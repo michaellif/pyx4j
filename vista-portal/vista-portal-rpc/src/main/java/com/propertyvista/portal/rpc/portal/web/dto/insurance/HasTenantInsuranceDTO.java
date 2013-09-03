@@ -28,6 +28,8 @@ public interface HasTenantInsuranceDTO extends InsuranceStatusDTO {
     @Format("#,##0.00")
     IPrimitive<BigDecimal> liabilityCoverage();
 
+    IPrimitive<LogicalDate> inceptionDate();
+
     IPrimitive<LogicalDate> expirationDate();
 
     /**

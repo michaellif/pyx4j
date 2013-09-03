@@ -19,7 +19,7 @@ import com.pyx4j.rpc.shared.IService;
 import com.pyx4j.rpc.shared.VoidSerializable;
 
 import com.propertyvista.domain.payment.InsurancePaymentMethod;
-import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.tenantsure.TenantSureTenantInsuranceStatusDetailedDTO;
+import com.propertyvista.portal.rpc.portal.web.dto.insurance.TenantSureTenantInsuranceStatusDTO;
 
 public interface TenantSureManagementService extends IService {
 
@@ -27,7 +27,7 @@ public interface TenantSureManagementService extends IService {
 
     void getFaq(AsyncCallback<String> faqHtml);
 
-    void getStatus(AsyncCallback<TenantSureTenantInsuranceStatusDetailedDTO> callback);
+    void getStatus(AsyncCallback<TenantSureTenantInsuranceStatusDTO> callback);
 
     void updatePaymentMethod(AsyncCallback<VoidSerializable> callback, InsurancePaymentMethod paymentMethod);
 

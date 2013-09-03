@@ -34,10 +34,8 @@ import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.Tenant;
 import com.propertyvista.portal.rpc.portal.web.dto.insurance.HasTenantInsuranceDTO;
 import com.propertyvista.portal.rpc.portal.web.dto.insurance.InsuranceStatusDTO;
-import com.propertyvista.portal.rpc.portal.web.dto.insurance.InsuranceStatusShortDTO;
 import com.propertyvista.portal.rpc.portal.web.dto.insurance.NoInsuranceStatusDTO;
 import com.propertyvista.portal.rpc.portal.web.dto.insurance.OtherProviderInsuranceStatusDTO;
-import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.tenantsure.TenantSureTenantInsuranceStatusDetailedDTO;
 
 public class TenantInsuranceFacadeImpl implements TenantInsuranceFacade {
 
@@ -87,14 +85,7 @@ public class TenantInsuranceFacadeImpl implements TenantInsuranceFacade {
             HasTenantInsuranceDTO insuranceStatus = null;
             if (insuranceCertificate.isPropertyVistaIntegratedProvider().isBooleanTrue()) {
                 // TODO currently TenantSure is the only integrated provider so we don't try to understand which one it is
-                TenantSureTenantInsuranceStatusDetailedDTO tsStatusDetailed = ServerSideFactory.create(TenantSureFacade.class).getStatus(tenantId);
-
-                InsuranceStatusShortDTO tsStatusShort = EntityFactory.create(InsuranceStatusShortDTO.class);
-                tsStatusShort.monthlyPremiumPayment().setValue(tsStatusDetailed.nextPaymentDetails().total().getValue());
-                tsStatusShort.messages().addAll(tsStatusDetailed.messages());
-                tsStatusShort.nextPaymentDate().setValue(tsStatusDetailed.nextPaymentDetails().paymentDate().getValue());
-
-                insuranceStatus = tsStatusShort;
+                insuranceStatus = ServerSideFactory.create(TenantSureFacade.class).getStatus(tenantId);
             } else {
 
                 OtherProviderInsuranceStatusDTO otherProviderStatus = EntityFactory.create(OtherProviderInsuranceStatusDTO.class);

@@ -31,7 +31,7 @@ import com.pyx4j.widgets.client.Label;
 import com.propertyvista.portal.client.ui.residents.tenantinsurance.dashboard.statusviewers.OtherProviderTenantInsuranceStatusViewer;
 import com.propertyvista.portal.client.ui.residents.tenantinsurance.tenantsure.forms.TenantSureLogo;
 import com.propertyvista.portal.rpc.portal.web.dto.insurance.InsuranceStatusDTO;
-import com.propertyvista.portal.rpc.portal.web.dto.insurance.InsuranceStatusShortDTO;
+import com.propertyvista.portal.rpc.portal.web.dto.insurance.TenantSureTenantInsuranceStatusDTO;
 import com.propertyvista.portal.rpc.portal.web.dto.insurance.NoInsuranceStatusDTO;
 import com.propertyvista.portal.rpc.portal.web.dto.insurance.OtherProviderInsuranceStatusDTO;
 
@@ -138,7 +138,7 @@ public class ProvideTenantInsuranceViewImpl extends Composite implements Provide
                 insuranceStatusViewer.setVisible(true);
                 insuranceStatusViewer.populate(insuranceStatus.duplicate(OtherProviderInsuranceStatusDTO.class));
                 provideInsuranceByOtherProvider.setText(i18n.tr("Update Insurance"));
-            } else if (insuranceStatus.isInstanceOf(InsuranceStatusShortDTO.class)) {
+            } else if (insuranceStatus.isInstanceOf(TenantSureTenantInsuranceStatusDTO.class)) {
                 assert false : "this place shouldn't be used when tenantsure is active";
             } else {
                 assert false : "unknown insurance status: " + insuranceStatus.getInstanceValueClass().getName();

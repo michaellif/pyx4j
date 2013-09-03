@@ -31,9 +31,9 @@ import com.propertyvista.common.client.ui.components.tenantinsurance.MoneyComboB
 import com.propertyvista.portal.client.ui.residents.tenantinsurance.tenantsure.forms.TenantSureStatusForm;
 import com.propertyvista.portal.client.ui.residents.tenantinsurance.tenantsure.resources.TenantSureResources;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap;
-import com.propertyvista.portal.rpc.portal.web.dto.insurance.InsuranceStatusShortDTO;
+import com.propertyvista.portal.rpc.portal.web.dto.insurance.TenantSureTenantInsuranceStatusDTO;
 
-public class TenantSureInsuranceStatusViewer extends CViewer<InsuranceStatusShortDTO> {
+public class TenantSureInsuranceStatusViewer extends CViewer<TenantSureTenantInsuranceStatusDTO> {
 
     public static final String STYLE_PREFIX = "-vista-TenantSureStatusViewer";
 
@@ -46,7 +46,7 @@ public class TenantSureInsuranceStatusViewer extends CViewer<InsuranceStatusShor
     private static final I18n i18n = I18n.get(TenantSureInsuranceStatusViewer.class);
 
     @Override
-    public IsWidget createContent(InsuranceStatusShortDTO tenantSureStatus) {
+    public IsWidget createContent(TenantSureTenantInsuranceStatusDTO tenantSureStatus) {
         FlowPanel contentPanel = new FlowPanel();
         Image tenantSureLogo = new Image(TenantSureResources.INSTANCE.logoTenantSure());
         tenantSureLogo.addStyleName(STYLE_PREFIX + StyleSuffix.TenantSureLogo.name());
@@ -55,11 +55,11 @@ public class TenantSureInsuranceStatusViewer extends CViewer<InsuranceStatusShor
         contentPanel.add(new Label(i18n.tr("Liablity Coverage: {0}",
                 MoneyComboBox.CANADIAN_CURRENCY_FORMAT.format(tenantSureStatus.liabilityCoverage().getValue()))));
         contentPanel.add(new Label(i18n.tr("Monthly Premium: {0}",
-                MoneyComboBox.CANADIAN_CURRENCY_DETAILED_FORMAT.format(tenantSureStatus.monthlyPremiumPayment().getValue()))));
+                MoneyComboBox.CANADIAN_CURRENCY_DETAILED_FORMAT.format(tenantSureStatus.nextPaymentDetails().total().getValue()))));
 
-        if (!tenantSureStatus.nextPaymentDate().isNull()) {
+        if (!tenantSureStatus.nextPaymentDetails().paymentDate().isNull()) {
             contentPanel.add(new Label(i18n.tr("Next Payment Date: {0}",
-                    DateTimeFormat.getFormat(CDatePicker.defaultDateFormat).format(tenantSureStatus.nextPaymentDate().getValue()))));
+                    DateTimeFormat.getFormat(CDatePicker.defaultDateFormat).format(tenantSureStatus.nextPaymentDetails().paymentDate().getValue()))));
         }
 
         if (!tenantSureStatus.messages().isEmpty()) {

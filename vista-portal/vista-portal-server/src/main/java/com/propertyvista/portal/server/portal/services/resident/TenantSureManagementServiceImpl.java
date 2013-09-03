@@ -27,15 +27,15 @@ import com.propertyvista.domain.payment.InsurancePaymentMethod;
 import com.propertyvista.domain.tenant.lease.Tenant;
 import com.propertyvista.operations.rpc.VistaSystemMaintenanceState;
 import com.propertyvista.portal.rpc.portal.services.resident.TenantSureManagementService;
-import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.tenantsure.TenantSureTenantInsuranceStatusDetailedDTO;
+import com.propertyvista.portal.rpc.portal.web.dto.insurance.TenantSureTenantInsuranceStatusDTO;
 import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.tenantsure.errors.TenantSureOnMaintenanceException;
 import com.propertyvista.portal.server.portal.TenantAppContext;
 
 public class TenantSureManagementServiceImpl implements TenantSureManagementService {
 
     @Override
-    public void getStatus(AsyncCallback<TenantSureTenantInsuranceStatusDetailedDTO> callback) {
-        TenantSureTenantInsuranceStatusDetailedDTO status = ServerSideFactory.create(TenantSureFacade.class).getStatus(
+    public void getStatus(AsyncCallback<TenantSureTenantInsuranceStatusDTO> callback) {
+        TenantSureTenantInsuranceStatusDTO status = ServerSideFactory.create(TenantSureFacade.class).getStatus(
                 TenantAppContext.getCurrentUserTenantInLease().leaseParticipant().<Tenant> createIdentityStub());
         if (status != null) {
             callback.onSuccess(status);

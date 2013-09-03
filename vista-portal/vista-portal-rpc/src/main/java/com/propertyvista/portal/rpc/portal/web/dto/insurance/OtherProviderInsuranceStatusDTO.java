@@ -13,14 +13,9 @@
  */
 package com.propertyvista.portal.rpc.portal.web.dto.insurance;
 
-import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.annotations.Transient;
-import com.pyx4j.entity.shared.IPrimitive;
 
 @Transient
 public interface OtherProviderInsuranceStatusDTO extends HasTenantInsuranceDTO {
-
-    @Override
-    IPrimitive<LogicalDate> expirationDate();
 
 }

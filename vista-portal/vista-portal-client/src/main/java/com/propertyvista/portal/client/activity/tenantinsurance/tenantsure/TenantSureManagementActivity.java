@@ -27,7 +27,7 @@ import com.propertyvista.portal.client.PortalSite;
 import com.propertyvista.portal.client.ui.residents.tenantinsurance.tenantsure.views.TenantSureManagementView;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap;
 import com.propertyvista.portal.rpc.portal.services.resident.TenantSureManagementService;
-import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.tenantsure.TenantSureTenantInsuranceStatusDetailedDTO;
+import com.propertyvista.portal.rpc.portal.web.dto.insurance.TenantSureTenantInsuranceStatusDTO;
 
 public class TenantSureManagementActivity extends AbstractActivity implements TenantSureManagementView.Presenter {
 
@@ -123,9 +123,9 @@ public class TenantSureManagementActivity extends AbstractActivity implements Te
     }
 
     private void populateStatus() {
-        service.getStatus(new DefaultAsyncCallback<TenantSureTenantInsuranceStatusDetailedDTO>() {
+        service.getStatus(new DefaultAsyncCallback<TenantSureTenantInsuranceStatusDTO>() {
             @Override
-            public void onSuccess(TenantSureTenantInsuranceStatusDetailedDTO status) {
+            public void onSuccess(TenantSureTenantInsuranceStatusDTO status) {
                 view.populate(status);
             }
 

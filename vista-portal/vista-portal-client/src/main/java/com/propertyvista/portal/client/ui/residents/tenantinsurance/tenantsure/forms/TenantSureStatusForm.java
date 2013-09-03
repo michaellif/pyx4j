@@ -30,10 +30,10 @@ import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
 import com.propertyvista.common.client.ui.components.tenantinsurance.MoneyComboBox;
 import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
 import com.propertyvista.portal.client.ui.residents.tenantinsurance.dashboard.statusviewers.TenantInsuranceStatusViewer;
+import com.propertyvista.portal.rpc.portal.web.dto.insurance.TenantSureTenantInsuranceStatusDTO;
 import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.tenantsure.TenantSureMessageDTO;
-import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.tenantsure.TenantSureTenantInsuranceStatusDetailedDTO;
 
-public class TenantSureStatusForm extends CEntityDecoratableForm<TenantSureTenantInsuranceStatusDetailedDTO> {
+public class TenantSureStatusForm extends CEntityDecoratableForm<TenantSureTenantInsuranceStatusDTO> {
 
     private static final I18n i18n = I18n.get(TenantSureStatusForm.class);
 
@@ -58,7 +58,7 @@ public class TenantSureStatusForm extends CEntityDecoratableForm<TenantSureTenan
     }
 
     public TenantSureStatusForm() {
-        super(TenantSureTenantInsuranceStatusDetailedDTO.class);
+        super(TenantSureTenantInsuranceStatusDTO.class);
         setViewable(true);
     }
 
@@ -69,17 +69,17 @@ public class TenantSureStatusForm extends CEntityDecoratableForm<TenantSureTenan
 
         panel.setH3(++row, 0, 1, i18n.tr("Coverage"));
         panel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().insuranceCertificateNumber()), 10).build());
-        panel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().coverage().inceptionDate()), 10).build());
-        panel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().expiryDate()), 10).build());
+        panel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().inceptionDate()), 10).build());
+        panel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().expirationDate()), 10).build());
 
         // TODO maybe create a separate coverage viewer?
-        panel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().coverage().personalLiabilityCoverage()), 10).build());
-        panel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().coverage().contentsCoverage()), 10).build());
+        panel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().liabilityCoverage()), 10).build());
+        panel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().contentsCoverage()), 10).build());
 
         // TODO investigate why format of annotated on the field doesn't work
         IFormat<BigDecimal> currencyFormat = new MoneyComboBox.MoneyComboBoxFormat();
-        ((CTextFieldBase<BigDecimal, ?>) get(proto().coverage().personalLiabilityCoverage())).setFormat(currencyFormat);
-        ((CTextFieldBase<BigDecimal, ?>) get(proto().coverage().contentsCoverage())).setFormat(currencyFormat);
+        ((CTextFieldBase<BigDecimal, ?>) get(proto().liabilityCoverage())).setFormat(currencyFormat);
+        ((CTextFieldBase<BigDecimal, ?>) get(proto().contentsCoverage())).setFormat(currencyFormat);
 
         panel.setH3(++row, 0, 1, i18n.tr("Annual Payment"));
         panel.setWidget(++row, 0, inject(proto().annualPaymentDetails(), new TenantSurePaymentViewer()));
@@ -95,9 +95,8 @@ public class TenantSureStatusForm extends CEntityDecoratableForm<TenantSureTenan
     @Override
     protected void onValueSet(boolean populate) {
         super.onValueSet(populate);
-        boolean hasContextCoverage = !getValue().coverage().contentsCoverage().isNull()
-                && !getValue().coverage().contentsCoverage().getValue().equals(new BigDecimal("0.00"));
-        get(proto().coverage().contentsCoverage()).setVisible(hasContextCoverage);
-        get(proto().expiryDate()).setVisible(!getValue().expiryDate().isNull());
+        boolean hasContextCoverage = !getValue().contentsCoverage().isNull() && !getValue().contentsCoverage().getValue().equals(new BigDecimal("0.00"));
+        get(proto().contentsCoverage()).setVisible(hasContextCoverage);
+        get(proto().expirationDate()).setVisible(!getValue().expirationDate().isNull());
     }
 }

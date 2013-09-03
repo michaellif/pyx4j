@@ -41,7 +41,7 @@ import com.propertyvista.portal.client.themes.TenantInsuranceTheme;
 import com.propertyvista.portal.client.ui.residents.tenantinsurance.tenantsure.forms.TenantSureStatusForm;
 import com.propertyvista.portal.client.ui.residents.tenantinsurance.tenantsure.forms.TenantSureViewDecorator;
 import com.propertyvista.portal.client.ui.residents.tenantinsurance.tenantsure.resources.TenantSureResources;
-import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.tenantsure.TenantSureTenantInsuranceStatusDetailedDTO;
+import com.propertyvista.portal.rpc.portal.web.dto.insurance.TenantSureTenantInsuranceStatusDTO;
 
 public class TenantSureManagementViewImpl extends Composite implements TenantSureManagementView {
 
@@ -132,9 +132,9 @@ public class TenantSureManagementViewImpl extends Composite implements TenantSur
     }
 
     @Override
-    public void populate(TenantSureTenantInsuranceStatusDetailedDTO detailedStatus) {
+    public void populate(TenantSureTenantInsuranceStatusDTO detailedStatus) {
         statusForm.populate(detailedStatus);
-        boolean isCancelled = !detailedStatus.expiryDate().isNull();
+        boolean isCancelled = !detailedStatus.expirationDate().isNull();
 
         updateCCButton.setEnabled(!isCancelled);
         updateCCButton.setVisible(!detailedStatus.isPaymentFailed().isBooleanTrue());
