@@ -24,7 +24,8 @@ BEGIN
                 v_sql :=  'SELECT '||quote_literal(v_schema_name)||' AS pmc,COUNT(p.id) '
                 ||' FROM '||v_schema_name||'.payment_record p '
                 ||'JOIN '||v_schema_name||'.payment_method pm ON (p.payment_method = pm.id) '
-                ||'WHERE p.payment_status = ''Received'' ';
+                ||'WHERE p.payment_status = ''Received'' '
+                ||'AND   pm.payment_type IN (''DirectBanking'',''Echeck'') ';
                 
    
                 EXECUTE  v_sql INTO pmc,row_count;
