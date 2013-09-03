@@ -36,13 +36,8 @@ public class ComplexViewerActivity extends CrmViewerActivity<ComplexDTO> impleme
 
     @SuppressWarnings("unchecked")
     public ComplexViewerActivity(CrudAppPlace place) {
-        super(place,  CrmSite.getViewFactory().instantiate(ComplexViewerView.class), (AbstractCrudService<ComplexDTO>) GWT.create(ComplexCrudService.class));
+        super(place, CrmSite.getViewFactory().instantiate(ComplexViewerView.class), (AbstractCrudService<ComplexDTO>) GWT.create(ComplexCrudService.class));
 
-    }
-
-    @Override
-    public void onStop() {
-        super.onStop();
     }
 
     @Override

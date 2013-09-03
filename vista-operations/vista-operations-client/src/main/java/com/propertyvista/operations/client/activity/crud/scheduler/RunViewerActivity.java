@@ -66,13 +66,17 @@ public class RunViewerActivity extends AdminViewerActivity<Run> implements RunVi
         updateState(result.status().getValue());
     }
 
-    @Override
-    public void onStop() {
+    private void cancelTimer() {
         if (updateViewTimer != null) {
             updateViewTimer.cancel();
             updateViewTimer = null;
         }
-        super.onStop();
+    }
+
+    @Override
+    public void onDiscard() {
+        cancelTimer();
+        super.onDiscard();
     }
 
     @Override
