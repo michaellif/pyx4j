@@ -16,7 +16,6 @@ package com.propertyvista.operations.domain.payment.pad;
 import java.util.Date;
 
 import com.pyx4j.entity.annotations.Detached;
-import com.pyx4j.entity.annotations.GwtBlacklist;
 import com.pyx4j.entity.annotations.OrderBy;
 import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.annotations.Table;
@@ -32,7 +31,6 @@ import com.propertyvista.domain.financial.FundsTransferType;
 
 @Table(namespace = VistaNamespace.operationsNamespace)
 @I18n(strategy = I18n.I18nStrategy.IgnoreAll)
-@GwtBlacklist
 public interface PadReconciliationFile extends IEntity {
 
     // YYYYMMDDhhmmss_reconciliation_rpt_pad.COMPANYID

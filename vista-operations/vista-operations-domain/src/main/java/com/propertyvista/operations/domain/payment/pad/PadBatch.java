@@ -18,7 +18,6 @@ import java.math.BigDecimal;
 import com.pyx4j.commons.Key;
 import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.Detached;
-import com.pyx4j.entity.annotations.GwtBlacklist;
 import com.pyx4j.entity.annotations.Indexed;
 import com.pyx4j.entity.annotations.JoinColumn;
 import com.pyx4j.entity.annotations.Length;
@@ -41,7 +40,6 @@ import com.propertyvista.domain.pmc.Pmc;
 
 @Table(namespace = VistaNamespace.operationsNamespace)
 @I18n(strategy = I18n.I18nStrategy.IgnoreAll)
-@GwtBlacklist
 //TODO rename to FundsTransferBatch
 public interface PadBatch extends IEntity {
 

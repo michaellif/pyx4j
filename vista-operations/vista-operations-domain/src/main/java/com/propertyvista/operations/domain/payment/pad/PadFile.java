@@ -17,7 +17,6 @@ import java.math.BigDecimal;
 import java.util.Date;
 
 import com.pyx4j.entity.annotations.Detached;
-import com.pyx4j.entity.annotations.GwtBlacklist;
 import com.pyx4j.entity.annotations.Indexed;
 import com.pyx4j.entity.annotations.OrderBy;
 import com.pyx4j.entity.annotations.Owned;
@@ -40,7 +39,6 @@ import com.propertyvista.domain.financial.FundsTransferType;
  */
 @Table(namespace = VistaNamespace.operationsNamespace)
 @I18n(strategy = I18n.I18nStrategy.IgnoreAll)
-@GwtBlacklist
 //TODO rename to FundsTransferFile
 public interface PadFile extends IEntity {
 
