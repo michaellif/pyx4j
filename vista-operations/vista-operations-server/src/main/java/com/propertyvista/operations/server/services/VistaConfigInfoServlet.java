@@ -24,6 +24,7 @@ import com.pyx4j.essentials.server.admin.ConfigInfoServlet;
 import com.pyx4j.security.shared.SecurityController;
 
 import com.propertyvista.config.AbstractVistaServerSideConfiguration;
+import com.propertyvista.config.SystemConfig;
 import com.propertyvista.domain.security.VistaOperationsBehavior;
 
 @SuppressWarnings("serial")
@@ -38,6 +39,9 @@ public class VistaConfigInfoServlet extends ConfigInfoServlet {
     @Override
     protected String applicationConfigurationText() {
         StringBuilder b = new StringBuilder();
+
+        b.append("LocalHostName            : ").append(SystemConfig.getLocalHostName()).append("\n");
+
         b.append("\nVista Configuration:\n");
 
         AbstractVistaServerSideConfiguration conf = ServerSideConfiguration.instance(AbstractVistaServerSideConfiguration.class);
@@ -59,16 +63,17 @@ public class VistaConfigInfoServlet extends ConfigInfoServlet {
                 .append("\n");
         b.append("\n");
 
-        b.append("  CaledonInterfaceWorkDirectory       : ").append(conf.getCaledonInterfaceWorkDirectory().getAbsolutePath()).append("\n");
-        b.append("  CaledonFundsTransferConfiguration   :\n    ").append(conf.getCaledonFundsTransferConfiguration().toString().replaceAll("\n", "\n    "))
-                .append("\n");
+        b.append("  CaledonInterfaceWorkDirectory         : ").append(conf.getCaledonInterfaceWorkDirectory().getAbsolutePath()).append("\n");
+        b.append("  CaledonFundsTransferConfiguration     :\n      ")
+                .append(conf.getCaledonFundsTransferConfiguration().toString().replaceAll("\n", "\n      ")).append("\n");
         b.append("\n");
-        b.append("  BmoInterfaceWorkDirectory           : ").append(conf.getBmoInterfaceWorkDirectory().getAbsolutePath()).append("\n");
-        b.append("  BmoInterfaceConfiguration           :\n    ").append(conf.getBmoInterfaceConfiguration().toString().replaceAll("\n", "\n    "))
+        b.append("  BmoInterfaceWorkDirectory             : ").append(conf.getBmoInterfaceWorkDirectory().getAbsolutePath()).append("\n");
+        b.append("  BmoInterfaceConfiguration             :\n      ").append(conf.getBmoInterfaceConfiguration().toString().replaceAll("\n", "\n      "))
                 .append("\n");
         b.append("\n");
 
-        b.append("  BankingSimulatorConfiguration       :\n ").append(conf.getBankingSimulatorConfiguration()).append("\n");
+        b.append("  BankingSimulatorConfiguration         :\n    ").append(conf.getBankingSimulatorConfiguration().toString().replaceAll("\n", "\n    "))
+                .append("\n");
 
         return b.toString();
     }

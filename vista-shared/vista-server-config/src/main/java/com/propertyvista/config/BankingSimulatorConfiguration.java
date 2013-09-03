@@ -29,7 +29,8 @@ public abstract class BankingSimulatorConfiguration {
 
     @Override
     public String toString() {
-        StringBuilder b = new StringBuilder(super.toString());
+        StringBuilder b = new StringBuilder();
+        b.append("configurationClass                  : ").append(getClass().getName()).append("\n");
         b.append("CardServiceSimulatorUrl             : ").append(getCardServiceSimulatorUrl()).append("\n");
         b.append("FundsTransferSimulationConfigurable : ").append(isFundsTransferSimulationConfigurable()).append("\n");
         b.append("CaledonSimulatorSftpDirectory       : ").append(getCaledonSimulatorSftpDirectory()).append("\n");
