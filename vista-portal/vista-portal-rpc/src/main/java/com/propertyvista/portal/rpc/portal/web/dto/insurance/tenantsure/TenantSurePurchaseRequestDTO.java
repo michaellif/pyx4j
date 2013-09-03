@@ -7,22 +7,16 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Jul 23, 2013
- * @author michaellif
+ * Created on 2013-09-03
+ * @author ArtyomB
  * @version $Id$
  */
-package com.propertyvista.portal.rpc.portal.web.dto;
+package com.propertyvista.portal.rpc.portal.web.dto.insurance.tenantsure;
 
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.i18n.annotations.I18n;
-
-import com.propertyvista.portal.rpc.portal.web.dto.insurance.InsuranceStatusDTO;
 
 @Transient
-@I18n(strategy = I18n.I18nStrategy.IgnoreThis)
-public interface ServicesDashboardDTO extends IEntity {
-
-    InsuranceStatusDTO insuranceStatus();
+public interface TenantSurePurchaseRequestDTO extends IEntity {
 
 }

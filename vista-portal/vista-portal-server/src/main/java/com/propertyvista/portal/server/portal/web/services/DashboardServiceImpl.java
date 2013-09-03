@@ -29,7 +29,6 @@ import com.propertyvista.biz.financial.ar.ARFacade;
 import com.propertyvista.biz.financial.billing.BillingFacade;
 import com.propertyvista.biz.financial.payment.PaymentMethodFacade;
 import com.propertyvista.biz.tenant.insurance.TenantInsuranceFacade;
-import com.propertyvista.domain.customizations.CountryOfOperation;
 import com.propertyvista.domain.financial.billing.Bill;
 import com.propertyvista.domain.payment.PreauthorizedPayment;
 import com.propertyvista.domain.payment.PreauthorizedPayment.PreauthorizedPaymentCoveredItem;
@@ -77,14 +76,11 @@ public class DashboardServiceImpl implements DashboardService {
                 dashboard.billingSummary().dueDate().setValue(bill.dueDate().getValue());
             }
 
-            if (VistaFeatures.instance().countryOfOperation() == CountryOfOperation.Canada) {
-                dashboard
-                        .residentServicesInfo()
-                        .tenantInsuranceStatus()
-                        .set(ServerSideFactory.create(TenantInsuranceFacade.class).getInsuranceStatus(
-                                TenantAppContext.getCurrentUserTenantInLease().leaseParticipant().<Tenant> createIdentityStub()));
-
-            }
+            dashboard
+                    .residentServicesInfo()
+                    .tenantInsuranceStatus()
+                    .set(ServerSideFactory.create(TenantInsuranceFacade.class).getInsuranceStatus(
+                            TenantAppContext.getCurrentUserTenantInLease().leaseParticipant().<Tenant> createIdentityStub()));
 
             callback.onSuccess(dashboard);
         }
@@ -118,8 +114,12 @@ public class DashboardServiceImpl implements DashboardService {
         if (true) {
             new DashboardServiceMockImpl().retrieveServicesDashboard(callback);
         } else {
-
+            ServicesDashboardDTO dto = EntityFactory.create(ServicesDashboardDTO.class);
+            dto.insuranceStatus().set(
+                    ServerSideFactory.create(TenantInsuranceFacade.class).getInsuranceStatus(
+                            TenantAppContext.getCurrentUserTenantInLease().leaseParticipant().<Tenant> createIdentityStub()));
         }
+
     }
 
     private static FinancialSummaryDTO retrieve() {

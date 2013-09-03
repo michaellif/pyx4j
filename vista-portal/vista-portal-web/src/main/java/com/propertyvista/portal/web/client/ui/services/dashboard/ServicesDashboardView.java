@@ -21,15 +21,17 @@ public interface ServicesDashboardView extends IsView {
 
     public interface ServicesDashboardPresenter {
 
-        void viewCurrentBill();
+        // Tenant Insurance Related        
 
-        void viewBillingHistory();
+        // when no tenant insurance
+        void getTenantSure();
 
-        void payNow();
+        void addThirdPartyTenantInsuranceCertificate();
 
-        void setAutopay();
+        // Tenant Sure related
 
-        void addPaymentMethod();
+        // Insurance by other provide related
+        void updateThirdPartyTenantInsuranceCeritificate();
 
     }
 

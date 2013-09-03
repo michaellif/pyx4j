@@ -19,12 +19,9 @@ import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
-import com.pyx4j.security.shared.SecurityController;
 import com.pyx4j.site.client.AppSite;
 
-import com.propertyvista.domain.security.VistaCustomerPaymentTypeBehavior;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap;
-import com.propertyvista.portal.rpc.portal.PortalSiteMap.Resident.Financial;
 import com.propertyvista.portal.rpc.portal.web.dto.ServicesDashboardDTO;
 import com.propertyvista.portal.rpc.portal.web.services.DashboardService;
 import com.propertyvista.portal.web.client.PortalWebSite;
@@ -59,35 +56,18 @@ public class ServicesDashboardActivity extends SecurityAwareActivity implements 
     }
 
     @Override
-    public void viewCurrentBill() {
-        AppSite.getPlaceController().goTo(new PortalSiteMap.Resident.Financial.BillingHistory.ViewBill());
+    public void getTenantSure() {
+        AppSite.getPlaceController().goTo(new PortalSiteMap.Resident.ResidentServices.TenantInsurance.TenantSure.TenantSurePurchase());
     }
 
     @Override
-    public void viewBillingHistory() {
-        AppSite.getPlaceController().goTo(new PortalSiteMap.Resident.Financial.BillingHistory());
-
+    public void addThirdPartyTenantInsuranceCertificate() {
+        AppSite.getPlaceController().goTo(new PortalSiteMap.Resident.ResidentServices.TenantInsurance.Other.UploadCertificate());
     }
 
     @Override
-    public void payNow() {
-        if (SecurityController.checkAnyBehavior(VistaCustomerPaymentTypeBehavior.values())) {
-            AppSite.getPlaceController().goTo(new Financial.PayNow());
-        }
-    }
-
-    @Override
-    public void setAutopay() {
-        if (SecurityController.checkAnyBehavior(VistaCustomerPaymentTypeBehavior.values())) {
-            AppSite.getPlaceController().goTo(new PortalSiteMap.Resident.Financial.PreauthorizedPayments());
-        }
-    }
-
-    @Override
-    public void addPaymentMethod() {
-        if (SecurityController.checkAnyBehavior(VistaCustomerPaymentTypeBehavior.values())) {
-            AppSite.getPlaceController().goTo(new PortalSiteMap.Resident.PaymentMethods.NewPaymentMethod());
-        }
+    public void updateThirdPartyTenantInsuranceCeritificate() {
+        AppSite.getPlaceController().goTo(new PortalSiteMap.Resident.ResidentServices.TenantInsurance.Other.UploadCertificate());
     }
 
 }

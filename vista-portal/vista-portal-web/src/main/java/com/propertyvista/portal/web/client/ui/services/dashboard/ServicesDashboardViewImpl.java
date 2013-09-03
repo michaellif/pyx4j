@@ -69,7 +69,7 @@ public class ServicesDashboardViewImpl extends FlowPanel implements ServicesDash
 
     @Override
     public void populate(ServicesDashboardDTO result) {
-        insuranceGadget.populate(result.insuranceSummary());
+        insuranceGadget.populate(result.insuranceStatus());
     }
 
 }

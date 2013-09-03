@@ -77,6 +77,11 @@ public class DashboardServiceImpl implements DashboardService {
                             TenantAppContext.getCurrentUserTenantInLease().leaseParticipant().<Tenant> createIdentityStub()));
 
         }
+        dashboard
+                .residentServicesInfo()
+                .tenantInsuranceStatus()
+                .set(ServerSideFactory.create(TenantInsuranceFacade.class).getInsuranceStatus(
+                        TenantAppContext.getCurrentUserTenantInLease().leaseParticipant().<Tenant> createIdentityStub()));
 
         // fill stuff for the new web portal
         FinancialSummaryDTO billingSummary = BillSummaryServiceImpl.retrieve();
