@@ -100,12 +100,22 @@ public abstract class AbstractViewerActivity<E extends IEntity> extends Abstract
         panel.setWidget(view);
     }
 
-    @Override
-    public void onStop() {
-        view.storeState(view.getMemento().getCurrentPlace());
+    protected void onDiscard() {
         view.reset();
         view.setPresenter(null);
         view.hideVisor();
+    }
+
+    @Override
+    public void onCancel() {
+        onDiscard();
+        super.onCancel();
+    }
+
+    @Override
+    public void onStop() {
+        view.storeState(view.getMemento().getCurrentPlace());
+        onDiscard();
         super.onStop();
     }
 

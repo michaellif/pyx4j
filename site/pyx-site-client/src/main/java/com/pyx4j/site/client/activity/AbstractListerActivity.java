@@ -84,19 +84,24 @@ public abstract class AbstractListerActivity<E extends IEntity> extends ListerCo
         containerWidget.setWidget(getView());
     }
 
+    public void onDiscard() {
+        getView().discard();
+    }
+
+    @Override
+    public void onCancel() {
+        onDiscard();
+    }
+
     @Override
     public void onStop() {
         getView().storeState(getView().getMemento().getCurrentPlace());
-        getView().discard();
+        onDiscard();
     }
 
     @Override
     public String mayStop() {
         return null;
-    }
-
-    @Override
-    public void onCancel() {
     }
 
     public void setPopulateOnStart(boolean populateOnStart) {

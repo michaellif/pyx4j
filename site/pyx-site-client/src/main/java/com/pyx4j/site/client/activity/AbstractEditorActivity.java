@@ -146,10 +146,20 @@ public abstract class AbstractEditorActivity<E extends IEntity> extends Abstract
         panel.setWidget(view);
     }
 
-    @Override
-    public void onStop() {
+    protected void onDiscard() {
         view.reset();
         view.setPresenter(null);
+    }
+
+    @Override
+    public void onCancel() {
+        onDiscard();
+        super.onCancel();
+    }
+
+    @Override
+    public void onStop() {
+        onDiscard();
         super.onStop();
     }
 
