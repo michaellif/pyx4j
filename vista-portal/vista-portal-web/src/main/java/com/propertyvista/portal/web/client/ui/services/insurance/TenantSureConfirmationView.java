@@ -13,14 +13,12 @@
  */
 package com.propertyvista.portal.web.client.ui.services.insurance;
 
-import com.propertyvista.dto.PaymentRecordDTO;
+import com.propertyvista.portal.rpc.portal.web.dto.insurance.TenantSureAgreementDTO;
 import com.propertyvista.portal.web.client.ui.IEntityView;
 
-public interface TenantSureConfirmationView extends IEntityView<PaymentRecordDTO> {
+public interface TenantSureConfirmationView extends IEntityView<TenantSureAgreementDTO> {
 
-    interface Presenter extends IEntityView.EntityPresenter<PaymentRecordDTO> {
-
-        void goToAutoPay();
+    interface Presenter extends IEntityView.EntityPresenter<TenantSureAgreementDTO> {
 
         void back();
     }
