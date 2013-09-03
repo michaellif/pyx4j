@@ -103,18 +103,17 @@ public abstract class AbstractReportsService<R extends ReportMetadata> implement
 
         @Override
         public void execute() {
-            final Serializable[] reportData = new Serializable[1];
+            Serializable reportData = null;
             if (!cancelled) {
                 try {
-                    new UnitOfWork(TransactionScopeOption.RequiresNew, ConnectionTarget.TransactionProcessing)
-                            .execute(new Executable<Void, RuntimeException>() {
+                    reportData = new UnitOfWork(TransactionScopeOption.RequiresNew, ConnectionTarget.TransactionProcessing)
+                            .execute(new Executable<Serializable, RuntimeException>() {
                                 @Override
-                                public Void execute() {
-                                    reportData[0] = reportGenerator.generateReport(reportMetadata);
-                                    return null;
+                                public Serializable execute() {
+                                    return reportGenerator.generateReport(reportMetadata);
                                 }
                             });
-                    Context.getVisit().setAttribute(REPORT_SESSION_STORAGE_KEY, reportData[0]);
+                    Context.getVisit().setAttribute(REPORT_SESSION_STORAGE_KEY, reportData);
                     isReady = true;
                 } catch (Throwable error) {
                     this.error = error;
