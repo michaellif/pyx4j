@@ -62,10 +62,10 @@ class ScheduledPaymentsManager {
             public void processPayment(PaymentRecord paymentRecord, PaymentBatchContext paymentBatchContext) throws PaymentException {
                 if (paymentRecord.amount().getValue().compareTo(BigDecimal.ZERO) <= 0) {
                     ServerSideFactory.create(PaymentFacade.class).cancel(paymentRecord);
-                    executionMonitor.addProcessedEvent("Canceled");
+                    executionMonitor.addFailedEvent("Canceled Zero amount", (String) null);
                 } else if (!PaymentUtils.isElectronicPaymentsSetup(paymentRecord.billingAccount())) {
                     ServerSideFactory.create(PaymentFacade.class).cancel(paymentRecord);
-                    executionMonitor.addProcessedEvent("Canceled ElectronicPayments Not Setup");
+                    executionMonitor.addFailedEvent("Canceled ElectronicPayments Not Setup", (String) null);
                 } else {
                     PaymentRecord processedPaymentRecord = ServerSideFactory.create(PaymentFacade.class).processPayment(paymentRecord, paymentBatchContext);
                     if (processedPaymentRecord.paymentStatus().getValue() == PaymentRecord.PaymentStatus.Rejected) {
