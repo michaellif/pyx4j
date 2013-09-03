@@ -18,10 +18,13 @@ import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
+import com.pyx4j.commons.UserRuntimeException;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
+import com.pyx4j.rpc.shared.VoidSerializable;
 import com.pyx4j.site.client.AppSite;
 
 import com.propertyvista.portal.rpc.portal.PortalSiteMap;
+import com.propertyvista.portal.rpc.portal.services.resident.TenantSureManagementService;
 import com.propertyvista.portal.rpc.portal.web.dto.ServicesDashboardDTO;
 import com.propertyvista.portal.rpc.portal.web.services.DashboardService;
 import com.propertyvista.portal.web.client.PortalWebSite;
@@ -35,10 +38,13 @@ public class ServicesDashboardActivity extends SecurityAwareActivity implements 
 
     private final DashboardService srv;
 
+    private final TenantSureManagementService tenantSureManagementService;
+
     public ServicesDashboardActivity(Place place) {
         this.view = PortalWebSite.getViewFactory().instantiate(ServicesDashboardView.class);
         this.view.setPresenter(this);
         srv = GWT.create(DashboardService.class);
+        tenantSureManagementService = GWT.create(TenantSureManagementService.class);
     }
 
     @Override
@@ -47,12 +53,8 @@ public class ServicesDashboardActivity extends SecurityAwareActivity implements 
         panel.setWidget(view);
         view.setPresenter(this);
 
-        srv.retrieveServicesDashboard(new DefaultAsyncCallback<ServicesDashboardDTO>() {
-            @Override
-            public void onSuccess(ServicesDashboardDTO result) {
-                view.populate(result);
-            }
-        });
+        populate();
+
     }
 
     @Override
@@ -68,6 +70,94 @@ public class ServicesDashboardActivity extends SecurityAwareActivity implements 
     @Override
     public void updateThirdPartyTenantInsuranceCeritificate() {
         AppSite.getPlaceController().goTo(new PortalSiteMap.Resident.ResidentServices.TenantInsurance.Other.UploadCertificate());
+    }
+
+    @Override
+    public void viewFaq() {
+        AppSite.getPlaceController().goTo(new PortalSiteMap.Resident.ResidentServices.TenantInsurance.TenantSure.Faq());
+    }
+
+    @Override
+    public void viewAboutTenantSure() {
+        AppSite.getPlaceController().goTo(new PortalSiteMap.Resident.ResidentServices.TenantInsurance.TenantSure.About());
+    }
+
+    @Override
+    public void updateCreditCardDetails() {
+        AppSite.getPlaceController().goTo(new PortalSiteMap.Resident.ResidentServices.TenantInsurance.TenantSure.Management.UpdateCreditCard());
+    }
+
+    @Override
+    public void cancelTenantSure() {
+        tenantSureManagementService.cancelTenantSure(new DefaultAsyncCallback<VoidSerializable>() {
+            @Override
+            public void onSuccess(VoidSerializable result) {
+                populate();
+            }
+
+            @Override
+            public void onFailure(Throwable caught) {
+                if (caught instanceof UserRuntimeException) {
+                    // TODO error reporting
+                    // view.reportCancelFailure(((UserRuntimeException) caught).getMessage());
+                } else {
+                    super.onFailure(caught);
+                }
+            }
+        });
+    }
+
+    @Override
+    public void sendCertificate(String email) {
+        tenantSureManagementService.sendCertificate(new DefaultAsyncCallback<String>() {
+
+            @Override
+            public void onSuccess(String resultEmailAddress) {
+                // TODO error reporting and notifications
+                // view.reportSendCertificateSuccess(resultEmailAddress);
+            }
+
+            @Override
+            public void onFailure(Throwable caught) {
+                if (caught instanceof UserRuntimeException) {
+                    // TODO error reporting
+                    // view.reportError(((UserRuntimeException) caught).getMessage());
+                } else {
+                    super.onFailure(caught);
+                }
+            }
+
+        }, email);
+    }
+
+    @Override
+    public void reinstate() {
+        tenantSureManagementService.reinstate(new DefaultAsyncCallback<VoidSerializable>() {
+            @Override
+            public void onSuccess(VoidSerializable result) {
+                populate();
+            }
+
+            @Override
+            public void onFailure(Throwable caught) {
+                if (caught instanceof UserRuntimeException) {
+                    // TODO error reporting
+                    //view.reportError(((UserRuntimeException) caught).getMessage());
+                } else {
+                    super.onFailure(caught);
+                }
+            }
+        });
+
+    }
+
+    private void populate() {
+        srv.retrieveServicesDashboard(new DefaultAsyncCallback<ServicesDashboardDTO>() {
+            @Override
+            public void onSuccess(ServicesDashboardDTO result) {
+                view.populate(result);
+            }
+        });
     }
 
 }
