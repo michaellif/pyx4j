@@ -74,7 +74,7 @@ public class TenantSurePurchaseActivity extends AbstractActivity implements Tena
                     view.setTenantSureOnMaintenance(((TenantSureOnMaintenanceException) caught).getMessage());
                     panel.setWidget(view);
                 } else if (caught instanceof TenantSureAlreadyPurchasedException) {
-                    AppSite.getPlaceController().goTo(new PortalSiteMap.Resident.TenantInsurance.TenantSure.Management());
+                    AppSite.getPlaceController().goTo(new PortalSiteMap.Resident.ResidentServices.TenantInsurance.TenantSure.Management());
                 } else if (caught instanceof UserRuntimeException) {
                     view.reportError(caught.getMessage());
                 } else {
@@ -171,7 +171,7 @@ public class TenantSurePurchaseActivity extends AbstractActivity implements Tena
 
     @Override
     public void onPaymentProcessingSuccessAccepted() {
-        AppSite.getPlaceController().goTo(new PortalSiteMap.Resident.TenantInsurance());
+        AppSite.getPlaceController().goTo(new PortalSiteMap.Resident.ResidentServices.TenantInsurance());
     }
 
 }

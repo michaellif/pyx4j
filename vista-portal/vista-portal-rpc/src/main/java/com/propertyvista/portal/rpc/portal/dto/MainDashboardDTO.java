@@ -23,7 +23,6 @@ import com.propertyvista.portal.domain.dto.financial.FinancialSummaryDTO;
 import com.propertyvista.portal.rpc.portal.web.dto.BillingSummaryDTO;
 import com.propertyvista.portal.rpc.portal.web.dto.MaintenanceDTO;
 import com.propertyvista.portal.rpc.portal.web.dto.TenantProfileDTO;
-import com.propertyvista.portal.rpc.portal.web.dto.ResidentServicesDTO;
 import com.propertyvista.portal.rpc.portal.web.dto.insurance.InsuranceStatusDTO;
 
 @Transient

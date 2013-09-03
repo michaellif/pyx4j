@@ -179,56 +179,59 @@ public class PortalSiteMap implements SiteMap {
         }
 
         @PlaceProperties(navigLabel = "Resident Services")
-        public static class TenantInsurance extends AppPlace {
+        public static class ResidentServices extends AppPlace {
 
-            /** this place is displayed to people who don't have tenant insurance */
-            public static class ProvideTenantInsurance extends AppPlace {
+            public static class TenantInsurance extends AppPlace {
 
-            }
-
-            public static class TenantSure {
-
-                @PlaceProperties(caption = "Tenant Sure Contact Info")
-                public static class About extends AppPlace implements PublicPlace {
+                /** this place is displayed to people who don't have tenant insurance */
+                public static class ProvideTenantInsurance extends AppPlace {
 
                 }
 
-                @PlaceProperties(caption = "TenantSure FAQ")
-                public static class Faq extends AppPlace {
+                public static class TenantSure {
 
-                }
+                    @PlaceProperties(caption = "Tenant Sure Contact Info")
+                    public static class About extends AppPlace implements PublicPlace {
 
-                @PlaceProperties(navigLabel = "TenantSure Management", caption = "TenantSure Management")
-                public static class Management extends AppPlace {
+                    }
 
-                    @PlaceProperties(caption = "Update Credit Card")
-                    public static class UpdateCreditCard extends AppPlace {
+                    @PlaceProperties(caption = "TenantSure FAQ")
+                    public static class Faq extends AppPlace {
+
+                    }
+
+                    @PlaceProperties(navigLabel = "TenantSure Management", caption = "TenantSure Management")
+                    public static class Management extends AppPlace {
+
+                        @PlaceProperties(caption = "Update Credit Card")
+                        public static class UpdateCreditCard extends AppPlace {
+
+                        }
+
+                    }
+
+                    @PlaceProperties(navigLabel = "Get TenantSure", caption = "Get TenantSure")
+                    public static class TenantSurePurchase extends AppPlace {
 
                     }
 
                 }
 
-                @PlaceProperties(navigLabel = "Get TenantSure", caption = "Get TenantSure")
-                public static class TenantSurePurchase extends AppPlace {
+                public static class Other {
 
-                }
-
-            }
-
-            public static class Other {
-
-                /** This place is for updating insurance other than TenantSure */
-                public static class UploadCertificate extends AppPlace {
-                    {
-                        setStable(false);
+                    /** This place is for updating insurance other than TenantSure */
+                    public static class UploadCertificate extends AppPlace {
+                        {
+                            setStable(false);
+                        }
                     }
+
                 }
 
-            }
+                @PlaceProperties(caption = "Tenant Insurance")
+                public static class CoveredByOtherTenant extends AppPlace {
 
-            @PlaceProperties(caption = "Tenant Insurance")
-            public static class CoveredByOtherTenant extends AppPlace {
-
+                }
             }
         }
     }

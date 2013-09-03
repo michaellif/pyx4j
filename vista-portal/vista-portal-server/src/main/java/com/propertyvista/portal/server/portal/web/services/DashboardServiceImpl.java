@@ -42,6 +42,7 @@ import com.propertyvista.portal.domain.dto.financial.PvBillingFinancialSummaryDT
 import com.propertyvista.portal.domain.dto.financial.YardiFinancialSummaryDTO;
 import com.propertyvista.portal.rpc.portal.web.dto.FinancialDashboardDTO;
 import com.propertyvista.portal.rpc.portal.web.dto.MainDashboardDTO;
+import com.propertyvista.portal.rpc.portal.web.dto.ServicesDashboardDTO;
 import com.propertyvista.portal.rpc.portal.web.services.DashboardService;
 import com.propertyvista.portal.server.portal.TenantAppContext;
 import com.propertyvista.portal.server.portal.web.services.mock.DashboardServiceMockImpl;
@@ -112,6 +113,15 @@ public class DashboardServiceImpl implements DashboardService {
         }
     }
 
+    @Override
+    public void retrieveServicesDashboard(AsyncCallback<ServicesDashboardDTO> callback) {
+        if (true) {
+            new DashboardServiceMockImpl().retrieveServicesDashboard(callback);
+        } else {
+
+        }
+    }
+
     private static FinancialSummaryDTO retrieve() {
         FinancialSummaryDTO financialSummary = VistaFeatures.instance().yardiIntegration() ? EntityFactory.create(YardiFinancialSummaryDTO.class)
                 : EntityFactory.create(PvBillingFinancialSummaryDTO.class);
@@ -160,4 +170,5 @@ public class DashboardServiceImpl implements DashboardService {
 
         return currentAutoPayments;
     }
+
 }

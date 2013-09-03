@@ -26,11 +26,10 @@ import com.propertyvista.portal.rpc.portal.PortalSiteMap;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap.Resident;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap.Resident.Financial.BillingDashboard;
 import com.propertyvista.portal.web.client.activity.NotificationPageActivity;
-import com.propertyvista.portal.web.client.activity.PotentialTenantActivity;
 import com.propertyvista.portal.web.client.activity.SignUpActivity;
 import com.propertyvista.portal.web.client.activity.dashboard.MainDashboardActivity;
-import com.propertyvista.portal.web.client.activity.financial.autopay.AutoPayListActivity;
 import com.propertyvista.portal.web.client.activity.financial.autopay.AutoPayConfirmationActivity;
+import com.propertyvista.portal.web.client.activity.financial.autopay.AutoPayListActivity;
 import com.propertyvista.portal.web.client.activity.financial.autopay.AutoPayWizardActivity;
 import com.propertyvista.portal.web.client.activity.financial.dashboard.FinancialDashboardActivity;
 import com.propertyvista.portal.web.client.activity.financial.payment.PaymentConfirmationActivity;
@@ -45,6 +44,7 @@ import com.propertyvista.portal.web.client.activity.login.VistaTermsActivity;
 import com.propertyvista.portal.web.client.activity.profile.ProfileActivity;
 import com.propertyvista.portal.web.client.activity.security.PasswordChangeActivity;
 import com.propertyvista.portal.web.client.activity.security.PasswordResetActivity;
+import com.propertyvista.portal.web.client.activity.services.dashboard.ServicesDashboardActivity;
 
 public class ContentActivityMapper implements AppActivityMapper {
 
@@ -73,8 +73,8 @@ public class ContentActivityMapper implements AppActivityMapper {
                         activity = new ProfileActivity(appPlace);
                     }
 
-                    else if (appPlace instanceof PortalSiteMap.PotentialTenants) {
-                        activity = new PotentialTenantActivity(appPlace);
+                    else if (appPlace instanceof PortalSiteMap.Resident.ResidentServices) {
+                        activity = new ServicesDashboardActivity(appPlace);
 
                     } else if (appPlace instanceof Resident.PaymentMethods.NewPaymentMethod) {
                         activity = new PaymentMethodWizardActivity(appPlace);

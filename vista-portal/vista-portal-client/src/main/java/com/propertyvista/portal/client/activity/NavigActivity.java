@@ -92,7 +92,7 @@ public class NavigActivity extends AbstractActivity implements NavigView.NavigPr
         }
         items.add(new Resident.ProfileViewer());
         if (VistaFeatures.instance().countryOfOperation() == CountryOfOperation.Canada) {
-            items.add(new Resident.TenantInsurance());
+            items.add(new Resident.ResidentServices.TenantInsurance());
         }
         if (SecurityController.checkBehavior(VistaCustomerBehavior.HasMultipleLeases)) {
             items.add(new PortalSiteMap.LeaseContextSelection());

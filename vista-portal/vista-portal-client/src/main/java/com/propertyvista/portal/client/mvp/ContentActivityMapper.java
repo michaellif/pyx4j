@@ -120,23 +120,23 @@ public class ContentActivityMapper implements AppActivityMapper {
                     } else if (appPlace instanceof Resident.Maintenance.EditMaintenanceRequest) {
                         activity = new EditMaintenanceRequestActivity(appPlace);
 
-                    } else if (appPlace instanceof Resident.TenantInsurance) {
+                    } else if (appPlace instanceof Resident.ResidentServices.TenantInsurance) {
                         activity = new TenantInsuranceActivity();
-                    } else if (appPlace instanceof Resident.TenantInsurance.ProvideTenantInsurance) {
+                    } else if (appPlace instanceof Resident.ResidentServices.TenantInsurance.ProvideTenantInsurance) {
                         activity = new ProvideTenantInsuranceActivity();
 
-                    } else if (appPlace instanceof Resident.TenantInsurance.TenantSure.TenantSurePurchase) {
+                    } else if (appPlace instanceof Resident.ResidentServices.TenantInsurance.TenantSure.TenantSurePurchase) {
                         activity = new TenantSurePurchaseActivity();
-                    } else if (appPlace instanceof Resident.TenantInsurance.TenantSure.Management) {
+                    } else if (appPlace instanceof Resident.ResidentServices.TenantInsurance.TenantSure.Management) {
                         activity = new TenantSureManagementActivity();
-                    } else if (appPlace instanceof Resident.TenantInsurance.TenantSure.Faq) {
+                    } else if (appPlace instanceof Resident.ResidentServices.TenantInsurance.TenantSure.Faq) {
                         activity = new TenantSureFaqActivity();
-                    } else if (appPlace instanceof Resident.TenantInsurance.TenantSure.About) {
+                    } else if (appPlace instanceof Resident.ResidentServices.TenantInsurance.TenantSure.About) {
                         activity = new TenantSureAboutActivity();
-                    } else if (appPlace instanceof Resident.TenantInsurance.TenantSure.Management.UpdateCreditCard) {
+                    } else if (appPlace instanceof Resident.ResidentServices.TenantInsurance.TenantSure.Management.UpdateCreditCard) {
                         activity = new TenantSureCreditCardUpdateActivity();
 
-                    } else if (appPlace instanceof Resident.TenantInsurance.Other.UploadCertificate) {
+                    } else if (appPlace instanceof Resident.ResidentServices.TenantInsurance.Other.UploadCertificate) {
                         activity = new TenantInsuranceByOtherProvdierUpdateActivity(appPlace);
                     }
 

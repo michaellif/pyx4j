@@ -11,7 +11,7 @@
  * @author michaellif
  * @version $Id$
  */
-package com.propertyvista.portal.web.client.ui.financial.dashboard;
+package com.propertyvista.portal.web.client.ui.services.dashboard;
 
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.FlowPanel;
@@ -23,35 +23,34 @@ import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.Button;
 import com.pyx4j.widgets.client.actionbar.Toolbar;
 
-import com.propertyvista.portal.rpc.portal.dto.ResidentServicesDTO;
+import com.propertyvista.portal.rpc.portal.web.dto.insurance.InsuranceStatusDTO;
 import com.propertyvista.portal.web.client.resources.PortalImages;
 import com.propertyvista.portal.web.client.ui.AbstractGadget;
 
-public class PaymentMethodsGadget extends AbstractGadget<FinancialDashboardViewImpl> {
+public class InsuranceSummaryGadget extends AbstractGadget<ServicesDashboardViewImpl> {
 
-    private static final I18n i18n = I18n.get(PaymentMethodsGadget.class);
+    private static final I18n i18n = I18n.get(InsuranceSummaryGadget.class);
 
-    PaymentMethodsGadget(FinancialDashboardViewImpl form) {
-        super(form, PortalImages.INSTANCE.billingIcon(), i18n.tr("Payment Methods"), ThemeColor.contrast4);
+    InsuranceSummaryGadget(ServicesDashboardViewImpl form) {
+        super(form, PortalImages.INSTANCE.billingIcon(), i18n.tr("Insurance"), ThemeColor.contrast4);
         setActionsToolbar(new PaymentMethodsToolbar());
 
         FlowPanel contentPanel = new FlowPanel();
-        contentPanel.add(new HTML("Payment Methods"));
+        contentPanel.add(new HTML("Insurance"));
 
         setContent(contentPanel);
     }
 
-    protected void populate(ResidentServicesDTO value) {
+    protected void populate(InsuranceStatusDTO value) {
 
     }
 
     class PaymentMethodsToolbar extends Toolbar {
         public PaymentMethodsToolbar() {
-            Button autoPayButton = new Button("Add Payment Method", new Command() {
+            Button autoPayButton = new Button("Add Insurance", new Command() {
 
                 @Override
                 public void execute() {
-                    getGadgetViewer().getPresenter().addPaymentMethod();
                 }
             });
             autoPayButton.getElement().getStyle().setProperty("background", StyleManager.getPalette().getThemeColor(ThemeColor.contrast4, 1));

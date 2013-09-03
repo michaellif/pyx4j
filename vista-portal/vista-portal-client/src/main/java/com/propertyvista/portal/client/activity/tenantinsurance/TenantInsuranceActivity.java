@@ -46,13 +46,13 @@ public class TenantInsuranceActivity extends AbstractActivity {
             @Override
             public void onSuccess(InsuranceStatusDTO status) {
                 if (status instanceof NoInsuranceStatusDTO) {
-                    AppSite.getPlaceController().goTo(new PortalSiteMap.Resident.TenantInsurance.ProvideTenantInsurance());
+                    AppSite.getPlaceController().goTo(new PortalSiteMap.Resident.ResidentServices.TenantInsurance.ProvideTenantInsurance());
                 } else {
                     if (status.isOwner().isBooleanTrue()) {
                         if (status instanceof InsuranceStatusShortDTO) {
-                            AppSite.getPlaceController().goTo(new PortalSiteMap.Resident.TenantInsurance.TenantSure.Management());
+                            AppSite.getPlaceController().goTo(new PortalSiteMap.Resident.ResidentServices.TenantInsurance.TenantSure.Management());
                         } else if (status instanceof OtherProviderInsuranceStatusDTO) {
-                            AppSite.getPlaceController().goTo(new PortalSiteMap.Resident.TenantInsurance.ProvideTenantInsurance());
+                            AppSite.getPlaceController().goTo(new PortalSiteMap.Resident.ResidentServices.TenantInsurance.ProvideTenantInsurance());
                         } else {
                             throw new Error("got unknown insurance status");
                         }

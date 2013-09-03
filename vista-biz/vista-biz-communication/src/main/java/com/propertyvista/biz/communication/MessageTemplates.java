@@ -513,7 +513,8 @@ public class MessageTemplates {
             body = body.replace("${cancellationDate}", dateFormat.format(cancellationDate));
             body = body.replace("${gracePeriodEndDate}", dateFormat.format(gracePeriodEndDate));
             body = body.replace("${paymentMethodLink}", AppPlaceInfo.absoluteUrl(VistaDeployment.getBaseApplicationURL(VistaApplication.residentPortal, true)
-                    + DeploymentConsts.TENANT_URL_PATH, true, PortalSiteMap.Resident.TenantInsurance.TenantSure.Management.UpdateCreditCard.class));
+                    + DeploymentConsts.TENANT_URL_PATH, true,
+                    PortalSiteMap.Resident.ResidentServices.TenantInsurance.TenantSure.Management.UpdateCreditCard.class));
             // TODO i18n body
             template.content().setValue(wrapTenantSureHtml(body));
 

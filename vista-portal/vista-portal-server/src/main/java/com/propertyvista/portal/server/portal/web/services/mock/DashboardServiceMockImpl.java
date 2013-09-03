@@ -26,6 +26,7 @@ import com.propertyvista.portal.rpc.portal.web.dto.AutoPaySummaryDTO;
 import com.propertyvista.portal.rpc.portal.web.dto.BillingSummaryDTO;
 import com.propertyvista.portal.rpc.portal.web.dto.FinancialDashboardDTO;
 import com.propertyvista.portal.rpc.portal.web.dto.MainDashboardDTO;
+import com.propertyvista.portal.rpc.portal.web.dto.ServicesDashboardDTO;
 import com.propertyvista.portal.rpc.portal.web.dto.TenantProfileDTO;
 import com.propertyvista.portal.rpc.portal.web.services.DashboardService;
 import com.propertyvista.portal.server.portal.TenantAppContext;
@@ -54,6 +55,12 @@ public class DashboardServiceMockImpl implements DashboardService {
         callback.onSuccess(dashboard);
     }
 
+    @Override
+    public void retrieveServicesDashboard(AsyncCallback<ServicesDashboardDTO> callback) {
+        ServicesDashboardDTO dashboard = EntityFactory.create(ServicesDashboardDTO.class);
+        callback.onSuccess(dashboard);
+    }
+
     private static void populateProfileInfo(TenantProfileDTO profileInfo) {
         LeaseTermTenant tenantInLease = TenantAppContext.getCurrentUserTenantInLease();
         profileInfo.tenantName().setValue(tenantInLease.leaseParticipant().customer().person().name().getStringView());
@@ -78,4 +85,5 @@ public class DashboardServiceMockImpl implements DashboardService {
         autoPaySummary.nextAutoPayDate().setValue(new LogicalDate(System.currentTimeMillis() + 35 * 24 * 60 * 60 * 1000));
         autoPaySummary.modificationsAllowd().setValue(true);
     }
+
 }

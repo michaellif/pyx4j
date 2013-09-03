@@ -11,16 +11,30 @@
  * @author Dad
  * @version $Id$
  */
-package com.propertyvista.portal.web.client.ui;
+package com.propertyvista.portal.web.client.ui.services.dashboard;
 
-import com.google.gwt.user.client.ui.HTML;
-import com.google.gwt.user.client.ui.SimplePanel;
+import com.pyx4j.site.client.IsView;
 
-public class PotentialTenantViewImpl extends SimplePanel implements PotentialTenantView {
+import com.propertyvista.portal.rpc.portal.web.dto.ServicesDashboardDTO;
 
-    public PotentialTenantViewImpl() {
-        HTML label = new HTML("Potential Tenant");
-        setWidget(label);
+public interface ServicesDashboardView extends IsView {
+
+    public interface ServicesDashboardPresenter {
+
+        void viewCurrentBill();
+
+        void viewBillingHistory();
+
+        void payNow();
+
+        void setAutopay();
+
+        void addPaymentMethod();
 
     }
+
+    void setPresenter(ServicesDashboardPresenter presenter);
+
+    void populate(ServicesDashboardDTO result);
+
 }

@@ -107,7 +107,7 @@ public class MenuViewImpl extends DockPanel implements MenuView {
         }
 
         if (VistaFeatures.instance().countryOfOperation() == CountryOfOperation.Canada) {
-            mainHolder.add(new NavigItem(new Resident.TenantInsurance(), PortalImages.INSTANCE.residentServicesMenu(), ThemeColor.contrast4));
+            mainHolder.add(new NavigItem(new Resident.ResidentServices(), PortalImages.INSTANCE.residentServicesMenu(), ThemeColor.contrast4));
         }
 
         mainHolder.add(new NavigItem(new Resident.Offers(), PortalImages.INSTANCE.offersMenu(), ThemeColor.contrast6));

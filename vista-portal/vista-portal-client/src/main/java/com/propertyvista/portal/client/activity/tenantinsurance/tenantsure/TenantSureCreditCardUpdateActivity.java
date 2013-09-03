@@ -96,6 +96,6 @@ public class TenantSureCreditCardUpdateActivity extends SecurityAwareActivity im
 
     @Override
     public void onCCUpdateSuccessAcknowledged() {
-        AppSite.getPlaceController().goTo(new PortalSiteMap.Resident.TenantInsurance.TenantSure.Management());
+        AppSite.getPlaceController().goTo(new PortalSiteMap.Resident.ResidentServices.TenantInsurance.TenantSure.Management());
     }
 }
