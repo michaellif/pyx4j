@@ -30,6 +30,7 @@ import java.util.Vector;
 
 import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.commons.EqualsHelper;
+import com.pyx4j.entity.annotations.Timestamp;
 import com.pyx4j.entity.shared.AttachLevel;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
@@ -174,7 +175,7 @@ public class EntityDiff {
                     }
                     break;
                 default:
-                    if (!EqualsHelper.equals(member1, member2)) {
+                    if ((memberMeta.getAnnotation(Timestamp.class) == null) && (!EqualsHelper.equals(member1, member2))) {
                         addChanges(path, memberMeta.getCaption(), logTransient, member1.getValue(), member2.getValue());
                     }
                 }
