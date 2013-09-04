@@ -128,7 +128,7 @@ body {
 
 .Anchor, .gwt-Anchor {
 	color: #F68308;
-	font-size: 0.8em;
+	font-size: 13px;
 	padding: 5px 5px 5px 0;
 	white-space: nowrap;
 	text-decoration: none;
@@ -183,6 +183,7 @@ div.Button,button.gwt-Button {
 div.ButtonText,button.gwt-Button {
 	color: #FDFDFD;
 	font-weight: bolder;
+	font-size: 16px;
 }
 
 button.gwt-Button {
@@ -312,12 +313,6 @@ element.style {
 .WidgetDecoratorComponentHolder .TextBox, .WidgetDecoratorComponentHolder .ListBox {
     min-width: 85px !important;
 }
-.FormFlexPanel, .EntityFolderTableDecorator {
-    font-size: 14px !important;
-}
-.FieldEditorPanel td {
-    vertical-align: bottom !important;
-}
 
 .ProvideTIRequirements {
     width: auto !important;
@@ -346,4 +341,30 @@ element.style {
 }
 .PmcCustomFooter .PmcLogoSmall {
 	vertical-align: middle;
+}
+.FormFlexPanel .FieldEditorPanel td {
+    vertical-align: bottom !important;
+}
+
+.EntityFolderTableDecorator {
+    font-size: 14px !important;
+}
+.FormFlexPanel {
+    font-size: 11px;
+}
+.FormFlexPanel  .TenantSurePresonalDisclaimer {
+    font-size: 12px;
+}
+.FormFlexPanel .PaymentEditorLegalTerms {
+    padding-right: 0;
+    font-size: 12px;
+}
+.FormFlexPanel  .TenantDashboardSection, .FormFlexPanel  .TenantDashboardTableHeader, .FormFlexPanel .FormFlexPanelH2, .FormFlexPanel .BillingDetailItem, .FormFlexPanel .gwt-HTML, .FormFlexPanel .TSPucrhaseViewMessageText {
+    font-size: 13px;
+}
+.FormFlexPanel .FormFlexPanelH1, .FormFlexPanel .WidgetDecorator, .FormFlexPanelH3, .EntityContainerDecoratorCollapsedCaption, .FormFlexPanel .TSPucrhaseViewMessageText, .FormFlexPanel .TenantSureManagementGreetingPanel{
+    font-size: 14px !important;
+}
+.PaymentEditorForm {
+    width: 55em !important;
 }
