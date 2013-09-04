@@ -67,7 +67,7 @@ import com.propertyvista.domain.contact.AddressSimple;
 import com.propertyvista.domain.payment.CreditCardInfo.CreditCardType;
 import com.propertyvista.domain.payment.LeasePaymentMethod;
 import com.propertyvista.domain.payment.PaymentType;
-import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
+import com.propertyvista.domain.person.Person;
 import com.propertyvista.dto.PaymentDataDTO.PaymentSelect;
 import com.propertyvista.portal.domain.dto.financial.PaymentDTO;
 import com.propertyvista.portal.web.client.resources.PortalImages;
@@ -82,7 +82,7 @@ public class PaymentWizardForm extends AbstractWizardForm<PaymentDTO> {
 
     private static final I18n i18n = I18n.get(PaymentWizardForm.class);
 
-    private final WizardStep paymentMethodSelectionStep, paymentMethodStep, comfirmationStep;
+    private final WizardStep paymentMethodSelectionStep, comfirmationStep;
 
     private final CComboBox<LeasePaymentMethod> profiledPaymentMethodsCombo = new CSimpleEntityComboBox<LeasePaymentMethod>();
 
@@ -125,7 +125,6 @@ public class PaymentWizardForm extends AbstractWizardForm<PaymentDTO> {
 
         addStep(createDetailsStep());
         paymentMethodSelectionStep = addStep(createSelectPaymentMethodStep());
-        paymentMethodStep = addStep(createPaymentMethodStep());
         comfirmationStep = addStep(createConfirmationStep());
     }
 
@@ -135,13 +134,12 @@ public class PaymentWizardForm extends AbstractWizardForm<PaymentDTO> {
 
         panel.setH1(++row, 0, 1, PortalImages.INSTANCE.billingIcon(), i18n.tr("Payment Details"));
 
-        panel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().leaseTermParticipant(), new CEntityLabel<LeaseTermParticipant<?>>()), "200px")
-                .customLabel(i18n.tr("Tenant")).build());
-
-        get(proto().leaseTermParticipant()).setViewable(true);
+        panel.setWidget(++row, 0,
+                new FormDecoratorBuilder(inject(proto().leaseTermParticipant().leaseParticipant().customer().person(), new CEntityLabel<Person>()), 200)
+                        .customLabel(i18n.tr("Tenant")).build());
 
         panel.setBR(++row, 0, 1);
-        panel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().amount()), "100px").build());
+        panel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().amount()), 100).build());
 
         return panel;
     }
@@ -185,7 +183,6 @@ public class PaymentWizardForm extends AbstractWizardForm<PaymentDTO> {
 
                         setProfiledPaymentMethodsVisible(false);
 
-                        paymentMethodStep.setStepVisible(true);
                         break;
 
                     case Profiled:
@@ -197,28 +194,11 @@ public class PaymentWizardForm extends AbstractWizardForm<PaymentDTO> {
                             profiledPaymentMethodsCombo.setValue(profiledPaymentMethodsCombo.getOptions().get(0));
                         }
 
-                        paymentMethodStep.setStepVisible(false);
                         break;
                     }
                 }
             }
         });
-
-        profiledPaymentMethodsCombo.addValueChangeHandler(new ValueChangeHandler<LeasePaymentMethod>() {
-            @Override
-            public void onValueChange(ValueChangeEvent<LeasePaymentMethod> event) {
-                if (event.getValue() != null) {
-                    paymentMethodEditor.setValue(event.getValue());
-                }
-            }
-        });
-
-        return panel;
-    }
-
-    private BasicFlexFormPanel createPaymentMethodStep() {
-        BasicFlexFormPanel panel = new BasicFlexFormPanel(i18n.tr("Payment Method"));
-        int row = -1;
 
         panel.setWidget(++row, 0, inject(proto().paymentMethod(), paymentMethodEditor));
 
@@ -231,6 +211,15 @@ public class PaymentWizardForm extends AbstractWizardForm<PaymentDTO> {
             @Override
             public void onValueChange(ValueChangeEvent<PaymentType> event) {
                 setupAddThisPaymentMethodToProfile(event.getValue());
+            }
+        });
+
+        profiledPaymentMethodsCombo.addValueChangeHandler(new ValueChangeHandler<LeasePaymentMethod>() {
+            @Override
+            public void onValueChange(ValueChangeEvent<LeasePaymentMethod> event) {
+                if (event.getValue() != null) {
+                    paymentMethodEditor.setValue(event.getValue());
+                }
             }
         });
 
