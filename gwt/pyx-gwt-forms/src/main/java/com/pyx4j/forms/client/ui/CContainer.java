@@ -227,6 +227,9 @@ public abstract class CContainer<DATA_TYPE> extends CComponent<DATA_TYPE> {
                 component.applyEditabilityRules();
             }
         }
+        //TODO Workaround to fire editable event for container - that should be reviewed - event should be fired 
+        //on accessibility adapters change
+        PropertyChangeEvent.fire(this, PropertyChangeEvent.PropertyName.editable);
     }
 
     @Override
