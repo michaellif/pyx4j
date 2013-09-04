@@ -19,11 +19,15 @@ import com.propertyvista.misc.VistaTODO;
 
 public class VistaServerSideConfigurationDevPostgreSQL extends VistaServerSideConfigurationDev {
 
+    public static final boolean connectToQAProdCopy = false;
+
     public static final boolean connectToQA = false;
 
     @Override
     public IPersistenceConfiguration getPersistenceConfiguration() {
-        if (connectToQA) {
+        if (connectToQAProdCopy) {
+            return new VistaConfigurationPostgreSQLDev2QAProdCopy();
+        } else if (connectToQA) {
             return new VistaConfigurationPostgreSQLDev2QA();
         } else {
             return new VistaConfigurationPostgreSQL() {
