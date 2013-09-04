@@ -65,10 +65,10 @@ public class Vista2PmcServiceImpl implements Vista2PmcService {
 
     @Override
     public void save(AsyncCallback<Key> callback, VistaSystemDefaultsDTO dto) {
-        auditChanges(dto.paymentFees(), Persistence.service().retrieve(EntityQueryCriteria.create(DefaultPaymentFees.class)), dto.paymentFees().updated());
+        auditChanges(dto.paymentFees(), Persistence.service().retrieve(EntityQueryCriteria.create(DefaultPaymentFees.class)));
         Persistence.service().merge(dto.paymentFees());
 
-        auditChanges(dto.equifaxFees(), Persistence.service().retrieve(EntityQueryCriteria.create(DefaultEquifaxFee.class)), dto.equifaxFees().updated());
+        auditChanges(dto.equifaxFees(), Persistence.service().retrieve(EntityQueryCriteria.create(DefaultEquifaxFee.class)));
         Persistence.service().merge(dto.equifaxFees());
 
         Persistence.service().merge(dto.equifaxLimit());

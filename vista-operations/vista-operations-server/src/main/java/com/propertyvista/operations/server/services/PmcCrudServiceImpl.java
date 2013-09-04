@@ -127,7 +127,7 @@ public class PmcCrudServiceImpl extends AbstractCrudServiceDtoImpl<Pmc, PmcDTO> 
 
         super.persist(entity, dto);
 
-        ServerSideFactory.create(AuditFacade.class).updated(entity, EntityDiff.getChanges(orig, entity, entity.updated()));
+        ServerSideFactory.create(AuditFacade.class).updated(entity, EntityDiff.getChanges(orig, entity));
 
         TaskRunner.runInTargetNamespace(entity, new Callable<Void>() {
             @Override

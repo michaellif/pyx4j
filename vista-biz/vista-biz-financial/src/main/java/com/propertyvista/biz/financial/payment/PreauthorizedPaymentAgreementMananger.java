@@ -69,14 +69,15 @@ class PreauthorizedPaymentAgreementMananger {
                 .getNextPreauthorizedPaymentDate(preauthorizedPayment.tenant().lease());
 
         PreauthorizedPayment origPreauthorizedPayment;
+        PreauthorizedPayment orig = null;
 
+        boolean isNew = false;
         // Creates a new version of PAP if values changed and there are payments created
         if (!preauthorizedPayment.id().isNull()) {
             origPreauthorizedPayment = Persistence.service().retrieve(PreauthorizedPayment.class, preauthorizedPayment.getPrimaryKey());
+            orig = origPreauthorizedPayment.duplicate();
 
             if (!EntityGraph.fullyEqual(origPreauthorizedPayment, preauthorizedPayment)) {
-                ServerSideFactory.create(AuditFacade.class)
-                        .updated(preauthorizedPayment, EntityDiff.getChanges(origPreauthorizedPayment, preauthorizedPayment));
 
                 // If tenant modifies PAP after cut off date - original will be used in this cycle and a new one in next cycle.
                 LogicalDate cutOffDate = ServerSideFactory.create(PaymentMethodFacade.class).getPreauthorizedPaymentCutOffDate(
@@ -88,6 +89,9 @@ class PreauthorizedPaymentAgreementMananger {
                 if (cutOffAppy && SystemDateManager.getDate().after(cutOffDate)) {
                     origPreauthorizedPayment.expiring().setValue(cutOffDate);
                     Persistence.service().merge(origPreauthorizedPayment);
+
+                    ServerSideFactory.create(AuditFacade.class).updated(origPreauthorizedPayment, EntityDiff.getChanges(orig, origPreauthorizedPayment));
+                    isNew = true;
 
                     preauthorizedPayment = EntityGraph.businessDuplicate(preauthorizedPayment);
                 } else {
@@ -101,6 +105,9 @@ class PreauthorizedPaymentAgreementMananger {
                         origPreauthorizedPayment.isDeleted().setValue(Boolean.TRUE);
                         Persistence.service().merge(origPreauthorizedPayment);
 
+                        ServerSideFactory.create(AuditFacade.class).updated(origPreauthorizedPayment, EntityDiff.getChanges(orig, origPreauthorizedPayment));
+                        isNew = true;
+
                         preauthorizedPayment = EntityGraph.businessDuplicate(preauthorizedPayment);
                     }
                 }
@@ -108,12 +115,18 @@ class PreauthorizedPaymentAgreementMananger {
 
             }
         } else {
+            isNew = true;
             preauthorizedPayment.effectiveFrom().setValue(nextPaymentDate);
             preauthorizedPayment.createdBy().set(VistaContext.getCurrentUserIfAvalable());
-            ServerSideFactory.create(AuditFacade.class).created(preauthorizedPayment);
         }
 
         Persistence.service().merge(preauthorizedPayment);
+
+        if (isNew) {
+            ServerSideFactory.create(AuditFacade.class).created(preauthorizedPayment);
+        } else {
+            ServerSideFactory.create(AuditFacade.class).updated(preauthorizedPayment, EntityDiff.getChanges(orig, preauthorizedPayment));
+        }
 
         return preauthorizedPayment;
     }

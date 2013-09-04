@@ -55,7 +55,7 @@ public class EmployeeCrudServiceImpl extends AbstractCrudServiceDtoImpl<Employee
     }
 
     @Override
-    protected void enhanceRetrieved(Employee entity, EmployeeDTO dto, RetrieveTarget retrieveTarget ) {
+    protected void enhanceRetrieved(Employee entity, EmployeeDTO dto, RetrieveTarget retrieveTarget) {
         // Load detached data:
         Persistence.service().retrieveMember(entity.portfolios());
         dto.portfolios().set(entity.portfolios());
@@ -151,7 +151,7 @@ public class EmployeeCrudServiceImpl extends AbstractCrudServiceDtoImpl<Employee
             Persistence.service().persist(credential);
 
             if (credentialOrig != null) {
-                String diff = EntityDiff.getChanges(credentialOrig, credential, credential.credentialUpdated());
+                String diff = EntityDiff.getChanges(credentialOrig, credential);
                 if (diff.length() > 0) {
                     ServerSideFactory.create(AuditFacade.class).record(AuditRecordEventType.CredentialUpdate, credential.user(), "{0}, {1} ", user.email(),
                             diff);

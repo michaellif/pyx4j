@@ -41,7 +41,7 @@ public class AdminUserCrudServiceImpl extends AbstractCrudServiceDtoImpl<Operati
     }
 
     @Override
-    protected void enhanceRetrieved(OperationsUserCredential entity, OperationsUserDTO dto, RetrieveTarget retrieveTarget ) {
+    protected void enhanceRetrieved(OperationsUserCredential entity, OperationsUserDTO dto, RetrieveTarget retrieveTarget) {
         if (!entity.behaviors().isEmpty()) {
             dto.role().setValue(entity.behaviors().iterator().next());
         }
@@ -53,7 +53,7 @@ public class AdminUserCrudServiceImpl extends AbstractCrudServiceDtoImpl<Operati
     }
 
     @Override
-    protected void retrievedSingle(OperationsUserCredential entity, RetrieveTarget retrieveTarget ) {
+    protected void retrievedSingle(OperationsUserCredential entity, RetrieveTarget retrieveTarget) {
         Persistence.service().retrieve(entity.user());
     }
 
@@ -63,10 +63,8 @@ public class AdminUserCrudServiceImpl extends AbstractCrudServiceDtoImpl<Operati
 
         super.save(entity, dto);
 
-        ServerSideFactory.create(AuditFacade.class).updated(
-                entity.user(),
-                CommonsStringUtils.nvl_concat(EntityDiff.getChanges(orig, entity, entity.credentialUpdated()),
-                        EntityDiff.getChanges(orig.user(), entity.user(), entity.user().updated()), "\n"));
+        ServerSideFactory.create(AuditFacade.class).updated(entity.user(),
+                CommonsStringUtils.nvl_concat(EntityDiff.getChanges(orig, entity), EntityDiff.getChanges(orig.user(), entity.user()), "\n"));
     }
 
     @Override
