@@ -23,6 +23,12 @@ public class PropertyUpdater extends Updater<ChargeDetail, PropertyUpdater> {
         Address1, Country;
     }
 
+    public enum MockFeatures implements com.propertyvista.yardi.mock.Name {
+
+        BlockAccess, BlockBatchOpening;
+
+    }
+
     public PropertyUpdater(String propertyID) {
         assert propertyID != null : "Property with id " + propertyID + " is not found.";
         this.propertyID = propertyID;

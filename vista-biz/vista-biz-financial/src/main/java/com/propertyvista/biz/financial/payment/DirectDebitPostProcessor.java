@@ -21,7 +21,6 @@ import org.apache.commons.lang.Validate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.pyx4j.commons.SimpleMessageFormat;
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.server.Executable;
 import com.pyx4j.entity.server.Persistence;
@@ -32,7 +31,6 @@ import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.utils.EntityFromatUtils;
 
 import com.propertyvista.biz.ExecutionMonitor;
-import com.propertyvista.biz.financial.payment.PaymentBatchPosting.ProcessPaymentRecordInBatch;
 import com.propertyvista.config.VistaDeployment;
 import com.propertyvista.domain.financial.BillingAccount;
 import com.propertyvista.domain.financial.PaymentRecord;
@@ -171,19 +169,7 @@ public class DirectDebitPostProcessor {
         criteria.eq(criteria.proto().paymentMethod().type(), PaymentType.DirectBanking);
         criteria.asc(criteria.proto().billingAccount().lease().unit().building());
 
-        PaymentBatchPosting.processPaymentsInBatch(executionMonitor, criteria, new ProcessPaymentRecordInBatch() {
-
-            @Override
-            public void processPayment(PaymentRecord paymentRecord, PaymentBatchContext paymentBatchContext) throws PaymentException {
-                PaymentRecord processedPaymentRecord = ServerSideFactory.create(PaymentFacade.class).processPayment(paymentRecord, paymentBatchContext);
-                if (processedPaymentRecord.paymentStatus().getValue() == PaymentRecord.PaymentStatus.Rejected) {
-                    executionMonitor.addFailedEvent("PostRejected", processedPaymentRecord.amount().getValue(),
-                            SimpleMessageFormat.format("Payment {0} was rejected", paymentRecord.id()));
-                } else {
-                    executionMonitor.addInfoEvent("Posted", null, processedPaymentRecord.amount().getValue());
-                }
-            }
-        });
+        new PaymentBatchPosting().processPayments(criteria, false, executionMonitor);
     }
 
 }

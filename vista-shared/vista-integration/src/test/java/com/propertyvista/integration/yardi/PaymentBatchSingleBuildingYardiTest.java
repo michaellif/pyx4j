@@ -31,14 +31,12 @@ import com.propertyvista.domain.financial.PaymentRecord.PaymentStatus;
 import com.propertyvista.domain.financial.yardi.YardiPayment;
 import com.propertyvista.domain.payment.PaymentType;
 import com.propertyvista.domain.tenant.lease.Lease;
-import com.propertyvista.domain.tenant.lease.Tenant;
 import com.propertyvista.test.integration.InvoiceLineItemTester;
 import com.propertyvista.test.integration.PaymentRecordTester;
-import com.propertyvista.test.mock.models.CustomerDataModel;
 import com.propertyvista.test.mock.models.LeaseDataModel;
 import com.propertyvista.yardi.services.YardiResidentTransactionsService;
 
-public class PaymentBatchYardiTest extends PaymentYardiTestBase {
+public class PaymentBatchSingleBuildingYardiTest extends PaymentYardiTestBase {
 
     private Lease lease11;
 
@@ -61,14 +59,6 @@ public class PaymentBatchYardiTest extends PaymentYardiTestBase {
         lease11 = loadLeaseAndCreatePaymentMethod("t000111");
         lease12 = loadLeaseAndCreatePaymentMethod("t000112");
         lease13 = loadLeaseAndCreatePaymentMethod("t000113");
-    }
-
-    protected Lease loadLeaseAndCreatePaymentMethod(String leaseId) {
-        Lease lease = loadLeaseToModel(leaseId);
-        Tenant tenant = lease.leaseParticipants().iterator().next().cast();
-        getDataModel(CustomerDataModel.class).addPaymentMethod(tenant.customer(), lease.unit().building(), PaymentType.Echeck);
-        Persistence.service().commit();
-        return lease;
     }
 
     public void testSuccessfulBatchPosting() throws Exception {

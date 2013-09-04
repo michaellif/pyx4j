@@ -22,6 +22,7 @@ import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.essentials.server.preloader.DataGenerator;
+import com.pyx4j.gwt.server.DateUtils;
 
 import com.propertyvista.biz.financial.payment.PaymentFacade;
 import com.propertyvista.biz.financial.payment.PaymentMethodFacade;
@@ -139,6 +140,14 @@ public class LeaseDataModel extends MockDataModel<Lease> {
 
     public PaymentRecord createPaymentRecord(Lease lease, PaymentType type, String amount) {
         return createPaymentRecord(lease, getPaymentMethod(lease, type), amount);
+    }
+
+    public PaymentRecord schedulePaymentRecord(Lease lease, PaymentType type, String amount, String dateStr) {
+        PaymentRecord paymentRecord = createPaymentRecord(lease, getPaymentMethod(lease, type), amount);
+        paymentRecord.targetDate().setValue(new LogicalDate(DateUtils.detectDateformat(dateStr)));
+        ServerSideFactory.create(PaymentFacade.class).persistPayment(paymentRecord);
+        ServerSideFactory.create(PaymentFacade.class).schedulePayment(paymentRecord);
+        return paymentRecord;
     }
 
     public PaymentRecord createPaymentRecord(Lease lease, LeasePaymentMethod paymentMethod, String amount) {

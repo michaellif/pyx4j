@@ -26,6 +26,7 @@ import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.gwt.server.DateUtils;
 
 import com.propertyvista.biz.system.OperationsTriggerFacade;
+import com.propertyvista.domain.payment.PaymentType;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.Tenant;
@@ -149,6 +150,7 @@ public abstract class PaymentYardiTestBase extends YardiTestBase {
         EntityQueryCriteria<Lease> criteria = EntityQueryCriteria.create(Lease.class);
         criteria.add(PropertyCriterion.eq(criteria.proto().leaseId(), leaseId));
         Lease lease = Persistence.service().retrieve(criteria);
+        assertNotNull("Lease  " + leaseId + " imported", lease);
         Persistence.ensureRetrieve(lease, AttachLevel.Attached);
         Persistence.ensureRetrieve(lease.unit(), AttachLevel.Attached);
         Persistence.ensureRetrieve(lease.unit().building(), AttachLevel.Attached);
@@ -158,6 +160,14 @@ public abstract class PaymentYardiTestBase extends YardiTestBase {
         Tenant tenant = lease.leaseParticipants().iterator().next().cast();
         getDataModel(CustomerDataModel.class).addItem(tenant.customer());
 
+        return lease;
+    }
+
+    protected Lease loadLeaseAndCreatePaymentMethod(String leaseId) {
+        Lease lease = loadLeaseToModel(leaseId);
+        Tenant tenant = lease.leaseParticipants().iterator().next().cast();
+        getDataModel(CustomerDataModel.class).addPaymentMethod(tenant.customer(), lease.unit().building(), PaymentType.Echeck);
+        Persistence.service().commit();
         return lease;
     }
 

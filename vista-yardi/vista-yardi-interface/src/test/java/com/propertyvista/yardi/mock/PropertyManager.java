@@ -47,6 +47,8 @@ public class PropertyManager {
 
     private final com.yardi.entity.mits.Property property;
 
+    private final YardiMockPropertyFeatures mockFeatures = new YardiMockPropertyFeatures();
+
     private final ResidentTransactions transactions;
 
     private final Map<String, Map<String, Charge>> leaseCharges;
@@ -164,7 +166,10 @@ public class PropertyManager {
             if (property.getName() instanceof PropertyUpdater.ADDRESS) {
                 Address address = rtProperty.getPropertyID().get(0).getAddress().get(0);
                 updateProperty(address, property);
+            } else if (property.getName() instanceof PropertyUpdater.MockFeatures) {
+                updateProperty(mockFeatures, property);
             }
+
         }
     }
 

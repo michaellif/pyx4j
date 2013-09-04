@@ -13,7 +13,6 @@
  */
 package com.propertyvista.biz.financial.payment;
 
-import java.math.BigDecimal;
 import java.rmi.RemoteException;
 import java.util.Calendar;
 import java.util.HashMap;
@@ -24,7 +23,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.pyx4j.commons.LogicalDate;
-import com.pyx4j.commons.SimpleMessageFormat;
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.server.IEntityPersistenceService.ICursorIterator;
 import com.pyx4j.entity.server.Persistence;
@@ -33,7 +31,6 @@ import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.gwt.server.DateUtils;
 
 import com.propertyvista.biz.ExecutionMonitor;
-import com.propertyvista.biz.financial.payment.PaymentBatchPosting.ProcessPaymentRecordInBatch;
 import com.propertyvista.biz.system.YardiARFacade;
 import com.propertyvista.biz.system.YardiServiceException;
 import com.propertyvista.domain.financial.PaymentRecord;
@@ -56,27 +53,7 @@ class ScheduledPaymentsManager {
         criteria.le(criteria.proto().targetDate(), forDate);
         criteria.asc(criteria.proto().billingAccount().lease().unit().building());
 
-        PaymentBatchPosting.processPaymentsInBatch(executionMonitor, criteria, new ProcessPaymentRecordInBatch() {
-
-            @Override
-            public void processPayment(PaymentRecord paymentRecord, PaymentBatchContext paymentBatchContext) throws PaymentException {
-                if (paymentRecord.amount().getValue().compareTo(BigDecimal.ZERO) <= 0) {
-                    ServerSideFactory.create(PaymentFacade.class).cancel(paymentRecord);
-                    executionMonitor.addFailedEvent("Canceled Zero amount", (String) null);
-                } else if (!PaymentUtils.isElectronicPaymentsSetup(paymentRecord.billingAccount())) {
-                    ServerSideFactory.create(PaymentFacade.class).cancel(paymentRecord);
-                    executionMonitor.addFailedEvent("Canceled ElectronicPayments Not Setup", (String) null);
-                } else {
-                    PaymentRecord processedPaymentRecord = ServerSideFactory.create(PaymentFacade.class).processPayment(paymentRecord, paymentBatchContext);
-                    if (processedPaymentRecord.paymentStatus().getValue() == PaymentRecord.PaymentStatus.Rejected) {
-                        executionMonitor.addFailedEvent("Rejected", processedPaymentRecord.amount().getValue(),
-                                SimpleMessageFormat.format("Payment {0} was rejected", paymentRecord.id()));
-                    } else {
-                        executionMonitor.addProcessedEvent("Processed", processedPaymentRecord.amount().getValue());
-                    }
-                }
-            }
-        });
+        new PaymentBatchPosting().processPayments(criteria, true, executionMonitor);
 
     }
 
