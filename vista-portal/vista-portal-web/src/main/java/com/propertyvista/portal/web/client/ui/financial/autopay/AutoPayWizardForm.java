@@ -43,7 +43,7 @@ import com.pyx4j.forms.client.ui.CDateLabel;
 import com.pyx4j.forms.client.ui.CEntityLabel;
 import com.pyx4j.forms.client.ui.CRadioGroupEnum;
 import com.pyx4j.forms.client.ui.CSimpleEntityComboBox;
-import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
+import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
 import com.pyx4j.forms.client.ui.wizard.WizardStep;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
@@ -57,6 +57,7 @@ import com.propertyvista.common.client.ui.components.editors.payments.PaymentMet
 import com.propertyvista.common.client.ui.components.folders.PapCoveredItemDtoFolder;
 import com.propertyvista.common.client.ui.components.folders.PapCoveredItemFolder;
 import com.propertyvista.domain.contact.AddressSimple;
+import com.propertyvista.domain.payment.CreditCardInfo.CreditCardType;
 import com.propertyvista.domain.payment.LeasePaymentMethod;
 import com.propertyvista.domain.payment.PaymentType;
 import com.propertyvista.domain.payment.PreauthorizedPayment;
@@ -66,6 +67,7 @@ import com.propertyvista.dto.PaymentDataDTO.PaymentSelect;
 import com.propertyvista.dto.PreauthorizedPaymentCoveredItemDTO;
 import com.propertyvista.portal.rpc.portal.web.dto.AutoPayDTO;
 import com.propertyvista.portal.web.client.ui.AbstractWizardForm;
+import com.propertyvista.portal.web.client.ui.IWizardView;
 import com.propertyvista.portal.web.client.ui.LegalTermsDialog;
 import com.propertyvista.portal.web.client.ui.LegalTermsDialog.TermsType;
 import com.propertyvista.portal.web.client.ui.financial.PortalPaymentTypesUtil;
@@ -73,11 +75,11 @@ import com.propertyvista.portal.web.client.ui.util.decorators.FormDecoratorBuild
 
 public class AutoPayWizardForm extends AbstractWizardForm<AutoPayDTO> {
 
-    private static final I18n i18n = I18n.get(AutoPayWizardForm.class);
+    static final I18n i18n = I18n.get(AutoPayWizardForm.class);
 
     private static String cutOffDateWarning = i18n.tr("All changes will take effect after this date!");
 
-    private final WizardStep detailsStep, paymentMethodStep, comfirmationStep;
+    private final WizardStep detailsStep, paymentMethodSelectionStep, paymentMethodStep, comfirmationStep;
 
     private final CComboBox<LeasePaymentMethod> profiledPaymentMethodsCombo = new CSimpleEntityComboBox<LeasePaymentMethod>();
 
@@ -90,7 +92,12 @@ public class AutoPayWizardForm extends AbstractWizardForm<AutoPayDTO> {
     private final PaymentMethodForm<LeasePaymentMethod> paymentMethodEditor = new PaymentMethodForm<LeasePaymentMethod>(LeasePaymentMethod.class) {
         @Override
         public Set<PaymentType> defaultPaymentTypes() {
-            return PortalPaymentTypesUtil.getAllowedPaymentTypes();
+            return PortalPaymentTypesUtil.getAllowedPaymentTypes(false);
+        }
+
+        @Override
+        protected Set<CreditCardType> getAllowedCardTypes() {
+            return AutoPayWizardForm.this.getValue().allowedCardTypes();
         }
 
         @Override
@@ -107,24 +114,29 @@ public class AutoPayWizardForm extends AbstractWizardForm<AutoPayDTO> {
                 comp.setValue(EntityFactory.create(AddressSimple.class), false);
             }
         }
+
+        @Override
+        protected String getNameOn() {
+            return ClientContext.getUserVisit().getName();
+        }
     };
 
-    public AutoPayWizardForm(AutoPayWizardView view, String endButtonCaption) {
-        super(AutoPayDTO.class, view, i18n.tr("Auto Payment Setup"), endButtonCaption, ThemeColor.contrast4);
+    public AutoPayWizardForm(IWizardView<AutoPayDTO> view) {
+        super(AutoPayDTO.class, view, i18n.tr("Automatic Payment Setup"), i18n.tr("Submit"), ThemeColor.contrast4);
 
         detailsStep = addStep(createDetailsStep());
-        addStep(createSelectPaymentMethodStep());
+        paymentMethodSelectionStep = addStep(createSelectPaymentMethodStep());
         paymentMethodStep = addStep(createPaymentMethodStep());
         comfirmationStep = addStep(createConfirmationStep());
     }
 
-    private TwoColumnFlexFormPanel createDetailsStep() {
-        TwoColumnFlexFormPanel panel = new TwoColumnFlexFormPanel(i18n.tr("Details"));
+    private BasicFlexFormPanel createDetailsStep() {
+        BasicFlexFormPanel panel = new BasicFlexFormPanel(i18n.tr("Details"));
         int row = -1;
 
-        panel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().tenant(), new CEntityLabel<Tenant>()), "200px").build());
-        panel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().address(), new CEntityLabel<AddressSimple>()), "200px").build());
-        panel.setWidget(++row, 0, inject(proto().coveredItemsDTO(), new PapCoveredItemDtoFolder() {
+        panel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().tenant(), new CEntityLabel<Tenant>()), 200).build());
+        panel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().address(), new CEntityLabel<AddressSimple>()), 200).build());
+        panel.setWidget(++row, 0, 2, inject(proto().coveredItemsDTO(), new PapCoveredItemDtoFolder() {
             @Override
             public void onAmontValueChange() {
                 BigDecimal total = BigDecimal.ZERO;
@@ -137,21 +149,22 @@ public class AutoPayWizardForm extends AbstractWizardForm<AutoPayDTO> {
             }
         }));
         panel.setWidget(++row, 0, detailsTotalHolder);
+        panel.getFlexCellFormatter().setHorizontalAlignment(row, 0, HasHorizontalAlignment.ALIGN_RIGHT);
 
         return panel;
     }
 
-    private TwoColumnFlexFormPanel createSelectPaymentMethodStep() {
-        TwoColumnFlexFormPanel panel = new TwoColumnFlexFormPanel(i18n.tr("Payment Method Selection"));
+    private BasicFlexFormPanel createSelectPaymentMethodStep() {
+        BasicFlexFormPanel panel = new BasicFlexFormPanel(i18n.tr("Payment Method Selection"));
         int row = -1;
 
         panel.setWidget(
                 ++row,
                 0,
                 new FormDecoratorBuilder(inject(proto().selectPaymentMethod(), new CRadioGroupEnum<PaymentSelect>(PaymentSelect.class,
-                        RadioGroup.Layout.HORISONTAL)), "200px").build());
+                        RadioGroup.Layout.HORISONTAL)), 200).build());
 
-        panel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().profiledPaymentMethod(), profiledPaymentMethodsCombo), "200px").build());
+        panel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().profiledPaymentMethod(), profiledPaymentMethodsCombo), 200).build());
 
         get(proto().selectPaymentMethod()).addValueChangeHandler(new ValueChangeHandler<PaymentSelect>() {
             @Override
@@ -211,31 +224,32 @@ public class AutoPayWizardForm extends AbstractWizardForm<AutoPayDTO> {
         return panel;
     }
 
-    private TwoColumnFlexFormPanel createPaymentMethodStep() {
-        TwoColumnFlexFormPanel panel = new TwoColumnFlexFormPanel(i18n.tr("Payment Method"));
+    private BasicFlexFormPanel createPaymentMethodStep() {
+        BasicFlexFormPanel panel = new BasicFlexFormPanel(i18n.tr("Payment Method"));
 
         panel.setWidget(0, 0, inject(proto().paymentMethod(), paymentMethodEditor));
 
         return panel;
     }
 
-    private TwoColumnFlexFormPanel createConfirmationStep() {
-        TwoColumnFlexFormPanel panel = new TwoColumnFlexFormPanel(i18n.tr("Confirmation"));
+    private BasicFlexFormPanel createConfirmationStep() {
+        BasicFlexFormPanel panel = new BasicFlexFormPanel(i18n.tr("Confirmation"));
         int row = -1;
 
         panel.setWidget(++row, 0, confirmationDetailsHolder);
 
         panel.setBR(++row, 0, 1);
 
-        panel.setWidget(++row, 0, inject(proto().coveredItems(), new PapCoveredItemFolder()));
+        panel.setWidget(++row, 0, 2, inject(proto().coveredItems(), new PapCoveredItemFolder()));
         get(proto().coveredItems()).setViewable(true);
         get(proto().coveredItems()).inheritViewable(false);
 
         panel.setWidget(++row, 0, confirmationTotalHolder);
+        panel.getFlexCellFormatter().setHorizontalAlignment(row, 0, HasHorizontalAlignment.ALIGN_RIGHT);
 
         panel.setBR(++row, 0, 1);
 
-        panel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().nextScheduledPaymentDate(), new CDateLabel()), "200px").build());
+        panel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().nextScheduledPaymentDate(), new CDateLabel()), "30em", "10em", "10em").build());
         panel.getFlexCellFormatter().setHorizontalAlignment(row, 0, HasHorizontalAlignment.ALIGN_CENTER);
 
         panel.setHR(++row, 0, 1);
@@ -250,7 +264,7 @@ public class AutoPayWizardForm extends AbstractWizardForm<AutoPayDTO> {
     protected void onStepChange(SelectionEvent<WizardStep> event) {
         super.onStepChange(event);
         if (event.getSelectedItem().equals(detailsStep)) {
-            switchTotal(detailsTotalHolder, 38);
+            switchTotal(detailsTotalHolder, 12);
         } else if (event.getSelectedItem().equals(comfirmationStep)) {
 
             confirmationDetailsHolder.clear();
@@ -262,7 +276,7 @@ public class AutoPayWizardForm extends AbstractWizardForm<AutoPayDTO> {
                 }
             }, getValue());
 
-            switchTotal(confirmationTotalHolder, 40);
+            switchTotal(confirmationTotalHolder, 10.3);
         }
     }
 
@@ -272,7 +286,7 @@ public class AutoPayWizardForm extends AbstractWizardForm<AutoPayDTO> {
             total = get(proto().total()).getValue();
             unbind(proto().total());
         }
-        holder.setWidget(new FormDecoratorBuilder(inject(proto().total()), "100px").build());
+        holder.setWidget(new FormDecoratorBuilder(inject(proto().total()), "12em", "10em", width + "em").build());
         get(proto().total()).setValue(total);
         get(proto().total()).setViewable(true);
     }
@@ -293,6 +307,8 @@ public class AutoPayWizardForm extends AbstractWizardForm<AutoPayDTO> {
                 get(proto().selectPaymentMethod()).setVisible(hasProfiledMethods);
                 get(proto().selectPaymentMethod()).setValue(hasProfiledMethods ? PaymentDataDTO.PaymentSelect.Profiled : PaymentDataDTO.PaymentSelect.New,
                         true, populate);
+
+                paymentMethodSelectionStep.setStepVisible(hasProfiledMethods);
             }
         });
 
@@ -352,7 +368,7 @@ public class AutoPayWizardForm extends AbstractWizardForm<AutoPayDTO> {
         FlowPanel panel = new FlowPanel();
         Widget w;
 
-        panel.add(new HTML(i18n.tr("By pressing Submit you are acknowledgeing our")));
+        panel.add(new HTML(i18n.tr("Be informed that you are acknowledging our")));
         panel.add(w = new Anchor(i18n.tr("Terms Of Use"), new Command() {
             @Override
             public void execute() {

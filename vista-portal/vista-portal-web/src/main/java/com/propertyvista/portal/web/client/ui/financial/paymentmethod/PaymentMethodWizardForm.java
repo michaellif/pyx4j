@@ -36,14 +36,17 @@ import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.forms.client.ui.wizard.WizardStep;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
+import com.pyx4j.security.client.ClientContext;
 import com.pyx4j.widgets.client.Anchor;
 
 import com.propertyvista.common.client.ui.components.editors.payments.PaymentMethodForm;
 import com.propertyvista.domain.contact.AddressSimple;
+import com.propertyvista.domain.payment.CreditCardInfo.CreditCardType;
 import com.propertyvista.domain.payment.LeasePaymentMethod;
 import com.propertyvista.domain.payment.PaymentType;
 import com.propertyvista.portal.rpc.portal.web.dto.PaymentMethodDTO;
 import com.propertyvista.portal.web.client.ui.AbstractWizardForm;
+import com.propertyvista.portal.web.client.ui.IWizardView;
 import com.propertyvista.portal.web.client.ui.LegalTermsDialog;
 import com.propertyvista.portal.web.client.ui.LegalTermsDialog.TermsType;
 import com.propertyvista.portal.web.client.ui.financial.PortalPaymentTypesUtil;
@@ -59,7 +62,12 @@ public class PaymentMethodWizardForm extends AbstractWizardForm<PaymentMethodDTO
     private final PaymentMethodForm<LeasePaymentMethod> paymentMethodEditor = new PaymentMethodForm<LeasePaymentMethod>(LeasePaymentMethod.class) {
         @Override
         public Set<PaymentType> defaultPaymentTypes() {
-            return PortalPaymentTypesUtil.getAllowedPaymentTypes();
+            return PortalPaymentTypesUtil.getAllowedPaymentTypes(false);
+        }
+
+        @Override
+        protected Set<CreditCardType> getAllowedCardTypes() {
+            return PaymentMethodWizardForm.this.getValue().allowedCardTypes();
         }
 
         @Override
@@ -76,10 +84,15 @@ public class PaymentMethodWizardForm extends AbstractWizardForm<PaymentMethodDTO
                 comp.setValue(EntityFactory.create(AddressSimple.class), false);
             }
         }
+
+        @Override
+        protected String getNameOn() {
+            return ClientContext.getUserVisit().getName();
+        }
     };
 
-    public PaymentMethodWizardForm(PaymentMethodWizardView view, String endButtonCaption) {
-        super(PaymentMethodDTO.class, view, i18n.tr("New Payment Method"), endButtonCaption, ThemeColor.contrast4);
+    public PaymentMethodWizardForm(IWizardView<PaymentMethodDTO> view) {
+        super(PaymentMethodDTO.class, view, i18n.tr("Profile Payment Setup"), i18n.tr("Submit"), ThemeColor.contrast4);
 
         addStep(createPaymentMethodStep());
         comfirmationStep = addStep(createConfirmationStep());
@@ -145,7 +158,7 @@ public class PaymentMethodWizardForm extends AbstractWizardForm<PaymentMethodDTO
         FlowPanel panel = new FlowPanel();
         Widget w;
 
-        panel.add(new HTML(i18n.tr("By pressing Submit you are acknowledgeing our")));
+        panel.add(new HTML(i18n.tr("Be informed that you are acknowledging our")));
         panel.add(w = new Anchor(i18n.tr("Terms Of Use"), new Command() {
             @Override
             public void execute() {

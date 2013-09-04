@@ -13,8 +13,6 @@
  */
 package com.propertyvista.portal.web.client.ui.financial;
 
-import java.util.ArrayList;
-import java.util.Collection;
 import java.util.EnumSet;
 import java.util.Set;
 
@@ -25,30 +23,7 @@ import com.propertyvista.domain.security.VistaCustomerPaymentTypeBehavior;
 
 public class PortalPaymentTypesUtil {
 
-    public static Collection<PaymentType> avalableInProfile() {
-        ArrayList<PaymentType> allowedTypes = new ArrayList<PaymentType>();
-
-        for (VistaCustomerPaymentTypeBehavior behavior : VistaCustomerPaymentTypeBehavior.values()) {
-            if (SecurityController.checkBehavior(behavior)) {
-                switch (behavior) {
-                case CreditCardPaymentsAllowed:
-                    allowedTypes.add(PaymentType.CreditCard);
-                    break;
-                case EcheckPaymentsAllowed:
-                    allowedTypes.add(PaymentType.Echeck);
-                    break;
-                case InteracPaymentsAllowed:
-                    break;
-                case DirectBankingPaymentsAllowed:
-                    break;
-                }
-            }
-        }
-        return allowedTypes;
-
-    }
-
-    public static Set<PaymentType> getAllowedPaymentTypes() {
+    public static Set<PaymentType> getAllowedPaymentTypes(boolean isOneTimePayment) {
         // set allowed for the lease payments types selection:
         Set<PaymentType> allowedTypes = EnumSet.noneOf(PaymentType.class);
 
@@ -62,10 +37,14 @@ public class PortalPaymentTypesUtil {
                     allowedTypes.add(PaymentType.Echeck);
                     break;
                 case InteracPaymentsAllowed:
-                    allowedTypes.add(PaymentType.Interac);
+                    if (isOneTimePayment) {
+                        allowedTypes.add(PaymentType.Interac);
+                    }
                     break;
                 case DirectBankingPaymentsAllowed:
-                    allowedTypes.add(PaymentType.DirectBanking);
+                    if (isOneTimePayment) {
+                        allowedTypes.add(PaymentType.DirectBanking);
+                    }
                     break;
                 }
             }
@@ -74,7 +53,7 @@ public class PortalPaymentTypesUtil {
     }
 
     public static boolean isPreauthorizedPaumentAllowed() {
-        Collection<PaymentType> available = getAllowedPaymentTypes();
+        Set<PaymentType> available = getAllowedPaymentTypes(false);
         available.retainAll(EnumSet.of(PaymentType.Echeck, PaymentType.CreditCard));
         return !available.isEmpty();
     }

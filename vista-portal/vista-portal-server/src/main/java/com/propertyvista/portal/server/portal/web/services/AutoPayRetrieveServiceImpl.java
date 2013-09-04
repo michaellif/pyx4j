@@ -75,5 +75,6 @@ public class AutoPayRetrieveServiceImpl extends EntityDtoBinder<PreauthorizedPay
         }
 
         callback.onSuccess(dto);
+
     }
 }

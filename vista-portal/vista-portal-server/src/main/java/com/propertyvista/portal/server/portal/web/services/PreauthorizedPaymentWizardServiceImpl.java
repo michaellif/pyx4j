@@ -50,8 +50,7 @@ import com.propertyvista.server.common.util.AddressConverter;
 import com.propertyvista.server.common.util.AddressRetriever;
 import com.propertyvista.server.common.util.LeaseParticipantUtils;
 
-public class PreauthorizedPaymentWizardServiceImpl extends EntityDtoBinder<PreauthorizedPayment, AutoPayDTO> implements
-        PreauthorizedPaymentWizardService {
+public class PreauthorizedPaymentWizardServiceImpl extends EntityDtoBinder<PreauthorizedPayment, AutoPayDTO> implements PreauthorizedPaymentWizardService {
 
     public PreauthorizedPaymentWizardServiceImpl() {
         super(PreauthorizedPayment.class, AutoPayDTO.class);

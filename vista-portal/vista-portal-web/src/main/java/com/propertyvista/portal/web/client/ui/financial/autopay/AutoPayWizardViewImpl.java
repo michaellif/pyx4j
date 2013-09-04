@@ -24,7 +24,6 @@ public class AutoPayWizardViewImpl extends AbstractWizardView<AutoPayDTO> implem
 
     public AutoPayWizardViewImpl() {
         super();
-        setWizard(new AutoPayWizardForm(this, i18n.tr("Submit")));
-
+        setWizard(new AutoPayWizardForm(this));
     }
 }
