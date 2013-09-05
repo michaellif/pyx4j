@@ -236,7 +236,6 @@ public class AutoPayWizardForm extends AbstractWizardForm<AutoPayDTO> {
         get(proto().coveredItems()).inheritViewable(false);
 
         panel.setWidget(++row, 0, confirmationTotalHolder);
-        panel.getFlexCellFormatter().setHorizontalAlignment(row, 0, HasHorizontalAlignment.ALIGN_CENTER);
 
         panel.setBR(++row, 0, 1);
 
@@ -277,7 +276,7 @@ public class AutoPayWizardForm extends AbstractWizardForm<AutoPayDTO> {
             total = get(proto().total()).getValue();
             unbind(proto().total());
         }
-        holder.setWidget(new FormDecoratorBuilder(inject(proto().total()), "30em", "10em", "10em").build());
+        holder.setWidget(new FormDecoratorBuilder(inject(proto().total()), 100).build());
         get(proto().total()).setValue(total);
         get(proto().total()).setViewable(true);
     }
