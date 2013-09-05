@@ -65,7 +65,7 @@ public class AutoPayListForm extends CEntityForm<AutoPaySummaryDTO> {
         BasicFlexFormPanel content = new BasicFlexFormPanel();
         int row = -1;
 
-        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().nextAutoPayDate(), new CDateLabel()), 100).build());
+        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().nextAutoPayDate(), new CDateLabel()), 100).labelWidth(12).build());
         content.setBR(++row, 0, 1);
         content.setWidget(++row, 0, inject(proto().currentAutoPayments(), new PreauthorizedPaymentFolder()));
 
