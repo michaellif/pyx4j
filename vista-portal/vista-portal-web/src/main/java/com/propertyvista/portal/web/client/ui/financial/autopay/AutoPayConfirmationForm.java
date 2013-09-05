@@ -68,7 +68,7 @@ public class AutoPayConfirmationForm extends CEntityForm<AutoPayDTO> {
 
         mainPanel.setBR(++row, 0, 1);
 
-        mainPanel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().nextScheduledPaymentDate(), new CDateLabel()), 100).build());
+        mainPanel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().nextScheduledPaymentDate(), new CDateLabel()), 100).labelWidth(20).build());
 
         SimplePanel contentPanel = new SimplePanel(mainPanel);
         contentPanel.setStyleName(EntityViewTheme.StyleName.EntityViewContent.name());
