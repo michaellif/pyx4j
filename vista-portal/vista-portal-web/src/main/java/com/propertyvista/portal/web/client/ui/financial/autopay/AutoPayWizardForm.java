@@ -244,7 +244,7 @@ public class AutoPayWizardForm extends AbstractWizardForm<AutoPayDTO> {
 
         panel.setHR(++row, 0, 1);
 
-        panel.setWidget(++row, 0, createLegalTermsPanel());
+        panel.setWidget(++row, 0, BasicFlexFormPanel());
         panel.getFlexCellFormatter().setAlignment(row, 0, HasHorizontalAlignment.ALIGN_CENTER, HasVerticalAlignment.ALIGN_MIDDLE);
 
         return panel;
@@ -327,7 +327,7 @@ public class AutoPayWizardForm extends AbstractWizardForm<AutoPayDTO> {
         VerticalPanel panel = new VerticalPanel();
         Widget w;
 
-        panel.add(new HTML(getValue().tenant().getStringView()));
+        panel.add(new HTML(getValue().tenant().customer().person().getStringView()));
         panel.add(new HTML(getValue().address().getStringView()));
 
         panel.add(new HTML("<br/>"));
@@ -353,7 +353,7 @@ public class AutoPayWizardForm extends AbstractWizardForm<AutoPayDTO> {
         return panel;
     }
 
-    private Widget createLegalTermsPanel() {
+    private Widget BasicFlexFormPanel() {
         FlowPanel panel = new FlowPanel();
         Widget w;
 

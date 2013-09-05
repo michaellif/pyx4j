@@ -236,7 +236,7 @@ public class PaymentWizardForm extends AbstractWizardForm<PaymentDTO> {
 
         panel.setHR(++row, 0, 1);
 
-        panel.setWidget(++row, 0, createLegalTermsPanel());
+        panel.setWidget(++row, 0, BasicFlexFormPanel());
         panel.getFlexCellFormatter().setAlignment(row, 0, HasHorizontalAlignment.ALIGN_CENTER, HasVerticalAlignment.ALIGN_MIDDLE);
 
         return panel;
@@ -343,7 +343,7 @@ public class PaymentWizardForm extends AbstractWizardForm<PaymentDTO> {
     private Widget createConfirmationDetailsPanel() {
         VerticalPanel panel = new VerticalPanel();
 
-        panel.add(new HTML(getValue().leaseTermParticipant().getStringView()));
+        panel.add(new HTML(getValue().leaseTermParticipant().leaseParticipant().customer().person().getStringView()));
         panel.add(new HTML(getValue().address().getStringView()));
 
         panel.add(new HTML("<br/>"));
@@ -430,7 +430,7 @@ public class PaymentWizardForm extends AbstractWizardForm<PaymentDTO> {
         Window.open(url, "_blank", BrowserType.isIE() ? "status=1,toolbar=1,location=1,resizable=1,scrollbars=1" : null);
     }
 
-    private Widget createLegalTermsPanel() {
+    private Widget BasicFlexFormPanel() {
         FlowPanel panel = new FlowPanel();
         Widget w;
 

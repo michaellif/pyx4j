@@ -29,7 +29,7 @@ import com.pyx4j.commons.css.ThemeColor;
 import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.ui.CEntityLabel;
 import com.pyx4j.forms.client.ui.decorators.WidgetDecorator.Builder.Alignment;
-import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
+import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.Anchor;
 
@@ -56,7 +56,7 @@ public class PaymentConfirmationForm extends CEntityForm<PaymentRecordDTO> {
 
     @Override
     public IsWidget createContent() {
-        TwoColumnFlexFormPanel mainPanel = new TwoColumnFlexFormPanel();
+        BasicFlexFormPanel mainPanel = new BasicFlexFormPanel();
         int row = -1;
         Widget w;
 
@@ -67,7 +67,7 @@ public class PaymentConfirmationForm extends CEntityForm<PaymentRecordDTO> {
         mainPanel.setBR(++row, 0, 1);
 
         mainPanel.setWidget(++row, 0,
-                new FormDecoratorBuilder(inject(proto().paymentMethod(), new CEntityLabel<LeasePaymentMethod>()), 200).labelAlignment(Alignment.left).build());
+                new FormDecoratorBuilder(inject(proto().paymentMethod(), new CEntityLabel<LeasePaymentMethod>()), 250).labelAlignment(Alignment.left).build());
         mainPanel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().amount()), 100).labelAlignment(Alignment.left).build());
 
         mainPanel.setHR(++row, 0, 1);
