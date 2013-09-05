@@ -18,7 +18,6 @@ import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.SimplePanel;
-import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.commons.css.StyleManager;
@@ -29,6 +28,7 @@ import com.pyx4j.forms.client.ui.CDateLabel;
 import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.ui.CEntityLabel;
 import com.pyx4j.forms.client.ui.folder.CEntityFolderItem;
+import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.security.client.ClientContext;
@@ -37,7 +37,6 @@ import com.pyx4j.widgets.client.dialog.MessageDialog;
 import com.propertyvista.common.client.theme.VistaTheme;
 import com.propertyvista.common.client.ui.components.VistaViewersComponentFactory;
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
-import com.propertyvista.common.client.ui.components.folders.PapCoveredItemFolder;
 import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
 import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
 import com.propertyvista.domain.payment.LeasePaymentMethod;
@@ -64,13 +63,14 @@ public class AutoPayListForm extends CEntityForm<AutoPaySummaryDTO> {
 
     @Override
     public IsWidget createContent() {
-        VerticalPanel mainPanel = new VerticalPanel();
+        BasicFlexFormPanel content = new BasicFlexFormPanel();
+        int row = -1;
 
-        mainPanel.add(new FormDecoratorBuilder(inject(proto().nextAutoPayDate(), new CDateLabel()), 10).build());
-        mainPanel.add(new HTML("&nbsp"));
-        mainPanel.add(inject(proto().currentAutoPayments(), new PreauthorizedPaymentFolder()));
+        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().nextAutoPayDate(), new CDateLabel()), 10).build());
+        content.setBR(++row, 0, 1);
+        content.setWidget(++row, 0, inject(proto().currentAutoPayments(), new PreauthorizedPaymentFolder()));
 
-        SimplePanel contentPanel = new SimplePanel(mainPanel);
+        SimplePanel contentPanel = new SimplePanel(content);
         contentPanel.setStyleName(EntityViewTheme.StyleName.EntityViewContent.name());
         contentPanel.addStyleName(BlockMixin.StyleName.PortalBlock.name());
         contentPanel.getElement().getStyle().setProperty("borderTopWidth", "5px");

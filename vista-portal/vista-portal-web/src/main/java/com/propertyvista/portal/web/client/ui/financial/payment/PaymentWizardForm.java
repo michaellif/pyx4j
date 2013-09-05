@@ -156,6 +156,14 @@ public class PaymentWizardForm extends AbstractWizardForm<PaymentDTO> {
 
         panel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().profiledPaymentMethod(), profiledPaymentMethodsCombo), 200).build());
 
+        panel.setWidget(++row, 0, inject(proto().paymentMethod(), paymentMethodEditor));
+
+        panel.setHR(++row, 0, 1);
+
+        panel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().addThisPaymentMethodToProfile()), 50).labelWidth(20).build());
+
+        // tweaks:
+
         get(proto().selectPaymentMethod()).addValueChangeHandler(new ValueChangeHandler<PaymentSelect>() {
             @Override
             public void onValueChange(ValueChangeEvent<PaymentSelect> event) {
@@ -200,26 +208,19 @@ public class PaymentWizardForm extends AbstractWizardForm<PaymentDTO> {
             }
         });
 
-        panel.setWidget(++row, 0, inject(proto().paymentMethod(), paymentMethodEditor));
-
-        panel.setHR(++row, 0, 1);
-
-        panel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().addThisPaymentMethodToProfile()), 50).labelWidth(20).build());
-
-        // tweaks:
-        paymentMethodEditor.addTypeSelectionValueChangeHandler(new ValueChangeHandler<PaymentType>() {
-            @Override
-            public void onValueChange(ValueChangeEvent<PaymentType> event) {
-                setupAddThisPaymentMethodToProfile(event.getValue());
-            }
-        });
-
         profiledPaymentMethodsCombo.addValueChangeHandler(new ValueChangeHandler<LeasePaymentMethod>() {
             @Override
             public void onValueChange(ValueChangeEvent<LeasePaymentMethod> event) {
                 if (event.getValue() != null) {
                     paymentMethodEditor.setValue(event.getValue());
                 }
+            }
+        });
+
+        paymentMethodEditor.addTypeSelectionValueChangeHandler(new ValueChangeHandler<PaymentType>() {
+            @Override
+            public void onValueChange(ValueChangeEvent<PaymentType> event) {
+                setupAddThisPaymentMethodToProfile(event.getValue());
             }
         });
 

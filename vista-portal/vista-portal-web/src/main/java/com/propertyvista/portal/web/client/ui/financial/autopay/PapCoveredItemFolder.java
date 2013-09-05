@@ -11,24 +11,25 @@
  * @author VladL
  * @version $Id$
  */
-package com.propertyvista.common.client.ui.components.folders;
-
-import java.util.Arrays;
-import java.util.List;
+package com.propertyvista.portal.web.client.ui.financial.autopay;
 
 import com.google.gwt.dom.client.Style.FontWeight;
+import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.forms.client.ui.CComponent;
-import com.pyx4j.forms.client.ui.folder.CEntityFolderRowEditor;
-import com.pyx4j.forms.client.ui.folder.EntityFolderColumnDescriptor;
+import com.pyx4j.forms.client.ui.CEntityForm;
+import com.pyx4j.forms.client.ui.CNumberLabel;
+import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.common.client.ui.components.c.PapBillableItemLabel;
+import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
+import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
 import com.propertyvista.domain.payment.PreauthorizedPayment;
 import com.propertyvista.domain.payment.PreauthorizedPayment.PreauthorizedPaymentCoveredItem;
 
-public class PapCoveredItemFolder extends VistaTableFolder<PreauthorizedPayment.PreauthorizedPaymentCoveredItem> {
+public class PapCoveredItemFolder extends VistaBoxFolder<PreauthorizedPayment.PreauthorizedPaymentCoveredItem> {
 
     private static final I18n i18n = I18n.get(PapCoveredItemFolder.class);
 
@@ -41,15 +42,6 @@ public class PapCoveredItemFolder extends VistaTableFolder<PreauthorizedPayment.
     }
 
     @Override
-    public List<EntityFolderColumnDescriptor> columns() {
-        return Arrays.asList(//@formatter:off
-                new EntityFolderColumnDescriptor(proto().billableItem(),"31em", i18n.tr("Lease Charge")),
-                new EntityFolderColumnDescriptor(proto().billableItem().agreedPrice(),"8em", i18n.tr("Price"), true),
-                new EntityFolderColumnDescriptor(proto().amount(), "8em", i18n.tr("Payment")));
-          //@formatter:on                
-    }
-
-    @Override
     public CComponent<?> create(IObject<?> member) {
         if (member instanceof PreauthorizedPaymentCoveredItem) {
             return new CoveredItemViewer();
@@ -57,31 +49,29 @@ public class PapCoveredItemFolder extends VistaTableFolder<PreauthorizedPayment.
         return super.create(member);
     }
 
-    class CoveredItemViewer extends CEntityFolderRowEditor<PreauthorizedPaymentCoveredItem> {
+    class CoveredItemViewer extends CEntityForm<PreauthorizedPaymentCoveredItem> {
 
         public CoveredItemViewer() {
-            super(PreauthorizedPaymentCoveredItem.class, columns());
+            super(PreauthorizedPaymentCoveredItem.class);
 
             setViewable(true);
             inheritViewable(false);
         }
 
         @Override
-        protected CComponent<?> createCell(EntityFolderColumnDescriptor column) {
-            CComponent<?> comp;
+        public IsWidget createContent() {
+            BasicFlexFormPanel content = new BasicFlexFormPanel(i18n.tr("Details"));
+            int row = -1;
 
-            if (column.getObject() == proto().billableItem()) {
-                comp = inject(column.getObject(), new PapBillableItemLabel());
-            } else {
-                comp = super.createCell(column);
-            }
+            content.setWidget(++row, 0,
+                    new FormDecoratorBuilder(inject(proto().billableItem(), new PapBillableItemLabel()), 200).customLabel(i18n.tr("Lease Charge")).build());
+            content.setWidget(++row, 0,
+                    new FormDecoratorBuilder(inject(proto().billableItem().agreedPrice(), new CNumberLabel()), 100).customLabel(i18n.tr("Price")).build());
+            content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().amount(), new CNumberLabel()), 100).customLabel(i18n.tr("Payment")).build());
 
-            if (column.getObject() == proto().amount()) {
-                comp.asWidget().getElement().getStyle().setFontWeight(FontWeight.BOLD);
-            }
+            get(proto().amount()).asWidget().getElement().getStyle().setFontWeight(FontWeight.BOLD);
 
-            return comp;
+            return content;
         }
     }
-
 }
