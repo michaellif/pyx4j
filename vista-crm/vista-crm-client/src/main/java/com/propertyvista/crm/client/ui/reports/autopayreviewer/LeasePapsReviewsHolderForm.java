@@ -13,6 +13,11 @@
  */
 package com.propertyvista.crm.client.ui.reports.autopayreviewer;
 
+import com.google.gwt.dom.client.Style.Cursor;
+import com.google.gwt.dom.client.Style.Overflow;
+import com.google.gwt.dom.client.Style.Position;
+import com.google.gwt.dom.client.Style.TextAlign;
+import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.IsWidget;
@@ -40,6 +45,12 @@ public final class LeasePapsReviewsHolderForm extends CEntityDecoratableForm<Lea
     @Override
     public IsWidget createContent() {
         FlowPanel panel = new FlowPanel();
+        panel.getElement().getStyle().setPosition(Position.ABSOLUTE);
+        panel.getElement().getStyle().setTop(0, Unit.PX);
+        panel.getElement().getStyle().setLeft(0, Unit.PX);
+        panel.getElement().getStyle().setRight(0, Unit.PX);
+        panel.getElement().getStyle().setBottom(0, Unit.PX);
+
         FlowPanel superCaptionsPanel = new FlowPanel();
         superCaptionsPanel.addStyleName(Styles.AutoPaySuperCaptionsPanel.name());
         superCaptionsPanel.add(new HTML(i18n.tr("Suspended")));
@@ -56,7 +67,25 @@ public final class LeasePapsReviewsHolderForm extends CEntityDecoratableForm<Lea
         captionsPanel.add(new HTML(i18n.tr("%")));
 
         panel.add(captionsPanel);
-        panel.add(inject(proto().leasePapsReviews(), new LeasePapsReviewFolder()));
+        FlowPanel leasePapsFolderHolder = new FlowPanel();
+        leasePapsFolderHolder.getElement().getStyle().setOverflow(Overflow.AUTO);
+        leasePapsFolderHolder.getElement().getStyle().setPosition(Position.ABSOLUTE);
+        leasePapsFolderHolder.getElement().getStyle().setTop(50, Unit.PX);
+        leasePapsFolderHolder.getElement().getStyle().setBottom(0, Unit.PX);
+        leasePapsFolderHolder.getElement().getStyle().setLeft(0, Unit.PX);
+        leasePapsFolderHolder.getElement().getStyle().setRight(0, Unit.PX);
+        leasePapsFolderHolder.add(inject(proto().leasePapsReviews(), new LeasePapsReviewFolder()));
+
+        HTML more = new HTML(i18n.tr("More..."));
+        more.getElement().getStyle().setTextAlign(TextAlign.CENTER);
+        more.getElement().getStyle().setCursor(Cursor.POINTER);
+        more.getElement().getStyle().setLineHeight(5, Unit.EM);
+        more.getElement().getStyle().setWidth(100, Unit.PCT);
+        more.getElement().getStyle().setHeight(5, Unit.EM);
+        leasePapsFolderHolder.add(more);
+
+        panel.add(leasePapsFolderHolder);
+
         return panel;
     }
 }

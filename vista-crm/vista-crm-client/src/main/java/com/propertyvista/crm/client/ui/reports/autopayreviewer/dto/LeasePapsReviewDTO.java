@@ -16,6 +16,7 @@ package com.propertyvista.crm.client.ui.reports.autopayreviewer.dto;
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
+import com.pyx4j.entity.shared.IPrimitive;
 
 import com.propertyvista.domain.tenant.lease.Lease;
 
@@ -25,5 +26,7 @@ public interface LeasePapsReviewDTO extends IEntity {
     Lease lease();
 
     IList<PapDTO> paps();
+
+    IPrimitive<Boolean> isSelected();
 
 }

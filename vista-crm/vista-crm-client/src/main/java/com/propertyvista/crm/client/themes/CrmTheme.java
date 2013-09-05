@@ -697,6 +697,15 @@ public class CrmTheme extends VistaTheme {
         style.addProperty("font-size", "1.5em");
         addStyle(style);
 
+        style = new Style("." + LeasePapsReviewFolder.Styles.AutoPayReviewSelected.name());
+        style.addProperty("padding-right", "10px");
+        addStyle(style);
+
+        style = new Style("." + LeasePapsReviewFolder.Styles.AutoPayReviewSelected.name() + " div");
+        style.addProperty("font-size", "1em");
+        style.addProperty("line-height", "1em");
+        addStyle(style);
+
         style = new Style("." + LeasePapsReviewFolder.Styles.AutoPayPapChargesContainer.name() + " .EntityContainerDecorator");
         style.addProperty("margin", "0px");
         style.addProperty("border", "none");
@@ -779,6 +788,7 @@ public class CrmTheme extends VistaTheme {
         style.addProperty("left", "346px");
         style.addProperty("width", "100px");
         addStyle(style);
+
     }
 
 }

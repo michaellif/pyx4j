@@ -15,13 +15,13 @@ package com.propertyvista.crm.client.ui.reports.autopayreviewer;
 
 import java.util.List;
 
-import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.view.client.Range;
 
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.IsView;
 import com.pyx4j.site.client.ui.prime.AbstractPrimePane;
+import com.pyx4j.widgets.client.Button;
 
 import com.propertyvista.crm.client.ui.reports.autopayreviewer.dto.LeasePapsReviewDTO;
 import com.propertyvista.crm.client.ui.reports.autopayreviewer.dto.LeasePapsReviewsHolderDTO;
@@ -37,8 +37,12 @@ public class AutoPayReviewUpdaterViewImpl2 extends AbstractPrimePane implements 
     public AutoPayReviewUpdaterViewImpl2() {
         leasePapsReviewsHolderForm = new LeasePapsReviewsHolderForm();
         leasePapsReviewsHolderForm.initContent();
-        setContentPane(new ScrollPanel(leasePapsReviewsHolderForm.asWidget()));
+        leasePapsReviewsHolderForm.asWidget().setSize("100%", "100%");
+        setContentPane(leasePapsReviewsHolderForm);
         setSize("100%", "100%");
+        addHeaderToolbarItem(new Button(i18n.tr("Accept All")));
+        addHeaderToolbarItem(new Button(i18n.tr("Accept Marked")));
+        addHeaderToolbarItem(new Button(i18n.tr("Accept Not Marked")));
     }
 
     @Override

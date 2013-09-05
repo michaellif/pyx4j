@@ -52,7 +52,7 @@ import com.propertyvista.crm.client.ui.reports.autopayreviewer.dto.PapDTO;
 public class LeasePapsReviewFolder extends VistaBoxFolder<LeasePapsReviewDTO> {
 
     public enum Styles implements IStyleName {
-        AutoPayReviewUpdaterLeaseCaption, AutoPayPapChargesContainer, AutoPayPapCharge, AutoPayPapChargeNameColumn, AutoPayPapChargeNumberColumn
+        AutoPayReviewUpdaterLeaseCaption, AutoPayPapChargesContainer, AutoPayPapCharge, AutoPayPapChargeNameColumn, AutoPayPapChargeNumberColumn, AutoPayReviewSelected
     }
 
     private static final I18n i18n = I18n.get(LeasePapsReviewFolder.class);
@@ -91,13 +91,13 @@ public class LeasePapsReviewFolder extends VistaBoxFolder<LeasePapsReviewDTO> {
         public IsWidget createContent() {
             HTMLPanel contentPanel = new HTMLPanel(//@formatter:off
                     "<div>" +                        
-                        "<div class='AutoPayReviewUpdaterLeaseCaption'><span id='leaseCaption'></span></div>" +
-                        "<div id='folder'></div>" +
-                        "<div id='leaseTotal'></div>" +
-                    "</div>");
-            //@formatter:on
+                        "<div class='AutoPayReviewUpdaterLeaseCaption'><div class='AutoPayReviewSelected'><span id='selectionMark'></span></div><span id='leaseCaption'></span></div>" +
+                        "<div id='folder'></div>" +                        
+                    "</div>"
+            );//@formatter:on
 
             contentPanel.addAndReplaceElement(leaseCaption = new HTML(), "leaseCaption");
+            contentPanel.addAndReplaceElement(inject(proto().isSelected()), "selectionMark");
             contentPanel.addAndReplaceElement(inject(proto().paps(), new PapFolder()), "folder");
             return contentPanel;
         }
@@ -177,14 +177,11 @@ public class LeasePapsReviewFolder extends VistaBoxFolder<LeasePapsReviewDTO> {
                         "<div><span id='tenantAndPaymentMethodCaption'></span></div>" +
                         "<div>" +
                             "<div style='float:left;'><span id='chargesFolder'></span></div>" +
-                            "<div style='float:right;'><span id='isMarkedAsRevised'></span></div>" +
                         "</div>" +
                     "</div>"
             );//@formatter:on
             contentPanel.addAndReplaceElement(inject(proto().tenantAndPaymentMethod(), new CLabel<String>()), "tenantAndPaymentMethodCaption");
-
             contentPanel.addAndReplaceElement(inject(proto().charges(), new PapChargesFolder()), "chargesFolder");
-            contentPanel.addAndReplaceElement(inject(proto().isMarkedAsRevised()), "isMarkedAsRevised");
             return contentPanel;
         }
 
@@ -199,8 +196,6 @@ public class LeasePapsReviewFolder extends VistaBoxFolder<LeasePapsReviewDTO> {
         @Override
         protected void onValueSet(boolean populate) {
             super.onValueSet(populate);
-
-            get(proto().isMarkedAsRevised()).setVisible(!(getValue() instanceof LeasePapTotalsDTO));
             setViewable(getValue() instanceof LeasePapTotalsDTO);
         }
     }
