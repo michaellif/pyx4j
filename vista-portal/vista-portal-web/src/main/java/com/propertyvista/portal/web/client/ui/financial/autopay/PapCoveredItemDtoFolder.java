@@ -68,8 +68,11 @@ public class PapCoveredItemDtoFolder extends VistaBoxFolder<PreauthorizedPayment
                     new FormDecoratorBuilder(inject(proto().billableItem().agreedPrice(), new CNumberLabel()), 100).customLabel(i18n.tr("Price")).build());
             content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().covered(), new CNumberLabel()), 100).build());
             content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().amount()), 100).customLabel(i18n.tr("Payment")).build());
-            content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().percent(), new CNumberLabel()), 100).build());
+            content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().percent()), 100).build());
 
+            // tweaks:
+
+            get(proto().percent()).setEditable(false);
             get(proto().amount()).addValueChangeHandler(new ValueChangeHandler<BigDecimal>() {
                 @Override
                 public void onValueChange(ValueChangeEvent<BigDecimal> event) {

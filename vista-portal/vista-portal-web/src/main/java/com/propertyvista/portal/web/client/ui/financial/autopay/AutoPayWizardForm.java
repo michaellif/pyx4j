@@ -231,7 +231,7 @@ public class AutoPayWizardForm extends AbstractWizardForm<AutoPayDTO> {
 
         panel.setBR(++row, 0, 1);
 
-        panel.setWidget(++row, 0, 2, inject(proto().coveredItems(), new PapCoveredItemFolder()));
+        panel.setWidget(++row, 0, inject(proto().coveredItems(), new PapCoveredItemFolder()));
         get(proto().coveredItems()).setViewable(true);
         get(proto().coveredItems()).inheritViewable(false);
 

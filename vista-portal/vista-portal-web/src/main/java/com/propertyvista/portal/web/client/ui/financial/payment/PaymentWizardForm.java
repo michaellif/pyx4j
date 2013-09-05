@@ -232,6 +232,7 @@ public class PaymentWizardForm extends AbstractWizardForm<PaymentDTO> {
         int row = -1;
 
         panel.setWidget(++row, 0, confirmationDetailsHolder);
+        panel.getFlexCellFormatter().setHorizontalAlignment(row, 0, HasHorizontalAlignment.ALIGN_CENTER);
 
         panel.setHR(++row, 0, 1);
 

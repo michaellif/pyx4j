@@ -17,7 +17,6 @@ import java.util.Set;
 
 import com.google.gwt.dom.client.Style.Display;
 import com.google.gwt.dom.client.Style.FontWeight;
-import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.logical.shared.SelectionEvent;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.FlowPanel;
@@ -32,7 +31,7 @@ import com.google.gwt.user.client.ui.Widget;
 import com.pyx4j.commons.css.ThemeColor;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.forms.client.ui.CComponent;
-import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
+import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
 import com.pyx4j.forms.client.ui.wizard.WizardStep;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
@@ -98,19 +97,20 @@ public class PaymentMethodWizardForm extends AbstractWizardForm<PaymentMethodDTO
         comfirmationStep = addStep(createConfirmationStep());
     }
 
-    private TwoColumnFlexFormPanel createPaymentMethodStep() {
-        TwoColumnFlexFormPanel panel = new TwoColumnFlexFormPanel(i18n.tr("Payment Method"));
+    private BasicFlexFormPanel createPaymentMethodStep() {
+        BasicFlexFormPanel panel = new BasicFlexFormPanel(i18n.tr("Payment Method"));
 
         panel.setWidget(0, 0, inject(proto().paymentMethod(), paymentMethodEditor));
 
         return panel;
     }
 
-    private TwoColumnFlexFormPanel createConfirmationStep() {
-        TwoColumnFlexFormPanel panel = new TwoColumnFlexFormPanel(i18n.tr("Confirmation"));
+    private BasicFlexFormPanel createConfirmationStep() {
+        BasicFlexFormPanel panel = new BasicFlexFormPanel(i18n.tr("Confirmation"));
         int row = -1;
 
         panel.setWidget(++row, 0, confirmationDetailsHolder);
+        panel.getFlexCellFormatter().setHorizontalAlignment(row, 0, HasHorizontalAlignment.ALIGN_CENTER);
 
         panel.setBR(++row, 0, 1);
         panel.setHR(++row, 0, 1);
@@ -145,7 +145,6 @@ public class PaymentMethodWizardForm extends AbstractWizardForm<PaymentMethodDTO
 
         HorizontalPanel pm = new HorizontalPanel();
         pm.add(w = new HTML(i18n.tr("Payment Method:")));
-        w.getElement().getStyle().setMarginLeft(5, Unit.EM);
         w.setWidth("10em");
         pm.add(w = new HTML(get(proto().paymentMethod()).getValue().getStringView()));
         w.getElement().getStyle().setFontWeight(FontWeight.BOLD);

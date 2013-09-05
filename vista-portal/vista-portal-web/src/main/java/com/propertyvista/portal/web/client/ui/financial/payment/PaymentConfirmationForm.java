@@ -34,12 +34,12 @@ import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.Anchor;
 
 import com.propertyvista.common.client.resources.VistaImages;
-import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
 import com.propertyvista.domain.payment.LeasePaymentMethod;
 import com.propertyvista.dto.PaymentRecordDTO;
 import com.propertyvista.portal.web.client.themes.BlockMixin;
 import com.propertyvista.portal.web.client.themes.EntityViewTheme;
 import com.propertyvista.portal.web.client.ui.AbstractEntityView;
+import com.propertyvista.portal.web.client.ui.util.decorators.FormDecoratorBuilder;
 
 public class PaymentConfirmationForm extends CEntityForm<PaymentRecordDTO> {
 
@@ -67,8 +67,8 @@ public class PaymentConfirmationForm extends CEntityForm<PaymentRecordDTO> {
         mainPanel.setBR(++row, 0, 1);
 
         mainPanel.setWidget(++row, 0,
-                new FormDecoratorBuilder(inject(proto().paymentMethod(), new CEntityLabel<LeasePaymentMethod>()), 22).labelAlignment(Alignment.left).build());
-        mainPanel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().amount())).labelAlignment(Alignment.left).build());
+                new FormDecoratorBuilder(inject(proto().paymentMethod(), new CEntityLabel<LeasePaymentMethod>()), 200).labelAlignment(Alignment.left).build());
+        mainPanel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().amount()), 100).labelAlignment(Alignment.left).build());
 
         mainPanel.setHR(++row, 0, 1);
 
