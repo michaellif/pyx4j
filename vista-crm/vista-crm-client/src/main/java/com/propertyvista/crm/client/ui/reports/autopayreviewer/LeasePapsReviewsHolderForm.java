@@ -60,12 +60,12 @@ public final class LeasePapsReviewsHolderForm extends CEntityDecoratableForm<Lea
 
         FlowPanel captionsPanel = new FlowPanel();
         captionsPanel.addStyleName(Styles.AutoPayCaptionsPanel.name());
-        captionsPanel.add(new HTML(i18n.tr("Price")));
+        captionsPanel.add(new HTML(i18n.tr("Charge")));
         captionsPanel.add(new HTML(i18n.tr("Payment")));
-        captionsPanel.add(new HTML(i18n.tr("%")));
-        captionsPanel.add(new HTML(i18n.tr("Price")));
+        captionsPanel.add(new HTML(i18n.tr("% of Charge")));
+        captionsPanel.add(new HTML(i18n.tr("Charge")));
         captionsPanel.add(new HTML(i18n.tr("Payment")));
-        captionsPanel.add(new HTML(i18n.tr("%")));
+        captionsPanel.add(new HTML(i18n.tr("% of Charge")));
 
         panel.add(captionsPanel);
         FlowPanel leasePapsFolderHolder = new FlowPanel();
