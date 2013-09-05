@@ -29,7 +29,6 @@ import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.ui.CEntityLabel;
 import com.pyx4j.forms.client.ui.folder.CEntityFolderItem;
 import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
-import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.security.client.ClientContext;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
@@ -112,7 +111,7 @@ public class AutoPayListForm extends CEntityForm<AutoPaySummaryDTO> {
 
         private class PreauthorizedPaymentEditor extends CEntityDecoratableForm<AutoPayDTO> {
 
-            private final TwoColumnFlexFormPanel expirationWarning = new TwoColumnFlexFormPanel();
+            private final BasicFlexFormPanel expirationWarning = new BasicFlexFormPanel();
 
             public PreauthorizedPaymentEditor() {
                 super(AutoPayDTO.class);
@@ -130,7 +129,7 @@ public class AutoPayListForm extends CEntityForm<AutoPaySummaryDTO> {
 
             @Override
             public IsWidget createContent() {
-                TwoColumnFlexFormPanel content = new TwoColumnFlexFormPanel();
+                BasicFlexFormPanel content = new BasicFlexFormPanel();
                 int row = -1;
 
                 content.setWidget(++row, 0, expirationWarning);

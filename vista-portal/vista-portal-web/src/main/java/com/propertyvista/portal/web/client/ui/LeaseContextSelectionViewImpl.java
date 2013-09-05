@@ -24,7 +24,7 @@ import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.entity.rpc.InMemeoryListService;
 import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
-import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
+import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.prime.lister.AbstractLister.ItemSelectionHandler;
 import com.pyx4j.site.client.ui.prime.lister.EntityDataTablePanel;
@@ -49,7 +49,7 @@ public class LeaseContextSelectionViewImpl implements LeaseContextSelectionView 
 
         lister = new LeaseContextChoicesLister();
 
-        TwoColumnFlexFormPanel content = new TwoColumnFlexFormPanel();
+        BasicFlexFormPanel content = new BasicFlexFormPanel();
         content.setSize("100%", "100%");
         content.setWidget(++row, 0, lister);
 
