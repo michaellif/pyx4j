@@ -47,7 +47,7 @@ public interface PapChargeDTO extends IEntity {
     IPrimitive<BigDecimal> newPrice();
 
     // user defined: if charge is changed or new add it to preauthorized payments
-    IPrimitive<Boolean> useCharge();
+    IPrimitive<Boolean> discardCharge();
 
     // user defined: (this field is supposed to be in sync with percent)
     @Editor(type = EditorType.money)

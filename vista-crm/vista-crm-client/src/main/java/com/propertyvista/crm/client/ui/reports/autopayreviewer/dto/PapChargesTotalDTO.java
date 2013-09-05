@@ -16,6 +16,6 @@ package com.propertyvista.crm.client.ui.reports.autopayreviewer.dto;
 import com.pyx4j.entity.annotations.Transient;
 
 @Transient
-public interface PapChargeTotalDTO extends PapChargeDTO {
+public interface PapChargesTotalDTO extends PapChargeDTO {
 
 }

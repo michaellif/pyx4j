@@ -46,7 +46,7 @@ import com.propertyvista.crm.client.ui.reports.autopayreviewer.dto.LeasePapTotal
 import com.propertyvista.crm.client.ui.reports.autopayreviewer.dto.LeasePapsReviewDTO;
 import com.propertyvista.crm.client.ui.reports.autopayreviewer.dto.PapChargeDTO;
 import com.propertyvista.crm.client.ui.reports.autopayreviewer.dto.PapChargeDTO.ChangeType;
-import com.propertyvista.crm.client.ui.reports.autopayreviewer.dto.PapChargeTotalDTO;
+import com.propertyvista.crm.client.ui.reports.autopayreviewer.dto.PapChargesTotalDTO;
 import com.propertyvista.crm.client.ui.reports.autopayreviewer.dto.PapDTO;
 
 public class LeasePapsReviewFolder extends VistaBoxFolder<LeasePapsReviewDTO> {
@@ -104,7 +104,7 @@ public class LeasePapsReviewFolder extends VistaBoxFolder<LeasePapsReviewDTO> {
 
         @Override
         protected LeasePapsReviewDTO preprocessValue(LeasePapsReviewDTO value, boolean fireEvent, boolean populate) {
-            value.paps().add(summarize(value.paps()));
+            value.paps().add(summarizePaps(value.paps()));
             return super.preprocessValue(value, fireEvent, populate);
         }
 
@@ -142,7 +142,7 @@ public class LeasePapsReviewFolder extends VistaBoxFolder<LeasePapsReviewDTO> {
                 form.addValueChangeHandler(new ValueChangeHandler<PapDTO>() {
                     @Override
                     public void onValueChange(ValueChangeEvent<PapDTO> event) {
-                        recalculateTotals();
+                        recalculateLeaseTotals();
                     }
                 });
                 return form;
@@ -157,7 +157,7 @@ public class LeasePapsReviewFolder extends VistaBoxFolder<LeasePapsReviewDTO> {
             return itemDecorator;
         }
 
-        public void setTotals(LeasePapTotalsDTO totals) {
+        private void setTotals(LeasePapTotalsDTO totals) {
             for (CComponent<?> c : PapFolder.this.getComponents()) {
                 if (c.getValue() instanceof LeasePapTotalsDTO) {
                     ((CComponent<PapDTO>) c).setValue(totals, false);
@@ -165,9 +165,9 @@ public class LeasePapsReviewFolder extends VistaBoxFolder<LeasePapsReviewDTO> {
             }
         }
 
-        private void recalculateTotals() {
+        private void recalculateLeaseTotals() {
             IList<PapDTO> paps = PapFolder.this.getValue();
-            LeasePapTotalsDTO totals = summarize(removeTotals(paps));
+            LeasePapTotalsDTO totals = summarizePaps(removeTotals(paps));
             setTotals(totals);
         }
     }
@@ -198,6 +198,7 @@ public class LeasePapsReviewFolder extends VistaBoxFolder<LeasePapsReviewDTO> {
             if (value instanceof LeasePapTotalsDTO) {
                 value.tenantAndPaymentMethod().setValue(i18n.tr("Lease Total"));
             }
+            value.charges().add(summarizeCharges(removeChargesTotal(value.charges())));
             return super.preprocessValue(value, fireEvent, populate);
         }
 
@@ -228,9 +229,30 @@ public class LeasePapsReviewFolder extends VistaBoxFolder<LeasePapsReviewDTO> {
         @Override
         public CComponent<?> create(IObject<?> member) {
             if (member instanceof PapChargeDTO) {
-                return new PapChargeForm();
+                PapChargeForm form = new PapChargeForm();
+                form.addValueChangeHandler(new ValueChangeHandler<PapChargeDTO>() {
+                    @Override
+                    public void onValueChange(ValueChangeEvent<PapChargeDTO> event) {
+                        recalculateChargesTotal();
+                    }
+                });
+                return form;
             }
             return super.create(member);
+        }
+
+        private void setTotals(PapChargesTotalDTO totals) {
+            for (CComponent<?> c : PapChargesFolder.this.getComponents()) {
+                if (c.getValue() instanceof PapChargesTotalDTO) {
+                    ((CComponent<PapChargeDTO>) c).setValue(totals, false);
+                }
+            }
+        }
+
+        private void recalculateChargesTotal() {
+            IList<PapChargeDTO> paps = PapChargesFolder.this.getValue();
+            PapChargesTotalDTO totals = summarizeCharges(removeChargesTotal(paps));
+            setTotals(totals);
         }
 
     }
@@ -273,6 +295,7 @@ public class LeasePapsReviewFolder extends VistaBoxFolder<LeasePapsReviewDTO> {
                     BigDecimal newPercent = event.getValue() != null ? event.getValue().divide(get(proto().newPrice()).getValue(), MathContext.DECIMAL32)
                             : null;
                     get(proto().newPreAuthorizedPaymentPercent()).setValue(newPercent, false);
+
                 }
             });
             get(proto().newPreAuthorizedPaymentPercent()).addValueChangeHandler(new ValueChangeHandler<BigDecimal>() {
@@ -282,17 +305,29 @@ public class LeasePapsReviewFolder extends VistaBoxFolder<LeasePapsReviewDTO> {
                     get(proto().newPreAuthorizedPaymentAmount()).setValue(newAmount, false);
                 }
             });
+
+            panel.add((inject(proto().discardCharge())));
+            get(proto().discardCharge()).addValueChangeHandler(new ValueChangeHandler<Boolean>() {
+                @Override
+                public void onValueChange(ValueChangeEvent<Boolean> event) {
+                    get(proto().newPreAuthorizedPaymentAmount()).setVisible(!event.getValue());
+                    get(proto().newPreAuthorizedPaymentPercent()).setVisible(!event.getValue());
+                }
+            });
             return panel;
         }
 
         @Override
         protected void onValueSet(boolean populate) {
             super.onValueSet(populate);
+            setViewable(getValue() instanceof PapChargesTotalDTO);
+
             get(proto().newPrice()).setVisible(getValue().changeType().getValue() != PapChargeDTO.ChangeType.Removed);
             get(proto().newPreAuthorizedPaymentAmount()).setVisible(getValue().changeType().getValue() != PapChargeDTO.ChangeType.Removed);
             get(proto().newPreAuthorizedPaymentPercent()).setVisible(getValue().changeType().getValue() != PapChargeDTO.ChangeType.Removed);
+            get(proto().discardCharge()).setVisible(
+                    !isViewable() && (getValue().changeType().getValue() != PapChargeDTO.ChangeType.Removed) && !(getValue() instanceof PapChargesTotalDTO));
 
-            setViewable(getValue() instanceof PapChargeTotalDTO);
         }
     }
 
@@ -324,12 +359,25 @@ public class LeasePapsReviewFolder extends VistaBoxFolder<LeasePapsReviewDTO> {
         return paps;
     }
 
-    private static LeasePapTotalsDTO summarize(Iterable<PapDTO> leasePaps) {
+    private static Iterable<PapChargeDTO> removeChargesTotal(IList<PapChargeDTO> charges) {
+        List<PapChargeDTO> paps = new LinkedList<PapChargeDTO>();
+        for (PapChargeDTO pap : charges) {
+            if (!(pap instanceof PapChargesTotalDTO)) {
+                paps.add(pap);
+            }
+        }
+        return paps;
+    }
+
+    private static LeasePapTotalsDTO summarizePaps(Iterable<PapDTO> leasePaps) {
         LeasePapTotalsDTO totals = EntityFactory.create(LeasePapTotalsDTO.class);
         totals.setPrimaryKey(new Key(-1));
 
         for (PapDTO pap : leasePaps) {
             for (PapChargeDTO charge : pap.charges()) {
+                if ((charge instanceof PapChargesTotalDTO)) {
+                    continue;
+                }
                 PapChargeDTO totalOfCharge = null;
                 foundTotalOfCharge: for (PapChargeDTO totalOfChargeCandidate : totals.charges()) {
                     if (totalOfChargeCandidate.getPrimaryKey().equals(charge.getPrimaryKey())) {
@@ -344,7 +392,7 @@ public class LeasePapsReviewFolder extends VistaBoxFolder<LeasePapsReviewDTO> {
                         totalOfCharge.suspendedPreAuthorizedPaymentPercent().setValue(
                                 totalOfCharge.suspendedPreAuthorizedPaymentPercent().getValue().add(charge.suspendedPreAuthorizedPaymentPercent().getValue()));
                     }
-                    if (totalOfCharge.changeType().getValue() != ChangeType.Removed) {
+                    if (totalOfCharge.changeType().getValue() != ChangeType.Removed && !charge.discardCharge().isBooleanTrue()) {
                         totalOfCharge.newPreAuthorizedPaymentAmount().setValue(
                                 totalOfCharge.newPreAuthorizedPaymentAmount().getValue().add(charge.newPreAuthorizedPaymentAmount().getValue()));
                         totalOfCharge.newPreAuthorizedPaymentPercent().setValue(
@@ -359,6 +407,10 @@ public class LeasePapsReviewFolder extends VistaBoxFolder<LeasePapsReviewDTO> {
                     if (totalOfCharge.changeType().getValue() != ChangeType.Removed) {
                         initIfNull(totalOfCharge.newPreAuthorizedPaymentAmount());
                         initIfNull(totalOfCharge.newPreAuthorizedPaymentPercent());
+                        if (charge.discardCharge().isBooleanTrue()) {
+                            totalOfCharge.newPreAuthorizedPaymentAmount().setValue(new BigDecimal("0.00"));
+                            totalOfCharge.newPreAuthorizedPaymentPercent().setValue(new BigDecimal("0.00"));
+                        }
                     }
                     totals.charges().add(totalOfCharge);
                 }
@@ -366,34 +418,49 @@ public class LeasePapsReviewFolder extends VistaBoxFolder<LeasePapsReviewDTO> {
             }
 
         }
-        PapChargeTotalDTO papChargeTotal = EntityFactory.create(PapChargeTotalDTO.class);
-        papChargeTotal.setPrimaryKey(new Key(-1));
-        papChargeTotal.chargeName().setValue(i18n.tr("Total"));
-
-        initIfNull(papChargeTotal.suspendedPrice());
-        initIfNull(papChargeTotal.suspendedPreAuthorizedPaymentAmount());
-        initIfNull(papChargeTotal.newPrice());
-        initIfNull(papChargeTotal.newPreAuthorizedPaymentAmount());
-
-        for (PapChargeDTO totalOfCharge : totals.charges()) {
-            if (totalOfCharge.changeType().getValue() != ChangeType.New) {
-                papChargeTotal.suspendedPrice().setValue(totalOfCharge.suspendedPrice().getValue().add(papChargeTotal.suspendedPrice().getValue()));
-                papChargeTotal.suspendedPreAuthorizedPaymentAmount().setValue(
-                        totalOfCharge.suspendedPreAuthorizedPaymentAmount().getValue().add(papChargeTotal.suspendedPreAuthorizedPaymentAmount().getValue()));
-            }
-            if (totalOfCharge.changeType().getValue() != ChangeType.Removed) {
-                papChargeTotal.newPrice().setValue(totalOfCharge.newPrice().getValue().add(papChargeTotal.newPrice().getValue()));
-                papChargeTotal.newPreAuthorizedPaymentAmount().setValue(
-                        totalOfCharge.newPreAuthorizedPaymentAmount().getValue().add(papChargeTotal.newPreAuthorizedPaymentAmount().getValue()));
-            }
-        }
-        papChargeTotal.suspendedPreAuthorizedPaymentPercent().setValue(
-                papChargeTotal.suspendedPreAuthorizedPaymentAmount().getValue().divide(papChargeTotal.suspendedPrice().getValue(), MathContext.DECIMAL32));
-        papChargeTotal.newPreAuthorizedPaymentPercent().setValue(
-                papChargeTotal.newPreAuthorizedPaymentAmount().getValue().divide(papChargeTotal.newPrice().getValue(), MathContext.DECIMAL32));
-
-        totals.charges().add(papChargeTotal);
-
         return totals;
     }
+
+    private static PapChargesTotalDTO summarizeCharges(Iterable<PapChargeDTO> papCharges) {
+        PapChargesTotalDTO papChargesTotal = EntityFactory.create(PapChargesTotalDTO.class);
+        papChargesTotal.setPrimaryKey(new Key(-1));
+        papChargesTotal.chargeName().setValue(i18n.tr("Total"));
+
+        initIfNull(papChargesTotal.suspendedPrice());
+        initIfNull(papChargesTotal.suspendedPreAuthorizedPaymentAmount());
+        initIfNull(papChargesTotal.newPrice());
+        initIfNull(papChargesTotal.newPreAuthorizedPaymentAmount());
+
+        for (PapChargeDTO totalOfCharge : papCharges) {
+            if (totalOfCharge.changeType().getValue() != ChangeType.New) {
+                papChargesTotal.suspendedPrice().setValue(totalOfCharge.suspendedPrice().getValue().add(papChargesTotal.suspendedPrice().getValue()));
+                papChargesTotal.suspendedPreAuthorizedPaymentAmount().setValue(
+                        totalOfCharge.suspendedPreAuthorizedPaymentAmount().getValue().add(papChargesTotal.suspendedPreAuthorizedPaymentAmount().getValue()));
+            }
+            if (totalOfCharge.changeType().getValue() != ChangeType.Removed) {
+                papChargesTotal.newPrice().setValue(totalOfCharge.newPrice().getValue().add(papChargesTotal.newPrice().getValue()));
+                if (!totalOfCharge.discardCharge().isBooleanTrue()) {
+                    papChargesTotal.newPreAuthorizedPaymentAmount().setValue(
+                            totalOfCharge.newPreAuthorizedPaymentAmount().getValue().add(papChargesTotal.newPreAuthorizedPaymentAmount().getValue()));
+                }
+            }
+        }
+        if (papChargesTotal.suspendedPrice().getValue().compareTo(BigDecimal.ZERO) != 0) {
+            papChargesTotal.suspendedPreAuthorizedPaymentPercent()
+                    .setValue(
+                            papChargesTotal.suspendedPreAuthorizedPaymentAmount().getValue()
+                                    .divide(papChargesTotal.suspendedPrice().getValue(), MathContext.DECIMAL32));
+        } else {
+            papChargesTotal.suspendedPreAuthorizedPaymentPercent().setValue(new BigDecimal("0.00"));
+        }
+        if (papChargesTotal.newPrice().getValue().compareTo(BigDecimal.ZERO) != 0) {
+            papChargesTotal.newPreAuthorizedPaymentPercent().setValue(
+                    papChargesTotal.newPreAuthorizedPaymentAmount().getValue().divide(papChargesTotal.newPrice().getValue(), MathContext.DECIMAL32));
+        } else {
+            papChargesTotal.newPreAuthorizedPaymentPercent().setValue(new BigDecimal("0.00"));
+        }
+
+        return papChargesTotal;
+    }
+
 }
