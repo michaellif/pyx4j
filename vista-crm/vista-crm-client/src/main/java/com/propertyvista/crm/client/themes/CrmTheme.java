@@ -748,6 +748,8 @@ public class CrmTheme extends VistaTheme {
         style = new Style("." + LeasePapsReviewsHolderForm.Styles.AutoPayCounterPanel.name());
         style.addProperty("text-align", "center");
         style.addProperty("font-weight", "bold");
+        style.addProperty("padding-top", "5px");
+        style.addProperty("padding-bottom", "10px");
         style.addProperty("width", "100%");
         addStyle(style);
 

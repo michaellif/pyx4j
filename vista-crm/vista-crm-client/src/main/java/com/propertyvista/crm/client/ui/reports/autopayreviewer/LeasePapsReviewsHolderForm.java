@@ -71,7 +71,7 @@ public final class LeasePapsReviewsHolderForm extends CEntityDecoratableForm<Lea
         FlowPanel leasePapsFolderHolder = new FlowPanel();
         leasePapsFolderHolder.getElement().getStyle().setOverflow(Overflow.AUTO);
         leasePapsFolderHolder.getElement().getStyle().setPosition(Position.ABSOLUTE);
-        leasePapsFolderHolder.getElement().getStyle().setTop(55, Unit.PX);
+        leasePapsFolderHolder.getElement().getStyle().setTop(70, Unit.PX);
         leasePapsFolderHolder.getElement().getStyle().setBottom(0, Unit.PX);
         leasePapsFolderHolder.getElement().getStyle().setLeft(0, Unit.PX);
         leasePapsFolderHolder.getElement().getStyle().setRight(0, Unit.PX);

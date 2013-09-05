@@ -15,8 +15,10 @@ package com.propertyvista.crm.client.ui.reports.autopayreviewer;
 
 import java.util.List;
 
+import com.google.gwt.dom.client.Style.Cursor;
 import com.google.gwt.dom.client.Style.Overflow;
 import com.google.gwt.dom.client.Style.Position;
+import com.google.gwt.dom.client.Style.TextAlign;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTML;
@@ -40,6 +42,9 @@ public class AutoPayReviewUpdaterViewImpl2 extends AbstractPrimePane implements 
 
     private final LeasePapsReviewsHolderForm leasePapsReviewsHolderForm;
 
+    /**
+     * 
+     */
     public AutoPayReviewUpdaterViewImpl2() {
         FlowPanel viewPanel = new FlowPanel();
         viewPanel.getElement().getStyle().setPosition(Position.RELATIVE);
@@ -55,7 +60,12 @@ public class AutoPayReviewUpdaterViewImpl2 extends AbstractPrimePane implements 
         filtersForm.initContent();
         filtersForm.populateNew();
         filtersPanel.add(filtersForm);
-        filtersPanel.add(new Button(i18n.tr("Apply")));
+
+        FlowPanel filterButtonsPanel = new FlowPanel();
+        filterButtonsPanel.setWidth("100%");
+        filterButtonsPanel.getElement().getStyle().setTextAlign(TextAlign.CENTER);
+        filterButtonsPanel.add(new Button(i18n.tr("Apply")));
+        filtersPanel.add(filterButtonsPanel);
 
         viewPanel.add(filtersPanel);
 
@@ -70,9 +80,10 @@ public class AutoPayReviewUpdaterViewImpl2 extends AbstractPrimePane implements 
         viewPanel.add(leasePapsReviewsHolderForm);
 
         addHeaderToolbarItem(new Button(i18n.tr("Accept All")));
+        addHeaderToolbarItem(new Separator(3));
         addHeaderToolbarItem(new Button(i18n.tr("Accept Marked")));
         addHeaderToolbarItem(new Button(i18n.tr("Accept Not Marked")));
-        addHeaderToolbarItem(new HTML("&nbsp;&nbsp;&nbsp;"));
+        addHeaderToolbarItem(new Separator(6));
         addHeaderToolbarItem(new Button(i18n.tr("Export")));
     }
 
@@ -94,6 +105,18 @@ public class AutoPayReviewUpdaterViewImpl2 extends AbstractPrimePane implements 
     public void setPresenter(AutoPayReviewUpdaterView.Presenter presenter) {
         this.presenter = presenter;
         this.presenter.onRangeChanged();
+    }
+
+    private class Separator extends HTML {
+
+        public Separator(int x) {
+            String sep = "&nbsp;";
+            for (int i = 0; i < x - 1; ++i) {
+                sep += "&nbsp;";
+            }
+            setHTML(sep);
+            getElement().getStyle().setCursor(Cursor.DEFAULT);
+        }
     }
 
 }
