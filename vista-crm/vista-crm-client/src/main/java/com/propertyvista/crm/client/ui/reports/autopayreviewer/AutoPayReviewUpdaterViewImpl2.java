@@ -15,6 +15,11 @@ package com.propertyvista.crm.client.ui.reports.autopayreviewer;
 
 import java.util.List;
 
+import com.google.gwt.dom.client.Style.Overflow;
+import com.google.gwt.dom.client.Style.Position;
+import com.google.gwt.dom.client.Style.Unit;
+import com.google.gwt.user.client.ui.FlowPanel;
+import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.view.client.Range;
 
 import com.pyx4j.entity.shared.EntityFactory;
@@ -23,6 +28,7 @@ import com.pyx4j.site.client.IsView;
 import com.pyx4j.site.client.ui.prime.AbstractPrimePane;
 import com.pyx4j.widgets.client.Button;
 
+import com.propertyvista.crm.client.ui.reports.autopay.AutoPayChangesReportSettingsForm;
 import com.propertyvista.crm.client.ui.reports.autopayreviewer.dto.LeasePapsReviewDTO;
 import com.propertyvista.crm.client.ui.reports.autopayreviewer.dto.LeasePapsReviewsHolderDTO;
 
@@ -35,20 +41,46 @@ public class AutoPayReviewUpdaterViewImpl2 extends AbstractPrimePane implements 
     private final LeasePapsReviewsHolderForm leasePapsReviewsHolderForm;
 
     public AutoPayReviewUpdaterViewImpl2() {
+        FlowPanel viewPanel = new FlowPanel();
+        viewPanel.getElement().getStyle().setPosition(Position.RELATIVE);
+        viewPanel.setSize("100%", "100%");
+        setContentPane(viewPanel);
+        setSize("100%", "100%");
+
+        FlowPanel filtersPanel = new FlowPanel();
+        filtersPanel.setHeight("150px");
+        filtersPanel.getElement().getStyle().setOverflow(Overflow.AUTO);
+
+        AutoPayChangesReportSettingsForm filtersForm = new AutoPayChangesReportSettingsForm();
+        filtersForm.initContent();
+        filtersForm.populateNew();
+        filtersPanel.add(filtersForm);
+        filtersPanel.add(new Button(i18n.tr("Apply")));
+
+        viewPanel.add(filtersPanel);
+
         leasePapsReviewsHolderForm = new LeasePapsReviewsHolderForm();
         leasePapsReviewsHolderForm.initContent();
-        leasePapsReviewsHolderForm.asWidget().setSize("100%", "100%");
-        setContentPane(leasePapsReviewsHolderForm);
-        setSize("100%", "100%");
+        leasePapsReviewsHolderForm.asWidget().getElement().getStyle().setPosition(Position.ABSOLUTE);
+        leasePapsReviewsHolderForm.asWidget().getElement().getStyle().setTop(150, Unit.PX);
+        leasePapsReviewsHolderForm.asWidget().getElement().getStyle().setLeft(0, Unit.PX);
+        leasePapsReviewsHolderForm.asWidget().getElement().getStyle().setRight(0, Unit.PX);
+        leasePapsReviewsHolderForm.asWidget().getElement().getStyle().setBottom(0, Unit.PX);
+
+        viewPanel.add(leasePapsReviewsHolderForm);
+
         addHeaderToolbarItem(new Button(i18n.tr("Accept All")));
         addHeaderToolbarItem(new Button(i18n.tr("Accept Marked")));
         addHeaderToolbarItem(new Button(i18n.tr("Accept Not Marked")));
+        addHeaderToolbarItem(new HTML("&nbsp;&nbsp;&nbsp;"));
+        addHeaderToolbarItem(new Button(i18n.tr("Export")));
     }
 
     @Override
     public void setRowData(int start, List<LeasePapsReviewDTO> values) {
         LeasePapsReviewsHolderDTO holder = EntityFactory.create(LeasePapsReviewsHolderDTO.class);
-        holder.leasePapsReviews().addAll(values);
+        holder.leaseAutoPayReviewsTotalCount().setValue(123512);
+        holder.leaseAutoPayReviews().addAll(values);
         leasePapsReviewsHolderForm.populate(holder);
     }
 

@@ -745,6 +745,12 @@ public class CrmTheme extends VistaTheme {
         addStyle(style);
 
         // the following styles set up the layout of captions for LeasePapsReviewFolder
+        style = new Style("." + LeasePapsReviewsHolderForm.Styles.AutoPayCounterPanel.name());
+        style.addProperty("text-align", "center");
+        style.addProperty("font-weight", "bold");
+        style.addProperty("width", "100%");
+        addStyle(style);
+
         style = new Style("." + LeasePapsReviewsHolderForm.Styles.AutoPaySuperCaptionsPanel.name());
         style.addProperty("position", "relative");
         addStyle(style);

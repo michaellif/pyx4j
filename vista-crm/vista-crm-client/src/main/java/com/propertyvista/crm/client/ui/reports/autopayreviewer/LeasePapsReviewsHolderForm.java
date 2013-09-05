@@ -34,9 +34,11 @@ public final class LeasePapsReviewsHolderForm extends CEntityDecoratableForm<Lea
 
     public enum Styles implements IStyleName {
 
-        AutoPaySuperCaptionsPanel, AutoPayCaptionsPanel
+        AutoPayCounterPanel, AutoPaySuperCaptionsPanel, AutoPayCaptionsPanel
 
     }
+
+    private HTML counterPanel;
 
     public LeasePapsReviewsHolderForm() {
         super(LeasePapsReviewsHolderDTO.class);
@@ -45,11 +47,10 @@ public final class LeasePapsReviewsHolderForm extends CEntityDecoratableForm<Lea
     @Override
     public IsWidget createContent() {
         FlowPanel panel = new FlowPanel();
-        panel.getElement().getStyle().setPosition(Position.ABSOLUTE);
-        panel.getElement().getStyle().setTop(0, Unit.PX);
-        panel.getElement().getStyle().setLeft(0, Unit.PX);
-        panel.getElement().getStyle().setRight(0, Unit.PX);
-        panel.getElement().getStyle().setBottom(0, Unit.PX);
+
+        counterPanel = new HTML();
+        counterPanel.addStyleName(Styles.AutoPayCounterPanel.name());
+        panel.add(counterPanel);
 
         FlowPanel superCaptionsPanel = new FlowPanel();
         superCaptionsPanel.addStyleName(Styles.AutoPaySuperCaptionsPanel.name());
@@ -70,11 +71,11 @@ public final class LeasePapsReviewsHolderForm extends CEntityDecoratableForm<Lea
         FlowPanel leasePapsFolderHolder = new FlowPanel();
         leasePapsFolderHolder.getElement().getStyle().setOverflow(Overflow.AUTO);
         leasePapsFolderHolder.getElement().getStyle().setPosition(Position.ABSOLUTE);
-        leasePapsFolderHolder.getElement().getStyle().setTop(50, Unit.PX);
+        leasePapsFolderHolder.getElement().getStyle().setTop(55, Unit.PX);
         leasePapsFolderHolder.getElement().getStyle().setBottom(0, Unit.PX);
         leasePapsFolderHolder.getElement().getStyle().setLeft(0, Unit.PX);
         leasePapsFolderHolder.getElement().getStyle().setRight(0, Unit.PX);
-        leasePapsFolderHolder.add(inject(proto().leasePapsReviews(), new LeasePapsReviewFolder()));
+        leasePapsFolderHolder.add(inject(proto().leaseAutoPayReviews(), new LeasePapsReviewFolder()));
 
         HTML more = new HTML(i18n.tr("More..."));
         more.getElement().getStyle().setTextAlign(TextAlign.CENTER);
@@ -87,5 +88,12 @@ public final class LeasePapsReviewsHolderForm extends CEntityDecoratableForm<Lea
         panel.add(leasePapsFolderHolder);
 
         return panel;
+    }
+
+    @Override
+    protected void onValueSet(boolean populate) {
+        super.onValueSet(populate);
+        counterPanel.setText(i18n.tr("Displaying {0,number,#,##0} of {1,number,#,##0} Leases with suspended AutoPay", getValue().leaseAutoPayReviews().size(),
+                getValue().leaseAutoPayReviewsTotalCount().getValue()));
     }
 }

@@ -111,9 +111,17 @@ public class LeasePapsReviewFolder extends VistaBoxFolder<LeasePapsReviewDTO> {
         @Override
         protected void onValueSet(boolean populate) {
             super.onValueSet(populate);
-            leaseCaption.setHTML(new SafeHtmlBuilder().appendEscaped(
-                    i18n.tr("Lease: {0} Unit: {1}", getValue().lease().leaseId().getValue(), getValue().lease().unit().info().number().getValue()))
-                    .toSafeHtml());
+            leaseCaption.setHTML(new SafeHtmlBuilder().appendEscaped(i18n.tr("Lease: {0} Unit: {1} Buidling: {2} Move Out: {3,date,short}",
+
+            getValue().lease().leaseId().getValue(),
+
+            getValue().lease().unit().info().number().getValue(),
+
+            getValue().lease().unit().building().propertyCode().getValue(),
+
+            getValue().lease().expectedMoveOut().getValue()
+
+            )).toSafeHtml());
         }
 
     }

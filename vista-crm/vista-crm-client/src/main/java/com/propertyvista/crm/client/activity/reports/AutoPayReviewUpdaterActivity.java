@@ -23,6 +23,7 @@ import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
 import com.pyx4j.commons.Key;
+import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.site.rpc.AppPlace;
 
@@ -86,6 +87,8 @@ public class AutoPayReviewUpdaterActivity extends AbstractActivity implements Au
             leasePapsReview.lease().setPrimaryKey(new Key(leaseNum + 1));
             leasePapsReview.lease().leaseId().setValue("t0000" + leaseNum);
             leasePapsReview.lease().unit().info().number().setValue("#" + leaseNum);
+            leasePapsReview.lease().unit().building().propertyCode().setValue("bath999");
+            leasePapsReview.lease().expectedMoveOut().setValue(new LogicalDate());
 
             // create charges for lease:
             List<PapChargeDTO> charges = new ArrayList<PapChargeDTO>();

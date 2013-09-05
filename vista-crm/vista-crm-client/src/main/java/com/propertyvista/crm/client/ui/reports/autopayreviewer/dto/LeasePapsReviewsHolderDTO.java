@@ -16,9 +16,12 @@ package com.propertyvista.crm.client.ui.reports.autopayreviewer.dto;
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
+import com.pyx4j.entity.shared.IPrimitive;
 
 @Transient
 public interface LeasePapsReviewsHolderDTO extends IEntity {
 
-    IList<LeasePapsReviewDTO> leasePapsReviews();
+    IPrimitive<Integer> leaseAutoPayReviewsTotalCount();
+
+    IList<LeasePapsReviewDTO> leaseAutoPayReviews();
 }
