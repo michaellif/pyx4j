@@ -19,18 +19,21 @@ import com.google.gwt.view.client.Range;
 
 import com.pyx4j.site.client.ui.prime.IPrimePane;
 
-import com.propertyvista.crm.client.ui.reports.autopayreviewer.dto.LeasePapsReviewDTO;
+import com.propertyvista.crm.client.ui.reports.autopayreviewer.dto.PapReviewDTO;
 
 public interface AutoPayReviewUpdaterView extends IPrimePane {
 
     interface Presenter extends IPrimePane.Presenter {
 
         void onRangeChanged();
+
     }
 
     void setPresenter(Presenter presenter);
 
-    void setRowData(int start, List<LeasePapsReviewDTO> values);
+    void setRowData(int start, int total, List<PapReviewDTO> values);
 
     Range getVisibleRange();
+
+    List<PapReviewDTO> selectedRows();
 }

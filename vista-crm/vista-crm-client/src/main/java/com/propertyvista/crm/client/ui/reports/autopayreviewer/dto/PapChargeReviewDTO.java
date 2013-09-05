@@ -22,11 +22,11 @@ import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 
 @Transient
-public interface PapChargeDTO extends IEntity {
+public interface PapChargeReviewDTO extends IEntity {
 
     public enum ChangeType {
 
-        Changed, Removed, New
+        Unchanged, Changed, Removed, New
 
     }
 
@@ -46,9 +46,6 @@ public interface PapChargeDTO extends IEntity {
     @Editor(type = EditorType.money)
     IPrimitive<BigDecimal> newPrice();
 
-    // user defined: if charge is changed or new add it to preauthorized payments
-    IPrimitive<Boolean> discardCharge();
-
     // user defined: (this field is supposed to be in sync with percent)
     @Editor(type = EditorType.money)
     IPrimitive<BigDecimal> newPreAuthorizedPaymentAmount();
@@ -61,7 +58,7 @@ public interface PapChargeDTO extends IEntity {
     @Editor(type = EditorType.money)
     IPrimitive<BigDecimal> suggestedNewPreAuthorizedPaymentAmount();
 
-    PapDTO _parentPap();
+    PapReviewDTO _parentPap();
 
     IPrimitive<Boolean> isPivot();
 

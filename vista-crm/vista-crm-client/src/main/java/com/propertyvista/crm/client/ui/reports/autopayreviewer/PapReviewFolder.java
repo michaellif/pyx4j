@@ -1,0 +1,297 @@
+/*
+ * (C) Copyright Property Vista Software Inc. 2011-2012 All Rights Reserved.
+ *
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * you entered into with Property Vista Software Inc.
+ *
+ * This notice and attribution to Property Vista Software Inc. may not be removed.
+ *
+ * Created on 2013-08-29
+ * @author ArtyomB
+ * @version $Id$
+ */
+package com.propertyvista.crm.client.ui.reports.autopayreviewer;
+
+import java.math.BigDecimal;
+import java.math.MathContext;
+import java.util.LinkedList;
+import java.util.List;
+
+import com.google.gwt.event.logical.shared.ValueChangeEvent;
+import com.google.gwt.event.logical.shared.ValueChangeHandler;
+import com.google.gwt.user.client.ui.FlowPanel;
+import com.google.gwt.user.client.ui.HTMLPanel;
+import com.google.gwt.user.client.ui.IsWidget;
+import com.google.gwt.user.client.ui.SimplePanel;
+import com.google.gwt.user.client.ui.Widget;
+
+import com.pyx4j.commons.Key;
+import com.pyx4j.commons.css.IStyleName;
+import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.entity.shared.IList;
+import com.pyx4j.entity.shared.IObject;
+import com.pyx4j.entity.shared.IPrimitive;
+import com.pyx4j.forms.client.ui.CComponent;
+import com.pyx4j.forms.client.ui.CEntityLabel;
+import com.pyx4j.forms.client.ui.CLabel;
+import com.pyx4j.forms.client.ui.folder.IFolderItemDecorator;
+import com.pyx4j.i18n.shared.I18n;
+
+import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
+import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
+import com.propertyvista.common.client.ui.decorations.VistaBoxFolderItemDecorator;
+import com.propertyvista.crm.client.ui.reports.autopayreviewer.dto.PapChargeReviewDTO;
+import com.propertyvista.crm.client.ui.reports.autopayreviewer.dto.PapChargeReviewDTO.ChangeType;
+import com.propertyvista.crm.client.ui.reports.autopayreviewer.dto.PapChargesTotalDTO;
+import com.propertyvista.crm.client.ui.reports.autopayreviewer.dto.PapReviewDTO;
+import com.propertyvista.domain.tenant.lease.Lease;
+
+public class PapReviewFolder extends VistaBoxFolder<PapReviewDTO> {
+
+    private static final I18n i18n = I18n.get(PapReviewFolder.class);
+
+    public enum Styles implements IStyleName {
+        AutoPayReviewUpdaterLeaseCaption, AutoPayPapChargesContainer, AutoPayPapCharge, AutoPayPapChargeNameColumn, AutoPayPapChargeNumberColumn, AutoPayReviewSelected
+    }
+
+    public PapReviewFolder() {
+        super(PapReviewDTO.class);
+        setAddable(false);
+        setRemovable(false);
+        setOrderable(false);
+    }
+
+    @Override
+    public CComponent<?> create(IObject<?> member) {
+        if (member instanceof PapReviewDTO) {
+            return new PapForm();
+        }
+        return super.create(member);
+    }
+
+    @Override
+    public IFolderItemDecorator<PapReviewDTO> createItemDecorator() {
+        VistaBoxFolderItemDecorator<PapReviewDTO> itemDecorator = (VistaBoxFolderItemDecorator<PapReviewDTO>) PapReviewFolder.super.createItemDecorator();
+        itemDecorator.setCollapsible(false);
+        return itemDecorator;
+    }
+
+    private static final class PapForm extends CEntityDecoratableForm<PapReviewDTO> {
+
+        public PapForm() {
+            super(PapReviewDTO.class);
+        }
+
+        @Override
+        public IsWidget createContent() {
+            HTMLPanel contentPanel = new HTMLPanel(//@formatter:off
+                    "<div>" +
+                        "<div style='float:left;'><span id='isSelected'></span></div>" +
+                        "<div style='float:right;'>" +
+                            "<div><span id='leaseLabel'></span></div>" +
+                            "<div><span id='tenantAndPaymentMethodCaption'></span></div>" +
+                            "<div>" +
+                                "<div style='float:left;'><span id='chargesFolder'></span></div>" +
+                            "</div>" +
+                        "</div>" +
+                    "</div>"
+            );//@formatter:on
+            contentPanel.addAndReplaceElement(inject(proto().isSelected()), "isSelected");
+            contentPanel.addAndReplaceElement(inject(proto().lease(), new CEntityLabel<Lease>()), "leaseLabel");
+            contentPanel.addAndReplaceElement(inject(proto().tenantAndPaymentMethod(), new CLabel<String>()), "tenantAndPaymentMethodCaption");
+            contentPanel.addAndReplaceElement(inject(proto().charges(), new PapChargesFolder()), "chargesFolder");
+            return contentPanel;
+        }
+
+    }
+
+    private static final class PapChargesFolder extends VistaBoxFolder<PapChargeReviewDTO> {
+
+        public PapChargesFolder() {
+            super(PapChargeReviewDTO.class);
+            setAddable(false);
+            setRemovable(false);
+            setOrderable(false);
+            asWidget().addStyleName(Styles.AutoPayPapChargesContainer.name());
+        }
+
+        @Override
+        public IFolderItemDecorator<PapChargeReviewDTO> createItemDecorator() {
+            VistaBoxFolderItemDecorator<PapChargeReviewDTO> itemDecorator = (VistaBoxFolderItemDecorator<PapChargeReviewDTO>) PapChargesFolder.super
+                    .createItemDecorator();
+            itemDecorator.setCollapsible(false);
+            return itemDecorator;
+        }
+
+        @Override
+        public CComponent<?> create(IObject<?> member) {
+            if (member instanceof PapChargeReviewDTO) {
+                PapChargeForm form = new PapChargeForm();
+                form.addValueChangeHandler(new ValueChangeHandler<PapChargeReviewDTO>() {
+                    @Override
+                    public void onValueChange(ValueChangeEvent<PapChargeReviewDTO> event) {
+                        recalculateChargesTotal();
+                    }
+                });
+                return form;
+            }
+            return super.create(member);
+        }
+
+        @Override
+        protected IList<PapChargeReviewDTO> preprocessValue(IList<PapChargeReviewDTO> value, boolean fireEvent, boolean populate) {
+            value.add(summarizeCharges(value));
+            return super.preprocessValue(value, fireEvent, populate);
+        }
+
+        @SuppressWarnings("unchecked")
+        private void setTotals(PapChargesTotalDTO totals) {
+            for (CComponent<?> c : PapChargesFolder.this.getComponents()) {
+                if (c.getValue() instanceof PapChargesTotalDTO) {
+                    ((CComponent<PapChargeReviewDTO>) c).setValue(totals, false);
+                }
+            }
+        }
+
+        private void recalculateChargesTotal() {
+            IList<PapChargeReviewDTO> paps = PapChargesFolder.this.getValue();
+            PapChargesTotalDTO totals = summarizeCharges(removeChargesTotal(paps));
+            setTotals(totals);
+        }
+
+    }
+
+    private static final class PapChargeForm extends CEntityDecoratableForm<PapChargeReviewDTO> {
+
+        public PapChargeForm() {
+            super(PapChargeReviewDTO.class);
+        }
+
+        @Override
+        public IsWidget createContent() {
+            FlowPanel panel = new FlowPanel();
+            panel.setStylePrimaryName(Styles.AutoPayPapCharge.name());
+
+            panel.add(new MiniDecorator(inject(proto().chargeName()), Styles.AutoPayPapChargeNameColumn.name()));
+            get(proto().chargeName()).setViewable(true);
+
+            panel.add(new MiniDecorator(inject(proto().changeType()), Styles.AutoPayPapChargeNumberColumn.name()));
+            get(proto().changeType()).setViewable(true);
+
+            panel.add(new MiniDecorator(inject(proto().suspendedPrice()), Styles.AutoPayPapChargeNumberColumn.name()));
+            get(proto().suspendedPrice()).setViewable(true);
+
+            panel.add(new MiniDecorator(inject(proto().suspendedPreAuthorizedPaymentAmount()), Styles.AutoPayPapChargeNumberColumn.name()));
+            get(proto().suspendedPreAuthorizedPaymentAmount()).setViewable(true);
+
+            panel.add(new MiniDecorator(inject(proto().suspendedPreAuthorizedPaymentPercent()), Styles.AutoPayPapChargeNumberColumn.name()));
+            get(proto().suspendedPreAuthorizedPaymentPercent()).setViewable(true);
+
+            panel.add(new MiniDecorator(inject(proto().newPrice()), Styles.AutoPayPapChargeNumberColumn.name()));
+            get(proto().newPrice()).setViewable(true);
+
+            panel.add(new MiniDecorator(inject(proto().newPreAuthorizedPaymentAmount()), Styles.AutoPayPapChargeNumberColumn.name()));
+            panel.add(new MiniDecorator(inject(proto().newPreAuthorizedPaymentPercent()), Styles.AutoPayPapChargeNumberColumn.name()));
+
+            get(proto().newPreAuthorizedPaymentAmount()).addValueChangeHandler(new ValueChangeHandler<BigDecimal>() {
+                @Override
+                public void onValueChange(ValueChangeEvent<BigDecimal> event) {
+                    BigDecimal newPercent = event.getValue() != null ? event.getValue().divide(get(proto().newPrice()).getValue(), MathContext.DECIMAL32)
+                            : null;
+                    get(proto().newPreAuthorizedPaymentPercent()).setValue(newPercent, false);
+
+                }
+            });
+            get(proto().newPreAuthorizedPaymentPercent()).addValueChangeHandler(new ValueChangeHandler<BigDecimal>() {
+                @Override
+                public void onValueChange(ValueChangeEvent<BigDecimal> event) {
+                    BigDecimal newAmount = event.getValue() != null ? get(proto().newPrice()).getValue().multiply(event.getValue()) : null;
+                    get(proto().newPreAuthorizedPaymentAmount()).setValue(newAmount, false);
+                }
+            });
+
+            return panel;
+        }
+
+        @Override
+        protected void onValueSet(boolean populate) {
+            super.onValueSet(populate);
+            setViewable(getValue() instanceof PapChargesTotalDTO);
+
+            get(proto().newPrice()).setVisible(getValue().changeType().getValue() != PapChargeReviewDTO.ChangeType.Removed);
+            get(proto().newPreAuthorizedPaymentAmount()).setVisible(getValue().changeType().getValue() != PapChargeReviewDTO.ChangeType.Removed);
+            get(proto().newPreAuthorizedPaymentPercent()).setVisible(getValue().changeType().getValue() != PapChargeReviewDTO.ChangeType.Removed);
+
+        }
+    }
+
+    private static class MiniDecorator extends SimplePanel {
+
+        public MiniDecorator(Widget widget, String styleName) {
+            setWidget(widget);
+            addStyleName(styleName);
+        }
+
+        public MiniDecorator(IsWidget widget, String styleName) {
+            this(widget.asWidget(), styleName);
+        }
+    }
+
+    private static void initIfNull(IPrimitive<BigDecimal> member) {
+        if (member.isNull()) {
+            member.setValue(new BigDecimal("0.00"));
+        }
+    }
+
+    private static Iterable<PapChargeReviewDTO> removeChargesTotal(IList<PapChargeReviewDTO> charges) {
+        List<PapChargeReviewDTO> paps = new LinkedList<PapChargeReviewDTO>();
+        for (PapChargeReviewDTO pap : charges) {
+            if (!(pap instanceof PapChargesTotalDTO)) {
+                paps.add(pap);
+            }
+        }
+        return paps;
+    }
+
+    private static PapChargesTotalDTO summarizeCharges(Iterable<PapChargeReviewDTO> papCharges) {
+        PapChargesTotalDTO papChargesTotal = EntityFactory.create(PapChargesTotalDTO.class);
+        papChargesTotal.setPrimaryKey(new Key(-1));
+        papChargesTotal.chargeName().setValue(i18n.tr("Total"));
+
+        initIfNull(papChargesTotal.suspendedPrice());
+        initIfNull(papChargesTotal.suspendedPreAuthorizedPaymentAmount());
+        initIfNull(papChargesTotal.newPrice());
+        initIfNull(papChargesTotal.newPreAuthorizedPaymentAmount());
+
+        for (PapChargeReviewDTO totalOfCharge : papCharges) {
+            if (totalOfCharge.changeType().getValue() != ChangeType.New) {
+                papChargesTotal.suspendedPrice().setValue(totalOfCharge.suspendedPrice().getValue().add(papChargesTotal.suspendedPrice().getValue()));
+                papChargesTotal.suspendedPreAuthorizedPaymentAmount().setValue(
+                        totalOfCharge.suspendedPreAuthorizedPaymentAmount().getValue().add(papChargesTotal.suspendedPreAuthorizedPaymentAmount().getValue()));
+            }
+            if (totalOfCharge.changeType().getValue() != ChangeType.Removed) {
+                papChargesTotal.newPrice().setValue(totalOfCharge.newPrice().getValue().add(papChargesTotal.newPrice().getValue()));
+
+                papChargesTotal.newPreAuthorizedPaymentAmount().setValue(
+                        totalOfCharge.newPreAuthorizedPaymentAmount().getValue().add(papChargesTotal.newPreAuthorizedPaymentAmount().getValue()));
+            }
+        }
+        if (papChargesTotal.suspendedPrice().getValue().compareTo(BigDecimal.ZERO) != 0) {
+            papChargesTotal.suspendedPreAuthorizedPaymentPercent()
+                    .setValue(
+                            papChargesTotal.suspendedPreAuthorizedPaymentAmount().getValue()
+                                    .divide(papChargesTotal.suspendedPrice().getValue(), MathContext.DECIMAL32));
+        } else {
+            papChargesTotal.suspendedPreAuthorizedPaymentPercent().setValue(new BigDecimal("0.00"));
+        }
+        if (papChargesTotal.newPrice().getValue().compareTo(BigDecimal.ZERO) != 0) {
+            papChargesTotal.newPreAuthorizedPaymentPercent().setValue(
+                    papChargesTotal.newPreAuthorizedPaymentAmount().getValue().divide(papChargesTotal.newPrice().getValue(), MathContext.DECIMAL32));
+        } else {
+            papChargesTotal.newPreAuthorizedPaymentPercent().setValue(new BigDecimal("0.00"));
+        }
+
+        return papChargesTotal;
+    }
+}

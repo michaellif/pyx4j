@@ -7,7 +7,7 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on 2013-08-29
+ * Created on 2013-08-28
  * @author ArtyomB
  * @version $Id$
  */
@@ -18,10 +18,15 @@ import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
 
+import com.propertyvista.domain.tenant.lease.Lease;
+
 @Transient
-public interface LeasePapsReviewsHolderDTO extends IEntity {
+public interface PapReviewDTO extends IEntity, BulkEditableEntity {
 
-    IPrimitive<Integer> leaseAutoPayReviewsTotalCount();
+    IPrimitive<String> tenantAndPaymentMethod();
 
-    IList<LeasePapsReviewDTO> leaseAutoPayReviews();
+    IList<PapChargeReviewDTO> charges();
+
+    Lease lease();
+
 }

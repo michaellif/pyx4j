@@ -33,19 +33,19 @@ import com.google.gwt.view.client.ListDataProvider;
 
 import com.pyx4j.i18n.shared.I18n;
 
-import com.propertyvista.crm.client.ui.reports.autopayreviewer.dto.PapChargeDTO;
+import com.propertyvista.crm.client.ui.reports.autopayreviewer.dto.PapChargeReviewDTO;
 
 public class AutoPayReviewUpdaterDataGrid extends Composite {
 
     private static final I18n i18n = I18n.get(AutoPayReviewUpdaterDataGrid.class);
 
-    private final DataGrid<PapChargeDTO> dataGrid = new DataGrid<PapChargeDTO>(20);
+    private final DataGrid<PapChargeReviewDTO> dataGrid = new DataGrid<PapChargeReviewDTO>(20);
 
-    private final ListDataProvider<PapChargeDTO> listDataProvider;
+    private final ListDataProvider<PapChargeReviewDTO> listDataProvider;
 
-    private Column<PapChargeDTO, String> suggestedPaymentColumn;
+    private Column<PapChargeReviewDTO, String> suggestedPaymentColumn;
 
-    private class HeaderBuilder extends AbstractHeaderOrFooterBuilder<PapChargeDTO> {
+    private class HeaderBuilder extends AbstractHeaderOrFooterBuilder<PapChargeReviewDTO> {
 
         //@formatter:off
         private final Header<String> buildingHeader = new TextHeader(i18n.tr("Building"));
@@ -153,14 +153,14 @@ public class AutoPayReviewUpdaterDataGrid extends Composite {
         }
     }
 
-    private class TableBuilder extends AbstractCellTableBuilder<PapChargeDTO> {
+    private class TableBuilder extends AbstractCellTableBuilder<PapChargeReviewDTO> {
 
         public TableBuilder() {
             super(dataGrid);
         }
 
         @Override
-        protected void buildRowImpl(PapChargeDTO papCharge, int absRowIndex) {
+        protected void buildRowImpl(PapChargeReviewDTO papCharge, int absRowIndex) {
 
             TableRowBuilder tr = startRow();
 
@@ -227,15 +227,15 @@ public class AutoPayReviewUpdaterDataGrid extends Composite {
     }
 
     public AutoPayReviewUpdaterDataGrid() {
-        suggestedPaymentColumn = new Column<PapChargeDTO, String>(new EditTextCell()) {
+        suggestedPaymentColumn = new Column<PapChargeReviewDTO, String>(new EditTextCell()) {
             @Override
-            public String getValue(PapChargeDTO object) {
+            public String getValue(PapChargeReviewDTO object) {
                 return object.suggestedNewPreAuthorizedPaymentAmount().getStringView();
             }
         };
-        suggestedPaymentColumn.setFieldUpdater(new FieldUpdater<PapChargeDTO, String>() {
+        suggestedPaymentColumn.setFieldUpdater(new FieldUpdater<PapChargeReviewDTO, String>() {
             @Override
-            public void update(int index, PapChargeDTO object, String value) {
+            public void update(int index, PapChargeReviewDTO object, String value) {
                 try {
                     object.suggestedNewPreAuthorizedPaymentAmount().setValue(new BigDecimal(value));
                 } catch (Throwable e) {
@@ -250,11 +250,11 @@ public class AutoPayReviewUpdaterDataGrid extends Composite {
         initWidget(dataGrid);
         getElement().setId("AutoPayChangesReviewDataGrid");
 
-        listDataProvider = new ListDataProvider<PapChargeDTO>(new ArrayList<PapChargeDTO>());
+        listDataProvider = new ListDataProvider<PapChargeReviewDTO>(new ArrayList<PapChargeReviewDTO>());
         listDataProvider.addDataDisplay(dataGrid);
     }
 
-    public void populate(List<PapChargeDTO> charges) {
+    public void populate(List<PapChargeReviewDTO> charges) {
         listDataProvider.setList(charges);
         listDataProvider.refresh();
     }

@@ -7,55 +7,128 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on 2013-09-04
+ * Created on 2013-06-27
  * @author ArtyomB
  * @version $Id$
  */
 package com.propertyvista.crm.client.ui.reports.autopayreviewer;
 
-import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
+import com.google.gwt.dom.client.Style.Cursor;
+import com.google.gwt.dom.client.Style.Overflow;
+import com.google.gwt.dom.client.Style.Position;
+import com.google.gwt.dom.client.Style.TextAlign;
+import com.google.gwt.dom.client.Style.Unit;
+import com.google.gwt.user.client.ui.FlowPanel;
+import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.view.client.Range;
 
+import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.site.client.IsView;
 import com.pyx4j.site.client.ui.prime.AbstractPrimePane;
+import com.pyx4j.widgets.client.Button;
 
-import com.propertyvista.crm.client.ui.reports.autopayreviewer.dto.LeasePapsReviewDTO;
-import com.propertyvista.crm.client.ui.reports.autopayreviewer.dto.PapChargeDTO;
-import com.propertyvista.crm.client.ui.reports.autopayreviewer.dto.PapDTO;
+import com.propertyvista.crm.client.ui.reports.autopay.AutoPayChangesReportSettingsForm;
+import com.propertyvista.crm.client.ui.reports.autopayreviewer.dto.PapReviewDTO;
+import com.propertyvista.crm.client.ui.reports.autopayreviewer.dto.PapReviewsHolderDTO;
 
-public class AutoPayReviewUpdaterViewImpl extends AbstractPrimePane implements AutoPayReviewUpdaterView {
+public class AutoPayReviewUpdaterViewImpl extends AbstractPrimePane implements AutoPayReviewUpdaterView, IsView {
 
-    private final AutoPayReviewUpdaterDataGrid dataGrid;
+    private final static I18n i18n = I18n.get(AutoPayReviewUpdaterViewImpl.class);
 
-    private com.propertyvista.crm.client.ui.reports.autopayreviewer.AutoPayReviewUpdaterView.Presenter presenter;
+    private AutoPayReviewUpdaterView.Presenter presenter;
 
+    private final PapReviewsHolderForm leasePapsReviewsHolderForm;
+
+    /**
+     * 
+     */
     public AutoPayReviewUpdaterViewImpl() {
+        FlowPanel viewPanel = new FlowPanel();
+        viewPanel.getElement().getStyle().setPosition(Position.RELATIVE);
+        viewPanel.setSize("100%", "100%");
+        setContentPane(viewPanel);
         setSize("100%", "100%");
-        dataGrid = new AutoPayReviewUpdaterDataGrid();
-        setContentPane(dataGrid);
+
+        FlowPanel filtersPanel = new FlowPanel();
+        filtersPanel.setHeight("150px");
+        filtersPanel.getElement().getStyle().setOverflow(Overflow.AUTO);
+
+        AutoPayChangesReportSettingsForm filtersForm = new AutoPayChangesReportSettingsForm();
+        filtersForm.initContent();
+        filtersForm.populateNew();
+        filtersPanel.add(filtersForm);
+
+        FlowPanel filterButtonsPanel = new FlowPanel();
+        filterButtonsPanel.setWidth("100%");
+        filterButtonsPanel.getElement().getStyle().setTextAlign(TextAlign.CENTER);
+        filterButtonsPanel.add(new Button(i18n.tr("Apply")));
+        filtersPanel.add(filterButtonsPanel);
+
+        viewPanel.add(filtersPanel);
+
+        leasePapsReviewsHolderForm = new PapReviewsHolderForm();
+        leasePapsReviewsHolderForm.initContent();
+        leasePapsReviewsHolderForm.asWidget().getElement().getStyle().setPosition(Position.ABSOLUTE);
+        leasePapsReviewsHolderForm.asWidget().getElement().getStyle().setTop(150, Unit.PX);
+        leasePapsReviewsHolderForm.asWidget().getElement().getStyle().setLeft(0, Unit.PX);
+        leasePapsReviewsHolderForm.asWidget().getElement().getStyle().setRight(0, Unit.PX);
+        leasePapsReviewsHolderForm.asWidget().getElement().getStyle().setBottom(0, Unit.PX);
+
+        viewPanel.add(leasePapsReviewsHolderForm);
+
+        addHeaderToolbarItem(new Button(i18n.tr("Accept All")));
+        addHeaderToolbarItem(new Separator(3));
+        addHeaderToolbarItem(new Button(i18n.tr("Accept Marked")));
+        addHeaderToolbarItem(new Button(i18n.tr("Accept Not Marked")));
+        addHeaderToolbarItem(new Separator(6));
+        addHeaderToolbarItem(new Button(i18n.tr("Export")));
     }
 
     @Override
-    public void setPresenter(com.propertyvista.crm.client.ui.reports.autopayreviewer.AutoPayReviewUpdaterView.Presenter presenter) {
+    public void setRowData(int start, int total, List<PapReviewDTO> values) {
+        PapReviewsHolderDTO holder = EntityFactory.create(PapReviewsHolderDTO.class);
+        holder.papReviewsTotalCount().setValue(total);
+        holder.papReviews().addAll(values);
+        leasePapsReviewsHolderForm.populate(holder);
+    }
+
+    @Override
+    public Range getVisibleRange() {
+        return new Range(0, leasePapsReviewsHolderForm.getValue() == null || leasePapsReviewsHolderForm.getValue().isNull() ? 10 : leasePapsReviewsHolderForm
+                .getValue().papReviews().size());
+    }
+
+    @Override
+    public void setPresenter(AutoPayReviewUpdaterView.Presenter presenter) {
         this.presenter = presenter;
         this.presenter.onRangeChanged();
     }
 
     @Override
-    public void setRowData(int start, List<LeasePapsReviewDTO> values) {
-        List<PapChargeDTO> charges = new ArrayList<PapChargeDTO>();
-        for (LeasePapsReviewDTO v : values) {
-            for (PapDTO p : v.paps()) {
-                charges.addAll(p.charges());
+    public List<PapReviewDTO> selectedRows() {
+        List<PapReviewDTO> selected = new LinkedList<PapReviewDTO>();
+        for (PapReviewDTO review : leasePapsReviewsHolderForm.getValue().papReviews()) {
+            if (review.isSelected().isBooleanTrue()) {
+                selected.add(review);
             }
         }
-        dataGrid.populate(charges);
+        return selected;
     }
 
-    @Override
-    public Range getVisibleRange() {
-        return new Range(0, Integer.MAX_VALUE);
+    private class Separator extends HTML {
+
+        public Separator(int x) {
+            String sep = "&nbsp;";
+            for (int i = 0; i < x - 1; ++i) {
+                sep += "&nbsp;";
+            }
+            setHTML(sep);
+            getElement().getStyle().setCursor(Cursor.DEFAULT);
+        }
     }
 
 }

@@ -26,11 +26,11 @@ import com.pyx4j.commons.css.IStyleName;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
-import com.propertyvista.crm.client.ui.reports.autopayreviewer.dto.LeasePapsReviewsHolderDTO;
+import com.propertyvista.crm.client.ui.reports.autopayreviewer.dto.PapReviewsHolderDTO;
 
-public final class LeasePapsReviewsHolderForm extends CEntityDecoratableForm<LeasePapsReviewsHolderDTO> {
+public final class PapReviewsHolderForm extends CEntityDecoratableForm<PapReviewsHolderDTO> {
 
-    private final static I18n i18n = I18n.get(LeasePapsReviewFolder.class);
+    private final static I18n i18n = I18n.get(PapReviewsHolderForm.class);
 
     public enum Styles implements IStyleName {
 
@@ -40,8 +40,8 @@ public final class LeasePapsReviewsHolderForm extends CEntityDecoratableForm<Lea
 
     private HTML counterPanel;
 
-    public LeasePapsReviewsHolderForm() {
-        super(LeasePapsReviewsHolderDTO.class);
+    public PapReviewsHolderForm() {
+        super(PapReviewsHolderDTO.class);
     }
 
     @Override
@@ -75,7 +75,7 @@ public final class LeasePapsReviewsHolderForm extends CEntityDecoratableForm<Lea
         leasePapsFolderHolder.getElement().getStyle().setBottom(0, Unit.PX);
         leasePapsFolderHolder.getElement().getStyle().setLeft(0, Unit.PX);
         leasePapsFolderHolder.getElement().getStyle().setRight(0, Unit.PX);
-        leasePapsFolderHolder.add(inject(proto().leaseAutoPayReviews(), new LeasePapsReviewFolder()));
+        leasePapsFolderHolder.add(inject(proto().papReviews(), new PapReviewFolder()));
 
         HTML more = new HTML(i18n.tr("More..."));
         more.getElement().getStyle().setTextAlign(TextAlign.CENTER);
@@ -93,7 +93,7 @@ public final class LeasePapsReviewsHolderForm extends CEntityDecoratableForm<Lea
     @Override
     protected void onValueSet(boolean populate) {
         super.onValueSet(populate);
-        counterPanel.setText(i18n.tr("Displaying {0,number,#,##0} of {1,number,#,##0} Leases with suspended AutoPay", getValue().leaseAutoPayReviews().size(),
-                getValue().leaseAutoPayReviewsTotalCount().getValue()));
+        counterPanel.setText(i18n.tr("Displaying {0,number,#,##0} of {1,number,#,##0} Leases with suspended AutoPay", getValue().papReviews().size(),
+                getValue().papReviewsTotalCount().getValue()));
     }
 }

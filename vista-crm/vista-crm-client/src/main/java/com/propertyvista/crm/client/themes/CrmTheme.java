@@ -47,8 +47,8 @@ import com.propertyvista.crm.client.ui.gadgets.commonMk2.dashboard.AbstractDashb
 import com.propertyvista.crm.client.ui.gadgets.commonMk2.dashboard.AddGadgetDialog;
 import com.propertyvista.crm.client.ui.gadgets.forms.ArrearsGadgetSummaryForm;
 import com.propertyvista.crm.client.ui.reports.CommonReportStyles;
-import com.propertyvista.crm.client.ui.reports.autopayreviewer.LeasePapsReviewFolder;
-import com.propertyvista.crm.client.ui.reports.autopayreviewer.LeasePapsReviewsHolderForm;
+import com.propertyvista.crm.client.ui.reports.autopayreviewer.PapReviewFolder;
+import com.propertyvista.crm.client.ui.reports.autopayreviewer.PapReviewsHolderForm;
 import com.propertyvista.crm.client.ui.wizard.creditcheck.components.CreditCheckReportTypeSelector;
 
 public class CrmTheme extends VistaTheme {
@@ -691,61 +691,61 @@ public class CrmTheme extends VistaTheme {
     }
 
     private void initAutoPayUpdaterStyles() {
-        Style style = new Style("." + LeasePapsReviewFolder.Styles.AutoPayReviewUpdaterLeaseCaption.name() + " div");
+        Style style = new Style("." + PapReviewFolder.Styles.AutoPayReviewUpdaterLeaseCaption.name() + " div");
         style.addProperty("display", "inline-block");
         style.addProperty("font-weight", "bold");
         style.addProperty("font-size", "1.5em");
         addStyle(style);
 
-        style = new Style("." + LeasePapsReviewFolder.Styles.AutoPayReviewSelected.name());
+        style = new Style("." + PapReviewFolder.Styles.AutoPayReviewSelected.name());
         style.addProperty("padding-right", "10px");
         addStyle(style);
 
-        style = new Style("." + LeasePapsReviewFolder.Styles.AutoPayReviewSelected.name() + " div");
+        style = new Style("." + PapReviewFolder.Styles.AutoPayReviewSelected.name() + " div");
         style.addProperty("font-size", "1em");
         style.addProperty("line-height", "1em");
         addStyle(style);
 
-        style = new Style("." + LeasePapsReviewFolder.Styles.AutoPayPapChargesContainer.name() + " .EntityContainerDecorator");
+        style = new Style("." + PapReviewFolder.Styles.AutoPayPapChargesContainer.name() + " .EntityContainerDecorator");
         style.addProperty("margin", "0px");
         style.addProperty("border", "none");
         style.addProperty("padding", "0px");
         addStyle(style);
 
-        style = new Style("." + LeasePapsReviewFolder.Styles.AutoPayPapChargesContainer.name() + " .EntityFolderBoxItem");
+        style = new Style("." + PapReviewFolder.Styles.AutoPayPapChargesContainer.name() + " .EntityFolderBoxItem");
         style.addProperty("margin", "0px");
         style.addProperty("padding", "0px");
         addStyle(style);
 
-        style = new Style("." + LeasePapsReviewFolder.Styles.AutoPayPapCharge.name());
+        style = new Style("." + PapReviewFolder.Styles.AutoPayPapCharge.name());
         style.addProperty("width", "80em");
         addStyle(style);
 
-        style = new Style("." + LeasePapsReviewFolder.Styles.AutoPayPapCharge.name() + " div");
+        style = new Style("." + PapReviewFolder.Styles.AutoPayPapCharge.name() + " div");
         style.addProperty("display", "inline-block");
         style.addProperty("vertical-align", "middle");
         addStyle(style);
 
-        style = new Style("." + LeasePapsReviewFolder.Styles.AutoPayPapChargeNameColumn.name());
+        style = new Style("." + PapReviewFolder.Styles.AutoPayPapChargeNameColumn.name());
         style.addProperty("width", "200px");
         style.addProperty("padding-left", "20px");
         addStyle(style);
 
-        style = new Style("." + LeasePapsReviewFolder.Styles.AutoPayPapChargeNumberColumn.name());
+        style = new Style("." + PapReviewFolder.Styles.AutoPayPapChargeNumberColumn.name());
         style.addProperty("width", "100px");
         style.addProperty("padding-left", "2px");
         style.addProperty("padding-right", "2px");
         style.addProperty("text-align", "right");
         addStyle(style);
 
-        style = new Style("." + LeasePapsReviewFolder.Styles.AutoPayPapChargeNumberColumn.name() + " .TextBox");
+        style = new Style("." + PapReviewFolder.Styles.AutoPayPapChargeNumberColumn.name() + " .TextBox");
         style.addProperty("text-align", "right");
         style.addProperty("margin-left", "2px");
         style.addProperty("margin-right", "2px");
         addStyle(style);
 
         // the following styles set up the layout of captions for LeasePapsReviewFolder
-        style = new Style("." + LeasePapsReviewsHolderForm.Styles.AutoPayCounterPanel.name());
+        style = new Style("." + PapReviewsHolderForm.Styles.AutoPayCounterPanel.name());
         style.addProperty("text-align", "center");
         style.addProperty("font-weight", "bold");
         style.addProperty("padding-top", "5px");
@@ -753,11 +753,11 @@ public class CrmTheme extends VistaTheme {
         style.addProperty("width", "100%");
         addStyle(style);
 
-        style = new Style("." + LeasePapsReviewsHolderForm.Styles.AutoPaySuperCaptionsPanel.name());
+        style = new Style("." + PapReviewsHolderForm.Styles.AutoPaySuperCaptionsPanel.name());
         style.addProperty("position", "relative");
         addStyle(style);
 
-        style = new Style("." + LeasePapsReviewsHolderForm.Styles.AutoPaySuperCaptionsPanel.name() + " div");
+        style = new Style("." + PapReviewsHolderForm.Styles.AutoPaySuperCaptionsPanel.name() + " div");
         style.addProperty("position", "relative");
         style.addProperty("display", "inline-block");
         style.addProperty("text-align", "center");
@@ -769,21 +769,21 @@ public class CrmTheme extends VistaTheme {
         style.addProperty("border-right", "1px dotted");
         addStyle(style);
 
-        style = new Style("." + LeasePapsReviewsHolderForm.Styles.AutoPaySuperCaptionsPanel.name() + " div:nth-child(1)");
+        style = new Style("." + PapReviewsHolderForm.Styles.AutoPaySuperCaptionsPanel.name() + " div:nth-child(1)");
         style.addProperty("left", "250px");
         style.addProperty("width", "400px");
         addStyle(style);
 
-        style = new Style("." + LeasePapsReviewsHolderForm.Styles.AutoPaySuperCaptionsPanel.name() + " div:nth-child(2)");
+        style = new Style("." + PapReviewsHolderForm.Styles.AutoPaySuperCaptionsPanel.name() + " div:nth-child(2)");
         style.addProperty("left", "250px");
         style.addProperty("width", "350px");
         addStyle(style);
 
-        style = new Style("." + LeasePapsReviewsHolderForm.Styles.AutoPayCaptionsPanel.name());
+        style = new Style("." + PapReviewsHolderForm.Styles.AutoPayCaptionsPanel.name());
         style.addProperty("position", "relative");
         addStyle(style);
 
-        style = new Style("." + LeasePapsReviewsHolderForm.Styles.AutoPayCaptionsPanel.name() + " div");
+        style = new Style("." + PapReviewsHolderForm.Styles.AutoPayCaptionsPanel.name() + " div");
         style.addProperty("position", "relative");
         style.addProperty("display", "inline-block");
         style.addProperty("text-align", "right");
@@ -792,7 +792,7 @@ public class CrmTheme extends VistaTheme {
         style.addProperty("border-right", "1px dotted");
         addStyle(style);
 
-        style = new Style("." + LeasePapsReviewsHolderForm.Styles.AutoPayCaptionsPanel.name() + " div");
+        style = new Style("." + PapReviewsHolderForm.Styles.AutoPayCaptionsPanel.name() + " div");
         style.addProperty("left", "346px");
         style.addProperty("width", "100px");
         addStyle(style);

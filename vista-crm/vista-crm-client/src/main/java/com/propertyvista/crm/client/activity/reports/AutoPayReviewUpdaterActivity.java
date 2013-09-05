@@ -15,6 +15,7 @@ package com.propertyvista.crm.client.activity.reports;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 import com.google.gwt.activity.shared.AbstractActivity;
@@ -28,21 +29,20 @@ import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.site.rpc.AppPlace;
 
 import com.propertyvista.crm.client.ui.reports.autopayreviewer.AutoPayReviewUpdaterView;
-import com.propertyvista.crm.client.ui.reports.autopayreviewer.AutoPayReviewUpdaterViewImpl2;
-import com.propertyvista.crm.client.ui.reports.autopayreviewer.dto.LeasePapsReviewDTO;
-import com.propertyvista.crm.client.ui.reports.autopayreviewer.dto.PapChargeDTO;
-import com.propertyvista.crm.client.ui.reports.autopayreviewer.dto.PapDTO;
+import com.propertyvista.crm.client.ui.reports.autopayreviewer.AutoPayReviewUpdaterViewImpl;
+import com.propertyvista.crm.client.ui.reports.autopayreviewer.dto.PapChargeReviewDTO;
+import com.propertyvista.crm.client.ui.reports.autopayreviewer.dto.PapReviewDTO;
+import com.propertyvista.domain.tenant.lease.Lease;
 
 public class AutoPayReviewUpdaterActivity extends AbstractActivity implements AutoPayReviewUpdaterView.Presenter {
 
     private final AutoPayReviewUpdaterView view;
 
-    List<LeasePapsReviewDTO> leasePapsReview;
+    List<PapReviewDTO> leasePapsReview;
 
     public AutoPayReviewUpdaterActivity(Place place) {
 //        view = CrmSite.getViewFactory().instantiate(AutoPayReviewUpdaterView.class);
-        view = new AutoPayReviewUpdaterViewImpl2();
-
+        view = new AutoPayReviewUpdaterViewImpl();
         leasePapsReview = makeMockData();
     }
 
@@ -73,32 +73,31 @@ public class AutoPayReviewUpdaterActivity extends AbstractActivity implements Au
         int start = view.getVisibleRange().getStart();
         int end = Math.min(leasePapsReview.size(), start + view.getVisibleRange().getLength());
 
-        view.setRowData(view.getVisibleRange().getStart(), leasePapsReview.subList(start, end));
+        view.setRowData(view.getVisibleRange().getStart(), leasePapsReview.size(), leasePapsReview.subList(start, end));
     }
 
-    private List<LeasePapsReviewDTO> makeMockData() {
-        ArrayList<LeasePapsReviewDTO> list = new ArrayList<LeasePapsReviewDTO>();
+    private List<PapReviewDTO> makeMockData() {
+        List<PapReviewDTO> papReviews = new LinkedList<PapReviewDTO>();
         int tenantNum = 0;
         int chargeKeyCounter = 0;
 
         for (int leaseNum = 0; leaseNum < 30; leaseNum++) {
-            LeasePapsReviewDTO leasePapsReview = EntityFactory.create(LeasePapsReviewDTO.class);
-
-            leasePapsReview.lease().setPrimaryKey(new Key(leaseNum + 1));
-            leasePapsReview.lease().leaseId().setValue("t0000" + leaseNum);
-            leasePapsReview.lease().unit().info().number().setValue("#" + leaseNum);
-            leasePapsReview.lease().unit().building().propertyCode().setValue("bath999");
-            leasePapsReview.lease().expectedMoveOut().setValue(new LogicalDate());
+            Lease lease = EntityFactory.create(Lease.class);
+            lease.setPrimaryKey(new Key(leaseNum + 1));
+            lease.leaseId().setValue("t0000" + leaseNum);
+            lease.unit().info().number().setValue("#" + leaseNum);
+            lease.unit().building().propertyCode().setValue("bath999");
+            lease.expectedMoveOut().setValue(new LogicalDate());
 
             // create charges for lease:
-            List<PapChargeDTO> charges = new ArrayList<PapChargeDTO>();
+            List<PapChargeReviewDTO> charges = new ArrayList<PapChargeReviewDTO>();
             for (int chargeNum = 0; chargeNum < 3; ++chargeNum) {
-                PapChargeDTO papCharge = EntityFactory.create(PapChargeDTO.class);
+                PapChargeReviewDTO papCharge = EntityFactory.create(PapChargeReviewDTO.class);
                 papCharge.setPrimaryKey(new Key(++chargeKeyCounter));
                 papCharge.chargeName().setValue("Charge#" + chargeNum);
                 papCharge.changeType().setValue(
-                        chargeNum % 3 == 0 ? PapChargeDTO.ChangeType.Changed : chargeNum % 2 == 0 ? PapChargeDTO.ChangeType.Removed
-                                : PapChargeDTO.ChangeType.New);
+                        chargeNum % 3 == 0 ? PapChargeReviewDTO.ChangeType.Changed : chargeNum % 2 == 0 ? PapChargeReviewDTO.ChangeType.Removed
+                                : PapChargeReviewDTO.ChangeType.New);
 
                 switch (papCharge.changeType().getValue()) {
                 case Changed:
@@ -132,14 +131,14 @@ public class AutoPayReviewUpdaterActivity extends AbstractActivity implements Au
 
             int papsPerLeaseCount = 2;
             for (int papNum = 0; papNum < papsPerLeaseCount; ++papNum) {
-                PapDTO pap = EntityFactory.create(PapDTO.class);
+                PapReviewDTO pap = EntityFactory.create(PapReviewDTO.class);
                 ++tenantNum;
                 pap.tenantAndPaymentMethod().setValue("Tenant Tenantovic" + tenantNum + " PaymentMethod#" + tenantNum);
 
-                for (PapChargeDTO charge : charges) {
-                    PapChargeDTO papCharge = charge.duplicate();
+                for (PapChargeReviewDTO charge : charges) {
+                    PapChargeReviewDTO papCharge = charge.duplicate();
 
-                    if (charge.changeType().equals(PapChargeDTO.ChangeType.Changed)) {
+                    if (charge.changeType().equals(PapChargeReviewDTO.ChangeType.Changed)) {
                         papCharge.suspendedPreAuthorizedPaymentPercent().setValue(
                                 charge.suspendedPreAuthorizedPaymentPercent().getValue().divide(new BigDecimal(papsPerLeaseCount)));
                         papCharge.suspendedPreAuthorizedPaymentAmount().setValue(
@@ -150,10 +149,9 @@ public class AutoPayReviewUpdaterActivity extends AbstractActivity implements Au
                     }
                     pap.charges().add(papCharge);
                 }
-                leasePapsReview.paps().add(pap);
+                papReviews.add(pap);
             }
-            list.add(leasePapsReview);
         }
-        return list;
+        return papReviews;
     }
 }

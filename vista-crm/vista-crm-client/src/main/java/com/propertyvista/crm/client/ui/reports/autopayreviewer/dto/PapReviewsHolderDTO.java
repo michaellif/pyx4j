@@ -7,15 +7,21 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on 2013-08-30
+ * Created on 2013-08-29
  * @author ArtyomB
  * @version $Id$
  */
 package com.propertyvista.crm.client.ui.reports.autopayreviewer.dto;
 
 import com.pyx4j.entity.annotations.Transient;
+import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.shared.IList;
+import com.pyx4j.entity.shared.IPrimitive;
 
 @Transient
-public interface LeasePapTotalsDTO extends PapDTO {
+public interface PapReviewsHolderDTO extends IEntity {
 
+    IPrimitive<Integer> papReviewsTotalCount();
+
+    IList<PapReviewDTO> papReviews();
 }
