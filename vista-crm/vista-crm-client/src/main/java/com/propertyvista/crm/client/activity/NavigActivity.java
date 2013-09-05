@@ -212,7 +212,7 @@ public class NavigActivity extends AbstractActivity implements NavigView.MainNav
         folder.addNavigItem(new CrmSiteMap.Reports.ResidentInsurance());
 
         // TODO this is a temporary place for this view to be used only for development and experimentation
-        if (VistaTODO.VISTA_3129_AutoPayBulkEditorExperiment && !GWT.isProdMode() && ApplicationMode.isDevelopment()) {
+        if (VistaTODO.VISTA_3129_AutoPayBulkEditorExperiment && ApplicationMode.isDevelopment()) {
             folder.addNavigItem(new CrmSiteMap.AutoPayReviewUpdater());
         }
         return folder;

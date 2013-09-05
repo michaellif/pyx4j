@@ -7,57 +7,55 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on 2013-06-27
+ * Created on 2013-09-04
  * @author ArtyomB
  * @version $Id$
  */
 package com.propertyvista.crm.client.ui.reports.autopayreviewer;
 
+import java.util.ArrayList;
 import java.util.List;
 
-import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.view.client.Range;
 
-import com.pyx4j.entity.shared.EntityFactory;
-import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.site.client.IsView;
 import com.pyx4j.site.client.ui.prime.AbstractPrimePane;
 
 import com.propertyvista.crm.client.ui.reports.autopayreviewer.dto.LeasePapsReviewDTO;
-import com.propertyvista.crm.client.ui.reports.autopayreviewer.dto.LeasePapsReviewsHolderDTO;
+import com.propertyvista.crm.client.ui.reports.autopayreviewer.dto.PapChargeDTO;
+import com.propertyvista.crm.client.ui.reports.autopayreviewer.dto.PapDTO;
 
-public class AutoPayReviewUpdaterViewImpl extends AbstractPrimePane implements AutoPayReviewUpdaterView, IsView {
+public class AutoPayReviewUpdaterViewImpl extends AbstractPrimePane implements AutoPayReviewUpdaterView {
 
-    private final static I18n i18n = I18n.get(AutoPayReviewUpdaterViewImpl.class);
+    private final AutoPayReviewUpdaterDataGrid dataGrid;
 
-    private AutoPayReviewUpdaterView.Presenter presenter;
-
-    private final LeasePapsReviewsHolderForm leasePapsReviewsHolderForm;
+    private com.propertyvista.crm.client.ui.reports.autopayreviewer.AutoPayReviewUpdaterView.Presenter presenter;
 
     public AutoPayReviewUpdaterViewImpl() {
-        leasePapsReviewsHolderForm = new LeasePapsReviewsHolderForm();
-        leasePapsReviewsHolderForm.initContent();
-        setContentPane(new ScrollPanel(leasePapsReviewsHolderForm.asWidget()));
         setSize("100%", "100%");
+        dataGrid = new AutoPayReviewUpdaterDataGrid();
+        setContentPane(dataGrid);
+    }
+
+    @Override
+    public void setPresenter(com.propertyvista.crm.client.ui.reports.autopayreviewer.AutoPayReviewUpdaterView.Presenter presenter) {
+        this.presenter = presenter;
+        this.presenter.onRangeChanged();
     }
 
     @Override
     public void setRowData(int start, List<LeasePapsReviewDTO> values) {
-        LeasePapsReviewsHolderDTO holder = EntityFactory.create(LeasePapsReviewsHolderDTO.class);
-        holder.leasePapsReviews().addAll(values);
-        leasePapsReviewsHolderForm.populate(holder);
+        List<PapChargeDTO> charges = new ArrayList<PapChargeDTO>();
+        for (LeasePapsReviewDTO v : values) {
+            for (PapDTO p : v.paps()) {
+                charges.addAll(p.charges());
+            }
+        }
+        dataGrid.populate(charges);
     }
 
     @Override
     public Range getVisibleRange() {
-        // TODO
-        return new Range(0, 3);
-    }
-
-    @Override
-    public void setPresenter(AutoPayReviewUpdaterView.Presenter presenter) {
-        this.presenter = presenter;
-        this.presenter.onRangeChanged();
+        return new Range(0, Integer.MAX_VALUE);
     }
 
 }

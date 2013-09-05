@@ -31,4 +31,6 @@ public interface PapDTO extends IEntity {
 
     IList<PapChargeDTO> charges();
 
+    PapDTO parentLeasePapReview();
+
 }

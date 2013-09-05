@@ -26,8 +26,8 @@ import com.pyx4j.commons.Key;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.site.rpc.AppPlace;
 
-import com.propertyvista.crm.client.CrmSite;
 import com.propertyvista.crm.client.ui.reports.autopayreviewer.AutoPayReviewUpdaterView;
+import com.propertyvista.crm.client.ui.reports.autopayreviewer.AutoPayReviewUpdaterViewImpl2;
 import com.propertyvista.crm.client.ui.reports.autopayreviewer.dto.LeasePapsReviewDTO;
 import com.propertyvista.crm.client.ui.reports.autopayreviewer.dto.PapChargeDTO;
 import com.propertyvista.crm.client.ui.reports.autopayreviewer.dto.PapDTO;
@@ -39,7 +39,8 @@ public class AutoPayReviewUpdaterActivity extends AbstractActivity implements Au
     List<LeasePapsReviewDTO> leasePapsReview;
 
     public AutoPayReviewUpdaterActivity(Place place) {
-        view = CrmSite.getViewFactory().instantiate(AutoPayReviewUpdaterView.class);
+//        view = CrmSite.getViewFactory().instantiate(AutoPayReviewUpdaterView.class);
+        view = new AutoPayReviewUpdaterViewImpl2();
 
         leasePapsReview = makeMockData();
     }

@@ -61,4 +61,8 @@ public interface PapChargeDTO extends IEntity {
     @Editor(type = EditorType.money)
     IPrimitive<BigDecimal> suggestedNewPreAuthorizedPaymentAmount();
 
+    PapDTO _parentPap();
+
+    IPrimitive<Boolean> isPivot();
+
 }
