@@ -61,6 +61,9 @@ public class YardiMockServer implements TransactionChargeUpdateEvent.Handler, Pr
         if (propertyManager == null) {
             throw new RuntimeException("Property '" + propertyId + "' not found");
         }
+        if (propertyManager.mockFeatures.isBlockAccess()) {
+            throw new RuntimeException("Access disabled for " + propertyId);
+        }
         return propertyManager;
     }
 
@@ -81,7 +84,11 @@ public class YardiMockServer implements TransactionChargeUpdateEvent.Handler, Pr
     }
 
     public long openReceiptBatch(String propertyId) {
-        PaymentBatchManager b = new PaymentBatchManager(getExistingPropertyManager(propertyId));
+        PropertyManager propertyManager = getExistingPropertyManager(propertyId);
+        if (propertyManager.mockFeatures.isBlockBatchOpening()) {
+            throw new RuntimeException("BatchOpening disabled for " + propertyId);
+        }
+        PaymentBatchManager b = new PaymentBatchManager(propertyManager);
         openBatches.put(b.getId(), b);
         return b.getId();
     }

@@ -21,6 +21,9 @@ public class YardiMockPropertyFeatures {
 
     private boolean blockAccess;
 
+    /**
+     * @link com.propertyvista.yardi.mock.PropertyUpdater#MockFeatures.BlockBatchOpening
+     */
     private boolean blockBatchOpening;
 
     public boolean isBlockAccess() {

@@ -20,10 +20,14 @@ import com.pyx4j.entity.server.Persistence;
 
 import com.propertyvista.biz.ExecutionMonitor;
 import com.propertyvista.domain.financial.PaymentRecord;
+import com.propertyvista.domain.financial.PaymentRecord.PaymentStatus;
 import com.propertyvista.domain.payment.PaymentType;
 import com.propertyvista.domain.tenant.lease.Lease;
+import com.propertyvista.operations.domain.scheduler.PmcProcessType;
+import com.propertyvista.test.integration.PaymentRecordTester;
 import com.propertyvista.test.mock.MockEventBus;
 import com.propertyvista.test.mock.models.LeaseDataModel;
+import com.propertyvista.test.mock.schedule.SchedulerMock;
 import com.propertyvista.yardi.mock.PropertyUpdateEvent;
 import com.propertyvista.yardi.mock.PropertyUpdater;
 import com.propertyvista.yardi.services.YardiResidentTransactionsService;
@@ -107,7 +111,51 @@ public class PaymentBatchThreeBuildingYardiTest extends PaymentYardiTestBase {
 
         setSysDate("2011-01-02");
 
-        //TODO  run process
+        //Run the batch process
+        SchedulerMock.runProcess(PmcProcessType.paymentsScheduledEcheck, "2011-01-02");
+
+        new PaymentRecordTester(lease11.billingAccount()).lastRecordStatus(PaymentStatus.Queued);
+        new PaymentRecordTester(lease12.billingAccount()).lastRecordStatus(PaymentStatus.Queued);
+
+        new PaymentRecordTester(lease21.billingAccount()).lastRecordStatus(PaymentStatus.Queued);
+        new PaymentRecordTester(lease22.billingAccount()).lastRecordStatus(PaymentStatus.Queued);
+
+        new PaymentRecordTester(lease31.billingAccount()).lastRecordStatus(PaymentStatus.Queued);
+        new PaymentRecordTester(lease32.billingAccount()).lastRecordStatus(PaymentStatus.Queued);
+    }
+
+    public void testOneBatchFailedPosting() throws Exception {
+        {
+            PropertyUpdater updater = new PropertyUpdater("prop2")//
+                    .set(PropertyUpdater.MockFeatures.BlockBatchOpening, true);
+            MockEventBus.fireEvent(new PropertyUpdateEvent(updater));
+        }
+
+        setSysDate("2011-01-02");
+
+        //Run the batch process
+        SchedulerMock.runProcess(PmcProcessType.paymentsScheduledEcheck, "2011-01-02");
+
+        new PaymentRecordTester(lease11.billingAccount()).lastRecordStatus(PaymentStatus.Queued);
+        new PaymentRecordTester(lease12.billingAccount()).lastRecordStatus(PaymentStatus.Queued);
+
+        new PaymentRecordTester(lease21.billingAccount()).lastRecordStatus(PaymentStatus.Scheduled);
+        new PaymentRecordTester(lease22.billingAccount()).lastRecordStatus(PaymentStatus.Scheduled);
+
+        new PaymentRecordTester(lease31.billingAccount()).lastRecordStatus(PaymentStatus.Queued);
+        new PaymentRecordTester(lease32.billingAccount()).lastRecordStatus(PaymentStatus.Queued);
+
+        // Test how process will recover
+        {
+            PropertyUpdater updater = new PropertyUpdater("prop2")//
+                    .set(PropertyUpdater.MockFeatures.BlockBatchOpening, false);
+            MockEventBus.fireEvent(new PropertyUpdateEvent(updater));
+        }
+
+        SchedulerMock.runProcess(PmcProcessType.paymentsScheduledEcheck, "2011-01-02");
+
+        new PaymentRecordTester(lease21.billingAccount()).lastRecordStatus(PaymentStatus.Queued);
+        new PaymentRecordTester(lease22.billingAccount()).lastRecordStatus(PaymentStatus.Queued);
     }
 
 }

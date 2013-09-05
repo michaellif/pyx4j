@@ -47,7 +47,7 @@ public class PropertyManager {
 
     private final com.yardi.entity.mits.Property property;
 
-    private final YardiMockPropertyFeatures mockFeatures = new YardiMockPropertyFeatures();
+    final YardiMockPropertyFeatures mockFeatures = new YardiMockPropertyFeatures();
 
     private final ResidentTransactions transactions;
 
