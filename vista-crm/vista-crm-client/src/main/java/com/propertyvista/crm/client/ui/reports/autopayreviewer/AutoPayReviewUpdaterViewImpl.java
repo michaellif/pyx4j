@@ -39,14 +39,20 @@ public class AutoPayReviewUpdaterViewImpl extends AbstractPrimePane implements A
 
     private final static I18n i18n = I18n.get(AutoPayReviewUpdaterViewImpl.class);
 
+    private static final int PAGE_INCREMENT = 10;
+
     private AutoPayReviewUpdaterView.Presenter presenter;
 
     private final PapReviewsHolderForm leasePapsReviewsHolderForm;
+
+    private Range visibleRange;
 
     /**
      * 
      */
     public AutoPayReviewUpdaterViewImpl() {
+        this.visibleRange = new Range(0, PAGE_INCREMENT);
+
         FlowPanel viewPanel = new FlowPanel();
         viewPanel.getElement().getStyle().setPosition(Position.RELATIVE);
         viewPanel.setSize("100%", "100%");
@@ -70,7 +76,12 @@ public class AutoPayReviewUpdaterViewImpl extends AbstractPrimePane implements A
 
         viewPanel.add(filtersPanel);
 
-        leasePapsReviewsHolderForm = new PapReviewsHolderForm();
+        leasePapsReviewsHolderForm = new PapReviewsHolderForm() {
+            @Override
+            public void onMoreClicked() {
+                AutoPayReviewUpdaterViewImpl.this.showMore();
+            }
+        };
         leasePapsReviewsHolderForm.initContent();
         leasePapsReviewsHolderForm.asWidget().getElement().getStyle().setPosition(Position.ABSOLUTE);
         leasePapsReviewsHolderForm.asWidget().getElement().getStyle().setTop(150, Unit.PX);
@@ -98,8 +109,7 @@ public class AutoPayReviewUpdaterViewImpl extends AbstractPrimePane implements A
 
     @Override
     public Range getVisibleRange() {
-        return new Range(0, leasePapsReviewsHolderForm.getValue() == null || leasePapsReviewsHolderForm.getValue().isNull() ? 10 : leasePapsReviewsHolderForm
-                .getValue().papReviews().size());
+        return visibleRange;
     }
 
     @Override
@@ -117,6 +127,12 @@ public class AutoPayReviewUpdaterViewImpl extends AbstractPrimePane implements A
             }
         }
         return selected;
+    }
+
+    private void showMore() {
+        this.visibleRange = new Range(0, leasePapsReviewsHolderForm.getValue() == null || leasePapsReviewsHolderForm.getValue().isNull() ? PAGE_INCREMENT
+                : leasePapsReviewsHolderForm.getValue().papReviews().size() + PAGE_INCREMENT);
+        this.presenter.onRangeChanged();
     }
 
     private class Separator extends HTML {

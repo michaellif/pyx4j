@@ -18,6 +18,8 @@ import com.google.gwt.dom.client.Style.Overflow;
 import com.google.gwt.dom.client.Style.Position;
 import com.google.gwt.dom.client.Style.TextAlign;
 import com.google.gwt.dom.client.Style.Unit;
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.IsWidget;
@@ -28,7 +30,7 @@ import com.pyx4j.i18n.shared.I18n;
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
 import com.propertyvista.crm.client.ui.reports.autopayreviewer.dto.PapReviewsHolderDTO;
 
-public final class PapReviewsHolderForm extends CEntityDecoratableForm<PapReviewsHolderDTO> {
+public class PapReviewsHolderForm extends CEntityDecoratableForm<PapReviewsHolderDTO> {
 
     private final static I18n i18n = I18n.get(PapReviewsHolderForm.class);
 
@@ -83,11 +85,21 @@ public final class PapReviewsHolderForm extends CEntityDecoratableForm<PapReview
         more.getElement().getStyle().setLineHeight(5, Unit.EM);
         more.getElement().getStyle().setWidth(100, Unit.PCT);
         more.getElement().getStyle().setHeight(5, Unit.EM);
+        more.addClickHandler(new ClickHandler() {
+            @Override
+            public void onClick(ClickEvent event) {
+                PapReviewsHolderForm.this.onMoreClicked();
+            }
+        });
         leasePapsFolderHolder.add(more);
 
         panel.add(leasePapsFolderHolder);
 
         return panel;
+    }
+
+    public void onMoreClicked() {
+
     }
 
     @Override

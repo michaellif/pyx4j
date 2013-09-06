@@ -15,8 +15,6 @@ package com.propertyvista.crm.client.ui.reports.autopayreviewer;
 
 import java.math.BigDecimal;
 import java.math.MathContext;
-import java.util.LinkedList;
-import java.util.List;
 
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
@@ -29,7 +27,6 @@ import com.google.gwt.user.client.ui.Widget;
 import com.pyx4j.commons.Key;
 import com.pyx4j.commons.css.IStyleName;
 import com.pyx4j.entity.shared.EntityFactory;
-import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.forms.client.ui.CComponent;
@@ -79,6 +76,8 @@ public class PapReviewFolder extends VistaBoxFolder<PapReviewDTO> {
 
     private static final class PapForm extends CEntityDecoratableForm<PapReviewDTO> {
 
+        private PapChargeForm chargeTotals;
+
         public PapForm() {
             super(PapReviewDTO.class);
         }
@@ -92,7 +91,8 @@ public class PapReviewFolder extends VistaBoxFolder<PapReviewDTO> {
                             "<div><span id='leaseLabel'></span></div>" +
                             "<div><span id='tenantAndPaymentMethodCaption'></span></div>" +
                             "<div>" +
-                                "<div style='float:left;'><span id='chargesFolder'></span></div>" +
+                                "<div><span id='chargesFolder'></span></div>" +
+                                "<div><span id='chargesTotals'></span></div>" +
                             "</div>" +
                         "</div>" +
                     "</div>"
@@ -101,7 +101,30 @@ public class PapReviewFolder extends VistaBoxFolder<PapReviewDTO> {
             contentPanel.addAndReplaceElement(inject(proto().lease(), new CEntityLabel<Lease>()), "leaseLabel");
             contentPanel.addAndReplaceElement(inject(proto().tenantAndPaymentMethod(), new CLabel<String>()), "tenantAndPaymentMethodCaption");
             contentPanel.addAndReplaceElement(inject(proto().charges(), new PapChargesFolder()), "chargesFolder");
+            contentPanel.addAndReplaceElement(chargeTotals = new PapChargeForm(), "chargesTotals");
+            chargeTotals.initContent();
+            chargeTotals.setViewable(true);
+
+            addValueChangeHandler(new ValueChangeHandler<PapReviewDTO>() {
+                @Override
+                public void onValueChange(ValueChangeEvent<PapReviewDTO> event) {
+                    recalculateChargesTotal();
+                }
+            });
             return contentPanel;
+        }
+
+        @Override
+        protected void onValueSet(boolean populate) {
+            super.onValueSet(populate);
+            recalculateChargesTotal();
+        }
+
+        private void recalculateChargesTotal() {
+            if (getValue() != null) {
+                PapChargesTotalDTO totals = summarizeCharges(getValue().charges());
+                chargeTotals.populate(totals);
+            }
         }
 
     }
@@ -127,37 +150,9 @@ public class PapReviewFolder extends VistaBoxFolder<PapReviewDTO> {
         @Override
         public CComponent<?> create(IObject<?> member) {
             if (member instanceof PapChargeReviewDTO) {
-                PapChargeForm form = new PapChargeForm();
-                form.addValueChangeHandler(new ValueChangeHandler<PapChargeReviewDTO>() {
-                    @Override
-                    public void onValueChange(ValueChangeEvent<PapChargeReviewDTO> event) {
-                        recalculateChargesTotal();
-                    }
-                });
-                return form;
+                return new PapChargeForm();
             }
             return super.create(member);
-        }
-
-        @Override
-        protected IList<PapChargeReviewDTO> preprocessValue(IList<PapChargeReviewDTO> value, boolean fireEvent, boolean populate) {
-            value.add(summarizeCharges(value));
-            return super.preprocessValue(value, fireEvent, populate);
-        }
-
-        @SuppressWarnings("unchecked")
-        private void setTotals(PapChargesTotalDTO totals) {
-            for (CComponent<?> c : PapChargesFolder.this.getComponents()) {
-                if (c.getValue() instanceof PapChargesTotalDTO) {
-                    ((CComponent<PapChargeReviewDTO>) c).setValue(totals, false);
-                }
-            }
-        }
-
-        private void recalculateChargesTotal() {
-            IList<PapChargeReviewDTO> paps = PapChargesFolder.this.getValue();
-            PapChargesTotalDTO totals = summarizeCharges(removeChargesTotal(paps));
-            setTotals(totals);
         }
 
     }
@@ -222,7 +217,6 @@ public class PapReviewFolder extends VistaBoxFolder<PapReviewDTO> {
             get(proto().newPrice()).setVisible(getValue().changeType().getValue() != PapChargeReviewDTO.ChangeType.Removed);
             get(proto().newPreAuthorizedPaymentAmount()).setVisible(getValue().changeType().getValue() != PapChargeReviewDTO.ChangeType.Removed);
             get(proto().newPreAuthorizedPaymentPercent()).setVisible(getValue().changeType().getValue() != PapChargeReviewDTO.ChangeType.Removed);
-
         }
     }
 
@@ -242,16 +236,6 @@ public class PapReviewFolder extends VistaBoxFolder<PapReviewDTO> {
         if (member.isNull()) {
             member.setValue(new BigDecimal("0.00"));
         }
-    }
-
-    private static Iterable<PapChargeReviewDTO> removeChargesTotal(IList<PapChargeReviewDTO> charges) {
-        List<PapChargeReviewDTO> paps = new LinkedList<PapChargeReviewDTO>();
-        for (PapChargeReviewDTO pap : charges) {
-            if (!(pap instanceof PapChargesTotalDTO)) {
-                paps.add(pap);
-            }
-        }
-        return paps;
     }
 
     private static PapChargesTotalDTO summarizeCharges(Iterable<PapChargeReviewDTO> papCharges) {
