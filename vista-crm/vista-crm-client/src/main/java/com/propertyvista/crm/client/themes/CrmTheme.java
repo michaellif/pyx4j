@@ -718,7 +718,6 @@ public class CrmTheme extends VistaTheme {
         addStyle(style);
 
         style = new Style("." + PapReviewFolder.Styles.AutoPayPapCharge.name());
-        style.addProperty("width", "80em");
         addStyle(style);
 
         style = new Style("." + PapReviewFolder.Styles.AutoPayPapCharge.name() + " div");

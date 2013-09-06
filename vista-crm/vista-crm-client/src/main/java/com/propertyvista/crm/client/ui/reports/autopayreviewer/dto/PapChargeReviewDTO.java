@@ -58,8 +58,13 @@ public interface PapChargeReviewDTO extends IEntity {
     @Editor(type = EditorType.money)
     IPrimitive<BigDecimal> suggestedNewPreAuthorizedPaymentAmount();
 
+    @Editor(type = EditorType.percentage)
+    IPrimitive<BigDecimal> changePercent();
+
+    @Deprecated
     PapReviewDTO _parentPap();
 
+    @Deprecated
     IPrimitive<Boolean> isPivot();
 
 }

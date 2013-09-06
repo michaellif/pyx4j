@@ -41,9 +41,13 @@ public class AutoPayReviewUpdaterActivity extends AbstractActivity implements Au
     List<PapReviewDTO> leasePapsReview;
 
     public AutoPayReviewUpdaterActivity(Place place) {
-//        view = CrmSite.getViewFactory().instantiate(AutoPayReviewUpdaterView.class);
         view = new AutoPayReviewUpdaterViewImpl();
         leasePapsReview = makeMockData();
+    }
+
+    @Override
+    public void acceptSelected() {
+        // TODO Auto-generated method stub
     }
 
     @Override
@@ -154,4 +158,5 @@ public class AutoPayReviewUpdaterActivity extends AbstractActivity implements Au
         }
         return papReviews;
     }
+
 }

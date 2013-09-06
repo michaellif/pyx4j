@@ -27,6 +27,8 @@ public interface AutoPayReviewUpdaterView extends IPrimePane {
 
         void onRangeChanged();
 
+        void acceptSelected();
+
     }
 
     void setPresenter(Presenter presenter);
