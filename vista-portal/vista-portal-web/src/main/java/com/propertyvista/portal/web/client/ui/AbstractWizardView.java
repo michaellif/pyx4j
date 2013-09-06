@@ -13,26 +13,25 @@
  */
 package com.propertyvista.portal.web.client.ui;
 
-import com.google.gwt.user.client.ui.SimplePanel;
-
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.UniqueConstraintUserRuntimeException;
+import com.pyx4j.forms.client.ui.CEntityContainer;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
 
-public abstract class AbstractWizardView<E extends IEntity> extends SimplePanel implements IWizardView<E> {
+public abstract class AbstractWizardView<E extends IEntity> extends AbstractPortalView implements IWizardView<E> {
 
     private static final I18n i18n = I18n.get(AbstractWizardView.class);
 
     private WizardPresenter<E> presenter;
 
-    private AbstractWizardForm<E> wizardForm;
+    private AbstractPortalWizard<E> wizardForm;
 
     public AbstractWizardView() {
         super();
     }
 
-    public void setWizard(AbstractWizardForm<E> wizardForm) {
+    public void setWizard(AbstractPortalWizard<E> wizardForm) {
         this.wizardForm = wizardForm;
         setWidget(wizardForm);
         wizardForm.initContent();
@@ -63,6 +62,11 @@ public abstract class AbstractWizardView<E extends IEntity> extends SimplePanel 
     @Override
     public E getValue() {
         return wizardForm.getValue();
+    }
+
+    @Override
+    public CEntityContainer<?> getCContainer() {
+        return wizardForm;
     }
 
     @Override

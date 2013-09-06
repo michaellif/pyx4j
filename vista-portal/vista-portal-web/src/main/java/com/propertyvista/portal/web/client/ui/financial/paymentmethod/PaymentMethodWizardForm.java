@@ -44,13 +44,13 @@ import com.propertyvista.domain.payment.CreditCardInfo.CreditCardType;
 import com.propertyvista.domain.payment.LeasePaymentMethod;
 import com.propertyvista.domain.payment.PaymentType;
 import com.propertyvista.portal.rpc.portal.web.dto.PaymentMethodDTO;
-import com.propertyvista.portal.web.client.ui.AbstractWizardForm;
+import com.propertyvista.portal.web.client.ui.AbstractPortalWizard;
 import com.propertyvista.portal.web.client.ui.IWizardView;
 import com.propertyvista.portal.web.client.ui.LegalTermsDialog;
 import com.propertyvista.portal.web.client.ui.LegalTermsDialog.TermsType;
 import com.propertyvista.portal.web.client.ui.financial.PortalPaymentTypesUtil;
 
-public class PaymentMethodWizardForm extends AbstractWizardForm<PaymentMethodDTO> {
+public class PaymentMethodWizardForm extends AbstractPortalWizard<PaymentMethodDTO> {
 
     private static final I18n i18n = I18n.get(PaymentMethodWizardForm.class);
 

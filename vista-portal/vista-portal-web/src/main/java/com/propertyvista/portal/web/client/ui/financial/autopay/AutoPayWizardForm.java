@@ -64,14 +64,14 @@ import com.propertyvista.dto.PaymentDataDTO;
 import com.propertyvista.dto.PaymentDataDTO.PaymentSelect;
 import com.propertyvista.dto.PreauthorizedPaymentCoveredItemDTO;
 import com.propertyvista.portal.rpc.portal.web.dto.AutoPayDTO;
-import com.propertyvista.portal.web.client.ui.AbstractWizardForm;
+import com.propertyvista.portal.web.client.ui.AbstractPortalWizard;
 import com.propertyvista.portal.web.client.ui.IWizardView;
 import com.propertyvista.portal.web.client.ui.LegalTermsDialog;
 import com.propertyvista.portal.web.client.ui.LegalTermsDialog.TermsType;
 import com.propertyvista.portal.web.client.ui.financial.PortalPaymentTypesUtil;
 import com.propertyvista.portal.web.client.ui.util.decorators.FormDecoratorBuilder;
 
-public class AutoPayWizardForm extends AbstractWizardForm<AutoPayDTO> {
+public class AutoPayWizardForm extends AbstractPortalWizard<AutoPayDTO> {
 
     static final I18n i18n = I18n.get(AutoPayWizardForm.class);
 

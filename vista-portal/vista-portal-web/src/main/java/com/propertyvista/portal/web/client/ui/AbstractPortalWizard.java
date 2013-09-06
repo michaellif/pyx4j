@@ -23,7 +23,7 @@ import com.pyx4j.forms.client.ui.wizard.CEntityWizard;
 import com.pyx4j.forms.client.ui.wizard.WizardDecorator;
 import com.pyx4j.forms.client.ui.wizard.WizardStep;
 
-public abstract class AbstractWizardForm<E extends IEntity> extends CEntityWizard<E> {
+public abstract class AbstractPortalWizard<E extends IEntity> extends CEntityWizard<E> {
 
     private final IWizardView<? extends IEntity> view;
 
@@ -35,7 +35,7 @@ public abstract class AbstractWizardForm<E extends IEntity> extends CEntityWizar
 
     private final ThemeColor themeColor;
 
-    public AbstractWizardForm(Class<E> rootClass, final IWizardView<? extends IEntity> view, String headerCaption, String endButtonCaption,
+    public AbstractPortalWizard(Class<E> rootClass, final IWizardView<? extends IEntity> view, String headerCaption, String endButtonCaption,
             ThemeColor themeColor) {
         super(rootClass);
         this.view = view;

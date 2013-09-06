@@ -71,14 +71,14 @@ import com.propertyvista.domain.person.Person;
 import com.propertyvista.dto.PaymentDataDTO.PaymentSelect;
 import com.propertyvista.portal.domain.dto.financial.PaymentDTO;
 import com.propertyvista.portal.web.client.resources.PortalImages;
-import com.propertyvista.portal.web.client.ui.AbstractWizardForm;
+import com.propertyvista.portal.web.client.ui.AbstractPortalWizard;
 import com.propertyvista.portal.web.client.ui.IWizardView;
 import com.propertyvista.portal.web.client.ui.LegalTermsDialog;
 import com.propertyvista.portal.web.client.ui.LegalTermsDialog.TermsType;
 import com.propertyvista.portal.web.client.ui.financial.PortalPaymentTypesUtil;
 import com.propertyvista.portal.web.client.ui.util.decorators.FormDecoratorBuilder;
 
-public class PaymentWizardForm extends AbstractWizardForm<PaymentDTO> {
+public class PaymentWizardForm extends AbstractPortalWizard<PaymentDTO> {
 
     private static final I18n i18n = I18n.get(PaymentWizardForm.class);
 

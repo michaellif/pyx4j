@@ -15,31 +15,14 @@ package com.propertyvista.portal.web.client.ui;
 
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
-import com.google.gwt.user.client.Window;
-import com.google.gwt.user.client.ui.FlowPanel;
-import com.google.gwt.user.client.ui.IsWidget;
-import com.google.gwt.user.client.ui.SimplePanel;
 
 import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.forms.client.ui.CComponent;
-import com.pyx4j.forms.client.ui.CContainer;
 import com.pyx4j.forms.client.ui.CEntityForm;
-import com.pyx4j.forms.client.ui.decorators.WidgetDecorator;
-import com.pyx4j.forms.client.ui.decorators.WidgetDecorator.Builder.Layout;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.site.client.AppSite;
-import com.pyx4j.site.client.ui.layout.responsive.LayoutChangeEvent;
-import com.pyx4j.site.client.ui.layout.responsive.LayoutChangeHandler;
-import com.pyx4j.site.client.ui.layout.responsive.ResponsiveLayoutPanel.LayoutType;
 
-public class AbstractEntityView<E extends IEntity> extends FlowPanel implements IEntityView<E> {
+public class AbstractEntityView<E extends IEntity> extends AbstractPortalView implements IEntityView<E> {
 
     protected static final I18n i18n = I18n.get(AbstractEntityView.class);
-
-    private final SimplePanel formHolder;
-
-    @Deprecated
-    private final FlowPanel footer;
 
     private CEntityForm<E> form;
 
@@ -47,37 +30,17 @@ public class AbstractEntityView<E extends IEntity> extends FlowPanel implements 
 
     private final boolean editingInProgress = false;
 
-    private Layout widgetLayout = Layout.horisontal;
-
     public AbstractEntityView() {
-        add(formHolder = new SimplePanel());
-        add(footer = new FlowPanel());
 
-        AppSite.getEventBus().addHandler(LayoutChangeEvent.TYPE, new LayoutChangeHandler() {
-
-            @Override
-            public void onLayoutChangeRerquest(LayoutChangeEvent event) {
-                doLayout();
-            }
-
-        });
-    }
-
-    public void doLayout() {
-        Layout newWdgetLayout = getWidgetLayout();
-        if (widgetLayout != newWdgetLayout) {
-            updateDecoratorsLayout(form, newWdgetLayout);
-            widgetLayout = newWdgetLayout;
-        }
     }
 
     protected void setForm(final CEntityForm<E> form) {
         this.form = form;
         if (form == null) {
-            formHolder.clear();
+            setWidget(null);
         } else {
             form.initContent();
-            formHolder.setWidget(form.asWidget());
+            setWidget(form.asWidget());
 
             form.setViewable(true);
             form.addValueChangeHandler(new ValueChangeHandler<E>() {
@@ -90,16 +53,6 @@ public class AbstractEntityView<E extends IEntity> extends FlowPanel implements 
                 }
             });
         }
-    }
-
-    @Deprecated
-    protected void addToFooter(IsWidget widget) {
-        footer.add(widget);
-    }
-
-    @Deprecated
-    protected void removeFromFooter(IsWidget widget) {
-        footer.remove(widget);
     }
 
     @Override
@@ -117,42 +70,8 @@ public class AbstractEntityView<E extends IEntity> extends FlowPanel implements 
         return presenter;
     }
 
-    public CEntityForm<E> getForm() {
+    public CEntityForm<E> getCContainer() {
         return form;
     }
 
-    public Layout getWidgetLayout() {
-        Layout layout;
-        switch (LayoutType.getLayoutType(Window.getClientWidth())) {
-        case phonePortrait:
-        case phoneLandscape:
-        case tabletPortrait:
-            layout = Layout.vertical;
-            break;
-
-        case tabletLandscape:
-        case monitor:
-        case huge:
-            layout = Layout.horisontal;
-            break;
-        default:
-            layout = Layout.horisontal;
-        }
-        return layout;
-    }
-
-    public void updateDecoratorsLayout(CContainer<?> container, Layout layout) {
-        if (container.getComponents() == null) {
-            return;
-        }
-        for (CComponent<?> component : container.getComponents()) {
-            if (component.getDecorator() instanceof WidgetDecorator) {
-                WidgetDecorator decorator = (WidgetDecorator) component.getDecorator();
-                decorator.setLayout(layout);
-            }
-            if (component instanceof CContainer) {
-                updateDecoratorsLayout((CContainer<?>) component, layout);
-            }
-        }
-    }
 }
