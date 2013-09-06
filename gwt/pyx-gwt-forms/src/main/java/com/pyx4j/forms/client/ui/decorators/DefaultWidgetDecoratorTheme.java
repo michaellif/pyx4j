@@ -112,7 +112,7 @@ public abstract class DefaultWidgetDecoratorTheme extends Theme {
 
         style = new Style(".", StyleName.WidgetDecoratorMandatoryImage);
         style.addProperty("position", "absolute");
-        style.addProperty("left", "-5px");
+        style.addProperty("left", "-7px");
         addStyle(style);
 
         style = new Style(".", StyleName.WidgetDecorator, "-", StyleDependent.noMandatoryStar, " .", StyleName.WidgetDecoratorMandatoryImage, " ", "img");
