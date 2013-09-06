@@ -85,6 +85,11 @@ public abstract class DefaultWidgetDecoratorTheme extends Theme {
         style.addProperty("text-align", "right");
         addStyle(style);
 
+        style = new Style(".", StyleName.WidgetDecorator, "-", StyleDependent.verticalAlign, " .", StyleName.WidgetDecoratorLabelHolder, "-",
+                StyleDependent.labelAlignRight);
+        style.addProperty("text-align", "left");
+        addStyle(style);
+
         style = new Style(".", StyleName.WidgetDecoratorLabel);
         style.addProperty("color", ThemeColor.foreground, 1);
         style.addProperty("font-weight", "bold");
@@ -106,9 +111,8 @@ public abstract class DefaultWidgetDecoratorTheme extends Theme {
         addStyle(style);
 
         style = new Style(".", StyleName.WidgetDecoratorMandatoryImage);
-        style.addProperty("display", "inline-block");
-        style.addProperty("width", "5px");
-        style.addProperty("padding-right", "3px");
+        style.addProperty("position", "absolute");
+        style.addProperty("left", "-5px");
         addStyle(style);
 
         style = new Style(".", StyleName.WidgetDecorator, "-", StyleDependent.noMandatoryStar, " .", StyleName.WidgetDecoratorMandatoryImage, " ", "img");

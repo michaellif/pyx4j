@@ -30,6 +30,7 @@ import static com.pyx4j.forms.client.ui.decorators.DefaultWidgetDecoratorTheme.S
 import static com.pyx4j.forms.client.ui.decorators.DefaultWidgetDecoratorTheme.StyleName.WidgetDecoratorMandatoryImage;
 
 import com.google.gwt.dom.client.Style.Display;
+import com.google.gwt.dom.client.Style.Position;
 import com.google.gwt.dom.client.Style.VerticalAlign;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
@@ -82,7 +83,7 @@ public class WidgetDecorator extends FlowPanel implements IDecorator<CComponent<
 
     private final Label noteLabel;
 
-    private final FlowPanel labelHolder;
+    private final SimplePanel labelHolder;
 
     private final FlowPanel contentPanel;
 
@@ -136,14 +137,18 @@ public class WidgetDecorator extends FlowPanel implements IDecorator<CComponent<
             renderMandatoryStar();
         }
 
-        labelHolder = new FlowPanel();
+        FlowPanel labelContent = new FlowPanel();
+        labelContent.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
+        labelContent.getElement().getStyle().setPosition(Position.RELATIVE);
+        labelContent.add(mandatoryImageHolder);
+        labelContent.add(label);
+
+        labelHolder = new SimplePanel();
         labelHolder.setStyleName(WidgetDecoratorLabelHolder.name());
-        labelHolder.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
         labelHolder.getElement().getStyle().setVerticalAlign(VerticalAlign.MIDDLE);
 
         labelHolder.setWidth(builder.labelWidth);
-        labelHolder.add(mandatoryImageHolder);
-        labelHolder.add(label);
+        labelHolder.setWidget(labelContent);
 
         componentHolder = new SimplePanel();
         componentHolder.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
