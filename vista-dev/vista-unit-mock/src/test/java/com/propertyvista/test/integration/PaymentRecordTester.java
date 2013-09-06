@@ -48,13 +48,19 @@ public class PaymentRecordTester extends Tester {
         return this;
     }
 
+    private PaymentRecord lastRecord() {
+        return paymentRecords.get(paymentRecords.size() - 1);
+    }
+
     public PaymentRecordTester lastRecordStatus(PaymentStatus paymentStatus) {
-        assertEquals(infor() + " Status of last Record", paymentStatus, paymentRecords.get(paymentRecords.size() - 1).paymentStatus().getValue());
+        PaymentRecord lastRecord = lastRecord();
+        assertEquals(infor() + " Status of last Record " + lastRecord.getPrimaryKey(), paymentStatus, lastRecord.paymentStatus().getValue());
         return this;
     }
 
     public PaymentRecordTester lastRecordAmount(String amount) {
-        assertEquals(infor() + " Amount of last Record", new BigDecimal(amount), paymentRecords.get(paymentRecords.size() - 1).amount().getValue());
+        PaymentRecord lastRecord = lastRecord();
+        assertEquals(infor() + " Amount of last Record " + lastRecord.getPrimaryKey(), new BigDecimal(amount), lastRecord.amount().getValue());
         return this;
     }
 }

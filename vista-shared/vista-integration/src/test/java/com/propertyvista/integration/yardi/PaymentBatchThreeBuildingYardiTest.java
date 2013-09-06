@@ -13,8 +13,12 @@
  */
 package com.propertyvista.integration.yardi;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.pyx4j.entity.server.Persistence;
 
@@ -33,6 +37,8 @@ import com.propertyvista.yardi.mock.PropertyUpdater;
 import com.propertyvista.yardi.services.YardiResidentTransactionsService;
 
 public class PaymentBatchThreeBuildingYardiTest extends PaymentYardiTestBase {
+
+    private static final Logger log = LoggerFactory.getLogger(PaymentBatchThreeBuildingYardiTest.class);
 
     private Lease lease11;
 
@@ -94,7 +100,6 @@ public class PaymentBatchThreeBuildingYardiTest extends PaymentYardiTestBase {
         lease32 = loadLeaseAndCreatePaymentMethod("t000312");
 
         // Make a payments
-        final List<PaymentRecord> paymentRecords = new ArrayList<PaymentRecord>();
         paymentRecords.add(getDataModel(LeaseDataModel.class).schedulePaymentRecord(lease11, PaymentType.Echeck, "101.00", "2011-01-02"));
         paymentRecords.add(getDataModel(LeaseDataModel.class).schedulePaymentRecord(lease12, PaymentType.Echeck, "102.00", "2011-01-02"));
 
@@ -156,6 +161,38 @@ public class PaymentBatchThreeBuildingYardiTest extends PaymentYardiTestBase {
 
         new PaymentRecordTester(lease21.billingAccount()).lastRecordStatus(PaymentStatus.Queued);
         new PaymentRecordTester(lease22.billingAccount()).lastRecordStatus(PaymentStatus.Queued);
+    }
+
+    public void testZerroAmountCancelataion() throws Exception {
+        // cancel first record in batch
+        {
+            PaymentRecord recordToCancell = Persistence.service().retrieve(PaymentRecord.class, paymentRecords.get(2).getPrimaryKey());
+            recordToCancell.amount().setValue(BigDecimal.ZERO);
+            Persistence.service().persist(recordToCancell);
+            log.info("Payment {} to be canceled", recordToCancell.id().getValue());
+        }
+        // cancel last record in batch
+        {
+            PaymentRecord recordToCancell = Persistence.service().retrieve(PaymentRecord.class, paymentRecords.get(5).getPrimaryKey());
+            recordToCancell.amount().setValue(BigDecimal.ZERO);
+            Persistence.service().persist(recordToCancell);
+            log.info("Payment {} to be canceled", recordToCancell.id().getValue());
+        }
+        Persistence.service().commit();
+
+        setSysDate("2011-01-02");
+
+        //Run the batch process
+        SchedulerMock.runProcess(PmcProcessType.paymentsScheduledEcheck, "2011-01-02");
+
+        new PaymentRecordTester(lease11.billingAccount()).lastRecordStatus(PaymentStatus.Queued);
+        new PaymentRecordTester(lease12.billingAccount()).lastRecordStatus(PaymentStatus.Queued);
+
+        new PaymentRecordTester(lease21.billingAccount()).lastRecordStatus(PaymentStatus.Canceled);
+        new PaymentRecordTester(lease22.billingAccount()).lastRecordStatus(PaymentStatus.Queued);
+
+        new PaymentRecordTester(lease31.billingAccount()).lastRecordStatus(PaymentStatus.Queued);
+        new PaymentRecordTester(lease32.billingAccount()).lastRecordStatus(PaymentStatus.Canceled);
     }
 
 }

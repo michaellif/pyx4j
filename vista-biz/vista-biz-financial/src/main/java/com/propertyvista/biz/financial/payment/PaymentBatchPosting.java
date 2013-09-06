@@ -168,11 +168,11 @@ class PaymentBatchPosting {
                                     break;
                                 }
 
-                                if (canCancel && shouldBeCanceled(firstPaymentRecord, executionMonitor)) {
-                                    return null;
+                                if (canCancel && shouldBeCanceled(paymentRecord, executionMonitor)) {
+                                    // 
+                                } else {
+                                    processPaymentTransaction(paymentRecord, paymentBatchContext, batchExecutionMonitor);
                                 }
-
-                                processPaymentTransaction(paymentRecord, paymentBatchContext, batchExecutionMonitor);
 
                                 if (executionMonitor.isTerminationRequested()) {
                                     break;
@@ -224,7 +224,6 @@ class PaymentBatchPosting {
         if (paymentRecord.paymentMethod().type().getValue() == PaymentType.DirectBanking) {
             return false;
         } else if (paymentRecord.amount().getValue().compareTo(BigDecimal.ZERO) <= 0) {
-            ServerSideFactory.create(PaymentFacade.class).cancel(paymentRecord);
 
             new UnitOfWork(transactionScopeOption()).execute(new Executable<Void, RuntimeException>() {
 
