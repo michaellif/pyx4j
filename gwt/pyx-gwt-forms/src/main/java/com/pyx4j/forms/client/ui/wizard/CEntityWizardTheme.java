@@ -31,7 +31,7 @@ public class CEntityWizardTheme extends Theme {
 
     public static enum StyleName implements IStyleName {
 
-        WizardPanel, WizardContent, WizardStep,
+        WizardPanel, WizardMain, WizardStep,
 
         WizardHeader, WizardHeaderCaption,
 

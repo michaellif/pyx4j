@@ -24,6 +24,7 @@ import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Label;
+import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.SimplePanel;
 
 import com.pyx4j.commons.IDebugId;
@@ -37,15 +38,15 @@ public class WizardDecorator<E extends IEntity> extends FlowPanel implements IDe
 
     private static final I18n i18n = I18n.get(WizardDecorator.class);
 
-    private final FlowPanel header;
+    private final FlowPanel headerPanel;
 
     private final Label captionLabel;
 
-    private final SimplePanel contentHolder;
+    private final SimplePanel mainPanel;
 
     private final Toolbar footerToolbar;
 
-    private final SimplePanel footer;
+    private final SimplePanel footerPanel;
 
     private final Button btnPrevious;
 
@@ -66,19 +67,19 @@ public class WizardDecorator<E extends IEntity> extends FlowPanel implements IDe
         captionLabel = new Label();
         captionLabel.setStyleName(CEntityWizardTheme.StyleName.WizardHeaderCaption.name());
 
-        header = new FlowPanel();
-        header.add(captionLabel);
-        header.setStyleName(CEntityWizardTheme.StyleName.WizardHeader.name());
-        add(header);
+        headerPanel = new FlowPanel();
+        headerPanel.add(captionLabel);
+        headerPanel.setStyleName(CEntityWizardTheme.StyleName.WizardHeader.name());
+        add(headerPanel);
 
-        add(contentHolder = new SimplePanel());
-        contentHolder.setStyleName(CEntityWizardTheme.StyleName.WizardContent.name());
+        add(mainPanel = new SimplePanel());
+        mainPanel.setStyleName(CEntityWizardTheme.StyleName.WizardMain.name());
 
         footerToolbar = new Toolbar();
-        footer = new SimplePanel();
-        footer.setStyleName(CEntityWizardTheme.StyleName.WizardFooter.name());
-        footer.setWidget(footerToolbar);
-        add(footer);
+        footerPanel = new SimplePanel();
+        footerPanel.setStyleName(CEntityWizardTheme.StyleName.WizardFooter.name());
+        footerPanel.setWidget(footerToolbar);
+        add(footerPanel);
 
         btnCancel = new Button(i18n.tr("Cancel"), new Command() {
             @Override
@@ -131,16 +132,12 @@ public class WizardDecorator<E extends IEntity> extends FlowPanel implements IDe
     }
 
     protected IsWidget getContent() {
-        return contentHolder.getWidget();
-    }
-
-    public SimplePanel getContentHolder() {
-        return contentHolder;
+        return mainPanel.getWidget();
     }
 
     protected void setContent(IsWidget widget) {
-        contentHolder.clear();
-        contentHolder.setWidget(widget);
+        mainPanel.clear();
+        mainPanel.setWidget(widget);
     }
 
     public void setCaption(String caption) {
@@ -149,6 +146,18 @@ public class WizardDecorator<E extends IEntity> extends FlowPanel implements IDe
 
     public String getCaption() {
         return captionLabel.getText();
+    }
+
+    public Panel getHeaderPanel() {
+        return headerPanel;
+    }
+
+    public Panel getMainPanel() {
+        return mainPanel;
+    }
+
+    public Panel getFooterPanel() {
+        return footerPanel;
     }
 
     public Button getBtnPrevious() {
