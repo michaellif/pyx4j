@@ -16,13 +16,10 @@ package com.propertyvista.portal.web.client.ui.profile;
 import java.util.List;
 
 import com.google.gwt.user.client.ui.IsWidget;
-import com.google.gwt.user.client.ui.SimplePanel;
 
-import com.pyx4j.commons.css.StyleManager;
 import com.pyx4j.commons.css.ThemeColor;
 import com.pyx4j.entity.shared.utils.EntityGraph;
 import com.pyx4j.forms.client.ui.CComponent;
-import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.ui.CEntityLabel;
 import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
@@ -33,13 +30,13 @@ import com.propertyvista.common.client.ui.components.VistaEditorsComponentFactor
 import com.propertyvista.domain.person.Name;
 import com.propertyvista.domain.tenant.EmergencyContact;
 import com.propertyvista.portal.domain.dto.ResidentDTO;
-import com.propertyvista.portal.web.client.themes.BlockMixin;
 import com.propertyvista.portal.web.client.themes.EntityViewTheme;
+import com.propertyvista.portal.web.client.ui.AbstractPortalForm;
 import com.propertyvista.portal.web.client.ui.profile.ProfileView.ProfilePresenter;
 import com.propertyvista.portal.web.client.ui.util.decorators.FormDecoratorBuilder;
 import com.propertyvista.shared.config.VistaFeatures;
 
-public class ProfileForm extends CEntityForm<ResidentDTO> {
+public class ProfileForm extends AbstractPortalForm<ResidentDTO> {
 
     private static final I18n i18n = I18n.get(ProfileForm.class);
 
@@ -77,15 +74,14 @@ public class ProfileForm extends CEntityForm<ResidentDTO> {
         mainPanel.setH1(++row, 0, 1, proto().emergencyContacts().getMeta().getCaption());
         mainPanel.setWidget(++row, 0, inject(proto().emergencyContacts(), new EmergencyContactFolder(view)));
 
-        SimplePanel contentPanel = new SimplePanel(mainPanel);
-        contentPanel.setStyleName(EntityViewTheme.StyleName.EntityViewContent.name());
-        contentPanel.addStyleName(BlockMixin.StyleName.PortalBlock.name());
-        contentPanel.getElement().getStyle().setProperty("borderTopWidth", "5px");
-        contentPanel.getElement().getStyle().setProperty("borderTopColor", StyleManager.getPalette().getThemeColor(ThemeColor.foreground, 1));
-
         view.doLayout();
 
-        return contentPanel;
+        return mainPanel;
+    }
+
+    @Override
+    protected IContentHolder createContentHolder() {
+        return new PortalContentHolder(ThemeColor.contrast2);
     }
 
     @Override

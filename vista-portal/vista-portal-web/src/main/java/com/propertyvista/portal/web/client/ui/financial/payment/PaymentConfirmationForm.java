@@ -20,13 +20,10 @@ import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.IsWidget;
-import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
-import com.pyx4j.commons.css.StyleManager;
 import com.pyx4j.commons.css.ThemeColor;
-import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.ui.CEntityLabel;
 import com.pyx4j.forms.client.ui.decorators.WidgetDecorator.Builder.Alignment;
 import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
@@ -36,12 +33,11 @@ import com.pyx4j.widgets.client.Anchor;
 import com.propertyvista.common.client.resources.VistaImages;
 import com.propertyvista.domain.payment.LeasePaymentMethod;
 import com.propertyvista.dto.PaymentRecordDTO;
-import com.propertyvista.portal.web.client.themes.BlockMixin;
-import com.propertyvista.portal.web.client.themes.EntityViewTheme;
 import com.propertyvista.portal.web.client.ui.AbstractEntityView;
+import com.propertyvista.portal.web.client.ui.AbstractPortalForm;
 import com.propertyvista.portal.web.client.ui.util.decorators.FormDecoratorBuilder;
 
-public class PaymentConfirmationForm extends CEntityForm<PaymentRecordDTO> {
+public class PaymentConfirmationForm extends AbstractPortalForm<PaymentRecordDTO> {
 
     private static final I18n i18n = I18n.get(PaymentConfirmationForm.class);
 
@@ -74,13 +70,12 @@ public class PaymentConfirmationForm extends CEntityForm<PaymentRecordDTO> {
 
         mainPanel.setWidget(++row, 0, createAutoPaySignupPanel());
 
-        SimplePanel contentPanel = new SimplePanel(mainPanel);
-        contentPanel.setStyleName(EntityViewTheme.StyleName.EntityViewContent.name());
-        contentPanel.addStyleName(BlockMixin.StyleName.PortalBlock.name());
-        contentPanel.getElement().getStyle().setProperty("borderTopWidth", "5px");
-        contentPanel.getElement().getStyle().setProperty("borderTopColor", StyleManager.getPalette().getThemeColor(ThemeColor.contrast4, 1));
+        return mainPanel;
+    }
 
-        return contentPanel;
+    @Override
+    protected IContentHolder createContentHolder() {
+        return new PortalContentHolder(ThemeColor.contrast4);
     }
 
     private Widget createAutoPaySignupPanel() {

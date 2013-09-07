@@ -26,7 +26,6 @@ import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.commons.css.StyleManager;
 import com.pyx4j.commons.css.ThemeColor;
-import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.ui.CEntityLabel;
 import com.pyx4j.forms.client.ui.decorators.WidgetDecorator.Builder.Alignment;
 import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
@@ -39,9 +38,10 @@ import com.propertyvista.portal.rpc.portal.web.dto.PaymentMethodDTO;
 import com.propertyvista.portal.web.client.themes.BlockMixin;
 import com.propertyvista.portal.web.client.themes.EntityViewTheme;
 import com.propertyvista.portal.web.client.ui.AbstractEntityView;
+import com.propertyvista.portal.web.client.ui.AbstractPortalForm;
 import com.propertyvista.portal.web.client.ui.util.decorators.FormDecoratorBuilder;
 
-public class PaymentMethodConfirmationForm extends CEntityForm<PaymentMethodDTO> {
+public class PaymentMethodConfirmationForm extends AbstractPortalForm<PaymentMethodDTO> {
 
     private static final I18n i18n = I18n.get(PaymentMethodConfirmationForm.class);
 
@@ -79,8 +79,13 @@ public class PaymentMethodConfirmationForm extends CEntityForm<PaymentMethodDTO>
         contentPanel.getElement().getStyle().setProperty("borderTopWidth", "5px");
         contentPanel.getElement().getStyle().setProperty("borderTopColor", StyleManager.getPalette().getThemeColor(ThemeColor.contrast4, 1));
 
-        return contentPanel;
+        return mainPanel;
 
+    }
+
+    @Override
+    protected IContentHolder createContentHolder() {
+        return new PortalContentHolder(ThemeColor.contrast4);
     }
 
     private Widget createAutoPaySignupPanel() {

@@ -202,7 +202,7 @@ public class PortalWebTheme extends Theme {
 
             @Override
             protected void initContentPanelStyles() {
-                Style style = new Style(".", StyleName.WizardContent);
+                Style style = new Style(".", StyleName.WizardMain);
                 style.addProperty("background", ThemeColor.foreground, 0.01);
                 style.addProperty("border-color", ThemeColor.foreground, 0.3);
                 style.addProperty("border-style", "solid");

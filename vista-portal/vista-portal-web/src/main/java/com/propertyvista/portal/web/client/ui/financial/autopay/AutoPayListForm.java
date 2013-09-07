@@ -17,15 +17,12 @@ import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.IsWidget;
-import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Widget;
 
-import com.pyx4j.commons.css.StyleManager;
 import com.pyx4j.commons.css.ThemeColor;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CDateLabel;
-import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.ui.CEntityLabel;
 import com.pyx4j.forms.client.ui.folder.CEntityFolderItem;
 import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
@@ -41,11 +38,10 @@ import com.propertyvista.domain.payment.LeasePaymentMethod;
 import com.propertyvista.domain.tenant.lease.Tenant;
 import com.propertyvista.portal.rpc.portal.web.dto.AutoPayDTO;
 import com.propertyvista.portal.rpc.portal.web.dto.AutoPaySummaryDTO;
-import com.propertyvista.portal.web.client.themes.BlockMixin;
-import com.propertyvista.portal.web.client.themes.EntityViewTheme;
+import com.propertyvista.portal.web.client.ui.AbstractPortalForm;
 import com.propertyvista.portal.web.client.ui.util.decorators.FormDecoratorBuilder;
 
-public class AutoPayListForm extends CEntityForm<AutoPaySummaryDTO> {
+public class AutoPayListForm extends AbstractPortalForm<AutoPaySummaryDTO> {
 
     private static final I18n i18n = I18n.get(AutoPayListForm.class);
 
@@ -69,13 +65,12 @@ public class AutoPayListForm extends CEntityForm<AutoPaySummaryDTO> {
         content.setBR(++row, 0, 1);
         content.setWidget(++row, 0, inject(proto().currentAutoPayments(), new PreauthorizedPaymentFolder()));
 
-        SimplePanel contentPanel = new SimplePanel(content);
-        contentPanel.setStyleName(EntityViewTheme.StyleName.EntityViewContent.name());
-        contentPanel.addStyleName(BlockMixin.StyleName.PortalBlock.name());
-        contentPanel.getElement().getStyle().setProperty("borderTopWidth", "5px");
-        contentPanel.getElement().getStyle().setProperty("borderTopColor", StyleManager.getPalette().getThemeColor(ThemeColor.contrast4, 1));
+        return content;
+    }
 
-        return contentPanel;
+    @Override
+    protected IContentHolder createContentHolder() {
+        return new PortalContentHolder(ThemeColor.contrast4);
     }
 
     private class PreauthorizedPaymentFolder extends VistaBoxFolder<AutoPayDTO> {

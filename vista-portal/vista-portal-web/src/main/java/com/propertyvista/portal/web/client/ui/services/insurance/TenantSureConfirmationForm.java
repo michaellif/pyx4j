@@ -17,18 +17,13 @@ import com.google.gwt.dom.client.Style.FontWeight;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.IsWidget;
-import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Widget;
 
-import com.pyx4j.commons.css.StyleManager;
-import com.pyx4j.commons.css.ThemeColor;
 import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.portal.rpc.portal.web.dto.insurance.TenantSureAgreementDTO;
-import com.propertyvista.portal.web.client.themes.BlockMixin;
-import com.propertyvista.portal.web.client.themes.EntityViewTheme;
 
 public class TenantSureConfirmationForm extends CEntityForm<TenantSureAgreementDTO> {
 
@@ -49,17 +44,11 @@ public class TenantSureConfirmationForm extends CEntityForm<TenantSureAgreementD
         int row = -1;
         Widget w;
 
-        mainPanel.setWidget(++row, 0, w = new HTML(i18n.tr("Insurance REquest submitted Successfully!")));
+        mainPanel.setWidget(++row, 0, w = new HTML(i18n.tr("Insurance Request submitted Successfully!")));
         w.getElement().getStyle().setFontWeight(FontWeight.BOLD);
         w.getElement().getStyle().setFontSize(1.2, Unit.EM);
 
-        SimplePanel contentPanel = new SimplePanel(mainPanel);
-        contentPanel.setStyleName(EntityViewTheme.StyleName.EntityViewContent.name());
-        contentPanel.addStyleName(BlockMixin.StyleName.PortalBlock.name());
-        contentPanel.getElement().getStyle().setProperty("borderTopWidth", "5px");
-        contentPanel.getElement().getStyle().setProperty("borderTopColor", StyleManager.getPalette().getThemeColor(ThemeColor.contrast4, 1));
-
-        return contentPanel;
+        return mainPanel;
     }
 
 }

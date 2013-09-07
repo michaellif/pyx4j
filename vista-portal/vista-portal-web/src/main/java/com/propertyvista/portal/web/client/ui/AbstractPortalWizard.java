@@ -75,8 +75,14 @@ public abstract class AbstractPortalWizard<E extends IEntity> extends CEntityWiz
         decorator.getBtnPrevious().setVisible(false);
         decorator.setCaption(headerCaption);
 
-        decorator.getContentHolder().getElement().getStyle().setProperty("borderTopWidth", "5px");
-        decorator.getContentHolder().getElement().getStyle().setProperty("borderTopColor", StyleManager.getPalette().getThemeColor(themeColor, 1));
+        decorator.getMainPanel().getElement().getStyle().setProperty("borderTopWidth", "5px");
+        decorator.getMainPanel().getElement().getStyle().setProperty("borderTopColor", StyleManager.getPalette().getThemeColor(themeColor, 1));
+
+        decorator.getHeaderPanel().getElement().getStyle().setProperty("borderTopWidth", "5px");
+        decorator.getHeaderPanel().getElement().getStyle().setProperty("borderTopColor", StyleManager.getPalette().getThemeColor(themeColor, 1));
+
+        decorator.getFooterPanel().getElement().getStyle().setProperty("borderTopWidth", "5px");
+        decorator.getFooterPanel().getElement().getStyle().setProperty("borderTopColor", StyleManager.getPalette().getThemeColor(themeColor, 1));
 
         return decorator;
     }
