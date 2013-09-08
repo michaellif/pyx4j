@@ -71,7 +71,7 @@ public class AutoPayListForm extends AbstractPortalForm<AutoPaySummaryDTO> {
 
     @Override
     public IDecorator<AbstractPortalForm<AutoPaySummaryDTO>> createDecorator() {
-        return new PortalContentHolder(ThemeColor.contrast4);
+        return new PortalFormDecorator(ThemeColor.contrast4);
     }
 
     private class PreauthorizedPaymentFolder extends VistaBoxFolder<AutoPayDTO> {

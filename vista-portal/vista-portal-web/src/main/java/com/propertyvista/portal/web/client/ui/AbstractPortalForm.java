@@ -36,9 +36,9 @@ public abstract class AbstractPortalForm<E extends IEntity> extends CEntityForm<
         super(clazz, factory);
     }
 
-    protected class PortalContentHolder extends SimplePanel implements IDecorator<AbstractPortalForm<E>> {
+    protected class PortalFormDecorator extends SimplePanel implements IDecorator<AbstractPortalForm<E>> {
 
-        public PortalContentHolder(ThemeColor themeColor) {
+        public PortalFormDecorator(ThemeColor themeColor) {
             setStyleName(EntityViewTheme.StyleName.EntityViewContent.name());
             addStyleName(BlockMixin.StyleName.PortalBlock.name());
             getElement().getStyle().setProperty("borderTopWidth", "5px");

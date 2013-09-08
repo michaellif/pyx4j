@@ -72,7 +72,7 @@ public class AutoPayConfirmationForm extends AbstractPortalForm<AutoPayDTO> {
 
     @Override
     public IDecorator<AbstractPortalForm<AutoPayDTO>> createDecorator() {
-        return new PortalContentHolder(ThemeColor.contrast4);
+        return new PortalFormDecorator(ThemeColor.contrast4);
     }
 
     @Override

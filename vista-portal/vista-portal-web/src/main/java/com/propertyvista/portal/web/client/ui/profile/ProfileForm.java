@@ -82,7 +82,7 @@ public class ProfileForm extends AbstractPortalForm<ResidentDTO> {
 
     @Override
     public IDecorator<AbstractPortalForm<ResidentDTO>> createDecorator() {
-        return new PortalContentHolder(ThemeColor.contrast2);
+        return new PortalFormDecorator(ThemeColor.contrast2);
     }
 
     @Override

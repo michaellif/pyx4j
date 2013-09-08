@@ -86,7 +86,7 @@ public class PaymentMethodConfirmationForm extends AbstractPortalForm<PaymentMet
 
     @Override
     public IDecorator<AbstractPortalForm<PaymentMethodDTO>> createDecorator() {
-        return new PortalContentHolder(ThemeColor.contrast4);
+        return new PortalFormDecorator(ThemeColor.contrast4);
     }
 
     private Widget createAutoPaySignupPanel() {
