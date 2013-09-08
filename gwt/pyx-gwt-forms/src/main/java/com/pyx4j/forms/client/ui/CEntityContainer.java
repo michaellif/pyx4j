@@ -50,7 +50,7 @@ public abstract class CEntityContainer<E extends IObject<?>> extends CContainer<
 
     private boolean initiated = false;
 
-    private final IContentHolder contentHolder;
+    private final SimplePanel contentHolder;
 
     private final ContainerPanel containerPanel;
 
@@ -70,7 +70,7 @@ public abstract class CEntityContainer<E extends IObject<?>> extends CContainer<
             containerPanel.getElement().getStyle().setProperty("border", "red solid 1px");
         }
 
-        contentHolder = createContentHolder();
+        contentHolder = new SimplePanel();
         contentHolder.asWidget().getElement().getStyle().setProperty("display", "inline");
         containerPanel.add(contentHolder);
     }
@@ -81,10 +81,6 @@ public abstract class CEntityContainer<E extends IObject<?>> extends CContainer<
     }
 
     public abstract IsWidget createContent();
-
-    protected IContentHolder createContentHolder() {
-        return new BasicContentHolder();
-    }
 
     protected IDecorator<?> createDecorator() {
         return null;
@@ -167,10 +163,4 @@ public abstract class CEntityContainer<E extends IObject<?>> extends CContainer<
         }
     }
 
-    public interface IContentHolder extends HasOneWidget, IsWidget {
-    }
-
-    public static class BasicContentHolder extends SimplePanel implements IContentHolder {
-
-    }
 }
