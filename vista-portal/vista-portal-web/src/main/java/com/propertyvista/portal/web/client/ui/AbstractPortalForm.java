@@ -13,15 +13,15 @@
  */
 package com.propertyvista.portal.web.client.ui;
 
-import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.SimplePanel;
-import com.google.gwt.user.client.ui.Widget;
 
+import com.pyx4j.commons.IDebugId;
 import com.pyx4j.commons.css.StyleManager;
 import com.pyx4j.commons.css.ThemeColor;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.ui.IEditableComponentFactory;
+import com.pyx4j.forms.client.ui.decorators.IDecorator;
 
 import com.propertyvista.portal.web.client.themes.BlockMixin;
 import com.propertyvista.portal.web.client.themes.EntityViewTheme;
@@ -36,27 +36,24 @@ public abstract class AbstractPortalForm<E extends IEntity> extends CEntityForm<
         super(clazz, factory);
     }
 
-    protected class PortalContentHolder extends BasicContentHolder {
-
-        private final SimplePanel contentPanel;
+    protected class PortalContentHolder extends SimplePanel implements IDecorator<AbstractPortalForm<E>> {
 
         public PortalContentHolder(ThemeColor themeColor) {
-            contentPanel = new SimplePanel();
-            contentPanel.setStyleName(EntityViewTheme.StyleName.EntityViewContent.name());
-            contentPanel.addStyleName(BlockMixin.StyleName.PortalBlock.name());
-            contentPanel.getElement().getStyle().setProperty("borderTopWidth", "5px");
-            contentPanel.getElement().getStyle().setProperty("borderTopColor", StyleManager.getPalette().getThemeColor(themeColor, 1));
-            setWidget(contentPanel);
+            setStyleName(EntityViewTheme.StyleName.EntityViewContent.name());
+            addStyleName(BlockMixin.StyleName.PortalBlock.name());
+            getElement().getStyle().setProperty("borderTopWidth", "5px");
+            getElement().getStyle().setProperty("borderTopColor", StyleManager.getPalette().getThemeColor(themeColor, 1));
         }
 
         @Override
-        public void setWidget(IsWidget w) {
-            contentPanel.setWidget(w);
+        public void setComponent(AbstractPortalForm<E> component) {
+            setWidget(component.createContent());
         }
 
         @Override
-        public Widget getWidget() {
-            return contentPanel;
+        public void onSetDebugId(IDebugId parentDebugId) {
+            // TODO Auto-generated method stub
         }
+
     }
 }

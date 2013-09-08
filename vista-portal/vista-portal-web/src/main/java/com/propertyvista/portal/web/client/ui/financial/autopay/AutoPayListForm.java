@@ -24,6 +24,7 @@ import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CDateLabel;
 import com.pyx4j.forms.client.ui.CEntityLabel;
+import com.pyx4j.forms.client.ui.decorators.IDecorator;
 import com.pyx4j.forms.client.ui.folder.CEntityFolderItem;
 import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
@@ -69,7 +70,7 @@ public class AutoPayListForm extends AbstractPortalForm<AutoPaySummaryDTO> {
     }
 
     @Override
-    protected IContentHolder createContentHolder() {
+    public IDecorator<AbstractPortalForm<AutoPaySummaryDTO>> createDecorator() {
         return new PortalContentHolder(ThemeColor.contrast4);
     }
 

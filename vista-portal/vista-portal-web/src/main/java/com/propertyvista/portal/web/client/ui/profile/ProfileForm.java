@@ -21,6 +21,7 @@ import com.pyx4j.commons.css.ThemeColor;
 import com.pyx4j.entity.shared.utils.EntityGraph;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CEntityLabel;
+import com.pyx4j.forms.client.ui.decorators.IDecorator;
 import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
 import com.pyx4j.forms.client.validators.ValidationError;
@@ -80,7 +81,7 @@ public class ProfileForm extends AbstractPortalForm<ResidentDTO> {
     }
 
     @Override
-    protected IContentHolder createContentHolder() {
+    public IDecorator<AbstractPortalForm<ResidentDTO>> createDecorator() {
         return new PortalContentHolder(ThemeColor.contrast2);
     }
 

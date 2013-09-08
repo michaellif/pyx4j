@@ -25,6 +25,7 @@ import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.commons.css.ThemeColor;
 import com.pyx4j.forms.client.ui.CEntityLabel;
+import com.pyx4j.forms.client.ui.decorators.IDecorator;
 import com.pyx4j.forms.client.ui.decorators.WidgetDecorator.Builder.Alignment;
 import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
@@ -74,7 +75,7 @@ public class PaymentConfirmationForm extends AbstractPortalForm<PaymentRecordDTO
     }
 
     @Override
-    protected IContentHolder createContentHolder() {
+    public IDecorator<AbstractPortalForm<PaymentRecordDTO>> createDecorator() {
         return new PortalContentHolder(ThemeColor.contrast4);
     }
 
