@@ -18,9 +18,11 @@ import java.util.List;
 
 import com.google.gwt.view.client.Range;
 
+import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.site.client.ui.prime.AbstractPrimePane;
 
 import com.propertyvista.crm.client.ui.reports.autopayreviewer.dto.PapReviewDTO;
+import com.propertyvista.domain.reports.AutoPayChangesReportMetadata;
 
 public class AutoPayReviewUpdaterDataGridViewImpl extends AbstractPrimePane implements AutoPayReviewUpdaterView {
 
@@ -54,6 +56,11 @@ public class AutoPayReviewUpdaterDataGridViewImpl extends AbstractPrimePane impl
     public List<PapReviewDTO> selectedRows() {
         // TODO Auto-generated method stub
         return new LinkedList<PapReviewDTO>();
+    }
+
+    @Override
+    public AutoPayChangesReportMetadata getAutoPayFilterSettings() {
+        return EntityFactory.create(AutoPayChangesReportMetadata.class);
     }
 
 }

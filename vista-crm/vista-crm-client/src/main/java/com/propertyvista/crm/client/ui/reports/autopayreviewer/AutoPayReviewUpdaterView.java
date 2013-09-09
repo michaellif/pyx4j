@@ -20,6 +20,7 @@ import com.google.gwt.view.client.Range;
 import com.pyx4j.site.client.ui.prime.IPrimePane;
 
 import com.propertyvista.crm.client.ui.reports.autopayreviewer.dto.PapReviewDTO;
+import com.propertyvista.domain.reports.AutoPayChangesReportMetadata;
 
 public interface AutoPayReviewUpdaterView extends IPrimePane {
 
@@ -38,4 +39,7 @@ public interface AutoPayReviewUpdaterView extends IPrimePane {
     Range getVisibleRange();
 
     List<PapReviewDTO> selectedRows();
+
+    AutoPayChangesReportMetadata getAutoPayFilterSettings();
+
 }

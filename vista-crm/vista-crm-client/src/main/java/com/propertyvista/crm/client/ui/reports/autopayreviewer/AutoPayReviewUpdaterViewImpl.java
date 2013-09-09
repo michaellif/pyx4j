@@ -35,6 +35,7 @@ import com.pyx4j.widgets.client.Button;
 import com.propertyvista.crm.client.ui.reports.autopay.AutoPayChangesReportSettingsForm;
 import com.propertyvista.crm.client.ui.reports.autopayreviewer.dto.PapReviewDTO;
 import com.propertyvista.crm.client.ui.reports.autopayreviewer.dto.PapReviewsHolderDTO;
+import com.propertyvista.domain.reports.AutoPayChangesReportMetadata;
 
 public class AutoPayReviewUpdaterViewImpl extends AbstractPrimePane implements AutoPayReviewUpdaterView, IsView {
 
@@ -47,6 +48,8 @@ public class AutoPayReviewUpdaterViewImpl extends AbstractPrimePane implements A
     private final PapReviewsHolderForm leasePapsReviewsHolderForm;
 
     private Range visibleRange;
+
+    private final AutoPayChangesReportSettingsForm filtersForm;
 
     /**
      * 
@@ -64,7 +67,7 @@ public class AutoPayReviewUpdaterViewImpl extends AbstractPrimePane implements A
         filtersPanel.setHeight("150px");
         filtersPanel.getElement().getStyle().setOverflow(Overflow.AUTO);
 
-        AutoPayChangesReportSettingsForm filtersForm = new AutoPayChangesReportSettingsForm();
+        filtersForm = new AutoPayChangesReportSettingsForm();
         filtersForm.initContent();
         filtersForm.populateNew();
         filtersPanel.add(filtersForm);
@@ -130,6 +133,11 @@ public class AutoPayReviewUpdaterViewImpl extends AbstractPrimePane implements A
             }
         }
         return selected;
+    }
+
+    @Override
+    public AutoPayChangesReportMetadata getAutoPayFilterSettings() {
+        return filtersForm.getValue();
     }
 
     private void showMore() {
