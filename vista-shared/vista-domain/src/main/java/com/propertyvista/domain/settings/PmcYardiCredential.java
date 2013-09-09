@@ -54,6 +54,8 @@ public interface PmcYardiCredential extends IEntity {
 
     IPrimitive<String> maintenanceRequestsServiceURL();
 
+    IPrimitive<String> ilsGuestCardServiceURL();
+
     @Caption(name = "Web Service User")
     IPrimitive<String> username();
 

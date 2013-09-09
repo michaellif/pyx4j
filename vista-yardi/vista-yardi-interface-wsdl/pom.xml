@@ -75,8 +75,12 @@
                             <uri>http://tempuri.org/YSI.Interfaces.WebServices/ItfApplicantScreening</uri>
                             <packageName>com.yardi.ws.operations.appscreening</packageName>
                         </namespaceURI>
-						<namespaceURI>
+			<namespaceURI>
                             <uri>http://tempuri.org/YSI.Interfaces.WebServices/ItfServiceRequests</uri>
+                            <packageName>com.yardi.ws.operations.requests</packageName>
+                        </namespaceURI>
+			<namespaceURI>
+			    <uri>http://tempuri.org/YSI.Interfaces.WebServices/ItfILSGuestCard20</uri>
                             <packageName>com.yardi.ws.operations.requests</packageName>
                         </namespaceURI>
                     </namespaceURIs>
@@ -131,6 +135,17 @@
                         </goals>
                         <configuration>
                             <wsdlFile>${basedir}/src/main/resources/maintenance/ItfServiceRequests.wsdl</wsdlFile>
+                            <packageName>com.yardi.ws</packageName>
+                        </configuration>
+                    </execution>
+		    <execution>
+                        <id>wsdl2code-client-yardi-ils</id>
+                        <phase>generate-sources</phase>
+                        <goals>
+                            <goal>wsdl2code</goal>
+                        </goals>
+                        <configuration>
+                            <wsdlFile>${basedir}/src/main/resources/common/ItfILSGuestCard20.wsdl</wsdlFile>
                             <packageName>com.yardi.ws</packageName>
                         </configuration>
                     </execution>
