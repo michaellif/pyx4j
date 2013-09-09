@@ -31,7 +31,7 @@ import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.Button;
 
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
-import com.propertyvista.crm.client.ui.reports.autopayreviewer.dto.PapReviewsHolderDTO;
+import com.propertyvista.crm.rpc.dto.financial.autopayreview.PapReviewsHolderDTO;
 
 public class PapReviewsHolderForm extends CEntityDecoratableForm<PapReviewsHolderDTO> {
 

@@ -33,8 +33,8 @@ import com.pyx4j.site.client.ui.prime.AbstractPrimePane;
 import com.pyx4j.widgets.client.Button;
 
 import com.propertyvista.crm.client.ui.reports.autopay.AutoPayChangesReportSettingsForm;
-import com.propertyvista.crm.client.ui.reports.autopayreviewer.dto.PapReviewDTO;
-import com.propertyvista.crm.client.ui.reports.autopayreviewer.dto.PapReviewsHolderDTO;
+import com.propertyvista.crm.rpc.dto.financial.autopayreview.PapReviewDTO;
+import com.propertyvista.crm.rpc.dto.financial.autopayreview.PapReviewsHolderDTO;
 import com.propertyvista.domain.reports.AutoPayChangesReportMetadata;
 
 public class AutoPayReviewUpdaterViewImpl extends AbstractPrimePane implements AutoPayReviewUpdaterView, IsView {
@@ -51,11 +51,8 @@ public class AutoPayReviewUpdaterViewImpl extends AbstractPrimePane implements A
 
     private final AutoPayChangesReportSettingsForm filtersForm;
 
-    /**
-     * 
-     */
     public AutoPayReviewUpdaterViewImpl() {
-        this.visibleRange = new Range(0, PAGE_INCREMENT);
+        visibleRange = new Range(0, PAGE_INCREMENT);
 
         FlowPanel viewPanel = new FlowPanel();
         viewPanel.getElement().getStyle().setPosition(Position.RELATIVE);
@@ -98,11 +95,10 @@ public class AutoPayReviewUpdaterViewImpl extends AbstractPrimePane implements A
         addHeaderToolbarItem(new Button(i18n.tr("Accept Marked"), new Command() {
             @Override
             public void execute() {
-                presenter.acceptSelected();
+                visibleRange = new Range(0, PAGE_INCREMENT);
+                presenter.populate();
             }
         }));
-        addHeaderToolbarItem(new Separator(6));
-        addHeaderToolbarItem(new Button(i18n.tr("Export")));
     }
 
     @Override
@@ -111,6 +107,7 @@ public class AutoPayReviewUpdaterViewImpl extends AbstractPrimePane implements A
         holder.papReviewsTotalCount().setValue(total);
         holder.papReviews().addAll(values);
         leasePapsReviewsHolderForm.populate(holder);
+        visibleRange = new Range(0, values.size());
     }
 
     @Override
@@ -121,7 +118,6 @@ public class AutoPayReviewUpdaterViewImpl extends AbstractPrimePane implements A
     @Override
     public void setPresenter(AutoPayReviewUpdaterView.Presenter presenter) {
         this.presenter = presenter;
-        this.presenter.onRangeChanged();
     }
 
     @Override

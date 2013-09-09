@@ -7,37 +7,26 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on 2013-06-27
+ * Created on 2013-09-09
  * @author ArtyomB
  * @version $Id$
  */
-package com.propertyvista.crm.client.ui.reports.autopayreviewer;
+package com.propertyvista.crm.rpc.services.financial;
 
-import java.util.List;
+import java.util.Vector;
 
-import com.google.gwt.view.client.Range;
+import com.google.gwt.user.client.rpc.AsyncCallback;
 
-import com.pyx4j.site.client.ui.prime.IPrimePane;
+import com.pyx4j.rpc.shared.IService;
+import com.pyx4j.rpc.shared.VoidSerializable;
 
 import com.propertyvista.crm.rpc.dto.financial.autopayreview.PapReviewDTO;
 import com.propertyvista.domain.reports.AutoPayChangesReportMetadata;
 
-public interface AutoPayReviewUpdaterView extends IPrimePane {
+public interface AutoPayReviewService extends IService {
 
-    interface Presenter extends IPrimePane.Presenter {
+    void getAutoPayReviews(AsyncCallback<Vector<PapReviewDTO>> callback, AutoPayChangesReportMetadata filterSettings);
 
-        void onRangeChanged();
-
-    }
-
-    void setPresenter(Presenter presenter);
-
-    void setRowData(int start, int total, List<PapReviewDTO> values);
-
-    Range getVisibleRange();
-
-    List<PapReviewDTO> selectedRows();
-
-    AutoPayChangesReportMetadata getAutoPayFilterSettings();
+    void accept(AsyncCallback<VoidSerializable> callback, Vector<PapReviewDTO> acceptedReviews);
 
 }

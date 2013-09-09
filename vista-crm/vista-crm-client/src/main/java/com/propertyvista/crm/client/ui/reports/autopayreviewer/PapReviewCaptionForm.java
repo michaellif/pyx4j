@@ -26,7 +26,7 @@ import com.pyx4j.site.client.AppPlaceEntityMapper;
 import com.pyx4j.site.client.AppSite;
 
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
-import com.propertyvista.crm.client.ui.reports.autopayreviewer.dto.PapReviewCaptionDTO;
+import com.propertyvista.crm.rpc.dto.financial.autopayreview.PapReviewCaptionDTO;
 
 public class PapReviewCaptionForm extends CEntityDecoratableForm<PapReviewCaptionDTO> {
 

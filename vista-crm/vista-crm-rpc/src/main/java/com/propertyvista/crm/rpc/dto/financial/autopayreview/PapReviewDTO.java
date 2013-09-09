@@ -7,15 +7,25 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on 2013-08-30
+ * Created on 2013-08-28
  * @author ArtyomB
  * @version $Id$
  */
-package com.propertyvista.crm.client.ui.reports.autopayreviewer.dto;
+package com.propertyvista.crm.rpc.dto.financial.autopayreview;
 
 import com.pyx4j.entity.annotations.Transient;
+import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.shared.IList;
+
+import com.propertyvista.domain.tenant.lease.Lease;
 
 @Transient
-public interface PapChargesTotalDTO extends PapChargeReviewDTO {
+public interface PapReviewDTO extends IEntity, BulkEditableEntity {
+
+    PapReviewCaptionDTO caption();
+
+    IList<PapChargeReviewDTO> charges();
+
+    Lease lease();
 
 }

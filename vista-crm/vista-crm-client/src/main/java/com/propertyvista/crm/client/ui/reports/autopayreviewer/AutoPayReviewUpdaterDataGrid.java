@@ -33,7 +33,7 @@ import com.google.gwt.view.client.ListDataProvider;
 
 import com.pyx4j.i18n.shared.I18n;
 
-import com.propertyvista.crm.client.ui.reports.autopayreviewer.dto.PapChargeReviewDTO;
+import com.propertyvista.crm.rpc.dto.financial.autopayreview.PapChargeReviewDTO;
 
 public class AutoPayReviewUpdaterDataGrid extends Composite {
 
