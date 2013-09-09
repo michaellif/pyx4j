@@ -20,12 +20,15 @@ import com.google.gwt.dom.client.Style.TextAlign;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.commons.css.IStyleName;
+import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.widgets.client.Button;
 
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
 import com.propertyvista.crm.client.ui.reports.autopayreviewer.dto.PapReviewsHolderDTO;
@@ -53,6 +56,15 @@ public class PapReviewsHolderForm extends CEntityDecoratableForm<PapReviewsHolde
         counterPanel = new HTML();
         counterPanel.addStyleName(Styles.AutoPayCounterPanel.name());
         panel.add(counterPanel);
+
+        FlowPanel controlsPanel = new FlowPanel();
+        controlsPanel.add(new Button(i18n.tr("Mark All"), new Command() {
+            @Override
+            public void execute() {
+                markAll();
+            }
+        }));
+        panel.add(controlsPanel);
 
         FlowPanel superCaptionsPanel = new FlowPanel();
         superCaptionsPanel.addStyleName(Styles.AutoPaySuperCaptionsPanel.name());
@@ -107,5 +119,11 @@ public class PapReviewsHolderForm extends CEntityDecoratableForm<PapReviewsHolde
         super.onValueSet(populate);
         counterPanel.setText(i18n.tr("Displaying {0,number,#,##0} of {1,number,#,##0} Leases with suspended AutoPay", getValue().papReviews().size(),
                 getValue().papReviewsTotalCount().getValue()));
+    }
+
+    private void markAll() {
+        CComponent<?> c = get(proto().papReviews());
+        PapReviewFolder folder = (PapReviewFolder) c;
+        folder.selectAll();
     }
 }

@@ -21,6 +21,7 @@ import com.google.gwt.dom.client.Style.Overflow;
 import com.google.gwt.dom.client.Style.Position;
 import com.google.gwt.dom.client.Style.TextAlign;
 import com.google.gwt.dom.client.Style.Unit;
+import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.view.client.Range;
@@ -91,10 +92,12 @@ public class AutoPayReviewUpdaterViewImpl extends AbstractPrimePane implements A
 
         viewPanel.add(leasePapsReviewsHolderForm);
 
-        addHeaderToolbarItem(new Button(i18n.tr("Accept All")));
-        addHeaderToolbarItem(new Separator(3));
-        addHeaderToolbarItem(new Button(i18n.tr("Accept Marked")));
-        addHeaderToolbarItem(new Button(i18n.tr("Accept Not Marked")));
+        addHeaderToolbarItem(new Button(i18n.tr("Accept Marked"), new Command() {
+            @Override
+            public void execute() {
+                presenter.acceptSelected();
+            }
+        }));
         addHeaderToolbarItem(new Separator(6));
         addHeaderToolbarItem(new Button(i18n.tr("Export")));
     }

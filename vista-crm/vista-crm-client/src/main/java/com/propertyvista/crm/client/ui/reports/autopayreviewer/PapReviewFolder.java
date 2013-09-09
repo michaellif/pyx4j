@@ -32,6 +32,7 @@ import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CEntityLabel;
 import com.pyx4j.forms.client.ui.CLabel;
+import com.pyx4j.forms.client.ui.folder.CEntityFolderItem;
 import com.pyx4j.forms.client.ui.folder.IFolderItemDecorator;
 import com.pyx4j.i18n.shared.I18n;
 
@@ -49,7 +50,9 @@ public class PapReviewFolder extends VistaBoxFolder<PapReviewDTO> {
     private static final I18n i18n = I18n.get(PapReviewFolder.class);
 
     public enum Styles implements IStyleName {
+
         AutoPayReviewUpdaterLeaseCaption, AutoPayPapChargesContainer, AutoPayPapCharge, AutoPayPapChargeNameColumn, AutoPayPapChargeNumberColumn, AutoPayReviewSelected
+
     }
 
     public PapReviewFolder() {
@@ -72,6 +75,15 @@ public class PapReviewFolder extends VistaBoxFolder<PapReviewDTO> {
         VistaBoxFolderItemDecorator<PapReviewDTO> itemDecorator = (VistaBoxFolderItemDecorator<PapReviewDTO>) PapReviewFolder.super.createItemDecorator();
         itemDecorator.setCollapsible(false);
         return itemDecorator;
+    }
+
+    public void selectAll() {
+        for (CComponent<?> c : getComponents()) {
+            if (c instanceof CEntityFolderItem) {
+                PapForm papForm = (PapForm) ((CEntityFolderItem<?>) c).getComponents().iterator().next();
+                papForm.setSelected(true);
+            }
+        }
     }
 
     private static final class PapForm extends CEntityDecoratableForm<PapReviewDTO> {
@@ -112,6 +124,10 @@ public class PapReviewFolder extends VistaBoxFolder<PapReviewDTO> {
                 }
             });
             return contentPanel;
+        }
+
+        public void setSelected(boolean isSelected) {
+            get(proto().isSelected()).populate(isSelected);
         }
 
         @Override
@@ -304,4 +320,5 @@ public class PapReviewFolder extends VistaBoxFolder<PapReviewDTO> {
 
         return papChargesTotal;
     }
+
 }
