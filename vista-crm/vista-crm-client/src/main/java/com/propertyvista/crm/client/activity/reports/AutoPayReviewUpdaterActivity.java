@@ -31,8 +31,8 @@ import com.pyx4j.site.rpc.AppPlace;
 import com.propertyvista.crm.client.ui.reports.autopayreviewer.AutoPayReviewUpdaterView;
 import com.propertyvista.crm.client.ui.reports.autopayreviewer.AutoPayReviewUpdaterViewImpl;
 import com.propertyvista.crm.client.ui.reports.autopayreviewer.dto.PapChargeReviewDTO;
+import com.propertyvista.crm.client.ui.reports.autopayreviewer.dto.PapReviewCaptionDTO;
 import com.propertyvista.crm.client.ui.reports.autopayreviewer.dto.PapReviewDTO;
-import com.propertyvista.domain.tenant.lease.Lease;
 
 public class AutoPayReviewUpdaterActivity extends AbstractActivity implements AutoPayReviewUpdaterView.Presenter {
 
@@ -86,12 +86,17 @@ public class AutoPayReviewUpdaterActivity extends AbstractActivity implements Au
         int chargeKeyCounter = 0;
 
         for (int leaseNum = 0; leaseNum < 30; leaseNum++) {
-            Lease lease = EntityFactory.create(Lease.class);
-            lease.setPrimaryKey(new Key(leaseNum + 1));
-            lease.leaseId().setValue("t0000" + leaseNum);
-            lease.unit().info().number().setValue("#" + leaseNum);
-            lease.unit().building().propertyCode().setValue("bath999");
-            lease.expectedMoveOut().setValue(new LogicalDate());
+            PapReviewCaptionDTO papReviewCaption = EntityFactory.create(PapReviewCaptionDTO.class);
+            papReviewCaption.building().setValue("bath9999");
+            papReviewCaption.building_().setPrimaryKey(new Key(1));
+
+            papReviewCaption.unit().setValue("#" + leaseNum);
+            papReviewCaption.unit_().setPrimaryKey(new Key(1));
+
+            papReviewCaption.lease().setValue("t000" + leaseNum);
+            papReviewCaption.lease_().setPrimaryKey(new Key(leaseNum + 1));
+
+            papReviewCaption.expectedMoveOut().setValue(new LogicalDate());
 
             // create charges for lease:
             List<PapChargeReviewDTO> charges = new ArrayList<PapChargeReviewDTO>();
@@ -136,8 +141,14 @@ public class AutoPayReviewUpdaterActivity extends AbstractActivity implements Au
             int papsPerLeaseCount = 2;
             for (int papNum = 0; papNum < papsPerLeaseCount; ++papNum) {
                 PapReviewDTO pap = EntityFactory.create(PapReviewDTO.class);
+                PapReviewCaptionDTO thisPapCaption = papReviewCaption.duplicate();
+                thisPapCaption.tenant().setValue("Tenant Tenantovic" + tenantNum);
+                thisPapCaption.tenant_().setPrimaryKey(new Key(tenantNum + 1));
+                thisPapCaption.paymentMethod().setValue("Payment Method" + tenantNum);
+                thisPapCaption.paymentMethod_().setPrimaryKey(new Key(tenantNum + 1));
+
+                pap.caption().set(thisPapCaption);
                 ++tenantNum;
-                pap.tenantAndPaymentMethod().setValue("Tenant Tenantovic" + tenantNum + " PaymentMethod#" + tenantNum);
 
                 for (PapChargeReviewDTO charge : charges) {
                     PapChargeReviewDTO papCharge = charge.duplicate();

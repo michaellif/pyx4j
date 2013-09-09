@@ -47,6 +47,7 @@ import com.propertyvista.crm.client.ui.gadgets.commonMk2.dashboard.AbstractDashb
 import com.propertyvista.crm.client.ui.gadgets.commonMk2.dashboard.AddGadgetDialog;
 import com.propertyvista.crm.client.ui.gadgets.forms.ArrearsGadgetSummaryForm;
 import com.propertyvista.crm.client.ui.reports.CommonReportStyles;
+import com.propertyvista.crm.client.ui.reports.autopayreviewer.PapReviewCaptionForm;
 import com.propertyvista.crm.client.ui.reports.autopayreviewer.PapReviewFolder;
 import com.propertyvista.crm.client.ui.reports.autopayreviewer.PapReviewsHolderForm;
 import com.propertyvista.crm.client.ui.wizard.creditcheck.components.CreditCheckReportTypeSelector;
@@ -691,10 +692,16 @@ public class CrmTheme extends VistaTheme {
     }
 
     private void initAutoPayUpdaterStyles() {
-        Style style = new Style("." + PapReviewFolder.Styles.AutoPayReviewUpdaterLeaseCaption.name() + " div");
+        Style style = new Style("." + PapReviewCaptionForm.Styles.AutoPayReviewUpdaterPapCaptionPanel.name() + " div");
         style.addProperty("display", "inline-block");
         style.addProperty("font-weight", "bold");
-        style.addProperty("font-size", "1.5em");
+        style.addProperty("vertical-align", "middle");
+        addStyle(style);
+
+        style = new Style("." + PapReviewCaptionForm.Styles.AutoPayExpectedMoveOut.name());
+        style.addProperty("display", "inline-block");
+        style.addProperty("font-weight", "bold");
+        style.addProperty("vertical-align", "middle");
         addStyle(style);
 
         style = new Style("." + PapReviewFolder.Styles.AutoPayReviewSelected.name());
@@ -765,12 +772,11 @@ public class CrmTheme extends VistaTheme {
         style.addProperty("font-weight", "bold");
         style.addProperty("font-size", "1.5em");
         style.addProperty("border-left", "1px dotted");
-        style.addProperty("border-right", "1px dotted");
         addStyle(style);
 
         style = new Style("." + PapReviewsHolderForm.Styles.AutoPaySuperCaptionsPanel.name() + " div:nth-child(1)");
         style.addProperty("left", "250px");
-        style.addProperty("width", "400px");
+        style.addProperty("width", "420px");
         addStyle(style);
 
         style = new Style("." + PapReviewsHolderForm.Styles.AutoPaySuperCaptionsPanel.name() + " div:nth-child(2)");
@@ -780,6 +786,7 @@ public class CrmTheme extends VistaTheme {
 
         style = new Style("." + PapReviewsHolderForm.Styles.AutoPayCaptionsPanel.name());
         style.addProperty("position", "relative");
+        style.addProperty("left", "29px");
         addStyle(style);
 
         style = new Style("." + PapReviewsHolderForm.Styles.AutoPayCaptionsPanel.name() + " div");
@@ -788,12 +795,10 @@ public class CrmTheme extends VistaTheme {
         style.addProperty("text-align", "right");
         style.addProperty("font-weight", "bold");
         style.addProperty("border-left", "1px dotted");
-        style.addProperty("border-right", "1px dotted");
         addStyle(style);
 
-        style = new Style("." + PapReviewsHolderForm.Styles.AutoPayCaptionsPanel.name() + " div");
-        style.addProperty("left", "346px");
-        style.addProperty("width", "100px");
+        style = new Style("." + PapReviewsHolderForm.Styles.AutoPayCaptionsPanel.name() + " div div");
+        style.addProperty("border-left", "none");
         addStyle(style);
 
     }

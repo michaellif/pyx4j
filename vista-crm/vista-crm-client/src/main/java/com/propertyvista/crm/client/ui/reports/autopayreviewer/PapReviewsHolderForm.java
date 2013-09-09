@@ -66,26 +66,13 @@ public class PapReviewsHolderForm extends CEntityDecoratableForm<PapReviewsHolde
         }));
         panel.add(controlsPanel);
 
-        FlowPanel superCaptionsPanel = new FlowPanel();
-        superCaptionsPanel.addStyleName(Styles.AutoPaySuperCaptionsPanel.name());
-        superCaptionsPanel.add(new HTML(i18n.tr("Suspended")));
-        superCaptionsPanel.add(new HTML(i18n.tr("Suggested")));
-        panel.add(superCaptionsPanel);
+        panel.add(createSuperCaptionsPanel());
+        panel.add(createCaptionsPanel());
 
-        FlowPanel captionsPanel = new FlowPanel();
-        captionsPanel.addStyleName(Styles.AutoPayCaptionsPanel.name());
-        captionsPanel.add(new HTML(i18n.tr("Charge")));
-        captionsPanel.add(new HTML(i18n.tr("Payment")));
-        captionsPanel.add(new HTML(i18n.tr("% of Charge")));
-        captionsPanel.add(new HTML(i18n.tr("Charge")));
-        captionsPanel.add(new HTML(i18n.tr("Payment")));
-        captionsPanel.add(new HTML(i18n.tr("% of Charge")));
-
-        panel.add(captionsPanel);
         FlowPanel leasePapsFolderHolder = new FlowPanel();
         leasePapsFolderHolder.getElement().getStyle().setOverflow(Overflow.AUTO);
         leasePapsFolderHolder.getElement().getStyle().setPosition(Position.ABSOLUTE);
-        leasePapsFolderHolder.getElement().getStyle().setTop(70, Unit.PX);
+        leasePapsFolderHolder.getElement().getStyle().setTop(100, Unit.PX);
         leasePapsFolderHolder.getElement().getStyle().setBottom(0, Unit.PX);
         leasePapsFolderHolder.getElement().getStyle().setLeft(0, Unit.PX);
         leasePapsFolderHolder.getElement().getStyle().setRight(0, Unit.PX);
@@ -125,5 +112,29 @@ public class PapReviewsHolderForm extends CEntityDecoratableForm<PapReviewsHolde
         CComponent<?> c = get(proto().papReviews());
         PapReviewFolder folder = (PapReviewFolder) c;
         folder.selectAll();
+    }
+
+    private FlowPanel createSuperCaptionsPanel() {
+        FlowPanel superCaptionsPanel = new FlowPanel();
+        superCaptionsPanel.addStyleName(Styles.AutoPaySuperCaptionsPanel.name());
+        superCaptionsPanel.add(new HTML(i18n.tr("Suspended")));
+        superCaptionsPanel.add(new HTML(i18n.tr("Suggested")));
+        return superCaptionsPanel;
+    }
+
+    private FlowPanel createCaptionsPanel() {
+        FlowPanel panel = new FlowPanel();
+        panel.setStylePrimaryName(Styles.AutoPayCaptionsPanel.name());
+
+        panel.add(new MiniDecorator(new HTML("&nbsp;"), PapReviewFolder.Styles.AutoPayPapChargeNameColumn.name()));
+        panel.add(new MiniDecorator(new HTML("&nbsp;"), PapReviewFolder.Styles.AutoPayPapChargeNumberColumn.name()));
+        panel.add(new MiniDecorator(new HTML(i18n.tr("Charge")), PapReviewFolder.Styles.AutoPayPapChargeNumberColumn.name()));
+        panel.add(new MiniDecorator(new HTML(i18n.tr("Payment")), PapReviewFolder.Styles.AutoPayPapChargeNumberColumn.name()));
+        panel.add(new MiniDecorator(new HTML(i18n.tr("% of Charge")), PapReviewFolder.Styles.AutoPayPapChargeNumberColumn.name()));
+        panel.add(new MiniDecorator(new HTML(i18n.tr("Charge")), PapReviewFolder.Styles.AutoPayPapChargeNumberColumn.name()));
+        panel.add(new MiniDecorator(new HTML(i18n.tr("Payment")), PapReviewFolder.Styles.AutoPayPapChargeNumberColumn.name()));
+        panel.add(new MiniDecorator(new HTML(i18n.tr("% of Charge")), PapReviewFolder.Styles.AutoPayPapChargeNumberColumn.name()));
+        panel.add(new MiniDecorator(new HTML(i18n.tr("% of Change")), PapReviewFolder.Styles.AutoPayPapChargeNumberColumn.name()));
+        return panel;
     }
 }

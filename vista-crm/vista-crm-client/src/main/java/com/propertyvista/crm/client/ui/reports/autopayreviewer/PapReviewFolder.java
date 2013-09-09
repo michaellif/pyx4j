@@ -21,8 +21,6 @@ import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTMLPanel;
 import com.google.gwt.user.client.ui.IsWidget;
-import com.google.gwt.user.client.ui.SimplePanel;
-import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.commons.Key;
 import com.pyx4j.commons.css.IStyleName;
@@ -30,8 +28,6 @@ import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.forms.client.ui.CComponent;
-import com.pyx4j.forms.client.ui.CEntityLabel;
-import com.pyx4j.forms.client.ui.CLabel;
 import com.pyx4j.forms.client.ui.folder.CEntityFolderItem;
 import com.pyx4j.forms.client.ui.folder.IFolderItemDecorator;
 import com.pyx4j.i18n.shared.I18n;
@@ -43,7 +39,6 @@ import com.propertyvista.crm.client.ui.reports.autopayreviewer.dto.PapChargeRevi
 import com.propertyvista.crm.client.ui.reports.autopayreviewer.dto.PapChargeReviewDTO.ChangeType;
 import com.propertyvista.crm.client.ui.reports.autopayreviewer.dto.PapChargesTotalDTO;
 import com.propertyvista.crm.client.ui.reports.autopayreviewer.dto.PapReviewDTO;
-import com.propertyvista.domain.tenant.lease.Lease;
 
 public class PapReviewFolder extends VistaBoxFolder<PapReviewDTO> {
 
@@ -51,7 +46,7 @@ public class PapReviewFolder extends VistaBoxFolder<PapReviewDTO> {
 
     public enum Styles implements IStyleName {
 
-        AutoPayReviewUpdaterLeaseCaption, AutoPayPapChargesContainer, AutoPayPapCharge, AutoPayPapChargeNameColumn, AutoPayPapChargeNumberColumn, AutoPayReviewSelected
+        AutoPayPapChargesContainer, AutoPayPapCharge, AutoPayPapChargeNameColumn, AutoPayPapChargeNumberColumn, AutoPayReviewSelected
 
     }
 
@@ -100,8 +95,9 @@ public class PapReviewFolder extends VistaBoxFolder<PapReviewDTO> {
                     "<div>" +
                         "<div style='display:inline-block;'><span id='isSelected'></span></div>" +
                         "<div style='display:inline-block;'>" +
-                            "<div><span id='leaseLabel'></span></div>" +
-                            "<div><span id='tenantAndPaymentMethodCaption'></span></div>" +
+                            "<div>" +
+                                "<div class='AutoPayReviewUpdaterPapCaptionPanel'><span id='captionLabel'></span></div>" +                                
+                            "</div>" +
                             "<div>" +
                                 "<div><span id='chargesFolder'></span></div>" +
                                 "<div><span id='chargesTotals'></span></div>" +
@@ -110,8 +106,8 @@ public class PapReviewFolder extends VistaBoxFolder<PapReviewDTO> {
                     "</div>"
             );//@formatter:on
             contentPanel.addAndReplaceElement(inject(proto().isSelected()), "isSelected");
-            contentPanel.addAndReplaceElement(inject(proto().lease(), new CEntityLabel<Lease>()), "leaseLabel");
-            contentPanel.addAndReplaceElement(inject(proto().tenantAndPaymentMethod(), new CLabel<String>()), "tenantAndPaymentMethodCaption");
+
+            contentPanel.addAndReplaceElement(inject(proto().caption(), new PapReviewCaptionForm()), "captionLabel");
             contentPanel.addAndReplaceElement(inject(proto().charges(), new PapChargesFolder()), "chargesFolder");
             contentPanel.addAndReplaceElement(chargeTotals = new PapChargeForm(), "chargesTotals");
             chargeTotals.initContent();
@@ -254,18 +250,6 @@ public class PapReviewFolder extends VistaBoxFolder<PapReviewDTO> {
                 changePercent = change.divide(get(proto().suspendedPreAuthorizedPaymentAmount()).getValue(), MathContext.DECIMAL32);
             }
             get(proto().changePercent()).setValue(changePercent, false);
-        }
-    }
-
-    private static class MiniDecorator extends SimplePanel {
-
-        public MiniDecorator(Widget widget, String styleName) {
-            setWidget(widget);
-            addStyleName(styleName);
-        }
-
-        public MiniDecorator(IsWidget widget, String styleName) {
-            this(widget.asWidget(), styleName);
         }
     }
 
