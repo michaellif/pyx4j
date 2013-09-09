@@ -25,6 +25,8 @@ import com.pyx4j.entity.shared.IPrimitive;
 @Transient
 public interface HasTenantInsuranceDTO extends InsuranceStatusDTO {
 
+    IPrimitive<String> insuranceProvider();
+
     @Format("#,##0.00")
     IPrimitive<BigDecimal> liabilityCoverage();
 

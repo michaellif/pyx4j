@@ -91,7 +91,7 @@ public class TenantInsuranceFacadeImpl implements TenantInsuranceFacade {
                 OtherProviderInsuranceStatusDTO otherProviderStatus = EntityFactory.create(OtherProviderInsuranceStatusDTO.class);
                 insuranceStatus = otherProviderStatus;
             }
-
+            insuranceStatus.insuranceProvider().setValue(insuranceCertificate.insuranceProvider().getValue());
             insuranceStatus.isOwner().setValue(insuranceCertificate.tenant().getPrimaryKey().equals(tenantId.getPrimaryKey()));
 
             insuranceStatus.liabilityCoverage().setValue(insuranceCertificate.liabilityCoverage().getValue());
