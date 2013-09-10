@@ -240,7 +240,6 @@ public class AutoPayWizardForm extends AbstractPortalWizard<AutoPayDTO> {
         panel.setBR(++row, 0, 1);
 
         panel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().nextScheduledPaymentDate(), new CDateLabel()), 100).labelWidth(30).build());
-        panel.getFlexCellFormatter().setHorizontalAlignment(row, 0, HasHorizontalAlignment.ALIGN_CENTER);
 
         panel.setHR(++row, 0, 1);
 
