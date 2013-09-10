@@ -13,28 +13,37 @@
  */
 package com.propertyvista.portal.web.client.ui.financial.dashboard;
 
-import java.util.Arrays;
-import java.util.List;
-
 import com.google.gwt.dom.client.Style.TextAlign;
+import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.Window;
+import com.google.gwt.user.client.ui.HTML;
+import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.SimplePanel;
+import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.commons.css.ThemeColor;
+import com.pyx4j.entity.shared.IObject;
+import com.pyx4j.forms.client.ui.CComponent;
+import com.pyx4j.forms.client.ui.CDateLabel;
 import com.pyx4j.forms.client.ui.CEntityForm;
-import com.pyx4j.forms.client.ui.folder.EntityFolderColumnDescriptor;
+import com.pyx4j.forms.client.ui.CEntityLabel;
+import com.pyx4j.forms.client.ui.folder.CEntityFolderItem;
 import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.client.ui.layout.responsive.LayoutChangeEvent;
 import com.pyx4j.site.client.ui.layout.responsive.LayoutChangeHandler;
 import com.pyx4j.site.client.ui.layout.responsive.ResponsiveLayoutPanel.LayoutType;
+import com.pyx4j.widgets.client.dialog.MessageDialog;
 
-import com.propertyvista.common.client.ui.components.folders.VistaTableFolder;
-import com.propertyvista.portal.domain.dto.financial.PaymentInfoDTO;
+import com.propertyvista.common.client.theme.VistaTheme;
+import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
+import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
+import com.propertyvista.domain.payment.PaymentMethod;
+import com.propertyvista.domain.tenant.lease.Tenant;
+import com.propertyvista.portal.rpc.portal.web.dto.AutoPayInfoDTO;
 import com.propertyvista.portal.rpc.portal.web.dto.AutoPaySummaryDTO;
-import com.propertyvista.portal.rpc.portal.web.dto.BillingSummaryDTO;
 import com.propertyvista.portal.web.client.resources.PortalImages;
 import com.propertyvista.portal.web.client.ui.AbstractGadget;
 import com.propertyvista.portal.web.client.ui.util.decorators.FormDecoratorBuilder;
@@ -43,45 +52,41 @@ public class AutoPayAgreementsGadget extends AbstractGadget<FinancialDashboardVi
 
     private static final I18n i18n = I18n.get(AutoPayAgreementsGadget.class);
 
-    private final AutoPayViewer autoPayViewer;
+    private final AutoPayListView autoPayListView;
 
-    AutoPayAgreementsGadget(FinancialDashboardViewImpl form) {
-        super(form, PortalImages.INSTANCE.billingIcon(), i18n.tr("Auto Pay Agreements"), ThemeColor.contrast4);
+    AutoPayAgreementsGadget(FinancialDashboardViewImpl dashboardView) {
+        super(dashboardView, PortalImages.INSTANCE.billingIcon(), i18n.tr("Auto Pay Agreements"), ThemeColor.contrast4);
 
-        autoPayViewer = new AutoPayViewer();
-        autoPayViewer.setViewable(true);
-        autoPayViewer.initContent();
+        autoPayListView = new AutoPayListView();
+        autoPayListView.setViewable(true);
+        autoPayListView.initContent();
 
-        SimplePanel contentPanel = new SimplePanel(autoPayViewer.asWidget());
+        SimplePanel contentPanel = new SimplePanel(autoPayListView.asWidget());
         contentPanel.getElement().getStyle().setTextAlign(TextAlign.CENTER);
 
         setContent(contentPanel);
     }
 
     protected void populate(AutoPaySummaryDTO value) {
-
+        autoPayListView.populate(value);
     }
 
-    //  getGadgetViewer().getPresenter().setAutopay();
-
-    class AutoPayViewer extends CEntityForm<BillingSummaryDTO> {
+    class AutoPayListView extends CEntityForm<AutoPaySummaryDTO> {
 
         private final BasicFlexFormPanel mainPanel;
 
-        public AutoPayViewer() {
-            super(BillingSummaryDTO.class);
+        public AutoPayListView() {
+            super(AutoPaySummaryDTO.class);
 
             mainPanel = new BasicFlexFormPanel();
 
             doLayout(LayoutType.getLayoutType(Window.getClientWidth()));
 
             AppSite.getEventBus().addHandler(LayoutChangeEvent.TYPE, new LayoutChangeHandler() {
-
                 @Override
                 public void onLayoutChangeRerquest(LayoutChangeEvent event) {
                     doLayout(event.getLayoutType());
                 }
-
             });
         }
 
@@ -91,30 +96,87 @@ public class AutoPayAgreementsGadget extends AbstractGadget<FinancialDashboardVi
 
         @Override
         public IsWidget createContent() {
+            int row = -1;
 
-            mainPanel.getElement().getStyle().setProperty("margin", "0 5%");
-            mainPanel.setWidget(0, 0, new FormDecoratorBuilder(inject(proto().currentBalance()), "140px", "100px", "120px").build());
-            mainPanel.setWidget(1, 0, new FormDecoratorBuilder(inject(proto().dueDate()), "140px", "100px", "120px").build());
+            mainPanel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().nextAutoPayDate(), new CDateLabel()), 100).labelWidth(12).build());
+            mainPanel.setBR(++row, 0, 1);
+            mainPanel.setWidget(++row, 0, inject(proto().currentAutoPayments(), new AutoPayFolder()));
 
             return mainPanel;
         }
     }
 
-    class AutoPayFolder extends VistaTableFolder<PaymentInfoDTO> {
+    private class AutoPayFolder extends VistaBoxFolder<AutoPayInfoDTO> {
 
         public AutoPayFolder() {
-            super(PaymentInfoDTO.class, false);
-            setViewable(true);
+            super(AutoPayInfoDTO.class, true);
+            setOrderable(false);
         }
 
         @Override
-        public List<EntityFolderColumnDescriptor> columns() {
-            return Arrays.asList(// @formatter:off
-                    new EntityFolderColumnDescriptor(proto().amount(), "7em"),
-                    new EntityFolderColumnDescriptor(proto().paymentDate(), "9em"),
-                    new EntityFolderColumnDescriptor(proto().paymentMethod().type(), "10em"),
-                    new EntityFolderColumnDescriptor(proto().payer(), "20em")
-            ); // formatter:on
+        public CComponent<?> create(IObject<?> member) {
+            if (member instanceof AutoPayInfoDTO) {
+                return new AutoPayViewer();
+            }
+            return super.create(member);
+        }
+
+        @Override
+        protected void addItem() {
+            getGadgetViewer().getPresenter().addPreauthorizedPayment();
+        }
+
+        @Override
+        protected void removeItem(final CEntityFolderItem<AutoPayInfoDTO> item) {
+            MessageDialog.confirm(i18n.tr("Please confirm"), i18n.tr("Do you really want to delete the Pre-Authorized Payment?"), new Command() {
+                @Override
+                public void execute() {
+                    AutoPayFolder.super.removeItem(item);
+                    getGadgetViewer().getPresenter().deletePreauthorizedPayment(item.getValue());
+                }
+            });
+        }
+
+        private class AutoPayViewer extends CEntityDecoratableForm<AutoPayInfoDTO> {
+
+            private final BasicFlexFormPanel expirationWarning = new BasicFlexFormPanel();
+
+            public AutoPayViewer() {
+                super(AutoPayInfoDTO.class);
+
+                setViewable(true);
+                inheritViewable(false);
+
+                Widget expirationWarningLabel = new HTML(i18n.tr("This Pre-Authorized Payment is expired - needs to be replaced with new one!"));
+                expirationWarningLabel.setStyleName(VistaTheme.StyleName.warningMessage.name());
+                expirationWarning.setWidget(0, 0, expirationWarningLabel);
+                expirationWarning.getCellFormatter().setHorizontalAlignment(0, 0, HasHorizontalAlignment.ALIGN_CENTER);
+                expirationWarning.setHR(1, 0, 1);
+                expirationWarning.setBR(2, 0, 1);
+            }
+
+            @Override
+            public IsWidget createContent() {
+                BasicFlexFormPanel content = new BasicFlexFormPanel();
+                int row = -1;
+
+                content.setWidget(++row, 0, expirationWarning);
+                content.setWidget(++row, 0, inject(proto().payer(), new CEntityLabel<Tenant>()));
+                content.setWidget(++row, 0, inject(proto().paymentMethod(), new CEntityLabel<PaymentMethod>()));
+                content.setWidget(++row, 0, inject(proto().amount()));
+
+                return content;
+            }
+
+            @SuppressWarnings("unchecked")
+            @Override
+            protected void onValueSet(boolean populate) {
+                super.onValueSet(populate);
+
+                expirationWarning.setVisible(!getValue().expiring().isNull());
+
+                ((CEntityFolderItem<AutoPayInfoDTO>) getParent()).setRemovable(!getValue().paymentMethod().isEmpty());
+            }
         }
     }
 }

@@ -19,9 +19,11 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.rpc.shared.VoidSerializable;
 
+import com.propertyvista.domain.payment.PreauthorizedPayment;
 import com.propertyvista.domain.tenant.lease.LeaseTermTenant;
-import com.propertyvista.portal.rpc.portal.web.dto.AutoPayDTO;
+import com.propertyvista.portal.rpc.portal.web.dto.AutoPayInfoDTO;
 import com.propertyvista.portal.rpc.portal.web.dto.AutoPaySummaryDTO;
 import com.propertyvista.portal.rpc.portal.web.dto.BillingSummaryDTO;
 import com.propertyvista.portal.rpc.portal.web.dto.FinancialDashboardDTO;
@@ -76,14 +78,20 @@ public class DashboardServiceMockImpl implements DashboardService {
     private static void populateAutoPaySummary(AutoPaySummaryDTO autoPaySummary) {
 
         {
-            AutoPayDTO autoPay = EntityFactory.create(AutoPayDTO.class);
-            autoPay.total().setValue(new BigDecimal("1100.00"));
+            AutoPayInfoDTO autoPay = EntityFactory.create(AutoPayInfoDTO.class);
+            autoPay.amount().setValue(new BigDecimal("1100.00"));
             autoPaySummary.currentAutoPayments().add(autoPay);
         }
 
         autoPaySummary.currentAutoPayDate().setValue(new LogicalDate(System.currentTimeMillis() + 5 * 24 * 60 * 60 * 1000));
         autoPaySummary.nextAutoPayDate().setValue(new LogicalDate(System.currentTimeMillis() + 35 * 24 * 60 * 60 * 1000));
-        autoPaySummary.modificationsAllowd().setValue(true);
+        autoPaySummary.modificationsAllowed().setValue(true);
+    }
+
+    @Override
+    public void deletePreauthorizedPayment(AsyncCallback<VoidSerializable> defaultAsyncCallback, PreauthorizedPayment itemId) {
+        // TODO Auto-generated method stub
+
     }
 
 }

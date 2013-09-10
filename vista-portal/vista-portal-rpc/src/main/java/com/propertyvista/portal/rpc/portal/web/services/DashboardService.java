@@ -16,7 +16,9 @@ package com.propertyvista.portal.rpc.portal.web.services;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.rpc.shared.IService;
+import com.pyx4j.rpc.shared.VoidSerializable;
 
+import com.propertyvista.domain.payment.PreauthorizedPayment;
 import com.propertyvista.portal.rpc.portal.web.dto.FinancialDashboardDTO;
 import com.propertyvista.portal.rpc.portal.web.dto.MainDashboardDTO;
 import com.propertyvista.portal.rpc.portal.web.dto.ServicesDashboardDTO;
@@ -29,4 +31,7 @@ public interface DashboardService extends IService {
 
     public void retrieveServicesDashboard(AsyncCallback<ServicesDashboardDTO> callback);
 
+    // Gadget utils:
+
+    public void deletePreauthorizedPayment(AsyncCallback<VoidSerializable> callback, PreauthorizedPayment itemId);
 }

@@ -116,8 +116,11 @@ public class PortalSiteMap implements SiteMap {
                 }
             }
 
-            @PlaceProperties(caption = "Pre-Authorized Payments", navigLabel = "Auto Pay")
             public static class PreauthorizedPayments extends AppPlace {
+
+                @PlaceProperties(caption = "Pre-Authorized Payment")
+                public static class PreauthorizedPayment extends AppPlace {
+                }
 
                 @PlaceProperties(caption = "New Pre-Authorized Payment")
                 public static class NewPreauthorizedPayment extends AppPlace {

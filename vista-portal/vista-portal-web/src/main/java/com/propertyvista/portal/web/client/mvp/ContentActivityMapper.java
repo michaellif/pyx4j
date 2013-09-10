@@ -28,8 +28,8 @@ import com.propertyvista.portal.rpc.portal.PortalSiteMap.Resident.Financial.Bill
 import com.propertyvista.portal.web.client.activity.NotificationPageActivity;
 import com.propertyvista.portal.web.client.activity.SignUpActivity;
 import com.propertyvista.portal.web.client.activity.dashboard.MainDashboardActivity;
+import com.propertyvista.portal.web.client.activity.financial.autopay.AutoPayActivity;
 import com.propertyvista.portal.web.client.activity.financial.autopay.AutoPayConfirmationActivity;
-import com.propertyvista.portal.web.client.activity.financial.autopay.AutoPayListActivity;
 import com.propertyvista.portal.web.client.activity.financial.autopay.AutoPayWizardActivity;
 import com.propertyvista.portal.web.client.activity.financial.dashboard.FinancialDashboardActivity;
 import com.propertyvista.portal.web.client.activity.financial.payment.PaymentConfirmationActivity;
@@ -87,8 +87,8 @@ public class ContentActivityMapper implements AppActivityMapper {
                     } else if (appPlace instanceof Resident.Financial.PaymentSubmitting) {
                         activity = new PaymentConfirmationActivity(appPlace);
 
-                    } else if (appPlace instanceof Resident.Financial.PreauthorizedPayments) {
-                        activity = new AutoPayListActivity(appPlace);
+                    } else if (appPlace instanceof Resident.Financial.PreauthorizedPayments.PreauthorizedPayment) {
+                        activity = new AutoPayActivity(appPlace);
                     } else if (appPlace instanceof Resident.Financial.PreauthorizedPayments.NewPreauthorizedPayment) {
                         activity = new AutoPayWizardActivity(appPlace);
                     } else if (appPlace instanceof Resident.Financial.PreauthorizedPayments.PreauthorizedPaymentSubmitted) {

@@ -224,8 +224,6 @@ public class VistaPortalAccessControlList extends ServletContainerAclBuilder {
         grant(VistaCustomerBehavior.Tenant, new IServiceExecutePermission(com.propertyvista.portal.rpc.portal.web.services.PaymentMethodRetrieveService.class));
         grant(VistaCustomerBehavior.Tenant, new IServiceExecutePermission(com.propertyvista.portal.rpc.portal.web.services.PaymentMethodWizardService.class));
         grant(VistaCustomerBehavior.Tenant, new IServiceExecutePermission(
-                com.propertyvista.portal.rpc.portal.web.services.PreauthorizedPaymentListService.class));
-        grant(VistaCustomerBehavior.Tenant, new IServiceExecutePermission(
                 com.propertyvista.portal.rpc.portal.web.services.PreauthorizedPaymentWizardService.class));
         grant(VistaCustomerBehavior.Tenant, new IServiceExecutePermission(
                 com.propertyvista.portal.rpc.portal.web.services.SelfRegistrationBuildingsSourceService.class));

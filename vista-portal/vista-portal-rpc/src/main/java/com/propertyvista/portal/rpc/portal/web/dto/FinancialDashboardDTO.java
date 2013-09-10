@@ -15,9 +15,12 @@ package com.propertyvista.portal.rpc.portal.web.dto;
 
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.shared.IList;
 import com.pyx4j.i18n.annotations.I18n;
 
-import com.propertyvista.portal.rpc.portal.web.dto.BillingSummaryDTO;
+import com.propertyvista.domain.financial.billing.InvoiceLineItem;
+import com.propertyvista.dto.TransactionHistoryDTO;
+import com.propertyvista.portal.domain.dto.BillDataDTO;
 
 @Transient
 @I18n(strategy = I18n.I18nStrategy.IgnoreThis)
@@ -26,4 +29,10 @@ public interface FinancialDashboardDTO extends IEntity {
     BillingSummaryDTO billingSummary();
 
     AutoPaySummaryDTO autoPaySummary();
+
+    IList<InvoiceLineItem> latestActivities();
+
+    IList<BillDataDTO> billingHistory();
+
+    TransactionHistoryDTO transactionsHistory();
 }
