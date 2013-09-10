@@ -24,7 +24,6 @@ import com.pyx4j.config.server.ServerSideFactory;
 
 import com.propertyvista.biz.system.YardiServiceException;
 import com.propertyvista.config.VistaDeployment;
-import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.settings.PmcYardiCredential;
 import com.propertyvista.yardi.stub.YardiILSGuestCardStub;
 
@@ -39,14 +38,13 @@ public class YardiILSGuestCardService extends YardiAbstractService {
         return SingletonHolder.INSTANCE;
     }
 
-    public void getUnitAvailability(PmcYardiCredential yc, Building building) throws YardiServiceException, RemoteException {
+    public void getUnitAvailability(PmcYardiCredential yc, String propertyId) throws YardiServiceException, RemoteException {
         if (VistaDeployment.getPmcYardiBuildings(yc).size() == 0) {
             return;
         }
 
         YardiILSGuestCardStub stub = ServerSideFactory.create(YardiILSGuestCardStub.class);
 
-        String propertyId = building.propertyCode().getValue();
         log.info("Getting marketing info for property {}", propertyId);
         PhysicalProperty marketingInfo = stub.getPropertyMarketingInfo(yc, propertyId);
     }

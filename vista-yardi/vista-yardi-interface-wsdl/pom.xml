@@ -52,6 +52,7 @@
                 </executions>
             </plugin>
 
+	    <!-- WebServices: WSDL compilation -->
             <plugin>
                 <groupId>org.apache.axis2</groupId>
                 <artifactId>axis2-wsdl2code-maven-plugin</artifactId>
@@ -81,7 +82,7 @@
                         </namespaceURI>
 			<namespaceURI>
 			    <uri>http://tempuri.org/YSI.Interfaces.WebServices/ItfILSGuestCard20</uri>
-                            <packageName>com.yardi.ws.operations.requests</packageName>
+                            <packageName>com.yardi.ws.operations.ils</packageName>
                         </namespaceURI>
                     </namespaceURIs>
                 </configuration>
@@ -127,7 +128,7 @@
                             <packageName>com.yardi.ws</packageName>
                         </configuration>
                     </execution>
-					<execution>
+		    <execution>
                         <id>wsdl2code-client-yardi-sr</id>
                         <phase>generate-sources</phase>
                         <goals>
@@ -145,19 +146,20 @@
                             <goal>wsdl2code</goal>
                         </goals>
                         <configuration>
-                            <wsdlFile>${basedir}/src/main/resources/common/ItfILSGuestCard20.wsdl</wsdlFile>
+                            <wsdlFile>${basedir}/src/main/resources/ils/ItfILSGuestCard20.wsdl</wsdlFile>
                             <packageName>com.yardi.ws</packageName>
                         </configuration>
                     </execution>
                 </executions>
             </plugin>
 
+	    <!-- WebServices: XSD compilation -->
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>jaxb2-maven-plugin</artifactId>
                 <executions>
                     <execution>
-						<id>common-schemas-gen</id>
+			<id>common-schemas-gen</id>
                         <goals>
                             <goal>xjc</goal>
                         </goals>
@@ -166,37 +168,50 @@
                             <bindingDirectory>src/main/resources/common</bindingDirectory>
                             <clearOutputDir>false</clearOutputDir>
                             <arguments>-extension -Xnamespace-prefix</arguments>
-							<staleFile>${project.build.directory}/jaxb2/.schema1XjcStaleFlag</staleFile>
+			    <staleFile>${project.build.directory}/jaxb2/.StaleFlag-common</staleFile>
                         </configuration>
                     </execution>
-					<execution>
-						<id>maintenance-schema-gen</id>
+                    <execution>
+			<id>ils-schemas-gen</id>
                         <goals>
                             <goal>xjc</goal>
                         </goals>
                         <configuration>
-							<schemaDirectory>src/main/resources/maintenance</schemaDirectory>
+                            <schemaDirectory>src/main/resources/ils</schemaDirectory>
+                            <bindingDirectory>src/main/resources/ils</bindingDirectory>
+                            <clearOutputDir>false</clearOutputDir>
+                            <arguments>-extension -Xnamespace-prefix</arguments>
+			    <staleFile>${project.build.directory}/jaxb2/.StaleFlag-ils</staleFile>
+                        </configuration>
+                    </execution>
+		    <execution>
+			<id>maintenance-schema-gen</id>
+                        <goals>
+                            <goal>xjc</goal>
+                        </goals>
+                        <configuration>
+			    <schemaDirectory>src/main/resources/maintenance</schemaDirectory>
                             <schemaFiles>Itf_ServiceRequest.xsd</schemaFiles>
-							<bindingDirectory>src/main/resources/maintenance</bindingDirectory>
+			    <bindingDirectory>src/main/resources/maintenance</bindingDirectory>
                             <bindingFiles>bindings-maintenance.xjb</bindingFiles>
                             <clearOutputDir>false</clearOutputDir>
                             <arguments>-extension -Xnamespace-prefix</arguments>
-							<staleFile>${project.build.directory}/jaxb2/.schema2XjcStaleFlag</staleFile>
+			    <staleFile>${project.build.directory}/jaxb2/.StaleFlag-maintenance</staleFile>
                         </configuration>
                     </execution>
-					<execution>
-						<id>maintenance-meta-schema-gen</id>
+		    <execution>
+			<id>maintenance-meta-schema-gen</id>
                         <goals>
                             <goal>xjc</goal>
                         </goals>
                         <configuration>
-							<schemaDirectory>src/main/resources/maintenance</schemaDirectory>
+			    <schemaDirectory>src/main/resources/maintenance</schemaDirectory>
                             <schemaFiles>Itf_CustomValues.xsd</schemaFiles>
-							<bindingDirectory>src/main/resources/maintenance</bindingDirectory>
+			    <bindingDirectory>src/main/resources/maintenance</bindingDirectory>
                             <bindingFiles>bindings-maintenance-meta.xjb</bindingFiles>
                             <clearOutputDir>false</clearOutputDir>
                             <arguments>-extension -Xnamespace-prefix</arguments>
-							<staleFile>${project.build.directory}/jaxb2/.schema3XjcStaleFlag</staleFile>
+			    <staleFile>${project.build.directory}/jaxb2/.StaleFlag-maintenance-meta</staleFile>
                         </configuration>
                     </execution>
                 </executions>

@@ -59,21 +59,4 @@
             <jxb:package name="com.yardi.entity.screening"/>
         </jxb:schemaBindings>
     </jxb:bindings>
-    <jxb:bindings namespace="http://yardi.com/PropertyMarketingILS20" schemaLocation="Itf_MITS_PropertyMarketingILS2.0.xsd" >
-        <jxb:schemaBindings>
-            <jxb:package name="com.yardi.entity.ils"/>
-        </jxb:schemaBindings>
-	<jxb:bindings node="//xsd:element[@name='Information']/xsd:complexType">
-            <jxb:class name="PropertyInfo"/>
-        </jxb:bindings>
-	<jxb:bindings node="//xsd:element[@name='Property']/xsd:complexType/xsd:sequence/xsd:element[@name='Fee']/xsd:complexType">
-            <jxb:class name="AdditionalFees"/>
-        </jxb:bindings>
-	<jxb:bindings node="//xsd:element[@name='Floorplan']/xsd:complexType/xsd:sequence/xsd:element[@name='MarketRent']/xsd:complexType">
-            <jxb:class name="MarketRentRange"/>
-        </jxb:bindings>
-	<jxb:bindings node="//xsd:element[@name='Floorplan']/xsd:complexType/xsd:sequence/xsd:element[@name='EffectiveRent']/xsd:complexType">
-            <jxb:class name="EffectiveRentRange"/>
-        </jxb:bindings>
-    </jxb:bindings>
 </jxb:bindings>

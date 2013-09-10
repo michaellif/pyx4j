@@ -1,0 +1,676 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- edited with XMLSPY v2004 rel. 3 U (http://www.xmlspy.com) by Bruce Coltman (National Multi Housing Council) -->
+<xs:schema xmlns:MITS="http://my-company.com/namespace" xmlns:xs="http://www.w3.org/2001/XMLSchema" targetNamespace="http://my-company.com/namespace" elementFormDefault="qualified" attributeFormDefault="unqualified">
+	<xs:element name="CoreData">
+		<xs:annotation>
+			<xs:documentation>MITS Core Data 2.0 Final 10/25/06</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="PropertyID" type="MITS:PropertyIDType">
+					<xs:annotation>
+						<xs:documentation>MITS PropertyID Core Data Module version 2.0</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element name="PropertyContacts" type="MITS:PropertyContactsType">
+					<xs:annotation>
+						<xs:documentation>MITS PropertyContacts Core Data module version 2.0</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element name="Customers" type="MITS:CustomersType">
+					<xs:annotation>
+						<xs:documentation>MITS Customers Core Data module version 2.0</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element name="Unit" type="MITS:UnitType">
+					<xs:annotation>
+						<xs:documentation>MITS Unit Core Data Module Version 2.0</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:complexType name="AddressType">
+		<xs:sequence>
+			<xs:element name="Description" minOccurs="0">
+				<xs:simpleType>
+					<xs:restriction base="xs:string">
+						<xs:maxLength value="100"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+			<xs:element name="Address1" minOccurs="0">
+				<xs:simpleType>
+					<xs:restriction base="xs:string">
+						<xs:maxLength value="100"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+			<xs:element name="Address2" minOccurs="0" maxOccurs="10">
+				<xs:simpleType>
+					<xs:restriction base="xs:string">
+						<xs:maxLength value="100"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+			<xs:element name="City" minOccurs="0">
+				<xs:simpleType>
+					<xs:restriction base="xs:string">
+						<xs:maxLength value="60"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+			<xs:element name="State" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>3 char State Code</xs:documentation>
+				</xs:annotation>
+				<xs:simpleType>
+					<xs:restriction base="xs:string">
+						<xs:maxLength value="3"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+			<xs:element name="Province" minOccurs="0">
+				<xs:simpleType>
+					<xs:restriction base="xs:string">
+						<xs:maxLength value="60"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+			<xs:element name="PostalCode" minOccurs="0">
+				<xs:simpleType>
+					<xs:restriction base="xs:string">
+						<xs:maxLength value="12"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+			<xs:element name="Country" minOccurs="0">
+				<xs:simpleType>
+					<xs:restriction base="xs:string">
+						<xs:maxLength value="50"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+			<xs:element name="CountyName" minOccurs="0">
+				<xs:simpleType>
+					<xs:restriction base="xs:string">
+						<xs:maxLength value="60"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+			<xs:element name="UnparsedAddress" minOccurs="0">
+				<xs:simpleType>
+					<xs:restriction base="xs:string">
+						<xs:maxLength value="200"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+			<xs:element name="Email" minOccurs="0">
+				<xs:simpleType>
+					<xs:restriction base="xs:string">
+						<xs:maxLength value="80"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+		</xs:sequence>
+		<xs:attribute name="Type" type="MITS:addressinfo" use="required"/>
+	</xs:complexType>
+	<xs:complexType name="PhoneType">
+		<xs:sequence>
+			<xs:element name="PhoneDescription" minOccurs="0">
+				<xs:simpleType>
+					<xs:restriction base="xs:string">
+						<xs:maxLength value="50"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+			<xs:element name="PhoneNumber" minOccurs="0">
+				<xs:simpleType>
+					<xs:restriction base="xs:string">
+						<xs:maxLength value="20"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+			<xs:element name="Extension" minOccurs="0">
+				<xs:simpleType>
+					<xs:restriction base="xs:string">
+						<xs:maxLength value="20"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+		</xs:sequence>
+		<xs:attribute name="Type" type="MITS:phoneinfo" use="required"/>
+	</xs:complexType>
+	<xs:complexType name="PropertyIDType" mixed="0">
+		<xs:sequence>
+			<xs:element name="Identification" minOccurs="0">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="PrimaryID">
+							<xs:simpleType>
+								<xs:restriction base="xs:string">
+									<xs:maxLength value="50"/>
+									<xs:minLength value="0"/>
+								</xs:restriction>
+							</xs:simpleType>
+						</xs:element>
+						<xs:element name="SecondaryID" minOccurs="0">
+							<xs:simpleType>
+								<xs:restriction base="xs:string">
+									<xs:maxLength value="50"/>
+								</xs:restriction>
+							</xs:simpleType>
+						</xs:element>
+						<xs:element name="MarketingName">
+							<xs:simpleType>
+								<xs:restriction base="xs:string">
+									<xs:maxLength value="120"/>
+								</xs:restriction>
+							</xs:simpleType>
+						</xs:element>
+						<xs:element name="LegalName" minOccurs="0">
+							<xs:simpleType>
+								<xs:restriction base="xs:string">
+									<xs:maxLength value="120"/>
+								</xs:restriction>
+							</xs:simpleType>
+						</xs:element>
+						<xs:element name="APN" minOccurs="0">
+							<xs:simpleType>
+								<xs:restriction base="xs:string">
+									<xs:maxLength value="40"/>
+								</xs:restriction>
+							</xs:simpleType>
+						</xs:element>
+						<xs:element name="MSA_Number" type="xs:integer" minOccurs="0"/>
+						<xs:element name="MSA_Name" minOccurs="0">
+							<xs:simpleType>
+								<xs:restriction base="xs:string">
+									<xs:maxLength value="60"/>
+								</xs:restriction>
+							</xs:simpleType>
+						</xs:element>
+						<xs:element name="StructureDescription" minOccurs="0">
+							<xs:simpleType>
+								<xs:restriction base="xs:string">
+									<xs:maxLength value="100"/>
+								</xs:restriction>
+							</xs:simpleType>
+						</xs:element>
+						<xs:element name="WebSite" minOccurs="0">
+							<xs:simpleType>
+								<xs:restriction base="xs:string">
+									<xs:maxLength value="100"/>
+								</xs:restriction>
+							</xs:simpleType>
+						</xs:element>
+					</xs:sequence>
+					<xs:attribute name="Type" type="MITS:propertyidinfo" use="required"/>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="Address" type="MITS:AddressType" minOccurs="0" maxOccurs="10"/>
+			<xs:element name="Phone" type="MITS:PhoneType" minOccurs="0" maxOccurs="10"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="PropertyContactsType">
+		<xs:sequence>
+			<xs:element name="CompanyInfo" minOccurs="0" maxOccurs="10">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="CompanyID">
+							<xs:simpleType>
+								<xs:restriction base="xs:string">
+									<xs:maxLength value="50"/>
+								</xs:restriction>
+							</xs:simpleType>
+						</xs:element>
+						<xs:element name="ContactDescription" minOccurs="0">
+							<xs:simpleType>
+								<xs:restriction base="xs:string">
+									<xs:maxLength value="50"/>
+								</xs:restriction>
+							</xs:simpleType>
+						</xs:element>
+						<xs:element name="ContactName" minOccurs="0">
+							<xs:simpleType>
+								<xs:restriction base="xs:string">
+									<xs:maxLength value="50"/>
+								</xs:restriction>
+							</xs:simpleType>
+						</xs:element>
+						<xs:element name="Address" type="MITS:AddressType" minOccurs="0" maxOccurs="10"/>
+						<xs:element name="WebSite" minOccurs="0">
+							<xs:simpleType>
+								<xs:restriction base="xs:string">
+									<xs:maxLength value="100"/>
+								</xs:restriction>
+							</xs:simpleType>
+						</xs:element>
+						<xs:element name="Logo" minOccurs="0">
+							<xs:simpleType>
+								<xs:restriction base="xs:string">
+									<xs:maxLength value="100"/>
+								</xs:restriction>
+							</xs:simpleType>
+						</xs:element>
+						<xs:element name="Phone" type="MITS:PhoneType" minOccurs="0" maxOccurs="10"/>
+					</xs:sequence>
+					<xs:attribute name="Type" type="MITS:propertycontactsinfo" use="required"/>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="IndividualInfo" minOccurs="0" maxOccurs="10">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="CompanyID" minOccurs="0">
+							<xs:simpleType>
+								<xs:restriction base="xs:string">
+									<xs:maxLength value="50"/>
+								</xs:restriction>
+							</xs:simpleType>
+						</xs:element>
+						<xs:element name="ContactDescription" minOccurs="0">
+							<xs:simpleType>
+								<xs:restriction base="xs:string">
+									<xs:maxLength value="50"/>
+								</xs:restriction>
+							</xs:simpleType>
+						</xs:element>
+						<xs:element name="FirstName" minOccurs="0">
+							<xs:simpleType>
+								<xs:restriction base="xs:string">
+									<xs:maxLength value="50"/>
+								</xs:restriction>
+							</xs:simpleType>
+						</xs:element>
+						<xs:element name="LastName" minOccurs="0">
+							<xs:simpleType>
+								<xs:restriction base="xs:string">
+									<xs:maxLength value="50"/>
+								</xs:restriction>
+							</xs:simpleType>
+						</xs:element>
+						<xs:element name="Address" type="MITS:AddressType" minOccurs="0" maxOccurs="10"/>
+						<xs:element name="Phone" type="MITS:PhoneType" minOccurs="0" maxOccurs="10"/>
+					</xs:sequence>
+					<xs:attribute name="Type" type="MITS:propertycontactsinfo" use="required"/>
+				</xs:complexType>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="UnitType">
+		<xs:sequence>
+			<xs:element name="Information" maxOccurs="unbounded">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="UnitID">
+							<xs:simpleType>
+								<xs:restriction base="xs:string">
+									<xs:minLength value="0"/>
+									<xs:maxLength value="50"/>
+								</xs:restriction>
+							</xs:simpleType>
+						</xs:element>
+						<xs:element name="UnitType" minOccurs="0">
+							<xs:simpleType>
+								<xs:restriction base="xs:string">
+									<xs:minLength value="0"/>
+									<xs:maxLength value="50"/>
+								</xs:restriction>
+							</xs:simpleType>
+						</xs:element>
+						<xs:element name="UnitBedrooms" minOccurs="0">
+							<xs:simpleType>
+								<xs:restriction base="xs:decimal">
+									<xs:fractionDigits value="2"/>
+									<xs:totalDigits value="4"/>
+								</xs:restriction>
+							</xs:simpleType>
+						</xs:element>
+						<xs:element name="UnitBathrooms" minOccurs="0">
+							<xs:simpleType>
+								<xs:restriction base="xs:decimal">
+									<xs:totalDigits value="4"/>
+									<xs:fractionDigits value="2"/>
+								</xs:restriction>
+							</xs:simpleType>
+						</xs:element>
+						<xs:element name="MinSquareFeet" minOccurs="0">
+							<xs:simpleType>
+								<xs:restriction base="xs:integer">
+									<xs:totalDigits value="5"/>
+								</xs:restriction>
+							</xs:simpleType>
+						</xs:element>
+						<xs:element name="MaxSquareFeet" minOccurs="0">
+							<xs:simpleType>
+								<xs:restriction base="xs:integer">
+									<xs:totalDigits value="5"/>
+								</xs:restriction>
+							</xs:simpleType>
+						</xs:element>
+						<xs:element name="SquareFootType" type="MITS:unitsqftinfo" minOccurs="0"/>
+						<xs:element name="UnitRent" minOccurs="0">
+							<xs:simpleType>
+								<xs:restriction base="xs:decimal">
+									<xs:totalDigits value="7"/>
+									<xs:fractionDigits value="2"/>
+								</xs:restriction>
+							</xs:simpleType>
+						</xs:element>
+						<xs:element name="MarketRent" minOccurs="0">
+							<xs:simpleType>
+								<xs:restriction base="xs:decimal">
+									<xs:totalDigits value="7"/>
+									<xs:fractionDigits value="2"/>
+								</xs:restriction>
+							</xs:simpleType>
+						</xs:element>
+						<xs:element name="UnitEcomomicStatus" type="MITS:uniteconstatusinfo" minOccurs="0"/>
+						<xs:element name="UnitEconomicStatusDescription" minOccurs="0">
+							<xs:simpleType>
+								<xs:restriction base="xs:string">
+									<xs:maxLength value="100"/>
+								</xs:restriction>
+							</xs:simpleType>
+						</xs:element>
+						<xs:element name="UnitOccupancyStatus" type="MITS:unitoccpstatusinfo" minOccurs="0"/>
+						<xs:element name="UnitLeasedStatus" type="MITS:unitleasestatusinfo" minOccurs="0"/>
+						<xs:element name="UnitLeasedStatusDescription" minOccurs="0">
+							<xs:simpleType>
+								<xs:restriction base="xs:string">
+									<xs:maxLength value="100"/>
+								</xs:restriction>
+							</xs:simpleType>
+						</xs:element>
+						<xs:element name="FloorPlanID" minOccurs="0">
+							<xs:simpleType>
+								<xs:restriction base="xs:string">
+									<xs:maxLength value="50"/>
+								</xs:restriction>
+							</xs:simpleType>
+						</xs:element>
+						<xs:element name="FloorplanName" minOccurs="0">
+							<xs:simpleType>
+								<xs:restriction base="xs:string">
+									<xs:maxLength value="50"/>
+								</xs:restriction>
+							</xs:simpleType>
+						</xs:element>
+						<xs:element name="PhaseID" minOccurs="0">
+							<xs:simpleType>
+								<xs:restriction base="xs:string">
+									<xs:maxLength value="50"/>
+								</xs:restriction>
+							</xs:simpleType>
+						</xs:element>
+						<xs:element name="PhaseName" minOccurs="0">
+							<xs:simpleType>
+								<xs:restriction base="xs:string">
+									<xs:maxLength value="50"/>
+								</xs:restriction>
+							</xs:simpleType>
+						</xs:element>
+						<xs:element name="BuildingID" minOccurs="0">
+							<xs:simpleType>
+								<xs:restriction base="xs:string">
+									<xs:maxLength value="50"/>
+								</xs:restriction>
+							</xs:simpleType>
+						</xs:element>
+						<xs:element name="BuildingName" minOccurs="0">
+							<xs:simpleType>
+								<xs:restriction base="xs:string">
+									<xs:maxLength value="50"/>
+								</xs:restriction>
+							</xs:simpleType>
+						</xs:element>
+						<xs:element name="Address" type="MITS:AddressType" minOccurs="0" maxOccurs="10"/>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="PropertyPrimaryID">
+				<xs:simpleType>
+					<xs:restriction base="xs:string">
+						<xs:maxLength value="50"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+			<xs:element name="MarketingName">
+				<xs:simpleType>
+					<xs:restriction base="xs:string">
+						<xs:maxLength value="120"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="CustomersType">
+		<xs:sequence>
+			<xs:element name="Customer" maxOccurs="unbounded">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="Description" minOccurs="0">
+							<xs:simpleType>
+								<xs:restriction base="xs:string">
+									<xs:maxLength value="100"/>
+								</xs:restriction>
+							</xs:simpleType>
+						</xs:element>
+						<xs:element name="CustomerID">
+							<xs:simpleType>
+								<xs:restriction base="xs:string">
+									<xs:maxLength value="50"/>
+								</xs:restriction>
+							</xs:simpleType>
+						</xs:element>
+						<xs:element name="Property" minOccurs="0">
+							<xs:complexType>
+								<xs:sequence>
+									<xs:element name="PrimaryID">
+										<xs:simpleType>
+											<xs:restriction base="xs:string">
+												<xs:maxLength value="50"/>
+											</xs:restriction>
+										</xs:simpleType>
+									</xs:element>
+									<xs:element name="MarketingName">
+										<xs:simpleType>
+											<xs:restriction base="xs:string">
+												<xs:maxLength value="120"/>
+											</xs:restriction>
+										</xs:simpleType>
+									</xs:element>
+									<xs:element name="UnitID" minOccurs="0">
+										<xs:simpleType>
+											<xs:restriction base="xs:string">
+												<xs:maxLength value="50"/>
+											</xs:restriction>
+										</xs:simpleType>
+									</xs:element>
+									<xs:element name="BuildingID" minOccurs="0">
+										<xs:simpleType>
+											<xs:restriction base="xs:string">
+												<xs:maxLength value="50"/>
+											</xs:restriction>
+										</xs:simpleType>
+									</xs:element>
+								</xs:sequence>
+							</xs:complexType>
+						</xs:element>
+						<xs:element name="Name">
+							<xs:complexType>
+								<xs:sequence>
+									<xs:element name="NamePrefix" minOccurs="0">
+										<xs:simpleType>
+											<xs:restriction base="xs:string">
+												<xs:maxLength value="50"/>
+											</xs:restriction>
+										</xs:simpleType>
+									</xs:element>
+									<xs:element name="FirstName">
+										<xs:simpleType>
+											<xs:restriction base="xs:string">
+												<xs:maxLength value="50"/>
+											</xs:restriction>
+										</xs:simpleType>
+									</xs:element>
+									<xs:element name="MiddleName" minOccurs="0">
+										<xs:simpleType>
+											<xs:restriction base="xs:string">
+												<xs:maxLength value="50"/>
+											</xs:restriction>
+										</xs:simpleType>
+									</xs:element>
+									<xs:element name="LastName">
+										<xs:simpleType>
+											<xs:restriction base="xs:string">
+												<xs:maxLength value="50"/>
+											</xs:restriction>
+										</xs:simpleType>
+									</xs:element>
+									<xs:element name="MaidenName" minOccurs="0">
+										<xs:simpleType>
+											<xs:restriction base="xs:string">
+												<xs:maxLength value="50"/>
+											</xs:restriction>
+										</xs:simpleType>
+									</xs:element>
+									<xs:element name="NameSuffix" minOccurs="0">
+										<xs:simpleType>
+											<xs:restriction base="xs:string">
+												<xs:maxLength value="50"/>
+											</xs:restriction>
+										</xs:simpleType>
+									</xs:element>
+								</xs:sequence>
+							</xs:complexType>
+						</xs:element>
+						<xs:element name="Address" type="MITS:AddressType" minOccurs="0" maxOccurs="10"/>
+						<xs:element name="Phone" type="MITS:PhoneType" minOccurs="0" maxOccurs="10"/>
+						<xs:element name="Lease" minOccurs="0">
+							<xs:complexType>
+								<xs:sequence>
+									<xs:element name="CurrentRent" type="xs:decimal" minOccurs="0"/>
+									<xs:element name="ExpectedMoveInDate" type="xs:date" minOccurs="0"/>
+									<xs:element name="ExpectedMoveOutDate" type="xs:date" minOccurs="0"/>
+									<xs:element name="LeaseFromDate" type="xs:date" minOccurs="0"/>
+									<xs:element name="LeaseToDate" type="xs:date" minOccurs="0"/>
+									<xs:element name="ActualMoveIn" type="xs:date" minOccurs="0"/>
+									<xs:element name="ActualMoveOut" type="xs:date" minOccurs="0"/>
+									<xs:element name="ResponsibleForLease" type="xs:boolean" minOccurs="0"/>
+									<xs:element name="LeaseSignDate" type="xs:date" minOccurs="0"/>
+								</xs:sequence>
+							</xs:complexType>
+						</xs:element>
+					</xs:sequence>
+					<xs:attribute name="Type" type="MITS:customerinfo" use="required"/>
+				</xs:complexType>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:simpleType name="addressinfo">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="property"/>
+			<xs:enumeration value="mailing"/>
+			<xs:enumeration value="shipping"/>
+			<xs:enumeration value="billing"/>
+			<xs:enumeration value="current"/>
+			<xs:enumeration value="previous"/>
+			<xs:enumeration value="forwarding"/>
+			<xs:enumeration value="legal notice"/>
+			<xs:enumeration value="termination notice"/>
+			<xs:enumeration value="other"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="phoneinfo">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="office"/>
+			<xs:enumeration value="cell"/>
+			<xs:enumeration value="fax"/>
+			<xs:enumeration value="personal"/>
+			<xs:enumeration value="home"/>
+			<xs:enumeration value="other"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="customerinfo">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="guest"/>
+			<xs:enumeration value="applicant"/>
+			<xs:enumeration value="customer"/>
+			<xs:enumeration value="current resident"/>
+			<xs:enumeration value="former resident"/>
+			<xs:enumeration value="future resident"/>
+			<xs:enumeration value="prospect"/>
+			<xs:enumeration value="other"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="propertyidinfo">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="market rate apt"/>
+			<xs:enumeration value="condominium"/>
+			<xs:enumeration value="cooperative"/>
+			<xs:enumeration value="senior"/>
+			<xs:enumeration value="assisted living"/>
+			<xs:enumeration value="subsidized"/>
+			<xs:enumeration value="military"/>
+			<xs:enumeration value="nursing"/>
+			<xs:enumeration value="home"/>
+			<xs:enumeration value="student"/>
+			<xs:enumeration value="other"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="propertycontactsinfo">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="manager"/>
+			<xs:enumeration value="owner"/>
+			<xs:enumeration value="vendor"/>
+			<xs:enumeration value="accountant"/>
+			<xs:enumeration value="tax accountant"/>
+			<xs:enumeration value="lawyer"/>
+			<xs:enumeration value="asset manager"/>
+			<xs:enumeration value="lender"/>
+			<xs:enumeration value="investor"/>
+			<xs:enumeration value="employer"/>
+			<xs:enumeration value="previous employer"/>
+			<xs:enumeration value="bank"/>
+			<xs:enumeration value="other"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="unitsqftinfo">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="internal"/>
+			<xs:enumeration value="external"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="uniteconstatusinfo">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="residential"/>
+			<xs:enumeration value="commercial"/>
+			<xs:enumeration value="down"/>
+			<xs:enumeration value="model"/>
+			<xs:enumeration value="employee"/>
+			<xs:enumeration value="construction"/>
+			<xs:enumeration value="office"/>
+			<xs:enumeration value="other"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="unitoccpstatusinfo">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="occupied"/>
+			<xs:enumeration value="vacant"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="unitleasestatusinfo">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="leased"/>
+			<xs:enumeration value="available"/>
+			<xs:enumeration value="approved"/>
+			<xs:enumeration value="reserved"/>
+			<xs:enumeration value="not ready"/>
+			<xs:enumeration value="on notice"/>
+			<xs:enumeration value="leased on notice"/>
+			<xs:enumeration value="leased reserved"/>
+			<xs:enumeration value="other"/>
+		</xs:restriction>
+	</xs:simpleType>
+</xs:schema>

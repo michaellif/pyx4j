@@ -1,0 +1,587 @@
+<PhysicalProperty xmlns:MITS="http://my-company.com/namespace"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:noNamespaceSchemaLocation="">
+	<Property>
+		<PropertyID>
+			<MITS:Identification Type="other">
+				<MITS:PrimaryID>prvista1</MITS:PrimaryID>
+				<MITS:MarketingName>Property Vista 1 Test Property
+				</MITS:MarketingName>
+			</MITS:Identification>
+			<MITS:Address Type="property">
+				<MITS:Address1>Property Vista 1 Test Property</MITS:Address1>
+				<MITS:Address2>430 S Fairview Avenue</MITS:Address2>
+				<MITS:City>Milton</MITS:City>
+				<MITS:State>OH</MITS:State>
+				<MITS:PostalCode>M3B1J3</MITS:PostalCode>
+			</MITS:Address>
+		</PropertyID>
+		<ILS_Identification Type="Unspecified" RentalType="Unspecified" />
+		<Information>
+			<StructureType>Unspecified</StructureType>
+			<UnitCount>14</UnitCount>
+		</Information>
+		<Floorplan Id="prv11b1">
+			<Name>1 Bedroom 1 Bath</Name>
+			<UnitCount>14</UnitCount>
+			<Room Type="Bedroom">
+				<Count>1.00</Count>
+				<Comment />
+			</Room>
+			<Room Type="Bathroom">
+				<Count>1.00</Count>
+				<Comment />
+			</Room>
+			<SquareFeet Min="900" Max="900" />
+			<MarketRent Min="850" Max="850" />
+			<EffectiveRent Min="850" Max="850" />
+			<Deposit type="deposit">
+				<Amount Type="Actual">
+					<Value>500.00</Value>
+				</Amount>
+			</Deposit>
+			<Fee>
+				<ProrateType>Standard</ProrateType>
+				<LateType>flat amount</LateType>
+				<LatePercent>0</LatePercent>
+				<LateMinFee>100.00</LateMinFee>
+				<LateFeePerDay>1.00</LateFeePerDay>
+				<NonRefundableHoldFee>0</NonRefundableHoldFee>
+				<AdminFee>0</AdminFee>
+				<ApplicationFee>0</ApplicationFee>
+			</Fee>
+		</Floorplan>
+		<ILS_Unit Id="141" FloorplanID="">
+			<Unit>
+				<MITS:Information>
+					<MITS:UnitID>141</MITS:UnitID>
+					<MITS:UnitType>prv11b1</MITS:UnitType>
+					<MITS:UnitBedrooms>1.00</MITS:UnitBedrooms>
+					<MITS:UnitBathrooms>1.00</MITS:UnitBathrooms>
+					<MITS:MinSquareFeet>900</MITS:MinSquareFeet>
+					<MITS:MaxSquareFeet>900</MITS:MaxSquareFeet>
+					<MITS:MarketRent>850.00</MITS:MarketRent>
+					<MITS:UnitEconomicStatus>residential</MITS:UnitEconomicStatus>
+					<MITS:UnitOccupancyStatus>occupied</MITS:UnitOccupancyStatus>
+					<MITS:UnitLeasedStatus>leased</MITS:UnitLeasedStatus>
+					<MITS:FloorPlanID />
+					<MITS:FloorplanName>1 Bedroom 1 Bath</MITS:FloorplanName>
+				</MITS:Information>
+				<MITS:PropertyPrimaryID>prvista1</MITS:PropertyPrimaryID>
+				<MITS:MarketingName>Property Vista 1 Test Property
+				</MITS:MarketingName>
+			</Unit>
+			<Comment>RentReady=false</Comment>
+			<EffectiveRent Min="850" Max="850" />
+			<Deposit type="deposit">
+				<Amount Type="Actual">
+					<Value>0</Value>
+				</Amount>
+				<Description>Deposit</Description>
+				<PercentRefundable>100</PercentRefundable>
+				<PortionRefundable>100</PortionRefundable>
+			</Deposit>
+			<Fee>
+				<ProrateType>Standard</ProrateType>
+				<LateType>flat amount</LateType>
+				<LatePercent>0</LatePercent>
+				<LateMinFee>100.00</LateMinFee>
+				<LateFeePerDay>1.00</LateFeePerDay>
+				<NonRefundableHoldFee>0</NonRefundableHoldFee>
+			</Fee>
+		</ILS_Unit>
+		<ILS_Unit Id="142" FloorplanID="">
+			<Unit>
+				<MITS:Information>
+					<MITS:UnitID>142</MITS:UnitID>
+					<MITS:UnitType>prv11b1</MITS:UnitType>
+					<MITS:UnitBedrooms>1.00</MITS:UnitBedrooms>
+					<MITS:UnitBathrooms>1.00</MITS:UnitBathrooms>
+					<MITS:MinSquareFeet>900</MITS:MinSquareFeet>
+					<MITS:MaxSquareFeet>900</MITS:MaxSquareFeet>
+					<MITS:MarketRent>850.00</MITS:MarketRent>
+					<MITS:UnitEconomicStatus>residential</MITS:UnitEconomicStatus>
+					<MITS:UnitOccupancyStatus>occupied</MITS:UnitOccupancyStatus>
+					<MITS:UnitLeasedStatus>leased</MITS:UnitLeasedStatus>
+					<MITS:FloorPlanID />
+					<MITS:FloorplanName>1 Bedroom 1 Bath</MITS:FloorplanName>
+				</MITS:Information>
+				<MITS:PropertyPrimaryID>prvista1</MITS:PropertyPrimaryID>
+				<MITS:MarketingName>Property Vista 1 Test Property
+				</MITS:MarketingName>
+			</Unit>
+			<Comment>RentReady=false</Comment>
+			<EffectiveRent Min="850" Max="850" />
+			<Deposit type="deposit">
+				<Amount Type="Actual">
+					<Value>0</Value>
+				</Amount>
+				<Description>Deposit</Description>
+				<PercentRefundable>100</PercentRefundable>
+				<PortionRefundable>100</PortionRefundable>
+			</Deposit>
+			<Fee>
+				<ProrateType>Standard</ProrateType>
+				<LateType>flat amount</LateType>
+				<LatePercent>0</LatePercent>
+				<LateMinFee>100.00</LateMinFee>
+				<LateFeePerDay>1.00</LateFeePerDay>
+				<NonRefundableHoldFee>0</NonRefundableHoldFee>
+			</Fee>
+		</ILS_Unit>
+		<ILS_Unit Id="143" FloorplanID="">
+			<Unit>
+				<MITS:Information>
+					<MITS:UnitID>143</MITS:UnitID>
+					<MITS:UnitType>prv11b1</MITS:UnitType>
+					<MITS:UnitBedrooms>1.00</MITS:UnitBedrooms>
+					<MITS:UnitBathrooms>1.00</MITS:UnitBathrooms>
+					<MITS:MinSquareFeet>900</MITS:MinSquareFeet>
+					<MITS:MaxSquareFeet>900</MITS:MaxSquareFeet>
+					<MITS:MarketRent>850.00</MITS:MarketRent>
+					<MITS:UnitEconomicStatus>residential</MITS:UnitEconomicStatus>
+					<MITS:UnitOccupancyStatus>vacant</MITS:UnitOccupancyStatus>
+					<MITS:UnitLeasedStatus>available</MITS:UnitLeasedStatus>
+					<MITS:FloorPlanID />
+					<MITS:FloorplanName>1 Bedroom 1 Bath</MITS:FloorplanName>
+				</MITS:Information>
+				<MITS:PropertyPrimaryID>prvista1</MITS:PropertyPrimaryID>
+				<MITS:MarketingName>Property Vista 1 Test Property
+				</MITS:MarketingName>
+			</Unit>
+			<Comment>RentReady=false</Comment>
+			<EffectiveRent Min="850" Max="850" />
+			<Deposit type="deposit">
+				<Amount Type="Actual">
+					<Value>0</Value>
+				</Amount>
+				<Description>Deposit</Description>
+				<PercentRefundable>100</PercentRefundable>
+				<PortionRefundable>100</PortionRefundable>
+			</Deposit>
+			<Availability>
+				<VacateDate Month="3" Day="21" Year="2011" />
+				<VacancyClass>Unoccupied</VacancyClass>
+				<MadeReadyDate Month="3" Day="21" Year="2011" />
+			</Availability>
+			<Fee>
+				<ProrateType>Standard</ProrateType>
+				<LateType>flat amount</LateType>
+				<LatePercent>0</LatePercent>
+				<LateMinFee>100.00</LateMinFee>
+				<LateFeePerDay>1.00</LateFeePerDay>
+				<NonRefundableHoldFee>0</NonRefundableHoldFee>
+			</Fee>
+		</ILS_Unit>
+		<ILS_Unit Id="144" FloorplanID="">
+			<Unit>
+				<MITS:Information>
+					<MITS:UnitID>144</MITS:UnitID>
+					<MITS:UnitType>prv11b1</MITS:UnitType>
+					<MITS:UnitBedrooms>1.00</MITS:UnitBedrooms>
+					<MITS:UnitBathrooms>1.00</MITS:UnitBathrooms>
+					<MITS:MinSquareFeet>900</MITS:MinSquareFeet>
+					<MITS:MaxSquareFeet>900</MITS:MaxSquareFeet>
+					<MITS:MarketRent>850.00</MITS:MarketRent>
+					<MITS:UnitEconomicStatus>residential</MITS:UnitEconomicStatus>
+					<MITS:UnitOccupancyStatus>occupied</MITS:UnitOccupancyStatus>
+					<MITS:UnitLeasedStatus>on notice</MITS:UnitLeasedStatus>
+					<MITS:FloorPlanID />
+					<MITS:FloorplanName>1 Bedroom 1 Bath</MITS:FloorplanName>
+				</MITS:Information>
+				<MITS:PropertyPrimaryID>prvista1</MITS:PropertyPrimaryID>
+				<MITS:MarketingName>Property Vista 1 Test Property
+				</MITS:MarketingName>
+			</Unit>
+			<Comment>RentReady=false</Comment>
+			<EffectiveRent Min="850" Max="850" />
+			<Deposit type="deposit">
+				<Amount Type="Actual">
+					<Value>0</Value>
+				</Amount>
+				<Description>Deposit</Description>
+				<PercentRefundable>100</PercentRefundable>
+				<PortionRefundable>100</PortionRefundable>
+			</Deposit>
+			<Availability>
+				<VacateDate Month="3" Day="31" Year="2011" />
+				<VacancyClass>Occupied</VacancyClass>
+				<MadeReadyDate Month="4" Day="1" Year="2011" />
+			</Availability>
+			<Fee>
+				<ProrateType>Standard</ProrateType>
+				<LateType>flat amount</LateType>
+				<LatePercent>0</LatePercent>
+				<LateMinFee>100.00</LateMinFee>
+				<LateFeePerDay>1.00</LateFeePerDay>
+				<NonRefundableHoldFee>0</NonRefundableHoldFee>
+			</Fee>
+		</ILS_Unit>
+		<ILS_Unit Id="145" FloorplanID="">
+			<Unit>
+				<MITS:Information>
+					<MITS:UnitID>145</MITS:UnitID>
+					<MITS:UnitType>prv11b1</MITS:UnitType>
+					<MITS:UnitBedrooms>1.00</MITS:UnitBedrooms>
+					<MITS:UnitBathrooms>1.00</MITS:UnitBathrooms>
+					<MITS:MinSquareFeet>900</MITS:MinSquareFeet>
+					<MITS:MaxSquareFeet>900</MITS:MaxSquareFeet>
+					<MITS:MarketRent>850.00</MITS:MarketRent>
+					<MITS:UnitEconomicStatus>residential</MITS:UnitEconomicStatus>
+					<MITS:UnitOccupancyStatus>occupied</MITS:UnitOccupancyStatus>
+					<MITS:UnitLeasedStatus>leased</MITS:UnitLeasedStatus>
+					<MITS:FloorPlanID />
+					<MITS:FloorplanName>1 Bedroom 1 Bath</MITS:FloorplanName>
+				</MITS:Information>
+				<MITS:PropertyPrimaryID>prvista1</MITS:PropertyPrimaryID>
+				<MITS:MarketingName>Property Vista 1 Test Property
+				</MITS:MarketingName>
+			</Unit>
+			<Comment>RentReady=false</Comment>
+			<EffectiveRent Min="850" Max="850" />
+			<Deposit type="deposit">
+				<Amount Type="Actual">
+					<Value>0</Value>
+				</Amount>
+				<Description>Deposit</Description>
+				<PercentRefundable>100</PercentRefundable>
+				<PortionRefundable>100</PortionRefundable>
+			</Deposit>
+			<Fee>
+				<ProrateType>Standard</ProrateType>
+				<LateType>flat amount</LateType>
+				<LatePercent>0</LatePercent>
+				<LateMinFee>100.00</LateMinFee>
+				<LateFeePerDay>1.00</LateFeePerDay>
+				<NonRefundableHoldFee>0</NonRefundableHoldFee>
+			</Fee>
+		</ILS_Unit>
+		<ILS_Unit Id="146" FloorplanID="">
+			<Unit>
+				<MITS:Information>
+					<MITS:UnitID>146</MITS:UnitID>
+					<MITS:UnitType>prv11b1</MITS:UnitType>
+					<MITS:UnitBedrooms>1.00</MITS:UnitBedrooms>
+					<MITS:UnitBathrooms>1.00</MITS:UnitBathrooms>
+					<MITS:MinSquareFeet>900</MITS:MinSquareFeet>
+					<MITS:MaxSquareFeet>900</MITS:MaxSquareFeet>
+					<MITS:MarketRent>850.00</MITS:MarketRent>
+					<MITS:UnitEconomicStatus>residential</MITS:UnitEconomicStatus>
+					<MITS:UnitOccupancyStatus>vacant</MITS:UnitOccupancyStatus>
+					<MITS:UnitLeasedStatus>available</MITS:UnitLeasedStatus>
+					<MITS:FloorPlanID />
+					<MITS:FloorplanName>1 Bedroom 1 Bath</MITS:FloorplanName>
+				</MITS:Information>
+				<MITS:PropertyPrimaryID>prvista1</MITS:PropertyPrimaryID>
+				<MITS:MarketingName>Property Vista 1 Test Property
+				</MITS:MarketingName>
+			</Unit>
+			<Comment>RentReady=false</Comment>
+			<EffectiveRent Min="850" Max="850" />
+			<Deposit type="deposit">
+				<Amount Type="Actual">
+					<Value>0</Value>
+				</Amount>
+				<Description>Deposit</Description>
+				<PercentRefundable>100</PercentRefundable>
+				<PortionRefundable>100</PortionRefundable>
+			</Deposit>
+			<Availability>
+				<VacateDate Month="3" Day="21" Year="2011" />
+				<VacancyClass>Unoccupied</VacancyClass>
+				<MadeReadyDate Month="3" Day="21" Year="2011" />
+			</Availability>
+			<Fee>
+				<ProrateType>Standard</ProrateType>
+				<LateType>flat amount</LateType>
+				<LatePercent>0</LatePercent>
+				<LateMinFee>100.00</LateMinFee>
+				<LateFeePerDay>1.00</LateFeePerDay>
+				<NonRefundableHoldFee>0</NonRefundableHoldFee>
+			</Fee>
+		</ILS_Unit>
+		<ILS_Unit Id="147" FloorplanID="">
+			<Unit>
+				<MITS:Information>
+					<MITS:UnitID>147</MITS:UnitID>
+					<MITS:UnitType>prv11b1</MITS:UnitType>
+					<MITS:UnitBedrooms>1.00</MITS:UnitBedrooms>
+					<MITS:UnitBathrooms>1.00</MITS:UnitBathrooms>
+					<MITS:MinSquareFeet>900</MITS:MinSquareFeet>
+					<MITS:MaxSquareFeet>900</MITS:MaxSquareFeet>
+					<MITS:MarketRent>850.00</MITS:MarketRent>
+					<MITS:UnitEconomicStatus>residential</MITS:UnitEconomicStatus>
+					<MITS:UnitOccupancyStatus>occupied</MITS:UnitOccupancyStatus>
+					<MITS:UnitLeasedStatus>leased</MITS:UnitLeasedStatus>
+					<MITS:FloorPlanID />
+					<MITS:FloorplanName>1 Bedroom 1 Bath</MITS:FloorplanName>
+				</MITS:Information>
+				<MITS:PropertyPrimaryID>prvista1</MITS:PropertyPrimaryID>
+				<MITS:MarketingName>Property Vista 1 Test Property
+				</MITS:MarketingName>
+			</Unit>
+			<Comment>RentReady=false</Comment>
+			<EffectiveRent Min="850" Max="850" />
+			<Deposit type="deposit">
+				<Amount Type="Actual">
+					<Value>0</Value>
+				</Amount>
+				<Description>Deposit</Description>
+				<PercentRefundable>100</PercentRefundable>
+				<PortionRefundable>100</PortionRefundable>
+			</Deposit>
+			<Fee>
+				<ProrateType>Standard</ProrateType>
+				<LateType>flat amount</LateType>
+				<LatePercent>0</LatePercent>
+				<LateMinFee>100.00</LateMinFee>
+				<LateFeePerDay>1.00</LateFeePerDay>
+				<NonRefundableHoldFee>0</NonRefundableHoldFee>
+			</Fee>
+		</ILS_Unit>
+		<ILS_Unit Id="148" FloorplanID="">
+			<Unit>
+				<MITS:Information>
+					<MITS:UnitID>148</MITS:UnitID>
+					<MITS:UnitType>prv11b1</MITS:UnitType>
+					<MITS:UnitBedrooms>1.00</MITS:UnitBedrooms>
+					<MITS:UnitBathrooms>1.00</MITS:UnitBathrooms>
+					<MITS:MinSquareFeet>900</MITS:MinSquareFeet>
+					<MITS:MaxSquareFeet>900</MITS:MaxSquareFeet>
+					<MITS:MarketRent>850.00</MITS:MarketRent>
+					<MITS:UnitEconomicStatus>residential</MITS:UnitEconomicStatus>
+					<MITS:UnitOccupancyStatus>occupied</MITS:UnitOccupancyStatus>
+					<MITS:UnitLeasedStatus>leased</MITS:UnitLeasedStatus>
+					<MITS:FloorPlanID />
+					<MITS:FloorplanName>1 Bedroom 1 Bath</MITS:FloorplanName>
+				</MITS:Information>
+				<MITS:PropertyPrimaryID>prvista1</MITS:PropertyPrimaryID>
+				<MITS:MarketingName>Property Vista 1 Test Property
+				</MITS:MarketingName>
+			</Unit>
+			<Comment>RentReady=true</Comment>
+			<EffectiveRent Min="850" Max="850" />
+			<Deposit type="deposit">
+				<Amount Type="Actual">
+					<Value>0</Value>
+				</Amount>
+				<Description>Deposit</Description>
+				<PercentRefundable>100</PercentRefundable>
+				<PortionRefundable>100</PortionRefundable>
+			</Deposit>
+			<Fee>
+				<ProrateType>Standard</ProrateType>
+				<LateType>flat amount</LateType>
+				<LatePercent>0</LatePercent>
+				<LateMinFee>100.00</LateMinFee>
+				<LateFeePerDay>1.00</LateFeePerDay>
+				<NonRefundableHoldFee>0</NonRefundableHoldFee>
+			</Fee>
+		</ILS_Unit>
+		<ILS_Unit Id="149" FloorplanID="">
+			<Unit>
+				<MITS:Information>
+					<MITS:UnitID>149</MITS:UnitID>
+					<MITS:UnitType>prv11b1</MITS:UnitType>
+					<MITS:UnitBedrooms>1.00</MITS:UnitBedrooms>
+					<MITS:UnitBathrooms>1.00</MITS:UnitBathrooms>
+					<MITS:MinSquareFeet>900</MITS:MinSquareFeet>
+					<MITS:MaxSquareFeet>900</MITS:MaxSquareFeet>
+					<MITS:MarketRent>850.00</MITS:MarketRent>
+					<MITS:UnitEconomicStatus>residential</MITS:UnitEconomicStatus>
+					<MITS:UnitOccupancyStatus>vacant</MITS:UnitOccupancyStatus>
+					<MITS:UnitLeasedStatus>leased reserved</MITS:UnitLeasedStatus>
+					<MITS:FloorPlanID />
+					<MITS:FloorplanName>1 Bedroom 1 Bath</MITS:FloorplanName>
+				</MITS:Information>
+				<MITS:PropertyPrimaryID>prvista1</MITS:PropertyPrimaryID>
+				<MITS:MarketingName>Property Vista 1 Test Property
+				</MITS:MarketingName>
+			</Unit>
+			<Comment>RentReady=true</Comment>
+			<EffectiveRent Min="850" Max="850" />
+			<Deposit type="deposit">
+				<Amount Type="Actual">
+					<Value>0</Value>
+				</Amount>
+				<Description>Deposit</Description>
+				<PercentRefundable>100</PercentRefundable>
+				<PortionRefundable>100</PortionRefundable>
+			</Deposit>
+			<Fee>
+				<ProrateType>Standard</ProrateType>
+				<LateType>flat amount</LateType>
+				<LatePercent>0</LatePercent>
+				<LateMinFee>100.00</LateMinFee>
+				<LateFeePerDay>1.00</LateFeePerDay>
+				<NonRefundableHoldFee>0</NonRefundableHoldFee>
+			</Fee>
+		</ILS_Unit>
+		<ILS_Unit Id="150" FloorplanID="">
+			<Unit>
+				<MITS:Information>
+					<MITS:UnitID>150</MITS:UnitID>
+					<MITS:UnitType>prv11b1</MITS:UnitType>
+					<MITS:UnitBedrooms>1.00</MITS:UnitBedrooms>
+					<MITS:UnitBathrooms>1.00</MITS:UnitBathrooms>
+					<MITS:MinSquareFeet>900</MITS:MinSquareFeet>
+					<MITS:MaxSquareFeet>900</MITS:MaxSquareFeet>
+					<MITS:MarketRent>850.00</MITS:MarketRent>
+					<MITS:UnitEconomicStatus>residential</MITS:UnitEconomicStatus>
+					<MITS:UnitOccupancyStatus>occupied</MITS:UnitOccupancyStatus>
+					<MITS:UnitLeasedStatus>leased</MITS:UnitLeasedStatus>
+					<MITS:FloorPlanID />
+					<MITS:FloorplanName>1 Bedroom 1 Bath</MITS:FloorplanName>
+				</MITS:Information>
+				<MITS:PropertyPrimaryID>prvista1</MITS:PropertyPrimaryID>
+				<MITS:MarketingName>Property Vista 1 Test Property
+				</MITS:MarketingName>
+			</Unit>
+			<Comment>RentReady=true</Comment>
+			<EffectiveRent Min="850" Max="850" />
+			<Deposit type="deposit">
+				<Amount Type="Actual">
+					<Value>0</Value>
+				</Amount>
+				<Description>Deposit</Description>
+				<PercentRefundable>100</PercentRefundable>
+				<PortionRefundable>100</PortionRefundable>
+			</Deposit>
+			<Fee>
+				<ProrateType>Standard</ProrateType>
+				<LateType>flat amount</LateType>
+				<LatePercent>0</LatePercent>
+				<LateMinFee>100.00</LateMinFee>
+				<LateFeePerDay>1.00</LateFeePerDay>
+				<NonRefundableHoldFee>0</NonRefundableHoldFee>
+			</Fee>
+		</ILS_Unit>
+		<ILS_Unit Id="411" FloorplanID="">
+			<Unit>
+				<MITS:Information>
+					<MITS:UnitID>411</MITS:UnitID>
+					<MITS:UnitType>prv11b1</MITS:UnitType>
+					<MITS:UnitBedrooms>1.00</MITS:UnitBedrooms>
+					<MITS:UnitBathrooms>1.00</MITS:UnitBathrooms>
+					<MITS:MinSquareFeet>900</MITS:MinSquareFeet>
+					<MITS:MaxSquareFeet>900</MITS:MaxSquareFeet>
+					<MITS:MarketRent>850.00</MITS:MarketRent>
+					<MITS:UnitEconomicStatus>residential</MITS:UnitEconomicStatus>
+					<MITS:UnitOccupancyStatus>occupied</MITS:UnitOccupancyStatus>
+					<MITS:UnitLeasedStatus>on notice</MITS:UnitLeasedStatus>
+					<MITS:FloorPlanID />
+					<MITS:FloorplanName>1 Bedroom 1 Bath</MITS:FloorplanName>
+				</MITS:Information>
+				<MITS:PropertyPrimaryID>prvista1</MITS:PropertyPrimaryID>
+				<MITS:MarketingName>Property Vista 1 Test Property
+				</MITS:MarketingName>
+			</Unit>
+			<Comment>RentReady=false</Comment>
+			<EffectiveRent Min="850" Max="850" />
+			<Deposit type="deposit">
+				<Amount Type="Actual">
+					<Value>0</Value>
+				</Amount>
+				<Description>Deposit</Description>
+				<PercentRefundable>100</PercentRefundable>
+				<PortionRefundable>100</PortionRefundable>
+			</Deposit>
+			<Availability>
+				<VacateDate Month="3" Day="15" Year="2011" />
+				<VacancyClass>Occupied</VacancyClass>
+				<MadeReadyDate Month="3" Day="16" Year="2011" />
+			</Availability>
+			<Fee>
+				<ProrateType>Standard</ProrateType>
+				<LateType>flat amount</LateType>
+				<LatePercent>0</LatePercent>
+				<LateMinFee>100.00</LateMinFee>
+				<LateFeePerDay>1.00</LateFeePerDay>
+				<NonRefundableHoldFee>0</NonRefundableHoldFee>
+			</Fee>
+		</ILS_Unit>
+		<ILS_Unit Id="412" FloorplanID="">
+			<Unit>
+				<MITS:Information>
+					<MITS:UnitID>412</MITS:UnitID>
+					<MITS:UnitType>prv11b1</MITS:UnitType>
+					<MITS:UnitBedrooms>1.00</MITS:UnitBedrooms>
+					<MITS:UnitBathrooms>1.00</MITS:UnitBathrooms>
+					<MITS:MinSquareFeet>900</MITS:MinSquareFeet>
+					<MITS:MaxSquareFeet>900</MITS:MaxSquareFeet>
+					<MITS:MarketRent>850.00</MITS:MarketRent>
+					<MITS:UnitEconomicStatus>residential</MITS:UnitEconomicStatus>
+					<MITS:UnitOccupancyStatus>vacant</MITS:UnitOccupancyStatus>
+					<MITS:UnitLeasedStatus>available</MITS:UnitLeasedStatus>
+					<MITS:FloorPlanID />
+					<MITS:FloorplanName>1 Bedroom 1 Bath</MITS:FloorplanName>
+				</MITS:Information>
+				<MITS:PropertyPrimaryID>prvista1</MITS:PropertyPrimaryID>
+				<MITS:MarketingName>Property Vista 1 Test Property
+				</MITS:MarketingName>
+			</Unit>
+			<Comment>RentReady=false</Comment>
+			<EffectiveRent Min="850" Max="850" />
+			<Deposit type="deposit">
+				<Amount Type="Actual">
+					<Value>0</Value>
+				</Amount>
+				<Description>Deposit</Description>
+				<PercentRefundable>100</PercentRefundable>
+				<PortionRefundable>100</PortionRefundable>
+			</Deposit>
+			<Availability>
+				<VacateDate Month="3" Day="21" Year="2011" />
+				<VacancyClass>Unoccupied</VacancyClass>
+				<MadeReadyDate Month="3" Day="21" Year="2011" />
+			</Availability>
+			<Fee>
+				<ProrateType>Standard</ProrateType>
+				<LateType>flat amount</LateType>
+				<LatePercent>0</LatePercent>
+				<LateMinFee>100.00</LateMinFee>
+				<LateFeePerDay>1.00</LateFeePerDay>
+				<NonRefundableHoldFee>0</NonRefundableHoldFee>
+			</Fee>
+		</ILS_Unit>
+		<ILS_Unit Id="413" FloorplanID="">
+			<Unit>
+				<MITS:Information>
+					<MITS:UnitID>413</MITS:UnitID>
+					<MITS:UnitType>prv11b1</MITS:UnitType>
+					<MITS:UnitBedrooms>1.00</MITS:UnitBedrooms>
+					<MITS:UnitBathrooms>1.00</MITS:UnitBathrooms>
+					<MITS:MinSquareFeet>900</MITS:MinSquareFeet>
+					<MITS:MaxSquareFeet>900</MITS:MaxSquareFeet>
+					<MITS:MarketRent>850.00</MITS:MarketRent>
+					<MITS:UnitEconomicStatus>residential</MITS:UnitEconomicStatus>
+					<MITS:UnitOccupancyStatus>occupied</MITS:UnitOccupancyStatus>
+					<MITS:UnitLeasedStatus>leased</MITS:UnitLeasedStatus>
+					<MITS:FloorPlanID />
+					<MITS:FloorplanName>1 Bedroom 1 Bath</MITS:FloorplanName>
+				</MITS:Information>
+				<MITS:PropertyPrimaryID>prvista1</MITS:PropertyPrimaryID>
+				<MITS:MarketingName>Property Vista 1 Test Property
+				</MITS:MarketingName>
+			</Unit>
+			<Comment>RentReady=true</Comment>
+			<EffectiveRent Min="850" Max="850" />
+			<Deposit type="deposit">
+				<Amount Type="Actual">
+					<Value>0</Value>
+				</Amount>
+				<Description>Deposit</Description>
+				<PercentRefundable>100</PercentRefundable>
+				<PortionRefundable>100</PortionRefundable>
+			</Deposit>
+			<Fee>
+				<ProrateType>Standard</ProrateType>
+				<LateType>flat amount</LateType>
+				<LatePercent>0</LatePercent>
+				<LateMinFee>100.00</LateMinFee>
+				<LateFeePerDay>1.00</LateFeePerDay>
+				<NonRefundableHoldFee>0</NonRefundableHoldFee>
+			</Fee>
+		</ILS_Unit>
+	</Property>
+</PhysicalProperty>

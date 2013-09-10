@@ -32,4 +32,6 @@ public class YardiConstants {
     public static final String INTERFACE_ENTITY = "Property Vista";
 
     public static final String MAINTENANCE_INTERFACE_ENTITY = "Property Vista-Maintenance";
+
+    public static final String ILS_INTERFACE_ENTITY = "Property Vista-ILS";
 }

@@ -1,0 +1,57 @@
+<jxb:bindings version="2.0"
+    xmlns:jxb="http://java.sun.com/xml/ns/jaxb" 
+    xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+    xmlns:namespace="http://jaxb2-commons.dev.java.net/namespace-prefix">
+
+    <jxb:globalBindings localScoping="toplevel">
+	<jxb:javaType name="java.util.Date" xmlType="xs:date" parseMethod="com.pyx4j.essentials.j2se.util.DateAdapter.parseDate" printMethod="com.pyx4j.essentials.j2se.util.DateAdapter.printDate"/>
+	<jxb:serializable uid="1" />
+    </jxb:globalBindings>
+    <jxb:bindings schemaLocation="Itf_MITS_CoreData2.0.xsd" >
+        <jxb:schemaBindings>
+            <jxb:package name="com.yardi.entity.mits"/>
+        </jxb:schemaBindings>
+	<jxb:bindings>
+	    <namespace:prefix name="MITS" />
+	</jxb:bindings>
+	<jxb:bindings node="//xsd:complexType[@name='CustomersType']">
+            <jxb:class name="YardiCustomers"/>
+        </jxb:bindings>
+	<jxb:bindings node="//xsd:complexType[@name='CustomersType']/xsd:sequence/xsd:element[@name='Customer']/xsd:complexType">
+            <jxb:class name="YardiCustomer"/>
+        </jxb:bindings>
+	<jxb:bindings node="//xsd:element[@name='Customer']/xsd:complexType/xsd:sequence/xsd:element[@name='Lease']/xsd:complexType">
+            <jxb:class name="YardiLease"/>
+        </jxb:bindings>
+	<jxb:bindings node="//xsd:complexType[@name='UnitType']">
+            <jxb:class name="Unit"/>
+        </jxb:bindings>
+	<jxb:bindings node="//xsd:complexType[@name='AddressType']">
+            <jxb:class name="Address"/>
+        </jxb:bindings>
+	<jxb:bindings node="//xsd:complexType[@name='PhoneType']">
+            <jxb:class name="Phone"/>
+        </jxb:bindings>
+	<jxb:bindings node="//xsd:complexType[@name='PropertyContactsType']">
+            <jxb:class name="PropertyContacts"/>
+        </jxb:bindings>
+    </jxb:bindings>
+
+    <jxb:bindings schemaLocation="Itf_MITS_PropertyMarketingILS2.0.xsd" >
+        <jxb:schemaBindings>
+            <jxb:package name="com.yardi.entity.ils"/>
+        </jxb:schemaBindings>
+	<jxb:bindings node="//xsd:element[@name='Information']/xsd:complexType">
+            <jxb:class name="PropertyInfo"/>
+        </jxb:bindings>
+	<jxb:bindings node="//xsd:element[@name='Property']/xsd:complexType/xsd:sequence/xsd:element[@name='Fee']/xsd:complexType">
+            <jxb:class name="AdditionalFees"/>
+        </jxb:bindings>
+	<jxb:bindings node="//xsd:element[@name='Floorplan']/xsd:complexType/xsd:sequence/xsd:element[@name='MarketRent']/xsd:complexType">
+            <jxb:class name="MarketRentRange"/>
+        </jxb:bindings>
+	<jxb:bindings node="//xsd:element[@name='Floorplan']/xsd:complexType/xsd:sequence/xsd:element[@name='EffectiveRent']/xsd:complexType">
+            <jxb:class name="EffectiveRentRange"/>
+        </jxb:bindings>
+    </jxb:bindings>
+</jxb:bindings>

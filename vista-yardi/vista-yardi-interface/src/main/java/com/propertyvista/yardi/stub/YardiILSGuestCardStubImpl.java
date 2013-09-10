@@ -22,8 +22,8 @@ import org.slf4j.LoggerFactory;
 import com.yardi.entity.ils.PhysicalProperty;
 import com.yardi.ws.ItfILSGuestCard2_0;
 import com.yardi.ws.ItfILSGuestCard2_0Stub;
-import com.yardi.ws.operations.requests.UnitAvailability_Login;
-import com.yardi.ws.operations.requests.UnitAvailability_LoginResponse;
+import com.yardi.ws.operations.ils.UnitAvailability_Login;
+import com.yardi.ws.operations.ils.UnitAvailability_LoginResponse;
 
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.essentials.j2se.util.MarshallUtil;
@@ -47,7 +47,7 @@ public class YardiILSGuestCardStubImpl extends AbstractYardiStub implements Yard
             request.setServerName(yc.serverName().getValue());
             request.setDatabase(yc.database().getValue());
             request.setPlatform(yc.platform().getValue().name());
-            request.setInterfaceEntity(YardiConstants.INTERFACE_ENTITY);
+            request.setInterfaceEntity(YardiConstants.ILS_INTERFACE_ENTITY);
             request.setYardiPropertyId(propertyId);
             UnitAvailability_LoginResponse response = getILSGuestCardService(yc).unitAvailability_Login(request);
             if (response.getUnitAvailability_LoginResult() == null) {
