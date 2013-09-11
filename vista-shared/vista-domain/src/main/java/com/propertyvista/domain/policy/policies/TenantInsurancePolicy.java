@@ -43,14 +43,14 @@ public interface TenantInsurancePolicy extends Policy {
     @NotNull
     @Owned
     @Length(10 * 1024)
-    @Editor(type = Editor.EditorType.richtextarea)
+    @Editor(type = Editor.EditorType.textarea)
     @Caption(description = "This text is displayed in Resident Portal on a page that lets a tenant to either provide insurance or purchase TenantSure insurance.")
     IPrimitive<String> tenantInsuranceInvitation();
 
     @NotNull
     @Owned
     @Length(10 * 1024)
-    @Editor(type = Editor.EditorType.richtextarea)
+    @Editor(type = Editor.EditorType.textarea)
     @Caption(description = "This text is displayed in Resident Portal's Dashboard when a tenant doesn't have tenant insurance.")
     IPrimitive<String> noInsuranceStatusMessage();
 

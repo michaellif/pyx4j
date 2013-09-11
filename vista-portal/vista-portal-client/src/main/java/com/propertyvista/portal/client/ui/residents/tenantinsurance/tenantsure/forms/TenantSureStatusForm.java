@@ -30,10 +30,10 @@ import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
 import com.propertyvista.common.client.ui.components.tenantinsurance.MoneyComboBox;
 import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
 import com.propertyvista.portal.client.ui.residents.tenantinsurance.dashboard.statusviewers.TenantInsuranceStatusViewer;
-import com.propertyvista.portal.rpc.portal.web.dto.insurance.TenantSureTenantInsuranceStatusDTO;
+import com.propertyvista.portal.rpc.portal.web.dto.insurance.TenantSureInsuranceStatusDTO;
 import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.tenantsure.TenantSureMessageDTO;
 
-public class TenantSureStatusForm extends CEntityDecoratableForm<TenantSureTenantInsuranceStatusDTO> {
+public class TenantSureStatusForm extends CEntityDecoratableForm<TenantSureInsuranceStatusDTO> {
 
     private static final I18n i18n = I18n.get(TenantSureStatusForm.class);
 
@@ -58,7 +58,7 @@ public class TenantSureStatusForm extends CEntityDecoratableForm<TenantSureTenan
     }
 
     public TenantSureStatusForm() {
-        super(TenantSureTenantInsuranceStatusDTO.class);
+        super(TenantSureInsuranceStatusDTO.class);
         setViewable(true);
     }
 
@@ -70,7 +70,7 @@ public class TenantSureStatusForm extends CEntityDecoratableForm<TenantSureTenan
         panel.setH3(++row, 0, 1, i18n.tr("Coverage"));
         panel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().insuranceCertificateNumber()), 10).build());
         panel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().inceptionDate()), 10).build());
-        panel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().expirationDate()), 10).build());
+        panel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().expiryDate()), 10).build());
 
         // TODO maybe create a separate coverage viewer?
         panel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().liabilityCoverage()), 10).build());
@@ -97,6 +97,6 @@ public class TenantSureStatusForm extends CEntityDecoratableForm<TenantSureTenan
         super.onValueSet(populate);
         boolean hasContextCoverage = !getValue().contentsCoverage().isNull() && !getValue().contentsCoverage().getValue().equals(new BigDecimal("0.00"));
         get(proto().contentsCoverage()).setVisible(hasContextCoverage);
-        get(proto().expirationDate()).setVisible(!getValue().expirationDate().isNull());
+        get(proto().expiryDate()).setVisible(!getValue().expiryDate().isNull());
     }
 }

@@ -40,7 +40,7 @@ public class MainDashboardViewImpl extends FlowPanel implements MainDashboardVie
 
     private final MaintenanceGadget maintenanceGadget;
 
-    private final ResidentServicesGadget residentServicesGadget;
+    private final InsuranceGadget insuranceGadget;
 
     private final OffersGadget offersGadget;
 
@@ -61,13 +61,13 @@ public class MainDashboardViewImpl extends FlowPanel implements MainDashboardVie
         maintenanceGadget = new MaintenanceGadget(this);
         maintenanceGadget.getElement().getStyle().setFloat(Float.RIGHT);
 
-        residentServicesGadget = new ResidentServicesGadget(this);
-        residentServicesGadget.getElement().getStyle().setFloat(Float.RIGHT);
+        insuranceGadget = new InsuranceGadget(this);
+        insuranceGadget.getElement().getStyle().setFloat(Float.RIGHT);
 
         add(profileGadget);
         add(billingGadget);
         add(maintenanceGadget);
-        add(residentServicesGadget);
+        add(insuranceGadget);
         add(offersGadget);
 
         doLayout(LayoutType.getLayoutType(Window.getClientWidth()));
@@ -90,13 +90,13 @@ public class MainDashboardViewImpl extends FlowPanel implements MainDashboardVie
         case tabletPortrait:
             billingGadget.asWidget().setWidth("100%");
             maintenanceGadget.asWidget().setWidth("100%");
-            residentServicesGadget.asWidget().setWidth("100%");
+            insuranceGadget.asWidget().setWidth("100%");
             offersGadget.asWidget().setWidth("100%");
             break;
         default:
             billingGadget.asWidget().setWidth("50%");
             maintenanceGadget.asWidget().setWidth("50%");
-            residentServicesGadget.asWidget().setWidth("50%");
+            insuranceGadget.asWidget().setWidth("50%");
             offersGadget.asWidget().setWidth("50%");
             break;
         }
@@ -117,7 +117,7 @@ public class MainDashboardViewImpl extends FlowPanel implements MainDashboardVie
         profileGadget.populate(result.profileInfo());
         billingGadget.populate(result.billingSummary());
         maintenanceGadget.populate(result.maintenanceInfo());
-        residentServicesGadget.populate(result.residentServicesInfo());
+        insuranceGadget.populate(result.insuranceStatus());
     }
 
 }

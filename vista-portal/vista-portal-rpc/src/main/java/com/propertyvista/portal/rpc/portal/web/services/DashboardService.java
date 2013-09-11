@@ -21,7 +21,7 @@ import com.pyx4j.rpc.shared.VoidSerializable;
 import com.propertyvista.domain.payment.PreauthorizedPayment;
 import com.propertyvista.portal.rpc.portal.web.dto.FinancialDashboardDTO;
 import com.propertyvista.portal.rpc.portal.web.dto.MainDashboardDTO;
-import com.propertyvista.portal.rpc.portal.web.dto.ServicesDashboardDTO;
+import com.propertyvista.portal.rpc.portal.web.dto.ResidentServicesDashboardDTO;
 
 public interface DashboardService extends IService {
 
@@ -29,7 +29,7 @@ public interface DashboardService extends IService {
 
     public void retrieveFinancialDashboard(AsyncCallback<FinancialDashboardDTO> callback);
 
-    public void retrieveServicesDashboard(AsyncCallback<ServicesDashboardDTO> callback);
+    public void retrieveServicesDashboard(AsyncCallback<ResidentServicesDashboardDTO> callback);
 
     // Gadget utils:
 

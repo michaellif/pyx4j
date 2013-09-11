@@ -17,7 +17,7 @@ import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.i18n.annotations.I18n;
 
-import com.propertyvista.portal.rpc.portal.dto.ResidentServicesDTO;
+import com.propertyvista.portal.rpc.portal.web.dto.insurance.InsuranceStatusDTO;
 
 @Transient
 @I18n(strategy = I18n.I18nStrategy.IgnoreThis)
@@ -29,6 +29,6 @@ public interface MainDashboardDTO extends IEntity {
 
     MaintenanceDTO maintenanceInfo();
 
-    ResidentServicesDTO residentServicesInfo();
+    InsuranceStatusDTO insuranceStatus();
 
 }

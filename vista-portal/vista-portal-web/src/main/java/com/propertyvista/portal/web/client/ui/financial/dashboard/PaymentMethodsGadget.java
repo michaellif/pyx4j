@@ -19,11 +19,12 @@ import com.google.gwt.user.client.ui.HTML;
 
 import com.pyx4j.commons.css.StyleManager;
 import com.pyx4j.commons.css.ThemeColor;
+import com.pyx4j.forms.client.ui.CEntityContainer;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.Button;
 import com.pyx4j.widgets.client.actionbar.Toolbar;
 
-import com.propertyvista.portal.rpc.portal.dto.ResidentServicesDTO;
+import com.propertyvista.portal.rpc.portal.web.dto.ResidentServicesDashboardDTO;
 import com.propertyvista.portal.web.client.resources.PortalImages;
 import com.propertyvista.portal.web.client.ui.AbstractGadget;
 
@@ -41,7 +42,7 @@ public class PaymentMethodsGadget extends AbstractGadget<FinancialDashboardViewI
         setContent(contentPanel);
     }
 
-    protected void populate(ResidentServicesDTO value) {
+    protected void populate(ResidentServicesDashboardDTO value) {
 
     }
 
@@ -51,11 +52,12 @@ public class PaymentMethodsGadget extends AbstractGadget<FinancialDashboardViewI
 
                 @Override
                 public void execute() {
-                    getGadgetViewer().getPresenter().addPaymentMethod();
+                    getGadgetView().getPresenter().addPaymentMethod();
                 }
             });
             autoPayButton.getElement().getStyle().setProperty("background", StyleManager.getPalette().getThemeColor(ThemeColor.contrast4, 1));
             add(autoPayButton);
         }
     }
+
 }

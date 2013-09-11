@@ -52,7 +52,7 @@ public class EmergencyContactEditor extends CEntityForm<EmergencyContact> {
         main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().address().country()), "200px").build());
         main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().address().postalCode()), "200px").build());
 
-        AbstractPortalView.updateDecoratorsLayout(this, view.getWidgetLayout());
+        AbstractPortalView.updateDecoratorsLayout(main, view.getWidgetLayout());
 
         return main;
     }

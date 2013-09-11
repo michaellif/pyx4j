@@ -75,8 +75,6 @@ public class ProfileForm extends AbstractPortalForm<ResidentDTO> {
         mainPanel.setH1(++row, 0, 1, proto().emergencyContacts().getMeta().getCaption());
         mainPanel.setWidget(++row, 0, inject(proto().emergencyContacts(), new EmergencyContactFolder(view)));
 
-        view.doLayout();
-
         return mainPanel;
     }
 

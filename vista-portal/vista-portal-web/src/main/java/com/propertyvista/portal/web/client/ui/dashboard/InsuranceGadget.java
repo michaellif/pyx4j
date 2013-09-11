@@ -11,7 +11,7 @@
  * @author michaellif
  * @version $Id$
  */
-package com.propertyvista.portal.web.client.ui.services.dashboard;
+package com.propertyvista.portal.web.client.ui.dashboard;
 
 import java.util.Arrays;
 import java.util.Collection;
@@ -35,25 +35,30 @@ import com.pyx4j.widgets.client.actionbar.Toolbar;
 import com.propertyvista.portal.rpc.portal.web.dto.insurance.HasInsuranceDTO;
 import com.propertyvista.portal.rpc.portal.web.dto.insurance.InsuranceStatusDTO;
 import com.propertyvista.portal.rpc.portal.web.dto.insurance.NoInsuranceStatusDTO;
+import com.propertyvista.portal.rpc.portal.web.dto.insurance.OtherProviderInsuranceStatusDTO;
+import com.propertyvista.portal.rpc.portal.web.dto.insurance.TenantSureInsuranceStatusDTO;
 import com.propertyvista.portal.web.client.resources.PortalImages;
 import com.propertyvista.portal.web.client.ui.AbstractGadget;
 import com.propertyvista.portal.web.client.ui.util.decorators.FormDecoratorBuilder;
 
-public class InsuranceSummaryGadget extends AbstractGadget<ServicesDashboardViewImpl> {
+public class InsuranceGadget extends AbstractGadget<MainDashboardViewImpl> {
 
-    private static final I18n i18n = I18n.get(InsuranceSummaryGadget.class);
+    static final I18n i18n = I18n.get(InsuranceGadget.class);
 
     private final InsuranceStatusViewer insuranceViewer;
 
-    InsuranceSummaryGadget(ServicesDashboardViewImpl view) {
-        super(view, PortalImages.INSTANCE.residentServicesIcon(), i18n.tr("Tenant Insurance"), ThemeColor.contrast3);
+    InsuranceGadget(MainDashboardViewImpl form) {
+        super(form, PortalImages.INSTANCE.residentServicesIcon(), i18n.tr("Tenant Insurance"), ThemeColor.contrast3);
         setActionsToolbar(new InsuranceToolbar());
 
         insuranceViewer = new InsuranceStatusViewer();
         insuranceViewer.setViewable(true);
         insuranceViewer.initContent();
 
-        setContent(insuranceViewer);
+        SimplePanel contentPanel = new SimplePanel(insuranceViewer.asWidget());
+
+        setContent(contentPanel);
+
     }
 
     protected void populate(InsuranceStatusDTO value) {
@@ -61,6 +66,7 @@ public class InsuranceSummaryGadget extends AbstractGadget<ServicesDashboardView
     }
 
     class InsuranceToolbar extends Toolbar {
+
         public InsuranceToolbar() {
 
             Button purchaseButton = new Button("Purchase Insurance", new Command() {
@@ -101,10 +107,14 @@ public class InsuranceSummaryGadget extends AbstractGadget<ServicesDashboardView
                 form = new NoInsuranceStatusForm();
                 form.initContent();
                 ((NoInsuranceStatusForm) form).populate(value.<NoInsuranceStatusDTO> cast());
-            } else if (value.isInstanceOf(HasInsuranceDTO.class)) {
-                form = new HasInsuranceStatusForm();
+            } else if (value.isInstanceOf(OtherProviderInsuranceStatusDTO.class)) {
+                form = new OtherProviderInsuranceStatusForm();
                 form.initContent();
-                ((HasInsuranceStatusForm) form).populate(value.<HasInsuranceDTO> cast());
+                ((OtherProviderInsuranceStatusForm) form).populate(value.<OtherProviderInsuranceStatusDTO> cast());
+            } else if (value.isInstanceOf(TenantSureInsuranceStatusDTO.class)) {
+                form = new NoInsuranceStatusForm();
+                form.initContent();
+                ((NoInsuranceStatusForm) form).populate(value.<NoInsuranceStatusDTO> cast());
             }
 
             if (form != null) {
@@ -151,10 +161,10 @@ public class InsuranceSummaryGadget extends AbstractGadget<ServicesDashboardView
 
     }
 
-    class HasInsuranceStatusForm extends CEntityForm<HasInsuranceDTO> {
+    class OtherProviderInsuranceStatusForm extends CEntityForm<OtherProviderInsuranceStatusDTO> {
 
-        public HasInsuranceStatusForm() {
-            super(HasInsuranceDTO.class);
+        public OtherProviderInsuranceStatusForm() {
+            super(OtherProviderInsuranceStatusDTO.class);
         }
 
         @Override
@@ -163,9 +173,9 @@ public class InsuranceSummaryGadget extends AbstractGadget<ServicesDashboardView
 
             int row = -1;
 
-            main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().insuranceProvider()), "200px").build());
-            main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().liabilityCoverage()), "200px").build());
-            main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().expiryDate()), "200px").build());
+            main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().insuranceProvider()), "160px", "120px", "120px").build());
+            main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().liabilityCoverage()), "160px", "120px", "120px").build());
+            main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().expiryDate()), "160px", "120px", "120px").build());
             return main;
 
         }

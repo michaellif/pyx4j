@@ -65,11 +65,6 @@ public abstract class AbstractWizardView<E extends IEntity> extends AbstractPort
     }
 
     @Override
-    public CEntityContainer<?> getCContainer() {
-        return wizardForm;
-    }
-
-    @Override
     public boolean onSaveFail(Throwable caught) {
         if (caught instanceof UniqueConstraintUserRuntimeException) {
             showErrorDialog(caught.getMessage());

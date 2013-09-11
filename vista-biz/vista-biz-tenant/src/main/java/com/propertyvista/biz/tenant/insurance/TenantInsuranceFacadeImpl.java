@@ -32,7 +32,7 @@ import com.propertyvista.domain.tenant.insurance.InsuranceCertificate;
 import com.propertyvista.domain.tenant.insurance.InsuranceTenantSure;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.Tenant;
-import com.propertyvista.portal.rpc.portal.web.dto.insurance.HasTenantInsuranceDTO;
+import com.propertyvista.portal.rpc.portal.web.dto.insurance.HasInsuranceDTO;
 import com.propertyvista.portal.rpc.portal.web.dto.insurance.InsuranceStatusDTO;
 import com.propertyvista.portal.rpc.portal.web.dto.insurance.NoInsuranceStatusDTO;
 import com.propertyvista.portal.rpc.portal.web.dto.insurance.OtherProviderInsuranceStatusDTO;
@@ -82,7 +82,7 @@ public class TenantInsuranceFacadeImpl implements TenantInsuranceFacade {
 
             return noInsuranceStatus;
         } else {
-            HasTenantInsuranceDTO insuranceStatus = null;
+            HasInsuranceDTO insuranceStatus = null;
             if (insuranceCertificate.isPropertyVistaIntegratedProvider().isBooleanTrue()) {
                 // TODO currently TenantSure is the only integrated provider so we don't try to understand which one it is
                 insuranceStatus = ServerSideFactory.create(TenantSureFacade.class).getStatus(tenantId);
@@ -95,7 +95,7 @@ public class TenantInsuranceFacadeImpl implements TenantInsuranceFacade {
             insuranceStatus.isOwner().setValue(insuranceCertificate.tenant().getPrimaryKey().equals(tenantId.getPrimaryKey()));
 
             insuranceStatus.liabilityCoverage().setValue(insuranceCertificate.liabilityCoverage().getValue());
-            insuranceStatus.expirationDate().setValue(insuranceCertificate.expiryDate().getValue());
+            insuranceStatus.expiryDate().setValue(insuranceCertificate.expiryDate().getValue());
             return insuranceStatus;
         }
     }

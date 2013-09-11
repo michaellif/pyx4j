@@ -31,8 +31,8 @@ public class OtherProviderTenantInsuranceStatusViewer extends CViewer<OtherProvi
         FlowPanel contentPanel = new FlowPanel();
 
         contentPanel.add(new Label(i18n.tr("Personal Liablity: ${0}", insuranceStatus.liabilityCoverage().getStringView())));
-        if (!insuranceStatus.expirationDate().isNull()) {
-            contentPanel.add(new Label(i18n.tr("Expiration Date: {0}", insuranceStatus.expirationDate().getStringView())));
+        if (!insuranceStatus.expiryDate().isNull()) {
+            contentPanel.add(new Label(i18n.tr("Expiration Date: {0}", insuranceStatus.expiryDate().getStringView())));
         }
         return contentPanel;
     }

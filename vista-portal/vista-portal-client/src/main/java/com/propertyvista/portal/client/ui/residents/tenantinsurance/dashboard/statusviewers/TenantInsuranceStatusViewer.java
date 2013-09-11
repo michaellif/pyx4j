@@ -18,7 +18,7 @@ import com.google.gwt.user.client.ui.IsWidget;
 import com.pyx4j.forms.client.ui.CViewer;
 
 import com.propertyvista.portal.rpc.portal.web.dto.insurance.InsuranceStatusDTO;
-import com.propertyvista.portal.rpc.portal.web.dto.insurance.TenantSureTenantInsuranceStatusDTO;
+import com.propertyvista.portal.rpc.portal.web.dto.insurance.TenantSureInsuranceStatusDTO;
 import com.propertyvista.portal.rpc.portal.web.dto.insurance.NoInsuranceStatusDTO;
 import com.propertyvista.portal.rpc.portal.web.dto.insurance.OtherProviderInsuranceStatusDTO;
 
@@ -38,8 +38,8 @@ public class TenantInsuranceStatusViewer extends CViewer<InsuranceStatusDTO> {
         if (tenantInsuranceStatus instanceof NoInsuranceStatusDTO) {
             return new NoTenantInsuranceStatusViewer().createContent((NoInsuranceStatusDTO) tenantInsuranceStatus);
 
-        } else if (tenantInsuranceStatus instanceof TenantSureTenantInsuranceStatusDTO) {
-            return new TenantSureInsuranceStatusViewer().createContent((TenantSureTenantInsuranceStatusDTO) tenantInsuranceStatus);
+        } else if (tenantInsuranceStatus instanceof TenantSureInsuranceStatusDTO) {
+            return new TenantSureInsuranceStatusViewer().createContent((TenantSureInsuranceStatusDTO) tenantInsuranceStatus);
 
         } else if (tenantInsuranceStatus instanceof OtherProviderInsuranceStatusDTO) {
             return new OtherProviderTenantInsuranceStatusViewer().createContent((OtherProviderInsuranceStatusDTO) tenantInsuranceStatus);

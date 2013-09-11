@@ -28,7 +28,7 @@ import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.tenantsure.Tenant
 import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.tenantsure.TenantSurePaymentDTO;
 
 @Transient
-public interface TenantSureTenantInsuranceStatusDTO extends HasTenantInsuranceDTO {
+public interface TenantSureInsuranceStatusDTO extends HasInsuranceDTO {
 
     @Caption(name = "Certificate Number")
     IPrimitive<String> insuranceCertificateNumber();

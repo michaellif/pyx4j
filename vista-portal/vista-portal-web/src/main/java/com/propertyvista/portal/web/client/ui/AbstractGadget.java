@@ -31,7 +31,7 @@ import com.pyx4j.widgets.client.actionbar.Toolbar;
 import com.propertyvista.portal.web.client.themes.BlockMixin;
 import com.propertyvista.portal.web.client.themes.DashboardTheme;
 
-public abstract class AbstractGadget<T extends IsWidget> extends SimplePanel {
+public abstract class AbstractGadget<T extends IsWidget> extends AbstractPortalView {
 
     private ContainerPanel containerPanel;
 
@@ -41,10 +41,10 @@ public abstract class AbstractGadget<T extends IsWidget> extends SimplePanel {
 
     private ThemeColor themeColor;
 
-    private T viewer;
+    private T view;
 
-    public AbstractGadget(T viewer, ImageResource imageResource, String title, ThemeColor themeColor) {
-        this.viewer = viewer;
+    public AbstractGadget(T view, ImageResource imageResource, String title, ThemeColor themeColor) {
+        this.view = view;
         this.imageResource = imageResource;
         this.title = title;
         this.themeColor = themeColor;
@@ -58,8 +58,8 @@ public abstract class AbstractGadget<T extends IsWidget> extends SimplePanel {
         this(viewer, null, null, themeColor);
     }
 
-    public T getGadgetViewer() {
-        return viewer;
+    public T getGadgetView() {
+        return view;
     }
 
     protected void setActionsToolbar(Toolbar actionsToolbar) {
@@ -130,4 +130,5 @@ public abstract class AbstractGadget<T extends IsWidget> extends SimplePanel {
         }
 
     }
+
 }

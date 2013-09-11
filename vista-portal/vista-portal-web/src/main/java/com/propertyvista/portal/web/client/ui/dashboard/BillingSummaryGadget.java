@@ -24,6 +24,7 @@ import com.google.gwt.user.client.ui.SimplePanel;
 
 import com.pyx4j.commons.css.StyleManager;
 import com.pyx4j.commons.css.ThemeColor;
+import com.pyx4j.forms.client.ui.CEntityContainer;
 import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
@@ -68,7 +69,7 @@ public class BillingSummaryGadget extends AbstractGadget<MainDashboardViewImpl> 
 
                 @Override
                 public void execute() {
-                    getGadgetViewer().getPresenter().payNow();
+                    getGadgetView().getPresenter().payNow();
                 }
             });
             paymentButton.getElement().getStyle().setProperty("background", StyleManager.getPalette().getThemeColor(ThemeColor.contrast4, 1));
@@ -78,7 +79,7 @@ public class BillingSummaryGadget extends AbstractGadget<MainDashboardViewImpl> 
 
                 @Override
                 public void execute() {
-                    getGadgetViewer().getPresenter().setAutopay();
+                    getGadgetView().getPresenter().setAutopay();
                 }
             });
             autoPayButton.getElement().getStyle().setProperty("background", StyleManager.getPalette().getThemeColor(ThemeColor.contrast4, 0.6));
@@ -109,7 +110,7 @@ public class BillingSummaryGadget extends AbstractGadget<MainDashboardViewImpl> 
 
                     @Override
                     public void execute() {
-                        getGadgetViewer().getPresenter().viewCurrentBill();
+                        getGadgetView().getPresenter().viewCurrentBill();
                     }
                 });
                 viewBillAnchor.getElement().getStyle().setMarginTop(10, Unit.PX);
@@ -121,4 +122,5 @@ public class BillingSummaryGadget extends AbstractGadget<MainDashboardViewImpl> 
             return contentPanel;
         }
     }
+
 }

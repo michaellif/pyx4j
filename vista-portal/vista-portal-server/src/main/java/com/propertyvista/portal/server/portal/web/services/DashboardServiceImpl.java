@@ -45,7 +45,7 @@ import com.propertyvista.portal.rpc.portal.web.dto.AutoPaySummaryDTO;
 import com.propertyvista.portal.rpc.portal.web.dto.BillingSummaryDTO;
 import com.propertyvista.portal.rpc.portal.web.dto.FinancialDashboardDTO;
 import com.propertyvista.portal.rpc.portal.web.dto.MainDashboardDTO;
-import com.propertyvista.portal.rpc.portal.web.dto.ServicesDashboardDTO;
+import com.propertyvista.portal.rpc.portal.web.dto.ResidentServicesDashboardDTO;
 import com.propertyvista.portal.rpc.portal.web.services.DashboardService;
 import com.propertyvista.portal.server.portal.TenantAppContext;
 import com.propertyvista.portal.server.portal.web.services.mock.DashboardServiceMockImpl;
@@ -80,10 +80,8 @@ public class DashboardServiceImpl implements DashboardService {
                 dashboard.billingSummary().dueDate().setValue(bill.dueDate().getValue());
             }
 
-            dashboard
-                    .residentServicesInfo()
-                    .tenantInsuranceStatus()
-                    .set(ServerSideFactory.create(TenantInsuranceFacade.class).getInsuranceStatus(
+            dashboard.insuranceStatus().set(
+                    ServerSideFactory.create(TenantInsuranceFacade.class).getInsuranceStatus(
                             TenantAppContext.getCurrentUserTenantInLease().leaseParticipant().<Tenant> createIdentityStub()));
 
             callback.onSuccess(dashboard);
@@ -115,11 +113,11 @@ public class DashboardServiceImpl implements DashboardService {
     }
 
     @Override
-    public void retrieveServicesDashboard(AsyncCallback<ServicesDashboardDTO> callback) {
+    public void retrieveServicesDashboard(AsyncCallback<ResidentServicesDashboardDTO> callback) {
         if (true) {
             new DashboardServiceMockImpl().retrieveServicesDashboard(callback);
         } else {
-            ServicesDashboardDTO dto = EntityFactory.create(ServicesDashboardDTO.class);
+            ResidentServicesDashboardDTO dto = EntityFactory.create(ResidentServicesDashboardDTO.class);
             dto.insuranceStatus().set(
                     ServerSideFactory.create(TenantInsuranceFacade.class).getInsuranceStatus(
                             TenantAppContext.getCurrentUserTenantInLease().leaseParticipant().<Tenant> createIdentityStub()));

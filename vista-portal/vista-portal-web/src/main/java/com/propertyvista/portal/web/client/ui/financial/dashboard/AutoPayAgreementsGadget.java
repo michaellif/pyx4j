@@ -123,7 +123,7 @@ public class AutoPayAgreementsGadget extends AbstractGadget<FinancialDashboardVi
 
         @Override
         protected void addItem() {
-            getGadgetViewer().getPresenter().addPreauthorizedPayment();
+            getGadgetView().getPresenter().addPreauthorizedPayment();
         }
 
         @Override
@@ -132,7 +132,7 @@ public class AutoPayAgreementsGadget extends AbstractGadget<FinancialDashboardVi
                 @Override
                 public void execute() {
                     AutoPayFolder.super.removeItem(item);
-                    getGadgetViewer().getPresenter().deletePreauthorizedPayment(item.getValue());
+                    getGadgetView().getPresenter().deletePreauthorizedPayment(item.getValue());
                 }
             });
         }
@@ -179,4 +179,5 @@ public class AutoPayAgreementsGadget extends AbstractGadget<FinancialDashboardVi
             }
         }
     }
+
 }

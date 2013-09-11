@@ -74,7 +74,7 @@ public class BillingSummaryGadget extends AbstractGadget<FinancialDashboardViewI
 
                 @Override
                 public void execute() {
-                    getGadgetViewer().getPresenter().payNow();
+                    getGadgetView().getPresenter().payNow();
                 }
             });
             paymentButton.getElement().getStyle().setProperty("background", StyleManager.getPalette().getThemeColor(ThemeColor.contrast4, 1));
@@ -151,7 +151,7 @@ public class BillingSummaryGadget extends AbstractGadget<FinancialDashboardViewI
 
                     @Override
                     public void execute() {
-                        getGadgetViewer().getPresenter().viewCurrentBill();
+                        getGadgetView().getPresenter().viewCurrentBill();
                     }
                 });
                 actionsPanel.add(viewBillAnchor);
@@ -161,7 +161,7 @@ public class BillingSummaryGadget extends AbstractGadget<FinancialDashboardViewI
 
                 @Override
                 public void execute() {
-                    getGadgetViewer().getPresenter().viewBillingHistory();
+                    getGadgetView().getPresenter().viewBillingHistory();
                 }
             });
             actionsPanel.add(viewBillAnchor);
@@ -169,4 +169,5 @@ public class BillingSummaryGadget extends AbstractGadget<FinancialDashboardViewI
             return contentPanel;
         }
     }
+
 }

@@ -28,35 +28,15 @@ public class TenantInsurancePolicyPreloader extends AbstractPolicyPreloader<Tena
     protected TenantInsurancePolicy createPolicy(StringBuilder log) {
         TenantInsurancePolicy policy = EntityFactory.create(TenantInsurancePolicy.class);
         policy.requireMinimumLiability().setValue(false);
-        policy.noInsuranceStatusMessage().setValue(//@formatter:off
-                "<div>" +
-                    "<div style=\"text-align: center; font-weight: bold;\">" +
-                    "<span>" +
-                    "According to our records you do not have valid tenant insurance!" +
-                    "</span>" +
-                    "</div>" +
-                    "<div style=\"text-align: justify;\">" +
-                    "<span>" +
-                    "As per your lease agreement, you must obtain and provide the landlord with proof of tenant insurance." +
-                    "</span>" +
-                    "</div>" +
-                "</div>"
-        );//@formatter:on
-        policy.tenantInsuranceInvitation().setValue(//@formatter:off
-                "<div>" +
-                "<div style=\"text-align: center; font-weight: bold;\">" +
-                "<span>" +
-                "According to our records you do not have valid tenant insurance!" +
-                "</span>" +
-                "</div>" +
-                "<div style=\"text-align: justify;\">" +
-                "<span>" +
-                "As per your Lease Agreement, you must obtain and provide the landlord with proof of tenant insurance. " +
-                "We have teamed up with Highcourt Partners Limited, a licensed broker, to assist you in obtaining your tenant insurance." +
-                "</span>" +
-                "</div>" +
-                "</div>" 
-        );//@formatter:on
+
+        policy.noInsuranceStatusMessage().setValue("According to our records you do not have valid tenant insurance!");
+
+        policy.tenantInsuranceInvitation().setValue(
+
+        "As per your Lease Agreement, you must obtain and provide the landlord with proof of tenant insurance. "
+
+        + "We have teamed up with Highcourt Partners Limited, a licensed broker, to assist you in obtaining your tenant insurance.");
+
         return policy;
 
     }

@@ -14,11 +14,10 @@
 package com.propertyvista.portal.web.client.ui;
 
 import com.google.gwt.user.client.Window;
+import com.google.gwt.user.client.ui.HasWidgets;
 import com.google.gwt.user.client.ui.SimplePanel;
+import com.google.gwt.user.client.ui.Widget;
 
-import com.pyx4j.forms.client.ui.CComponent;
-import com.pyx4j.forms.client.ui.CContainer;
-import com.pyx4j.forms.client.ui.CEntityContainer;
 import com.pyx4j.forms.client.ui.decorators.WidgetDecorator;
 import com.pyx4j.forms.client.ui.decorators.WidgetDecorator.Builder.Layout;
 import com.pyx4j.site.client.AppSite;
@@ -29,7 +28,7 @@ import com.pyx4j.site.client.ui.layout.responsive.ResponsiveLayoutPanel.LayoutTy
 
 public abstract class AbstractPortalView extends SimplePanel implements IsView {
 
-    private Layout widgetLayout = Layout.horisontal;
+    private Layout widgetLayout = null;
 
     public AbstractPortalView() {
         AppSite.getEventBus().addHandler(LayoutChangeEvent.TYPE, new LayoutChangeHandler() {
@@ -45,12 +44,12 @@ public abstract class AbstractPortalView extends SimplePanel implements IsView {
     public void doLayout() {
         Layout newWdgetLayout = getWidgetLayout();
         if (widgetLayout != newWdgetLayout) {
-            updateDecoratorsLayout(getCContainer(), newWdgetLayout);
+            updateDecoratorsLayout(AbstractPortalView.this, newWdgetLayout);
             widgetLayout = newWdgetLayout;
         }
     }
 
-    public Layout getWidgetLayout() {
+    public static Layout getWidgetLayout() {
         Layout layout;
         switch (LayoutType.getLayoutType(Window.getClientWidth())) {
         case phonePortrait:
@@ -70,20 +69,16 @@ public abstract class AbstractPortalView extends SimplePanel implements IsView {
         return layout;
     }
 
-    public abstract CEntityContainer<?> getCContainer();
-
-    public static void updateDecoratorsLayout(CContainer<?> container, Layout layout) {
-        if (container.getComponents() == null) {
-            return;
+    public static void updateDecoratorsLayout(Widget widget, Layout layout) {
+        if (widget instanceof WidgetDecorator) {
+            WidgetDecorator decorator = (WidgetDecorator) widget;
+            decorator.setLayout(layout);
         }
-        for (CComponent<?> component : container.getComponents()) {
-            if (component.getDecorator() instanceof WidgetDecorator) {
-                WidgetDecorator decorator = (WidgetDecorator) component.getDecorator();
-                decorator.setLayout(layout);
-            }
-            if (component instanceof CContainer) {
-                updateDecoratorsLayout((CContainer<?>) component, layout);
+        if (widget instanceof HasWidgets) {
+            for (Widget childWidget : (HasWidgets) widget) {
+                updateDecoratorsLayout(childWidget, layout);
             }
         }
     }
+
 }

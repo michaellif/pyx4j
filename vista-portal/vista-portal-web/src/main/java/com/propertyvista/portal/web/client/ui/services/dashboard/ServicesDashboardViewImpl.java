@@ -22,7 +22,7 @@ import com.pyx4j.site.client.ui.layout.responsive.LayoutChangeEvent;
 import com.pyx4j.site.client.ui.layout.responsive.LayoutChangeHandler;
 import com.pyx4j.site.client.ui.layout.responsive.ResponsiveLayoutPanel.LayoutType;
 
-import com.propertyvista.portal.rpc.portal.web.dto.ServicesDashboardDTO;
+import com.propertyvista.portal.rpc.portal.web.dto.ResidentServicesDashboardDTO;
 import com.propertyvista.portal.web.client.themes.DashboardTheme;
 
 public class ServicesDashboardViewImpl extends FlowPanel implements ServicesDashboardView {
@@ -68,7 +68,7 @@ public class ServicesDashboardViewImpl extends FlowPanel implements ServicesDash
     }
 
     @Override
-    public void populate(ServicesDashboardDTO result) {
+    public void populate(ResidentServicesDashboardDTO result) {
         insuranceGadget.populate(result.insuranceStatus());
     }
 

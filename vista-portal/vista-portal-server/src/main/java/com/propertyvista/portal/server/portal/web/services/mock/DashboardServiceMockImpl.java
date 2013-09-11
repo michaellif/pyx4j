@@ -28,8 +28,11 @@ import com.propertyvista.portal.rpc.portal.web.dto.AutoPaySummaryDTO;
 import com.propertyvista.portal.rpc.portal.web.dto.BillingSummaryDTO;
 import com.propertyvista.portal.rpc.portal.web.dto.FinancialDashboardDTO;
 import com.propertyvista.portal.rpc.portal.web.dto.MainDashboardDTO;
-import com.propertyvista.portal.rpc.portal.web.dto.ServicesDashboardDTO;
+import com.propertyvista.portal.rpc.portal.web.dto.ResidentServicesDashboardDTO;
 import com.propertyvista.portal.rpc.portal.web.dto.TenantProfileDTO;
+import com.propertyvista.portal.rpc.portal.web.dto.insurance.InsuranceStatusDTO;
+import com.propertyvista.portal.rpc.portal.web.dto.insurance.NoInsuranceStatusDTO;
+import com.propertyvista.portal.rpc.portal.web.dto.insurance.OtherProviderInsuranceStatusDTO;
 import com.propertyvista.portal.rpc.portal.web.services.DashboardService;
 import com.propertyvista.portal.server.portal.TenantAppContext;
 
@@ -42,6 +45,8 @@ public class DashboardServiceMockImpl implements DashboardService {
         populateProfileInfo(dashboard.profileInfo());
 
         populateBillingSummary(dashboard.billingSummary());
+
+        populateInsuranceStatus(dashboard.insuranceStatus());
 
         callback.onSuccess(dashboard);
     }
@@ -58,8 +63,11 @@ public class DashboardServiceMockImpl implements DashboardService {
     }
 
     @Override
-    public void retrieveServicesDashboard(AsyncCallback<ServicesDashboardDTO> callback) {
-        ServicesDashboardDTO dashboard = EntityFactory.create(ServicesDashboardDTO.class);
+    public void retrieveServicesDashboard(AsyncCallback<ResidentServicesDashboardDTO> callback) {
+        ResidentServicesDashboardDTO dashboard = EntityFactory.create(ResidentServicesDashboardDTO.class);
+
+        populateInsuranceStatus(dashboard.insuranceStatus());
+
         callback.onSuccess(dashboard);
     }
 
@@ -86,6 +94,28 @@ public class DashboardServiceMockImpl implements DashboardService {
         autoPaySummary.currentAutoPayDate().setValue(new LogicalDate(System.currentTimeMillis() + 5 * 24 * 60 * 60 * 1000));
         autoPaySummary.nextAutoPayDate().setValue(new LogicalDate(System.currentTimeMillis() + 35 * 24 * 60 * 60 * 1000));
         autoPaySummary.modificationsAllowed().setValue(true);
+    }
+
+    private static void populateInsuranceStatus(InsuranceStatusDTO insuranceStatus) {
+        if (false) {
+            NoInsuranceStatusDTO statusDTO = EntityFactory.create(NoInsuranceStatusDTO.class);
+            statusDTO.noInsuranceStatusMessage().setValue("Our records indicate you do not have valid tenant insurance.");
+            statusDTO.tenantInsuranceInvitation().setValue(
+                    "As per your lease agreement, you must obtain and provide the landlord with proof of tenant insurance.");
+            insuranceStatus.set(statusDTO);
+        } else if (true) {
+            OtherProviderInsuranceStatusDTO statusDTO = EntityFactory.create(OtherProviderInsuranceStatusDTO.class);
+            statusDTO.insuranceProvider().setValue("Other Insurance");
+            statusDTO.liabilityCoverage().setValue(new BigDecimal("1000000"));
+            statusDTO.expiryDate().setValue(new LogicalDate());
+            insuranceStatus.set(statusDTO);
+        } else if (false) {
+            NoInsuranceStatusDTO noInsuranceStatusDTO = EntityFactory.create(NoInsuranceStatusDTO.class);
+            noInsuranceStatusDTO.noInsuranceStatusMessage().setValue("Our records indicate you do not have valid tenant insurance.");
+            noInsuranceStatusDTO.tenantInsuranceInvitation().setValue(
+                    "As per your lease agreement, you must obtain and provide the landlord with proof of tenant insurance.");
+            insuranceStatus.set(noInsuranceStatusDTO);
+        }
     }
 
     @Override

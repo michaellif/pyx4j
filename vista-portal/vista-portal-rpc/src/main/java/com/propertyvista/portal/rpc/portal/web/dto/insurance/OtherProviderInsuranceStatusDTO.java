@@ -16,6 +16,6 @@ package com.propertyvista.portal.rpc.portal.web.dto.insurance;
 import com.pyx4j.entity.annotations.Transient;
 
 @Transient
-public interface OtherProviderInsuranceStatusDTO extends HasTenantInsuranceDTO {
+public interface OtherProviderInsuranceStatusDTO extends HasInsuranceDTO {
 
 }

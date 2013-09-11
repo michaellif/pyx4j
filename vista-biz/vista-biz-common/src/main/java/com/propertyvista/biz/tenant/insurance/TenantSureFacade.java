@@ -17,14 +17,14 @@ import com.pyx4j.commons.LogicalDate;
 
 import com.propertyvista.domain.payment.InsurancePaymentMethod;
 import com.propertyvista.domain.tenant.lease.Tenant;
-import com.propertyvista.portal.rpc.portal.web.dto.insurance.TenantSureTenantInsuranceStatusDTO;
+import com.propertyvista.portal.rpc.portal.web.dto.insurance.TenantSureInsuranceStatusDTO;
 import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.tenantsure.TenantSureCoverageDTO;
 import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.tenantsure.TenantSureQuoteDTO;
 
 public interface TenantSureFacade {
 
     /** @return <code>null</code> if tenant is not covered by tenant sure, or details of coverage */
-    TenantSureTenantInsuranceStatusDTO getStatus(Tenant tenantId);
+    TenantSureInsuranceStatusDTO getStatus(Tenant tenantId);
 
     TenantSureQuoteDTO getQuote(TenantSureCoverageDTO coverage, Tenant tenantId);
 

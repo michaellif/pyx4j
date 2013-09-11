@@ -25,7 +25,7 @@ import com.pyx4j.site.client.AppSite;
 
 import com.propertyvista.portal.rpc.portal.PortalSiteMap;
 import com.propertyvista.portal.rpc.portal.services.resident.TenantSureManagementService;
-import com.propertyvista.portal.rpc.portal.web.dto.ServicesDashboardDTO;
+import com.propertyvista.portal.rpc.portal.web.dto.ResidentServicesDashboardDTO;
 import com.propertyvista.portal.rpc.portal.web.services.DashboardService;
 import com.propertyvista.portal.web.client.PortalWebSite;
 import com.propertyvista.portal.web.client.activity.SecurityAwareActivity;
@@ -152,9 +152,9 @@ public class ServicesDashboardActivity extends SecurityAwareActivity implements 
     }
 
     private void populate() {
-        srv.retrieveServicesDashboard(new DefaultAsyncCallback<ServicesDashboardDTO>() {
+        srv.retrieveServicesDashboard(new DefaultAsyncCallback<ResidentServicesDashboardDTO>() {
             @Override
-            public void onSuccess(ServicesDashboardDTO result) {
+            public void onSuccess(ResidentServicesDashboardDTO result) {
                 view.populate(result);
             }
         });

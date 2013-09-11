@@ -55,7 +55,7 @@ import com.propertyvista.domain.tenant.insurance.InsuranceTenantSureTransaction;
 import com.propertyvista.domain.tenant.insurance.TenantSureConstants;
 import com.propertyvista.domain.tenant.lease.Tenant;
 import com.propertyvista.operations.domain.tenantsure.TenantSureSubscribers;
-import com.propertyvista.portal.rpc.portal.web.dto.insurance.TenantSureTenantInsuranceStatusDTO;
+import com.propertyvista.portal.rpc.portal.web.dto.insurance.TenantSureInsuranceStatusDTO;
 import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.tenantsure.TenantSureCoverageDTO;
 import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.tenantsure.TenantSureCoverageDTO.PreviousClaims;
 import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.tenantsure.TenantSureMessageDTO;
@@ -291,15 +291,15 @@ public class TenantSureFacadeImpl implements TenantSureFacade {
     }
 
     @Override
-    public TenantSureTenantInsuranceStatusDTO getStatus(Tenant tenantId) {
+    public TenantSureInsuranceStatusDTO getStatus(Tenant tenantId) {
         InsuranceTenantSure insuranceTenantSure = retrieveActiveInsuranceTenantSure(tenantId);
         if (insuranceTenantSure == null) {
             return null;
         }
 
-        TenantSureTenantInsuranceStatusDTO status = EntityFactory.create(TenantSureTenantInsuranceStatusDTO.class);
+        TenantSureInsuranceStatusDTO status = EntityFactory.create(TenantSureInsuranceStatusDTO.class);
         status.insuranceCertificateNumber().setValue(insuranceTenantSure.insuranceCertificateNumber().getValue());
-        status.expirationDate().setValue(insuranceTenantSure.expiryDate().getValue());
+        status.expiryDate().setValue(insuranceTenantSure.expiryDate().getValue());
 
         status.liabilityCoverage().setValue(insuranceTenantSure.liabilityCoverage().getValue());
         status.contentsCoverage().setValue(insuranceTenantSure.contentsCoverage().getValue());

@@ -15,7 +15,7 @@ package com.propertyvista.portal.client.ui.residents.tenantinsurance.tenantsure.
 
 import com.pyx4j.site.client.IsView;
 
-import com.propertyvista.portal.rpc.portal.web.dto.insurance.TenantSureTenantInsuranceStatusDTO;
+import com.propertyvista.portal.rpc.portal.web.dto.insurance.TenantSureInsuranceStatusDTO;
 
 public interface TenantSureManagementView extends IsView {
 
@@ -38,7 +38,7 @@ public interface TenantSureManagementView extends IsView {
 
     void setPresenter(Presenter presenter);
 
-    void populate(TenantSureTenantInsuranceStatusDTO detailedStatus);
+    void populate(TenantSureInsuranceStatusDTO detailedStatus);
 
     void reportUpdateCreditCardUpdate(String errorMessage);
 

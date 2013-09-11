@@ -79,7 +79,7 @@ public class DashboardServiceImpl implements DashboardService {
         }
         dashboard
                 .residentServicesInfo()
-                .tenantInsuranceStatus()
+                .insuranceStatus()
                 .set(ServerSideFactory.create(TenantInsuranceFacade.class).getInsuranceStatus(
                         TenantAppContext.getCurrentUserTenantInLease().leaseParticipant().<Tenant> createIdentityStub()));
 
@@ -102,7 +102,7 @@ public class DashboardServiceImpl implements DashboardService {
         if (VistaFeatures.instance().countryOfOperation() == CountryOfOperation.Canada) {
             dashboard
                     .residentServicesInfo()
-                    .tenantInsuranceStatus()
+                    .insuranceStatus()
                     .set(ServerSideFactory.create(TenantInsuranceFacade.class).getInsuranceStatus(
                             TenantAppContext.getCurrentUserTenantInLease().leaseParticipant().<Tenant> createIdentityStub()));
 
