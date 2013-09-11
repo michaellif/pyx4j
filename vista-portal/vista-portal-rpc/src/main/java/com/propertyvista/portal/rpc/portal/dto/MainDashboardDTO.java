@@ -21,7 +21,7 @@ import com.pyx4j.i18n.annotations.I18n;
 import com.propertyvista.dto.MaintenanceRequestDTO;
 import com.propertyvista.portal.domain.dto.financial.FinancialSummaryDTO;
 import com.propertyvista.portal.rpc.portal.web.dto.BillingSummaryDTO;
-import com.propertyvista.portal.rpc.portal.web.dto.MaintenanceDTO;
+import com.propertyvista.portal.rpc.portal.web.dto.MaintenanceSummaryDTO;
 import com.propertyvista.portal.rpc.portal.web.dto.ResidentServicesDashboardDTO;
 import com.propertyvista.portal.rpc.portal.web.dto.TenantProfileDTO;
 import com.propertyvista.portal.rpc.portal.web.dto.insurance.InsuranceStatusDTO;
@@ -32,7 +32,7 @@ public interface MainDashboardDTO extends IEntity {
 
     TenantProfileDTO profileInfo();
 
-    MaintenanceDTO maintenanceInfo();
+    MaintenanceSummaryDTO maintenanceInfo();
 
     BillingSummaryDTO billingSummary();
 

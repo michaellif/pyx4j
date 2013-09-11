@@ -27,7 +27,7 @@ public interface MainDashboardDTO extends IEntity {
 
     BillingSummaryDTO billingSummary();
 
-    MaintenanceDTO maintenanceInfo();
+    MaintenanceSummaryDTO maintenanceInfo();
 
     InsuranceStatusDTO insuranceStatus();
 

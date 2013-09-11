@@ -7,19 +7,14 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on 2013-04-10
- * @author VladL
+ * Created on Sep 11, 2013
+ * @author michaellif
  * @version $Id$
  */
-package com.propertyvista.portal.web.client.ui.services.insurance;
+package com.propertyvista.portal.rpc.portal.web.services_new.services;
 
-import com.propertyvista.portal.rpc.portal.web.dto.insurance.TenantSureAgreementDTO;
-import com.propertyvista.portal.web.client.ui.IEntityViewer;
+import com.pyx4j.rpc.shared.IService;
 
-public interface TenantSureConfirmationView extends IEntityViewer<TenantSureAgreementDTO> {
+public class InsuranceService implements IService {
 
-    public interface TenantSureConfirmationPresenter extends IEntityViewer.EntityPresenter<TenantSureAgreementDTO> {
-
-        void back();
-    }
 }

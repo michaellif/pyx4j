@@ -13,13 +13,17 @@
  */
 package com.propertyvista.portal.web.client.ui.services.insurance;
 
-import com.propertyvista.portal.domain.dto.ResidentDTO;
+import java.math.BigDecimal;
+
+import com.propertyvista.domain.tenant.insurance.InsuranceGeneric;
 import com.propertyvista.portal.web.client.ui.IEntityEditor;
 
-public interface OtherInsuranceEditorView extends IEntityEditor<ResidentDTO> {
+public interface OtherInsuranceEditorView extends IEntityEditor<InsuranceGeneric> {
 
-    public interface OtherInsuranceEditorPresenter extends EntityPresenter<ResidentDTO> {
+    public interface OtherInsuranceEditorPresenter extends EntityPresenter<InsuranceGeneric> {
 
     }
+
+    void setMinRequiredLiability(BigDecimal minRequiredLiability);
 
 }

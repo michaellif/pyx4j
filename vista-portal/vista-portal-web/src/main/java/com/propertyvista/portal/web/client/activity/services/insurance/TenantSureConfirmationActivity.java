@@ -19,29 +19,28 @@ import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
 import com.pyx4j.commons.Key;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
-import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.rpc.AppPlace;
 
-import com.propertyvista.dto.PaymentRecordDTO;
-import com.propertyvista.portal.rpc.portal.PortalSiteMap;
 import com.propertyvista.portal.rpc.portal.services.resident.PaymentRetrieveService;
+import com.propertyvista.portal.rpc.portal.web.dto.insurance.TenantSureAgreementDTO;
 import com.propertyvista.portal.web.client.PortalWebSite;
 import com.propertyvista.portal.web.client.activity.SecurityAwareActivity;
-import com.propertyvista.portal.web.client.ui.financial.payment.PaymentConfirmationView;
+import com.propertyvista.portal.web.client.ui.services.insurance.TenantSureConfirmationView;
+import com.propertyvista.portal.web.client.ui.services.insurance.TenantSureConfirmationView.TenantSureConfirmationPresenter;
 
-public class TenantSureConfirmationActivity extends SecurityAwareActivity implements PaymentConfirmationView.Presenter {
+public class TenantSureConfirmationActivity extends SecurityAwareActivity implements TenantSureConfirmationPresenter {
 
-    private final PaymentConfirmationView view;
+    private final TenantSureConfirmationView view;
 
-    protected final PaymentRetrieveService srv;
+//    protected final PaymentRetrieveService srv;
 
     private final Key entityId;
 
     public TenantSureConfirmationActivity(AppPlace place) {
-        this.view = PortalWebSite.getViewFactory().instantiate(PaymentConfirmationView.class);
-        this.view.setPresenter(this);
+        view = PortalWebSite.getViewFactory().instantiate(TenantSureConfirmationView.class);
+        view.setPresenter(this);
 
-        srv = GWT.create(PaymentRetrieveService.class);
+//        srv = GWT.create(PaymentRetrieveService.class);
 
         entityId = place.getItemId();
     }
@@ -52,17 +51,12 @@ public class TenantSureConfirmationActivity extends SecurityAwareActivity implem
         panel.setWidget(view);
 
         assert (entityId != null);
-        srv.retrieve(new DefaultAsyncCallback<PaymentRecordDTO>() {
-            @Override
-            public void onSuccess(PaymentRecordDTO result) {
-                view.populate(result);
-            }
-        }, entityId);
-    }
-
-    @Override
-    public void goToAutoPay() {
-        AppSite.getPlaceController().goTo(new PortalSiteMap.Resident.Financial.PreauthorizedPayments.NewPreauthorizedPayment());
+//        srv.retrieve(new DefaultAsyncCallback<TenantSureAgreementDTO>() {
+//            @Override
+//            public void onSuccess(TenantSureAgreementDTO result) {
+//                view.populate(result);
+//            }
+//        }, entityId);
     }
 
     @Override

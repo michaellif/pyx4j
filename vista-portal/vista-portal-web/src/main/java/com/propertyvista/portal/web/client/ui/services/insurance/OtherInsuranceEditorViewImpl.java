@@ -13,28 +13,20 @@
  */
 package com.propertyvista.portal.web.client.ui.services.insurance;
 
-import com.google.gwt.user.client.ui.Widget;
+import java.math.BigDecimal;
 
-import com.propertyvista.portal.domain.dto.ResidentDTO;
+import com.propertyvista.domain.tenant.insurance.InsuranceGeneric;
+import com.propertyvista.portal.web.client.ui.AbstractEditor;
 
-public class OtherInsuranceEditorViewImpl implements OtherInsuranceEditorView {
+public class OtherInsuranceEditorViewImpl extends AbstractEditor<InsuranceGeneric> implements OtherInsuranceEditorView {
 
-    @Override
-    public void setPresenter(EntityPresenter<ResidentDTO> presenter) {
-        // TODO Auto-generated method stub
-
+    public OtherInsuranceEditorViewImpl() {
+        setForm(new OtherInsuranceEditorForm());
     }
 
     @Override
-    public void populate(ResidentDTO value) {
-        // TODO Auto-generated method stub
-
-    }
-
-    @Override
-    public Widget asWidget() {
-        // TODO Auto-generated method stub
-        return null;
+    public void setMinRequiredLiability(BigDecimal minRequiredLiability) {
+        ((OtherInsuranceEditorForm) getForm()).setMinRequiredLiability(minRequiredLiability);
     }
 
 }

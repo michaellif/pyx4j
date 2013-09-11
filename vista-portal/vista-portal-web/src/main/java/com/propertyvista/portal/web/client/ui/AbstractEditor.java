@@ -54,7 +54,7 @@ public class AbstractEditor<E extends IEntity> extends AbstractPortalPanel imple
         return presenter;
     }
 
-    public CEntityForm<E> getCContainer() {
+    public CEntityForm<E> getForm() {
         return form;
     }
 

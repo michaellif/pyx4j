@@ -43,19 +43,6 @@ public class ServicesDashboardViewImpl extends FlowPanel implements ServicesDash
 
         add(insuranceGadget);
 
-        doLayout(LayoutType.getLayoutType(Window.getClientWidth()));
-
-        AppSite.getEventBus().addHandler(LayoutChangeEvent.TYPE, new LayoutChangeHandler() {
-
-            @Override
-            public void onLayoutChangeRerquest(LayoutChangeEvent event) {
-                doLayout(event.getLayoutType());
-            }
-
-        });
-    }
-
-    private void doLayout(LayoutType layoutType) {
     }
 
     @Override
