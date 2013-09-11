@@ -22,6 +22,8 @@ import com.google.gwt.cell.client.EditTextCell;
 import com.google.gwt.cell.client.FieldUpdater;
 import com.google.gwt.dom.builder.shared.TableCellBuilder;
 import com.google.gwt.dom.builder.shared.TableRowBuilder;
+import com.google.gwt.dom.client.Style.FontWeight;
+import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.user.cellview.client.AbstractCellTableBuilder;
 import com.google.gwt.user.cellview.client.AbstractHeaderOrFooterBuilder;
 import com.google.gwt.user.cellview.client.Column;
@@ -35,11 +37,11 @@ import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.crm.rpc.dto.financial.autopayreview.PapChargeReviewDTO;
 
-public class AutoPayReviewUpdaterDataGrid extends Composite {
+public class AutoPayReviewDataGrid extends Composite {
 
-    private static final I18n i18n = I18n.get(AutoPayReviewUpdaterDataGrid.class);
+    private static final I18n i18n = I18n.get(AutoPayReviewDataGrid.class);
 
-    private final DataGrid<PapChargeReviewDTO> dataGrid = new DataGrid<PapChargeReviewDTO>(20);
+    private final DataGrid<PapChargeReviewDTO> dataGrid = new DataGrid<PapChargeReviewDTO>(100);
 
     private final ListDataProvider<PapChargeReviewDTO> listDataProvider;
 
@@ -78,31 +80,6 @@ public class AutoPayReviewUpdaterDataGrid extends Composite {
             TableRowBuilder tr = startRow();
 
             TableCellBuilder th = tr.startTH();
-            th.colSpan(1).rowSpan(2);
-            renderHeader(th, new Context(0, 0, buildingHeader.getKey()), buildingHeader);
-            tr.endTH();
-
-            th.startTH();
-            th.colSpan(1).rowSpan(2);
-            renderHeader(th, new Context(0, 1, unitHeader.getKey()), unitHeader);
-            tr.endTH();
-
-            th.startTH();
-            th.colSpan(1).rowSpan(2);
-            renderHeader(th, new Context(0, 2, leaseHeader.getKey()), leaseHeader);
-            tr.endTH();
-
-            th.startTH();
-            th.colSpan(1).rowSpan(2);
-            renderHeader(th, new Context(0, 3, expectedMoveOutHeader.getKey()), expectedMoveOutHeader);
-            tr.endTH();
-
-            th.startTH();
-            th.colSpan(1).rowSpan(2);
-            renderHeader(th, new Context(0, 4, tenantNameHeader.getKey()), tenantNameHeader);
-            tr.endTH();
-
-            th.startTH();
             th.colSpan(1).rowSpan(2);
             renderHeader(th, new Context(0, 5, chargeCodeHeader.getKey()), chargeCodeHeader);
             tr.endTH();
@@ -163,28 +140,20 @@ public class AutoPayReviewUpdaterDataGrid extends Composite {
         protected void buildRowImpl(PapChargeReviewDTO papCharge, int absRowIndex) {
 
             TableRowBuilder tr = startRow();
+            if (papCharge._isPivot().isBooleanTrue()) {
+                TableCellBuilder td = tr.startTD();
+                td.colSpan(9);
+                td.style().fontWeight(FontWeight.BOLD).paddingTop(10, Unit.PX);
+                td.text(i18n.tr("{0} {1} {2}", papCharge._parentPap().building().getValue(), papCharge._parentPap().unit().getValue(), papCharge._parentPap()
+                        .lease().getValue()));
+                td.endTD();
+
+                tr.endTR();
+            }
+
+            tr = startRow();
 
             TableCellBuilder td = tr.startTD();
-            // building
-            td.endTD();
-
-            td = tr.startTD();
-            // unit
-            td.endTD();
-
-            td = tr.startTD();
-            // lease
-            td.endTD();
-
-            td = tr.startTD();
-            // expected move out
-            td.endTD();
-
-            td = tr.startTD();
-            // tenant name
-            td.endTD();
-
-            td = tr.startTD();
             td.text(papCharge.chargeName().getStringView() + " " + papCharge.getPrimaryKey());
             td.endTD();
 
@@ -226,7 +195,7 @@ public class AutoPayReviewUpdaterDataGrid extends Composite {
         }
     }
 
-    public AutoPayReviewUpdaterDataGrid() {
+    public AutoPayReviewDataGrid() {
         suggestedPaymentColumn = new Column<PapChargeReviewDTO, String>(new EditTextCell()) {
             @Override
             public String getValue(PapChargeReviewDTO object) {
@@ -244,6 +213,9 @@ public class AutoPayReviewUpdaterDataGrid extends Composite {
                 listDataProvider.refresh();
             }
         });
+
+        dataGrid.setHeight("100%");
+        dataGrid.getResources();
         dataGrid.setHeaderBuilder(new HeaderBuilder());
         dataGrid.setTableBuilder(new TableBuilder());
 

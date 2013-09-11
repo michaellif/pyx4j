@@ -22,6 +22,7 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.pyx4j.commons.Key;
 import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.site.client.activity.AppActivityMapper;
+import com.pyx4j.site.rpc.AppPlace;
 import com.pyx4j.site.rpc.CrudAppPlace;
 import com.pyx4j.site.rpc.ReportsAppPlace;
 
@@ -1235,7 +1236,7 @@ public class ContentActivityMapper implements AppActivityMapper {
                 } else if (place instanceof CrmSiteMap.Dashboard.View) {
                     activity = new DashboardActivity((CrmSiteMap.Dashboard.View) place);
                 } else if (VistaTODO.VISTA_3129_AutoPayBulkEditorExperiment && (place instanceof CrmSiteMap.AutoPayReviewUpdater)) {
-                    activity = new AutoPayReviewUpdaterActivity(place);
+                    activity = new AutoPayReviewUpdaterActivity((AppPlace) place);
                 } else if (place instanceof Administration.Settings.CreditCheck) {
                     activity = new CreditCheckActivity();
                 } else if (place instanceof Administration.Settings.CreditCheck.Setup) {

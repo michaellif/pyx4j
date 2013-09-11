@@ -66,6 +66,10 @@ public class AutoPayReviewServiceImpl implements AutoPayReviewService {
             List<PapChargeReviewDTO> charges = new ArrayList<PapChargeReviewDTO>();
             for (int chargeNum = 0; chargeNum < 3; ++chargeNum) {
                 PapChargeReviewDTO papCharge = EntityFactory.create(PapChargeReviewDTO.class);
+                if (chargeNum == 0) {
+                    papCharge._isPivot().setValue(true);
+                    papCharge._parentPap().set(papReviewCaption);
+                }
                 papCharge.setPrimaryKey(new Key(++chargeKeyCounter));
                 papCharge.chargeName().setValue("Charge#" + chargeNum);
                 papCharge.changeType().setValue(

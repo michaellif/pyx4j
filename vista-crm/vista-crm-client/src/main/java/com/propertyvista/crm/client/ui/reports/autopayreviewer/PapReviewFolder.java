@@ -36,9 +36,9 @@ import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
 import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
 import com.propertyvista.common.client.ui.decorations.VistaBoxFolderItemDecorator;
 import com.propertyvista.crm.rpc.dto.financial.autopayreview.PapChargeReviewDTO;
+import com.propertyvista.crm.rpc.dto.financial.autopayreview.PapChargeReviewDTO.ChangeType;
 import com.propertyvista.crm.rpc.dto.financial.autopayreview.PapChargesTotalDTO;
 import com.propertyvista.crm.rpc.dto.financial.autopayreview.PapReviewDTO;
-import com.propertyvista.crm.rpc.dto.financial.autopayreview.PapChargeReviewDTO.ChangeType;
 
 public class PapReviewFolder extends VistaBoxFolder<PapReviewDTO> {
 

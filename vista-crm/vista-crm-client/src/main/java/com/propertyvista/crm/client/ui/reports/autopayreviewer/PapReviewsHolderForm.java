@@ -13,10 +13,8 @@
  */
 package com.propertyvista.crm.client.ui.reports.autopayreviewer;
 
-import com.google.gwt.dom.client.Style.Cursor;
 import com.google.gwt.dom.client.Style.Overflow;
 import com.google.gwt.dom.client.Style.Position;
-import com.google.gwt.dom.client.Style.TextAlign;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
@@ -39,11 +37,13 @@ public class PapReviewsHolderForm extends CEntityDecoratableForm<PapReviewsHolde
 
     public enum Styles implements IStyleName {
 
-        AutoPayCounterPanel, AutoPaySuperCaptionsPanel, AutoPayCaptionsPanel
+        AutoPayCounterPanel, AutoPaySuperCaptionsPanel, AutoPayCaptionsPanel, AutoPayLoadMore
 
     }
 
     private HTML counterPanel;
+
+    private HTML moreButton;
 
     public PapReviewsHolderForm() {
         super(PapReviewsHolderDTO.class);
@@ -78,19 +78,16 @@ public class PapReviewsHolderForm extends CEntityDecoratableForm<PapReviewsHolde
         leasePapsFolderHolder.getElement().getStyle().setRight(0, Unit.PX);
         leasePapsFolderHolder.add(inject(proto().papReviews(), new PapReviewFolder()));
 
-        HTML more = new HTML(i18n.tr("More..."));
-        more.getElement().getStyle().setTextAlign(TextAlign.CENTER);
-        more.getElement().getStyle().setCursor(Cursor.POINTER);
-        more.getElement().getStyle().setLineHeight(5, Unit.EM);
-        more.getElement().getStyle().setWidth(100, Unit.PCT);
-        more.getElement().getStyle().setHeight(5, Unit.EM);
-        more.addClickHandler(new ClickHandler() {
+        moreButton = new HTML(i18n.tr("More..."));
+        moreButton.setStyleName(Styles.AutoPayLoadMore.name());
+
+        moreButton.addClickHandler(new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
                 PapReviewsHolderForm.this.onMoreClicked();
             }
         });
-        leasePapsFolderHolder.add(more);
+        leasePapsFolderHolder.add(moreButton);
 
         panel.add(leasePapsFolderHolder);
 
@@ -99,6 +96,10 @@ public class PapReviewsHolderForm extends CEntityDecoratableForm<PapReviewsHolde
 
     public void onMoreClicked() {
 
+    }
+
+    public void setLoading(boolean isLoading) {
+        moreButton.setHTML(isLoading ? i18n.tr("Loading...") : i18n.tr("More..."));
     }
 
     @Override

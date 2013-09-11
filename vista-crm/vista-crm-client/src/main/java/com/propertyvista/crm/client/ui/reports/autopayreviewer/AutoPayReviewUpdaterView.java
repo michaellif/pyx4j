@@ -26,9 +26,13 @@ public interface AutoPayReviewUpdaterView extends IPrimePane {
 
     interface Presenter extends IPrimePane.Presenter {
 
+        void acceptMarked();
+
         void onRangeChanged();
 
     }
+
+    void setLoading(boolean isLoading);
 
     void setPresenter(Presenter presenter);
 
@@ -36,7 +40,7 @@ public interface AutoPayReviewUpdaterView extends IPrimePane {
 
     Range getVisibleRange();
 
-    List<PapReviewDTO> selectedRows();
+    List<PapReviewDTO> getMarkedPapReviews();
 
     AutoPayChangesReportMetadata getAutoPayFilterSettings();
 

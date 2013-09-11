@@ -62,9 +62,9 @@ public interface PapChargeReviewDTO extends IEntity {
     IPrimitive<BigDecimal> changePercent();
 
     @Deprecated
-    PapReviewDTO _parentPap();
+    PapReviewCaptionDTO _parentPap();
 
     @Deprecated
-    IPrimitive<Boolean> isPivot();
+    IPrimitive<Boolean> _isPivot();
 
 }

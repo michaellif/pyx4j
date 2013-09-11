@@ -16,14 +16,12 @@ package com.propertyvista.crm.client.ui.reports.autopayreviewer;
 import java.util.LinkedList;
 import java.util.List;
 
-import com.google.gwt.dom.client.Style.Cursor;
 import com.google.gwt.dom.client.Style.Overflow;
 import com.google.gwt.dom.client.Style.Position;
 import com.google.gwt.dom.client.Style.TextAlign;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.FlowPanel;
-import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.view.client.Range;
 
 import com.pyx4j.entity.shared.EntityFactory;
@@ -45,20 +43,16 @@ public class AutoPayReviewUpdaterViewImpl extends AbstractPrimePane implements A
 
     private AutoPayReviewUpdaterView.Presenter presenter;
 
-    private final PapReviewsHolderForm leasePapsReviewsHolderForm;
+    private final PapReviewsHolderForm papReviewHolderForm;
 
     private Range visibleRange;
 
     private final AutoPayChangesReportSettingsForm filtersForm;
 
     public AutoPayReviewUpdaterViewImpl() {
-        visibleRange = new Range(0, PAGE_INCREMENT);
-
         FlowPanel viewPanel = new FlowPanel();
         viewPanel.getElement().getStyle().setPosition(Position.RELATIVE);
         viewPanel.setSize("100%", "100%");
-        setContentPane(viewPanel);
-        setSize("100%", "100%");
 
         FlowPanel filtersPanel = new FlowPanel();
         filtersPanel.setHeight("150px");
@@ -72,33 +66,42 @@ public class AutoPayReviewUpdaterViewImpl extends AbstractPrimePane implements A
         FlowPanel filterButtonsPanel = new FlowPanel();
         filterButtonsPanel.setWidth("100%");
         filterButtonsPanel.getElement().getStyle().setTextAlign(TextAlign.CENTER);
-        filterButtonsPanel.add(new Button(i18n.tr("Apply")));
+        filterButtonsPanel.add(new Button(i18n.tr("Search"), new Command() {
+            @Override
+            public void execute() {
+                AutoPayReviewUpdaterViewImpl.this.search();
+            }
+        }));
         filtersPanel.add(filterButtonsPanel);
 
         viewPanel.add(filtersPanel);
 
-        leasePapsReviewsHolderForm = new PapReviewsHolderForm() {
+        papReviewHolderForm = new PapReviewsHolderForm() {
             @Override
             public void onMoreClicked() {
                 AutoPayReviewUpdaterViewImpl.this.showMore();
             }
         };
-        leasePapsReviewsHolderForm.initContent();
-        leasePapsReviewsHolderForm.asWidget().getElement().getStyle().setPosition(Position.ABSOLUTE);
-        leasePapsReviewsHolderForm.asWidget().getElement().getStyle().setTop(150, Unit.PX);
-        leasePapsReviewsHolderForm.asWidget().getElement().getStyle().setLeft(0, Unit.PX);
-        leasePapsReviewsHolderForm.asWidget().getElement().getStyle().setRight(0, Unit.PX);
-        leasePapsReviewsHolderForm.asWidget().getElement().getStyle().setBottom(0, Unit.PX);
+        papReviewHolderForm.initContent();
+        papReviewHolderForm.asWidget().getElement().getStyle().setPosition(Position.ABSOLUTE);
+        papReviewHolderForm.asWidget().getElement().getStyle().setTop(150, Unit.PX);
+        papReviewHolderForm.asWidget().getElement().getStyle().setLeft(0, Unit.PX);
+        papReviewHolderForm.asWidget().getElement().getStyle().setRight(0, Unit.PX);
+        papReviewHolderForm.asWidget().getElement().getStyle().setBottom(0, Unit.PX);
 
-        viewPanel.add(leasePapsReviewsHolderForm);
+        viewPanel.add(papReviewHolderForm);
 
         addHeaderToolbarItem(new Button(i18n.tr("Accept Marked"), new Command() {
             @Override
             public void execute() {
-                visibleRange = new Range(0, PAGE_INCREMENT);
-                presenter.populate();
+                AutoPayReviewUpdaterViewImpl.this.acceptMarked();
             }
         }));
+
+        setContentPane(viewPanel);
+        setSize("100%", "100%");
+
+        visibleRange = new Range(0, PAGE_INCREMENT);
     }
 
     @Override
@@ -106,8 +109,9 @@ public class AutoPayReviewUpdaterViewImpl extends AbstractPrimePane implements A
         PapReviewsHolderDTO holder = EntityFactory.create(PapReviewsHolderDTO.class);
         holder.papReviewsTotalCount().setValue(total);
         holder.papReviews().addAll(values);
-        leasePapsReviewsHolderForm.populate(holder);
-        visibleRange = new Range(0, values.size());
+
+        this.papReviewHolderForm.setValue(holder, false);
+        this.visibleRange = new Range(0, values.size());
     }
 
     @Override
@@ -121,9 +125,9 @@ public class AutoPayReviewUpdaterViewImpl extends AbstractPrimePane implements A
     }
 
     @Override
-    public List<PapReviewDTO> selectedRows() {
+    public List<PapReviewDTO> getMarkedPapReviews() {
         List<PapReviewDTO> selected = new LinkedList<PapReviewDTO>();
-        for (PapReviewDTO review : leasePapsReviewsHolderForm.getValue().papReviews()) {
+        for (PapReviewDTO review : papReviewHolderForm.getValue().papReviews()) {
             if (review.isSelected().isBooleanTrue()) {
                 selected.add(review);
             }
@@ -136,22 +140,24 @@ public class AutoPayReviewUpdaterViewImpl extends AbstractPrimePane implements A
         return filtersForm.getValue();
     }
 
+    private void acceptMarked() {
+        visibleRange = new Range(0, PAGE_INCREMENT);
+        presenter.acceptMarked();
+    }
+
+    private void search() {
+        presenter.populate();
+    }
+
     private void showMore() {
-        this.visibleRange = new Range(0, leasePapsReviewsHolderForm.getValue() == null || leasePapsReviewsHolderForm.getValue().isNull() ? PAGE_INCREMENT
-                : leasePapsReviewsHolderForm.getValue().papReviews().size() + PAGE_INCREMENT);
+        this.visibleRange = new Range(0, papReviewHolderForm.getValue() == null || papReviewHolderForm.getValue().isNull() ? PAGE_INCREMENT
+                : papReviewHolderForm.getValue().papReviews().size() + PAGE_INCREMENT);
         this.presenter.onRangeChanged();
     }
 
-    private class Separator extends HTML {
-
-        public Separator(int x) {
-            String sep = "&nbsp;";
-            for (int i = 0; i < x - 1; ++i) {
-                sep += "&nbsp;";
-            }
-            setHTML(sep);
-            getElement().getStyle().setCursor(Cursor.DEFAULT);
-        }
+    @Override
+    public void setLoading(boolean isLoading) {
+        papReviewHolderForm.setLoading(isLoading);
     }
 
 }
