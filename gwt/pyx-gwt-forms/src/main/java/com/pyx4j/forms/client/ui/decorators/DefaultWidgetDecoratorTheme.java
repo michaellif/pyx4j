@@ -27,6 +27,8 @@ import com.pyx4j.commons.css.Style;
 import com.pyx4j.commons.css.Theme;
 import com.pyx4j.commons.css.ThemeColor;
 import com.pyx4j.commons.css.ThemeId;
+import com.pyx4j.forms.client.ui.DefaultCComponentsTheme;
+import com.pyx4j.forms.client.ui.DefaultCComponentsTheme.StyleName;
 import com.pyx4j.widgets.client.DefaultWidgetsTheme;
 
 public abstract class DefaultWidgetDecoratorTheme extends Theme {
@@ -98,9 +100,17 @@ public abstract class DefaultWidgetDecoratorTheme extends Theme {
         style.addProperty("line-height", "2em");
         addStyle(style);
 
+        style = new Style(".", StyleName.WidgetDecoratorComponent, " .", DefaultCComponentsTheme.StyleName.FieldEditorPanel);
+        style.addProperty("line-height", "2em");
+        addStyle(style);
+
         style = new Style(".", StyleName.WidgetDecorator, "-", StyleDependent.viewable, " .", StyleName.WidgetDecoratorLabel);
         style.addProperty("color", ThemeColor.foreground, 0.5);
         style.addProperty("font-size", "0.9em");
+        style.addProperty("line-height", "1.5em");
+        addStyle(style);
+
+        style = new Style(".", StyleName.WidgetDecoratorComponent, " .", DefaultCComponentsTheme.StyleName.FieldViewerPanel);
         style.addProperty("line-height", "1.5em");
         addStyle(style);
 

@@ -92,12 +92,8 @@ public class DefaultCComponentsTheme extends Theme {
 
     protected void initTriggerButtonStyle() {
 
-        Style style = new Style(".", StyleName.FieldEditorPanel);
-        style.addProperty("line-height", "2em");
-        addStyle(style);
-
-        style = new Style(".", StyleName.FieldViewerPanel);
-        style.addProperty("line-height", "1.5em");
+        Style style = new Style(".", StyleName.FieldPanel);
+        style.addProperty("text-align", "left");
         addStyle(style);
 
         style = new Style(".", StyleName.FieldEditorPanel, " .", DefaultWidgetsTheme.StyleName.Button);
