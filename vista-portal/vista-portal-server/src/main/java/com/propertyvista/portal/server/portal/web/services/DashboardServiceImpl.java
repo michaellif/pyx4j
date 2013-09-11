@@ -40,11 +40,14 @@ import com.propertyvista.domain.payment.PreauthorizedPayment;
 import com.propertyvista.domain.payment.PreauthorizedPayment.PreauthorizedPaymentCoveredItem;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.Tenant;
+import com.propertyvista.dto.TransactionHistoryDTO;
 import com.propertyvista.portal.domain.dto.BillDataDTO;
 import com.propertyvista.portal.rpc.portal.web.dto.AutoPayInfoDTO;
 import com.propertyvista.portal.rpc.portal.web.dto.AutoPaySummaryDTO;
+import com.propertyvista.portal.rpc.portal.web.dto.BillingHistoryDTO;
 import com.propertyvista.portal.rpc.portal.web.dto.BillingSummaryDTO;
 import com.propertyvista.portal.rpc.portal.web.dto.FinancialDashboardDTO;
+import com.propertyvista.portal.rpc.portal.web.dto.LatestActivitiesDTO;
 import com.propertyvista.portal.rpc.portal.web.dto.PaymentMethodInfoDTO;
 import com.propertyvista.portal.rpc.portal.web.dto.PaymentMethodSummaryDTO;
 import com.propertyvista.portal.rpc.portal.web.dto.ResidentServicesDashboardDTO;
@@ -67,13 +70,12 @@ public class DashboardServiceImpl implements DashboardService {
 
             dashboard.billingSummary().set(createBillingSummary(lease));
             dashboard.autoPaySummary().set(createAutoPaySummary(lease));
-
-            dashboard.latestActivities().addAll(ServerSideFactory.create(ARFacade.class).getLatestBillingActivity(lease.billingAccount()));
+            dashboard.latestActivities().set(createLatestActivities(lease));
 
             if (VistaFeatures.instance().yardiIntegration()) {
-                dashboard.transactionsHistory().set(ServerSideFactory.create(ARFacade.class).getTransactionHistory(lease.billingAccount()));
+                dashboard.transactionsHistory().set(createTransactionsHistory(lease));
             } else {
-                dashboard.billingHistory().addAll(retrieveBillHistory(lease));
+                dashboard.billingHistory().set(createBillingHistory(lease));
             }
 
             dashboard.paymentMethodSummary().set(createPaymentMethodSummary(lease));
@@ -106,6 +108,26 @@ public class DashboardServiceImpl implements DashboardService {
         }
 
         return summary;
+    }
+
+    private static BillingHistoryDTO createBillingHistory(Lease lease) {
+        BillingHistoryDTO history = EntityFactory.create(BillingHistoryDTO.class);
+
+        history.bills().addAll(retrieveBillHistory(lease));
+
+        return history;
+    }
+
+    private static TransactionHistoryDTO createTransactionsHistory(Lease lease) {
+        return ServerSideFactory.create(ARFacade.class).getTransactionHistory(lease.billingAccount());
+    }
+
+    private static LatestActivitiesDTO createLatestActivities(Lease lease) {
+        LatestActivitiesDTO history = EntityFactory.create(LatestActivitiesDTO.class);
+
+        history.lineItems().addAll(ServerSideFactory.create(ARFacade.class).getLatestBillingActivity(lease.billingAccount()));
+
+        return history;
     }
 
     private static AutoPaySummaryDTO createAutoPaySummary(Lease lease) {
