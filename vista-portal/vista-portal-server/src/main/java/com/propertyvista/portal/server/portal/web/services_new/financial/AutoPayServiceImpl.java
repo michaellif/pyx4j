@@ -7,17 +7,16 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on 2013-04-12
+ * Created on Sep 11, 2013
  * @author VladL
  * @version $Id$
  */
-package com.propertyvista.portal.server.portal.web.services;
+package com.propertyvista.portal.server.portal.web.services_new.financial;
 
 import java.math.BigDecimal;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
-import com.pyx4j.commons.Key;
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.utils.EntityDtoBinder;
@@ -29,26 +28,36 @@ import com.propertyvista.domain.payment.PreauthorizedPayment.PreauthorizedPaymen
 import com.propertyvista.domain.security.common.VistaApplication;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.portal.rpc.portal.web.dto.AutoPayDTO;
-import com.propertyvista.portal.rpc.portal.web.services.AutoPayRetrieveService;
+import com.propertyvista.portal.rpc.portal.web.dto.AutoPaySummaryDTO;
+import com.propertyvista.portal.rpc.portal.web.services_new.financial.AutoPayService;
 import com.propertyvista.portal.server.portal.TenantAppContext;
 import com.propertyvista.server.common.util.AddressConverter;
 import com.propertyvista.server.common.util.AddressRetriever;
 
-public class AutoPayRetrieveServiceImpl extends EntityDtoBinder<PreauthorizedPayment, AutoPayDTO> implements AutoPayRetrieveService {
+public class AutoPayServiceImpl implements AutoPayService {
 
-    public AutoPayRetrieveServiceImpl() {
-        super(PreauthorizedPayment.class, AutoPayDTO.class);
+    @Override
+    public void createAutoPay(AsyncCallback<AutoPayDTO> callback) {
+        // TODO Auto-generated method stub
+
     }
 
     @Override
-    protected void bind() {
-        bindCompleteDBO();
+    public void saveAutoPay(AsyncCallback<Boolean> callback, AutoPayDTO autoPay) {
+        // TODO Auto-generated method stub
+
     }
 
     @Override
-    public void retrieve(AsyncCallback<AutoPayDTO> callback, Key entityId) {
-        PreauthorizedPayment dbo = Persistence.secureRetrieve(PreauthorizedPayment.class, entityId);
-        AutoPayDTO dto = createDTO(dbo);
+    public void deleteAutoPay(AsyncCallback<Boolean> callback, PreauthorizedPayment itemId) {
+        // TODO Auto-generated method stub
+
+    }
+
+    @Override
+    public void retreiveAutoPay(AsyncCallback<AutoPayDTO> callback, PreauthorizedPayment entityId) {
+        PreauthorizedPayment dbo = Persistence.secureRetrieve(PreauthorizedPayment.class, entityId.getPrimaryKey());
+        AutoPayDTO dto = new AutoPayDtoBinder().createDTO(dbo);
 
         // enhance dto:
         Lease lease = TenantAppContext.getCurrentUserLease();
@@ -75,6 +84,24 @@ public class AutoPayRetrieveServiceImpl extends EntityDtoBinder<PreauthorizedPay
         }
 
         callback.onSuccess(dto);
+    }
+
+    @Override
+    public void getAutoPaySummary(AsyncCallback<AutoPaySummaryDTO> callback) {
+        // TODO Auto-generated method stub
+
+    }
+
+    class AutoPayDtoBinder extends EntityDtoBinder<PreauthorizedPayment, AutoPayDTO> {
+
+        protected AutoPayDtoBinder() {
+            super(PreauthorizedPayment.class, AutoPayDTO.class);
+        }
+
+        @Override
+        protected void bind() {
+            bindCompleteDBO();
+        }
 
     }
 }

@@ -15,21 +15,21 @@ package com.propertyvista.portal.rpc.portal.web.services_new.financial;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
-import com.pyx4j.commons.Key;
 import com.pyx4j.rpc.shared.IService;
 
+import com.propertyvista.domain.payment.PreauthorizedPayment;
 import com.propertyvista.portal.rpc.portal.web.dto.AutoPayDTO;
+import com.propertyvista.portal.rpc.portal.web.dto.AutoPaySummaryDTO;
 
 public interface AutoPayService extends IService {
 
-    void createAutoPay(AutoPayDTO autoPay);
+    void createAutoPay(AsyncCallback<AutoPayDTO> callback);
 
-    void saveAutoPay(AutoPayDTO autoPay);
+    void saveAutoPay(AsyncCallback<Boolean> callback, AutoPayDTO autoPay);
 
-    void deleteAutoPay(AutoPayDTO autoPay);
+    void deleteAutoPay(AsyncCallback<Boolean> callback, PreauthorizedPayment entityId);
 
-    void retreiveAutoPay(AsyncCallback<AutoPayDTO> callback, Key entityId);
+    void retreiveAutoPay(AsyncCallback<AutoPayDTO> callback, PreauthorizedPayment entityId);
 
-    //  void getAutoPaySummary(AsyncCallback<AutoPaySummaryDTO> callback);
-
+    void getAutoPaySummary(AsyncCallback<AutoPaySummaryDTO> callback);
 }
