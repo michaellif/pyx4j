@@ -13,12 +13,15 @@
  */
 package com.propertyvista.portal.rpc.portal.web.dto;
 
+import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.entity.shared.IPrimitive;
+
+import com.propertyvista.domain.payment.PaymentMethod;
 
 @Transient
 public interface PaymentMethodInfoDTO extends IEntity {
 
-    IPrimitive<String> description();
+    @ToString
+    PaymentMethod paymentMethod();
 }

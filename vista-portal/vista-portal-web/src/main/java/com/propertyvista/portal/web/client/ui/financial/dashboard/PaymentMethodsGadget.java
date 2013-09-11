@@ -13,6 +13,7 @@
  */
 package com.propertyvista.portal.web.client.ui.financial.dashboard;
 
+import com.google.gwt.dom.client.Style.FontWeight;
 import com.google.gwt.dom.client.Style.TextAlign;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.Window;
@@ -24,8 +25,10 @@ import com.pyx4j.commons.css.ThemeColor;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CEntityForm;
-import com.pyx4j.forms.client.ui.CLabel;
+import com.pyx4j.forms.client.ui.CEntityLabel;
+import com.pyx4j.forms.client.ui.folder.BoxFolderItemDecorator;
 import com.pyx4j.forms.client.ui.folder.CEntityFolderItem;
+import com.pyx4j.forms.client.ui.folder.IFolderItemDecorator;
 import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.AppSite;
@@ -38,6 +41,7 @@ import com.pyx4j.widgets.client.dialog.MessageDialog;
 
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
 import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
+import com.propertyvista.domain.payment.PaymentMethod;
 import com.propertyvista.portal.rpc.portal.web.dto.PaymentMethodInfoDTO;
 import com.propertyvista.portal.rpc.portal.web.dto.PaymentMethodSummaryDTO;
 import com.propertyvista.portal.web.client.resources.PortalImages;
@@ -123,6 +127,13 @@ public class PaymentMethodsGadget extends AbstractGadget<FinancialDashboardViewI
         }
 
         @Override
+        public IFolderItemDecorator<PaymentMethodInfoDTO> createItemDecorator() {
+            BoxFolderItemDecorator<PaymentMethodInfoDTO> decor = (BoxFolderItemDecorator<PaymentMethodInfoDTO>) super.createItemDecorator();
+            decor.setExpended(false);
+            return decor;
+        }
+
+        @Override
         public CComponent<?> create(IObject<?> member) {
             if (member instanceof PaymentMethodInfoDTO) {
                 return new PaymentMethodViewer();
@@ -155,7 +166,8 @@ public class PaymentMethodsGadget extends AbstractGadget<FinancialDashboardViewI
                 BasicFlexFormPanel content = new BasicFlexFormPanel();
                 int row = -1;
 
-                content.setWidget(++row, 0, inject(proto().description(), new CLabel<String>()));
+                content.setWidget(++row, 0, inject(proto().paymentMethod(), new CEntityLabel<PaymentMethod>()));
+                content.getWidget(row, 0).getElement().getStyle().setFontWeight(FontWeight.BOLD);
 
                 return content;
             }

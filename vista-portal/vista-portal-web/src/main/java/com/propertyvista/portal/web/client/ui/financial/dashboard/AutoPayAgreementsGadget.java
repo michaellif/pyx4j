@@ -29,7 +29,9 @@ import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CDateLabel;
 import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.ui.CEntityLabel;
+import com.pyx4j.forms.client.ui.folder.BoxFolderItemDecorator;
 import com.pyx4j.forms.client.ui.folder.CEntityFolderItem;
+import com.pyx4j.forms.client.ui.folder.IFolderItemDecorator;
 import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.AppSite;
@@ -133,6 +135,13 @@ public class AutoPayAgreementsGadget extends AbstractGadget<FinancialDashboardVi
         }
 
         @Override
+        public IFolderItemDecorator<AutoPayInfoDTO> createItemDecorator() {
+            BoxFolderItemDecorator<AutoPayInfoDTO> decor = (BoxFolderItemDecorator<AutoPayInfoDTO>) super.createItemDecorator();
+            decor.setExpended(false);
+            return decor;
+        }
+
+        @Override
         public CComponent<?> create(IObject<?> member) {
             if (member instanceof AutoPayInfoDTO) {
                 return new AutoPayViewer();
@@ -175,9 +184,10 @@ public class AutoPayAgreementsGadget extends AbstractGadget<FinancialDashboardVi
                 int row = -1;
 
                 content.setWidget(++row, 0, expirationWarning);
-                content.setWidget(++row, 0, inject(proto().payer(), new CEntityLabel<Tenant>()));
-                content.setWidget(++row, 0, inject(proto().paymentMethod(), new CEntityLabel<PaymentMethod>()));
-                content.setWidget(++row, 0, inject(proto().amount()));
+                content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().expiring()), 100).build());
+                content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().payer(), new CEntityLabel<Tenant>()), 250).build());
+                content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().paymentMethod(), new CEntityLabel<PaymentMethod>()), 250).build());
+                content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().amount()), 100).build());
 
                 return content;
             }
@@ -188,6 +198,7 @@ public class AutoPayAgreementsGadget extends AbstractGadget<FinancialDashboardVi
                 super.onValueSet(populate);
 
                 expirationWarning.setVisible(!getValue().expiring().isNull());
+                get(proto().expiring()).setVisible(!getValue().expiring().isNull());
 
                 ((CEntityFolderItem<AutoPayInfoDTO>) getParent()).setRemovable(!getValue().paymentMethod().isEmpty());
             }

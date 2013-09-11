@@ -209,7 +209,7 @@ public class DashboardServiceImpl implements DashboardService {
             PaymentMethodInfoDTO pmi = EntityFactory.create(PaymentMethodInfoDTO.class);
 
             pmi.id().setValue(pm.id().getValue());
-            pmi.description().setValue(pm.getStringView());
+            pmi.paymentMethod().set(pm);
 
             paymentMethods.add(pmi);
         }
