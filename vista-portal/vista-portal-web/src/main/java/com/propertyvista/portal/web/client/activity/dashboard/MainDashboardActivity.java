@@ -52,6 +52,10 @@ public class MainDashboardActivity extends SecurityAwareActivity implements Main
         panel.setWidget(view);
         view.setPresenter(this);
 
+        populate();
+    }
+
+    private void populate() {
         ((ProfileService) GWT.create(ProfileService.class)).retreiveProfileSummary(new DefaultAsyncCallback<TenantProfileSummaryDTO>() {
             @Override
             public void onSuccess(TenantProfileSummaryDTO result) {

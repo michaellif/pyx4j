@@ -19,7 +19,7 @@ import com.google.gwt.user.client.ui.HTML;
 import com.pyx4j.commons.css.ThemeColor;
 import com.pyx4j.i18n.shared.I18n;
 
-import com.propertyvista.portal.rpc.portal.web.dto.ResidentServicesDashboardDTO;
+import com.propertyvista.portal.rpc.portal.web.dto.LatestActivitiesDTO;
 import com.propertyvista.portal.web.client.resources.PortalImages;
 import com.propertyvista.portal.web.client.ui.AbstractGadget;
 
@@ -35,7 +35,7 @@ public class LatestActivitiesGadget extends AbstractGadget<FinancialDashboardVie
         setContent(contentPanel);
     }
 
-    protected void populate(ResidentServicesDashboardDTO value) {
+    protected void populate(LatestActivitiesDTO value) {
 
     }
 

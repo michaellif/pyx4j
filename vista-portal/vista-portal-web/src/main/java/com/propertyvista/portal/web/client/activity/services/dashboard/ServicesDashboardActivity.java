@@ -25,8 +25,8 @@ import com.pyx4j.site.client.AppSite;
 
 import com.propertyvista.portal.rpc.portal.PortalSiteMap;
 import com.propertyvista.portal.rpc.portal.services.resident.TenantSureManagementService;
-import com.propertyvista.portal.rpc.portal.web.dto.ResidentServicesDashboardDTO;
-import com.propertyvista.portal.rpc.portal.web.services.DashboardService;
+import com.propertyvista.portal.rpc.portal.web.dto.insurance.InsuranceStatusDTO;
+import com.propertyvista.portal.rpc.portal.web.services_new.services.InsuranceService;
 import com.propertyvista.portal.web.client.PortalWebSite;
 import com.propertyvista.portal.web.client.activity.SecurityAwareActivity;
 import com.propertyvista.portal.web.client.ui.services.dashboard.ServicesDashboardView;
@@ -36,14 +36,11 @@ public class ServicesDashboardActivity extends SecurityAwareActivity implements 
 
     private final ServicesDashboardView view;
 
-    private final DashboardService srv;
-
     private final TenantSureManagementService tenantSureManagementService;
 
     public ServicesDashboardActivity(Place place) {
         this.view = PortalWebSite.getViewFactory().instantiate(ServicesDashboardView.class);
         this.view.setPresenter(this);
-        srv = GWT.create(DashboardService.class);
         tenantSureManagementService = GWT.create(TenantSureManagementService.class);
     }
 
@@ -55,6 +52,15 @@ public class ServicesDashboardActivity extends SecurityAwareActivity implements 
 
         populate();
 
+    }
+
+    private void populate() {
+        ((InsuranceService) GWT.create(InsuranceService.class)).retreiveInsuranceStatus(new DefaultAsyncCallback<InsuranceStatusDTO>() {
+            @Override
+            public void onSuccess(InsuranceStatusDTO result) {
+                view.populateInsuranceGadget(result);
+            }
+        });
     }
 
     @Override
@@ -149,15 +155,6 @@ public class ServicesDashboardActivity extends SecurityAwareActivity implements 
             }
         });
 
-    }
-
-    private void populate() {
-        srv.retrieveServicesDashboard(new DefaultAsyncCallback<ResidentServicesDashboardDTO>() {
-            @Override
-            public void onSuccess(ResidentServicesDashboardDTO result) {
-                view.populate(result);
-            }
-        });
     }
 
 }

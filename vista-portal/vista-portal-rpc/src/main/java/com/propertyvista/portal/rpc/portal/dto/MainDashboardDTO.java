@@ -22,7 +22,6 @@ import com.propertyvista.dto.MaintenanceRequestDTO;
 import com.propertyvista.portal.domain.dto.financial.FinancialSummaryDTO;
 import com.propertyvista.portal.rpc.portal.web.dto.BillingSummaryDTO;
 import com.propertyvista.portal.rpc.portal.web.dto.MaintenanceSummaryDTO;
-import com.propertyvista.portal.rpc.portal.web.dto.ResidentServicesDashboardDTO;
 import com.propertyvista.portal.rpc.portal.web.dto.TenantProfileSummaryDTO;
 import com.propertyvista.portal.rpc.portal.web.dto.insurance.InsuranceStatusDTO;
 
@@ -35,8 +34,6 @@ public interface MainDashboardDTO extends IEntity {
     MaintenanceSummaryDTO maintenanceInfo();
 
     BillingSummaryDTO billingSummary();
-
-    ResidentServicesDashboardDTO residentServicesInfo();
 
     @Deprecated
     FinancialSummaryDTO billSummary();

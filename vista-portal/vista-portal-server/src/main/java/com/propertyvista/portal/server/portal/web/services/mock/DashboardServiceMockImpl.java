@@ -23,18 +23,14 @@ import com.pyx4j.rpc.shared.VoidSerializable;
 
 import com.propertyvista.domain.payment.LeasePaymentMethod;
 import com.propertyvista.domain.payment.PreauthorizedPayment;
-import com.propertyvista.domain.tenant.lease.LeaseTermTenant;
 import com.propertyvista.portal.rpc.portal.web.dto.AutoPayInfoDTO;
 import com.propertyvista.portal.rpc.portal.web.dto.AutoPaySummaryDTO;
 import com.propertyvista.portal.rpc.portal.web.dto.BillingSummaryDTO;
 import com.propertyvista.portal.rpc.portal.web.dto.FinancialDashboardDTO;
-import com.propertyvista.portal.rpc.portal.web.dto.ResidentServicesDashboardDTO;
-import com.propertyvista.portal.rpc.portal.web.dto.TenantProfileSummaryDTO;
 import com.propertyvista.portal.rpc.portal.web.dto.insurance.InsuranceStatusDTO;
 import com.propertyvista.portal.rpc.portal.web.dto.insurance.NoInsuranceStatusDTO;
 import com.propertyvista.portal.rpc.portal.web.dto.insurance.OtherProviderInsuranceStatusDTO;
 import com.propertyvista.portal.rpc.portal.web.services.DashboardService;
-import com.propertyvista.portal.server.portal.TenantAppContext;
 
 public class DashboardServiceMockImpl implements DashboardService {
 
@@ -45,15 +41,6 @@ public class DashboardServiceMockImpl implements DashboardService {
         populateBillingSummary(dashboard.billingSummary());
 
         populateAutoPaySummary(dashboard.autoPaySummary());
-
-        callback.onSuccess(dashboard);
-    }
-
-    @Override
-    public void retrieveServicesDashboard(AsyncCallback<ResidentServicesDashboardDTO> callback) {
-        ResidentServicesDashboardDTO dashboard = EntityFactory.create(ResidentServicesDashboardDTO.class);
-
-        populateInsuranceStatus(dashboard.insuranceStatus());
 
         callback.onSuccess(dashboard);
     }

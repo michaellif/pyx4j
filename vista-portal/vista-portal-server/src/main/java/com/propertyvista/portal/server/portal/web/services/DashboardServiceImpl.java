@@ -32,14 +32,12 @@ import com.pyx4j.rpc.shared.VoidSerializable;
 import com.propertyvista.biz.financial.ar.ARFacade;
 import com.propertyvista.biz.financial.billing.BillingFacade;
 import com.propertyvista.biz.financial.payment.PaymentMethodFacade;
-import com.propertyvista.biz.tenant.insurance.TenantInsuranceFacade;
 import com.propertyvista.biz.tenant.lease.LeaseFacade;
 import com.propertyvista.domain.financial.billing.Bill;
 import com.propertyvista.domain.payment.LeasePaymentMethod;
 import com.propertyvista.domain.payment.PreauthorizedPayment;
 import com.propertyvista.domain.payment.PreauthorizedPayment.PreauthorizedPaymentCoveredItem;
 import com.propertyvista.domain.tenant.lease.Lease;
-import com.propertyvista.domain.tenant.lease.Tenant;
 import com.propertyvista.dto.TransactionHistoryDTO;
 import com.propertyvista.portal.domain.dto.BillDataDTO;
 import com.propertyvista.portal.rpc.portal.web.dto.AutoPayInfoDTO;
@@ -50,7 +48,6 @@ import com.propertyvista.portal.rpc.portal.web.dto.FinancialDashboardDTO;
 import com.propertyvista.portal.rpc.portal.web.dto.LatestActivitiesDTO;
 import com.propertyvista.portal.rpc.portal.web.dto.PaymentMethodInfoDTO;
 import com.propertyvista.portal.rpc.portal.web.dto.PaymentMethodSummaryDTO;
-import com.propertyvista.portal.rpc.portal.web.dto.ResidentServicesDashboardDTO;
 import com.propertyvista.portal.rpc.portal.web.services.DashboardService;
 import com.propertyvista.portal.server.portal.TenantAppContext;
 import com.propertyvista.portal.server.portal.web.services.mock.DashboardServiceMockImpl;
@@ -81,18 +78,6 @@ public class DashboardServiceImpl implements DashboardService {
             dashboard.paymentMethodSummary().set(createPaymentMethodSummary(lease));
 
             callback.onSuccess(dashboard);
-        }
-    }
-
-    @Override
-    public void retrieveServicesDashboard(AsyncCallback<ResidentServicesDashboardDTO> callback) {
-        if (true) {
-            new DashboardServiceMockImpl().retrieveServicesDashboard(callback);
-        } else {
-            ResidentServicesDashboardDTO dto = EntityFactory.create(ResidentServicesDashboardDTO.class);
-            dto.insuranceStatus().set(
-                    ServerSideFactory.create(TenantInsuranceFacade.class).getInsuranceStatus(
-                            TenantAppContext.getCurrentUserTenantInLease().leaseParticipant().<Tenant> createIdentityStub()));
         }
     }
 

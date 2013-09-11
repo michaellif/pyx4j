@@ -27,7 +27,7 @@ public class InsuranceServiceImpl implements InsuranceService {
 
     @Override
     public void retreiveInsuranceStatus(AsyncCallback<InsuranceStatusDTO> callback) {
-        if (false) {
+        if (true) {
             new InsuranceServiceMockImpl().retreiveInsuranceStatus(callback);
         } else {
             callback.onSuccess(ServerSideFactory.create(TenantInsuranceFacade.class).getInsuranceStatus(

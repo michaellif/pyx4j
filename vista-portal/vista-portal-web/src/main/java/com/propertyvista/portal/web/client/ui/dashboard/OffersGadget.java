@@ -22,7 +22,6 @@ import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.Button;
 import com.pyx4j.widgets.client.actionbar.Toolbar;
 
-import com.propertyvista.portal.rpc.portal.web.dto.ResidentServicesDashboardDTO;
 import com.propertyvista.portal.web.client.resources.PortalImages;
 import com.propertyvista.portal.web.client.ui.AbstractGadget;
 
@@ -39,9 +38,9 @@ public class OffersGadget extends AbstractGadget<MainDashboardViewImpl> {
         setContent(contentPanel);
     }
 
-    protected void populate(ResidentServicesDashboardDTO value) {
-
-    }
+//    protected void populate(ResidentServicesDashboardDTO value) {
+//
+//    }
 
     class ResidentServicesToolbar extends Toolbar {
         public ResidentServicesToolbar() {

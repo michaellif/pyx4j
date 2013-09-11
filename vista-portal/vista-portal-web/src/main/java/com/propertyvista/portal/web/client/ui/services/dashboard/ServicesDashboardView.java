@@ -15,7 +15,7 @@ package com.propertyvista.portal.web.client.ui.services.dashboard;
 
 import com.pyx4j.site.client.IsView;
 
-import com.propertyvista.portal.rpc.portal.web.dto.ResidentServicesDashboardDTO;
+import com.propertyvista.portal.rpc.portal.web.dto.insurance.InsuranceStatusDTO;
 
 public interface ServicesDashboardView extends IsView {
 
@@ -50,6 +50,6 @@ public interface ServicesDashboardView extends IsView {
 
     void setPresenter(ServicesDashboardPresenter presenter);
 
-    void populate(ResidentServicesDashboardDTO result);
+    void populateInsuranceGadget(InsuranceStatusDTO insuranceStatus);
 
 }

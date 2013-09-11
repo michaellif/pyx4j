@@ -77,11 +77,6 @@ public class DashboardServiceImpl implements DashboardService {
                             TenantAppContext.getCurrentUserTenantInLease().leaseParticipant().<Tenant> createIdentityStub()));
 
         }
-        dashboard
-                .residentServicesInfo()
-                .insuranceStatus()
-                .set(ServerSideFactory.create(TenantInsuranceFacade.class).getInsuranceStatus(
-                        TenantAppContext.getCurrentUserTenantInLease().leaseParticipant().<Tenant> createIdentityStub()));
 
         // fill stuff for the new web portal
         FinancialSummaryDTO billingSummary = BillSummaryServiceImpl.retrieve();
@@ -97,15 +92,6 @@ public class DashboardServiceImpl implements DashboardService {
             requestStatusDto.status().set(maintenanceRequest.status().duplicate());
             requestStatusDto.submitted().setValue(maintenanceRequest.submitted().getValue());
             dashboard.maintenanceInfo().maintenanceRequestStatuses().add(requestStatusDto);
-        }
-
-        if (VistaFeatures.instance().countryOfOperation() == CountryOfOperation.Canada) {
-            dashboard
-                    .residentServicesInfo()
-                    .insuranceStatus()
-                    .set(ServerSideFactory.create(TenantInsuranceFacade.class).getInsuranceStatus(
-                            TenantAppContext.getCurrentUserTenantInLease().leaseParticipant().<Tenant> createIdentityStub()));
-
         }
 
         callback.onSuccess(dashboard);
