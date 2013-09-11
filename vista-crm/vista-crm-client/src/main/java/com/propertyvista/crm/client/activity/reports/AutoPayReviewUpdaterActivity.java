@@ -26,8 +26,8 @@ import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.rpc.shared.VoidSerializable;
 import com.pyx4j.site.rpc.AppPlace;
 
-import com.propertyvista.crm.client.ui.reports.autopayreviewer.AutoPayReviewUpdaterDataGridViewImpl;
 import com.propertyvista.crm.client.ui.reports.autopayreviewer.AutoPayReviewUpdaterView;
+import com.propertyvista.crm.client.ui.reports.autopayreviewer.AutoPayReviewUpdaterViewImpl;
 import com.propertyvista.crm.rpc.dto.financial.autopayreview.PapReviewDTO;
 import com.propertyvista.crm.rpc.services.financial.AutoPayReviewService;
 import com.propertyvista.domain.reports.AutoPayChangesReportMetadata;
@@ -44,8 +44,8 @@ public class AutoPayReviewUpdaterActivity extends AbstractActivity implements Au
 
     public AutoPayReviewUpdaterActivity(AppPlace place) {
         this.place = place;
-//        this.view = new AutoPayReviewUpdaterViewImpl();
-        this.view = new AutoPayReviewUpdaterDataGridViewImpl();
+        this.view = new AutoPayReviewUpdaterViewImpl();
+//        this.view = new AutoPayReviewUpdaterDataGridViewImpl();
         this.autoPayReviewService = GWT.create(AutoPayReviewService.class);
         this.papReviews = new LinkedList<PapReviewDTO>();
     }
