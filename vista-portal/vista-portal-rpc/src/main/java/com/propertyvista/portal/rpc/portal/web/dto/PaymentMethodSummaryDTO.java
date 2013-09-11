@@ -7,8 +7,8 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Jul 23, 2013
- * @author michaellif
+ * Created on Sep 10, 2013
+ * @author VladL
  * @version $Id$
  */
 package com.propertyvista.portal.rpc.portal.web.dto;
@@ -16,25 +16,9 @@ package com.propertyvista.portal.rpc.portal.web.dto;
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
-import com.pyx4j.i18n.annotations.I18n;
-
-import com.propertyvista.domain.financial.billing.InvoiceLineItem;
-import com.propertyvista.dto.TransactionHistoryDTO;
-import com.propertyvista.portal.domain.dto.BillDataDTO;
 
 @Transient
-@I18n(strategy = I18n.I18nStrategy.IgnoreThis)
-public interface FinancialDashboardDTO extends IEntity {
+public interface PaymentMethodSummaryDTO extends IEntity {
 
-    BillingSummaryDTO billingSummary();
-
-    AutoPaySummaryDTO autoPaySummary();
-
-    IList<InvoiceLineItem> latestActivities();
-
-    IList<BillDataDTO> billingHistory();
-
-    TransactionHistoryDTO transactionsHistory();
-
-    PaymentMethodSummaryDTO paymentMethodSummary();
+    IList<PaymentMethodInfoDTO> paymentMethods();
 }

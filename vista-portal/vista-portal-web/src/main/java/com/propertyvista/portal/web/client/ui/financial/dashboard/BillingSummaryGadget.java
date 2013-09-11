@@ -157,17 +157,7 @@ public class BillingSummaryGadget extends AbstractGadget<FinancialDashboardViewI
                 actionsPanel.add(viewBillAnchor);
             }
 
-            Anchor viewBillAnchor = new Anchor("View Billing History", new Command() {
-
-                @Override
-                public void execute() {
-                    getGadgetView().getPresenter().viewBillingHistory();
-                }
-            });
-            actionsPanel.add(viewBillAnchor);
-
             return contentPanel;
         }
     }
-
 }

@@ -32,6 +32,7 @@ import com.propertyvista.portal.rpc.portal.PortalSiteMap;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap.Resident.Financial;
 import com.propertyvista.portal.rpc.portal.web.dto.AutoPayInfoDTO;
 import com.propertyvista.portal.rpc.portal.web.dto.FinancialDashboardDTO;
+import com.propertyvista.portal.rpc.portal.web.dto.PaymentMethodInfoDTO;
 import com.propertyvista.portal.rpc.portal.web.services.DashboardService;
 import com.propertyvista.portal.web.client.PortalWebSite;
 import com.propertyvista.portal.web.client.activity.SecurityAwareActivity;
@@ -83,20 +84,7 @@ public class FinancialDashboardActivity extends SecurityAwareActivity implements
     }
 
     @Override
-    public void addPaymentMethod() {
-        if (SecurityController.checkAnyBehavior(VistaCustomerPaymentTypeBehavior.values())) {
-            AppSite.getPlaceController().goTo(new PortalSiteMap.Resident.PaymentMethods.NewPaymentMethod());
-        }
-    }
-
-    @Override
-    public void viewPaymentMethod(LeasePaymentMethod paymentMethod) {
-        AppPlace place = new PortalSiteMap.Resident.PaymentMethods.ViewPaymentMethod();
-        AppSite.getPlaceController().goTo(place.formPlace(paymentMethod.id().getValue()));
-    }
-
-    @Override
-    public void addPreauthorizedPayment() {
+    public void addAutoPay() {
         if (SecurityController.checkAnyBehavior(VistaCustomerPaymentTypeBehavior.values())) {
             AppSite.getPlaceController().goTo(new PortalSiteMap.Resident.Financial.PreauthorizedPayments.NewPreauthorizedPayment());
         }
@@ -110,5 +98,34 @@ public class FinancialDashboardActivity extends SecurityAwareActivity implements
                 // TODO Auto-generated method stub
             }
         }, EntityFactory.createIdentityStub(PreauthorizedPayment.class, autoPay.getPrimaryKey()));
+    }
+
+    @Override
+    public void viewPreauthorizedPayment(AutoPayInfoDTO autoPay) {
+        // TODO Auto-generated method stub
+
+    }
+
+    @Override
+    public void addPaymentMethod() {
+        if (SecurityController.checkAnyBehavior(VistaCustomerPaymentTypeBehavior.values())) {
+            AppSite.getPlaceController().goTo(new PortalSiteMap.Resident.PaymentMethods.NewPaymentMethod());
+        }
+    }
+
+    @Override
+    public void deletePaymentMethod(PaymentMethodInfoDTO paymentMethod) {
+        srv.deletePaymentMethod(new DefaultAsyncCallback<VoidSerializable>() {
+            @Override
+            public void onSuccess(VoidSerializable result) {
+                // TODO Auto-generated method stub
+            }
+        }, EntityFactory.createIdentityStub(LeasePaymentMethod.class, paymentMethod.getPrimaryKey()));
+    }
+
+    @Override
+    public void viewPaymentMethod(PaymentMethodInfoDTO paymentMethod) {
+        AppPlace place = new PortalSiteMap.Resident.PaymentMethods.ViewPaymentMethod();
+        AppSite.getPlaceController().goTo(place.formPlace(paymentMethod.id().getValue()));
     }
 }

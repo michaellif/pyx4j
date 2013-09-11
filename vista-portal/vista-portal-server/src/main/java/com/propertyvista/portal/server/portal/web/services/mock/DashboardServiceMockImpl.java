@@ -21,6 +21,7 @@ import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.rpc.shared.VoidSerializable;
 
+import com.propertyvista.domain.payment.LeasePaymentMethod;
 import com.propertyvista.domain.payment.PreauthorizedPayment;
 import com.propertyvista.domain.tenant.lease.LeaseTermTenant;
 import com.propertyvista.portal.rpc.portal.web.dto.AutoPayInfoDTO;
@@ -124,4 +125,8 @@ public class DashboardServiceMockImpl implements DashboardService {
 
     }
 
+    @Override
+    public void deletePaymentMethod(AsyncCallback<VoidSerializable> callback, LeasePaymentMethod itemId) {
+        // TODO Auto-generated method stub
+    }
 }

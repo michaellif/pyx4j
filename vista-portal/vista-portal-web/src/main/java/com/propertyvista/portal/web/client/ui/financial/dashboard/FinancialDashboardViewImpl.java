@@ -89,6 +89,6 @@ public class FinancialDashboardViewImpl extends FlowPanel implements FinancialDa
     public void populate(FinancialDashboardDTO result) {
         billingGadget.populate(result.billingSummary());
         autoPayAgreementsGadget.populate(result.autoPaySummary());
+        paymentMethodsGadget.populate(result.paymentMethodSummary());
     }
-
 }

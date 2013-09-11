@@ -24,6 +24,7 @@ import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.AttachLevel;
 import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.rpc.shared.VoidSerializable;
@@ -34,6 +35,7 @@ import com.propertyvista.biz.financial.payment.PaymentMethodFacade;
 import com.propertyvista.biz.tenant.LeaseFacade;
 import com.propertyvista.biz.tenant.insurance.TenantInsuranceFacade;
 import com.propertyvista.domain.financial.billing.Bill;
+import com.propertyvista.domain.payment.LeasePaymentMethod;
 import com.propertyvista.domain.payment.PreauthorizedPayment;
 import com.propertyvista.domain.payment.PreauthorizedPayment.PreauthorizedPaymentCoveredItem;
 import com.propertyvista.domain.tenant.lease.Lease;
@@ -45,11 +47,14 @@ import com.propertyvista.portal.rpc.portal.web.dto.AutoPaySummaryDTO;
 import com.propertyvista.portal.rpc.portal.web.dto.BillingSummaryDTO;
 import com.propertyvista.portal.rpc.portal.web.dto.FinancialDashboardDTO;
 import com.propertyvista.portal.rpc.portal.web.dto.MainDashboardDTO;
+import com.propertyvista.portal.rpc.portal.web.dto.PaymentMethodInfoDTO;
+import com.propertyvista.portal.rpc.portal.web.dto.PaymentMethodSummaryDTO;
 import com.propertyvista.portal.rpc.portal.web.dto.ResidentServicesDashboardDTO;
 import com.propertyvista.portal.rpc.portal.web.services.DashboardService;
 import com.propertyvista.portal.server.portal.TenantAppContext;
 import com.propertyvista.portal.server.portal.web.services.mock.DashboardServiceMockImpl;
 import com.propertyvista.server.common.util.AddressRetriever;
+import com.propertyvista.server.common.util.LeaseParticipantUtils;
 import com.propertyvista.shared.config.VistaFeatures;
 
 public class DashboardServiceImpl implements DashboardService {
@@ -64,21 +69,13 @@ public class DashboardServiceImpl implements DashboardService {
             LeaseTermTenant tenantInLease = TenantAppContext.getCurrentUserTenantInLease();
             Persistence.service().retrieve(tenantInLease.leaseTermV());
             Persistence.service().retrieve(tenantInLease.leaseTermV().holder().lease());
-            Persistence.service().retrieve(tenantInLease.leaseTermV().holder().lease().unit());
             Persistence.service().retrieve(tenantInLease.leaseTermV().holder().lease().unit().floorplan());
-            Persistence.service().retrieve(tenantInLease.leaseTermV().holder().lease().unit().building());
 
             dashboard.profileInfo().tenantName().setValue(tenantInLease.leaseParticipant().customer().person().name().getStringView());
             dashboard.profileInfo().floorplanName().set(tenantInLease.leaseTermV().holder().lease().unit().floorplan().marketingName());
             dashboard.profileInfo().tenantAddress().setValue(AddressRetriever.getLeaseParticipantCurrentAddress(tenantInLease).getStringView());
 
-            // fill stuff for the new web portal
-            dashboard.billingSummary().currentBalance()
-                    .setValue(ServerSideFactory.create(ARFacade.class).getCurrentBalance(TenantAppContext.getCurrentUserLease().billingAccount()));
-            if (!VistaFeatures.instance().yardiIntegration()) {
-                Bill bill = ServerSideFactory.create(BillingFacade.class).getLatestBill(tenantInLease.leaseTermV().holder().lease());
-                dashboard.billingSummary().dueDate().setValue(bill.dueDate().getValue());
-            }
+            dashboard.billingSummary().set(createBillingSummary(tenantInLease.leaseTermV().holder().lease()));
 
             dashboard.insuranceStatus().set(
                     ServerSideFactory.create(TenantInsuranceFacade.class).getInsuranceStatus(
@@ -97,16 +94,18 @@ public class DashboardServiceImpl implements DashboardService {
 
             Lease lease = TenantAppContext.getCurrentUserLease();
 
-            dashboard.billingSummary().set(createBillingSummary());
-            dashboard.autoPaySummary().set(createAutoPaySummary());
+            dashboard.billingSummary().set(createBillingSummary(lease));
+            dashboard.autoPaySummary().set(createAutoPaySummary(lease));
 
             dashboard.latestActivities().addAll(ServerSideFactory.create(ARFacade.class).getLatestBillingActivity(lease.billingAccount()));
 
             if (VistaFeatures.instance().yardiIntegration()) {
                 dashboard.transactionsHistory().set(ServerSideFactory.create(ARFacade.class).getTransactionHistory(lease.billingAccount()));
             } else {
-                dashboard.billingHistory().addAll(retrieveBillHistory());
+                dashboard.billingHistory().addAll(retrieveBillHistory(lease));
             }
+
+            dashboard.paymentMethodSummary().set(createPaymentMethodSummary(lease));
 
             callback.onSuccess(dashboard);
         }
@@ -122,36 +121,37 @@ public class DashboardServiceImpl implements DashboardService {
                     ServerSideFactory.create(TenantInsuranceFacade.class).getInsuranceStatus(
                             TenantAppContext.getCurrentUserTenantInLease().leaseParticipant().<Tenant> createIdentityStub()));
         }
-
     }
 
     // Internals:
 
-    private static BillingSummaryDTO createBillingSummary() {
+    private static BillingSummaryDTO createBillingSummary(Lease lease) {
         BillingSummaryDTO summary = EntityFactory.create(BillingSummaryDTO.class);
 
-        summary.currentBalance().setValue(ServerSideFactory.create(ARFacade.class).getCurrentBalance(TenantAppContext.getCurrentUserLease().billingAccount()));
+        summary.currentBalance().setValue(ServerSideFactory.create(ARFacade.class).getCurrentBalance(lease.billingAccount()));
         if (!VistaFeatures.instance().yardiIntegration()) {
-            LeaseTermTenant tenantInLease = TenantAppContext.getCurrentUserTenantInLease();
-            Persistence.service().retrieve(tenantInLease.leaseTermV());
-            Persistence.service().retrieve(tenantInLease.leaseTermV().holder().lease());
-
-            Bill bill = ServerSideFactory.create(BillingFacade.class).getLatestBill(tenantInLease.leaseTermV().holder().lease());
+            Bill bill = ServerSideFactory.create(BillingFacade.class).getLatestBill(lease);
             summary.dueDate().setValue(bill.dueDate().getValue());
         }
 
         return summary;
     }
 
-    private static AutoPaySummaryDTO createAutoPaySummary() {
+    private static AutoPaySummaryDTO createAutoPaySummary(Lease lease) {
         AutoPaySummaryDTO summary = EntityFactory.create(AutoPaySummaryDTO.class);
-
-        Lease lease = TenantAppContext.getCurrentUserLease();
 
         summary.currentAutoPayments().addAll(retrieveCurrentAutoPayments(lease));
         summary.currentAutoPayDate().setValue(ServerSideFactory.create(PaymentMethodFacade.class).getCurrentPreauthorizedPaymentDate(lease));
         summary.nextAutoPayDate().setValue(ServerSideFactory.create(PaymentMethodFacade.class).getNextPreauthorizedPaymentDate(lease));
         summary.modificationsAllowed().setValue(!ServerSideFactory.create(LeaseFacade.class).isMoveOutWithinNextBillingCycle(lease));
+
+        return summary;
+    }
+
+    private IEntity createPaymentMethodSummary(Lease lease) {
+        PaymentMethodSummaryDTO summary = EntityFactory.create(PaymentMethodSummaryDTO.class);
+
+        summary.paymentMethods().addAll(retrievePaymentMethods(lease));
 
         return summary;
     }
@@ -182,17 +182,14 @@ public class DashboardServiceImpl implements DashboardService {
         return currentAutoPayments;
     }
 
-    private static List<BillDataDTO> retrieveBillHistory() {
+    private static List<BillDataDTO> retrieveBillHistory(Lease lease) {
         List<BillDataDTO> bills = new ArrayList<BillDataDTO>();
         EntityQueryCriteria<Bill> criteria = EntityQueryCriteria.create(Bill.class);
 
-        LeaseTermTenant tenant = TenantAppContext.getCurrentUserTenantInLease();
-        Persistence.service().retrieve(tenant.leaseTermV());
-        Persistence.service().retrieve(tenant.leaseTermV().holder().lease());
-
-        criteria.add(PropertyCriterion.eq(criteria.proto().billingAccount(), tenant.leaseTermV().holder().lease().billingAccount()));
+        criteria.add(PropertyCriterion.eq(criteria.proto().billingAccount(), lease.billingAccount()));
         for (Bill bill : Persistence.service().query(criteria)) {
             BillDataDTO dto = EntityFactory.create(BillDataDTO.class);
+
             dto.setPrimaryKey(bill.getPrimaryKey());
             dto.referenceNo().setValue(bill.billSequenceNumber().getValue());
             dto.amount().setValue(bill.totalDueAmount().getValue());
@@ -201,7 +198,23 @@ public class DashboardServiceImpl implements DashboardService {
 
             bills.add(dto);
         }
+
         return bills;
+    }
+
+    private static List<PaymentMethodInfoDTO> retrievePaymentMethods(Lease lease) {
+        List<PaymentMethodInfoDTO> paymentMethods = new ArrayList<PaymentMethodInfoDTO>();
+
+        for (LeasePaymentMethod pm : LeaseParticipantUtils.getProfiledPaymentMethods(TenantAppContext.getCurrentUserTenantInLease())) {
+            PaymentMethodInfoDTO pmi = EntityFactory.create(PaymentMethodInfoDTO.class);
+
+            pmi.id().setValue(pm.id().getValue());
+            pmi.description().setValue(pm.getStringView());
+
+            paymentMethods.add(pmi);
+        }
+
+        return paymentMethods;
     }
 
     // Gadgets utilities:
@@ -209,6 +222,14 @@ public class DashboardServiceImpl implements DashboardService {
     @Override
     public void deletePreauthorizedPayment(AsyncCallback<VoidSerializable> callback, PreauthorizedPayment itemId) {
         ServerSideFactory.create(PaymentMethodFacade.class).deletePreauthorizedPayment(itemId);
+        Persistence.service().commit();
+
+        callback.onSuccess(null);
+    }
+
+    @Override
+    public void deletePaymentMethod(AsyncCallback<VoidSerializable> callback, LeasePaymentMethod itemId) {
+        ServerSideFactory.create(PaymentMethodFacade.class).deleteLeasePaymentMethod(itemId);
         Persistence.service().commit();
 
         callback.onSuccess(null);

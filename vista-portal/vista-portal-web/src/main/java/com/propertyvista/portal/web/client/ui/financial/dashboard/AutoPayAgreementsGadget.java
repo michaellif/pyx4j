@@ -22,6 +22,7 @@ import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Widget;
 
+import com.pyx4j.commons.css.StyleManager;
 import com.pyx4j.commons.css.ThemeColor;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.forms.client.ui.CComponent;
@@ -35,6 +36,8 @@ import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.client.ui.layout.responsive.LayoutChangeEvent;
 import com.pyx4j.site.client.ui.layout.responsive.LayoutChangeHandler;
 import com.pyx4j.site.client.ui.layout.responsive.ResponsiveLayoutPanel.LayoutType;
+import com.pyx4j.widgets.client.Button;
+import com.pyx4j.widgets.client.actionbar.Toolbar;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
 
 import com.propertyvista.common.client.theme.VistaTheme;
@@ -56,6 +59,7 @@ public class AutoPayAgreementsGadget extends AbstractGadget<FinancialDashboardVi
 
     AutoPayAgreementsGadget(FinancialDashboardViewImpl dashboardView) {
         super(dashboardView, PortalImages.INSTANCE.billingIcon(), i18n.tr("Auto Pay Agreements"), ThemeColor.contrast4);
+        setActionsToolbar(new AutoPayAgreementsToolbar());
 
         autoPayListView = new AutoPayListView();
         autoPayListView.setViewable(true);
@@ -69,6 +73,19 @@ public class AutoPayAgreementsGadget extends AbstractGadget<FinancialDashboardVi
 
     protected void populate(AutoPaySummaryDTO value) {
         autoPayListView.populate(value);
+    }
+
+    class AutoPayAgreementsToolbar extends Toolbar {
+        public AutoPayAgreementsToolbar() {
+            Button autoPayButton = new Button("Add Auto Pay Agreement", new Command() {
+                @Override
+                public void execute() {
+                    getGadgetView().getPresenter().addAutoPay();
+                }
+            });
+            autoPayButton.getElement().getStyle().setProperty("background", StyleManager.getPalette().getThemeColor(ThemeColor.contrast4, 1));
+            add(autoPayButton);
+        }
     }
 
     class AutoPayListView extends CEntityForm<AutoPaySummaryDTO> {
@@ -110,7 +127,9 @@ public class AutoPayAgreementsGadget extends AbstractGadget<FinancialDashboardVi
 
         public AutoPayFolder() {
             super(AutoPayInfoDTO.class, true);
+
             setOrderable(false);
+            setAddable(false);
         }
 
         @Override
@@ -119,11 +138,6 @@ public class AutoPayAgreementsGadget extends AbstractGadget<FinancialDashboardVi
                 return new AutoPayViewer();
             }
             return super.create(member);
-        }
-
-        @Override
-        protected void addItem() {
-            getGadgetView().getPresenter().addPreauthorizedPayment();
         }
 
         @Override
@@ -179,5 +193,4 @@ public class AutoPayAgreementsGadget extends AbstractGadget<FinancialDashboardVi
             }
         }
     }
-
 }

@@ -13,18 +13,33 @@
  */
 package com.propertyvista.portal.web.client.ui.financial.dashboard;
 
+import com.google.gwt.dom.client.Style.TextAlign;
 import com.google.gwt.user.client.Command;
-import com.google.gwt.user.client.ui.FlowPanel;
-import com.google.gwt.user.client.ui.HTML;
+import com.google.gwt.user.client.Window;
+import com.google.gwt.user.client.ui.IsWidget;
+import com.google.gwt.user.client.ui.SimplePanel;
 
 import com.pyx4j.commons.css.StyleManager;
 import com.pyx4j.commons.css.ThemeColor;
-import com.pyx4j.forms.client.ui.CEntityContainer;
+import com.pyx4j.entity.shared.IObject;
+import com.pyx4j.forms.client.ui.CComponent;
+import com.pyx4j.forms.client.ui.CEntityForm;
+import com.pyx4j.forms.client.ui.CLabel;
+import com.pyx4j.forms.client.ui.folder.CEntityFolderItem;
+import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.site.client.AppSite;
+import com.pyx4j.site.client.ui.layout.responsive.LayoutChangeEvent;
+import com.pyx4j.site.client.ui.layout.responsive.LayoutChangeHandler;
+import com.pyx4j.site.client.ui.layout.responsive.ResponsiveLayoutPanel.LayoutType;
 import com.pyx4j.widgets.client.Button;
 import com.pyx4j.widgets.client.actionbar.Toolbar;
+import com.pyx4j.widgets.client.dialog.MessageDialog;
 
-import com.propertyvista.portal.rpc.portal.web.dto.ResidentServicesDashboardDTO;
+import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
+import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
+import com.propertyvista.portal.rpc.portal.web.dto.PaymentMethodInfoDTO;
+import com.propertyvista.portal.rpc.portal.web.dto.PaymentMethodSummaryDTO;
 import com.propertyvista.portal.web.client.resources.PortalImages;
 import com.propertyvista.portal.web.client.ui.AbstractGadget;
 
@@ -32,24 +47,29 @@ public class PaymentMethodsGadget extends AbstractGadget<FinancialDashboardViewI
 
     private static final I18n i18n = I18n.get(PaymentMethodsGadget.class);
 
+    private final PaymentMethodListView paymentMethodListView;
+
     PaymentMethodsGadget(FinancialDashboardViewImpl form) {
         super(form, PortalImages.INSTANCE.billingIcon(), i18n.tr("Payment Methods"), ThemeColor.contrast4);
         setActionsToolbar(new PaymentMethodsToolbar());
 
-        FlowPanel contentPanel = new FlowPanel();
-        contentPanel.add(new HTML("Payment Methods"));
+        paymentMethodListView = new PaymentMethodListView();
+        paymentMethodListView.setViewable(true);
+        paymentMethodListView.initContent();
+
+        SimplePanel contentPanel = new SimplePanel(paymentMethodListView.asWidget());
+        contentPanel.getElement().getStyle().setTextAlign(TextAlign.CENTER);
 
         setContent(contentPanel);
     }
 
-    protected void populate(ResidentServicesDashboardDTO value) {
-
+    protected void populate(PaymentMethodSummaryDTO value) {
+        paymentMethodListView.populate(value);
     }
 
     class PaymentMethodsToolbar extends Toolbar {
         public PaymentMethodsToolbar() {
             Button autoPayButton = new Button("Add Payment Method", new Command() {
-
                 @Override
                 public void execute() {
                     getGadgetView().getPresenter().addPaymentMethod();
@@ -60,4 +80,85 @@ public class PaymentMethodsGadget extends AbstractGadget<FinancialDashboardViewI
         }
     }
 
+    class PaymentMethodListView extends CEntityForm<PaymentMethodSummaryDTO> {
+
+        private final BasicFlexFormPanel mainPanel;
+
+        public PaymentMethodListView() {
+            super(PaymentMethodSummaryDTO.class);
+
+            mainPanel = new BasicFlexFormPanel();
+
+            doLayout(LayoutType.getLayoutType(Window.getClientWidth()));
+
+            AppSite.getEventBus().addHandler(LayoutChangeEvent.TYPE, new LayoutChangeHandler() {
+                @Override
+                public void onLayoutChangeRerquest(LayoutChangeEvent event) {
+                    doLayout(event.getLayoutType());
+                }
+            });
+        }
+
+        private void doLayout(LayoutType layoutType) {
+
+        }
+
+        @Override
+        public IsWidget createContent() {
+            int row = -1;
+
+            mainPanel.setWidget(++row, 0, inject(proto().paymentMethods(), new PaymentMethodFolder()));
+
+            return mainPanel;
+        }
+    }
+
+    private class PaymentMethodFolder extends VistaBoxFolder<PaymentMethodInfoDTO> {
+
+        public PaymentMethodFolder() {
+            super(PaymentMethodInfoDTO.class, true);
+
+            setOrderable(false);
+            setAddable(false);
+        }
+
+        @Override
+        public CComponent<?> create(IObject<?> member) {
+            if (member instanceof PaymentMethodInfoDTO) {
+                return new PaymentMethodViewer();
+            }
+            return super.create(member);
+        }
+
+        @Override
+        protected void removeItem(final CEntityFolderItem<PaymentMethodInfoDTO> item) {
+            MessageDialog.confirm(i18n.tr("Please confirm"), i18n.tr("Do you really want to delete the Payment Method?"), new Command() {
+                @Override
+                public void execute() {
+                    PaymentMethodFolder.super.removeItem(item);
+                    getGadgetView().getPresenter().deletePaymentMethod(item.getValue());
+                }
+            });
+        }
+
+        private class PaymentMethodViewer extends CEntityDecoratableForm<PaymentMethodInfoDTO> {
+
+            public PaymentMethodViewer() {
+                super(PaymentMethodInfoDTO.class);
+
+                setViewable(true);
+                inheritViewable(false);
+            }
+
+            @Override
+            public IsWidget createContent() {
+                BasicFlexFormPanel content = new BasicFlexFormPanel();
+                int row = -1;
+
+                content.setWidget(++row, 0, inject(proto().description(), new CLabel<String>()));
+
+                return content;
+            }
+        }
+    }
 }

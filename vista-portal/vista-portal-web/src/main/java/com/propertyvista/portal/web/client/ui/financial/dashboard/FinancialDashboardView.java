@@ -15,9 +15,9 @@ package com.propertyvista.portal.web.client.ui.financial.dashboard;
 
 import com.pyx4j.site.client.IsView;
 
-import com.propertyvista.domain.payment.LeasePaymentMethod;
 import com.propertyvista.portal.rpc.portal.web.dto.AutoPayInfoDTO;
 import com.propertyvista.portal.rpc.portal.web.dto.FinancialDashboardDTO;
+import com.propertyvista.portal.rpc.portal.web.dto.PaymentMethodInfoDTO;
 
 public interface FinancialDashboardView extends IsView {
 
@@ -31,11 +31,15 @@ public interface FinancialDashboardView extends IsView {
 
         void addPaymentMethod();
 
-        void viewPaymentMethod(LeasePaymentMethod paymentMethod);
+        void deletePaymentMethod(PaymentMethodInfoDTO paymentMethod);
 
-        void addPreauthorizedPayment();
+        void viewPaymentMethod(PaymentMethodInfoDTO paymentMethod);
+
+        void addAutoPay();
 
         void deletePreauthorizedPayment(AutoPayInfoDTO autoPay);
+
+        void viewPreauthorizedPayment(AutoPayInfoDTO autoPay);
     }
 
     void setPresenter(FinancialDashboardPresenter presenter);
