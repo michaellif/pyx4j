@@ -31,7 +31,7 @@ import com.pyx4j.widgets.client.actionbar.Toolbar;
 import com.propertyvista.portal.web.client.themes.BlockMixin;
 import com.propertyvista.portal.web.client.themes.DashboardTheme;
 
-public abstract class AbstractGadget<T extends IsWidget> extends AbstractPortalView {
+public abstract class AbstractGadget<T extends IsWidget> extends AbstractPortalPanel {
 
     private ContainerPanel containerPanel;
 

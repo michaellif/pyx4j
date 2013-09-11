@@ -19,15 +19,15 @@ import com.pyx4j.forms.client.ui.CEntityContainer;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
 
-public abstract class AbstractWizardView<E extends IEntity> extends AbstractPortalView implements IWizardView<E> {
+public abstract class AbstractWizard<E extends IEntity> extends AbstractPortalPanel implements IWizardView<E> {
 
-    private static final I18n i18n = I18n.get(AbstractWizardView.class);
+    private static final I18n i18n = I18n.get(AbstractWizard.class);
 
     private WizardPresenter<E> presenter;
 
     private AbstractPortalWizard<E> wizardForm;
 
-    public AbstractWizardView() {
+    public AbstractWizard() {
         super();
     }
 

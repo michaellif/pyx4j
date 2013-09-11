@@ -16,9 +16,9 @@ package com.propertyvista.portal.web.client.ui.financial.payment;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.portal.domain.dto.financial.PaymentDTO;
-import com.propertyvista.portal.web.client.ui.AbstractWizardView;
+import com.propertyvista.portal.web.client.ui.AbstractWizard;
 
-public class PaymentWizardViewImpl extends AbstractWizardView<PaymentDTO> implements PaymentWizardView {
+public class PaymentWizardViewImpl extends AbstractWizard<PaymentDTO> implements PaymentWizardView {
 
     private static final I18n i18n = I18n.get(PaymentWizardViewImpl.class);
 

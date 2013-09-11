@@ -14,9 +14,9 @@
 package com.propertyvista.portal.web.client.ui.services.insurance;
 
 import com.propertyvista.portal.rpc.portal.web.dto.insurance.TenantSureAgreementDTO;
-import com.propertyvista.portal.web.client.ui.AbstractEntityView;
+import com.propertyvista.portal.web.client.ui.AbstractViewer;
 
-public class TenantSureConfirmationViewImpl extends AbstractEntityView<TenantSureAgreementDTO> implements TenantSureConfirmationView {
+public class TenantSureConfirmationViewImpl extends AbstractViewer<TenantSureAgreementDTO> implements TenantSureConfirmationView {
 
     public TenantSureConfirmationViewImpl() {
         super();

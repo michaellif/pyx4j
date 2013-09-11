@@ -13,24 +13,19 @@
  */
 package com.propertyvista.portal.web.client.ui;
 
-import com.google.gwt.event.logical.shared.ValueChangeEvent;
-import com.google.gwt.event.logical.shared.ValueChangeHandler;
-
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.i18n.shared.I18n;
 
-public class AbstractEntityView<E extends IEntity> extends AbstractPortalView implements IEntityView<E> {
+public class AbstractEditor<E extends IEntity> extends AbstractPortalPanel implements IEntityEditor<E> {
 
-    protected static final I18n i18n = I18n.get(AbstractEntityView.class);
+    protected static final I18n i18n = I18n.get(AbstractEditor.class);
 
     private CEntityForm<E> form;
 
     private EntityPresenter<E> presenter;
 
-    private final boolean editingInProgress = false;
-
-    public AbstractEntityView() {
+    public AbstractEditor() {
 
     }
 
@@ -41,17 +36,6 @@ public class AbstractEntityView<E extends IEntity> extends AbstractPortalView im
         } else {
             form.initContent();
             setWidget(form.asWidget());
-
-            form.setViewable(true);
-            form.addValueChangeHandler(new ValueChangeHandler<E>() {
-
-                @Override
-                public void onValueChange(ValueChangeEvent<E> event) {
-                    if (!editingInProgress) {
-                        presenter.save(form.getValue());
-                    }
-                }
-            });
         }
     }
 

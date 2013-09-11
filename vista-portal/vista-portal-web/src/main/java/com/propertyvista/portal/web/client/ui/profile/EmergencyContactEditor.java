@@ -22,7 +22,7 @@ import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.domain.person.Name;
 import com.propertyvista.domain.tenant.EmergencyContact;
-import com.propertyvista.portal.web.client.ui.AbstractPortalView;
+import com.propertyvista.portal.web.client.ui.AbstractPortalPanel;
 import com.propertyvista.portal.web.client.ui.util.decorators.FormDecoratorBuilder;
 
 public class EmergencyContactEditor extends CEntityForm<EmergencyContact> {
@@ -52,7 +52,7 @@ public class EmergencyContactEditor extends CEntityForm<EmergencyContact> {
         main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().address().country()), "200px").build());
         main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().address().postalCode()), "200px").build());
 
-        AbstractPortalView.updateDecoratorsLayout(main, view.getWidgetLayout());
+        AbstractPortalPanel.updateDecoratorsLayout(main, view.getWidgetLayout());
 
         return main;
     }

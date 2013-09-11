@@ -14,9 +14,9 @@
 package com.propertyvista.portal.web.client.ui.financial.paymentmethod;
 
 import com.propertyvista.portal.rpc.portal.web.dto.PaymentMethodDTO;
-import com.propertyvista.portal.web.client.ui.AbstractEntityView;
+import com.propertyvista.portal.web.client.ui.AbstractViewer;
 
-public class PaymentMethodConfirmationViewImpl extends AbstractEntityView<PaymentMethodDTO> implements PaymentMethodConfirmationView {
+public class PaymentMethodConfirmationViewImpl extends AbstractViewer<PaymentMethodDTO> implements PaymentMethodConfirmationView {
 
     public PaymentMethodConfirmationViewImpl() {
         super();

@@ -7,19 +7,34 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on 2013-04-10
- * @author VladL
+ * Created on Sep 11, 2013
+ * @author michaellif
  * @version $Id$
  */
 package com.propertyvista.portal.web.client.ui.services.insurance;
 
-import com.propertyvista.portal.rpc.portal.web.dto.insurance.TenantSureAgreementDTO;
-import com.propertyvista.portal.web.client.ui.IEntityViewer;
+import com.google.gwt.user.client.ui.Widget;
 
-public interface TenantSureConfirmationView extends IEntityViewer<TenantSureAgreementDTO> {
+import com.propertyvista.portal.domain.dto.ResidentDTO;
 
-    interface Presenter extends IEntityViewer.EntityPresenter<TenantSureAgreementDTO> {
+public class OtherInsuranceEditorViewImpl implements OtherInsuranceEditorView {
 
-        void back();
+    @Override
+    public void setPresenter(EntityPresenter<ResidentDTO> presenter) {
+        // TODO Auto-generated method stub
+
     }
+
+    @Override
+    public void populate(ResidentDTO value) {
+        // TODO Auto-generated method stub
+
+    }
+
+    @Override
+    public Widget asWidget() {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
 }

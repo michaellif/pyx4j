@@ -71,9 +71,4 @@ public class PaymentMethodConfirmationActivity extends SecurityAwareActivity imp
 
     }
 
-    @Override
-    public void save(PaymentMethodDTO value) {
-        // TODO Auto-generated method stub
-
-    }
 }

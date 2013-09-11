@@ -7,21 +7,19 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on 2013-04-10
- * @author VladL
+ * Created on Sep 11, 2013
+ * @author michaellif
  * @version $Id$
  */
-package com.propertyvista.portal.web.client.ui.financial.paymentmethod;
+package com.propertyvista.portal.web.client.ui.services.insurance;
 
-import com.propertyvista.portal.rpc.portal.web.dto.PaymentMethodDTO;
-import com.propertyvista.portal.web.client.ui.IEntityViewer;
+import com.propertyvista.portal.domain.dto.ResidentDTO;
+import com.propertyvista.portal.web.client.ui.IEntityEditor;
 
-public interface PaymentMethodConfirmationView extends IEntityViewer<PaymentMethodDTO> {
+public interface OtherInsuranceEditorView extends IEntityEditor<ResidentDTO> {
 
-    interface Presenter extends IEntityViewer.EntityPresenter<PaymentMethodDTO> {
+    public interface OtherInsuranceEditorPresenter extends EntityPresenter<ResidentDTO> {
 
-        void goToAutoPay();
-
-        void back();
     }
+
 }

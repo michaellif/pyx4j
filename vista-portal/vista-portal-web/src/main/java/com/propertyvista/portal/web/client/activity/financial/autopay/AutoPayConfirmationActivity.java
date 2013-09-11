@@ -65,9 +65,4 @@ public class AutoPayConfirmationActivity extends SecurityAwareActivity implement
         AppSite.getPlaceController().goTo(new PortalSiteMap.Resident.Financial.PreauthorizedPayments());
     }
 
-    @Override
-    public void save(AutoPayDTO value) {
-        // TODO Auto-generated method stub
-
-    }
 }

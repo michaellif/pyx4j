@@ -16,7 +16,7 @@ package com.propertyvista.portal.web.client.ui.util.decorators;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.decorators.WidgetDecorator;
 
-import com.propertyvista.portal.web.client.ui.AbstractPortalView;
+import com.propertyvista.portal.web.client.ui.AbstractPortalPanel;
 
 public class FormDecoratorBuilder extends WidgetDecorator.Builder {
 
@@ -25,7 +25,7 @@ public class FormDecoratorBuilder extends WidgetDecorator.Builder {
         labelWidth(labelWidth);
         contentWidth(contentWidth);
         componentWidth(componentWidth);
-        layout(AbstractPortalView.getWidgetLayout());
+        layout(AbstractPortalPanel.getWidgetLayout());
     }
 
     @Override

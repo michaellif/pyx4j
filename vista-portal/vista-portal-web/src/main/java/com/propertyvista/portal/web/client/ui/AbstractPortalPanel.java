@@ -21,16 +21,15 @@ import com.google.gwt.user.client.ui.Widget;
 import com.pyx4j.forms.client.ui.decorators.WidgetDecorator;
 import com.pyx4j.forms.client.ui.decorators.WidgetDecorator.Builder.Layout;
 import com.pyx4j.site.client.AppSite;
-import com.pyx4j.site.client.IsView;
 import com.pyx4j.site.client.ui.layout.responsive.LayoutChangeEvent;
 import com.pyx4j.site.client.ui.layout.responsive.LayoutChangeHandler;
 import com.pyx4j.site.client.ui.layout.responsive.ResponsiveLayoutPanel.LayoutType;
 
-public abstract class AbstractPortalView extends SimplePanel implements IsView {
+public abstract class AbstractPortalPanel extends SimplePanel {
 
     private Layout widgetLayout = null;
 
-    public AbstractPortalView() {
+    public AbstractPortalPanel() {
         AppSite.getEventBus().addHandler(LayoutChangeEvent.TYPE, new LayoutChangeHandler() {
 
             @Override
@@ -44,7 +43,7 @@ public abstract class AbstractPortalView extends SimplePanel implements IsView {
     public void doLayout() {
         Layout newWdgetLayout = getWidgetLayout();
         if (widgetLayout != newWdgetLayout) {
-            updateDecoratorsLayout(AbstractPortalView.this, newWdgetLayout);
+            updateDecoratorsLayout(AbstractPortalPanel.this, newWdgetLayout);
             widgetLayout = newWdgetLayout;
         }
     }

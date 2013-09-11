@@ -24,7 +24,7 @@ public class TenantSureWizardForm extends AbstractPortalWizard<TenantSureAgreeme
     private static final I18n i18n = I18n.get(TenantSureWizardForm.class);
 
     public TenantSureWizardForm(TenantSureWizardView view, String endButtonCaption) {
-        super(TenantSureAgreementDTO.class, view, i18n.tr("TenantSure Insurance"), endButtonCaption, ThemeColor.contrast4);
+        super(TenantSureAgreementDTO.class, view, i18n.tr("TenantSure Insurance"), endButtonCaption, ThemeColor.contrast3);
     }
 
 }

@@ -71,9 +71,4 @@ public class TenantSureConfirmationActivity extends SecurityAwareActivity implem
 
     }
 
-    @Override
-    public void save(PaymentRecordDTO value) {
-        // TODO Auto-generated method stub
-
-    }
 }

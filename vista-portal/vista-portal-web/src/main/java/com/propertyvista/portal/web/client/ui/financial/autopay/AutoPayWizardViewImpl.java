@@ -16,9 +16,9 @@ package com.propertyvista.portal.web.client.ui.financial.autopay;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.portal.rpc.portal.web.dto.AutoPayDTO;
-import com.propertyvista.portal.web.client.ui.AbstractWizardView;
+import com.propertyvista.portal.web.client.ui.AbstractWizard;
 
-public class AutoPayWizardViewImpl extends AbstractWizardView<AutoPayDTO> implements AutoPayWizardView {
+public class AutoPayWizardViewImpl extends AbstractWizard<AutoPayDTO> implements AutoPayWizardView {
 
     private static final I18n i18n = I18n.get(AutoPayWizardViewImpl.class);
 
