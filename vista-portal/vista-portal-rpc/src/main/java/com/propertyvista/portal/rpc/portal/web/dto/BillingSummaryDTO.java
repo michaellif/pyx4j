@@ -18,7 +18,6 @@ import java.math.BigDecimal;
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.annotations.Editor;
 import com.pyx4j.entity.annotations.Editor.EditorType;
-import com.pyx4j.entity.annotations.Format;
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
@@ -28,9 +27,9 @@ import com.pyx4j.i18n.annotations.I18n;
 @I18n(strategy = I18n.I18nStrategy.IgnoreThis)
 public interface BillingSummaryDTO extends IEntity {
 
-    @Format("#,##0.00")
-    @Editor(type = EditorType.money)
+    @Editor(type = EditorType.moneylabel)
     IPrimitive<BigDecimal> currentBalance();
 
+    @Editor(type = EditorType.label)
     IPrimitive<LogicalDate> dueDate();
 }
