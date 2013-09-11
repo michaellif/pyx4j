@@ -50,7 +50,6 @@ import com.propertyvista.portal.rpc.portal.web.dto.PaymentMethodInfoDTO;
 import com.propertyvista.portal.rpc.portal.web.dto.PaymentMethodSummaryDTO;
 import com.propertyvista.portal.rpc.portal.web.services.DashboardService;
 import com.propertyvista.portal.server.portal.TenantAppContext;
-import com.propertyvista.portal.server.portal.web.services.mock.DashboardServiceMockImpl;
 import com.propertyvista.server.common.util.LeaseParticipantUtils;
 import com.propertyvista.shared.config.VistaFeatures;
 
@@ -58,27 +57,24 @@ public class DashboardServiceImpl implements DashboardService {
 
     @Override
     public void retrieveFinancialDashboard(AsyncCallback<FinancialDashboardDTO> callback) {
-        if (false) {
-            new DashboardServiceMockImpl().retrieveFinancialDashboard(callback);
+
+        FinancialDashboardDTO dashboard = EntityFactory.create(FinancialDashboardDTO.class);
+
+        Lease lease = TenantAppContext.getCurrentUserLease();
+
+        dashboard.billingSummary().set(createBillingSummary(lease));
+        dashboard.autoPaySummary().set(createAutoPaySummary(lease));
+        dashboard.latestActivities().set(createLatestActivities(lease));
+
+        if (VistaFeatures.instance().yardiIntegration()) {
+            dashboard.transactionsHistory().set(createTransactionsHistory(lease));
         } else {
-            FinancialDashboardDTO dashboard = EntityFactory.create(FinancialDashboardDTO.class);
-
-            Lease lease = TenantAppContext.getCurrentUserLease();
-
-            dashboard.billingSummary().set(createBillingSummary(lease));
-            dashboard.autoPaySummary().set(createAutoPaySummary(lease));
-            dashboard.latestActivities().set(createLatestActivities(lease));
-
-            if (VistaFeatures.instance().yardiIntegration()) {
-                dashboard.transactionsHistory().set(createTransactionsHistory(lease));
-            } else {
-                dashboard.billingHistory().set(createBillingHistory(lease));
-            }
-
-            dashboard.paymentMethodSummary().set(createPaymentMethodSummary(lease));
-
-            callback.onSuccess(dashboard);
+            dashboard.billingHistory().set(createBillingHistory(lease));
         }
+
+        dashboard.paymentMethodSummary().set(createPaymentMethodSummary(lease));
+
+        callback.onSuccess(dashboard);
     }
 
     // Internals:
