@@ -20,7 +20,7 @@ import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.server.Persistence;
 
 import com.propertyvista.biz.financial.LeaseFinancialTestBase;
-import com.propertyvista.biz.tenant.LeaseFacade;
+import com.propertyvista.biz.tenant.lease.LeaseFacade;
 import com.propertyvista.domain.payment.PreauthorizedPayment;
 import com.propertyvista.domain.policy.policies.LeaseBillingPolicy;
 import com.propertyvista.domain.tenant.lease.BillableItem;

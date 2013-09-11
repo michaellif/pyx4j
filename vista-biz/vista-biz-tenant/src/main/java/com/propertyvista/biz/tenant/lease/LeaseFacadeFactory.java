@@ -15,7 +15,6 @@ package com.propertyvista.biz.tenant.lease;
 
 import com.pyx4j.config.server.FacadeFactory;
 
-import com.propertyvista.biz.tenant.LeaseFacade;
 import com.propertyvista.biz.tenant.lease.internal.LeaseFacadeInternalImpl;
 import com.propertyvista.biz.tenant.lease.yardi.LeaseFacadeYardiImpl;
 import com.propertyvista.shared.config.VistaFeatures;

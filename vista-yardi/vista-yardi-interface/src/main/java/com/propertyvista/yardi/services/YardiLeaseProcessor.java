@@ -48,7 +48,7 @@ import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.propertyvista.biz.ExecutionMonitor;
 import com.propertyvista.biz.financial.ar.yardi.YardiARIntegrationAgent;
 import com.propertyvista.biz.policy.PolicyFacade;
-import com.propertyvista.biz.tenant.LeaseFacade;
+import com.propertyvista.biz.tenant.lease.LeaseFacade;
 import com.propertyvista.domain.financial.ARCode;
 import com.propertyvista.domain.financial.ARCode.ActionType;
 import com.propertyvista.domain.financial.BillingAccount;

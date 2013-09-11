@@ -16,7 +16,6 @@ package com.propertyvista.biz.tenant.lease;
 import com.pyx4j.commons.LogicalDate;
 
 import com.propertyvista.biz.ExecutionMonitor;
-import com.propertyvista.biz.tenant.LeaseProcessFacade;
 
 public class LeaseProcessFacadeYardiImpl implements LeaseProcessFacade {
 

@@ -11,7 +11,7 @@
  * @author vlads
  * @version $Id$
  */
-package com.propertyvista.biz.tenant;
+package com.propertyvista.biz.tenant.lease;
 
 import com.pyx4j.commons.LogicalDate;
 

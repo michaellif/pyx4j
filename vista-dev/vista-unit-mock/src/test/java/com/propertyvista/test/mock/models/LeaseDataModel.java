@@ -27,7 +27,7 @@ import com.pyx4j.gwt.server.DateUtils;
 import com.propertyvista.biz.financial.payment.PaymentFacade;
 import com.propertyvista.biz.financial.payment.PaymentMethodFacade;
 import com.propertyvista.biz.occupancy.OccupancyFacade;
-import com.propertyvista.biz.tenant.LeaseFacade;
+import com.propertyvista.biz.tenant.lease.LeaseFacade;
 import com.propertyvista.domain.financial.BillingAccount.BillingPeriod;
 import com.propertyvista.domain.financial.PaymentRecord;
 import com.propertyvista.domain.financial.offering.ProductItem;

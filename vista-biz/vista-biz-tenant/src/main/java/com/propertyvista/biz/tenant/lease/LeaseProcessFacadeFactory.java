@@ -15,7 +15,6 @@ package com.propertyvista.biz.tenant.lease;
 
 import com.pyx4j.config.server.FacadeFactory;
 
-import com.propertyvista.biz.tenant.LeaseProcessFacade;
 import com.propertyvista.shared.config.VistaFeatures;
 
 public class LeaseProcessFacadeFactory implements FacadeFactory<LeaseProcessFacade> {

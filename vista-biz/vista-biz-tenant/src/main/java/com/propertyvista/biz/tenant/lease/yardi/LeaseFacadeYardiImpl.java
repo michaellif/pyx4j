@@ -17,7 +17,7 @@ import java.math.BigDecimal;
 
 import com.pyx4j.commons.LogicalDate;
 
-import com.propertyvista.biz.tenant.LeaseFacade;
+import com.propertyvista.biz.tenant.lease.LeaseFacade;
 import com.propertyvista.domain.company.Employee;
 import com.propertyvista.domain.financial.offering.ProductItem;
 import com.propertyvista.domain.policy.framework.PolicyNode;

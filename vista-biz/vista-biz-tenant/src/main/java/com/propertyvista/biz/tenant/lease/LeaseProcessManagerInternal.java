@@ -25,7 +25,6 @@ import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 
 import com.propertyvista.biz.ExecutionMonitor;
-import com.propertyvista.biz.tenant.LeaseFacade;
 import com.propertyvista.domain.tenant.lease.Lease;
 
 public class LeaseProcessManagerInternal {

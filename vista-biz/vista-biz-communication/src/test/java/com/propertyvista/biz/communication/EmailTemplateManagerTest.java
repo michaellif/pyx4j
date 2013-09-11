@@ -45,7 +45,7 @@ import com.propertyvista.biz.communication.mail.template.model.PasswordRequestPr
 import com.propertyvista.biz.communication.mail.template.model.PasswordRequestTenantT;
 import com.propertyvista.biz.communication.mail.template.model.PortalLinksT;
 import com.propertyvista.biz.system.encryption.PasswordEncryptorFacade;
-import com.propertyvista.biz.tenant.LeaseFacade;
+import com.propertyvista.biz.tenant.lease.LeaseFacade;
 import com.propertyvista.config.VistaDeployment;
 import com.propertyvista.config.tests.VistaDBTestBase;
 import com.propertyvista.crm.rpc.CrmSiteMap;

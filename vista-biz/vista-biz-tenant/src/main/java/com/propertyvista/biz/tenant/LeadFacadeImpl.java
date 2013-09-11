@@ -32,6 +32,7 @@ import com.pyx4j.gwt.server.DateUtils;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.biz.policy.IdAssignmentFacade;
+import com.propertyvista.biz.tenant.lease.LeaseFacade;
 import com.propertyvista.biz.validation.framework.ValidationFailure;
 import com.propertyvista.biz.validation.validators.lead.LeadValidator;
 import com.propertyvista.domain.property.asset.unit.AptUnit;

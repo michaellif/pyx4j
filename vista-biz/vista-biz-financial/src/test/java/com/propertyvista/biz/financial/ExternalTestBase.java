@@ -24,7 +24,7 @@ import com.pyx4j.essentials.server.dev.DataDump;
 import com.propertyvista.biz.financial.billing.BillingFacade;
 import com.propertyvista.biz.financial.billingext.ExternalBillingFacade;
 import com.propertyvista.biz.occupancy.OccupancyFacade;
-import com.propertyvista.biz.tenant.LeaseFacade;
+import com.propertyvista.biz.tenant.lease.LeaseFacade;
 import com.propertyvista.domain.financial.billing.Bill;
 import com.propertyvista.domain.financial.billingext.dto.ChargeDTO;
 import com.propertyvista.domain.financial.billingext.dto.PaymentDTO;

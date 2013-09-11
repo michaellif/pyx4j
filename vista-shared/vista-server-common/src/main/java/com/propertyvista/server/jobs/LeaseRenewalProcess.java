@@ -19,7 +19,7 @@ import org.slf4j.LoggerFactory;
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.config.server.ServerSideFactory;
 
-import com.propertyvista.biz.tenant.LeaseProcessFacade;
+import com.propertyvista.biz.tenant.lease.LeaseProcessFacade;
 import com.propertyvista.domain.settings.PmcVistaFeatures;
 
 public class LeaseRenewalProcess implements PmcProcess {

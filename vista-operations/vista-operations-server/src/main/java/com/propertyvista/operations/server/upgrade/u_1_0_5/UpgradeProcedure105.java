@@ -25,7 +25,7 @@ import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.server.contexts.NamespaceManager;
 
 import com.propertyvista.operations.server.upgrade.UpgradeProcedure;
-import com.propertyvista.biz.tenant.LeaseFacade;
+import com.propertyvista.biz.tenant.lease.LeaseFacade;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.portal.server.preloader.DashboardPreloader;
 
