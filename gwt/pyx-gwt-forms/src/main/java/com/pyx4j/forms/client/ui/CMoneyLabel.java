@@ -14,8 +14,8 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  *
- * Created on Jan 7, 2012
- * @author michaellif
+ * Created on Sep 11, 2013
+ * @author VladL
  * @version $Id$
  */
 package com.pyx4j.forms.client.ui;
@@ -23,20 +23,15 @@ package com.pyx4j.forms.client.ui;
 import java.math.BigDecimal;
 
 import com.pyx4j.forms.client.ui.formatters.MoneyFormat;
-import com.pyx4j.forms.client.validators.TextBoxParserValidator;
-import com.pyx4j.i18n.shared.I18n;
 
-public class CMoneyField extends CTextFieldBase<BigDecimal, NTextBox<BigDecimal>> {
+public class CMoneyLabel extends CLabel<BigDecimal> {
 
-    static final I18n i18n = I18n.get(CMoneyField.class);
+    public CMoneyLabel() {
+        this(null);
+    }
 
-    public static final String symbol = i18n.tr("$");
-
-    public CMoneyField() {
-        super();
+    public CMoneyLabel(String title) {
+        super(title);
         setFormat(new MoneyFormat());
-        addValueValidator(new TextBoxParserValidator<BigDecimal>());
-        setNativeWidget(new NTextBox<BigDecimal>(this));
-        asWidget().setWidth("100%");
     }
 }
