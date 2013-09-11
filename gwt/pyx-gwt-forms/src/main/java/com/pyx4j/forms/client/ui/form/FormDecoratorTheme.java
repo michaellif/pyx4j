@@ -18,7 +18,7 @@
  * @author michaellif
  * @version $Id$
  */
-package com.pyx4j.forms.client.ui.wizard;
+package com.pyx4j.forms.client.ui.form;
 
 import com.pyx4j.commons.css.ClassBasedThemeId;
 import com.pyx4j.commons.css.IStyleName;
@@ -27,22 +27,22 @@ import com.pyx4j.commons.css.Theme;
 import com.pyx4j.commons.css.ThemeId;
 import com.pyx4j.widgets.client.DefaultWidgetsTheme;
 
-public class CEntityWizardTheme extends Theme {
+public class FormDecoratorTheme extends Theme {
 
     public static enum StyleName implements IStyleName {
 
-        WizardPanel, WizardMain, WizardStep,
+        FormDecoratorPanel, FormDecoratorMain,
 
-        WizardHeader, WizardHeaderCaption,
+        FormDecoratorHeader, FormDecoratorCaption,
 
-        WizardFooter
+        FormDecoratorFooter
 
     }
 
-    public CEntityWizardTheme() {
+    public FormDecoratorTheme() {
+        initContentStyles();
         initHeaderStyles();
         initFooterStyles();
-        initContentPanelStyles();
     }
 
     @Override
@@ -50,8 +50,13 @@ public class CEntityWizardTheme extends Theme {
         return new ClassBasedThemeId(getClass());
     }
 
+    protected void initContentStyles() {
+        Style style = new Style(".", StyleName.FormDecoratorPanel);
+        addStyle(style);
+    }
+
     protected void initHeaderStyles() {
-        Style style = new Style(".", StyleName.WizardHeader);
+        Style style = new Style(".", StyleName.FormDecoratorHeader);
         style.addProperty("width", "100%");
         style.addProperty("height", "2em");
         style.addProperty("border-bottom", "1px solid");
@@ -61,7 +66,7 @@ public class CEntityWizardTheme extends Theme {
         style.addProperty("font-weight", "bold");
         addStyle(style);
 
-        style = new Style(".", StyleName.WizardHeaderCaption);
+        style = new Style(".", StyleName.FormDecoratorCaption);
         style.addProperty("float", "left");
         style.addProperty("padding", "0 1em");
         addStyle(style);
@@ -69,22 +74,14 @@ public class CEntityWizardTheme extends Theme {
     }
 
     protected void initFooterStyles() {
-        Style style = new Style(".", StyleName.WizardFooter);
+        Style style = new Style(".", StyleName.FormDecoratorFooter);
         style.addProperty("padding", "2px 0");
         style.addProperty("margin", "0.5em 0");
         addStyle(style);
 
-        style = new Style(".", StyleName.WizardFooter, " .", DefaultWidgetsTheme.StyleName.Toolbar);
+        style = new Style(".", StyleName.FormDecoratorFooter, " .", DefaultWidgetsTheme.StyleName.Toolbar);
         style.addProperty("padding", "2px");
         addStyle(style);
     }
 
-    protected void initContentPanelStyles() {
-        Style style = new Style(".", StyleName.WizardPanel);
-        addStyle(style);
-
-        style = new Style(".", StyleName.WizardPanel, " .", StyleName.WizardStep);
-        style.addProperty("height", "auto");
-        addStyle(style);
-    }
 }

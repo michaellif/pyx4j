@@ -23,6 +23,7 @@ package com.pyx4j.forms.client.ui.wizard;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Widget;
 
+import com.pyx4j.forms.client.ui.form.FormDecoratorTheme;
 import com.pyx4j.forms.client.validators.IValidatable;
 import com.pyx4j.forms.client.validators.ValidationResults;
 
@@ -48,7 +49,7 @@ public class WizardStep extends SimplePanel implements IValidatable {
         setStepTitle(title);
         assert (content != null);
         setWidget(this.content = content);
-        addStyleName(CEntityWizardTheme.StyleName.WizardStep.name());
+        addStyleName(WizardDecoratorTheme.StyleName.WizardStep.name());
     }
 
     public String getStepTitle() {
