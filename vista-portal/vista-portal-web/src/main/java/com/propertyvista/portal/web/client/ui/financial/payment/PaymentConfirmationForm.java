@@ -13,8 +13,6 @@
  */
 package com.propertyvista.portal.web.client.ui.financial.payment;
 
-import com.google.gwt.dom.client.Style.FontWeight;
-import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HorizontalPanel;
@@ -25,7 +23,6 @@ import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.commons.css.ThemeColor;
 import com.pyx4j.forms.client.ui.CEntityLabel;
-import com.pyx4j.forms.client.ui.decorators.IDecorator;
 import com.pyx4j.forms.client.ui.decorators.WidgetDecorator.Builder.Alignment;
 import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
@@ -34,18 +31,18 @@ import com.pyx4j.widgets.client.Anchor;
 import com.propertyvista.common.client.resources.VistaImages;
 import com.propertyvista.domain.payment.LeasePaymentMethod;
 import com.propertyvista.dto.PaymentRecordDTO;
-import com.propertyvista.portal.web.client.ui.CPortalEntityForm;
 import com.propertyvista.portal.web.client.ui.AbstractViewer;
+import com.propertyvista.portal.web.client.ui.CPortalEntityViewer;
 import com.propertyvista.portal.web.client.ui.util.decorators.FormDecoratorBuilder;
 
-public class PaymentConfirmationForm extends CPortalEntityForm<PaymentRecordDTO> {
+public class PaymentConfirmationForm extends CPortalEntityViewer<PaymentRecordDTO> {
 
     private static final I18n i18n = I18n.get(PaymentConfirmationForm.class);
 
     private final AbstractViewer<PaymentRecordDTO> view;
 
     public PaymentConfirmationForm(AbstractViewer<PaymentRecordDTO> view) {
-        super(PaymentRecordDTO.class);
+        super(PaymentRecordDTO.class, null, i18n.tr("Payment Submitted Successfully!"), ThemeColor.contrast4);
         this.view = view;
         setViewable(true);
         inheritViewable(false);
@@ -55,13 +52,6 @@ public class PaymentConfirmationForm extends CPortalEntityForm<PaymentRecordDTO>
     public IsWidget createContent() {
         BasicFlexFormPanel mainPanel = new BasicFlexFormPanel();
         int row = -1;
-        Widget w;
-
-        mainPanel.setWidget(++row, 0, w = new HTML(i18n.tr("Payment Submitted Successfully!")));
-        w.getElement().getStyle().setFontWeight(FontWeight.BOLD);
-        w.getElement().getStyle().setFontSize(1.2, Unit.EM);
-
-        mainPanel.setBR(++row, 0, 1);
 
         mainPanel.setWidget(++row, 0,
                 new FormDecoratorBuilder(inject(proto().paymentMethod(), new CEntityLabel<LeasePaymentMethod>()), 250).labelAlignment(Alignment.left).build());
@@ -72,11 +62,6 @@ public class PaymentConfirmationForm extends CPortalEntityForm<PaymentRecordDTO>
         mainPanel.setWidget(++row, 0, createAutoPaySignupPanel());
 
         return mainPanel;
-    }
-
-    @Override
-    public IDecorator<CPortalEntityForm<PaymentRecordDTO>> createDecorator() {
-        return new PortalFormDecorator(ThemeColor.contrast4);
     }
 
     private Widget createAutoPaySignupPanel() {

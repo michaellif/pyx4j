@@ -22,8 +22,8 @@ import com.pyx4j.forms.client.ui.DefaultCComponentsTheme;
 import com.pyx4j.forms.client.ui.datatable.DefaultDataTableTheme;
 import com.pyx4j.forms.client.ui.decorators.DefaultWidgetDecoratorTheme;
 import com.pyx4j.forms.client.ui.folder.DefaultEntityFolderTheme;
+import com.pyx4j.forms.client.ui.form.FormDecoratorTheme;
 import com.pyx4j.forms.client.ui.panels.FlexFormPanelTheme;
-import com.pyx4j.forms.client.ui.wizard.CEntityWizardTheme;
 import com.pyx4j.widgets.client.DefaultWidgetsTheme;
 import com.pyx4j.widgets.client.datepicker.DefaultDatePickerTheme;
 import com.pyx4j.widgets.client.dialog.DefaultDialogTheme;
@@ -170,34 +170,35 @@ public class PortalTheme extends VistaTheme {
         });
         addTheme(new DefaultDialogTheme());
 
-        addTheme(new CEntityWizardTheme() {
+        addTheme(new FormDecoratorTheme() {
             @Override
-            protected void initContentPanelStyles() {
-                super.initContentPanelStyles();
-                Style style = new Style(".", StyleName.WizardPanel);
+            protected void initContentStyles() {
+                super.initContentStyles();
+                Style style = new Style(".", StyleName.FormDecoratorPanel);
                 style.addProperty("min-height", "25em");
                 addStyle(style);
             }
 
             @Override
             protected void initFooterStyles() {
-                Style style = new Style(".", StyleName.WizardFooter);
+                Style style = new Style(".", StyleName.FormDecoratorFooter);
                 style.addProperty("padding", "10px");
                 style.addProperty("margin", "10px");
                 style.addProperty("overflow", "hidden");
                 addStyle(style);
 
-                style = new Style(".", StyleName.WizardFooter, " .", DefaultWidgetsTheme.StyleName.Toolbar);
+                style = new Style(".", StyleName.FormDecoratorFooter, " .", DefaultWidgetsTheme.StyleName.Toolbar);
                 style.addProperty("border-top", "4px solid");
                 style.addProperty("float", "right");
                 addStyle(style);
 
-                style = new Style(".", StyleName.WizardFooter, " .", DefaultWidgetsTheme.StyleName.ToolbarItem);
+                style = new Style(".", StyleName.FormDecoratorFooter, " .", DefaultWidgetsTheme.StyleName.ToolbarItem);
                 style.addProperty("padding", "4px");
                 addStyle(style);
 
             }
         });
+
         addTheme(new TenantDashboardTheme());
         addTheme(new CommunicationCenterTheme());
         addTheme(new NewPaymentMethodEditorTheme());

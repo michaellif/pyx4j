@@ -32,6 +32,7 @@ import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.Button;
 import com.pyx4j.widgets.client.actionbar.Toolbar;
 
+import com.propertyvista.portal.rpc.portal.web.dto.insurance.HasInsuranceDTO;
 import com.propertyvista.portal.rpc.portal.web.dto.insurance.InsuranceStatusDTO;
 import com.propertyvista.portal.rpc.portal.web.dto.insurance.NoInsuranceStatusDTO;
 import com.propertyvista.portal.rpc.portal.web.dto.insurance.OtherProviderInsuranceStatusDTO;
@@ -106,14 +107,10 @@ public class InsuranceGadget extends AbstractGadget<MainDashboardViewImpl> {
                 form = new NoInsuranceStatusForm();
                 form.initContent();
                 ((NoInsuranceStatusForm) form).populate(value.<NoInsuranceStatusDTO> cast());
-            } else if (value.isInstanceOf(OtherProviderInsuranceStatusDTO.class)) {
-                form = new OtherProviderInsuranceStatusForm();
+            } else if (value.isInstanceOf(HasInsuranceDTO.class)) {
+                form = new HasInsuranceStatusForm();
                 form.initContent();
-                ((OtherProviderInsuranceStatusForm) form).populate(value.<OtherProviderInsuranceStatusDTO> cast());
-            } else if (value.isInstanceOf(TenantSureInsuranceStatusDTO.class)) {
-                form = new NoInsuranceStatusForm();
-                form.initContent();
-                ((NoInsuranceStatusForm) form).populate(value.<NoInsuranceStatusDTO> cast());
+                ((HasInsuranceStatusForm) form).populate(value.<HasInsuranceDTO> cast());
             }
 
             if (form != null) {
@@ -160,10 +157,10 @@ public class InsuranceGadget extends AbstractGadget<MainDashboardViewImpl> {
 
     }
 
-    class OtherProviderInsuranceStatusForm extends CEntityForm<OtherProviderInsuranceStatusDTO> {
+    class HasInsuranceStatusForm extends CEntityForm<HasInsuranceDTO> {
 
-        public OtherProviderInsuranceStatusForm() {
-            super(OtherProviderInsuranceStatusDTO.class);
+        public HasInsuranceStatusForm() {
+            super(HasInsuranceDTO.class);
         }
 
         @Override

@@ -14,11 +14,11 @@
 package com.propertyvista.portal.web.client.ui.services.insurance;
 
 import com.propertyvista.portal.rpc.portal.web.dto.insurance.TenantSureAgreementDTO;
-import com.propertyvista.portal.web.client.ui.IEntityViewer;
+import com.propertyvista.portal.web.client.ui.IEntityViewerView;
 
-public interface TenantSureConfirmationView extends IEntityViewer<TenantSureAgreementDTO> {
+public interface TenantSureConfirmationView extends IEntityViewerView<TenantSureAgreementDTO> {
 
-    public interface TenantSureConfirmationPresenter extends IEntityViewer.EntityPresenter<TenantSureAgreementDTO> {
+    public interface TenantSureConfirmationPresenter extends IEntityViewerView.EntityPresenter<TenantSureAgreementDTO> {
 
         void back();
     }

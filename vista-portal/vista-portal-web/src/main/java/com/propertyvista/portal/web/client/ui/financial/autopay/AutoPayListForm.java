@@ -24,7 +24,6 @@ import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CDateLabel;
 import com.pyx4j.forms.client.ui.CEntityLabel;
-import com.pyx4j.forms.client.ui.decorators.IDecorator;
 import com.pyx4j.forms.client.ui.folder.CEntityFolderItem;
 import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
@@ -39,17 +38,17 @@ import com.propertyvista.domain.payment.LeasePaymentMethod;
 import com.propertyvista.domain.tenant.lease.Tenant;
 import com.propertyvista.portal.rpc.portal.web.dto.AutoPayDTO;
 import com.propertyvista.portal.rpc.portal.web.dto.AutoPaySummaryDTO;
-import com.propertyvista.portal.web.client.ui.CPortalEntityForm;
+import com.propertyvista.portal.web.client.ui.CPortalEntityViewer;
 import com.propertyvista.portal.web.client.ui.util.decorators.FormDecoratorBuilder;
 
-public class AutoPayListForm extends CPortalEntityForm<AutoPaySummaryDTO> {
+public class AutoPayListForm extends CPortalEntityViewer<AutoPaySummaryDTO> {
 
     private static final I18n i18n = I18n.get(AutoPayListForm.class);
 
     private AutoPayListView.Presenter presenter;
 
     public AutoPayListForm() {
-        super(AutoPaySummaryDTO.class, new VistaViewersComponentFactory());
+        super(AutoPaySummaryDTO.class, new VistaViewersComponentFactory(), null, i18n.tr("Auto Pay"), ThemeColor.contrast4);
         setViewable(true);
     }
 
@@ -67,11 +66,6 @@ public class AutoPayListForm extends CPortalEntityForm<AutoPaySummaryDTO> {
         content.setWidget(++row, 0, inject(proto().currentAutoPayments(), new PreauthorizedPaymentFolder()));
 
         return content;
-    }
-
-    @Override
-    public IDecorator<CPortalEntityForm<AutoPaySummaryDTO>> createDecorator() {
-        return new PortalFormDecorator(ThemeColor.contrast4);
     }
 
     private class PreauthorizedPaymentFolder extends VistaBoxFolder<AutoPayDTO> {

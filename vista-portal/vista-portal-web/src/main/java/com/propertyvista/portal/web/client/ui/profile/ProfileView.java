@@ -14,9 +14,9 @@
 package com.propertyvista.portal.web.client.ui.profile;
 
 import com.propertyvista.portal.domain.dto.ResidentDTO;
-import com.propertyvista.portal.web.client.ui.IEntityViewer;
+import com.propertyvista.portal.web.client.ui.IEntityViewerView;
 
-public interface ProfileView extends IEntityViewer<ResidentDTO> {
+public interface ProfileView extends IEntityViewerView<ResidentDTO> {
 
     public interface ProfilePresenter extends EntityPresenter<ResidentDTO> {
 

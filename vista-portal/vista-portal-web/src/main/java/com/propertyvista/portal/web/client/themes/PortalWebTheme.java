@@ -22,8 +22,8 @@ import com.pyx4j.forms.client.ui.DefaultCComponentsTheme;
 import com.pyx4j.forms.client.ui.datatable.DefaultDataTableTheme;
 import com.pyx4j.forms.client.ui.decorators.DefaultWidgetDecoratorTheme;
 import com.pyx4j.forms.client.ui.folder.DefaultEntityFolderTheme;
+import com.pyx4j.forms.client.ui.form.FormDecoratorTheme;
 import com.pyx4j.forms.client.ui.panels.FlexFormPanelTheme;
-import com.pyx4j.forms.client.ui.wizard.CEntityWizardTheme;
 import com.pyx4j.site.client.ui.layout.responsive.ResponsiveLayoutTheme;
 import com.pyx4j.widgets.client.DefaultWidgetsTheme;
 import com.pyx4j.widgets.client.datepicker.DefaultDatePickerTheme;
@@ -179,11 +179,11 @@ public class PortalWebTheme extends Theme {
         });
         addTheme(new DefaultDialogTheme());
 
-        addTheme(new CEntityWizardTheme() {
+        addTheme(new FormDecoratorTheme() {
 
             @Override
             protected void initHeaderStyles() {
-                Style style = new Style(".", StyleName.WizardHeader);
+                Style style = new Style(".", StyleName.FormDecoratorHeader);
                 style.addProperty("background", ThemeColor.foreground, 0.01);
                 style.addProperty("border-color", ThemeColor.foreground, 0.3);
                 style.addProperty("border-style", "solid");
@@ -196,13 +196,13 @@ public class PortalWebTheme extends Theme {
                 style.addProperty("font-weight", "bold");
                 addStyle(style);
 
-                style = new Style(".", StyleName.WizardHeaderCaption);
+                style = new Style(".", StyleName.FormDecoratorCaption);
                 addStyle(style);
             }
 
             @Override
-            protected void initContentPanelStyles() {
-                Style style = new Style(".", StyleName.WizardMain);
+            protected void initContentStyles() {
+                Style style = new Style(".", StyleName.FormDecoratorMain);
                 style.addProperty("background", ThemeColor.foreground, 0.01);
                 style.addProperty("border-color", ThemeColor.foreground, 0.3);
                 style.addProperty("border-style", "solid");
@@ -212,12 +212,12 @@ public class PortalWebTheme extends Theme {
                 style.addProperty("margin", "10px");
                 style.addProperty("overflow", "hidden");
                 addStyle(style);
-                super.initContentPanelStyles();
+                super.initContentStyles();
             }
 
             @Override
             protected void initFooterStyles() {
-                Style style = new Style(".", StyleName.WizardFooter);
+                Style style = new Style(".", StyleName.FormDecoratorFooter);
                 style.addProperty("background", ThemeColor.foreground, 0.01);
                 style.addProperty("border-color", ThemeColor.foreground, 0.3);
                 style.addProperty("border-style", "solid");
@@ -228,15 +228,15 @@ public class PortalWebTheme extends Theme {
                 style.addProperty("overflow", "hidden");
                 addStyle(style);
 
-                style = new Style(".", StyleName.WizardFooter, " .", DefaultWidgetsTheme.StyleName.Toolbar);
+                style = new Style(".", StyleName.FormDecoratorFooter, " .", DefaultWidgetsTheme.StyleName.Toolbar);
                 style.addProperty("float", "right");
                 addStyle(style);
 
-                style = new Style(".", StyleName.WizardFooter, " .", DefaultWidgetsTheme.StyleName.ToolbarItem);
+                style = new Style(".", StyleName.FormDecoratorFooter, " .", DefaultWidgetsTheme.StyleName.ToolbarItem);
                 style.addProperty("margin-left", "10px");
                 addStyle(style);
 
-                style = new Style(".", StyleName.WizardFooter, " .", DefaultWidgetsTheme.StyleName.Button);
+                style = new Style(".", StyleName.FormDecoratorFooter, " .", DefaultWidgetsTheme.StyleName.Button);
                 style.addProperty("width", "100%");
                 style.addProperty("line-height", "40px");
                 style.addProperty("background", "#aaa");

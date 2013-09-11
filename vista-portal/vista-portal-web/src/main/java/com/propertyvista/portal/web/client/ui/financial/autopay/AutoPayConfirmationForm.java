@@ -31,17 +31,17 @@ import com.pyx4j.security.client.ClientContext;
 
 import com.propertyvista.domain.payment.LeasePaymentMethod;
 import com.propertyvista.portal.rpc.portal.web.dto.AutoPayDTO;
-import com.propertyvista.portal.web.client.ui.CPortalEntityForm;
+import com.propertyvista.portal.web.client.ui.CPortalEntityViewer;
 import com.propertyvista.portal.web.client.ui.util.decorators.FormDecoratorBuilder;
 
-public class AutoPayConfirmationForm extends CPortalEntityForm<AutoPayDTO> {
+public class AutoPayConfirmationForm extends CPortalEntityViewer<AutoPayDTO> {
 
     private static final I18n i18n = I18n.get(AutoPayConfirmationForm.class);
 
     private static String cutOffDateWarning = i18n.tr("All changes will take effect after this date!");
 
     public AutoPayConfirmationForm() {
-        super(AutoPayDTO.class);
+        super(AutoPayDTO.class, null, i18n.tr("Automatic Payment Submitted Successfully!"), ThemeColor.contrast4);
         setViewable(true);
         inheritViewable(false);
     }
@@ -50,13 +50,6 @@ public class AutoPayConfirmationForm extends CPortalEntityForm<AutoPayDTO> {
     public IsWidget createContent() {
         BasicFlexFormPanel mainPanel = new BasicFlexFormPanel();
         int row = -1;
-        Widget w;
-
-        mainPanel.setWidget(++row, 0, w = new HTML(i18n.tr("Automatic Payment Submitted Successfully!")));
-        w.getElement().getStyle().setFontWeight(FontWeight.BOLD);
-        w.getElement().getStyle().setFontSize(1.2, Unit.EM);
-
-        mainPanel.setBR(++row, 0, 1);
 
         mainPanel.setWidget(++row, 0,
                 new FormDecoratorBuilder(inject(proto().paymentMethod(), new CEntityLabel<LeasePaymentMethod>()), 200).labelAlignment(Alignment.left).build());
@@ -68,11 +61,6 @@ public class AutoPayConfirmationForm extends CPortalEntityForm<AutoPayDTO> {
         mainPanel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().nextScheduledPaymentDate(), new CDateLabel()), 100).labelWidth(20).build());
 
         return mainPanel;
-    }
-
-    @Override
-    public IDecorator<CPortalEntityForm<AutoPayDTO>> createDecorator() {
-        return new PortalFormDecorator(ThemeColor.contrast4);
     }
 
     @Override

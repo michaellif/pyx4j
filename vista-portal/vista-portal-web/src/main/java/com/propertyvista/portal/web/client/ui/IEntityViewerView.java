@@ -16,10 +16,10 @@ package com.propertyvista.portal.web.client.ui;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.site.client.IsView;
 
-public interface IEntityEditor<E extends IEntity> extends IsView {
+public interface IEntityViewerView<E extends IEntity> extends IsView {
 
     interface EntityPresenter<E extends IEntity> {
-        void save();
+
     }
 
     void setPresenter(EntityPresenter<E> presenter);

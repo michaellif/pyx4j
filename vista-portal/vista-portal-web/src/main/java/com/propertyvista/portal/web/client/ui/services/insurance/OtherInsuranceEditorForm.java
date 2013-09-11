@@ -31,7 +31,6 @@ import com.pyx4j.forms.client.validators.ValidationError;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.common.client.ui.components.ApplicationDocumentFileUploaderFolder;
-import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
 import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
 import com.propertyvista.domain.media.InsuranceCertificateDocument;
 import com.propertyvista.domain.tenant.Customer;
@@ -181,7 +180,7 @@ public class OtherInsuranceEditorForm extends CEntityForm<InsuranceGeneric> {
 
     }
 
-    private static class InsuranceCertificateDocumentEditor extends CEntityDecoratableForm<InsuranceCertificateDocument> {
+    private static class InsuranceCertificateDocumentEditor extends CEntityForm<InsuranceCertificateDocument> {
 
         public InsuranceCertificateDocumentEditor() {
             super(InsuranceCertificateDocument.class);

@@ -32,9 +32,10 @@ import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.Button;
 import com.pyx4j.widgets.client.actionbar.Toolbar;
 
-import com.propertyvista.portal.rpc.portal.web.dto.insurance.HasInsuranceDTO;
 import com.propertyvista.portal.rpc.portal.web.dto.insurance.InsuranceStatusDTO;
 import com.propertyvista.portal.rpc.portal.web.dto.insurance.NoInsuranceStatusDTO;
+import com.propertyvista.portal.rpc.portal.web.dto.insurance.OtherProviderInsuranceStatusDTO;
+import com.propertyvista.portal.rpc.portal.web.dto.insurance.TenantSureInsuranceStatusDTO;
 import com.propertyvista.portal.web.client.resources.PortalImages;
 import com.propertyvista.portal.web.client.ui.AbstractGadget;
 import com.propertyvista.portal.web.client.ui.util.decorators.FormDecoratorBuilder;
@@ -101,10 +102,14 @@ public class InsuranceSummaryGadget extends AbstractGadget<ServicesDashboardView
                 form = new NoInsuranceStatusForm();
                 form.initContent();
                 ((NoInsuranceStatusForm) form).populate(value.<NoInsuranceStatusDTO> cast());
-            } else if (value.isInstanceOf(HasInsuranceDTO.class)) {
-                form = new HasInsuranceStatusForm();
+            } else if (value.isInstanceOf(OtherProviderInsuranceStatusDTO.class)) {
+                form = new OtherProviderInsuranceStatusForm();
                 form.initContent();
-                ((HasInsuranceStatusForm) form).populate(value.<HasInsuranceDTO> cast());
+                ((OtherProviderInsuranceStatusForm) form).populate(value.<OtherProviderInsuranceStatusDTO> cast());
+            } else if (value.isInstanceOf(TenantSureInsuranceStatusDTO.class)) {
+                form = new TenantSureInsuranceStatusForm();
+                form.initContent();
+                ((TenantSureInsuranceStatusForm) form).populate(value.<TenantSureInsuranceStatusDTO> cast());
             }
 
             if (form != null) {
@@ -151,10 +156,10 @@ public class InsuranceSummaryGadget extends AbstractGadget<ServicesDashboardView
 
     }
 
-    class HasInsuranceStatusForm extends CEntityForm<HasInsuranceDTO> {
+    class OtherProviderInsuranceStatusForm extends CEntityForm<OtherProviderInsuranceStatusDTO> {
 
-        public HasInsuranceStatusForm() {
-            super(HasInsuranceDTO.class);
+        public OtherProviderInsuranceStatusForm() {
+            super(OtherProviderInsuranceStatusDTO.class);
         }
 
         @Override
@@ -165,6 +170,7 @@ public class InsuranceSummaryGadget extends AbstractGadget<ServicesDashboardView
 
             main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().insuranceProvider()), "200px").build());
             main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().liabilityCoverage()), "200px").build());
+            main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().inceptionDate()), "200px").build());
             main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().expiryDate()), "200px").build());
             return main;
 
@@ -172,4 +178,27 @@ public class InsuranceSummaryGadget extends AbstractGadget<ServicesDashboardView
 
     }
 
+    class TenantSureInsuranceStatusForm extends CEntityForm<TenantSureInsuranceStatusDTO> {
+
+        public TenantSureInsuranceStatusForm() {
+            super(TenantSureInsuranceStatusDTO.class);
+        }
+
+        @Override
+        public IsWidget createContent() {
+            BasicFlexFormPanel main = new BasicFlexFormPanel();
+
+            int row = -1;
+
+            main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().insuranceProvider()), "200px").build());
+            main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().insuranceCertificateNumber()), "200px").build());
+            main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().inceptionDate()), "200px").build());
+            main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().expiryDate()), "200px").build());
+            main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().liabilityCoverage()), "200px").build());
+            main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().contentsCoverage()), "200px").build());
+            return main;
+
+        }
+
+    }
 }

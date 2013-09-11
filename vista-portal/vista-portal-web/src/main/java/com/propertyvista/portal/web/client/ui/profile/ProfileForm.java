@@ -32,12 +32,12 @@ import com.propertyvista.domain.person.Name;
 import com.propertyvista.domain.tenant.EmergencyContact;
 import com.propertyvista.portal.domain.dto.ResidentDTO;
 import com.propertyvista.portal.web.client.themes.EntityViewTheme;
-import com.propertyvista.portal.web.client.ui.CPortalEntityForm;
+import com.propertyvista.portal.web.client.ui.CPortalEntityViewer;
 import com.propertyvista.portal.web.client.ui.profile.ProfileView.ProfilePresenter;
 import com.propertyvista.portal.web.client.ui.util.decorators.FormDecoratorBuilder;
 import com.propertyvista.shared.config.VistaFeatures;
 
-public class ProfileForm extends CPortalEntityForm<ResidentDTO> {
+public class ProfileForm extends CPortalEntityViewer<ResidentDTO> {
 
     private static final I18n i18n = I18n.get(ProfileForm.class);
 
@@ -46,7 +46,7 @@ public class ProfileForm extends CPortalEntityForm<ResidentDTO> {
     private final ProfileViewImpl view;
 
     public ProfileForm(ProfileViewImpl view) {
-        super(ResidentDTO.class, new VistaEditorsComponentFactory());
+        super(ResidentDTO.class, new VistaEditorsComponentFactory(), null, "Tenant Profile", ThemeColor.contrast2);
         this.view = view;
         asWidget().setStyleName(EntityViewTheme.StyleName.EntityView.name());
     }
@@ -76,11 +76,6 @@ public class ProfileForm extends CPortalEntityForm<ResidentDTO> {
         mainPanel.setWidget(++row, 0, inject(proto().emergencyContacts(), new EmergencyContactFolder(view)));
 
         return mainPanel;
-    }
-
-    @Override
-    public IDecorator<CPortalEntityForm<ResidentDTO>> createDecorator() {
-        return new PortalFormDecorator(ThemeColor.contrast2);
     }
 
     @Override

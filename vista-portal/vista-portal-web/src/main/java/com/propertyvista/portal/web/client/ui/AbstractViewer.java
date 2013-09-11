@@ -17,16 +17,16 @@ import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.i18n.shared.I18n;
 
-public class AbstractViewer<E extends IEntity> extends AbstractPortalPanel implements IEntityViewer<E> {
+public class AbstractViewer<E extends IEntity> extends AbstractPortalPanel implements IEntityViewerView<E> {
 
     protected static final I18n i18n = I18n.get(AbstractViewer.class);
 
-    private CEntityForm<E> form;
-
     private EntityPresenter<E> presenter;
 
-    public AbstractViewer() {
+    private CEntityForm<E> form;
 
+    public AbstractViewer() {
+        super();
     }
 
     protected void setForm(final CEntityForm<E> form) {
