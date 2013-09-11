@@ -93,8 +93,8 @@ public class PapReviewFolder extends VistaBoxFolder<PapReviewDTO> {
         public IsWidget createContent() {
             HTMLPanel contentPanel = new HTMLPanel(//@formatter:off
                     "<div>" +
-                        "<div style='display:inline-block;'><span id='isSelected'></span></div>" +
-                        "<div style='display:inline-block;'>" +
+                        "<div style='display:inline-block; vertical-align: middle;'><span id='isSelected'></span></div>" +
+                        "<div style='display:inline-block; vertical-align: middle;'>" +
                             "<div>" +
                                 "<div class='AutoPayReviewUpdaterPapCaptionPanel'><span id='captionLabel'></span></div>" +                                
                             "</div>" +
@@ -130,6 +130,7 @@ public class PapReviewFolder extends VistaBoxFolder<PapReviewDTO> {
         protected void onValueSet(boolean populate) {
             super.onValueSet(populate);
             recalculateChargesTotal();
+            chargeTotals.setVisible(getValue().charges().size() > 1);
         }
 
         private void recalculateChargesTotal() {
@@ -244,7 +245,7 @@ public class PapReviewFolder extends VistaBoxFolder<PapReviewDTO> {
             if (getValue().changeType().getValue() == ChangeType.Removed) {
                 changePercent = new BigDecimal("-1.00");
             }
-            if (getValue().changeType().getValue() == ChangeType.Changed) {
+            if (getValue().changeType().getValue() == ChangeType.Changed || getValue().changeType().getValue() == ChangeType.Unchanged) {
                 BigDecimal change = get(proto().newPreAuthorizedPaymentAmount()).getValue().subtract(
                         get(proto().suspendedPreAuthorizedPaymentAmount()).getValue());
                 changePercent = change.divide(get(proto().suspendedPreAuthorizedPaymentAmount()).getValue(), MathContext.DECIMAL32);

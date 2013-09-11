@@ -45,7 +45,6 @@ public class AutoPayReviewUpdaterActivity extends AbstractActivity implements Au
     public AutoPayReviewUpdaterActivity(AppPlace place) {
         this.place = place;
         this.view = new AutoPayReviewUpdaterViewImpl();
-//        this.view = new AutoPayReviewUpdaterDataGridViewImpl();
         this.autoPayReviewService = GWT.create(AutoPayReviewService.class);
         this.papReviews = new LinkedList<PapReviewDTO>();
     }
@@ -55,9 +54,9 @@ public class AutoPayReviewUpdaterActivity extends AbstractActivity implements Au
         view.setLoading(true);
         autoPayReviewService.getAutoPayReviews(new DefaultAsyncCallback<Vector<PapReviewDTO>>() {
             @Override
-            public void onSuccess(Vector<PapReviewDTO> result) {
-                papReviews = result;
-                populateView();
+            public void onSuccess(Vector<PapReviewDTO> papReviews) {
+                AutoPayReviewUpdaterActivity.this.papReviews = papReviews;
+                AutoPayReviewUpdaterActivity.this.populateView();
             }
         }, view.getAutoPayFilterSettings().duplicate(AutoPayChangesReportMetadata.class));
     }

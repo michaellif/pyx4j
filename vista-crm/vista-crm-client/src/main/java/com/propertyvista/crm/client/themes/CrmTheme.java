@@ -750,6 +750,12 @@ public class CrmTheme extends VistaTheme {
         style.addProperty("margin-right", "2px");
         addStyle(style);
 
+        style = new Style("." + PapReviewFolder.Styles.AutoPayPapChargeNumberColumn.name() + " .FieldPanel");
+        style.addProperty("text-align", "right");
+        style.addProperty("margin-left", "2px");
+        style.addProperty("margin-right", "2px");
+        addStyle(style);
+
         // the following styles set up the layout of captions for LeasePapsReviewFolder
         style = new Style("." + PapReviewsHolderForm.Styles.AutoPayCounterPanel.name());
         style.addProperty("text-align", "center");
@@ -787,6 +793,8 @@ public class CrmTheme extends VistaTheme {
         style = new Style("." + PapReviewsHolderForm.Styles.AutoPayCaptionsPanel.name());
         style.addProperty("position", "relative");
         style.addProperty("left", "29px");
+        style.addProperty("border-top", "1px dotted");
+        style.addProperty("border-bottom", "1px dotted");
         addStyle(style);
 
         style = new Style("." + PapReviewsHolderForm.Styles.AutoPayCaptionsPanel.name() + " div");

@@ -22,25 +22,125 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.commons.Key;
 import com.pyx4j.commons.LogicalDate;
+import com.pyx4j.config.server.ServerSideFactory;
+import com.pyx4j.entity.server.Persistence;
+import com.pyx4j.entity.shared.AttachLevel;
 import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.rpc.shared.VoidSerializable;
 
+import com.propertyvista.biz.financial.payment.PaymentReportFacade;
+import com.propertyvista.biz.financial.payment.PreauthorizedPaymentsReportCriteria;
 import com.propertyvista.crm.rpc.dto.financial.autopayreview.PapChargeReviewDTO;
+import com.propertyvista.crm.rpc.dto.financial.autopayreview.PapChargeReviewDTO.ChangeType;
 import com.propertyvista.crm.rpc.dto.financial.autopayreview.PapReviewCaptionDTO;
 import com.propertyvista.crm.rpc.dto.financial.autopayreview.PapReviewDTO;
 import com.propertyvista.crm.rpc.services.financial.AutoPayReviewService;
+import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.reports.AutoPayChangesReportMetadata;
+import com.propertyvista.dto.payment.AutoPayReviewChargeDTO;
+import com.propertyvista.dto.payment.AutoPayReviewDTO;
+import com.propertyvista.dto.payment.AutoPayReviewPreauthorizedPaymentDTO;
 
 public class AutoPayReviewServiceImpl implements AutoPayReviewService {
 
     @Override
     public void getAutoPayReviews(AsyncCallback<Vector<PapReviewDTO>> callback, AutoPayChangesReportMetadata filterSettings) {
-        callback.onSuccess(makeMockData());
+        Vector<AutoPayReviewDTO> suspendedPreauthorizedPayments = new Vector<AutoPayReviewDTO>(ServerSideFactory.create(PaymentReportFacade.class)
+                .reportSuspendedPreauthorizedPayments(makeCriteria(filterSettings)));
+
+        Vector<PapReviewDTO> papsForReview = convertPapReviews(suspendedPreauthorizedPayments);
+
+        callback.onSuccess(papsForReview);
     }
 
     @Override
     public void accept(AsyncCallback<VoidSerializable> callback, Vector<PapReviewDTO> acceptedReviews) {
         callback.onSuccess(null);
+    }
+
+    private PreauthorizedPaymentsReportCriteria makeCriteria(AutoPayChangesReportMetadata filterSettings) {
+        // query buildings to enforce portfolio:        
+        List<Building> selectedBuildings = null;
+
+        if (!filterSettings.buildings().isEmpty()) {
+            Vector<Key> buildingKeys = new Vector<Key>(filterSettings.buildings().size());
+            for (Building b : filterSettings.buildings()) {
+                buildingKeys.add(b.getPrimaryKey());
+            }
+            EntityQueryCriteria<Building> criteria = EntityQueryCriteria.create(Building.class);
+            criteria.in(criteria.proto().id(), buildingKeys);
+            selectedBuildings = Persistence.secureQuery(criteria, AttachLevel.IdOnly);
+        } else {
+            EntityQueryCriteria<Building> criteria = EntityQueryCriteria.create(Building.class);
+            criteria.eq(criteria.proto().suspended(), false);
+            selectedBuildings = Persistence.secureQuery(criteria);
+        }
+
+        PreauthorizedPaymentsReportCriteria reportCriteria = new PreauthorizedPaymentsReportCriteria(null, selectedBuildings);
+        if (filterSettings.filterByExpectedMoveOut().isBooleanTrue()) {
+            reportCriteria.setExpectedMoveOutCriteris(filterSettings.minimum().getValue(), filterSettings.maximum().getValue());
+        }
+        reportCriteria.setLeasesOnNoticeOnly(filterSettings.leasesOnNoticeOnly().isBooleanTrue());
+        return reportCriteria;
+    }
+
+    private Vector<PapReviewDTO> convertPapReviews(Vector<AutoPayReviewDTO> suspendedPreauthorizedPayments) {
+        Vector<PapReviewDTO> papReviews = new Vector<PapReviewDTO>();
+        for (AutoPayReviewDTO leaseAutoPays : suspendedPreauthorizedPayments) {
+            PapReviewCaptionDTO papReviewCaption = makeCaption(leaseAutoPays);
+            for (AutoPayReviewPreauthorizedPaymentDTO autoPay : leaseAutoPays.pap()) {
+                papReviews.add(makePapReview(papReviewCaption, autoPay));
+            }
+        }
+        return papReviews;
+    }
+
+    private PapReviewDTO makePapReview(PapReviewCaptionDTO papReviewCaption, AutoPayReviewPreauthorizedPaymentDTO autoPay) {
+        PapReviewDTO papReview = EntityFactory.create(PapReviewDTO.class);
+        papReview.caption().set(papReviewCaption);
+
+        for (AutoPayReviewChargeDTO autoPayCharge : autoPay.items()) {
+            PapChargeReviewDTO papCharge = EntityFactory.create(PapChargeReviewDTO.class);
+            papCharge.chargeName().setValue(autoPayCharge.leaseCharge().getValue());
+            papCharge.changeType().setValue(guessChangeType(autoPayCharge));
+
+            papCharge.suspendedPrice().setValue(autoPayCharge.suspended().totalPrice().getValue());
+            papCharge.suspendedPreAuthorizedPaymentAmount().setValue(autoPayCharge.suspended().payment().getValue());
+            papCharge.suspendedPreAuthorizedPaymentPercent().setValue(autoPayCharge.suspended().percent().getValue());
+
+            papCharge.newPrice().setValue(autoPayCharge.suggested().totalPrice().getValue());
+            papCharge.newPreAuthorizedPaymentAmount().setValue(autoPayCharge.suggested().payment().getValue());
+            papCharge.newPreAuthorizedPaymentPercent().setValue(autoPayCharge.suggested().percent().getValue());
+
+            papCharge.changePercent().setValue(autoPayCharge.suggested().percentChange().getValue());
+
+            papReview.charges().add(papCharge);
+        }
+        return papReview;
+    }
+
+    private PapChargeReviewDTO.ChangeType guessChangeType(AutoPayReviewChargeDTO charge) {
+        if (charge.suspended().isEmpty()) {
+            return ChangeType.New;
+        }
+        if (charge.suggested().isEmpty()) {
+            return ChangeType.Removed;
+        }
+        if (charge.suggested().totalPrice().getValue().compareTo(charge.suspended().totalPrice().getValue()) == 0) {
+            return ChangeType.Unchanged;
+        }
+        return ChangeType.Changed;
+    }
+
+    private PapReviewCaptionDTO makeCaption(AutoPayReviewDTO leaseAutoPays) {
+        PapReviewCaptionDTO caption = EntityFactory.create(PapReviewCaptionDTO.class);
+        caption.building().setValue(leaseAutoPays.building().getValue());
+        caption.unit().setValue(leaseAutoPays.unit().getValue());
+        caption.lease().setValue(leaseAutoPays.leaseId().getValue());
+        caption.lease_().set(leaseAutoPays.lease());
+        caption.expectedMoveOut().setValue(leaseAutoPays.lease().expectedMoveOut().getValue());
+        return caption;
     }
 
     private Vector<PapReviewDTO> makeMockData() {
@@ -137,4 +237,5 @@ public class AutoPayReviewServiceImpl implements AutoPayReviewService {
         }
         return papReviews;
     }
+
 }
