@@ -7,26 +7,26 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on May 16, 2013
- * @author stanp
+ * Created on 2013-04-02
+ * @author vlads
  * @version $Id$
  */
-package com.propertyvista.biz.tenant;
+package com.propertyvista.biz.tenant.lease;
 
 import com.pyx4j.config.server.FacadeFactory;
 
-import com.propertyvista.biz.tenant.internal.LeaseFacadeInternalImpl;
-import com.propertyvista.biz.tenant.yardi.LeaseFacadeYardiImpl;
+import com.propertyvista.biz.tenant.LeaseProcessFacade;
 import com.propertyvista.shared.config.VistaFeatures;
 
-public class LeaseFacadeFactory implements FacadeFactory<LeaseFacade> {
+public class LeaseProcessFacadeFactory implements FacadeFactory<LeaseProcessFacade> {
 
     @Override
-    public LeaseFacade getFacade() {
+    public LeaseProcessFacade getFacade() {
         if (VistaFeatures.instance().yardiIntegration()) {
-            return new LeaseFacadeYardiImpl();
+            return new LeaseProcessFacadeYardiImpl();
         } else {
-            return new LeaseFacadeInternalImpl();
+            return new LeaseProcessFacadeInternalImpl();
         }
     }
+
 }

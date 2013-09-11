@@ -11,7 +11,7 @@
  * @author stanp
  * @version $Id$
  */
-package com.propertyvista.biz.tenant.yardi;
+package com.propertyvista.biz.tenant.lease.yardi;
 
 import java.math.BigDecimal;
 

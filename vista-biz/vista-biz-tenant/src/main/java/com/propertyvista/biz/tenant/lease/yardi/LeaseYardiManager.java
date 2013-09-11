@@ -11,7 +11,7 @@
  * @author stanp
  * @version $Id$
  */
-package com.propertyvista.biz.tenant.yardi;
+package com.propertyvista.biz.tenant.lease.yardi;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -22,7 +22,7 @@ import com.pyx4j.config.server.SystemDateManager;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
 
-import com.propertyvista.biz.tenant.LeaseAbstractManager;
+import com.propertyvista.biz.tenant.lease.LeaseAbstractManager;
 import com.propertyvista.domain.company.Employee;
 import com.propertyvista.domain.financial.BillingAccount;
 import com.propertyvista.domain.financial.BillingAccount.BillingPeriod;

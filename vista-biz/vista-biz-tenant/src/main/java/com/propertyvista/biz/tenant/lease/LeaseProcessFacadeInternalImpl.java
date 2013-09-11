@@ -11,28 +11,28 @@
  * @author vlads
  * @version $Id$
  */
-package com.propertyvista.biz.tenant;
+package com.propertyvista.biz.tenant.lease;
 
 import com.pyx4j.commons.LogicalDate;
 
 import com.propertyvista.biz.ExecutionMonitor;
+import com.propertyvista.biz.tenant.LeaseProcessFacade;
 
-public class LeaseProcessFacadeYardiImpl implements LeaseProcessFacade {
+public class LeaseProcessFacadeInternalImpl implements LeaseProcessFacade {
 
     @Override
     public void leaseActivation(ExecutionMonitor executionMonitor, LogicalDate date) {
-        // Do nothing
+        new LeaseProcessManagerInternal().leaseActivation(executionMonitor, date);
     }
 
     @Override
     public void leaseRenewal(ExecutionMonitor executionMonitor, LogicalDate date) {
-        // Do nothing
-
+        new LeaseProcessManagerInternal().leaseRenewal(executionMonitor, date);
     }
 
     @Override
     public void leaseCompletion(ExecutionMonitor executionMonitor, LogicalDate date) {
-        // Do nothing
+        new LeaseProcessManagerInternal().leaseCompletion(executionMonitor, date);
     }
 
 }

@@ -11,7 +11,7 @@
  * @author stanp
  * @version $Id$
  */
-package com.propertyvista.biz.tenant.internal;
+package com.propertyvista.biz.tenant.lease.internal;
 
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.commons.UserRuntimeException;
@@ -25,7 +25,7 @@ import com.pyx4j.gwt.server.DateUtils;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.biz.financial.billing.BillingFacade;
-import com.propertyvista.biz.tenant.LeaseAbstractManager;
+import com.propertyvista.biz.tenant.lease.LeaseAbstractManager;
 import com.propertyvista.domain.financial.BillingAccount;
 import com.propertyvista.domain.financial.BillingAccount.BillingPeriod;
 import com.propertyvista.domain.financial.billing.Bill;

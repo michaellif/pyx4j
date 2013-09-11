@@ -11,7 +11,7 @@
  * @author vlads
  * @version $Id$
  */
-package com.propertyvista.biz.tenant;
+package com.propertyvista.biz.tenant.lease;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -51,6 +51,10 @@ import com.propertyvista.biz.occupancy.OccupancyFacade;
 import com.propertyvista.biz.occupancy.OccupancyOperationException;
 import com.propertyvista.biz.policy.IdAssignmentFacade;
 import com.propertyvista.biz.policy.PolicyFacade;
+import com.propertyvista.biz.tenant.CustomerFacade;
+import com.propertyvista.biz.tenant.LeadFacade;
+import com.propertyvista.biz.tenant.OnlineApplicationFacade;
+import com.propertyvista.biz.tenant.ScreeningFacade;
 import com.propertyvista.biz.validation.framework.ValidationFailure;
 import com.propertyvista.biz.validation.validators.lease.LeaseApprovalValidator;
 import com.propertyvista.biz.validation.validators.lease.ScreeningValidator;

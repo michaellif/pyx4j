@@ -11,7 +11,7 @@
  * @author stanp
  * @version $Id$
  */
-package com.propertyvista.biz.tenant.internal;
+package com.propertyvista.biz.tenant.lease.internal;
 
 import java.math.BigDecimal;
 
