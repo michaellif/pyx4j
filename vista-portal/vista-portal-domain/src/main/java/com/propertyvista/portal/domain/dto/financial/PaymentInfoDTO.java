@@ -18,7 +18,6 @@ import java.math.BigDecimal;
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.annotations.Editor;
 import com.pyx4j.entity.annotations.Editor.EditorType;
-import com.pyx4j.entity.annotations.Format;
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
@@ -29,8 +28,7 @@ import com.propertyvista.domain.tenant.lease.Tenant;
 @Transient
 public interface PaymentInfoDTO extends IEntity {
 
-    @Format("#,##0.00")
-    @Editor(type = EditorType.label)
+    @Editor(type = EditorType.moneylabel)
     IPrimitive<BigDecimal> amount();
 
     @Editor(type = EditorType.label)
