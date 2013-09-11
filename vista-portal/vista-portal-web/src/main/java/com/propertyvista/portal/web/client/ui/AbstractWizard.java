@@ -24,13 +24,13 @@ public abstract class AbstractWizard<E extends IEntity> extends AbstractPortalPa
 
     private WizardPresenter<E> presenter;
 
-    private AbstractPortalWizard<E> wizardForm;
+    private CPortalEntityWizard<E> wizardForm;
 
     public AbstractWizard() {
         super();
     }
 
-    public void setWizard(AbstractPortalWizard<E> wizardForm) {
+    public void setWizard(CPortalEntityWizard<E> wizardForm) {
         this.wizardForm = wizardForm;
         setWidget(wizardForm);
         wizardForm.initContent();

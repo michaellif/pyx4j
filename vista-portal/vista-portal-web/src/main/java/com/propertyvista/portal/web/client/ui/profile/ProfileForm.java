@@ -32,12 +32,12 @@ import com.propertyvista.domain.person.Name;
 import com.propertyvista.domain.tenant.EmergencyContact;
 import com.propertyvista.portal.domain.dto.ResidentDTO;
 import com.propertyvista.portal.web.client.themes.EntityViewTheme;
-import com.propertyvista.portal.web.client.ui.AbstractPortalForm;
+import com.propertyvista.portal.web.client.ui.CPortalEntityForm;
 import com.propertyvista.portal.web.client.ui.profile.ProfileView.ProfilePresenter;
 import com.propertyvista.portal.web.client.ui.util.decorators.FormDecoratorBuilder;
 import com.propertyvista.shared.config.VistaFeatures;
 
-public class ProfileForm extends AbstractPortalForm<ResidentDTO> {
+public class ProfileForm extends CPortalEntityForm<ResidentDTO> {
 
     private static final I18n i18n = I18n.get(ProfileForm.class);
 
@@ -79,7 +79,7 @@ public class ProfileForm extends AbstractPortalForm<ResidentDTO> {
     }
 
     @Override
-    public IDecorator<AbstractPortalForm<ResidentDTO>> createDecorator() {
+    public IDecorator<CPortalEntityForm<ResidentDTO>> createDecorator() {
         return new PortalFormDecorator(ThemeColor.contrast2);
     }
 

@@ -39,10 +39,10 @@ import com.propertyvista.domain.payment.LeasePaymentMethod;
 import com.propertyvista.domain.tenant.lease.Tenant;
 import com.propertyvista.portal.rpc.portal.web.dto.AutoPayDTO;
 import com.propertyvista.portal.rpc.portal.web.dto.AutoPaySummaryDTO;
-import com.propertyvista.portal.web.client.ui.AbstractPortalForm;
+import com.propertyvista.portal.web.client.ui.CPortalEntityForm;
 import com.propertyvista.portal.web.client.ui.util.decorators.FormDecoratorBuilder;
 
-public class AutoPayListForm extends AbstractPortalForm<AutoPaySummaryDTO> {
+public class AutoPayListForm extends CPortalEntityForm<AutoPaySummaryDTO> {
 
     private static final I18n i18n = I18n.get(AutoPayListForm.class);
 
@@ -70,7 +70,7 @@ public class AutoPayListForm extends AbstractPortalForm<AutoPaySummaryDTO> {
     }
 
     @Override
-    public IDecorator<AbstractPortalForm<AutoPaySummaryDTO>> createDecorator() {
+    public IDecorator<CPortalEntityForm<AutoPaySummaryDTO>> createDecorator() {
         return new PortalFormDecorator(ThemeColor.contrast4);
     }
 

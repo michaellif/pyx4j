@@ -34,11 +34,11 @@ import com.pyx4j.widgets.client.Anchor;
 import com.propertyvista.common.client.resources.VistaImages;
 import com.propertyvista.domain.payment.LeasePaymentMethod;
 import com.propertyvista.dto.PaymentRecordDTO;
-import com.propertyvista.portal.web.client.ui.AbstractPortalForm;
+import com.propertyvista.portal.web.client.ui.CPortalEntityForm;
 import com.propertyvista.portal.web.client.ui.AbstractViewer;
 import com.propertyvista.portal.web.client.ui.util.decorators.FormDecoratorBuilder;
 
-public class PaymentConfirmationForm extends AbstractPortalForm<PaymentRecordDTO> {
+public class PaymentConfirmationForm extends CPortalEntityForm<PaymentRecordDTO> {
 
     private static final I18n i18n = I18n.get(PaymentConfirmationForm.class);
 
@@ -75,7 +75,7 @@ public class PaymentConfirmationForm extends AbstractPortalForm<PaymentRecordDTO
     }
 
     @Override
-    public IDecorator<AbstractPortalForm<PaymentRecordDTO>> createDecorator() {
+    public IDecorator<CPortalEntityForm<PaymentRecordDTO>> createDecorator() {
         return new PortalFormDecorator(ThemeColor.contrast4);
     }
 

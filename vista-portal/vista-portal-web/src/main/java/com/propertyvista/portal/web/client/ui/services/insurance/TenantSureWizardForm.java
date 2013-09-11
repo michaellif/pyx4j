@@ -17,9 +17,9 @@ import com.pyx4j.commons.css.ThemeColor;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.portal.rpc.portal.web.dto.insurance.TenantSureAgreementDTO;
-import com.propertyvista.portal.web.client.ui.AbstractPortalWizard;
+import com.propertyvista.portal.web.client.ui.CPortalEntityWizard;
 
-public class TenantSureWizardForm extends AbstractPortalWizard<TenantSureAgreementDTO> {
+public class TenantSureWizardForm extends CPortalEntityWizard<TenantSureAgreementDTO> {
 
     private static final I18n i18n = I18n.get(TenantSureWizardForm.class);
 

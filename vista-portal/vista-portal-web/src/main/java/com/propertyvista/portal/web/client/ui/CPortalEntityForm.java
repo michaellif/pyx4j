@@ -26,17 +26,17 @@ import com.pyx4j.forms.client.ui.decorators.IDecorator;
 import com.propertyvista.portal.web.client.themes.BlockMixin;
 import com.propertyvista.portal.web.client.themes.EntityViewTheme;
 
-public abstract class AbstractPortalForm<E extends IEntity> extends CEntityForm<E> {
+public abstract class CPortalEntityForm<E extends IEntity> extends CEntityForm<E> {
 
-    public AbstractPortalForm(Class<E> clazz) {
+    public CPortalEntityForm(Class<E> clazz) {
         super(clazz);
     }
 
-    public AbstractPortalForm(Class<E> clazz, IEditableComponentFactory factory) {
+    public CPortalEntityForm(Class<E> clazz, IEditableComponentFactory factory) {
         super(clazz, factory);
     }
 
-    protected class PortalFormDecorator extends SimplePanel implements IDecorator<AbstractPortalForm<E>> {
+    protected class PortalFormDecorator extends SimplePanel implements IDecorator<CPortalEntityForm<E>> {
 
         public PortalFormDecorator(ThemeColor themeColor) {
             setStyleName(EntityViewTheme.StyleName.EntityViewContent.name());
@@ -46,7 +46,7 @@ public abstract class AbstractPortalForm<E extends IEntity> extends CEntityForm<
         }
 
         @Override
-        public void setComponent(AbstractPortalForm<E> component) {
+        public void setComponent(CPortalEntityForm<E> component) {
             setWidget(component.createContent());
         }
 

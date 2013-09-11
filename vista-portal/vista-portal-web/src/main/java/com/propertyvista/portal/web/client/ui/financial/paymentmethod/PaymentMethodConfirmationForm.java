@@ -38,11 +38,11 @@ import com.propertyvista.domain.payment.LeasePaymentMethod;
 import com.propertyvista.portal.rpc.portal.web.dto.PaymentMethodDTO;
 import com.propertyvista.portal.web.client.themes.BlockMixin;
 import com.propertyvista.portal.web.client.themes.EntityViewTheme;
-import com.propertyvista.portal.web.client.ui.AbstractPortalForm;
+import com.propertyvista.portal.web.client.ui.CPortalEntityForm;
 import com.propertyvista.portal.web.client.ui.AbstractViewer;
 import com.propertyvista.portal.web.client.ui.util.decorators.FormDecoratorBuilder;
 
-public class PaymentMethodConfirmationForm extends AbstractPortalForm<PaymentMethodDTO> {
+public class PaymentMethodConfirmationForm extends CPortalEntityForm<PaymentMethodDTO> {
 
     private static final I18n i18n = I18n.get(PaymentMethodConfirmationForm.class);
 
@@ -85,7 +85,7 @@ public class PaymentMethodConfirmationForm extends AbstractPortalForm<PaymentMet
     }
 
     @Override
-    public IDecorator<AbstractPortalForm<PaymentMethodDTO>> createDecorator() {
+    public IDecorator<CPortalEntityForm<PaymentMethodDTO>> createDecorator() {
         return new PortalFormDecorator(ThemeColor.contrast4);
     }
 

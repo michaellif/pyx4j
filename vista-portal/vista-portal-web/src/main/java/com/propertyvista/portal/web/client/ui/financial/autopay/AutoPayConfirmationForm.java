@@ -31,10 +31,10 @@ import com.pyx4j.security.client.ClientContext;
 
 import com.propertyvista.domain.payment.LeasePaymentMethod;
 import com.propertyvista.portal.rpc.portal.web.dto.AutoPayDTO;
-import com.propertyvista.portal.web.client.ui.AbstractPortalForm;
+import com.propertyvista.portal.web.client.ui.CPortalEntityForm;
 import com.propertyvista.portal.web.client.ui.util.decorators.FormDecoratorBuilder;
 
-public class AutoPayConfirmationForm extends AbstractPortalForm<AutoPayDTO> {
+public class AutoPayConfirmationForm extends CPortalEntityForm<AutoPayDTO> {
 
     private static final I18n i18n = I18n.get(AutoPayConfirmationForm.class);
 
@@ -71,7 +71,7 @@ public class AutoPayConfirmationForm extends AbstractPortalForm<AutoPayDTO> {
     }
 
     @Override
-    public IDecorator<AbstractPortalForm<AutoPayDTO>> createDecorator() {
+    public IDecorator<CPortalEntityForm<AutoPayDTO>> createDecorator() {
         return new PortalFormDecorator(ThemeColor.contrast4);
     }
 
