@@ -18,9 +18,9 @@ import com.google.gwt.user.client.ui.IsWidget;
 import com.pyx4j.forms.client.ui.CViewer;
 
 import com.propertyvista.portal.rpc.portal.web.dto.insurance.InsuranceStatusDTO;
-import com.propertyvista.portal.rpc.portal.web.dto.insurance.TenantSureInsuranceStatusDTO;
 import com.propertyvista.portal.rpc.portal.web.dto.insurance.NoInsuranceStatusDTO;
 import com.propertyvista.portal.rpc.portal.web.dto.insurance.OtherProviderInsuranceStatusDTO;
+import com.propertyvista.portal.rpc.portal.web.dto.insurance.TenantSureInsuranceStatusDTO;
 
 /** this is a class that supposed to implement 'polymorphic' tenant insurance status viewer */
 public class TenantInsuranceStatusViewer extends CViewer<InsuranceStatusDTO> {

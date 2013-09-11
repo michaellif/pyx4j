@@ -20,11 +20,11 @@ import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
+import com.pyx4j.security.client.BehaviorChangeEvent;
+import com.pyx4j.security.client.BehaviorChangeHandler;
 import com.pyx4j.security.client.ClientContext;
 import com.pyx4j.security.client.ContextChangeEvent;
 import com.pyx4j.security.client.ContextChangeHandler;
-import com.pyx4j.security.client.BehaviorChangeEvent;
-import com.pyx4j.security.client.BehaviorChangeHandler;
 import com.pyx4j.security.rpc.AuthenticationResponse;
 import com.pyx4j.security.rpc.AuthenticationService;
 import com.pyx4j.site.client.AppSite;

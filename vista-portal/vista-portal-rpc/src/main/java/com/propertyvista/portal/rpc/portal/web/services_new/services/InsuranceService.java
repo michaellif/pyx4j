@@ -13,8 +13,14 @@
  */
 package com.propertyvista.portal.rpc.portal.web.services_new.services;
 
+import com.google.gwt.user.client.rpc.AsyncCallback;
+
 import com.pyx4j.rpc.shared.IService;
 
-public class InsuranceService implements IService {
+import com.propertyvista.portal.rpc.portal.web.dto.insurance.InsuranceStatusDTO;
+
+public interface InsuranceService extends IService {
+
+    void retreiveInsuranceStatus(AsyncCallback<InsuranceStatusDTO> callback);
 
 }

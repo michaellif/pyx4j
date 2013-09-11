@@ -25,8 +25,14 @@ import com.pyx4j.site.client.AppSite;
 import com.propertyvista.domain.security.VistaCustomerPaymentTypeBehavior;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap.Resident.Financial;
-import com.propertyvista.portal.rpc.portal.web.dto.MainDashboardDTO;
-import com.propertyvista.portal.rpc.portal.web.services.DashboardService;
+import com.propertyvista.portal.rpc.portal.web.dto.BillingSummaryDTO;
+import com.propertyvista.portal.rpc.portal.web.dto.MaintenanceSummaryDTO;
+import com.propertyvista.portal.rpc.portal.web.dto.TenantProfileSummaryDTO;
+import com.propertyvista.portal.rpc.portal.web.dto.insurance.InsuranceStatusDTO;
+import com.propertyvista.portal.rpc.portal.web.services_new.financial.BillingService;
+import com.propertyvista.portal.rpc.portal.web.services_new.maintenance.MaintenanceService;
+import com.propertyvista.portal.rpc.portal.web.services_new.profile.ProfileService;
+import com.propertyvista.portal.rpc.portal.web.services_new.services.InsuranceService;
 import com.propertyvista.portal.web.client.PortalWebSite;
 import com.propertyvista.portal.web.client.activity.SecurityAwareActivity;
 import com.propertyvista.portal.web.client.ui.dashboard.MainDashboardView;
@@ -35,12 +41,9 @@ public class MainDashboardActivity extends SecurityAwareActivity implements Main
 
     private final MainDashboardView view;
 
-    private final DashboardService srv;
-
     public MainDashboardActivity(Place place) {
         this.view = PortalWebSite.getViewFactory().instantiate(MainDashboardView.class);
         this.view.setPresenter(this);
-        srv = GWT.create(DashboardService.class);
     }
 
     @Override
@@ -49,10 +52,28 @@ public class MainDashboardActivity extends SecurityAwareActivity implements Main
         panel.setWidget(view);
         view.setPresenter(this);
 
-        srv.retrieveMainDashboard(new DefaultAsyncCallback<MainDashboardDTO>() {
+        ((ProfileService) GWT.create(ProfileService.class)).retreiveProfileSummary(new DefaultAsyncCallback<TenantProfileSummaryDTO>() {
             @Override
-            public void onSuccess(MainDashboardDTO result) {
-                view.populate(result);
+            public void onSuccess(TenantProfileSummaryDTO result) {
+                view.populateProfileGadget(result);
+            }
+        });
+        ((BillingService) GWT.create(BillingService.class)).retreiveBillingSummary(new DefaultAsyncCallback<BillingSummaryDTO>() {
+            @Override
+            public void onSuccess(BillingSummaryDTO result) {
+                view.populateBillingGadget(result);
+            }
+        });
+        ((InsuranceService) GWT.create(InsuranceService.class)).retreiveInsuranceStatus(new DefaultAsyncCallback<InsuranceStatusDTO>() {
+            @Override
+            public void onSuccess(InsuranceStatusDTO result) {
+                view.populateInsuranceGadget(result);
+            }
+        });
+        ((MaintenanceService) GWT.create(MaintenanceService.class)).retreiveMaintenanceSummary(new DefaultAsyncCallback<MaintenanceSummaryDTO>() {
+            @Override
+            public void onSuccess(MaintenanceSummaryDTO result) {
+                view.populateMaintenanceGadget(result);
             }
         });
     }

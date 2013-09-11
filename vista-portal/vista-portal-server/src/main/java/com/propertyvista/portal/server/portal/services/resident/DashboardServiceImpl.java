@@ -92,11 +92,11 @@ public class DashboardServiceImpl implements DashboardService {
         }
 
         for (MaintenanceRequestDTO maintenanceRequest : mrList) {
-            TenantMainenanceRequestStatusDTO requestStatusDto = dashboard.maintenanceInfo().maintenanceRequestStauses().$();
+            TenantMainenanceRequestStatusDTO requestStatusDto = dashboard.maintenanceInfo().maintenanceRequestStatuses().$();
             requestStatusDto.description().setValue(maintenanceRequest.summary().getValue());
             requestStatusDto.status().set(maintenanceRequest.status().duplicate());
             requestStatusDto.submitted().setValue(maintenanceRequest.submitted().getValue());
-            dashboard.maintenanceInfo().maintenanceRequestStauses().add(requestStatusDto);
+            dashboard.maintenanceInfo().maintenanceRequestStatuses().add(requestStatusDto);
         }
 
         if (VistaFeatures.instance().countryOfOperation() == CountryOfOperation.Canada) {

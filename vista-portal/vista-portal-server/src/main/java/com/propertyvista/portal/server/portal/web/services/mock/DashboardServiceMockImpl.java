@@ -28,9 +28,8 @@ import com.propertyvista.portal.rpc.portal.web.dto.AutoPayInfoDTO;
 import com.propertyvista.portal.rpc.portal.web.dto.AutoPaySummaryDTO;
 import com.propertyvista.portal.rpc.portal.web.dto.BillingSummaryDTO;
 import com.propertyvista.portal.rpc.portal.web.dto.FinancialDashboardDTO;
-import com.propertyvista.portal.rpc.portal.web.dto.MainDashboardDTO;
 import com.propertyvista.portal.rpc.portal.web.dto.ResidentServicesDashboardDTO;
-import com.propertyvista.portal.rpc.portal.web.dto.TenantProfileDTO;
+import com.propertyvista.portal.rpc.portal.web.dto.TenantProfileSummaryDTO;
 import com.propertyvista.portal.rpc.portal.web.dto.insurance.InsuranceStatusDTO;
 import com.propertyvista.portal.rpc.portal.web.dto.insurance.NoInsuranceStatusDTO;
 import com.propertyvista.portal.rpc.portal.web.dto.insurance.OtherProviderInsuranceStatusDTO;
@@ -38,19 +37,6 @@ import com.propertyvista.portal.rpc.portal.web.services.DashboardService;
 import com.propertyvista.portal.server.portal.TenantAppContext;
 
 public class DashboardServiceMockImpl implements DashboardService {
-
-    @Override
-    public void retrieveMainDashboard(AsyncCallback<MainDashboardDTO> callback) {
-        MainDashboardDTO dashboard = EntityFactory.create(MainDashboardDTO.class);
-
-        populateProfileInfo(dashboard.profileInfo());
-
-        populateBillingSummary(dashboard.billingSummary());
-
-        populateInsuranceStatus(dashboard.insuranceStatus());
-
-        callback.onSuccess(dashboard);
-    }
 
     @Override
     public void retrieveFinancialDashboard(AsyncCallback<FinancialDashboardDTO> callback) {
@@ -70,13 +56,6 @@ public class DashboardServiceMockImpl implements DashboardService {
         populateInsuranceStatus(dashboard.insuranceStatus());
 
         callback.onSuccess(dashboard);
-    }
-
-    private static void populateProfileInfo(TenantProfileDTO profileInfo) {
-        LeaseTermTenant tenantInLease = TenantAppContext.getCurrentUserTenantInLease();
-        profileInfo.tenantName().setValue(tenantInLease.leaseParticipant().customer().person().name().getStringView());
-        profileInfo.floorplanName().setValue("3 bedroom + den");
-        profileInfo.tenantAddress().setValue("8 Milky Way Drive, Burlington, ON");
     }
 
     private static void populateBillingSummary(BillingSummaryDTO billingSummary) {

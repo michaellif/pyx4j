@@ -38,8 +38,8 @@ import com.propertyvista.domain.payment.LeasePaymentMethod;
 import com.propertyvista.portal.rpc.portal.web.dto.PaymentMethodDTO;
 import com.propertyvista.portal.web.client.themes.BlockMixin;
 import com.propertyvista.portal.web.client.themes.EntityViewTheme;
-import com.propertyvista.portal.web.client.ui.AbstractViewer;
 import com.propertyvista.portal.web.client.ui.AbstractPortalForm;
+import com.propertyvista.portal.web.client.ui.AbstractViewer;
 import com.propertyvista.portal.web.client.ui.util.decorators.FormDecoratorBuilder;
 
 public class PaymentMethodConfirmationForm extends AbstractPortalForm<PaymentMethodDTO> {

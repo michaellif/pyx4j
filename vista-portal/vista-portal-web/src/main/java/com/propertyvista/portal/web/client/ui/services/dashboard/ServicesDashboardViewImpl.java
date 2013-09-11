@@ -13,14 +13,9 @@
  */
 package com.propertyvista.portal.web.client.ui.services.dashboard;
 
-import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.FlowPanel;
 
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.site.client.AppSite;
-import com.pyx4j.site.client.ui.layout.responsive.LayoutChangeEvent;
-import com.pyx4j.site.client.ui.layout.responsive.LayoutChangeHandler;
-import com.pyx4j.site.client.ui.layout.responsive.ResponsiveLayoutPanel.LayoutType;
 
 import com.propertyvista.portal.rpc.portal.web.dto.ResidentServicesDashboardDTO;
 import com.propertyvista.portal.web.client.themes.DashboardTheme;

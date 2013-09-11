@@ -17,9 +17,9 @@ import com.google.gwt.activity.shared.AbstractActivity;
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
-import com.pyx4j.security.client.ClientContext;
 import com.pyx4j.security.client.BehaviorChangeEvent;
 import com.pyx4j.security.client.BehaviorChangeHandler;
+import com.pyx4j.security.client.ClientContext;
 
 public abstract class SecurityAwareActivity extends AbstractActivity {
 

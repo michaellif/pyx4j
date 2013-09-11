@@ -24,6 +24,6 @@ import com.propertyvista.portal.rpc.portal.dto.TenantMainenanceRequestStatusDTO;
 @I18n(strategy = I18n.I18nStrategy.IgnoreThis)
 public interface MaintenanceSummaryDTO extends IEntity {
 
-    IList<TenantMainenanceRequestStatusDTO> maintenanceRequestStauses();
+    IList<TenantMainenanceRequestStatusDTO> maintenanceRequestStatuses();
 
 }

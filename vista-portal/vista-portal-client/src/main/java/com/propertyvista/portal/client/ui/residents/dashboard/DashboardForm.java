@@ -47,7 +47,7 @@ import com.propertyvista.portal.domain.dto.financial.FinancialSummaryDTO;
 import com.propertyvista.portal.domain.dto.financial.PvBillingFinancialSummaryDTO;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap;
 import com.propertyvista.portal.rpc.portal.dto.MainDashboardDTO;
-import com.propertyvista.portal.rpc.portal.web.dto.TenantProfileDTO;
+import com.propertyvista.portal.rpc.portal.web.dto.TenantProfileSummaryDTO;
 import com.propertyvista.shared.config.VistaFeatures;
 
 public class DashboardForm extends CEntityDecoratableForm<MainDashboardDTO> {
@@ -138,9 +138,9 @@ public class DashboardForm extends CEntityDecoratableForm<MainDashboardDTO> {
         payButton.setVisible(SecurityController.checkAnyBehavior(VistaCustomerPaymentTypeBehavior.values()));
     }
 
-    class GeneralInfoViewer extends CViewer<TenantProfileDTO> {
+    class GeneralInfoViewer extends CViewer<TenantProfileSummaryDTO> {
         @Override
-        public IsWidget createContent(TenantProfileDTO value) {
+        public IsWidget createContent(TenantProfileSummaryDTO value) {
             if (value == null) {
                 return null;
             }

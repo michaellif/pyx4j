@@ -32,7 +32,6 @@ import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.Button;
 import com.pyx4j.widgets.client.actionbar.Toolbar;
 
-import com.propertyvista.portal.rpc.portal.web.dto.insurance.HasInsuranceDTO;
 import com.propertyvista.portal.rpc.portal.web.dto.insurance.InsuranceStatusDTO;
 import com.propertyvista.portal.rpc.portal.web.dto.insurance.NoInsuranceStatusDTO;
 import com.propertyvista.portal.rpc.portal.web.dto.insurance.OtherProviderInsuranceStatusDTO;
@@ -61,8 +60,8 @@ public class InsuranceGadget extends AbstractGadget<MainDashboardViewImpl> {
 
     }
 
-    protected void populate(InsuranceStatusDTO value) {
-        insuranceViewer.populate(value);
+    protected void populate(InsuranceStatusDTO insuranceStatus) {
+        insuranceViewer.populate(insuranceStatus);
     }
 
     class InsuranceToolbar extends Toolbar {

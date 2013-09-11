@@ -13,9 +13,10 @@
  */
 package com.propertyvista.portal.rpc.ptapp.dto;
 
+import com.pyx4j.entity.annotations.Transient;
+
 import com.propertyvista.dto.LegalTermsDescriptorDTO;
 import com.propertyvista.portal.domain.ptapp.PaymentInformation;
-import com.pyx4j.entity.annotations.Transient;
 
 @Transient
 public interface PaymentInformationDTO extends PaymentInformation {

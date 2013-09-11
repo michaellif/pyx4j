@@ -27,9 +27,9 @@ import com.propertyvista.portal.rpc.portal.PortalSiteMap;
 import com.propertyvista.portal.rpc.portal.services.resident.TenantInsuranceService;
 import com.propertyvista.portal.rpc.portal.web.dto.insurance.HasInsuranceDTO;
 import com.propertyvista.portal.rpc.portal.web.dto.insurance.InsuranceStatusDTO;
-import com.propertyvista.portal.rpc.portal.web.dto.insurance.TenantSureInsuranceStatusDTO;
 import com.propertyvista.portal.rpc.portal.web.dto.insurance.NoInsuranceStatusDTO;
 import com.propertyvista.portal.rpc.portal.web.dto.insurance.OtherProviderInsuranceStatusDTO;
+import com.propertyvista.portal.rpc.portal.web.dto.insurance.TenantSureInsuranceStatusDTO;
 
 // TODO maybe this dispatching should be done on navig activity level: i.e. put the place that corresponds to current status in the navig bar 
 public class TenantInsuranceActivity extends AbstractActivity {

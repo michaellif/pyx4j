@@ -228,6 +228,12 @@ public class VistaPortalAccessControlList extends ServletContainerAclBuilder {
         grant(VistaCustomerBehavior.Tenant, new IServiceExecutePermission(
                 com.propertyvista.portal.rpc.portal.web.services.SelfRegistrationBuildingsSourceService.class));
 
+        grant(VistaCustomerBehavior.Tenant, new IServiceExecutePermission(com.propertyvista.portal.rpc.portal.web.services_new.financial.BillingService.class));
+        grant(VistaCustomerBehavior.Tenant, new IServiceExecutePermission(
+                com.propertyvista.portal.rpc.portal.web.services_new.maintenance.MaintenanceService.class));
+        grant(VistaCustomerBehavior.Tenant, new IServiceExecutePermission(com.propertyvista.portal.rpc.portal.web.services_new.profile.ProfileService.class));
+        grant(VistaCustomerBehavior.Tenant, new IServiceExecutePermission(com.propertyvista.portal.rpc.portal.web.services_new.services.InsuranceService.class));
+
         //=======================================
 
         // Tenant Insurance and TenantSure

@@ -17,9 +17,9 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.rpc.shared.IService;
 
-import com.propertyvista.domain.tenant.ptapp.OnlineApplication;
 import com.propertyvista.domain.tenant.ptapp.ApplicationWizardStep;
 import com.propertyvista.domain.tenant.ptapp.ApplicationWizardSubstep;
+import com.propertyvista.domain.tenant.ptapp.OnlineApplication;
 
 /**
  * This is secure services, user need to lodged in to use application.

@@ -39,51 +39,22 @@ import com.propertyvista.domain.payment.LeasePaymentMethod;
 import com.propertyvista.domain.payment.PreauthorizedPayment;
 import com.propertyvista.domain.payment.PreauthorizedPayment.PreauthorizedPaymentCoveredItem;
 import com.propertyvista.domain.tenant.lease.Lease;
-import com.propertyvista.domain.tenant.lease.LeaseTermTenant;
 import com.propertyvista.domain.tenant.lease.Tenant;
 import com.propertyvista.portal.domain.dto.BillDataDTO;
 import com.propertyvista.portal.rpc.portal.web.dto.AutoPayInfoDTO;
 import com.propertyvista.portal.rpc.portal.web.dto.AutoPaySummaryDTO;
 import com.propertyvista.portal.rpc.portal.web.dto.BillingSummaryDTO;
 import com.propertyvista.portal.rpc.portal.web.dto.FinancialDashboardDTO;
-import com.propertyvista.portal.rpc.portal.web.dto.MainDashboardDTO;
 import com.propertyvista.portal.rpc.portal.web.dto.PaymentMethodInfoDTO;
 import com.propertyvista.portal.rpc.portal.web.dto.PaymentMethodSummaryDTO;
 import com.propertyvista.portal.rpc.portal.web.dto.ResidentServicesDashboardDTO;
 import com.propertyvista.portal.rpc.portal.web.services.DashboardService;
 import com.propertyvista.portal.server.portal.TenantAppContext;
 import com.propertyvista.portal.server.portal.web.services.mock.DashboardServiceMockImpl;
-import com.propertyvista.server.common.util.AddressRetriever;
 import com.propertyvista.server.common.util.LeaseParticipantUtils;
 import com.propertyvista.shared.config.VistaFeatures;
 
 public class DashboardServiceImpl implements DashboardService {
-
-    @Override
-    public void retrieveMainDashboard(AsyncCallback<MainDashboardDTO> callback) {
-        if (false) {
-            new DashboardServiceMockImpl().retrieveMainDashboard(callback);
-        } else {
-            MainDashboardDTO dashboard = EntityFactory.create(MainDashboardDTO.class);
-
-            LeaseTermTenant tenantInLease = TenantAppContext.getCurrentUserTenantInLease();
-            Persistence.service().retrieve(tenantInLease.leaseTermV());
-            Persistence.service().retrieve(tenantInLease.leaseTermV().holder().lease());
-            Persistence.service().retrieve(tenantInLease.leaseTermV().holder().lease().unit().floorplan());
-
-            dashboard.profileInfo().tenantName().setValue(tenantInLease.leaseParticipant().customer().person().name().getStringView());
-            dashboard.profileInfo().floorplanName().set(tenantInLease.leaseTermV().holder().lease().unit().floorplan().marketingName());
-            dashboard.profileInfo().tenantAddress().setValue(AddressRetriever.getLeaseParticipantCurrentAddress(tenantInLease).getStringView());
-
-            dashboard.billingSummary().set(createBillingSummary(tenantInLease.leaseTermV().holder().lease()));
-
-            dashboard.insuranceStatus().set(
-                    ServerSideFactory.create(TenantInsuranceFacade.class).getInsuranceStatus(
-                            TenantAppContext.getCurrentUserTenantInLease().leaseParticipant().<Tenant> createIdentityStub()));
-
-            callback.onSuccess(dashboard);
-        }
-    }
 
     @Override
     public void retrieveFinancialDashboard(AsyncCallback<FinancialDashboardDTO> callback) {

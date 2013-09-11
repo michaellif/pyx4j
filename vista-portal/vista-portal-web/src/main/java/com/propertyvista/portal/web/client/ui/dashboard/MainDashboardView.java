@@ -15,7 +15,10 @@ package com.propertyvista.portal.web.client.ui.dashboard;
 
 import com.pyx4j.site.client.IsView;
 
-import com.propertyvista.portal.rpc.portal.web.dto.MainDashboardDTO;
+import com.propertyvista.portal.rpc.portal.web.dto.BillingSummaryDTO;
+import com.propertyvista.portal.rpc.portal.web.dto.MaintenanceSummaryDTO;
+import com.propertyvista.portal.rpc.portal.web.dto.TenantProfileSummaryDTO;
+import com.propertyvista.portal.rpc.portal.web.dto.insurance.InsuranceStatusDTO;
 
 public interface MainDashboardView extends IsView {
 
@@ -33,6 +36,12 @@ public interface MainDashboardView extends IsView {
 
     void setPresenter(DashboardPresenter presenter);
 
-    void populate(MainDashboardDTO result);
+    void populateProfileGadget(TenantProfileSummaryDTO profileSummary);
+
+    void populateBillingGadget(BillingSummaryDTO billingSummary);
+
+    void populateInsuranceGadget(InsuranceStatusDTO insuranceStatus);
+
+    void populateMaintenanceGadget(MaintenanceSummaryDTO maintenanceSummary);
 
 }

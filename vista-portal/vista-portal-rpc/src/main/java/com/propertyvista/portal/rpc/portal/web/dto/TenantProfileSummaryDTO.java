@@ -20,7 +20,7 @@ import com.pyx4j.i18n.annotations.I18n;
 
 @Transient
 @I18n(strategy = I18n.I18nStrategy.IgnoreThis)
-public interface TenantProfileDTO extends IEntity {
+public interface TenantProfileSummaryDTO extends IEntity {
 
     IPrimitive<String> tenantName();
 

@@ -34,8 +34,8 @@ import com.pyx4j.widgets.client.Anchor;
 import com.propertyvista.common.client.resources.VistaImages;
 import com.propertyvista.domain.payment.LeasePaymentMethod;
 import com.propertyvista.dto.PaymentRecordDTO;
-import com.propertyvista.portal.web.client.ui.AbstractViewer;
 import com.propertyvista.portal.web.client.ui.AbstractPortalForm;
+import com.propertyvista.portal.web.client.ui.AbstractViewer;
 import com.propertyvista.portal.web.client.ui.util.decorators.FormDecoratorBuilder;
 
 public class PaymentConfirmationForm extends AbstractPortalForm<PaymentRecordDTO> {

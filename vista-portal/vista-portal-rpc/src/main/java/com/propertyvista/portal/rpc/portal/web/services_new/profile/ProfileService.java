@@ -13,8 +13,14 @@
  */
 package com.propertyvista.portal.rpc.portal.web.services_new.profile;
 
+import com.google.gwt.user.client.rpc.AsyncCallback;
+
 import com.pyx4j.rpc.shared.IService;
 
-public class ProfileService implements IService {
+import com.propertyvista.portal.rpc.portal.web.dto.TenantProfileSummaryDTO;
+
+public interface ProfileService extends IService {
+
+    void retreiveProfileSummary(AsyncCallback<TenantProfileSummaryDTO> callback);
 
 }
