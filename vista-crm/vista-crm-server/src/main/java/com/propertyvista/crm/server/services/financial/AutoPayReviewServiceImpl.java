@@ -149,7 +149,7 @@ public class AutoPayReviewServiceImpl implements AutoPayReviewService {
         caption.lease_().set(leaseAutoPays.lease());
         caption.hasLeaseWithOtherPaps().setValue(leaseAutoPays.pap().size() > 1);
         caption.expectedMoveOut().setValue(leaseAutoPays.lease().expectedMoveOut().getValue());
-
+        caption.paymentDue().setValue(leaseAutoPays.paymentDue().getValue());
         return caption;
     }
 
