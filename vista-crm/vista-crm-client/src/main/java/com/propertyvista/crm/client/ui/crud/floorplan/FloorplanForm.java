@@ -42,7 +42,7 @@ public class FloorplanForm extends CrmEntityForm<FloorplanDTO> {
         Tab tab = addTab(createGeneralTab(i18n.tr("General")));
         selectTab(tab);
 
-        addTab(createMediaTab(i18n.tr("Media")));
+        addTab(createMarketingTab(i18n.tr("Marketing")));
 
     }
 
@@ -59,12 +59,21 @@ public class FloorplanForm extends CrmEntityForm<FloorplanDTO> {
         };
     }
 
-    private TwoColumnFlexFormPanel createMediaTab(String title) {
+    private TwoColumnFlexFormPanel createMarketingTab(String title) {
         TwoColumnFlexFormPanel main = new TwoColumnFlexFormPanel(title);
 
         int row = -1;
-        main.setH1(++row, 0, 2, i18n.tr("Media Information"));
+        main.setH1(++row, 0, 2, i18n.tr("Marketing Summary"));
+        main.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().marketingName()), true).build());
+        main.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().description()), true).build());
+
+        main.setH1(++row, 0, 2, i18n.tr("Media"));
         main.setWidget(++row, 0, inject(proto().media(), new CrmMediaFolder(isEditable(), ImageTarget.Floorplan)));
+
+        main.setH1(++row, 0, 2, i18n.tr("ILS"));
+        // TODO - ILSProfileFloorplanFolder extends VistaBoxFolder<ILSProfileFloorplan>
+        // adding/removing an item would enable/disable listing of this Floorplan for selected ILS provider
+
         return main;
     }
 
@@ -79,7 +88,6 @@ public class FloorplanForm extends CrmEntityForm<FloorplanDTO> {
         leftRow = rightRow = Math.max(leftRow, rightRow);
 
         main.setWidget(++leftRow, 0, new FormDecoratorBuilder(inject(proto().name()), 15).build());
-        main.setWidget(++leftRow, 0, new FormDecoratorBuilder(inject(proto().marketingName()), 15).build());
         main.setWidget(++leftRow, 0, new FormDecoratorBuilder(inject(proto().bedrooms()), 3).build());
         main.setWidget(++leftRow, 0, new FormDecoratorBuilder(inject(proto().dens()), 3).build());
         main.setWidget(++leftRow, 0, new FormDecoratorBuilder(inject(proto().area()), 8).build());
@@ -91,7 +99,6 @@ public class FloorplanForm extends CrmEntityForm<FloorplanDTO> {
 
         leftRow = rightRow = Math.max(leftRow, rightRow);
 
-        main.setWidget(++leftRow, 0, 2, new FormDecoratorBuilder(inject(proto().description()), true).build());
         main.setH1(++leftRow, 0, 2, proto().amenities().getMeta().getCaption());
         main.setWidget(++leftRow, 0, 2, inject(proto().amenities(), createAmenitiesListEditor()));
 

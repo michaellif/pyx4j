@@ -7,18 +7,17 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on May 10, 2013
+ * Created on Sep 11, 2013
  * @author stanp
  * @version $Id$
  */
 package com.propertyvista.domain.marketing.ils;
 
-import java.math.BigDecimal;
-
 import com.pyx4j.entity.annotations.Detached;
+import com.pyx4j.entity.annotations.Indexed;
 import com.pyx4j.entity.annotations.JoinColumn;
 import com.pyx4j.entity.annotations.MemberColumn;
-import com.pyx4j.entity.annotations.OrderColumn;
+import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.annotations.Owner;
 import com.pyx4j.entity.annotations.ReadOnly;
 import com.pyx4j.entity.annotations.validator.NotNull;
@@ -26,49 +25,28 @@ import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.entity.shared.ISet;
 
-import com.propertyvista.domain.ref.City;
-import com.propertyvista.domain.ref.Province;
+import com.propertyvista.domain.marketing.ils.ILSPolicyItem.ILSProvider;
+import com.propertyvista.domain.property.PropertyContact;
+import com.propertyvista.domain.property.asset.building.Building;
 
-/**
- * ILSPolicy defines a set of attributes to be used to select a subset of available units
- * that will be published with a given ILS provider
- */
-public interface ILSPolicyItem extends IEntity {
-
-    public enum ILSProvider {
-        kijiji
-    }
-
-    IPrimitive<ILSProvider> provider();
-
-    ISet<Province> provinces();
-
-    ISet<City> cities();
-
-    IPrimitive<Integer> buildings();
-
-    IPrimitive<Integer> units();
-
-    IPrimitive<Integer> maxUnitsPerBuilding();
-
-    IPrimitive<Integer> minBeds();
-
-    IPrimitive<Integer> maxBeds();
-
-    IPrimitive<BigDecimal> minPrice();
-
-    IPrimitive<BigDecimal> maxPrice();
-
-    // internals: 
-
+public interface ILSProfileBuilding extends IEntity {
     @Owner
     @NotNull
     @MemberColumn(notNull = true)
     @ReadOnly
     @Detached
+    @Indexed
     @JoinColumn
-    ILSPolicy policy();
+    Building building();
 
-    @OrderColumn
-    IPrimitive<Integer> orderInParent();
+    IPrimitive<ILSProvider> provider();
+
+    @Owned
+    PropertyContact inquiryContact();
+
+    @Owned
+    @Detached
+    ISet<ILSProfileFloorplan> floorplans();
+
+    IPrimitive<Boolean> disabled();
 }

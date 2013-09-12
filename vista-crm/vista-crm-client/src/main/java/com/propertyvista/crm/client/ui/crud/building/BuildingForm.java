@@ -334,6 +334,10 @@ public class BuildingForm extends CrmEntityForm<BuildingDTO> {
         flexPanel.setH1(++row, 0, 2, i18n.tr("Media"));
         flexPanel.setWidget(++row, 0, 2, inject(proto().media(), new CrmMediaFolder(isEditable(), ImageTarget.Building)));
 
+        flexPanel.setH1(++row, 0, 2, i18n.tr("ILS"));
+        // TODO - ILSProfileBuildingFolder extends VistaBoxFolder<ILSProfileBuilding>
+        // adding an item would enable listing of this Building and all its floorplans for selected ILS provider
+
         return flexPanel;
     }
 
