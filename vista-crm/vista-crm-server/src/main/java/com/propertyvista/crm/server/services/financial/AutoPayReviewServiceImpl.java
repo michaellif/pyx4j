@@ -36,8 +36,10 @@ import com.propertyvista.crm.rpc.dto.financial.autopayreview.PapChargeReviewDTO.
 import com.propertyvista.crm.rpc.dto.financial.autopayreview.PapReviewCaptionDTO;
 import com.propertyvista.crm.rpc.dto.financial.autopayreview.PapReviewDTO;
 import com.propertyvista.crm.rpc.services.financial.AutoPayReviewService;
+import com.propertyvista.domain.payment.PreauthorizedPayment;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.reports.AutoPayChangesReportMetadata;
+import com.propertyvista.domain.tenant.lease.Tenant;
 import com.propertyvista.dto.payment.AutoPayReviewChargeDTO;
 import com.propertyvista.dto.payment.AutoPayReviewDTO;
 import com.propertyvista.dto.payment.AutoPayReviewPreauthorizedPaymentDTO;
@@ -49,7 +51,7 @@ public class AutoPayReviewServiceImpl implements AutoPayReviewService {
         Vector<AutoPayReviewDTO> suspendedPreauthorizedPayments = new Vector<AutoPayReviewDTO>(ServerSideFactory.create(PaymentReportFacade.class)
                 .reportSuspendedPreauthorizedPayments(makeCriteria(filterSettings)));
 
-        Vector<PapReviewDTO> papsForReview = convertPapReviews(suspendedPreauthorizedPayments);
+        Vector<PapReviewDTO> papsForReview = convert2PapReviews(suspendedPreauthorizedPayments);
 
         callback.onSuccess(papsForReview);
     }
@@ -85,7 +87,7 @@ public class AutoPayReviewServiceImpl implements AutoPayReviewService {
         return reportCriteria;
     }
 
-    private Vector<PapReviewDTO> convertPapReviews(Vector<AutoPayReviewDTO> suspendedPreauthorizedPayments) {
+    private Vector<PapReviewDTO> convert2PapReviews(Vector<AutoPayReviewDTO> suspendedPreauthorizedPayments) {
         Vector<PapReviewDTO> papReviews = new Vector<PapReviewDTO>();
         for (AutoPayReviewDTO leaseAutoPays : suspendedPreauthorizedPayments) {
             PapReviewCaptionDTO papReviewCaption = makeCaption(leaseAutoPays);
@@ -98,7 +100,13 @@ public class AutoPayReviewServiceImpl implements AutoPayReviewService {
 
     private PapReviewDTO makePapReview(PapReviewCaptionDTO papReviewCaption, AutoPayReviewPreauthorizedPaymentDTO autoPay) {
         PapReviewDTO papReview = EntityFactory.create(PapReviewDTO.class);
-        papReview.caption().set(papReviewCaption);
+        papReview.pap_().set(autoPay.pap());
+        papReview.caption().set(papReviewCaption.duplicate(PapReviewCaptionDTO.class));
+        PreauthorizedPayment pap = Persistence.service().retrieve(PreauthorizedPayment.class, papReview.pap_().getPrimaryKey());
+        Persistence.service().retrieve(pap.tenant());
+        papReview.caption().paymentMethod().setValue(pap.paymentMethod().getStringView());
+        papReview.caption().tenant().setValue(pap.tenant().getStringView());
+        papReview.caption().tenant_().set(pap.tenant().<Tenant> createIdentityStub());
 
         for (AutoPayReviewChargeDTO autoPayCharge : autoPay.items()) {
             PapChargeReviewDTO papCharge = EntityFactory.create(PapChargeReviewDTO.class);
@@ -139,7 +147,9 @@ public class AutoPayReviewServiceImpl implements AutoPayReviewService {
         caption.unit().setValue(leaseAutoPays.unit().getValue());
         caption.lease().setValue(leaseAutoPays.leaseId().getValue());
         caption.lease_().set(leaseAutoPays.lease());
+        caption.hasLeaseWithOtherPaps().setValue(leaseAutoPays.pap().size() > 1);
         caption.expectedMoveOut().setValue(leaseAutoPays.lease().expectedMoveOut().getValue());
+
         return caption;
     }
 
@@ -213,7 +223,6 @@ public class AutoPayReviewServiceImpl implements AutoPayReviewService {
                 thisPapCaption.tenant().setValue("Tenant Tenantovic" + tenantNum);
                 thisPapCaption.tenant_().setPrimaryKey(new Key(tenantNum + 1));
                 thisPapCaption.paymentMethod().setValue("Payment Method" + tenantNum);
-                thisPapCaption.paymentMethod_().setPrimaryKey(new Key(tenantNum + 1));
 
                 pap.caption().set(thisPapCaption);
                 ++tenantNum;

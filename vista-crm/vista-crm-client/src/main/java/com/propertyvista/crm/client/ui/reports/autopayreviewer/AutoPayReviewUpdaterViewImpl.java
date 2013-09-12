@@ -84,7 +84,7 @@ public class AutoPayReviewUpdaterViewImpl extends AbstractPrimePane implements A
         };
         papReviewHolderForm.initContent();
         papReviewHolderForm.asWidget().getElement().getStyle().setPosition(Position.ABSOLUTE);
-        papReviewHolderForm.asWidget().getElement().getStyle().setTop(150, Unit.PX);
+        papReviewHolderForm.asWidget().getElement().getStyle().setTop(151, Unit.PX);
         papReviewHolderForm.asWidget().getElement().getStyle().setLeft(0, Unit.PX);
         papReviewHolderForm.asWidget().getElement().getStyle().setRight(0, Unit.PX);
         papReviewHolderForm.asWidget().getElement().getStyle().setBottom(0, Unit.PX);

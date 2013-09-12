@@ -47,7 +47,7 @@ import com.propertyvista.crm.client.ui.gadgets.commonMk2.dashboard.AbstractDashb
 import com.propertyvista.crm.client.ui.gadgets.commonMk2.dashboard.AddGadgetDialog;
 import com.propertyvista.crm.client.ui.gadgets.forms.ArrearsGadgetSummaryForm;
 import com.propertyvista.crm.client.ui.reports.CommonReportStyles;
-import com.propertyvista.crm.client.ui.reports.autopayreviewer.PapReviewCaptionForm;
+import com.propertyvista.crm.client.ui.reports.autopayreviewer.PapReviewCaptionViewer;
 import com.propertyvista.crm.client.ui.reports.autopayreviewer.PapReviewFolder;
 import com.propertyvista.crm.client.ui.reports.autopayreviewer.PapReviewsHolderForm;
 import com.propertyvista.crm.client.ui.wizard.creditcheck.components.CreditCheckReportTypeSelector;
@@ -692,16 +692,19 @@ public class CrmTheme extends VistaTheme {
     }
 
     private void initAutoPayUpdaterStyles() {
-        Style style = new Style("." + PapReviewCaptionForm.Styles.AutoPayReviewUpdaterPapCaptionPanel.name() + " div");
-        style.addProperty("display", "inline-block");
+        Style style = new Style("." + PapReviewCaptionViewer.Styles.AutoPayReviewCaptionPanel.name());
+        style.addProperty("width", "100%");
+        addStyle(style);
+
+        style = new Style("." + PapReviewCaptionViewer.Styles.AutoPayReviewCaption.name());
         style.addProperty("font-weight", "bold");
         style.addProperty("vertical-align", "middle");
         addStyle(style);
 
-        style = new Style("." + PapReviewCaptionForm.Styles.AutoPayExpectedMoveOut.name());
-        style.addProperty("display", "inline-block");
+        style = new Style("." + PapReviewCaptionViewer.Styles.AutoPayReviewCaptionWarning.name());
         style.addProperty("font-weight", "bold");
         style.addProperty("vertical-align", "middle");
+        style.addProperty("color", "red");
         addStyle(style);
 
         style = new Style("." + PapReviewFolder.Styles.AutoPayReviewSelected.name());

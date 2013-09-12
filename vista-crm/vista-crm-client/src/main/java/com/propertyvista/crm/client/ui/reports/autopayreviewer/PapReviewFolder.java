@@ -107,7 +107,7 @@ public class PapReviewFolder extends VistaBoxFolder<PapReviewDTO> {
             );//@formatter:on
             contentPanel.addAndReplaceElement(inject(proto().isSelected()), "isSelected");
 
-            contentPanel.addAndReplaceElement(inject(proto().caption(), new PapReviewCaptionForm()), "captionLabel");
+            contentPanel.addAndReplaceElement(inject(proto().caption(), new PapReviewCaptionViewer()), "captionLabel");
             contentPanel.addAndReplaceElement(inject(proto().charges(), new PapChargesFolder()), "chargesFolder");
             contentPanel.addAndReplaceElement(chargeTotals = new PapChargeForm(), "chargesTotals");
             chargeTotals.initContent();

@@ -18,7 +18,6 @@ import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 
-import com.propertyvista.domain.payment.PaymentMethod;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.tenant.lease.Lease;
@@ -41,12 +40,13 @@ public interface PapReviewCaptionDTO extends IEntity {
 
     IPrimitive<String> paymentMethod();
 
-    PaymentMethod paymentMethod_();
-
     IPrimitive<String> lease();
 
     Lease lease_();
 
     IPrimitive<LogicalDate> expectedMoveOut();
+
+    /** specifies that the lease of PAP that this caption belongs to has more PAPs */
+    IPrimitive<Boolean> hasLeaseWithOtherPaps();
 
 }

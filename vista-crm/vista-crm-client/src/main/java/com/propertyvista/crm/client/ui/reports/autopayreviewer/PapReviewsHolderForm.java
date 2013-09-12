@@ -107,6 +107,7 @@ public class PapReviewsHolderForm extends CEntityDecoratableForm<PapReviewsHolde
         super.onValueSet(populate);
         counterPanel.setText(i18n.tr("Displaying {0,number,#,##0} of {1,number,#,##0} Leases with suspended AutoPay", getValue().papReviews().size(),
                 getValue().papReviewsTotalCount().getValue()));
+        moreButton.setVisible(getValue().papReviewsTotalCount().getValue() != getValue().papReviews().size());
     }
 
     private void markAll() {
