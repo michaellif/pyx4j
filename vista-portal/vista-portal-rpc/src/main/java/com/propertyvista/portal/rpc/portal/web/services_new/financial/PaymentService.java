@@ -13,8 +13,17 @@
  */
 package com.propertyvista.portal.rpc.portal.web.services_new.financial;
 
+import com.google.gwt.user.client.rpc.AsyncCallback;
+
 import com.pyx4j.rpc.shared.IService;
 
-public class PaymentService implements IService {
+import com.propertyvista.domain.payment.LeasePaymentMethod;
+import com.propertyvista.portal.rpc.portal.web.dto.PaymentMethodSummaryDTO;
+
+public interface PaymentService extends IService {
+
+    void deletePaymentMethod(AsyncCallback<Boolean> callback, LeasePaymentMethod itemId);
+
+    void getPaymentMethodSummary(AsyncCallback<PaymentMethodSummaryDTO> callback);
 
 }

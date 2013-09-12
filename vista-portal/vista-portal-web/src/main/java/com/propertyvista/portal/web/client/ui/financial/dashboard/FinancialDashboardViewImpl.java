@@ -22,7 +22,12 @@ import com.pyx4j.site.client.ui.layout.responsive.LayoutChangeEvent;
 import com.pyx4j.site.client.ui.layout.responsive.LayoutChangeHandler;
 import com.pyx4j.site.client.ui.layout.responsive.ResponsiveLayoutPanel.LayoutType;
 
-import com.propertyvista.portal.rpc.portal.web.dto.FinancialDashboardDTO;
+import com.propertyvista.dto.TransactionHistoryDTO;
+import com.propertyvista.portal.rpc.portal.web.dto.AutoPaySummaryDTO;
+import com.propertyvista.portal.rpc.portal.web.dto.BillingHistoryDTO;
+import com.propertyvista.portal.rpc.portal.web.dto.BillingSummaryDTO;
+import com.propertyvista.portal.rpc.portal.web.dto.LatestActivitiesDTO;
+import com.propertyvista.portal.rpc.portal.web.dto.PaymentMethodSummaryDTO;
 import com.propertyvista.portal.web.client.themes.DashboardTheme;
 
 public class FinancialDashboardViewImpl extends FlowPanel implements FinancialDashboardView {
@@ -32,9 +37,9 @@ public class FinancialDashboardViewImpl extends FlowPanel implements FinancialDa
 
     private FinancialDashboardPresenter presenter;
 
-    private final BillingSummaryGadget billingGadget;
+    private final BillingSummaryGadget billingSummarygGadget;
 
-    private final LatestActivitiesGadget offersGadget;
+    private final LatestActivitiesGadget latestActivitiesGadget;
 
     private final AutoPayAgreementsGadget autoPayAgreementsGadget;
 
@@ -44,21 +49,21 @@ public class FinancialDashboardViewImpl extends FlowPanel implements FinancialDa
 
         setStyleName(DashboardTheme.StyleName.Dashboard.name());
 
-        billingGadget = new BillingSummaryGadget(this);
-        billingGadget.asWidget().setWidth("100%");
+        billingSummarygGadget = new BillingSummaryGadget(this);
+        billingSummarygGadget.asWidget().setWidth("100%");
 
         autoPayAgreementsGadget = new AutoPayAgreementsGadget(this);
         autoPayAgreementsGadget.asWidget().setWidth("100%");
 
-        offersGadget = new LatestActivitiesGadget(this);
-        offersGadget.asWidget().setWidth("100%");
+        latestActivitiesGadget = new LatestActivitiesGadget(this);
+        latestActivitiesGadget.asWidget().setWidth("100%");
 
         paymentMethodsGadget = new PaymentMethodsGadget(this);
         paymentMethodsGadget.asWidget().setWidth("100%");
 
-        add(billingGadget);
+        add(billingSummarygGadget);
         add(autoPayAgreementsGadget);
-        add(offersGadget);
+        add(latestActivitiesGadget);
         add(paymentMethodsGadget);
 
         doLayout(LayoutType.getLayoutType(Window.getClientWidth()));
@@ -86,9 +91,35 @@ public class FinancialDashboardViewImpl extends FlowPanel implements FinancialDa
     }
 
     @Override
-    public void populate(FinancialDashboardDTO result) {
-        billingGadget.populate(result.billingSummary());
-        autoPayAgreementsGadget.populate(result.autoPaySummary());
-        paymentMethodsGadget.populate(result.paymentMethodSummary());
+    public void populate(BillingSummaryDTO result) {
+        billingSummarygGadget.populate(result);
+    }
+
+    @Override
+    public void populate(AutoPaySummaryDTO result) {
+        autoPayAgreementsGadget.populate(result);
+    }
+
+    @Override
+    public void populate(PaymentMethodSummaryDTO result) {
+        paymentMethodsGadget.populate(result);
+    }
+
+    @Override
+    public void populate(BillingHistoryDTO result) {
+        // TODO Auto-generated method stub
+
+    }
+
+    @Override
+    public void populate(TransactionHistoryDTO result) {
+        // TODO Auto-generated method stub
+
+    }
+
+    @Override
+    public void populate(LatestActivitiesDTO result) {
+        // TODO Auto-generated method stub
+
     }
 }

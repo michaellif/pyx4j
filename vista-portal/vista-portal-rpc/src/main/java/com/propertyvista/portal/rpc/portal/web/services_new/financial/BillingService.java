@@ -17,9 +17,18 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.rpc.shared.IService;
 
+import com.propertyvista.dto.TransactionHistoryDTO;
+import com.propertyvista.portal.rpc.portal.web.dto.BillingHistoryDTO;
 import com.propertyvista.portal.rpc.portal.web.dto.BillingSummaryDTO;
+import com.propertyvista.portal.rpc.portal.web.dto.LatestActivitiesDTO;
 
 public interface BillingService extends IService {
 
     void retreiveBillingSummary(AsyncCallback<BillingSummaryDTO> callback);
+
+    void retreiveBillingHistory(AsyncCallback<BillingHistoryDTO> callback);
+
+    void retreiveTransactionHistory(AsyncCallback<TransactionHistoryDTO> callback);
+
+    void retreiveLatestActivities(AsyncCallback<LatestActivitiesDTO> callback);
 }

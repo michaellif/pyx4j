@@ -74,7 +74,7 @@ public class BillingSummaryGadget extends AbstractGadget<FinancialDashboardViewI
 
                 @Override
                 public void execute() {
-                    getGadgetView().getPresenter().payNow();
+                    getGadgetView().getPresenter().makePayment();
                 }
             });
             paymentButton.getElement().getStyle().setProperty("background", StyleManager.getPalette().getThemeColor(ThemeColor.contrast4, 1));

@@ -20,7 +20,6 @@ import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
-import com.pyx4j.rpc.shared.VoidSerializable;
 import com.pyx4j.security.shared.SecurityController;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.rpc.AppPlace;
@@ -28,27 +27,37 @@ import com.pyx4j.site.rpc.AppPlace;
 import com.propertyvista.domain.payment.LeasePaymentMethod;
 import com.propertyvista.domain.payment.PreauthorizedPayment;
 import com.propertyvista.domain.security.VistaCustomerPaymentTypeBehavior;
+import com.propertyvista.dto.TransactionHistoryDTO;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap.Resident.Financial;
 import com.propertyvista.portal.rpc.portal.web.dto.AutoPayInfoDTO;
-import com.propertyvista.portal.rpc.portal.web.dto.FinancialDashboardDTO;
+import com.propertyvista.portal.rpc.portal.web.dto.AutoPaySummaryDTO;
+import com.propertyvista.portal.rpc.portal.web.dto.BillingHistoryDTO;
+import com.propertyvista.portal.rpc.portal.web.dto.BillingSummaryDTO;
+import com.propertyvista.portal.rpc.portal.web.dto.LatestActivitiesDTO;
 import com.propertyvista.portal.rpc.portal.web.dto.PaymentMethodInfoDTO;
-import com.propertyvista.portal.rpc.portal.web.services.DashboardService;
+import com.propertyvista.portal.rpc.portal.web.dto.PaymentMethodSummaryDTO;
+import com.propertyvista.portal.rpc.portal.web.services_new.financial.AutoPayService;
+import com.propertyvista.portal.rpc.portal.web.services_new.financial.BillingService;
+import com.propertyvista.portal.rpc.portal.web.services_new.financial.PaymentService;
 import com.propertyvista.portal.web.client.PortalWebSite;
 import com.propertyvista.portal.web.client.activity.SecurityAwareActivity;
 import com.propertyvista.portal.web.client.ui.financial.dashboard.FinancialDashboardView;
 import com.propertyvista.portal.web.client.ui.financial.dashboard.FinancialDashboardView.FinancialDashboardPresenter;
+import com.propertyvista.shared.config.VistaFeatures;
 
 public class FinancialDashboardActivity extends SecurityAwareActivity implements FinancialDashboardPresenter {
 
-    private final FinancialDashboardView view;
+    private final FinancialDashboardView view = PortalWebSite.getViewFactory().instantiate(FinancialDashboardView.class);
 
-    private final DashboardService srv;
+    private final AutoPayService autoPayService = GWT.<AutoPayService> create(AutoPayService.class);
+
+    private final BillingService billingService = GWT.<BillingService> create(BillingService.class);
+
+    private final PaymentService paymentService = GWT.<PaymentService> create(PaymentService.class);
 
     public FinancialDashboardActivity(Place place) {
-        this.view = PortalWebSite.getViewFactory().instantiate(FinancialDashboardView.class);
         this.view.setPresenter(this);
-        srv = GWT.create(DashboardService.class);
     }
 
     @Override
@@ -57,12 +66,49 @@ public class FinancialDashboardActivity extends SecurityAwareActivity implements
         panel.setWidget(view);
         view.setPresenter(this);
 
-        srv.retrieveFinancialDashboard(new DefaultAsyncCallback<FinancialDashboardDTO>() {
+        billingService.retreiveBillingSummary(new DefaultAsyncCallback<BillingSummaryDTO>() {
             @Override
-            public void onSuccess(FinancialDashboardDTO result) {
+            public void onSuccess(BillingSummaryDTO result) {
                 view.populate(result);
             }
         });
+
+        billingService.retreiveLatestActivities(new DefaultAsyncCallback<LatestActivitiesDTO>() {
+            @Override
+            public void onSuccess(LatestActivitiesDTO result) {
+                view.populate(result);
+            }
+        });
+
+        autoPayService.getAutoPaySummary(new DefaultAsyncCallback<AutoPaySummaryDTO>() {
+            @Override
+            public void onSuccess(AutoPaySummaryDTO result) {
+                view.populate(result);
+            }
+        });
+
+        paymentService.getPaymentMethodSummary(new DefaultAsyncCallback<PaymentMethodSummaryDTO>() {
+            @Override
+            public void onSuccess(PaymentMethodSummaryDTO result) {
+                view.populate(result);
+            }
+        });
+
+        if (VistaFeatures.instance().yardiIntegration()) {
+            billingService.retreiveTransactionHistory(new DefaultAsyncCallback<TransactionHistoryDTO>() {
+                @Override
+                public void onSuccess(TransactionHistoryDTO result) {
+                    view.populate(result);
+                }
+            });
+        } else {
+            billingService.retreiveBillingHistory(new DefaultAsyncCallback<BillingHistoryDTO>() {
+                @Override
+                public void onSuccess(BillingHistoryDTO result) {
+                    view.populate(result);
+                }
+            });
+        }
     }
 
     @Override
@@ -71,13 +117,7 @@ public class FinancialDashboardActivity extends SecurityAwareActivity implements
     }
 
     @Override
-    public void viewBillingHistory() {
-        AppSite.getPlaceController().goTo(new PortalSiteMap.Resident.Financial.BillingHistory());
-
-    }
-
-    @Override
-    public void payNow() {
+    public void makePayment() {
         if (SecurityController.checkAnyBehavior(VistaCustomerPaymentTypeBehavior.values())) {
             AppSite.getPlaceController().goTo(new Financial.PayNow());
         }
@@ -92,9 +132,9 @@ public class FinancialDashboardActivity extends SecurityAwareActivity implements
 
     @Override
     public void deletePreauthorizedPayment(AutoPayInfoDTO autoPay) {
-        srv.deletePreauthorizedPayment(new DefaultAsyncCallback<VoidSerializable>() {
+        autoPayService.deleteAutoPay(new DefaultAsyncCallback<Boolean>() {
             @Override
-            public void onSuccess(VoidSerializable result) {
+            public void onSuccess(Boolean result) {
                 // TODO Auto-generated method stub
             }
         }, EntityFactory.createIdentityStub(PreauthorizedPayment.class, autoPay.getPrimaryKey()));
@@ -115,9 +155,9 @@ public class FinancialDashboardActivity extends SecurityAwareActivity implements
 
     @Override
     public void deletePaymentMethod(PaymentMethodInfoDTO paymentMethod) {
-        srv.deletePaymentMethod(new DefaultAsyncCallback<VoidSerializable>() {
+        paymentService.deletePaymentMethod(new DefaultAsyncCallback<Boolean>() {
             @Override
-            public void onSuccess(VoidSerializable result) {
+            public void onSuccess(Boolean result) {
                 // TODO Auto-generated method stub
             }
         }, EntityFactory.createIdentityStub(LeasePaymentMethod.class, paymentMethod.getPrimaryKey()));

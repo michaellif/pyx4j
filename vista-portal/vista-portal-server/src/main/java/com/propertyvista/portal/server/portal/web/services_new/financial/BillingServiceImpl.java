@@ -13,18 +13,26 @@
  */
 package com.propertyvista.portal.server.portal.web.services_new.financial;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
+import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 
 import com.propertyvista.biz.financial.ar.ARFacade;
 import com.propertyvista.biz.financial.billing.BillingFacade;
 import com.propertyvista.domain.financial.billing.Bill;
 import com.propertyvista.domain.tenant.lease.Lease;
-import com.propertyvista.domain.tenant.lease.LeaseTermTenant;
+import com.propertyvista.dto.TransactionHistoryDTO;
+import com.propertyvista.portal.domain.dto.BillDataDTO;
+import com.propertyvista.portal.rpc.portal.web.dto.BillingHistoryDTO;
 import com.propertyvista.portal.rpc.portal.web.dto.BillingSummaryDTO;
+import com.propertyvista.portal.rpc.portal.web.dto.LatestActivitiesDTO;
 import com.propertyvista.portal.rpc.portal.web.services_new.financial.BillingService;
 import com.propertyvista.portal.server.portal.TenantAppContext;
 import com.propertyvista.shared.config.VistaFeatures;
@@ -33,26 +41,67 @@ public class BillingServiceImpl implements BillingService {
 
     @Override
     public void retreiveBillingSummary(AsyncCallback<BillingSummaryDTO> callback) {
-        if (true) {
-            new BillingServiceMockImpl().retreiveBillingSummary(callback);
-        } else {
-            BillingSummaryDTO billingSummary = EntityFactory.create(BillingSummaryDTO.class);
+        BillingSummaryDTO summary = EntityFactory.create(BillingSummaryDTO.class);
 
-            LeaseTermTenant tenantInLease = TenantAppContext.getCurrentUserTenantInLease();
-            Persistence.service().retrieve(tenantInLease.leaseTermV());
-            Persistence.service().retrieve(tenantInLease.leaseTermV().holder().lease());
+        Lease lease = TenantAppContext.getCurrentUserLease();
 
-            Lease lease = tenantInLease.leaseTermV().holder().lease();
-
-            billingSummary.currentBalance().setValue(ServerSideFactory.create(ARFacade.class).getCurrentBalance(lease.billingAccount()));
-            if (!VistaFeatures.instance().yardiIntegration()) {
-                Bill bill = ServerSideFactory.create(BillingFacade.class).getLatestBill(lease);
-                billingSummary.dueDate().setValue(bill.dueDate().getValue());
-            }
-
-            callback.onSuccess(billingSummary);
+        summary.currentBalance().setValue(ServerSideFactory.create(ARFacade.class).getCurrentBalance(lease.billingAccount()));
+        if (!VistaFeatures.instance().yardiIntegration()) {
+            Bill bill = ServerSideFactory.create(BillingFacade.class).getLatestBill(lease);
+            summary.dueDate().setValue(bill.dueDate().getValue());
         }
 
+        callback.onSuccess(summary);
     }
 
+    @Override
+    public void retreiveBillingHistory(AsyncCallback<BillingHistoryDTO> callback) {
+        BillingHistoryDTO history = EntityFactory.create(BillingHistoryDTO.class);
+
+        Lease lease = TenantAppContext.getCurrentUserLease();
+
+        history.bills().addAll(retrieveBillHistory(lease));
+
+        callback.onSuccess(history);
+    }
+
+    @Override
+    public void retreiveTransactionHistory(AsyncCallback<TransactionHistoryDTO> callback) {
+        Lease lease = TenantAppContext.getCurrentUserLease();
+
+        callback.onSuccess(ServerSideFactory.create(ARFacade.class).getTransactionHistory(lease.billingAccount()));
+    }
+
+    @Override
+    public void retreiveLatestActivities(AsyncCallback<LatestActivitiesDTO> callback) {
+        LatestActivitiesDTO activities = EntityFactory.create(LatestActivitiesDTO.class);
+
+        Lease lease = TenantAppContext.getCurrentUserLease();
+
+        activities.lineItems().addAll(ServerSideFactory.create(ARFacade.class).getLatestBillingActivity(lease.billingAccount()));
+
+        callback.onSuccess(activities);
+    }
+
+    // Internals:
+
+    private static List<BillDataDTO> retrieveBillHistory(Lease lease) {
+        List<BillDataDTO> bills = new ArrayList<BillDataDTO>();
+        EntityQueryCriteria<Bill> criteria = EntityQueryCriteria.create(Bill.class);
+
+        criteria.add(PropertyCriterion.eq(criteria.proto().billingAccount(), lease.billingAccount()));
+        for (Bill bill : Persistence.service().query(criteria)) {
+            BillDataDTO dto = EntityFactory.create(BillDataDTO.class);
+
+            dto.setPrimaryKey(bill.getPrimaryKey());
+            dto.referenceNo().setValue(bill.billSequenceNumber().getValue());
+            dto.amount().setValue(bill.totalDueAmount().getValue());
+            dto.dueDate().setValue(bill.dueDate().getValue());
+            dto.fromDate().setValue(bill.executionDate().getValue());
+
+            bills.add(dto);
+        }
+
+        return bills;
+    }
 }

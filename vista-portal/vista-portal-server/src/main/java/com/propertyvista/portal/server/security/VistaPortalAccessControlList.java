@@ -77,6 +77,8 @@ import com.propertyvista.portal.rpc.portal.services.resident.TenantSurePurchaseS
 import com.propertyvista.portal.rpc.portal.services.resident.ViewBillService;
 import com.propertyvista.portal.rpc.portal.services.resident.WeatherService;
 import com.propertyvista.portal.rpc.portal.web.services_new.financial.AutoPayService;
+import com.propertyvista.portal.rpc.portal.web.services_new.financial.BillingService;
+import com.propertyvista.portal.rpc.portal.web.services_new.financial.PaymentService;
 import com.propertyvista.portal.rpc.ptapp.services.ApplicationDocumentUploadService;
 import com.propertyvista.portal.rpc.ptapp.services.ApplicationSelectionService;
 import com.propertyvista.portal.rpc.ptapp.services.ApplicationService;
@@ -86,7 +88,6 @@ import com.propertyvista.portal.rpc.ptapp.services.PtPasswordResetService;
 import com.propertyvista.portal.rpc.ptapp.services.PtPolicyRetrieveService;
 import com.propertyvista.portal.rpc.ptapp.services.steps.ApartmentService;
 import com.propertyvista.portal.rpc.ptapp.services.steps.ChargesService;
-import com.propertyvista.portal.rpc.ptapp.services.steps.PaymentService;
 import com.propertyvista.portal.rpc.ptapp.services.steps.SummaryService;
 import com.propertyvista.portal.rpc.ptapp.services.steps.TenantFinancialService;
 import com.propertyvista.portal.rpc.ptapp.services.steps.TenantInfoService;
@@ -219,7 +220,9 @@ public class VistaPortalAccessControlList extends ServletContainerAclBuilder {
         //========================= My Community
 
         grant(VistaCustomerBehavior.Tenant, new IServiceExecutePermission(AutoPayService.class));
-        grant(VistaCustomerBehavior.Tenant, new IServiceExecutePermission(com.propertyvista.portal.rpc.portal.web.services.DashboardService.class));
+        grant(VistaCustomerBehavior.Tenant, new IServiceExecutePermission(BillingService.class));
+        grant(VistaCustomerBehavior.Tenant, new IServiceExecutePermission(PaymentService.class));
+
         grant(VistaCustomerBehavior.Tenant, new IServiceExecutePermission(com.propertyvista.portal.rpc.portal.web.services.PaymentMethodCrudService.class));
         grant(VistaCustomerBehavior.Tenant, new IServiceExecutePermission(com.propertyvista.portal.rpc.portal.web.services.PaymentMethodRetrieveService.class));
         grant(VistaCustomerBehavior.Tenant, new IServiceExecutePermission(com.propertyvista.portal.rpc.portal.web.services.PaymentMethodWizardService.class));

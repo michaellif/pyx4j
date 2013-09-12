@@ -14,20 +14,27 @@
 package com.propertyvista.portal.server.portal.web.services_new.financial;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
+import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.server.Persistence;
+import com.pyx4j.entity.shared.AttachLevel;
+import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.utils.EntityDtoBinder;
 
 import com.propertyvista.biz.financial.payment.PaymentFacade;
 import com.propertyvista.biz.financial.payment.PaymentMethodFacade;
+import com.propertyvista.biz.tenant.lease.LeaseFacade;
 import com.propertyvista.domain.payment.PreauthorizedPayment;
 import com.propertyvista.domain.payment.PreauthorizedPayment.PreauthorizedPaymentCoveredItem;
 import com.propertyvista.domain.security.common.VistaApplication;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.portal.rpc.portal.web.dto.AutoPayDTO;
+import com.propertyvista.portal.rpc.portal.web.dto.AutoPayInfoDTO;
 import com.propertyvista.portal.rpc.portal.web.dto.AutoPaySummaryDTO;
 import com.propertyvista.portal.rpc.portal.web.services_new.financial.AutoPayService;
 import com.propertyvista.portal.server.portal.TenantAppContext;
@@ -50,8 +57,10 @@ public class AutoPayServiceImpl implements AutoPayService {
 
     @Override
     public void deleteAutoPay(AsyncCallback<Boolean> callback, PreauthorizedPayment itemId) {
-        // TODO Auto-generated method stub
+        ServerSideFactory.create(PaymentMethodFacade.class).deletePreauthorizedPayment(itemId);
+        Persistence.service().commit();
 
+        callback.onSuccess(true);
     }
 
     @Override
@@ -88,8 +97,44 @@ public class AutoPayServiceImpl implements AutoPayService {
 
     @Override
     public void getAutoPaySummary(AsyncCallback<AutoPaySummaryDTO> callback) {
-        // TODO Auto-generated method stub
+        AutoPaySummaryDTO summary = EntityFactory.create(AutoPaySummaryDTO.class);
 
+        Lease lease = TenantAppContext.getCurrentUserLease();
+
+        summary.currentAutoPayments().addAll(retrieveCurrentAutoPayments(lease));
+        summary.currentAutoPayDate().setValue(ServerSideFactory.create(PaymentMethodFacade.class).getCurrentPreauthorizedPaymentDate(lease));
+        summary.nextAutoPayDate().setValue(ServerSideFactory.create(PaymentMethodFacade.class).getNextPreauthorizedPaymentDate(lease));
+        summary.modificationsAllowed().setValue(!ServerSideFactory.create(LeaseFacade.class).isMoveOutWithinNextBillingCycle(lease));
+
+        callback.onSuccess(summary);
+    }
+
+    // internals:
+
+    private static List<AutoPayInfoDTO> retrieveCurrentAutoPayments(Lease lease) {
+        List<AutoPayInfoDTO> currentAutoPayments = new ArrayList<AutoPayInfoDTO>();
+        LogicalDate excutionDate = ServerSideFactory.create(PaymentMethodFacade.class).getCurrentPreauthorizedPaymentDate(lease);
+        for (PreauthorizedPayment pap : ServerSideFactory.create(PaymentMethodFacade.class).retrieveCurrentPreauthorizedPayments(lease)) {
+            AutoPayInfoDTO autoPayInfo = EntityFactory.create(AutoPayInfoDTO.class);
+            autoPayInfo.id().setValue(pap.id().getValue());
+
+            autoPayInfo.amount().setValue(BigDecimal.ZERO);
+            for (PreauthorizedPaymentCoveredItem ci : pap.coveredItems()) {
+                autoPayInfo.amount().setValue(autoPayInfo.amount().getValue().add(ci.amount().getValue()));
+            }
+
+            autoPayInfo.paymentDate().setValue(excutionDate);
+            autoPayInfo.payer().set(pap.tenant());
+            Persistence.ensureRetrieve(autoPayInfo.payer(), AttachLevel.ToStringMembers);
+            if (autoPayInfo.payer().equals(TenantAppContext.getCurrentUserTenant())) {
+                autoPayInfo.paymentMethod().set(pap.paymentMethod());
+            }
+            autoPayInfo.expiring().setValue(pap.expiring().getValue());
+
+            currentAutoPayments.add(autoPayInfo);
+        }
+
+        return currentAutoPayments;
     }
 
     class AutoPayDtoBinder extends EntityDtoBinder<PreauthorizedPayment, AutoPayDTO> {
