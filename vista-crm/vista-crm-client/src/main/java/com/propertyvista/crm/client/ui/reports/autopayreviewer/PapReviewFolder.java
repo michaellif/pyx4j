@@ -190,32 +190,32 @@ public class PapReviewFolder extends VistaBoxFolder<PapReviewDTO> {
             panel.add(new MiniDecorator(inject(proto().suspendedPrice()), Styles.AutoPayPapChargeNumberColumn.name()));
             get(proto().suspendedPrice()).setViewable(true);
 
-            panel.add(new MiniDecorator(inject(proto().suspendedPreAuthorizedPaymentAmount()), Styles.AutoPayPapChargeNumberColumn.name()));
-            get(proto().suspendedPreAuthorizedPaymentAmount()).setViewable(true);
+            panel.add(new MiniDecorator(inject(proto().suspendedPapAmount()), Styles.AutoPayPapChargeNumberColumn.name()));
+            get(proto().suspendedPapAmount()).setViewable(true);
 
-            panel.add(new MiniDecorator(inject(proto().suspendedPreAuthorizedPaymentPercent()), Styles.AutoPayPapChargeNumberColumn.name()));
-            get(proto().suspendedPreAuthorizedPaymentPercent()).setViewable(true);
+            panel.add(new MiniDecorator(inject(proto().suspendedPapPercent()), Styles.AutoPayPapChargeNumberColumn.name()));
+            get(proto().suspendedPapPercent()).setViewable(true);
 
             panel.add(new MiniDecorator(inject(proto().newPrice()), Styles.AutoPayPapChargeNumberColumn.name()));
             get(proto().newPrice()).setViewable(true);
 
-            panel.add(new MiniDecorator(inject(proto().newPreAuthorizedPaymentAmount()), Styles.AutoPayPapChargeNumberColumn.name()));
-            panel.add(new MiniDecorator(inject(proto().newPreAuthorizedPaymentPercent()), Styles.AutoPayPapChargeNumberColumn.name()));
+            panel.add(new MiniDecorator(inject(proto().newPapAmount()), Styles.AutoPayPapChargeNumberColumn.name()));
+            panel.add(new MiniDecorator(inject(proto().newPapPercent()), Styles.AutoPayPapChargeNumberColumn.name()));
 
-            get(proto().newPreAuthorizedPaymentAmount()).addValueChangeHandler(new ValueChangeHandler<BigDecimal>() {
+            get(proto().newPapAmount()).addValueChangeHandler(new ValueChangeHandler<BigDecimal>() {
                 @Override
                 public void onValueChange(ValueChangeEvent<BigDecimal> event) {
                     BigDecimal newPercent = event.getValue() != null ? event.getValue().divide(get(proto().newPrice()).getValue(), MathContext.DECIMAL32)
                             : null;
-                    get(proto().newPreAuthorizedPaymentPercent()).setValue(newPercent, false);
+                    get(proto().newPapPercent()).setValue(newPercent, false);
                     updateChangePercent();
                 }
             });
-            get(proto().newPreAuthorizedPaymentPercent()).addValueChangeHandler(new ValueChangeHandler<BigDecimal>() {
+            get(proto().newPapPercent()).addValueChangeHandler(new ValueChangeHandler<BigDecimal>() {
                 @Override
                 public void onValueChange(ValueChangeEvent<BigDecimal> event) {
                     BigDecimal newAmount = event.getValue() != null ? get(proto().newPrice()).getValue().multiply(event.getValue()) : null;
-                    get(proto().newPreAuthorizedPaymentAmount()).setValue(newAmount, false);
+                    get(proto().newPapAmount()).setValue(newAmount, false);
                     updateChangePercent();
                 }
             });
@@ -231,24 +231,24 @@ public class PapReviewFolder extends VistaBoxFolder<PapReviewDTO> {
             super.onValueSet(populate);
 
             get(proto().newPrice()).setVisible(getValue().changeType().getValue() != PapChargeReviewDTO.ChangeType.Removed);
-            get(proto().newPreAuthorizedPaymentAmount()).setVisible(getValue().changeType().getValue() != PapChargeReviewDTO.ChangeType.Removed);
-            get(proto().newPreAuthorizedPaymentPercent()).setVisible(getValue().changeType().getValue() != PapChargeReviewDTO.ChangeType.Removed);
+            get(proto().newPapAmount()).setVisible(getValue().changeType().getValue() != PapChargeReviewDTO.ChangeType.Removed);
+            get(proto().newPapPercent()).setVisible(getValue().changeType().getValue() != PapChargeReviewDTO.ChangeType.Removed);
         }
 
         private void updateChangePercent() {
 
             BigDecimal changePercent = new BigDecimal("0.00");
             if (getValue().changeType().getValue() == ChangeType.New) {
-                changePercent = get(proto().newPreAuthorizedPaymentAmount()).getValue().compareTo(BigDecimal.ZERO) != 0 ? new BigDecimal("1.00")
+                changePercent = get(proto().newPapAmount()).getValue().compareTo(BigDecimal.ZERO) != 0 ? new BigDecimal("1.00")
                         : BigDecimal.ZERO;
             }
             if (getValue().changeType().getValue() == ChangeType.Removed) {
                 changePercent = new BigDecimal("-1.00");
             }
             if (getValue().changeType().getValue() == ChangeType.Changed || getValue().changeType().getValue() == ChangeType.Unchanged) {
-                BigDecimal change = get(proto().newPreAuthorizedPaymentAmount()).getValue().subtract(
-                        get(proto().suspendedPreAuthorizedPaymentAmount()).getValue());
-                changePercent = change.divide(get(proto().suspendedPreAuthorizedPaymentAmount()).getValue(), MathContext.DECIMAL32);
+                BigDecimal change = get(proto().newPapAmount()).getValue().subtract(
+                        get(proto().suspendedPapAmount()).getValue());
+                changePercent = change.divide(get(proto().suspendedPapAmount()).getValue(), MathContext.DECIMAL32);
             }
             get(proto().changePercent()).setValue(changePercent, false);
         }
@@ -266,42 +266,42 @@ public class PapReviewFolder extends VistaBoxFolder<PapReviewDTO> {
         papChargesTotal.chargeName().setValue(i18n.tr("Total"));
 
         initIfNull(papChargesTotal.suspendedPrice());
-        initIfNull(papChargesTotal.suspendedPreAuthorizedPaymentAmount());
+        initIfNull(papChargesTotal.suspendedPapAmount());
         initIfNull(papChargesTotal.newPrice());
-        initIfNull(papChargesTotal.newPreAuthorizedPaymentAmount());
+        initIfNull(papChargesTotal.newPapAmount());
 
         for (PapChargeReviewDTO totalOfCharge : papCharges) {
             if (totalOfCharge.changeType().getValue() != ChangeType.New) {
                 papChargesTotal.suspendedPrice().setValue(totalOfCharge.suspendedPrice().getValue().add(papChargesTotal.suspendedPrice().getValue()));
-                papChargesTotal.suspendedPreAuthorizedPaymentAmount().setValue(
-                        totalOfCharge.suspendedPreAuthorizedPaymentAmount().getValue().add(papChargesTotal.suspendedPreAuthorizedPaymentAmount().getValue()));
+                papChargesTotal.suspendedPapAmount().setValue(
+                        totalOfCharge.suspendedPapAmount().getValue().add(papChargesTotal.suspendedPapAmount().getValue()));
             }
             if (totalOfCharge.changeType().getValue() != ChangeType.Removed) {
                 papChargesTotal.newPrice().setValue(totalOfCharge.newPrice().getValue().add(papChargesTotal.newPrice().getValue()));
 
-                papChargesTotal.newPreAuthorizedPaymentAmount().setValue(
-                        totalOfCharge.newPreAuthorizedPaymentAmount().getValue().add(papChargesTotal.newPreAuthorizedPaymentAmount().getValue()));
+                papChargesTotal.newPapAmount().setValue(
+                        totalOfCharge.newPapAmount().getValue().add(papChargesTotal.newPapAmount().getValue()));
             }
         }
         if (papChargesTotal.suspendedPrice().getValue().compareTo(BigDecimal.ZERO) != 0) {
-            papChargesTotal.suspendedPreAuthorizedPaymentPercent()
+            papChargesTotal.suspendedPapPercent()
                     .setValue(
-                            papChargesTotal.suspendedPreAuthorizedPaymentAmount().getValue()
+                            papChargesTotal.suspendedPapAmount().getValue()
                                     .divide(papChargesTotal.suspendedPrice().getValue(), MathContext.DECIMAL32));
         } else {
-            papChargesTotal.suspendedPreAuthorizedPaymentPercent().setValue(new BigDecimal("0.00"));
+            papChargesTotal.suspendedPapPercent().setValue(new BigDecimal("0.00"));
         }
         if (papChargesTotal.newPrice().getValue().compareTo(BigDecimal.ZERO) != 0) {
-            papChargesTotal.newPreAuthorizedPaymentPercent().setValue(
-                    papChargesTotal.newPreAuthorizedPaymentAmount().getValue().divide(papChargesTotal.newPrice().getValue(), MathContext.DECIMAL32));
+            papChargesTotal.newPapPercent().setValue(
+                    papChargesTotal.newPapAmount().getValue().divide(papChargesTotal.newPrice().getValue(), MathContext.DECIMAL32));
         } else {
-            papChargesTotal.newPreAuthorizedPaymentPercent().setValue(new BigDecimal("0.00"));
+            papChargesTotal.newPapPercent().setValue(new BigDecimal("0.00"));
         }
 
         papChargesTotal.changePercent().setValue(
-                papChargesTotal.suspendedPreAuthorizedPaymentAmount().getValue().compareTo(BigDecimal.ZERO) == 0 ? BigDecimal.ZERO : papChargesTotal
-                        .newPreAuthorizedPaymentAmount().getValue().subtract(papChargesTotal.suspendedPreAuthorizedPaymentAmount().getValue())
-                        .divide(papChargesTotal.suspendedPreAuthorizedPaymentAmount().getValue(), MathContext.DECIMAL32));
+                papChargesTotal.suspendedPapAmount().getValue().compareTo(BigDecimal.ZERO) == 0 ? BigDecimal.ZERO : papChargesTotal
+                        .newPapAmount().getValue().subtract(papChargesTotal.suspendedPapAmount().getValue())
+                        .divide(papChargesTotal.suspendedPapAmount().getValue(), MathContext.DECIMAL32));
 
         return papChargesTotal;
     }

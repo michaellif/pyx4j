@@ -162,11 +162,11 @@ public class AutoPayReviewDataGrid extends Composite {
             td.endTD();
 
             td = tr.startTD();
-            td.text(papCharge.suspendedPreAuthorizedPaymentAmount().getStringView());
+            td.text(papCharge.suspendedPapAmount().getStringView());
             td.endTD();
 
             td = tr.startTD();
-            td.text(papCharge.suspendedPreAuthorizedPaymentPercent().getStringView());
+            td.text(papCharge.suspendedPapPercent().getStringView());
             td.endTD();
 
             td = tr.startTD();
@@ -199,14 +199,14 @@ public class AutoPayReviewDataGrid extends Composite {
         suggestedPaymentColumn = new Column<PapChargeReviewDTO, String>(new EditTextCell()) {
             @Override
             public String getValue(PapChargeReviewDTO object) {
-                return object.suggestedNewPreAuthorizedPaymentAmount().getStringView();
+                return object.newPapAmount().getStringView();
             }
         };
         suggestedPaymentColumn.setFieldUpdater(new FieldUpdater<PapChargeReviewDTO, String>() {
             @Override
             public void update(int index, PapChargeReviewDTO object, String value) {
                 try {
-                    object.suggestedNewPreAuthorizedPaymentAmount().setValue(new BigDecimal(value));
+                    object.newPapAmount().setValue(new BigDecimal(value));
                 } catch (Throwable e) {
 
                 }

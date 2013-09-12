@@ -114,12 +114,12 @@ public class AutoPayReviewServiceImpl implements AutoPayReviewService {
             papCharge.changeType().setValue(guessChangeType(autoPayCharge));
 
             papCharge.suspendedPrice().setValue(autoPayCharge.suspended().totalPrice().getValue());
-            papCharge.suspendedPreAuthorizedPaymentAmount().setValue(autoPayCharge.suspended().payment().getValue());
-            papCharge.suspendedPreAuthorizedPaymentPercent().setValue(autoPayCharge.suspended().percent().getValue());
+            papCharge.suspendedPapAmount().setValue(autoPayCharge.suspended().payment().getValue());
+            papCharge.suspendedPapPercent().setValue(autoPayCharge.suspended().percent().getValue());
 
             papCharge.newPrice().setValue(autoPayCharge.suggested().totalPrice().getValue());
-            papCharge.newPreAuthorizedPaymentAmount().setValue(autoPayCharge.suggested().payment().getValue());
-            papCharge.newPreAuthorizedPaymentPercent().setValue(autoPayCharge.suggested().percent().getValue());
+            papCharge.newPapAmount().setValue(autoPayCharge.suggested().payment().getValue());
+            papCharge.newPapPercent().setValue(autoPayCharge.suggested().percent().getValue());
 
             papCharge.changePercent().setValue(autoPayCharge.suggested().percentChange().getValue());
 
@@ -189,26 +189,21 @@ public class AutoPayReviewServiceImpl implements AutoPayReviewService {
                 switch (papCharge.changeType().getValue()) {
                 case Changed:
                     papCharge.suspendedPrice().setValue(new BigDecimal(1200 * (chargeNum + 1)));
-                    papCharge.suspendedPreAuthorizedPaymentPercent().setValue(tenantNum % 3 == 0 ? new BigDecimal("0.6") : new BigDecimal("1"));
-                    papCharge.suspendedPreAuthorizedPaymentAmount().setValue(
-                            papCharge.suspendedPrice().getValue().multiply((papCharge.suspendedPreAuthorizedPaymentPercent().getValue())));
+                    papCharge.suspendedPapPercent().setValue(tenantNum % 3 == 0 ? new BigDecimal("0.6") : new BigDecimal("1"));
+                    papCharge.suspendedPapAmount().setValue(papCharge.suspendedPrice().getValue().multiply((papCharge.suspendedPapPercent().getValue())));
                     papCharge.newPrice().setValue(papCharge.suspendedPrice().getValue().add(new BigDecimal(50)));
-                    papCharge.newPreAuthorizedPaymentAmount().setValue(new BigDecimal("0.00"));
-                    papCharge.newPreAuthorizedPaymentPercent().setValue(new BigDecimal("0.00"));
-                    papCharge.suggestedNewPreAuthorizedPaymentAmount().setValue(
-                            papCharge.newPrice().getValue().multiply(papCharge.suspendedPreAuthorizedPaymentPercent().getValue()));
+                    papCharge.newPapAmount().setValue(new BigDecimal("0.00"));
+                    papCharge.newPapPercent().setValue(new BigDecimal("0.00"));
                     break;
                 case New:
                     papCharge.newPrice().setValue(new BigDecimal(500 * (chargeNum + 1)));
-                    papCharge.newPreAuthorizedPaymentAmount().setValue(new BigDecimal("0.00"));
-                    papCharge.newPreAuthorizedPaymentPercent().setValue(new BigDecimal("0.00"));
-                    papCharge.suggestedNewPreAuthorizedPaymentAmount().setValue(papCharge.newPrice().getValue());
+                    papCharge.newPapAmount().setValue(new BigDecimal("0.00"));
+                    papCharge.newPapPercent().setValue(new BigDecimal("0.00"));
                     break;
                 case Removed:
                     papCharge.suspendedPrice().setValue(new BigDecimal(199 * (chargeNum + 1)));
-                    papCharge.suspendedPreAuthorizedPaymentPercent().setValue(tenantNum % 3 == 0 ? new BigDecimal("0.6") : new BigDecimal("1"));
-                    papCharge.suspendedPreAuthorizedPaymentAmount().setValue(
-                            papCharge.suspendedPrice().getValue().multiply(papCharge.suspendedPreAuthorizedPaymentPercent().getValue()));
+                    papCharge.suspendedPapPercent().setValue(tenantNum % 3 == 0 ? new BigDecimal("0.6") : new BigDecimal("1"));
+                    papCharge.suspendedPapAmount().setValue(papCharge.suspendedPrice().getValue().multiply(papCharge.suspendedPapPercent().getValue()));
                     break;
                 default:
                     break;
@@ -231,13 +226,9 @@ public class AutoPayReviewServiceImpl implements AutoPayReviewService {
                     PapChargeReviewDTO papCharge = charge.duplicate();
 
                     if (charge.changeType().equals(PapChargeReviewDTO.ChangeType.Changed)) {
-                        papCharge.suspendedPreAuthorizedPaymentPercent().setValue(
-                                charge.suspendedPreAuthorizedPaymentPercent().getValue().divide(new BigDecimal(papsPerLeaseCount)));
-                        papCharge.suspendedPreAuthorizedPaymentAmount().setValue(
-                                papCharge.suspendedPrice().getValue().multiply(papCharge.suspendedPreAuthorizedPaymentPercent().getValue()));
+                        papCharge.suspendedPapPercent().setValue(charge.suspendedPapPercent().getValue().divide(new BigDecimal(papsPerLeaseCount)));
+                        papCharge.suspendedPapAmount().setValue(papCharge.suspendedPrice().getValue().multiply(papCharge.suspendedPapPercent().getValue()));
 
-                        papCharge.suggestedNewPreAuthorizedPaymentAmount().setValue(
-                                papCharge.newPrice().getValue().multiply(papCharge.suspendedPreAuthorizedPaymentPercent().getValue()));
                     }
                     pap.charges().add(papCharge);
                 }

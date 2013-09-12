@@ -38,32 +38,34 @@ public interface PapChargeReviewDTO extends IEntity {
     IPrimitive<BigDecimal> suspendedPrice();
 
     @Editor(type = EditorType.money)
-    IPrimitive<BigDecimal> suspendedPreAuthorizedPaymentAmount();
+    IPrimitive<BigDecimal> suspendedPapAmount();
 
     @Editor(type = EditorType.percentage)
-    IPrimitive<BigDecimal> suspendedPreAuthorizedPaymentPercent();
+    IPrimitive<BigDecimal> suspendedPapPercent();
 
     @Editor(type = EditorType.money)
     IPrimitive<BigDecimal> newPrice();
 
-    // user defined: (this field is supposed to be in sync with percent)
+    /** user defined: (this field is supposed to be in sync with percent) */
     @Editor(type = EditorType.money)
-    IPrimitive<BigDecimal> newPreAuthorizedPaymentAmount();
+    IPrimitive<BigDecimal> newPapAmount();
 
-    // user defined: (this field is supposed to be in sync with amount)
+    /** user defined: (this field is supposed to be in sync with amount) */
     @Editor(type = EditorType.percentage)
-    IPrimitive<BigDecimal> newPreAuthorizedPaymentPercent();
-
-    // this is to be used for 'Cancel' operation
-    @Editor(type = EditorType.money)
-    IPrimitive<BigDecimal> suggestedNewPreAuthorizedPaymentAmount();
+    IPrimitive<BigDecimal> newPapPercent();
 
     @Editor(type = EditorType.percentage)
+    /** denormalized field, must be equal to <code>(suspendedPapAmount - newPapAmount)/suspenedPapAmount</code> */
     IPrimitive<BigDecimal> changePercent();
 
+    /** this is a helper field that is used for populating DataGrid based view */
     @Deprecated
     PapReviewCaptionDTO _parentPap();
 
+    /**
+     * this is a helper field that is used for populating DataGrid based view: denotes the first charge of a charges group beloning to the same PAP for a
+     * sequence of charges.
+     */
     @Deprecated
     IPrimitive<Boolean> _isPivot();
 
