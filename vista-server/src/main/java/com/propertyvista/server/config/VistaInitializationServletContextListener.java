@@ -20,6 +20,7 @@ import org.slf4j.LoggerFactory;
 
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.server.Persistence;
+import com.pyx4j.entity.shared.DatastoreReadOnlyRuntimeException;
 import com.pyx4j.quartz.SchedulerHelper;
 import com.pyx4j.server.contexts.DevSession;
 import com.pyx4j.server.contexts.Lifecycle;
@@ -39,7 +40,11 @@ public class VistaInitializationServletContextListener extends com.pyx4j.entity.
         super.contextInitialized(sce);
         try {
             Persistence.service();
-            ServerSideFactory.create(AuditFacade.class).record(AuditRecordEventType.System, null, "System Start {0}", SystemConfig.getLocalHostName());
+            try {
+                ServerSideFactory.create(AuditFacade.class).record(AuditRecordEventType.System, null, "System Start {0}", SystemConfig.getLocalHostName());
+            } catch (DatastoreReadOnlyRuntimeException readOnly) {
+                //TODO remove this when we have second Audit connection 
+            }
 
             ServerSideFactory.create(PasswordEncryptorFacade.class).activateDecryption();
             SchedulerHelper.init();
@@ -48,6 +53,7 @@ public class VistaInitializationServletContextListener extends com.pyx4j.entity.
         } catch (Throwable e) {
             Logger log = LoggerFactory.getLogger(VistaInitializationServletContextListener.class);
             log.error("VistaServer initialization error", e);
+            contextDestroyed(sce);
             throw new Error("VistaServer initialization error", e);
         } finally {
             Lifecycle.endContext();
@@ -56,7 +62,10 @@ public class VistaInitializationServletContextListener extends com.pyx4j.entity.
 
     @Override
     public void contextDestroyed(ServletContextEvent sce) {
-        ServerSideFactory.create(AuditFacade.class).record(AuditRecordEventType.System, null, "System Shutdown {0}", SystemConfig.getLocalHostName());
+        try {
+            ServerSideFactory.create(AuditFacade.class).record(AuditRecordEventType.System, null, "System Shutdown {0}", SystemConfig.getLocalHostName());
+        } catch (Throwable readOnly) {
+        }
         try {
             InterfaceSSHDServer.shutdown();
             PmcProcessMonitor.shutdown();
@@ -73,5 +82,4 @@ public class VistaInitializationServletContextListener extends com.pyx4j.entity.
         }
         super.contextDestroyed(sce);
     }
-
 }

@@ -377,6 +377,7 @@ public abstract class VistaAuthenticationServicesImpl<U extends AbstractUser, E 
         try {
             ServerSideFactory.create(AuditFacade.class).login(getVistaApplication());
         } catch (DatastoreReadOnlyRuntimeException readOnly) {
+            //TODO remove this when we have second Audit connection
             if (honorSystemState()) {
                 throw readOnly;
             }
@@ -387,7 +388,12 @@ public abstract class VistaAuthenticationServicesImpl<U extends AbstractUser, E 
     @Override
     @IgnoreSessionToken
     public final void logout(AsyncCallback<AuthenticationResponse> callback) {
-        ServerSideFactory.create(AuditFacade.class).logout(getVistaApplication());
+        try {
+            ServerSideFactory.create(AuditFacade.class).logout(getVistaApplication());
+        } catch (DatastoreReadOnlyRuntimeException readOnly) {
+            //TODO remove this when we have second Audit connection 
+            // ignore logout 
+        }
         Lifecycle.endSession();
         callback.onSuccess(createAuthenticationResponse(null));
     }
