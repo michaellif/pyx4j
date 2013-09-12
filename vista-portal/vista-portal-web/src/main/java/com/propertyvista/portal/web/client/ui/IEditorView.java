@@ -7,20 +7,24 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on May 15, 2011
- * @author Dad
+ * Created on 2012-05-25
+ * @author Vlad
  * @version $Id$
  */
-package com.propertyvista.portal.web.client.ui.profile;
+package com.propertyvista.portal.web.client.ui;
 
-import com.propertyvista.portal.domain.dto.ResidentDTO;
-import com.propertyvista.portal.web.client.ui.AbstractViewer;
+import com.pyx4j.entity.shared.IEntity;
 
-public class ProfileViewImpl extends AbstractViewer<ResidentDTO> implements ProfileView {
+public interface IEditorView<E extends IEntity> extends IFormView<E> {
 
-    public ProfileViewImpl() {
-        super();
-        setForm(new ProfileForm(this));
+    interface IEditorPresenter<E extends IEntity> extends EntityPresenter<E> {
+        void save();
     }
+
+    @Override
+    void setPresenter(EntityPresenter<E> presenter);
+
+    @Override
+    void populate(E value);
 
 }

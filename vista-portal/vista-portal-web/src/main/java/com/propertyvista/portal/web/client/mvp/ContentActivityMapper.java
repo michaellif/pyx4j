@@ -41,7 +41,7 @@ import com.propertyvista.portal.web.client.activity.login.LeaseContextSelectionA
 import com.propertyvista.portal.web.client.activity.login.LoginWithTokenActivity;
 import com.propertyvista.portal.web.client.activity.login.PasswordResetRequestActivity;
 import com.propertyvista.portal.web.client.activity.login.VistaTermsActivity;
-import com.propertyvista.portal.web.client.activity.profile.ProfileActivity;
+import com.propertyvista.portal.web.client.activity.profile.ProfileEditorActivity;
 import com.propertyvista.portal.web.client.activity.security.PasswordChangeActivity;
 import com.propertyvista.portal.web.client.activity.security.PasswordResetActivity;
 import com.propertyvista.portal.web.client.activity.services.dashboard.ServicesDashboardActivity;
@@ -71,7 +71,7 @@ public class ContentActivityMapper implements AppActivityMapper {
                     }
 
                     else if (appPlace instanceof Resident.ProfileViewer) {
-                        activity = new ProfileActivity(appPlace);
+                        activity = new ProfileEditorActivity(appPlace);
                     }
 
                     else if (appPlace instanceof PortalSiteMap.Resident.ResidentServices) {

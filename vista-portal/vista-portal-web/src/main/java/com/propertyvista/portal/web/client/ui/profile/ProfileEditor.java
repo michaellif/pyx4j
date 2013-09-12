@@ -21,7 +21,6 @@ import com.pyx4j.commons.css.ThemeColor;
 import com.pyx4j.entity.shared.utils.EntityGraph;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CEntityLabel;
-import com.pyx4j.forms.client.ui.decorators.IDecorator;
 import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
 import com.pyx4j.forms.client.validators.ValidationError;
@@ -32,26 +31,26 @@ import com.propertyvista.domain.person.Name;
 import com.propertyvista.domain.tenant.EmergencyContact;
 import com.propertyvista.portal.domain.dto.ResidentDTO;
 import com.propertyvista.portal.web.client.themes.EntityViewTheme;
-import com.propertyvista.portal.web.client.ui.CPortalEntityViewer;
-import com.propertyvista.portal.web.client.ui.profile.ProfileView.ProfilePresenter;
+import com.propertyvista.portal.web.client.ui.CPortalEntityEditor;
+import com.propertyvista.portal.web.client.ui.profile.ProfileEditorView.ProfileEditorPresenter;
 import com.propertyvista.portal.web.client.ui.util.decorators.FormDecoratorBuilder;
 import com.propertyvista.shared.config.VistaFeatures;
 
-public class ProfileForm extends CPortalEntityViewer<ResidentDTO> {
+public class ProfileEditor extends CPortalEntityEditor<ResidentDTO> {
 
-    private static final I18n i18n = I18n.get(ProfileForm.class);
+    private static final I18n i18n = I18n.get(ProfileEditor.class);
 
-    private ProfilePresenter presenter;
+    private ProfileEditorPresenter presenter;
 
-    private final ProfileViewImpl view;
+    private final ProfileEditorViewImpl view;
 
-    public ProfileForm(ProfileViewImpl view) {
+    public ProfileEditor(ProfileEditorViewImpl view) {
         super(ResidentDTO.class, new VistaEditorsComponentFactory(), null, "Tenant Profile", ThemeColor.contrast2);
         this.view = view;
         asWidget().setStyleName(EntityViewTheme.StyleName.EntityView.name());
     }
 
-    public void setPresenter(ProfilePresenter presenter) {
+    public void setPresenter(ProfileEditorPresenter presenter) {
         this.presenter = presenter;
     }
 

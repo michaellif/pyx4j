@@ -17,7 +17,7 @@ import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.i18n.shared.I18n;
 
-public class AbstractEditor<E extends IEntity> extends AbstractPortalPanel implements IEntityEditorView<E> {
+public class AbstractEditor<E extends IEntity> extends AbstractPortalPanel implements IFormView<E> {
 
     protected static final I18n i18n = I18n.get(AbstractEditor.class);
 

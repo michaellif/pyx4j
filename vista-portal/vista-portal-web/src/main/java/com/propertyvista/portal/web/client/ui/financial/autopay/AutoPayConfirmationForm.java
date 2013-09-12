@@ -31,10 +31,10 @@ import com.pyx4j.security.client.ClientContext;
 
 import com.propertyvista.domain.payment.LeasePaymentMethod;
 import com.propertyvista.portal.rpc.portal.web.dto.AutoPayDTO;
-import com.propertyvista.portal.web.client.ui.CPortalEntityViewer;
+import com.propertyvista.portal.web.client.ui.CPortalEntityEditor;
 import com.propertyvista.portal.web.client.ui.util.decorators.FormDecoratorBuilder;
 
-public class AutoPayConfirmationForm extends CPortalEntityViewer<AutoPayDTO> {
+public class AutoPayConfirmationForm extends CPortalEntityEditor<AutoPayDTO> {
 
     private static final I18n i18n = I18n.get(AutoPayConfirmationForm.class);
 

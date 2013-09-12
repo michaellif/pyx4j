@@ -29,9 +29,9 @@ public class EmergencyContactEditor extends CEntityForm<EmergencyContact> {
 
     private static final I18n i18n = I18n.get(EmergencyContactEditor.class);
 
-    private final ProfileViewImpl view;
+    private final ProfileEditorViewImpl view;
 
-    public EmergencyContactEditor(ProfileViewImpl view) {
+    public EmergencyContactEditor(ProfileEditorViewImpl view) {
         super(EmergencyContact.class);
         this.view = view;
     }

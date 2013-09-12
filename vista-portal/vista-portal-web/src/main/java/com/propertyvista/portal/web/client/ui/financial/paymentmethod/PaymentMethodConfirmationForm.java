@@ -36,10 +36,10 @@ import com.propertyvista.portal.rpc.portal.web.dto.PaymentMethodDTO;
 import com.propertyvista.portal.web.client.themes.BlockMixin;
 import com.propertyvista.portal.web.client.themes.EntityViewTheme;
 import com.propertyvista.portal.web.client.ui.AbstractViewer;
-import com.propertyvista.portal.web.client.ui.CPortalEntityViewer;
+import com.propertyvista.portal.web.client.ui.CPortalEntityEditor;
 import com.propertyvista.portal.web.client.ui.util.decorators.FormDecoratorBuilder;
 
-public class PaymentMethodConfirmationForm extends CPortalEntityViewer<PaymentMethodDTO> {
+public class PaymentMethodConfirmationForm extends CPortalEntityEditor<PaymentMethodDTO> {
 
     private static final I18n i18n = I18n.get(PaymentMethodConfirmationForm.class);
 

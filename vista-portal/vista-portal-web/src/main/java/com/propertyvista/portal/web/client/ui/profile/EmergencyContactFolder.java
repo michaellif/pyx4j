@@ -17,8 +17,6 @@ import com.google.gwt.user.client.Command;
 
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.forms.client.ui.CComponent;
-import com.pyx4j.forms.client.ui.decorators.EditableEntityDecorator;
-import com.pyx4j.forms.client.ui.decorators.IDecorator;
 import com.pyx4j.forms.client.ui.folder.BoxFolderDecorator;
 import com.pyx4j.forms.client.ui.folder.BoxFolderItemDecorator;
 import com.pyx4j.forms.client.ui.folder.CEntityFolder;
@@ -35,9 +33,9 @@ public class EmergencyContactFolder extends CEntityFolder<EmergencyContact> {
 
     private static final I18n i18n = I18n.get(EmergencyContactFolder.class);
 
-    private final ProfileViewImpl view;
+    private final ProfileEditorViewImpl view;
 
-    public EmergencyContactFolder(ProfileViewImpl view) {
+    public EmergencyContactFolder(ProfileEditorViewImpl view) {
         super(EmergencyContact.class);
         this.view = view;
         setOrderable(true);
@@ -59,12 +57,7 @@ public class EmergencyContactFolder extends CEntityFolder<EmergencyContact> {
     @Override
     public CComponent<?> create(IObject<?> member) {
         if (member instanceof EmergencyContact) {
-            return new EmergencyContactEditor(view) {
-                @Override
-                protected IDecorator<?> createDecorator() {
-                    return new EditableEntityDecorator<EmergencyContact>();
-                }
-            };
+            return new EmergencyContactEditor(view);
         } else {
             return super.create(member);
         }

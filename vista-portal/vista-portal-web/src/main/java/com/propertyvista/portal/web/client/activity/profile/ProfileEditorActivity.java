@@ -25,17 +25,17 @@ import com.propertyvista.portal.domain.dto.ResidentDTO;
 import com.propertyvista.portal.rpc.portal.services.resident.PersonalInfoCrudService;
 import com.propertyvista.portal.web.client.PortalWebSite;
 import com.propertyvista.portal.web.client.activity.SecurityAwareActivity;
-import com.propertyvista.portal.web.client.ui.profile.ProfileView;
-import com.propertyvista.portal.web.client.ui.profile.ProfileView.ProfilePresenter;
+import com.propertyvista.portal.web.client.ui.profile.ProfileEditorView;
+import com.propertyvista.portal.web.client.ui.profile.ProfileEditorView.ProfileEditorPresenter;
 
-public class ProfileActivity extends SecurityAwareActivity implements ProfilePresenter {
+public class ProfileEditorActivity extends SecurityAwareActivity implements ProfileEditorPresenter {
 
-    private final ProfileView view;
+    private final ProfileEditorView view;
 
     private final PersonalInfoCrudService srv;
 
-    public ProfileActivity(Place place) {
-        this.view = PortalWebSite.getViewFactory().instantiate(ProfileView.class);
+    public ProfileEditorActivity(Place place) {
+        this.view = PortalWebSite.getViewFactory().instantiate(ProfileEditorView.class);
         this.view.setPresenter(this);
         srv = GWT.create(PersonalInfoCrudService.class);
     }
@@ -51,6 +51,12 @@ public class ProfileActivity extends SecurityAwareActivity implements ProfilePre
                 view.populate(result);
             }
         }, null, AbstractCrudService.RetrieveTarget.View);
+    }
+
+    @Override
+    public void save() {
+        // TODO Auto-generated method stub
+
     }
 
 }

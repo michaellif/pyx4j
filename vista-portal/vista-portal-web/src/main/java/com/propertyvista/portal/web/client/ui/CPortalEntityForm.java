@@ -21,9 +21,9 @@ import com.pyx4j.forms.client.ui.IEditableComponentFactory;
 import com.pyx4j.forms.client.ui.decorators.IDecorator;
 import com.pyx4j.forms.client.ui.form.FormDecorator;
 
-public abstract class CPortalEntityViewer<E extends IEntity> extends CEntityForm<E> {
+public abstract class CPortalEntityForm<E extends IEntity> extends CEntityForm<E> {
 
-    private final IEntityViewerView<? extends IEntity> view;
+    private final IFormView<? extends IEntity> view;
 
     private FormDecorator<E, CEntityForm<E>> decorator;
 
@@ -31,19 +31,19 @@ public abstract class CPortalEntityViewer<E extends IEntity> extends CEntityForm
 
     private final ThemeColor themeColor;
 
-    public CPortalEntityViewer(Class<E> clazz, IEntityViewerView<? extends IEntity> view, String headerCaption, ThemeColor themeColor) {
+    public CPortalEntityForm(Class<E> clazz, IFormView<? extends IEntity> view, String headerCaption, ThemeColor themeColor) {
         this(clazz, null, view, headerCaption, themeColor);
     }
 
-    public CPortalEntityViewer(Class<E> clazz, IEditableComponentFactory factory, IEntityViewerView<? extends IEntity> view, String headerCaption,
-            ThemeColor themeColor) {
+    public CPortalEntityForm(Class<E> clazz, IEditableComponentFactory factory, IFormView<? extends IEntity> view, String headerCaption, ThemeColor themeColor) {
         super(clazz, factory);
         this.view = view;
         this.headerCaption = headerCaption;
         this.themeColor = themeColor;
+        setViewable(true);
     }
 
-    public IEntityViewerView<? extends IEntity> getView() {
+    public IFormView<? extends IEntity> getView() {
         return view;
     }
 

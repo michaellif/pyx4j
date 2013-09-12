@@ -16,9 +16,9 @@ package com.propertyvista.portal.web.client.ui.services.insurance;
 import java.math.BigDecimal;
 
 import com.propertyvista.domain.tenant.insurance.InsuranceGeneric;
-import com.propertyvista.portal.web.client.ui.IEntityEditorView;
+import com.propertyvista.portal.web.client.ui.IFormView;
 
-public interface OtherInsuranceEditorView extends IEntityEditorView<InsuranceGeneric> {
+public interface OtherInsuranceEditorView extends IFormView<InsuranceGeneric> {
 
     public interface OtherInsuranceEditorPresenter extends EntityPresenter<InsuranceGeneric> {
 
