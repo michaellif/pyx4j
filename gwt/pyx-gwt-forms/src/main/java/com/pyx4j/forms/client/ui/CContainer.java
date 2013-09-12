@@ -197,6 +197,10 @@ public abstract class CContainer<DATA_TYPE> extends CComponent<DATA_TYPE> {
                 component.applyVisibilityRules();
             }
         }
+        //TODO Workaround to fire event for container - that should be reviewed - event should be fired 
+        //on accessibility adapters change
+        PropertyChangeEvent.fire(this, PropertyChangeEvent.PropertyName.visible);
+
     }
 
     @Override
@@ -207,6 +211,10 @@ public abstract class CContainer<DATA_TYPE> extends CComponent<DATA_TYPE> {
                 component.applyViewabilityRules();
             }
         }
+        //TODO Workaround to fire event for container - that should be reviewed - event should be fired 
+        //on accessibility adapters change
+        PropertyChangeEvent.fire(this, PropertyChangeEvent.PropertyName.viewable);
+
     }
 
     @Override
@@ -217,6 +225,10 @@ public abstract class CContainer<DATA_TYPE> extends CComponent<DATA_TYPE> {
                 component.applyEnablingRules();
             }
         }
+        //TODO Workaround to fire event for container - that should be reviewed - event should be fired 
+        //on accessibility adapters change
+        PropertyChangeEvent.fire(this, PropertyChangeEvent.PropertyName.enabled);
+
     }
 
     @Override

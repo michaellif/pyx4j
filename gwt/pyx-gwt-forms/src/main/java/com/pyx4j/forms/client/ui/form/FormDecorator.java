@@ -37,6 +37,8 @@ public class FormDecorator<E extends IEntity, T extends CEntityForm<E>> extends 
 
     private T component;
 
+    private final Toolbar headerToolbar;
+
     private final FlowPanel headerPanel;
 
     private final Label captionLabel;
@@ -51,8 +53,10 @@ public class FormDecorator<E extends IEntity, T extends CEntityForm<E>> extends 
         captionLabel = new Label();
         captionLabel.setStyleName(FormDecoratorTheme.StyleName.FormDecoratorCaption.name());
 
+        headerToolbar = new Toolbar();
         headerPanel = new FlowPanel();
         headerPanel.add(captionLabel);
+        headerPanel.add(headerToolbar);
         headerPanel.setStyleName(FormDecoratorTheme.StyleName.FormDecoratorHeader.name());
         add(headerPanel);
 
@@ -67,7 +71,7 @@ public class FormDecorator<E extends IEntity, T extends CEntityForm<E>> extends 
     }
 
     protected void addHeaderToolbarButton(Button button) {
-
+        headerToolbar.add(button);
     }
 
     protected void addFooterToolbarButton(Button button) {
