@@ -24,6 +24,7 @@ import java.util.List;
 import java.util.Vector;
 
 import com.pyx4j.commons.Key;
+import com.pyx4j.commons.SimpleMessageFormat;
 import com.pyx4j.config.server.ServerSideConfiguration;
 import com.pyx4j.entity.rpc.EntityCriteriaByPK;
 import com.pyx4j.entity.rpc.EntitySearchResult;
@@ -35,6 +36,7 @@ import com.pyx4j.entity.shared.DatastoreReadOnlyRuntimeException;
 import com.pyx4j.entity.shared.ICollection;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IVersionedEntity;
+import com.pyx4j.entity.shared.UniqueConstraintUserRuntimeException;
 import com.pyx4j.entity.shared.criterion.EntityListCriteria;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.utils.EntityGraph;
@@ -163,6 +165,23 @@ public class Persistence {
     public static <T extends IVersionedEntity<?>> T secureRetrieveDraft(Class<T> entityClass, Key primaryKey) {
         // TODO  vlads
         return retrieveDraftForEdit(entityClass, primaryKey);
+    }
+
+    public static <T extends IEntity> T retrieveUnique(EntityQueryCriteria<T> criteria, AttachLevel attachLevel) throws UniqueConstraintUserRuntimeException {
+        ICursorIterator<T> cursor = service().query(null, criteria, attachLevel);
+        T enttity = null;
+        try {
+            if (cursor.hasNext()) {
+                enttity = cursor.next();
+                if (cursor.hasNext()) {
+                    throw new UniqueConstraintUserRuntimeException(SimpleMessageFormat.format("More then one {0} found matching search criteria {1}", criteria
+                            .proto().getEntityMeta().getCaption(), criteria.toStringForUser()), criteria.proto());
+                }
+            }
+            return enttity;
+        } finally {
+            cursor.close();
+        }
     }
 
     public static <T extends IVersionedEntity<?>> T retrieveDraftForEdit(Class<T> entityClass, Key primaryKey) {

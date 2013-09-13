@@ -315,6 +315,14 @@ public class EntityQueryCriteria<E extends IEntity> extends FiltersBuilder imple
         return this.entityPrototype.getEntityMeta().getCaption().replace(' ', '_');
     }
 
+    public String toStringForUser() {
+        StringBuilder builder = new StringBuilder();
+        if (getFilters() != null) {
+            builder.append(getFilters());
+        }
+        return builder.toString();
+    }
+
     @Override
     public String toString() {
         StringBuilder builder = new StringBuilder();
