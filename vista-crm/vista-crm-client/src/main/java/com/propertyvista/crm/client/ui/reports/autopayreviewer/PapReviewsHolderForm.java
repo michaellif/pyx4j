@@ -37,7 +37,7 @@ public class PapReviewsHolderForm extends CEntityDecoratableForm<PapReviewsHolde
 
     public enum Styles implements IStyleName {
 
-        AutoPayCounterPanel, AutoPaySuperCaptionsPanel, AutoPayCaptionsPanel, AutoPayLoadMore
+        AutoPayCounterPanel, AutoPayActionsPanel, AutoPaySuperCaptionsPanel, AutoPayCaptionsPanel, AutoPayLoadMore
 
     }
 
@@ -53,19 +53,8 @@ public class PapReviewsHolderForm extends CEntityDecoratableForm<PapReviewsHolde
     public IsWidget createContent() {
         FlowPanel panel = new FlowPanel();
 
-        counterPanel = new HTML();
-        counterPanel.addStyleName(Styles.AutoPayCounterPanel.name());
-        panel.add(counterPanel);
-
-        FlowPanel controlsPanel = new FlowPanel();
-        controlsPanel.add(new Button(i18n.tr("Mark All"), new Command() {
-            @Override
-            public void execute() {
-                markAll();
-            }
-        }));
-        panel.add(controlsPanel);
-
+        panel.add(createStatsPanel());
+        panel.add(createActionsPanel());
         panel.add(createSuperCaptionsPanel());
         panel.add(createCaptionsPanel());
 
@@ -116,6 +105,24 @@ public class PapReviewsHolderForm extends CEntityDecoratableForm<PapReviewsHolde
         folder.selectAll();
     }
 
+    private HTML createStatsPanel() {
+        counterPanel = new HTML();
+        counterPanel.addStyleName(Styles.AutoPayCounterPanel.name());
+        return counterPanel;
+    }
+
+    private FlowPanel createActionsPanel() {
+        FlowPanel actionsPanel = new FlowPanel();
+        actionsPanel.setStyleName(Styles.AutoPayActionsPanel.name());
+        actionsPanel.add(new Button(i18n.tr("Mark All"), new Command() {
+            @Override
+            public void execute() {
+                markAll();
+            }
+        }));
+        return actionsPanel;
+    }
+
     private FlowPanel createSuperCaptionsPanel() {
         FlowPanel superCaptionsPanel = new FlowPanel();
         superCaptionsPanel.addStyleName(Styles.AutoPaySuperCaptionsPanel.name());
@@ -127,16 +134,13 @@ public class PapReviewsHolderForm extends CEntityDecoratableForm<PapReviewsHolde
     private FlowPanel createCaptionsPanel() {
         FlowPanel panel = new FlowPanel();
         panel.setStylePrimaryName(Styles.AutoPayCaptionsPanel.name());
-
-        panel.add(new MiniDecorator(new HTML("&nbsp;"), PapReviewFolder.Styles.AutoPayPapChargeNameColumn.name()));
-        panel.add(new MiniDecorator(new HTML("&nbsp;"), PapReviewFolder.Styles.AutoPayPapChargeNumberColumn.name()));
-        panel.add(new MiniDecorator(new HTML(i18n.tr("Charge")), PapReviewFolder.Styles.AutoPayPapChargeNumberColumn.name()));
-        panel.add(new MiniDecorator(new HTML(i18n.tr("Payment")), PapReviewFolder.Styles.AutoPayPapChargeNumberColumn.name()));
-        panel.add(new MiniDecorator(new HTML(i18n.tr("% of Charge")), PapReviewFolder.Styles.AutoPayPapChargeNumberColumn.name()));
-        panel.add(new MiniDecorator(new HTML(i18n.tr("Charge")), PapReviewFolder.Styles.AutoPayPapChargeNumberColumn.name()));
-        panel.add(new MiniDecorator(new HTML(i18n.tr("Payment")), PapReviewFolder.Styles.AutoPayPapChargeNumberColumn.name()));
-        panel.add(new MiniDecorator(new HTML(i18n.tr("% of Charge")), PapReviewFolder.Styles.AutoPayPapChargeNumberColumn.name()));
-        panel.add(new MiniDecorator(new HTML(i18n.tr("% of Change")), PapReviewFolder.Styles.AutoPayPapChargeNumberColumn.name()));
+        panel.add(new MiniDecorator(new HTML(i18n.tr("Charge")), PapReviewFolder.Styles.AutoPayChargeNumberColumn.name()));
+        panel.add(new MiniDecorator(new HTML(i18n.tr("Payment")), PapReviewFolder.Styles.AutoPayChargeNumberColumn.name()));
+        panel.add(new MiniDecorator(new HTML(i18n.tr("% of Charge")), PapReviewFolder.Styles.AutoPayChargeNumberColumn.name()));
+        panel.add(new MiniDecorator(new HTML(i18n.tr("Charge")), PapReviewFolder.Styles.AutoPayChargeNumberColumn.name()));
+        panel.add(new MiniDecorator(new HTML(i18n.tr("Payment")), PapReviewFolder.Styles.AutoPayChargeNumberColumn.name()));
+        panel.add(new MiniDecorator(new HTML(i18n.tr("% of Charge")), PapReviewFolder.Styles.AutoPayChargeNumberColumn.name()));
+        panel.add(new MiniDecorator(new HTML(i18n.tr("% of Change")), PapReviewFolder.Styles.AutoPayChargeNumberColumn.name()));
         return panel;
     }
 }
