@@ -18,11 +18,9 @@ import com.pyx4j.entity.annotations.DiscriminatorValue;
 import com.pyx4j.entity.annotations.Editor;
 import com.pyx4j.entity.annotations.Editor.EditorType;
 import com.pyx4j.entity.annotations.ToString;
-import com.pyx4j.entity.annotations.ToStringFormat;
 import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IPrimitive;
 
-@ToStringFormat("${0}, {1}, {2}")
 @DiscriminatorValue("socialServices")
 @Caption(name = "Income Information Social Services")
 public interface IncomeInfoSocialServices extends IEmploymentInfo {

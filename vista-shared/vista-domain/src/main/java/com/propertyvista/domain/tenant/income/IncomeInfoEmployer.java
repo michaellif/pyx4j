@@ -15,9 +15,7 @@ package com.propertyvista.domain.tenant.income;
 
 import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.DiscriminatorValue;
-import com.pyx4j.entity.annotations.ToStringFormat;
 
-@ToStringFormat("${0}, {1}, {2}")
 @DiscriminatorValue("employee")
 @Caption(name = "Income Information Of Employer")
 public interface IncomeInfoEmployer extends IEmploymentInfo {

@@ -20,13 +20,11 @@ import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.annotations.OrderColumn;
 import com.pyx4j.entity.annotations.Owner;
 import com.pyx4j.entity.annotations.ReadOnly;
-import com.pyx4j.entity.annotations.ToStringFormat;
 import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IPrimitive;
 
 import com.propertyvista.domain.tenant.Customer;
 
-@ToStringFormat("{0}{1,choice,null#|!null# - {1}}")
 @DiscriminatorValue("LeasePaymentMethod")
 public interface LeasePaymentMethod extends PaymentMethod {
 
