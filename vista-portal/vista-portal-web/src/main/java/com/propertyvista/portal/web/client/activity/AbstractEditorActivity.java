@@ -15,11 +15,15 @@ package com.propertyvista.portal.web.client.activity;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.shared.EventBus;
+import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
 import com.pyx4j.commons.CommonsStringUtils;
+import com.pyx4j.commons.Key;
 import com.pyx4j.entity.rpc.AbstractCrudService;
 import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.forms.client.ui.ReferenceDataManager;
+import com.pyx4j.gwt.commons.UnrecoverableClientError;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 
@@ -37,6 +41,8 @@ public abstract class AbstractEditorActivity<E extends IEntity> extends Security
 
     private final Class<E> entityClass;
 
+    private E value;
+
     public AbstractEditorActivity(Class<? extends IEditorView<E>> viewType, Class<? extends AbstractCrudService<E>> serviceType, Class<E> entityClass) {
         view = PortalWebSite.getViewFactory().instantiate(viewType);
         view.setPresenter(this);
@@ -53,6 +59,7 @@ public abstract class AbstractEditorActivity<E extends IEntity> extends Security
         service.retrieve(new DefaultAsyncCallback<E>() {
             @Override
             public void onSuccess(E result) {
+                value = result;
                 view.reset();
                 view.populate(result);
             }
@@ -95,12 +102,36 @@ public abstract class AbstractEditorActivity<E extends IEntity> extends Security
 
     @Override
     public void save() {
-        getView().setEditable(false);
+        AsyncCallback<Key> callback = new AsyncCallback<Key>() {
+            @Override
+            public void onSuccess(Key result) {
+                ReferenceDataManager.invalidate(entityClass);
+                onSaved(result);
+            }
+
+            @Override
+            public void onFailure(Throwable caught) {
+                onSaveFail(caught);
+            }
+        };
+        service.save(callback, view.getValue());
+        view.setEditable(false);
+    }
+
+    protected void onSaved(Key result) {
+    }
+
+    protected void onSaveFail(Throwable caught) {
+        if (!view.onSaveFail(caught)) {
+            throw new UnrecoverableClientError(caught);
+        }
     }
 
     @Override
     public void cancel() {
         getView().setEditable(false);
+        view.reset();
+        view.populate(value);
     }
 
     @Override
