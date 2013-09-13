@@ -260,7 +260,7 @@ public abstract class AbstractEditorActivity<E extends IEntity> extends Abstract
         }
     }
 
-    public void trySave(final boolean apply) {
+    private void trySave(final boolean apply) {
         AsyncCallback<Key> callback = new AsyncCallback<Key>() {
             @Override
             public void onSuccess(Key result) {
