@@ -27,8 +27,10 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Queue;
 import java.util.Vector;
 
 import com.pyx4j.commons.CommonsStringUtils;
@@ -178,21 +180,24 @@ public class EntityMetaImpl implements EntityMeta {
     }
 
     /**
-     * TODO follow interface declaration inheritance
-     * 
      * @see InheritedOnInterface
      */
-    public <A extends Annotation> A getInheritedAnnotation(Class<? extends IEntity> clazz, Class<A> annotationClass) {
+    private <A extends Annotation> A getInheritedAnnotation(Class<? extends IEntity> clazz, Class<A> annotationClass) {
         A annotation = clazz.getAnnotation(annotationClass);
         if (annotation != null) {
             return annotation;
         }
-        for (Class<?> superClasses : clazz.getInterfaces()) {
+        // Breadth-first search
+        Queue<Class<?>> queue = new LinkedList<Class<?>>();
+        queue.addAll(Arrays.asList(clazz.getInterfaces()));
+        while (!queue.isEmpty()) {
+            Class<?> superClasses = queue.remove();
             if (IEntity.class.isAssignableFrom(superClasses) && (superClasses != IEntity.class)) {
                 annotation = superClasses.getAnnotation(annotationClass);
                 if (annotation != null) {
                     return annotation;
                 }
+                queue.addAll(Arrays.asList(superClasses.getInterfaces()));
             }
         }
         return null;

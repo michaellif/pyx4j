@@ -26,9 +26,12 @@ import java.lang.annotation.Target;
 /**
  * Marker to indicate that an annotation type is inherited by implementing interfaces.
  * 
- * All interfaces implemented by the class will be queried for the
- * annotation type. This process will be repeated until an annotation for this
- * type is found.
+ * All interfaces implemented by the class will be queried for the annotation type.
+ * This process will be repeated until an annotation for this type is found.
+ * 
+ * The order of the interface objects in the query corresponds to
+ * the order of the interface names in the {@code implements} clause
+ * of the declaration of the interfaces represented by this interface.
  */
 @Target({ ElementType.TYPE })
 public @interface InheritedOnInterface {

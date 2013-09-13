@@ -21,8 +21,11 @@
 package com.pyx4j.entity.rebind;
 
 import java.lang.annotation.Annotation;
+import java.util.Arrays;
 import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Queue;
 import java.util.Set;
 import java.util.Vector;
 
@@ -139,8 +142,6 @@ class ContextHelper {
     }
 
     /**
-     * TODO follow interface declaration inheritance
-     * 
      * @see InheritedOnInterface
      */
     <A extends Annotation> A getInheritedAnnotation(JClassType interfaceType, Class<A> annotationClass) {
@@ -148,12 +149,17 @@ class ContextHelper {
         if (annotation != null) {
             return annotation;
         }
-        for (JClassType superClasses : interfaceType.getImplementedInterfaces()) {
+        // Breadth-first search
+        Queue<JClassType> queue = new LinkedList<JClassType>();
+        queue.addAll(Arrays.asList(interfaceType.getImplementedInterfaces()));
+        while (!queue.isEmpty()) {
+            JClassType superClasses = queue.remove();
             if ((superClasses != iEnentityInterfaceType) && (superClasses != iObjectInterfaceType)) {
                 annotation = superClasses.getAnnotation(annotationClass);
                 if (annotation != null) {
                     return annotation;
                 }
+                queue.addAll(Arrays.asList(superClasses.getImplementedInterfaces()));
             }
         }
         return null;
