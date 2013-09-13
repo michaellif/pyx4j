@@ -13,7 +13,8 @@ SET search_path = 'public';
 
 BEGIN TRANSACTION;
 
-
+-- Sequences to drop
+DROP SEQUENCE yardi_building_origination_seq;
 
 COMMIT;
 
