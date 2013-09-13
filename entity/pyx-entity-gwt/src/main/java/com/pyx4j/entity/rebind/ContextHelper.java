@@ -20,6 +20,7 @@
  */
 package com.pyx4j.entity.rebind;
 
+import java.lang.annotation.Annotation;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -37,6 +38,7 @@ import com.google.gwt.core.ext.typeinfo.NotFoundException;
 import com.google.gwt.core.ext.typeinfo.TypeOracle;
 
 import com.pyx4j.entity.annotations.AbstractEntity;
+import com.pyx4j.entity.annotations.InheritedOnInterface;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IObject;
@@ -134,5 +136,26 @@ class ContextHelper {
         }
         allMethods.addAll(allSuperMethods);
         allMethods.addAll(allMethodsSortedByDeclaration);
+    }
+
+    /**
+     * TODO follow interface declaration inheritance
+     * 
+     * @see InheritedOnInterface
+     */
+    <A extends Annotation> A getInheritedAnnotation(JClassType interfaceType, Class<A> annotationClass) {
+        A annotation = interfaceType.getAnnotation(annotationClass);
+        if (annotation != null) {
+            return annotation;
+        }
+        for (JClassType superClasses : interfaceType.getImplementedInterfaces()) {
+            if ((superClasses != iEnentityInterfaceType) && (superClasses != iObjectInterfaceType)) {
+                annotation = superClasses.getAnnotation(annotationClass);
+                if (annotation != null) {
+                    return annotation;
+                }
+            }
+        }
+        return null;
     }
 }

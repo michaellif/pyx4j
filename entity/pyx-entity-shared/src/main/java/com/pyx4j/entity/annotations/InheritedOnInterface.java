@@ -1,6 +1,6 @@
 /*
  * Pyx4j framework
- * Copyright (C) 2008-2010 pyx4j.com.
+ * Copyright (C) 2008-2013 pyx4j.com.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -14,37 +14,23 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  *
- * Created on Jan 5, 2010
+ * Created on Sep 13, 2013
  * @author vlads
  * @version $Id$
  */
 package com.pyx4j.entity.annotations;
 
 import java.lang.annotation.ElementType;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-import com.pyx4j.i18n.annotations.I18n;
-import com.pyx4j.i18n.annotations.I18nAnnotation;
-
+/**
+ * Marker to indicate that an annotation type is inherited by implementing interfaces.
+ * 
+ * All interfaces implemented by the class will be queried for the
+ * annotation type. This process will be repeated until an annotation for this
+ * type is found.
+ */
 @Target({ ElementType.TYPE })
-@Retention(RetentionPolicy.RUNTIME)
-@I18nAnnotation(element = "")
-@InheritedOnInterface
-public @interface ToStringFormat {
+public @interface InheritedOnInterface {
 
-    /**
-     * All arguments are converted to Strings, used as argument SimpleMessageFormat.format
-     * 
-     * @see java.text.MessageFormat.format
-     */
-    @I18n(javaFormatFlag = true)
-    String value();
-
-    /**
-     * String presentations for 'isNull()' IEntity values
-     */
-    @I18n
-    String nil() default "";
 }

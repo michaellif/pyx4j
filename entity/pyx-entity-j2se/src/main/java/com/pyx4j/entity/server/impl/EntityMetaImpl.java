@@ -40,6 +40,7 @@ import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.DiscriminatorValue;
 import com.pyx4j.entity.annotations.ExtendsDBO;
 import com.pyx4j.entity.annotations.Inheritance;
+import com.pyx4j.entity.annotations.InheritedOnInterface;
 import com.pyx4j.entity.annotations.Owner;
 import com.pyx4j.entity.annotations.RpcBlacklist;
 import com.pyx4j.entity.annotations.RpcTransient;
@@ -94,6 +95,8 @@ public class EntityMetaImpl implements EntityMeta {
     private String createdTimestampMember;
 
     private String updatedTimestampMember;
+
+    private final ToStringFormat toStringFormat;
 
     public EntityMetaImpl(Class<? extends IEntity> clazz) {
         entityClass = clazz;
@@ -171,6 +174,28 @@ public class EntityMetaImpl implements EntityMeta {
 
         persistenceTransient = (entityClass.getAnnotation(Transient.class) != null);
         rpcTransient = (entityClass.getAnnotation(RpcTransient.class) != null) || (entityClass.getAnnotation(RpcBlacklist.class) != null);
+        toStringFormat = getInheritedAnnotation(entityClass, ToStringFormat.class);
+    }
+
+    /**
+     * TODO follow interface declaration inheritance
+     * 
+     * @see InheritedOnInterface
+     */
+    public <A extends Annotation> A getInheritedAnnotation(Class<? extends IEntity> clazz, Class<A> annotationClass) {
+        A annotation = clazz.getAnnotation(annotationClass);
+        if (annotation != null) {
+            return annotation;
+        }
+        for (Class<?> superClasses : clazz.getInterfaces()) {
+            if (IEntity.class.isAssignableFrom(superClasses) && (superClasses != IEntity.class)) {
+                annotation = superClasses.getAnnotation(annotationClass);
+                if (annotation != null) {
+                    return annotation;
+                }
+            }
+        }
+        return null;
     }
 
     private Class<? extends IEntity> findSingeTableInheritance(Class<? extends IEntity> clazz) {
@@ -356,9 +381,8 @@ public class EntityMetaImpl implements EntityMeta {
 
     @Override
     public String getToStringFormat() {
-        ToStringFormat annotation = entityClass.getAnnotation(ToStringFormat.class);
-        if (annotation != null) {
-            return i18n.translate(i18nContext, annotation.value());
+        if (toStringFormat != null) {
+            return i18n.translate(i18nContext, toStringFormat.value());
         } else {
             return null;
         }
@@ -366,9 +390,8 @@ public class EntityMetaImpl implements EntityMeta {
 
     @Override
     public String getNullString() {
-        ToStringFormat annotation = entityClass.getAnnotation(ToStringFormat.class);
-        if (annotation != null) {
-            return i18n.translate(i18nContext, annotation.nil());
+        if (toStringFormat != null) {
+            return i18n.translate(i18nContext, toStringFormat.nil());
         } else {
             return "";
         }

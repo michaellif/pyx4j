@@ -235,7 +235,7 @@ public class EntityMetaWriter {
         writer.print(rpcTransient.toString());
         writer.print(", ");
 
-        ToStringFormat toStringFormatAnnotation = interfaceType.getAnnotation(ToStringFormat.class);
+        ToStringFormat toStringFormatAnnotation = contextHelper.getInheritedAnnotation(interfaceType, ToStringFormat.class);
         if (toStringFormatAnnotation != null) {
             writer.print(i18nEscapeSourceString(toStringFormatAnnotation.value()));
             writer.print(", ");

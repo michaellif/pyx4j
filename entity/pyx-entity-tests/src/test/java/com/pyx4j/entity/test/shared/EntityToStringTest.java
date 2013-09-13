@@ -29,6 +29,7 @@ import com.pyx4j.entity.test.shared.domain.Country;
 import com.pyx4j.entity.test.shared.domain.Employee;
 import com.pyx4j.entity.test.shared.domain.Status;
 import com.pyx4j.entity.test.shared.domain.Task;
+import com.pyx4j.entity.test.shared.domain.format.FormattedInheritanceChild;
 import com.pyx4j.entity.test.shared.domain.format.StringFields;
 import com.pyx4j.entity.test.shared.domain.format.StringFieldsFormated;
 import com.pyx4j.entity.test.shared.domain.format.StringIntFields;
@@ -139,6 +140,14 @@ public class EntityToStringTest extends InitializerTestBase {
         ent.intField().setValue(null);
         assertEquals("Primitive.StringView", "", ent.intField().getStringView());
         assertEquals("StringView", "One Nan", ent.getStringView());
+
+    }
+
+    public void testToStringFormatInheritance() {
+        FormattedInheritanceChild ent = EntityFactory.create(FormattedInheritanceChild.class);
+        ent.strField1().setValue("One");
+        ent.strField2().setValue("Two");
+        assertEquals("StringView", "One - Two", ent.getStringView());
 
     }
 }
