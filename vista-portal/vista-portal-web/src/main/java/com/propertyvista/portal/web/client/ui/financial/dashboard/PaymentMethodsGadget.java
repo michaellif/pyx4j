@@ -29,6 +29,7 @@ import com.pyx4j.forms.client.ui.CEntityLabel;
 import com.pyx4j.forms.client.ui.folder.BoxFolderItemDecorator;
 import com.pyx4j.forms.client.ui.folder.CEntityFolderItem;
 import com.pyx4j.forms.client.ui.folder.IFolderItemDecorator;
+import com.pyx4j.forms.client.ui.folder.ItemActionsBar.ActionType;
 import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.AppSite;
@@ -135,6 +136,19 @@ public class PaymentMethodsGadget extends AbstractGadget<FinancialDashboardViewI
                 return new PaymentMethodViewer();
             }
             return super.create(member);
+        }
+
+        @Override
+        protected CEntityFolderItem<PaymentMethodInfoDTO> createItem(boolean first) {
+            final CEntityFolderItem<PaymentMethodInfoDTO> item = super.createItem(first);
+            item.addAction(ActionType.Cust1, i18n.tr("Edit"), PortalImages.INSTANCE.editButton(), new Command() {
+                @Override
+                public void execute() {
+                    getGadgetView().getPresenter().editPaymentMethod(item.getValue());
+                }
+            });
+
+            return item;
         }
 
         @Override

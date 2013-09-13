@@ -168,4 +168,10 @@ public class FinancialDashboardActivity extends SecurityAwareActivity implements
         AppPlace place = new PortalSiteMap.Resident.PaymentMethods.ViewPaymentMethod();
         AppSite.getPlaceController().goTo(place.formPlace(paymentMethod.id().getValue()));
     }
+
+    @Override
+    public void editPaymentMethod(PaymentMethodInfoDTO paymentMethod) {
+        AppPlace place = new PortalSiteMap.Resident.PaymentMethods.EditPaymentMethod();
+        AppSite.getPlaceController().goTo(place.formPlace(paymentMethod.id().getValue()));
+    }
 }

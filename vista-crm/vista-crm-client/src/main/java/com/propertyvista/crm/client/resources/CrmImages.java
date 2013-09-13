@@ -215,7 +215,7 @@ public interface CrmImages extends VistaImages {
 
         @Override
         @ImageOptions(repeatStyle = RepeatStyle.Both)
-        @Source("edit.png")
+        @Source("edit_hover.png")
         ImageResource hover();
 
         @Override

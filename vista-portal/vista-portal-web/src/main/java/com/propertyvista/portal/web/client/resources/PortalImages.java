@@ -345,4 +345,23 @@ public interface PortalImages extends ClientBundle, EntityFolderImages, WidgetsI
         ImageResource regular();
     }
 
+    EditIconButtonImages editButton();
+
+    public interface EditIconButtonImages extends ButtonImages {
+        @Override
+        @ImageOptions(repeatStyle = RepeatStyle.Both)
+        @Source("edit.png")
+        ImageResource regular();
+
+        @Override
+        @ImageOptions(repeatStyle = RepeatStyle.Both)
+        @Source("edit_hover.png")
+        ImageResource hover();
+
+        @Override
+        @ImageOptions(repeatStyle = RepeatStyle.Both)
+        @Source("edit.png")
+        ImageResource active();
+    }
+
 }
