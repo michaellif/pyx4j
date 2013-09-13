@@ -18,7 +18,7 @@ import com.pyx4j.entity.shared.IEntity;
 public interface IEditorView<E extends IEntity> extends IFormView<E> {
 
     interface IEditorPresenter<E extends IEntity> extends EntityPresenter<E> {
-        void save();
+
     }
 
     @Override
@@ -26,5 +26,11 @@ public interface IEditorView<E extends IEntity> extends IFormView<E> {
 
     @Override
     void populate(E value);
+
+    void edit();
+
+    void save();
+
+    void cancel();
 
 }

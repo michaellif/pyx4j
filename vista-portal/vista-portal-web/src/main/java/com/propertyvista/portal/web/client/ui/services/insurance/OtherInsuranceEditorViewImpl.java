@@ -21,12 +21,12 @@ import com.propertyvista.portal.web.client.ui.AbstractEditor;
 public class OtherInsuranceEditorViewImpl extends AbstractEditor<InsuranceGeneric> implements OtherInsuranceEditorView {
 
     public OtherInsuranceEditorViewImpl() {
-        setForm(new OtherInsuranceEditorForm());
+        setForm(new OtherInsuranceEditor(this));
     }
 
     @Override
     public void setMinRequiredLiability(BigDecimal minRequiredLiability) {
-        ((OtherInsuranceEditorForm) getForm()).setMinRequiredLiability(minRequiredLiability);
+        ((OtherInsuranceEditor) getForm()).setMinRequiredLiability(minRequiredLiability);
     }
 
 }

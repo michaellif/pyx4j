@@ -21,6 +21,7 @@ import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Label;
 
 import com.pyx4j.commons.LogicalDate;
+import com.pyx4j.commons.css.ThemeColor;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CEntityForm;
@@ -36,11 +37,12 @@ import com.propertyvista.domain.media.InsuranceCertificateDocument;
 import com.propertyvista.domain.tenant.Customer;
 import com.propertyvista.domain.tenant.insurance.InsuranceGeneric;
 import com.propertyvista.domain.tenant.lease.Tenant;
+import com.propertyvista.portal.web.client.ui.CPortalEntityEditor;
 import com.propertyvista.portal.web.client.ui.util.decorators.FormDecoratorBuilder;
 
-public class OtherInsuranceEditorForm extends CEntityForm<InsuranceGeneric> {
+public class OtherInsuranceEditor extends CPortalEntityEditor<InsuranceGeneric> {
 
-    private final static I18n i18n = I18n.get(OtherInsuranceEditorForm.class);
+    private final static I18n i18n = I18n.get(OtherInsuranceEditor.class);
 
     public interface TenantOwnerClickHandler {
 
@@ -66,15 +68,15 @@ public class OtherInsuranceEditorForm extends CEntityForm<InsuranceGeneric> {
      * @param tenantOwnerClickHandler
      *            a handler for tenantOwner click (if not null will render tenant's name as a hyperlink that execs this handler on click)
      */
-    public OtherInsuranceEditorForm(boolean displayTenantOwner, TenantOwnerClickHandler tenantOwnerClickHandler) {
-        super(InsuranceGeneric.class);
+    public OtherInsuranceEditor(OtherInsuranceEditorView view, boolean displayTenantOwner, TenantOwnerClickHandler tenantOwnerClickHandler) {
+        super(InsuranceGeneric.class, view, i18n.tr("Insurance Certificated"), ThemeColor.contrast3);
         this.minRequiredLiability = null;
         this.displayTenantOwner = displayTenantOwner;
         this.tenantOwnerClickHandler = tenantOwnerClickHandler;
     }
 
-    public OtherInsuranceEditorForm() {
-        this(false, null);
+    public OtherInsuranceEditor(OtherInsuranceEditorView view) {
+        this(view, false, null);
     }
 
     @Override
@@ -87,7 +89,7 @@ public class OtherInsuranceEditorForm extends CEntityForm<InsuranceGeneric> {
                 comp.setNavigationCommand(new Command() {
                     @Override
                     public void execute() {
-                        OtherInsuranceEditorForm.this.tenantOwnerClickHandler.onTenantOwnerClicked(getValue().tenant().<Tenant> createIdentityStub());
+                        OtherInsuranceEditor.this.tenantOwnerClickHandler.onTenantOwnerClicked(getValue().tenant().<Tenant> createIdentityStub());
                     }
                 });
             }
@@ -100,7 +102,7 @@ public class OtherInsuranceEditorForm extends CEntityForm<InsuranceGeneric> {
         get(proto().liabilityCoverage()).addValueValidator(new EditableValueValidator<BigDecimal>() {
             @Override
             public ValidationError isValid(CComponent<BigDecimal> component, BigDecimal value) {
-                if (OtherInsuranceEditorForm.this.minRequiredLiability != null && value != null && value.compareTo(minRequiredLiability) < 0) {
+                if (OtherInsuranceEditor.this.minRequiredLiability != null && value != null && value.compareTo(minRequiredLiability) < 0) {
                     return new ValidationError(component, i18n.tr("The minimum required liability is {0,number,#,##0.00}", minRequiredLiability));
                 }
                 return null;

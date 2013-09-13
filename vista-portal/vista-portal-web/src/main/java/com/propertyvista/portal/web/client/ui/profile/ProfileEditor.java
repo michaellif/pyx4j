@@ -42,11 +42,8 @@ public class ProfileEditor extends CPortalEntityEditor<ResidentDTO> {
 
     private ProfileEditorPresenter presenter;
 
-    private final ProfileEditorViewImpl view;
-
     public ProfileEditor(ProfileEditorViewImpl view) {
-        super(ResidentDTO.class, new VistaEditorsComponentFactory(), null, "Tenant Profile", ThemeColor.contrast2);
-        this.view = view;
+        super(ResidentDTO.class, new VistaEditorsComponentFactory(), view, "Tenant Profile", ThemeColor.contrast2);
         asWidget().setStyleName(EntityViewTheme.StyleName.EntityView.name());
     }
 
@@ -72,7 +69,7 @@ public class ProfileEditor extends CPortalEntityEditor<ResidentDTO> {
         mainPanel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().email()), "230px").build());
 
         mainPanel.setH1(++row, 0, 1, proto().emergencyContacts().getMeta().getCaption());
-        mainPanel.setWidget(++row, 0, inject(proto().emergencyContacts(), new EmergencyContactFolder(view)));
+        mainPanel.setWidget(++row, 0, inject(proto().emergencyContacts(), new EmergencyContactFolder((ProfileEditorViewImpl) getView())));
 
         return mainPanel;
     }

@@ -207,6 +207,7 @@ public class PortalWebTheme extends Theme {
 
                 style = new Style(".", StyleName.FormDecoratorCaption);
                 style.addProperty("float", "left");
+                style.addProperty("line-height", "40px");
                 addStyle(style);
 
                 style = new Style(".", StyleName.FormDecoratorHeader, " .", DefaultWidgetsTheme.StyleName.Toolbar);

@@ -53,14 +53,18 @@ public abstract class CPortalEntityEditor<E extends IEntity> extends CEntityForm
         decorator = new EditableFormDecorator<E>() {
             @Override
             protected void onEdit() {
-                CPortalEntityEditor.this.setViewable(false);
+                view.edit();
+            }
+
+            @Override
+            protected void onSave() {
+                view.save();
             }
 
             @Override
             protected void onCancel() {
-                CPortalEntityEditor.this.setViewable(true);
+                view.cancel();
             }
-
         };
 
         decorator.setCaption(headerCaption);

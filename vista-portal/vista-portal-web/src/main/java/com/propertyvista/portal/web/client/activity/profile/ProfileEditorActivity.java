@@ -53,10 +53,4 @@ public class ProfileEditorActivity extends SecurityAwareActivity implements Prof
         }, null, AbstractCrudService.RetrieveTarget.View);
     }
 
-    @Override
-    public void save() {
-        // TODO Auto-generated method stub
-
-    }
-
 }
