@@ -13,7 +13,6 @@
  */
 package com.propertyvista.portal.web.client.activity;
 
-import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
@@ -43,11 +42,11 @@ public abstract class AbstractEditorActivity<E extends IEntity> extends Security
 
     private E value;
 
-    public AbstractEditorActivity(Class<? extends IEditorView<E>> viewType, Class<? extends AbstractCrudService<E>> serviceType, Class<E> entityClass) {
+    public AbstractEditorActivity(Class<? extends IEditorView<E>> viewType, AbstractCrudService<E> service, Class<E> entityClass) {
         view = PortalWebSite.getViewFactory().instantiate(viewType);
         view.setPresenter(this);
 
-        this.service = GWT.create(serviceType);
+        this.service = service;
         this.entityClass = entityClass;
     }
 

@@ -49,11 +49,11 @@ public abstract class AbstractWizardActivity<E extends IEntity> extends Security
 
     private final Class<E> entityClass;
 
-    public AbstractWizardActivity(Class<? extends IWizardView<E>> viewType, Class<? extends AbstractWizardService<E>> serviceType, Class<E> entityClass) {
+    public AbstractWizardActivity(Class<? extends IWizardView<E>> viewType, AbstractWizardService<E> service, Class<E> entityClass) {
         view = PortalWebSite.getViewFactory().instantiate(viewType);
         view.setPresenter(this);
 
-        this.service = GWT.create(serviceType);
+        this.service = service;
         this.entityClass = entityClass;
     }
 

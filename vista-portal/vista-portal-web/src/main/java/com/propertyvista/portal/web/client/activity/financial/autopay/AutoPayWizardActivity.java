@@ -16,6 +16,7 @@ package com.propertyvista.portal.web.client.activity.financial.autopay;
 import java.util.List;
 import java.util.Vector;
 
+import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.commons.Key;
@@ -35,7 +36,7 @@ import com.propertyvista.portal.web.client.ui.financial.autopay.AutoPayWizardVie
 public class AutoPayWizardActivity extends AbstractWizardActivity<AutoPayDTO> implements AutoPayWizardView.Persenter {
 
     public AutoPayWizardActivity(AppPlace place) {
-        super(AutoPayWizardView.class, PreauthorizedPaymentWizardService.class, AutoPayDTO.class);
+        super(AutoPayWizardView.class, GWT.<PreauthorizedPaymentWizardService> create(PreauthorizedPaymentWizardService.class), AutoPayDTO.class);
     }
 
     @Override

@@ -16,6 +16,7 @@ package com.propertyvista.portal.web.client.activity.financial.payment;
 import java.util.List;
 import java.util.Vector;
 
+import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.commons.Key;
@@ -34,7 +35,7 @@ import com.propertyvista.portal.web.client.ui.financial.payment.PaymentWizardVie
 public class PaymentWizardActivity extends AbstractWizardActivity<PaymentDTO> implements PaymentWizardView.Persenter {
 
     public PaymentWizardActivity(AppPlace place) {
-        super(PaymentWizardView.class, PaymentWizardService.class, PaymentDTO.class);
+        super(PaymentWizardView.class, GWT.<PaymentWizardService> create(PaymentWizardService.class), PaymentDTO.class);
     }
 
     @Override
