@@ -23,6 +23,6 @@ package com.pyx4j.entity.test.shared.domain.format;
 import com.pyx4j.entity.annotations.Transient;
 
 @Transient
-public interface FormattedInheritanceChild extends FormattedInheritanceSuper {
+public interface FormattedInheritanceChild1 extends FormattedInheritanceSuper {
 
 }
