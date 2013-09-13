@@ -11,7 +11,7 @@
  * @author stanp
  * @version $Id$
  */
-package com.propertyvista.domain.marketing.ils;
+package com.propertyvista.domain.policy.policies;
 
 import com.pyx4j.entity.annotations.DiscriminatorValue;
 import com.pyx4j.entity.annotations.Owned;
@@ -19,6 +19,7 @@ import com.pyx4j.entity.shared.IList;
 
 import com.propertyvista.domain.policy.framework.LowestApplicableNode;
 import com.propertyvista.domain.policy.framework.Policy;
+import com.propertyvista.domain.policy.policies.domain.ILSPolicyItem;
 import com.propertyvista.domain.property.asset.building.Building;
 
 @DiscriminatorValue("ILSPolicy")

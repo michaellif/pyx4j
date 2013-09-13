@@ -25,7 +25,7 @@ import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.entity.shared.ISet;
 
-import com.propertyvista.domain.marketing.ils.ILSPolicyItem.ILSProvider;
+import com.propertyvista.domain.policy.policies.domain.ILSPolicyItem.ILSProvider;
 import com.propertyvista.domain.property.PropertyContact;
 import com.propertyvista.domain.property.asset.building.Building;
 

@@ -11,7 +11,7 @@
  * @author stanp
  * @version $Id$
  */
-package com.propertyvista.domain.marketing.ils;
+package com.propertyvista.domain.policy.policies.domain;
 
 import java.math.BigDecimal;
 
@@ -26,6 +26,7 @@ import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.entity.shared.ISet;
 
+import com.propertyvista.domain.policy.policies.ILSPolicy;
 import com.propertyvista.domain.ref.City;
 import com.propertyvista.domain.ref.Province;
 

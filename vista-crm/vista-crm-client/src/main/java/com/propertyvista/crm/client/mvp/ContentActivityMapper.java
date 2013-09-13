@@ -184,6 +184,9 @@ import com.propertyvista.crm.client.activity.policies.emailtemplates.EmailTempla
 import com.propertyvista.crm.client.activity.policies.idassignment.IdAssignmentPolicyEditorActivity;
 import com.propertyvista.crm.client.activity.policies.idassignment.IdAssignmentPolicyListerActivity;
 import com.propertyvista.crm.client.activity.policies.idassignment.IdAssignmentPolicyViewerActivity;
+import com.propertyvista.crm.client.activity.policies.ils.ILSPolicyEditorActivity;
+import com.propertyvista.crm.client.activity.policies.ils.ILSPolicyListerActivity;
+import com.propertyvista.crm.client.activity.policies.ils.ILSPolicyViewerActivity;
 import com.propertyvista.crm.client.activity.policies.leaseadjustment.LeaseAdjustmentPolicyEditorActivity;
 import com.propertyvista.crm.client.activity.policies.leaseadjustment.LeaseAdjustmentPolicyListerActivity;
 import com.propertyvista.crm.client.activity.policies.leaseadjustment.LeaseAdjustmentPolicyViewerActivity;
@@ -1174,6 +1177,7 @@ public class ContentActivityMapper implements AppActivityMapper {
                             activity = new AutoPayPolicyViewerActivity(crudPlace);
                             break;
                         }
+
                     } else if (crudPlace instanceof CrmSiteMap.Administration.Policies.YardiInterface) {
                         switch (crudPlace.getType()) {
                         case lister:
@@ -1186,6 +1190,20 @@ public class ContentActivityMapper implements AppActivityMapper {
                             activity = new YardiInterfacePolicyViewerActivity(crudPlace);
                             break;
                         }
+
+                    } else if (crudPlace instanceof CrmSiteMap.Administration.Policies.ILSMarketing) {
+                        switch (crudPlace.getType()) {
+                        case lister:
+                            activity = new ILSPolicyListerActivity(crudPlace);
+                            break;
+                        case editor:
+                            activity = new ILSPolicyEditorActivity(crudPlace);
+                            break;
+                        case viewer:
+                            activity = new ILSPolicyViewerActivity(crudPlace);
+                            break;
+                        }
+
 // - Security          
                     } else if (crudPlace instanceof CrmSiteMap.Account.LoginAttemptsLog) {
                         switch (crudPlace.getType()) {

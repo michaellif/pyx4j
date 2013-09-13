@@ -142,6 +142,8 @@ public class NavigSettingsActivity extends AbstractActivity implements NavigView
         if (VistaFeatures.instance().yardiIntegration()) {
             folder.addNavigItem(new CrmSiteMap.Administration.Policies.YardiInterface());
         }
+        folder.addNavigItem(new CrmSiteMap.Administration.Policies.ILSMarketing());
+
         list.add(folder);
 
         return list;
