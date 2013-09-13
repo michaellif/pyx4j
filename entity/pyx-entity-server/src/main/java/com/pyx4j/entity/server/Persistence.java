@@ -118,7 +118,7 @@ public class Persistence {
     public static <T extends IEntity> Vector<T> secureQuery(EntityQueryCriteria<T> criteria, AttachLevel attachLevel) {
         SecurityController.assertPermission(new EntityPermission(criteria.getEntityClass(), EntityPermission.READ));
         applyDatasetAccessRule(criteria);
-        List<T> rc = PersistenceServicesFactory.getPersistenceService().query(criteria, attachLevel);
+        List<T> rc = service().query(criteria, attachLevel);
         Vector<T> v = new Vector<T>();
         for (T ent : rc) {
             SecurityController.assertPermission(EntityPermission.permissionRead(ent));
@@ -134,7 +134,7 @@ public class Persistence {
     public static <T extends IEntity> T secureRetrieve(EntityQueryCriteria<T> criteria) {
         SecurityController.assertPermission(new EntityPermission(criteria.getEntityClass(), EntityPermission.READ));
         applyDatasetAccessRule(criteria);
-        T ent = PersistenceServicesFactory.getPersistenceService().retrieve(criteria);
+        T ent = service().retrieve(criteria);
         if (ent != null) {
             SecurityController.assertPermission(EntityPermission.permissionRead(ent));
         }
