@@ -38,6 +38,7 @@ import com.pyx4j.entity.server.UnitOfWork;
 import com.pyx4j.entity.shared.AttachLevel;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IPrimitive;
+import com.pyx4j.entity.shared.UniqueConstraintUserRuntimeException;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.essentials.server.dev.DataDump;
 import com.pyx4j.i18n.shared.I18n;
@@ -163,7 +164,17 @@ public class TenantPadProcessor {
                 String tenantId = padFileModel.tenantId().getValue().trim();
                 EntityQueryCriteria<Tenant> criteria = EntityQueryCriteria.create(Tenant.class);
                 criteria.eq(criteria.proto().participantId(), tenantId);
-                padFileModel._processorInformation().tenant().set(Persistence.service().retrieve(criteria));
+                if (!padFileModel.property().isNull()) {
+                    criteria.eq(criteria.proto().lease().unit().building().propertyCode(), padFileModel.property());
+                }
+                try {
+                    padFileModel._processorInformation().tenant().set(Persistence.retrieveUnique(criteria, AttachLevel.Attached));
+                } catch (UniqueConstraintUserRuntimeException e) {
+                    padFileModel._import().invalid().setValue(Boolean.TRUE);
+                    padFileModel._import().message().setValue(e.getMessage());
+                    counters.notFound++;
+                    continue;
+                }
                 if (padFileModel._processorInformation().tenant().isNull()) {
                     padFileModel._import().message().setValue(i18n.tr("Tenant Id ''{0}'' not found in database", tenantId));
                 }
@@ -173,7 +184,18 @@ public class TenantPadProcessor {
                 criteria.eq(criteria.proto().lease().leaseId(), leaseId);
                 criteria.isCurrent(criteria.proto().leaseTermParticipants().$().leaseTermV());
                 criteria.eq(criteria.proto().leaseTermParticipants().$().role(), LeaseTermParticipant.Role.Applicant);
-                padFileModel._processorInformation().tenant().set(Persistence.service().retrieve(criteria));
+                if (!padFileModel.property().isNull()) {
+                    criteria.eq(criteria.proto().lease().unit().building().propertyCode(), padFileModel.property());
+                }
+                try {
+                    padFileModel._processorInformation().tenant().set(Persistence.retrieveUnique(criteria, AttachLevel.Attached));
+                } catch (UniqueConstraintUserRuntimeException e) {
+                    padFileModel._import().invalid().setValue(Boolean.TRUE);
+                    padFileModel._import().message().setValue(e.getMessage());
+                    counters.notFound++;
+                    continue;
+                }
+
                 if (padFileModel._processorInformation().tenant().isNull()) {
                     padFileModel._import().message().setValue(i18n.tr("Lease Id ''{0}'' not found in database", leaseId));
                 }
