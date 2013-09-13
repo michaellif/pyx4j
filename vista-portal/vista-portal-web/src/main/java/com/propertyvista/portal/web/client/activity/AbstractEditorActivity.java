@@ -118,6 +118,7 @@ public abstract class AbstractEditorActivity<E extends IEntity> extends Security
     }
 
     protected void onSaved(Key result) {
+
     }
 
     protected void onSaveFail(Throwable caught) {
