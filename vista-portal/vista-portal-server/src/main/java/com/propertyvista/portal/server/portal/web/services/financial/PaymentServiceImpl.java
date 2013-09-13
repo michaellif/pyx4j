@@ -11,7 +11,7 @@
  * @author VladL
  * @version $Id$
  */
-package com.propertyvista.portal.server.portal.web.services_new.financial;
+package com.propertyvista.portal.server.portal.web.services.financial;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,7 +29,7 @@ import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.portal.rpc.portal.web.dto.PaymentMethodDTO;
 import com.propertyvista.portal.rpc.portal.web.dto.PaymentMethodInfoDTO;
 import com.propertyvista.portal.rpc.portal.web.dto.PaymentMethodSummaryDTO;
-import com.propertyvista.portal.rpc.portal.web.services_new.financial.PaymentService;
+import com.propertyvista.portal.rpc.portal.web.services.financial.PaymentService;
 import com.propertyvista.portal.server.portal.TenantAppContext;
 import com.propertyvista.server.common.util.LeaseParticipantUtils;
 

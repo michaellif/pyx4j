@@ -11,7 +11,7 @@
  * @author michaellif
  * @version $Id$
  */
-package com.propertyvista.portal.server.portal.web.services_new.profile;
+package com.propertyvista.portal.server.portal.web.services.profile;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
@@ -20,7 +20,7 @@ import com.pyx4j.entity.shared.EntityFactory;
 
 import com.propertyvista.domain.tenant.lease.LeaseTermTenant;
 import com.propertyvista.portal.rpc.portal.web.dto.TenantProfileSummaryDTO;
-import com.propertyvista.portal.rpc.portal.web.services_new.profile.ProfileService;
+import com.propertyvista.portal.rpc.portal.web.services.profile.ProfileService;
 import com.propertyvista.portal.server.portal.TenantAppContext;
 import com.propertyvista.server.common.util.AddressRetriever;
 

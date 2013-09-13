@@ -11,7 +11,7 @@
  * @author VladL
  * @version $Id$
  */
-package com.propertyvista.portal.server.portal.web.services;
+package com.propertyvista.portal.server.portal.web.services.financial;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
@@ -30,7 +30,7 @@ import com.propertyvista.domain.payment.PaymentType;
 import com.propertyvista.domain.security.common.VistaApplication;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.portal.rpc.portal.web.dto.PaymentMethodDTO;
-import com.propertyvista.portal.rpc.portal.web.services.PaymentMethodWizardService;
+import com.propertyvista.portal.rpc.portal.web.services.financial.PaymentMethodWizardService;
 import com.propertyvista.portal.server.portal.TenantAppContext;
 import com.propertyvista.server.common.util.AddressRetriever;
 

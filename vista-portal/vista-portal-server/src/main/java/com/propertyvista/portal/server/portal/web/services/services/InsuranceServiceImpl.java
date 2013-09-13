@@ -11,7 +11,7 @@
  * @author michaellif
  * @version $Id$
  */
-package com.propertyvista.portal.server.portal.web.services_new.services;
+package com.propertyvista.portal.server.portal.web.services.services;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
@@ -20,7 +20,7 @@ import com.pyx4j.config.server.ServerSideFactory;
 import com.propertyvista.biz.tenant.insurance.TenantInsuranceFacade;
 import com.propertyvista.domain.tenant.lease.Tenant;
 import com.propertyvista.portal.rpc.portal.web.dto.insurance.InsuranceStatusDTO;
-import com.propertyvista.portal.rpc.portal.web.services_new.services.InsuranceService;
+import com.propertyvista.portal.rpc.portal.web.services.services.InsuranceService;
 import com.propertyvista.portal.server.portal.TenantAppContext;
 
 public class InsuranceServiceImpl implements InsuranceService {

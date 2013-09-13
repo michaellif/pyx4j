@@ -11,16 +11,16 @@
  * @author michaellif
  * @version $Id$
  */
-package com.propertyvista.portal.rpc.portal.web.services_new.services;
+package com.propertyvista.portal.rpc.portal.web.services.profile;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.rpc.shared.IService;
 
-import com.propertyvista.portal.rpc.portal.web.dto.insurance.InsuranceStatusDTO;
+import com.propertyvista.portal.rpc.portal.web.dto.TenantProfileSummaryDTO;
 
-public interface InsuranceService extends IService {
+public interface ProfileService extends IService {
 
-    void retreiveInsuranceStatus(AsyncCallback<InsuranceStatusDTO> callback);
+    void retreiveProfileSummary(AsyncCallback<TenantProfileSummaryDTO> callback);
 
 }

@@ -7,20 +7,26 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on 2013-04-02
- * @author VladL
+ * Created on Sep 11, 2013
+ * @author michaellif
  * @version $Id$
  */
-package com.propertyvista.portal.rpc.portal.web.services;
+package com.propertyvista.portal.rpc.portal.web.services.financial;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
-import com.pyx4j.entity.rpc.AbstractWizardService;
+import com.pyx4j.rpc.shared.IService;
 
-import com.propertyvista.domain.contact.AddressSimple;
+import com.propertyvista.domain.payment.LeasePaymentMethod;
 import com.propertyvista.portal.rpc.portal.web.dto.PaymentMethodDTO;
+import com.propertyvista.portal.rpc.portal.web.dto.PaymentMethodSummaryDTO;
 
-public interface PaymentMethodWizardService extends AbstractWizardService<PaymentMethodDTO> {
+public interface PaymentService extends IService {
 
-    void getCurrentAddress(AsyncCallback<AddressSimple> callback);
+    void retrievePaymentMethod(AsyncCallback<PaymentMethodDTO> callback, LeasePaymentMethod itemId);
+
+    void deletePaymentMethod(AsyncCallback<Boolean> callback, LeasePaymentMethod itemId);
+
+    void getPaymentMethodSummary(AsyncCallback<PaymentMethodSummaryDTO> callback);
+
 }

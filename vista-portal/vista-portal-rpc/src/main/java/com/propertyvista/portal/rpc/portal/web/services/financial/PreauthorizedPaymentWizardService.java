@@ -7,29 +7,28 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Sep 11, 2013
- * @author michaellif
+ * Created on 2013-04-02
+ * @author VladL
  * @version $Id$
  */
-package com.propertyvista.portal.rpc.portal.web.services_new.financial;
+package com.propertyvista.portal.rpc.portal.web.services.financial;
+
+import java.util.Vector;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
-import com.pyx4j.rpc.shared.IService;
+import com.pyx4j.entity.rpc.AbstractWizardService;
 
+import com.propertyvista.domain.contact.AddressSimple;
+import com.propertyvista.domain.payment.LeasePaymentMethod;
 import com.propertyvista.domain.payment.PreauthorizedPayment;
 import com.propertyvista.portal.rpc.portal.web.dto.AutoPayDTO;
-import com.propertyvista.portal.rpc.portal.web.dto.AutoPaySummaryDTO;
 
-public interface AutoPayService extends IService {
+public interface PreauthorizedPaymentWizardService extends AbstractWizardService<AutoPayDTO> {
 
-    void createAutoPay(AsyncCallback<AutoPayDTO> callback);
+    void getCurrentAddress(AsyncCallback<AddressSimple> callback);
 
-    void saveAutoPay(AsyncCallback<Boolean> callback, AutoPayDTO autoPay);
+    void getProfiledPaymentMethods(AsyncCallback<Vector<LeasePaymentMethod>> callback);
 
-    void deleteAutoPay(AsyncCallback<Boolean> callback, PreauthorizedPayment entityId);
-
-    void retreiveAutoPay(AsyncCallback<AutoPayDTO> callback, PreauthorizedPayment entityId);
-
-    void getAutoPaySummary(AsyncCallback<AutoPaySummaryDTO> callback);
+    void preview(AsyncCallback<PreauthorizedPayment> callback, AutoPayDTO currentValue);
 }

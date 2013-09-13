@@ -76,9 +76,9 @@ import com.propertyvista.portal.rpc.portal.services.resident.TenantSureManagemen
 import com.propertyvista.portal.rpc.portal.services.resident.TenantSurePurchaseService;
 import com.propertyvista.portal.rpc.portal.services.resident.ViewBillService;
 import com.propertyvista.portal.rpc.portal.services.resident.WeatherService;
-import com.propertyvista.portal.rpc.portal.web.services_new.financial.AutoPayService;
-import com.propertyvista.portal.rpc.portal.web.services_new.financial.BillingService;
-import com.propertyvista.portal.rpc.portal.web.services_new.financial.PaymentService;
+import com.propertyvista.portal.rpc.portal.web.services.financial.AutoPayService;
+import com.propertyvista.portal.rpc.portal.web.services.financial.BillingService;
+import com.propertyvista.portal.rpc.portal.web.services.financial.PaymentService;
 import com.propertyvista.portal.rpc.ptapp.services.ApplicationDocumentUploadService;
 import com.propertyvista.portal.rpc.ptapp.services.ApplicationSelectionService;
 import com.propertyvista.portal.rpc.ptapp.services.ApplicationService;
@@ -223,17 +223,17 @@ public class VistaPortalAccessControlList extends ServletContainerAclBuilder {
         grant(VistaCustomerBehavior.Tenant, new IServiceExecutePermission(BillingService.class));
         grant(VistaCustomerBehavior.Tenant, new IServiceExecutePermission(PaymentService.class));
 
-        grant(VistaCustomerBehavior.Tenant, new IServiceExecutePermission(com.propertyvista.portal.rpc.portal.web.services.PaymentMethodWizardService.class));
+        grant(VistaCustomerBehavior.Tenant, new IServiceExecutePermission(com.propertyvista.portal.rpc.portal.web.services.financial.PaymentMethodWizardService.class));
         grant(VistaCustomerBehavior.Tenant, new IServiceExecutePermission(
-                com.propertyvista.portal.rpc.portal.web.services.PreauthorizedPaymentWizardService.class));
+                com.propertyvista.portal.rpc.portal.web.services.financial.PreauthorizedPaymentWizardService.class));
         grant(VistaCustomerBehavior.Tenant, new IServiceExecutePermission(
                 com.propertyvista.portal.rpc.portal.web.services.SelfRegistrationBuildingsSourceService.class));
 
-        grant(VistaCustomerBehavior.Tenant, new IServiceExecutePermission(com.propertyvista.portal.rpc.portal.web.services_new.financial.BillingService.class));
+        grant(VistaCustomerBehavior.Tenant, new IServiceExecutePermission(com.propertyvista.portal.rpc.portal.web.services.financial.BillingService.class));
         grant(VistaCustomerBehavior.Tenant, new IServiceExecutePermission(
-                com.propertyvista.portal.rpc.portal.web.services_new.maintenance.MaintenanceService.class));
-        grant(VistaCustomerBehavior.Tenant, new IServiceExecutePermission(com.propertyvista.portal.rpc.portal.web.services_new.profile.ProfileService.class));
-        grant(VistaCustomerBehavior.Tenant, new IServiceExecutePermission(com.propertyvista.portal.rpc.portal.web.services_new.services.InsuranceService.class));
+                com.propertyvista.portal.rpc.portal.web.services.maintenance.MaintenanceService.class));
+        grant(VistaCustomerBehavior.Tenant, new IServiceExecutePermission(com.propertyvista.portal.rpc.portal.web.services.profile.ProfileService.class));
+        grant(VistaCustomerBehavior.Tenant, new IServiceExecutePermission(com.propertyvista.portal.rpc.portal.web.services.services.InsuranceService.class));
 
         //=======================================
 

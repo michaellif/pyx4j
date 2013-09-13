@@ -11,16 +11,22 @@
  * @author michaellif
  * @version $Id$
  */
-package com.propertyvista.portal.rpc.portal.web.services_new.maintenance;
+package com.propertyvista.portal.server.portal.web.services.maintenance;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
-import com.pyx4j.rpc.shared.IService;
+import com.pyx4j.entity.shared.EntityFactory;
 
 import com.propertyvista.portal.rpc.portal.web.dto.MaintenanceSummaryDTO;
+import com.propertyvista.portal.rpc.portal.web.services.maintenance.MaintenanceService;
 
-public interface MaintenanceService extends IService {
+public class MaintenanceServiceMockImpl implements MaintenanceService {
 
-    void retreiveMaintenanceSummary(AsyncCallback<MaintenanceSummaryDTO> callback);
+    @Override
+    public void retreiveMaintenanceSummary(AsyncCallback<MaintenanceSummaryDTO> callback) {
+        MaintenanceSummaryDTO maintenanceSummary = EntityFactory.create(MaintenanceSummaryDTO.class);
+
+        callback.onSuccess(maintenanceSummary);
+    }
 
 }

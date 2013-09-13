@@ -26,7 +26,7 @@ import com.pyx4j.site.rpc.AppPlace;
 import com.propertyvista.domain.payment.LeasePaymentMethod;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap;
 import com.propertyvista.portal.rpc.portal.web.dto.PaymentMethodDTO;
-import com.propertyvista.portal.rpc.portal.web.services_new.financial.PaymentService;
+import com.propertyvista.portal.rpc.portal.web.services.financial.PaymentService;
 import com.propertyvista.portal.web.client.PortalWebSite;
 import com.propertyvista.portal.web.client.activity.SecurityAwareActivity;
 import com.propertyvista.portal.web.client.ui.financial.paymentmethod.PaymentMethodConfirmationView;

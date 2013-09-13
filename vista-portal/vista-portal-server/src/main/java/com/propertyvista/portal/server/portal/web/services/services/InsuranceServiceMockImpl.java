@@ -11,7 +11,7 @@
  * @author michaellif
  * @version $Id$
  */
-package com.propertyvista.portal.server.portal.web.services_new.services;
+package com.propertyvista.portal.server.portal.web.services.services;
 
 import java.math.BigDecimal;
 
@@ -24,7 +24,7 @@ import com.propertyvista.portal.rpc.portal.web.dto.insurance.InsuranceStatusDTO;
 import com.propertyvista.portal.rpc.portal.web.dto.insurance.NoInsuranceStatusDTO;
 import com.propertyvista.portal.rpc.portal.web.dto.insurance.OtherProviderInsuranceStatusDTO;
 import com.propertyvista.portal.rpc.portal.web.dto.insurance.TenantSureInsuranceStatusDTO;
-import com.propertyvista.portal.rpc.portal.web.services_new.services.InsuranceService;
+import com.propertyvista.portal.rpc.portal.web.services.services.InsuranceService;
 
 public class InsuranceServiceMockImpl implements InsuranceService {
 

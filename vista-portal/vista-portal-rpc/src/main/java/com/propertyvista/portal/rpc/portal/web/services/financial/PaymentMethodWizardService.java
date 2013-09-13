@@ -11,24 +11,16 @@
  * @author VladL
  * @version $Id$
  */
-package com.propertyvista.portal.rpc.portal.web.services;
-
-import java.util.Vector;
+package com.propertyvista.portal.rpc.portal.web.services.financial;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.entity.rpc.AbstractWizardService;
 
 import com.propertyvista.domain.contact.AddressSimple;
-import com.propertyvista.domain.payment.LeasePaymentMethod;
-import com.propertyvista.domain.payment.PreauthorizedPayment;
-import com.propertyvista.portal.rpc.portal.web.dto.AutoPayDTO;
+import com.propertyvista.portal.rpc.portal.web.dto.PaymentMethodDTO;
 
-public interface PreauthorizedPaymentWizardService extends AbstractWizardService<AutoPayDTO> {
+public interface PaymentMethodWizardService extends AbstractWizardService<PaymentMethodDTO> {
 
     void getCurrentAddress(AsyncCallback<AddressSimple> callback);
-
-    void getProfiledPaymentMethods(AsyncCallback<Vector<LeasePaymentMethod>> callback);
-
-    void preview(AsyncCallback<PreauthorizedPayment> callback, AutoPayDTO currentValue);
 }

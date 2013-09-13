@@ -11,7 +11,7 @@
  * @author VladL
  * @version $Id$
  */
-package com.propertyvista.portal.server.portal.web.services_new.financial;
+package com.propertyvista.portal.server.portal.web.services.financial;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -36,7 +36,7 @@ import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.portal.rpc.portal.web.dto.AutoPayDTO;
 import com.propertyvista.portal.rpc.portal.web.dto.AutoPayInfoDTO;
 import com.propertyvista.portal.rpc.portal.web.dto.AutoPaySummaryDTO;
-import com.propertyvista.portal.rpc.portal.web.services_new.financial.AutoPayService;
+import com.propertyvista.portal.rpc.portal.web.services.financial.AutoPayService;
 import com.propertyvista.portal.server.portal.TenantAppContext;
 import com.propertyvista.server.common.util.AddressConverter;
 import com.propertyvista.server.common.util.AddressRetriever;

@@ -11,16 +11,22 @@
  * @author michaellif
  * @version $Id$
  */
-package com.propertyvista.portal.rpc.portal.web.services_new.profile;
+package com.propertyvista.portal.server.portal.web.services.maintenance;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
-import com.pyx4j.rpc.shared.IService;
+import com.propertyvista.portal.rpc.portal.web.dto.MaintenanceSummaryDTO;
+import com.propertyvista.portal.rpc.portal.web.services.maintenance.MaintenanceService;
 
-import com.propertyvista.portal.rpc.portal.web.dto.TenantProfileSummaryDTO;
+public class MaintenanceServiceImpl implements MaintenanceService {
 
-public interface ProfileService extends IService {
+    @Override
+    public void retreiveMaintenanceSummary(AsyncCallback<MaintenanceSummaryDTO> callback) {
+        if (true) {
+            new MaintenanceServiceMockImpl().retreiveMaintenanceSummary(callback);
+        } else {
 
-    void retreiveProfileSummary(AsyncCallback<TenantProfileSummaryDTO> callback);
+        }
+    }
 
 }

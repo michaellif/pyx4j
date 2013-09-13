@@ -11,22 +11,16 @@
  * @author michaellif
  * @version $Id$
  */
-package com.propertyvista.portal.rpc.portal.web.services_new.financial;
+package com.propertyvista.portal.rpc.portal.web.services.services;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.rpc.shared.IService;
 
-import com.propertyvista.domain.payment.LeasePaymentMethod;
-import com.propertyvista.portal.rpc.portal.web.dto.PaymentMethodDTO;
-import com.propertyvista.portal.rpc.portal.web.dto.PaymentMethodSummaryDTO;
+import com.propertyvista.portal.rpc.portal.web.dto.insurance.InsuranceStatusDTO;
 
-public interface PaymentService extends IService {
+public interface InsuranceService extends IService {
 
-    void retrievePaymentMethod(AsyncCallback<PaymentMethodDTO> callback, LeasePaymentMethod itemId);
-
-    void deletePaymentMethod(AsyncCallback<Boolean> callback, LeasePaymentMethod itemId);
-
-    void getPaymentMethodSummary(AsyncCallback<PaymentMethodSummaryDTO> callback);
+    void retreiveInsuranceStatus(AsyncCallback<InsuranceStatusDTO> callback);
 
 }

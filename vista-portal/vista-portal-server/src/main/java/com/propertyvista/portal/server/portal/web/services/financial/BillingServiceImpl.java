@@ -11,7 +11,7 @@
  * @author michaellif
  * @version $Id$
  */
-package com.propertyvista.portal.server.portal.web.services_new.financial;
+package com.propertyvista.portal.server.portal.web.services.financial;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,7 +33,7 @@ import com.propertyvista.portal.domain.dto.BillDataDTO;
 import com.propertyvista.portal.rpc.portal.web.dto.BillingHistoryDTO;
 import com.propertyvista.portal.rpc.portal.web.dto.BillingSummaryDTO;
 import com.propertyvista.portal.rpc.portal.web.dto.LatestActivitiesDTO;
-import com.propertyvista.portal.rpc.portal.web.services_new.financial.BillingService;
+import com.propertyvista.portal.rpc.portal.web.services.financial.BillingService;
 import com.propertyvista.portal.server.portal.TenantAppContext;
 import com.propertyvista.shared.config.VistaFeatures;
 

@@ -11,7 +11,7 @@
  * @author michaellif
  * @version $Id$
  */
-package com.propertyvista.portal.rpc.portal.web.services_new.financial;
+package com.propertyvista.portal.rpc.portal.web.services.financial;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
