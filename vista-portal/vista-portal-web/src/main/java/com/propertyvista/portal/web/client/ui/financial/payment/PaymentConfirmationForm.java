@@ -32,10 +32,10 @@ import com.propertyvista.common.client.resources.VistaImages;
 import com.propertyvista.domain.payment.LeasePaymentMethod;
 import com.propertyvista.dto.PaymentRecordDTO;
 import com.propertyvista.portal.web.client.ui.AbstractViewer;
-import com.propertyvista.portal.web.client.ui.CPortalEntityEditor;
+import com.propertyvista.portal.web.client.ui.CPortalEntityForm;
 import com.propertyvista.portal.web.client.ui.util.decorators.FormDecoratorBuilder;
 
-public class PaymentConfirmationForm extends CPortalEntityEditor<PaymentRecordDTO> {
+public class PaymentConfirmationForm extends CPortalEntityForm<PaymentRecordDTO> {
 
     private static final I18n i18n = I18n.get(PaymentConfirmationForm.class);
 

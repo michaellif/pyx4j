@@ -23,6 +23,7 @@ import com.pyx4j.forms.client.ui.datatable.DefaultDataTableTheme;
 import com.pyx4j.forms.client.ui.decorators.DefaultWidgetDecoratorTheme;
 import com.pyx4j.forms.client.ui.folder.DefaultEntityFolderTheme;
 import com.pyx4j.forms.client.ui.form.FormDecoratorTheme;
+import com.pyx4j.forms.client.ui.form.FormDecoratorTheme.StyleName;
 import com.pyx4j.forms.client.ui.panels.FlexFormPanelTheme;
 import com.pyx4j.site.client.ui.layout.responsive.ResponsiveLayoutTheme;
 import com.pyx4j.widgets.client.DefaultWidgetsTheme;
@@ -67,6 +68,14 @@ public class PortalWebTheme extends Theme {
             protected void initTextBoxStyle() {
                 super.initTextBoxStyle();
                 Style style = new Style(".", StyleName.TextBox);
+                style.addProperty("border-radius", "5px");
+                addStyle(style);
+            };
+
+            @Override
+            protected void initListBoxStyle() {
+                super.initListBoxStyle();
+                Style style = new Style(".", StyleName.ListBox);
                 style.addProperty("border-radius", "5px");
                 addStyle(style);
             };
@@ -197,6 +206,11 @@ public class PortalWebTheme extends Theme {
                 addStyle(style);
 
                 style = new Style(".", StyleName.FormDecoratorCaption);
+                style.addProperty("float", "left");
+                addStyle(style);
+
+                style = new Style(".", StyleName.FormDecoratorHeader, " .", DefaultWidgetsTheme.StyleName.Toolbar);
+                style.addProperty("float", "right");
                 addStyle(style);
             }
 
@@ -212,6 +226,16 @@ public class PortalWebTheme extends Theme {
                 style.addProperty("margin", "10px");
                 style.addProperty("overflow", "hidden");
                 addStyle(style);
+
+                style = new Style(".", StyleName.FormDecorator, " .", DefaultWidgetsTheme.StyleName.Toolbar, " .", DefaultWidgetsTheme.StyleName.Button);
+                style.addProperty("width", "100%");
+                style.addProperty("line-height", "40px");
+                style.addProperty("background", "#aaa");
+                style.addProperty("border-radius", "5px");
+                style.addProperty("border", "none");
+                style.addProperty("color", ThemeColor.foreground, 0.01);
+                addStyle(style);
+
                 super.initContentStyles();
             }
 
@@ -234,15 +258,6 @@ public class PortalWebTheme extends Theme {
 
                 style = new Style(".", StyleName.FormDecoratorFooter, " .", DefaultWidgetsTheme.StyleName.ToolbarItem);
                 style.addProperty("margin-left", "10px");
-                addStyle(style);
-
-                style = new Style(".", StyleName.FormDecoratorFooter, " .", DefaultWidgetsTheme.StyleName.Button);
-                style.addProperty("width", "100%");
-                style.addProperty("line-height", "40px");
-                style.addProperty("background", "#aaa");
-                style.addProperty("border-radius", "5px");
-                style.addProperty("border", "none");
-                style.addProperty("color", ThemeColor.foreground, 0.01);
                 addStyle(style);
 
             }
