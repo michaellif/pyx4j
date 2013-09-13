@@ -43,11 +43,9 @@ public class PaymentMethodConfirmationForm extends CPortalEntityForm<PaymentMeth
 
     private static final I18n i18n = I18n.get(PaymentMethodConfirmationForm.class);
 
-    private final PaymentMethodConfirmationView view;
-
     public PaymentMethodConfirmationForm(PaymentMethodConfirmationView view) {
-        super(PaymentMethodDTO.class, null, i18n.tr("New Payment Method Submitted Successfully!"), ThemeColor.contrast4);
-        this.view = view;
+        super(PaymentMethodDTO.class, view, i18n.tr("New Payment Method Submitted Successfully!"), ThemeColor.contrast4);
+
         setViewable(true);
         inheritViewable(false);
     }
@@ -80,7 +78,7 @@ public class PaymentMethodConfirmationForm extends CPortalEntityForm<PaymentMeth
         text.add(new Anchor(i18n.tr("Sign up for Auto Pay today"), new Command() {
             @Override
             public void execute() {
-                ((PaymentMethodConfirmationPresenter) view.getPresenter()).goToAutoPay();
+                ((PaymentMethodConfirmationPresenter) getView().getPresenter()).goToAutoPay();
             }
         }));
 

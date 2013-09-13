@@ -32,6 +32,23 @@ public abstract class AbstractEditorActivity<E extends IEntity> extends Security
         return view;
     }
 
+    protected void onDiscard() {
+        view.reset();
+        view.setPresenter(null);
+    }
+
+    @Override
+    public void onCancel() {
+        onDiscard();
+        super.onCancel();
+    }
+
+    @Override
+    public void onStop() {
+        onDiscard();
+        super.onStop();
+    }
+
     @Override
     public void edit() {
         getView().setEditable(true);

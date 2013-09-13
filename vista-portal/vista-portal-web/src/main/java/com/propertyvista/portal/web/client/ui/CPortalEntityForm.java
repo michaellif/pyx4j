@@ -43,6 +43,14 @@ public abstract class CPortalEntityForm<E extends IEntity> extends CEntityForm<E
         setViewable(true);
     }
 
+    protected String getHeaderCaption() {
+        return headerCaption;
+    }
+
+    protected ThemeColor getThemeColor() {
+        return themeColor;
+    }
+
     public IFormView<? extends IEntity> getView() {
         return view;
     }

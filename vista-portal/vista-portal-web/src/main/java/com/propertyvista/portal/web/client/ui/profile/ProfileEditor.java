@@ -43,7 +43,7 @@ public class ProfileEditor extends CPortalEntityEditor<ResidentDTO> {
     private ProfileEditorPresenter presenter;
 
     public ProfileEditor(ProfileEditorViewImpl view) {
-        super(ResidentDTO.class, new VistaEditorsComponentFactory(), view, "Tenant Profile", ThemeColor.contrast2);
+        super(ResidentDTO.class, view, "Tenant Profile", ThemeColor.contrast2);
         asWidget().setStyleName(EntityViewTheme.StyleName.EntityView.name());
     }
 

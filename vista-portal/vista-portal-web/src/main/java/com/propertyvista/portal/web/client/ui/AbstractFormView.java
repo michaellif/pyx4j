@@ -14,7 +14,6 @@
 package com.propertyvista.portal.web.client.ui;
 
 import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.i18n.shared.I18n;
 
 public class AbstractFormView<E extends IEntity> extends AbstractPortalPanel implements IFormView<E> {
@@ -23,13 +22,13 @@ public class AbstractFormView<E extends IEntity> extends AbstractPortalPanel imp
 
     private IFormViewPresenter<E> presenter;
 
-    private CEntityForm<E> form;
+    private CPortalEntityForm<E> form;
 
     public AbstractFormView() {
         super();
     }
 
-    protected void setForm(final CEntityForm<E> form) {
+    protected void setForm(final CPortalEntityForm<E> form) {
         this.form = form;
         if (form == null) {
             setWidget(null);
@@ -42,6 +41,7 @@ public class AbstractFormView<E extends IEntity> extends AbstractPortalPanel imp
     @Override
     public void setPresenter(IFormViewPresenter<E> presenter) {
         this.presenter = presenter;
+        form.reset();
     }
 
     @Override
@@ -51,12 +51,16 @@ public class AbstractFormView<E extends IEntity> extends AbstractPortalPanel imp
 
     @Override
     public void populate(E value) {
-        form.reset();
         form.populate(value);
     }
 
-    public CEntityForm<E> getForm() {
+    public CPortalEntityForm<E> getForm() {
         return form;
+    }
+
+    @Override
+    public void reset() {
+        getForm().reset();
     }
 
 }

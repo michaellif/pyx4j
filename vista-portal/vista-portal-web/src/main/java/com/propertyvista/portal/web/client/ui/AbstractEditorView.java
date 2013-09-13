@@ -34,4 +34,9 @@ public class AbstractEditorView<E extends IEntity> extends AbstractFormView<E> i
         return (IEditorPresenter<E>) super.getPresenter();
     }
 
+    @Override
+    public void reset() {
+        super.reset();
+        setEditable(false);
+    }
 }

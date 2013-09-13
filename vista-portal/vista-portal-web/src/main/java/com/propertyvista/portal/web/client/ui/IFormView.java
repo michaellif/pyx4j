@@ -28,4 +28,5 @@ public interface IFormView<E extends IEntity> extends IsView {
 
     void populate(E value);
 
+    void reset();
 }

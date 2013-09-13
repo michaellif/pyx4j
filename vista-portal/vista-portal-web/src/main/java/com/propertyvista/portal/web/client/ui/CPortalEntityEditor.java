@@ -16,70 +16,60 @@ package com.propertyvista.portal.web.client.ui;
 import com.pyx4j.commons.css.StyleManager;
 import com.pyx4j.commons.css.ThemeColor;
 import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.ui.IEditableComponentFactory;
 import com.pyx4j.forms.client.ui.decorators.IDecorator;
 import com.pyx4j.forms.client.ui.form.EditableFormDecorator;
 
-import com.propertyvista.portal.web.client.ui.IEditorView.IEditorPresenter;
+import com.propertyvista.common.client.ui.components.VistaEditorsComponentFactory;
 
-public abstract class CPortalEntityEditor<E extends IEntity> extends CEntityForm<E> {
-
-    private final IEditorView<? extends IEntity> view;
-
-    private EditableFormDecorator<E> decorator;
-
-    private final String headerCaption;
-
-    private final ThemeColor themeColor;
+public abstract class CPortalEntityEditor<E extends IEntity> extends CPortalEntityForm<E> {
 
     public CPortalEntityEditor(Class<E> clazz, IEditorView<? extends IEntity> view, String headerCaption, ThemeColor themeColor) {
-        this(clazz, null, view, headerCaption, themeColor);
+        this(clazz, new VistaEditorsComponentFactory(), view, headerCaption, themeColor);
     }
 
     public CPortalEntityEditor(Class<E> clazz, IEditableComponentFactory factory, IEditorView<? extends IEntity> view, String headerCaption,
             ThemeColor themeColor) {
-        super(clazz, factory);
-        this.view = view;
-        this.headerCaption = headerCaption;
-        this.themeColor = themeColor;
+        super(clazz, factory, view, headerCaption, themeColor);
         setViewable(true);
     }
 
-    public IFormView<? extends IEntity> getView() {
-        return view;
+    @SuppressWarnings("unchecked")
+    @Override
+    public IEditorView<E> getView() {
+        return (IEditorView<E>) super.getView();
     }
 
     @Override
     protected IDecorator<?> createDecorator() {
-        decorator = new EditableFormDecorator<E>() {
+        EditableFormDecorator<E> decorator = new EditableFormDecorator<E>() {
 
             @Override
             protected void onEdit() {
-                view.getPresenter().edit();
+                getView().getPresenter().edit();
             }
 
             @Override
             protected void onSave() {
-                view.getPresenter().save();
+                getView().getPresenter().save();
             }
 
             @Override
             protected void onCancel() {
-                view.getPresenter().cancel();
+                getView().getPresenter().cancel();
             }
         };
 
-        decorator.setCaption(headerCaption);
+        decorator.setCaption(getHeaderCaption());
 
         decorator.getMainPanel().getElement().getStyle().setProperty("borderTopWidth", "5px");
-        decorator.getMainPanel().getElement().getStyle().setProperty("borderTopColor", StyleManager.getPalette().getThemeColor(themeColor, 1));
+        decorator.getMainPanel().getElement().getStyle().setProperty("borderTopColor", StyleManager.getPalette().getThemeColor(getThemeColor(), 1));
 
         decorator.getHeaderPanel().getElement().getStyle().setProperty("borderTopWidth", "5px");
-        decorator.getHeaderPanel().getElement().getStyle().setProperty("borderTopColor", StyleManager.getPalette().getThemeColor(themeColor, 1));
+        decorator.getHeaderPanel().getElement().getStyle().setProperty("borderTopColor", StyleManager.getPalette().getThemeColor(getThemeColor(), 1));
 
         decorator.getFooterPanel().getElement().getStyle().setProperty("borderTopWidth", "5px");
-        decorator.getFooterPanel().getElement().getStyle().setProperty("borderTopColor", StyleManager.getPalette().getThemeColor(themeColor, 1));
+        decorator.getFooterPanel().getElement().getStyle().setProperty("borderTopColor", StyleManager.getPalette().getThemeColor(getThemeColor(), 1));
 
         return decorator;
     }
