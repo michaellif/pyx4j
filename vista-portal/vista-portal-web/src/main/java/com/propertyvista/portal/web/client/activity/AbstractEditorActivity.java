@@ -21,10 +21,10 @@ import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.commons.Key;
 import com.pyx4j.entity.rpc.AbstractCrudService;
 import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.forms.client.ui.ReferenceDataManager;
 import com.pyx4j.gwt.commons.UnrecoverableClientError;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
+import com.pyx4j.site.rpc.AppPlace;
 
 import com.propertyvista.portal.web.client.PortalWebSite;
 import com.propertyvista.portal.web.client.ui.IEditorView;
@@ -38,39 +38,26 @@ public abstract class AbstractEditorActivity<E extends IEntity> extends Security
 
     private final AbstractCrudService<E> service;
 
-    private final Class<E> entityClass;
+    private final Key entityId;
 
-    private E value;
-
-    public AbstractEditorActivity(Class<? extends IEditorView<E>> viewType, AbstractCrudService<E> service, Class<E> entityClass) {
+    public AbstractEditorActivity(Class<? extends IEditorView<E>> viewType, AbstractCrudService<E> service, AppPlace place) {
         view = PortalWebSite.getViewFactory().instantiate(viewType);
         view.setPresenter(this);
 
         this.service = service;
-        this.entityClass = entityClass;
+
+        entityId = place.getItemId();
     }
 
     @Override
     public void start(AcceptsOneWidget panel, EventBus eventBus) {
         super.start(panel, eventBus);
         panel.setWidget(getView());
-
-        service.retrieve(new DefaultAsyncCallback<E>() {
-            @Override
-            public void onSuccess(E result) {
-                value = result;
-                view.reset();
-                view.populate(result);
-            }
-        }, null, AbstractCrudService.RetrieveTarget.View);
+        retreive(AbstractCrudService.RetrieveTarget.View);
     }
 
     public AbstractCrudService<E> getService() {
         return service;
-    }
-
-    public Class<E> getEntityClass() {
-        return entityClass;
     }
 
     public IEditorView<E> getView() {
@@ -96,7 +83,7 @@ public abstract class AbstractEditorActivity<E extends IEntity> extends Security
 
     @Override
     public void edit() {
-        getView().setEditable(true);
+        retreive(AbstractCrudService.RetrieveTarget.Edit);
     }
 
     @Override
@@ -104,7 +91,6 @@ public abstract class AbstractEditorActivity<E extends IEntity> extends Security
         AsyncCallback<Key> callback = new AsyncCallback<Key>() {
             @Override
             public void onSuccess(Key result) {
-                ReferenceDataManager.invalidate(entityClass);
                 onSaved(result);
             }
 
@@ -114,11 +100,10 @@ public abstract class AbstractEditorActivity<E extends IEntity> extends Security
             }
         };
         service.save(callback, view.getValue());
-        view.setEditable(false);
     }
 
     protected void onSaved(Key result) {
-
+        retreive(AbstractCrudService.RetrieveTarget.View);
     }
 
     protected void onSaveFail(Throwable caught) {
@@ -129,9 +114,25 @@ public abstract class AbstractEditorActivity<E extends IEntity> extends Security
 
     @Override
     public void cancel() {
-        getView().setEditable(false);
-        view.reset();
-        view.populate(value);
+        retreive(AbstractCrudService.RetrieveTarget.View);
+    }
+
+    private void retreive(final AbstractCrudService.RetrieveTarget target) {
+        service.retrieve(new DefaultAsyncCallback<E>() {
+            @Override
+            public void onSuccess(E result) {
+                view.reset();
+                switch (target) {
+                case Edit:
+                    view.setEditable(true);
+                    break;
+                case View:
+                    view.setEditable(false);
+                    break;
+                }
+                view.populate(result);
+            }
+        }, entityId, target);
     }
 
     @Override

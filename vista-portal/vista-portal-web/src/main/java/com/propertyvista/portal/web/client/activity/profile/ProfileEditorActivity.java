@@ -14,7 +14,8 @@
 package com.propertyvista.portal.web.client.activity.profile;
 
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.place.shared.Place;
+
+import com.pyx4j.site.rpc.AppPlace;
 
 import com.propertyvista.portal.domain.dto.ResidentDTO;
 import com.propertyvista.portal.rpc.portal.services.resident.PersonalInfoCrudService;
@@ -24,8 +25,8 @@ import com.propertyvista.portal.web.client.ui.profile.ProfileEditorView.ProfileE
 
 public class ProfileEditorActivity extends AbstractEditorActivity<ResidentDTO> implements ProfileEditorPresenter {
 
-    public ProfileEditorActivity(Place place) {
-        super(ProfileEditorView.class, GWT.<PersonalInfoCrudService> create(PersonalInfoCrudService.class), ResidentDTO.class);
+    public ProfileEditorActivity(AppPlace place) {
+        super(ProfileEditorView.class, GWT.<PersonalInfoCrudService> create(PersonalInfoCrudService.class), place);
     }
 
 }

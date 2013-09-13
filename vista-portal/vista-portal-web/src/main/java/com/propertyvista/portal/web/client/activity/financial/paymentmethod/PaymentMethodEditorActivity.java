@@ -14,12 +14,8 @@
 package com.propertyvista.portal.web.client.activity.financial.paymentmethod;
 
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.user.client.rpc.AsyncCallback;
-import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
-import com.pyx4j.commons.Key;
-import com.pyx4j.entity.rpc.AbstractCrudService;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.site.rpc.AppPlace;
 
@@ -31,26 +27,8 @@ import com.propertyvista.portal.web.client.ui.financial.paymentmethod.PaymentMet
 
 public class PaymentMethodEditorActivity extends AbstractEditorActivity<LeasePaymentMethod> implements PaymentMethodEditorView.Presenter {
 
-    private final Key entityId;
-
     public PaymentMethodEditorActivity(AppPlace place) {
-        super(PaymentMethodEditorView.class, GWT.<PaymentMethodCrudService> create(PaymentMethodCrudService.class), LeasePaymentMethod.class);
-
-        entityId = place.getItemId();
-    }
-
-    @Override
-    public void start(AcceptsOneWidget panel, EventBus eventBus) {
-        super.start(panel, eventBus);
-        panel.setWidget(getView());
-
-        assert (entityId != null);
-        getService().retrieve(new DefaultAsyncCallback<LeasePaymentMethod>() {
-            @Override
-            public void onSuccess(LeasePaymentMethod result) {
-                getView().populate(result);
-            }
-        }, entityId, AbstractCrudService.RetrieveTarget.Edit);
+        super(PaymentMethodEditorView.class, GWT.<PaymentMethodCrudService> create(PaymentMethodCrudService.class), place);
     }
 
     @Override
