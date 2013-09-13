@@ -28,6 +28,8 @@ public interface IWizardView<E extends IEntity> extends IsView {
 
     void setPresenter(WizardPresenter<E> presenter);
 
+    WizardPresenter<E> getPresenter();
+
     void populate(E value);
 
     void reset();
@@ -35,8 +37,6 @@ public interface IWizardView<E extends IEntity> extends IsView {
     public E getValue();
 
     public boolean isDirty();
-
-    WizardPresenter<E> getPresenter();
 
     boolean onSaveFail(Throwable caught);
 

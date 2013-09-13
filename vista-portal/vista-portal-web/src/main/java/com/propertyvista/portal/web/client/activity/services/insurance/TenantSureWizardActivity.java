@@ -13,8 +13,6 @@
  */
 package com.propertyvista.portal.web.client.activity.services.insurance;
 
-import com.google.gwt.core.client.GWT;
-
 import com.pyx4j.commons.Key;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.site.client.AppSite;
@@ -26,15 +24,13 @@ import com.propertyvista.portal.rpc.portal.services.resident.TenantSurePurchaseS
 import com.propertyvista.portal.rpc.portal.web.dto.insurance.TenantSureAgreementDTO;
 import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.tenantsure.TenantSureCoverageDTO;
 import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.tenantsure.TenantSureQuoteDTO;
-import com.propertyvista.portal.web.client.PortalWebSite;
 import com.propertyvista.portal.web.client.activity.AbstractWizardActivity;
 import com.propertyvista.portal.web.client.ui.services.insurance.TenantSureWizardView;
 
 public class TenantSureWizardActivity extends AbstractWizardActivity<TenantSureAgreementDTO> implements TenantSureWizardView.Persenter {
 
     public TenantSureWizardActivity(AppPlace place) {
-        super(PortalWebSite.getViewFactory().instantiate(TenantSureWizardView.class), GWT.<TenantSurePurchaseService> create(TenantSurePurchaseService.class),
-                TenantSureAgreementDTO.class);
+        super(TenantSureWizardView.class, TenantSurePurchaseService.class, TenantSureAgreementDTO.class);
     }
 
     @Override

@@ -32,6 +32,12 @@ public interface IEditorView<E extends IEntity> extends IFormView<E> {
     @Override
     void populate(E value);
 
+    public E getValue();
+
+    public boolean isDirty();
+
+    boolean onSaveFail(Throwable caught);
+
     void setEditable(boolean flag);
 
 }

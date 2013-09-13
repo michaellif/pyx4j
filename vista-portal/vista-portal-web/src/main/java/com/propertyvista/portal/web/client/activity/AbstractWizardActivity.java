@@ -20,6 +20,7 @@
  */
 package com.propertyvista.portal.web.client.activity;
 
+import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
@@ -34,6 +35,7 @@ import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.site.client.AppSite;
 
+import com.propertyvista.portal.web.client.PortalWebSite;
 import com.propertyvista.portal.web.client.ui.IWizardView;
 import com.propertyvista.portal.web.client.ui.IWizardView.WizardPresenter;
 
@@ -47,27 +49,12 @@ public abstract class AbstractWizardActivity<E extends IEntity> extends Security
 
     private final Class<E> entityClass;
 
-    public AbstractWizardActivity(IWizardView<E> view, AbstractWizardService<E> service, Class<E> entityClass) {
-        assert (view != null);
-        assert (service != null);
-        assert (entityClass != null);
+    public AbstractWizardActivity(Class<? extends IWizardView<E>> viewType, Class<? extends AbstractWizardService<E>> serviceType, Class<E> entityClass) {
+        view = PortalWebSite.getViewFactory().instantiate(viewType);
+        view.setPresenter(this);
 
-        this.view = view;
-        this.service = service;
+        this.service = GWT.create(serviceType);
         this.entityClass = entityClass;
-
-    }
-
-    public AbstractWizardService<E> getService() {
-        return service;
-    }
-
-    public Class<E> getEntityClass() {
-        return entityClass;
-    }
-
-    public IWizardView<E> getView() {
-        return view;
     }
 
     @Override
@@ -81,6 +68,18 @@ public abstract class AbstractWizardActivity<E extends IEntity> extends Security
             }
         });
         panel.setWidget(view);
+    }
+
+    public AbstractWizardService<E> getService() {
+        return service;
+    }
+
+    public Class<E> getEntityClass() {
+        return entityClass;
+    }
+
+    public IWizardView<E> getView() {
+        return view;
     }
 
     protected void onDiscard() {

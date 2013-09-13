@@ -16,7 +16,6 @@ package com.propertyvista.portal.web.client.activity.financial.payment;
 import java.util.List;
 import java.util.Vector;
 
-import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.commons.Key;
@@ -29,15 +28,13 @@ import com.propertyvista.domain.payment.LeasePaymentMethod;
 import com.propertyvista.portal.domain.dto.financial.PaymentDTO;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap.Resident.Financial;
 import com.propertyvista.portal.rpc.portal.services.resident.PaymentWizardService;
-import com.propertyvista.portal.web.client.PortalWebSite;
 import com.propertyvista.portal.web.client.activity.AbstractWizardActivity;
 import com.propertyvista.portal.web.client.ui.financial.payment.PaymentWizardView;
 
 public class PaymentWizardActivity extends AbstractWizardActivity<PaymentDTO> implements PaymentWizardView.Persenter {
 
     public PaymentWizardActivity(AppPlace place) {
-        super(PortalWebSite.getViewFactory().instantiate(PaymentWizardView.class), GWT.<PaymentWizardService> create(PaymentWizardService.class),
-                PaymentDTO.class);
+        super(PaymentWizardView.class, PaymentWizardService.class, PaymentDTO.class);
     }
 
     @Override
