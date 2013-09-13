@@ -27,6 +27,7 @@ import com.pyx4j.i18n.shared.I18nEnum;
 import com.propertyvista.domain.PublicVisibilityType;
 import com.propertyvista.domain.contact.AddressStructured;
 import com.propertyvista.domain.marketing.AdvertisingBlurb;
+import com.propertyvista.domain.pmc.IntegrationSystem;
 import com.propertyvista.domain.property.PropertyContact;
 import com.propertyvista.domain.property.PropertyContact.PropertyContactType;
 import com.propertyvista.domain.property.PropertyManager;
@@ -105,6 +106,7 @@ public class BuildingsGenerator {
     private Building createBuilding(String propertyCode, BuildingInfo.Type buildingType, String website, AddressStructured address, String email) {
         Building building = EntityFactory.create(Building.class);
         building.propertyCode().setValue(propertyCode);
+        building.integrationSystemId().setValue(IntegrationSystem.internal);
 
         building.info().name().setValue(getName(address));
         building.info().address().set(address);

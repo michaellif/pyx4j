@@ -82,7 +82,7 @@ public class WSOapiTestBase {
             monitorPort = 9090;
         }
         String address = getAddress(monitorPort);
-        log.info("Address: {}", address);
+        log.debug("Address: {}", address);
         endpoint = Endpoint.publish(address, Class.forName(serviceClass.getName() + "Impl").newInstance());
     }
 

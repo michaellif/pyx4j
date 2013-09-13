@@ -42,6 +42,7 @@ import com.propertyvista.domain.dashboard.gadgets.availability.UnitAvailabilityS
 import com.propertyvista.domain.dashboard.gadgets.availability.UnitAvailabilityStatus.RentedStatus;
 import com.propertyvista.domain.dashboard.gadgets.availability.UnitAvailabilityStatus.Scoping;
 import com.propertyvista.domain.dashboard.gadgets.availability.UnitAvailabilityStatus.Vacancy;
+import com.propertyvista.domain.pmc.IntegrationSystem;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.property.asset.unit.occupancy.AptUnitOccupancySegment;
 import com.propertyvista.domain.property.asset.unit.occupancy.AptUnitOccupancySegment.OffMarketType;
@@ -68,6 +69,7 @@ public class AvailabilityReportManagerTestBase {
         unit = EntityFactory.create(AptUnit.class);
         unit.info().number().setValue("1");
         unit.building().propertyCode().setValue(String.valueOf(System.currentTimeMillis()).substring(5));
+        unit.building().integrationSystemId().setValue(IntegrationSystem.internal);
         Persistence.service().merge(unit.building());
         Persistence.service().merge(unit);
         unitId = unit.getPrimaryKey();

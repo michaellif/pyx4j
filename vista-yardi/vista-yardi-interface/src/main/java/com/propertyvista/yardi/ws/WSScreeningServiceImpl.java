@@ -33,7 +33,6 @@ import com.yardi.ws.WSScreeningService;
 import com.pyx4j.commons.Key;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
-import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.essentials.j2se.util.MarshallUtil;
 import com.pyx4j.i18n.shared.I18n;
 
@@ -97,7 +96,7 @@ public class WSScreeningServiceImpl implements WSScreeningService {
 
     private CustomerCreditCheckReport getExistingReport(String reportId) throws YardiServiceException {
         EntityQueryCriteria<CustomerCreditCheckReport> criteria = EntityQueryCriteria.create(CustomerCreditCheckReport.class);
-        criteria.add(PropertyCriterion.eq(criteria.proto().id(), new Key(reportId)));
+        criteria.eq(criteria.proto().id(), new Key(reportId));
         List<CustomerCreditCheckReport> reports = Persistence.service().query(criteria);
         if (reports.isEmpty()) {
             throw new YardiServiceException(i18n.tr("No reports found for reportID {0}", reportId));

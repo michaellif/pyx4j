@@ -30,11 +30,20 @@ import com.propertyvista.domain.financial.BillingAccount;
 import com.propertyvista.domain.financial.BillingAccount.BillingPeriod;
 import com.propertyvista.domain.financial.billing.Bill;
 import com.propertyvista.domain.financial.billing.Bill.BillType;
+import com.propertyvista.domain.pmc.IntegrationSystem;
 import com.propertyvista.domain.tenant.lease.Lease;
+import com.propertyvista.domain.tenant.lease.Lease.Status;
 
 public class LeaseInternalManager extends LeaseAbstractManager {
 
     private static final I18n i18n = I18n.get(LeaseInternalManager.class);
+
+    @Override
+    public Lease create(Status status) {
+        Lease lease = super.create(status);
+        lease.integrationSystemId().setValue(IntegrationSystem.internal);
+        return lease;
+    }
 
     @Override
     protected BillingAccount createBillingAccount() {

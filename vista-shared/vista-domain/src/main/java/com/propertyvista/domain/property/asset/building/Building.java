@@ -15,6 +15,7 @@ package com.propertyvista.domain.property.asset.building;
 
 import java.util.Date;
 
+import com.pyx4j.commons.Key;
 import com.pyx4j.entity.adapters.index.AlphanumIndexAdapter;
 import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.ColumnId;
@@ -29,6 +30,7 @@ import com.pyx4j.entity.annotations.Length;
 import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.annotations.OrderColumn;
 import com.pyx4j.entity.annotations.Owned;
+import com.pyx4j.entity.annotations.ReadOnly;
 import com.pyx4j.entity.annotations.Reference;
 import com.pyx4j.entity.annotations.RpcTransient;
 import com.pyx4j.entity.annotations.Timestamp;
@@ -80,9 +82,15 @@ public interface Building extends PolicyNode {
     @NotNull
     @ToString(index = 0)
     @Length(10)
-    @Indexed(uniqueConstraint = true, ignoreCase = true)
+    @Indexed(uniqueConstraint = true, ignoreCase = true, group = { "c,1" })
     @MemberColumn(notNull = true, sortAdapter = AlphanumIndexAdapter.class)
     IPrimitive<String> propertyCode();
+
+    //as of now @see PmcYardiCredential or -1 for internal
+    @ReadOnly
+    @Indexed(group = { "c,2" })
+    @MemberColumn(notNull = true)
+    IPrimitive<Key> integrationSystemId();
 
     IPrimitive<String> externalId();
 

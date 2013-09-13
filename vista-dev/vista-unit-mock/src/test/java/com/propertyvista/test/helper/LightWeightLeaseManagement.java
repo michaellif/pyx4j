@@ -20,6 +20,7 @@ import com.pyx4j.entity.shared.IVersionedEntity.SaveAction;
 import com.propertyvista.domain.financial.ARCode;
 import com.propertyvista.domain.financial.BillingAccount;
 import com.propertyvista.domain.financial.BillingAccount.BillingPeriod;
+import com.propertyvista.domain.pmc.IntegrationSystem;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.tenant.Customer;
 import com.propertyvista.domain.tenant.lease.Lease;
@@ -42,6 +43,8 @@ public class LightWeightLeaseManagement {
         lease.status().setValue(status);
 
         lease.type().setValue(ARCode.Type.Residential);
+        lease.leaseId().setValue(uniqueId());
+        lease.integrationSystemId().setValue(IntegrationSystem.internal);
 
         BillingAccount billingAccount = EntityFactory.create(BillingAccount.class);
         lease.billingAccount().set(billingAccount);

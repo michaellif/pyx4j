@@ -18,6 +18,7 @@ import java.util.EnumSet;
 
 import javax.xml.bind.annotation.XmlType;
 
+import com.pyx4j.commons.Key;
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.adapters.index.AlphanumIndexAdapter;
 import com.pyx4j.entity.annotations.Detached;
@@ -167,9 +168,15 @@ public interface Lease extends IEntity {
     @NotNull
     @ToString(index = 0)
     @Length(14)
-    @Indexed(uniqueConstraint = true, ignoreCase = true)
-    @MemberColumn(sortAdapter = AlphanumIndexAdapter.class)
+    @Indexed(uniqueConstraint = true, ignoreCase = true, group = { "c,2" })
+    @MemberColumn(notNull = true, sortAdapter = AlphanumIndexAdapter.class)
     IPrimitive<String> leaseId();
+
+    //as of now @see PmcYardiCredential or -1 for internal
+    @ReadOnly
+    @Indexed(group = { "c,2" })
+    @MemberColumn(notNull = true)
+    IPrimitive<Key> integrationSystemId();
 
     @NotNull
     @ReadOnly

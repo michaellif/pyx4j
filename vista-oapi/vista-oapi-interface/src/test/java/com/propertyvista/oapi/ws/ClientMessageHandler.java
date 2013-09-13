@@ -22,9 +22,14 @@ import javax.xml.ws.handler.MessageContext;
 import javax.xml.ws.handler.soap.SOAPHandler;
 import javax.xml.ws.handler.soap.SOAPMessageContext;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.propertyvista.oapi.XmlFormatter;
 
 public class ClientMessageHandler implements SOAPHandler<SOAPMessageContext> {
+
+    private final static Logger log = LoggerFactory.getLogger(ClientMessageHandler.class);
 
     @Override
     public boolean handleMessage(SOAPMessageContext context) {
@@ -33,10 +38,10 @@ public class ClientMessageHandler implements SOAPHandler<SOAPMessageContext> {
 
         ByteArrayOutputStream stream = new ByteArrayOutputStream();
         try {
-            System.out.println("===============" + (isRequest ? "REQUEST" : "RESPONSE") + "================");
+            log.debug("===============" + (isRequest ? "REQUEST" : "RESPONSE") + "================");
             context.getMessage().writeTo(stream);
             stream.flush();
-            System.out.println(new XmlFormatter().format(stream.toString()));
+            log.debug(new XmlFormatter().format(stream.toString()));
 
         } catch (Exception e) {
             throw new RuntimeException(e);

@@ -30,6 +30,7 @@ import com.propertyvista.domain.financial.ARCode;
 import com.propertyvista.domain.financial.offering.Feature;
 import com.propertyvista.domain.financial.offering.ProductItem;
 import com.propertyvista.domain.financial.offering.Service;
+import com.propertyvista.domain.pmc.IntegrationSystem;
 import com.propertyvista.domain.property.asset.BuildingElement;
 import com.propertyvista.domain.property.asset.LockerArea;
 import com.propertyvista.domain.property.asset.Parking;
@@ -63,6 +64,7 @@ public class BuildingDataModel extends MockDataModel<Building> {
 
         Building building = EntityFactory.create(Building.class);
         building.propertyCode().setValue(String.valueOf(System.currentTimeMillis()).substring(5));
+        building.integrationSystemId().setValue(IntegrationSystem.internal);
 
         building.info().address().province().set(getDataModel(LocationsDataModel.class).getProvinceByCode("ON"));
 

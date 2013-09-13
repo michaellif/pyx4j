@@ -31,12 +31,12 @@ import com.yardi.entity.maintenance.meta.Priorities;
 import com.yardi.entity.maintenance.meta.Status;
 import com.yardi.entity.maintenance.meta.Statuses;
 
+import com.pyx4j.commons.Key;
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.AttachLevel;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
-import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 
 import com.propertyvista.biz.financial.maintenance.MaintenanceFacade;
 import com.propertyvista.biz.system.YardiServiceException;
@@ -116,10 +116,12 @@ public class YardiMaintenanceProcessor {
 
     // we will update and reload meta from here if request categories, status, or priority do not exist
     public MaintenanceRequest mergeRequest(PmcYardiCredential yc, ServiceRequest request) throws YardiServiceException {
-        EntityQueryCriteria<MaintenanceRequest> crit = EntityQueryCriteria.create(MaintenanceRequest.class);
-        crit.eq(crit.proto().building().propertyCode(), request.getPropertyCode());
-        crit.eq(crit.proto().requestId(), request.getServiceRequestId().toString());
-        MaintenanceRequest mr = Persistence.service().retrieve(crit);
+        final Key yardiInterfaceId = yc.getPrimaryKey();
+        EntityQueryCriteria<MaintenanceRequest> criteria = EntityQueryCriteria.create(MaintenanceRequest.class);
+        criteria.eq(criteria.proto().building().propertyCode(), request.getPropertyCode());
+        criteria.eq(criteria.proto().building().integrationSystemId(), yardiInterfaceId);
+        criteria.eq(criteria.proto().requestId(), request.getServiceRequestId().toString());
+        MaintenanceRequest mr = Persistence.service().retrieve(criteria);
         if (mr == null) {
             mr = EntityFactory.create(MaintenanceRequest.class);
         }
@@ -129,11 +131,13 @@ public class YardiMaintenanceProcessor {
     public MaintenanceRequest updateRequest(PmcYardiCredential yc, MaintenanceRequest mr, ServiceRequest request) throws YardiServiceException {
         boolean metaReloaded = false;
         // find building - propertyCode field is mandatory
+        final Key yardiInterfaceId = yc.getPrimaryKey();
         Building building = null;
         {
-            EntityQueryCriteria<Building> crit = EntityQueryCriteria.create(Building.class);
-            crit.add(PropertyCriterion.eq(crit.proto().propertyCode(), request.getPropertyCode()));
-            building = Persistence.service().retrieve(crit);
+            EntityQueryCriteria<Building> criteria = EntityQueryCriteria.create(Building.class);
+            criteria.eq(criteria.proto().propertyCode(), request.getPropertyCode());
+            criteria.eq(criteria.proto().integrationSystemId(), yardiInterfaceId);
+            building = Persistence.service().retrieve(criteria);
             if (building == null) {
                 throw new YardiServiceException("Request dropped - Building not found: " + request.getPropertyCode());
             } else {
@@ -143,10 +147,10 @@ public class YardiMaintenanceProcessor {
         MaintenanceRequestMetadata meta = ServerSideFactory.create(MaintenanceFacade.class).getMaintenanceMetadata(building);
         // unit
         if (request.getUnitCode() != null) {
-            EntityQueryCriteria<AptUnit> crit = EntityQueryCriteria.create(AptUnit.class);
-            crit.add(PropertyCriterion.eq(crit.proto().building(), mr.building()));
-            crit.add(PropertyCriterion.eq(crit.proto().info().number(), request.getUnitCode()));
-            AptUnit unit = Persistence.service().retrieve(crit);
+            EntityQueryCriteria<AptUnit> criteria = EntityQueryCriteria.create(AptUnit.class);
+            criteria.eq(criteria.proto().building(), mr.building());
+            criteria.eq(criteria.proto().info().number(), request.getUnitCode());
+            AptUnit unit = Persistence.service().retrieve(criteria);
             if (unit == null) {
                 throw new YardiServiceException("Request dropped - Unit not found: " + request.getUnitCode());
             } else {
@@ -262,9 +266,9 @@ public class YardiMaintenanceProcessor {
         }
         for (MaintenanceRequestStatus stat : toBeRemoved) {
             // make sure we don't have any associated requests
-            EntityQueryCriteria<MaintenanceRequest> crit = EntityQueryCriteria.create(MaintenanceRequest.class);
-            crit.add(PropertyCriterion.eq(crit.proto().status(), stat));
-            if (Persistence.service().count(crit) == 0) {
+            EntityQueryCriteria<MaintenanceRequest> criteria = EntityQueryCriteria.create(MaintenanceRequest.class);
+            criteria.eq(criteria.proto().status(), stat);
+            if (Persistence.service().count(criteria) == 0) {
                 oldStatuses.remove(stat);
                 Persistence.service().delete(stat);
             }
@@ -292,9 +296,9 @@ public class YardiMaintenanceProcessor {
         }
         for (MaintenanceRequestPriority stat : toBeRemoved) {
             // make sure we don't have any associated requests
-            EntityQueryCriteria<MaintenanceRequest> crit = EntityQueryCriteria.create(MaintenanceRequest.class);
-            crit.add(PropertyCriterion.eq(crit.proto().priority(), stat));
-            if (Persistence.service().count(crit) == 0) {
+            EntityQueryCriteria<MaintenanceRequest> criteria = EntityQueryCriteria.create(MaintenanceRequest.class);
+            criteria.eq(criteria.proto().priority(), stat);
+            if (Persistence.service().count(criteria) == 0) {
                 oldPriorities.remove(stat);
                 Persistence.service().delete(stat);
             }
@@ -343,9 +347,9 @@ public class YardiMaintenanceProcessor {
         }
         for (MaintenanceRequestCategory cat : toBeRemoved) {
             // make sure we don't have any associated requests
-            EntityQueryCriteria<MaintenanceRequest> crit = EntityQueryCriteria.create(MaintenanceRequest.class);
-            crit.add(PropertyCriterion.eq(crit.proto().category(), cat));
-            if (Persistence.service().count(crit) == 0) {
+            EntityQueryCriteria<MaintenanceRequest> criteria = EntityQueryCriteria.create(MaintenanceRequest.class);
+            criteria.eq(criteria.proto().category(), cat);
+            if (Persistence.service().count(criteria) == 0) {
                 oldParent.subCategories().remove(cat);
                 Persistence.service().delete(cat);
             }

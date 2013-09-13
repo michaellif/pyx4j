@@ -46,6 +46,7 @@ import com.propertyvista.config.tests.VistaTestDBSetup;
 import com.propertyvista.domain.financial.ARCode;
 import com.propertyvista.domain.financial.offering.ProductItem;
 import com.propertyvista.domain.financial.offering.Service;
+import com.propertyvista.domain.pmc.IntegrationSystem;
 import com.propertyvista.domain.policy.framework.OrganizationPoliciesNode;
 import com.propertyvista.domain.policy.policies.IdAssignmentPolicy;
 import com.propertyvista.domain.policy.policies.domain.IdAssignmentItem;
@@ -97,6 +98,7 @@ public class AptUnitOccupancyManagerTestBase {
         unit = EntityFactory.create(AptUnit.class);
         unit.info().number().setValue("" + (++gensymCount));
         unit.building().propertyCode().setValue("" + (++gensymCount));
+        unit.building().integrationSystemId().setValue(IntegrationSystem.internal);
         Persistence.service().merge(unit.building());
         Persistence.service().merge(unit);
 

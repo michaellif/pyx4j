@@ -25,7 +25,6 @@ import com.yardi.entity.resident.Transactions;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.AttachLevel;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
-import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 
 import com.propertyvista.biz.financial.ar.yardi.YardiARIntegrationAgent;
 import com.propertyvista.domain.financial.BillingAccount;
@@ -38,10 +37,10 @@ public class YardiPaymentProcessor {
     private final static Logger log = LoggerFactory.getLogger(YardiPaymentProcessor.class);
 
     void removeOldPayments(BillingAccount account) {
-        EntityQueryCriteria<YardiPayment> oldPayments = EntityQueryCriteria.create(YardiPayment.class);
-        oldPayments.add(PropertyCriterion.eq(oldPayments.proto().billingAccount(), account));
-        oldPayments.add(PropertyCriterion.isNull(oldPayments.proto().paymentRecord()));
-        Persistence.service().delete(oldPayments);
+        EntityQueryCriteria<YardiPayment> criteria = EntityQueryCriteria.create(YardiPayment.class);
+        criteria.eq(criteria.proto().billingAccount(), account);
+        criteria.isNull(criteria.proto().paymentRecord());
+        Persistence.service().delete(criteria);
     }
 
     public Transactions createTransactionForPayment(YardiReceipt yp) {

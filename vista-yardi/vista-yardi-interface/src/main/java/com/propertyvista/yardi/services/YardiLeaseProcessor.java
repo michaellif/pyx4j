@@ -36,6 +36,7 @@ import com.yardi.entity.resident.Transactions;
 
 import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.commons.EqualsHelper;
+import com.pyx4j.commons.Key;
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.commons.SimpleMessageFormat;
 import com.pyx4j.config.server.ServerSideFactory;
@@ -79,25 +80,40 @@ public class YardiLeaseProcessor {
         this.executionMonitor = executionMonitor;
     }
 
-    public Lease findLease(String customerId, String propertyCode) {
+    public Lease findLease(Key yardiInterfaceId, String propertyCode, String customerId) {
         EntityQueryCriteria<Lease> criteria = EntityQueryCriteria.create(Lease.class);
         criteria.eq(criteria.proto().leaseId(), customerId);
+        criteria.eq(criteria.proto().integrationSystemId(), yardiInterfaceId);
         criteria.eq(criteria.proto().unit().building().propertyCode(), propertyCode);
+        criteria.eq(criteria.proto().unit().building().integrationSystemId(), yardiInterfaceId);
         return Persistence.service().retrieve(criteria);
     }
 
-    public Lease processLease(RTCustomer rtCustomer, String propertyCode) {
-        Lease existingLease = findLease(getLeaseId(rtCustomer), propertyCode);
+    public Lease processLease(RTCustomer rtCustomer, Key yardiInterfaceId, String propertyCode) {
+        Lease existingLease = findLease(yardiInterfaceId, propertyCode, getLeaseId(rtCustomer));
         if (existingLease != null) {
-            log.info("      = Updating lease {}", getLeaseId(rtCustomer));
-            return updateLease(rtCustomer, propertyCode, existingLease);
+            log.info("      = Updating lease {} {}", yardiInterfaceId, getLeaseId(rtCustomer));
+            return updateLease(rtCustomer, yardiInterfaceId, propertyCode, existingLease);
         } else {
-            log.info("      = Creating new lease {}", getLeaseId(rtCustomer));
-            return createLease(rtCustomer, propertyCode);
+            log.info("      = Creating new lease {} {}", yardiInterfaceId, getLeaseId(rtCustomer));
+            return createLease(yardiInterfaceId, propertyCode, rtCustomer);
         }
     }
 
-    private Lease createLease(RTCustomer rtCustomer, String propertyCode) {
+    private AptUnit retrieveUnit(Key yardiInterfaceId, String propertyCode, String unitNumber) {
+        EntityQueryCriteria<AptUnit> criteria = EntityQueryCriteria.create(AptUnit.class);
+        criteria.eq(criteria.proto().building().propertyCode(), propertyCode);
+        criteria.eq(criteria.proto().building().integrationSystemId(), yardiInterfaceId);
+        criteria.eq(criteria.proto().info().number(), unitNumber);
+        AptUnit unit = Persistence.service().retrieve(criteria);
+        if (unit == null) {
+            throw new Error("Unit " + unitNumber + " not found in building " + propertyCode);
+        } else {
+            return unit;
+        }
+    }
+
+    private Lease createLease(Key yardiInterfaceId, String propertyCode, RTCustomer rtCustomer) {
         List<YardiCustomer> yardiCustomers = rtCustomer.getCustomers().getCustomer();
         YardiLease yardiLease = yardiCustomers.get(0).getLease();
 
@@ -105,14 +121,7 @@ public class YardiLeaseProcessor {
         String unitNumber = YardiARIntegrationAgent.getUnitId(rtCustomer);
         Validate.isTrue(CommonsStringUtils.isStringSet(unitNumber), "Unit number required");
 
-        EntityQueryCriteria<AptUnit> criteria = EntityQueryCriteria.create(AptUnit.class);
-        criteria.eq(criteria.proto().building().propertyCode(), propertyCode);
-        criteria.eq(criteria.proto().info().number(), unitNumber);
-        List<AptUnit> units = Persistence.service().query(criteria);
-        if (units.size() != 1) {
-            throw new Error("Non unique unit " + unitNumber + " found in building " + propertyCode);
-        }
-        AptUnit unit = units.get(0);
+        AptUnit unit = retrieveUnit(yardiInterfaceId, propertyCode, unitNumber);
         log.debug("creating lease {} for unit {}", getLeaseId(rtCustomer), unit.getStringView());
 
         LeaseFacade leaseFacade = ServerSideFactory.create(LeaseFacade.class);
@@ -120,6 +129,7 @@ public class YardiLeaseProcessor {
         Lease lease = leaseFacade.create(Lease.Status.ExistingLease);
         lease.leaseId().setValue(getLeaseId(rtCustomer));
         lease.type().setValue(ARCode.Type.Residential);
+        lease.integrationSystemId().setValue(yardiInterfaceId);
 
         // unit:
         if (unit.getPrimaryKey() != null) {
@@ -183,7 +193,7 @@ public class YardiLeaseProcessor {
         return yardiCustomers.get(0).getDescription();
     }
 
-    private Lease updateLease(RTCustomer rtCustomer, String propertyCode, Lease leaseId) {
+    private Lease updateLease(RTCustomer rtCustomer, Key yardiInterfaceId, String propertyCode, Lease leaseId) {
         List<YardiCustomer> yardiCustomers = rtCustomer.getCustomers().getCustomer();
         YardiLease yardiLease = yardiCustomers.get(0).getLease();
 
@@ -205,14 +215,7 @@ public class YardiLeaseProcessor {
         Validate.isTrue(CommonsStringUtils.isStringSet(unitNumber), "Unit number required");
         if (leaseMove || (!unitNumber.equals(lease.unit().info().number().getValue()))) {
             Validate.isTrue(CommonsStringUtils.isStringSet(propertyCode), "Property Code required");
-            EntityQueryCriteria<AptUnit> criteria = EntityQueryCriteria.create(AptUnit.class);
-            criteria.eq(criteria.proto().building().propertyCode(), propertyCode);
-            criteria.eq(criteria.proto().info().number(), unitNumber);
-            List<AptUnit> units = Persistence.service().query(criteria);
-            if (units.size() != 1) {
-                throw new Error("Non unique unit " + unitNumber + " found in building " + propertyCode);
-            }
-            AptUnit unit = units.get(0);
+            AptUnit unit = retrieveUnit(yardiInterfaceId, propertyCode, unitNumber);
             log.debug("updating unit {} for lease {}", unit.getStringView(), getLeaseId(rtCustomer));
 
             lease = new LeaseMerger().updateUnit(unit, lease);

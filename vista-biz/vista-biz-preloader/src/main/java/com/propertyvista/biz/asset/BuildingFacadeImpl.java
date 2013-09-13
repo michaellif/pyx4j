@@ -28,6 +28,7 @@ import com.propertyvista.biz.policy.IdAssignmentFacade;
 import com.propertyvista.biz.policy.PolicyFacade;
 import com.propertyvista.biz.preloader.DefaultProductCatalogFacade;
 import com.propertyvista.domain.PublicVisibilityType;
+import com.propertyvista.domain.pmc.IntegrationSystem;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.server.common.reference.PublicDataUpdater;
@@ -42,6 +43,9 @@ public class BuildingFacadeImpl implements BuildingFacade {
             if (building.marketing().visibility().isNull()) {
                 building.marketing().visibility().setValue(PublicVisibilityType.global);
             }
+        }
+        if (building.integrationSystemId().isNull()) {
+            building.integrationSystemId().setValue(IntegrationSystem.internal);
         }
         Persistence.service().merge(building);
 

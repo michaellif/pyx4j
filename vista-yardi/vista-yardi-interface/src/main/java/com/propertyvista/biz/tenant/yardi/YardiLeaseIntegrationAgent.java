@@ -13,6 +13,7 @@
  */
 package com.propertyvista.biz.tenant.yardi;
 
+import com.pyx4j.commons.Key;
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.server.Persistence;
@@ -29,10 +30,11 @@ import com.propertyvista.domain.tenant.lease.Lease;
 
 public class YardiLeaseIntegrationAgent {
 
-    public static BillingCycle getBillingCycleForDate(String propertyCode, LogicalDate date) {
+    public static BillingCycle getBillingCycleForDate(Key yardiInterfaceId, String propertyCode, LogicalDate date) {
         // get building
         EntityQueryCriteria<Building> criteria = EntityQueryCriteria.create(Building.class);
         criteria.eq(criteria.proto().propertyCode(), propertyCode);
+        criteria.eq(criteria.proto().integrationSystemId(), yardiInterfaceId);
         Building building = Persistence.service().retrieve(criteria);
         if (building == null) {
             throw new Error("Building '" + propertyCode + "' not found");

@@ -17,7 +17,10 @@ import static org.junit.Assert.assertEquals;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
+import com.propertyvista.domain.pmc.IntegrationSystem;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.oapi.binder.BuildingPersister;
@@ -30,6 +33,8 @@ import com.propertyvista.oapi.xml.StringIO;
 
 public class UnitPersistenceTest extends WSOapiTestBase {
 
+    private final static Logger log = LoggerFactory.getLogger(UnitPersistenceTest.class);
+
     @Before
     public void init() throws Exception {
         preloadData();
@@ -41,18 +46,19 @@ public class UnitPersistenceTest extends WSOapiTestBase {
         propertyCode = propertyCode.substring(propertyCode.length() - 6, propertyCode.length());
         BuildingIO buildingIO = createBuilding(propertyCode);
         Building building = BuildingMarshaller.getInstance().unmarshal(buildingIO);
+        building.integrationSystemId().setValue(IntegrationSystem.internal);
         new BuildingPersister().persist(building);
 
         UnitIO unitIO = createUnit("1", propertyCode);
         AptUnit unit = UnitMarshaller.getInstance().unmarshal(unitIO);
 
-        System.out.println("++++++++++" + unit);
+        log.debug("++++++++++ {}", unit);
 
         new UnitPersister().persist(unit);
 
         unit = new UnitPersister().retrieve(unit);
 
-        System.out.println("++++++++++" + unit);
+        log.debug("++++++++++ {}", unit);
 
         UnitIO unitIO2 = UnitMarshaller.getInstance().marshal(unit);
 

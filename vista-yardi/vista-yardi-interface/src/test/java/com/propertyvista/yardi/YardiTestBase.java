@@ -17,6 +17,9 @@ import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
@@ -55,6 +58,8 @@ import com.propertyvista.yardi.stub.YardiResidentTransactionsStub;
 import com.propertyvista.yardi.stub.YardiSystemBatchesStub;
 
 public class YardiTestBase extends IntegrationTestBase {
+
+    private static final Logger log = LoggerFactory.getLogger(YardiTestBase.class);
 
     @Override
     protected void setUp() throws Exception {
@@ -127,7 +132,7 @@ public class YardiTestBase extends IntegrationTestBase {
         try {
             NamespaceManager.setNamespace(VistaNamespace.operationsNamespace);
             EntityQueryCriteria<PmcYardiCredential> criteria = EntityQueryCriteria.create(PmcYardiCredential.class);
-            criteria.eq(criteria.proto().propertyCode(), propertyCode);
+            criteria.like(criteria.proto().propertyCode(), "*" + propertyCode + "*");
             criteria.eq(criteria.proto().pmc().namespace(), namespace);
             PmcYardiCredential yc = Persistence.service().retrieve(criteria);
             if (yc == null) {
@@ -135,6 +140,7 @@ public class YardiTestBase extends IntegrationTestBase {
                 yc.pmc().set(getDataModel(PmcDataModel.class).getItem(0));
                 yc.propertyCode().setValue(propertyCode);
                 Persistence.service().persist(yc);
+                log.info("Created Yardi interface {} for Property codes {}", yc.getPrimaryKey(), propertyCode);
             }
             return yc;
         } finally {

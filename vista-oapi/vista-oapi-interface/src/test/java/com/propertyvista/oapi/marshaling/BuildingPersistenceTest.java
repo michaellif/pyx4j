@@ -17,9 +17,12 @@ import static org.junit.Assert.assertEquals;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.propertyvista.domain.contact.AddressStructured;
 import com.propertyvista.domain.media.Media;
+import com.propertyvista.domain.pmc.IntegrationSystem;
 import com.propertyvista.domain.property.asset.Parking;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.building.BuildingAmenity;
@@ -47,6 +50,8 @@ import com.propertyvista.oapi.xml.StringIO;
 
 public class BuildingPersistenceTest extends WSOapiTestBase {
 
+    private final static Logger log = LoggerFactory.getLogger(BuildingPersistenceTest.class);
+
     @Before
     public void init() throws Exception {
         preloadData();
@@ -57,14 +62,15 @@ public class BuildingPersistenceTest extends WSOapiTestBase {
         BuildingIO buildingIO = createBuilding();
 
         Building building = BuildingMarshaller.getInstance().unmarshal(buildingIO);
+        building.integrationSystemId().setValue(IntegrationSystem.internal);
 
-        System.out.println("++++++++++" + building);
+        log.debug("++++++++++ {}", building);
 
         new BuildingPersister().persist(building);
 
         building = new BuildingPersister().retrieve(building);
 
-        System.out.println("++++++++++" + building);
+        log.debug("++++++++++ {}", building);
 
         BuildingIO buildingIO2 = BuildingMarshaller.getInstance().marshal(building);
 

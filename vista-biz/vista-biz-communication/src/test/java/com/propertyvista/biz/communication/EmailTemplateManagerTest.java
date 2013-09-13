@@ -62,6 +62,7 @@ import com.propertyvista.domain.maintenance.MaintenanceRequestSchedule;
 import com.propertyvista.domain.maintenance.MaintenanceRequestStatus;
 import com.propertyvista.domain.maintenance.MaintenanceRequestStatus.StatusPhase;
 import com.propertyvista.domain.payment.PaymentType;
+import com.propertyvista.domain.pmc.IntegrationSystem;
 import com.propertyvista.domain.pmc.Pmc;
 import com.propertyvista.domain.policy.framework.OrganizationPoliciesNode;
 import com.propertyvista.domain.policy.policies.ARPolicy;
@@ -1059,6 +1060,7 @@ public class EmailTemplateManagerTest extends VistaDBTestBase {
         // load building
         building = EntityFactory.create(Building.class);
         building.propertyCode().setValue("B001");
+        building.integrationSystemId().setValue(IntegrationSystem.internal);
         building.info().address().streetName().setValue(TestLoaderRandomGen.getStreetName());
         building.info().address().streetType().setValue(StreetType.street);
         building.info().address().streetNumber().setValue(String.valueOf(100 + TestLoaderRandomGen.randomInt(99)));

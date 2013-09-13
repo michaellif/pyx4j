@@ -25,10 +25,10 @@ import com.yardi.entity.resident.RTCustomer;
 import com.yardi.entity.resident.RTUnit;
 import com.yardi.entity.resident.ResidentTransactions;
 
+import com.pyx4j.commons.Key;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.AttachLevel;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
-import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 
 import com.propertyvista.biz.financial.ar.yardi.YardiARIntegrationAgent;
 import com.propertyvista.biz.system.YardiServiceException;
@@ -44,19 +44,21 @@ import com.propertyvista.yardi.merger.UnitsMerger;
 
 public class YardiBuildingProcessor {
 
-    public Building updateBuilding(Property property) throws YardiServiceException {
+    public Building updateBuilding(Key yardiInterfaceId, Property property) throws YardiServiceException {
         Building building = getBuildingFromProperty(property);
+        building.integrationSystemId().setValue(yardiInterfaceId);
         if (!isSameCountry(building)) {
             throw new YardiServiceException("Wrong country in building ");
         }
         String propertyCode = building.propertyCode().getValue();
-        return merge(building, getBuilding(propertyCode));
+        return merge(building, getBuilding(yardiInterfaceId, propertyCode));
     }
 
-    public AptUnit updateUnit(String propertyCode, RTUnit unit) throws YardiServiceException {
-        Building building = getBuilding(propertyCode);
-        Persistence.service().retrieveMember(building.floorplans(), AttachLevel.Attached);
+    public AptUnit updateUnit(Building building, RTUnit unit) throws YardiServiceException {
         AptUnit importedUnit = new UnitsMapper().map(unit);
+        if (building.floorplans().getAttachLevel() != AttachLevel.Attached) {
+            Persistence.service().retrieveMember(building.floorplans(), AttachLevel.Attached);
+        }
         return updateUnitForBuilding(importedUnit, building);
 
     }
@@ -71,7 +73,7 @@ public class YardiBuildingProcessor {
         if (building == null) {
             throw new YardiServiceException("Unable to update units for building: null");
         }
-        return mergeUnit(building, importedUnit, getUnit(building.propertyCode().getValue(), importedUnit.info().number().getValue()));
+        return mergeUnit(building, importedUnit, getUnit(building, importedUnit.info().number().getValue()));
     }
 
     private AptUnit mergeUnit(Building building, AptUnit importedUnit, AptUnit existingUnit) {
@@ -80,9 +82,9 @@ public class YardiBuildingProcessor {
         return merged;
     }
 
-    private AptUnit getUnit(String propertyCode, String unitNumber) {
+    private AptUnit getUnit(Building building, String unitNumber) {
         EntityQueryCriteria<AptUnit> criteria = EntityQueryCriteria.create(AptUnit.class);
-        criteria.add(PropertyCriterion.eq(criteria.proto().building().propertyCode(), propertyCode));
+        criteria.eq(criteria.proto().building(), building);
         criteria.eq(criteria.proto().info().number(), unitNumber);
         List<AptUnit> units = Persistence.service().query(criteria);
         if (units.size() == 0) {
@@ -91,17 +93,10 @@ public class YardiBuildingProcessor {
         return units.get(0);
     }
 
-    @Deprecated
-    private List<AptUnit> getUnits(String propertyCode) {
-        EntityQueryCriteria<AptUnit> criteria = EntityQueryCriteria.create(AptUnit.class);
-        criteria.add(PropertyCriterion.eq(criteria.proto().building().propertyCode(), propertyCode));
-        List<AptUnit> units = Persistence.service().query(criteria);
-        return units;
-    }
-
-    private Building getBuilding(String propertyCode) {
+    private Building getBuilding(Key yardiInterfaceId, String propertyCode) {
         EntityQueryCriteria<Building> criteria = EntityQueryCriteria.create(Building.class);
-        criteria.add(PropertyCriterion.eq(criteria.proto().propertyCode(), propertyCode));
+        criteria.eq(criteria.proto().propertyCode(), propertyCode);
+        criteria.eq(criteria.proto().integrationSystemId(), yardiInterfaceId);
         List<Building> buildings = Persistence.service().query(criteria);
         return !buildings.isEmpty() ? buildings.get(0) : null;
     }
