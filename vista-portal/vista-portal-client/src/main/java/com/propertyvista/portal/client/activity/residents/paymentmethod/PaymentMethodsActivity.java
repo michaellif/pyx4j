@@ -27,7 +27,7 @@ import com.propertyvista.domain.payment.LeasePaymentMethod;
 import com.propertyvista.portal.client.PortalSite;
 import com.propertyvista.portal.client.activity.SecurityAwareActivity;
 import com.propertyvista.portal.client.ui.residents.paymentmethod.PaymentMethodsView;
-import com.propertyvista.portal.rpc.portal.PortalSiteMap;
+import com.propertyvista.portal.rpc.portal.PortalSiteMap.Resident.Financial;
 import com.propertyvista.portal.rpc.portal.services.resident.PaymentMethodCrudService;
 
 public class PaymentMethodsActivity extends SecurityAwareActivity implements PaymentMethodsView.Presenter {
@@ -57,12 +57,12 @@ public class PaymentMethodsActivity extends SecurityAwareActivity implements Pay
 
     @Override
     public void addPaymentMethod() {
-        AppSite.getPlaceController().goTo(new PortalSiteMap.Resident.PaymentMethods.NewPaymentMethod());
+        AppSite.getPlaceController().goTo(new Financial.PaymentMethods.NewPaymentMethod());
     }
 
     @Override
     public void viewPaymentMethod(LeasePaymentMethod paymentMethod) {
-        AppSite.getPlaceController().goTo(new PortalSiteMap.Resident.PaymentMethods.ViewPaymentMethod().formPlace(paymentMethod.id().getValue()));
+        AppSite.getPlaceController().goTo(new Financial.PaymentMethods.ViewPaymentMethod().formPlace(paymentMethod.id().getValue()));
     }
 
     @Override

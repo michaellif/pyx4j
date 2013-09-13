@@ -34,6 +34,7 @@ import com.propertyvista.portal.client.ui.NavigView;
 import com.propertyvista.portal.client.ui.residents.payment.PortalPaymentTypesUtil;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap.Resident;
+import com.propertyvista.portal.rpc.portal.PortalSiteMap.Resident.Financial;
 import com.propertyvista.shared.config.VistaFeatures;
 
 public class NavigActivity extends AbstractActivity implements NavigView.NavigPresenter {
@@ -88,7 +89,7 @@ public class NavigActivity extends AbstractActivity implements NavigView.NavigPr
                 items.add(new Resident.Financial.PreauthorizedPayments());
             }
 
-            items.add(new Resident.PaymentMethods());
+            items.add(new Financial.PaymentMethods());
         }
         items.add(new Resident.ProfileViewer());
         if (VistaFeatures.instance().countryOfOperation() == CountryOfOperation.Canada) {

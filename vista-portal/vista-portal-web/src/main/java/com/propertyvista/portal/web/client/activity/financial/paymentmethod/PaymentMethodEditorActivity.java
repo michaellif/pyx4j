@@ -11,38 +11,32 @@
  * @author dad
  * @version $Id$
  */
-package com.propertyvista.portal.client.activity.residents.paymentmethod;
+package com.propertyvista.portal.web.client.activity.financial.paymentmethod;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.shared.EventBus;
-import com.google.gwt.user.client.History;
+import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
 import com.pyx4j.commons.Key;
 import com.pyx4j.entity.rpc.AbstractCrudService;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
-import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.rpc.AppPlace;
 
+import com.propertyvista.domain.contact.AddressSimple;
 import com.propertyvista.domain.payment.LeasePaymentMethod;
-import com.propertyvista.portal.client.PortalSite;
-import com.propertyvista.portal.client.activity.SecurityAwareActivity;
-import com.propertyvista.portal.client.ui.residents.paymentmethod.ViewPaymentMethodView;
-import com.propertyvista.portal.rpc.portal.PortalSiteMap.Resident.Financial;
 import com.propertyvista.portal.rpc.portal.services.resident.PaymentMethodCrudService;
+import com.propertyvista.portal.web.client.activity.AbstractEditorActivity;
+import com.propertyvista.portal.web.client.ui.financial.paymentmethod.PaymentMethodEditorView;
 
-public class ViewPaymentMethodActivity extends SecurityAwareActivity implements ViewPaymentMethodView.Presenter {
+public class PaymentMethodEditorActivity extends AbstractEditorActivity<LeasePaymentMethod> implements PaymentMethodEditorView.Presenter {
 
-    protected final ViewPaymentMethodView view;
-
-    protected final PaymentMethodCrudService srv;
+    protected final PaymentMethodCrudService srv = GWT.create(PaymentMethodCrudService.class);
 
     private final Key entityId;
 
-    public ViewPaymentMethodActivity(AppPlace place) {
-        this.view = PortalSite.getViewFactory().instantiate(ViewPaymentMethodView.class);
-        this.view.setPresenter(this);
-        srv = GWT.create(PaymentMethodCrudService.class);
+    public PaymentMethodEditorActivity(AppPlace place) {
+        super(PaymentMethodEditorView.class);
 
         entityId = place.getItemId();
     }
@@ -50,24 +44,24 @@ public class ViewPaymentMethodActivity extends SecurityAwareActivity implements 
     @Override
     public void start(AcceptsOneWidget panel, EventBus eventBus) {
         super.start(panel, eventBus);
-        panel.setWidget(view);
+        panel.setWidget(getView());
 
         assert (entityId != null);
         srv.retrieve(new DefaultAsyncCallback<LeasePaymentMethod>() {
             @Override
             public void onSuccess(LeasePaymentMethod result) {
-                view.populate(result);
+                getView().populate(result);
             }
-        }, entityId, AbstractCrudService.RetrieveTarget.View);
+        }, entityId, AbstractCrudService.RetrieveTarget.Edit);
     }
 
     @Override
-    public void edit(Key id) {
-        AppSite.getPlaceController().goTo(new Financial.PaymentMethods.EditPaymentMethod().formPlace(id));
-    }
-
-    @Override
-    public void back() {
-        History.back();
+    public void getCurrentAddress(final AsyncCallback<AddressSimple> callback) {
+        srv.getCurrentAddress(new DefaultAsyncCallback<AddressSimple>() {
+            @Override
+            public void onSuccess(AddressSimple result) {
+                callback.onSuccess(result);
+            }
+        });
     }
 }

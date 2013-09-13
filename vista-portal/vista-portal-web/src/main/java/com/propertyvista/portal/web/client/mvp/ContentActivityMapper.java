@@ -24,6 +24,7 @@ import com.pyx4j.site.rpc.AppPlace;
 
 import com.propertyvista.portal.rpc.portal.PortalSiteMap;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap.Resident;
+import com.propertyvista.portal.rpc.portal.PortalSiteMap.Resident.Financial;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap.Resident.Financial.BillingDashboard;
 import com.propertyvista.portal.web.client.activity.NotificationPageActivity;
 import com.propertyvista.portal.web.client.activity.SignUpActivity;
@@ -34,6 +35,7 @@ import com.propertyvista.portal.web.client.activity.financial.autopay.AutoPayWiz
 import com.propertyvista.portal.web.client.activity.financial.dashboard.FinancialDashboardActivity;
 import com.propertyvista.portal.web.client.activity.financial.payment.PaymentConfirmationActivity;
 import com.propertyvista.portal.web.client.activity.financial.payment.PaymentWizardActivity;
+import com.propertyvista.portal.web.client.activity.financial.paymentmethod.PaymentMethodEditorActivity;
 import com.propertyvista.portal.web.client.activity.financial.paymentmethod.PaymentMethodConfirmationActivity;
 import com.propertyvista.portal.web.client.activity.financial.paymentmethod.PaymentMethodWizardActivity;
 import com.propertyvista.portal.web.client.activity.login.LandingActivity;
@@ -77,9 +79,11 @@ public class ContentActivityMapper implements AppActivityMapper {
                     else if (appPlace instanceof PortalSiteMap.Resident.ResidentServices) {
                         activity = new ServicesDashboardActivity(appPlace);
 
-                    } else if (appPlace instanceof Resident.PaymentMethods.NewPaymentMethod) {
+                    } else if (appPlace instanceof Financial.PaymentMethods.EditPaymentMethod) {
+                        activity = new PaymentMethodEditorActivity(appPlace);
+                    } else if (appPlace instanceof Financial.PaymentMethods.NewPaymentMethod) {
                         activity = new PaymentMethodWizardActivity(appPlace);
-                    } else if (appPlace instanceof Resident.PaymentMethods.PaymentMethodSubmitted) {
+                    } else if (appPlace instanceof Financial.PaymentMethods.PaymentMethodSubmitted) {
                         activity = new PaymentMethodConfirmationActivity(appPlace);
 
                     } else if (appPlace instanceof Resident.Financial.PayNow) {
@@ -116,6 +120,7 @@ public class ContentActivityMapper implements AppActivityMapper {
                     } else if (place instanceof PortalSiteMap.NotificationPlace) {
                         activity = new NotificationPageActivity(place);
                     }
+
                     callback.onSuccess(activity);
                 }
             }

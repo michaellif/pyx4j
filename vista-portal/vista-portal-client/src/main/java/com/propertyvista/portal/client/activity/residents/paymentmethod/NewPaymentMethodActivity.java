@@ -24,7 +24,7 @@ import com.pyx4j.site.rpc.AppPlace;
 
 import com.propertyvista.domain.payment.LeasePaymentMethod;
 import com.propertyvista.domain.payment.PaymentType;
-import com.propertyvista.portal.rpc.portal.PortalSiteMap;
+import com.propertyvista.portal.rpc.portal.PortalSiteMap.Resident.Financial;
 
 public class NewPaymentMethodActivity extends EditPaymentMethodActivity {
 
@@ -48,13 +48,13 @@ public class NewPaymentMethodActivity extends EditPaymentMethodActivity {
         srv.create(new DefaultAsyncCallback<Key>() {
             @Override
             public void onSuccess(Key result) {
-                AppSite.getPlaceController().goTo(new PortalSiteMap.Resident.PaymentMethods());
+                AppSite.getPlaceController().goTo(new Financial.PaymentMethods());
             }
         }, paymentmethod);
     }
 
     @Override
     public void cancel() {
-        AppSite.getPlaceController().goTo(new PortalSiteMap.Resident.PaymentMethods());
+        AppSite.getPlaceController().goTo(new Financial.PaymentMethods());
     }
 }

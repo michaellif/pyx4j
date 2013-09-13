@@ -149,7 +149,7 @@ public class FinancialDashboardActivity extends SecurityAwareActivity implements
     @Override
     public void addPaymentMethod() {
         if (SecurityController.checkAnyBehavior(VistaCustomerPaymentTypeBehavior.values())) {
-            AppSite.getPlaceController().goTo(new PortalSiteMap.Resident.PaymentMethods.NewPaymentMethod());
+            AppSite.getPlaceController().goTo(new Financial.PaymentMethods.NewPaymentMethod());
         }
     }
 
@@ -165,13 +165,13 @@ public class FinancialDashboardActivity extends SecurityAwareActivity implements
 
     @Override
     public void viewPaymentMethod(PaymentMethodInfoDTO paymentMethod) {
-        AppPlace place = new PortalSiteMap.Resident.PaymentMethods.ViewPaymentMethod();
+        AppPlace place = new Financial.PaymentMethods.ViewPaymentMethod();
         AppSite.getPlaceController().goTo(place.formPlace(paymentMethod.id().getValue()));
     }
 
     @Override
     public void editPaymentMethod(PaymentMethodInfoDTO paymentMethod) {
-        AppPlace place = new PortalSiteMap.Resident.PaymentMethods.EditPaymentMethod();
+        AppPlace place = new Financial.PaymentMethods.EditPaymentMethod();
         AppSite.getPlaceController().goTo(place.formPlace(paymentMethod.id().getValue()));
     }
 }

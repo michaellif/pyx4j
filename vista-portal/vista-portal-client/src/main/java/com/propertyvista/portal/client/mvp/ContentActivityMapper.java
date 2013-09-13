@@ -54,6 +54,7 @@ import com.propertyvista.portal.client.activity.tenantinsurance.tenantsure.Tenan
 import com.propertyvista.portal.client.activity.tenantinsurance.tenantsure.TenantSurePurchaseActivity;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap.Resident;
+import com.propertyvista.portal.rpc.portal.PortalSiteMap.Resident.Financial;
 
 public class ContentActivityMapper implements AppActivityMapper {
 
@@ -79,15 +80,15 @@ public class ContentActivityMapper implements AppActivityMapper {
                     } else if (appPlace instanceof PortalSiteMap.PotentialTenants) {
                         activity = new PotentialTenantActivity(appPlace);
 
-                    } else if (appPlace instanceof Resident.PaymentMethods) {
+                    } else if (appPlace instanceof Financial.PaymentMethods) {
                         activity = new PaymentMethodsActivity(appPlace);
-                    } else if (appPlace instanceof Resident.PaymentMethods.ViewPaymentMethod) {
+                    } else if (appPlace instanceof Financial.PaymentMethods.ViewPaymentMethod) {
                         activity = new ViewPaymentMethodActivity(appPlace);
-                    } else if (appPlace instanceof Resident.PaymentMethods.EditPaymentMethod) {
+                    } else if (appPlace instanceof Financial.PaymentMethods.EditPaymentMethod) {
                         activity = new EditPaymentMethodActivity(appPlace);
-                    } else if (appPlace instanceof Resident.PaymentMethods.NewPaymentMethod) {
+                    } else if (appPlace instanceof Financial.PaymentMethods.NewPaymentMethod) {
                         activity = new PaymentMethodWizardActivity(appPlace);
-                    } else if (appPlace instanceof Resident.PaymentMethods.PaymentMethodSubmitted) {
+                    } else if (appPlace instanceof Financial.PaymentMethods.PaymentMethodSubmitted) {
                         activity = new PaymentMethodSubmittedActivity(appPlace);
 
                     } else if (appPlace instanceof Resident.Financial.BillSummary) {

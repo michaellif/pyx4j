@@ -21,7 +21,8 @@ import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.rpc.AppPlace;
 
 import com.propertyvista.domain.contact.AddressSimple;
-import com.propertyvista.portal.rpc.portal.PortalSiteMap.Resident.PaymentMethods;
+import com.propertyvista.portal.rpc.portal.PortalSiteMap.Resident.Financial;
+import com.propertyvista.portal.rpc.portal.PortalSiteMap.Resident.Financial.PaymentMethods;
 import com.propertyvista.portal.rpc.portal.web.dto.PaymentMethodDTO;
 import com.propertyvista.portal.rpc.portal.web.services.financial.PaymentMethodWizardService;
 import com.propertyvista.portal.web.client.activity.AbstractWizardActivity;
@@ -46,6 +47,6 @@ public class PaymentMethodWizardActivity extends AbstractWizardActivity<PaymentM
     @Override
     protected void onSaved(Key result) {
         getView().reset();
-        AppSite.getPlaceController().goTo(new PaymentMethods.PaymentMethodSubmitted(result));
+        AppSite.getPlaceController().goTo(new Financial.PaymentMethods.PaymentMethodSubmitted(result));
     }
 }

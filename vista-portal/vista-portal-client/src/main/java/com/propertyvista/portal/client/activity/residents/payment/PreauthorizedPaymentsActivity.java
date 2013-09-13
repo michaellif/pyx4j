@@ -26,6 +26,7 @@ import com.propertyvista.portal.client.PortalSite;
 import com.propertyvista.portal.client.activity.SecurityAwareActivity;
 import com.propertyvista.portal.client.ui.residents.payment.autopay.PreauthorizedPaymentsView;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap;
+import com.propertyvista.portal.rpc.portal.PortalSiteMap.Resident.Financial;
 import com.propertyvista.portal.rpc.portal.dto.PreauthorizedPaymentListDTO;
 import com.propertyvista.portal.rpc.portal.services.resident.PreauthorizedPaymentListService;
 
@@ -56,7 +57,7 @@ public class PreauthorizedPaymentsActivity extends SecurityAwareActivity impleme
 
     @Override
     public void viewPaymentMethod(PreauthorizedPaymentListDTO.ListItemDTO preauthorizedPayment) {
-        AppPlace place = new PortalSiteMap.Resident.PaymentMethods.ViewPaymentMethod();
+        AppPlace place = new Financial.PaymentMethods.ViewPaymentMethod();
         AppSite.getPlaceController().goTo(place.formPlace(preauthorizedPayment.paymentMethod().id().getValue()));
     }
 
