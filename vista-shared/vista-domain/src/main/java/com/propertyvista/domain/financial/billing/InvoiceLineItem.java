@@ -40,7 +40,7 @@ import com.pyx4j.entity.shared.IPrimitive;
 import com.propertyvista.domain.financial.ARCode;
 import com.propertyvista.domain.financial.BillingAccount;
 
-@ToStringFormat("{0}, {1}, {2}")
+@ToStringFormat("${0}, {1}, {2}")
 @AbstractEntity
 @Inheritance(strategy = Inheritance.InheritanceStrategy.SINGLE_TABLE)
 @Table(prefix = "billing")
