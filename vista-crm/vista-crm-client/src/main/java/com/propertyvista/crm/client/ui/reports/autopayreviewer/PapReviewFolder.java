@@ -253,8 +253,12 @@ public class PapReviewFolder extends VistaBoxFolder<PapReviewDTO> {
                 changePercent = new BigDecimal("-1.00");
             }
             if (getValue().changeType().getValue() == ChangeType.Changed || getValue().changeType().getValue() == ChangeType.Unchanged) {
-                BigDecimal change = get(proto().newPapAmount()).getValue().subtract(get(proto().suspendedPapAmount()).getValue());
-                changePercent = change.divide(get(proto().suspendedPapAmount()).getValue(), MathContext.DECIMAL32);
+                if (get(proto().newPapAmount()).getValue() != null) {
+                    BigDecimal change = get(proto().newPapAmount()).getValue().subtract(get(proto().suspendedPapAmount()).getValue());
+                    changePercent = change.divide(get(proto().suspendedPapAmount()).getValue(), MathContext.DECIMAL32);
+                } else {
+                    changePercent = null;
+                }
             }
             get(proto().changePercent()).setValue(changePercent, false);
         }
@@ -285,7 +289,9 @@ public class PapReviewFolder extends VistaBoxFolder<PapReviewDTO> {
             if (totalOfCharge.changeType().getValue() != ChangeType.Removed) {
                 papChargesTotal.newPrice().setValue(totalOfCharge.newPrice().getValue().add(papChargesTotal.newPrice().getValue()));
 
-                papChargesTotal.newPapAmount().setValue(totalOfCharge.newPapAmount().getValue().add(papChargesTotal.newPapAmount().getValue()));
+                if (totalOfCharge.newPapAmount().getValue() != null) {
+                    papChargesTotal.newPapAmount().setValue(totalOfCharge.newPapAmount().getValue().add(papChargesTotal.newPapAmount().getValue()));
+                }
             }
         }
         if (papChargesTotal.suspendedPrice().getValue().compareTo(BigDecimal.ZERO) != 0) {
