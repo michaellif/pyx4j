@@ -124,9 +124,18 @@ public class DefaultWidgetsTheme extends Theme {
     protected void initListBoxStyle() {
         Style style = new Style(".", StyleName.ListBox);
         style.addProperty("color", ThemeColor.foreground);
+        style.addProperty("background-color", "white");
         style.addProperty("border-width", "1px");
         style.addProperty("border-style", "solid");
         style.addProperty("border-color", ThemeColor.foreground, 0.4);
+        style.addProperty("padding", "2px 1px 2px 5px");
+        style.addProperty("box-sizing", "border-box");
+        style.addProperty("-moz-box-sizing", "border-box");
+        style.addProperty("-webkit-box-sizing", "border-box");
+        addStyle(style);
+
+        style = new Style(".", StyleName.ListBox, "-", StyleDependent.singleLine);
+        style.addProperty("height", "2em");
         addStyle(style);
 
     }

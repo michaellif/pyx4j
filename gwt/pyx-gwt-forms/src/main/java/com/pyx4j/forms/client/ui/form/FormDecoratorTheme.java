@@ -31,7 +31,7 @@ public class FormDecoratorTheme extends Theme {
 
     public static enum StyleName implements IStyleName {
 
-        FormDecoratorPanel, FormDecoratorMain,
+        FormDecorator, FormDecoratorPanel, FormDecoratorMain,
 
         FormDecoratorHeader, FormDecoratorCaption,
 
@@ -69,6 +69,11 @@ public class FormDecoratorTheme extends Theme {
         style = new Style(".", StyleName.FormDecoratorCaption);
         style.addProperty("float", "left");
         style.addProperty("padding", "0 1em");
+        addStyle(style);
+
+        style = new Style(".", StyleName.FormDecoratorHeader, " .", DefaultWidgetsTheme.StyleName.Toolbar);
+        style.addProperty("float", "right");
+        style.addProperty("padding", "2px");
         addStyle(style);
 
     }

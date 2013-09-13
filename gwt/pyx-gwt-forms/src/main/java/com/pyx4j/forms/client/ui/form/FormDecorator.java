@@ -50,6 +50,8 @@ public class FormDecorator<E extends IEntity, T extends CEntityForm<E>> extends 
     private final SimplePanel footerPanel;
 
     public FormDecorator() {
+        setStyleName(FormDecoratorTheme.StyleName.FormDecorator.name());
+
         captionLabel = new Label();
         captionLabel.setStyleName(FormDecoratorTheme.StyleName.FormDecoratorCaption.name());
 

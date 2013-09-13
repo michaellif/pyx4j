@@ -33,6 +33,10 @@ public class ListBox extends com.google.gwt.user.client.ui.ListBox implements IF
     public ListBox(boolean multipleSelect) {
         super(multipleSelect);
         setStyleName(DefaultWidgetsTheme.StyleName.ListBox.name());
+
+        if (!multipleSelect) {
+            addStyleDependentName(DefaultWidgetsTheme.StyleDependent.singleLine.name());
+        }
     }
 
     @Override
