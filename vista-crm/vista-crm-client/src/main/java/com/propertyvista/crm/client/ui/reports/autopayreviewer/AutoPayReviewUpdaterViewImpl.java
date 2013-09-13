@@ -16,14 +16,13 @@ package com.propertyvista.crm.client.ui.reports.autopayreviewer;
 import java.util.LinkedList;
 import java.util.List;
 
-import com.google.gwt.dom.client.Style.Overflow;
 import com.google.gwt.dom.client.Style.Position;
 import com.google.gwt.dom.client.Style.TextAlign;
-import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.view.client.Range;
 
+import com.pyx4j.commons.css.IStyleName;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.IsView;
@@ -37,6 +36,12 @@ import com.propertyvista.domain.reports.AutoPayChangesReportMetadata;
 
 public class AutoPayReviewUpdaterViewImpl extends AbstractPrimePane implements AutoPayReviewUpdaterView, IsView {
 
+    public enum Styles implements IStyleName {
+
+        AutoPayReviewsSettingsFormPanel, AutoPayReviewsHolderForm
+
+    }
+
     private final static I18n i18n = I18n.get(AutoPayReviewUpdaterViewImpl.class);
 
     private static final int PAGE_INCREMENT = 10;
@@ -47,7 +52,7 @@ public class AutoPayReviewUpdaterViewImpl extends AbstractPrimePane implements A
 
     private Range visibleRange;
 
-    private final AutoPayChangesReportSettingsForm filtersForm;
+    private final AutoPayChangesReportSettingsForm settingsForm;
 
     public AutoPayReviewUpdaterViewImpl() {
         FlowPanel viewPanel = new FlowPanel();
@@ -55,13 +60,12 @@ public class AutoPayReviewUpdaterViewImpl extends AbstractPrimePane implements A
         viewPanel.setSize("100%", "100%");
 
         FlowPanel filtersPanel = new FlowPanel();
-        filtersPanel.setHeight("150px");
-        filtersPanel.getElement().getStyle().setOverflow(Overflow.AUTO);
+        filtersPanel.setStyleName(Styles.AutoPayReviewsSettingsFormPanel.name());
 
-        filtersForm = new AutoPayChangesReportSettingsForm();
-        filtersForm.initContent();
-        filtersForm.populateNew();
-        filtersPanel.add(filtersForm);
+        settingsForm = new AutoPayChangesReportSettingsForm();
+        settingsForm.initContent();
+        settingsForm.populateNew();
+        filtersPanel.add(settingsForm);
 
         FlowPanel filterButtonsPanel = new FlowPanel();
         filterButtonsPanel.setWidth("100%");
@@ -83,11 +87,7 @@ public class AutoPayReviewUpdaterViewImpl extends AbstractPrimePane implements A
             }
         };
         papReviewHolderForm.initContent();
-        papReviewHolderForm.asWidget().getElement().getStyle().setPosition(Position.ABSOLUTE);
-        papReviewHolderForm.asWidget().getElement().getStyle().setTop(151, Unit.PX);
-        papReviewHolderForm.asWidget().getElement().getStyle().setLeft(0, Unit.PX);
-        papReviewHolderForm.asWidget().getElement().getStyle().setRight(0, Unit.PX);
-        papReviewHolderForm.asWidget().getElement().getStyle().setBottom(0, Unit.PX);
+        papReviewHolderForm.asWidget().setStyleName(Styles.AutoPayReviewsHolderForm.name());
 
         viewPanel.add(papReviewHolderForm);
 
@@ -137,7 +137,7 @@ public class AutoPayReviewUpdaterViewImpl extends AbstractPrimePane implements A
 
     @Override
     public AutoPayChangesReportMetadata getAutoPayFilterSettings() {
-        return filtersForm.getValue();
+        return settingsForm.getValue();
     }
 
     private void acceptMarked() {

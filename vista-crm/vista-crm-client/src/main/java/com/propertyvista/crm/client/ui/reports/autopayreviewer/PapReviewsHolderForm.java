@@ -13,9 +13,6 @@
  */
 package com.propertyvista.crm.client.ui.reports.autopayreviewer;
 
-import com.google.gwt.dom.client.Style.Overflow;
-import com.google.gwt.dom.client.Style.Position;
-import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.Command;
@@ -37,7 +34,7 @@ public class PapReviewsHolderForm extends CEntityDecoratableForm<PapReviewsHolde
 
     public enum Styles implements IStyleName {
 
-        AutoPayCounterPanel, AutoPayActionsPanel, AutoPaySuperCaptionsPanel, AutoPayCaptionsPanel, AutoPayLoadMore
+        AutoPayCounterPanel, AutoPayActionsPanel, AutoPaySuperCaptionsPanel, AutoPayCaptionsPanel, AutoPayFolderHolder, AutoPayLoadMore
 
     }
 
@@ -59,12 +56,7 @@ public class PapReviewsHolderForm extends CEntityDecoratableForm<PapReviewsHolde
         panel.add(createCaptionsPanel());
 
         FlowPanel leasePapsFolderHolder = new FlowPanel();
-        leasePapsFolderHolder.getElement().getStyle().setOverflow(Overflow.AUTO);
-        leasePapsFolderHolder.getElement().getStyle().setPosition(Position.ABSOLUTE);
-        leasePapsFolderHolder.getElement().getStyle().setTop(100, Unit.PX);
-        leasePapsFolderHolder.getElement().getStyle().setBottom(0, Unit.PX);
-        leasePapsFolderHolder.getElement().getStyle().setLeft(0, Unit.PX);
-        leasePapsFolderHolder.getElement().getStyle().setRight(0, Unit.PX);
+        leasePapsFolderHolder.setStyleName(Styles.AutoPayFolderHolder.name());
         leasePapsFolderHolder.add(inject(proto().papReviews(), new PapReviewFolder()));
 
         moreButton = new HTML(i18n.tr("More..."));

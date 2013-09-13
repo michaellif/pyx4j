@@ -96,29 +96,31 @@ public class PapReviewFolder extends VistaBoxFolder<PapReviewDTO> {
         public IsWidget createContent() {
             FlowPanel contentPanel = new FlowPanel();
 
+            FlowPanel isSelectedAndCaptionHolderPanel = new FlowPanel();
+            isSelectedAndCaptionHolderPanel.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
+            isSelectedAndCaptionHolderPanel.getElement().getStyle().setVerticalAlign(VerticalAlign.MIDDLE);
+            isSelectedAndCaptionHolderPanel.getElement().getStyle().setPaddingBottom(10, Unit.PX);
+
             CComponent<?> isSelected = inject(proto().isSelected());
             isSelected.asWidget().getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
             isSelected.asWidget().getElement().getStyle().setVerticalAlign(VerticalAlign.MIDDLE);
             isSelected.asWidget().getElement().getStyle().setPaddingRight(15, Unit.PX);
-            contentPanel.add(isSelected);
-
-            FlowPanel folderAndCaptionHolderPanel = new FlowPanel();
-            folderAndCaptionHolderPanel.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
-            folderAndCaptionHolderPanel.getElement().getStyle().setVerticalAlign(VerticalAlign.MIDDLE);
+            isSelectedAndCaptionHolderPanel.add(isSelected);
 
             CComponent<?> caption = inject(proto().caption(), new PapReviewCaptionViewer());
-            folderAndCaptionHolderPanel.add(caption);
+            caption.asWidget().getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
+            caption.asWidget().getElement().getStyle().setVerticalAlign(VerticalAlign.MIDDLE);
+            isSelectedAndCaptionHolderPanel.add(caption);
 
             FlowPanel folderHolderPanel = new FlowPanel();
-            folderHolderPanel.add(inject(proto().charges(), new PapChargesFolder()));
+            isSelectedAndCaptionHolderPanel.add(inject(proto().charges(), new PapChargesFolder()));
+            contentPanel.add(isSelectedAndCaptionHolderPanel);
 
             chargeTotals = new PapChargeReviewForm();
             chargeTotals.initContent();
             chargeTotals.setViewable(true);
             folderHolderPanel.add(chargeTotals);
-            folderAndCaptionHolderPanel.add(folderHolderPanel);
-
-            contentPanel.add(folderAndCaptionHolderPanel);
+            contentPanel.add(folderHolderPanel);
 
             addValueChangeHandler(new ValueChangeHandler<PapReviewDTO>() {
                 @Override

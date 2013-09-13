@@ -16,6 +16,7 @@ package com.propertyvista.crm.client.ui.reports.eft;
 import java.util.Arrays;
 import java.util.List;
 
+import com.pyx4j.commons.css.IStyleName;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.forms.client.ui.CComponent;
@@ -27,6 +28,11 @@ import com.propertyvista.crm.client.ui.components.boxes.BuildingSelectorDialog;
 import com.propertyvista.domain.property.asset.building.Building;
 
 public class SelectedBuildingsFolder extends VistaTableFolder<Building> {
+
+    public enum Styles implements IStyleName {
+
+        SelectedBuildingsFolder
+    }
 
     private static List<EntityFolderColumnDescriptor> COLUMNS;
     static {
@@ -40,6 +46,7 @@ public class SelectedBuildingsFolder extends VistaTableFolder<Building> {
         super(Building.class);
         setViewable(true);
         setOrderable(false);
+        asWidget().addStyleName(Styles.SelectedBuildingsFolder.name());
     }
 
     @Override

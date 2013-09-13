@@ -47,6 +47,7 @@ import com.propertyvista.crm.client.ui.gadgets.commonMk2.dashboard.AbstractDashb
 import com.propertyvista.crm.client.ui.gadgets.commonMk2.dashboard.AddGadgetDialog;
 import com.propertyvista.crm.client.ui.gadgets.forms.ArrearsGadgetSummaryForm;
 import com.propertyvista.crm.client.ui.reports.CommonReportStyles;
+import com.propertyvista.crm.client.ui.reports.autopayreviewer.AutoPayReviewUpdaterViewImpl;
 import com.propertyvista.crm.client.ui.reports.autopayreviewer.PapReviewCaptionViewer;
 import com.propertyvista.crm.client.ui.reports.autopayreviewer.PapReviewFolder;
 import com.propertyvista.crm.client.ui.reports.autopayreviewer.PapReviewsHolderForm;
@@ -467,6 +468,10 @@ public class CrmTheme extends VistaTheme {
         style.addProperty("background-color", ThemeColor.object1, 0.3);
         addStyle(style);
 
+        style = new Style("." + AbstractReport.Styles.SettingsFormPanel.name(), " .EntityFolderTableDecorator");
+        style.addProperty("width", "30em");
+        addStyle(style);
+
         style = new Style("." + AbstractReport.Styles.ReportView.name(), " .FooterToolbar");
         style.addProperty("height", "2em");
         addStyle(style);
@@ -692,14 +697,34 @@ public class CrmTheme extends VistaTheme {
     }
 
     private void initAutoPayUpdaterStyles() {
-        Style style = new Style("." + PapReviewCaptionViewer.Styles.AutoPayReviewCaptionPanel.name());
+
+        Style style = new Style("." + AutoPayReviewUpdaterViewImpl.Styles.AutoPayReviewsSettingsFormPanel.name());
+        style.addProperty("background-color", ThemeColor.object1, 0.3);
+        style.addProperty("height", "120px");
+        style.addProperty("overflow", "auto");
+        addStyle(style);
+
+        style = new Style("." + AutoPayReviewUpdaterViewImpl.Styles.AutoPayReviewsSettingsFormPanel.name() + " .EntityFolderTableDecorator");
+        style.addProperty("width", "5em");
+        addStyle(style);
+
+        style = new Style("." + AutoPayReviewUpdaterViewImpl.Styles.AutoPayReviewsHolderForm.name());
+        style.addProperty("position", "absolute");
+        style.addProperty("top", "120px");
+        style.addProperty("left", "0px");
+        style.addProperty("right", "0px");
+        style.addProperty("bottom", "0px");
+        addStyle(style);
+
+        // ************************************************************************************************************
+
+        style = new Style("." + PapReviewCaptionViewer.Styles.AutoPayReviewCaptionPanel.name());
         style.addProperty("width", "100%");
         addStyle(style);
 
         style = new Style("." + PapReviewCaptionViewer.Styles.AutoPayReviewCaption.name());
         style.addProperty("font-weight", "bold");
         style.addProperty("vertical-align", "middle");
-        style.addProperty("padding-bottom", "10px");
         addStyle(style);
 
         style = new Style("." + PapReviewCaptionViewer.Styles.AutoPayReviewCaptionWarning.name());
@@ -778,7 +803,7 @@ public class CrmTheme extends VistaTheme {
         style = new Style("." + PapReviewsHolderForm.Styles.AutoPayActionsPanel.name() + " .Button:first-child");
         style.addProperty("position", "relative");
         style.addProperty("top", "15px");
-        style.addProperty("left", "120px");
+        style.addProperty("left", "10px");
         addStyle(style);
 
         style = new Style("." + PapReviewsHolderForm.Styles.AutoPaySuperCaptionsPanel.name());
@@ -787,6 +812,7 @@ public class CrmTheme extends VistaTheme {
         style.addProperty("width", "780px");
         style.addProperty("border-top", "1px dotted");
         style.addProperty("border-right", "1px dotted");
+        style.addProperty("background", ThemeColor.object1, 0.3);
         addStyle(style);
 
         style = new Style("." + PapReviewsHolderForm.Styles.AutoPaySuperCaptionsPanel.name() + " div");
@@ -815,6 +841,7 @@ public class CrmTheme extends VistaTheme {
         style.addProperty("border-top", "1px dotted");
         style.addProperty("border-right", "1px dotted");
         style.addProperty("border-bottom", "1px dotted");
+        style.addProperty("background", ThemeColor.object1, 0.3);
         addStyle(style);
 
         style = new Style("." + PapReviewsHolderForm.Styles.AutoPayCaptionsPanel.name() + " div");
@@ -827,6 +854,15 @@ public class CrmTheme extends VistaTheme {
 
         style = new Style("." + PapReviewsHolderForm.Styles.AutoPayCaptionsPanel.name() + " div div");
         style.addProperty("border-left", "none");
+        addStyle(style);
+
+        style = new Style("." + PapReviewsHolderForm.Styles.AutoPayFolderHolder.name());
+        style.addProperty("overflow", "auto");
+        style.addProperty("position", "absolute");
+        style.addProperty("top", "73px");
+        style.addProperty("bottom", "0px");
+        style.addProperty("left", "0px");
+        style.addProperty("right", "0px");
         addStyle(style);
 
         style = new Style("." + PapReviewsHolderForm.Styles.AutoPayLoadMore.name());
