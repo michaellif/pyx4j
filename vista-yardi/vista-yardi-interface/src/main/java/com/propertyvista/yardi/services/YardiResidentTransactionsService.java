@@ -346,7 +346,7 @@ public class YardiResidentTransactionsService extends YardiAbstractService {
                     new YardiLeaseProcessor(executionMonitor).processLease(rtCustomer, yardiInterfaceId, propertyCode);
 
                     // update charges and payments
-                    final BillingAccount account = new YardiChargeProcessor().getAccount(rtCustomer);
+                    final BillingAccount account = new YardiChargeProcessor().getAccount(yardiInterfaceId, rtCustomer);
                     new YardiChargeProcessor().removeOldCharges(account);
                     new YardiPaymentProcessor().removeOldPayments(account);
 

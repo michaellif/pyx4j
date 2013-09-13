@@ -26,13 +26,13 @@ import com.yardi.entity.resident.PaymentDetailReversal;
 import com.yardi.entity.resident.PropertyID;
 import com.yardi.entity.resident.RTCustomer;
 
+import com.pyx4j.commons.Key;
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.AttachLevel;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
-import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 
 import com.propertyvista.biz.financial.ar.ARFacade;
 import com.propertyvista.biz.financial.billingcycle.BillingCycleFacade;
@@ -83,10 +83,11 @@ public class YardiARIntegrationAgent {
     /*
      * ChargeProcessor utils
      */
-    public static BillingAccount getYardiBillingAccount(RTCustomer customer) {
-        EntityQueryCriteria<Lease> leaseCrit = EntityQueryCriteria.create(Lease.class);
-        leaseCrit.add(PropertyCriterion.eq(leaseCrit.proto().leaseId(), customer.getCustomerID()));
-        Lease lease = Persistence.service().retrieve(leaseCrit);
+    public static BillingAccount getYardiBillingAccount(final Key yardiInterfaceId, RTCustomer customer) {
+        EntityQueryCriteria<Lease> criteria = EntityQueryCriteria.create(Lease.class);
+        criteria.eq(criteria.proto().leaseId(), customer.getCustomerID());
+        criteria.eq(criteria.proto().unit().building().integrationSystemId(), yardiInterfaceId);
+        Lease lease = Persistence.service().retrieve(criteria);
         if (lease == null) {
             // no lease found - quit
             return null;
