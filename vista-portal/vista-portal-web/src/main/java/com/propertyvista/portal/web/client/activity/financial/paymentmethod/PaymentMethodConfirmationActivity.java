@@ -18,13 +18,15 @@ import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
 import com.pyx4j.commons.Key;
+import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.rpc.AppPlace;
 
+import com.propertyvista.domain.payment.LeasePaymentMethod;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap;
 import com.propertyvista.portal.rpc.portal.web.dto.PaymentMethodDTO;
-import com.propertyvista.portal.rpc.portal.web.services.PaymentMethodRetrieveService;
+import com.propertyvista.portal.rpc.portal.web.services_new.financial.PaymentService;
 import com.propertyvista.portal.web.client.PortalWebSite;
 import com.propertyvista.portal.web.client.activity.SecurityAwareActivity;
 import com.propertyvista.portal.web.client.ui.financial.paymentmethod.PaymentMethodConfirmationView;
@@ -33,7 +35,7 @@ public class PaymentMethodConfirmationActivity extends SecurityAwareActivity imp
 
     private final PaymentMethodConfirmationView view;
 
-    protected final PaymentMethodRetrieveService srv;
+    protected final PaymentService srv;
 
     private final Key entityId;
 
@@ -41,7 +43,7 @@ public class PaymentMethodConfirmationActivity extends SecurityAwareActivity imp
         this.view = PortalWebSite.getViewFactory().instantiate(PaymentMethodConfirmationView.class);
         this.view.setPresenter(this);
 
-        srv = GWT.create(PaymentMethodRetrieveService.class);
+        srv = GWT.create(PaymentService.class);
 
         entityId = place.getItemId();
     }
@@ -52,12 +54,12 @@ public class PaymentMethodConfirmationActivity extends SecurityAwareActivity imp
         panel.setWidget(view);
 
         assert (entityId != null);
-        srv.retrieve(new DefaultAsyncCallback<PaymentMethodDTO>() {
+        srv.retrievePaymentMethod(new DefaultAsyncCallback<PaymentMethodDTO>() {
             @Override
             public void onSuccess(PaymentMethodDTO result) {
                 view.populate(result);
             }
-        }, entityId);
+        }, EntityFactory.createIdentityStub(LeasePaymentMethod.class, entityId));
     }
 
     @Override

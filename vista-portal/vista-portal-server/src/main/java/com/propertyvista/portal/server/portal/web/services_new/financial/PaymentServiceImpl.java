@@ -21,10 +21,12 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.entity.shared.utils.EntityDtoBinder;
 
 import com.propertyvista.biz.financial.payment.PaymentMethodFacade;
 import com.propertyvista.domain.payment.LeasePaymentMethod;
 import com.propertyvista.domain.tenant.lease.Lease;
+import com.propertyvista.portal.rpc.portal.web.dto.PaymentMethodDTO;
 import com.propertyvista.portal.rpc.portal.web.dto.PaymentMethodInfoDTO;
 import com.propertyvista.portal.rpc.portal.web.dto.PaymentMethodSummaryDTO;
 import com.propertyvista.portal.rpc.portal.web.services_new.financial.PaymentService;
@@ -32,6 +34,18 @@ import com.propertyvista.portal.server.portal.TenantAppContext;
 import com.propertyvista.server.common.util.LeaseParticipantUtils;
 
 public class PaymentServiceImpl implements PaymentService {
+
+    @Override
+    public void retrievePaymentMethod(AsyncCallback<PaymentMethodDTO> callback, LeasePaymentMethod itemId) {
+        PaymentMethodDTO dto = new PaymentMethodDtoBinder().createDTO(Persistence.secureRetrieve(LeasePaymentMethod.class, itemId.getPrimaryKey()));
+    
+        // enhance dto:
+        Lease lease = TenantAppContext.getCurrentUserLease();
+        Persistence.service().retrieve(lease.unit());
+        Persistence.service().retrieve(lease.unit().building());
+    
+        callback.onSuccess(dto);
+    }
 
     @Override
     public void deletePaymentMethod(AsyncCallback<Boolean> callback, LeasePaymentMethod itemId) {
@@ -67,5 +81,17 @@ public class PaymentServiceImpl implements PaymentService {
         }
 
         return paymentMethods;
+    }
+
+    class PaymentMethodDtoBinder extends EntityDtoBinder<LeasePaymentMethod, PaymentMethodDTO> {
+
+        protected PaymentMethodDtoBinder() {
+            super(LeasePaymentMethod.class, PaymentMethodDTO.class);
+        }
+
+        @Override
+        protected void bind() {
+            bindCompleteDtoMember(dtoProto.paymentMethod());
+        }
     }
 }
