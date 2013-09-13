@@ -31,7 +31,7 @@ import com.pyx4j.widgets.client.Anchor;
 import com.propertyvista.common.client.resources.VistaImages;
 import com.propertyvista.domain.payment.LeasePaymentMethod;
 import com.propertyvista.dto.PaymentRecordDTO;
-import com.propertyvista.portal.web.client.ui.AbstractViewer;
+import com.propertyvista.portal.web.client.ui.AbstractViewerView;
 import com.propertyvista.portal.web.client.ui.CPortalEntityForm;
 import com.propertyvista.portal.web.client.ui.util.decorators.FormDecoratorBuilder;
 
@@ -39,9 +39,9 @@ public class PaymentConfirmationForm extends CPortalEntityForm<PaymentRecordDTO>
 
     private static final I18n i18n = I18n.get(PaymentConfirmationForm.class);
 
-    private final AbstractViewer<PaymentRecordDTO> view;
+    private final AbstractViewerView<PaymentRecordDTO> view;
 
-    public PaymentConfirmationForm(AbstractViewer<PaymentRecordDTO> view) {
+    public PaymentConfirmationForm(AbstractViewerView<PaymentRecordDTO> view) {
         super(PaymentRecordDTO.class, null, i18n.tr("Payment Submitted Successfully!"), ThemeColor.contrast4);
         this.view = view;
         setViewable(true);

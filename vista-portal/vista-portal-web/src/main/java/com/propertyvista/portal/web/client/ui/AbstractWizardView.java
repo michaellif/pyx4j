@@ -18,15 +18,15 @@ import com.pyx4j.entity.shared.UniqueConstraintUserRuntimeException;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
 
-public abstract class AbstractWizard<E extends IEntity> extends AbstractPortalPanel implements IWizardView<E> {
+public abstract class AbstractWizardView<E extends IEntity> extends AbstractPortalPanel implements IWizardView<E> {
 
-    private static final I18n i18n = I18n.get(AbstractWizard.class);
+    private static final I18n i18n = I18n.get(AbstractWizardView.class);
 
     private WizardPresenter<E> presenter;
 
     private CPortalEntityWizard<E> wizardForm;
 
-    public AbstractWizard() {
+    public AbstractWizardView() {
         super();
     }
 

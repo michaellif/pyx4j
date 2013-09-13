@@ -14,9 +14,9 @@
 package com.propertyvista.portal.web.client.ui.profile;
 
 import com.propertyvista.portal.domain.dto.ResidentDTO;
-import com.propertyvista.portal.web.client.ui.AbstractEditor;
+import com.propertyvista.portal.web.client.ui.AbstractEditorView;
 
-public class ProfileEditorViewImpl extends AbstractEditor<ResidentDTO> implements ProfileEditorView {
+public class ProfileEditorViewImpl extends AbstractEditorView<ResidentDTO> implements ProfileEditorView {
 
     public ProfileEditorViewImpl() {
         super();

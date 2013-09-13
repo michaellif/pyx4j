@@ -17,19 +17,19 @@ import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.i18n.shared.I18n;
 
-public class AbstractViewer<E extends IEntity> extends AbstractPortalPanel implements IFormView<E> {
+public class AbstractEditorView<E extends IEntity> extends AbstractPortalPanel implements IEditorView<E> {
 
-    protected static final I18n i18n = I18n.get(AbstractViewer.class);
+    protected static final I18n i18n = I18n.get(AbstractEditorView.class);
 
     private EntityPresenter<E> presenter;
 
-    private CEntityForm<E> form;
+    private CPortalEntityEditor<E> form;
 
-    public AbstractViewer() {
+    public AbstractEditorView() {
         super();
     }
 
-    protected void setForm(final CEntityForm<E> form) {
+    protected void setForm(final CPortalEntityEditor<E> form) {
         this.form = form;
         if (form == null) {
             setWidget(null);
@@ -54,8 +54,22 @@ public class AbstractViewer<E extends IEntity> extends AbstractPortalPanel imple
         return presenter;
     }
 
-    public CEntityForm<E> getCContainer() {
+    public CEntityForm<E> getForm() {
         return form;
     }
 
+    @Override
+    public void edit() {
+        form.setViewable(false);
+    }
+
+    @Override
+    public void save() {
+        form.setViewable(true);
+    }
+
+    @Override
+    public void cancel() {
+        form.setViewable(true);
+    }
 }

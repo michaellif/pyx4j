@@ -35,7 +35,7 @@ import com.propertyvista.domain.payment.LeasePaymentMethod;
 import com.propertyvista.portal.rpc.portal.web.dto.PaymentMethodDTO;
 import com.propertyvista.portal.web.client.themes.BlockMixin;
 import com.propertyvista.portal.web.client.themes.EntityViewTheme;
-import com.propertyvista.portal.web.client.ui.AbstractViewer;
+import com.propertyvista.portal.web.client.ui.AbstractViewerView;
 import com.propertyvista.portal.web.client.ui.CPortalEntityForm;
 import com.propertyvista.portal.web.client.ui.util.decorators.FormDecoratorBuilder;
 
@@ -43,9 +43,9 @@ public class PaymentMethodConfirmationForm extends CPortalEntityForm<PaymentMeth
 
     private static final I18n i18n = I18n.get(PaymentMethodConfirmationForm.class);
 
-    private final AbstractViewer<PaymentMethodDTO> view;
+    private final AbstractViewerView<PaymentMethodDTO> view;
 
-    public PaymentMethodConfirmationForm(AbstractViewer<PaymentMethodDTO> view) {
+    public PaymentMethodConfirmationForm(AbstractViewerView<PaymentMethodDTO> view) {
         super(PaymentMethodDTO.class, null, i18n.tr("New Payment Method Submitted Successfully!"), ThemeColor.contrast4);
         this.view = view;
         setViewable(true);

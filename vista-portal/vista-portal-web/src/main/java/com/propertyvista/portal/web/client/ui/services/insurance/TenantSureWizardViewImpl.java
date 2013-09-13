@@ -18,9 +18,9 @@ import com.pyx4j.i18n.shared.I18n;
 import com.propertyvista.domain.contact.AddressSimple;
 import com.propertyvista.portal.rpc.portal.web.dto.insurance.TenantSureAgreementDTO;
 import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.tenantsure.TenantSureQuoteDTO;
-import com.propertyvista.portal.web.client.ui.AbstractWizard;
+import com.propertyvista.portal.web.client.ui.AbstractWizardView;
 
-public class TenantSureWizardViewImpl extends AbstractWizard<TenantSureAgreementDTO> implements TenantSureWizardView {
+public class TenantSureWizardViewImpl extends AbstractWizardView<TenantSureAgreementDTO> implements TenantSureWizardView {
 
     private static final I18n i18n = I18n.get(TenantSureWizardViewImpl.class);
 
