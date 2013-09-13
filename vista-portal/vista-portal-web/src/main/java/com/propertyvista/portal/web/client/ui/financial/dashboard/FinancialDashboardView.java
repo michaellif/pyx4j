@@ -47,16 +47,16 @@ public interface FinancialDashboardView extends IsView {
 
     void setPresenter(FinancialDashboardPresenter presenter);
 
-    void populate(BillingSummaryDTO result);
+    void populate(BillingSummaryDTO value);
 
-    void populate(AutoPaySummaryDTO result);
+    void populate(AutoPaySummaryDTO value);
 
-    void populate(LatestActivitiesDTO result);
+    void populate(LatestActivitiesDTO value);
 
-    void populate(PaymentMethodSummaryDTO result);
+    void populate(PaymentMethodSummaryDTO value);
 
-    void populate(BillingHistoryDTO result);
+    void populate(BillingHistoryDTO value);
 
-    void populate(TransactionHistoryDTO result);
+    void populate(TransactionHistoryDTO value);
 
 }

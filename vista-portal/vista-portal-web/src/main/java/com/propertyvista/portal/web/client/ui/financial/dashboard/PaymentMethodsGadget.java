@@ -51,24 +51,24 @@ public class PaymentMethodsGadget extends AbstractGadget<FinancialDashboardViewI
 
     private static final I18n i18n = I18n.get(PaymentMethodsGadget.class);
 
-    private final PaymentMethodListView paymentMethodListView;
+    private final PaymentMethodsView view;
 
     PaymentMethodsGadget(FinancialDashboardViewImpl form) {
         super(form, PortalImages.INSTANCE.billingIcon(), i18n.tr("Payment Methods"), ThemeColor.contrast4);
         setActionsToolbar(new PaymentMethodsToolbar());
 
-        paymentMethodListView = new PaymentMethodListView();
-        paymentMethodListView.setViewable(true);
-        paymentMethodListView.initContent();
+        view = new PaymentMethodsView();
+        view.setViewable(true);
+        view.initContent();
 
-        SimplePanel contentPanel = new SimplePanel(paymentMethodListView.asWidget());
+        SimplePanel contentPanel = new SimplePanel(view.asWidget());
         contentPanel.getElement().getStyle().setTextAlign(TextAlign.CENTER);
 
         setContent(contentPanel);
     }
 
     protected void populate(PaymentMethodSummaryDTO value) {
-        paymentMethodListView.populate(value);
+        view.populate(value);
     }
 
     class PaymentMethodsToolbar extends Toolbar {
@@ -84,17 +84,12 @@ public class PaymentMethodsGadget extends AbstractGadget<FinancialDashboardViewI
         }
     }
 
-    class PaymentMethodListView extends CEntityForm<PaymentMethodSummaryDTO> {
+    class PaymentMethodsView extends CEntityForm<PaymentMethodSummaryDTO> {
 
-        private final BasicFlexFormPanel mainPanel;
-
-        public PaymentMethodListView() {
+        public PaymentMethodsView() {
             super(PaymentMethodSummaryDTO.class);
 
-            mainPanel = new BasicFlexFormPanel();
-
             doLayout(LayoutType.getLayoutType(Window.getClientWidth()));
-
             AppSite.getEventBus().addHandler(LayoutChangeEvent.TYPE, new LayoutChangeHandler() {
                 @Override
                 public void onLayoutChangeRerquest(LayoutChangeEvent event) {
@@ -109,11 +104,12 @@ public class PaymentMethodsGadget extends AbstractGadget<FinancialDashboardViewI
 
         @Override
         public IsWidget createContent() {
+            BasicFlexFormPanel content = new BasicFlexFormPanel();
             int row = -1;
 
-            mainPanel.setWidget(++row, 0, inject(proto().paymentMethods(), new PaymentMethodFolder()));
+            content.setWidget(++row, 0, inject(proto().paymentMethods(), new PaymentMethodFolder()));
 
-            return mainPanel;
+            return content;
         }
     }
 

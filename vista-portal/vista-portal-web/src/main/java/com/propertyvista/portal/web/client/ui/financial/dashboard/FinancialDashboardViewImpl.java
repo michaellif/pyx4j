@@ -91,35 +91,34 @@ public class FinancialDashboardViewImpl extends FlowPanel implements FinancialDa
     }
 
     @Override
-    public void populate(BillingSummaryDTO result) {
-        billingSummarygGadget.populate(result);
+    public void populate(BillingSummaryDTO value) {
+        billingSummarygGadget.populate(value);
     }
 
     @Override
-    public void populate(AutoPaySummaryDTO result) {
-        autoPayAgreementsGadget.populate(result);
+    public void populate(AutoPaySummaryDTO value) {
+        autoPayAgreementsGadget.populate(value);
     }
 
     @Override
-    public void populate(PaymentMethodSummaryDTO result) {
-        paymentMethodsGadget.populate(result);
+    public void populate(PaymentMethodSummaryDTO value) {
+        paymentMethodsGadget.populate(value);
     }
 
     @Override
-    public void populate(BillingHistoryDTO result) {
+    public void populate(BillingHistoryDTO value) {
         // TODO Auto-generated method stub
 
     }
 
     @Override
-    public void populate(TransactionHistoryDTO result) {
+    public void populate(TransactionHistoryDTO value) {
         // TODO Auto-generated method stub
 
     }
 
     @Override
-    public void populate(LatestActivitiesDTO result) {
-        // TODO Auto-generated method stub
-
+    public void populate(LatestActivitiesDTO value) {
+        latestActivitiesGadget.populate(value);
     }
 }

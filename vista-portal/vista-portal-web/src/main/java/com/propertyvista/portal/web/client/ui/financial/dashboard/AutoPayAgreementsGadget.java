@@ -57,24 +57,24 @@ public class AutoPayAgreementsGadget extends AbstractGadget<FinancialDashboardVi
 
     private static final I18n i18n = I18n.get(AutoPayAgreementsGadget.class);
 
-    private final AutoPayListView autoPayListView;
+    private final AutoPaysView view;
 
     AutoPayAgreementsGadget(FinancialDashboardViewImpl dashboardView) {
         super(dashboardView, PortalImages.INSTANCE.billingIcon(), i18n.tr("Auto Pay Agreements"), ThemeColor.contrast4);
         setActionsToolbar(new AutoPayAgreementsToolbar());
 
-        autoPayListView = new AutoPayListView();
-        autoPayListView.setViewable(true);
-        autoPayListView.initContent();
+        view = new AutoPaysView();
+        view.setViewable(true);
+        view.initContent();
 
-        SimplePanel contentPanel = new SimplePanel(autoPayListView.asWidget());
+        SimplePanel contentPanel = new SimplePanel(view.asWidget());
         contentPanel.getElement().getStyle().setTextAlign(TextAlign.CENTER);
 
         setContent(contentPanel);
     }
 
     protected void populate(AutoPaySummaryDTO value) {
-        autoPayListView.populate(value);
+        view.populate(value);
     }
 
     class AutoPayAgreementsToolbar extends Toolbar {
@@ -90,11 +90,11 @@ public class AutoPayAgreementsGadget extends AbstractGadget<FinancialDashboardVi
         }
     }
 
-    class AutoPayListView extends CEntityForm<AutoPaySummaryDTO> {
+    class AutoPaysView extends CEntityForm<AutoPaySummaryDTO> {
 
         private final BasicFlexFormPanel mainPanel;
 
-        public AutoPayListView() {
+        public AutoPaysView() {
             super(AutoPaySummaryDTO.class);
 
             mainPanel = new BasicFlexFormPanel();

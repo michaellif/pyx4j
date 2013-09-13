@@ -47,17 +47,17 @@ public class BillingSummaryGadget extends AbstractGadget<FinancialDashboardViewI
 
     private static final I18n i18n = I18n.get(BillingSummaryGadget.class);
 
-    private final BillingViewer billingViewer;
+    private final BillingView view;
 
     BillingSummaryGadget(FinancialDashboardViewImpl viewer) {
         super(viewer, PortalImages.INSTANCE.billingIcon(), i18n.tr("My Billing Summary"), ThemeColor.contrast4);
         setActionsToolbar(new BillingToolbar());
 
-        billingViewer = new BillingViewer();
-        billingViewer.setViewable(true);
-        billingViewer.initContent();
+        view = new BillingView();
+        view.setViewable(true);
+        view.initContent();
 
-        SimplePanel contentPanel = new SimplePanel(billingViewer.asWidget());
+        SimplePanel contentPanel = new SimplePanel(view.asWidget());
         contentPanel.getElement().getStyle().setTextAlign(TextAlign.CENTER);
 
         setContent(contentPanel);
@@ -65,7 +65,7 @@ public class BillingSummaryGadget extends AbstractGadget<FinancialDashboardViewI
     }
 
     protected void populate(BillingSummaryDTO value) {
-        billingViewer.populate(value);
+        view.populate(value);
     }
 
     class BillingToolbar extends Toolbar {
@@ -82,13 +82,13 @@ public class BillingSummaryGadget extends AbstractGadget<FinancialDashboardViewI
         }
     }
 
-    class BillingViewer extends CEntityForm<BillingSummaryDTO> {
+    class BillingView extends CEntityForm<BillingSummaryDTO> {
 
         private final BasicFlexFormPanel mainPanel;
 
         private final FlowPanel actionsPanel;
 
-        public BillingViewer() {
+        public BillingView() {
             super(BillingSummaryDTO.class);
 
             mainPanel = new BasicFlexFormPanel();

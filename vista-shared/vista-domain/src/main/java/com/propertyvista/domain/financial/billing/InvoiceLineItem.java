@@ -31,6 +31,7 @@ import com.pyx4j.entity.annotations.OrderColumn;
 import com.pyx4j.entity.annotations.Owner;
 import com.pyx4j.entity.annotations.ReadOnly;
 import com.pyx4j.entity.annotations.Table;
+import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
@@ -54,12 +55,15 @@ public interface InvoiceLineItem extends IEntity {
 
     BillingCycle billingCycle();
 
+    @ToString(index = 2)
     IPrimitive<String> description();
 
+    @ToString(index = 0)
     @Format("#,##0.00")
     @Editor(type = EditorType.money)
     IPrimitive<BigDecimal> amount();
 
+    @ToString(index = 1)
     IPrimitive<LogicalDate> postDate();
 
     @NotNull
