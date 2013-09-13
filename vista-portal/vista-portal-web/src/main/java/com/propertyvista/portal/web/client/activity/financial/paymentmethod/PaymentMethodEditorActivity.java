@@ -31,12 +31,10 @@ import com.propertyvista.portal.web.client.ui.financial.paymentmethod.PaymentMet
 
 public class PaymentMethodEditorActivity extends AbstractEditorActivity<LeasePaymentMethod> implements PaymentMethodEditorView.Presenter {
 
-    protected final PaymentMethodCrudService srv = GWT.create(PaymentMethodCrudService.class);
-
     private final Key entityId;
 
     public PaymentMethodEditorActivity(AppPlace place) {
-        super(PaymentMethodEditorView.class);
+        super(PaymentMethodEditorView.class, GWT.<PaymentMethodCrudService> create(PaymentMethodCrudService.class), LeasePaymentMethod.class);
 
         entityId = place.getItemId();
     }
@@ -47,7 +45,7 @@ public class PaymentMethodEditorActivity extends AbstractEditorActivity<LeasePay
         panel.setWidget(getView());
 
         assert (entityId != null);
-        srv.retrieve(new DefaultAsyncCallback<LeasePaymentMethod>() {
+        getService().retrieve(new DefaultAsyncCallback<LeasePaymentMethod>() {
             @Override
             public void onSuccess(LeasePaymentMethod result) {
                 getView().populate(result);
@@ -57,7 +55,7 @@ public class PaymentMethodEditorActivity extends AbstractEditorActivity<LeasePay
 
     @Override
     public void getCurrentAddress(final AsyncCallback<AddressSimple> callback) {
-        srv.getCurrentAddress(new DefaultAsyncCallback<AddressSimple>() {
+        ((PaymentMethodCrudService) getService()).getCurrentAddress(new DefaultAsyncCallback<AddressSimple>() {
             @Override
             public void onSuccess(AddressSimple result) {
                 callback.onSuccess(result);
