@@ -35,17 +35,17 @@ import com.propertyvista.domain.payment.LeasePaymentMethod;
 import com.propertyvista.portal.rpc.portal.web.dto.PaymentMethodDTO;
 import com.propertyvista.portal.web.client.themes.BlockMixin;
 import com.propertyvista.portal.web.client.themes.EntityViewTheme;
-import com.propertyvista.portal.web.client.ui.AbstractViewerView;
 import com.propertyvista.portal.web.client.ui.CPortalEntityForm;
+import com.propertyvista.portal.web.client.ui.financial.paymentmethod.PaymentMethodConfirmationView.PaymentMethodConfirmationPresenter;
 import com.propertyvista.portal.web.client.ui.util.decorators.FormDecoratorBuilder;
 
 public class PaymentMethodConfirmationForm extends CPortalEntityForm<PaymentMethodDTO> {
 
     private static final I18n i18n = I18n.get(PaymentMethodConfirmationForm.class);
 
-    private final AbstractViewerView<PaymentMethodDTO> view;
+    private final PaymentMethodConfirmationView view;
 
-    public PaymentMethodConfirmationForm(AbstractViewerView<PaymentMethodDTO> view) {
+    public PaymentMethodConfirmationForm(PaymentMethodConfirmationView view) {
         super(PaymentMethodDTO.class, null, i18n.tr("New Payment Method Submitted Successfully!"), ThemeColor.contrast4);
         this.view = view;
         setViewable(true);
@@ -80,7 +80,7 @@ public class PaymentMethodConfirmationForm extends CPortalEntityForm<PaymentMeth
         text.add(new Anchor(i18n.tr("Sign up for Auto Pay today"), new Command() {
             @Override
             public void execute() {
-                ((PaymentMethodConfirmationView.Presenter) view.getPresenter()).goToAutoPay();
+                ((PaymentMethodConfirmationPresenter) view.getPresenter()).goToAutoPay();
             }
         }));
 

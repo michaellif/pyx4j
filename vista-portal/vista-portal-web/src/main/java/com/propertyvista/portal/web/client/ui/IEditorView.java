@@ -17,20 +17,21 @@ import com.pyx4j.entity.shared.IEntity;
 
 public interface IEditorView<E extends IEntity> extends IFormView<E> {
 
-    interface IEditorPresenter<E extends IEntity> extends EntityPresenter<E> {
+    public interface IEditorPresenter<E extends IEntity> extends IFormViewPresenter<E> {
 
+        void edit();
+
+        void save();
+
+        void cancel();
     }
 
     @Override
-    void setPresenter(EntityPresenter<E> presenter);
+    IEditorPresenter<E> getPresenter();
 
     @Override
     void populate(E value);
 
-    void edit();
-
-    void save();
-
-    void cancel();
+    void setEditable(boolean flag);
 
 }

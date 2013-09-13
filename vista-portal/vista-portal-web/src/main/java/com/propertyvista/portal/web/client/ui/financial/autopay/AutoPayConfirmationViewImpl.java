@@ -14,9 +14,9 @@
 package com.propertyvista.portal.web.client.ui.financial.autopay;
 
 import com.propertyvista.portal.rpc.portal.web.dto.AutoPayDTO;
-import com.propertyvista.portal.web.client.ui.AbstractViewerView;
+import com.propertyvista.portal.web.client.ui.AbstractFormView;
 
-public class AutoPayConfirmationViewImpl extends AbstractViewerView<AutoPayDTO> implements AutoPayConfirmationView {
+public class AutoPayConfirmationViewImpl extends AbstractFormView<AutoPayDTO> implements AutoPayConfirmationView {
 
     public AutoPayConfirmationViewImpl() {
         super();

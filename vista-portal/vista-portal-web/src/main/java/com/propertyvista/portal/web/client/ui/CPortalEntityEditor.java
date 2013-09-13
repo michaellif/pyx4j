@@ -21,6 +21,8 @@ import com.pyx4j.forms.client.ui.IEditableComponentFactory;
 import com.pyx4j.forms.client.ui.decorators.IDecorator;
 import com.pyx4j.forms.client.ui.form.EditableFormDecorator;
 
+import com.propertyvista.portal.web.client.ui.IEditorView.IEditorPresenter;
+
 public abstract class CPortalEntityEditor<E extends IEntity> extends CEntityForm<E> {
 
     private final IEditorView<? extends IEntity> view;
@@ -51,19 +53,20 @@ public abstract class CPortalEntityEditor<E extends IEntity> extends CEntityForm
     @Override
     protected IDecorator<?> createDecorator() {
         decorator = new EditableFormDecorator<E>() {
+
             @Override
             protected void onEdit() {
-                view.edit();
+                view.getPresenter().edit();
             }
 
             @Override
             protected void onSave() {
-                view.save();
+                view.getPresenter().save();
             }
 
             @Override
             protected void onCancel() {
-                view.cancel();
+                view.getPresenter().cancel();
             }
         };
 

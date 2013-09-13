@@ -23,32 +23,26 @@ import com.pyx4j.rpc.client.DefaultAsyncCallback;
 
 import com.propertyvista.portal.domain.dto.ResidentDTO;
 import com.propertyvista.portal.rpc.portal.services.resident.PersonalInfoCrudService;
-import com.propertyvista.portal.web.client.PortalWebSite;
-import com.propertyvista.portal.web.client.activity.SecurityAwareActivity;
+import com.propertyvista.portal.web.client.activity.AbstractEditorActivity;
 import com.propertyvista.portal.web.client.ui.profile.ProfileEditorView;
 import com.propertyvista.portal.web.client.ui.profile.ProfileEditorView.ProfileEditorPresenter;
 
-public class ProfileEditorActivity extends SecurityAwareActivity implements ProfileEditorPresenter {
-
-    private final ProfileEditorView view;
-
-    private final PersonalInfoCrudService srv;
+public class ProfileEditorActivity extends AbstractEditorActivity<ResidentDTO> implements ProfileEditorPresenter {
 
     public ProfileEditorActivity(Place place) {
-        this.view = PortalWebSite.getViewFactory().instantiate(ProfileEditorView.class);
-        this.view.setPresenter(this);
-        srv = GWT.create(PersonalInfoCrudService.class);
+        super(ProfileEditorView.class);
     }
 
     @Override
     public void start(AcceptsOneWidget panel, EventBus eventBus) {
         super.start(panel, eventBus);
-        panel.setWidget(view);
+        panel.setWidget(getView());
 
+        PersonalInfoCrudService srv = GWT.create(PersonalInfoCrudService.class);
         srv.retrieve(new DefaultAsyncCallback<ResidentDTO>() {
             @Override
             public void onSuccess(ResidentDTO result) {
-                view.populate(result);
+                getView().populate(result);
             }
         }, null, AbstractCrudService.RetrieveTarget.View);
     }

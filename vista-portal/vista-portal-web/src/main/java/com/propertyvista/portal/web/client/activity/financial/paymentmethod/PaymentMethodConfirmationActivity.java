@@ -31,7 +31,7 @@ import com.propertyvista.portal.web.client.PortalWebSite;
 import com.propertyvista.portal.web.client.activity.SecurityAwareActivity;
 import com.propertyvista.portal.web.client.ui.financial.paymentmethod.PaymentMethodConfirmationView;
 
-public class PaymentMethodConfirmationActivity extends SecurityAwareActivity implements PaymentMethodConfirmationView.Presenter {
+public class PaymentMethodConfirmationActivity extends SecurityAwareActivity implements PaymentMethodConfirmationView.PaymentMethodConfirmationPresenter {
 
     private final PaymentMethodConfirmationView view;
 

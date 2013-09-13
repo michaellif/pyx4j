@@ -14,62 +14,24 @@
 package com.propertyvista.portal.web.client.ui;
 
 import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.i18n.shared.I18n;
 
-public class AbstractEditorView<E extends IEntity> extends AbstractPortalPanel implements IEditorView<E> {
+public class AbstractEditorView<E extends IEntity> extends AbstractFormView<E> implements IEditorView<E> {
 
     protected static final I18n i18n = I18n.get(AbstractEditorView.class);
-
-    private EntityPresenter<E> presenter;
-
-    private CPortalEntityEditor<E> form;
 
     public AbstractEditorView() {
         super();
     }
 
-    protected void setForm(final CPortalEntityEditor<E> form) {
-        this.form = form;
-        if (form == null) {
-            setWidget(null);
-        } else {
-            form.initContent();
-            setWidget(form.asWidget());
-        }
+    @Override
+    public void setEditable(boolean flag) {
+        getForm().setViewable(!flag);
     }
 
     @Override
-    public void setPresenter(EntityPresenter<E> presenter) {
-        this.presenter = presenter;
+    public IEditorPresenter<E> getPresenter() {
+        return (IEditorPresenter<E>) super.getPresenter();
     }
 
-    @Override
-    public void populate(E value) {
-        form.reset();
-        form.populate(value);
-    }
-
-    public EntityPresenter<E> getPresenter() {
-        return presenter;
-    }
-
-    public CEntityForm<E> getForm() {
-        return form;
-    }
-
-    @Override
-    public void edit() {
-        form.setViewable(false);
-    }
-
-    @Override
-    public void save() {
-        form.setViewable(true);
-    }
-
-    @Override
-    public void cancel() {
-        form.setViewable(true);
-    }
 }
