@@ -98,6 +98,7 @@ public class ConfigurationProperties {
             cpc.initialPoolSize = c.getIntegerValue(connectionType.name() + ".initialPoolSize", cpc.initialPoolSize);
             cpc.minPoolSize = c.getIntegerValue(connectionType.name() + ".minPoolSize", cpc.minPoolSize);
             cpc.maxPoolSize = c.getIntegerValue(connectionType.name() + ".maxPoolSize", cpc.maxPoolSize);
+            cpc.checkoutTimeout = c.getSecondsValue(connectionType.name() + ".checkoutTimeout", cpc.checkoutTimeout);
             cpc.maxPoolPreparedStatements = c.getIntegerValue(connectionType.name() + ".maxPoolPreparedStatements", cpc.maxPoolPreparedStatements);
             cpc.unreturnedConnectionTimeout = c.getSecondsValue(connectionType.name() + ".unreturnedConnectionTimeout", cpc.unreturnedConnectionTimeout);
         }

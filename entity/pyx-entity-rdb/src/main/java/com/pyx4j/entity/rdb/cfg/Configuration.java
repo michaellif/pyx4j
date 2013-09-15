@@ -45,6 +45,8 @@ public interface Configuration extends IPersistenceConfiguration {
 
         public int maxPoolSize = 15;
 
+        public int checkoutTimeout = Consts.MIN2SEC;
+
         public int unreturnedConnectionTimeout = Consts.MIN2SEC;
 
         public int maxPoolPreparedStatements = 1000;
@@ -59,10 +61,12 @@ public interface Configuration extends IPersistenceConfiguration {
             case BackgroundProcess:
                 maxPoolSize = 20;
                 unreturnedConnectionTimeout = 1 * Consts.HOURS2SEC;
+                checkoutTimeout = 20 * Consts.MIN2SEC;
                 break;
             case TransactionProcessing:
                 maxPoolSize = 40;
                 unreturnedConnectionTimeout = 10 * Consts.MIN2SEC;
+                checkoutTimeout = 2 * Consts.MIN2SEC;
                 break;
             default:
                 break;
@@ -82,6 +86,16 @@ public interface Configuration extends IPersistenceConfiguration {
 
         public int maxPoolSize() {
             return maxPoolSize;
+        }
+
+        /**
+         * The number of seconds a client calling getConnection() will wait for a Connection to be checked-in or acquired when the pool is exhausted. Zero
+         * means wait indefinitely. Setting any positive value will cause the getConnection() call to time-out and break with an SQLException after the
+         * specified number of seconds.
+         * 
+         */
+        public int getCheckoutTimeout() {
+            return checkoutTimeout;
         }
 
         /**

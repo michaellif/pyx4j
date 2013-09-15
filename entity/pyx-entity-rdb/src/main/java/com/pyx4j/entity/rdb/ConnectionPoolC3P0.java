@@ -36,8 +36,8 @@ import com.mchange.v2.c3p0.impl.C3P0ImplUtils;
 import com.pyx4j.commons.Consts;
 import com.pyx4j.config.server.ServerSideConfiguration;
 import com.pyx4j.entity.rdb.cfg.Configuration;
-import com.pyx4j.entity.rdb.cfg.ConnectionPoolType;
 import com.pyx4j.entity.rdb.cfg.Configuration.ConnectionPoolConfiguration;
+import com.pyx4j.entity.rdb.cfg.ConnectionPoolType;
 
 public class ConnectionPoolC3P0 implements ConnectionPool {
 
@@ -63,6 +63,8 @@ public class ConnectionPoolC3P0 implements ConnectionPool {
             dataSource.setMinPoolSize(cpc.minPoolSize());
             dataSource.setMaxPoolSize(cpc.maxPoolSize());
             dataSource.setMaxStatements(cpc.maxPoolPreparedStatements());
+
+            dataSource.setCheckoutTimeout(Consts.SEC2MILLISECONDS * cpc.getCheckoutTimeout());
 
             dataSource.setUnreturnedConnectionTimeout(cpc.unreturnedConnectionTimeout());
             dataSource.setDebugUnreturnedConnectionStackTraces(true);
