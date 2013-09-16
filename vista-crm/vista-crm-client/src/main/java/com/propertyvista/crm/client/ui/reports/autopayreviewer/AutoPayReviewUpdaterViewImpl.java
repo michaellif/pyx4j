@@ -28,6 +28,7 @@ import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.IsView;
 import com.pyx4j.site.client.ui.prime.AbstractPrimePane;
 import com.pyx4j.widgets.client.Button;
+import com.pyx4j.widgets.client.dialog.MessageDialog;
 
 import com.propertyvista.crm.client.ui.reports.autopay.AutoPayChangesReportSettingsForm;
 import com.propertyvista.crm.rpc.dto.financial.autopayreview.PapReviewDTO;
@@ -121,6 +122,7 @@ public class AutoPayReviewUpdaterViewImpl extends AbstractPrimePane implements A
 
     @Override
     public void setPresenter(AutoPayReviewUpdaterView.Presenter presenter) {
+        this.papReviewHolderForm.setVisited(false);
         this.presenter = presenter;
     }
 
@@ -142,7 +144,12 @@ public class AutoPayReviewUpdaterViewImpl extends AbstractPrimePane implements A
 
     private void acceptMarked() {
         visibleRange = new Range(0, PAGE_INCREMENT);
-        presenter.acceptMarked();
+        papReviewHolderForm.setUnconditionalValidationErrorRendering(true);
+        if (papReviewHolderForm.isValid()) {
+            presenter.acceptMarked();
+        } else {
+            MessageDialog.info(i18n.tr("Please fix the validation errors"));
+        }
     }
 
     private void search() {
