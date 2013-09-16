@@ -29,6 +29,7 @@ public class AbstractEditorView<E extends IEntity> extends AbstractFormView<E> i
     @Override
     public void setEditable(boolean flag) {
         getForm().setViewable(!flag);
+        getForm().setEditable(flag);
     }
 
     @Override
