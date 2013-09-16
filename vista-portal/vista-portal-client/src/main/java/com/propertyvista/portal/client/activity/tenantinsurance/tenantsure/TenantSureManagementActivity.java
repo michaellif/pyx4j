@@ -27,7 +27,7 @@ import com.propertyvista.portal.client.PortalSite;
 import com.propertyvista.portal.client.ui.residents.tenantinsurance.tenantsure.views.TenantSureManagementView;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap;
 import com.propertyvista.portal.rpc.portal.services.resident.TenantSureManagementService;
-import com.propertyvista.portal.rpc.portal.web.dto.insurance.TenantSureInsuranceStatusDTO;
+import com.propertyvista.portal.rpc.portal.web.dto.insurance.status.TenantSureInsuranceStatusDTO;
 
 public class TenantSureManagementActivity extends AbstractActivity implements TenantSureManagementView.Presenter {
 

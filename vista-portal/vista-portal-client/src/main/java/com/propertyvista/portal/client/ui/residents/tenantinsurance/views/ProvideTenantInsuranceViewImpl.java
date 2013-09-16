@@ -30,10 +30,10 @@ import com.pyx4j.widgets.client.Label;
 
 import com.propertyvista.portal.client.ui.residents.tenantinsurance.dashboard.statusviewers.OtherProviderTenantInsuranceStatusViewer;
 import com.propertyvista.portal.client.ui.residents.tenantinsurance.tenantsure.forms.TenantSureLogo;
-import com.propertyvista.portal.rpc.portal.web.dto.insurance.InsuranceStatusDTO;
-import com.propertyvista.portal.rpc.portal.web.dto.insurance.NoInsuranceStatusDTO;
-import com.propertyvista.portal.rpc.portal.web.dto.insurance.OtherProviderInsuranceStatusDTO;
-import com.propertyvista.portal.rpc.portal.web.dto.insurance.TenantSureInsuranceStatusDTO;
+import com.propertyvista.portal.rpc.portal.web.dto.insurance.status.InsuranceStatusDTO;
+import com.propertyvista.portal.rpc.portal.web.dto.insurance.status.NoInsuranceStatusDTO;
+import com.propertyvista.portal.rpc.portal.web.dto.insurance.status.OtherProviderInsuranceStatusDTO;
+import com.propertyvista.portal.rpc.portal.web.dto.insurance.status.TenantSureInsuranceStatusDTO;
 
 public class ProvideTenantInsuranceViewImpl extends Composite implements ProvideTenantInsuranceView {
 

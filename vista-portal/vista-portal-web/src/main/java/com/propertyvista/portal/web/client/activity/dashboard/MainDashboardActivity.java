@@ -28,7 +28,7 @@ import com.propertyvista.portal.rpc.portal.PortalSiteMap.Resident.Financial;
 import com.propertyvista.portal.rpc.portal.web.dto.BillingSummaryDTO;
 import com.propertyvista.portal.rpc.portal.web.dto.MaintenanceSummaryDTO;
 import com.propertyvista.portal.rpc.portal.web.dto.TenantProfileSummaryDTO;
-import com.propertyvista.portal.rpc.portal.web.dto.insurance.InsuranceStatusDTO;
+import com.propertyvista.portal.rpc.portal.web.dto.insurance.status.InsuranceStatusDTO;
 import com.propertyvista.portal.rpc.portal.web.services.financial.BillingService;
 import com.propertyvista.portal.rpc.portal.web.services.maintenance.MaintenanceService;
 import com.propertyvista.portal.rpc.portal.web.services.profile.ProfileService;

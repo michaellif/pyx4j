@@ -11,7 +11,7 @@
  * @author ArtyomB
  * @version $Id$
  */
-package com.propertyvista.portal.rpc.portal.web.dto.insurance;
+package com.propertyvista.portal.rpc.portal.web.dto.insurance.status;
 
 import java.math.BigDecimal;
 

@@ -31,7 +31,7 @@ import com.propertyvista.common.client.ui.components.tenantinsurance.MoneyComboB
 import com.propertyvista.portal.client.ui.residents.tenantinsurance.tenantsure.forms.TenantSureStatusForm;
 import com.propertyvista.portal.client.ui.residents.tenantinsurance.tenantsure.resources.TenantSureResources;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap;
-import com.propertyvista.portal.rpc.portal.web.dto.insurance.TenantSureInsuranceStatusDTO;
+import com.propertyvista.portal.rpc.portal.web.dto.insurance.status.TenantSureInsuranceStatusDTO;
 
 public class TenantSureInsuranceStatusViewer extends CViewer<TenantSureInsuranceStatusDTO> {
 

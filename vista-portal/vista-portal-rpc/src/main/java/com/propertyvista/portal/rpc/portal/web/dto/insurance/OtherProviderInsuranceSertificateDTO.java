@@ -7,18 +7,12 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on 2012-11-08
- * @author ArtyomB
+ * Created on Sep 16, 2013
+ * @author michaellif
  * @version $Id$
  */
 package com.propertyvista.portal.rpc.portal.web.dto.insurance;
 
-import com.pyx4j.entity.annotations.AbstractEntity;
-import com.pyx4j.entity.annotations.Transient;
-import com.pyx4j.entity.shared.IEntity;
-
-@Transient
-@AbstractEntity
-public interface InsuranceStatusDTO extends IEntity {
+public class OtherProviderInsuranceSertificateDTO {
 
 }

@@ -19,7 +19,7 @@ import com.pyx4j.config.server.ServerSideFactory;
 
 import com.propertyvista.biz.tenant.insurance.TenantInsuranceFacade;
 import com.propertyvista.domain.tenant.lease.Tenant;
-import com.propertyvista.portal.rpc.portal.web.dto.insurance.InsuranceStatusDTO;
+import com.propertyvista.portal.rpc.portal.web.dto.insurance.status.InsuranceStatusDTO;
 import com.propertyvista.portal.rpc.portal.web.services.services.InsuranceService;
 import com.propertyvista.portal.server.portal.TenantAppContext;
 

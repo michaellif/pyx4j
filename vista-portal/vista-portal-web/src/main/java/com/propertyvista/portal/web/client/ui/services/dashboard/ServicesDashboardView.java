@@ -15,7 +15,7 @@ package com.propertyvista.portal.web.client.ui.services.dashboard;
 
 import com.pyx4j.site.client.IsView;
 
-import com.propertyvista.portal.rpc.portal.web.dto.insurance.InsuranceStatusDTO;
+import com.propertyvista.portal.rpc.portal.web.dto.insurance.status.InsuranceStatusDTO;
 
 public interface ServicesDashboardView extends IsView {
 

@@ -17,7 +17,7 @@ import com.google.gwt.user.client.ui.FlowPanel;
 
 import com.pyx4j.i18n.shared.I18n;
 
-import com.propertyvista.portal.rpc.portal.web.dto.insurance.InsuranceStatusDTO;
+import com.propertyvista.portal.rpc.portal.web.dto.insurance.status.InsuranceStatusDTO;
 import com.propertyvista.portal.web.client.themes.DashboardTheme;
 
 public class ServicesDashboardViewImpl extends FlowPanel implements ServicesDashboardView {

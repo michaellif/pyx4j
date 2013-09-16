@@ -27,7 +27,7 @@ import com.propertyvista.domain.payment.InsurancePaymentMethod;
 import com.propertyvista.domain.tenant.lease.Tenant;
 import com.propertyvista.operations.rpc.VistaSystemMaintenanceState;
 import com.propertyvista.portal.rpc.portal.services.resident.TenantSureManagementService;
-import com.propertyvista.portal.rpc.portal.web.dto.insurance.TenantSureInsuranceStatusDTO;
+import com.propertyvista.portal.rpc.portal.web.dto.insurance.status.TenantSureInsuranceStatusDTO;
 import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.tenantsure.errors.TenantSureOnMaintenanceException;
 import com.propertyvista.portal.server.portal.TenantAppContext;
 

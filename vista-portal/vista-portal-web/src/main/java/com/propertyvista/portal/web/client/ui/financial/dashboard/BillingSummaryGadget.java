@@ -22,7 +22,6 @@ import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.IsWidget;
-import com.google.gwt.user.client.ui.SimplePanel;
 
 import com.pyx4j.commons.css.StyleManager;
 import com.pyx4j.commons.css.ThemeColor;
@@ -49,6 +48,8 @@ public class BillingSummaryGadget extends AbstractGadget<FinancialDashboardViewI
 
     private final BillingView view;
 
+    private final FlowPanel actionsPanel;
+
     BillingSummaryGadget(FinancialDashboardViewImpl viewer) {
         super(viewer, PortalImages.INSTANCE.billingIcon(), i18n.tr("My Billing Summary"), ThemeColor.contrast4);
         setActionsToolbar(new BillingToolbar());
@@ -57,19 +58,72 @@ public class BillingSummaryGadget extends AbstractGadget<FinancialDashboardViewI
         view.setViewable(true);
         view.initContent();
 
-        SimplePanel contentPanel = new SimplePanel(view.asWidget());
+        FlowPanel contentPanel = new FlowPanel();
         contentPanel.getElement().getStyle().setTextAlign(TextAlign.CENTER);
-
         setContent(contentPanel);
 
+        contentPanel.add(view);
+
+        actionsPanel = new FlowPanel();
+        contentPanel.add(actionsPanel);
+
+        if (!VistaFeatures.instance().yardiIntegration()) {
+            Anchor viewBillAnchor = new Anchor("View my Current Bill", new Command() {
+
+                @Override
+                public void execute() {
+                    getGadgetView().getPresenter().viewCurrentBill();
+                }
+            });
+            actionsPanel.add(viewBillAnchor);
+        }
+
+        doLayout(LayoutType.getLayoutType(Window.getClientWidth()));
+
+        AppSite.getEventBus().addHandler(LayoutChangeEvent.TYPE, new LayoutChangeHandler() {
+
+            @Override
+            public void onLayoutChangeRerquest(LayoutChangeEvent event) {
+                doLayout(event.getLayoutType());
+            }
+
+        });
     }
 
     protected void populate(BillingSummaryDTO value) {
         view.populate(value);
     }
 
+    private void doLayout(LayoutType layoutType) {
+        switch (layoutType) {
+        case phonePortrait:
+        case phoneLandscape:
+        case tabletPortrait:
+            view.asWidget().getElement().getStyle().setFloat(Float.NONE);
+            view.asWidget().getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
+            view.asWidget().getElement().getStyle().setVerticalAlign(VerticalAlign.TOP);
+            view.asWidget().setWidth("100%");
+
+            actionsPanel.getElement().getStyle().setFloat(Float.NONE);
+            actionsPanel.getElement().getStyle().setMarginTop(10, Unit.PX);
+            actionsPanel.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
+            actionsPanel.getElement().getStyle().setVerticalAlign(VerticalAlign.TOP);
+            break;
+        default:
+            view.asWidget().getElement().getStyle().setDisplay(Display.BLOCK);
+            view.asWidget().getElement().getStyle().setFloat(Float.LEFT);
+            view.asWidget().setWidth("auto");
+
+            actionsPanel.getElement().getStyle().setDisplay(Display.BLOCK);
+            actionsPanel.getElement().getStyle().setFloat(Float.RIGHT);
+
+            break;
+        }
+    }
+
     class BillingToolbar extends Toolbar {
         public BillingToolbar() {
+
             Button paymentButton = new Button("Make a Payment", new Command() {
 
                 @Override
@@ -86,78 +140,22 @@ public class BillingSummaryGadget extends AbstractGadget<FinancialDashboardViewI
 
         private final BasicFlexFormPanel mainPanel;
 
-        private final FlowPanel actionsPanel;
-
         public BillingView() {
             super(BillingSummaryDTO.class);
 
             mainPanel = new BasicFlexFormPanel();
 
-            actionsPanel = new FlowPanel();
-
-            doLayout(LayoutType.getLayoutType(Window.getClientWidth()));
-
-            AppSite.getEventBus().addHandler(LayoutChangeEvent.TYPE, new LayoutChangeHandler() {
-
-                @Override
-                public void onLayoutChangeRerquest(LayoutChangeEvent event) {
-                    doLayout(event.getLayoutType());
-                }
-
-            });
-        }
-
-        private void doLayout(LayoutType layoutType) {
-            switch (layoutType) {
-            case phonePortrait:
-            case phoneLandscape:
-            case tabletPortrait:
-                mainPanel.getElement().getStyle().setFloat(Float.NONE);
-                mainPanel.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
-                mainPanel.getElement().getStyle().setVerticalAlign(VerticalAlign.TOP);
-                mainPanel.setWidth("100%");
-
-                actionsPanel.getElement().getStyle().setFloat(Float.NONE);
-                actionsPanel.getElement().getStyle().setMarginTop(10, Unit.PX);
-                actionsPanel.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
-                actionsPanel.getElement().getStyle().setVerticalAlign(VerticalAlign.TOP);
-                break;
-            default:
-                mainPanel.getElement().getStyle().setDisplay(Display.BLOCK);
-                mainPanel.getElement().getStyle().setFloat(Float.LEFT);
-                mainPanel.setWidth("auto");
-
-                actionsPanel.getElement().getStyle().setDisplay(Display.BLOCK);
-                actionsPanel.getElement().getStyle().setFloat(Float.RIGHT);
-
-                break;
-            }
         }
 
         @Override
         public IsWidget createContent() {
-            FlowPanel contentPanel = new FlowPanel();
 
             mainPanel.setWidth("auto");
             mainPanel.getElement().getStyle().setProperty("margin", "0 5%");
-            mainPanel.setWidget(0, 0, new FormDecoratorBuilder(inject(proto().currentBalance()), "140px", "100px", "120px").build());
-            mainPanel.setWidget(1, 0, new FormDecoratorBuilder(inject(proto().dueDate()), "140px", "100px", "120px").build());
+            mainPanel.setWidget(0, 0, new FormDecoratorBuilder(inject(proto().currentBalance()), "140px").build());
+            mainPanel.setWidget(1, 0, new FormDecoratorBuilder(inject(proto().dueDate()), "140px").build());
 
-            contentPanel.add(mainPanel);
-            contentPanel.add(actionsPanel);
-
-            if (!VistaFeatures.instance().yardiIntegration()) {
-                Anchor viewBillAnchor = new Anchor("View my Current Bill", new Command() {
-
-                    @Override
-                    public void execute() {
-                        getGadgetView().getPresenter().viewCurrentBill();
-                    }
-                });
-                actionsPanel.add(viewBillAnchor);
-            }
-
-            return contentPanel;
+            return mainPanel;
         }
     }
 }

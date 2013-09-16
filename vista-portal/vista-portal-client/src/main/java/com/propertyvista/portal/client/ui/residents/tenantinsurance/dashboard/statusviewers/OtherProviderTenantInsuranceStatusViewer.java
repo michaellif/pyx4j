@@ -20,7 +20,7 @@ import com.google.gwt.user.client.ui.Label;
 import com.pyx4j.forms.client.ui.CViewer;
 import com.pyx4j.i18n.shared.I18n;
 
-import com.propertyvista.portal.rpc.portal.web.dto.insurance.OtherProviderInsuranceStatusDTO;
+import com.propertyvista.portal.rpc.portal.web.dto.insurance.status.OtherProviderInsuranceStatusDTO;
 
 public class OtherProviderTenantInsuranceStatusViewer extends CViewer<OtherProviderInsuranceStatusDTO> {
 

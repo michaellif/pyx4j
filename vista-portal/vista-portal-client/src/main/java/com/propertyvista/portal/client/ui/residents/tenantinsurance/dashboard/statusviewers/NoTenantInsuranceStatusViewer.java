@@ -25,7 +25,7 @@ import com.pyx4j.site.client.AppSite;
 import com.pyx4j.widgets.client.Anchor;
 
 import com.propertyvista.portal.rpc.portal.PortalSiteMap;
-import com.propertyvista.portal.rpc.portal.web.dto.insurance.NoInsuranceStatusDTO;
+import com.propertyvista.portal.rpc.portal.web.dto.insurance.status.NoInsuranceStatusDTO;
 import com.propertyvista.shared.config.VistaFeatures;
 
 public class NoTenantInsuranceStatusViewer extends CViewer<NoInsuranceStatusDTO> {
