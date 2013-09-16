@@ -27,9 +27,7 @@ import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.resources.client.ImageResource;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.FlowPanel;
-import com.google.gwt.user.client.ui.HasOneWidget;
 import com.google.gwt.user.client.ui.IsWidget;
-import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.ProvidesResize;
 import com.google.gwt.user.client.ui.RequiresResize;
 import com.google.gwt.user.client.ui.SimplePanel;
@@ -71,7 +69,7 @@ public abstract class CEntityContainer<E extends IObject<?>> extends CContainer<
         }
 
         contentHolder = new SimplePanel();
-        contentHolder.asWidget().getElement().getStyle().setProperty("display", "inline");
+        contentHolder.asWidget().getElement().getStyle().setProperty("display", "inline-block");
         containerPanel.add(contentHolder);
     }
 
