@@ -25,7 +25,7 @@ import com.propertyvista.portal.client.PortalSite;
 import com.propertyvista.portal.client.ui.residents.tenantinsurance.views.TenantInsuranceCoveredByOtherTenantView;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap;
 import com.propertyvista.portal.rpc.portal.services.resident.TenantInsuranceService;
-import com.propertyvista.portal.rpc.portal.web.dto.insurance.HasInsuranceDTO;
+import com.propertyvista.portal.rpc.portal.web.dto.insurance.ExtantInsuranceStatusDTO;
 import com.propertyvista.portal.rpc.portal.web.dto.insurance.InsuranceStatusDTO;
 import com.propertyvista.portal.rpc.portal.web.dto.insurance.NoInsuranceStatusDTO;
 import com.propertyvista.portal.rpc.portal.web.dto.insurance.OtherProviderInsuranceStatusDTO;
@@ -48,8 +48,8 @@ public class TenantInsuranceActivity extends AbstractActivity {
             public void onSuccess(InsuranceStatusDTO status) {
                 if (status instanceof NoInsuranceStatusDTO) {
                     AppSite.getPlaceController().goTo(new PortalSiteMap.Resident.ResidentServices.TenantInsurance.ProvideTenantInsurance());
-                } else if (status instanceof HasInsuranceDTO) {
-                    if (((HasInsuranceDTO) status).isOwner().isBooleanTrue()) {
+                } else if (status instanceof ExtantInsuranceStatusDTO) {
+                    if (((ExtantInsuranceStatusDTO) status).isOwner().isBooleanTrue()) {
                         if (status instanceof TenantSureInsuranceStatusDTO) {
                             AppSite.getPlaceController().goTo(new PortalSiteMap.Resident.ResidentServices.TenantInsurance.TenantSure.Management());
                         } else if (status instanceof OtherProviderInsuranceStatusDTO) {

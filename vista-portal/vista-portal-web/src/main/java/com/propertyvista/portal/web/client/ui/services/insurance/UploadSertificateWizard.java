@@ -37,12 +37,12 @@ import com.propertyvista.domain.media.InsuranceCertificateDocument;
 import com.propertyvista.domain.tenant.Customer;
 import com.propertyvista.domain.tenant.insurance.InsuranceGeneric;
 import com.propertyvista.domain.tenant.lease.Tenant;
-import com.propertyvista.portal.web.client.ui.CPortalEntityEditor;
+import com.propertyvista.portal.web.client.ui.CPortalEntityWizard;
 import com.propertyvista.portal.web.client.ui.util.decorators.FormDecoratorBuilder;
 
-public class OtherInsuranceEditor extends CPortalEntityEditor<InsuranceGeneric> {
+public class UploadSertificateWizard extends CPortalEntityWizard<InsuranceGeneric> {
 
-    private final static I18n i18n = I18n.get(OtherInsuranceEditor.class);
+    private final static I18n i18n = I18n.get(UploadSertificateWizard.class);
 
     public interface TenantOwnerClickHandler {
 
@@ -68,14 +68,14 @@ public class OtherInsuranceEditor extends CPortalEntityEditor<InsuranceGeneric> 
      * @param tenantOwnerClickHandler
      *            a handler for tenantOwner click (if not null will render tenant's name as a hyperlink that execs this handler on click)
      */
-    public OtherInsuranceEditor(OtherInsuranceEditorView view, boolean displayTenantOwner, TenantOwnerClickHandler tenantOwnerClickHandler) {
-        super(InsuranceGeneric.class, view, i18n.tr("Insurance Certificated"), ThemeColor.contrast3);
+    public UploadSertificateWizard(UploadSertificateWizardView view, boolean displayTenantOwner, TenantOwnerClickHandler tenantOwnerClickHandler) {
+        super(InsuranceGeneric.class, view, i18n.tr("Insurance Certificated"), i18n.tr("Submit"), ThemeColor.contrast3);
         this.minRequiredLiability = null;
         this.displayTenantOwner = displayTenantOwner;
         this.tenantOwnerClickHandler = tenantOwnerClickHandler;
     }
 
-    public OtherInsuranceEditor(OtherInsuranceEditorView view) {
+    public UploadSertificateWizard(UploadSertificateWizardView view) {
         this(view, false, null);
     }
 
@@ -89,7 +89,7 @@ public class OtherInsuranceEditor extends CPortalEntityEditor<InsuranceGeneric> 
                 comp.setNavigationCommand(new Command() {
                     @Override
                     public void execute() {
-                        OtherInsuranceEditor.this.tenantOwnerClickHandler.onTenantOwnerClicked(getValue().tenant().<Tenant> createIdentityStub());
+                        UploadSertificateWizard.this.tenantOwnerClickHandler.onTenantOwnerClicked(getValue().tenant().<Tenant> createIdentityStub());
                     }
                 });
             }
@@ -102,7 +102,7 @@ public class OtherInsuranceEditor extends CPortalEntityEditor<InsuranceGeneric> 
         get(proto().liabilityCoverage()).addValueValidator(new EditableValueValidator<BigDecimal>() {
             @Override
             public ValidationError isValid(CComponent<BigDecimal> component, BigDecimal value) {
-                if (OtherInsuranceEditor.this.minRequiredLiability != null && value != null && value.compareTo(minRequiredLiability) < 0) {
+                if (UploadSertificateWizard.this.minRequiredLiability != null && value != null && value.compareTo(minRequiredLiability) < 0) {
                     return new ValidationError(component, i18n.tr("The minimum required liability is {0,number,#,##0.00}", minRequiredLiability));
                 }
                 return null;

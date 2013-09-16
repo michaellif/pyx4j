@@ -32,7 +32,7 @@ import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.Button;
 import com.pyx4j.widgets.client.actionbar.Toolbar;
 
-import com.propertyvista.portal.rpc.portal.web.dto.insurance.HasInsuranceDTO;
+import com.propertyvista.portal.rpc.portal.web.dto.insurance.ExtantInsuranceStatusDTO;
 import com.propertyvista.portal.rpc.portal.web.dto.insurance.InsuranceStatusDTO;
 import com.propertyvista.portal.rpc.portal.web.dto.insurance.NoInsuranceStatusDTO;
 import com.propertyvista.portal.web.client.resources.PortalImages;
@@ -71,14 +71,19 @@ public class InsuranceGadget extends AbstractGadget<MainDashboardViewImpl> {
 
                 @Override
                 public void execute() {
-                    getGadgetView().getPresenter().getTenantSure();
+                    getGadgetView().getPresenter().buyTenantSure();
                 }
             });
-
             purchaseButton.getElement().getStyle().setProperty("background", StyleManager.getPalette().getThemeColor(ThemeColor.contrast3, 1));
             add(purchaseButton);
 
-            Button proofButton = new Button("Provide Proof of my Insurance");
+            Button proofButton = new Button("Provide Proof of my Insurance", new Command() {
+
+                @Override
+                public void execute() {
+                    getGadgetView().getPresenter().addThirdPartyTenantInsuranceCertificate();
+                }
+            });
             proofButton.getElement().getStyle().setProperty("background", StyleManager.getPalette().getThemeColor(ThemeColor.contrast3, 0.6));
             add(proofButton);
 
@@ -105,10 +110,10 @@ public class InsuranceGadget extends AbstractGadget<MainDashboardViewImpl> {
                 form = new NoInsuranceStatusForm();
                 form.initContent();
                 ((NoInsuranceStatusForm) form).populate(value.<NoInsuranceStatusDTO> cast());
-            } else if (value.isInstanceOf(HasInsuranceDTO.class)) {
+            } else if (value.isInstanceOf(ExtantInsuranceStatusDTO.class)) {
                 form = new HasInsuranceStatusForm();
                 form.initContent();
-                ((HasInsuranceStatusForm) form).populate(value.<HasInsuranceDTO> cast());
+                ((HasInsuranceStatusForm) form).populate(value.<ExtantInsuranceStatusDTO> cast());
             }
 
             if (form != null) {
@@ -155,10 +160,10 @@ public class InsuranceGadget extends AbstractGadget<MainDashboardViewImpl> {
 
     }
 
-    class HasInsuranceStatusForm extends CEntityForm<HasInsuranceDTO> {
+    class HasInsuranceStatusForm extends CEntityForm<ExtantInsuranceStatusDTO> {
 
         public HasInsuranceStatusForm() {
-            super(HasInsuranceDTO.class);
+            super(ExtantInsuranceStatusDTO.class);
         }
 
         @Override

@@ -63,6 +63,10 @@ public abstract class AbstractWizardView<E extends IEntity> extends AbstractPort
         return wizardForm.getValue();
     }
 
+    public CPortalEntityWizard<E> getWizard() {
+        return wizardForm;
+    }
+
     @Override
     public boolean onSaveFail(Throwable caught) {
         if (caught instanceof UniqueConstraintUserRuntimeException) {

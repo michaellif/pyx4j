@@ -16,17 +16,17 @@ package com.propertyvista.portal.web.client.ui.services.insurance;
 import java.math.BigDecimal;
 
 import com.propertyvista.domain.tenant.insurance.InsuranceGeneric;
-import com.propertyvista.portal.web.client.ui.AbstractEditorView;
+import com.propertyvista.portal.web.client.ui.AbstractWizardView;
 
-public class OtherInsuranceEditorViewImpl extends AbstractEditorView<InsuranceGeneric> implements OtherInsuranceEditorView {
+public class UploadSertificateWizardViewImpl extends AbstractWizardView<InsuranceGeneric> implements UploadSertificateWizardView {
 
-    public OtherInsuranceEditorViewImpl() {
-        setForm(new OtherInsuranceEditor(this));
+    public UploadSertificateWizardViewImpl() {
+        setWizard(new UploadSertificateWizard(this));
     }
 
     @Override
     public void setMinRequiredLiability(BigDecimal minRequiredLiability) {
-        ((OtherInsuranceEditor) getForm()).setMinRequiredLiability(minRequiredLiability);
+        ((UploadSertificateWizard) getWizard()).setMinRequiredLiability(minRequiredLiability);
     }
 
 }

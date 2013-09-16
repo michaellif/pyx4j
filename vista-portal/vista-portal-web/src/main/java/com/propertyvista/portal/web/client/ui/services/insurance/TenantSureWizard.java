@@ -19,11 +19,11 @@ import com.pyx4j.i18n.shared.I18n;
 import com.propertyvista.portal.rpc.portal.web.dto.insurance.TenantSureAgreementDTO;
 import com.propertyvista.portal.web.client.ui.CPortalEntityWizard;
 
-public class TenantSureWizardForm extends CPortalEntityWizard<TenantSureAgreementDTO> {
+public class TenantSureWizard extends CPortalEntityWizard<TenantSureAgreementDTO> {
 
-    private static final I18n i18n = I18n.get(TenantSureWizardForm.class);
+    private static final I18n i18n = I18n.get(TenantSureWizard.class);
 
-    public TenantSureWizardForm(TenantSureWizardView view, String endButtonCaption) {
+    public TenantSureWizard(TenantSureWizardView view, String endButtonCaption) {
         super(TenantSureAgreementDTO.class, view, i18n.tr("TenantSure Insurance"), endButtonCaption, ThemeColor.contrast3);
     }
 

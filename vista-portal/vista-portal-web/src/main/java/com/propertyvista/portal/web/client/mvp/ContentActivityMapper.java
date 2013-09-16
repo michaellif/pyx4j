@@ -35,8 +35,8 @@ import com.propertyvista.portal.web.client.activity.financial.autopay.AutoPayWiz
 import com.propertyvista.portal.web.client.activity.financial.dashboard.FinancialDashboardActivity;
 import com.propertyvista.portal.web.client.activity.financial.payment.PaymentConfirmationActivity;
 import com.propertyvista.portal.web.client.activity.financial.payment.PaymentWizardActivity;
-import com.propertyvista.portal.web.client.activity.financial.paymentmethod.PaymentMethodEditorActivity;
 import com.propertyvista.portal.web.client.activity.financial.paymentmethod.PaymentMethodConfirmationActivity;
+import com.propertyvista.portal.web.client.activity.financial.paymentmethod.PaymentMethodEditorActivity;
 import com.propertyvista.portal.web.client.activity.financial.paymentmethod.PaymentMethodWizardActivity;
 import com.propertyvista.portal.web.client.activity.login.LandingActivity;
 import com.propertyvista.portal.web.client.activity.login.LeaseContextSelectionActivity;
@@ -99,6 +99,8 @@ public class ContentActivityMapper implements AppActivityMapper {
                         activity = new AutoPayConfirmationActivity(appPlace);
 
                     } else if (appPlace instanceof PortalSiteMap.Resident.ResidentServices.TenantInsurance.TenantSure.TenantSurePurchase) {
+                        activity = new TenantSureWizardActivity(appPlace);
+                    } else if (appPlace instanceof PortalSiteMap.Resident.ResidentServices.TenantInsurance.Other.UploadCertificate) {
                         activity = new TenantSureWizardActivity(appPlace);
 
                     } else if (place instanceof PortalSiteMap.Login) {

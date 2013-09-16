@@ -16,11 +16,11 @@ package com.propertyvista.portal.web.client.ui.services.insurance;
 import java.math.BigDecimal;
 
 import com.propertyvista.domain.tenant.insurance.InsuranceGeneric;
-import com.propertyvista.portal.web.client.ui.IEditorView;
+import com.propertyvista.portal.web.client.ui.IWizardView;
 
-public interface OtherInsuranceEditorView extends IEditorView<InsuranceGeneric> {
+public interface UploadSertificateWizardView extends IWizardView<InsuranceGeneric> {
 
-    public interface OtherInsuranceEditorPresenter extends IEditorPresenter<InsuranceGeneric> {
+    public interface UploadSertificateWizardPresenter extends WizardPresenter<InsuranceGeneric> {
 
     }
 

@@ -26,7 +26,7 @@ import com.pyx4j.entity.shared.IPrimitive;
 
 @AbstractEntity
 @Transient
-public interface HasInsuranceDTO extends InsuranceStatusDTO {
+public interface ExtantInsuranceStatusDTO extends InsuranceStatusDTO {
 
     IPrimitive<String> insuranceProvider();
 

@@ -26,7 +26,7 @@ public class TenantSureWizardViewImpl extends AbstractWizardView<TenantSureAgree
 
     public TenantSureWizardViewImpl() {
         super();
-        setWizard(new TenantSureWizardForm(this, i18n.tr("Submit")));
+        setWizard(new TenantSureWizard(this, i18n.tr("Submit")));
 
     }
 

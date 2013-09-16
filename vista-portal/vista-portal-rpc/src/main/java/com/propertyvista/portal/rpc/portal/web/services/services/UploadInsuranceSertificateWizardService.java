@@ -11,19 +11,12 @@
  * @author VladL
  * @version $Id$
  */
-package com.propertyvista.portal.web.client.ui.financial.autopay;
+package com.propertyvista.portal.rpc.portal.web.services.services;
 
-import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.entity.rpc.AbstractWizardService;
 
-import com.propertyvista.portal.rpc.portal.web.dto.AutoPayDTO;
-import com.propertyvista.portal.web.client.ui.AbstractWizardView;
+import com.propertyvista.domain.tenant.insurance.InsuranceGeneric;
 
-public class AutoPayWizardViewImpl extends AbstractWizardView<AutoPayDTO> implements AutoPayWizardView {
+public interface UploadInsuranceSertificateWizardService extends AbstractWizardService<InsuranceGeneric> {
 
-    private static final I18n i18n = I18n.get(AutoPayWizardViewImpl.class);
-
-    public AutoPayWizardViewImpl() {
-        super();
-        setWizard(new AutoPayWizard(this));
-    }
 }

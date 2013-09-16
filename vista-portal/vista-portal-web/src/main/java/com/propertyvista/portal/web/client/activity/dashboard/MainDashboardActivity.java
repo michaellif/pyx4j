@@ -102,8 +102,12 @@ public class MainDashboardActivity extends SecurityAwareActivity implements Main
     }
 
     @Override
-    public void getTenantSure() {
+    public void buyTenantSure() {
         AppSite.getPlaceController().goTo(new PortalSiteMap.Resident.ResidentServices.TenantInsurance.TenantSure.TenantSurePurchase());
     }
 
+    @Override
+    public void addThirdPartyTenantInsuranceCertificate() {
+        AppSite.getPlaceController().goTo(new PortalSiteMap.Resident.ResidentServices.TenantInsurance.Other.UploadCertificate());
+    }
 }

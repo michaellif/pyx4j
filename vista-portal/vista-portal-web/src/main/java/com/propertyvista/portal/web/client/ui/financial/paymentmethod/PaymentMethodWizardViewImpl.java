@@ -24,7 +24,7 @@ public class PaymentMethodWizardViewImpl extends AbstractWizardView<PaymentMetho
 
     public PaymentMethodWizardViewImpl() {
         super();
-        setWizard(new PaymentMethodWizardForm(this));
+        setWizard(new PaymentMethodWizard(this));
 
     }
 }

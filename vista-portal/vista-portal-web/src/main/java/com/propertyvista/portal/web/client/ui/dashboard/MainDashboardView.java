@@ -30,7 +30,9 @@ public interface MainDashboardView extends IsView {
 
         void setAutopay();
 
-        void getTenantSure();
+        void buyTenantSure();
+
+        void addThirdPartyTenantInsuranceCertificate();
 
     }
 

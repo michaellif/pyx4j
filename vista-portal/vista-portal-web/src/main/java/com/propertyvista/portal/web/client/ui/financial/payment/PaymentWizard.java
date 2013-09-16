@@ -11,40 +11,48 @@
  * @author VladL
  * @version $Id$
  */
-package com.propertyvista.portal.web.client.ui.financial.autopay;
+package com.propertyvista.portal.web.client.ui.financial.payment;
 
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.Set;
 
+import com.google.gwt.dom.client.Style.Cursor;
 import com.google.gwt.dom.client.Style.Display;
 import com.google.gwt.dom.client.Style.FontWeight;
-import com.google.gwt.dom.client.Style.TextAlign;
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.logical.shared.SelectionEvent;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
+import com.google.gwt.resources.client.ImageResource;
 import com.google.gwt.user.client.Command;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
+import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.HasVerticalAlignment;
 import com.google.gwt.user.client.ui.HorizontalPanel;
+import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
-import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.commons.css.ThemeColor;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.forms.client.ui.CComboBox;
 import com.pyx4j.forms.client.ui.CComponent;
-import com.pyx4j.forms.client.ui.CDateLabel;
 import com.pyx4j.forms.client.ui.CEntityLabel;
 import com.pyx4j.forms.client.ui.CRadioGroupEnum;
 import com.pyx4j.forms.client.ui.CSimpleEntityComboBox;
+import com.pyx4j.forms.client.ui.CTextFieldBase;
 import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
 import com.pyx4j.forms.client.ui.wizard.WizardStep;
+import com.pyx4j.forms.client.validators.EditableValueValidator;
+import com.pyx4j.forms.client.validators.ValidationError;
+import com.pyx4j.gwt.commons.BrowserType;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.security.client.ClientContext;
@@ -52,18 +60,17 @@ import com.pyx4j.widgets.client.Anchor;
 import com.pyx4j.widgets.client.RadioGroup;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
 
-import com.propertyvista.common.client.theme.VistaTheme;
+import com.propertyvista.common.client.resources.VistaImages;
+import com.propertyvista.common.client.resources.VistaResources;
 import com.propertyvista.common.client.ui.components.editors.payments.PaymentMethodForm;
 import com.propertyvista.domain.contact.AddressSimple;
 import com.propertyvista.domain.payment.CreditCardInfo.CreditCardType;
 import com.propertyvista.domain.payment.LeasePaymentMethod;
 import com.propertyvista.domain.payment.PaymentType;
-import com.propertyvista.domain.payment.PreauthorizedPayment;
-import com.propertyvista.domain.tenant.lease.Tenant;
-import com.propertyvista.dto.PaymentDataDTO;
+import com.propertyvista.domain.person.Person;
 import com.propertyvista.dto.PaymentDataDTO.PaymentSelect;
-import com.propertyvista.dto.PreauthorizedPaymentCoveredItemDTO;
-import com.propertyvista.portal.rpc.portal.web.dto.AutoPayDTO;
+import com.propertyvista.portal.domain.dto.financial.PaymentDTO;
+import com.propertyvista.portal.web.client.resources.PortalImages;
 import com.propertyvista.portal.web.client.ui.CPortalEntityWizard;
 import com.propertyvista.portal.web.client.ui.IWizardView;
 import com.propertyvista.portal.web.client.ui.LegalTermsDialog;
@@ -71,38 +78,32 @@ import com.propertyvista.portal.web.client.ui.LegalTermsDialog.TermsType;
 import com.propertyvista.portal.web.client.ui.financial.PortalPaymentTypesUtil;
 import com.propertyvista.portal.web.client.ui.util.decorators.FormDecoratorBuilder;
 
-public class AutoPayWizardForm extends CPortalEntityWizard<AutoPayDTO> {
+public class PaymentWizard extends CPortalEntityWizard<PaymentDTO> {
 
-    static final I18n i18n = I18n.get(AutoPayWizardForm.class);
+    private static final I18n i18n = I18n.get(PaymentWizard.class);
 
-    private static String cutOffDateWarning = i18n.tr("All changes will take effect after this date!");
-
-    private final WizardStep detailsStep, paymentMethodSelectionStep, comfirmationStep;
+    private final WizardStep paymentMethodSelectionStep, comfirmationStep;
 
     private final CComboBox<LeasePaymentMethod> profiledPaymentMethodsCombo = new CSimpleEntityComboBox<LeasePaymentMethod>();
 
     private final SimplePanel confirmationDetailsHolder = new SimplePanel();
 
-    private final SimplePanel confirmationTotalHolder = new SimplePanel();
-
-    private final SimplePanel detailsTotalHolder = new SimplePanel();
-
     private final PaymentMethodForm<LeasePaymentMethod> paymentMethodEditor = new PaymentMethodForm<LeasePaymentMethod>(LeasePaymentMethod.class) {
         @Override
         public Set<PaymentType> defaultPaymentTypes() {
-            return PortalPaymentTypesUtil.getAllowedPaymentTypes(false);
+            return PortalPaymentTypesUtil.getAllowedPaymentTypes(true);
         }
 
         @Override
         protected Set<CreditCardType> getAllowedCardTypes() {
-            return AutoPayWizardForm.this.getValue().allowedCardTypes();
+            return PaymentWizard.this.getValue().allowedCardTypes();
         }
 
         @Override
         public void onBillingAddressSameAsCurrentOne(boolean set, final CComponent<AddressSimple> comp) {
             if (set) {
                 assert (getView().getPresenter() != null);
-                ((AutoPayWizardView.Persenter) getView().getPresenter()).getCurrentAddress(new DefaultAsyncCallback<AddressSimple>() {
+                ((PaymentWizardView.Persenter) getView().getPresenter()).getCurrentAddress(new DefaultAsyncCallback<AddressSimple>() {
                     @Override
                     public void onSuccess(AddressSimple result) {
                         comp.setValue(result, false);
@@ -119,33 +120,26 @@ public class AutoPayWizardForm extends CPortalEntityWizard<AutoPayDTO> {
         }
     };
 
-    public AutoPayWizardForm(IWizardView<AutoPayDTO> view) {
-        super(AutoPayDTO.class, view, i18n.tr("Automatic Payment Setup"), i18n.tr("Submit"), ThemeColor.contrast4);
+    public PaymentWizard(IWizardView<PaymentDTO> view) {
+        super(PaymentDTO.class, view, i18n.tr("Payment Setup"), i18n.tr("Submit"), ThemeColor.contrast4);
 
-        detailsStep = addStep(createDetailsStep());
+        addStep(createDetailsStep());
         paymentMethodSelectionStep = addStep(createSelectPaymentMethodStep());
         comfirmationStep = addStep(createConfirmationStep());
     }
 
     private BasicFlexFormPanel createDetailsStep() {
-        BasicFlexFormPanel panel = new BasicFlexFormPanel(i18n.tr("Details"));
+        BasicFlexFormPanel panel = new BasicFlexFormPanel();
         int row = -1;
 
-        panel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().tenant(), new CEntityLabel<Tenant>()), 200).build());
-        panel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().address(), new CEntityLabel<AddressSimple>()), 200).build());
-        panel.setWidget(++row, 0, inject(proto().coveredItemsDTO(), new PapCoveredItemDtoFolder() {
-            @Override
-            public void onAmontValueChange() {
-                BigDecimal total = BigDecimal.ZERO;
-                for (PreauthorizedPaymentCoveredItemDTO item : getValue()) {
-                    if (!item.amount().isNull()) {
-                        total = (total.add(item.amount().getValue()));
-                    }
-                }
-                AutoPayWizardForm.this.get(AutoPayWizardForm.this.proto().total()).setValue(total);
-            }
-        }));
-        panel.setWidget(++row, 0, detailsTotalHolder);
+        panel.setH1(++row, 0, 1, PortalImages.INSTANCE.billingIcon(), i18n.tr("Payment Details"));
+
+        panel.setWidget(++row, 0,
+                new FormDecoratorBuilder(inject(proto().leaseTermParticipant().leaseParticipant().customer().person(), new CEntityLabel<Person>()), 200)
+                        .customLabel(i18n.tr("Tenant")).build());
+
+        panel.setBR(++row, 0, 1);
+        panel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().amount()), 100).build());
 
         return panel;
     }
@@ -163,6 +157,10 @@ public class AutoPayWizardForm extends CPortalEntityWizard<AutoPayDTO> {
         panel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().profiledPaymentMethod(), profiledPaymentMethodsCombo), 200).build());
 
         panel.setWidget(++row, 0, inject(proto().paymentMethod(), paymentMethodEditor));
+
+        panel.setHR(++row, 0, 1);
+
+        panel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().addThisPaymentMethodToProfile()), 50).labelWidth(20).build());
 
         // tweaks:
 
@@ -191,7 +189,7 @@ public class AutoPayWizardForm extends CPortalEntityWizard<AutoPayDTO> {
 
                         paymentMethodEditor.getValue().isProfiledMethod().setValue(Boolean.FALSE);
 
-                        profiledPaymentMethodsCombo.setVisible(false);
+                        setProfiledPaymentMethodsVisible(false);
 
                         break;
 
@@ -199,7 +197,7 @@ public class AutoPayWizardForm extends CPortalEntityWizard<AutoPayDTO> {
                         paymentMethodEditor.setViewable(true);
 
                         profiledPaymentMethodsCombo.reset();
-                        profiledPaymentMethodsCombo.setVisible(true);
+                        setProfiledPaymentMethodsVisible(true);
                         if (!profiledPaymentMethodsCombo.getOptions().isEmpty()) {
                             profiledPaymentMethodsCombo.setValue(profiledPaymentMethodsCombo.getOptions().get(0));
                         }
@@ -219,6 +217,13 @@ public class AutoPayWizardForm extends CPortalEntityWizard<AutoPayDTO> {
             }
         });
 
+        paymentMethodEditor.addTypeSelectionValueChangeHandler(new ValueChangeHandler<PaymentType>() {
+            @Override
+            public void onValueChange(ValueChangeEvent<PaymentType> event) {
+                setupAddThisPaymentMethodToProfile(event.getValue());
+            }
+        });
+
         return panel;
     }
 
@@ -229,18 +234,6 @@ public class AutoPayWizardForm extends CPortalEntityWizard<AutoPayDTO> {
         panel.setWidget(++row, 0, confirmationDetailsHolder);
         panel.getFlexCellFormatter().setHorizontalAlignment(row, 0, HasHorizontalAlignment.ALIGN_CENTER);
 
-        panel.setBR(++row, 0, 1);
-
-        panel.setWidget(++row, 0, inject(proto().coveredItems(), new PapCoveredItemFolder()));
-        get(proto().coveredItems()).setViewable(true);
-        get(proto().coveredItems()).inheritViewable(false);
-
-        panel.setWidget(++row, 0, confirmationTotalHolder);
-
-        panel.setBR(++row, 0, 1);
-
-        panel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().nextScheduledPaymentDate(), new CDateLabel()), 100).labelWidth(30).build());
-
         panel.setHR(++row, 0, 1);
 
         panel.setWidget(++row, 0, BasicFlexFormPanel());
@@ -250,34 +243,35 @@ public class AutoPayWizardForm extends CPortalEntityWizard<AutoPayDTO> {
     }
 
     @Override
-    protected void onStepChange(SelectionEvent<WizardStep> event) {
-        super.onStepChange(event);
-        if (event.getSelectedItem().equals(detailsStep)) {
-            switchTotal(detailsTotalHolder);
-        } else if (event.getSelectedItem().equals(comfirmationStep)) {
+    public void addValidations() {
+        super.addValidations();
 
-            confirmationDetailsHolder.clear();
-            ((AutoPayWizardView.Persenter) getView().getPresenter()).preview(new DefaultAsyncCallback<PreauthorizedPayment>() {
-                @Override
-                public void onSuccess(PreauthorizedPayment result) {
-                    get(proto().coveredItems()).populate(result.coveredItems());
-                    confirmationDetailsHolder.setWidget(createConfirmationDetailsPanel());
+        get(proto().amount()).addValueValidator(new EditableValueValidator<BigDecimal>() {
+            @Override
+            public ValidationError isValid(CComponent<BigDecimal> component, BigDecimal value) {
+                if (value != null) {
+                    return (value.compareTo(BigDecimal.ZERO) > 0 ? null
+                            : new ValidationError(component, i18n.tr("Payment amount should be greater then zero!")));
                 }
-            }, getValue());
-
-            switchTotal(confirmationTotalHolder);
-        }
+                return null;
+            }
+        });
     }
 
-    private void switchTotal(SimplePanel holder) {
-        BigDecimal total = BigDecimal.ZERO;
-        if (isBound(proto().total())) {
-            total = get(proto().total()).getValue();
-            unbind(proto().total());
+    @Override
+    protected void onStepChange(SelectionEvent<WizardStep> event) {
+        super.onStepChange(event);
+
+//        getDecorator().getBtnNext().setEnabled(true);
+
+        if (event.getSelectedItem().equals(comfirmationStep)) {
+            confirmationDetailsHolder.clear();
+            confirmationDetailsHolder.setWidget(createConfirmationDetailsPanel());
+
+            if (get(proto().paymentMethod()).getValue().type().getValue() == PaymentType.DirectBanking) {
+//                getDecorator().getBtnNext().setEnabled(false);
+            }
         }
-        holder.setWidget(new FormDecoratorBuilder(inject(proto().total()), 100).build());
-        get(proto().total()).setValue(total);
-        get(proto().total()).setViewable(true);
     }
 
     @Override
@@ -293,25 +287,16 @@ public class AutoPayWizardForm extends CPortalEntityWizard<AutoPayDTO> {
 
                 get(proto().selectPaymentMethod()).reset();
                 get(proto().selectPaymentMethod()).setEnabled(hasProfiledMethods);
-                get(proto().selectPaymentMethod()).setVisible(hasProfiledMethods);
-                get(proto().selectPaymentMethod()).setValue(hasProfiledMethods ? PaymentDataDTO.PaymentSelect.Profiled : PaymentDataDTO.PaymentSelect.New,
-                        true, populate);
+                get(proto().selectPaymentMethod()).setValue(hasProfiledMethods ? PaymentSelect.Profiled : PaymentSelect.New, true, populate);
 
                 paymentMethodSelectionStep.setStepVisible(hasProfiledMethods);
             }
         });
-
-        LogicalDate today = new LogicalDate(ClientContext.getServerDate());
-        if (!today.before(getValue().paymentCutOffDate().getValue()) && !today.after(getValue().nextScheduledPaymentDate().getValue())) {
-            get(proto().nextScheduledPaymentDate()).setNote(cutOffDateWarning, NoteStyle.Warn);
-        } else {
-            get(proto().nextScheduledPaymentDate()).setNote(null);
-        }
     }
 
     private void loadProfiledPaymentMethods(final AsyncCallback<Void> callback) {
         profiledPaymentMethodsCombo.setOptions(null);
-        ((AutoPayWizardView.Persenter) getView().getPresenter()).getProfiledPaymentMethods(new DefaultAsyncCallback<List<LeasePaymentMethod>>() {
+        ((PaymentWizardView.Persenter) getView().getPresenter()).getProfiledPaymentMethods(new DefaultAsyncCallback<List<LeasePaymentMethod>>() {
             @Override
             public void onSuccess(List<LeasePaymentMethod> result) {
                 profiledPaymentMethodsCombo.setOptions(result);
@@ -322,34 +307,127 @@ public class AutoPayWizardForm extends CPortalEntityWizard<AutoPayDTO> {
         });
     }
 
+    private void setProfiledPaymentMethodsVisible(boolean visible) {
+        profiledPaymentMethodsCombo.setVisible(visible);
+
+        get(proto().addThisPaymentMethodToProfile()).setVisible(!visible && !getValue().paymentMethod().type().isNull());
+        if (get(proto().addThisPaymentMethodToProfile()).isVisible()) {
+            setupAddThisPaymentMethodToProfile(getValue().paymentMethod().type().getValue());
+        }
+    }
+
+    private void setupAddThisPaymentMethodToProfile(PaymentType paymentType) {
+        if (paymentType != null) {
+            switch (paymentType) {
+            case CreditCard:
+                get(proto().addThisPaymentMethodToProfile()).setValue(true);
+                get(proto().addThisPaymentMethodToProfile()).setEnabled(true);
+                get(proto().addThisPaymentMethodToProfile()).setVisible(true);
+                break;
+
+            case Echeck:
+                get(proto().addThisPaymentMethodToProfile()).setValue(true);
+                get(proto().addThisPaymentMethodToProfile()).setEnabled(false);
+                get(proto().addThisPaymentMethodToProfile()).setVisible(true);
+                break;
+
+            default:
+                get(proto().addThisPaymentMethodToProfile()).setValue(false);
+                get(proto().addThisPaymentMethodToProfile()).setEnabled(false);
+                get(proto().addThisPaymentMethodToProfile()).setVisible(false);
+                break;
+            }
+        }
+    }
+
     private Widget createConfirmationDetailsPanel() {
         VerticalPanel panel = new VerticalPanel();
-        Widget w;
 
-        panel.add(new HTML(getValue().tenant().customer().person().getStringView()));
+        panel.add(new HTML(getValue().leaseTermParticipant().leaseParticipant().customer().person().getStringView()));
         panel.add(new HTML(getValue().address().getStringView()));
 
         panel.add(new HTML("<br/>"));
 
-        HorizontalPanel pm = new HorizontalPanel();
-        pm.add(w = new HTML(i18n.tr("Payment Method:")));
-        w.setWidth("10em");
-        pm.add(w = new HTML(get(proto().paymentMethod()).getValue().getStringView()));
-        w.getElement().getStyle().setFontWeight(FontWeight.BOLD);
-        panel.add(pm);
+        panel.add(createDecorator(i18n.tr("Payment Method:"), get(proto().paymentMethod()).getValue().getStringView()));
+        panel.add(createDecorator(i18n.tr("Amount to pay:"), ((CTextFieldBase<?, ?>) get(proto().amount())).getFormattedValue()));
 
-        if (getValue().coveredItems().isEmpty()) {
-            panel.add(new HTML("<br/>"));
-            panel.add(new HTML("<br/>"));
-
-            panel.add(w = new HTML(i18n.tr("There are no payments set!")));
-            w.setStyleName(VistaTheme.StyleName.warningMessage.name());
-            w.getElement().getStyle().setTextAlign(TextAlign.CENTER);
-
-            get(proto().total()).setVisible(false);
+        if (get(proto().paymentMethod()).getValue().type().getValue() == PaymentType.DirectBanking) {
+            panel.add(createDirectBankingPanel());
         }
 
         return panel;
+    }
+
+    private Widget createDirectBankingPanel() {
+        VerticalPanel panel = new VerticalPanel();
+
+        panel.add(createDecorator(i18n.tr("Account #:"), getValue().billingAccount().accountNumber().getStringView()));
+        panel.add(createDecorator(i18n.tr("Payee:"), "Rent Payments - Payment Pad"));
+
+        panel.add(new HTML("<br/>"));
+
+        panel.add(new HTML(VistaResources.INSTANCE.directBankingDescription().getText()));
+
+        panel.add(new HTML("<br/>"));
+
+        FlexTable links = new FlexTable();
+        links.setCellSpacing(10);
+//        links.setBorderWidth(1);
+
+        links.setWidget(0, 0, createLink(VistaImages.INSTANCE.linkTD(), "http://www.td.com/about-tdbfg/our-business"));
+        links.setWidget(0, 1, createLink(VistaImages.INSTANCE.linkBMO(), "http://www.bmo.com/home/personal"));
+
+        links.setWidget(1, 0, createLink(VistaImages.INSTANCE.linkCIBC(), "https://www.cibc.com/ca/personal.html"));
+        links.setWidget(1, 1, createLink(VistaImages.INSTANCE.linkLaurentian(), "https://www.laurentianbank.ca/en/personal_banking_services/index.html"));
+
+//        links.setWidget(2, 0, createLink(VistaImages.INSTANCE.linkManulife(), "http://www.manulifebank.ca/wps/portal/bankca/Bank.caHome/Personal/"));
+
+        links.setWidget(2, 0, createLink(VistaImages.INSTANCE.linkNBC(), "http://www.nbc.ca/bnc/cda/index/0,4229,divId-2_langId-1_navCode-1000,00.html"));
+        links.setWidget(2, 1, createLink(VistaImages.INSTANCE.linkPCF(), "http://www.pcfinancial.ca/"));
+
+        links.setWidget(3, 0, createLink(VistaImages.INSTANCE.linkRBC(), "http://www.rbcroyalbank.com/personal.html"));
+        links.setWidget(3, 1, createLink(VistaImages.INSTANCE.linkScotia(), "http://www.scotiabank.com/ca/en/0,1091,2,00.html"));
+
+        panel.add(links);
+
+        panel.add(new HTML("<br/>"));
+
+        panel.add(new Anchor(i18n.tr("How to pay..."), new Command() {
+            @Override
+            public void execute() {
+                new LegalTermsDialog(TermsType.DirectBankingInstruction).show();
+            }
+        }));
+
+        return panel;
+    }
+
+    private Widget createDecorator(String label, String value) {
+        HorizontalPanel payee = new HorizontalPanel();
+        Widget w;
+
+        payee.add(w = new HTML(label));
+        w.setWidth("12em");
+        payee.add(w = new HTML(value));
+        w.getElement().getStyle().setFontWeight(FontWeight.BOLD);
+
+        return payee;
+    }
+
+    private Image createLink(ImageResource image, final String url) {
+        Image link = new Image(image);
+        link.getElement().getStyle().setCursor(Cursor.POINTER);
+        link.addClickHandler(new ClickHandler() {
+            @Override
+            public void onClick(ClickEvent event) {
+                openLink(url);
+            }
+        });
+        return link;
+    }
+
+    private void openLink(String url) {
+        Window.open(url, "_blank", BrowserType.isIE() ? "status=1,toolbar=1,location=1,resizable=1,scrollbars=1" : null);
     }
 
     private Widget BasicFlexFormPanel() {
@@ -375,20 +453,10 @@ public class AutoPayWizardForm extends CPortalEntityWizard<AutoPayDTO> {
 
         panel.add(w = new HTML("&nbsp" + i18n.tr("and") + "&nbsp"));
         w.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
-        panel.add(w = new Anchor(i18n.tr("Pre-Authorized Agreement"), new Command() {
+        panel.add(w = new Anchor(i18n.tr("Billing And Refund Policy"), new Command() {
             @Override
             public void execute() {
-                switch (get(proto().paymentMethod()).getValue().type().getValue()) {
-                case Echeck:
-                    new LegalTermsDialog(TermsType.PreauthorisedPAD).show();
-                    break;
-                case CreditCard:
-                    new LegalTermsDialog(TermsType.PreauthorisedCC).show();
-                    break;
-                default:
-                    assert false : "Illegal payment method type!";
-                    break;
-                }
+                new LegalTermsDialog(TermsType.BillingAndRefundPolicy).show();
             }
         }));
 

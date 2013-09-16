@@ -50,9 +50,9 @@ import com.propertyvista.portal.web.client.ui.LegalTermsDialog;
 import com.propertyvista.portal.web.client.ui.LegalTermsDialog.TermsType;
 import com.propertyvista.portal.web.client.ui.financial.PortalPaymentTypesUtil;
 
-public class PaymentMethodWizardForm extends CPortalEntityWizard<PaymentMethodDTO> {
+public class PaymentMethodWizard extends CPortalEntityWizard<PaymentMethodDTO> {
 
-    private static final I18n i18n = I18n.get(PaymentMethodWizardForm.class);
+    private static final I18n i18n = I18n.get(PaymentMethodWizard.class);
 
     private final WizardStep comfirmationStep;
 
@@ -66,7 +66,7 @@ public class PaymentMethodWizardForm extends CPortalEntityWizard<PaymentMethodDT
 
         @Override
         protected Set<CreditCardType> getAllowedCardTypes() {
-            return PaymentMethodWizardForm.this.getValue().allowedCardTypes();
+            return PaymentMethodWizard.this.getValue().allowedCardTypes();
         }
 
         @Override
@@ -90,7 +90,7 @@ public class PaymentMethodWizardForm extends CPortalEntityWizard<PaymentMethodDT
         }
     };
 
-    public PaymentMethodWizardForm(IWizardView<PaymentMethodDTO> view) {
+    public PaymentMethodWizard(IWizardView<PaymentMethodDTO> view) {
         super(PaymentMethodDTO.class, view, i18n.tr("Profile Payment Setup"), i18n.tr("Submit"), ThemeColor.contrast4);
 
         addStep(createPaymentMethodStep());

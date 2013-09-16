@@ -32,7 +32,7 @@ import com.propertyvista.domain.tenant.insurance.InsuranceCertificate;
 import com.propertyvista.domain.tenant.insurance.InsuranceTenantSure;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.Tenant;
-import com.propertyvista.portal.rpc.portal.web.dto.insurance.HasInsuranceDTO;
+import com.propertyvista.portal.rpc.portal.web.dto.insurance.ExtantInsuranceStatusDTO;
 import com.propertyvista.portal.rpc.portal.web.dto.insurance.InsuranceStatusDTO;
 import com.propertyvista.portal.rpc.portal.web.dto.insurance.NoInsuranceStatusDTO;
 import com.propertyvista.portal.rpc.portal.web.dto.insurance.OtherProviderInsuranceStatusDTO;
@@ -82,7 +82,7 @@ public class TenantInsuranceFacadeImpl implements TenantInsuranceFacade {
 
             return noInsuranceStatus;
         } else {
-            HasInsuranceDTO insuranceStatus = null;
+            ExtantInsuranceStatusDTO insuranceStatus = null;
             if (insuranceCertificate.isPropertyVistaIntegratedProvider().isBooleanTrue()) {
                 // TODO currently TenantSure is the only integrated provider so we don't try to understand which one it is
                 insuranceStatus = ServerSideFactory.create(TenantSureFacade.class).getStatus(tenantId);
