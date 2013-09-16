@@ -105,6 +105,7 @@ public class PapReviewFolder extends VistaBoxFolder<PapReviewDTO> {
             isSelected.asWidget().getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
             isSelected.asWidget().getElement().getStyle().setVerticalAlign(VerticalAlign.MIDDLE);
             isSelected.asWidget().getElement().getStyle().setPaddingRight(15, Unit.PX);
+            isSelected.asWidget().getElement().getStyle().setWidth(15, Unit.PX);
             isSelectedAndCaptionHolderPanel.add(isSelected);
 
             CComponent<?> caption = inject(proto().caption(), new PapReviewCaptionViewer());

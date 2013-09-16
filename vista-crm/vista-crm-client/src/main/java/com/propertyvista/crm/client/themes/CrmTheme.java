@@ -808,7 +808,7 @@ public class CrmTheme extends VistaTheme {
 
         style = new Style("." + PapReviewsHolderForm.Styles.AutoPaySuperCaptionsPanel.name());
         style.addProperty("position", "relative");
-        style.addProperty("left", "318px");
+        style.addProperty("left", "280px");
         style.addProperty("width", "780px");
         style.addProperty("border-top", "1px dotted");
         style.addProperty("border-right", "1px dotted");
@@ -827,7 +827,7 @@ public class CrmTheme extends VistaTheme {
         addStyle(style);
 
         style = new Style("." + PapReviewsHolderForm.Styles.AutoPaySuperCaptionsPanel.name() + " div:nth-child(1)");
-        style.addProperty("width", "419px");
+        style.addProperty("width", "314px");
         addStyle(style);
 
         style = new Style("." + PapReviewsHolderForm.Styles.AutoPaySuperCaptionsPanel.name() + " div:nth-child(2)");
@@ -836,7 +836,7 @@ public class CrmTheme extends VistaTheme {
 
         style = new Style("." + PapReviewsHolderForm.Styles.AutoPayCaptionsPanel.name());
         style.addProperty("position", "relative");
-        style.addProperty("left", "318px");
+        style.addProperty("left", "280px");
         style.addProperty("width", "780px");
         style.addProperty("border-top", "1px dotted");
         style.addProperty("border-right", "1px dotted");
