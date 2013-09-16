@@ -64,7 +64,7 @@ public class ServicesDashboardActivity extends SecurityAwareActivity implements 
     }
 
     @Override
-    public void getTenantSure() {
+    public void buyTenantSure() {
         AppSite.getPlaceController().goTo(new PortalSiteMap.Resident.ResidentServices.TenantInsurance.TenantSure.TenantSurePurchase());
     }
 

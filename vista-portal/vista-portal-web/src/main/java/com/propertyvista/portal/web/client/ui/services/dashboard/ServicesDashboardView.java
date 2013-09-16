@@ -21,10 +21,7 @@ public interface ServicesDashboardView extends IsView {
 
     public interface ServicesDashboardPresenter {
 
-        // Tenant Insurance Related        
-
-        // when no tenant insurance
-        void getTenantSure();
+        void buyTenantSure();
 
         void addThirdPartyTenantInsuranceCertificate();
 

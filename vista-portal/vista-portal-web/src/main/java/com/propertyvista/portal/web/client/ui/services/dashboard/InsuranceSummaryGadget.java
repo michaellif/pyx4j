@@ -68,14 +68,19 @@ public class InsuranceSummaryGadget extends AbstractGadget<ServicesDashboardView
 
                 @Override
                 public void execute() {
-                    getGadgetView().getPresenter().getTenantSure();
+                    getGadgetView().getPresenter().buyTenantSure();
                 }
             });
-
             purchaseButton.getElement().getStyle().setProperty("background", StyleManager.getPalette().getThemeColor(ThemeColor.contrast3, 1));
             add(purchaseButton);
 
-            Button proofButton = new Button("Provide Proof of my Insurance");
+            Button proofButton = new Button("Provide Proof of my Insurance", new Command() {
+
+                @Override
+                public void execute() {
+                    getGadgetView().getPresenter().addThirdPartyTenantInsuranceCertificate();
+                }
+            });
             proofButton.getElement().getStyle().setProperty("background", StyleManager.getPalette().getThemeColor(ThemeColor.contrast3, 0.6));
             add(proofButton);
 
