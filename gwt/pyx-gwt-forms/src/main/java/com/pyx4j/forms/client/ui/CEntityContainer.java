@@ -69,7 +69,7 @@ public abstract class CEntityContainer<E extends IObject<?>> extends CContainer<
         }
 
         contentHolder = new SimplePanel();
-        contentHolder.asWidget().getElement().getStyle().setProperty("display", "inline-block");
+        contentHolder.asWidget().getElement().getStyle().setProperty("display", "inline");
         containerPanel.add(contentHolder);
     }
 
