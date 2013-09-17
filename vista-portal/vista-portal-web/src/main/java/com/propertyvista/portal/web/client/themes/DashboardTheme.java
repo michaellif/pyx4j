@@ -52,10 +52,10 @@ public class DashboardTheme extends Theme {
         addStyle(style);
 
         style = new Style(".", StyleName.GadgetContent, " .", DefaultWidgetsTheme.StyleName.Anchor);
-        style.addProperty("display", "block");
+        style.addProperty("display", "inline-block");
         style.addProperty("color", ThemeColor.contrast2, 1);
         style.addProperty("font-size", "0.8em");
-        style.addProperty("padding", "5px 5px 5px 0");
+        style.addProperty("padding", "5px 10px");
         addStyle(style);
 
         style = new Style(".", StyleName.PersonPhoto);

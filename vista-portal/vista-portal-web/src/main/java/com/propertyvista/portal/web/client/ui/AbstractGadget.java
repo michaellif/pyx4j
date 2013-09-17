@@ -19,7 +19,6 @@ import com.google.gwt.dom.client.Style.TextAlign;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.dom.client.Style.VerticalAlign;
 import com.google.gwt.resources.client.ImageResource;
-import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.Image;
@@ -29,10 +28,6 @@ import com.google.gwt.user.client.ui.SimplePanel;
 
 import com.pyx4j.commons.css.StyleManager;
 import com.pyx4j.commons.css.ThemeColor;
-import com.pyx4j.site.client.AppSite;
-import com.pyx4j.site.client.ui.layout.responsive.LayoutChangeEvent;
-import com.pyx4j.site.client.ui.layout.responsive.LayoutChangeHandler;
-import com.pyx4j.site.client.ui.layout.responsive.ResponsiveLayoutPanel.LayoutType;
 import com.pyx4j.widgets.client.actionbar.Toolbar;
 
 import com.propertyvista.portal.web.client.themes.BlockMixin;
@@ -126,11 +121,20 @@ public abstract class AbstractGadget<T extends IsWidget> extends AbstractPortalP
             contentPanel.getElement().getStyle().setTextAlign(TextAlign.CENTER);
 
             contentHolder = new SimplePanel();
+            contentHolder.getElement().getStyle().setFloat(Float.NONE);
+            contentHolder.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
+            contentHolder.getElement().getStyle().setVerticalAlign(VerticalAlign.TOP);
             contentHolder.getElement().getStyle().setProperty("padding", "10px 0");
+            contentHolder.setWidth("100%");
 
             contentPanel.add(contentHolder);
 
             navigationBarHolder = new SimplePanel();
+            navigationBarHolder.getElement().getStyle().setFloat(Float.NONE);
+            navigationBarHolder.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
+            navigationBarHolder.getElement().getStyle().setVerticalAlign(VerticalAlign.TOP);
+            navigationBarHolder.setWidth("100%");
+
             contentPanel.add(navigationBarHolder);
 
             containerPanel.add(contentPanel);
@@ -140,47 +144,8 @@ public abstract class AbstractGadget<T extends IsWidget> extends AbstractPortalP
             actionsToolbarHolder = new SimplePanel();
             add(actionsToolbarHolder);
 
-            doLayout(LayoutType.getLayoutType(Window.getClientWidth()));
-
-            AppSite.getEventBus().addHandler(LayoutChangeEvent.TYPE, new LayoutChangeHandler() {
-
-                @Override
-                public void onLayoutChangeRerquest(LayoutChangeEvent event) {
-                    doLayout(event.getLayoutType());
-                }
-
-            });
         }
 
-        private void doLayout(LayoutType layoutType) {
-            switch (layoutType) {
-            case phonePortrait:
-            case phoneLandscape:
-            case tabletPortrait:
-                contentHolder.getElement().getStyle().setFloat(Float.NONE);
-                contentHolder.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
-                contentHolder.getElement().getStyle().setVerticalAlign(VerticalAlign.TOP);
-                contentHolder.setWidth("100%");
-
-                navigationBarHolder.getElement().getStyle().setFloat(Float.NONE);
-                navigationBarHolder.getElement().getStyle().setMarginTop(10, Unit.PX);
-                navigationBarHolder.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
-                navigationBarHolder.getElement().getStyle().setVerticalAlign(VerticalAlign.TOP);
-                navigationBarHolder.setWidth("100%");
-
-                break;
-            default:
-                contentHolder.getElement().getStyle().setDisplay(Display.BLOCK);
-                contentHolder.getElement().getStyle().setFloat(Float.LEFT);
-                contentHolder.setWidth("70%");
-
-                navigationBarHolder.getElement().getStyle().setDisplay(Display.BLOCK);
-                navigationBarHolder.getElement().getStyle().setFloat(Float.RIGHT);
-                navigationBarHolder.setWidth("30%");
-
-                break;
-            }
-        }
     }
 
 }
