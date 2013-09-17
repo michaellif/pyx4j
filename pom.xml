@@ -74,7 +74,7 @@
     </scm>
 
     <modules>
-        <module>maven/maven-gwt-plugin</module>
+        <module>maven/gwt-maven-plugin</module>
 
         <module>pyx-commons</module>
 
@@ -150,8 +150,8 @@
         <module>svg/pyx-svg-j2se</module>
         <module>svg/pyx-svg-gwt</module>
 
-        <module>maven/maven-password-plugin</module>
-        <module>maven/maven-i18n-plugin</module>
+        <module>maven/password-maven-plugin</module>
+        <module>maven/i18n-maven-plugin</module>
 
         <module>essentials/pyx-essentials-shared</module>
         <module>essentials/pyx-essentials-gwt</module>
@@ -282,7 +282,7 @@
 
                 <plugin>
                     <groupId>com.pyx4j</groupId>
-                    <artifactId>maven-gwt-plugin</artifactId>
+                    <artifactId>gwt-maven-plugin</artifactId>
                     <version>${project.version}</version>
                     <configuration>
                         <systemProperties>

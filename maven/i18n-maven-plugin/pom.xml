@@ -13,8 +13,8 @@
         <relativePath>../../pom.xml</relativePath>
     </parent>
 
-    <artifactId>maven-i18n-plugin</artifactId>
-    <name>maven-i18n-plugin</name>
+    <artifactId>i18n-maven-plugin</artifactId>
+    <name>i18n-maven-plugin</name>
     <packaging>maven-plugin</packaging>
 
     <description>The i18n message extractor</description>

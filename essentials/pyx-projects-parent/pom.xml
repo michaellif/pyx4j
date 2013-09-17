@@ -147,7 +147,7 @@
             <plugins>
                 <plugin>
                     <groupId>com.pyx4j</groupId>
-                    <artifactId>maven-gwt-plugin</artifactId>
+                    <artifactId>gwt-maven-plugin</artifactId>
                     <version>${pyxVersion}</version>
                     <configuration>
                         <systemProperties>
@@ -162,7 +162,7 @@
         <plugins>
             <plugin>
                 <groupId>com.pyx4j</groupId>
-                <artifactId>maven-gwt-plugin</artifactId>
+                <artifactId>gwt-maven-plugin</artifactId>
                 <executions>
                     <execution>
                         <phase>package</phase>

@@ -154,7 +154,7 @@
 
                     <plugin>
                         <groupId>com.pyx4j</groupId>
-                        <artifactId>maven-password-plugin</artifactId>
+                        <artifactId>password-maven-plugin</artifactId>
                         <version>${project.version}</version>
                         <executions>
                             <execution>

@@ -1,5 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
 <projectDescription>
-    <name>maven-gwt-plugin</name>
+	<name>gwt-maven-plugin</name>
 	<comment></comment>
 	<projects>
 	</projects>
@@ -18,5 +19,5 @@
 	<natures>
 		<nature>org.eclipse.m2e.core.maven2Nature</nature>
 		<nature>org.eclipse.jdt.core.javanature</nature>
-    </natures>
+	</natures>
 </projectDescription>
