@@ -56,17 +56,25 @@ public class CollapsablePanel extends FlowPanel implements HasToggleHandlers {
 
         collapseImage = new Image();
         collapseImage.setResource(images.collapse());
-        collapseImage.getElement().getStyle().setPosition(Position.ABSOLUTE);
-        collapseImage.getElement().getStyle().setDisplay(Display.INLINE);
-        collapseImage.getElement().getStyle().setTop(0, Unit.PX);
-        collapseImage.getElement().getStyle().setLeft(0, Unit.PX);
+
+        collapseImage.getElement().getStyle().setPosition(Position.RELATIVE);
+        collapseImage.getElement().getStyle().setMarginTop(-collapseImage.getHeight() / 2, Unit.PX);
+        collapseImage.getElement().getStyle().setTop(50, Unit.PCT);
         collapseImage.addClickHandler(new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
                 setExpended(!expended);
             }
         });
-        add(collapseImage);
+
+        SimplePanel collapseImageHolder = new SimplePanel(collapseImage);
+        collapseImageHolder.getElement().getStyle().setPosition(Position.ABSOLUTE);
+        collapseImageHolder.getElement().getStyle().setDisplay(Display.INLINE);
+        collapseImageHolder.getElement().getStyle().setTop(0, Unit.PX);
+        collapseImageHolder.getElement().getStyle().setLeft(0, Unit.PX);
+        collapseImageHolder.getElement().getStyle().setHeight(2, Unit.EM);
+
+        add(collapseImageHolder);
 
         contentHolder = new SimplePanel();
         add(contentHolder);
@@ -78,6 +86,7 @@ public class CollapsablePanel extends FlowPanel implements HasToggleHandlers {
             return;
         }
         collapseImage.setResource(expended ? images.collapse() : images.expand());
+        collapseImage.getElement().getStyle().setMarginTop(-collapseImage.getHeight() / 2, Unit.PX);
         this.expended = expended;
 
         ToggleEvent.fire(this, expended);
