@@ -13,10 +13,14 @@
  */
 package com.propertyvista.crm.server.services.policies.policy;
 
+import com.pyx4j.entity.server.Persistence;
+import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
+
 import com.propertyvista.crm.rpc.services.policies.policy.ILSPolicyCrudService;
 import com.propertyvista.crm.server.services.policies.GenericPolicyCrudService;
 import com.propertyvista.domain.policy.dto.ILSPolicyDTO;
 import com.propertyvista.domain.policy.policies.ILSPolicy;
+import com.propertyvista.domain.property.asset.building.Building;
 
 public class ILSPolicyCrudServiceImpl extends GenericPolicyCrudService<ILSPolicy, ILSPolicyDTO> implements ILSPolicyCrudService {
 
@@ -24,4 +28,11 @@ public class ILSPolicyCrudServiceImpl extends GenericPolicyCrudService<ILSPolicy
         super(ILSPolicy.class, ILSPolicyDTO.class);
     }
 
+    @Override
+    public void enhanceRetrieved(ILSPolicy entity, ILSPolicyDTO dto, RetrieveTarget retrieveTarget) {
+        super.enhanceRetrieved(entity, dto, retrieveTarget);
+        for (Building bld : Persistence.service().query(EntityQueryCriteria.create(Building.class))) {
+            dto.countries().add(bld.info().address().country());
+        }
+    }
 }

@@ -131,6 +131,7 @@ import com.propertyvista.crm.rpc.services.security.CrmLoginAttemptsListerService
 import com.propertyvista.crm.rpc.services.security.CrmPasswordChangeUserService;
 import com.propertyvista.crm.rpc.services.security.CrmPasswordResetService;
 import com.propertyvista.crm.rpc.services.selections.SelectBuildingListService;
+import com.propertyvista.crm.rpc.services.selections.SelectCityListService;
 import com.propertyvista.crm.rpc.services.selections.SelectConcessionListService;
 import com.propertyvista.crm.rpc.services.selections.SelectCustomerListService;
 import com.propertyvista.crm.rpc.services.selections.SelectFeatureListService;
@@ -140,6 +141,7 @@ import com.propertyvista.crm.rpc.services.selections.SelectLeaseAdjustmentReason
 import com.propertyvista.crm.rpc.services.selections.SelectLeaseTermListService;
 import com.propertyvista.crm.rpc.services.selections.SelectPortfolioListService;
 import com.propertyvista.crm.rpc.services.selections.SelectProductCodeListService;
+import com.propertyvista.crm.rpc.services.selections.SelectProvinceListService;
 import com.propertyvista.crm.rpc.services.selections.SelectTaxListService;
 import com.propertyvista.crm.rpc.services.selections.SelectTenantListService;
 import com.propertyvista.crm.rpc.services.selections.SelectUnitListService;
@@ -428,6 +430,9 @@ public class VistaCrmAccessControlList extends ServletContainerAclBuilder {
         grant(VistaBasicBehavior.CRM, new IServiceExecutePermission(SelectFeatureListService.class));
         grant(VistaBasicBehavior.CRM, new IServiceExecutePermission(SelectConcessionListService.class));
         grant(VistaBasicBehavior.CRM, new IServiceExecutePermission(SelectLeaseAdjustmentReasonListService.class));
+
+        grant(VistaBasicBehavior.CRM, new IServiceExecutePermission(SelectProvinceListService.class));
+        grant(VistaBasicBehavior.CRM, new IServiceExecutePermission(SelectCityListService.class));
 
 // - Organization:
         grant(VistaBasicBehavior.CRM, new EntityPermission(Employee.class, EntityPermission.READ));

@@ -11,18 +11,12 @@
  * @author stanp
  * @version $Id$
  */
-package com.propertyvista.domain.policy.dto;
+package com.propertyvista.crm.rpc.services.selections;
 
-import com.pyx4j.entity.annotations.ExtendsDBO;
-import com.pyx4j.entity.annotations.Transient;
-import com.pyx4j.entity.shared.ISet;
+import com.pyx4j.entity.rpc.AbstractListService;
 
-import com.propertyvista.domain.policy.framework.PolicyDTOBase;
-import com.propertyvista.domain.policy.policies.ILSPolicy;
-import com.propertyvista.domain.ref.Country;
+import com.propertyvista.domain.ref.City;
 
-@Transient
-@ExtendsDBO(ILSPolicy.class)
-public interface ILSPolicyDTO extends PolicyDTOBase, ILSPolicy {
-    ISet<Country> countries();
+public interface SelectCityListService extends AbstractListService<City> {
+
 }

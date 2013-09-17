@@ -23,8 +23,8 @@ import com.pyx4j.entity.annotations.Owner;
 import com.pyx4j.entity.annotations.ReadOnly;
 import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
-import com.pyx4j.entity.shared.ISet;
 
 import com.propertyvista.domain.policy.policies.ILSPolicy;
 import com.propertyvista.domain.ref.City;
@@ -37,18 +37,23 @@ import com.propertyvista.domain.ref.Province;
 public interface ILSPolicyItem extends IEntity {
 
     public enum ILSProvider {
-        kijiji
+        kijiji, gottarent, emg
     }
 
     IPrimitive<ILSProvider> provider();
 
-    ISet<Province> provinces();
+    /*
+     * --- listing restrictions ---
+     */
+    // TODO - switch to ISet once Set-mapped containers available in UI
+    IList<Province> allowedProvinces();
 
-    ISet<City> cities();
+    // TODO - switch to ISet once Set-mapped containers available in UI
+    IList<City> allowedCities();
 
-    IPrimitive<Integer> buildings();
+    IPrimitive<Integer> maxBuildings();
 
-    IPrimitive<Integer> units();
+    IPrimitive<Integer> maxUnits();
 
     IPrimitive<Integer> maxUnitsPerBuilding();
 

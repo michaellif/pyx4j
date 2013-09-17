@@ -25,7 +25,6 @@ import com.pyx4j.entity.shared.Path;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion.Restriction;
 import com.pyx4j.forms.client.ui.CEntityComboBox;
-import com.pyx4j.forms.client.ui.CListBox.AsyncOptionsReadyCallback;
 
 public abstract class IssueClassificationChoice<E extends IEntity> extends CEntityComboBox<E> {
 
