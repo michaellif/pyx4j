@@ -37,7 +37,7 @@ import com.propertyvista.crm.rpc.dto.financial.autopayreview.ReviewedPapsHolderD
 import com.propertyvista.crm.rpc.services.financial.AutoPayReviewService;
 import com.propertyvista.domain.reports.AutoPayChangesReportMetadata;
 
-public class AutoPayReviewUpdaterActivity extends AbstractActivity implements AutoPayReviewView.Presenter {
+public class AutoPayReviewActivity extends AbstractActivity implements AutoPayReviewView.Presenter {
 
     private final AutoPayReviewView view;
 
@@ -47,7 +47,7 @@ public class AutoPayReviewUpdaterActivity extends AbstractActivity implements Au
 
     private final AppPlace place;
 
-    public AutoPayReviewUpdaterActivity(AppPlace place) {
+    public AutoPayReviewActivity(AppPlace place) {
         this.place = place;
         this.view = new AutoPayReviewViewImpl();
         this.autoPayReviewService = GWT.create(AutoPayReviewService.class);
@@ -60,8 +60,8 @@ public class AutoPayReviewUpdaterActivity extends AbstractActivity implements Au
         autoPayReviewService.getAutoPayReviews(new DefaultAsyncCallback<Vector<PapReviewDTO>>() {
             @Override
             public void onSuccess(Vector<PapReviewDTO> papReviews) {
-                AutoPayReviewUpdaterActivity.this.papReviews = papReviews;
-                AutoPayReviewUpdaterActivity.this.populateView();
+                AutoPayReviewActivity.this.papReviews = papReviews;
+                AutoPayReviewActivity.this.populateView();
             }
         }, view.getAutoPayFilterSettings().duplicate(AutoPayChangesReportMetadata.class));
     }

@@ -223,7 +223,7 @@ import com.propertyvista.crm.client.activity.policies.yardiinterface.YardiInterf
 import com.propertyvista.crm.client.activity.profile.PmcPaymentMethodsEditorActivity;
 import com.propertyvista.crm.client.activity.profile.PmcPaymentMethodsViewerActivity;
 import com.propertyvista.crm.client.activity.reports.AutoPayChangesReportActivity;
-import com.propertyvista.crm.client.activity.reports.AutoPayReviewUpdaterActivity;
+import com.propertyvista.crm.client.activity.reports.AutoPayReviewActivity;
 import com.propertyvista.crm.client.activity.reports.AvailabilityReportActivity;
 import com.propertyvista.crm.client.activity.reports.CustomerCreditCheckReportActivity;
 import com.propertyvista.crm.client.activity.reports.EftReportActivity;
@@ -1254,7 +1254,7 @@ public class ContentActivityMapper implements AppActivityMapper {
                 } else if (place instanceof CrmSiteMap.Dashboard.View) {
                     activity = new DashboardActivity((CrmSiteMap.Dashboard.View) place);
                 } else if (VistaTODO.VISTA_3129_AutoPayBulkEditorExperiment && (place instanceof CrmSiteMap.AutoPayReviewUpdater)) {
-                    activity = new AutoPayReviewUpdaterActivity((AppPlace) place);
+                    activity = new AutoPayReviewActivity((AppPlace) place);
                 } else if (place instanceof Administration.Settings.CreditCheck) {
                     activity = new CreditCheckActivity();
                 } else if (place instanceof Administration.Settings.CreditCheck.Setup) {
