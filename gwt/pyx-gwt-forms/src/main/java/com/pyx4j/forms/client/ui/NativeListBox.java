@@ -20,182 +20,76 @@
  */
 package com.pyx4j.forms.client.ui;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Comparator;
 import java.util.List;
 
-import com.google.gwt.event.dom.client.BlurHandler;
-import com.google.gwt.event.dom.client.ChangeEvent;
-import com.google.gwt.event.dom.client.ChangeHandler;
-import com.google.gwt.event.dom.client.FocusHandler;
-import com.google.gwt.event.shared.HandlerRegistration;
-import com.google.gwt.user.client.Command;
-import com.google.gwt.user.client.ui.ListBox;
+import com.pyx4j.widgets.client.ListBox;
 
-import com.pyx4j.commons.IDebugId;
-import com.pyx4j.forms.client.ui.CListBox.ListBoxDisplayProperties;
+public class NativeListBox<E> extends ListBox implements INativeListBox<E> {
 
-//TODO doesn't follow convention on calling onEditStop+update
-public class NativeListBox<E> extends TriggerComponent<List<E>> implements INativeListBox<E> {
+    private final INativeListBox<E> implDelegate;
 
-    final private CListBox<E> cListBox;
+    private List<E> options;
 
-    private final InnerListBox nativeListBox;
+    public NativeListBox(int visibleItems, INativeListBox<E> implDelegate) {
+        super(true); // enable multiselect
+        this.implDelegate = implDelegate;
+        setVisibleItemCount(visibleItems);
+    }
 
-    private ListBoxDisplayProperties displayProperties;
-
-    private int selectedIndex = -1;
-
-    public NativeListBox(final CListBox<E> cListBox, ListBoxDisplayProperties properties) {
-        super();
-        this.cListBox = cListBox;
-        nativeListBox = new InnerListBox();
-//        construct(nativeListBox);
-        setTabIndex(cListBox.getTabIndex());
-        setDisplayProperties(properties);
-
-        nativeListBox.addChangeHandler(new ChangeHandler() {
-
-            @Override
-            public void onChange(ChangeEvent event) {
-                if (!displayProperties.multipleSelect) {
-                    // Only one item can be selected
-                    int selectedFirst = nativeListBox.getSelectedIndex();
-                    int count = nativeListBox.getItemCount();
-                    for (int i = 0; i < count; i++) {
-                        if (i == selectedFirst) {
-                            continue;
-                        }
-                        if (nativeListBox.isItemSelected(i)) {
-                            nativeListBox.setItemSelected(i, false);
-                        }
-                    }
-                    if (selectedIndex != selectedFirst) {
-                        cListBox.onSelectionChanged(selectedFirst);
-                    }
-                    selectedIndex = selectedFirst;
-                }
+    @Override
+    public void setOptions(Collection<E> options) {
+        clear();
+        this.options = new ArrayList<E>(options);
+        if (options != null) {
+            for (E item : options) {
+                addItem(getItemName(item));
             }
-        });
-    }
-
-    @Override
-    public void setEnabled(boolean enabled) {
-        super.setEnabled(enabled);
-    }
-
-    @Override
-    public void setEditable(boolean editable) {
-        super.setReadOnly(!editable);
-    }
-
-    @Override
-    public boolean isEditable() {
-        return !super.isReadOnly();
-    }
-
-    @Override
-    public void setDisplayProperties(ListBoxDisplayProperties properties) {
-        this.displayProperties = properties;
-        this.nativeListBox.setVisibleItemCount(properties.visibleItemCount);
-    }
-
-    @Override
-    public int getSelectedIndex() {
-        return nativeListBox.getSelectedIndex();
-    }
-
-    @Override
-    public void setSelectedIndex(int index) {
-        nativeListBox.setSelectedIndex(index);
-        selectedIndex = index;
-    }
-
-    @Override
-    protected void onTrigger(boolean show) {
-        cListBox.onTrigger(show);
-    }
-
-    public void removeAllItems() {
-        nativeListBox.clear();
-        selectedIndex = -1;
-    }
-
-    @Override
-    public void removeItem(int index) {
-        if (index < 0) {
-            return;
-        }
-        nativeListBox.removeItem(index);
-        if (selectedIndex == index) {
-            selectedIndex = -1;
         }
     }
 
     @Override
-    public void refreshItem(int index) {
-        if (index < 0) {
-            return;
-        }
-        nativeListBox.setItemText(index, cListBox.getItemName(cListBox.getValue().get(index)));
-    }
-
-    class InnerListBox extends ListBox {
-
-        public InnerListBox() {
-            super(true);
-        }
-
-    }
-
-    @Override
-    public void setNativeValue(List<E> value) {
-        this.selectedIndex = -1;
-        removeAllItems();
-        if (value != null) {
+    public void setNativeValue(Collection<E> value) {
+        setSelectedIndex(-1);
+        if (value != null && options != null) {
             for (E v : value) {
-                nativeListBox.addItem(cListBox.getItemName(v));
+                setItemSelected(options.indexOf(v), true);
             }
         }
     }
 
     @Override
     public List<E> getNativeValue() {
-        // TODO Auto-generated method stub
-        return null;
+        List<E> selection = new ArrayList<E>();
+        if (options != null) {
+            for (int idx = 0; idx < options.size(); idx++) {
+                if (this.isItemSelected(idx)) {
+                    selection.add(options.get(idx));
+                }
+            }
+        }
+        return selection;
     }
 
     @Override
-    public CListBox<E> getCComponent() {
-        return cListBox;
+    public String getItemName(E item) {
+        return implDelegate.getItemName(item);
     }
 
     @Override
-    public HandlerRegistration addFocusHandler(FocusHandler focusHandler) {
-        // TODO Auto-generated method stub
-        return null;
+    public void onNativeValueChange(Collection<E> values) {
+        implDelegate.onNativeValueChange(values);
     }
 
     @Override
-    public HandlerRegistration addBlurHandler(BlurHandler blurHandler) {
-        // TODO Auto-generated method stub
-        return null;
+    public String itemCannotBeRemovedMessage(E item) {
+        return implDelegate.itemCannotBeRemovedMessage(item);
     }
 
     @Override
-    public void setDebugId(IDebugId debugId) {
-        // TODO Auto-generated method stub
-
+    public Comparator<E> getComparator() {
+        return implDelegate.getComparator();
     }
-
-    @Override
-    public void setNavigationCommand(Command navigationCommand) {
-        // TODO Auto-generated method stub
-
-    }
-
-    @Override
-    public void init() {
-        // TODO Auto-generated method stub
-
-    }
-
 }

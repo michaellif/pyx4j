@@ -30,9 +30,12 @@ import com.google.gwt.event.shared.HandlerRegistration;
 import com.pyx4j.forms.client.events.HasOptionsChangeHandlers;
 import com.pyx4j.forms.client.events.OptionsChangeEvent;
 import com.pyx4j.forms.client.events.OptionsChangeHandler;
-import com.pyx4j.forms.client.ui.CListBox.AsyncOptionsReadyCallback;
 
 public class CComboBox<E> extends CFocusComponent<E, NComboBox<E>> implements HasOptionsChangeHandlers<List<E>>, IAcceptText {
+
+    public static interface AsyncOptionsReadyCallback<T> {
+        public void onOptionsReady(List<T> opt);
+    }
 
     private List<E> options;
 

@@ -20,19 +20,27 @@
  */
 package com.pyx4j.forms.client.ui;
 
+import java.util.Collection;
+import java.util.Comparator;
 import java.util.List;
 
-import com.pyx4j.forms.client.ui.CListBox.ListBoxDisplayProperties;
+import com.pyx4j.widgets.client.IFocusWidget;
 
-public interface INativeListBox<E> extends INativeFocusComponent<List<E>> {
+public interface INativeListBox<E> extends IFocusWidget {
 
-    public int getSelectedIndex();
+    void setVisibleItemCount(int count);
 
-    public void setSelectedIndex(int index);
+    void setOptions(Collection<E> options);
 
-    public void refreshItem(int index);
+    void setNativeValue(Collection<E> value);
 
-    public void removeItem(int index);
+    List<E> getNativeValue();
 
-    public void setDisplayProperties(ListBoxDisplayProperties properties);
+    String getItemName(E item);
+
+    void onNativeValueChange(Collection<E> values);
+
+    String itemCannotBeRemovedMessage(E item);
+
+    Comparator<E> getComparator();
 }

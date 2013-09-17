@@ -29,8 +29,11 @@ import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPersonalIdentity;
 import com.pyx4j.forms.client.ui.CAbstractSuggestBox;
+import com.pyx4j.forms.client.ui.CCollectionBox;
+import com.pyx4j.forms.client.ui.CCollectionBox.SelectionMode;
 import com.pyx4j.forms.client.ui.CComboBoxBoolean;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CEntityComboBox;
@@ -50,6 +53,7 @@ import com.pyx4j.site.client.ui.prime.misc.CEntitySelectorHyperlink;
 import com.pyx4j.site.rpc.AppPlace;
 import com.pyx4j.tester.client.domain.test.EntityI;
 import com.pyx4j.tester.client.domain.test.EntityI.Enum1;
+import com.pyx4j.tester.client.domain.test.EntityIII;
 import com.pyx4j.tester.client.domain.test.EntityV;
 import com.pyx4j.tester.client.ui.FormDecoratorBuilder;
 import com.pyx4j.widgets.client.RadioGroup.Layout;
@@ -70,6 +74,44 @@ public class EntityIFormWithoutLists extends CEntityForm<EntityI> {
         int row = -1;
         main.setH1(++row, 0, 1, i18n.tr("Main Form"));
         main.getFlexCellFormatter().setColSpan(row, 0, 2);
+
+        // list box
+        CCollectionBox<EntityIII> listBox = new CCollectionBox<EntityIII>(SelectionMode.SINGLE_PANEL) {
+            @Override
+            public String getItemName(EntityIII o) {
+                if (o instanceof IEntity) {
+                    return ((IEntity) o).getStringView();
+                } else {
+                    return super.getItemName(o);
+                }
+            }
+        };
+        EntityIII e1 = EntityFactory.create(EntityIII.class);
+        e1.stringMember().setValue("One");
+        e1.integerMember().setValue(1);
+        EntityIII e2 = EntityFactory.create(EntityIII.class);
+        e2.stringMember().setValue("Two");
+        e2.integerMember().setValue(2);
+        EntityIII e3 = EntityFactory.create(EntityIII.class);
+        e3.stringMember().setValue("Three");
+        e3.integerMember().setValue(3);
+        listBox.setOptions(Arrays.asList(e1, e2, e3));
+
+        main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().entityIIIList(), listBox)).build());
+
+        CCollectionBox<EntityIII> setBox = new CCollectionBox<EntityIII>(SelectionMode.TWO_PANEL) {
+            @Override
+            public String getItemName(EntityIII o) {
+                if (o instanceof IEntity) {
+                    return ((IEntity) o).getStringView();
+                } else {
+                    return super.getItemName(o);
+                }
+            }
+        };
+        setBox.setOptions(Arrays.asList(e1, e2, e3));
+
+        main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().entityIIISet(), setBox)).build());
 
         // Personal Identity
         main.setWidget(

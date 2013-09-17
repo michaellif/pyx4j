@@ -21,6 +21,7 @@
 package com.pyx4j.forms.client.ui;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
@@ -29,28 +30,24 @@ import java.util.Vector;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.google.gwt.event.dom.client.BlurHandler;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.DoubleClickEvent;
 import com.google.gwt.event.dom.client.DoubleClickHandler;
-import com.google.gwt.event.dom.client.FocusHandler;
 import com.google.gwt.event.dom.client.HasDoubleClickHandlers;
 import com.google.gwt.event.dom.client.KeyDownEvent;
 import com.google.gwt.event.dom.client.KeyDownHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
-import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.FlexTable;
+import com.google.gwt.user.client.ui.FocusPanel;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.ListBox;
 
-import com.pyx4j.commons.IDebugId;
 import com.pyx4j.forms.client.ImageFactory;
-import com.pyx4j.forms.client.ui.CListBox.ListBoxDisplayProperties;
-import com.pyx4j.forms.client.validators.HasRequiredValueValidationMessage;
+import com.pyx4j.widgets.client.dialog.MessageDialog;
 
-public abstract class NativeListSelectionComposite<E> extends FlexTable implements INativeListBox<E> {
+public class NativeListSelectionComposite<E> extends FocusPanel implements INativeListBox<E> {
 
     private static final Logger log = LoggerFactory.getLogger(NativeListSelectionComposite.class);
 
@@ -62,17 +59,13 @@ public abstract class NativeListSelectionComposite<E> extends FlexTable implemen
 
     private List<E> optionsItemList;
 
-    private List<E> requiredValues;
-
-    private HasRequiredValueValidationMessage<E> hasRequiredValueValidationMessage;
-
     private final InnerListBox optionsListBox;
 
     private boolean enabled = true;
 
     private boolean editable = true;
 
-    private Comparator<E> comparator = null;
+    private final INativeListBox<E> implDelegate;
 
     protected class InnerListBox extends ListBox implements HasDoubleClickHandlers {
 
@@ -97,10 +90,11 @@ public abstract class NativeListSelectionComposite<E> extends FlexTable implemen
 
         public void insertItem(E item) {
             this.itemList.add(item);
-            if (getComparator() == null) {
+            Comparator<E> comparator = getComparator();
+            if (comparator == null) {
                 super.addItem(getItemName(item));
             } else {
-                Collections.sort(this.itemList, getComparator());
+                Collections.sort(this.itemList, comparator);
                 super.insertItem(getItemName(item), this.itemList.indexOf(item));
             }
         }
@@ -171,20 +165,22 @@ public abstract class NativeListSelectionComposite<E> extends FlexTable implemen
 
     }
 
-    public NativeListSelectionComposite(ListBoxDisplayProperties properties) {
-
+    public NativeListSelectionComposite(int visibleItems, INativeListBox<E> implDelegate) {
+        this.implDelegate = implDelegate;
         selectedListBox = new InnerListBox(true);
         optionsListBox = new InnerListBox(true);
         optionsListBox.addItem("Loading...");
 
+        FlexTable content = new FlexTable();
+        setWidget(content);
         Label availableLabel = new Label("Available");
-        setWidget(0, 0, availableLabel);
+        content.setWidget(0, 0, availableLabel);
 
         Label selectedLabel = new Label("Selected");
-        setWidget(0, 3, selectedLabel);
+        content.setWidget(0, 3, selectedLabel);
 
-        setWidget(1, 0, optionsListBox);
-        (getFlexCellFormatter()).setRowSpan(1, 0, 4);
+        content.setWidget(1, 0, optionsListBox);
+        content.getFlexCellFormatter().setRowSpan(1, 0, 4);
 
         // ->
         addButton = new NativePushButton(new Image(ImageFactory.getImages().arrowLightGreyRight()), new Image(ImageFactory.getImages()
@@ -200,7 +196,7 @@ public abstract class NativeListSelectionComposite<E> extends FlexTable implemen
                 slectedAdd();
             }
         });
-        setWidget(2, 1, addButton);
+        content.setWidget(2, 1, addButton);
 
         optionsListBox.addDoubleClickHandler(new DoubleClickHandler() {
             @Override
@@ -231,7 +227,7 @@ public abstract class NativeListSelectionComposite<E> extends FlexTable implemen
                 slectedRemove();
             }
         });
-        setWidget(3, 1, removeButton);
+        content.setWidget(3, 1, removeButton);
 
         selectedListBox.addDoubleClickHandler(new DoubleClickHandler() {
             @Override
@@ -249,23 +245,19 @@ public abstract class NativeListSelectionComposite<E> extends FlexTable implemen
         });
 
         // Layout corrections
-        getCellFormatter().getElement(1, 0).getStyle().setProperty("paddingRight", "0");
+        content.getCellFormatter().getElement(1, 0).getStyle().setProperty("paddingRight", "0");
         removeButton.getElement().getStyle().setProperty("padding", "3px");
         addButton.getElement().getStyle().setProperty("padding", "3px");
 
-        setWidget(1, 3, selectedListBox);
-        (getFlexCellFormatter()).setRowSpan(1, 3, 4);
+        content.setWidget(1, 3, selectedListBox);
+        content.getFlexCellFormatter().setRowSpan(1, 3, 4);
 
         // Remove table offset in form
-        this.getElement().getStyle().setProperty("borderCollapse", "collapse");
-        getCellFormatter().getElement(1, 0).getStyle().setProperty("paddingLeft", "0");
+        content.getElement().getStyle().setProperty("borderCollapse", "collapse");
+        content.getCellFormatter().getElement(1, 0).getStyle().setProperty("paddingLeft", "0");
 
-        this.setDisplayProperties(properties);
+        setVisibleItemCount(visibleItems);
     }
-
-    public abstract String getItemName(E item);
-
-    public abstract void onNativeValueChange(List<E> values);
 
     @Override
     protected void onEnsureDebugId(String baseID) {
@@ -288,7 +280,7 @@ public abstract class NativeListSelectionComposite<E> extends FlexTable implemen
             selectedListBox.insertItem(item);
             count++;
         }
-        onNativeValueChange(getNativeValue());
+// TODO        onNativeValueChange(getNativeValue());
         selectedListBox.setSelected(selected);
         log.debug("items added", count);
     }
@@ -297,17 +289,16 @@ public abstract class NativeListSelectionComposite<E> extends FlexTable implemen
         List<E> selected = selectedListBox.getSelected();
         int count = 0;
         for (E item : selected) {
-            if ((getRequiredValues() != null) && (getRequiredValues().contains(item))) {
-                if (hasRequiredValueValidationMessage != null) {
-                    //TODO Message.warn_no_log(hasRequiredValueValidationMessage.getValidationMessage(item));
-                }
+            String msg = itemCannotBeRemovedMessage(item);
+            if (msg != null) {
+                MessageDialog.info(msg);
                 continue;
             }
             selectedListBox.removeItem(item);
             optionsListBox.insertItem(item);
             count++;
         }
-        onNativeValueChange(getNativeValue());
+// TODO        onNativeValueChange(getNativeValue());
         optionsListBox.setSelected(selected);
         log.debug("items removed", count);
     }
@@ -333,12 +324,9 @@ public abstract class NativeListSelectionComposite<E> extends FlexTable implemen
     }
 
     @Override
-    public void setNativeValue(List<E> value) {
+    public void setNativeValue(Collection<E> value) {
         selectedListBox.clear();
         if (value != null) {
-            if (getComparator() != null) {
-                Collections.sort(value, getComparator());
-            }
             for (E item : value) {
                 selectedListBox.addItem(item);
             }
@@ -355,74 +343,25 @@ public abstract class NativeListSelectionComposite<E> extends FlexTable implemen
         setOptions(optionsItemList);
     }
 
-    public void setOptions(List<E> options) {
-        optionsItemList = options;
+    @Override
+    public void setOptions(Collection<E> options) {
         optionsListBox.clear();
         if (options != null) {
-            if (getComparator() != null) {
-                Collections.sort(options, getComparator());
-            }
+            optionsItemList = new ArrayList<E>(options);
             for (E item : options) {
                 if (!selectedListBox.contains(item)) {
                     optionsListBox.addItem(item);
                 }
             }
+        } else {
+            optionsItemList = null;
         }
     }
 
-    public Comparator<E> getComparator() {
-        return comparator;
-    }
-
-    public void setComparator(Comparator<E> comparator) {
-        this.comparator = comparator;
-    }
-
     @Override
-    public int getSelectedIndex() {
-        return selectedListBox.getSelectedIndex();
-    }
-
-    @Override
-    public void setSelectedIndex(int index) {
-        selectedListBox.setSelectedIndex(index);
-    }
-
-    @Override
-    public void refreshItem(int index) {
-        selectedListBox.refreshItem(index);
-    }
-
-    @Override
-    public void removeItem(int index) {
-        selectedListBox.removeItem(index);
-    }
-
-    @Override
-    public void setDisplayProperties(ListBoxDisplayProperties properties) {
-        optionsListBox.setVisibleItemCount(properties.visibleItemCount);
-        selectedListBox.setVisibleItemCount(properties.visibleItemCount);
-    }
-
-    @Override
-    public void setFocus(boolean focused) {
-        optionsListBox.setFocus(focused);
-        addButton.setFocus(false);
-        removeButton.setFocus(false);
-        selectedListBox.setFocus(false);
-    }
-
-    @Override
-    public void setTabIndex(int tabIndex) {
-        optionsListBox.setTabIndex(tabIndex);
-        addButton.setTabIndex(tabIndex + 1);
-        removeButton.setTabIndex(tabIndex + 2);
-        selectedListBox.setTabIndex(tabIndex + 3);
-    }
-
-    @Override
-    public int getTabIndex() {
-        return optionsListBox.getTabIndex();
+    public void setVisibleItemCount(int count) {
+        optionsListBox.setVisibleItemCount(count);
+        selectedListBox.setVisibleItemCount(count);
     }
 
     @Override
@@ -447,18 +386,6 @@ public abstract class NativeListSelectionComposite<E> extends FlexTable implemen
         return this.editable;
     }
 
-    @Override
-    public void setViewable(boolean editable) {
-        // TODO Auto-generated method stub
-
-    }
-
-    @Override
-    public boolean isViewable() {
-        // TODO Auto-generated method stub
-        return false;
-    }
-
     private void setEnabledComponents(boolean enabled) {
         optionsListBox.setEnabled(enabled);
         addButton.setEnabled(enabled);
@@ -466,39 +393,23 @@ public abstract class NativeListSelectionComposite<E> extends FlexTable implemen
         selectedListBox.setEnabled(enabled);
     }
 
-    public List<E> getRequiredValues() {
-        return requiredValues;
-    }
-
-    public void setRequiredValues(List<E> requiredValues) {
-        this.requiredValues = requiredValues;
-    }
-
-    public void setHasRequiredValueValidationMessage(HasRequiredValueValidationMessage<E> hasRequiredValueValidationMessage) {
-        this.hasRequiredValueValidationMessage = hasRequiredValueValidationMessage;
+    @Override
+    public String getItemName(E item) {
+        return implDelegate.getItemName(item);
     }
 
     @Override
-    public HandlerRegistration addFocusHandler(FocusHandler focusHandler) {
-        // TODO Auto-generated method stub
-        return null;
+    public void onNativeValueChange(Collection<E> values) {
+        implDelegate.onNativeValueChange(values);
     }
 
     @Override
-    public HandlerRegistration addBlurHandler(BlurHandler blurHandler) {
-        // TODO Auto-generated method stub
-        return null;
+    public String itemCannotBeRemovedMessage(E item) {
+        return implDelegate.itemCannotBeRemovedMessage(item);
     }
 
     @Override
-    public void setDebugId(IDebugId debugId) {
-        // TODO Auto-generated method stub
-
-    }
-
-    @Override
-    public void setNavigationCommand(Command navigationCommand) {
-        // TODO Auto-generated method stub
-
+    public Comparator<E> getComparator() {
+        return implDelegate.getComparator();
     }
 }

@@ -35,8 +35,9 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.criterion.Criterion;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
+import com.pyx4j.forms.client.ui.CComboBox.AsyncOptionsReadyCallback;
 
-public class CEntityListBox<E extends IEntity> extends CListBox<E> {
+public class CEntityListBox<E extends IEntity> extends CCollectionBox<E> {
 
     private static final Logger log = LoggerFactory.getLogger(CEntityListBox.class);
 
@@ -52,12 +53,12 @@ public class CEntityListBox<E extends IEntity> extends CListBox<E> {
         super();
     }
 
-    public CEntityListBox(String title, Layout layout) {
-        super(title, layout);
+    public CEntityListBox(String title) {
+        super(title);
     }
 
-    public CEntityListBox(String title, Layout layout, Class<E> entityClass) {
-        this(title, layout);
+    public CEntityListBox(String title, Class<E> entityClass) {
+        this(title);
         this.criteria = new EntityQueryCriteria<E>(entityClass);
     }
 

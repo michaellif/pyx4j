@@ -45,7 +45,6 @@ import com.pyx4j.forms.client.events.AsyncValueChangeEvent;
 import com.pyx4j.forms.client.events.AsyncValueChangeHandler;
 import com.pyx4j.forms.client.events.HasAsyncValue;
 import com.pyx4j.forms.client.events.HasAsyncValueChangeHandlers;
-import com.pyx4j.forms.client.ui.CListBox.AsyncOptionsReadyCallback;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
 import com.pyx4j.forms.client.validators.ValidationError;
 import com.pyx4j.gwt.commons.HandlerRegistrationGC;
