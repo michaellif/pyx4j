@@ -32,7 +32,7 @@ import com.pyx4j.forms.client.events.PropertyChangeEvent;
 import com.pyx4j.forms.client.events.PropertyChangeEvent.PropertyName;
 import com.pyx4j.forms.client.events.PropertyChangeHandler;
 import com.pyx4j.forms.client.images.EntityFolderImages;
-import com.pyx4j.forms.client.ui.DefaultCComponentsTheme;
+import com.pyx4j.forms.client.ui.CComponentTheme;
 import com.pyx4j.forms.client.ui.FormNavigationDebugId;
 import com.pyx4j.forms.client.validators.ValidationResults;
 import com.pyx4j.gwt.commons.HandlerRegistrationGC;
@@ -54,7 +54,7 @@ public abstract class BaseFolderDecorator<E extends IEntity> extends FlowPanel i
         addButton.setStyleName(DefaultEntityFolderTheme.StyleName.EntityFolderAddButton.name());
 
         validationMessageHolder = new HTML();
-        validationMessageHolder.setStyleName(DefaultCComponentsTheme.StyleName.ValidationLabel.name());
+        validationMessageHolder.setStyleName(CComponentTheme.StyleName.ValidationLabel.name());
 
         container = new SimplePanel();
         container.setStyleName(DefaultEntityFolderTheme.StyleName.EntityFolderContent.name());

@@ -48,7 +48,7 @@ import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.forms.client.events.HasPropertyChangeHandlers;
 import com.pyx4j.forms.client.events.PropertyChangeEvent;
 import com.pyx4j.forms.client.events.PropertyChangeHandler;
-import com.pyx4j.forms.client.ui.DefaultCComponentsTheme.StyleDependent;
+import com.pyx4j.forms.client.ui.CComponentTheme.StyleDependent;
 import com.pyx4j.forms.client.ui.decorators.IDecorator;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
 import com.pyx4j.forms.client.validators.MandatoryValidationFailure;
@@ -65,17 +65,17 @@ public abstract class CComponent<DATA_TYPE> implements HasHandlers, HasPropertyC
 
     public static enum NoteStyle {
 
-        Info(DefaultCComponentsTheme.StyleDependent.info),
+        Info(CComponentTheme.StyleDependent.info),
 
-        Warn(DefaultCComponentsTheme.StyleDependent.warning);
+        Warn(CComponentTheme.StyleDependent.warning);
 
         private NoteStyle(StyleDependent style) {
             this.style = style;
         }
 
-        DefaultCComponentsTheme.StyleDependent style;
+        CComponentTheme.StyleDependent style;
 
-        public DefaultCComponentsTheme.StyleDependent getStyle() {
+        public CComponentTheme.StyleDependent getStyle() {
             return style;
         }
     }
@@ -90,7 +90,7 @@ public abstract class CComponent<DATA_TYPE> implements HasHandlers, HasPropertyC
 
     private NoteStyle noteStyle;
 
-    private CContainer<?> parent;
+    private CEntityContainer<?> parent;
 
     private CLayoutConstraints constraints;
 
@@ -163,7 +163,7 @@ public abstract class CComponent<DATA_TYPE> implements HasHandlers, HasPropertyC
         PropertyChangeEvent.fire(this, PropertyChangeEvent.PropertyName.locationHint);
     }
 
-    public CContainer<?> getParent() {
+    public CEntityContainer<?> getParent() {
         return parent;
     }
 
@@ -171,7 +171,7 @@ public abstract class CComponent<DATA_TYPE> implements HasHandlers, HasPropertyC
         return parent != null;
     }
 
-    public void onAdopt(CContainer<?> parent) {
+    public void onAdopt(CEntityContainer<?> parent) {
         assert (this.parent == null) : "Component " + this.getClass().getName() + " is already bound to " + this.parent;
         this.parent = parent;
         setContainerAccessRules(true);

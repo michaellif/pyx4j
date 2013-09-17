@@ -37,7 +37,6 @@ import com.pyx4j.entity.shared.IList;
 import com.pyx4j.forms.client.events.PropertyChangeHandler;
 import com.pyx4j.forms.client.images.EntityFolderImages;
 import com.pyx4j.forms.client.ui.CComponent;
-import com.pyx4j.forms.client.ui.CContainer;
 import com.pyx4j.forms.client.ui.CEntityContainer;
 import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.ui.folder.ItemActionsBar.ActionType;
@@ -171,7 +170,7 @@ public abstract class CEntityFolderItem<E extends IEntity> extends CEntityContai
     }
 
     @Override
-    public void onAdopt(final CContainer<?> parent) {
+    public void onAdopt(final CEntityContainer<?> parent) {
         super.onAdopt(parent);
 
         final CEntityFolder<E> folder = (CEntityFolder<E>) parent;

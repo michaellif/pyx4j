@@ -73,7 +73,7 @@ public abstract class NField<DATA, EDITOR extends IWidget, CCOMP extends CField<
 
     public NField(CCOMP cComponent) {
         super();
-        setStyleName(DefaultCComponentsTheme.StyleName.FieldPanel.name());
+        setStyleName(CComponentTheme.StyleName.FieldPanel.name());
         this.cComponent = cComponent;
     }
 
@@ -182,9 +182,9 @@ public abstract class NField<DATA, EDITOR extends IWidget, CCOMP extends CField<
             }
             editor.setEnabled(enabled);
             if (enabled) {
-                editor.removeStyleDependentName(DefaultCComponentsTheme.StyleDependent.disabled.name());
+                editor.removeStyleDependentName(CComponentTheme.StyleDependent.disabled.name());
             } else {
-                editor.addStyleDependentName(DefaultCComponentsTheme.StyleDependent.disabled.name());
+                editor.addStyleDependentName(CComponentTheme.StyleDependent.disabled.name());
             }
         }
     }
@@ -206,9 +206,9 @@ public abstract class NField<DATA, EDITOR extends IWidget, CCOMP extends CField<
             }
             editor.setEditable(editable);
             if (editable) {
-                editor.removeStyleDependentName(DefaultCComponentsTheme.StyleDependent.readonly.name());
+                editor.removeStyleDependentName(CComponentTheme.StyleDependent.readonly.name());
             } else {
-                editor.addStyleDependentName(DefaultCComponentsTheme.StyleDependent.readonly.name());
+                editor.addStyleDependentName(CComponentTheme.StyleDependent.readonly.name());
             }
         }
     }
@@ -252,7 +252,7 @@ public abstract class NField<DATA, EDITOR extends IWidget, CCOMP extends CField<
 
         public EditorPanel() {
             super();
-            setStyleName(DefaultCComponentsTheme.StyleName.FieldEditorPanel.name());
+            setStyleName(CComponentTheme.StyleName.FieldEditorPanel.name());
             getElement().getStyle().setProperty("display", "table");
             setWidth("100%");
 
@@ -369,7 +369,7 @@ public abstract class NField<DATA, EDITOR extends IWidget, CCOMP extends CField<
         public ViewerPanel() {
             super();
 
-            setStyleName(DefaultCComponentsTheme.StyleName.FieldViewerPanel.name());
+            setStyleName(CComponentTheme.StyleName.FieldViewerPanel.name());
             getElement().getStyle().setWhiteSpace(WhiteSpace.NOWRAP);
             setWidth("100%");
 

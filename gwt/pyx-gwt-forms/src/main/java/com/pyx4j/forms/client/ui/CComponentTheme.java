@@ -29,7 +29,7 @@ import com.pyx4j.commons.css.ThemeColor;
 import com.pyx4j.commons.css.ThemeId;
 import com.pyx4j.widgets.client.DefaultWidgetsTheme;
 
-public class DefaultCComponentsTheme extends Theme {
+public class CComponentTheme extends Theme {
 
     public static enum StyleName implements IStyleName {
         FieldPanel, FieldEditorPanel, FieldViewerPanel, ValidationLabel, NoteLabel,
@@ -41,7 +41,7 @@ public class DefaultCComponentsTheme extends Theme {
         disabled, readonly, info, warning
     }
 
-    public DefaultCComponentsTheme() {
+    public CComponentTheme() {
         initStyles();
     }
 

@@ -41,7 +41,7 @@ import com.pyx4j.forms.client.events.PropertyChangeEvent.PropertyName;
 import com.pyx4j.forms.client.events.PropertyChangeHandler;
 import com.pyx4j.forms.client.images.EntityFolderImages;
 import com.pyx4j.forms.client.ui.CComponent;
-import com.pyx4j.forms.client.ui.DefaultCComponentsTheme;
+import com.pyx4j.forms.client.ui.CComponentTheme;
 import com.pyx4j.forms.client.ui.decorators.DecoratorDebugIds;
 import com.pyx4j.forms.client.validators.ValidationError;
 import com.pyx4j.forms.client.validators.ValidationResults;
@@ -80,7 +80,7 @@ public class TableFolderItemDecorator<E extends IEntity> extends BaseFolderItemD
         setWidget(mainPanel);
 
         validationMessageHolder = new HTML();
-        validationMessageHolder.setStyleName(DefaultCComponentsTheme.StyleName.ValidationLabel.name());
+        validationMessageHolder.setStyleName(CComponentTheme.StyleName.ValidationLabel.name());
         mainPanel.add(validationMessageHolder, DockPanel.SOUTH);
 
         actionsPanelHolder = new SimplePanel();

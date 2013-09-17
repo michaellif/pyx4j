@@ -89,15 +89,15 @@ public class NMonthYearPicker extends NFocusField<LogicalDate, MonthYearPicker, 
         super.setEnabled(enabled);
         if (getEditor() != null) {
             if (enabled) {
-                getEditor().getYearSelector().removeStyleDependentName(DefaultCComponentsTheme.StyleDependent.disabled.name());
+                getEditor().getYearSelector().removeStyleDependentName(CComponentTheme.StyleDependent.disabled.name());
             } else {
-                getEditor().getYearSelector().addStyleDependentName(DefaultCComponentsTheme.StyleDependent.disabled.name());
+                getEditor().getYearSelector().addStyleDependentName(CComponentTheme.StyleDependent.disabled.name());
             }
             if (!getCComponent().isYearOnly()) {
                 if (enabled) {
-                    getEditor().getMonthSelector().removeStyleDependentName(DefaultCComponentsTheme.StyleDependent.disabled.name());
+                    getEditor().getMonthSelector().removeStyleDependentName(CComponentTheme.StyleDependent.disabled.name());
                 } else {
-                    getEditor().getMonthSelector().addStyleDependentName(DefaultCComponentsTheme.StyleDependent.disabled.name());
+                    getEditor().getMonthSelector().addStyleDependentName(CComponentTheme.StyleDependent.disabled.name());
                 }
             }
         }
@@ -108,15 +108,15 @@ public class NMonthYearPicker extends NFocusField<LogicalDate, MonthYearPicker, 
         super.setEditable(editable);
         if (getEditor() != null) {
             if (editable) {
-                getEditor().getYearSelector().removeStyleDependentName(DefaultCComponentsTheme.StyleDependent.readonly.name());
+                getEditor().getYearSelector().removeStyleDependentName(CComponentTheme.StyleDependent.readonly.name());
             } else {
-                getEditor().getYearSelector().addStyleDependentName(DefaultCComponentsTheme.StyleDependent.readonly.name());
+                getEditor().getYearSelector().addStyleDependentName(CComponentTheme.StyleDependent.readonly.name());
             }
             if (!getCComponent().isYearOnly()) {
                 if (editable) {
-                    getEditor().getMonthSelector().removeStyleDependentName(DefaultCComponentsTheme.StyleDependent.readonly.name());
+                    getEditor().getMonthSelector().removeStyleDependentName(CComponentTheme.StyleDependent.readonly.name());
                 } else {
-                    getEditor().getMonthSelector().addStyleDependentName(DefaultCComponentsTheme.StyleDependent.readonly.name());
+                    getEditor().getMonthSelector().addStyleDependentName(CComponentTheme.StyleDependent.readonly.name());
                 }
             }
         }

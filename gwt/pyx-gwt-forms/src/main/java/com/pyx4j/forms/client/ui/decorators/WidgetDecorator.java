@@ -52,7 +52,7 @@ import com.pyx4j.forms.client.events.PropertyChangeEvent.PropertyName;
 import com.pyx4j.forms.client.events.PropertyChangeHandler;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.Cursor;
-import com.pyx4j.forms.client.ui.DefaultCComponentsTheme;
+import com.pyx4j.forms.client.ui.CComponentTheme;
 import com.pyx4j.forms.client.ui.decorators.WidgetDecorator.Builder.Alignment;
 import com.pyx4j.forms.client.ui.decorators.WidgetDecorator.Builder.Layout;
 
@@ -161,12 +161,12 @@ public class WidgetDecorator extends FlowPanel implements IDecorator<CComponent<
         validationLabel = new Label();
         validationLabel.setVisible(false);
         validationLabel.setWidth(builder.contentWidth);
-        validationLabel.setStyleName(DefaultCComponentsTheme.StyleName.ValidationLabel.name());
+        validationLabel.setStyleName(CComponentTheme.StyleName.ValidationLabel.name());
 
         noteLabel = new Label();
         noteLabel.setVisible(false);
         noteLabel.setWidth(builder.contentWidth);
-        noteLabel.setStyleName(DefaultCComponentsTheme.StyleName.NoteLabel.name());
+        noteLabel.setStyleName(CComponentTheme.StyleName.NoteLabel.name());
 
         assistantWidgetHolder = new SimplePanel();
         assistantWidgetHolder.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
@@ -348,7 +348,7 @@ public class WidgetDecorator extends FlowPanel implements IDecorator<CComponent<
         } else {
             noteLabel.setText(null);
             noteLabel.setVisible(false);
-            for (DefaultCComponentsTheme.StyleDependent style : DefaultCComponentsTheme.StyleDependent.values()) {
+            for (CComponentTheme.StyleDependent style : CComponentTheme.StyleDependent.values()) {
                 noteLabel.removeStyleDependentName(style.toString());
             }
         }
