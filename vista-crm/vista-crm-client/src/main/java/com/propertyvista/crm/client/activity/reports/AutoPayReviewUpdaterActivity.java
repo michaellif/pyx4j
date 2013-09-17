@@ -22,19 +22,24 @@ import com.google.gwt.core.shared.GWT;
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
+import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.rpc.shared.VoidSerializable;
 import com.pyx4j.site.rpc.AppPlace;
 
-import com.propertyvista.crm.client.ui.reports.autopayreviewer.AutoPayReviewUpdaterView;
-import com.propertyvista.crm.client.ui.reports.autopayreviewer.AutoPayReviewUpdaterViewImpl;
+import com.propertyvista.crm.client.ui.reports.autopayreviewer.AutoPayReviewView;
+import com.propertyvista.crm.client.ui.reports.autopayreviewer.AutoPayReviewViewImpl;
+import com.propertyvista.crm.rpc.dto.financial.autopayreview.PapChargeReviewDTO;
 import com.propertyvista.crm.rpc.dto.financial.autopayreview.PapReviewDTO;
+import com.propertyvista.crm.rpc.dto.financial.autopayreview.ReviewedPapChargeDTO;
+import com.propertyvista.crm.rpc.dto.financial.autopayreview.ReviewedPapDTO;
+import com.propertyvista.crm.rpc.dto.financial.autopayreview.ReviewedPapsHolderDTO;
 import com.propertyvista.crm.rpc.services.financial.AutoPayReviewService;
 import com.propertyvista.domain.reports.AutoPayChangesReportMetadata;
 
-public class AutoPayReviewUpdaterActivity extends AbstractActivity implements AutoPayReviewUpdaterView.Presenter {
+public class AutoPayReviewUpdaterActivity extends AbstractActivity implements AutoPayReviewView.Presenter {
 
-    private final AutoPayReviewUpdaterView view;
+    private final AutoPayReviewView view;
 
     private List<PapReviewDTO> papReviews;
 
@@ -44,7 +49,7 @@ public class AutoPayReviewUpdaterActivity extends AbstractActivity implements Au
 
     public AutoPayReviewUpdaterActivity(AppPlace place) {
         this.place = place;
-        this.view = new AutoPayReviewUpdaterViewImpl();
+        this.view = new AutoPayReviewViewImpl();
         this.autoPayReviewService = GWT.create(AutoPayReviewService.class);
         this.papReviews = new LinkedList<PapReviewDTO>();
     }
@@ -68,7 +73,17 @@ public class AutoPayReviewUpdaterActivity extends AbstractActivity implements Au
             public void onSuccess(VoidSerializable result) {
                 populate();
             }
-        }, new Vector<PapReviewDTO>(view.getMarkedPapReviews()));
+        }, makeReviewedPaps(view.getMarkedPapReviews()));
+    }
+
+    @Override
+    public void acceptAll() {
+        autoPayReviewService.accept(new DefaultAsyncCallback<VoidSerializable>() {
+            @Override
+            public void onSuccess(VoidSerializable result) {
+                populate();
+            }
+        }, makeReviewedPaps(papReviews));
     }
 
     @Override
@@ -100,6 +115,24 @@ public class AutoPayReviewUpdaterActivity extends AbstractActivity implements Au
 
         view.setRowData(view.getVisibleRange().getStart(), papReviews.size(), papReviews.subList(start, end));
         view.setLoading(false);
+    }
+
+    private ReviewedPapsHolderDTO makeReviewedPaps(List<PapReviewDTO> papReviews) {
+        ReviewedPapsHolderDTO reviewedPapsHolder = EntityFactory.create(ReviewedPapsHolderDTO.class);
+        for (PapReviewDTO papReview : papReviews) {
+            ReviewedPapDTO reviewedPap = EntityFactory.create(ReviewedPapDTO.class);
+            reviewedPap.pap().set(papReview.pap_());
+
+            for (PapChargeReviewDTO papChargeReview : papReview.charges()) {
+                ReviewedPapChargeDTO reviewedPapCharge = EntityFactory.create(ReviewedPapChargeDTO.class);
+                reviewedPapCharge.billableItem().set(papChargeReview.billableItem());
+                reviewedPapCharge.paymentAmountUpdate().setValue(papChargeReview.newPapAmount().getValue());
+                reviewedPap.reviewedCharges().add(reviewedPapCharge);
+            }
+            reviewedPapsHolder.acceptedReviewedPaps().add(reviewedPap);
+        }
+
+        return reviewedPapsHolder;
     }
 
 }

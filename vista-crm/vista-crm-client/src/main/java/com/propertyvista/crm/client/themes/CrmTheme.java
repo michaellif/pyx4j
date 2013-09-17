@@ -48,7 +48,7 @@ import com.propertyvista.crm.client.ui.gadgets.commonMk2.dashboard.AbstractDashb
 import com.propertyvista.crm.client.ui.gadgets.commonMk2.dashboard.AddGadgetDialog;
 import com.propertyvista.crm.client.ui.gadgets.forms.ArrearsGadgetSummaryForm;
 import com.propertyvista.crm.client.ui.reports.CommonReportStyles;
-import com.propertyvista.crm.client.ui.reports.autopayreviewer.AutoPayReviewUpdaterViewImpl;
+import com.propertyvista.crm.client.ui.reports.autopayreviewer.AutoPayReviewViewImpl;
 import com.propertyvista.crm.client.ui.reports.autopayreviewer.PapReviewCaptionViewer;
 import com.propertyvista.crm.client.ui.reports.autopayreviewer.PapReviewFolder;
 import com.propertyvista.crm.client.ui.reports.autopayreviewer.PapReviewsHolderForm;
@@ -700,17 +700,17 @@ public class CrmTheme extends VistaTheme {
 
     private void initAutoPayUpdaterStyles() {
 
-        Style style = new Style("." + AutoPayReviewUpdaterViewImpl.Styles.AutoPayReviewsSettingsFormPanel.name());
+        Style style = new Style("." + AutoPayReviewViewImpl.Styles.AutoPayReviewsSettingsFormPanel.name());
         style.addProperty("background-color", ThemeColor.object1, 0.3);
         style.addProperty("height", "120px");
         style.addProperty("overflow", "auto");
         addStyle(style);
 
-        style = new Style("." + AutoPayReviewUpdaterViewImpl.Styles.AutoPayReviewsSettingsFormPanel.name() + " .EntityFolderTableDecorator");
+        style = new Style("." + AutoPayReviewViewImpl.Styles.AutoPayReviewsSettingsFormPanel.name() + " .EntityFolderTableDecorator");
         style.addProperty("width", "5em");
         addStyle(style);
 
-        style = new Style("." + AutoPayReviewUpdaterViewImpl.Styles.AutoPayReviewsHolderForm.name());
+        style = new Style("." + AutoPayReviewViewImpl.Styles.AutoPayReviewsHolderForm.name());
         style.addProperty("position", "absolute");
         style.addProperty("top", "120px");
         style.addProperty("left", "0px");

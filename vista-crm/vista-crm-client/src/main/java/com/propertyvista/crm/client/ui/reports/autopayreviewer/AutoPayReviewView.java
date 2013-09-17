@@ -22,9 +22,11 @@ import com.pyx4j.site.client.ui.prime.IPrimePane;
 import com.propertyvista.crm.rpc.dto.financial.autopayreview.PapReviewDTO;
 import com.propertyvista.domain.reports.AutoPayChangesReportMetadata;
 
-public interface AutoPayReviewUpdaterView extends IPrimePane {
+public interface AutoPayReviewView extends IPrimePane {
 
     interface Presenter extends IPrimePane.Presenter {
+
+        void acceptAll();
 
         void acceptMarked();
 

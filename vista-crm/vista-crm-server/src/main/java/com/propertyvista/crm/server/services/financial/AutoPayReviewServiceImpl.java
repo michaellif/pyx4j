@@ -35,6 +35,7 @@ import com.propertyvista.crm.rpc.dto.financial.autopayreview.PapChargeReviewDTO;
 import com.propertyvista.crm.rpc.dto.financial.autopayreview.PapChargeReviewDTO.ChangeType;
 import com.propertyvista.crm.rpc.dto.financial.autopayreview.PapReviewCaptionDTO;
 import com.propertyvista.crm.rpc.dto.financial.autopayreview.PapReviewDTO;
+import com.propertyvista.crm.rpc.dto.financial.autopayreview.ReviewedPapsHolderDTO;
 import com.propertyvista.crm.rpc.services.financial.AutoPayReviewService;
 import com.propertyvista.domain.payment.PreauthorizedPayment;
 import com.propertyvista.domain.property.asset.building.Building;
@@ -50,19 +51,17 @@ public class AutoPayReviewServiceImpl implements AutoPayReviewService {
     public void getAutoPayReviews(AsyncCallback<Vector<PapReviewDTO>> callback, AutoPayChangesReportMetadata filterSettings) {
         Vector<AutoPayReviewDTO> suspendedPreauthorizedPayments = new Vector<AutoPayReviewDTO>(ServerSideFactory.create(PaymentReportFacade.class)
                 .reportSuspendedPreauthorizedPayments(makeCriteria(filterSettings)));
-
         Vector<PapReviewDTO> papsForReview = convert2PapReviews(suspendedPreauthorizedPayments);
-
         callback.onSuccess(papsForReview);
     }
 
     @Override
-    public void accept(AsyncCallback<VoidSerializable> callback, Vector<PapReviewDTO> acceptedReviews) {
+    public void accept(AsyncCallback<VoidSerializable> callback, ReviewedPapsHolderDTO acceptedReviews) {
         callback.onSuccess(null);
     }
 
     private PreauthorizedPaymentsReportCriteria makeCriteria(AutoPayChangesReportMetadata filterSettings) {
-        // query buildings to enforce portfolio:        
+        // query buildings to enforce portfolio:
         List<Building> selectedBuildings = null;
 
         if (!filterSettings.buildings().isEmpty()) {
@@ -110,6 +109,7 @@ public class AutoPayReviewServiceImpl implements AutoPayReviewService {
 
         for (AutoPayReviewChargeDTO autoPayCharge : autoPay.items()) {
             PapChargeReviewDTO papCharge = EntityFactory.create(PapChargeReviewDTO.class);
+            papCharge.billableItem().set(autoPayCharge.suspended().billableItem());
             papCharge.chargeName().setValue(autoPayCharge.leaseCharge().getValue());
             papCharge.changeType().setValue(guessChangeType(autoPayCharge));
 

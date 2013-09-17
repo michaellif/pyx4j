@@ -30,13 +30,13 @@ import com.propertyvista.crm.rpc.dto.financial.autopayreview.PapChargeReviewDTO;
 import com.propertyvista.crm.rpc.dto.financial.autopayreview.PapReviewDTO;
 import com.propertyvista.domain.reports.AutoPayChangesReportMetadata;
 
-public class AutoPayReviewUpdaterDataGridViewImpl extends AbstractPrimePane implements AutoPayReviewUpdaterView {
+public class AutoPayReviewDataGridViewImpl extends AbstractPrimePane implements AutoPayReviewView {
 
     private final AutoPayReviewDataGrid dataGrid;
 
-    private com.propertyvista.crm.client.ui.reports.autopayreviewer.AutoPayReviewUpdaterView.Presenter presenter;
+    private com.propertyvista.crm.client.ui.reports.autopayreviewer.AutoPayReviewView.Presenter presenter;
 
-    public AutoPayReviewUpdaterDataGridViewImpl() {
+    public AutoPayReviewDataGridViewImpl() {
         setSize("100%", "100%");
         LayoutPanel panel = new LayoutPanel();
 
@@ -62,7 +62,7 @@ public class AutoPayReviewUpdaterDataGridViewImpl extends AbstractPrimePane impl
     }
 
     @Override
-    public void setPresenter(com.propertyvista.crm.client.ui.reports.autopayreviewer.AutoPayReviewUpdaterView.Presenter presenter) {
+    public void setPresenter(com.propertyvista.crm.client.ui.reports.autopayreviewer.AutoPayReviewView.Presenter presenter) {
         this.presenter = presenter;
         this.presenter.onRangeChanged();
     }

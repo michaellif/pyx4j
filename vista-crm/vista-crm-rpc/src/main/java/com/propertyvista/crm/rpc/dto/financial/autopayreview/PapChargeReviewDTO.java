@@ -21,6 +21,8 @@ import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 
+import com.propertyvista.domain.tenant.lease.BillableItem;
+
 @Transient
 public interface PapChargeReviewDTO extends IEntity {
 
@@ -29,6 +31,9 @@ public interface PapChargeReviewDTO extends IEntity {
         Unchanged, Changed, Removed, New
 
     }
+
+    /** This is a reference to DBO */
+    BillableItem billableItem();
 
     IPrimitive<String> chargeName();
 

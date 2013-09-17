@@ -35,7 +35,7 @@ import com.propertyvista.crm.rpc.dto.financial.autopayreview.PapReviewDTO;
 import com.propertyvista.crm.rpc.dto.financial.autopayreview.PapReviewsHolderDTO;
 import com.propertyvista.domain.reports.AutoPayChangesReportMetadata;
 
-public class AutoPayReviewUpdaterViewImpl extends AbstractPrimePane implements AutoPayReviewUpdaterView, IsView {
+public class AutoPayReviewViewImpl extends AbstractPrimePane implements AutoPayReviewView, IsView {
 
     public enum Styles implements IStyleName {
 
@@ -43,11 +43,11 @@ public class AutoPayReviewUpdaterViewImpl extends AbstractPrimePane implements A
 
     }
 
-    private final static I18n i18n = I18n.get(AutoPayReviewUpdaterViewImpl.class);
+    private final static I18n i18n = I18n.get(AutoPayReviewViewImpl.class);
 
     private static final int PAGE_INCREMENT = 10;
 
-    private AutoPayReviewUpdaterView.Presenter presenter;
+    private AutoPayReviewView.Presenter presenter;
 
     private final PapReviewsHolderForm papReviewHolderForm;
 
@@ -55,7 +55,7 @@ public class AutoPayReviewUpdaterViewImpl extends AbstractPrimePane implements A
 
     private final AutoPayChangesReportSettingsForm settingsForm;
 
-    public AutoPayReviewUpdaterViewImpl() {
+    public AutoPayReviewViewImpl() {
         FlowPanel viewPanel = new FlowPanel();
         viewPanel.getElement().getStyle().setPosition(Position.RELATIVE);
         viewPanel.setSize("100%", "100%");
@@ -74,7 +74,7 @@ public class AutoPayReviewUpdaterViewImpl extends AbstractPrimePane implements A
         filterButtonsPanel.add(new Button(i18n.tr("Search"), new Command() {
             @Override
             public void execute() {
-                AutoPayReviewUpdaterViewImpl.this.search();
+                AutoPayReviewViewImpl.this.search();
             }
         }));
         filtersPanel.add(filterButtonsPanel);
@@ -84,7 +84,7 @@ public class AutoPayReviewUpdaterViewImpl extends AbstractPrimePane implements A
         papReviewHolderForm = new PapReviewsHolderForm() {
             @Override
             public void onMoreClicked() {
-                AutoPayReviewUpdaterViewImpl.this.showMore();
+                AutoPayReviewViewImpl.this.showMore();
             }
         };
         papReviewHolderForm.initContent();
@@ -95,7 +95,7 @@ public class AutoPayReviewUpdaterViewImpl extends AbstractPrimePane implements A
         addHeaderToolbarItem(new Button(i18n.tr("Accept Marked"), new Command() {
             @Override
             public void execute() {
-                AutoPayReviewUpdaterViewImpl.this.acceptMarked();
+                AutoPayReviewViewImpl.this.acceptMarked();
             }
         }));
 
@@ -121,7 +121,7 @@ public class AutoPayReviewUpdaterViewImpl extends AbstractPrimePane implements A
     }
 
     @Override
-    public void setPresenter(AutoPayReviewUpdaterView.Presenter presenter) {
+    public void setPresenter(AutoPayReviewView.Presenter presenter) {
         this.papReviewHolderForm.setVisited(false);
         this.presenter = presenter;
     }
