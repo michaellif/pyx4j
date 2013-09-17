@@ -30,7 +30,7 @@ import com.pyx4j.forms.client.events.PropertyChangeEvent;
 import com.pyx4j.forms.client.events.PropertyChangeEvent.PropertyName;
 import com.pyx4j.forms.client.events.PropertyChangeHandler;
 import com.pyx4j.forms.client.ui.CComponent;
-import com.pyx4j.forms.client.ui.DefaultCComponentsTheme;
+import com.pyx4j.forms.client.ui.CComponentTheme;
 import com.pyx4j.forms.client.ui.decorators.DefaultWidgetDecoratorTheme;
 import com.pyx4j.forms.client.ui.decorators.IDecorator;
 import com.pyx4j.forms.client.ui.decorators.WidgetDecorator.DebugIds;
@@ -86,7 +86,7 @@ public class WidgetDecoratorRightLabel extends Composite implements IDecorator<C
 
         SimplePanel validationLabelHolder = new SimplePanel();
         validationLabel = new Label();
-        validationLabel.setStyleName(DefaultCComponentsTheme.StyleName.ValidationLabel.name());
+        validationLabel.setStyleName(CComponentTheme.StyleName.ValidationLabel.name());
         validationLabel.getElement().getStyle().setWidth(labelWidth + componentWidth, Unit.EM);
         validationLabelHolder.add(validationLabel);
         panel.add(validationLabelHolder);
