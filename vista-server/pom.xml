@@ -379,7 +379,7 @@
 
                     <plugin>
                         <groupId>com.pyx4j</groupId>
-                        <artifactId>maven-i18n-plugin</artifactId>
+                        <artifactId>i18n-maven-plugin</artifactId>
                         <version>${pyxVersion}</version>
                         <executions>
                             <execution>
@@ -651,7 +651,7 @@
 
                     <plugin>
                         <groupId>com.pyx4j</groupId>
-                        <artifactId>maven-password-plugin</artifactId>
+                        <artifactId>password-maven-plugin</artifactId>
                         <version>${pyxVersion}</version>
                         <executions>
                             <execution>

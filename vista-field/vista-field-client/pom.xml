@@ -85,7 +85,7 @@
                 <plugins>
                     <plugin>
                         <groupId>com.pyx4j</groupId>
-                        <artifactId>maven-gwt-plugin</artifactId>
+                        <artifactId>gwt-maven-plugin</artifactId>
                         <executions>
                             <execution>
                                 <id>compile-java2script</id>
@@ -144,7 +144,7 @@
                 <plugins>
                     <plugin>
                         <groupId>com.pyx4j</groupId>
-                        <artifactId>maven-i18n-plugin</artifactId>
+                        <artifactId>i18n-maven-plugin</artifactId>
                         <version>${pyxVersion}</version>
                         <executions>
                             <execution>

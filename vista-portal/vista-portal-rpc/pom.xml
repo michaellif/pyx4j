@@ -86,7 +86,7 @@
             </plugin>
             <plugin>
                 <groupId>com.pyx4j</groupId>
-                <artifactId>maven-gwt-plugin</artifactId>
+                <artifactId>gwt-maven-plugin</artifactId>
                 <executions>
                     <execution>
                         <goals>
