@@ -26,9 +26,12 @@ import java.util.Vector;
 
 import org.apache.maven.archiver.MavenArchiveConfiguration;
 import org.apache.maven.archiver.MavenArchiver;
+import org.apache.maven.execution.MavenSession;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
+import org.apache.maven.plugins.annotations.Component;
+import org.apache.maven.plugins.annotations.Parameter;
 import org.apache.maven.project.MavenProject;
 import org.codehaus.plexus.archiver.jar.JarArchiver;
 import org.codehaus.plexus.util.DirectoryScanner;
@@ -43,59 +46,52 @@ abstract class AbstractSourceJarMojo extends AbstractMojo {
      * List of files to include. Specified as fileset patterns which are relative to the
      * input directory whose contents is being packaged into the JAR. Defaults to .java
      * and .gwt.xml files.
-     * 
-     * @parameter
      */
+    @Parameter
     private String[] includes;
 
     /**
      * List of files to exclude. Specified as fileset patterns which are relative to the
      * input directory whose contents is being packaged into the JAR.
      * 
-     * @parameter
      */
+    @Parameter
     private String[] excludes;
 
     /**
      * Name of the generated JAR.
-     * 
-     * @parameter alias="jarName" expression="${jar.finalName}" default-value="${project.build.finalName}"
-     * @required
      */
+    @Parameter(required = true, defaultValue = "${project.build.finalName}")
     private String finalName;
 
     protected abstract String getClassifier();
 
     /**
      * Directory containing the generated JAR.
-     * 
-     * @parameter expression="${project.build.directory}"
-     * @required
      */
+    @Parameter(required = true, defaultValue = "${project.build.directory}")
     private File outputDirectory;
 
     /**
      * The Jar archiver.
-     * 
-     * @component role="org.codehaus.plexus.archiver.Archiver" roleHint="jar"
      */
+    @Component(role = org.codehaus.plexus.archiver.Archiver.class, hint = "jar")
     private JarArchiver jarArchiver;
 
     /**
      * The Maven project.
-     * 
-     * @parameter expression="${project}"
-     * @required
-     * @readonly
      */
+    @Component
     private MavenProject project;
 
     /**
      * The archive configuration to use. See <a href="http://maven.apache.org/shared/maven-archiver/index.html">Maven Archiver Reference</a>.
-     * 
-     * @parameter
      */
+    @Parameter
     private final MavenArchiveConfiguration archive = new MavenArchiveConfiguration();
+
+    @Component
+    private MavenSession session;
 
     protected abstract List<String> getCompileSourceRoots();
 
@@ -150,7 +146,7 @@ abstract class AbstractSourceJarMojo extends AbstractMojo {
             }
 
             jarArchiver.addArchivedFileSet(origJarFile, null, jarExcludes.toArray(new String[jarExcludes.size()]));
-            archiver.createArchive(project, archive);
+            archiver.createArchive(session, project, archive);
         } catch (Exception e) {
             throw new MojoExecutionException("Error assembling JAR", e);
         }

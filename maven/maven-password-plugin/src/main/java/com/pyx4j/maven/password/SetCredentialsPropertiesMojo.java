@@ -22,6 +22,9 @@ package com.pyx4j.maven.password;
 
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
+import org.apache.maven.plugins.annotations.Component;
+import org.apache.maven.plugins.annotations.Mojo;
+import org.apache.maven.plugins.annotations.Parameter;
 import org.apache.maven.project.MavenProject;
 import org.apache.maven.settings.Server;
 import org.codehaus.plexus.PlexusConstants;
@@ -31,26 +34,19 @@ import org.codehaus.plexus.context.ContextException;
 import org.codehaus.plexus.personality.plexus.lifecycle.phase.Contextualizable;
 
 /**
- * 
  * Read the credentials from server in settings.xml and set them as project properties.
- * 
- * @goal set-project-properties
  */
+@Mojo(name = "set-project-properties")
 public class SetCredentialsPropertiesMojo extends CredentialsAbstractMojo implements Contextualizable {
 
     /**
      * The server id in maven settings.xml to use for email(username) and password.
      * 
-     * @parameter
-     * @required
      */
+    @Parameter(required = true)
     protected String serverId;
 
-    /**
-     * @parameter default-value="${project}"
-     * @required
-     * @readonly
-     */
+    @Component
     private MavenProject project;
 
     @Override

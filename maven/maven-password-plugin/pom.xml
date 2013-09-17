@@ -20,7 +20,7 @@
     <description>Write Credentials file or project properties base on server in maven settings.xml</description>
 
     <properties>
-        <maven.plugin.version>3.0.3</maven.plugin.version>
+        <maven.plugin.version>3.1.0</maven.plugin.version>
         <maven.project.version>2.2.1</maven.project.version>
     </properties>
 
@@ -38,6 +38,13 @@
         </dependency>
 
         <dependency>
+             <groupId>org.apache.maven.plugin-tools</groupId>
+            <artifactId>maven-plugin-annotations</artifactId>
+            <version>3.2</version>
+            <scope>provided</scope>
+        </dependency>
+        
+        <dependency>
             <groupId>org.apache.maven</groupId>
             <artifactId>maven-settings</artifactId>
             <version>${maven.plugin.version}</version>
@@ -48,17 +55,27 @@
             <artifactId>maven-project</artifactId>
             <version>${maven.project.version}</version>
         </dependency>
-        
+
     </dependencies>
 
-    <reporting>
+    <build>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-plugin-plugin</artifactId>
-                <version>2.9</version>
+                <version>3.2</version>
+                <configuration>
+                    <skipErrorNoDescriptorsFound>true</skipErrorNoDescriptorsFound>
+                </configuration>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>descriptor</goal>
+                        </goals>
+                    </execution>
+                </executions>
             </plugin>
         </plugins>
-    </reporting>
+    </build>
 
 </project>

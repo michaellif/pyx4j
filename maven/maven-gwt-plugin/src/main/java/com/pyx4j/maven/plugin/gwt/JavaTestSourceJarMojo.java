@@ -22,37 +22,34 @@ package com.pyx4j.maven.plugin.gwt;
 
 import java.util.List;
 
+import org.apache.maven.plugins.annotations.LifecyclePhase;
+import org.apache.maven.plugins.annotations.Mojo;
+import org.apache.maven.plugins.annotations.Parameter;
+
 /**
  * Add java source and GWT module descriptors as resources to project test jar
- * 
- * @goal test-source-jar
- * @phase package
- * @threadSafe
  */
+@Mojo(name = "test-source-jar", defaultPhase = LifecyclePhase.PACKAGE, threadSafe = true)
 public class JavaTestSourceJarMojo extends AbstractSourceJarMojo {
 
     /**
      * Allow to skip execution of this Mojo
-     * 
-     * @parameter expression = "${project.test-jar-source-4gwt}" default-value="false"
-     * @required
      */
+    @Parameter(defaultValue = "${project.test-jar-source-4gwt}")
     private boolean active;
 
     /**
      * Set this to <code>true</code> to bypass unit tests entirely.
      * 
-     * @parameter expression="${maven.test.skip}"
      */
+    @Parameter(property = "maven.test.skip", defaultValue = "false")
     private boolean skip;
 
     /**
      * Source directory containing the test java files to be copied.
      * 
-     * @parameter default-value="${project.testCompileSourceRoots}"
-     * @required
-     * @readonly
      */
+    @Parameter(readonly = true, required = true, defaultValue = "${project.testCompileSourceRoots}")
     private List<String> compileSourceRoots;
 
     @Override

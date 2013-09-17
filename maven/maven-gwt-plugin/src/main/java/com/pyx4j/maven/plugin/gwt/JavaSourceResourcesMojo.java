@@ -29,6 +29,10 @@ import org.apache.maven.execution.MavenSession;
 import org.apache.maven.model.Resource;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
+import org.apache.maven.plugins.annotations.Component;
+import org.apache.maven.plugins.annotations.LifecyclePhase;
+import org.apache.maven.plugins.annotations.Mojo;
+import org.apache.maven.plugins.annotations.Parameter;
 import org.apache.maven.project.MavenProject;
 import org.apache.maven.shared.filtering.MavenFilteringException;
 import org.apache.maven.shared.filtering.MavenResourcesExecution;
@@ -38,81 +42,57 @@ import org.apache.maven.shared.filtering.MavenResourcesFiltering;
  * Copy java source code and GWT module descriptors as resources in the build
  * outputDirectory.
  * 
- * @goal source-resources
- * @phase prepare-package
- * @threadSafe
  */
+@Mojo(name = "source-resources", defaultPhase = LifecyclePhase.PREPARE_PACKAGE, threadSafe = true)
 public class JavaSourceResourcesMojo extends AbstractMojo {
 
     /**
      * Allow to skip execution of this Mojo
      * 
-     * @parameter expression = "${project.jar-source-4gwt}" default-value="false"
-     * @required
      */
+    @Parameter(defaultValue = "${project.jar-source-4gwt}")
     private boolean active;
 
     /**
      * The output directory into which to copy the resources.
-     * 
-     * @parameter expression="${project.build.outputDirectory}"
-     * @required
      */
+    @Parameter(required = true, defaultValue = "${project.build.outputDirectory}")
     private File outputDirectory;
 
     /**
      * Source directory containing the java files to be copied.
-     * 
-     * @parameter expression = "${project.build.sourceDirectory}"
-     * @required
      */
+    @Parameter(required = true, defaultValue = "${project.build.sourceDirectory}")
     private String sourceDirectory;
 
     /**
-     * Set whether Sources are filtered to replace tokens with parameterized values or
-     * not.
-     * 
-     * @parameter expression = "false"
-     * @required
+     * Set whether Sources are filtered to replace tokens with parameterized values or not.
      */
+    @Parameter(defaultValue = "false")
     private boolean filtering;
 
     /**
      * The character encoding scheme to be applied when filtering resources.
      * 
-     * @parameter expression="${encoding}" default-value="${project.build.sourceEncoding}"
      */
+    @Parameter(defaultValue = "${project.build.sourceEncoding}")
     protected String encoding;
 
     /**
-     * Additional file extensions to not apply filtering (already defined are : jpg, jpeg,
-     * gif, bmp, png)
+     * Additional file extensions to not apply filtering (already defined are : jpg, jpeg, gif, bmp, png)
      * 
-     * @parameter
      * @since 2.3
      */
-    protected List<?> nonFilteredFileExtensions;
+    @Parameter
+    protected List<String> nonFilteredFileExtensions;
 
-    /**
-     * @parameter expression="${project}"
-     * @required
-     * @readonly
-     */
+    @Component
     protected MavenProject project;
 
-    /**
-     * 
-     * @component role="org.apache.maven.shared.filtering.MavenResourcesFiltering"
-     *            role-hint="default"
-     * @required
-     */
+    @Component
     protected MavenResourcesFiltering mavenResourcesFiltering;
 
-    /**
-     * @parameter default-value="${session}"
-     * @readonly
-     * @required
-     */
+    @Component
     protected MavenSession session;
 
     @Override
@@ -121,8 +101,9 @@ public class JavaSourceResourcesMojo extends AbstractMojo {
             getLog().debug("inactive");
             return;
         }
+        List<String> nonFilteredFileExtensions = Collections.emptyList();
         MavenResourcesExecution mavenResourcesExecution = new MavenResourcesExecution(getResources(), getOutputDirectory(), project, encoding, null,
-                Collections.EMPTY_LIST, session);
+                nonFilteredFileExtensions, session);
         if (nonFilteredFileExtensions != null) {
             mavenResourcesExecution.setNonFilteredFileExtensions(nonFilteredFileExtensions);
         }
@@ -137,7 +118,7 @@ public class JavaSourceResourcesMojo extends AbstractMojo {
         return outputDirectory;
     }
 
-    private List<?> getResources() {
+    private List<Resource> getResources() {
         List<Resource> resources = new Vector<Resource>();
 
         Resource res = new Resource();

@@ -23,23 +23,19 @@ package com.pyx4j.maven.password;
 import java.lang.reflect.Method;
 
 import org.apache.maven.plugin.AbstractMojo;
+import org.apache.maven.plugins.annotations.Component;
+import org.apache.maven.plugins.annotations.Parameter;
 import org.apache.maven.settings.Settings;
 import org.codehaus.plexus.PlexusContainer;
 
-/**
- * 
- */
 public abstract class CredentialsAbstractMojo extends AbstractMojo {
 
     static final String SECURITY_DISPATCHER_CLASS_NAME = "org.sonatype.plexus.components.sec.dispatcher.SecDispatcher";
 
     /**
      * The Maven settings reference.
-     * 
-     * @parameter expression="${settings}"
-     * @required
-     * @readonly
      */
+    @Component
     protected Settings settings;
 
     /**
@@ -51,13 +47,15 @@ public abstract class CredentialsAbstractMojo extends AbstractMojo {
     protected PlexusContainer container;
 
     /**
-     * @parameter default-value="email";
+     * UserId property name
      */
+    @Parameter(defaultValue = "userId")
     protected String usernameName;
 
     /**
-     * @parameter default-value="password";
+     * Password property name
      */
+    @Parameter(defaultValue = "password")
     protected String passwordName;
 
     protected String decryptPassword(String password) {

@@ -22,30 +22,26 @@ package com.pyx4j.maven.plugin.gwt;
 
 import java.util.List;
 
+import org.apache.maven.plugins.annotations.LifecyclePhase;
+import org.apache.maven.plugins.annotations.Mojo;
+import org.apache.maven.plugins.annotations.Parameter;
+
 /**
  * Add java source and GWT module descriptors as resources to project jar
- * 
- * @goal source-jar
- * @phase package
- * @threadSafe
  */
+@Mojo(name = "source-jar", defaultPhase = LifecyclePhase.PACKAGE, threadSafe = true)
 public class JavaSourceJarMojo extends AbstractSourceJarMojo {
 
     /**
      * Allow to skip execution of this Mojo
-     * 
-     * @parameter expression = "${project.jar-source-4gwt}" default-value="false"
-     * @required
      */
+    @Parameter(defaultValue = "${project.jar-source-4gwt}")
     private boolean active;
 
     /**
      * Source directory containing the java files to be copied.
-     * 
-     * @parameter default-value="${project.compileSourceRoots}"
-     * @required
-     * @readonly
      */
+    @Parameter(readonly = true, required = true, defaultValue = "${project.compileSourceRoots}")
     private List<String> compileSourceRoots;
 
     @Override

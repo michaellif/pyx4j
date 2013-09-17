@@ -25,6 +25,9 @@ import java.io.File;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
+import org.apache.maven.plugins.annotations.LifecyclePhase;
+import org.apache.maven.plugins.annotations.Mojo;
+import org.apache.maven.plugins.annotations.Parameter;
 import org.codehaus.plexus.util.DirectoryScanner;
 
 /**
@@ -32,34 +35,26 @@ import org.codehaus.plexus.util.DirectoryScanner;
  * 
  * Used for better GWT eclipse projects sync
  * 
- * @goal remove-source-resources
- * @phase package
- * @threadSafe
  */
+@Mojo(name = "remove-source-resources", defaultPhase = LifecyclePhase.PACKAGE, threadSafe = true)
 public class JavaSourceResourcesCleanMojo extends AbstractMojo {
 
     /**
      * Allow to skip execution of this Mojo
-     * 
-     * @parameter expression = "${project.jar-source-4gwt}" default-value="false"
-     * @required
      */
+    @Parameter(defaultValue = "${project.jar-source-4gwt}")
     private boolean active;
 
     /**
      * The output directory into which to copy the resources.
-     * 
-     * @parameter expression="${project.build.outputDirectory}"
-     * @required
      */
+    @Parameter(readonly = true, required = true, defaultValue = "${project.build.outputDirectory}")
     private File outputDirectory;
 
     /**
      * Source directory containing the java files to be copied.
-     * 
-     * @parameter expression = "${project.build.sourceDirectory}"
-     * @required
      */
+    @Parameter(readonly = true, required = true, defaultValue = "${project.build.sourceDirectory}")
     private String sourceDirectory;
 
     @Override

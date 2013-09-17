@@ -39,6 +39,11 @@ import java.util.Vector;
 import org.apache.maven.artifact.Artifact;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
+import org.apache.maven.plugins.annotations.Component;
+import org.apache.maven.plugins.annotations.LifecyclePhase;
+import org.apache.maven.plugins.annotations.Mojo;
+import org.apache.maven.plugins.annotations.Parameter;
+import org.apache.maven.plugins.annotations.ResolutionScope;
 import org.apache.maven.project.MavenProject;
 import org.apache.maven.shared.artifact.filter.StrictPatternIncludesArtifactFilter;
 
@@ -47,12 +52,8 @@ import org.apache.maven.shared.artifact.filter.StrictPatternIncludesArtifactFilt
  * Runs the GWT Java to Javascript Compiler
  * 
  * use phase compile or prepare-package
- * 
- * @goal compile
- * @phase compile
- * @requiresDependencyResolution compile
- * @threadSafe
  */
+@Mojo(name = "compile", defaultPhase = LifecyclePhase.COMPILE, requiresDependencyResolution = ResolutionScope.COMPILE, threadSafe = true)
 public class GwtCompileMojo extends AbstractGWTMojo {
 
     /**
@@ -62,147 +63,137 @@ public class GwtCompileMojo extends AbstractGWTMojo {
      * 
      * Use 'com.google.gwt.dev.GWTCompiler' for old GWT 1.5 compiler
      * 
-     * @parameter default-value="com.google.gwt.dev.Compiler";
      */
+    @Parameter(defaultValue = "com.google.gwt.dev.Compiler")
     private String compilerClass;
 
     /**
      * Use ThreadedPermutationWorkerFactory or ExternalPermutationWorkerFactory
-     * 
-     * @parameter default-value="true" expression="${gwt.threadedPermutationWorker}"
      */
+    @Parameter(property = "gwt.threadedPermutationWorker", defaultValue = "true")
     private boolean threadedPermutationWorker;
 
     /**
      * Whether or not to enable assertions in generated scripts (-ea).
-     * 
-     * @parameter default-value="false";
      */
+    @Parameter(defaultValue = "false")
     private boolean enableAssertions;
 
     /**
      * Add -strict parameter to the compiler command line.
-     * 
-     * @parameter default-value="false" expression="${gwt.compiler.strict}"
      */
+    @Parameter(property = "gwt.compiler.strict", defaultValue = "false")
     private boolean strict;
 
     /**
      * GWT 2.0 Enable faster, but less-optimized, compilations
      * 
-     * @parameter default-value="false";
      * @since GWT 2.0
      */
+    @Parameter(defaultValue = "false")
     private boolean draftCompile;
 
     /**
      * Disables run-time checking of cast operations
      * 
-     * @parameter default-value="false";
      * @since GWT 2.0
      */
+    @Parameter(defaultValue = "false")
     private boolean disableCastChecking;
 
     /**
      * Disables getName() java.lang.Class method.
      * 
-     * @parameter default-value="false";
      * @since GWT 2.0
      */
+    @Parameter(defaultValue = "false")
     private boolean disableClassMetadata;
 
     /**
      * GWT 2.0 Enable Story Of Your Compile
      * 
-     * @parameter default-value="false";
      * @since GWT 2.0
      */
+    @Parameter(defaultValue = "false")
     private boolean soyc;
 
     /**
      * Create Compile Report
      * 
-     * @parameter default-value="false";
      * @since GWT 2.0
      */
+    @Parameter(defaultValue = "false")
     private boolean compileReport;
 
     /**
      * Additional compiler arguments. e.g. -XdisableClassMetadata -XdisableCastChecking
      * -XdisableAggressiveOptimization -XdisableRunAsync -XsoycDetailed
      * 
-     * @parameter
      */
+    @Parameter
     private List<String> args;
 
     /**
      * Additional static setter for compilerClass
      * 
-     * @parameter
      */
+    @Parameter
     private Map<String, String> compilerSet;
 
     /**
      * The directory containing generated classes.
-     * 
-     * @parameter expression="${project.build.outputDirectory}"
-     * @required
-     * @readonly
      */
+    @Parameter(readonly = true, required = true, defaultValue = "${project.build.outputDirectory}")
     private File classesDirectory;
 
     /**
      * Location of the source files.
      * 
-     * @parameter
      */
+    @Parameter
     private List<String> sourceDirectories;
 
     /**
      * Allows to disable GWT compilation cache.
      * 
-     * @parameter expression="${gwt.persistentunitcache}"
      */
+    @Parameter(property = "gwt.persistentunitcache", defaultValue = "true")
     private final boolean persistentUnitCache = true;
 
     /**
      * GWT Compiler now cache compilation artifacts between runs.
      * 
-     * @parameter expression="${project.build.directory}"
      */
+    @Parameter(defaultValue = "${project.build.directory}")
     private File persistentUnitCacheDir;
 
     /**
      * Use plugin dependencies for GWT compilation. A comma-separated list of artifacts.
      * The artifact syntax is defined by StrictPatternIncludesArtifactFilter.
      * 
-     * @parameter
      */
+    @Parameter
     protected String usePluginDependencies;
 
     /**
      * Pass project properties as Java system, properties.
      * 
-     * @parameter
      */
+    @Parameter
     private List<String> systemProperties;
 
     /**
      * The maven project descriptor
      * 
-     * @parameter expression="${project}"
-     * @required
-     * @readonly
      */
+    @Component
     private MavenProject project;
 
     /**
      * The plugin dependencies.
      * 
-     * @parameter expression="${plugin.artifacts}"
-     * @required
-     * @readonly
      */
+    @Component
     protected List<Artifact> pluginArtifacts;
 
     private Throwable executionError;
@@ -473,7 +464,7 @@ public class GwtCompileMojo extends AbstractGWTMojo {
     private URL convert(String path) throws MojoExecutionException {
         // Solve the space problem in path
         try {
-            URL urlToConvert = new File(path).getCanonicalFile().toURL();
+            URL urlToConvert = new File(path).getCanonicalFile().toURI().toURL();
             String url = urlToConvert.toExternalForm();
             return new File(url.substring("file:".length())).toURI().toURL();
         } catch (IOException e) {

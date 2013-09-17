@@ -31,6 +31,9 @@ import java.util.Enumeration;
 import java.util.Properties;
 
 import org.apache.maven.plugin.MojoExecutionException;
+import org.apache.maven.plugins.annotations.LifecyclePhase;
+import org.apache.maven.plugins.annotations.Mojo;
+import org.apache.maven.plugins.annotations.Parameter;
 import org.apache.maven.settings.Server;
 import org.codehaus.plexus.PlexusConstants;
 import org.codehaus.plexus.PlexusContainer;
@@ -43,25 +46,21 @@ import org.jasypt.properties.PropertyValueEncryptionUtils;
 /**
  * Write credentials file base on settings.xml.
  * 
- * @goal write
- * @phase pre-integration-test
- * @threadSafe
  */
+@Mojo(name = "write", defaultPhase = LifecyclePhase.PRE_INTEGRATION_TEST, threadSafe = true)
 public class WriteCredentialsMojo extends CredentialsFileAbstractMojo implements Contextualizable {
 
     /**
-     * The server id in maven settings.xml to use for email(username) and password.
+     * The server id in maven settings.xml to use for username and password.
      * 
-     * @parameter
-     * @required
      */
+    @Parameter(required = true)
     protected String serverId;
 
     /**
      * Encrypt values in created file
-     * 
-     * @parameter default-value="true"
      */
+    @Parameter(defaultValue = "true")
     protected boolean encrypt;
 
     @Override

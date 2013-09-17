@@ -25,6 +25,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Vector;
@@ -36,6 +38,11 @@ import org.apache.maven.artifact.Artifact;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
+import org.apache.maven.plugins.annotations.Component;
+import org.apache.maven.plugins.annotations.LifecyclePhase;
+import org.apache.maven.plugins.annotations.Mojo;
+import org.apache.maven.plugins.annotations.Parameter;
+import org.apache.maven.plugins.annotations.ResolutionScope;
 import org.apache.maven.project.MavenProject;
 import org.apache.maven.shared.artifact.filter.StrictPatternExcludesArtifactFilter;
 import org.apache.maven.shared.artifact.filter.StrictPatternIncludesArtifactFilter;
@@ -54,18 +61,11 @@ import com.pyx4j.scanner.JarFileScanner;
 import com.pyx4j.scanner.Scanner;
 import com.pyx4j.scanner.ScannerEntry;
 
-import edu.emory.mathcs.backport.java.util.Arrays;
-import edu.emory.mathcs.backport.java.util.Collections;
-
 /**
- * 
  * Extracts i18n text from classes dependencies.
  * 
- * @goal extract
- * @phase prepare-package
- * @requiresDependencyResolution compile
- * @threadSafe
  */
+@Mojo(name = "extract", defaultPhase = LifecyclePhase.PREPARE_PACKAGE, requiresDependencyResolution = ResolutionScope.COMPILE, threadSafe = true)
 public class ExtractMojo extends AbstractMojo {
 
     /**
@@ -88,23 +88,22 @@ public class ExtractMojo extends AbstractMojo {
      * would match all snapshot artifacts.
      * </p>
      * 
-     * @parameter
      */
+    @Parameter
     public List<String> excludes = null;
 
     /**
      * Dependencies to include.
      * The artifact syntax is defined by AbstractStrictPatternArtifactFilter.
      * 
-     * @parameter
      */
+    @Parameter
     public List<String> includes = null;
 
     /**
      * Dependency artifacts scope: "compile", test", "runtime" or "system";
-     * 
-     * @parameter expression="compile"
      */
+    @Parameter(defaultValue = "compile")
     public String scope;
 
 //TODO  public List<String> classesInclude;
@@ -113,23 +112,21 @@ public class ExtractMojo extends AbstractMojo {
 
     /**
      * Filename of the created .pot file
-     * 
-     * @parameter expression="keys.pot"
      */
+    @Parameter(defaultValue = "keys.pot")
     public String keysFile;
 
     /**
      * Corrections filename translations are equal to text
      * 
-     * @parameter expression="corrections.pot"
      */
+    @Parameter(defaultValue = "corrections.pot")
     public String correctionKeysFile;
 
     /**
      * PO directory
-     * 
-     * @parameter expression="${basedir}/src/main/resources/translations"
      */
+    @Parameter(defaultValue = "${basedir}/src/main/resources/translations")
     public File poDirectory;
 
     public enum Sort {
@@ -144,118 +141,99 @@ public class ExtractMojo extends AbstractMojo {
     /**
      * Set output sorting: none, byText, byFile
      * 
-     * @parameter default-value="byText"
      */
+    @Parameter(defaultValue = "byText")
     public Sort poSort = Sort.byText;
 
     /**
      * Set output page width
-     * 
-     * @parameter default-value="78"
      */
+    @Parameter(defaultValue = "78")
     public int poPageWidth = 78;
 
     /**
      * Break long message lines, longer than the output page width, into several lines
-     * 
-     * @parameter default-value="true"
      */
+    @Parameter(defaultValue = "true")
     public boolean poWrapLines = true;
 
     /**
      * Add UTF-8 BOM to the file
-     * 
-     * @parameter default-value="false"
      */
+    @Parameter(defaultValue = "false")
     public boolean writeBomTokeysFile = false;
 
     /**
      * Write source code location
-     * 
-     * @parameter default-value="true"
      */
+    @Parameter(defaultValue = "true")
     public boolean poSaveLocation = true;
 
     /**
      * Write 'java-format' as Extracted Comment (transifex.net bug)
-     * 
-     * @parameter default-value="true"
      */
+    @Parameter(defaultValue = "true")
     public boolean javaFormatFlagAsComment = true;
 
     /**
      * File to save extracted strings, you may use it to run spell checker.
-     * 
-     * @parameter expression="${project.build.directory}/i18n.txt"
      */
+    @Parameter(defaultValue = "${project.build.directory}/i18n.txt")
     public File extractedStrings;
 
     /**
      * Java Source language
-     * 
-     * @parameter default-value="en"
      */
+    @Parameter(defaultValue = "en")
     public String sourceLanguage = "en";
 
     /**
      * Enable auto translate.
-     * 
-     * @parameter expression="${i18n.autoTranslate}" default-value="false"
      */
+    @Parameter(property = "i18n.autoTranslate", defaultValue = "false")
     public boolean autoTranslate = false;
 
     /**
      * merge translation catalog
-     * 
-     * @parameter expression="${i18n.merge}" default-value="false"
      */
+    @Parameter(property = "i18n.merge", defaultValue = "false")
     public boolean merge = false;
 
     /**
      * Use translation catalog for auto translate and merge.
-     * 
-     * @parameter expression="${i18n.catalog}"
      */
+    @Parameter(property = "i18n.catalog")
     private File translationCatalog;
 
     /**
      * Used for auto translate.
-     * 
-     * @parameter expression="${google.translate.apiKey}"
      */
+    @Parameter(defaultValue = "${google.translate.apiKey}")
     public String googleApiKey;
 
     /**
      * Use Google Translate to create translation for languages
-     * 
-     * @parameter
      */
+    @Parameter
     public List<String> translates = null;
 
     /**
      * Use Google Translate to create translation for languages
      * Comma separated list of languages to translate or merge.
-     * 
-     * @parameter
      */
+    @Parameter
     public String translate = null;
 
     /**
      * The directory containing generated classes.
-     * 
-     * @parameter expression="${project.build.outputDirectory}"
-     * @required
-     * @readonly
      */
+    @Parameter(readonly = true, required = true, defaultValue = "${project.build.outputDirectory}")
     private File classesDirectory;
 
     /**
      * The Maven project.
-     * 
-     * @parameter expression="${project}"
-     * @required
-     * @readonly
      */
+    @Component
     public MavenProject project;
 
     @Override

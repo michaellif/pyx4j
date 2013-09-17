@@ -23,14 +23,14 @@ package com.pyx4j.maven.password;
 import java.io.File;
 
 import org.apache.maven.plugin.MojoExecutionException;
+import org.apache.maven.plugins.annotations.LifecyclePhase;
+import org.apache.maven.plugins.annotations.Mojo;
 
 /**
  * Remove created credentials file.
  * 
- * @goal clean
- * @phase post-integration-test
- * @threadSafe
  */
+@Mojo(name = "clean", defaultPhase = LifecyclePhase.POST_INTEGRATION_TEST, threadSafe = true)
 public class CleanCredentialsMojo extends CredentialsFileAbstractMojo {
 
     @Override

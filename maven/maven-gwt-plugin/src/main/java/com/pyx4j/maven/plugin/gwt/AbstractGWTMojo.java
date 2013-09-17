@@ -23,58 +23,55 @@ package com.pyx4j.maven.plugin.gwt;
 import java.io.File;
 
 import org.apache.maven.plugin.AbstractMojo;
+import org.apache.maven.plugins.annotations.Parameter;
 
 public abstract class AbstractGWTMojo extends AbstractMojo {
 
     /**
      * A single GWT Module to compile
-     * 
-     * @parameter
      */
+    @Parameter
     protected String module;
 
     /**
      * A set of GWT Modules to compile
-     * 
-     * @parameter
      */
+    @Parameter
     protected String[] modules;
 
     /**
-     * -logLevel The level of logging detail: ERROR, WARN, INFO, TRACE, DEBUG, SPAM, or
-     * ALL
+     * -logLevel The level of logging detail: ERROR, WARN, INFO, TRACE, DEBUG, SPAM, or ALL
      * 
-     * @parameter default-value="WARN";
      */
+    @Parameter(defaultValue = "WARN")
     protected String logLevel;
 
     /**
      * -war(-out) The directory to write output files into
      * 
-     * @parameter default-value="${project.build.directory}/${project.build.finalName}";
      */
+    @Parameter(defaultValue = "${project.build.directory}/${project.build.finalName}")
     protected File webappDirectory;
 
     /**
      * -deploy The directory into which deployable but not servable output files will be written (defaults to 'WEB-INF/deploy' under the webappDirectory
      * directory/jar, and may be the same as the extra directory/jar)
-     * 
-     * @parameter
      */
+    @Parameter
     protected File deploy;
 
     /**
      * -gen The directory into which generated files will be written for review
      * 
-     * @parameter default-value="${project.build.directory}/gwt-generated";
      */
+    @Parameter(defaultValue = "${project.build.directory}/gwt-generated")
     protected File generated;
 
     /**
      * -style Script output style: OBF[USCATED], PRETTY, or DETAILED
      * 
-     * @parameter default-value="OBFUSCATED";
      */
+    @Parameter(defaultValue = "OBFUSCATED")
     protected String style;
 
     /**
@@ -82,21 +79,19 @@ public abstract class AbstractGWTMojo extends AbstractMojo {
      * 
      * We use System.setProperty "gwt.jjs.maxThreads".
      * 
-     * @parameter default-value="1";
      */
+    @Parameter(defaultValue = "1")
     protected int localWorkers;
 
     /**
      * -workDir The compiler's working directory for internal use
-     * 
-     * @parameter default-value="${project.build.directory}/gwt-work";
      */
+    @Parameter(defaultValue = "${project.build.directory}/gwt-work")
     protected File workDir;
 
     /**
      * -extra The directory into which report files will be written for review
-     * 
-     * @parameter default-value="${project.build.directory}/gwt-extra";
      */
+    @Parameter(defaultValue = "${project.build.directory}/gwt-extra")
     protected File extra;
 }

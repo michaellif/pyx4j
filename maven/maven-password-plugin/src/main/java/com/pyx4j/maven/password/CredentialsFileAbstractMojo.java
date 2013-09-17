@@ -22,18 +22,19 @@ package com.pyx4j.maven.password;
 
 import java.io.File;
 
+import org.apache.maven.plugins.annotations.Parameter;
+
 public abstract class CredentialsFileAbstractMojo extends CredentialsAbstractMojo {
 
     /**
      * Where the credentials is located.
-     * 
-     * @parameter expression="${user.dir}"
-     * @required
      */
+    @Parameter(required = true, defaultValue = "${user.dir}")
     protected File locationDir;
 
     /**
-     * @parameter default-value="credentials.properties";
+     * 
      */
+    @Parameter(defaultValue = "credentials.properties")
     protected String credentialsName;
 }
