@@ -75,11 +75,11 @@ public class PapReviewFolder extends VistaBoxFolder<PapReviewDTO> {
         return itemDecorator;
     }
 
-    public void selectAll() {
+    public void checkAll(boolean isChecked) {
         for (CComponent<?> c : getComponents()) {
             if (c instanceof CEntityFolderItem) {
                 PapReviewForm papForm = (PapReviewForm) ((CEntityFolderItem<?>) c).getComponents().iterator().next();
-                papForm.setSelected(true);
+                papForm.setSelected(isChecked);
             }
         }
     }

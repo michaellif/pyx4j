@@ -92,7 +92,7 @@ public class AutoPayReviewViewImpl extends AbstractPrimePane implements AutoPayR
 
         viewPanel.add(papReviewHolderForm);
 
-        addHeaderToolbarItem(new Button(i18n.tr("Accept Marked"), new Command() {
+        addHeaderToolbarItem(new Button(i18n.tr("Accept Selected"), new Command() {
             @Override
             public void execute() {
                 AutoPayReviewViewImpl.this.acceptMarked();
@@ -113,6 +113,11 @@ public class AutoPayReviewViewImpl extends AbstractPrimePane implements AutoPayR
 
         this.papReviewHolderForm.setValue(holder, false);
         this.visibleRange = new Range(0, values.size());
+    }
+
+    @Override
+    public boolean isEverythingSelected() {
+        return this.papReviewHolderForm.isEverythingSelected();
     }
 
     @Override

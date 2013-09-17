@@ -99,4 +99,10 @@ public class AutoPayReviewDataGridViewImpl extends AbstractPrimePane implements 
 
     }
 
+    @Override
+    public boolean isEverythingSelected() {
+        // TODO Auto-generated method stub
+        return false;
+    }
+
 }

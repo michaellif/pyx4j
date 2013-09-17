@@ -73,17 +73,7 @@ public class AutoPayReviewActivity extends AbstractActivity implements AutoPayRe
             public void onSuccess(VoidSerializable result) {
                 populate();
             }
-        }, makeReviewedPaps(view.getMarkedPapReviews()));
-    }
-
-    @Override
-    public void acceptAll() {
-        autoPayReviewService.accept(new DefaultAsyncCallback<VoidSerializable>() {
-            @Override
-            public void onSuccess(VoidSerializable result) {
-                populate();
-            }
-        }, makeReviewedPaps(papReviews));
+        }, makeReviewedPaps(view.isEverythingSelected() ? papReviews : view.getMarkedPapReviews()));
     }
 
     @Override

@@ -790,12 +790,25 @@ public class CrmTheme extends VistaTheme {
         addStyle(style);
 
         // the following styles set up the layout of captions for LeasePapsReviewFolder
-        style = new Style("." + PapReviewsHolderForm.Styles.AutoPayCounterPanel.name());
+        style = new Style("." + PapReviewsHolderForm.Styles.AutoPayStatsPanel.name());
         style.addProperty("text-align", "center");
         style.addProperty("font-weight", "bold");
         style.addProperty("padding-top", "5px");
         style.addProperty("padding-bottom", "10px");
         style.addProperty("width", "100%");
+        addStyle(style);
+
+        style = new Style("." + PapReviewsHolderForm.Styles.AutoPayStatsPanel.name() + " div");
+        style.addProperty("display", "inline");
+
+        addStyle(style);
+        style = new Style("." + PapReviewsHolderForm.Styles.AutoPayStatsPanel.name() + " a");
+        style.addProperty("margin-left", "20px");
+        style.addProperty("display", "inline");
+        addStyle(style);
+
+        style = new Style("." + PapReviewsHolderForm.Styles.AutoPayEverythingIsSelected.name());
+        style.addProperty("background", ThemeColor.object1, 0.8);
         addStyle(style);
 
         style = new Style("." + PapReviewsHolderForm.Styles.AutoPayActionsPanel.name());

@@ -26,8 +26,6 @@ public interface AutoPayReviewView extends IPrimePane {
 
     interface Presenter extends IPrimePane.Presenter {
 
-        void acceptAll();
-
         void acceptMarked();
 
         void onRangeChanged();
@@ -45,5 +43,7 @@ public interface AutoPayReviewView extends IPrimePane {
     List<PapReviewDTO> getMarkedPapReviews();
 
     AutoPayChangesReportMetadata getAutoPayFilterSettings();
+
+    boolean isEverythingSelected();
 
 }
