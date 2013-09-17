@@ -13,13 +13,7 @@
  */
 package com.propertyvista.portal.web.client.ui.financial.dashboard;
 
-import com.google.gwt.dom.client.Style.Display;
-import com.google.gwt.dom.client.Style.Float;
-import com.google.gwt.dom.client.Style.TextAlign;
-import com.google.gwt.dom.client.Style.Unit;
-import com.google.gwt.dom.client.Style.VerticalAlign;
 import com.google.gwt.user.client.Command;
-import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.IsWidget;
 
@@ -28,10 +22,6 @@ import com.pyx4j.commons.css.ThemeColor;
 import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.site.client.AppSite;
-import com.pyx4j.site.client.ui.layout.responsive.LayoutChangeEvent;
-import com.pyx4j.site.client.ui.layout.responsive.LayoutChangeHandler;
-import com.pyx4j.site.client.ui.layout.responsive.ResponsiveLayoutPanel.LayoutType;
 import com.pyx4j.widgets.client.Anchor;
 import com.pyx4j.widgets.client.Button;
 import com.pyx4j.widgets.client.actionbar.Toolbar;
@@ -48,77 +38,22 @@ public class BillingSummaryGadget extends AbstractGadget<FinancialDashboardViewI
 
     private final BillingView view;
 
-    private final FlowPanel actionsPanel;
-
     BillingSummaryGadget(FinancialDashboardViewImpl viewer) {
         super(viewer, PortalImages.INSTANCE.billingIcon(), i18n.tr("My Billing Summary"), ThemeColor.contrast4);
-        setActionsToolbar(new BillingToolbar());
 
         view = new BillingView();
         view.setViewable(true);
         view.initContent();
 
-        FlowPanel contentPanel = new FlowPanel();
-        contentPanel.getElement().getStyle().setTextAlign(TextAlign.CENTER);
-        setContent(contentPanel);
+        setContent(view);
 
-        contentPanel.add(view);
+        setActionsToolbar(new BillingToolbar());
+        setNavigationBar(new NavigationBar());
 
-        actionsPanel = new FlowPanel();
-        contentPanel.add(actionsPanel);
-
-        if (!VistaFeatures.instance().yardiIntegration()) {
-            Anchor viewBillAnchor = new Anchor("View my Current Bill", new Command() {
-
-                @Override
-                public void execute() {
-                    getGadgetView().getPresenter().viewCurrentBill();
-                }
-            });
-            actionsPanel.add(viewBillAnchor);
-        }
-
-        doLayout(LayoutType.getLayoutType(Window.getClientWidth()));
-
-        AppSite.getEventBus().addHandler(LayoutChangeEvent.TYPE, new LayoutChangeHandler() {
-
-            @Override
-            public void onLayoutChangeRerquest(LayoutChangeEvent event) {
-                doLayout(event.getLayoutType());
-            }
-
-        });
     }
 
     protected void populate(BillingSummaryDTO value) {
         view.populate(value);
-    }
-
-    private void doLayout(LayoutType layoutType) {
-        switch (layoutType) {
-        case phonePortrait:
-        case phoneLandscape:
-        case tabletPortrait:
-            view.asWidget().getElement().getStyle().setFloat(Float.NONE);
-            view.asWidget().getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
-            view.asWidget().getElement().getStyle().setVerticalAlign(VerticalAlign.TOP);
-            view.asWidget().setWidth("100%");
-
-            actionsPanel.getElement().getStyle().setFloat(Float.NONE);
-            actionsPanel.getElement().getStyle().setMarginTop(10, Unit.PX);
-            actionsPanel.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
-            actionsPanel.getElement().getStyle().setVerticalAlign(VerticalAlign.TOP);
-            break;
-        default:
-            view.asWidget().getElement().getStyle().setDisplay(Display.BLOCK);
-            view.asWidget().getElement().getStyle().setFloat(Float.LEFT);
-            view.asWidget().setWidth("auto");
-
-            actionsPanel.getElement().getStyle().setDisplay(Display.BLOCK);
-            actionsPanel.getElement().getStyle().setFloat(Float.RIGHT);
-
-            break;
-        }
     }
 
     class BillingToolbar extends Toolbar {
@@ -133,6 +68,24 @@ public class BillingSummaryGadget extends AbstractGadget<FinancialDashboardViewI
             });
             paymentButton.getElement().getStyle().setProperty("background", StyleManager.getPalette().getThemeColor(ThemeColor.contrast4, 1));
             add(paymentButton);
+
+        }
+
+    }
+
+    class NavigationBar extends FlowPanel {
+        public NavigationBar() {
+            if (!VistaFeatures.instance().yardiIntegration()) {
+
+                Anchor viewBillAnchor = new Anchor("View my Current Bill", new Command() {
+
+                    @Override
+                    public void execute() {
+                        getGadgetView().getPresenter().viewCurrentBill();
+                    }
+                });
+                add(viewBillAnchor);
+            }
         }
     }
 
@@ -150,8 +103,6 @@ public class BillingSummaryGadget extends AbstractGadget<FinancialDashboardViewI
         @Override
         public IsWidget createContent() {
 
-            mainPanel.setWidth("auto");
-            mainPanel.getElement().getStyle().setProperty("margin", "0 5%");
             mainPanel.setWidget(0, 0, new FormDecoratorBuilder(inject(proto().currentBalance()), "140px").build());
             mainPanel.setWidget(1, 0, new FormDecoratorBuilder(inject(proto().dueDate()), "140px").build());
 

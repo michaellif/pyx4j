@@ -14,18 +14,25 @@
 package com.propertyvista.portal.web.client.ui;
 
 import com.google.gwt.dom.client.Style.Display;
+import com.google.gwt.dom.client.Style.Float;
 import com.google.gwt.dom.client.Style.TextAlign;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.dom.client.Style.VerticalAlign;
 import com.google.gwt.resources.client.ImageResource;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.IsWidget;
+import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.SimplePanel;
 
 import com.pyx4j.commons.css.StyleManager;
 import com.pyx4j.commons.css.ThemeColor;
+import com.pyx4j.site.client.AppSite;
+import com.pyx4j.site.client.ui.layout.responsive.LayoutChangeEvent;
+import com.pyx4j.site.client.ui.layout.responsive.LayoutChangeHandler;
+import com.pyx4j.site.client.ui.layout.responsive.ResponsiveLayoutPanel.LayoutType;
 import com.pyx4j.widgets.client.actionbar.Toolbar;
 
 import com.propertyvista.portal.web.client.themes.BlockMixin;
@@ -63,11 +70,15 @@ public abstract class AbstractGadget<T extends IsWidget> extends AbstractPortalP
     }
 
     protected void setActionsToolbar(Toolbar actionsToolbar) {
-        containerPanel.setActionsToolbar(actionsToolbar);
+        containerPanel.actionsToolbarHolder.setWidget(actionsToolbar);
+    }
+
+    protected void setNavigationBar(Panel navigationBar) {
+        containerPanel.navigationBarHolder.setWidget(navigationBar);
     }
 
     public void setContent(IsWidget widget) {
-        containerPanel.setContentPanel(widget);
+        containerPanel.contentHolder.setWidget(widget);
     }
 
     class ContainerPanel extends FlowPanel {
@@ -75,6 +86,8 @@ public abstract class AbstractGadget<T extends IsWidget> extends AbstractPortalP
         private final SimplePanel contentHolder;
 
         private final SimplePanel actionsToolbarHolder;
+
+        private final SimplePanel navigationBarHolder;
 
         public ContainerPanel() {
 
@@ -109,26 +122,63 @@ public abstract class AbstractGadget<T extends IsWidget> extends AbstractPortalP
                 containerPanel.add(headerPanel);
             }
 
+            FlowPanel contentPanel = new FlowPanel();
+            contentPanel.getElement().getStyle().setTextAlign(TextAlign.CENTER);
+
             contentHolder = new SimplePanel();
             contentHolder.getElement().getStyle().setProperty("padding", "10px 0");
 
-            containerPanel.add(contentHolder);
+            contentPanel.add(contentHolder);
+
+            navigationBarHolder = new SimplePanel();
+            contentPanel.add(navigationBarHolder);
+
+            containerPanel.add(contentPanel);
 
             add(containerPanel);
 
             actionsToolbarHolder = new SimplePanel();
             add(actionsToolbarHolder);
 
+            doLayout(LayoutType.getLayoutType(Window.getClientWidth()));
+
+            AppSite.getEventBus().addHandler(LayoutChangeEvent.TYPE, new LayoutChangeHandler() {
+
+                @Override
+                public void onLayoutChangeRerquest(LayoutChangeEvent event) {
+                    doLayout(event.getLayoutType());
+                }
+
+            });
         }
 
-        public void setActionsToolbar(Toolbar actionsToolbar) {
-            actionsToolbarHolder.setWidget(actionsToolbar);
-        }
+        private void doLayout(LayoutType layoutType) {
+            switch (layoutType) {
+            case phonePortrait:
+            case phoneLandscape:
+            case tabletPortrait:
+                contentHolder.getElement().getStyle().setFloat(Float.NONE);
+                contentHolder.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
+                contentHolder.getElement().getStyle().setVerticalAlign(VerticalAlign.TOP);
+                contentHolder.setWidth("100%");
 
-        public void setContentPanel(IsWidget widget) {
-            contentHolder.setWidget(widget);
-        }
+                navigationBarHolder.getElement().getStyle().setFloat(Float.NONE);
+                navigationBarHolder.getElement().getStyle().setMarginTop(10, Unit.PX);
+                navigationBarHolder.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
+                navigationBarHolder.getElement().getStyle().setVerticalAlign(VerticalAlign.TOP);
+                break;
+            default:
+                contentHolder.getElement().getStyle().setDisplay(Display.BLOCK);
+                contentHolder.getElement().getStyle().setFloat(Float.LEFT);
+                contentHolder.setWidth("70%");
 
+                navigationBarHolder.getElement().getStyle().setDisplay(Display.BLOCK);
+                navigationBarHolder.getElement().getStyle().setFloat(Float.RIGHT);
+                navigationBarHolder.setWidth("30%");
+
+                break;
+            }
+        }
     }
 
 }

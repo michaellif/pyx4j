@@ -161,14 +161,7 @@ public class PortalWebTheme extends Theme {
 //        addTheme(new DefaultPaneTheme());
         addTheme(new DefaultDataTableTheme());
         addTheme(new CComponentTheme());
-        addTheme(new CEntityContainerTheme() {
-            @Override
-            protected void initStyles() {
-                Style style = new Style(".", StyleName.ContentHolder);
-                style.addProperty("display", "inline-block");
-                addStyle(style);
-            }
-        });
+        addTheme(new CEntityContainerTheme());
 
         addTheme(new DefaultDatePickerTheme());
         addTheme(new DefaultEntityFolderTheme() {

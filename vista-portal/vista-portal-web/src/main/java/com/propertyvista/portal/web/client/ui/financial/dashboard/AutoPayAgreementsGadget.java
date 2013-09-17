@@ -13,13 +13,11 @@
  */
 package com.propertyvista.portal.web.client.ui.financial.dashboard;
 
-import com.google.gwt.dom.client.Style.TextAlign;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.IsWidget;
-import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.commons.css.StyleManager;
@@ -67,10 +65,7 @@ public class AutoPayAgreementsGadget extends AbstractGadget<FinancialDashboardVi
         view.setViewable(true);
         view.initContent();
 
-        SimplePanel contentPanel = new SimplePanel(view.asWidget());
-        contentPanel.getElement().getStyle().setTextAlign(TextAlign.CENTER);
-
-        setContent(contentPanel);
+        setContent(view);
     }
 
     protected void populate(AutoPaySummaryDTO value) {
@@ -117,7 +112,7 @@ public class AutoPayAgreementsGadget extends AbstractGadget<FinancialDashboardVi
         public IsWidget createContent() {
             int row = -1;
 
-            mainPanel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().nextAutoPayDate(), new CDateLabel()), 100).labelWidth(12).build());
+            mainPanel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().nextAutoPayDate(), new CDateLabel()), 100).build());
             mainPanel.setBR(++row, 0, 1);
             mainPanel.setWidget(++row, 0, inject(proto().currentAutoPayments(), new AutoPayFolder()));
 
