@@ -14,11 +14,9 @@
 package com.propertyvista.portal.web.client.ui.financial.dashboard;
 
 import com.google.gwt.dom.client.Style.FontWeight;
-import com.google.gwt.dom.client.Style.TextAlign;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.IsWidget;
-import com.google.gwt.user.client.ui.SimplePanel;
 
 import com.pyx4j.commons.css.StyleManager;
 import com.pyx4j.commons.css.ThemeColor;
@@ -62,10 +60,7 @@ public class PaymentMethodsGadget extends AbstractGadget<FinancialDashboardViewI
         view.setViewable(true);
         view.initContent();
 
-        SimplePanel contentPanel = new SimplePanel(view.asWidget());
-        contentPanel.getElement().getStyle().setTextAlign(TextAlign.CENTER);
-
-        setContent(contentPanel);
+        setContent(view);
     }
 
     protected void populate(PaymentMethodSummaryDTO value) {

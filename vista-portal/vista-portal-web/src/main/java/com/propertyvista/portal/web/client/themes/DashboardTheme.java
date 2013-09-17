@@ -53,7 +53,6 @@ public class DashboardTheme extends Theme {
 
         style = new Style(".", StyleName.GadgetContent, " .", DefaultWidgetsTheme.StyleName.Anchor);
         style.addProperty("display", "block");
-        style.addProperty("white-space", "nowrap");
         style.addProperty("color", ThemeColor.contrast2, 1);
         style.addProperty("font-size", "0.8em");
         style.addProperty("padding", "5px 5px 5px 0");

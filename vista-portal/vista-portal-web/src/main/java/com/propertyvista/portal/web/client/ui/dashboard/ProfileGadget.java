@@ -16,6 +16,7 @@ package com.propertyvista.portal.web.client.ui.dashboard;
 import com.google.gwt.dom.client.Style.Display;
 import com.google.gwt.dom.client.Style.FontWeight;
 import com.google.gwt.dom.client.Style.VerticalAlign;
+import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTML;
@@ -31,6 +32,7 @@ import com.propertyvista.portal.rpc.portal.web.dto.TenantProfileSummaryDTO;
 import com.propertyvista.portal.web.client.resources.PortalImages;
 import com.propertyvista.portal.web.client.themes.DashboardTheme;
 import com.propertyvista.portal.web.client.ui.AbstractGadget;
+import com.propertyvista.shared.config.VistaFeatures;
 
 public class ProfileGadget extends AbstractGadget<MainDashboardViewImpl> {
 
@@ -58,23 +60,40 @@ public class ProfileGadget extends AbstractGadget<MainDashboardViewImpl> {
         contentPanel.add(addressPanel);
 
         setContent(contentPanel);
+
+        setNavigationBar(new NavigationBar());
+
     }
 
-    public void doLayout(LayoutType layoutType) {
-        switch (layoutType) {
-        case phonePortrait:
-        case phoneLandscape:
-        case tabletPortrait:
-            personInfoPanel.setWidth("100%");
-            addressPanel.setWidth("100%");
-            break;
+    class NavigationBar extends FlowPanel {
+        public NavigationBar() {
+            if (!VistaFeatures.instance().yardiIntegration()) {
 
-        default:
-            personInfoPanel.setWidth("50%");
-            addressPanel.setWidth("50%");
-            break;
+                Anchor anchor = new Anchor("View my Profile", new Command() {
+
+                    @Override
+                    public void execute() {
+                    }
+                });
+                add(anchor);
+
+                anchor = new Anchor("Change my Settings", new Command() {
+
+                    @Override
+                    public void execute() {
+                    }
+                });
+                add(anchor);
+
+                anchor = new Anchor("Change my Password", new Command() {
+
+                    @Override
+                    public void execute() {
+                    }
+                });
+                add(anchor);
+            }
         }
-
     }
 
     class PersonInfoPanel extends SimplePanel {
@@ -117,19 +136,9 @@ public class ProfileGadget extends AbstractGadget<MainDashboardViewImpl> {
             int row = -1;
             int col = -1;
 
-            FlowPanel actionsPanel = new FlowPanel();
-            actionsPanel.getElement().getStyle().setProperty("marginRight", "10px");
-            actionsPanel.add(new Anchor("View my Profile"));
-            actionsPanel.add(new Anchor("Change my Settings"));
-            actionsPanel.add(new Anchor("Change my Password"));
-
-            contentPanel.setWidget(++row, ++col, actionsPanel);
-            contentPanel.getFlexCellFormatter().setVerticalAlignment(row, col, HasVerticalAlignment.ALIGN_TOP);
-            contentPanel.getFlexCellFormatter().setRowSpan(row, col, 2);
-
             HTML separator = new HTML();
             separator.getElement().getStyle().setProperty("marginRight", "10px");
-            contentPanel.setWidget(row, ++col, separator);
+            contentPanel.setWidget(++row, ++col, separator);
             contentPanel.getFlexCellFormatter().setHeight(row, col, "100%");
             contentPanel.getFlexCellFormatter().setStyleName(row, col, DashboardTheme.StyleName.GadgetBlockSeparator.name());
             contentPanel.getFlexCellFormatter().setRowSpan(row, col, 2);

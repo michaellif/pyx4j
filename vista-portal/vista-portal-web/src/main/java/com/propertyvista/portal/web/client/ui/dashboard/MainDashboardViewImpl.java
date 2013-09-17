@@ -86,7 +86,6 @@ public class MainDashboardViewImpl extends FlowPanel implements MainDashboardVie
     }
 
     private void doLayout(LayoutType layoutType) {
-        profileGadget.doLayout(layoutType);
         switch (layoutType) {
         case phonePortrait:
         case phoneLandscape:

@@ -13,14 +13,9 @@
  */
 package com.propertyvista.portal.web.client.ui.dashboard;
 
-import com.google.gwt.dom.client.Style.Display;
-import com.google.gwt.dom.client.Style.TextAlign;
-import com.google.gwt.dom.client.Style.Unit;
-import com.google.gwt.dom.client.Style.VerticalAlign;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.IsWidget;
-import com.google.gwt.user.client.ui.SimplePanel;
 
 import com.pyx4j.commons.css.StyleManager;
 import com.pyx4j.commons.css.ThemeColor;
@@ -51,10 +46,8 @@ public class BillingSummaryGadget extends AbstractGadget<MainDashboardViewImpl> 
         billingViewer.setViewable(true);
         billingViewer.initContent();
 
-        SimplePanel contentPanel = new SimplePanel(billingViewer.asWidget());
-        contentPanel.getElement().getStyle().setTextAlign(TextAlign.CENTER);
-
-        setContent(contentPanel);
+        setContent(billingViewer);
+        setNavigationBar(new NavigationBar());
 
     }
 
@@ -86,6 +79,22 @@ public class BillingSummaryGadget extends AbstractGadget<MainDashboardViewImpl> 
         }
     }
 
+    class NavigationBar extends FlowPanel {
+        public NavigationBar() {
+            if (!VistaFeatures.instance().yardiIntegration()) {
+
+                Anchor viewBillAnchor = new Anchor("View my Current Bill", new Command() {
+
+                    @Override
+                    public void execute() {
+                        getGadgetView().getPresenter().viewCurrentBill();
+                    }
+                });
+                add(viewBillAnchor);
+            }
+        }
+    }
+
     class BillingViewer extends CEntityForm<BillingSummaryDTO> {
 
         public BillingViewer() {
@@ -94,31 +103,12 @@ public class BillingSummaryGadget extends AbstractGadget<MainDashboardViewImpl> 
 
         @Override
         public IsWidget createContent() {
-            FlowPanel contentPanel = new FlowPanel();
 
             BasicFlexFormPanel mainPanel = new BasicFlexFormPanel();
-            mainPanel.setWidth("auto");
-            mainPanel.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
-            mainPanel.getElement().getStyle().setVerticalAlign(VerticalAlign.TOP);
             mainPanel.setWidget(0, 0, new FormDecoratorBuilder(inject(proto().currentBalance()), "140px", "100px", "120px").build());
             mainPanel.setWidget(1, 0, new FormDecoratorBuilder(inject(proto().dueDate()), "140px", "100px", "120px").build());
-            contentPanel.add(mainPanel);
 
-            if (!VistaFeatures.instance().yardiIntegration()) {
-                Anchor viewBillAnchor = new Anchor("View my Current Bill", new Command() {
-
-                    @Override
-                    public void execute() {
-                        getGadgetView().getPresenter().viewCurrentBill();
-                    }
-                });
-                viewBillAnchor.getElement().getStyle().setMarginTop(10, Unit.PX);
-                viewBillAnchor.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
-                viewBillAnchor.getElement().getStyle().setVerticalAlign(VerticalAlign.TOP);
-                contentPanel.add(viewBillAnchor);
-            }
-
-            return contentPanel;
+            return mainPanel;
         }
     }
 

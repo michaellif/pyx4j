@@ -166,6 +166,8 @@ public abstract class AbstractGadget<T extends IsWidget> extends AbstractPortalP
                 navigationBarHolder.getElement().getStyle().setMarginTop(10, Unit.PX);
                 navigationBarHolder.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
                 navigationBarHolder.getElement().getStyle().setVerticalAlign(VerticalAlign.TOP);
+                navigationBarHolder.setWidth("100%");
+
                 break;
             default:
                 contentHolder.getElement().getStyle().setDisplay(Display.BLOCK);
