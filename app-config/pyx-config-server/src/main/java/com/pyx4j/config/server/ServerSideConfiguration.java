@@ -82,9 +82,6 @@ public class ServerSideConfiguration {
 
     /**
      * Convenience method to access custom ServerSideConfiguration
-     * 
-     * @param serverSideConfigurationClass
-     * @return
      */
     @SuppressWarnings("unchecked")
     public static <E extends ServerSideConfiguration> E instance(Class<E> serverSideConfigurationClass) {

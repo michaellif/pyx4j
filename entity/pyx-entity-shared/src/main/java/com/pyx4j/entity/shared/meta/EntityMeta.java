@@ -44,7 +44,7 @@ public interface EntityMeta {
     public Class<? extends IEntity> getDBOClass();
 
     /**
-     * @see Inheritance.InheritanceStrategy.SINGLE_TABLE
+     * {@link Inheritance.InheritanceStrategy.SINGLE_TABLE}
      */
     public Class<? extends IEntity> getPersistableSuperClass();
 

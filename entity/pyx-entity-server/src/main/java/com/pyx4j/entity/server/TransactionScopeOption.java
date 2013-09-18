@@ -21,9 +21,7 @@
 package com.pyx4j.entity.server;
 
 /**
- * @see http://docs.oracle.com/javaee/5/tutorial/doc/bncij.html
- * @see
- * 
+ * {@link http://docs.oracle.com/javaee/5/tutorial/doc/bncij.html}
  */
 public enum TransactionScopeOption {
 
