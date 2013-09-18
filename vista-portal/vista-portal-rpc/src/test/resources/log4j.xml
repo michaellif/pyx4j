@@ -41,9 +41,17 @@
 		<level value="debug" />
 	</logger>
 
+    <logger name="org.hsqldb">
+        <level value="warn" />
+    </logger>
+
 	<logger name="org.apache">
 		<level value="info" />
 	</logger>
+
+    <logger name="com.mchange">
+        <level value="warn" />
+    </logger>
 
 	<root>
 		<level value="info" />

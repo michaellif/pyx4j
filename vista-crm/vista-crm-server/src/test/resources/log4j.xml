@@ -37,9 +37,9 @@
 		<level value="debug" />
 	</logger>
 
-	<logger name="com.pyx4j">
-		<level value="debug" />
-	</logger>
+    <logger name="org.hsqldb">
+        <level value="warn" />
+    </logger>
 
 	<logger name="org.apache">
 		<level value="info" />
@@ -48,7 +48,7 @@
     <logger name="com.mchange">
         <level value="warn" />
     </logger>
-    
+
 	<root>
 		<level value="info" />
 		<appender-ref ref="ConsoleAppender-info" />
