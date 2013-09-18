@@ -22,7 +22,6 @@ import com.pyx4j.rpc.shared.ServiceExecutePermission;
 import com.pyx4j.security.server.ServletContainerAclBuilder;
 
 import com.propertyvista.crm.server.security.VistaCrmAccessControlList;
-import com.propertyvista.field.server.security.VistaFieldAccessControlList;
 import com.propertyvista.ob.server.security.OnboardingAccessControlList;
 import com.propertyvista.operations.server.security.VistaOperationsAccessControlList;
 import com.propertyvista.portal.server.security.VistaPortalAccessControlList;
@@ -51,7 +50,6 @@ public class VistaAccessControlList extends ServletContainerAclBuilder {
         merge(new VistaCrmAccessControlList());
         merge(new VistaOperationsAccessControlList());
         merge(new OnboardingAccessControlList());
-        merge(new VistaFieldAccessControlList());
 
         freeze();
     }
