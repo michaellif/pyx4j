@@ -58,14 +58,15 @@ public class RichTextContentFolder extends VistaBoxFolder<HtmlContent> {
 
     @Override
     protected void addItem() {
-        new AvailableLocaleSelectorDialog(usedLocales, new ValueChangeHandler<AvailableLocale>() {
+        new AvailableLocaleSelectorDialog(usedLocales) {
             @Override
-            public void onValueChange(ValueChangeEvent<AvailableLocale> event) {
+            public boolean onClickOk() {
                 HtmlContent item = EntityFactory.create(HtmlContent.class);
-                item.locale().set(event.getValue());
+                item.locale().set(getSelectedLocale());
                 RichTextContentFolder.super.addItem(item);
+                return true;
             }
-        }).show();
+        }.show();
     }
 
     @Override

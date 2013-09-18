@@ -18,9 +18,11 @@ import java.util.Vector;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.commons.Key;
+import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.rpc.AbstractCrudService;
 
 import com.propertyvista.domain.contact.AddressSimple;
+import com.propertyvista.domain.financial.BillingAccount;
 import com.propertyvista.domain.payment.LeasePaymentMethod;
 import com.propertyvista.domain.tenant.lease.LeaseParticipant;
 import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
@@ -28,7 +30,11 @@ import com.propertyvista.dto.PaymentRecordDTO;
 
 public interface PaymentCrudService extends AbstractCrudService<PaymentRecordDTO> {
 
-    void initNewEntity(AsyncCallback<PaymentRecordDTO> callback, Key parentId);
+    @Transient
+    public interface PaymentInitializationData extends InitializationData {
+
+        BillingAccount parent();
+    }
 
     void getCurrentAddress(AsyncCallback<AddressSimple> callback, LeaseTermParticipant<? extends LeaseParticipant<?>> payer);
 

@@ -13,9 +13,24 @@
  */
 package com.propertyvista.crm.rpc.services;
 
+import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.rpc.AbstractCrudService;
+import com.pyx4j.entity.shared.IPrimitive;
 
+import com.propertyvista.domain.site.AvailableLocale;
 import com.propertyvista.domain.site.PageDescriptor;
 
 public interface PageDescriptorCrudService extends AbstractCrudService<PageDescriptor> {
+
+    @Transient
+    public interface PageDescriptorInitializationData extends InitializationData {
+
+        public enum PageParent {
+            site, page;
+        }
+
+        IPrimitive<PageParent> pageParent();
+
+        AvailableLocale pageLocale();
+    }
 }

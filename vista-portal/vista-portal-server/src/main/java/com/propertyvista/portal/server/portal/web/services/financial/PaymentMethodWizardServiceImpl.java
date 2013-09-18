@@ -17,10 +17,9 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.commons.Key;
 import com.pyx4j.config.server.ServerSideFactory;
+import com.pyx4j.entity.server.AbstractCrudServiceDtoImpl;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
-import com.pyx4j.entity.shared.utils.EntityDtoBinder;
-import com.pyx4j.rpc.shared.ServiceExecution;
 
 import com.propertyvista.biz.financial.payment.PaymentFacade;
 import com.propertyvista.biz.financial.payment.PaymentMethodFacade;
@@ -34,7 +33,7 @@ import com.propertyvista.portal.rpc.portal.web.services.financial.PaymentMethodW
 import com.propertyvista.portal.server.portal.TenantAppContext;
 import com.propertyvista.server.common.util.AddressRetriever;
 
-public class PaymentMethodWizardServiceImpl extends EntityDtoBinder<LeasePaymentMethod, PaymentMethodDTO> implements PaymentMethodWizardService {
+public class PaymentMethodWizardServiceImpl extends AbstractCrudServiceDtoImpl<LeasePaymentMethod, PaymentMethodDTO> implements PaymentMethodWizardService {
 
     public PaymentMethodWizardServiceImpl() {
         super(LeasePaymentMethod.class, PaymentMethodDTO.class);
@@ -46,7 +45,7 @@ public class PaymentMethodWizardServiceImpl extends EntityDtoBinder<LeasePayment
     }
 
     @Override
-    public void create(AsyncCallback<PaymentMethodDTO> callback) {
+    public void init(AsyncCallback<PaymentMethodDTO> callback, InitializationData initializationData) {
         Lease lease = TenantAppContext.getCurrentUserLease();
         Persistence.service().retrieve(lease.unit());
         Persistence.service().retrieve(lease.unit().building());
@@ -69,8 +68,7 @@ public class PaymentMethodWizardServiceImpl extends EntityDtoBinder<LeasePayment
     }
 
     @Override
-    @ServiceExecution(waitCaption = "Submitting...")
-    public void finish(AsyncCallback<Key> callback, PaymentMethodDTO dto) {
+    public void save(AsyncCallback<Key> callback, PaymentMethodDTO dto) {
         Lease lease = TenantAppContext.getCurrentUserLease();
         Persistence.service().retrieve(lease.unit());
 

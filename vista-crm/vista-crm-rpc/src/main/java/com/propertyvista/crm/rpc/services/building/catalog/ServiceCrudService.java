@@ -16,12 +16,23 @@ package com.propertyvista.crm.rpc.services.building.catalog;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.commons.Key;
+import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.rpc.AbstractCrudService;
+import com.pyx4j.entity.shared.IPrimitive;
 
+import com.propertyvista.domain.financial.ARCode;
 import com.propertyvista.domain.financial.offering.ProductCatalog;
 import com.propertyvista.domain.financial.offering.Service;
 
 public interface ServiceCrudService extends AbstractCrudService<Service> {
+
+    @Transient
+    public interface ServiceInitializationdata extends InitializationData {
+
+        ProductCatalog parent();
+
+        IPrimitive<ARCode.Type> type();
+    }
 
     public void retrieveCatalog(AsyncCallback<ProductCatalog> callback, Key entityId);
 }

@@ -13,14 +13,10 @@
  */
 package com.propertyvista.crm.rpc.services.policies.policy;
 
-import com.google.gwt.user.client.rpc.AsyncCallback;
-
 import com.pyx4j.entity.rpc.AbstractCrudService;
 
 import com.propertyvista.domain.policy.framework.PolicyDTOBase;
 
 public interface AbstractPolicyCrudService<POLICY_DTO extends PolicyDTOBase> extends AbstractCrudService<POLICY_DTO> {
-
-    void createNewPolicy(AsyncCallback<POLICY_DTO> callback);
 
 }

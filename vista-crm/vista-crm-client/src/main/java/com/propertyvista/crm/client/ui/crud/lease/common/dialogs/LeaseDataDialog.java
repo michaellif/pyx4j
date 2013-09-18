@@ -13,25 +13,19 @@
  */
 package com.propertyvista.crm.client.ui.crud.lease.common.dialogs;
 
-import java.math.BigDecimal;
-
-import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.security.client.ClientContext;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.client.ui.dialogs.SelectEnumDialog;
 import com.pyx4j.widgets.client.dialog.OkCancelOption;
 
 import com.propertyvista.crm.client.activity.crud.lease.common.LeaseTermEditorActivity;
 import com.propertyvista.crm.rpc.CrmSiteMap;
+import com.propertyvista.crm.rpc.services.lease.common.LeaseTermCrudService;
+import com.propertyvista.crm.rpc.services.lease.common.LeaseTermCrudService.LeaseTermInitializationData;
 import com.propertyvista.domain.financial.ARCode;
-import com.propertyvista.domain.financial.BillingAccount;
-import com.propertyvista.domain.financial.BillingAccount.BillingPeriod;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.tenant.lease.Lease;
-import com.propertyvista.domain.tenant.lease.LeaseTerm;
-import com.propertyvista.dto.LeaseTermDTO;
 
 public class LeaseDataDialog extends SelectEnumDialog<ARCode.Type> implements OkCancelOption {
 
@@ -57,68 +51,37 @@ public class LeaseDataDialog extends SelectEnumDialog<ARCode.Type> implements Ok
 
     @Override
     public boolean onClickOk() {
-        // prepare LeaseTermDTO:
-        LeaseTermDTO termDto = EntityFactory.create(LeaseTermDTO.class);
-
-        termDto.newParentLease().set(createNewLease(getSelectedType()));
-        termDto.newParentLease().currentTerm().set(termDto);
-
-        termDto.type().setValue(LeaseTerm.Type.FixedEx);
-        termDto.status().setValue(LeaseTerm.Status.Current);
-        termDto.lease().set(termDto.newParentLease());
-
         switch (type) {
         case Current:
-            termDto.carryforwardBalance().setValue(BigDecimal.ZERO);
             AppSite.getPlaceController().goTo(
-                    new CrmSiteMap.Tenants.LeaseTerm().formNewItemPlace(termDto).queryArg(LeaseTermEditorActivity.ARG_NAME_RETURN_BH,
-                            LeaseTermEditorActivity.ReturnBehaviour.Lease.name()));
+                    new CrmSiteMap.Tenants.LeaseTerm().formNewItemPlace(createInitData(Lease.Status.ExistingLease)).queryArg(
+                            LeaseTermEditorActivity.ARG_NAME_RETURN_BH, LeaseTermEditorActivity.ReturnBehaviour.Lease.name()));
             break;
 
         case New:
-            termDto.termFrom().setValue(new LogicalDate(ClientContext.getServerDate()));
             AppSite.getPlaceController().goTo(
-                    new CrmSiteMap.Tenants.LeaseTerm().formNewItemPlace(termDto).queryArg(LeaseTermEditorActivity.ARG_NAME_RETURN_BH,
-                            LeaseTermEditorActivity.ReturnBehaviour.Lease.name()));
+                    new CrmSiteMap.Tenants.LeaseTerm().formNewItemPlace(createInitData(Lease.Status.NewLease)).queryArg(
+                            LeaseTermEditorActivity.ARG_NAME_RETURN_BH, LeaseTermEditorActivity.ReturnBehaviour.Lease.name()));
             break;
 
         case Application:
-            termDto.termFrom().setValue(new LogicalDate(ClientContext.getServerDate()));
             AppSite.getPlaceController().goTo(
-                    new CrmSiteMap.Tenants.LeaseTerm().formNewItemPlace(termDto).queryArg(LeaseTermEditorActivity.ARG_NAME_RETURN_BH,
-                            LeaseTermEditorActivity.ReturnBehaviour.Application.name()));
+                    new CrmSiteMap.Tenants.LeaseTerm().formNewItemPlace(createInitData(Lease.Status.Application)).queryArg(
+                            LeaseTermEditorActivity.ARG_NAME_RETURN_BH, LeaseTermEditorActivity.ReturnBehaviour.Application.name()));
             break;
         }
 
         return true;
     }
 
-    private Lease createNewLease(ARCode.Type leaseType) {
-        Lease newLease = EntityFactory.create(Lease.class);
+    private LeaseTermInitializationData createInitData(final Lease.Status leaseStatus) {
+        LeaseTermCrudService.LeaseTermInitializationData id = EntityFactory.create(LeaseTermCrudService.LeaseTermInitializationData.class);
 
-        newLease.type().setValue(leaseType);
+        id.isOffer().setValue(false); // not an offer.
+        id.leaseType().setValue(getSelectedType());
+        id.leaseStatus().setValue(leaseStatus);
+        id.unit().set(selectedUnitId);
 
-        BillingAccount billingAccount = EntityFactory.create(BillingAccount.class);
-        billingAccount.billingPeriod().setValue(BillingPeriod.Monthly);
-        billingAccount.billCounter().setValue(0);
-        newLease.billingAccount().set(billingAccount);
-
-        newLease.unit().set(selectedUnitId);
-
-        switch (type) {
-        case New:
-            newLease.status().setValue(Lease.Status.NewLease);
-            break;
-
-        case Current:
-            newLease.status().setValue(Lease.Status.ExistingLease);
-            break;
-
-        case Application:
-            newLease.status().setValue(Lease.Status.Application);
-            break;
-        }
-
-        return newLease;
+        return id;
     }
 }

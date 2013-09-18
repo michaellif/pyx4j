@@ -16,6 +16,7 @@ package com.propertyvista.crm.rpc.services;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.commons.Key;
+import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.rpc.AbstractCrudService;
 import com.pyx4j.rpc.shared.VoidSerializable;
 
@@ -28,6 +29,14 @@ import com.propertyvista.dto.MaintenanceRequestScheduleDTO;
 
 public interface MaintenanceCrudService extends AbstractCrudService<MaintenanceRequestDTO> {
 
+    @Transient
+    interface MaintenanceInitializationData extends InitializationData {
+
+        Building building();
+
+        Tenant tenant();
+    }
+
     void sheduleAction(AsyncCallback<VoidSerializable> callback, MaintenanceRequestScheduleDTO schedule, Key entityId);
 
     void updateProgressAction(AsyncCallback<VoidSerializable> callback, String progressNote, Key scheduleId);
@@ -37,10 +46,6 @@ public interface MaintenanceCrudService extends AbstractCrudService<MaintenanceR
     void rateAction(AsyncCallback<VoidSerializable> callback, SurveyResponse rate, Key entityId);
 
     void cancelAction(AsyncCallback<VoidSerializable> callback, Key entityId);
-
-    void createNewRequest(AsyncCallback<MaintenanceRequestDTO> callback, Building buildingStub);
-
-    void createNewRequestForTenant(AsyncCallback<MaintenanceRequestDTO> callback, Tenant tenantStub);
 
     void getCategoryMeta(AsyncCallback<MaintenanceRequestMetadata> callback, boolean labelsOnly, Key buildingId);
 }

@@ -16,6 +16,7 @@ package com.propertyvista.crm.rpc.services.customer.lead;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.commons.Key;
+import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.rpc.AbstractCrudService;
 
 import com.propertyvista.crm.rpc.dto.tenant.ShowingDTO;
@@ -24,7 +25,11 @@ import com.propertyvista.domain.tenant.lead.Appointment;
 
 public interface ShowingCrudService extends AbstractCrudService<ShowingDTO> {
 
-    void createNew(AsyncCallback<ShowingDTO> callback, Appointment parentAppointmentStub);
+    @Transient
+    public interface ShowingInitializationData extends InitializationData {
+
+        Appointment appointment();
+    }
 
     void updateValue(AsyncCallback<AptUnit> callback, Key unitId);
 

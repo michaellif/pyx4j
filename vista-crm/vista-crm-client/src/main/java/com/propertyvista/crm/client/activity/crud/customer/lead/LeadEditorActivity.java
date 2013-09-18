@@ -14,10 +14,8 @@
 package com.propertyvista.crm.client.activity.crud.customer.lead;
 
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.entity.rpc.AbstractCrudService;
-import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.site.rpc.CrudAppPlace;
 
@@ -26,14 +24,13 @@ import com.propertyvista.crm.client.activity.crud.CrmEditorActivity;
 import com.propertyvista.crm.client.ui.crud.customer.lead.LeadEditorView;
 import com.propertyvista.crm.rpc.services.customer.lead.LeadCrudService;
 import com.propertyvista.domain.property.asset.Floorplan;
-import com.propertyvista.domain.tenant.lead.Lead.Status;
 import com.propertyvista.domain.tenant.lead.Lead;
 
 public class LeadEditorActivity extends CrmEditorActivity<Lead> implements LeadEditorView.Presenter {
 
     @SuppressWarnings("unchecked")
     public LeadEditorActivity(CrudAppPlace place) {
-        super(place,  CrmSite.getViewFactory().instantiate(LeadEditorView.class), (AbstractCrudService<Lead>) GWT.create(LeadCrudService.class), Lead.class);
+        super(place, CrmSite.getViewFactory().instantiate(LeadEditorView.class), (AbstractCrudService<Lead>) GWT.create(LeadCrudService.class), Lead.class);
     }
 
     @Override
@@ -44,14 +41,5 @@ public class LeadEditorActivity extends CrmEditorActivity<Lead> implements LeadE
                 ((LeadEditorView) getView()).setFloorplanData(item);
             }
         }, selected.getPrimaryKey());
-    }
-
-    @Override
-    protected void createNewEntity(AsyncCallback<Lead> callback) {
-        Lead entity = EntityFactory.create(getEntityClass());
-
-        entity.status().setValue(Status.active);
-
-        callback.onSuccess(entity);
     }
 }

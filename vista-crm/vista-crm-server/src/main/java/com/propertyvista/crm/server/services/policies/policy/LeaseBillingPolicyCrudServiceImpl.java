@@ -13,6 +13,8 @@
  */
 package com.propertyvista.crm.server.services.policies.policy;
 
+import com.google.gwt.user.client.rpc.AsyncCallback;
+
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
@@ -21,6 +23,7 @@ import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.propertyvista.biz.financial.billingcycle.BillingCycleFacade;
 import com.propertyvista.crm.rpc.services.policies.policy.LeaseBillingPolicyCrudService;
 import com.propertyvista.crm.server.services.policies.GenericPolicyCrudService;
+import com.propertyvista.domain.financial.BillingAccount;
 import com.propertyvista.domain.policy.dto.LeaseBillingPolicyDTO;
 import com.propertyvista.domain.policy.policies.LeaseBillingPolicy;
 
@@ -29,6 +32,23 @@ public class LeaseBillingPolicyCrudServiceImpl extends GenericPolicyCrudService<
 
     public LeaseBillingPolicyCrudServiceImpl() {
         super(LeaseBillingPolicy.class, LeaseBillingPolicyDTO.class);
+    }
+
+    @Override
+    public void init(final AsyncCallback<LeaseBillingPolicyDTO> callback, InitializationData initializationData) {
+        super.init(new AsyncCallback<LeaseBillingPolicyDTO>() {
+            @Override
+            public void onSuccess(LeaseBillingPolicyDTO entity) {
+                entity.prorationMethod().setValue(BillingAccount.ProrationMethod.Standard);
+
+                callback.onSuccess(entity);
+            }
+
+            @Override
+            public void onFailure(Throwable err) {
+                callback.onFailure(err);
+            }
+        }, initializationData);
     }
 
     @Override

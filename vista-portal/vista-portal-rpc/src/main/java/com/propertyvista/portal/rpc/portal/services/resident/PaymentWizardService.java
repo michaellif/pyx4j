@@ -17,13 +17,13 @@ import java.util.Vector;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
-import com.pyx4j.entity.rpc.AbstractWizardService;
+import com.pyx4j.entity.rpc.AbstractCrudService;
 
 import com.propertyvista.domain.contact.AddressSimple;
 import com.propertyvista.domain.payment.LeasePaymentMethod;
 import com.propertyvista.portal.domain.dto.financial.PaymentDTO;
 
-public interface PaymentWizardService extends AbstractWizardService<PaymentDTO> {
+public interface PaymentWizardService extends AbstractCrudService<PaymentDTO> {
 
     void getCurrentAddress(AsyncCallback<AddressSimple> callback);
 

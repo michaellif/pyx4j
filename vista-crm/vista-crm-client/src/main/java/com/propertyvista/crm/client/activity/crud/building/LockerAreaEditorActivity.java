@@ -14,10 +14,8 @@
 package com.propertyvista.crm.client.activity.crud.building;
 
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.entity.rpc.AbstractCrudService;
-import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.site.rpc.CrudAppPlace;
 
 import com.propertyvista.crm.client.CrmSite;
@@ -30,20 +28,7 @@ public class LockerAreaEditorActivity extends CrmEditorActivity<LockerAreaDTO> i
 
     @SuppressWarnings("unchecked")
     public LockerAreaEditorActivity(CrudAppPlace place) {
-        super(place,  CrmSite.getViewFactory().instantiate(LockerAreaEditorView.class), (AbstractCrudService<LockerAreaDTO>) GWT.create(LockerAreaCrudService.class),
-                LockerAreaDTO.class);
-    }
-
-    @Override
-    protected void createNewEntity(AsyncCallback<LockerAreaDTO> callback) {
-        LockerAreaDTO lockerArea = EntityFactory.create(getEntityClass());
-
-        // do not allow null members!
-        lockerArea.totalLockers().setValue(0);
-        lockerArea.largeLockers().setValue(0);
-        lockerArea.regularLockers().setValue(0);
-        lockerArea.smallLockers().setValue(0);
-
-        callback.onSuccess(lockerArea);
+        super(place, CrmSite.getViewFactory().instantiate(LockerAreaEditorView.class), (AbstractCrudService<LockerAreaDTO>) GWT
+                .create(LockerAreaCrudService.class), LockerAreaDTO.class);
     }
 }

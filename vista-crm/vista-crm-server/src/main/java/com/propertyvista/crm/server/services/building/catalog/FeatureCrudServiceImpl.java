@@ -13,8 +13,11 @@
  */
 package com.propertyvista.crm.server.services.building.catalog;
 
+import com.google.gwt.user.client.rpc.AsyncCallback;
+
 import com.pyx4j.entity.server.AbstractCrudServiceImpl;
 import com.pyx4j.entity.server.Persistence;
+import com.pyx4j.entity.shared.EntityFactory;
 
 import com.propertyvista.crm.rpc.services.building.catalog.FeatureCrudService;
 import com.propertyvista.domain.financial.offering.Feature;
@@ -29,6 +32,18 @@ public class FeatureCrudServiceImpl extends AbstractCrudServiceImpl<Feature> imp
     @Override
     protected void bind() {
         bindCompleteDBO();
+    }
+
+    @Override
+    public void init(AsyncCallback<Feature> callback, InitializationData initializationData) {
+        FeatureInitializationdata initData = (FeatureInitializationdata) initializationData;
+
+        Feature entity = EntityFactory.create(Feature.class);
+        entity.type().setValue(initData.type().getValue());
+        entity.catalog().setPrimaryKey(initData.parent().getPrimaryKey());
+        entity.catalog().setValueDetached();
+
+        callback.onSuccess(entity);
     }
 
     @Override

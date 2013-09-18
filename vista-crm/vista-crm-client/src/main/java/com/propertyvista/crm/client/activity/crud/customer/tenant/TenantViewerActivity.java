@@ -31,11 +31,10 @@ import com.propertyvista.crm.client.visor.maintenance.MaintenanceRequestVisorCon
 import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.crm.rpc.services.MaintenanceCrudService;
 import com.propertyvista.crm.rpc.services.customer.TenantCrudService;
+import com.propertyvista.crm.rpc.services.customer.screening.CustomerScreeningCrudService;
 import com.propertyvista.domain.security.VistaCrmBehavior;
 import com.propertyvista.domain.tenant.Customer;
-import com.propertyvista.domain.tenant.CustomerScreening;
 import com.propertyvista.domain.tenant.lease.Tenant;
-import com.propertyvista.dto.MaintenanceRequestDTO;
 import com.propertyvista.dto.TenantDTO;
 import com.propertyvista.dto.TenantPortalAccessInformationDTO;
 
@@ -50,7 +49,7 @@ public class TenantViewerActivity extends CrmViewerActivity<TenantDTO> implement
     private Customer screeningCustomer;
 
     public TenantViewerActivity(CrudAppPlace place) {
-        super(place,  CrmSite.getViewFactory().instantiate(TenantViewerView.class), GWT.<TenantCrudService> create(TenantCrudService.class));
+        super(place, CrmSite.getViewFactory().instantiate(TenantViewerView.class), GWT.<TenantCrudService> create(TenantCrudService.class));
     }
 
     @Override
@@ -63,20 +62,17 @@ public class TenantViewerActivity extends CrmViewerActivity<TenantDTO> implement
 
     @Override
     public void goToCreateScreening() {
-        CustomerScreening screening = EntityFactory.create(CustomerScreening.class);
-        screening.screene().set(screeningCustomer);
-
-        AppSite.getPlaceController().goTo(new CrmSiteMap.Tenants.Screening().formNewItemPlace(screening));
+        CustomerScreeningCrudService.CustomerScreeningInitializationData id = EntityFactory
+                .create(CustomerScreeningCrudService.CustomerScreeningInitializationData.class);
+        id.screene().set(screeningCustomer);
+        AppSite.getPlaceController().goTo(new CrmSiteMap.Tenants.Screening().formNewItemPlace(id));
     }
 
     @Override
     public void goToCreateMaintenanceRequest() {
-        GWT.<MaintenanceCrudService> create(MaintenanceCrudService.class).createNewRequestForTenant(new DefaultAsyncCallback<MaintenanceRequestDTO>() {
-            @Override
-            public void onSuccess(MaintenanceRequestDTO result) {
-                AppSite.getPlaceController().goTo(new CrmSiteMap.Tenants.MaintenanceRequest().formNewItemPlace(result));
-            }
-        }, EntityFactory.createIdentityStub(Tenant.class, getEntityId()));
+        MaintenanceCrudService.MaintenanceInitializationData id = EntityFactory.create(MaintenanceCrudService.MaintenanceInitializationData.class);
+        id.tenant().set(EntityFactory.createIdentityStub(Tenant.class, getEntityId()));
+        AppSite.getPlaceController().goTo(new CrmSiteMap.Tenants.MaintenanceRequest().formNewItemPlace(id));
     }
 
     @Override

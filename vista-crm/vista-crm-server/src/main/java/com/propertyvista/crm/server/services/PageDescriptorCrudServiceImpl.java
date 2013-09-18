@@ -13,13 +13,18 @@
  */
 package com.propertyvista.crm.server.services;
 
+import com.google.gwt.user.client.rpc.AsyncCallback;
+
 import com.pyx4j.entity.server.AbstractCrudServiceImpl;
 import com.pyx4j.entity.server.Persistence;
+import com.pyx4j.entity.shared.EntityFactory;
 
 import com.propertyvista.crm.rpc.services.PageDescriptorCrudService;
 import com.propertyvista.domain.site.PageCaption;
 import com.propertyvista.domain.site.PageContent;
 import com.propertyvista.domain.site.PageDescriptor;
+import com.propertyvista.domain.site.PageDescriptor.Type;
+import com.propertyvista.domain.site.SiteDescriptor;
 import com.propertyvista.server.common.reference.PMSiteContentCache;
 
 public class PageDescriptorCrudServiceImpl extends AbstractCrudServiceImpl<PageDescriptor> implements PageDescriptorCrudService {
@@ -34,7 +39,32 @@ public class PageDescriptorCrudServiceImpl extends AbstractCrudServiceImpl<PageD
     }
 
     @Override
-    protected void enhanceRetrieved(PageDescriptor entity, PageDescriptor dto, RetrieveTarget retrieveTarget ) {
+    public void init(AsyncCallback<PageDescriptor> callback, InitializationData initializationData) {
+        PageDescriptorInitializationData initData = (PageDescriptorInitializationData) initializationData;
+
+        PageDescriptor entity = EntityFactory.create(PageDescriptor.class);
+        entity.type().setValue(Type.staticContent);
+
+        switch (initData.pageParent().getValue()) {
+        case page:
+            entity.parent().set(EntityFactory.create(PageDescriptor.class));
+            break;
+
+        case site:
+            entity.parent().set(EntityFactory.create(SiteDescriptor.class));
+            break;
+        }
+
+        PageContent content = EntityFactory.create(PageContent.class);
+        content.locale().set(initData.pageLocale());
+
+        entity.content().add(content);
+
+        callback.onSuccess(entity);
+    }
+
+    @Override
+    protected void enhanceRetrieved(PageDescriptor entity, PageDescriptor dto, RetrieveTarget retrieveTarget) {
         // load content caption:
         for (PageContent content : dto.content()) {
 

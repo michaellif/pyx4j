@@ -15,7 +15,6 @@ package com.propertyvista.crm.rpc;
 
 import com.pyx4j.i18n.annotations.I18nComment;
 import com.pyx4j.site.rpc.AppPlace;
-import com.pyx4j.site.rpc.CrudAppPlace;
 import com.pyx4j.site.rpc.ReportsAppPlace;
 import com.pyx4j.site.rpc.annotations.PlaceProperties;
 import com.pyx4j.site.shared.meta.PublicPlace;
@@ -387,7 +386,7 @@ public class CrmSiteMap implements SiteMap {
         public static class Profile extends AppPlace {
 
             @PlaceProperties(caption = "Payment Methods")
-            public static class PaymentMethods extends CrudAppPlace {
+            public static class PaymentMethods extends CrmCrudAppPlace {
             }
 
         }
@@ -395,7 +394,7 @@ public class CrmSiteMap implements SiteMap {
         public static class Settings extends AppPlace {
 
             @PlaceProperties(caption = "Online Payment Setup")
-            public static class OnlinePaymentSetup extends AppPlace {
+            public static class OnlinePaymentSetup extends CrmCrudAppPlace {
             }
 
             /**
@@ -405,7 +404,7 @@ public class CrmSiteMap implements SiteMap {
             public static class CreditCheck extends AppPlace {
 
                 @PlaceProperties(caption = "Credit Check Setup", navigLabel = "Credit Check Setup")
-                public static class Setup extends AppPlace {
+                public static class Setup extends CrmCrudAppPlace {
                 }
 
                 @PlaceProperties(caption = "Credit Check", navigLabel = "Credit Check Status")

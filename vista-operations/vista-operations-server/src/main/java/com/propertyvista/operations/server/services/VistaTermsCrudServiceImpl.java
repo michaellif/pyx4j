@@ -20,11 +20,14 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.pyx4j.commons.Key;
 import com.pyx4j.entity.server.AbstractVersionedCrudServiceImpl;
 import com.pyx4j.entity.server.Persistence;
+import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria.VersionedCriteria;
 
+import com.propertyvista.operations.domain.legal.LegalDocument;
 import com.propertyvista.operations.domain.legal.VistaTerms;
 import com.propertyvista.operations.rpc.services.VistaTermsCrudService;
+import com.propertyvista.shared.i18n.CompiledLocale;
 
 public class VistaTermsCrudServiceImpl extends AbstractVersionedCrudServiceImpl<VistaTerms> implements VistaTermsCrudService {
 
@@ -35,6 +38,20 @@ public class VistaTermsCrudServiceImpl extends AbstractVersionedCrudServiceImpl<
     @Override
     protected void bind() {
         bindCompleteDBO();
+    }
+
+    @Override
+    public void init(AsyncCallback<VistaTerms> callback, InitializationData initializationData) {
+        VistaTermsInitializationData initData = (VistaTermsInitializationData) initializationData;
+
+        LegalDocument doc = EntityFactory.create(LegalDocument.class);
+        doc.locale().setValue(CompiledLocale.en);
+
+        VistaTerms terms = EntityFactory.create(VistaTerms.class);
+        terms.target().setValue(initData.target().getValue());
+        terms.version().document().add(doc);
+
+        callback.onSuccess(terms);
     }
 
     @Override

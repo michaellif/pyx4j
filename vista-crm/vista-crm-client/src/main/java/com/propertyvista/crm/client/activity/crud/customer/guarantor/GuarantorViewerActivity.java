@@ -28,9 +28,9 @@ import com.propertyvista.crm.client.activity.crud.CrmViewerActivity;
 import com.propertyvista.crm.client.ui.crud.customer.guarantor.GuarantorViewerView;
 import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.crm.rpc.services.customer.GuarantorCrudService;
+import com.propertyvista.crm.rpc.services.customer.screening.CustomerScreeningCrudService;
 import com.propertyvista.domain.security.VistaCrmBehavior;
 import com.propertyvista.domain.tenant.Customer;
-import com.propertyvista.domain.tenant.CustomerScreening;
 import com.propertyvista.dto.GuarantorDTO;
 
 public class GuarantorViewerActivity extends CrmViewerActivity<GuarantorDTO> implements GuarantorViewerView.Presenter {
@@ -38,15 +38,15 @@ public class GuarantorViewerActivity extends CrmViewerActivity<GuarantorDTO> imp
     private Customer screeningCustomer;
 
     public GuarantorViewerActivity(CrudAppPlace place) {
-        super(place,  CrmSite.getViewFactory().instantiate(GuarantorViewerView.class), GWT.<GuarantorCrudService> create(GuarantorCrudService.class));
+        super(place, CrmSite.getViewFactory().instantiate(GuarantorViewerView.class), GWT.<GuarantorCrudService> create(GuarantorCrudService.class));
     }
 
     @Override
     public void goToCreateScreening() {
-        CustomerScreening screening = EntityFactory.create(CustomerScreening.class);
-        screening.screene().set(screeningCustomer);
-
-        AppSite.getPlaceController().goTo(new CrmSiteMap.Tenants.Screening().formNewItemPlace(screening));
+        CustomerScreeningCrudService.CustomerScreeningInitializationData id = EntityFactory
+                .create(CustomerScreeningCrudService.CustomerScreeningInitializationData.class);
+        id.screene().set(screeningCustomer);
+        AppSite.getPlaceController().goTo(new CrmSiteMap.Tenants.Screening().formNewItemPlace(id));
     }
 
     @Override

@@ -124,6 +124,11 @@ public class PmcPaymentMethodsCrudServiceImpl implements PmcPaymentMethodsCrudSe
     }
 
     @Override
+    public void init(AsyncCallback<PmcPaymentMethodsDTO> callback, InitializationData initializationData) {
+        throw new Error("Invalid Operation");
+    }
+
+    @Override
     public void create(AsyncCallback<Key> callback, PmcPaymentMethodsDTO editableEntity) {
         throw new Error("Invalid Operation");
     }
@@ -145,5 +150,4 @@ public class PmcPaymentMethodsCrudServiceImpl implements PmcPaymentMethodsCrudSe
         Vector<PmcPaymentMethod> paymentMethods = Persistence.secureQuery(criteria);
         return paymentMethods;
     }
-
 }

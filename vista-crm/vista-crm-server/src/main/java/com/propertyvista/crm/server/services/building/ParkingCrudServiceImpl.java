@@ -13,7 +13,10 @@
  */
 package com.propertyvista.crm.server.services.building;
 
+import com.google.gwt.user.client.rpc.AsyncCallback;
+
 import com.pyx4j.entity.server.AbstractCrudServiceDtoImpl;
+import com.pyx4j.entity.shared.EntityFactory;
 
 import com.propertyvista.crm.rpc.services.building.ParkingCrudService;
 import com.propertyvista.domain.property.asset.Parking;
@@ -28,5 +31,19 @@ public class ParkingCrudServiceImpl extends AbstractCrudServiceDtoImpl<Parking, 
     @Override
     protected void bind() {
         bindCompleteDBO();
+    }
+
+    @Override
+    public void init(AsyncCallback<ParkingDTO> callback, InitializationData initializationData) {
+        ParkingDTO parking = EntityFactory.create(ParkingDTO.class);
+
+        // do not allow null members!
+        parking.totalSpaces().setValue(0);
+        parking.disabledSpaces().setValue(0);
+        parking.regularSpaces().setValue(0);
+        parking.wideSpaces().setValue(0);
+        parking.narrowSpaces().setValue(0);
+
+        callback.onSuccess(parking);
     }
 }

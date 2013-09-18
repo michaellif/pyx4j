@@ -16,50 +16,29 @@ package com.propertyvista.operations.client.activity.crud.pmc.merchantaccount;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
-import com.pyx4j.commons.UserRuntimeException;
-import com.pyx4j.entity.rpc.AbstractCrudService;
+import com.pyx4j.entity.rpc.AbstractCrudService.InitializationData;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.site.client.activity.AbstractEditorActivity;
 import com.pyx4j.site.rpc.CrudAppPlace;
 
+import com.propertyvista.domain.pmc.Pmc;
 import com.propertyvista.operations.client.OperationsSite;
 import com.propertyvista.operations.client.ui.crud.pmc.MerchantAccountEditorView;
-import com.propertyvista.operations.rpc.PmcDTO;
 import com.propertyvista.operations.rpc.PmcMerchantAccountDTO;
-import com.propertyvista.operations.rpc.services.PmcCrudService;
 import com.propertyvista.operations.rpc.services.PmcMerchantAccountCrudService;
 
 public class MerchantAccountEditorActivity extends AbstractEditorActivity<PmcMerchantAccountDTO> {
 
     public MerchantAccountEditorActivity(CrudAppPlace place) {
-        super(//@formatter:off
-                place,
- OperationsSite.getViewFactory().instantiate(MerchantAccountEditorView.class),
-                GWT.<PmcMerchantAccountCrudService> create(PmcMerchantAccountCrudService.class),
-                PmcMerchantAccountDTO.class
-        );//@formatter:on
+        super(place, OperationsSite.getViewFactory().instantiate(MerchantAccountEditorView.class), GWT
+                .<PmcMerchantAccountCrudService> create(PmcMerchantAccountCrudService.class), PmcMerchantAccountDTO.class);
     }
 
     @Override
-    protected void createNewEntity(final AsyncCallback<PmcMerchantAccountDTO> callback) {
-        if (getParentId() == null) {
-            throw new UserRuntimeException("Invalid URL");
-        }
-        PmcCrudService srv = GWT.create(PmcCrudService.class);
-        srv.retrieve(new AsyncCallback<PmcDTO>() {
-
-            @Override
-            public void onFailure(Throwable caught) {
-                callback.onFailure(caught);
-            }
-
-            @Override
-            public void onSuccess(PmcDTO result) {
-                PmcMerchantAccountDTO ent = EntityFactory.create(PmcMerchantAccountDTO.class);
-                ent.pmc().name().set(result.name());
-                ent.merchantAccount().invalid().setValue(Boolean.FALSE);
-                callback.onSuccess(ent);
-            }
-        }, getParentId(), AbstractCrudService.RetrieveTarget.View);
+    protected void obtainInitializationData(AsyncCallback<InitializationData> callback) {
+        PmcMerchantAccountCrudService.PmcMerchantAccountInitializationData id = EntityFactory
+                .create(PmcMerchantAccountCrudService.PmcMerchantAccountInitializationData.class);
+        id.parent().set(EntityFactory.createIdentityStub(Pmc.class, getParentId()));
+        callback.onSuccess(id);
     }
 }

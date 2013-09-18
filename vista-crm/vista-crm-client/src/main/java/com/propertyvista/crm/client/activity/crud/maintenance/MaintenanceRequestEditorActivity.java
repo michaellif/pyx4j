@@ -17,6 +17,7 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.commons.Key;
+import com.pyx4j.entity.rpc.AbstractCrudService.InitializationData;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.site.rpc.CrudAppPlace;
@@ -37,11 +38,13 @@ public class MaintenanceRequestEditorActivity extends CrmEditorActivity<Maintena
     }
 
     @Override
-    protected void createNewEntity(final AsyncCallback<MaintenanceRequestDTO> callback) {
+    protected void obtainInitializationData(AsyncCallback<InitializationData> callback) {
         if (getParentId() != null) {
-            ((MaintenanceCrudService) getService()).createNewRequest(callback, EntityFactory.createIdentityStub(Building.class, getParentId()));
+            MaintenanceCrudService.MaintenanceInitializationData id = EntityFactory.create(MaintenanceCrudService.MaintenanceInitializationData.class);
+            id.building().set(EntityFactory.createIdentityStub(Building.class, getParentId()));
+            callback.onSuccess(id);
         } else {
-            super.createNewEntity(callback);
+            super.obtainInitializationData(callback);
         }
     }
 

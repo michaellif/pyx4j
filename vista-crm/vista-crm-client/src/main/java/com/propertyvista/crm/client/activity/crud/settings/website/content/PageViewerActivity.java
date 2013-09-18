@@ -24,6 +24,7 @@ import com.propertyvista.crm.client.activity.crud.CrmViewerActivity;
 import com.propertyvista.crm.client.ui.crud.settings.website.content.pages.PageEditor;
 import com.propertyvista.crm.client.ui.crud.settings.website.content.pages.PageViewer;
 import com.propertyvista.crm.rpc.services.PageDescriptorCrudService;
+import com.propertyvista.crm.rpc.services.PageDescriptorCrudService.PageDescriptorInitializationData;
 import com.propertyvista.domain.site.PageDescriptor;
 
 public class PageViewerActivity extends CrmViewerActivity<PageDescriptor> implements PageViewer.Presenter {
@@ -41,6 +42,6 @@ public class PageViewerActivity extends CrmViewerActivity<PageDescriptor> implem
     public void editNew(Key parentid) {
         AppSite.getPlaceController().goTo(
                 AppSite.getHistoryMapper().createPlace(getPlace().getClass()).formNewItemPlace(parentid)
-                        .queryArg(PageEditor.Presenter.URL_PARAM_PAGE_PARENT, PageEditor.Presenter.PageParent.page.name()));
+                        .queryArg(PageEditor.Presenter.URL_PARAM_PAGE_PARENT, PageDescriptorInitializationData.PageParent.page.name()));
     }
 }

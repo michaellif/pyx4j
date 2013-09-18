@@ -34,6 +34,7 @@ import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.tenant.lead.Appointment;
 import com.propertyvista.domain.tenant.lead.Lead;
 import com.propertyvista.domain.tenant.lead.Lead.ConvertToLeaseAppraisal;
+import com.propertyvista.domain.tenant.lead.Lead.Status;
 import com.propertyvista.domain.tenant.lead.Showing;
 
 public class LeadCrudServiceImpl extends AbstractCrudServiceImpl<Lead> implements LeadCrudService {
@@ -45,6 +46,15 @@ public class LeadCrudServiceImpl extends AbstractCrudServiceImpl<Lead> implement
     @Override
     protected void bind() {
         bindCompleteDBO();
+    }
+
+    @Override
+    public void init(AsyncCallback<Lead> callback, InitializationData initializationData) {
+        Lead entity = EntityFactory.create(Lead.class);
+
+        entity.status().setValue(Status.active);
+
+        callback.onSuccess(entity);
     }
 
     @Override

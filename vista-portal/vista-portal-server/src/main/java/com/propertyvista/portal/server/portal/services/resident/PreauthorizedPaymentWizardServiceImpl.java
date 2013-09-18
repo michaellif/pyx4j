@@ -23,12 +23,11 @@ import com.pyx4j.commons.Key;
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.config.server.SystemDateManager;
+import com.pyx4j.entity.server.AbstractCrudServiceDtoImpl;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.AttachLevel;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
-import com.pyx4j.entity.shared.utils.EntityDtoBinder;
-import com.pyx4j.rpc.shared.ServiceExecution;
 
 import com.propertyvista.biz.financial.payment.PaymentFacade;
 import com.propertyvista.biz.financial.payment.PaymentMethodFacade;
@@ -50,7 +49,7 @@ import com.propertyvista.server.common.util.AddressConverter;
 import com.propertyvista.server.common.util.AddressRetriever;
 import com.propertyvista.server.common.util.LeaseParticipantUtils;
 
-public class PreauthorizedPaymentWizardServiceImpl extends EntityDtoBinder<PreauthorizedPayment, PreauthorizedPaymentDTO> implements
+public class PreauthorizedPaymentWizardServiceImpl extends AbstractCrudServiceDtoImpl<PreauthorizedPayment, PreauthorizedPaymentDTO> implements
         PreauthorizedPaymentWizardService {
 
     public PreauthorizedPaymentWizardServiceImpl() {
@@ -63,7 +62,7 @@ public class PreauthorizedPaymentWizardServiceImpl extends EntityDtoBinder<Preau
     }
 
     @Override
-    public void create(AsyncCallback<PreauthorizedPaymentDTO> callback) {
+    public void init(AsyncCallback<PreauthorizedPaymentDTO> callback, InitializationData initializationData) {
         Lease lease = TenantAppContext.getCurrentUserLease();
         Persistence.service().retrieve(lease.unit().building());
 
@@ -94,8 +93,7 @@ public class PreauthorizedPaymentWizardServiceImpl extends EntityDtoBinder<Preau
     }
 
     @Override
-    @ServiceExecution(waitCaption = "Submitting...")
-    public void finish(AsyncCallback<Key> callback, PreauthorizedPaymentDTO dto) {
+    public void save(AsyncCallback<Key> callback, PreauthorizedPaymentDTO dto) {
         PreauthorizedPayment entity = createDBO(dto);
 
         Lease lease = TenantAppContext.getCurrentUserLease();

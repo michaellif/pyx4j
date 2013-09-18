@@ -14,14 +14,10 @@
 package com.propertyvista.operations.client.activity.crud.pmc;
 
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.user.client.rpc.AsyncCallback;
 
-import com.pyx4j.entity.rpc.AbstractCrudService;
-import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.site.client.activity.AbstractEditorActivity;
 import com.pyx4j.site.rpc.CrudAppPlace;
 
-import com.propertyvista.domain.customizations.CountryOfOperation;
 import com.propertyvista.operations.client.OperationsSite;
 import com.propertyvista.operations.client.ui.crud.pmc.PmcEditorView;
 import com.propertyvista.operations.rpc.PmcDTO;
@@ -29,35 +25,7 @@ import com.propertyvista.operations.rpc.services.PmcCrudService;
 
 public class PmcEditorActivity extends AbstractEditorActivity<PmcDTO> {
 
-    private final PmcDTO newItem;
-
-    @SuppressWarnings("unchecked")
     public PmcEditorActivity(CrudAppPlace place) {
-        super(place, OperationsSite.getViewFactory().instantiate(PmcEditorView.class), (AbstractCrudService<PmcDTO>) GWT.create(PmcCrudService.class),
-                PmcDTO.class);
-        newItem = (PmcDTO) place.getNewItem();
-    }
-
-    @Override
-    protected void createNewEntity(AsyncCallback<PmcDTO> callback) {
-        PmcDTO entity;
-        if (newItem == null) {
-            entity = EntityFactory.create(getEntityClass());
-        } else {
-            entity = newItem;
-        }
-
-        entity.features().occupancyModel().setValue(Boolean.TRUE);
-        entity.features().productCatalog().setValue(Boolean.TRUE);
-        entity.features().leases().setValue(Boolean.TRUE);
-        entity.features().onlineApplication().setValue(Boolean.FALSE);
-        entity.features().defaultProductCatalog().setValue(true);
-        entity.features().yardiIntegration().setValue(Boolean.FALSE);
-        entity.features().countryOfOperation().setValue(CountryOfOperation.Canada);
-
-        entity.features().tenantSureIntegration().setValue(Boolean.TRUE);
-
-        callback.onSuccess(entity);
-
+        super(place, OperationsSite.getViewFactory().instantiate(PmcEditorView.class), GWT.<PmcCrudService> create(PmcCrudService.class), PmcDTO.class);
     }
 }

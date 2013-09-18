@@ -39,6 +39,11 @@ public class CustomerCreditCheckLongReportServiceImpl implements CustomerCreditC
     }
 
     @Override
+    public void init(AsyncCallback<CustomerCreditCheckLongReportDTO> callback, InitializationData initializationData) {
+        throw new Error("Not intended for use!");
+    }
+
+    @Override
     public void create(AsyncCallback<Key> callback, CustomerCreditCheckLongReportDTO editableEntity) {
         throw new Error("Not intended for use!");
     }

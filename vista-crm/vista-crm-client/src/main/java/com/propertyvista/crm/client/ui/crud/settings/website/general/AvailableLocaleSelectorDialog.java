@@ -28,22 +28,24 @@ import com.pyx4j.forms.client.ui.CEntityComboBox;
 import com.pyx4j.forms.client.ui.IFormat;
 import com.pyx4j.forms.client.ui.OptionsFilter;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.widgets.client.dialog.CancelOption;
 import com.pyx4j.widgets.client.dialog.Dialog;
+import com.pyx4j.widgets.client.dialog.OkCancelOption;
 
 import com.propertyvista.domain.site.AvailableLocale;
 import com.propertyvista.shared.i18n.CompiledLocale;
 
-public class AvailableLocaleSelectorDialog extends Dialog implements CancelOption {
+public class AvailableLocaleSelectorDialog extends Dialog implements OkCancelOption {
     private final static I18n i18n = I18n.get(AvailableLocaleSelectorDialog.class);
 
     private final static String title = i18n.tr("Select Locale");
 
-    private final Set<AvailableLocale> usedLocales;
-
     private final VerticalPanel panel = new VerticalPanel();
 
-    public AvailableLocaleSelectorDialog(final Set<AvailableLocale> usedLocales, final ValueChangeHandler<AvailableLocale> selectHandler) {
+    private final Set<AvailableLocale> usedLocales;
+
+    private AvailableLocale selectedLocale;
+
+    public AvailableLocaleSelectorDialog(final Set<AvailableLocale> usedLocales) {
         super(title);
         setDialogOptions(this);
 
@@ -79,8 +81,7 @@ public class AvailableLocaleSelectorDialog extends Dialog implements CancelOptio
         localeSelector.addValueChangeHandler(new ValueChangeHandler<AvailableLocale>() {
             @Override
             public void onValueChange(ValueChangeEvent<AvailableLocale> event) {
-                selectHandler.onValueChange(event);
-                hide();
+                selectedLocale = event.getValue();
             }
         });
 
@@ -111,8 +112,16 @@ public class AvailableLocaleSelectorDialog extends Dialog implements CancelOptio
     }
 
     @Override
+    public boolean onClickOk() {
+        return true;
+    }
+
+    @Override
     public boolean onClickCancel() {
         return true;
     }
 
+    public AvailableLocale getSelectedLocale() {
+        return selectedLocale;
+    }
 }

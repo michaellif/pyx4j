@@ -13,9 +13,17 @@
  */
 package com.propertyvista.crm.rpc.services;
 
+import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.rpc.AbstractCrudService;
+import com.pyx4j.entity.shared.IPrimitive;
 
 import com.propertyvista.domain.site.gadgets.HomePageGadget;
 
 public interface HomePageGadgetCrudService extends AbstractCrudService<HomePageGadget> {
+
+    @Transient
+    public interface HomePageGadgetInitializationData extends InitializationData {
+
+        IPrimitive<HomePageGadget.GadgetType> type();
+    }
 }

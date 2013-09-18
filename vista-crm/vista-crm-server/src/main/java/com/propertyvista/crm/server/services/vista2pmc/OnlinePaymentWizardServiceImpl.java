@@ -20,10 +20,11 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.commons.Key;
 import com.pyx4j.config.server.ServerSideFactory;
+import com.pyx4j.entity.rpc.EntitySearchResult;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.entity.shared.criterion.EntityListCriteria;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
-import com.pyx4j.rpc.shared.ServiceExecution;
 import com.pyx4j.server.contexts.Context;
 
 import com.propertyvista.biz.communication.CommunicationFacade;
@@ -41,7 +42,7 @@ import com.propertyvista.server.jobs.TaskRunner;
 public class OnlinePaymentWizardServiceImpl implements OnlinePaymentWizardService {
 
     @Override
-    public void create(AsyncCallback<OnlinePaymentSetupDTO> callback) {
+    public void init(AsyncCallback<OnlinePaymentSetupDTO> callback, InitializationData initializationData) {
         OnlinePaymentSetupDTO onlinePaymentSetup = EntityFactory.create(OnlinePaymentSetupDTO.class);
 
         // init property accounts
@@ -58,8 +59,7 @@ public class OnlinePaymentWizardServiceImpl implements OnlinePaymentWizardServic
     }
 
     @Override
-    @ServiceExecution(waitCaption = "Submitting...")
-    public void finish(AsyncCallback<Key> callback, OnlinePaymentSetupDTO editableEntity) {
+    public void save(AsyncCallback<Key> callback, OnlinePaymentSetupDTO editableEntity) {
 
         EntityQueryCriteria<CrmUser> criteria = EntityQueryCriteria.create(CrmUser.class);
         criteria.eq(criteria.proto().id(), VistaContext.getCurrentUserPrimaryKey());
@@ -93,5 +93,29 @@ public class OnlinePaymentWizardServiceImpl implements OnlinePaymentWizardServic
         agreement.terms().setValue(termsContent);
         agreement.agreementSignature().timestamp().setValue(new Date());
         agreement.agreementSignature().ipAddress().setValue(Context.getRequestRemoteAddr());
+    }
+
+    @Override
+    public void retrieve(AsyncCallback<OnlinePaymentSetupDTO> callback, Key entityId, com.pyx4j.entity.rpc.AbstractCrudService.RetrieveTarget retrieveTarget) {
+        // TODO Auto-generated method stub
+
+    }
+
+    @Override
+    public void create(AsyncCallback<Key> callback, OnlinePaymentSetupDTO editableEntity) {
+        // TODO Auto-generated method stub
+
+    }
+
+    @Override
+    public void list(AsyncCallback<EntitySearchResult<OnlinePaymentSetupDTO>> callback, EntityListCriteria<OnlinePaymentSetupDTO> criteria) {
+        // TODO Auto-generated method stub
+
+    }
+
+    @Override
+    public void delete(AsyncCallback<Boolean> callback, Key entityId) {
+        // TODO Auto-generated method stub
+
     }
 }

@@ -27,10 +27,11 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.commons.Key;
 import com.pyx4j.config.server.ServerSideFactory;
+import com.pyx4j.entity.rpc.EntitySearchResult;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.entity.shared.criterion.EntityListCriteria;
 import com.pyx4j.essentials.server.admin.SystemMaintenance;
-import com.pyx4j.rpc.shared.ServiceExecution;
 import com.pyx4j.rpc.shared.VoidSerializable;
 import com.pyx4j.server.contexts.Context;
 import com.pyx4j.server.contexts.Visit;
@@ -237,7 +238,7 @@ public class TenantSurePurchaseServiceImpl implements TenantSurePurchaseService 
     }
 
     @Override
-    public void create(final AsyncCallback<TenantSureAgreementDTO> callback) {
+    public void init(final AsyncCallback<TenantSureAgreementDTO> callback, InitializationData initializationData) {
         
         getQuotationRequestParams(new AsyncCallback<TenantSureQuotationRequestParamsDTO>() {
 
@@ -267,9 +268,32 @@ public class TenantSurePurchaseServiceImpl implements TenantSurePurchaseService 
     }
 
     @Override
-    @ServiceExecution(waitCaption = "Submitting...")
-    public void finish(AsyncCallback<Key> callback, TenantSureAgreementDTO editableEntity) {
+    public void save(AsyncCallback<Key> callback, TenantSureAgreementDTO editableEntity) {
         // TODO Auto-generated method stub        
+    }
+
+    @Override
+    public void retrieve(AsyncCallback<TenantSureAgreementDTO> callback, Key entityId, com.pyx4j.entity.rpc.AbstractCrudService.RetrieveTarget retrieveTarget) {
+        // TODO Auto-generated method stub
+        
+    }
+
+    @Override
+    public void create(AsyncCallback<Key> callback, TenantSureAgreementDTO editableEntity) {
+        // TODO Auto-generated method stub
+        
+    }
+
+    @Override
+    public void list(AsyncCallback<EntitySearchResult<TenantSureAgreementDTO>> callback, EntityListCriteria<TenantSureAgreementDTO> criteria) {
+        // TODO Auto-generated method stub
+        
+    }
+
+    @Override
+    public void delete(AsyncCallback<Boolean> callback, Key entityId) {
+        // TODO Auto-generated method stub
+        
     }
 
    

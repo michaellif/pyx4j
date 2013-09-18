@@ -18,35 +18,20 @@ import java.math.BigDecimal;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
-import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.rpc.AbstractCrudService;
-import com.pyx4j.entity.shared.EntityFactory;
-import com.pyx4j.security.client.ClientContext;
 import com.pyx4j.site.rpc.CrudAppPlace;
 
 import com.propertyvista.crm.client.CrmSite;
 import com.propertyvista.crm.client.activity.crud.CrmEditorActivity;
 import com.propertyvista.crm.client.ui.crud.billing.adjustments.LeaseAdjustmentEditorView;
 import com.propertyvista.crm.rpc.services.billing.LeaseAdjustmentCrudService;
-import com.propertyvista.domain.tenant.lease.LeaseAdjustment.Status;
 import com.propertyvista.domain.tenant.lease.LeaseAdjustment;
 
 public class LeaseAdjustmentEditorActivity extends CrmEditorActivity<LeaseAdjustment> implements LeaseAdjustmentEditorView.Presenter {
 
     public LeaseAdjustmentEditorActivity(CrudAppPlace place) {
-        super(place,  CrmSite.getViewFactory().instantiate(LeaseAdjustmentEditorView.class), GWT
+        super(place, CrmSite.getViewFactory().instantiate(LeaseAdjustmentEditorView.class), GWT
                 .<AbstractCrudService<LeaseAdjustment>> create(LeaseAdjustmentCrudService.class), LeaseAdjustment.class);
-    }
-
-    @Override
-    protected void createNewEntity(AsyncCallback<LeaseAdjustment> callback) {
-        LeaseAdjustment entity = EntityFactory.create(LeaseAdjustment.class);
-
-        entity.receivedDate().setValue(new LogicalDate(ClientContext.getServerDate()));
-        entity.targetDate().setValue(new LogicalDate(ClientContext.getServerDate()));
-        entity.status().setValue(Status.draft);
-
-        callback.onSuccess(entity);
     }
 
     @Override

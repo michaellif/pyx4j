@@ -55,6 +55,11 @@ public class MaintenanceCrudServiceImpl extends AdminServiceImpl implements Main
     // Crud service interface implementation:
 
     @Override
+    public void init(AsyncCallback<VistaSystemMaintenanceState> callback, InitializationData initializationData) {
+        throw new Error();
+    }
+
+    @Override
     public void create(AsyncCallback<Key> callback, VistaSystemMaintenanceState editableEntity) {
         throw new Error();
     }
@@ -93,4 +98,5 @@ public class MaintenanceCrudServiceImpl extends AdminServiceImpl implements Main
     public void delete(AsyncCallback<Boolean> callback, Key entityId) {
         throw new Error();
     }
+
 }

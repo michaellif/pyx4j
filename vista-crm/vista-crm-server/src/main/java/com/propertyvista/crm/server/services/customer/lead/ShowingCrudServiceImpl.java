@@ -41,6 +41,15 @@ public class ShowingCrudServiceImpl extends AbstractCrudServiceDtoImpl<Showing, 
     }
 
     @Override
+    public void init(AsyncCallback<ShowingDTO> callback, InitializationData initializationData) {
+        ShowingDTO newShowing = EntityFactory.create(ShowingDTO.class);
+        newShowing.appointment().set(((ShowingCrudService.ShowingInitializationData) initializationData).appointment());
+        newShowing.status().setValue(Showing.Status.planned);
+        retrieveUnitFilterCriteria(newShowing);
+        callback.onSuccess(newShowing);
+    }
+
+    @Override
     protected void enhanceRetrieved(Showing entity, ShowingDTO dto, RetrieveTarget retrieveTarget) {
         enhanceListRetrieved(entity, dto);
         retrieveUnitFilterCriteria(dto);
@@ -79,15 +88,6 @@ public class ShowingCrudServiceImpl extends AbstractCrudServiceDtoImpl<Showing, 
         Persistence.service().retrieve(unit.building(), AttachLevel.ToStringMembers);
         Persistence.service().retrieve(unit.floorplan(), AttachLevel.ToStringMembers);
         callback.onSuccess(unit);
-    }
-
-    @Override
-    public void createNew(AsyncCallback<ShowingDTO> callback, Appointment parentAppointmentStub) {
-        ShowingDTO newShowing = EntityFactory.create(ShowingDTO.class);
-        newShowing.appointment().set(parentAppointmentStub);
-        newShowing.status().setValue(Showing.Status.planned);
-        retrieveUnitFilterCriteria(newShowing);
-        callback.onSuccess(newShowing);
     }
 
     private static void retrieveUnitFilterCriteria(ShowingDTO showingDTO) {

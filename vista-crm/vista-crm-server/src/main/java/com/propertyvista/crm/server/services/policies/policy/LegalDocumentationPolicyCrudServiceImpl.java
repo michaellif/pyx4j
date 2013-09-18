@@ -13,17 +13,43 @@
  */
 package com.propertyvista.crm.server.services.policies.policy;
 
+import com.google.gwt.user.client.rpc.AsyncCallback;
+
 import com.pyx4j.commons.UserRuntimeException;
+import com.pyx4j.entity.shared.EntityFactory;
 
 import com.propertyvista.crm.server.services.policies.GenericPolicyCrudService;
 import com.propertyvista.domain.policy.dto.LegalDocumentationPolicyDTO;
 import com.propertyvista.domain.policy.policies.LegalDocumentation;
+import com.propertyvista.domain.policy.policies.domain.LegalTermsContent;
 import com.propertyvista.domain.policy.policies.domain.LegalTermsDescriptor;
 
 public class LegalDocumentationPolicyCrudServiceImpl extends GenericPolicyCrudService<LegalDocumentation, LegalDocumentationPolicyDTO> {
 
     public LegalDocumentationPolicyCrudServiceImpl() {
         super(LegalDocumentation.class, LegalDocumentationPolicyDTO.class);
+    }
+
+    @Override
+    public void init(final AsyncCallback<LegalDocumentationPolicyDTO> callback, InitializationData initializationData) {
+        super.init(new AsyncCallback<LegalDocumentationPolicyDTO>() {
+            @Override
+            public void onFailure(Throwable err) {
+                callback.onFailure(err);
+            }
+
+            @Override
+            public void onSuccess(LegalDocumentationPolicyDTO policy) {
+                // load default values:
+                policy.mainApplication().add(createNewLegalTerms());
+                policy.coApplication().add(createNewLegalTerms());
+                policy.guarantorApplication().add(createNewLegalTerms());
+                policy.lease().add(createNewLegalTerms());
+                policy.paymentAuthorization().add(createNewLegalTerms());
+
+                callback.onSuccess(policy);
+            }
+        }, initializationData);
     }
 
     @Override
@@ -55,4 +81,14 @@ public class LegalDocumentationPolicyCrudServiceImpl extends GenericPolicyCrudSe
         // FIXME finish this
         return true;
     }
+
+    /** Create new empty terms descriptor with a empty content */
+    private LegalTermsDescriptor createNewLegalTerms() {
+        LegalTermsDescriptor termsDescriptor = EntityFactory.create(LegalTermsDescriptor.class);
+
+        termsDescriptor.content().add(EntityFactory.create(LegalTermsContent.class));
+
+        return termsDescriptor;
+    }
+
 }

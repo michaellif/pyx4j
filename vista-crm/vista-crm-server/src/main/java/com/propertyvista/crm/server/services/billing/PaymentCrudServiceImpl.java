@@ -62,6 +62,51 @@ public class PaymentCrudServiceImpl extends AbstractCrudServiceDtoImpl<PaymentRe
     }
 
     @Override
+    public void init(AsyncCallback<PaymentRecordDTO> callback, InitializationData initializationData) {
+        PaymentInitializationData initData = (PaymentInitializationData) initializationData;
+        BillingAccount billingAccount = Persistence.service().retrieve(BillingAccount.class, initData.parent().getPrimaryKey());
+        if ((billingAccount == null) || (billingAccount.isNull())) {
+            throw new RuntimeException("Entity '" + EntityFactory.getEntityMeta(BillingAccount.class).getCaption() + "' " + initData.parent().getPrimaryKey()
+                    + " NotFound");
+        }
+
+        if (!ServerSideFactory.create(PaymentFacade.class).isPaymentsAllowed(billingAccount)) {
+            throw new UserRuntimeException(i18n.tr("No merchantAccount assigned to building to create the payment"));
+        }
+
+        Persistence.service().retrieve(billingAccount.lease());
+        Persistence.service().retrieve(billingAccount.lease().unit());
+        Persistence.service().retrieve(billingAccount.lease().unit().building());
+
+        PaymentRecordDTO dto = EntityFactory.create(PaymentRecordDTO.class);
+
+        dto.billingAccount().set(billingAccount);
+        dto.electronicPaymentsAllowed().setValue(ServerSideFactory.create(PaymentFacade.class).isElectronicPaymentsSetup(billingAccount));
+        dto.allowedPaymentTypes().setCollectionValue(
+                ServerSideFactory.create(PaymentFacade.class).getAllowedPaymentTypes(dto.billingAccount(), VistaApplication.crm));
+        dto.allowedCardTypes()
+                .setCollectionValue(ServerSideFactory.create(PaymentFacade.class).getAllowedCardTypes(dto.billingAccount(), VistaApplication.crm));
+
+        dto.leaseId().set(billingAccount.lease().leaseId());
+        dto.leaseStatus().set(billingAccount.lease().status());
+        dto.propertyCode().set(billingAccount.lease().unit().building().propertyCode());
+        dto.unitNumber().set(billingAccount.lease().unit().info().number());
+
+        dto.participants().addAll(retrievePayableUsers(billingAccount.lease()));
+
+        // some default values:
+        dto.createdDate().setValue(new LogicalDate(SystemDateManager.getDate()));
+
+        // calculate current balance:
+        dto.amount().setValue(ServerSideFactory.create(ARFacade.class).getCurrentBalance(billingAccount));
+        if (dto.amount().isNull() || dto.amount().getValue().signum() == -1) {
+            dto.amount().setValue(new BigDecimal("0.00"));
+        }
+
+        callback.onSuccess(dto);
+    }
+
+    @Override
     protected void enhanceRetrieved(PaymentRecord entity, PaymentRecordDTO dto, RetrieveTarget retrieveTarget) {
         super.enhanceRetrieved(entity, dto, retrieveTarget);
         enhanceListRetrieved(entity, dto);
@@ -113,49 +158,6 @@ public class PaymentCrudServiceImpl extends AbstractCrudServiceDtoImpl<PaymentRe
         ServerSideFactory.create(PaymentFacade.class).validatePaymentMethod(entity.billingAccount(), dto.paymentMethod(), VistaApplication.crm);
 
         ServerSideFactory.create(PaymentFacade.class).persistPayment(entity);
-    }
-
-    @Override
-    public void initNewEntity(AsyncCallback<PaymentRecordDTO> callback, Key parentId) {
-        BillingAccount billingAccount = Persistence.service().retrieve(BillingAccount.class, parentId);
-        if ((billingAccount == null) || (billingAccount.isNull())) {
-            throw new RuntimeException("Entity '" + EntityFactory.getEntityMeta(BillingAccount.class).getCaption() + "' " + parentId + " NotFound");
-        }
-
-        if (!ServerSideFactory.create(PaymentFacade.class).isPaymentsAllowed(billingAccount)) {
-            throw new UserRuntimeException(i18n.tr("No merchantAccount assigned to building to create the payment"));
-        }
-
-        Persistence.service().retrieve(billingAccount.lease());
-        Persistence.service().retrieve(billingAccount.lease().unit());
-        Persistence.service().retrieve(billingAccount.lease().unit().building());
-
-        PaymentRecordDTO dto = EntityFactory.create(PaymentRecordDTO.class);
-
-        dto.billingAccount().set(billingAccount);
-        dto.electronicPaymentsAllowed().setValue(ServerSideFactory.create(PaymentFacade.class).isElectronicPaymentsSetup(billingAccount));
-        dto.allowedPaymentTypes().setCollectionValue(
-                ServerSideFactory.create(PaymentFacade.class).getAllowedPaymentTypes(dto.billingAccount(), VistaApplication.crm));
-        dto.allowedCardTypes()
-                .setCollectionValue(ServerSideFactory.create(PaymentFacade.class).getAllowedCardTypes(dto.billingAccount(), VistaApplication.crm));
-
-        dto.leaseId().set(billingAccount.lease().leaseId());
-        dto.leaseStatus().set(billingAccount.lease().status());
-        dto.propertyCode().set(billingAccount.lease().unit().building().propertyCode());
-        dto.unitNumber().set(billingAccount.lease().unit().info().number());
-
-        dto.participants().addAll(retrievePayableUsers(billingAccount.lease()));
-
-        // some default values:
-        dto.createdDate().setValue(new LogicalDate(SystemDateManager.getDate()));
-
-        // calculate current balance:
-        dto.amount().setValue(ServerSideFactory.create(ARFacade.class).getCurrentBalance(billingAccount));
-        if (dto.amount().isNull() || dto.amount().getValue().signum() == -1) {
-            dto.amount().setValue(new BigDecimal("0.00"));
-        }
-
-        callback.onSuccess(dto);
     }
 
     @Override

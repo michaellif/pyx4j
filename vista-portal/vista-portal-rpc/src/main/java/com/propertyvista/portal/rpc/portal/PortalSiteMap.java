@@ -15,6 +15,7 @@ package com.propertyvista.portal.rpc.portal;
 
 import com.pyx4j.commons.Key;
 import com.pyx4j.site.rpc.AppPlace;
+import com.pyx4j.site.rpc.CrudAppPlace;
 import com.pyx4j.site.rpc.annotations.PlaceProperties;
 import com.pyx4j.site.shared.meta.PublicPlace;
 import com.pyx4j.site.shared.meta.SiteMap;
@@ -103,7 +104,7 @@ public class PortalSiteMap implements SiteMap {
 
             }
 
-            public static class PayNow extends AppPlace {
+            public static class PayNow extends CrudAppPlace {
             }
 
             public static class PaymentSubmitting extends AppPlace {
@@ -123,7 +124,7 @@ public class PortalSiteMap implements SiteMap {
                 }
 
                 @PlaceProperties(caption = "New Pre-Authorized Payment")
-                public static class NewPreauthorizedPayment extends AppPlace {
+                public static class NewPreauthorizedPayment extends CrudAppPlace {
                 }
 
                 @PlaceProperties(caption = "Pre-Authorized Payment Submitted")
@@ -139,21 +140,21 @@ public class PortalSiteMap implements SiteMap {
             }
 
             public static class PaymentMethods extends AppPlace {
-            
-                public static class NewPaymentMethod extends AppPlace {
+
+                public static class NewPaymentMethod extends CrudAppPlace {
                 }
-            
+
                 public static class EditPaymentMethod extends AppPlace {
                 }
-            
+
                 public static class ViewPaymentMethod extends AppPlace {
                 }
-            
+
                 public static class PaymentMethodSubmitted extends AppPlace {
-            
+
                     public PaymentMethodSubmitted() {
                     }
-            
+
                     public PaymentMethodSubmitted(Key preauthorizedPaymentID) {
                         formPlace(preauthorizedPaymentID);
                     }

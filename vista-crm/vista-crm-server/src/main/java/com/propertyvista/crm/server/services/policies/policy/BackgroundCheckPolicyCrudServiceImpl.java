@@ -45,8 +45,8 @@ public class BackgroundCheckPolicyCrudServiceImpl extends GenericPolicyCrudServi
     }
 
     @Override
-    public void createNewPolicy(final AsyncCallback<BackgroundCheckPolicyDTO> callback) {
-        super.createNewPolicy(new AsyncCallback<BackgroundCheckPolicyDTO>() {
+    public void init(final AsyncCallback<BackgroundCheckPolicyDTO> callback, com.pyx4j.entity.rpc.AbstractCrudService.InitializationData initializationData) {
+        super.init(new AsyncCallback<BackgroundCheckPolicyDTO>() {
             @Override
             public void onFailure(Throwable err) {
                 callback.onFailure(err);
@@ -63,7 +63,7 @@ public class BackgroundCheckPolicyCrudServiceImpl extends GenericPolicyCrudServi
 
                 callback.onSuccess(policy);
             }
-        });
+        }, initializationData);
     }
 
     @Override

@@ -23,7 +23,7 @@ import com.pyx4j.commons.Key;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.client.activity.AbstractWizardActivity;
-import com.pyx4j.site.rpc.AppPlace;
+import com.pyx4j.site.rpc.CrudAppPlace;
 
 import com.propertyvista.domain.contact.AddressSimple;
 import com.propertyvista.domain.payment.LeasePaymentMethod;
@@ -36,7 +36,7 @@ import com.propertyvista.portal.rpc.portal.services.resident.PreauthorizedPaymen
 
 public class PreauthorizedPaymentWizardActivity extends AbstractWizardActivity<PreauthorizedPaymentDTO> implements PreauthorizedPaymentWizardView.Persenter {
 
-    public PreauthorizedPaymentWizardActivity(AppPlace place) {
+    public PreauthorizedPaymentWizardActivity(CrudAppPlace place) {
         super(place, PortalSite.getViewFactory().instantiate(PreauthorizedPaymentWizardView.class), GWT
                 .<PreauthorizedPaymentWizardService> create(PreauthorizedPaymentWizardService.class), PreauthorizedPaymentDTO.class);
     }

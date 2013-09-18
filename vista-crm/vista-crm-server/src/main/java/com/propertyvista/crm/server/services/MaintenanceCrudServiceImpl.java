@@ -149,17 +149,24 @@ public class MaintenanceCrudServiceImpl extends AbstractCrudServiceDtoImpl<Maint
     }
 
     @Override
-    public void createNewRequest(AsyncCallback<MaintenanceRequestDTO> callback, Building buildingStub) {
-        Building building = Persistence.service().retrieve(Building.class, buildingStub.getPrimaryKey());
-        MaintenanceRequest maintenanceRequest = ServerSideFactory.create(MaintenanceFacade.class).createNewRequest(building);
-        callback.onSuccess(createDTO(maintenanceRequest));
-    }
+    public void init(AsyncCallback<MaintenanceRequestDTO> callback, InitializationData initializationData) {
+        MaintenanceInitializationData initData = (MaintenanceInitializationData) initializationData;
 
-    @Override
-    public void createNewRequestForTenant(AsyncCallback<MaintenanceRequestDTO> callback, Tenant tenantStub) {
-        Tenant tenant = Persistence.service().retrieve(Tenant.class, tenantStub.getPrimaryKey());
-        MaintenanceRequest maintenanceRequest = ServerSideFactory.create(MaintenanceFacade.class).createNewRequestForTenant(tenant);
-        callback.onSuccess(createDTO(maintenanceRequest));
+        if (initData != null) {
+            if (!initData.tenant().isNull()) {
+                Tenant tenant = Persistence.service().retrieve(Tenant.class, initData.tenant().getPrimaryKey());
+                MaintenanceRequest maintenanceRequest = ServerSideFactory.create(MaintenanceFacade.class).createNewRequestForTenant(tenant);
+                callback.onSuccess(createDTO(maintenanceRequest));
+            } else if (!initData.building().isNull()) {
+                Building building = Persistence.service().retrieve(Building.class, initData.building().getPrimaryKey());
+                MaintenanceRequest maintenanceRequest = ServerSideFactory.create(MaintenanceFacade.class).createNewRequest(building);
+                callback.onSuccess(createDTO(maintenanceRequest));
+            } else {
+                super.init(callback, initializationData);
+            }
+        } else {
+            super.init(callback, initializationData);
+        }
     }
 
     @Override

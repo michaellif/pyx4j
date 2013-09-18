@@ -15,12 +15,12 @@ package com.propertyvista.crm.rpc.services.vista2pmc;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
-import com.pyx4j.entity.rpc.AbstractWizardService;
+import com.pyx4j.entity.rpc.AbstractCrudService;
 
 import com.propertyvista.domain.pmc.fee.AbstractEquifaxFee;
 import com.propertyvista.dto.vista2pmc.CreditCheckSetupDTO;
 
-public interface CreditCheckWizardService extends AbstractWizardService<CreditCheckSetupDTO> {
+public interface CreditCheckWizardService extends AbstractCrudService<CreditCheckSetupDTO> {
 
     public void obtatinFee(AsyncCallback<AbstractEquifaxFee> callback);
 }

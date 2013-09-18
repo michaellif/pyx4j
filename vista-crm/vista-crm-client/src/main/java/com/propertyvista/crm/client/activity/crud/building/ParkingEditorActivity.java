@@ -14,10 +14,7 @@
 package com.propertyvista.crm.client.activity.crud.building;
 
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.user.client.rpc.AsyncCallback;
 
-import com.pyx4j.entity.rpc.AbstractCrudService;
-import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.site.rpc.CrudAppPlace;
 
 import com.propertyvista.crm.client.CrmSite;
@@ -28,23 +25,7 @@ import com.propertyvista.dto.ParkingDTO;
 
 public class ParkingEditorActivity extends CrmEditorActivity<ParkingDTO> implements ParkingEditorView.Presenter {
 
-    @SuppressWarnings("unchecked")
     public ParkingEditorActivity(CrudAppPlace place) {
-        super(place,  CrmSite.getViewFactory().instantiate(ParkingEditorView.class), (AbstractCrudService<ParkingDTO>) GWT.create(ParkingCrudService.class),
-                ParkingDTO.class);
-    }
-
-    @Override
-    protected void createNewEntity(AsyncCallback<ParkingDTO> callback) {
-        ParkingDTO parking = EntityFactory.create(getEntityClass());
-
-        // do not allow null members!
-        parking.totalSpaces().setValue(0);
-        parking.disabledSpaces().setValue(0);
-        parking.regularSpaces().setValue(0);
-        parking.wideSpaces().setValue(0);
-        parking.narrowSpaces().setValue(0);
-
-        callback.onSuccess(parking);
+        super(place, CrmSite.getViewFactory().instantiate(ParkingEditorView.class), GWT.<ParkingCrudService> create(ParkingCrudService.class), ParkingDTO.class);
     }
 }

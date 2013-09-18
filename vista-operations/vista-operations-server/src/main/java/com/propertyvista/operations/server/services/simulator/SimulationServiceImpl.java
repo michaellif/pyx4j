@@ -86,6 +86,11 @@ public class SimulationServiceImpl extends AdminServiceImpl implements Simulatio
     }
 
     @Override
+    public void init(AsyncCallback<SimulationDTO> callback, com.pyx4j.entity.rpc.AbstractCrudService.InitializationData initializationData) {
+        throwSorryForPoorDesignError();
+    }
+
+    @Override
     public void create(AsyncCallback<Key> callback, SimulationDTO editableEntity) {
         throwSorryForPoorDesignError();
     }

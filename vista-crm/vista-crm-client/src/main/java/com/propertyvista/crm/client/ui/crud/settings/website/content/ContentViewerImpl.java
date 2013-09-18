@@ -28,6 +28,7 @@ import com.pyx4j.site.client.ui.dialogs.SelectEnumDialog;
 import com.propertyvista.crm.client.ui.crud.CrmViewerViewImplBase;
 import com.propertyvista.crm.rpc.CrmCrudAppPlace;
 import com.propertyvista.crm.rpc.CrmSiteMap.Administration.Website;
+import com.propertyvista.crm.rpc.services.HomePageGadgetCrudService;
 import com.propertyvista.domain.site.gadgets.HomePageGadget;
 import com.propertyvista.dto.SiteDescriptorDTO;
 
@@ -87,11 +88,12 @@ public class ContentViewerImpl extends CrmViewerViewImplBase<SiteDescriptorDTO> 
 
         @Override
         public boolean onClickOk() {
-            HomePageGadget.GadgetType type = getSelectedType();
+            final HomePageGadget.GadgetType type = getSelectedType();
             if (type != null) {
-                HomePageGadget newItem = EntityFactory.create(HomePageGadget.class);
-                newItem.type().setValue(type);
-                AppSite.getPlaceController().goTo(AppPlaceEntityMapper.resolvePlace(HomePageGadget.class).formNewItemPlace(newItem));
+                HomePageGadgetCrudService.HomePageGadgetInitializationData id = EntityFactory
+                        .create(HomePageGadgetCrudService.HomePageGadgetInitializationData.class);
+                id.type().setValue(type);
+                AppSite.getPlaceController().goTo(AppPlaceEntityMapper.resolvePlace(HomePageGadget.class).formNewItemPlace(id));
                 return true;
             }
             return false;

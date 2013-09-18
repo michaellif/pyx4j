@@ -66,6 +66,11 @@ public class InvoiceCreditCrudServiceImpl implements InvoiceCreditCrudService {
     }
 
     @Override
+    public void init(AsyncCallback<InvoiceCreditDTO> callback, com.pyx4j.entity.rpc.AbstractCrudService.InitializationData initializationData) {
+        throw new IllegalStateException("not supported");
+    }
+
+    @Override
     public void create(AsyncCallback<Key> callback, InvoiceCreditDTO editableEntity) {
         throw new IllegalStateException("not supported");
     }
@@ -85,5 +90,4 @@ public class InvoiceCreditCrudServiceImpl implements InvoiceCreditCrudService {
     public void delete(AsyncCallback<Boolean> callback, Key entityId) {
         throw new IllegalStateException("not supported");
     }
-
 }

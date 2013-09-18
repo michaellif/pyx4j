@@ -24,11 +24,9 @@ import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.rpc.CrudAppPlace;
 
-import com.propertyvista.operations.domain.legal.LegalDocument;
 import com.propertyvista.operations.domain.legal.VistaTerms;
 import com.propertyvista.operations.domain.legal.VistaTerms.Target;
 import com.propertyvista.operations.rpc.services.VistaTermsCrudService;
-import com.propertyvista.shared.i18n.CompiledLocale;
 
 public class VistaTermsDefaultActivity extends AbstractActivity {
 
@@ -52,12 +50,9 @@ public class VistaTermsDefaultActivity extends AbstractActivity {
                 if (result != null) {
                     dst.formViewerPlace(result);
                 } else {
-                    LegalDocument doc = EntityFactory.create(LegalDocument.class);
-                    doc.locale().setValue(CompiledLocale.en);
-                    VistaTerms terms = EntityFactory.create(VistaTerms.class);
-                    terms.target().setValue(target);
-                    terms.version().document().add(doc);
-                    dst.formNewItemPlace(terms);
+                    VistaTermsCrudService.VistaTermsInitializationData id = EntityFactory.create(VistaTermsCrudService.VistaTermsInitializationData.class);
+                    id.target().setValue(target);
+                    dst.formNewItemPlace(id);
                 }
                 AppSite.getPlaceController().goTo(dst);
             }

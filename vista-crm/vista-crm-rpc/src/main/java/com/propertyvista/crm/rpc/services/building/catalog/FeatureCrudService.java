@@ -13,10 +13,22 @@
  */
 package com.propertyvista.crm.rpc.services.building.catalog;
 
+import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.rpc.AbstractCrudService;
+import com.pyx4j.entity.shared.IPrimitive;
 
+import com.propertyvista.domain.financial.ARCode;
 import com.propertyvista.domain.financial.offering.Feature;
+import com.propertyvista.domain.financial.offering.ProductCatalog;
 
 public interface FeatureCrudService extends AbstractCrudService<Feature> {
+
+    @Transient
+    public interface FeatureInitializationdata extends InitializationData {
+
+        ProductCatalog parent();
+
+        IPrimitive<ARCode.Type> type();
+    }
 
 }

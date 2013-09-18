@@ -56,6 +56,11 @@ public class InvoiceDebitCrudServiceImpl implements InvoiceDebitCrudService {
     }
 
     @Override
+    public void init(AsyncCallback<InvoiceDebitDTO> callback, InitializationData initializationData) {
+        throw new IllegalStateException("not implemented");
+    }
+
+    @Override
     public void create(AsyncCallback<Key> callback, InvoiceDebitDTO editableEntity) {
         throw new IllegalStateException("not implemented");
     }
@@ -75,5 +80,4 @@ public class InvoiceDebitCrudServiceImpl implements InvoiceDebitCrudService {
     public void delete(AsyncCallback<Boolean> callback, Key entityId) {
         throw new IllegalStateException("not implemented");
     }
-
 }

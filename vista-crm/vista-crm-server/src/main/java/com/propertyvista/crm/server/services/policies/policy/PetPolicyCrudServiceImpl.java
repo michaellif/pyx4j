@@ -36,12 +36,11 @@ public class PetPolicyCrudServiceImpl extends GenericPolicyCrudService<PetPolicy
     }
 
     @Override
-    public void createNewPolicy(final AsyncCallback<PetPolicyDTO> callback) {
-        super.createNewPolicy(new AsyncCallback<PetPolicyDTO>() {
-
+    public void init(final AsyncCallback<PetPolicyDTO> callback, com.pyx4j.entity.rpc.AbstractCrudService.InitializationData initializationData) {
+        super.init(new AsyncCallback<PetPolicyDTO>() {
             @Override
             public void onFailure(Throwable arg0) {
-                throw new Error(arg0);
+                callback.onFailure(arg0);
             }
 
             @Override
@@ -49,7 +48,7 @@ public class PetPolicyCrudServiceImpl extends GenericPolicyCrudService<PetPolicy
                 attachNewPets(dto);
                 callback.onSuccess(dto);
             }
-        });
+        }, initializationData);
     }
 
     @Override

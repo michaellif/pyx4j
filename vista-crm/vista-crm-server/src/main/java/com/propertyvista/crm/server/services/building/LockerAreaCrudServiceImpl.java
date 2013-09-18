@@ -13,7 +13,10 @@
  */
 package com.propertyvista.crm.server.services.building;
 
+import com.google.gwt.user.client.rpc.AsyncCallback;
+
 import com.pyx4j.entity.server.AbstractCrudServiceDtoImpl;
+import com.pyx4j.entity.shared.EntityFactory;
 
 import com.propertyvista.crm.rpc.services.building.LockerAreaCrudService;
 import com.propertyvista.domain.property.asset.LockerArea;
@@ -28,5 +31,18 @@ public class LockerAreaCrudServiceImpl extends AbstractCrudServiceDtoImpl<Locker
     @Override
     protected void bind() {
         bindCompleteDBO();
+    }
+
+    @Override
+    public void init(AsyncCallback<LockerAreaDTO> callback, InitializationData initializationData) {
+        LockerAreaDTO lockerArea = EntityFactory.create(LockerAreaDTO.class);
+
+        // do not allow null members!
+        lockerArea.totalLockers().setValue(0);
+        lockerArea.largeLockers().setValue(0);
+        lockerArea.regularLockers().setValue(0);
+        lockerArea.smallLockers().setValue(0);
+
+        callback.onSuccess(lockerArea);
     }
 }

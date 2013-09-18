@@ -13,11 +13,15 @@
  */
 package com.propertyvista.crm.server.services.customer.screening;
 
+import com.google.gwt.user.client.rpc.AsyncCallback;
+
 import com.pyx4j.entity.server.AbstractVersionedCrudServiceImpl;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.AttachLevel;
+import com.pyx4j.entity.shared.EntityFactory;
 
 import com.propertyvista.crm.rpc.services.customer.screening.CustomerScreeningCrudService;
+import com.propertyvista.domain.tenant.Customer;
 import com.propertyvista.domain.tenant.CustomerScreening;
 
 public class CustomerScreeningCrudServiceImpl extends AbstractVersionedCrudServiceImpl<CustomerScreening> implements CustomerScreeningCrudService {
@@ -29,6 +33,16 @@ public class CustomerScreeningCrudServiceImpl extends AbstractVersionedCrudServi
     @Override
     protected void bind() {
         bindCompleteDBO();
+    }
+
+    @Override
+    public void init(AsyncCallback<CustomerScreening> callback, com.pyx4j.entity.rpc.AbstractCrudService.InitializationData initializationData) {
+        CustomerScreeningInitializationData initData = (CustomerScreeningInitializationData) initializationData;
+
+        CustomerScreening screening = EntityFactory.create(CustomerScreening.class);
+        screening.screene().set(Persistence.service().retrieve(Customer.class, initData.screene().getPrimaryKey(), AttachLevel.ToStringMembers));
+
+        callback.onSuccess(screening);
     }
 
     @Override

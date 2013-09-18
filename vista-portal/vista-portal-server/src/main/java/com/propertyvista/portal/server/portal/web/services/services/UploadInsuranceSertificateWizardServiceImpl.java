@@ -16,7 +16,8 @@ package com.propertyvista.portal.server.portal.web.services.services;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.commons.Key;
-import com.pyx4j.rpc.shared.ServiceExecution;
+import com.pyx4j.entity.rpc.EntitySearchResult;
+import com.pyx4j.entity.shared.criterion.EntityListCriteria;
 
 import com.propertyvista.domain.tenant.insurance.InsuranceGeneric;
 import com.propertyvista.portal.rpc.portal.web.services.services.UploadInsuranceSertificateWizardService;
@@ -24,14 +25,37 @@ import com.propertyvista.portal.rpc.portal.web.services.services.UploadInsurance
 public class UploadInsuranceSertificateWizardServiceImpl implements UploadInsuranceSertificateWizardService {
 
     @Override
-    public void create(AsyncCallback<InsuranceGeneric> callback) {
+    public void init(AsyncCallback<InsuranceGeneric> callback, com.pyx4j.entity.rpc.AbstractCrudService.InitializationData initializationData) {
         // TODO Auto-generated method stub
 
     }
 
     @Override
-    @ServiceExecution(waitCaption = "Submitting...")
-    public void finish(AsyncCallback<Key> callback, InsuranceGeneric editableEntity) {
+    public void retrieve(AsyncCallback<InsuranceGeneric> callback, Key entityId, com.pyx4j.entity.rpc.AbstractCrudService.RetrieveTarget retrieveTarget) {
+        // TODO Auto-generated method stub
+
+    }
+
+    @Override
+    public void create(AsyncCallback<Key> callback, InsuranceGeneric editableEntity) {
+        // TODO Auto-generated method stub
+
+    }
+
+    @Override
+    public void save(AsyncCallback<Key> callback, InsuranceGeneric editableEntity) {
+        // TODO Auto-generated method stub
+
+    }
+
+    @Override
+    public void list(AsyncCallback<EntitySearchResult<InsuranceGeneric>> callback, EntityListCriteria<InsuranceGeneric> criteria) {
+        // TODO Auto-generated method stub
+
+    }
+
+    @Override
+    public void delete(AsyncCallback<Boolean> callback, Key entityId) {
         // TODO Auto-generated method stub
 
     }

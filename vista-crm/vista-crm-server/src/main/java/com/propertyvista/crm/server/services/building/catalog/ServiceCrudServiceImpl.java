@@ -19,6 +19,7 @@ import com.pyx4j.commons.Key;
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.server.AbstractCrudServiceImpl;
 import com.pyx4j.entity.server.Persistence;
+import com.pyx4j.entity.shared.EntityFactory;
 
 import com.propertyvista.biz.financial.productcatalog.ProductCatalogFacade;
 import com.propertyvista.crm.rpc.services.building.catalog.ServiceCrudService;
@@ -36,6 +37,18 @@ public class ServiceCrudServiceImpl extends AbstractCrudServiceImpl<Service> imp
     @Override
     protected void bind() {
         bindCompleteDBO();
+    }
+
+    @Override
+    public void init(AsyncCallback<Service> callback, InitializationData initializationData) {
+        ServiceInitializationdata initData = (ServiceInitializationdata) initializationData;
+
+        Service entity = EntityFactory.create(Service.class);
+        entity.type().setValue(initData.type().getValue());
+        entity.catalog().setPrimaryKey(initData.parent().getPrimaryKey());
+        entity.catalog().setValueDetached();
+
+        callback.onSuccess(entity);
     }
 
     @Override

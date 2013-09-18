@@ -13,6 +13,8 @@
  */
 package com.propertyvista.crm.server.services.unit;
 
+import com.google.gwt.user.client.rpc.AsyncCallback;
+
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.server.AbstractCrudServiceDtoImpl;
 import com.pyx4j.entity.server.Persistence;
@@ -42,6 +44,17 @@ public class UnitCrudServiceImpl extends AbstractCrudServiceDtoImpl<AptUnit, Apt
     protected void bind() {
         bindCompleteDBO();
         bind(dtoProto.buildingCode(), dboProto.building().propertyCode());
+    }
+
+    @Override
+    public void init(AsyncCallback<AptUnitDTO> callback, InitializationData initializationData) {
+        UnitInitializationdata initData = (UnitInitializationdata) initializationData;
+
+        AptUnitDTO newUnit = EntityFactory.create(AptUnitDTO.class);
+
+        newUnit.building().set(Persistence.service().retrieve(Building.class, initData.parent().getPrimaryKey()));
+
+        callback.onSuccess(newUnit);
     }
 
     @Override

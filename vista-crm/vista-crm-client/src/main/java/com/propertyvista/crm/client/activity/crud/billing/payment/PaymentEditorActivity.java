@@ -20,6 +20,8 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.entity.rpc.AbstractCrudService;
+import com.pyx4j.entity.rpc.AbstractCrudService.InitializationData;
+import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.site.rpc.CrudAppPlace;
 
@@ -28,6 +30,7 @@ import com.propertyvista.crm.client.activity.crud.CrmEditorActivity;
 import com.propertyvista.crm.client.ui.crud.billing.payment.PaymentEditorView;
 import com.propertyvista.crm.rpc.services.billing.PaymentCrudService;
 import com.propertyvista.domain.contact.AddressSimple;
+import com.propertyvista.domain.financial.BillingAccount;
 import com.propertyvista.domain.payment.LeasePaymentMethod;
 import com.propertyvista.domain.tenant.lease.LeaseParticipant;
 import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
@@ -41,13 +44,10 @@ public class PaymentEditorActivity extends CrmEditorActivity<PaymentRecordDTO> i
     }
 
     @Override
-    protected void createNewEntity(final AsyncCallback<PaymentRecordDTO> callback) {
-        ((PaymentCrudService) getService()).initNewEntity(new DefaultAsyncCallback<PaymentRecordDTO>() {
-            @Override
-            public void onSuccess(PaymentRecordDTO result) {
-                callback.onSuccess(result);
-            }
-        }, getParentId());
+    protected void obtainInitializationData(AsyncCallback<InitializationData> callback) {
+        PaymentCrudService.PaymentInitializationData id = EntityFactory.create(PaymentCrudService.PaymentInitializationData.class);
+        id.parent().set(EntityFactory.createIdentityStub(BillingAccount.class, getParentId()));
+        callback.onSuccess(id);
     }
 
     @SuppressWarnings("unchecked")

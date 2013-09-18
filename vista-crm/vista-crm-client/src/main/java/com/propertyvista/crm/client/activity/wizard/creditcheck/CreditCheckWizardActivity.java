@@ -16,7 +16,7 @@ package com.propertyvista.crm.client.activity.wizard.creditcheck;
 import com.google.gwt.core.client.GWT;
 
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
-import com.pyx4j.site.rpc.AppPlace;
+import com.pyx4j.site.rpc.CrudAppPlace;
 
 import com.propertyvista.crm.client.CrmSite;
 import com.propertyvista.crm.client.activity.crud.CrmWizardActivity;
@@ -27,7 +27,7 @@ import com.propertyvista.dto.vista2pmc.CreditCheckSetupDTO;
 
 public class CreditCheckWizardActivity extends CrmWizardActivity<CreditCheckSetupDTO> implements CreditCheckWizardView.Presenter {
 
-    public CreditCheckWizardActivity(AppPlace place) {
+    public CreditCheckWizardActivity(CrudAppPlace place) {
         super(place, CrmSite.getViewFactory().instantiate(CreditCheckWizardView.class), GWT.<CreditCheckWizardService> create(CreditCheckWizardService.class),
                 CreditCheckSetupDTO.class);
     }

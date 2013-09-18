@@ -25,6 +25,7 @@ import com.propertyvista.crm.client.ui.crud.settings.website.content.ContentView
 import com.propertyvista.crm.client.ui.crud.settings.website.content.pages.PageEditor;
 import com.propertyvista.crm.rpc.CrmCrudAppPlace;
 import com.propertyvista.crm.rpc.CrmSiteMap.Administration.Website;
+import com.propertyvista.crm.rpc.services.PageDescriptorCrudService.PageDescriptorInitializationData;
 import com.propertyvista.crm.rpc.services.admin.SiteContentCrudService;
 import com.propertyvista.dto.SiteDescriptorDTO;
 
@@ -48,7 +49,7 @@ public class ContentViewerActivity extends CrmViewerActivity<SiteDescriptorDTO> 
     public void editNew(Key parentid) {
         AppSite.getPlaceController().goTo(
                 new Website.Content.Page().formNewItemPlace(parentid).queryArg(PageEditor.Presenter.URL_PARAM_PAGE_PARENT,
-                        PageEditor.Presenter.PageParent.site.name()));
+                        PageDescriptorInitializationData.PageParent.site.name()));
     }
 
     @Override

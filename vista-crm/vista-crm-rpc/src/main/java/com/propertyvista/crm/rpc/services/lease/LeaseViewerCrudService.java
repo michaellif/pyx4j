@@ -25,10 +25,8 @@ import com.propertyvista.crm.rpc.dto.occupancy.opconstraints.CancelMoveOutConstr
 import com.propertyvista.crm.rpc.services.lease.common.LeaseViewerCrudServiceBase;
 import com.propertyvista.domain.communication.EmailTemplateType;
 import com.propertyvista.domain.tenant.lease.Lease;
-import com.propertyvista.domain.tenant.lease.LeaseTerm;
 import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
 import com.propertyvista.dto.LeaseDTO;
-import com.propertyvista.dto.LeaseTermDTO;
 
 public interface LeaseViewerCrudService extends LeaseViewerCrudServiceBase<LeaseDTO> {
 
@@ -53,8 +51,6 @@ public interface LeaseViewerCrudService extends LeaseViewerCrudServiceBase<Lease
     void closeLease(AsyncCallback<VoidSerializable> callback, Key entityId, String decisionReason);
 
     void cancelLease(AsyncCallback<VoidSerializable> callback, Key entityId, String decisionReason);
-
-    void createOffer(AsyncCallback<LeaseTermDTO> callback, Key entityId, LeaseTerm.Type type);
 
     /**
      * Yardi Integration stuff

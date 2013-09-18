@@ -19,8 +19,10 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.commons.Key;
 import com.pyx4j.config.server.ServerSideFactory;
+import com.pyx4j.entity.rpc.EntitySearchResult;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.entity.shared.criterion.EntityListCriteria;
 
 import com.propertyvista.biz.financial.payment.PaymentMethodFacade;
 import com.propertyvista.biz.system.Vista2PmcFacade;
@@ -41,7 +43,7 @@ import com.propertyvista.server.jobs.TaskRunner;
 public class CreditCheckWizardServiceImpl implements CreditCheckWizardService {
 
     @Override
-    public void create(AsyncCallback<CreditCheckSetupDTO> callback) {
+    public void init(AsyncCallback<CreditCheckSetupDTO> callback, InitializationData initializationData) {
         CreditCheckSetupDTO creditCheck = EntityFactory.create(CreditCheckSetupDTO.class);
         Pmc pmc = VistaDeployment.getCurrentPmc();
         creditCheck.businessInformation().companyName().setValue(pmc.name().getValue());
@@ -51,7 +53,7 @@ public class CreditCheckWizardServiceImpl implements CreditCheckWizardService {
     }
 
     @Override
-    public void finish(AsyncCallback<Key> callback, final CreditCheckSetupDTO dto) {
+    public void save(AsyncCallback<Key> callback, final CreditCheckSetupDTO dto) {
         final Pmc pmc = VistaDeployment.getCurrentPmc();
         final AbstractEquifaxFee fee = ServerSideFactory.create(Vista2PmcFacade.class).getEquifaxFee();
 
@@ -112,4 +114,27 @@ public class CreditCheckWizardServiceImpl implements CreditCheckWizardService {
         callback.onSuccess(ServerSideFactory.create(Vista2PmcFacade.class).getEquifaxFee());
     }
 
+    @Override
+    public void retrieve(AsyncCallback<CreditCheckSetupDTO> callback, Key entityId, com.pyx4j.entity.rpc.AbstractCrudService.RetrieveTarget retrieveTarget) {
+        // TODO Auto-generated method stub
+
+    }
+
+    @Override
+    public void create(AsyncCallback<Key> callback, CreditCheckSetupDTO editableEntity) {
+        // TODO Auto-generated method stub
+
+    }
+
+    @Override
+    public void list(AsyncCallback<EntitySearchResult<CreditCheckSetupDTO>> callback, EntityListCriteria<CreditCheckSetupDTO> criteria) {
+        // TODO Auto-generated method stub
+
+    }
+
+    @Override
+    public void delete(AsyncCallback<Boolean> callback, Key entityId) {
+        // TODO Auto-generated method stub
+
+    }
 }

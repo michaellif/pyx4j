@@ -16,9 +16,8 @@ package com.propertyvista.operations.client.activity.crud.simulator.cardservice;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
-import com.pyx4j.entity.rpc.AbstractCrudService;
+import com.pyx4j.entity.rpc.AbstractCrudService.InitializationData;
 import com.pyx4j.entity.shared.EntityFactory;
-import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.site.client.activity.AbstractEditorActivity;
 import com.pyx4j.site.rpc.CrudAppPlace;
 
@@ -26,7 +25,6 @@ import com.propertyvista.operations.client.OperationsSite;
 import com.propertyvista.operations.client.ui.crud.simulator.cardservice.CardServiceSimulationTransactionEditorView;
 import com.propertyvista.operations.domain.dev.CardServiceSimulationCard;
 import com.propertyvista.operations.domain.dev.CardServiceSimulationTransaction;
-import com.propertyvista.operations.rpc.services.simulator.CardServiceSimulationCardCrudService;
 import com.propertyvista.operations.rpc.services.simulator.CardServiceSimulationTransactionCrudService;
 
 public class CardServiceSimulationTransactionEditorActivity extends AbstractEditorActivity<CardServiceSimulationTransaction> {
@@ -38,17 +36,10 @@ public class CardServiceSimulationTransactionEditorActivity extends AbstractEdit
     }
 
     @Override
-    protected void createNewEntity(final AsyncCallback<CardServiceSimulationTransaction> callback) {
-        CardServiceSimulationCardCrudService srv = GWT.create(CardServiceSimulationCardCrudService.class);
-        srv.retrieve(new DefaultAsyncCallback<CardServiceSimulationCard>() {
-            @Override
-            public void onSuccess(CardServiceSimulationCard result) {
-                CardServiceSimulationTransaction tx = EntityFactory.create(CardServiceSimulationTransaction.class);
-                tx.scheduledSimulatedResponce().setValue(Boolean.TRUE);
-                tx.card().set(result);
-                callback.onSuccess(tx);
-
-            }
-        }, getParentId(), AbstractCrudService.RetrieveTarget.View);
+    protected void obtainInitializationData(AsyncCallback<InitializationData> callback) {
+        CardServiceSimulationTransactionCrudService.CardServiceSimulationTransactionInitializationData ind = EntityFactory
+                .create(CardServiceSimulationTransactionCrudService.CardServiceSimulationTransactionInitializationData.class);
+        ind.card().set(EntityFactory.createIdentityStub(CardServiceSimulationCard.class, getParentId()));
+        callback.onSuccess(ind);
     }
 }

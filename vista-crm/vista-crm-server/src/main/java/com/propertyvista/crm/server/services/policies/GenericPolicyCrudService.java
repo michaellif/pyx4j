@@ -54,6 +54,15 @@ public abstract class GenericPolicyCrudService<POLICY extends Policy, POLICY_DTO
     }
 
     @Override
+    public void init(AsyncCallback<POLICY_DTO> callback, InitializationData initializationData) {
+        POLICY_DTO policyDTO = EntityFactory.create(dtoClass);
+
+        setLowestNodeType(policyDTO);
+
+        callback.onSuccess(policyDTO);
+    }
+
+    @Override
     protected void enhanceListRetrieved(POLICY in, POLICY_DTO dto) {
         PolicyNode castedNode = ((PolicyDTOBase) dto).node().cast();
         ((PolicyDTOBase) dto).nodeType().setValue(castedNode.getEntityMeta().getCaption());
@@ -91,12 +100,5 @@ public abstract class GenericPolicyCrudService<POLICY extends Policy, POLICY_DTO
         super.persist(dbo, in);
 
         ServerSideFactory.create(PolicyFacade.class).resetPolicyCache();
-    }
-
-    @Override
-    public void createNewPolicy(AsyncCallback<POLICY_DTO> callback) {
-        POLICY_DTO policyDTO = EntityFactory.create(dtoClass);
-        setLowestNodeType(policyDTO);
-        callback.onSuccess(policyDTO);
     }
 }

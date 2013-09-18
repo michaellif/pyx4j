@@ -16,7 +16,7 @@ package com.propertyvista.crm.client.activity.crud.customer.lead;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
-import com.pyx4j.entity.rpc.AbstractCrudService;
+import com.pyx4j.entity.rpc.AbstractCrudService.InitializationData;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.site.rpc.CrudAppPlace;
@@ -31,10 +31,8 @@ import com.propertyvista.domain.tenant.lead.Appointment;
 
 public class ShowingEditorActivity extends CrmEditorActivity<ShowingDTO> implements ShowingEditorView.Presenter {
 
-    @SuppressWarnings("unchecked")
     public ShowingEditorActivity(CrudAppPlace place) {
-        super(place,  CrmSite.getViewFactory().instantiate(ShowingEditorView.class), (AbstractCrudService<ShowingDTO>) GWT.create(ShowingCrudService.class),
-                ShowingDTO.class);
+        super(place, CrmSite.getViewFactory().instantiate(ShowingEditorView.class), GWT.<ShowingCrudService> create(ShowingCrudService.class), ShowingDTO.class);
     }
 
     @Override
@@ -48,12 +46,9 @@ public class ShowingEditorActivity extends CrmEditorActivity<ShowingDTO> impleme
     }
 
     @Override
-    protected void createNewEntity(final AsyncCallback<ShowingDTO> callback) {
-        super.createNewEntity(new DefaultAsyncCallback<ShowingDTO>() {
-            @Override
-            public void onSuccess(ShowingDTO result) {
-                ((ShowingCrudService) getService()).createNew(callback, EntityFactory.createIdentityStub(Appointment.class, getParentId()));
-            }
-        });
+    protected void obtainInitializationData(AsyncCallback<InitializationData> callback) {
+        ShowingCrudService.ShowingInitializationData id = EntityFactory.create(ShowingCrudService.ShowingInitializationData.class);
+        id.appointment().set(EntityFactory.createIdentityStub(Appointment.class, getParentId()));
+        callback.onSuccess(id);
     }
 }

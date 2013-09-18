@@ -14,9 +14,7 @@
 package com.propertyvista.crm.client.activity.crud.lease.common;
 
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.user.client.rpc.AsyncCallback;
-import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
 import com.pyx4j.commons.Key;
 import com.pyx4j.entity.rpc.AbstractCrudService.RetrieveTarget;
@@ -34,8 +32,8 @@ import com.propertyvista.domain.financial.offering.ProductItem;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.tenant.lease.BillableItem;
-import com.propertyvista.domain.tenant.lease.Deposit.DepositType;
 import com.propertyvista.domain.tenant.lease.Deposit;
+import com.propertyvista.domain.tenant.lease.Deposit.DepositType;
 import com.propertyvista.dto.LeaseTermDTO;
 
 public class LeaseTermEditorActivity extends CrmEditorActivity<LeaseTermDTO> implements LeaseTermEditorView.Presenter {
@@ -50,26 +48,14 @@ public class LeaseTermEditorActivity extends CrmEditorActivity<LeaseTermDTO> imp
     private final ReturnBehaviour returnBehaviour;
 
     public LeaseTermEditorActivity(CrudAppPlace place) {
-        super(place,  CrmSite.getViewFactory().instantiate(LeaseTermEditorView.class), GWT.<LeaseTermCrudService> create(LeaseTermCrudService.class), LeaseTermDTO.class);
+        super(place, CrmSite.getViewFactory().instantiate(LeaseTermEditorView.class), GWT.<LeaseTermCrudService> create(LeaseTermCrudService.class),
+                LeaseTermDTO.class);
 
         String val;
         if ((val = place.getFirstArg(ARG_NAME_RETURN_BH)) != null) {
             returnBehaviour = ReturnBehaviour.valueOf(val);
         } else {
             returnBehaviour = ReturnBehaviour.Default;
-        }
-    }
-
-    @Override
-    public void start(AcceptsOneWidget panel, EventBus eventBus) {
-        super.start(panel, eventBus);
-
-        // if new Entity - set pre-selected unit if supplied: 
-        if (isNewEntity() && getPlace().getNewItem() != null && !((LeaseTermDTO) getPlace().getNewItem()).newParentLease().isNull()) {
-            AptUnit unit = ((LeaseTermDTO) getPlace().getNewItem()).newParentLease().unit();
-            if (!unit.isNull()) {
-                setSelectedUnit(unit);
-            }
         }
     }
 

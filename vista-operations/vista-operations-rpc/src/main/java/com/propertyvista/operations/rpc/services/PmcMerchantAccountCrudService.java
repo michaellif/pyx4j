@@ -13,10 +13,17 @@
  */
 package com.propertyvista.operations.rpc.services;
 
+import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.rpc.AbstractCrudService;
 
+import com.propertyvista.domain.pmc.Pmc;
 import com.propertyvista.operations.rpc.PmcMerchantAccountDTO;
 
 public interface PmcMerchantAccountCrudService extends AbstractCrudService<PmcMerchantAccountDTO> {
 
+    @Transient
+    public interface PmcMerchantAccountInitializationData extends InitializationData {
+
+        Pmc parent();
+    }
 }

@@ -24,7 +24,9 @@ import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.dialogs.SelectEnumDialog;
 import com.pyx4j.site.client.ui.prime.lister.AbstractLister;
 
+import com.propertyvista.crm.rpc.services.building.catalog.ServiceCrudService;
 import com.propertyvista.domain.financial.ARCode;
+import com.propertyvista.domain.financial.offering.ProductCatalog;
 import com.propertyvista.domain.financial.offering.Service;
 import com.propertyvista.misc.VistaTODO;
 
@@ -61,12 +63,12 @@ public class ServiceLister extends AbstractLister<Service> {
         new SelectEnumDialog<ARCode.Type>(i18n.tr("Select Service Type"), ARCode.Type.services()) {
             @Override
             public boolean onClickOk() {
-                Service newService = EntityFactory.create(Service.class);
-                newService.type().setValue(getSelectedType());
-                newService.catalog().setPrimaryKey(getPresenter().getParent());
-                newService.catalog().setValueDetached();
-                getPresenter().editNew(getItemOpenPlaceClass(), newService);
+                ServiceCrudService.ServiceInitializationdata id = EntityFactory.create(ServiceCrudService.ServiceInitializationdata.class);
+                id.parent().set(EntityFactory.createIdentityStub(ProductCatalog.class, getPresenter().getParent()));
+                id.type().setValue(getSelectedType());
+                getPresenter().editNew(getItemOpenPlaceClass(), id);
                 return true;
+
             }
         }.show();
     }

@@ -13,9 +13,17 @@
  */
 package com.propertyvista.crm.rpc.services.unit;
 
+import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.rpc.AbstractCrudService;
 
+import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.dto.AptUnitDTO;
 
 public interface UnitCrudService extends AbstractCrudService<AptUnitDTO> {
+
+    @Transient
+    public interface UnitInitializationdata extends InitializationData {
+
+        Building parent();
+    }
 }

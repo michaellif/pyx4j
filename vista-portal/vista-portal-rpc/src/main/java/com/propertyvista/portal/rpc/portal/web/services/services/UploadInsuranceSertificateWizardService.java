@@ -13,10 +13,10 @@
  */
 package com.propertyvista.portal.rpc.portal.web.services.services;
 
-import com.pyx4j.entity.rpc.AbstractWizardService;
+import com.pyx4j.entity.rpc.AbstractCrudService;
 
 import com.propertyvista.domain.tenant.insurance.InsuranceGeneric;
 
-public interface UploadInsuranceSertificateWizardService extends AbstractWizardService<InsuranceGeneric> {
+public interface UploadInsuranceSertificateWizardService extends AbstractCrudService<InsuranceGeneric> {
 
 }

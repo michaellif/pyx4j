@@ -94,6 +94,11 @@ public class Vista2PmcServiceImpl implements Vista2PmcService {
     }
 
     @Override
+    public void init(AsyncCallback<VistaSystemDefaultsDTO> callback, InitializationData initializationData) {
+        throw new IllegalAccessError("this is not supposed to be used!!!");
+    }
+
+    @Override
     public void create(AsyncCallback<Key> callback, VistaSystemDefaultsDTO editableEntity) {
         throw new IllegalAccessError("this is not supposed to be used!!!");
     }

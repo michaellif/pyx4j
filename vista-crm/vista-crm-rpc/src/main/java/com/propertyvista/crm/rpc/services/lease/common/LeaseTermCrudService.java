@@ -16,17 +16,38 @@ package com.propertyvista.crm.rpc.services.lease.common;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.commons.Key;
+import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.rpc.AbstractVersionedCrudService;
+import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.rpc.shared.VoidSerializable;
 
+import com.propertyvista.domain.financial.ARCode;
 import com.propertyvista.domain.financial.offering.ProductItem;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.tenant.lease.BillableItem;
 import com.propertyvista.domain.tenant.lease.Deposit;
 import com.propertyvista.domain.tenant.lease.Deposit.DepositType;
+import com.propertyvista.domain.tenant.lease.Lease;
+import com.propertyvista.domain.tenant.lease.LeaseTerm;
 import com.propertyvista.dto.LeaseTermDTO;
 
 public interface LeaseTermCrudService extends AbstractVersionedCrudService<LeaseTermDTO> {
+
+    @Transient
+    public interface LeaseTermInitializationData extends InitializationData {
+
+        IPrimitive<Boolean> isOffer();
+
+        Lease lease();
+
+        IPrimitive<LeaseTerm.Type> termType();
+
+        IPrimitive<ARCode.Type> leaseType();
+
+        IPrimitive<Lease.Status> leaseStatus();
+
+        AptUnit unit();
+    }
 
     void setSelectedUnit(AsyncCallback<LeaseTermDTO> callback, AptUnit unitId, LeaseTermDTO currentValue);
 

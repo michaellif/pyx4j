@@ -55,6 +55,16 @@ public class EmployeeCrudServiceImpl extends AbstractCrudServiceDtoImpl<Employee
     }
 
     @Override
+    public void init(AsyncCallback<EmployeeDTO> callback, InitializationData initializationData) {
+        EmployeeDTO newEmployee = EntityFactory.create(EmployeeDTO.class);
+
+        newEmployee.enabled().setValue(true);
+
+        callback.onSuccess(newEmployee);
+
+    }
+
+    @Override
     protected void enhanceRetrieved(Employee entity, EmployeeDTO dto, RetrieveTarget retrieveTarget) {
         // Load detached data:
         Persistence.service().retrieveMember(entity.portfolios());

@@ -26,7 +26,8 @@ import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
 import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.commons.Key;
-import com.pyx4j.entity.rpc.AbstractWizardService;
+import com.pyx4j.entity.rpc.AbstractCrudService;
+import com.pyx4j.entity.rpc.AbstractCrudService.InitializationData;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.forms.client.ui.ReferenceDataManager;
 import com.pyx4j.gwt.commons.UnrecoverableClientError;
@@ -44,11 +45,11 @@ public abstract class AbstractWizardActivity<E extends IEntity> extends Security
 
     private final IWizardView<E> view;
 
-    private final AbstractWizardService<E> service;
+    private final AbstractCrudService<E> service;
 
     private final Class<E> entityClass;
 
-    public AbstractWizardActivity(Class<? extends IWizardView<E>> viewType, AbstractWizardService<E> service, Class<E> entityClass) {
+    public AbstractWizardActivity(Class<? extends IWizardView<E>> viewType, AbstractCrudService<E> service, Class<E> entityClass) {
         view = PortalWebSite.getViewFactory().instantiate(viewType);
         view.setPresenter(this);
 
@@ -59,17 +60,28 @@ public abstract class AbstractWizardActivity<E extends IEntity> extends Security
     @Override
     public void start(AcceptsOneWidget panel, EventBus eventBus) {
         view.setPresenter(this);
-        service.create(new DefaultAsyncCallback<E>() {
-            @Override
-            public void onSuccess(E result) {
-                view.reset();
-                view.populate(result);
-            }
-        });
+
+        init();
+
         panel.setWidget(view);
     }
 
-    public AbstractWizardService<E> getService() {
+    public void init() {
+        obtainInitializationData(new DefaultAsyncCallback<AbstractCrudService.InitializationData>() {
+            @Override
+            public void onSuccess(InitializationData result) {
+                service.init(new DefaultAsyncCallback<E>() {
+                    @Override
+                    public void onSuccess(E result) {
+                        view.reset();
+                        view.populate(result);
+                    }
+                }, result);
+            }
+        });
+    }
+
+    public AbstractCrudService<E> getService() {
         return service;
     }
 
@@ -100,7 +112,7 @@ public abstract class AbstractWizardActivity<E extends IEntity> extends Security
 
     @Override
     public void finish() {
-        service.finish(new AsyncCallback<Key>() {
+        service.save(new AsyncCallback<Key>() {
             @Override
             public void onSuccess(Key result) {
                 ReferenceDataManager.invalidate(entityClass);
@@ -140,4 +152,11 @@ public abstract class AbstractWizardActivity<E extends IEntity> extends Security
         }
     }
 
+    /**
+     * Descendants may override this method to supply some initialization info.
+     * 
+     */
+    protected void obtainInitializationData(AsyncCallback<InitializationData> callback) {
+        callback.onSuccess(null);
+    }
 }

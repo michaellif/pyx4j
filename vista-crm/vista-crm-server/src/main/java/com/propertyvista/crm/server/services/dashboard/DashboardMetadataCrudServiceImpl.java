@@ -19,12 +19,14 @@ import com.pyx4j.commons.Key;
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.server.AbstractCrudServiceImpl;
 import com.pyx4j.entity.server.Persistence;
+import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.security.shared.SecurityViolationException;
 
 import com.propertyvista.biz.dashboard.GadgetStorageFacade;
 import com.propertyvista.crm.rpc.dto.dashboard.DashboardColumnLayoutFormat;
 import com.propertyvista.crm.rpc.services.dashboard.DashboardMetadataCrudService;
 import com.propertyvista.domain.dashboard.DashboardMetadata;
+import com.propertyvista.domain.dashboard.DashboardMetadata.LayoutType;
 import com.propertyvista.server.common.security.VistaContext;
 
 public class DashboardMetadataCrudServiceImpl extends AbstractCrudServiceImpl<DashboardMetadata> implements DashboardMetadataCrudService {
@@ -36,6 +38,15 @@ public class DashboardMetadataCrudServiceImpl extends AbstractCrudServiceImpl<Da
     @Override
     protected void bind() {
         bindCompleteDBO();
+    }
+
+    @Override
+    public void init(AsyncCallback<DashboardMetadata> callback, InitializationData initializationData) {
+        DashboardMetadata entity = EntityFactory.create(DashboardMetadata.class);
+
+        entity.encodedLayout().setValue(new DashboardColumnLayoutFormat.Builder(LayoutType.Two11).build().getSerializedForm());
+
+        callback.onSuccess(entity);
     }
 
     @Override

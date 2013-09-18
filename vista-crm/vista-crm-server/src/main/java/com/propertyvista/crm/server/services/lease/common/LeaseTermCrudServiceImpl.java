@@ -13,13 +13,18 @@
  */
 package com.propertyvista.crm.server.services.lease.common;
 
+import java.math.BigDecimal;
+
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.commons.Key;
+import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.config.server.ServerSideFactory;
+import com.pyx4j.config.server.SystemDateManager;
 import com.pyx4j.entity.server.AbstractVersionedCrudServiceDtoImpl;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.AttachLevel;
+import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.entity.shared.utils.VersionedEntityUtils;
@@ -31,6 +36,7 @@ import com.propertyvista.biz.policy.PolicyFacade;
 import com.propertyvista.biz.tenant.lease.LeaseFacade;
 import com.propertyvista.crm.rpc.services.lease.common.LeaseTermCrudService;
 import com.propertyvista.crm.server.util.CrmAppContext;
+import com.propertyvista.domain.financial.ARCode;
 import com.propertyvista.domain.financial.offering.Feature;
 import com.propertyvista.domain.financial.offering.ProductCatalog;
 import com.propertyvista.domain.financial.offering.ProductItem;
@@ -44,6 +50,7 @@ import com.propertyvista.domain.tenant.lease.Deposit;
 import com.propertyvista.domain.tenant.lease.Deposit.DepositType;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.LeaseTerm;
+import com.propertyvista.domain.tenant.lease.LeaseTerm.Type;
 import com.propertyvista.domain.tenant.lease.LeaseTermGuarantor;
 import com.propertyvista.domain.tenant.lease.LeaseTermTenant;
 import com.propertyvista.dto.LeaseTermDTO;
@@ -62,16 +69,47 @@ public class LeaseTermCrudServiceImpl extends AbstractVersionedCrudServiceDtoImp
     }
 
     @Override
+    public void init(AsyncCallback<LeaseTermDTO> callback, InitializationData initializationData) {
+        LeaseTermInitializationData initData = (LeaseTermInitializationData) initializationData;
+        if (initData.isOffer().isBooleanTrue()) {
+            callback.onSuccess(createOffer(initData.lease(), initData.termType().getValue()));
+        } else { // creating new Application/Lease:
+            Lease lease = createNewLease(initData.leaseType().getValue(), initData.leaseStatus().getValue());
+            LeaseTermDTO term = createDTO(lease.currentTerm());
+            term.isNewLease().setValue(true);
+
+            lease.currentTerm().set(term);
+
+            if (!initData.unit().isNull()) {
+                setSelectedUnit(initData.unit(), term);
+            }
+
+            switch (initData.leaseStatus().getValue()) {
+            case ExistingLease:
+                term.carryforwardBalance().setValue(BigDecimal.ZERO);
+                break;
+
+            case NewLease:
+                term.termFrom().setValue(new LogicalDate(SystemDateManager.getDate()));
+                break;
+
+            case Application:
+                term.termFrom().setValue(new LogicalDate(SystemDateManager.getDate()));
+                break;
+            }
+
+            callback.onSuccess(term);
+        }
+    }
+
+    @Override
     protected void create(LeaseTerm dbo, LeaseTermDTO dto) {
         updateAdjustments(dbo);
 
         // check for newly created parent (lease/application):
-        if (!dto.newParentLease().isNull()) {
-            dbo.lease().set(dto.newParentLease());
+        if (dto.isNewLease().isBooleanTrue()) {
             dbo.lease().currentTerm().set(dbo);
             dbo.lease().unit().set(dbo.unit());
-
-            ServerSideFactory.create(LeaseFacade.class).init(dto.newParentLease());
             dbo.lease().billingAccount().carryforwardBalance().setValue(dto.carryforwardBalance().getValue());
             ServerSideFactory.create(LeaseFacade.class).persist(dbo.lease());
         } else {
@@ -80,14 +118,13 @@ public class LeaseTermCrudServiceImpl extends AbstractVersionedCrudServiceDtoImp
     }
 
     @Override
-    protected void save(LeaseTerm dbo, LeaseTermDTO in) {
+    protected void save(LeaseTerm dbo, LeaseTermDTO dto) {
         updateAdjustments(dbo);
-
-        dbo.lease().billingAccount().carryforwardBalance().setValue(in.carryforwardBalance().getValue());
 
         if (VersionedEntityUtils.equalsIgnoreVersion(dbo, dbo.lease().currentTerm())) {
             dbo.lease().currentTerm().set(dbo);
             dbo.lease().unit().set(dbo.unit());
+            dbo.lease().billingAccount().carryforwardBalance().setValue(dto.carryforwardBalance().getValue());
             ServerSideFactory.create(LeaseFacade.class).persist(dbo.lease());
         } else {
             ServerSideFactory.create(LeaseFacade.class).persist(dbo);
@@ -146,12 +183,12 @@ public class LeaseTermCrudServiceImpl extends AbstractVersionedCrudServiceDtoImp
 
     @Override
     public void setSelectedUnit(AsyncCallback<LeaseTermDTO> callback, AptUnit unitId, LeaseTermDTO currentValue) {
-        LeaseTerm term = currentValue; // works for newly created lease/application, but:
-        if (currentValue.lease().currentTerm().getInstanceValueClass().equals(LeaseTerm.class)) {
-            term = createDBO(currentValue);
-        }
-        term = ServerSideFactory.create(LeaseFacade.class).setUnit(term, unitId);
-        currentValue = createDTO(term);
+        callback.onSuccess(setSelectedUnit(unitId, currentValue));
+    }
+
+    private LeaseTermDTO setSelectedUnit(AptUnit unitId, LeaseTermDTO currentValue) {
+        ServerSideFactory.create(LeaseFacade.class).setUnit(currentValue, unitId);
+        currentValue.building().set(currentValue.unit().building());
 
         loadDetachedProducts(currentValue);
 
@@ -163,17 +200,12 @@ public class LeaseTermCrudServiceImpl extends AbstractVersionedCrudServiceDtoImp
 
         setAgeOfMajority(currentValue);
 
-        callback.onSuccess(currentValue);
+        return currentValue;
     }
 
     @Override
     public void setSelectedService(AsyncCallback<LeaseTermDTO> callback, ProductItem serviceId, LeaseTermDTO currentValue) {
-        LeaseTerm term = currentValue; // works for newly created lease/application, but:
-        if (currentValue.lease().currentTerm().getInstanceValueClass().equals(LeaseTerm.class)) {
-            term = createDBO(currentValue);
-        }
-        term = ServerSideFactory.create(LeaseFacade.class).setService(term, serviceId);
-        currentValue = createDTO(term);
+        ServerSideFactory.create(LeaseFacade.class).setService(currentValue, serviceId);
 
         loadDetachedProducts(currentValue);
 
@@ -344,4 +376,25 @@ public class LeaseTermCrudServiceImpl extends AbstractVersionedCrudServiceDtoImp
             }
         }
     }
+
+    private LeaseTermDTO createOffer(Lease leaseId, Type type) {
+        LeaseTerm term = ServerSideFactory.create(LeaseFacade.class).createOffer(leaseId, type);
+
+        LeaseTermDTO termDto = EntityFactory.create(LeaseTermDTO.class);
+        termDto.setValue(term.getValue());
+        new LeaseTermCrudServiceImpl().update(term, termDto);
+
+        return termDto;
+    }
+
+    private Lease createNewLease(ARCode.Type leaseType, Lease.Status initialStatus) {
+        Lease newLease = EntityFactory.create(Lease.class);
+
+        newLease.type().setValue(leaseType);
+        newLease.status().setValue(initialStatus);
+        ServerSideFactory.create(LeaseFacade.class).init(newLease);
+
+        return newLease;
+    }
+
 }

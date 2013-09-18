@@ -18,9 +18,12 @@ import java.math.BigDecimal;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.commons.Key;
+import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.config.server.ServerSideFactory;
+import com.pyx4j.config.server.SystemDateManager;
 import com.pyx4j.entity.server.AbstractCrudServiceImpl;
 import com.pyx4j.entity.server.Persistence;
+import com.pyx4j.entity.shared.EntityFactory;
 
 import com.propertyvista.biz.financial.ar.ARFacade;
 import com.propertyvista.biz.financial.billing.BillingFacade;
@@ -39,6 +42,17 @@ public class LeaseAdjustmentCrudServiceImpl extends AbstractCrudServiceImpl<Leas
     @Override
     protected void bind() {
         bindCompleteDBO();
+    }
+
+    @Override
+    public void init(AsyncCallback<LeaseAdjustment> callback, InitializationData initializationData) {
+        LeaseAdjustment entity = EntityFactory.create(LeaseAdjustment.class);
+
+        entity.receivedDate().setValue(new LogicalDate(SystemDateManager.getDate()));
+        entity.targetDate().setValue(new LogicalDate(SystemDateManager.getDate()));
+        entity.status().setValue(Status.draft);
+
+        callback.onSuccess(entity);
     }
 
     @Override

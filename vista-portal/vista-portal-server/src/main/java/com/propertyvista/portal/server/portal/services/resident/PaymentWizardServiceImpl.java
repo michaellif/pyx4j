@@ -23,9 +23,9 @@ import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.commons.UserRuntimeException;
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.config.server.SystemDateManager;
+import com.pyx4j.entity.server.AbstractCrudServiceDtoImpl;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
-import com.pyx4j.entity.shared.utils.EntityDtoBinder;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.shared.ServiceExecution;
 
@@ -45,7 +45,7 @@ import com.propertyvista.server.common.util.AddressConverter;
 import com.propertyvista.server.common.util.AddressRetriever;
 import com.propertyvista.server.common.util.LeaseParticipantUtils;
 
-public class PaymentWizardServiceImpl extends EntityDtoBinder<PaymentRecord, PaymentDTO> implements PaymentWizardService {
+public class PaymentWizardServiceImpl extends AbstractCrudServiceDtoImpl<PaymentRecord, PaymentDTO> implements PaymentWizardService {
 
     private static final I18n i18n = I18n.get(PaymentWizardServiceImpl.class);
 
@@ -59,7 +59,7 @@ public class PaymentWizardServiceImpl extends EntityDtoBinder<PaymentRecord, Pay
     }
 
     @Override
-    public void create(AsyncCallback<PaymentDTO> callback) {
+    public void init(AsyncCallback<PaymentDTO> callback, InitializationData initializationData) {
         Lease lease = TenantAppContext.getCurrentUserLease();
         Persistence.service().retrieve(lease.unit());
         Persistence.service().retrieve(lease.unit().building());
@@ -99,7 +99,7 @@ public class PaymentWizardServiceImpl extends EntityDtoBinder<PaymentRecord, Pay
 
     @Override
     @ServiceExecution(waitCaption = "Submitting...")
-    public void finish(AsyncCallback<Key> callback, PaymentDTO dto) {
+    public void save(AsyncCallback<Key> callback, PaymentDTO dto) {
         PaymentRecord entity = createDBO(dto);
 
         Lease lease = Persistence.service().retrieve(Lease.class, TenantAppContext.getCurrentUserLeaseIdStub().getPrimaryKey());

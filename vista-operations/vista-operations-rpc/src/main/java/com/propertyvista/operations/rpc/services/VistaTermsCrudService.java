@@ -16,11 +16,20 @@ package com.propertyvista.operations.rpc.services;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.commons.Key;
+import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.rpc.AbstractVersionedCrudService;
+import com.pyx4j.entity.shared.IPrimitive;
 
 import com.propertyvista.operations.domain.legal.VistaTerms;
+import com.propertyvista.operations.domain.legal.VistaTerms.Target;
 
 public interface VistaTermsCrudService extends AbstractVersionedCrudService<VistaTerms> {
+
+    @Transient
+    public interface VistaTermsInitializationData extends InitializationData {
+
+        IPrimitive<Target> target();
+    }
 
     public void retrieveTerms(AsyncCallback<Key> callback, VistaTerms.Target target);
 }

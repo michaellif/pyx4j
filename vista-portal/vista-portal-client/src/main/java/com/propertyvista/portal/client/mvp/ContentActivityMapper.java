@@ -21,6 +21,7 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.site.client.activity.AppActivityMapper;
 import com.pyx4j.site.rpc.AppPlace;
+import com.pyx4j.site.rpc.CrudAppPlace;
 
 import com.propertyvista.portal.client.activity.PotentialTenantActivity;
 import com.propertyvista.portal.client.activity.residents.DashboardActivity;
@@ -87,7 +88,7 @@ public class ContentActivityMapper implements AppActivityMapper {
                     } else if (appPlace instanceof Financial.PaymentMethods.EditPaymentMethod) {
                         activity = new EditPaymentMethodActivity(appPlace);
                     } else if (appPlace instanceof Financial.PaymentMethods.NewPaymentMethod) {
-                        activity = new PaymentMethodWizardActivity(appPlace);
+                        activity = new PaymentMethodWizardActivity((CrudAppPlace) appPlace);
                     } else if (appPlace instanceof Financial.PaymentMethods.PaymentMethodSubmitted) {
                         activity = new PaymentMethodSubmittedActivity(appPlace);
 
@@ -101,14 +102,14 @@ public class ContentActivityMapper implements AppActivityMapper {
                         activity = new FinancialSummaryActivity(appPlace);
 
                     } else if (appPlace instanceof Resident.Financial.PayNow) {
-                        activity = new PaymentWizardActivity(appPlace);
+                        activity = new PaymentWizardActivity((CrudAppPlace) appPlace);
                     } else if (appPlace instanceof Resident.Financial.PaymentSubmitting) {
                         activity = new PaymentSubmittingActivity(appPlace);
 
                     } else if (appPlace instanceof Resident.Financial.PreauthorizedPayments) {
                         activity = new PreauthorizedPaymentsActivity(appPlace);
                     } else if (appPlace instanceof Resident.Financial.PreauthorizedPayments.NewPreauthorizedPayment) {
-                        activity = new PreauthorizedPaymentWizardActivity(appPlace);
+                        activity = new PreauthorizedPaymentWizardActivity((CrudAppPlace) appPlace);
                     } else if (appPlace instanceof Resident.Financial.PreauthorizedPayments.PreauthorizedPaymentSubmitted) {
                         activity = new PreauthorizedPaymentSubmittedActivity(appPlace);
 

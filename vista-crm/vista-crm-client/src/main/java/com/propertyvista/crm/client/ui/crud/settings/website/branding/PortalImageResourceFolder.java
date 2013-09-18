@@ -79,14 +79,15 @@ public class PortalImageResourceFolder extends VistaBoxFolder<PortalLogoImageRes
 
     @Override
     protected void addItem() {
-        new AvailableLocaleSelectorDialog(usedLocales, new ValueChangeHandler<AvailableLocale>() {
+        new AvailableLocaleSelectorDialog(usedLocales) {
             @Override
-            public void onValueChange(ValueChangeEvent<AvailableLocale> event) {
+            public boolean onClickOk() {
                 PortalLogoImageResource item = EntityFactory.create(PortalLogoImageResource.class);
-                item.locale().set(event.getValue());
+                item.locale().set(getSelectedLocale());
                 PortalImageResourceFolder.super.addItem(item);
+                return true;
             }
-        }).show();
+        }.show();
     }
 
     @Override

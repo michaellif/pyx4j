@@ -37,7 +37,7 @@ import com.propertyvista.server.jobs.TaskRunner;
 public class CreditCheckStatusCrudServiceImpl implements CreditCheckStatusCrudService {
 
     @Override
-    public void retrieve(AsyncCallback<CreditCheckStatusDTO> callback, Key entityId, RetrieveTarget retrieveTarget ) {
+    public void retrieve(AsyncCallback<CreditCheckStatusDTO> callback, Key entityId, RetrieveTarget retrieveTarget) {
 
         final CreditCheckStatusDTO status = EntityFactory.create(CreditCheckStatusDTO.class);
         final Pmc pmc = VistaDeployment.getCurrentPmc();
@@ -78,6 +78,11 @@ public class CreditCheckStatusCrudServiceImpl implements CreditCheckStatusCrudSe
     }
 
     @Override
+    public void init(AsyncCallback<CreditCheckStatusDTO> callback, InitializationData initializationData) {
+        throw new Error("Invalid Operation");
+    }
+
+    @Override
     public void create(AsyncCallback<Key> callback, CreditCheckStatusDTO editableEntity) {
         throw new Error("Invalid Operation");
     }
@@ -97,5 +102,4 @@ public class CreditCheckStatusCrudServiceImpl implements CreditCheckStatusCrudSe
     public void delete(AsyncCallback<Boolean> callback, Key entityId) {
         throw new Error("Invalid Operation");
     }
-
 }

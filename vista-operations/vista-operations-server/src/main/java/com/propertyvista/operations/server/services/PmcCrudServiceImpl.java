@@ -42,6 +42,7 @@ import com.propertyvista.biz.system.PmcNameValidator;
 import com.propertyvista.biz.system.encryption.PasswordEncryptorFacade;
 import com.propertyvista.config.ThreadPoolNames;
 import com.propertyvista.config.VistaDeployment;
+import com.propertyvista.domain.customizations.CountryOfOperation;
 import com.propertyvista.domain.pmc.Pmc;
 import com.propertyvista.domain.pmc.Pmc.PmcStatus;
 import com.propertyvista.domain.pmc.PmcDnsName;
@@ -66,6 +67,22 @@ public class PmcCrudServiceImpl extends AbstractCrudServiceDtoImpl<Pmc, PmcDTO> 
     @Override
     protected void bind() {
         bindCompleteDBO();
+    }
+
+    @Override
+    public void init(AsyncCallback<PmcDTO> callback, InitializationData initializationData) {
+        PmcDTO entity = EntityFactory.create(PmcDTO.class);
+
+        entity.features().occupancyModel().setValue(Boolean.TRUE);
+        entity.features().productCatalog().setValue(Boolean.TRUE);
+        entity.features().leases().setValue(Boolean.TRUE);
+        entity.features().onlineApplication().setValue(Boolean.FALSE);
+        entity.features().defaultProductCatalog().setValue(true);
+        entity.features().yardiIntegration().setValue(Boolean.FALSE);
+        entity.features().countryOfOperation().setValue(CountryOfOperation.Canada);
+        entity.features().tenantSureIntegration().setValue(Boolean.TRUE);
+
+        callback.onSuccess(entity);
     }
 
     @Override

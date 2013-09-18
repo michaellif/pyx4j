@@ -19,7 +19,6 @@ import com.pyx4j.commons.Key;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.security.shared.SecurityController;
 import com.pyx4j.site.client.activity.AbstractVisorController;
 import com.pyx4j.site.client.activity.ListerController;
@@ -57,20 +56,13 @@ public class MaintenanceRequestVisorController extends AbstractVisorController {
 
             @Override
             public void editNew(final Class<? extends CrudAppPlace> openPlaceClass) {
+                MaintenanceCrudService.MaintenanceInitializationData id = EntityFactory.create(MaintenanceCrudService.MaintenanceInitializationData.class);
                 if (tenantId != null) {
-                    ((MaintenanceCrudService) getService()).createNewRequestForTenant(new DefaultAsyncCallback<MaintenanceRequestDTO>() {
-                        @Override
-                        public void onSuccess(MaintenanceRequestDTO result) {
-                            lister.editNew(openPlaceClass, result);
-                        }
-                    }, EntityFactory.createIdentityStub(Tenant.class, tenantId));
+                    id.tenant().set(EntityFactory.createIdentityStub(Tenant.class, tenantId));
+                    lister.editNew(openPlaceClass, id);
                 } else if (buildingId != null) {
-                    ((MaintenanceCrudService) getService()).createNewRequest(new DefaultAsyncCallback<MaintenanceRequestDTO>() {
-                        @Override
-                        public void onSuccess(MaintenanceRequestDTO result) {
-                            lister.editNew(openPlaceClass, result);
-                        }
-                    }, EntityFactory.createIdentityStub(Building.class, buildingId));
+                    id.building().set(EntityFactory.createIdentityStub(Building.class, buildingId));
+                    lister.editNew(openPlaceClass, id);
                 } else {
                     super.editNew(openPlaceClass);
                 }

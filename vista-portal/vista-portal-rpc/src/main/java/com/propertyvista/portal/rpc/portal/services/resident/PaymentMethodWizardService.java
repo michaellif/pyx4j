@@ -15,12 +15,12 @@ package com.propertyvista.portal.rpc.portal.services.resident;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
-import com.pyx4j.entity.rpc.AbstractWizardService;
+import com.pyx4j.entity.rpc.AbstractCrudService;
 
 import com.propertyvista.domain.contact.AddressSimple;
 import com.propertyvista.portal.rpc.portal.dto.PaymentMethodDTO;
 
-public interface PaymentMethodWizardService extends AbstractWizardService<PaymentMethodDTO> {
+public interface PaymentMethodWizardService extends AbstractCrudService<PaymentMethodDTO> {
 
     void getCurrentAddress(AsyncCallback<AddressSimple> callback);
 }

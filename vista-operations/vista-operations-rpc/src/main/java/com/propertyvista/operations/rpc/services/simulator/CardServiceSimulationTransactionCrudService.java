@@ -13,10 +13,18 @@
  */
 package com.propertyvista.operations.rpc.services.simulator;
 
+import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.rpc.AbstractCrudService;
 
+import com.propertyvista.operations.domain.dev.CardServiceSimulationCard;
 import com.propertyvista.operations.domain.dev.CardServiceSimulationTransaction;
 
 public interface CardServiceSimulationTransactionCrudService extends AbstractCrudService<CardServiceSimulationTransaction> {
+
+    @Transient
+    public interface CardServiceSimulationTransactionInitializationData extends InitializationData {
+
+        CardServiceSimulationCard card();
+    }
 
 }

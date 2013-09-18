@@ -23,6 +23,7 @@ import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.config.server.SystemDateManager;
 import com.pyx4j.entity.server.AbstractCrudServiceDtoImpl;
 import com.pyx4j.entity.server.Persistence;
+import com.pyx4j.entity.shared.EntityFactory;
 
 import com.propertyvista.biz.system.OperationsTriggerFacade;
 import com.propertyvista.operations.domain.scheduler.Run;
@@ -46,6 +47,15 @@ public class TriggerCrudServiceImpl extends AbstractCrudServiceDtoImpl<Trigger, 
     }
 
     @Override
+    public void init(AsyncCallback<TriggerDTO> callback, InitializationData initializationData) {
+        TriggerDTO process = EntityFactory.create(TriggerDTO.class);
+
+        process.created().setValue(SystemDateManager.getDate());
+
+        callback.onSuccess(process);
+    }
+
+    @Override
     protected void enhanceListRetrieved(Trigger entity, TriggerDTO dto) {
         super.enhanceListRetrieved(entity, dto);
 
@@ -63,7 +73,7 @@ public class TriggerCrudServiceImpl extends AbstractCrudServiceDtoImpl<Trigger, 
     }
 
     @Override
-    protected void enhanceRetrieved(Trigger entity, TriggerDTO dto, RetrieveTarget retrieveTarget ) {
+    protected void enhanceRetrieved(Trigger entity, TriggerDTO dto, RetrieveTarget retrieveTarget) {
         if (entity != null) {
             JobUtils.getScheduleDetails(dto);
         }

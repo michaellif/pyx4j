@@ -31,6 +31,7 @@ import com.propertyvista.crm.rpc.services.building.BuildingCrudService;
 import com.propertyvista.domain.GeoLocation;
 import com.propertyvista.domain.GeoLocation.LatitudeType;
 import com.propertyvista.domain.GeoLocation.LongitudeType;
+import com.propertyvista.domain.PublicVisibilityType;
 import com.propertyvista.domain.dashboard.DashboardMetadata;
 import com.propertyvista.domain.financial.ARCode;
 import com.propertyvista.domain.financial.BuildingMerchantAccount;
@@ -48,6 +49,15 @@ public class BuildingCrudServiceImpl extends AbstractCrudServiceDtoImpl<Building
     @Override
     protected void bind() {
         bindCompleteDBO();
+    }
+
+    @Override
+    public void init(AsyncCallback<BuildingDTO> callback, InitializationData initializationData) {
+        BuildingDTO entity = EntityFactory.create(BuildingDTO.class);
+
+        entity.marketing().visibility().setValue(PublicVisibilityType.global);
+
+        callback.onSuccess(entity);
     }
 
     @Override

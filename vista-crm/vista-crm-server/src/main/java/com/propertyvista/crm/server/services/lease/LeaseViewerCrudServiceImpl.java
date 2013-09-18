@@ -41,19 +41,15 @@ import com.propertyvista.biz.system.YardiServiceException;
 import com.propertyvista.biz.tenant.lease.LeaseFacade;
 import com.propertyvista.crm.rpc.dto.occupancy.opconstraints.CancelMoveOutConstraintsDTO;
 import com.propertyvista.crm.rpc.services.lease.LeaseViewerCrudService;
-import com.propertyvista.crm.server.services.lease.common.LeaseTermCrudServiceImpl;
 import com.propertyvista.crm.server.services.lease.common.LeaseViewerCrudServiceBaseImpl;
 import com.propertyvista.crm.server.util.CrmAppContext;
 import com.propertyvista.domain.communication.EmailTemplateType;
 import com.propertyvista.domain.payment.PreauthorizedPayment;
 import com.propertyvista.domain.tenant.lease.Lease;
-import com.propertyvista.domain.tenant.lease.LeaseTerm;
-import com.propertyvista.domain.tenant.lease.LeaseTerm.Type;
 import com.propertyvista.domain.tenant.lease.LeaseTermGuarantor;
 import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
 import com.propertyvista.domain.tenant.lease.LeaseTermTenant;
 import com.propertyvista.dto.LeaseDTO;
-import com.propertyvista.dto.LeaseTermDTO;
 
 public class LeaseViewerCrudServiceImpl extends LeaseViewerCrudServiceBaseImpl<LeaseDTO> implements LeaseViewerCrudService {
 
@@ -231,18 +227,6 @@ public class LeaseViewerCrudServiceImpl extends LeaseViewerCrudServiceBaseImpl<L
 
         Persistence.service().commit();
         callback.onSuccess(null);
-    }
-
-    @Override
-    public void createOffer(AsyncCallback<LeaseTermDTO> callback, Key entityId, Type type) {
-        Lease leaseId = EntityFactory.createIdentityStub(Lease.class, entityId);
-        LeaseTerm term = ServerSideFactory.create(LeaseFacade.class).createOffer(leaseId, type);
-
-        LeaseTermDTO termDto = EntityFactory.create(LeaseTermDTO.class);
-        termDto.setValue(term.getValue());
-        new LeaseTermCrudServiceImpl().update(term, termDto);
-
-        callback.onSuccess(termDto);
     }
 
     @Override
