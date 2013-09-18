@@ -41,7 +41,7 @@ import com.pyx4j.forms.client.validators.HasRequiredValueValidationMessage;
 /**
  * A Multi-select collection box has two selection modes - single panel Classic style and two-panel Add-Remove style
  */
-public class CCollectionBox<E> extends CFocusComponent<Collection<E>, NCollectionBox<E>> implements HasOptionsChangeHandlers<List<E>>, HasSelectionHandlers<E>,
+public class CListBox<E> extends CFocusComponent<List<E>, NListBox<E>> implements HasOptionsChangeHandlers<List<E>>, HasSelectionHandlers<E>,
         HasRequiredValueValidationMessage<E> {
 
     public enum SelectionMode {
@@ -52,7 +52,7 @@ public class CCollectionBox<E> extends CFocusComponent<Collection<E>, NCollectio
 
     private final SelectionMode mode;
 
-    private final NCollectionBox<E> nativeListBox;
+    private final NListBox<E> nativeListBox;
 
     private final ArrayList<E> options = new ArrayList<E>();
 
@@ -60,30 +60,25 @@ public class CCollectionBox<E> extends CFocusComponent<Collection<E>, NCollectio
 
     private Comparator<E> comparator = null;
 
-    public CCollectionBox() {
+    public CListBox() {
         this((String) null);
     }
 
-    public CCollectionBox(SelectionMode mode) {
+    public CListBox(SelectionMode mode) {
         this(null, mode);
     }
 
-    public CCollectionBox(String title) {
+    public CListBox(String title) {
         this(title, SelectionMode.SINGLE_PANEL);
     }
 
-    public CCollectionBox(String title, SelectionMode mode) {
+    public CListBox(String title, SelectionMode mode) {
         super(title);
         this.mode = mode;
-        nativeListBox = new NCollectionBox<E>(this);
+        nativeListBox = new NListBox<E>(this);
         setNativeWidget(nativeListBox);
         asWidget().setWidth("100%");
         setVisibleItemCount(visibleItemCount);
-    }
-
-    @Override
-    public void onEditingStop() {
-        super.onEditingStop();
     }
 
     public SelectionMode getSelectionMode() {
@@ -99,14 +94,11 @@ public class CCollectionBox<E> extends CFocusComponent<Collection<E>, NCollectio
     }
 
     @Override
-    protected Collection<E> preprocessValue(Collection<E> value, boolean fireEvent, boolean populate) {
+    protected List<E> preprocessValue(List<E> value, boolean fireEvent, boolean populate) {
         if (value != null && getComparator() != null) {
-            List<E> list = new ArrayList<E>(value);
-            Collections.sort(list, getComparator());
-            return list;
-        } else {
-            return value;
+            Collections.sort(value, getComparator());
         }
+        return value;
     }
 
     /**

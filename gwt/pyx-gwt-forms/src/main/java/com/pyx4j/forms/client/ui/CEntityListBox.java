@@ -37,7 +37,7 @@ import com.pyx4j.entity.shared.criterion.Criterion;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.forms.client.ui.CComboBox.AsyncOptionsReadyCallback;
 
-public class CEntityListBox<E extends IEntity> extends CCollectionBox<E> {
+public class CEntityListBox<E extends IEntity> extends CListBox<E> {
 
     private static final Logger log = LoggerFactory.getLogger(CEntityListBox.class);
 

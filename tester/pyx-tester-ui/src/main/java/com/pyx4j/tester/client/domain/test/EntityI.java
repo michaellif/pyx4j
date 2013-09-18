@@ -35,7 +35,6 @@ import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPersonalIdentity;
 import com.pyx4j.entity.shared.IPrimitive;
-import com.pyx4j.entity.shared.ISet;
 import com.pyx4j.i18n.annotations.I18n;
 import com.pyx4j.i18n.shared.I18nEnum;
 import com.pyx4j.tester.domain.TFile;
@@ -107,7 +106,7 @@ public interface EntityI extends IEntity {
     IList<EntityIII> entityIIIList();
 
     @Owned
-    ISet<EntityIII> entityIIISet();
+    IList<EntityIII> entityIIIList2();
 
     @Owned
     IList<EntityIV> entityIVList();

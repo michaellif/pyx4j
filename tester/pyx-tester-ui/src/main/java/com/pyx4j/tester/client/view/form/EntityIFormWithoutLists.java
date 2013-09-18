@@ -32,8 +32,8 @@ import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPersonalIdentity;
 import com.pyx4j.forms.client.ui.CAbstractSuggestBox;
-import com.pyx4j.forms.client.ui.CCollectionBox;
-import com.pyx4j.forms.client.ui.CCollectionBox.SelectionMode;
+import com.pyx4j.forms.client.ui.CListBox;
+import com.pyx4j.forms.client.ui.CListBox.SelectionMode;
 import com.pyx4j.forms.client.ui.CComboBoxBoolean;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CEntityComboBox;
@@ -76,7 +76,7 @@ public class EntityIFormWithoutLists extends CEntityForm<EntityI> {
         main.getFlexCellFormatter().setColSpan(row, 0, 2);
 
         // list box
-        CCollectionBox<EntityIII> listBox = new CCollectionBox<EntityIII>(SelectionMode.SINGLE_PANEL) {
+        CListBox<EntityIII> listBox = new CListBox<EntityIII>(SelectionMode.SINGLE_PANEL) {
             @Override
             public String getItemName(EntityIII o) {
                 if (o instanceof IEntity) {
@@ -99,7 +99,7 @@ public class EntityIFormWithoutLists extends CEntityForm<EntityI> {
 
         main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().entityIIIList(), listBox)).build());
 
-        CCollectionBox<EntityIII> setBox = new CCollectionBox<EntityIII>(SelectionMode.TWO_PANEL) {
+        CListBox<EntityIII> setBox = new CListBox<EntityIII>(SelectionMode.TWO_PANEL) {
             @Override
             public String getItemName(EntityIII o) {
                 if (o instanceof IEntity) {
@@ -111,7 +111,7 @@ public class EntityIFormWithoutLists extends CEntityForm<EntityI> {
         };
         setBox.setOptions(Arrays.asList(e1, e2, e3));
 
-        main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().entityIIISet(), setBox)).build());
+        main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().entityIIIList2(), setBox)).build());
 
         // Personal Identity
         main.setWidget(

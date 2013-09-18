@@ -21,7 +21,6 @@
 package com.pyx4j.forms.client.ui;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Comparator;
 import java.util.List;
 
@@ -40,9 +39,9 @@ public class NativeListBox<E> extends ListBox implements INativeListBox<E> {
     }
 
     @Override
-    public void setOptions(Collection<E> options) {
+    public void setOptions(List<E> options) {
         clear();
-        this.options = new ArrayList<E>(options);
+        this.options = options;
         if (options != null) {
             for (E item : options) {
                 addItem(getItemName(item));
@@ -51,7 +50,7 @@ public class NativeListBox<E> extends ListBox implements INativeListBox<E> {
     }
 
     @Override
-    public void setNativeValue(Collection<E> value) {
+    public void setNativeValue(List<E> value) {
         setSelectedIndex(-1);
         if (value != null && options != null) {
             for (E v : value) {
@@ -76,11 +75,6 @@ public class NativeListBox<E> extends ListBox implements INativeListBox<E> {
     @Override
     public String getItemName(E item) {
         return implDelegate.getItemName(item);
-    }
-
-    @Override
-    public void onNativeValueChange(Collection<E> values) {
-        implDelegate.onNativeValueChange(values);
     }
 
     @Override

@@ -1,23 +1,22 @@
 package com.pyx4j.forms.client.ui;
 
-import java.util.Collection;
 import java.util.Comparator;
 import java.util.List;
 
 import com.google.gwt.user.client.ui.HTML;
 
-public class NCollectionBox<E> extends NFocusField<Collection<E>, INativeListBox<E>, CCollectionBox<E>, HTML> implements INativeListBox<E> {
+public class NListBox<E> extends NFocusField<List<E>, INativeListBox<E>, CListBox<E>, HTML> implements INativeListBox<E> {
 
     private int visibleItemCount;
 
-    public NCollectionBox(CCollectionBox<E> cComponent) {
+    public NListBox(CListBox<E> cComponent) {
         super(cComponent);
         visibleItemCount = 10;
         refreshOptions();
     }
 
     @Override
-    public void setNativeValue(Collection<E> value) {
+    public void setNativeValue(List<E> value) {
         if (isViewable()) {
             getViewer().setHTML(getCComponent().format(value));
         } else {
@@ -54,11 +53,6 @@ public class NCollectionBox<E> extends NFocusField<Collection<E>, INativeListBox
     }
 
     @Override
-    public void onNativeValueChange(Collection<E> values) {
-        getCComponent().setValue(values);
-    }
-
-    @Override
     public String itemCannotBeRemovedMessage(E item) {
         List<E> required = getCComponent().getRequiredValues();
         if (required != null && required.contains(item)) {
@@ -88,7 +82,7 @@ public class NCollectionBox<E> extends NFocusField<Collection<E>, INativeListBox
     }
 
     @Override
-    public void setOptions(Collection<E> options) {
+    public void setOptions(List<E> options) {
         if (getEditor() != null) {
             getEditor().setOptions(options);
         }

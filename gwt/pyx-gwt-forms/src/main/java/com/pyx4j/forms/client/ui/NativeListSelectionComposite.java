@@ -21,7 +21,6 @@
 package com.pyx4j.forms.client.ui;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
@@ -30,21 +29,31 @@ import java.util.Vector;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.google.gwt.event.dom.client.ClickEvent;
-import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.event.dom.client.BlurEvent;
 import com.google.gwt.event.dom.client.DoubleClickEvent;
 import com.google.gwt.event.dom.client.DoubleClickHandler;
+import com.google.gwt.event.dom.client.FocusEvent;
+import com.google.gwt.event.dom.client.FocusHandler;
+import com.google.gwt.event.dom.client.HasAllFocusHandlers;
+import com.google.gwt.event.dom.client.HasAllMouseHandlers;
 import com.google.gwt.event.dom.client.HasDoubleClickHandlers;
 import com.google.gwt.event.dom.client.KeyDownEvent;
 import com.google.gwt.event.dom.client.KeyDownHandler;
+import com.google.gwt.event.dom.client.MouseOutEvent;
+import com.google.gwt.event.dom.client.MouseOutHandler;
+import com.google.gwt.event.dom.client.MouseOverEvent;
+import com.google.gwt.event.dom.client.MouseOverHandler;
+import com.google.gwt.event.shared.GwtEvent;
 import com.google.gwt.event.shared.HandlerRegistration;
+import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.FocusPanel;
-import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.ListBox;
 
 import com.pyx4j.forms.client.ImageFactory;
+import com.pyx4j.widgets.client.Button;
+import com.pyx4j.widgets.client.GroupFocusHandler;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
 
 public class NativeListSelectionComposite<E> extends FocusPanel implements INativeListBox<E> {
@@ -53,9 +62,9 @@ public class NativeListSelectionComposite<E> extends FocusPanel implements INati
 
     private final InnerListBox selectedListBox;
 
-    protected final NativePushButton addButton;
+    protected final Button addButton;
 
-    protected final NativePushButton removeButton;
+    protected final Button removeButton;
 
     private List<E> optionsItemList;
 
@@ -66,6 +75,8 @@ public class NativeListSelectionComposite<E> extends FocusPanel implements INati
     private boolean editable = true;
 
     private final INativeListBox<E> implDelegate;
+
+    private boolean ignoreBlur = false;
 
     protected class InnerListBox extends ListBox implements HasDoubleClickHandlers {
 
@@ -183,16 +194,16 @@ public class NativeListSelectionComposite<E> extends FocusPanel implements INati
         content.getFlexCellFormatter().setRowSpan(1, 0, 4);
 
         // ->
-        addButton = new NativePushButton(new Image(ImageFactory.getImages().arrowLightGreyRight()), new Image(ImageFactory.getImages()
-                .arrowLightBlueRightDown()));
-        addButton.getUpDisabledFace().setImage(new Image(ImageFactory.getImages().arrowGreyRight()));
-        Image imageRightOver = new Image(ImageFactory.getImages().arrowLightBlueRight());
-        addButton.getUpHoveringFace().setImage(imageRightOver);
-        Cursor.setHand(imageRightOver);
+        addButton = new Button(ImageFactory.getImages().arrowLightGreyRight());
+//        new Image(ImageFactory.getImages().arrowLightGreyRight()), new Image(ImageFactory.getImages().arrowLightBlueRightDown()));
+//        addButton.getUpDisabledFace().setImage(new Image(ImageFactory.getImages().arrowGreyRight()));
+//        Image imageRightOver = new Image(ImageFactory.getImages().arrowLightBlueRight());
+//        addButton.getUpHoveringFace().setImage(imageRightOver);
+//        Cursor.setHand(imageRightOver);
 
-        addButton.addClickHandler(new ClickHandler() {
+        addButton.setCommand(new Command() {
             @Override
-            public void onClick(ClickEvent event) {
+            public void execute() {
                 slectedAdd();
             }
         });
@@ -214,16 +225,16 @@ public class NativeListSelectionComposite<E> extends FocusPanel implements INati
         });
 
         // <-
-        removeButton = new NativePushButton(new Image(ImageFactory.getImages().arrowLightGreyLeft()), new Image(ImageFactory.getImages()
-                .arrowLightBlueLeftDown()));
-        removeButton.getUpDisabledFace().setImage(new Image(ImageFactory.getImages().arrowGreyLeft()));
-        Image imageLeftOver = new Image(ImageFactory.getImages().arrowLightBlueLeft());
-        removeButton.getUpHoveringFace().setImage(imageLeftOver);
-        Cursor.setHand(imageLeftOver);
+        removeButton = new Button(ImageFactory.getImages().arrowLightGreyLeft());
+//        new Image(ImageFactory.getImages().arrowLightGreyLeft()), new Image(ImageFactory.getImages().arrowLightBlueLeftDown()));
+//        removeButton.getUpDisabledFace().setImage(new Image(ImageFactory.getImages().arrowGreyLeft()));
+//        Image imageLeftOver = new Image(ImageFactory.getImages().arrowLightBlueLeft());
+//        removeButton.getUpHoveringFace().setImage(imageLeftOver);
+//        Cursor.setHand(imageLeftOver);
 
-        removeButton.addClickHandler(new ClickHandler() {
+        removeButton.setCommand(new Command() {
             @Override
-            public void onClick(ClickEvent event) {
+            public void execute() {
                 slectedRemove();
             }
         });
@@ -256,6 +267,8 @@ public class NativeListSelectionComposite<E> extends FocusPanel implements INati
         content.getElement().getStyle().setProperty("borderCollapse", "collapse");
         content.getCellFormatter().getElement(1, 0).getStyle().setProperty("paddingLeft", "0");
 
+        addFocusableGroup(addButton, removeButton, selectedListBox, optionsListBox);
+
         setVisibleItemCount(visibleItems);
     }
 
@@ -280,7 +293,6 @@ public class NativeListSelectionComposite<E> extends FocusPanel implements INati
             selectedListBox.insertItem(item);
             count++;
         }
-// TODO        onNativeValueChange(getNativeValue());
         selectedListBox.setSelected(selected);
         log.debug("items added", count);
     }
@@ -298,7 +310,6 @@ public class NativeListSelectionComposite<E> extends FocusPanel implements INati
             optionsListBox.insertItem(item);
             count++;
         }
-// TODO        onNativeValueChange(getNativeValue());
         optionsListBox.setSelected(selected);
         log.debug("items removed", count);
     }
@@ -324,7 +335,7 @@ public class NativeListSelectionComposite<E> extends FocusPanel implements INati
     }
 
     @Override
-    public void setNativeValue(Collection<E> value) {
+    public void setNativeValue(List<E> value) {
         selectedListBox.clear();
         if (value != null) {
             for (E item : value) {
@@ -344,17 +355,15 @@ public class NativeListSelectionComposite<E> extends FocusPanel implements INati
     }
 
     @Override
-    public void setOptions(Collection<E> options) {
+    public void setOptions(List<E> options) {
         optionsListBox.clear();
+        optionsItemList = options;
         if (options != null) {
-            optionsItemList = new ArrayList<E>(options);
             for (E item : options) {
                 if (!selectedListBox.contains(item)) {
                     optionsListBox.addItem(item);
                 }
             }
-        } else {
-            optionsItemList = null;
         }
     }
 
@@ -393,14 +402,13 @@ public class NativeListSelectionComposite<E> extends FocusPanel implements INati
         selectedListBox.setEnabled(enabled);
     }
 
-    @Override
-    public String getItemName(E item) {
-        return implDelegate.getItemName(item);
+    protected void setGroupFocusHandler(GroupFocusHandler focusHandler) {
+
     }
 
     @Override
-    public void onNativeValueChange(Collection<E> values) {
-        implDelegate.onNativeValueChange(values);
+    public String getItemName(E item) {
+        return implDelegate.getItemName(item);
     }
 
     @Override
@@ -411,5 +419,52 @@ public class NativeListSelectionComposite<E> extends FocusPanel implements INati
     @Override
     public Comparator<E> getComparator() {
         return implDelegate.getComparator();
+    }
+
+    @Override
+    public void setFocus(boolean focused) {
+        if (focused || !ignoreBlur) {
+            super.setFocus(focused);
+        }
+    }
+
+    /*
+     * Only fire blur if none of the FocusableGroup components have mouse over
+     */
+    @Override
+    public void fireEvent(GwtEvent<?> event) {
+        if (!event.getAssociatedType().equals(BlurEvent.getType()) || !ignoreBlur) {
+            super.fireEvent(event);
+        }
+    }
+
+    /*
+     * 1. MouseOver for any component from focusable group will disable Blur event for the parent component.
+     * 2. Focus event for any component from focusable group will also set focus on the parent component via
+     * setFocus(), while consequent Blur on the parent component loosing focus will be disabled by MouseOver.
+     */
+    private void addFocusableGroup(HasAllMouseHandlers... group) {
+        for (HasAllMouseHandlers child : group) {
+            if (child instanceof HasAllFocusHandlers) {
+                child.addMouseOverHandler(new MouseOverHandler() {
+                    @Override
+                    public void onMouseOver(MouseOverEvent e) {
+                        ignoreBlur = true;
+                    }
+                });
+                child.addMouseOutHandler(new MouseOutHandler() {
+                    @Override
+                    public void onMouseOut(MouseOutEvent event) {
+                        ignoreBlur = false;
+                    }
+                });
+                ((HasAllFocusHandlers) child).addFocusHandler(new FocusHandler() {
+                    @Override
+                    public void onFocus(FocusEvent event) {
+                        setFocus(true);
+                    }
+                });
+            }
+        }
     }
 }

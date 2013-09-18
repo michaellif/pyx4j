@@ -20,7 +20,6 @@
  */
 package com.pyx4j.forms.client.ui;
 
-import java.util.Collection;
 import java.util.Comparator;
 import java.util.List;
 
@@ -30,15 +29,13 @@ public interface INativeListBox<E> extends IFocusWidget {
 
     void setVisibleItemCount(int count);
 
-    void setOptions(Collection<E> options);
+    void setOptions(List<E> options);
 
-    void setNativeValue(Collection<E> value);
+    void setNativeValue(List<E> value);
 
     List<E> getNativeValue();
 
     String getItemName(E item);
-
-    void onNativeValueChange(Collection<E> values);
 
     String itemCannotBeRemovedMessage(E item);
 
