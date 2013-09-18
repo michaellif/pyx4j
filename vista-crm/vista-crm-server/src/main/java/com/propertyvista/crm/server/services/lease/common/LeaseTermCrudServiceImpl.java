@@ -349,10 +349,6 @@ public class LeaseTermCrudServiceImpl extends AbstractVersionedCrudServiceDtoImp
         }
     }
 
-    public void update(LeaseTerm dbo, LeaseTermDTO dto) {
-        enhanceRetrieved(dbo, dto, null);
-    }
-
     private void checkUnitMoveOut(LeaseTermDTO dto) {
         EntityQueryCriteria<Lease> criteria = EntityQueryCriteria.create(Lease.class);
         criteria.add(PropertyCriterion.eq(criteria.proto().unit(), dto.unit()));
@@ -380,9 +376,8 @@ public class LeaseTermCrudServiceImpl extends AbstractVersionedCrudServiceDtoImp
     private LeaseTermDTO createOffer(Lease leaseId, Type type) {
         LeaseTerm term = ServerSideFactory.create(LeaseFacade.class).createOffer(leaseId, type);
 
-        LeaseTermDTO termDto = EntityFactory.create(LeaseTermDTO.class);
-        termDto.setValue(term.getValue());
-        new LeaseTermCrudServiceImpl().update(term, termDto);
+        LeaseTermDTO termDto = createDTO(term);
+        enhanceRetrieved(term, termDto, RetrieveTarget.Edit);
 
         return termDto;
     }
