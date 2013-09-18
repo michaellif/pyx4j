@@ -92,6 +92,7 @@ public class LeaseProcessManagerInternal {
         EntityQueryCriteria<Lease> criteria = EntityQueryCriteria.create(Lease.class);
         criteria.add(PropertyCriterion.eq(criteria.proto().status(), Lease.Status.Active));
         criteria.add(PropertyCriterion.lt(criteria.proto().leaseTo(), date));
+        criteria.add(PropertyCriterion.isNotNull(criteria.proto().actualMoveOut())); // already moved out
         //@formatter:off
         criteria.or(PropertyCriterion.isNull(criteria.proto().nextTerm()),                              // not renewed OR
                     new AndCriterion(PropertyCriterion.isNotNull(criteria.proto().nextTerm()),          // renewed but moving out
