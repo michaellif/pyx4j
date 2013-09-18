@@ -46,6 +46,13 @@ public class LeaseInternalManager extends LeaseAbstractManager {
     }
 
     @Override
+    public Lease init(Lease lease) {
+        lease = super.init(lease);
+        lease.integrationSystemId().setValue(IntegrationSystem.internal);
+        return lease;
+    }
+
+    @Override
     protected BillingAccount createBillingAccount() {
         BillingAccount billingAccount = EntityFactory.create(BillingAccount.class);
         billingAccount.billingPeriod().setValue(BillingPeriod.Monthly);
