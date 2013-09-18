@@ -149,12 +149,19 @@ public class AutoPayReviewViewImpl extends AbstractPrimePane implements AutoPayR
 
     private void acceptMarked() {
         visibleRange = new Range(0, PAGE_INCREMENT);
+
         papReviewHolderForm.setUnconditionalValidationErrorRendering(true);
-        if (papReviewHolderForm.isValid()) {
+        boolean isEditable = papReviewHolderForm.isEditable(); // validations can fail only when form is editable so we force it to be editable
+        papReviewHolderForm.setEditable(true);
+        boolean isValid = papReviewHolderForm.isValid();
+        papReviewHolderForm.setEditable(isEditable);
+
+        if (isValid) {
             presenter.acceptMarked();
         } else {
             MessageDialog.info(i18n.tr("Please fix the validation errors"));
         }
+
     }
 
     private void search() {
