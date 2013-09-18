@@ -11,7 +11,7 @@
  * @author ArtyomB
  * @version $Id$
  */
-package com.propertyvista.portal.server.portal.services.resident;
+package com.propertyvista.portal.server.portal.web.services.services;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -32,6 +32,7 @@ import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityListCriteria;
 import com.pyx4j.essentials.server.admin.SystemMaintenance;
+import com.pyx4j.rpc.shared.ServiceExecution;
 import com.pyx4j.rpc.shared.VoidSerializable;
 import com.pyx4j.server.contexts.Context;
 import com.pyx4j.server.contexts.Visit;
@@ -49,17 +50,17 @@ import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.Tenant;
 import com.propertyvista.operations.rpc.VistaSystemMaintenanceState;
-import com.propertyvista.portal.rpc.portal.services.resident.TenantSurePurchaseService;
 import com.propertyvista.portal.rpc.portal.web.dto.insurance.TenantSureAgreementDTO;
-import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.tenantsure.TenantSureCoverageDTO;
+import com.propertyvista.portal.rpc.portal.web.dto.insurance.TenantSureCoverageDTO;
+import com.propertyvista.portal.rpc.portal.web.dto.insurance.TenantSureQuoteDTO;
+import com.propertyvista.portal.rpc.portal.web.services.services.TenantSurePurchaseWizardService;
 import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.tenantsure.TenantSureQuotationRequestParamsDTO;
-import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.tenantsure.TenantSureQuoteDTO;
 import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.tenantsure.errors.TenantSureAlreadyPurchasedException;
 import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.tenantsure.errors.TenantSureOnMaintenanceException;
 import com.propertyvista.portal.server.portal.TenantAppContext;
 import com.propertyvista.server.common.util.AddressRetriever;
 
-public class TenantSurePurchaseServiceImpl implements TenantSurePurchaseService {
+public class TenantSurePurchaseWizardServiceImpl implements TenantSurePurchaseWizardService {
 
     private static class ServerSideQuteStorage {
 
@@ -237,9 +238,9 @@ public class TenantSurePurchaseServiceImpl implements TenantSurePurchaseService 
         return filteredValues;
     }
 
+
     @Override
     public void init(final AsyncCallback<TenantSureAgreementDTO> callback, InitializationData initializationData) {
-        
         getQuotationRequestParams(new AsyncCallback<TenantSureQuotationRequestParamsDTO>() {
 
             @Override
@@ -264,12 +265,6 @@ public class TenantSurePurchaseServiceImpl implements TenantSurePurchaseService 
                 
             }
         });
-
-    }
-
-    @Override
-    public void save(AsyncCallback<Key> callback, TenantSureAgreementDTO editableEntity) {
-        // TODO Auto-generated method stub        
     }
 
     @Override
@@ -279,7 +274,14 @@ public class TenantSurePurchaseServiceImpl implements TenantSurePurchaseService 
     }
 
     @Override
-    public void create(AsyncCallback<Key> callback, TenantSureAgreementDTO editableEntity) {
+    public void create(final AsyncCallback<Key> callback, TenantSureAgreementDTO editableEntity) {
+
+        
+    }
+
+    @Override
+    @ServiceExecution(waitCaption = "Saving...")
+    public void save(AsyncCallback<Key> callback, TenantSureAgreementDTO editableEntity) {
         // TODO Auto-generated method stub
         
     }

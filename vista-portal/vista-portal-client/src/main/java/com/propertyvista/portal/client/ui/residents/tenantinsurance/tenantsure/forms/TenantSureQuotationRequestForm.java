@@ -27,7 +27,7 @@ import com.propertyvista.common.client.ui.components.tenantinsurance.MoneyComboB
 import com.propertyvista.common.client.ui.components.tenantinsurance.YesNoComboBox;
 import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
 import com.propertyvista.misc.VistaTODO;
-import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.tenantsure.TenantSureCoverageDTO;
+import com.propertyvista.portal.rpc.portal.web.dto.insurance.TenantSureCoverageDTO;
 import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.tenantsure.TenantSureQuotationRequestParamsDTO;
 
 public class TenantSureQuotationRequestForm extends CEntityDecoratableForm<TenantSureCoverageDTO> {

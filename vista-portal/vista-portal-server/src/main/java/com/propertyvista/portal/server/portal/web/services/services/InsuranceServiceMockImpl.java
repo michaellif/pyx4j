@@ -20,38 +20,38 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.shared.EntityFactory;
 
+import com.propertyvista.portal.rpc.portal.web.dto.insurance.status.GeneralInsuranceCertificateSummaryDTO;
 import com.propertyvista.portal.rpc.portal.web.dto.insurance.status.InsuranceStatusDTO;
-import com.propertyvista.portal.rpc.portal.web.dto.insurance.status.NoInsuranceStatusDTO;
-import com.propertyvista.portal.rpc.portal.web.dto.insurance.status.OtherProviderInsuranceStatusDTO;
-import com.propertyvista.portal.rpc.portal.web.dto.insurance.status.TenantSureInsuranceStatusDTO;
+import com.propertyvista.portal.rpc.portal.web.dto.insurance.status.TenantSureCertificateSummaryDTO;
 import com.propertyvista.portal.rpc.portal.web.services.services.InsuranceService;
 
 public class InsuranceServiceMockImpl implements InsuranceService {
 
     @Override
     public void retreiveInsuranceStatus(AsyncCallback<InsuranceStatusDTO> callback) {
+
+        InsuranceStatusDTO statusDTO = EntityFactory.create(InsuranceStatusDTO.class);
+
         if (false) {
-            NoInsuranceStatusDTO statusDTO = EntityFactory.create(NoInsuranceStatusDTO.class);
-            statusDTO.noInsuranceStatusMessage().setValue("Our records indicate you do not have valid tenant insurance.");
-            statusDTO.tenantInsuranceInvitation().setValue(
-                    "As per your lease agreement, you must obtain and provide the landlord with proof of tenant insurance.");
-            callback.onSuccess(statusDTO);
+            GeneralInsuranceCertificateSummaryDTO summaryDTO = EntityFactory.create(GeneralInsuranceCertificateSummaryDTO.class);
+            summaryDTO.insuranceProvider().setValue("Other Insurance");
+            summaryDTO.liabilityCoverage().setValue(new BigDecimal("1000000"));
+            summaryDTO.expiryDate().setValue(new LogicalDate());
+            statusDTO.sertificates().add(summaryDTO);
         } else if (false) {
-            OtherProviderInsuranceStatusDTO statusDTO = EntityFactory.create(OtherProviderInsuranceStatusDTO.class);
-            statusDTO.insuranceProvider().setValue("Other Insurance");
-            statusDTO.liabilityCoverage().setValue(new BigDecimal("1000000"));
-            statusDTO.expiryDate().setValue(new LogicalDate());
-            callback.onSuccess(statusDTO);
-        } else if (true) {
-            TenantSureInsuranceStatusDTO statusDTO = EntityFactory.create(TenantSureInsuranceStatusDTO.class);
-            statusDTO.insuranceProvider().setValue("TenantSure Insurance");
-            statusDTO.insuranceCertificateNumber().setValue("ABC12345");
-            statusDTO.liabilityCoverage().setValue(new BigDecimal("1000000"));
-            statusDTO.contentsCoverage().setValue(new BigDecimal("100000"));
-            statusDTO.inceptionDate().setValue(new LogicalDate());
-            statusDTO.expiryDate().setValue(new LogicalDate());
-            callback.onSuccess(statusDTO);
+            TenantSureCertificateSummaryDTO summaryDTO = EntityFactory.create(TenantSureCertificateSummaryDTO.class);
+            summaryDTO.insuranceProvider().setValue("TenantSure Insurance");
+            summaryDTO.insuranceCertificateNumber().setValue("ABC12345");
+            summaryDTO.liabilityCoverage().setValue(new BigDecimal("1000000"));
+            summaryDTO.contentsCoverage().setValue(new BigDecimal("100000"));
+            summaryDTO.inceptionDate().setValue(new LogicalDate());
+            summaryDTO.expiryDate().setValue(new LogicalDate());
+            statusDTO.sertificates().add(summaryDTO);
+        } else {
+            statusDTO.minimumRequiredLiability().setValue(new BigDecimal("1000000"));
         }
+        callback.onSuccess(statusDTO);
+
     }
 
 }

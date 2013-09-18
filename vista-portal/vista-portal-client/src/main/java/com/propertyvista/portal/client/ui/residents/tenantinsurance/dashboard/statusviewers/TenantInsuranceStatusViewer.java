@@ -17,10 +17,9 @@ import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.forms.client.ui.CViewer;
 
+import com.propertyvista.portal.rpc.portal.web.dto.insurance.status.GeneralInsuranceCertificateSummaryDTO;
 import com.propertyvista.portal.rpc.portal.web.dto.insurance.status.InsuranceStatusDTO;
-import com.propertyvista.portal.rpc.portal.web.dto.insurance.status.NoInsuranceStatusDTO;
-import com.propertyvista.portal.rpc.portal.web.dto.insurance.status.OtherProviderInsuranceStatusDTO;
-import com.propertyvista.portal.rpc.portal.web.dto.insurance.status.TenantSureInsuranceStatusDTO;
+import com.propertyvista.portal.rpc.portal.web.dto.insurance.status.TenantSureCertificateSummaryDTO;
 
 /** this is a class that supposed to implement 'polymorphic' tenant insurance status viewer */
 public class TenantInsuranceStatusViewer extends CViewer<InsuranceStatusDTO> {
@@ -30,19 +29,19 @@ public class TenantInsuranceStatusViewer extends CViewer<InsuranceStatusDTO> {
     }
 
     @Override
-    public IsWidget createContent(InsuranceStatusDTO tenantInsuranceStatus) {
-        if (tenantInsuranceStatus == null) {
+    public IsWidget createContent(InsuranceStatusDTO status) {
+        if (status == null) {
             return null;
         }
 
-        if (tenantInsuranceStatus instanceof NoInsuranceStatusDTO) {
-            return new NoTenantInsuranceStatusViewer().createContent((NoInsuranceStatusDTO) tenantInsuranceStatus);
+        if (status.sertificates().size() == 0) {
+            return new NoTenantInsuranceStatusViewer().createContent(status);
 
-        } else if (tenantInsuranceStatus instanceof TenantSureInsuranceStatusDTO) {
-            return new TenantSureInsuranceStatusViewer().createContent((TenantSureInsuranceStatusDTO) tenantInsuranceStatus);
+        } else if (status.sertificates().get(0).isInstanceOf(GeneralInsuranceCertificateSummaryDTO.class)) {
+            return new TenantSureInsuranceStatusViewer().createContent(status.sertificates().get(0).<TenantSureCertificateSummaryDTO> cast());
 
-        } else if (tenantInsuranceStatus instanceof OtherProviderInsuranceStatusDTO) {
-            return new OtherProviderTenantInsuranceStatusViewer().createContent((OtherProviderInsuranceStatusDTO) tenantInsuranceStatus);
+        } else if (status.sertificates().get(0).isInstanceOf(GeneralInsuranceCertificateSummaryDTO.class)) {
+            return new GeneralTenantInsuranceStatusViewer().createContent(status.sertificates().get(0).<GeneralInsuranceCertificateSummaryDTO> cast());
 
         } else {
             throw new Error("A viewer for current insurance status was not found!");

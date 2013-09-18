@@ -17,16 +17,17 @@ import com.google.gwt.core.client.GWT;
 
 import com.pyx4j.site.rpc.AppPlace;
 
-import com.propertyvista.domain.tenant.insurance.InsuranceGeneric;
+import com.propertyvista.portal.rpc.portal.web.dto.insurance.OtherProviderInsuranceSertificateDTO;
 import com.propertyvista.portal.rpc.portal.web.services.services.UploadInsuranceSertificateWizardService;
 import com.propertyvista.portal.web.client.activity.AbstractWizardActivity;
 import com.propertyvista.portal.web.client.ui.services.insurance.UploadSertificateWizardView;
 import com.propertyvista.portal.web.client.ui.services.insurance.UploadSertificateWizardView.UploadSertificateWizardPresenter;
 
-public class UploadSertificateWizardActivity extends AbstractWizardActivity<InsuranceGeneric> implements UploadSertificateWizardPresenter {
+public class UploadSertificateWizardActivity extends AbstractWizardActivity<OtherProviderInsuranceSertificateDTO> implements UploadSertificateWizardPresenter {
 
     public UploadSertificateWizardActivity(AppPlace place) {
-        super(UploadSertificateWizardView.class, GWT.<UploadInsuranceSertificateWizardService> create(UploadInsuranceSertificateWizardService.class), InsuranceGeneric.class);
+        super(UploadSertificateWizardView.class, GWT.<UploadInsuranceSertificateWizardService> create(UploadInsuranceSertificateWizardService.class),
+                OtherProviderInsuranceSertificateDTO.class);
     }
 
 }

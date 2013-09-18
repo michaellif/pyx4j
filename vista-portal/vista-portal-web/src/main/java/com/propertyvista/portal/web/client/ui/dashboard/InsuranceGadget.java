@@ -30,11 +30,11 @@ import com.pyx4j.forms.client.ui.CLabel;
 import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.Button;
+import com.pyx4j.widgets.client.Label;
 import com.pyx4j.widgets.client.actionbar.Toolbar;
 
-import com.propertyvista.portal.rpc.portal.web.dto.insurance.status.ExtantInsuranceStatusDTO;
+import com.propertyvista.portal.rpc.portal.web.dto.insurance.status.InsuranceCertificateSummaryDTO;
 import com.propertyvista.portal.rpc.portal.web.dto.insurance.status.InsuranceStatusDTO;
-import com.propertyvista.portal.rpc.portal.web.dto.insurance.status.NoInsuranceStatusDTO;
 import com.propertyvista.portal.web.client.resources.PortalImages;
 import com.propertyvista.portal.web.client.ui.AbstractGadget;
 import com.propertyvista.portal.web.client.ui.util.decorators.FormDecoratorBuilder;
@@ -102,16 +102,16 @@ public class InsuranceGadget extends AbstractGadget<MainDashboardViewImpl> {
         }
 
         @Override
-        protected void setEditorValue(InsuranceStatusDTO value) {
+        protected void setEditorValue(InsuranceStatusDTO status) {
             CEntityForm<? extends InsuranceStatusDTO> form = null;
-            if (value.isInstanceOf(NoInsuranceStatusDTO.class)) {
+            if (status.sertificates().size() == 0) {
                 form = new NoInsuranceStatusForm();
                 form.initContent();
-                ((NoInsuranceStatusForm) form).populate(value.<NoInsuranceStatusDTO> cast());
-            } else if (value.isInstanceOf(ExtantInsuranceStatusDTO.class)) {
+                ((NoInsuranceStatusForm) form).populate(status.<InsuranceStatusDTO> cast());
+            } else {
                 form = new HasInsuranceStatusForm();
                 form.initContent();
-                ((HasInsuranceStatusForm) form).populate(value.<ExtantInsuranceStatusDTO> cast());
+                ((HasInsuranceStatusForm) form).populate(status.sertificates().get(0).<InsuranceCertificateSummaryDTO> cast());
             }
 
             if (form != null) {
@@ -136,10 +136,10 @@ public class InsuranceGadget extends AbstractGadget<MainDashboardViewImpl> {
         }
     }
 
-    class NoInsuranceStatusForm extends CEntityForm<NoInsuranceStatusDTO> {
+    class NoInsuranceStatusForm extends CEntityForm<InsuranceStatusDTO> {
 
         public NoInsuranceStatusForm() {
-            super(NoInsuranceStatusDTO.class);
+            super(InsuranceStatusDTO.class);
         }
 
         @Override
@@ -150,18 +150,18 @@ public class InsuranceGadget extends AbstractGadget<MainDashboardViewImpl> {
 
             CLabel<String> noInsuranceStatusMessageLabel = new CLabel<String>();
             noInsuranceStatusMessageLabel.asWidget().getElement().getStyle().setFontWeight(FontWeight.BOLDER);
-            main.setWidget(++row, 0, inject(proto().noInsuranceStatusMessage(), noInsuranceStatusMessageLabel));
-            main.setWidget(++row, 0, inject(proto().tenantInsuranceInvitation(), new CLabel<String>()));
+            main.setWidget(++row, 0, new Label(InsuranceStatusDTO.noInsuranceStatusMessage));
+            main.setWidget(++row, 0, new Label(InsuranceStatusDTO.tenantSureInvitation));
             return main;
 
         }
 
     }
 
-    class HasInsuranceStatusForm extends CEntityForm<ExtantInsuranceStatusDTO> {
+    class HasInsuranceStatusForm extends CEntityForm<InsuranceCertificateSummaryDTO> {
 
         public HasInsuranceStatusForm() {
-            super(ExtantInsuranceStatusDTO.class);
+            super(InsuranceCertificateSummaryDTO.class);
         }
 
         @Override

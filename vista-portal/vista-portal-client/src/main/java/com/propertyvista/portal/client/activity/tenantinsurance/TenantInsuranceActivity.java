@@ -25,11 +25,9 @@ import com.propertyvista.portal.client.PortalSite;
 import com.propertyvista.portal.client.ui.residents.tenantinsurance.views.TenantInsuranceCoveredByOtherTenantView;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap;
 import com.propertyvista.portal.rpc.portal.services.resident.TenantInsuranceService;
-import com.propertyvista.portal.rpc.portal.web.dto.insurance.status.ExtantInsuranceStatusDTO;
+import com.propertyvista.portal.rpc.portal.web.dto.insurance.status.GeneralInsuranceCertificateSummaryDTO;
 import com.propertyvista.portal.rpc.portal.web.dto.insurance.status.InsuranceStatusDTO;
-import com.propertyvista.portal.rpc.portal.web.dto.insurance.status.NoInsuranceStatusDTO;
-import com.propertyvista.portal.rpc.portal.web.dto.insurance.status.OtherProviderInsuranceStatusDTO;
-import com.propertyvista.portal.rpc.portal.web.dto.insurance.status.TenantSureInsuranceStatusDTO;
+import com.propertyvista.portal.rpc.portal.web.dto.insurance.status.TenantSureCertificateSummaryDTO;
 
 // TODO maybe this dispatching should be done on navig activity level: i.e. put the place that corresponds to current status in the navig bar 
 public class TenantInsuranceActivity extends AbstractActivity {
@@ -46,13 +44,13 @@ public class TenantInsuranceActivity extends AbstractActivity {
 
             @Override
             public void onSuccess(InsuranceStatusDTO status) {
-                if (status instanceof NoInsuranceStatusDTO) {
+                if (status.sertificates().size() == 0) {
                     AppSite.getPlaceController().goTo(new PortalSiteMap.Resident.ResidentServices.TenantInsurance.ProvideTenantInsurance());
-                } else if (status instanceof ExtantInsuranceStatusDTO) {
-                    if (((ExtantInsuranceStatusDTO) status).isOwner().isBooleanTrue()) {
-                        if (status instanceof TenantSureInsuranceStatusDTO) {
+                } else {
+                    if ((status.sertificates().get(0)).isOwner().isBooleanTrue()) {
+                        if (status.isInstanceOf(TenantSureCertificateSummaryDTO.class)) {
                             AppSite.getPlaceController().goTo(new PortalSiteMap.Resident.ResidentServices.TenantInsurance.TenantSure.Management());
-                        } else if (status instanceof OtherProviderInsuranceStatusDTO) {
+                        } else if (status.sertificates().get(0).isInstanceOf(GeneralInsuranceCertificateSummaryDTO.class)) {
                             AppSite.getPlaceController().goTo(new PortalSiteMap.Resident.ResidentServices.TenantInsurance.ProvideTenantInsurance());
                         } else {
                             throw new Error("got unknown insurance status");
@@ -62,8 +60,6 @@ public class TenantInsuranceActivity extends AbstractActivity {
                         view.populate(status);
                         panel.setWidget(view);
                     }
-                } else {
-                    throw new Error("got unknown insurance status");
                 }
             }
         });

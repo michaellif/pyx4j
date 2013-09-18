@@ -14,7 +14,7 @@
 package com.propertyvista.biz.tenant.insurance.tenantsure.apiadapters;
 
 import com.propertyvista.domain.tenant.lease.Tenant;
-import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.tenantsure.TenantSureCoverageDTO;
+import com.propertyvista.portal.rpc.portal.web.dto.insurance.TenantSureCoverageDTO;
 
 public interface ITenantSureOptionalExtrasFormatter {
 

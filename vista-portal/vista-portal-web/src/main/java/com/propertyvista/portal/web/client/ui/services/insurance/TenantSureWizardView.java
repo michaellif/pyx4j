@@ -15,7 +15,7 @@ package com.propertyvista.portal.web.client.ui.services.insurance;
 
 import com.propertyvista.domain.contact.AddressSimple;
 import com.propertyvista.portal.rpc.portal.web.dto.insurance.TenantSureAgreementDTO;
-import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.tenantsure.TenantSureQuoteDTO;
+import com.propertyvista.portal.rpc.portal.web.dto.insurance.TenantSureQuoteDTO;
 import com.propertyvista.portal.web.client.ui.IWizardView;
 
 public interface TenantSureWizardView extends IWizardView<TenantSureAgreementDTO> {

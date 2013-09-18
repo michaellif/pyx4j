@@ -35,12 +35,12 @@ import com.propertyvista.common.client.ui.components.ApplicationDocumentFileUplo
 import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
 import com.propertyvista.domain.media.InsuranceCertificateDocument;
 import com.propertyvista.domain.tenant.Customer;
-import com.propertyvista.domain.tenant.insurance.InsuranceGeneric;
 import com.propertyvista.domain.tenant.lease.Tenant;
+import com.propertyvista.portal.rpc.portal.web.dto.insurance.OtherProviderInsuranceSertificateDTO;
 import com.propertyvista.portal.web.client.ui.CPortalEntityWizard;
 import com.propertyvista.portal.web.client.ui.util.decorators.FormDecoratorBuilder;
 
-public class UploadSertificateWizard extends CPortalEntityWizard<InsuranceGeneric> {
+public class UploadSertificateWizard extends CPortalEntityWizard<OtherProviderInsuranceSertificateDTO> {
 
     private final static I18n i18n = I18n.get(UploadSertificateWizard.class);
 
@@ -69,7 +69,7 @@ public class UploadSertificateWizard extends CPortalEntityWizard<InsuranceGeneri
      *            a handler for tenantOwner click (if not null will render tenant's name as a hyperlink that execs this handler on click)
      */
     public UploadSertificateWizard(UploadSertificateWizardView view, boolean displayTenantOwner, TenantOwnerClickHandler tenantOwnerClickHandler) {
-        super(InsuranceGeneric.class, view, i18n.tr("Insurance Certificated"), i18n.tr("Submit"), ThemeColor.contrast3);
+        super(OtherProviderInsuranceSertificateDTO.class, view, i18n.tr("Insurance Certificated"), i18n.tr("Submit"), ThemeColor.contrast3);
         this.minRequiredLiability = null;
         this.displayTenantOwner = displayTenantOwner;
         this.tenantOwnerClickHandler = tenantOwnerClickHandler;
@@ -89,11 +89,11 @@ public class UploadSertificateWizard extends CPortalEntityWizard<InsuranceGeneri
                 comp.setNavigationCommand(new Command() {
                     @Override
                     public void execute() {
-                        UploadSertificateWizard.this.tenantOwnerClickHandler.onTenantOwnerClicked(getValue().tenant().<Tenant> createIdentityStub());
+                        //TODO     UploadSertificateWizard.this.tenantOwnerClickHandler.onTenantOwnerClicked(getValue().tenant().<Tenant> createIdentityStub());
                     }
                 });
             }
-            contentPanel.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().tenant(), comp), "150px").build());
+            //TODO    contentPanel.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().tenant(), comp), "150px").build());
         }
 
         contentPanel.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().insuranceProvider()), "150px").build());
@@ -140,7 +140,7 @@ public class UploadSertificateWizard extends CPortalEntityWizard<InsuranceGeneri
         });
 
         insuranceCeritificatesHeaderRow = ++row;
-        contentPanel.setWidget(++row, 0, 2, inject(proto().documents(), new InsuranceCertificateDocumentFolder()));
+        //TODO  contentPanel.setWidget(++row, 0, 2, inject(proto().documents(), new InsuranceCertificateDocumentFolder()));
         scannedInsuranceCertificateNotAvailable = new Label(i18n.tr("N/A"));
         scannedInsuranceCertificateNotAvailable.getElement().getStyle().setTextAlign(TextAlign.CENTER);
         scannedInsuranceCertificateNotAvailable.getElement().getStyle().setProperty("marginLeft", "auto");
@@ -157,8 +157,8 @@ public class UploadSertificateWizard extends CPortalEntityWizard<InsuranceGeneri
     @Override
     protected void onValueSet(boolean populate) {
         super.onValueSet(populate);
-        setViewable(getValue().isPropertyVistaIntegratedProvider().isBooleanTrue()); // TODO this should not be controlled by the form itstelf
-        scannedInsuranceCertificateNotAvailable.setVisible(isViewable() & getValue().documents().isEmpty());
+        //TODO      setViewable(getValue().isPropertyVistaIntegratedProvider().isBooleanTrue()); // TODO this should not be controlled by the form itstelf
+        //TODO    scannedInsuranceCertificateNotAvailable.setVisible(isViewable() & getValue().documents().isEmpty());
         contentPanel.setH2(insuranceCeritificatesHeaderRow, 0, 1,
                 isEditable() & !isViewable() ? i18n.tr("Attach Scanned Insurance Certificate") : i18n.tr("Scanned Insurance Certificate"));
     }

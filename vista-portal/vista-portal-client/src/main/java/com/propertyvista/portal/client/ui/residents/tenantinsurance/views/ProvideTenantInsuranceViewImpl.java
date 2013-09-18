@@ -28,12 +28,11 @@ import com.pyx4j.widgets.client.Anchor;
 import com.pyx4j.widgets.client.Button;
 import com.pyx4j.widgets.client.Label;
 
-import com.propertyvista.portal.client.ui.residents.tenantinsurance.dashboard.statusviewers.OtherProviderTenantInsuranceStatusViewer;
+import com.propertyvista.portal.client.ui.residents.tenantinsurance.dashboard.statusviewers.GeneralTenantInsuranceStatusViewer;
 import com.propertyvista.portal.client.ui.residents.tenantinsurance.tenantsure.forms.TenantSureLogo;
+import com.propertyvista.portal.rpc.portal.web.dto.insurance.status.GeneralInsuranceCertificateSummaryDTO;
 import com.propertyvista.portal.rpc.portal.web.dto.insurance.status.InsuranceStatusDTO;
-import com.propertyvista.portal.rpc.portal.web.dto.insurance.status.NoInsuranceStatusDTO;
-import com.propertyvista.portal.rpc.portal.web.dto.insurance.status.OtherProviderInsuranceStatusDTO;
-import com.propertyvista.portal.rpc.portal.web.dto.insurance.status.TenantSureInsuranceStatusDTO;
+import com.propertyvista.portal.rpc.portal.web.dto.insurance.status.TenantSureCertificateSummaryDTO;
 
 public class ProvideTenantInsuranceViewImpl extends Composite implements ProvideTenantInsuranceView {
 
@@ -77,7 +76,7 @@ public class ProvideTenantInsuranceViewImpl extends Composite implements Provide
 
     private final TenantSureInvitationPanel tenantSureInvitationPanel;
 
-    private final OtherProviderTenantInsuranceStatusViewer insuranceStatusViewer;
+    private final GeneralTenantInsuranceStatusViewer insuranceStatusViewer;
 
     private final Anchor provideInsuranceByOtherProvider;
 
@@ -88,7 +87,7 @@ public class ProvideTenantInsuranceViewImpl extends Composite implements Provide
         tenantInsuranceRequirementsMessage.setStyleName(Styles.ProvideTIRequirements.name());
         viewPanel.add(tenantInsuranceRequirementsMessage);
 
-        insuranceStatusViewer = new OtherProviderTenantInsuranceStatusViewer();
+        insuranceStatusViewer = new GeneralTenantInsuranceStatusViewer();
         insuranceStatusViewer.asWidget().setStyleName(Styles.ProvideTIInsuranceStatus.name());
         viewPanel.add(insuranceStatusViewer);
 
@@ -122,26 +121,25 @@ public class ProvideTenantInsuranceViewImpl extends Composite implements Provide
     }
 
     @Override
-    public void populate(InsuranceStatusDTO insuranceStatus) {
+    public void populate(InsuranceStatusDTO status) {
         tenantInsuranceRequirementsMessage.setVisible(false);
         tenantInsuranceRequirementsMessage.setHTML("");
 
         insuranceStatusViewer.setVisible(false);
 
-        if (insuranceStatus != null) {
-            if (insuranceStatus.isInstanceOf(NoInsuranceStatusDTO.class)) {
-                NoInsuranceStatusDTO insuranceStatusNoInsurance = insuranceStatus.duplicate(NoInsuranceStatusDTO.class);
+        if (status != null) {
+            if (status.sertificates().size() == 0) {
                 tenantInsuranceRequirementsMessage.setVisible(true);
-                tenantInsuranceRequirementsMessage.setHTML(insuranceStatusNoInsurance.tenantInsuranceInvitation().getValue());
+                tenantInsuranceRequirementsMessage.setHTML(InsuranceStatusDTO.tenantSureInvitation);
                 provideInsuranceByOtherProvider.setText(i18n.tr("I (we) already have Tenant Insurance"));
-            } else if (insuranceStatus.isInstanceOf(OtherProviderInsuranceStatusDTO.class)) {
+            } else if (status.sertificates().get(0).isInstanceOf(GeneralInsuranceCertificateSummaryDTO.class)) {
                 insuranceStatusViewer.setVisible(true);
-                insuranceStatusViewer.populate(insuranceStatus.duplicate(OtherProviderInsuranceStatusDTO.class));
+                insuranceStatusViewer.populate(status.sertificates().get(0).<GeneralInsuranceCertificateSummaryDTO> cast());
                 provideInsuranceByOtherProvider.setText(i18n.tr("Update Insurance"));
-            } else if (insuranceStatus.isInstanceOf(TenantSureInsuranceStatusDTO.class)) {
+            } else if (status.isInstanceOf(TenantSureCertificateSummaryDTO.class)) {
                 assert false : "this place shouldn't be used when tenantsure is active";
             } else {
-                assert false : "unknown insurance status: " + insuranceStatus.getInstanceValueClass().getName();
+                assert false : "unknown insurance status: " + status.getInstanceValueClass().getName();
             }
         }
     }

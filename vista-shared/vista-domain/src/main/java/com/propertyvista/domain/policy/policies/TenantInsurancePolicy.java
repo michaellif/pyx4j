@@ -15,13 +15,10 @@ package com.propertyvista.domain.policy.policies;
 
 import java.math.BigDecimal;
 
-import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.DiscriminatorValue;
 import com.pyx4j.entity.annotations.Editor;
 import com.pyx4j.entity.annotations.Editor.EditorType;
 import com.pyx4j.entity.annotations.Format;
-import com.pyx4j.entity.annotations.Length;
-import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IPrimitive;
 
@@ -39,19 +36,5 @@ public interface TenantInsurancePolicy extends Policy {
     @Format("#,##.00")
     @NotNull
     IPrimitive<BigDecimal> minimumRequiredLiability();
-
-    @NotNull
-    @Owned
-    @Length(10 * 1024)
-    @Editor(type = Editor.EditorType.textarea)
-    @Caption(description = "This text is displayed in Resident Portal on a page that lets a tenant to either provide insurance or purchase TenantSure insurance.")
-    IPrimitive<String> tenantInsuranceInvitation();
-
-    @NotNull
-    @Owned
-    @Length(10 * 1024)
-    @Editor(type = Editor.EditorType.textarea)
-    @Caption(description = "This text is displayed in Resident Portal's Dashboard when a tenant doesn't have tenant insurance.")
-    IPrimitive<String> noInsuranceStatusMessage();
 
 }

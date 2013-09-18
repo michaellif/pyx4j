@@ -13,13 +13,15 @@
  */
 package com.propertyvista.biz.tenant.insurance;
 
+import java.util.List;
+
 import com.propertyvista.domain.tenant.insurance.InsuranceCertificate;
 import com.propertyvista.domain.tenant.lease.Tenant;
 import com.propertyvista.portal.rpc.portal.web.dto.insurance.status.InsuranceStatusDTO;
 
 public interface TenantInsuranceFacade {
 
-    InsuranceCertificate getInsuranceCertificate(Tenant tenantId);
+    List<InsuranceCertificate> getInsuranceCertificates(Tenant tenantId);
 
     InsuranceStatusDTO getInsuranceStatus(Tenant tenantId);
 

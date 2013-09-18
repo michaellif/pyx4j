@@ -41,7 +41,7 @@ import com.propertyvista.portal.client.themes.TenantInsuranceTheme;
 import com.propertyvista.portal.client.ui.residents.tenantinsurance.tenantsure.forms.TenantSureStatusForm;
 import com.propertyvista.portal.client.ui.residents.tenantinsurance.tenantsure.forms.TenantSureViewDecorator;
 import com.propertyvista.portal.client.ui.residents.tenantinsurance.tenantsure.resources.TenantSureResources;
-import com.propertyvista.portal.rpc.portal.web.dto.insurance.status.TenantSureInsuranceStatusDTO;
+import com.propertyvista.portal.rpc.portal.web.dto.insurance.status.TenantSureCertificateSummaryDTO;
 
 public class TenantSureManagementViewImpl extends Composite implements TenantSureManagementView {
 
@@ -132,7 +132,7 @@ public class TenantSureManagementViewImpl extends Composite implements TenantSur
     }
 
     @Override
-    public void populate(TenantSureInsuranceStatusDTO detailedStatus) {
+    public void populate(TenantSureCertificateSummaryDTO detailedStatus) {
         statusForm.populate(detailedStatus);
         boolean isCancelled = !detailedStatus.expiryDate().isNull();
 

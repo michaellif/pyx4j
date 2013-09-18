@@ -34,9 +34,9 @@ import com.propertyvista.domain.tenant.insurance.TenantSurePaymentSchedule;
 import com.propertyvista.portal.client.PortalSite;
 import com.propertyvista.portal.client.ui.residents.tenantinsurance.tenantsure.views.TenantSurePurchaseView;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap;
-import com.propertyvista.portal.rpc.portal.services.resident.TenantSurePurchaseService;
+import com.propertyvista.portal.rpc.portal.web.dto.insurance.TenantSureQuoteDTO;
+import com.propertyvista.portal.rpc.portal.web.services.services.TenantSurePurchaseWizardService;
 import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.tenantsure.TenantSureQuotationRequestParamsDTO;
-import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.tenantsure.TenantSureQuoteDTO;
 import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.tenantsure.errors.TenantSureAlreadyPurchasedException;
 import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.tenantsure.errors.TenantSureOnMaintenanceException;
 
@@ -46,11 +46,11 @@ public class TenantSurePurchaseActivity extends AbstractActivity implements Tena
 
     private final TenantSurePurchaseView view;
 
-    private final TenantSurePurchaseService service;
+    private final TenantSurePurchaseWizardService service;
 
     public TenantSurePurchaseActivity() {
         view = PortalSite.getViewFactory().instantiate(TenantSurePurchaseView.class);
-        service = GWT.<TenantSurePurchaseService> create(TenantSurePurchaseService.class);
+        service = GWT.<TenantSurePurchaseWizardService> create(TenantSurePurchaseWizardService.class);
     }
 
     @Override

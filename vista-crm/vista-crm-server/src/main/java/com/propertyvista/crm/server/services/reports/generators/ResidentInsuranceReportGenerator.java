@@ -14,6 +14,7 @@
 package com.propertyvista.crm.server.services.reports.generators;
 
 import java.io.Serializable;
+import java.util.List;
 import java.util.Vector;
 
 import com.pyx4j.config.server.ServerSideFactory;
@@ -79,9 +80,10 @@ public class ResidentInsuranceReportGenerator implements ReportGenerator {
 
                 ResidentInsuranceStatusDTO status = EntityFactory.create(ResidentInsuranceStatusDTO.class);
                 status.namesOnLease_().set(tenant.<Tenant> createIdentityStub());
-                InsuranceCertificate insuranceCertificate = ServerSideFactory.create(TenantInsuranceFacade.class).getInsuranceCertificate(tenant);
+                List<InsuranceCertificate> insuranceCertificates = ServerSideFactory.create(TenantInsuranceFacade.class).getInsuranceCertificates(tenant);
 
-                if (insuranceCertificate != null) {
+                if (insuranceCertificates.size() > 0) {
+                    InsuranceCertificate insuranceCertificate = insuranceCertificates.get(0);
                     status.hasResidentInsurance().setValue(true);
                     status.liabilityCoverage().setValue(insuranceCertificate.liabilityCoverage().getValue());
 

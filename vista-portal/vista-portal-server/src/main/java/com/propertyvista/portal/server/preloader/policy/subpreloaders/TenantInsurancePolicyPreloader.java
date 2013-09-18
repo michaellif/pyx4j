@@ -29,14 +29,6 @@ public class TenantInsurancePolicyPreloader extends AbstractPolicyPreloader<Tena
         TenantInsurancePolicy policy = EntityFactory.create(TenantInsurancePolicy.class);
         policy.requireMinimumLiability().setValue(false);
 
-        policy.noInsuranceStatusMessage().setValue("According to our records you do not have valid tenant insurance!");
-
-        policy.tenantInsuranceInvitation().setValue(
-
-        "As per your Lease Agreement, you must obtain and provide the landlord with proof of tenant insurance. "
-
-        + "We have teamed up with Highcourt Partners Limited, a licensed broker, to assist you in obtaining your tenant insurance.");
-
         return policy;
 
     }

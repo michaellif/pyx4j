@@ -30,7 +30,6 @@ import com.pyx4j.site.client.ui.prime.form.IForm;
 import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
 import com.propertyvista.crm.client.ui.crud.policies.common.PolicyDTOTabPanelBasedForm;
 import com.propertyvista.domain.policy.dto.TenantInsurancePolicyDTO;
-import com.propertyvista.shared.config.VistaFeatures;
 
 public class TenantInsurancePolicyForm extends PolicyDTOTabPanelBasedForm<TenantInsurancePolicyDTO> {
 
@@ -43,8 +42,7 @@ public class TenantInsurancePolicyForm extends PolicyDTOTabPanelBasedForm<Tenant
     @Override
     protected List<TwoColumnFlexFormPanel> createCustomTabPanels() {
         return Arrays.asList(//@formatter:off
-                createInsuranceRequirementsTab(),
-                createPortalConfigurationTab()                
+                createInsuranceRequirementsTab()
         );//@formatter:on
     }
 
@@ -75,17 +73,6 @@ public class TenantInsurancePolicyForm extends PolicyDTOTabPanelBasedForm<Tenant
                 }
             }
         });
-        return panel;
-    }
-
-    private TwoColumnFlexFormPanel createPortalConfigurationTab() {
-        TwoColumnFlexFormPanel panel = new TwoColumnFlexFormPanel(i18n.tr("Portal Configuration"));
-        int row = -1;
-        String lbw = "200px";
-        panel.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().noInsuranceStatusMessage()), 50, true).labelWidth(lbw).build());
-        if (VistaFeatures.instance().tenantSure()) {
-            panel.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().tenantInsuranceInvitation()), 50, true).labelWidth(lbw).build());
-        }
         return panel;
     }
 

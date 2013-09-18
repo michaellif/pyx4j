@@ -19,37 +19,37 @@ import com.pyx4j.commons.Key;
 import com.pyx4j.entity.rpc.EntitySearchResult;
 import com.pyx4j.entity.shared.criterion.EntityListCriteria;
 
-import com.propertyvista.domain.tenant.insurance.InsuranceGeneric;
+import com.propertyvista.portal.rpc.portal.web.dto.insurance.OtherProviderInsuranceSertificateDTO;
 import com.propertyvista.portal.rpc.portal.web.services.services.UploadInsuranceSertificateWizardService;
 
 public class UploadInsuranceSertificateWizardServiceImpl implements UploadInsuranceSertificateWizardService {
 
     @Override
-    public void init(AsyncCallback<InsuranceGeneric> callback, com.pyx4j.entity.rpc.AbstractCrudService.InitializationData initializationData) {
+    public void init(AsyncCallback<OtherProviderInsuranceSertificateDTO> callback, InitializationData initializationData) {
+        // TODO Auto-generated method stub
+    }
+
+    @Override
+    public void retrieve(AsyncCallback<OtherProviderInsuranceSertificateDTO> callback, Key entityId,
+            com.pyx4j.entity.rpc.AbstractCrudService.RetrieveTarget retrieveTarget) {
+        // TODO Auto-generated method stub
+    }
+
+    @Override
+    public void create(AsyncCallback<Key> callback, OtherProviderInsuranceSertificateDTO editableEntity) {
         // TODO Auto-generated method stub
 
     }
 
     @Override
-    public void retrieve(AsyncCallback<InsuranceGeneric> callback, Key entityId, com.pyx4j.entity.rpc.AbstractCrudService.RetrieveTarget retrieveTarget) {
+    public void save(AsyncCallback<Key> callback, OtherProviderInsuranceSertificateDTO editableEntity) {
         // TODO Auto-generated method stub
 
     }
 
     @Override
-    public void create(AsyncCallback<Key> callback, InsuranceGeneric editableEntity) {
-        // TODO Auto-generated method stub
-
-    }
-
-    @Override
-    public void save(AsyncCallback<Key> callback, InsuranceGeneric editableEntity) {
-        // TODO Auto-generated method stub
-
-    }
-
-    @Override
-    public void list(AsyncCallback<EntitySearchResult<InsuranceGeneric>> callback, EntityListCriteria<InsuranceGeneric> criteria) {
+    public void list(AsyncCallback<EntitySearchResult<OtherProviderInsuranceSertificateDTO>> callback,
+            EntityListCriteria<OtherProviderInsuranceSertificateDTO> criteria) {
         // TODO Auto-generated method stub
 
     }

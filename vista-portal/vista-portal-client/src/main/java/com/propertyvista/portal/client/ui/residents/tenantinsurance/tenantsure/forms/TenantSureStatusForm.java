@@ -30,10 +30,10 @@ import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
 import com.propertyvista.common.client.ui.components.tenantinsurance.MoneyComboBox;
 import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
 import com.propertyvista.portal.client.ui.residents.tenantinsurance.dashboard.statusviewers.TenantInsuranceStatusViewer;
-import com.propertyvista.portal.rpc.portal.web.dto.insurance.status.TenantSureInsuranceStatusDTO;
+import com.propertyvista.portal.rpc.portal.web.dto.insurance.status.TenantSureCertificateSummaryDTO;
 import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.tenantsure.TenantSureMessageDTO;
 
-public class TenantSureStatusForm extends CEntityDecoratableForm<TenantSureInsuranceStatusDTO> {
+public class TenantSureStatusForm extends CEntityDecoratableForm<TenantSureCertificateSummaryDTO> {
 
     private static final I18n i18n = I18n.get(TenantSureStatusForm.class);
 
@@ -58,7 +58,7 @@ public class TenantSureStatusForm extends CEntityDecoratableForm<TenantSureInsur
     }
 
     public TenantSureStatusForm() {
-        super(TenantSureInsuranceStatusDTO.class);
+        super(TenantSureCertificateSummaryDTO.class);
         setViewable(true);
     }
 

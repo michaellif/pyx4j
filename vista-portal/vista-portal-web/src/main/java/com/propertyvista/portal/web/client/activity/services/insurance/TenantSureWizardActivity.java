@@ -22,17 +22,17 @@ import com.pyx4j.site.rpc.AppPlace;
 
 import com.propertyvista.domain.contact.AddressSimple;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap.Resident.Financial;
-import com.propertyvista.portal.rpc.portal.services.resident.TenantSurePurchaseService;
 import com.propertyvista.portal.rpc.portal.web.dto.insurance.TenantSureAgreementDTO;
-import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.tenantsure.TenantSureCoverageDTO;
-import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.tenantsure.TenantSureQuoteDTO;
+import com.propertyvista.portal.rpc.portal.web.dto.insurance.TenantSureCoverageDTO;
+import com.propertyvista.portal.rpc.portal.web.dto.insurance.TenantSureQuoteDTO;
+import com.propertyvista.portal.rpc.portal.web.services.services.TenantSurePurchaseWizardService;
 import com.propertyvista.portal.web.client.activity.AbstractWizardActivity;
 import com.propertyvista.portal.web.client.ui.services.insurance.TenantSureWizardView;
 
 public class TenantSureWizardActivity extends AbstractWizardActivity<TenantSureAgreementDTO> implements TenantSureWizardView.Persenter {
 
     public TenantSureWizardActivity(AppPlace place) {
-        super(TenantSureWizardView.class, GWT.<TenantSurePurchaseService> create(TenantSurePurchaseService.class), TenantSureAgreementDTO.class);
+        super(TenantSureWizardView.class, GWT.<TenantSurePurchaseWizardService> create(TenantSurePurchaseWizardService.class), TenantSureAgreementDTO.class);
     }
 
     @Override
@@ -42,7 +42,7 @@ public class TenantSureWizardActivity extends AbstractWizardActivity<TenantSureA
 
     @Override
     public void sendQuoteDetailsEmail() {
-        ((TenantSurePurchaseService) getService()).sendQuoteDetails(new DefaultAsyncCallback<String>() {
+        ((TenantSurePurchaseWizardService) getService()).sendQuoteDetails(new DefaultAsyncCallback<String>() {
 
             @Override
             public void onSuccess(String email) {
@@ -53,7 +53,7 @@ public class TenantSureWizardActivity extends AbstractWizardActivity<TenantSureA
 
     @Override
     public void getNewQuote() {
-        ((TenantSurePurchaseService) getService()).getQuote(new DefaultAsyncCallback<TenantSureQuoteDTO>() {
+        ((TenantSurePurchaseWizardService) getService()).getQuote(new DefaultAsyncCallback<TenantSureQuoteDTO>() {
             @Override
             public void onSuccess(TenantSureQuoteDTO quote) {
                 ((TenantSureWizardView) getView()).setQuote(quote);
@@ -63,7 +63,7 @@ public class TenantSureWizardActivity extends AbstractWizardActivity<TenantSureA
 
     @Override
     public void populateCurrentAddressAsBillingAddress() {
-        ((TenantSurePurchaseService) getService()).getCurrentTenantAddress(new DefaultAsyncCallback<AddressSimple>() {
+        ((TenantSurePurchaseWizardService) getService()).getCurrentTenantAddress(new DefaultAsyncCallback<AddressSimple>() {
             @Override
             public void onSuccess(AddressSimple billingAddress) {
                 ((TenantSureWizardView) getView()).setBillingAddress(billingAddress);

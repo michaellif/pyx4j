@@ -11,7 +11,7 @@
  * @author ArtyomB
  * @version $Id$
  */
-package com.propertyvista.portal.rpc.shared.dto.tenantinsurance.tenantsure;
+package com.propertyvista.portal.rpc.portal.web.dto.insurance;
 
 import java.math.BigDecimal;
 

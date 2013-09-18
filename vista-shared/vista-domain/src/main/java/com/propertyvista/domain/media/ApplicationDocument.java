@@ -28,6 +28,7 @@ import com.pyx4j.entity.shared.IPrimitive;
 
 @Inheritance
 @AbstractEntity
+//TODO Rename to ApplicationDocumentFolder
 public interface ApplicationDocument extends IEntity {
 
     @Owner
@@ -38,6 +39,7 @@ public interface ApplicationDocument extends IEntity {
 
     @Owned
     @Caption(name = "Files")
+    //TODO Rename documentPages to files
     IList<ApplicationDocumentFile> documentPages();
 
     @OrderColumn

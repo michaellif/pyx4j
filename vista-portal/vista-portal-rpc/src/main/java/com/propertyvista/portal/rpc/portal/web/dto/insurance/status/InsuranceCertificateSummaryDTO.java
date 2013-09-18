@@ -7,51 +7,48 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on 2012-11-08
- * @author ArtyomB
+ * Created on Sep 18, 2013
+ * @author michaellif
  * @version $Id$
  */
 package com.propertyvista.portal.rpc.portal.web.dto.insurance.status;
 
 import java.math.BigDecimal;
 
+import com.pyx4j.commons.LogicalDate;
+import com.pyx4j.entity.annotations.AbstractEntity;
 import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.Editor;
 import com.pyx4j.entity.annotations.Editor.EditorType;
 import com.pyx4j.entity.annotations.Format;
+import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.annotations.validator.NotNull;
-import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
 
-import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.tenantsure.TenantSureMessageDTO;
-import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.tenantsure.TenantSurePaymentDTO;
-
+@AbstractEntity
 @Transient
-public interface TenantSureInsuranceStatusDTO extends ExtantInsuranceStatusDTO {
+public interface InsuranceCertificateSummaryDTO extends InsuranceStatusDTO {
 
+    IPrimitive<String> insuranceProvider();
+
+    @NotNull
+    @ToString(index = 1)
     @Caption(name = "Certificate Number")
     IPrimitive<String> insuranceCertificateNumber();
 
-    @Format("#,##0")
+    @Format("#,##0.00")
     @Editor(type = EditorType.money)
-    @NotNull
-    IPrimitive<BigDecimal> contentsCoverage();
+    @Caption(name = "Personal Liability")
+    IPrimitive<BigDecimal> liabilityCoverage();
 
-    @Caption(name = "Deductible (per claim)")
-    @NotNull
-    IPrimitive<BigDecimal> deductible();
+    IPrimitive<LogicalDate> inceptionDate();
 
-    TenantSurePaymentDTO annualPaymentDetails();
+    IPrimitive<LogicalDate> expiryDate();
 
     /**
-     * The date of next payment can be <code>null</code> if the there's some problem with credit card, i.e. credit limit, cancelled or whatever, anything that
-     * caused last payment to fail.
+     * <code>true</code> when the tenant in the context is the owner of the insurance policy, <code>false</code> when tenant is covered by insurance certificate
+     * provided by roommate
      */
-    TenantSurePaymentDTO nextPaymentDetails();
-
-    IPrimitive<Boolean> isPaymentFailed();
-
-    IList<TenantSureMessageDTO> messages();
-
+    IPrimitive<Boolean> isOwner();
 }
