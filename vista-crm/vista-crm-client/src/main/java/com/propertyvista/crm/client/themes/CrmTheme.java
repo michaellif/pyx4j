@@ -700,19 +700,26 @@ public class CrmTheme extends VistaTheme {
 
     private void initAutoPayUpdaterStyles() {
 
-        Style style = new Style("." + AutoPayReviewViewImpl.Styles.AutoPayReviewsSettingsFormPanel.name());
+        Style style = new Style("." + AutoPayReviewViewImpl.Styles.AutoPayReviewsFiltersFormPanel.name());
         style.addProperty("background-color", ThemeColor.object1, 0.3);
-        style.addProperty("height", "120px");
+        style.addProperty("height", "100px");
         style.addProperty("overflow", "auto");
         addStyle(style);
 
-        style = new Style("." + AutoPayReviewViewImpl.Styles.AutoPayReviewsSettingsFormPanel.name() + " .EntityFolderTableDecorator");
+        style = new Style("." + AutoPayReviewViewImpl.Styles.AutoPayReviewsFiltersFormPanel.name() + " .EntityFolderTableDecorator");
         style.addProperty("width", "5em");
+        addStyle(style);
+
+        style = new Style("." + AutoPayReviewViewImpl.Styles.AutoPayReviewsFiltersButtonsPanel.name());
+        style.addProperty("height", "30px");
+        style.addProperty("padding-top", "5px");
+        style.addProperty("text-align", "center");
+        style.addProperty("width", "100%");
         addStyle(style);
 
         style = new Style("." + AutoPayReviewViewImpl.Styles.AutoPayReviewsHolderForm.name());
         style.addProperty("position", "absolute");
-        style.addProperty("top", "120px");
+        style.addProperty("top", "131px");
         style.addProperty("left", "0px");
         style.addProperty("right", "0px");
         style.addProperty("bottom", "0px");

@@ -17,7 +17,6 @@ import java.util.LinkedList;
 import java.util.List;
 
 import com.google.gwt.dom.client.Style.Position;
-import com.google.gwt.dom.client.Style.TextAlign;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.view.client.Range;
@@ -39,7 +38,7 @@ public class AutoPayReviewViewImpl extends AbstractPrimePane implements AutoPayR
 
     public enum Styles implements IStyleName {
 
-        AutoPayReviewsSettingsFormPanel, AutoPayReviewsHolderForm
+        AutoPayReviewsFiltersFormPanel, AutoPayReviewsFiltersButtonsPanel, AutoPayReviewsHolderForm
 
     }
 
@@ -61,25 +60,23 @@ public class AutoPayReviewViewImpl extends AbstractPrimePane implements AutoPayR
         viewPanel.setSize("100%", "100%");
 
         FlowPanel filtersPanel = new FlowPanel();
-        filtersPanel.setStyleName(Styles.AutoPayReviewsSettingsFormPanel.name());
+        filtersPanel.setStyleName(Styles.AutoPayReviewsFiltersFormPanel.name());
 
         settingsForm = new AutoPayChangesReportSettingsForm();
         settingsForm.initContent();
         settingsForm.populateNew();
         filtersPanel.add(settingsForm);
+        viewPanel.add(filtersPanel);
 
         FlowPanel filterButtonsPanel = new FlowPanel();
-        filterButtonsPanel.setWidth("100%");
-        filterButtonsPanel.getElement().getStyle().setTextAlign(TextAlign.CENTER);
+        filterButtonsPanel.setStyleName(Styles.AutoPayReviewsFiltersButtonsPanel.name());
         filterButtonsPanel.add(new Button(i18n.tr("Search"), new Command() {
             @Override
             public void execute() {
                 AutoPayReviewViewImpl.this.search();
             }
         }));
-        filtersPanel.add(filterButtonsPanel);
-
-        viewPanel.add(filtersPanel);
+        viewPanel.add(filterButtonsPanel);
 
         papReviewHolderForm = new PapReviewsHolderForm() {
             @Override
