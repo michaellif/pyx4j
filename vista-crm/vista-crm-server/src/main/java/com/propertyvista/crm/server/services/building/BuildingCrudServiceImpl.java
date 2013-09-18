@@ -55,6 +55,7 @@ public class BuildingCrudServiceImpl extends AbstractCrudServiceDtoImpl<Building
     public void init(AsyncCallback<BuildingDTO> callback, InitializationData initializationData) {
         BuildingDTO entity = EntityFactory.create(BuildingDTO.class);
 
+        entity.suspended().setValue(false);
         entity.marketing().visibility().setValue(PublicVisibilityType.global);
 
         callback.onSuccess(entity);
