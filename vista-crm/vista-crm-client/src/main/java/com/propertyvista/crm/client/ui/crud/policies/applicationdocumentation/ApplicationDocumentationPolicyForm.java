@@ -17,6 +17,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import com.pyx4j.forms.client.ui.CComponent;
+import com.pyx4j.forms.client.ui.RevalidationTrigger;
 import com.pyx4j.forms.client.ui.folder.EntityFolderColumnDescriptor;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
@@ -72,9 +73,11 @@ public class ApplicationDocumentationPolicyForm extends PolicyDTOTabPanelBasedFo
                 }
             }
         });
+
+        get(proto().allowedIDs()).addValueChangeHandler(new RevalidationTrigger<List<IdentificationDocumentType>>(get(proto().numberOfRequiredIDs())));
     }
 
-    private static class IdentificationDocumentFolder extends VistaTableFolder<IdentificationDocumentType> {
+    private class IdentificationDocumentFolder extends VistaTableFolder<IdentificationDocumentType> {
 
         public IdentificationDocumentFolder() {
             super(IdentificationDocumentType.class);
@@ -83,9 +86,9 @@ public class ApplicationDocumentationPolicyForm extends PolicyDTOTabPanelBasedFo
         @Override
         public List<EntityFolderColumnDescriptor> columns() {
             return Arrays.asList(//@formatter:off
-                    new EntityFolderColumnDescriptor(proto().type(), "15em", true),                    
-                        new EntityFolderColumnDescriptor(proto().name(), "30em")
-                    );//@formatter:on
+                                new EntityFolderColumnDescriptor(proto().type(), "15em", true),                    
+                                new EntityFolderColumnDescriptor(proto().name(), "30em")
+                                );//@formatter:on
         }
 
         @Override
@@ -98,29 +101,5 @@ public class ApplicationDocumentationPolicyForm extends PolicyDTOTabPanelBasedFo
                 }
             }.show();
         }
-//
-//        @Override
-//        public CComponent<?> create(IObject<?> member) {
-//            if (member instanceof IdentificationDocument) {
-//                return new IdentificationDocumentEditor();
-//            } else {
-//                return super.create(member);
-//            }
-//        }
-//
-//        private static class IdentificationDocumentEditor extends CEntityEditor<IdentificationDocument> {
-//
-//            public IdentificationDocumentEditor() {
-//                super(IdentificationDocument.class);
-//            }
-//
-//            @Override
-//            public IsWidget createContent() {
-//                Widget w = inject(proto().name()).asWidget();
-//                w.setWidth("30em");
-//                return w;
-//            }
-//        }
     }
-
 }
