@@ -48,7 +48,7 @@ public class TenantInsuranceActivity extends AbstractActivity {
                     AppSite.getPlaceController().goTo(new PortalSiteMap.Resident.ResidentServices.TenantInsurance.ProvideTenantInsurance());
                 } else {
                     if ((status.sertificates().get(0)).isOwner().isBooleanTrue()) {
-                        if (status.isInstanceOf(TenantSureCertificateSummaryDTO.class)) {
+                        if (status.sertificates().get(0).isInstanceOf(TenantSureCertificateSummaryDTO.class)) {
                             AppSite.getPlaceController().goTo(new PortalSiteMap.Resident.ResidentServices.TenantInsurance.TenantSure.Management());
                         } else if (status.sertificates().get(0).isInstanceOf(GeneralInsuranceCertificateSummaryDTO.class)) {
                             AppSite.getPlaceController().goTo(new PortalSiteMap.Resident.ResidentServices.TenantInsurance.ProvideTenantInsurance());
