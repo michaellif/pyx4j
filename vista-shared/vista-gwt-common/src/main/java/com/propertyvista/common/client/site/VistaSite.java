@@ -13,6 +13,9 @@
  */
 package com.propertyvista.common.client.site;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.RootPanel;
@@ -22,6 +25,8 @@ import com.pyx4j.config.client.ClientDeploymentConfig;
 import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.essentials.client.ApplicationCommon;
 import com.pyx4j.forms.client.ImageFactory;
+import com.pyx4j.gwt.commons.BrowserType;
+import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.log4gwt.client.ClientLogger;
 import com.pyx4j.log4gwt.rpcappender.RPCAppender;
 import com.pyx4j.log4gwt.shared.Level;
@@ -38,6 +43,10 @@ import com.propertyvista.common.client.resources.VistaImages;
 import com.propertyvista.portal.rpc.DeploymentConsts;
 
 public abstract class VistaSite extends AppSite {
+
+    private static final Logger log = LoggerFactory.getLogger(VistaSite.class);
+
+    private static final I18n i18n = I18n.get(VistaSite.class);
 
     private final ViewFactory viewFactory;
 
@@ -98,21 +107,32 @@ public abstract class VistaSite extends AppSite {
 
     public abstract void showMessageDialog(String message, String title);
 
-    public native static boolean isIEVersion9Native()
-    /*-{ return $wnd.ieVersion9 === true; }-*/;
+    protected abstract boolean isBrowserCompatible();
 
-    public native static boolean isIEVersion8Native()
-    /*-{ return $wnd.ieVersion8 === true; }-*/;
-
-    public static boolean isIEDocumentModeComatible(int expectedMode) {
-        try {
-            int mode = getIEDocumentModeNative();
-            return mode >= expectedMode;
-        } catch (Throwable e) {
-            return false;
-        }
+    protected boolean isBrowserIEDocumentModeCompatible() {
+        return VistaBrowserRequirments.isBrowserIEDocumentModeCompatible();
     }
 
-    public native static int getIEDocumentModeNative()
-    /*-{  return $doc.documentMode; }-*/;
+    protected boolean verifyBrowserCompatibility() {
+        if (!isBrowserCompatible()) {
+            hideLoadingIndicator();
+            log.warn("Unsupported Browser UserAgent [{}]", BrowserType.getUserAgent());
+            Window.alert(i18n.tr("Unsupported Browser")
+                    + "\n"
+                    + i18n.tr("Your current Browser Version will restrict the functionality of this application.\n"
+                            + "Please use an updated version of Internet Explorer.\n"
+                            + "This application will also work with current versions of Mozilla Firefox, Google Chrome or Apple Safari"));
+            return false;
+        } else if (BrowserType.isIE() && BrowserType.isIENative() && !isBrowserIEDocumentModeCompatible()) {
+            hideLoadingIndicator();
+            Window.alert(i18n.tr("Unsupported Browser Compatibility Mode")
+                    + "\n"
+                    + i18n.tr("Your current Browser Compatibility Mode settings will restrict the functionality of this application.\n"
+                            + "Please change setting 'Document Mode' to IE9 standards.\n"
+                            + "This application will also work with current versions of Mozilla Firefox, Google Chrome or Apple Safari"));
+            return false;
+        }
+        return true;
+    }
+
 }

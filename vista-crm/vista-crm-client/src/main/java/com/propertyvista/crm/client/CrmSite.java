@@ -26,14 +26,13 @@ import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.commons.Key;
 import com.pyx4j.commons.css.StyleManager;
 import com.pyx4j.essentials.client.SessionInactiveDialog;
-import com.pyx4j.gwt.commons.BrowserType;
 import com.pyx4j.gwt.commons.GoogleAnalytics;
 import com.pyx4j.gwt.commons.UncaughtHandler;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
-import com.pyx4j.security.client.ClientContext;
 import com.pyx4j.security.client.BehaviorChangeEvent;
 import com.pyx4j.security.client.BehaviorChangeHandler;
+import com.pyx4j.security.client.ClientContext;
 import com.pyx4j.security.client.SessionInactiveEvent;
 import com.pyx4j.security.client.SessionInactiveHandler;
 import com.pyx4j.security.client.SessionMonitor;
@@ -49,7 +48,7 @@ import com.propertyvista.common.client.events.NotificationEvent;
 import com.propertyvista.common.client.events.NotificationHandler;
 import com.propertyvista.common.client.handlers.VistaUnrecoverableErrorHandler;
 import com.propertyvista.common.client.policy.ClientPolicyManager;
-import com.propertyvista.common.client.site.CrmSiteBrowserRequirments;
+import com.propertyvista.common.client.site.VistaBrowserRequirments;
 import com.propertyvista.common.client.site.Notification;
 import com.propertyvista.common.client.site.Notification.NotificationType;
 import com.propertyvista.common.client.site.VistaSite;
@@ -112,6 +111,11 @@ public class CrmSite extends VistaSite {
         if (verifyBrowserCompatibility()) {
             initialize();
         }
+    }
+
+    @Override
+    protected boolean isBrowserCompatible() {
+        return VistaBrowserRequirments.isBrowserCompatibleCrm();
     }
 
     @Override
@@ -185,28 +189,6 @@ public class CrmSite extends VistaSite {
 
     static public AppPlace getSystemDashboardPlace() {
         return new CrmSiteMap.Dashboard.View().formPlace(new Key(-1));
-    }
-
-    private boolean verifyBrowserCompatibility() {
-        if (!CrmSiteBrowserRequirments.isBrowserCompatible()) {
-            hideLoadingIndicator();
-            log.warn("Unsupported Browser UserAgent [{}]", BrowserType.getUserAgent());
-            Window.alert(i18n.tr("Unsupported Browser")
-                    + "\n"
-                    + i18n.tr("Your current Browser Version will restrict the functionality of this application.\n"
-                            + "Please use an updated version of Internet Explorer.\n"
-                            + "This application will also work with current versions of Mozilla Firefox, Google Chrome or Apple Safari"));
-            return false;
-        } else if (BrowserType.isIE() && BrowserType.isIENative() && !isIEDocumentModeComatible(9)) {
-            hideLoadingIndicator();
-            Window.alert(i18n.tr("Unsupported Browser Compatibility Mode")
-                    + "\n"
-                    + i18n.tr("Your current Browser Compatibility Mode settings will restrict the functionality of this application.\n"
-                            + "Please change setting 'Document Mode' to IE9 standards.\n"
-                            + "This application will also work with current versions of Mozilla Firefox, Google Chrome or Apple Safari"));
-            return false;
-        }
-        return true;
     }
 
     /**

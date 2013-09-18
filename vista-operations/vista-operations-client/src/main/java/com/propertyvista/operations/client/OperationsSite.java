@@ -23,6 +23,7 @@ import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.security.client.ClientContext;
 import com.pyx4j.site.client.SingletonViewFactory;
 
+import com.propertyvista.common.client.site.VistaBrowserRequirments;
 import com.propertyvista.common.client.site.Notification;
 import com.propertyvista.common.client.site.Notification.NotificationType;
 import com.propertyvista.common.client.site.VistaSite;
@@ -47,11 +48,18 @@ public class OperationsSite extends VistaSite {
         getHistoryHandler().register(getPlaceController(), getEventBus(), new OperationsSiteMap.Management());
         StyleManager.installTheme(new OperationsTheme(), new OperationsPalette());
 
-        setRootPane(new OperationsRootPane());
+        if (verifyBrowserCompatibility()) {
+            setRootPane(new OperationsRootPane());
 
-        hideLoadingIndicator();
-        SessionInactiveDialog.register();
-        obtainAuthenticationData();
+            hideLoadingIndicator();
+            SessionInactiveDialog.register();
+            obtainAuthenticationData();
+        }
+    }
+
+    @Override
+    protected boolean isBrowserCompatible() {
+        return VistaBrowserRequirments.isBrowserCompatibleOperations();
     }
 
     @Override
@@ -86,4 +94,5 @@ public class OperationsSite extends VistaSite {
             Window.setTitle(envName + " - Vista Operations");
         }
     }
+
 }

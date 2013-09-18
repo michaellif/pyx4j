@@ -38,6 +38,7 @@ import com.pyx4j.widgets.client.dialog.MessageDialog;
 import com.propertyvista.common.client.events.NotificationEvent;
 import com.propertyvista.common.client.events.NotificationHandler;
 import com.propertyvista.common.client.handlers.VistaUnrecoverableErrorHandler;
+import com.propertyvista.common.client.site.VistaBrowserRequirments;
 import com.propertyvista.common.client.site.VistaSite;
 import com.propertyvista.ob.client.mvp.OnboardingActivityMapper;
 import com.propertyvista.ob.client.themes.OnboardingPalette;
@@ -74,14 +75,20 @@ public class OnboardingSite extends VistaSite {
         getHistoryHandler().register(getPlaceController(), getEventBus(), AppPlace.NOWHERE);
         StyleManager.installTheme(new OnboardingTheme(), new OnboardingPalette());
 
-        createAndBindUI();
-
-        obtainAuthenticationData();
+        if (verifyBrowserCompatibility()) {
+            createAndBindUI();
+            obtainAuthenticationData();
+        }
     }
 
     @Override
     public void showMessageDialog(String message, String title) {
         MessageDialog.info(title, message);
+    }
+
+    @Override
+    protected boolean isBrowserCompatible() {
+        return VistaBrowserRequirments.isBrowserCompatibleCrm();
     }
 
     private void obtainAuthenticationData() {

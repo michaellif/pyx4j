@@ -30,7 +30,7 @@ import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.rpc.AppPlace;
 import com.pyx4j.site.rpc.AppPlaceInfo;
 
-import com.propertyvista.common.client.site.CrmSiteBrowserRequirments;
+import com.propertyvista.common.client.site.VistaBrowserRequirments;
 import com.propertyvista.domain.customizations.CountryOfOperation;
 import com.propertyvista.ob.client.views.OnboardingViewFactory;
 import com.propertyvista.ob.client.views.PmcAccountCreationRequestView;
@@ -69,8 +69,8 @@ public class PmcAccountCreationRequestActivity extends AbstractActivity implemen
     @Override
     public void start(AcceptsOneWidget panel, EventBus eventBus) {
         view.setPresenter(this);
-        view.setEnabled(CrmSiteBrowserRequirments.isBrowserCompatible());
-        view.setMessage(CrmSiteBrowserRequirments.isBrowserCompatible() ? "" : "<div>" + i18n.tr("Your Browser is Not Supported!") + "</div>" + "<div>"
+        view.setEnabled(VistaBrowserRequirments.isBrowserCompatibleCrm());
+        view.setMessage(VistaBrowserRequirments.isBrowserCompatibleCrm() ? "" : "<div>" + i18n.tr("Your Browser is Not Supported!") + "</div>" + "<div>"
                 + i18n.tr("Please use the most recent version of Internet&nbsp;Explorer, Google&nbsp;Chrome, Firefox or Apple&nbsp;Safari.") + "</div>");
 
         PmcAccountCreationRequest req = EntityFactory.create(PmcAccountCreationRequest.class);

@@ -37,6 +37,7 @@ import com.propertyvista.common.client.events.NotificationEvent;
 import com.propertyvista.common.client.events.NotificationHandler;
 import com.propertyvista.common.client.handlers.VistaUnrecoverableErrorHandler;
 import com.propertyvista.common.client.policy.ClientPolicyManager;
+import com.propertyvista.common.client.site.VistaBrowserRequirments;
 import com.propertyvista.common.client.site.Notification;
 import com.propertyvista.common.client.site.Notification.NotificationType;
 import com.propertyvista.common.client.site.VistaSite;
@@ -84,7 +85,14 @@ public class PortalSite extends VistaSite {
 
         SessionInactiveDialog.register();
 
-        initialize();
+        if (verifyBrowserCompatibility()) {
+            initialize();
+        }
+    }
+
+    @Override
+    protected boolean isBrowserCompatible() {
+        return VistaBrowserRequirments.isBrowserCompatiblePortal();
     }
 
     public final native String getAuthenticationToken() /*-{

@@ -21,9 +21,9 @@ import com.pyx4j.commons.css.StyleManager;
 import com.pyx4j.essentials.client.SessionInactiveDialog;
 import com.pyx4j.gwt.commons.UncaughtHandler;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
-import com.pyx4j.security.client.ClientContext;
 import com.pyx4j.security.client.BehaviorChangeEvent;
 import com.pyx4j.security.client.BehaviorChangeHandler;
+import com.pyx4j.security.client.ClientContext;
 import com.pyx4j.security.client.SessionInactiveEvent;
 import com.pyx4j.security.client.SessionInactiveHandler;
 import com.pyx4j.security.client.SessionMonitor;
@@ -36,6 +36,7 @@ import com.propertyvista.common.client.ClientNavigUtils;
 import com.propertyvista.common.client.config.VistaFeaturesCustomizationClient;
 import com.propertyvista.common.client.handlers.VistaUnrecoverableErrorHandler;
 import com.propertyvista.common.client.policy.ClientPolicyManager;
+import com.propertyvista.common.client.site.VistaBrowserRequirments;
 import com.propertyvista.common.client.site.Notification;
 import com.propertyvista.common.client.site.Notification.NotificationType;
 import com.propertyvista.common.client.site.VistaSite;
@@ -91,29 +92,37 @@ public class PtAppSite extends VistaSite {
         });
 
         ClientPolicyManager.initialize(GWT.<PolicyRetrieveService> create(PtPolicyRetrieveService.class));
-        wizardManager = new PtAppWizardManager();
 
-        SiteThemeServices siteThemeServices = GWT.create(SiteThemeServices.class);
-        siteThemeServices.retrieveSiteDescriptor(new DefaultAsyncCallback<SiteDefinitionsDTO>() {
-            @Override
-            public void onSuccess(SiteDefinitionsDTO descriptor) {
-                hideLoadingIndicator();
-                com.propertyvista.portal.ptapp.client.ui.LogoViewImpl.temporaryWayToSetTitle(descriptor.siteTitles().prospectPortalTitle().getStringView());
-                Window.setTitle(pmcName = descriptor.siteTitles().prospectPortalTitle().getStringView());
-                StyleManager.installTheme(new PtAppTheme(), new VistaPalette(descriptor.palette()));
-                VistaFeaturesCustomizationClient.setVistaFeatures(descriptor.features());
-                obtainAuthenticationData();
-            }
+        if (verifyBrowserCompatibility()) {
+            wizardManager = new PtAppWizardManager();
 
-            @Override
-            public void onFailure(Throwable caught) {
-                hideLoadingIndicator();
-                StyleManager.installTheme(new PtAppTheme(), VistaPalette.getServerUnavailablePalette());
-                super.onFailure(caught);
-            }
+            SiteThemeServices siteThemeServices = GWT.create(SiteThemeServices.class);
+            siteThemeServices.retrieveSiteDescriptor(new DefaultAsyncCallback<SiteDefinitionsDTO>() {
+                @Override
+                public void onSuccess(SiteDefinitionsDTO descriptor) {
+                    hideLoadingIndicator();
+                    com.propertyvista.portal.ptapp.client.ui.LogoViewImpl.temporaryWayToSetTitle(descriptor.siteTitles().prospectPortalTitle().getStringView());
+                    Window.setTitle(pmcName = descriptor.siteTitles().prospectPortalTitle().getStringView());
+                    StyleManager.installTheme(new PtAppTheme(), new VistaPalette(descriptor.palette()));
+                    VistaFeaturesCustomizationClient.setVistaFeatures(descriptor.features());
+                    obtainAuthenticationData();
+                }
 
-        }, ClientNavigUtils.getCurrentLocale());
+                @Override
+                public void onFailure(Throwable caught) {
+                    hideLoadingIndicator();
+                    StyleManager.installTheme(new PtAppTheme(), VistaPalette.getServerUnavailablePalette());
+                    super.onFailure(caught);
+                }
 
+            }, ClientNavigUtils.getCurrentLocale());
+        }
+
+    }
+
+    @Override
+    protected boolean isBrowserCompatible() {
+        return VistaBrowserRequirments.isBrowserCompatiblePortal();
     }
 
     private void obtainAuthenticationData() {
