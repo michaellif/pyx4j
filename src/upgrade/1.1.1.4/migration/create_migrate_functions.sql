@@ -124,6 +124,7 @@ BEGIN
        -- not null
        
        ALTER TABLE building ALTER COLUMN integration_system_id SET NOT NULL;
+       ALTER TABLE building ALTER COLUMN suspended SET NOT NULL;
        ALTER TABLE lease ALTER COLUMN integration_system_id SET NOT NULL;
        ALTER TABLE lease ALTER COLUMN lease_id SET NOT NULL;
        
