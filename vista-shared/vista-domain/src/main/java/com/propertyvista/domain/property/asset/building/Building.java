@@ -96,6 +96,7 @@ public interface Building extends PolicyNode {
 
     // Indicator for sold properties
     @NotNull
+    @MemberColumn(notNull = true)
     IPrimitive<Boolean> suspended();
 
     @Editor(type = EditorType.suggest)
