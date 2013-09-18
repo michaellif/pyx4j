@@ -350,7 +350,7 @@ public class CrmSiteMap implements SiteMap {
 
     }
 
-    public static class AutoPayReviewUpdater extends AppPlace {
+    public static class AutoPayReview extends AppPlace {
 
     }
 

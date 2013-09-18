@@ -1253,7 +1253,7 @@ public class ContentActivityMapper implements AppActivityMapper {
                     // Dashboard related stuff again
                 } else if (place instanceof CrmSiteMap.Dashboard.View) {
                     activity = new DashboardActivity((CrmSiteMap.Dashboard.View) place);
-                } else if (VistaTODO.VISTA_3129_AutoPayBulkEditorExperiment && (place instanceof CrmSiteMap.AutoPayReviewUpdater)) {
+                } else if (VistaTODO.VISTA_3129_AutoPayBulkEditorExperiment && (place instanceof CrmSiteMap.AutoPayReview)) {
                     activity = new AutoPayReviewActivity((AppPlace) place);
                 } else if (place instanceof Administration.Settings.CreditCheck) {
                     activity = new CreditCheckActivity();
