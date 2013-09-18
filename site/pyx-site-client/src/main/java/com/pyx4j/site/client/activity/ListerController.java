@@ -25,6 +25,7 @@ import java.util.List;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.commons.Key;
+import com.pyx4j.entity.rpc.AbstractCrudService.InitializationData;
 import com.pyx4j.entity.rpc.AbstractListService;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IntegrityConstraintUserRuntimeException;
@@ -170,9 +171,9 @@ public class ListerController<E extends IEntity> implements ILister.Presenter<E>
     }
 
     @Override
-    public void editNew(Class<? extends CrudAppPlace> openPlaceClass, E newItem) {
+    public void editNew(Class<? extends CrudAppPlace> openPlaceClass, InitializationData initializationData) {
         if (canCreateNewItem()) {
-            AppSite.getPlaceController().goTo(AppSite.getHistoryMapper().createPlace(openPlaceClass).formNewItemPlace(newItem));
+            AppSite.getPlaceController().goTo(AppSite.getHistoryMapper().createPlace(openPlaceClass).formNewItemPlace(initializationData));
         }
     }
 

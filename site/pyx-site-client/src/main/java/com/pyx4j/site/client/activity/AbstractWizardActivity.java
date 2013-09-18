@@ -27,7 +27,8 @@ import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
 import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.commons.Key;
-import com.pyx4j.entity.rpc.AbstractWizardService;
+import com.pyx4j.entity.rpc.AbstractCrudService;
+import com.pyx4j.entity.rpc.AbstractCrudService.InitializationData;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.forms.client.ui.ReferenceDataManager;
 import com.pyx4j.gwt.commons.UnrecoverableClientError;
@@ -35,7 +36,7 @@ import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.client.ui.prime.wizard.IWizard;
-import com.pyx4j.site.rpc.AppPlace;
+import com.pyx4j.site.rpc.CrudAppPlace;
 
 public abstract class AbstractWizardActivity<E extends IEntity> extends AbstractActivity implements IWizard.Presenter {
 
@@ -43,13 +44,13 @@ public abstract class AbstractWizardActivity<E extends IEntity> extends Abstract
 
     private final IWizard<E> view;
 
-    private final AbstractWizardService<E> service;
+    private final AbstractCrudService<E> service;
 
-    private final AppPlace place;
+    private final CrudAppPlace place;
 
     private final Class<E> entityClass;
 
-    public AbstractWizardActivity(AppPlace place, IWizard<E> view, AbstractWizardService<E> service, Class<E> entityClass) {
+    public AbstractWizardActivity(CrudAppPlace place, IWizard<E> view, AbstractCrudService<E> service, Class<E> entityClass) {
         // development correctness checks:
         assert (view != null);
         assert (service != null);
@@ -67,11 +68,11 @@ public abstract class AbstractWizardActivity<E extends IEntity> extends Abstract
         return view;
     }
 
-    public AbstractWizardService<E> getService() {
+    public AbstractCrudService<E> getService() {
         return service;
     }
 
-    public AppPlace getPlace() {
+    public CrudAppPlace getPlace() {
         return place;
     }
 
@@ -105,12 +106,29 @@ public abstract class AbstractWizardActivity<E extends IEntity> extends Abstract
 
     @Override
     public void populate() {
-        service.create(new DefaultAsyncCallback<E>() {
+        obtainInitializationData(new DefaultAsyncCallback<AbstractCrudService.InitializationData>() {
             @Override
-            public void onSuccess(E result) {
-                onPopulateSuccess(result);
+            public void onSuccess(InitializationData result) {
+                service.init(new DefaultAsyncCallback<E>() {
+                    @Override
+                    public void onSuccess(E result) {
+                        onPopulateSuccess(result);
+                    }
+                }, result);
             }
         });
+    }
+
+    /**
+     * Descendants may override this method to supply some initialization info.
+     * 
+     */
+    protected void obtainInitializationData(AsyncCallback<InitializationData> callback) {
+        if (place.getInitializationData() != null) {
+            callback.onSuccess(place.getInitializationData());
+        } else {
+            callback.onSuccess(null);
+        }
     }
 
     public void onPopulateSuccess(E result) {
@@ -133,7 +151,7 @@ public abstract class AbstractWizardActivity<E extends IEntity> extends Abstract
     }
 
     public void trySave() {
-        service.finish(new AsyncCallback<Key>() {
+        service.save(new AsyncCallback<Key>() {
             @Override
             public void onSuccess(Key result) {
                 ReferenceDataManager.invalidate(entityClass);

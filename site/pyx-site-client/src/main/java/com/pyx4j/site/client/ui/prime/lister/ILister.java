@@ -23,6 +23,7 @@ package com.pyx4j.site.client.ui.prime.lister;
 import java.util.List;
 
 import com.pyx4j.commons.Key;
+import com.pyx4j.entity.rpc.AbstractCrudService.InitializationData;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.criterion.Criterion;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria.Sort;
@@ -59,7 +60,7 @@ public interface ILister<E extends IEntity> extends IPrimePane {
 
         void editNew(Class<? extends CrudAppPlace> openPlaceClass);
 
-        void editNew(Class<? extends CrudAppPlace> openPlaceClass, E newItem);
+        void editNew(Class<? extends CrudAppPlace> openPlaceClass, InitializationData initializationData);
 
         /**
          * Should be called after populate, return value is security feature

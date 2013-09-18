@@ -59,6 +59,7 @@ public class EntityFactory {
      * isValueDetached() will return true for such entity.
      */
     public static <T extends IEntity> T createIdentityStub(Class<T> entityClass, Key primaryKey) {
+        assert (primaryKey != null);
         T entity = create(entityClass);
         entity.setPrimaryKey(primaryKey);
         entity.setValueDetached();

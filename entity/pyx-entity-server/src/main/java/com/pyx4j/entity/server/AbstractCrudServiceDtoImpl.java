@@ -71,6 +71,11 @@ public abstract class AbstractCrudServiceDtoImpl<E extends IEntity, DTO extends 
         return entity;
     }
 
+    @Override
+    public void init(AsyncCallback<DTO> callback, InitializationData initializationData) {
+        callback.onSuccess(EntityFactory.create(dtoClass));
+    }
+
     protected void create(E entity, DTO dto) {
         persist(entity, dto);
     }

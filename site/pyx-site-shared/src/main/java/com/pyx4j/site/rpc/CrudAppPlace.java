@@ -21,7 +21,7 @@
 package com.pyx4j.site.rpc;
 
 import com.pyx4j.commons.Key;
-import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.rpc.AbstractCrudService.InitializationData;
 import com.pyx4j.i18n.annotations.I18n;
 import com.pyx4j.i18n.annotations.I18n.I18nStrategy;
 
@@ -38,7 +38,7 @@ public abstract class CrudAppPlace extends AppPlace {
 
     public static final String ARG_NAME_TAB_IDX = "tabIdx";
 
-    private IEntity newItem;
+    private InitializationData initializationData;
 
     public static enum Type {
         lister, viewer, editor
@@ -118,23 +118,23 @@ public abstract class CrudAppPlace extends AppPlace {
         return formNewItemPlace(parentID);
     }
 
-    public CrudAppPlace formNewItemPlace(IEntity newItem) {
-        this.newItem = newItem;
+    public CrudAppPlace formNewItemPlace(InitializationData initializationData) {
+        this.initializationData = initializationData;
         setType(Type.editor);
         setStable(false);
         placeArg(ARG_NAME_TAB_IDX, String.valueOf(0));
         return (CrudAppPlace) placeArg(ARG_NAME_ID, ARG_VALUE_NEW);
     }
 
-    public IEntity getNewItem() {
-        return newItem;
+    public InitializationData getInitializationData() {
+        return initializationData;
     }
 
     @Override
     public CrudAppPlace copy(AppPlace place) {
         super.copy(place);
         if (place instanceof CrudAppPlace) {
-            newItem = ((CrudAppPlace) place).newItem;
+            initializationData = ((CrudAppPlace) place).initializationData;
         }
         return this;
     }

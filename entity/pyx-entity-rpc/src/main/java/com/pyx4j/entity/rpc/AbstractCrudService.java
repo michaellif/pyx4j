@@ -36,6 +36,18 @@ public interface AbstractCrudService<E extends IEntity> extends AbstractListServ
 
     }
 
+    /**
+     * Inherit your InitializationData from this marker
+     */
+    public interface InitializationData extends IEntity {
+
+    }
+
+    /**
+     * Creates in-memory entity object, returns to client without persisting.
+     */
+    public void init(AsyncCallback<E> callback, InitializationData initializationData);
+
     public void retrieve(AsyncCallback<E> callback, Key entityId, RetrieveTarget retrieveTarget);
 
     public void create(AsyncCallback<Key> callback, E editableEntity);

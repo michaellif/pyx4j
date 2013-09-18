@@ -28,9 +28,9 @@ import com.google.gwt.user.client.ui.AcceptsOneWidget;
 import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.commons.Key;
 import com.pyx4j.entity.rpc.AbstractCrudService;
+import com.pyx4j.entity.rpc.AbstractCrudService.InitializationData;
 import com.pyx4j.entity.rpc.AbstractCrudService.RetrieveTarget;
 import com.pyx4j.entity.shared.AttachLevel;
-import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.forms.client.ui.ReferenceDataManager;
 import com.pyx4j.gwt.commons.UnrecoverableClientError;
@@ -166,11 +166,16 @@ public abstract class AbstractEditorActivity<E extends IEntity> extends Abstract
     @Override
     public void populate() {
         if (isNewEntity()) {
-            createNewEntity(new DefaultAsyncCallback<E>() {
+            obtainInitializationData(new DefaultAsyncCallback<AbstractCrudService.InitializationData>() {
                 @Override
-                public void onSuccess(E entity) {
-                    setEntityParent(entity, false);
-                    onPopulateSuccess(entity);
+                public void onSuccess(InitializationData result) {
+                    service.init(new DefaultAsyncCallback<E>() {
+                        @Override
+                        public void onSuccess(E result) {
+                            setEntityParent(result, false);
+                            onPopulateSuccess(result);
+                        }
+                    }, result);
                 }
             });
         } else {
@@ -211,15 +216,14 @@ public abstract class AbstractEditorActivity<E extends IEntity> extends Abstract
     }
 
     /**
-     * Descendants may override this method to perform some initialization.
+     * Descendants may override this method to supply some initialization info.
      * 
-     * @param callback
      */
-    protected void createNewEntity(AsyncCallback<E> callback) {
-        if (place.getNewItem() != null) {
-            callback.onSuccess((E) place.getNewItem());
+    protected void obtainInitializationData(AsyncCallback<InitializationData> callback) {
+        if (place.getInitializationData() != null) {
+            callback.onSuccess(place.getInitializationData());
         } else {
-            callback.onSuccess(EntityFactory.create(getEntityClass()));
+            callback.onSuccess(null);
         }
     }
 
