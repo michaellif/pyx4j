@@ -815,10 +815,10 @@ public class CrmTheme extends VistaTheme {
         style.addProperty("height", "0px");
         addStyle(style);
 
-        style = new Style("." + PapReviewsHolderForm.Styles.AutoPayActionsPanel.name() + " .Button:first-child");
+        style = new Style("." + PapReviewsHolderForm.Styles.AutoPayActionsPanel.name() + " .pyx4j_CheckBox:first-child");
         style.addProperty("position", "relative");
-        style.addProperty("top", "15px");
-        style.addProperty("left", "10px");
+        style.addProperty("top", "-27px");
+        style.addProperty("left", "6px");
         addStyle(style);
 
         style = new Style("." + PapReviewsHolderForm.Styles.AutoPaySuperCaptionsPanel.name());
