@@ -164,14 +164,18 @@ public class PmcForm extends OperationsEntityForm<PmcDTO> {
 
         content.setH1(++row, 0, 2, proto().features().getMeta().getCaption());
         content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().features().countryOfOperation()), 25).build());
-        content.setWidget(row, 1, new FormDecoratorBuilder(inject(proto().features().occupancyModel()), 5).build());
+
         content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().features().productCatalog()), 5).build());
-        content.setWidget(row, 1, new FormDecoratorBuilder(inject(proto().features().leases()), 5).build());
-        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().features().onlineApplication()), 5).build());
         content.setWidget(row, 1, new FormDecoratorBuilder(inject(proto().features().defaultProductCatalog()), 5).build());
+
+        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().features().onlineApplication()), 5).build());
+        content.setWidget(row, 1, new FormDecoratorBuilder(inject(proto().features().leases()), 5).build());
+
         content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().features().yardiIntegration()), 5).build());
         content.setWidget(row, 1, new FormDecoratorBuilder(inject(proto().features().yardiMaintenance()), 5).build());
+
         content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().features().tenantSureIntegration()), 5).build());
+        content.setWidget(row, 1, new FormDecoratorBuilder(inject(proto().features().occupancyModel()), 5).build());
 
         content.setH1(++row, 0, 2, proto().dnsNameAliases().getMeta().getCaption());
         content.setWidget(++row, 0, 2, inject(proto().dnsNameAliases(), new PmcDnsNameFolder(isEditable())));
