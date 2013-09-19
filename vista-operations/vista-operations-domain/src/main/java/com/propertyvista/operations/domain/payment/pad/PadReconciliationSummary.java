@@ -17,6 +17,8 @@ import java.math.BigDecimal;
 
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.annotations.Detached;
+import com.pyx4j.entity.annotations.Editor;
+import com.pyx4j.entity.annotations.Editor.EditorType;
 import com.pyx4j.entity.annotations.Format;
 import com.pyx4j.entity.annotations.Indexed;
 import com.pyx4j.entity.annotations.JoinColumn;
@@ -57,42 +59,53 @@ public interface PadReconciliationSummary extends IEntity {
 
     @NotNull
     @Format("#0.00")
+    @Editor(type = EditorType.moneylabel)
     IPrimitive<BigDecimal> grossPaymentAmount();
 
     @Format("#0.00")
+    @Editor(type = EditorType.moneylabel)
     IPrimitive<BigDecimal> grossPaymentFee();
 
     IPrimitive<Integer> grossPaymentCount();
 
     @Format("#0.00")
+    @Editor(type = EditorType.moneylabel)
     IPrimitive<BigDecimal> rejectItemsAmount();
 
     @Format("#0.00")
+    @Editor(type = EditorType.moneylabel)
     IPrimitive<BigDecimal> rejectItemsFee();
 
     IPrimitive<Integer> rejectItemsCount();
 
     @Format("#0.00")
+    @Editor(type = EditorType.moneylabel)
     IPrimitive<BigDecimal> returnItemsAmount();
 
     @Format("#0.00")
+    @Editor(type = EditorType.moneylabel)
     IPrimitive<BigDecimal> returnItemsFee();
 
     IPrimitive<Integer> returnItemsCount();
 
     @Format("#0.00")
+    @Editor(type = EditorType.moneylabel)
     IPrimitive<BigDecimal> netAmount();
 
     @Format("#0.00")
+    @Editor(type = EditorType.moneylabel)
     IPrimitive<BigDecimal> adjustments();
 
     @Format("#0.00")
+    @Editor(type = EditorType.moneylabel)
     IPrimitive<BigDecimal> previousBalance();
 
     @Format("#0.00")
+    @Editor(type = EditorType.moneylabel)
     IPrimitive<BigDecimal> merchantBalance();
 
     @Format("#0.00")
+    @Editor(type = EditorType.moneylabel)
     IPrimitive<BigDecimal> fundsReleased();
 
     @NotNull

@@ -36,6 +36,8 @@ import com.propertyvista.operations.client.activity.crud.fundstransfer.directdeb
 import com.propertyvista.operations.client.activity.crud.fundstransfer.directdebitrecord.DirectDebitRecordViewerActivity;
 import com.propertyvista.operations.client.activity.crud.fundstransfer.fundsreconciliationfile.PadReconciliationFileListerActivity;
 import com.propertyvista.operations.client.activity.crud.fundstransfer.fundsreconciliationfile.PadReconciliationFileViewerActivity;
+import com.propertyvista.operations.client.activity.crud.fundstransfer.fundsreconciliationrecord.PadReconciliationDebitRecordListerActivity;
+import com.propertyvista.operations.client.activity.crud.fundstransfer.fundsreconciliationrecord.PadReconciliationDebitRecordViewerActivity;
 import com.propertyvista.operations.client.activity.crud.fundstransfer.fundstransferfile.PadFileListerActivity;
 import com.propertyvista.operations.client.activity.crud.fundstransfer.fundstransferfile.PadFileViewerActivity;
 import com.propertyvista.operations.client.activity.crud.fundstransfer.fundstransferrecord.PadDebitRecordListerActivity;
@@ -236,6 +238,18 @@ public class ContentActivityMapper implements AppActivityMapper {
                             break;
                         case viewer:
                             activity = new PadReconciliationFileViewerActivity(crudPlace);
+                            break;
+                        default:
+                            break;
+                        }
+
+                    } else if (place instanceof OperationsSiteMap.FundsTransfer.FundsReconciliationRecord) {
+                        switch (crudPlace.getType()) {
+                        case lister:
+                            activity = new PadReconciliationDebitRecordListerActivity(crudPlace);
+                            break;
+                        case viewer:
+                            activity = new PadReconciliationDebitRecordViewerActivity(crudPlace);
                             break;
                         default:
                             break;

@@ -33,6 +33,7 @@ import com.propertyvista.operations.rpc.OperationsSiteMap;
 import com.propertyvista.operations.rpc.dto.AuditRecordOperationsDTO;
 import com.propertyvista.operations.rpc.dto.PadDebitRecordDTO;
 import com.propertyvista.operations.rpc.dto.PadFileDTO;
+import com.propertyvista.operations.rpc.dto.PadReconciliationDebitRecordDTO;
 import com.propertyvista.operations.rpc.dto.PadReconciliationFileDTO;
 import com.propertyvista.operations.rpc.dto.PmcDTO;
 import com.propertyvista.operations.rpc.dto.TriggerDTO;
@@ -51,6 +52,7 @@ public class OperationsEntityMapper {
         register(PadFileDTO.class, OperationsSiteMap.FundsTransfer.FundsTransferFile.class, DEFAULT_IMAGE);
         register(PadDebitRecordDTO.class, OperationsSiteMap.FundsTransfer.FundsTransferRecord.class, DEFAULT_IMAGE);
         register(PadReconciliationFileDTO.class, OperationsSiteMap.FundsTransfer.FundsReconciliationFile.class, DEFAULT_IMAGE);
+        register(PadReconciliationDebitRecordDTO.class, OperationsSiteMap.FundsTransfer.FundsReconciliationRecord.class, DEFAULT_IMAGE);
         register(PadSimFile.class, OperationsSiteMap.Simulator.PadSimulation.PadSimFile.class, DEFAULT_IMAGE);
         register(PadSimBatch.class, OperationsSiteMap.Simulator.PadSimulation.PadSimBatch.class, DEFAULT_IMAGE);
         register(CardServiceSimulationMerchantAccount.class, OperationsSiteMap.Simulator.CardServiceSimulation.CardServiceSimulationMerchantAccount.class,

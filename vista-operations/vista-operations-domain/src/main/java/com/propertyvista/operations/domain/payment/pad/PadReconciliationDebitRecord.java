@@ -17,6 +17,8 @@ import java.math.BigDecimal;
 
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.annotations.Caption;
+import com.pyx4j.entity.annotations.Editor;
+import com.pyx4j.entity.annotations.Editor.EditorType;
 import com.pyx4j.entity.annotations.Format;
 import com.pyx4j.entity.annotations.GwtBlacklist;
 import com.pyx4j.entity.annotations.Indexed;
@@ -54,6 +56,7 @@ public interface PadReconciliationDebitRecord extends IEntity {
     IPrimitive<String> transactionId();
 
     @Format("#0.00")
+    @Editor(type = EditorType.moneylabel)
     IPrimitive<BigDecimal> amount();
 
     IPrimitive<TransactionReconciliationStatus> reconciliationStatus();
@@ -63,7 +66,7 @@ public interface PadReconciliationDebitRecord extends IEntity {
     IPrimitive<String> reasonText();
 
     @Caption(description = "Reject/Return Item Fee; This field will contain the fee for the reject or returned item.")
-    @Format("#0.00")
+    @Editor(type = EditorType.moneylabel)
     IPrimitive<BigDecimal> fee();
 
     // Not coming from Caledon, this is our processing flag

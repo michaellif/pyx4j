@@ -17,18 +17,36 @@ import com.google.gwt.core.client.GWT;
 
 import com.pyx4j.entity.rpc.AbstractCrudService;
 import com.pyx4j.site.client.activity.AbstractViewerActivity;
+import com.pyx4j.site.client.activity.ListerController;
+import com.pyx4j.site.client.ui.prime.lister.ILister;
 import com.pyx4j.site.rpc.CrudAppPlace;
 
 import com.propertyvista.operations.client.OperationsSite;
 import com.propertyvista.operations.client.ui.crud.fundstransfer.fundsreconciliationfile.PadReconciliationFileViewerView;
 import com.propertyvista.operations.rpc.dto.PadReconciliationFileDTO;
+import com.propertyvista.operations.rpc.dto.PadReconciliationSummaryDTO;
 import com.propertyvista.operations.rpc.services.PadReconciliationFileCrudService;
+import com.propertyvista.operations.rpc.services.PadReconciliationSummaryListService;
 
 public class PadReconciliationFileViewerActivity extends AbstractViewerActivity<PadReconciliationFileDTO> implements PadReconciliationFileViewerView.Presenter {
+
+    private final ILister.Presenter<?> summaryLister;
 
     public PadReconciliationFileViewerActivity(CrudAppPlace place) {
         super(place, OperationsSite.getViewFactory().instantiate(PadReconciliationFileViewerView.class), GWT
                 .<AbstractCrudService<PadReconciliationFileDTO>> create(PadReconciliationFileCrudService.class));
+
+        summaryLister = new ListerController<PadReconciliationSummaryDTO>(((PadReconciliationFileViewerView) getView()).getSummaryListerView(),
+                GWT.<PadReconciliationSummaryListService> create(PadReconciliationSummaryListService.class), PadReconciliationSummaryDTO.class);
+
+    }
+
+    @Override
+    protected void onPopulateSuccess(PadReconciliationFileDTO result) {
+        super.onPopulateSuccess(result);
+
+        summaryLister.setParent(result.getPrimaryKey());
+        summaryLister.populate();
     }
 
     @Override

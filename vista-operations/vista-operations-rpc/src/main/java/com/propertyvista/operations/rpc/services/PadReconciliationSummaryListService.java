@@ -7,19 +7,16 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on 2013-08-02
- * @author ArtyomB
+ * Created on Sep 19, 2013
+ * @author VladL
  * @version $Id$
  */
-package com.propertyvista.operations.client.ui.crud.fundstransfer.fundsreconciliationfile;
+package com.propertyvista.operations.rpc.services;
 
-import com.pyx4j.site.client.ui.prime.form.IViewer;
-import com.pyx4j.site.client.ui.prime.lister.ILister;
+import com.pyx4j.entity.rpc.AbstractListService;
 
-import com.propertyvista.operations.rpc.dto.PadReconciliationFileDTO;
 import com.propertyvista.operations.rpc.dto.PadReconciliationSummaryDTO;
 
-public interface PadReconciliationFileViewerView extends IViewer<PadReconciliationFileDTO> {
+public interface PadReconciliationSummaryListService extends AbstractListService<PadReconciliationSummaryDTO> {
 
-    ILister<PadReconciliationSummaryDTO> getSummaryListerView();
 }

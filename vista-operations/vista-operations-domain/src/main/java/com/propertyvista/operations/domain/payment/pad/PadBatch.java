@@ -18,6 +18,9 @@ import java.math.BigDecimal;
 import com.pyx4j.commons.Key;
 import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.Detached;
+import com.pyx4j.entity.annotations.Editor;
+import com.pyx4j.entity.annotations.Editor.EditorType;
+import com.pyx4j.entity.annotations.Format;
 import com.pyx4j.entity.annotations.Indexed;
 import com.pyx4j.entity.annotations.JoinColumn;
 import com.pyx4j.entity.annotations.Length;
@@ -94,6 +97,8 @@ public interface PadBatch extends IEntity {
     IPrimitive<String> chargeDescription();
 
     // Updated when batch is sent to Caledon
+    @Format("#0.00")
+    @Editor(type = EditorType.moneylabel)
     IPrimitive<BigDecimal> batchAmount();
 
     IPrimitive<String> acknowledgmentStatusCode();

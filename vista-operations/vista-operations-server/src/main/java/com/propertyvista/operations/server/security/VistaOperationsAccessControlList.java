@@ -32,7 +32,9 @@ import com.propertyvista.operations.domain.payment.dbp.simulator.DirectDebitSimF
 import com.propertyvista.operations.domain.payment.dbp.simulator.DirectDebitSimRecord;
 import com.propertyvista.operations.domain.payment.pad.PadDebitRecord;
 import com.propertyvista.operations.domain.payment.pad.PadFile;
+import com.propertyvista.operations.domain.payment.pad.PadReconciliationDebitRecord;
 import com.propertyvista.operations.domain.payment.pad.PadReconciliationFile;
+import com.propertyvista.operations.domain.payment.pad.PadReconciliationSummary;
 import com.propertyvista.operations.domain.payment.pad.simulator.PadSimBatch;
 import com.propertyvista.operations.domain.payment.pad.simulator.PadSimFile;
 import com.propertyvista.operations.domain.scheduler.ExecutionReportMessage;
@@ -60,7 +62,9 @@ import com.propertyvista.operations.rpc.services.MerchantAccountFileUploadServic
 import com.propertyvista.operations.rpc.services.OperationsAuthenticationService;
 import com.propertyvista.operations.rpc.services.PadDebitRecordCrudService;
 import com.propertyvista.operations.rpc.services.PadFileCrudService;
+import com.propertyvista.operations.rpc.services.PadReconciliationDebitRecordCrudService;
 import com.propertyvista.operations.rpc.services.PadReconciliationFileCrudService;
+import com.propertyvista.operations.rpc.services.PadReconciliationSummaryListService;
 import com.propertyvista.operations.rpc.services.PmcCrudService;
 import com.propertyvista.operations.rpc.services.PmcDataReportService;
 import com.propertyvista.operations.rpc.services.PmcDirectDebitRecordCrudService;
@@ -147,6 +151,12 @@ public class VistaOperationsAccessControlList extends ServletContainerAclBuilder
 
         grant(VistaOperationsBehavior.SystemAdmin, new IServiceExecutePermission(PadReconciliationFileCrudService.class));
         grant(VistaOperationsBehavior.SystemAdmin, new EntityPermission(PadReconciliationFile.class, EntityPermission.ALL));
+
+        grant(VistaOperationsBehavior.SystemAdmin, new IServiceExecutePermission(PadReconciliationDebitRecordCrudService.class));
+        grant(VistaOperationsBehavior.SystemAdmin, new EntityPermission(PadReconciliationDebitRecord.class, EntityPermission.ALL));
+
+        grant(VistaOperationsBehavior.SystemAdmin, new IServiceExecutePermission(PadReconciliationSummaryListService.class));
+        grant(VistaOperationsBehavior.SystemAdmin, new EntityPermission(PadReconciliationSummary.class, EntityPermission.ALL));
 
         grant(VistaOperationsBehavior.SystemAdmin, new IServiceExecutePermission(PadFileCrudService.class));
         grant(VistaOperationsBehavior.SystemAdmin, new EntityPermission(PadFile.class, EntityPermission.ALL));

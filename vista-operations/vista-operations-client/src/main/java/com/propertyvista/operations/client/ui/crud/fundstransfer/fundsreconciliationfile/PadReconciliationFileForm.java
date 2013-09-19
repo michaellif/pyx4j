@@ -32,6 +32,10 @@ public class PadReconciliationFileForm extends OperationsEntityForm<PadReconcili
         panel.setWidget(++row, 0, 1, new FormDecoratorBuilder(inject(proto().fundsTransferType())).build());
         panel.setWidget(++row, 0, 1, new FormDecoratorBuilder(inject(proto().created())).build());
 
+        panel.setBR(++row, 0, 1);
+
+        panel.setWidget(++row, 0, 2, ((PadReconciliationFileViewerView) getParentView()).getSummaryListerView().getLister());
+
         selectTab(addTab(panel));
         setTabBarVisible(false);
     }

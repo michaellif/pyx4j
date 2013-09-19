@@ -17,6 +17,9 @@ import java.math.BigDecimal;
 import java.util.Date;
 
 import com.pyx4j.entity.annotations.Detached;
+import com.pyx4j.entity.annotations.Editor;
+import com.pyx4j.entity.annotations.Editor.EditorType;
+import com.pyx4j.entity.annotations.Format;
 import com.pyx4j.entity.annotations.Indexed;
 import com.pyx4j.entity.annotations.OrderBy;
 import com.pyx4j.entity.annotations.Owned;
@@ -124,6 +127,8 @@ public interface PadFile extends IEntity {
 
     IPrimitive<Integer> recordsCount();
 
+    @Format("#0.00")
+    @Editor(type = EditorType.moneylabel)
     IPrimitive<BigDecimal> fileAmount();
 
     // Updated when batch is received from Caledon

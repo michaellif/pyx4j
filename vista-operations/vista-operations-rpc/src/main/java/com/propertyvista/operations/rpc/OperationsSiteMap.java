@@ -99,6 +99,10 @@ public class OperationsSiteMap implements SiteMap {
         @PlaceProperties(navigLabel = "Funds Reconciliation Files")
         public static class FundsReconciliationFile extends CrmCrudAppPlace {
         }
+
+        @PlaceProperties(navigLabel = "Funds Reconciliation Records")
+        public static class FundsReconciliationRecord extends CrmCrudAppPlace {
+        }
     }
 
     public static class Security extends AppPlace {
