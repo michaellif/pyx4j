@@ -441,7 +441,8 @@ public class DataTable<E extends IEntity> extends FlexTable implements DataTable
             @Override
             public boolean execute() {
                 if (!dataIterator.hasNext()) {
-                    log.trace("dataTable {} render ends {} in {} msec", GWTJava5Helper.getSimpleName(model.getEntityClass()), rowIndex, TimeUtils.since(start));
+                    log.trace("dataTable {} render ends {} in {} msec", GWTJava5Helper.getSimpleName(model.getEntityClass()), rowIndex - 1,
+                            TimeUtils.since(start));
                     return false;
                 }
 

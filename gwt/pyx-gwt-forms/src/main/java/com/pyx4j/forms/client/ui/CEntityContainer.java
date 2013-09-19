@@ -233,6 +233,7 @@ public abstract class CEntityContainer<E extends IObject<?>> extends CComponent<
                 component.applyVisibilityRules();
             }
         }
+        log.trace("PropertyChangeEvent.PropertyName.visible fired from {}", shortDebugInfo());
         //TODO Workaround to fire event for container - that should be reviewed - event should be fired 
         //on accessibility adapters change
         PropertyChangeEvent.fire(this, PropertyChangeEvent.PropertyName.visible);
@@ -247,6 +248,7 @@ public abstract class CEntityContainer<E extends IObject<?>> extends CComponent<
                 component.applyViewabilityRules();
             }
         }
+        log.trace("PropertyChangeEvent.PropertyName.viewable fired from {}", shortDebugInfo());
         //TODO Workaround to fire event for container - that should be reviewed - event should be fired 
         //on accessibility adapters change
         PropertyChangeEvent.fire(this, PropertyChangeEvent.PropertyName.viewable);
@@ -261,6 +263,7 @@ public abstract class CEntityContainer<E extends IObject<?>> extends CComponent<
                 component.applyEnablingRules();
             }
         }
+        log.trace("PropertyChangeEvent.PropertyName.enabled fired from {}", shortDebugInfo());
         //TODO Workaround to fire event for container - that should be reviewed - event should be fired 
         //on accessibility adapters change
         PropertyChangeEvent.fire(this, PropertyChangeEvent.PropertyName.enabled);
@@ -275,6 +278,7 @@ public abstract class CEntityContainer<E extends IObject<?>> extends CComponent<
                 component.applyEditabilityRules();
             }
         }
+        log.trace("PropertyChangeEvent.PropertyName.editable fired from {}", shortDebugInfo());
         //TODO Workaround to fire editable event for container - that should be reviewed - event should be fired 
         //on accessibility adapters change
         PropertyChangeEvent.fire(this, PropertyChangeEvent.PropertyName.editable);

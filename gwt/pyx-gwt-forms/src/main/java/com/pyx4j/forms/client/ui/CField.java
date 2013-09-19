@@ -22,6 +22,9 @@ package com.pyx4j.forms.client.ui;
 
 import java.text.ParseException;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.Widget;
 
@@ -29,6 +32,8 @@ import com.pyx4j.commons.IDebugId;
 import com.pyx4j.forms.client.events.PropertyChangeEvent;
 
 public abstract class CField<DATA_TYPE, WIDGET_TYPE extends INativeComponent<DATA_TYPE>> extends CComponent<DATA_TYPE> {
+
+    private static final Logger log = LoggerFactory.getLogger(CField.class);
 
     private WIDGET_TYPE widget;
 
@@ -105,6 +110,7 @@ public abstract class CField<DATA_TYPE, WIDGET_TYPE extends INativeComponent<DAT
         boolean enabled = isEnabled();
         if (widget.isEnabled() != enabled) {
             widget.setEnabled(enabled);
+            log.trace("PropertyChangeEvent.PropertyName.enabled fired from {}", shortDebugInfo());
             PropertyChangeEvent.fire(this, PropertyChangeEvent.PropertyName.enabled);
         }
     }
@@ -115,6 +121,7 @@ public abstract class CField<DATA_TYPE, WIDGET_TYPE extends INativeComponent<DAT
         boolean editable = isEditable();
         if (widget.isEditable() != editable) {
             widget.setEditable(editable);
+            log.trace("PropertyChangeEvent.PropertyName.editable fired from {}", shortDebugInfo());
             PropertyChangeEvent.fire(this, PropertyChangeEvent.PropertyName.editable);
         }
 
@@ -126,6 +133,7 @@ public abstract class CField<DATA_TYPE, WIDGET_TYPE extends INativeComponent<DAT
         boolean viewable = isViewable();
         if (widget.isViewable() != viewable) {
             widget.setViewable(viewable);
+            log.trace("PropertyChangeEvent.PropertyName.viewable fired from {}", shortDebugInfo());
             PropertyChangeEvent.fire(this, PropertyChangeEvent.PropertyName.viewable);
         }
     }

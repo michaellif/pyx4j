@@ -335,6 +335,7 @@ public abstract class CComponent<DATA_TYPE> implements HasHandlers, HasPropertyC
                     removeValueValidator(validator);
                 }
             }
+            log.trace("PropertyChangeEvent.PropertyName.mandatory fired from {}", shortDebugInfo());
             PropertyChangeEvent.fire(this, PropertyChangeEvent.PropertyName.mandatory);
             revalidate();
         }
@@ -526,6 +527,7 @@ public abstract class CComponent<DATA_TYPE> implements HasHandlers, HasPropertyC
         onValueSet(populate);
         if (populate) {
             setVisited(false);
+            log.trace("PropertyChangeEvent.PropertyName.repopulated fired from {}", shortDebugInfo());
             PropertyChangeEvent.fire(this, PropertyChangeEvent.PropertyName.repopulated);
         }
     }
@@ -607,6 +609,7 @@ public abstract class CComponent<DATA_TYPE> implements HasHandlers, HasPropertyC
             if (this.visited) {
                 revalidate();
             }
+            log.trace("PropertyChangeEvent.PropertyName.visited fired from {}", shortDebugInfo());
             PropertyChangeEvent.fire(this, PropertyChangeEvent.PropertyName.visited);
         }
     }

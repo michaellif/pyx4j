@@ -190,6 +190,7 @@ public class RPCManager {
 
         @Override
         public void onSuccess(Serializable result) {
+            log.trace("RPC CALL returns");
             runningServicesCount--;
             try {
                 if (result instanceof SystemNotificationsWrapper) {
