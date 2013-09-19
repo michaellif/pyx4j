@@ -89,7 +89,7 @@ public class UnitsMapper {
         unitTo.info().economicStatusDescription().setValue(info.getUnitEconomicStatusDescription());
 
         // Legal address
-        {
+        if (rtCustomer.getCustomers().getCustomer().get(0).getAddress().size() > 0) {
             Address addressImported = rtCustomer.getCustomers().getCustomer().get(0).getAddress().get(0);
             StringBuilder address2 = new StringBuilder();
             for (String addressPart : addressImported.getAddress2()) {
