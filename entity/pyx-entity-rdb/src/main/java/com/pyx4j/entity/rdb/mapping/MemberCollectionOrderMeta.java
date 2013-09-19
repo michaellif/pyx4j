@@ -60,6 +60,11 @@ public class MemberCollectionOrderMeta {
         return this.orderMemberName;
     }
 
+    @Override
+    public String toString() {
+        return "materialized: " + materialized + ", sqlOrderColumnName: " + sqlOrderColumnName;
+    }
+
     static MemberMeta findOrderMember(EntityMeta entityMeta, MemberMeta memberMeta, boolean strict, EntityMeta joinEntityMeta) {
         Class<? extends ColumnId> orderColumn = null;
         OrderBy orderBy = memberMeta.getAnnotation(OrderBy.class);
