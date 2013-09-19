@@ -44,6 +44,7 @@ import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.entity.shared.ISet;
+import com.pyx4j.entity.shared.ObjectClassType;
 import com.pyx4j.entity.shared.Path;
 import com.pyx4j.entity.shared.meta.EntityMeta;
 import com.pyx4j.entity.shared.meta.MemberMeta;
@@ -401,15 +402,21 @@ public abstract class CEntityForm<E extends IEntity> extends CEntityContainer<E>
                 ((ICollection<?, ?>) getValue().getMember(memberPath)).set((ICollection) value);
             } else if (!(component instanceof CEntityContainer)) {
                 if (value instanceof Date) {
-                    // Synchronize the value in Editor with model
                     Class<?> cls = getValue().getEntityMeta().getMemberMeta(memberPath).getValueClass();
+                    // Synchronize the value in Editor with model
                     if (cls.equals(LogicalDate.class)) {
                         value = (T) new LogicalDate((Date) value);
                     } else if (cls.equals(java.sql.Date.class)) {
                         value = (T) new java.sql.Date(((Date) value).getTime());
                     }
                 }
-                getValue().setValue(memberPath, (Serializable) value);
+                if ((value instanceof Collection) && getValue().getEntityMeta().getMemberMeta(memberPath).getObjectClassType() == ObjectClassType.EntityList) {
+                    ICollection<IEntity, ?> collectionMember = (ICollection<IEntity, ?>) getValue().getMember(memberPath);
+                    collectionMember.clear();
+                    collectionMember.addAll((Collection<IEntity>) value);
+                } else {
+                    getValue().setValue(memberPath, (Serializable) value);
+                }
             }
             log.trace("CEntityEditor {} model updated {}", shortDebugInfo(), memberPath);
         }
