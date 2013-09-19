@@ -110,7 +110,6 @@ public abstract class CField<DATA_TYPE, WIDGET_TYPE extends INativeComponent<DAT
         boolean enabled = isEnabled();
         if (widget.isEnabled() != enabled) {
             widget.setEnabled(enabled);
-            log.trace("PropertyChangeEvent.PropertyName.enabled fired from {}", shortDebugInfo());
             PropertyChangeEvent.fire(this, PropertyChangeEvent.PropertyName.enabled);
         }
     }
@@ -121,7 +120,6 @@ public abstract class CField<DATA_TYPE, WIDGET_TYPE extends INativeComponent<DAT
         boolean editable = isEditable();
         if (widget.isEditable() != editable) {
             widget.setEditable(editable);
-            log.trace("PropertyChangeEvent.PropertyName.editable fired from {}", shortDebugInfo());
             PropertyChangeEvent.fire(this, PropertyChangeEvent.PropertyName.editable);
         }
 
@@ -133,7 +131,6 @@ public abstract class CField<DATA_TYPE, WIDGET_TYPE extends INativeComponent<DAT
         boolean viewable = isViewable();
         if (widget.isViewable() != viewable) {
             widget.setViewable(viewable);
-            log.trace("PropertyChangeEvent.PropertyName.viewable fired from {}", shortDebugInfo());
             PropertyChangeEvent.fire(this, PropertyChangeEvent.PropertyName.viewable);
         }
     }

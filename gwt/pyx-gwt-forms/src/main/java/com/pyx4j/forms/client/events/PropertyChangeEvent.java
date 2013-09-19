@@ -20,9 +20,16 @@
  */
 package com.pyx4j.forms.client.events;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.google.gwt.event.shared.GwtEvent;
 
+import com.pyx4j.forms.client.ui.CComponent;
+
 public class PropertyChangeEvent extends GwtEvent<PropertyChangeHandler> {
+
+    private static final Logger log = LoggerFactory.getLogger(PropertyChangeEvent.class);
 
     public static enum PropertyName {
 
@@ -85,6 +92,9 @@ public class PropertyChangeEvent extends GwtEvent<PropertyChangeHandler> {
 
     public static void fire(HasPropertyChangeHandlers source, PropertyName propertyName) {
         if (TYPE != null) {
+            if (log.isTraceEnabled() && (source instanceof CComponent)) {
+                log.trace("PropertyChangeEvent.PropertyName.{} fired from {}", propertyName, ((CComponent<?>) source).shortDebugInfo());
+            }
             PropertyChangeEvent event = new PropertyChangeEvent(propertyName);
             source.fireEvent(event);
         }
