@@ -30,16 +30,26 @@ import org.slf4j.LoggerFactory;
 
 import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.core.client.Scheduler.ScheduledCommand;
+import com.google.gwt.event.logical.shared.ValueChangeEvent;
+import com.google.gwt.event.logical.shared.ValueChangeHandler;
+import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.entity.shared.criterion.Criterion;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.forms.client.ui.CComboBox.AsyncOptionsReadyCallback;
+import com.pyx4j.forms.client.validators.EditableValueValidator;
+import com.pyx4j.forms.client.validators.ValidationError;
+import com.pyx4j.i18n.shared.I18n;
 
+// TODO - this is a logical copy of CEntityComboBox; a generic base class may make sense
 public class CEntityListBox<E extends IEntity> extends CListBox<E> {
 
     private static final Logger log = LoggerFactory.getLogger(CEntityListBox.class);
+
+    private static final I18n i18n = I18n.get(CEntityListBox.class);
 
     private EntityQueryCriteria<E> criteria;
 
@@ -49,16 +59,46 @@ public class CEntityListBox<E extends IEntity> extends CListBox<E> {
 
     private boolean optionsLoaded;
 
+    private String stringViewMemberName;
+
+    private boolean isLoading = false;
+
+    private boolean isUnavailable = false;
+
+    private EditableValueValidator<List<E>> unavailableValidator;
+
+    private EntityDataSource<E> optionsDataSource;
+
+    private TerminableHandlingCallback optionHandlingCallback;
+
+    private HandlerRegistration referenceDataManagerHandlerRegistration;
+
     public CEntityListBox() {
         super();
+    }
+
+    public CEntityListBox(SelectionMode mode) {
+        super(mode);
     }
 
     public CEntityListBox(String title) {
         super(title);
     }
 
+    public CEntityListBox(String title, SelectionMode mode) {
+        super(title, mode);
+    }
+
+    public CEntityListBox(Class<E> entityClass, SelectionMode mode) {
+        this(null, entityClass, SelectionMode.SINGLE_PANEL);
+    }
+
     public CEntityListBox(String title, Class<E> entityClass) {
-        this(title);
+        this(title, entityClass, SelectionMode.SINGLE_PANEL);
+    }
+
+    public CEntityListBox(String title, Class<E> entityClass, SelectionMode mode) {
+        this(title, mode);
         this.criteria = new EntityQueryCriteria<E>(entityClass);
     }
 
@@ -83,12 +123,18 @@ public class CEntityListBox<E extends IEntity> extends CListBox<E> {
         setOptions(getOptions());
     }
 
+    /** the expected functionality is not implemented */
+    public void setOptionsDataSource(EntityDataSource<E> optionsDataSource) {
+        this.optionsDataSource = optionsDataSource;
+    }
+
     public boolean isOptionsLoaded() {
         return this.optionsLoaded;
     }
 
     @Override
     public void setOptions(List<E> opt) {
+        optionsLoaded = true;
         if (((optionsFilter == null) && (comparator == null)) || (opt == null) || (opt.size() == 0)) {
             super.setOptions(opt);
         } else {
@@ -99,6 +145,8 @@ public class CEntityListBox<E extends IEntity> extends CListBox<E> {
                         optFiltered.add(en);
                     }
                 }
+            } else {
+                optFiltered.addAll(opt);
             }
             if (comparator != null) {
                 Collections.sort(optFiltered, comparator);
@@ -108,37 +156,142 @@ public class CEntityListBox<E extends IEntity> extends CListBox<E> {
     }
 
     @Override
+    protected void onReset() {
+        resetOptions();
+    }
+
+    public void resetOptions() {
+        if (optionsLoaded) {
+            optionsLoaded = false;
+        }
+    }
+
+    public void refreshOptions() {
+        resetOptions();
+        retriveOptions(null);
+        getWidget().refreshOptions();
+    }
+
+    private class TerminableHandlingCallback implements AsyncCallback<List<E>> {
+        private final AsyncOptionsReadyCallback<E> callback;
+
+        private boolean cancelled = false;
+
+        public TerminableHandlingCallback(AsyncOptionsReadyCallback<E> callback) {
+            this.callback = callback;
+        }
+
+        public void cancel() {
+            cancelled = true;
+        }
+
+        @Override
+        public void onSuccess(List<E> result) {
+            if (cancelled) {
+                return;
+            }
+            isLoading = false;
+            isUnavailable = false;
+            if (unavailableValidator != null) {
+                removeValueValidator(unavailableValidator);
+            }
+            setOptions(result);
+            optionsLoaded = true;
+            if (callback != null) {
+                callback.onOptionsReady(getOptions());
+            }
+        }
+
+        @Override
+        public void onFailure(Throwable caught) {
+            if (cancelled) {
+                return;
+            }
+            isLoading = false;
+            isUnavailable = true;
+            log.error("can't load {} {}", getTitle(), caught);
+            if (unavailableValidator == null) {
+                unavailableValidator = new EditableValueValidator<List<E>>() {
+
+                    @Override
+                    public ValidationError isValid(CComponent<List<E>> component, List<E> value) {
+                        return !isUnavailable ? null : new ValidationError(component, i18n.tr("Reference data unavailable"));
+                    }
+                };
+            }
+            addValueValidator(unavailableValidator);
+            setOptions(null);
+        }
+    }
+
+    @Override
     public void retriveOptions(final AsyncOptionsReadyCallback<E> callback) {
-        if ((optionsLoaded) || (criteria == null)) {
+        if (isViewable()) {
+            return;
+        }
+        if (optionsLoaded) {
             super.retriveOptions(callback);
         } else {
-            final AsyncCallback<List<E>> handlingCallback = new AsyncCallback<List<E>>() {
-                @Override
-                public void onSuccess(List<E> result) {
-                    optionsLoaded = true;
-                    setOptions(result);
-                    callback.onOptionsReady(getOptions());
-                }
+            if (isLoading && (optionHandlingCallback != null)) {
+                // Second or any other sequential call cancels previous callback
+                optionHandlingCallback.cancel();
+            }
+            isLoading = true;
+            optionHandlingCallback = new TerminableHandlingCallback(callback);
+            if (optionsDataSource != null) {
+                //TODO  optionsDataSource.obtain(criteria, handlingCallback, true);
+            } else {
+                if (ReferenceDataManager.isCached(criteria)) {
+                    ReferenceDataManager.obtain(criteria, optionHandlingCallback, true);
+                } else {
+                    Scheduler.get().scheduleDeferred(new ScheduledCommand() {
+                        // keep current criteria and callback reference as they can change by the time the command executes
+                        final TerminableHandlingCallback handlingCallback = optionHandlingCallback;
 
-                @Override
-                public void onFailure(Throwable caught) {
-                    log.error("can't load {} {}", getTitle(), caught);
+                        final EntityQueryCriteria<E> crit = criteria.iclone();
+
+                        @Override
+                        public void execute() {
+                            ReferenceDataManager.obtain(crit, handlingCallback, true);
+                        }
+                    });
                 }
-            };
-            Scheduler.get().scheduleDeferred(new ScheduledCommand() {
+                registerDataChangeHandler();
+            }
+
+        }
+    }
+
+    private void registerDataChangeHandler() {
+        if (referenceDataManagerHandlerRegistration == null) {
+            referenceDataManagerHandlerRegistration = ReferenceDataManager.addValueChangeHandler(new ValueChangeHandler<Class<E>>() {
                 @Override
-                public void execute() {
-                    ReferenceDataManager.obtain(criteria, handlingCallback, true);
+                public void onValueChange(ValueChangeEvent<Class<E>> event) {
+                    if ((criteria.getEntityClass() == event.getValue()) || (IEntity.class == event.getValue())) {
+                        resetOptions();
+                    }
                 }
             });
         }
     }
 
+    public void setStringViewMember(IObject<?> member) {
+        stringViewMemberName = member.getFieldName();
+    }
+
     @Override
     public String getItemName(E o) {
-        if (o == null) {
-            // Get super's NULL presentation
-            return super.getItemName(null);
+        if ((o == null) || (o.isNull())) {
+            if (isLoading) {
+                return "loading...";
+            } else if (isUnavailable) {
+                return "Error: Data unavailable";
+            } else {
+                // Get super's NULL presentation
+                return super.getItemName(null);
+            }
+        } else if (stringViewMemberName != null) {
+            return o.getMember(stringViewMemberName).getStringView();
         } else {
             return o.getStringView();
         }

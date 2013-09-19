@@ -29,15 +29,14 @@ import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.entity.shared.EntityFactory;
-import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPersonalIdentity;
 import com.pyx4j.forms.client.ui.CAbstractSuggestBox;
-import com.pyx4j.forms.client.ui.CListBox;
-import com.pyx4j.forms.client.ui.CListBox.SelectionMode;
 import com.pyx4j.forms.client.ui.CComboBoxBoolean;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CEntityComboBox;
 import com.pyx4j.forms.client.ui.CEntityForm;
+import com.pyx4j.forms.client.ui.CEntityListBox;
+import com.pyx4j.forms.client.ui.CListBox.SelectionMode;
 import com.pyx4j.forms.client.ui.CPersonalIdentityField;
 import com.pyx4j.forms.client.ui.CRadioGroupBoolean;
 import com.pyx4j.forms.client.ui.CRadioGroupEnum;
@@ -76,16 +75,7 @@ public class EntityIFormWithoutLists extends CEntityForm<EntityI> {
         main.getFlexCellFormatter().setColSpan(row, 0, 2);
 
         // list box
-        CListBox<EntityIII> listBox = new CListBox<EntityIII>(SelectionMode.SINGLE_PANEL) {
-            @Override
-            public String getItemName(EntityIII o) {
-                if (o instanceof IEntity) {
-                    return ((IEntity) o).getStringView();
-                } else {
-                    return super.getItemName(o);
-                }
-            }
-        };
+        CEntityListBox<EntityIII> listBox = new CEntityListBox<EntityIII>(SelectionMode.SINGLE_PANEL);
         EntityIII e1 = EntityFactory.create(EntityIII.class);
         e1.stringMember().setValue("One");
         e1.integerMember().setValue(1);
@@ -99,16 +89,7 @@ public class EntityIFormWithoutLists extends CEntityForm<EntityI> {
 
         main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().entityIIIList(), listBox)).build());
 
-        CListBox<EntityIII> setBox = new CListBox<EntityIII>(SelectionMode.TWO_PANEL) {
-            @Override
-            public String getItemName(EntityIII o) {
-                if (o instanceof IEntity) {
-                    return ((IEntity) o).getStringView();
-                } else {
-                    return super.getItemName(o);
-                }
-            }
-        };
+        CEntityListBox<EntityIII> setBox = new CEntityListBox<EntityIII>(SelectionMode.TWO_PANEL);
         setBox.setOptions(Arrays.asList(e1, e2, e3));
 
         main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().entityIIIList2(), setBox)).build());

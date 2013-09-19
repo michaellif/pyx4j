@@ -3,6 +3,7 @@ package com.pyx4j.forms.client.ui;
 import java.util.Comparator;
 import java.util.List;
 
+import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.HTML;
 
 public class NListBox<E> extends NFocusField<List<E>, INativeListBox<E>, CListBox<E>, HTML> implements INativeListBox<E> {
@@ -18,7 +19,7 @@ public class NListBox<E> extends NFocusField<List<E>, INativeListBox<E>, CListBo
     @Override
     public void setNativeValue(List<E> value) {
         if (isViewable()) {
-            getViewer().setHTML(getCComponent().format(value));
+            getViewer().setText(getCComponent().format(value));
         } else {
             getEditor().setNativeValue(value);
         }
@@ -91,5 +92,12 @@ public class NListBox<E> extends NFocusField<List<E>, INativeListBox<E>, CListBo
     @Override
     public Comparator<E> getComparator() {
         return getCComponent().getComparator();
+    }
+
+    @Override
+    public final void setNavigationCommand(Command navigationCommand) {
+        if (navigationCommand != null) {
+            throw new Error("Not supported in multi-select mode");
+        }
     }
 }

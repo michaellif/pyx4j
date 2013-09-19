@@ -194,7 +194,10 @@ public class CListBox<E> extends CFocusComponent<List<E>, NListBox<E>> implement
         } else {
             StringBuilder sb = new StringBuilder();
             for (E item : value) {
-                sb.append(getItemName(item) + "<br>\n");
+                if (sb.length() > 0) {
+                    sb.append(", ");
+                }
+                sb.append(getItemName(item));
             }
             return sb.toString();
         }
