@@ -14,7 +14,6 @@
 package com.propertyvista.biz.tenant.insurance;
 
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
 
 import com.pyx4j.commons.LogicalDate;
@@ -29,7 +28,6 @@ import com.pyx4j.i18n.shared.I18n;
 import com.propertyvista.biz.policy.PolicyFacade;
 import com.propertyvista.domain.policy.policies.TenantInsurancePolicy;
 import com.propertyvista.domain.tenant.insurance.InsuranceCertificate;
-import com.propertyvista.domain.tenant.insurance.InsuranceTenantSure;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.Tenant;
 import com.propertyvista.portal.rpc.portal.web.dto.insurance.status.GeneralInsuranceCertificateSummaryDTO;
@@ -100,23 +98,7 @@ public class TenantInsuranceFacadeImpl implements TenantInsuranceFacade {
             return null;
         }
         ArrayList<InsuranceCertificate> sortedInsuranceCertificates = new ArrayList<InsuranceCertificate>(insuranceCertificates);
-        java.util.Collections.sort(sortedInsuranceCertificates, new Comparator<InsuranceCertificate>() {
-
-            @Override
-            public int compare(InsuranceCertificate o1, InsuranceCertificate o2) {
-                if ((o1.tenant().equals(tenantId)) && !(o2.tenant().equals(tenantId))) {
-                    return -1;
-                } else if (!(o1.tenant().equals(tenantId)) && (o2.tenant().equals(tenantId))) {
-                    return 1;
-                } else if ((o1.getInstanceValueClass().equals(InsuranceTenantSure.class)) && !(o2.getInstanceValueClass().equals(InsuranceTenantSure.class))) {
-                    return -1;
-                } else if (!(o1.getInstanceValueClass().equals(InsuranceTenantSure.class)) && (o2.getInstanceValueClass().equals(InsuranceTenantSure.class))) {
-                    return 1;
-                } else {
-                    return -o1.liabilityCoverage().getValue().compareTo(o2.liabilityCoverage().getValue());
-                }
-            }
-        });
+        java.util.Collections.sort(sortedInsuranceCertificates, new InsuranceCertificateComparator(tenantId));
         return sortedInsuranceCertificates;
     }
 }
