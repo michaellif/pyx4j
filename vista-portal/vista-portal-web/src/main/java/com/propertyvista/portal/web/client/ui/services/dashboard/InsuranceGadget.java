@@ -16,72 +16,56 @@ package com.propertyvista.portal.web.client.ui.services.dashboard;
 import java.util.Arrays;
 import java.util.Collection;
 
-import com.google.gwt.dom.client.Style.FontWeight;
-import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.SimplePanel;
 
-import com.pyx4j.commons.css.StyleManager;
 import com.pyx4j.commons.css.ThemeColor;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CEntityContainer;
 import com.pyx4j.forms.client.ui.CEntityForm;
-import com.pyx4j.forms.client.ui.CLabel;
 import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.widgets.client.Button;
-import com.pyx4j.widgets.client.Label;
-import com.pyx4j.widgets.client.actionbar.Toolbar;
 
 import com.propertyvista.portal.rpc.portal.web.dto.insurance.status.InsuranceStatusDTO;
 import com.propertyvista.portal.web.client.resources.PortalImages;
 import com.propertyvista.portal.web.client.ui.AbstractGadget;
 
-public class InsuranceSummaryGadget extends AbstractGadget<ServicesDashboardViewImpl> {
+public class InsuranceGadget extends AbstractGadget<ServicesDashboardViewImpl> {
 
-    private static final I18n i18n = I18n.get(InsuranceSummaryGadget.class);
+    private static final I18n i18n = I18n.get(InsuranceGadget.class);
 
     private final InsuranceStatusViewer insuranceViewer;
 
-    InsuranceSummaryGadget(ServicesDashboardViewImpl view) {
+    private final InsuranceToolbar toolbar;
+
+    InsuranceGadget(ServicesDashboardViewImpl view) {
         super(view, PortalImages.INSTANCE.residentServicesIcon(), i18n.tr("Tenant Insurance"), ThemeColor.contrast3);
-        setActionsToolbar(new InsuranceToolbar());
 
         insuranceViewer = new InsuranceStatusViewer();
         insuranceViewer.setViewable(true);
         insuranceViewer.initContent();
 
         setContent(insuranceViewer);
+
+        setActionsToolbar(toolbar = new InsuranceToolbar() {
+
+            @Override
+            protected void onPurchaseClicked() {
+                getGadgetView().getPresenter().buyTenantSure();
+            }
+
+            @Override
+            protected void onProofClicked() {
+                getGadgetView().getPresenter().addThirdPartyTenantInsuranceCertificate();
+            }
+
+        });
+
     }
 
     protected void populate(InsuranceStatusDTO value) {
         insuranceViewer.populate(value);
-    }
-
-    class InsuranceToolbar extends Toolbar {
-        public InsuranceToolbar() {
-
-            Button purchaseButton = new Button("Purchase Insurance", new Command() {
-
-                @Override
-                public void execute() {
-                    getGadgetView().getPresenter().buyTenantSure();
-                }
-            });
-            purchaseButton.getElement().getStyle().setProperty("background", StyleManager.getPalette().getThemeColor(ThemeColor.contrast3, 1));
-            add(purchaseButton);
-
-            Button proofButton = new Button("Provide Proof of my Insurance", new Command() {
-
-                @Override
-                public void execute() {
-                    getGadgetView().getPresenter().addThirdPartyTenantInsuranceCertificate();
-                }
-            });
-            proofButton.getElement().getStyle().setProperty("background", StyleManager.getPalette().getThemeColor(ThemeColor.contrast3, 0.8));
-            add(proofButton);
-
-        }
+        toolbar.recalculateState(value);
     }
 
     class InsuranceStatusViewer extends CEntityContainer<InsuranceStatusDTO> {
@@ -120,28 +104,6 @@ public class InsuranceSummaryGadget extends AbstractGadget<ServicesDashboardView
         @Override
         protected void setComponentsValue(InsuranceStatusDTO value, boolean fireEvent, boolean populate) {
         }
-    }
-
-    class NoInsuranceStatusForm extends CEntityForm<InsuranceStatusDTO> {
-
-        public NoInsuranceStatusForm() {
-            super(InsuranceStatusDTO.class);
-        }
-
-        @Override
-        public IsWidget createContent() {
-            BasicFlexFormPanel main = new BasicFlexFormPanel();
-
-            int row = -1;
-
-            CLabel<String> noInsuranceStatusMessageLabel = new CLabel<String>();
-            noInsuranceStatusMessageLabel.asWidget().getElement().getStyle().setFontWeight(FontWeight.BOLDER);
-            main.setWidget(++row, 0, new Label(InsuranceStatusDTO.noInsuranceStatusMessage));
-            main.setWidget(++row, 0, new Label(InsuranceStatusDTO.noInsuranceTenantSureInvitation));
-            return main;
-
-        }
-
     }
 
     class InsuranceStatusForm extends CEntityForm<InsuranceStatusDTO> {

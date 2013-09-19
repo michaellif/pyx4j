@@ -27,13 +27,13 @@ public class ServicesDashboardViewImpl extends FlowPanel implements ServicesDash
 
     private ServicesDashboardPresenter presenter;
 
-    private final InsuranceSummaryGadget insuranceGadget;
+    private final InsuranceGadget insuranceGadget;
 
     public ServicesDashboardViewImpl() {
 
         setStyleName(DashboardTheme.StyleName.Dashboard.name());
 
-        insuranceGadget = new InsuranceSummaryGadget(this);
+        insuranceGadget = new InsuranceGadget(this);
         insuranceGadget.asWidget().setWidth("100%");
 
         add(insuranceGadget);

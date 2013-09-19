@@ -40,6 +40,7 @@ import com.propertyvista.portal.rpc.portal.PortalSiteMap;
 import com.propertyvista.portal.rpc.portal.web.dto.insurance.status.InsuranceStatusDTO;
 import com.propertyvista.portal.web.client.resources.PortalImages;
 import com.propertyvista.portal.web.client.ui.AbstractGadget;
+import com.propertyvista.portal.web.client.ui.services.dashboard.InsuranceToolbar;
 
 public class InsuranceGadget extends AbstractGadget<MainDashboardViewImpl> {
 
@@ -60,72 +61,27 @@ public class InsuranceGadget extends AbstractGadget<MainDashboardViewImpl> {
 
         setContent(insuranceViewer);
 
-        setActionsToolbar(toolbar = new InsuranceToolbar());
+        setActionsToolbar(toolbar = new InsuranceToolbar() {
+
+            @Override
+            protected void onPurchaseClicked() {
+                getGadgetView().getPresenter().buyTenantSure();
+            }
+
+            @Override
+            protected void onProofClicked() {
+                getGadgetView().getPresenter().addThirdPartyTenantInsuranceCertificate();
+            }
+
+        });
         setNavigationBar(navigationBar = new NavigationBar());
 
     }
 
-    protected void populate(InsuranceStatusDTO insuranceStatus) {
-        insuranceViewer.populate(insuranceStatus);
-        toolbar.recalculateState(insuranceStatus);
-        navigationBar.recalculateState(insuranceStatus);
-    }
-
-    class InsuranceToolbar extends Toolbar {
-
-        private final Button purchaseButton;
-
-        private final Button proofButton;
-
-        public InsuranceToolbar() {
-
-            purchaseButton = new Button(i18n.tr("Purchase Insurance"), new Command() {
-
-                @Override
-                public void execute() {
-                    getGadgetView().getPresenter().buyTenantSure();
-                }
-            });
-            purchaseButton.getElement().getStyle().setProperty("background", StyleManager.getPalette().getThemeColor(ThemeColor.contrast3, 1));
-            add(purchaseButton);
-
-            proofButton = new Button("", new Command() {
-
-                @Override
-                public void execute() {
-                    getGadgetView().getPresenter().addThirdPartyTenantInsuranceCertificate();
-                }
-            });
-            proofButton.getElement().getStyle().setProperty("background", StyleManager.getPalette().getThemeColor(ThemeColor.contrast3, 0.8));
-            add(proofButton);
-
-            recalculateState(null);
-        }
-
-        public void recalculateState(InsuranceStatusDTO insuranceStatus) {
-
-            if (insuranceStatus == null) {
-                purchaseButton.setVisible(false);
-                proofButton.setVisible(false);
-            } else {
-                switch (insuranceStatus.status().getValue()) {
-                case noInsurance:
-                    proofButton.setCaption(i18n.tr("Provide Proof of my Insurance"));
-                    purchaseButton.setVisible(true);
-                    proofButton.setVisible(true);
-                    break;
-                case hasOtherInsurance:
-                    proofButton.setCaption(i18n.tr("Update Proof of my Insurance"));
-                    purchaseButton.setVisible(true);
-                    proofButton.setVisible(true);
-                    break;
-                case hasTenantSure:
-                    purchaseButton.setVisible(false);
-                    proofButton.setVisible(false);
-                    break;
-                }
-            }
-        }
+    protected void populate(InsuranceStatusDTO value) {
+        insuranceViewer.populate(value);
+        toolbar.recalculateState(value);
+        navigationBar.recalculateState(value);
     }
 
     class NavigationBar extends FlowPanel {
