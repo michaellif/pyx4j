@@ -25,7 +25,7 @@ import com.pyx4j.site.client.ReportDialog;
 import com.pyx4j.widgets.client.Button;
 
 import com.propertyvista.operations.client.ui.crud.OperationsListerViewImplBase;
-import com.propertyvista.operations.rpc.PmcDTO;
+import com.propertyvista.operations.rpc.dto.PmcDTO;
 import com.propertyvista.operations.rpc.services.DBIntegrityCheckService;
 import com.propertyvista.operations.rpc.services.PmcDataReportService;
 import com.propertyvista.portal.rpc.DeploymentConsts;

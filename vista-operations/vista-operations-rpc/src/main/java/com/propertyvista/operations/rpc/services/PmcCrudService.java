@@ -22,7 +22,7 @@ import com.pyx4j.rpc.shared.VoidSerializable;
 
 import com.propertyvista.operations.domain.scheduler.PmcProcessType;
 import com.propertyvista.operations.domain.scheduler.Run;
-import com.propertyvista.operations.rpc.PmcDTO;
+import com.propertyvista.operations.rpc.dto.PmcDTO;
 
 public interface PmcCrudService extends AbstractCrudService<PmcDTO> {
 

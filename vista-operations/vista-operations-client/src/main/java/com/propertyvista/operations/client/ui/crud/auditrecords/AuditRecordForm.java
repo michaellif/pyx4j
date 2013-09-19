@@ -25,8 +25,8 @@ import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
 import com.propertyvista.domain.pmc.Pmc;
 import com.propertyvista.operations.client.themes.OperationsTheme;
 import com.propertyvista.operations.client.ui.crud.OperationsEntityForm;
-import com.propertyvista.operations.rpc.AuditRecordOperationsDTO;
-import com.propertyvista.operations.rpc.PmcDTO;
+import com.propertyvista.operations.rpc.dto.AuditRecordOperationsDTO;
+import com.propertyvista.operations.rpc.dto.PmcDTO;
 
 public class AuditRecordForm extends OperationsEntityForm<AuditRecordOperationsDTO> {
 

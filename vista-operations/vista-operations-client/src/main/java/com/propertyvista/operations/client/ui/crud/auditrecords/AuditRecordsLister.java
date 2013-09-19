@@ -20,7 +20,7 @@ import com.pyx4j.entity.shared.criterion.EntityQueryCriteria.Sort;
 import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
 import com.pyx4j.site.client.ui.prime.lister.AbstractLister;
 
-import com.propertyvista.operations.rpc.AuditRecordOperationsDTO;
+import com.propertyvista.operations.rpc.dto.AuditRecordOperationsDTO;
 
 public class AuditRecordsLister extends AbstractLister<AuditRecordOperationsDTO> {
 

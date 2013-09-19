@@ -13,7 +13,7 @@
  */
 package com.propertyvista.operations.client.ui.crud.simulation;
 
-import com.propertyvista.operations.rpc.SimulationDTO;
+import com.propertyvista.operations.rpc.dto.SimulationDTO;
 
 import com.pyx4j.site.client.ui.prime.form.IEditor;
 

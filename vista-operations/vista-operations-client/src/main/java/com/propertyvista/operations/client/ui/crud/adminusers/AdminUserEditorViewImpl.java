@@ -14,7 +14,7 @@
 package com.propertyvista.operations.client.ui.crud.adminusers;
 
 import com.propertyvista.operations.client.ui.crud.OperationsEditorViewImplBase;
-import com.propertyvista.operations.rpc.OperationsUserDTO;
+import com.propertyvista.operations.rpc.dto.OperationsUserDTO;
 
 public class AdminUserEditorViewImpl extends OperationsEditorViewImplBase<OperationsUserDTO> implements AdminUserEditorView {
 

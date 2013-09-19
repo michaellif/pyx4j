@@ -19,7 +19,7 @@ import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.rpc.AbstractCrudService;
 
 import com.propertyvista.operations.domain.scheduler.Run;
-import com.propertyvista.operations.rpc.TriggerDTO;
+import com.propertyvista.operations.rpc.dto.TriggerDTO;
 
 public interface TriggerCrudService extends AbstractCrudService<TriggerDTO> {
 

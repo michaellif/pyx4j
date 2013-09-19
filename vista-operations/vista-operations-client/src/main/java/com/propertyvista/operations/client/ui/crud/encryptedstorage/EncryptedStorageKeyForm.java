@@ -32,7 +32,7 @@ import com.pyx4j.widgets.client.dialog.MessageDialog;
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
 import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
 import com.propertyvista.operations.client.ui.crud.encryptedstorage.EncryptedStorageView.Presenter;
-import com.propertyvista.operations.rpc.PrivateKeyDTO;
+import com.propertyvista.operations.rpc.dto.PrivateKeyDTO;
 import com.propertyvista.operations.rpc.encryption.EncryptedStorageKeyDTO;
 
 public class EncryptedStorageKeyForm extends CEntityDecoratableForm<EncryptedStorageKeyDTO> {

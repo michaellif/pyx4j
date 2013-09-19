@@ -26,7 +26,7 @@ import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
 import com.propertyvista.operations.client.ui.crud.OperationsEntityForm;
 import com.propertyvista.operations.domain.scheduler.PmcProcessOptions;
 import com.propertyvista.operations.domain.scheduler.TriggerPmcSelectionType;
-import com.propertyvista.operations.rpc.TriggerDTO;
+import com.propertyvista.operations.rpc.dto.TriggerDTO;
 
 public class TriggerForm extends OperationsEntityForm<TriggerDTO> {
 

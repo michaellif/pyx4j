@@ -15,7 +15,7 @@ package com.propertyvista.operations.rpc.services;
 
 import com.pyx4j.essentials.rpc.report.ReportService;
 
-import com.propertyvista.operations.rpc.PmcDTO;
+import com.propertyvista.operations.rpc.dto.PmcDTO;
 
 /**
  * Used for QA.

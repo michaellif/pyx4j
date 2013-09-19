@@ -25,7 +25,7 @@ import com.pyx4j.site.client.ui.prime.form.IForm;
 
 import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
 import com.propertyvista.operations.client.ui.crud.OperationsEntityForm;
-import com.propertyvista.operations.rpc.OperationsUserDTO;
+import com.propertyvista.operations.rpc.dto.OperationsUserDTO;
 
 public class AdminUserForm extends OperationsEntityForm<OperationsUserDTO> {
 

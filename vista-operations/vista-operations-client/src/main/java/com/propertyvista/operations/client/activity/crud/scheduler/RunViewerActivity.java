@@ -30,7 +30,7 @@ import com.propertyvista.operations.client.ui.crud.scheduler.run.RunViewerView;
 import com.propertyvista.operations.domain.scheduler.Run;
 import com.propertyvista.operations.domain.scheduler.RunData;
 import com.propertyvista.operations.domain.scheduler.RunStatus;
-import com.propertyvista.operations.rpc.ExecutionStatusUpdateDTO;
+import com.propertyvista.operations.rpc.dto.ExecutionStatusUpdateDTO;
 import com.propertyvista.operations.rpc.services.scheduler.RunCrudService;
 import com.propertyvista.operations.rpc.services.scheduler.RunDataCrudService;
 

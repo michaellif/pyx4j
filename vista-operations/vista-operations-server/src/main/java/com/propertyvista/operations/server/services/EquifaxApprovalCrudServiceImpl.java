@@ -24,7 +24,7 @@ import com.pyx4j.entity.shared.criterion.EntityListCriteria;
 import com.pyx4j.rpc.shared.ServiceExecution;
 import com.pyx4j.rpc.shared.VoidSerializable;
 
-import com.propertyvista.operations.rpc.EquifaxSetupRequestDTO;
+import com.propertyvista.operations.rpc.dto.EquifaxSetupRequestDTO;
 import com.propertyvista.operations.rpc.services.EquifaxApprovalCrudService;
 import com.propertyvista.domain.pmc.Pmc;
 import com.propertyvista.domain.pmc.PmcEquifaxInfo;

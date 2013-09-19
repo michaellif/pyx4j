@@ -14,7 +14,7 @@
 package com.propertyvista.operations.client.ui.crud.auditrecords;
 
 import com.propertyvista.operations.client.ui.crud.OperationsListerViewImplBase;
-import com.propertyvista.operations.rpc.AuditRecordOperationsDTO;
+import com.propertyvista.operations.rpc.dto.AuditRecordOperationsDTO;
 
 public class AuditRecordListerViewImpl extends OperationsListerViewImplBase<AuditRecordOperationsDTO> {
 

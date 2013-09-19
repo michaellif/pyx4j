@@ -27,7 +27,7 @@ import com.pyx4j.site.client.ui.prime.form.IForm;
 import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
 import com.propertyvista.domain.DemoData;
 import com.propertyvista.operations.client.ui.crud.OperationsEntityForm;
-import com.propertyvista.operations.rpc.PmcDTO;
+import com.propertyvista.operations.rpc.dto.PmcDTO;
 
 public class PmcFormNewItem extends OperationsEntityForm<PmcDTO> {
 

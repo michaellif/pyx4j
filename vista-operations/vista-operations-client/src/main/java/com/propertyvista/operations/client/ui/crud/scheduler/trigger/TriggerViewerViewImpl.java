@@ -24,7 +24,7 @@ import com.propertyvista.operations.client.ui.crud.OperationsViewerViewImplBase;
 import com.propertyvista.operations.client.ui.crud.scheduler.run.RunLister;
 import com.propertyvista.operations.domain.scheduler.PmcProcessOptions;
 import com.propertyvista.operations.domain.scheduler.Run;
-import com.propertyvista.operations.rpc.TriggerDTO;
+import com.propertyvista.operations.rpc.dto.TriggerDTO;
 
 public class TriggerViewerViewImpl extends OperationsViewerViewImplBase<TriggerDTO> implements TriggerViewerView {
 

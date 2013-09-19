@@ -21,7 +21,7 @@ import com.pyx4j.site.rpc.CrudAppPlace;
 import com.propertyvista.operations.client.OperationsSite;
 import com.propertyvista.operations.client.activity.crud.AdminViewerActivity;
 import com.propertyvista.operations.client.ui.crud.systemdefaults.VistaSystemDefaultsViewerView;
-import com.propertyvista.operations.rpc.VistaSystemDefaultsDTO;
+import com.propertyvista.operations.rpc.dto.VistaSystemDefaultsDTO;
 import com.propertyvista.operations.rpc.services.Vista2PmcService;
 
 public class VistaSystemDefaultsViewerActivity extends AdminViewerActivity<VistaSystemDefaultsDTO> implements VistaSystemDefaultsViewerView.Presenter {

@@ -15,7 +15,7 @@ package com.propertyvista.operations.client.ui.crud.scheduler.trigger;
 
 import com.pyx4j.site.client.ui.prime.lister.ILister;
 
-import com.propertyvista.operations.rpc.TriggerDTO;
+import com.propertyvista.operations.rpc.dto.TriggerDTO;
 
 public interface TriggerListerView extends ILister<TriggerDTO> {
 

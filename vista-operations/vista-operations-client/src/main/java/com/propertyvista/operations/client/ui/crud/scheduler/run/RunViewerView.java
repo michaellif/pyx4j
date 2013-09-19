@@ -18,7 +18,7 @@ import com.pyx4j.site.client.ui.prime.lister.ILister;
 
 import com.propertyvista.operations.domain.scheduler.Run;
 import com.propertyvista.operations.domain.scheduler.RunData;
-import com.propertyvista.operations.rpc.ExecutionStatusUpdateDTO;
+import com.propertyvista.operations.rpc.dto.ExecutionStatusUpdateDTO;
 
 public interface RunViewerView extends IViewer<Run> {
 

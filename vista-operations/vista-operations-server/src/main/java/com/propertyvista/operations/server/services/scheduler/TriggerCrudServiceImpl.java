@@ -29,7 +29,7 @@ import com.propertyvista.biz.system.OperationsTriggerFacade;
 import com.propertyvista.operations.domain.scheduler.Run;
 import com.propertyvista.operations.domain.scheduler.Trigger;
 import com.propertyvista.operations.domain.scheduler.TriggerSchedule;
-import com.propertyvista.operations.rpc.TriggerDTO;
+import com.propertyvista.operations.rpc.dto.TriggerDTO;
 import com.propertyvista.operations.rpc.services.scheduler.TriggerCrudService;
 import com.propertyvista.operations.server.proc.JobUtils;
 

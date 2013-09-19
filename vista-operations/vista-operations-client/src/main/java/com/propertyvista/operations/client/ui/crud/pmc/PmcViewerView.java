@@ -19,8 +19,8 @@ import com.pyx4j.site.client.ui.prime.lister.ListerDataSource;
 import com.propertyvista.crm.rpc.dto.ScheduleDataDTO;
 import com.propertyvista.operations.domain.payment.dbp.DirectDebitRecord;
 import com.propertyvista.operations.domain.scheduler.PmcProcessType;
-import com.propertyvista.operations.rpc.PmcDTO;
-import com.propertyvista.operations.rpc.PmcMerchantAccountDTO;
+import com.propertyvista.operations.rpc.dto.PmcDTO;
+import com.propertyvista.operations.rpc.dto.PmcMerchantAccountDTO;
 
 public interface PmcViewerView extends IViewer<PmcDTO> {
 

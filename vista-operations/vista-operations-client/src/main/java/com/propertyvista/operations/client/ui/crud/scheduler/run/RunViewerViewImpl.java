@@ -25,7 +25,7 @@ import com.propertyvista.operations.client.ui.crud.OperationsViewerViewImplBase;
 import com.propertyvista.operations.domain.scheduler.Run;
 import com.propertyvista.operations.domain.scheduler.RunData;
 import com.propertyvista.operations.domain.scheduler.RunStatus;
-import com.propertyvista.operations.rpc.ExecutionStatusUpdateDTO;
+import com.propertyvista.operations.rpc.dto.ExecutionStatusUpdateDTO;
 
 public class RunViewerViewImpl extends OperationsViewerViewImplBase<Run> implements RunViewerView {
 

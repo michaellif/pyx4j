@@ -15,7 +15,7 @@ package com.propertyvista.operations.rpc.services;
 
 import com.pyx4j.entity.rpc.AbstractCrudService;
 
-import com.propertyvista.operations.rpc.OperationsUserDTO;
+import com.propertyvista.operations.rpc.dto.OperationsUserDTO;
 
 /**
  * Service used to create update new users in Admin Application.

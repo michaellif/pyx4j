@@ -33,8 +33,8 @@ import com.propertyvista.domain.financial.MerchantAccount.MerchantAccountActivat
 import com.propertyvista.domain.pmc.Pmc;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.operations.client.ui.crud.OperationsEntityForm;
-import com.propertyvista.operations.rpc.PmcDTO;
-import com.propertyvista.operations.rpc.PmcMerchantAccountDTO;
+import com.propertyvista.operations.rpc.dto.PmcDTO;
+import com.propertyvista.operations.rpc.dto.PmcMerchantAccountDTO;
 
 public class MerchantAccountForm extends OperationsEntityForm<PmcMerchantAccountDTO> {
 

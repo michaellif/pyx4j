@@ -24,7 +24,7 @@ import com.propertyvista.domain.pmc.PmcEquifaxStatus;
 import com.propertyvista.operations.client.OperationsSite;
 import com.propertyvista.operations.client.activity.crud.AdminViewerActivity;
 import com.propertyvista.operations.client.ui.crud.pmc.EquifaxApprovalView;
-import com.propertyvista.operations.rpc.EquifaxSetupRequestDTO;
+import com.propertyvista.operations.rpc.dto.EquifaxSetupRequestDTO;
 import com.propertyvista.operations.rpc.services.EquifaxApprovalCrudService;
 
 public class EquifaxApprovalViewActivity extends AdminViewerActivity<EquifaxSetupRequestDTO> implements EquifaxApprovalView.Presenter {

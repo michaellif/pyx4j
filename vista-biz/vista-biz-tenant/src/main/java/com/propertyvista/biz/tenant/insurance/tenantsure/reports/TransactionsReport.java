@@ -37,7 +37,7 @@ import com.propertyvista.biz.financial.payment.CreditCardFacade;
 import com.propertyvista.biz.financial.payment.CreditCardFacade.ReferenceNumberPrefix;
 import com.propertyvista.domain.payment.CreditCardInfo;
 import com.propertyvista.domain.tenant.insurance.InsuranceTenantSureTransaction;
-import com.propertyvista.operations.rpc.TenantSureCcTaransactionsReportLineDTO;
+import com.propertyvista.operations.rpc.dto.TenantSureCcTaransactionsReportLineDTO;
 
 public class TransactionsReport implements Report {
 

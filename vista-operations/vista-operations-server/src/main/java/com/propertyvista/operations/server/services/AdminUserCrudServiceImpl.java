@@ -18,7 +18,7 @@ import com.pyx4j.security.server.EmailValidator;
 import com.propertyvista.biz.system.AuditFacade;
 import com.propertyvista.biz.system.encryption.PasswordEncryptorFacade;
 import com.propertyvista.operations.domain.security.OperationsUserCredential;
-import com.propertyvista.operations.rpc.OperationsUserDTO;
+import com.propertyvista.operations.rpc.dto.OperationsUserDTO;
 import com.propertyvista.operations.rpc.services.AdminUserCrudService;
 
 public class AdminUserCrudServiceImpl extends AbstractCrudServiceDtoImpl<OperationsUserCredential, OperationsUserDTO> implements AdminUserCrudService {

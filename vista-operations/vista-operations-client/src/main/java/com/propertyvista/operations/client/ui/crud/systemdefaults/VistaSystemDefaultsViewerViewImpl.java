@@ -14,7 +14,7 @@
 package com.propertyvista.operations.client.ui.crud.systemdefaults;
 
 import com.propertyvista.operations.client.ui.crud.OperationsViewerViewImplBase;
-import com.propertyvista.operations.rpc.VistaSystemDefaultsDTO;
+import com.propertyvista.operations.rpc.dto.VistaSystemDefaultsDTO;
 
 public class VistaSystemDefaultsViewerViewImpl extends OperationsViewerViewImplBase<VistaSystemDefaultsDTO> implements VistaSystemDefaultsViewerView {
 

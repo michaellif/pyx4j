@@ -21,7 +21,7 @@ import com.pyx4j.site.rpc.CrudAppPlace;
 
 import com.propertyvista.operations.client.OperationsSite;
 import com.propertyvista.operations.client.ui.crud.systemdefaults.VistaSystemDefaultsEditorView;
-import com.propertyvista.operations.rpc.VistaSystemDefaultsDTO;
+import com.propertyvista.operations.rpc.dto.VistaSystemDefaultsDTO;
 import com.propertyvista.operations.rpc.services.Vista2PmcService;
 
 public class VistaSystemDefaultsEditorActivity extends AbstractEditorActivity<VistaSystemDefaultsDTO> implements VistaSystemDefaultsEditorView.Presenter {

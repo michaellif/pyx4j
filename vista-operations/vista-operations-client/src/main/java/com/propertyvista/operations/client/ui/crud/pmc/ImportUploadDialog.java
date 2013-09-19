@@ -29,7 +29,7 @@ import com.propertyvista.common.client.ui.components.UploadResponseDownloadableR
 import com.propertyvista.crm.rpc.dto.ImportUploadDTO;
 import com.propertyvista.dto.DownloadableUploadResponseDTO;
 import com.propertyvista.dto.ImportDataFormatType;
-import com.propertyvista.operations.rpc.PmcDTO;
+import com.propertyvista.operations.rpc.dto.PmcDTO;
 import com.propertyvista.operations.rpc.services.ImportUploadService;
 
 public class ImportUploadDialog extends UploadDialogBase<ImportUploadDTO, DownloadableUploadResponseDTO> {

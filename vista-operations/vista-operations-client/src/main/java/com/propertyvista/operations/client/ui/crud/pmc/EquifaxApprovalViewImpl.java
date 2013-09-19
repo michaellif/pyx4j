@@ -22,7 +22,7 @@ import com.pyx4j.widgets.client.dialog.MessageDialog;
 import com.pyx4j.widgets.client.dialog.OkOption;
 
 import com.propertyvista.operations.client.ui.crud.OperationsViewerViewImplBase;
-import com.propertyvista.operations.rpc.EquifaxSetupRequestDTO;
+import com.propertyvista.operations.rpc.dto.EquifaxSetupRequestDTO;
 
 public class EquifaxApprovalViewImpl extends OperationsViewerViewImplBase<EquifaxSetupRequestDTO> implements EquifaxApprovalView {
 

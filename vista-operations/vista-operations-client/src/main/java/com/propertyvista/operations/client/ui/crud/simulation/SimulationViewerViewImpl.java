@@ -14,7 +14,7 @@
 package com.propertyvista.operations.client.ui.crud.simulation;
 
 import com.propertyvista.operations.client.ui.crud.OperationsViewerViewImplBase;
-import com.propertyvista.operations.rpc.SimulationDTO;
+import com.propertyvista.operations.rpc.dto.SimulationDTO;
 
 public class SimulationViewerViewImpl extends OperationsViewerViewImplBase<SimulationDTO> implements SimulationViewerView {
 

@@ -15,7 +15,7 @@ package com.propertyvista.operations.rpc.services.simulator;
 
 import com.pyx4j.entity.rpc.AbstractCrudService;
 
-import com.propertyvista.operations.rpc.SimulationDTO;
+import com.propertyvista.operations.rpc.dto.SimulationDTO;
 
 public interface SimulationService extends AbstractCrudService<SimulationDTO> {
 

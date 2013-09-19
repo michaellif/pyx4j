@@ -14,7 +14,7 @@
 package com.propertyvista.operations.client.ui.crud.pmc;
 
 import com.propertyvista.operations.client.ui.crud.OperationsViewerViewImplBase;
-import com.propertyvista.operations.rpc.PmcMerchantAccountDTO;
+import com.propertyvista.operations.rpc.dto.PmcMerchantAccountDTO;
 
 public class MerchantAccountViewerViewImpl extends OperationsViewerViewImplBase<PmcMerchantAccountDTO> implements
         MerchantAccountViewerView {

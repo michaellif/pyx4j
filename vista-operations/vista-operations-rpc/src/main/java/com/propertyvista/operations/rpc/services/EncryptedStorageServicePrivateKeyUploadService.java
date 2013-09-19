@@ -15,7 +15,7 @@ package com.propertyvista.operations.rpc.services;
 
 import com.pyx4j.gwt.rpc.upload.UploadService;
 
-import com.propertyvista.operations.rpc.PrivateKeyDTO;
+import com.propertyvista.operations.rpc.dto.PrivateKeyDTO;
 
 public interface EncryptedStorageServicePrivateKeyUploadService extends
         UploadService<PrivateKeyDTO, PrivateKeyDTO> {

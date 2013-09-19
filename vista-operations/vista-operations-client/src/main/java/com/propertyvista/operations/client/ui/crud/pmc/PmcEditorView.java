@@ -15,7 +15,7 @@ package com.propertyvista.operations.client.ui.crud.pmc;
 
 import com.pyx4j.site.client.ui.prime.form.IEditor;
 
-import com.propertyvista.operations.rpc.PmcDTO;
+import com.propertyvista.operations.rpc.dto.PmcDTO;
 
 public interface PmcEditorView extends IEditor<PmcDTO> {
 

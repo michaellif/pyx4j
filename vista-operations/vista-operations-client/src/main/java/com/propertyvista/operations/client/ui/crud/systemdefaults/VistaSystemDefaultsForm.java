@@ -23,7 +23,7 @@ import com.propertyvista.operations.client.ui.components.MerchantAccountForm;
 import com.propertyvista.operations.client.ui.components.PaymentFeesForm;
 import com.propertyvista.operations.client.ui.crud.OperationsEntityForm;
 import com.propertyvista.operations.domain.vista2pmc.DefaultPaymentFees;
-import com.propertyvista.operations.rpc.VistaSystemDefaultsDTO;
+import com.propertyvista.operations.rpc.dto.VistaSystemDefaultsDTO;
 
 public class VistaSystemDefaultsForm extends OperationsEntityForm<VistaSystemDefaultsDTO> {
 

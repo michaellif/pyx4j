@@ -44,8 +44,8 @@ import com.propertyvista.operations.client.ui.crud.OperationsEntityForm;
 import com.propertyvista.operations.domain.payment.dbp.DirectDebitRecord;
 import com.propertyvista.operations.domain.vista2pmc.DefaultPaymentFees;
 import com.propertyvista.operations.rpc.OperationsSiteMap;
-import com.propertyvista.operations.rpc.PmcDTO;
-import com.propertyvista.operations.rpc.PmcMerchantAccountDTO;
+import com.propertyvista.operations.rpc.dto.PmcDTO;
+import com.propertyvista.operations.rpc.dto.PmcMerchantAccountDTO;
 
 public class PmcForm extends OperationsEntityForm<PmcDTO> {
 

@@ -20,7 +20,7 @@ import com.pyx4j.site.rpc.CrudAppPlace;
 
 import com.propertyvista.operations.client.OperationsSite;
 import com.propertyvista.operations.client.ui.crud.pmc.MerchantAccountViewerView;
-import com.propertyvista.operations.rpc.PmcMerchantAccountDTO;
+import com.propertyvista.operations.rpc.dto.PmcMerchantAccountDTO;
 import com.propertyvista.operations.rpc.services.PmcMerchantAccountCrudService;
 
 public class MerchantAccountViewerActivity extends AbstractViewerActivity<PmcMerchantAccountDTO> {

@@ -15,7 +15,7 @@ package com.propertyvista.operations.client.ui.crud.adminusers;
 
 import com.pyx4j.site.client.ui.prime.form.IEditor;
 
-import com.propertyvista.operations.rpc.OperationsUserDTO;
+import com.propertyvista.operations.rpc.dto.OperationsUserDTO;
 
 public interface AdminUserEditorView extends IEditor<OperationsUserDTO> {
 

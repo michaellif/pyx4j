@@ -17,7 +17,7 @@ import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.rpc.AbstractCrudService;
 
 import com.propertyvista.domain.pmc.Pmc;
-import com.propertyvista.operations.rpc.PmcMerchantAccountDTO;
+import com.propertyvista.operations.rpc.dto.PmcMerchantAccountDTO;
 
 public interface PmcMerchantAccountCrudService extends AbstractCrudService<PmcMerchantAccountDTO> {
 

@@ -20,7 +20,7 @@ import com.propertyvista.common.client.ui.components.editors.dto.wizards.Busines
 import com.propertyvista.common.client.ui.components.editors.dto.wizards.PersonalInformationForm;
 import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
 import com.propertyvista.operations.client.ui.crud.OperationsEntityForm;
-import com.propertyvista.operations.rpc.EquifaxSetupRequestDTO;
+import com.propertyvista.operations.rpc.dto.EquifaxSetupRequestDTO;
 
 public class EquifaxApprovalForm extends OperationsEntityForm<EquifaxSetupRequestDTO> {
 

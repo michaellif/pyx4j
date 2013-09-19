@@ -15,7 +15,7 @@ package com.propertyvista.operations.client.ui.crud.auditrecords;
 
 import com.pyx4j.site.client.ui.prime.lister.ILister;
 
-import com.propertyvista.operations.rpc.AuditRecordOperationsDTO;
+import com.propertyvista.operations.rpc.dto.AuditRecordOperationsDTO;
 
 public interface AuditRecordListerView extends ILister<AuditRecordOperationsDTO> {
 

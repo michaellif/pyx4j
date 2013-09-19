@@ -20,7 +20,7 @@ import com.pyx4j.site.client.activity.AbstractListerActivity;
 
 import com.propertyvista.operations.client.OperationsSite;
 import com.propertyvista.operations.client.ui.crud.adminusers.AdminUserListerView;
-import com.propertyvista.operations.rpc.OperationsUserDTO;
+import com.propertyvista.operations.rpc.dto.OperationsUserDTO;
 import com.propertyvista.operations.rpc.services.AdminUserCrudService;
 
 public class AdminUserListerActivity extends AbstractListerActivity<OperationsUserDTO> {

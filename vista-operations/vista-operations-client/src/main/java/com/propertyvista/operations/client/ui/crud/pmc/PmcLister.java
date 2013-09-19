@@ -24,7 +24,7 @@ import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.prime.lister.AbstractLister;
 import com.pyx4j.widgets.client.Button;
 
-import com.propertyvista.operations.rpc.PmcDTO;
+import com.propertyvista.operations.rpc.dto.PmcDTO;
 
 public class PmcLister extends AbstractLister<PmcDTO> {
 

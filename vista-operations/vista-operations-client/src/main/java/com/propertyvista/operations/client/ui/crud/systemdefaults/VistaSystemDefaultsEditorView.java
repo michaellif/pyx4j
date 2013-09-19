@@ -15,7 +15,7 @@ package com.propertyvista.operations.client.ui.crud.systemdefaults;
 
 import com.pyx4j.site.client.ui.prime.form.IEditor;
 
-import com.propertyvista.operations.rpc.VistaSystemDefaultsDTO;
+import com.propertyvista.operations.rpc.dto.VistaSystemDefaultsDTO;
 
 public interface VistaSystemDefaultsEditorView extends IEditor<VistaSystemDefaultsDTO> {
 

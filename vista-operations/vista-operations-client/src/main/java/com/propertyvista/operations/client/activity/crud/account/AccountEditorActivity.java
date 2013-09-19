@@ -20,7 +20,7 @@ import com.pyx4j.site.rpc.CrudAppPlace;
 
 import com.propertyvista.operations.client.OperationsSite;
 import com.propertyvista.operations.client.ui.crud.adminusers.AdminUserEditorView;
-import com.propertyvista.operations.rpc.OperationsUserDTO;
+import com.propertyvista.operations.rpc.dto.OperationsUserDTO;
 import com.propertyvista.operations.rpc.services.AdminUserService;
 
 public class AccountEditorActivity extends AbstractEditorActivity<OperationsUserDTO> {

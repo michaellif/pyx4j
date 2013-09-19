@@ -22,7 +22,7 @@ import com.pyx4j.entity.server.Persistence;
 import com.propertyvista.domain.security.common.AbstractUser;
 import com.propertyvista.domain.security.common.VistaUserType;
 import com.propertyvista.operations.domain.security.AuditRecord;
-import com.propertyvista.operations.rpc.AuditRecordOperationsDTO;
+import com.propertyvista.operations.rpc.dto.AuditRecordOperationsDTO;
 import com.propertyvista.operations.rpc.services.AuditRecordCrudService;
 import com.propertyvista.server.common.security.VistaContext;
 import com.propertyvista.server.jobs.TaskRunner;

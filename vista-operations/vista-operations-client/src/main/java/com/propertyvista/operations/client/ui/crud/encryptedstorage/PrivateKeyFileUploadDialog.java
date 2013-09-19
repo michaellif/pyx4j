@@ -27,7 +27,7 @@ import com.pyx4j.gwt.rpc.upload.UploadService;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.security.shared.PasswordSerializable;
 
-import com.propertyvista.operations.rpc.PrivateKeyDTO;
+import com.propertyvista.operations.rpc.dto.PrivateKeyDTO;
 import com.propertyvista.operations.rpc.encryption.EncryptedStorageKeyDTO;
 import com.propertyvista.operations.rpc.services.EncryptedStorageServicePrivateKeyUploadService;
 

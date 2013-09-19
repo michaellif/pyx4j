@@ -17,7 +17,7 @@ import com.pyx4j.site.client.ui.prime.form.IViewer;
 import com.pyx4j.site.client.ui.prime.lister.ILister;
 
 import com.propertyvista.operations.domain.scheduler.Run;
-import com.propertyvista.operations.rpc.TriggerDTO;
+import com.propertyvista.operations.rpc.dto.TriggerDTO;
 import com.propertyvista.crm.rpc.dto.ScheduleDataDTO;
 
 public interface TriggerViewerView extends IViewer<TriggerDTO> {

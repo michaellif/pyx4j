@@ -27,7 +27,7 @@ import com.propertyvista.common.client.ui.components.UploadResponseDownloadableR
 import com.propertyvista.dto.DownloadableUploadResponseDTO;
 import com.propertyvista.operations.client.OperationsSite;
 import com.propertyvista.operations.client.ui.crud.pmc.PmcListerView;
-import com.propertyvista.operations.rpc.PmcDTO;
+import com.propertyvista.operations.rpc.dto.PmcDTO;
 import com.propertyvista.operations.rpc.services.MerchantAccountFileUploadService;
 import com.propertyvista.operations.rpc.services.PmcCrudService;
 import com.propertyvista.portal.rpc.DeploymentConsts;

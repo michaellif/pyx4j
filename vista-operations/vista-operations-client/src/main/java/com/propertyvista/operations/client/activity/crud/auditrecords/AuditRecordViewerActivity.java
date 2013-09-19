@@ -20,7 +20,7 @@ import com.pyx4j.site.rpc.CrudAppPlace;
 
 import com.propertyvista.operations.client.OperationsSite;
 import com.propertyvista.operations.client.ui.crud.auditrecords.AuditRecordViewerView;
-import com.propertyvista.operations.rpc.AuditRecordOperationsDTO;
+import com.propertyvista.operations.rpc.dto.AuditRecordOperationsDTO;
 import com.propertyvista.operations.rpc.services.AuditRecordCrudService;
 
 public class AuditRecordViewerActivity extends AbstractViewerActivity<AuditRecordOperationsDTO> {

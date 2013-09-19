@@ -22,7 +22,7 @@ import com.pyx4j.essentials.server.upload.UploadDeferredProcess;
 import com.pyx4j.gwt.rpc.upload.UploadResponse;
 
 import com.propertyvista.biz.system.encryption.EncryptedStorageFacade;
-import com.propertyvista.operations.rpc.PrivateKeyDTO;
+import com.propertyvista.operations.rpc.dto.PrivateKeyDTO;
 import com.propertyvista.operations.rpc.services.EncryptedStorageServicePrivateKeyUploadService;
 
 public class EncryptedStorageServicePrivateKeyUploadServiceImpl extends AbstractUploadServiceImpl<PrivateKeyDTO, PrivateKeyDTO> implements

@@ -18,7 +18,7 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.pyx4j.entity.rpc.AbstractCrudService;
 import com.pyx4j.rpc.shared.VoidSerializable;
 
-import com.propertyvista.operations.rpc.EquifaxSetupRequestDTO;
+import com.propertyvista.operations.rpc.dto.EquifaxSetupRequestDTO;
 
 public interface EquifaxApprovalCrudService extends AbstractCrudService<EquifaxSetupRequestDTO> {
 

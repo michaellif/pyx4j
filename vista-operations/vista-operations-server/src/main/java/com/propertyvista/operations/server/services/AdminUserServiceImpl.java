@@ -23,7 +23,7 @@ import com.pyx4j.entity.shared.criterion.EntityListCriteria;
 import com.pyx4j.security.server.EmailValidator;
 
 import com.propertyvista.operations.domain.security.OperationsUserCredential;
-import com.propertyvista.operations.rpc.OperationsUserDTO;
+import com.propertyvista.operations.rpc.dto.OperationsUserDTO;
 import com.propertyvista.operations.rpc.services.AdminUserService;
 
 public class AdminUserServiceImpl extends AbstractCrudServiceDtoImpl<OperationsUserCredential, OperationsUserDTO> implements AdminUserService {

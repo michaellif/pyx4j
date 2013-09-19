@@ -26,8 +26,8 @@ import com.propertyvista.operations.client.ui.crud.OperationsEntityForm;
 import com.propertyvista.operations.domain.scheduler.ExecutionReport;
 import com.propertyvista.operations.domain.scheduler.Run;
 import com.propertyvista.operations.domain.scheduler.RunData;
-import com.propertyvista.operations.rpc.PmcDTO;
-import com.propertyvista.operations.rpc.TriggerDTO;
+import com.propertyvista.operations.rpc.dto.PmcDTO;
+import com.propertyvista.operations.rpc.dto.TriggerDTO;
 
 public class RunDataForm extends OperationsEntityForm<RunData> {
 

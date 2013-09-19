@@ -31,9 +31,13 @@ import com.propertyvista.operations.client.activity.crud.adminusers.AdminUserLis
 import com.propertyvista.operations.client.activity.crud.adminusers.AdminUserViewerActivity;
 import com.propertyvista.operations.client.activity.crud.auditrecords.AuditRecordListerActivity;
 import com.propertyvista.operations.client.activity.crud.auditrecords.AuditRecordViewerActivity;
-import com.propertyvista.operations.client.activity.crud.dbp.DirectDebitRecordListerActivity;
-import com.propertyvista.operations.client.activity.crud.dbp.DirectDebitRecordViewerActivity;
 import com.propertyvista.operations.client.activity.crud.encryptedstorage.EncryptedStorageActivity;
+import com.propertyvista.operations.client.activity.crud.fundstransfer.directdebitrecord.DirectDebitRecordListerActivity;
+import com.propertyvista.operations.client.activity.crud.fundstransfer.directdebitrecord.DirectDebitRecordViewerActivity;
+import com.propertyvista.operations.client.activity.crud.fundstransfer.fundsreconciliationfile.PadReconciliationFileListerActivity;
+import com.propertyvista.operations.client.activity.crud.fundstransfer.fundsreconciliationfile.PadReconciliationFileViewerActivity;
+import com.propertyvista.operations.client.activity.crud.fundstransfer.fundstransferrecord.PadDebitRecordListerActivity;
+import com.propertyvista.operations.client.activity.crud.fundstransfer.fundstransferrecord.PadDebitRecordViewerActivity;
 import com.propertyvista.operations.client.activity.crud.legal.VistaTermsDefaultActivity;
 import com.propertyvista.operations.client.activity.crud.legal.VistaTermsEditorActivity;
 import com.propertyvista.operations.client.activity.crud.legal.VistaTermsViewerActivity;
@@ -187,13 +191,49 @@ public class ContentActivityMapper implements AppActivityMapper {
                             break;
                         }
 
-                    } else if (place instanceof OperationsSiteMap.Management.DirectDebitRecord) {
+                    } else if (place instanceof OperationsSiteMap.FundsTransfer.DirectDebitRecord) {
                         switch (crudPlace.getType()) {
                         case lister:
                             activity = new DirectDebitRecordListerActivity(crudPlace);
                             break;
                         case viewer:
                             activity = new DirectDebitRecordViewerActivity(crudPlace);
+                            break;
+                        default:
+                            break;
+                        }
+
+                    } else if (place instanceof OperationsSiteMap.FundsTransfer.FundsTransferFile) {
+                        switch (crudPlace.getType()) {
+                        case lister:
+                            activity = new PadFileListerActivity(crudPlace);
+                            break;
+                        case viewer:
+                            activity = new PadFileViewerActivity(crudPlace);
+                            break;
+                        default:
+                            break;
+                        }
+
+                    } else if (place instanceof OperationsSiteMap.FundsTransfer.FundsTransferRecord) {
+                        switch (crudPlace.getType()) {
+                        case lister:
+                            activity = new PadDebitRecordListerActivity(crudPlace);
+                            break;
+                        case viewer:
+                            activity = new PadDebitRecordViewerActivity(crudPlace);
+                            break;
+                        default:
+                            break;
+                        }
+
+                    } else if (place instanceof OperationsSiteMap.FundsTransfer.FundsReconciliationFile) {
+                        switch (crudPlace.getType()) {
+                        case lister:
+                            activity = new PadReconciliationFileListerActivity(crudPlace);
+                            break;
+                        case viewer:
+                            activity = new PadReconciliationFileViewerActivity(crudPlace);
                             break;
                         default:
                             break;

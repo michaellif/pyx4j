@@ -80,9 +80,24 @@ public class OperationsSiteMap implements SiteMap {
                 formViewerPlace(new Key(-1));
             }
         }
+    }
 
-        @PlaceProperties(caption = "Direct Debit Records", navigLabel = "Direct Debit Records")
+    public static class FundsTransfer extends AppPlace {
+
+        @PlaceProperties(navigLabel = "Direct Debit Records")
         public static class DirectDebitRecord extends CrmCrudAppPlace {
+        }
+
+        @PlaceProperties(navigLabel = "Funds Transfer Files")
+        public static class FundsTransferFile extends CrmCrudAppPlace {
+        }
+
+        @PlaceProperties(navigLabel = "Funds Transfer Records")
+        public static class FundsTransferRecord extends CrmCrudAppPlace {
+        }
+
+        @PlaceProperties(navigLabel = "Funds Reconciliation Files")
+        public static class FundsReconciliationFile extends CrmCrudAppPlace {
         }
     }
 

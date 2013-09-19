@@ -14,7 +14,7 @@
 package com.propertyvista.operations.client.ui.crud.scheduler.trigger;
 
 import com.propertyvista.operations.client.ui.crud.OperationsListerViewImplBase;
-import com.propertyvista.operations.rpc.TriggerDTO;
+import com.propertyvista.operations.rpc.dto.TriggerDTO;
 
 public class TriggerListerViewImpl extends OperationsListerViewImplBase<TriggerDTO> implements TriggerListerView {
 

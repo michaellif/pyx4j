@@ -33,7 +33,7 @@ import com.propertyvista.operations.domain.vista2pmc.DefaultPaymentFees;
 import com.propertyvista.operations.domain.vista2pmc.TenantSureMerchantAccount;
 import com.propertyvista.operations.domain.vista2pmc.VistaMerchantAccount;
 import com.propertyvista.operations.domain.vista2pmc.VistaMerchantAccount.AccountType;
-import com.propertyvista.operations.rpc.VistaSystemDefaultsDTO;
+import com.propertyvista.operations.rpc.dto.VistaSystemDefaultsDTO;
 import com.propertyvista.operations.rpc.services.Vista2PmcService;
 
 public class Vista2PmcServiceImpl implements Vista2PmcService {

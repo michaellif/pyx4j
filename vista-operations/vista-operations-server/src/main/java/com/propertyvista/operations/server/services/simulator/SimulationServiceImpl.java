@@ -33,7 +33,7 @@ import com.propertyvista.config.AbstractVistaServerSideConfiguration;
 import com.propertyvista.config.VistaSystemsSimulationConfig;
 import com.propertyvista.operations.domain.dev.CardServiceSimulatorConfig;
 import com.propertyvista.operations.domain.dev.EquifaxSimulatorConfig;
-import com.propertyvista.operations.rpc.SimulationDTO;
+import com.propertyvista.operations.rpc.dto.SimulationDTO;
 import com.propertyvista.operations.rpc.services.simulator.SimulationService;
 
 public class SimulationServiceImpl extends AdminServiceImpl implements SimulationService {

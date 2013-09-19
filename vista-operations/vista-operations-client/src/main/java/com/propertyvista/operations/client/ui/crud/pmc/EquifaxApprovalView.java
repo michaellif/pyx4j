@@ -15,7 +15,7 @@ package com.propertyvista.operations.client.ui.crud.pmc;
 
 import com.pyx4j.site.client.ui.prime.form.IViewer;
 
-import com.propertyvista.operations.rpc.EquifaxSetupRequestDTO;
+import com.propertyvista.operations.rpc.dto.EquifaxSetupRequestDTO;
 
 public interface EquifaxApprovalView extends IViewer<EquifaxSetupRequestDTO> {
 

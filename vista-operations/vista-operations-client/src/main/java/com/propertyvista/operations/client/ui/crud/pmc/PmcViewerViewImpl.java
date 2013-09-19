@@ -33,8 +33,8 @@ import com.propertyvista.operations.client.ui.crud.OperationsViewerViewImplBase;
 import com.propertyvista.operations.client.ui.crud.scheduler.trigger.RunForDateDialog;
 import com.propertyvista.operations.domain.scheduler.PmcProcessOptions;
 import com.propertyvista.operations.domain.scheduler.PmcProcessType;
-import com.propertyvista.operations.rpc.PmcDTO;
-import com.propertyvista.operations.rpc.PmcExportDownloadDTO;
+import com.propertyvista.operations.rpc.dto.PmcDTO;
+import com.propertyvista.operations.rpc.dto.PmcExportDownloadDTO;
 import com.propertyvista.operations.rpc.services.ExportDownloadService;
 import com.propertyvista.portal.rpc.DeploymentConsts;
 
