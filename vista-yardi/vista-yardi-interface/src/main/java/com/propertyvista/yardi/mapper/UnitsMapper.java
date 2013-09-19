@@ -25,6 +25,7 @@ import com.yardi.entity.mits.Uniteconstatusinfo;
 import com.yardi.entity.resident.RTCustomer;
 import com.yardi.entity.resident.RTUnit;
 
+import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.entity.shared.EntityFactory;
 
 import com.propertyvista.domain.contact.AddressStructured;
@@ -98,7 +99,7 @@ public class UnitsMapper {
                 }
                 address2.append(addressPart);
             }
-            StreetAddress streetAddress = new CanadianStreetAddressParser().parse(addressImported.getAddress1(), address2.toString());
+            StreetAddress streetAddress = new CanadianStreetAddressParser().parse(CommonsStringUtils.nvl(addressImported.getAddress1()), address2.toString());
 
             AddressStructured address = EntityFactory.create(AddressStructured.class);
             address.streetNumber().setValue(streetAddress.streetNumber);
