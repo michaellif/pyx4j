@@ -89,8 +89,12 @@ public class CEntityListBox<E extends IEntity> extends CListBox<E> {
         super(title, mode);
     }
 
-    public CEntityListBox(Class<E> entityClass, SelectionMode mode) {
+    public CEntityListBox(Class<E> entityClass) {
         this(null, entityClass, SelectionMode.SINGLE_PANEL);
+    }
+
+    public CEntityListBox(Class<E> entityClass, SelectionMode mode) {
+        this(null, entityClass, mode);
     }
 
     public CEntityListBox(String title, Class<E> entityClass) {
