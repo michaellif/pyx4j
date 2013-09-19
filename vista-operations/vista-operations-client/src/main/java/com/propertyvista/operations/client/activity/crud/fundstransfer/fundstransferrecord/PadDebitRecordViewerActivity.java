@@ -20,12 +20,11 @@ import com.pyx4j.site.client.activity.AbstractViewerActivity;
 import com.pyx4j.site.rpc.CrudAppPlace;
 
 import com.propertyvista.operations.client.OperationsSite;
-import com.propertyvista.operations.client.ui.crud.fundstransfer.directdebitrecords.DirectDebitRecordViewerView;
 import com.propertyvista.operations.client.ui.crud.fundstransfer.fundstransferrecord.PadDebitRecordViewerView;
 import com.propertyvista.operations.rpc.dto.PadDebitRecordDTO;
 import com.propertyvista.operations.rpc.services.PadDebitRecordCrudService;
 
-public class PadDebitRecordViewerActivity extends AbstractViewerActivity<PadDebitRecordDTO> implements DirectDebitRecordViewerView.Presenter {
+public class PadDebitRecordViewerActivity extends AbstractViewerActivity<PadDebitRecordDTO> implements PadDebitRecordViewerView.Presenter {
 
     public PadDebitRecordViewerActivity(CrudAppPlace place) {
         super(place, OperationsSite.getViewFactory().instantiate(PadDebitRecordViewerView.class), GWT
