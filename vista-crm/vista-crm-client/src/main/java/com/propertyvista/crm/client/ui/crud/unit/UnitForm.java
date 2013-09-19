@@ -31,6 +31,7 @@ import com.pyx4j.entity.shared.criterion.EntityQueryCriteria.Sort;
 import com.pyx4j.forms.client.ui.CEntityLabel;
 import com.pyx4j.forms.client.ui.datatable.ColumnDescriptor;
 import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
+import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
@@ -164,11 +165,11 @@ public class UnitForm extends CrmEntityForm<AptUnitDTO> {
         return main;
     }
 
-    private TwoColumnFlexFormPanel createLegalAddresslTab() {
-        TwoColumnFlexFormPanel main = new TwoColumnFlexFormPanel(i18n.tr("Legal Address"));
+    private BasicFlexFormPanel createLegalAddresslTab() {
+        BasicFlexFormPanel main = new BasicFlexFormPanel(i18n.tr("Legal Address"));
 
         int row = -1;
-        main.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().info().legalAddressOverride()), 8).build());
+        main.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().info().legalAddressOverride())).labelWidth("360px").build());
         main.setH1(++row, 0, 2, proto().info().legalAddress().getMeta().getCaption());
         unitLegalAddressLabel = main.getWidget(row, 0);
         main.setWidget(++row, 0, inject(proto().info().legalAddress(), new AddressStructuredEditor(true)));
