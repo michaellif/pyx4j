@@ -28,7 +28,7 @@ import com.pyx4j.rpc.client.DefaultAsyncCallback;
 
 import com.propertyvista.common.client.policy.ClientPolicyManager;
 import com.propertyvista.common.client.ui.components.ApplicationDocumentFileUploaderFolder;
-import com.propertyvista.common.client.ui.components.DocumentTypeSelectorDialog;
+import com.propertyvista.common.client.ui.components.DocumentTypeSelectorDialogReferenceData;
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
 import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
 import com.propertyvista.domain.media.ApplicationDocumentFile;
@@ -86,7 +86,7 @@ public class IdUploaderFolder extends VistaBoxFolder<IdentificationDocument> {
 
     @Override
     protected void addItem() {
-        new DocumentTypeSelectorDialog() {
+        new DocumentTypeSelectorDialogReferenceData() {
             @Override
             public boolean onClickOk() {
                 IdentificationDocument document = EntityFactory.create(IdentificationDocument.class);
