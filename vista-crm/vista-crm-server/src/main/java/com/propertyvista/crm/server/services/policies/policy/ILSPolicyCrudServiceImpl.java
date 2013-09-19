@@ -13,6 +13,8 @@
  */
 package com.propertyvista.crm.server.services.policies.policy;
 
+import java.util.List;
+
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 
@@ -31,7 +33,8 @@ public class ILSPolicyCrudServiceImpl extends GenericPolicyCrudService<ILSPolicy
     @Override
     public void enhanceRetrieved(ILSPolicy entity, ILSPolicyDTO dto, RetrieveTarget retrieveTarget) {
         super.enhanceRetrieved(entity, dto, retrieveTarget);
-        for (Building bld : Persistence.service().query(EntityQueryCriteria.create(Building.class))) {
+        List<Building> buildings = Persistence.service().query(EntityQueryCriteria.create(Building.class));
+        for (Building bld : buildings) {
             dto.countries().add(bld.info().address().country());
         }
     }

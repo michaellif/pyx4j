@@ -17,6 +17,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.EnumSet;
 import java.util.List;
+import java.util.Set;
 
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
@@ -24,6 +25,7 @@ import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IObject;
+import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CEntityListBox;
 import com.pyx4j.forms.client.ui.CEnumLabel;
@@ -42,6 +44,7 @@ import com.propertyvista.domain.policy.dto.ILSPolicyDTO;
 import com.propertyvista.domain.policy.policies.domain.ILSPolicyItem;
 import com.propertyvista.domain.policy.policies.domain.ILSPolicyItem.ILSProvider;
 import com.propertyvista.domain.ref.City;
+import com.propertyvista.domain.ref.Country;
 import com.propertyvista.domain.ref.Province;
 
 public class ILSPolicyForm extends PolicyDTOTabPanelBasedForm<ILSPolicyDTO> {
@@ -104,13 +107,23 @@ public class ILSPolicyForm extends PolicyDTOTabPanelBasedForm<ILSPolicyDTO> {
 
         private class ILSPolicyItemEditor extends CEntityDecoratableForm<ILSPolicyItem> {
 
-            private final CEntityListBox<Province> provinceSelector = new CEntityListBox<Province>(Province.class, SelectionMode.TWO_PANEL);
+            private final CEntityListBox<Province> provinceSelector;
 
-            private final CEntityListBox<City> citySelector = new CEntityListBox<City>(City.class, SelectionMode.TWO_PANEL);
+            private final CEntityListBox<City> citySelector;
 
             public ILSPolicyItemEditor() {
                 super(ILSPolicyItem.class);
 
+                provinceSelector = new CEntityListBox<Province>(Province.class, SelectionMode.TWO_PANEL);
+                citySelector = new CEntityListBox<City>(City.class, SelectionMode.TWO_PANEL);
+
+                // set province option criteria
+                if (!ILSPolicyForm.this.getValue().isNull()) {
+                    Set<Country> countries = ILSPolicyForm.this.getValue().countries();
+                    if (!countries.isEmpty()) {
+                        provinceSelector.addCriterion(PropertyCriterion.in(provinceSelector.proto().country(), countries));
+                    }
+                }
                 // update city option filter
                 provinceSelector.addValueChangeHandler(new ValueChangeHandler<List<Province>>() {
                     @Override
@@ -131,9 +144,12 @@ public class ILSPolicyForm extends PolicyDTOTabPanelBasedForm<ILSPolicyDTO> {
                 TwoColumnFlexFormPanel content = new TwoColumnFlexFormPanel();
                 int row = -1;
 
-                content.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().provider(), new CEnumLabel()), true).labelWidth("100px").build());
-                content.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().allowedProvinces(), provinceSelector), true).labelWidth("100px").build());
-                content.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().allowedCities(), citySelector), true).labelWidth("100px").build());
+                content.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().provider(), new CEnumLabel()), true).build());
+                content.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().allowedProvinces(), provinceSelector), true).build());
+                content.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().allowedCities(), citySelector), true).build());
+
+                provinceSelector.setEmptyValueFormat(i18n.tr("All Available"));
+                citySelector.setEmptyValueFormat(i18n.tr("All Available"));
 
                 return content;
             }
