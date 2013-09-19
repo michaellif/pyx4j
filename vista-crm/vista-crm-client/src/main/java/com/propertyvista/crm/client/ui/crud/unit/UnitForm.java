@@ -23,6 +23,7 @@ import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HasVerticalAlignment;
+import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.commons.Key;
 import com.pyx4j.entity.rpc.AbstractListService;
@@ -42,6 +43,7 @@ import com.pyx4j.site.client.ui.prime.misc.CEntitySelectorHyperlink;
 import com.pyx4j.site.rpc.AppPlace;
 import com.pyx4j.widgets.client.tabpanel.Tab;
 
+import com.propertyvista.common.client.ui.components.editors.AddressStructuredEditor;
 import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.crm.rpc.services.selections.SelectFloorplanListService;
@@ -54,6 +56,10 @@ import com.propertyvista.shared.config.VistaFeatures;
 public class UnitForm extends CrmEntityForm<AptUnitDTO> {
 
     private static final I18n i18n = I18n.get(UnitForm.class);
+
+    private Widget buildingLegalAddressLabel;
+
+    private Widget unitLegalAddressLabel;
 
     public UnitForm(IForm<AptUnitDTO> view) {
         super(AptUnitDTO.class, view);
@@ -69,6 +75,8 @@ public class UnitForm extends CrmEntityForm<AptUnitDTO> {
             setTabEnabled(tab, !isEditable());
         }
 
+        addTab(createLegalAddresslTab());
+
         // TODO Hided till further investigation:
         // addTab(createMarketingTab(), i18n.tr("Marketing"));
     }
@@ -82,6 +90,15 @@ public class UnitForm extends CrmEntityForm<AptUnitDTO> {
             get(proto()._availableForRent()).setVisible(!getValue()._availableForRent().isNull());
             get(proto().financial()._unitRent()).setVisible(!getValue().financial()._unitRent().isNull());
         }
+        updateSelectedLegalAddress();
+    }
+
+    private void updateSelectedLegalAddress() {
+        boolean ownedLegalAddress = getValue().info().legalAddressOverride().getValue(false);
+        get(proto().info().legalAddress()).setVisible(ownedLegalAddress);
+        unitLegalAddressLabel.setVisible(ownedLegalAddress);
+        get(proto().buildingLegalAddress()).setVisible(!ownedLegalAddress);
+        buildingLegalAddressLabel.setVisible(!ownedLegalAddress);
     }
 
     private TwoColumnFlexFormPanel createGeneralTab(String title) {
@@ -143,6 +160,35 @@ public class UnitForm extends CrmEntityForm<AptUnitDTO> {
 
         main.getFlexCellFormatter().setVerticalAlignment(0, 0, HasVerticalAlignment.ALIGN_TOP);
         main.getFlexCellFormatter().setVerticalAlignment(0, 1, HasVerticalAlignment.ALIGN_TOP);
+
+        return main;
+    }
+
+    private TwoColumnFlexFormPanel createLegalAddresslTab() {
+        TwoColumnFlexFormPanel main = new TwoColumnFlexFormPanel(i18n.tr("Legal Address"));
+
+        int row = -1;
+        main.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().info().legalAddressOverride()), 8).build());
+        main.setH1(++row, 0, 2, proto().info().legalAddress().getMeta().getCaption());
+        unitLegalAddressLabel = main.getWidget(row, 0);
+        main.setWidget(++row, 0, inject(proto().info().legalAddress(), new AddressStructuredEditor(true)));
+
+        main.setH1(++row, 0, 2, proto().buildingLegalAddress().getMeta().getCaption());
+        buildingLegalAddressLabel = main.getWidget(row, 0);
+        main.setWidget(++row, 0, inject(proto().buildingLegalAddress(), new AddressStructuredEditor(true)));
+        get(proto().buildingLegalAddress()).setViewable(true);
+
+        get(proto().info().legalAddressOverride()).addValueChangeHandler(new ValueChangeHandler<Boolean>() {
+            @Override
+            public void onValueChange(ValueChangeEvent<Boolean> event) {
+                updateSelectedLegalAddress();
+
+                // Populate default values base on building address
+                if (getValue().info().legalAddressOverride().getValue(false) && get(proto().info().legalAddress()).getValue().isEmpty()) {
+                    get(proto().info().legalAddress()).setValue(getValue().buildingLegalAddress());
+                }
+            }
+        });
 
         return main;
     }

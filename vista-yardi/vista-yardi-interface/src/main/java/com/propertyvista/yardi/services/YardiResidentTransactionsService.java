@@ -324,7 +324,7 @@ public class YardiResidentTransactionsService extends YardiAbstractService {
         AptUnit unit = new UnitOfWork(TransactionScopeOption.RequiresNew).execute(new Executable<AptUnit, YardiServiceException>() {
             @Override
             public AptUnit execute() throws YardiServiceException {
-                AptUnit unit = new YardiBuildingProcessor().updateUnit(building, rtCustomer.getRTUnit());
+                AptUnit unit = new YardiBuildingProcessor().updateUnit(building, rtCustomer);
                 ServerSideFactory.create(BuildingFacade.class).persist(unit);
                 return unit;
             }

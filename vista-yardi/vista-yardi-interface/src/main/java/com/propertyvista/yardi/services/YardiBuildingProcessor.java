@@ -14,15 +14,10 @@
 package com.propertyvista.yardi.services;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-
-import org.apache.commons.lang.StringUtils;
 
 import com.yardi.entity.resident.Property;
 import com.yardi.entity.resident.RTCustomer;
-import com.yardi.entity.resident.RTUnit;
 import com.yardi.entity.resident.ResidentTransactions;
 
 import com.pyx4j.commons.Key;
@@ -30,7 +25,6 @@ import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.AttachLevel;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 
-import com.propertyvista.biz.financial.ar.yardi.YardiARIntegrationAgent;
 import com.propertyvista.biz.system.YardiServiceException;
 import com.propertyvista.config.VistaDeployment;
 import com.propertyvista.domain.pmc.Pmc;
@@ -54,8 +48,8 @@ public class YardiBuildingProcessor {
         return merge(building, getBuilding(yardiInterfaceId, propertyCode));
     }
 
-    public AptUnit updateUnit(Building building, RTUnit unit) throws YardiServiceException {
-        AptUnit importedUnit = new UnitsMapper().map(unit);
+    public AptUnit updateUnit(Building building, RTCustomer rtCustomer) throws YardiServiceException {
+        AptUnit importedUnit = new UnitsMapper().map(rtCustomer, getProvinces());
         if (building.floorplans().getAttachLevel() != AttachLevel.Attached) {
             Persistence.service().retrieveMember(building.floorplans(), AttachLevel.Attached);
         }
@@ -112,34 +106,12 @@ public class YardiBuildingProcessor {
         return Persistence.service().query(criteria);
     }
 
-    @Deprecated
-    public List<AptUnit> getUnits(Property property) {
-        List<RTUnit> imported = getYardiUnits(property);
-        return new UnitsMapper().map(imported);
-
-    }
-
     public List<Property> getProperties(ResidentTransactions transaction) {
         List<Property> properties = new ArrayList<Property>();
         for (Property property : transaction.getProperty()) {
             properties.add(property);
         }
         return properties;
-    }
-
-    @Deprecated
-    public List<RTUnit> getYardiUnits(Property property) {
-
-        Map<String, RTUnit> map = new HashMap<String, RTUnit>();
-
-        for (RTCustomer customer : property.getRTCustomer()) {
-            String unitId = YardiARIntegrationAgent.getUnitId(customer);
-            if (StringUtils.isNotEmpty(unitId) && !map.containsKey(unitId)) {
-                map.put(unitId, customer.getRTUnit());
-            }
-        }
-
-        return new ArrayList<RTUnit>(map.values());
     }
 
     private boolean isSameCountry(Building building) throws YardiServiceException {

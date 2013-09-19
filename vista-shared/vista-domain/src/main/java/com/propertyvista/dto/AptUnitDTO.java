@@ -18,12 +18,15 @@ import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
 
+import com.propertyvista.domain.contact.AddressStructured;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.tenant.lease.Lease;
 
 @Transient
 @ExtendsDBO
 public interface AptUnitDTO extends AptUnit {
+
+    AddressStructured buildingLegalAddress();
 
     IPrimitive<String> buildingCode();
 

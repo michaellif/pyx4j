@@ -13,23 +13,28 @@
  */
 package com.propertyvista.yardi.mapper;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.yardi.entity.mits.Address;
 import com.yardi.entity.mits.Information;
 import com.yardi.entity.mits.Uniteconstatusinfo;
+import com.yardi.entity.resident.RTCustomer;
 import com.yardi.entity.resident.RTUnit;
 
 import com.pyx4j.entity.shared.EntityFactory;
 
+import com.propertyvista.domain.contact.AddressStructured;
 import com.propertyvista.domain.property.asset.AreaMeasurementUnit;
 import com.propertyvista.domain.property.asset.Floorplan;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.property.asset.unit.AptUnitInfo.EconomicStatus;
+import com.propertyvista.domain.ref.Province;
+import com.propertyvista.server.common.util.CanadianStreetAddressParser;
+import com.propertyvista.server.common.util.StreetAddressParser.StreetAddress;
 
 /**
  * Maps units information from YARDI System to domain entities.
@@ -44,26 +49,9 @@ public class UnitsMapper {
     /**
      * Maps units from YARDI System to VISTA domain units
      * 
-     * @param building
-     *            the building where units from
-     * @param unitsFrom
-     *            the units which map from
-     * @return the mapped units
      */
-    public List<AptUnit> map(List<RTUnit> unitsFrom) {
-        List<AptUnit> mapped = new ArrayList<AptUnit>();
-        for (RTUnit rtUnit : unitsFrom) {
-            try {
-                AptUnit unit = map(rtUnit);
-                mapped.add(unit);
-            } catch (Exception e) {
-                log.error(String.format("Error during imported unit %s mapping", rtUnit.getUnitID()), e);
-            }
-        }
-        return mapped;
-    }
-
-    public AptUnit map(RTUnit unitFrom) {
+    public AptUnit map(RTCustomer rtCustomer, List<Province> provinces) {
+        RTUnit unitFrom = rtCustomer.getRTUnit();
         AptUnit unitTo = EntityFactory.create(AptUnit.class);
         Information info = unitFrom.getUnit().getInformation().get(0);
 
@@ -100,6 +88,35 @@ public class UnitsMapper {
         }
         unitTo.info().economicStatusDescription().setValue(info.getUnitEconomicStatusDescription());
 
+        // Legal address
+        {
+            Address addressImported = rtCustomer.getCustomers().getCustomer().get(0).getAddress().get(0);
+            StringBuilder address2 = new StringBuilder();
+            for (String addressPart : addressImported.getAddress2()) {
+                if (address2.length() > 0) {
+                    address2.append("\n");
+                }
+                address2.append(addressPart);
+            }
+            StreetAddress streetAddress = new CanadianStreetAddressParser().parse(addressImported.getAddress1(), address2.toString());
+
+            AddressStructured address = EntityFactory.create(AddressStructured.class);
+            address.streetNumber().setValue(streetAddress.streetNumber);
+            address.streetName().setValue(streetAddress.streetName);
+            address.streetType().setValue(streetAddress.streetType);
+            address.streetDirection().setValue(streetAddress.streetDirection);
+            address.city().setValue(addressImported.getCity());
+
+            address.province().code().setValue(addressImported.getState());
+
+            String importedCountry = addressImported.getCountry();
+            address.country().name().setValue(StringUtils.isEmpty(importedCountry) ? getCountry(provinces, addressImported.getState()) : importedCountry);
+
+            address.postalCode().setValue(addressImported.getPostalCode());
+
+            unitTo.info().legalAddress().set(address);
+        }
+
         // marketing
         unitTo.marketing().name().setValue(unitFrom.getUnit().getMarketingName());
 
@@ -108,5 +125,14 @@ public class UnitsMapper {
         unitTo.financial()._marketRent().setValue(info.getMarketRent());
 
         return unitTo;
+    }
+
+    private String getCountry(List<Province> provinces, String stateCode) {
+        for (Province province : provinces) {
+            if (StringUtils.equals(province.code().getValue(), stateCode)) {
+                return province.country().name().getValue();
+            }
+        }
+        return null;
     }
 }

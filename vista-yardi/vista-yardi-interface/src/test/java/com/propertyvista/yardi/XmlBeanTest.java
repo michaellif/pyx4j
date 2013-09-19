@@ -15,6 +15,7 @@ package com.propertyvista.yardi;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import javax.xml.bind.JAXBException;
@@ -27,6 +28,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.yardi.entity.resident.Property;
+import com.yardi.entity.resident.RTCustomer;
 import com.yardi.entity.resident.ResidentTransactions;
 
 import com.pyx4j.entity.shared.EntityFactory;
@@ -44,6 +46,7 @@ import com.propertyvista.domain.property.asset.unit.AptUnitInfo;
 import com.propertyvista.domain.ref.Country;
 import com.propertyvista.domain.ref.Province;
 import com.propertyvista.yardi.bean.Properties;
+import com.propertyvista.yardi.mapper.UnitsMapper;
 import com.propertyvista.yardi.services.YardiBuildingProcessor;
 
 public class XmlBeanTest {
@@ -122,7 +125,12 @@ public class XmlBeanTest {
             Assert.assertFalse(building.info().address().city().isNull());
             Assert.assertFalse(building.info().address().postalCode().isNull());
 
-            List<AptUnit> units = buildingProcessor.getUnits(property);
+            List<AptUnit> units = new ArrayList<AptUnit>();
+
+            for (RTCustomer rtCustomer : property.getRTCustomer()) {
+                units.add(new UnitsMapper().map(rtCustomer, Collections.<Province> emptyList()));
+            }
+
             Assert.assertTrue("Has units", !units.isEmpty());
 
             for (AptUnit aptUnit : units) {
@@ -152,5 +160,4 @@ public class XmlBeanTest {
         }
 
     }
-
 }

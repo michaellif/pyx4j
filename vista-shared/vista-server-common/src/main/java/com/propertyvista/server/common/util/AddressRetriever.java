@@ -19,6 +19,7 @@ import com.pyx4j.entity.shared.EntityFactory;
 
 import com.propertyvista.domain.contact.AddressSimple;
 import com.propertyvista.domain.contact.AddressStructured;
+import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.LeaseParticipant;
 import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
@@ -46,6 +47,23 @@ public class AddressRetriever {
         address.suiteNumber().set(lease.unit().info().number());
 
         return address;
+    }
+
+    public static AddressStructured getLeaseLegalAddress(Lease lease) {
+        Persistence.ensureRetrieve(lease, AttachLevel.Attached);
+        return getUnitLegalAddress(lease.unit());
+    }
+
+    public static AddressStructured getUnitLegalAddress(AptUnit unit) {
+        Persistence.ensureRetrieve(unit.building(), AttachLevel.Attached);
+        if (unit.info().legalAddressOverride().getValue(false)) {
+            AddressStructured address = EntityFactory.create(AddressStructured.class);
+            address.set(unit.building().info().address());
+            address.suiteNumber().set(unit.info().number());
+            return address;
+        } else {
+            return unit.info().legalAddress();
+        }
     }
 
     // Simple form address retrieving: 

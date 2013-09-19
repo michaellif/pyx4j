@@ -377,7 +377,7 @@ public class CanadianStreetAddressParser implements StreetAddressParser {
     }
 
     @Override
-    public StreetAddress parse(String address1, String address2) throws ParseException {
+    public StreetAddress parse(String address1, String address2) {
         String[] addressTokens = address1.trim().split("\\s+");
 
         String streetNumber = addressTokens[0];

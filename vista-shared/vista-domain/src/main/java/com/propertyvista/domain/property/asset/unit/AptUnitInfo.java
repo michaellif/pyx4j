@@ -28,6 +28,7 @@ import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.i18n.annotations.I18n;
 import com.pyx4j.i18n.shared.I18nEnum;
 
+import com.propertyvista.domain.contact.AddressStructured;
 import com.propertyvista.domain.property.asset.AreaMeasurementUnit;
 
 @EmbeddedEntity
@@ -65,6 +66,11 @@ public interface AptUnitInfo extends IEntity {
     @NotNull
     @Length(20)
     IPrimitive<String> number();
+
+    @Caption(name = "Unit Legal Address is different from Building Address")
+    IPrimitive<Boolean> legalAddressOverride();
+
+    AddressStructured legalAddress();
 
     // ---- Physical: ----------------
 

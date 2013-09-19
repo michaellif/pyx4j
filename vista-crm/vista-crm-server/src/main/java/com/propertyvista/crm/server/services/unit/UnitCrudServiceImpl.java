@@ -54,9 +54,6 @@ public class UnitCrudServiceImpl extends AbstractCrudServiceDtoImpl<AptUnit, Apt
 
     @Override
     protected void enhanceRetrieved(AptUnit in, AptUnitDTO dto, RetrieveTarget retrieveTarget) {
-        //TODO: calculate value here:
-        dto.buildingCode().set(Persistence.service().retrieve(Building.class, dto.building().getPrimaryKey()).propertyCode());
-
         // load detached entities:
         if (!dto.marketing().isValueDetached()) { // This is not called for now cince file is detached in annotation. see comments on this filed
             Persistence.service().retrieve(dto.marketing().adBlurbs());
@@ -74,6 +71,10 @@ public class UnitCrudServiceImpl extends AbstractCrudServiceDtoImpl<AptUnit, Apt
 
         Persistence.service().retrieve(dto.floorplan());
         Persistence.service().retrieve(dto.building());
+        dto.buildingCode().setValue(dto.building().propertyCode().getValue());
+
+        dto.buildingLegalAddress().set(dto.building().info().address());
+        dto.buildingLegalAddress().suiteNumber().set(dto.info().number());
 
         // retrieve market rent prices
         retrieveServicePrices(dto);
