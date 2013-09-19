@@ -25,7 +25,7 @@ import com.propertyvista.domain.legal.LegalNoticeCandidate;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.tenant.lease.Lease;
 
-public interface N4Facade {
+public interface N4ManagementFacade {
 
     /**
      * Searches for leases that require N4.
