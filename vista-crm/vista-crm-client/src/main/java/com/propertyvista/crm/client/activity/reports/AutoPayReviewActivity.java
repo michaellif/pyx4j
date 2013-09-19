@@ -127,7 +127,7 @@ public class AutoPayReviewActivity extends AbstractActivity implements AutoPayRe
         ReviewedPapsHolderDTO reviewedPapsHolder = EntityFactory.create(ReviewedPapsHolderDTO.class);
         for (PapReviewDTO papReview : papReviews) {
             ReviewedPapDTO reviewedPap = EntityFactory.create(ReviewedPapDTO.class);
-            reviewedPap.pap().set(papReview.pap_());
+            reviewedPap.papId().set(papReview.papId());
 
             for (PapChargeReviewDTO papChargeReview : papReview.charges()) {
                 ReviewedPapChargeDTO reviewedPapCharge = EntityFactory.create(ReviewedPapChargeDTO.class);

@@ -22,7 +22,7 @@ import com.propertyvista.domain.payment.PreauthorizedPayment;
 @Transient
 public interface ReviewedPapDTO extends IEntity {
 
-    PreauthorizedPayment pap();
+    PreauthorizedPayment papId();
 
     IList<ReviewedPapChargeDTO> reviewedCharges();
 

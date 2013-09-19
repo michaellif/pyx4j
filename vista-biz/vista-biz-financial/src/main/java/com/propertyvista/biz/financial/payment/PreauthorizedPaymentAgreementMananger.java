@@ -13,6 +13,7 @@
  */
 package com.propertyvista.biz.financial.payment;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
 
@@ -28,6 +29,7 @@ import com.pyx4j.entity.server.IEntityPersistenceService.ICursorIterator;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.server.UnitOfWork;
 import com.pyx4j.entity.shared.AttachLevel;
+import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.OrCriterion;
@@ -40,6 +42,7 @@ import com.propertyvista.biz.communication.NotificationFacade;
 import com.propertyvista.biz.financial.billingcycle.BillingCycleFacade;
 import com.propertyvista.biz.policy.PolicyFacade;
 import com.propertyvista.biz.system.AuditFacade;
+import com.propertyvista.crm.rpc.dto.financial.autopayreview.ReviewedPapChargeDTO;
 import com.propertyvista.crm.rpc.dto.financial.autopayreview.ReviewedPapDTO;
 import com.propertyvista.domain.financial.BillingAccount;
 import com.propertyvista.domain.financial.PaymentRecord;
@@ -95,6 +98,7 @@ class PreauthorizedPaymentAgreementMananger {
                     isNew = true;
 
                     preauthorizedPayment = EntityGraph.businessDuplicate(preauthorizedPayment);
+                    preauthorizedPayment.expiring().setValue(null);
                 } else {
                     boolean hasPaymentRecords = false;
                     {
@@ -110,6 +114,7 @@ class PreauthorizedPaymentAgreementMananger {
                         isNew = true;
 
                         preauthorizedPayment = EntityGraph.businessDuplicate(preauthorizedPayment);
+                        preauthorizedPayment.expiring().setValue(null);
                     }
                 }
                 preauthorizedPayment.effectiveFrom().setValue(nextPaymentDate);
@@ -133,7 +138,38 @@ class PreauthorizedPaymentAgreementMananger {
     }
 
     void persitPreauthorizedPaymentReview(ReviewedPapDTO preauthorizedPaymentChanges) {
-        //TODO
+        PreauthorizedPayment origPreauthorizedPayment = Persistence.service().retrieve(PreauthorizedPayment.class,
+                preauthorizedPaymentChanges.papId().getPrimaryKey());
+
+        PreauthorizedPayment newPreauthorizedPayment = EntityGraph.businessDuplicate(origPreauthorizedPayment);
+        newPreauthorizedPayment.coveredItems().clear();
+
+        boolean hsCharges = false;
+        for (ReviewedPapChargeDTO reviewedPapCharge : preauthorizedPaymentChanges.reviewedCharges()) {
+            PreauthorizedPaymentCoveredItem item = EntityFactory.create(PreauthorizedPaymentCoveredItem.class);
+            item.billableItem().set(reviewedPapCharge.billableItem());
+            item.amount().setValue(reviewedPapCharge.paymentAmountUpdate().getValue());
+            newPreauthorizedPayment.coveredItems().add(item);
+
+            if (reviewedPapCharge.paymentAmountUpdate().getValue().compareTo(BigDecimal.ZERO) > 0) {
+                hsCharges = true;
+            }
+        }
+
+        if (hsCharges) {
+            Persistence.ensureRetrieve(origPreauthorizedPayment.tenant(), AttachLevel.Attached);
+            LogicalDate nextPaymentDate = ServerSideFactory.create(PaymentMethodFacade.class).getNextPreauthorizedPaymentDate(
+                    origPreauthorizedPayment.tenant().lease());
+
+            newPreauthorizedPayment.effectiveFrom().setValue(nextPaymentDate);
+            newPreauthorizedPayment.createdBy().set(VistaContext.getCurrentUserIfAvalable());
+
+            Persistence.service().merge(newPreauthorizedPayment);
+            ServerSideFactory.create(AuditFacade.class).updated(newPreauthorizedPayment,
+                    EntityDiff.getChanges(origPreauthorizedPayment, newPreauthorizedPayment));
+        } else {
+            deletePreauthorizedPayment(origPreauthorizedPayment);
+        }
     }
 
     List<PreauthorizedPayment> retrievePreauthorizedPayments(Tenant tenantId) {

@@ -25,7 +25,7 @@ import com.propertyvista.domain.tenant.lease.Lease;
 public interface PapReviewDTO extends IEntity, BulkEditableEntity {
 
     @Detached
-    PreauthorizedPayment pap_();
+    PreauthorizedPayment papId();
 
     PapReviewCaptionDTO caption();
 

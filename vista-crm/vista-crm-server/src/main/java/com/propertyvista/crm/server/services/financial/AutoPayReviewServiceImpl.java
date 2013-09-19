@@ -100,9 +100,9 @@ public class AutoPayReviewServiceImpl implements AutoPayReviewService {
 
     private PapReviewDTO makePapReview(PapReviewCaptionDTO papReviewCaption, AutoPayReviewPreauthorizedPaymentDTO autoPay) {
         PapReviewDTO papReview = EntityFactory.create(PapReviewDTO.class);
-        papReview.pap_().set(autoPay.pap());
+        papReview.papId().set(autoPay.pap());
         papReview.caption().set(papReviewCaption.duplicate(PapReviewCaptionDTO.class));
-        PreauthorizedPayment pap = Persistence.service().retrieve(PreauthorizedPayment.class, papReview.pap_().getPrimaryKey());
+        PreauthorizedPayment pap = Persistence.service().retrieve(PreauthorizedPayment.class, papReview.papId().getPrimaryKey());
         Persistence.service().retrieve(pap.tenant());
         papReview.caption().paymentMethod().setValue(pap.paymentMethod().getStringView());
         papReview.caption().tenant().setValue(pap.tenant().getStringView());
