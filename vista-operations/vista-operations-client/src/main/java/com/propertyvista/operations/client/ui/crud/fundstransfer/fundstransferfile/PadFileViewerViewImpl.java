@@ -19,6 +19,7 @@ import com.propertyvista.operations.rpc.dto.PadFileDTO;
 public class PadFileViewerViewImpl extends OperationsViewerViewImplBase<PadFileDTO> implements PadFileViewerView {
 
     public PadFileViewerViewImpl() {
+        super(true);
         setForm(new PadFileForm(this));
     }
 }

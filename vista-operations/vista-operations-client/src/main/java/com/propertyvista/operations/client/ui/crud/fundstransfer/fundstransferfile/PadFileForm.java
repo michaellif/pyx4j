@@ -44,5 +44,6 @@ public class PadFileForm extends OperationsEntityForm<PadFileDTO> {
         panel.setWidget(++row, 0, 1, new FormDecoratorBuilder(inject(proto().acknowledgmentStatus())).build());
 
         selectTab(addTab(panel));
+        setTabBarVisible(false);
     }
 }

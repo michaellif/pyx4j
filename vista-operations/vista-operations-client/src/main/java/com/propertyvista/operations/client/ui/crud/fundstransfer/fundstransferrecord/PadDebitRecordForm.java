@@ -39,6 +39,6 @@ public class PadDebitRecordForm extends OperationsEntityForm<PadDebitRecordDTO> 
         panel.setWidget(++row, 0, 1, new FormDecoratorBuilder(inject(proto().processingStatus())).build());
 
         selectTab(addTab(panel));
-
+        setTabBarVisible(false);
     }
 }

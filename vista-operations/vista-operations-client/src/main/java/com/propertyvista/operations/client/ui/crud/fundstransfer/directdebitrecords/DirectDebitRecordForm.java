@@ -36,6 +36,6 @@ public class DirectDebitRecordForm extends OperationsEntityForm<DirectDebitRecor
         panel.setWidget(++row, 0, 1, new FormDecoratorBuilder(inject(proto().processingStatus())).build());
 
         selectTab(addTab(panel));
-
+        setTabBarVisible(false);
     }
 }

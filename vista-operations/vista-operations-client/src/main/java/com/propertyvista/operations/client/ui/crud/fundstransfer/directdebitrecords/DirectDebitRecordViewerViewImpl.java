@@ -19,6 +19,7 @@ import com.propertyvista.operations.domain.payment.dbp.DirectDebitRecord;
 public class DirectDebitRecordViewerViewImpl extends OperationsViewerViewImplBase<DirectDebitRecord> implements DirectDebitRecordViewerView {
 
     public DirectDebitRecordViewerViewImpl() {
+        super(true);
         setForm(new DirectDebitRecordForm(this));
     }
 }

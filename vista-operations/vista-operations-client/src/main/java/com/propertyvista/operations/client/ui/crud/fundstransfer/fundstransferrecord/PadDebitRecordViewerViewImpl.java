@@ -19,6 +19,7 @@ import com.propertyvista.operations.rpc.dto.PadDebitRecordDTO;
 public class PadDebitRecordViewerViewImpl extends OperationsViewerViewImplBase<PadDebitRecordDTO> implements PadDebitRecordViewerView {
 
     public PadDebitRecordViewerViewImpl() {
+        super(true);
         setForm(new PadDebitRecordForm(this));
     }
 }

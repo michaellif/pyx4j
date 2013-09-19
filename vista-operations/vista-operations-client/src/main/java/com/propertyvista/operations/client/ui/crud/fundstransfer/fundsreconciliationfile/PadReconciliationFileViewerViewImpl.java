@@ -19,6 +19,7 @@ import com.propertyvista.operations.rpc.dto.PadReconciliationFileDTO;
 public class PadReconciliationFileViewerViewImpl extends OperationsViewerViewImplBase<PadReconciliationFileDTO> implements PadReconciliationFileViewerView {
 
     public PadReconciliationFileViewerViewImpl() {
+        super(true);
         setForm(new PadReconciliationFileForm(this));
     }
 }
