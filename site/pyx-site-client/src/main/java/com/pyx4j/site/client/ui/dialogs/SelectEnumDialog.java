@@ -29,6 +29,7 @@ import com.google.gwt.safehtml.client.SafeHtmlTemplates;
 import com.google.gwt.safehtml.shared.SafeHtml;
 import com.google.gwt.safehtml.shared.SafeHtmlBuilder;
 import com.google.gwt.user.cellview.client.CellList;
+import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.view.client.SelectionModel;
@@ -48,10 +49,18 @@ public abstract class SelectEnumDialog<E extends Enum<E>> extends OkCancelDialog
 
     public SelectEnumDialog(String caption, Collection<E> values) {
         super(caption);
-        assert !values.isEmpty() : "The set of values must not be empty";
         this.selectionModel = new SingleSelectionModel<E>();
-        setBody(initBody(selectionModel, values, defineHeight()));
+        if (values.isEmpty()) {
+            setBody(new HTML(getEmptySelectionMessage()));
+            getOkButton().setVisible(false);
+        } else {
+            setBody(initBody(selectionModel, values, defineHeight()));
+        }
         setWidth(defineWidth());
+    }
+
+    public String getEmptySelectionMessage() {
+        return "The set of values is empty";
     }
 
     protected <E extends Enum<E>> Widget initBody(SelectionModel<E> selectionModel, Collection<E> values, String height) {
