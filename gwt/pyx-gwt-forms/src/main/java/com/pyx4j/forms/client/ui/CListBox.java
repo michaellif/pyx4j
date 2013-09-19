@@ -60,6 +60,8 @@ public class CListBox<E> extends CFocusComponent<List<E>, NListBox<E>> implement
 
     private Comparator<E> comparator = null;
 
+    private String emptyValueFormat;
+
     public CListBox() {
         this((String) null);
     }
@@ -188,9 +190,13 @@ public class CListBox<E> extends CFocusComponent<List<E>, NListBox<E>> implement
         return "Required value \"" + getItemName(value) + "\" can't be removed";
     }
 
+    public void setEmptyValueFormat(String format) {
+        emptyValueFormat = format;
+    }
+
     public String format(Collection<E> value) {
-        if (value == null) {
-            return "";
+        if (value == null || value.isEmpty()) {
+            return emptyValueFormat == null ? "" : emptyValueFormat;
         } else {
             StringBuilder sb = new StringBuilder();
             for (E item : value) {
