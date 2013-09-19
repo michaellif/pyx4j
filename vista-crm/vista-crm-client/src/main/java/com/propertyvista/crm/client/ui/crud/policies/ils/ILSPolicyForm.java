@@ -18,15 +18,17 @@ import java.util.Arrays;
 import java.util.EnumSet;
 import java.util.List;
 
+import com.google.gwt.event.logical.shared.ValueChangeEvent;
+import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.forms.client.ui.CComponent;
+import com.pyx4j.forms.client.ui.CEntityListBox;
 import com.pyx4j.forms.client.ui.CEnumLabel;
-import com.pyx4j.forms.client.ui.folder.EntityFolderColumnDescriptor;
-import com.pyx4j.forms.client.ui.folder.IFolderDecorator;
-import com.pyx4j.forms.client.ui.folder.TableFolderDecorator;
+import com.pyx4j.forms.client.ui.CListBox.SelectionMode;
+import com.pyx4j.forms.client.ui.OptionsFilter;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.dialogs.SelectEnumDialog;
@@ -34,13 +36,12 @@ import com.pyx4j.site.client.ui.prime.form.IForm;
 
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
 import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
-import com.propertyvista.common.client.ui.components.folders.VistaTableFolder;
 import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
-import com.propertyvista.crm.client.ui.components.boxes.ProvinceSelectorDialog;
 import com.propertyvista.crm.client.ui.crud.policies.common.PolicyDTOTabPanelBasedForm;
 import com.propertyvista.domain.policy.dto.ILSPolicyDTO;
 import com.propertyvista.domain.policy.policies.domain.ILSPolicyItem;
 import com.propertyvista.domain.policy.policies.domain.ILSPolicyItem.ILSProvider;
+import com.propertyvista.domain.ref.City;
 import com.propertyvista.domain.ref.Province;
 
 public class ILSPolicyForm extends PolicyDTOTabPanelBasedForm<ILSPolicyDTO> {
@@ -103,8 +104,26 @@ public class ILSPolicyForm extends PolicyDTOTabPanelBasedForm<ILSPolicyDTO> {
 
         private class ILSPolicyItemEditor extends CEntityDecoratableForm<ILSPolicyItem> {
 
+            private final CEntityListBox<Province> provinceSelector = new CEntityListBox<Province>(Province.class, SelectionMode.TWO_PANEL);
+
+            private final CEntityListBox<City> citySelector = new CEntityListBox<City>(City.class, SelectionMode.TWO_PANEL);
+
             public ILSPolicyItemEditor() {
                 super(ILSPolicyItem.class);
+
+                // update city option filter
+                provinceSelector.addValueChangeHandler(new ValueChangeHandler<List<Province>>() {
+                    @Override
+                    public void onValueChange(final ValueChangeEvent<List<Province>> event) {
+                        citySelector.setOptionsFilter(new OptionsFilter<City>() {
+                            @Override
+                            public boolean acceptOption(City entity) {
+                                return event.getValue().contains(entity.province());
+                            }
+                        });
+                        citySelector.refreshOptions();
+                    }
+                });
             }
 
             @Override
@@ -113,46 +132,24 @@ public class ILSPolicyForm extends PolicyDTOTabPanelBasedForm<ILSPolicyDTO> {
                 int row = -1;
 
                 content.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().provider(), new CEnumLabel()), true).labelWidth("100px").build());
-                content.setWidget(++row, 1, 1, inject(proto().allowedProvinces(), new AllowedProvinceFolder()));
+                content.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().allowedProvinces(), provinceSelector), true).labelWidth("100px").build());
+                content.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().allowedCities(), citySelector), true).labelWidth("100px").build());
 
                 return content;
             }
-        }
-    }
 
-    private class AllowedProvinceFolder extends VistaTableFolder<Province> {
-        public AllowedProvinceFolder() {
-            super(Province.class);
-
-            setViewable(true);
-            setOrderable(false);
-        }
-
-        @Override
-        public List<EntityFolderColumnDescriptor> columns() {
-            return Arrays.asList(//@formatter:off
-                    new EntityFolderColumnDescriptor(proto().name(), "100px")
-            );//@formatter:on
-        }
-
-        @Override
-        protected void addItem() {
-            new ProvinceSelectorDialog(true, getValue()) {
-                @Override
-                public boolean onClickOk() {
-                    for (Province prov : getSelectedItems()) {
-                        addItem(prov);
-                    }
-                    return true;
+            @Override
+            protected void onValueSet(boolean populate) {
+                final ILSPolicyItem policyItem = getValue();
+                if (policyItem == null || policyItem.allowedProvinces().isEmpty()) {
+                    citySelector.setOptionsFilter(new OptionsFilter<City>() {
+                        @Override
+                        public boolean acceptOption(City entity) {
+                            return false;
+                        }
+                    });
                 }
-            }.setCountry(ILSPolicyForm.this.getValue().countries()).show();
-        }
-
-        @Override
-        protected IFolderDecorator<Province> createFolderDecorator() {
-            IFolderDecorator<Province> decorator = super.createFolderDecorator();
-            ((TableFolderDecorator<Province>) decorator).setShowHeader(false);
-            return decorator;
+            }
         }
     }
 }
