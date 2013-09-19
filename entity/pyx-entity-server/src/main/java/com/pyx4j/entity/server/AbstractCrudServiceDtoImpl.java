@@ -27,10 +27,12 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.commons.Key;
 import com.pyx4j.entity.rpc.AbstractCrudService;
+import com.pyx4j.entity.security.EntityPermission;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.shared.UnRecoverableRuntimeException;
+import com.pyx4j.security.shared.SecurityController;
 
 public abstract class AbstractCrudServiceDtoImpl<E extends IEntity, DTO extends IEntity> extends AbstractListServiceDtoImpl<E, DTO> implements
         AbstractCrudService<DTO> {
@@ -71,9 +73,8 @@ public abstract class AbstractCrudServiceDtoImpl<E extends IEntity, DTO extends 
         return entity;
     }
 
-    @Override
-    public void init(AsyncCallback<DTO> callback, InitializationData initializationData) {
-        callback.onSuccess(EntityFactory.create(dtoClass));
+    protected DTO init(InitializationData initializationData) {
+        return EntityFactory.create(dtoClass);
     }
 
     protected void create(E entity, DTO dto) {
@@ -97,6 +98,12 @@ public abstract class AbstractCrudServiceDtoImpl<E extends IEntity, DTO extends 
         DTO dto = createDTO(entity);
         enhanceRetrieved(entity, dto, retrieveTarget);
         callback.onSuccess(dto);
+    }
+
+    @Override
+    public final void init(AsyncCallback<DTO> callback, InitializationData initializationData) {
+        SecurityController.assertPermission(EntityPermission.permissionCreate(entityClass));
+        callback.onSuccess(init(initializationData));
     }
 
     @Override
