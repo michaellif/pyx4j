@@ -37,12 +37,10 @@ public class AppointmentCrudServiceImpl extends AbstractCrudServiceImpl<Appointm
     }
 
     @Override
-    public void init(AsyncCallback<Appointment> callback, InitializationData initializationData) {
+    protected Appointment init(InitializationData initializationData) {
         Appointment entity = EntityFactory.create(Appointment.class);
-
         entity.status().setValue(Appointment.Status.planned);
-
-        callback.onSuccess(entity);
+        return entity;
     }
 
     @Override

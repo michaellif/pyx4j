@@ -41,7 +41,7 @@ public class VistaTermsCrudServiceImpl extends AbstractVersionedCrudServiceImpl<
     }
 
     @Override
-    public void init(AsyncCallback<VistaTerms> callback, InitializationData initializationData) {
+    protected VistaTerms init(InitializationData initializationData) {
         VistaTermsInitializationData initData = (VistaTermsInitializationData) initializationData;
 
         LegalDocument doc = EntityFactory.create(LegalDocument.class);
@@ -51,7 +51,7 @@ public class VistaTermsCrudServiceImpl extends AbstractVersionedCrudServiceImpl<
         terms.target().setValue(initData.target().getValue());
         terms.version().document().add(doc);
 
-        callback.onSuccess(terms);
+        return terms;
     }
 
     @Override

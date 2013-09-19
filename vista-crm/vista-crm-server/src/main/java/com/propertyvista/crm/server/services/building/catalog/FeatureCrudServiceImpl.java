@@ -13,8 +13,6 @@
  */
 package com.propertyvista.crm.server.services.building.catalog;
 
-import com.google.gwt.user.client.rpc.AsyncCallback;
-
 import com.pyx4j.entity.server.AbstractCrudServiceImpl;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
@@ -35,7 +33,7 @@ public class FeatureCrudServiceImpl extends AbstractCrudServiceImpl<Feature> imp
     }
 
     @Override
-    public void init(AsyncCallback<Feature> callback, InitializationData initializationData) {
+    protected Feature init(InitializationData initializationData) {
         FeatureInitializationdata initData = (FeatureInitializationdata) initializationData;
 
         Feature entity = EntityFactory.create(Feature.class);
@@ -43,7 +41,7 @@ public class FeatureCrudServiceImpl extends AbstractCrudServiceImpl<Feature> imp
         entity.catalog().setPrimaryKey(initData.parent().getPrimaryKey());
         entity.catalog().setValueDetached();
 
-        callback.onSuccess(entity);
+        return entity;
     }
 
     @Override

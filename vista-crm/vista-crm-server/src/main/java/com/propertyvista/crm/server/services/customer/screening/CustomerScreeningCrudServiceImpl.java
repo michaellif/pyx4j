@@ -13,8 +13,6 @@
  */
 package com.propertyvista.crm.server.services.customer.screening;
 
-import com.google.gwt.user.client.rpc.AsyncCallback;
-
 import com.pyx4j.entity.server.AbstractVersionedCrudServiceImpl;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.AttachLevel;
@@ -36,13 +34,13 @@ public class CustomerScreeningCrudServiceImpl extends AbstractVersionedCrudServi
     }
 
     @Override
-    public void init(AsyncCallback<CustomerScreening> callback, com.pyx4j.entity.rpc.AbstractCrudService.InitializationData initializationData) {
+    protected CustomerScreening init(InitializationData initializationData) {
         CustomerScreeningInitializationData initData = (CustomerScreeningInitializationData) initializationData;
 
         CustomerScreening screening = EntityFactory.create(CustomerScreening.class);
         screening.screene().set(Persistence.service().retrieve(Customer.class, initData.screene().getPrimaryKey(), AttachLevel.ToStringMembers));
 
-        callback.onSuccess(screening);
+        return screening;
     }
 
     @Override

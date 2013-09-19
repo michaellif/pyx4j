@@ -13,8 +13,6 @@
  */
 package com.propertyvista.crm.server.services.policies.policy;
 
-import com.google.gwt.user.client.rpc.AsyncCallback;
-
 import com.propertyvista.crm.rpc.services.policies.policy.BackgroundCheckPolicyCrudService;
 import com.propertyvista.crm.server.services.policies.GenericPolicyCrudService;
 import com.propertyvista.domain.policy.dto.BackgroundCheckPolicyDTO;
@@ -45,25 +43,16 @@ public class BackgroundCheckPolicyCrudServiceImpl extends GenericPolicyCrudServi
     }
 
     @Override
-    public void init(final AsyncCallback<BackgroundCheckPolicyDTO> callback, com.pyx4j.entity.rpc.AbstractCrudService.InitializationData initializationData) {
-        super.init(new AsyncCallback<BackgroundCheckPolicyDTO>() {
-            @Override
-            public void onFailure(Throwable err) {
-                callback.onFailure(err);
-            }
+    protected BackgroundCheckPolicyDTO init(InitializationData initializationData) {
+        BackgroundCheckPolicyDTO policy = super.init(initializationData);
+        // load default values:
+        policy.version().bankruptcy().setValue(BjccEntry.m12);
+        policy.version().judgment().setValue(BjccEntry.m12);
+        policy.version().collection().setValue(BjccEntry.m12);
+        policy.version().chargeOff().setValue(BjccEntry.m12);
+        policy.strategyNumber().setValue(1);
 
-            @Override
-            public void onSuccess(BackgroundCheckPolicyDTO policy) {
-                // load default values:
-                policy.version().bankruptcy().setValue(BjccEntry.m12);
-                policy.version().judgment().setValue(BjccEntry.m12);
-                policy.version().collection().setValue(BjccEntry.m12);
-                policy.version().chargeOff().setValue(BjccEntry.m12);
-                policy.strategyNumber().setValue(1);
-
-                callback.onSuccess(policy);
-            }
-        }, initializationData);
+        return policy;
     }
 
     @Override

@@ -41,12 +41,12 @@ public class ShowingCrudServiceImpl extends AbstractCrudServiceDtoImpl<Showing, 
     }
 
     @Override
-    public void init(AsyncCallback<ShowingDTO> callback, InitializationData initializationData) {
+    protected ShowingDTO init(InitializationData initializationData) {
         ShowingDTO newShowing = EntityFactory.create(ShowingDTO.class);
         newShowing.appointment().set(((ShowingCrudService.ShowingInitializationData) initializationData).appointment());
         newShowing.status().setValue(Showing.Status.planned);
         retrieveUnitFilterCriteria(newShowing);
-        callback.onSuccess(newShowing);
+        return newShowing;
     }
 
     @Override

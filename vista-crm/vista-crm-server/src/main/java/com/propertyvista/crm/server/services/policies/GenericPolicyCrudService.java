@@ -13,8 +13,6 @@
  */
 package com.propertyvista.crm.server.services.policies;
 
-import com.google.gwt.user.client.rpc.AsyncCallback;
-
 import com.pyx4j.commons.UserRuntimeException;
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.server.AbstractCrudServiceDtoImpl;
@@ -54,12 +52,12 @@ public abstract class GenericPolicyCrudService<POLICY extends Policy, POLICY_DTO
     }
 
     @Override
-    public void init(AsyncCallback<POLICY_DTO> callback, InitializationData initializationData) {
+    protected POLICY_DTO init(InitializationData initializationData) {
         POLICY_DTO policyDTO = EntityFactory.create(dtoClass);
 
         setLowestNodeType(policyDTO);
 
-        callback.onSuccess(policyDTO);
+        return policyDTO;
     }
 
     @Override

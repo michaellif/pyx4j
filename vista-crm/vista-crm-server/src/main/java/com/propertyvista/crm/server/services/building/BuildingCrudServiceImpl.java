@@ -52,13 +52,13 @@ public class BuildingCrudServiceImpl extends AbstractCrudServiceDtoImpl<Building
     }
 
     @Override
-    public void init(AsyncCallback<BuildingDTO> callback, InitializationData initializationData) {
+    protected BuildingDTO init(InitializationData initializationData) {
         BuildingDTO entity = EntityFactory.create(BuildingDTO.class);
 
         entity.suspended().setValue(false);
         entity.marketing().visibility().setValue(PublicVisibilityType.global);
 
-        callback.onSuccess(entity);
+        return entity;
     }
 
     @Override

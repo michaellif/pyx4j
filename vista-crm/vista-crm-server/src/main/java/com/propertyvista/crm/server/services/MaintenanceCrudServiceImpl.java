@@ -149,23 +149,23 @@ public class MaintenanceCrudServiceImpl extends AbstractCrudServiceDtoImpl<Maint
     }
 
     @Override
-    public void init(AsyncCallback<MaintenanceRequestDTO> callback, InitializationData initializationData) {
+    protected MaintenanceRequestDTO init(InitializationData initializationData) {
         MaintenanceInitializationData initData = (MaintenanceInitializationData) initializationData;
 
         if (initData != null) {
             if (!initData.tenant().isNull()) {
                 Tenant tenant = Persistence.service().retrieve(Tenant.class, initData.tenant().getPrimaryKey());
                 MaintenanceRequest maintenanceRequest = ServerSideFactory.create(MaintenanceFacade.class).createNewRequestForTenant(tenant);
-                callback.onSuccess(createDTO(maintenanceRequest));
+                return createDTO(maintenanceRequest);
             } else if (!initData.building().isNull()) {
                 Building building = Persistence.service().retrieve(Building.class, initData.building().getPrimaryKey());
                 MaintenanceRequest maintenanceRequest = ServerSideFactory.create(MaintenanceFacade.class).createNewRequest(building);
-                callback.onSuccess(createDTO(maintenanceRequest));
+                return createDTO(maintenanceRequest);
             } else {
-                super.init(callback, initializationData);
+                return super.init(initializationData);
             }
         } else {
-            super.init(callback, initializationData);
+            return super.init(initializationData);
         }
     }
 

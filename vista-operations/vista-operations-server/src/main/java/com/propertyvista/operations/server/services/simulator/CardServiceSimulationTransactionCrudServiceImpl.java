@@ -13,8 +13,6 @@
  */
 package com.propertyvista.operations.server.services.simulator;
 
-import com.google.gwt.user.client.rpc.AsyncCallback;
-
 import com.pyx4j.entity.server.AbstractCrudServiceImpl;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
@@ -36,7 +34,7 @@ public class CardServiceSimulationTransactionCrudServiceImpl extends AbstractCru
     }
 
     @Override
-    public void init(AsyncCallback<CardServiceSimulationTransaction> callback, InitializationData initializationData) {
+    protected CardServiceSimulationTransaction init(InitializationData initializationData) {
         CardServiceSimulationTransactionInitializationData initData = (CardServiceSimulationTransactionInitializationData) initializationData;
 
         CardServiceSimulationTransaction tx = EntityFactory.create(CardServiceSimulationTransaction.class);
@@ -44,6 +42,6 @@ public class CardServiceSimulationTransactionCrudServiceImpl extends AbstractCru
         tx.scheduledSimulatedResponce().setValue(Boolean.TRUE);
         tx.card().set(Persistence.service().retrieve(CardServiceSimulationCard.class, initData.card().getPrimaryKey()));
 
-        callback.onSuccess(tx);
+        return tx;
     }
 }

@@ -40,7 +40,7 @@ public class ServiceCrudServiceImpl extends AbstractCrudServiceImpl<Service> imp
     }
 
     @Override
-    public void init(AsyncCallback<Service> callback, InitializationData initializationData) {
+    protected Service init(InitializationData initializationData) {
         ServiceInitializationdata initData = (ServiceInitializationdata) initializationData;
 
         Service entity = EntityFactory.create(Service.class);
@@ -48,7 +48,7 @@ public class ServiceCrudServiceImpl extends AbstractCrudServiceImpl<Service> imp
         entity.catalog().setPrimaryKey(initData.parent().getPrimaryKey());
         entity.catalog().setValueDetached();
 
-        callback.onSuccess(entity);
+        return entity;
     }
 
     @Override

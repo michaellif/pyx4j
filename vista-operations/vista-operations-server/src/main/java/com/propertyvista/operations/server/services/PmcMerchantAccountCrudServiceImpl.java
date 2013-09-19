@@ -19,8 +19,6 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.concurrent.Callable;
 
-import com.google.gwt.user.client.rpc.AsyncCallback;
-
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.server.AbstractCrudServiceDtoImpl;
 import com.pyx4j.entity.server.Persistence;
@@ -53,7 +51,7 @@ public class PmcMerchantAccountCrudServiceImpl extends AbstractCrudServiceDtoImp
     }
 
     @Override
-    public void init(AsyncCallback<PmcMerchantAccountDTO> callback, InitializationData initializationData) {
+    protected PmcMerchantAccountDTO init(InitializationData initializationData) {
         PmcMerchantAccountInitializationData initData = (PmcMerchantAccountInitializationData) initializationData;
 
         PmcMerchantAccountDTO ent = EntityFactory.create(PmcMerchantAccountDTO.class);
@@ -61,7 +59,7 @@ public class PmcMerchantAccountCrudServiceImpl extends AbstractCrudServiceDtoImp
         ent.pmc().name().set(Persistence.service().retrieve(Pmc.class, initData.parent().getPrimaryKey()).name());
         ent.merchantAccount().invalid().setValue(Boolean.FALSE);
 
-        callback.onSuccess(ent);
+        return ent;
     }
 
     public static void retriveMerchantAccountFromPmc(final PmcMerchantAccountIndex entity, final PmcMerchantAccountDTO dto) {

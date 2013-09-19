@@ -59,7 +59,7 @@ public class PaymentWizardServiceImpl extends AbstractCrudServiceDtoImpl<Payment
     }
 
     @Override
-    public void init(AsyncCallback<PaymentDTO> callback, InitializationData initializationData) {
+    protected PaymentDTO init(InitializationData initializationData) {
         Lease lease = TenantAppContext.getCurrentUserLease();
         Persistence.service().retrieve(lease.unit());
         Persistence.service().retrieve(lease.unit().building());
@@ -94,7 +94,7 @@ public class PaymentWizardServiceImpl extends AbstractCrudServiceDtoImpl<Payment
 
         dto.currentAutoPayments().addAll(BillSummaryServiceImpl.retrieveCurrentAutoPayments(lease));
 
-        callback.onSuccess(dto);
+        return dto;
     }
 
     @Override

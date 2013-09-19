@@ -62,7 +62,7 @@ public class PaymentCrudServiceImpl extends AbstractCrudServiceDtoImpl<PaymentRe
     }
 
     @Override
-    public void init(AsyncCallback<PaymentRecordDTO> callback, InitializationData initializationData) {
+    protected PaymentRecordDTO init(InitializationData initializationData) {
         PaymentInitializationData initData = (PaymentInitializationData) initializationData;
         BillingAccount billingAccount = Persistence.service().retrieve(BillingAccount.class, initData.parent().getPrimaryKey());
         if ((billingAccount == null) || (billingAccount.isNull())) {
@@ -103,7 +103,7 @@ public class PaymentCrudServiceImpl extends AbstractCrudServiceDtoImpl<PaymentRe
             dto.amount().setValue(new BigDecimal("0.00"));
         }
 
-        callback.onSuccess(dto);
+        return dto;
     }
 
     @Override

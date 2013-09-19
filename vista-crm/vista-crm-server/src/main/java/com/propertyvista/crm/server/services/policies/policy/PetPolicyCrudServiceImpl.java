@@ -15,8 +15,6 @@ package com.propertyvista.crm.server.services.policies.policy;
 
 import java.util.List;
 
-import com.google.gwt.user.client.rpc.AsyncCallback;
-
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
@@ -36,19 +34,10 @@ public class PetPolicyCrudServiceImpl extends GenericPolicyCrudService<PetPolicy
     }
 
     @Override
-    public void init(final AsyncCallback<PetPolicyDTO> callback, com.pyx4j.entity.rpc.AbstractCrudService.InitializationData initializationData) {
-        super.init(new AsyncCallback<PetPolicyDTO>() {
-            @Override
-            public void onFailure(Throwable arg0) {
-                callback.onFailure(arg0);
-            }
-
-            @Override
-            public void onSuccess(PetPolicyDTO dto) {
-                attachNewPets(dto);
-                callback.onSuccess(dto);
-            }
-        }, initializationData);
+    protected PetPolicyDTO init(InitializationData initializationData) {
+        PetPolicyDTO dto = super.init(initializationData);
+        attachNewPets(dto);
+        return dto;
     }
 
     @Override

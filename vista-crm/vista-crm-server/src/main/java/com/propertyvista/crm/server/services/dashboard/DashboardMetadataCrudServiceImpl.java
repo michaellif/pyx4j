@@ -41,12 +41,12 @@ public class DashboardMetadataCrudServiceImpl extends AbstractCrudServiceImpl<Da
     }
 
     @Override
-    public void init(AsyncCallback<DashboardMetadata> callback, InitializationData initializationData) {
+    protected DashboardMetadata init(InitializationData initializationData) {
         DashboardMetadata entity = EntityFactory.create(DashboardMetadata.class);
 
         entity.encodedLayout().setValue(new DashboardColumnLayoutFormat.Builder(LayoutType.Two11).build().getSerializedForm());
 
-        callback.onSuccess(entity);
+        return entity;
     }
 
     @Override

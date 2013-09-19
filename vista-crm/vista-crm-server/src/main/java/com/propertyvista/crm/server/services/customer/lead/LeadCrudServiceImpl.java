@@ -49,12 +49,10 @@ public class LeadCrudServiceImpl extends AbstractCrudServiceImpl<Lead> implement
     }
 
     @Override
-    public void init(AsyncCallback<Lead> callback, InitializationData initializationData) {
+    protected Lead init(InitializationData initializationData) {
         Lead entity = EntityFactory.create(Lead.class);
-
         entity.status().setValue(Status.active);
-
-        callback.onSuccess(entity);
+        return entity;
     }
 
     @Override

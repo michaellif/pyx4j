@@ -13,8 +13,6 @@
  */
 package com.propertyvista.crm.server.services.building;
 
-import com.google.gwt.user.client.rpc.AsyncCallback;
-
 import com.pyx4j.entity.server.AbstractCrudServiceDtoImpl;
 import com.pyx4j.entity.shared.EntityFactory;
 
@@ -34,7 +32,7 @@ public class LockerAreaCrudServiceImpl extends AbstractCrudServiceDtoImpl<Locker
     }
 
     @Override
-    public void init(AsyncCallback<LockerAreaDTO> callback, InitializationData initializationData) {
+    protected LockerAreaDTO init(InitializationData initializationData) {
         LockerAreaDTO lockerArea = EntityFactory.create(LockerAreaDTO.class);
 
         // do not allow null members!
@@ -43,6 +41,6 @@ public class LockerAreaCrudServiceImpl extends AbstractCrudServiceDtoImpl<Locker
         lockerArea.regularLockers().setValue(0);
         lockerArea.smallLockers().setValue(0);
 
-        callback.onSuccess(lockerArea);
+        return lockerArea;
     }
 }

@@ -69,10 +69,10 @@ public class LeaseTermCrudServiceImpl extends AbstractVersionedCrudServiceDtoImp
     }
 
     @Override
-    public void init(AsyncCallback<LeaseTermDTO> callback, InitializationData initializationData) {
+    protected LeaseTermDTO init(InitializationData initializationData) {
         LeaseTermInitializationData initData = (LeaseTermInitializationData) initializationData;
         if (initData.isOffer().isBooleanTrue()) {
-            callback.onSuccess(createOffer(initData.lease(), initData.termType().getValue()));
+            return createOffer(initData.lease(), initData.termType().getValue());
         } else { // creating new Application/Lease:
             Lease lease = createNewLease(initData.leaseType().getValue(), initData.leaseStatus().getValue());
             LeaseTermDTO term = createDTO(lease.currentTerm());
@@ -98,7 +98,7 @@ public class LeaseTermCrudServiceImpl extends AbstractVersionedCrudServiceDtoImp
                 break;
             }
 
-            callback.onSuccess(term);
+            return term;
         }
     }
 

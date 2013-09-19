@@ -45,14 +45,14 @@ public class LeaseAdjustmentCrudServiceImpl extends AbstractCrudServiceImpl<Leas
     }
 
     @Override
-    public void init(AsyncCallback<LeaseAdjustment> callback, InitializationData initializationData) {
+    protected LeaseAdjustment init(InitializationData initializationData) {
         LeaseAdjustment entity = EntityFactory.create(LeaseAdjustment.class);
 
         entity.receivedDate().setValue(new LogicalDate(SystemDateManager.getDate()));
         entity.targetDate().setValue(new LogicalDate(SystemDateManager.getDate()));
         entity.status().setValue(Status.draft);
 
-        callback.onSuccess(entity);
+        return entity;
     }
 
     @Override

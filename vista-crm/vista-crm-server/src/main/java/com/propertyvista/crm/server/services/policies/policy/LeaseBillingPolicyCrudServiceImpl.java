@@ -13,8 +13,6 @@
  */
 package com.propertyvista.crm.server.services.policies.policy;
 
-import com.google.gwt.user.client.rpc.AsyncCallback;
-
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
@@ -35,20 +33,10 @@ public class LeaseBillingPolicyCrudServiceImpl extends GenericPolicyCrudService<
     }
 
     @Override
-    public void init(final AsyncCallback<LeaseBillingPolicyDTO> callback, InitializationData initializationData) {
-        super.init(new AsyncCallback<LeaseBillingPolicyDTO>() {
-            @Override
-            public void onSuccess(LeaseBillingPolicyDTO entity) {
-                entity.prorationMethod().setValue(BillingAccount.ProrationMethod.Standard);
-
-                callback.onSuccess(entity);
-            }
-
-            @Override
-            public void onFailure(Throwable err) {
-                callback.onFailure(err);
-            }
-        }, initializationData);
+    protected LeaseBillingPolicyDTO init(InitializationData initializationData) {
+        LeaseBillingPolicyDTO entity = super.init(initializationData);
+        entity.prorationMethod().setValue(BillingAccount.ProrationMethod.Standard);
+        return entity;
     }
 
     @Override

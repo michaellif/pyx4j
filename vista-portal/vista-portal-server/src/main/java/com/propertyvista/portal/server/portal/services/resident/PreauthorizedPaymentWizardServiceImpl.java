@@ -62,7 +62,7 @@ public class PreauthorizedPaymentWizardServiceImpl extends AbstractCrudServiceDt
     }
 
     @Override
-    public void init(AsyncCallback<PreauthorizedPaymentDTO> callback, InitializationData initializationData) {
+    protected PreauthorizedPaymentDTO init(InitializationData initializationData) {
         Lease lease = TenantAppContext.getCurrentUserLease();
         Persistence.service().retrieve(lease.unit().building());
 
@@ -89,7 +89,7 @@ public class PreauthorizedPaymentWizardServiceImpl extends AbstractCrudServiceDt
 
         fillCoveredItems(dto, lease.currentTerm().version().leaseProducts());
 
-        callback.onSuccess(dto);
+        return dto;
     }
 
     @Override

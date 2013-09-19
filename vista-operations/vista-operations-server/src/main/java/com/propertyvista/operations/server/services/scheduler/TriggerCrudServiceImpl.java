@@ -47,12 +47,12 @@ public class TriggerCrudServiceImpl extends AbstractCrudServiceDtoImpl<Trigger, 
     }
 
     @Override
-    public void init(AsyncCallback<TriggerDTO> callback, InitializationData initializationData) {
+    protected TriggerDTO init(InitializationData initializationData) {
         TriggerDTO process = EntityFactory.create(TriggerDTO.class);
 
         process.created().setValue(SystemDateManager.getDate());
 
-        callback.onSuccess(process);
+        return process;
     }
 
     @Override

@@ -13,8 +13,6 @@
  */
 package com.propertyvista.crm.server.services;
 
-import com.google.gwt.user.client.rpc.AsyncCallback;
-
 import com.pyx4j.entity.server.AbstractCrudServiceImpl;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
@@ -39,13 +37,13 @@ public class HomePageGadgetCrudServiceImpl extends AbstractCrudServiceImpl<HomeP
     }
 
     @Override
-    public void init(AsyncCallback<HomePageGadget> callback, InitializationData initializationData) {
+    protected HomePageGadget init(InitializationData initializationData) {
         HomePageGadgetInitializationData initData = (HomePageGadgetInitializationData) initializationData;
 
         HomePageGadget newItem = EntityFactory.create(HomePageGadget.class);
         newItem.type().setValue(initData.type().getValue());
 
-        callback.onSuccess(newItem);
+        return newItem;
     }
 
     @Override

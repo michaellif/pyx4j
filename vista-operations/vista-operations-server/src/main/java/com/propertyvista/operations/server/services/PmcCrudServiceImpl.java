@@ -70,7 +70,7 @@ public class PmcCrudServiceImpl extends AbstractCrudServiceDtoImpl<Pmc, PmcDTO> 
     }
 
     @Override
-    public void init(AsyncCallback<PmcDTO> callback, InitializationData initializationData) {
+    protected PmcDTO init(InitializationData initializationData) {
         PmcDTO entity = EntityFactory.create(PmcDTO.class);
 
         entity.features().occupancyModel().setValue(Boolean.TRUE);
@@ -82,7 +82,7 @@ public class PmcCrudServiceImpl extends AbstractCrudServiceDtoImpl<Pmc, PmcDTO> 
         entity.features().countryOfOperation().setValue(CountryOfOperation.Canada);
         entity.features().tenantSureIntegration().setValue(Boolean.TRUE);
 
-        callback.onSuccess(entity);
+        return entity;
     }
 
     @Override

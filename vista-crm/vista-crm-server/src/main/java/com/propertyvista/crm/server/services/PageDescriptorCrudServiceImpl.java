@@ -13,8 +13,6 @@
  */
 package com.propertyvista.crm.server.services;
 
-import com.google.gwt.user.client.rpc.AsyncCallback;
-
 import com.pyx4j.entity.server.AbstractCrudServiceImpl;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
@@ -39,7 +37,7 @@ public class PageDescriptorCrudServiceImpl extends AbstractCrudServiceImpl<PageD
     }
 
     @Override
-    public void init(AsyncCallback<PageDescriptor> callback, InitializationData initializationData) {
+    protected PageDescriptor init(InitializationData initializationData) {
         PageDescriptorInitializationData initData = (PageDescriptorInitializationData) initializationData;
 
         PageDescriptor entity = EntityFactory.create(PageDescriptor.class);
@@ -60,7 +58,7 @@ public class PageDescriptorCrudServiceImpl extends AbstractCrudServiceImpl<PageD
 
         entity.content().add(content);
 
-        callback.onSuccess(entity);
+        return entity;
     }
 
     @Override

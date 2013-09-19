@@ -45,7 +45,7 @@ public class PaymentMethodWizardServiceImpl extends AbstractCrudServiceDtoImpl<L
     }
 
     @Override
-    public void init(AsyncCallback<PaymentMethodDTO> callback, InitializationData initializationData) {
+    protected PaymentMethodDTO init(InitializationData initializationData) {
         Lease lease = TenantAppContext.getCurrentUserLease();
         Persistence.service().retrieve(lease.unit());
         Persistence.service().retrieve(lease.unit().building());
@@ -64,7 +64,7 @@ public class PaymentMethodWizardServiceImpl extends AbstractCrudServiceDtoImpl<L
             dto.paymentMethod().type().setValue(dto.allowedPaymentTypes().iterator().next());
         }
 
-        callback.onSuccess(dto);
+        return dto;
     }
 
     @Override

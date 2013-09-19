@@ -55,12 +55,12 @@ public class EmployeeCrudServiceImpl extends AbstractCrudServiceDtoImpl<Employee
     }
 
     @Override
-    public void init(AsyncCallback<EmployeeDTO> callback, InitializationData initializationData) {
+    protected EmployeeDTO init(InitializationData initializationData) {
         EmployeeDTO newEmployee = EntityFactory.create(EmployeeDTO.class);
 
         newEmployee.enabled().setValue(true);
 
-        callback.onSuccess(newEmployee);
+        return newEmployee;
 
     }
 
