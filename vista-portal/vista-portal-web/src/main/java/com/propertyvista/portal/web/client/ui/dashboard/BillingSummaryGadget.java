@@ -22,10 +22,12 @@ import com.pyx4j.commons.css.ThemeColor;
 import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.site.client.AppSite;
 import com.pyx4j.widgets.client.Anchor;
 import com.pyx4j.widgets.client.Button;
 import com.pyx4j.widgets.client.actionbar.Toolbar;
 
+import com.propertyvista.portal.rpc.portal.PortalSiteMap;
 import com.propertyvista.portal.rpc.portal.web.dto.BillingSummaryDTO;
 import com.propertyvista.portal.web.client.resources.PortalImages;
 import com.propertyvista.portal.web.client.ui.AbstractGadget;
@@ -87,7 +89,7 @@ public class BillingSummaryGadget extends AbstractGadget<MainDashboardViewImpl> 
 
                     @Override
                     public void execute() {
-                        getGadgetView().getPresenter().viewCurrentBill();
+                        AppSite.getPlaceController().goTo(new PortalSiteMap.Resident.Financial.BillingHistory.ViewBill());
                     }
                 });
                 add(viewBillAnchor);

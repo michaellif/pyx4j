@@ -130,7 +130,7 @@ public class ProvideTenantInsuranceViewImpl extends Composite implements Provide
         if (status != null) {
             if (status.certificates().size() == 0) {
                 tenantInsuranceRequirementsMessage.setVisible(true);
-                tenantInsuranceRequirementsMessage.setHTML(InsuranceStatusDTO.tenantSureInvitation);
+                tenantInsuranceRequirementsMessage.setHTML(InsuranceStatusDTO.noInsuranceTenantSureInvitation);
                 provideInsuranceByOtherProvider.setText(i18n.tr("I (we) already have Tenant Insurance"));
             } else if (status.certificates().get(0).isInstanceOf(GeneralInsuranceCertificateSummaryDTO.class)) {
                 insuranceStatusViewer.setVisible(true);

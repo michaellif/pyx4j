@@ -23,6 +23,7 @@ import com.pyx4j.entity.shared.EntityFactory;
 import com.propertyvista.portal.rpc.portal.web.dto.insurance.status.GeneralInsuranceCertificateSummaryDTO;
 import com.propertyvista.portal.rpc.portal.web.dto.insurance.status.InsuranceStatusDTO;
 import com.propertyvista.portal.rpc.portal.web.dto.insurance.status.TenantSureCertificateSummaryDTO;
+import com.propertyvista.portal.rpc.portal.web.dto.insurance.status.InsuranceStatusDTO.Status;
 import com.propertyvista.portal.rpc.portal.web.services.services.InsuranceService;
 
 public class InsuranceServiceMockImpl implements InsuranceService {
@@ -38,9 +39,10 @@ public class InsuranceServiceMockImpl implements InsuranceService {
             summaryDTO.liabilityCoverage().setValue(new BigDecimal("1000000"));
             summaryDTO.expiryDate().setValue(new LogicalDate());
 
+            statusDTO.status().setValue(Status.hasOtherInsurance);
             statusDTO.coverageExpiryDate().setValue(new LogicalDate());
             statusDTO.certificates().add(summaryDTO);
-        } else if (false) {
+        } else if (true) {
             TenantSureCertificateSummaryDTO summaryDTO = EntityFactory.create(TenantSureCertificateSummaryDTO.class);
             summaryDTO.insuranceProvider().setValue("TenantSure Insurance");
             summaryDTO.insuranceCertificateNumber().setValue("ABC12345");
@@ -49,9 +51,11 @@ public class InsuranceServiceMockImpl implements InsuranceService {
             summaryDTO.inceptionDate().setValue(new LogicalDate());
             summaryDTO.expiryDate().setValue(new LogicalDate());
 
+            statusDTO.status().setValue(Status.hasTenantSure);
             statusDTO.coverageExpiryDate().setValue(new LogicalDate());
             statusDTO.certificates().add(summaryDTO);
         } else {
+            statusDTO.status().setValue(Status.noInsurance);
             statusDTO.minimumRequiredLiability().setValue(new BigDecimal("1000000"));
         }
         callback.onSuccess(statusDTO);

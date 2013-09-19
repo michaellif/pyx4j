@@ -17,6 +17,7 @@ import java.util.Arrays;
 import java.util.Collection;
 
 import com.google.gwt.user.client.Command;
+import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.SimplePanel;
@@ -29,14 +30,14 @@ import com.pyx4j.forms.client.ui.CEntityContainer;
 import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.site.client.AppSite;
+import com.pyx4j.widgets.client.Anchor;
 import com.pyx4j.widgets.client.Button;
 import com.pyx4j.widgets.client.Label;
 import com.pyx4j.widgets.client.actionbar.Toolbar;
 
-import com.propertyvista.portal.rpc.portal.web.dto.insurance.TenantSureAgreementDTO;
-import com.propertyvista.portal.rpc.portal.web.dto.insurance.status.InsuranceCertificateSummaryDTO;
+import com.propertyvista.portal.rpc.portal.PortalSiteMap;
 import com.propertyvista.portal.rpc.portal.web.dto.insurance.status.InsuranceStatusDTO;
-import com.propertyvista.portal.rpc.portal.web.dto.insurance.status.TenantSureCertificateSummaryDTO;
 import com.propertyvista.portal.web.client.resources.PortalImages;
 import com.propertyvista.portal.web.client.ui.AbstractGadget;
 
@@ -48,10 +49,10 @@ public class InsuranceGadget extends AbstractGadget<MainDashboardViewImpl> {
 
     private final InsuranceToolbar toolbar;
 
+    private final NavigationBar navigationBar;
+
     InsuranceGadget(MainDashboardViewImpl form) {
         super(form, PortalImages.INSTANCE.residentServicesIcon(), i18n.tr("Tenant Insurance"), ThemeColor.contrast3);
-        toolbar = new InsuranceToolbar();
-        setActionsToolbar(toolbar);
 
         insuranceViewer = new InsuranceStatusViewer();
         insuranceViewer.setViewable(true);
@@ -59,11 +60,15 @@ public class InsuranceGadget extends AbstractGadget<MainDashboardViewImpl> {
 
         setContent(insuranceViewer);
 
+        setActionsToolbar(toolbar = new InsuranceToolbar());
+        setNavigationBar(navigationBar = new NavigationBar());
+
     }
 
     protected void populate(InsuranceStatusDTO insuranceStatus) {
         insuranceViewer.populate(insuranceStatus);
         toolbar.recalculateState(insuranceStatus);
+        navigationBar.recalculateState(insuranceStatus);
     }
 
     class InsuranceToolbar extends Toolbar {
@@ -74,7 +79,7 @@ public class InsuranceGadget extends AbstractGadget<MainDashboardViewImpl> {
 
         public InsuranceToolbar() {
 
-            purchaseButton = new Button("Purchase Insurance", new Command() {
+            purchaseButton = new Button(i18n.tr("Purchase Insurance"), new Command() {
 
                 @Override
                 public void execute() {
@@ -84,7 +89,7 @@ public class InsuranceGadget extends AbstractGadget<MainDashboardViewImpl> {
             purchaseButton.getElement().getStyle().setProperty("background", StyleManager.getPalette().getThemeColor(ThemeColor.contrast3, 1));
             add(purchaseButton);
 
-            proofButton = new Button("Provide Proof of my Insurance", new Command() {
+            proofButton = new Button("", new Command() {
 
                 @Override
                 public void execute() {
@@ -98,22 +103,63 @@ public class InsuranceGadget extends AbstractGadget<MainDashboardViewImpl> {
         }
 
         public void recalculateState(InsuranceStatusDTO insuranceStatus) {
+
             if (insuranceStatus == null) {
                 purchaseButton.setVisible(false);
                 proofButton.setVisible(false);
-            } else if (insuranceStatus.certificates().size() == 0) {
-                purchaseButton.setVisible(true);
-                proofButton.setVisible(true);
             } else {
-                for (InsuranceCertificateSummaryDTO certificate : insuranceStatus.certificates()) {
-                    if (certificate.isInstanceOf(TenantSureCertificateSummaryDTO.class)) {
-                        purchaseButton.setVisible(false);
-                        proofButton.setVisible(true);
-                        break;
-                    }
+                switch (insuranceStatus.status().getValue()) {
+                case noInsurance:
+                    proofButton.setCaption(i18n.tr("Provide Proof of my Insurance"));
+                    purchaseButton.setVisible(true);
+                    proofButton.setVisible(true);
+                    break;
+                case hasOtherInsurance:
+                    proofButton.setCaption(i18n.tr("Update Proof of my Insurance"));
+                    purchaseButton.setVisible(true);
+                    proofButton.setVisible(true);
+                    break;
+                case hasTenantSure:
+                    purchaseButton.setVisible(false);
+                    proofButton.setVisible(false);
+                    break;
                 }
             }
+        }
+    }
 
+    class NavigationBar extends FlowPanel {
+
+        private final Anchor viewServicesAnchor;
+
+        public NavigationBar() {
+            viewServicesAnchor = new Anchor(i18n.tr("View my Resident Services"), new Command() {
+
+                @Override
+                public void execute() {
+                    AppSite.getPlaceController().goTo(new PortalSiteMap.Resident.ResidentServices());
+                }
+            });
+            add(viewServicesAnchor);
+        }
+
+        public void recalculateState(InsuranceStatusDTO insuranceStatus) {
+
+            if (insuranceStatus == null) {
+                viewServicesAnchor.setVisible(false);
+            } else {
+                switch (insuranceStatus.status().getValue()) {
+                case noInsurance:
+                    viewServicesAnchor.setVisible(false);
+                    break;
+                case hasOtherInsurance:
+                    viewServicesAnchor.setVisible(true);
+                    break;
+                case hasTenantSure:
+                    viewServicesAnchor.setVisible(true);
+                    break;
+                }
+            }
         }
     }
 
@@ -180,9 +226,22 @@ public class InsuranceGadget extends AbstractGadget<MainDashboardViewImpl> {
             super.onValueSet(populate);
 
             if (getValue().certificates().size() == 0) {
-                message.setHTML("<b>" + InsuranceStatusDTO.noInsuranceStatusMessage + "</b><br/>" + InsuranceStatusDTO.tenantSureInvitation);
+                message.setHTML("<b>" + InsuranceStatusDTO.noInsuranceStatusMessage + "</b><br/>" + InsuranceStatusDTO.noInsuranceTenantSureInvitation);
             } else {
-                message.setText(SimpleMessageFormat.format(InsuranceStatusDTO.insuranceStatusMessage, getValue().coverageExpiryDate().getValue()));
+                message.setText(SimpleMessageFormat.format(InsuranceStatusDTO.hasInsuranceStatusMessage, getValue().coverageExpiryDate().getValue()));
+            }
+
+            switch (getValue().status().getValue()) {
+            case noInsurance:
+                message.setHTML("<b>" + InsuranceStatusDTO.noInsuranceStatusMessage + "</b><br/>" + InsuranceStatusDTO.noInsuranceTenantSureInvitation);
+                break;
+            case hasOtherInsurance:
+                message.setHTML(SimpleMessageFormat.format(InsuranceStatusDTO.hasInsuranceStatusMessage, getValue().coverageExpiryDate().getValue()) + "<br/>"
+                        + InsuranceStatusDTO.otherInsuranceTenantSureInvitation);
+                break;
+            case hasTenantSure:
+                message.setText(SimpleMessageFormat.format(InsuranceStatusDTO.hasInsuranceStatusMessage, getValue().coverageExpiryDate().getValue()));
+                break;
             }
 
         }

@@ -83,11 +83,6 @@ public class MainDashboardActivity extends SecurityAwareActivity implements Main
     }
 
     @Override
-    public void viewCurrentBill() {
-        AppSite.getPlaceController().goTo(new PortalSiteMap.Resident.Financial.BillingHistory.ViewBill());
-    }
-
-    @Override
     public void payNow() {
         if (SecurityController.checkAnyBehavior(VistaCustomerPaymentTypeBehavior.values())) {
             AppSite.getPlaceController().goTo(new Financial.PayNow());

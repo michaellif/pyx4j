@@ -33,12 +33,9 @@ import com.pyx4j.widgets.client.Button;
 import com.pyx4j.widgets.client.Label;
 import com.pyx4j.widgets.client.actionbar.Toolbar;
 
-import com.propertyvista.portal.rpc.portal.web.dto.insurance.status.GeneralInsuranceCertificateSummaryDTO;
 import com.propertyvista.portal.rpc.portal.web.dto.insurance.status.InsuranceStatusDTO;
-import com.propertyvista.portal.rpc.portal.web.dto.insurance.status.TenantSureCertificateSummaryDTO;
 import com.propertyvista.portal.web.client.resources.PortalImages;
 import com.propertyvista.portal.web.client.ui.AbstractGadget;
-import com.propertyvista.portal.web.client.ui.util.decorators.FormDecoratorBuilder;
 
 public class InsuranceSummaryGadget extends AbstractGadget<ServicesDashboardViewImpl> {
 
@@ -140,7 +137,7 @@ public class InsuranceSummaryGadget extends AbstractGadget<ServicesDashboardView
             CLabel<String> noInsuranceStatusMessageLabel = new CLabel<String>();
             noInsuranceStatusMessageLabel.asWidget().getElement().getStyle().setFontWeight(FontWeight.BOLDER);
             main.setWidget(++row, 0, new Label(InsuranceStatusDTO.noInsuranceStatusMessage));
-            main.setWidget(++row, 0, new Label(InsuranceStatusDTO.tenantSureInvitation));
+            main.setWidget(++row, 0, new Label(InsuranceStatusDTO.noInsuranceTenantSureInvitation));
             return main;
 
         }

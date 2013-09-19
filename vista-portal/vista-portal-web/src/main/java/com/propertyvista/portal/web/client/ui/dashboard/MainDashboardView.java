@@ -24,8 +24,6 @@ public interface MainDashboardView extends IsView {
 
     interface DashboardPresenter {
 
-        void viewCurrentBill();
-
         void payNow();
 
         void setAutopay();
