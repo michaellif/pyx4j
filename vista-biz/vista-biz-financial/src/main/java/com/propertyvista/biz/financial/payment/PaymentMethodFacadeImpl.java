@@ -27,6 +27,7 @@ import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 
 import com.propertyvista.biz.financial.billingcycle.BillingCycleFacade;
 import com.propertyvista.biz.system.AuditFacade;
+import com.propertyvista.crm.rpc.dto.financial.autopayreview.ReviewedPapDTO;
 import com.propertyvista.domain.financial.BillingAccount;
 import com.propertyvista.domain.financial.PaymentRecord;
 import com.propertyvista.domain.financial.billing.BillingCycle;
@@ -112,6 +113,11 @@ public class PaymentMethodFacadeImpl implements PaymentMethodFacade {
     @Override
     public PreauthorizedPayment persistPreauthorizedPayment(PreauthorizedPayment preauthorizedPayment, Tenant tenantId) {
         return new PreauthorizedPaymentAgreementMananger().persistPreauthorizedPayment(preauthorizedPayment, tenantId);
+    }
+
+    @Override
+    public void persitPreauthorizedPaymentReview(ReviewedPapDTO preauthorizedPaymentChanges) {
+        new PreauthorizedPaymentAgreementMananger().persitPreauthorizedPaymentReview(preauthorizedPaymentChanges);
     }
 
     @Override

@@ -23,8 +23,10 @@ import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
 import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.gwt.client.deferred.DeferredProcessDialog;
+import com.pyx4j.gwt.rpc.deferred.DeferredProcessProgressResponse;
+import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
-import com.pyx4j.rpc.shared.VoidSerializable;
 import com.pyx4j.site.rpc.AppPlace;
 
 import com.propertyvista.crm.client.ui.reports.autopayreviewer.AutoPayReviewView;
@@ -38,6 +40,8 @@ import com.propertyvista.crm.rpc.services.financial.AutoPayReviewService;
 import com.propertyvista.domain.reports.AutoPayChangesReportMetadata;
 
 public class AutoPayReviewActivity extends AbstractActivity implements AutoPayReviewView.Presenter {
+
+    private static final I18n i18n = I18n.get(AutoPayReviewActivity.class);
 
     private final AutoPayReviewView view;
 
@@ -68,12 +72,24 @@ public class AutoPayReviewActivity extends AbstractActivity implements AutoPayRe
 
     @Override
     public void acceptMarked() {
-        autoPayReviewService.accept(new DefaultAsyncCallback<VoidSerializable>() {
+        autoPayReviewService.accept(new DefaultAsyncCallback<String>() {
             @Override
-            public void onSuccess(VoidSerializable result) {
-                populate();
+            public void onSuccess(String deferredCorrelationId) {
+                startAccetanceProgress(deferredCorrelationId);
             }
         }, makeReviewedPaps(view.isEverythingSelected() ? papReviews : view.getMarkedPapReviews()));
+    }
+
+    private void startAccetanceProgress(String deferredCorrelationId) {
+        DeferredProcessDialog d = new DeferredProcessDialog(i18n.tr("Accept Selected"), i18n.tr("Accepting Auto Pay changes ..."), false) {
+            @Override
+            public void onDeferredSuccess(DeferredProcessProgressResponse result) {
+                super.onDeferredSuccess(result);
+                populate();
+            }
+        };
+        d.show();
+        d.startProgress(deferredCorrelationId);
     }
 
     @Override

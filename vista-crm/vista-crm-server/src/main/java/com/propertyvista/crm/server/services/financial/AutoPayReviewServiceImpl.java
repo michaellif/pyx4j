@@ -27,10 +27,11 @@ import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.AttachLevel;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
-import com.pyx4j.rpc.shared.VoidSerializable;
+import com.pyx4j.gwt.server.deferred.DeferredProcessRegistry;
 
 import com.propertyvista.biz.financial.payment.PaymentReportFacade;
 import com.propertyvista.biz.financial.payment.PreauthorizedPaymentsReportCriteria;
+import com.propertyvista.config.ThreadPoolNames;
 import com.propertyvista.crm.rpc.dto.financial.autopayreview.PapChargeReviewDTO;
 import com.propertyvista.crm.rpc.dto.financial.autopayreview.PapChargeReviewDTO.ChangeType;
 import com.propertyvista.crm.rpc.dto.financial.autopayreview.PapReviewCaptionDTO;
@@ -56,8 +57,8 @@ public class AutoPayReviewServiceImpl implements AutoPayReviewService {
     }
 
     @Override
-    public void accept(AsyncCallback<VoidSerializable> callback, ReviewedPapsHolderDTO acceptedReviews) {
-        callback.onSuccess(null);
+    public void accept(AsyncCallback<String> callback, final ReviewedPapsHolderDTO acceptedReviews) {
+        callback.onSuccess(DeferredProcessRegistry.fork(new AutoPayReviewDeferredProcess(acceptedReviews), ThreadPoolNames.IMPORTS));
     }
 
     private PreauthorizedPaymentsReportCriteria makeCriteria(AutoPayChangesReportMetadata filterSettings) {

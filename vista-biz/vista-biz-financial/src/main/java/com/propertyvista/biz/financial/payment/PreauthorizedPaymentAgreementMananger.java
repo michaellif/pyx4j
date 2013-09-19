@@ -40,6 +40,7 @@ import com.propertyvista.biz.communication.NotificationFacade;
 import com.propertyvista.biz.financial.billingcycle.BillingCycleFacade;
 import com.propertyvista.biz.policy.PolicyFacade;
 import com.propertyvista.biz.system.AuditFacade;
+import com.propertyvista.crm.rpc.dto.financial.autopayreview.ReviewedPapDTO;
 import com.propertyvista.domain.financial.BillingAccount;
 import com.propertyvista.domain.financial.PaymentRecord;
 import com.propertyvista.domain.financial.billing.BillingCycle;
@@ -129,6 +130,10 @@ class PreauthorizedPaymentAgreementMananger {
         }
 
         return preauthorizedPayment;
+    }
+
+    void persitPreauthorizedPaymentReview(ReviewedPapDTO preauthorizedPaymentChanges) {
+        //TODO
     }
 
     List<PreauthorizedPayment> retrievePreauthorizedPayments(Tenant tenantId) {

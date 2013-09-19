@@ -17,6 +17,7 @@ import java.util.List;
 
 import com.pyx4j.commons.LogicalDate;
 
+import com.propertyvista.crm.rpc.dto.financial.autopayreview.ReviewedPapDTO;
 import com.propertyvista.domain.financial.BillingAccount;
 import com.propertyvista.domain.financial.PaymentRecord;
 import com.propertyvista.domain.financial.billing.BillingCycle;
@@ -60,6 +61,8 @@ public interface PaymentMethodFacade {
     // PAP:
 
     PreauthorizedPayment persistPreauthorizedPayment(PreauthorizedPayment preauthorizedPayment, Tenant tenantId);
+
+    void persitPreauthorizedPaymentReview(ReviewedPapDTO preauthorizedPaymentChanges);
 
     void deletePreauthorizedPayment(PreauthorizedPayment preauthorizedPaymentId);
 

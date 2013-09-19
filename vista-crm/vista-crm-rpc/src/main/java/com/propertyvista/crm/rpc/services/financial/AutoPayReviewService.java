@@ -18,7 +18,6 @@ import java.util.Vector;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.rpc.shared.IService;
-import com.pyx4j.rpc.shared.VoidSerializable;
 
 import com.propertyvista.crm.rpc.dto.financial.autopayreview.PapReviewDTO;
 import com.propertyvista.crm.rpc.dto.financial.autopayreview.ReviewedPapsHolderDTO;
@@ -28,6 +27,6 @@ public interface AutoPayReviewService extends IService {
 
     void getAutoPayReviews(AsyncCallback<Vector<PapReviewDTO>> callback, AutoPayChangesReportMetadata filterSettings);
 
-    void accept(AsyncCallback<VoidSerializable> callback, ReviewedPapsHolderDTO acceptedReviews);
+    void accept(AsyncCallback<String> callback, ReviewedPapsHolderDTO acceptedReviews);
 
 }
