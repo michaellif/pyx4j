@@ -14,6 +14,7 @@
 package com.propertyvista.domain.marketing.ils;
 
 import com.pyx4j.entity.annotations.Detached;
+import com.pyx4j.entity.annotations.EmbeddedEntity;
 import com.pyx4j.entity.annotations.Indexed;
 import com.pyx4j.entity.annotations.JoinColumn;
 import com.pyx4j.entity.annotations.MemberColumn;
@@ -42,6 +43,7 @@ public interface ILSProfileBuilding extends IEntity {
     IPrimitive<ILSProvider> provider();
 
     @Owned
+    @EmbeddedEntity
     PropertyContact inquiryContact();
 
     @Owned

@@ -15,18 +15,22 @@ package com.propertyvista.crm.client.ui.crud.building;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Vector;
 
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.HTML;
+import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.view.client.Range;
 
 import com.pyx4j.commons.ValidationUtils;
 import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CEntityLabel;
+import com.pyx4j.forms.client.ui.CEnumLabel;
 import com.pyx4j.forms.client.ui.CField;
 import com.pyx4j.forms.client.ui.CMonthYearPicker;
 import com.pyx4j.forms.client.ui.folder.EntityFolderColumnDescriptor;
@@ -38,24 +42,30 @@ import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.security.client.ClientContext;
 import com.pyx4j.security.shared.SecurityController;
 import com.pyx4j.site.client.AppPlaceEntityMapper;
+import com.pyx4j.site.client.ui.dialogs.SelectEnumDialog;
 import com.pyx4j.site.client.ui.prime.form.IForm;
 import com.pyx4j.site.client.ui.prime.misc.CEntityCrudHyperlink;
 import com.pyx4j.widgets.client.tabpanel.Tab;
 
 import com.propertyvista.common.client.policy.ClientPolicyManager;
+import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
 import com.propertyvista.common.client.ui.components.editors.AddressStructuredEditor;
 import com.propertyvista.common.client.ui.components.editors.MarketingEditor;
+import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
 import com.propertyvista.common.client.ui.components.folders.VistaTableFolder;
 import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
 import com.propertyvista.common.client.ui.validators.PastDateIncludeTodayValidator;
 import com.propertyvista.crm.client.ui.components.media.CrmMediaFolder;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.domain.financial.MerchantAccount;
+import com.propertyvista.domain.marketing.ils.ILSProfileBuilding;
 import com.propertyvista.domain.policy.policies.DatesPolicy;
+import com.propertyvista.domain.policy.policies.domain.ILSPolicyItem.ILSProvider;
 import com.propertyvista.domain.policy.policies.domain.IdAssignmentItem.IdTarget;
 import com.propertyvista.domain.property.PropertyContact;
 import com.propertyvista.domain.property.PropertyPhone;
 import com.propertyvista.domain.property.asset.Complex;
+import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.building.BuildingAmenity;
 import com.propertyvista.domain.property.asset.building.BuildingUtility;
 import com.propertyvista.domain.security.VistaCrmBehavior;
@@ -335,6 +345,7 @@ public class BuildingForm extends CrmEntityForm<BuildingDTO> {
         flexPanel.setWidget(++row, 0, 2, inject(proto().media(), new CrmMediaFolder(isEditable(), ImageTarget.Building)));
 
         flexPanel.setH1(++row, 0, 2, i18n.tr("ILS"));
+        flexPanel.setWidget(++row, 0, 2, inject(proto().ilsProfile(), new ILSProfileBuildingFolder()));
         // TODO - ILSProfileBuildingFolder extends VistaBoxFolder<ILSProfileBuilding>
         // adding an item would enable listing of this Building and all its floorplans for selected ILS provider
 
@@ -417,6 +428,62 @@ public class BuildingForm extends CrmEntityForm<BuildingDTO> {
             columns.add(new EntityFolderColumnDescriptor(proto().name(), "15em"));
             columns.add(new EntityFolderColumnDescriptor(proto().description(), "25em"));
             return columns;
+        }
+    }
+
+    private class ILSProfileBuildingFolder extends VistaBoxFolder<ILSProfileBuilding> {
+        public ILSProfileBuildingFolder() {
+            super(ILSProfileBuilding.class);
+        }
+
+        @Override
+        public CComponent<?> create(IObject<?> member) {
+            if (member instanceof ILSProfileBuilding) {
+                return new ILSProfileBuildingEditor();
+            } else {
+                return super.create(member);
+            }
+        }
+
+        @Override
+        protected void addItem() {
+            // get allowed providers
+            ((BuildingEditorView.Presenter) getParentView().getPresenter()).getILSProviders(new DefaultAsyncCallback<Vector<ILSProvider>>() {
+                @Override
+                public void onSuccess(Vector<ILSProvider> providers) {
+                    // clear used providers
+                    for (ILSProfileBuilding pr : BuildingForm.this.getValue().ilsProfile()) {
+                        providers.remove(pr.provider().getValue());
+                    }
+                    // show selection dialog
+                    new SelectEnumDialog<ILSProvider>(i18n.tr("Select ILS Provider"), providers) {
+                        @Override
+                        public boolean onClickOk() {
+                            if (getSelectedType() != null) {
+                                ILSProfileBuilding item = EntityFactory.create(ILSProfileBuilding.class);
+                                item.provider().setValue(getSelectedType());
+                                addItem(item);
+                            }
+                            return true;
+                        }
+                    }.show();
+                }
+            }, EntityFactory.createIdentityStub(Building.class, BuildingForm.this.getValue().getPrimaryKey()));
+        }
+
+        private class ILSProfileBuildingEditor extends CEntityDecoratableForm<ILSProfileBuilding> {
+            public ILSProfileBuildingEditor() {
+                super(ILSProfileBuilding.class);
+            }
+
+            @Override
+            public IsWidget createContent() {
+                TwoColumnFlexFormPanel content = new TwoColumnFlexFormPanel();
+                int row = -1;
+
+                content.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().provider(), new CEnumLabel()), true).build());
+                return content;
+            }
         }
     }
 

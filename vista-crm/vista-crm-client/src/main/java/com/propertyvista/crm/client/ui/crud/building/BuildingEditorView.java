@@ -13,12 +13,20 @@
  */
 package com.propertyvista.crm.client.ui.crud.building;
 
+import java.util.Vector;
+
+import com.google.gwt.user.client.rpc.AsyncCallback;
+
 import com.pyx4j.site.client.ui.prime.form.IEditor;
 
+import com.propertyvista.domain.policy.policies.domain.ILSPolicyItem.ILSProvider;
+import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.dto.BuildingDTO;
 
 public interface BuildingEditorView extends IEditor<BuildingDTO> {
 
     interface Presenter extends BuildingPresenterCommon, IEditor.Presenter {
+
+        void getILSProviders(AsyncCallback<Vector<ILSProvider>> callback, Building building);
     }
 }

@@ -13,14 +13,20 @@
  */
 package com.propertyvista.crm.rpc.services.building;
 
+import java.util.Vector;
+
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.entity.rpc.AbstractCrudService;
 
 import com.propertyvista.domain.financial.MerchantAccount;
+import com.propertyvista.domain.policy.policies.domain.ILSPolicyItem.ILSProvider;
+import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.dto.BuildingDTO;
 
 public interface BuildingCrudService extends AbstractCrudService<BuildingDTO> {
 
     void retrieveMerchantAccountStatus(AsyncCallback<MerchantAccount> callback, MerchantAccount merchantAccountStub);
+
+    void getILSProviders(AsyncCallback<Vector<ILSProvider>> callback, Building building);
 }

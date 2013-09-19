@@ -13,6 +13,8 @@
  */
 package com.propertyvista.crm.server.services.building;
 
+import java.util.Vector;
+
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.config.server.ServerSideFactory;
@@ -26,6 +28,7 @@ import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.geo.GeoPoint;
 
 import com.propertyvista.biz.asset.BuildingFacade;
+import com.propertyvista.biz.policy.PolicyFacade;
 import com.propertyvista.biz.system.Vista2PmcFacade;
 import com.propertyvista.crm.rpc.services.building.BuildingCrudService;
 import com.propertyvista.domain.GeoLocation;
@@ -36,6 +39,9 @@ import com.propertyvista.domain.dashboard.DashboardMetadata;
 import com.propertyvista.domain.financial.ARCode;
 import com.propertyvista.domain.financial.BuildingMerchantAccount;
 import com.propertyvista.domain.financial.MerchantAccount;
+import com.propertyvista.domain.policy.policies.ILSPolicy;
+import com.propertyvista.domain.policy.policies.domain.ILSPolicyItem;
+import com.propertyvista.domain.policy.policies.domain.ILSPolicyItem.ILSProvider;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.dto.BuildingDTO;
 import com.propertyvista.server.common.reference.geo.SharedGeoLocator;
@@ -190,5 +196,23 @@ public class BuildingCrudServiceImpl extends AbstractCrudServiceDtoImpl<Building
         MerchantAccount entity = Persistence.service().retrieve(MerchantAccount.class, merchantAccountStub.getPrimaryKey());
         ServerSideFactory.create(Vista2PmcFacade.class).calulateMerchantAccountStatus(entity);
         callback.onSuccess(entity);
+    }
+
+    @Override
+    public void getILSProviders(AsyncCallback<Vector<ILSProvider>> callback, Building buildingStub) {
+        // check policy to find providers where posting is allowed for this building
+        Vector<ILSProvider> providers = new Vector<ILSProvider>();
+        Building building = Persistence.service().retrieve(Building.class, buildingStub.getPrimaryKey());
+        ILSPolicy policy = ServerSideFactory.create(PolicyFacade.class).obtainEffectivePolicy(building, ILSPolicy.class);
+        for (ILSPolicyItem item : policy.policyItems()) {
+            if (!item.allowedProvinces().isEmpty() && !item.allowedProvinces().contains(building.info().address().province().getValue())) {
+                continue;
+            }
+            if (!item.allowedCities().isEmpty() && !item.allowedCities().contains(building.info().address().city().getValue())) {
+                continue;
+            }
+            providers.add(item.provider().getValue());
+        }
+        callback.onSuccess(providers);
     }
 }
