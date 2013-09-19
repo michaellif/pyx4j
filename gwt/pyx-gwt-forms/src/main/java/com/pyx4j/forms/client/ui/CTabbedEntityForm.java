@@ -35,7 +35,7 @@ import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.forms.client.events.PropertyChangeEvent;
 import com.pyx4j.forms.client.events.PropertyChangeEvent.PropertyName;
 import com.pyx4j.forms.client.events.PropertyChangeHandler;
-import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
+import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
 import com.pyx4j.forms.client.validators.IValidatable;
 import com.pyx4j.forms.client.validators.ValidationResults;
 import com.pyx4j.widgets.client.tabpanel.Tab;
@@ -102,7 +102,7 @@ public class CTabbedEntityForm<E extends IEntity> extends CEntityForm<E> {
         return tabPanel;
     }
 
-    public Tab addTab(final TwoColumnFlexFormPanel panel) {
+    public Tab addTab(final BasicFlexFormPanel panel) {
         return addTab(panel, panel.getTitle());
     }
 
