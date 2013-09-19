@@ -426,7 +426,7 @@ public class DataTable<E extends IEntity> extends FlexTable implements DataTable
 
     private void renderBody() {
         clearTable();
-        log.debug("dataTable {} render start {}", GWTJava5Helper.getSimpleName(model.getEntityClass()), model.getData().size());
+        log.trace("dataTable {} render start {}", GWTJava5Helper.getSimpleName(model.getEntityClass()), model.getData().size());
 
         Scheduler.get().scheduleIncremental(new RepeatingCommand() {
 
@@ -441,7 +441,7 @@ public class DataTable<E extends IEntity> extends FlexTable implements DataTable
             @Override
             public boolean execute() {
                 if (!dataIterator.hasNext()) {
-                    log.debug("dataTable {} render ends {} in {} msec", GWTJava5Helper.getSimpleName(model.getEntityClass()), rowIndex, TimeUtils.since(start));
+                    log.trace("dataTable {} render ends {} in {} msec", GWTJava5Helper.getSimpleName(model.getEntityClass()), rowIndex, TimeUtils.since(start));
                     return false;
                 }
 

@@ -231,7 +231,7 @@ public class EntityDataTablePanel<E extends IEntity> extends VerticalPanel {
         dataSource.obtain(updateCriteria(criteria), new DefaultAsyncCallback<EntitySearchResult<E>>() {
             @Override
             public void onSuccess(final EntitySearchResult<E> result) {
-                log.debug("dataTable {} data received {}", GWTJava5Helper.getSimpleName(clazz), result.getData().size());
+                log.trace("dataTable {} data received {}", GWTJava5Helper.getSimpleName(clazz), result.getData().size());
                 // Separate RPC serialization and table painting
                 Scheduler.get().scheduleDeferred(new ScheduledCommand() {
                     @Override
