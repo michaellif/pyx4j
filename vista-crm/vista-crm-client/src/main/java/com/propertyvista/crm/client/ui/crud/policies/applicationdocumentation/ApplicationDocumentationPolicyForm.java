@@ -14,8 +14,10 @@
 package com.propertyvista.crm.client.ui.crud.policies.applicationdocumentation;
 
 import java.util.Arrays;
+import java.util.EnumSet;
 import java.util.List;
 
+import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.RevalidationTrigger;
 import com.pyx4j.forms.client.ui.folder.EntityFolderColumnDescriptor;
@@ -23,9 +25,9 @@ import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
 import com.pyx4j.forms.client.validators.ValidationError;
 import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.site.client.ui.dialogs.SelectEnumDialog;
 import com.pyx4j.site.client.ui.prime.form.IForm;
 
-import com.propertyvista.common.client.ui.components.DocumentTypeSelectorDialog;
 import com.propertyvista.common.client.ui.components.folders.VistaTableFolder;
 import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
 import com.propertyvista.crm.client.ui.crud.policies.common.PolicyDTOTabPanelBasedForm;
@@ -93,10 +95,13 @@ public class ApplicationDocumentationPolicyForm extends PolicyDTOTabPanelBasedFo
 
         @Override
         protected void addItem() {
-            new DocumentTypeSelectorDialog() {
+            new SelectEnumDialog<IdentificationDocumentType.Type>(i18n.tr("Select Document Type"), EnumSet.allOf(IdentificationDocumentType.Type.class)) {
                 @Override
                 public boolean onClickOk() {
-                    addItem(getSelectedItems().get(0));
+                    IdentificationDocumentType item = EntityFactory.create(IdentificationDocumentType.class);
+                    item.type().setValue(getSelectedType());
+                    item.name().setValue(getSelectedType().toString());
+                    addItem(item);
                     return true;
                 }
             }.show();
