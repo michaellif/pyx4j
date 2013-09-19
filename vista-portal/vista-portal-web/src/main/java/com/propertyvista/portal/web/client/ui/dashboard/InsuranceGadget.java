@@ -91,7 +91,7 @@ public class InsuranceGadget extends AbstractGadget<MainDashboardViewImpl> {
                     getGadgetView().getPresenter().addThirdPartyTenantInsuranceCertificate();
                 }
             });
-            proofButton.getElement().getStyle().setProperty("background", StyleManager.getPalette().getThemeColor(ThemeColor.contrast3, 0.6));
+            proofButton.getElement().getStyle().setProperty("background", StyleManager.getPalette().getThemeColor(ThemeColor.contrast3, 0.8));
             add(proofButton);
 
             recalculateState(null);

@@ -40,7 +40,7 @@ public class InsuranceServiceMockImpl implements InsuranceService {
 
             statusDTO.coverageExpiryDate().setValue(new LogicalDate());
             statusDTO.certificates().add(summaryDTO);
-        } else if (true) {
+        } else if (false) {
             TenantSureCertificateSummaryDTO summaryDTO = EntityFactory.create(TenantSureCertificateSummaryDTO.class);
             summaryDTO.insuranceProvider().setValue("TenantSure Insurance");
             summaryDTO.insuranceCertificateNumber().setValue("ABC12345");

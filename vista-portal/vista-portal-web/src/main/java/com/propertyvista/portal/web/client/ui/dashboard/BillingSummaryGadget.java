@@ -74,7 +74,7 @@ public class BillingSummaryGadget extends AbstractGadget<MainDashboardViewImpl> 
                     getGadgetView().getPresenter().setAutopay();
                 }
             });
-            autoPayButton.getElement().getStyle().setProperty("background", StyleManager.getPalette().getThemeColor(ThemeColor.contrast4, 0.6));
+            autoPayButton.getElement().getStyle().setProperty("background", StyleManager.getPalette().getThemeColor(ThemeColor.contrast4, 0.8));
             add(autoPayButton);
         }
     }
