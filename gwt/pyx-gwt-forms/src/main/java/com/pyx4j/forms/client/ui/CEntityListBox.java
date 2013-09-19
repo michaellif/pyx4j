@@ -164,6 +164,15 @@ public class CEntityListBox<E extends IEntity> extends CListBox<E> {
         resetOptions();
     }
 
+    @Override
+    protected void onValuePropagation(List<E> value, boolean fireEvent, boolean populate) {
+        super.onValuePropagation(value, fireEvent, populate);
+        if (populate && optionsFilter != null || (criteria != null && criteria.getFilters() != null && !criteria.getFilters().isEmpty())) {
+            // Fire options reload since optionsFilter may depend on other values in the model.
+            refreshOptions();
+        }
+    }
+
     public void resetOptions() {
         if (optionsLoaded) {
             optionsLoaded = false;

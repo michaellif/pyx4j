@@ -77,7 +77,7 @@ public class EntityIFormWithoutLists extends CEntityForm<EntityI> {
         // list box
         CEntityListBox<EntityIII> listBox = new CEntityListBox<EntityIII>(SelectionMode.SINGLE_PANEL);
         EntityIII e1 = EntityFactory.create(EntityIII.class);
-        e1.stringMember().setValue("One");
+        e1.stringMember().setValue("OneOneOneOneOneOneOneOneOneOneOneOne");
         e1.integerMember().setValue(1);
         EntityIII e2 = EntityFactory.create(EntityIII.class);
         e2.stringMember().setValue("Two");

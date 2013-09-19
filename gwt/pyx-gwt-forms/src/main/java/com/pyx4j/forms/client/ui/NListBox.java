@@ -6,6 +6,8 @@ import java.util.List;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.HTML;
 
+import com.pyx4j.forms.client.ui.CComboBox.AsyncOptionsReadyCallback;
+
 public class NListBox<E> extends NFocusField<List<E>, INativeListBox<E>, CListBox<E>, HTML> implements INativeListBox<E> {
 
     private int visibleItemCount;
@@ -98,6 +100,19 @@ public class NListBox<E> extends NFocusField<List<E>, INativeListBox<E>, CListBo
     public final void setNavigationCommand(Command navigationCommand) {
         if (navigationCommand != null) {
             throw new Error("Not supported in multi-select mode");
+        }
+    }
+
+    @Override
+    protected void onLoad() {
+        super.onLoad();
+        if (getCComponent().getOptions() != null) {
+            getCComponent().retriveOptions(new AsyncOptionsReadyCallback<E>() {
+                @Override
+                public void onOptionsReady(List<E> opt) {
+                    refreshOptions();
+                }
+            });
         }
     }
 }

@@ -29,6 +29,7 @@ import java.util.Vector;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.google.gwt.dom.client.Style.Overflow;
 import com.google.gwt.event.dom.client.BlurEvent;
 import com.google.gwt.event.dom.client.DoubleClickEvent;
 import com.google.gwt.event.dom.client.DoubleClickHandler;
@@ -78,6 +79,8 @@ public class NativeListSelectionComposite<E> extends FocusPanel implements INati
 
     private boolean ignoreBlur = false;
 
+    private final int controlPanelWidth = 16;
+
     protected class InnerListBox extends ListBox implements HasDoubleClickHandlers {
 
         private final ArrayList<E> itemList;
@@ -86,6 +89,8 @@ public class NativeListSelectionComposite<E> extends FocusPanel implements INati
             super(isMultipleSelect);
             this.itemList = new ArrayList<E>();
             this.setTitle("Double click or Space to move");
+            setWidth("100px");
+            getElement().getStyle().setOverflowX(Overflow.SCROLL);
         }
 
         @Override
@@ -192,15 +197,14 @@ public class NativeListSelectionComposite<E> extends FocusPanel implements INati
 
         content.setWidget(1, 0, optionsListBox);
         content.getFlexCellFormatter().setRowSpan(1, 0, 4);
+        content.getCellFormatter().getElement(1, 0).getStyle().setProperty("padding", "0");
+
+        content.setWidget(1, 3, selectedListBox);
+        content.getFlexCellFormatter().setRowSpan(1, 3, 4);
+        content.getCellFormatter().getElement(1, 3).getStyle().setProperty("padding", "0");
 
         // ->
         addButton = new Button(ImageFactory.getImages().arrowLightGreyRight());
-//        new Image(ImageFactory.getImages().arrowLightGreyRight()), new Image(ImageFactory.getImages().arrowLightBlueRightDown()));
-//        addButton.getUpDisabledFace().setImage(new Image(ImageFactory.getImages().arrowGreyRight()));
-//        Image imageRightOver = new Image(ImageFactory.getImages().arrowLightBlueRight());
-//        addButton.getUpHoveringFace().setImage(imageRightOver);
-//        Cursor.setHand(imageRightOver);
-
         addButton.setCommand(new Command() {
             @Override
             public void execute() {
@@ -226,12 +230,6 @@ public class NativeListSelectionComposite<E> extends FocusPanel implements INati
 
         // <-
         removeButton = new Button(ImageFactory.getImages().arrowLightGreyLeft());
-//        new Image(ImageFactory.getImages().arrowLightGreyLeft()), new Image(ImageFactory.getImages().arrowLightBlueLeftDown()));
-//        removeButton.getUpDisabledFace().setImage(new Image(ImageFactory.getImages().arrowGreyLeft()));
-//        Image imageLeftOver = new Image(ImageFactory.getImages().arrowLightBlueLeft());
-//        removeButton.getUpHoveringFace().setImage(imageLeftOver);
-//        Cursor.setHand(imageLeftOver);
-
         removeButton.setCommand(new Command() {
             @Override
             public void execute() {
@@ -256,16 +254,11 @@ public class NativeListSelectionComposite<E> extends FocusPanel implements INati
         });
 
         // Layout corrections
-        content.getCellFormatter().getElement(1, 0).getStyle().setProperty("paddingRight", "0");
         removeButton.getElement().getStyle().setProperty("padding", "3px");
         addButton.getElement().getStyle().setProperty("padding", "3px");
 
-        content.setWidget(1, 3, selectedListBox);
-        content.getFlexCellFormatter().setRowSpan(1, 3, 4);
-
         // Remove table offset in form
         content.getElement().getStyle().setProperty("borderCollapse", "collapse");
-        content.getCellFormatter().getElement(1, 0).getStyle().setProperty("paddingLeft", "0");
 
         addFocusableGroup(addButton, removeButton, selectedListBox, optionsListBox);
 
@@ -280,9 +273,18 @@ public class NativeListSelectionComposite<E> extends FocusPanel implements INati
         addButton.ensureDebugId(baseID + "-addButton");
     }
 
-    public void setListBoxWidth(String width) {
-        optionsListBox.setWidth(width);
-        selectedListBox.setWidth(width);
+    public void setPixelWidth(int width) {
+        super.setWidth(width + "px");
+        String listWidth = ((width - controlPanelWidth) / 2) + "px";
+        optionsListBox.setWidth(listWidth);
+        selectedListBox.setWidth(listWidth);
+    }
+
+    public void setPixelHeight(int height) {
+        super.setHeight(height + "px");
+        String listHeight = (height - 20) + "px"; // allow space for header
+        optionsListBox.setHeight(listHeight);
+        selectedListBox.setHeight(listHeight);
     }
 
     private void slectedAdd() {
@@ -314,24 +316,26 @@ public class NativeListSelectionComposite<E> extends FocusPanel implements INati
         log.debug("items removed", count);
     }
 
+    /** Assumes pixels */
     @Override
     public void setWidth(String width) {
+        int w = 300;
         try {
-            if (width == null) {
-                setListBoxWidth("200");
-            } else {
-                int w = (Integer.valueOf(width) - 40) / 2;
-                setListBoxWidth(String.valueOf(w));
-            }
+            w = Integer.valueOf(width);
         } catch (NumberFormatException ignore) {
-            setListBoxWidth("200");
         }
-        super.setWidth(width);
+        setPixelWidth(w);
     }
 
-    public void setListBoxHeight(String height) {
-        optionsListBox.setHeight(height);
-        selectedListBox.setHeight(height);
+    /** Assumes pixels */
+    @Override
+    public void setHeight(String height) {
+        int h = 300;
+        try {
+            h = Integer.valueOf(height);
+        } catch (NumberFormatException ignore) {
+        }
+        setPixelHeight(h);
     }
 
     @Override
