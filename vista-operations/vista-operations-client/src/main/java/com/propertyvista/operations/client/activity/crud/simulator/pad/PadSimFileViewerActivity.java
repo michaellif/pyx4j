@@ -26,23 +26,23 @@ import com.pyx4j.site.rpc.CrudAppPlace;
 
 import com.propertyvista.operations.client.OperationsSite;
 import com.propertyvista.operations.client.activity.crud.AdminViewerActivity;
-import com.propertyvista.operations.client.ui.crud.simulator.pad.file.PadFileViewerView;
+import com.propertyvista.operations.client.ui.crud.simulator.pad.file.PadSimFileViewerView;
 import com.propertyvista.operations.domain.payment.pad.simulator.PadSimBatch;
 import com.propertyvista.operations.domain.payment.pad.simulator.PadSimFile;
 import com.propertyvista.operations.rpc.OperationsSiteMap;
 import com.propertyvista.operations.rpc.services.simulator.PadSimBatchCrudService;
 import com.propertyvista.operations.rpc.services.simulator.PadSimFileCrudService;
 
-public class PadFileViewerActivity extends AdminViewerActivity<PadSimFile> implements PadFileViewerView.Presenter {
+public class PadSimFileViewerActivity extends AdminViewerActivity<PadSimFile> implements PadSimFileViewerView.Presenter {
 
     private final Presenter<PadSimBatch> batchLister;
 
     @SuppressWarnings("unchecked")
-    public PadFileViewerActivity(CrudAppPlace place) {
-        super(place, OperationsSite.getViewFactory().instantiate(PadFileViewerView.class), (AbstractCrudService<PadSimFile>) GWT
+    public PadSimFileViewerActivity(CrudAppPlace place) {
+        super(place, OperationsSite.getViewFactory().instantiate(PadSimFileViewerView.class), (AbstractCrudService<PadSimFile>) GWT
                 .create(PadSimFileCrudService.class));
 
-        batchLister = new ListerController<PadSimBatch>(((PadFileViewerView) getView()).getBatchListerView(),
+        batchLister = new ListerController<PadSimBatch>(((PadSimFileViewerView) getView()).getBatchListerView(),
                 (AbstractCrudService<PadSimBatch>) GWT.create(PadSimBatchCrudService.class), PadSimBatch.class);
     }
 

@@ -18,9 +18,9 @@ import com.pyx4j.site.client.ui.prime.lister.AbstractLister;
 
 import com.propertyvista.operations.domain.payment.pad.simulator.PadSimFile;
 
-public class PadFileLister extends AbstractLister<PadSimFile> {
+public class PadSimFileLister extends AbstractLister<PadSimFile> {
 
-    public PadFileLister() {
+    public PadSimFileLister() {
         super(PadSimFile.class, false);
 
         setColumnDescriptors(//@formatter:off

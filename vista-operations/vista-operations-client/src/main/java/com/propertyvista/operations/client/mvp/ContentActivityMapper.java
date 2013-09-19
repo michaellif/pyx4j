@@ -36,6 +36,8 @@ import com.propertyvista.operations.client.activity.crud.fundstransfer.directdeb
 import com.propertyvista.operations.client.activity.crud.fundstransfer.directdebitrecord.DirectDebitRecordViewerActivity;
 import com.propertyvista.operations.client.activity.crud.fundstransfer.fundsreconciliationfile.PadReconciliationFileListerActivity;
 import com.propertyvista.operations.client.activity.crud.fundstransfer.fundsreconciliationfile.PadReconciliationFileViewerActivity;
+import com.propertyvista.operations.client.activity.crud.fundstransfer.fundstransferfile.PadFileListerActivity;
+import com.propertyvista.operations.client.activity.crud.fundstransfer.fundstransferfile.PadFileViewerActivity;
 import com.propertyvista.operations.client.activity.crud.fundstransfer.fundstransferrecord.PadDebitRecordListerActivity;
 import com.propertyvista.operations.client.activity.crud.fundstransfer.fundstransferrecord.PadDebitRecordViewerActivity;
 import com.propertyvista.operations.client.activity.crud.legal.VistaTermsDefaultActivity;
@@ -73,9 +75,9 @@ import com.propertyvista.operations.client.activity.crud.simulator.dbp.DirectDeb
 import com.propertyvista.operations.client.activity.crud.simulator.dbp.DirectDebitSimRecordViewerActivity;
 import com.propertyvista.operations.client.activity.crud.simulator.pad.PadBatchEditorActivity;
 import com.propertyvista.operations.client.activity.crud.simulator.pad.PadBatchViewerActivity;
-import com.propertyvista.operations.client.activity.crud.simulator.pad.PadFileEditorActivity;
-import com.propertyvista.operations.client.activity.crud.simulator.pad.PadFileListerActivity;
-import com.propertyvista.operations.client.activity.crud.simulator.pad.PadFileViewerActivity;
+import com.propertyvista.operations.client.activity.crud.simulator.pad.PadSimFileEditorActivity;
+import com.propertyvista.operations.client.activity.crud.simulator.pad.PadSimFileListerActivity;
+import com.propertyvista.operations.client.activity.crud.simulator.pad.PadSimFileViewerActivity;
 import com.propertyvista.operations.client.activity.crud.systemdefaults.VistaSystemDefaultsEditorActivity;
 import com.propertyvista.operations.client.activity.crud.systemdefaults.VistaSystemDefaultsViewerActivity;
 import com.propertyvista.operations.client.activity.login.LoginActivity;
@@ -425,13 +427,13 @@ public class ContentActivityMapper implements AppActivityMapper {
             } else if (place instanceof OperationsSiteMap.Simulator.PadSimulation.PadSimFile) {
                 switch (crudPlace.getType()) {
                 case editor:
-                    activity = new PadFileEditorActivity(crudPlace);
+                    activity = new PadSimFileEditorActivity(crudPlace);
                     break;
                 case viewer:
-                    activity = new PadFileViewerActivity(crudPlace);
+                    activity = new PadSimFileViewerActivity(crudPlace);
                     break;
                 case lister:
-                    activity = new PadFileListerActivity(crudPlace);
+                    activity = new PadSimFileListerActivity(crudPlace);
                     break;
                 }
 

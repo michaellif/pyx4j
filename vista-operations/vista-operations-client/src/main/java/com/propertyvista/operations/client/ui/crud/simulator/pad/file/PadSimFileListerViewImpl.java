@@ -21,18 +21,18 @@ import com.pyx4j.widgets.client.Button;
 import com.propertyvista.operations.client.ui.crud.OperationsListerViewImplBase;
 import com.propertyvista.operations.domain.payment.pad.simulator.PadSimFile;
 
-public class PadFileListerViewImpl extends OperationsListerViewImplBase<PadSimFile> implements PadFileListerView {
+public class PadSimFileListerViewImpl extends OperationsListerViewImplBase<PadSimFile> implements PadSimFileListerView {
 
-    private static final I18n i18n = I18n.get(PadFileListerViewImpl.class);
+    private static final I18n i18n = I18n.get(PadSimFileListerViewImpl.class);
 
-    public PadFileListerViewImpl() {
-        setLister(new PadFileLister());
+    public PadSimFileListerViewImpl() {
+        setLister(new PadSimFileLister());
 
         // Add actions:
         Button loadPadFile = new Button(i18n.tr("Load"), new Command() {
             @Override
             public void execute() {
-                ((PadFileListerView.Presenter) getPresenter()).loadPadFile();
+                ((PadSimFileListerView.Presenter) getPresenter()).loadPadFile();
             }
         });
         getLister().addActionItem(loadPadFile.asWidget());

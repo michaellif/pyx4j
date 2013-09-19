@@ -7,30 +7,20 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on 2011-05-24
+ * Created on 2011-05-09
  * @author Vlad
  * @version $Id$
  */
 package com.propertyvista.operations.client.ui.crud.simulator.pad.file;
 
-import com.pyx4j.site.client.ui.prime.form.IViewer;
 import com.pyx4j.site.client.ui.prime.lister.ILister;
 
-import com.propertyvista.operations.domain.payment.pad.simulator.PadSimBatch;
 import com.propertyvista.operations.domain.payment.pad.simulator.PadSimFile;
 
-public interface PadFileViewerView extends IViewer<PadSimFile> {
+public interface PadSimFileListerView extends ILister<PadSimFile> {
 
-    interface Presenter extends IViewer.Presenter {
+    interface Presenter extends ILister.Presenter<PadSimFile> {
 
-        public void replyAcknowledgment();
-
-        public void replyReconciliation();
-
-        public void replyReturns();
-
-        public void createReturnReconciliation();
+        void loadPadFile();
     }
-
-    ILister<PadSimBatch> getBatchListerView();
 }

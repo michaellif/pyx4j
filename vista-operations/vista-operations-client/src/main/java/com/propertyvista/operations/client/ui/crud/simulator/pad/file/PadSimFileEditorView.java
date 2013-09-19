@@ -17,6 +17,6 @@ import com.pyx4j.site.client.ui.prime.form.IEditor;
 
 import com.propertyvista.operations.domain.payment.pad.simulator.PadSimFile;
 
-public interface PadFileEditorView extends IEditor<PadSimFile> {
+public interface PadSimFileEditorView extends IEditor<PadSimFile> {
 
 }

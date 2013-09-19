@@ -25,9 +25,9 @@ import com.propertyvista.operations.client.ui.crud.simulator.pad.batch.PadBatchL
 import com.propertyvista.operations.domain.payment.pad.simulator.PadSimBatch;
 import com.propertyvista.operations.domain.payment.pad.simulator.PadSimFile;
 
-public class PadFileViewerViewImpl extends OperationsViewerViewImplBase<PadSimFile> implements PadFileViewerView {
+public class PadSimFileViewerViewImpl extends OperationsViewerViewImplBase<PadSimFile> implements PadSimFileViewerView {
 
-    private static final I18n i18n = I18n.get(PadFileEditorViewImpl.class);
+    private static final I18n i18n = I18n.get(PadSimFileEditorViewImpl.class);
 
     private final ILister<PadSimBatch> batchLister;
 
@@ -39,15 +39,15 @@ public class PadFileViewerViewImpl extends OperationsViewerViewImplBase<PadSimFi
 
     Button replyReturns;
 
-    public PadFileViewerViewImpl() {
+    public PadSimFileViewerViewImpl() {
         batchLister = new ListerInternalViewImplBase<PadSimBatch>(new PadBatchLister());
 
-        setForm(new PadFileForm(this));
+        setForm(new PadSimFileForm(this));
 
         replyAcknowledgment = new Button(i18n.tr("Reply Acknowledgment"), new Command() {
             @Override
             public void execute() {
-                ((PadFileViewerView.Presenter) getPresenter()).replyAcknowledgment();
+                ((PadSimFileViewerView.Presenter) getPresenter()).replyAcknowledgment();
             }
         });
         addHeaderToolbarItem(replyAcknowledgment.asWidget());
@@ -55,7 +55,7 @@ public class PadFileViewerViewImpl extends OperationsViewerViewImplBase<PadSimFi
         replyReconciliation = new Button(i18n.tr("Reply Reconciliation"), new Command() {
             @Override
             public void execute() {
-                ((PadFileViewerView.Presenter) getPresenter()).replyReconciliation();
+                ((PadSimFileViewerView.Presenter) getPresenter()).replyReconciliation();
             }
         });
         addHeaderToolbarItem(replyReconciliation.asWidget());
@@ -63,7 +63,7 @@ public class PadFileViewerViewImpl extends OperationsViewerViewImplBase<PadSimFi
         createReturnReconciliation = new Button(i18n.tr("Create Return File"), new Command() {
             @Override
             public void execute() {
-                ((PadFileViewerView.Presenter) getPresenter()).createReturnReconciliation();
+                ((PadSimFileViewerView.Presenter) getPresenter()).createReturnReconciliation();
             }
         });
         addHeaderToolbarItem(createReturnReconciliation.asWidget());
@@ -71,7 +71,7 @@ public class PadFileViewerViewImpl extends OperationsViewerViewImplBase<PadSimFi
         replyReturns = new Button(i18n.tr("Reply Returns"), new Command() {
             @Override
             public void execute() {
-                ((PadFileViewerView.Presenter) getPresenter()).replyReturns();
+                ((PadSimFileViewerView.Presenter) getPresenter()).replyReturns();
             }
         });
         addHeaderToolbarItem(replyReturns.asWidget());

@@ -21,15 +21,15 @@ import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.site.client.activity.AbstractListerActivity;
 
 import com.propertyvista.operations.client.OperationsSite;
-import com.propertyvista.operations.client.ui.crud.simulator.pad.file.PadFileListerView;
+import com.propertyvista.operations.client.ui.crud.simulator.pad.file.PadSimFileListerView;
 import com.propertyvista.operations.domain.payment.pad.simulator.PadSimFile;
 import com.propertyvista.operations.rpc.services.simulator.PadSimFileCrudService;
 
-public class PadFileListerActivity extends AbstractListerActivity<PadSimFile> implements PadFileListerView.Presenter {
+public class PadSimFileListerActivity extends AbstractListerActivity<PadSimFile> implements PadSimFileListerView.Presenter {
 
     @SuppressWarnings("unchecked")
-    public PadFileListerActivity(Place place) {
-        super(place, OperationsSite.getViewFactory().instantiate(PadFileListerView.class), (AbstractCrudService<PadSimFile>) GWT
+    public PadSimFileListerActivity(Place place) {
+        super(place, OperationsSite.getViewFactory().instantiate(PadSimFileListerView.class), (AbstractCrudService<PadSimFile>) GWT
                 .create(PadSimFileCrudService.class), PadSimFile.class);
     }
 

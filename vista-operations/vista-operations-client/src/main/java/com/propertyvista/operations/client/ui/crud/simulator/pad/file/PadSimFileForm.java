@@ -25,11 +25,11 @@ import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
 import com.propertyvista.operations.client.ui.crud.OperationsEntityForm;
 import com.propertyvista.operations.domain.payment.pad.simulator.PadSimFile;
 
-public class PadFileForm extends OperationsEntityForm<PadSimFile> {
+public class PadSimFileForm extends OperationsEntityForm<PadSimFile> {
 
-    private static final I18n i18n = I18n.get(PadFileForm.class);
+    private static final I18n i18n = I18n.get(PadSimFileForm.class);
 
-    public PadFileForm(IForm<PadSimFile> view) {
+    public PadSimFileForm(IForm<PadSimFile> view) {
         super(PadSimFile.class, view);
 
         TwoColumnFlexFormPanel content = new TwoColumnFlexFormPanel(i18n.tr("General"));
@@ -40,7 +40,7 @@ public class PadFileForm extends OperationsEntityForm<PadSimFile> {
 
         if (!isEditable()) {
             content.setH1(++row, 0, 1, i18n.tr("Batches"));
-            content.setWidget(++row, 0, ((PadFileViewerView) getParentView()).getBatchListerView().asWidget());
+            content.setWidget(++row, 0, ((PadSimFileViewerView) getParentView()).getBatchListerView().asWidget());
         }
         selectTab(addTab(content));
     }

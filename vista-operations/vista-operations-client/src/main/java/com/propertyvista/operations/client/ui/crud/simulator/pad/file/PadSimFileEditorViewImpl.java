@@ -7,20 +7,19 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on 2011-05-09
+ * Created on 2011-05-25
  * @author Vlad
  * @version $Id$
  */
 package com.propertyvista.operations.client.ui.crud.simulator.pad.file;
 
-import com.pyx4j.site.client.ui.prime.lister.ILister;
-
+import com.propertyvista.operations.client.ui.crud.OperationsEditorViewImplBase;
 import com.propertyvista.operations.domain.payment.pad.simulator.PadSimFile;
 
-public interface PadFileListerView extends ILister<PadSimFile> {
+public class PadSimFileEditorViewImpl extends OperationsEditorViewImplBase<PadSimFile> implements PadSimFileEditorView {
 
-    interface Presenter extends ILister.Presenter<PadSimFile> {
-
-        void loadPadFile();
+    public PadSimFileEditorViewImpl() {
+        setForm(new PadSimFileForm(this));
     }
+
 }
