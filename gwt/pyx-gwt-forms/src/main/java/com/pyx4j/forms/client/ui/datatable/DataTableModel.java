@@ -34,6 +34,8 @@ public class DataTableModel<E extends IEntity> {
 
     public static final int PAGE_SIZE = 20;
 
+    private final Class<E> clazz;
+
     /** List of listeners */
     private final ArrayList<DataTableModelListener> listenerList = new ArrayList<DataTableModelListener>();
 
@@ -58,6 +60,7 @@ public class DataTableModel<E extends IEntity> {
     private int totalRows;
 
     public DataTableModel(Class<E> clazz) {
+        this.clazz = clazz;
     }
 
     public void close() {
@@ -65,8 +68,23 @@ public class DataTableModel<E extends IEntity> {
         data.clear();
     }
 
+    public Class<E> getEntityClass() {
+        return clazz;
+    }
+
     public List<ColumnDescriptor> getColumnDescriptors() {
         return columnDescriptors;
+    }
+
+    public List<ColumnDescriptor> getColumnDescriptorsVisible() {
+        List<ColumnDescriptor> descriptors = new ArrayList<ColumnDescriptor>();
+        for (ColumnDescriptor columnDescriptor : getColumnDescriptors()) {
+            if (columnDescriptor.isVisible()) {
+                descriptors.add(columnDescriptor);
+                continue;
+            }
+        }
+        return descriptors;
     }
 
     public void setColumnDescriptors(List<ColumnDescriptor> columnDescriptors) {

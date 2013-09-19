@@ -24,11 +24,17 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.google.gwt.core.client.Scheduler;
+import com.google.gwt.core.client.Scheduler.ScheduledCommand;
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
+import com.pyx4j.commons.GWTJava5Helper;
 import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.entity.rpc.EntitySearchResult;
 import com.pyx4j.entity.shared.IEntity;
@@ -49,6 +55,8 @@ import com.pyx4j.site.client.ui.prime.misc.MementoImpl;
 
 public class EntityDataTablePanel<E extends IEntity> extends VerticalPanel {
 
+    private static final Logger log = LoggerFactory.getLogger(EntityDataTablePanel.class);
+
     public static enum MementoKeys {
         page, filterData, sortingData
     };
@@ -65,7 +73,7 @@ public class EntityDataTablePanel<E extends IEntity> extends VerticalPanel {
 
     private List<ItemSelectionHandler<E>> itemSelectionHandlers;
 
-    private Class<E> clazz;
+    private final Class<E> clazz;
 
     private final IMemento memento = new MementoImpl();
 
@@ -222,9 +230,16 @@ public class EntityDataTablePanel<E extends IEntity> extends VerticalPanel {
 
         dataSource.obtain(updateCriteria(criteria), new DefaultAsyncCallback<EntitySearchResult<E>>() {
             @Override
-            public void onSuccess(EntitySearchResult<E> result) {
-                dataTablePanel.populateData(result.getData(), pageNumber, result.hasMoreData(), result.getTotalRows());
-                onObtainSuccess();
+            public void onSuccess(final EntitySearchResult<E> result) {
+                log.debug("dataTable {} data received {}", GWTJava5Helper.getSimpleName(clazz), result.getData().size());
+                // Separate RPC serialization and table painting
+                Scheduler.get().scheduleDeferred(new ScheduledCommand() {
+                    @Override
+                    public void execute() {
+                        dataTablePanel.populateData(result.getData(), pageNumber, result.hasMoreData(), result.getTotalRows());
+                        onObtainSuccess();
+                    }
+                });
             }
         });
     }

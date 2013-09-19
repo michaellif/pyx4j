@@ -21,8 +21,14 @@
 package com.pyx4j.forms.client.ui.datatable;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.google.gwt.core.client.Scheduler;
+import com.google.gwt.core.client.Scheduler.RepeatingCommand;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
@@ -40,11 +46,15 @@ import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.UIObject;
 import com.google.gwt.user.client.ui.Widget;
 
+import com.pyx4j.commons.GWTJava5Helper;
+import com.pyx4j.commons.TimeUtils;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.gwt.commons.BrowserType;
 import com.pyx4j.widgets.client.dialog.OkCancelDialog;
 
 public class DataTable<E extends IEntity> extends FlexTable implements DataTableModelListener {
+
+    private static final Logger log = LoggerFactory.getLogger(DataTable.class);
 
     private static final int HEADER_RAW_INDEX = 0;
 
@@ -369,10 +379,7 @@ public class DataTable<E extends IEntity> extends FlexTable implements DataTable
             ++colIndex;
         }
 
-        for (ColumnDescriptor columnDescriptor : model.getColumnDescriptors()) {
-            if (!columnDescriptor.isVisible()) {
-                continue;
-            }
+        for (ColumnDescriptor columnDescriptor : model.getColumnDescriptorsVisible()) {
             String columnTitle = columnDescriptor.getColumnTitle();
             StringBuffer headerText = new StringBuffer("&nbsp;");
             headerText.append(columnTitle);
@@ -419,65 +426,80 @@ public class DataTable<E extends IEntity> extends FlexTable implements DataTable
 
     private void renderBody() {
         clearTable();
+        log.debug("dataTable {} render start {}", GWTJava5Helper.getSimpleName(model.getEntityClass()), model.getData().size());
 
-        List<DataItem<E>> data = model.getData();
-        List<ColumnDescriptor> columnDescriptors = model.getColumnDescriptors();
+        Scheduler.get().scheduleIncremental(new RepeatingCommand() {
 
-        int rowIndex = 1;
-        for (DataItem<E> dataItem : data) {
-            int colIndex = 0;
-            if (hasCheckboxColumn()) {
-                SelectionCheckBox selectionCheckBox = new SelectionCheckBox(rowIndex, dataItem.isChecked());
-                selectionCheckBoxes.add(selectionCheckBox);
+            final long start = System.currentTimeMillis();
 
-                selectionCheckBox.setWidth(CHECK_MARK_COLUMN_SIZE);
+            final Iterator<DataItem<E>> dataIterator = model.getData().iterator();
 
-                setWidget(rowIndex, 0, selectionCheckBox);
-                getCellFormatter().setAlignment(rowIndex, 0, HasHorizontalAlignment.ALIGN_CENTER, HasVerticalAlignment.ALIGN_MIDDLE);
-                ++colIndex;
-            }
+            final List<ColumnDescriptor> visibleColumnDescriptors = model.getColumnDescriptorsVisible();
 
-            for (ColumnDescriptor columnDescriptor : columnDescriptors) {
+            int rowIndex = 1;
 
-                if (!columnDescriptor.isVisible()) {
-                    continue;
+            @Override
+            public boolean execute() {
+                if (!dataIterator.hasNext()) {
+                    log.debug("dataTable {} render ends {} in {} msec", GWTJava5Helper.getSimpleName(model.getEntityClass()), rowIndex, TimeUtils.since(start));
+                    return false;
                 }
-                Widget contentHtml;
-                Object value = dataItem.getCellValue(columnDescriptor);
-                if (value instanceof Widget) {
-                    contentHtml = (Widget) value;
-                } else if (value == null || value.equals("")) {
-                    contentHtml = new HTML("&nbsp;");
-                } else {
-                    contentHtml = new HTML(SafeHtmlUtils.fromString(value.toString()));
-                    if (!columnDescriptor.isWordWrap()) {
-                        contentHtml.getElement().getStyle().setProperty("overflow", "hidden");
-                        contentHtml.getElement().getStyle().setMarginRight(5, Unit.PX);
+
+                DataItem<E> dataItem = dataIterator.next();
+
+                int colIndex = 0;
+                if (hasCheckboxColumn()) {
+                    SelectionCheckBox selectionCheckBox = new SelectionCheckBox(rowIndex, dataItem.isChecked());
+                    selectionCheckBoxes.add(selectionCheckBox);
+
+                    selectionCheckBox.setWidth(CHECK_MARK_COLUMN_SIZE);
+
+                    setWidget(rowIndex, 0, selectionCheckBox);
+                    getCellFormatter().setAlignment(rowIndex, 0, HasHorizontalAlignment.ALIGN_CENTER, HasVerticalAlignment.ALIGN_MIDDLE);
+                    ++colIndex;
+                }
+
+                for (ColumnDescriptor columnDescriptor : visibleColumnDescriptors) {
+                    Widget contentHtml;
+                    Object value = dataItem.getCellValue(columnDescriptor);
+                    if (value instanceof Widget) {
+                        contentHtml = (Widget) value;
+                    } else if (value == null || value.equals("")) {
+                        contentHtml = new HTML("&nbsp;");
+                    } else {
+                        contentHtml = new HTML(SafeHtmlUtils.fromString(value.toString()));
+                        if (!columnDescriptor.isWordWrap()) {
+                            contentHtml.getElement().getStyle().setProperty("overflow", "hidden");
+                            contentHtml.getElement().getStyle().setMarginRight(5, Unit.PX);
+                        }
                     }
-                }
-                setWidget(rowIndex, colIndex, contentHtml);
-                getCellFormatter().setWordWrap(rowIndex, colIndex, columnDescriptor.isWordWrap());
-                ++colIndex;
-            }
-
-            if (rowIndex < getRowCount()) {
-                Element rowElement = getRowFormatter().getElement(rowIndex);
-                UIObject.setStyleName(rowElement, DefaultDataTableTheme.StyleName.DataTableRow.name());
-                if (rowIndex % 2 == 0) {
-                    UIObject.setStyleName(rowElement,
-                            DefaultDataTableTheme.StyleName.DataTableRow.name() + "-" + DefaultDataTableTheme.StyleDependent.even.name(), true);
-                } else {
-                    UIObject.setStyleName(rowElement,
-                            DefaultDataTableTheme.StyleName.DataTableRow.name() + "-" + DefaultDataTableTheme.StyleDependent.odd.name(), true);
-                }
-                if (!hasDetailsNavigation()) {
-                    UIObject.setStyleName(rowElement, DefaultDataTableTheme.StyleName.DataTableRow.name() + "-"
-                            + DefaultDataTableTheme.StyleDependent.nodetails.name(), true);
+                    setWidget(rowIndex, colIndex, contentHtml);
+                    getCellFormatter().setWordWrap(rowIndex, colIndex, columnDescriptor.isWordWrap());
+                    ++colIndex;
                 }
 
-                ++rowIndex;
+                if (rowIndex < getRowCount()) {
+                    Element rowElement = getRowFormatter().getElement(rowIndex);
+                    UIObject.setStyleName(rowElement, DefaultDataTableTheme.StyleName.DataTableRow.name());
+                    if (rowIndex % 2 == 0) {
+                        UIObject.setStyleName(rowElement,
+                                DefaultDataTableTheme.StyleName.DataTableRow.name() + "-" + DefaultDataTableTheme.StyleDependent.even.name(), true);
+                    } else {
+                        UIObject.setStyleName(rowElement,
+                                DefaultDataTableTheme.StyleName.DataTableRow.name() + "-" + DefaultDataTableTheme.StyleDependent.odd.name(), true);
+                    }
+                    if (!hasDetailsNavigation()) {
+                        UIObject.setStyleName(rowElement, DefaultDataTableTheme.StyleName.DataTableRow.name() + "-"
+                                + DefaultDataTableTheme.StyleDependent.nodetails.name(), true);
+                    }
+
+                    ++rowIndex;
+                }
+                return true;
             }
-        }
+
+        });
+
         //TODO implement
         //this.ensureDebugId(model.getDebugId());
     }
