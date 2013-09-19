@@ -81,7 +81,7 @@ public class TenantInsuranceFacadeImpl implements TenantInsuranceFacade {
             certificateSummaryDTO.liabilityCoverage().setValue(certificate.liabilityCoverage().getValue());
             certificateSummaryDTO.expiryDate().setValue(certificate.expiryDate().getValue());
 
-            insuranceStatusDTO.sertificates().add(certificateSummaryDTO);
+            insuranceStatusDTO.certificates().add(certificateSummaryDTO);
         }
 
         return insuranceStatusDTO;

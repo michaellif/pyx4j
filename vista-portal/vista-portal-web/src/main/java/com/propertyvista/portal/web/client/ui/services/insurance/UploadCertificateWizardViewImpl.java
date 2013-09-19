@@ -15,15 +15,18 @@ package com.propertyvista.portal.web.client.ui.services.insurance;
 
 import java.math.BigDecimal;
 
-import com.propertyvista.portal.rpc.portal.web.dto.insurance.OtherProviderInsuranceSertificateDTO;
-import com.propertyvista.portal.web.client.ui.IWizardView;
+import com.propertyvista.portal.rpc.portal.web.dto.insurance.OtherProviderInsuranceCertificateDTO;
+import com.propertyvista.portal.web.client.ui.AbstractWizardView;
 
-public interface UploadSertificateWizardView extends IWizardView<OtherProviderInsuranceSertificateDTO> {
+public class UploadCertificateWizardViewImpl extends AbstractWizardView<OtherProviderInsuranceCertificateDTO> implements UploadCertificateWizardView {
 
-    public interface UploadSertificateWizardPresenter extends WizardPresenter<OtherProviderInsuranceSertificateDTO> {
-
+    public UploadCertificateWizardViewImpl() {
+        setWizard(new UploadCertificateWizard(this));
     }
 
-    void setMinRequiredLiability(BigDecimal minRequiredLiability);
+    @Override
+    public void setMinRequiredLiability(BigDecimal minRequiredLiability) {
+        ((UploadCertificateWizard) getWizard()).setMinRequiredLiability(minRequiredLiability);
+    }
 
 }

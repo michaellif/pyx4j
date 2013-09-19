@@ -37,8 +37,10 @@ public class InsuranceServiceMockImpl implements InsuranceService {
             summaryDTO.insuranceProvider().setValue("Other Insurance");
             summaryDTO.liabilityCoverage().setValue(new BigDecimal("1000000"));
             summaryDTO.expiryDate().setValue(new LogicalDate());
-            statusDTO.sertificates().add(summaryDTO);
-        } else if (false) {
+
+            statusDTO.coverageExpiryDate().setValue(new LogicalDate());
+            statusDTO.certificates().add(summaryDTO);
+        } else if (true) {
             TenantSureCertificateSummaryDTO summaryDTO = EntityFactory.create(TenantSureCertificateSummaryDTO.class);
             summaryDTO.insuranceProvider().setValue("TenantSure Insurance");
             summaryDTO.insuranceCertificateNumber().setValue("ABC12345");
@@ -46,7 +48,9 @@ public class InsuranceServiceMockImpl implements InsuranceService {
             summaryDTO.contentsCoverage().setValue(new BigDecimal("100000"));
             summaryDTO.inceptionDate().setValue(new LogicalDate());
             summaryDTO.expiryDate().setValue(new LogicalDate());
-            statusDTO.sertificates().add(summaryDTO);
+
+            statusDTO.coverageExpiryDate().setValue(new LogicalDate());
+            statusDTO.certificates().add(summaryDTO);
         } else {
             statusDTO.minimumRequiredLiability().setValue(new BigDecimal("1000000"));
         }

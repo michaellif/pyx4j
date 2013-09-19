@@ -15,6 +15,7 @@ package com.propertyvista.portal.rpc.portal.web.dto.insurance.status;
 
 import java.math.BigDecimal;
 
+import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.annotations.AbstractEntity;
 import com.pyx4j.entity.annotations.Format;
 import com.pyx4j.entity.annotations.Transient;
@@ -31,12 +32,16 @@ public interface InsuranceStatusDTO extends IEntity {
 
     public static final String noInsuranceStatusMessage = i18n.tr("According to our records you do not have valid tenant insurance!");
 
+    public static final String insuranceStatusMessage = i18n.tr("According to our records you have valid tenant insurance which expire on {0}.");
+
     public static final String tenantSureInvitation = i18n
             .tr("As per your Lease Agreement, you must obtain and provide the landlord with proof of tenant insurance. We have teamed up with Highcourt Partners Limited, a licensed broker, to assist you in obtaining your tenant insurance.");
+
+    IPrimitive<LogicalDate> coverageExpiryDate();
 
     @Format("#,##0.00")
     IPrimitive<BigDecimal> minimumRequiredLiability();
 
-    IList<InsuranceCertificateSummaryDTO> sertificates();
+    IList<InsuranceCertificateSummaryDTO> certificates();
 
 }

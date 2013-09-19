@@ -16,28 +16,29 @@ package com.propertyvista.portal.web.client.ui.dashboard;
 import java.util.Arrays;
 import java.util.Collection;
 
-import com.google.gwt.dom.client.Style.FontWeight;
 import com.google.gwt.user.client.Command;
+import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.SimplePanel;
 
+import com.pyx4j.commons.SimpleMessageFormat;
 import com.pyx4j.commons.css.StyleManager;
 import com.pyx4j.commons.css.ThemeColor;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CEntityContainer;
 import com.pyx4j.forms.client.ui.CEntityForm;
-import com.pyx4j.forms.client.ui.CLabel;
 import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.Button;
 import com.pyx4j.widgets.client.Label;
 import com.pyx4j.widgets.client.actionbar.Toolbar;
 
+import com.propertyvista.portal.rpc.portal.web.dto.insurance.TenantSureAgreementDTO;
 import com.propertyvista.portal.rpc.portal.web.dto.insurance.status.InsuranceCertificateSummaryDTO;
 import com.propertyvista.portal.rpc.portal.web.dto.insurance.status.InsuranceStatusDTO;
+import com.propertyvista.portal.rpc.portal.web.dto.insurance.status.TenantSureCertificateSummaryDTO;
 import com.propertyvista.portal.web.client.resources.PortalImages;
 import com.propertyvista.portal.web.client.ui.AbstractGadget;
-import com.propertyvista.portal.web.client.ui.util.decorators.FormDecoratorBuilder;
 
 public class InsuranceGadget extends AbstractGadget<MainDashboardViewImpl> {
 
@@ -45,9 +46,12 @@ public class InsuranceGadget extends AbstractGadget<MainDashboardViewImpl> {
 
     private final InsuranceStatusViewer insuranceViewer;
 
+    private final InsuranceToolbar toolbar;
+
     InsuranceGadget(MainDashboardViewImpl form) {
         super(form, PortalImages.INSTANCE.residentServicesIcon(), i18n.tr("Tenant Insurance"), ThemeColor.contrast3);
-        setActionsToolbar(new InsuranceToolbar());
+        toolbar = new InsuranceToolbar();
+        setActionsToolbar(toolbar);
 
         insuranceViewer = new InsuranceStatusViewer();
         insuranceViewer.setViewable(true);
@@ -59,13 +63,18 @@ public class InsuranceGadget extends AbstractGadget<MainDashboardViewImpl> {
 
     protected void populate(InsuranceStatusDTO insuranceStatus) {
         insuranceViewer.populate(insuranceStatus);
+        toolbar.recalculateState(insuranceStatus);
     }
 
     class InsuranceToolbar extends Toolbar {
 
+        private final Button purchaseButton;
+
+        private final Button proofButton;
+
         public InsuranceToolbar() {
 
-            Button purchaseButton = new Button("Purchase Insurance", new Command() {
+            purchaseButton = new Button("Purchase Insurance", new Command() {
 
                 @Override
                 public void execute() {
@@ -75,7 +84,7 @@ public class InsuranceGadget extends AbstractGadget<MainDashboardViewImpl> {
             purchaseButton.getElement().getStyle().setProperty("background", StyleManager.getPalette().getThemeColor(ThemeColor.contrast3, 1));
             add(purchaseButton);
 
-            Button proofButton = new Button("Provide Proof of my Insurance", new Command() {
+            proofButton = new Button("Provide Proof of my Insurance", new Command() {
 
                 @Override
                 public void execute() {
@@ -84,6 +93,26 @@ public class InsuranceGadget extends AbstractGadget<MainDashboardViewImpl> {
             });
             proofButton.getElement().getStyle().setProperty("background", StyleManager.getPalette().getThemeColor(ThemeColor.contrast3, 0.6));
             add(proofButton);
+
+            recalculateState(null);
+        }
+
+        public void recalculateState(InsuranceStatusDTO insuranceStatus) {
+            if (insuranceStatus == null) {
+                purchaseButton.setVisible(false);
+                proofButton.setVisible(false);
+            } else if (insuranceStatus.certificates().size() == 0) {
+                purchaseButton.setVisible(true);
+                proofButton.setVisible(true);
+            } else {
+                for (InsuranceCertificateSummaryDTO certificate : insuranceStatus.certificates()) {
+                    if (certificate.isInstanceOf(TenantSureCertificateSummaryDTO.class)) {
+                        purchaseButton.setVisible(false);
+                        proofButton.setVisible(true);
+                        break;
+                    }
+                }
+            }
 
         }
     }
@@ -103,21 +132,11 @@ public class InsuranceGadget extends AbstractGadget<MainDashboardViewImpl> {
 
         @Override
         protected void setEditorValue(InsuranceStatusDTO status) {
-            CEntityForm<? extends InsuranceStatusDTO> form = null;
-            if (status.sertificates().size() == 0) {
-                form = new NoInsuranceStatusForm();
-                form.initContent();
-                ((NoInsuranceStatusForm) form).populate(status.<InsuranceStatusDTO> cast());
-            } else {
-                form = new HasInsuranceStatusForm();
-                form.initContent();
-                ((HasInsuranceStatusForm) form).populate(status.sertificates().get(0).<InsuranceCertificateSummaryDTO> cast());
-            }
-
-            if (form != null) {
-                form.setViewable(true);
-                container.setWidget(form);
-            }
+            CEntityForm<InsuranceStatusDTO> form = new InsuranceStatusForm();
+            form.initContent();
+            form.populate(status);
+            form.setViewable(true);
+            container.setWidget(form);
         }
 
         @Override
@@ -136,10 +155,13 @@ public class InsuranceGadget extends AbstractGadget<MainDashboardViewImpl> {
         }
     }
 
-    class NoInsuranceStatusForm extends CEntityForm<InsuranceStatusDTO> {
+    class InsuranceStatusForm extends CEntityForm<InsuranceStatusDTO> {
 
-        public NoInsuranceStatusForm() {
+        private final HTML message;
+
+        public InsuranceStatusForm() {
             super(InsuranceStatusDTO.class);
+            message = new Label();
         }
 
         @Override
@@ -148,35 +170,22 @@ public class InsuranceGadget extends AbstractGadget<MainDashboardViewImpl> {
 
             int row = -1;
 
-            CLabel<String> noInsuranceStatusMessageLabel = new CLabel<String>();
-            noInsuranceStatusMessageLabel.asWidget().getElement().getStyle().setFontWeight(FontWeight.BOLDER);
-            main.setWidget(++row, 0, new Label(InsuranceStatusDTO.noInsuranceStatusMessage));
-            main.setWidget(++row, 0, new Label(InsuranceStatusDTO.tenantSureInvitation));
+            main.setWidget(++row, 0, message);
             return main;
 
-        }
-
-    }
-
-    class HasInsuranceStatusForm extends CEntityForm<InsuranceCertificateSummaryDTO> {
-
-        public HasInsuranceStatusForm() {
-            super(InsuranceCertificateSummaryDTO.class);
         }
 
         @Override
-        public IsWidget createContent() {
-            BasicFlexFormPanel main = new BasicFlexFormPanel();
+        protected void onValueSet(boolean populate) {
+            super.onValueSet(populate);
 
-            int row = -1;
-
-            main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().insuranceProvider()), "160px", "120px", "120px").build());
-            main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().liabilityCoverage()), "160px", "120px", "120px").build());
-            main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().expiryDate()), "160px", "120px", "120px").build());
-            return main;
+            if (getValue().certificates().size() == 0) {
+                message.setHTML("<b>" + InsuranceStatusDTO.noInsuranceStatusMessage + "</b><br/>" + InsuranceStatusDTO.tenantSureInvitation);
+            } else {
+                message.setText(SimpleMessageFormat.format(InsuranceStatusDTO.insuranceStatusMessage, getValue().coverageExpiryDate().getValue()));
+            }
 
         }
-
     }
 
 }

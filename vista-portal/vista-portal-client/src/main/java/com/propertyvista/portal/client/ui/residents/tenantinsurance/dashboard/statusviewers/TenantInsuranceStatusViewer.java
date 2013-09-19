@@ -34,14 +34,14 @@ public class TenantInsuranceStatusViewer extends CViewer<InsuranceStatusDTO> {
             return null;
         }
 
-        if (status.sertificates().size() == 0) {
+        if (status.certificates().size() == 0) {
             return new NoTenantInsuranceStatusViewer().createContent(status);
 
-        } else if (status.sertificates().get(0).isInstanceOf(TenantSureCertificateSummaryDTO.class)) {
-            return new TenantSureInsuranceStatusViewer().createContent(status.sertificates().get(0).<TenantSureCertificateSummaryDTO> cast());
+        } else if (status.certificates().get(0).isInstanceOf(TenantSureCertificateSummaryDTO.class)) {
+            return new TenantSureInsuranceStatusViewer().createContent(status.certificates().get(0).<TenantSureCertificateSummaryDTO> cast());
 
-        } else if (status.sertificates().get(0).isInstanceOf(GeneralInsuranceCertificateSummaryDTO.class)) {
-            return new GeneralTenantInsuranceStatusViewer().createContent(status.sertificates().get(0).<GeneralInsuranceCertificateSummaryDTO> cast());
+        } else if (status.certificates().get(0).isInstanceOf(GeneralInsuranceCertificateSummaryDTO.class)) {
+            return new GeneralTenantInsuranceStatusViewer().createContent(status.certificates().get(0).<GeneralInsuranceCertificateSummaryDTO> cast());
 
         } else {
             throw new Error("A viewer for current insurance status was not found!");

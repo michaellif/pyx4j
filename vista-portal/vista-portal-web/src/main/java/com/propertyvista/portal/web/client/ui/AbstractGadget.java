@@ -66,10 +66,12 @@ public abstract class AbstractGadget<T extends IsWidget> extends AbstractPortalP
 
     protected void setActionsToolbar(Toolbar actionsToolbar) {
         containerPanel.actionsToolbarHolder.setWidget(actionsToolbar);
+        containerPanel.actionsToolbarHolder.setVisible(true);
     }
 
     protected void setNavigationBar(Panel navigationBar) {
         containerPanel.navigationBarHolder.setWidget(navigationBar);
+        containerPanel.navigationBarHolder.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
     }
 
     public void setContent(IsWidget widget) {
@@ -131,7 +133,7 @@ public abstract class AbstractGadget<T extends IsWidget> extends AbstractPortalP
 
             navigationBarHolder = new SimplePanel();
             navigationBarHolder.getElement().getStyle().setFloat(Float.NONE);
-            navigationBarHolder.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
+            navigationBarHolder.getElement().getStyle().setDisplay(Display.NONE);
             navigationBarHolder.getElement().getStyle().setVerticalAlign(VerticalAlign.TOP);
             navigationBarHolder.setWidth("100%");
 
@@ -142,6 +144,7 @@ public abstract class AbstractGadget<T extends IsWidget> extends AbstractPortalP
             add(containerPanel);
 
             actionsToolbarHolder = new SimplePanel();
+            actionsToolbarHolder.setVisible(false);
             add(actionsToolbarHolder);
 
         }

@@ -102,25 +102,11 @@ public class InsuranceSummaryGadget extends AbstractGadget<ServicesDashboardView
 
         @Override
         protected void setEditorValue(InsuranceStatusDTO status) {
-            CEntityForm<? extends InsuranceStatusDTO> form = null;
-            if (status.sertificates().size() == 0) {
-                form = new NoInsuranceStatusForm();
-                form.initContent();
-                ((NoInsuranceStatusForm) form).populate(status.<InsuranceStatusDTO> cast());
-            } else if (status.sertificates().get(0).isInstanceOf(GeneralInsuranceCertificateSummaryDTO.class)) {
-                form = new GeneralInsuranceStatusForm();
-                form.initContent();
-                ((GeneralInsuranceStatusForm) form).populate(status.sertificates().get(0).<GeneralInsuranceCertificateSummaryDTO> cast());
-            } else if (status.sertificates().get(0).isInstanceOf(TenantSureCertificateSummaryDTO.class)) {
-                form = new TenantSureInsuranceStatusForm();
-                form.initContent();
-                ((TenantSureInsuranceStatusForm) form).populate(status.sertificates().get(0).<TenantSureCertificateSummaryDTO> cast());
-            }
-
-            if (form != null) {
-                form.setViewable(true);
-                container.setWidget(form);
-            }
+            CEntityForm<InsuranceStatusDTO> form = new InsuranceStatusForm();
+            form.initContent();
+            form.populate(status);
+            form.setViewable(true);
+            container.setWidget(form);
         }
 
         @Override
@@ -161,10 +147,10 @@ public class InsuranceSummaryGadget extends AbstractGadget<ServicesDashboardView
 
     }
 
-    class GeneralInsuranceStatusForm extends CEntityForm<GeneralInsuranceCertificateSummaryDTO> {
+    class InsuranceStatusForm extends CEntityForm<InsuranceStatusDTO> {
 
-        public GeneralInsuranceStatusForm() {
-            super(GeneralInsuranceCertificateSummaryDTO.class);
+        public InsuranceStatusForm() {
+            super(InsuranceStatusDTO.class);
         }
 
         @Override
@@ -173,37 +159,10 @@ public class InsuranceSummaryGadget extends AbstractGadget<ServicesDashboardView
 
             int row = -1;
 
-            main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().insuranceProvider()), "200px").build());
-            main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().liabilityCoverage()), "200px").build());
-            main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().inceptionDate()), "200px").build());
-            main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().expiryDate()), "200px").build());
             return main;
 
         }
 
     }
 
-    class TenantSureInsuranceStatusForm extends CEntityForm<TenantSureCertificateSummaryDTO> {
-
-        public TenantSureInsuranceStatusForm() {
-            super(TenantSureCertificateSummaryDTO.class);
-        }
-
-        @Override
-        public IsWidget createContent() {
-            BasicFlexFormPanel main = new BasicFlexFormPanel();
-
-            int row = -1;
-
-            main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().insuranceProvider()), "200px").build());
-            main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().insuranceCertificateNumber()), "200px").build());
-            main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().inceptionDate()), "200px").build());
-            main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().expiryDate()), "200px").build());
-            main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().liabilityCoverage()), "200px").build());
-            main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().contentsCoverage()), "200px").build());
-            return main;
-
-        }
-
-    }
 }

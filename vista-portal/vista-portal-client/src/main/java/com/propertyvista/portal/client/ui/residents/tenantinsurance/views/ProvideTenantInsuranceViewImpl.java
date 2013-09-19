@@ -128,13 +128,13 @@ public class ProvideTenantInsuranceViewImpl extends Composite implements Provide
         insuranceStatusViewer.setVisible(false);
 
         if (status != null) {
-            if (status.sertificates().size() == 0) {
+            if (status.certificates().size() == 0) {
                 tenantInsuranceRequirementsMessage.setVisible(true);
                 tenantInsuranceRequirementsMessage.setHTML(InsuranceStatusDTO.tenantSureInvitation);
                 provideInsuranceByOtherProvider.setText(i18n.tr("I (we) already have Tenant Insurance"));
-            } else if (status.sertificates().get(0).isInstanceOf(GeneralInsuranceCertificateSummaryDTO.class)) {
+            } else if (status.certificates().get(0).isInstanceOf(GeneralInsuranceCertificateSummaryDTO.class)) {
                 insuranceStatusViewer.setVisible(true);
-                insuranceStatusViewer.populate(status.sertificates().get(0).<GeneralInsuranceCertificateSummaryDTO> cast());
+                insuranceStatusViewer.populate(status.certificates().get(0).<GeneralInsuranceCertificateSummaryDTO> cast());
                 provideInsuranceByOtherProvider.setText(i18n.tr("Update Insurance"));
             } else if (status.isInstanceOf(TenantSureCertificateSummaryDTO.class)) {
                 assert false : "this place shouldn't be used when tenantsure is active";
