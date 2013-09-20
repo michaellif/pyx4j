@@ -14,7 +14,6 @@
 package com.propertyvista.portal.web.client.ui.financial.dashboard;
 
 import com.google.gwt.user.client.Command;
-import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.IsWidget;
@@ -32,10 +31,6 @@ import com.pyx4j.forms.client.ui.folder.CEntityFolderItem;
 import com.pyx4j.forms.client.ui.folder.IFolderItemDecorator;
 import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.site.client.AppSite;
-import com.pyx4j.site.client.ui.layout.responsive.LayoutChangeEvent;
-import com.pyx4j.site.client.ui.layout.responsive.LayoutChangeHandler;
-import com.pyx4j.site.client.ui.layout.responsive.ResponsiveLayoutPanel.LayoutType;
 import com.pyx4j.widgets.client.Button;
 import com.pyx4j.widgets.client.actionbar.Toolbar;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
@@ -93,18 +88,6 @@ public class AutoPayAgreementsGadget extends AbstractGadget<FinancialDashboardVi
             super(AutoPaySummaryDTO.class);
 
             mainPanel = new BasicFlexFormPanel();
-
-            doLayout(LayoutType.getLayoutType(Window.getClientWidth()));
-
-            AppSite.getEventBus().addHandler(LayoutChangeEvent.TYPE, new LayoutChangeHandler() {
-                @Override
-                public void onLayoutChangeRerquest(LayoutChangeEvent event) {
-                    doLayout(event.getLayoutType());
-                }
-            });
-        }
-
-        private void doLayout(LayoutType layoutType) {
 
         }
 

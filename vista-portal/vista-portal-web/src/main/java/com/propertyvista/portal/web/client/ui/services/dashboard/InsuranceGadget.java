@@ -13,18 +13,14 @@
  */
 package com.propertyvista.portal.web.client.ui.services.dashboard;
 
-import java.util.Arrays;
-import java.util.Collection;
-
 import com.google.gwt.user.client.ui.IsWidget;
-import com.google.gwt.user.client.ui.SimplePanel;
 
+import com.pyx4j.commons.SimpleMessageFormat;
 import com.pyx4j.commons.css.ThemeColor;
-import com.pyx4j.forms.client.ui.CComponent;
-import com.pyx4j.forms.client.ui.CEntityContainer;
 import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.widgets.client.Label;
 
 import com.propertyvista.portal.rpc.portal.web.dto.insurance.status.InsuranceStatusDTO;
 import com.propertyvista.portal.web.client.resources.PortalImages;
@@ -68,48 +64,13 @@ public class InsuranceGadget extends AbstractGadget<ServicesDashboardViewImpl> {
         toolbar.recalculateState(value);
     }
 
-    class InsuranceStatusViewer extends CEntityContainer<InsuranceStatusDTO> {
+    class InsuranceStatusViewer extends CEntityForm<InsuranceStatusDTO> {
 
-        private SimplePanel container;
+        private final Label message;
 
         public InsuranceStatusViewer() {
-
-        }
-
-        @Override
-        public IsWidget createContent() {
-            return container = new SimplePanel();
-        }
-
-        @Override
-        protected void setEditorValue(InsuranceStatusDTO status) {
-            CEntityForm<InsuranceStatusDTO> form = new InsuranceStatusForm();
-            form.initContent();
-            form.populate(status);
-            form.setViewable(true);
-            container.setWidget(form);
-        }
-
-        @Override
-        protected void onReset() {
-            container.setWidget(null);
-            super.onReset();
-        }
-
-        @Override
-        public Collection<? extends CComponent<?>> getComponents() {
-            return Arrays.asList(new CComponent<?>[] {});
-        }
-
-        @Override
-        protected void setComponentsValue(InsuranceStatusDTO value, boolean fireEvent, boolean populate) {
-        }
-    }
-
-    class InsuranceStatusForm extends CEntityForm<InsuranceStatusDTO> {
-
-        public InsuranceStatusForm() {
             super(InsuranceStatusDTO.class);
+            message = new Label();
         }
 
         @Override
@@ -118,10 +79,30 @@ public class InsuranceGadget extends AbstractGadget<ServicesDashboardViewImpl> {
 
             int row = -1;
 
+            main.setWidget(++row, 0, message);
+
             return main;
 
         }
 
+        @Override
+        protected void onValueSet(boolean populate) {
+            super.onValueSet(populate);
+
+            switch (getValue().status().getValue()) {
+            case noInsurance:
+                message.setHTML("<b>" + InsuranceStatusDTO.noInsuranceStatusMessage + "</b><br/>" + InsuranceStatusDTO.noInsuranceTenantSureInvitation);
+                break;
+            case hasOtherInsurance:
+                message.setHTML(SimpleMessageFormat.format(InsuranceStatusDTO.hasInsuranceStatusMessage, getValue().coverageExpiryDate().getValue()) + "<br/>"
+                        + InsuranceStatusDTO.otherInsuranceTenantSureInvitation);
+                break;
+            case hasTenantSure:
+                message.setText(SimpleMessageFormat.format(InsuranceStatusDTO.hasInsuranceStatusMessage, getValue().coverageExpiryDate().getValue()));
+                break;
+            }
+
+        }
     }
 
 }

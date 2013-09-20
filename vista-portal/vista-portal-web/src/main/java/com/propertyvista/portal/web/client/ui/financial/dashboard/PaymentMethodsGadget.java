@@ -84,18 +84,6 @@ public class PaymentMethodsGadget extends AbstractGadget<FinancialDashboardViewI
 
         public PaymentMethodsView() {
             super(PaymentMethodSummaryDTO.class);
-
-            doLayout(LayoutType.getLayoutType(Window.getClientWidth()));
-            AppSite.getEventBus().addHandler(LayoutChangeEvent.TYPE, new LayoutChangeHandler() {
-                @Override
-                public void onLayoutChangeRerquest(LayoutChangeEvent event) {
-                    doLayout(event.getLayoutType());
-                }
-            });
-        }
-
-        private void doLayout(LayoutType layoutType) {
-
         }
 
         @Override

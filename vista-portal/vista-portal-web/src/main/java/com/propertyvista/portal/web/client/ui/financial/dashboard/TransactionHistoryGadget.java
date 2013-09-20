@@ -64,18 +64,6 @@ public class TransactionHistoryGadget extends AbstractGadget<FinancialDashboardV
 
         public TransactionHistoryView() {
             super(TransactionHistoryDTO.class);
-
-            doLayout(LayoutType.getLayoutType(Window.getClientWidth()));
-            AppSite.getEventBus().addHandler(LayoutChangeEvent.TYPE, new LayoutChangeHandler() {
-                @Override
-                public void onLayoutChangeRerquest(LayoutChangeEvent event) {
-                    doLayout(event.getLayoutType());
-                }
-            });
-        }
-
-        private void doLayout(LayoutType layoutType) {
-
         }
 
         @Override
