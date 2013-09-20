@@ -47,7 +47,7 @@ import com.propertyvista.portal.web.client.activity.profile.ProfileEditorActivit
 import com.propertyvista.portal.web.client.activity.security.PasswordChangeActivity;
 import com.propertyvista.portal.web.client.activity.security.PasswordResetActivity;
 import com.propertyvista.portal.web.client.activity.services.dashboard.ServicesDashboardActivity;
-import com.propertyvista.portal.web.client.activity.services.insurance.TenantSureWizardActivity;
+import com.propertyvista.portal.web.client.activity.services.insurance.TenantSureOrderWizardActivity;
 
 public class ContentActivityMapper implements AppActivityMapper {
 
@@ -99,9 +99,9 @@ public class ContentActivityMapper implements AppActivityMapper {
                         activity = new AutoPayConfirmationActivity(appPlace);
 
                     } else if (appPlace instanceof PortalSiteMap.Resident.ResidentServices.TenantInsurance.TenantSure.TenantSurePurchase) {
-                        activity = new TenantSureWizardActivity(appPlace);
+                        activity = new TenantSureOrderWizardActivity(appPlace);
                     } else if (appPlace instanceof PortalSiteMap.Resident.ResidentServices.TenantInsurance.Other.UploadCertificate) {
-                        activity = new TenantSureWizardActivity(appPlace);
+                        activity = new TenantSureOrderWizardActivity(appPlace);
 
                     } else if (place instanceof PortalSiteMap.Login) {
                         activity = new LandingActivity(place);

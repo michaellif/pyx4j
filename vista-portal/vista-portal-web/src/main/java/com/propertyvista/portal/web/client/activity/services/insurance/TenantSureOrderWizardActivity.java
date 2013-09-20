@@ -27,12 +27,12 @@ import com.propertyvista.portal.rpc.portal.web.dto.insurance.TenantSureCoverageD
 import com.propertyvista.portal.rpc.portal.web.dto.insurance.TenantSureQuoteDTO;
 import com.propertyvista.portal.rpc.portal.web.services.services.TenantSurePurchaseWizardService;
 import com.propertyvista.portal.web.client.activity.AbstractWizardActivity;
-import com.propertyvista.portal.web.client.ui.services.insurance.TenantSureWizardView;
+import com.propertyvista.portal.web.client.ui.services.insurance.TenantSureOrderWizardView;
 
-public class TenantSureWizardActivity extends AbstractWizardActivity<TenantSureAgreementDTO> implements TenantSureWizardView.Persenter {
+public class TenantSureOrderWizardActivity extends AbstractWizardActivity<TenantSureAgreementDTO> implements TenantSureOrderWizardView.TenantSureOrderWizardPersenter {
 
-    public TenantSureWizardActivity(AppPlace place) {
-        super(TenantSureWizardView.class, GWT.<TenantSurePurchaseWizardService> create(TenantSurePurchaseWizardService.class), TenantSureAgreementDTO.class);
+    public TenantSureOrderWizardActivity(AppPlace place) {
+        super(TenantSureOrderWizardView.class, GWT.<TenantSurePurchaseWizardService> create(TenantSurePurchaseWizardService.class), TenantSureAgreementDTO.class);
     }
 
     @Override
@@ -46,7 +46,7 @@ public class TenantSureWizardActivity extends AbstractWizardActivity<TenantSureA
 
             @Override
             public void onSuccess(String email) {
-                ((TenantSureWizardView) getView()).onSendQuoteDetailsSucess(email);
+                ((TenantSureOrderWizardView) getView()).onSendQuoteDetailsSucess(email);
             }
         }, getView().getValue().quote().quoteId().getValue());
     }
@@ -56,7 +56,7 @@ public class TenantSureWizardActivity extends AbstractWizardActivity<TenantSureA
         ((TenantSurePurchaseWizardService) getService()).getQuote(new DefaultAsyncCallback<TenantSureQuoteDTO>() {
             @Override
             public void onSuccess(TenantSureQuoteDTO quote) {
-                ((TenantSureWizardView) getView()).setQuote(quote);
+                ((TenantSureOrderWizardView) getView()).setQuote(quote);
             }
         }, getView().getValue().tenantSureCoverageRequest().<TenantSureCoverageDTO> duplicate());
     }
@@ -66,7 +66,7 @@ public class TenantSureWizardActivity extends AbstractWizardActivity<TenantSureA
         ((TenantSurePurchaseWizardService) getService()).getCurrentTenantAddress(new DefaultAsyncCallback<AddressSimple>() {
             @Override
             public void onSuccess(AddressSimple billingAddress) {
-                ((TenantSureWizardView) getView()).setBillingAddress(billingAddress);
+                ((TenantSureOrderWizardView) getView()).setBillingAddress(billingAddress);
             }
         });
     }

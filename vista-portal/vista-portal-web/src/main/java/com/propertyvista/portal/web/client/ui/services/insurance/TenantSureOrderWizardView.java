@@ -18,9 +18,9 @@ import com.propertyvista.portal.rpc.portal.web.dto.insurance.TenantSureAgreement
 import com.propertyvista.portal.rpc.portal.web.dto.insurance.TenantSureQuoteDTO;
 import com.propertyvista.portal.web.client.ui.IWizardView;
 
-public interface TenantSureWizardView extends IWizardView<TenantSureAgreementDTO> {
+public interface TenantSureOrderWizardView extends IWizardView<TenantSureAgreementDTO> {
 
-    interface Persenter extends WizardPresenter<TenantSureAgreementDTO> {
+    interface TenantSureOrderWizardPersenter extends WizardPresenter<TenantSureAgreementDTO> {
 
         void sendQuoteDetailsEmail();
 

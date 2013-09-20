@@ -20,13 +20,13 @@ import com.propertyvista.portal.rpc.portal.web.dto.insurance.TenantSureAgreement
 import com.propertyvista.portal.rpc.portal.web.dto.insurance.TenantSureQuoteDTO;
 import com.propertyvista.portal.web.client.ui.AbstractWizardView;
 
-public class TenantSureWizardViewImpl extends AbstractWizardView<TenantSureAgreementDTO> implements TenantSureWizardView {
+public class TenantSureOrderWizardViewImpl extends AbstractWizardView<TenantSureAgreementDTO> implements TenantSureOrderWizardView {
 
-    private static final I18n i18n = I18n.get(TenantSureWizardViewImpl.class);
+    private static final I18n i18n = I18n.get(TenantSureOrderWizardViewImpl.class);
 
-    public TenantSureWizardViewImpl() {
+    public TenantSureOrderWizardViewImpl() {
         super();
-        setWizard(new TenantSureWizard(this, i18n.tr("Submit")));
+        setWizard(new TenantSureOrderWizard(this, i18n.tr("Submit")));
 
     }
 

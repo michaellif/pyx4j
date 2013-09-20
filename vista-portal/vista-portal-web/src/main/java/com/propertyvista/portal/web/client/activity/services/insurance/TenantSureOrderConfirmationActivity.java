@@ -21,19 +21,19 @@ import com.pyx4j.site.rpc.AppPlace;
 
 import com.propertyvista.portal.web.client.PortalWebSite;
 import com.propertyvista.portal.web.client.activity.SecurityAwareActivity;
-import com.propertyvista.portal.web.client.ui.services.insurance.TenantSureConfirmationView;
-import com.propertyvista.portal.web.client.ui.services.insurance.TenantSureConfirmationView.TenantSureConfirmationPresenter;
+import com.propertyvista.portal.web.client.ui.services.insurance.TenantSureOrderConfirmationView;
+import com.propertyvista.portal.web.client.ui.services.insurance.TenantSureOrderConfirmationView.TenantSureOrderConfirmationPresenter;
 
-public class TenantSureConfirmationActivity extends SecurityAwareActivity implements TenantSureConfirmationPresenter {
+public class TenantSureOrderConfirmationActivity extends SecurityAwareActivity implements TenantSureOrderConfirmationPresenter {
 
-    private final TenantSureConfirmationView view;
+    private final TenantSureOrderConfirmationView view;
 
 //    protected final PaymentRetrieveService srv;
 
     private final Key entityId;
 
-    public TenantSureConfirmationActivity(AppPlace place) {
-        view = PortalWebSite.getViewFactory().instantiate(TenantSureConfirmationView.class);
+    public TenantSureOrderConfirmationActivity(AppPlace place) {
+        view = PortalWebSite.getViewFactory().instantiate(TenantSureOrderConfirmationView.class);
         view.setPresenter(this);
 
 //        srv = GWT.create(PaymentRetrieveService.class);

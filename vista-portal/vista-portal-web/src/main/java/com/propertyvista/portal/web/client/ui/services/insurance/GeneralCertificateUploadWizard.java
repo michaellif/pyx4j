@@ -36,13 +36,13 @@ import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
 import com.propertyvista.domain.media.InsuranceCertificateDocument;
 import com.propertyvista.domain.tenant.Customer;
 import com.propertyvista.domain.tenant.lease.Tenant;
-import com.propertyvista.portal.rpc.portal.web.dto.insurance.OtherProviderInsuranceCertificateDTO;
+import com.propertyvista.portal.rpc.portal.web.dto.insurance.GeneralInsuranceCertificateDTO;
 import com.propertyvista.portal.web.client.ui.CPortalEntityWizard;
 import com.propertyvista.portal.web.client.ui.util.decorators.FormDecoratorBuilder;
 
-public class UploadCertificateWizard extends CPortalEntityWizard<OtherProviderInsuranceCertificateDTO> {
+public class GeneralCertificateUploadWizard extends CPortalEntityWizard<GeneralInsuranceCertificateDTO> {
 
-    private final static I18n i18n = I18n.get(UploadCertificateWizard.class);
+    private final static I18n i18n = I18n.get(GeneralCertificateUploadWizard.class);
 
     public interface TenantOwnerClickHandler {
 
@@ -68,14 +68,14 @@ public class UploadCertificateWizard extends CPortalEntityWizard<OtherProviderIn
      * @param tenantOwnerClickHandler
      *            a handler for tenantOwner click (if not null will render tenant's name as a hyperlink that execs this handler on click)
      */
-    public UploadCertificateWizard(UploadCertificateWizardView view, boolean displayTenantOwner, TenantOwnerClickHandler tenantOwnerClickHandler) {
-        super(OtherProviderInsuranceCertificateDTO.class, view, i18n.tr("Insurance Certificated"), i18n.tr("Submit"), ThemeColor.contrast3);
+    public GeneralCertificateUploadWizard(GeneralCertificateUploadWizardView view, boolean displayTenantOwner, TenantOwnerClickHandler tenantOwnerClickHandler) {
+        super(GeneralInsuranceCertificateDTO.class, view, i18n.tr("Insurance Certificated"), i18n.tr("Submit"), ThemeColor.contrast3);
         this.minRequiredLiability = null;
         this.displayTenantOwner = displayTenantOwner;
         this.tenantOwnerClickHandler = tenantOwnerClickHandler;
     }
 
-    public UploadCertificateWizard(UploadCertificateWizardView view) {
+    public GeneralCertificateUploadWizard(GeneralCertificateUploadWizardView view) {
         this(view, false, null);
     }
 
@@ -102,7 +102,7 @@ public class UploadCertificateWizard extends CPortalEntityWizard<OtherProviderIn
         get(proto().liabilityCoverage()).addValueValidator(new EditableValueValidator<BigDecimal>() {
             @Override
             public ValidationError isValid(CComponent<BigDecimal> component, BigDecimal value) {
-                if (UploadCertificateWizard.this.minRequiredLiability != null && value != null && value.compareTo(minRequiredLiability) < 0) {
+                if (GeneralCertificateUploadWizard.this.minRequiredLiability != null && value != null && value.compareTo(minRequiredLiability) < 0) {
                     return new ValidationError(component, i18n.tr("The minimum required liability is {0,number,#,##0.00}", minRequiredLiability));
                 }
                 return null;

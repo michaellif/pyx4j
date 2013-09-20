@@ -7,19 +7,23 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on 2013-04-10
- * @author VladL
+ * Created on Sep 11, 2013
+ * @author michaellif
  * @version $Id$
  */
 package com.propertyvista.portal.web.client.ui.services.insurance;
 
-import com.propertyvista.portal.rpc.portal.web.dto.insurance.TenantSureAgreementDTO;
-import com.propertyvista.portal.web.client.ui.AbstractFormView;
+import java.math.BigDecimal;
 
-public class TenantSureConfirmationViewImpl extends AbstractFormView<TenantSureAgreementDTO> implements TenantSureConfirmationView {
+import com.propertyvista.portal.rpc.portal.web.dto.insurance.GeneralInsuranceCertificateDTO;
+import com.propertyvista.portal.web.client.ui.IWizardView;
 
-    public TenantSureConfirmationViewImpl() {
-        super();
-        setForm(new TenantSureConfirmationForm(this));
+public interface GeneralCertificateUploadWizardView extends IWizardView<GeneralInsuranceCertificateDTO> {
+
+    public interface GeneralCertificateUploadWizardPresenter extends WizardPresenter<GeneralInsuranceCertificateDTO> {
+
     }
+
+    void setMinRequiredLiability(BigDecimal minRequiredLiability);
+
 }

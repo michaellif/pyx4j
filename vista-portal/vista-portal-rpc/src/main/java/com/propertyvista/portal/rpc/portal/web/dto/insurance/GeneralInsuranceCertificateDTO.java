@@ -30,7 +30,7 @@ import com.propertyvista.domain.media.ApplicationDocumentHolder;
 import com.propertyvista.domain.media.InsuranceCertificateDocument;
 
 @Transient
-public interface OtherProviderInsuranceCertificateDTO extends ApplicationDocumentHolder<InsuranceCertificateDocument>, IEntity {
+public interface GeneralInsuranceCertificateDTO extends ApplicationDocumentHolder<InsuranceCertificateDocument>, IEntity {
 
     IPrimitive<BigDecimal> minLiability();
 

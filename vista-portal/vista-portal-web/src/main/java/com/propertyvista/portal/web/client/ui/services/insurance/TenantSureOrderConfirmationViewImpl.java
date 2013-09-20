@@ -7,24 +7,19 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on 2013-04-02
+ * Created on 2013-04-10
  * @author VladL
  * @version $Id$
  */
 package com.propertyvista.portal.web.client.ui.services.insurance;
 
-import com.pyx4j.commons.css.ThemeColor;
-import com.pyx4j.i18n.shared.I18n;
-
 import com.propertyvista.portal.rpc.portal.web.dto.insurance.TenantSureAgreementDTO;
-import com.propertyvista.portal.web.client.ui.CPortalEntityWizard;
+import com.propertyvista.portal.web.client.ui.AbstractFormView;
 
-public class TenantSureWizard extends CPortalEntityWizard<TenantSureAgreementDTO> {
+public class TenantSureOrderConfirmationViewImpl extends AbstractFormView<TenantSureAgreementDTO> implements TenantSureOrderConfirmationView {
 
-    private static final I18n i18n = I18n.get(TenantSureWizard.class);
-
-    public TenantSureWizard(TenantSureWizardView view, String endButtonCaption) {
-        super(TenantSureAgreementDTO.class, view, i18n.tr("TenantSure Insurance"), endButtonCaption, ThemeColor.contrast3);
+    public TenantSureOrderConfirmationViewImpl() {
+        super();
+        setForm(new TenantSureOrderConfirmationForm(this));
     }
-
 }
