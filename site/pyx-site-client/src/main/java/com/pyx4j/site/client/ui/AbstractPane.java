@@ -34,7 +34,7 @@ import com.pyx4j.widgets.client.actionbar.Toolbar;
 
 public abstract class AbstractPane extends DockLayoutPanel implements IPane {
 
-    private static final double TOOLBAR_DEFAULT_HEIGHT = 2.8;
+    private static final double TOOLBAR_DEFAULT_HEIGHT = 34;
 
     private final VisorHolder contentHolder;
 
@@ -54,12 +54,8 @@ public abstract class AbstractPane extends DockLayoutPanel implements IPane {
 
     private final FlowPanel headerCaption;
 
-    private final double headerToolbarHeight = TOOLBAR_DEFAULT_HEIGHT;
-
-    private double footerToolbarHeight = TOOLBAR_DEFAULT_HEIGHT;
-
     public AbstractPane() {
-        super(Unit.EM);
+        super(Unit.PX);
 
         headerCaption = new FlowPanel();
         captionLabel = new Label();
@@ -134,25 +130,18 @@ public abstract class AbstractPane extends DockLayoutPanel implements IPane {
     }
 
     public void setBreadcrumbsBar(BreadcrumbsBar breadcrumbsBar) {
-        setWidgetSize(headerContainer, headerToolbarHeight);
+        setWidgetSize(headerContainer, TOOLBAR_DEFAULT_HEIGHT);
         headerBreadcrumbHolder.setWidget(breadcrumbsBar);
     }
 
     public void addHeaderToolbarItem(Widget widget) {
-        setWidgetSize(headerContainer, headerToolbarHeight);
+        setWidgetSize(headerContainer, TOOLBAR_DEFAULT_HEIGHT);
         headerToolbar.add(widget);
     }
 
     public void addFooterToolbarItem(Widget widget) {
-        setWidgetSize(footerToolbarHolder, footerToolbarHeight);
+        setWidgetSize(footerToolbarHolder, TOOLBAR_DEFAULT_HEIGHT);
         footerToolbar.add(widget);
-    }
-
-    public void setFooterToolbarHeight(int footerToolbarHeight) {
-        this.footerToolbarHeight = footerToolbarHeight;
-        if (footerToolbar.getWidgetCount() == 0) {
-            setWidgetSize(footerToolbarHolder, footerToolbarHeight);
-        }
     }
 
 }
