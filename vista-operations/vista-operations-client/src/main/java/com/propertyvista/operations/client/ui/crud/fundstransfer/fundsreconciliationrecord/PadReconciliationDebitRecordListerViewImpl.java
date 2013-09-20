@@ -13,11 +13,10 @@
  */
 package com.propertyvista.operations.client.ui.crud.fundstransfer.fundsreconciliationrecord;
 
-import com.pyx4j.site.client.ui.prime.lister.ListerViewImplBase;
-
+import com.propertyvista.operations.client.ui.crud.OperationsListerViewImplBase;
 import com.propertyvista.operations.rpc.dto.PadReconciliationDebitRecordDTO;
 
-public class PadReconciliationDebitRecordListerViewImpl extends ListerViewImplBase<PadReconciliationDebitRecordDTO> implements
+public class PadReconciliationDebitRecordListerViewImpl extends OperationsListerViewImplBase<PadReconciliationDebitRecordDTO> implements
         PadReconciliationDebitRecordListerView {
 
     public PadReconciliationDebitRecordListerViewImpl() {

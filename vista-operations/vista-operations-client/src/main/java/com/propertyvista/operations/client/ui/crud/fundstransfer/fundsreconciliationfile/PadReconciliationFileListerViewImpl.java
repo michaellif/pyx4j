@@ -13,11 +13,10 @@
  */
 package com.propertyvista.operations.client.ui.crud.fundstransfer.fundsreconciliationfile;
 
-import com.pyx4j.site.client.ui.prime.lister.ListerViewImplBase;
-
+import com.propertyvista.operations.client.ui.crud.OperationsListerViewImplBase;
 import com.propertyvista.operations.rpc.dto.PadReconciliationFileDTO;
 
-public class PadReconciliationFileListerViewImpl extends ListerViewImplBase<PadReconciliationFileDTO> implements PadReconciliationFileListerView {
+public class PadReconciliationFileListerViewImpl extends OperationsListerViewImplBase<PadReconciliationFileDTO> implements PadReconciliationFileListerView {
 
     public PadReconciliationFileListerViewImpl() {
         setLister(new PadReconciliationFileLister());

@@ -47,6 +47,7 @@ public class NavigActivity extends AbstractActivity implements NavigView.MainNav
 
     @Override
     public void start(AcceptsOneWidget panel, EventBus eventBus) {
+        view.setNavigFolders(createNavigFolders());
         panel.setWidget(view);
     }
 
@@ -56,17 +57,11 @@ public class NavigActivity extends AbstractActivity implements NavigView.MainNav
     }
 
     @Override
-    public String getNavigLabel(AppPlace place) {
-        return AppSite.getHistoryMapper().getPlaceInfo(place).getNavigLabel();
-    }
-
-    @Override
     public AppPlace getWhere() {
         return AppSite.getPlaceController().getWhere();
     }
 
-    @Override
-    public List<NavigFolder> getNavigFolders() {
+    private List<NavigFolder> createNavigFolders() {
         ArrayList<NavigFolder> list = new ArrayList<NavigFolder>();
 
         // Properties

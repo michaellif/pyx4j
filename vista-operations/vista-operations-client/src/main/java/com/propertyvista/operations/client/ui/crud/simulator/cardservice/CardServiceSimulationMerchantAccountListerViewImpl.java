@@ -15,11 +15,11 @@ package com.propertyvista.operations.client.ui.crud.simulator.cardservice;
 
 import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
 import com.pyx4j.site.client.ui.prime.lister.AbstractLister;
-import com.pyx4j.site.client.ui.prime.lister.ListerViewImplBase;
 
+import com.propertyvista.operations.client.ui.crud.OperationsListerViewImplBase;
 import com.propertyvista.operations.domain.dev.CardServiceSimulationMerchantAccount;
 
-public class CardServiceSimulationMerchantAccountListerViewImpl extends ListerViewImplBase<CardServiceSimulationMerchantAccount> implements
+public class CardServiceSimulationMerchantAccountListerViewImpl extends OperationsListerViewImplBase<CardServiceSimulationMerchantAccount> implements
         CardServiceSimulationMerchantAccountListerView {
 
     public static class CardServiceSimulationLister extends AbstractLister<CardServiceSimulationMerchantAccount> {

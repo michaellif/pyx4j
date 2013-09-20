@@ -19,11 +19,11 @@ import java.util.List;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria.Sort;
 import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
 import com.pyx4j.site.client.ui.prime.lister.AbstractLister;
-import com.pyx4j.site.client.ui.prime.lister.ListerViewImplBase;
 
+import com.propertyvista.operations.client.ui.crud.OperationsListerViewImplBase;
 import com.propertyvista.operations.domain.dev.CardServiceSimulationTransaction;
 
-public class CardServiceSimulationTransactionListerViewImpl extends ListerViewImplBase<CardServiceSimulationTransaction> implements
+public class CardServiceSimulationTransactionListerViewImpl extends OperationsListerViewImplBase<CardServiceSimulationTransaction> implements
         CardServiceSimulationTransactionListerView {
 
     public static class CardServiceSimulationTransactionLister extends AbstractLister<CardServiceSimulationTransaction> {

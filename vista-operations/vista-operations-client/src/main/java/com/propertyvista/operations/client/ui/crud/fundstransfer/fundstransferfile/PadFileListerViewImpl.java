@@ -13,11 +13,10 @@
  */
 package com.propertyvista.operations.client.ui.crud.fundstransfer.fundstransferfile;
 
-import com.pyx4j.site.client.ui.prime.lister.ListerViewImplBase;
-
+import com.propertyvista.operations.client.ui.crud.OperationsListerViewImplBase;
 import com.propertyvista.operations.rpc.dto.PadFileDTO;
 
-public class PadFileListerViewImpl extends ListerViewImplBase<PadFileDTO> implements PadFileListerView {
+public class PadFileListerViewImpl extends OperationsListerViewImplBase<PadFileDTO> implements PadFileListerView {
 
     public PadFileListerViewImpl() {
         setLister(new PadFileLister());
