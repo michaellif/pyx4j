@@ -16,8 +16,11 @@ package com.propertyvista.operations.client.activity.crud.fundstransfer.fundstra
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.place.shared.Place;
 
+import com.pyx4j.commons.Key;
 import com.pyx4j.entity.rpc.AbstractCrudService;
+import com.pyx4j.entity.shared.criterion.EntityFiltersBuilder;
 import com.pyx4j.site.client.activity.AbstractListerActivity;
+import com.pyx4j.site.rpc.AppPlace;
 
 import com.propertyvista.operations.client.OperationsSite;
 import com.propertyvista.operations.client.ui.crud.fundstransfer.fundstransferrecord.PadDebitRecordListerView;
@@ -29,6 +32,16 @@ public class PadDebitRecordListerActivity extends AbstractListerActivity<PadDebi
     public PadDebitRecordListerActivity(Place place) {
         super(place, OperationsSite.getViewFactory().instantiate(PadDebitRecordListerView.class), GWT
                 .<AbstractCrudService<PadDebitRecordDTO>> create(PadDebitRecordCrudService.class), PadDebitRecordDTO.class);
+    }
+
+    @Override
+    protected void parseExternalFilters(AppPlace place, Class<PadDebitRecordDTO> entityClass, EntityFiltersBuilder<PadDebitRecordDTO> filters) {
+        super.parseExternalFilters(place, entityClass, filters);
+
+        String val;
+        if ((val = place.getFirstArg(filters.proto().padBatch().padFile().id().getPath().toString())) != null) {
+            filters.eq(filters.proto().padBatch().padFile().id(), new Key(val));
+        }
     }
 
 }

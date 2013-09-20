@@ -14,7 +14,11 @@
 package com.propertyvista.operations.server.services;
 
 import com.pyx4j.entity.server.AbstractCrudServiceDtoImpl;
+import com.pyx4j.entity.server.Persistence;
+import com.pyx4j.entity.shared.AttachLevel;
+import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 
+import com.propertyvista.operations.domain.payment.pad.PadReconciliationDebitRecord;
 import com.propertyvista.operations.domain.payment.pad.PadReconciliationFile;
 import com.propertyvista.operations.rpc.dto.PadReconciliationFileDTO;
 import com.propertyvista.operations.rpc.services.PadReconciliationFileCrudService;
@@ -29,5 +33,14 @@ public class PadReconciliationFileCrudServiceImpl extends AbstractCrudServiceDto
     @Override
     protected void bind() {
         bindCompleteDBO();
+    }
+
+    @Override
+    protected void enhanceRetrieved(PadReconciliationFile entity, PadReconciliationFileDTO dto, RetrieveTarget retrieveTarget) {
+        { //TODO count only,
+            EntityQueryCriteria<PadReconciliationDebitRecord> criteria = EntityQueryCriteria.create(PadReconciliationDebitRecord.class);
+            criteria.eq(criteria.proto().reconciliationSummary().reconciliationFile(), entity);
+            dto.reconciliationRecords().addAll(Persistence.service().query(criteria, AttachLevel.IdOnly));
+        }
     }
 }

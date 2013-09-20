@@ -13,11 +13,18 @@
  */
 package com.propertyvista.operations.rpc.dto;
 
+import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.Transient;
+import com.pyx4j.entity.shared.AttachLevel;
+import com.pyx4j.entity.shared.IList;
 
+import com.propertyvista.operations.domain.payment.pad.PadReconciliationDebitRecord;
 import com.propertyvista.operations.domain.payment.pad.PadReconciliationFile;
 
 @Transient
 public interface PadReconciliationFileDTO extends PadReconciliationFile {
 
+    //TODO count only, Should be DTO
+    @Detached(level = AttachLevel.Detached)
+    IList<PadReconciliationDebitRecord> reconciliationRecords();
 }

@@ -16,8 +16,11 @@ package com.propertyvista.operations.client.activity.crud.fundstransfer.fundsrec
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.place.shared.Place;
 
+import com.pyx4j.commons.Key;
 import com.pyx4j.entity.rpc.AbstractCrudService;
+import com.pyx4j.entity.shared.criterion.EntityFiltersBuilder;
 import com.pyx4j.site.client.activity.AbstractListerActivity;
+import com.pyx4j.site.rpc.AppPlace;
 
 import com.propertyvista.operations.client.OperationsSite;
 import com.propertyvista.operations.client.ui.crud.fundstransfer.fundsreconciliationrecord.PadReconciliationDebitRecordListerView;
@@ -30,6 +33,17 @@ public class PadReconciliationDebitRecordListerActivity extends AbstractListerAc
         super(place, OperationsSite.getViewFactory().instantiate(PadReconciliationDebitRecordListerView.class), GWT
                 .<AbstractCrudService<PadReconciliationDebitRecordDTO>> create(PadReconciliationDebitRecordCrudService.class),
                 PadReconciliationDebitRecordDTO.class);
+    }
+
+    @Override
+    protected void parseExternalFilters(AppPlace place, Class<PadReconciliationDebitRecordDTO> entityClass,
+            EntityFiltersBuilder<PadReconciliationDebitRecordDTO> filters) {
+        super.parseExternalFilters(place, entityClass, filters);
+
+        String val;
+        if ((val = place.getFirstArg(filters.proto().reconciliationSummary().reconciliationFile().id().getPath().toString())) != null) {
+            filters.eq(filters.proto().reconciliationSummary().reconciliationFile().id(), new Key(val));
+        }
     }
 
 }

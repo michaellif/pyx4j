@@ -13,6 +13,7 @@
  */
 package com.propertyvista.operations.client.ui.crud.fundstransfer.fundstransferfile;
 
+import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IList;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.site.client.AppPlaceEntityMapper;
@@ -51,11 +52,13 @@ public class PadFileForm extends OperationsEntityForm<PadFileDTO> {
         panel.setWidget(++row, 0, 1, new FormDecoratorBuilder(inject(proto().acknowledgmentRejectReasonMessage())).build());
         panel.setWidget(++row, 0, 1, new FormDecoratorBuilder(inject(proto().acknowledgmentStatus())).build());
 
+        // TODO Sorry for the mess with DTO and DBO here,  will be fixed once we have AttacheLEvel.countOnly
         AppPlaceBuilder<IList<PadDebitRecord>> appPlaceBuilder = new AppPlaceBuilder<IList<PadDebitRecord>>() {
             @Override
             public AppPlace createAppPlace(IList<PadDebitRecord> value) {
                 CrudAppPlace place = AppPlaceEntityMapper.resolvePlace(PadDebitRecordDTO.class);
-                place.formListerPlace().queryArg("todo", value.getOwner().getPrimaryKey().toString());
+                place.formListerPlace().queryArg(EntityFactory.getEntityPrototype(PadDebitRecordDTO.class).padBatch().padFile().id().getPath().toString(),
+                        value.getOwner().getPrimaryKey().toString());
                 return place;
             }
         };

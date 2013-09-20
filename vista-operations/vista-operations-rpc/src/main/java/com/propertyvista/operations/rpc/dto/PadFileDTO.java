@@ -24,7 +24,7 @@ import com.propertyvista.operations.domain.payment.pad.PadFile;
 @Transient
 public interface PadFileDTO extends PadFile {
 
-    //TODO count only
+    //TODO count only, Should be DTO
     @Detached(level = AttachLevel.Detached)
     IList<PadDebitRecord> debitRecords();
 
