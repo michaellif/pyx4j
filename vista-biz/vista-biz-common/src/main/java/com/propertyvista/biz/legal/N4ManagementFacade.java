@@ -33,12 +33,12 @@ public interface N4ManagementFacade {
     List<LegalNoticeCandidate> getN4Candidates(BigDecimal minAmountOwed, List<Building> buildingIds);
 
     /**
-     * Generate N4 for <code>delinguqentLeases</code> signed by the given <code>employee</code>.
+     * Prepare N4 letters for <code>delinguqentLeases</code> as if signed by the given <code>employee</code>.
      * 
      * @throws IllegalStateException
      *             if one of the given leases doesn't owe any money.
      */
-    void generateN4(List<Lease> delinquentLeases, Employee employee) throws IllegalStateException;
+    void issueN4(List<Lease> delinquentLeases, Employee employee) throws IllegalStateException;
 
     /**
      * Retrieves N4s sorted in descending order by the date of generation. If <code>generatedCutOffDate</code> is not <code>null</code> this will be the minimum

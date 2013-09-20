@@ -7,20 +7,30 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on 2013-09-19
+ * Created on 2013-09-20
  * @author ArtyomB
  * @version $Id$
  */
-package com.propertyvista.biz.legal;
+package com.propertyvista.domain.legal;
 
-import java.util.List;
+import java.math.BigDecimal;
 
-import com.propertyvista.domain.legal.N4FormFieldsData;
+import com.pyx4j.commons.LogicalDate;
+import com.pyx4j.entity.annotations.Transient;
+import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.shared.IPrimitive;
 
-public interface N4GenerationFacade {
+@Transient
+public interface N4RentOwingForPeriod extends IEntity {
 
-    byte[] generateN4Letter(List<N4FormFieldsData> formData);
+    IPrimitive<LogicalDate> from();
 
-    N4FormFieldsData populateFormData();
+    IPrimitive<LogicalDate> to();
+
+    IPrimitive<BigDecimal> rentCharged();
+
+    IPrimitive<BigDecimal> rentPaid();
+
+    IPrimitive<BigDecimal> rentOwing();
 
 }

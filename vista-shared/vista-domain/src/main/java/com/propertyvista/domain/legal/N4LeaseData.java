@@ -7,16 +7,31 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on 2013-09-19
+ * Created on 2013-09-20
  * @author ArtyomB
  * @version $Id$
  */
 package com.propertyvista.domain.legal;
 
+import java.math.BigDecimal;
+
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.shared.IList;
+import com.pyx4j.entity.shared.IPrimitive;
+
+import com.propertyvista.domain.contact.AddressStructured;
+import com.propertyvista.domain.tenant.lease.Tenant;
 
 @Transient
-public interface N4Signature extends IEntity {
+public interface N4LeaseData extends IEntity {
+
+    IList<Tenant> leaseTenants();
+
+    AddressStructured rentalUnitAddress();
+
+    IPrimitive<BigDecimal> totalRentOwning();
+
+    IList<N4RentOwingForPeriod> rentOwingBreakdown();
 
 }
