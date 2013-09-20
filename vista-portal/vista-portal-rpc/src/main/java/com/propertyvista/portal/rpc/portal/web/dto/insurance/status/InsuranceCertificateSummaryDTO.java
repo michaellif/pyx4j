@@ -19,6 +19,7 @@ import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.annotations.AbstractEntity;
 import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.Editor;
+import com.pyx4j.entity.annotations.ToStringFormat;
 import com.pyx4j.entity.annotations.Editor.EditorType;
 import com.pyx4j.entity.annotations.Format;
 import com.pyx4j.entity.annotations.ToString;
@@ -29,8 +30,10 @@ import com.pyx4j.entity.shared.IPrimitive;
 
 @AbstractEntity
 @Transient
+@ToStringFormat("{0} {1}")
 public interface InsuranceCertificateSummaryDTO extends IEntity {
 
+    @ToString(index = 0)
     IPrimitive<String> insuranceProvider();
 
     @NotNull

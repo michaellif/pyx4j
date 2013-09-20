@@ -13,18 +13,34 @@
  */
 package com.propertyvista.portal.web.client.ui.services.dashboard;
 
+import com.google.gwt.dom.client.Style.FontWeight;
+import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.commons.SimpleMessageFormat;
 import com.pyx4j.commons.css.ThemeColor;
+import com.pyx4j.entity.shared.IObject;
+import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CEntityForm;
+import com.pyx4j.forms.client.ui.CEntityLabel;
+import com.pyx4j.forms.client.ui.CLabel;
+import com.pyx4j.forms.client.ui.folder.BoxFolderItemDecorator;
+import com.pyx4j.forms.client.ui.folder.CEntityFolderItem;
+import com.pyx4j.forms.client.ui.folder.IFolderItemDecorator;
+import com.pyx4j.forms.client.ui.folder.ItemActionsBar.ActionType;
 import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.Label;
 
+import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
+import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
+import com.propertyvista.domain.payment.PaymentMethod;
+import com.propertyvista.portal.rpc.portal.web.dto.PaymentMethodInfoDTO;
+import com.propertyvista.portal.rpc.portal.web.dto.insurance.status.InsuranceCertificateSummaryDTO;
 import com.propertyvista.portal.rpc.portal.web.dto.insurance.status.InsuranceStatusDTO;
 import com.propertyvista.portal.web.client.resources.PortalImages;
 import com.propertyvista.portal.web.client.ui.AbstractGadget;
+import com.propertyvista.portal.web.client.ui.util.decorators.FormDecoratorBuilder;
 
 public class InsuranceGadget extends AbstractGadget<ServicesDashboardViewImpl> {
 
@@ -79,6 +95,10 @@ public class InsuranceGadget extends AbstractGadget<ServicesDashboardViewImpl> {
 
             int row = -1;
 
+            main.setH4(++row, 0, 1, i18n.tr("Certificates"));
+
+            main.setWidget(++row, 0, inject(proto().certificates(), new InsuranceCertificatesFolder()));
+
             main.setWidget(++row, 0, message);
 
             return main;
@@ -98,11 +118,57 @@ public class InsuranceGadget extends AbstractGadget<ServicesDashboardViewImpl> {
                         + InsuranceStatusDTO.otherInsuranceTenantSureInvitation);
                 break;
             case hasTenantSure:
-                message.setText(SimpleMessageFormat.format(InsuranceStatusDTO.hasInsuranceStatusMessage, getValue().coverageExpiryDate().getValue()));
                 break;
             }
 
         }
     }
 
+    private class InsuranceCertificatesFolder extends VistaBoxFolder<InsuranceCertificateSummaryDTO> {
+
+        public InsuranceCertificatesFolder() {
+            super(InsuranceCertificateSummaryDTO.class, true);
+
+            setOrderable(false);
+            setAddable(false);
+        }
+
+        @Override
+        public IFolderItemDecorator<InsuranceCertificateSummaryDTO> createItemDecorator() {
+            BoxFolderItemDecorator<InsuranceCertificateSummaryDTO> decor = (BoxFolderItemDecorator<InsuranceCertificateSummaryDTO>) super.createItemDecorator();
+            return decor;
+        }
+
+        @Override
+        public CComponent<?> create(IObject<?> member) {
+            if (member instanceof InsuranceCertificateSummaryDTO) {
+                return new InsuranceCertificateViewer();
+            }
+            return super.create(member);
+        }
+
+        private class InsuranceCertificateViewer extends CEntityDecoratableForm<InsuranceCertificateSummaryDTO> {
+
+            public InsuranceCertificateViewer() {
+                super(InsuranceCertificateSummaryDTO.class);
+
+                setViewable(true);
+                inheritViewable(false);
+            }
+
+            @Override
+            public IsWidget createContent() {
+                BasicFlexFormPanel content = new BasicFlexFormPanel();
+                int row = -1;
+
+                content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().insuranceProvider(), new CLabel<String>()), 140).build());
+                content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().insuranceCertificateNumber(), new CLabel<String>()), 140).build());
+                content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().liabilityCoverage(), new CLabel<String>()), 140).build());
+                content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().inceptionDate(), new CLabel<String>()), 140).build());
+                content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().expiryDate(), new CLabel<String>()), 140).build());
+
+                return content;
+            }
+        }
+    }
 }
