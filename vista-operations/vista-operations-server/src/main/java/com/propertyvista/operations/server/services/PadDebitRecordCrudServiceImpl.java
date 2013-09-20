@@ -14,6 +14,7 @@
 package com.propertyvista.operations.server.services;
 
 import com.pyx4j.entity.server.AbstractCrudServiceDtoImpl;
+import com.pyx4j.entity.server.Persistence;
 
 import com.propertyvista.operations.domain.payment.pad.PadDebitRecord;
 import com.propertyvista.operations.rpc.dto.PadDebitRecordDTO;
@@ -29,4 +30,15 @@ public class PadDebitRecordCrudServiceImpl extends AbstractCrudServiceDtoImpl<Pa
     protected void bind() {
         bindCompleteDBO();
     }
+
+    @Override
+    protected void enhanceRetrieved(PadDebitRecord entity, PadDebitRecordDTO dto, RetrieveTarget retrieveTarget) {
+        Persistence.service().retrieve(dto.padBatch().pmc());
+    }
+
+    @Override
+    protected void enhanceListRetrieved(PadDebitRecord entity, PadDebitRecordDTO dto) {
+        Persistence.service().retrieve(dto.padBatch().pmc());
+    }
+
 }

@@ -20,6 +20,7 @@ import com.pyx4j.entity.annotations.OrderBy;
 import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.annotations.Table;
 import com.pyx4j.entity.annotations.Timestamp;
+import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.shared.AttachLevel;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
@@ -36,6 +37,7 @@ public interface PadReconciliationFile extends IEntity {
     // YYYYMMDDhhmmss_reconciliation_rpt_pad.COMPANYID
     public static String FileNameSufix = "_reconciliation_rpt";
 
+    @ToString(index = 0)
     IPrimitive<String> fileName();
 
     IPrimitive<FundsTransferType> fundsTransferType();

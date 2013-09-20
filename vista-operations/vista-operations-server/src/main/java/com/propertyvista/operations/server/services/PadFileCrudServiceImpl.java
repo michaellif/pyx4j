@@ -14,7 +14,11 @@
 package com.propertyvista.operations.server.services;
 
 import com.pyx4j.entity.server.AbstractCrudServiceDtoImpl;
+import com.pyx4j.entity.server.Persistence;
+import com.pyx4j.entity.shared.AttachLevel;
+import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 
+import com.propertyvista.operations.domain.payment.pad.PadDebitRecord;
 import com.propertyvista.operations.domain.payment.pad.PadFile;
 import com.propertyvista.operations.rpc.dto.PadFileDTO;
 import com.propertyvista.operations.rpc.services.PadFileCrudService;
@@ -28,6 +32,13 @@ public class PadFileCrudServiceImpl extends AbstractCrudServiceDtoImpl<PadFile, 
     @Override
     protected void bind() {
         bindCompleteDBO();
+    }
+
+    @Override
+    protected void enhanceRetrieved(PadFile entity, PadFileDTO dto, com.pyx4j.entity.rpc.AbstractCrudService.RetrieveTarget retrieveTarget) {
+        EntityQueryCriteria<PadDebitRecord> criteria = EntityQueryCriteria.create(PadDebitRecord.class);
+        criteria.eq(criteria.proto().padBatch().padFile(), entity);
+        dto.debitRecords().addAll(Persistence.service().query(criteria, AttachLevel.IdOnly));
     }
 
 }

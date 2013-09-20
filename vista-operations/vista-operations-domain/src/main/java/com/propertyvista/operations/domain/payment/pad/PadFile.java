@@ -25,6 +25,7 @@ import com.pyx4j.entity.annotations.OrderBy;
 import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.annotations.Table;
 import com.pyx4j.entity.annotations.Timestamp;
+import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.shared.AttachLevel;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
@@ -96,8 +97,10 @@ public interface PadFile extends IEntity {
      * Must be incremented by one for each file submitted to Caledon, Unique per Company ID and FundsTransferType
      */
     @Indexed(group = { "n,1" }, uniqueConstraint = true)
+    @ToString(index = 2)
     IPrimitive<String> fileCreationNumber();
 
+    @ToString(index = 0)
     IPrimitive<String> fileName();
 
     @Indexed(group = { "n,3" }, uniqueConstraint = true)

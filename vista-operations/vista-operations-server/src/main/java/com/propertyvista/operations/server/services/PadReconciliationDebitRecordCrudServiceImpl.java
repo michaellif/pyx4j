@@ -14,6 +14,7 @@
 package com.propertyvista.operations.server.services;
 
 import com.pyx4j.entity.server.AbstractCrudServiceDtoImpl;
+import com.pyx4j.entity.server.Persistence;
 
 import com.propertyvista.operations.domain.payment.pad.PadReconciliationDebitRecord;
 import com.propertyvista.operations.rpc.dto.PadReconciliationDebitRecordDTO;
@@ -29,6 +30,17 @@ public class PadReconciliationDebitRecordCrudServiceImpl extends AbstractCrudSer
     @Override
     protected void bind() {
         bindCompleteDBO();
+    }
+
+    @Override
+    protected void enhanceRetrieved(PadReconciliationDebitRecord entity, PadReconciliationDebitRecordDTO dto,
+            com.pyx4j.entity.rpc.AbstractCrudService.RetrieveTarget retrieveTarget) {
+        Persistence.service().retrieve(dto.reconciliationSummary().merchantAccount().pmc());
+    }
+
+    @Override
+    protected void enhanceListRetrieved(PadReconciliationDebitRecord entity, PadReconciliationDebitRecordDTO dto) {
+        Persistence.service().retrieve(dto.reconciliationSummary().merchantAccount().pmc());
     }
 
 }

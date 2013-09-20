@@ -28,8 +28,13 @@ public class PadReconciliationDebitRecordForm extends OperationsEntityForm<PadRe
         TwoColumnFlexFormPanel panel = new TwoColumnFlexFormPanel();
         int row = -1;
 
-        panel.setWidget(++row, 0, 1, new FormDecoratorBuilder(inject(proto().paymentDate())).build());
+        panel.setWidget(++row, 0, 1, new FormDecoratorBuilder(inject(proto().reconciliationSummary().merchantAccount().pmc().name())).customLabel("PMC:")
+                .build());
+        panel.setWidget(++row, 0, 1, new FormDecoratorBuilder(inject(proto().reconciliationSummary().reconciliationFile())).build());
+        panel.setWidget(++row, 0, 1, new FormDecoratorBuilder(inject(proto().reconciliationSummary().reconciliationFile().fundsTransferType())).build());
+
         panel.setWidget(++row, 0, 1, new FormDecoratorBuilder(inject(proto().merchantTerminalId())).build());
+        panel.setWidget(++row, 0, 1, new FormDecoratorBuilder(inject(proto().paymentDate())).build());
         panel.setWidget(++row, 0, 1, new FormDecoratorBuilder(inject(proto().clientId())).build());
         panel.setWidget(++row, 0, 1, new FormDecoratorBuilder(inject(proto().transactionId())).build());
         panel.setWidget(++row, 0, 1, new FormDecoratorBuilder(inject(proto().amount())).build());

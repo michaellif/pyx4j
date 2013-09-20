@@ -29,7 +29,6 @@ import com.pyx4j.entity.annotations.OrderBy;
 import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.annotations.Owner;
 import com.pyx4j.entity.annotations.ReadOnly;
-import com.pyx4j.entity.annotations.RpcTransient;
 import com.pyx4j.entity.annotations.Table;
 import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.shared.AttachLevel;
@@ -69,10 +68,9 @@ public interface PadBatch extends IEntity {
     IPrimitive<Key> merchantAccountKey();
 
     /**
-     * TBD Copy of merchantAccount at the time of Batch creation
+     * Copy of merchantAccount at the time of Batch creation
      */
     @Length(8)
-    @RpcTransient
     IPrimitive<String> merchantTerminalId();
 
     @Length(3)

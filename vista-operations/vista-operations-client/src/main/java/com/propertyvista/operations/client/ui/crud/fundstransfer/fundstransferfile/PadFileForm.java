@@ -13,11 +13,19 @@
  */
 package com.propertyvista.operations.client.ui.crud.fundstransfer.fundstransferfile;
 
+import com.pyx4j.entity.shared.IList;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
+import com.pyx4j.site.client.AppPlaceEntityMapper;
 import com.pyx4j.site.client.ui.prime.form.IForm;
+import com.pyx4j.site.client.ui.prime.misc.CEntityCollectionCrudHyperlink;
+import com.pyx4j.site.client.ui.prime.misc.CEntityCollectionCrudHyperlink.AppPlaceBuilder;
+import com.pyx4j.site.rpc.AppPlace;
+import com.pyx4j.site.rpc.CrudAppPlace;
 
 import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
 import com.propertyvista.operations.client.ui.crud.OperationsEntityForm;
+import com.propertyvista.operations.domain.payment.pad.PadDebitRecord;
+import com.propertyvista.operations.rpc.dto.PadDebitRecordDTO;
 import com.propertyvista.operations.rpc.dto.PadFileDTO;
 
 public class PadFileForm extends OperationsEntityForm<PadFileDTO> {
@@ -42,6 +50,18 @@ public class PadFileForm extends OperationsEntityForm<PadFileDTO> {
         panel.setWidget(++row, 0, 1, new FormDecoratorBuilder(inject(proto().acknowledgmentStatusCode())).build());
         panel.setWidget(++row, 0, 1, new FormDecoratorBuilder(inject(proto().acknowledgmentRejectReasonMessage())).build());
         panel.setWidget(++row, 0, 1, new FormDecoratorBuilder(inject(proto().acknowledgmentStatus())).build());
+
+        AppPlaceBuilder<IList<PadDebitRecord>> appPlaceBuilder = new AppPlaceBuilder<IList<PadDebitRecord>>() {
+            @Override
+            public AppPlace createAppPlace(IList<PadDebitRecord> value) {
+                CrudAppPlace place = AppPlaceEntityMapper.resolvePlace(PadDebitRecordDTO.class);
+                place.formListerPlace().queryArg("todo", value.getOwner().getPrimaryKey().toString());
+                return place;
+            }
+        };
+
+        CEntityCollectionCrudHyperlink<IList<PadDebitRecord>> link = new CEntityCollectionCrudHyperlink<IList<PadDebitRecord>>(appPlaceBuilder);
+        panel.setWidget(++row, 0, 1, new FormDecoratorBuilder(inject(proto().debitRecords(), link)).build());
 
         selectTab(addTab(panel));
         setTabBarVisible(false);

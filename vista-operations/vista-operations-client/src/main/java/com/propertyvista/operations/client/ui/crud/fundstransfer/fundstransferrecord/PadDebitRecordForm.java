@@ -28,6 +28,12 @@ public class PadDebitRecordForm extends OperationsEntityForm<PadDebitRecordDTO> 
         TwoColumnFlexFormPanel panel = new TwoColumnFlexFormPanel();
         int row = -1;
 
+        panel.setWidget(++row, 0, 1, new FormDecoratorBuilder(inject(proto().padBatch().pmc().name())).customLabel("PMC:").build());
+        panel.setWidget(++row, 0, 1, new FormDecoratorBuilder(inject(proto().padBatch().merchantTerminalId())).build());
+
+        panel.setWidget(++row, 0, 1, new FormDecoratorBuilder(inject(proto().padBatch().padFile())).build());
+        panel.setWidget(++row, 0, 1, new FormDecoratorBuilder(inject(proto().padBatch().padFile().fundsTransferType())).build());
+
         panel.setWidget(++row, 0, 1, new FormDecoratorBuilder(inject(proto().clientId())).build());
         panel.setWidget(++row, 0, 1, new FormDecoratorBuilder(inject(proto().amount())).build());
         panel.setWidget(++row, 0, 1, new FormDecoratorBuilder(inject(proto().bankId())).build());
