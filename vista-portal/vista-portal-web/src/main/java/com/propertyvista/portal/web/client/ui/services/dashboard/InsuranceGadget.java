@@ -132,9 +132,9 @@ public class InsuranceGadget extends AbstractGadget<ServicesDashboardViewImpl> {
 
         public InsuranceCertificatesFolder() {
             super(InsuranceCertificateSummaryDTO.class, true);
-
             setOrderable(false);
             setAddable(false);
+            setEditable(false);
         }
 
         @Override
