@@ -27,6 +27,7 @@ import com.pyx4j.commons.css.Style;
 import com.pyx4j.commons.css.Theme;
 import com.pyx4j.commons.css.ThemeColor;
 import com.pyx4j.commons.css.ThemeId;
+import com.pyx4j.widgets.client.DefaultWidgetsTheme;
 
 public abstract class DefaultEntityFolderTheme extends Theme {
 
@@ -114,6 +115,10 @@ public abstract class DefaultEntityFolderTheme extends Theme {
         style.addProperty("font-weight", "normal");
         style.addProperty("font-style", "italic");
         style.addProperty("cursor", "pointer");
+        addStyle(style);
+
+        style = new Style(".", StyleName.EntityFolderAddButton, " .", DefaultWidgetsTheme.StyleName.ButtonText);
+        style.addProperty("color", ThemeColor.foreground, 0.5);
         addStyle(style);
 
         style = new Style(".", StyleName.EntityFolderUpButton);
