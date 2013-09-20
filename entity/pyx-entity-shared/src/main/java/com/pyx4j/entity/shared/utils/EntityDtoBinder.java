@@ -203,14 +203,18 @@ public abstract class EntityDtoBinder<DBO extends IEntity, DTO extends IEntity> 
                 }
             } else if (b.binder == null) {
                 if (dboM instanceof ICollection) {
-                    ((ICollection<IEntity, ?>) dtoM).clear();
-                    for (IEntity dboMi : (ICollection<IEntity, ?>) dboM) {
-                        if (dboMi.isValueDetached() && !dtoM.getMeta().isDetached()) {
-                            if (!retriveDetachedMember(dboMi)) {
-                                throw new Error("Copying detached entity " + dboMi.getDebugExceptionInfoString());
+                    if (dboM.getAttachLevel() == AttachLevel.CollectionSizeOnly) {
+                        ((ICollection<IEntity, ?>) dtoM).setCollectionSizeOnly(((ICollection<IEntity, ?>) dboM).size());
+                    } else {
+                        ((ICollection<IEntity, ?>) dtoM).clear();
+                        for (IEntity dboMi : (ICollection<IEntity, ?>) dboM) {
+                            if (dboMi.isValueDetached() && !dtoM.getMeta().isDetached()) {
+                                if (!retriveDetachedMember(dboMi)) {
+                                    throw new Error("Copying detached entity " + dboMi.getDebugExceptionInfoString());
+                                }
                             }
+                            ((ICollection<IEntity, ?>) dtoM).add(dboMi);
                         }
-                        ((ICollection<IEntity, ?>) dtoM).add(dboMi);
                     }
                 } else if (dboM.getAttachLevel() == AttachLevel.IdOnly) {
                     if (!((IEntity) dboM).isObjectClassSameAsDef()) {
@@ -256,10 +260,14 @@ public abstract class EntityDtoBinder<DBO extends IEntity, DTO extends IEntity> 
             } else if (b.binder == null) {
                 if (dtoM instanceof ICollection) {
                     ICollection<IEntity, ?> dboMc = (ICollection<IEntity, ?>) dboM;
-                    dboMc.setAttachLevel(AttachLevel.Attached);
-                    dboMc.clear();
-                    for (IEntity dtoMi : (ICollection<IEntity, ?>) dtoM) {
-                        ((ICollection<IEntity, ?>) dboM).add(dtoMi);
+                    if (dtoM.getAttachLevel() == AttachLevel.CollectionSizeOnly) {
+                        dboMc.setCollectionSizeOnly(((ICollection<IEntity, ?>) dtoM).size());
+                    } else {
+                        dboMc.setAttachLevel(AttachLevel.Attached);
+                        dboMc.clear();
+                        for (IEntity dtoMi : (ICollection<IEntity, ?>) dtoM) {
+                            ((ICollection<IEntity, ?>) dboM).add(dtoMi);
+                        }
                     }
                 } else if (dtoM.getAttachLevel() == AttachLevel.IdOnly) {
                     if (!((IEntity) dtoM).isObjectClassSameAsDef()) {

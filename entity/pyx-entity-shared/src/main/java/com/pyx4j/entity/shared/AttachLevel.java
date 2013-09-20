@@ -22,14 +22,14 @@ package com.pyx4j.entity.shared;
 
 import java.io.Serializable;
 
-
-//TODO implement this
 public enum AttachLevel implements Serializable {
 
     /**
      * Data not retrieved.
      */
     Detached,
+
+    CollectionSizeOnly,
 
     /**
      * Only PrimaryKey and type information is present, other data was not retrieved.

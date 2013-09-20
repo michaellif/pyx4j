@@ -292,17 +292,6 @@ public class ListHandler<TYPE extends IEntity> extends AbstractCollectionHandler
     }
 
     @Override
-    public int size() {
-        List<?> value = getValue();
-        if (value != null) {
-            assert (value != this) : "IList structure error in " + exceptionInfo();
-            return value.size();
-        } else {
-            return 0;
-        }
-    }
-
-    @Override
     public List<TYPE> subList(int fromIndex, int toIndex) {
         // TODO implement this
         throw new UnsupportedOperationException();

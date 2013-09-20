@@ -291,6 +291,16 @@ public class XMLEntityWriter {
                 break;
             case EntitySet:
             case EntityList:
+                if (member.getAttachLevel() == AttachLevel.CollectionSizeOnly) {
+                    if (isEmitAttachLevel()) {
+                        Map<String, String> collectionAttributes = new LinkedHashMap<String, String>();
+                        collectionAttributes.put("attachLevel", AttachLevel.CollectionSizeOnly.name());
+                        collectionAttributes.put("size", String.valueOf(((ICollection<?, ?>) member).size()));
+                        xml.writeEmpty(memberName, collectionAttributes);
+                    }
+                    continue;
+                }
+
                 if (!((ICollection<?, ?>) member).isEmpty()) {
                     xml.startIdented(memberName);
                     for (Object item : (ICollection<?, ?>) member) {
@@ -327,7 +337,11 @@ public class XMLEntityWriter {
     }
 
     protected boolean emitMember(IEntity entity, String memberName, IObject<?> member) {
-        return !member.isNull();
+        if (member.getAttachLevel() == AttachLevel.CollectionSizeOnly) {
+            return true;
+        } else {
+            return !member.isNull();
+        }
     }
 
     protected String getValueAsString(Object value) {

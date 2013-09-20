@@ -33,11 +33,10 @@ import com.pyx4j.commons.Key;
 import com.pyx4j.config.server.rpc.IServiceFilter;
 import com.pyx4j.entity.rpc.EntitySearchResult;
 import com.pyx4j.entity.shared.AttachLevel;
+import com.pyx4j.entity.shared.ICollection;
 import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.entity.shared.IPrimitiveSet;
-import com.pyx4j.entity.shared.ISet;
 import com.pyx4j.entity.shared.meta.EntityMeta;
 import com.pyx4j.entity.shared.meta.MemberMeta;
 import com.pyx4j.rpc.shared.DevInfoUnRecoverableRuntimeException;
@@ -146,12 +145,12 @@ public class RpcEntityServiceFilter implements IServiceFilter {
                 }
                 if (memberMeta.isEntity()) {
                     filterMembers((IEntity) entity.getMember(memberName), processed, in);
-                } else if (ISet.class.isAssignableFrom(memberMeta.getObjectClass())) {
-                    for (IEntity value : (ISet<?>) entity.getMember(memberName)) {
-                        filterMembers(value, processed, in);
+                } else if (ICollection.class.isAssignableFrom(memberMeta.getObjectClass())) {
+                    if (me.getValue() instanceof Integer) {
+                        // AttachLevel.CollectionSizeOnly
+                        continue;
                     }
-                } else if (IList.class.isAssignableFrom(memberMeta.getObjectClass())) {
-                    for (IEntity value : (IList<?>) entity.getMember(memberName)) {
+                    for (IEntity value : (ICollection<?, ?>) entity.getMember(memberName)) {
                         filterMembers(value, processed, in);
                     }
                 } else if (IPrimitive.class.isAssignableFrom(memberMeta.getObjectClass())) {

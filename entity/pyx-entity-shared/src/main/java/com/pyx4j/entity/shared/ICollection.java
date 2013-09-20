@@ -38,6 +38,14 @@ public interface ICollection<TYPE extends IEntity, VALUE_TYPE> extends IObject<V
 
     public void set(ICollection<TYPE, VALUE_TYPE> typedCollection);
 
+    /**
+     * Make collection AttachLevel.CollectionSizeOnly the same as Detached
+     * 
+     * @param size
+     *            the value that will be returned by for size();
+     */
+    public void setCollectionSizeOnly(int size);
+
     public String toStringIds();
 
     public boolean containsAny(TYPE... value);

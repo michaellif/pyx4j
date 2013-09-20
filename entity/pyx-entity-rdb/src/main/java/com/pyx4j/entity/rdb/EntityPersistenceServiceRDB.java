@@ -810,7 +810,9 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
             }
 
             for (MemberOperationsMeta member : tm.operationsMeta().getDetachedMembers()) {
-                if ((member.getMember(entity).getAttachLevel() != AttachLevel.Detached) && (member.getMember(entity).isNull())) {
+                if (member.getMember(entity).getAttachLevel() == AttachLevel.CollectionSizeOnly) {
+                    member.getMember(entity).setAttachLevel(AttachLevel.Detached);
+                } else if ((member.getMember(entity).getAttachLevel() != AttachLevel.Detached) && (member.getMember(entity).isNull())) {
                     member.getMember(entity).setAttachLevel(AttachLevel.Detached);
                 }
             }
@@ -1345,13 +1347,14 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
             // There are no distinction in IdOnly/Attached  for now
             //TODO throw new RuntimeException("Values of " + collectionMember.getPath() + " already Attached");
             retrieve(collectionMember);
-
+            break;
         case IdOnly: // This is not implemented now.
         case ToStringMembers:
             retrieve(collectionMember, attachLevel);
             collectionMember.setAttachLevel(AttachLevel.Attached);
             break;
 
+        case CollectionSizeOnly:
         case Detached:
             assert (collectionMember.getOwner().getPrimaryKey() != null);
             startCallContext(ConnectionReason.forRead);
@@ -1360,10 +1363,15 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
                 //TODO collectionMember.setAttachLevel(AttachLevel.IdOnly);
                 collectionMember.setAttachLevel(AttachLevel.Attached);
                 tm.retrieveMember(getPersistenceContext(), collectionMember.getOwner(), collectionMember);
-                for (IEntity childEntity : collectionMember) {
-                    if (cascadeRetrieve(childEntity, attachLevel) == null) {
-                        throw new RuntimeException("Entity '" + childEntity.getEntityMeta().getCaption() + "' " + childEntity.getPrimaryKey() + " "
-                                + childEntity.getPath() + " NotFound");
+                if (attachLevel == AttachLevel.CollectionSizeOnly) {
+                    // TODO run count only query
+                    collectionMember.setCollectionSizeOnly(collectionMember.size());
+                } else {
+                    for (IEntity childEntity : collectionMember) {
+                        if (cascadeRetrieve(childEntity, attachLevel) == null) {
+                            throw new RuntimeException("Entity '" + childEntity.getEntityMeta().getCaption() + "' " + childEntity.getPrimaryKey() + " "
+                                    + childEntity.getPath() + " NotFound");
+                        }
                     }
                 }
             } finally {

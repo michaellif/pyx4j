@@ -58,14 +58,44 @@ public abstract class AbstractCollectionHandler<TYPE extends IEntity, VALUE_TYPE
         return EntityFactory.create(getValueClass(), this, getFieldName());
     }
 
+    protected Object getDetachedValue() {
+        Map<String, Serializable> data = getOwner().getValue();
+        if (data == null) {
+            return null;
+        } else {
+            return data.get(getFieldName());
+        }
+    }
+
+    @Override
+    public int size() {
+        Object value = getDetachedValue();
+        if (value instanceof Integer) {
+            // AttachLevel.CollectionSizeOnly
+            return (Integer) value;
+        } else if (value == null) {
+            return 0;
+        } else {
+            assert (value != this) : "ICollection structure error in " + exceptionInfo();
+            return ((Collection<?>) getValue()).size();
+        }
+    }
+
     @Override
     public AttachLevel getAttachLevel() {
-        Map<String, Serializable> data = getOwner().getValue();
-        if ((data != null) && (data.get(getFieldName()) == AttachLevel.Detached)) {
+        Object value = getDetachedValue();
+        if (value instanceof Integer) {
+            return AttachLevel.CollectionSizeOnly;
+        } else if (value == AttachLevel.Detached) {
             return AttachLevel.Detached;
         } else {
             return AttachLevel.Attached;
         }
+    }
+
+    @Override
+    public void setCollectionSizeOnly(int size) {
+        getOwner().setMemberValue(getFieldName(), Integer.valueOf(size));
     }
 
     @Override
@@ -80,6 +110,8 @@ public abstract class AbstractCollectionHandler<TYPE extends IEntity, VALUE_TYPE
         case Detached:
             getOwner().setMemberValue(getFieldName(), AttachLevel.Detached);
             break;
+        case CollectionSizeOnly:
+            throw new IllegalArgumentException("Use setCollectionSizeOnly");
         default:
             throw new IllegalArgumentException();
         }
@@ -158,7 +190,19 @@ public abstract class AbstractCollectionHandler<TYPE extends IEntity, VALUE_TYPE
 
     @Override
     public void set(ICollection<TYPE, VALUE_TYPE> typedCollection) {
-        setValue(typedCollection.getValue());
+        switch (typedCollection.getAttachLevel()) {
+        case CollectionSizeOnly:
+            setCollectionSizeOnly(typedCollection.size());
+            break;
+        case Detached:
+            setAttachLevel(AttachLevel.Detached);
+            break;
+        case Attached:
+            setValue(typedCollection.getValue());
+            break;
+        default:
+            throw new IllegalArgumentException();
+        }
     }
 
     protected String exceptionInfo() {

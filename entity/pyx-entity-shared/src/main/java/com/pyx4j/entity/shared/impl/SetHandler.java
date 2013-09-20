@@ -79,14 +79,12 @@ public class SetHandler<TYPE extends IEntity> extends AbstractCollectionHandler<
     @SuppressWarnings("unchecked")
     @Override
     public Set<Map<String, Serializable>> getValue() {
-        Map<String, Serializable> data = getOwner().getValue();
-        if (data == null) {
+        Object value = getDetachedValue();
+        if (value == null) {
             return null;
-        } else {
-            Object value = data.get(getFieldName());
-            assert (value != AttachLevel.Detached) : "Access to detached ISet " + exceptionInfo();
-            return (Set<Map<String, Serializable>>) value;
         }
+        assert (value != AttachLevel.Detached) : "Access to detached ISet " + exceptionInfo();
+        return (Set<Map<String, Serializable>>) value;
     }
 
     @Override
@@ -232,16 +230,6 @@ public class SetHandler<TYPE extends IEntity> extends AbstractCollectionHandler<
     public boolean retainAll(Collection<?> c) {
         // TODO implement this
         throw new UnsupportedOperationException();
-    }
-
-    @Override
-    public int size() {
-        Set<?> set = getValue();
-        if (set != null) {
-            return set.size();
-        } else {
-            return 0;
-        }
     }
 
 }
