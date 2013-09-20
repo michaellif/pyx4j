@@ -14,6 +14,7 @@
 package com.propertyvista.portal.web.client.ui.services.dashboard;
 
 import com.google.gwt.dom.client.Style.FontWeight;
+import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.IsWidget;
 
@@ -30,14 +31,17 @@ import com.pyx4j.forms.client.ui.folder.IFolderItemDecorator;
 import com.pyx4j.forms.client.ui.folder.ItemActionsBar.ActionType;
 import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.widgets.client.Button;
 import com.pyx4j.widgets.client.Label;
 
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
 import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
 import com.propertyvista.domain.payment.PaymentMethod;
 import com.propertyvista.portal.rpc.portal.web.dto.PaymentMethodInfoDTO;
+import com.propertyvista.portal.rpc.portal.web.dto.insurance.TenantSureAgreementDTO;
 import com.propertyvista.portal.rpc.portal.web.dto.insurance.status.InsuranceCertificateSummaryDTO;
 import com.propertyvista.portal.rpc.portal.web.dto.insurance.status.InsuranceStatusDTO;
+import com.propertyvista.portal.rpc.portal.web.dto.insurance.status.TenantSureCertificateSummaryDTO;
 import com.propertyvista.portal.web.client.resources.PortalImages;
 import com.propertyvista.portal.web.client.ui.AbstractGadget;
 import com.propertyvista.portal.web.client.ui.util.decorators.FormDecoratorBuilder;
@@ -149,6 +153,8 @@ public class InsuranceGadget extends AbstractGadget<ServicesDashboardViewImpl> {
 
         private class InsuranceCertificateViewer extends CEntityDecoratableForm<InsuranceCertificateSummaryDTO> {
 
+            private Button detailsButton;
+
             public InsuranceCertificateViewer() {
                 super(InsuranceCertificateSummaryDTO.class);
 
@@ -161,14 +167,38 @@ public class InsuranceGadget extends AbstractGadget<ServicesDashboardViewImpl> {
                 BasicFlexFormPanel content = new BasicFlexFormPanel();
                 int row = -1;
 
-                content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().insuranceProvider(), new CLabel<String>()), 140).build());
-                content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().insuranceCertificateNumber(), new CLabel<String>()), 140).build());
-                content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().liabilityCoverage(), new CLabel<String>()), 140).build());
-                content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().inceptionDate(), new CLabel<String>()), 140).build());
-                content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().expiryDate(), new CLabel<String>()), 140).build());
+                content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().insuranceProvider(), new CLabel<String>()), 180).build());
+                content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().insuranceCertificateNumber(), new CLabel<String>()), 180).build());
+                content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().liabilityCoverage(), new CLabel<String>()), 180).build());
+                content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().inceptionDate(), new CLabel<String>()), 180).build());
+                content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().expiryDate(), new CLabel<String>()), 180).build());
+
+                detailsButton = new Button(i18n.tr("View Details"), new Command() {
+
+                    @Override
+                    public void execute() {
+                        System.out.println("+++++++++View Details");
+                    }
+                });
+                detailsButton.getElement().getStyle().setMarginTop(30, Unit.PX);
+
+                detailsButton.setVisible(false);
+                content.setWidget(++row, 0, detailsButton);
 
                 return content;
             }
+
+            @Override
+            protected void onValueSet(boolean populate) {
+                super.onValueSet(populate);
+                if (getValue().isInstanceOf(TenantSureCertificateSummaryDTO.class)) {
+                    detailsButton.setVisible(true);
+                } else {
+                    detailsButton.setVisible(false);
+                }
+            }
         }
+
     }
+
 }

@@ -68,20 +68,6 @@ public class PortalWebRootPaneTheme extends Theme {
         style.addProperty("height", "60px");
         addStyle(style);
 
-        style = new Style(".", StyleName.MainToolbar, " .", DefaultWidgetsTheme.StyleName.Button);
-        style.addProperty("height", "2.6em");
-        style.addGradient(ThemeColor.foreground, 1, ThemeColor.foreground, 0.95);
-        style.addProperty("background", ThemeColor.foreground, 0.7);
-        style.addProperty("border-color", ThemeColor.foreground, 0.75);
-        style.addProperty("border-radius", "5px");
-        style.addProperty("margin", "0  0 0 10px");
-        addStyle(style);
-
-        style = new Style(".", StyleName.MainToolbar, " .", DefaultWidgetsTheme.StyleName.ButtonText);
-        style.addProperty("color", ThemeColor.foreground, 0.1);
-        style.addProperty("line-height", "2.6em");
-        addStyle(style);
-
         style = new Style(".", StyleName.MainToolbar, " .", DefaultWidgetsTheme.StyleName.Toolbar);
         style.addProperty("margin", "8px 10px 0 8px");
         style.addProperty("display", "inline-block");

@@ -81,6 +81,26 @@ public class PortalWebTheme extends Theme {
                 addStyle(style);
             };
 
+            @Override
+            protected void initButtonStyle() {
+                super.initButtonStyle();
+
+                Style style = new Style(" .", DefaultWidgetsTheme.StyleName.Button);
+                style.addProperty("height", "2.6em");
+                style.addGradient(ThemeColor.foreground, 1, ThemeColor.foreground, 0.95);
+                style.addProperty("background", ThemeColor.foreground, 0.7);
+                style.addProperty("border-color", ThemeColor.foreground, 0.75);
+                style.addProperty("border-radius", "5px");
+                style.addProperty("margin", "0  0 0 10px");
+                addStyle(style);
+
+                style = new Style(" .", DefaultWidgetsTheme.StyleName.ButtonText);
+                style.addProperty("color", ThemeColor.foreground, 0.1);
+                style.addProperty("line-height", "2.6em");
+                addStyle(style);
+
+            }
+
         });
 
         addTheme(new DefaultWidgetDecoratorTheme() {
@@ -204,12 +224,12 @@ public class PortalWebTheme extends Theme {
                 style.addProperty("padding", "10px");
                 style.addProperty("margin", "10px");
                 style.addProperty("overflow", "hidden");
-                style.addProperty("font-size", "1.3em");
                 style.addProperty("font-weight", "bold");
                 addStyle(style);
 
                 style = new Style(".", StyleName.FormDecoratorCaption);
                 style.addProperty("float", "left");
+                style.addProperty("font-size", "1.3em");
                 style.addProperty("line-height", "40px");
                 addStyle(style);
 
@@ -229,15 +249,6 @@ public class PortalWebTheme extends Theme {
                 style.addProperty("padding", "10px");
                 style.addProperty("margin", "10px");
                 style.addProperty("overflow", "hidden");
-                addStyle(style);
-
-                style = new Style(".", StyleName.FormDecorator, " .", DefaultWidgetsTheme.StyleName.Toolbar, " .", DefaultWidgetsTheme.StyleName.Button);
-                style.addProperty("width", "100%");
-                style.addProperty("line-height", "40px");
-                style.addProperty("background", "#aaa");
-                style.addProperty("border-radius", "5px");
-                style.addProperty("border", "none");
-                style.addProperty("color", ThemeColor.foreground, 0.01);
                 addStyle(style);
 
                 super.initContentStyles();

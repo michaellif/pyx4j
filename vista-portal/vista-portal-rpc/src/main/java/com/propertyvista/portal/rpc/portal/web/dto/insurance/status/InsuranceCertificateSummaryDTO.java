@@ -30,7 +30,7 @@ import com.pyx4j.entity.shared.IPrimitive;
 
 @AbstractEntity
 @Transient
-@ToStringFormat("{0} {1}")
+@ToStringFormat("{0} ({1})")
 public interface InsuranceCertificateSummaryDTO extends IEntity {
 
     @ToString(index = 0)
