@@ -51,10 +51,15 @@ public class AutoPayReviewDeferredProcess extends AbstractDeferredProcess {
                 for (ReviewedPapDTO preauthorizedPaymentChanges : acceptedReviews.acceptedReviewedPaps()) {
                     ServerSideFactory.create(PaymentMethodFacade.class).persitPreauthorizedPaymentReview(preauthorizedPaymentChanges);
                     progress.addAndGet(1);
+                    if (canceled) {
+                        break;
+                    }
+
                 }
                 return null;
             }
         });
+        completed = true;
     }
 
     @Override

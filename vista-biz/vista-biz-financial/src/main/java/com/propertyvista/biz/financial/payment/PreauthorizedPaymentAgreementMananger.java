@@ -142,6 +142,7 @@ class PreauthorizedPaymentAgreementMananger {
                 preauthorizedPaymentChanges.papId().getPrimaryKey());
 
         PreauthorizedPayment newPreauthorizedPayment = EntityGraph.businessDuplicate(origPreauthorizedPayment);
+        newPreauthorizedPayment.expiring().setValue(null);
         newPreauthorizedPayment.coveredItems().clear();
 
         boolean hsCharges = false;
@@ -155,7 +156,7 @@ class PreauthorizedPaymentAgreementMananger {
                 hsCharges = true;
             }
         }
-
+        deletePreauthorizedPayment(origPreauthorizedPayment);
         if (hsCharges) {
             Persistence.ensureRetrieve(origPreauthorizedPayment.tenant(), AttachLevel.Attached);
             LogicalDate nextPaymentDate = ServerSideFactory.create(PaymentMethodFacade.class).getNextPreauthorizedPaymentDate(
@@ -167,8 +168,6 @@ class PreauthorizedPaymentAgreementMananger {
             Persistence.service().merge(newPreauthorizedPayment);
             ServerSideFactory.create(AuditFacade.class).updated(newPreauthorizedPayment,
                     EntityDiff.getChanges(origPreauthorizedPayment, newPreauthorizedPayment));
-        } else {
-            deletePreauthorizedPayment(origPreauthorizedPayment);
         }
     }
 
