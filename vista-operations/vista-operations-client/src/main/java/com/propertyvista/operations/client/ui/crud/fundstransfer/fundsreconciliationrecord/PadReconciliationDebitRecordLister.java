@@ -25,7 +25,7 @@ public class PadReconciliationDebitRecordLister extends AbstractLister<PadReconc
         setAllowZoomIn(true);
 
         setColumnDescriptors(//@formatter:off       
-                    new MemberColumnDescriptor.Builder(proto().reconciliationSummary().reconciliationFile().id()).searchableOnly().build(),    
+                    new MemberColumnDescriptor.Builder(proto().reconciliationSummary().reconciliationFile().id()).columnTitle("File Id").searchableOnly().build(),    
                     new MemberColumnDescriptor.Builder(proto().reconciliationSummary().reconciliationFile().fileName()).build(),
                     new MemberColumnDescriptor.Builder(proto().reconciliationSummary().merchantAccount().pmc()).build(),
                     new MemberColumnDescriptor.Builder(proto().reconciliationSummary().merchantAccount().pmc().namespace()).visible(false).build(),

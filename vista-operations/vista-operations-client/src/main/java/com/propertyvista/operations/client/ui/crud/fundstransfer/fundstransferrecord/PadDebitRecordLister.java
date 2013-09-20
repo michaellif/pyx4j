@@ -25,7 +25,7 @@ public class PadDebitRecordLister extends AbstractLister<PadDebitRecordDTO> {
         setAllowZoomIn(true);
 
         setColumnDescriptors(//@formatter:off
-                    new MemberColumnDescriptor.Builder(proto().padBatch().padFile().id()).searchableOnly().build(),    
+                    new MemberColumnDescriptor.Builder(proto().padBatch().padFile().id()).columnTitle("File Id").searchableOnly().build(),    
                     new MemberColumnDescriptor.Builder(proto().padBatch().padFile().fileName(), false).build(),
                     new MemberColumnDescriptor.Builder(proto().padBatch().padFile().status(), false).columnTitle("File status").build(),
                     new MemberColumnDescriptor.Builder(proto().padBatch().padFile().fundsTransferType()).build(),
