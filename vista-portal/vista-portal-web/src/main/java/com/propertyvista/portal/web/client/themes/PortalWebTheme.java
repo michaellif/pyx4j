@@ -89,6 +89,7 @@ public class PortalWebTheme extends Theme {
                 style.addProperty("height", "2.6em");
                 style.addGradient(ThemeColor.foreground, 1, ThemeColor.foreground, 0.95);
                 style.addProperty("background", ThemeColor.foreground, 0.7);
+                style.addProperty("border", "none");
                 style.addProperty("border-color", ThemeColor.foreground, 0.75);
                 style.addProperty("border-radius", "5px");
                 style.addProperty("margin", "0  0 0 10px");
@@ -97,6 +98,17 @@ public class PortalWebTheme extends Theme {
                 style = new Style(" .", DefaultWidgetsTheme.StyleName.ButtonText);
                 style.addProperty("color", ThemeColor.foreground, 0.1);
                 style.addProperty("line-height", "2.6em");
+                addStyle(style);
+
+            }
+
+            @Override
+            protected void initToolbarStyle() {
+                super.initToolbarStyle();
+
+                Style style = new Style(".", DefaultWidgetsTheme.StyleName.ToolbarItem);
+                style.addProperty("text-align", "center");
+                style.addProperty("font-size", "0.9em");
                 addStyle(style);
 
             }

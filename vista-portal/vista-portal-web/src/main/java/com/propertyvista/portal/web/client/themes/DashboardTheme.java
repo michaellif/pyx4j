@@ -82,18 +82,13 @@ public class DashboardTheme extends Theme {
         addStyle(style);
 
         style = new Style(".", StyleName.Gadget, " .", DefaultWidgetsTheme.StyleName.ToolbarItem);
-        style.addProperty("margin", "10px 10px 0 10px");
-        style.addProperty("text-align", "center");
-        style.addProperty("font-size", "0.9em");
         addStyle(style);
 
         style = new Style(".", StyleName.Gadget, " .", DefaultWidgetsTheme.StyleName.ToolbarItem, " .", DefaultWidgetsTheme.StyleName.Button);
         style.addProperty("width", "250px");
-        style.addProperty("line-height", "40px");
         style.addProperty("background", "none");
-        style.addProperty("border-radius", "5px");
-        style.addProperty("border", "none");
         style.addProperty("color", ThemeColor.foreground, 0.01);
+        style.addProperty("margin", "10px 10px 0 10px");
         addStyle(style);
 
     }
