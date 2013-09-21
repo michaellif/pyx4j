@@ -65,17 +65,17 @@ public class ServicesDashboardActivity extends SecurityAwareActivity implements 
 
     @Override
     public void buyTenantSure() {
-        AppSite.getPlaceController().goTo(new PortalSiteMap.Resident.ResidentServices.TenantInsurance.TenantSure.TenantSurePurchase());
+        AppSite.getPlaceController().goTo(new PortalSiteMap.Resident.ResidentServices.TenantInsurance.TenantSure.TenantSureOrderWizard());
     }
 
     @Override
     public void addThirdPartyTenantInsuranceCertificate() {
-        AppSite.getPlaceController().goTo(new PortalSiteMap.Resident.ResidentServices.TenantInsurance.Other.UploadCertificate());
+        AppSite.getPlaceController().goTo(new PortalSiteMap.Resident.ResidentServices.TenantInsurance.GeneralCertificateUploadWizard());
     }
 
     @Override
     public void updateThirdPartyTenantInsuranceCeritificate() {
-        AppSite.getPlaceController().goTo(new PortalSiteMap.Resident.ResidentServices.TenantInsurance.Other.UploadCertificate());
+        AppSite.getPlaceController().goTo(new PortalSiteMap.Resident.ResidentServices.TenantInsurance.GeneralCertificateUploadWizard());
     }
 
     @Override
@@ -90,7 +90,7 @@ public class ServicesDashboardActivity extends SecurityAwareActivity implements 
 
     @Override
     public void updateCreditCardDetails() {
-        AppSite.getPlaceController().goTo(new PortalSiteMap.Resident.ResidentServices.TenantInsurance.TenantSure.Management.UpdateCreditCard());
+        AppSite.getPlaceController().goTo(new PortalSiteMap.Resident.ResidentServices.TenantInsurance.TenantSure.TenantSurePage.UpdateCreditCard());
     }
 
     @Override

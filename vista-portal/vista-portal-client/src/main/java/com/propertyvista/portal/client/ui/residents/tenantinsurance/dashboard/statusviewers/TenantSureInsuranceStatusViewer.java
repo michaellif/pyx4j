@@ -67,7 +67,7 @@ public class TenantSureInsuranceStatusViewer extends CViewer<TenantSureCertifica
             Anchor goToTenantSureScreen = new Anchor(i18n.tr("Go To TenantSure Management Page"), new Command() {
                 @Override
                 public void execute() {
-                    AppSite.getPlaceController().goTo(new PortalSiteMap.Resident.ResidentServices.TenantInsurance.TenantSure.Management());
+                    AppSite.getPlaceController().goTo(new PortalSiteMap.Resident.ResidentServices.TenantInsurance.TenantSure.TenantSurePage());
                 }
             });
             contentPanel.add(goToTenantSureScreen);

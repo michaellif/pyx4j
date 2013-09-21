@@ -187,12 +187,33 @@ public class PortalSiteMap implements SiteMap {
 
             public static class TenantInsurance extends AppPlace {
 
-                /** this place is displayed to people who don't have tenant insurance */
-                public static class ProvideTenantInsurance extends AppPlace {
+                /** This place is for updating insurance other than TenantSure */
+                public static class GeneralCertificateUploadWizard extends AppPlace {
+                    {
+                        setStable(false);
+                    }
+                }
+
+                public static class GeneralCertificatePage extends AppPlace {
 
                 }
 
                 public static class TenantSure {
+
+                    @PlaceProperties(navigLabel = "Get TenantSure", caption = "Get TenantSure")
+                    public static class TenantSureOrderWizard extends AppPlace {
+
+                    }
+
+                    @PlaceProperties(navigLabel = "TenantSure Management", caption = "TenantSure Management")
+                    public static class TenantSurePage extends AppPlace {
+
+                        @PlaceProperties(caption = "Update Credit Card")
+                        public static class UpdateCreditCard extends AppPlace {
+
+                        }
+
+                    }
 
                     @PlaceProperties(caption = "Tenant Sure Contact Info")
                     public static class About extends AppPlace implements PublicPlace {
@@ -204,38 +225,13 @@ public class PortalSiteMap implements SiteMap {
 
                     }
 
-                    @PlaceProperties(navigLabel = "TenantSure Management", caption = "TenantSure Management")
-                    public static class Management extends AppPlace {
-
-                        @PlaceProperties(caption = "Update Credit Card")
-                        public static class UpdateCreditCard extends AppPlace {
-
-                        }
-
-                    }
-
-                    @PlaceProperties(navigLabel = "Get TenantSure", caption = "Get TenantSure")
-                    public static class TenantSurePurchase extends AppPlace {
-
-                    }
-
                 }
 
-                public static class Other {
-
-                    /** This place is for updating insurance other than TenantSure */
-                    public static class UploadCertificate extends AppPlace {
-                        {
-                            setStable(false);
-                        }
-                    }
-
+                /** this place is displayed to people who don't have tenant insurance */
+                @Deprecated
+                public static class ProvideTenantInsurance extends AppPlace {
                 }
 
-                @PlaceProperties(caption = "Tenant Insurance")
-                public static class CoveredByOtherTenant extends AppPlace {
-
-                }
             }
         }
     }

@@ -49,7 +49,7 @@ public class TenantSureManagementActivity extends AbstractActivity implements Te
 
     @Override
     public void updateCreditCardDetails() {
-        AppSite.getPlaceController().goTo(new PortalSiteMap.Resident.ResidentServices.TenantInsurance.TenantSure.Management.UpdateCreditCard());
+        AppSite.getPlaceController().goTo(new PortalSiteMap.Resident.ResidentServices.TenantInsurance.TenantSure.TenantSurePage.UpdateCreditCard());
     }
 
     @Override

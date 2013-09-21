@@ -57,7 +57,7 @@ public class NoTenantInsuranceStatusViewer extends CViewer<InsuranceStatusDTO> {
             public void execute() {
                 AppSite.getPlaceController().goTo(
                         VistaFeatures.instance().tenantSure() ? new PortalSiteMap.Resident.ResidentServices.TenantInsurance.ProvideTenantInsurance()
-                                : new PortalSiteMap.Resident.ResidentServices.TenantInsurance.Other.UploadCertificate());
+                                : new PortalSiteMap.Resident.ResidentServices.TenantInsurance.GeneralCertificateUploadWizard());
             }
         });
         goToInsuranceScreenAnchor.addStyleName(TenantInsuranceStatusViewer.Styles.TenantInsuranceAnchor.name());
