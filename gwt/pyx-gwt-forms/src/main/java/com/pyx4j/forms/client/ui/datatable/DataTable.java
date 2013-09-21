@@ -21,6 +21,7 @@
 package com.pyx4j.forms.client.ui.datatable;
 
 import java.util.ArrayList;
+import java.util.ConcurrentModificationException;
 import java.util.Iterator;
 import java.util.List;
 
@@ -446,7 +447,14 @@ public class DataTable<E extends IEntity> extends FlexTable implements DataTable
                     return false;
                 }
 
-                DataItem<E> dataItem = dataIterator.next();
+                DataItem<E> dataItem;
+                try {
+                    dataItem = dataIterator.next();
+                } catch (ConcurrentModificationException e) {
+                    // this may happen in hosted mode when data changed.
+                    log.debug("Data Changed, discard render");
+                    return false;
+                }
 
                 int colIndex = 0;
                 if (hasCheckboxColumn()) {
