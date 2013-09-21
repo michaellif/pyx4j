@@ -1,5 +1,5 @@
 /*
- * (C) Copyright Property Vista Software Inc. 2011-2012 All Rights Reserved.
+ * (C) Copyright Property Vista Software Inc. 2011- All Rights Reserved.
  *
  * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
  * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
@@ -7,16 +7,19 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on 2013-04-02
- * @author VladL
+ * Created on May 14, 2011
+ * @author Dad
  * @version $Id$
  */
-package com.propertyvista.portal.rpc.portal.web.services.services;
-
-import com.pyx4j.entity.rpc.AbstractCrudService;
+package com.propertyvista.portal.web.client.ui.services.insurance;
 
 import com.propertyvista.portal.rpc.portal.web.dto.insurance.GeneralInsuranceCertificateDTO;
+import com.propertyvista.portal.web.client.ui.IEditorView;
 
-public interface UploadInsuranceCertificateWizardService extends AbstractCrudService<GeneralInsuranceCertificateDTO> {
+public interface GeneralCertificatePageView extends IEditorView<GeneralInsuranceCertificateDTO> {
+
+    public interface GeneralCertificatePagePresenter extends IEditorPresenter<GeneralInsuranceCertificateDTO> {
+
+    }
 
 }

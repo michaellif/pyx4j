@@ -33,9 +33,9 @@ public class EmergencyContactFolder extends CEntityFolder<EmergencyContact> {
 
     private static final I18n i18n = I18n.get(EmergencyContactFolder.class);
 
-    private final ProfileEditorViewImpl view;
+    private final ProfilePageViewImpl view;
 
-    public EmergencyContactFolder(ProfileEditorViewImpl view) {
+    public EmergencyContactFolder(ProfilePageViewImpl view) {
         super(EmergencyContact.class);
         this.view = view;
         setOrderable(true);
@@ -57,7 +57,7 @@ public class EmergencyContactFolder extends CEntityFolder<EmergencyContact> {
     @Override
     public CComponent<?> create(IObject<?> member) {
         if (member instanceof EmergencyContact) {
-            return new EmergencyContactEditor(view);
+            return new EmergencyContactForm(view);
         } else {
             return super.create(member);
         }

@@ -25,13 +25,13 @@ import com.propertyvista.domain.tenant.EmergencyContact;
 import com.propertyvista.portal.web.client.ui.AbstractPortalPanel;
 import com.propertyvista.portal.web.client.ui.util.decorators.FormDecoratorBuilder;
 
-public class EmergencyContactEditor extends CEntityForm<EmergencyContact> {
+public class EmergencyContactForm extends CEntityForm<EmergencyContact> {
 
-    private static final I18n i18n = I18n.get(EmergencyContactEditor.class);
+    private static final I18n i18n = I18n.get(EmergencyContactForm.class);
 
-    private final ProfileEditorViewImpl view;
+    private final ProfilePageViewImpl view;
 
-    public EmergencyContactEditor(ProfileEditorViewImpl view) {
+    public EmergencyContactForm(ProfilePageViewImpl view) {
         super(EmergencyContact.class);
         this.view = view;
     }

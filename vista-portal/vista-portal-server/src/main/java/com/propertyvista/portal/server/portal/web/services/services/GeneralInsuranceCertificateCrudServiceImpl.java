@@ -20,9 +20,9 @@ import com.pyx4j.entity.rpc.EntitySearchResult;
 import com.pyx4j.entity.shared.criterion.EntityListCriteria;
 
 import com.propertyvista.portal.rpc.portal.web.dto.insurance.GeneralInsuranceCertificateDTO;
-import com.propertyvista.portal.rpc.portal.web.services.services.UploadInsuranceCertificateWizardService;
+import com.propertyvista.portal.rpc.portal.web.services.services.GeneralInsuranceCertificateCrudService;
 
-public class UploadInsuranceCertificateWizardServiceImpl implements UploadInsuranceCertificateWizardService {
+public class GeneralInsuranceCertificateCrudServiceImpl implements GeneralInsuranceCertificateCrudService {
 
     @Override
     public void init(AsyncCallback<GeneralInsuranceCertificateDTO> callback, InitializationData initializationData) {

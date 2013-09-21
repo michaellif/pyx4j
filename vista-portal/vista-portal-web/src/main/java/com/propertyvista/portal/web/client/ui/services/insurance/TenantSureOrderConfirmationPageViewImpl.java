@@ -14,12 +14,12 @@
 package com.propertyvista.portal.web.client.ui.services.insurance;
 
 import com.propertyvista.portal.rpc.portal.web.dto.insurance.TenantSureAgreementDTO;
-import com.propertyvista.portal.web.client.ui.IFormView;
+import com.propertyvista.portal.web.client.ui.AbstractFormView;
 
-public interface TenantSureOrderConfirmationView extends IFormView<TenantSureAgreementDTO> {
+public class TenantSureOrderConfirmationPageViewImpl extends AbstractFormView<TenantSureAgreementDTO> implements TenantSureOrderConfirmationPageView {
 
-    public interface TenantSureOrderConfirmationPresenter extends IFormView.IFormViewPresenter<TenantSureAgreementDTO> {
-
-        void back();
+    public TenantSureOrderConfirmationPageViewImpl() {
+        super();
+        setForm(new TenantSureOrderConfirmationPage(this));
     }
 }

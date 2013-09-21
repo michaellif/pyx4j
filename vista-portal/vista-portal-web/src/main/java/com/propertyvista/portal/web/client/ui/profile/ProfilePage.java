@@ -31,22 +31,22 @@ import com.propertyvista.domain.tenant.EmergencyContact;
 import com.propertyvista.portal.domain.dto.ResidentDTO;
 import com.propertyvista.portal.web.client.themes.EntityViewTheme;
 import com.propertyvista.portal.web.client.ui.CPortalEntityEditor;
-import com.propertyvista.portal.web.client.ui.profile.ProfileEditorView.ProfileEditorPresenter;
+import com.propertyvista.portal.web.client.ui.profile.ProfilePageView.ProfilePagePresenter;
 import com.propertyvista.portal.web.client.ui.util.decorators.FormDecoratorBuilder;
 import com.propertyvista.shared.config.VistaFeatures;
 
-public class ProfileEditor extends CPortalEntityEditor<ResidentDTO> {
+public class ProfilePage extends CPortalEntityEditor<ResidentDTO> {
 
-    private static final I18n i18n = I18n.get(ProfileEditor.class);
+    private static final I18n i18n = I18n.get(ProfilePage.class);
 
-    private ProfileEditorPresenter presenter;
+    private ProfilePagePresenter presenter;
 
-    public ProfileEditor(ProfileEditorViewImpl view) {
+    public ProfilePage(ProfilePageViewImpl view) {
         super(ResidentDTO.class, view, "Tenant Profile", ThemeColor.contrast2);
         asWidget().setStyleName(EntityViewTheme.StyleName.EntityView.name());
     }
 
-    public void setPresenter(ProfileEditorPresenter presenter) {
+    public void setPresenter(ProfilePagePresenter presenter) {
         this.presenter = presenter;
     }
 
@@ -68,7 +68,7 @@ public class ProfileEditor extends CPortalEntityEditor<ResidentDTO> {
         mainPanel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().email()), "230px").build());
 
         mainPanel.setH1(++row, 0, 1, proto().emergencyContacts().getMeta().getCaption());
-        mainPanel.setWidget(++row, 0, inject(proto().emergencyContacts(), new EmergencyContactFolder((ProfileEditorViewImpl) getView())));
+        mainPanel.setWidget(++row, 0, inject(proto().emergencyContacts(), new EmergencyContactFolder((ProfilePageViewImpl) getView())));
 
         return mainPanel;
     }

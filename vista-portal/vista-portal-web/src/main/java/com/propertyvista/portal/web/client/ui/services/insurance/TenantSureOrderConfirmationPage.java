@@ -22,11 +22,11 @@ import com.pyx4j.i18n.shared.I18n;
 import com.propertyvista.portal.rpc.portal.web.dto.insurance.TenantSureAgreementDTO;
 import com.propertyvista.portal.web.client.ui.CPortalEntityForm;
 
-public class TenantSureOrderConfirmationForm extends CPortalEntityForm<TenantSureAgreementDTO> {
+public class TenantSureOrderConfirmationPage extends CPortalEntityForm<TenantSureAgreementDTO> {
 
-    private static final I18n i18n = I18n.get(TenantSureOrderConfirmationForm.class);
+    private static final I18n i18n = I18n.get(TenantSureOrderConfirmationPage.class);
 
-    public TenantSureOrderConfirmationForm(TenantSureOrderConfirmationViewImpl view) {
+    public TenantSureOrderConfirmationPage(TenantSureOrderConfirmationPageViewImpl view) {
         super(TenantSureAgreementDTO.class, view, i18n.tr("Insurance Request submitted Successfully!"), ThemeColor.contrast4);
 
         setViewable(true);

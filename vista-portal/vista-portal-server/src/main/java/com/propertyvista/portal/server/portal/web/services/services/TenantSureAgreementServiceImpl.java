@@ -53,14 +53,14 @@ import com.propertyvista.operations.rpc.VistaSystemMaintenanceState;
 import com.propertyvista.portal.rpc.portal.web.dto.insurance.TenantSureAgreementDTO;
 import com.propertyvista.portal.rpc.portal.web.dto.insurance.TenantSureCoverageDTO;
 import com.propertyvista.portal.rpc.portal.web.dto.insurance.TenantSureQuoteDTO;
-import com.propertyvista.portal.rpc.portal.web.services.services.TenantSurePurchaseWizardService;
+import com.propertyvista.portal.rpc.portal.web.services.services.TenantSureAgreementService;
 import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.tenantsure.TenantSureQuotationRequestParamsDTO;
 import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.tenantsure.errors.TenantSureAlreadyPurchasedException;
 import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.tenantsure.errors.TenantSureOnMaintenanceException;
 import com.propertyvista.portal.server.portal.TenantAppContext;
 import com.propertyvista.server.common.util.AddressRetriever;
 
-public class TenantSurePurchaseWizardServiceImpl implements TenantSurePurchaseWizardService {
+public class TenantSureAgreementServiceImpl implements TenantSureAgreementService {
 
     private static class ServerSideQuteStorage {
 

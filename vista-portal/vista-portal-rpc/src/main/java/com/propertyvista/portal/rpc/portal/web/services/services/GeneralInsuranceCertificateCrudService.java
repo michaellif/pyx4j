@@ -7,19 +7,16 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on 2013-04-10
+ * Created on 2013-04-02
  * @author VladL
  * @version $Id$
  */
-package com.propertyvista.portal.web.client.ui.services.insurance;
+package com.propertyvista.portal.rpc.portal.web.services.services;
 
-import com.propertyvista.portal.rpc.portal.web.dto.insurance.TenantSureAgreementDTO;
-import com.propertyvista.portal.web.client.ui.AbstractFormView;
+import com.pyx4j.entity.rpc.AbstractCrudService;
 
-public class TenantSureOrderConfirmationViewImpl extends AbstractFormView<TenantSureAgreementDTO> implements TenantSureOrderConfirmationView {
+import com.propertyvista.portal.rpc.portal.web.dto.insurance.GeneralInsuranceCertificateDTO;
 
-    public TenantSureOrderConfirmationViewImpl() {
-        super();
-        setForm(new TenantSureOrderConfirmationForm(this));
-    }
+public interface GeneralInsuranceCertificateCrudService extends AbstractCrudService<GeneralInsuranceCertificateDTO> {
+
 }

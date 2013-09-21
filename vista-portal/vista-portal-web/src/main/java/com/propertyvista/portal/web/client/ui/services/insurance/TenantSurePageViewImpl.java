@@ -11,16 +11,16 @@
  * @author Dad
  * @version $Id$
  */
-package com.propertyvista.portal.web.client.ui.profile;
+package com.propertyvista.portal.web.client.ui.services.insurance;
 
-import com.propertyvista.portal.domain.dto.ResidentDTO;
+import com.propertyvista.portal.rpc.portal.web.dto.insurance.TenantSureAgreementDTO;
 import com.propertyvista.portal.web.client.ui.AbstractEditorView;
 
-public class ProfileEditorViewImpl extends AbstractEditorView<ResidentDTO> implements ProfileEditorView {
+public class TenantSurePageViewImpl extends AbstractEditorView<TenantSureAgreementDTO> implements TenantSurePageView {
 
-    public ProfileEditorViewImpl() {
+    public TenantSurePageViewImpl() {
         super();
-        setForm(new ProfileEditor(this));
+        setForm(new TenantSurePage(this));
     }
 
 }

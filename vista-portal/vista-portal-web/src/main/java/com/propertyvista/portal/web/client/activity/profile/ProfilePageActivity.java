@@ -20,13 +20,13 @@ import com.pyx4j.site.rpc.AppPlace;
 import com.propertyvista.portal.domain.dto.ResidentDTO;
 import com.propertyvista.portal.rpc.portal.services.resident.PersonalInfoCrudService;
 import com.propertyvista.portal.web.client.activity.AbstractEditorActivity;
-import com.propertyvista.portal.web.client.ui.profile.ProfileEditorView;
-import com.propertyvista.portal.web.client.ui.profile.ProfileEditorView.ProfileEditorPresenter;
+import com.propertyvista.portal.web.client.ui.profile.ProfilePageView;
+import com.propertyvista.portal.web.client.ui.profile.ProfilePageView.ProfilePagePresenter;
 
-public class ProfileEditorActivity extends AbstractEditorActivity<ResidentDTO> implements ProfileEditorPresenter {
+public class ProfilePageActivity extends AbstractEditorActivity<ResidentDTO> implements ProfilePagePresenter {
 
-    public ProfileEditorActivity(AppPlace place) {
-        super(ProfileEditorView.class, GWT.<PersonalInfoCrudService> create(PersonalInfoCrudService.class), place);
+    public ProfilePageActivity(AppPlace place) {
+        super(ProfilePageView.class, GWT.<PersonalInfoCrudService> create(PersonalInfoCrudService.class), place);
     }
 
 }

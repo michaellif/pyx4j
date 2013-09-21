@@ -7,8 +7,8 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on 2013-04-02
- * @author VladL
+ * Created on Sep 21, 2013
+ * @author michaellif
  * @version $Id$
  */
 package com.propertyvista.portal.web.client.activity.services.insurance;
@@ -19,15 +19,14 @@ import com.pyx4j.site.rpc.AppPlace;
 
 import com.propertyvista.portal.rpc.portal.web.dto.insurance.GeneralInsuranceCertificateDTO;
 import com.propertyvista.portal.rpc.portal.web.services.services.GeneralInsuranceCertificateCrudService;
-import com.propertyvista.portal.web.client.activity.AbstractWizardActivity;
-import com.propertyvista.portal.web.client.ui.services.insurance.GeneralCertificateUploadWizardView;
-import com.propertyvista.portal.web.client.ui.services.insurance.GeneralCertificateUploadWizardView.GeneralCertificateUploadWizardPresenter;
+import com.propertyvista.portal.web.client.activity.AbstractEditorActivity;
+import com.propertyvista.portal.web.client.ui.services.insurance.GeneralCertificatePageView;
+import com.propertyvista.portal.web.client.ui.services.insurance.GeneralCertificatePageView.GeneralCertificatePagePresenter;
 
-public class GeneralCertificateUploadWizardActivity extends AbstractWizardActivity<GeneralInsuranceCertificateDTO> implements GeneralCertificateUploadWizardPresenter {
+public class GeneralCertificatePageActivity extends AbstractEditorActivity<GeneralInsuranceCertificateDTO> implements GeneralCertificatePagePresenter {
 
-    public GeneralCertificateUploadWizardActivity(AppPlace place) {
-        super(GeneralCertificateUploadWizardView.class, GWT.<GeneralInsuranceCertificateCrudService> create(GeneralInsuranceCertificateCrudService.class),
-                GeneralInsuranceCertificateDTO.class);
+    public GeneralCertificatePageActivity(AppPlace place) {
+        super(GeneralCertificatePageView.class, GWT.<GeneralInsuranceCertificateCrudService> create(GeneralInsuranceCertificateCrudService.class), place);
     }
 
 }
