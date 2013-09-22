@@ -33,7 +33,7 @@ public class InsuranceServiceMockImpl implements InsuranceService {
 
         InsuranceStatusDTO statusDTO = EntityFactory.create(InsuranceStatusDTO.class);
 
-        if (false) {
+        if (true) {
             statusDTO.status().setValue(Status.hasOtherInsurance);
             statusDTO.coverageExpiryDate().setValue(new LogicalDate());
 
@@ -53,18 +53,21 @@ public class InsuranceServiceMockImpl implements InsuranceService {
                 statusDTO.certificates().add(summaryDTO);
             }
 
-        } else if (true) {
-            TenantSureCertificateSummaryDTO summaryDTO = EntityFactory.create(TenantSureCertificateSummaryDTO.class);
-            summaryDTO.insuranceProvider().setValue("TenantSure Insurance");
-            summaryDTO.insuranceCertificateNumber().setValue("ABC12345");
-            summaryDTO.liabilityCoverage().setValue(new BigDecimal("1000000"));
-            summaryDTO.contentsCoverage().setValue(new BigDecimal("100000"));
-            summaryDTO.inceptionDate().setValue(new LogicalDate());
-            summaryDTO.expiryDate().setValue(new LogicalDate());
+        } else if (false) {
+            {
+                TenantSureCertificateSummaryDTO summaryDTO = EntityFactory.create(TenantSureCertificateSummaryDTO.class);
+                summaryDTO.insuranceProvider().setValue("TenantSure Insurance");
+                summaryDTO.insuranceCertificateNumber().setValue("ABC12345");
+                summaryDTO.liabilityCoverage().setValue(new BigDecimal("1000000"));
+                summaryDTO.contentsCoverage().setValue(new BigDecimal("100000"));
+                summaryDTO.inceptionDate().setValue(new LogicalDate());
+                summaryDTO.expiryDate().setValue(new LogicalDate());
+                statusDTO.certificates().add(summaryDTO);
+            }
 
             statusDTO.status().setValue(Status.hasTenantSure);
             statusDTO.coverageExpiryDate().setValue(new LogicalDate());
-            statusDTO.certificates().add(summaryDTO);
+
         } else {
             statusDTO.status().setValue(Status.noInsurance);
             statusDTO.minimumRequiredLiability().setValue(new BigDecimal("1000000"));
