@@ -80,7 +80,7 @@ public class InsuranceGadget extends AbstractGadget<MainDashboardViewImpl> {
         private final Anchor viewServicesAnchor;
 
         public NavigationBar() {
-            viewServicesAnchor = new Anchor(i18n.tr("View my Resident Services"), new Command() {
+            viewServicesAnchor = new Anchor(i18n.tr("View details in Resident Services"), new Command() {
 
                 @Override
                 public void execute() {
