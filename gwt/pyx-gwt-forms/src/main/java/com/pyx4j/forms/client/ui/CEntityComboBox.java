@@ -37,6 +37,7 @@ import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.commons.EqualsHelper;
+import com.pyx4j.entity.rpc.EntitySearchResult;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.entity.shared.criterion.Criterion;
@@ -83,16 +84,17 @@ public class CEntityComboBox<E extends IEntity> extends CComboBox<E> implements 
     private TerminableHandlingCallback optionHandlingCallback = null;
 
     public CEntityComboBox(Class<E> entityClass) {
-        this(null, entityClass, (NotInOptionsPolicy) null);
+        this(null, entityClass, (NotInOptionsPolicy) null, null);
     }
 
     public CEntityComboBox(String title, Class<E> entityClass) {
-        this(title, entityClass, (NotInOptionsPolicy) null);
+        this(title, entityClass, (NotInOptionsPolicy) null, null);
     }
 
-    public CEntityComboBox(String title, Class<E> entityClass, NotInOptionsPolicy policy) {
+    public CEntityComboBox(String title, Class<E> entityClass, NotInOptionsPolicy policy, EntityDataSource<E> optionsDataSource) {
         super(title, policy);
         this.criteria = new EntityQueryCriteria<E>(entityClass);
+        this.optionsDataSource = optionsDataSource;
         retriveOptions(null);
     }
 
@@ -116,11 +118,6 @@ public class CEntityComboBox<E extends IEntity> extends CComboBox<E> implements 
     public void setOptionsComparator(Comparator<E> comparator) {
         this.comparator = comparator;
         setOptions(getOptions());
-    }
-
-    /** the expected functionality is not implemented */
-    public void setOptionsDataSource(EntityDataSource<E> optionsDataSource) {
-        this.optionsDataSource = optionsDataSource;
     }
 
     public boolean isOptionsLoaded() {
@@ -234,7 +231,17 @@ public class CEntityComboBox<E extends IEntity> extends CComboBox<E> implements 
             isLoading = true;
             optionHandlingCallback = new TerminableHandlingCallback(callback);
             if (optionsDataSource != null) {
-                //TODO  optionsDataSource.obtain(criteria, handlingCallback, true);
+                optionsDataSource.obtain(criteria, new AsyncCallback<EntitySearchResult<E>>() {
+                    @Override
+                    public void onFailure(Throwable caught) {
+                        optionHandlingCallback.onFailure(caught);
+                    }
+
+                    @Override
+                    public void onSuccess(EntitySearchResult<E> result) {
+                        optionHandlingCallback.onSuccess(result.getData());
+                    }
+                });
             } else {
                 if (ReferenceDataManager.isCached(criteria)) {
                     ReferenceDataManager.obtain(criteria, optionHandlingCallback, true);

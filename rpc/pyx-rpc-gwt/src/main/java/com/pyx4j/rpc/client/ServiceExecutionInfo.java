@@ -22,11 +22,10 @@ package com.pyx4j.rpc.client;
 
 import com.pyx4j.i18n.annotations.I18nComment;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.rpc.shared.ServiceExecution;
 import com.pyx4j.rpc.shared.ServiceExecution.OperationType;
 
 /**
- * @see ServiceExecution
+ * This class instance is generated for each server base on data in annotation @ServiceExecution
  * 
  */
 public class ServiceExecutionInfo {

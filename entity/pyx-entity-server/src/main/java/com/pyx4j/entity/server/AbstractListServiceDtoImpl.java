@@ -23,7 +23,6 @@ package com.pyx4j.entity.server;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Vector;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
@@ -158,7 +157,6 @@ public abstract class AbstractListServiceDtoImpl<E extends IEntity, DTO extends 
         result.setEncodedCursorReference(dbResults.getEncodedCursorReference());
         result.hasMoreData(dbResults.hasMoreData());
         result.setTotalRows(dbResults.getTotalRows());
-        result.setData(new Vector<DTO>());
         for (E entity : dbResults.getData()) {
             retrievedForList(entity);
             DTO dto = createDTO(entity);

@@ -29,6 +29,8 @@ import java.util.Vector;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.google.gwt.core.client.GWT;
+import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.event.shared.EventBus;
@@ -36,18 +38,18 @@ import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.event.shared.SimpleEventBus;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
-import com.pyx4j.entity.rpc.EntityServices;
+import com.pyx4j.entity.rpc.EntitySearchResult;
+import com.pyx4j.entity.rpc.ReferenceDataService;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.criterion.EntityCriteriaFilter;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.meta.EntityMeta;
 import com.pyx4j.gwt.commons.UncaughtHandler;
-import com.pyx4j.rpc.client.RPCManager;
 import com.pyx4j.rpc.client.RecoverableAsyncCallback;
-import com.pyx4j.security.client.ClientSecurityController;
 import com.pyx4j.security.client.BehaviorChangeEvent;
 import com.pyx4j.security.client.BehaviorChangeHandler;
+import com.pyx4j.security.client.ClientSecurityController;
 
 /**
  * Cache Reference Data
@@ -94,21 +96,26 @@ public class ReferenceDataManager {
                 return;
             }
 
-            AsyncCallback<Vector<? extends IEntity>> callback = new RecoverableAsyncCallback<Vector<? extends IEntity>>() {
+            AsyncCallback<EntitySearchResult<? extends IEntity>> callback = new RecoverableAsyncCallback<EntitySearchResult<? extends IEntity>>() {
 
                 @Override
-                public void onSuccess(Vector<? extends IEntity> result) {
+                public void onSuccess(final EntitySearchResult<? extends IEntity> result) {
                     try {
-                        cache.put(originalCriteria, result);
-                        List<AsyncCallback<List<?>>> callbacks = concurrentLoad.remove(originalCriteria);
-                        for (AsyncCallback<List<?>> cb : callbacks) {
-                            try {
-                                cb.onSuccess(result);
-                            } catch (Throwable e) {
-                                log.error("Internal error [UIR]", e);
-                                UncaughtHandler.onUnrecoverableError(e, "UIRonS");
+                        cache.put(originalCriteria, result.getData());
+                        Scheduler.get().scheduleDeferred(new Scheduler.ScheduledCommand() {
+                            @Override
+                            public void execute() {
+                                List<AsyncCallback<List<?>>> callbacks = concurrentLoad.remove(originalCriteria);
+                                for (AsyncCallback<List<?>> cb : callbacks) {
+                                    try {
+                                        cb.onSuccess(result.getData());
+                                    } catch (Throwable e) {
+                                        log.error("Internal error [UIR]", e);
+                                        UncaughtHandler.onUnrecoverableError(e, "UIRonS");
+                                    }
+                                }
                             }
-                        }
+                        });
                     } catch (Throwable e) {
                         UncaughtHandler.onUnrecoverableError(e, "UIRonS");
                     }
@@ -128,10 +135,11 @@ public class ReferenceDataManager {
                 }
             };
 
+            ReferenceDataService service = GWT.create(ReferenceDataService.class);
             if (background) {
-                RPCManager.executeBackground(EntityServices.Query.class, criteria, callback);
+                service.queryNonBlocking(callback, criteria);
             } else {
-                RPCManager.execute(EntityServices.Query.class, criteria, callback);
+                service.query(callback, criteria);
             }
         } else {
             handlingCallback.onSuccess(cache.get(criteria));
