@@ -13,7 +13,7 @@
  */
 package com.propertyvista.crm.server.security;
 
-import com.pyx4j.entity.rpc.EntityServices;
+import com.pyx4j.entity.rpc.ReferenceDataService;
 import com.pyx4j.entity.security.EntityPermission;
 import com.pyx4j.essentials.rpc.download.DownloadableService;
 import com.pyx4j.essentials.rpc.report.ReportServices;
@@ -238,7 +238,7 @@ public class VistaCrmAccessControlList extends ServletContainerAclBuilder {
         grant(VistaCrmBehavior.PropertyVistaSupport, new IServiceExecutePermission("*"));
 
         grant(VistaBasicBehavior.CRM, new IServiceExecutePermission(DeferredProcessService.class));
-        grant(VistaBasicBehavior.CRM, new ServiceExecutePermission(EntityServices.Query.class));
+        grant(VistaBasicBehavior.CRM, new IServiceExecutePermission(ReferenceDataService.class));
         grant(VistaBasicBehavior.CRM, new ServiceExecutePermission(ReportServices.class, "*"));
 
         grant(new IServiceExecutePermission(CrmAuthenticationService.class));
@@ -515,7 +515,7 @@ public class VistaCrmAccessControlList extends ServletContainerAclBuilder {
 
 // - Old services:
         grant(VistaBasicBehavior.CRM, new EntityPermission(Country.class.getPackage().getName() + ".*", EntityPermission.READ));
-        grant(VistaBasicBehavior.CRM, new ServiceExecutePermission(EntityServices.class, "*"));
+        grant(VistaBasicBehavior.CRM, new IServiceExecutePermission(ReferenceDataService.class));
 
         // All other roles have everything the same
 //        for (VistaTenantBehavior b : VistaTenantBehavior.getCrmBehaviors()) {

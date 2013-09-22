@@ -13,11 +13,10 @@
  */
 package com.propertyvista.portal.server.security;
 
-import com.pyx4j.entity.rpc.EntityServices;
+import com.pyx4j.entity.rpc.ReferenceDataService;
 import com.pyx4j.entity.security.EntityPermission;
 import com.pyx4j.entity.security.InstanceAccess;
 import com.pyx4j.rpc.shared.IServiceExecutePermission;
-import com.pyx4j.rpc.shared.ServiceExecutePermission;
 import com.pyx4j.security.server.ServletContainerAclBuilder;
 
 import com.propertyvista.domain.financial.PaymentRecord;
@@ -122,7 +121,7 @@ public class VistaPortalAccessControlList extends ServletContainerAclBuilder {
         grant(VistaCustomerBehavior.HasMultipleApplications, new IServiceExecutePermission(ApplicationSelectionService.class));
 
         // Old TODO remove
-        grant(new ServiceExecutePermission(EntityServices.Query.class));
+        grant(new IServiceExecutePermission(ReferenceDataService.class));
         grant(new EntityPermission(City.class, EntityPermission.READ));
         grant(new EntityPermission(Country.class, EntityPermission.READ));
         grant(new EntityPermission(Province.class, EntityPermission.READ));
@@ -151,7 +150,7 @@ public class VistaPortalAccessControlList extends ServletContainerAclBuilder {
         grant(VistaCustomerBehavior.Prospective, new IServiceExecutePermission(PaymentService.class));
 
         // Old TODO remove
-        grant(VistaCustomerBehavior.Prospective, new ServiceExecutePermission(EntityServices.Query.class));
+        grant(VistaCustomerBehavior.Prospective, new IServiceExecutePermission(ReferenceDataService.class));
 
         grant(VistaCustomerBehavior.Prospective, new EntityPermission(Country.class, EntityPermission.READ));
         grant(VistaCustomerBehavior.Prospective, new EntityPermission(Province.class, EntityPermission.READ));
