@@ -72,12 +72,14 @@ public class AutoPayReviewActivity extends AbstractActivity implements AutoPayRe
 
     @Override
     public void acceptMarked() {
-        autoPayReviewService.accept(new DefaultAsyncCallback<String>() {
-            @Override
-            public void onSuccess(String deferredCorrelationId) {
-                startAccetanceProgress(deferredCorrelationId);
-            }
-        }, makeReviewedPaps(view.isEverythingSelected() ? papReviews : view.getMarkedPapReviews()));
+        if (!papReviews.isEmpty() && (view.isEverythingSelected() || !view.getMarkedPapReviews().isEmpty())) {
+            autoPayReviewService.accept(new DefaultAsyncCallback<String>() {
+                @Override
+                public void onSuccess(String deferredCorrelationId) {
+                    startAccetanceProgress(deferredCorrelationId);
+                }
+            }, makeReviewedPaps(view.isEverythingSelected() ? papReviews : view.getMarkedPapReviews()));
+        }
     }
 
     private void startAccetanceProgress(String deferredCorrelationId) {
