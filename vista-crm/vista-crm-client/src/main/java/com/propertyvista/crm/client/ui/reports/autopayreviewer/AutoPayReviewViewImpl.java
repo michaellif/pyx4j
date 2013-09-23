@@ -114,7 +114,7 @@ public class AutoPayReviewViewImpl extends AbstractPrimePane implements AutoPayR
 
     @Override
     public boolean isEverythingSelected() {
-        return this.papReviewHolderForm.isEverythingSelected();
+        return this.papReviewHolderForm.isSelectAllSet();
     }
 
     @Override

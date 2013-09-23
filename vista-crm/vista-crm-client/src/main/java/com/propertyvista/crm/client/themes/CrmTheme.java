@@ -744,8 +744,22 @@ public class CrmTheme extends VistaTheme {
 
         // ************************************************************************************************************
 
+        style = new Style("." + PapReviewFolder.Styles.AutoPayReviewFolder.name() + " .EntityContainerDecorator");
+        style.addProperty("margin", "0px");
+        addStyle(style);
+
         style = new Style("." + PapReviewFolder.Styles.AutoPayReviewFolder.name() + " .EntityContainerDecorator:hover");
-        style.addProperty("background", ThemeColor.object1, 0.5);
+        style.addProperty("background", ThemeColor.object1, 1.0);
+        addStyle(style);
+
+        style = new Style("." + PapReviewFolder.Styles.AutoPayReviewFolder.name() + " .EntityFolderBoxItem");
+        style.addProperty("margin", "0px");
+        style.addProperty("border", "none");
+        style.addProperty("padding", "0px");
+        addStyle(style);
+
+        style = new Style("." + PapReviewFolder.Styles.AutoPaySelected.name());
+        style.addProperty("background", ThemeColor.object1, 0.7);
         addStyle(style);
 
         style = new Style("." + PapReviewFolder.Styles.AutoPayChargesFolder.name() + " .EntityContainerDecorator");
@@ -756,7 +770,7 @@ public class CrmTheme extends VistaTheme {
 
         style = new Style("." + PapReviewFolder.Styles.AutoPayChargesFolder.name() + " .EntityContainerDecorator:hover");
         style.addProperty("border", "none");
-        style.addProperty("background", ThemeColor.object1, 0.5);
+//        style.addProperty("background", ThemeColor.object1, 0.5);
         addStyle(style);
 
         style = new Style("." + PapReviewFolder.Styles.AutoPayChargesFolder.name() + " .EntityFolderBoxItem");

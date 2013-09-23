@@ -48,7 +48,7 @@ public class PapReviewFolder extends VistaBoxFolder<PapReviewDTO> {
 
     public enum Styles implements IStyleName {
 
-        AutoPayReviewFolder, AutoPayChargesFolder, AutoPayCharge, AutoPayChargeNameColumn, AutoPayChargeNumberColumn
+        AutoPayReviewFolder, AutoPayChargesFolder, AutoPayCharge, AutoPayChargeNameColumn, AutoPayChargeNumberColumn, AutoPaySelected
 
     }
 
@@ -88,24 +88,32 @@ public class PapReviewFolder extends VistaBoxFolder<PapReviewDTO> {
 
         private PapChargeReviewForm chargeTotals;
 
+        private FlowPanel formPanel;
+
         public PapReviewForm() {
             super(PapReviewDTO.class);
         }
 
         @Override
         public IsWidget createContent() {
-            FlowPanel contentPanel = new FlowPanel();
+            formPanel = new FlowPanel();
 
             FlowPanel isSelectedAndCaptionHolderPanel = new FlowPanel();
             isSelectedAndCaptionHolderPanel.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
             isSelectedAndCaptionHolderPanel.getElement().getStyle().setVerticalAlign(VerticalAlign.MIDDLE);
             isSelectedAndCaptionHolderPanel.getElement().getStyle().setPaddingBottom(10, Unit.PX);
 
-            CComponent<?> isSelected = inject(proto().isSelected());
+            final CComponent<Boolean> isSelected = (CComponent<Boolean>) inject(proto().isSelected());
             isSelected.asWidget().getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
             isSelected.asWidget().getElement().getStyle().setVerticalAlign(VerticalAlign.MIDDLE);
             isSelected.asWidget().getElement().getStyle().setPaddingRight(15, Unit.PX);
             isSelected.asWidget().getElement().getStyle().setWidth(15, Unit.PX);
+            isSelected.addValueChangeHandler(new ValueChangeHandler<Boolean>() {
+                @Override
+                public void onValueChange(ValueChangeEvent<Boolean> event) {
+                    formPanel.setStyleName(Styles.AutoPaySelected.name(), isSelected.getValue());
+                }
+            });
             isSelectedAndCaptionHolderPanel.add(isSelected);
 
             CComponent<?> caption = inject(proto().caption(), new PapReviewCaptionViewer());
@@ -115,13 +123,13 @@ public class PapReviewFolder extends VistaBoxFolder<PapReviewDTO> {
 
             FlowPanel folderHolderPanel = new FlowPanel();
             isSelectedAndCaptionHolderPanel.add(inject(proto().charges(), new PapChargesFolder()));
-            contentPanel.add(isSelectedAndCaptionHolderPanel);
+            formPanel.add(isSelectedAndCaptionHolderPanel);
 
             chargeTotals = new PapChargeReviewForm();
             chargeTotals.initContent();
             chargeTotals.setViewable(true);
             folderHolderPanel.add(chargeTotals);
-            contentPanel.add(folderHolderPanel);
+            formPanel.add(folderHolderPanel);
 
             addValueChangeHandler(new ValueChangeHandler<PapReviewDTO>() {
                 @Override
@@ -129,11 +137,11 @@ public class PapReviewFolder extends VistaBoxFolder<PapReviewDTO> {
                     recalculateChargesTotal();
                 }
             });
-            return contentPanel;
+            return formPanel;
         }
 
         public void setSelected(boolean isSelected) {
-            get(proto().isSelected()).populate(isSelected);
+            get(proto().isSelected()).setValue(isSelected);
         }
 
         @Override

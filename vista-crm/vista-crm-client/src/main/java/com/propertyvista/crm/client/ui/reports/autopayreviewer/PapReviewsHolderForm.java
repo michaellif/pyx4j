@@ -27,6 +27,7 @@ import com.pyx4j.widgets.client.Anchor;
 import com.pyx4j.widgets.client.CheckBox;
 
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
+import com.propertyvista.crm.rpc.dto.financial.autopayreview.PapReviewDTO;
 import com.propertyvista.crm.rpc.dto.financial.autopayreview.PapReviewsHolderDTO;
 
 public class PapReviewsHolderForm extends CEntityDecoratableForm<PapReviewsHolderDTO> {
@@ -39,17 +40,17 @@ public class PapReviewsHolderForm extends CEntityDecoratableForm<PapReviewsHolde
 
     }
 
-    private HTML counterPanel;
+    private FlowPanel statsPanel;
 
-    private HTML moreButton;
+    private HTML counterPanel;
 
     private Anchor toggleSelectEverythingAnchor;
 
-    private boolean isEverythingSelected;
+    private HTML moreButton;
 
-    private CheckBox checkVisibleItems;
+    private CheckBox checkAllVisibleItems;
 
-    private FlowPanel statsPanel;
+    private boolean isSelectAllSet;
 
     public PapReviewsHolderForm() {
         super(PapReviewsHolderDTO.class);
@@ -58,34 +59,15 @@ public class PapReviewsHolderForm extends CEntityDecoratableForm<PapReviewsHolde
     @Override
     public IsWidget createContent() {
         FlowPanel panel = new FlowPanel();
-
         panel.add(createStatsPanel());
         panel.add(createActionsPanel());
-        panel.add(createSuperCaptionsPanel());
-        panel.add(createCaptionsPanel());
-
-        FlowPanel leasePapsFolderHolder = new FlowPanel();
-        leasePapsFolderHolder.setStyleName(Styles.AutoPayFolderHolder.name());
-        leasePapsFolderHolder.add(inject(proto().papReviews(), new PapReviewFolder()));
-
-        moreButton = new HTML(i18n.tr("More..."));
-        moreButton.setStyleName(Styles.AutoPayLoadMore.name());
-
-        moreButton.addClickHandler(new ClickHandler() {
-            @Override
-            public void onClick(ClickEvent event) {
-                PapReviewsHolderForm.this.onMoreClicked();
-            }
-        });
-        leasePapsFolderHolder.add(moreButton);
-
-        panel.add(leasePapsFolderHolder);
-
+        panel.add(createTableHeaderPanel());
+        panel.add(createPapsFolderPanel());
         return panel;
     }
 
-    public boolean isEverythingSelected() {
-        return isEverythingSelected;
+    public boolean isSelectAllSet() {
+        return isSelectAllSet;
     }
 
     public void onMoreClicked() {
@@ -97,16 +79,20 @@ public class PapReviewsHolderForm extends CEntityDecoratableForm<PapReviewsHolde
     }
 
     @Override
-    protected void onValueSet(boolean populate) {
-        super.onValueSet(populate);
-        isEverythingSelected = false;
-        redrawStats();
+    protected PapReviewsHolderDTO preprocessValue(PapReviewsHolderDTO value, boolean fireEvent, boolean populate) {
+        if (isSelectAllSet) {
+            for (PapReviewDTO papReview : value.papReviews()) {
+                papReview.isSelected().setValue(true);
+            }
+        }
+        return super.preprocessValue(value, fireEvent, populate);
     }
 
-    private void checkAll(boolean isChecked) {
-        CComponent<?> c = get(proto().papReviews());
-        PapReviewFolder folder = (PapReviewFolder) c;
-        folder.checkAll(isChecked);
+    @Override
+    protected void onValueSet(boolean populate) {
+        super.onValueSet(populate);
+        renderStatsPanel();
+        moreButton.setVisible(getValue().papReviewsTotalCount().getValue() != getValue().papReviews().size());
     }
 
     private FlowPanel createStatsPanel() {
@@ -116,10 +102,11 @@ public class PapReviewsHolderForm extends CEntityDecoratableForm<PapReviewsHolde
         counterPanel = new HTML();
         statsPanel.add(counterPanel);
 
-        toggleSelectEverythingAnchor = new Anchor(i18n.tr("Select Everything"), new Command() {
+        // the caption of this anchor is defined dynamically when the form is populated and based on user's actions 
+        toggleSelectEverythingAnchor = new Anchor("", new Command() {
             @Override
             public void execute() {
-                toggleSelectEverything();
+                toggleSelectAll();
             }
         });
         statsPanel.add(toggleSelectEverythingAnchor);
@@ -130,61 +117,102 @@ public class PapReviewsHolderForm extends CEntityDecoratableForm<PapReviewsHolde
         FlowPanel actionsPanel = new FlowPanel();
         actionsPanel.setStyleName(Styles.AutoPayActionsPanel.name());
 
-        checkVisibleItems = new CheckBox();
-        checkVisibleItems.setTitle(i18n.tr(i18n.tr("Check/Uncheck all visible items")));
-        checkVisibleItems.addClickHandler(new ClickHandler() {
+        checkAllVisibleItems = new CheckBox();
+        checkAllVisibleItems.setTitle(i18n.tr(i18n.tr("Check/Uncheck all visible items")));
+        checkAllVisibleItems.addClickHandler(new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
-                checkAll(checkVisibleItems.getValue());
+                checkAll();
             }
         });
-        actionsPanel.add(checkVisibleItems);
+        actionsPanel.add(checkAllVisibleItems);
+
         return actionsPanel;
     }
 
-    private FlowPanel createSuperCaptionsPanel() {
+    private FlowPanel createTableHeaderPanel() {
+        FlowPanel tableHeaderPanel = new FlowPanel();
+
         FlowPanel superCaptionsPanel = new FlowPanel();
         superCaptionsPanel.addStyleName(Styles.AutoPaySuperCaptionsPanel.name());
         superCaptionsPanel.add(new HTML(i18n.tr("Suspended")));
         superCaptionsPanel.add(new HTML(i18n.tr("Suggested")));
-        return superCaptionsPanel;
+        tableHeaderPanel.add(superCaptionsPanel);
+
+        FlowPanel captionsPanel = new FlowPanel();
+        captionsPanel.setStylePrimaryName(Styles.AutoPayCaptionsPanel.name());
+        captionsPanel.add(new MiniDecorator(new HTML(i18n.tr("Charge")), PapReviewFolder.Styles.AutoPayChargeNumberColumn.name()));
+        captionsPanel.add(new MiniDecorator(new HTML(i18n.tr("Payment")), PapReviewFolder.Styles.AutoPayChargeNumberColumn.name()));
+        captionsPanel.add(new MiniDecorator(new HTML(i18n.tr("% of Charge")), PapReviewFolder.Styles.AutoPayChargeNumberColumn.name()));
+        captionsPanel.add(new MiniDecorator(new HTML(i18n.tr("Charge")), PapReviewFolder.Styles.AutoPayChargeNumberColumn.name()));
+        captionsPanel.add(new MiniDecorator(new HTML(i18n.tr("Payment")), PapReviewFolder.Styles.AutoPayChargeNumberColumn.name()));
+        captionsPanel.add(new MiniDecorator(new HTML(i18n.tr("% of Charge")), PapReviewFolder.Styles.AutoPayChargeNumberColumn.name()));
+        captionsPanel.add(new MiniDecorator(new HTML(i18n.tr("% of Change")), PapReviewFolder.Styles.AutoPayChargeNumberColumn.name()));
+        tableHeaderPanel.add(captionsPanel);
+
+        return tableHeaderPanel;
     }
 
-    private FlowPanel createCaptionsPanel() {
-        FlowPanel panel = new FlowPanel();
-        panel.setStylePrimaryName(Styles.AutoPayCaptionsPanel.name());
-        panel.add(new MiniDecorator(new HTML(i18n.tr("Charge")), PapReviewFolder.Styles.AutoPayChargeNumberColumn.name()));
-        panel.add(new MiniDecorator(new HTML(i18n.tr("Payment")), PapReviewFolder.Styles.AutoPayChargeNumberColumn.name()));
-        panel.add(new MiniDecorator(new HTML(i18n.tr("% of Charge")), PapReviewFolder.Styles.AutoPayChargeNumberColumn.name()));
-        panel.add(new MiniDecorator(new HTML(i18n.tr("Charge")), PapReviewFolder.Styles.AutoPayChargeNumberColumn.name()));
-        panel.add(new MiniDecorator(new HTML(i18n.tr("Payment")), PapReviewFolder.Styles.AutoPayChargeNumberColumn.name()));
-        panel.add(new MiniDecorator(new HTML(i18n.tr("% of Charge")), PapReviewFolder.Styles.AutoPayChargeNumberColumn.name()));
-        panel.add(new MiniDecorator(new HTML(i18n.tr("% of Change")), PapReviewFolder.Styles.AutoPayChargeNumberColumn.name()));
-        return panel;
+    private FlowPanel createPapsFolderPanel() {
+        FlowPanel leasePapsFolderHolder = new FlowPanel();
+        leasePapsFolderHolder.setStyleName(Styles.AutoPayFolderHolder.name());
+
+        leasePapsFolderHolder.add(inject(proto().papReviews(), new PapReviewFolder()));
+
+        moreButton = new HTML(i18n.tr("More..."));
+        moreButton.setStyleName(Styles.AutoPayLoadMore.name());
+        moreButton.addClickHandler(new ClickHandler() {
+            @Override
+            public void onClick(ClickEvent event) {
+                PapReviewsHolderForm.this.onMoreClicked();
+            }
+        });
+        leasePapsFolderHolder.add(moreButton);
+
+        return leasePapsFolderHolder;
     }
 
-    private void toggleSelectEverything() {
-        isEverythingSelected = !isEverythingSelected;
-        checkAll(isEverythingSelected);
-        redrawStats();
+    private void checkAll() {
+        checkAll(checkAllVisibleItems.getValue());
+        renderStatsPanel();
     }
 
-    private void redrawStats() {
-        setEditable(!isEverythingSelected);
-        checkVisibleItems.setValue(isEverythingSelected);
-        checkVisibleItems.setEditable(!isEverythingSelected);
+    private void checkAll(boolean isChecked) {
+        CComponent<?> c = get(proto().papReviews());
+        PapReviewFolder folder = (PapReviewFolder) c;
+        folder.checkAll(isChecked);
+    }
 
-        statsPanel.setStyleName(Styles.AutoPayEverythingIsSelected.name(), isEverythingSelected);
-        if (!isEverythingSelected) {
+    private void toggleSelectAll() {
+        isSelectAllSet = !isSelectAllSet;
 
-            toggleSelectEverythingAnchor.setText(i18n.tr("Select Everything"));
-            counterPanel.setText(i18n.tr("Displaying {0,number,#,##0} of {1,number,#,##0} Leases with suspended AutoPay", getValue().papReviews().size(),
-                    getValue().papReviewsTotalCount().getValue()));
-            moreButton.setVisible(getValue().papReviewsTotalCount().getValue() != getValue().papReviews().size());
+        checkAllVisibleItems.setValue(isSelectAllSet);
+        checkAllVisibleItems.setEditable(!isSelectAllSet);
+        setEditable(!isSelectAllSet);
+        checkAll(isSelectAllSet);
+
+        renderStatsPanel();
+    }
+
+    private void renderStatsPanel() {
+        statsPanel.setStyleName(Styles.AutoPayEverythingIsSelected.name(), isSelectAllSet);
+        if (!isSelectAllSet) {
+            if (checkAllVisibleItems.getValue() == true) {
+                counterPanel.setText(i18n.tr("All {0,number,#,##0} AutoPays on this page are selected.", getValue().papReviews().size(), getValue()
+                        .papReviewsTotalCount().getValue()));
+                toggleSelectEverythingAnchor.setVisible(true);
+                toggleSelectEverythingAnchor.setText(i18n.tr("Select all {0,number,#,##0} suspended AutoPays", getValue().papReviews().size()));
+            } else {
+                counterPanel.setText(i18n.tr("Displaying {0,number,#,##0} of {1,number,#,##0} suspended AutoPays", getValue().papReviews().size(), getValue()
+                        .papReviewsTotalCount().getValue()));
+                toggleSelectEverythingAnchor.setVisible(false);
+                toggleSelectEverythingAnchor.setText("");
+            }
         } else {
-            toggleSelectEverythingAnchor.setText(i18n.tr("Unselect Everything"));
-            counterPanel.setText(i18n.tr("All {0,number,#,##0} suspended AutoPays are selected", getValue().papReviewsTotalCount().getValue()));
-            moreButton.setVisible(false);
+            toggleSelectEverythingAnchor.setVisible(true);
+            toggleSelectEverythingAnchor.setText(i18n.tr("Clear selection"));
+            counterPanel.setText(i18n.tr("All {0,number,#,##0} suspended AutoPays are selected.", getValue().papReviewsTotalCount().getValue()));
         }
     }
+
 }
