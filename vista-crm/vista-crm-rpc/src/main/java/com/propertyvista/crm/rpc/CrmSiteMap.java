@@ -329,12 +329,14 @@ public class CrmSiteMap implements SiteMap {
             }
         }
 
+        @PlaceProperties(navigLabel = "EFT", caption = "EFT")
         public static class Eft extends ReportsAppPlace<EftReportMetadata> {
             public Eft() {
                 super(EftReportMetadata.class);
             }
         }
 
+        @PlaceProperties(navigLabel = "EFT Variance", caption = "EFT Variance")
         public static class EftVariance extends ReportsAppPlace<EftVarianceReportMetadata> {
             public EftVariance() {
                 super(EftVarianceReportMetadata.class);
