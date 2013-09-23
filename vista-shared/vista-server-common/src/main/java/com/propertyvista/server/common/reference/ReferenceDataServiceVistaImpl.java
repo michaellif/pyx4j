@@ -19,6 +19,7 @@ import com.pyx4j.entity.server.ReferenceDataServiceImpl;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 
+import com.propertyvista.domain.ref.Country;
 import com.propertyvista.domain.ref.Province;
 
 /**
@@ -31,7 +32,7 @@ public class ReferenceDataServiceVistaImpl extends ReferenceDataServiceImpl {
 
     @Override
     protected <T extends IEntity> EntitySearchResult<T> query(EntityQueryCriteria<T> criteria) {
-        if (criteria.getEntityClass() == Province.class) {
+        if ((criteria.getEntityClass() == Province.class) || (criteria.getEntityClass() == Country.class)) {
             EntitySearchResult<T> result = new EntitySearchResult<T>();
             result.setData(Persistence.secureQuery(criteria));
             return result;
