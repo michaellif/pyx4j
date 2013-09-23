@@ -13,9 +13,16 @@
  */
 package com.propertyvista.crm.rpc.services.building;
 
+import java.util.Vector;
+
+import com.google.gwt.user.client.rpc.AsyncCallback;
+
 import com.pyx4j.entity.rpc.AbstractCrudService;
 
+import com.propertyvista.domain.property.asset.Floorplan;
+import com.propertyvista.domain.settings.ILSConfig.ILSVendor;
 import com.propertyvista.dto.FloorplanDTO;
 
 public interface FloorplanCrudService extends AbstractCrudService<FloorplanDTO> {
+    void getILSVendors(AsyncCallback<Vector<ILSVendor>> callback, Floorplan florplan);
 }

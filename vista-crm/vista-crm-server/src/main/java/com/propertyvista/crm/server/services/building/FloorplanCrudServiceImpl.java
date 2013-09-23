@@ -14,16 +14,23 @@
 package com.propertyvista.crm.server.services.building;
 
 import java.util.List;
+import java.util.Vector;
+
+import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.commons.EqualsHelper;
 import com.pyx4j.entity.server.AbstractCrudServiceDtoImpl;
 import com.pyx4j.entity.server.Persistence;
+import com.pyx4j.entity.shared.AttachLevel;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 
 import com.propertyvista.crm.rpc.services.building.FloorplanCrudService;
+import com.propertyvista.domain.marketing.ils.ILSProfileBuilding;
+import com.propertyvista.domain.marketing.ils.ILSProfileFloorplan;
 import com.propertyvista.domain.property.asset.Floorplan;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
+import com.propertyvista.domain.settings.ILSConfig.ILSVendor;
 import com.propertyvista.dto.FloorplanDTO;
 
 public class FloorplanCrudServiceImpl extends AbstractCrudServiceDtoImpl<Floorplan, FloorplanDTO> implements FloorplanCrudService {
@@ -42,6 +49,10 @@ public class FloorplanCrudServiceImpl extends AbstractCrudServiceDtoImpl<Floorpl
         Persistence.service().retrieveMember(in.amenities());
         dto.amenities().set(in.amenities());
         Persistence.service().retrieve(dto.media());
+        // ils
+        EntityQueryCriteria<ILSProfileFloorplan> criteria = EntityQueryCriteria.create(ILSProfileFloorplan.class);
+        criteria.eq(criteria.proto().floorplan(), in);
+        dto.ilsProfile().addAll(Persistence.service().query(criteria));
     }
 
     @Override
@@ -73,6 +84,18 @@ public class FloorplanCrudServiceImpl extends AbstractCrudServiceDtoImpl<Floorpl
                 u.info()._bedrooms().set(dbo.bedrooms());
             }
             Persistence.service().persist(units);
+        }
+        // ils marketing
+        {
+            EntityQueryCriteria<ILSProfileFloorplan> criteria = EntityQueryCriteria.create(ILSProfileFloorplan.class);
+            criteria.eq(criteria.proto().floorplan(), in);
+            List<ILSProfileFloorplan> ilsData = Persistence.service().query(criteria);
+            ilsData.clear();
+            for (ILSProfileFloorplan profile : in.ilsProfile()) {
+                profile.floorplan().set(dbo);
+                ilsData.add(profile);
+            }
+            Persistence.service().persist(ilsData);
         }
     }
 
@@ -127,6 +150,20 @@ public class FloorplanCrudServiceImpl extends AbstractCrudServiceDtoImpl<Floorpl
                 Persistence.service().persist(othrPlan.counters());
             }
         }
+    }
+
+    @Override
+    public void getILSVendors(AsyncCallback<Vector<ILSVendor>> callback, Floorplan floorplan) {
+        // find configured vendors for the building
+        Persistence.ensureRetrieve(floorplan, AttachLevel.Attached);
+        Persistence.ensureRetrieve(floorplan.building(), AttachLevel.IdOnly);
+        Vector<ILSVendor> vendors = new Vector<ILSVendor>();
+        EntityQueryCriteria<ILSProfileBuilding> crit = EntityQueryCriteria.create(ILSProfileBuilding.class);
+        crit.eq(crit.proto().building(), floorplan.building());
+        for (ILSProfileBuilding config : Persistence.service().query(crit)) {
+            vendors.add(config.vendor().getValue());
+        }
+        callback.onSuccess(vendors);
     }
 
 }

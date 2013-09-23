@@ -224,8 +224,10 @@ public class BuildingCrudServiceImpl extends AbstractCrudServiceDtoImpl<Building
         // find configured vendors
         Vector<ILSVendor> vendors = new Vector<ILSVendor>();
         ILSConfig config = Persistence.service().retrieve(EntityQueryCriteria.create(ILSConfig.class));
-        for (ILSVendorConfig item : config.vendors()) {
-            vendors.add(item.vendor().getValue());
+        if (config != null) {
+            for (ILSVendorConfig item : config.vendors()) {
+                vendors.add(item.vendor().getValue());
+            }
         }
         callback.onSuccess(vendors);
     }

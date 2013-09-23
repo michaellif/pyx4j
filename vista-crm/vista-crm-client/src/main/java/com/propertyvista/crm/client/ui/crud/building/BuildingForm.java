@@ -51,6 +51,7 @@ import com.propertyvista.common.client.policy.ClientPolicyManager;
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
 import com.propertyvista.common.client.ui.components.editors.AddressStructuredEditor;
 import com.propertyvista.common.client.ui.components.editors.MarketingEditor;
+import com.propertyvista.common.client.ui.components.editors.MarketingEditor.MarketingContactEditor;
 import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
 import com.propertyvista.common.client.ui.components.folders.VistaTableFolder;
 import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
@@ -58,6 +59,9 @@ import com.propertyvista.common.client.ui.validators.PastDateIncludeTodayValidat
 import com.propertyvista.crm.client.ui.components.media.CrmMediaFolder;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.domain.financial.MerchantAccount;
+import com.propertyvista.domain.marketing.MarketingContactEmail;
+import com.propertyvista.domain.marketing.MarketingContactPhone;
+import com.propertyvista.domain.marketing.MarketingContactUrl;
 import com.propertyvista.domain.marketing.ils.ILSProfileBuilding;
 import com.propertyvista.domain.policy.policies.DatesPolicy;
 import com.propertyvista.domain.policy.policies.domain.IdAssignmentItem.IdTarget;
@@ -341,7 +345,7 @@ public class BuildingForm extends CrmEntityForm<BuildingDTO> {
         flexPanel.setH1(++row, 0, 2, i18n.tr("Media"));
         flexPanel.setWidget(++row, 0, 2, inject(proto().media(), new CrmMediaFolder(isEditable(), ImageTarget.Building)));
 
-        flexPanel.setH1(++row, 0, 2, i18n.tr("ILS"));
+        flexPanel.setH1(++row, 0, 2, i18n.tr("ILS Profile"));
         flexPanel.setWidget(++row, 0, 2, inject(proto().ilsProfile(), new ILSProfileBuildingFolder()));
 
         return flexPanel;
@@ -469,7 +473,7 @@ public class BuildingForm extends CrmEntityForm<BuildingDTO> {
 
                         @Override
                         public String getEmptySelectionMessage() {
-                            return i18n.tr("No other Providers available for this building. See ILS Policy for details.");
+                            return i18n.tr("No Vendors to choose from.");
                         }
                     }.show();
                 }
@@ -486,7 +490,17 @@ public class BuildingForm extends CrmEntityForm<BuildingDTO> {
                 TwoColumnFlexFormPanel content = new TwoColumnFlexFormPanel();
                 int row = -1;
 
-                content.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().vendor(), new CEnumLabel()), true).build());
+                content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().vendor(), new CEnumLabel())).build());
+                content.setWidget(row, 1, new FormDecoratorBuilder(inject(proto().disabled())).build());
+
+                content.setH1(++row, 0, 2, proto().preferredContacts().getMeta().getCaption());
+                content.setWidget(++row, 0, 2,
+                        inject(proto().preferredContacts().url(), new MarketingContactEditor<MarketingContactUrl>(MarketingContactUrl.class)));
+                content.setWidget(++row, 0, 2,
+                        inject(proto().preferredContacts().email(), new MarketingContactEditor<MarketingContactEmail>(MarketingContactEmail.class)));
+                content.setWidget(++row, 0, 2,
+                        inject(proto().preferredContacts().phone(), new MarketingContactEditor<MarketingContactPhone>(MarketingContactPhone.class)));
+
                 return content;
             }
         }

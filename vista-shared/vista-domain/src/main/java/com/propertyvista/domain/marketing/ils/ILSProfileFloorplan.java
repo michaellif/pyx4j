@@ -14,6 +14,7 @@
 package com.propertyvista.domain.marketing.ils;
 
 import com.pyx4j.entity.annotations.Detached;
+import com.pyx4j.entity.annotations.Editor;
 import com.pyx4j.entity.annotations.Indexed;
 import com.pyx4j.entity.annotations.JoinColumn;
 import com.pyx4j.entity.annotations.MemberColumn;
@@ -24,6 +25,7 @@ import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 
 import com.propertyvista.domain.property.asset.Floorplan;
+import com.propertyvista.domain.settings.ILSConfig.ILSVendor;
 
 public interface ILSProfileFloorplan extends IEntity {
     public enum Priority {
@@ -37,14 +39,13 @@ public interface ILSProfileFloorplan extends IEntity {
     @Detached
     @Indexed
     @JoinColumn
-    ILSProfileBuilding buildingProfile();
-
-    @ReadOnly
-    @Detached
     Floorplan floorplan();
 
-    IPrimitive<String> title();
+    IPrimitive<ILSVendor> vendor();
 
+    IPrimitive<String> listingTitle();
+
+    @Editor(type = Editor.EditorType.textarea)
     IPrimitive<String> description();
 
     IPrimitive<Priority> priority();
