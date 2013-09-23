@@ -26,7 +26,6 @@ import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
 import com.pyx4j.commons.Key;
-import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.entity.rpc.EntitySearchResult;
 import com.pyx4j.entity.shared.criterion.EntityListCriteria;
 import com.pyx4j.i18n.shared.I18n;
@@ -43,7 +42,6 @@ import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.crm.rpc.services.dashboard.DashboardMetadataCrudService;
 import com.propertyvista.domain.dashboard.DashboardMetadata;
 import com.propertyvista.domain.security.VistaCrmBehavior;
-import com.propertyvista.misc.VistaTODO;
 import com.propertyvista.shared.config.VistaFeatures;
 
 public class NavigActivity extends AbstractActivity implements NavigView.MainNavigPresenter, BoardUpdateHandler {
@@ -146,6 +144,10 @@ public class NavigActivity extends AbstractActivity implements NavigView.MainNav
             if (SecurityController.checkBehavior(VistaCrmBehavior.OrganizationFinancial)) {
                 folder.addNavigItem(new CrmSiteMap.Finance.AggregatedTransfer());
             }
+            if (SecurityController.checkBehavior(VistaCrmBehavior.Billing)) {
+                folder.addNavigItem(new CrmSiteMap.AutoPayReview());
+            }
+
             list.add(folder);
         }
 
@@ -211,10 +213,6 @@ public class NavigActivity extends AbstractActivity implements NavigView.MainNav
         folder.addNavigItem(new CrmSiteMap.Reports.EftVariance());
         folder.addNavigItem(new CrmSiteMap.Reports.ResidentInsurance());
 
-        // TODO this is a temporary place for this view to be used only for development and experimentation
-        if (VistaTODO.VISTA_3129_AutoPayBulkEditorExperiment && ApplicationMode.isDevelopment()) {
-            folder.addNavigItem(new CrmSiteMap.AutoPayReview());
-        }
         return folder;
     }
 }

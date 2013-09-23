@@ -248,7 +248,6 @@ import com.propertyvista.domain.reports.CustomerCreditCheckReportMetadata;
 import com.propertyvista.domain.reports.EftReportMetadata;
 import com.propertyvista.domain.reports.EftVarianceReportMetadata;
 import com.propertyvista.domain.reports.ResidentInsuranceReportMetadata;
-import com.propertyvista.misc.VistaTODO;
 
 public class ContentActivityMapper implements AppActivityMapper {
 
@@ -1253,7 +1252,7 @@ public class ContentActivityMapper implements AppActivityMapper {
                     // Dashboard related stuff again
                 } else if (place instanceof CrmSiteMap.Dashboard.View) {
                     activity = new DashboardActivity((CrmSiteMap.Dashboard.View) place);
-                } else if (VistaTODO.VISTA_3129_AutoPayBulkEditorExperiment && (place instanceof CrmSiteMap.AutoPayReview)) {
+                } else if (place instanceof CrmSiteMap.AutoPayReview) {
                     activity = new AutoPayReviewActivity((AppPlace) place);
                 } else if (place instanceof Administration.Settings.CreditCheck) {
                     activity = new CreditCheckActivity();
