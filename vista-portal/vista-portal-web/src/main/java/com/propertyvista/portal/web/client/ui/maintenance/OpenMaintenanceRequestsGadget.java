@@ -33,7 +33,7 @@ import com.pyx4j.widgets.client.actionbar.Toolbar;
 
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
 import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
-import com.propertyvista.portal.rpc.portal.web.dto.insurance.status.InsuranceCertificateSummaryDTO;
+import com.propertyvista.domain.maintenance.MaintenanceRequestStatus.StatusPhase;
 import com.propertyvista.portal.rpc.portal.web.dto.insurance.status.TenantSureCertificateSummaryDTO;
 import com.propertyvista.portal.rpc.portal.web.dto.maintenance.MainenanceRequestStatusDTO;
 import com.propertyvista.portal.rpc.portal.web.dto.maintenance.MaintenanceSummaryDTO;
@@ -136,7 +136,7 @@ public class OpenMaintenanceRequestsGadget extends AbstractGadget<MaintenanceDas
 
         @Override
         public CComponent<?> create(IObject<?> member) {
-            if (member instanceof InsuranceCertificateSummaryDTO) {
+            if (member instanceof MainenanceRequestStatusDTO) {
                 return new MaintenanceRequestViewer();
             }
             return super.create(member);
@@ -159,7 +159,7 @@ public class OpenMaintenanceRequestsGadget extends AbstractGadget<MaintenanceDas
                 int row = -1;
 
                 content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().description(), new CLabel<String>()), 180).build());
-                content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().status(), new CLabel<String>()), 180).build());
+                content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().status().phase(), new CLabel<StatusPhase>()), 180).build());
                 content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().submissionDate(), new CLabel<String>()), 180).build());
 
                 detailsButton = new Button(i18n.tr("View Details"), new Command() {
@@ -171,21 +171,11 @@ public class OpenMaintenanceRequestsGadget extends AbstractGadget<MaintenanceDas
                 });
                 detailsButton.getElement().getStyle().setMarginTop(30, Unit.PX);
 
-                detailsButton.setVisible(false);
                 content.setWidget(++row, 0, detailsButton);
 
                 return content;
             }
 
-            @Override
-            protected void onValueSet(boolean populate) {
-                super.onValueSet(populate);
-                if (getValue().isInstanceOf(TenantSureCertificateSummaryDTO.class)) {
-                    detailsButton.setVisible(true);
-                } else {
-                    detailsButton.setVisible(false);
-                }
-            }
         }
 
     }

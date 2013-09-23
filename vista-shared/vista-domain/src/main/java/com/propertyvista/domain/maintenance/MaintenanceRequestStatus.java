@@ -23,12 +23,14 @@ import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.annotations.Owner;
 import com.pyx4j.entity.annotations.ReadOnly;
 import com.pyx4j.entity.annotations.ToString;
+import com.pyx4j.entity.annotations.ToStringFormat;
 import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.i18n.annotations.I18n;
 import com.pyx4j.i18n.shared.I18nEnum;
 
+@ToStringFormat("{0}")
 public interface MaintenanceRequestStatus extends IEntity {
 
     @I18n(context = "Maintenance Request")
@@ -69,6 +71,7 @@ public interface MaintenanceRequestStatus extends IEntity {
     @JoinColumn
     MaintenanceRequestMetadata meta();
 
+    @ToString(index = 0)
     IPrimitive<StatusPhase> phase();
 
     @ToString

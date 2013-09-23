@@ -17,6 +17,8 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.entity.shared.EntityFactory;
 
+import com.propertyvista.domain.maintenance.MaintenanceRequestStatus.StatusPhase;
+import com.propertyvista.portal.rpc.portal.web.dto.maintenance.MainenanceRequestStatusDTO;
 import com.propertyvista.portal.rpc.portal.web.dto.maintenance.MaintenanceSummaryDTO;
 import com.propertyvista.portal.rpc.portal.web.services.maintenance.MaintenanceService;
 
@@ -25,6 +27,20 @@ public class MaintenanceServiceMockImpl implements MaintenanceService {
     @Override
     public void retreiveMaintenanceSummary(AsyncCallback<MaintenanceSummaryDTO> callback) {
         MaintenanceSummaryDTO maintenanceSummary = EntityFactory.create(MaintenanceSummaryDTO.class);
+
+        {
+            MainenanceRequestStatusDTO requestDTO = EntityFactory.create(MainenanceRequestStatusDTO.class);
+            requestDTO.description().setValue("Request 1");
+            requestDTO.status().phase().setValue(StatusPhase.Submitted);
+            maintenanceSummary.maintenanceRequestStatuses().add(requestDTO);
+        }
+
+        {
+            MainenanceRequestStatusDTO requestDTO = EntityFactory.create(MainenanceRequestStatusDTO.class);
+            requestDTO.description().setValue("Request 2");
+            requestDTO.status().phase().setValue(StatusPhase.Submitted);
+            maintenanceSummary.maintenanceRequestStatuses().add(requestDTO);
+        }
 
         callback.onSuccess(maintenanceSummary);
     }

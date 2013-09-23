@@ -15,6 +15,8 @@ package com.propertyvista.portal.rpc.portal.web.dto.maintenance;
 
 import java.util.Date;
 
+import com.pyx4j.entity.annotations.ToString;
+import com.pyx4j.entity.annotations.ToStringFormat;
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
@@ -22,10 +24,13 @@ import com.pyx4j.entity.shared.IPrimitive;
 import com.propertyvista.domain.maintenance.MaintenanceRequestStatus;
 
 @Transient
+@ToStringFormat("{0} ({1})")
 public interface MainenanceRequestStatusDTO extends IEntity {
 
+    @ToString(index = 0)
     IPrimitive<String> description();
 
+    @ToString(index = 1)
     MaintenanceRequestStatus status();
 
     IPrimitive<Date> submissionDate();
