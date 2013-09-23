@@ -68,7 +68,6 @@ import com.propertyvista.portal.rpc.portal.services.resident.PaymentWizardServic
 import com.propertyvista.portal.rpc.portal.services.resident.PersonalInfoCrudService;
 import com.propertyvista.portal.rpc.portal.services.resident.PreauthorizedPaymentListService;
 import com.propertyvista.portal.rpc.portal.services.resident.PreauthorizedPaymentWizardService;
-import com.propertyvista.portal.rpc.portal.services.resident.SelfRegistrationBuildingsSourceService;
 import com.propertyvista.portal.rpc.portal.services.resident.TenantInsuranceByOtherProviderManagementService;
 import com.propertyvista.portal.rpc.portal.services.resident.TenantInsuranceService;
 import com.propertyvista.portal.rpc.portal.services.resident.TenantSureManagementService;
@@ -110,7 +109,10 @@ public class VistaPortalAccessControlList extends ServletContainerAclBuilder {
 
         grant(new IServiceExecutePermission(PortalAuthenticationService.class));
         grant(new IServiceExecutePermission(PortalVistaTermsService.class));
-        grant(new IServiceExecutePermission(SelfRegistrationBuildingsSourceService.class));
+
+        grant(new IServiceExecutePermission(com.propertyvista.portal.rpc.portal.services.resident.SelfRegistrationBuildingsSourceService.class));
+        grant(new IServiceExecutePermission(com.propertyvista.portal.rpc.portal.web.services.SelfRegistrationBuildingsSourceService.class));
+
         grant(new EntityPermission(SelfRegistrationBuildingDTO.class, EntityPermission.READ));
 
         grant(new IServiceExecutePermission(PtAuthenticationService.class));
