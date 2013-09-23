@@ -25,24 +25,6 @@ public interface ServicesDashboardView extends IsView {
 
         void addThirdPartyTenantInsuranceCertificate();
 
-        // Tenant Sure Managment Related
-        void updateCreditCardDetails();
-
-        void cancelTenantSure();
-
-        /** reverts cancelation */
-        void reinstate();
-
-        void viewFaq();
-
-        void viewAboutTenantSure();
-
-        /** email can be null: then tenant's default email should be used */
-        void sendCertificate(String email);
-
-        // Insurance by other provide related
-        void updateThirdPartyTenantInsuranceCeritificate();
-
     }
 
     void setPresenter(ServicesDashboardPresenter presenter);

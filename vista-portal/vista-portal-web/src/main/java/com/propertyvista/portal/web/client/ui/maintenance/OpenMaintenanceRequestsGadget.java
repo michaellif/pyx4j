@@ -50,7 +50,7 @@ public class OpenMaintenanceRequestsGadget extends AbstractGadget<MaintenanceDas
     private final MaintenanceToolbar toolbar;
 
     OpenMaintenanceRequestsGadget(MaintenanceDashboardViewImpl view) {
-        super(view, PortalImages.INSTANCE.residentServicesIcon(), i18n.tr("Tenant Insurance"), ThemeColor.contrast3);
+        super(view, PortalImages.INSTANCE.maintenanceIcon(), i18n.tr("Open Maintenance Requests"), ThemeColor.contrast5);
 
         openMaintenanceRequestsViewer = new OpenMaintenanceRequestsViewer();
         openMaintenanceRequestsViewer.setViewable(true);
@@ -69,29 +69,18 @@ public class OpenMaintenanceRequestsGadget extends AbstractGadget<MaintenanceDas
 
     class MaintenanceToolbar extends Toolbar {
 
-        private final Button purchaseButton;
-
-        private final Button proofButton;
+        private final Button createButton;
 
         public MaintenanceToolbar() {
 
-            purchaseButton = new Button(i18n.tr("Purchase Insurance"), new Command() {
+            createButton = new Button(i18n.tr("New Maintenance Request"), new Command() {
 
                 @Override
                 public void execute() {
                 }
             });
-            purchaseButton.getElement().getStyle().setProperty("background", StyleManager.getPalette().getThemeColor(ThemeColor.contrast3, 1));
-            add(purchaseButton);
-
-            proofButton = new Button("", new Command() {
-
-                @Override
-                public void execute() {
-                }
-            });
-            proofButton.getElement().getStyle().setProperty("background", StyleManager.getPalette().getThemeColor(ThemeColor.contrast3, 0.8));
-            add(proofButton);
+            createButton.getElement().getStyle().setProperty("background", StyleManager.getPalette().getThemeColor(ThemeColor.contrast5, 1));
+            add(createButton);
 
             recalculateState(null);
         }
@@ -114,8 +103,6 @@ public class OpenMaintenanceRequestsGadget extends AbstractGadget<MaintenanceDas
             BasicFlexFormPanel main = new BasicFlexFormPanel();
 
             int row = -1;
-
-            main.setH4(++row, 0, 1, i18n.tr("Certificates"));
 
             main.setWidget(++row, 0, inject(proto().maintenanceRequestStatuses(), new OpenMaintenanceRequestsFolder()));
 

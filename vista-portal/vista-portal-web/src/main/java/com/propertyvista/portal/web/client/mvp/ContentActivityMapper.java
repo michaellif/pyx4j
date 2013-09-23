@@ -43,6 +43,7 @@ import com.propertyvista.portal.web.client.activity.login.LeaseContextSelectionA
 import com.propertyvista.portal.web.client.activity.login.LoginWithTokenActivity;
 import com.propertyvista.portal.web.client.activity.login.PasswordResetRequestActivity;
 import com.propertyvista.portal.web.client.activity.login.VistaTermsActivity;
+import com.propertyvista.portal.web.client.activity.maintenance.MaintenanceDashboardActivity;
 import com.propertyvista.portal.web.client.activity.profile.ProfilePageActivity;
 import com.propertyvista.portal.web.client.activity.security.PasswordChangeActivity;
 import com.propertyvista.portal.web.client.activity.security.PasswordResetActivity;
@@ -102,6 +103,9 @@ public class ContentActivityMapper implements AppActivityMapper {
                         activity = new TenantSureOrderWizardActivity(appPlace);
                     } else if (appPlace instanceof PortalSiteMap.Resident.ResidentServices.TenantInsurance.GeneralCertificateUploadWizard) {
                         activity = new TenantSureOrderWizardActivity(appPlace);
+
+                    } else if (place instanceof PortalSiteMap.Resident.Maintenance) {
+                        activity = new MaintenanceDashboardActivity(place);
 
                     } else if (place instanceof PortalSiteMap.Login) {
                         activity = new LandingActivity(place);

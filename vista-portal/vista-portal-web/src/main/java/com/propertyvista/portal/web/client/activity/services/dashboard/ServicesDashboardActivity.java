@@ -18,13 +18,10 @@ import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
-import com.pyx4j.commons.UserRuntimeException;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
-import com.pyx4j.rpc.shared.VoidSerializable;
 import com.pyx4j.site.client.AppSite;
 
 import com.propertyvista.portal.rpc.portal.PortalSiteMap;
-import com.propertyvista.portal.rpc.portal.services.resident.TenantSureManagementService;
 import com.propertyvista.portal.rpc.portal.web.dto.insurance.status.InsuranceStatusDTO;
 import com.propertyvista.portal.rpc.portal.web.services.services.InsuranceService;
 import com.propertyvista.portal.web.client.PortalWebSite;
@@ -36,12 +33,9 @@ public class ServicesDashboardActivity extends SecurityAwareActivity implements 
 
     private final ServicesDashboardView view;
 
-    private final TenantSureManagementService tenantSureManagementService;
-
     public ServicesDashboardActivity(Place place) {
         this.view = PortalWebSite.getViewFactory().instantiate(ServicesDashboardView.class);
         this.view.setPresenter(this);
-        tenantSureManagementService = GWT.create(TenantSureManagementService.class);
     }
 
     @Override
@@ -71,90 +65,6 @@ public class ServicesDashboardActivity extends SecurityAwareActivity implements 
     @Override
     public void addThirdPartyTenantInsuranceCertificate() {
         AppSite.getPlaceController().goTo(new PortalSiteMap.Resident.ResidentServices.TenantInsurance.GeneralCertificateUploadWizard());
-    }
-
-    @Override
-    public void updateThirdPartyTenantInsuranceCeritificate() {
-        AppSite.getPlaceController().goTo(new PortalSiteMap.Resident.ResidentServices.TenantInsurance.GeneralCertificateUploadWizard());
-    }
-
-    @Override
-    public void viewFaq() {
-        AppSite.getPlaceController().goTo(new PortalSiteMap.Resident.ResidentServices.TenantInsurance.TenantSure.Faq());
-    }
-
-    @Override
-    public void viewAboutTenantSure() {
-        AppSite.getPlaceController().goTo(new PortalSiteMap.Resident.ResidentServices.TenantInsurance.TenantSure.About());
-    }
-
-    @Override
-    public void updateCreditCardDetails() {
-        AppSite.getPlaceController().goTo(new PortalSiteMap.Resident.ResidentServices.TenantInsurance.TenantSure.TenantSurePage.UpdateCreditCard());
-    }
-
-    @Override
-    public void cancelTenantSure() {
-        tenantSureManagementService.cancelTenantSure(new DefaultAsyncCallback<VoidSerializable>() {
-            @Override
-            public void onSuccess(VoidSerializable result) {
-                populate();
-            }
-
-            @Override
-            public void onFailure(Throwable caught) {
-                if (caught instanceof UserRuntimeException) {
-                    // TODO error reporting
-                    // view.reportCancelFailure(((UserRuntimeException) caught).getMessage());
-                } else {
-                    super.onFailure(caught);
-                }
-            }
-        });
-    }
-
-    @Override
-    public void sendCertificate(String email) {
-        tenantSureManagementService.sendCertificate(new DefaultAsyncCallback<String>() {
-
-            @Override
-            public void onSuccess(String resultEmailAddress) {
-                // TODO error reporting and notifications
-                // view.reportSendCertificateSuccess(resultEmailAddress);
-            }
-
-            @Override
-            public void onFailure(Throwable caught) {
-                if (caught instanceof UserRuntimeException) {
-                    // TODO error reporting
-                    // view.reportError(((UserRuntimeException) caught).getMessage());
-                } else {
-                    super.onFailure(caught);
-                }
-            }
-
-        }, email);
-    }
-
-    @Override
-    public void reinstate() {
-        tenantSureManagementService.reinstate(new DefaultAsyncCallback<VoidSerializable>() {
-            @Override
-            public void onSuccess(VoidSerializable result) {
-                populate();
-            }
-
-            @Override
-            public void onFailure(Throwable caught) {
-                if (caught instanceof UserRuntimeException) {
-                    // TODO error reporting
-                    //view.reportError(((UserRuntimeException) caught).getMessage());
-                } else {
-                    super.onFailure(caught);
-                }
-            }
-        });
-
     }
 
 }

@@ -22,7 +22,6 @@ import com.pyx4j.rpc.client.DefaultAsyncCallback;
 
 import com.propertyvista.portal.rpc.portal.web.dto.maintenance.MaintenanceSummaryDTO;
 import com.propertyvista.portal.rpc.portal.web.services.maintenance.MaintenanceService;
-import com.propertyvista.portal.rpc.portal.web.services.services.InsuranceService;
 import com.propertyvista.portal.web.client.PortalWebSite;
 import com.propertyvista.portal.web.client.activity.SecurityAwareActivity;
 import com.propertyvista.portal.web.client.ui.maintenance.MaintenanceDashboardView;
@@ -32,12 +31,9 @@ public class MaintenanceDashboardActivity extends SecurityAwareActivity implemen
 
     private final MaintenanceDashboardView view;
 
-    private final MaintenanceService maintenanceService;
-
     public MaintenanceDashboardActivity(Place place) {
         this.view = PortalWebSite.getViewFactory().instantiate(MaintenanceDashboardView.class);
         this.view.setPresenter(this);
-        maintenanceService = GWT.create(MaintenanceService.class);
     }
 
     @Override
@@ -45,9 +41,7 @@ public class MaintenanceDashboardActivity extends SecurityAwareActivity implemen
         super.start(panel, eventBus);
         panel.setWidget(view);
         view.setPresenter(this);
-
         populate();
-
     }
 
     private void populate() {
