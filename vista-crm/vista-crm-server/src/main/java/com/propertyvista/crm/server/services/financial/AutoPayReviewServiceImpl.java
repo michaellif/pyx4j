@@ -110,7 +110,6 @@ public class AutoPayReviewServiceImpl implements AutoPayReviewService {
 
         for (AutoPayReviewChargeDTO autoPayCharge : autoPay.items()) {
             PapChargeReviewDTO papCharge = EntityFactory.create(PapChargeReviewDTO.class);
-            papCharge.billableItem().set(autoPayCharge.suspended().billableItem());
             papCharge.chargeName().setValue(autoPayCharge.leaseCharge().getValue());
             papCharge.changeType().setValue(guessChangeType(autoPayCharge));
 
@@ -118,6 +117,7 @@ public class AutoPayReviewServiceImpl implements AutoPayReviewService {
             papCharge.suspendedPapAmount().setValue(autoPayCharge.suspended().payment().getValue());
             papCharge.suspendedPapPercent().setValue(autoPayCharge.suspended().percent().getValue());
 
+            papCharge.billableItem().set(autoPayCharge.suggested().billableItem());
             papCharge.newPrice().setValue(autoPayCharge.suggested().totalPrice().getValue());
             papCharge.newPapAmount().setValue(autoPayCharge.suggested().payment().getValue());
             papCharge.newPapPercent().setValue(autoPayCharge.suggested().percent().getValue());

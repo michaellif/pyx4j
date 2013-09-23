@@ -147,8 +147,14 @@ class PreauthorizedPaymentAgreementMananger {
 
         boolean hsCharges = false;
         for (ReviewedPapChargeDTO reviewedPapCharge : preauthorizedPaymentChanges.reviewedCharges()) {
+            if (reviewedPapCharge.paymentAmountUpdate().isNull()) {
+                // Removed charges
+                continue;
+            }
+            BillableItem billableItem = Persistence.service().retrieve(BillableItem.class, reviewedPapCharge.billableItem().getPrimaryKey());
+            Validate.notNull(billableItem, "billableItem is required for PreauthorizedPaymentCoveredItem");
             PreauthorizedPaymentCoveredItem item = EntityFactory.create(PreauthorizedPaymentCoveredItem.class);
-            item.billableItem().set(reviewedPapCharge.billableItem());
+            item.billableItem().set(billableItem);
             item.amount().setValue(reviewedPapCharge.paymentAmountUpdate().getValue());
             newPreauthorizedPayment.coveredItems().add(item);
 
