@@ -35,7 +35,6 @@ import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.entity.server.dataimport.DataPreloaderCollection;
 import com.pyx4j.essentials.rpc.admin.SystemMaintenanceState;
 import com.pyx4j.essentials.server.AbstractAntiBot;
-import com.pyx4j.essentials.server.EssentialsRPCServiceFactory;
 import com.pyx4j.log4j.LoggerConfig;
 import com.pyx4j.security.server.ThrottleConfig;
 import com.pyx4j.security.shared.AclCreator;
@@ -256,7 +255,7 @@ public class VistaServerSideConfiguration extends AbstractVistaServerSideConfigu
 
     @Override
     public IServiceFactory getRPCServiceFactory() {
-        return new EssentialsRPCServiceFactory();
+        return new VistaRPCServiceFactory();
     }
 
     @Override
