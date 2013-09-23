@@ -169,6 +169,15 @@ public class SimpleMessageFormatTest extends TestCase {
 
     public void testChoiceFormatNulls() {
         assertMessageFormat("Nil", "{0,choice,null#Nil|0#Zero|1#One}", (Object) null);
+
+        @SuppressWarnings("deprecation")
+        int offset = (new Date(0)).getTimezoneOffset();
+        Date date = new Date(Consts.MIN2MSEC * (offset + (((3 - 1) * Consts.DAY2HOURS + 4) * Consts.HOURS2MIN) + 10));
+
+        assertMessageFormat("txt (date: 70-01-03)", "txt {0,choice,null#|!null#(date: {0,date,yy-MM-dd})}", date);
+
+        //TODO fix this test
+        //assertMessageFormat("txt  ", "txt {0,choice,null#|!null#(date: {0,date,yy-MM-dd})}", (Date) null);
     }
 
     public void testChoiceFormatNested() {
