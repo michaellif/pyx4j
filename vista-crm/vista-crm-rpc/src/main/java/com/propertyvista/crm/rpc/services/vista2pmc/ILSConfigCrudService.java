@@ -7,18 +7,20 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Sep 13, 2013
+ * Created on Sep 23, 2013
  * @author stanp
  * @version $Id$
  */
-package com.propertyvista.crm.client.ui.crud.policies.ils;
+package com.propertyvista.crm.rpc.services.vista2pmc;
 
-import com.propertyvista.crm.client.ui.crud.CrmEditorViewImplBase;
-import com.propertyvista.domain.policy.dto.ILSPolicyDTO;
+import com.google.gwt.user.client.rpc.AsyncCallback;
 
-public class ILSPolicyEditorViewImpl extends CrmEditorViewImplBase<ILSPolicyDTO> implements ILSPolicyEditorView {
+import com.pyx4j.commons.Key;
+import com.pyx4j.entity.rpc.AbstractCrudService;
 
-    public ILSPolicyEditorViewImpl() {
-        setForm(new ILSPolicyForm(this));
-    }
+import com.propertyvista.dto.vista2pmc.ILSConfigDTO;
+
+public interface ILSConfigCrudService extends AbstractCrudService<ILSConfigDTO> {
+
+    void retrieve(AsyncCallback<Key> callback);
 }

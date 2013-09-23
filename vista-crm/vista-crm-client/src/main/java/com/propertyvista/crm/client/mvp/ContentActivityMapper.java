@@ -122,6 +122,9 @@ import com.propertyvista.crm.client.activity.crud.settings.arcode.ARCodeListerAc
 import com.propertyvista.crm.client.activity.crud.settings.arcode.ARCodeViewerActivity;
 import com.propertyvista.crm.client.activity.crud.settings.creditcheck.CustomerCreditCheckListerActivity;
 import com.propertyvista.crm.client.activity.crud.settings.creditcheck.CustomerCreditCheckViewerActivity;
+import com.propertyvista.crm.client.activity.crud.settings.ils.ILSConfigDefaultActivity;
+import com.propertyvista.crm.client.activity.crud.settings.ils.ILSConfigEditorActivity;
+import com.propertyvista.crm.client.activity.crud.settings.ils.ILSConfigViewerActivity;
 import com.propertyvista.crm.client.activity.crud.settings.merchantaccount.MerchantAccountEditorActivity;
 import com.propertyvista.crm.client.activity.crud.settings.merchantaccount.MerchantAccountListerActivity;
 import com.propertyvista.crm.client.activity.crud.settings.merchantaccount.MerchantAccountViewerActivity;
@@ -184,9 +187,6 @@ import com.propertyvista.crm.client.activity.policies.emailtemplates.EmailTempla
 import com.propertyvista.crm.client.activity.policies.idassignment.IdAssignmentPolicyEditorActivity;
 import com.propertyvista.crm.client.activity.policies.idassignment.IdAssignmentPolicyListerActivity;
 import com.propertyvista.crm.client.activity.policies.idassignment.IdAssignmentPolicyViewerActivity;
-import com.propertyvista.crm.client.activity.policies.ils.ILSPolicyEditorActivity;
-import com.propertyvista.crm.client.activity.policies.ils.ILSPolicyListerActivity;
-import com.propertyvista.crm.client.activity.policies.ils.ILSPolicyViewerActivity;
 import com.propertyvista.crm.client.activity.policies.leaseadjustment.LeaseAdjustmentPolicyEditorActivity;
 import com.propertyvista.crm.client.activity.policies.leaseadjustment.LeaseAdjustmentPolicyListerActivity;
 import com.propertyvista.crm.client.activity.policies.leaseadjustment.LeaseAdjustmentPolicyViewerActivity;
@@ -1190,19 +1190,6 @@ public class ContentActivityMapper implements AppActivityMapper {
                             break;
                         }
 
-                    } else if (crudPlace instanceof CrmSiteMap.Administration.Policies.ILSMarketing) {
-                        switch (crudPlace.getType()) {
-                        case lister:
-                            activity = new ILSPolicyListerActivity(crudPlace);
-                            break;
-                        case editor:
-                            activity = new ILSPolicyEditorActivity(crudPlace);
-                            break;
-                        case viewer:
-                            activity = new ILSPolicyViewerActivity(crudPlace);
-                            break;
-                        }
-
 // - Security          
                     } else if (crudPlace instanceof CrmSiteMap.Account.LoginAttemptsLog) {
                         switch (crudPlace.getType()) {
@@ -1218,6 +1205,19 @@ public class ContentActivityMapper implements AppActivityMapper {
 
                     } else if (crudPlace instanceof CrmSiteMap.Administration.Settings.CreditCheck.Status) {
                         activity = new CreditCheckStatusViewerActivity(crudPlace);
+
+                    } else if (crudPlace instanceof Administration.Settings.ILSConfig) {
+                        switch (crudPlace.getType()) {
+                        case editor:
+                            activity = new ILSConfigEditorActivity(crudPlace);
+                            break;
+                        case viewer:
+                            activity = new ILSConfigViewerActivity(crudPlace);
+                            break;
+                        default:
+                            activity = new ILSConfigDefaultActivity(crudPlace);
+                            break;
+                        }
 
                     } else if (crudPlace instanceof CrmSiteMap.Administration.Profile.PaymentMethods) {
                         switch (crudPlace.getType()) {
@@ -1247,6 +1247,7 @@ public class ContentActivityMapper implements AppActivityMapper {
                         activity = new EftVarianceReportActivity((ReportsAppPlace<EftVarianceReportMetadata>) place);
                     } else if (place instanceof CrmSiteMap.Reports.ResidentInsurance) {
                         activity = new ResidentInsuranceReportActivity((ReportsAppPlace<ResidentInsuranceReportMetadata>) place);
+
                     } // CRUD APP PLACE IF ENDS HERE
 
                     // Dashboard related stuff again

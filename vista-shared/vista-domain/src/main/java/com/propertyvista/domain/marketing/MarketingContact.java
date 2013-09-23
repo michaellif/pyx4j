@@ -7,16 +7,19 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Sep 13, 2013
+ * Created on Sep 20, 2013
  * @author stanp
  * @version $Id$
  */
-package com.propertyvista.crm.client.ui.crud.policies.ils;
+package com.propertyvista.domain.marketing;
 
-import com.pyx4j.site.client.ui.prime.form.IEditor;
+import com.pyx4j.entity.annotations.AbstractEntity;
+import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.shared.IPrimitive;
 
-import com.propertyvista.domain.policy.dto.ILSPolicyDTO;
+@AbstractEntity
+public interface MarketingContact extends IEntity {
+    IPrimitive<String> value();
 
-public interface ILSPolicyEditorView extends IEditor<ILSPolicyDTO> {
-
+    IPrimitive<String> description();
 }

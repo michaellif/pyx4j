@@ -18,18 +18,18 @@ import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.Editor;
 import com.pyx4j.entity.annotations.EmbeddedEntity;
 import com.pyx4j.entity.annotations.Length;
+import com.pyx4j.entity.annotations.OrderBy;
 import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
-import com.pyx4j.entity.shared.ISet;
 
 import com.propertyvista.domain.PublicVisibilityType;
 import com.propertyvista.domain.contact.AddressStructured;
 import com.propertyvista.domain.marketing.ils.ILSOpenHouse;
-import com.propertyvista.domain.property.PropertyContact;
+import com.propertyvista.domain.marketing.ils.ILSOpenHouse.OpenHouseDateId;
 
 public interface Marketing extends IEntity {
 
@@ -45,14 +45,15 @@ public interface Marketing extends IEntity {
     IPrimitive<String> description();
 
     @EmbeddedEntity
-    AddressStructured propertyAddress();
+    AddressStructured marketingAddress();
 
     @Owned
-    PropertyContact inquiryContact();
+    MarketingContacts marketingContacts();
 
     @Owned
     @Detached
-    ISet<ILSOpenHouse> openHouseSchedule();
+    @OrderBy(OpenHouseDateId.class)
+    IList<ILSOpenHouse> openHouseSchedule();
 
     @Owned
     @Detached

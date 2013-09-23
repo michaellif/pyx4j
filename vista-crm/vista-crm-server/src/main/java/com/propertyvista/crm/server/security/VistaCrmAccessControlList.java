@@ -156,6 +156,7 @@ import com.propertyvista.crm.rpc.services.unit.UnitOccupancyManagerService;
 import com.propertyvista.crm.rpc.services.vista2pmc.CreditCheckStatusCrudService;
 import com.propertyvista.crm.rpc.services.vista2pmc.CreditCheckStatusService;
 import com.propertyvista.crm.rpc.services.vista2pmc.CreditCheckWizardService;
+import com.propertyvista.crm.rpc.services.vista2pmc.ILSConfigCrudService;
 import com.propertyvista.crm.rpc.services.vista2pmc.OnlinePaymentWizardService;
 import com.propertyvista.domain.company.Company;
 import com.propertyvista.domain.company.Employee;
@@ -496,6 +497,7 @@ public class VistaCrmAccessControlList extends ServletContainerAclBuilder {
         grant(VistaCrmBehavior.PropertyVistaAccountOwner, new IServiceExecutePermission(CreditCardValidationService.class));
         grant(VistaCrmBehavior.PropertyVistaAccountOwner, new IServiceExecutePermission(OnlinePaymentWizardService.class));
         grant(VistaCrmBehavior.PropertyVistaAccountOwner, new IServiceExecutePermission(PmcPaymentMethodsCrudService.class));
+        grant(VistaCrmBehavior.PropertyVistaAccountOwner, new IServiceExecutePermission(ILSConfigCrudService.class));
 
         grant(VistaCrmBehavior.Equifax, new IServiceExecutePermission(CustomerCreditCheckCrudService.class));
         grant(VistaCrmBehavior.OrganizationFinancial, new IServiceExecutePermission(CustomerCreditCheckCrudService.class));

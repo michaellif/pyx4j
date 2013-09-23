@@ -26,6 +26,10 @@ import com.pyx4j.entity.shared.IPrimitive;
 import com.propertyvista.domain.property.asset.Floorplan;
 
 public interface ILSProfileFloorplan extends IEntity {
+    public enum Priority {
+        High, Normal, Low, Disabled
+    }
+
     @Owner
     @NotNull
     @MemberColumn(notNull = true)
@@ -43,5 +47,5 @@ public interface ILSProfileFloorplan extends IEntity {
 
     IPrimitive<String> description();
 
-    IPrimitive<Boolean> disabled();
+    IPrimitive<Priority> priority();
 }

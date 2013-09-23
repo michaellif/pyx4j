@@ -13,6 +13,7 @@
  */
 package com.propertyvista.crm.server.services.building;
 
+import java.util.List;
 import java.util.Vector;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
@@ -28,7 +29,6 @@ import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.geo.GeoPoint;
 
 import com.propertyvista.biz.asset.BuildingFacade;
-import com.propertyvista.biz.policy.PolicyFacade;
 import com.propertyvista.biz.system.Vista2PmcFacade;
 import com.propertyvista.crm.rpc.services.building.BuildingCrudService;
 import com.propertyvista.domain.GeoLocation;
@@ -39,10 +39,11 @@ import com.propertyvista.domain.dashboard.DashboardMetadata;
 import com.propertyvista.domain.financial.ARCode;
 import com.propertyvista.domain.financial.BuildingMerchantAccount;
 import com.propertyvista.domain.financial.MerchantAccount;
-import com.propertyvista.domain.policy.policies.ILSPolicy;
-import com.propertyvista.domain.policy.policies.domain.ILSPolicyItem;
-import com.propertyvista.domain.policy.policies.domain.ILSPolicyItem.ILSProvider;
+import com.propertyvista.domain.marketing.ils.ILSProfileBuilding;
 import com.propertyvista.domain.property.asset.building.Building;
+import com.propertyvista.domain.settings.ILSConfig;
+import com.propertyvista.domain.settings.ILSConfig.ILSVendor;
+import com.propertyvista.domain.settings.ILSVendorConfig;
 import com.propertyvista.dto.BuildingDTO;
 import com.propertyvista.server.common.reference.geo.SharedGeoLocator;
 
@@ -85,6 +86,7 @@ public class BuildingCrudServiceImpl extends AbstractCrudServiceDtoImpl<Building
         Persistence.service().retrieve(dto.contacts().propertyContacts());
         Persistence.service().retrieve(dto.contacts().organizationContacts());
         Persistence.service().retrieve(dto.marketing().adBlurbs());
+        Persistence.service().retrieve(dto.marketing().openHouseSchedule());
 
         if (retrieveTarget == RetrieveTarget.View) {
             EntityQueryCriteria<DashboardMetadata> criteria = EntityQueryCriteria.create(DashboardMetadata.class);
@@ -125,6 +127,12 @@ public class BuildingCrudServiceImpl extends AbstractCrudServiceDtoImpl<Building
             MerchantAccount oneAccount = in.merchantAccounts().iterator().next().merchantAccount();
             dto.merchantAccount().set(ServerSideFactory.create(Vista2PmcFacade.class).calulateMerchantAccountStatus(oneAccount));
         }
+
+        // ils
+        EntityQueryCriteria<ILSProfileBuilding> criteria = EntityQueryCriteria.create(ILSProfileBuilding.class);
+        criteria.eq(criteria.proto().building(), in);
+        dto.ilsProfile().addAll(Persistence.service().query(criteria));
+
     }
 
     @Override
@@ -188,6 +196,19 @@ public class BuildingCrudServiceImpl extends AbstractCrudServiceDtoImpl<Building
             }
         }
 
+        // ils marketing
+        {
+            EntityQueryCriteria<ILSProfileBuilding> criteria = EntityQueryCriteria.create(ILSProfileBuilding.class);
+            criteria.eq(criteria.proto().building(), in);
+            List<ILSProfileBuilding> ilsData = Persistence.service().query(criteria);
+            ilsData.clear();
+            for (ILSProfileBuilding profile : in.ilsProfile()) {
+                profile.building().set(dbo);
+                ilsData.add(profile);
+            }
+            Persistence.service().persist(ilsData);
+        }
+
         ServerSideFactory.create(BuildingFacade.class).persist(dbo);
     }
 
@@ -199,20 +220,13 @@ public class BuildingCrudServiceImpl extends AbstractCrudServiceDtoImpl<Building
     }
 
     @Override
-    public void getILSProviders(AsyncCallback<Vector<ILSProvider>> callback, Building buildingStub) {
-        // check policy to find providers where posting is allowed for this building
-        Vector<ILSProvider> providers = new Vector<ILSProvider>();
-        Building building = Persistence.service().retrieve(Building.class, buildingStub.getPrimaryKey());
-        ILSPolicy policy = ServerSideFactory.create(PolicyFacade.class).obtainEffectivePolicy(building, ILSPolicy.class);
-        for (ILSPolicyItem item : policy.policyItems()) {
-            if (!item.allowedProvinces().isEmpty() && !item.allowedProvinces().contains(building.info().address().province().getValue())) {
-                continue;
-            }
-            if (!item.allowedCities().isEmpty() && !item.allowedCities().contains(building.info().address().city().getValue())) {
-                continue;
-            }
-            providers.add(item.provider().getValue());
+    public void getILSVendors(AsyncCallback<Vector<ILSVendor>> callback, Building buildingStub) {
+        // find configured vendors
+        Vector<ILSVendor> vendors = new Vector<ILSVendor>();
+        ILSConfig config = Persistence.service().retrieve(EntityQueryCriteria.create(ILSConfig.class));
+        for (ILSVendorConfig item : config.vendors()) {
+            vendors.add(item.vendor().getValue());
         }
-        callback.onSuccess(providers);
+        callback.onSuccess(vendors);
     }
 }

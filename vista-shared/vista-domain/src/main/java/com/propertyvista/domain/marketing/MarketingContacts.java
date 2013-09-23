@@ -7,18 +7,20 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Sep 13, 2013
+ * Created on Sep 20, 2013
  * @author stanp
  * @version $Id$
  */
-package com.propertyvista.crm.client.ui.crud.policies.ils;
+package com.propertyvista.domain.marketing;
 
-import com.propertyvista.crm.client.ui.crud.CrmViewerViewImplBase;
-import com.propertyvista.domain.policy.dto.ILSPolicyDTO;
+import com.pyx4j.entity.annotations.EmbeddedEntity;
+import com.pyx4j.entity.shared.IEntity;
 
-public class ILSPolicyViewerViewImpl extends CrmViewerViewImplBase<ILSPolicyDTO> implements ILSPolicyViewerView {
+@EmbeddedEntity
+public interface MarketingContacts extends IEntity {
+    MarketingContactUrl url();
 
-    public ILSPolicyViewerViewImpl() {
-        setForm(new ILSPolicyForm(this));
-    }
+    MarketingContactEmail email();
+
+    MarketingContactPhone phone();
 }

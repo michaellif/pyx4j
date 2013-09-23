@@ -7,22 +7,18 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Sep 13, 2013
+ * Created on Sep 20, 2013
  * @author stanp
  * @version $Id$
  */
-package com.propertyvista.domain.policy.dto;
+package com.propertyvista.dto.vista2pmc;
 
 import com.pyx4j.entity.annotations.ExtendsDBO;
 import com.pyx4j.entity.annotations.Transient;
-import com.pyx4j.entity.shared.ISet;
 
-import com.propertyvista.domain.policy.framework.PolicyDTOBase;
-import com.propertyvista.domain.policy.policies.ILSPolicy;
-import com.propertyvista.domain.ref.Country;
+import com.propertyvista.domain.settings.ILSConfig;
 
 @Transient
-@ExtendsDBO(ILSPolicy.class)
-public interface ILSPolicyDTO extends PolicyDTOBase, ILSPolicy {
-    ISet<Country> countries();
+@ExtendsDBO
+public interface ILSConfigDTO extends ILSConfig {
 }

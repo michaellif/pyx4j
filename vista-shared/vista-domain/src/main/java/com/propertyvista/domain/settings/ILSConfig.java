@@ -7,25 +7,28 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on May 10, 2013
+ * Created on Sep 20, 2013
  * @author stanp
  * @version $Id$
  */
-package com.propertyvista.domain.policy.policies;
+package com.propertyvista.domain.settings;
 
-import com.pyx4j.entity.annotations.DiscriminatorValue;
+import com.pyx4j.entity.annotations.OrderBy;
 import com.pyx4j.entity.annotations.Owned;
+import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
+import com.pyx4j.entity.shared.IPrimitive;
 
-import com.propertyvista.domain.policy.framework.LowestApplicableNode;
-import com.propertyvista.domain.policy.framework.Policy;
-import com.propertyvista.domain.policy.policies.domain.ILSPolicyItem;
-import com.propertyvista.domain.property.asset.building.Building;
+public interface ILSConfig extends IEntity {
+    public enum ILSVendor {
+        kijiji, gottarent, emg
+    }
 
-@DiscriminatorValue("ILSPolicy")
-@LowestApplicableNode(value = Building.class)
-public interface ILSPolicy extends Policy {
+    // work-around to avoid SQL errors for an empty entity - remove if more methods added
+    @Deprecated
+    IPrimitive<String> x();
 
     @Owned
-    IList<ILSPolicyItem> policyItems();
+    @OrderBy(PrimaryKey.class)
+    IList<ILSVendorConfig> vendors();
 }

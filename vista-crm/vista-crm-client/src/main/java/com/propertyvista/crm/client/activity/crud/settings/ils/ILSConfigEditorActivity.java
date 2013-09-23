@@ -11,22 +11,23 @@
  * @author stanp
  * @version $Id$
  */
-package com.propertyvista.crm.client.activity.policies.ils;
+package com.propertyvista.crm.client.activity.crud.settings.ils;
 
 import com.google.gwt.core.client.GWT;
 
 import com.pyx4j.site.rpc.CrudAppPlace;
 
 import com.propertyvista.crm.client.CrmSite;
-import com.propertyvista.crm.client.activity.crud.CrmViewerActivity;
-import com.propertyvista.crm.client.ui.crud.policies.ils.ILSPolicyViewerView;
-import com.propertyvista.crm.rpc.services.policies.policy.ILSPolicyCrudService;
-import com.propertyvista.domain.policy.dto.ILSPolicyDTO;
+import com.propertyvista.crm.client.activity.crud.CrmEditorActivity;
+import com.propertyvista.crm.client.ui.crud.settings.ils.ILSConfigEditorView;
+import com.propertyvista.crm.rpc.services.vista2pmc.ILSConfigCrudService;
+import com.propertyvista.dto.vista2pmc.ILSConfigDTO;
 
-public class ILSPolicyViewerActivity extends CrmViewerActivity<ILSPolicyDTO> {
+public class ILSConfigEditorActivity extends CrmEditorActivity<ILSConfigDTO> {
 
-    public ILSPolicyViewerActivity(CrudAppPlace place) {
-        super(place, CrmSite.getViewFactory().instantiate(ILSPolicyViewerView.class), GWT.<ILSPolicyCrudService> create(ILSPolicyCrudService.class));
+    public ILSConfigEditorActivity(CrudAppPlace place) {
+        super(place, CrmSite.getViewFactory().instantiate(ILSConfigEditorView.class), GWT.<ILSConfigCrudService> create(ILSConfigCrudService.class),
+                ILSConfigDTO.class);
     }
 
 }

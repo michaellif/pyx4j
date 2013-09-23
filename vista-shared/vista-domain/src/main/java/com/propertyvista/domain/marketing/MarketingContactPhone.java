@@ -7,14 +7,22 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Sep 13, 2013
+ * Created on Sep 20, 2013
  * @author stanp
  * @version $Id$
  */
-package com.propertyvista.crm.rpc.services.policies.policy;
+package com.propertyvista.domain.marketing;
 
-import com.propertyvista.domain.policy.dto.ILSPolicyDTO;
+import com.pyx4j.entity.annotations.Caption;
+import com.pyx4j.entity.annotations.Editor;
+import com.pyx4j.entity.annotations.Editor.EditorType;
+import com.pyx4j.entity.annotations.EmbeddedEntity;
+import com.pyx4j.entity.shared.IPrimitive;
 
-public interface ILSPolicyCrudService extends AbstractPolicyCrudService<ILSPolicyDTO> {
-
+@EmbeddedEntity
+public interface MarketingContactPhone extends MarketingContact {
+    @Override
+    @Caption(name = "Phone")
+    @Editor(type = EditorType.phone)
+    IPrimitive<String> value();
 }

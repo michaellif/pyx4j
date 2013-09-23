@@ -78,6 +78,7 @@ public class NavigSettingsActivity extends AbstractActivity implements NavigView
                     folder.addNavigItem(new Settings.CreditCheck.Setup());
                     folder.addNavigItem(new Settings.CreditCheck.Status().formViewerPlace(new Key(-1)));
                 }
+                folder.addNavigItem(new Settings.ILSConfig());
                 list.add(folder);
             }
         }

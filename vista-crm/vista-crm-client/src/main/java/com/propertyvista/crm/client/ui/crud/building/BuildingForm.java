@@ -60,7 +60,6 @@ import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.domain.financial.MerchantAccount;
 import com.propertyvista.domain.marketing.ils.ILSProfileBuilding;
 import com.propertyvista.domain.policy.policies.DatesPolicy;
-import com.propertyvista.domain.policy.policies.domain.ILSPolicyItem.ILSProvider;
 import com.propertyvista.domain.policy.policies.domain.IdAssignmentItem.IdTarget;
 import com.propertyvista.domain.property.PropertyContact;
 import com.propertyvista.domain.property.PropertyPhone;
@@ -69,6 +68,7 @@ import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.building.BuildingAmenity;
 import com.propertyvista.domain.property.asset.building.BuildingUtility;
 import com.propertyvista.domain.security.VistaCrmBehavior;
+import com.propertyvista.domain.settings.ILSConfig.ILSVendor;
 import com.propertyvista.dto.BuildingDTO;
 import com.propertyvista.misc.VistaTODO;
 import com.propertyvista.portal.rpc.portal.ImageConsts.ImageTarget;
@@ -338,24 +338,24 @@ public class BuildingForm extends CrmEntityForm<BuildingDTO> {
         flexPanel.setH1(++row, 0, 2, i18n.tr("Marketing Summary"));
         flexPanel.setWidget(++row, 0, 2, inject(proto().marketing(), new MarketingEditor()));
 
-        flexPanel.setH1(++row, 0, 2, proto().contacts().propertyContacts().getMeta().getCaption());
-        flexPanel.setWidget(++row, 0, 2, inject(proto().contacts().propertyContacts(), new PropertyContactFolder()));
-
         flexPanel.setH1(++row, 0, 2, i18n.tr("Media"));
         flexPanel.setWidget(++row, 0, 2, inject(proto().media(), new CrmMediaFolder(isEditable(), ImageTarget.Building)));
 
         flexPanel.setH1(++row, 0, 2, i18n.tr("ILS"));
         flexPanel.setWidget(++row, 0, 2, inject(proto().ilsProfile(), new ILSProfileBuildingFolder()));
-        // TODO - ILSProfileBuildingFolder extends VistaBoxFolder<ILSProfileBuilding>
-        // adding an item would enable listing of this Building and all its floorplans for selected ILS provider
 
         return flexPanel;
     }
 
     private TwoColumnFlexFormPanel createContactTab(String title) {
         TwoColumnFlexFormPanel flexPanel = new TwoColumnFlexFormPanel(title);
+        int row = -1;
 
-        flexPanel.setWidget(0, 0, 2, inject(proto().contacts().organizationContacts(), new OrganizationContactFolder(isEditable())));
+        flexPanel.setH1(++row, 0, 2, proto().contacts().organizationContacts().getMeta().getCaption());
+        flexPanel.setWidget(++row, 0, 2, inject(proto().contacts().organizationContacts(), new OrganizationContactFolder(isEditable())));
+
+        flexPanel.setH1(++row, 0, 2, proto().contacts().propertyContacts().getMeta().getCaption());
+        flexPanel.setWidget(++row, 0, 2, inject(proto().contacts().propertyContacts(), new PropertyContactFolder()));
 
         return flexPanel;
     }
@@ -448,23 +448,28 @@ public class BuildingForm extends CrmEntityForm<BuildingDTO> {
         @Override
         protected void addItem() {
             // get allowed providers
-            ((BuildingEditorView.Presenter) getParentView().getPresenter()).getILSProviders(new DefaultAsyncCallback<Vector<ILSProvider>>() {
+            ((BuildingEditorView.Presenter) getParentView().getPresenter()).getILSVendors(new DefaultAsyncCallback<Vector<ILSVendor>>() {
                 @Override
-                public void onSuccess(Vector<ILSProvider> providers) {
+                public void onSuccess(Vector<ILSVendor> vendors) {
                     // clear used providers
                     for (ILSProfileBuilding pr : BuildingForm.this.getValue().ilsProfile()) {
-                        providers.remove(pr.provider().getValue());
+                        vendors.remove(pr.vendor().getValue());
                     }
                     // show selection dialog
-                    new SelectEnumDialog<ILSProvider>(i18n.tr("Select ILS Provider"), providers) {
+                    new SelectEnumDialog<ILSVendor>(i18n.tr("Select ILS Vendor"), vendors) {
                         @Override
                         public boolean onClickOk() {
                             if (getSelectedType() != null) {
                                 ILSProfileBuilding item = EntityFactory.create(ILSProfileBuilding.class);
-                                item.provider().setValue(getSelectedType());
+                                item.vendor().setValue(getSelectedType());
                                 addItem(item);
                             }
                             return true;
+                        }
+
+                        @Override
+                        public String getEmptySelectionMessage() {
+                            return i18n.tr("No other Providers available for this building. See ILS Policy for details.");
                         }
                     }.show();
                 }
@@ -481,7 +486,7 @@ public class BuildingForm extends CrmEntityForm<BuildingDTO> {
                 TwoColumnFlexFormPanel content = new TwoColumnFlexFormPanel();
                 int row = -1;
 
-                content.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().provider(), new CEnumLabel()), true).build());
+                content.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().vendor(), new CEnumLabel()), true).build());
                 return content;
             }
         }

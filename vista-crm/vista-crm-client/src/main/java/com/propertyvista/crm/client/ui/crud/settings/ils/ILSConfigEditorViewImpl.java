@@ -11,18 +11,14 @@
  * @author stanp
  * @version $Id$
  */
-package com.propertyvista.crm.client.ui.crud.policies.ils;
+package com.propertyvista.crm.client.ui.crud.settings.ils;
 
-import com.propertyvista.crm.client.ui.crud.CrmListerViewImplBase;
-import com.propertyvista.crm.client.ui.crud.policies.common.PolicyListerBase;
-import com.propertyvista.domain.policy.dto.ILSPolicyDTO;
+import com.propertyvista.crm.client.ui.crud.CrmEditorViewImplBase;
+import com.propertyvista.dto.vista2pmc.ILSConfigDTO;
 
-public class ILSPolicyListerViewImpl extends CrmListerViewImplBase<ILSPolicyDTO> implements ILSPolicyListerView {
+public class ILSConfigEditorViewImpl extends CrmEditorViewImplBase<ILSConfigDTO> implements ILSConfigEditorView {
 
-    public ILSPolicyListerViewImpl() {
-        setLister(new PolicyListerBase<ILSPolicyDTO>(ILSPolicyDTO.class) {
-
-        });
+    public ILSConfigEditorViewImpl() {
+        setForm(new ILSConfigForm(this));
     }
-
 }

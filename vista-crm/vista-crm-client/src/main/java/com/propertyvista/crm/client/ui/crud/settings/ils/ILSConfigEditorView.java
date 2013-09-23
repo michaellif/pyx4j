@@ -11,12 +11,12 @@
  * @author stanp
  * @version $Id$
  */
-package com.propertyvista.crm.client.ui.crud.policies.ils;
+package com.propertyvista.crm.client.ui.crud.settings.ils;
 
-import com.pyx4j.site.client.ui.prime.lister.ILister;
+import com.pyx4j.site.client.ui.prime.form.IEditor;
 
-import com.propertyvista.domain.policy.dto.ILSPolicyDTO;
+import com.propertyvista.dto.vista2pmc.ILSConfigDTO;
 
-public interface ILSPolicyListerView extends ILister<ILSPolicyDTO> {
+public interface ILSConfigEditorView extends IEditor<ILSConfigDTO> {
 
 }

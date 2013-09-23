@@ -416,6 +416,9 @@ public class CrmSiteMap implements SiteMap {
 
             }
 
+            @PlaceProperties(caption = "Internet Listing Service")
+            public static class ILSConfig extends CrmCrudAppPlace {
+            }
         }
 
         public static class Security extends AppPlace {
