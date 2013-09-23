@@ -176,8 +176,7 @@ public class SimpleMessageFormatTest extends TestCase {
 
         assertMessageFormat("txt (date: 70-01-03)", "txt {0,choice,null#|!null#(date: {0,date,yy-MM-dd})}", date);
 
-        //TODO fix this test
-        //assertMessageFormat("txt  ", "txt {0,choice,null#|!null#(date: {0,date,yy-MM-dd})}", (Date) null);
+        assertMessageFormat("txt ", "txt {0,choice,null#|!null#(date: {0,date,yy-MM-dd})}", (Date) null);
     }
 
     public void testChoiceFormatNested() {
@@ -194,6 +193,8 @@ public class SimpleMessageFormatTest extends TestCase {
         Date date = new Date(Consts.MIN2MSEC * (offset + (((3 - 1) * Consts.DAY2HOURS + 4) * Consts.HOURS2MIN) + 10));
         assertMessageFormat("January 1970", "{0,date,MMMM yyyy}", date);
         assertMessageFormat("Saturday, January 3, 1970", "{0,date,EEEE, MMMM d, yyyy}", date);
+
+        assertMessageFormat("", "{0,date,short}", (Date) null);
     }
 
     /**
