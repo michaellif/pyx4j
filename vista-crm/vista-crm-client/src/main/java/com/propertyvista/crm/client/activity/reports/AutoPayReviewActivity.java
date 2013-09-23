@@ -101,7 +101,6 @@ public class AutoPayReviewActivity extends AbstractActivity implements AutoPayRe
     public void start(AcceptsOneWidget panel, EventBus eventBus) {
         panel.setWidget(view);
         view.setPresenter(this);
-        populate();
     }
 
     @Override

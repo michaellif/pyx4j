@@ -36,13 +36,15 @@ public class PapReviewsHolderForm extends CEntityDecoratableForm<PapReviewsHolde
 
     public enum Styles implements IStyleName {
 
-        AutoPayStatsPanel, AutoPayActionsPanel, AutoPayEverythingIsSelected, AutoPaySuperCaptionsPanel, AutoPayCaptionsPanel, AutoPayFolderHolder, AutoPayLoadMore
+        AutoPayStatsPanel, AutoPayActionsPanel, AutoPayEverythingIsSelected, AutoPaySuperCaptionsPanel, AutoPayCaptionsPanel, AutoPayNoResultsPanel, AutoPayFolderHolder, AutoPayLoadMore
 
     }
 
     private FlowPanel statsPanel;
 
     private HTML counterPanel;
+
+    private FlowPanel tableHeaderPanel;
 
     private Anchor toggleSelectEverythingAnchor;
 
@@ -51,6 +53,8 @@ public class PapReviewsHolderForm extends CEntityDecoratableForm<PapReviewsHolde
     private CheckBox checkAllVisibleItems;
 
     private boolean isSelectAllSet;
+
+    private FlowPanel actionsPanel;
 
     public PapReviewsHolderForm() {
         super(PapReviewsHolderDTO.class);
@@ -91,8 +95,11 @@ public class PapReviewsHolderForm extends CEntityDecoratableForm<PapReviewsHolde
     @Override
     protected void onValueSet(boolean populate) {
         super.onValueSet(populate);
+        checkAllVisibleItems.setValue(false);
         renderStatsPanel();
-        moreButton.setVisible(getValue().papReviewsTotalCount().getValue() != getValue().papReviews().size());
+        moreButton.setVisible(!getValue().isNull() && (getValue().papReviewsTotalCount().getValue() != getValue().papReviews().size()));
+        actionsPanel.setVisible(!getValue().isNull() && getValue().papReviewsTotalCount().getValue() != 0);
+        tableHeaderPanel.setVisible(!getValue().isNull() && getValue().papReviewsTotalCount().getValue() != 0);
     }
 
     private FlowPanel createStatsPanel() {
@@ -114,7 +121,7 @@ public class PapReviewsHolderForm extends CEntityDecoratableForm<PapReviewsHolde
     }
 
     private FlowPanel createActionsPanel() {
-        FlowPanel actionsPanel = new FlowPanel();
+        actionsPanel = new FlowPanel();
         actionsPanel.setStyleName(Styles.AutoPayActionsPanel.name());
 
         checkAllVisibleItems = new CheckBox();
@@ -131,7 +138,7 @@ public class PapReviewsHolderForm extends CEntityDecoratableForm<PapReviewsHolde
     }
 
     private FlowPanel createTableHeaderPanel() {
-        FlowPanel tableHeaderPanel = new FlowPanel();
+        tableHeaderPanel = new FlowPanel();
 
         FlowPanel superCaptionsPanel = new FlowPanel();
         superCaptionsPanel.addStyleName(Styles.AutoPaySuperCaptionsPanel.name());
@@ -195,23 +202,32 @@ public class PapReviewsHolderForm extends CEntityDecoratableForm<PapReviewsHolde
     }
 
     private void renderStatsPanel() {
-        statsPanel.setStyleName(Styles.AutoPayEverythingIsSelected.name(), isSelectAllSet);
-        if (!isSelectAllSet) {
-            if (checkAllVisibleItems.getValue() == true) {
-                counterPanel.setText(i18n.tr("All {0,number,#,##0} AutoPays on this page are selected.", getValue().papReviews().size(), getValue()
-                        .papReviewsTotalCount().getValue()));
-                toggleSelectEverythingAnchor.setVisible(true);
-                toggleSelectEverythingAnchor.setText(i18n.tr("Select all {0,number,#,##0} suspended AutoPays", getValue().papReviews().size()));
-            } else {
-                counterPanel.setText(i18n.tr("Displaying {0,number,#,##0} of {1,number,#,##0} suspended AutoPays", getValue().papReviews().size(), getValue()
-                        .papReviewsTotalCount().getValue()));
-                toggleSelectEverythingAnchor.setVisible(false);
-                toggleSelectEverythingAnchor.setText("");
-            }
+        if (getValue().isNull()) {
+            statsPanel.setVisible(false);
         } else {
-            toggleSelectEverythingAnchor.setVisible(true);
-            toggleSelectEverythingAnchor.setText(i18n.tr("Clear selection"));
-            counterPanel.setText(i18n.tr("All {0,number,#,##0} suspended AutoPays are selected.", getValue().papReviewsTotalCount().getValue()));
+            statsPanel.setVisible(true);
+            statsPanel.setStyleName(Styles.AutoPayEverythingIsSelected.name(), isSelectAllSet);
+            if (getValue().papReviewsTotalCount().getValue() > 0) {
+                if (!isSelectAllSet) {
+                    if (checkAllVisibleItems.getValue() == true) {
+                        counterPanel.setText(i18n.tr("All {0,number,#,##0} AutoPays on this page are selected.", getValue().papReviews().size(), getValue()
+                                .papReviewsTotalCount().getValue()));
+                        toggleSelectEverythingAnchor.setVisible(true);
+                        toggleSelectEverythingAnchor.setText(i18n.tr("Select all {0,number,#,##0} suspended AutoPays", getValue().papReviews().size()));
+                    } else {
+                        counterPanel.setText(i18n.tr("Displaying {0,number,#,##0} of {1,number,#,##0} suspended AutoPays", getValue().papReviews().size(),
+                                getValue().papReviewsTotalCount().getValue()));
+                        toggleSelectEverythingAnchor.setVisible(false);
+                        toggleSelectEverythingAnchor.setText("");
+                    }
+                } else {
+                    toggleSelectEverythingAnchor.setVisible(true);
+                    toggleSelectEverythingAnchor.setText(i18n.tr("Clear selection"));
+                    counterPanel.setText(i18n.tr("All {0,number,#,##0} suspended AutoPays are selected.", getValue().papReviewsTotalCount().getValue()));
+                }
+            } else {
+                counterPanel.setText(i18n.tr("No suspended AutoPays have been found"));
+            }
         }
     }
 

@@ -892,6 +892,12 @@ public class CrmTheme extends VistaTheme {
         style.addProperty("border-left", "none");
         addStyle(style);
 
+        style = new Style("." + PapReviewsHolderForm.Styles.AutoPayNoResultsPanel.name());
+        style.addProperty("text-align", "center");
+        style.addProperty("margin-top", "2em");
+        style.addProperty("margin-buttom", "2em");
+        addStyle(style);
+
         style = new Style("." + PapReviewsHolderForm.Styles.AutoPayFolderHolder.name());
         style.addProperty("overflow", "auto");
         style.addProperty("position", "absolute");

@@ -125,6 +125,7 @@ public class AutoPayReviewViewImpl extends AbstractPrimePane implements AutoPayR
     @Override
     public void setPresenter(AutoPayReviewView.Presenter presenter) {
         this.papReviewHolderForm.setVisited(false);
+        this.papReviewHolderForm.setValue(EntityFactory.create(PapReviewsHolderDTO.class));
         this.presenter = presenter;
     }
 
