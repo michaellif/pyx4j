@@ -7,20 +7,16 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Sep 11, 2013
+ * Created on Sep 23, 2013
  * @author michaellif
  * @version $Id$
  */
 package com.propertyvista.portal.rpc.portal.web.services.maintenance;
 
-import com.google.gwt.user.client.rpc.AsyncCallback;
+import com.pyx4j.entity.rpc.AbstractCrudService;
 
-import com.pyx4j.rpc.shared.IService;
+import com.propertyvista.portal.rpc.portal.web.dto.maintenance.MaintenanceRequestDTO;
 
-import com.propertyvista.portal.rpc.portal.web.dto.maintenance.MaintenanceSummaryDTO;
-
-public interface MaintenanceService extends IService {
-
-    void retreiveMaintenanceSummary(AsyncCallback<MaintenanceSummaryDTO> callback);
+public interface MainenanceRequestCrudService extends AbstractCrudService<MaintenanceRequestDTO> {
 
 }

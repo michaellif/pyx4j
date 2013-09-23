@@ -87,7 +87,6 @@ public class DashboardTheme extends Theme {
         style = new Style(".", StyleName.Gadget, " .", DefaultWidgetsTheme.StyleName.ToolbarItem, " .", DefaultWidgetsTheme.StyleName.Button);
         style.addProperty("width", "250px");
         style.addProperty("background", "none");
-        style.addProperty("color", ThemeColor.foreground, 0.01);
         style.addProperty("margin", "10px 10px 0 10px");
         addStyle(style);
 

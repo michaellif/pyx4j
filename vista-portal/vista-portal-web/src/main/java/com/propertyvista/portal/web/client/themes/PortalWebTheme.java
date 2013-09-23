@@ -20,7 +20,6 @@ import com.pyx4j.commons.css.ThemeColor;
 import com.pyx4j.commons.css.ThemeId;
 import com.pyx4j.forms.client.ui.CComponentTheme;
 import com.pyx4j.forms.client.ui.CEntityContainerTheme;
-import com.pyx4j.forms.client.ui.CEntityContainerTheme.StyleName;
 import com.pyx4j.forms.client.ui.datatable.DefaultDataTableTheme;
 import com.pyx4j.forms.client.ui.decorators.DefaultWidgetDecoratorTheme;
 import com.pyx4j.forms.client.ui.folder.DefaultEntityFolderTheme;
@@ -93,10 +92,10 @@ public class PortalWebTheme extends Theme {
                 style.addProperty("border-color", ThemeColor.foreground, 0.75);
                 style.addProperty("border-radius", "5px");
                 style.addProperty("margin", "0  0 0 10px");
+                style.addProperty("color", "#fff");
                 addStyle(style);
 
                 style = new Style(" .", DefaultWidgetsTheme.StyleName.ButtonText);
-                style.addProperty("color", ThemeColor.foreground, 0.1);
                 style.addProperty("line-height", "2.6em");
                 addStyle(style);
 

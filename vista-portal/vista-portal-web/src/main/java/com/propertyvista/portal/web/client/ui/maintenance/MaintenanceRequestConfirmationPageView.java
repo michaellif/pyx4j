@@ -7,27 +7,19 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on 2013-07-05
- * @author ArtyomB
+ * Created on 2013-04-10
+ * @author VladL
  * @version $Id$
  */
-package com.propertyvista.portal.rpc.portal.dto;
+package com.propertyvista.portal.web.client.ui.maintenance;
 
-import java.util.Date;
+import com.propertyvista.portal.rpc.portal.web.dto.insurance.TenantSureAgreementDTO;
+import com.propertyvista.portal.web.client.ui.IFormView;
 
-import com.pyx4j.entity.annotations.Transient;
-import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.entity.shared.IPrimitive;
+public interface MaintenanceRequestConfirmationPageView extends IFormView<TenantSureAgreementDTO> {
 
-import com.propertyvista.domain.maintenance.MaintenanceRequestStatus;
+    public interface TenantSureOrderConfirmationPagePresenter extends IFormView.IFormViewPresenter<TenantSureAgreementDTO> {
 
-@Transient
-public interface TenantMainenanceRequestStatusDTO extends IEntity {
-
-    IPrimitive<String> description();
-
-    MaintenanceRequestStatus status();
-
-    IPrimitive<Date> submitted();
-
+        void back();
+    }
 }

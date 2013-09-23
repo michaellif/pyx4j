@@ -31,7 +31,7 @@ import com.propertyvista.portal.client.activity.SecurityAwareActivity;
 import com.propertyvista.portal.client.ui.residents.tenantinsurance.tenantsure.views.TenantSureCreditCardUpdateView;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap;
 import com.propertyvista.portal.rpc.portal.services.resident.TenantSureManagementService;
-import com.propertyvista.portal.rpc.portal.web.services.services.TenantSureAgreementService;
+import com.propertyvista.portal.rpc.portal.web.services.services.TenantSureAgreementCrudService;
 
 public class TenantSureCreditCardUpdateActivity extends SecurityAwareActivity implements TenantSureCreditCardUpdateView.Presenter {
 
@@ -84,7 +84,7 @@ public class TenantSureCreditCardUpdateActivity extends SecurityAwareActivity im
     @Override
     public void onTenantAddressRequested() {
         // TODO there should be some generic service to do this in Portal APP
-        GWT.<TenantSureAgreementService> create(TenantSureAgreementService.class).getCurrentTenantAddress(new DefaultAsyncCallback<AddressSimple>() {
+        GWT.<TenantSureAgreementCrudService> create(TenantSureAgreementCrudService.class).getCurrentTenantAddress(new DefaultAsyncCallback<AddressSimple>() {
 
             @Override
             public void onSuccess(AddressSimple result) {

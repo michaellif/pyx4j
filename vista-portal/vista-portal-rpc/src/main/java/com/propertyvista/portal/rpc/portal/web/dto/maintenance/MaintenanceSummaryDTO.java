@@ -11,19 +11,17 @@
  * @author vlads
  * @version $Id$
  */
-package com.propertyvista.portal.rpc.portal.web.dto;
+package com.propertyvista.portal.rpc.portal.web.dto.maintenance;
 
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
 import com.pyx4j.i18n.annotations.I18n;
 
-import com.propertyvista.portal.rpc.portal.dto.TenantMainenanceRequestStatusDTO;
-
 @Transient
 @I18n(strategy = I18n.I18nStrategy.IgnoreThis)
 public interface MaintenanceSummaryDTO extends IEntity {
 
-    IList<TenantMainenanceRequestStatusDTO> maintenanceRequestStatuses();
+    IList<MainenanceRequestStatusDTO> maintenanceRequestStatuses();
 
 }

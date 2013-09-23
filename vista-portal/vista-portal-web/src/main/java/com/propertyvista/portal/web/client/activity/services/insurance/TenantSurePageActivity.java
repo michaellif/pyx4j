@@ -18,7 +18,7 @@ import com.google.gwt.core.client.GWT;
 import com.pyx4j.site.rpc.AppPlace;
 
 import com.propertyvista.portal.rpc.portal.web.dto.insurance.TenantSureAgreementDTO;
-import com.propertyvista.portal.rpc.portal.web.services.services.TenantSureAgreementService;
+import com.propertyvista.portal.rpc.portal.web.services.services.TenantSureAgreementCrudService;
 import com.propertyvista.portal.web.client.activity.AbstractEditorActivity;
 import com.propertyvista.portal.web.client.ui.services.insurance.TenantSurePageView;
 import com.propertyvista.portal.web.client.ui.services.insurance.TenantSurePageView.TenantSurePagePresenter;
@@ -26,7 +26,7 @@ import com.propertyvista.portal.web.client.ui.services.insurance.TenantSurePageV
 public class TenantSurePageActivity extends AbstractEditorActivity<TenantSureAgreementDTO> implements TenantSurePagePresenter {
 
     public TenantSurePageActivity(AppPlace place) {
-        super(TenantSurePageView.class, GWT.<TenantSureAgreementService> create(TenantSureAgreementService.class), place);
+        super(TenantSurePageView.class, GWT.<TenantSureAgreementCrudService> create(TenantSureAgreementCrudService.class), place);
     }
 
 }

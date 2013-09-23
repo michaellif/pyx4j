@@ -25,7 +25,7 @@ import com.propertyvista.portal.rpc.portal.web.dto.insurance.TenantSureCoverageD
 import com.propertyvista.portal.rpc.portal.web.dto.insurance.TenantSureQuoteDTO;
 import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.tenantsure.TenantSureQuotationRequestParamsDTO;
 
-public interface TenantSureAgreementService extends AbstractCrudService<TenantSureAgreementDTO> {
+public interface TenantSureAgreementCrudService extends AbstractCrudService<TenantSureAgreementDTO> {
 
     @Deprecated
     void getQuotationRequestParams(AsyncCallback<TenantSureQuotationRequestParamsDTO> callback);

@@ -7,26 +7,12 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Sep 11, 2013
+ * Created on Sep 23, 2013
  * @author michaellif
  * @version $Id$
  */
 package com.propertyvista.portal.server.portal.web.services.maintenance;
 
-import com.google.gwt.user.client.rpc.AsyncCallback;
-
-import com.propertyvista.portal.rpc.portal.web.dto.maintenance.MaintenanceSummaryDTO;
-import com.propertyvista.portal.rpc.portal.web.services.maintenance.MaintenanceService;
-
-public class MaintenanceServiceImpl implements MaintenanceService {
-
-    @Override
-    public void retreiveMaintenanceSummary(AsyncCallback<MaintenanceSummaryDTO> callback) {
-        if (true) {
-            new MaintenanceServiceMockImpl().retreiveMaintenanceSummary(callback);
-        } else {
-
-        }
-    }
+public class MainenanceRequestCrudServiceImpl {
 
 }

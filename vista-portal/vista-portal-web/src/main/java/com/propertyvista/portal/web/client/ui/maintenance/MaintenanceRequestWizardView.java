@@ -11,16 +11,19 @@
  * @author michaellif
  * @version $Id$
  */
-package com.propertyvista.portal.rpc.portal.web.services.maintenance;
+package com.propertyvista.portal.web.client.ui.maintenance;
 
-import com.google.gwt.user.client.rpc.AsyncCallback;
+import java.math.BigDecimal;
 
-import com.pyx4j.rpc.shared.IService;
+import com.propertyvista.portal.rpc.portal.web.dto.maintenance.MaintenanceRequestDTO;
+import com.propertyvista.portal.web.client.ui.IWizardView;
 
-import com.propertyvista.portal.rpc.portal.web.dto.maintenance.MaintenanceSummaryDTO;
+public interface MaintenanceRequestWizardView extends IWizardView<MaintenanceRequestDTO> {
 
-public interface MaintenanceService extends IService {
+    public interface MaintenanceRequestWizardPresenter extends WizardPresenter<MaintenanceRequestDTO> {
 
-    void retreiveMaintenanceSummary(AsyncCallback<MaintenanceSummaryDTO> callback);
+    }
+
+    void setMinRequiredLiability(BigDecimal minRequiredLiability);
 
 }

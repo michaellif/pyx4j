@@ -32,8 +32,8 @@ import com.propertyvista.domain.tenant.lease.Tenant;
 import com.propertyvista.dto.MaintenanceRequestDTO;
 import com.propertyvista.portal.domain.dto.financial.FinancialSummaryDTO;
 import com.propertyvista.portal.rpc.portal.dto.MainDashboardDTO;
-import com.propertyvista.portal.rpc.portal.dto.TenantMainenanceRequestStatusDTO;
 import com.propertyvista.portal.rpc.portal.services.resident.DashboardService;
+import com.propertyvista.portal.rpc.portal.web.dto.maintenance.MainenanceRequestStatusDTO;
 import com.propertyvista.portal.server.portal.TenantAppContext;
 import com.propertyvista.server.common.util.AddressRetriever;
 import com.propertyvista.shared.config.VistaFeatures;
@@ -87,10 +87,10 @@ public class DashboardServiceImpl implements DashboardService {
         }
 
         for (MaintenanceRequestDTO maintenanceRequest : mrList) {
-            TenantMainenanceRequestStatusDTO requestStatusDto = dashboard.maintenanceInfo().maintenanceRequestStatuses().$();
+            MainenanceRequestStatusDTO requestStatusDto = dashboard.maintenanceInfo().maintenanceRequestStatuses().$();
             requestStatusDto.description().setValue(maintenanceRequest.summary().getValue());
             requestStatusDto.status().set(maintenanceRequest.status().duplicate());
-            requestStatusDto.submitted().setValue(maintenanceRequest.submitted().getValue());
+            requestStatusDto.submissionDate().setValue(maintenanceRequest.submitted().getValue());
             dashboard.maintenanceInfo().maintenanceRequestStatuses().add(requestStatusDto);
         }
 
