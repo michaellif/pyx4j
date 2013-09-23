@@ -30,19 +30,23 @@ import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 
 public class ReferenceDataServiceImpl implements ReferenceDataService {
 
-    @Override
-    public void queryNonBlocking(AsyncCallback<EntitySearchResult<? extends IEntity>> callback, EntityQueryCriteria<? extends IEntity> criteria) {
-        this.query(callback, criteria);
-    }
-
-    @Override
-    public void query(AsyncCallback<EntitySearchResult<? extends IEntity>> callback, EntityQueryCriteria<? extends IEntity> criteria) {
-        EntitySearchResult<IEntity> result = new EntitySearchResult<IEntity>();
-        for (IEntity entity : Persistence.secureQuery(criteria, AttachLevel.ToStringMembers)) {
+    protected <T extends IEntity> EntitySearchResult<T> query(EntityQueryCriteria<T> criteria) {
+        EntitySearchResult<T> result = new EntitySearchResult<T>();
+        for (T entity : Persistence.secureQuery(criteria, AttachLevel.ToStringMembers)) {
             entity.setAttachLevel(AttachLevel.ToStringMembers);
             result.getData().add(entity);
         }
-        callback.onSuccess(result);
+        return result;
+    }
+
+    @Override
+    public final void queryNonBlocking(AsyncCallback<EntitySearchResult<? extends IEntity>> callback, EntityQueryCriteria<? extends IEntity> criteria) {
+        callback.onSuccess(query(criteria));
+    }
+
+    @Override
+    public final void query(AsyncCallback<EntitySearchResult<? extends IEntity>> callback, EntityQueryCriteria<? extends IEntity> criteria) {
+        callback.onSuccess(query(criteria));
     }
 
 }
