@@ -70,8 +70,12 @@ class PreauthorizedPaymentAutoPayReviewReport {
             }
 
             if (reportCriteria.hasExpectedMoveOutFilter()) {
-                criteria.ge(criteria.proto().lease().expectedMoveOut(), reportCriteria.getMinExpectedMoveOut());
-                criteria.le(criteria.proto().lease().expectedMoveOut(), reportCriteria.getMaxExpectedMoveOut());
+                if (reportCriteria.getMinExpectedMoveOut() != null) {
+                    criteria.ge(criteria.proto().lease().expectedMoveOut(), reportCriteria.getMinExpectedMoveOut());
+                }
+                if (reportCriteria.getMaxExpectedMoveOut() != null) {
+                    criteria.le(criteria.proto().lease().expectedMoveOut(), reportCriteria.getMaxExpectedMoveOut());
+                }
             }
 
             criteria.asc(criteria.proto().lease().unit().building().propertyCode());
