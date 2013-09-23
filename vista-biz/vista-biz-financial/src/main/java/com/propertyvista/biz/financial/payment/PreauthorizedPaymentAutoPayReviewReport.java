@@ -300,6 +300,9 @@ class PreauthorizedPaymentAutoPayReviewReport {
             description = billableItem.extraData().getStringView() + " ";
         }
         description += billableItem.description().getStringView();
+        if (description.length() == 0) {
+            description += billableItem.item().code().getStringView();
+        }
         return description;
     }
 
