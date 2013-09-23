@@ -213,7 +213,8 @@ public class PapReviewsHolderForm extends CEntityDecoratableForm<PapReviewsHolde
                         counterPanel.setText(i18n.tr("All {0,number,#,##0} AutoPays on this page are selected.", getValue().papReviews().size(), getValue()
                                 .papReviewsTotalCount().getValue()));
                         toggleSelectEverythingAnchor.setVisible(true);
-                        toggleSelectEverythingAnchor.setText(i18n.tr("Select all {0,number,#,##0} suspended AutoPays", getValue().papReviews().size()));
+                        toggleSelectEverythingAnchor.setText(i18n.tr("Select all {0,number,#,##0} suspended AutoPays", getValue().papReviewsTotalCount()
+                                .getValue()));
                     } else {
                         counterPanel.setText(i18n.tr("Displaying {0,number,#,##0} of {1,number,#,##0} suspended AutoPays", getValue().papReviews().size(),
                                 getValue().papReviewsTotalCount().getValue()));
