@@ -33,7 +33,7 @@ import com.pyx4j.site.client.ui.layout.responsive.LayoutChangeRerquestEvent.Chan
 
 import com.propertyvista.common.client.ClientNavigUtils;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap;
-import com.propertyvista.portal.rpc.portal.services.PortalAuthenticationService;
+import com.propertyvista.portal.rpc.portal.web.services.PortalAuthenticationService;
 import com.propertyvista.portal.web.client.PortalWebSite;
 import com.propertyvista.portal.web.client.ui.ToolbarView;
 import com.propertyvista.shared.i18n.CompiledLocale;

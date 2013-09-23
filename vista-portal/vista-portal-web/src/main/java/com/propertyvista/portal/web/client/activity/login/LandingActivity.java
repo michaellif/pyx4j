@@ -29,7 +29,7 @@ import com.propertyvista.common.client.ui.components.login.AbstractLoginActivty;
 import com.propertyvista.common.client.ui.components.login.LoginView.DevLoginCredentials;
 import com.propertyvista.domain.DemoData.UserType;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap;
-import com.propertyvista.portal.rpc.portal.services.PortalAuthenticationService;
+import com.propertyvista.portal.rpc.portal.web.services.PortalAuthenticationService;
 import com.propertyvista.portal.web.client.ui.landing.LandingView;
 import com.propertyvista.portal.web.client.ui.landing.LandingViewImpl;
 

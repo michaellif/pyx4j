@@ -32,7 +32,7 @@ import com.pyx4j.site.client.AppSite;
 import com.propertyvista.portal.client.PortalSite;
 import com.propertyvista.portal.client.ui.TopRightActionsView;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap;
-import com.propertyvista.portal.rpc.portal.services.PortalAuthenticationService;
+import com.propertyvista.portal.rpc.portal.web.services.PortalAuthenticationService;
 
 public class TopRightActionsActivity extends AbstractActivity implements TopRightActionsView.Presenter {
 

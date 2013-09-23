@@ -24,15 +24,17 @@ import com.pyx4j.commons.UserRuntimeException;
 import com.pyx4j.entity.rpc.EntitySearchResult;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
+import com.pyx4j.rpc.shared.VoidSerializable;
 import com.pyx4j.security.client.ClientContext;
+import com.pyx4j.security.rpc.AuthenticationRequest;
 import com.pyx4j.security.rpc.AuthenticationService;
 import com.pyx4j.site.client.NavigationUri;
 import com.pyx4j.site.rpc.AppPlaceInfo;
 
 import com.propertyvista.portal.rpc.portal.PortalSiteMap;
-import com.propertyvista.portal.rpc.portal.services.PortalAuthenticationService;
 import com.propertyvista.portal.rpc.portal.web.dto.SelfRegistrationBuildingDTO;
 import com.propertyvista.portal.rpc.portal.web.dto.SelfRegistrationDTO;
+import com.propertyvista.portal.rpc.portal.web.services.PortalAuthenticationService;
 import com.propertyvista.portal.rpc.portal.web.services.SelfRegistrationBuildingsSourceService;
 import com.propertyvista.portal.rpc.shared.EntityValidationException;
 import com.propertyvista.portal.web.client.PortalWebSite;
@@ -71,11 +73,11 @@ public class SignUpActivity extends AbstractActivity implements SignUpView.SignU
     }
 
     @Override
-    public void register(SelfRegistrationDTO value) {
-        ClientContext.authenticate(GWT.<AuthenticationService> create(PortalAuthenticationService.class), value, new DefaultAsyncCallback<Boolean>() {
+    public void register(final SelfRegistrationDTO value) {
+        GWT.<PortalAuthenticationService> create(PortalAuthenticationService.class).selfRegistration(new DefaultAsyncCallback<VoidSerializable>() {
             @Override
-            public void onSuccess(Boolean result) {
-
+            public void onSuccess(VoidSerializable result) {
+                authenticate(value);
             }
 
             @Override
@@ -83,6 +85,25 @@ public class SignUpActivity extends AbstractActivity implements SignUpView.SignU
                 if (caught instanceof EntityValidationException) {
                     view.showValidationError((EntityValidationException) caught);
                 } else if (caught instanceof UserRuntimeException) {
+                    view.showError(((UserRuntimeException) caught).getMessage());
+                } else {
+                    super.onFailure(caught);
+                }
+            }
+        }, value);
+    }
+
+    private void authenticate(AuthenticationRequest request) {
+        ClientContext.authenticate(GWT.<AuthenticationService> create(PortalAuthenticationService.class), request, new DefaultAsyncCallback<Boolean>() {
+
+            @Override
+            public void onSuccess(Boolean result) {
+                // ClientContext is redirecting to new place
+            }
+
+            @Override
+            public void onFailure(Throwable caught) {
+                if (caught instanceof UserRuntimeException) {
                     view.showError(((UserRuntimeException) caught).getMessage());
                 } else {
                     super.onFailure(caught);

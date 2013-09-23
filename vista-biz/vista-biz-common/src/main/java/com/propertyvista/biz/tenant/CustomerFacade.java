@@ -20,8 +20,8 @@ import com.pyx4j.commons.Key;
 import com.propertyvista.domain.security.CustomerUser;
 import com.propertyvista.domain.security.VistaCustomerBehavior;
 import com.propertyvista.domain.tenant.Customer;
+import com.propertyvista.domain.tenant.CustomerSelfRegistration;
 import com.propertyvista.domain.tenant.lease.Lease;
-import com.propertyvista.portal.rpc.portal.dto.SelfRegistrationDTO;
 
 public interface CustomerFacade {
 
@@ -35,5 +35,5 @@ public interface CustomerFacade {
 
     void onVistaTermsAccepted(Key customerUserKey, Key vistaTermsKey, boolean accepted);
 
-    void selfRegistration(SelfRegistrationDTO selfRegistration);
+    void selfRegistration(CustomerSelfRegistration selfRegistration);
 }

@@ -46,10 +46,10 @@ import com.propertyvista.portal.client.themes.PortalTheme;
 import com.propertyvista.portal.client.ui.PortalRootPane;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap;
 import com.propertyvista.portal.rpc.portal.SiteDefinitionsDTO;
-import com.propertyvista.portal.rpc.portal.services.PortalAuthenticationService;
 import com.propertyvista.portal.rpc.portal.services.PortalPolicyRetrieveService;
 import com.propertyvista.portal.rpc.portal.services.PortalSiteServices;
 import com.propertyvista.portal.rpc.portal.services.SiteThemeServices;
+import com.propertyvista.portal.rpc.portal.web.services.PortalAuthenticationService;
 import com.propertyvista.portal.rpc.shared.services.PolicyRetrieveService;
 
 public class PortalSite extends VistaSite {

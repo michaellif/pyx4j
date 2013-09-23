@@ -42,7 +42,7 @@ import com.propertyvista.portal.client.ui.components.LandingViewLayoutPanel.Side
 import com.propertyvista.portal.client.ui.residents.login.LandingViewImpl.LandingHtmlTemplates;
 import com.propertyvista.portal.client.ui.residents.login.LoginAndSignUpResources;
 import com.propertyvista.portal.rpc.portal.dto.SelfRegistrationBuildingDTO;
-import com.propertyvista.portal.rpc.portal.dto.SelfRegistrationDTO;
+import com.propertyvista.portal.rpc.portal.web.dto.SelfRegistrationDTO;
 import com.propertyvista.portal.rpc.shared.EntityValidationException;
 
 public class TenantRegistrationViewImpl extends Composite implements TenantRegistrationView {

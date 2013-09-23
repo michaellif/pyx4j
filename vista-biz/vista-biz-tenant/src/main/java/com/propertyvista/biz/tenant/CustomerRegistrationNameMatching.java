@@ -17,11 +17,11 @@ import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.entity.shared.IPrimitive;
 
 import com.propertyvista.domain.person.Name;
-import com.propertyvista.portal.rpc.portal.dto.SelfRegistrationDTO;
+import com.propertyvista.domain.tenant.CustomerSelfRegistration;
 
 class CustomerRegistrationNameMatching {
 
-    static boolean nameMatch(Name name, SelfRegistrationDTO selfRegistration) {
+    static boolean nameMatch(Name name, CustomerSelfRegistration selfRegistration) {
         if (equalsIgnoreCase(name.lastName(), selfRegistration.lastName()) && equalsIgnoreCase(name.firstName(), selfRegistration.firstName())) {
             return true;
         }

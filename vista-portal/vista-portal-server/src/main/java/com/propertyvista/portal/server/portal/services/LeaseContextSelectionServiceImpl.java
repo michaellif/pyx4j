@@ -29,6 +29,7 @@ import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.portal.domain.dto.LeaseContextChoiceDTO;
 import com.propertyvista.portal.rpc.portal.services.LeaseContextSelectionService;
 import com.propertyvista.portal.server.portal.TenantAppContext;
+import com.propertyvista.portal.server.portal.web.services.PortalAuthenticationServiceImpl;
 
 public class LeaseContextSelectionServiceImpl implements LeaseContextSelectionService {
 

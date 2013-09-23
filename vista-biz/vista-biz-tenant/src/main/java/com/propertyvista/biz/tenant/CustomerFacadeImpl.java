@@ -41,11 +41,12 @@ import com.propertyvista.domain.security.CustomerUser;
 import com.propertyvista.domain.security.VistaCustomerBehavior;
 import com.propertyvista.domain.tenant.Customer;
 import com.propertyvista.domain.tenant.CustomerAcceptedTerms;
+import com.propertyvista.domain.tenant.CustomerSelfRegistration;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
 import com.propertyvista.domain.tenant.lease.Tenant;
 import com.propertyvista.operations.domain.legal.VistaTerms.VistaTermsV;
-import com.propertyvista.portal.rpc.portal.dto.SelfRegistrationDTO;
+import com.propertyvista.portal.rpc.portal.web.dto.SelfRegistrationDTO;
 import com.propertyvista.portal.rpc.shared.EntityValidationException;
 import com.propertyvista.server.common.security.AccessKey;
 import com.propertyvista.server.domain.security.CustomerUserCredential;
@@ -200,10 +201,10 @@ public class CustomerFacadeImpl implements CustomerFacade {
     }
 
     @Override
-    public void selfRegistration(SelfRegistrationDTO selfRegistration) {
+    public void selfRegistration(CustomerSelfRegistration selfRegistration) {
         // We need protection from attacks that check names of the user?
         EntityQueryCriteria<Tenant> criteria = EntityQueryCriteria.create(Tenant.class);
-        criteria.eq(criteria.proto().lease().unit().building(), selfRegistration.building().buildingKey());
+        criteria.eq(criteria.proto().lease().unit().building(), selfRegistration.buildingId());
         criteria.eq(criteria.proto().lease().unit().building().suspended(), false);
         criteria.eq(criteria.proto().customer().portalRegistrationToken(), selfRegistration.securityCode().getValue().toUpperCase(Locale.ENGLISH));
 
@@ -249,7 +250,6 @@ public class CustomerFacadeImpl implements CustomerFacade {
         ServerSideFactory.create(AuditFacade.class).credentialsUpdated(credential.user());
 
         Persistence.service().persist(credential);
-        Persistence.service().commit();
         log.info("tenant {} {} registered for tenant portal", selfRegistration.firstName(), selfRegistration.lastName());
 
     }

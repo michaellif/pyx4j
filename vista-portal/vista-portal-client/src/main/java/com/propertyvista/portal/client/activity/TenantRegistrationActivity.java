@@ -33,10 +33,12 @@ import com.propertyvista.portal.client.PortalSite;
 import com.propertyvista.portal.client.ui.residents.registration.TenantRegistrationView;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap;
 import com.propertyvista.portal.rpc.portal.dto.SelfRegistrationBuildingDTO;
-import com.propertyvista.portal.rpc.portal.services.PortalAuthenticationService;
 import com.propertyvista.portal.rpc.portal.services.resident.SelfRegistrationBuildingsSourceService;
+import com.propertyvista.portal.rpc.portal.web.services.PortalAuthenticationService;
 import com.propertyvista.portal.rpc.shared.EntityValidationException;
 
+// All code is now in SignUpActivity
+@Deprecated
 public class TenantRegistrationActivity extends AbstractActivity implements TenantRegistrationView.Presenter {
 
     private static final I18n i18n = I18n.get(I18n.class);
@@ -71,6 +73,7 @@ public class TenantRegistrationActivity extends AbstractActivity implements Tena
 
     @Override
     public void onRegister() {
+        Window.alert("This is deprecated functionality and will not work");
         ClientContext.authenticate(GWT.<AuthenticationService> create(PortalAuthenticationService.class), view.getValue(), new DefaultAsyncCallback<Boolean>() {
             @Override
             public void onSuccess(Boolean result) {

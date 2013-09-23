@@ -22,7 +22,7 @@ import com.propertyvista.common.client.ui.components.login.AbstractPasswordReset
 import com.propertyvista.common.client.ui.components.login.PasswordResetRequestView;
 import com.propertyvista.portal.client.PortalSite;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap;
-import com.propertyvista.portal.rpc.portal.services.PortalAuthenticationService;
+import com.propertyvista.portal.rpc.portal.web.services.PortalAuthenticationService;
 
 public class PasswordResetRequestActivity extends AbstractPasswordResetRequestActivity {
 

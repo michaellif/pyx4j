@@ -25,7 +25,7 @@ import com.pyx4j.security.rpc.AuthenticationService;
 import com.pyx4j.site.client.AppSite;
 
 import com.propertyvista.portal.rpc.portal.PortalSiteMap;
-import com.propertyvista.portal.rpc.portal.services.PortalAuthenticationService;
+import com.propertyvista.portal.rpc.portal.web.services.PortalAuthenticationService;
 
 public class LogoutActivity extends AbstractActivity {
 

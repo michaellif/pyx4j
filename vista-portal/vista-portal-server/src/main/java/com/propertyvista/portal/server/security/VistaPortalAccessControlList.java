@@ -47,7 +47,6 @@ import com.propertyvista.portal.domain.ptapp.Summary;
 import com.propertyvista.portal.rpc.portal.dto.SelfRegistrationBuildingDTO;
 import com.propertyvista.portal.rpc.portal.services.LeaseContextSelectionService;
 import com.propertyvista.portal.rpc.portal.services.PasswordChangeUserService;
-import com.propertyvista.portal.rpc.portal.services.PortalAuthenticationService;
 import com.propertyvista.portal.rpc.portal.services.PortalPasswordResetService;
 import com.propertyvista.portal.rpc.portal.services.PortalPolicyRetrieveService;
 import com.propertyvista.portal.rpc.portal.services.PortalSiteServices;
@@ -73,6 +72,7 @@ import com.propertyvista.portal.rpc.portal.services.resident.TenantInsuranceServ
 import com.propertyvista.portal.rpc.portal.services.resident.TenantSureManagementService;
 import com.propertyvista.portal.rpc.portal.services.resident.ViewBillService;
 import com.propertyvista.portal.rpc.portal.services.resident.WeatherService;
+import com.propertyvista.portal.rpc.portal.web.services.PortalAuthenticationService;
 import com.propertyvista.portal.rpc.portal.web.services.services.TenantSureAgreementCrudService;
 import com.propertyvista.portal.rpc.ptapp.services.ApplicationDocumentUploadService;
 import com.propertyvista.portal.rpc.ptapp.services.ApplicationSelectionService;

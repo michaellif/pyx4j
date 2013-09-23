@@ -20,7 +20,7 @@ import com.google.gwt.place.shared.Place;
 import com.pyx4j.site.client.IsView;
 
 import com.propertyvista.portal.rpc.portal.dto.SelfRegistrationBuildingDTO;
-import com.propertyvista.portal.rpc.portal.dto.SelfRegistrationDTO;
+import com.propertyvista.portal.rpc.portal.web.dto.SelfRegistrationDTO;
 import com.propertyvista.portal.rpc.shared.EntityValidationException;
 
 public interface TenantRegistrationView extends IsView {

@@ -21,7 +21,7 @@ import com.pyx4j.security.rpc.AuthenticationService;
 import com.propertyvista.common.client.ui.components.login.AbstractPasswordResetRequestActivity;
 import com.propertyvista.common.client.ui.components.login.PasswordResetRequestView;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap;
-import com.propertyvista.portal.rpc.portal.services.PortalAuthenticationService;
+import com.propertyvista.portal.rpc.portal.web.services.PortalAuthenticationService;
 import com.propertyvista.portal.web.client.PortalWebSite;
 
 public class PasswordResetRequestActivity extends AbstractPasswordResetRequestActivity {

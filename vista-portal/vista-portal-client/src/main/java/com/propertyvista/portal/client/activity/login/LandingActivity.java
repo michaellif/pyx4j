@@ -31,7 +31,7 @@ import com.propertyvista.domain.DemoData.UserType;
 import com.propertyvista.portal.client.ui.residents.login.LandingView;
 import com.propertyvista.portal.client.ui.residents.login.LandingViewImpl;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap;
-import com.propertyvista.portal.rpc.portal.services.PortalAuthenticationService;
+import com.propertyvista.portal.rpc.portal.web.services.PortalAuthenticationService;
 
 public class LandingActivity extends AbstractLoginActivty implements LandingView.Presenter {
 

@@ -35,7 +35,7 @@ import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
 import com.propertyvista.portal.client.themes.LandingPagesTheme;
 import com.propertyvista.portal.client.ui.util.decorators.LoginDecoratorBuilder;
 import com.propertyvista.portal.rpc.portal.dto.SelfRegistrationBuildingDTO;
-import com.propertyvista.portal.rpc.portal.dto.SelfRegistrationDTO;
+import com.propertyvista.portal.rpc.portal.web.dto.SelfRegistrationDTO;
 import com.propertyvista.portal.rpc.shared.EntityValidationException;
 import com.propertyvista.portal.rpc.shared.EntityValidationException.MemberValidationError;
 
@@ -59,7 +59,7 @@ public class TenantRegistrationForm extends CEntityDecoratableForm<SelfRegistrat
         FlowPanel userDataPanel = new FlowPanel();
         userDataPanel.getElement().getStyle().setMarginTop(20, Unit.PX);
 
-        buildingSelector = ((CBuildingSuggestBox) inject(proto().building(), new CBuildingSuggestBox()));
+        buildingSelector = (inject(proto().building(), new CBuildingSuggestBox()));
         buildingSelector.setWatermark(i18n.tr("Your building's address"));
         buildingSelector.setNote(i18n.tr("Search by typing your building's street, postal code, province etc..."));
         userDataPanel.add(center(new LoginDecoratorBuilder(buildingSelector, false).customLabel(i18n.tr("Select your building")).build()));

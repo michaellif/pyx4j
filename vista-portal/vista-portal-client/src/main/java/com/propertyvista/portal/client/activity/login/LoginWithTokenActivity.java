@@ -22,7 +22,7 @@ import com.propertyvista.common.client.ui.components.login.AbstractLoginWithToke
 import com.propertyvista.common.client.ui.components.login.LoginWithTokenView;
 import com.propertyvista.portal.client.PortalSite;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap;
-import com.propertyvista.portal.rpc.portal.services.PortalAuthenticationService;
+import com.propertyvista.portal.rpc.portal.web.services.PortalAuthenticationService;
 
 public class LoginWithTokenActivity extends AbstractLoginWithTokenActivity {
 

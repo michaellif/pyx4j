@@ -11,8 +11,16 @@
  * @author vlads
  * @version $Id$
  */
-package com.propertyvista.portal.rpc.portal.services;
+package com.propertyvista.portal.rpc.portal.web.services;
+
+import com.google.gwt.user.client.rpc.AsyncCallback;
+
+import com.pyx4j.rpc.shared.VoidSerializable;
+
+import com.propertyvista.portal.rpc.portal.web.dto.SelfRegistrationDTO;
 
 public interface PortalAuthenticationService extends com.pyx4j.security.rpc.AuthenticationService {
+
+    public void selfRegistration(AsyncCallback<VoidSerializable> callback, SelfRegistrationDTO selfRegistration);
 
 }

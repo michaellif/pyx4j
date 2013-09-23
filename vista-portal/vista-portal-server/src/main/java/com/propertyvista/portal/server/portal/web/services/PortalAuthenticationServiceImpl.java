@@ -11,7 +11,7 @@
  * @author vlads
  * @version $Id$
  */
-package com.propertyvista.portal.server.portal.services;
+package com.propertyvista.portal.server.portal.web.services;
 
 import java.util.Arrays;
 import java.util.Collection;
@@ -19,15 +19,18 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import com.google.gwt.user.client.rpc.AsyncCallback;
+
 import com.pyx4j.commons.UserRuntimeException;
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.entity.server.Persistence;
+import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.security.rpc.AuthenticationRequest;
+import com.pyx4j.rpc.shared.VoidSerializable;
 import com.pyx4j.security.shared.Behavior;
 
 import com.propertyvista.biz.communication.CommunicationFacade;
@@ -40,9 +43,10 @@ import com.propertyvista.domain.security.VistaCustomerPaymentTypeBehavior;
 import com.propertyvista.domain.security.common.VistaApplication;
 import com.propertyvista.domain.security.common.VistaBasicBehavior;
 import com.propertyvista.domain.tenant.Customer;
+import com.propertyvista.domain.tenant.CustomerSelfRegistration;
 import com.propertyvista.domain.tenant.lease.Lease;
-import com.propertyvista.portal.rpc.portal.dto.SelfRegistrationDTO;
-import com.propertyvista.portal.rpc.portal.services.PortalAuthenticationService;
+import com.propertyvista.portal.rpc.portal.web.dto.SelfRegistrationDTO;
+import com.propertyvista.portal.rpc.portal.web.services.PortalAuthenticationService;
 import com.propertyvista.portal.server.security.VistaCustomerContext;
 import com.propertyvista.server.common.security.VistaAuthenticationServicesImpl;
 import com.propertyvista.server.domain.security.CustomerUserCredential;
@@ -63,7 +67,7 @@ public class PortalAuthenticationServiceImpl extends VistaAuthenticationServices
 
     @Override
     protected VistaApplication getVistaApplication() {
-        return VistaApplication.residentPortal;
+        return VistaApplication.resident;
     }
 
     @Override
@@ -82,11 +86,20 @@ public class PortalAuthenticationServiceImpl extends VistaAuthenticationServices
     }
 
     @Override
-    protected String beginSession(AuthenticationRequest request) {
-        if (request instanceof SelfRegistrationDTO) {
-            ServerSideFactory.create(CustomerFacade.class).selfRegistration((SelfRegistrationDTO) request);
-        }
-        return super.beginSession(request);
+    public void selfRegistration(AsyncCallback<VoidSerializable> callback, SelfRegistrationDTO request) {
+        CustomerSelfRegistration selfRegistration = EntityFactory.create(CustomerSelfRegistration.class);
+
+        selfRegistration.buildingId().set(request.building().buildingKey());
+        selfRegistration.firstName().setValue(request.firstName().getValue());
+        selfRegistration.middleName().setValue(request.middleName().getValue());
+        selfRegistration.lastName().setValue(request.lastName().getValue());
+        selfRegistration.securityCode().setValue(request.securityCode().getValue());
+        selfRegistration.email().setValue(request.email().getValue());
+        selfRegistration.password().setValue(request.password().getValue());
+
+        ServerSideFactory.create(CustomerFacade.class).selfRegistration(selfRegistration);
+        Persistence.service().commit();
+        callback.onSuccess(null);
     }
 
     @Override
@@ -181,4 +194,5 @@ public class PortalAuthenticationServiceImpl extends VistaAuthenticationServices
         }
         Persistence.service().commit();
     }
+
 }
