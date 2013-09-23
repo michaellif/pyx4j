@@ -109,7 +109,7 @@ public class AutoPayReviewViewImpl extends AbstractPrimePane implements AutoPayR
         holder.papReviews().addAll(values);
 
         this.papReviewHolderForm.setValue(holder, false);
-        this.visibleRange = new Range(0, values.size());
+        this.visibleRange = new Range(0, values.size() == 0 ? PAGE_INCREMENT : values.size());
     }
 
     @Override
@@ -124,6 +124,8 @@ public class AutoPayReviewViewImpl extends AbstractPrimePane implements AutoPayR
 
     @Override
     public void setPresenter(AutoPayReviewView.Presenter presenter) {
+        this.settingsForm.setVisited(false);
+        this.settingsForm.populateNew(); // TODO this is not supposed to be here: settings must be populated by presenter too
         this.papReviewHolderForm.setVisited(false);
         this.papReviewHolderForm.setValue(EntityFactory.create(PapReviewsHolderDTO.class));
         this.presenter = presenter;
@@ -163,7 +165,10 @@ public class AutoPayReviewViewImpl extends AbstractPrimePane implements AutoPayR
     }
 
     private void search() {
-        presenter.populate();
+        settingsForm.setUnconditionalValidationErrorRendering(true);
+        if (settingsForm.isValid()) {
+            presenter.populate();
+        }
     }
 
     private void showMore() {
