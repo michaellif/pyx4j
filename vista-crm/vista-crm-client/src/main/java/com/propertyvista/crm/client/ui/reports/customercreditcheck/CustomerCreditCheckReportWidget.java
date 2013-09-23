@@ -145,8 +145,10 @@ public class CustomerCreditCheckReportWidget implements ReportWidget {
                 @Override
                 public void execute() {
                     ScrollBarPositionMemento scrollBarPosition = (ScrollBarPositionMemento) (((Object[]) memento)[1]);
-                    reportHtml.getElement().setScrollLeft(scrollBarPosition.posX);
-                    reportHtml.getElement().setScrollTop(scrollBarPosition.posY);
+                    if (scrollBarPosition != null) {
+                        reportHtml.getElement().setScrollLeft(scrollBarPosition.posX);
+                        reportHtml.getElement().setScrollTop(scrollBarPosition.posY);
+                    }
                 }
             });
 
