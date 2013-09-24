@@ -320,7 +320,7 @@ class PreauthorizedPaymentAgreementMananger {
         BillingCycle nextCycle = ServerSideFactory.create(PaymentMethodFacade.class).getNextPreauthorizedPaymentBillingCycle(lease);
         AutoPayPolicy autoPayPolicy = ServerSideFactory.create(PolicyFacade.class).obtainEffectivePolicy(lease.unit().building(), AutoPayPolicy.class);
 
-        if (isPreauthorizedPaymentsApplicableForBillingCycle(lease, nextCycle, autoPayPolicy)) {
+        if (!isPreauthorizedPaymentsApplicableForBillingCycle(lease, nextCycle, autoPayPolicy)) {
             suspend = true;
         }
 
@@ -384,7 +384,7 @@ class PreauthorizedPaymentAgreementMananger {
                                 for (PreauthorizedPayment item : retrieveNextPreauthorizedPayments(account.lease())) {
                                     boolean suspend = false;
 
-                                    if (isPreauthorizedPaymentsApplicableForBillingCycle(account.lease(), suspensionCycle, autoPayPolicy)) {
+                                    if (!isPreauthorizedPaymentsApplicableForBillingCycle(account.lease(), suspensionCycle, autoPayPolicy)) {
                                         suspend = true;
                                     }
 
