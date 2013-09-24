@@ -320,14 +320,9 @@ class PreauthorizedPaymentAgreementMananger {
         BillingCycle nextCycle = ServerSideFactory.create(PaymentMethodFacade.class).getNextPreauthorizedPaymentBillingCycle(lease);
         AutoPayPolicy autoPayPolicy = ServerSideFactory.create(PolicyFacade.class).obtainEffectivePolicy(lease.unit().building(), AutoPayPolicy.class);
 
-        // TODO: lease first month check:
-        suspend |= leaseFirstBillingPeriodChargePolicyCheck(lease, nextCycle, autoPayPolicy);
-
-        // lease last month check:
-        suspend |= leaseLastBillingPeriodChargePolicyCheck(lease, nextCycle, autoPayPolicy);
-
-        // Lease end date check:
-        suspend |= leaseEndDateCheck(lease, nextCycle);
+        if (isPreauthorizedPaymentsApplicableForBillingCycle(lease, nextCycle, autoPayPolicy)) {
+            suspend = true;
+        }
 
         if (suspend) {
             for (PreauthorizedPayment pap : activePaps) {
@@ -389,9 +384,9 @@ class PreauthorizedPaymentAgreementMananger {
                                 for (PreauthorizedPayment item : retrieveNextPreauthorizedPayments(account.lease())) {
                                     boolean suspend = false;
 
-                                    suspend |= leaseFirstBillingPeriodChargePolicyCheck(account.lease(), suspensionCycle, autoPayPolicy);
-                                    suspend |= leaseLastBillingPeriodChargePolicyCheck(account.lease(), suspensionCycle, autoPayPolicy);
-                                    suspend |= leaseEndDateCheck(account.lease(), suspensionCycle);
+                                    if (isPreauthorizedPaymentsApplicableForBillingCycle(account.lease(), suspensionCycle, autoPayPolicy)) {
+                                        suspend = true;
+                                    }
 
                                     if (suspend) {
                                         suspended = true;
@@ -424,6 +419,23 @@ class PreauthorizedPaymentAgreementMananger {
             }
         } finally {
             billingCycleIterator.close();
+        }
+    }
+
+    boolean isPreauthorizedPaymentsApplicableForBillingCycle(Lease lease, BillingCycle paymentCycle, AutoPayPolicy autoPayPolicy) {
+        // TODO: lease first month check:
+        if (leaseFirstBillingPeriodChargePolicyCheck(lease, paymentCycle, autoPayPolicy)) {
+            return false;
+        } else
+        // lease last month check:
+        if (leaseLastBillingPeriodChargePolicyCheck(lease, paymentCycle, autoPayPolicy)) {
+            return false;
+        } else
+        // Lease end date check:
+        if (leaseEndDateCheck(lease, paymentCycle)) {
+            return false;
+        } else {
+            return true;
         }
     }
 

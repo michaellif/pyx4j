@@ -33,6 +33,7 @@ import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 
 import com.propertyvista.biz.policy.PolicyFacade;
 import com.propertyvista.domain.financial.BillingAccount;
+import com.propertyvista.domain.financial.billing.BillingCycle;
 import com.propertyvista.domain.payment.PreauthorizedPayment;
 import com.propertyvista.domain.payment.PreauthorizedPayment.PreauthorizedPaymentCoveredItem;
 import com.propertyvista.domain.policy.policies.AutoPayPolicy;
@@ -121,15 +122,21 @@ class PreauthorizedPaymentAutoPayReviewReport {
 
         review.unit().setValue(billingAccount.lease().unit().info().number().getValue());
 
-        review.paymentDue().setValue(ServerSideFactory.create(PaymentMethodFacade.class).getNextPreauthorizedPaymentDate(billingAccount.lease()));
+        BillingCycle nextPaymentCycle = ServerSideFactory.create(PaymentMethodFacade.class).getNextPreauthorizedPaymentBillingCycle(billingAccount.lease());
+
+        review.paymentDue().setValue(nextPaymentCycle.targetPadExecutionDate().getValue());
 
         AutoPayPolicy policy = ServerSideFactory.create(PolicyFacade.class)
                 .obtainEffectivePolicy(billingAccount.lease().unit().building(), AutoPayPolicy.class);
         AutoPayPolicy.ChangeRule changeRule = policy.onLeaseChargeChangeRule().getValue();
 
+        boolean renewPayments = new PreauthorizedPaymentAgreementMananger().isPreauthorizedPaymentsApplicableForBillingCycle(billingAccount.lease(),
+                nextPaymentCycle, policy);
+
         List<PreauthorizedPayment> preauthorizedPayments = getPreauthorizedPayments(billingAccount);
         for (PreauthorizedPayment preauthorizedPayment : preauthorizedPayments) {
-            review.pap().add(createPreauthorizedPaymentPreview(billingAccount, changeRule, review.paymentDue().getValue(), preauthorizedPayment));
+            review.pap()
+                    .add(createPreauthorizedPaymentPreview(billingAccount, changeRule, renewPayments, review.paymentDue().getValue(), preauthorizedPayment));
         }
 
         calulateLeaseTotals(review);
@@ -199,7 +206,7 @@ class PreauthorizedPaymentAutoPayReviewReport {
     }
 
     private AutoPayReviewPreauthorizedPaymentDTO createPreauthorizedPaymentPreview(BillingAccount billingAccount, AutoPayPolicy.ChangeRule changeRule,
-            LogicalDate preauthorizedPaymentDate, PreauthorizedPayment preauthorizedPayment) {
+            boolean renewPayments, LogicalDate preauthorizedPaymentDate, PreauthorizedPayment preauthorizedPayment) {
         AutoPayReviewPreauthorizedPaymentDTO papReview = EntityFactory.create(AutoPayReviewPreauthorizedPaymentDTO.class);
 
         papReview.pap().set(preauthorizedPayment.createIdentityStub());
@@ -223,7 +230,7 @@ class PreauthorizedPaymentAutoPayReviewReport {
             AutoPayReviewChargeDTO chargeReview = EntityFactory.create(AutoPayReviewChargeDTO.class);
             if (coveredItem == null) {
                 // newly added items or not covered
-                if (isBillableItemPapable(billableItem, preauthorizedPaymentDate)) {
+                if (renewPayments && isBillableItemPapable(billableItem, preauthorizedPaymentDate)) {
                     BillableItem previousBillableItem = previousBillableItems.get(bi.getKey());
                     if (previousBillableItem != null) {
                         chargeReview.suspended().billableItem().set(previousBillableItem.createIdentityStub());
@@ -244,7 +251,7 @@ class PreauthorizedPaymentAutoPayReviewReport {
                 chargeReview.suspended().payment().setValue(coveredItem.amount().getValue());
                 calulatePercent(chargeReview.suspended());
 
-                if (isBillableItemPapable(billableItem, preauthorizedPaymentDate)) {
+                if (renewPayments && isBillableItemPapable(billableItem, preauthorizedPaymentDate)) {
                     chargeReview.suggested()
                             .set(calulateSuggestedChargeDetail(billingAccount, changeRule, preauthorizedPaymentDate, billableItem, coveredItem));
                 }
@@ -273,7 +280,7 @@ class PreauthorizedPaymentAutoPayReviewReport {
 
         }
 
-        // Removed items at the end
+        // Removed billableItem are shown at the end, and they don't have suggestions
         for (PreauthorizedPaymentCoveredItem coveredItem : preauthorizedPayment.coveredItems()) {
             if (!newBillableItems.containsKey(coveredItem.billableItem().uid().getValue())) {
 
