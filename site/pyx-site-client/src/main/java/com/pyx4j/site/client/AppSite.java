@@ -72,12 +72,15 @@ public abstract class AppSite implements EntryPoint {
 
     private RootPane<?> rootPane;
 
+    private final ViewFactory viewFactory;
+
     public final long applicationStartTime = System.currentTimeMillis();
 
     private final UserAgentDetection userAgentDetection;
 
-    public AppSite(String appId, Class<? extends SiteMap> siteMapClass, AppPlaceDispatcher dispatcher) {
+    public AppSite(String appId, Class<? extends SiteMap> siteMapClass, ViewFactory viewFactory, AppPlaceDispatcher dispatcher) {
         this.appId = appId;
+        this.viewFactory = viewFactory;
 
         if (dispatcher == null) {
             dispatcher = new AppPlaceDispatcher() {
@@ -147,8 +150,8 @@ public abstract class AppSite implements EntryPoint {
         userAgentDetection = new UserAgentDetection(Window.Navigator.getUserAgent());
     }
 
-    public AppSite(String appId, Class<? extends SiteMap> siteMapClass) {
-        this(appId, siteMapClass, null);
+    public AppSite(String appId, Class<? extends SiteMap> siteMapClass, ViewFactory viewFactory) {
+        this(appId, siteMapClass, viewFactory, null);
     }
 
     public static AppSite instance() {
@@ -157,6 +160,10 @@ public abstract class AppSite implements EntryPoint {
 
     public String getAppId() {
         return appId;
+    }
+
+    public static ViewFactory getViewFactory() {
+        return instance().viewFactory;
     }
 
     protected void setRootPane(RootPane<?> rootPane) {

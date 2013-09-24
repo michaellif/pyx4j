@@ -46,6 +46,9 @@ public abstract class AbstractAppPlaceDispatcher implements AppPlaceDispatcher {
 
             @Override
             public void onBehaviorChange(BehaviorChangeEvent event) {
+                if (AppSite.getViewFactory() instanceof SingletonViewFactory) {
+                    ((SingletonViewFactory) AppSite.getViewFactory()).invalidate();
+                }
                 Place current = AppSite.getPlaceController().getWhere();
                 if ((current instanceof PublicPlace) || (!isApplicationAuthenticated())) {
                     AppSite.getPlaceController().goTo(AppPlace.NOWHERE);
