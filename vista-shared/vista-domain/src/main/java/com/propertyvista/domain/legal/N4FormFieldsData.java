@@ -24,42 +24,64 @@ public interface N4FormFieldsData extends IEntity {
     /**
      * Tenant names and address
      */
+    @PdfFormFieldName("Text1")
     IPrimitive<String> to();
 
     /**
      * Landlord's name.
      */
+    @PdfFormFieldName("Text2")
     IPrimitive<String> from();
 
     // ADDRESS OF THE RENTAL UNIT
+    @PdfFormFieldName("b12c96nfn4_app_street_no")
     IPrimitive<String> tenantStreetNumber();
 
+    @PdfFormFieldName("b12c96nfn4_app_street_name")
     IPrimitive<String> tenantStreetName();
 
+    @PdfFormFieldName("b12c96nfn4_app_street_label")
     IPrimitive<String> tenantStreetType();
 
+    @PdfFormFieldName("b12c96nfn4_app_street_direction")
     IPrimitive<String> tenantStreetDirection();
 
+    @PdfFormFieldName("b12c96nfn4_app_unit_no")
     IPrimitive<String> tenantUnit();
 
+    @PdfFormFieldName("b12c96nfn4_app_city")
     IPrimitive<String> tenantMunicipality();
 
-    /** Actually this is not required */
-    IPrimitive<String> tenantProvince();
+//    /** Actually this is not required */
+//    IPrimitive<String> tenantProvince();
 
     /** First part of postal code */
+    @PdfFormFieldName("b12c96nfn4_app_postal_code_1")
     IPrimitive<String> tenantPostalCodeADA();
 
     /** SecondPart of Postal code */
+    @PdfFormFieldName("@@b12c96nfn4_app_postal_code_2.0")
     IPrimitive<String> tenantPostalCodeDAD();
 
     // THIS INFO. IS FROM YOUR LANDLORD
 
+    @PdfFormFieldName("@@b12c96nfn4_termination_date_g.0")
     IPrimitive<String> terminationDateDD();
 
+    @PdfFormFieldName("@@b12c96nfn4_termination_date_g.1")
     IPrimitive<String> terminationDateMM();
 
+    @PdfFormFieldName("@@b12c96nfn4_termination_date_g.2")
     IPrimitive<String> terminationDateYYYY();
+
+    @PdfFormFieldName("@@b12c96nfn4_total_rent_owed_g.0")
+    IPrimitive<String> globalTotalOwedThousands();
+
+    @PdfFormFieldName("@@b12c96nfn4_total_rent_owed_g.1")
+    IPrimitive<String> globalTotalOwedHundreds();
+
+    @PdfFormFieldName("@@b12c96nfn4_total_rent_owed_g.2")
+    IPrimitive<String> globalTotalOwedCents();
 
     // OWED RENT BREAKDOWN
 
@@ -157,7 +179,6 @@ public interface N4FormFieldsData extends IEntity {
     IPrimitive<String> rentOwingCentsC();
 
     // Total Rent Owing
-
     IPrimitive<String> rentOwingThousandsTotal();
 
     IPrimitive<String> rentOwingHundredsTotal();
