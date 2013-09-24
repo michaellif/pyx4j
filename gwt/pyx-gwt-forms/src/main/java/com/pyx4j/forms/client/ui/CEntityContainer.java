@@ -69,8 +69,8 @@ public abstract class CEntityContainer<E extends IObject<?>> extends CComponent<
     private final ContainerPanel containerPanel;
 
     public CEntityContainer() {
-        applyAccessibilityRules();
         containerPanel = new ContainerPanel();
+
         if (false) {
             Button debugButton = new Button("Debug", new Command() {
 
@@ -89,6 +89,8 @@ public abstract class CEntityContainer<E extends IObject<?>> extends CComponent<
         contentHolder.setStyleName(CEntityContainerTheme.StyleName.ContentHolder.name());
 
         containerPanel.add(contentHolder);
+        applyAccessibilityRules();
+
     }
 
     public abstract Collection<? extends CComponent<?>> getComponents();
@@ -227,11 +229,8 @@ public abstract class CEntityContainer<E extends IObject<?>> extends CComponent<
     @Override
     public void applyVisibilityRules() {
         super.applyVisibilityRules();
-        if (getComponents() != null) {
-            for (CComponent<?> component : getComponents()) {
-                component.applyVisibilityRules();
-            }
-        }
+        asWidget().setVisible(isVisible());
+
         //TODO Workaround to fire event for container - that should be reviewed - event should be fired 
         //on accessibility adapters change
         PropertyChangeEvent.fire(this, PropertyChangeEvent.PropertyName.visible);
