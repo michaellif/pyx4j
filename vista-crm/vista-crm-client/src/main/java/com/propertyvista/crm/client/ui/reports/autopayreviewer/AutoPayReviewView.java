@@ -48,4 +48,6 @@ public interface AutoPayReviewView extends IPrimePane {
 
     boolean isEverythingSelected();
 
+    void showMessage(String message);
+
 }

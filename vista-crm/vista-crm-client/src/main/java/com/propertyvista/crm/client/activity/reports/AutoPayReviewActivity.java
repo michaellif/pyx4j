@@ -80,6 +80,8 @@ public class AutoPayReviewActivity extends AbstractActivity implements AutoPayRe
                     startAccetanceProgress(deferredCorrelationId);
                 }
             }, makeReviewedPaps(view.isEverythingSelected() ? papReviews : view.getMarkedPapReviews()));
+        } else {
+            view.showMessage(i18n.tr("Please select some AutoPays first"));
         }
     }
 

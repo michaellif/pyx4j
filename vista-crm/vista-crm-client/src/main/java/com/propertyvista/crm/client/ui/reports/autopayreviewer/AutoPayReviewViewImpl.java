@@ -187,4 +187,9 @@ public class AutoPayReviewViewImpl extends AbstractPrimePane implements AutoPayR
         papReviewHolderForm.setLoading(isLoading);
     }
 
+    @Override
+    public void showMessage(String message) {
+        MessageDialog.info(message);
+    }
+
 }
