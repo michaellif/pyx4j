@@ -109,12 +109,17 @@ public class AutoPayReviewViewImpl extends AbstractPrimePane implements AutoPayR
         holder.papReviews().addAll(values);
 
         this.papReviewHolderForm.setValue(holder, false);
-        this.visibleRange = new Range(0, values.size() == 0 ? PAGE_INCREMENT : values.size());
+        this.visibleRange = new Range(0, values.size());
     }
 
     @Override
     public boolean isEverythingSelected() {
         return this.papReviewHolderForm.isSelectAllSet();
+    }
+
+    @Override
+    public void resetVisibleRange() {
+        visibleRange = new Range(0, PAGE_INCREMENT);
     }
 
     @Override

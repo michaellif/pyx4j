@@ -65,6 +65,7 @@ public class AutoPayReviewActivity extends AbstractActivity implements AutoPayRe
             @Override
             public void onSuccess(Vector<PapReviewDTO> papReviews) {
                 AutoPayReviewActivity.this.papReviews = papReviews;
+                AutoPayReviewActivity.this.view.resetVisibleRange();
                 AutoPayReviewActivity.this.populateView();
             }
         }, view.getAutoPayFilterSettings().duplicate(AutoPayChangesReportMetadata.class));
