@@ -150,6 +150,7 @@ public class PapReviewFolder extends VistaBoxFolder<PapReviewDTO> {
             recalculateChargesTotal();
             chargeTotals.setVisible(getValue().charges().size() > 1);
             chargeTotals.asWidget().setVisible(getValue().charges().size() > 1);
+            formPanel.setStyleName(Styles.AutoPaySelected.name(), (get(proto().isSelected()).getValue() != null && get(proto().isSelected()).getValue()));
         }
 
         private void recalculateChargesTotal() {
