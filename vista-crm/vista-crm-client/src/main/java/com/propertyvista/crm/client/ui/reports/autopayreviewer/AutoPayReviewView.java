@@ -38,8 +38,6 @@ public interface AutoPayReviewView extends IPrimePane {
 
     void setRowData(int start, int total, List<PapReviewDTO> values);
 
-    void resetVisibleRange();
-
     Range getVisibleRange();
 
     List<PapReviewDTO> getMarkedPapReviews();

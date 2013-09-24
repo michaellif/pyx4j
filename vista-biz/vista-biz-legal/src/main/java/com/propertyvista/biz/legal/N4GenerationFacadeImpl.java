@@ -29,10 +29,7 @@ import java.util.List;
 import org.apache.commons.io.IOUtils;
 
 import com.itextpdf.text.DocumentException;
-import com.itextpdf.text.Image;
 import com.itextpdf.text.pdf.AcroFields;
-import com.itextpdf.text.pdf.AcroFields.FieldPosition;
-import com.itextpdf.text.pdf.PdfContentByte;
 import com.itextpdf.text.pdf.PdfReader;
 import com.itextpdf.text.pdf.PdfStamper;
 
@@ -79,32 +76,9 @@ public class N4GenerationFacadeImpl implements N4GenerationFacade {
                 if (fieldsData.getMember(memberName).getValueClass().equals(String.class)) {
                     String value = fieldsData.getMember(memberName).isNull() ? "" : fieldsData.getMember(memberName).getValue().toString();
                     fields.setField(pdfFieldName(fieldsData, memberName), value);
-                } else if (fieldsData.getMember(memberName).getValueClass().isEnum()) {
-                    // this code should work the same as for sting but it was left here just to denote it's a different field type
-                    String value = fieldsData.getMember(memberName).isNull() ? "" : fieldsData.getMember(memberName).getValue().toString();
-                    fields.setField(pdfFieldName(fieldsData, memberName), value);
-
-                } else if (fieldsData.getMember(memberName).getValueClass().isArray()) {
-                    do {
-                        if (fieldsData.getMember(memberName).isNull()) {
-                            break;
-                        }
-
-                        List<FieldPosition> fieldPositions = fields.getFieldPositions(pdfFieldName(fieldsData, memberName));
-                        if (fieldPositions == null || fieldPositions.size() == 0) {
-                            break;
-                        }
-
-                        FieldPosition signaturePosition = fieldPositions.get(0);
-                        PdfContentByte canvas = stamper.getOverContent(signaturePosition.page);
-                        Image signature = Image.getInstance((byte[]) fieldsData.getMember(memberName).getValue());
-                        signature.scaleAbsolute(signaturePosition.position.getWidth(), signaturePosition.position.getHeight());
-                        signature.setAbsolutePosition(signaturePosition.position.getLeft(), signaturePosition.position.getBottom());
-                        canvas.addImage(signature);
-                    } while (false);
-
+                } else {
+                    // TODO add handling of images
                 }
-
             } catch (Throwable e) {
                 throw new RuntimeException(e);
             }

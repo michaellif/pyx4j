@@ -105,10 +105,4 @@ public class AutoPayReviewDataGridViewImpl extends AbstractPrimePane implements 
         return false;
     }
 
-    @Override
-    public void resetVisibleRange() {
-        // TODO Auto-generated method stub
-
-    }
-
 }
