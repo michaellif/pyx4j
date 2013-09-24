@@ -82,6 +82,30 @@ public class N4PrepareForm {
     private static void removeInteractiveFields(AcroFields fields) {
         fields.removeField("b12c96nfn4_total_rent_owed_g");
         fields.removeField("b12c96nfn4_termination_date_g");
+
+        fields.removeField("b12c96nfn4_a1_start");
+        fields.removeField("b12c96nfn4_a1_end");
+        fields.removeField("b12c96nfn4_a1_charged");
+        fields.removeField("b12c96nfn4_a1_owing");
+        fields.removeField("b12c96nfn4_a1_paid");
+
+        fields.removeField("b12c96nfn4_a2_start");
+        fields.removeField("b12c96nfn4_a2_end");
+        fields.removeField("b12c96nfn4_a2_charged");
+        fields.removeField("b12c96nfn4_a2_owing");
+        fields.removeField("b12c96nfn4_a2_paid");
+
+        fields.removeField("b12c96nfn4_a3_start");
+        fields.removeField("b12c96nfn4_a3_end");
+        fields.removeField("b12c96nfn4_a3_charged");
+        fields.removeField("b12c96nfn4_a3_owing");
+        fields.removeField("b12c96nfn4_a3_paid");
+
+        fields.removeField("b12c96nfn4_total_rent_owed");
+
+        fields.removeField("b12c96nfn4_personnel_phone");
+        fields.removeField("b12c96nfn4_personnel_fax_number");
+
     }
 
 }
