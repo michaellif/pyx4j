@@ -71,6 +71,8 @@ public abstract class CEntityContainer<E extends IObject<?>> extends CContainer<
         contentHolder = new SimplePanel();
         contentHolder.getElement().getStyle().setProperty("display", "inline");
         containerPanel.add(contentHolder);
+        applyAccessibilityRules();
+
     }
 
     @Override

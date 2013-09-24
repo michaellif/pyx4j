@@ -52,7 +52,6 @@ public abstract class CContainer<DATA_TYPE> extends CComponent<DATA_TYPE> {
 
     public CContainer(String title) {
         super(title);
-        applyAccessibilityRules();
     }
 
     public abstract Collection<? extends CComponent<?>> getComponents();
@@ -192,11 +191,7 @@ public abstract class CContainer<DATA_TYPE> extends CComponent<DATA_TYPE> {
     @Override
     public void applyVisibilityRules() {
         super.applyVisibilityRules();
-        if (getComponents() != null) {
-            for (CComponent<?> component : getComponents()) {
-                component.applyVisibilityRules();
-            }
-        }
+				asWidget().setVisible(isVisible());
     }
 
     @Override
