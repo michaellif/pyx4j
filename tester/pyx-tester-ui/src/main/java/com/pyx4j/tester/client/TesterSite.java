@@ -53,7 +53,7 @@ public class TesterSite extends AppSite {
     private Message message;
 
     public TesterSite() {
-        super("test", TesterSiteMap.class);
+        super("test", TesterSiteMap.class, null);
     }
 
     @Override
