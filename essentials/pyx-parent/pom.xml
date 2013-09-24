@@ -126,9 +126,9 @@
         <gae.version>${gaeVersion}</gae.version>
 
 
-        <jettyVersion>9.0.3.v20130506</jettyVersion>
+        <jettyVersion>9.0.5.v20130815</jettyVersion>
 
-        <jasperreportsVersion>4.5.1</jasperreportsVersion>
+        <jasperreportsVersion>5.2.0</jasperreportsVersion>
         <batikVersion>1.7</batikVersion>
 
         <!-- Used for speed up the GWT compiler for developers -->
@@ -410,15 +410,15 @@
             </dependency>
 
             <dependency>
-                <groupId>net.sf.saxon</groupId>
+                <groupId>net.sourceforge.saxon</groupId>
                 <artifactId>saxon</artifactId>
-                <version>8.7</version>
+                <version>9.1.0.8</version>
             </dependency>
 
             <dependency>
                 <groupId>com.itextpdf</groupId>
                 <artifactId>itextpdf</artifactId>
-                <version>5.1.2</version>
+                <version>5.4.4</version>
                 <exclusions>
                     <exclusion>
                         <groupId>org.bouncycastle</groupId>
@@ -459,7 +459,7 @@
             <dependency>
                 <groupId>com.lowagie</groupId>
                 <artifactId>itext</artifactId>
-                <version>2.1.7</version>
+                <version>4.2.1</version>
                 <exclusions>
                     <exclusion><groupId>bouncycastle</groupId><artifactId>bcmail-jdk14</artifactId></exclusion>
                     <exclusion><groupId>bouncycastle</groupId><artifactId>bcprov-jdk14</artifactId></exclusion>
