@@ -41,6 +41,7 @@ import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.UIObject;
 
 import com.pyx4j.commons.UserAgentDetection;
+import com.pyx4j.config.client.ClientApplicationVersion;
 import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.entity.client.ClientEntityFactory;
 import com.pyx4j.gwt.commons.BrowserType;
@@ -216,6 +217,11 @@ public abstract class AppSite implements EntryPoint {
                 ClientSecurityController.setUnsecure();
             }
             AppDevStartTimeMonitor.start();
+        } else {
+            String debug = Window.Location.getParameter("debug");
+            if ((debug != null) && (debug.equals(ClientApplicationVersion.instance().getScmRevision()))) {
+                ClientLogger.setDebugOn(true);
+            }
         }
         log.debug("{}", BrowserType.getCompiledType());
         if (ApplicationMode.isDevelopment()) {
