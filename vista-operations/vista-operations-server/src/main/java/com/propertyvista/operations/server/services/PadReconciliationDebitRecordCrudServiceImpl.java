@@ -29,7 +29,7 @@ public class PadReconciliationDebitRecordCrudServiceImpl extends AbstractCrudSer
 
     @Override
     protected void bind() {
-        bindCompleteDBO();
+        bindCompleteObject();
     }
 
     @Override

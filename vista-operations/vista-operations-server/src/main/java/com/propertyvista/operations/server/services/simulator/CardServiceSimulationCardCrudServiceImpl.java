@@ -26,7 +26,7 @@ public class CardServiceSimulationCardCrudServiceImpl extends AbstractCrudServic
 
     @Override
     protected void bind() {
-        bindCompleteDBO();
+        bindCompleteObject();
     }
 
 }

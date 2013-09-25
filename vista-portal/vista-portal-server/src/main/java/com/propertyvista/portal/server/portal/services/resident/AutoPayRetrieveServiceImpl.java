@@ -43,7 +43,7 @@ public class AutoPayRetrieveServiceImpl extends EntityBinder<PreauthorizedPaymen
 
     @Override
     protected void bind() {
-        bindCompleteDBO();
+        bindCompleteObject();
     }
 
     @Override

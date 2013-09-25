@@ -14,7 +14,7 @@
 package com.propertyvista.crm.rpc.dto.billing;
 
 import com.pyx4j.entity.annotations.EmbeddedEntity;
-import com.pyx4j.entity.annotations.ExtendsDBO;
+import com.pyx4j.entity.annotations.ExtendsBO;
 import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.shared.IEntity;
@@ -23,7 +23,7 @@ import com.propertyvista.domain.financial.billing.Bill;
 import com.propertyvista.dto.BillDTO;
 
 @Transient
-@ExtendsDBO(Bill.class)
+@ExtendsBO(Bill.class)
 public interface BillDataDTO extends IEntity {
 
     @ToString

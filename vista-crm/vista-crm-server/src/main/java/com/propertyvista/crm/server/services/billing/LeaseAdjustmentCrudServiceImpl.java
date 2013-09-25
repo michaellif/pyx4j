@@ -41,7 +41,7 @@ public class LeaseAdjustmentCrudServiceImpl extends AbstractCrudServiceImpl<Leas
 
     @Override
     protected void bind() {
-        bindCompleteDBO();
+        bindCompleteObject();
     }
 
     @Override

@@ -28,7 +28,7 @@ public class ParkingCrudServiceImpl extends AbstractCrudServiceDtoImpl<Parking, 
 
     @Override
     protected void bind() {
-        bindCompleteDBO();
+        bindCompleteObject();
     }
 
     @Override

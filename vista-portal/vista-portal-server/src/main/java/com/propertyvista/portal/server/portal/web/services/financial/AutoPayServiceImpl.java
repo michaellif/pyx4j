@@ -145,7 +145,7 @@ public class AutoPayServiceImpl implements AutoPayService {
 
         @Override
         protected void bind() {
-            bindCompleteDBO();
+            bindCompleteObject();
         }
 
     }

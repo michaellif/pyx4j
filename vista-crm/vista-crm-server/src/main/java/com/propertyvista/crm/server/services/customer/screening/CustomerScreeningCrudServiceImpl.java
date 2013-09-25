@@ -30,7 +30,7 @@ public class CustomerScreeningCrudServiceImpl extends AbstractVersionedCrudServi
 
     @Override
     protected void bind() {
-        bindCompleteDBO();
+        bindCompleteObject();
     }
 
     @Override

@@ -43,7 +43,7 @@ public class PaymentMethodCrudServiceImpl extends AbstractCrudServiceImpl<LeaseP
 
     @Override
     protected void bind() {
-        bindCompleteDBO();
+        bindCompleteObject();
     }
 
     @Override

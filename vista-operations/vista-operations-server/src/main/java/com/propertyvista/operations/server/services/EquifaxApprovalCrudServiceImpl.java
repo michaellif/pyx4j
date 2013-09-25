@@ -37,7 +37,7 @@ public class EquifaxApprovalCrudServiceImpl extends AbstractCrudServiceDtoImpl<P
 
     @Override
     protected void bind() {
-        bindCompleteDBO();
+        bindCompleteObject();
         bind(toProto.businessInformation().dto_businessAddress(), boProto.businessInformation().businessAddress());
         bind(toProto.personalInformation().dto_personalAddress(), boProto.personalInformation().personalAddress());
     }

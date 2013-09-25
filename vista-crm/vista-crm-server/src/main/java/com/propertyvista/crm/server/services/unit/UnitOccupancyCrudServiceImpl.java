@@ -34,7 +34,7 @@ public class UnitOccupancyCrudServiceImpl extends AbstractCrudServiceImpl<AptUni
 
     @Override
     protected void bind() {
-        bindCompleteDBO();
+        bindCompleteObject();
     }
 
     @Override

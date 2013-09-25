@@ -31,7 +31,7 @@ public class NotesParentId {
     }
 
     public NotesParentId(IEntity entity) {
-        this(entity.createIdentityStub().getEntityMeta().getDBOClass(), entity.getPrimaryKey().asCurrentKey());
+        this(entity.createIdentityStub().getEntityMeta().getBOClass(), entity.getPrimaryKey().asCurrentKey());
     }
 
     // TODO : this algorithm should be revised 

@@ -27,7 +27,7 @@ public class PmcDirectDebitRecordCrudServiceImpl extends AbstractCrudServiceImpl
 
     @Override
     protected void bind() {
-        bindCompleteDBO();
+        bindCompleteObject();
     }
 
     @Override

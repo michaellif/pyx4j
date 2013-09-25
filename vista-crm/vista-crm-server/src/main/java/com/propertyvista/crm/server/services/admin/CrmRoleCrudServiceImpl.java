@@ -27,7 +27,7 @@ public class CrmRoleCrudServiceImpl extends AbstractCrudServiceImpl<CrmRole> imp
 
     @Override
     protected void bind() {
-        bindCompleteDBO();
+        bindCompleteObject();
     }
 
     @Override

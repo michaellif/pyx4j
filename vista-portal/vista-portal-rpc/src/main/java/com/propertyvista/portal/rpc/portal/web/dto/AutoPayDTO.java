@@ -19,7 +19,7 @@ import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.Editor;
 import com.pyx4j.entity.annotations.Editor.EditorType;
-import com.pyx4j.entity.annotations.ExtendsDBO;
+import com.pyx4j.entity.annotations.ExtendsBO;
 import com.pyx4j.entity.annotations.Format;
 import com.pyx4j.entity.annotations.ReadOnly;
 import com.pyx4j.entity.annotations.ToString;
@@ -32,7 +32,7 @@ import com.propertyvista.dto.PaymentDataDTO;
 
 @Transient
 @ToStringFormat("")
-@ExtendsDBO(PreauthorizedPayment.class)
+@ExtendsBO(PreauthorizedPayment.class)
 public interface AutoPayDTO extends PaymentDataDTO, com.propertyvista.dto.PreauthorizedPaymentDTO {
 
     @ReadOnly

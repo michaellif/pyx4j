@@ -37,7 +37,7 @@ public class SiteContentCrudServiceImpl extends AbstractCrudServiceDtoImpl<SiteD
 
     @Override
     protected void bind() {
-        bindCompleteDBO();
+        bindCompleteObject();
     }
 
     @Override

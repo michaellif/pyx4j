@@ -13,14 +13,14 @@
  */
 package com.propertyvista.domain.policy.dto;
 
-import com.pyx4j.entity.annotations.ExtendsDBO;
+import com.pyx4j.entity.annotations.ExtendsBO;
 import com.pyx4j.entity.annotations.Transient;
 
 import com.propertyvista.domain.policy.framework.PolicyDTOBase;
 import com.propertyvista.domain.policy.policies.BackgroundCheckPolicy;
 
 @Transient
-@ExtendsDBO(value = BackgroundCheckPolicy.class)
+@ExtendsBO(value = BackgroundCheckPolicy.class)
 public interface BackgroundCheckPolicyDTO extends PolicyDTOBase, BackgroundCheckPolicy {
 
 }

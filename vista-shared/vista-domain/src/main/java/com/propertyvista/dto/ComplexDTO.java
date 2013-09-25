@@ -13,7 +13,7 @@
  */
 package com.propertyvista.dto;
 
-import com.pyx4j.entity.annotations.ExtendsDBO;
+import com.pyx4j.entity.annotations.ExtendsBO;
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.shared.IList;
 
@@ -23,7 +23,7 @@ import com.propertyvista.domain.property.asset.Complex;
 import com.propertyvista.domain.property.asset.building.Building;
 
 @Transient
-@ExtendsDBO
+@ExtendsBO
 public interface ComplexDTO extends Complex {
 
     /** Contact info of complex's primary building */

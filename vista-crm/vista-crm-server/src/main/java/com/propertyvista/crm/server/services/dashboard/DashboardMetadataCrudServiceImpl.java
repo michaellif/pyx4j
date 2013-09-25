@@ -37,7 +37,7 @@ public class DashboardMetadataCrudServiceImpl extends AbstractCrudServiceImpl<Da
 
     @Override
     protected void bind() {
-        bindCompleteDBO();
+        bindCompleteObject();
     }
 
     @Override

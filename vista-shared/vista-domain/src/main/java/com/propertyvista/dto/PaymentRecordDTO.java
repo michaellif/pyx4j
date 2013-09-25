@@ -13,7 +13,7 @@
  */
 package com.propertyvista.dto;
 
-import com.pyx4j.entity.annotations.ExtendsDBO;
+import com.pyx4j.entity.annotations.ExtendsBO;
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.shared.IList;
 
@@ -22,7 +22,7 @@ import com.propertyvista.domain.tenant.lease.LeaseParticipant;
 import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
 
 @Transient
-@ExtendsDBO(PaymentRecord.class)
+@ExtendsBO(PaymentRecord.class)
 public interface PaymentRecordDTO extends PaymentDataDTO, PaymentRecord {
 
     IList<LeaseTermParticipant<? extends LeaseParticipant<?>>> participants();

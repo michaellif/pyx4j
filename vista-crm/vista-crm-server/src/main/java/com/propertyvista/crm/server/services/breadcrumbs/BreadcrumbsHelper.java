@@ -34,7 +34,7 @@ import com.propertyvista.dto.LeaseApplicationDTO;
 public class BreadcrumbsHelper {
 
     public List<IEntity> breadcrumbTrail(IEntity targetEntity) {
-        IEntity startFromTarget = Persistence.service().retrieve(EntityFactory.resolveDBOClass(targetEntity), targetEntity.getPrimaryKey());
+        IEntity startFromTarget = Persistence.service().retrieve(EntityFactory.resolveBOClass(targetEntity), targetEntity.getPrimaryKey());
         List<IEntity> trail = getOwners(startFromTarget);
         Collections.reverse(trail);
         return trail;

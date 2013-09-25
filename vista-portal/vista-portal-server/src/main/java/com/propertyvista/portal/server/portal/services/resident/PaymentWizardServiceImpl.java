@@ -55,7 +55,7 @@ public class PaymentWizardServiceImpl extends AbstractCrudServiceDtoImpl<Payment
 
     @Override
     protected void bind() {
-        bindCompleteDBO();
+        bindCompleteObject();
     }
 
     @Override

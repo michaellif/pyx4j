@@ -13,14 +13,14 @@
  */
 package com.propertyvista.domain.policy.dto;
 
-import com.pyx4j.entity.annotations.ExtendsDBO;
+import com.pyx4j.entity.annotations.ExtendsBO;
 import com.pyx4j.entity.annotations.Transient;
 
 import com.propertyvista.domain.policy.framework.PolicyDTOBase;
 import com.propertyvista.domain.policy.policies.DepositPolicy;
 
 @Transient
-@ExtendsDBO(value = DepositPolicy.class)
+@ExtendsBO(value = DepositPolicy.class)
 public interface DepositPolicyDTO extends PolicyDTOBase, DepositPolicy {
 
 }

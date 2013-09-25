@@ -26,6 +26,6 @@ public class SelectPmcListServiceImpl extends AbstractListServiceImpl<Pmc> imple
 
     @Override
     protected void bind() {
-        bindCompleteDBO();
+        bindCompleteObject();
     }
 }

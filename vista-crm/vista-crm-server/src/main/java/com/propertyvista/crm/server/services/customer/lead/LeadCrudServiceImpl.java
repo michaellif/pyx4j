@@ -45,7 +45,7 @@ public class LeadCrudServiceImpl extends AbstractCrudServiceImpl<Lead> implement
 
     @Override
     protected void bind() {
-        bindCompleteDBO();
+        bindCompleteObject();
     }
 
     @Override

@@ -27,7 +27,7 @@ public class CustomerScreeningVersionServiceImpl extends AbstractVistaVersionDat
 
     @Override
     protected void bind() {
-        bindCompleteDBO();
+        bindCompleteObject();
     }
 
 }

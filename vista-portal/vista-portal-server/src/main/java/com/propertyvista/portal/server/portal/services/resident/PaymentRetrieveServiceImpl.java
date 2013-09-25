@@ -38,7 +38,7 @@ public class PaymentRetrieveServiceImpl extends EntityBinder<PaymentRecord, Paym
 
     @Override
     protected void bind() {
-        bindCompleteDBO();
+        bindCompleteObject();
     }
 
     @Override

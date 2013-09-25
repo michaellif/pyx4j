@@ -32,7 +32,7 @@ public class RunDataCrudServiceImpl extends AbstractCrudServiceImpl<RunData> imp
 
     @Override
     protected void bind() {
-        bindCompleteDBO();
+        bindCompleteObject();
     }
 
     @Override

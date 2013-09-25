@@ -26,6 +26,6 @@ public class ConcessionCrudServiceImpl extends AbstractVistaVersionedCrudService
 
     @Override
     protected void bind() {
-        bindCompleteDBO();
+        bindCompleteObject();
     }
 }

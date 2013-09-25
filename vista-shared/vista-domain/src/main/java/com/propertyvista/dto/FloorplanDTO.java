@@ -13,7 +13,7 @@
  */
 package com.propertyvista.dto;
 
-import com.pyx4j.entity.annotations.ExtendsDBO;
+import com.pyx4j.entity.annotations.ExtendsBO;
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.shared.IList;
 
@@ -21,7 +21,7 @@ import com.propertyvista.domain.marketing.ils.ILSProfileFloorplan;
 import com.propertyvista.domain.property.asset.Floorplan;
 
 @Transient
-@ExtendsDBO
+@ExtendsBO
 public interface FloorplanDTO extends Floorplan {
 
     IList<ILSProfileFloorplan> ilsProfile();

@@ -42,7 +42,7 @@ public class ARCodeCrudServiceImpl extends AbstractCrudServiceImpl<ARCode> imple
 
     @Override
     protected void bind() {
-        bindCompleteDBO();
+        bindCompleteObject();
     }
 
     @Override

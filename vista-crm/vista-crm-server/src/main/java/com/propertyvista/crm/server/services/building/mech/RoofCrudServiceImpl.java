@@ -27,6 +27,6 @@ public class RoofCrudServiceImpl extends AbstractCrudServiceDtoImpl<Roof, RoofDT
 
     @Override
     protected void bind() {
-        bindCompleteDBO();
+        bindCompleteObject();
     }
 }

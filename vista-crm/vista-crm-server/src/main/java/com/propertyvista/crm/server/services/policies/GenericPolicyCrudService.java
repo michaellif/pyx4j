@@ -48,7 +48,7 @@ public abstract class GenericPolicyCrudService<POLICY extends Policy, POLICY_DTO
 
     @Override
     protected void bind() {
-        bindCompleteDBO();
+        bindCompleteObject();
     }
 
     @Override

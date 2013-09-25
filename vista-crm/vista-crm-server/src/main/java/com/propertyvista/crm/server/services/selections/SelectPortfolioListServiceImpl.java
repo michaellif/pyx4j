@@ -27,6 +27,6 @@ public class SelectPortfolioListServiceImpl extends AbstractListServiceImpl<Port
     @Override
     protected void bind() {
         bind(toProto.id(), boProto.id());
-        bindCompleteDBO();
+        bindCompleteObject();
     }
 }

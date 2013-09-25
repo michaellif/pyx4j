@@ -27,7 +27,7 @@ public class CardServiceSimulationMerchantAccountCrudServiceImpl extends Abstrac
 
     @Override
     protected void bind() {
-        bindCompleteDBO();
+        bindCompleteObject();
     }
 
 }

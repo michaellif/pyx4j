@@ -28,7 +28,7 @@ public class SelectFloorplanListServiceImpl extends AbstractListServiceImpl<Floo
     @Override
     protected void bind() {
         bind(toProto.id(), boProto.id());
-        bindCompleteDBO();
+        bindCompleteObject();
     }
 
     @Override

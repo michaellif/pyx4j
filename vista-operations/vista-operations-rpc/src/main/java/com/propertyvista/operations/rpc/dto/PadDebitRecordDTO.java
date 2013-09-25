@@ -13,13 +13,13 @@
  */
 package com.propertyvista.operations.rpc.dto;
 
-import com.pyx4j.entity.annotations.ExtendsDBO;
+import com.pyx4j.entity.annotations.ExtendsBO;
 import com.pyx4j.entity.annotations.Transient;
 
 import com.propertyvista.operations.domain.payment.pad.PadDebitRecord;
 
 @Transient
-@ExtendsDBO(PadDebitRecord.class)
+@ExtendsBO(PadDebitRecord.class)
 public interface PadDebitRecordDTO extends PadDebitRecord {
 
 }

@@ -14,7 +14,7 @@
 package com.propertyvista.operations.rpc.dto;
 
 import com.pyx4j.entity.annotations.Caption;
-import com.pyx4j.entity.annotations.ExtendsDBO;
+import com.pyx4j.entity.annotations.ExtendsBO;
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.shared.IPrimitive;
 
@@ -24,7 +24,7 @@ import com.propertyvista.operations.domain.security.OperationsUser;
 
 @Transient
 @Caption(name = "User")
-@ExtendsDBO(OperationsUser.class)
+@ExtendsBO(OperationsUser.class)
 public interface OperationsUserDTO extends OperationsUser, UserCredentialEditDTO {
 
     IPrimitive<VistaOperationsBehavior> role();

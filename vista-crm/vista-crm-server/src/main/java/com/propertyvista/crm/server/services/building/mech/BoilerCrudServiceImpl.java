@@ -27,6 +27,6 @@ public class BoilerCrudServiceImpl extends AbstractCrudServiceDtoImpl<Boiler, Bo
 
     @Override
     protected void bind() {
-        bindCompleteDBO();
+        bindCompleteObject();
     }
 }

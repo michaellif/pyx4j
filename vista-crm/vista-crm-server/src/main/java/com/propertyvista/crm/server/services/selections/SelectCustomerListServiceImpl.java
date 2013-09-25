@@ -27,6 +27,6 @@ public class SelectCustomerListServiceImpl extends AbstractListServiceImpl<Custo
     @Override
     protected void bind() {
         bind(toProto.id(), boProto.id());
-        bindCompleteDBO();
+        bindCompleteObject();
     }
 }

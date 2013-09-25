@@ -44,7 +44,7 @@ public class CrmViewerActivity<E extends IEntity> extends AbstractViewerActivity
     protected void onPopulateSuccess(E result) {
         super.onPopulateSuccess(result);
 
-        entityClass = result.getEntityMeta().getDBOClass();
+        entityClass = result.getEntityMeta().getBOClass();
 
         AppSite.getEventBus().fireEvent(new CrudNavigateEvent(place, result));
     }

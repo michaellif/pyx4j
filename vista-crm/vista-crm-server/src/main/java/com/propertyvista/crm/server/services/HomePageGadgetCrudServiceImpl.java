@@ -33,7 +33,7 @@ public class HomePageGadgetCrudServiceImpl extends AbstractCrudServiceImpl<HomeP
 
     @Override
     protected void bind() {
-        bindCompleteDBO();
+        bindCompleteObject();
     }
 
     @Override

@@ -28,7 +28,7 @@ public class LockerAreaCrudServiceImpl extends AbstractCrudServiceDtoImpl<Locker
 
     @Override
     protected void bind() {
-        bindCompleteDBO();
+        bindCompleteObject();
     }
 
     @Override

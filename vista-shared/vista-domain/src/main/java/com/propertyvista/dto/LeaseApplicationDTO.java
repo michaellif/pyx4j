@@ -13,7 +13,7 @@
  */
 package com.propertyvista.dto;
 
-import com.pyx4j.entity.annotations.ExtendsDBO;
+import com.pyx4j.entity.annotations.ExtendsBO;
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
@@ -22,7 +22,7 @@ import com.propertyvista.domain.tenant.Customer;
 import com.propertyvista.domain.tenant.lease.Lease;
 
 @Transient
-@ExtendsDBO(Lease.class)
+@ExtendsBO(Lease.class)
 public interface LeaseApplicationDTO extends LeaseDTO {
 
     MasterOnlineApplicationOnlineStatusDTO masterApplicationStatus();

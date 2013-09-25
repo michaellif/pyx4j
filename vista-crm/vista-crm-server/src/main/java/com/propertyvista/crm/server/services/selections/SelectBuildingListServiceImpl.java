@@ -27,6 +27,6 @@ public class SelectBuildingListServiceImpl extends AbstractListServiceImpl<Build
     @Override
     protected void bind() {
         bind(toProto.id(), boProto.id());
-        bindCompleteDBO();
+        bindCompleteObject();
     }
 }

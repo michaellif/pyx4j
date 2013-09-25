@@ -28,6 +28,6 @@ public class PadReconciliationSummaryListServiceImpl extends AbstractListService
 
     @Override
     protected void bind() {
-        bindCompleteDBO();
+        bindCompleteObject();
     }
 }

@@ -28,7 +28,7 @@ public class GlCodeCategoryCrudServiceImpl extends AbstractCrudServiceImpl<GlCod
 
     @Override
     protected void bind() {
-        bindCompleteDBO();
+        bindCompleteObject();
     }
 
     @Override

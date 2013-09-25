@@ -13,7 +13,7 @@
  */
 package com.propertyvista.domain.policy.dto;
 
-import com.pyx4j.entity.annotations.ExtendsDBO;
+import com.pyx4j.entity.annotations.ExtendsBO;
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.shared.IList;
 
@@ -22,7 +22,7 @@ import com.propertyvista.domain.policy.policies.IdAssignmentPolicy;
 import com.propertyvista.domain.policy.policies.domain.IdAssignmentItem;
 
 @Transient
-@ExtendsDBO(value = IdAssignmentPolicy.class)
+@ExtendsBO(value = IdAssignmentPolicy.class)
 public interface IdAssignmentPolicyDTO extends PolicyDTOBase, IdAssignmentPolicy {
 
     IList<IdAssignmentItem> editableItems();

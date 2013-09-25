@@ -18,7 +18,7 @@ import java.math.BigDecimal;
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.annotations.Editor;
 import com.pyx4j.entity.annotations.Editor.EditorType;
-import com.pyx4j.entity.annotations.ExtendsDBO;
+import com.pyx4j.entity.annotations.ExtendsBO;
 import com.pyx4j.entity.annotations.Format;
 import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.annotations.Transient;
@@ -30,7 +30,7 @@ import com.propertyvista.domain.financial.billing.InvoiceChargeTax;
 import com.propertyvista.domain.financial.billing.InvoiceDebit;
 
 @Transient
-@ExtendsDBO(InvoiceDebit.class)
+@ExtendsBO(InvoiceDebit.class)
 public interface InvoiceDebitDTO extends IEntity {
 
     IPrimitive<LogicalDate> date();

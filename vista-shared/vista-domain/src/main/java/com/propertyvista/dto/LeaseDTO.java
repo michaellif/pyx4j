@@ -18,7 +18,7 @@ import java.math.BigDecimal;
 import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.Editor;
 import com.pyx4j.entity.annotations.Editor.EditorType;
-import com.pyx4j.entity.annotations.ExtendsDBO;
+import com.pyx4j.entity.annotations.ExtendsBO;
 import com.pyx4j.entity.annotations.Format;
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.annotations.validator.NotNull;
@@ -28,7 +28,7 @@ import com.pyx4j.entity.shared.IPrimitive;
 import com.propertyvista.domain.tenant.lease.Lease;
 
 @Transient
-@ExtendsDBO
+@ExtendsBO
 public interface LeaseDTO extends Lease {
 
     TransactionHistoryDTO transactionHistory();

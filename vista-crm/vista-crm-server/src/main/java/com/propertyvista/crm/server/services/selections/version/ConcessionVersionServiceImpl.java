@@ -26,6 +26,6 @@ public class ConcessionVersionServiceImpl extends AbstractVistaVersionDataListSe
 
     @Override
     protected void bind() {
-        bindCompleteDBO();
+        bindCompleteObject();
     }
 }

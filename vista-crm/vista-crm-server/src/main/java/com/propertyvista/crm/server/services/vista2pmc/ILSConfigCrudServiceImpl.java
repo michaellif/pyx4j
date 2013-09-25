@@ -35,7 +35,7 @@ public class ILSConfigCrudServiceImpl extends AbstractCrudServiceDtoImpl<ILSConf
 
     @Override
     protected void bind() {
-        bindCompleteDBO();
+        bindCompleteObject();
     }
 
     @Override

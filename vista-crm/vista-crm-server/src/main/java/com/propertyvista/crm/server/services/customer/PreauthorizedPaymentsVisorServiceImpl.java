@@ -292,7 +292,7 @@ public class PreauthorizedPaymentsVisorServiceImpl implements PreauthorizedPayme
 
         @Override
         protected void bind() {
-            bindCompleteDBO();
+            bindCompleteObject();
         }
     }
 }

@@ -43,11 +43,11 @@ import com.propertyvista.dto.LeaseParticipantDTO;
 import com.propertyvista.server.common.util.AddressRetriever;
 import com.propertyvista.server.common.util.LeaseParticipantUtils;
 
-public abstract class LeaseParticipantCrudServiceBaseImpl<DBO extends LeaseParticipant<? extends LeaseTermParticipant<?>>, DTO extends LeaseParticipantDTO<? extends LeaseTermParticipant<?>>>
-        extends AbstractCrudServiceDtoImpl<DBO, DTO> implements LeaseParticipantCrudServiceBase<DTO> {
+public abstract class LeaseParticipantCrudServiceBaseImpl<BO extends LeaseParticipant<? extends LeaseTermParticipant<?>>, TO extends LeaseParticipantDTO<? extends LeaseTermParticipant<?>>>
+        extends AbstractCrudServiceDtoImpl<BO, TO> implements LeaseParticipantCrudServiceBase<TO> {
 
-    public LeaseParticipantCrudServiceBaseImpl(Class<DBO> dboClass, Class<DTO> dtoClass) {
-        super(dboClass, dtoClass);
+    public LeaseParticipantCrudServiceBaseImpl(Class<BO> boClass, Class<TO> toClass) {
+        super(boClass, toClass);
     }
 
     @Override
@@ -56,7 +56,7 @@ public abstract class LeaseParticipantCrudServiceBaseImpl<DBO extends LeaseParti
     }
 
     @Override
-    protected void enhanceRetrieved(DBO bo, DTO to, RetrieveTarget retrieveTarget) {
+    protected void enhanceRetrieved(BO bo, TO to, RetrieveTarget retrieveTarget) {
         to.leaseTermV().set(retrieveLeaseTerm(bo));
 
         LeaseParticipantUtils.retrieveCustomerScreeningPointer(to.customer());
@@ -79,12 +79,12 @@ public abstract class LeaseParticipantCrudServiceBaseImpl<DBO extends LeaseParti
     }
 
     @Override
-    protected void enhanceListRetrieved(DBO entity, DTO dto) {
-        dto.leaseTermV().set(retrieveLeaseTerm(entity));
+    protected void enhanceListRetrieved(BO bo, TO to) {
+        to.leaseTermV().set(retrieveLeaseTerm(bo));
     }
 
     @Override
-    protected void persist(DBO bo, DTO to) {
+    protected void persist(BO bo, TO to) {
         ServerSideFactory.create(CustomerFacade.class).persistCustomer(bo.customer());
 
         // delete payment methods removed in UI:
@@ -113,19 +113,19 @@ public abstract class LeaseParticipantCrudServiceBaseImpl<DBO extends LeaseParti
     }
 
     @Override
-    public void getAllowedPaymentTypes(AsyncCallback<Vector<PaymentType>> callback, DTO participantId) {
-        DBO leaseParticipant = Persistence.service().retrieve(boClass, participantId.getPrimaryKey());
+    public void getAllowedPaymentTypes(AsyncCallback<Vector<PaymentType>> callback, TO participantId) {
+        BO leaseParticipant = Persistence.service().retrieve(boClass, participantId.getPrimaryKey());
         Persistence.ensureRetrieve(leaseParticipant.lease(), AttachLevel.Attached);
         callback.onSuccess(new Vector<PaymentType>(ServerSideFactory.create(PaymentFacade.class).getAllowedPaymentTypes(
                 leaseParticipant.lease().billingAccount(), VistaApplication.crm)));
     }
 
     @Override
-    public void getCurrentAddress(AsyncCallback<AddressSimple> callback, DTO participantId) {
+    public void getCurrentAddress(AsyncCallback<AddressSimple> callback, TO participantId) {
         callback.onSuccess(AddressRetriever.getLeaseParticipantCurrentAddressSimple(EntityFactory.createIdentityStub(boClass, participantId.getPrimaryKey())));
     }
 
-    private LeaseTerm.LeaseTermV retrieveLeaseTerm(DBO leaseParticipant) {
+    private LeaseTerm.LeaseTermV retrieveLeaseTerm(BO leaseParticipant) {
         LeaseTerm.LeaseTermV term = null;
 
         // case of 'current' Tenants for applications: 

@@ -37,7 +37,7 @@ public class CityIntroPageCrudServiceImpl extends AbstractCrudServiceImpl<CityIn
 
     @Override
     protected void bind() {
-        this.bindCompleteDBO();
+        this.bindCompleteObject();
     }
 
     @Override

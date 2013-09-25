@@ -32,7 +32,7 @@ public class PadReconciliationFileCrudServiceImpl extends AbstractCrudServiceDto
 
     @Override
     protected void bind() {
-        bindCompleteDBO();
+        bindCompleteObject();
     }
 
     @Override

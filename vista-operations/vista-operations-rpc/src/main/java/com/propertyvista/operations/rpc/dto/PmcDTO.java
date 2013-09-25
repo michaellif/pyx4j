@@ -14,7 +14,7 @@
 package com.propertyvista.operations.rpc.dto;
 
 import com.pyx4j.entity.annotations.Caption;
-import com.pyx4j.entity.annotations.ExtendsDBO;
+import com.pyx4j.entity.annotations.ExtendsBO;
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.shared.IPrimitive;
 
@@ -24,7 +24,7 @@ import com.propertyvista.operations.domain.vista2pmc.DefaultPaymentFees;
 
 @Transient
 @Caption(name = "Property Management Company (PMC)")
-@ExtendsDBO(Pmc.class)
+@ExtendsBO(Pmc.class)
 public interface PmcDTO extends Pmc {
 
     OnboardingUser onboardingUser();

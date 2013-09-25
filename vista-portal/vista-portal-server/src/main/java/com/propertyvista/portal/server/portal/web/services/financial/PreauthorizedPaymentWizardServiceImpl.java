@@ -58,7 +58,7 @@ public class PreauthorizedPaymentWizardServiceImpl extends AbstractCrudServiceDt
 
     @Override
     protected void bind() {
-        bindCompleteDBO();
+        bindCompleteObject();
     }
 
     @Override

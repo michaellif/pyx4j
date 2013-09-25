@@ -26,7 +26,7 @@ public class ExecutionReportSectionServiceImpl extends AbstractCrudServiceImpl<E
 
     @Override
     protected void bind() {
-        bindCompleteDBO();
+        bindCompleteObject();
     }
 
 }

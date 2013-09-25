@@ -26,6 +26,6 @@ public class UnitItemCrudServiceImpl extends AbstractCrudServiceImpl<AptUnitItem
 
     @Override
     protected void bind() {
-        bindCompleteDBO();
+        bindCompleteObject();
     }
 }

@@ -34,7 +34,7 @@ public class CustomerCreditCheckCrudServiceImpl extends AbstractCrudServiceDtoIm
 
     @Override
     protected void bind() {
-        bindCompleteDBO();
+        bindCompleteObject();
     }
 
     @Override

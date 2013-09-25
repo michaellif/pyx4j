@@ -26,7 +26,7 @@ public class NotesAndAttachmentsCrudServiceImpl extends AbstractCrudServiceImpl<
 
     @Override
     protected void bind() {
-        bindCompleteDBO();
+        bindCompleteObject();
     }
 
 }

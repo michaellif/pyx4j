@@ -26,7 +26,7 @@ public class SelectCrmRoleListServiceImpl extends AbstractListServiceImpl<CrmRol
 
     @Override
     protected void bind() {
-        bindCompleteDBO();
+        bindCompleteObject();
     }
 
 }

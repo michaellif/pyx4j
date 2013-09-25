@@ -47,7 +47,7 @@ public class PmcMerchantAccountCrudServiceImpl extends AbstractCrudServiceDtoImp
 
     @Override
     protected void bind() {
-        bindCompleteDBO();
+        bindCompleteObject();
     }
 
     @Override

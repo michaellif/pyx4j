@@ -33,7 +33,7 @@ public class BillingCycleCrudServiceImpl extends AbstractCrudServiceDtoImpl<Bill
 
     @Override
     protected void bind() {
-        bindCompleteDBO();
+        bindCompleteObject();
     }
 
     @Override

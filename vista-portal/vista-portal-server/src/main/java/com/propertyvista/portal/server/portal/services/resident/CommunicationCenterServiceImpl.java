@@ -56,7 +56,7 @@ public class CommunicationCenterServiceImpl extends AbstractCrudServiceDtoImpl<C
 
     @Override
     protected void bind() {
-        bindCompleteDBO();
+        bindCompleteObject();
     }
 
     @Override

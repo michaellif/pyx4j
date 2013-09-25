@@ -18,7 +18,7 @@ import java.math.BigDecimal;
 import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.Editor;
 import com.pyx4j.entity.annotations.Editor.EditorType;
-import com.pyx4j.entity.annotations.ExtendsDBO;
+import com.pyx4j.entity.annotations.ExtendsBO;
 import com.pyx4j.entity.annotations.Format;
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.annotations.validator.NotNull;
@@ -31,7 +31,7 @@ import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.tenant.lease.LeaseTerm;
 
 @Transient
-@ExtendsDBO
+@ExtendsBO
 public interface LeaseTermDTO extends LeaseTerm {
 
     // newly created parent (lease/application):

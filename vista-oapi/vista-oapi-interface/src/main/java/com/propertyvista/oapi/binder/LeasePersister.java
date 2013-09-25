@@ -26,7 +26,7 @@ public class LeasePersister extends AbstractPersister<Lease, Lease> {
 
     @Override
     protected void bind() {
-        bindCompleteDBO();
+        bindCompleteObject();
     }
 
     @Override

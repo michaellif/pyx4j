@@ -13,12 +13,12 @@
  */
 package com.propertyvista.dto.vista2pmc;
 
-import com.pyx4j.entity.annotations.ExtendsDBO;
+import com.pyx4j.entity.annotations.ExtendsBO;
 import com.pyx4j.entity.annotations.Transient;
 
 import com.propertyvista.domain.settings.ILSConfig;
 
 @Transient
-@ExtendsDBO
+@ExtendsBO
 public interface ILSConfigDTO extends ILSConfig {
 }

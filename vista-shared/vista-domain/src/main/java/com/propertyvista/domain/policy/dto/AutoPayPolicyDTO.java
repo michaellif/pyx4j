@@ -13,14 +13,14 @@
  */
 package com.propertyvista.domain.policy.dto;
 
-import com.pyx4j.entity.annotations.ExtendsDBO;
+import com.pyx4j.entity.annotations.ExtendsBO;
 import com.pyx4j.entity.annotations.Transient;
 
 import com.propertyvista.domain.policy.framework.PolicyDTOBase;
 import com.propertyvista.domain.policy.policies.AutoPayPolicy;
 
 @Transient
-@ExtendsDBO(value = AutoPayPolicy.class)
+@ExtendsBO(value = AutoPayPolicy.class)
 public interface AutoPayPolicyDTO extends PolicyDTOBase, AutoPayPolicy {
 
 }

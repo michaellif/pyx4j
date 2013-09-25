@@ -27,6 +27,6 @@ public class SelectCityListServiceImpl extends AbstractListServiceImpl<City> imp
     @Override
     protected void bind() {
         bind(toProto.id(), boProto.id());
-        bindCompleteDBO();
+        bindCompleteObject();
     }
 }

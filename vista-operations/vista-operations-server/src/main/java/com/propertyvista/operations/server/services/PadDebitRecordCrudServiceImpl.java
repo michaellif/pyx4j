@@ -28,7 +28,7 @@ public class PadDebitRecordCrudServiceImpl extends AbstractCrudServiceDtoImpl<Pa
 
     @Override
     protected void bind() {
-        bindCompleteDBO();
+        bindCompleteObject();
     }
 
     @Override

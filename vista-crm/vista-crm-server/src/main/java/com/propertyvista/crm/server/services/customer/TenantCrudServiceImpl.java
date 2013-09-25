@@ -391,7 +391,7 @@ public class TenantCrudServiceImpl extends LeaseParticipantCrudServiceBaseImpl<T
 
         @Override
         protected void bind() {
-            bindCompleteDBO();
+            bindCompleteObject();
         }
     }
 }

@@ -31,7 +31,7 @@ public class PadFileCrudServiceImpl extends AbstractCrudServiceDtoImpl<PadFile, 
 
     @Override
     protected void bind() {
-        bindCompleteDBO();
+        bindCompleteObject();
     }
 
     @Override

@@ -18,7 +18,7 @@ import java.math.BigDecimal;
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.annotations.Editor;
 import com.pyx4j.entity.annotations.Editor.EditorType;
-import com.pyx4j.entity.annotations.ExtendsDBO;
+import com.pyx4j.entity.annotations.ExtendsBO;
 import com.pyx4j.entity.annotations.Format;
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.shared.IEntity;
@@ -26,7 +26,7 @@ import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
 
 @Transient
-@ExtendsDBO(value = com.propertyvista.domain.financial.billing.InvoiceCredit.class)
+@ExtendsBO(value = com.propertyvista.domain.financial.billing.InvoiceCredit.class)
 public interface InvoiceCreditDTO extends IEntity {
 
     IPrimitive<LogicalDate> date();

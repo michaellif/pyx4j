@@ -27,6 +27,6 @@ public class SelectLeasePaymentMethodServiceImpl extends AbstractListServiceImpl
     @Override
     protected void bind() {
         bind(toProto.id(), boProto.id());
-        bindCompleteDBO();
+        bindCompleteObject();
     }
 }

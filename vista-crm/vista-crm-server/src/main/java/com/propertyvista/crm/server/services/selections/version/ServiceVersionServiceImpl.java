@@ -26,6 +26,6 @@ public class ServiceVersionServiceImpl extends AbstractVistaVersionDataListServi
 
     @Override
     protected void bind() {
-        bindCompleteDBO();
+        bindCompleteObject();
     }
 }

@@ -13,7 +13,7 @@
  */
 package com.propertyvista.dto;
 
-import com.pyx4j.entity.annotations.ExtendsDBO;
+import com.pyx4j.entity.annotations.ExtendsBO;
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IPrimitive;
@@ -21,7 +21,7 @@ import com.pyx4j.entity.shared.IPrimitive;
 import com.propertyvista.domain.communication.CommunicationMessage;
 
 @Transient
-@ExtendsDBO
+@ExtendsBO
 public interface CommunicationCenterDTO extends CommunicationMessage {
 //TODO add favorites
     @NotNull

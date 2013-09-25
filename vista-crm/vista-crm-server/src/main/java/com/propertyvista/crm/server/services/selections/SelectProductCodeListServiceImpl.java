@@ -26,6 +26,6 @@ public class SelectProductCodeListServiceImpl extends AbstractListServiceImpl<AR
 
     @Override
     protected void bind() {
-        bindCompleteDBO();
+        bindCompleteObject();
     }
 }

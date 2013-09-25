@@ -26,7 +26,7 @@ public class PadSimBatchCrudServiceImpl extends AbstractCrudServiceImpl<PadSimBa
 
     @Override
     protected void bind() {
-        bindCompleteDBO();
+        bindCompleteObject();
     }
 
 }

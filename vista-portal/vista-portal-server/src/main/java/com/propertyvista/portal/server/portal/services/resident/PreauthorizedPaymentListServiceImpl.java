@@ -42,7 +42,7 @@ public class PreauthorizedPaymentListServiceImpl extends AbstractListServiceDtoI
 
     @Override
     protected void bind() {
-        bindCompleteDBO();
+        bindCompleteObject();
     }
 
     @Override

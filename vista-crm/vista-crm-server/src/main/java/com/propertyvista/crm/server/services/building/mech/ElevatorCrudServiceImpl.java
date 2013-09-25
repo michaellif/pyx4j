@@ -27,6 +27,6 @@ public class ElevatorCrudServiceImpl extends AbstractCrudServiceDtoImpl<Elevator
 
     @Override
     protected void bind() {
-        bindCompleteDBO();
+        bindCompleteObject();
     }
 }

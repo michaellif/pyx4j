@@ -26,7 +26,7 @@ public class UnitPersister extends AbstractPersister<AptUnit, AptUnit> {
 
     @Override
     protected void bind() {
-        bindCompleteDBO();
+        bindCompleteObject();
     }
 
     @Override

@@ -33,7 +33,7 @@ public class AppointmentCrudServiceImpl extends AbstractCrudServiceImpl<Appointm
 
     @Override
     protected void bind() {
-        bindCompleteDBO();
+        bindCompleteObject();
     }
 
     @Override

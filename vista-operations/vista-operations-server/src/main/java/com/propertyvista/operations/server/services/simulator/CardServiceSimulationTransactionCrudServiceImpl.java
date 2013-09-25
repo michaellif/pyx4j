@@ -30,7 +30,7 @@ public class CardServiceSimulationTransactionCrudServiceImpl extends AbstractCru
 
     @Override
     protected void bind() {
-        bindCompleteDBO();
+        bindCompleteObject();
     }
 
     @Override

@@ -27,7 +27,7 @@ public class VendorCrudServiceImpl extends AbstractCrudServiceImpl<Vendor> imple
 
     @Override
     protected void bind() {
-        bindCompleteDBO();
+        bindCompleteObject();
     }
 
     @Override

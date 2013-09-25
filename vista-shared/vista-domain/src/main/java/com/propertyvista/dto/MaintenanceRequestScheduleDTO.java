@@ -13,12 +13,12 @@
  */
 package com.propertyvista.dto;
 
-import com.pyx4j.entity.annotations.ExtendsDBO;
+import com.pyx4j.entity.annotations.ExtendsBO;
 import com.pyx4j.entity.annotations.Transient;
 
 import com.propertyvista.domain.maintenance.MaintenanceRequestSchedule;
 
 @Transient
-@ExtendsDBO
+@ExtendsBO
 public interface MaintenanceRequestScheduleDTO extends MaintenanceRequestSchedule {
 }

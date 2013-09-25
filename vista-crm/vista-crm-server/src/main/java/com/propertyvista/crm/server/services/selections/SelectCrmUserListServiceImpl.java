@@ -26,7 +26,7 @@ public class SelectCrmUserListServiceImpl extends AbstractListServiceImpl<CrmUse
 
     @Override
     protected void bind() {
-        bindCompleteDBO();
+        bindCompleteObject();
     }
 
 }

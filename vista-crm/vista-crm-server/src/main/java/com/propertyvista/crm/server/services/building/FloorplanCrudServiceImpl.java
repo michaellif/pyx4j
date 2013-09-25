@@ -41,7 +41,7 @@ public class FloorplanCrudServiceImpl extends AbstractCrudServiceDtoImpl<Floorpl
 
     @Override
     protected void bind() {
-        bindCompleteDBO();
+        bindCompleteObject();
     }
 
     @Override

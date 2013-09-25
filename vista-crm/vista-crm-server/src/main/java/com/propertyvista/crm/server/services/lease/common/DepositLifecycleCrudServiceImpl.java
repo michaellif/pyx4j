@@ -30,7 +30,7 @@ public class DepositLifecycleCrudServiceImpl extends AbstractCrudServiceDtoImpl<
 
     @Override
     protected void bind() {
-        bindCompleteDBO();
+        bindCompleteObject();
     }
 
     @Override

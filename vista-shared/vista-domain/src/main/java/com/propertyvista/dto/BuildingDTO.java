@@ -14,7 +14,7 @@
 package com.propertyvista.dto;
 
 import com.pyx4j.entity.annotations.EmbeddedEntity;
-import com.pyx4j.entity.annotations.ExtendsDBO;
+import com.pyx4j.entity.annotations.ExtendsBO;
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
@@ -27,7 +27,7 @@ import com.propertyvista.domain.marketing.ils.ILSProfileBuilding;
 import com.propertyvista.domain.property.asset.building.Building;
 
 @Transient
-@ExtendsDBO
+@ExtendsBO
 public interface BuildingDTO extends Building {
 
     IList<ARCode> availableUtilities();

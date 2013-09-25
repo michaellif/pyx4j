@@ -26,6 +26,6 @@ public class LockerCrudServiceImpl extends AbstractCrudServiceImpl<Locker> imple
 
     @Override
     protected void bind() {
-        bindCompleteDBO();
+        bindCompleteObject();
     }
 }

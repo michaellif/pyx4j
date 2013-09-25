@@ -28,7 +28,7 @@ public class BillingCycleLeaseListServiceImpl extends AbstractListServiceDtoImpl
 
     @Override
     protected void bind() {
-        bindCompleteDBO();
+        bindCompleteObject();
     }
 
     @Override

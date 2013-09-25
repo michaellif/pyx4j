@@ -40,7 +40,7 @@ public class UnitCrudServiceImpl extends AbstractCrudServiceDtoImpl<AptUnit, Apt
 
     @Override
     protected void bind() {
-        bindCompleteDBO();
+        bindCompleteObject();
         bind(toProto.buildingCode(), boProto.building().propertyCode());
     }
 

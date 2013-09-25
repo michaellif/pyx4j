@@ -30,7 +30,7 @@ public class SelectTenantListServiceImpl extends AbstractListServiceImpl<Tenant>
 
     @Override
     protected void bind() {
-        bindCompleteDBO();
+        bindCompleteObject();
     }
 
     @Override

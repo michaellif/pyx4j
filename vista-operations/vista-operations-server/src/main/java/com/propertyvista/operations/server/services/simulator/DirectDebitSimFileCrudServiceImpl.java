@@ -34,7 +34,7 @@ public class DirectDebitSimFileCrudServiceImpl extends AbstractCrudServiceImpl<D
 
     @Override
     protected void bind() {
-        bindCompleteDBO();
+        bindCompleteObject();
     }
 
     @Override

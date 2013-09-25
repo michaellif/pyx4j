@@ -33,7 +33,7 @@ public class PageDescriptorCrudServiceImpl extends AbstractCrudServiceImpl<PageD
 
     @Override
     protected void bind() {
-        bindCompleteDBO();
+        bindCompleteObject();
     }
 
     @Override

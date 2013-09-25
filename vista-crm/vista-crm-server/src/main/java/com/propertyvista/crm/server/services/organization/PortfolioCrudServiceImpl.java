@@ -34,7 +34,7 @@ public class PortfolioCrudServiceImpl extends AbstractCrudServiceImpl<Portfolio>
 
     @Override
     protected void bind() {
-        bindCompleteDBO();
+        bindCompleteObject();
     }
 
     @Override

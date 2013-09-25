@@ -26,6 +26,6 @@ public class TaxCrudServiceImpl extends AbstractCrudServiceImpl<Tax> implements 
 
     @Override
     protected void bind() {
-        bindCompleteDBO();
+        bindCompleteObject();
     }
 }

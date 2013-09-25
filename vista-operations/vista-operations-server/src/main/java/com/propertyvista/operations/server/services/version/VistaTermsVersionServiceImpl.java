@@ -26,6 +26,6 @@ public class VistaTermsVersionServiceImpl extends AbstractVistaVersionDataListSe
 
     @Override
     protected void bind() {
-        bindCompleteDBO();
+        bindCompleteObject();
     }
 }
