@@ -204,6 +204,11 @@ class VistaBusinessStatsReport {
             data.eChequeValue().setValue(amount);
 
             criteria.eq(criteria.proto().createdBy(), CustomerUser.class);
+            records = Persistence.service().query(criteria);
+            amount = BigDecimal.ZERO;
+            for (PaymentRecord record : records) {
+                amount = amount.add(record.amount().getValue());
+            }
 
             data.eChequeCountOneTime().setValue(records.size());
             data.eChequeValueOneTime().setValue(amount);
@@ -251,6 +256,11 @@ class VistaBusinessStatsReport {
             data.creditCardValue().setValue(amount);
 
             criteria.eq(criteria.proto().createdBy(), CustomerUser.class);
+            records = Persistence.service().query(criteria);
+            amount = BigDecimal.ZERO;
+            for (PaymentRecord record : records) {
+                amount = amount.add(record.amount().getValue());
+            }
 
             data.creditCardCountOneTime().setValue(records.size());
             data.creditCardValueOneTime().setValue(amount);
