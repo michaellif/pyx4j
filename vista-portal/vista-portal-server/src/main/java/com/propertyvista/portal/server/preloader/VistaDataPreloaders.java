@@ -101,6 +101,8 @@ public class VistaDataPreloaders extends DataPreloaderCollection {
             add(new UpdateArrearsHistoryDevPreloader());
             add(new MaintenanceRequestsDevPreloader());
             add(new CommunicationDevPreloader());
+
+            add(new ILSConfigDevPreloader());
         }
     }
 

@@ -13,6 +13,8 @@
 package com.propertyvista.ils.kijiji.rs;
 
 import java.io.StringWriter;
+import java.util.List;
+import java.util.Map;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
@@ -28,6 +30,13 @@ import javax.xml.transform.stream.StreamResult;
 import com.kijiji.pint.rs.ILSLocations;
 import com.kijiji.pint.rs.ObjectFactory;
 
+import com.pyx4j.server.contexts.NamespaceManager;
+
+import com.propertyvista.biz.occupancy.ILSKijijiIntegrationAgent;
+import com.propertyvista.domain.property.asset.building.Building;
+import com.propertyvista.domain.property.asset.unit.AptUnit;
+import com.propertyvista.ils.kijiji.mapper.KijijiDataMapper;
+
 @Path("/send")
 public class KijijiApiService {
 
@@ -37,14 +46,14 @@ public class KijijiApiService {
 
         ObjectFactory factory = new ObjectFactory();
 
-        XMLManager mgr = new XMLManager(factory);
-        ILSLocations locations = mgr.createRentXML();
-
         JAXBContext context = JAXBContext.newInstance(ILSLocations.class);
-
-        JAXBElement<ILSLocations> element = factory.createLocations(locations);
         javax.xml.bind.Marshaller marshaller = context.createMarshaller();
         marshaller.setProperty("jaxb.formatted.output", Boolean.TRUE);
+
+        Map<Building, List<AptUnit>> units = new ILSKijijiIntegrationAgent().getUnitListing();
+        ILSLocations locations = new KijijiDataMapper(factory).createLocations(units);
+        JAXBElement<ILSLocations> element = factory.createLocations(locations);
+
         marshaller.marshal(element, res);
         return stringWriter.getBuffer().toString();
     }
@@ -52,6 +61,8 @@ public class KijijiApiService {
     @GET
     @Produces({ MediaType.APPLICATION_XML })
     public Response generateKijiji() throws Exception {
+        // FIXME - use OAPIFilter authentication mechanism; create CrmUser with (some Interface role) per ils vendor
+        NamespaceManager.setNamespace("vista");
 
         String xmlString = generateXML();
         return KijijiUtils.createSuccessResponse(xmlString);
