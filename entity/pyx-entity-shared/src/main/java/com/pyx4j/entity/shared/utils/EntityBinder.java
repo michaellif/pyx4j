@@ -102,7 +102,7 @@ public abstract class EntityBinder<BO extends IEntity, TO extends IEntity> {
     }
 
     @SuppressWarnings("unchecked")
-    protected final void bindCompleteDBO() {
+    protected final void bindCompleteObject() {
         bind((Class<IEntity>) boProto.getValueClass(), toProto, boProto);
     }
 

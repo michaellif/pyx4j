@@ -20,11 +20,11 @@
  */
 package com.pyx4j.entity.test.shared.domain.inherit;
 
-import com.pyx4j.entity.annotations.ExtendsDBO;
+import com.pyx4j.entity.annotations.ExtendsBO;
 import com.pyx4j.entity.annotations.Transient;
 
 @Transient
-@ExtendsDBO(value = Concrete1Entity.class)
+@ExtendsBO(value = Concrete1Entity.class)
 public interface MultipleInheritanceDTO extends Concrete1Entity, ReferenceEntity {
 
 }

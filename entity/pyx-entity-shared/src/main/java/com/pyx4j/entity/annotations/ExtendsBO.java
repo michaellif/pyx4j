@@ -33,13 +33,13 @@ import com.pyx4j.entity.shared.meta.EntityMeta;
  */
 @Target({ ElementType.TYPE })
 @Retention(RetentionPolicy.RUNTIME)
-public @interface ExtendsDBO {
+public @interface ExtendsBO {
 
     /**
      * By default super interface is used.
      * In case of multiple inheritance this value is required.
      * 
-     * @see EntityMeta#getDBOClass()
+     * @see EntityMeta#getBOClass()
      */
     Class<? extends IEntity> value() default IEntity.class;
 }

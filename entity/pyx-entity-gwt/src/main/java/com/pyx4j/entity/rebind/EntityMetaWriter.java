@@ -44,7 +44,7 @@ import com.pyx4j.entity.annotations.CascadeType;
 import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.Editor;
 import com.pyx4j.entity.annotations.EmbeddedEntity;
-import com.pyx4j.entity.annotations.ExtendsDBO;
+import com.pyx4j.entity.annotations.ExtendsBO;
 import com.pyx4j.entity.annotations.Format;
 import com.pyx4j.entity.annotations.Indexed;
 import com.pyx4j.entity.annotations.JoinTable;
@@ -142,8 +142,8 @@ public class EntityMetaWriter {
         List<String> businessEqualMemberNames = new Vector<String>();
 
         String expandedFromClassName = null;
-        if (interfaceType.getAnnotation(ExtendsDBO.class) != null) {
-            Class<?> expandedFromClass = interfaceType.getAnnotation(ExtendsDBO.class).value();
+        if (interfaceType.getAnnotation(ExtendsBO.class) != null) {
+            Class<?> expandedFromClass = interfaceType.getAnnotation(ExtendsBO.class).value();
             if (expandedFromClass != IEntity.class) {
                 expandedFromClassName = expandedFromClass.getName();
             }

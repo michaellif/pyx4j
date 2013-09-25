@@ -96,7 +96,7 @@ public abstract class ClientEntityMetaImpl implements EntityMeta {
     }
 
     @Override
-    public Class<? extends IEntity> getDBOClass() {
+    public Class<? extends IEntity> getBOClass() {
         return expandedFromClass;
     }
 

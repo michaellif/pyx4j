@@ -33,7 +33,7 @@ public class OneToOneDTOCrudServiceImpl extends AbstractCrudServiceDtoImpl<OneTo
 
     @Override
     protected void bind() {
-        bindCompleteDBO();
+        bindCompleteObject();
     }
 
 }

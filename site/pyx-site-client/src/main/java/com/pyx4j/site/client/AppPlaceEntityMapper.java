@@ -97,7 +97,7 @@ public class AppPlaceEntityMapper {
     private static AppPlaceData retrievePlaceData(Class<? extends IEntity> type) {
         AppPlaceData data = map.get(type);
         if (data == null) {
-            data = map.get(EntityFactory.getEntityMeta(type).getDBOClass());
+            data = map.get(EntityFactory.getEntityMeta(type).getBOClass());
         }
         return data;
     }

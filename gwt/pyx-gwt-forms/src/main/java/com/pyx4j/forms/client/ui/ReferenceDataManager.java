@@ -214,8 +214,8 @@ public class ReferenceDataManager {
     @SuppressWarnings("unchecked")
     public static <T extends IEntity> void invalidate(Class<T> domainClass) {
         EntityMeta meta = EntityFactory.getEntityMeta(domainClass);
-        if (meta.getDBOClass() != null) {
-            domainClass = (Class<T>) meta.getDBOClass();
+        if (meta.getBOClass() != null) {
+            domainClass = (Class<T>) meta.getBOClass();
         }
         Iterator<EntityQueryCriteria<?>> it = cache.keySet().iterator();
         while (it.hasNext()) {

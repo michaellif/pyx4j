@@ -94,11 +94,11 @@ public class EntityFactory {
     /**
      * Resolve DBO Entity class from DTO Class from @ExtendsDBO expands
      */
-    public static Class<? extends IEntity> resolveDBOClass(IEntity entity) {
+    public static Class<? extends IEntity> resolveBOClass(IEntity entity) {
         Class<? extends IEntity> instanceClass = entity.getInstanceValueClass();
         EntityMeta meta = EntityFactory.getEntityMeta(instanceClass);
-        if (meta.getDBOClass() != null) {
-            return meta.getDBOClass();
+        if (meta.getBOClass() != null) {
+            return meta.getBOClass();
         } else if (meta.isTransient()) {
             throw new Error("Unable to resolve DBO class from DTO, use @DTO annotation on DTO class " + instanceClass.getName());
         } else {

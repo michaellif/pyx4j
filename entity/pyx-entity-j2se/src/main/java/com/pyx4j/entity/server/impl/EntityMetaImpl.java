@@ -40,7 +40,7 @@ import com.pyx4j.entity.annotations.AbstractEntity;
 import com.pyx4j.entity.annotations.BusinessEqualValue;
 import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.DiscriminatorValue;
-import com.pyx4j.entity.annotations.ExtendsDBO;
+import com.pyx4j.entity.annotations.ExtendsBO;
 import com.pyx4j.entity.annotations.Inheritance;
 import com.pyx4j.entity.annotations.InheritedOnInterface;
 import com.pyx4j.entity.annotations.Owner;
@@ -132,7 +132,7 @@ public class EntityMetaImpl implements EntityMeta {
             persistenceName = ((persistenceNamePrefix != null) ? persistenceNamePrefix : "") + persistableClass.getSimpleName();
         }
 
-        ExtendsDBO dtoAnnotation = entityClass.getAnnotation(ExtendsDBO.class);
+        ExtendsBO dtoAnnotation = entityClass.getAnnotation(ExtendsBO.class);
         if (dtoAnnotation != null) {
             if (dtoAnnotation.value() == IEntity.class) {
                 if (clazz.getInterfaces().length > 1) {
@@ -228,7 +228,7 @@ public class EntityMetaImpl implements EntityMeta {
     }
 
     @Override
-    public Class<? extends IEntity> getDBOClass() {
+    public Class<? extends IEntity> getBOClass() {
         return expandedFromClass;
     }
 

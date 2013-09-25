@@ -20,11 +20,11 @@
  */
 package com.pyx4j.entity.test.shared.domain.join;
 
-import com.pyx4j.entity.annotations.ExtendsDBO;
+import com.pyx4j.entity.annotations.ExtendsBO;
 import com.pyx4j.entity.annotations.Transient;
 
 @Transient
-@ExtendsDBO
+@ExtendsBO
 public interface OneToOneReadOwnerDTO extends OneToOneReadOwner {
 
 }

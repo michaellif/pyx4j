@@ -41,7 +41,7 @@ public interface EntityMeta {
     /**
      * @return 'This class' if this class is not annotated with @ExtendsDBO, else returns value declared in @ExtendsDBO.value
      */
-    public Class<? extends IEntity> getDBOClass();
+    public Class<? extends IEntity> getBOClass();
 
     /**
      * {@link Inheritance.InheritanceStrategy.SINGLE_TABLE}
