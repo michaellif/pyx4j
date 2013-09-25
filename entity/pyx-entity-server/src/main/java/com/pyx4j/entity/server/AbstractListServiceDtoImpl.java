@@ -38,47 +38,44 @@ import com.pyx4j.entity.shared.criterion.EntityListCriteria;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria.Sort;
 import com.pyx4j.entity.shared.criterion.OrCriterion;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
-import com.pyx4j.entity.shared.utils.EntityDtoBinder;
+import com.pyx4j.entity.shared.utils.EntityBinder;
 import com.pyx4j.security.shared.SecurityController;
 
-public abstract class AbstractListServiceDtoImpl<E extends IEntity, DTO extends IEntity> extends EntityDtoBinder<E, DTO> implements AbstractListService<DTO> {
+public abstract class AbstractListServiceDtoImpl<BO extends IEntity, TO extends IEntity> extends EntityBinder<BO, TO> implements AbstractListService<TO> {
 
-    protected Class<E> entityClass;
-
-    protected AbstractListServiceDtoImpl(Class<E> entityClass, Class<DTO> dtoClass) {
-        super(entityClass, dtoClass);
-        this.entityClass = entityClass;
+    protected AbstractListServiceDtoImpl(Class<BO> boClass, Class<TO> dtoClass) {
+        super(boClass, dtoClass);
     }
 
     /**
      * This method called for every entity returned to the GWT client for listing. As opposite to single entity in retrieve/save operations.
      * This function is empty no need to call when you override this method
      */
-    protected void enhanceListRetrieved(E entity, DTO dto) {
+    protected void enhanceListRetrieved(BO bo, TO dto) {
     }
 
     /**
      * Used to retrieve bound detached members before they are copied to DTO
      * TODO To make it work magically we have implemented retriveDetachedMember
      */
-    protected void retrievedForList(E entity) {
+    protected void retrievedForList(BO bo) {
     }
 
     @Override
-    protected boolean retriveDetachedMember(IEntity dboMember) {
-        return Persistence.service().retrieve(dboMember);
+    protected boolean retriveDetachedMember(IEntity boMember) {
+        return Persistence.service().retrieve(boMember);
     }
 
-    protected Path convertPropertyDTOPathToDBOPath(String path, E dboProto, DTO dtoProto) {
+    protected Path convertPropertyDTOPathToDBOPath(String path, BO boProto, TO toProto) {
         throw new Error("Unsupported query property path " + path);
     }
 
-    private Collection<Criterion> convertFilters(Collection<Criterion> dtoFilters) {
-        Collection<Criterion> dboFilters = new ArrayList<Criterion>();
-        for (Criterion cr : dtoFilters) {
-            dboFilters.add(convertCriterion(cr));
+    private Collection<Criterion> convertFilters(Collection<Criterion> toFilters) {
+        Collection<Criterion> boFilters = new ArrayList<Criterion>();
+        for (Criterion cr : toFilters) {
+            boFilters.add(convertCriterion(cr));
         }
-        return dboFilters;
+        return boFilters;
     }
 
     public Criterion convertCriterion(Criterion cr) {
@@ -86,7 +83,7 @@ public abstract class AbstractListServiceDtoImpl<E extends IEntity, DTO extends 
             PropertyCriterion propertyCriterion = (PropertyCriterion) cr;
             Path path = getBoundDboMemberPath(new Path(propertyCriterion.getPropertyPath()));
             if (path == null) {
-                path = convertPropertyDTOPathToDBOPath(propertyCriterion.getPropertyPath(), dboProto, dtoProto);
+                path = convertPropertyDTOPathToDBOPath(propertyCriterion.getPropertyPath(), boProto, toProto);
             }
             return new PropertyCriterion(path, propertyCriterion.getRestriction(), convertValue(propertyCriterion));
         } else if (cr instanceof OrCriterion) {
@@ -108,7 +105,7 @@ public abstract class AbstractListServiceDtoImpl<E extends IEntity, DTO extends 
         if (value instanceof Path) {
             Path path = getBoundDboMemberPath((Path) value);
             if (path == null) {
-                path = convertPropertyDTOPathToDBOPath(value.toString(), dboProto, dtoProto);
+                path = convertPropertyDTOPathToDBOPath(value.toString(), boProto, toProto);
             }
             return path;
         } else if (value instanceof Criterion) {
@@ -118,63 +115,63 @@ public abstract class AbstractListServiceDtoImpl<E extends IEntity, DTO extends 
         }
     }
 
-    protected void enhanceListCriteria(EntityListCriteria<E> dbCriteria, EntityListCriteria<DTO> dtoCriteria) {
-        if ((dtoCriteria.getFilters() != null) && (!dtoCriteria.getFilters().isEmpty())) {
-            dbCriteria.addAll(convertFilters(dtoCriteria.getFilters()));
+    protected void enhanceListCriteria(EntityListCriteria<BO> boCriteria, EntityListCriteria<TO> toCriteria) {
+        if ((toCriteria.getFilters() != null) && (!toCriteria.getFilters().isEmpty())) {
+            boCriteria.addAll(convertFilters(toCriteria.getFilters()));
         }
-        if ((dtoCriteria.getSorts() != null) && (!dtoCriteria.getSorts().isEmpty())) {
-            for (Sort s : dtoCriteria.getSorts()) {
+        if ((toCriteria.getSorts() != null) && (!toCriteria.getSorts().isEmpty())) {
+            for (Sort s : toCriteria.getSorts()) {
                 Path path = getBoundDboMemberPath(new Path(s.getPropertyPath()));
                 if (path == null) {
-                    path = convertPropertyDTOPathToDBOPath(s.getPropertyPath(), dbCriteria.proto(), dtoCriteria.proto());
+                    path = convertPropertyDTOPathToDBOPath(s.getPropertyPath(), boCriteria.proto(), toCriteria.proto());
                 }
                 if (s.isDescending()) {
-                    dbCriteria.desc(path.toString());
+                    boCriteria.desc(path.toString());
                 } else {
-                    dbCriteria.asc(path.toString());
+                    boCriteria.asc(path.toString());
                 }
             }
         }
     }
 
-    protected EntitySearchResult<E> query(EntityListCriteria<E> criteria) {
+    protected EntitySearchResult<BO> query(EntityListCriteria<BO> criteria) {
         return Persistence.secureQuery(criteria);
     }
 
     @Override
-    public void list(AsyncCallback<EntitySearchResult<DTO>> callback, EntityListCriteria<DTO> dtoCriteria) {
-        if (!dtoCriteria.getEntityClass().equals(dtoClass)) {
-            throw new Error("Service " + this.getClass().getName() + " declaration error. " + dtoClass + "!=" + dtoCriteria.getEntityClass());
+    public void list(AsyncCallback<EntitySearchResult<TO>> callback, EntityListCriteria<TO> dtoCriteria) {
+        if (!dtoCriteria.getEntityClass().equals(toClass)) {
+            throw new Error("Service " + this.getClass().getName() + " declaration error. " + toClass + "!=" + dtoCriteria.getEntityClass());
         }
-        EntityListCriteria<E> criteria = EntityListCriteria.create(dboClass);
+        EntityListCriteria<BO> criteria = EntityListCriteria.create(boClass);
         criteria.setPageNumber(dtoCriteria.getPageNumber());
         criteria.setPageSize(dtoCriteria.getPageSize());
         criteria.setVersionedCriteria(dtoCriteria.getVersionedCriteria());
         enhanceListCriteria(criteria, dtoCriteria);
-        EntitySearchResult<E> dbResults = query(criteria);
+        EntitySearchResult<BO> dbResults = query(criteria);
 
-        EntitySearchResult<DTO> result = new EntitySearchResult<DTO>();
+        EntitySearchResult<TO> result = new EntitySearchResult<TO>();
         result.setEncodedCursorReference(dbResults.getEncodedCursorReference());
         result.hasMoreData(dbResults.hasMoreData());
         result.setTotalRows(dbResults.getTotalRows());
-        for (E entity : dbResults.getData()) {
-            retrievedForList(entity);
-            DTO dto = createDTO(entity);
-            enhanceListRetrieved(entity, dto);
+        for (BO bo : dbResults.getData()) {
+            retrievedForList(bo);
+            TO dto = createTO(bo);
+            enhanceListRetrieved(bo, dto);
             result.getData().add(dto);
         }
         callback.onSuccess(result);
 
     }
 
-    protected void delete(E actualEntity) {
+    protected void delete(BO actualEntity) {
         Persistence.service().delete(actualEntity);
     }
 
     @Override
     public void delete(AsyncCallback<Boolean> callback, Key entityId) {
-        SecurityController.assertPermission(new EntityPermission(entityClass, EntityPermission.DELETE));
-        E actualEntity = Persistence.service().retrieve(entityClass, entityId);
+        SecurityController.assertPermission(new EntityPermission(boClass, EntityPermission.DELETE));
+        BO actualEntity = Persistence.service().retrieve(boClass, entityId);
         SecurityController.assertPermission(EntityPermission.permissionDelete(actualEntity));
         delete(actualEntity);
         Persistence.service().commit();

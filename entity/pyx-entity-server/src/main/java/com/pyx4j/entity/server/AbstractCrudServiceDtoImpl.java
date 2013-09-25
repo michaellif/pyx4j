@@ -34,15 +34,15 @@ import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.shared.UnRecoverableRuntimeException;
 import com.pyx4j.security.shared.SecurityController;
 
-public abstract class AbstractCrudServiceDtoImpl<E extends IEntity, DTO extends IEntity> extends AbstractListServiceDtoImpl<E, DTO> implements
-        AbstractCrudService<DTO> {
+public abstract class AbstractCrudServiceDtoImpl<BO extends IEntity, TO extends IEntity> extends AbstractListServiceDtoImpl<BO, TO> implements
+        AbstractCrudService<TO> {
 
     private static final Logger log = LoggerFactory.getLogger(AbstractCrudServiceDtoImpl.class);
 
     private static final I18n i18n = I18n.get(AbstractCrudServiceDtoImpl.class);
 
-    protected AbstractCrudServiceDtoImpl(Class<E> entityClass, Class<DTO> dtoClass) {
-        super(entityClass, dtoClass);
+    protected AbstractCrudServiceDtoImpl(Class<BO> boClass, Class<TO> toClass) {
+        super(boClass, toClass);
     }
 
     /**
@@ -51,7 +51,7 @@ public abstract class AbstractCrudServiceDtoImpl<E extends IEntity, DTO extends 
      * 
      * retrieveTarget when called for save operations
      */
-    protected void retrievedSingle(E entity, RetrieveTarget retrieveTarget) {
+    protected void retrievedSingle(BO bo, RetrieveTarget retrieveTarget) {
     }
 
     /**
@@ -61,73 +61,73 @@ public abstract class AbstractCrudServiceDtoImpl<E extends IEntity, DTO extends 
      * @param retrieveTarget
      *            TODO
      */
-    protected void enhanceRetrieved(E entity, DTO dto, RetrieveTarget retrieveTarget) {
+    protected void enhanceRetrieved(BO bo, TO to, RetrieveTarget retrieveTarget) {
     }
 
-    protected E retrieve(Key entityId, RetrieveTarget retrieveTarget) {
-        E entity = Persistence.secureRetrieve(entityClass, entityId);
-        if (entity == null) {
-            log.error("Entity {} {} not found", entityClass, entityId);
-            throw new UnRecoverableRuntimeException(i18n.tr("{0} not found", EntityFactory.getEntityMeta(entityClass).getCaption()));
+    protected BO retrieve(Key entityId, RetrieveTarget retrieveTarget) {
+        BO bo = Persistence.secureRetrieve(boClass, entityId);
+        if (bo == null) {
+            log.error("Entity {} {} not found", boClass, entityId);
+            throw new UnRecoverableRuntimeException(i18n.tr("{0} not found", EntityFactory.getEntityMeta(boClass).getCaption()));
         }
-        return entity;
+        return bo;
     }
 
-    protected DTO init(InitializationData initializationData) {
-        return EntityFactory.create(dtoClass);
+    protected TO init(InitializationData initializationData) {
+        return EntityFactory.create(toClass);
     }
 
-    protected void create(E entity, DTO dto) {
-        persist(entity, dto);
+    protected void create(BO bo, TO to) {
+        persist(bo, to);
     }
 
-    protected void save(E entity, DTO dto) {
-        persist(entity, dto);
+    protected void save(BO bo, TO to) {
+        persist(bo, to);
     }
 
-    protected void persist(E entity, DTO dto) {
-        Persistence.secureSave(entity);
+    protected void persist(BO bo, TO to) {
+        Persistence.secureSave(bo);
     }
 
     @Override
-    public void retrieve(AsyncCallback<DTO> callback, Key entityId, RetrieveTarget retrieveTarget) {
-        E entity = retrieve(entityId, retrieveTarget);
+    public void retrieve(AsyncCallback<TO> callback, Key entityId, RetrieveTarget retrieveTarget) {
+        BO entity = retrieve(entityId, retrieveTarget);
         if (entity != null) {
             retrievedSingle(entity, retrieveTarget);
         }
-        DTO dto = createDTO(entity);
+        TO dto = createTO(entity);
         enhanceRetrieved(entity, dto, retrieveTarget);
         callback.onSuccess(dto);
     }
 
     @Override
-    public final void init(AsyncCallback<DTO> callback, InitializationData initializationData) {
-        SecurityController.assertPermission(EntityPermission.permissionCreate(entityClass));
+    public final void init(AsyncCallback<TO> callback, InitializationData initializationData) {
+        SecurityController.assertPermission(EntityPermission.permissionCreate(boClass));
         callback.onSuccess(init(initializationData));
     }
 
     @Override
-    public void create(AsyncCallback<Key> callback, DTO dto) {
-        E entity = createDBO(dto);
+    public void create(AsyncCallback<Key> callback, TO dto) {
+        BO entity = createBO(dto);
         create(entity, dto);
         Persistence.service().commit();
         callback.onSuccess(entity.getPrimaryKey());
     }
 
-    protected E retrieveForSave(DTO dto) {
-        E entity = Persistence.secureRetrieve(entityClass, dto.getPrimaryKey());
-        if (entity == null) {
-            entity = EntityFactory.create(dboClass);
+    protected BO retrieveForSave(TO dt) {
+        BO bo = Persistence.secureRetrieve(boClass, dt.getPrimaryKey());
+        if (bo == null) {
+            bo = EntityFactory.create(boClass);
         }
-        return entity;
+        return bo;
     }
 
     @Override
-    public void save(AsyncCallback<Key> callback, DTO dto) {
-        E entity = retrieveForSave(dto);
+    public void save(AsyncCallback<Key> callback, TO to) {
+        BO entity = retrieveForSave(to);
         retrievedSingle(entity, null);
-        copyDTOtoDBO(dto, entity);
-        save(entity, dto);
+        copyTOtoBO(to, entity);
+        save(entity, to);
         Persistence.service().commit();
         callback.onSuccess(entity.getPrimaryKey());
     }

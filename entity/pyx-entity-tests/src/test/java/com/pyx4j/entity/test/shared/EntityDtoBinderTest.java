@@ -27,7 +27,7 @@ import junit.framework.Assert;
 import com.pyx4j.commons.Key;
 import com.pyx4j.entity.shared.AttachLevel;
 import com.pyx4j.entity.shared.EntityFactory;
-import com.pyx4j.entity.shared.utils.EntityDtoBinder;
+import com.pyx4j.entity.shared.utils.EntityBinder;
 import com.pyx4j.entity.test.shared.domain.Employee;
 import com.pyx4j.entity.test.shared.domain.Task;
 import com.pyx4j.entity.test.shared.domain.inherit.Concrete2Entity;
@@ -36,7 +36,7 @@ import com.pyx4j.entity.test.shared.domain.inherit.ReferenceEntityDTO;
 
 public class EntityDtoBinderTest extends InitializerTestBase {
 
-    private class SimpleEntityDtoBinder extends EntityDtoBinder<Employee, Employee> {
+    private class SimpleEntityDtoBinder extends EntityBinder<Employee, Employee> {
 
         protected SimpleEntityDtoBinder() {
             super(Employee.class, Employee.class);
@@ -44,10 +44,10 @@ public class EntityDtoBinderTest extends InitializerTestBase {
 
         @Override
         protected void bind() {
-            bind(dtoProto.firstName(), dboProto.firstName());
-            bind(dtoProto.employmentStatus(), dboProto.employmentStatus());
-            bind(dtoProto.tasksSorted(), dboProto.tasksSorted());
-            bind(dtoProto.workAddress(), dboProto.workAddress());
+            bind(toProto.firstName(), boProto.firstName());
+            bind(toProto.employmentStatus(), boProto.employmentStatus());
+            bind(toProto.tasksSorted(), boProto.tasksSorted());
+            bind(toProto.workAddress(), boProto.workAddress());
         }
 
     }
@@ -66,7 +66,7 @@ public class EntityDtoBinderTest extends InitializerTestBase {
         task1.notes().add("note1");
         emp1.tasksSorted().add(task1);
 
-        Employee emp2 = new SimpleEntityDtoBinder().createDBO(emp1);
+        Employee emp2 = new SimpleEntityDtoBinder().createBO(emp1);
         Assert.assertEquals(emp1.firstName().getValue(), emp2.firstName().getValue());
         Assert.assertEquals(emp1.employmentStatus().getValue(), emp2.employmentStatus().getValue());
 
@@ -82,13 +82,13 @@ public class EntityDtoBinderTest extends InitializerTestBase {
 
         emp2 = emp2.duplicate();
 
-        Assert.assertFalse(new SimpleEntityDtoBinder().updateDBO(emp1, emp2));
+        Assert.assertFalse(new SimpleEntityDtoBinder().updateBO(emp1, emp2));
 
         emp1.workAddress().streetName().setValue("street m");
 
-        Assert.assertTrue(new SimpleEntityDtoBinder().updateDBO(emp1, emp2));
+        Assert.assertTrue(new SimpleEntityDtoBinder().updateBO(emp1, emp2));
         //Second pass will not change the value
-        Assert.assertFalse(new SimpleEntityDtoBinder().updateDBO(emp1, emp2));
+        Assert.assertFalse(new SimpleEntityDtoBinder().updateBO(emp1, emp2));
         Assert.assertEquals("address.streetName Value", emp1.workAddress().streetName().getValue(), emp2.workAddress().streetName().getValue());
     }
 
@@ -101,10 +101,10 @@ public class EntityDtoBinderTest extends InitializerTestBase {
         emp1.workAddress().country().setPrimaryKey(new Key(22));
         emp1.workAddress().city().name().setValue("city");
 
-        Employee emp2 = new SimpleEntityDtoBinder().createDBO(emp1);
+        Employee emp2 = new SimpleEntityDtoBinder().createBO(emp1);
         emp2 = emp2.duplicate();
 
-        Assert.assertFalse(new SimpleEntityDtoBinder().updateDBO(emp1, emp2));
+        Assert.assertFalse(new SimpleEntityDtoBinder().updateBO(emp1, emp2));
         Assert.assertEquals("address.country Value", emp1.workAddress().country().name().getValue(), emp2.workAddress().country().name().getValue());
         Assert.assertEquals("address.country Value", emp1.workAddress().country().id().getValue(), emp2.workAddress().country().id().getValue());
         Assert.assertEquals("owned PK Value", emp1.workAddress().id().getValue(), emp2.workAddress().id().getValue());
@@ -113,7 +113,7 @@ public class EntityDtoBinderTest extends InitializerTestBase {
         emp1.workAddress().country().setPrimaryKey(null);
         emp1.workAddress().streetName().setValue("street m");
 
-        Assert.assertTrue(new SimpleEntityDtoBinder().updateDBO(emp1, emp2));
+        Assert.assertTrue(new SimpleEntityDtoBinder().updateBO(emp1, emp2));
         Assert.assertEquals("address.country Value", emp1.workAddress().country().name().getValue(), emp2.workAddress().country().name().getValue());
         Assert.assertTrue("address.country Value", emp2.workAddress().country().id().isNull());
 
@@ -121,7 +121,7 @@ public class EntityDtoBinderTest extends InitializerTestBase {
         Assert.assertEquals("address.streetName Value", emp1.workAddress().streetName().getValue(), emp2.workAddress().streetName().getValue());
     }
 
-    private class PolymorphicEntityDtoBinder extends EntityDtoBinder<ReferenceEntityDTO, ReferenceEntity> {
+    private class PolymorphicEntityDtoBinder extends EntityBinder<ReferenceEntityDTO, ReferenceEntity> {
 
         protected PolymorphicEntityDtoBinder() {
             super(ReferenceEntityDTO.class, ReferenceEntity.class);
@@ -129,8 +129,8 @@ public class EntityDtoBinderTest extends InitializerTestBase {
 
         @Override
         protected void bind() {
-            bind(dtoProto.name(), dboProto.name());
-            bind(dtoProto.reference(), dboProto.reference());
+            bind(toProto.name(), boProto.name());
+            bind(toProto.reference(), boProto.reference());
         }
 
     }
@@ -143,7 +143,7 @@ public class EntityDtoBinderTest extends InitializerTestBase {
 
         ent1.reference().set(ent12);
 
-        ReferenceEntityDTO ent2 = new PolymorphicEntityDtoBinder().createDBO(ent1);
+        ReferenceEntityDTO ent2 = new PolymorphicEntityDtoBinder().createBO(ent1);
 
         Assert.assertEquals(ent12.nameB1(), ent2.reference().nameB1());
         Assert.assertEquals("Proper instance", Concrete2Entity.class, ent2.reference().getInstanceValueClass());
@@ -158,7 +158,7 @@ public class EntityDtoBinderTest extends InitializerTestBase {
 
         ent1.reference().set(ent12);
 
-        ReferenceEntityDTO ent2 = new PolymorphicEntityDtoBinder().createDBO(ent1);
+        ReferenceEntityDTO ent2 = new PolymorphicEntityDtoBinder().createBO(ent1);
 
         Assert.assertEquals("Proper instance", Concrete2Entity.class, ent2.reference().getInstanceValueClass());
     }

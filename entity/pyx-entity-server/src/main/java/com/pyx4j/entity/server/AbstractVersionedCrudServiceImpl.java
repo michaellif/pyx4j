@@ -46,7 +46,7 @@ public abstract class AbstractVersionedCrudServiceImpl<E extends IVersionedEntit
         } else {
             primaryKey = entityId;
         }
-        E entity = Persistence.secureRetrieve(entityClass, entityId);
+        E entity = Persistence.secureRetrieve(boClass, entityId);
         if (primaryKey.isDraft() && (entity == null)) {
             entity = super.retrieve(primaryKey.asCurrentKey(), retrieveTarget);
         } else if (primaryKey.getVersion() == Key.VERSION_CURRENT && entity.version().isNull()) {
@@ -78,7 +78,7 @@ public abstract class AbstractVersionedCrudServiceImpl<E extends IVersionedEntit
 
     @Override
     public void approveFinal(AsyncCallback<VoidSerializable> callback, Key entityId) {
-        E entity = Persistence.secureRetrieve(entityClass, entityId.asDraftKey());
+        E entity = Persistence.secureRetrieve(boClass, entityId.asDraftKey());
         if (entity.version().isNull()) {
             throw new Error("There are no draft version to finalize");
         }

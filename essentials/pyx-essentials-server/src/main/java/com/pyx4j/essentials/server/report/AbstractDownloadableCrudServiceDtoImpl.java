@@ -42,7 +42,7 @@ public abstract class AbstractDownloadableCrudServiceDtoImpl<E extends IEntity, 
 
     @Override
     public void createDownload(AsyncCallback<String> callback, ReportRequest reportRequest) {
-        EntityListCriteria<E> criteria = EntityListCriteria.create(dboClass);
+        EntityListCriteria<E> criteria = EntityListCriteria.create(boClass);
         criteria.setVersionedCriteria(reportRequest.getCriteria().getVersionedCriteria());
         enhanceListCriteria(criteria, (EntityListCriteria<DTO>) reportRequest.getCriteria());
         reportRequest.setCriteria(criteria);

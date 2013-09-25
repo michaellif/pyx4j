@@ -43,89 +43,89 @@ import com.pyx4j.entity.shared.Path;
  * 
  * bind() function should be implemented to map members that needs to be copied of one class to another.
  */
-public abstract class EntityDtoBinder<DBO extends IEntity, DTO extends IEntity> {
+public abstract class EntityBinder<BO extends IEntity, TO extends IEntity> {
 
-    protected Class<DBO> dboClass;
+    protected Class<BO> boClass;
 
-    protected Class<DTO> dtoClass;
+    protected Class<TO> toClass;
 
-    protected final DBO dboProto;
+    protected final BO boProto;
 
-    protected final DTO dtoProto;
+    protected final TO toProto;
 
     private final boolean copyPrimaryKey;
 
     private final List<Binding> binding = new Vector<Binding>();
 
-    private final Map<Path, Binding> bindingByDTOMemberPath = new HashMap<Path, Binding>();
+    private final Map<Path, Binding> bindingByTOMemberPath = new HashMap<Path, Binding>();
 
     private static class Binding {
 
-        Path dtoMemberPath;
+        Path toMemberPath;
 
-        Path dboMemberPath;
+        Path boMemberPath;
 
         @SuppressWarnings("rawtypes")
-        EntityDtoBinder binder;
+        EntityBinder binder;
 
-        Binding(IObject<?> dtoMember, IObject<?> dboMember, @SuppressWarnings("rawtypes") EntityDtoBinder binder) {
-            dtoMemberPath = dtoMember.getPath();
-            dboMemberPath = dboMember.getPath();
+        Binding(IObject<?> dtoMember, IObject<?> dboMember, @SuppressWarnings("rawtypes") EntityBinder binder) {
+            toMemberPath = dtoMember.getPath();
+            boMemberPath = dboMember.getPath();
             this.binder = binder;
         }
 
     }
 
-    protected EntityDtoBinder(Class<DBO> dboClass, Class<DTO> dtoClass) {
-        this(dboClass, dtoClass, true);
+    protected EntityBinder(Class<BO> boClass, Class<TO> toClass) {
+        this(boClass, toClass, true);
     }
 
     /**
      * Allow to skip automatic copy of PK, Used to allow duplicated in XML
      */
-    protected EntityDtoBinder(Class<DBO> dboClass, Class<DTO> dtoClass, boolean copyPrimaryKey) {
-        this.dboClass = dboClass;
-        this.dtoClass = dtoClass;
+    protected EntityBinder(Class<BO> boClass, Class<TO> toClass, boolean copyPrimaryKey) {
+        this.boClass = boClass;
+        this.toClass = toClass;
         this.copyPrimaryKey = copyPrimaryKey;
 
-        dboProto = EntityFactory.getEntityPrototype(dboClass);
-        dtoProto = EntityFactory.getEntityPrototype(dtoClass);
+        boProto = EntityFactory.getEntityPrototype(boClass);
+        toProto = EntityFactory.getEntityPrototype(toClass);
     }
 
     protected abstract void bind();
 
     private void addBinding(Binding b) {
-        if (!b.dboMemberPath.isUndefinedCollectionPath() && !b.dtoMemberPath.isUndefinedCollectionPath()) {
+        if (!b.boMemberPath.isUndefinedCollectionPath() && !b.toMemberPath.isUndefinedCollectionPath()) {
             binding.add(b);
         }
-        bindingByDTOMemberPath.put(b.dtoMemberPath, b);
+        bindingByTOMemberPath.put(b.toMemberPath, b);
     }
 
     @SuppressWarnings("unchecked")
     protected final void bindCompleteDBO() {
-        bind((Class<IEntity>) dboProto.getValueClass(), dtoProto, dboProto);
+        bind((Class<IEntity>) boProto.getValueClass(), toProto, boProto);
     }
 
     /**
-     * binds DTO member of DBO type to DBO
+     * binds TO member of BO type to BO
      */
-    protected final void bindCompleteDtoMember(DBO dtoEntityMember) {
-        addBinding(new Binding(dtoEntityMember.getMember(IEntity.PRIMARY_KEY), dboProto.getMember(IEntity.PRIMARY_KEY), null));
-        for (String memberName : EntityFactory.getEntityMeta(dboClass).getMemberNames()) {
-            addBinding(new Binding(dtoEntityMember.getMember(memberName), dboProto.getMember(memberName), null));
+    protected final void bindCompleteDtoMember(BO toEntityMember) {
+        addBinding(new Binding(toEntityMember.getMember(IEntity.PRIMARY_KEY), boProto.getMember(IEntity.PRIMARY_KEY), null));
+        for (String memberName : EntityFactory.getEntityMeta(boClass).getMemberNames()) {
+            addBinding(new Binding(toEntityMember.getMember(memberName), boProto.getMember(memberName), null));
         }
     }
 
-    protected final <TYPE> void bind(IObject<TYPE> dtoMember, IObject<TYPE> dboMember) {
-        addBinding(new Binding(dtoMember, dboMember, null));
+    protected final <TYPE> void bind(IObject<TYPE> toMember, IObject<TYPE> boMember) {
+        addBinding(new Binding(toMember, boMember, null));
     }
 
-    protected final <TDBO extends IEntity, TDTO extends IEntity> void bind(TDTO dtoMember, TDBO dboMember, EntityDtoBinder<TDBO, TDTO> binder) {
-        addBinding(new Binding(dtoMember, dboMember, binder));
+    protected final <TBO extends IEntity, TTO extends IEntity> void bind(TTO toMember, TBO boMember, EntityBinder<TBO, TTO> binder) {
+        addBinding(new Binding(toMember, boMember, binder));
     }
 
-    protected final <TDBO extends IEntity, TDTO extends IEntity> void bind(IList<TDTO> dtoMember, IList<TDBO> dboMember, EntityDtoBinder<TDBO, TDTO> binder) {
-        addBinding(new Binding(dtoMember, dboMember, binder));
+    protected final <TDBO extends IEntity, TDTO extends IEntity> void bind(IList<TDTO> toMember, IList<TDBO> boMember, EntityBinder<TDBO, TDTO> binder) {
+        addBinding(new Binding(toMember, boMember, binder));
     }
 
     protected final <F extends IEntity, S extends F, D extends F> void bind(Class<F> fragmentClass, S dto, D dbo) {
@@ -145,22 +145,22 @@ public abstract class EntityDtoBinder<DBO extends IEntity, DTO extends IEntity> 
         }
     }
 
-    public Path getBoundDboMemberPath(Path dtoMemberPath) {
+    public Path getBoundDboMemberPath(Path toMemberPath) {
         init();
-        Binding b = bindingByDTOMemberPath.get(dtoMemberPath);
+        Binding b = bindingByTOMemberPath.get(toMemberPath);
         if (b != null) {
-            return b.dboMemberPath;
+            return b.boMemberPath;
         }
         // The binding may have been done by Entity member,
         StringBuilder shortDTOMemberPath = new StringBuilder();
-        shortDTOMemberPath.append(dtoMemberPath.getRootObjectClassName()).append(Path.PATH_SEPARATOR);
-        Iterator<String> it = dtoMemberPath.getPathMembers().iterator();
+        shortDTOMemberPath.append(toMemberPath.getRootObjectClassName()).append(Path.PATH_SEPARATOR);
+        Iterator<String> it = toMemberPath.getPathMembers().iterator();
         while (it.hasNext()) {
             String member = it.next();
             shortDTOMemberPath.append(member).append(Path.PATH_SEPARATOR);
-            b = bindingByDTOMemberPath.get(new Path(shortDTOMemberPath.toString()));
+            b = bindingByTOMemberPath.get(new Path(shortDTOMemberPath.toString()));
             if (b != null) {
-                StringBuilder shortDBOMemberPath = new StringBuilder(b.dboMemberPath.toString());
+                StringBuilder shortDBOMemberPath = new StringBuilder(b.boMemberPath.toString());
                 while (it.hasNext()) {
                     shortDBOMemberPath.append(it.next()).append(Path.PATH_SEPARATOR);
                 }
@@ -170,12 +170,12 @@ public abstract class EntityDtoBinder<DBO extends IEntity, DTO extends IEntity> 
         return null;
     }
 
-    public DTO createDTO(DBO dbo) {
-        DTO dto = EntityFactory.create(dtoClass);
+    public TO createTO(BO bo) {
+        TO dto = EntityFactory.create(toClass);
         if (copyPrimaryKey) {
-            dto.setPrimaryKey(dbo.getPrimaryKey());
+            dto.setPrimaryKey(bo.getPrimaryKey());
         }
-        copyDBOtoDTO(dbo, dto);
+        copyBOtoTO(bo, dto);
         return dto;
     }
 
@@ -184,11 +184,11 @@ public abstract class EntityDtoBinder<DBO extends IEntity, DTO extends IEntity> 
     }
 
     @SuppressWarnings({ "rawtypes", "unchecked" })
-    public void copyDBOtoDTO(DBO dbo, DTO dto) {
+    public void copyBOtoTO(BO bo, TO to) {
         init();
         for (Binding b : binding) {
-            IObject dtoM = dto.getMember(b.dtoMemberPath);
-            IObject dboM = dbo.getMember(b.dboMemberPath);
+            IObject dtoM = to.getMember(b.toMemberPath);
+            IObject dboM = bo.getMember(b.boMemberPath);
 
             // Assert that all data has been retrieved
             if ((dboM instanceof IEntity) && ((IEntity) dboM).isValueDetached() && !dtoM.getMeta().isDetached()) {
@@ -229,31 +229,31 @@ public abstract class EntityDtoBinder<DBO extends IEntity, DTO extends IEntity> 
                     dtoM.setValue(dboM.getValue());
                 }
             } else if (dtoM instanceof IEntity) {
-                b.binder.copyDBOtoDTO((IEntity) dboM, (IEntity) dtoM);
+                b.binder.copyBOtoTO((IEntity) dboM, (IEntity) dtoM);
             } else if (dboM instanceof ICollection) {
                 ((ICollection<IEntity, ?>) dtoM).clear();
                 for (IEntity dboMi : (ICollection<IEntity, ?>) dboM) {
-                    ((ICollection<IEntity, ?>) dtoM).add(b.binder.createDTO(dboMi));
+                    ((ICollection<IEntity, ?>) dtoM).add(b.binder.createTO(dboMi));
                 }
             }
         }
     }
 
-    public DBO createDBO(DTO dto) {
-        DBO dbo = EntityFactory.create(dboClass);
+    public BO createBO(TO to) {
+        BO dbo = EntityFactory.create(boClass);
         if (copyPrimaryKey) {
-            dbo.setPrimaryKey(dto.getPrimaryKey());
+            dbo.setPrimaryKey(to.getPrimaryKey());
         }
-        copyDTOtoDBO(dto, dbo);
+        copyTOtoBO(to, dbo);
         return dbo;
     }
 
     @SuppressWarnings({ "rawtypes", "unchecked" })
-    public void copyDTOtoDBO(DTO dto, DBO dbo) {
+    public void copyTOtoBO(TO to, BO bo) {
         init();
         for (Binding b : binding) {
-            IObject dtoM = dto.getMember(b.dtoMemberPath);
-            IObject dboM = dbo.getMember(b.dboMemberPath);
+            IObject dtoM = to.getMember(b.toMemberPath);
+            IObject dboM = bo.getMember(b.boMemberPath);
 
             if (dtoM.getAttachLevel() == AttachLevel.Detached) {
                 dboM.setAttachLevel(AttachLevel.Detached);
@@ -282,47 +282,47 @@ public abstract class EntityDtoBinder<DBO extends IEntity, DTO extends IEntity> 
                     dboM.setValue(dtoM.getValue());
                 }
             } else if (dtoM instanceof IEntity) {
-                b.binder.copyDTOtoDBO((IEntity) dtoM, (IEntity) dboM);
+                b.binder.copyTOtoBO((IEntity) dtoM, (IEntity) dboM);
             } else if (dtoM instanceof ICollection) {
                 ((ICollection<IEntity, ?>) dboM).clear();
                 for (IEntity dtoMi : (ICollection<IEntity, ?>) dtoM) {
-                    ((ICollection<IEntity, ?>) dboM).add(b.binder.createDBO(dtoMi));
+                    ((ICollection<IEntity, ?>) dboM).add(b.binder.createBO(dtoMi));
                 }
             }
         }
     }
 
     @SuppressWarnings({ "rawtypes", "unchecked" })
-    public boolean updateDBO(DTO dto, DBO dbo) {
+    public boolean updateBO(TO to, BO bo) {
         init();
         boolean updated = false;
         Set<IEntity> processed = new HashSet<IEntity>();
         for (Binding b : binding) {
-            IObject dtoM = dto.getMember(b.dtoMemberPath);
+            IObject dtoM = to.getMember(b.toMemberPath);
             if (dtoM.isNull()) {
                 continue;
             }
-            IObject dboM = dbo.getMember(b.dboMemberPath);
+            IObject dboM = bo.getMember(b.boMemberPath);
             if (b.binder == null) {
                 if (dtoM instanceof ICollection) {
                     if (EntityGraph.update((ICollection<IEntity, ?>) dboM, (ICollection<IEntity, ?>) dtoM, processed)) {
-                        onUpdateDBOmember(dto, dbo, dboM);
+                        onUpdateBOmember(to, bo, dboM);
                         updated = true;
                     }
                 } else if (dtoM instanceof IEntity) {
                     if (EntityGraph.update((IEntity) dboM, (IEntity) dtoM, processed)) {
-                        onUpdateDBOmember(dto, dbo, dboM);
+                        onUpdateBOmember(to, bo, dboM);
                         updated = true;
                     }
                 } else {
                     if (!EqualsHelper.equals(dboM.getValue(), dtoM.getValue())) {
                         dboM.setValue(dtoM.getValue());
-                        onUpdateDBOmember(dto, dbo, dboM);
+                        onUpdateBOmember(to, bo, dboM);
                         updated = true;
                     }
                 }
             } else if (dtoM instanceof IEntity) {
-                updated |= b.binder.updateDBO((IEntity) dtoM, (IEntity) dboM);
+                updated |= b.binder.updateBO((IEntity) dtoM, (IEntity) dboM);
             } else if (dtoM instanceof ICollection) {
                 ICollection<IEntity, ?> dboMc = (ICollection<IEntity, ?>) dboM;
                 for (IEntity dtoMi : (ICollection<IEntity, ?>) dtoM) {
@@ -331,13 +331,13 @@ public abstract class EntityDtoBinder<DBO extends IEntity, DTO extends IEntity> 
                     for (IEntity dboMi : dboMc) {
                         if (dtoMi.equals(dboMi) || dtoMi.businessEquals(dboMi)) {
                             found = true;
-                            updated |= b.binder.updateDBO(dtoMi, dboMi);
+                            updated |= b.binder.updateBO(dtoMi, dboMi);
                             break;
                         }
                     }
 
                     if (!found) {
-                        ((ICollection<IEntity, ?>) dboM).add(b.binder.createDBO(dtoMi));
+                        ((ICollection<IEntity, ?>) dboM).add(b.binder.createBO(dtoMi));
                         updated = true;
                     }
                 }
@@ -348,7 +348,7 @@ public abstract class EntityDtoBinder<DBO extends IEntity, DTO extends IEntity> 
         return updated;
     }
 
-    protected void onUpdateDBOmember(DTO dto, DBO dbo, IObject<?> dboM) {
+    protected void onUpdateBOmember(TO to, BO bo, IObject<?> boM) {
 
     }
 
