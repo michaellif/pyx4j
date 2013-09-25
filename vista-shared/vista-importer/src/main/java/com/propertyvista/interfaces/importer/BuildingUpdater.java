@@ -152,7 +152,7 @@ public class BuildingUpdater extends ImportPersister {
                     Persistence.service().retrieve(building.contacts().propertyContacts());
                 }
 
-                boolean buildingUpdated = new BuildingConverter().updateDBO(buildingIO, building);
+                boolean buildingUpdated = new BuildingConverter().updateBO(buildingIO, building);
                 if (building.info().address().location().isNull()) {
                     buildingUpdated |= SharedGeoLocator.populateGeo(building.info().address());
                 }
@@ -189,7 +189,7 @@ public class BuildingUpdater extends ImportPersister {
                 floorplanUpdated = true;
                 floorplan = createFloorplan(floorplanIO, building, mediaConfig);
             } else {
-                floorplanUpdated = new FloorplanConverter().updateDBO(floorplanIO, floorplan);
+                floorplanUpdated = new FloorplanConverter().updateBO(floorplanIO, floorplan);
             }
 
             if (floorplanUpdated) {
@@ -212,13 +212,13 @@ public class BuildingUpdater extends ImportPersister {
                 boolean unitIsNew = false;
                 boolean unitUpdated = false;
                 if (unit == null) {
-                    unit = new AptUnitConverter().createDBO(aptUnitIO);
+                    unit = new AptUnitConverter().createBO(aptUnitIO);
                     unit.building().set(building);
                     unit.floorplan().set(floorplan);
                     unitUpdated = true;
                     unitIsNew = true;
                 } else {
-                    unitUpdated = new AptUnitConverter().updateDBO(aptUnitIO, unit);
+                    unitUpdated = new AptUnitConverter().updateBO(aptUnitIO, unit);
                 }
 
                 if (unitUpdated) {
@@ -242,7 +242,7 @@ public class BuildingUpdater extends ImportPersister {
         for (AptUnitIO aptUnitIO : buildingIO.units()) {
             AptUnit unit = requestUnit(aptUnitIO, building, null);
             boolean unitUpdated = false;
-            unitUpdated = new AptUnitConverter().updateDBO(aptUnitIO, unit);
+            unitUpdated = new AptUnitConverter().updateBO(aptUnitIO, unit);
 
             // Temporary Hack for null values
             if (aptUnitIO.containsMemberValue(aptUnitIO.availableForRent().getFieldName()) && aptUnitIO.availableForRent().isNull()) {

@@ -38,14 +38,14 @@ public class CustomerCreditCheckCrudServiceImpl extends AbstractCrudServiceDtoIm
     }
 
     @Override
-    protected void enhanceRetrieved(CustomerCreditCheck entity, CustomerCreditCheckDTO dto, RetrieveTarget retrieveTarget) {
-        Persistence.service().retrieveMember(dto.screening());
-        Persistence.service().retrieveMember(dto.screening().screene());
+    protected void enhanceRetrieved(CustomerCreditCheck bo, CustomerCreditCheckDTO to, RetrieveTarget retrieveTarget) {
+        Persistence.service().retrieveMember(to.screening());
+        Persistence.service().retrieveMember(to.screening().screene());
 
-        if (!dto.transactionId().isNull()) {
-            final Key transactionId = dto.transactionId().getValue();
-            dto.transactionRef().setValue(transactionId.toString());
-            dto.transaction().set(TaskRunner.runInOperationsNamespace(new Callable<CustomerCreditCheckTransaction>() {
+        if (!to.transactionId().isNull()) {
+            final Key transactionId = to.transactionId().getValue();
+            to.transactionRef().setValue(transactionId.toString());
+            to.transaction().set(TaskRunner.runInOperationsNamespace(new Callable<CustomerCreditCheckTransaction>() {
                 @Override
                 public CustomerCreditCheckTransaction call() {
                     CustomerCreditCheckTransaction transaction = Persistence.service().retrieve(CustomerCreditCheckTransaction.class, transactionId);

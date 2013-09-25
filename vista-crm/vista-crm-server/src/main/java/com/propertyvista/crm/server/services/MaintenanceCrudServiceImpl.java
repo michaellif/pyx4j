@@ -51,8 +51,8 @@ public class MaintenanceCrudServiceImpl extends AbstractCrudServiceDtoImpl<Maint
     }
 
     @Override
-    protected void enhanceRetrieved(MaintenanceRequest entity, MaintenanceRequestDTO dto, RetrieveTarget RetrieveTarget) {
-        enhanceAll(dto);
+    protected void enhanceRetrieved(MaintenanceRequest bo, MaintenanceRequestDTO to, RetrieveTarget RetrieveTarget) {
+        enhanceAll(to);
     }
 
     @Override
@@ -156,11 +156,11 @@ public class MaintenanceCrudServiceImpl extends AbstractCrudServiceDtoImpl<Maint
             if (!initData.tenant().isNull()) {
                 Tenant tenant = Persistence.service().retrieve(Tenant.class, initData.tenant().getPrimaryKey());
                 MaintenanceRequest maintenanceRequest = ServerSideFactory.create(MaintenanceFacade.class).createNewRequestForTenant(tenant);
-                return createDTO(maintenanceRequest);
+                return createTO(maintenanceRequest);
             } else if (!initData.building().isNull()) {
                 Building building = Persistence.service().retrieve(Building.class, initData.building().getPrimaryKey());
                 MaintenanceRequest maintenanceRequest = ServerSideFactory.create(MaintenanceFacade.class).createNewRequest(building);
-                return createDTO(maintenanceRequest);
+                return createTO(maintenanceRequest);
             } else {
                 return super.init(initializationData);
             }
@@ -192,7 +192,7 @@ public class MaintenanceCrudServiceImpl extends AbstractCrudServiceDtoImpl<Maint
     }
 
     @Override
-    protected void persist(MaintenanceRequest entity, MaintenanceRequestDTO dto) {
-        ServerSideFactory.create(MaintenanceFacade.class).postMaintenanceRequest(entity);
+    protected void persist(MaintenanceRequest bo, MaintenanceRequestDTO to) {
+        ServerSideFactory.create(MaintenanceFacade.class).postMaintenanceRequest(bo);
     }
 }

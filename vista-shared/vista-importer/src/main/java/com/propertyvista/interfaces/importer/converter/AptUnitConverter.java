@@ -13,13 +13,13 @@
  */
 package com.propertyvista.interfaces.importer.converter;
 
-import com.pyx4j.entity.shared.utils.EntityDtoBinder;
+import com.pyx4j.entity.shared.utils.EntityBinder;
 
 import com.propertyvista.domain.property.asset.AreaMeasurementUnit;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.interfaces.importer.model.AptUnitIO;
 
-public class AptUnitConverter extends EntityDtoBinder<AptUnit, AptUnitIO> {
+public class AptUnitConverter extends EntityBinder<AptUnit, AptUnitIO> {
 
     public AptUnitConverter() {
         super(AptUnit.class, AptUnitIO.class, false);
@@ -28,18 +28,18 @@ public class AptUnitConverter extends EntityDtoBinder<AptUnit, AptUnitIO> {
     @SuppressWarnings("deprecation")
     @Override
     protected void bind() {
-        bind(dtoProto.number(), dboProto.info().number());
-        bind(dtoProto.area(), dboProto.info().area());
-        bind(dtoProto.areaUnits(), dboProto.info().areaUnits());
-        bind(dtoProto.unitRent(), dboProto.financial()._unitRent());
-        bind(dtoProto.marketRent(), dboProto.financial()._marketRent());
-        bind(dtoProto.availableForRent(), dboProto._availableForRent());
-        bind(dtoProto.floor(), dboProto.info().floor());
+        bind(toProto.number(), boProto.info().number());
+        bind(toProto.area(), boProto.info().area());
+        bind(toProto.areaUnits(), boProto.info().areaUnits());
+        bind(toProto.unitRent(), boProto.financial()._unitRent());
+        bind(toProto.marketRent(), boProto.financial()._marketRent());
+        bind(toProto.availableForRent(), boProto._availableForRent());
+        bind(toProto.floor(), boProto.info().floor());
     }
 
     @Override
-    public void copyDTOtoDBO(AptUnitIO dto, AptUnit dbo) {
-        super.copyDTOtoDBO(dto, dbo);
+    public void copyTOtoBO(AptUnitIO dto, AptUnit dbo) {
+        super.copyTOtoBO(dto, dbo);
         if (!dbo.info().area().isNull() && dbo.info().areaUnits().isNull()) {
             dbo.info().areaUnits().setValue(AreaMeasurementUnit.sqFeet);
         }

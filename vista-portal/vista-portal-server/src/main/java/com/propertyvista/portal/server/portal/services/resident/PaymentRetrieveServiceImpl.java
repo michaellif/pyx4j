@@ -18,7 +18,7 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.pyx4j.commons.Key;
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.server.Persistence;
-import com.pyx4j.entity.shared.utils.EntityDtoBinder;
+import com.pyx4j.entity.shared.utils.EntityBinder;
 
 import com.propertyvista.biz.financial.payment.PaymentFacade;
 import com.propertyvista.domain.financial.PaymentRecord;
@@ -30,7 +30,7 @@ import com.propertyvista.portal.server.portal.TenantAppContext;
 import com.propertyvista.server.common.util.AddressConverter;
 import com.propertyvista.server.common.util.AddressRetriever;
 
-public class PaymentRetrieveServiceImpl extends EntityDtoBinder<PaymentRecord, PaymentRecordDTO> implements PaymentRetrieveService {
+public class PaymentRetrieveServiceImpl extends EntityBinder<PaymentRecord, PaymentRecordDTO> implements PaymentRetrieveService {
 
     public PaymentRetrieveServiceImpl() {
         super(PaymentRecord.class, PaymentRecordDTO.class);
@@ -44,7 +44,7 @@ public class PaymentRetrieveServiceImpl extends EntityDtoBinder<PaymentRecord, P
     @Override
     public void retrieve(AsyncCallback<PaymentRecordDTO> callback, Key entityId) {
         PaymentRecord dbo = Persistence.secureRetrieve(PaymentRecord.class, entityId);
-        PaymentRecordDTO dto = createDTO(dbo);
+        PaymentRecordDTO dto = createTO(dbo);
 
         // enhance dto:
         Lease lease = TenantAppContext.getCurrentUserLease();
@@ -55,7 +55,7 @@ public class PaymentRetrieveServiceImpl extends EntityDtoBinder<PaymentRecord, P
         dto.allowedPaymentTypes().setCollectionValue(
                 ServerSideFactory.create(PaymentFacade.class).getAllowedPaymentTypes(lease.billingAccount(), VistaApplication.residentPortal));
 
-        new AddressConverter.StructuredToSimpleAddressConverter().copyDBOtoDTO(AddressRetriever.getLeaseAddress(lease), dto.address());
+        new AddressConverter.StructuredToSimpleAddressConverter().copyBOtoTO(AddressRetriever.getLeaseAddress(lease), dto.address());
 
         dto.propertyCode().set(lease.unit().building().propertyCode());
         dto.unitNumber().set(lease.unit().info().number());

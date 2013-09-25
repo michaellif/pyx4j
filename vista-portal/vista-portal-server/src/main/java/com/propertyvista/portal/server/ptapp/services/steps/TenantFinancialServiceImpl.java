@@ -53,7 +53,7 @@ public class TenantFinancialServiceImpl extends ApplicationEntityServiceImpl imp
         List<LeaseTermGuarantor> currentGuarantors = lease.currentTerm().version().guarantors();
 
         TenantRetriever tr = new TenantRetriever(entity.getPrimaryKey(), true);
-        new TenantConverter.TenantFinancialEditorConverter().copyDTOtoDBO(entity, tr.getScreening());
+        new TenantConverter.TenantFinancialEditorConverter().copyTOtoBO(entity, tr.getScreening());
 
         for (LeaseTermGuarantor pg : entity.guarantors()) {
             int idx = currentGuarantors.indexOf(pg);
@@ -84,7 +84,7 @@ public class TenantFinancialServiceImpl extends ApplicationEntityServiceImpl imp
     }
 
     public TenantFinancialDTO retrieveData(TenantRetriever tr) {
-        TenantFinancialDTO dto = new TenantConverter.TenantFinancialEditorConverter().createDTO(tr.getScreening());
+        TenantFinancialDTO dto = new TenantConverter.TenantFinancialEditorConverter().createTO(tr.getScreening());
         dto.setPrimaryKey(tr.getTenant().getPrimaryKey());
         dto.person().set(tr.getPerson());
 

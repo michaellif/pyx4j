@@ -34,13 +34,13 @@ public class AdminUserServiceImpl extends AbstractCrudServiceDtoImpl<OperationsU
 
     @Override
     protected void bind() {
-        bind(dtoProto.name(), dboProto.user().name());
-        bind(dtoProto.email(), dboProto.user().email());
-        bind(dtoProto.created(), dboProto.user().created());
-        bind(dtoProto.updated(), dboProto.user().updated());
+        bind(toProto.name(), boProto.user().name());
+        bind(toProto.email(), boProto.user().email());
+        bind(toProto.created(), boProto.user().created());
+        bind(toProto.updated(), boProto.user().updated());
 
-        bind(dtoProto.enabled(), dboProto.enabled());
-        bind(dtoProto.requiredPasswordChangeOnNextLogIn(), dboProto.requiredPasswordChangeOnNextLogIn());
+        bind(toProto.enabled(), boProto.enabled());
+        bind(toProto.requiredPasswordChangeOnNextLogIn(), boProto.requiredPasswordChangeOnNextLogIn());
     }
 
     @Override
@@ -54,20 +54,20 @@ public class AdminUserServiceImpl extends AbstractCrudServiceDtoImpl<OperationsU
     }
 
     @Override
-    protected void enhanceRetrieved(OperationsUserCredential entity, OperationsUserDTO dto, RetrieveTarget retrieveTarget ) {
-        if (!entity.behaviors().isEmpty()) {
-            dto.role().setValue(entity.behaviors().iterator().next());
+    protected void enhanceRetrieved(OperationsUserCredential bo, OperationsUserDTO to, RetrieveTarget retrieveTarget ) {
+        if (!bo.behaviors().isEmpty()) {
+            to.role().setValue(bo.behaviors().iterator().next());
         }
     }
 
     @Override
-    protected void retrievedSingle(OperationsUserCredential entity, RetrieveTarget retrieveTarget ) {
-        Persistence.service().retrieve(entity.user());
+    protected void retrievedSingle(OperationsUserCredential bo, RetrieveTarget retrieveTarget ) {
+        Persistence.service().retrieve(bo.user());
     }
 
     @Override
-    protected void persist(OperationsUserCredential dbo, OperationsUserDTO dto) {
-        dbo.user().email().setValue(EmailValidator.normalizeEmailAddress(dto.email().getValue()));
+    protected void persist(OperationsUserCredential dbo, OperationsUserDTO to) {
+        dbo.user().email().setValue(EmailValidator.normalizeEmailAddress(to.email().getValue()));
         Persistence.service().merge(dbo.user());
 
         // ignore role changes (don't copy role from dto to dbo);

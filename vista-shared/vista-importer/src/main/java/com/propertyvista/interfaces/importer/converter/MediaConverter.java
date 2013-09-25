@@ -31,7 +31,7 @@ import com.pyx4j.commons.Key;
 import com.pyx4j.commons.UserRuntimeException;
 import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.entity.cache.CacheService;
-import com.pyx4j.entity.shared.utils.EntityDtoBinder;
+import com.pyx4j.entity.shared.utils.EntityBinder;
 import com.pyx4j.essentials.j2se.util.FileIOUtils;
 import com.pyx4j.essentials.server.download.MimeMap;
 import com.pyx4j.gwt.server.IOUtils;
@@ -46,7 +46,7 @@ import com.propertyvista.server.common.blob.BlobService;
 import com.propertyvista.server.common.blob.ThumbnailService;
 import com.propertyvista.server.domain.FileImageThumbnailBlobDTO;
 
-public class MediaConverter extends EntityDtoBinder<Media, MediaIO> {
+public class MediaConverter extends EntityBinder<Media, MediaIO> {
 
     private final static Logger log = LoggerFactory.getLogger(MediaConverter.class);
 
@@ -66,13 +66,13 @@ public class MediaConverter extends EntityDtoBinder<Media, MediaIO> {
 
     @Override
     protected void bind() {
-        bind(dtoProto.caption(), dboProto.caption());
-        bind(dtoProto.visibility(), dboProto.visibility());
+        bind(toProto.caption(), boProto.caption());
+        bind(toProto.visibility(), boProto.visibility());
     }
 
     @Override
-    public void copyDBOtoDTO(Media dbo, MediaIO dto) {
-        super.copyDBOtoDTO(dbo, dto);
+    public void copyBOtoTO(Media dbo, MediaIO dto) {
+        super.copyBOtoTO(dbo, dto);
         switch (dbo.type().getValue()) {
         case file:
             dto.mediaType().setValue(MediaIO.MediaType.file);
@@ -126,8 +126,8 @@ public class MediaConverter extends EntityDtoBinder<Media, MediaIO> {
     private static Map<String, FileImageThumbnailBlobDTO> resized = new Hashtable<String, FileImageThumbnailBlobDTO>();
 
     @Override
-    public void copyDTOtoDBO(MediaIO dto, Media dbo) {
-        super.copyDTOtoDBO(dto, dbo);
+    public void copyTOtoBO(MediaIO dto, Media dbo) {
+        super.copyTOtoBO(dto, dbo);
         if (dto.mediaType().isNull()) {
             if (mediaConfig.ignoreMissingMedia) {
                 return;

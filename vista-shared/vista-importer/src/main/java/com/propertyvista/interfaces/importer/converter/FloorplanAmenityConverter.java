@@ -13,12 +13,12 @@
  */
 package com.propertyvista.interfaces.importer.converter;
 
-import com.pyx4j.entity.shared.utils.EntityDtoBinder;
+import com.pyx4j.entity.shared.utils.EntityBinder;
 
 import com.propertyvista.domain.property.asset.FloorplanAmenity;
 import com.propertyvista.interfaces.importer.model.FloorplanAmenityIO;
 
-public class FloorplanAmenityConverter extends EntityDtoBinder<FloorplanAmenity, FloorplanAmenityIO> {
+public class FloorplanAmenityConverter extends EntityBinder<FloorplanAmenity, FloorplanAmenityIO> {
 
     public FloorplanAmenityConverter() {
         super(FloorplanAmenity.class, FloorplanAmenityIO.class, false);
@@ -26,9 +26,9 @@ public class FloorplanAmenityConverter extends EntityDtoBinder<FloorplanAmenity,
 
     @Override
     protected void bind() {
-        bind(dtoProto.name(), dboProto.name());
-        bind(dtoProto.description(), dboProto.description());
-        bind(dtoProto.type(), dboProto.type());
+        bind(toProto.name(), boProto.name());
+        bind(toProto.description(), boProto.description());
+        bind(toProto.type(), boProto.type());
     }
 
 }

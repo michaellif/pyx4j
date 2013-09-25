@@ -53,14 +53,14 @@ public class CityIntroPageCrudServiceImpl extends AbstractCrudServiceImpl<CityIn
     }
 
     @Override
-    protected void persist(CityIntroPage entity, CityIntroPage dto) {
+    protected void persist(CityIntroPage bo, CityIntroPage to) {
         EntityQueryCriteria<SiteDescriptor> criteria = EntityQueryCriteria.create(SiteDescriptor.class);
         SiteDescriptor site = Persistence.service().retrieve(criteria);
-        if (entity.getPrimaryKey() == null) {
-            site.cityIntroPages().add(entity);
+        if (bo.getPrimaryKey() == null) {
+            site.cityIntroPages().add(bo);
             Persistence.service().merge(site);
         } else {
-            super.persist(entity, dto);
+            super.persist(bo, to);
         }
         PMSiteContentCache.siteDescriptorUpdated();
     }

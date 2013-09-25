@@ -47,10 +47,10 @@ public class PaymentMethodCrudServiceImpl extends AbstractCrudServiceImpl<LeaseP
     }
 
     @Override
-    protected void enhanceRetrieved(LeasePaymentMethod entity, LeasePaymentMethod dto, RetrieveTarget retrieveTarget) {
-        super.enhanceRetrieved(entity, dto, retrieveTarget);
+    protected void enhanceRetrieved(LeasePaymentMethod bo, LeasePaymentMethod to, RetrieveTarget retrieveTarget) {
+        super.enhanceRetrieved(bo, to, retrieveTarget);
 
-        dto.allowedCardTypes().setCollectionValue(
+        to.allowedCardTypes().setCollectionValue(
                 ServerSideFactory.create(PaymentFacade.class).getAllowedCardTypes(TenantAppContext.getCurrentUserLease().billingAccount(),
                         VistaApplication.residentPortal));
     }
@@ -69,20 +69,20 @@ public class PaymentMethodCrudServiceImpl extends AbstractCrudServiceImpl<LeaseP
     }
 
     @Override
-    protected void persist(LeasePaymentMethod entity, LeasePaymentMethod dto) {
+    protected void persist(LeasePaymentMethod bo, LeasePaymentMethod to) {
         Lease lease = TenantAppContext.getCurrentUserLease();
         Persistence.service().retrieve(lease.unit());
 
-        entity.customer().set(TenantAppContext.getCurrentUserCustomer());
-        entity.isProfiledMethod().setValue(Boolean.TRUE);
+        bo.customer().set(TenantAppContext.getCurrentUserCustomer());
+        bo.isProfiledMethod().setValue(Boolean.TRUE);
 
-        ServerSideFactory.create(PaymentFacade.class).validatePaymentMethod(lease.billingAccount(), dto, VistaApplication.residentPortal);
-        ServerSideFactory.create(PaymentMethodFacade.class).persistLeasePaymentMethod(entity, lease.unit().building());
+        ServerSideFactory.create(PaymentFacade.class).validatePaymentMethod(lease.billingAccount(), to, VistaApplication.residentPortal);
+        ServerSideFactory.create(PaymentMethodFacade.class).persistLeasePaymentMethod(bo, lease.unit().building());
     }
 
     @Override
     public void delete(AsyncCallback<Boolean> callback, Key entityId) {
-        LeasePaymentMethod paymentMethod = Persistence.service().retrieve(entityClass, entityId);
+        LeasePaymentMethod paymentMethod = Persistence.service().retrieve(boClass, entityId);
         ServerSideFactory.create(PaymentMethodFacade.class).deleteLeasePaymentMethod(paymentMethod);
         Persistence.service().commit();
         callback.onSuccess(Boolean.TRUE);

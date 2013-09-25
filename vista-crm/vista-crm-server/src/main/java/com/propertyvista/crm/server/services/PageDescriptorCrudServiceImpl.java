@@ -62,14 +62,14 @@ public class PageDescriptorCrudServiceImpl extends AbstractCrudServiceImpl<PageD
     }
 
     @Override
-    protected void enhanceRetrieved(PageDescriptor entity, PageDescriptor dto, RetrieveTarget retrieveTarget) {
+    protected void enhanceRetrieved(PageDescriptor bo, PageDescriptor to, RetrieveTarget retrieveTarget) {
         // load content caption:
-        for (PageContent content : dto.content()) {
+        for (PageContent content : to.content()) {
 
             // TODO VladS remove this hack!
-            content.descriptor().set(entity);
+            content.descriptor().set(bo);
 
-            for (PageCaption caption : entity.caption()) {
+            for (PageCaption caption : bo.caption()) {
                 if (content.locale().equals(caption.locale())) {
                     content._caption().set(caption);
                     break;
@@ -79,7 +79,7 @@ public class PageDescriptorCrudServiceImpl extends AbstractCrudServiceImpl<PageD
     }
 
     @Override
-    protected void persist(PageDescriptor dbo, PageDescriptor dto) {
+    protected void persist(PageDescriptor dbo, PageDescriptor to) {
         // update caption:
         dbo.caption().clear();
         for (PageContent content : dbo.content()) {
@@ -104,7 +104,7 @@ public class PageDescriptorCrudServiceImpl extends AbstractCrudServiceImpl<PageD
             }
             dbo.orderInDescriptor().setValue(maxOrder);
         }
-        super.persist(dbo, dto);
+        super.persist(dbo, to);
 
         // set update flag
         PMSiteContentCache.siteDescriptorUpdated();

@@ -32,19 +32,19 @@ public class PaymentRecordsGadgetListServiceImpl extends AbstractListServiceDtoI
 
     @Override
     protected void bind() {
-        bind(dtoProto.merchantAccount(), dboProto.merchantAccount().accountNumber());
-        bind(dtoProto.building(), dboProto.billingAccount().lease().unit().building().propertyCode());
-        bind(dtoProto.lease(), dboProto.billingAccount().lease().leaseId());
-        bind(dtoProto.tenant(), dboProto.paymentMethod().customer());
-        bind(dtoProto.method(), dboProto.paymentMethod().type());
-        bind(dtoProto.status(), dboProto.paymentStatus());
-        bind(dtoProto.created(), dboProto.createdDate());
-        bind(dtoProto.received(), dboProto.receivedDate());
-        bind(dtoProto.finalized(), dboProto.finalizeDate());
-        bind(dtoProto.target(), dboProto.targetDate());
-        bind(dtoProto.amount(), dboProto.amount());
-        bind(dtoProto.lastStatusChangeDate(), dboProto.lastStatusChangeDate());
-        bind(dtoProto.buildingFilterAnchor(), dboProto.billingAccount().lease().unit().building());
+        bind(toProto.merchantAccount(), boProto.merchantAccount().accountNumber());
+        bind(toProto.building(), boProto.billingAccount().lease().unit().building().propertyCode());
+        bind(toProto.lease(), boProto.billingAccount().lease().leaseId());
+        bind(toProto.tenant(), boProto.paymentMethod().customer());
+        bind(toProto.method(), boProto.paymentMethod().type());
+        bind(toProto.status(), boProto.paymentStatus());
+        bind(toProto.created(), boProto.createdDate());
+        bind(toProto.received(), boProto.receivedDate());
+        bind(toProto.finalized(), boProto.finalizeDate());
+        bind(toProto.target(), boProto.targetDate());
+        bind(toProto.amount(), boProto.amount());
+        bind(toProto.lastStatusChangeDate(), boProto.lastStatusChangeDate());
+        bind(toProto.buildingFilterAnchor(), boProto.billingAccount().lease().unit().building());
     }
 
     @Override

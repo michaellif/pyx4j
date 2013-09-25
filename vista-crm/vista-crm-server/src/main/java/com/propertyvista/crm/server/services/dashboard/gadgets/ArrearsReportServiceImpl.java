@@ -35,7 +35,7 @@ import com.pyx4j.entity.shared.Path;
 import com.pyx4j.entity.shared.criterion.Criterion;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria.Sort;
-import com.pyx4j.entity.shared.utils.EntityDtoBinder;
+import com.pyx4j.entity.shared.utils.EntityBinder;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.biz.financial.ar.ARFacade;
@@ -58,30 +58,30 @@ public class ArrearsReportServiceImpl implements ArrearsReportService {
     private final static I18n i18n = I18n.get(ArrearsReportServiceImpl.class);
 
     // reminder: resist the urge to make it static because maybe it's not thread safe
-    private final EntityDtoBinder<LeaseArrearsSnapshot, LeaseArrearsSnapshotDTO> dtoBinder = new EntityDtoBinder<LeaseArrearsSnapshot, LeaseArrearsSnapshotDTO>(
+    private final EntityBinder<LeaseArrearsSnapshot, LeaseArrearsSnapshotDTO> dtoBinder = new EntityBinder<LeaseArrearsSnapshot, LeaseArrearsSnapshotDTO>(
             LeaseArrearsSnapshot.class, LeaseArrearsSnapshotDTO.class) {
 
         @Override
         protected void bind() {
-            bind(dtoProto.fromDate(), dboProto.fromDate());
-            bind(dtoProto.lmrToUnitRentDifference(), dboProto.lmrToUnitRentDifference());
+            bind(toProto.fromDate(), boProto.fromDate());
+            bind(toProto.lmrToUnitRentDifference(), boProto.lmrToUnitRentDifference());
 
             // references
-            bind(dtoProto.billingAccount().lease().unit().building().propertyCode(), dboProto.billingAccount().lease().unit().building().propertyCode());
-            bind(dtoProto.billingAccount().lease().unit().building().info().name(), dboProto.billingAccount().lease().unit().building().info().name());
-            bind(dtoProto.billingAccount().lease().unit().building().info().address().streetNumber(), dboProto.billingAccount().lease().unit().building()
+            bind(toProto.billingAccount().lease().unit().building().propertyCode(), boProto.billingAccount().lease().unit().building().propertyCode());
+            bind(toProto.billingAccount().lease().unit().building().info().name(), boProto.billingAccount().lease().unit().building().info().name());
+            bind(toProto.billingAccount().lease().unit().building().info().address().streetNumber(), boProto.billingAccount().lease().unit().building()
                     .info().address().streetNumber());
-            bind(dtoProto.billingAccount().lease().unit().building().info().address().streetName(), dboProto.billingAccount().lease().unit().building().info()
+            bind(toProto.billingAccount().lease().unit().building().info().address().streetName(), boProto.billingAccount().lease().unit().building().info()
                     .address().streetName());
-            bind(dtoProto.billingAccount().lease().unit().building().info().address().province().name(), dboProto.billingAccount().lease().unit().building()
+            bind(toProto.billingAccount().lease().unit().building().info().address().province().name(), boProto.billingAccount().lease().unit().building()
                     .info().address().province().name());
-            bind(dtoProto.billingAccount().lease().unit().building().info().address().country().name(), dboProto.billingAccount().lease().unit().building()
+            bind(toProto.billingAccount().lease().unit().building().info().address().country().name(), boProto.billingAccount().lease().unit().building()
                     .info().address().country().name());
-            bind(dtoProto.billingAccount().lease().unit().building().complex().name(), dboProto.billingAccount().lease().unit().building().complex().name());
-            bind(dtoProto.billingAccount().lease().unit().info().number(), dboProto.billingAccount().lease().unit().info().number());
-            bind(dtoProto.billingAccount().lease().leaseId(), dboProto.billingAccount().lease().leaseId());
-            bind(dtoProto.billingAccount().lease().leaseFrom(), dboProto.billingAccount().lease().leaseFrom());
-            bind(dtoProto.billingAccount().lease().leaseTo(), dboProto.billingAccount().lease().leaseTo());
+            bind(toProto.billingAccount().lease().unit().building().complex().name(), boProto.billingAccount().lease().unit().building().complex().name());
+            bind(toProto.billingAccount().lease().unit().info().number(), boProto.billingAccount().lease().unit().info().number());
+            bind(toProto.billingAccount().lease().leaseId(), boProto.billingAccount().lease().leaseId());
+            bind(toProto.billingAccount().lease().leaseFrom(), boProto.billingAccount().lease().leaseFrom());
+            bind(toProto.billingAccount().lease().leaseTo(), boProto.billingAccount().lease().leaseTo());
 
         }
     };
@@ -206,7 +206,7 @@ public class ArrearsReportServiceImpl implements ArrearsReportService {
         Persistence.service().retrieve(snapshot.billingAccount().lease().unit());
         Persistence.service().retrieve(snapshot.billingAccount().lease().unit().building());
 
-        LeaseArrearsSnapshotDTO snapshotDTO = dtoBinder.createDTO(snapshot);
+        LeaseArrearsSnapshotDTO snapshotDTO = dtoBinder.createTO(snapshot);
 
         AgingBuckets selectedBuckets = null;
         for (AgingBuckets buckets : snapshot.agingBuckets()) {

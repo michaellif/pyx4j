@@ -21,7 +21,7 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
-import com.pyx4j.entity.shared.utils.EntityDtoBinder;
+import com.pyx4j.entity.shared.utils.EntityBinder;
 
 import com.propertyvista.biz.financial.payment.PaymentMethodFacade;
 import com.propertyvista.domain.payment.LeasePaymentMethod;
@@ -37,7 +37,7 @@ public class PaymentServiceImpl implements PaymentService {
 
     @Override
     public void retrievePaymentMethod(AsyncCallback<PaymentMethodDTO> callback, LeasePaymentMethod itemId) {
-        PaymentMethodDTO dto = new PaymentMethodDtoBinder().createDTO(Persistence.secureRetrieve(LeasePaymentMethod.class, itemId.getPrimaryKey()));
+        PaymentMethodDTO dto = new PaymentMethodDtoBinder().createTO(Persistence.secureRetrieve(LeasePaymentMethod.class, itemId.getPrimaryKey()));
     
         // enhance dto:
         Lease lease = TenantAppContext.getCurrentUserLease();
@@ -83,7 +83,7 @@ public class PaymentServiceImpl implements PaymentService {
         return paymentMethods;
     }
 
-    class PaymentMethodDtoBinder extends EntityDtoBinder<LeasePaymentMethod, PaymentMethodDTO> {
+    class PaymentMethodDtoBinder extends EntityBinder<LeasePaymentMethod, PaymentMethodDTO> {
 
         protected PaymentMethodDtoBinder() {
             super(LeasePaymentMethod.class, PaymentMethodDTO.class);
@@ -91,7 +91,7 @@ public class PaymentServiceImpl implements PaymentService {
 
         @Override
         protected void bind() {
-            bindCompleteDtoMember(dtoProto.paymentMethod());
+            bindCompleteDtoMember(toProto.paymentMethod());
         }
     }
 }

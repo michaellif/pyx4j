@@ -13,12 +13,12 @@
  */
 package com.propertyvista.interfaces.importer.converter;
 
-import com.pyx4j.entity.shared.utils.EntityDtoBinder;
+import com.pyx4j.entity.shared.utils.EntityBinder;
 
 import com.propertyvista.domain.property.asset.unit.occupancy.AptUnitOccupancySegment;
 import com.propertyvista.interfaces.importer.model.AptUnitOccupancyIO;
 
-public class AptUnitOccupancyConverter extends EntityDtoBinder<AptUnitOccupancySegment, AptUnitOccupancyIO> {
+public class AptUnitOccupancyConverter extends EntityBinder<AptUnitOccupancySegment, AptUnitOccupancyIO> {
 
     public AptUnitOccupancyConverter() {
         super(AptUnitOccupancySegment.class, AptUnitOccupancyIO.class, false);
@@ -26,9 +26,9 @@ public class AptUnitOccupancyConverter extends EntityDtoBinder<AptUnitOccupancyS
 
     @Override
     protected void bind() {
-        bind(dtoProto.dateFrom(), dboProto.dateFrom());
-        bind(dtoProto.dateTo(), dboProto.dateTo());
-        bind(dtoProto.status(), dboProto.status());
-        bind(dtoProto.offMarket(), dboProto.offMarket());
+        bind(toProto.dateFrom(), boProto.dateFrom());
+        bind(toProto.dateTo(), boProto.dateTo());
+        bind(toProto.status(), boProto.status());
+        bind(toProto.offMarket(), boProto.offMarket());
     }
 }

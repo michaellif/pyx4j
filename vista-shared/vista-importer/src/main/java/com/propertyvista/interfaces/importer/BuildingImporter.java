@@ -189,7 +189,7 @@ public class BuildingImporter extends ImportPersister {
                 {
                     List<FloorplanAmenity> items = new Vector<FloorplanAmenity>();
                     for (FloorplanAmenityIO iIO : floorplanIO.amenities()) {
-                        FloorplanAmenity i = new FloorplanAmenityConverter().createDBO(iIO);
+                        FloorplanAmenity i = new FloorplanAmenityConverter().createBO(iIO);
                         i.floorplan().set(floorplan);
                         if (i.type().isNull()) {
                             i.type().setValue(FloorplanAmenity.Type.other);
@@ -220,7 +220,7 @@ public class BuildingImporter extends ImportPersister {
                             }
                         }
 
-                        AptUnit i = new AptUnitConverter().createDBO(aptUnitIO);
+                        AptUnit i = new AptUnitConverter().createBO(aptUnitIO);
                         i.building().set(building);
                         i.floorplan().set(floorplan);
                         i.info()._bathrooms().set(floorplan.bathrooms());

@@ -67,7 +67,7 @@ public class MaintenanceServiceImpl extends AbstractCrudServiceDtoImpl<Maintenan
         List<MaintenanceRequest> requests = ServerSideFactory.create(MaintenanceFacade.class).getMaintenanceRequests(statuses,
                 TenantAppContext.getCurrentUserTenant());
         for (MaintenanceRequest mr : requests) {
-            MaintenanceRequestDTO mrDto = createDTO(mr);
+            MaintenanceRequestDTO mrDto = createTO(mr);
             enhanceAll(mrDto);
             dto.add(mrDto);
         }
@@ -75,8 +75,8 @@ public class MaintenanceServiceImpl extends AbstractCrudServiceDtoImpl<Maintenan
     }
 
     @Override
-    protected void enhanceRetrieved(MaintenanceRequest entity, MaintenanceRequestDTO dto, RetrieveTarget retrieveTarget) {
-        enhanceAll(dto);
+    protected void enhanceRetrieved(MaintenanceRequest bo, MaintenanceRequestDTO to, RetrieveTarget retrieveTarget) {
+        enhanceAll(to);
     }
 
     @Override
@@ -108,12 +108,12 @@ public class MaintenanceServiceImpl extends AbstractCrudServiceDtoImpl<Maintenan
     }
 
     @Override
-    protected void persist(MaintenanceRequest entity, MaintenanceRequestDTO dto) {
-        if (dto.reportedForOwnUnit().isBooleanTrue() && !dto.reporter().isNull()) {
-            Persistence.ensureRetrieve(dto.reporter().lease(), AttachLevel.Attached);
-            entity.unit().set(dto.reporter().lease().unit());
+    protected void persist(MaintenanceRequest bo, MaintenanceRequestDTO to) {
+        if (to.reportedForOwnUnit().isBooleanTrue() && !to.reporter().isNull()) {
+            Persistence.ensureRetrieve(to.reporter().lease(), AttachLevel.Attached);
+            bo.unit().set(to.reporter().lease().unit());
         }
-        ServerSideFactory.create(MaintenanceFacade.class).postMaintenanceRequest(entity);
+        ServerSideFactory.create(MaintenanceFacade.class).postMaintenanceRequest(bo);
     }
 
     @Override
@@ -140,7 +140,7 @@ public class MaintenanceServiceImpl extends AbstractCrudServiceDtoImpl<Maintenan
     public void createNewRequest(AsyncCallback<MaintenanceRequestDTO> callback) {
         Tenant tenant = TenantAppContext.getCurrentUserTenantInLease().leaseParticipant();
         MaintenanceRequest maintenanceRequest = ServerSideFactory.create(MaintenanceFacade.class).createNewRequestForTenant(tenant);
-        callback.onSuccess(createDTO(maintenanceRequest));
+        callback.onSuccess(createTO(maintenanceRequest));
     }
 
     @Override

@@ -13,12 +13,12 @@
  */
 package com.propertyvista.interfaces.importer.converter;
 
-import com.pyx4j.entity.shared.utils.EntityDtoBinder;
+import com.pyx4j.entity.shared.utils.EntityBinder;
 
 import com.propertyvista.domain.marketing.AdvertisingBlurb;
 import com.propertyvista.interfaces.importer.model.AdvertisingBlurbIO;
 
-public class AdvertisingBlurbConverter extends EntityDtoBinder<AdvertisingBlurb, AdvertisingBlurbIO> {
+public class AdvertisingBlurbConverter extends EntityBinder<AdvertisingBlurb, AdvertisingBlurbIO> {
 
     public AdvertisingBlurbConverter() {
         super(AdvertisingBlurb.class, AdvertisingBlurbIO.class, false);
@@ -26,7 +26,7 @@ public class AdvertisingBlurbConverter extends EntityDtoBinder<AdvertisingBlurb,
 
     @Override
     protected void bind() {
-        bind(dtoProto.content(), dboProto.content());
+        bind(toProto.content(), boProto.content());
     }
 
 }

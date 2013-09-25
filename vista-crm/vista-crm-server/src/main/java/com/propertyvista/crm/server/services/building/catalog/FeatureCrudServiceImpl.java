@@ -45,16 +45,16 @@ public class FeatureCrudServiceImpl extends AbstractCrudServiceImpl<Feature> imp
     }
 
     @Override
-    protected void enhanceRetrieved(Feature entity, Feature dto, RetrieveTarget retrieveTarget) {
+    protected void enhanceRetrieved(Feature bo, Feature to, RetrieveTarget retrieveTarget) {
         // Load detached data:
 
         /*
          * catalog retrieving is necessary for building element filtering by catalog().building() in @link FeatureItemEditor
          */
-        Persistence.service().retrieve(dto.catalog());
-        Persistence.service().retrieve(dto.version().items());
+        Persistence.service().retrieve(to.catalog());
+        Persistence.service().retrieve(to.version().items());
         // next level:
-        for (ProductItem item : dto.version().items()) {
+        for (ProductItem item : to.version().items()) {
             Persistence.service().retrieve(item.element());
         }
     }

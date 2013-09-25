@@ -52,30 +52,30 @@ public abstract class LeaseParticipantCrudServiceBaseImpl<DBO extends LeaseParti
 
     @Override
     protected void bind() {
-        bind(LeaseParticipant.class, dtoProto, dboProto);
+        bind(LeaseParticipant.class, toProto, boProto);
     }
 
     @Override
-    protected void enhanceRetrieved(DBO entity, DTO dto, RetrieveTarget retrieveTarget) {
-        dto.leaseTermV().set(retrieveLeaseTerm(entity));
+    protected void enhanceRetrieved(DBO bo, DTO to, RetrieveTarget retrieveTarget) {
+        to.leaseTermV().set(retrieveLeaseTerm(bo));
 
-        LeaseParticipantUtils.retrieveCustomerScreeningPointer(dto.customer());
+        LeaseParticipantUtils.retrieveCustomerScreeningPointer(to.customer());
 
         // fill/update payment methods: 
-        dto.paymentMethods().clear();
-        dto.paymentMethods().addAll(ServerSideFactory.create(PaymentMethodFacade.class).retrieveLeasePaymentMethods(entity.customer()));
+        to.paymentMethods().clear();
+        to.paymentMethods().addAll(ServerSideFactory.create(PaymentMethodFacade.class).retrieveLeasePaymentMethods(bo.customer()));
         if (retrieveTarget == RetrieveTarget.Edit) {
-            for (LeasePaymentMethod method : dto.paymentMethods()) {
+            for (LeasePaymentMethod method : to.paymentMethods()) {
                 Persistence.service().retrieve(method.details());
             }
         }
 
-        dto.allowedCardTypes().setCollectionValue(
-                ServerSideFactory.create(PaymentFacade.class).getAllowedCardTypes(dto.lease().billingAccount(), VistaApplication.crm));
+        to.allowedCardTypes().setCollectionValue(
+                ServerSideFactory.create(PaymentFacade.class).getAllowedCardTypes(to.lease().billingAccount(), VistaApplication.crm));
 
-        dto.electronicPaymentsAllowed().setValue(ServerSideFactory.create(PaymentFacade.class).isElectronicPaymentsSetup(dto.leaseTermV().holder()));
+        to.electronicPaymentsAllowed().setValue(ServerSideFactory.create(PaymentFacade.class).isElectronicPaymentsSetup(to.leaseTermV().holder()));
 
-        Persistence.service().retrieve(dto.customer().pictures());
+        Persistence.service().retrieve(to.customer().pictures());
     }
 
     @Override
@@ -84,37 +84,37 @@ public abstract class LeaseParticipantCrudServiceBaseImpl<DBO extends LeaseParti
     }
 
     @Override
-    protected void persist(DBO entity, DTO dto) {
-        ServerSideFactory.create(CustomerFacade.class).persistCustomer(entity.customer());
+    protected void persist(DBO bo, DTO to) {
+        ServerSideFactory.create(CustomerFacade.class).persistCustomer(bo.customer());
 
         // delete payment methods removed in UI:
-        for (LeasePaymentMethod paymentMethod : ServerSideFactory.create(PaymentMethodFacade.class).retrieveLeasePaymentMethods(entity.customer())) {
-            if (!dto.paymentMethods().contains(paymentMethod)) {
+        for (LeasePaymentMethod paymentMethod : ServerSideFactory.create(PaymentMethodFacade.class).retrieveLeasePaymentMethods(bo.customer())) {
+            if (!to.paymentMethods().contains(paymentMethod)) {
                 ServerSideFactory.create(PaymentMethodFacade.class).deleteLeasePaymentMethod(paymentMethod);
             }
         }
 
         EntityQueryCriteria<Building> criteria = EntityQueryCriteria.create(Building.class);
-        criteria.add(PropertyCriterion.eq(criteria.proto().units().$()._Leases().$().currentTerm().versions(), dto.leaseTermV()));
+        criteria.add(PropertyCriterion.eq(criteria.proto().units().$()._Leases().$().currentTerm().versions(), to.leaseTermV()));
         Building building = Persistence.service().retrieve(criteria);
 
         // save new/edited ones:
-        Persistence.ensureRetrieve(entity.lease(), AttachLevel.Attached);
-        for (LeasePaymentMethod paymentMethod : dto.paymentMethods()) {
-            paymentMethod.customer().set(entity.customer());
+        Persistence.ensureRetrieve(bo.lease(), AttachLevel.Attached);
+        for (LeasePaymentMethod paymentMethod : to.paymentMethods()) {
+            paymentMethod.customer().set(bo.customer());
             paymentMethod.isProfiledMethod().setValue(true);
 
-            ServerSideFactory.create(PaymentFacade.class).validatePaymentMethod(entity.lease().billingAccount(), paymentMethod, VistaApplication.crm);
+            ServerSideFactory.create(PaymentFacade.class).validatePaymentMethod(bo.lease().billingAccount(), paymentMethod, VistaApplication.crm);
 
             ServerSideFactory.create(PaymentMethodFacade.class).persistLeasePaymentMethod(paymentMethod, building);
         }
 
-        super.persist(entity, dto);
+        super.persist(bo, to);
     }
 
     @Override
     public void getAllowedPaymentTypes(AsyncCallback<Vector<PaymentType>> callback, DTO participantId) {
-        DBO leaseParticipant = Persistence.service().retrieve(dboClass, participantId.getPrimaryKey());
+        DBO leaseParticipant = Persistence.service().retrieve(boClass, participantId.getPrimaryKey());
         Persistence.ensureRetrieve(leaseParticipant.lease(), AttachLevel.Attached);
         callback.onSuccess(new Vector<PaymentType>(ServerSideFactory.create(PaymentFacade.class).getAllowedPaymentTypes(
                 leaseParticipant.lease().billingAccount(), VistaApplication.crm)));
@@ -122,7 +122,7 @@ public abstract class LeaseParticipantCrudServiceBaseImpl<DBO extends LeaseParti
 
     @Override
     public void getCurrentAddress(AsyncCallback<AddressSimple> callback, DTO participantId) {
-        callback.onSuccess(AddressRetriever.getLeaseParticipantCurrentAddressSimple(EntityFactory.createIdentityStub(dboClass, participantId.getPrimaryKey())));
+        callback.onSuccess(AddressRetriever.getLeaseParticipantCurrentAddressSimple(EntityFactory.createIdentityStub(boClass, participantId.getPrimaryKey())));
     }
 
     private LeaseTerm.LeaseTermV retrieveLeaseTerm(DBO leaseParticipant) {

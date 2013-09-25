@@ -47,30 +47,30 @@ public class HomePageGadgetCrudServiceImpl extends AbstractCrudServiceImpl<HomeP
     }
 
     @Override
-    protected void enhanceRetrieved(HomePageGadget entity, HomePageGadget dto, RetrieveTarget retrieveTarget) {
+    protected void enhanceRetrieved(HomePageGadget bo, HomePageGadget to, RetrieveTarget retrieveTarget) {
         // set the gadget type based on the content
         @SuppressWarnings("unchecked")
-        GadgetType type = GadgetType.getGadgetType((Class<? extends GadgetContent>) entity.content().getInstanceValueClass());
-        dto.type().setValue(type);
+        GadgetType type = GadgetType.getGadgetType((Class<? extends GadgetContent>) bo.content().getInstanceValueClass());
+        to.type().setValue(type);
     }
 
     @Override
-    protected void persist(HomePageGadget entity, HomePageGadget dto) {
+    protected void persist(HomePageGadget bo, HomePageGadget to) {
         EntityQueryCriteria<SiteDescriptor> criteria = EntityQueryCriteria.create(SiteDescriptor.class);
         SiteDescriptor site = Persistence.service().retrieve(criteria);
-        if (entity.getPrimaryKey() == null) {
+        if (bo.getPrimaryKey() == null) {
             // update corresponding gadget list
-            switch (dto.area().getValue()) {
+            switch (to.area().getValue()) {
             case wide:
-                site.homePageGadgetsWide().add(entity);
+                site.homePageGadgetsWide().add(bo);
                 break;
             case narrow:
-                site.homePageGadgetsNarrow().add(entity);
+                site.homePageGadgetsNarrow().add(bo);
                 break;
             }
             Persistence.service().merge(site);
         } else {
-            super.persist(entity, dto);
+            super.persist(bo, to);
         }
         PMSiteContentCache.siteDescriptorUpdated();
     }

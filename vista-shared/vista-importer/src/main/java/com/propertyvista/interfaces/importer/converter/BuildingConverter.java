@@ -13,12 +13,12 @@
  */
 package com.propertyvista.interfaces.importer.converter;
 
-import com.pyx4j.entity.shared.utils.EntityDtoBinder;
+import com.pyx4j.entity.shared.utils.EntityBinder;
 
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.interfaces.importer.model.BuildingIO;
 
-public class BuildingConverter extends EntityDtoBinder<Building, BuildingIO> {
+public class BuildingConverter extends EntityBinder<Building, BuildingIO> {
 
     public BuildingConverter() {
         super(Building.class, BuildingIO.class, false);
@@ -26,40 +26,40 @@ public class BuildingConverter extends EntityDtoBinder<Building, BuildingIO> {
 
     @Override
     protected void bind() {
-        bind(dtoProto.propertyCode(), dboProto.propertyCode());
-        bind(dtoProto.externalId(), dboProto.externalId());
-        bind(dtoProto.legalName(), dboProto.info().name());
-        bind(dtoProto.totalStoreys(), dboProto.info().totalStoreys());
-        bind(dtoProto.residentialStoreys(), dboProto.info().residentialStoreys());
-        bind(dtoProto.type(), dboProto.info().type());
-        bind(dtoProto.shape(), dboProto.info().shape());
-        bind(dtoProto.structureType(), dboProto.info().structureType());
-        bind(dtoProto.structureBuildYear(), dboProto.info().structureBuildYear());
-        bind(dtoProto.constructionType(), dboProto.info().constructionType());
-        bind(dtoProto.foundationType(), dboProto.info().foundationType());
-        bind(dtoProto.floorType(), dboProto.info().floorType());
-        bind(dtoProto.landArea(), dboProto.info().landArea());
-        bind(dtoProto.waterSupply(), dboProto.info().waterSupply());
-        bind(dtoProto.centralAir(), dboProto.info().centralAir());
-        bind(dtoProto.centralHeat(), dboProto.info().centralHeat());
+        bind(toProto.propertyCode(), boProto.propertyCode());
+        bind(toProto.externalId(), boProto.externalId());
+        bind(toProto.legalName(), boProto.info().name());
+        bind(toProto.totalStoreys(), boProto.info().totalStoreys());
+        bind(toProto.residentialStoreys(), boProto.info().residentialStoreys());
+        bind(toProto.type(), boProto.info().type());
+        bind(toProto.shape(), boProto.info().shape());
+        bind(toProto.structureType(), boProto.info().structureType());
+        bind(toProto.structureBuildYear(), boProto.info().structureBuildYear());
+        bind(toProto.constructionType(), boProto.info().constructionType());
+        bind(toProto.foundationType(), boProto.info().foundationType());
+        bind(toProto.floorType(), boProto.info().floorType());
+        bind(toProto.landArea(), boProto.info().landArea());
+        bind(toProto.waterSupply(), boProto.info().waterSupply());
+        bind(toProto.centralAir(), boProto.info().centralAir());
+        bind(toProto.centralHeat(), boProto.info().centralHeat());
 
-        bind(dtoProto.addressCoordinates(), dboProto.info().address().location());
-        bind(dtoProto.website(), dboProto.contacts().website());
+        bind(toProto.addressCoordinates(), boProto.info().address().location());
+        bind(toProto.website(), boProto.contacts().website());
 
-        bind(dtoProto.propertyManager(), dboProto.propertyManager().name());
+        bind(toProto.propertyManager(), boProto.propertyManager().name());
 
-        bind(dtoProto.complexName(), dboProto.complex().name());
-        bind(dtoProto.complexPrimary(), dboProto.complexPrimary());
+        bind(toProto.complexName(), boProto.complex().name());
+        bind(toProto.complexPrimary(), boProto.complexPrimary());
 
-        bind(dtoProto.address(), dboProto.info().address(), new AddressConverter());
+        bind(toProto.address(), boProto.info().address(), new AddressConverter());
 
-        bind(dtoProto.phones(), dboProto.contacts().propertyContacts(), new PropertyContactConverter());
-        bind(dtoProto.contacts(), dboProto.contacts().organizationContacts(), new OrganizationContactConverter());
+        bind(toProto.phones(), boProto.contacts().propertyContacts(), new PropertyContactConverter());
+        bind(toProto.contacts(), boProto.contacts().organizationContacts(), new OrganizationContactConverter());
 
-        bind(dtoProto.marketing().visibility(), dboProto.marketing().visibility());
-        bind(dtoProto.marketing().name(), dboProto.marketing().name());
-        bind(dtoProto.marketing().description(), dboProto.marketing().description());
+        bind(toProto.marketing().visibility(), boProto.marketing().visibility());
+        bind(toProto.marketing().name(), boProto.marketing().name());
+        bind(toProto.marketing().description(), boProto.marketing().description());
 
-        bind(dtoProto.marketing().blurbs(), dboProto.marketing().adBlurbs(), new AdvertisingBlurbConverter());
+        bind(toProto.marketing().blurbs(), boProto.marketing().adBlurbs(), new AdvertisingBlurbConverter());
     }
 }

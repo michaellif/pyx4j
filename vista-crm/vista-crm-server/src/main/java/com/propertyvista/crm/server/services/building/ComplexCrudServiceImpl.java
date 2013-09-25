@@ -18,7 +18,7 @@ import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.AttachLevel;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
-import com.pyx4j.entity.shared.utils.EntityDtoBinder;
+import com.pyx4j.entity.shared.utils.EntityBinder;
 
 import com.propertyvista.crm.rpc.services.building.ComplexCrudService;
 import com.propertyvista.domain.dashboard.DashboardMetadata;
@@ -28,7 +28,7 @@ import com.propertyvista.dto.ComplexDTO;
 
 public class ComplexCrudServiceImpl extends AbstractCrudServiceDtoImpl<Complex, ComplexDTO> implements ComplexCrudService {
 
-    private class BuildingBinder extends EntityDtoBinder<Building, Building> {
+    private class BuildingBinder extends EntityBinder<Building, Building> {
 
         protected BuildingBinder() {
             super(Building.class, Building.class);
@@ -36,12 +36,12 @@ public class ComplexCrudServiceImpl extends AbstractCrudServiceDtoImpl<Complex, 
 
         @Override
         protected void bind() {
-            bind(dtoProto.propertyCode(), dboProto.propertyCode());
-            bind(dtoProto.complex().id(), dboProto.complex().id());
-            bind(dtoProto.complexPrimary(), dboProto.complexPrimary());
-            bind(dtoProto.orderInComplex(), dboProto.orderInComplex());
-            bind(dtoProto.info().name(), dboProto.info().name());
-            bind(dtoProto.info().type(), dboProto.info().type());
+            bind(toProto.propertyCode(), boProto.propertyCode());
+            bind(toProto.complex().id(), boProto.complex().id());
+            bind(toProto.complexPrimary(), boProto.complexPrimary());
+            bind(toProto.orderInComplex(), boProto.orderInComplex());
+            bind(toProto.info().name(), boProto.info().name());
+            bind(toProto.info().type(), boProto.info().type());
         }
 
     }
@@ -52,26 +52,26 @@ public class ComplexCrudServiceImpl extends AbstractCrudServiceDtoImpl<Complex, 
 
     @Override
     protected void bind() {
-        bind(dtoProto.name(), dboProto.name());
-        bind(dtoProto.website(), dboProto.website());
+        bind(toProto.name(), boProto.name());
+        bind(toProto.website(), boProto.website());
     }
 
     @Override
-    protected void enhanceRetrieved(Complex entity, ComplexDTO dto, RetrieveTarget retrieveTarget) {
+    protected void enhanceRetrieved(Complex bo, ComplexDTO to, RetrieveTarget retrieveTarget) {
         // add dashboards
         if (retrieveTarget == RetrieveTarget.View) {
             EntityQueryCriteria<DashboardMetadata> criteria = EntityQueryCriteria.create(DashboardMetadata.class);
             criteria.add(PropertyCriterion.eq(criteria.proto().type(), DashboardMetadata.DashboardType.building));
-            dto.dashboards().addAll(Persistence.secureQuery(criteria, AttachLevel.ToStringMembers));
+            to.dashboards().addAll(Persistence.secureQuery(criteria, AttachLevel.ToStringMembers));
         }
 
         // fill transient data:
         // TODO use Persistence.service().retrieve(in.buildings(), new BuildingBinder());
         EntityQueryCriteria<Building> criteria = EntityQueryCriteria.create(Building.class);
-        criteria.add(PropertyCriterion.eq(criteria.proto().complex(), entity));
+        criteria.add(PropertyCriterion.eq(criteria.proto().complex(), bo));
         criteria.asc(criteria.proto().orderInComplex());
         for (Building building : Persistence.service().query(criteria)) {
-            dto.buildings().add(new BuildingBinder().createDTO(building));
+            to.buildings().add(new BuildingBinder().createTO(building));
         }
     }
 
@@ -111,7 +111,7 @@ public class ComplexCrudServiceImpl extends AbstractCrudServiceDtoImpl<Complex, 
             dto.orderInComplex().setValue(count++);
             Building building = Persistence.service().retrieve(Building.class, dto.getPrimaryKey());
             // update, possible primary building change, addition to complex, order
-            if (new BuildingBinder().updateDBO(dto, building)) {
+            if (new BuildingBinder().updateBO(dto, building)) {
                 Persistence.service().persist(building);
             }
         }

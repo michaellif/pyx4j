@@ -70,19 +70,19 @@ public class AddressRetriever {
 
     public static AddressSimple getLeaseParticipantCurrentAddressSimple(LeaseParticipant<?> participant) {
         AddressSimple address = EntityFactory.create(AddressSimple.class);
-        new AddressConverter.StructuredToSimpleAddressConverter().copyDBOtoDTO(getLeaseParticipantCurrentAddress(participant), address);
+        new AddressConverter.StructuredToSimpleAddressConverter().copyBOtoTO(getLeaseParticipantCurrentAddress(participant), address);
         return address;
     }
 
     public static AddressSimple getLeaseParticipantCurrentAddressSimple(LeaseTermParticipant<?> participant) {
         AddressSimple address = EntityFactory.create(AddressSimple.class);
-        new AddressConverter.StructuredToSimpleAddressConverter().copyDBOtoDTO(getLeaseParticipantCurrentAddress(participant), address);
+        new AddressConverter.StructuredToSimpleAddressConverter().copyBOtoTO(getLeaseParticipantCurrentAddress(participant), address);
         return address;
     }
 
     public static AddressSimple getLeaseAddressSimple(Lease lease) {
         AddressSimple address = EntityFactory.create(AddressSimple.class);
-        new AddressConverter.StructuredToSimpleAddressConverter().copyDBOtoDTO(getLeaseAddress(lease), address);
+        new AddressConverter.StructuredToSimpleAddressConverter().copyBOtoTO(getLeaseAddress(lease), address);
         return address;
     }
 

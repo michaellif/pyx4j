@@ -38,15 +38,15 @@ public class EquifaxApprovalCrudServiceImpl extends AbstractCrudServiceDtoImpl<P
     @Override
     protected void bind() {
         bindCompleteDBO();
-        bind(dtoProto.businessInformation().dto_businessAddress(), dboProto.businessInformation().businessAddress());
-        bind(dtoProto.personalInformation().dto_personalAddress(), dboProto.personalInformation().personalAddress());
+        bind(toProto.businessInformation().dto_businessAddress(), boProto.businessInformation().businessAddress());
+        bind(toProto.personalInformation().dto_personalAddress(), boProto.personalInformation().personalAddress());
     }
 
     @Override
     public void retrieve(AsyncCallback<EquifaxSetupRequestDTO> callback, Key entityId, com.pyx4j.entity.rpc.AbstractCrudService.RetrieveTarget retrieveTarget ) {
         Pmc pmc = Persistence.service().retrieve(Pmc.class, entityId);
         Persistence.service().retrieveMember(pmc.equifaxInfo());
-        EquifaxSetupRequestDTO dto = createDTO(pmc.equifaxInfo());
+        EquifaxSetupRequestDTO dto = createTO(pmc.equifaxInfo());
         dto.pmc().setAttachLevel(AttachLevel.ToStringMembers);
         callback.onSuccess(dto);
     }

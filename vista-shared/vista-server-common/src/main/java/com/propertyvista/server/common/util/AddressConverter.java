@@ -14,7 +14,7 @@
 package com.propertyvista.server.common.util;
 
 import com.pyx4j.entity.shared.IPrimitive;
-import com.pyx4j.entity.shared.utils.EntityDtoBinder;
+import com.pyx4j.entity.shared.utils.EntityBinder;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.domain.contact.AddressSimple;
@@ -24,7 +24,7 @@ public class AddressConverter {
 
     private static final I18n i18n = I18n.get(AddressConverter.class);
 
-    public static class StructuredToSimpleAddressConverter extends EntityDtoBinder<AddressStructured, AddressSimple> {
+    public static class StructuredToSimpleAddressConverter extends EntityBinder<AddressStructured, AddressSimple> {
 
         public StructuredToSimpleAddressConverter() {
             super(AddressStructured.class, AddressSimple.class);
@@ -32,15 +32,15 @@ public class AddressConverter {
 
         @Override
         protected void bind() {
-            bind(dtoProto.city(), dboProto.city());
-            bind(dtoProto.country(), dboProto.country());
-            bind(dtoProto.province(), dboProto.province());
-            bind(dtoProto.postalCode(), dboProto.postalCode());
+            bind(toProto.city(), boProto.city());
+            bind(toProto.country(), boProto.country());
+            bind(toProto.province(), boProto.province());
+            bind(toProto.postalCode(), boProto.postalCode());
         }
 
         @Override
-        public void copyDBOtoDTO(AddressStructured dbo, AddressSimple dto) {
-            super.copyDBOtoDTO(dbo, dto);
+        public void copyBOtoTO(AddressStructured dbo, AddressSimple dto) {
+            super.copyBOtoTO(dbo, dto);
 
             //@formatter:off
             StringBuilder address = new StringBuilder();            

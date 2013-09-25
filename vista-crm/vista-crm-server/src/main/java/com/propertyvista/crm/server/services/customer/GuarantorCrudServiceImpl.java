@@ -28,14 +28,14 @@ public class GuarantorCrudServiceImpl extends LeaseParticipantCrudServiceBaseImp
     }
 
     @Override
-    protected void enhanceRetrieved(Guarantor entity, GuarantorDTO dto, RetrieveTarget retrieveTarget) {
-        super.enhanceRetrieved(entity, dto, retrieveTarget);
+    protected void enhanceRetrieved(Guarantor bo, GuarantorDTO to, RetrieveTarget retrieveTarget) {
+        super.enhanceRetrieved(bo, to, retrieveTarget);
 
         if (retrieveTarget == RetrieveTarget.Edit) {
-            RestrictionsPolicy restrictionsPolicy = ServerSideFactory.create(PolicyFacade.class).obtainEffectivePolicy(entity.lease().unit(),
+            RestrictionsPolicy restrictionsPolicy = ServerSideFactory.create(PolicyFacade.class).obtainEffectivePolicy(bo.lease().unit(),
                     RestrictionsPolicy.class);
             if (restrictionsPolicy.enforceAgeOfMajority().isBooleanTrue()) {
-                dto.ageOfMajority().setValue(restrictionsPolicy.ageOfMajority().getValue());
+                to.ageOfMajority().setValue(restrictionsPolicy.ageOfMajority().getValue());
             }
         }
 

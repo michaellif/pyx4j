@@ -43,7 +43,7 @@ public class GuarantorFinancialServiceImpl extends ApplicationEntityServiceImpl 
         log.debug("Saving tenantFinancial {}", entity);
 
         GuarantorRetriever tr = new GuarantorRetriever(entity.getPrimaryKey(), true);
-        new TenantConverter.TenantFinancialEditorConverter().copyDTOtoDBO(entity, tr.getScreening());
+        new TenantConverter.TenantFinancialEditorConverter().copyTOtoBO(entity, tr.getScreening());
 
         tr.saveScreening();
 
@@ -57,7 +57,7 @@ public class GuarantorFinancialServiceImpl extends ApplicationEntityServiceImpl 
     }
 
     public TenantFinancialDTO retrieveData(GuarantorRetriever tr) {
-        TenantFinancialDTO dto = new TenantConverter.TenantFinancialEditorConverter().createDTO(tr.getScreening());
+        TenantFinancialDTO dto = new TenantConverter.TenantFinancialEditorConverter().createTO(tr.getScreening());
         dto.setPrimaryKey(tr.getGuarantor().getPrimaryKey());
         dto.person().set(tr.getPerson());
         return dto;

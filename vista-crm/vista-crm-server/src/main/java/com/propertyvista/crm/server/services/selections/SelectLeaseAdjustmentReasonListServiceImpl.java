@@ -27,7 +27,7 @@ public class SelectLeaseAdjustmentReasonListServiceImpl extends AbstractListServ
 
     @Override
     protected void bind() {
-        bind(dtoProto.id(), dboProto.id());
+        bind(toProto.id(), boProto.id());
         bindCompleteDBO();
     }
 

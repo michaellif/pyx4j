@@ -45,14 +45,14 @@ public class FloorplanCrudServiceImpl extends AbstractCrudServiceDtoImpl<Floorpl
     }
 
     @Override
-    protected void enhanceRetrieved(Floorplan in, FloorplanDTO dto, RetrieveTarget retrieveTarget) {
+    protected void enhanceRetrieved(Floorplan in, FloorplanDTO to, RetrieveTarget retrieveTarget) {
         Persistence.service().retrieveMember(in.amenities());
-        dto.amenities().set(in.amenities());
-        Persistence.service().retrieve(dto.media());
+        to.amenities().set(in.amenities());
+        Persistence.service().retrieve(to.media());
         // ils
         EntityQueryCriteria<ILSProfileFloorplan> criteria = EntityQueryCriteria.create(ILSProfileFloorplan.class);
         criteria.eq(criteria.proto().floorplan(), in);
-        dto.ilsProfile().addAll(Persistence.service().query(criteria));
+        to.ilsProfile().addAll(Persistence.service().query(criteria));
     }
 
     @Override

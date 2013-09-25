@@ -43,10 +43,10 @@ public class CrmLoginAttemptsListerServiceImpl extends AbstractCrudServiceDtoImp
 
     @Override
     protected void bind() {
-        bind(dtoProto.userKey(), dboProto.user());
-        bind(dtoProto.remoteAddress(), dboProto.remoteAddr());
-        bind(dtoProto.outcome(), dboProto.event());
-        bind(dtoProto.time(), dboProto.created());
+        bind(toProto.userKey(), boProto.user());
+        bind(toProto.remoteAddress(), boProto.remoteAddr());
+        bind(toProto.outcome(), boProto.event());
+        bind(toProto.time(), boProto.created());
     }
 
     @Override

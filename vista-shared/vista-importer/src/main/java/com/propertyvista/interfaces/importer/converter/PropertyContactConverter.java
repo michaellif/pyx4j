@@ -13,13 +13,13 @@
  */
 package com.propertyvista.interfaces.importer.converter;
 
-import com.pyx4j.entity.shared.utils.EntityDtoBinder;
+import com.pyx4j.entity.shared.utils.EntityBinder;
 
 import com.propertyvista.domain.property.PropertyContact;
 import com.propertyvista.domain.property.PropertyContact.PropertyContactType;
 import com.propertyvista.interfaces.importer.model.PropertyPhoneIO;
 
-public class PropertyContactConverter extends EntityDtoBinder<PropertyContact, PropertyPhoneIO> {
+public class PropertyContactConverter extends EntityBinder<PropertyContact, PropertyPhoneIO> {
 
     public PropertyContactConverter() {
         super(PropertyContact.class, PropertyPhoneIO.class, false);
@@ -29,17 +29,17 @@ public class PropertyContactConverter extends EntityDtoBinder<PropertyContact, P
     protected void bind() {
         // TODO PrimitiveConvertor
         //bind(dtoProto.type(), dboProto.type(), new TODOPrimitiveConvertor());
-        bind(dtoProto.name(), dboProto.name());
-        bind(dtoProto.description(), dboProto.description());
-        bind(dtoProto.number(), dboProto.phone());
-        bind(dtoProto.email(), dboProto.email());
-        bind(dtoProto.visibility(), dboProto.visibility());
-        bind(dtoProto.description(), dboProto.description());
+        bind(toProto.name(), boProto.name());
+        bind(toProto.description(), boProto.description());
+        bind(toProto.number(), boProto.phone());
+        bind(toProto.email(), boProto.email());
+        bind(toProto.visibility(), boProto.visibility());
+        bind(toProto.description(), boProto.description());
     }
 
     @Override
-    public void copyDBOtoDTO(PropertyContact dbo, PropertyPhoneIO dto) {
-        super.copyDBOtoDTO(dbo, dto);
+    public void copyBOtoTO(PropertyContact dbo, PropertyPhoneIO dto) {
+        super.copyBOtoTO(dbo, dto);
 
         // TODO PrimitiveConvertor
         if (!dbo.type().isNull()) {
@@ -48,8 +48,8 @@ public class PropertyContactConverter extends EntityDtoBinder<PropertyContact, P
     }
 
     @Override
-    public void copyDTOtoDBO(PropertyPhoneIO dto, PropertyContact dbo) {
-        super.copyDTOtoDBO(dto, dbo);
+    public void copyTOtoBO(PropertyPhoneIO dto, PropertyContact dbo) {
+        super.copyTOtoBO(dto, dbo);
 
         // TODO PrimitiveConvertor
         if (!dto.type().isNull()) {

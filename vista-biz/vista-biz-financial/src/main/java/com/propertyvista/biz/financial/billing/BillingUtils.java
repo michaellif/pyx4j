@@ -156,14 +156,14 @@ public class BillingUtils {
     public static BillDTO createBillDto(Bill bill) {
         Persistence.service().retrieve(bill.lineItems());
         Persistence.service().retrieve(bill.billingAccount());
-        BillDTO billDTO = new BillConverter().createDTO(bill);
+        BillDTO billDTO = new BillConverter().createTO(bill);
 
         enhanceBillDto(bill, billDTO);
         return billDTO;
     }
 
     public static BillDTO createBillPreviewDto(Bill bill) {
-        BillDTO billDTO = new BillConverter().createDTO(bill);
+        BillDTO billDTO = new BillConverter().createTO(bill);
 
         enhanceBillDto(bill, billDTO);
         return billDTO;

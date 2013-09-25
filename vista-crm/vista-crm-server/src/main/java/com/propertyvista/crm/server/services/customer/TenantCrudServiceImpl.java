@@ -33,7 +33,7 @@ import com.pyx4j.entity.shared.AttachLevel;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
-import com.pyx4j.entity.shared.utils.EntityDtoBinder;
+import com.pyx4j.entity.shared.utils.EntityBinder;
 import com.pyx4j.security.shared.SecurityViolationException;
 
 import com.propertyvista.biz.financial.payment.PaymentMethodFacade;
@@ -71,43 +71,43 @@ public class TenantCrudServiceImpl extends LeaseParticipantCrudServiceBaseImpl<T
     }
 
     @Override
-    protected void enhanceRetrieved(Tenant entity, TenantDTO dto, RetrieveTarget retrieveTarget) {
-        super.enhanceRetrieved(entity, dto, retrieveTarget);
+    protected void enhanceRetrieved(Tenant bo, TenantDTO to, RetrieveTarget retrieveTarget) {
+        super.enhanceRetrieved(bo, to, retrieveTarget);
 
-        dto.role().setValue(retrieveTenant(dto.leaseTermV(), entity).role().getValue());
+        to.role().setValue(retrieveTenant(to.leaseTermV(), bo).role().getValue());
 
-        Persistence.service().retrieve(dto.customer().emergencyContacts());
-        Persistence.service().retrieve(dto.lease().unit().building());
+        Persistence.service().retrieve(to.customer().emergencyContacts());
+        Persistence.service().retrieve(to.lease().unit().building());
 
-        fillPreauthorizedPayments(dto);
+        fillPreauthorizedPayments(to);
 
-        dto.insuranceCertificates().addAll(retrieveInsuranceCertificates(entity));
+        to.insuranceCertificates().addAll(retrieveInsuranceCertificates(bo));
         // unattach tenant related information since we don't want to send again
-        for (InsuranceCertificate insuranceCertificate : dto.insuranceCertificates()) {
+        for (InsuranceCertificate insuranceCertificate : to.insuranceCertificates()) {
             insuranceCertificate.tenant().set(insuranceCertificate.tenant().createIdentityStub());
         }
 
         if (retrieveTarget == RetrieveTarget.Edit) {
-            TenantInsurancePolicy insurancePolicy = ServerSideFactory.create(PolicyFacade.class).obtainEffectivePolicy(entity.lease().unit(),
+            TenantInsurancePolicy insurancePolicy = ServerSideFactory.create(PolicyFacade.class).obtainEffectivePolicy(bo.lease().unit(),
                     TenantInsurancePolicy.class);
             if (insurancePolicy.requireMinimumLiability().isBooleanTrue()) {
-                dto.minimumRequiredLiability().setValue(insurancePolicy.minimumRequiredLiability().getValue());
+                to.minimumRequiredLiability().setValue(insurancePolicy.minimumRequiredLiability().getValue());
             }
 
-            RestrictionsPolicy restrictionsPolicy = ServerSideFactory.create(PolicyFacade.class).obtainEffectivePolicy(entity.lease().unit(),
+            RestrictionsPolicy restrictionsPolicy = ServerSideFactory.create(PolicyFacade.class).obtainEffectivePolicy(bo.lease().unit(),
                     RestrictionsPolicy.class);
             if (restrictionsPolicy.enforceAgeOfMajority().isBooleanTrue()) {
-                dto.ageOfMajority().setValue((dto.role().getValue() != Role.Dependent) ? restrictionsPolicy.ageOfMajority().getValue() : null);
+                to.ageOfMajority().setValue((to.role().getValue() != Role.Dependent) ? restrictionsPolicy.ageOfMajority().getValue() : null);
             }
         }
 
         if (VistaFeatures.instance().yardiIntegration()) {
-            LeaseTerm leaseTerm = Persistence.service().retrieve(LeaseTerm.class, dto.leaseTermV().holder().getPrimaryKey());
+            LeaseTerm leaseTerm = Persistence.service().retrieve(LeaseTerm.class, to.leaseTermV().holder().getPrimaryKey());
             boolean isPotentialTenant = leaseTerm.status().getValue() != LeaseTerm.Status.Current & leaseTerm.status().getValue() != LeaseTerm.Status.Historic;
-            dto.isPotentialTenant().setValue(isPotentialTenant);
+            to.isPotentialTenant().setValue(isPotentialTenant);
         }
 
-        dto.isMoveOutWithinNextBillingCycle().setValue(ServerSideFactory.create(LeaseFacade.class).isMoveOutWithinNextBillingCycle(entity.lease()));
+        to.isMoveOutWithinNextBillingCycle().setValue(ServerSideFactory.create(LeaseFacade.class).isMoveOutWithinNextBillingCycle(bo.lease()));
     }
 
     @Override
@@ -233,7 +233,7 @@ public class TenantCrudServiceImpl extends LeaseParticipantCrudServiceBaseImpl<T
         List<PreauthorizedPayment> paps = new ArrayList<PreauthorizedPayment>();
         for (PreauthorizedPaymentDTO papDTO : dto.preauthorizedPayments()) {
             updateCoveredItems(papDTO);
-            paps.add(new PapConverter().createDBO(papDTO));
+            paps.add(new PapConverter().createBO(papDTO));
         }
 
         // delete payment methods removed in UI:
@@ -264,7 +264,7 @@ public class TenantCrudServiceImpl extends LeaseParticipantCrudServiceBaseImpl<T
     }
 
     private PreauthorizedPaymentDTO createPreauthorizedPaymentDto(PreauthorizedPayment pap) {
-        PreauthorizedPaymentDTO papDto = new PapConverter().createDTO(pap);
+        PreauthorizedPaymentDTO papDto = new PapConverter().createTO(pap);
 
         updateCoveredItemsDto(papDto);
         fillCoveredItemsDto(papDto);
@@ -383,7 +383,7 @@ public class TenantCrudServiceImpl extends LeaseParticipantCrudServiceBaseImpl<T
         }
     }
 
-    private class PapConverter extends EntityDtoBinder<PreauthorizedPayment, PreauthorizedPaymentDTO> {
+    private class PapConverter extends EntityBinder<PreauthorizedPayment, PreauthorizedPaymentDTO> {
 
         protected PapConverter() {
             super(PreauthorizedPayment.class, PreauthorizedPaymentDTO.class);

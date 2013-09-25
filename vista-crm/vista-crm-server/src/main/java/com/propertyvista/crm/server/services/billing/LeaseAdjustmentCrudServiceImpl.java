@@ -56,18 +56,18 @@ public class LeaseAdjustmentCrudServiceImpl extends AbstractCrudServiceImpl<Leas
     }
 
     @Override
-    protected void persist(LeaseAdjustment dbo, LeaseAdjustment dto) {
+    protected void persist(LeaseAdjustment dbo, LeaseAdjustment to) {
         updateAdjustments(dbo);
-        super.persist(dbo, dto);
+        super.persist(dbo, to);
     }
 
     @Override
-    protected void enhanceRetrieved(LeaseAdjustment entity, LeaseAdjustment dto, RetrieveTarget retrieveTarget) {
-        super.enhanceRetrieved(entity, dto, retrieveTarget);
+    protected void enhanceRetrieved(LeaseAdjustment bo, LeaseAdjustment to, RetrieveTarget retrieveTarget) {
+        super.enhanceRetrieved(bo, to, retrieveTarget);
 
-        Persistence.service().retrieve(dto.billingAccount());
-        Persistence.service().retrieve(dto.billingAccount().lease());
-        Persistence.service().retrieve(dto.billingAccount().lease().unit());
+        Persistence.service().retrieve(to.billingAccount());
+        Persistence.service().retrieve(to.billingAccount().lease());
+        Persistence.service().retrieve(to.billingAccount().lease().unit());
     }
 
     private void updateAdjustments(LeaseAdjustment adj) {

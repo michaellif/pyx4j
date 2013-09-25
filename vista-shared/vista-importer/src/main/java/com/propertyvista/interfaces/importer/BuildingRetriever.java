@@ -68,7 +68,7 @@ public class BuildingRetriever {
             Persistence.service().retrieve(building.contacts().propertyContacts());
         }
 
-        BuildingIO buildingIO = new BuildingConverter().createDTO(building);
+        BuildingIO buildingIO = new BuildingConverter().createTO(building);
         if (!buildingIO.propertyCode().isNull()) {
             buildingConfig.directory = buildingIO.propertyCode().getStringView() + "/";
         }
@@ -77,13 +77,13 @@ public class BuildingRetriever {
         {
             Persistence.service().retrieveMember(building.amenities());
             for (BuildingAmenity amenity : building.amenities()) {
-                buildingIO.amenities().add(new BuildingAmenityConverter().createDTO(amenity));
+                buildingIO.amenities().add(new BuildingAmenityConverter().createTO(amenity));
             }
         }
 
         Persistence.service().retrieve(building.media());
         for (Media media : building.media()) {
-            buildingIO.medias().add(new MediaConverter(buildingConfig, ImageTarget.Building).createDTO(media));
+            buildingIO.medias().add(new MediaConverter(buildingConfig, ImageTarget.Building).createTO(media));
         }
 
         //TODO
@@ -94,14 +94,14 @@ public class BuildingRetriever {
         floorplanCriteria.asc(floorplanCriteria.proto().id());
         List<Floorplan> floorplans = Persistence.service().query(floorplanCriteria);
         for (Floorplan floorplan : floorplans) {
-            FloorplanIO floorplanIO = new FloorplanConverter().createDTO(floorplan);
+            FloorplanIO floorplanIO = new FloorplanConverter().createTO(floorplan);
             buildingIO.floorplans().add(floorplanIO);
 
             //Get Amenity
             {
                 Persistence.service().retrieveMember(floorplan.amenities());
                 for (FloorplanAmenity amenity : floorplan.amenities()) {
-                    floorplanIO.amenities().add(new FloorplanAmenityConverter().createDTO(amenity));
+                    floorplanIO.amenities().add(new FloorplanAmenityConverter().createTO(amenity));
                 }
             }
 
@@ -111,7 +111,7 @@ public class BuildingRetriever {
                 criteria.add(PropertyCriterion.eq(criteria.proto().floorplan(), floorplan));
                 criteria.asc(criteria.proto().info().number());
                 for (AptUnit unit : Persistence.service().query(criteria)) {
-                    AptUnitIO aptUnitIO = new AptUnitConverter().createDTO(unit);
+                    AptUnitIO aptUnitIO = new AptUnitConverter().createTO(unit);
                     floorplanIO.units().add(aptUnitIO);
 
                     //Get Occupancy
@@ -119,7 +119,7 @@ public class BuildingRetriever {
                     EntityQueryCriteria<AptUnitOccupancySegment> occupancyCriteria = EntityQueryCriteria.create(AptUnitOccupancySegment.class);
                     occupancyCriteria.add(PropertyCriterion.eq(occupancyCriteria.proto().unit(), unit));
                     for (AptUnitOccupancySegment occupancy : Persistence.service().query(occupancyCriteria)) {
-                        AptUnitOccupancyIO occupancyIO = new AptUnitOccupancyConverter().createDTO(occupancy);
+                        AptUnitOccupancyIO occupancyIO = new AptUnitOccupancyConverter().createTO(occupancy);
                         aptUnitIO.AptUnitOccupancySegment().add(occupancyIO);
                     }
                 }
@@ -130,7 +130,7 @@ public class BuildingRetriever {
 
             Persistence.service().retrieve(floorplan.media());
             for (Media media : floorplan.media()) {
-                floorplanIO.medias().add(new MediaConverter(floorplanConfig, ImageTarget.Floorplan).createDTO(media));
+                floorplanIO.medias().add(new MediaConverter(floorplanConfig, ImageTarget.Floorplan).createTO(media));
             }
 
         }
@@ -140,7 +140,7 @@ public class BuildingRetriever {
             EntityQueryCriteria<Parking> criteria = EntityQueryCriteria.create(Parking.class);
             criteria.add(PropertyCriterion.eq(criteria.proto().building(), building));
             for (Parking i : Persistence.service().query(criteria)) {
-                buildingIO.parkings().add(new ParkingConverter().createDTO(i));
+                buildingIO.parkings().add(new ParkingConverter().createTO(i));
             }
         }
 

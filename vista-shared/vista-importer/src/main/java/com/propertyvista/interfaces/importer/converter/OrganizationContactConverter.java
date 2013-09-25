@@ -13,12 +13,12 @@
  */
 package com.propertyvista.interfaces.importer.converter;
 
-import com.pyx4j.entity.shared.utils.EntityDtoBinder;
+import com.pyx4j.entity.shared.utils.EntityBinder;
 
 import com.propertyvista.domain.company.OrganizationContact;
 import com.propertyvista.interfaces.importer.model.ContactIO;
 
-public class OrganizationContactConverter extends EntityDtoBinder<OrganizationContact, ContactIO> {
+public class OrganizationContactConverter extends EntityBinder<OrganizationContact, ContactIO> {
 
     public OrganizationContactConverter() {
         super(OrganizationContact.class, ContactIO.class, false);
@@ -26,10 +26,10 @@ public class OrganizationContactConverter extends EntityDtoBinder<OrganizationCo
 
     @Override
     protected void bind() {
-        bind(dtoProto.name(), dboProto.person().name());
-        bind(dtoProto.title(), dboProto.person().title());
-        bind(dtoProto.description(), dboProto.description());
-        bind(dtoProto.email(), dboProto.person().email());
-        bind(dtoProto.workPhone(), dboProto.person().workPhone());
+        bind(toProto.name(), boProto.person().name());
+        bind(toProto.title(), boProto.person().title());
+        bind(toProto.description(), boProto.description());
+        bind(toProto.email(), boProto.person().email());
+        bind(toProto.workPhone(), boProto.person().workPhone());
     }
 }

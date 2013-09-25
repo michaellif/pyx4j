@@ -32,8 +32,8 @@ public class GlCodeCategoryCrudServiceImpl extends AbstractCrudServiceImpl<GlCod
     }
 
     @Override
-    protected void retrievedSingle(GlCodeCategory entity, RetrieveTarget retrieveTarget) {
-        Persistence.service().retrieveMember(entity.glCodes());
+    protected void retrievedSingle(GlCodeCategory bo, RetrieveTarget retrieveTarget) {
+        Persistence.service().retrieveMember(bo.glCodes());
     }
 
     @Override

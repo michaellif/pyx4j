@@ -30,7 +30,7 @@ import com.pyx4j.entity.shared.Path;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria.Sort;
 import com.pyx4j.entity.shared.utils.EntityComparatorFactory;
-import com.pyx4j.entity.shared.utils.EntityDtoBinder;
+import com.pyx4j.entity.shared.utils.EntityBinder;
 import com.pyx4j.essentials.server.services.reports.ReportExporter;
 import com.pyx4j.essentials.server.services.reports.ReportProgressStatus;
 import com.pyx4j.gwt.server.IOUtils;
@@ -59,41 +59,41 @@ public class EftReportGenerator implements ReportExporter {
 
     private volatile ReportProgressStatusHolderExectutionMonitorAdapter reportProgressStatusHolder;
 
-    private final EntityDtoBinder<PaymentRecord, EftReportRecordDTO> dtoBinder;
+    private final EntityBinder<PaymentRecord, EftReportRecordDTO> dtoBinder;
 
     public EftReportGenerator() {
 
-        dtoBinder = new EntityDtoBinder<PaymentRecord, EftReportRecordDTO>(PaymentRecord.class, EftReportRecordDTO.class) {
+        dtoBinder = new EntityBinder<PaymentRecord, EftReportRecordDTO>(PaymentRecord.class, EftReportRecordDTO.class) {
 
             @Override
             protected void bind() {
-                bind(dtoProto.targetDate(), dboProto.targetDate());
-                bind(dtoProto.notice(), dboProto.notice());
-                bind(dtoProto.billingCycleStartDate(), dboProto.padBillingCycle().billingCycleStartDate());
-                bind(dtoProto.leaseId(), dboProto.preauthorizedPayment().tenant().lease().leaseId());
-                bind(dtoProto.leaseId_(), dboProto.preauthorizedPayment().tenant().lease());
-                bind(dtoProto.leaseStatus(), dboProto.preauthorizedPayment().tenant().lease().status());
-                bind(dtoProto.leaseFrom(), dboProto.preauthorizedPayment().tenant().lease().leaseFrom());
-                bind(dtoProto.leaseTo(), dboProto.preauthorizedPayment().tenant().lease().leaseTo());
-                bind(dtoProto.expectedMoveOut(), dboProto.preauthorizedPayment().tenant().lease().expectedMoveOut());
+                bind(toProto.targetDate(), boProto.targetDate());
+                bind(toProto.notice(), boProto.notice());
+                bind(toProto.billingCycleStartDate(), boProto.padBillingCycle().billingCycleStartDate());
+                bind(toProto.leaseId(), boProto.preauthorizedPayment().tenant().lease().leaseId());
+                bind(toProto.leaseId_(), boProto.preauthorizedPayment().tenant().lease());
+                bind(toProto.leaseStatus(), boProto.preauthorizedPayment().tenant().lease().status());
+                bind(toProto.leaseFrom(), boProto.preauthorizedPayment().tenant().lease().leaseFrom());
+                bind(toProto.leaseTo(), boProto.preauthorizedPayment().tenant().lease().leaseTo());
+                bind(toProto.expectedMoveOut(), boProto.preauthorizedPayment().tenant().lease().expectedMoveOut());
 
-                bind(dtoProto.building(), dboProto.preauthorizedPayment().tenant().lease().unit().building().propertyCode());
-                bind(dtoProto.building_(), dboProto.preauthorizedPayment().tenant().lease().unit().building());
+                bind(toProto.building(), boProto.preauthorizedPayment().tenant().lease().unit().building().propertyCode());
+                bind(toProto.building_(), boProto.preauthorizedPayment().tenant().lease().unit().building());
 
-                bind(dtoProto.unit(), dboProto.preauthorizedPayment().tenant().lease().unit().info().number());
-                bind(dtoProto.unit_(), dboProto.preauthorizedPayment().tenant().lease().unit());
-                bind(dtoProto.participantId(), dboProto.preauthorizedPayment().tenant().participantId());
-                bind(dtoProto.customer(), dboProto.preauthorizedPayment().tenant().customer());
-                bind(dtoProto.customer_(), dboProto.preauthorizedPayment().tenant());
-                bind(dtoProto.amount(), dboProto.amount());
-                bind(dtoProto.amount_().id(), dboProto.id());
-                bind(dtoProto.paymentType(), dboProto.paymentMethod().type());
-                bind(dtoProto.paymentStatus(), dboProto.paymentStatus());
+                bind(toProto.unit(), boProto.preauthorizedPayment().tenant().lease().unit().info().number());
+                bind(toProto.unit_(), boProto.preauthorizedPayment().tenant().lease().unit());
+                bind(toProto.participantId(), boProto.preauthorizedPayment().tenant().participantId());
+                bind(toProto.customer(), boProto.preauthorizedPayment().tenant().customer());
+                bind(toProto.customer_(), boProto.preauthorizedPayment().tenant());
+                bind(toProto.amount(), boProto.amount());
+                bind(toProto.amount_().id(), boProto.id());
+                bind(toProto.paymentType(), boProto.paymentMethod().type());
+                bind(toProto.paymentStatus(), boProto.paymentStatus());
             }
 
             @Override
-            public EftReportRecordDTO createDTO(PaymentRecord paymentRecord) {
-                EftReportRecordDTO eftReportRecordDto = super.createDTO(paymentRecord);
+            public EftReportRecordDTO createTO(PaymentRecord paymentRecord) {
+                EftReportRecordDTO eftReportRecordDto = super.createTO(paymentRecord);
                 switch (paymentRecord.paymentMethod().type().getValue()) {
                 case Echeck:
                     EcheckInfo echeck = paymentRecord.paymentMethod().details().duplicate(EcheckInfo.class);
@@ -162,7 +162,7 @@ public class EftReportGenerator implements ReportExporter {
 
             for (PaymentRecord paymentRecord : paymentRecords) {
                 enhancePaymentRecord(paymentRecord);
-                reportData.eftReportRecords().add(dtoBinder.createDTO(paymentRecord));
+                reportData.eftReportRecords().add(dtoBinder.createTO(paymentRecord));
             }
 
         } else {
@@ -175,7 +175,7 @@ public class EftReportGenerator implements ReportExporter {
                 while (paymentRecordsIter.hasNext() & !reportProgressStatusHolder.isTerminationRequested()) {
                     PaymentRecord paymentRecord = paymentRecordsIter.next();
                     enhancePaymentRecord(paymentRecord);
-                    reportData.eftReportRecords().add(dtoBinder.createDTO(paymentRecord));
+                    reportData.eftReportRecords().add(dtoBinder.createTO(paymentRecord));
                     if (progress % 100 == 0) {
                         reportProgressStatusHolder.set(new ReportProgressStatus(i18n.tr("Gathering Data"), 1, 2, progress, count));
                     }

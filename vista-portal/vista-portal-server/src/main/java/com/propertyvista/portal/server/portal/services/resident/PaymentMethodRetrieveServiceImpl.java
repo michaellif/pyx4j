@@ -17,7 +17,7 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.commons.Key;
 import com.pyx4j.entity.server.Persistence;
-import com.pyx4j.entity.shared.utils.EntityDtoBinder;
+import com.pyx4j.entity.shared.utils.EntityBinder;
 
 import com.propertyvista.domain.payment.LeasePaymentMethod;
 import com.propertyvista.domain.tenant.lease.Lease;
@@ -25,7 +25,7 @@ import com.propertyvista.portal.rpc.portal.dto.PaymentMethodDTO;
 import com.propertyvista.portal.rpc.portal.services.resident.PaymentMethodRetrieveService;
 import com.propertyvista.portal.server.portal.TenantAppContext;
 
-public class PaymentMethodRetrieveServiceImpl extends EntityDtoBinder<LeasePaymentMethod, PaymentMethodDTO> implements PaymentMethodRetrieveService {
+public class PaymentMethodRetrieveServiceImpl extends EntityBinder<LeasePaymentMethod, PaymentMethodDTO> implements PaymentMethodRetrieveService {
 
     public PaymentMethodRetrieveServiceImpl() {
         super(LeasePaymentMethod.class, PaymentMethodDTO.class);
@@ -33,13 +33,13 @@ public class PaymentMethodRetrieveServiceImpl extends EntityDtoBinder<LeasePayme
 
     @Override
     protected void bind() {
-        bindCompleteDtoMember(dtoProto.paymentMethod());
+        bindCompleteDtoMember(toProto.paymentMethod());
     }
 
     @Override
     public void retrieve(AsyncCallback<PaymentMethodDTO> callback, Key entityId) {
         LeasePaymentMethod dbo = Persistence.secureRetrieve(LeasePaymentMethod.class, entityId);
-        PaymentMethodDTO dto = createDTO(dbo);
+        PaymentMethodDTO dto = createTO(dbo);
 
         // enhance dto:
         Lease lease = TenantAppContext.getCurrentUserLease();

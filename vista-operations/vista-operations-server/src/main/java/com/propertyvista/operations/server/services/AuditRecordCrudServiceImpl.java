@@ -35,18 +35,18 @@ public class AuditRecordCrudServiceImpl extends AbstractCrudServiceDtoImpl<Audit
 
     @Override
     protected void bind() {
-        bind(dtoProto.remoteAddr(), dboProto.remoteAddr());
-        bind(dtoProto.userKey(), dboProto.user());
-        bind(dtoProto.when(), dboProto.created());
-        bind(dtoProto.worldTime(), dboProto.worldTime());
-        bind(dtoProto.sessionId(), dboProto.sessionId());
-        bind(dtoProto.event(), dboProto.event());
-        bind(dtoProto.namespace(), dboProto.namespace());
-        bind(dtoProto.pmc(), dboProto.pmc());
-        bind(dtoProto.application(), dboProto.app());
-        bind(dtoProto.details(), dboProto.details());
-        bind(dtoProto.entityId(), dboProto.entityId());
-        bind(dtoProto.entityClass(), dboProto.entityClass());
+        bind(toProto.remoteAddr(), boProto.remoteAddr());
+        bind(toProto.userKey(), boProto.user());
+        bind(toProto.when(), boProto.created());
+        bind(toProto.worldTime(), boProto.worldTime());
+        bind(toProto.sessionId(), boProto.sessionId());
+        bind(toProto.event(), boProto.event());
+        bind(toProto.namespace(), boProto.namespace());
+        bind(toProto.pmc(), boProto.pmc());
+        bind(toProto.application(), boProto.app());
+        bind(toProto.details(), boProto.details());
+        bind(toProto.entityId(), boProto.entityId());
+        bind(toProto.entityClass(), boProto.entityClass());
     }
 
     @Override
@@ -85,7 +85,7 @@ public class AuditRecordCrudServiceImpl extends AbstractCrudServiceDtoImpl<Audit
     }
 
     @Override
-    protected void enhanceRetrieved(AuditRecord entity, AuditRecordOperationsDTO dto, RetrieveTarget retrieveTarget) {
-        enhanceListRetrieved(entity, dto);
+    protected void enhanceRetrieved(AuditRecord bo, AuditRecordOperationsDTO to, RetrieveTarget retrieveTarget) {
+        enhanceListRetrieved(bo, to);
     }
 }

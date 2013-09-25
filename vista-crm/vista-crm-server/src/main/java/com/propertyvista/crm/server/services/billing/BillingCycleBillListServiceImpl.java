@@ -35,7 +35,7 @@ public class BillingCycleBillListServiceImpl extends AbstractListServiceDtoImpl<
 
     @Override
     protected void bind() {
-        bind(dboClass, dtoProto.bill(), dboProto);
+        bind(boClass, toProto.bill(), boProto);
     }
 
     @Override

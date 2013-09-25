@@ -31,9 +31,9 @@ public class VendorCrudServiceImpl extends AbstractCrudServiceImpl<Vendor> imple
     }
 
     @Override
-    protected void persist(Vendor entity, Vendor vendor) {
-        Persistence.service().merge(entity.phones());
-        Persistence.service().merge(entity.emails());
-        Persistence.service().persist(entity);
+    protected void persist(Vendor bo, Vendor vendor) {
+        Persistence.service().merge(bo.phones());
+        Persistence.service().merge(bo.emails());
+        Persistence.service().persist(bo);
     }
 }

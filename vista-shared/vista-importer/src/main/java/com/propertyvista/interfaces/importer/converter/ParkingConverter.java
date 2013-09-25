@@ -13,12 +13,12 @@
  */
 package com.propertyvista.interfaces.importer.converter;
 
-import com.pyx4j.entity.shared.utils.EntityDtoBinder;
+import com.pyx4j.entity.shared.utils.EntityBinder;
 
 import com.propertyvista.domain.property.asset.Parking;
 import com.propertyvista.interfaces.importer.model.ParkingIO;
 
-public class ParkingConverter extends EntityDtoBinder<Parking, ParkingIO> {
+public class ParkingConverter extends EntityBinder<Parking, ParkingIO> {
 
     public ParkingConverter() {
         super(Parking.class, ParkingIO.class, false);
@@ -26,10 +26,10 @@ public class ParkingConverter extends EntityDtoBinder<Parking, ParkingIO> {
 
     @Override
     protected void bind() {
-        bind(dtoProto.name(), dboProto.name());
-        bind(dtoProto.description(), dboProto.description());
-        bind(dtoProto.type(), dboProto.type());
-        bind(dtoProto.levels(), dboProto.levels());
+        bind(toProto.name(), boProto.name());
+        bind(toProto.description(), boProto.description());
+        bind(toProto.type(), boProto.type());
+        bind(toProto.levels(), boProto.levels());
     }
 
 }

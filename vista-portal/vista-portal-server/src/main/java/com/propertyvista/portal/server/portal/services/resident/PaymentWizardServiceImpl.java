@@ -73,7 +73,7 @@ public class PaymentWizardServiceImpl extends AbstractCrudServiceDtoImpl<Payment
         dto.allowedCardTypes().setCollectionValue(
                 ServerSideFactory.create(PaymentFacade.class).getAllowedCardTypes(lease.billingAccount(), VistaApplication.residentPortal));
 
-        new AddressConverter.StructuredToSimpleAddressConverter().copyDBOtoDTO(AddressRetriever.getLeaseAddress(lease), dto.address());
+        new AddressConverter.StructuredToSimpleAddressConverter().copyBOtoTO(AddressRetriever.getLeaseAddress(lease), dto.address());
 
         dto.propertyCode().set(lease.unit().building().propertyCode());
         dto.unitNumber().set(lease.unit().info().number());
@@ -100,7 +100,7 @@ public class PaymentWizardServiceImpl extends AbstractCrudServiceDtoImpl<Payment
     @Override
     @ServiceExecution(waitCaption = "Submitting...")
     public void save(AsyncCallback<Key> callback, PaymentDTO dto) {
-        PaymentRecord entity = createDBO(dto);
+        PaymentRecord entity = createBO(dto);
 
         Lease lease = Persistence.service().retrieve(Lease.class, TenantAppContext.getCurrentUserLeaseIdStub().getPrimaryKey());
         ServerSideFactory.create(PaymentFacade.class).validatePaymentMethod(lease.billingAccount(), dto.paymentMethod(), VistaApplication.residentPortal);

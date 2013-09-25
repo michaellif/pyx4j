@@ -47,27 +47,27 @@ public abstract class LeaseViewerCrudServiceBaseImpl<DTO extends LeaseDTO> exten
     }
 
     @Override
-    protected void enhanceRetrieved(Lease in, DTO dto, RetrieveTarget retrieveTarget) {
-        super.enhanceRetrieved(in, dto, retrieveTarget);
+    protected void enhanceRetrieved(Lease in, DTO to, RetrieveTarget retrieveTarget) {
+        super.enhanceRetrieved(in, to, retrieveTarget);
 
         if (!VistaFeatures.instance().yardiIntegration()) {
             // create bill preview for draft leases/applications:
             if (in.status().getValue().isDraft()) {
-                dto.billingPreview().set(BillingUtils.createBillPreviewDto(ServerSideFactory.create(BillingFacade.class).runBillingPreview(in)));
+                to.billingPreview().set(BillingUtils.createBillPreviewDto(ServerSideFactory.create(BillingFacade.class).runBillingPreview(in)));
             }
         }
 
-        if (!dto.unit().isNull()) {
-            Persistence.service().retrieveMember(dto.unit().floorplan(), AttachLevel.ToStringMembers);
+        if (!to.unit().isNull()) {
+            Persistence.service().retrieveMember(to.unit().floorplan(), AttachLevel.ToStringMembers);
 
-            checkUnitMoveOut(dto);
+            checkUnitMoveOut(to);
         }
 
         EntityQueryCriteria<LeaseTerm> criteria = EntityQueryCriteria.create(LeaseTerm.class);
         criteria.eq(criteria.proto().lease(), in);
         criteria.ne(criteria.proto().id(), in.currentTerm().getPrimaryKey());
         criteria.ne(criteria.proto().status(), LeaseTerm.Status.Offer);
-        dto.historyPresent().setValue(Persistence.service().exists(criteria));
+        to.historyPresent().setValue(Persistence.service().exists(criteria));
     }
 
     @Override

@@ -24,7 +24,7 @@ import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.AttachLevel;
 import com.pyx4j.entity.shared.EntityFactory;
-import com.pyx4j.entity.shared.utils.EntityDtoBinder;
+import com.pyx4j.entity.shared.utils.EntityBinder;
 
 import com.propertyvista.biz.financial.payment.PaymentFacade;
 import com.propertyvista.biz.financial.payment.PaymentMethodFacade;
@@ -66,7 +66,7 @@ public class AutoPayServiceImpl implements AutoPayService {
     @Override
     public void retreiveAutoPay(AsyncCallback<AutoPayDTO> callback, PreauthorizedPayment entityId) {
         PreauthorizedPayment dbo = Persistence.secureRetrieve(PreauthorizedPayment.class, entityId.getPrimaryKey());
-        AutoPayDTO dto = new AutoPayDtoBinder().createDTO(dbo);
+        AutoPayDTO dto = new AutoPayDtoBinder().createTO(dbo);
 
         // enhance dto:
         Lease lease = TenantAppContext.getCurrentUserLease();
@@ -76,7 +76,7 @@ public class AutoPayServiceImpl implements AutoPayService {
         dto.allowedPaymentTypes().setCollectionValue(
                 ServerSideFactory.create(PaymentFacade.class).getAllowedPaymentTypes(lease.billingAccount(), VistaApplication.residentPortal));
 
-        new AddressConverter.StructuredToSimpleAddressConverter().copyDBOtoDTO(AddressRetriever.getLeaseAddress(lease), dto.address());
+        new AddressConverter.StructuredToSimpleAddressConverter().copyBOtoTO(AddressRetriever.getLeaseAddress(lease), dto.address());
 
         dto.propertyCode().set(lease.unit().building().propertyCode());
         dto.unitNumber().set(lease.unit().info().number());
@@ -137,7 +137,7 @@ public class AutoPayServiceImpl implements AutoPayService {
         return currentAutoPayments;
     }
 
-    class AutoPayDtoBinder extends EntityDtoBinder<PreauthorizedPayment, AutoPayDTO> {
+    class AutoPayDtoBinder extends EntityBinder<PreauthorizedPayment, AutoPayDTO> {
 
         protected AutoPayDtoBinder() {
             super(PreauthorizedPayment.class, AutoPayDTO.class);

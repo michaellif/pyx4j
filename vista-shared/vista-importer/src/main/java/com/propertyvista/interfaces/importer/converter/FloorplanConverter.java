@@ -13,12 +13,12 @@
  */
 package com.propertyvista.interfaces.importer.converter;
 
-import com.pyx4j.entity.shared.utils.EntityDtoBinder;
+import com.pyx4j.entity.shared.utils.EntityBinder;
 
 import com.propertyvista.domain.property.asset.Floorplan;
 import com.propertyvista.interfaces.importer.model.FloorplanIO;
 
-public class FloorplanConverter extends EntityDtoBinder<Floorplan, FloorplanIO> {
+public class FloorplanConverter extends EntityBinder<Floorplan, FloorplanIO> {
 
     public FloorplanConverter() {
         super(Floorplan.class, FloorplanIO.class, false);
@@ -26,14 +26,14 @@ public class FloorplanConverter extends EntityDtoBinder<Floorplan, FloorplanIO> 
 
     @Override
     protected void bind() {
-        bind(dtoProto.name(), dboProto.name());
-        bind(dtoProto.marketingName(), dboProto.marketingName());
-        bind(dtoProto.description(), dboProto.description());
-        bind(dtoProto.floorCount(), dboProto.floorCount());
-        bind(dtoProto.bedrooms(), dboProto.bedrooms());
-        bind(dtoProto.dens(), dboProto.dens());
-        bind(dtoProto.bathrooms(), dboProto.bathrooms());
-        bind(dtoProto.halfBath(), dboProto.halfBath());
+        bind(toProto.name(), boProto.name());
+        bind(toProto.marketingName(), boProto.marketingName());
+        bind(toProto.description(), boProto.description());
+        bind(toProto.floorCount(), boProto.floorCount());
+        bind(toProto.bedrooms(), boProto.bedrooms());
+        bind(toProto.dens(), boProto.dens());
+        bind(toProto.bathrooms(), boProto.bathrooms());
+        bind(toProto.halfBath(), boProto.halfBath());
     }
 
 }

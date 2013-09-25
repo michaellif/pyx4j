@@ -93,8 +93,8 @@ public class PmcMerchantAccountCrudServiceImpl extends AbstractCrudServiceDtoImp
     }
 
     @Override
-    protected void enhanceRetrieved(PmcMerchantAccountIndex entity, PmcMerchantAccountDTO dto, RetrieveTarget retrieveTarget) {
-        retriveMerchantAccountFromPmc(entity, dto);
+    protected void enhanceRetrieved(PmcMerchantAccountIndex bo, PmcMerchantAccountDTO to, RetrieveTarget retrieveTarget) {
+        retriveMerchantAccountFromPmc(bo, to);
     }
 
     @Override
@@ -103,19 +103,19 @@ public class PmcMerchantAccountCrudServiceImpl extends AbstractCrudServiceDtoImp
     }
 
     @Override
-    protected void persist(PmcMerchantAccountIndex entity, PmcMerchantAccountDTO dto) {
-        Pmc pmc = Persistence.service().retrieve(Pmc.class, dto.pmc().getPrimaryKey());
+    protected void persist(PmcMerchantAccountIndex bo, PmcMerchantAccountDTO to) {
+        Pmc pmc = Persistence.service().retrieve(Pmc.class, to.pmc().getPrimaryKey());
 
         // Copy RpcTransient value
-        dto.merchantAccount().merchantTerminalId().setValue(dto.merchantTerminalId().getValue());
+        to.merchantAccount().merchantTerminalId().setValue(to.merchantTerminalId().getValue());
 
-        ServerSideFactory.create(PmcFacade.class).persistMerchantAccount(pmc, dto.merchantAccount());
+        ServerSideFactory.create(PmcFacade.class).persistMerchantAccount(pmc, to.merchantAccount());
         // Find created item
         {
             EntityQueryCriteria<PmcMerchantAccountIndex> criteria = EntityQueryCriteria.create(PmcMerchantAccountIndex.class);
             criteria.add(PropertyCriterion.eq(criteria.proto().pmc(), pmc));
-            criteria.add(PropertyCriterion.eq(criteria.proto().merchantAccountKey(), dto.merchantAccount().getPrimaryKey()));
-            entity.set(Persistence.service().retrieve(criteria));
+            criteria.add(PropertyCriterion.eq(criteria.proto().merchantAccountKey(), to.merchantAccount().getPrimaryKey()));
+            bo.set(Persistence.service().retrieve(criteria));
         }
     }
 }

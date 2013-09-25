@@ -74,7 +74,7 @@ public class PreauthorizedPaymentWizardServiceImpl extends AbstractCrudServiceDt
         dto.allowedCardTypes().setCollectionValue(
                 ServerSideFactory.create(PaymentFacade.class).getAllowedCardTypes(lease.billingAccount(), VistaApplication.residentPortal));
 
-        new AddressConverter.StructuredToSimpleAddressConverter().copyDBOtoDTO(AddressRetriever.getLeaseAddress(lease), dto.address());
+        new AddressConverter.StructuredToSimpleAddressConverter().copyBOtoTO(AddressRetriever.getLeaseAddress(lease), dto.address());
 
         dto.propertyCode().set(lease.unit().building().propertyCode());
         dto.unitNumber().set(lease.unit().info().number());
@@ -94,7 +94,7 @@ public class PreauthorizedPaymentWizardServiceImpl extends AbstractCrudServiceDt
 
     @Override
     public void save(AsyncCallback<Key> callback, AutoPayDTO dto) {
-        PreauthorizedPayment entity = createDBO(dto);
+        PreauthorizedPayment entity = createBO(dto);
 
         Lease lease = TenantAppContext.getCurrentUserLease();
         ServerSideFactory.create(PaymentFacade.class).validatePaymentMethod(lease.billingAccount(), dto.paymentMethod(), VistaApplication.residentPortal);
@@ -126,7 +126,7 @@ public class PreauthorizedPaymentWizardServiceImpl extends AbstractCrudServiceDt
 
     @Override
     public void preview(AsyncCallback<PreauthorizedPayment> callback, AutoPayDTO currentValue) {
-        PreauthorizedPayment entity = createDBO(currentValue);
+        PreauthorizedPayment entity = createBO(currentValue);
 
         updateCoveredItems(entity, currentValue);
 

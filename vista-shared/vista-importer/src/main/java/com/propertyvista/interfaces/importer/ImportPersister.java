@@ -73,7 +73,7 @@ class ImportPersister {
 
     // Save building
     protected Building createBuilding(BuildingIO buildingIO, MediaConfig mediaConfig) {
-        Building building = new BuildingConverter().createDBO(buildingIO);
+        Building building = new BuildingConverter().createBO(buildingIO);
 
         // Set defaults
         setBuildingDfaults(building);
@@ -138,7 +138,7 @@ class ImportPersister {
         {
             for (MediaIO iIO : buildingIO.medias()) {
                 try {
-                    building.media().add(new MediaConverter(mediaConfig, ImageTarget.Building).createDBO(iIO));
+                    building.media().add(new MediaConverter(mediaConfig, ImageTarget.Building).createBO(iIO));
                 } catch (Throwable e) {
                     log.error("Building '" + buildingIO.propertyCode().getValue() + "' media error", e);
                     throw new UserRuntimeException(i18n.tr("Building ''{0}'' media error {1}", buildingIO.propertyCode().getValue(), e.getMessage()));
@@ -152,7 +152,7 @@ class ImportPersister {
         {
             List<BuildingAmenity> items = new Vector<BuildingAmenity>();
             for (BuildingAmenityIO iIO : buildingIO.amenities()) {
-                BuildingAmenity i = new BuildingAmenityConverter().createDBO(iIO);
+                BuildingAmenity i = new BuildingAmenityConverter().createBO(iIO);
                 if (i.type().isNull()) {
                     i.type().setValue(BuildingAmenity.Type.other);
                 }
@@ -167,7 +167,7 @@ class ImportPersister {
         {
             List<Parking> items = new Vector<Parking>();
             for (ParkingIO iIO : buildingIO.parkings()) {
-                Parking i = new ParkingConverter().createDBO(iIO);
+                Parking i = new ParkingConverter().createBO(iIO);
                 i.building().set(building);
                 items.add(i);
             }
@@ -178,7 +178,7 @@ class ImportPersister {
     }
 
     protected Floorplan createFloorplan(FloorplanIO floorplanIO, Building building, MediaConfig mediaConfig) {
-        Floorplan floorplan = new FloorplanConverter().createDBO(floorplanIO);
+        Floorplan floorplan = new FloorplanConverter().createBO(floorplanIO);
         floorplan.building().set(building);
 
         if (floorplan.name().isNull()) {
@@ -199,7 +199,7 @@ class ImportPersister {
         {
             for (MediaIO iIO : floorplanIO.medias()) {
                 try {
-                    floorplan.media().add(new MediaConverter(mediaConfig, ImageTarget.Floorplan).createDBO(iIO));
+                    floorplan.media().add(new MediaConverter(mediaConfig, ImageTarget.Floorplan).createBO(iIO));
                 } catch (Throwable e) {
                     log.error("Building '" + building.propertyCode().getValue() + "' floorplan '" + floorplanIO.name().getValue() + "' media error", e);
                     throw new UserRuntimeException(i18n.tr("Building ''{0}'' floorplan ''{1}'' media error {2}", building.propertyCode().getValue(),

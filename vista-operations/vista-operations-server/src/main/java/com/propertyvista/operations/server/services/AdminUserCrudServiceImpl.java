@@ -29,21 +29,21 @@ public class AdminUserCrudServiceImpl extends AbstractCrudServiceDtoImpl<Operati
 
     @Override
     protected void bind() {
-        bind(dtoProto.name(), dboProto.user().name());
-        bind(dtoProto.email(), dboProto.user().email());
-        bind(dtoProto.created(), dboProto.user().created());
-        bind(dtoProto.updated(), dboProto.user().updated());
+        bind(toProto.name(), boProto.user().name());
+        bind(toProto.email(), boProto.user().email());
+        bind(toProto.created(), boProto.user().created());
+        bind(toProto.updated(), boProto.user().updated());
 
-        bind(dtoProto.enabled(), dboProto.enabled());
-        bind(dtoProto.requiredPasswordChangeOnNextLogIn(), dboProto.requiredPasswordChangeOnNextLogIn());
-        bind(dtoProto.credentialUpdated(), dboProto.credentialUpdated());
+        bind(toProto.enabled(), boProto.enabled());
+        bind(toProto.requiredPasswordChangeOnNextLogIn(), boProto.requiredPasswordChangeOnNextLogIn());
+        bind(toProto.credentialUpdated(), boProto.credentialUpdated());
 
     }
 
     @Override
-    protected void enhanceRetrieved(OperationsUserCredential entity, OperationsUserDTO dto, RetrieveTarget retrieveTarget) {
-        if (!entity.behaviors().isEmpty()) {
-            dto.role().setValue(entity.behaviors().iterator().next());
+    protected void enhanceRetrieved(OperationsUserCredential bo, OperationsUserDTO to, RetrieveTarget retrieveTarget) {
+        if (!bo.behaviors().isEmpty()) {
+            to.role().setValue(bo.behaviors().iterator().next());
         }
     }
 
@@ -53,13 +53,13 @@ public class AdminUserCrudServiceImpl extends AbstractCrudServiceDtoImpl<Operati
     }
 
     @Override
-    protected void retrievedSingle(OperationsUserCredential entity, RetrieveTarget retrieveTarget) {
-        Persistence.service().retrieve(entity.user());
+    protected void retrievedSingle(OperationsUserCredential bo, RetrieveTarget retrieveTarget) {
+        Persistence.service().retrieve(bo.user());
     }
 
     @Override
     protected void save(OperationsUserCredential entity, OperationsUserDTO dto) {
-        OperationsUserCredential orig = Persistence.secureRetrieve(entityClass, entity.getPrimaryKey());
+        OperationsUserCredential orig = Persistence.secureRetrieve(boClass, entity.getPrimaryKey());
 
         super.save(entity, dto);
 
@@ -68,15 +68,15 @@ public class AdminUserCrudServiceImpl extends AbstractCrudServiceDtoImpl<Operati
     }
 
     @Override
-    protected void persist(OperationsUserCredential dbo, OperationsUserDTO dto) {
-        dbo.user().email().setValue(EmailValidator.normalizeEmailAddress(dto.email().getValue()));
+    protected void persist(OperationsUserCredential dbo, OperationsUserDTO to) {
+        dbo.user().email().setValue(EmailValidator.normalizeEmailAddress(to.email().getValue()));
         Persistence.service().merge(dbo.user());
 
         dbo.behaviors().clear();
-        dbo.behaviors().add(dto.role().getValue());
+        dbo.behaviors().add(to.role().getValue());
 
         if (dbo.getPrimaryKey() == null) {
-            dbo.credential().setValue(ServerSideFactory.create(PasswordEncryptorFacade.class).encryptUserPassword(dto.password().getValue()));
+            dbo.credential().setValue(ServerSideFactory.create(PasswordEncryptorFacade.class).encryptUserPassword(to.password().getValue()));
         }
         dbo.setPrimaryKey(dbo.user().getPrimaryKey());
         Persistence.service().merge(dbo);

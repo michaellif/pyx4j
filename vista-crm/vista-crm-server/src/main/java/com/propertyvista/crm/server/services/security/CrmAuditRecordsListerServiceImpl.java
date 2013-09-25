@@ -39,11 +39,11 @@ public class CrmAuditRecordsListerServiceImpl extends AbstractListServiceDtoImpl
 
     @Override
     protected void bind() {
-        bind(dtoProto.remoteAddr(), dboProto.remoteAddr());
-        bind(dtoProto.when(), dboProto.created());
-        bind(dtoProto.event(), dboProto.event());
-        bind(dtoProto.application(), dboProto.app());
-        bind(dtoProto.details(), dboProto.details());
+        bind(toProto.remoteAddr(), boProto.remoteAddr());
+        bind(toProto.when(), boProto.created());
+        bind(toProto.event(), boProto.event());
+        bind(toProto.application(), boProto.app());
+        bind(toProto.details(), boProto.details());
     }
 
     @Override

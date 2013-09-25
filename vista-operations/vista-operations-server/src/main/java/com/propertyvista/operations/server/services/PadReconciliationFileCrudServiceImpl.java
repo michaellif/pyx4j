@@ -36,11 +36,11 @@ public class PadReconciliationFileCrudServiceImpl extends AbstractCrudServiceDto
     }
 
     @Override
-    protected void enhanceRetrieved(PadReconciliationFile entity, PadReconciliationFileDTO dto, RetrieveTarget retrieveTarget) {
+    protected void enhanceRetrieved(PadReconciliationFile bo, PadReconciliationFileDTO to, RetrieveTarget retrieveTarget) {
         { //TODO count only,
             EntityQueryCriteria<PadReconciliationDebitRecord> criteria = EntityQueryCriteria.create(PadReconciliationDebitRecord.class);
-            criteria.eq(criteria.proto().reconciliationSummary().reconciliationFile(), entity);
-            dto.reconciliationRecords().addAll(Persistence.service().query(criteria, AttachLevel.IdOnly));
+            criteria.eq(criteria.proto().reconciliationSummary().reconciliationFile(), bo);
+            to.reconciliationRecords().addAll(Persistence.service().query(criteria, AttachLevel.IdOnly));
         }
     }
 }

@@ -86,12 +86,12 @@ public class PmcCrudServiceImpl extends AbstractCrudServiceDtoImpl<Pmc, PmcDTO> 
     }
 
     @Override
-    protected void retrievedSingle(Pmc entity, RetrieveTarget retrieveTarget) {
-        Persistence.service().retrieveMember(entity.equifaxInfo());
-        Persistence.service().retrieveMember(entity.equifaxFee());
-        Persistence.service().retrieveMember(entity.yardiCredentials());
+    protected void retrievedSingle(Pmc bo, RetrieveTarget retrieveTarget) {
+        Persistence.service().retrieveMember(bo.equifaxInfo());
+        Persistence.service().retrieveMember(bo.equifaxFee());
+        Persistence.service().retrieveMember(bo.yardiCredentials());
 
-        for (PmcYardiCredential yardiCredential : entity.yardiCredentials()) {
+        for (PmcYardiCredential yardiCredential : bo.yardiCredentials()) {
             if (!yardiCredential.password().encrypted().isNull()) {
                 yardiCredential.password().obfuscatedNumber().setValue("**");
             } else if (!yardiCredential.password().number().isNull()) {
@@ -102,51 +102,51 @@ public class PmcCrudServiceImpl extends AbstractCrudServiceDtoImpl<Pmc, PmcDTO> 
     }
 
     @Override
-    protected void enhanceRetrieved(Pmc entity, PmcDTO dto, RetrieveTarget retrieveTarget) {
-        super.enhanceRetrieved(entity, dto, retrieveTarget);
+    protected void enhanceRetrieved(Pmc bo, PmcDTO to, RetrieveTarget retrieveTarget) {
+        super.enhanceRetrieved(bo, to, retrieveTarget);
 
-        dto.vistaCrmUrl().setValue(VistaDeployment.getBaseApplicationURL(entity, VistaApplication.crm, true));
-        dto.residentPortalUrl().setValue(VistaDeployment.getBaseApplicationURL(entity, VistaApplication.residentPortal, false));
-        dto.prospectPortalUrl().setValue(VistaDeployment.getBaseApplicationURL(entity, VistaApplication.prospect, true));
+        to.vistaCrmUrl().setValue(VistaDeployment.getBaseApplicationURL(bo, VistaApplication.crm, true));
+        to.residentPortalUrl().setValue(VistaDeployment.getBaseApplicationURL(bo, VistaApplication.residentPortal, false));
+        to.prospectPortalUrl().setValue(VistaDeployment.getBaseApplicationURL(bo, VistaApplication.prospect, true));
 
-        dto.defaultPaymentFees().set(Persistence.service().retrieve(EntityQueryCriteria.create(DefaultPaymentFees.class)));
-        Persistence.service().retrieveMember(entity.paymentTypeInfo());
-        dto.paymentTypeInfo().set(entity.paymentTypeInfo());
+        to.defaultPaymentFees().set(Persistence.service().retrieve(EntityQueryCriteria.create(DefaultPaymentFees.class)));
+        Persistence.service().retrieveMember(bo.paymentTypeInfo());
+        to.paymentTypeInfo().set(bo.paymentTypeInfo());
 
     }
 
     @Override
-    protected void persist(Pmc entity, PmcDTO dto) {
-        if (!PmcNameValidator.isDnsNameValid(entity.dnsName().getValue())) {
+    protected void persist(Pmc bo, PmcDTO to) {
+        if (!PmcNameValidator.isDnsNameValid(bo.dnsName().getValue())) {
             throw new UserRuntimeException("PMC DNS name is not valid");
         }
-        if (!PmcNameValidator.isDnsNameValid(entity.namespace().getValue())) {
+        if (!PmcNameValidator.isDnsNameValid(bo.namespace().getValue())) {
             throw new UserRuntimeException("PMC namespace is not valid");
         }
 
-        Pmc orig = Persistence.secureRetrieve(Pmc.class, entity.getPrimaryKey());
+        Pmc orig = Persistence.secureRetrieve(Pmc.class, bo.getPrimaryKey());
         retrievedSingle(orig, RetrieveTarget.Edit);
 
-        entity.dnsName().setValue(entity.dnsName().getValue().toLowerCase(Locale.ENGLISH));
-        entity.namespace().setValue(entity.namespace().getValue().toLowerCase(Locale.ENGLISH).replace('-', '_'));
+        bo.dnsName().setValue(bo.dnsName().getValue().toLowerCase(Locale.ENGLISH));
+        bo.namespace().setValue(bo.namespace().getValue().toLowerCase(Locale.ENGLISH).replace('-', '_'));
 
-        for (PmcDnsName alias : entity.dnsNameAliases()) {
+        for (PmcDnsName alias : bo.dnsNameAliases()) {
             alias.dnsName().setValue(alias.dnsName().getValue().toLowerCase(Locale.ENGLISH));
         }
 
-        if (entity.features().yardiIntegration().getValue(false)) {
-            entity.features().defaultProductCatalog().setValue(Boolean.TRUE);
+        if (bo.features().yardiIntegration().getValue(false)) {
+            bo.features().defaultProductCatalog().setValue(Boolean.TRUE);
         }
 
-        for (PmcYardiCredential yardiCredential : entity.yardiCredentials()) {
+        for (PmcYardiCredential yardiCredential : bo.yardiCredentials()) {
             encryptPassword(yardiCredential);
         }
 
-        super.persist(entity, dto);
+        super.persist(bo, to);
 
-        ServerSideFactory.create(AuditFacade.class).updated(entity, EntityDiff.getChanges(orig, entity));
+        ServerSideFactory.create(AuditFacade.class).updated(bo, EntityDiff.getChanges(orig, bo));
 
-        TaskRunner.runInTargetNamespace(entity, new Callable<Void>() {
+        TaskRunner.runInTargetNamespace(bo, new Callable<Void>() {
             @Override
             public Void call() {
                 CacheService.reset();
@@ -211,7 +211,7 @@ public class PmcCrudServiceImpl extends AbstractCrudServiceDtoImpl<Pmc, PmcDTO> 
     public void suspend(AsyncCallback<VoidSerializable> callback, Key entityId) {
         SecurityController.assertPermission(EntityPermission.permissionUpdate(Pmc.class));
 
-        Pmc pmc = Persistence.service().retrieve(entityClass, entityId);
+        Pmc pmc = Persistence.service().retrieve(boClass, entityId);
         pmc.status().setValue(PmcStatus.Suspended);
         Persistence.service().persist(pmc);
         Persistence.service().commit();
@@ -225,7 +225,7 @@ public class PmcCrudServiceImpl extends AbstractCrudServiceDtoImpl<Pmc, PmcDTO> 
     public void cancelPmc(AsyncCallback<VoidSerializable> callback, Key entityId) {
         SecurityController.assertPermission(EntityPermission.permissionUpdate(Pmc.class));
 
-        Pmc pmc = Persistence.service().retrieve(entityClass, entityId);
+        Pmc pmc = Persistence.service().retrieve(boClass, entityId);
 
         ServerSideFactory.create(PmcFacade.class).cancelPmc(pmc);
         Persistence.service().commit();
@@ -233,7 +233,7 @@ public class PmcCrudServiceImpl extends AbstractCrudServiceDtoImpl<Pmc, PmcDTO> 
 
         ServerSideFactory.create(AuditFacade.class).info("PMC {0} Cancelled by {1} ", pmc.namespace().getValue(), Context.getVisit().getUserVisit().getEmail());
 
-        pmc = Persistence.service().retrieve(entityClass, entityId);
+        pmc = Persistence.service().retrieve(boClass, entityId);
         callback.onSuccess(null);
     }
 
@@ -249,7 +249,7 @@ public class PmcCrudServiceImpl extends AbstractCrudServiceDtoImpl<Pmc, PmcDTO> 
                 throw new UserRuntimeException("The Trigger " + processType + " not found");
             }
         }
-        Pmc pmc = Persistence.service().retrieve(entityClass, entityId);
+        Pmc pmc = Persistence.service().retrieve(boClass, entityId);
 
         Run run = ServerSideFactory.create(OperationsTriggerFacade.class).startProcess(trigger, pmc, executionDate);
         callback.onSuccess(run.<Run> createIdentityStub());

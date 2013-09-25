@@ -36,10 +36,10 @@ public class RunDataCrudServiceImpl extends AbstractCrudServiceImpl<RunData> imp
     }
 
     @Override
-    protected void enhanceRetrieved(RunData entity, RunData dto, RetrieveTarget retrieveTarget) {
-        super.enhanceRetrieved(entity, dto, retrieveTarget);
+    protected void enhanceRetrieved(RunData bo, RunData to, RetrieveTarget retrieveTarget) {
+        super.enhanceRetrieved(bo, to, retrieveTarget);
 
-        Persistence.ensureRetrieve(dto.execution(), AttachLevel.Attached);
+        Persistence.ensureRetrieve(to.execution(), AttachLevel.Attached);
     }
 
     @Override

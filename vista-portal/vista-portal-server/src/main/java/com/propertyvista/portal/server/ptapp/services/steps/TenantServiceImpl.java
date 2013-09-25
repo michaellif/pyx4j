@@ -88,14 +88,14 @@ public class TenantServiceImpl extends ApplicationEntityServiceImpl implements T
             // save Tenant in Lease: 
             tenantInLease.leaseTermV().set(lease.currentTerm().version());
             tenantInLease.orderInLease().setValue(no++);
-            new TenantConverter.TenantEditorConverter().copyDTOtoDBO(tenantInApplication, tenantInLease);
+            new TenantConverter.TenantEditorConverter().copyTOtoBO(tenantInApplication, tenantInLease);
             Persistence.service().merge(tenantInLease.leaseParticipant().customer());
             Persistence.service().merge(tenantInLease);
             lease.currentTerm().version().tenants().add(tenantInLease);
 
             // update current tenants:
             tenantInApplication.setPrimaryKey(tenantInLease.getPrimaryKey());
-            currentTenants.tenants().add(new TenantConverter.TenantEditorConverter().createDTO(tenantInLease));
+            currentTenants.tenants().add(new TenantConverter.TenantEditorConverter().createTO(tenantInLease));
         }
 
         // remove deleted tenants:
@@ -134,7 +134,7 @@ public class TenantServiceImpl extends ApplicationEntityServiceImpl implements T
         TenantInApplicationListDTO tenants = EntityFactory.create(TenantInApplicationListDTO.class);
         for (LeaseTermTenant tenantInLease : lease.currentTerm().version().tenants()) {
             Persistence.service().retrieve(tenantInLease);
-            tenants.tenants().add(new TenantConverter.TenantEditorConverter().createDTO(tenantInLease));
+            tenants.tenants().add(new TenantConverter.TenantEditorConverter().createTO(tenantInLease));
         }
 
         RestrictionsPolicy restrictionsPolicy = ServerSideFactory.create(PolicyFacade.class).obtainEffectivePolicy(lease.unit(), RestrictionsPolicy.class);

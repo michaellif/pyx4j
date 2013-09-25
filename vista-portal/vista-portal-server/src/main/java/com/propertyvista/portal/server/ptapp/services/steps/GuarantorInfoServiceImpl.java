@@ -42,13 +42,13 @@ public class GuarantorInfoServiceImpl implements GuarantorInfoService {
         log.debug("Saving Tenant Info {}", entity);
 
         GuarantorRetriever tr = new GuarantorRetriever(entity.getPrimaryKey());
-        new TenantConverter.Guarantor2TenantInfo().copyDTOtoDBO(entity, tr.getGuarantor());
-        new TenantConverter.TenantScreening2TenantInfo().copyDTOtoDBO(entity, tr.getScreening());
+        new TenantConverter.Guarantor2TenantInfo().copyTOtoBO(entity, tr.getGuarantor());
+        new TenantConverter.TenantScreening2TenantInfo().copyTOtoBO(entity, tr.getScreening());
 
         tr.saveCustomer();
 
-        entity = new TenantConverter.Guarantor2TenantInfo().createDTO(tr.getGuarantor());
-        new TenantConverter.TenantScreening2TenantInfo().copyDBOtoDTO(tr.getScreening(), entity);
+        entity = new TenantConverter.Guarantor2TenantInfo().createTO(tr.getGuarantor());
+        new TenantConverter.TenantScreening2TenantInfo().copyBOtoTO(tr.getScreening(), entity);
         entity.setPrimaryKey(tr.getGuarantor().getPrimaryKey());
 
         DigitalSignatureMgr.reset(tr.getCustomer());
@@ -61,8 +61,8 @@ public class GuarantorInfoServiceImpl implements GuarantorInfoService {
     }
 
     public TenantInfoDTO retrieveData(GuarantorRetriever tr) {
-        TenantInfoDTO dto = new TenantConverter.Guarantor2TenantInfo().createDTO(tr.getGuarantor());
-        new TenantConverter.TenantScreening2TenantInfo().copyDBOtoDTO(tr.getScreening(), dto);
+        TenantInfoDTO dto = new TenantConverter.Guarantor2TenantInfo().createTO(tr.getGuarantor());
+        new TenantConverter.TenantScreening2TenantInfo().copyBOtoTO(tr.getScreening(), dto);
         dto.setPrimaryKey(tr.getGuarantor().getPrimaryKey());
         return dto;
     }

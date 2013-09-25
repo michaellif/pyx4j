@@ -61,23 +61,23 @@ public class LeaseApplicationViewerCrudServiceImpl extends LeaseViewerCrudServic
     }
 
     @Override
-    protected void enhanceRetrieved(Lease lease, LeaseApplicationDTO dto, RetrieveTarget retrieveTarget) {
-        super.enhanceRetrieved(lease, dto, retrieveTarget);
-        enhanceRetrievedCommon(lease, dto);
+    protected void enhanceRetrieved(Lease lease, LeaseApplicationDTO to, RetrieveTarget retrieveTarget) {
+        super.enhanceRetrieved(lease, to, retrieveTarget);
+        enhanceRetrievedCommon(lease, to);
 
-        for (LeaseTermTenant tenantId : dto.currentTerm().version().tenants()) {
-            loadLeaseParticipant(lease, dto, tenantId);
+        for (LeaseTermTenant tenantId : to.currentTerm().version().tenants()) {
+            loadLeaseParticipant(lease, to, tenantId);
         }
 
-        for (LeaseTermGuarantor guarantorId : dto.currentTerm().version().guarantors()) {
-            loadLeaseParticipant(lease, dto, guarantorId);
+        for (LeaseTermGuarantor guarantorId : to.currentTerm().version().guarantors()) {
+            loadLeaseParticipant(lease, to, guarantorId);
         }
 
         ServerSideFactory.create(ScreeningFacade.class).calculateSuggestedDecision(
-                ServerSideFactory.create(BillingFacade.class).getMaxLeaseTermMonthlyTotal(dto.currentTerm()), dto.leaseApproval());
+                ServerSideFactory.create(BillingFacade.class).getMaxLeaseTermMonthlyTotal(to.currentTerm()), to.leaseApproval());
 
-        dto.masterApplicationStatus().set(
-                ServerSideFactory.create(OnlineApplicationFacade.class).calculateOnlineApplicationStatus(dto.leaseApplication().onlineApplication()));
+        to.masterApplicationStatus().set(
+                ServerSideFactory.create(OnlineApplicationFacade.class).calculateOnlineApplicationStatus(to.leaseApplication().onlineApplication()));
     }
 
     private void loadLeaseParticipant(Lease lease, LeaseApplicationDTO dto, LeaseTermParticipant<? extends LeaseParticipant<?>> leaseParticipantId) {
@@ -88,13 +88,13 @@ public class LeaseApplicationViewerCrudServiceImpl extends LeaseViewerCrudServic
 
         {
             Persistence.service().retrieve(leaseParticipant.leaseParticipant().customer().emergencyContacts());
-            TenantInfoDTO tenantInfoDTO = new TenantConverter.LeaseParticipant2TenantInfo().createDTO(leaseParticipant);
-            new TenantConverter.TenantScreening2TenantInfo().copyDBOtoDTO(leaseParticipant.effectiveScreening(), tenantInfoDTO);
+            TenantInfoDTO tenantInfoDTO = new TenantConverter.LeaseParticipant2TenantInfo().createTO(leaseParticipant);
+            new TenantConverter.TenantScreening2TenantInfo().copyBOtoTO(leaseParticipant.effectiveScreening(), tenantInfoDTO);
             dto.tenantInfo().add(fillQuickSummary(tenantInfoDTO));
         }
 
         {
-            TenantFinancialDTO tenantFinancialDTO = new TenantConverter.TenantFinancialEditorConverter().createDTO(leaseParticipant.effectiveScreening());
+            TenantFinancialDTO tenantFinancialDTO = new TenantConverter.TenantFinancialEditorConverter().createTO(leaseParticipant.effectiveScreening());
             tenantFinancialDTO.person().set(leaseParticipant.leaseParticipant().customer().person());
             dto.tenantFinancials().add(fillQuickSummary(tenantFinancialDTO));
         }

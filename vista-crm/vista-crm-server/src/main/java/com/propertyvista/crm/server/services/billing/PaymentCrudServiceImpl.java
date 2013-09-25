@@ -107,16 +107,16 @@ public class PaymentCrudServiceImpl extends AbstractCrudServiceDtoImpl<PaymentRe
     }
 
     @Override
-    protected void enhanceRetrieved(PaymentRecord entity, PaymentRecordDTO dto, RetrieveTarget retrieveTarget) {
-        super.enhanceRetrieved(entity, dto, retrieveTarget);
-        enhanceListRetrieved(entity, dto);
+    protected void enhanceRetrieved(PaymentRecord bo, PaymentRecordDTO to, RetrieveTarget retrieveTarget) {
+        super.enhanceRetrieved(bo, to, retrieveTarget);
+        enhanceListRetrieved(bo, to);
 
-        dto.electronicPaymentsAllowed().setValue(ServerSideFactory.create(PaymentFacade.class).isElectronicPaymentsSetup(dto.billingAccount()));
-        dto.allowedPaymentTypes().setCollectionValue(
-                ServerSideFactory.create(PaymentFacade.class).getAllowedPaymentTypes(dto.billingAccount(), VistaApplication.crm));
-        dto.allowedCardTypes()
-                .setCollectionValue(ServerSideFactory.create(PaymentFacade.class).getAllowedCardTypes(dto.billingAccount(), VistaApplication.crm));
-        dto.participants().addAll(retrievePayableUsers(dto.billingAccount().lease()));
+        to.electronicPaymentsAllowed().setValue(ServerSideFactory.create(PaymentFacade.class).isElectronicPaymentsSetup(to.billingAccount()));
+        to.allowedPaymentTypes().setCollectionValue(
+                ServerSideFactory.create(PaymentFacade.class).getAllowedPaymentTypes(to.billingAccount(), VistaApplication.crm));
+        to.allowedCardTypes()
+                .setCollectionValue(ServerSideFactory.create(PaymentFacade.class).getAllowedCardTypes(to.billingAccount(), VistaApplication.crm));
+        to.participants().addAll(retrievePayableUsers(to.billingAccount().lease()));
     }
 
     @Override
@@ -139,25 +139,25 @@ public class PaymentCrudServiceImpl extends AbstractCrudServiceDtoImpl<PaymentRe
     }
 
     @Override
-    protected void persist(PaymentRecord entity, PaymentRecordDTO dto) {
-        entity.paymentMethod().customer().set(dto.leaseTermParticipant().leaseParticipant().customer());
+    protected void persist(PaymentRecord bo, PaymentRecordDTO to) {
+        bo.paymentMethod().customer().set(to.leaseTermParticipant().leaseParticipant().customer());
 
         // Do not change profile methods
-        if (entity.paymentMethod().id().isNull()) {
-            if (dto.addThisPaymentMethodToProfile().isBooleanTrue() && PaymentType.avalableInProfile().contains(dto.paymentMethod().type().getValue())) {
-                entity.paymentMethod().isProfiledMethod().setValue(Boolean.TRUE);
+        if (bo.paymentMethod().id().isNull()) {
+            if (to.addThisPaymentMethodToProfile().isBooleanTrue() && PaymentType.avalableInProfile().contains(to.paymentMethod().type().getValue())) {
+                bo.paymentMethod().isProfiledMethod().setValue(Boolean.TRUE);
             } else {
-                entity.paymentMethod().isProfiledMethod().setValue(Boolean.FALSE);
+                bo.paymentMethod().isProfiledMethod().setValue(Boolean.FALSE);
             }
 
             // some corrections for particular method types:
-            if (dto.paymentMethod().type().getValue() == PaymentType.Echeck) {
-                entity.paymentMethod().isProfiledMethod().setValue(Boolean.TRUE);
+            if (to.paymentMethod().type().getValue() == PaymentType.Echeck) {
+                bo.paymentMethod().isProfiledMethod().setValue(Boolean.TRUE);
             }
         }
-        ServerSideFactory.create(PaymentFacade.class).validatePaymentMethod(entity.billingAccount(), dto.paymentMethod(), VistaApplication.crm);
+        ServerSideFactory.create(PaymentFacade.class).validatePaymentMethod(bo.billingAccount(), to.paymentMethod(), VistaApplication.crm);
 
-        ServerSideFactory.create(PaymentFacade.class).persistPayment(entity);
+        ServerSideFactory.create(PaymentFacade.class).persistPayment(bo);
     }
 
     @Override

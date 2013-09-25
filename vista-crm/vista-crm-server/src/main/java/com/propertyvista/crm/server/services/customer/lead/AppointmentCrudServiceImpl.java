@@ -44,9 +44,9 @@ public class AppointmentCrudServiceImpl extends AbstractCrudServiceImpl<Appointm
     }
 
     @Override
-    protected void enhanceRetrieved(Appointment entity, Appointment dto, RetrieveTarget retrieveTarget) {
-        super.enhanceRetrieved(entity, dto, retrieveTarget);
-        Persistence.service().retrieve(dto.lead());
+    protected void enhanceRetrieved(Appointment bo, Appointment to, RetrieveTarget retrieveTarget) {
+        super.enhanceRetrieved(bo, to, retrieveTarget);
+        Persistence.service().retrieve(to.lead());
     }
 
     @Override

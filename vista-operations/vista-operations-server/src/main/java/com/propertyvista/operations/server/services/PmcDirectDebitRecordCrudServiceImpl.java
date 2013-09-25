@@ -36,9 +36,9 @@ public class PmcDirectDebitRecordCrudServiceImpl extends AbstractCrudServiceImpl
     }
 
     @Override
-    protected void enhanceRetrieved(DirectDebitRecord entity, DirectDebitRecord dto, com.pyx4j.entity.rpc.AbstractCrudService.RetrieveTarget retrieveTarget) {
-        super.enhanceRetrieved(entity, dto, retrieveTarget);
-        Persistence.service().retrieve(dto.pmc());
+    protected void enhanceRetrieved(DirectDebitRecord bo, DirectDebitRecord to, com.pyx4j.entity.rpc.AbstractCrudService.RetrieveTarget retrieveTarget) {
+        super.enhanceRetrieved(bo, to, retrieveTarget);
+        Persistence.service().retrieve(to.pmc());
     }
 
 }

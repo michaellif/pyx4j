@@ -56,12 +56,12 @@ public class LeadCrudServiceImpl extends AbstractCrudServiceImpl<Lead> implement
     }
 
     @Override
-    protected void enhanceRetrieved(Lead entity, Lead dto, RetrieveTarget retrieveTarget) {
-        if (!dto.floorplan().isNull()) {
-            Persistence.service().retrieve(dto.floorplan().building(), AttachLevel.ToStringMembers);
+    protected void enhanceRetrieved(Lead bo, Lead to, RetrieveTarget retrieveTarget) {
+        if (!to.floorplan().isNull()) {
+            Persistence.service().retrieve(to.floorplan().building(), AttachLevel.ToStringMembers);
         }
-        if (!dto.lease().isNull()) {
-            Persistence.service().retrieve(dto.lease());
+        if (!to.lease().isNull()) {
+            Persistence.service().retrieve(to.lease());
         }
     }
 
@@ -148,7 +148,7 @@ public class LeadCrudServiceImpl extends AbstractCrudServiceImpl<Lead> implement
     }
 
     @Override
-    protected void save(Lead dbo, Lead in) {
-        ServerSideFactory.create(LeadFacade.class).persist(dbo);
+    protected void save(Lead entity, Lead to) {
+        ServerSideFactory.create(LeadFacade.class).persist(entity);
     }
 }

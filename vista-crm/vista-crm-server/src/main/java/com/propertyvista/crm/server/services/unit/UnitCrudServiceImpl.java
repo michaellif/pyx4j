@@ -41,7 +41,7 @@ public class UnitCrudServiceImpl extends AbstractCrudServiceDtoImpl<AptUnit, Apt
     @Override
     protected void bind() {
         bindCompleteDBO();
-        bind(dtoProto.buildingCode(), dboProto.building().propertyCode());
+        bind(toProto.buildingCode(), boProto.building().propertyCode());
     }
 
     @Override
@@ -53,10 +53,10 @@ public class UnitCrudServiceImpl extends AbstractCrudServiceDtoImpl<AptUnit, Apt
     }
 
     @Override
-    protected void enhanceRetrieved(AptUnit in, AptUnitDTO dto, RetrieveTarget retrieveTarget) {
+    protected void enhanceRetrieved(AptUnit in, AptUnitDTO to, RetrieveTarget retrieveTarget) {
         // load detached entities:
-        if (!dto.marketing().isValueDetached()) { // This is not called for now cince file is detached in annotation. see comments on this filed
-            Persistence.service().retrieve(dto.marketing().adBlurbs());
+        if (!to.marketing().isValueDetached()) { // This is not called for now cince file is detached in annotation. see comments on this filed
+            Persistence.service().retrieve(to.marketing().adBlurbs());
         }
 
         // find corresponding lease:
@@ -66,18 +66,18 @@ public class UnitCrudServiceImpl extends AbstractCrudServiceDtoImpl<AptUnit, Apt
             criteria.add(PropertyCriterion.in(criteria.proto().status(), Lease.Status.current()));
             // set sorting by 'from date' to get last active lease first:
             criteria.asc(criteria.proto().leaseFrom());
-            dto.lease().set(Persistence.service().retrieve(criteria));
+            to.lease().set(Persistence.service().retrieve(criteria));
         }
 
-        Persistence.service().retrieve(dto.floorplan());
-        Persistence.service().retrieve(dto.building());
-        dto.buildingCode().setValue(dto.building().propertyCode().getValue());
+        Persistence.service().retrieve(to.floorplan());
+        Persistence.service().retrieve(to.building());
+        to.buildingCode().setValue(to.building().propertyCode().getValue());
 
-        dto.buildingLegalAddress().set(dto.building().info().address());
-        dto.buildingLegalAddress().suiteNumber().set(dto.info().number());
+        to.buildingLegalAddress().set(to.building().info().address());
+        to.buildingLegalAddress().suiteNumber().set(to.info().number());
 
         // retrieve market rent prices
-        retrieveServicePrices(dto);
+        retrieveServicePrices(to);
 
         // check unit catalog/lease readiness:
         if (retrieveTarget == RetrieveTarget.View) {
@@ -85,8 +85,8 @@ public class UnitCrudServiceImpl extends AbstractCrudServiceDtoImpl<AptUnit, Apt
             criteria.add(PropertyCriterion.in(criteria.proto().code().type(), ARCode.Type.services()));
             criteria.add(PropertyCriterion.eq(criteria.proto().element(), in));
 
-            dto.isPresentInCatalog().setValue(Persistence.service().exists(criteria));
-            dto.isAvailableForExistingLease().setValue(ServerSideFactory.create(OccupancyFacade.class).isAvailableForExistingLease(in.getPrimaryKey()));
+            to.isPresentInCatalog().setValue(Persistence.service().exists(criteria));
+            to.isAvailableForExistingLease().setValue(ServerSideFactory.create(OccupancyFacade.class).isAvailableForExistingLease(in.getPrimaryKey()));
         }
     }
 
@@ -109,8 +109,8 @@ public class UnitCrudServiceImpl extends AbstractCrudServiceDtoImpl<AptUnit, Apt
     }
 
     @Override
-    protected void persist(AptUnit entity, AptUnitDTO dto) {
-        ServerSideFactory.create(BuildingFacade.class).persist(entity);
+    protected void persist(AptUnit bo, AptUnitDTO to) {
+        ServerSideFactory.create(BuildingFacade.class).persist(bo);
     }
 
     private void retrieveServicePrices(AptUnitDTO dto) {

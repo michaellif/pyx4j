@@ -144,7 +144,7 @@ public class ApartmentServiceImpl implements ApartmentService {
 
         aptInfo.suiteNumber().setValue(suiteNumber);
         lease.unit().building().info().address().suiteNumber().setValue(suiteNumber); // this was just for the following copy
-        ADDRESS_CONVERTER.copyDBOtoDTO(lease.unit().building().info().address(), aptInfo.address());
+        ADDRESS_CONVERTER.copyBOtoTO(lease.unit().building().info().address(), aptInfo.address());
 
         // find picture:
         Persistence.service().retrieve(lease.unit().building().media());

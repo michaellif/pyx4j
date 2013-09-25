@@ -40,7 +40,7 @@ public abstract class GenericPolicyCrudService<POLICY extends Policy, POLICY_DTO
     }
 
     private void setLowestNodeType(POLICY_DTO dto) {
-        LowestApplicableNode lowestNodeType = dboClass.getAnnotation(LowestApplicableNode.class);
+        LowestApplicableNode lowestNodeType = boClass.getAnnotation(LowestApplicableNode.class);
         if (lowestNodeType != null) {
             dto.lowestNodeType().setValue(lowestNodeType.value().getName());
         }
@@ -53,7 +53,7 @@ public abstract class GenericPolicyCrudService<POLICY extends Policy, POLICY_DTO
 
     @Override
     protected POLICY_DTO init(InitializationData initializationData) {
-        POLICY_DTO policyDTO = EntityFactory.create(dtoClass);
+        POLICY_DTO policyDTO = EntityFactory.create(toClass);
 
         setLowestNodeType(policyDTO);
 
@@ -86,7 +86,7 @@ public abstract class GenericPolicyCrudService<POLICY extends Policy, POLICY_DTO
 
         boolean isNewPolicy = in.getPrimaryKey() == null;
         if (isNewPolicy) {
-            EntityQueryCriteria<POLICY> criteria = new EntityQueryCriteria<POLICY>(dboClass);
+            EntityQueryCriteria<POLICY> criteria = new EntityQueryCriteria<POLICY>(boClass);
             criteria.add(PropertyCriterion.eq(criteria.proto().node(), node));
             POLICY oldPolicyAtTheSameNode = Persistence.service().retrieve(criteria);
 

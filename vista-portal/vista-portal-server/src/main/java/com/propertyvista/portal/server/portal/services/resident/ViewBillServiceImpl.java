@@ -54,17 +54,17 @@ public class ViewBillServiceImpl extends AbstractCrudServiceDtoImpl<Bill, BillDT
     }
 
     @Override
-    protected void enhanceRetrieved(Bill entity, BillDTO dto, RetrieveTarget retrieveTarget) {
+    protected void enhanceRetrieved(Bill bo, BillDTO to, RetrieveTarget retrieveTarget) {
         // load detached entities:
-        Persistence.service().retrieve(dto.lineItems());
-        Persistence.service().retrieve(dto.billingAccount());
-        Persistence.service().retrieve(dto.billingAccount().lease());
-        Persistence.service().retrieve(dto.billingCycle().building(), AttachLevel.ToStringMembers);
-        BillingUtils.enhanceBillDto(entity, dto);
+        Persistence.service().retrieve(to.lineItems());
+        Persistence.service().retrieve(to.billingAccount());
+        Persistence.service().retrieve(to.billingAccount().lease());
+        Persistence.service().retrieve(to.billingCycle().building(), AttachLevel.ToStringMembers);
+        BillingUtils.enhanceBillDto(bo, to);
     }
 
     @Override
-    protected void persist(Bill entity, BillDTO dto) {
+    protected void persist(Bill bo, BillDTO to) {
         throw new IllegalArgumentException();
     }
 }

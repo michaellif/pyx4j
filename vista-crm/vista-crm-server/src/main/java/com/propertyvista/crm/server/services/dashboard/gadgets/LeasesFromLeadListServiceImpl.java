@@ -31,8 +31,8 @@ public class LeasesFromLeadListServiceImpl extends AbstractListServiceDtoImpl<Le
 
     @Override
     protected void bind() {
-        bind(dtoProto.createDate(), dboProto.createDate());
-        bind(dtoProto.lease(), dboProto.lease());
+        bind(toProto.createDate(), boProto.createDate());
+        bind(toProto.lease(), boProto.lease());
     }
 
     @Override

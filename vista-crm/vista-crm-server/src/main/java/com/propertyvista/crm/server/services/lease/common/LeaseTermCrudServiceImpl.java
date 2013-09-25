@@ -75,7 +75,7 @@ public class LeaseTermCrudServiceImpl extends AbstractVersionedCrudServiceDtoImp
             return createOffer(initData.lease(), initData.termType().getValue());
         } else { // creating new Application/Lease:
             Lease lease = createNewLease(initData.leaseType().getValue(), initData.leaseStatus().getValue());
-            LeaseTermDTO term = createDTO(lease.currentTerm());
+            LeaseTermDTO term = createTO(lease.currentTerm());
             term.isNewLease().setValue(true);
 
             lease.currentTerm().set(term);
@@ -142,42 +142,42 @@ public class LeaseTermCrudServiceImpl extends AbstractVersionedCrudServiceDtoImp
     }
 
     @Override
-    protected void enhanceRetrieved(LeaseTerm in, LeaseTermDTO dto, RetrieveTarget retrieveTarget) {
-        super.enhanceRetrieved(in, dto, retrieveTarget);
+    protected void enhanceRetrieved(LeaseTerm in, LeaseTermDTO to, RetrieveTarget retrieveTarget) {
+        super.enhanceRetrieved(in, to, retrieveTarget);
 
-        Persistence.service().retrieve(dto.lease());
+        Persistence.service().retrieve(to.lease());
 
-        dto.carryforwardBalance().setValue(dto.lease().billingAccount().carryforwardBalance().getValue());
+        to.carryforwardBalance().setValue(to.lease().billingAccount().carryforwardBalance().getValue());
         if (in.getPrimaryKey() != null) {
-            Persistence.service().retrieve(dto.version().tenants());
+            Persistence.service().retrieve(to.version().tenants());
         }
-        for (LeaseTermTenant item : dto.version().tenants()) {
-            LeaseParticipantUtils.retrieveLeaseTermEffectiveScreening(dto.lease(), item, AttachLevel.ToStringMembers);
+        for (LeaseTermTenant item : to.version().tenants()) {
+            LeaseParticipantUtils.retrieveLeaseTermEffectiveScreening(to.lease(), item, AttachLevel.ToStringMembers);
             fillPreauthorizedPayments(item);
         }
 
         if (in.getPrimaryKey() != null) {
-            Persistence.service().retrieve(dto.version().guarantors());
+            Persistence.service().retrieve(to.version().guarantors());
         }
-        for (LeaseTermGuarantor item : dto.version().guarantors()) {
-            LeaseParticipantUtils.retrieveLeaseTermEffectiveScreening(dto.lease(), item, AttachLevel.ToStringMembers);
+        for (LeaseTermGuarantor item : to.version().guarantors()) {
+            LeaseParticipantUtils.retrieveLeaseTermEffectiveScreening(to.lease(), item, AttachLevel.ToStringMembers);
         }
 
-        loadDetachedProducts(dto);
+        loadDetachedProducts(to);
 
-        if (!dto.unit().isNull()) {
-            Persistence.ensureRetrieve(dto.unit().building(), AttachLevel.ToStringMembers);
-            dto.building().set(dto.unit().building());
+        if (!to.unit().isNull()) {
+            Persistence.ensureRetrieve(to.unit().building(), AttachLevel.ToStringMembers);
+            to.building().set(to.unit().building());
 
             if (retrieveTarget == RetrieveTarget.Edit) {
                 // fill runtime editor data:
-                fillServiceEligibilityData(dto);
-                fillserviceItems(dto);
+                fillServiceEligibilityData(to);
+                fillserviceItems(to);
             }
 
-            checkUnitMoveOut(dto);
+            checkUnitMoveOut(to);
 
-            setAgeOfMajority(dto);
+            setAgeOfMajority(to);
         }
     }
 
@@ -376,7 +376,7 @@ public class LeaseTermCrudServiceImpl extends AbstractVersionedCrudServiceDtoImp
     private LeaseTermDTO createOffer(Lease leaseId, Type type) {
         LeaseTerm term = ServerSideFactory.create(LeaseFacade.class).createOffer(leaseId, type);
 
-        LeaseTermDTO termDto = createDTO(term);
+        LeaseTermDTO termDto = createTO(term);
         enhanceRetrieved(term, termDto, RetrieveTarget.Edit);
 
         return termDto;

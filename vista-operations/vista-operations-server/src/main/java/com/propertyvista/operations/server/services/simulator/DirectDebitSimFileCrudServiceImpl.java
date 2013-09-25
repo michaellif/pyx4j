@@ -65,8 +65,8 @@ public class DirectDebitSimFileCrudServiceImpl extends AbstractCrudServiceImpl<D
     }
 
     @Override
-    protected void retrievedSingle(DirectDebitSimFile entity, RetrieveTarget retrieveTarget) {
-        Persistence.service().retrieveMember(entity.records());
+    protected void retrievedSingle(DirectDebitSimFile bo, RetrieveTarget retrieveTarget) {
+        Persistence.service().retrieveMember(bo.records());
     }
 
     @Override

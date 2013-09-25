@@ -46,35 +46,35 @@ public abstract class LeaseCrudServiceBaseImpl<DTO extends LeaseDTO> extends Abs
     }
 
     @Override
-    protected void enhanceRetrieved(Lease in, DTO dto, RetrieveTarget retrieveTarget) {
-        Persistence.service().retrieve(dto.unit().building());
+    protected void enhanceRetrieved(Lease in, DTO to, RetrieveTarget retrieveTarget) {
+        Persistence.service().retrieve(to.unit().building());
 
-        if (!dto.currentTerm().isNull()) {
-            Persistence.service().retrieve(dto.currentTerm());
-            if (dto.currentTerm().version().isNull()) {
-                dto.currentTerm().set(Persistence.secureRetrieveDraft(LeaseTerm.class, dto.currentTerm().getPrimaryKey()));
+        if (!to.currentTerm().isNull()) {
+            Persistence.service().retrieve(to.currentTerm());
+            if (to.currentTerm().version().isNull()) {
+                to.currentTerm().set(Persistence.secureRetrieveDraft(LeaseTerm.class, to.currentTerm().getPrimaryKey()));
             }
 
-            Persistence.service().retrieveMember(dto.currentTerm().version().tenants());
-            Persistence.service().retrieveMember(dto.currentTerm().version().guarantors());
+            Persistence.service().retrieveMember(to.currentTerm().version().tenants());
+            Persistence.service().retrieveMember(to.currentTerm().version().guarantors());
         }
 
-        loadDetachedProducts(dto);
+        loadDetachedProducts(to);
 
-        for (LeaseTermTenant item : dto.currentTerm().version().tenants()) {
+        for (LeaseTermTenant item : to.currentTerm().version().tenants()) {
             Persistence.service().retrieve(item.screening(), AttachLevel.ToStringMembers);
             fillPreauthorizedPayments(item);
         }
 
-        for (LeaseTermGuarantor item : dto.currentTerm().version().guarantors()) {
+        for (LeaseTermGuarantor item : to.currentTerm().version().guarantors()) {
             Persistence.service().retrieve(item.screening(), AttachLevel.ToStringMembers);
         }
 
-        fillTenantInsurance(dto);
+        fillTenantInsurance(to);
 
-        RestrictionsPolicy restrictionsPolicy = ServerSideFactory.create(PolicyFacade.class).obtainEffectivePolicy(dto.unit(), RestrictionsPolicy.class);
+        RestrictionsPolicy restrictionsPolicy = ServerSideFactory.create(PolicyFacade.class).obtainEffectivePolicy(to.unit(), RestrictionsPolicy.class);
         if (restrictionsPolicy.enforceAgeOfMajority().isBooleanTrue()) {
-            dto.ageOfMajority().setValue(restrictionsPolicy.ageOfMajority().getValue());
+            to.ageOfMajority().setValue(restrictionsPolicy.ageOfMajority().getValue());
         }
     }
 

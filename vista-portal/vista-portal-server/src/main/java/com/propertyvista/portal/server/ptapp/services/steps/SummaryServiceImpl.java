@@ -115,7 +115,7 @@ public class SummaryServiceImpl extends ApplicationEntityServiceImpl implements 
             Persistence.service().retrieve(tenantInLease);
             TenantRetriever tr = new TenantRetriever(tenantInLease.getPrimaryKey(), true);
 
-            summary.tenantList().tenants().add(new TenantConverter.TenantEditorConverter().createDTO(tenantInLease));
+            summary.tenantList().tenants().add(new TenantConverter.TenantEditorConverter().createTO(tenantInLease));
 
             if (ApplicationProgressMgr.shouldEnterInformation(tenantInLease)) {
                 summary.tenantsWithInfo().add(tis.retrieveData(tr));

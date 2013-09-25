@@ -13,12 +13,12 @@
  */
 package com.propertyvista.biz.communication.mail.template.converter;
 
-import com.pyx4j.entity.shared.utils.EntityDtoBinder;
+import com.pyx4j.entity.shared.utils.EntityBinder;
 
 import com.propertyvista.biz.communication.mail.template.model.BuildingT;
 import com.propertyvista.domain.property.asset.building.Building;
 
-public class BuildingTConvertor extends EntityDtoBinder<Building, BuildingT> {
+public class BuildingTConvertor extends EntityBinder<Building, BuildingT> {
 
     public BuildingTConvertor() {
         super(Building.class, BuildingT.class, false);
@@ -26,7 +26,7 @@ public class BuildingTConvertor extends EntityDtoBinder<Building, BuildingT> {
 
     @Override
     protected void bind() {
-        bind(dtoProto.PropertyCode(), dboProto.propertyCode());
+        bind(toProto.PropertyCode(), boProto.propertyCode());
         //TODO all other
     }
 

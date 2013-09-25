@@ -90,15 +90,15 @@ public class LeaseViewerCrudServiceImpl extends LeaseViewerCrudServiceBaseImpl<L
     }
 
     @Override
-    protected void enhanceRetrieved(Lease in, LeaseDTO dto, RetrieveTarget retrieveTarget) {
-        super.enhanceRetrieved(in, dto, retrieveTarget);
+    protected void enhanceRetrieved(Lease in, LeaseDTO to, RetrieveTarget retrieveTarget) {
+        super.enhanceRetrieved(in, to, retrieveTarget);
 
-        if (!dto.billingAccount().isNull()) {
-            dto.transactionHistory().set(ServerSideFactory.create(ARFacade.class).getTransactionHistory(dto.billingAccount()));
-            dto.carryforwardBalance().setValue(dto.billingAccount().carryforwardBalance().getValue());
+        if (!to.billingAccount().isNull()) {
+            to.transactionHistory().set(ServerSideFactory.create(ARFacade.class).getTransactionHistory(to.billingAccount()));
+            to.carryforwardBalance().setValue(to.billingAccount().carryforwardBalance().getValue());
         }
 
-        dto.isMoveOutWithinNextBillingCycle().setValue(ServerSideFactory.create(LeaseFacade.class).isMoveOutWithinNextBillingCycle(in));
+        to.isMoveOutWithinNextBillingCycle().setValue(ServerSideFactory.create(LeaseFacade.class).isMoveOutWithinNextBillingCycle(in));
     }
 
     @Override
@@ -113,7 +113,7 @@ public class LeaseViewerCrudServiceImpl extends LeaseViewerCrudServiceBaseImpl<L
 
     @Override
     public void isCancelCompletionEventAvailable(AsyncCallback<CancelMoveOutConstraintsDTO> callback, Key entityId) {
-        Lease lease = Persistence.service().retrieve(dboClass, entityId);
+        Lease lease = Persistence.service().retrieve(boClass, entityId);
         CancelMoveOutConstraintsDTO result = ServerSideFactory.create(OccupancyFacade.class).getCancelMoveOutConstraints(lease.unit().getPrimaryKey());
         if (!result.leaseStub().isNull()) {
             Persistence.service().retrieve(result.leaseStub());
@@ -148,9 +148,9 @@ public class LeaseViewerCrudServiceImpl extends LeaseViewerCrudServiceBaseImpl<L
 
     @Override
     public void sendMail(AsyncCallback<String> callback, Key entityId, Vector<LeaseTermParticipant<?>> users, EmailTemplateType emailType) {
-        Lease lease = Persistence.service().retrieve(dboClass, entityId);
+        Lease lease = Persistence.service().retrieve(boClass, entityId);
         if ((lease == null) || (lease.isNull())) {
-            throw new RuntimeException("Entity '" + EntityFactory.getEntityMeta(dboClass).getCaption() + "' " + entityId + " NotFound");
+            throw new RuntimeException("Entity '" + EntityFactory.getEntityMeta(boClass).getCaption() + "' " + entityId + " NotFound");
         }
         if (!lease.status().getValue().isCurrent()) {
             throw new UserRuntimeException(i18n.tr("Can't send tenant email for inactive Lease"));
@@ -231,7 +231,7 @@ public class LeaseViewerCrudServiceImpl extends LeaseViewerCrudServiceBaseImpl<L
 
     @Override
     public void updateFromYardi(AsyncCallback<VoidSerializable> callback, Key entityId) {
-        Lease lease = Persistence.service().retrieve(dboClass, entityId);
+        Lease lease = Persistence.service().retrieve(boClass, entityId);
 
         try {
             ServerSideFactory.create(YardiARFacade.class).updateLease(lease);

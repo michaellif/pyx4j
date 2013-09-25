@@ -170,7 +170,7 @@ public class ImportProcessorFlatFloorplanAndUnits implements ImportProcessor {
                     if (floorplans.size() == 1) {
                         floorplan = (floorplans.get(0));
                     } else {
-                        floorplan = new FloorplanConverter().createDBO(floorplanIO);
+                        floorplan = new FloorplanConverter().createBO(floorplanIO);
                         floorplan.building().set(building);
                     }
                     Persistence.service().persist(floorplan);
@@ -200,7 +200,7 @@ public class ImportProcessorFlatFloorplanAndUnits implements ImportProcessor {
                             }
                         }
 
-                        AptUnit i = new AptUnitConverter().createDBO(aptUnitIO);
+                        AptUnit i = new AptUnitConverter().createBO(aptUnitIO);
                         i.building().set(building);
                         i.floorplan().set(floorplan);
                         i.info()._bathrooms().set(floorplan.bathrooms());

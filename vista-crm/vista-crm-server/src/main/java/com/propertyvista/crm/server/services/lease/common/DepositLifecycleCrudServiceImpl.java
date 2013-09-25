@@ -34,12 +34,12 @@ public class DepositLifecycleCrudServiceImpl extends AbstractCrudServiceDtoImpl<
     }
 
     @Override
-    protected void enhanceRetrieved(DepositLifecycle entity, DepositLifecycleDTO dto, RetrieveTarget retrieveTarget) {
-        super.enhanceRetrieved(entity, dto, retrieveTarget);
-        enhanceListRetrieved(entity, dto);
+    protected void enhanceRetrieved(DepositLifecycle bo, DepositLifecycleDTO to, RetrieveTarget retrieveTarget) {
+        super.enhanceRetrieved(bo, to, retrieveTarget);
+        enhanceListRetrieved(bo, to);
 
         // load detached:
-        Persistence.service().retrieve(dto.interestAdjustments());
+        Persistence.service().retrieve(to.interestAdjustments());
     }
 
     @Override

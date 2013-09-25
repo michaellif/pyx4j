@@ -14,12 +14,12 @@
 package com.propertyvista.interfaces.importer.converter;
 
 import com.pyx4j.entity.shared.IObject;
-import com.pyx4j.entity.shared.utils.EntityDtoBinder;
+import com.pyx4j.entity.shared.utils.EntityBinder;
 
 import com.propertyvista.domain.contact.AddressStructured;
 import com.propertyvista.interfaces.importer.model.AddressIO;
 
-public class AddressConverter extends EntityDtoBinder<AddressStructured, AddressIO> {
+public class AddressConverter extends EntityBinder<AddressStructured, AddressIO> {
 
     public AddressConverter() {
         super(AddressStructured.class, AddressIO.class, false);
@@ -27,21 +27,21 @@ public class AddressConverter extends EntityDtoBinder<AddressStructured, Address
 
     @Override
     protected void bind() {
-        bind(dtoProto.unitNumber(), dboProto.suiteNumber());
-        bind(dtoProto.streetNumber(), dboProto.streetNumber());
-        bind(dtoProto.streetNumberSuffix(), dboProto.streetNumberSuffix());
-        bind(dtoProto.streetName(), dboProto.streetName());
-        bind(dtoProto.streetType(), dboProto.streetType());
-        bind(dtoProto.streetDirection(), dboProto.streetDirection());
-        bind(dtoProto.city(), dboProto.city());
-        bind(dtoProto.county(), dboProto.county());
-        bind(dtoProto.provinceCode(), dboProto.province().code());
-        bind(dtoProto.countryName(), dboProto.country().name());
-        bind(dtoProto.postalCode(), dboProto.postalCode());
+        bind(toProto.unitNumber(), boProto.suiteNumber());
+        bind(toProto.streetNumber(), boProto.streetNumber());
+        bind(toProto.streetNumberSuffix(), boProto.streetNumberSuffix());
+        bind(toProto.streetName(), boProto.streetName());
+        bind(toProto.streetType(), boProto.streetType());
+        bind(toProto.streetDirection(), boProto.streetDirection());
+        bind(toProto.city(), boProto.city());
+        bind(toProto.county(), boProto.county());
+        bind(toProto.provinceCode(), boProto.province().code());
+        bind(toProto.countryName(), boProto.country().name());
+        bind(toProto.postalCode(), boProto.postalCode());
     }
 
     @Override
-    protected void onUpdateDBOmember(AddressIO dto, AddressStructured dbo, IObject<?> dboM) {
+    protected void onUpdateBOmember(AddressIO dto, AddressStructured dbo, IObject<?> dboM) {
         if (dboM == dbo.country().name()) {
             dbo.country().setPrimaryKey(null);
         } else if (dboM == dbo.province().code()) {

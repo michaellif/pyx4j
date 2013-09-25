@@ -38,16 +38,16 @@ public class PortfolioCrudServiceImpl extends AbstractCrudServiceImpl<Portfolio>
     }
 
     @Override
-    protected void enhanceRetrieved(Portfolio entity, Portfolio dto, RetrieveTarget retrieveTarget) {
-        Persistence.service().retrieveMember(entity.buildings());
-        dto.buildings().set(entity.buildings());
-        BuildingFolderUtil.stripExtraData(dto.buildings());
+    protected void enhanceRetrieved(Portfolio bo, Portfolio to, RetrieveTarget retrieveTarget) {
+        Persistence.service().retrieveMember(bo.buildings());
+        to.buildings().set(bo.buildings());
+        BuildingFolderUtil.stripExtraData(to.buildings());
     }
 
     @Override
-    protected void persist(Portfolio entity, Portfolio dto) {
-        validate(entity);
-        super.persist(entity, dto);
+    protected void persist(Portfolio bo, Portfolio to) {
+        validate(bo);
+        super.persist(bo, to);
     }
 
     private void validate(Portfolio portfolio) {

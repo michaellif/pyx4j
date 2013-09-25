@@ -41,7 +41,7 @@ public class PaymentMethodWizardServiceImpl extends AbstractCrudServiceDtoImpl<L
 
     @Override
     protected void bind() {
-        bindCompleteDtoMember(dtoProto.paymentMethod());
+        bindCompleteDtoMember(toProto.paymentMethod());
     }
 
     @Override
@@ -78,7 +78,7 @@ public class PaymentMethodWizardServiceImpl extends AbstractCrudServiceDtoImpl<L
 
         dto.paymentMethod().isProfiledMethod().setValue(Boolean.TRUE);
 
-        LeasePaymentMethod entity = createDBO(dto);
+        LeasePaymentMethod entity = createBO(dto);
         ServerSideFactory.create(PaymentMethodFacade.class).persistLeasePaymentMethod(entity, lease.unit().building());
         Key key = entity.getPrimaryKey();
         Persistence.service().commit();

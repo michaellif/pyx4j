@@ -32,15 +32,15 @@ public class MerchantAccountCrudServiceImpl extends AbstractCrudServiceImpl<Merc
 
     @Override
     protected void bind() {
-        bind(dtoProto.id(), dboProto.id());
-        bind(dtoProto.accountNumber(), dboProto.accountNumber());
-        bind(dtoProto.bankId(), dboProto.bankId());
-        bind(dtoProto.branchTransitNumber(), dboProto.branchTransitNumber());
-        bind(dtoProto.chargeDescription(), dboProto.chargeDescription());
+        bind(toProto.id(), boProto.id());
+        bind(toProto.accountNumber(), boProto.accountNumber());
+        bind(toProto.bankId(), boProto.bankId());
+        bind(toProto.branchTransitNumber(), boProto.branchTransitNumber());
+        bind(toProto.chargeDescription(), boProto.chargeDescription());
     }
 
     @Override
-    public void copyDTOtoDBO(MerchantAccount dto, MerchantAccount dbo) {
+    public void copyTOtoBO(MerchantAccount dto, MerchantAccount dbo) {
         // TODO move to Minding type
         dbo.chargeDescription().setValue(dto.chargeDescription().getValue());
     }
@@ -52,8 +52,8 @@ public class MerchantAccountCrudServiceImpl extends AbstractCrudServiceImpl<Merc
     }
 
     @Override
-    protected void enhanceRetrieved(MerchantAccount entity, MerchantAccount dto, RetrieveTarget retrieveTarget) {
-        setCalulatedFileds(entity, dto);
+    protected void enhanceRetrieved(MerchantAccount bo, MerchantAccount to, RetrieveTarget retrieveTarget) {
+        setCalulatedFileds(bo, to);
     }
 
     @Override

@@ -32,8 +32,8 @@ public class PadDebitRecordCrudServiceImpl extends AbstractCrudServiceDtoImpl<Pa
     }
 
     @Override
-    protected void enhanceRetrieved(PadDebitRecord entity, PadDebitRecordDTO dto, RetrieveTarget retrieveTarget) {
-        Persistence.service().retrieve(dto.padBatch().pmc());
+    protected void enhanceRetrieved(PadDebitRecord bo, PadDebitRecordDTO to, RetrieveTarget retrieveTarget) {
+        Persistence.service().retrieve(to.padBatch().pmc());
     }
 
     @Override

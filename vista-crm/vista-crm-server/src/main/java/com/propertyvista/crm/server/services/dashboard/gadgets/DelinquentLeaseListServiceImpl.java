@@ -43,26 +43,26 @@ public class DelinquentLeaseListServiceImpl extends AbstractCrudServiceDtoImpl<L
 
     @Override
     protected void bind() {
-        bind(dtoProto.leasePrimaryKey(), dboProto.arrearsSnapshot().billingAccount().lease().id());
-        bind(dtoProto.leaseId(), dboProto.arrearsSnapshot().billingAccount().lease().leaseId());
-        bind(dtoProto.buildingPropertyCode(), dboProto.arrearsSnapshot().billingAccount().lease().unit().building().propertyCode());
-        bind(dtoProto.unitNumber(), dboProto.arrearsSnapshot().billingAccount().lease().unit().info().number());
+        bind(toProto.leasePrimaryKey(), boProto.arrearsSnapshot().billingAccount().lease().id());
+        bind(toProto.leaseId(), boProto.arrearsSnapshot().billingAccount().lease().leaseId());
+        bind(toProto.buildingPropertyCode(), boProto.arrearsSnapshot().billingAccount().lease().unit().building().propertyCode());
+        bind(toProto.unitNumber(), boProto.arrearsSnapshot().billingAccount().lease().unit().info().number());
 
-        bind(dtoProto.participantId(), dboProto.arrearsSnapshot().billingAccount().lease()._applicant().participantId());
-        bind(dtoProto.primaryApplicantsFirstName(), dboProto.arrearsSnapshot().billingAccount().lease()._applicant().customer().person().name().firstName());
-        bind(dtoProto.primaryApplicantsLastName(), dboProto.arrearsSnapshot().billingAccount().lease()._applicant().customer().person().name().lastName());
-        bind(dtoProto.email(), dboProto.arrearsSnapshot().billingAccount().lease()._applicant().customer().person().email());
-        bind(dtoProto.mobilePhone(), dboProto.arrearsSnapshot().billingAccount().lease()._applicant().customer().person().mobilePhone());
-        bind(dtoProto.homePhone(), dboProto.arrearsSnapshot().billingAccount().lease()._applicant().customer().person().homePhone());
-        bind(dtoProto.workPhone(), dboProto.arrearsSnapshot().billingAccount().lease()._applicant().customer().person().workPhone());
+        bind(toProto.participantId(), boProto.arrearsSnapshot().billingAccount().lease()._applicant().participantId());
+        bind(toProto.primaryApplicantsFirstName(), boProto.arrearsSnapshot().billingAccount().lease()._applicant().customer().person().name().firstName());
+        bind(toProto.primaryApplicantsLastName(), boProto.arrearsSnapshot().billingAccount().lease()._applicant().customer().person().name().lastName());
+        bind(toProto.email(), boProto.arrearsSnapshot().billingAccount().lease()._applicant().customer().person().email());
+        bind(toProto.mobilePhone(), boProto.arrearsSnapshot().billingAccount().lease()._applicant().customer().person().mobilePhone());
+        bind(toProto.homePhone(), boProto.arrearsSnapshot().billingAccount().lease()._applicant().customer().person().homePhone());
+        bind(toProto.workPhone(), boProto.arrearsSnapshot().billingAccount().lease()._applicant().customer().person().workPhone());
 
-        bind(dtoProto.arrears().arCode(), dboProto.arCode());
-        bind(dtoProto.arrears().bucketThisMonth(), dboProto.bucketThisMonth());
-        bind(dtoProto.arrears().bucket30(), dboProto.bucket30());
-        bind(dtoProto.arrears().bucket60(), dboProto.bucket60());
-        bind(dtoProto.arrears().bucket90(), dboProto.bucket90());
-        bind(dtoProto.arrears().bucketOver90(), dboProto.bucketOver90());
-        bind(dtoProto.arrears().arrearsAmount(), dboProto.arrearsAmount());
+        bind(toProto.arrears().arCode(), boProto.arCode());
+        bind(toProto.arrears().bucketThisMonth(), boProto.bucketThisMonth());
+        bind(toProto.arrears().bucket30(), boProto.bucket30());
+        bind(toProto.arrears().bucket60(), boProto.bucket60());
+        bind(toProto.arrears().bucket90(), boProto.bucket90());
+        bind(toProto.arrears().bucketOver90(), boProto.bucketOver90());
+        bind(toProto.arrears().arrearsAmount(), boProto.arrearsAmount());
     }
 
     @Override
@@ -77,11 +77,11 @@ public class DelinquentLeaseListServiceImpl extends AbstractCrudServiceDtoImpl<L
                 if (criterion instanceof PropertyCriterion) {
                     PropertyCriterion propertyCriterion = (PropertyCriterion) criterion;
 
-                    if (propertyCriterion.getPropertyPath().equals(dtoProto.asOf().getPath().toString())) {
+                    if (propertyCriterion.getPropertyPath().equals(toProto.asOf().getPath().toString())) {
                         dbCriteria.le(dbCriteria.proto().arrearsSnapshot().fromDate(), propertyCriterion.getValue());
                         dbCriteria.ge(dbCriteria.proto().arrearsSnapshot().toDate(), propertyCriterion.getValue());
                         i.remove();
-                    } else if (propertyCriterion.getPropertyPath().equals(dtoProto.building().getPath().toString())) {
+                    } else if (propertyCriterion.getPropertyPath().equals(toProto.building().getPath().toString())) {
                         dbCriteria.in(dbCriteria.proto().arrearsSnapshot().billingAccount().lease().unit().building(),
                                 (Vector<Building>) propertyCriterion.getValue());
                         i.remove();

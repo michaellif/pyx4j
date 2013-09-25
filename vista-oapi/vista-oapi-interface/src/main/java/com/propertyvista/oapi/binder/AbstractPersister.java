@@ -16,9 +16,9 @@ package com.propertyvista.oapi.binder;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.entity.shared.utils.EntityDtoBinder;
+import com.pyx4j.entity.shared.utils.EntityBinder;
 
-public abstract class AbstractPersister<E extends IEntity, DTO extends IEntity> extends EntityDtoBinder<E, DTO> {
+public abstract class AbstractPersister<E extends IEntity, DTO extends IEntity> extends EntityBinder<E, DTO> {
 
     protected AbstractPersister(Class<E> dboClass, Class<DTO> dtoClass) {
         super(dboClass, dtoClass);
@@ -27,7 +27,7 @@ public abstract class AbstractPersister<E extends IEntity, DTO extends IEntity> 
     protected abstract E retrieve(DTO dto);
 
     protected E create(DTO dto) {
-        return EntityFactory.create(dboClass);
+        return EntityFactory.create(boClass);
     }
 
     public final void persist(DTO dto) {
@@ -35,7 +35,7 @@ public abstract class AbstractPersister<E extends IEntity, DTO extends IEntity> 
         if (entity == null) {
             entity = create(dto);
         }
-        copyDTOtoDBO(dto, entity);
+        copyTOtoBO(dto, entity);
         Persistence.service().persist(entity);
     }
 }

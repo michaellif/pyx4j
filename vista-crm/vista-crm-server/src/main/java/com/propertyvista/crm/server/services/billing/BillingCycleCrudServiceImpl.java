@@ -50,27 +50,27 @@ public class BillingCycleCrudServiceImpl extends AbstractCrudServiceDtoImpl<Bill
     }
 
     @Override
-    protected void enhanceRetrieved(BillingCycle entity, BillingCycleDTO dto, RetrieveTarget retrieveTarget) {
-        enhanceListRetrieved(entity, dto);
-        Persistence.service().retrieve(dto.building(), AttachLevel.ToStringMembers);
+    protected void enhanceRetrieved(BillingCycle bo, BillingCycleDTO to, RetrieveTarget retrieveTarget) {
+        enhanceListRetrieved(bo, to);
+        Persistence.service().retrieve(to.building(), AttachLevel.ToStringMembers);
 
         // calculate statistics on leases:
         // Total:
         EntityQueryCriteria<BillingAccount> criteriaTotal = EntityQueryCriteria.create(BillingAccount.class);
-        criteriaTotal.add(PropertyCriterion.eq(criteriaTotal.proto().billingType(), entity.billingType()));
-        dto.total().setValue((long) Persistence.service().count(criteriaTotal));
+        criteriaTotal.add(PropertyCriterion.eq(criteriaTotal.proto().billingType(), bo.billingType()));
+        to.total().setValue((long) Persistence.service().count(criteriaTotal));
 
         // not Run:
         EntityQueryCriteria<BillingAccount> criteriaNotRun = EntityQueryCriteria.create(BillingAccount.class);
-        criteriaNotRun.add(PropertyCriterion.eq(criteriaNotRun.proto().billingType(), entity.billingType()));
-        criteriaNotRun.add(PropertyCriterion.eq(criteriaNotRun.proto().bills().$().billingCycle(), entity));
+        criteriaNotRun.add(PropertyCriterion.eq(criteriaNotRun.proto().billingType(), bo.billingType()));
+        criteriaNotRun.add(PropertyCriterion.eq(criteriaNotRun.proto().bills().$().billingCycle(), bo));
         criteriaNotRun.add(PropertyCriterion.notExists(criteriaNotRun.proto().bills()));
 
-        dto.notRun().setValue((long) Persistence.service().count(criteriaNotRun));
+        to.notRun().setValue((long) Persistence.service().count(criteriaNotRun));
     }
 
     @Override
-    protected void persist(BillingCycle entity, BillingCycleDTO dto) {
+    protected void persist(BillingCycle bo, BillingCycleDTO to) {
         throw new IllegalArgumentException();
     }
 }

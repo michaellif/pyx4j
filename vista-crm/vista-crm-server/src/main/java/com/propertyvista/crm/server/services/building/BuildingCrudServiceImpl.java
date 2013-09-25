@@ -69,55 +69,55 @@ public class BuildingCrudServiceImpl extends AbstractCrudServiceDtoImpl<Building
     }
 
     @Override
-    protected void retrievedSingle(Building entity, RetrieveTarget retrieveTarget) {
-        super.retrievedSingle(entity, retrieveTarget);
+    protected void retrievedSingle(Building bo, RetrieveTarget retrieveTarget) {
+        super.retrievedSingle(bo, retrieveTarget);
 
-        Persistence.service().retrieveMember(entity.amenities());
-        Persistence.service().retrieveMember(entity.utilities());
+        Persistence.service().retrieveMember(bo.amenities());
+        Persistence.service().retrieveMember(bo.utilities());
         //TODO count only
-        Persistence.service().retrieveMember(entity.floorplans(), AttachLevel.IdOnly);
+        Persistence.service().retrieveMember(bo.floorplans(), AttachLevel.IdOnly);
     }
 
     @Override
-    protected void enhanceRetrieved(Building in, BuildingDTO dto, RetrieveTarget retrieveTarget) {
+    protected void enhanceRetrieved(Building in, BuildingDTO to, RetrieveTarget retrieveTarget) {
         // load detached entities/lists. Update other places: BuildingsResource and BuildingRetriever
-        Persistence.service().retrieve(dto.media());
-        Persistence.service().retrieve(dto.productCatalog());
-        Persistence.service().retrieve(dto.contacts().propertyContacts());
-        Persistence.service().retrieve(dto.contacts().organizationContacts());
-        Persistence.service().retrieve(dto.marketing().adBlurbs());
-        Persistence.service().retrieve(dto.marketing().openHouseSchedule());
+        Persistence.service().retrieve(to.media());
+        Persistence.service().retrieve(to.productCatalog());
+        Persistence.service().retrieve(to.contacts().propertyContacts());
+        Persistence.service().retrieve(to.contacts().organizationContacts());
+        Persistence.service().retrieve(to.marketing().adBlurbs());
+        Persistence.service().retrieve(to.marketing().openHouseSchedule());
 
         if (retrieveTarget == RetrieveTarget.View) {
             EntityQueryCriteria<DashboardMetadata> criteria = EntityQueryCriteria.create(DashboardMetadata.class);
             criteria.add(PropertyCriterion.eq(criteria.proto().type(), DashboardMetadata.DashboardType.building));
-            dto.dashboards().addAll(Persistence.secureQuery(criteria, AttachLevel.ToStringMembers));
+            to.dashboards().addAll(Persistence.secureQuery(criteria, AttachLevel.ToStringMembers));
         }
 
         if (retrieveTarget == RetrieveTarget.Edit) {
             EntityQueryCriteria<ARCode> featureItemCriteria = EntityQueryCriteria.create(ARCode.class);
             featureItemCriteria.add(PropertyCriterion.in(featureItemCriteria.proto().type(), ARCode.Type.AddOn, ARCode.Type.Utility));
-            dto.availableUtilities().addAll(Persistence.service().query(featureItemCriteria));
+            to.availableUtilities().addAll(Persistence.service().query(featureItemCriteria));
         }
 
         // Geotagging:
-        dto.geoLocation().set(EntityFactory.create(GeoLocation.class));
+        to.geoLocation().set(EntityFactory.create(GeoLocation.class));
         if (!in.info().address().location().isNull()) {
             double lat = in.info().address().location().getValue().getLat();
             if (lat < 0) {
-                dto.geoLocation().latitudeType().setValue(LatitudeType.South);
-                dto.geoLocation().latitude().setValue(-lat);
+                to.geoLocation().latitudeType().setValue(LatitudeType.South);
+                to.geoLocation().latitude().setValue(-lat);
             } else {
-                dto.geoLocation().latitudeType().setValue(LatitudeType.North);
-                dto.geoLocation().latitude().setValue(lat);
+                to.geoLocation().latitudeType().setValue(LatitudeType.North);
+                to.geoLocation().latitude().setValue(lat);
             }
             double lng = in.info().address().location().getValue().getLng();
             if (lng < 0) {
-                dto.geoLocation().longitudeType().setValue(LongitudeType.West);
-                dto.geoLocation().longitude().setValue(-lng);
+                to.geoLocation().longitudeType().setValue(LongitudeType.West);
+                to.geoLocation().longitude().setValue(-lng);
             } else {
-                dto.geoLocation().longitudeType().setValue(LongitudeType.East);
-                dto.geoLocation().longitude().setValue(lng);
+                to.geoLocation().longitudeType().setValue(LongitudeType.East);
+                to.geoLocation().longitude().setValue(lng);
             }
         }
 
@@ -125,13 +125,13 @@ public class BuildingCrudServiceImpl extends AbstractCrudServiceDtoImpl<Building
         Persistence.service().retrieveMember(in.merchantAccounts());
         if (!in.merchantAccounts().isEmpty()) {
             MerchantAccount oneAccount = in.merchantAccounts().iterator().next().merchantAccount();
-            dto.merchantAccount().set(ServerSideFactory.create(Vista2PmcFacade.class).calulateMerchantAccountStatus(oneAccount));
+            to.merchantAccount().set(ServerSideFactory.create(Vista2PmcFacade.class).calulateMerchantAccountStatus(oneAccount));
         }
 
         // ils
         EntityQueryCriteria<ILSProfileBuilding> criteria = EntityQueryCriteria.create(ILSProfileBuilding.class);
         criteria.eq(criteria.proto().building(), in);
-        dto.ilsProfile().addAll(Persistence.service().query(criteria));
+        to.ilsProfile().addAll(Persistence.service().query(criteria));
 
     }
 

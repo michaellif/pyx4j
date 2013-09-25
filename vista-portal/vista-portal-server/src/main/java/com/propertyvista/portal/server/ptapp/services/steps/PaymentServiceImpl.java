@@ -116,7 +116,7 @@ public class PaymentServiceImpl extends ApplicationEntityServiceImpl implements 
     public void getCurrentAddress(AsyncCallback<AddressSimple> callback) {
         CustomerRetriever r = new CustomerRetriever(PtAppContext.retrieveCurrentUserCustomer().getPrimaryKey());
         AddressSimple address = EntityFactory.create(AddressSimple.class);
-        new AddressConverter.StructuredToSimpleAddressConverter().copyDBOtoDTO(r.getScreening().version().currentAddress(), address);
+        new AddressConverter.StructuredToSimpleAddressConverter().copyBOtoTO(r.getScreening().version().currentAddress(), address);
         callback.onSuccess(address);
     }
 }

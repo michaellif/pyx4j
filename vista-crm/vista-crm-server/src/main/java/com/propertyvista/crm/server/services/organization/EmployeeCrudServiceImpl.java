@@ -65,32 +65,32 @@ public class EmployeeCrudServiceImpl extends AbstractCrudServiceDtoImpl<Employee
     }
 
     @Override
-    protected void enhanceRetrieved(Employee entity, EmployeeDTO dto, RetrieveTarget retrieveTarget) {
+    protected void enhanceRetrieved(Employee bo, EmployeeDTO to, RetrieveTarget retrieveTarget) {
         // Load detached data:
-        Persistence.service().retrieveMember(entity.portfolios());
-        dto.portfolios().set(entity.portfolios());
+        Persistence.service().retrieveMember(bo.portfolios());
+        to.portfolios().set(bo.portfolios());
 
-        Persistence.service().retrieveMember(entity.buildingAccess());
-        dto.buildingAccess().set(entity.buildingAccess());
-        BuildingFolderUtil.stripExtraData(dto.buildingAccess());
+        Persistence.service().retrieveMember(bo.buildingAccess());
+        to.buildingAccess().set(bo.buildingAccess());
+        BuildingFolderUtil.stripExtraData(to.buildingAccess());
 
-        Persistence.service().retrieve(dto.employees());
+        Persistence.service().retrieve(to.employees());
 
         //TODO proper Role
-        if (SecurityController.checkBehavior(VistaCrmBehavior.Organization) && (entity.user().getPrimaryKey() != null)) {
-            CrmUserCredential crs = Persistence.service().retrieve(CrmUserCredential.class, entity.user().getPrimaryKey());
-            dto.enabled().set(crs.enabled());
-            dto.restrictAccessToSelectedBuildingsAndPortfolios().setValue(!crs.accessAllBuildings().getValue(false));
-            dto.requiredPasswordChangeOnNextLogIn().setValue(crs.requiredPasswordChangeOnNextLogIn().getValue());
-            dto.roles().addAll(crs.roles());
-            dto.credentialUpdated().setValue(crs.credentialUpdated().getValue());
+        if (SecurityController.checkBehavior(VistaCrmBehavior.Organization) && (bo.user().getPrimaryKey() != null)) {
+            CrmUserCredential crs = Persistence.service().retrieve(CrmUserCredential.class, bo.user().getPrimaryKey());
+            to.enabled().set(crs.enabled());
+            to.restrictAccessToSelectedBuildingsAndPortfolios().setValue(!crs.accessAllBuildings().getValue(false));
+            to.requiredPasswordChangeOnNextLogIn().setValue(crs.requiredPasswordChangeOnNextLogIn().getValue());
+            to.roles().addAll(crs.roles());
+            to.credentialUpdated().setValue(crs.credentialUpdated().getValue());
 
-            dto.userAuditingConfiguration().set(EntityFactory.create(UserAuditingConfigurationDTO.class));
+            to.userAuditingConfiguration().set(EntityFactory.create(UserAuditingConfigurationDTO.class));
         }
 
-        Persistence.service().retrieveMember(entity.notifications());
-        dto.notifications().set(entity.notifications());
-        for (Notification item : dto.notifications()) {
+        Persistence.service().retrieveMember(bo.notifications());
+        to.notifications().set(bo.notifications());
+        for (Notification item : to.notifications()) {
             Persistence.service().retrieve(item.buildings());
             BuildingFolderUtil.stripExtraData(item.buildings());
             Persistence.service().retrieve(item.portfolios());

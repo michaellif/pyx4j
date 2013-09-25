@@ -31,7 +31,7 @@ import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityListCriteria;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
-import com.pyx4j.entity.shared.utils.EntityDtoBinder;
+import com.pyx4j.entity.shared.utils.EntityBinder;
 import com.pyx4j.rpc.shared.VoidSerializable;
 
 import com.propertyvista.biz.financial.payment.PaymentMethodFacade;
@@ -87,7 +87,7 @@ public class PreauthorizedPaymentsVisorServiceImpl implements PreauthorizedPayme
         List<PreauthorizedPayment> paps = new ArrayList<PreauthorizedPayment>();
         for (PreauthorizedPaymentDTO papDTO : dto.preauthorizedPayments()) {
             updateCoveredItems(papDTO);
-            paps.add(new PapConverter().createDBO(papDTO));
+            paps.add(new PapConverter().createBO(papDTO));
         }
 
         // delete payment methods removed in UI:
@@ -165,7 +165,7 @@ public class PreauthorizedPaymentsVisorServiceImpl implements PreauthorizedPayme
     }
 
     private PreauthorizedPaymentDTO createPreauthorizedPaymentDto(PreauthorizedPayment pap) {
-        PreauthorizedPaymentDTO papDto = new PapConverter().createDTO(pap);
+        PreauthorizedPaymentDTO papDto = new PapConverter().createTO(pap);
 
         updateCoveredItemsDto(papDto);
         fillCoveredItemsDto(papDto);
@@ -284,7 +284,7 @@ public class PreauthorizedPaymentsVisorServiceImpl implements PreauthorizedPayme
         }
     }
 
-    private class PapConverter extends EntityDtoBinder<PreauthorizedPayment, PreauthorizedPaymentDTO> {
+    private class PapConverter extends EntityBinder<PreauthorizedPayment, PreauthorizedPaymentDTO> {
 
         protected PapConverter() {
             super(PreauthorizedPayment.class, PreauthorizedPaymentDTO.class);

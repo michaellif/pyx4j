@@ -52,29 +52,29 @@ public class CrmUserServiceImpl extends AbstractCrudServiceDtoImpl<Employee, Emp
     }
 
     @Override
-    protected void enhanceRetrieved(Employee entity, EmployeeDTO dto, RetrieveTarget retrieveTarget) {
-        Persistence.service().retrieveMember(entity.portfolios());
-        dto.portfolios().set(entity.portfolios());
+    protected void enhanceRetrieved(Employee bo, EmployeeDTO to, RetrieveTarget retrieveTarget) {
+        Persistence.service().retrieveMember(bo.portfolios());
+        to.portfolios().set(bo.portfolios());
 
-        Persistence.service().retrieveMember(entity.buildingAccess());
-        dto.buildingAccess().set(entity.buildingAccess());
+        Persistence.service().retrieveMember(bo.buildingAccess());
+        to.buildingAccess().set(bo.buildingAccess());
 
-        Persistence.service().retrieve(dto.employees());
+        Persistence.service().retrieve(to.employees());
 
-        CrmUserCredential crs = Persistence.service().retrieve(CrmUserCredential.class, entity.user().getPrimaryKey());
-        dto.restrictAccessToSelectedBuildingsAndPortfolios().setValue(!crs.accessAllBuildings().getValue(false));
-        dto.requiredPasswordChangeOnNextLogIn().setValue(crs.requiredPasswordChangeOnNextLogIn().getValue());
-        dto.roles().addAll(crs.roles());
-        dto.credentialUpdated().setValue(crs.credentialUpdated().getValue());
+        CrmUserCredential crs = Persistence.service().retrieve(CrmUserCredential.class, bo.user().getPrimaryKey());
+        to.restrictAccessToSelectedBuildingsAndPortfolios().setValue(!crs.accessAllBuildings().getValue(false));
+        to.requiredPasswordChangeOnNextLogIn().setValue(crs.requiredPasswordChangeOnNextLogIn().getValue());
+        to.roles().addAll(crs.roles());
+        to.credentialUpdated().setValue(crs.credentialUpdated().getValue());
 
         // TODO put auditing configuration here
-        dto.userAuditingConfiguration().set(EntityFactory.create(UserAuditingConfigurationDTO.class));
+        to.userAuditingConfiguration().set(EntityFactory.create(UserAuditingConfigurationDTO.class));
 
-        Persistence.service().retrieveMember(entity.notifications());
-        dto.notifications().set(entity.notifications());
-        for (Notification item : dto.notifications()) {
+        Persistence.service().retrieveMember(bo.notifications());
+        to.notifications().set(bo.notifications());
+        for (Notification item : to.notifications()) {
             Persistence.service().retrieve(item.buildings());
-            BuildingFolderUtil.stripExtraData(dto.buildingAccess());
+            BuildingFolderUtil.stripExtraData(to.buildingAccess());
             Persistence.service().retrieve(item.portfolios());
         }
     }
@@ -86,16 +86,16 @@ public class CrmUserServiceImpl extends AbstractCrudServiceDtoImpl<Employee, Emp
     }
 
     @Override
-    protected void persist(Employee entity, EmployeeDTO dto) {
-        assertSamePortfolios(dto);
+    protected void persist(Employee bo, EmployeeDTO to) {
+        assertSamePortfolios(to);
         // Enforce access only to current user
-        dto.setPrimaryKey(CrmAppContext.getCurrentUserEmployee().getPrimaryKey());
-        dto.user().setPrimaryKey(VistaContext.getCurrentUserPrimaryKey());
+        to.setPrimaryKey(CrmAppContext.getCurrentUserEmployee().getPrimaryKey());
+        to.user().setPrimaryKey(VistaContext.getCurrentUserPrimaryKey());
 
-        super.persist(entity, dto);
+        super.persist(bo, to);
 
         // Update name label in UI
-        Context.getVisit().getUserVisit().setName(entity.name().getStringView());
+        Context.getVisit().getUserVisit().setName(bo.name().getStringView());
     }
 
     @Override

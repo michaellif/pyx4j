@@ -39,17 +39,17 @@ public class UnitOccupancyCrudServiceImpl extends AbstractCrudServiceImpl<AptUni
 
     @Override
     public void list(AsyncCallback<EntitySearchResult<AptUnitOccupancySegment>> callback, EntityListCriteria<AptUnitOccupancySegment> dtoCriteria) {
-        dtoCriteria.asc(dtoProto.dateFrom());
+        dtoCriteria.asc(toProto.dateFrom());
         super.list(callback, dtoCriteria);
     }
 
     @Override
-    protected void enhanceRetrieved(AptUnitOccupancySegment entity, AptUnitOccupancySegment dto, RetrieveTarget retrieveTarget ) {
-        if (dto.dateFrom().getValue().equals(OccupancyFacade.MIN_DATE)) {
-            dto.dateFrom().setValue(null);
+    protected void enhanceRetrieved(AptUnitOccupancySegment bo, AptUnitOccupancySegment to, RetrieveTarget retrieveTarget ) {
+        if (to.dateFrom().getValue().equals(OccupancyFacade.MIN_DATE)) {
+            to.dateFrom().setValue(null);
         }
-        if (dto.dateTo().getValue().equals(OccupancyFacade.MAX_DATE)) {
-            dto.dateTo().setValue(null);
+        if (to.dateTo().getValue().equals(OccupancyFacade.MAX_DATE)) {
+            to.dateTo().setValue(null);
         }
     }
 

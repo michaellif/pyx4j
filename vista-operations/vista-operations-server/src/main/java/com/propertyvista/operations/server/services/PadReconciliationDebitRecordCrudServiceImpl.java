@@ -33,9 +33,9 @@ public class PadReconciliationDebitRecordCrudServiceImpl extends AbstractCrudSer
     }
 
     @Override
-    protected void enhanceRetrieved(PadReconciliationDebitRecord entity, PadReconciliationDebitRecordDTO dto,
+    protected void enhanceRetrieved(PadReconciliationDebitRecord bo, PadReconciliationDebitRecordDTO to,
             com.pyx4j.entity.rpc.AbstractCrudService.RetrieveTarget retrieveTarget) {
-        Persistence.service().retrieve(dto.reconciliationSummary().merchantAccount().pmc());
+        Persistence.service().retrieve(to.reconciliationSummary().merchantAccount().pmc());
     }
 
     @Override

@@ -55,11 +55,11 @@ public class SiteBrandingCrudServiceImpl extends AbstractCrudServiceDtoImpl<Site
     }
 
     @Override
-    protected void enhanceRetrieved(SiteDescriptor in, SiteDescriptorDTO dto, RetrieveTarget retrieveTarget) {
+    protected void enhanceRetrieved(SiteDescriptor in, SiteDescriptorDTO to, RetrieveTarget retrieveTarget) {
         // load transient data:
         EntityQueryCriteria<AvailableLocale> criteria = EntityQueryCriteria.create(AvailableLocale.class);
         criteria.asc(criteria.proto().displayOrder());
-        dto.locales().addAll(Persistence.service().query(criteria));
+        to.locales().addAll(Persistence.service().query(criteria));
     }
 
     @Override

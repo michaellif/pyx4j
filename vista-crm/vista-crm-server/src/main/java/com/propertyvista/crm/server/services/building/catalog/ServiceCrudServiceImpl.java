@@ -52,7 +52,7 @@ public class ServiceCrudServiceImpl extends AbstractCrudServiceImpl<Service> imp
     }
 
     @Override
-    protected void enhanceRetrieved(Service dbo, Service dto, RetrieveTarget retrieveTarget) {
+    protected void enhanceRetrieved(Service dbo, Service to, RetrieveTarget retrieveTarget) {
         // Load detached data:
 
         /*
@@ -60,17 +60,17 @@ public class ServiceCrudServiceImpl extends AbstractCrudServiceImpl<Service> imp
          * (lister filtering by catalog().building() in @link ServiceItemFolder.AddItem())
          * and building element filtering in ServiceItemEditor
          */
-        Persistence.service().retrieve(dto.catalog());
+        Persistence.service().retrieve(to.catalog());
 
-        Persistence.service().retrieve(dto.version().items());
-        Persistence.service().retrieve(dto.version().features());
-        Persistence.service().retrieve(dto.version().concessions());
+        Persistence.service().retrieve(to.version().items());
+        Persistence.service().retrieve(to.version().features());
+        Persistence.service().retrieve(to.version().concessions());
 
         // next level:
-        for (ProductItem item : dto.version().items()) {
+        for (ProductItem item : to.version().items()) {
             Persistence.service().retrieve(item.element());
         }
-        for (Feature feature : dto.version().features()) {
+        for (Feature feature : to.version().features()) {
             Persistence.service().retrieve(feature.version().items());
             // next level:
             for (ProductItem item : feature.version().items()) {
@@ -85,10 +85,10 @@ public class ServiceCrudServiceImpl extends AbstractCrudServiceImpl<Service> imp
     }
 
     @Override
-    protected void persist(Service entity, Service dto) {
-        super.persist(entity, dto);
+    protected void persist(Service bo, Service to) {
+        super.persist(bo, to);
 
         // update unit market prices here:
-        ServerSideFactory.create(ProductCatalogFacade.class).updateUnitMarketPrice(entity);
+        ServerSideFactory.create(ProductCatalogFacade.class).updateUnitMarketPrice(bo);
     }
 }
