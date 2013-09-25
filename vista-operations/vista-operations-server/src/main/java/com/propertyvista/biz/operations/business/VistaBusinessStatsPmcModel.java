@@ -59,7 +59,11 @@ public interface VistaBusinessStatsPmcModel extends IEntity {
 
     IPrimitive<Integer> eChequeCount();
 
+    IPrimitive<Integer> eChequeCountOneTime();
+
     IPrimitive<BigDecimal> eChequeValue();
+
+    IPrimitive<BigDecimal> eChequeValueOneTime();
 
     IPrimitive<Integer> eftCount();
 
@@ -71,7 +75,11 @@ public interface VistaBusinessStatsPmcModel extends IEntity {
 
     IPrimitive<Integer> creditCardCount();
 
+    IPrimitive<Integer> creditCardCountOneTime();
+
     IPrimitive<BigDecimal> creditCardValue();
+
+    IPrimitive<BigDecimal> creditCardValueOneTime();
 
     // TenantSure
 

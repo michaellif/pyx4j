@@ -53,10 +53,12 @@ import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.security.AuditRecordEventType;
 import com.propertyvista.domain.security.CrmRole;
+import com.propertyvista.domain.security.CustomerUser;
 import com.propertyvista.domain.security.VistaCrmBehavior;
 import com.propertyvista.domain.tenant.Customer;
 import com.propertyvista.domain.tenant.CustomerCreditCheck;
 import com.propertyvista.domain.tenant.insurance.InsuranceTenantSure;
+import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.operations.domain.security.AuditRecord;
 import com.propertyvista.server.domain.security.CrmUserCredential;
 import com.propertyvista.server.jobs.TaskRunner;
@@ -175,7 +177,18 @@ class VistaBusinessStatsReport {
             data.registeredTenantsCount().setValue(Persistence.service().count(criteria));
         }
 
-        // TODO add "total tenants using electronic payments"
+        {
+            EntityQueryCriteria<Lease> criteria = EntityQueryCriteria.create(Lease.class);
+            criteria.eq(criteria.proto().billingAccount().payments().$().createdBy(), CustomerUser.class);
+            data.payingTenants().setValue(Persistence.service().count(criteria));
+        }
+
+        {
+            EntityQueryCriteria<Lease> criteria = EntityQueryCriteria.create(Lease.class);
+            criteria.eq(criteria.proto().billingAccount().payments().$().createdBy(), CustomerUser.class);
+            criteria.ge(criteria.proto().billingAccount().payments().$().createdDate(), reportSince);
+            data.newPayingTenants().setValue(Persistence.service().count(criteria));
+        }
 
         {
             EntityQueryCriteria<PaymentRecord> criteria = EntityQueryCriteria.create(PaymentRecord.class);
@@ -189,6 +202,11 @@ class VistaBusinessStatsReport {
             }
             data.eChequeCount().setValue(records.size());
             data.eChequeValue().setValue(amount);
+
+            criteria.eq(criteria.proto().createdBy(), CustomerUser.class);
+
+            data.eChequeCountOneTime().setValue(records.size());
+            data.eChequeValueOneTime().setValue(amount);
         }
 
         {
@@ -231,6 +249,11 @@ class VistaBusinessStatsReport {
             }
             data.creditCardCount().setValue(records.size());
             data.creditCardValue().setValue(amount);
+
+            criteria.eq(criteria.proto().createdBy(), CustomerUser.class);
+
+            data.creditCardCountOneTime().setValue(records.size());
+            data.creditCardValueOneTime().setValue(amount);
         }
 
         {
