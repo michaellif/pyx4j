@@ -16,10 +16,8 @@ package com.propertyvista.server.config;
 import java.util.EnumSet;
 import java.util.Set;
 
-import com.pyx4j.log4j.LoggerConfig;
-
 import com.propertyvista.domain.DemoData.DemoPmc;
-import com.propertyvista.portal.rpc.DeploymentConsts;
+import com.propertyvista.domain.security.common.VistaApplication;
 
 public class VistaServerSideConfigurationProdSalesDemo extends VistaServerSideConfigurationCustom {
 
@@ -39,39 +37,21 @@ public class VistaServerSideConfigurationProdSalesDemo extends VistaServerSideCo
     }
 
     @Override
-    public String getDefaultBaseURLvistaCrm(String pmcDnsName) {
-        return "http://" + pmcDnsName + ".propertyvista.biz/";
-    }
-
-    @Override
-    public String getDefaultBaseURLresidentPortalSite(String pmcDnsName, boolean secure) {
-        String protocol;
-        if (secure) {
-            protocol = "https://";
-        } else {
-            protocol = "http://";
+    public String getDefaultApplicationURL(VistaApplication application, String pmcDnsName) {
+        switch (application) {
+        case crm:
+            return "http://" + pmcDnsName + ".propertyvista.biz/";
+        case site:
+            return "http://" + pmcDnsName + ".residentportal.info/";
+        case portal:
+            return "https://" + pmcDnsName + ".residentportal.info/";
+        case prospect:
+            return "http://" + pmcDnsName + ".prospectportal.info/";
+        case onboarding:
+            return "http://start.propertyvista.biz/";
+        default:
+            return super.getDefaultApplicationURL(application, pmcDnsName);
         }
-        return protocol + pmcDnsName + ".residentportal.info/";
-    }
-
-    @Override
-    public String getDefaultBaseURLresidentPortalWeb(String pmcDnsName) {
-        return "https://" + pmcDnsName + ".residentportal.info/" + DeploymentConsts.RESIDENT_URL_PATH;
-    }
-
-    @Override
-    public String getDefaultBaseURLprospectPortal(String pmcDnsName) {
-        return "http://" + pmcDnsName + ".prospectportal.info/";
-    }
-
-    @Override
-    public String getDefaultBaseURLvistaOperations() {
-        return "https://prod-demo.birchwoodsoftwaregroup.com/" + LoggerConfig.getContextName() + "/" + DeploymentConsts.OPERATIONS_URL;
-    }
-
-    @Override
-    public String getDefaultBaseURLvistaOnboarding() {
-        return "http://start.propertyvista.biz/";
     }
 
     @Override

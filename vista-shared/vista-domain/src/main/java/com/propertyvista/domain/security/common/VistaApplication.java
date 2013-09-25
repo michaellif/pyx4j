@@ -29,11 +29,10 @@ public enum VistaApplication implements Behavior {
 
     field,
 
-    // TODO rename to site
-    residentPortal,
+    site,
 
-    // New site for residents
-    resident,
+    // Site for residents
+    portal,
 
     prospect,
 

@@ -61,8 +61,8 @@ public class EmailTemplateRootObjectLoader {
         }
         if (tObj instanceof PortalLinksT) {
             PortalLinksT t = (PortalLinksT) tObj;
-            t.PortalHomeUrl().setValue(VistaDeployment.getBaseApplicationURL(VistaApplication.residentPortal, false));
-            t.TenantPortalUrl().setValue(VistaDeployment.getBaseApplicationURL(VistaApplication.resident, true));
+            t.PortalHomeUrl().setValue(VistaDeployment.getBaseApplicationURL(VistaApplication.site, false));
+            t.TenantPortalUrl().setValue(VistaDeployment.getBaseApplicationURL(VistaApplication.portal, true));
             t.ProspectPortalUrl().setValue(VistaDeployment.getBaseApplicationURL(VistaApplication.prospect, true));
             t.CompanyLogo().setValue(t.PortalHomeUrl().getValue() + "/" + DeploymentConsts.portalLogo + DeploymentConsts.siteImageResourceServletMapping);
 
@@ -210,7 +210,7 @@ public class EmailTemplateRootObjectLoader {
             t.updated().setValue(mr.updated().getStringView());
             t.cancellationNote().set(mr.cancellationNote());
             // generate url for maintenance request viewer in Resident Portal
-            String residentUrl = VistaDeployment.getBaseApplicationURL(VistaApplication.residentPortal, true) + DeploymentConsts.TENANT_URL_PATH;
+            String residentUrl = VistaDeployment.getBaseApplicationURL(VistaApplication.portal, true);
             String mrUrl = AppPlaceInfo.absoluteUrl(residentUrl, true,
                     new PortalSiteMap.Resident.Maintenance.ViewMaintenanceRequest().formPlace(mr.getPrimaryKey()));
             t.requestViewUrl().setValue(mrUrl);
@@ -240,8 +240,8 @@ public class EmailTemplateRootObjectLoader {
     }
 
     private static String getPortalAccessUrl(String token) {
-        return AppPlaceInfo.absoluteUrl(VistaDeployment.getBaseApplicationURL(VistaApplication.residentPortal, true) + DeploymentConsts.TENANT_URL_PATH, true,
-                PortalSiteMap.LoginWithToken.class, AuthenticationService.AUTH_TOKEN_ARG, token);
+        return AppPlaceInfo.absoluteUrl(VistaDeployment.getBaseApplicationURL(VistaApplication.portal, true), true, PortalSiteMap.LoginWithToken.class,
+                AuthenticationService.AUTH_TOKEN_ARG, token);
     }
 
     private static OnlineApplication getApplication(LeaseTermParticipant tenantInLease) {

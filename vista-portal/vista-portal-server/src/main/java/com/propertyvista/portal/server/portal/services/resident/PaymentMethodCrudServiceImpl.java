@@ -52,7 +52,7 @@ public class PaymentMethodCrudServiceImpl extends AbstractCrudServiceImpl<LeaseP
 
         to.allowedCardTypes().setCollectionValue(
                 ServerSideFactory.create(PaymentFacade.class).getAllowedCardTypes(TenantAppContext.getCurrentUserLease().billingAccount(),
-                        VistaApplication.residentPortal));
+                        VistaApplication.portal));
     }
 
     @Override
@@ -63,7 +63,7 @@ public class PaymentMethodCrudServiceImpl extends AbstractCrudServiceImpl<LeaseP
 
         // filter out not allowed payment types:
         Collection<PaymentType> allowedPaymentTypes = ServerSideFactory.create(PaymentFacade.class).getAllowedPaymentTypes(
-                TenantAppContext.getCurrentUserLease().billingAccount(), VistaApplication.residentPortal);
+                TenantAppContext.getCurrentUserLease().billingAccount(), VistaApplication.portal);
 
         dbCriteria.add(PropertyCriterion.in(dbCriteria.proto().type(), allowedPaymentTypes));
     }
@@ -76,7 +76,7 @@ public class PaymentMethodCrudServiceImpl extends AbstractCrudServiceImpl<LeaseP
         bo.customer().set(TenantAppContext.getCurrentUserCustomer());
         bo.isProfiledMethod().setValue(Boolean.TRUE);
 
-        ServerSideFactory.create(PaymentFacade.class).validatePaymentMethod(lease.billingAccount(), to, VistaApplication.residentPortal);
+        ServerSideFactory.create(PaymentFacade.class).validatePaymentMethod(lease.billingAccount(), to, VistaApplication.portal);
         ServerSideFactory.create(PaymentMethodFacade.class).persistLeasePaymentMethod(bo, lease.unit().building());
     }
 

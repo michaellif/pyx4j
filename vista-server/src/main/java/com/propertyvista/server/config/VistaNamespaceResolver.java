@@ -34,7 +34,7 @@ import com.pyx4j.server.contexts.NamespaceManager;
 import com.propertyvista.domain.VistaNamespace;
 import com.propertyvista.domain.pmc.Pmc;
 import com.propertyvista.domain.pmc.Pmc.PmcStatus;
-import com.propertyvista.portal.rpc.DeploymentConsts;
+import com.propertyvista.domain.security.common.VistaApplication;
 import com.propertyvista.portal.rpc.shared.SiteWasNotActivatedUserRuntimeException;
 
 public class VistaNamespaceResolver implements NamespaceResolver {
@@ -72,26 +72,25 @@ public class VistaNamespaceResolver implements NamespaceResolver {
     public String getNamespace(HttpServletRequest httprequest) {
         if (httprequest.getServletPath() != null) {
             String servletPath = httprequest.getServletPath();
-            if ((servletPath.startsWith("/" + DeploymentConsts.OPERATIONS_URL) || servletPath.startsWith("/interfaces"))) {
+            if ((servletPath.startsWith("/" + VistaApplication.operations) || servletPath.startsWith("/interfaces"))) {
                 return VistaNamespace.operationsNamespace;
             }
             if (servletPath.startsWith("/public/schema") || servletPath.startsWith("/public/version") || servletPath.startsWith("/static/")
                     || servletPath.startsWith("/demo/") || servletPath.startsWith("/public/verify") || servletPath.startsWith("/public/status")
-                    || servletPath.startsWith("/o/") || servletPath.equals("/index.html") || servletPath.startsWith("/" + DeploymentConsts.ONBOARDING_URL)) {
+                    || servletPath.startsWith("/o/") || servletPath.equals("/index.html") || servletPath.startsWith("/" + VistaApplication.onboarding)) {
                 return VistaNamespace.noNamespace;
             }
         }
 
         // Dev: Get the 4th part of URL.
-        // www.ABC.22.birchwoodsoftwaregroup.com
-        // www.ABC.dev.birchwoodsoftwaregroup.com
+        // {PMC}-crm.dev.birchwoodsoftwaregroup.com
 
         // Support wildcard HTTPS on dev
-        // vista-crm-22.birchwoodsoftwaregroup.com
-        // vista-portal-22.birchwoodsoftwaregroup.com
+        // {PMC}-crm-22.birchwoodsoftwaregroup.com
+        // {PMC}-portal-22.birchwoodsoftwaregroup.com
 
         // Prod: Get the 3rd part of URL.
-        // www.ABC.propertyvista.com
+        // {PMC}.propertyvista.com
 
         String serverName = httprequest.getServerName();
         if ("localhost".equals(serverName) || httprequest.getLocalAddr().equals(serverName)) {
@@ -164,7 +163,13 @@ public class VistaNamespaceResolver implements NamespaceResolver {
 
     private static String getNamespaceFromPmcAppEnv(String[] serverNameParts) {
         if (serverNameParts.length >= 4) {
-            return serverNameParts[0];
+            String hostName = serverNameParts[serverNameParts.length - 4];
+            int appIdx = hostName.lastIndexOf('-');
+            if (appIdx > 0) {
+                return hostName.substring(0, appIdx);
+            } else {
+                return hostName;
+            }
         } else if (serverNameParts.length == 3) {
             String hostName = serverNameParts[serverNameParts.length - 3];
             int envIdx = hostName.lastIndexOf('-');

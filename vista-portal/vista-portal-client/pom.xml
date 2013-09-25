@@ -57,7 +57,7 @@
         <gwtModule>portal</gwtModule>
         <gwtModuleCompile>vista.${gwtModule}${appGWTModuleSufix}</gwtModuleCompile>
         <warFolder>${basedir}/../../vista-server/src/main/webapp</warFolder>
-        <gwtDestinationWarFolder>${warFolder}/portal</gwtDestinationWarFolder>
+        <gwtDestinationWarFolder>${warFolder}/site</gwtDestinationWarFolder>
     </properties>
 
     <profiles>

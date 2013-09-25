@@ -26,7 +26,6 @@ import javax.servlet.http.HttpServletResponse;
 import com.pyx4j.config.server.ServerSideConfiguration;
 
 import com.propertyvista.config.AbstractVistaServerSideConfiguration;
-import com.propertyvista.portal.rpc.DeploymentConsts;
 
 /**
  * Avoid in browser cash of index.html for GWT applications when secondary login is enabled
@@ -38,7 +37,7 @@ public class GWTCacheFilter extends com.pyx4j.gwt.server.GWTCacheFilter {
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {
         super.init(filterConfig);
-        openIdEnabled = ((AbstractVistaServerSideConfiguration) ServerSideConfiguration.instance()).openIdRequired();
+        openIdEnabled = ServerSideConfiguration.instance(AbstractVistaServerSideConfiguration.class).openIdRequired();
     }
 
     @Override
@@ -46,7 +45,7 @@ public class GWTCacheFilter extends com.pyx4j.gwt.server.GWTCacheFilter {
         if (openIdEnabled) {
             if ((request instanceof HttpServletRequest) && (response instanceof HttpServletResponse)) {
                 String servletPath = ((HttpServletRequest) request).getServletPath();
-                if (servletPath.equals("/" + DeploymentConsts.CRM_URL) || servletPath.equals("/" + DeploymentConsts.PTAPP_URL)) {
+                if (servletPath.equals("/crm/")) {
                     ((HttpServletResponse) response).setDateHeader("Expires", System.currentTimeMillis());
                     ((HttpServletResponse) response).setHeader("Pragma", "no-cache");
                     ((HttpServletResponse) response).setHeader("Cache-control", "no-cache, no-store, must-revalidate");

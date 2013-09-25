@@ -15,24 +15,7 @@ package com.propertyvista.portal.rpc;
 
 public interface DeploymentConsts {
 
-    public static final String PORTAL_URL = "portal/";
-
-    public static final String PTAPP_URL = "ptapp/";
-
-    public static final String CRM_URL = "crm/";
-
-    public static final String FIELD_URL = "field/";
-
-    public static final String TENANT_URL_PATH = "residents";
-
-    // TODO rename to resident
-    public static final String RESIDENT_URL_PATH = "portalWeb";
-
     public static final String portalInectionProxy = "/vista/https/";
-
-    public static final String OPERATIONS_URL = "operations/";
-
-    public static final String ONBOARDING_URL = "ob/";
 
     public static final String downloadServletMapping = "download/";
 

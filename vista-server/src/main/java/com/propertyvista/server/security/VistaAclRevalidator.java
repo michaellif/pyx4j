@@ -46,7 +46,7 @@ public class VistaAclRevalidator implements AclRevalidator {
         case prospect:
             aclRevalidator = new PtAuthenticationServiceImpl();
             break;
-        case residentPortal:
+        case portal:
             aclRevalidator = new PortalAuthenticationServiceImpl();
             break;
         case onboarding:

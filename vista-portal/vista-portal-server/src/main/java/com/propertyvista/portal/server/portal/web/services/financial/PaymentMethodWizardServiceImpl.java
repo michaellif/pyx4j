@@ -54,9 +54,9 @@ public class PaymentMethodWizardServiceImpl extends AbstractCrudServiceDtoImpl<L
 
         dto.electronicPaymentsAllowed().setValue(ServerSideFactory.create(PaymentFacade.class).isElectronicPaymentsSetup(lease.billingAccount()));
         dto.allowedPaymentTypes().setCollectionValue(
-                ServerSideFactory.create(PaymentFacade.class).getAllowedPaymentTypes(lease.billingAccount(), VistaApplication.residentPortal));
+                ServerSideFactory.create(PaymentFacade.class).getAllowedPaymentTypes(lease.billingAccount(), VistaApplication.portal));
         dto.allowedCardTypes().setCollectionValue(
-                ServerSideFactory.create(PaymentFacade.class).getAllowedCardTypes(lease.billingAccount(), VistaApplication.residentPortal));
+                ServerSideFactory.create(PaymentFacade.class).getAllowedCardTypes(lease.billingAccount(), VistaApplication.portal));
 
         if (dto.allowedPaymentTypes().contains(PaymentType.Echeck)) {
             dto.paymentMethod().type().setValue(PaymentType.Echeck);
@@ -74,7 +74,7 @@ public class PaymentMethodWizardServiceImpl extends AbstractCrudServiceDtoImpl<L
 
         dto.paymentMethod().customer().set(TenantAppContext.getCurrentUserCustomer());
 
-        ServerSideFactory.create(PaymentFacade.class).validatePaymentMethod(lease.billingAccount(), dto.paymentMethod(), VistaApplication.residentPortal);
+        ServerSideFactory.create(PaymentFacade.class).validatePaymentMethod(lease.billingAccount(), dto.paymentMethod(), VistaApplication.portal);
 
         dto.paymentMethod().isProfiledMethod().setValue(Boolean.TRUE);
 

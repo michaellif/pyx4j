@@ -25,6 +25,7 @@ import com.pyx4j.essentials.server.EssentialsServerSideConfiguration;
 import com.pyx4j.log4j.LoggerConfig;
 
 import com.propertyvista.domain.DemoData.DemoPmc;
+import com.propertyvista.domain.security.common.VistaApplication;
 import com.propertyvista.server.config.VistaFeaturesLifecycleListener;
 import com.propertyvista.shared.config.VistaSettings;
 
@@ -65,43 +66,7 @@ public abstract class AbstractVistaServerSideConfiguration extends EssentialsSer
 
     public abstract String getApplicationURLNamespace(boolean secure);
 
-    /**
-     * This method should not be used directly since PMC may have custom DNS configuration
-     * Use @see VistaDeployment.getBaseApplicationURL(VistaApplication.TenantPortal, true);
-     */
-    public abstract String getDefaultBaseURLresidentPortalSite(String pmcDnsName, boolean secure);
-
-    public abstract String getDefaultBaseURLresidentPortalWeb(String pmcDnsName);
-
-    /**
-     * This method should not be used directly since PMC may have custom DNS configuration
-     * Use @see VistaDeployment.getBaseApplicationURL(VistaApplication.crm, true);
-     */
-    public abstract String getDefaultBaseURLvistaCrm(String pmcDnsName);
-
-    /**
-     * This method should not be used directly since PMC may have custom DNS configuration
-     * Use @see VistaDeployment.getBaseApplicationURL(VistaApplication.crm, true);
-     */
-    public abstract String getDefaultBaseURLvistaField(String pmcDnsName);
-
-    /**
-     * This method should not be used directly since PMC may have custom DNS configuration
-     * Use @see VistaDeployment.getBaseApplicationURL(VistaApplication.ProspectiveApp, true);
-     */
-    public abstract String getDefaultBaseURLprospectPortal(String pmcDnsName);
-
-    /**
-     * This method should not be used directly
-     * Use @see VistaDeployment.getBaseApplicationURL(VistaApplication.Operations, true);
-     */
-    public abstract String getDefaultBaseURLvistaOperations();
-
-    /**
-     * This method should not be used directly
-     * Use @see VistaDeployment.getBaseApplicationURL(VistaApplication.Onboarding, true);
-     */
-    public abstract String getDefaultBaseURLvistaOnboarding();
+    public abstract String getDefaultApplicationURL(VistaApplication application, String pmcDnsName);
 
     public abstract File vistaWorkDir();
 

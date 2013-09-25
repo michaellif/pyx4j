@@ -50,9 +50,9 @@ import com.propertyvista.config.TenantSureConfiguration;
 import com.propertyvista.config.VistaCookieLocaleResolver;
 import com.propertyvista.config.VistaDeployment;
 import com.propertyvista.domain.DemoData.DemoPmc;
+import com.propertyvista.domain.security.common.VistaApplication;
 import com.propertyvista.misc.VistaDevPreloadConfig;
 import com.propertyvista.operations.rpc.VistaSystemMaintenanceState;
-import com.propertyvista.portal.rpc.DeploymentConsts;
 import com.propertyvista.portal.server.preloader.VistaDataPreloaders;
 import com.propertyvista.server.ci.bugs.MemoryLeakJAXBContextLifecycleListener;
 import com.propertyvista.server.common.security.VistaAntiBot;
@@ -153,68 +153,22 @@ public class VistaServerSideConfiguration extends AbstractVistaServerSideConfigu
     }
 
     @Override
-    public String getDefaultBaseURLvistaCrm(String pmcDnsName) {
-        String base = getApplicationDeploymentProtocol() + "://" + pmcDnsName + getAppUrlSeparator() + "crm" + getApplicationURLNamespace(true);
+    public String getDefaultApplicationURL(VistaApplication application, String pmcDnsName) {
+        String hostName;
+        switch (application) {
+        case onboarding:
+            hostName = "start";
+        case operations:
+            hostName = application.name();
+            break;
+        default:
+            hostName = pmcDnsName + "-" + application.name();
+        }
+        String base = getApplicationDeploymentProtocol() + "://" + hostName + getApplicationURLNamespace(true);
         if (isAppsContextlessDepoyment()) {
             return base;
         } else {
-            return base + DeploymentConsts.CRM_URL;
-        }
-    }
-
-    @Override
-    public String getDefaultBaseURLvistaField(String pmcDnsName) {
-        String base = getApplicationDeploymentProtocol() + "://" + pmcDnsName + getAppUrlSeparator() + "field" + getApplicationURLNamespace(true);
-        if (isAppsContextlessDepoyment()) {
-            return base;
-        } else {
-            return base + DeploymentConsts.FIELD_URL;
-        }
-    }
-
-    @Override
-    public String getDefaultBaseURLresidentPortalSite(String pmcDnsName, boolean secure) {
-        String base = secure ? getApplicationDeploymentProtocol() : "http";
-        base += "://" + pmcDnsName + getAppUrlSeparator() + "portal" + getApplicationURLNamespace(secure);
-        if (isAppsContextlessDepoyment()) {
-            return base;
-        } else {
-            return base + DeploymentConsts.PORTAL_URL;
-        }
-    }
-
-    @Override
-    public String getDefaultBaseURLresidentPortalWeb(String pmcDnsName) {
-        String base = getApplicationDeploymentProtocol() + "://" + pmcDnsName + getAppUrlSeparator() + "portal" + getApplicationURLNamespace(true);
-        if (isAppsContextlessDepoyment()) {
-            return base + DeploymentConsts.RESIDENT_URL_PATH;
-        } else {
-            return base + DeploymentConsts.PORTAL_URL + DeploymentConsts.RESIDENT_URL_PATH;
-        }
-    }
-
-    @Override
-    public String getDefaultBaseURLprospectPortal(String pmcDnsName) {
-        String base = getApplicationDeploymentProtocol() + "://" + pmcDnsName + getAppUrlSeparator() + "ptapp" + getApplicationURLNamespace(true);
-        if (isAppsContextlessDepoyment()) {
-            return base;
-        } else {
-            return base + DeploymentConsts.PTAPP_URL;
-        }
-    }
-
-    @Override
-    public String getDefaultBaseURLvistaOperations() {
-        return getApplicationDeploymentProtocol() + "://" + "operations" + getApplicationURLNamespace(true) + DeploymentConsts.OPERATIONS_URL;
-    }
-
-    @Override
-    public String getDefaultBaseURLvistaOnboarding() {
-        String base = getApplicationDeploymentProtocol() + "://" + "start" + getApplicationURLNamespace(true);
-        if (isAppsContextlessDepoyment()) {
-            return base;
-        } else {
-            return base + DeploymentConsts.ONBOARDING_URL;
+            return base + application.name();
         }
     }
 

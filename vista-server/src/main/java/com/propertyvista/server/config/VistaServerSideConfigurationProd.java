@@ -18,12 +18,11 @@ import javax.servlet.ServletContext;
 import com.pyx4j.commons.UserRuntimeException;
 import com.pyx4j.config.server.IPersistenceConfiguration;
 import com.pyx4j.config.server.ServerSideConfiguration;
-import com.pyx4j.log4j.LoggerConfig;
 
 import com.propertyvista.config.BmoInterfaceConfiguration;
 import com.propertyvista.config.CaledonFundsTransferConfiguration;
 import com.propertyvista.config.VistaDeployment;
-import com.propertyvista.portal.rpc.DeploymentConsts;
+import com.propertyvista.domain.security.common.VistaApplication;
 import com.propertyvista.shared.config.VistaSettings;
 
 public class VistaServerSideConfigurationProd extends VistaServerSideConfiguration {
@@ -49,70 +48,59 @@ public class VistaServerSideConfigurationProd extends VistaServerSideConfigurati
     }
 
     @Override
-    public String getDefaultBaseURLvistaCrm(String pmcDnsName) {
-        switch (VistaDeployment.getSystemIdentification()) {
-        case production:
-            return "https://" + pmcDnsName + ".propertyvista.com/";
-        case staging:
-            return "https://" + pmcDnsName + "-crm-staging03.propertyvista.com/";
-        default:
-            throw new IllegalArgumentException(VistaDeployment.getSystemIdentification().name());
-        }
-    }
-
-    @Override
-    public String getDefaultBaseURLresidentPortalSite(String pmcDnsName, boolean secure) {
+    public String getDefaultApplicationURL(VistaApplication application, String pmcDnsName) {
         String protocol;
-        if (secure) {
-            protocol = "https://";
+        if (application == VistaApplication.site) {
+            protocol = "http";
         } else {
-            protocol = "http://";
+            protocol = "https";
         }
-        switch (VistaDeployment.getSystemIdentification()) {
-        case production:
-            // TODO Add ".my-community.co/"
-            return protocol + pmcDnsName + ".residentportalsite.com/";
-        case staging:
-            return protocol + pmcDnsName + "-portal-staging03.residentportalsite.com/";
-        default:
-            throw new IllegalArgumentException(VistaDeployment.getSystemIdentification().name());
-        }
-    }
 
-    @Override
-    public String getDefaultBaseURLprospectPortal(String pmcDnsName) {
-        switch (VistaDeployment.getSystemIdentification()) {
-        case production:
-            return "https://" + pmcDnsName + ".prospectportalsite.com/";
-        case staging:
-            return "https://" + pmcDnsName + "-ptapp-staging03.prospectportalsite.com/";
+        String hostName;
+        switch (application) {
+        case onboarding:
+            hostName = "start";
+        case operations:
+            hostName = application.name();
+            break;
         default:
-            throw new IllegalArgumentException(VistaDeployment.getSystemIdentification().name());
+            hostName = pmcDnsName;
+            if (VistaDeployment.isVistaStaging()) {
+                hostName += "-" + application.name();
+            }
         }
-    }
+        if (VistaDeployment.isVistaStaging()) {
+            hostName += "-staging03";
+        }
+        String base = protocol + "://" + hostName;
 
-    @Override
-    public String getDefaultBaseURLvistaOperations() {
-        switch (VistaDeployment.getSystemIdentification()) {
-        case production:
-            return "https://operations-prod03.propertyvista.com/" + LoggerConfig.getContextName() + "/" + DeploymentConsts.OPERATIONS_URL;
-        case staging:
-            return "https://operations-staging03.propertyvista.com/" + LoggerConfig.getContextName() + "/" + DeploymentConsts.OPERATIONS_URL;
+        String dnsName;
+        switch (application) {
+        case crm:
+            dnsName = ".propertyvista.com";
+            break;
+        case onboarding:
+            dnsName = ".propertyvista.com";
+            break;
+        case site:
+            dnsName = ".residentportalsite.com";
+            break;
+        case portal:
+            dnsName = ".residentportalsite.com";
+            break;
+        case prospect:
+            dnsName = ".prospectportalsite.com";
+            break;
+        case operations:
+            if (VistaDeployment.isVistaProduction()) {
+                hostName += "-prod03";
+            }
+            dnsName = ".propertyvista.com";
+            break;
         default:
-            throw new IllegalArgumentException(VistaDeployment.getSystemIdentification().name());
+            throw new IllegalArgumentException();
         }
-    }
-
-    @Override
-    public String getDefaultBaseURLvistaOnboarding() {
-        switch (VistaDeployment.getSystemIdentification()) {
-        case production:
-            return "https://start.propertyvista.com/";
-        case staging:
-            return "https://start-staging03.propertyvista.com/";
-        default:
-            throw new IllegalArgumentException(VistaDeployment.getSystemIdentification().name());
-        }
+        return base + dnsName + dnsName + "/";
     }
 
     @Override

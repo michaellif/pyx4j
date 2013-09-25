@@ -84,7 +84,7 @@
 
     <filter-mapping>
         <filter-name>PMSiteRobotsTxtFilter</filter-name>
-        <url-pattern>/portal/robots.txt</url-pattern>
+        <url-pattern>/site/robots.txt</url-pattern>
     </filter-mapping>
 
     <filter>
@@ -102,7 +102,7 @@
 
     <filter-mapping>
         <filter-name>wicket.site</filter-name>
-        <url-pattern>/portal/*</url-pattern>
+        <url-pattern>/site/*</url-pattern>
     </filter-mapping>
 
     <filter>

@@ -91,7 +91,7 @@ public class PaymentFacadeImpl implements PaymentFacade {
     @Override
     public void validatePaymentMethod(BillingAccount billingAccount, LeasePaymentMethod paymentMethod, VistaApplication vistaApplication) {
         switch (vistaApplication) {
-        case residentPortal:
+        case portal:
             Validate.isTrue(PaymentType.avalableInPortal().contains(paymentMethod.type().getValue()), "Payment type not acceptable");
             break;
         case crm:

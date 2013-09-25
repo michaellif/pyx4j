@@ -22,6 +22,7 @@ import com.propertyvista.common.client.ClientNavigUtils;
 import com.propertyvista.domain.File;
 import com.propertyvista.domain.media.ThumbnailSize;
 import com.propertyvista.domain.pmc.info.PmcDocumentFile;
+import com.propertyvista.domain.security.common.VistaApplication;
 import com.propertyvista.domain.security.common.VistaBasicBehavior;
 import com.propertyvista.domain.site.SiteImageResource;
 import com.propertyvista.domain.tenant.CustomerPicture;
@@ -44,7 +45,7 @@ public class MediaUtils {
         String baseURL = ClientNavigUtils.getDeploymentBaseURL();
         if (SecurityController.checkBehavior(VistaBasicBehavior.Operations)) {
             // Admin is exception, TODO use FileURLBuilder
-            baseURL += DeploymentConsts.OPERATIONS_URL;
+            baseURL += VistaApplication.operations + "/";
         }
         return baseURL + DeploymentConsts.pmcDocumentServletMapping + file.id().getStringView() + "/" + file.fileName().getStringView();
     }

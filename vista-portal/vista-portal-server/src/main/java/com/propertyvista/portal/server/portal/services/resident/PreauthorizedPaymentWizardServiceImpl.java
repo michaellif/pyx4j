@@ -70,9 +70,9 @@ public class PreauthorizedPaymentWizardServiceImpl extends AbstractCrudServiceDt
 
         dto.electronicPaymentsAllowed().setValue(ServerSideFactory.create(PaymentFacade.class).isElectronicPaymentsSetup(lease.billingAccount()));
         dto.allowedPaymentTypes().setCollectionValue(
-                ServerSideFactory.create(PaymentFacade.class).getAllowedPaymentTypes(lease.billingAccount(), VistaApplication.residentPortal));
+                ServerSideFactory.create(PaymentFacade.class).getAllowedPaymentTypes(lease.billingAccount(), VistaApplication.portal));
         dto.allowedCardTypes().setCollectionValue(
-                ServerSideFactory.create(PaymentFacade.class).getAllowedCardTypes(lease.billingAccount(), VistaApplication.residentPortal));
+                ServerSideFactory.create(PaymentFacade.class).getAllowedCardTypes(lease.billingAccount(), VistaApplication.portal));
 
         new AddressConverter.StructuredToSimpleAddressConverter().copyBOtoTO(AddressRetriever.getLeaseAddress(lease), dto.address());
 
@@ -97,7 +97,7 @@ public class PreauthorizedPaymentWizardServiceImpl extends AbstractCrudServiceDt
         PreauthorizedPayment entity = createBO(dto);
 
         Lease lease = TenantAppContext.getCurrentUserLease();
-        ServerSideFactory.create(PaymentFacade.class).validatePaymentMethod(lease.billingAccount(), dto.paymentMethod(), VistaApplication.residentPortal);
+        ServerSideFactory.create(PaymentFacade.class).validatePaymentMethod(lease.billingAccount(), dto.paymentMethod(), VistaApplication.portal);
 
         if (entity.paymentMethod().getPrimaryKey() == null) {
             entity.paymentMethod().customer().set(TenantAppContext.getCurrentUserCustomer());

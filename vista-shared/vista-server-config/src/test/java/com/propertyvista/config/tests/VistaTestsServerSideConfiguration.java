@@ -37,6 +37,7 @@ import com.propertyvista.config.CaledonFundsTransferConfiguration;
 import com.propertyvista.config.EncryptedStorageConfiguration;
 import com.propertyvista.config.TenantSureConfiguration;
 import com.propertyvista.domain.DemoData.DemoPmc;
+import com.propertyvista.domain.security.common.VistaApplication;
 
 public class VistaTestsServerSideConfiguration extends AbstractVistaServerSideConfiguration {
 
@@ -151,43 +152,8 @@ public class VistaTestsServerSideConfiguration extends AbstractVistaServerSideCo
     }
 
     @Override
-    public String getDefaultBaseURLresidentPortalSite(String pmcDnsName, boolean secure) {
-        String url = getMainApplicationURL() + "r";
-        if (secure) {
-            return url;
-        } else {
-            return url.replace("https://", "http://");
-        }
-    }
-
-    @Override
-    public String getDefaultBaseURLvistaCrm(String pmcDnsName) {
-        return getMainApplicationURL() + "c";
-    }
-
-    @Override
-    public String getDefaultBaseURLvistaField(String pmcDnsName) {
-        return getMainApplicationURL() + "f";
-    }
-
-    @Override
-    public String getDefaultBaseURLprospectPortal(String pmcDnsName) {
-        return getMainApplicationURL() + "p";
-    }
-
-    @Override
-    public String getDefaultBaseURLresidentPortalWeb(String pmcDnsName) {
-        return getMainApplicationURL() + "r";
-    }
-
-    @Override
-    public String getDefaultBaseURLvistaOperations() {
-        return getMainApplicationURL() + "a";
-    }
-
-    @Override
-    public String getDefaultBaseURLvistaOnboarding() {
-        return getMainApplicationURL() + "o";
+    public String getDefaultApplicationURL(VistaApplication application, String pmcDnsName) {
+        return getMainApplicationURL() + application.name();
     }
 
     @Override

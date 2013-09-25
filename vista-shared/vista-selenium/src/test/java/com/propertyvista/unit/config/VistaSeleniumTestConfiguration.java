@@ -19,7 +19,7 @@ import com.pyx4j.selenium.DefaultSeleniumTestConfiguration;
 
 import com.propertyvista.config.SystemConfig;
 import com.propertyvista.config.VistaDeploymentId;
-import com.propertyvista.portal.rpc.DeploymentConsts;
+import com.propertyvista.domain.security.common.VistaApplication;
 
 /**
  * This is local Global configurator for all tests.
@@ -87,16 +87,16 @@ public class VistaSeleniumTestConfiguration extends DefaultSeleniumTestConfigura
 
         switch (appID) {
         case portal:
-            url.append(DeploymentConsts.PORTAL_URL);
+            url.append(VistaApplication.site + "/");
             break;
         case ptapp:
-            url.append(DeploymentConsts.PTAPP_URL);
+            url.append(VistaApplication.prospect + "/");
             break;
         case tester:
             url.append("tester/");
             break;
         case crm:
-            url.append(DeploymentConsts.CRM_URL);
+            url.append(VistaApplication.crm + "/");
             break;
         }
 

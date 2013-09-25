@@ -101,23 +101,23 @@ public class VistaDeployment {
         DnsNameTarget target;
         switch (application) {
         case operations:
-            return ((AbstractVistaServerSideConfiguration) ServerSideConfiguration.instance()).getDefaultBaseURLvistaOperations();
+            return ServerSideConfiguration.instance(AbstractVistaServerSideConfiguration.class).getDefaultApplicationURL(application, null);
         case onboarding:
-            return ((AbstractVistaServerSideConfiguration) ServerSideConfiguration.instance()).getDefaultBaseURLvistaOnboarding();
+            return ServerSideConfiguration.instance(AbstractVistaServerSideConfiguration.class).getDefaultApplicationURL(application, null);
         case crm:
-            target = DnsNameTarget.vistaCrm;
+            target = DnsNameTarget.crm;
             break;
         case field:
             target = DnsNameTarget.field;
             break;
         case prospect:
-            target = DnsNameTarget.prospectPortal;
+            target = DnsNameTarget.prospect;
             break;
-        case residentPortal:
-            target = DnsNameTarget.residentPortal;
+        case portal:
+            target = DnsNameTarget.portal;
             break;
-        case resident:
-            target = DnsNameTarget.resident;
+        case site:
+            target = DnsNameTarget.site;
             break;
         default:
             throw new IllegalArgumentException();
@@ -135,27 +135,13 @@ public class VistaDeployment {
                 return protocol + alias.dnsName().getValue();
             }
         }
-        switch (target) {
-        case prospectPortal:
-            return ((AbstractVistaServerSideConfiguration) ServerSideConfiguration.instance()).getDefaultBaseURLprospectPortal(pmc.dnsName().getValue());
-        case residentPortal:
-            return ((AbstractVistaServerSideConfiguration) ServerSideConfiguration.instance()).getDefaultBaseURLresidentPortalSite(pmc.dnsName().getValue(),
-                    secure);
-        case resident:
-            return ((AbstractVistaServerSideConfiguration) ServerSideConfiguration.instance()).getDefaultBaseURLresidentPortalWeb(pmc.dnsName().getValue());
-        case vistaCrm:
-            return ((AbstractVistaServerSideConfiguration) ServerSideConfiguration.instance()).getDefaultBaseURLvistaCrm(pmc.dnsName().getValue());
-        case field:
-            return ((AbstractVistaServerSideConfiguration) ServerSideConfiguration.instance()).getDefaultBaseURLvistaField(pmc.dnsName().getValue());
-        default:
-            throw new IllegalArgumentException();
-        }
+        return ServerSideConfiguration.instance(AbstractVistaServerSideConfiguration.class).getDefaultApplicationURL(application, pmc.dnsName().getValue());
     }
 
     public static String getPortalGoogleAPIKey() {
         Pmc pmc = getCurrentPmc();
         for (PmcDnsName alias : pmc.dnsNameAliases()) {
-            if (alias.target().getValue() == DnsNameTarget.residentPortal) {
+            if (alias.target().getValue() == DnsNameTarget.portal) {
                 if (!alias.googleAPIKey().isNull()) {
                     return alias.googleAPIKey().getValue();
                 } else {

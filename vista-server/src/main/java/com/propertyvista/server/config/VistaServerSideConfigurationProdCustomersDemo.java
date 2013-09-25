@@ -16,10 +16,8 @@ package com.propertyvista.server.config;
 import java.util.EnumSet;
 import java.util.Set;
 
-import com.pyx4j.log4j.LoggerConfig;
-
 import com.propertyvista.domain.DemoData.DemoPmc;
-import com.propertyvista.portal.rpc.DeploymentConsts;
+import com.propertyvista.domain.security.common.VistaApplication;
 import com.propertyvista.shared.config.VistaSettings;
 
 public class VistaServerSideConfigurationProdCustomersDemo extends VistaServerSideConfigurationDevCustom {
@@ -40,29 +38,19 @@ public class VistaServerSideConfigurationProdCustomersDemo extends VistaServerSi
     }
 
     @Override
-    public String getDefaultBaseURLvistaCrm(String pmcDnsName) {
-        return "https://demo.propertyvista.com/";
-    }
-
-    @Override
-    public String getDefaultBaseURLresidentPortalSite(String pmcDnsName, boolean secure) {
-        String protocol;
-        if (secure) {
-            protocol = "https://";
-        } else {
-            protocol = "http://";
+    public String getDefaultApplicationURL(VistaApplication application, String pmcDnsName) {
+        switch (application) {
+        case crm:
+            return "https://demo.propertyvista.com/";
+        case site:
+            return "http://demo.residentportalsite.com/";
+        case portal:
+            return "https://demo.residentportalsite.com/";
+        case prospect:
+            return "http://demo.prospectportalsite.com/";
+        default:
+            return super.getDefaultApplicationURL(application, pmcDnsName);
         }
-        return protocol + "demo.residentportalsite.com/";
-    }
-
-    @Override
-    public String getDefaultBaseURLprospectPortal(String pmcDnsName) {
-        return "https://demo.prospectportalsite.com/";
-    }
-
-    @Override
-    public String getDefaultBaseURLvistaOperations() {
-        return "https://demo.birchwoodsoftwaregroup.com/" + LoggerConfig.getContextName() + "/" + DeploymentConsts.OPERATIONS_URL;
     }
 
     @Override

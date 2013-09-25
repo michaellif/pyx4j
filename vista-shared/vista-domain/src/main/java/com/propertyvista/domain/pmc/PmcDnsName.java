@@ -37,16 +37,15 @@ public interface PmcDnsName extends IEntity {
     @I18n
     public enum DnsNameTarget {
 
-        vistaCrm,
+        crm,
 
         field,
 
-        // TODO rename to site
-        residentPortal,
+        site,
 
-        resident,
+        portal,
 
-        prospectPortal;
+        prospect;
 
         @Override
         public String toString() {

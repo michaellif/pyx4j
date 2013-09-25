@@ -405,7 +405,7 @@ public class PMSiteApplication extends AuthenticatedWebApplication {
     public static void onSecurePage(Request request) {
         HttpServletRequest httpServletRequest = ((ServletWebRequest) request).getContainerRequest();
         // redirect if not secure
-        String secureBaseUrl = VistaDeployment.getBaseApplicationURL(VistaApplication.residentPortal, true);
+        String secureBaseUrl = VistaDeployment.getBaseApplicationURL(VistaApplication.portal, true);
         String requestUrl = httpServletRequest.getRequestURL().toString();
         log.debug("request: {}; configured: {}", requestUrl, secureBaseUrl);
         if (!requestUrl.startsWith(secureBaseUrl)) {

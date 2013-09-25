@@ -17,9 +17,8 @@ import javax.servlet.ServletContext;
 
 import com.pyx4j.config.server.IPersistenceConfiguration;
 import com.pyx4j.config.server.ServerSideConfiguration;
-import com.pyx4j.log4j.LoggerConfig;
 
-import com.propertyvista.portal.rpc.DeploymentConsts;
+import com.propertyvista.domain.security.common.VistaApplication;
 
 public class VistaServerSideConfigurationDemoMac extends VistaServerSideConfiguration {
 
@@ -69,29 +68,19 @@ public class VistaServerSideConfigurationDemoMac extends VistaServerSideConfigur
     }
 
     @Override
-    public String getDefaultBaseURLvistaCrm(String pmcDnsName) {
-        return "http://" + pmcDnsName + ".propertyvista.ca/";
-    }
-
-    @Override
-    public String getDefaultBaseURLresidentPortalSite(String pmcDnsName, boolean secure) {
-        String protocol;
-        if (secure) {
-            protocol = "http://";
-        } else {
-            protocol = "http://";
+    public String getDefaultApplicationURL(VistaApplication application, String pmcDnsName) {
+        switch (application) {
+        case crm:
+            return "http://" + pmcDnsName + ".propertyvista.ca/";
+        case site:
+            return "http://" + pmcDnsName + ".residentportalsite.ca/";
+        case portal:
+            return "http://" + pmcDnsName + ".mycommunity.ca/";
+        case prospect:
+            return "http://" + pmcDnsName + ".residentportalsite.ca/";
+        default:
+            return super.getDefaultApplicationURL(application, pmcDnsName);
         }
-        return protocol + pmcDnsName + ".residentportalsite.ca/";
-    }
-
-    @Override
-    public String getDefaultBaseURLprospectPortal(String pmcDnsName) {
-        return "http://" + pmcDnsName + ".prospectportalsite.ca/";
-    }
-
-    @Override
-    public String getDefaultBaseURLvistaOperations() {
-        return "https://localhost:8080/" + LoggerConfig.getContextName() + "/" + DeploymentConsts.OPERATIONS_URL;
     }
 
 }

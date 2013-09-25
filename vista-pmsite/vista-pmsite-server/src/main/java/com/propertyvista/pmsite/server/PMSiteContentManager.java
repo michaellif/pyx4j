@@ -40,6 +40,7 @@ import com.propertyvista.domain.media.Media;
 import com.propertyvista.domain.media.ThumbnailSize;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.ref.City;
+import com.propertyvista.domain.security.common.VistaApplication;
 import com.propertyvista.domain.site.AvailableLocale;
 import com.propertyvista.domain.site.HtmlContent;
 import com.propertyvista.domain.site.News;
@@ -414,7 +415,7 @@ public class PMSiteContentManager implements Serializable {
      * We want to build a relative! path from the current page down to the servlet root
      */
     public static String getPortalContextPath() {
-        return ServletUtils.getRelativeServletPath(com.pyx4j.server.contexts.Context.getRequest(), "/" + DeploymentConsts.PORTAL_URL);
+        return ServletUtils.getRelativeServletPath(com.pyx4j.server.contexts.Context.getRequest(), "/" + VistaApplication.site + "/");
     }
 
     public static String getMediaImgUrl(long mediaId, ThumbnailSize size) {
