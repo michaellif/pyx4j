@@ -13,8 +13,8 @@
         <relativePath>../pom.xml</relativePath>
     </parent>
 
-    <artifactId>vista-portal-ptapp</artifactId>
-    <name>vista-portal-ptapp</name>
+    <artifactId>vista-prospect-ptapp</artifactId>
+    <name>vista-prospect-ptapp</name>
 
     <dependencies>
 

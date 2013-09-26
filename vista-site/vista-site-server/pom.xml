@@ -8,13 +8,13 @@
 
     <parent>
         <groupId>com.propertyvista</groupId>
-        <artifactId>vista-pmsite</artifactId>
+        <artifactId>vista-site</artifactId>
         <version>1.1.2-SNAPSHOT</version><!--vista-version-->
         <relativePath>../pom.xml</relativePath>
     </parent>
 
-    <artifactId>vista-pmsite-server</artifactId>
-    <name>vista-pmsite-server</name>
+    <artifactId>vista-site-server</artifactId>
+    <name>vista-site-server</name>
 
     <dependencies>
 

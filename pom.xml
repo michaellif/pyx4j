@@ -178,7 +178,7 @@
         <module>vista-operations</module>
         <module>vista-onboarding</module>
         <module>vista-crm</module>
-        <module>vista-pmsite</module>
+        <module>vista-site</module>
         <module>vista-server</module>
         <module>vista-i18n-catalog</module>
     </modules>

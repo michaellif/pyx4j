@@ -13,12 +13,12 @@
         <relativePath>../pom.xml</relativePath>
     </parent>
 
-    <artifactId>vista-pmsite</artifactId>
-    <name>vista-pmsite</name>
+    <artifactId>vista-site</artifactId>
+    <name>vista-site</name>
     <packaging>pom</packaging>
 
     <modules>
-        <module>vista-pmsite-server</module>
+        <module>vista-site-server</module>
     </modules>
 
 </project>
