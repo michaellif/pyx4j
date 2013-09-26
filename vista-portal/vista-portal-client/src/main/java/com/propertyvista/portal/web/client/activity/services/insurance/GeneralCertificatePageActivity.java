@@ -17,13 +17,13 @@ import com.google.gwt.core.client.GWT;
 
 import com.pyx4j.site.rpc.AppPlace;
 
-import com.propertyvista.portal.rpc.portal.web.dto.insurance.GeneralInsuranceCertificateDTO;
+import com.propertyvista.portal.rpc.portal.web.dto.insurance.InsuranceGeneralCertificateDTO;
 import com.propertyvista.portal.rpc.portal.web.services.services.GeneralInsuranceCertificateCrudService;
 import com.propertyvista.portal.web.client.activity.AbstractEditorActivity;
 import com.propertyvista.portal.web.client.ui.services.insurance.GeneralCertificatePageView;
 import com.propertyvista.portal.web.client.ui.services.insurance.GeneralCertificatePageView.GeneralCertificatePagePresenter;
 
-public class GeneralCertificatePageActivity extends AbstractEditorActivity<GeneralInsuranceCertificateDTO> implements GeneralCertificatePagePresenter {
+public class GeneralCertificatePageActivity extends AbstractEditorActivity<InsuranceGeneralCertificateDTO> implements GeneralCertificatePagePresenter {
 
     public GeneralCertificatePageActivity(AppPlace place) {
         super(GeneralCertificatePageView.class, GWT.<GeneralInsuranceCertificateCrudService> create(GeneralInsuranceCertificateCrudService.class), place);

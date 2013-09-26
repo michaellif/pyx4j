@@ -16,7 +16,7 @@ package com.propertyvista.biz.tenant.insurance.tenantsure.rules;
 import java.math.BigDecimal;
 
 import com.propertyvista.domain.payment.InsurancePaymentMethod;
-import com.propertyvista.domain.tenant.insurance.InsuranceTenantSure;
+import com.propertyvista.domain.tenant.insurance.InsuranceTenantSureCertificate;
 import com.propertyvista.domain.tenant.insurance.InsuranceTenantSureTransaction;
 import com.propertyvista.portal.rpc.portal.web.dto.insurance.TenantSureQuoteDTO;
 
@@ -24,6 +24,6 @@ public interface ITenantSurePaymentSchedule {
 
     void prepareQuote(TenantSureQuoteDTO quote, BigDecimal annualPremium, BigDecimal underwritingFee, BigDecimal totalAnnualTax);
 
-    InsuranceTenantSureTransaction initFirstTransaction(InsuranceTenantSure insuranceTenantSure, InsurancePaymentMethod paymentMethod);
+    InsuranceTenantSureTransaction initFirstTransaction(InsuranceTenantSureCertificate insuranceTenantSure, InsurancePaymentMethod paymentMethod);
 
 }

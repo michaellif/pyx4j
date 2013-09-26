@@ -19,15 +19,15 @@ import com.pyx4j.commons.css.ThemeColor;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
 
-import com.propertyvista.portal.rpc.portal.web.dto.insurance.TenantSureAgreementDTO;
+import com.propertyvista.portal.rpc.portal.web.dto.insurance.InsuranceTenantSureCertificateDTO;
 import com.propertyvista.portal.web.client.ui.CPortalEntityForm;
 
-public class MaintenanceRequestConfirmationPage extends CPortalEntityForm<TenantSureAgreementDTO> {
+public class MaintenanceRequestConfirmationPage extends CPortalEntityForm<InsuranceTenantSureCertificateDTO> {
 
     private static final I18n i18n = I18n.get(MaintenanceRequestConfirmationPage.class);
 
     public MaintenanceRequestConfirmationPage(MaintenanceRequestConfirmationPageViewImpl view) {
-        super(TenantSureAgreementDTO.class, view, i18n.tr("Insurance Request submitted Successfully!"), ThemeColor.contrast4);
+        super(InsuranceTenantSureCertificateDTO.class, view, i18n.tr("Insurance Request submitted Successfully!"), ThemeColor.contrast4);
 
         setViewable(true);
         inheritViewable(false);

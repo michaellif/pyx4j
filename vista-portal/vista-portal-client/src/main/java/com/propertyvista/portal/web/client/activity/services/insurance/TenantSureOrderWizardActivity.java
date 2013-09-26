@@ -22,17 +22,17 @@ import com.pyx4j.site.rpc.AppPlace;
 
 import com.propertyvista.domain.contact.AddressSimple;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap.Resident.Financial;
-import com.propertyvista.portal.rpc.portal.web.dto.insurance.TenantSureAgreementDTO;
+import com.propertyvista.portal.rpc.portal.web.dto.insurance.InsuranceTenantSureCertificateDTO;
 import com.propertyvista.portal.rpc.portal.web.dto.insurance.TenantSureCoverageDTO;
 import com.propertyvista.portal.rpc.portal.web.dto.insurance.TenantSureQuoteDTO;
 import com.propertyvista.portal.rpc.portal.web.services.services.TenantSureAgreementCrudService;
 import com.propertyvista.portal.web.client.activity.AbstractWizardActivity;
 import com.propertyvista.portal.web.client.ui.services.insurance.TenantSureOrderWizardView;
 
-public class TenantSureOrderWizardActivity extends AbstractWizardActivity<TenantSureAgreementDTO> implements TenantSureOrderWizardView.TenantSureOrderWizardPersenter {
+public class TenantSureOrderWizardActivity extends AbstractWizardActivity<InsuranceTenantSureCertificateDTO> implements TenantSureOrderWizardView.TenantSureOrderWizardPersenter {
 
     public TenantSureOrderWizardActivity(AppPlace place) {
-        super(TenantSureOrderWizardView.class, GWT.<TenantSureAgreementCrudService> create(TenantSureAgreementCrudService.class), TenantSureAgreementDTO.class);
+        super(TenantSureOrderWizardView.class, GWT.<TenantSureAgreementCrudService> create(TenantSureAgreementCrudService.class), InsuranceTenantSureCertificateDTO.class);
     }
 
     @Override

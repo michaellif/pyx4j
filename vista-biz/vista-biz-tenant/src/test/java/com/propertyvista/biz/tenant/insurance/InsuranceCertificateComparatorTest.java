@@ -27,8 +27,8 @@ import com.pyx4j.commons.Key;
 import com.pyx4j.entity.shared.EntityFactory;
 
 import com.propertyvista.domain.tenant.insurance.InsuranceCertificate;
-import com.propertyvista.domain.tenant.insurance.InsuranceGeneric;
-import com.propertyvista.domain.tenant.insurance.InsuranceTenantSure;
+import com.propertyvista.domain.tenant.insurance.InsuranceGeneralCertificate;
+import com.propertyvista.domain.tenant.insurance.InsuranceTenantSureCertificate;
 import com.propertyvista.domain.tenant.lease.Tenant;
 
 public class InsuranceCertificateComparatorTest {
@@ -79,8 +79,8 @@ public class InsuranceCertificateComparatorTest {
         ));//@formatter:on
         sort(tenantInContext, certificates);
 
-        Assert.assertEquals(InsuranceTenantSure.class, certificates.get(0).getInstanceValueClass());
-        Assert.assertEquals("the second tenant sure certificate shouldn't be here because it doesn't belong to the tenant in context", InsuranceGeneric.class,
+        Assert.assertEquals(InsuranceTenantSureCertificate.class, certificates.get(0).getInstanceValueClass());
+        Assert.assertEquals("the second tenant sure certificate shouldn't be here because it doesn't belong to the tenant in context", InsuranceGeneralCertificate.class,
                 certificates.get(1).getInstanceValueClass());
     }
 
@@ -110,7 +110,7 @@ public class InsuranceCertificateComparatorTest {
     }
 
     private InsuranceCertificate makeGeneric(Tenant tenant, BigDecimal liablilityCoverage) {
-        InsuranceGeneric cert = EntityFactory.create(InsuranceGeneric.class);
+        InsuranceGeneralCertificate cert = EntityFactory.create(InsuranceGeneralCertificate.class);
         cert.setPrimaryKey(genKey());
         cert.liabilityCoverage().setValue(liablilityCoverage);
         cert.tenant().set(tenant);
@@ -118,7 +118,7 @@ public class InsuranceCertificateComparatorTest {
     }
 
     private InsuranceCertificate makeTenantSure(Tenant tenant, BigDecimal liablilityCoverage) {
-        InsuranceTenantSure cert = EntityFactory.create(InsuranceTenantSure.class);
+        InsuranceTenantSureCertificate cert = EntityFactory.create(InsuranceTenantSureCertificate.class);
         cert.setPrimaryKey(genKey());
         cert.liabilityCoverage().setValue(liablilityCoverage);
         cert.tenant().set(tenant);

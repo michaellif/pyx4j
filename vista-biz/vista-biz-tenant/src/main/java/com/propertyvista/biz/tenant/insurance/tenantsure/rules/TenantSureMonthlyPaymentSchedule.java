@@ -20,7 +20,7 @@ import com.pyx4j.entity.shared.EntityFactory;
 
 import com.propertyvista.biz.tenant.insurance.tenantsure.apiadapters.TenantSureCfcMoneyAdapter;
 import com.propertyvista.domain.payment.InsurancePaymentMethod;
-import com.propertyvista.domain.tenant.insurance.InsuranceTenantSure;
+import com.propertyvista.domain.tenant.insurance.InsuranceTenantSureCertificate;
 import com.propertyvista.domain.tenant.insurance.InsuranceTenantSureTransaction;
 import com.propertyvista.domain.tenant.insurance.TenantSurePaymentSchedule;
 import com.propertyvista.portal.rpc.portal.web.dto.insurance.TenantSureQuoteDTO;
@@ -51,7 +51,7 @@ public class TenantSureMonthlyPaymentSchedule implements ITenantSurePaymentSched
     }
 
     @Override
-    public InsuranceTenantSureTransaction initFirstTransaction(InsuranceTenantSure insuranceTenantSure, InsurancePaymentMethod paymentMethod) {
+    public InsuranceTenantSureTransaction initFirstTransaction(InsuranceTenantSureCertificate insuranceTenantSure, InsurancePaymentMethod paymentMethod) {
         InsuranceTenantSureTransaction transaction = EntityFactory.create(InsuranceTenantSureTransaction.class);
         transaction.insurance().set(insuranceTenantSure);
         transaction.paymentMethod().set(paymentMethod);

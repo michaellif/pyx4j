@@ -23,7 +23,7 @@ import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.rpc.shared.VoidSerializable;
 
-import com.propertyvista.domain.tenant.insurance.InsuranceGeneric;
+import com.propertyvista.domain.tenant.insurance.InsuranceGeneralCertificate;
 import com.propertyvista.portal.client.PortalSite;
 import com.propertyvista.portal.client.activity.SecurityAwareActivity;
 import com.propertyvista.portal.client.ui.residents.tenantinsurance.otherprovider.views.TenantInsuranceByOtherProviderUpdateView;
@@ -54,9 +54,9 @@ public class TenantInsuranceByOtherProvdierUpdateActivity extends SecurityAwareA
         insuranceService.getTenantInsuranceRequirements(new DefaultAsyncCallback<OtherProviderInsuranceRequirementsDTO>() {
             @Override
             public void onSuccess(final OtherProviderInsuranceRequirementsDTO requirements) {
-                insuranceByOtherProviderService.get(new DefaultAsyncCallback<InsuranceGeneric>() {
+                insuranceByOtherProviderService.get(new DefaultAsyncCallback<InsuranceGeneralCertificate>() {
                     @Override
-                    public void onSuccess(InsuranceGeneric result) {
+                    public void onSuccess(InsuranceGeneralCertificate result) {
                         view.setPresenter(TenantInsuranceByOtherProvdierUpdateActivity.this);
                         view.setMinRequiredLiability(requirements.minLiability().getValue());
                         view.populate(result);
@@ -69,7 +69,7 @@ public class TenantInsuranceByOtherProvdierUpdateActivity extends SecurityAwareA
     }
 
     @Override
-    public void save(InsuranceGeneric certificate) {
+    public void save(InsuranceGeneralCertificate certificate) {
         insuranceByOtherProviderService.save(new DefaultAsyncCallback<VoidSerializable>() {
 
             @Override

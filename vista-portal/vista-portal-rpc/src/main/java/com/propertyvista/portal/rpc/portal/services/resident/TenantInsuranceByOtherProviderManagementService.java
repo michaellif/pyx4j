@@ -18,12 +18,12 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.pyx4j.rpc.shared.IService;
 import com.pyx4j.rpc.shared.VoidSerializable;
 
-import com.propertyvista.domain.tenant.insurance.InsuranceGeneric;
+import com.propertyvista.domain.tenant.insurance.InsuranceGeneralCertificate;
 
 public interface TenantInsuranceByOtherProviderManagementService extends IService {
 
-    void save(AsyncCallback<VoidSerializable> callback, InsuranceGeneric insuranceDetails);
+    void save(AsyncCallback<VoidSerializable> callback, InsuranceGeneralCertificate insuranceDetails);
 
-    void get(AsyncCallback<InsuranceGeneric> callback);
+    void get(AsyncCallback<InsuranceGeneralCertificate> callback);
 
 }

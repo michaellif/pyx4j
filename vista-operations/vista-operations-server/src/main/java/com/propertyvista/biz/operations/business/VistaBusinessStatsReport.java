@@ -57,7 +57,7 @@ import com.propertyvista.domain.security.CustomerUser;
 import com.propertyvista.domain.security.VistaCrmBehavior;
 import com.propertyvista.domain.tenant.Customer;
 import com.propertyvista.domain.tenant.CustomerCreditCheck;
-import com.propertyvista.domain.tenant.insurance.InsuranceTenantSure;
+import com.propertyvista.domain.tenant.insurance.InsuranceTenantSureCertificate;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.operations.domain.security.AuditRecord;
 import com.propertyvista.server.domain.security.CrmUserCredential;
@@ -267,8 +267,8 @@ class VistaBusinessStatsReport {
         }
 
         {
-            EntityQueryCriteria<InsuranceTenantSure> criteria = EntityQueryCriteria.create(InsuranceTenantSure.class);
-            criteria.eq(criteria.proto().status(), InsuranceTenantSure.TenantSureStatus.Active);
+            EntityQueryCriteria<InsuranceTenantSureCertificate> criteria = EntityQueryCriteria.create(InsuranceTenantSureCertificate.class);
+            criteria.eq(criteria.proto().status(), InsuranceTenantSureCertificate.TenantSureStatus.Active);
             data.insuranceCount().setValue(Persistence.service().count(criteria));
         }
 

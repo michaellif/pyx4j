@@ -69,7 +69,7 @@ public interface InsuranceTenantSureTransaction extends IEntity {
     @Owner
     @JoinColumn
     @MemberColumn(notNull = true)
-    InsuranceTenantSure insurance();
+    InsuranceTenantSureCertificate insurance();
 
     @NotNull
     @Format("#,##0.00")

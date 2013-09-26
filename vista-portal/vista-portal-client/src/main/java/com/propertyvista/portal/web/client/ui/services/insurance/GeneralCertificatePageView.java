@@ -13,12 +13,12 @@
  */
 package com.propertyvista.portal.web.client.ui.services.insurance;
 
-import com.propertyvista.portal.rpc.portal.web.dto.insurance.GeneralInsuranceCertificateDTO;
+import com.propertyvista.portal.rpc.portal.web.dto.insurance.InsuranceGeneralCertificateDTO;
 import com.propertyvista.portal.web.client.ui.IEditorView;
 
-public interface GeneralCertificatePageView extends IEditorView<GeneralInsuranceCertificateDTO> {
+public interface GeneralCertificatePageView extends IEditorView<InsuranceGeneralCertificateDTO> {
 
-    public interface GeneralCertificatePagePresenter extends IEditorPresenter<GeneralInsuranceCertificateDTO> {
+    public interface GeneralCertificatePagePresenter extends IEditorPresenter<InsuranceGeneralCertificateDTO> {
 
     }
 

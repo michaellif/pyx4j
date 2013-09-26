@@ -35,7 +35,7 @@ public interface InsuranceTenantSureReport extends IEntity {
     @Owner
     @JoinColumn
     @MemberColumn(notNull = true)
-    InsuranceTenantSure insurance();
+    InsuranceTenantSureCertificate insurance();
 
     IPrimitive<ReportedStatus> reportedStatus();
 

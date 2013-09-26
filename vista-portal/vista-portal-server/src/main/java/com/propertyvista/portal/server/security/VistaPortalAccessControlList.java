@@ -36,8 +36,8 @@ import com.propertyvista.domain.ref.Country;
 import com.propertyvista.domain.ref.Province;
 import com.propertyvista.domain.security.VistaCustomerBehavior;
 import com.propertyvista.domain.security.common.VistaBasicBehavior;
-import com.propertyvista.domain.tenant.insurance.InsuranceGeneric;
-import com.propertyvista.domain.tenant.insurance.InsuranceTenantSure;
+import com.propertyvista.domain.tenant.insurance.InsuranceGeneralCertificate;
+import com.propertyvista.domain.tenant.insurance.InsuranceTenantSureCertificate;
 import com.propertyvista.domain.tenant.lease.LeaseTermTenant;
 import com.propertyvista.domain.tenant.ptapp.OnlineApplication;
 import com.propertyvista.misc.VistaTODO;
@@ -247,8 +247,8 @@ public class VistaPortalAccessControlList extends ServletContainerAclBuilder {
         //=======================================
 
         // Tenant Insurance and TenantSure
-        grant(VistaCustomerBehavior.Tenant, new EntityPermission(InsuranceGeneric.class, CRUD));
-        grant(VistaCustomerBehavior.Tenant, new EntityPermission(InsuranceTenantSure.class, CRUD));
+        grant(VistaCustomerBehavior.Tenant, new EntityPermission(InsuranceGeneralCertificate.class, CRUD));
+        grant(VistaCustomerBehavior.Tenant, new EntityPermission(InsuranceTenantSureCertificate.class, CRUD));
         grant(VistaCustomerBehavior.Tenant, new IServiceExecutePermission(TenantInsuranceService.class));
 
         grant(VistaCustomerBehavior.Tenant, new IServiceExecutePermission(TenantInsuranceByOtherProviderManagementService.class));

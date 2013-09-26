@@ -47,7 +47,7 @@ import com.propertyvista.domain.payment.PreauthorizedPayment.PreauthorizedPaymen
 import com.propertyvista.domain.policy.policies.RestrictionsPolicy;
 import com.propertyvista.domain.policy.policies.TenantInsurancePolicy;
 import com.propertyvista.domain.tenant.insurance.InsuranceCertificate;
-import com.propertyvista.domain.tenant.insurance.InsuranceGeneric;
+import com.propertyvista.domain.tenant.insurance.InsuranceGeneralCertificate;
 import com.propertyvista.domain.tenant.lease.BillableItem;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.LeaseTerm;
@@ -149,7 +149,7 @@ public class TenantCrudServiceImpl extends LeaseParticipantCrudServiceBaseImpl<T
                 continue;
             }
             // we use insurance generic for those insurances that are managed by pmc
-            InsuranceGeneric insuranceGeneric = insuranceCertificate.duplicate(InsuranceCertificate.class).duplicate(InsuranceGeneric.class);
+            InsuranceGeneralCertificate insuranceGeneric = insuranceCertificate.duplicate(InsuranceCertificate.class).duplicate(InsuranceGeneralCertificate.class);
             // workaround since 'duplicate' seems not to do this
             for (InsuranceCertificateDocument document : insuranceGeneric.documents()) {
                 document.owner().set(insuranceGeneric);

@@ -32,7 +32,7 @@ import com.pyx4j.entity.shared.ISet;
  * Created when insurance is approved and bound
  */
 @DiscriminatorValue("InsuranceTenantSure")
-public interface InsuranceTenantSure extends InsuranceCertificate {
+public interface InsuranceTenantSureCertificate extends InsuranceCertificate {
 
     public enum TenantSureStatus {
 
@@ -75,9 +75,9 @@ public interface InsuranceTenantSure extends InsuranceCertificate {
     @NotNull
     IPrimitive<String> quoteId();
 
-    IPrimitive<InsuranceTenantSure.TenantSureStatus> status();
+    IPrimitive<InsuranceTenantSureCertificate.TenantSureStatus> status();
 
-    IPrimitive<InsuranceTenantSure.CancellationType> cancellation();
+    IPrimitive<InsuranceTenantSureCertificate.CancellationType> cancellation();
 
     /** for insurance that is cancelled by TenantSure, holds the reason for cancellation */
     IPrimitive<String> cancellationDescriptionReasonFromTenantSure();

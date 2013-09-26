@@ -15,12 +15,12 @@ package com.propertyvista.portal.client.ui.residents.tenantinsurance.otherprovid
 
 import java.math.BigDecimal;
 
-import com.propertyvista.domain.tenant.insurance.InsuranceGeneric;
+import com.propertyvista.domain.tenant.insurance.InsuranceGeneralCertificate;
 import com.propertyvista.portal.client.ui.residents.Edit;
 
-public interface TenantInsuranceByOtherProviderUpdateView extends Edit<InsuranceGeneric> {
+public interface TenantInsuranceByOtherProviderUpdateView extends Edit<InsuranceGeneralCertificate> {
 
-    interface Presenter extends Edit.Presenter<InsuranceGeneric> {
+    interface Presenter extends Edit.Presenter<InsuranceGeneralCertificate> {
 
     }
 

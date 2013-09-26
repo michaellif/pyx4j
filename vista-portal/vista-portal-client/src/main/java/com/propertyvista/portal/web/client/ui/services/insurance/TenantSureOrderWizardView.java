@@ -14,13 +14,13 @@
 package com.propertyvista.portal.web.client.ui.services.insurance;
 
 import com.propertyvista.domain.contact.AddressSimple;
-import com.propertyvista.portal.rpc.portal.web.dto.insurance.TenantSureAgreementDTO;
+import com.propertyvista.portal.rpc.portal.web.dto.insurance.InsuranceTenantSureCertificateDTO;
 import com.propertyvista.portal.rpc.portal.web.dto.insurance.TenantSureQuoteDTO;
 import com.propertyvista.portal.web.client.ui.IWizardView;
 
-public interface TenantSureOrderWizardView extends IWizardView<TenantSureAgreementDTO> {
+public interface TenantSureOrderWizardView extends IWizardView<InsuranceTenantSureCertificateDTO> {
 
-    interface TenantSureOrderWizardPersenter extends WizardPresenter<TenantSureAgreementDTO> {
+    interface TenantSureOrderWizardPersenter extends WizardPresenter<InsuranceTenantSureCertificateDTO> {
 
         void sendQuoteDetailsEmail();
 

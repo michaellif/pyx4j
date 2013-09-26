@@ -14,12 +14,12 @@
 package com.propertyvista.portal.rpc.portal.web.dto.insurance;
 
 import com.pyx4j.entity.annotations.Transient;
-import com.pyx4j.entity.shared.IEntity;
 
 import com.propertyvista.domain.payment.InsurancePaymentMethod;
+import com.propertyvista.domain.tenant.insurance.InsuranceTenantSureCertificate;
 
 @Transient
-public interface TenantSureAgreementDTO extends IEntity {
+public interface InsuranceTenantSureCertificateDTO extends InsuranceTenantSureCertificate {
 
     TenantSureAgreementParamsDTO agreementParams();
 

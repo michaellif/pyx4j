@@ -18,6 +18,7 @@ import com.pyx4j.entity.annotations.Transient;
 import com.propertyvista.domain.tenant.insurance.InsuranceCertificate;
 
 @Transient
+@Deprecated
 public interface TenantInsuranceCertificateDTO extends InsuranceCertificate {
 
 }

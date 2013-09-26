@@ -199,7 +199,7 @@ import com.propertyvista.domain.security.common.VistaBasicBehavior;
 import com.propertyvista.domain.tenant.Customer;
 import com.propertyvista.domain.tenant.CustomerCreditCheck;
 import com.propertyvista.domain.tenant.CustomerScreening;
-import com.propertyvista.domain.tenant.insurance.InsuranceGeneric;
+import com.propertyvista.domain.tenant.insurance.InsuranceGeneralCertificate;
 import com.propertyvista.domain.tenant.lead.Appointment;
 import com.propertyvista.domain.tenant.lead.Lead;
 import com.propertyvista.domain.tenant.lead.Showing;
@@ -506,7 +506,7 @@ public class VistaCrmAccessControlList extends ServletContainerAclBuilder {
         grant(VistaCrmBehavior.Organization, new EntityPermission(AuditRecord.class, EntityPermission.READ));
 
 // - TenantInsurance:
-        grant(VistaBasicBehavior.CRM, new EntityPermission(InsuranceGeneric.class, EntityPermission.ALL));
+        grant(VistaBasicBehavior.CRM, new EntityPermission(InsuranceGeneralCertificate.class, EntityPermission.ALL));
 
 // - Other:
         grant(VistaBasicBehavior.CRM, new IServiceExecutePermission(NotesAndAttachmentsCrudService.class));

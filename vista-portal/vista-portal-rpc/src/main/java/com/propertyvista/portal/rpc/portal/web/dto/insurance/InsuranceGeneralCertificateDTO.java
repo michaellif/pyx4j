@@ -18,10 +18,10 @@ import java.math.BigDecimal;
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.shared.IPrimitive;
 
-import com.propertyvista.domain.tenant.insurance.InsuranceGeneric;
+import com.propertyvista.domain.tenant.insurance.InsuranceGeneralCertificate;
 
 @Transient
-public interface GeneralInsuranceCertificateDTO extends InsuranceGeneric {
+public interface InsuranceGeneralCertificateDTO extends InsuranceGeneralCertificate {
 
     IPrimitive<BigDecimal> minLiability();
 

@@ -33,12 +33,12 @@ import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
 import com.propertyvista.domain.media.InsuranceCertificateDocument;
 import com.propertyvista.domain.tenant.Customer;
 import com.propertyvista.domain.tenant.lease.Tenant;
-import com.propertyvista.portal.rpc.portal.web.dto.insurance.GeneralInsuranceCertificateDTO;
+import com.propertyvista.portal.rpc.portal.web.dto.insurance.InsuranceGeneralCertificateDTO;
 import com.propertyvista.portal.web.client.ui.ApplicationDocumentFileUploaderFolder;
 import com.propertyvista.portal.web.client.ui.CPortalEntityWizard;
 import com.propertyvista.portal.web.client.ui.util.decorators.FormDecoratorBuilder;
 
-public class GeneralCertificateUploadWizard extends CPortalEntityWizard<GeneralInsuranceCertificateDTO> {
+public class GeneralCertificateUploadWizard extends CPortalEntityWizard<InsuranceGeneralCertificateDTO> {
 
     private final static I18n i18n = I18n.get(GeneralCertificateUploadWizard.class);
 
@@ -63,7 +63,7 @@ public class GeneralCertificateUploadWizard extends CPortalEntityWizard<GeneralI
      *            a handler for tenantOwner click (if not null will render tenant's name as a hyperlink that execs this handler on click)
      */
     public GeneralCertificateUploadWizard(GeneralCertificateUploadWizardView view, boolean displayTenantOwner, TenantOwnerClickHandler tenantOwnerClickHandler) {
-        super(GeneralInsuranceCertificateDTO.class, view, i18n.tr("Insurance Certificate"), i18n.tr("Submit"), ThemeColor.contrast3);
+        super(InsuranceGeneralCertificateDTO.class, view, i18n.tr("Insurance Certificate"), i18n.tr("Submit"), ThemeColor.contrast3);
         this.minRequiredLiability = null;
         this.displayTenantOwner = displayTenantOwner;
         this.tenantOwnerClickHandler = tenantOwnerClickHandler;

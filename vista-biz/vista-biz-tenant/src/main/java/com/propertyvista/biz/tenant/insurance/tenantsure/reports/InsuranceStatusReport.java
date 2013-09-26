@@ -32,8 +32,8 @@ import com.pyx4j.essentials.server.report.ReportTableFormatter;
 
 import com.propertyvista.biz.ExecutionMonitor;
 import com.propertyvista.biz.tenant.insurance.TenantSureReportStatusData;
-import com.propertyvista.domain.tenant.insurance.InsuranceTenantSure;
-import com.propertyvista.domain.tenant.insurance.InsuranceTenantSure.TenantSureStatus;
+import com.propertyvista.domain.tenant.insurance.InsuranceTenantSureCertificate;
+import com.propertyvista.domain.tenant.insurance.InsuranceTenantSureCertificate.TenantSureStatus;
 import com.propertyvista.domain.tenant.insurance.InsuranceTenantSureReport;
 import com.propertyvista.domain.tenant.insurance.InsuranceTenantSureReport.ReportedStatus;
 
@@ -52,12 +52,12 @@ public class InsuranceStatusReport implements Report {
         EntityQueryCriteria<InsuranceTenantSureReport> criteria = EntityQueryCriteria.create(InsuranceTenantSureReport.class);
         criteria.or(//@formatter:off
                 // active:
-                PropertyCriterion.in(criteria.proto().insurance().status(), EnumSet.of(InsuranceTenantSure.TenantSureStatus.Active, InsuranceTenantSure.TenantSureStatus.PendingCancellation)),
+                PropertyCriterion.in(criteria.proto().insurance().status(), EnumSet.of(InsuranceTenantSureCertificate.TenantSureStatus.Active, InsuranceTenantSureCertificate.TenantSureStatus.PendingCancellation)),
 
                 // cancelled but not reported insurance certificates:
                 new AndCriterion(
-                        PropertyCriterion.eq(criteria.proto().insurance().status(), InsuranceTenantSure.TenantSureStatus.Cancelled),
-                        PropertyCriterion.ne(criteria.proto().reportedStatus(), InsuranceTenantSure.TenantSureStatus.Cancelled)
+                        PropertyCriterion.eq(criteria.proto().insurance().status(), InsuranceTenantSureCertificate.TenantSureStatus.Cancelled),
+                        PropertyCriterion.ne(criteria.proto().reportedStatus(), InsuranceTenantSureCertificate.TenantSureStatus.Cancelled)
                 )
          );//@formatter:on
 
@@ -149,7 +149,7 @@ public class InsuranceStatusReport implements Report {
 
                 if (reportClientStatus == null) {
                     throw new IllegalArgumentException(SimpleMessageFormat.format("wrong insurance status for report: {0} id = {1},  status = {2}",
-                            InsuranceTenantSure.class.getSimpleName(), reportedStatusHolder.insurance().getPrimaryKey(), reportedStatusHolder.insurance()
+                            InsuranceTenantSureCertificate.class.getSimpleName(), reportedStatusHolder.insurance().getPrimaryKey(), reportedStatusHolder.insurance()
                                     .status().getValue()));
                 }
 

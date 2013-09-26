@@ -16,15 +16,15 @@ package com.propertyvista.portal.web.client.ui.services.insurance;
 import com.pyx4j.commons.css.ThemeColor;
 import com.pyx4j.i18n.shared.I18n;
 
-import com.propertyvista.portal.rpc.portal.web.dto.insurance.TenantSureAgreementDTO;
+import com.propertyvista.portal.rpc.portal.web.dto.insurance.InsuranceTenantSureCertificateDTO;
 import com.propertyvista.portal.web.client.ui.CPortalEntityWizard;
 
-public class TenantSureOrderWizard extends CPortalEntityWizard<TenantSureAgreementDTO> {
+public class TenantSureOrderWizard extends CPortalEntityWizard<InsuranceTenantSureCertificateDTO> {
 
     private static final I18n i18n = I18n.get(TenantSureOrderWizard.class);
 
     public TenantSureOrderWizard(TenantSureOrderWizardView view, String endButtonCaption) {
-        super(TenantSureAgreementDTO.class, view, i18n.tr("TenantSure Insurance"), endButtonCaption, ThemeColor.contrast3);
+        super(InsuranceTenantSureCertificateDTO.class, view, i18n.tr("TenantSure Insurance"), endButtonCaption, ThemeColor.contrast3);
     }
 
 }
