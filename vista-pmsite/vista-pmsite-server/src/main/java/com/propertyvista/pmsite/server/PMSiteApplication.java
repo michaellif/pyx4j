@@ -409,7 +409,7 @@ public class PMSiteApplication extends AuthenticatedWebApplication {
         String requestUrl = httpServletRequest.getRequestURL().toString();
         log.debug("request: {}; configured: {}", requestUrl, secureBaseUrl);
         if (!requestUrl.startsWith(secureBaseUrl)) {
-            String secureUrl = secureBaseUrl + request.getUrl().toString();
+            String secureUrl = secureBaseUrl + "?" + request.getUrl().getQueryString();
             log.debug("secure redirect {}", secureUrl);
             throw new RedirectToUrlException(secureUrl);
         }
