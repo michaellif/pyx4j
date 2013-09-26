@@ -228,13 +228,16 @@ class PolicyManager {
     }
 
     @SuppressWarnings("unchecked")
+    /**
+     * Sibling nodes included
+     */
     public static <T extends PolicyNode> List<T> descendantsOf(PolicyNode parent, Class<T> descendant) {
         Class<? extends PolicyNode> nodeClass = parent != null ? (Class<? extends PolicyNode>) parent.getInstanceValueClass() : OrganizationPoliciesNode.class;
         if (!HIERARCHY.contains(descendant)) {
             throw new IllegalArgumentException("Unknown node type: " + descendant.getSimpleName());
         }
         int hPos = HIERARCHY.indexOf(descendant);
-        if (hPos >= HIERARCHY.indexOf(nodeClass)) {
+        if (hPos > HIERARCHY.indexOf(nodeClass)) {
             throw new IllegalArgumentException(descendant.getSimpleName() + " is not a descendant of " + nodeClass.getSimpleName());
         }
         List<T> resultList = new ArrayList<T>();
