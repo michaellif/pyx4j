@@ -19,7 +19,9 @@ import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
+import com.pyx4j.site.client.AppSite;
 
+import com.propertyvista.portal.rpc.portal.PortalSiteMap;
 import com.propertyvista.portal.rpc.portal.web.dto.maintenance.MaintenanceSummaryDTO;
 import com.propertyvista.portal.rpc.portal.web.services.maintenance.MaintenanceService;
 import com.propertyvista.portal.web.client.PortalWebSite;
@@ -51,6 +53,11 @@ public class MaintenanceDashboardActivity extends SecurityAwareActivity implemen
                 view.populateOpenMaintenanceRequests(result);
             }
         });
+    }
+
+    @Override
+    public void createMaintenanceRequest() {
+        AppSite.getPlaceController().goTo(new PortalSiteMap.Resident.Maintenance.MaintenanceRequestWizard());
     }
 
 }

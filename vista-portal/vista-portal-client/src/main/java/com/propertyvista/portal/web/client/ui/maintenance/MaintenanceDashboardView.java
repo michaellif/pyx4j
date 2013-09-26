@@ -21,6 +21,8 @@ public interface MaintenanceDashboardView extends IsView {
 
     public interface MaintenanceDashboardPresenter {
 
+        void createMaintenanceRequest();
+
     }
 
     void setPresenter(MaintenanceDashboardPresenter presenter);

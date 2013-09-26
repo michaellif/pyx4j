@@ -17,7 +17,6 @@ import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.IsWidget;
 
-import com.pyx4j.commons.css.StyleManager;
 import com.pyx4j.commons.css.ThemeColor;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.forms.client.ui.CComponent;
@@ -29,12 +28,10 @@ import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.Button;
 import com.pyx4j.widgets.client.Label;
-import com.pyx4j.widgets.client.actionbar.Toolbar;
 
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
 import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
 import com.propertyvista.domain.maintenance.MaintenanceRequestStatus.StatusPhase;
-import com.propertyvista.portal.rpc.portal.web.dto.insurance.status.TenantSureCertificateSummaryDTO;
 import com.propertyvista.portal.rpc.portal.web.dto.maintenance.MainenanceRequestStatusDTO;
 import com.propertyvista.portal.rpc.portal.web.dto.maintenance.MaintenanceSummaryDTO;
 import com.propertyvista.portal.web.client.resources.PortalImages;
@@ -58,35 +55,20 @@ public class OpenMaintenanceRequestsGadget extends AbstractGadget<MaintenanceDas
 
         setContent(openMaintenanceRequestsViewer);
 
-        setActionsToolbar(toolbar = new MaintenanceToolbar());
+        setActionsToolbar(toolbar = new MaintenanceToolbar() {
+
+            @Override
+            protected void onNewRequestClicked() {
+                getGadgetView().getPresenter().createMaintenanceRequest();
+            }
+
+        });
 
     }
 
     protected void populate(MaintenanceSummaryDTO value) {
         openMaintenanceRequestsViewer.populate(value);
         toolbar.recalculateState(value);
-    }
-
-    class MaintenanceToolbar extends Toolbar {
-
-        private final Button createButton;
-
-        public MaintenanceToolbar() {
-
-            createButton = new Button(i18n.tr("New Maintenance Request"), new Command() {
-
-                @Override
-                public void execute() {
-                }
-            });
-            createButton.getElement().getStyle().setProperty("background", StyleManager.getPalette().getThemeColor(ThemeColor.contrast5, 1));
-            add(createButton);
-
-            recalculateState(null);
-        }
-
-        public void recalculateState(MaintenanceSummaryDTO insuranceStatus) {
-        }
     }
 
     class OpenMaintenanceRequestsViewer extends CEntityForm<MaintenanceSummaryDTO> {

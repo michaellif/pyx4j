@@ -13,8 +13,6 @@
  */
 package com.propertyvista.portal.web.client.ui.maintenance;
 
-import java.math.BigDecimal;
-
 import com.propertyvista.portal.rpc.portal.web.dto.maintenance.MaintenanceRequestDTO;
 import com.propertyvista.portal.web.client.ui.IWizardView;
 
@@ -23,7 +21,5 @@ public interface MaintenanceRequestWizardView extends IWizardView<MaintenanceReq
     public interface MaintenanceRequestWizardPresenter extends WizardPresenter<MaintenanceRequestDTO> {
 
     }
-
-    void setMinRequiredLiability(BigDecimal minRequiredLiability);
 
 }

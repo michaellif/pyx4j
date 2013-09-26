@@ -32,6 +32,8 @@ public interface MainDashboardView extends IsView {
 
         void addThirdPartyTenantInsuranceCertificate();
 
+        void createMaintenanceRequest();
+
     }
 
     void setPresenter(DashboardPresenter presenter);

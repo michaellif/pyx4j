@@ -105,4 +105,9 @@ public class MainDashboardActivity extends SecurityAwareActivity implements Main
     public void addThirdPartyTenantInsuranceCertificate() {
         AppSite.getPlaceController().goTo(new PortalSiteMap.Resident.ResidentServices.TenantInsurance.GeneralCertificateUploadWizard());
     }
+
+    @Override
+    public void createMaintenanceRequest() {
+        AppSite.getPlaceController().goTo(new PortalSiteMap.Resident.Maintenance.MaintenanceRequestWizard());
+    }
 }

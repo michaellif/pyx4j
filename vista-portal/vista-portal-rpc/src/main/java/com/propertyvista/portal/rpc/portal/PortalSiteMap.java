@@ -164,7 +164,7 @@ public class PortalSiteMap implements SiteMap {
 
         public static class Maintenance extends AppPlace {
 
-            public static class NewMaintenanceRequest extends AppPlace {
+            public static class MaintenanceRequestWizard extends AppPlace {
             }
 
             public static class ViewMaintenanceRequest extends AppPlace {

@@ -13,6 +13,22 @@
  */
 package com.propertyvista.portal.server.portal.web.services.maintenance;
 
-public class MainenanceRequestCrudServiceImpl {
+import com.pyx4j.entity.server.AbstractCrudServiceDtoImpl;
+
+import com.propertyvista.domain.maintenance.MaintenanceRequest;
+import com.propertyvista.portal.rpc.portal.web.dto.maintenance.MaintenanceRequestDTO;
+import com.propertyvista.portal.rpc.portal.web.services.maintenance.MainenanceRequestCrudService;
+
+public class MainenanceRequestCrudServiceImpl extends AbstractCrudServiceDtoImpl<MaintenanceRequest, MaintenanceRequestDTO> implements
+        MainenanceRequestCrudService {
+
+    public MainenanceRequestCrudServiceImpl() {
+        super(MaintenanceRequest.class, MaintenanceRequestDTO.class);
+    }
+
+    @Override
+    public void bind() {
+        bindCompleteObject();
+    }
 
 }

@@ -115,7 +115,7 @@ public class ContentActivityMapper implements AppActivityMapper {
 
                     } else if (appPlace instanceof Resident.Maintenance) {
                         activity = new MaintenanceAcitvity(appPlace);
-                    } else if (appPlace instanceof Resident.Maintenance.NewMaintenanceRequest) {
+                    } else if (appPlace instanceof Resident.Maintenance.MaintenanceRequestWizard) {
                         activity = new NewMaintenanceRequestActivity(appPlace);
                     } else if (appPlace instanceof Resident.Maintenance.ViewMaintenanceRequest) {
                         activity = new ViewMaintenanceRequestActivity(appPlace);

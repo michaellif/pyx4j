@@ -16,15 +16,13 @@ package com.propertyvista.portal.web.client.ui.dashboard;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTML;
 
-import com.pyx4j.commons.css.StyleManager;
 import com.pyx4j.commons.css.ThemeColor;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.widgets.client.Button;
-import com.pyx4j.widgets.client.actionbar.Toolbar;
 
 import com.propertyvista.portal.rpc.portal.web.dto.maintenance.MaintenanceSummaryDTO;
 import com.propertyvista.portal.web.client.resources.PortalImages;
 import com.propertyvista.portal.web.client.ui.AbstractGadget;
+import com.propertyvista.portal.web.client.ui.maintenance.MaintenanceToolbar;
 
 public class MaintenanceGadget extends AbstractGadget<MainDashboardViewImpl> {
 
@@ -32,7 +30,14 @@ public class MaintenanceGadget extends AbstractGadget<MainDashboardViewImpl> {
 
     MaintenanceGadget(MainDashboardViewImpl form) {
         super(form, PortalImages.INSTANCE.maintenanceIcon(), i18n.tr("My Maintenance Requests"), ThemeColor.contrast5);
-        setActionsToolbar(new MaintenanceToolbar());
+        setActionsToolbar(new MaintenanceToolbar() {
+
+            @Override
+            protected void onNewRequestClicked() {
+                getGadgetView().getPresenter().createMaintenanceRequest();
+            }
+
+        });
 
         FlowPanel contentPanel = new FlowPanel();
         contentPanel.add(new HTML("You don't have any pending Maintenance Requests."));
@@ -41,16 +46,6 @@ public class MaintenanceGadget extends AbstractGadget<MainDashboardViewImpl> {
 
     protected void populate(MaintenanceSummaryDTO maintenanceSummary) {
 
-    }
-
-    class MaintenanceToolbar extends Toolbar {
-        public MaintenanceToolbar() {
-
-            Button createButton = new Button("Create New Request");
-            createButton.getElement().getStyle().setProperty("background", StyleManager.getPalette().getThemeColor(ThemeColor.contrast5, 1));
-            add(createButton);
-
-        }
     }
 
 }

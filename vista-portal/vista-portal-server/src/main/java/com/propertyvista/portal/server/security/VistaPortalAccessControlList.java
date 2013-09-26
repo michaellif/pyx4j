@@ -74,6 +74,7 @@ import com.propertyvista.portal.rpc.portal.services.resident.ViewBillService;
 import com.propertyvista.portal.rpc.portal.services.resident.WeatherService;
 import com.propertyvista.portal.rpc.portal.web.services.PortalAuthenticationService;
 import com.propertyvista.portal.rpc.portal.web.services.financial.BillingService;
+import com.propertyvista.portal.rpc.portal.web.services.maintenance.MainenanceRequestCrudService;
 import com.propertyvista.portal.rpc.portal.web.services.profile.ProfileService;
 import com.propertyvista.portal.rpc.portal.web.services.services.GeneralInsuranceCertificateCrudService;
 import com.propertyvista.portal.rpc.portal.web.services.services.TenantSureAgreementCrudService;
@@ -243,6 +244,8 @@ public class VistaPortalAccessControlList extends ServletContainerAclBuilder {
                 new IServiceExecutePermission(com.propertyvista.portal.rpc.portal.web.services.maintenance.MaintenanceService.class));
 
         grant(VistaCustomerBehavior.Tenant, new IServiceExecutePermission(GeneralInsuranceCertificateCrudService.class));
+
+        grant(VistaCustomerBehavior.Tenant, new IServiceExecutePermission(MainenanceRequestCrudService.class));
 
         //=======================================
 
