@@ -13,8 +13,8 @@
         <relativePath>../pom.xml</relativePath>
     </parent>
 
-    <artifactId>vista-prospect-ptapp</artifactId>
-    <name>vista-prospect-ptapp</name>
+    <artifactId>vista-portal-client</artifactId>
+    <name>vista-portal-client</name>
 
     <dependencies>
 
@@ -46,12 +46,18 @@
             <artifactId>pyx-essentials-gwt</artifactId>
         </dependency>
 
+        <dependency>
+		    <groupId>com.google.gwt.google-apis</groupId>
+		    <artifactId>gwt-maps</artifactId>
+		</dependency>
+
     </dependencies>
 
     <properties>
-        <gwtModule>ptapp</gwtModule>
+        <gwtModule>portal</gwtModule>
         <gwtModuleCompile>vista.${gwtModule}${appGWTModuleSufix}</gwtModuleCompile>
-        <gwtDestinationWarFolder>${basedir}/../../vista-server/src/main/webapp</gwtDestinationWarFolder>
+        <warFolder>${basedir}/../../vista-server/src/main/webapp</warFolder>
+        <gwtDestinationWarFolder>${warFolder}</gwtDestinationWarFolder>
     </properties>
 
     <profiles>
@@ -76,6 +82,7 @@
                             <logLevel>INFO</logLevel>
                             <style>${gwtCompilerOutputStyle}</style>
                             <webappDirectory>${gwtDestinationWarFolder}</webappDirectory>
+                            <deploy>${warFolder}/WEB-INF/deploy</deploy>
                             <generated>${project.build.directory}/gwt-generated</generated>
                             <extra>${project.build.directory}/gwt-extra</extra>
                             <localWorkers>${gwtLocalWorkers}</localWorkers>

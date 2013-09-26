@@ -13,17 +13,12 @@
         <relativePath>../pom.xml</relativePath>
     </parent>
 
-    <artifactId>vista-portal</artifactId>
-    <name>vista-portal</name>
+    <artifactId>vista-prospect</artifactId>
+    <name>vista-prospect</name>
     <packaging>pom</packaging>
 
     <modules>
-        <module>vista-portal-domain</module>
-        <module>vista-portal-rpc</module>
-        <module>vista-portal-client-old</module>
-        <module>vista-portal-client</module>
         <module>vista-prospect-ptapp</module>
-        <module>vista-portal-server</module>
     </modules>
 
 </project>
