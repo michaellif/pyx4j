@@ -418,7 +418,7 @@ http://static.dev.birchwoodsoftwaregroup.com:8888/vista/o/wsp/yardi.starlightinv
 
     <servlet-mapping>
         <servlet-name>VistaUploadServlet</servlet-name>
-        <url-pattern>/portal/residents/upload/*</url-pattern>
+        <url-pattern>/portal/upload/*</url-pattern>
     </servlet-mapping>
 
     <servlet-mapping>
