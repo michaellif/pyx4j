@@ -4,7 +4,10 @@
 <stringAttribute key="com.google.gdt.eclipse.core.SERVER_PORT" value="7998"/>
 <stringAttribute key="com.google.gdt.eclipse.suiteMainTypeProcessor.PREVIOUSLY_SET_MAIN_TYPE_NAME" value="com.google.gwt.dev.DevMode"/>
 <stringAttribute key="com.google.gwt.eclipse.core.CODE_SERVER_PORT" value="9998"/>
-<stringAttribute key="com.google.gwt.eclipse.core.URL" value="http://start.dev.birchwoodsoftwaregroup.com:8888/vista/ob/index.html"/>
+<listAttribute key="com.google.gwt.eclipse.core.ENTRY_POINT_MODULES">
+<listEntry value="vista.onboardingDeveloper"/>
+</listAttribute>
+<stringAttribute key="com.google.gwt.eclipse.core.URL" value="http://start.dev.birchwoodsoftwaregroup.com:8888/vista/onboarding/index.html"/>
 <listAttribute key="org.eclipse.debug.core.MAPPED_RESOURCE_PATHS">
 <listEntry value="/vista-onboarding-client"/>
 </listAttribute>
@@ -18,7 +21,7 @@
 </listAttribute>
 <stringAttribute key="org.eclipse.jdt.launching.CLASSPATH_PROVIDER" value="com.google.gdt.eclipse.maven.mavenClasspathProvider"/>
 <stringAttribute key="org.eclipse.jdt.launching.MAIN_TYPE" value="com.google.gwt.dev.HostedMode"/>
-<stringAttribute key="org.eclipse.jdt.launching.PROGRAM_ARGUMENTS" value="-codeServerPort 9998 -remoteUI &quot;${gwt_remote_ui_server_port}:${unique_id}&quot; -startupUrl http://start.dev.birchwoodsoftwaregroup.com:8888/vista/ob/index.html -logLevel INFO -noserver -extra &quot;${workspace_loc:vista-onboarding-client}/target/hosted-extra&quot; -gen &quot;${workspace_loc:vista-onboarding-client}/target/hosted-gen&quot; -war &quot;${workspace_loc:vista-server}/src/main/webapp&quot; vista.obDeveloper"/>
+<stringAttribute key="org.eclipse.jdt.launching.PROGRAM_ARGUMENTS" value="-codeServerPort 9998 -remoteUI &quot;${gwt_remote_ui_server_port}:${unique_id}&quot; -startupUrl http://start.dev.birchwoodsoftwaregroup.com:8888/vista/onboarding/index.html -logLevel INFO -noserver -extra &quot;${workspace_loc:vista-onboarding-client}/target/hosted-extra&quot; -gen &quot;${workspace_loc:vista-onboarding-client}/target/hosted-gen&quot; -war &quot;${workspace_loc:vista-server}/src/main/webapp&quot; vista.onboardingDeveloper"/>
 <stringAttribute key="org.eclipse.jdt.launching.PROJECT_ATTR" value="vista-onboarding-client"/>
 <stringAttribute key="org.eclipse.jdt.launching.VM_ARGUMENTS" value="-Xmx512m"/>
 </launchConfiguration>

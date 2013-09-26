@@ -49,7 +49,7 @@
     </dependencies>
 
     <properties>
-        <gwtModule>ob</gwtModule>
+        <gwtModule>onboarding</gwtModule>
         <gwtModuleCompile>vista.${gwtModule}${appGWTModuleSufix}</gwtModuleCompile>
         <gwtDestinationWarFolder>${basedir}/../../vista-server/src/main/webapp</gwtDestinationWarFolder>
     </properties>
