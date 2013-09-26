@@ -34,11 +34,7 @@ public class GeneralInsuranceCertificateCrudServiceImpl extends AbstractCrudServ
 
     @Override
     public void bind() {
-        bind(toProto.insuranceProvider(), boProto.insuranceProvider());
-        bind(toProto.insuranceCertificateNumber(), boProto.insuranceCertificateNumber());
-        bind(toProto.liabilityCoverage(), boProto.liabilityCoverage());
-        bind(toProto.inceptionDate(), boProto.inceptionDate());
-        bind(toProto.expiryDate(), boProto.expiryDate());
+        bindCompleteObject();
     }
 
     @Override
