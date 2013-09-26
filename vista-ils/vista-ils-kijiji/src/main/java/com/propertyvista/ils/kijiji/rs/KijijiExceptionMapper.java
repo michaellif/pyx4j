@@ -16,10 +16,16 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.ext.ExceptionMapper;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 public class KijijiExceptionMapper implements ExceptionMapper<Throwable> {
+
+    private static Logger log = LoggerFactory.getLogger(KijijiExceptionMapper.class);
 
     @Override
     public Response toResponse(Throwable exception) {
+        log.info("XML generation failed", exception);
         return Response.serverError().status(Response.Status.INTERNAL_SERVER_ERROR).entity(exception.getMessage()).type(MediaType.TEXT_PLAIN).build();
     }
 

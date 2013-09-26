@@ -33,8 +33,8 @@ import com.kijiji.pint.rs.ObjectFactory;
 import com.pyx4j.server.contexts.NamespaceManager;
 
 import com.propertyvista.biz.occupancy.ILSKijijiIntegrationAgent;
+import com.propertyvista.domain.property.asset.Floorplan;
 import com.propertyvista.domain.property.asset.building.Building;
-import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.ils.kijiji.mapper.KijijiDataMapper;
 
 @Path("/send")
@@ -50,7 +50,7 @@ public class KijijiApiService {
         javax.xml.bind.Marshaller marshaller = context.createMarshaller();
         marshaller.setProperty("jaxb.formatted.output", Boolean.TRUE);
 
-        Map<Building, List<AptUnit>> units = new ILSKijijiIntegrationAgent().getUnitListing();
+        Map<Building, List<Floorplan>> units = new ILSKijijiIntegrationAgent().getUnitListing();
         ILSLocations locations = new KijijiDataMapper(factory).createLocations(units);
         JAXBElement<ILSLocations> element = factory.createLocations(locations);
 

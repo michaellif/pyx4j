@@ -26,11 +26,17 @@ public interface ILSVendorProfile {
         daily, weekly, monthly, byRequest
     }
 
+    public enum AdTarget {
+        unit, floorplan
+    }
+
     ServiceType serviceType();
 
     String serviceUrl();
 
     RenewFrequency renewFrequency();
+
+    AdTarget target();
 
     // daily limits, if any
     Integer maxAdsTotal();

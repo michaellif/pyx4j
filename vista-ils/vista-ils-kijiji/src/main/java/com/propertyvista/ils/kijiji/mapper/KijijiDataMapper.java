@@ -12,6 +12,7 @@
  */
 package com.propertyvista.ils.kijiji.mapper;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
@@ -19,26 +20,16 @@ import com.kijiji.pint.rs.ILSLocation;
 import com.kijiji.pint.rs.ILSLocations;
 import com.kijiji.pint.rs.ILSLogo;
 import com.kijiji.pint.rs.ILSUnit;
-import com.kijiji.pint.rs.ILSUnit.BathroomsEnum;
-import com.kijiji.pint.rs.ILSUnit.BedroomsEnum;
 import com.kijiji.pint.rs.ILSUnit.Images;
 import com.kijiji.pint.rs.ILSUnit.Images.Image;
-import com.kijiji.pint.rs.ILSUnit.IsFurnished;
-import com.kijiji.pint.rs.ILSUnit.IsPetsAllowed;
-import com.kijiji.pint.rs.ILSUnit.OfferedByEnum;
 import com.kijiji.pint.rs.ILSUnits;
 import com.kijiji.pint.rs.ObjectFactory;
 
-import com.pyx4j.commons.SimpleMessageFormat;
-import com.pyx4j.entity.server.Persistence;
-import com.pyx4j.entity.shared.AttachLevel;
-
 import com.propertyvista.domain.File;
-import com.propertyvista.domain.contact.AddressStructured;
-import com.propertyvista.domain.marketing.Marketing;
 import com.propertyvista.domain.media.Media;
+import com.propertyvista.domain.property.asset.Floorplan;
 import com.propertyvista.domain.property.asset.building.Building;
-import com.propertyvista.domain.property.asset.unit.AptUnit;
+import com.propertyvista.domain.site.PortalLogoImageResource;
 
 public class KijijiDataMapper {
 
@@ -48,18 +39,12 @@ public class KijijiDataMapper {
         factory = newFactory;
     }
 
-    private ILSUnit createUnit(AptUnit unit) {
+    private ILSUnit createUnit(Floorplan unit) {
         ILSUnit ilsUnit = factory.createILSUnit();
-        ilsUnit.setRentOrSale("rent");
-        ilsUnit.setOfferedBy(OfferedByEnum.OWNER);
-        ilsUnit.setTitle("2 Bedroom condo by the lake");
-        ilsUnit.setBedrooms(BedroomsEnum.None);
-        ilsUnit.setBathrooms(BathroomsEnum.Six_More);
-        ilsUnit.setPrice("1134.00");
-        ilsUnit.setSquareFootage(864);
-        ilsUnit.setFurnished(IsFurnished.YES);
-        ilsUnit.setPetsAllowed(IsPetsAllowed.NO);
-        ilsUnit.setImages(createImages(unit.floorplan().media()));
+        // map unit data
+        new KijijiUnitMapper().convert(unit, ilsUnit);
+        // add media urls
+        ilsUnit.setImages(createImages(unit.media()));
         return ilsUnit;
     }
 
@@ -92,9 +77,9 @@ public class KijijiDataMapper {
         return images;
     }
 
-    private ILSUnits createUnits(List<AptUnit> units) {
+    private ILSUnits createUnits(Collection<Floorplan> units) {
         ILSUnits ilsUnits = factory.createILSUnits();
-        for (AptUnit unit : units) {
+        for (Floorplan unit : units) {
             ilsUnits.getUnit().add(createUnit(unit));
         }
         return ilsUnits;
@@ -102,45 +87,25 @@ public class KijijiDataMapper {
 
     private ILSLogo createLogo() {
         ILSLogo logo = factory.createILSLogo();
-        // TODO - generate logo url
-        logo.setSmall("http://example.com/dealerlogo/small.png");
-        logo.setMedium("http://example.com/dealerlogo/medium.png");
-        logo.setLarge("http://example.com/dealerlogo/large.png");
+        PortalLogoImageResource siteLogo = KijijiMapperUtils.getSiteLogo();
+        logo.setSmall(KijijiMapperUtils.getSiteImageResourceUrl(siteLogo.small()));
+        logo.setLarge(KijijiMapperUtils.getSiteImageResourceUrl(siteLogo.large()));
         return logo;
     }
 
-    private ILSLocation createLocation(Building building, List<AptUnit> units) {
-        Persistence.ensureRetrieve(building, AttachLevel.Attached);
-        Marketing info = building.marketing();
+    private ILSLocation createLocation(Building building, Collection<Floorplan> units) {
         ILSLocation location = factory.createILSLocation();
-        location.setClientLocationId((int) building.getPrimaryKey().asLong());
-        location.setBuildingName(info.name().getStringView());
-        location.setStreetAddress(formatStreetAddress(info.marketingAddress()));
-        location.setCity(info.marketingAddress().city().getStringView());
-        location.setProvince(info.marketingAddress().province().getStringView());
-        location.setPostalCode(info.marketingAddress().postalCode().getStringView());
-        location.setEmail(info.marketingContacts().email().value().getStringView());
-        location.setPhoneNumber(info.marketingContacts().phone().value().getStringView());
-        location.setWebSite(info.marketingContacts().url().value().getStringView());
+        // map building data
+        new KijijiLocationMapper().convert(building, location);
+        // logo
         location.setLogo(createLogo());
+        // add units
         location.getUnits().add(createUnits(units));
+
         return location;
     }
 
-    private String formatStreetAddress(AddressStructured address) {
-        Object[] args = new Object[] {
-                // @formatter:off
-                address.suiteNumber().getValue(),
-                address.streetNumber().getValue(),
-                address.streetNumberSuffix().getValue(),
-                address.streetName().getValue(),
-                address.streetType().getValue(),
-                address.streetDirection().getValue()
-        }; // @formatter:on
-        return SimpleMessageFormat.format("{0,choice,null#|!null#{0}-}{1} {2} {3}{4,choice,null#|!null# {4}}{5,choice,null#|!null# {5}}", args);
-    }
-
-    public ILSLocations createLocations(Map<Building, List<AptUnit>> units) {
+    public ILSLocations createLocations(Map<Building, List<Floorplan>> units) {
         ILSLocations locations = factory.createILSLocations();
         for (Building building : units.keySet()) {
             locations.getLocation().add(createLocation(building, units.get(building)));

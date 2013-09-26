@@ -17,12 +17,15 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.config.server.SystemDateManager;
 import com.pyx4j.entity.server.Persistence;
+import com.pyx4j.entity.shared.AttachLevel;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 
 import com.propertyvista.domain.marketing.ils.ILSProfileBuilding;
@@ -84,7 +87,7 @@ public class ILSKijijiIntegrationAgent {
     /**
      * Provides a list of available units for publishing with ILS provider. Uses Occupancy model and ILSConfig data
      */
-    public Map<Building, List<AptUnit>> getUnitListing() {
+    public Map<Building, List<Floorplan>> getUnitListing() {
         // get available units
         EntityQueryCriteria<AptUnit> critUnit = EntityQueryCriteria.create(AptUnit.class);
         critUnit.in(critUnit.proto().floorplan(), floorplanMap.keySet());
@@ -92,44 +95,60 @@ public class ILSKijijiIntegrationAgent {
         critUnit.eq(critUnit.proto().unitOccupancySegments().$().dateTo(), OccupancyFacade.MAX_DATE);
         List<AptUnit> units = Persistence.service().query(critUnit);
 
-        // truncate and balance unit quantities according to floorplan priorities
-        units = truncateUnits(units);
-
-        Map<Building, List<AptUnit>> listing = new HashMap<Building, List<AptUnit>>();
+        Set<Floorplan> floorplanSet = new HashSet<Floorplan>();
         for (AptUnit unit : units) {
-            List<AptUnit> list = listing.get(unit.building());
+            floorplanSet.add(unit.floorplan());
+        }
+        // truncate and balance unit quantities according to floorplan priorities
+        List<Floorplan> floorplans = new ArrayList<Floorplan>(floorplanSet);
+        floorplans = truncateList(floorplans);
+
+        Map<Building, List<Floorplan>> listing = new HashMap<Building, List<Floorplan>>();
+        for (Floorplan floorplan : floorplans) {
+            Persistence.service().retrieve(floorplan.building(), AttachLevel.IdOnly);
+            List<Floorplan> list = listing.get(floorplan.building());
             if (list == null) {
-                list = new ArrayList<AptUnit>();
-                listing.put(unit.building(), list);
+                list = new ArrayList<Floorplan>();
+                listing.put(floorplan.building(), list);
             }
-            list.add(unit);
+            list.add(floorplan);
         }
 
         return listing;
     }
 
-    private List<AptUnit> truncateUnits(List<AptUnit> units) {
+    private List<Floorplan> truncateList(List<Floorplan> units) {
         int maxSize = ilsCfg.maxDailyAds().getValue();
         if (units.size() <= maxSize) {
             return units;
         }
 
         // get availability segments
-        final Map<AptUnit, LogicalDate> unitAvail = new HashMap<AptUnit, LogicalDate>();
+        final Map<Floorplan, LogicalDate> unitAvail = new HashMap<Floorplan, LogicalDate>();
         EntityQueryCriteria<AptUnitOccupancySegment> critAvail = EntityQueryCriteria.create(AptUnitOccupancySegment.class);
-        critAvail.in(critAvail.proto().unit(), units);
+        critAvail.in(critAvail.proto().unit().floorplan(), units);
         critAvail.eq(critAvail.proto().status(), AptUnitOccupancySegment.Status.available);
         critAvail.eq(critAvail.proto().dateTo(), OccupancyFacade.MAX_DATE);
         for (AptUnitOccupancySegment avail : Persistence.service().query(critAvail)) {
-            unitAvail.put(avail.unit(), avail.dateFrom().getValue());
+            Persistence.service().retrieve(avail.unit());
+            Persistence.service().retrieve(avail.unit().floorplan());
+
+            LogicalDate curAvail = unitAvail.get(avail.unit().floorplan());
+            LogicalDate dateFrom = avail.dateFrom().getValue();
+            if (dateFrom == null) {
+                dateFrom = new LogicalDate(SystemDateManager.getDate());
+            }
+            if (curAvail == null || curAvail.after(dateFrom)) {
+                unitAvail.put(avail.unit().floorplan(), dateFrom);
+            }
         }
 
         // sort by total score, highest first
-        Collections.sort(units, new Comparator<AptUnit>() {
+        Collections.sort(units, new Comparator<Floorplan>() {
             @Override
-            public int compare(AptUnit o1, AptUnit o2) {
-                int score2 = getTotalScore(priorityMap.get(o2.floorplan()), unitAvail.get(o2));
-                int score1 = getTotalScore(priorityMap.get(o1.floorplan()), unitAvail.get(o1));
+            public int compare(Floorplan o1, Floorplan o2) {
+                int score2 = getTotalScore(priorityMap.get(o2), unitAvail.get(o2));
+                int score1 = getTotalScore(priorityMap.get(o1), unitAvail.get(o1));
                 return score2 - score1;
             }
         });

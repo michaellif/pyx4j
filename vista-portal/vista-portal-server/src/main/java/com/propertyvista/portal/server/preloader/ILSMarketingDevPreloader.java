@@ -35,7 +35,7 @@ import com.propertyvista.domain.settings.ILSConfig.ILSVendor;
 import com.propertyvista.domain.settings.ILSVendorConfig;
 import com.propertyvista.preloader.BaseVistaDevDataPreloader;
 
-public class ILSConfigDevPreloader extends BaseVistaDevDataPreloader {
+public class ILSMarketingDevPreloader extends BaseVistaDevDataPreloader {
 
     @Override
     public String create() {
