@@ -13,8 +13,8 @@
         <relativePath>../pom.xml</relativePath>
     </parent>
 
-    <artifactId>vista-portal-client</artifactId>
-    <name>vista-portal-client</name>
+    <artifactId>vista-portal-client-old</artifactId>
+    <name>vista-portal-client-old</name>
 
     <dependencies>
 
