@@ -33,7 +33,6 @@ import com.pyx4j.entity.shared.AttachLevel;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
-import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.gwt.server.IOUtils;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.security.rpc.AuthenticationService;
@@ -168,11 +167,13 @@ public class MessageTemplates {
         EntityQueryCriteria<OrganizationPoliciesNode> nodeCrit = EntityQueryCriteria.create(OrganizationPoliciesNode.class);
         PolicyNode policyNode = Persistence.service().retrieve(nodeCrit);
         // get building policy node form the first available TenantInLease entry
-        EntityQueryCriteria<LeaseTermTenant> tilCrit = EntityQueryCriteria.create(LeaseTermTenant.class);
-        tilCrit.add(PropertyCriterion.eq(tilCrit.proto().leaseParticipant().customer().user(), user));
+        EntityQueryCriteria<LeaseTermTenant> criteria = EntityQueryCriteria.create(LeaseTermTenant.class);
+        criteria.eq(criteria.proto().leaseParticipant().customer().user(), user);
+        criteria.eq(criteria.proto().leaseTermV().holder(), criteria.proto().leaseTermV().holder().lease().currentTerm());
+        criteria.isCurrent(criteria.proto().leaseTermV());
 
         // TODO Fix this!
-        LeaseTermTenant til = Persistence.service().retrieve(tilCrit);
+        LeaseTermTenant til = Persistence.service().retrieve(criteria);
         if (til != null) {
             Persistence.service().retrieve(til.leaseTermV());
             Persistence.service().retrieve(til.leaseTermV().holder().lease());

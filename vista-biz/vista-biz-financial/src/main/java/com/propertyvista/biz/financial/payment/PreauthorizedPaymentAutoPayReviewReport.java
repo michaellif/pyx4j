@@ -369,6 +369,7 @@ class PreauthorizedPaymentAutoPayReviewReport {
         {
             EntityQueryCriteria<LeaseTermTenant> criteria = EntityQueryCriteria.create(LeaseTermTenant.class);
             criteria.eq(criteria.proto().leaseTermV().holder().lease().billingAccount(), billingAccount);
+            criteria.eq(criteria.proto().leaseTermV().holder(), criteria.proto().leaseTermV().holder().lease().currentTerm());
             criteria.isCurrent(criteria.proto().leaseTermV());
             criteria.asc(criteria.proto().leaseParticipant().participantId());
             leaseParticipants = Persistence.service().query(criteria);
