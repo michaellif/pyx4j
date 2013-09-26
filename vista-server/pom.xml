@@ -485,35 +485,35 @@
         </profile>
 
         <profile>
-            <id>deploy-target-env11</id>
+            <id>deploy-target-env-11</id>
             <properties>
                 <deployContext>vista11</deployContext>
-                <vista-app-ping-url>http://env11.birchwoodsoftwaregroup.com</vista-app-ping-url>
+                <vista-app-ping-url>http://env-11.birchwoodsoftwaregroup.com</vista-app-ping-url>
             </properties>
         </profile>
 
         <profile>
-            <id>deploy-target-env22</id>
+            <id>deploy-target-env-22</id>
             <properties>
                 <deployContext>vista22</deployContext>
-                <vista-app-ping-url>http://env22.birchwoodsoftwaregroup.com</vista-app-ping-url>
+                <vista-app-ping-url>http://env-22.birchwoodsoftwaregroup.com</vista-app-ping-url>
             </properties>
         </profile>
 
         <profile>
-            <id>deploy-target-env66</id>
+            <id>deploy-target-env-66</id>
             <properties>
                 <deployContext>vista66</deployContext>
-                <vista-app-ping-url>http://static-66.birchwoodsoftwaregroup.com/</vista-app-ping-url>
+                <vista-app-ping-url>http://env-66.birchwoodsoftwaregroup.com/</vista-app-ping-url>
             </properties>
         </profile>
 
         <profile>
-            <id>deploy-target-env33</id>
+            <id>deploy-target-env-33</id>
             <properties>
                 <deployContext>vista33</deployContext>
                 <vista-tomcat-url>http://qa.birchwoodsoftwaregroup.com</vista-tomcat-url>
-                <vista-app-ping-url>http://env33.birchwoodsoftwaregroup.com</vista-app-ping-url>
+                <vista-app-ping-url>http://env-33.birchwoodsoftwaregroup.com</vista-app-ping-url>
             </properties>
         </profile>
 
@@ -527,20 +527,20 @@
         </profile>
 
         <profile>
-            <id>deploy-target-env55</id>
+            <id>deploy-target-env-55</id>
             <properties>
                 <deployContext>vista55</deployContext>
                 <vista-tomcat-url>http://qa.birchwoodsoftwaregroup.com</vista-tomcat-url>
-                <vista-app-ping-url>http://env55.birchwoodsoftwaregroup.com</vista-app-ping-url>
+                <vista-app-ping-url>http://env-55.birchwoodsoftwaregroup.com</vista-app-ping-url>
             </properties>
         </profile>
 
         <profile>
-            <id>deploy-target-env77</id>
+            <id>deploy-target-env-77</id>
             <properties>
                 <deployContext>vista77</deployContext>
                 <vista-tomcat-url>http://qa.birchwoodsoftwaregroup.com</vista-tomcat-url>
-                <vista-app-ping-url>http://static-77.birchwoodsoftwaregroup.com/</vista-app-ping-url>
+                <vista-app-ping-url>http://env-77.birchwoodsoftwaregroup.com/</vista-app-ping-url>
             </properties>
         </profile>
 
