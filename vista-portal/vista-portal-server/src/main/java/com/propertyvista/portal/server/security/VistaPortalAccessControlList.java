@@ -73,6 +73,9 @@ import com.propertyvista.portal.rpc.portal.services.resident.TenantSureManagemen
 import com.propertyvista.portal.rpc.portal.services.resident.ViewBillService;
 import com.propertyvista.portal.rpc.portal.services.resident.WeatherService;
 import com.propertyvista.portal.rpc.portal.web.services.PortalAuthenticationService;
+import com.propertyvista.portal.rpc.portal.web.services.financial.BillingService;
+import com.propertyvista.portal.rpc.portal.web.services.profile.ProfileService;
+import com.propertyvista.portal.rpc.portal.web.services.services.GeneralInsuranceCertificateCrudService;
 import com.propertyvista.portal.rpc.portal.web.services.services.TenantSureAgreementCrudService;
 import com.propertyvista.portal.rpc.ptapp.services.ApplicationDocumentUploadService;
 import com.propertyvista.portal.rpc.ptapp.services.ApplicationSelectionService;
@@ -229,11 +232,17 @@ public class VistaPortalAccessControlList extends ServletContainerAclBuilder {
         grant(VistaCustomerBehavior.Tenant, new IServiceExecutePermission(
                 com.propertyvista.portal.rpc.portal.web.services.SelfRegistrationBuildingsSourceService.class));
 
-        grant(VistaCustomerBehavior.Tenant, new IServiceExecutePermission(com.propertyvista.portal.rpc.portal.web.services.financial.BillingService.class));
+        grant(VistaCustomerBehavior.Tenant, new IServiceExecutePermission(BillingService.class));
+        grant(VistaCustomerBehavior.Tenant, new IServiceExecutePermission(MaintenanceService.class));
+
+        grant(VistaCustomerBehavior.Tenant, new IServiceExecutePermission(ProfileService.class));
+
+        grant(VistaCustomerBehavior.Tenant, new IServiceExecutePermission(com.propertyvista.portal.rpc.portal.web.services.services.InsuranceService.class));
+
         grant(VistaCustomerBehavior.Tenant,
                 new IServiceExecutePermission(com.propertyvista.portal.rpc.portal.web.services.maintenance.MaintenanceService.class));
-        grant(VistaCustomerBehavior.Tenant, new IServiceExecutePermission(com.propertyvista.portal.rpc.portal.web.services.profile.ProfileService.class));
-        grant(VistaCustomerBehavior.Tenant, new IServiceExecutePermission(com.propertyvista.portal.rpc.portal.web.services.services.InsuranceService.class));
+
+        grant(VistaCustomerBehavior.Tenant, new IServiceExecutePermission(GeneralInsuranceCertificateCrudService.class));
 
         //=======================================
 

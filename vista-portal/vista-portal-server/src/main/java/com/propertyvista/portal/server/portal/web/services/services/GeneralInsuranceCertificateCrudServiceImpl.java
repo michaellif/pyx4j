@@ -15,49 +15,50 @@ package com.propertyvista.portal.server.portal.web.services.services;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
-import com.pyx4j.commons.Key;
-import com.pyx4j.entity.rpc.EntitySearchResult;
-import com.pyx4j.entity.shared.criterion.EntityListCriteria;
+import com.pyx4j.config.server.ServerSideFactory;
+import com.pyx4j.entity.server.AbstractCrudServiceDtoImpl;
+import com.pyx4j.entity.server.Persistence;
 
+import com.propertyvista.biz.policy.PolicyFacade;
+import com.propertyvista.domain.policy.policies.TenantInsurancePolicy;
+import com.propertyvista.domain.tenant.insurance.InsuranceGeneric;
+import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.portal.rpc.portal.web.dto.insurance.GeneralInsuranceCertificateDTO;
 import com.propertyvista.portal.rpc.portal.web.services.services.GeneralInsuranceCertificateCrudService;
+import com.propertyvista.portal.server.portal.TenantAppContext;
 
-public class GeneralInsuranceCertificateCrudServiceImpl implements GeneralInsuranceCertificateCrudService {
+public class GeneralInsuranceCertificateCrudServiceImpl extends AbstractCrudServiceDtoImpl<InsuranceGeneric, GeneralInsuranceCertificateDTO> implements
+        GeneralInsuranceCertificateCrudService {
 
-    @Override
-    public void init(AsyncCallback<GeneralInsuranceCertificateDTO> callback, InitializationData initializationData) {
-        // TODO Auto-generated method stub
+    public GeneralInsuranceCertificateCrudServiceImpl() {
+        super(InsuranceGeneric.class, GeneralInsuranceCertificateDTO.class);
     }
 
     @Override
-    public void retrieve(AsyncCallback<GeneralInsuranceCertificateDTO> callback, Key entityId,
-            com.pyx4j.entity.rpc.AbstractCrudService.RetrieveTarget retrieveTarget) {
-        // TODO Auto-generated method stub
+    public void bind() {
+        bind(dtoProto.insuranceProvider(), dboProto.insuranceProvider());
+        bind(dtoProto.insuranceCertificateNumber(), dboProto.insuranceCertificateNumber());
+        bind(dtoProto.liabilityCoverage(), dboProto.liabilityCoverage());
+        bind(dtoProto.inceptionDate(), dboProto.inceptionDate());
+        bind(dtoProto.expiryDate(), dboProto.expiryDate());
     }
 
     @Override
-    public void create(AsyncCallback<Key> callback, GeneralInsuranceCertificateDTO editableEntity) {
-        // TODO Auto-generated method stub
-
+    public GeneralInsuranceCertificateDTO init(InitializationData initializationData) {
+        GeneralInsuranceCertificateDTO dto = super.init(initializationData);
+        populateMinLiability(dto);
+        return dto;
     }
 
     @Override
-    public void save(AsyncCallback<Key> callback, GeneralInsuranceCertificateDTO editableEntity) {
-        // TODO Auto-generated method stub
-
+    public void enhanceRetrieved(InsuranceGeneric dbo, GeneralInsuranceCertificateDTO dto, RetrieveTarget retrieveTarget) {
+        populateMinLiability(dto);
     }
 
-    @Override
-    public void list(AsyncCallback<EntitySearchResult<GeneralInsuranceCertificateDTO>> callback,
-            EntityListCriteria<GeneralInsuranceCertificateDTO> criteria) {
-        // TODO Auto-generated method stub
+    private void populateMinLiability(GeneralInsuranceCertificateDTO dto) {
+        Lease lease = Persistence.service().retrieve(Lease.class, TenantAppContext.getCurrentUserLeaseIdStub().getPrimaryKey());
+        TenantInsurancePolicy insurancePolicy = ServerSideFactory.create(PolicyFacade.class).obtainEffectivePolicy(lease.unit(), TenantInsurancePolicy.class);
+        dto.minLiability().setValue(insurancePolicy.requireMinimumLiability().isBooleanTrue() ? insurancePolicy.minimumRequiredLiability().getValue() : null);
 
     }
-
-    @Override
-    public void delete(AsyncCallback<Boolean> callback, Key entityId) {
-        // TODO Auto-generated method stub
-
-    }
-
 }
