@@ -13,8 +13,6 @@
  */
 package com.propertyvista.portal.server.portal.web.services.services;
 
-import com.google.gwt.user.client.rpc.AsyncCallback;
-
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.server.AbstractCrudServiceDtoImpl;
 import com.pyx4j.entity.server.Persistence;
@@ -36,11 +34,11 @@ public class GeneralInsuranceCertificateCrudServiceImpl extends AbstractCrudServ
 
     @Override
     public void bind() {
-        bind(dtoProto.insuranceProvider(), dboProto.insuranceProvider());
-        bind(dtoProto.insuranceCertificateNumber(), dboProto.insuranceCertificateNumber());
-        bind(dtoProto.liabilityCoverage(), dboProto.liabilityCoverage());
-        bind(dtoProto.inceptionDate(), dboProto.inceptionDate());
-        bind(dtoProto.expiryDate(), dboProto.expiryDate());
+        bind(toProto.insuranceProvider(), boProto.insuranceProvider());
+        bind(toProto.insuranceCertificateNumber(), boProto.insuranceCertificateNumber());
+        bind(toProto.liabilityCoverage(), boProto.liabilityCoverage());
+        bind(toProto.inceptionDate(), boProto.inceptionDate());
+        bind(toProto.expiryDate(), boProto.expiryDate());
     }
 
     @Override
@@ -51,14 +49,14 @@ public class GeneralInsuranceCertificateCrudServiceImpl extends AbstractCrudServ
     }
 
     @Override
-    public void enhanceRetrieved(InsuranceGeneric dbo, GeneralInsuranceCertificateDTO dto, RetrieveTarget retrieveTarget) {
-        populateMinLiability(dto);
+    public void enhanceRetrieved(InsuranceGeneric bo, GeneralInsuranceCertificateDTO to, RetrieveTarget retrieveTarget) {
+        populateMinLiability(to);
     }
 
-    private void populateMinLiability(GeneralInsuranceCertificateDTO dto) {
+    private void populateMinLiability(GeneralInsuranceCertificateDTO to) {
         Lease lease = Persistence.service().retrieve(Lease.class, TenantAppContext.getCurrentUserLeaseIdStub().getPrimaryKey());
         TenantInsurancePolicy insurancePolicy = ServerSideFactory.create(PolicyFacade.class).obtainEffectivePolicy(lease.unit(), TenantInsurancePolicy.class);
-        dto.minLiability().setValue(insurancePolicy.requireMinimumLiability().isBooleanTrue() ? insurancePolicy.minimumRequiredLiability().getValue() : null);
+        to.minLiability().setValue(insurancePolicy.requireMinimumLiability().isBooleanTrue() ? insurancePolicy.minimumRequiredLiability().getValue() : null);
 
     }
 }
