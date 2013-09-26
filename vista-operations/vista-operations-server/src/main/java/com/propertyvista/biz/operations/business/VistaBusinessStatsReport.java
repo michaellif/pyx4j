@@ -57,7 +57,7 @@ import com.propertyvista.domain.security.CustomerUser;
 import com.propertyvista.domain.security.VistaCrmBehavior;
 import com.propertyvista.domain.tenant.Customer;
 import com.propertyvista.domain.tenant.CustomerCreditCheck;
-import com.propertyvista.domain.tenant.insurance.InsuranceTenantSureCertificate;
+import com.propertyvista.domain.tenant.insurance.InsuranceTenantSure;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.operations.domain.security.AuditRecord;
 import com.propertyvista.server.domain.security.CrmUserCredential;
@@ -242,6 +242,8 @@ class VistaBusinessStatsReport {
             data.interacValue().setValue(amount);
         }
 
+        // TODO All cards are currently listed as Visa. When we can query by polymorphic entities the credit cards should be split in types.
+
         {
             EntityQueryCriteria<PaymentRecord> criteria = EntityQueryCriteria.create(PaymentRecord.class);
             criteria.eq(criteria.proto().paymentStatus(), PaymentStatus.Cleared);
@@ -252,8 +254,8 @@ class VistaBusinessStatsReport {
             for (PaymentRecord record : records) {
                 amount = amount.add(record.amount().getValue());
             }
-            data.creditCardCount().setValue(records.size());
-            data.creditCardValue().setValue(amount);
+            data.creditVisaCount().setValue(records.size());
+            data.creditVisaValue().setValue(amount);
 
             criteria.eq(criteria.proto().createdBy(), CustomerUser.class);
             records = Persistence.service().query(criteria);
@@ -262,13 +264,27 @@ class VistaBusinessStatsReport {
                 amount = amount.add(record.amount().getValue());
             }
 
-            data.creditCardCountOneTime().setValue(records.size());
-            data.creditCardValueOneTime().setValue(amount);
+            data.creditVisaCountOneTime().setValue(records.size());
+            data.creditVisaValueOneTime().setValue(amount);
         }
 
         {
-            EntityQueryCriteria<InsuranceTenantSureCertificate> criteria = EntityQueryCriteria.create(InsuranceTenantSureCertificate.class);
-            criteria.eq(criteria.proto().status(), InsuranceTenantSureCertificate.TenantSureStatus.Active);
+            EntityQueryCriteria<PaymentRecord> criteria = EntityQueryCriteria.create(PaymentRecord.class);
+            criteria.eq(criteria.proto().paymentStatus(), PaymentStatus.Cleared);
+            criteria.eq(criteria.proto().paymentMethod().type(), PaymentType.Interac);
+            criteria.ge(criteria.proto().finalizeDate(), monthlyPeriod);
+            List<PaymentRecord> records = Persistence.service().query(criteria);
+            BigDecimal amount = BigDecimal.ZERO;
+            for (PaymentRecord record : records) {
+                amount = amount.add(record.amount().getValue());
+            }
+            data.interacCount().setValue(records.size());
+            data.interacValue().setValue(amount);
+        }
+
+        {
+            EntityQueryCriteria<InsuranceTenantSure> criteria = EntityQueryCriteria.create(InsuranceTenantSure.class);
+            criteria.eq(criteria.proto().status(), InsuranceTenantSure.TenantSureStatus.Active);
             data.insuranceCount().setValue(Persistence.service().count(criteria));
         }
 

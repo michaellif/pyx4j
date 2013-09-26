@@ -73,13 +73,29 @@ public interface VistaBusinessStatsPmcModel extends IEntity {
 
     IPrimitive<BigDecimal> interacValue();
 
-    IPrimitive<Integer> creditCardCount();
+    IPrimitive<Integer> creditVisaCount();
 
-    IPrimitive<Integer> creditCardCountOneTime();
+    IPrimitive<Integer> creditVisaCountOneTime();
 
-    IPrimitive<BigDecimal> creditCardValue();
+    IPrimitive<BigDecimal> creditVisaValue();
 
-    IPrimitive<BigDecimal> creditCardValueOneTime();
+    IPrimitive<BigDecimal> creditVisaValueOneTime();
+
+    IPrimitive<Integer> creditMastercardCount();
+
+    IPrimitive<Integer> creditMastercardCountOneTime();
+
+    IPrimitive<BigDecimal> creditMastercardValue();
+
+    IPrimitive<BigDecimal> creditMastercardValueOneTime();
+
+    IPrimitive<Integer> creditVisaDebitCount();
+
+    IPrimitive<Integer> creditVisaDebitCountOneTime();
+
+    IPrimitive<BigDecimal> creditVisaDebitValue();
+
+    IPrimitive<BigDecimal> creditVisaDebitValueOneTime();
 
     // TenantSure
 
