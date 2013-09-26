@@ -1,6 +1,6 @@
 /*
  * Pyx4j framework
- * Copyright (C) 2008-2012 pyx4j.com.
+ * Copyright (C) 2008-2013 pyx4j.com.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -14,31 +14,26 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  *
- * Created on 2013-09-24
- * @author ArtyomB
+ * Created on Sep 26, 2013
+ * @author Artyom
  * @version $Id$
  */
 package com.propertyvista.biz.legal;
 
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.Arrays;
 
-import org.junit.Test;
+/** this is just a utility to generate a document to see how it looks like */
+public class MakeAFilledN4Form {
 
-import com.propertyvista.domain.legal.N4FormFieldsData;
-
-public class N4GenerationFacadeImplTest {
-
-    private final N4FormFieldsData mockFormData;
-
-    public N4GenerationFacadeImplTest() {
-        mockFormData = MockN4FormDataFactory.makeMockN4FormFieldsData("Tenant Tenantovic");
-    }
-
-    /** Just run the form fill procedure and see that nothing fails */
-    @Test
-    public void testSanity() {
+    public static void main(String args[]) throws FileNotFoundException, IOException {
         N4GenerationFacadeImpl facade = new N4GenerationFacadeImpl();
-        facade.generateN4Letter(Arrays.asList(mockFormData));
+        byte[] pdf = facade.generateN4Letter(Arrays.asList(MockN4FormDataFactory.makeMockN4FormFieldsData("Tenant Tenantovic")));
+        FileOutputStream fos = new FileOutputStream("n4filled-test.pdf");
+        fos.write(pdf);
+        fos.close();
     }
 
 }
