@@ -13,10 +13,31 @@
  */
 package com.propertyvista.portal.rpc.portal.web.services.maintenance;
 
-import com.pyx4j.entity.rpc.AbstractCrudService;
+import java.util.Vector;
 
+import com.google.gwt.user.client.rpc.AsyncCallback;
+
+import com.pyx4j.commons.Key;
+import com.pyx4j.entity.rpc.AbstractCrudService;
+import com.pyx4j.rpc.shared.VoidSerializable;
+
+import com.propertyvista.domain.maintenance.MaintenanceRequestMetadata;
 import com.propertyvista.portal.rpc.portal.web.dto.maintenance.MaintenanceRequestDTO;
+import com.propertyvista.portal.rpc.portal.web.dto.maintenance.MaintenanceSummaryDTO;
 
 public interface MainenanceRequestCrudService extends AbstractCrudService<MaintenanceRequestDTO> {
+
+    // Can't use List, this should be serializable collection
+    void listOpenIssues(AsyncCallback<Vector<MaintenanceRequestDTO>> callback);
+
+    void listClosedIssues(AsyncCallback<Vector<MaintenanceRequestDTO>> callback);
+
+    void cancelMaintenanceRequest(AsyncCallback<VoidSerializable> callback, Key requestId);
+
+    void rateMaintenanceRequest(AsyncCallback<VoidSerializable> callback, Key requestId, Integer rate);
+
+    void getCategoryMeta(AsyncCallback<MaintenanceRequestMetadata> callback, boolean levelsOnly);
+
+    void retreiveMaintenanceSummary(AsyncCallback<MaintenanceSummaryDTO> callback);
 
 }

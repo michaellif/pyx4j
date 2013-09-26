@@ -27,7 +27,7 @@ public class MaintenanceRequestWizard extends CPortalEntityWizard<MaintenanceReq
     private final static I18n i18n = I18n.get(MaintenanceRequestWizard.class);
 
     public MaintenanceRequestWizard(MaintenanceRequestWizardView view) {
-        super(MaintenanceRequestDTO.class, view, i18n.tr("New Maintenance Request"), i18n.tr("Submit"), ThemeColor.contrast3);
+        super(MaintenanceRequestDTO.class, view, i18n.tr("New Maintenance Request"), i18n.tr("Submit"), ThemeColor.contrast5);
     }
 
     @Override
