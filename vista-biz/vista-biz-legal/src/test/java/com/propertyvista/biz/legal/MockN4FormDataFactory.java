@@ -20,12 +20,20 @@
  */
 package com.propertyvista.biz.legal;
 
+import java.math.BigDecimal;
+
 import org.apache.commons.io.IOUtils;
 
+import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.gwt.server.DateUtils;
 
+import com.propertyvista.domain.contact.AddressStructured.StreetDirection;
+import com.propertyvista.domain.contact.AddressStructured.StreetType;
 import com.propertyvista.domain.legal.N4FormFieldsData;
 import com.propertyvista.domain.legal.N4FormFieldsData.SignedBy;
+import com.propertyvista.domain.legal.N4LeaseData;
+import com.propertyvista.domain.tenant.lease.Tenant;
 
 public class MockN4FormDataFactory {
 
@@ -139,5 +147,30 @@ public class MockN4FormDataFactory {
         mockFormData.signatureEmailAddress().setValue("foob@redridge.ca");
 
         return mockFormData;
+    }
+
+    public static N4LeaseData makeLeaseData() {
+        N4LeaseData leaseData = EntityFactory.create(N4LeaseData.class);
+        Tenant tenant1 = EntityFactory.create(Tenant.class);
+        tenant1.customer().person().name().firstName().setValue("Tenant");
+        tenant1.customer().person().name().lastName().setValue("Tenantovic");
+        leaseData.leaseTenants().add(tenant1);
+
+        leaseData.rentalUnitAddress().streetNumber().setValue("2222");
+        leaseData.rentalUnitAddress().streetNumberSuffix().setValue("b");
+        leaseData.rentalUnitAddress().streetName().setValue("Bathurst");
+        leaseData.rentalUnitAddress().streetType().setValue(StreetType.street);
+        leaseData.rentalUnitAddress().streetDirection().setValue(StreetDirection.north);
+        leaseData.rentalUnitAddress().suiteNumber().setValue("11");
+        leaseData.rentalUnitAddress().city().setValue("Toronto");
+        leaseData.rentalUnitAddress().postalCode().setValue("A9A 9A9");
+
+        leaseData.terminationDate().setValue(new LogicalDate(DateUtils.detectDateformat("31/12/2013")));
+
+        leaseData.terminationDate().setValue(new LogicalDate(DateUtils.detectDateformat("31/12/2013")));
+
+        leaseData.totalRentOwning().setValue(new BigDecimal("1234.99"));
+
+        return leaseData;
     }
 }

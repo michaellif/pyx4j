@@ -36,10 +36,19 @@ import com.itextpdf.text.pdf.PdfContentByte;
 import com.itextpdf.text.pdf.PdfReader;
 import com.itextpdf.text.pdf.PdfStamper;
 
+import com.pyx4j.commons.CommonsStringUtils;
+import com.pyx4j.commons.SimpleMessageFormat;
+import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IEntity;
 
+import com.propertyvista.domain.contact.AddressStructured;
 import com.propertyvista.domain.legal.N4FormFieldsData;
+import com.propertyvista.domain.legal.N4FormFieldsData.SignedBy;
+import com.propertyvista.domain.legal.N4LandlordsData;
+import com.propertyvista.domain.legal.N4LeaseData;
+import com.propertyvista.domain.legal.N4RentOwingForPeriod;
 import com.propertyvista.domain.legal.PdfFormFieldName;
+import com.propertyvista.domain.tenant.lease.Tenant;
 
 public class N4GenerationFacadeImpl implements N4GenerationFacade {
 
@@ -59,12 +68,6 @@ public class N4GenerationFacadeImpl implements N4GenerationFacade {
             throw new RuntimeException(e);
         }
         return filledForm;
-    }
-
-    @Override
-    public N4FormFieldsData populateFormData() {
-        // TODO Auto-generated method stub
-        return null;
     }
 
     // TODO factor out this one 
@@ -127,4 +130,161 @@ public class N4GenerationFacadeImpl implements N4GenerationFacade {
         // TODO implement this one
         return (byte[]) pdfArray.get(0);
     }
+
+    @Override
+    public N4FormFieldsData populateFormData(N4LeaseData leaseData, N4LandlordsData landlordsData) {
+        N4FormFieldsData fieldsData = EntityFactory.create(N4FormFieldsData.class);
+        fieldsData.to().setValue(
+                SimpleMessageFormat.format("{0}\n{1}", formatTenants(leaseData.leaseTenants()), formatRentalAddress(leaseData.rentalUnitAddress())));
+        fieldsData.from().setValue(landlordsData.landlordsLegalName().getValue());
+
+        fieldsData.tenantStreetNumber().setValue(
+                leaseData.rentalUnitAddress().streetNumber().getStringView() + leaseData.rentalUnitAddress().streetNumberSuffix().getStringView());
+        fieldsData.tenantStreetName().setValue(leaseData.rentalUnitAddress().streetName().getStringView());
+        fieldsData.tenantStreetType().setValue(leaseData.rentalUnitAddress().streetType().getStringView());
+        fieldsData.tenantStreetDirection().setValue(leaseData.rentalUnitAddress().streetDirection().getStringView());
+        fieldsData.tenantUnit().setValue(leaseData.rentalUnitAddress().suiteNumber().getStringView());
+        fieldsData.tenantMunicipality().setValue(leaseData.rentalUnitAddress().city().getValue());
+        fieldsData.tenantPostalCodeADA().setValue(leaseData.rentalUnitAddress().postalCode().getValue().substring(0, 3));
+        fieldsData.tenantPostalCodeDAD().setValue(leaseData.rentalUnitAddress().postalCode().getValue().substring(4, 7));
+
+        // create a date in the following format: dd/MM/YYYY        
+        String[] globalTerminationDate = N4GenerationUtils.splitDate(leaseData.terminationDate().getValue());
+        fieldsData.terminationDateDD().setValue(globalTerminationDate[0]);
+        fieldsData.terminationDateMM().setValue(globalTerminationDate[1]);
+        fieldsData.terminationDateYYYY().setValue(globalTerminationDate[2]);
+
+        String[] totalOwed = N4GenerationUtils.splitCurrency(leaseData.totalRentOwning().getValue());
+        fieldsData.globalTotalOwedThousands().setValue(totalOwed[0]);
+        fieldsData.globalTotalOwedHundreds().setValue(totalOwed[1]);
+        fieldsData.globalTotalOwedCents().setValue(totalOwed[2]);
+
+        {
+            N4RentOwingForPeriod rentOwningForPeriod = leaseData.rentOwingBreakdown().get(1);
+            String[] owedFrom = N4GenerationUtils.splitDate(rentOwningForPeriod.from().getValue());
+            fieldsData.owedFromDDA().setValue(owedFrom[0]);
+            fieldsData.owedFromMMA().setValue(owedFrom[1]);
+            fieldsData.owedFromYYYYA().setValue(owedFrom[2]);
+
+            String[] owedTo = N4GenerationUtils.splitDate(rentOwningForPeriod.to().getValue());
+            fieldsData.owedToDDA().setValue(owedTo[0]);
+            fieldsData.owedToMMA().setValue(owedTo[1]);
+            fieldsData.owedToYYYYA().setValue(owedTo[2]);
+
+            String[] charged = N4GenerationUtils.splitCurrency(rentOwningForPeriod.rentCharged().getValue());
+            fieldsData.rentChargedThousandsA().setValue(charged[0]);
+            fieldsData.rentChargedHundredsA().setValue(charged[1]);
+            fieldsData.rentChargedCentsA().setValue(charged[2]);
+
+            String[] paid = N4GenerationUtils.splitCurrency(rentOwningForPeriod.rentPaid().getValue());
+            fieldsData.rentPaidThousandsA().setValue(paid[0]);
+            fieldsData.rentPaidHundredsA().setValue(paid[1]);
+            fieldsData.rentPaidCentsA().setValue(paid[2]);
+
+            String[] owing = N4GenerationUtils.splitCurrency(rentOwningForPeriod.rentOwing().getValue());
+            fieldsData.rentOwingThousandsA().setValue(owing[0]);
+            fieldsData.rentOwingHundredsA().setValue(owing[1]);
+            fieldsData.rentOwingCentsA().setValue(owing[2]);
+        }
+
+        if (leaseData.rentOwingBreakdown().size() >= 2) {
+            N4RentOwingForPeriod rentOwningForPeriod = leaseData.rentOwingBreakdown().get(1);
+            String[] owedFrom = N4GenerationUtils.splitDate(rentOwningForPeriod.from().getValue());
+            fieldsData.owedFromDDB().setValue(owedFrom[0]);
+            fieldsData.owedFromMMB().setValue(owedFrom[1]);
+            fieldsData.owedFromYYYYB().setValue(owedFrom[2]);
+
+            String[] owedTo = N4GenerationUtils.splitDate(rentOwningForPeriod.to().getValue());
+            fieldsData.owedToDDB().setValue(owedTo[0]);
+            fieldsData.owedToMMB().setValue(owedTo[1]);
+            fieldsData.owedToYYYYB().setValue(owedTo[2]);
+
+            String[] charged = N4GenerationUtils.splitCurrency(rentOwningForPeriod.rentCharged().getValue());
+            fieldsData.rentChargedThousandsB().setValue(charged[0]);
+            fieldsData.rentChargedHundredsB().setValue(charged[1]);
+            fieldsData.rentChargedCentsB().setValue(charged[2]);
+
+            String[] paid = N4GenerationUtils.splitCurrency(rentOwningForPeriod.rentPaid().getValue());
+            fieldsData.rentPaidThousandsB().setValue(paid[0]);
+            fieldsData.rentPaidHundredsB().setValue(paid[1]);
+            fieldsData.rentPaidCentsB().setValue(paid[2]);
+
+            String[] owing = N4GenerationUtils.splitCurrency(rentOwningForPeriod.rentOwing().getValue());
+            fieldsData.rentOwingThousandsB().setValue(owing[0]);
+            fieldsData.rentOwingHundredsB().setValue(owing[1]);
+            fieldsData.rentOwingCentsB().setValue(owing[2]);
+        }
+        if (leaseData.rentOwingBreakdown().size() == 3) {
+            N4RentOwingForPeriod rentOwningForPeriod = leaseData.rentOwingBreakdown().get(2);
+            String[] owedFrom = N4GenerationUtils.splitDate(rentOwningForPeriod.from().getValue());
+            fieldsData.owedFromDDC().setValue(owedFrom[0]);
+            fieldsData.owedFromMMC().setValue(owedFrom[1]);
+            fieldsData.owedFromYYYYC().setValue(owedFrom[2]);
+
+            String[] owedTo = N4GenerationUtils.splitDate(rentOwningForPeriod.to().getValue());
+            fieldsData.owedToDDC().setValue(owedTo[0]);
+            fieldsData.owedToMMC().setValue(owedTo[1]);
+            fieldsData.owedToYYYYC().setValue(owedTo[2]);
+
+            String[] charged = N4GenerationUtils.splitCurrency(rentOwningForPeriod.rentCharged().getValue());
+            fieldsData.rentChargedThousandsC().setValue(charged[0]);
+            fieldsData.rentChargedHundredsC().setValue(charged[1]);
+            fieldsData.rentChargedCentsC().setValue(charged[2]);
+
+            String[] paid = N4GenerationUtils.splitCurrency(rentOwningForPeriod.rentPaid().getValue());
+            fieldsData.rentPaidThousandsC().setValue(paid[0]);
+            fieldsData.rentPaidHundredsC().setValue(paid[1]);
+            fieldsData.rentPaidCentsC().setValue(paid[2]);
+
+            String[] owing = N4GenerationUtils.splitCurrency(rentOwningForPeriod.rentOwing().getValue());
+            fieldsData.rentOwingThousandsC().setValue(owing[0]);
+            fieldsData.rentOwingHundredsC().setValue(owing[1]);
+            fieldsData.rentOwingCentsC().setValue(owing[2]);
+        }
+
+        fieldsData.signedBy().setValue(landlordsData.isLandlord().isBooleanTrue() ? SignedBy.Landlord : SignedBy.Agent);
+        fieldsData.signature().setValue(landlordsData.signature().getValue());
+
+        fieldsData.signatureDate().setValue(SimpleMessageFormat.format("{0,date,dd/MM/YYYY}", landlordsData.signatureDate().getValue()));
+
+        fieldsData.signatureFirstName().setValue(landlordsData.signingEmployee().name().firstName().getStringView());
+        fieldsData.signatureLastName().setValue(landlordsData.signingEmployee().name().lastName().getStringView());
+        fieldsData.signatureCompanyName().setValue(landlordsData.landlordsLegalName().getStringView());
+
+        fieldsData.signatureAddress().setValue(landlordsData.landlordsAddress().street1().getValue());
+        fieldsData.signatureUnit().setValue(landlordsData.landlordsAddress().street2().getValue());
+        fieldsData.signatureMunicipality().setValue(landlordsData.landlordsAddress().city().getValue());
+        fieldsData.signatureProvince().setValue(landlordsData.landlordsAddress().province().code().getValue().toString());
+        fieldsData.signaturePostalCode().setValue(landlordsData.landlordsAddress().postalCode().getValue());
+
+        String[] signaturPhoneNumber = N4GenerationUtils.splitPhoneNumber(landlordsData.landlordsPhoneNumber().getValue());
+        fieldsData.signaturePhoneNumberAreaCode().setValue(signaturPhoneNumber[0]);
+        fieldsData.signaturePhoneNumberCombA().setValue(signaturPhoneNumber[1]);
+        fieldsData.signaturePhoneNumberCombB().setValue(signaturPhoneNumber[2]);
+
+        if (!CommonsStringUtils.isEmpty(landlordsData.faxNumber().getValue())) {
+            String[] signatureFaxNumber = N4GenerationUtils.splitPhoneNumber(landlordsData.faxNumber().getValue());
+            fieldsData.signatureFaxNumberAreaCode().setValue(signatureFaxNumber[0]);
+            fieldsData.signatureFaxNumberCombA().setValue(signatureFaxNumber[1]);
+            fieldsData.signatureFaxNumberCombB().setValue(signatureFaxNumber[2]);
+        }
+
+        fieldsData.signatureEmailAddress().setValue(landlordsData.emailAddress().getValue());
+
+        return fieldsData;
+    }
+
+    private String formatTenants(Iterable<Tenant> tenants) {
+        StringBuilder stringBuilder = new StringBuilder();
+        for (Tenant tenant : tenants) {
+            stringBuilder.append(tenant.customer().person().name().getStringView());
+            stringBuilder.append("; ");
+        }
+        return stringBuilder.toString();
+    }
+
+    private String formatRentalAddress(AddressStructured address) {
+        return address.getStringView();
+    }
+
 }

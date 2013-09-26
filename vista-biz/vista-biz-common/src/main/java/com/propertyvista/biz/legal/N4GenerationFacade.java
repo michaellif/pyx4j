@@ -16,11 +16,13 @@ package com.propertyvista.biz.legal;
 import java.util.List;
 
 import com.propertyvista.domain.legal.N4FormFieldsData;
+import com.propertyvista.domain.legal.N4LandlordsData;
+import com.propertyvista.domain.legal.N4LeaseData;
 
 public interface N4GenerationFacade {
 
     byte[] generateN4Letter(List<N4FormFieldsData> formData);
 
-    N4FormFieldsData populateFormData();
+    N4FormFieldsData populateFormData(N4LeaseData leaseData, N4LandlordsData landlordsData);
 
 }

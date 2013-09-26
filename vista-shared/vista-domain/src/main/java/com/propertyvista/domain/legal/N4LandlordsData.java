@@ -18,10 +18,15 @@ import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 
+import com.propertyvista.domain.company.Employee;
 import com.propertyvista.domain.contact.AddressSimple;
 
 @Transient
 public interface N4LandlordsData extends IEntity {
+
+    IPrimitive<String> landlordsLegalName();
+
+    Employee signingEmployee();
 
     AddressSimple landlordsAddress();
 

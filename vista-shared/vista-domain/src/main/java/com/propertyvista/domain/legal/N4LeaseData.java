@@ -15,6 +15,7 @@ package com.propertyvista.domain.legal;
 
 import java.math.BigDecimal;
 
+import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
@@ -29,6 +30,8 @@ public interface N4LeaseData extends IEntity {
     IList<Tenant> leaseTenants();
 
     AddressStructured rentalUnitAddress();
+
+    IPrimitive<LogicalDate> terminationDate();
 
     IPrimitive<BigDecimal> totalRentOwning();
 
