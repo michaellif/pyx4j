@@ -150,7 +150,7 @@
 
     <servlet-mapping>
         <servlet-name>OpenIdServlet</servlet-name>
-        <url-pattern>/ptapp/o/openid</url-pattern>
+        <url-pattern>/prospect/o/openid</url-pattern>
     </servlet-mapping>
 
     <servlet>
@@ -261,7 +261,7 @@
 
     <servlet-mapping>
         <servlet-name>DebugServlet</servlet-name>
-        <url-pattern>/ptapp/debug/*</url-pattern>
+        <url-pattern>/prospect/debug/*</url-pattern>
     </servlet-mapping>
 
     <servlet-mapping>
@@ -358,7 +358,7 @@ http://static.dev.birchwoodsoftwaregroup.com:8888/vista/o/wsp/yardi.starlightinv
 
     <servlet-mapping>
         <servlet-name>RemoteServiceServlet</servlet-name>
-        <url-pattern>/ptapp/srv/*</url-pattern>
+        <url-pattern>/prospect/srv/*</url-pattern>
     </servlet-mapping>
 
     <servlet-mapping>
@@ -398,7 +398,7 @@ http://static.dev.birchwoodsoftwaregroup.com:8888/vista/o/wsp/yardi.starlightinv
 
     <servlet-mapping>
         <servlet-name>DownloadServlet</servlet-name>
-        <url-pattern>/ptapp/download/*</url-pattern>
+        <url-pattern>/prospect/download/*</url-pattern>
     </servlet-mapping>
 
     <servlet>
@@ -423,7 +423,7 @@ http://static.dev.birchwoodsoftwaregroup.com:8888/vista/o/wsp/yardi.starlightinv
 
     <servlet-mapping>
         <servlet-name>VistaUploadServlet</servlet-name>
-        <url-pattern>/ptapp/upload/*</url-pattern>
+        <url-pattern>/prospect/upload/*</url-pattern>
     </servlet-mapping>
 
     <servlet>

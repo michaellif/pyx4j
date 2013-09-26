@@ -96,7 +96,9 @@ class EnvLinksBuilder extends XMLStringWriter {
 
     private void writePmc(Pmc pmc) {
         writeApp(pmc, pmc.namespace().getValue(), "CRM", VistaApplication.crm);
-        writeApp(pmc, null, "Field", VistaApplication.field);
+        if (false) { // TODO enable filed in future
+            writeApp(pmc, null, "Field", VistaApplication.field);
+        }
         writeApp(pmc, null, "Site", VistaApplication.site);
         writeApp(pmc, null, "Resident", VistaApplication.portal);
         writeApp(pmc, null, "PTApp", VistaApplication.prospect);
