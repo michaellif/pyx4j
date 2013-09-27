@@ -15,10 +15,8 @@ package com.propertyvista.portal.web.client.ui.financial.dashboard;
 
 import com.pyx4j.site.client.IsView;
 
-import com.propertyvista.dto.TransactionHistoryDTO;
 import com.propertyvista.portal.rpc.portal.web.dto.AutoPayInfoDTO;
 import com.propertyvista.portal.rpc.portal.web.dto.AutoPaySummaryDTO;
-import com.propertyvista.portal.rpc.portal.web.dto.BillingHistoryDTO;
 import com.propertyvista.portal.rpc.portal.web.dto.BillingSummaryDTO;
 import com.propertyvista.portal.rpc.portal.web.dto.LatestActivitiesDTO;
 import com.propertyvista.portal.rpc.portal.web.dto.PaymentMethodInfoDTO;
@@ -29,6 +27,10 @@ public interface FinancialDashboardView extends IsView {
     public interface FinancialDashboardPresenter {
 
         void viewCurrentBill();
+
+        void viewBillilngHistory();
+
+        void viewTransactionHistory();
 
         void makePayment();
 
@@ -56,9 +58,4 @@ public interface FinancialDashboardView extends IsView {
     void populate(LatestActivitiesDTO value);
 
     void populate(PaymentMethodSummaryDTO value);
-
-    void populate(BillingHistoryDTO value);
-
-    void populate(TransactionHistoryDTO value);
-
 }

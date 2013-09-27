@@ -77,14 +77,28 @@ public class BillingSummaryGadget extends AbstractGadget<FinancialDashboardViewI
         public NavigationBar() {
             if (!VistaFeatures.instance().yardiIntegration()) {
 
-                Anchor viewBillAnchor = new Anchor("View my Current Bill", new Command() {
-
+                add(new Anchor("View my Current Bill", new Command() {
                     @Override
                     public void execute() {
                         getGadgetView().getPresenter().viewCurrentBill();
                     }
-                });
-                add(viewBillAnchor);
+                }));
+
+                add(new Anchor("View Billing History", new Command() {
+                    @Override
+                    public void execute() {
+                        getGadgetView().getPresenter().viewBillilngHistory();
+                    }
+                }));
+
+            } else {
+
+                add(new Anchor("View Transaction History", new Command() {
+                    @Override
+                    public void execute() {
+                        getGadgetView().getPresenter().viewTransactionHistory();
+                    }
+                }));
             }
         }
     }

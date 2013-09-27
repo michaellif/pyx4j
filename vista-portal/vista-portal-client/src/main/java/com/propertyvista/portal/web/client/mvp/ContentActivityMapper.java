@@ -26,6 +26,7 @@ import com.propertyvista.portal.rpc.portal.PortalSiteMap;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap.Resident;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap.Resident.Financial;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap.Resident.Financial.BillingDashboard;
+import com.propertyvista.portal.rpc.portal.PortalSiteMap.Resident.Financial.Payment;
 import com.propertyvista.portal.web.client.activity.NotificationPageActivity;
 import com.propertyvista.portal.web.client.activity.SignUpActivity;
 import com.propertyvista.portal.web.client.activity.dashboard.MainDashboardActivity;
@@ -82,16 +83,16 @@ public class ContentActivityMapper implements AppActivityMapper {
                     else if (appPlace instanceof PortalSiteMap.Resident.ResidentServices) {
                         activity = new ServicesDashboardActivity(appPlace);
 
-                    } else if (appPlace instanceof Financial.PaymentMethods.EditPaymentMethod) {
+                    } else if (appPlace instanceof Financial.PaymentMethods.PaymentMethod) {
                         activity = new PaymentMethodEditorActivity(appPlace);
                     } else if (appPlace instanceof Financial.PaymentMethods.NewPaymentMethod) {
                         activity = new PaymentMethodWizardActivity(appPlace);
                     } else if (appPlace instanceof Financial.PaymentMethods.PaymentMethodSubmitted) {
                         activity = new PaymentMethodConfirmationActivity(appPlace);
 
-                    } else if (appPlace instanceof Resident.Financial.PayNow) {
+                    } else if (appPlace instanceof Payment.PayNow) {
                         activity = new PaymentWizardActivity(appPlace);
-                    } else if (appPlace instanceof Resident.Financial.PaymentSubmitting) {
+                    } else if (appPlace instanceof Payment.PaymentSubmitting) {
                         activity = new PaymentConfirmationActivity(appPlace);
 
                     } else if (appPlace instanceof Resident.Financial.PreauthorizedPayments.PreauthorizedPayment) {

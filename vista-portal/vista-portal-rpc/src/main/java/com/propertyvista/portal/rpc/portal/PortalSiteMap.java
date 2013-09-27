@@ -89,42 +89,39 @@ public class PortalSiteMap implements SiteMap {
             public static class BillingDashboard extends AppPlace {
             }
 
-            // Billing* are relevant for users who's financials managed by PV */
-            public static class BillSummary extends AppPlace {
-            }
-
             public static class BillingHistory extends AppPlace {
 
                 public static class ViewBill extends AppPlace {
                 }
             }
 
-            // this one is for tenants from Yardi integrated accounts
-            public static class FinancialSummary extends AppPlace {
-
+            public static class TransactionHistory extends AppPlace {
             }
 
-            public static class PayNow extends CrudAppPlace {
-            }
+            public static class Payment extends AppPlace {
 
-            public static class PaymentSubmitting extends AppPlace {
-
-                public PaymentSubmitting() {
+                public static class PayNow extends CrudAppPlace {
                 }
 
-                public PaymentSubmitting(Key paymentRecordID) {
-                    formPlace(paymentRecordID);
+                public static class PaymentSubmitting extends AppPlace {
+
+                    public PaymentSubmitting() {
+                    }
+
+                    public PaymentSubmitting(Key paymentRecordID) {
+                        formPlace(paymentRecordID);
+                    }
                 }
             }
 
             public static class PreauthorizedPayments extends AppPlace {
 
-                @PlaceProperties(caption = "Pre-Authorized Payment")
-                public static class PreauthorizedPayment extends AppPlace {
-                }
-
                 @PlaceProperties(caption = "New Pre-Authorized Payment")
                 public static class NewPreauthorizedPayment extends CrudAppPlace {
+                }
+
+                @PlaceProperties(caption = "Pre-Authorized Payment")
+                public static class PreauthorizedPayment extends CrudAppPlace {
                 }
 
                 @PlaceProperties(caption = "Pre-Authorized Payment Submitted")
@@ -144,10 +141,7 @@ public class PortalSiteMap implements SiteMap {
                 public static class NewPaymentMethod extends CrudAppPlace {
                 }
 
-                public static class EditPaymentMethod extends AppPlace {
-                }
-
-                public static class ViewPaymentMethod extends AppPlace {
+                public static class PaymentMethod extends CrudAppPlace {
                 }
 
                 public static class PaymentMethodSubmitted extends AppPlace {

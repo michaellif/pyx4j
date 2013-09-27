@@ -7,15 +7,14 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Jul 3, 2013
- * @author michaellif
+ * Created on Sep 27, 2013
+ * @author VladL
  * @version $Id$
  */
-package com.propertyvista.portal.web.client.ui.financial.dashboard;
+package com.propertyvista.portal.web.client.ui.financial.dashboard.views;
 
 import com.google.gwt.user.client.ui.IsWidget;
 
-import com.pyx4j.commons.css.ThemeColor;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CDateLabel;
@@ -25,54 +24,30 @@ import com.pyx4j.forms.client.ui.CNumberLabel;
 import com.pyx4j.forms.client.ui.folder.BoxFolderItemDecorator;
 import com.pyx4j.forms.client.ui.folder.IFolderItemDecorator;
 import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
-import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
 import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
 import com.propertyvista.portal.domain.dto.BillDataDTO;
 import com.propertyvista.portal.rpc.portal.web.dto.BillingHistoryDTO;
-import com.propertyvista.portal.web.client.resources.PortalImages;
-import com.propertyvista.portal.web.client.ui.AbstractGadget;
 import com.propertyvista.portal.web.client.ui.util.decorators.FormDecoratorBuilder;
 
-public class BillingHistoryGadget extends AbstractGadget<FinancialDashboardViewImpl> {
+public class BillingHistoryView extends CEntityForm<BillingHistoryDTO> {
 
-    private static final I18n i18n = I18n.get(BillingHistoryGadget.class);
-
-    private final BillingHistoryView view;
-
-    BillingHistoryGadget(FinancialDashboardViewImpl form) {
-        super(form, PortalImages.INSTANCE.billingIcon(), i18n.tr("Billing History"), ThemeColor.contrast4);
-
-        view = new BillingHistoryView();
-        view.setViewable(true);
-        view.initContent();
-
-        setContent(view);
+    public BillingHistoryView() {
+        super(BillingHistoryDTO.class);
     }
 
-    protected void populate(BillingHistoryDTO value) {
-        view.populate(value);
+    @Override
+    public IsWidget createContent() {
+        BasicFlexFormPanel content = new BasicFlexFormPanel();
+        int row = -1;
+
+        content.setWidget(++row, 0, inject(proto().bills(), new BillDataFolder()));
+
+        return content;
     }
 
-    class BillingHistoryView extends CEntityForm<BillingHistoryDTO> {
-
-        public BillingHistoryView() {
-            super(BillingHistoryDTO.class);
-        }
-
-        @Override
-        public IsWidget createContent() {
-            BasicFlexFormPanel content = new BasicFlexFormPanel();
-            int row = -1;
-
-            content.setWidget(++row, 0, inject(proto().bills(), new BillDataFolder()));
-
-            return content;
-        }
-    }
-
-    private class BillDataFolder extends VistaBoxFolder<BillDataDTO> {
+    class BillDataFolder extends VistaBoxFolder<BillDataDTO> {
 
         public BillDataFolder() {
             super(BillDataDTO.class, false);
@@ -116,5 +91,4 @@ public class BillingHistoryGadget extends AbstractGadget<FinancialDashboardViewI
             }
         }
     }
-
 }

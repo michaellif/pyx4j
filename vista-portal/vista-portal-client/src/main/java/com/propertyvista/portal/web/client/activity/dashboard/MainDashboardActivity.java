@@ -24,7 +24,7 @@ import com.pyx4j.site.client.AppSite;
 
 import com.propertyvista.domain.security.VistaCustomerPaymentTypeBehavior;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap;
-import com.propertyvista.portal.rpc.portal.PortalSiteMap.Resident.Financial;
+import com.propertyvista.portal.rpc.portal.PortalSiteMap.Resident.Financial.Payment;
 import com.propertyvista.portal.rpc.portal.web.dto.BillingSummaryDTO;
 import com.propertyvista.portal.rpc.portal.web.dto.TenantProfileSummaryDTO;
 import com.propertyvista.portal.rpc.portal.web.dto.insurance.status.InsuranceStatusDTO;
@@ -86,7 +86,7 @@ public class MainDashboardActivity extends SecurityAwareActivity implements Main
     @Override
     public void payNow() {
         if (SecurityController.checkAnyBehavior(VistaCustomerPaymentTypeBehavior.values())) {
-            AppSite.getPlaceController().goTo(new Financial.PayNow());
+            AppSite.getPlaceController().goTo(new Payment.PayNow());
         }
     }
 

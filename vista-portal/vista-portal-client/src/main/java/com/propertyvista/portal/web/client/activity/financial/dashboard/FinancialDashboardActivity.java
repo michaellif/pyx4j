@@ -22,17 +22,16 @@ import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.security.shared.SecurityController;
 import com.pyx4j.site.client.AppSite;
-import com.pyx4j.site.rpc.AppPlace;
+import com.pyx4j.site.rpc.CrudAppPlace;
 
 import com.propertyvista.domain.payment.LeasePaymentMethod;
 import com.propertyvista.domain.payment.PreauthorizedPayment;
 import com.propertyvista.domain.security.VistaCustomerPaymentTypeBehavior;
-import com.propertyvista.dto.TransactionHistoryDTO;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap.Resident.Financial;
+import com.propertyvista.portal.rpc.portal.PortalSiteMap.Resident.Financial.Payment;
 import com.propertyvista.portal.rpc.portal.web.dto.AutoPayInfoDTO;
 import com.propertyvista.portal.rpc.portal.web.dto.AutoPaySummaryDTO;
-import com.propertyvista.portal.rpc.portal.web.dto.BillingHistoryDTO;
 import com.propertyvista.portal.rpc.portal.web.dto.BillingSummaryDTO;
 import com.propertyvista.portal.rpc.portal.web.dto.LatestActivitiesDTO;
 import com.propertyvista.portal.rpc.portal.web.dto.PaymentMethodInfoDTO;
@@ -44,7 +43,6 @@ import com.propertyvista.portal.web.client.PortalWebSite;
 import com.propertyvista.portal.web.client.activity.SecurityAwareActivity;
 import com.propertyvista.portal.web.client.ui.financial.dashboard.FinancialDashboardView;
 import com.propertyvista.portal.web.client.ui.financial.dashboard.FinancialDashboardView.FinancialDashboardPresenter;
-import com.propertyvista.shared.config.VistaFeatures;
 
 public class FinancialDashboardActivity extends SecurityAwareActivity implements FinancialDashboardPresenter {
 
@@ -93,22 +91,6 @@ public class FinancialDashboardActivity extends SecurityAwareActivity implements
                 view.populate(result);
             }
         });
-
-        if (VistaFeatures.instance().yardiIntegration()) {
-            billingService.retreiveTransactionHistory(new DefaultAsyncCallback<TransactionHistoryDTO>() {
-                @Override
-                public void onSuccess(TransactionHistoryDTO result) {
-                    view.populate(result);
-                }
-            });
-        } else {
-            billingService.retreiveBillingHistory(new DefaultAsyncCallback<BillingHistoryDTO>() {
-                @Override
-                public void onSuccess(BillingHistoryDTO result) {
-                    view.populate(result);
-                }
-            });
-        }
     }
 
     @Override
@@ -117,9 +99,21 @@ public class FinancialDashboardActivity extends SecurityAwareActivity implements
     }
 
     @Override
+    public void viewBillilngHistory() {
+        // TODO Auto-generated method stub
+
+    }
+
+    @Override
+    public void viewTransactionHistory() {
+        // TODO Auto-generated method stub
+
+    }
+
+    @Override
     public void makePayment() {
         if (SecurityController.checkAnyBehavior(VistaCustomerPaymentTypeBehavior.values())) {
-            AppSite.getPlaceController().goTo(new Financial.PayNow());
+            AppSite.getPlaceController().goTo(new Payment.PayNow());
         }
     }
 
@@ -165,13 +159,13 @@ public class FinancialDashboardActivity extends SecurityAwareActivity implements
 
     @Override
     public void viewPaymentMethod(PaymentMethodInfoDTO paymentMethod) {
-        AppPlace place = new Financial.PaymentMethods.ViewPaymentMethod();
-        AppSite.getPlaceController().goTo(place.formPlace(paymentMethod.id().getValue()));
+        CrudAppPlace place = new Financial.PaymentMethods.PaymentMethod();
+        AppSite.getPlaceController().goTo(place.formViewerPlace(paymentMethod.id().getValue()));
     }
 
     @Override
     public void editPaymentMethod(PaymentMethodInfoDTO paymentMethod) {
-        AppPlace place = new Financial.PaymentMethods.EditPaymentMethod();
-        AppSite.getPlaceController().goTo(place.formPlace(paymentMethod.id().getValue()));
+        CrudAppPlace place = new Financial.PaymentMethods.PaymentMethod();
+        AppSite.getPlaceController().goTo(place.formEditorPlace(paymentMethod.id().getValue()));
     }
 }

@@ -22,14 +22,11 @@ import com.pyx4j.site.client.ui.layout.responsive.LayoutChangeEvent;
 import com.pyx4j.site.client.ui.layout.responsive.LayoutChangeHandler;
 import com.pyx4j.site.client.ui.layout.responsive.ResponsiveLayoutPanel.LayoutType;
 
-import com.propertyvista.dto.TransactionHistoryDTO;
 import com.propertyvista.portal.rpc.portal.web.dto.AutoPaySummaryDTO;
-import com.propertyvista.portal.rpc.portal.web.dto.BillingHistoryDTO;
 import com.propertyvista.portal.rpc.portal.web.dto.BillingSummaryDTO;
 import com.propertyvista.portal.rpc.portal.web.dto.LatestActivitiesDTO;
 import com.propertyvista.portal.rpc.portal.web.dto.PaymentMethodSummaryDTO;
 import com.propertyvista.portal.web.client.themes.DashboardTheme;
-import com.propertyvista.shared.config.VistaFeatures;
 
 public class FinancialDashboardViewImpl extends FlowPanel implements FinancialDashboardView {
 
@@ -41,10 +38,6 @@ public class FinancialDashboardViewImpl extends FlowPanel implements FinancialDa
     private final BillingSummaryGadget billingSummarygGadget;
 
     private final LatestActivitiesGadget latestActivitiesGadget;
-
-    private final BillingHistoryGadget billingHistoryGadget;
-
-    private final TransactionHistoryGadget transactionHistoryGadget;
 
     private final AutoPayAgreementsGadget autoPayAgreementsGadget;
 
@@ -63,23 +56,12 @@ public class FinancialDashboardViewImpl extends FlowPanel implements FinancialDa
         latestActivitiesGadget = new LatestActivitiesGadget(this);
         latestActivitiesGadget.asWidget().setWidth("100%");
 
-        billingHistoryGadget = new BillingHistoryGadget(this);
-        billingHistoryGadget.asWidget().setWidth("100%");
-
-        transactionHistoryGadget = new TransactionHistoryGadget(this);
-        transactionHistoryGadget.asWidget().setWidth("100%");
-
         paymentMethodsGadget = new PaymentMethodsGadget(this);
         paymentMethodsGadget.asWidget().setWidth("100%");
 
         add(billingSummarygGadget);
         add(autoPayAgreementsGadget);
         add(latestActivitiesGadget);
-        if (VistaFeatures.instance().yardiIntegration()) {
-            add(transactionHistoryGadget);
-        } else {
-            add(billingHistoryGadget);
-        }
         add(paymentMethodsGadget);
 
         doLayout(LayoutType.getLayoutType(Window.getClientWidth()));
@@ -116,16 +98,6 @@ public class FinancialDashboardViewImpl extends FlowPanel implements FinancialDa
     @Override
     public void populate(PaymentMethodSummaryDTO value) {
         paymentMethodsGadget.populate(value);
-    }
-
-    @Override
-    public void populate(BillingHistoryDTO value) {
-        billingHistoryGadget.populate(value);
-    }
-
-    @Override
-    public void populate(TransactionHistoryDTO value) {
-        transactionHistoryGadget.populate(value);
     }
 
     @Override
