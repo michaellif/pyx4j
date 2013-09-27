@@ -25,11 +25,14 @@ import com.kijiji.pint.rs.ILSUnit.Images.Image;
 import com.kijiji.pint.rs.ILSUnits;
 import com.kijiji.pint.rs.ObjectFactory;
 
+import com.pyx4j.entity.server.Persistence;
+import com.pyx4j.entity.shared.AttachLevel;
+
 import com.propertyvista.domain.File;
 import com.propertyvista.domain.media.Media;
-import com.propertyvista.domain.property.asset.Floorplan;
-import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.site.PortalLogoImageResource;
+import com.propertyvista.ils.kijiji.mapper.dto.ILSBuildingDTO;
+import com.propertyvista.ils.kijiji.mapper.dto.ILSFloorplanDTO;
 
 public class KijijiDataMapper {
 
@@ -39,12 +42,13 @@ public class KijijiDataMapper {
         factory = newFactory;
     }
 
-    private ILSUnit createUnit(Floorplan unit) {
+    private ILSUnit createUnit(ILSFloorplanDTO fpDto) {
         ILSUnit ilsUnit = factory.createILSUnit();
         // map unit data
-        new KijijiUnitMapper().convert(unit, ilsUnit);
+        new KijijiUnitMapper().convert(fpDto, ilsUnit);
         // add media urls
-        ilsUnit.setImages(createImages(unit.media()));
+        Persistence.ensureRetrieve(fpDto.floorplan().media(), AttachLevel.Attached);
+        ilsUnit.setImages(createImages(fpDto.floorplan().media()));
         return ilsUnit;
     }
 
@@ -77,10 +81,10 @@ public class KijijiDataMapper {
         return images;
     }
 
-    private ILSUnits createUnits(Collection<Floorplan> units) {
+    private ILSUnits createUnits(Collection<ILSFloorplanDTO> fpList) {
         ILSUnits ilsUnits = factory.createILSUnits();
-        for (Floorplan unit : units) {
-            ilsUnits.getUnit().add(createUnit(unit));
+        for (ILSFloorplanDTO fpDto : fpList) {
+            ilsUnits.getUnit().add(createUnit(fpDto));
         }
         return ilsUnits;
     }
@@ -93,22 +97,22 @@ public class KijijiDataMapper {
         return logo;
     }
 
-    private ILSLocation createLocation(Building building, Collection<Floorplan> units) {
+    private ILSLocation createLocation(ILSBuildingDTO bldDto, Collection<ILSFloorplanDTO> fpList) {
         ILSLocation location = factory.createILSLocation();
         // map building data
-        new KijijiLocationMapper().convert(building, location);
+        new KijijiLocationMapper().convert(bldDto, location);
         // logo
         location.setLogo(createLogo());
         // add units
-        location.getUnits().add(createUnits(units));
+        location.getUnits().add(createUnits(fpList));
 
         return location;
     }
 
-    public ILSLocations createLocations(Map<Building, List<Floorplan>> units) {
+    public ILSLocations createLocations(Map<ILSBuildingDTO, List<ILSFloorplanDTO>> listing) {
         ILSLocations locations = factory.createILSLocations();
-        for (Building building : units.keySet()) {
-            locations.getLocation().add(createLocation(building, units.get(building)));
+        for (ILSBuildingDTO bldDto : listing.keySet()) {
+            locations.getLocation().add(createLocation(bldDto, listing.get(bldDto)));
         }
         return locations;
     }

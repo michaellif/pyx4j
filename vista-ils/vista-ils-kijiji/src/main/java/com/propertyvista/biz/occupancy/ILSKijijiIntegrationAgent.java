@@ -13,19 +13,22 @@
  */
 package com.propertyvista.biz.occupancy;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.config.server.SystemDateManager;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.AttachLevel;
+import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 
 import com.propertyvista.domain.marketing.ils.ILSProfileBuilding;
@@ -36,8 +39,13 @@ import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.property.asset.unit.occupancy.AptUnitOccupancySegment;
 import com.propertyvista.domain.settings.ILSConfig.ILSVendor;
 import com.propertyvista.domain.settings.ILSVendorConfig;
+import com.propertyvista.ils.kijiji.mapper.dto.ILSBuildingDTO;
+import com.propertyvista.ils.kijiji.mapper.dto.ILSFloorplanDTO;
 
 public class ILSKijijiIntegrationAgent {
+    private static Logger log = LoggerFactory.getLogger(ILSKijijiIntegrationAgent.class);
+
+    public static final ILSVendor vendor = ILSVendor.kijiji;
 
     private ILSVendorConfig ilsCfg;
 
@@ -63,7 +71,7 @@ public class ILSKijijiIntegrationAgent {
         // create building profile map
         buildingMap = new HashMap<Building, ILSProfileBuilding>();
         EntityQueryCriteria<ILSProfileBuilding> critBld = EntityQueryCriteria.create(ILSProfileBuilding.class);
-        critBld.eq(critBld.proto().vendor(), ILSVendor.kijiji);
+        critBld.eq(critBld.proto().vendor(), vendor);
         for (ILSProfileBuilding profile : Persistence.service().query(critBld)) {
             buildingMap.put(profile.building(), profile);
         }
@@ -71,7 +79,7 @@ public class ILSKijijiIntegrationAgent {
         // create floorplan profile map
         floorplanMap = new HashMap<Floorplan, ILSProfileFloorplan>();
         EntityQueryCriteria<ILSProfileFloorplan> critFp = EntityQueryCriteria.create(ILSProfileFloorplan.class);
-        critFp.eq(critFp.proto().vendor(), ILSVendor.kijiji);
+        critFp.eq(critFp.proto().vendor(), vendor);
         critFp.in(critFp.proto().floorplan().building(), buildingMap.keySet());
         for (ILSProfileFloorplan profile : Persistence.service().query(critFp)) {
             floorplanMap.put(profile.floorplan(), profile);
@@ -87,7 +95,7 @@ public class ILSKijijiIntegrationAgent {
     /**
      * Provides a list of available units for publishing with ILS provider. Uses Occupancy model and ILSConfig data
      */
-    public Map<Building, List<Floorplan>> getUnitListing() {
+    public Map<ILSBuildingDTO, List<ILSFloorplanDTO>> getUnitListing() {
         // get available units
         EntityQueryCriteria<AptUnit> critUnit = EntityQueryCriteria.create(AptUnit.class);
         critUnit.in(critUnit.proto().floorplan(), floorplanMap.keySet());
@@ -95,66 +103,121 @@ public class ILSKijijiIntegrationAgent {
         critUnit.eq(critUnit.proto().unitOccupancySegments().$().dateTo(), OccupancyFacade.MAX_DATE);
         List<AptUnit> units = Persistence.service().query(critUnit);
 
-        Set<Floorplan> floorplanSet = new HashSet<Floorplan>();
+        // extract floorplans
+        Map<Floorplan, ILSFloorplanDTO> fpDtoMap = new HashMap<Floorplan, ILSFloorplanDTO>();
         for (AptUnit unit : units) {
-            floorplanSet.add(unit.floorplan());
+            Persistence.service().retrieve(unit.floorplan());
+            ILSFloorplanDTO fpDto = fpDtoMap.get(unit.floorplan());
+            if (fpDto == null) {
+                fpDto = createDto(unit.floorplan());
+                fpDtoMap.put(unit.floorplan(), fpDto);
+            }
+            if (fpDto.minPrice().isNull()
+                    || (!unit.financial()._marketRent().isNull() && fpDto.minPrice().getValue().compareTo(unit.financial()._marketRent().getValue()) > 0)) {
+                fpDto.minPrice().set(unit.financial()._marketRent());
+            }
         }
-        // truncate and balance unit quantities according to floorplan priorities
-        List<Floorplan> floorplans = new ArrayList<Floorplan>(floorplanSet);
+
+        // order by floorplan priorities and truncate if allowed size is exceeded
+        List<Floorplan> floorplans = new ArrayList<Floorplan>(fpDtoMap.keySet());
         floorplans = truncateList(floorplans);
 
-        Map<Building, List<Floorplan>> listing = new HashMap<Building, List<Floorplan>>();
+        // rearrange listing by building
+        Map<Building, List<ILSFloorplanDTO>> _listing = new HashMap<Building, List<ILSFloorplanDTO>>();
         for (Floorplan floorplan : floorplans) {
-            Persistence.service().retrieve(floorplan.building(), AttachLevel.IdOnly);
-            List<Floorplan> list = listing.get(floorplan.building());
-            if (list == null) {
-                list = new ArrayList<Floorplan>();
-                listing.put(floorplan.building(), list);
+            ILSFloorplanDTO fpDto = fpDtoMap.get(floorplan);
+            if (fpDto == null) {
+                log.info("ILS Profile missing for floorplan: {}", floorplan.name().getValue());
+                continue;
             }
-            list.add(floorplan);
+            // do some sanity check
+            if (fpDto.minPrice().isNull() || fpDto.minPrice().getValue().compareTo(new BigDecimal(100)) < 0) {
+                log.info("Market price invalid: {} for {}", fpDto.minPrice().getValue(), floorplan.name().getValue());
+                continue;
+            }
+            Persistence.service().retrieveMember(floorplan.building(), AttachLevel.Attached);
+            List<ILSFloorplanDTO> list = _listing.get(floorplan.building());
+            if (list == null) {
+                list = new ArrayList<ILSFloorplanDTO>();
+                _listing.put(floorplan.building(), list);
+            }
+            list.add(fpDto);
+        }
+
+        // create final listing object
+        Map<ILSBuildingDTO, List<ILSFloorplanDTO>> listing = new HashMap<ILSBuildingDTO, List<ILSFloorplanDTO>>();
+        for (Building building : _listing.keySet()) {
+            ILSBuildingDTO bldDto = createDto(building);
+            if (bldDto == null) {
+                log.info("ILS Profile missing for building: {}", building.propertyCode().getValue());
+                continue;
+            }
+            listing.put(bldDto, _listing.get(building));
         }
 
         return listing;
     }
 
-    private List<Floorplan> truncateList(List<Floorplan> units) {
+    private ILSBuildingDTO createDto(Building building) {
+        ILSProfileBuilding profile = buildingMap.get(building);
+        if (profile == null) {
+            return null;
+        }
+        ILSBuildingDTO dto = EntityFactory.create(ILSBuildingDTO.class);
+        dto.building().set(building);
+        dto.profile().set(profile);
+        return dto;
+    }
+
+    private ILSFloorplanDTO createDto(Floorplan floorplan) {
+        ILSProfileFloorplan profile = floorplanMap.get(floorplan);
+        if (profile == null) {
+            return null;
+        }
+        ILSFloorplanDTO dto = EntityFactory.create(ILSFloorplanDTO.class);
+        dto.floorplan().set(floorplan);
+        dto.profile().set(profile);
+        return dto;
+    }
+
+    private List<Floorplan> truncateList(List<Floorplan> list) {
         int maxSize = ilsCfg.maxDailyAds().getValue();
-        if (units.size() <= maxSize) {
-            return units;
+        if (list.size() <= maxSize) {
+            return list;
         }
 
         // get availability segments
-        final Map<Floorplan, LogicalDate> unitAvail = new HashMap<Floorplan, LogicalDate>();
+        final Map<Floorplan, LogicalDate> availMap = new HashMap<Floorplan, LogicalDate>();
         EntityQueryCriteria<AptUnitOccupancySegment> critAvail = EntityQueryCriteria.create(AptUnitOccupancySegment.class);
-        critAvail.in(critAvail.proto().unit().floorplan(), units);
+        critAvail.in(critAvail.proto().unit().floorplan(), list);
         critAvail.eq(critAvail.proto().status(), AptUnitOccupancySegment.Status.available);
         critAvail.eq(critAvail.proto().dateTo(), OccupancyFacade.MAX_DATE);
         for (AptUnitOccupancySegment avail : Persistence.service().query(critAvail)) {
             Persistence.service().retrieve(avail.unit());
             Persistence.service().retrieve(avail.unit().floorplan());
 
-            LogicalDate curAvail = unitAvail.get(avail.unit().floorplan());
+            LogicalDate curAvail = availMap.get(avail.unit().floorplan());
             LogicalDate dateFrom = avail.dateFrom().getValue();
             if (dateFrom == null) {
                 dateFrom = new LogicalDate(SystemDateManager.getDate());
             }
             if (curAvail == null || curAvail.after(dateFrom)) {
-                unitAvail.put(avail.unit().floorplan(), dateFrom);
+                availMap.put(avail.unit().floorplan(), dateFrom);
             }
         }
 
         // sort by total score, highest first
-        Collections.sort(units, new Comparator<Floorplan>() {
+        Collections.sort(list, new Comparator<Floorplan>() {
             @Override
-            public int compare(Floorplan o1, Floorplan o2) {
-                int score2 = getTotalScore(priorityMap.get(o2), unitAvail.get(o2));
-                int score1 = getTotalScore(priorityMap.get(o1), unitAvail.get(o1));
+            public int compare(Floorplan f1, Floorplan f2) {
+                int score2 = getTotalScore(priorityMap.get(f2), availMap.get(f2));
+                int score1 = getTotalScore(priorityMap.get(f1), availMap.get(f1));
                 return score2 - score1;
             }
         });
 
         // truncate to max size
-        return units.subList(0, maxSize - 1);
+        return list.subList(0, maxSize - 1);
     }
 
     /** Returns total score 0-10 */

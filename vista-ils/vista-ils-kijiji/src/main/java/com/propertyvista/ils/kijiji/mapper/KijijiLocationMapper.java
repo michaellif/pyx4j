@@ -23,46 +23,53 @@ import com.propertyvista.domain.contact.AddressStructured;
 import com.propertyvista.domain.marketing.Marketing;
 import com.propertyvista.domain.property.PropertyContact;
 import com.propertyvista.domain.property.PropertyContact.PropertyContactType;
-import com.propertyvista.domain.property.asset.building.Building;
+import com.propertyvista.ils.kijiji.mapper.dto.ILSBuildingDTO;
 
 public class KijijiLocationMapper {
 
-    public void convert(Building from, ILSLocation to) {
+    public void convert(ILSBuildingDTO from, ILSLocation to) {
         Persistence.ensureRetrieve(from, AttachLevel.Attached);
-        Marketing info = from.marketing();
+        Marketing info = from.building().marketing();
 
         // identification
-        to.setClientLocationId((int) from.getPrimaryKey().asLong());
-        to.setBuildingName(info.name().getStringView());
+        to.setClientLocationId((int) from.building().getPrimaryKey().asLong());
+        to.setBuildingName(info.name().getValue());
         // address
         AddressStructured address = info.marketingAddress();
         if (address.isEmpty()) {
-            address = from.info().address();
+            address = from.building().info().address();
         }
         to.setStreetAddress(formatStreetAddress(address));
         to.setCity(address.city().getStringView());
         to.setProvince(address.province().getStringView());
         to.setPostalCode(address.postalCode().getStringView());
         // contacts
-        String phone = info.marketingContacts().phone().value().getValue();
-        String email = info.marketingContacts().email().value().getValue();
-        String url = info.marketingContacts().url().value().getValue();
-        if (email == null || phone == null) {
-            // check main office contact
-            Persistence.service().retrieveMember(from.contacts().propertyContacts(), AttachLevel.Attached);
-            for (PropertyContact contact : from.contacts().propertyContacts()) {
-                if (contact.type().getValue() == PropertyContactType.mainOffice) {
-                    if (email == null) {
-                        email = contact.email().getValue();
-                    }
-                    if (phone == null) {
-                        phone = contact.phone().getValue();
+        String phone, email, url;
+        if (!from.profile().preferredContacts().isEmpty()) {
+            phone = from.profile().preferredContacts().phone().value().getValue();
+            email = from.profile().preferredContacts().email().value().getValue();
+            url = from.profile().preferredContacts().url().value().getValue();
+        } else {
+            phone = info.marketingContacts().phone().value().getValue();
+            email = info.marketingContacts().email().value().getValue();
+            url = info.marketingContacts().url().value().getValue();
+            if (email == null || phone == null) {
+                // check main office contact
+                Persistence.service().retrieveMember(from.building().contacts().propertyContacts(), AttachLevel.Attached);
+                for (PropertyContact contact : from.building().contacts().propertyContacts()) {
+                    if (contact.type().getValue() == PropertyContactType.mainOffice) {
+                        if (email == null) {
+                            email = contact.email().getValue();
+                        }
+                        if (phone == null) {
+                            phone = contact.phone().getValue();
+                        }
                     }
                 }
             }
-        }
-        if (url == null) {
-            url = from.contacts().website().getStringView();
+            if (url == null) {
+                url = from.building().contacts().website().getStringView();
+            }
         }
         to.setEmail(email);
         to.setPhoneNumber(phone);
