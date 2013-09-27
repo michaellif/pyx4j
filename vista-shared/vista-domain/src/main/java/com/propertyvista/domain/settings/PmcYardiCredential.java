@@ -15,6 +15,8 @@ package com.propertyvista.domain.settings;
 
 import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.Detached;
+import com.pyx4j.entity.annotations.Editor;
+import com.pyx4j.entity.annotations.Editor.EditorType;
 import com.pyx4j.entity.annotations.Indexed;
 import com.pyx4j.entity.annotations.JoinColumn;
 import com.pyx4j.entity.annotations.Length;
@@ -68,7 +70,8 @@ public interface PmcYardiCredential extends IEntity {
 
     IPrimitive<Platform> platform();
 
-    @Length(2048)
+    @Length(4000)
+    @Editor(type = EditorType.textarea)
     IPrimitive<String> propertyCode();
 
 }

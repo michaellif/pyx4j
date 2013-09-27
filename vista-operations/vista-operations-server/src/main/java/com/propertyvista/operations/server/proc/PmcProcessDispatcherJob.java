@@ -101,7 +101,7 @@ public class PmcProcessDispatcherJob implements Job {
                 forPmcKey = dataMap.getLong(JobData.forPmc.name());
             }
 
-            log.info("process end {} {} {}", process.id().getStringView(), process.triggerType().getStringView(), process.getStringView(), process);
+            log.info("process start {} {} {}", process.id().getStringView(), process.triggerType().getStringView(), process.getStringView(), process);
             Long operationsUserKey = null;
             if (dataMap.containsKey(JobData.startedBy.name())) {
                 operationsUserKey = dataMap.getLong(JobData.startedBy.name());
@@ -109,7 +109,7 @@ public class PmcProcessDispatcherJob implements Job {
 
             startAndRun(process, forPmcKey, scheduledFireTime, forDate, operationsUserKey);
 
-            log.info("process start {} {} {}", process.id().getStringView(), process.triggerType().getStringView(), process.getStringView(), process);
+            log.info("process end {} {} {}", process.id().getStringView(), process.triggerType().getStringView(), process.getStringView(), process);
         } finally {
             Persistence.service().endTransaction();
             Lifecycle.endContext();
