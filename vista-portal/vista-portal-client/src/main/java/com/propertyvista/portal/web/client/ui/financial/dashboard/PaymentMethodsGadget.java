@@ -13,38 +13,36 @@
  */
 package com.propertyvista.portal.web.client.ui.financial.dashboard;
 
-import com.google.gwt.dom.client.Style.FontWeight;
 import com.google.gwt.user.client.Command;
-import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.commons.css.StyleManager;
 import com.pyx4j.commons.css.ThemeColor;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.forms.client.ui.CComponent;
+import com.pyx4j.forms.client.ui.CDateLabel;
 import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.ui.CEntityLabel;
+import com.pyx4j.forms.client.ui.CEnumLabel;
 import com.pyx4j.forms.client.ui.folder.BoxFolderItemDecorator;
 import com.pyx4j.forms.client.ui.folder.CEntityFolderItem;
 import com.pyx4j.forms.client.ui.folder.IFolderItemDecorator;
 import com.pyx4j.forms.client.ui.folder.ItemActionsBar.ActionType;
 import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.site.client.AppSite;
-import com.pyx4j.site.client.ui.layout.responsive.LayoutChangeEvent;
-import com.pyx4j.site.client.ui.layout.responsive.LayoutChangeHandler;
-import com.pyx4j.site.client.ui.layout.responsive.ResponsiveLayoutPanel.LayoutType;
 import com.pyx4j.widgets.client.Button;
 import com.pyx4j.widgets.client.actionbar.Toolbar;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
 
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
 import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
-import com.propertyvista.domain.payment.PaymentMethod;
+import com.propertyvista.domain.contact.AddressSimple;
+import com.propertyvista.domain.payment.PaymentDetails;
 import com.propertyvista.portal.rpc.portal.web.dto.PaymentMethodInfoDTO;
 import com.propertyvista.portal.rpc.portal.web.dto.PaymentMethodSummaryDTO;
 import com.propertyvista.portal.web.client.resources.PortalImages;
 import com.propertyvista.portal.web.client.ui.AbstractGadget;
+import com.propertyvista.portal.web.client.ui.util.decorators.FormDecoratorBuilder;
 
 public class PaymentMethodsGadget extends AbstractGadget<FinancialDashboardViewImpl> {
 
@@ -159,8 +157,11 @@ public class PaymentMethodsGadget extends AbstractGadget<FinancialDashboardViewI
                 BasicFlexFormPanel content = new BasicFlexFormPanel();
                 int row = -1;
 
-                content.setWidget(++row, 0, inject(proto().paymentMethod(), new CEntityLabel<PaymentMethod>()));
-                content.getWidget(row, 0).getElement().getStyle().setFontWeight(FontWeight.BOLD);
+                content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().paymentMethod().creationDate(), new CDateLabel()), 100).build());
+                content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().paymentMethod().type(), new CEnumLabel()), 150).build());
+                content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().paymentMethod().details(), new CEntityLabel<PaymentDetails>())).build());
+                content.setWidget(++row, 0,
+                        new FormDecoratorBuilder(inject(proto().paymentMethod().billingAddress(), new CEntityLabel<AddressSimple>())).build());
 
                 return content;
             }

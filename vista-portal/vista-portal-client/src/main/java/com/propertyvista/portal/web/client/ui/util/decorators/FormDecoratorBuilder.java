@@ -67,4 +67,8 @@ public class FormDecoratorBuilder extends WidgetDecorator.Builder {
     public FormDecoratorBuilder(CComponent<?> component, int componentWidth) {
         this(component, LABEL_WIDTH, componentWidth + "px", CONTENT_WIDTH);
     }
+
+    public FormDecoratorBuilder(CComponent<?> component) {
+        this(component, LABEL_WIDTH, CONTENT_WIDTH, CONTENT_WIDTH);
+    }
 }
