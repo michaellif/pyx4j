@@ -70,6 +70,7 @@ public interface PmcYardiCredential extends IEntity {
 
     IPrimitive<Platform> platform();
 
+    //TODO rename to Property Lists 
     @Length(4000)
     @Editor(type = EditorType.textarea)
     IPrimitive<String> propertyCode();
