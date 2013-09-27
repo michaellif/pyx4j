@@ -63,7 +63,7 @@ public class ViewPaymentMethodActivity extends SecurityAwareActivity implements 
 
     @Override
     public void edit(Key id) {
-        AppSite.getPlaceController().goTo(new Financial.PaymentMethods.EditPaymentMethod().formPlace(id));
+        AppSite.getPlaceController().goTo(new Financial.PaymentMethods.PaymentMethod().formEditorPlace(id));
     }
 
     @Override

@@ -63,6 +63,6 @@ public class PaymentWizardActivity extends AbstractWizardActivity<PaymentDTO> im
     @Override
     protected void onSaved(Key result) {
         getView().reset();
-        AppSite.getPlaceController().goTo(new Financial.PaymentSubmitting(result));
+        AppSite.getPlaceController().goTo(new Financial.Payment.PaymentSubmitting(result));
     }
 }

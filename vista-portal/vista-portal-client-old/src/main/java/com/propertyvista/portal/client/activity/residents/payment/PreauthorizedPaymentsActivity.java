@@ -20,7 +20,6 @@ import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.site.client.AppSite;
-import com.pyx4j.site.rpc.AppPlace;
 
 import com.propertyvista.portal.client.PortalSite;
 import com.propertyvista.portal.client.activity.SecurityAwareActivity;
@@ -57,8 +56,7 @@ public class PreauthorizedPaymentsActivity extends SecurityAwareActivity impleme
 
     @Override
     public void viewPaymentMethod(PreauthorizedPaymentListDTO.ListItemDTO preauthorizedPayment) {
-        AppPlace place = new Financial.PaymentMethods.ViewPaymentMethod();
-        AppSite.getPlaceController().goTo(place.formPlace(preauthorizedPayment.paymentMethod().id().getValue()));
+        AppSite.getPlaceController().goTo(new Financial.PaymentMethods.PaymentMethod().formViewerPlace(preauthorizedPayment.paymentMethod().id().getValue()));
     }
 
     @Override

@@ -62,7 +62,7 @@ public class ViewBillActivity extends SecurityAwareActivity implements ViewBillV
 
     @Override
     public void payBill() {
-        AppSite.getPlaceController().goTo(new Financial.PayNow());
+        AppSite.getPlaceController().goTo(new Financial.Payment.PayNow());
     }
 
     @Override

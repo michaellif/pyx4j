@@ -83,10 +83,15 @@ public class ContentActivityMapper implements AppActivityMapper {
 
                     } else if (appPlace instanceof Financial.PaymentMethods) {
                         activity = new PaymentMethodsActivity(appPlace);
-                    } else if (appPlace instanceof Financial.PaymentMethods.ViewPaymentMethod) {
-                        activity = new ViewPaymentMethodActivity(appPlace);
-                    } else if (appPlace instanceof Financial.PaymentMethods.EditPaymentMethod) {
-                        activity = new EditPaymentMethodActivity(appPlace);
+                    } else if (appPlace instanceof Financial.PaymentMethods.PaymentMethod) {
+                        switch (((CrudAppPlace) appPlace).getType()) {
+                        case editor:
+                            activity = new EditPaymentMethodActivity(appPlace);
+                            break;
+                        case viewer:
+                            activity = new ViewPaymentMethodActivity(appPlace);
+                            break;
+                        }
                     } else if (appPlace instanceof Financial.PaymentMethods.NewPaymentMethod) {
                         activity = new PaymentMethodWizardActivity((CrudAppPlace) appPlace);
                     } else if (appPlace instanceof Financial.PaymentMethods.PaymentMethodSubmitted) {
@@ -101,9 +106,9 @@ public class ContentActivityMapper implements AppActivityMapper {
                     } else if (appPlace instanceof Resident.Financial.FinancialSummary) {
                         activity = new FinancialSummaryActivity(appPlace);
 
-                    } else if (appPlace instanceof Resident.Financial.PayNow) {
+                    } else if (appPlace instanceof Resident.Financial.Payment.PayNow) {
                         activity = new PaymentWizardActivity((CrudAppPlace) appPlace);
-                    } else if (appPlace instanceof Resident.Financial.PaymentSubmitting) {
+                    } else if (appPlace instanceof Resident.Financial.Payment.PaymentSubmitting) {
                         activity = new PaymentSubmittingActivity(appPlace);
 
                     } else if (appPlace instanceof Resident.Financial.PreauthorizedPayments) {

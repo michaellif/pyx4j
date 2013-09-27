@@ -98,6 +98,16 @@ public class PortalSiteMap implements SiteMap {
             public static class TransactionHistory extends AppPlace {
             }
 
+            // ---> Old Portal places: 
+            public static class FinancialSummary extends AppPlace {
+
+            }
+
+            public static class BillSummary extends AppPlace {
+            }
+
+            // ---> Old Portal places (end) 
+
             public static class Payment extends AppPlace {
 
                 public static class PayNow extends CrudAppPlace {

@@ -65,7 +65,7 @@ public class DashboardActivity extends SecurityAwareActivity implements Dashboar
     @Override
     public void payNow() {
         if (SecurityController.checkAnyBehavior(VistaCustomerPaymentTypeBehavior.values())) {
-            AppSite.getPlaceController().goTo(new Financial.PayNow());
+            AppSite.getPlaceController().goTo(new Financial.Payment.PayNow());
         }
     }
 

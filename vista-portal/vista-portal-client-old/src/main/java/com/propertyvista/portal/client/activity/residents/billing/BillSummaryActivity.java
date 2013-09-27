@@ -64,7 +64,7 @@ public class BillSummaryActivity extends SecurityAwareActivity implements BillSu
 
     @Override
     public void payNow() {
-        AppSite.getPlaceController().goTo(new Financial.PayNow());
+        AppSite.getPlaceController().goTo(new Financial.Payment.PayNow());
     }
 
     @Override

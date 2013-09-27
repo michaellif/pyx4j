@@ -63,7 +63,7 @@ public class FinancialSummaryActivity extends AbstractActivity implements Financ
     @Override
     public void payNow() {
         if (SecurityController.checkAnyBehavior(VistaCustomerPaymentTypeBehavior.values())) {
-            AppSite.getPlaceController().goTo(new Financial.PayNow());
+            AppSite.getPlaceController().goTo(new Financial.Payment.PayNow());
         }
     }
 
