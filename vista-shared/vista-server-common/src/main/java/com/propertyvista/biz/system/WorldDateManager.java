@@ -21,6 +21,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.pyx4j.commons.Consts;
+import com.pyx4j.commons.TimeUtils;
 import com.pyx4j.config.server.ServerSideConfiguration;
 
 import com.propertyvista.config.AbstractVistaServerSideConfiguration;
@@ -48,6 +49,7 @@ public class WorldDateManager {
 
     public static Date getRemoteTime() {
         Date remoteTime = null;
+        long start = System.currentTimeMillis();
         TimeUDPClient client = new TimeUDPClient();
         try {
             // We want to timeout if a response takes longer than 60 seconds
@@ -55,7 +57,7 @@ public class WorldDateManager {
             client.open();
             remoteTime = client.getDate(InetAddress.getByName(ServerSideConfiguration.instance(AbstractVistaServerSideConfiguration.class).rdateServer()));
             timedelta = remoteTime.getTime() - System.currentTimeMillis();
-            log.debug("RemoteTime {}, timeDelta {} ", remoteTime, timedelta);
+            log.debug("RemoteTime {}, timeDelta {} msec, sync {}", remoteTime, timedelta, TimeUtils.secSince(start));
         } catch (Throwable e) {
             log.error("Error getting remote time", e);
         } finally {
