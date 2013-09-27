@@ -23,6 +23,7 @@ import org.slf4j.LoggerFactory;
 import com.pyx4j.commons.Consts;
 import com.pyx4j.commons.TimeUtils;
 import com.pyx4j.config.server.ServerSideConfiguration;
+import com.pyx4j.config.shared.ApplicationMode;
 
 import com.propertyvista.config.AbstractVistaServerSideConfiguration;
 
@@ -39,7 +40,7 @@ public class WorldDateManager {
 
     public static Date getWorldTime() {
         long now = System.currentTimeMillis();
-        if (remoteTimeEol <= now) {
+        if ((ApplicationMode.offlineDevelopment) || remoteTimeEol <= now) {
             getRemoteTime();
             return new Date(System.currentTimeMillis() + timedelta);
         } else {
