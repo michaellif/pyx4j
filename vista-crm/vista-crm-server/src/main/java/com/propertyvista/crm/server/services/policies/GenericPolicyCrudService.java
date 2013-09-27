@@ -80,7 +80,7 @@ public abstract class GenericPolicyCrudService<POLICY extends Policy, POLICY_DTO
             }
             dbo.node().set(node);
         }
-        if (node.isNull() || node.id().isNull()) {
+        if (node.isNull() || node.getPrimaryKey() == null) {
             throw new Error("unable to persist policy, the scope (a node in organizatonal hierarchy) was not set");
         }
 
