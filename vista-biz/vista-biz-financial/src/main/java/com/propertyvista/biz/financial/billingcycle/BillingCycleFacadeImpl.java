@@ -13,11 +13,14 @@
  */
 package com.propertyvista.biz.financial.billingcycle;
 
+import java.util.List;
+
 import com.pyx4j.commons.LogicalDate;
 
 import com.propertyvista.domain.financial.billing.BillingCycle;
 import com.propertyvista.domain.financial.billing.BillingType;
 import com.propertyvista.domain.policy.policies.LeaseBillingPolicy;
+import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.tenant.lease.Lease;
 
 public class BillingCycleFacadeImpl implements BillingCycleFacade {
@@ -48,7 +51,12 @@ public class BillingCycleFacadeImpl implements BillingCycleFacade {
     }
 
     @Override
-    public void onLeaseBillingPolicyChange(LeaseBillingPolicy oldPolicy, LeaseBillingPolicy newPolicy) {
-        BillingCycleManager.instance().onLeaseBillingPolicyChange(oldPolicy, newPolicy);
+    public void onLeaseBillingPolicyChange(LeaseBillingPolicy newPolicy) {
+        BillingCycleManager.instance().onLeaseBillingPolicyChange(newPolicy);
+    }
+
+    @Override
+    public void onLeaseBillingPolicyDelete(List<Building> affectedBuildings) {
+        BillingCycleManager.instance().onLeaseBillingPolicyDelete(affectedBuildings);
     }
 }

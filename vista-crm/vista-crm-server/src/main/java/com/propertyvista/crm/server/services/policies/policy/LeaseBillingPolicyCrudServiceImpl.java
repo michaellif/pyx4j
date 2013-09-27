@@ -13,17 +13,18 @@
  */
 package com.propertyvista.crm.server.services.policies.policy;
 
+import java.util.List;
+
 import com.pyx4j.config.server.ServerSideFactory;
-import com.pyx4j.entity.server.Persistence;
-import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
-import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 
 import com.propertyvista.biz.financial.billingcycle.BillingCycleFacade;
+import com.propertyvista.biz.policy.PolicyFacade;
 import com.propertyvista.crm.rpc.services.policies.policy.LeaseBillingPolicyCrudService;
 import com.propertyvista.crm.server.services.policies.GenericPolicyCrudService;
 import com.propertyvista.domain.financial.BillingAccount;
 import com.propertyvista.domain.policy.dto.LeaseBillingPolicyDTO;
 import com.propertyvista.domain.policy.policies.LeaseBillingPolicy;
+import com.propertyvista.domain.property.asset.building.Building;
 
 public class LeaseBillingPolicyCrudServiceImpl extends GenericPolicyCrudService<LeaseBillingPolicy, LeaseBillingPolicyDTO> implements
         LeaseBillingPolicyCrudService {
@@ -41,13 +42,19 @@ public class LeaseBillingPolicyCrudServiceImpl extends GenericPolicyCrudService<
 
     @Override
     protected void persist(LeaseBillingPolicy dbo, LeaseBillingPolicyDTO in) {
-        EntityQueryCriteria<LeaseBillingPolicy> criteria = new EntityQueryCriteria<LeaseBillingPolicy>(LeaseBillingPolicy.class);
-        criteria.add(PropertyCriterion.eq(criteria.proto().node(), dbo.node()));
-        LeaseBillingPolicy oldPolicy = Persistence.service().retrieve(criteria);
-
         super.persist(dbo, in);
 
-        ServerSideFactory.create(BillingCycleFacade.class).onLeaseBillingPolicyChange(oldPolicy, dbo);
+        ServerSideFactory.create(BillingCycleFacade.class).onLeaseBillingPolicyChange(dbo);
     }
 
+    @Override
+    protected void delete(LeaseBillingPolicy actualEntity) {
+        // retrieve affected buildings
+        List<Building> buildings = ServerSideFactory.create(PolicyFacade.class).getGovernedNodesOfType(actualEntity, Building.class);
+
+        super.delete(actualEntity);
+
+        // update billing cycles for the affected buildings
+        ServerSideFactory.create(BillingCycleFacade.class).onLeaseBillingPolicyDelete(buildings);
+    }
 }

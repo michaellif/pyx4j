@@ -13,12 +13,11 @@
  */
 package com.propertyvista.biz.financial.billingcycle;
 
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.config.server.ServerSideFactory;
@@ -217,33 +216,33 @@ class BillingCycleManager {
         return billingCycle;
     }
 
-    void onLeaseBillingPolicyChange(LeaseBillingPolicy oldPolicy, LeaseBillingPolicy newPolicy) {
+    void onLeaseBillingPolicyDelete(List<Building> affectedBuildings) {
+        for (Building building : affectedBuildings) {
+            LeaseBillingPolicy policy = ServerSideFactory.create(PolicyFacade.class).obtainEffectivePolicy(building, LeaseBillingPolicy.class);
+            updateBillingCycles(policy, Arrays.asList(building));
+        }
+    }
+
+    /**
+     * update future BillingCycles with new execution dates
+     */
+    void onLeaseBillingPolicyChange(LeaseBillingPolicy policy) {
         // get all affected buildings
-        List<Building> buildings = ServerSideFactory.create(PolicyFacade.class).getGovernedNodesOfType(newPolicy, Building.class);
+        List<Building> buildings = ServerSideFactory.create(PolicyFacade.class).getGovernedNodesOfType(policy, Building.class);
+        updateBillingCycles(policy, buildings);
+    }
+
+    private void updateBillingCycles(LeaseBillingPolicy policy, List<Building> buildings) {
         if (buildings == null || buildings.size() == 0) {
             return;
         }
 
-        // update future BillingCycles if execution dates have changed
-        Map<BillingPeriod, LeaseBillingTypePolicyItem> policyMap = new HashMap<BillingPeriod, LeaseBillingTypePolicyItem>();
-        for (LeaseBillingTypePolicyItem item : newPolicy.availableBillingTypes()) {
-            policyMap.put(item.billingPeriod().getValue(), item);
-        }
+        for (LeaseBillingTypePolicyItem newItem : policy.availableBillingTypes()) {
 
-        for (LeaseBillingTypePolicyItem oldItem : oldPolicy.availableBillingTypes()) {
-            LeaseBillingTypePolicyItem newItem = policyMap.get(oldItem.billingPeriod().getValue());
-            if (// @formatter:off
-                oldItem.billExecutionDayOffset().getValue() == newItem.billExecutionDayOffset().getValue() &&
-                oldItem.padCalculationDayOffset().getValue() == newItem.padCalculationDayOffset().getValue() &&
-                oldItem.padExecutionDayOffset().getValue() == newItem.padExecutionDayOffset().getValue()
-                // @formatter:on
-            ) {
-                continue;
-            }
             // iterate over future billing cycles
             EntityQueryCriteria<BillingCycle> criteria = new EntityQueryCriteria<BillingCycle>(BillingCycle.class);
             criteria.add(PropertyCriterion.in(criteria.proto().building(), buildings));
-            criteria.add(PropertyCriterion.eq(criteria.proto().billingType().billingPeriod(), oldItem.billingPeriod()));
+            criteria.add(PropertyCriterion.eq(criteria.proto().billingType().billingPeriod(), newItem.billingPeriod()));
             criteria.add(PropertyCriterion.gt(criteria.proto().billingCycleStartDate(), SystemDateManager.getDate()));
             for (BillingCycle billingCycle : Persistence.service().query(criteria)) {
                 // For each cycle we can update ANY date that is in the future

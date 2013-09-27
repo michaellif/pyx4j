@@ -228,18 +228,22 @@ class PolicyManager {
     }
 
     @SuppressWarnings("unchecked")
-    /**
-     * Sibling nodes included
-     */
     public static <T extends PolicyNode> List<T> descendantsOf(PolicyNode parent, Class<T> descendant) {
+        // stop right here if the parent is what we are looking for
+        if (parent.getInstanceValueClass().equals(descendant)) {
+            return Arrays.asList(parent.<T> cast());
+        }
+
         Class<? extends PolicyNode> nodeClass = parent != null ? (Class<? extends PolicyNode>) parent.getInstanceValueClass() : OrganizationPoliciesNode.class;
         if (!HIERARCHY.contains(descendant)) {
             throw new IllegalArgumentException("Unknown node type: " + descendant.getSimpleName());
         }
         int hPos = HIERARCHY.indexOf(descendant);
-        if (hPos > HIERARCHY.indexOf(nodeClass)) {
+        if (hPos >= HIERARCHY.indexOf(nodeClass)) {
             throw new IllegalArgumentException(descendant.getSimpleName() + " is not a descendant of " + nodeClass.getSimpleName());
         }
+
+        // continue down the hierarchy
         List<T> resultList = new ArrayList<T>();
         List<PolicyNode> parentList = Arrays.asList(parent);
         while (parentList != null && parentList.size() > 0) {
@@ -249,7 +253,7 @@ class PolicyManager {
                     // some nodes, such as Complex, are "transparent", so we get their children if
                     // parent does not exist - that means we have to check for child class here
                     if (c.getInstanceValueClass().equals(descendant)) {
-                        resultList.add((T) c);
+                        resultList.add(c.<T> cast());
                     } else {
                         childList.add(c);
                     }
