@@ -14,6 +14,7 @@
 package com.propertyvista.biz.tenant.insurance;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import com.pyx4j.commons.LogicalDate;
@@ -28,6 +29,7 @@ import com.pyx4j.i18n.shared.I18n;
 import com.propertyvista.biz.policy.PolicyFacade;
 import com.propertyvista.domain.policy.policies.TenantInsurancePolicy;
 import com.propertyvista.domain.tenant.insurance.InsuranceCertificate;
+import com.propertyvista.domain.tenant.insurance.PropertyVistaIntegratedInsurance;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.Tenant;
 import com.propertyvista.portal.rpc.portal.web.dto.insurance.status.GeneralInsuranceCertificateSummaryDTO;
@@ -39,18 +41,30 @@ public class TenantInsuranceFacadeImpl implements TenantInsuranceFacade {
     private static final I18n i18n = I18n.get(TenantInsuranceFacadeImpl.class);
 
     @Override
-    public List<InsuranceCertificate> getInsuranceCertificates(Tenant tenantId) {
+    public List<InsuranceCertificate> getInsuranceCertificates(Tenant tenantId, boolean ownedOnly) {
         LogicalDate today = new LogicalDate(SystemDateManager.getDate());
 
         // try to get current insurance certificate either tenant's own or the insurance certificate of the room mate
-
         EntityQueryCriteria<InsuranceCertificate> ownInsuranceCriteira = EntityQueryCriteria.create(InsuranceCertificate.class);
-        ownInsuranceCriteira.eq(ownInsuranceCriteira.proto().tenant().lease().leaseParticipants(), tenantId);
-        ownInsuranceCriteira.eq(ownInsuranceCriteira.proto().isDeleted(), Boolean.FALSE);
+        if (ownedOnly) {
+            ownInsuranceCriteira.eq(ownInsuranceCriteira.proto().insurancePolicy().tenant(), tenantId);
+        } else {
+            ownInsuranceCriteira.eq(ownInsuranceCriteira.proto().insurancePolicy().tenant().lease().leaseParticipants(), tenantId);
+        }
+        ownInsuranceCriteira.eq(ownInsuranceCriteira.proto().insurancePolicy().isDeleted(), Boolean.FALSE);
         ownInsuranceCriteira.or(PropertyCriterion.gt(ownInsuranceCriteira.proto().expiryDate(), today),
                 PropertyCriterion.isNull(ownInsuranceCriteira.proto().expiryDate()));
 
-        return sortInsuranceCertificates(Persistence.service().query(ownInsuranceCriteira), tenantId);
+        List<InsuranceCertificate> certificates = Persistence.service().query(ownInsuranceCriteira);
+        for (InsuranceCertificate certificate : certificates) {
+            Persistence.service().retrieve(certificate.insurancePolicy());
+            Persistence.service().retrieve(certificate.insurancePolicy().tenant());
+        }
+        List<InsuranceCertificate> sorted = sortInsuranceCertificates(certificates, tenantId);
+        for (InsuranceCertificate certificate : sorted) {
+            certificate.insurancePolicy().detach();
+        }
+        return sorted;
     }
 
     @Override
@@ -62,10 +76,10 @@ public class TenantInsuranceFacadeImpl implements TenantInsuranceFacade {
                 TenantInsurancePolicy.class);
         insuranceStatusDTO.minimumRequiredLiability().setValue(tenantInsurancePolicy.minimumRequiredLiability().getValue());
 
-        for (InsuranceCertificate certificate : getInsuranceCertificates(tenantId)) {
+        for (InsuranceCertificate<?> certificate : getInsuranceCertificates(tenantId, false)) {
             InsuranceCertificateSummaryDTO certificateSummaryDTO = EntityFactory.create(InsuranceCertificateSummaryDTO.class);
 
-            if (certificate.isPropertyVistaIntegratedProvider().isBooleanTrue()) {
+            if (certificate instanceof PropertyVistaIntegratedInsurance) {
                 // TODO currently TenantSure is the only integrated provider so we don't try to understand which one it is
                 certificateSummaryDTO = ServerSideFactory.create(TenantSureFacade.class).getStatus(tenantId);
             } else {
@@ -74,7 +88,7 @@ public class TenantInsuranceFacadeImpl implements TenantInsuranceFacade {
                 certificateSummaryDTO = otherProviderStatus;
             }
             certificateSummaryDTO.insuranceProvider().setValue(certificate.insuranceProvider().getValue());
-            certificateSummaryDTO.isOwner().setValue(certificate.tenant().getPrimaryKey().equals(tenantId.getPrimaryKey()));
+            certificateSummaryDTO.isOwner().setValue(certificate.insurancePolicy().tenant().getPrimaryKey().equals(tenantId.getPrimaryKey()));
 
             certificateSummaryDTO.liabilityCoverage().setValue(certificate.liabilityCoverage().getValue());
             certificateSummaryDTO.expiryDate().setValue(certificate.expiryDate().getValue());
@@ -95,7 +109,7 @@ public class TenantInsuranceFacadeImpl implements TenantInsuranceFacade {
     /** this one chooses the best insurance certificate out of all insurance certificates */
     private List<InsuranceCertificate> sortInsuranceCertificates(List<InsuranceCertificate> insuranceCertificates, final Tenant tenantId) {
         if (insuranceCertificates.isEmpty()) {
-            return null;
+            return Collections.emptyList();
         }
         ArrayList<InsuranceCertificate> sortedInsuranceCertificates = new ArrayList<InsuranceCertificate>(insuranceCertificates);
         java.util.Collections.sort(sortedInsuranceCertificates, new InsuranceCertificateComparator(tenantId));

@@ -74,7 +74,8 @@ public class TransactionsReport implements Report {
                         TenantSureCcTaransactionsReportLineDTO transactionReportLine = EntityFactory.create(TenantSureCcTaransactionsReportLineDTO.class);
                         transactionReportLine.date().setValue(transaction.transactionDate().getValue());
                         transactionReportLine.tenant().setValue(transaction.insurance().tenant().customer().person().name().getStringView());
-                        transactionReportLine.insuranceCertificateNumber().setValue(transaction.insurance().insuranceCertificateNumber().getValue());
+                        transactionReportLine.insuranceCertificateNumber().setValue(
+                                transaction.insurance().certificate().insuranceCertificateNumber().getValue());
                         if (transaction.paymentMethod().details().isInstanceOf(CreditCardInfo.class)) {
                             CreditCardInfo ccInfo = transaction.paymentMethod().details().duplicate(CreditCardInfo.class);
                             transactionReportLine.creditCardType().setValue(ccInfo.cardType().getValue().toString());

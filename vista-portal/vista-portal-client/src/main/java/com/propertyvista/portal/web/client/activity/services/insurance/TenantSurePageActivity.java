@@ -17,16 +17,16 @@ import com.google.gwt.core.client.GWT;
 
 import com.pyx4j.site.rpc.AppPlace;
 
-import com.propertyvista.portal.rpc.portal.web.dto.insurance.InsuranceTenantSureCertificateDTO;
-import com.propertyvista.portal.rpc.portal.web.services.services.TenantSureAgreementCrudService;
+import com.propertyvista.portal.rpc.portal.web.dto.insurance.TenantSureInsurancePolicyDTO;
+import com.propertyvista.portal.rpc.portal.web.services.services.TenantSureInsurancePolicyCrudService;
 import com.propertyvista.portal.web.client.activity.AbstractEditorActivity;
 import com.propertyvista.portal.web.client.ui.services.insurance.TenantSurePageView;
 import com.propertyvista.portal.web.client.ui.services.insurance.TenantSurePageView.TenantSurePagePresenter;
 
-public class TenantSurePageActivity extends AbstractEditorActivity<InsuranceTenantSureCertificateDTO> implements TenantSurePagePresenter {
+public class TenantSurePageActivity extends AbstractEditorActivity<TenantSureInsurancePolicyDTO> implements TenantSurePagePresenter {
 
     public TenantSurePageActivity(AppPlace place) {
-        super(TenantSurePageView.class, GWT.<TenantSureAgreementCrudService> create(TenantSureAgreementCrudService.class), place);
+        super(TenantSurePageView.class, GWT.<TenantSureInsurancePolicyCrudService> create(TenantSureInsurancePolicyCrudService.class), place);
     }
 
 }

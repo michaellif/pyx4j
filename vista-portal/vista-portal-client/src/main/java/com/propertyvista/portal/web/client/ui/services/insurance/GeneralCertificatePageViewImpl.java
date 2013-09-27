@@ -13,10 +13,10 @@
  */
 package com.propertyvista.portal.web.client.ui.services.insurance;
 
-import com.propertyvista.portal.rpc.portal.web.dto.insurance.InsuranceGeneralCertificateDTO;
+import com.propertyvista.portal.rpc.portal.web.dto.insurance.GeneralInsurancePolicyDTO;
 import com.propertyvista.portal.web.client.ui.AbstractEditorView;
 
-public class GeneralCertificatePageViewImpl extends AbstractEditorView<InsuranceGeneralCertificateDTO> implements GeneralCertificatePageView {
+public class GeneralCertificatePageViewImpl extends AbstractEditorView<GeneralInsurancePolicyDTO> implements GeneralCertificatePageView {
 
     public GeneralCertificatePageViewImpl() {
         super();

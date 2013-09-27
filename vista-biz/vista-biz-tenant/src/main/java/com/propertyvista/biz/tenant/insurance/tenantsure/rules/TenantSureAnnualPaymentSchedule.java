@@ -18,8 +18,8 @@ import java.math.BigDecimal;
 import com.pyx4j.entity.shared.EntityFactory;
 
 import com.propertyvista.domain.payment.InsurancePaymentMethod;
-import com.propertyvista.domain.tenant.insurance.InsuranceTenantSureCertificate;
 import com.propertyvista.domain.tenant.insurance.InsuranceTenantSureTransaction;
+import com.propertyvista.domain.tenant.insurance.TenantSureInsurancePolicy;
 import com.propertyvista.domain.tenant.insurance.TenantSurePaymentSchedule;
 import com.propertyvista.portal.rpc.portal.web.dto.insurance.TenantSureQuoteDTO;
 
@@ -36,14 +36,14 @@ public class TenantSureAnnualPaymentSchedule implements ITenantSurePaymentSchedu
     }
 
     @Override
-    public InsuranceTenantSureTransaction initFirstTransaction(InsuranceTenantSureCertificate insuranceTenantSure, InsurancePaymentMethod paymentMethod) {
+    public InsuranceTenantSureTransaction initFirstTransaction(TenantSureInsurancePolicy insuranceTenantSure, InsurancePaymentMethod paymentMethod) {
         InsuranceTenantSureTransaction transaction = EntityFactory.create(InsuranceTenantSureTransaction.class);
         transaction.insurance().set(insuranceTenantSure);
         transaction.paymentMethod().set(paymentMethod);
         transaction.status().setValue(InsuranceTenantSureTransaction.TransactionStatus.Draft);
         transaction.amount().setValue(insuranceTenantSure.totalAnnualPayable().getValue());
         transaction.paymentDue().setValue(insuranceTenantSure.inceptionDate().getValue());
-        return null;
+        return transaction;
     }
 
 }

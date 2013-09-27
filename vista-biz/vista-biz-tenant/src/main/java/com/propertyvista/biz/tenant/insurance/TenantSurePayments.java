@@ -44,8 +44,9 @@ import com.propertyvista.biz.financial.payment.PaymentMethodFacade;
 import com.propertyvista.biz.system.Vista2PmcFacade;
 import com.propertyvista.domain.payment.CreditCardInfo;
 import com.propertyvista.domain.payment.InsurancePaymentMethod;
-import com.propertyvista.domain.tenant.insurance.InsuranceTenantSureCertificate;
 import com.propertyvista.domain.tenant.insurance.InsuranceTenantSureTransaction;
+import com.propertyvista.domain.tenant.insurance.TenantSureInsurancePolicy;
+import com.propertyvista.domain.tenant.insurance.TenantSureInsurancePolicy.TenantSureStatus;
 import com.propertyvista.domain.tenant.lease.Tenant;
 import com.propertyvista.server.jobs.TaskRunner;
 
@@ -83,7 +84,7 @@ class TenantSurePayments {
         return cal.get(Calendar.DAY_OF_MONTH);
     }
 
-    static LogicalDate getNextPaymentDate(InsuranceTenantSureCertificate insuranceTenantSure) {
+    static LogicalDate getNextPaymentDate(TenantSureInsurancePolicy insuranceTenantSure) {
         // Get last transaction
         EntityQueryCriteria<InsuranceTenantSureTransaction> criteria = EntityQueryCriteria.create(InsuranceTenantSureTransaction.class);
         criteria.eq(criteria.proto().insurance(), insuranceTenantSure);
@@ -133,7 +134,7 @@ class TenantSurePayments {
         transaction.transactionDate().setValue(SystemDateManager.getDate());
     }
 
-    public static void performOutstandingPayment(final InsuranceTenantSureCertificate insuranceTenantSure) {
+    public static void performOutstandingPayment(final TenantSureInsurancePolicy insuranceTenantSure) {
         final LogicalDate dueDate = getNextPaymentDate(insuranceTenantSure);
         InsuranceTenantSureTransaction transaction = TaskRunner.runAutonomousTransation(new Callable<InsuranceTenantSureTransaction>() {
             @Override
@@ -164,16 +165,16 @@ class TenantSurePayments {
 
         }
 
-        EntityQueryCriteria<InsuranceTenantSureCertificate> criteria = EntityQueryCriteria.create(InsuranceTenantSureCertificate.class);
+        EntityQueryCriteria<TenantSureInsurancePolicy> criteria = EntityQueryCriteria.create(TenantSureInsurancePolicy.class);
         OrCriterion or = criteria.or();
         or.right().eq(criteria.proto().expiryDate(), dueDate);
         or.left().isNull(criteria.proto().expiryDate());
-        criteria.eq(criteria.proto().status(), InsuranceTenantSureCertificate.TenantSureStatus.Active);
+        criteria.eq(criteria.proto().status(), TenantSureStatus.Active);
         criteria.in(criteria.proto().paymentDay(), paymentDays);
-        ICursorIterator<InsuranceTenantSureCertificate> iterator = Persistence.service().query(null, criteria, AttachLevel.Attached);
+        ICursorIterator<TenantSureInsurancePolicy> iterator = Persistence.service().query(null, criteria, AttachLevel.Attached);
         try {
             while (iterator.hasNext()) {
-                final InsuranceTenantSureCertificate insuranceTenantSure = iterator.next();
+                final TenantSureInsurancePolicy insuranceTenantSure = iterator.next();
                 if (!isPaymentMadeForPaymentDue(insuranceTenantSure, dueDate)) {
 
                     InsuranceTenantSureTransaction transaction = TaskRunner.runAutonomousTransation(new Callable<InsuranceTenantSureTransaction>() {
@@ -187,19 +188,19 @@ class TenantSurePayments {
                         executionMonitor.addProcessedEvent(//@formatter:off
                                 EXECUTION_MONITOR_SECTION_NAME,
                                 transaction.amount().getValue(),
-                                SimpleMessageFormat.format("PreAuthorized payment for insurance certificate {0} was cleared", insuranceTenantSure.insuranceCertificateNumber().getValue())
+                                SimpleMessageFormat.format("PreAuthorized payment for insurance certificate {0} was cleared", insuranceTenantSure.certificate().insuranceCertificateNumber().getValue())
                         );//@formatter:on
                     } else if (transaction.status().getValue() == InsuranceTenantSureTransaction.TransactionStatus.PaymentRejected) {
                         executionMonitor.addFailedEvent(//@formatter:off
                                 EXECUTION_MONITOR_SECTION_NAME,
                                 transaction.amount().getValue(),
-                                SimpleMessageFormat.format("PreAuthorized payment for insurance certificate {0} was rejected", insuranceTenantSure.insuranceCertificateNumber().getValue())
+                                SimpleMessageFormat.format("PreAuthorized payment for insurance certificate {0} was rejected", insuranceTenantSure.certificate().insuranceCertificateNumber().getValue())
                         );//@formatter:on
                     } else {
                         executionMonitor.addErredEvent(//@formatter:off
                                 EXECUTION_MONITOR_SECTION_NAME,
                                 transaction.amount().getValue(),
-                                SimpleMessageFormat.format("PreAuthorized payment for insurance certificate {0} is neither cleared nor rejected", insuranceTenantSure.insuranceCertificateNumber().getValue())
+                                SimpleMessageFormat.format("PreAuthorized payment for insurance certificate {0} is neither cleared nor rejected", insuranceTenantSure.certificate().insuranceCertificateNumber().getValue())
                         );//@formatter:on
                     }
 
@@ -210,7 +211,7 @@ class TenantSurePayments {
         }
     }
 
-    static boolean isPaymentMadeForPaymentDue(InsuranceTenantSureCertificate insuranceTenantSure, LogicalDate dueDate) {
+    static boolean isPaymentMadeForPaymentDue(TenantSureInsurancePolicy insuranceTenantSure, LogicalDate dueDate) {
         // Get last transaction
         EntityQueryCriteria<InsuranceTenantSureTransaction> criteria = EntityQueryCriteria.create(InsuranceTenantSureTransaction.class);
         criteria.eq(criteria.proto().insurance(), insuranceTenantSure);
@@ -226,7 +227,7 @@ class TenantSurePayments {
         return cal.get(Calendar.MONTH);
     }
 
-    static BigDecimal getMonthlyPayable(InsuranceTenantSureCertificate insuranceTenantSure, LogicalDate dueDate) {
+    static BigDecimal getMonthlyPayable(TenantSureInsurancePolicy insuranceTenantSure, LogicalDate dueDate) {
         if (getMonth(insuranceTenantSure.inceptionDate().getValue()) == getMonth(dueDate)) {
             return insuranceTenantSure.totalAnniversaryFirstMonthPayable().getValue();
         } else {
@@ -234,7 +235,7 @@ class TenantSurePayments {
         }
     }
 
-    static InsuranceTenantSureTransaction makePaymentTransaction(InsuranceTenantSureCertificate insuranceTenantSure, LogicalDate dueDate) {
+    static InsuranceTenantSureTransaction makePaymentTransaction(TenantSureInsurancePolicy insuranceTenantSure, LogicalDate dueDate) {
         InsuranceTenantSureTransaction transaction = EntityFactory.create(InsuranceTenantSureTransaction.class);
         transaction.insurance().set(insuranceTenantSure);
         transaction.paymentMethod().set(getPaymentMethod(insuranceTenantSure.client().tenant()));

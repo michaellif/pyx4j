@@ -15,12 +15,12 @@ package com.propertyvista.portal.web.client.ui.services.insurance;
 
 import java.math.BigDecimal;
 
-import com.propertyvista.portal.rpc.portal.web.dto.insurance.InsuranceGeneralCertificateDTO;
+import com.propertyvista.portal.rpc.portal.web.dto.insurance.GeneralInsurancePolicyDTO;
 import com.propertyvista.portal.web.client.ui.IWizardView;
 
-public interface GeneralCertificateUploadWizardView extends IWizardView<InsuranceGeneralCertificateDTO> {
+public interface GeneralCertificateUploadWizardView extends IWizardView<GeneralInsurancePolicyDTO> {
 
-    public interface GeneralCertificateUploadWizardPresenter extends WizardPresenter<InsuranceGeneralCertificateDTO> {
+    public interface GeneralCertificateUploadWizardPresenter extends WizardPresenter<GeneralInsurancePolicyDTO> {
 
     }
 

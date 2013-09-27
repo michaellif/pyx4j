@@ -85,7 +85,7 @@ public class BuildingResidentInsuranceListServiceImpl implements BuildingResiden
             dto.units().setValue(Persistence.service().count(unitsCriteria));
 
             EntityQueryCriteria<InsuranceCertificate> insuranceCriteria = EntityQueryCriteria.create(InsuranceCertificate.class);
-            insuranceCriteria.eq(insuranceCriteria.proto().tenant().lease().unit().building(), b);
+            insuranceCriteria.eq(insuranceCriteria.proto().insurancePolicy().tenant().lease().unit().building(), b);
             LogicalDate now = new LogicalDate();
             insuranceCriteria.or().left(PropertyCriterion.isNull(insuranceCriteria.proto().expiryDate()))
                     .right(PropertyCriterion.ge(insuranceCriteria.proto().expiryDate(), now));

@@ -39,10 +39,10 @@ import com.propertyvista.biz.tenant.insurance.tenantsure.reports.InsuranceStatus
 import com.propertyvista.biz.tenant.insurance.tenantsure.reports.ReportFileCreatorImpl;
 import com.propertyvista.biz.tenant.insurance.tenantsure.reports.TransactionsReport;
 import com.propertyvista.config.AbstractVistaServerSideConfiguration;
-import com.propertyvista.domain.tenant.insurance.InsuranceTenantSureCertificate;
-import com.propertyvista.domain.tenant.insurance.InsuranceTenantSureCertificate.CancellationType;
-import com.propertyvista.domain.tenant.insurance.InsuranceTenantSureCertificate.TenantSureStatus;
 import com.propertyvista.domain.tenant.insurance.TenantSureConstants;
+import com.propertyvista.domain.tenant.insurance.TenantSureInsurancePolicy;
+import com.propertyvista.domain.tenant.insurance.TenantSureInsurancePolicy.CancellationType;
+import com.propertyvista.domain.tenant.insurance.TenantSureInsurancePolicy.TenantSureStatus;
 import com.propertyvista.domain.tenant.lease.Tenant;
 import com.propertyvista.operations.domain.tenantsure.TenantSureHQUpdateFile;
 
@@ -54,16 +54,17 @@ public class TenantSureProcessFacadeImpl implements TenantSureProcessFacade {
 
     private static class TenantSureCancellator implements Executable<Void, RuntimeException> {
 
-        private final InsuranceTenantSureCertificate ts;
+        private final TenantSureInsurancePolicy ts;
 
-        public TenantSureCancellator(InsuranceTenantSureCertificate ts) {
+        public TenantSureCancellator(TenantSureInsurancePolicy ts) {
             this.ts = ts;
         }
 
         @Override
         public Void execute() {
             ts.status().setValue(TenantSureStatus.Cancelled);
-            log.info("cancelling TenantSure for certifcate: (#{}, expiry date {})}", ts.insuranceCertificateNumber().getValue(), ts.expiryDate().getValue());
+            log.info("cancelling TenantSure for certifcate: (#{}, expiry date {})}", ts.certificate().insuranceCertificateNumber().getValue(), ts.expiryDate()
+                    .getValue());
             Persistence.service().persist(ts);
             return null;
         }
@@ -72,9 +73,9 @@ public class TenantSureProcessFacadeImpl implements TenantSureProcessFacade {
 
     private static class TenantSureSkippedPaymentCancellator implements Executable<Void, RuntimeException> {
 
-        private final InsuranceTenantSureCertificate ts;
+        private final TenantSureInsurancePolicy ts;
 
-        public TenantSureSkippedPaymentCancellator(InsuranceTenantSureCertificate ts) {
+        public TenantSureSkippedPaymentCancellator(TenantSureInsurancePolicy ts) {
             assert ts.cancellation().getValue() == CancellationType.SkipPayment;
             this.ts = ts;
         }
@@ -93,15 +94,15 @@ public class TenantSureProcessFacadeImpl implements TenantSureProcessFacade {
         log.info("processing TenantSure cancellations requested by tenant");
 
         {
-            EntityQueryCriteria<InsuranceTenantSureCertificate> byTenantCancellationsCriteria = EntityQueryCriteria.create(InsuranceTenantSureCertificate.class);
+            EntityQueryCriteria<TenantSureInsurancePolicy> byTenantCancellationsCriteria = EntityQueryCriteria.create(TenantSureInsurancePolicy.class);
             byTenantCancellationsCriteria.le(byTenantCancellationsCriteria.proto().expiryDate(), dueDate);
-            byTenantCancellationsCriteria.eq(byTenantCancellationsCriteria.proto().status(), InsuranceTenantSureCertificate.TenantSureStatus.PendingCancellation);
-            byTenantCancellationsCriteria.eq(byTenantCancellationsCriteria.proto().cancellation(), InsuranceTenantSureCertificate.CancellationType.CancelledByTenant);
-            ICursorIterator<InsuranceTenantSureCertificate> iterator = Persistence.service().query(null, byTenantCancellationsCriteria, AttachLevel.Attached);
+            byTenantCancellationsCriteria.eq(byTenantCancellationsCriteria.proto().status(), TenantSureStatus.PendingCancellation);
+            byTenantCancellationsCriteria.eq(byTenantCancellationsCriteria.proto().cancellation(), CancellationType.CancelledByTenant);
+            ICursorIterator<TenantSureInsurancePolicy> iterator = Persistence.service().query(null, byTenantCancellationsCriteria, AttachLevel.Attached);
             try {
                 while (iterator.hasNext()) {
-                    InsuranceTenantSureCertificate ts = iterator.next();
-                    String certificateNumber = ts.insuranceCertificateNumber().getValue();
+                    TenantSureInsurancePolicy ts = iterator.next();
+                    String certificateNumber = ts.certificate().insuranceCertificateNumber().getValue();
                     try {
                         new UnitOfWork().execute(new TenantSureCancellator(ts));
                         executionMonitor.addProcessedEvent(EXECUTION_MONITOR_SECTION_NAME);
@@ -120,18 +121,17 @@ public class TenantSureProcessFacadeImpl implements TenantSureProcessFacade {
 
         {
             log.info("processing TenantSure cancellation due to skipped payment");
-            EntityQueryCriteria<InsuranceTenantSureCertificate> skippedPaymentCancellationsCriteria = EntityQueryCriteria.create(InsuranceTenantSureCertificate.class);
-            skippedPaymentCancellationsCriteria.eq(skippedPaymentCancellationsCriteria.proto().status(),
-                    InsuranceTenantSureCertificate.TenantSureStatus.PendingCancellation);
-            skippedPaymentCancellationsCriteria
-                    .eq(skippedPaymentCancellationsCriteria.proto().cancellation(), InsuranceTenantSureCertificate.CancellationType.SkipPayment);
-            ICursorIterator<InsuranceTenantSureCertificate> skippedIterator = Persistence.service().query(null, skippedPaymentCancellationsCriteria, AttachLevel.Attached);
+            EntityQueryCriteria<TenantSureInsurancePolicy> skippedPaymentCancellationsCriteria = EntityQueryCriteria.create(TenantSureInsurancePolicy.class);
+            skippedPaymentCancellationsCriteria.eq(skippedPaymentCancellationsCriteria.proto().status(), TenantSureStatus.PendingCancellation);
+            skippedPaymentCancellationsCriteria.eq(skippedPaymentCancellationsCriteria.proto().cancellation(), CancellationType.SkipPayment);
+            ICursorIterator<TenantSureInsurancePolicy> skippedIterator = Persistence.service().query(null, skippedPaymentCancellationsCriteria,
+                    AttachLevel.Attached);
             try {
                 LogicalDate today = new LogicalDate(SystemDateManager.getDate());
                 while (skippedIterator.hasNext()) {
-                    InsuranceTenantSureCertificate ts = skippedIterator.next();
+                    TenantSureInsurancePolicy ts = skippedIterator.next();
                     if (gracePeriodEnd(ts).compareTo(today) < 0) {
-                        String certificateNumber = ts.insuranceCertificateNumber().getValue();
+                        String certificateNumber = ts.certificate().insuranceCertificateNumber().getValue();
                         try {
                             new UnitOfWork().execute(new TenantSureSkippedPaymentCancellator(ts));
                             executionMonitor.addProcessedEvent(EXECUTION_MONITOR_SECTION_NAME);
@@ -212,7 +212,7 @@ public class TenantSureProcessFacadeImpl implements TenantSureProcessFacade {
         }, formatter);
     }
 
-    private LogicalDate gracePeriodEnd(InsuranceTenantSureCertificate insuranceTenantSure) {
+    private LogicalDate gracePeriodEnd(TenantSureInsurancePolicy insuranceTenantSure) {
         GregorianCalendar gracePeriodEnd = new GregorianCalendar();
         gracePeriodEnd.setTime(TenantSurePayments.getNextPaymentDate(insuranceTenantSure));
         gracePeriodEnd.add(GregorianCalendar.DATE, TenantSureConstants.TENANTSURE_SKIPPED_PAYMENT_GRACE_PERIOD_DAYS);

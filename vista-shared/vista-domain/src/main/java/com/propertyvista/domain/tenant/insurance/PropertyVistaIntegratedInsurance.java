@@ -7,22 +7,15 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on 2012-11-29
+ * Created on Sep 26, 2013
  * @author Artyom
  * @version $Id$
  */
-package com.propertyvista.portal.rpc.portal.web.dto.insurance;
+package com.propertyvista.domain.tenant.insurance;
 
-import java.math.BigDecimal;
-
-import com.pyx4j.entity.annotations.Transient;
-import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.entity.shared.IPrimitive;
-
-@Transient
-@Deprecated
-public interface OtherProviderInsuranceRequirementsDTO extends IEntity {
-
-    IPrimitive<BigDecimal> minLiability();
+/**
+ * Marker to denote PropertyVista Integrated Insurance classes.
+ */
+public interface PropertyVistaIntegratedInsurance {
 
 }

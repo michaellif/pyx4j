@@ -7,19 +7,22 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on 2013-04-10
- * @author VladL
+ * Created on 2012-11-29
+ * @author Artyom
  * @version $Id$
  */
-package com.propertyvista.portal.web.client.ui.maintenance;
+package com.propertyvista.portal.rpc.portal.dto;
 
-import com.propertyvista.portal.rpc.portal.web.dto.insurance.TenantSureInsurancePolicyDTO;
-import com.propertyvista.portal.web.client.ui.IFormView;
+import java.math.BigDecimal;
 
-public interface MaintenanceRequestConfirmationPageView extends IFormView<TenantSureInsurancePolicyDTO> {
+import com.pyx4j.entity.annotations.Transient;
+import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.shared.IPrimitive;
 
-    public interface TenantSureOrderConfirmationPagePresenter extends IFormView.IFormViewPresenter<TenantSureInsurancePolicyDTO> {
+@Transient
+@Deprecated
+public interface OtherProviderInsuranceRequirementsDTO extends IEntity {
 
-        void back();
-    }
+    IPrimitive<BigDecimal> minLiability();
+
 }

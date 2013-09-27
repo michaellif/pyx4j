@@ -25,6 +25,7 @@ import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
 
+import com.propertyvista.domain.tenant.insurance.InsuranceCertificate;
 import com.propertyvista.domain.tenant.lease.Lease;
 
 @Transient
@@ -46,7 +47,7 @@ public interface LeaseDTO extends Lease {
 
     IPrimitive<Boolean> isMoveOutWithinNextBillingCycle();
 
-    IList<TenantInsuranceCertificateDTO> tenantInsuranceCertificates();
+    IList<InsuranceCertificate> tenantInsuranceCertificates();
 
     @NotNull
     @Format("#,##0.00")

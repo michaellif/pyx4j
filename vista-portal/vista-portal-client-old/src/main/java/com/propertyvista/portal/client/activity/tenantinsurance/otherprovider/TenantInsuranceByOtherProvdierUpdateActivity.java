@@ -23,14 +23,14 @@ import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.rpc.shared.VoidSerializable;
 
-import com.propertyvista.domain.tenant.insurance.InsuranceGeneralCertificate;
+import com.propertyvista.domain.tenant.insurance.GeneralInsuranceCertificate;
 import com.propertyvista.portal.client.PortalSite;
 import com.propertyvista.portal.client.activity.SecurityAwareActivity;
 import com.propertyvista.portal.client.ui.residents.tenantinsurance.otherprovider.views.TenantInsuranceByOtherProviderUpdateView;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap;
+import com.propertyvista.portal.rpc.portal.dto.OtherProviderInsuranceRequirementsDTO;
 import com.propertyvista.portal.rpc.portal.services.resident.TenantInsuranceByOtherProviderManagementService;
 import com.propertyvista.portal.rpc.portal.services.resident.TenantInsuranceService;
-import com.propertyvista.portal.rpc.portal.web.dto.insurance.OtherProviderInsuranceRequirementsDTO;
 
 public class TenantInsuranceByOtherProvdierUpdateActivity extends SecurityAwareActivity implements TenantInsuranceByOtherProviderUpdateView.Presenter {
 
@@ -54,9 +54,9 @@ public class TenantInsuranceByOtherProvdierUpdateActivity extends SecurityAwareA
         insuranceService.getTenantInsuranceRequirements(new DefaultAsyncCallback<OtherProviderInsuranceRequirementsDTO>() {
             @Override
             public void onSuccess(final OtherProviderInsuranceRequirementsDTO requirements) {
-                insuranceByOtherProviderService.get(new DefaultAsyncCallback<InsuranceGeneralCertificate>() {
+                insuranceByOtherProviderService.get(new DefaultAsyncCallback<GeneralInsuranceCertificate>() {
                     @Override
-                    public void onSuccess(InsuranceGeneralCertificate result) {
+                    public void onSuccess(GeneralInsuranceCertificate result) {
                         view.setPresenter(TenantInsuranceByOtherProvdierUpdateActivity.this);
                         view.setMinRequiredLiability(requirements.minLiability().getValue());
                         view.populate(result);
@@ -69,7 +69,7 @@ public class TenantInsuranceByOtherProvdierUpdateActivity extends SecurityAwareA
     }
 
     @Override
-    public void save(InsuranceGeneralCertificate certificate) {
+    public void save(GeneralInsuranceCertificate certificate) {
         insuranceByOtherProviderService.save(new DefaultAsyncCallback<VoidSerializable>() {
 
             @Override

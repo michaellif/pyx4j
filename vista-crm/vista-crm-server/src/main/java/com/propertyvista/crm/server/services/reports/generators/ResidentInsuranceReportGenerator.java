@@ -80,10 +80,11 @@ public class ResidentInsuranceReportGenerator implements ReportGenerator {
 
                 ResidentInsuranceStatusDTO status = EntityFactory.create(ResidentInsuranceStatusDTO.class);
                 status.namesOnLease_().set(tenant.<Tenant> createIdentityStub());
-                List<InsuranceCertificate> insuranceCertificates = ServerSideFactory.create(TenantInsuranceFacade.class).getInsuranceCertificates(tenant);
+                List<InsuranceCertificate> insuranceCertificates = ServerSideFactory.create(TenantInsuranceFacade.class)
+                        .getInsuranceCertificates(tenant, false);
 
                 if (insuranceCertificates.size() > 0) {
-                    InsuranceCertificate insuranceCertificate = insuranceCertificates.get(0);
+                    InsuranceCertificate<?> insuranceCertificate = insuranceCertificates.get(0);
                     status.hasResidentInsurance().setValue(true);
                     status.liabilityCoverage().setValue(insuranceCertificate.liabilityCoverage().getValue());
 

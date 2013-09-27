@@ -7,22 +7,26 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Sep 16, 2013
+ * Created on Sep 3, 2013
  * @author michaellif
  * @version $Id$
  */
 package com.propertyvista.portal.rpc.portal.web.dto.insurance;
 
-import java.math.BigDecimal;
-
 import com.pyx4j.entity.annotations.Transient;
-import com.pyx4j.entity.shared.IPrimitive;
 
-import com.propertyvista.domain.tenant.insurance.InsuranceGeneralCertificate;
+import com.propertyvista.domain.payment.InsurancePaymentMethod;
+import com.propertyvista.domain.tenant.insurance.TenantSureInsurancePolicy;
 
 @Transient
-public interface InsuranceGeneralCertificateDTO extends InsuranceGeneralCertificate {
+public interface TenantSureInsurancePolicyDTO extends TenantSureInsurancePolicy {
 
-    IPrimitive<BigDecimal> minLiability();
+    TenantSureAgreementParamsDTO agreementParams();
+
+    TenantSureCoverageDTO tenantSureCoverageRequest();
+
+    TenantSureQuoteDTO quote();
+
+    InsurancePaymentMethod paymentMethod();
 
 }

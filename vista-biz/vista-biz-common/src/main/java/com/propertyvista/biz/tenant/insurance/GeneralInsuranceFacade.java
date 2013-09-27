@@ -7,18 +7,19 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on 2013-02-11
- * @author ArtyomB
+ * Created on Sep 27, 2013
+ * @author Artyom
  * @version $Id$
  */
-package com.propertyvista.dto;
+package com.propertyvista.biz.tenant.insurance;
 
-import com.pyx4j.entity.annotations.Transient;
+import com.propertyvista.domain.tenant.insurance.GeneralInsuranceCertificate;
+import com.propertyvista.domain.tenant.lease.Tenant;
 
-import com.propertyvista.domain.tenant.insurance.InsuranceCertificate;
+public interface GeneralInsuranceFacade {
 
-@Transient
-@Deprecated
-public interface TenantInsuranceCertificateDTO extends InsuranceCertificate {
+    public void createGeneralTenantInsurance(Tenant tenantId, GeneralInsuranceCertificate certifcate);
+
+    public void deleteGeneralInsurance(GeneralInsuranceCertificate deletedCertificate);
 
 }

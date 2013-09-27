@@ -32,10 +32,10 @@ import com.pyx4j.essentials.server.report.ReportTableFormatter;
 
 import com.propertyvista.biz.ExecutionMonitor;
 import com.propertyvista.biz.tenant.insurance.TenantSureReportStatusData;
-import com.propertyvista.domain.tenant.insurance.InsuranceTenantSureCertificate;
-import com.propertyvista.domain.tenant.insurance.InsuranceTenantSureCertificate.TenantSureStatus;
 import com.propertyvista.domain.tenant.insurance.InsuranceTenantSureReport;
 import com.propertyvista.domain.tenant.insurance.InsuranceTenantSureReport.ReportedStatus;
+import com.propertyvista.domain.tenant.insurance.TenantSureInsuranceCertificate;
+import com.propertyvista.domain.tenant.insurance.TenantSureInsurancePolicy.TenantSureStatus;
 
 public class InsuranceStatusReport implements Report {
 
@@ -52,12 +52,12 @@ public class InsuranceStatusReport implements Report {
         EntityQueryCriteria<InsuranceTenantSureReport> criteria = EntityQueryCriteria.create(InsuranceTenantSureReport.class);
         criteria.or(//@formatter:off
                 // active:
-                PropertyCriterion.in(criteria.proto().insurance().status(), EnumSet.of(InsuranceTenantSureCertificate.TenantSureStatus.Active, InsuranceTenantSureCertificate.TenantSureStatus.PendingCancellation)),
+                PropertyCriterion.in(criteria.proto().insurance().status(), EnumSet.of(TenantSureStatus.Active, TenantSureStatus.PendingCancellation)),
 
                 // cancelled but not reported insurance certificates:
                 new AndCriterion(
-                        PropertyCriterion.eq(criteria.proto().insurance().status(), InsuranceTenantSureCertificate.TenantSureStatus.Cancelled),
-                        PropertyCriterion.ne(criteria.proto().reportedStatus(), InsuranceTenantSureCertificate.TenantSureStatus.Cancelled)
+                        PropertyCriterion.eq(criteria.proto().insurance().status(), TenantSureStatus.Cancelled),
+                        PropertyCriterion.ne(criteria.proto().reportedStatus(), TenantSureStatus.Cancelled)
                 )
          );//@formatter:on
 
@@ -70,7 +70,7 @@ public class InsuranceStatusReport implements Report {
                 TenantSureReportStatusData data = EntityFactory.create(TenantSureReportStatusData.class);
                 data.firstName().setValue(reportedStatusHolder.insurance().client().tenant().customer().person().name().firstName().getValue());
                 data.lastName().setValue(reportedStatusHolder.insurance().client().tenant().customer().person().name().lastName().getValue());
-                data.insuranceCertificateNumber().setValue(reportedStatusHolder.insurance().insuranceCertificateNumber().getStringView());
+                data.insuranceCertificateNumber().setValue(reportedStatusHolder.insurance().certificate().insuranceCertificateNumber().getValue());
                 data.monthlyPayable().setValue(reportedStatusHolder.insurance().totalMonthlyPayable().getValue().toString());
                 data.status().setValue(reportedStatusHolder.reportedStatus().getValue().name());
                 data.statusFrom().setValue(SimpleMessageFormat.format("{0,date,short}", reportedStatusHolder.statusFrom().getValue()));
@@ -149,8 +149,8 @@ public class InsuranceStatusReport implements Report {
 
                 if (reportClientStatus == null) {
                     throw new IllegalArgumentException(SimpleMessageFormat.format("wrong insurance status for report: {0} id = {1},  status = {2}",
-                            InsuranceTenantSureCertificate.class.getSimpleName(), reportedStatusHolder.insurance().getPrimaryKey(), reportedStatusHolder.insurance()
-                                    .status().getValue()));
+                            TenantSureInsuranceCertificate.class.getSimpleName(), reportedStatusHolder.insurance().getPrimaryKey(), reportedStatusHolder
+                                    .insurance().status().getValue()));
                 }
 
                 if (needsUpdate) {

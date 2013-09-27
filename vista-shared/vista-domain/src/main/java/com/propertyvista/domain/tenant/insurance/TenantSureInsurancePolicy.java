@@ -1,14 +1,14 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011-2012 All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on 2012-11-16
- * @author vlads
+ * Created on Sep 26, 2013
+ * @author Artyom
  * @version $Id$
  */
 package com.propertyvista.domain.tenant.insurance;
@@ -27,12 +27,8 @@ import com.pyx4j.entity.shared.AttachLevel;
 import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.entity.shared.ISet;
 
-/**
- * TenantSure operational data, updated by processes.
- * Created when insurance is approved and bound
- */
-@DiscriminatorValue("InsuranceTenantSure")
-public interface InsuranceTenantSureCertificate extends InsuranceCertificate {
+@DiscriminatorValue("TenantSureInsurancePolicy")
+public interface TenantSureInsurancePolicy extends InsurancePolicy<TenantSureInsuranceCertificate> {
 
     public enum TenantSureStatus {
 
@@ -75,9 +71,9 @@ public interface InsuranceTenantSureCertificate extends InsuranceCertificate {
     @NotNull
     IPrimitive<String> quoteId();
 
-    IPrimitive<InsuranceTenantSureCertificate.TenantSureStatus> status();
+    IPrimitive<TenantSureStatus> status();
 
-    IPrimitive<InsuranceTenantSureCertificate.CancellationType> cancellation();
+    IPrimitive<CancellationType> cancellation();
 
     /** for insurance that is cancelled by TenantSure, holds the reason for cancellation */
     IPrimitive<String> cancellationDescriptionReasonFromTenantSure();
@@ -85,15 +81,13 @@ public interface InsuranceTenantSureCertificate extends InsuranceCertificate {
     /**
      * Defines billing cycle days: every month
      */
-    @Override
     @NotNull
     IPrimitive<LogicalDate> inceptionDate();
 
+    IPrimitive<LogicalDate> expiryDate();
+
     @ReadOnly(allowOverrideNull = true)
     IPrimitive<Integer> paymentDay();
-
-    @Override
-    IPrimitive<LogicalDate> expiryDate();
 
     /** a date when cancellation command has been issued */
     IPrimitive<LogicalDate> cancellationDate();
@@ -123,6 +117,10 @@ public interface InsuranceTenantSureCertificate extends InsuranceCertificate {
     /** this is an amount that gets charged every month (i.e. monthly premium + the taxes) */
     @Format("#,##0.00")
     IPrimitive<BigDecimal> totalMonthlyPayable();
+
+    @Format("#,##0.00")
+    @NotNull
+    IPrimitive<BigDecimal> liabilityCoverage();
 
     @Format("#,##0.00")
     IPrimitive<BigDecimal> contentsCoverage();

@@ -16,6 +16,6 @@ package com.propertyvista.domain.tenant.insurance;
 import com.pyx4j.entity.annotations.DiscriminatorValue;
 
 @DiscriminatorValue("InsuranceGeneral")
-public interface InsuranceGeneralCertificate extends InsuranceCertificate {
+public interface GeneralInsuranceCertificate extends InsuranceCertificate<GeneralInsurancePolicy> {
 
 }

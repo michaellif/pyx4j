@@ -26,9 +26,9 @@ import org.junit.Test;
 import com.pyx4j.commons.Key;
 import com.pyx4j.entity.shared.EntityFactory;
 
+import com.propertyvista.domain.tenant.insurance.GeneralInsuranceCertificate;
 import com.propertyvista.domain.tenant.insurance.InsuranceCertificate;
-import com.propertyvista.domain.tenant.insurance.InsuranceGeneralCertificate;
-import com.propertyvista.domain.tenant.insurance.InsuranceTenantSureCertificate;
+import com.propertyvista.domain.tenant.insurance.TenantSureInsuranceCertificate;
 import com.propertyvista.domain.tenant.lease.Tenant;
 
 public class InsuranceCertificateComparatorTest {
@@ -48,7 +48,7 @@ public class InsuranceCertificateComparatorTest {
         Tenant tenantForDiscraction = EntityFactory.create(Tenant.class);
         tenantForDiscraction.setPrimaryKey(genKey());
 
-        List<InsuranceCertificate> certificates = new ArrayList<InsuranceCertificate>(Arrays.asList(//@formatter:off
+        List<InsuranceCertificate<?>> certificates = new ArrayList<InsuranceCertificate<?>>(Arrays.asList(//@formatter:off
                makeGeneric(tenantForDiscraction, new BigDecimal("10")),
                makeGeneric(tenantForDiscraction, new BigDecimal("9")),
                makeTenantSure(tenantInContext, new BigDecimal("8")),
@@ -57,8 +57,8 @@ public class InsuranceCertificateComparatorTest {
         ));//@formatter:on
         sort(tenantInContext, certificates);
 
-        Assert.assertEquals(tenantInContext, certificates.get(0).tenant());
-        Assert.assertEquals(tenantInContext, certificates.get(1).tenant());
+        Assert.assertEquals(tenantInContext, certificates.get(0).insurancePolicy().tenant());
+        Assert.assertEquals(tenantInContext, certificates.get(1).insurancePolicy().tenant());
     }
 
     @Test
@@ -70,7 +70,7 @@ public class InsuranceCertificateComparatorTest {
         Tenant tenantForDiscraction = EntityFactory.create(Tenant.class);
         tenantForDiscraction.setPrimaryKey(genKey());
 
-        List<InsuranceCertificate> certificates = new ArrayList<InsuranceCertificate>(Arrays.asList(//@formatter:off
+        List<InsuranceCertificate<?>> certificates = new ArrayList<InsuranceCertificate<?>>(Arrays.asList(//@formatter:off
                makeGeneric(tenantForDiscraction, new BigDecimal("10")),
                makeGeneric(tenantInContext, new BigDecimal("9")),
                makeTenantSure(tenantInContext, new BigDecimal("8")),
@@ -79,9 +79,9 @@ public class InsuranceCertificateComparatorTest {
         ));//@formatter:on
         sort(tenantInContext, certificates);
 
-        Assert.assertEquals(InsuranceTenantSureCertificate.class, certificates.get(0).getInstanceValueClass());
-        Assert.assertEquals("the second tenant sure certificate shouldn't be here because it doesn't belong to the tenant in context", InsuranceGeneralCertificate.class,
-                certificates.get(1).getInstanceValueClass());
+        Assert.assertEquals(TenantSureInsuranceCertificate.class, certificates.get(0).getInstanceValueClass());
+        Assert.assertEquals("the second tenant sure certificate shouldn't be here because it doesn't belong to the tenant in context",
+                GeneralInsuranceCertificate.class, certificates.get(1).getInstanceValueClass());
     }
 
     @Test
@@ -92,7 +92,7 @@ public class InsuranceCertificateComparatorTest {
         Tenant tenantForDistraction = EntityFactory.create(Tenant.class);
         tenantForDistraction.setPrimaryKey(genKey());
 
-        List<InsuranceCertificate> certificates = new ArrayList<InsuranceCertificate>(Arrays.asList(//@formatter:off
+        List<InsuranceCertificate<?>> certificates = new ArrayList<InsuranceCertificate<?>>(Arrays.asList(//@formatter:off
                 makeGeneric(tenantForDistraction, new BigDecimal("10")),
                 makeGeneric(tenantInContext, new BigDecimal("9")),
                 makeGeneric(tenantInContext, new BigDecimal("10")),
@@ -109,19 +109,19 @@ public class InsuranceCertificateComparatorTest {
 
     }
 
-    private InsuranceCertificate makeGeneric(Tenant tenant, BigDecimal liablilityCoverage) {
-        InsuranceGeneralCertificate cert = EntityFactory.create(InsuranceGeneralCertificate.class);
+    private InsuranceCertificate<?> makeGeneric(Tenant tenant, BigDecimal liablilityCoverage) {
+        GeneralInsuranceCertificate cert = EntityFactory.create(GeneralInsuranceCertificate.class);
         cert.setPrimaryKey(genKey());
         cert.liabilityCoverage().setValue(liablilityCoverage);
-        cert.tenant().set(tenant);
+        cert.insurancePolicy().tenant().set(tenant);
         return cert;
     }
 
-    private InsuranceCertificate makeTenantSure(Tenant tenant, BigDecimal liablilityCoverage) {
-        InsuranceTenantSureCertificate cert = EntityFactory.create(InsuranceTenantSureCertificate.class);
+    private InsuranceCertificate<?> makeTenantSure(Tenant tenant, BigDecimal liablilityCoverage) {
+        TenantSureInsuranceCertificate cert = EntityFactory.create(TenantSureInsuranceCertificate.class);
         cert.setPrimaryKey(genKey());
         cert.liabilityCoverage().setValue(liablilityCoverage);
-        cert.tenant().set(tenant);
+        cert.insurancePolicy().tenant().set(tenant);
         return cert;
     }
 
@@ -129,7 +129,7 @@ public class InsuranceCertificateComparatorTest {
         return new Key(++keyCounter);
     }
 
-    private void sort(Tenant tenantInContext, List<InsuranceCertificate> list) {
+    private void sort(Tenant tenantInContext, List<InsuranceCertificate<?>> list) {
         java.util.Collections.sort(list, new InsuranceCertificateComparator(tenantInContext));
     }
 }

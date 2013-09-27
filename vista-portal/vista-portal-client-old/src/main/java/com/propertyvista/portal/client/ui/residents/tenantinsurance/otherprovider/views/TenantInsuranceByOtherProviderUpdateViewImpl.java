@@ -19,15 +19,15 @@ import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
 
 import com.propertyvista.common.client.ui.components.tenantinsurance.TenantInsuranceCertificateForm;
-import com.propertyvista.domain.tenant.insurance.InsuranceGeneralCertificate;
+import com.propertyvista.domain.tenant.insurance.GeneralInsuranceCertificate;
 import com.propertyvista.portal.client.ui.residents.EditImpl;
 
-public class TenantInsuranceByOtherProviderUpdateViewImpl extends EditImpl<InsuranceGeneralCertificate> implements TenantInsuranceByOtherProviderUpdateView {
+public class TenantInsuranceByOtherProviderUpdateViewImpl extends EditImpl<GeneralInsuranceCertificate> implements TenantInsuranceByOtherProviderUpdateView {
 
     private static final I18n i18n = I18n.get(TenantInsuranceByOtherProviderUpdateViewImpl.class);
 
     public TenantInsuranceByOtherProviderUpdateViewImpl() {
-        setForm(new TenantInsuranceCertificateForm<InsuranceGeneralCertificate>(InsuranceGeneralCertificate.class));
+        setForm(new TenantInsuranceCertificateForm<GeneralInsuranceCertificate>(GeneralInsuranceCertificate.class));
     }
 
     @Override
@@ -37,6 +37,6 @@ public class TenantInsuranceByOtherProviderUpdateViewImpl extends EditImpl<Insur
 
     @Override
     public void setMinRequiredLiability(BigDecimal minRequiredLiability) {
-        ((TenantInsuranceCertificateForm<InsuranceGeneralCertificate>) getForm()).setMinRequiredLiability(minRequiredLiability);
+        ((TenantInsuranceCertificateForm<GeneralInsuranceCertificate>) getForm()).setMinRequiredLiability(minRequiredLiability);
     }
 }

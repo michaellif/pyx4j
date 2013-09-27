@@ -13,26 +13,22 @@
  */
 package com.propertyvista.crm.server.services.lease.common;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.server.AbstractCrudServiceDtoImpl;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.AttachLevel;
-import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 
 import com.propertyvista.biz.financial.payment.PaymentMethodFacade;
 import com.propertyvista.biz.policy.PolicyFacade;
+import com.propertyvista.biz.tenant.insurance.TenantInsuranceFacade;
 import com.propertyvista.domain.policy.policies.RestrictionsPolicy;
-import com.propertyvista.domain.tenant.insurance.InsuranceCertificate;
 import com.propertyvista.domain.tenant.lease.BillableItem;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.LeaseTerm;
 import com.propertyvista.domain.tenant.lease.LeaseTermGuarantor;
 import com.propertyvista.domain.tenant.lease.LeaseTermTenant;
+import com.propertyvista.domain.tenant.lease.Tenant;
 import com.propertyvista.dto.LeaseDTO;
-import com.propertyvista.dto.TenantInsuranceCertificateDTO;
 
 public abstract class LeaseCrudServiceBaseImpl<DTO extends LeaseDTO> extends AbstractCrudServiceDtoImpl<Lease, DTO> {
 
@@ -98,18 +94,8 @@ public abstract class LeaseCrudServiceBaseImpl<DTO extends LeaseDTO> extends Abs
     }
 
     private void fillTenantInsurance(LeaseDTO lease) {
-        EntityQueryCriteria<InsuranceCertificate> criteria = new EntityQueryCriteria<InsuranceCertificate>(InsuranceCertificate.class);
-        criteria.eq(criteria.proto().tenant().lease(), lease);
-        List<InsuranceCertificate> certificates = Persistence.service().query(criteria);
-
-        List<TenantInsuranceCertificateDTO> dtoCertificates = new ArrayList<TenantInsuranceCertificateDTO>();
-        // TODO add sorting
-        if (certificates != null) {
-            for (InsuranceCertificate c : certificates) {
-                dtoCertificates.add(c.duplicate(TenantInsuranceCertificateDTO.class));
-            }
-            lease.tenantInsuranceCertificates().addAll(dtoCertificates);
-        }
+        Tenant tenantId = lease.currentTerm().version().tenants().get(0).leaseParticipant().<Tenant> createIdentityStub();
+        lease.tenantInsuranceCertificates().addAll(ServerSideFactory.create(TenantInsuranceFacade.class).getInsuranceCertificates(tenantId, false));
     }
 
     private void fillPreauthorizedPayments(LeaseTermTenant item) {

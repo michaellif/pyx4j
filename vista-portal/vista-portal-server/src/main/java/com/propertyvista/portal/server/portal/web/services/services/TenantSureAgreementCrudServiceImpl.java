@@ -50,17 +50,17 @@ import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.Tenant;
 import com.propertyvista.operations.rpc.VistaSystemMaintenanceState;
-import com.propertyvista.portal.rpc.portal.web.dto.insurance.InsuranceTenantSureCertificateDTO;
+import com.propertyvista.portal.rpc.portal.web.dto.insurance.TenantSureInsurancePolicyDTO;
 import com.propertyvista.portal.rpc.portal.web.dto.insurance.TenantSureCoverageDTO;
 import com.propertyvista.portal.rpc.portal.web.dto.insurance.TenantSureQuoteDTO;
-import com.propertyvista.portal.rpc.portal.web.services.services.TenantSureAgreementCrudService;
+import com.propertyvista.portal.rpc.portal.web.services.services.TenantSureInsurancePolicyCrudService;
 import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.tenantsure.TenantSureQuotationRequestParamsDTO;
 import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.tenantsure.errors.TenantSureAlreadyPurchasedException;
 import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.tenantsure.errors.TenantSureOnMaintenanceException;
 import com.propertyvista.portal.server.portal.TenantAppContext;
 import com.propertyvista.server.common.util.AddressRetriever;
 
-public class TenantSureAgreementCrudServiceImpl implements TenantSureAgreementCrudService {
+public class TenantSureAgreementCrudServiceImpl implements TenantSureInsurancePolicyCrudService {
 
     private static class ServerSideQuteStorage {
 
@@ -240,7 +240,7 @@ public class TenantSureAgreementCrudServiceImpl implements TenantSureAgreementCr
 
 
     @Override
-    public void init(final AsyncCallback<InsuranceTenantSureCertificateDTO> callback, InitializationData initializationData) {
+    public void init(final AsyncCallback<TenantSureInsurancePolicyDTO> callback, InitializationData initializationData) {
         getQuotationRequestParams(new AsyncCallback<TenantSureQuotationRequestParamsDTO>() {
 
             @Override
@@ -252,7 +252,7 @@ public class TenantSureAgreementCrudServiceImpl implements TenantSureAgreementCr
             public void onSuccess(TenantSureQuotationRequestParamsDTO params) {
                 Tenant tenant = Persistence.service().retrieve(Tenant.class, TenantAppContext.getCurrentUserTenant().getPrimaryKey());
                 
-                InsuranceTenantSureCertificateDTO tenantSureAgreement = EntityFactory.create(InsuranceTenantSureCertificateDTO.class);                
+                TenantSureInsurancePolicyDTO tenantSureAgreement = EntityFactory.create(TenantSureInsurancePolicyDTO.class);                
                 tenantSureAgreement.tenantSureCoverageRequest().tenantName().setValue(tenant.customer().person().name().getStringView());
                 tenantSureAgreement.tenantSureCoverageRequest().tenantPhone().setValue(getDefaultPhone(tenant.customer().person()));
 
@@ -268,26 +268,26 @@ public class TenantSureAgreementCrudServiceImpl implements TenantSureAgreementCr
     }
 
     @Override
-    public void retrieve(AsyncCallback<InsuranceTenantSureCertificateDTO> callback, Key entityId, com.pyx4j.entity.rpc.AbstractCrudService.RetrieveTarget retrieveTarget) {
+    public void retrieve(AsyncCallback<TenantSureInsurancePolicyDTO> callback, Key entityId, com.pyx4j.entity.rpc.AbstractCrudService.RetrieveTarget retrieveTarget) {
         // TODO Auto-generated method stub
         
     }
 
     @Override
-    public void create(final AsyncCallback<Key> callback, InsuranceTenantSureCertificateDTO editableEntity) {
+    public void create(final AsyncCallback<Key> callback, TenantSureInsurancePolicyDTO editableEntity) {
 
         
     }
 
     @Override
     @ServiceExecution(waitCaption = "Saving...")
-    public void save(AsyncCallback<Key> callback, InsuranceTenantSureCertificateDTO editableEntity) {
+    public void save(AsyncCallback<Key> callback, TenantSureInsurancePolicyDTO editableEntity) {
         // TODO Auto-generated method stub
         
     }
 
     @Override
-    public void list(AsyncCallback<EntitySearchResult<InsuranceTenantSureCertificateDTO>> callback, EntityListCriteria<InsuranceTenantSureCertificateDTO> criteria) {
+    public void list(AsyncCallback<EntitySearchResult<TenantSureInsurancePolicyDTO>> callback, EntityListCriteria<TenantSureInsurancePolicyDTO> criteria) {
         // TODO Auto-generated method stub
         
     }

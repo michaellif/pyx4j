@@ -36,6 +36,7 @@ import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
 import com.propertyvista.domain.media.InsuranceCertificateDocument;
 import com.propertyvista.domain.tenant.Customer;
 import com.propertyvista.domain.tenant.insurance.InsuranceCertificate;
+import com.propertyvista.domain.tenant.insurance.PropertyVistaIntegratedInsurance;
 import com.propertyvista.domain.tenant.lease.Tenant;
 
 public class TenantInsuranceCertificateForm<E extends InsuranceCertificate> extends CEntityDecoratableForm<E> {
@@ -130,11 +131,12 @@ public class TenantInsuranceCertificateForm<E extends InsuranceCertificate> exte
                 comp.setNavigationCommand(new Command() {
                     @Override
                     public void execute() {
-                        TenantInsuranceCertificateForm.this.tenantOwnerClickHandler.onTenantOwnerClicked(getValue().tenant().<Tenant> createIdentityStub());
+                        TenantInsuranceCertificateForm.this.tenantOwnerClickHandler.onTenantOwnerClicked(getValue().insurancePolicy().tenant()
+                                .<Tenant> createIdentityStub());
                     }
                 });
             }
-            contentPanel.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().tenant(), comp), 15, true).build());
+            contentPanel.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().insurancePolicy().tenant(), comp), 15, true).build());
         }
 
         contentPanel.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().insuranceProvider()), 10, true).build());
@@ -198,7 +200,7 @@ public class TenantInsuranceCertificateForm<E extends InsuranceCertificate> exte
     @Override
     protected void onValueSet(boolean populate) {
         super.onValueSet(populate);
-        setViewable(getValue().isPropertyVistaIntegratedProvider().isBooleanTrue()); // TODO this should not be controlled by the form itstelf
+        setViewable(getValue() instanceof PropertyVistaIntegratedInsurance); // TODO this should not be controlled by the form itstelf
         scannedInsuranceCertificateNotAvailable.setVisible(isViewable() & getValue().documents().isEmpty());
         contentPanel.setH2(insuranceCeritificatesHeaderRow, 0, 1,
                 isEditable() & !isViewable() ? i18n.tr("Attach Scanned Insurance Certificate") : i18n.tr("Scanned Insurance Certificate"));

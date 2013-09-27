@@ -13,7 +13,6 @@
  */
 package com.propertyvista.crm.client.ui.crud.lease;
 
-import com.pyx4j.commons.UserRuntimeException;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.forms.client.ui.CComponent;
@@ -21,21 +20,23 @@ import com.pyx4j.forms.client.ui.folder.BoxFolderItemDecorator;
 import com.pyx4j.forms.client.ui.folder.CEntityFolderItem;
 import com.pyx4j.forms.client.ui.folder.IFolderItemDecorator;
 import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.widgets.client.dialog.MessageDialog;
 
 import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
 import com.propertyvista.common.client.ui.components.tenantinsurance.TenantInsuranceCertificateForm;
 import com.propertyvista.common.client.ui.components.tenantinsurance.TenantInsuranceCertificateForm.TenantOwnerClickHandler;
+import com.propertyvista.domain.tenant.insurance.GeneralInsuranceCertificate;
 import com.propertyvista.domain.tenant.insurance.InsuranceCertificate;
-import com.propertyvista.dto.TenantInsuranceCertificateDTO;
+import com.propertyvista.domain.tenant.insurance.PropertyVistaIntegratedInsurance;
 
-public class TenantInsuranceCertificateFolder extends VistaBoxFolder<TenantInsuranceCertificateDTO> {
+public class TenantInsuranceCertificateFolder extends VistaBoxFolder<InsuranceCertificate> {
 
-    private final I18n i18n = I18n.get(TenantInsuranceCertificateDTO.class);
+    private final I18n i18n = I18n.get(TenantInsuranceCertificateFolder.class);
 
     private final TenantOwnerClickHandler tenantOwnerClickHanlder;
 
     public TenantInsuranceCertificateFolder(TenantOwnerClickHandler tenatOwnerClickHandler) {
-        super(TenantInsuranceCertificateDTO.class);
+        super(InsuranceCertificate.class);
         setRemovable(true);
         setOrderable(false);
         this.tenantOwnerClickHanlder = tenatOwnerClickHandler;
@@ -44,7 +45,7 @@ public class TenantInsuranceCertificateFolder extends VistaBoxFolder<TenantInsur
     @Override
     public CComponent<?> create(IObject<?> member) {
         if (member instanceof InsuranceCertificate) {
-            TenantInsuranceCertificateForm form = new TenantInsuranceCertificateForm(TenantInsuranceCertificateDTO.class, tenantOwnerClickHanlder != null,
+            TenantInsuranceCertificateForm form = new TenantInsuranceCertificateForm(GeneralInsuranceCertificate.class, tenantOwnerClickHanlder != null,
                     tenantOwnerClickHanlder);
             return form;
         }
@@ -52,24 +53,23 @@ public class TenantInsuranceCertificateFolder extends VistaBoxFolder<TenantInsur
     }
 
     @Override
-    public IFolderItemDecorator<TenantInsuranceCertificateDTO> createItemDecorator() {
-        BoxFolderItemDecorator<TenantInsuranceCertificateDTO> decorator = (BoxFolderItemDecorator<TenantInsuranceCertificateDTO>) super.createItemDecorator();
+    public IFolderItemDecorator<InsuranceCertificate> createItemDecorator() {
+        BoxFolderItemDecorator<InsuranceCertificate> decorator = (BoxFolderItemDecorator<InsuranceCertificate>) super.createItemDecorator();
         decorator.setExpended(isEditable());
         return decorator;
     }
 
     @Override
     protected void addItem() {
-        TenantInsuranceCertificateDTO certificate = EntityFactory.create(TenantInsuranceCertificateDTO.class);
+        GeneralInsuranceCertificate certificate = EntityFactory.create(GeneralInsuranceCertificate.class);
         certificate.documents().add(certificate.documents().$());
         super.addItem(certificate);
     }
 
     @Override
-    protected void removeItem(CEntityFolderItem<TenantInsuranceCertificateDTO> item) {
-        if (item.getValue().isPropertyVistaIntegratedProvider().isBooleanTrue()) {
-            // TODO this is ugly
-            throw new UserRuntimeException(i18n.tr("This insurance was uploaded by tenant: delete not permitted!"));
+    protected void removeItem(CEntityFolderItem<InsuranceCertificate> item) {
+        if (item.getValue() instanceof PropertyVistaIntegratedInsurance || item.getValue().isManagedByTenant().isBooleanTrue()) {
+            MessageDialog.info(i18n.tr("This insurance certificate was uploaded by tenant and cannot be deleted"));
         } else {
             super.removeItem(item);
         }

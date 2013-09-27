@@ -33,12 +33,12 @@ import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
 import com.propertyvista.domain.media.InsuranceCertificateDocument;
 import com.propertyvista.domain.tenant.Customer;
 import com.propertyvista.domain.tenant.lease.Tenant;
-import com.propertyvista.portal.rpc.portal.web.dto.insurance.InsuranceGeneralCertificateDTO;
+import com.propertyvista.portal.rpc.portal.web.dto.insurance.GeneralInsurancePolicyDTO;
 import com.propertyvista.portal.web.client.ui.ApplicationDocumentFileUploaderFolder;
 import com.propertyvista.portal.web.client.ui.CPortalEntityWizard;
 import com.propertyvista.portal.web.client.ui.util.decorators.FormDecoratorBuilder;
 
-public class GeneralCertificateUploadWizard extends CPortalEntityWizard<InsuranceGeneralCertificateDTO> {
+public class GeneralCertificateUploadWizard extends CPortalEntityWizard<GeneralInsurancePolicyDTO> {
 
     private final static I18n i18n = I18n.get(GeneralCertificateUploadWizard.class);
 
@@ -63,7 +63,7 @@ public class GeneralCertificateUploadWizard extends CPortalEntityWizard<Insuranc
      *            a handler for tenantOwner click (if not null will render tenant's name as a hyperlink that execs this handler on click)
      */
     public GeneralCertificateUploadWizard(GeneralCertificateUploadWizardView view, boolean displayTenantOwner, TenantOwnerClickHandler tenantOwnerClickHandler) {
-        super(InsuranceGeneralCertificateDTO.class, view, i18n.tr("Insurance Certificate"), i18n.tr("Submit"), ThemeColor.contrast3);
+        super(GeneralInsurancePolicyDTO.class, view, i18n.tr("Insurance Certificate"), i18n.tr("Submit"), ThemeColor.contrast3);
         this.minRequiredLiability = null;
         this.displayTenantOwner = displayTenantOwner;
         this.tenantOwnerClickHandler = tenantOwnerClickHandler;
@@ -90,10 +90,10 @@ public class GeneralCertificateUploadWizard extends CPortalEntityWizard<Insuranc
             //TODO    contentPanel.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().tenant(), comp), "150px").build());
         }
 
-        contentPanel.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().insuranceProvider()), "150px").build());
-        contentPanel.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().insuranceCertificateNumber()), "150px").build());
-        contentPanel.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().liabilityCoverage()), "150px").build());
-        get(proto().liabilityCoverage()).addValueValidator(new EditableValueValidator<BigDecimal>() {
+        contentPanel.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().certificate().insuranceProvider()), "150px").build());
+        contentPanel.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().certificate().insuranceCertificateNumber()), "150px").build());
+        contentPanel.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().certificate().liabilityCoverage()), "150px").build());
+        get(proto().certificate().liabilityCoverage()).addValueValidator(new EditableValueValidator<BigDecimal>() {
             @Override
             public ValidationError isValid(CComponent<BigDecimal> component, BigDecimal value) {
                 if (GeneralCertificateUploadWizard.this.minRequiredLiability != null && value != null && value.compareTo(minRequiredLiability) < 0) {
@@ -102,7 +102,7 @@ public class GeneralCertificateUploadWizard extends CPortalEntityWizard<Insuranc
                 return null;
             }
         });
-        get(proto().liabilityCoverage()).addValueValidator(new EditableValueValidator<BigDecimal>() {
+        get(proto().certificate().liabilityCoverage()).addValueValidator(new EditableValueValidator<BigDecimal>() {
             @Override
             public ValidationError isValid(CComponent<BigDecimal> component, BigDecimal value) {
                 if (value != null && value.compareTo(BigDecimal.ZERO) <= 0) {
@@ -111,9 +111,9 @@ public class GeneralCertificateUploadWizard extends CPortalEntityWizard<Insuranc
                 return null;
             }
         });
-        contentPanel.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().inceptionDate()), "150px").build());
+        contentPanel.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().certificate().inceptionDate()), "150px").build());
 
-        get(proto().inceptionDate()).addValueValidator(new EditableValueValidator<LogicalDate>() {
+        get(proto().certificate().inceptionDate()).addValueValidator(new EditableValueValidator<LogicalDate>() {
             @Override
             public ValidationError isValid(CComponent<LogicalDate> component, LogicalDate value) {
                 if (value != null && value.compareTo(new LogicalDate()) > 0) {
@@ -122,8 +122,8 @@ public class GeneralCertificateUploadWizard extends CPortalEntityWizard<Insuranc
                 return null;
             }
         });
-        contentPanel.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().expiryDate()), "150px").build());
-        get(proto().expiryDate()).addValueValidator(new EditableValueValidator<LogicalDate>() {
+        contentPanel.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().certificate().expiryDate()), "150px").build());
+        get(proto().certificate().expiryDate()).addValueValidator(new EditableValueValidator<LogicalDate>() {
             @Override
             public ValidationError isValid(CComponent<LogicalDate> component, LogicalDate value) {
                 if (value != null && value.compareTo(new LogicalDate()) < 0) {
@@ -134,7 +134,7 @@ public class GeneralCertificateUploadWizard extends CPortalEntityWizard<Insuranc
         });
 
         contentPanel.setH2(++row, 0, 1, i18n.tr("Attach Scanned Insurance Certificate"));
-        contentPanel.setWidget(++row, 0, 1, inject(proto().documents(), new InsuranceCertificateDocumentFolder()));
+        contentPanel.setWidget(++row, 0, 1, inject(proto().certificate().documents(), new InsuranceCertificateDocumentFolder()));
 
         return contentPanel;
     }

@@ -20,12 +20,12 @@ import com.pyx4j.rpc.shared.VoidSerializable;
 
 import com.propertyvista.domain.contact.AddressSimple;
 import com.propertyvista.domain.payment.InsurancePaymentMethod;
-import com.propertyvista.portal.rpc.portal.web.dto.insurance.InsuranceTenantSureCertificateDTO;
 import com.propertyvista.portal.rpc.portal.web.dto.insurance.TenantSureCoverageDTO;
+import com.propertyvista.portal.rpc.portal.web.dto.insurance.TenantSureInsurancePolicyDTO;
 import com.propertyvista.portal.rpc.portal.web.dto.insurance.TenantSureQuoteDTO;
 import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.tenantsure.TenantSureQuotationRequestParamsDTO;
 
-public interface TenantSureAgreementCrudService extends AbstractCrudService<InsuranceTenantSureCertificateDTO> {
+public interface TenantSureInsurancePolicyCrudService extends AbstractCrudService<TenantSureInsurancePolicyDTO> {
 
     @Deprecated
     void getQuotationRequestParams(AsyncCallback<TenantSureQuotationRequestParamsDTO> callback);

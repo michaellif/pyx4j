@@ -15,8 +15,8 @@ package com.propertyvista.portal.rpc.portal.web.services.services;
 
 import com.pyx4j.entity.rpc.AbstractCrudService;
 
-import com.propertyvista.portal.rpc.portal.web.dto.insurance.InsuranceGeneralCertificateDTO;
+import com.propertyvista.portal.rpc.portal.web.dto.insurance.GeneralInsurancePolicyDTO;
 
-public interface GeneralInsuranceCertificateCrudService extends AbstractCrudService<InsuranceGeneralCertificateDTO> {
+public interface GeneralInsurancePolicyCrudService extends AbstractCrudService<GeneralInsurancePolicyDTO> {
 
 }

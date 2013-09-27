@@ -16,7 +16,7 @@ package com.propertyvista.biz.tenant.insurance;
 import java.util.Comparator;
 
 import com.propertyvista.domain.tenant.insurance.InsuranceCertificate;
-import com.propertyvista.domain.tenant.insurance.InsuranceTenantSureCertificate;
+import com.propertyvista.domain.tenant.insurance.TenantSureInsuranceCertificate;
 import com.propertyvista.domain.tenant.lease.Tenant;
 
 public final class InsuranceCertificateComparator implements Comparator<InsuranceCertificate> {
@@ -28,16 +28,18 @@ public final class InsuranceCertificateComparator implements Comparator<Insuranc
 
     @Override
     public int compare(InsuranceCertificate o1, InsuranceCertificate o2) {
-        if ((o1.tenant().equals(tenantId)) && !(o2.tenant().equals(tenantId))) {
+        if ((o1.insurancePolicy().tenant().equals(tenantId)) && !(o2.insurancePolicy().tenant().equals(tenantId))) {
             return -1;
-        } else if (!(o1.tenant().equals(tenantId)) && (o2.tenant().equals(tenantId))) {
+        } else if (!(o1.insurancePolicy().tenant().equals(tenantId)) && (o2.insurancePolicy().tenant().equals(tenantId))) {
             return 1;
-        } else if ((o1.getInstanceValueClass().equals(InsuranceTenantSureCertificate.class)) && !(o2.getInstanceValueClass().equals(InsuranceTenantSureCertificate.class))) {
+        } else if ((o1.getInstanceValueClass().equals(TenantSureInsuranceCertificate.class))
+                && !(o2.getInstanceValueClass().equals(TenantSureInsuranceCertificate.class))) {
             return -1;
-        } else if (!(o1.getInstanceValueClass().equals(InsuranceTenantSureCertificate.class)) && (o2.getInstanceValueClass().equals(InsuranceTenantSureCertificate.class))) {
+        } else if (!(o1.getInstanceValueClass().equals(TenantSureInsuranceCertificate.class))
+                && (o2.getInstanceValueClass().equals(TenantSureInsuranceCertificate.class))) {
             return 1;
         } else {
-            return -o1.liabilityCoverage().getValue().compareTo(o2.liabilityCoverage().getValue());
+            return -((Comparable) o1.liabilityCoverage().getValue()).compareTo(o2.liabilityCoverage().getValue());
         }
     }
 }

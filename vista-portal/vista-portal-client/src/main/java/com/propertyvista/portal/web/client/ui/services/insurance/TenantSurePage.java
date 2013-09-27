@@ -18,15 +18,15 @@ import com.google.gwt.user.client.ui.IsWidget;
 import com.pyx4j.commons.css.ThemeColor;
 import com.pyx4j.i18n.shared.I18n;
 
-import com.propertyvista.portal.rpc.portal.web.dto.insurance.InsuranceTenantSureCertificateDTO;
+import com.propertyvista.portal.rpc.portal.web.dto.insurance.TenantSureInsurancePolicyDTO;
 import com.propertyvista.portal.web.client.ui.CPortalEntityEditor;
 
-public class TenantSurePage extends CPortalEntityEditor<InsuranceTenantSureCertificateDTO> {
+public class TenantSurePage extends CPortalEntityEditor<TenantSureInsurancePolicyDTO> {
 
     private final static I18n i18n = I18n.get(TenantSurePage.class);
 
     public TenantSurePage(TenantSurePageView view) {
-        super(InsuranceTenantSureCertificateDTO.class, view, i18n.tr("TenantSure Insurance"), ThemeColor.contrast3);
+        super(TenantSureInsurancePolicyDTO.class, view, i18n.tr("TenantSure Insurance"), ThemeColor.contrast3);
     }
 
     @Override

@@ -36,8 +36,8 @@ import com.propertyvista.domain.ref.Country;
 import com.propertyvista.domain.ref.Province;
 import com.propertyvista.domain.security.VistaCustomerBehavior;
 import com.propertyvista.domain.security.common.VistaBasicBehavior;
-import com.propertyvista.domain.tenant.insurance.InsuranceGeneralCertificate;
-import com.propertyvista.domain.tenant.insurance.InsuranceTenantSureCertificate;
+import com.propertyvista.domain.tenant.insurance.GeneralInsuranceCertificate;
+import com.propertyvista.domain.tenant.insurance.TenantSureInsuranceCertificate;
 import com.propertyvista.domain.tenant.lease.LeaseTermTenant;
 import com.propertyvista.domain.tenant.ptapp.OnlineApplication;
 import com.propertyvista.misc.VistaTODO;
@@ -76,8 +76,8 @@ import com.propertyvista.portal.rpc.portal.web.services.PortalAuthenticationServ
 import com.propertyvista.portal.rpc.portal.web.services.financial.BillingService;
 import com.propertyvista.portal.rpc.portal.web.services.maintenance.MainenanceRequestCrudService;
 import com.propertyvista.portal.rpc.portal.web.services.profile.ProfileService;
-import com.propertyvista.portal.rpc.portal.web.services.services.GeneralInsuranceCertificateCrudService;
-import com.propertyvista.portal.rpc.portal.web.services.services.TenantSureAgreementCrudService;
+import com.propertyvista.portal.rpc.portal.web.services.services.GeneralInsurancePolicyCrudService;
+import com.propertyvista.portal.rpc.portal.web.services.services.TenantSureInsurancePolicyCrudService;
 import com.propertyvista.portal.rpc.ptapp.services.ApplicationDocumentUploadService;
 import com.propertyvista.portal.rpc.ptapp.services.ApplicationSelectionService;
 import com.propertyvista.portal.rpc.ptapp.services.ApplicationService;
@@ -240,20 +240,20 @@ public class VistaPortalAccessControlList extends ServletContainerAclBuilder {
 
         grant(VistaCustomerBehavior.Tenant, new IServiceExecutePermission(com.propertyvista.portal.rpc.portal.web.services.services.InsuranceService.class));
 
-        grant(VistaCustomerBehavior.Tenant, new IServiceExecutePermission(GeneralInsuranceCertificateCrudService.class));
+        grant(VistaCustomerBehavior.Tenant, new IServiceExecutePermission(GeneralInsurancePolicyCrudService.class));
 
         grant(VistaCustomerBehavior.Tenant, new IServiceExecutePermission(MainenanceRequestCrudService.class));
 
         //=======================================
 
         // Tenant Insurance and TenantSure
-        grant(VistaCustomerBehavior.Tenant, new EntityPermission(InsuranceGeneralCertificate.class, CRUD));
-        grant(VistaCustomerBehavior.Tenant, new EntityPermission(InsuranceTenantSureCertificate.class, CRUD));
+        grant(VistaCustomerBehavior.Tenant, new EntityPermission(GeneralInsuranceCertificate.class, CRUD));
+        grant(VistaCustomerBehavior.Tenant, new EntityPermission(TenantSureInsuranceCertificate.class, CRUD));
         grant(VistaCustomerBehavior.Tenant, new IServiceExecutePermission(TenantInsuranceService.class));
 
         grant(VistaCustomerBehavior.Tenant, new IServiceExecutePermission(TenantInsuranceByOtherProviderManagementService.class));
 
-        grant(VistaCustomerBehavior.Tenant, new IServiceExecutePermission(TenantSureAgreementCrudService.class));
+        grant(VistaCustomerBehavior.Tenant, new IServiceExecutePermission(TenantSureInsurancePolicyCrudService.class));
         grant(VistaCustomerBehavior.Tenant, new IServiceExecutePermission(TenantSureManagementService.class));
 
         // Billing and Payments
