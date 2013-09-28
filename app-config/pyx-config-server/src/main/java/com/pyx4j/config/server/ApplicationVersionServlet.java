@@ -75,6 +75,7 @@ public class ApplicationVersionServlet extends HttpServlet {
                 buf.append("?v=").append(t.name()).append("\">");
                 buf.append("?v=").append(t.name());
                 buf.append("</a></td><td>").append(t.toString());
+                buf.append("</td><td>").append(getVersionInfo(t));
                 buf.append("</td></tr>");
             }
             buf.append("</table>");
