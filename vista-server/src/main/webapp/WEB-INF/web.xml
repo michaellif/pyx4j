@@ -129,6 +129,11 @@
 
     <servlet-mapping>
         <servlet-name>OpenIdServlet</servlet-name>
+        <url-pattern>/operations/o/openid</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
+        <servlet-name>OpenIdServlet</servlet-name>
         <url-pattern>/onboarding/o/openid</url-pattern>
     </servlet-mapping>
 
@@ -224,6 +229,16 @@
     </servlet-mapping>
 
 
+    <servlet>
+        <servlet-name>OutOfMemorSimulationServlet</servlet-name>
+        <servlet-class>com.pyx4j.essentials.server.dev.OutOfMemorSimulationServlet</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>OutOfMemorSimulationServlet</servlet-name>
+        <url-pattern>/o/ooms</url-pattern>
+    </servlet-mapping>
+    
     <servlet>
         <servlet-name>DebugServlet</servlet-name>
         <servlet-class>com.pyx4j.essentials.server.dev.DebugServlet</servlet-class>
