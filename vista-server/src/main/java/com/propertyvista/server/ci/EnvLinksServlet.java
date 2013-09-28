@@ -21,8 +21,12 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.pyx4j.config.server.ApplicationVersion;
+import com.pyx4j.config.server.ServerSideConfiguration;
 import com.pyx4j.gwt.server.IOUtils;
 
+import com.propertyvista.config.AbstractVistaServerSideConfiguration;
+import com.propertyvista.config.VistaDeployment;
 
 @SuppressWarnings("serial")
 public class EnvLinksServlet extends HttpServlet {
@@ -39,12 +43,20 @@ public class EnvLinksServlet extends HttpServlet {
 
         String body = IOUtils.getTextResource("index.html", EnvLinksServlet.class);
 
-        body = body.replace("${name}", "Welcome Developer!");
+        String envName = "";
+        Integer enviromentId = ServerSideConfiguration.instance(AbstractVistaServerSideConfiguration.class).enviromentId();
+        if (enviromentId != null) {
+            envName = "env-" + enviromentId;
+        } else {
+            envName = VistaDeployment.getSystemIdentification().name();
+        }
+        body = body.replace("${title}", envName);
+        body = body.replace("${name}", "Environment: " + envName);
+        body = body.replace("${version}", "version: " + ApplicationVersion.getProductVersion() + " " + ApplicationVersion.getBuildTime());
 
         body = body.replace("${text}", new EnvLinksBuilder().toString());
 
         out.print(body);
         out.flush();
     }
-
 }
