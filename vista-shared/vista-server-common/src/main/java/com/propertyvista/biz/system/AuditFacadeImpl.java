@@ -43,6 +43,8 @@ import com.propertyvista.server.jobs.TaskRunner;
 
 public class AuditFacadeImpl implements AuditFacade {
 
+    private static final int details_length = EntityFactory.getEntityPrototype(AuditRecord.class).details().getMeta().getLength() - 3;
+
     @Override
     public void login(VistaApplication application) {
         record(AuditRecordEventType.Login, null, null);
@@ -107,7 +109,7 @@ public class AuditFacadeImpl implements AuditFacade {
         record.remoteAddr().setValue(getRequestRemoteAddr());
         record.sessionId().setValue(Context.getSessionId());
         record.event().setValue(eventType);
-        record.details().setValue((format == null) ? null : SimpleMessageFormat.format(format, args));
+        record.details().setValue((format == null) ? null : truncDetails(SimpleMessageFormat.format(format, args)));
         if (entity != null) {
             record.entityId().setValue(entity.getPrimaryKey());
             record.entityClass().setValue(entity.getEntityMeta().getEntityClass().getSimpleName());
@@ -115,6 +117,14 @@ public class AuditFacadeImpl implements AuditFacade {
         setPrincipalUser(record, getPrincipal());
         record.app().setValue(VistaApplication.getVistaApplication(SecurityController.getBehaviors()));
         record(record);
+    }
+
+    private static String truncDetails(String details) {
+        if ((details != null) && (details.length() > details_length)) {
+            return details.substring(0, details_length) + "...";
+        } else {
+            return details;
+        }
     }
 
     private void setPrincipalUser(AuditRecord record, AbstractUser principal) {
