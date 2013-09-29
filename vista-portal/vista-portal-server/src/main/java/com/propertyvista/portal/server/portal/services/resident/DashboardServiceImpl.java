@@ -87,11 +87,11 @@ public class DashboardServiceImpl implements DashboardService {
         }
 
         for (MaintenanceRequestDTO maintenanceRequest : mrList) {
-            MainenanceRequestStatusDTO requestStatusDto = dashboard.maintenanceInfo().maintenanceRequestStatuses().$();
+            MainenanceRequestStatusDTO requestStatusDto = dashboard.maintenanceInfo().openMaintenanceRequests().$();
             requestStatusDto.description().setValue(maintenanceRequest.summary().getValue());
             requestStatusDto.status().set(maintenanceRequest.status().duplicate());
             requestStatusDto.submissionDate().setValue(maintenanceRequest.submitted().getValue());
-            dashboard.maintenanceInfo().maintenanceRequestStatuses().add(requestStatusDto);
+            dashboard.maintenanceInfo().openMaintenanceRequests().add(requestStatusDto);
         }
 
         callback.onSuccess(dashboard);

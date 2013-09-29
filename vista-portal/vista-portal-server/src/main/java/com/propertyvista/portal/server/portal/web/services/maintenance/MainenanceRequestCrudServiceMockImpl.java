@@ -13,8 +13,6 @@
  */
 package com.propertyvista.portal.server.portal.web.services.maintenance;
 
-import java.util.Vector;
-
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.commons.Key;
@@ -41,14 +39,14 @@ public class MainenanceRequestCrudServiceMockImpl implements MainenanceRequestCr
             MainenanceRequestStatusDTO requestDTO = EntityFactory.create(MainenanceRequestStatusDTO.class);
             requestDTO.description().setValue("Request 1");
             requestDTO.status().phase().setValue(StatusPhase.Submitted);
-            maintenanceSummary.maintenanceRequestStatuses().add(requestDTO);
+            maintenanceSummary.openMaintenanceRequests().add(requestDTO);
         }
 
         {
             MainenanceRequestStatusDTO requestDTO = EntityFactory.create(MainenanceRequestStatusDTO.class);
             requestDTO.description().setValue("Request 2");
-            requestDTO.status().phase().setValue(StatusPhase.Submitted);
-            maintenanceSummary.maintenanceRequestStatuses().add(requestDTO);
+            requestDTO.status().phase().setValue(StatusPhase.Scheduled);
+            maintenanceSummary.openMaintenanceRequests().add(requestDTO);
         }
 
         callback.onSuccess(maintenanceSummary);
@@ -87,18 +85,6 @@ public class MainenanceRequestCrudServiceMockImpl implements MainenanceRequestCr
 
     @Override
     public void delete(AsyncCallback<Boolean> callback, Key entityId) {
-        // TODO Auto-generated method stub
-
-    }
-
-    @Override
-    public void listOpenIssues(AsyncCallback<Vector<MaintenanceRequestDTO>> callback) {
-        // TODO Auto-generated method stub
-
-    }
-
-    @Override
-    public void listClosedIssues(AsyncCallback<Vector<MaintenanceRequestDTO>> callback) {
         // TODO Auto-generated method stub
 
     }

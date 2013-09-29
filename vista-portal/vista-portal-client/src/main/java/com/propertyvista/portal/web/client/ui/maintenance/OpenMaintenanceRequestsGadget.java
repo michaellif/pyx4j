@@ -86,7 +86,7 @@ public class OpenMaintenanceRequestsGadget extends AbstractGadget<MaintenanceDas
 
             int row = -1;
 
-            main.setWidget(++row, 0, inject(proto().maintenanceRequestStatuses(), new OpenMaintenanceRequestsFolder()));
+            main.setWidget(++row, 0, inject(proto().openMaintenanceRequests(), new OpenMaintenanceRequestsFolder()));
 
             main.setWidget(++row, 0, message);
 

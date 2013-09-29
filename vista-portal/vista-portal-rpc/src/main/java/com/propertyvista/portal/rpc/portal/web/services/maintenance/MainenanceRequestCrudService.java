@@ -13,8 +13,6 @@
  */
 package com.propertyvista.portal.rpc.portal.web.services.maintenance;
 
-import java.util.Vector;
-
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.commons.Key;
@@ -26,11 +24,6 @@ import com.propertyvista.portal.rpc.portal.web.dto.maintenance.MaintenanceReques
 import com.propertyvista.portal.rpc.portal.web.dto.maintenance.MaintenanceSummaryDTO;
 
 public interface MainenanceRequestCrudService extends AbstractCrudService<MaintenanceRequestDTO> {
-
-    // Can't use List, this should be serializable collection
-    void listOpenIssues(AsyncCallback<Vector<MaintenanceRequestDTO>> callback);
-
-    void listClosedIssues(AsyncCallback<Vector<MaintenanceRequestDTO>> callback);
 
     void cancelMaintenanceRequest(AsyncCallback<VoidSerializable> callback, Key requestId);
 

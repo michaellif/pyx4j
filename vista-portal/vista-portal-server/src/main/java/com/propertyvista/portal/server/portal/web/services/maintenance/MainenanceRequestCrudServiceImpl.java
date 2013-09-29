@@ -32,7 +32,6 @@ import com.propertyvista.domain.maintenance.MaintenanceRequest;
 import com.propertyvista.domain.maintenance.MaintenanceRequestCategory;
 import com.propertyvista.domain.maintenance.MaintenanceRequestMetadata;
 import com.propertyvista.domain.maintenance.MaintenanceRequestSchedule;
-import com.propertyvista.domain.maintenance.MaintenanceRequestStatus;
 import com.propertyvista.domain.maintenance.MaintenanceRequestStatus.StatusPhase;
 import com.propertyvista.domain.maintenance.SurveyResponse;
 import com.propertyvista.domain.property.asset.building.Building;
@@ -59,16 +58,6 @@ public class MainenanceRequestCrudServiceImpl extends AbstractCrudServiceDtoImpl
         Tenant tenant = TenantAppContext.getCurrentUserTenantInLease().leaseParticipant();
         MaintenanceRequest maintenanceRequest = ServerSideFactory.create(MaintenanceFacade.class).createNewRequestForTenant(tenant);
         return createTO(maintenanceRequest);
-    }
-
-    @Override
-    public void listOpenIssues(AsyncCallback<Vector<MaintenanceRequestDTO>> callback) {
-        callback.onSuccess(listIssues(MaintenanceRequestStatus.StatusPhase.open()));
-    }
-
-    @Override
-    public void listClosedIssues(AsyncCallback<Vector<MaintenanceRequestDTO>> callback) {
-        callback.onSuccess(listIssues(MaintenanceRequestStatus.StatusPhase.closed()));
     }
 
     private Vector<MaintenanceRequestDTO> listIssues(Set<StatusPhase> statuses) {
