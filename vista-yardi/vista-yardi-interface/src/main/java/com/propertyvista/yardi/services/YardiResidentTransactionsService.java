@@ -563,7 +563,7 @@ public class YardiResidentTransactionsService extends YardiAbstractService {
             Building bulding = findBuilding(yardiInterfaceId, propertyListCode);
             if (bulding == null) {
                 //TODO need to implement this. But how?
-                throw new Error("propertyListCode not implemented in this Vista version, us building codes");
+                throw new Error("propertyListCode not implemented in this Vista version, use building codes instead of list '" + propertyListCode + "'");
             } else {
                 if (bulding.suspended().getValue()) {
                     executionMonitor.addInfoEvent("skip suspended property code for charges import", CompletionType.failed, propertyListCode, null);
