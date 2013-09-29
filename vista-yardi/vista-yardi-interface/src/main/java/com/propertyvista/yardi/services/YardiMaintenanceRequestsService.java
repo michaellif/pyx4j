@@ -168,10 +168,10 @@ public class YardiMaintenanceRequestsService extends YardiAbstractService {
         }
 
         List<String> propertyCodes = null;
-        if (yc.propertyCode().isNull()) {
+        if (yc.propertyListCodes().isNull()) {
             propertyCodes = getPropertyCodes(stub, yc);
         } else {
-            propertyCodes = Arrays.asList(yc.propertyCode().getValue().trim().split("\\s*,\\s*"));
+            propertyCodes = Arrays.asList(yc.propertyListCodes().getValue().trim().split("\\s*,\\s*"));
         }
 
         if (propertyCodes != null) {

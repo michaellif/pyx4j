@@ -64,6 +64,8 @@ public class YardiResidentTransactionsStubImpl extends AbstractYardiStub impleme
 
     private final static Logger log = LoggerFactory.getLogger(YardiResidentTransactionsStubImpl.class);
 
+    private static String errorMessage_NoAccess_Start = "Invalid or no access to Yardi Property";
+
     @Override
     public String ping(PmcYardiCredential yc) throws RemoteException {
         init(Action.Ping);
@@ -143,7 +145,7 @@ public class YardiResidentTransactionsStubImpl extends AbstractYardiStub impleme
             if (Messages.isMessageResponse(xml)) {
                 Messages messages = MarshallUtil.unmarshal(Messages.class, xml);
                 if (messages.isError()) {
-                    if (messages.getErrorMessage().getValue().startsWith("Invalid or no access to Yardi Property")) {
+                    if (messages.getErrorMessage().getValue().startsWith(errorMessage_NoAccess_Start)) {
                         throw new YardiPropertyNoAccessException(messages.getErrorMessage().getValue());
                     } else if (messages.getErrorMessage().getValue().startsWith("No tenants exist with the given search criteria")) {
                         success = true;
@@ -309,7 +311,8 @@ public class YardiResidentTransactionsStubImpl extends AbstractYardiStub impleme
     }
 
     @Override
-    public ResidentTransactions getAllLeaseCharges(PmcYardiCredential yc, String propertyId, LogicalDate date) throws YardiServiceException, RemoteException {
+    public ResidentTransactions getAllLeaseCharges(PmcYardiCredential yc, String propertyListCode, LogicalDate date) throws YardiServiceException,
+            RemoteException, YardiPropertyNoAccessException {
         boolean success = false;
         try {
             init(Action.GetResidentsLeaseCharges);
@@ -324,14 +327,14 @@ public class YardiResidentTransactionsStubImpl extends AbstractYardiStub impleme
             request.setDatabase(yc.database().getValue());
             request.setPlatform(yc.platform().getValue().name());
             request.setInterfaceEntity(YardiConstants.INTERFACE_ENTITY);
-            request.setYardiPropertyId(propertyId);
+            request.setYardiPropertyId(propertyListCode);
             request.setPostMonth(calendar);
 
             GetResidentsLeaseCharges_LoginResponse response = getResidentTransactionsService(yc).getResidentsLeaseCharges_Login(request);
             if ((response == null) || (response.getGetResidentsLeaseCharges_LoginResult() == null)
                     || (response.getGetResidentsLeaseCharges_LoginResult().getExtraElement() == null)) {
-                throw new YardiServiceException(SimpleMessageFormat.format("getResidentsLeaseCharges received NULL response; PropertyId {0}, Date {1}",
-                        propertyId, date));
+                throw new YardiServiceException(SimpleMessageFormat.format("getResidentsLeaseCharges received NULL response; PropertyListCode {0}, Date {1}",
+                        propertyListCode, date));
             }
             String xml = response.getGetResidentsLeaseCharges_LoginResult().getExtraElement().toString();
 
@@ -339,7 +342,12 @@ public class YardiResidentTransactionsStubImpl extends AbstractYardiStub impleme
             if (Messages.isMessageResponse(xml)) {
                 Messages messages = MarshallUtil.unmarshal(Messages.class, xml);
                 if (messages.isError()) {
-                    throw new YardiServiceException(SimpleMessageFormat.format("{0}; PropertyId {1}, Date {2}", messages.toString(), propertyId, date));
+                    if (messages.getErrorMessage().getValue().startsWith(errorMessage_NoAccess_Start)) {
+                        throw new YardiPropertyNoAccessException(messages.getErrorMessage().getValue());
+                    } else {
+                        throw new YardiServiceException(SimpleMessageFormat.format("{0}; PropertyListCode {1}, Date {2}", messages.toString(),
+                                propertyListCode, date));
+                    }
                 } else {
                     log.debug(messages.toString());
                 }

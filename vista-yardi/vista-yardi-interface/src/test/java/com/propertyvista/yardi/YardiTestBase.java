@@ -132,13 +132,13 @@ public class YardiTestBase extends IntegrationTestBase {
         try {
             NamespaceManager.setNamespace(VistaNamespace.operationsNamespace);
             EntityQueryCriteria<PmcYardiCredential> criteria = EntityQueryCriteria.create(PmcYardiCredential.class);
-            criteria.like(criteria.proto().propertyCode(), "*" + propertyCode + "*");
+            criteria.like(criteria.proto().propertyListCodes(), "*" + propertyCode + "*");
             criteria.eq(criteria.proto().pmc().namespace(), namespace);
             PmcYardiCredential yc = Persistence.service().retrieve(criteria);
             if (yc == null) {
                 yc = EntityFactory.create(PmcYardiCredential.class);
                 yc.pmc().set(getDataModel(PmcDataModel.class).getItem(0));
-                yc.propertyCode().setValue(propertyCode);
+                yc.propertyListCodes().setValue(propertyCode);
                 Persistence.service().persist(yc);
                 log.info("Created Yardi interface {} for Property codes {}", yc.getPrimaryKey(), propertyCode);
             }

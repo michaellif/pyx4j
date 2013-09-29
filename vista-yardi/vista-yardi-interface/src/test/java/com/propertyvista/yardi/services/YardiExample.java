@@ -63,7 +63,7 @@ public class YardiExample {
         try {
             YardiResidentTransactionsStub stub = ServerSideFactory.create(YardiResidentTransactionsStub.class);
             ResidentTransactions residentTransactions = stub.getAllResidentTransactions(DevYardiCredentials.getTestPmcYardiCredential(), DevYardiCredentials
-                    .getTestPmcYardiCredential().propertyCode().getValue());
+                    .getTestPmcYardiCredential().propertyListCodes().getValue());
             System.out.println(residentTransactions);
         } catch (Throwable e) {
             log.error("error", e);
@@ -74,7 +74,7 @@ public class YardiExample {
     private static void getUnitInformation() {
         try {
             YardiResidentTransactionsStub stub = ServerSideFactory.create(YardiResidentTransactionsStub.class);
-            stub.getUnitInformation(DevYardiCredentials.getTestPmcYardiCredential(), DevYardiCredentials.getTestPmcYardiCredential().propertyCode().getValue());
+            stub.getUnitInformation(DevYardiCredentials.getTestPmcYardiCredential(), DevYardiCredentials.getTestPmcYardiCredential().propertyListCodes().getValue());
 
         } catch (Throwable e) {
             log.error("error", e);
@@ -85,7 +85,7 @@ public class YardiExample {
     private static void getResidentsLeaseCharges() {
         try {
             YardiResidentTransactionsStub stub = ServerSideFactory.create(YardiResidentTransactionsStub.class);
-            stub.getAllLeaseCharges(DevYardiCredentials.getTestPmcYardiCredential(), DevYardiCredentials.getTestPmcYardiCredential().propertyCode().getValue(),
+            stub.getAllLeaseCharges(DevYardiCredentials.getTestPmcYardiCredential(), DevYardiCredentials.getTestPmcYardiCredential().propertyListCodes().getValue(),
                     new LogicalDate());
 
         } catch (Throwable e) {

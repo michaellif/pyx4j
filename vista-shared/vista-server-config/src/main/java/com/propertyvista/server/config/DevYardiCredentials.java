@@ -23,14 +23,14 @@ public class DevYardiCredentials {
         PmcYardiCredential cr = EntityFactory.create(PmcYardiCredential.class);
         // See http://jira.birchwoodsoftwaregroup.com/wiki/display/VISTA/Yardi
         if (true) {
-            cr.propertyCode().setValue("gran0002, aven2175");
+            cr.propertyListCodes().setValue("gran0002, aven2175");
             cr.serviceURLBase().setValue("http://yardi.birchwoodsoftwaregroup.com/Voyager60");
             cr.username().setValue("vista_dev");
             cr.password().number().setValue("vista_dev");
             cr.serverName().setValue("WIN-CO5DPAKNUA4\\YARDI");
             cr.database().setValue("vista_dev");
         } else if (false) {
-            cr.propertyCode().setValue("prvista2");
+            cr.propertyListCodes().setValue("prvista2");
             cr.serviceURLBase().setValue("https://www.iyardiasp.com/8223thirddev");
             cr.username().setValue("propertyvistaws");
             cr.password().number().setValue("52673");
@@ -43,7 +43,7 @@ public class DevYardiCredentials {
             cr.serverName().setValue("aspdb06\\sql2k5");
             cr.database().setValue("afqoml_qa6008");
         } else if (false) {
-            cr.propertyCode().setValue("prvista1");
+            cr.propertyListCodes().setValue("prvista1");
             cr.serviceURLBase().setValue("https://www.iyardiasp.com/8223thirddev");
             cr.username().setValue("propertyvista-srws");
             cr.password().number().setValue("55548");

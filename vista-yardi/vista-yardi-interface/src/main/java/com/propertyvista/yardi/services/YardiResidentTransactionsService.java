@@ -63,6 +63,7 @@ import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.property.yardi.YardiPropertyConfiguration;
 import com.propertyvista.domain.settings.PmcYardiCredential;
 import com.propertyvista.domain.tenant.lease.Lease;
+import com.propertyvista.operations.domain.scheduler.CompletionType;
 import com.propertyvista.yardi.bean.Properties;
 import com.propertyvista.yardi.stub.ExternalInterfaceLoggingStub;
 import com.propertyvista.yardi.stub.YardiPropertyNoAccessException;
@@ -116,18 +117,18 @@ public class YardiResidentTransactionsService extends YardiAbstractService {
         YardiResidentTransactionsStub stub = ServerSideFactory.create(YardiResidentTransactionsStub.class);
         final Key yardiInterfaceId = yc.getPrimaryKey();
         try {
-            List<String> propertyCodes;
-            if (yc.propertyCode().isNull()) {
+            List<String> propertyListCodes;
+            if (yc.propertyListCodes().isNull()) {
                 List<YardiPropertyConfiguration> propertyConfigurations = getPropertyConfigurations(stub, yc);
-                propertyCodes = new ArrayList<String>();
+                propertyListCodes = new ArrayList<String>();
                 for (YardiPropertyConfiguration yardiPropertyConfiguration : propertyConfigurations) {
-                    propertyCodes.add(yardiPropertyConfiguration.propertyID().getValue());
+                    propertyListCodes.add(yardiPropertyConfiguration.propertyID().getValue());
                 }
             } else {
-                propertyCodes = Arrays.asList(yc.propertyCode().getValue().trim().split("\\s*,\\s*"));
+                propertyListCodes = Arrays.asList(yc.propertyListCodes().getValue().trim().split("\\s*,\\s*"));
             }
 
-            List<ResidentTransactions> allTransactions = getAllResidentTransactions(stub, yc, executionMonitor, propertyCodes);
+            List<ResidentTransactions> allTransactions = getAllResidentTransactions(stub, yc, executionMonitor, propertyListCodes);
             for (ResidentTransactions transaction : allTransactions) {
                 if (executionMonitor.isTerminationRequested()) {
                     break;
@@ -136,7 +137,7 @@ public class YardiResidentTransactionsService extends YardiAbstractService {
                 importTransaction(yardiInterfaceId, transaction, executionMonitor, stub);
             }
 
-            List<ResidentTransactions> allLeaseCharges = getAllLeaseCharges(stub, yc, executionMonitor, propertyCodes);
+            List<ResidentTransactions> allLeaseCharges = getAllLeaseCharges(stub, yc, executionMonitor, propertyListCodes);
             for (ResidentTransactions leaseCharges : allLeaseCharges) {
                 if (executionMonitor.isTerminationRequested()) {
                     break;
@@ -166,7 +167,7 @@ public class YardiResidentTransactionsService extends YardiAbstractService {
         }
         // import lease charges
         LogicalDate now = new LogicalDate(SystemDateManager.getDate());
-        BillingCycle currCycle = YardiLeaseIntegrationAgent.getBillingCycleForDate(yardiInterfaceId, propertyCode, now);
+        BillingCycle currCycle = YardiLeaseIntegrationAgent.getBillingCycleForDate(lease.unit().building(), now);
         BillingCycle nextCycle = ServerSideFactory.create(BillingCycleFacade.class).getSubsequentBillingCycle(currCycle);
         ResidentTransactions leaseCharges = null;
         try {
@@ -383,22 +384,34 @@ public class YardiResidentTransactionsService extends YardiAbstractService {
     }
 
     private List<ResidentTransactions> getAllResidentTransactions(YardiResidentTransactionsStub stub, PmcYardiCredential yc, ExecutionMonitor executionMonitor,
-            List<String> propertyCodes) throws YardiServiceException, RemoteException {
+            List<String> propertyListCodes) throws YardiServiceException, RemoteException {
         List<ResidentTransactions> transactions = new ArrayList<ResidentTransactions>();
         final Key yardiInterfaceId = yc.getPrimaryKey();
-        for (String propertyCode : propertyCodes) {
+        for (String propertyListCode : propertyListCodes) {
             if (executionMonitor.isTerminationRequested()) {
                 break;
             }
-            ResidentTransactions residentTransactions;
+            Building bulding = findBuilding(yardiInterfaceId, propertyListCode);
+            if (bulding != null) {
+                if (bulding.suspended().getValue()) {
+                    executionMonitor.addInfoEvent("skip suspended property code for transaction import", CompletionType.failed, propertyListCode, null);
+                    continue;
+                }
+            } else {
+                // process as propertyListCode or new building
+            }
             try {
-                residentTransactions = stub.getAllResidentTransactions(yc, propertyCode);
+                ResidentTransactions residentTransactions = stub.getAllResidentTransactions(yc, propertyListCode);
                 if (residentTransactions != null) {
                     transactions.add(residentTransactions);
                 }
+                executionMonitor.addInfoEvent("PropertyListTransactions", propertyListCode);
             } catch (YardiPropertyNoAccessException e) {
-                suspendBuilding(yardiInterfaceId, propertyCode);
-                executionMonitor.addErredEvent("Building", e);
+                if (suspendBuilding(yardiInterfaceId, propertyListCode)) {
+                    executionMonitor.addErredEvent("BuildingSuspended", e);
+                } else {
+                    executionMonitor.addFailedEvent("PropertyListTransactions", propertyListCode, e);
+                }
             }
         }
         return transactions;
@@ -529,7 +542,7 @@ public class YardiResidentTransactionsService extends YardiAbstractService {
 
     // TODO - we may need to request Yardi charges for one more cycle forward
     private List<ResidentTransactions> getAllLeaseCharges(YardiResidentTransactionsStub stub, PmcYardiCredential yc, ExecutionMonitor executionMonitor,
-            List<String> propertyCodes) throws YardiServiceException, RemoteException {
+            List<String> propertyListCodes) throws YardiServiceException, RemoteException {
         final Key yardiInterfaceId = yc.getPrimaryKey();
         // Make sure YardiChargeCodes have been configured
         EntityQueryCriteria<ARCode> criteria = EntityQueryCriteria.create(ARCode.class);
@@ -542,27 +555,39 @@ public class YardiResidentTransactionsService extends YardiAbstractService {
         LogicalDate now = new LogicalDate(SystemDateManager.getDate());
 
         List<ResidentTransactions> transactions = new ArrayList<ResidentTransactions>();
-        for (String propertyCode : propertyCodes) {
+        for (String propertyListCode : propertyListCodes) {
             if (executionMonitor.isTerminationRequested()) {
                 break;
             }
 
-            if (isBuildingExistsAndNotSuspended(yardiInterfaceId, propertyCode)) {
-                BillingCycle currCycle = YardiLeaseIntegrationAgent.getBillingCycleForDate(yardiInterfaceId, propertyCode, now);
-                BillingCycle nextCycle = ServerSideFactory.create(BillingCycleFacade.class).getSubsequentBillingCycle(currCycle);
-                ResidentTransactions residentTransactions = stub.getAllLeaseCharges(yc, propertyCode, nextCycle.billingCycleStartDate().getValue());
-                if (residentTransactions != null) {
-                    transactions.add(residentTransactions);
+            Building bulding = findBuilding(yardiInterfaceId, propertyListCode);
+            if (bulding == null) {
+                //TODO need to implement this. But how?
+                throw new Error("propertyListCode not implemented in this Vista version, us building codes");
+            } else {
+                if (bulding.suspended().getValue()) {
+                    executionMonitor.addInfoEvent("skip suspended property code for charges import", CompletionType.failed, propertyListCode, null);
+                } else {
+                    BillingCycle currCycle = YardiLeaseIntegrationAgent.getBillingCycleForDate(bulding, now);
+                    BillingCycle nextCycle = ServerSideFactory.create(BillingCycleFacade.class).getSubsequentBillingCycle(currCycle);
+                    try {
+                        ResidentTransactions residentTransactions = stub.getAllLeaseCharges(yc, propertyListCode, nextCycle.billingCycleStartDate().getValue());
+                        if (residentTransactions != null) {
+                            transactions.add(residentTransactions);
+                        }
+                        executionMonitor.addInfoEvent("PropertyListCharges", propertyListCode);
+                    } catch (YardiPropertyNoAccessException e) {
+                        if (suspendBuilding(yardiInterfaceId, propertyListCode)) {
+                            executionMonitor.addErredEvent("BuildingSuspended", e);
+                        } else {
+                            executionMonitor.addFailedEvent("PropertyListCharges", propertyListCode, e);
+                        }
+                    }
                 }
             }
         }
 
         return transactions;
-    }
-
-    private boolean isBuildingExistsAndNotSuspended(Key yardiInterfaceId, String propertyCode) {
-        Building bulding = findBuilding(yardiInterfaceId, propertyCode);
-        return (bulding != null && !bulding.propertyCode().isNull());
     }
 
     public List<Property> getProperties(ResidentTransactions transaction) {
@@ -631,10 +656,13 @@ public class YardiResidentTransactionsService extends YardiAbstractService {
         return Persistence.service().retrieve(criteria);
     }
 
-    private void suspendBuilding(Key yardiInterfaceId, String propertyCode) {
+    private boolean suspendBuilding(Key yardiInterfaceId, String propertyCode) {
         Building building = findBuilding(yardiInterfaceId, propertyCode);
-        if (building != null) {
+        if ((building != null) && (!building.suspended().getValue())) {
             ServerSideFactory.create(BuildingFacade.class).suspend(building);
+            return true;
+        } else {
+            return false;
         }
     }
 }

@@ -48,7 +48,7 @@ class YardiCredentialEditor extends CEntityDecoratableForm<PmcYardiCredential> {
         content.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().residentTransactionsServiceURL()), true).build());
         content.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().sysBatchServiceURL()), true).build());
         content.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().maintenanceRequestsServiceURL()), true).build());
-        content.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().propertyCode()), true).build());
+        content.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().propertyListCodes()), true).build());
 
         content.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().username()), 30, true).build());
 

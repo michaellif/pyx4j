@@ -32,7 +32,7 @@ public interface YardiResidentTransactionsStub extends ExternalInterfaceLoggingS
     /**
      * Returns null of there are no tenants in Yardi DB
      */
-    ResidentTransactions getAllResidentTransactions(PmcYardiCredential yc, String propertyId) throws YardiServiceException, YardiPropertyNoAccessException,
+    ResidentTransactions getAllResidentTransactions(PmcYardiCredential yc, String propertyListCode) throws YardiServiceException, YardiPropertyNoAccessException,
             RemoteException;
 
     ResidentTransactions getResidentTransactionsForTenant(PmcYardiCredential yc, String propertyId, String tenantId) throws YardiServiceException,
@@ -42,7 +42,8 @@ public interface YardiResidentTransactionsStub extends ExternalInterfaceLoggingS
 
     void getUnitInformation(PmcYardiCredential yc, String propertyId) throws YardiServiceException, RemoteException;
 
-    ResidentTransactions getAllLeaseCharges(PmcYardiCredential yc, String propertyId, LogicalDate date) throws YardiServiceException, RemoteException;
+    ResidentTransactions getAllLeaseCharges(PmcYardiCredential yc, String propertyListCode, LogicalDate date) throws YardiServiceException, RemoteException,
+            YardiPropertyNoAccessException;
 
     ResidentTransactions getLeaseChargesForTenant(PmcYardiCredential yc, String propertyId, String tenantId, LogicalDate date) throws YardiServiceException,
             RemoteException, YardiResidentNoTenantsExistException;

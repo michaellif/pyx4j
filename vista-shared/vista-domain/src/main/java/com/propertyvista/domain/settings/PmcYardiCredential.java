@@ -73,6 +73,7 @@ public interface PmcYardiCredential extends IEntity {
     //TODO rename to Property Lists 
     @Length(4000)
     @Editor(type = EditorType.textarea)
-    IPrimitive<String> propertyCode();
+    @MemberColumn(name = "property_code")
+    IPrimitive<String> propertyListCodes();
 
 }
