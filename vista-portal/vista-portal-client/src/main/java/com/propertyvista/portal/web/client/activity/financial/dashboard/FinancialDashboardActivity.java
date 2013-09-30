@@ -94,7 +94,7 @@ public class FinancialDashboardActivity extends SecurityAwareActivity implements
 
     @Override
     public void viewCurrentBill() {
-        AppSite.getPlaceController().goTo(new PortalSiteMap.Resident.Financial.BillingHistory.ViewBill());
+        AppSite.getPlaceController().goTo(new PortalSiteMap.Resident.Financial.BillingHistory.BillView());
     }
 
     @Override

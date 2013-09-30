@@ -91,7 +91,7 @@ public class PortalSiteMap implements SiteMap {
 
             public static class BillingHistory extends AppPlace {
 
-                public static class ViewBill extends AppPlace {
+                public static class BillView extends AppPlace {
                 }
             }
 

@@ -20,19 +20,23 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.server.Persistence;
+import com.pyx4j.entity.shared.AttachLevel;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
+import com.pyx4j.entity.shared.utils.EntityBinder;
 
 import com.propertyvista.biz.financial.ar.ARFacade;
 import com.propertyvista.biz.financial.billing.BillingFacade;
 import com.propertyvista.domain.financial.billing.Bill;
 import com.propertyvista.domain.tenant.lease.Lease;
+import com.propertyvista.dto.BillDTO;
 import com.propertyvista.dto.TransactionHistoryDTO;
 import com.propertyvista.portal.domain.dto.BillDataDTO;
 import com.propertyvista.portal.rpc.portal.web.dto.BillingHistoryDTO;
 import com.propertyvista.portal.rpc.portal.web.dto.BillingSummaryDTO;
 import com.propertyvista.portal.rpc.portal.web.dto.LatestActivitiesDTO;
+import com.propertyvista.portal.rpc.portal.web.dto.financial.BillViewDTO;
 import com.propertyvista.portal.rpc.portal.web.services.financial.BillingService;
 import com.propertyvista.portal.server.portal.TenantAppContext;
 import com.propertyvista.shared.config.VistaFeatures;
@@ -103,5 +107,33 @@ public class BillingServiceImpl implements BillingService {
         }
 
         return bills;
+    }
+
+    @Override
+    public void retreiveBill(AsyncCallback<BillViewDTO> callback, Bill entityId) {
+        Bill bill = null;
+        if (entityId == null) {
+            // find current bill instead:
+            bill = ServerSideFactory.create(BillingFacade.class).getLatestConfirmedBill(TenantAppContext.getCurrentUserLease());
+        } else {
+            bill = Persistence.secureRetrieve(Bill.class, entityId.getPrimaryKey());
+        }
+
+        // create and fill resulting DTO:
+        BillViewDTO result = EntityFactory.create(BillViewDTO.class);
+        result.billData().set(new EntityBinder<Bill, BillDTO>(Bill.class, BillDTO.class) {
+            @Override
+            protected void bind() {
+                bindCompleteObject();
+            }
+        }.createTO(bill));
+
+        // load detached entities:
+        Persistence.service().retrieve(result.billData().lineItems());
+        Persistence.service().retrieve(result.billData().billingAccount());
+        Persistence.service().retrieve(result.billData().billingAccount().lease());
+        Persistence.service().retrieve(result.billData().billingCycle().building(), AttachLevel.ToStringMembers);
+
+        callback.onSuccess(result);
     }
 }

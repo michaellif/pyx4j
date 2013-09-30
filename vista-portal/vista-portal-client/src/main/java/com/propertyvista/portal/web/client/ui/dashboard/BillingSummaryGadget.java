@@ -89,7 +89,7 @@ public class BillingSummaryGadget extends AbstractGadget<MainDashboardViewImpl> 
 
                     @Override
                     public void execute() {
-                        AppSite.getPlaceController().goTo(new PortalSiteMap.Resident.Financial.BillingHistory.ViewBill());
+                        AppSite.getPlaceController().goTo(new PortalSiteMap.Resident.Financial.BillingHistory.BillView());
                     }
                 });
                 add(viewBillAnchor);

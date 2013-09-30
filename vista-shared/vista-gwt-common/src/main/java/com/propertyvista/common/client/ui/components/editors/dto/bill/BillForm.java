@@ -18,6 +18,7 @@ import java.math.BigDecimal;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Widget;
 
+import com.pyx4j.forms.client.ui.CEntityLabel;
 import com.pyx4j.forms.client.ui.CMoneyField;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
@@ -26,6 +27,8 @@ import com.propertyvista.common.client.theme.BillingTheme;
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
 import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
 import com.propertyvista.domain.financial.billing.Bill.BillStatus;
+import com.propertyvista.domain.property.asset.building.Building;
+import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.dto.BillDTO;
 import com.propertyvista.dto.InvoiceLineItemGroupDTO;
 
@@ -63,12 +66,12 @@ public class BillForm extends CEntityDecoratableForm<BillDTO> {
         int col = oneColumn ? 0 : 1;
         if (!justPreviewBill) {
             flexPanel.setH1(++row, 0, 2, i18n.tr("Info"));
-            flexPanel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().billingAccount().lease().unit())).build());
+            flexPanel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().billingAccount().lease().unit(), new CEntityLabel<AptUnit>())).build());
             flexPanel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().billingCycle().billingCycleStartDate())).build());
             flexPanel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().billingCycle().billingCycleEndDate())).build());
 
             int row2 = oneColumn ? row : 0;
-            flexPanel.setWidget(++row2, col, new FormDecoratorBuilder(inject(proto().billingCycle().building())).build());
+            flexPanel.setWidget(++row2, col, new FormDecoratorBuilder(inject(proto().billingCycle().building(), new CEntityLabel<Building>())).build());
             flexPanel.setWidget(++row2, col, new FormDecoratorBuilder(inject(proto().billingCycle().billingType().billingPeriod())).build());
             flexPanel.setWidget(++row2, col, new FormDecoratorBuilder(inject(proto().billingCycle().targetBillExecutionDate())).build());
             row = oneColumn ? row2 : row;

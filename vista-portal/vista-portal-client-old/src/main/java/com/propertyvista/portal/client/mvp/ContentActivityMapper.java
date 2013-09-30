@@ -101,7 +101,7 @@ public class ContentActivityMapper implements AppActivityMapper {
                         activity = new BillSummaryActivity(appPlace);
                     } else if (appPlace instanceof Resident.Financial.BillingHistory) {
                         activity = new BillingHistoryActivity(appPlace);
-                    } else if (appPlace instanceof Resident.Financial.BillingHistory.ViewBill) {
+                    } else if (appPlace instanceof Resident.Financial.BillingHistory.BillView) {
                         activity = new ViewBillActivity(appPlace);
                     } else if (appPlace instanceof Resident.Financial.FinancialSummary) {
                         activity = new FinancialSummaryActivity(appPlace);

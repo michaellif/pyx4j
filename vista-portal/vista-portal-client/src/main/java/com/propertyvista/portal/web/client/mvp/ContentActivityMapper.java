@@ -32,6 +32,7 @@ import com.propertyvista.portal.web.client.activity.dashboard.MainDashboardActiv
 import com.propertyvista.portal.web.client.activity.financial.autopay.AutoPayActivity;
 import com.propertyvista.portal.web.client.activity.financial.autopay.AutoPayConfirmationActivity;
 import com.propertyvista.portal.web.client.activity.financial.autopay.AutoPayWizardActivity;
+import com.propertyvista.portal.web.client.activity.financial.dashboard.BillViewActivity;
 import com.propertyvista.portal.web.client.activity.financial.dashboard.BillingHistoryViewActivity;
 import com.propertyvista.portal.web.client.activity.financial.dashboard.FinancialDashboardActivity;
 import com.propertyvista.portal.web.client.activity.financial.dashboard.TransactionHistoryViewActivity;
@@ -110,6 +111,9 @@ public class ContentActivityMapper implements AppActivityMapper {
                         activity = new BillingHistoryViewActivity(appPlace);
                     } else if (appPlace instanceof Financial.TransactionHistory) {
                         activity = new TransactionHistoryViewActivity(appPlace);
+
+                    } else if (appPlace instanceof Financial.BillingHistory.BillView) {
+                        activity = new BillViewActivity(appPlace);
 
 // Insurance:
                     } else if (appPlace instanceof PortalSiteMap.Resident.ResidentServices.TenantInsurance.TenantSure.TenantSureWizard) {

@@ -17,10 +17,12 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.rpc.shared.IService;
 
+import com.propertyvista.domain.financial.billing.Bill;
 import com.propertyvista.dto.TransactionHistoryDTO;
 import com.propertyvista.portal.rpc.portal.web.dto.BillingHistoryDTO;
 import com.propertyvista.portal.rpc.portal.web.dto.BillingSummaryDTO;
 import com.propertyvista.portal.rpc.portal.web.dto.LatestActivitiesDTO;
+import com.propertyvista.portal.rpc.portal.web.dto.financial.BillViewDTO;
 
 public interface BillingService extends IService {
 
@@ -31,4 +33,6 @@ public interface BillingService extends IService {
     void retreiveTransactionHistory(AsyncCallback<TransactionHistoryDTO> callback);
 
     void retreiveLatestActivities(AsyncCallback<LatestActivitiesDTO> callback);
+
+    void retreiveBill(AsyncCallback<BillViewDTO> callback, Bill entityId);
 }

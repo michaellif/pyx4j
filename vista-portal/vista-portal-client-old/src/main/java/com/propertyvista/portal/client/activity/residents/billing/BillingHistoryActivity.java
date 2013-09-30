@@ -63,7 +63,7 @@ public class BillingHistoryActivity extends SecurityAwareActivity implements Bil
 
     @Override
     public void view(BillDataDTO item) {
-        AppPlace place = new PortalSiteMap.Resident.Financial.BillingHistory.ViewBill();
+        AppPlace place = new PortalSiteMap.Resident.Financial.BillingHistory.BillView();
         AppSite.getPlaceController().goTo(place.formPlace(item.getPrimaryKey()));
     }
 

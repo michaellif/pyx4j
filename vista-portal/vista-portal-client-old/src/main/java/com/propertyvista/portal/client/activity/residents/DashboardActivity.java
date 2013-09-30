@@ -59,7 +59,7 @@ public class DashboardActivity extends SecurityAwareActivity implements Dashboar
 
     @Override
     public void viewCurrentBill() {
-        AppSite.getPlaceController().goTo(new PortalSiteMap.Resident.Financial.BillingHistory.ViewBill());
+        AppSite.getPlaceController().goTo(new PortalSiteMap.Resident.Financial.BillingHistory.BillView());
     }
 
     @Override

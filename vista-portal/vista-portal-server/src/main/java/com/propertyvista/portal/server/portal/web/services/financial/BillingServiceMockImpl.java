@@ -20,10 +20,12 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.shared.EntityFactory;
 
+import com.propertyvista.domain.financial.billing.Bill;
 import com.propertyvista.dto.TransactionHistoryDTO;
 import com.propertyvista.portal.rpc.portal.web.dto.BillingHistoryDTO;
 import com.propertyvista.portal.rpc.portal.web.dto.BillingSummaryDTO;
 import com.propertyvista.portal.rpc.portal.web.dto.LatestActivitiesDTO;
+import com.propertyvista.portal.rpc.portal.web.dto.financial.BillViewDTO;
 import com.propertyvista.portal.rpc.portal.web.services.financial.BillingService;
 
 public class BillingServiceMockImpl implements BillingService {
@@ -53,6 +55,12 @@ public class BillingServiceMockImpl implements BillingService {
 
     @Override
     public void retreiveLatestActivities(AsyncCallback<LatestActivitiesDTO> callback) {
+        // TODO Auto-generated method stub
+
+    }
+
+    @Override
+    public void retreiveBill(AsyncCallback<BillViewDTO> callback, Bill entityId) {
         // TODO Auto-generated method stub
 
     }
