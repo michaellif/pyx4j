@@ -53,7 +53,6 @@ import com.pyx4j.widgets.client.RadioGroup;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
 
 import com.propertyvista.common.client.theme.VistaTheme;
-import com.propertyvista.common.client.ui.components.editors.payments.PaymentMethodForm;
 import com.propertyvista.domain.contact.AddressSimple;
 import com.propertyvista.domain.payment.CreditCardInfo.CreditCardType;
 import com.propertyvista.domain.payment.LeasePaymentMethod;
@@ -68,6 +67,7 @@ import com.propertyvista.portal.web.client.ui.CPortalEntityWizard;
 import com.propertyvista.portal.web.client.ui.LegalTermsDialog;
 import com.propertyvista.portal.web.client.ui.LegalTermsDialog.TermsType;
 import com.propertyvista.portal.web.client.ui.financial.PortalPaymentTypesUtil;
+import com.propertyvista.portal.web.client.ui.financial.paymentmethod.PaymentMethodEditor;
 import com.propertyvista.portal.web.client.ui.util.decorators.FormDecoratorBuilder;
 
 public class AutoPayWizard extends CPortalEntityWizard<AutoPayDTO> {
@@ -86,7 +86,7 @@ public class AutoPayWizard extends CPortalEntityWizard<AutoPayDTO> {
 
     private final SimplePanel detailsTotalHolder = new SimplePanel();
 
-    private final PaymentMethodForm<LeasePaymentMethod> paymentMethodEditor = new PaymentMethodForm<LeasePaymentMethod>(LeasePaymentMethod.class) {
+    private final PaymentMethodEditor<LeasePaymentMethod> paymentMethodEditor = new PaymentMethodEditor<LeasePaymentMethod>(LeasePaymentMethod.class) {
         @Override
         public Set<PaymentType> defaultPaymentTypes() {
             return PortalPaymentTypesUtil.getAllowedPaymentTypes(false);

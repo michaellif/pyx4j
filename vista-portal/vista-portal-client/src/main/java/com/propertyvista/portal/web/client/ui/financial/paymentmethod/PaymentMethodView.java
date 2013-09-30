@@ -19,7 +19,7 @@ import com.propertyvista.domain.contact.AddressSimple;
 import com.propertyvista.domain.payment.LeasePaymentMethod;
 import com.propertyvista.portal.web.client.ui.IEditorView;
 
-public interface PaymentMethodEditorView extends IEditorView<LeasePaymentMethod> {
+public interface PaymentMethodView extends IEditorView<LeasePaymentMethod> {
 
     interface Presenter extends IEditorPresenter<LeasePaymentMethod> {
 

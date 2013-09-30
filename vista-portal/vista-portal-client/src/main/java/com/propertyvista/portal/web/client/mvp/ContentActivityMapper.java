@@ -39,7 +39,7 @@ import com.propertyvista.portal.web.client.activity.financial.dashboard.Transact
 import com.propertyvista.portal.web.client.activity.financial.payment.PaymentConfirmationActivity;
 import com.propertyvista.portal.web.client.activity.financial.payment.PaymentWizardActivity;
 import com.propertyvista.portal.web.client.activity.financial.paymentmethod.PaymentMethodConfirmationActivity;
-import com.propertyvista.portal.web.client.activity.financial.paymentmethod.PaymentMethodEditorActivity;
+import com.propertyvista.portal.web.client.activity.financial.paymentmethod.PaymentMethodViewActivity;
 import com.propertyvista.portal.web.client.activity.financial.paymentmethod.PaymentMethodWizardActivity;
 import com.propertyvista.portal.web.client.activity.login.LandingActivity;
 import com.propertyvista.portal.web.client.activity.login.LeaseContextSelectionActivity;
@@ -94,7 +94,7 @@ public class ContentActivityMapper implements AppActivityMapper {
                         activity = new PaymentConfirmationActivity(appPlace);
 
                     } else if (appPlace instanceof Financial.PaymentMethods.PaymentMethod) {
-                        activity = new PaymentMethodEditorActivity(appPlace);
+                        activity = new PaymentMethodViewActivity(appPlace);
                     } else if (appPlace instanceof Financial.PaymentMethods.NewPaymentMethod) {
                         activity = new PaymentMethodWizardActivity(appPlace);
                     } else if (appPlace instanceof Financial.PaymentMethods.PaymentMethodSubmitted) {

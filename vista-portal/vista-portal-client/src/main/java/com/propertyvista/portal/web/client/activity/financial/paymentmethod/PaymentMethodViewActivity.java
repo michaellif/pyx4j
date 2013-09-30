@@ -23,12 +23,12 @@ import com.propertyvista.domain.contact.AddressSimple;
 import com.propertyvista.domain.payment.LeasePaymentMethod;
 import com.propertyvista.portal.rpc.portal.services.resident.PaymentMethodCrudService;
 import com.propertyvista.portal.web.client.activity.AbstractEditorActivity;
-import com.propertyvista.portal.web.client.ui.financial.paymentmethod.PaymentMethodEditorView;
+import com.propertyvista.portal.web.client.ui.financial.paymentmethod.PaymentMethodView;
 
-public class PaymentMethodEditorActivity extends AbstractEditorActivity<LeasePaymentMethod> implements PaymentMethodEditorView.Presenter {
+public class PaymentMethodViewActivity extends AbstractEditorActivity<LeasePaymentMethod> implements PaymentMethodView.Presenter {
 
-    public PaymentMethodEditorActivity(AppPlace place) {
-        super(PaymentMethodEditorView.class, GWT.<PaymentMethodCrudService> create(PaymentMethodCrudService.class), place);
+    public PaymentMethodViewActivity(AppPlace place) {
+        super(PaymentMethodView.class, GWT.<PaymentMethodCrudService> create(PaymentMethodCrudService.class), place);
     }
 
     @Override

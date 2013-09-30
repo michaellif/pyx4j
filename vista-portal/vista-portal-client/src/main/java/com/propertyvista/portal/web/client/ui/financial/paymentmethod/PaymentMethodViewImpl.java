@@ -16,9 +16,9 @@ package com.propertyvista.portal.web.client.ui.financial.paymentmethod;
 import com.propertyvista.domain.payment.LeasePaymentMethod;
 import com.propertyvista.portal.web.client.ui.AbstractEditorView;
 
-public class PaymentMethodEditorViewImpl extends AbstractEditorView<LeasePaymentMethod> implements PaymentMethodEditorView {
+public class PaymentMethodViewImpl extends AbstractEditorView<LeasePaymentMethod> implements PaymentMethodView {
 
-    public PaymentMethodEditorViewImpl() {
-        setForm(new PaymentMethodEditor(null));
+    public PaymentMethodViewImpl() {
+        setForm(new PaymentMethodViewForm(null));
     }
 }
