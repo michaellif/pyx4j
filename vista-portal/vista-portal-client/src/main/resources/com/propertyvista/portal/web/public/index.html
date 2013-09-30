@@ -56,6 +56,27 @@
 			document.getElementById("Site").style.display = "none";	document.getElementById('loading-bdr').style.visibility = 'visible';
 		}
 	</script>
+	
+	<script type="text/javascript">
+		function hideAddressBar()
+		{
+		    if(!window.location.hash)
+		    {
+		        if(document.height <= window.outerHeight + 10)
+		        {
+		            document.body.style.height = (window.outerHeight + 50) +'px';
+		            setTimeout( function(){ window.scrollTo(0, 1); }, 50 );
+		        }
+		        else
+		        {
+		            setTimeout( function(){ window.scrollTo(0, 1); }, 0 );
+		        }
+		    }
+		}
+		window.addEventListener("load", hideAddressBar );
+		window.addEventListener("orientationchange", hideAddressBar );
+	</script>
+		    
     <script type="text/javascript" language="javascript" src="portal.nocache.js"></script>
 	<iframe src="javascript:''" id="__gwt_historyFrame" tabIndex='-1' style="position:absolute;width:0;height:0;border:0"></iframe>
 	<!--[if lt IE 9]><script type="text/javascript">var ieVersion9=false;firstDiv.style.display = "none";</script><p>Please upgrade to Internet Explorer version 9 or later.</p><![endif]-->
