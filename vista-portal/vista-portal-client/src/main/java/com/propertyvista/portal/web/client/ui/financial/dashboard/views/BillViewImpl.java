@@ -19,7 +19,7 @@ import com.propertyvista.portal.web.client.ui.AbstractFormView;
 public class BillViewImpl extends AbstractFormView<BillViewDTO> implements BillView {
 
     public BillViewImpl() {
-        setForm(new BillViewForm());
+        setForm(new BillViewForm(this));
     }
 
 }

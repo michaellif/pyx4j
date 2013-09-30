@@ -13,11 +13,15 @@
  */
 package com.propertyvista.portal.web.client.ui.financial.dashboard.views;
 
+import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.commons.css.ThemeColor;
+import com.pyx4j.forms.client.ui.CEntityForm;
+import com.pyx4j.forms.client.ui.form.FormDecorator;
 import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.widgets.client.Button;
 
 import com.propertyvista.common.client.ui.components.editors.dto.bill.BillForm;
 import com.propertyvista.portal.rpc.portal.web.dto.financial.BillViewDTO;
@@ -27,8 +31,8 @@ public class BillViewForm extends CPortalEntityForm<BillViewDTO> {
 
     private static final I18n i18n = I18n.get(BillViewForm.class);
 
-    public BillViewForm() {
-        super(BillViewDTO.class, null, i18n.tr("Bill View"), ThemeColor.contrast4);
+    public BillViewForm(BillView view) {
+        super(BillViewDTO.class, view, i18n.tr("Bill View"), ThemeColor.contrast4);
     }
 
     @Override
@@ -39,5 +43,20 @@ public class BillViewForm extends CPortalEntityForm<BillViewDTO> {
         content.setWidget(++row, 0, inject(proto().billData(), new BillForm(true, true)));
 
         return content;
+    }
+
+    @Override
+    protected FormDecorator<BillViewDTO, CEntityForm<BillViewDTO>> createDecorator() {
+        FormDecorator<BillViewDTO, CEntityForm<BillViewDTO>> decorator = super.createDecorator();
+
+        Button btnPay = new Button(i18n.tr("Pay Bill"), new Command() {
+            @Override
+            public void execute() {
+                ((BillView.Presenter) getView().getPresenter()).payBill();
+            }
+        });
+        decorator.addHeaderToolbarButton(btnPay);
+
+        return decorator;
     }
 }
