@@ -47,6 +47,8 @@ import com.propertyvista.portal.server.portal.TenantAppContext;
 public class MaintenanceRequestCrudServiceImpl extends AbstractCrudServiceDtoImpl<MaintenanceRequest, MaintenanceRequestDTO> implements
         MaintenanceRequestCrudService {
 
+    private final boolean MOCK_MODE = false;
+
     public MaintenanceRequestCrudServiceImpl() {
         super(MaintenanceRequest.class, MaintenanceRequestDTO.class);
     }
@@ -65,7 +67,7 @@ public class MaintenanceRequestCrudServiceImpl extends AbstractCrudServiceDtoImp
 
     @Override
     public void retrieve(AsyncCallback<MaintenanceRequestDTO> callback, Key entityId, com.pyx4j.entity.rpc.AbstractCrudService.RetrieveTarget retrieveTarget) {
-        if (false) {
+        if (MOCK_MODE) {
             new MaintenanceRequestCrudServiceMockImpl().retrieve(callback, entityId, retrieveTarget);
         } else {
             super.retrieve(callback, entityId, retrieveTarget);
@@ -159,7 +161,7 @@ public class MaintenanceRequestCrudServiceImpl extends AbstractCrudServiceDtoImp
 
     @Override
     public void retreiveMaintenanceSummary(AsyncCallback<MaintenanceSummaryDTO> callback) {
-        if (false) {
+        if (MOCK_MODE) {
             new MaintenanceRequestCrudServiceMockImpl().retreiveMaintenanceSummary(callback);
         } else {
             MaintenanceSummaryDTO dto = EntityFactory.create(MaintenanceSummaryDTO.class);
