@@ -13,10 +13,10 @@
  */
 package com.propertyvista.crm.client.ui.crud.policies.ar;
 
-import com.propertyvista.crm.client.ui.crud.CrmEditorViewImplBase;
+import com.propertyvista.crm.client.ui.crud.policies.common.PolicyEditorViewImplBase;
 import com.propertyvista.domain.policy.dto.ARPolicyDTO;
 
-public class ARPolicyEditorViewImpl extends CrmEditorViewImplBase<ARPolicyDTO> implements ARPolicyEditorView {
+public class ARPolicyEditorViewImpl extends PolicyEditorViewImplBase<ARPolicyDTO> implements ARPolicyEditorView {
 
     public ARPolicyEditorViewImpl() {
         setForm(new ARPolicyForm(this));

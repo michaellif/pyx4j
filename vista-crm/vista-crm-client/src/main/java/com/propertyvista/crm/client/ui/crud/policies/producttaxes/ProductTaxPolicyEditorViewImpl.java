@@ -13,10 +13,10 @@
  */
 package com.propertyvista.crm.client.ui.crud.policies.producttaxes;
 
-import com.propertyvista.crm.client.ui.crud.CrmEditorViewImplBase;
+import com.propertyvista.crm.client.ui.crud.policies.common.PolicyEditorViewImplBase;
 import com.propertyvista.domain.policy.dto.ProductTaxPolicyDTO;
 
-public class ProductTaxPolicyEditorViewImpl extends CrmEditorViewImplBase<ProductTaxPolicyDTO> implements ProductTaxPolicyEditorView {
+public class ProductTaxPolicyEditorViewImpl extends PolicyEditorViewImplBase<ProductTaxPolicyDTO> implements ProductTaxPolicyEditorView {
 
     public ProductTaxPolicyEditorViewImpl() {
         setForm(new ProductTaxPolicyForm(this));

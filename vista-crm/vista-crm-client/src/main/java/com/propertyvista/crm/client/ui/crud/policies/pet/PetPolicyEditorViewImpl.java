@@ -13,10 +13,10 @@
  */
 package com.propertyvista.crm.client.ui.crud.policies.pet;
 
-import com.propertyvista.crm.client.ui.crud.CrmEditorViewImplBase;
+import com.propertyvista.crm.client.ui.crud.policies.common.PolicyEditorViewImplBase;
 import com.propertyvista.domain.policy.dto.PetPolicyDTO;
 
-public class PetPolicyEditorViewImpl extends CrmEditorViewImplBase<PetPolicyDTO> implements PetPolicyEditorView {
+public class PetPolicyEditorViewImpl extends PolicyEditorViewImplBase<PetPolicyDTO> implements PetPolicyEditorView {
 
     public PetPolicyEditorViewImpl() {
         setForm(new PetPolicyForm(this));

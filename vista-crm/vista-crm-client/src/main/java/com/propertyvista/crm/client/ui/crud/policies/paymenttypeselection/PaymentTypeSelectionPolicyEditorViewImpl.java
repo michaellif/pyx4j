@@ -13,10 +13,10 @@
  */
 package com.propertyvista.crm.client.ui.crud.policies.paymenttypeselection;
 
-import com.propertyvista.crm.client.ui.crud.CrmEditorViewImplBase;
+import com.propertyvista.crm.client.ui.crud.policies.common.PolicyEditorViewImplBase;
 import com.propertyvista.domain.policy.dto.PaymentTypeSelectionPolicyDTO;
 
-public class PaymentTypeSelectionPolicyEditorViewImpl extends CrmEditorViewImplBase<PaymentTypeSelectionPolicyDTO> implements
+public class PaymentTypeSelectionPolicyEditorViewImpl extends PolicyEditorViewImplBase<PaymentTypeSelectionPolicyDTO> implements
         PaymentTypeSelectionPolicyEditorView {
 
     public PaymentTypeSelectionPolicyEditorViewImpl() {

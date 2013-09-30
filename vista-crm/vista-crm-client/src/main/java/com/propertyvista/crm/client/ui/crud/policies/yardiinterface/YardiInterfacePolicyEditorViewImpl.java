@@ -13,10 +13,10 @@
  */
 package com.propertyvista.crm.client.ui.crud.policies.yardiinterface;
 
-import com.propertyvista.crm.client.ui.crud.CrmEditorViewImplBase;
+import com.propertyvista.crm.client.ui.crud.policies.common.PolicyEditorViewImplBase;
 import com.propertyvista.domain.policy.dto.YardiInterfacePolicyDTO;
 
-public class YardiInterfacePolicyEditorViewImpl extends CrmEditorViewImplBase<YardiInterfacePolicyDTO> {
+public class YardiInterfacePolicyEditorViewImpl extends PolicyEditorViewImplBase<YardiInterfacePolicyDTO> {
 
     public YardiInterfacePolicyEditorViewImpl() {
         setForm(new YardiInterfacePolicyForm(this));

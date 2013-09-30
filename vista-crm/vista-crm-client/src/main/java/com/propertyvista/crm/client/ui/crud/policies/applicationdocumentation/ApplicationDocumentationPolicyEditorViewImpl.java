@@ -13,10 +13,10 @@
  */
 package com.propertyvista.crm.client.ui.crud.policies.applicationdocumentation;
 
-import com.propertyvista.crm.client.ui.crud.CrmEditorViewImplBase;
+import com.propertyvista.crm.client.ui.crud.policies.common.PolicyEditorViewImplBase;
 import com.propertyvista.domain.policy.dto.ApplicationDocumentationPolicyDTO;
 
-public class ApplicationDocumentationPolicyEditorViewImpl extends CrmEditorViewImplBase<ApplicationDocumentationPolicyDTO> implements
+public class ApplicationDocumentationPolicyEditorViewImpl extends PolicyEditorViewImplBase<ApplicationDocumentationPolicyDTO> implements
         ApplicationDocumentationPolicyEditorView {
 
     public ApplicationDocumentationPolicyEditorViewImpl() {

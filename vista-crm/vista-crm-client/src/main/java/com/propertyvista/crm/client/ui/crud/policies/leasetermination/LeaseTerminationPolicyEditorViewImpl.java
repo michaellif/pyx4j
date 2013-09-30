@@ -13,10 +13,10 @@
  */
 package com.propertyvista.crm.client.ui.crud.policies.leasetermination;
 
-import com.propertyvista.crm.client.ui.crud.CrmEditorViewImplBase;
+import com.propertyvista.crm.client.ui.crud.policies.common.PolicyEditorViewImplBase;
 import com.propertyvista.domain.policy.dto.LeaseTerminationPolicyDTO;
 
-public class LeaseTerminationPolicyEditorViewImpl extends CrmEditorViewImplBase<LeaseTerminationPolicyDTO> implements LeaseTerminationPolicyEditorView {
+public class LeaseTerminationPolicyEditorViewImpl extends PolicyEditorViewImplBase<LeaseTerminationPolicyDTO> implements LeaseTerminationPolicyEditorView {
 
     public LeaseTerminationPolicyEditorViewImpl() {
         setForm(new LeaseTerminationPolicyForm(this));

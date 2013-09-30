@@ -13,10 +13,10 @@
  */
 package com.propertyvista.crm.client.ui.crud.policies.idassignment;
 
-import com.propertyvista.crm.client.ui.crud.CrmEditorViewImplBase;
+import com.propertyvista.crm.client.ui.crud.policies.common.PolicyEditorViewImplBase;
 import com.propertyvista.domain.policy.dto.IdAssignmentPolicyDTO;
 
-public class IdAssignmentPolicyEditorViewImpl extends CrmEditorViewImplBase<IdAssignmentPolicyDTO> implements IdAssignmentPolicyEditorView {
+public class IdAssignmentPolicyEditorViewImpl extends PolicyEditorViewImplBase<IdAssignmentPolicyDTO> implements IdAssignmentPolicyEditorView {
 
     public IdAssignmentPolicyEditorViewImpl() {
         setForm(new IdAssignmentPolicyForm(this));

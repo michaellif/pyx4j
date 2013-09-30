@@ -13,10 +13,10 @@
  */
 package com.propertyvista.crm.client.ui.crud.policies.leasebilling;
 
-import com.propertyvista.crm.client.ui.crud.CrmEditorViewImplBase;
+import com.propertyvista.crm.client.ui.crud.policies.common.PolicyEditorViewImplBase;
 import com.propertyvista.domain.policy.dto.LeaseBillingPolicyDTO;
 
-public class LeaseBillingPolicyEditorViewImpl extends CrmEditorViewImplBase<LeaseBillingPolicyDTO> implements LeaseBillingPolicyEditorView {
+public class LeaseBillingPolicyEditorViewImpl extends PolicyEditorViewImplBase<LeaseBillingPolicyDTO> implements LeaseBillingPolicyEditorView {
 
     public LeaseBillingPolicyEditorViewImpl() {
         setForm(new LeaseBillingPolicyForm(this));

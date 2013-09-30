@@ -13,10 +13,10 @@
  */
 package com.propertyvista.crm.client.ui.crud.policies.tenantinsurance;
 
-import com.propertyvista.crm.client.ui.crud.CrmEditorViewImplBase;
+import com.propertyvista.crm.client.ui.crud.policies.common.PolicyEditorViewImplBase;
 import com.propertyvista.domain.policy.dto.TenantInsurancePolicyDTO;
 
-public class TenantInsurancePolicyEditorViewImpl extends CrmEditorViewImplBase<TenantInsurancePolicyDTO> implements TenantInsurancePolicyEditorView {
+public class TenantInsurancePolicyEditorViewImpl extends PolicyEditorViewImplBase<TenantInsurancePolicyDTO> implements TenantInsurancePolicyEditorView {
 
     public TenantInsurancePolicyEditorViewImpl() {
         setForm(new TenantInsurancePolicyForm(this));

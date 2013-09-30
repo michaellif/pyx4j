@@ -13,10 +13,10 @@
  */
 package com.propertyvista.crm.client.ui.crud.policies.backgroundcheck;
 
-import com.propertyvista.crm.client.ui.crud.CrmEditorViewImplBase;
+import com.propertyvista.crm.client.ui.crud.policies.common.PolicyEditorViewImplBase;
 import com.propertyvista.domain.policy.dto.BackgroundCheckPolicyDTO;
 
-public class BackgroundCheckPolicyEditorViewImpl extends CrmEditorViewImplBase<BackgroundCheckPolicyDTO> implements BackgroundCheckPolicyEditorView {
+public class BackgroundCheckPolicyEditorViewImpl extends PolicyEditorViewImplBase<BackgroundCheckPolicyDTO> implements BackgroundCheckPolicyEditorView {
 
     public BackgroundCheckPolicyEditorViewImpl() {
         setForm(new BackgroundCheckPolicyForm(this));
