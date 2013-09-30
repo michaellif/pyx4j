@@ -13,13 +13,17 @@
  */
 package com.propertyvista.portal.web.client.ui.maintenance;
 
+import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.commons.css.ThemeColor;
+import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.ui.CEntityLabel;
 import com.pyx4j.forms.client.ui.CLabel;
+import com.pyx4j.forms.client.ui.form.FormDecorator;
 import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.widgets.client.Button;
 
 import com.propertyvista.domain.maintenance.MaintenanceRequestCategory;
 import com.propertyvista.domain.maintenance.MaintenanceRequestPriority;
@@ -75,5 +79,20 @@ public class MaintenanceRequestPage extends CPortalEntityForm<MaintenanceRequest
         mainPanel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().preferredTime2()), 100).build());
 
         return mainPanel;
+    }
+
+    @Override
+    protected FormDecorator<MaintenanceRequestDTO, CEntityForm<MaintenanceRequestDTO>> createDecorator() {
+        FormDecorator<MaintenanceRequestDTO, CEntityForm<MaintenanceRequestDTO>> decorator = super.createDecorator();
+
+        Button btnEdit = new Button(i18n.tr("Cancel"), new Command() {
+            @Override
+            public void execute() {
+//TODO
+            }
+        });
+        decorator.addHeaderToolbarButton(btnEdit);
+
+        return decorator;
     }
 }

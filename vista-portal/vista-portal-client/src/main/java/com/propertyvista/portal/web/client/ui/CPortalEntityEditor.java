@@ -17,12 +17,9 @@ import com.pyx4j.commons.css.StyleManager;
 import com.pyx4j.commons.css.ThemeColor;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.forms.client.ui.IEditableComponentFactory;
-import com.pyx4j.forms.client.ui.decorators.IDecorator;
 import com.pyx4j.forms.client.ui.form.EditableFormDecorator;
 
 import com.propertyvista.common.client.ui.components.VistaEditorsComponentFactory;
-import com.propertyvista.portal.rpc.portal.web.dto.insurance.GeneralInsurancePolicyDTO;
-import com.propertyvista.portal.web.client.ui.services.insurance.GeneralCertificateUploadWizardView;
 
 public abstract class CPortalEntityEditor<E extends IEntity> extends CPortalEntityForm<E> {
 
@@ -43,7 +40,7 @@ public abstract class CPortalEntityEditor<E extends IEntity> extends CPortalEnti
     }
 
     @Override
-    protected IDecorator<?> createDecorator() {
+    protected EditableFormDecorator<E> createDecorator() {
         EditableFormDecorator<E> decorator = new EditableFormDecorator<E>() {
 
             @Override

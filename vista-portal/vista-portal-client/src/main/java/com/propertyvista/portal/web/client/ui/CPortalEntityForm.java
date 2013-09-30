@@ -18,7 +18,6 @@ import com.pyx4j.commons.css.ThemeColor;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.ui.IEditableComponentFactory;
-import com.pyx4j.forms.client.ui.decorators.IDecorator;
 import com.pyx4j.forms.client.ui.form.FormDecorator;
 
 public abstract class CPortalEntityForm<E extends IEntity> extends CEntityForm<E> {
@@ -56,7 +55,7 @@ public abstract class CPortalEntityForm<E extends IEntity> extends CEntityForm<E
     }
 
     @Override
-    protected IDecorator<?> createDecorator() {
+    protected FormDecorator<E, CEntityForm<E>> createDecorator() {
         decorator = new FormDecorator<E, CEntityForm<E>>();
 
         decorator.setCaption(headerCaption);
