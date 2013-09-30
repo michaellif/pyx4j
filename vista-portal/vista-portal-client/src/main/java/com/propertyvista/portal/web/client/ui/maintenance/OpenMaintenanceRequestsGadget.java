@@ -26,7 +26,7 @@ import com.pyx4j.forms.client.ui.folder.BoxFolderItemDecorator;
 import com.pyx4j.forms.client.ui.folder.IFolderItemDecorator;
 import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.widgets.client.Button;
+import com.pyx4j.widgets.client.Anchor;
 import com.pyx4j.widgets.client.Label;
 
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
@@ -127,7 +127,7 @@ public class OpenMaintenanceRequestsGadget extends AbstractGadget<MaintenanceDas
 
         private class MaintenanceRequestViewer extends CEntityDecoratableForm<MainenanceRequestStatusDTO> {
 
-            private Button detailsButton;
+            private Anchor detailsLink;
 
             public MaintenanceRequestViewer() {
                 super(MainenanceRequestStatusDTO.class);
@@ -145,16 +145,16 @@ public class OpenMaintenanceRequestsGadget extends AbstractGadget<MaintenanceDas
                 content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().status().phase(), new CLabel<StatusPhase>()), 180).build());
                 content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().submissionDate(), new CLabel<String>()), 180).build());
 
-                detailsButton = new Button(i18n.tr("View Details"), new Command() {
+                detailsLink = new Anchor(i18n.tr("View Details"), new Command() {
 
                     @Override
                     public void execute() {
                         System.out.println("+++++++++View Details");
                     }
                 });
-                detailsButton.getElement().getStyle().setMarginTop(30, Unit.PX);
+                detailsLink.getElement().getStyle().setMarginTop(10, Unit.PX);
 
-                content.setWidget(++row, 0, detailsButton);
+                content.setWidget(++row, 0, detailsLink);
 
                 return content;
             }
