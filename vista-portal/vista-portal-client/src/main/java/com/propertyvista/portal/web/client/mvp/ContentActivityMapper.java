@@ -46,6 +46,7 @@ import com.propertyvista.portal.web.client.activity.login.LoginWithTokenActivity
 import com.propertyvista.portal.web.client.activity.login.PasswordResetRequestActivity;
 import com.propertyvista.portal.web.client.activity.login.VistaTermsActivity;
 import com.propertyvista.portal.web.client.activity.maintenance.MaintenanceDashboardActivity;
+import com.propertyvista.portal.web.client.activity.maintenance.MaintenanceRequestConfirmationActivity;
 import com.propertyvista.portal.web.client.activity.maintenance.MaintenanceRequestPageActivity;
 import com.propertyvista.portal.web.client.activity.maintenance.MaintenanceRequestWizardActivity;
 import com.propertyvista.portal.web.client.activity.profile.ProfilePageActivity;
@@ -121,6 +122,8 @@ public class ContentActivityMapper implements AppActivityMapper {
                         activity = new MaintenanceDashboardActivity(appPlace);
                     } else if (place instanceof PortalSiteMap.Resident.Maintenance.MaintenanceRequestWizard) {
                         activity = new MaintenanceRequestWizardActivity(appPlace);
+                    } else if (place instanceof PortalSiteMap.Resident.Maintenance.MaintenanceRequestConfirmation) {
+                        activity = new MaintenanceRequestConfirmationActivity(appPlace);
                     } else if (place instanceof PortalSiteMap.Resident.Maintenance.MaintenanceRequestPage) {
                         activity = new MaintenanceRequestPageActivity(appPlace);
 

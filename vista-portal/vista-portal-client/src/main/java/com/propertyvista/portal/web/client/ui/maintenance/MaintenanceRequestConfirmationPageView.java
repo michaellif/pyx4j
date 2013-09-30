@@ -13,12 +13,12 @@
  */
 package com.propertyvista.portal.web.client.ui.maintenance;
 
-import com.propertyvista.portal.rpc.portal.web.dto.insurance.TenantSureInsurancePolicyDTO;
+import com.propertyvista.portal.rpc.portal.web.dto.maintenance.MaintenanceRequestDTO;
 import com.propertyvista.portal.web.client.ui.IFormView;
 
-public interface MaintenanceRequestConfirmationPageView extends IFormView<TenantSureInsurancePolicyDTO> {
+public interface MaintenanceRequestConfirmationPageView extends IFormView<MaintenanceRequestDTO> {
 
-    public interface TenantSureOrderConfirmationPagePresenter extends IFormView.IFormViewPresenter<TenantSureInsurancePolicyDTO> {
+    public interface MaintenanceRequestConfirmationPagePresenter extends IFormView.IFormViewPresenter<MaintenanceRequestDTO> {
 
         void back();
     }
