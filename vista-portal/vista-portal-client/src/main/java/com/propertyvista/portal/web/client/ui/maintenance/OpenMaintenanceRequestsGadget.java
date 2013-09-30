@@ -13,30 +13,23 @@
  */
 package com.propertyvista.portal.web.client.ui.maintenance;
 
-import com.google.gwt.dom.client.Style.Unit;
-import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.commons.css.ThemeColor;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CEntityForm;
-import com.pyx4j.forms.client.ui.CLabel;
 import com.pyx4j.forms.client.ui.folder.BoxFolderItemDecorator;
 import com.pyx4j.forms.client.ui.folder.IFolderItemDecorator;
 import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.widgets.client.Anchor;
 import com.pyx4j.widgets.client.Label;
 
-import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
 import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
-import com.propertyvista.domain.maintenance.MaintenanceRequestStatus.StatusPhase;
 import com.propertyvista.portal.rpc.portal.web.dto.maintenance.MainenanceRequestStatusDTO;
 import com.propertyvista.portal.rpc.portal.web.dto.maintenance.MaintenanceSummaryDTO;
 import com.propertyvista.portal.web.client.resources.PortalImages;
 import com.propertyvista.portal.web.client.ui.AbstractGadget;
-import com.propertyvista.portal.web.client.ui.util.decorators.FormDecoratorBuilder;
 
 public class OpenMaintenanceRequestsGadget extends AbstractGadget<MaintenanceDashboardViewImpl> {
 
@@ -120,45 +113,9 @@ public class OpenMaintenanceRequestsGadget extends AbstractGadget<MaintenanceDas
         @Override
         public CComponent<?> create(IObject<?> member) {
             if (member instanceof MainenanceRequestStatusDTO) {
-                return new MaintenanceRequestViewer();
+                return new MaintenanceRequestFolderItem();
             }
             return super.create(member);
-        }
-
-        private class MaintenanceRequestViewer extends CEntityDecoratableForm<MainenanceRequestStatusDTO> {
-
-            private Anchor detailsLink;
-
-            public MaintenanceRequestViewer() {
-                super(MainenanceRequestStatusDTO.class);
-
-                setViewable(true);
-                inheritViewable(false);
-            }
-
-            @Override
-            public IsWidget createContent() {
-                BasicFlexFormPanel content = new BasicFlexFormPanel();
-                int row = -1;
-
-                content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().description(), new CLabel<String>()), 180).build());
-                content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().status().phase(), new CLabel<StatusPhase>()), 180).build());
-                content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().submissionDate(), new CLabel<String>()), 180).build());
-
-                detailsLink = new Anchor(i18n.tr("View Details"), new Command() {
-
-                    @Override
-                    public void execute() {
-                        System.out.println("+++++++++View Details");
-                    }
-                });
-                detailsLink.getElement().getStyle().setMarginTop(10, Unit.PX);
-
-                content.setWidget(++row, 0, detailsLink);
-
-                return content;
-            }
-
         }
 
     }
