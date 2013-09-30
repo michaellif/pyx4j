@@ -31,6 +31,7 @@ import com.pyx4j.forms.client.ui.folder.CEntityFolderItem;
 import com.pyx4j.forms.client.ui.folder.IFolderItemDecorator;
 import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.widgets.client.Anchor;
 import com.pyx4j.widgets.client.Button;
 import com.pyx4j.widgets.client.actionbar.Toolbar;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
@@ -166,6 +167,13 @@ public class AutoPayAgreementsGadget extends AbstractGadget<FinancialDashboardVi
                 content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().payer(), new CEntityLabel<Tenant>()), 250).build());
                 content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().paymentMethod(), new CEntityLabel<PaymentMethod>()), 250).build());
                 content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().amount()), 100).build());
+
+                content.setWidget(++row, 0, new Anchor("View Auto Payment", new Command() {
+                    @Override
+                    public void execute() {
+                        getGadgetView().getPresenter().viewPreauthorizedPayment(getValue());
+                    }
+                }));
 
                 return content;
             }

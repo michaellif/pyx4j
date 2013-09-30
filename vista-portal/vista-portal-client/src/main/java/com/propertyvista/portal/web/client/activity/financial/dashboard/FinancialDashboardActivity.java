@@ -22,7 +22,6 @@ import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.security.shared.SecurityController;
 import com.pyx4j.site.client.AppSite;
-import com.pyx4j.site.rpc.CrudAppPlace;
 
 import com.propertyvista.domain.payment.LeasePaymentMethod;
 import com.propertyvista.domain.payment.PreauthorizedPayment;
@@ -100,14 +99,12 @@ public class FinancialDashboardActivity extends SecurityAwareActivity implements
 
     @Override
     public void viewBillilngHistory() {
-        // TODO Auto-generated method stub
-
+        AppSite.getPlaceController().goTo(new PortalSiteMap.Resident.Financial.BillingHistory());
     }
 
     @Override
     public void viewTransactionHistory() {
-        // TODO Auto-generated method stub
-
+        AppSite.getPlaceController().goTo(new PortalSiteMap.Resident.Financial.TransactionHistory());
     }
 
     @Override
@@ -136,8 +133,8 @@ public class FinancialDashboardActivity extends SecurityAwareActivity implements
 
     @Override
     public void viewPreauthorizedPayment(AutoPayInfoDTO autoPay) {
-        // TODO Auto-generated method stub
-
+        AppSite.getPlaceController().goTo(
+                new PortalSiteMap.Resident.Financial.PreauthorizedPayments.PreauthorizedPayment().formViewerPlace(autoPay.id().getValue()));
     }
 
     @Override
@@ -159,13 +156,6 @@ public class FinancialDashboardActivity extends SecurityAwareActivity implements
 
     @Override
     public void viewPaymentMethod(PaymentMethodInfoDTO paymentMethod) {
-        CrudAppPlace place = new Financial.PaymentMethods.PaymentMethod();
-        AppSite.getPlaceController().goTo(place.formViewerPlace(paymentMethod.id().getValue()));
-    }
-
-    @Override
-    public void editPaymentMethod(PaymentMethodInfoDTO paymentMethod) {
-        CrudAppPlace place = new Financial.PaymentMethods.PaymentMethod();
-        AppSite.getPlaceController().goTo(place.formEditorPlace(paymentMethod.id().getValue()));
+        AppSite.getPlaceController().goTo(new Financial.PaymentMethods.PaymentMethod().formViewerPlace(paymentMethod.id().getValue()));
     }
 }

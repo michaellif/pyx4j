@@ -40,8 +40,6 @@ public interface FinancialDashboardView extends IsView {
 
         void viewPaymentMethod(PaymentMethodInfoDTO paymentMethod);
 
-        void editPaymentMethod(PaymentMethodInfoDTO paymentMethod);
-
         void addAutoPay();
 
         void deletePreauthorizedPayment(AutoPayInfoDTO autoPay);

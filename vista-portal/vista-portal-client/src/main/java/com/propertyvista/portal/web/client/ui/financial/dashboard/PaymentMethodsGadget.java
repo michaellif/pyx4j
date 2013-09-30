@@ -27,9 +27,9 @@ import com.pyx4j.forms.client.ui.CEnumLabel;
 import com.pyx4j.forms.client.ui.folder.BoxFolderItemDecorator;
 import com.pyx4j.forms.client.ui.folder.CEntityFolderItem;
 import com.pyx4j.forms.client.ui.folder.IFolderItemDecorator;
-import com.pyx4j.forms.client.ui.folder.ItemActionsBar.ActionType;
 import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.widgets.client.Anchor;
 import com.pyx4j.widgets.client.Button;
 import com.pyx4j.widgets.client.actionbar.Toolbar;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
@@ -120,19 +120,6 @@ public class PaymentMethodsGadget extends AbstractGadget<FinancialDashboardViewI
         }
 
         @Override
-        protected CEntityFolderItem<PaymentMethodInfoDTO> createItem(boolean first) {
-            final CEntityFolderItem<PaymentMethodInfoDTO> item = super.createItem(first);
-            item.addAction(ActionType.Cust1, i18n.tr("Edit"), PortalImages.INSTANCE.editButton(), new Command() {
-                @Override
-                public void execute() {
-                    getGadgetView().getPresenter().editPaymentMethod(item.getValue());
-                }
-            });
-
-            return item;
-        }
-
-        @Override
         protected void removeItem(final CEntityFolderItem<PaymentMethodInfoDTO> item) {
             MessageDialog.confirm(i18n.tr("Please confirm"), i18n.tr("Do you really want to delete the Payment Method?"), new Command() {
                 @Override
@@ -162,6 +149,13 @@ public class PaymentMethodsGadget extends AbstractGadget<FinancialDashboardViewI
                 content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().paymentMethod().details(), new CEntityLabel<PaymentDetails>())).build());
                 content.setWidget(++row, 0,
                         new FormDecoratorBuilder(inject(proto().paymentMethod().billingAddress(), new CEntityLabel<AddressSimple>())).build());
+
+                content.setWidget(++row, 0, new Anchor("View Payment Method", new Command() {
+                    @Override
+                    public void execute() {
+                        getGadgetView().getPresenter().viewPaymentMethod(getValue());
+                    }
+                }));
 
                 return content;
             }

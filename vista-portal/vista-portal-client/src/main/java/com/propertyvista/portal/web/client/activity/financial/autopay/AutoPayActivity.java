@@ -30,17 +30,18 @@ import com.propertyvista.portal.rpc.portal.web.services.financial.AutoPayService
 import com.propertyvista.portal.web.client.PortalWebSite;
 import com.propertyvista.portal.web.client.activity.SecurityAwareActivity;
 import com.propertyvista.portal.web.client.ui.financial.autopay.AutoPayConfirmationView;
+import com.propertyvista.portal.web.client.ui.financial.autopay.AutoPayView;
 
 public class AutoPayActivity extends SecurityAwareActivity implements AutoPayConfirmationView.Presenter {
 
-    private final AutoPayConfirmationView view;
+    private final AutoPayView view;
 
     protected final AutoPayService srv;
 
     private final Key entityId;
 
     public AutoPayActivity(AppPlace place) {
-        this.view = PortalWebSite.getViewFactory().instantiate(AutoPayConfirmationView.class);
+        this.view = PortalWebSite.getViewFactory().instantiate(AutoPayView.class);
         this.view.setPresenter(this);
 
         srv = GWT.create(AutoPayService.class);
