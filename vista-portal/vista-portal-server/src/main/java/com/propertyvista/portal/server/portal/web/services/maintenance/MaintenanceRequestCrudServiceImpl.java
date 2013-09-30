@@ -13,6 +13,7 @@
  */
 package com.propertyvista.portal.server.portal.web.services.maintenance;
 
+import java.util.EnumSet;
 import java.util.List;
 import java.util.Set;
 import java.util.Vector;
@@ -32,11 +33,13 @@ import com.propertyvista.domain.maintenance.MaintenanceRequest;
 import com.propertyvista.domain.maintenance.MaintenanceRequestCategory;
 import com.propertyvista.domain.maintenance.MaintenanceRequestMetadata;
 import com.propertyvista.domain.maintenance.MaintenanceRequestSchedule;
+import com.propertyvista.domain.maintenance.MaintenanceRequestStatus;
 import com.propertyvista.domain.maintenance.MaintenanceRequestStatus.StatusPhase;
 import com.propertyvista.domain.maintenance.SurveyResponse;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.tenant.lease.Tenant;
 import com.propertyvista.portal.rpc.portal.web.dto.maintenance.MaintenanceRequestDTO;
+import com.propertyvista.portal.rpc.portal.web.dto.maintenance.MaintenanceRequestStatusDTO;
 import com.propertyvista.portal.rpc.portal.web.dto.maintenance.MaintenanceSummaryDTO;
 import com.propertyvista.portal.rpc.portal.web.services.maintenance.MaintenanceRequestCrudService;
 import com.propertyvista.portal.server.portal.TenantAppContext;
@@ -156,10 +159,25 @@ public class MaintenanceRequestCrudServiceImpl extends AbstractCrudServiceDtoImp
 
     @Override
     public void retreiveMaintenanceSummary(AsyncCallback<MaintenanceSummaryDTO> callback) {
-        if (true) {
+        if (false) {
             new MaintenanceRequestCrudServiceMockImpl().retreiveMaintenanceSummary(callback);
         } else {
+            MaintenanceSummaryDTO dto = EntityFactory.create(MaintenanceSummaryDTO.class);
+            List<MaintenanceRequest> requests = ServerSideFactory.create(MaintenanceFacade.class).getMaintenanceRequests(
+                    EnumSet.allOf(MaintenanceRequestStatus.StatusPhase.class), TenantAppContext.getCurrentUserTenant());
+            for (MaintenanceRequest mr : requests) {
+                MaintenanceRequestStatusDTO statusDto = EntityFactory.create(MaintenanceRequestStatusDTO.class);
+                statusDto.description().set(mr.description());
+                statusDto.status().set(mr.status());
+                statusDto.submissionDate().set(mr.submitted());
+                if (MaintenanceRequestStatus.StatusPhase.open().contains(mr.status().phase().getValue())) {
+                    dto.openMaintenanceRequests().add(statusDto);
+                } else {
+                    dto.closedMaintenanceRequests().add(statusDto);
+                }
+            }
 
+            callback.onSuccess(dto);
         }
     }
 }

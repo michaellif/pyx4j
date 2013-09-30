@@ -16,10 +16,13 @@ package com.propertyvista.portal.web.client.activity.maintenance;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
+import com.pyx4j.commons.Key;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
+import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.rpc.AppPlace;
 
 import com.propertyvista.domain.maintenance.MaintenanceRequestMetadata;
+import com.propertyvista.portal.rpc.portal.PortalSiteMap;
 import com.propertyvista.portal.rpc.portal.web.dto.maintenance.MaintenanceRequestDTO;
 import com.propertyvista.portal.rpc.portal.web.services.maintenance.MaintenanceRequestCrudService;
 import com.propertyvista.portal.web.client.activity.AbstractWizardActivity;
@@ -41,4 +44,10 @@ public class MaintenanceRequestWizardActivity extends AbstractWizardActivity<Mai
             }
         }, false);
     }
+
+    @Override
+    protected void onSaved(Key result) {
+        AppSite.getPlaceController().goTo(new PortalSiteMap.Resident.Maintenance.MaintenanceRequestConfirmation(result));
+    }
+
 }

@@ -28,11 +28,13 @@ public class MaintenanceRequestWizardViewImpl extends AbstractWizardView<Mainten
     @Override
     public void setPresenter(WizardPresenter<MaintenanceRequestDTO> presenter) {
         super.setPresenter(presenter);
-        ((MaintenanceRequestWizardPresenter) presenter).getCategoryMeta(new DefaultAsyncCallback<MaintenanceRequestMetadata>() {
-            @Override
-            public void onSuccess(MaintenanceRequestMetadata meta) {
-                ((MaintenanceRequestWizard) getWizard()).setMaintenanceRequestCategoryMeta(meta);
-            }
-        });
+        if (presenter != null) {
+            ((MaintenanceRequestWizardPresenter) presenter).getCategoryMeta(new DefaultAsyncCallback<MaintenanceRequestMetadata>() {
+                @Override
+                public void onSuccess(MaintenanceRequestMetadata meta) {
+                    ((MaintenanceRequestWizard) getWizard()).setMaintenanceRequestCategoryMeta(meta);
+                }
+            });
+        }
     }
 }

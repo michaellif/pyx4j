@@ -26,17 +26,17 @@ import com.pyx4j.widgets.client.Anchor;
 
 import com.propertyvista.domain.maintenance.MaintenanceRequestStatus.StatusPhase;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap;
-import com.propertyvista.portal.rpc.portal.web.dto.maintenance.MainenanceRequestStatusDTO;
+import com.propertyvista.portal.rpc.portal.web.dto.maintenance.MaintenanceRequestStatusDTO;
 import com.propertyvista.portal.web.client.ui.util.decorators.FormDecoratorBuilder;
 
-public class MaintenanceRequestFolderItem extends CEntityForm<MainenanceRequestStatusDTO> {
+public class MaintenanceRequestFolderItem extends CEntityForm<MaintenanceRequestStatusDTO> {
 
     private static final I18n i18n = I18n.get(MaintenanceRequestFolderItem.class);
 
     private Anchor detailsLink;
 
     public MaintenanceRequestFolderItem() {
-        super(MainenanceRequestStatusDTO.class);
+        super(MaintenanceRequestStatusDTO.class);
 
         setViewable(true);
         inheritViewable(false);

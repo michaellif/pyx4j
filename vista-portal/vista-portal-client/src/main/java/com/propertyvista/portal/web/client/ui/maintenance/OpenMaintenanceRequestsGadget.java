@@ -26,7 +26,7 @@ import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.Label;
 
 import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
-import com.propertyvista.portal.rpc.portal.web.dto.maintenance.MainenanceRequestStatusDTO;
+import com.propertyvista.portal.rpc.portal.web.dto.maintenance.MaintenanceRequestStatusDTO;
 import com.propertyvista.portal.rpc.portal.web.dto.maintenance.MaintenanceSummaryDTO;
 import com.propertyvista.portal.web.client.resources.PortalImages;
 import com.propertyvista.portal.web.client.ui.AbstractGadget;
@@ -94,25 +94,25 @@ public class OpenMaintenanceRequestsGadget extends AbstractGadget<MaintenanceDas
         }
     }
 
-    private class OpenMaintenanceRequestsFolder extends VistaBoxFolder<MainenanceRequestStatusDTO> {
+    private class OpenMaintenanceRequestsFolder extends VistaBoxFolder<MaintenanceRequestStatusDTO> {
 
         public OpenMaintenanceRequestsFolder() {
-            super(MainenanceRequestStatusDTO.class, true);
+            super(MaintenanceRequestStatusDTO.class, true);
             setOrderable(false);
             setAddable(false);
             setEditable(false);
         }
 
         @Override
-        public IFolderItemDecorator<MainenanceRequestStatusDTO> createItemDecorator() {
-            BoxFolderItemDecorator<MainenanceRequestStatusDTO> decor = (BoxFolderItemDecorator<MainenanceRequestStatusDTO>) super.createItemDecorator();
+        public IFolderItemDecorator<MaintenanceRequestStatusDTO> createItemDecorator() {
+            BoxFolderItemDecorator<MaintenanceRequestStatusDTO> decor = (BoxFolderItemDecorator<MaintenanceRequestStatusDTO>) super.createItemDecorator();
             decor.setExpended(false);
             return decor;
         }
 
         @Override
         public CComponent<?> create(IObject<?> member) {
-            if (member instanceof MainenanceRequestStatusDTO) {
+            if (member instanceof MaintenanceRequestStatusDTO) {
                 return new MaintenanceRequestFolderItem();
             }
             return super.create(member);

@@ -24,7 +24,7 @@ import com.pyx4j.rpc.shared.VoidSerializable;
 
 import com.propertyvista.domain.maintenance.MaintenanceRequestMetadata;
 import com.propertyvista.domain.maintenance.MaintenanceRequestStatus.StatusPhase;
-import com.propertyvista.portal.rpc.portal.web.dto.maintenance.MainenanceRequestStatusDTO;
+import com.propertyvista.portal.rpc.portal.web.dto.maintenance.MaintenanceRequestStatusDTO;
 import com.propertyvista.portal.rpc.portal.web.dto.maintenance.MaintenanceRequestDTO;
 import com.propertyvista.portal.rpc.portal.web.dto.maintenance.MaintenanceSummaryDTO;
 import com.propertyvista.portal.rpc.portal.web.services.maintenance.MaintenanceRequestCrudService;
@@ -36,7 +36,7 @@ public class MaintenanceRequestCrudServiceMockImpl implements MaintenanceRequest
         MaintenanceSummaryDTO maintenanceSummary = EntityFactory.create(MaintenanceSummaryDTO.class);
 
         {
-            MainenanceRequestStatusDTO requestDTO = EntityFactory.create(MainenanceRequestStatusDTO.class);
+            MaintenanceRequestStatusDTO requestDTO = EntityFactory.create(MaintenanceRequestStatusDTO.class);
             requestDTO.description().setValue("Request 1");
             requestDTO.status().phase().setValue(StatusPhase.Submitted);
             requestDTO.setPrimaryKey(new Key(11));
@@ -44,7 +44,7 @@ public class MaintenanceRequestCrudServiceMockImpl implements MaintenanceRequest
         }
 
         {
-            MainenanceRequestStatusDTO requestDTO = EntityFactory.create(MainenanceRequestStatusDTO.class);
+            MaintenanceRequestStatusDTO requestDTO = EntityFactory.create(MaintenanceRequestStatusDTO.class);
             requestDTO.description().setValue("Request 2");
             requestDTO.status().phase().setValue(StatusPhase.Scheduled);
             requestDTO.setPrimaryKey(new Key(22));
@@ -52,7 +52,7 @@ public class MaintenanceRequestCrudServiceMockImpl implements MaintenanceRequest
         }
 
         {
-            MainenanceRequestStatusDTO requestDTO = EntityFactory.create(MainenanceRequestStatusDTO.class);
+            MaintenanceRequestStatusDTO requestDTO = EntityFactory.create(MaintenanceRequestStatusDTO.class);
             requestDTO.description().setValue("Request 3");
             requestDTO.status().phase().setValue(StatusPhase.Cancelled);
             requestDTO.setPrimaryKey(new Key(33));
@@ -60,7 +60,7 @@ public class MaintenanceRequestCrudServiceMockImpl implements MaintenanceRequest
         }
 
         {
-            MainenanceRequestStatusDTO requestDTO = EntityFactory.create(MainenanceRequestStatusDTO.class);
+            MaintenanceRequestStatusDTO requestDTO = EntityFactory.create(MaintenanceRequestStatusDTO.class);
             requestDTO.description().setValue("Request 4");
             requestDTO.status().phase().setValue(StatusPhase.Resolved);
             requestDTO.setPrimaryKey(new Key(44));
@@ -68,7 +68,7 @@ public class MaintenanceRequestCrudServiceMockImpl implements MaintenanceRequest
         }
 
         {
-            MainenanceRequestStatusDTO requestDTO = EntityFactory.create(MainenanceRequestStatusDTO.class);
+            MaintenanceRequestStatusDTO requestDTO = EntityFactory.create(MaintenanceRequestStatusDTO.class);
             requestDTO.description().setValue("Request 5");
             requestDTO.status().phase().setValue(StatusPhase.Resolved);
             requestDTO.setPrimaryKey(new Key(55));

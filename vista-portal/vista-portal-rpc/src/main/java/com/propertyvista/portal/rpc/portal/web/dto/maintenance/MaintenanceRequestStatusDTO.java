@@ -25,7 +25,7 @@ import com.propertyvista.domain.maintenance.MaintenanceRequestStatus;
 
 @Transient
 @ToStringFormat("{0} ({1})")
-public interface MainenanceRequestStatusDTO extends IEntity {
+public interface MaintenanceRequestStatusDTO extends IEntity {
 
     @ToString(index = 0)
     IPrimitive<String> description();

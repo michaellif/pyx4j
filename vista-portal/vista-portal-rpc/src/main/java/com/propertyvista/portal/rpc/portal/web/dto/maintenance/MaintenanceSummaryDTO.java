@@ -22,8 +22,8 @@ import com.pyx4j.i18n.annotations.I18n;
 @I18n(strategy = I18n.I18nStrategy.IgnoreThis)
 public interface MaintenanceSummaryDTO extends IEntity {
 
-    IList<MainenanceRequestStatusDTO> openMaintenanceRequests();
+    IList<MaintenanceRequestStatusDTO> openMaintenanceRequests();
 
-    IList<MainenanceRequestStatusDTO> closedMaintenanceRequests();
+    IList<MaintenanceRequestStatusDTO> closedMaintenanceRequests();
 
 }
