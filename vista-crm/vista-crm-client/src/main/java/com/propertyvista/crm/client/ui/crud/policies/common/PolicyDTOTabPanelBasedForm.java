@@ -250,6 +250,8 @@ public abstract class PolicyDTOTabPanelBasedForm<POLICY_DTO extends PolicyDTOBas
                             CComponent<PolicyNode> comp = (CComponent<PolicyNode>) nodeTypeToComponentMap.get(nodeType);
                             comp.setVisible(true);
                             comp.setMandatory(true);
+                            comp.setViewable(false);
+                            comp.setEditable(true);
                             comp.setValue((PolicyNode) getValue().cast());
                         }
                     }
