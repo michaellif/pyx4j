@@ -21,9 +21,11 @@ import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.ui.CLabel;
 import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.site.client.AppSite;
 import com.pyx4j.widgets.client.Anchor;
 
 import com.propertyvista.domain.maintenance.MaintenanceRequestStatus.StatusPhase;
+import com.propertyvista.portal.rpc.portal.PortalSiteMap;
 import com.propertyvista.portal.rpc.portal.web.dto.maintenance.MainenanceRequestStatusDTO;
 import com.propertyvista.portal.web.client.ui.util.decorators.FormDecoratorBuilder;
 
@@ -53,7 +55,8 @@ public class MaintenanceRequestFolderItem extends CEntityForm<MainenanceRequestS
 
             @Override
             public void execute() {
-                System.out.println("+++++++++View Details");
+                System.out.println("+++++++++View Details " + getValue().getPrimaryKey());
+                AppSite.getPlaceController().goTo(new PortalSiteMap.Resident.Maintenance.MaintenanceRequestPage().formPlace(getValue().getPrimaryKey()));
             }
         });
         detailsLink.getElement().getStyle().setMarginTop(10, Unit.PX);

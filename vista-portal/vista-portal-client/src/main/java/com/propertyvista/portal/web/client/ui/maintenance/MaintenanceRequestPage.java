@@ -21,10 +21,10 @@ import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.portal.rpc.portal.web.dto.maintenance.MaintenanceRequestDTO;
 import com.propertyvista.portal.web.client.themes.EntityViewTheme;
-import com.propertyvista.portal.web.client.ui.CPortalEntityEditor;
+import com.propertyvista.portal.web.client.ui.CPortalEntityForm;
 import com.propertyvista.portal.web.client.ui.profile.ProfilePageView.ProfilePagePresenter;
 
-public class MaintenanceRequestPage extends CPortalEntityEditor<MaintenanceRequestDTO> {
+public class MaintenanceRequestPage extends CPortalEntityForm<MaintenanceRequestDTO> {
 
     private static final I18n i18n = I18n.get(MaintenanceRequestPage.class);
 

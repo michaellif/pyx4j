@@ -60,6 +60,15 @@ public class MainenanceRequestCrudServiceImpl extends AbstractCrudServiceDtoImpl
         return createTO(maintenanceRequest);
     }
 
+    @Override
+    public void retrieve(AsyncCallback<MaintenanceRequestDTO> callback, Key entityId, com.pyx4j.entity.rpc.AbstractCrudService.RetrieveTarget retrieveTarget) {
+        if (true) {
+            new MainenanceRequestCrudServiceMockImpl().retrieve(callback, entityId, retrieveTarget);
+        } else {
+            super.retrieve(callback, entityId, retrieveTarget);
+        }
+    }
+
     private Vector<MaintenanceRequestDTO> listIssues(Set<StatusPhase> statuses) {
         Vector<MaintenanceRequestDTO> dto = new Vector<MaintenanceRequestDTO>();
         List<MaintenanceRequest> requests = ServerSideFactory.create(MaintenanceFacade.class).getMaintenanceRequests(statuses,
