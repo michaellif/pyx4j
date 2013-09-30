@@ -87,9 +87,14 @@ public class MainenanceRequestCrudServiceMockImpl implements MainenanceRequestCr
     @Override
     public void retrieve(AsyncCallback<MaintenanceRequestDTO> callback, Key entityId, com.pyx4j.entity.rpc.AbstractCrudService.RetrieveTarget retrieveTarget) {
         MaintenanceRequestDTO requestDTO = EntityFactory.create(MaintenanceRequestDTO.class);
-        requestDTO.description().setValue("Request 1");
-        requestDTO.status().phase().setValue(StatusPhase.Submitted);
         requestDTO.setPrimaryKey(entityId);
+        requestDTO.requestId().setValue("1111-111");
+        requestDTO.description().setValue("Request 1");
+        requestDTO.category().name().setValue("Category 1");
+        requestDTO.status().phase().setValue(StatusPhase.Submitted);
+        requestDTO.summary().setValue("summary summary summary");
+        requestDTO.description().setValue("description description description description description description description description");
+        requestDTO.priority().name().setValue("Priority");
         callback.onSuccess(requestDTO);
     }
 

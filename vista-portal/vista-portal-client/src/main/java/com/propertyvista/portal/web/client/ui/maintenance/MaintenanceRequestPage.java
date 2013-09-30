@@ -16,13 +16,18 @@ package com.propertyvista.portal.web.client.ui.maintenance;
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.commons.css.ThemeColor;
+import com.pyx4j.forms.client.ui.CEntityLabel;
+import com.pyx4j.forms.client.ui.CLabel;
 import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
 
+import com.propertyvista.domain.maintenance.MaintenanceRequestCategory;
+import com.propertyvista.domain.maintenance.MaintenanceRequestPriority;
 import com.propertyvista.portal.rpc.portal.web.dto.maintenance.MaintenanceRequestDTO;
 import com.propertyvista.portal.web.client.themes.EntityViewTheme;
 import com.propertyvista.portal.web.client.ui.CPortalEntityForm;
 import com.propertyvista.portal.web.client.ui.profile.ProfilePageView.ProfilePagePresenter;
+import com.propertyvista.portal.web.client.ui.util.decorators.FormDecoratorBuilder;
 
 public class MaintenanceRequestPage extends CPortalEntityForm<MaintenanceRequestDTO> {
 
@@ -45,8 +50,30 @@ public class MaintenanceRequestPage extends CPortalEntityForm<MaintenanceRequest
         int row = -1;
 
         mainPanel.setH1(++row, 0, 1, i18n.tr("Basic Information"));
+        mainPanel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().requestId(), new CLabel<String>()), 250).build());
+        mainPanel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().reportedForOwnUnit()), 250).build());
+        mainPanel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().category(), new CEntityLabel<MaintenanceRequestCategory>() {
+            @Override
+            public String format(MaintenanceRequestCategory value) {
+                if (value == null) {
+                    return "";
+                } else {
+                    return value.name().getValue() + "-TODO";
+                }
+            }
+        }), 250).build());
+
+        mainPanel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().summary()), 250).build());
+        mainPanel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().description()), 250).build());
+        mainPanel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().priority(), new CEntityLabel<MaintenanceRequestPriority>()), 250).build());
+
+        mainPanel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().petInstructions()), 250).build());
+
+        mainPanel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().preferredDate1()), 100).build());
+        mainPanel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().preferredTime1()), 100).build());
+        mainPanel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().preferredDate2()), 100).build());
+        mainPanel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().preferredTime2()), 100).build());
 
         return mainPanel;
     }
-
 }
