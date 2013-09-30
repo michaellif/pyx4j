@@ -22,7 +22,6 @@ import com.pyx4j.entity.annotations.Format;
 import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.annotations.ReadOnly;
-import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.AttachLevel;
 import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.entity.shared.ISet;
@@ -63,12 +62,11 @@ public interface TenantSureInsurancePolicy extends InsurancePolicy<TenantSureIns
 
     @ReadOnly
     @MemberColumn(notNull = true)
-    InsuranceTenantSureClient client();
+    TenantSureInsurancePolicyClient client();
 
     /**
      * PK in TenantSure API of the accepted quote that was bound to the owner client/tenant.
      */
-    @NotNull
     IPrimitive<String> quoteId();
 
     IPrimitive<TenantSureStatus> status();
@@ -77,14 +75,6 @@ public interface TenantSureInsurancePolicy extends InsurancePolicy<TenantSureIns
 
     /** for insurance that is cancelled by TenantSure, holds the reason for cancellation */
     IPrimitive<String> cancellationDescriptionReasonFromTenantSure();
-
-    /**
-     * Defines billing cycle days: every month
-     */
-    @NotNull
-    IPrimitive<LogicalDate> inceptionDate();
-
-    IPrimitive<LogicalDate> expiryDate();
 
     @ReadOnly(allowOverrideNull = true)
     IPrimitive<Integer> paymentDay();
@@ -118,9 +108,9 @@ public interface TenantSureInsurancePolicy extends InsurancePolicy<TenantSureIns
     @Format("#,##0.00")
     IPrimitive<BigDecimal> totalMonthlyPayable();
 
-    @Format("#,##0.00")
-    @NotNull
-    IPrimitive<BigDecimal> liabilityCoverage();
+//    @Format("#,##0.00")
+//    @NotNull
+//    IPrimitive<BigDecimal> liabilityCoverage();
 
     @Format("#,##0.00")
     IPrimitive<BigDecimal> contentsCoverage();
@@ -130,6 +120,6 @@ public interface TenantSureInsurancePolicy extends InsurancePolicy<TenantSureIns
 
     @Owned
     @Detached(level = AttachLevel.Detached)
-    ISet<InsuranceTenantSureTransaction> transactions();
+    ISet<TenantSureTransaction> transactions();
 
 }

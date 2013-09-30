@@ -32,8 +32,8 @@ import com.pyx4j.essentials.server.report.ReportTableFormatter;
 
 import com.propertyvista.biz.ExecutionMonitor;
 import com.propertyvista.biz.tenant.insurance.TenantSureReportStatusData;
-import com.propertyvista.domain.tenant.insurance.InsuranceTenantSureReport;
-import com.propertyvista.domain.tenant.insurance.InsuranceTenantSureReport.ReportedStatus;
+import com.propertyvista.domain.tenant.insurance.TenantSureInsurancePolicyReport;
+import com.propertyvista.domain.tenant.insurance.TenantSureInsurancePolicyReport.ReportedStatus;
 import com.propertyvista.domain.tenant.insurance.TenantSureInsuranceCertificate;
 import com.propertyvista.domain.tenant.insurance.TenantSureInsurancePolicy.TenantSureStatus;
 
@@ -49,7 +49,7 @@ public class InsuranceStatusReport implements Report {
     public void processReport(ExecutionMonitor executionMonitor, Date date, ReportTableFormatter formatter) {
         EntityReportFormatter<TenantSureReportStatusData> er = new EntityReportFormatter<TenantSureReportStatusData>(TenantSureReportStatusData.class);
 
-        EntityQueryCriteria<InsuranceTenantSureReport> criteria = EntityQueryCriteria.create(InsuranceTenantSureReport.class);
+        EntityQueryCriteria<TenantSureInsurancePolicyReport> criteria = EntityQueryCriteria.create(TenantSureInsurancePolicyReport.class);
         criteria.or(//@formatter:off
                 // active:
                 PropertyCriterion.in(criteria.proto().insurance().status(), EnumSet.of(TenantSureStatus.Active, TenantSureStatus.PendingCancellation)),
@@ -61,10 +61,10 @@ public class InsuranceStatusReport implements Report {
                 )
          );//@formatter:on
 
-        ICursorIterator<InsuranceTenantSureReport> iterator = Persistence.service().query(null, criteria, AttachLevel.Attached);
+        ICursorIterator<TenantSureInsurancePolicyReport> iterator = Persistence.service().query(null, criteria, AttachLevel.Attached);
         try {
             while (iterator.hasNext()) {
-                InsuranceTenantSureReport reportedStatusHolder = iterator.next();
+                TenantSureInsurancePolicyReport reportedStatusHolder = iterator.next();
                 reportedStatusHolder = updateReportStatus(reportedStatusHolder);
 
                 TenantSureReportStatusData data = EntityFactory.create(TenantSureReportStatusData.class);
@@ -112,11 +112,11 @@ public class InsuranceStatusReport implements Report {
      * @throws IllegalArgumentException
      *             if previously reported status and current insurance status cannot be updated
      */
-    private static InsuranceTenantSureReport updateReportStatus(final InsuranceTenantSureReport reportedStatusHolder) {
-        return new UnitOfWork().execute(new Executable<InsuranceTenantSureReport, Error>() {
+    private static TenantSureInsurancePolicyReport updateReportStatus(final TenantSureInsurancePolicyReport reportedStatusHolder) {
+        return new UnitOfWork().execute(new Executable<TenantSureInsurancePolicyReport, Error>() {
 
             @Override
-            public InsuranceTenantSureReport execute() throws Error {
+            public TenantSureInsurancePolicyReport execute() throws Error {
                 ReportedStatus reportClientStatus = null;
                 LogicalDate statusFrom = null;
                 boolean needsUpdate = false;
@@ -124,7 +124,7 @@ public class InsuranceStatusReport implements Report {
                 case Cancelled:
                     if (reportedStatusHolder.reportedStatus().getValue() != ReportedStatus.Cancelled) {
                         reportClientStatus = ReportedStatus.Cancelled;
-                        statusFrom = reportedStatusHolder.insurance().expiryDate().getValue();
+                        statusFrom = reportedStatusHolder.insurance().certificate().expiryDate().getValue();
                     }
                     break;
 
@@ -132,7 +132,7 @@ public class InsuranceStatusReport implements Report {
                 case PendingCancellation:
                     if (reportedStatusHolder.reportedStatus().getValue() == null) {
                         reportClientStatus = ReportedStatus.New;
-                        statusFrom = reportedStatusHolder.insurance().inceptionDate().getValue();
+                        statusFrom = reportedStatusHolder.insurance().certificate().inceptionDate().getValue();
                         needsUpdate = true;
 
                     } else if ((reportedStatusHolder.reportedStatus().getValue() == ReportedStatus.Active)

@@ -19,7 +19,7 @@ import com.pyx4j.commons.LogicalDate;
 
 import com.propertyvista.biz.tenant.insurance.tenantsure.errors.CfcApiException;
 import com.propertyvista.biz.tenant.insurance.tenantsure.errors.TooManyPreviousClaimsException;
-import com.propertyvista.domain.tenant.insurance.InsuranceTenantSureClient;
+import com.propertyvista.domain.tenant.insurance.TenantSureInsurancePolicyClient;
 import com.propertyvista.domain.tenant.lease.Tenant;
 import com.propertyvista.portal.rpc.portal.web.dto.insurance.TenantSureCoverageDTO;
 import com.propertyvista.portal.rpc.portal.web.dto.insurance.TenantSureQuoteDTO;
@@ -45,7 +45,7 @@ public interface CfcApiAdapterFacade {
      */
     public String createClient(Tenant tenant, String tenantName, String tenantPhone) throws CfcApiException;
 
-    public TenantSureQuoteDTO getQuote(InsuranceTenantSureClient client, TenantSureCoverageDTO coverageRequest) throws TooManyPreviousClaimsException,
+    public TenantSureQuoteDTO getQuote(TenantSureInsurancePolicyClient client, TenantSureCoverageDTO coverageRequest) throws TooManyPreviousClaimsException,
             CfcApiException;
 
     /**

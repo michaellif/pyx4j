@@ -63,8 +63,8 @@ public class TenantSureProcessFacadeImpl implements TenantSureProcessFacade {
         @Override
         public Void execute() {
             ts.status().setValue(TenantSureStatus.Cancelled);
-            log.info("cancelling TenantSure for certifcate: (#{}, expiry date {})}", ts.certificate().insuranceCertificateNumber().getValue(), ts.expiryDate()
-                    .getValue());
+            log.info("cancelling TenantSure for certifcate: (#{}, expiry date {})}", ts.certificate().insuranceCertificateNumber().getValue(), ts.certificate()
+                    .expiryDate().getValue());
             Persistence.service().persist(ts);
             return null;
         }
@@ -95,7 +95,7 @@ public class TenantSureProcessFacadeImpl implements TenantSureProcessFacade {
 
         {
             EntityQueryCriteria<TenantSureInsurancePolicy> byTenantCancellationsCriteria = EntityQueryCriteria.create(TenantSureInsurancePolicy.class);
-            byTenantCancellationsCriteria.le(byTenantCancellationsCriteria.proto().expiryDate(), dueDate);
+            byTenantCancellationsCriteria.le(byTenantCancellationsCriteria.proto().certificate().expiryDate(), dueDate);
             byTenantCancellationsCriteria.eq(byTenantCancellationsCriteria.proto().status(), TenantSureStatus.PendingCancellation);
             byTenantCancellationsCriteria.eq(byTenantCancellationsCriteria.proto().cancellation(), CancellationType.CancelledByTenant);
             ICursorIterator<TenantSureInsurancePolicy> iterator = Persistence.service().query(null, byTenantCancellationsCriteria, AttachLevel.Attached);

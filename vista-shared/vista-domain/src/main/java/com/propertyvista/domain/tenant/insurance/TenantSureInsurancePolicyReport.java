@@ -20,7 +20,7 @@ import com.pyx4j.entity.annotations.Owner;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 
-public interface InsuranceTenantSureReport extends IEntity {
+public interface TenantSureInsurancePolicyReport extends IEntity {
 
     public enum ReportedStatus {
 

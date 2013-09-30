@@ -30,7 +30,7 @@ import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.biz.tenant.insurance.TenantSureOptionCode;
-import com.propertyvista.domain.tenant.insurance.InsuranceTenantSureClient;
+import com.propertyvista.domain.tenant.insurance.TenantSureInsurancePolicyClient;
 import com.propertyvista.domain.tenant.lease.LeaseTermTenant;
 import com.propertyvista.portal.rpc.portal.web.dto.insurance.TenantSureCoverageDTO;
 
@@ -58,7 +58,7 @@ public class TenantSureCoverageRequestAdapter {
         TENANT_SURE_INSURED_ACTIVITY_CODE.setPercentage(new BigDecimal(100));
     }
 
-    public static void fillOptionQuote(InsuranceTenantSureClient tenantSureClient, TenantSureCoverageDTO coverageRequest, OptionQuote optionQuote) {
+    public static void fillOptionQuote(TenantSureInsurancePolicyClient tenantSureClient, TenantSureCoverageDTO coverageRequest, OptionQuote optionQuote) {
         DatatypeFactory dataTypeFactory;
         try {
             dataTypeFactory = DatatypeFactory.newInstance();

@@ -29,7 +29,7 @@ import com.pyx4j.entity.shared.IPrimitive;
 
 import com.propertyvista.domain.payment.InsurancePaymentMethod;
 
-public interface InsuranceTenantSureTransaction extends IEntity {
+public interface TenantSureTransaction extends IEntity {
 
     /**
      * Status flow:

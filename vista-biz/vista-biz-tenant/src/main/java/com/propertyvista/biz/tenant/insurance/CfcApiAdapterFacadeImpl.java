@@ -56,7 +56,7 @@ import com.propertyvista.config.AbstractVistaServerSideConfiguration;
 import com.propertyvista.config.SystemConfig;
 import com.propertyvista.config.TenantSureConfiguration;
 import com.propertyvista.config.VistaInterfaceCredentials;
-import com.propertyvista.domain.tenant.insurance.InsuranceTenantSureClient;
+import com.propertyvista.domain.tenant.insurance.TenantSureInsurancePolicyClient;
 import com.propertyvista.domain.tenant.lease.Tenant;
 import com.propertyvista.portal.rpc.portal.web.dto.insurance.TenantSureCoverageDTO;
 import com.propertyvista.portal.rpc.portal.web.dto.insurance.TenantSureQuoteDTO;
@@ -141,7 +141,7 @@ public class CfcApiAdapterFacadeImpl implements CfcApiAdapterFacade {
     }
 
     @Override
-    public TenantSureQuoteDTO getQuote(InsuranceTenantSureClient client, TenantSureCoverageDTO coverageRequest) throws CfcApiException {
+    public TenantSureQuoteDTO getQuote(TenantSureInsurancePolicyClient client, TenantSureCoverageDTO coverageRequest) throws CfcApiException {
         CFCAPISoap api = getApi();
         String sessionId = makeNewCfcSession(api);
 

@@ -36,7 +36,7 @@ import com.propertyvista.domain.payment.InsurancePaymentMethod;
 import com.propertyvista.domain.payment.LeasePaymentMethod;
 import com.propertyvista.domain.pmc.PmcPaymentMethod;
 import com.propertyvista.domain.property.asset.building.Building;
-import com.propertyvista.domain.tenant.insurance.InsuranceTenantSureTransaction;
+import com.propertyvista.domain.tenant.insurance.TenantSureTransaction;
 import com.propertyvista.domain.util.DomainUtil;
 import com.propertyvista.server.common.security.VistaContext;
 
@@ -115,9 +115,9 @@ class PaymentMethodPersister {
             // Keep history of payment methods that were used.
             origPaymentMethod = Persistence.service().retrieve(InsurancePaymentMethod.class, paymentMethod.getPrimaryKey());
             if (isAccountNumberChange(paymentMethod, origPaymentMethod)) {
-                EntityQueryCriteria<InsuranceTenantSureTransaction> criteria = EntityQueryCriteria.create(InsuranceTenantSureTransaction.class);
+                EntityQueryCriteria<TenantSureTransaction> criteria = EntityQueryCriteria.create(TenantSureTransaction.class);
                 criteria.eq(criteria.proto().paymentMethod(), paymentMethod);
-                criteria.ne(criteria.proto().status(), InsuranceTenantSureTransaction.TransactionStatus.Draft);
+                criteria.ne(criteria.proto().status(), TenantSureTransaction.TransactionStatus.Draft);
                 if (Persistence.service().count(criteria) != 0) {
                     origPaymentMethod.isDeleted().setValue(true);
                     Persistence.service().merge(origPaymentMethod);
@@ -151,9 +151,9 @@ class PaymentMethodPersister {
             // Keep history of payment methods that were used.
             origPaymentMethod = Persistence.service().retrieve(PmcPaymentMethod.class, paymentMethod.getPrimaryKey());
             if (isAccountNumberChange(paymentMethod, origPaymentMethod)) {
-                EntityQueryCriteria<InsuranceTenantSureTransaction> criteria = EntityQueryCriteria.create(InsuranceTenantSureTransaction.class);
+                EntityQueryCriteria<TenantSureTransaction> criteria = EntityQueryCriteria.create(TenantSureTransaction.class);
                 criteria.eq(criteria.proto().paymentMethod(), paymentMethod);
-                criteria.ne(criteria.proto().status(), InsuranceTenantSureTransaction.TransactionStatus.Draft);
+                criteria.ne(criteria.proto().status(), TenantSureTransaction.TransactionStatus.Draft);
                 if (Persistence.service().count(criteria) != 0) {
                     origPaymentMethod.isDeleted().setValue(true);
                     Persistence.service().merge(origPaymentMethod);

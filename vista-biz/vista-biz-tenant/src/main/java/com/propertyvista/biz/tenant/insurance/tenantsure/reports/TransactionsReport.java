@@ -36,7 +36,7 @@ import com.propertyvista.biz.ExecutionMonitor;
 import com.propertyvista.biz.financial.payment.CreditCardFacade;
 import com.propertyvista.biz.financial.payment.CreditCardFacade.ReferenceNumberPrefix;
 import com.propertyvista.domain.payment.CreditCardInfo;
-import com.propertyvista.domain.tenant.insurance.InsuranceTenantSureTransaction;
+import com.propertyvista.domain.tenant.insurance.TenantSureTransaction;
 import com.propertyvista.operations.rpc.dto.TenantSureCcTaransactionsReportLineDTO;
 
 public class TransactionsReport implements Report {
@@ -57,19 +57,19 @@ public class TransactionsReport implements Report {
         new UnitOfWork().execute(new Executable<VoidSerializable, Error>() {
             @Override
             public VoidSerializable execute() throws Error {
-                EntityQueryCriteria<InsuranceTenantSureTransaction> criteria = EntityQueryCriteria.create(InsuranceTenantSureTransaction.class);
+                EntityQueryCriteria<TenantSureTransaction> criteria = EntityQueryCriteria.create(TenantSureTransaction.class);
                 criteria.ge(criteria.proto().transactionDate(), DateUtils.dayStart(date));
                 criteria.le(criteria.proto().transactionDate(), DateUtils.dayEnd(date));
-                criteria.eq(criteria.proto().status(), InsuranceTenantSureTransaction.TransactionStatus.Cleared);
+                criteria.eq(criteria.proto().status(), TenantSureTransaction.TransactionStatus.Cleared);
 
-                ICursorIterator<InsuranceTenantSureTransaction> transactions = Persistence.service().query(null, criteria, AttachLevel.Attached);
+                ICursorIterator<TenantSureTransaction> transactions = Persistence.service().query(null, criteria, AttachLevel.Attached);
 
                 EntityReportFormatter<TenantSureCcTaransactionsReportLineDTO> reportGenerator = new EntityReportFormatter<TenantSureCcTaransactionsReportLineDTO>(
                         TenantSureCcTaransactionsReportLineDTO.class);
                 try {
 
                     while (transactions.hasNext()) {
-                        InsuranceTenantSureTransaction transaction = transactions.next();
+                        TenantSureTransaction transaction = transactions.next();
 
                         TenantSureCcTaransactionsReportLineDTO transactionReportLine = EntityFactory.create(TenantSureCcTaransactionsReportLineDTO.class);
                         transactionReportLine.date().setValue(transaction.transactionDate().getValue());
