@@ -150,7 +150,7 @@ public class PaymentMethodsGadget extends AbstractGadget<FinancialDashboardViewI
                 content.setWidget(++row, 0,
                         new FormDecoratorBuilder(inject(proto().paymentMethod().billingAddress(), new CEntityLabel<AddressSimple>())).build());
 
-                content.setWidget(++row, 0, new Anchor("View Payment Method", new Command() {
+                content.setWidget(++row, 0, new Anchor("View Details", new Command() {
                     @Override
                     public void execute() {
                         getGadgetView().getPresenter().viewPaymentMethod(getValue());

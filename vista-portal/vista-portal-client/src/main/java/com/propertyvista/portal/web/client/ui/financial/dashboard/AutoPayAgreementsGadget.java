@@ -168,7 +168,7 @@ public class AutoPayAgreementsGadget extends AbstractGadget<FinancialDashboardVi
                 content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().paymentMethod(), new CEntityLabel<PaymentMethod>()), 250).build());
                 content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().amount()), 100).build());
 
-                content.setWidget(++row, 0, new Anchor("View Auto Payment", new Command() {
+                content.setWidget(++row, 0, new Anchor("View Details", new Command() {
                     @Override
                     public void execute() {
                         getGadgetView().getPresenter().viewPreauthorizedPayment(getValue());
