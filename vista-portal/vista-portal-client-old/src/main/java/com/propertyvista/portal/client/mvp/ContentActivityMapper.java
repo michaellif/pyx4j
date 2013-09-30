@@ -132,7 +132,7 @@ public class ContentActivityMapper implements AppActivityMapper {
                     } else if (appPlace instanceof Resident.ResidentServices.TenantInsurance.ProvideTenantInsurance) {
                         activity = new ProvideTenantInsuranceActivity();
 
-                    } else if (appPlace instanceof Resident.ResidentServices.TenantInsurance.TenantSure.TenantSureOrderWizard) {
+                    } else if (appPlace instanceof Resident.ResidentServices.TenantInsurance.TenantSure.TenantSureWizard) {
                         activity = new TenantSurePurchaseActivity();
                     } else if (appPlace instanceof Resident.ResidentServices.TenantInsurance.TenantSure.TenantSurePage) {
                         activity = new TenantSureManagementActivity();
@@ -143,7 +143,7 @@ public class ContentActivityMapper implements AppActivityMapper {
                     } else if (appPlace instanceof Resident.ResidentServices.TenantInsurance.TenantSure.TenantSurePage.UpdateCreditCard) {
                         activity = new TenantSureCreditCardUpdateActivity();
 
-                    } else if (appPlace instanceof Resident.ResidentServices.TenantInsurance.GeneralCertificateUploadWizard) {
+                    } else if (appPlace instanceof Resident.ResidentServices.TenantInsurance.GeneralCertificateWizard) {
                         activity = new TenantInsuranceByOtherProvdierUpdateActivity(appPlace);
                     }
 

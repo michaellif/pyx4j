@@ -59,12 +59,12 @@ public class ProvideTenantInsuranceActivity extends AbstractActivity implements 
 
     @Override
     public void onPurchaseTenantSure() {
-        AppSite.getPlaceController().goTo(new PortalSiteMap.Resident.ResidentServices.TenantInsurance.TenantSure.TenantSureOrderWizard());
+        AppSite.getPlaceController().goTo(new PortalSiteMap.Resident.ResidentServices.TenantInsurance.TenantSure.TenantSureWizard());
     }
 
     @Override
     public void onUpdateInsuranceByOtherProvider() {
-        AppSite.getPlaceController().goTo(new PortalSiteMap.Resident.ResidentServices.TenantInsurance.GeneralCertificateUploadWizard());
+        AppSite.getPlaceController().goTo(new PortalSiteMap.Resident.ResidentServices.TenantInsurance.GeneralCertificateWizard());
     }
 
 }

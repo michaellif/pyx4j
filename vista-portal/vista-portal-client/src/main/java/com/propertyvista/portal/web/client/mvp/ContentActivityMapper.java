@@ -102,9 +102,9 @@ public class ContentActivityMapper implements AppActivityMapper {
                     } else if (appPlace instanceof Resident.Financial.PreauthorizedPayments.PreauthorizedPaymentSubmitted) {
                         activity = new AutoPayConfirmationActivity(appPlace);
 
-                    } else if (appPlace instanceof PortalSiteMap.Resident.ResidentServices.TenantInsurance.TenantSure.TenantSureOrderWizard) {
+                    } else if (appPlace instanceof PortalSiteMap.Resident.ResidentServices.TenantInsurance.TenantSure.TenantSureWizard) {
                         activity = new TenantSureOrderWizardActivity(appPlace);
-                    } else if (appPlace instanceof PortalSiteMap.Resident.ResidentServices.TenantInsurance.GeneralCertificateUploadWizard) {
+                    } else if (appPlace instanceof PortalSiteMap.Resident.ResidentServices.TenantInsurance.GeneralCertificateWizard) {
                         activity = new GeneralCertificateUploadWizardActivity(appPlace);
 
                     } else if (place instanceof PortalSiteMap.Resident.Maintenance) {

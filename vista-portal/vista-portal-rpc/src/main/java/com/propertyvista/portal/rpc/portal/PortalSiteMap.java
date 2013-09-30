@@ -111,6 +111,9 @@ public class PortalSiteMap implements SiteMap {
             public static class Payment extends AppPlace {
 
                 public static class PayNow extends CrudAppPlace {
+                    {
+                        setStable(false);
+                    }
                 }
 
                 public static class PaymentSubmitting extends AppPlace {
@@ -128,6 +131,9 @@ public class PortalSiteMap implements SiteMap {
 
                 @PlaceProperties(caption = "New Pre-Authorized Payment")
                 public static class NewPreauthorizedPayment extends CrudAppPlace {
+                    {
+                        setStable(false);
+                    }
                 }
 
                 @PlaceProperties(caption = "Pre-Authorized Payment")
@@ -192,7 +198,7 @@ public class PortalSiteMap implements SiteMap {
             public static class TenantInsurance extends AppPlace {
 
                 /** This place is for updating insurance other than TenantSure */
-                public static class GeneralCertificateUploadWizard extends AppPlace {
+                public static class GeneralCertificateWizard extends AppPlace {
                     {
                         setStable(false);
                     }
@@ -205,7 +211,7 @@ public class PortalSiteMap implements SiteMap {
                 public static class TenantSure {
 
                     @PlaceProperties(navigLabel = "Get TenantSure", caption = "Get TenantSure")
-                    public static class TenantSureOrderWizard extends AppPlace {
+                    public static class TenantSureWizard extends AppPlace {
 
                     }
 
