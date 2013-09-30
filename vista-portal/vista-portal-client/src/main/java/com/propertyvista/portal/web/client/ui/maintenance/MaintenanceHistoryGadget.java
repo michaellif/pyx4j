@@ -38,44 +38,32 @@ import com.propertyvista.portal.web.client.resources.PortalImages;
 import com.propertyvista.portal.web.client.ui.AbstractGadget;
 import com.propertyvista.portal.web.client.ui.util.decorators.FormDecoratorBuilder;
 
-public class OpenMaintenanceRequestsGadget extends AbstractGadget<MaintenanceDashboardViewImpl> {
+public class MaintenanceHistoryGadget extends AbstractGadget<MaintenanceDashboardViewImpl> {
 
-    private static final I18n i18n = I18n.get(OpenMaintenanceRequestsGadget.class);
+    private static final I18n i18n = I18n.get(MaintenanceHistoryGadget.class);
 
-    private final OpenMaintenanceRequestsViewer openMaintenanceRequestsViewer;
+    private final ClosedMaintenanceRequestsViewer closedMaintenanceRequestsViewer;
 
-    private final MaintenanceToolbar toolbar;
+    MaintenanceHistoryGadget(MaintenanceDashboardViewImpl view) {
+        super(view, PortalImages.INSTANCE.maintenanceIcon(), i18n.tr("Maintenance History"), ThemeColor.contrast5);
 
-    OpenMaintenanceRequestsGadget(MaintenanceDashboardViewImpl view) {
-        super(view, PortalImages.INSTANCE.maintenanceIcon(), i18n.tr("Open Maintenance Requests"), ThemeColor.contrast5);
+        closedMaintenanceRequestsViewer = new ClosedMaintenanceRequestsViewer();
+        closedMaintenanceRequestsViewer.setViewable(true);
+        closedMaintenanceRequestsViewer.initContent();
 
-        openMaintenanceRequestsViewer = new OpenMaintenanceRequestsViewer();
-        openMaintenanceRequestsViewer.setViewable(true);
-        openMaintenanceRequestsViewer.initContent();
-
-        setContent(openMaintenanceRequestsViewer);
-
-        setActionsToolbar(toolbar = new MaintenanceToolbar() {
-
-            @Override
-            protected void onNewRequestClicked() {
-                getGadgetView().getPresenter().createMaintenanceRequest();
-            }
-
-        });
+        setContent(closedMaintenanceRequestsViewer);
 
     }
 
     protected void populate(MaintenanceSummaryDTO value) {
-        openMaintenanceRequestsViewer.populate(value);
-        toolbar.recalculateState(value);
+        closedMaintenanceRequestsViewer.populate(value);
     }
 
-    class OpenMaintenanceRequestsViewer extends CEntityForm<MaintenanceSummaryDTO> {
+    class ClosedMaintenanceRequestsViewer extends CEntityForm<MaintenanceSummaryDTO> {
 
         private final Label message;
 
-        public OpenMaintenanceRequestsViewer() {
+        public ClosedMaintenanceRequestsViewer() {
             super(MaintenanceSummaryDTO.class);
             message = new Label();
         }
@@ -86,7 +74,7 @@ public class OpenMaintenanceRequestsGadget extends AbstractGadget<MaintenanceDas
 
             int row = -1;
 
-            main.setWidget(++row, 0, inject(proto().openMaintenanceRequests(), new OpenMaintenanceRequestsFolder()));
+            main.setWidget(++row, 0, inject(proto().closedMaintenanceRequests(), new ClosedMaintenanceRequestsFolder()));
 
             main.setWidget(++row, 0, message);
 
@@ -101,9 +89,9 @@ public class OpenMaintenanceRequestsGadget extends AbstractGadget<MaintenanceDas
         }
     }
 
-    private class OpenMaintenanceRequestsFolder extends VistaBoxFolder<MainenanceRequestStatusDTO> {
+    private class ClosedMaintenanceRequestsFolder extends VistaBoxFolder<MainenanceRequestStatusDTO> {
 
-        public OpenMaintenanceRequestsFolder() {
+        public ClosedMaintenanceRequestsFolder() {
             super(MainenanceRequestStatusDTO.class, true);
             setOrderable(false);
             setAddable(false);

@@ -13,12 +13,16 @@
  */
 package com.propertyvista.portal.web.client.ui.dashboard;
 
+import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTML;
 
 import com.pyx4j.commons.css.ThemeColor;
 import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.site.client.AppSite;
+import com.pyx4j.widgets.client.Anchor;
 
+import com.propertyvista.portal.rpc.portal.PortalSiteMap;
 import com.propertyvista.portal.rpc.portal.web.dto.maintenance.MaintenanceSummaryDTO;
 import com.propertyvista.portal.web.client.resources.PortalImages;
 import com.propertyvista.portal.web.client.ui.AbstractGadget;
@@ -27,6 +31,10 @@ import com.propertyvista.portal.web.client.ui.maintenance.MaintenanceToolbar;
 public class MaintenanceGadget extends AbstractGadget<MainDashboardViewImpl> {
 
     static final I18n i18n = I18n.get(MaintenanceGadget.class);
+
+    private final HTML message;
+
+    private final NavigationBar navigationBar;
 
     MaintenanceGadget(MainDashboardViewImpl form) {
         super(form, PortalImages.INSTANCE.maintenanceIcon(), i18n.tr("My Maintenance Requests"), ThemeColor.contrast5);
@@ -40,12 +48,45 @@ public class MaintenanceGadget extends AbstractGadget<MainDashboardViewImpl> {
         });
 
         FlowPanel contentPanel = new FlowPanel();
-        contentPanel.add(new HTML("You don't have any pending Maintenance Requests."));
+        message = new HTML();
+        contentPanel.add(message);
         setContent(contentPanel);
+
+        setNavigationBar(navigationBar = new NavigationBar());
+
     }
 
-    protected void populate(MaintenanceSummaryDTO maintenanceSummary) {
+    class NavigationBar extends FlowPanel {
 
+        private final Anchor viewMaintenanceAnchor;
+
+        public NavigationBar() {
+            viewMaintenanceAnchor = new Anchor(i18n.tr("View details in Maintenance Section"), new Command() {
+
+                @Override
+                public void execute() {
+                    AppSite.getPlaceController().goTo(new PortalSiteMap.Resident.Maintenance());
+                }
+            });
+            add(viewMaintenanceAnchor);
+        }
+
+        public void recalculateState(MaintenanceSummaryDTO value) {
+
+            if (value.openMaintenanceRequests().size() == 0) {
+                viewMaintenanceAnchor.setVisible(false);
+            } else {
+                viewMaintenanceAnchor.setVisible(true);
+            }
+        }
     }
 
+    protected void populate(MaintenanceSummaryDTO value) {
+        navigationBar.recalculateState(value);
+        if (value.openMaintenanceRequests().size() == 0) {
+            message.setHTML(i18n.tr("You don't have any open Maintenance Requests."));
+        } else {
+            message.setHTML(i18n.tr("You have {0} open Maintenance Requests.", value.openMaintenanceRequests().size()));
+        }
+    }
 }

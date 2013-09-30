@@ -49,6 +49,27 @@ public class MainenanceRequestCrudServiceMockImpl implements MainenanceRequestCr
             maintenanceSummary.openMaintenanceRequests().add(requestDTO);
         }
 
+        {
+            MainenanceRequestStatusDTO requestDTO = EntityFactory.create(MainenanceRequestStatusDTO.class);
+            requestDTO.description().setValue("Request 3");
+            requestDTO.status().phase().setValue(StatusPhase.Cancelled);
+            maintenanceSummary.closedMaintenanceRequests().add(requestDTO);
+        }
+
+        {
+            MainenanceRequestStatusDTO requestDTO = EntityFactory.create(MainenanceRequestStatusDTO.class);
+            requestDTO.description().setValue("Request 4");
+            requestDTO.status().phase().setValue(StatusPhase.Resolved);
+            maintenanceSummary.closedMaintenanceRequests().add(requestDTO);
+        }
+
+        {
+            MainenanceRequestStatusDTO requestDTO = EntityFactory.create(MainenanceRequestStatusDTO.class);
+            requestDTO.description().setValue("Request 5");
+            requestDTO.status().phase().setValue(StatusPhase.Resolved);
+            maintenanceSummary.closedMaintenanceRequests().add(requestDTO);
+        }
+
         callback.onSuccess(maintenanceSummary);
     }
 
