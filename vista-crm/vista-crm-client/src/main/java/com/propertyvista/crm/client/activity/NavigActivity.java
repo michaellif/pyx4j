@@ -138,18 +138,16 @@ public class NavigActivity extends AbstractActivity implements NavigView.MainNav
         list.add(folder);
 
         //Finance
-        if (VistaFeatures.instance().productCatalog()) {
-            folder = new NavigFolder(i18n.tr("Finance"), CrmImages.INSTANCE.financeNormal(), CrmImages.INSTANCE.financeHover(),
-                    CrmImages.INSTANCE.financeActive());
-            if (SecurityController.checkBehavior(VistaCrmBehavior.OrganizationFinancial)) {
-                folder.addNavigItem(new CrmSiteMap.Finance.AggregatedTransfer());
-            }
-            if (SecurityController.checkBehavior(VistaCrmBehavior.Billing)) {
-                folder.addNavigItem(new CrmSiteMap.AutoPayReview());
-            }
-
-            list.add(folder);
+        folder = new NavigFolder(i18n.tr("Finance"), CrmImages.INSTANCE.financeNormal(), CrmImages.INSTANCE.financeHover(), CrmImages.INSTANCE.financeActive());
+        if (SecurityController.checkBehavior(VistaCrmBehavior.OrganizationFinancial)) {
+            folder.addNavigItem(new CrmSiteMap.Finance.AggregatedTransfer());
         }
+        folder.addNavigItem(new CrmSiteMap.Finance.Payment());
+        if (SecurityController.checkBehavior(VistaCrmBehavior.Billing)) {
+            folder.addNavigItem(new CrmSiteMap.AutoPayReview());
+        }
+
+        list.add(folder);
 
         //Organization
         folder = new NavigFolder(i18n.tr("Organization"), CrmImages.INSTANCE.companyNormal(), CrmImages.INSTANCE.companyHover(),

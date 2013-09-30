@@ -191,7 +191,7 @@ public class TenantForm extends LeaseParticipantForm<TenantDTO> {
 
         @Override
         protected void removeItem(final CEntityFolderItem<PreauthorizedPaymentDTO> item) {
-            MessageDialog.confirm(i18n.tr("Please confirm"), i18n.tr("Do you really want to delete the Preauthorized Payment?"), new Command() {
+            MessageDialog.confirm(i18n.tr("Please confirm"), i18n.tr("Do you really want to delete the Pre-Authorized Payment?"), new Command() {
                 @Override
                 public void execute() {
                     PreauthorizedPaymentFolder.super.removeItem(item);

@@ -33,7 +33,7 @@ public class PaymentRecordLister extends AbstractLister<PaymentRecord> {
         setColumnDescriptors(//@formatter:off
             new MemberColumnDescriptor.Builder(proto().id()).build(),
             new MemberColumnDescriptor.Builder(proto().billingAccount().lease().unit().building().propertyCode()).columnTitle(i18n.tr("Property Code")).visible(true).build(),
-            new MemberColumnDescriptor.Builder(proto().padBillingCycle().billingCycleStartDate()).build(),
+            new MemberColumnDescriptor.Builder(proto().padBillingCycle().billingCycleStartDate()).columnTitle(i18n.tr("Pre-Authorized Payment Cycle")).build(),
             new MemberColumnDescriptor.Builder(proto().billingAccount().lease().unit().info().number()).columnTitle(i18n.tr("Unit")).visible(false).build(),
             new MemberColumnDescriptor.Builder(proto().billingAccount().lease().leaseId()).columnTitle(i18n.tr("Lease")).visible(true).build(),
             new MemberColumnDescriptor.Builder(proto().paymentMethod().customer()).visible(false).build(), 
@@ -45,7 +45,8 @@ public class PaymentRecordLister extends AbstractLister<PaymentRecord> {
             new MemberColumnDescriptor.Builder(proto().targetDate()).build(),
             new MemberColumnDescriptor.Builder(proto().paymentStatus()).build(),
             new MemberColumnDescriptor.Builder(proto().paymentMethod().type()).build(),
-            new MemberColumnDescriptor.Builder(proto().notice()).visible(false).build()
+            new MemberColumnDescriptor.Builder(proto().notice()).visible(false).build(),
+            new MemberColumnDescriptor.Builder(proto().createdBy()).visible(false).searchable(false).build()
         );//@formatter:on
     }
 

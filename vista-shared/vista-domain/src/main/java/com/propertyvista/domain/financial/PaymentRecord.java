@@ -141,8 +141,10 @@ public interface PaymentRecord extends IEntity {
     /**
      * padBillingCycle and preauthorizedPayment indicates that this is PAD record
      */
+    @Caption(name = "Pre-Authorized Cycle")
     BillingCycle padBillingCycle();
 
+    @Caption(name = "Pre-Authorized Payment")
     PreauthorizedPayment preauthorizedPayment();
 
     @NotNull
