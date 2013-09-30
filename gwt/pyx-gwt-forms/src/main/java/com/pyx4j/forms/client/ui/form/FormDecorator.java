@@ -72,11 +72,11 @@ public class FormDecorator<E extends IEntity, T extends CEntityForm<E>> extends 
         add(footerPanel);
     }
 
-    protected void addHeaderToolbarButton(Button button) {
+    public void addHeaderToolbarButton(Button button) {
         headerToolbar.add(button);
     }
 
-    protected void addFooterToolbarButton(Button button) {
+    public void addFooterToolbarButton(Button button) {
         footerToolbar.add(button);
     }
 
