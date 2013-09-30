@@ -23,7 +23,7 @@ import com.pyx4j.site.client.AppSite;
 
 import com.propertyvista.portal.rpc.portal.PortalSiteMap;
 import com.propertyvista.portal.rpc.portal.web.dto.maintenance.MaintenanceSummaryDTO;
-import com.propertyvista.portal.rpc.portal.web.services.maintenance.MainenanceRequestCrudService;
+import com.propertyvista.portal.rpc.portal.web.services.maintenance.MaintenanceRequestCrudService;
 import com.propertyvista.portal.web.client.PortalWebSite;
 import com.propertyvista.portal.web.client.activity.SecurityAwareActivity;
 import com.propertyvista.portal.web.client.ui.maintenance.MaintenanceDashboardView;
@@ -47,7 +47,7 @@ public class MaintenanceDashboardActivity extends SecurityAwareActivity implemen
     }
 
     private void populate() {
-        ((MainenanceRequestCrudService) GWT.create(MainenanceRequestCrudService.class))
+        ((MaintenanceRequestCrudService) GWT.create(MaintenanceRequestCrudService.class))
                 .retreiveMaintenanceSummary(new DefaultAsyncCallback<MaintenanceSummaryDTO>() {
                     @Override
                     public void onSuccess(MaintenanceSummaryDTO result) {

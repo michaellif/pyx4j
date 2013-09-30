@@ -30,7 +30,7 @@ import com.propertyvista.portal.rpc.portal.web.dto.TenantProfileSummaryDTO;
 import com.propertyvista.portal.rpc.portal.web.dto.insurance.status.InsuranceStatusDTO;
 import com.propertyvista.portal.rpc.portal.web.dto.maintenance.MaintenanceSummaryDTO;
 import com.propertyvista.portal.rpc.portal.web.services.financial.BillingService;
-import com.propertyvista.portal.rpc.portal.web.services.maintenance.MainenanceRequestCrudService;
+import com.propertyvista.portal.rpc.portal.web.services.maintenance.MaintenanceRequestCrudService;
 import com.propertyvista.portal.rpc.portal.web.services.profile.ProfileService;
 import com.propertyvista.portal.rpc.portal.web.services.services.InsuranceService;
 import com.propertyvista.portal.web.client.PortalWebSite;
@@ -74,7 +74,7 @@ public class MainDashboardActivity extends SecurityAwareActivity implements Main
                 view.populateInsuranceGadget(result);
             }
         });
-        ((MainenanceRequestCrudService) GWT.create(MainenanceRequestCrudService.class))
+        ((MaintenanceRequestCrudService) GWT.create(MaintenanceRequestCrudService.class))
                 .retreiveMaintenanceSummary(new DefaultAsyncCallback<MaintenanceSummaryDTO>() {
                     @Override
                     public void onSuccess(MaintenanceSummaryDTO result) {

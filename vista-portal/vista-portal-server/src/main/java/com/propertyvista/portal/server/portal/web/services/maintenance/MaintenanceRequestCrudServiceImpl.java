@@ -38,13 +38,13 @@ import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.tenant.lease.Tenant;
 import com.propertyvista.portal.rpc.portal.web.dto.maintenance.MaintenanceRequestDTO;
 import com.propertyvista.portal.rpc.portal.web.dto.maintenance.MaintenanceSummaryDTO;
-import com.propertyvista.portal.rpc.portal.web.services.maintenance.MainenanceRequestCrudService;
+import com.propertyvista.portal.rpc.portal.web.services.maintenance.MaintenanceRequestCrudService;
 import com.propertyvista.portal.server.portal.TenantAppContext;
 
-public class MainenanceRequestCrudServiceImpl extends AbstractCrudServiceDtoImpl<MaintenanceRequest, MaintenanceRequestDTO> implements
-        MainenanceRequestCrudService {
+public class MaintenanceRequestCrudServiceImpl extends AbstractCrudServiceDtoImpl<MaintenanceRequest, MaintenanceRequestDTO> implements
+        MaintenanceRequestCrudService {
 
-    public MainenanceRequestCrudServiceImpl() {
+    public MaintenanceRequestCrudServiceImpl() {
         super(MaintenanceRequest.class, MaintenanceRequestDTO.class);
     }
 
@@ -58,15 +58,6 @@ public class MainenanceRequestCrudServiceImpl extends AbstractCrudServiceDtoImpl
         Tenant tenant = TenantAppContext.getCurrentUserTenantInLease().leaseParticipant();
         MaintenanceRequest maintenanceRequest = ServerSideFactory.create(MaintenanceFacade.class).createNewRequestForTenant(tenant);
         return createTO(maintenanceRequest);
-    }
-
-    @Override
-    public void retrieve(AsyncCallback<MaintenanceRequestDTO> callback, Key entityId, com.pyx4j.entity.rpc.AbstractCrudService.RetrieveTarget retrieveTarget) {
-        if (true) {
-            new MainenanceRequestCrudServiceMockImpl().retrieve(callback, entityId, retrieveTarget);
-        } else {
-            super.retrieve(callback, entityId, retrieveTarget);
-        }
     }
 
     private Vector<MaintenanceRequestDTO> listIssues(Set<StatusPhase> statuses) {
@@ -157,7 +148,7 @@ public class MainenanceRequestCrudServiceImpl extends AbstractCrudServiceDtoImpl
     @Override
     public void retreiveMaintenanceSummary(AsyncCallback<MaintenanceSummaryDTO> callback) {
         if (true) {
-            new MainenanceRequestCrudServiceMockImpl().retreiveMaintenanceSummary(callback);
+            new MaintenanceRequestCrudServiceMockImpl().retreiveMaintenanceSummary(callback);
         } else {
 
         }

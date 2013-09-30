@@ -18,7 +18,7 @@ import com.google.gwt.core.client.GWT;
 import com.pyx4j.site.rpc.AppPlace;
 
 import com.propertyvista.portal.rpc.portal.web.dto.maintenance.MaintenanceRequestDTO;
-import com.propertyvista.portal.rpc.portal.web.services.maintenance.MainenanceRequestCrudService;
+import com.propertyvista.portal.rpc.portal.web.services.maintenance.MaintenanceRequestCrudService;
 import com.propertyvista.portal.web.client.activity.AbstractEditorActivity;
 import com.propertyvista.portal.web.client.ui.maintenance.MaintenanceRequestPageView;
 import com.propertyvista.portal.web.client.ui.maintenance.MaintenanceRequestPageView.MaintenanceRequestPagePresenter;
@@ -26,7 +26,7 @@ import com.propertyvista.portal.web.client.ui.maintenance.MaintenanceRequestPage
 public class MaintenanceRequestPageActivity extends AbstractEditorActivity<MaintenanceRequestDTO> implements MaintenanceRequestPagePresenter {
 
     public MaintenanceRequestPageActivity(AppPlace place) {
-        super(MaintenanceRequestPageView.class, GWT.<MainenanceRequestCrudService> create(MainenanceRequestCrudService.class), place);
+        super(MaintenanceRequestPageView.class, GWT.<MaintenanceRequestCrudService> create(MaintenanceRequestCrudService.class), place);
     }
 
 }

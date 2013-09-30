@@ -50,11 +50,11 @@ public abstract class AbstractWizardActivity<E extends IEntity> extends Security
     private final Class<E> entityClass;
 
     public AbstractWizardActivity(Class<? extends IWizardView<E>> viewType, AbstractCrudService<E> service, Class<E> entityClass) {
-        view = PortalWebSite.getViewFactory().instantiate(viewType);
-        view.setPresenter(this);
-
         this.service = service;
         this.entityClass = entityClass;
+
+        view = PortalWebSite.getViewFactory().instantiate(viewType);
+        view.setPresenter(this);
     }
 
     @Override
@@ -112,7 +112,7 @@ public abstract class AbstractWizardActivity<E extends IEntity> extends Security
 
     @Override
     public void finish() {
-        service.save(new AsyncCallback<Key>() {
+        service.create(new AsyncCallback<Key>() {
             @Override
             public void onSuccess(Key result) {
                 ReferenceDataManager.invalidate(entityClass);

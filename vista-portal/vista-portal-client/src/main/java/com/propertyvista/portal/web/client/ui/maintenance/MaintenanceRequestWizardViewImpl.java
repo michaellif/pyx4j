@@ -13,6 +13,9 @@
  */
 package com.propertyvista.portal.web.client.ui.maintenance;
 
+import com.pyx4j.rpc.client.DefaultAsyncCallback;
+
+import com.propertyvista.domain.maintenance.MaintenanceRequestMetadata;
 import com.propertyvista.portal.rpc.portal.web.dto.maintenance.MaintenanceRequestDTO;
 import com.propertyvista.portal.web.client.ui.AbstractWizardView;
 
@@ -22,4 +25,14 @@ public class MaintenanceRequestWizardViewImpl extends AbstractWizardView<Mainten
         setWizard(new MaintenanceRequestWizard(this));
     }
 
+    @Override
+    public void setPresenter(WizardPresenter<MaintenanceRequestDTO> presenter) {
+        super.setPresenter(presenter);
+        ((MaintenanceRequestWizardPresenter) presenter).getCategoryMeta(new DefaultAsyncCallback<MaintenanceRequestMetadata>() {
+            @Override
+            public void onSuccess(MaintenanceRequestMetadata meta) {
+                ((MaintenanceRequestWizard) getWizard()).setMaintenanceRequestCategoryMeta(meta);
+            }
+        });
+    }
 }

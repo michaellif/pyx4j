@@ -14,11 +14,14 @@
 package com.propertyvista.portal.web.client.activity.maintenance;
 
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.user.client.rpc.AsyncCallback;
 
+import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.site.rpc.AppPlace;
 
+import com.propertyvista.domain.maintenance.MaintenanceRequestMetadata;
 import com.propertyvista.portal.rpc.portal.web.dto.maintenance.MaintenanceRequestDTO;
-import com.propertyvista.portal.rpc.portal.web.services.maintenance.MainenanceRequestCrudService;
+import com.propertyvista.portal.rpc.portal.web.services.maintenance.MaintenanceRequestCrudService;
 import com.propertyvista.portal.web.client.activity.AbstractWizardActivity;
 import com.propertyvista.portal.web.client.ui.maintenance.MaintenanceRequestWizardView;
 import com.propertyvista.portal.web.client.ui.maintenance.MaintenanceRequestWizardView.MaintenanceRequestWizardPresenter;
@@ -26,7 +29,16 @@ import com.propertyvista.portal.web.client.ui.maintenance.MaintenanceRequestWiza
 public class MaintenanceRequestWizardActivity extends AbstractWizardActivity<MaintenanceRequestDTO> implements MaintenanceRequestWizardPresenter {
 
     public MaintenanceRequestWizardActivity(AppPlace place) {
-        super(MaintenanceRequestWizardView.class, GWT.<MainenanceRequestCrudService> create(MainenanceRequestCrudService.class), MaintenanceRequestDTO.class);
+        super(MaintenanceRequestWizardView.class, GWT.<MaintenanceRequestCrudService> create(MaintenanceRequestCrudService.class), MaintenanceRequestDTO.class);
     }
 
+    @Override
+    public void getCategoryMeta(final AsyncCallback<MaintenanceRequestMetadata> callback) {
+        ((MaintenanceRequestCrudService) getService()).getCategoryMeta(new DefaultAsyncCallback<MaintenanceRequestMetadata>() {
+            @Override
+            public void onSuccess(MaintenanceRequestMetadata result) {
+                callback.onSuccess(result);
+            }
+        }, false);
+    }
 }

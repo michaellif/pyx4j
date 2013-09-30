@@ -23,7 +23,7 @@ import com.propertyvista.domain.maintenance.MaintenanceRequestMetadata;
 import com.propertyvista.portal.rpc.portal.web.dto.maintenance.MaintenanceRequestDTO;
 import com.propertyvista.portal.rpc.portal.web.dto.maintenance.MaintenanceSummaryDTO;
 
-public interface MainenanceRequestCrudService extends AbstractCrudService<MaintenanceRequestDTO> {
+public interface MaintenanceRequestCrudService extends AbstractCrudService<MaintenanceRequestDTO> {
 
     void cancelMaintenanceRequest(AsyncCallback<VoidSerializable> callback, Key requestId);
 

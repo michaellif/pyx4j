@@ -195,7 +195,7 @@ public class MaintenanceRequestWizard extends CPortalEntityWizard<MaintenanceReq
         categoryPanel.clear();
         int row = levels;
         for (choice = mrCategory; choice != null; choice = choice.getParentSelector()) {
-            categoryPanel.setWidget(--row, 0, new FormDecoratorBuilder(choice, 20).build());
+            categoryPanel.setWidget(--row, 0, new FormDecoratorBuilder(choice, 250).build());
         }
     }
 
