@@ -7,90 +7,18 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Sep 27, 2013
+ * Created on Sep 30, 2013
  * @author VladL
  * @version $Id$
  */
 package com.propertyvista.portal.web.client.ui.financial.dashboard.views;
 
-import com.google.gwt.user.client.ui.IsWidget;
-
-import com.pyx4j.entity.shared.IObject;
-import com.pyx4j.forms.client.ui.CComponent;
-import com.pyx4j.forms.client.ui.CDateLabel;
-import com.pyx4j.forms.client.ui.CEntityForm;
-import com.pyx4j.forms.client.ui.CLabel;
-import com.pyx4j.forms.client.ui.CMoneyLabel;
-import com.pyx4j.forms.client.ui.folder.BoxFolderItemDecorator;
-import com.pyx4j.forms.client.ui.folder.IFolderItemDecorator;
-import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
-
-import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
-import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
-import com.propertyvista.domain.financial.billing.InvoiceLineItem;
 import com.propertyvista.dto.TransactionHistoryDTO;
-import com.propertyvista.portal.web.client.ui.util.decorators.FormDecoratorBuilder;
+import com.propertyvista.portal.web.client.ui.IFormView;
 
-public class TransactionHistoryView extends CEntityForm<TransactionHistoryDTO> {
+public interface TransactionHistoryView extends IFormView<TransactionHistoryDTO> {
 
-    public TransactionHistoryView() {
-        super(TransactionHistoryDTO.class);
-    }
+    interface Presenter extends IFormViewPresenter<TransactionHistoryDTO> {
 
-    @Override
-    public IsWidget createContent() {
-        BasicFlexFormPanel content = new BasicFlexFormPanel();
-        int row = -1;
-
-        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().issueDate(), new CDateLabel()), 100).build());
-        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().currentBalanceAmount(), new CMoneyLabel()), 100).build());
-
-        content.setWidget(++row, 0, inject(proto().lineItems(), new InvoiceLineItemFolder()));
-
-        return content;
-    }
-
-    class InvoiceLineItemFolder extends VistaBoxFolder<InvoiceLineItem> {
-
-        public InvoiceLineItemFolder() {
-            super(InvoiceLineItem.class, false);
-        }
-
-        @Override
-        public IFolderItemDecorator<InvoiceLineItem> createItemDecorator() {
-            BoxFolderItemDecorator<InvoiceLineItem> decor = (BoxFolderItemDecorator<InvoiceLineItem>) super.createItemDecorator();
-            decor.setExpended(false);
-            return decor;
-        }
-
-        @Override
-        public CComponent<?> create(IObject<?> member) {
-            if (member instanceof InvoiceLineItem) {
-                return new InvoiceLineItemViewer();
-            }
-            return super.create(member);
-        }
-
-        private class InvoiceLineItemViewer extends CEntityDecoratableForm<InvoiceLineItem> {
-
-            public InvoiceLineItemViewer() {
-                super(InvoiceLineItem.class);
-
-                setViewable(true);
-                inheritViewable(false);
-            }
-
-            @Override
-            public IsWidget createContent() {
-                BasicFlexFormPanel content = new BasicFlexFormPanel();
-                int row = -1;
-
-                content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().amount(), new CMoneyLabel()), 100).build());
-                content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().postDate(), new CDateLabel()), 100).build());
-                content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().description(), new CLabel<String>()), 250).build());
-
-                return content;
-            }
-        }
     }
 }

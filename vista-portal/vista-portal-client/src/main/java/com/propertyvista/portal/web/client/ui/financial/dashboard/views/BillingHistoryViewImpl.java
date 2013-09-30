@@ -14,11 +14,11 @@
 package com.propertyvista.portal.web.client.ui.financial.dashboard.views;
 
 import com.propertyvista.portal.rpc.portal.web.dto.BillingHistoryDTO;
-import com.propertyvista.portal.web.client.ui.IFormView;
+import com.propertyvista.portal.web.client.ui.AbstractFormView;
 
-public interface BillingHistoryView extends IFormView<BillingHistoryDTO> {
+public class BillingHistoryViewImpl extends AbstractFormView<BillingHistoryDTO> implements BillingHistoryView {
 
-    interface Presenter extends IFormViewPresenter<BillingHistoryDTO> {
-
+    public BillingHistoryViewImpl() {
+        setForm(new BillingHistoryViewForm());
     }
 }

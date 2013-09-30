@@ -26,14 +26,15 @@ import com.propertyvista.portal.rpc.portal.PortalSiteMap;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap.Resident;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap.Resident.Financial;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap.Resident.Financial.BillingDashboard;
-import com.propertyvista.portal.rpc.portal.PortalSiteMap.Resident.Financial.Payment;
 import com.propertyvista.portal.web.client.activity.NotificationPageActivity;
 import com.propertyvista.portal.web.client.activity.SignUpActivity;
 import com.propertyvista.portal.web.client.activity.dashboard.MainDashboardActivity;
 import com.propertyvista.portal.web.client.activity.financial.autopay.AutoPayActivity;
 import com.propertyvista.portal.web.client.activity.financial.autopay.AutoPayConfirmationActivity;
 import com.propertyvista.portal.web.client.activity.financial.autopay.AutoPayWizardActivity;
+import com.propertyvista.portal.web.client.activity.financial.dashboard.BillingHistoryViewActivity;
 import com.propertyvista.portal.web.client.activity.financial.dashboard.FinancialDashboardActivity;
+import com.propertyvista.portal.web.client.activity.financial.dashboard.TransactionHistoryViewActivity;
 import com.propertyvista.portal.web.client.activity.financial.payment.PaymentConfirmationActivity;
 import com.propertyvista.portal.web.client.activity.financial.payment.PaymentWizardActivity;
 import com.propertyvista.portal.web.client.activity.financial.paymentmethod.PaymentMethodConfirmationActivity;
@@ -84,17 +85,18 @@ public class ContentActivityMapper implements AppActivityMapper {
                     else if (appPlace instanceof PortalSiteMap.Resident.ResidentServices) {
                         activity = new ServicesDashboardActivity(appPlace);
 
+// Financial:
+                    } else if (appPlace instanceof Financial.Payment.PayNow) {
+                        activity = new PaymentWizardActivity(appPlace);
+                    } else if (appPlace instanceof Financial.Payment.PaymentSubmitting) {
+                        activity = new PaymentConfirmationActivity(appPlace);
+
                     } else if (appPlace instanceof Financial.PaymentMethods.PaymentMethod) {
                         activity = new PaymentMethodEditorActivity(appPlace);
                     } else if (appPlace instanceof Financial.PaymentMethods.NewPaymentMethod) {
                         activity = new PaymentMethodWizardActivity(appPlace);
                     } else if (appPlace instanceof Financial.PaymentMethods.PaymentMethodSubmitted) {
                         activity = new PaymentMethodConfirmationActivity(appPlace);
-
-                    } else if (appPlace instanceof Payment.PayNow) {
-                        activity = new PaymentWizardActivity(appPlace);
-                    } else if (appPlace instanceof Payment.PaymentSubmitting) {
-                        activity = new PaymentConfirmationActivity(appPlace);
 
                     } else if (appPlace instanceof Resident.Financial.PreauthorizedPayments.PreauthorizedPayment) {
                         activity = new AutoPayActivity(appPlace);
@@ -103,11 +105,18 @@ public class ContentActivityMapper implements AppActivityMapper {
                     } else if (appPlace instanceof Resident.Financial.PreauthorizedPayments.PreauthorizedPaymentSubmitted) {
                         activity = new AutoPayConfirmationActivity(appPlace);
 
+                    } else if (appPlace instanceof Financial.BillingHistory) {
+                        activity = new BillingHistoryViewActivity(appPlace);
+                    } else if (appPlace instanceof Financial.TransactionHistory) {
+                        activity = new TransactionHistoryViewActivity(appPlace);
+
+// Insurance:
                     } else if (appPlace instanceof PortalSiteMap.Resident.ResidentServices.TenantInsurance.TenantSure.TenantSureWizard) {
                         activity = new TenantSureOrderWizardActivity(appPlace);
                     } else if (appPlace instanceof PortalSiteMap.Resident.ResidentServices.TenantInsurance.GeneralCertificateWizard) {
                         activity = new GeneralCertificateUploadWizardActivity(appPlace);
 
+// Maintenance:
                     } else if (place instanceof PortalSiteMap.Resident.Maintenance) {
                         activity = new MaintenanceDashboardActivity(appPlace);
                     } else if (place instanceof PortalSiteMap.Resident.Maintenance.MaintenanceRequestWizard) {
@@ -115,6 +124,7 @@ public class ContentActivityMapper implements AppActivityMapper {
                     } else if (place instanceof PortalSiteMap.Resident.Maintenance.MaintenanceRequestPage) {
                         activity = new MaintenanceRequestPageActivity(appPlace);
 
+// Internals:
                     } else if (place instanceof PortalSiteMap.Login) {
                         activity = new LandingActivity(place);
                     } else if (place instanceof PortalSiteMap.PasswordReset) {
