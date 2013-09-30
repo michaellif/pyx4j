@@ -16,6 +16,9 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.kijiji.pint.rs.ILSLocation;
 import com.kijiji.pint.rs.ILSLocations;
 import com.kijiji.pint.rs.ILSLogo;
@@ -28,13 +31,15 @@ import com.kijiji.pint.rs.ObjectFactory;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.AttachLevel;
 
-import com.propertyvista.domain.File;
+import com.propertyvista.domain.PublicVisibilityType;
 import com.propertyvista.domain.media.Media;
+import com.propertyvista.domain.media.ThumbnailSize;
 import com.propertyvista.domain.site.PortalLogoImageResource;
 import com.propertyvista.ils.kijiji.mapper.dto.ILSBuildingDTO;
 import com.propertyvista.ils.kijiji.mapper.dto.ILSFloorplanDTO;
 
 public class KijijiDataMapper {
+    private static Logger log = LoggerFactory.getLogger(KijijiDataMapper.class);
 
     private final ObjectFactory factory;
 
@@ -49,35 +54,40 @@ public class KijijiDataMapper {
         // add media urls
         Persistence.ensureRetrieve(fpDto.floorplan().media(), AttachLevel.Attached);
         ilsUnit.setImages(createImages(fpDto.floorplan().media()));
+
         return ilsUnit;
     }
 
-    private Image createImage(String url) {
+    private Image createImage(Media media) {
         Image image = factory.createILSUnitImagesImage();
-        image.setName("Building Profile Image");
-        image.setSourceUrl("http://example.com/image.jpg");
-        image.setClientImageId("clientImage1");
-        return image;
-    }
+        switch (media.type().getValue()) {
+        case externalUrl:
+            image.setSourceUrl(media.url().getValue());
+            break;
+        case file:
+            image.setSourceUrl(KijijiMapperUtils.getMediaImgUrl(media.getPrimaryKey().asLong(), ThumbnailSize.large));
+            break;
+        default:
+            log.info("Unknown media type: {}", media.type().getValue());
+            return null;
+        }
+        image.setClientImageId(media.getPrimaryKey().toString());
+        image.setName(media.caption().getValue());
 
-    private Image createImage(File file) {
-        // TODO - generate image url from file and call createImage(String url)
-        return null;
+        return image;
     }
 
     private Images createImages(List<Media> media) {
         Images images = factory.createILSUnitImages();
         for (Media item : media) {
-            switch (item.type().getValue()) {
-            case externalUrl:
-                images.setImage(createImage(item.url().getValue()));
-                break;
-            case file:
-                images.setImage(createImage(item.file()));
-                break;
-            default:
+            if (PublicVisibilityType.global.equals(item.visibility().getValue())) {
+                Image image = createImage(item);
+                if (image != null) {
+                    images.setImage(image);
+                }
             }
         }
+
         return images;
     }
 
@@ -86,6 +96,7 @@ public class KijijiDataMapper {
         for (ILSFloorplanDTO fpDto : fpList) {
             ilsUnits.getUnit().add(createUnit(fpDto));
         }
+
         return ilsUnits;
     }
 
@@ -94,6 +105,7 @@ public class KijijiDataMapper {
         PortalLogoImageResource siteLogo = KijijiMapperUtils.getSiteLogo();
         logo.setSmall(KijijiMapperUtils.getSiteImageResourceUrl(siteLogo.small()));
         logo.setLarge(KijijiMapperUtils.getSiteImageResourceUrl(siteLogo.large()));
+
         return logo;
     }
 
@@ -114,6 +126,7 @@ public class KijijiDataMapper {
         for (ILSBuildingDTO bldDto : listing.keySet()) {
             locations.getLocation().add(createLocation(bldDto, listing.get(bldDto)));
         }
+
         return locations;
     }
 }

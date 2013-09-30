@@ -116,6 +116,7 @@ public class ILSKijijiIntegrationAgent {
                     || (!unit.financial()._marketRent().isNull() && fpDto.minPrice().getValue().compareTo(unit.financial()._marketRent().getValue()) > 0)) {
                 fpDto.minPrice().set(unit.financial()._marketRent());
             }
+            // TODO - need to set ILSFloorplanDTO.isFurnished() and ILSFloorplanDTO.isPetsAllowed()
         }
 
         // order by floorplan priorities and truncate if allowed size is exceeded
@@ -131,7 +132,8 @@ public class ILSKijijiIntegrationAgent {
                 continue;
             }
             // do some sanity check
-            if (fpDto.minPrice().isNull() || fpDto.minPrice().getValue().compareTo(new BigDecimal(100)) < 0) {
+            // FIXME - revert compareTo(100) when done testing
+            if (fpDto.minPrice().isNull() || fpDto.minPrice().getValue().compareTo(new BigDecimal(/* 10 */0)) < 0) {
                 log.info("Market price invalid: {} for {}", fpDto.minPrice().getValue(), floorplan.name().getValue());
                 continue;
             }
@@ -217,7 +219,7 @@ public class ILSKijijiIntegrationAgent {
         });
 
         // truncate to max size
-        return list.subList(0, maxSize - 1);
+        return list.subList(0, maxSize);
     }
 
     /** Returns total score 0-10 */
