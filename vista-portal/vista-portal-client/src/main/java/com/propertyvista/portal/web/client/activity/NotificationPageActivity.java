@@ -19,6 +19,7 @@ import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
 import com.pyx4j.site.client.AppSite;
+import com.pyx4j.site.rpc.AppPlace;
 
 import com.propertyvista.portal.web.client.PortalWebSite;
 import com.propertyvista.portal.web.client.ui.NotificationPageView;
@@ -41,7 +42,7 @@ public class NotificationPageActivity extends AbstractActivity implements Notifi
 
     @Override
     public void acceptMessage() {
-        AppSite.getPlaceController().goTo(AppSite.getPlaceController().getForwardedFrom());
+        AppSite.getPlaceController().goTo(AppPlace.NOWHERE);
     }
 
 }

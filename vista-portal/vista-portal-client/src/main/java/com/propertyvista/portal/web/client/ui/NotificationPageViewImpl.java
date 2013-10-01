@@ -36,8 +36,6 @@ import com.propertyvista.portal.web.client.themes.DashboardTheme;
 
 public class NotificationPageViewImpl extends SimplePanel implements NotificationPageView {
 
-    private static final I18n i18n = I18n.get(NotificationPageView.class);
-
     public interface NotificationTypeImages {
 
         ImageResource error();
@@ -160,15 +158,15 @@ public class NotificationPageViewImpl extends SimplePanel implements Notificatio
         class NotificationToolbar extends Toolbar {
             public NotificationToolbar() {
 
-                Button paymentButton = new Button("Back", new Command() {
+                Button okButton = new Button("OK", new Command() {
 
                     @Override
                     public void execute() {
                         presenter.acceptMessage();
                     }
                 });
-                paymentButton.getElement().getStyle().setProperty("background", StyleManager.getPalette().getThemeColor(ThemeColor.foreground, 1));
-                add(paymentButton);
+                okButton.getElement().getStyle().setProperty("background", StyleManager.getPalette().getThemeColor(ThemeColor.foreground, 1));
+                add(okButton);
 
             }
 
