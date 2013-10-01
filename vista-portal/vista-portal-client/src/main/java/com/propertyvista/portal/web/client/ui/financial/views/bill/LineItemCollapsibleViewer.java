@@ -110,11 +110,12 @@ public class LineItemCollapsibleViewer extends CEntityContainer<InvoiceLineItemG
         int row = 0;
         if (value != null && !value.total().isNull()) {
             content.getFlexCellFormatter().setColSpan(row, 0, 2);
+
             content.setWidget(row, 0, new HTML(value.getMeta().getCaption()));
-            content.getCellFormatter().setHorizontalAlignment(row, 0, HasHorizontalAlignment.ALIGN_LEFT);
             content.setWidget(row, 2, new HTML(value.total().getStringView()));
 
             // styling:
+            content.getCellFormatter().setHorizontalAlignment(row, 0, HasHorizontalAlignment.ALIGN_LEFT);
             content.getRowFormatter().setStyleName(row, BillingTheme.StyleName.BillingLineItem.name());
             content.getFlexCellFormatter().setStyleName(row, 0, BillingTheme.StyleName.BillingLineItemTitle.name());
             content.getFlexCellFormatter().setStyleName(row, 2, BillingTheme.StyleName.BillingLineItemAmount.name());
@@ -134,7 +135,9 @@ public class LineItemCollapsibleViewer extends CEntityContainer<InvoiceLineItemG
         int row = 0;
         if (value != null && !value.total().isNull()) {
             content.setWidget(row, 0, new HTML(value.getMeta().getCaption()));
+
             // styling:
+            content.getCellFormatter().setHorizontalAlignment(row, 0, HasHorizontalAlignment.ALIGN_LEFT);
             content.getRowFormatter().setStyleName(row, BillingTheme.StyleName.BillingLineItem.name());
             content.getFlexCellFormatter().setStyleName(row, 0, BillingTheme.StyleName.BillingLineItemTitle.name());
 
