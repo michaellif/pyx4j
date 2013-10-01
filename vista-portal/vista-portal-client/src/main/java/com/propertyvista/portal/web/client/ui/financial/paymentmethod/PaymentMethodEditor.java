@@ -14,8 +14,8 @@
 package com.propertyvista.portal.web.client.ui.financial.paymentmethod;
 
 import java.text.ParseException;
+import java.util.Set;
 
-import com.google.gwt.dom.client.Style.FontWeight;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
@@ -27,7 +27,7 @@ import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
-import com.pyx4j.forms.client.ui.CLabel;
+import com.pyx4j.forms.client.ui.CEnumLabel;
 import com.pyx4j.forms.client.ui.CRadioGroupEnum;
 import com.pyx4j.forms.client.ui.IFormat;
 import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
@@ -40,6 +40,7 @@ import com.propertyvista.common.client.ui.components.editors.AddressSimpleEditor
 import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
 import com.propertyvista.domain.payment.AbstractPaymentMethod;
 import com.propertyvista.domain.payment.PaymentType;
+import com.propertyvista.portal.web.client.ui.financial.PortalPaymentTypesUtil;
 
 public class PaymentMethodEditor<E extends AbstractPaymentMethod> extends com.propertyvista.common.client.ui.components.editors.payments.PaymentMethodEditor<E> {
 
@@ -50,26 +51,30 @@ public class PaymentMethodEditor<E extends AbstractPaymentMethod> extends com.pr
     }
 
     @Override
+    public Set<PaymentType> defaultPaymentTypes() {
+        return PortalPaymentTypesUtil.getAllowedPaymentTypes(false);
+    }
+
+    @Override
     public IsWidget createContent() {
-        VerticalPanel paymentMethods = new VerticalPanel();
-        paymentMethods.setWidth("100%");
-
-        if (isViewable()) {
-            paymentMethods.add(inject(proto().type(), new CLabel<PaymentType>()).asWidget());
-            get(proto().type()).asWidget().getElement().getStyle().setFontWeight(FontWeight.BOLD);
-            get(proto().type()).asWidget().getElement().getStyle().setFontSize(1.3, Unit.EM);
-        } else {
-            paymentMethods.add(inject(proto().type(), createPaymentTypesRadioGroup()).asWidget());
-        }
-
-        paymentMethods.add(paymentDetailsHolder);
-        DOM.setElementProperty(DOM.getParent(paymentDetailsHolder.getElement()), "align", HasHorizontalAlignment.ALIGN_CENTER.getTextAlignString());
-
-        // Form content pane:
         BasicFlexFormPanel content = new BasicFlexFormPanel();
         int row = -1;
 
-        content.setWidget(++row, 0, paymentMethods);
+        if (isViewable()) {
+            content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().type(), new CEnumLabel()), 15).build());
+            content.setWidget(++row, 0, paymentDetailsHolder);
+        } else {
+            VerticalPanel paymentMethods = new VerticalPanel();
+            paymentMethods.setWidth("100%");
+
+            paymentMethods.add(inject(proto().type(), createPaymentTypesRadioGroup()).asWidget());
+            paymentMethods.add(paymentDetailsHolder);
+            DOM.setElementProperty(DOM.getParent(paymentDetailsHolder.getElement()), "align", HasHorizontalAlignment.ALIGN_CENTER.getTextAlignString());
+
+            get(proto().type()).asWidget().getElement().getStyle().setMarginLeft(15, Unit.EM);
+
+            content.setWidget(++row, 0, paymentMethods);
+        }
 
         content.setH1(++row, 0, 1, proto().billingAddress().getMeta().getCaption());
         billingAddressHeader = content.getWidget(row, 0);
@@ -78,7 +83,6 @@ public class PaymentMethodEditor<E extends AbstractPaymentMethod> extends com.pr
         content.setWidget(++row, 0, inject(proto().billingAddress(), new AddressSimpleEditor()));
 
         // tweaks:
-        get(proto().type()).asWidget().getElement().getStyle().setMarginLeft(15, Unit.EM);
         get(proto().type()).addValueChangeHandler(new ValueChangeHandler<PaymentType>() {
             @Override
             public void onValueChange(ValueChangeEvent<PaymentType> event) {

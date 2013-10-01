@@ -22,14 +22,15 @@ import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.domain.payment.LeasePaymentMethod;
+import com.propertyvista.portal.rpc.portal.web.dto.PaymentMethodDTO;
 import com.propertyvista.portal.web.client.ui.CPortalEntityForm;
 
-public class PaymentMethodViewForm extends CPortalEntityForm<LeasePaymentMethod> {
+public class PaymentMethodViewForm extends CPortalEntityForm<PaymentMethodDTO> {
 
     private static final I18n i18n = I18n.get(PaymentMethodViewForm.class);
 
     public PaymentMethodViewForm(PaymentMethodViewImpl view) {
-        super(LeasePaymentMethod.class, view, i18n.tr("Payment Method"), ThemeColor.contrast4);
+        super(PaymentMethodDTO.class, view, i18n.tr("Payment Method"), ThemeColor.contrast4);
 
         setViewable(true);
         inheritViewable(false);
@@ -40,14 +41,14 @@ public class PaymentMethodViewForm extends CPortalEntityForm<LeasePaymentMethod>
         BasicFlexFormPanel content = new BasicFlexFormPanel();
         int row = -1;
 
-        content.setH1(++row, 0, 1, i18n.tr("Payment Method Editor Form goes here..."));
+        content.setWidget(++row, 0, inject(proto().paymentMethod(), new PaymentMethodEditor<LeasePaymentMethod>(LeasePaymentMethod.class)));
 
         return content;
     }
 
     @Override
-    protected FormDecorator<LeasePaymentMethod, CEntityForm<LeasePaymentMethod>> createDecorator() {
-        FormDecorator<LeasePaymentMethod, CEntityForm<LeasePaymentMethod>> decorator = super.createDecorator();
+    protected FormDecorator<PaymentMethodDTO, CEntityForm<PaymentMethodDTO>> createDecorator() {
+        FormDecorator<PaymentMethodDTO, CEntityForm<PaymentMethodDTO>> decorator = super.createDecorator();
 
         return decorator;
     }

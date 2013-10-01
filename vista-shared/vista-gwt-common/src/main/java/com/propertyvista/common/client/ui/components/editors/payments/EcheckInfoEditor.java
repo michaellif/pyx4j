@@ -62,7 +62,7 @@ public class EcheckInfoEditor extends CEntityDecoratableForm<EcheckInfo> {
         panel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().branchTransitNumber()), 5).build());
         panel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().bankId()), 3).build());
 
-        if (isEditable()) {
+        if (!isViewable()) {
             Image image = new Image(VistaImages.INSTANCE.eChequeGuide().getSafeUri());
             image.getElement().getStyle().setMarginTop(2, Unit.EM);
             image.getElement().getStyle().setMarginLeft(6, Unit.EM);

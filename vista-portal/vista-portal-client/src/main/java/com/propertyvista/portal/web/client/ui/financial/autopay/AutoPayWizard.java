@@ -66,7 +66,6 @@ import com.propertyvista.portal.rpc.portal.web.dto.AutoPayDTO;
 import com.propertyvista.portal.web.client.ui.CPortalEntityWizard;
 import com.propertyvista.portal.web.client.ui.LegalTermsDialog;
 import com.propertyvista.portal.web.client.ui.LegalTermsDialog.TermsType;
-import com.propertyvista.portal.web.client.ui.financial.PortalPaymentTypesUtil;
 import com.propertyvista.portal.web.client.ui.financial.paymentmethod.PaymentMethodEditor;
 import com.propertyvista.portal.web.client.ui.util.decorators.FormDecoratorBuilder;
 
@@ -87,10 +86,6 @@ public class AutoPayWizard extends CPortalEntityWizard<AutoPayDTO> {
     private final SimplePanel detailsTotalHolder = new SimplePanel();
 
     private final PaymentMethodEditor<LeasePaymentMethod> paymentMethodEditor = new PaymentMethodEditor<LeasePaymentMethod>(LeasePaymentMethod.class) {
-        @Override
-        public Set<PaymentType> defaultPaymentTypes() {
-            return PortalPaymentTypesUtil.getAllowedPaymentTypes(false);
-        }
 
         @Override
         protected Set<CreditCardType> getAllowedCardTypes() {

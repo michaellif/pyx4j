@@ -75,7 +75,6 @@ import com.propertyvista.portal.web.client.ui.CPortalEntityWizard;
 import com.propertyvista.portal.web.client.ui.IWizardView;
 import com.propertyvista.portal.web.client.ui.LegalTermsDialog;
 import com.propertyvista.portal.web.client.ui.LegalTermsDialog.TermsType;
-import com.propertyvista.portal.web.client.ui.financial.PortalPaymentTypesUtil;
 import com.propertyvista.portal.web.client.ui.util.decorators.FormDecoratorBuilder;
 
 public class PaymentWizard extends CPortalEntityWizard<PaymentDTO> {
@@ -89,10 +88,6 @@ public class PaymentWizard extends CPortalEntityWizard<PaymentDTO> {
     private final SimplePanel confirmationDetailsHolder = new SimplePanel();
 
     private final PaymentMethodForm<LeasePaymentMethod> paymentMethodEditor = new PaymentMethodForm<LeasePaymentMethod>(LeasePaymentMethod.class) {
-        @Override
-        public Set<PaymentType> defaultPaymentTypes() {
-            return PortalPaymentTypesUtil.getAllowedPaymentTypes(true);
-        }
 
         @Override
         protected Set<CreditCardType> getAllowedCardTypes() {

@@ -13,10 +13,10 @@
  */
 package com.propertyvista.portal.web.client.ui.financial.paymentmethod;
 
-import com.propertyvista.domain.payment.LeasePaymentMethod;
+import com.propertyvista.portal.rpc.portal.web.dto.PaymentMethodDTO;
 import com.propertyvista.portal.web.client.ui.AbstractEditorView;
 
-public class PaymentMethodViewImpl extends AbstractEditorView<LeasePaymentMethod> implements PaymentMethodView {
+public class PaymentMethodViewImpl extends AbstractEditorView<PaymentMethodDTO> implements PaymentMethodView {
 
     public PaymentMethodViewImpl() {
         setForm(new PaymentMethodViewForm(null));

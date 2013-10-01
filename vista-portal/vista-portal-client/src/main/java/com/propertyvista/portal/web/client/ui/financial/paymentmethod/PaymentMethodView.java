@@ -13,16 +13,11 @@
  */
 package com.propertyvista.portal.web.client.ui.financial.paymentmethod;
 
-import com.google.gwt.user.client.rpc.AsyncCallback;
+import com.propertyvista.portal.rpc.portal.web.dto.PaymentMethodDTO;
+import com.propertyvista.portal.web.client.ui.IFormView;
 
-import com.propertyvista.domain.contact.AddressSimple;
-import com.propertyvista.domain.payment.LeasePaymentMethod;
-import com.propertyvista.portal.web.client.ui.IEditorView;
+public interface PaymentMethodView extends IFormView<PaymentMethodDTO> {
 
-public interface PaymentMethodView extends IEditorView<LeasePaymentMethod> {
-
-    interface Presenter extends IEditorPresenter<LeasePaymentMethod> {
-
-        void getCurrentAddress(AsyncCallback<AddressSimple> callback);
+    interface Presenter extends IFormView.IFormViewPresenter<PaymentMethodDTO> {
     }
 }
