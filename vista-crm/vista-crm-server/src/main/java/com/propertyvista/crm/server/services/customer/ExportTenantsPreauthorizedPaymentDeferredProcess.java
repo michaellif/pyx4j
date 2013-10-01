@@ -54,6 +54,8 @@ public class ExportTenantsPreauthorizedPaymentDeferredProcess extends AbstractDe
 
             final EntityQueryCriteria<PreauthorizedPayment> criteria = EntityQueryCriteria.create(PreauthorizedPayment.class);
             criteria.eq(criteria.proto().isDeleted(), Boolean.FALSE);
+            criteria.asc(criteria.proto().tenant().lease().unit().building().propertyCode());
+            criteria.asc(criteria.proto().tenant().lease().leaseId());
             maximum = Persistence.service().count(criteria);
 
             ICursorIterator<PreauthorizedPayment> tenants = Persistence.service().query(null, criteria, AttachLevel.Attached);
