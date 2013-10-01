@@ -18,8 +18,11 @@ import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
+import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.rpc.AppPlace;
 
+import com.propertyvista.domain.financial.billing.Bill;
+import com.propertyvista.portal.rpc.portal.PortalSiteMap;
 import com.propertyvista.portal.rpc.portal.web.dto.financial.BillingHistoryDTO;
 import com.propertyvista.portal.rpc.portal.web.services.financial.BillingService;
 import com.propertyvista.portal.web.client.PortalWebSite;
@@ -46,5 +49,10 @@ public class BillingHistoryViewActivity extends SecurityAwareActivity implements
                 view.populate(result);
             }
         });
+    }
+
+    @Override
+    public void viewBill(Bill itemId) {
+        AppSite.getPlaceController().goTo(new PortalSiteMap.Resident.Financial.BillingHistory.BillView().formPlace(itemId.getPrimaryKey()));
     }
 }

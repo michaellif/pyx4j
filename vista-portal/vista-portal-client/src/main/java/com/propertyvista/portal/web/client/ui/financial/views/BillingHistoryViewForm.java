@@ -13,9 +13,11 @@
  */
 package com.propertyvista.portal.web.client.ui.financial.views;
 
+import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.commons.css.ThemeColor;
+import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CDateLabel;
@@ -25,9 +27,11 @@ import com.pyx4j.forms.client.ui.folder.BoxFolderItemDecorator;
 import com.pyx4j.forms.client.ui.folder.IFolderItemDecorator;
 import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.widgets.client.Anchor;
 
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
 import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
+import com.propertyvista.domain.financial.billing.Bill;
 import com.propertyvista.portal.domain.dto.BillDataDTO;
 import com.propertyvista.portal.rpc.portal.web.dto.financial.BillingHistoryDTO;
 import com.propertyvista.portal.web.client.ui.CPortalEntityForm;
@@ -37,8 +41,8 @@ public class BillingHistoryViewForm extends CPortalEntityForm<BillingHistoryDTO>
 
     private static final I18n i18n = I18n.get(BillingHistoryViewForm.class);
 
-    public BillingHistoryViewForm() {
-        super(BillingHistoryDTO.class, null, i18n.tr("Billing History"), ThemeColor.contrast4);
+    public BillingHistoryViewForm(BillingHistoryView view) {
+        super(BillingHistoryDTO.class, view, i18n.tr("Billing History"), ThemeColor.contrast4);
     }
 
     @Override
@@ -90,6 +94,14 @@ public class BillingHistoryViewForm extends CPortalEntityForm<BillingHistoryDTO>
                 content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().amount(), new CMoneyLabel()), 100).build());
                 content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().fromDate(), new CDateLabel()), 100).build());
                 content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().dueDate(), new CDateLabel()), 100).build());
+
+                content.setWidget(++row, 0, new Anchor("View Details", new Command() {
+                    @Override
+                    public void execute() {
+                        ((BillingHistoryView.Presenter) getView().getPresenter()).viewBill(EntityFactory.createIdentityStub(Bill.class, getValue()
+                                .getPrimaryKey()));
+                    }
+                }));
 
                 return content;
             }

@@ -19,6 +19,6 @@ import com.propertyvista.portal.web.client.ui.AbstractFormView;
 public class BillingHistoryViewImpl extends AbstractFormView<BillingHistoryDTO> implements BillingHistoryView {
 
     public BillingHistoryViewImpl() {
-        setForm(new BillingHistoryViewForm());
+        setForm(new BillingHistoryViewForm(this));
     }
 }

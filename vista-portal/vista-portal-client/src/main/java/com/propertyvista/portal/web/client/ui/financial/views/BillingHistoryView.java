@@ -13,6 +13,7 @@
  */
 package com.propertyvista.portal.web.client.ui.financial.views;
 
+import com.propertyvista.domain.financial.billing.Bill;
 import com.propertyvista.portal.rpc.portal.web.dto.financial.BillingHistoryDTO;
 import com.propertyvista.portal.web.client.ui.IFormView;
 
@@ -20,5 +21,6 @@ public interface BillingHistoryView extends IFormView<BillingHistoryDTO> {
 
     interface Presenter extends IFormViewPresenter<BillingHistoryDTO> {
 
+        void viewBill(Bill itemId);
     }
 }
