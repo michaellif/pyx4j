@@ -24,8 +24,8 @@ import com.pyx4j.security.client.ClientContext;
 import com.pyx4j.security.client.ContextChangeEvent;
 import com.pyx4j.security.client.ContextChangeHandler;
 import com.pyx4j.site.client.AppSite;
-import com.pyx4j.site.client.ui.layout.responsive.LayoutChangeRerquestEvent;
-import com.pyx4j.site.client.ui.layout.responsive.LayoutChangeRerquestEvent.ChangeType;
+import com.pyx4j.site.client.ui.layout.responsive.LayoutChangeRequestEvent;
+import com.pyx4j.site.client.ui.layout.responsive.LayoutChangeRequestEvent.ChangeType;
 import com.pyx4j.site.rpc.AppPlace;
 
 import com.propertyvista.portal.web.client.PortalWebSite;
@@ -59,7 +59,7 @@ public class MenuActivity extends AbstractActivity implements MenuView.MenuPrese
             }
         });
 
-        AppSite.getEventBus().fireEvent(new LayoutChangeRerquestEvent(ChangeType.resizeComponents));
+        AppSite.getEventBus().fireEvent(new LayoutChangeRequestEvent(ChangeType.resizeComponents));
     }
 
     private void updateView() {

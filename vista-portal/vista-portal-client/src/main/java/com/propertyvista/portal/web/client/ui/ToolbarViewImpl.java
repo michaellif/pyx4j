@@ -28,8 +28,8 @@ import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.client.ui.layout.responsive.LayoutChangeEvent;
 import com.pyx4j.site.client.ui.layout.responsive.LayoutChangeHandler;
-import com.pyx4j.site.client.ui.layout.responsive.LayoutChangeRerquestEvent;
-import com.pyx4j.site.client.ui.layout.responsive.LayoutChangeRerquestEvent.ChangeType;
+import com.pyx4j.site.client.ui.layout.responsive.LayoutChangeRequestEvent;
+import com.pyx4j.site.client.ui.layout.responsive.LayoutChangeRequestEvent.ChangeType;
 import com.pyx4j.site.client.ui.layout.responsive.ResponsiveLayoutPanel.LayoutType;
 import com.pyx4j.widgets.client.Button;
 import com.pyx4j.widgets.client.Button.ButtonMenuBar;
@@ -127,10 +127,10 @@ public class ToolbarViewImpl extends FlowPanel implements ToolbarView {
                 switch (layoutType) {
                 case phonePortrait:
                 case phoneLandscape:
-                    AppSite.getEventBus().fireEvent(new LayoutChangeRerquestEvent(ChangeType.toggleSideComm));
+                    AppSite.getEventBus().fireEvent(new LayoutChangeRequestEvent(ChangeType.toggleSideComm));
                     break;
                 default:
-                    AppSite.getEventBus().fireEvent(new LayoutChangeRerquestEvent(communicationButton));
+                    AppSite.getEventBus().fireEvent(new LayoutChangeRequestEvent(communicationButton));
                     break;
                 }
             }
@@ -147,7 +147,7 @@ public class ToolbarViewImpl extends FlowPanel implements ToolbarView {
         sideMenuButton = new Button(PortalImages.INSTANCE.menu(), new Command() {
             @Override
             public void execute() {
-                AppSite.getEventBus().fireEvent(new LayoutChangeRerquestEvent(ChangeType.toggleSideMenu));
+                AppSite.getEventBus().fireEvent(new LayoutChangeRequestEvent(ChangeType.toggleSideMenu));
             }
         });
         leftToolbar.add(sideMenuButton);

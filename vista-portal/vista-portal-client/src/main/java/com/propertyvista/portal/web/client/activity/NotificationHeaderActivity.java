@@ -22,8 +22,8 @@ import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
 import com.pyx4j.site.client.AppSite;
-import com.pyx4j.site.client.ui.layout.responsive.LayoutChangeRerquestEvent;
-import com.pyx4j.site.client.ui.layout.responsive.LayoutChangeRerquestEvent.ChangeType;
+import com.pyx4j.site.client.ui.layout.responsive.LayoutChangeRequestEvent;
+import com.pyx4j.site.client.ui.layout.responsive.LayoutChangeRequestEvent.ChangeType;
 
 import com.propertyvista.common.client.site.Notification;
 import com.propertyvista.portal.web.client.PortalWebSite;
@@ -54,7 +54,7 @@ public class NotificationHeaderActivity extends AbstractActivity implements Noti
     @Override
     public void start(AcceptsOneWidget panel, EventBus eventBus) {
         panel.setWidget(view);
-        AppSite.getEventBus().fireEvent(new LayoutChangeRerquestEvent(ChangeType.resizeComponents));
+        AppSite.getEventBus().fireEvent(new LayoutChangeRequestEvent(ChangeType.resizeComponents));
         view.populate(notifications);
     }
 

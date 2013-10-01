@@ -39,8 +39,8 @@ import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.client.ui.layout.responsive.LayoutChangeEvent;
 import com.pyx4j.site.client.ui.layout.responsive.LayoutChangeHandler;
-import com.pyx4j.site.client.ui.layout.responsive.LayoutChangeRerquestEvent;
-import com.pyx4j.site.client.ui.layout.responsive.LayoutChangeRerquestEvent.ChangeType;
+import com.pyx4j.site.client.ui.layout.responsive.LayoutChangeRequestEvent;
+import com.pyx4j.site.client.ui.layout.responsive.LayoutChangeRequestEvent.ChangeType;
 import com.pyx4j.site.client.ui.layout.responsive.ResponsiveLayoutPanel.LayoutType;
 import com.pyx4j.site.rpc.AppPlace;
 import com.pyx4j.widgets.client.images.ButtonImages;
@@ -278,7 +278,7 @@ public class MenuViewImpl extends DockPanel implements MenuView {
                     command.execute();
                     LayoutType layout = LayoutType.getLayoutType(Window.getClientWidth());
                     if (LayoutType.phonePortrait.equals(layout) || (LayoutType.phoneLandscape.equals(layout))) {
-                        AppSite.getEventBus().fireEvent(new LayoutChangeRerquestEvent(ChangeType.toggleSideMenu));
+                        AppSite.getEventBus().fireEvent(new LayoutChangeRequestEvent(ChangeType.toggleSideMenu));
                     }
                 }
             }, ClickEvent.getType());

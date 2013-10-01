@@ -20,8 +20,8 @@ import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.SimplePanel;
 
 import com.pyx4j.site.client.AppSite;
-import com.pyx4j.site.client.ui.layout.responsive.LayoutChangeRerquestEvent;
-import com.pyx4j.site.client.ui.layout.responsive.LayoutChangeRerquestEvent.ChangeType;
+import com.pyx4j.site.client.ui.layout.responsive.LayoutChangeRequestEvent;
+import com.pyx4j.site.client.ui.layout.responsive.LayoutChangeRequestEvent.ChangeType;
 
 import com.propertyvista.common.client.theme.HorizontalAlignCenterMixin;
 import com.propertyvista.common.client.ui.components.MediaUtils;
@@ -38,7 +38,7 @@ public class HeaderViewImpl extends SimplePanel implements HeaderView {
 
             @Override
             public void onLoad(LoadEvent event) {
-                AppSite.getEventBus().fireEvent(new LayoutChangeRerquestEvent(ChangeType.resizeComponents));
+                AppSite.getEventBus().fireEvent(new LayoutChangeRequestEvent(ChangeType.resizeComponents));
             }
         });
 

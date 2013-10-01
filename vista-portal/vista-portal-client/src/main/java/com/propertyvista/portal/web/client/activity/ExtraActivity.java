@@ -23,8 +23,8 @@ import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.site.client.AppSite;
-import com.pyx4j.site.client.ui.layout.responsive.LayoutChangeRerquestEvent;
-import com.pyx4j.site.client.ui.layout.responsive.LayoutChangeRerquestEvent.ChangeType;
+import com.pyx4j.site.client.ui.layout.responsive.LayoutChangeRequestEvent;
+import com.pyx4j.site.client.ui.layout.responsive.LayoutChangeRequestEvent.ChangeType;
 
 import com.propertyvista.portal.domain.dto.CommunityEventDTO;
 import com.propertyvista.portal.domain.dto.extra.CommunityEventsGadgetDTO;
@@ -79,7 +79,7 @@ public class ExtraActivity extends AbstractActivity {
     @Override
     public void start(AcceptsOneWidget panel, EventBus eventBus) {
         panel.setWidget(view);
-        AppSite.getEventBus().fireEvent(new LayoutChangeRerquestEvent(ChangeType.resizeComponents));
+        AppSite.getEventBus().fireEvent(new LayoutChangeRequestEvent(ChangeType.resizeComponents));
         view.populate(gadgets);
     }
 }
