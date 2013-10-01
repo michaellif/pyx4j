@@ -35,15 +35,11 @@ public class PaymentMethodConfirmationActivity extends SecurityAwareActivity imp
 
     private final PaymentMethodConfirmationView view;
 
-    protected final PaymentService srv;
-
     private final Key entityId;
 
     public PaymentMethodConfirmationActivity(AppPlace place) {
         this.view = PortalWebSite.getViewFactory().instantiate(PaymentMethodConfirmationView.class);
         this.view.setPresenter(this);
-
-        srv = GWT.create(PaymentService.class);
 
         entityId = place.getItemId();
     }
@@ -54,7 +50,7 @@ public class PaymentMethodConfirmationActivity extends SecurityAwareActivity imp
         panel.setWidget(view);
 
         assert (entityId != null);
-        srv.retrievePaymentMethod(new DefaultAsyncCallback<PaymentMethodDTO>() {
+        GWT.<PaymentService> create(PaymentService.class).retrievePaymentMethod(new DefaultAsyncCallback<PaymentMethodDTO>() {
             @Override
             public void onSuccess(PaymentMethodDTO result) {
                 view.populate(result);

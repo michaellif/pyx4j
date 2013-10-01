@@ -34,7 +34,6 @@ import com.propertyvista.portal.rpc.portal.web.dto.financial.BillingSummaryDTO;
 import com.propertyvista.portal.rpc.portal.web.dto.financial.LatestActivitiesDTO;
 import com.propertyvista.portal.rpc.portal.web.dto.financial.PaymentMethodInfoDTO;
 import com.propertyvista.portal.rpc.portal.web.dto.financial.PaymentMethodSummaryDTO;
-import com.propertyvista.portal.rpc.portal.web.services.financial.AutoPayService;
 import com.propertyvista.portal.rpc.portal.web.services.financial.BillingService;
 import com.propertyvista.portal.rpc.portal.web.services.financial.PaymentService;
 import com.propertyvista.portal.web.client.PortalWebSite;
@@ -45,8 +44,6 @@ import com.propertyvista.portal.web.client.ui.financial.dashboard.FinancialDashb
 public class FinancialDashboardActivity extends SecurityAwareActivity implements FinancialDashboardPresenter {
 
     private final FinancialDashboardView view = PortalWebSite.getViewFactory().instantiate(FinancialDashboardView.class);
-
-    private final AutoPayService autoPayService = GWT.<AutoPayService> create(AutoPayService.class);
 
     private final BillingService billingService = GWT.<BillingService> create(BillingService.class);
 
@@ -76,7 +73,7 @@ public class FinancialDashboardActivity extends SecurityAwareActivity implements
             }
         });
 
-        autoPayService.getAutoPaySummary(new DefaultAsyncCallback<AutoPaySummaryDTO>() {
+        paymentService.getAutoPaySummary(new DefaultAsyncCallback<AutoPaySummaryDTO>() {
             @Override
             public void onSuccess(AutoPaySummaryDTO result) {
                 view.populate(result);
@@ -122,7 +119,7 @@ public class FinancialDashboardActivity extends SecurityAwareActivity implements
 
     @Override
     public void deletePreauthorizedPayment(AutoPayInfoDTO autoPay) {
-        autoPayService.deleteAutoPay(new DefaultAsyncCallback<Boolean>() {
+        paymentService.deleteAutoPay(new DefaultAsyncCallback<Boolean>() {
             @Override
             public void onSuccess(Boolean result) {
                 // TODO Auto-generated method stub

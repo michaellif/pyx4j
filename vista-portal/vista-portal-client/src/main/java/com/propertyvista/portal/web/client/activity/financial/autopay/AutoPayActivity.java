@@ -26,7 +26,7 @@ import com.pyx4j.site.rpc.AppPlace;
 import com.propertyvista.domain.payment.PreauthorizedPayment;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap;
 import com.propertyvista.portal.rpc.portal.web.dto.financial.AutoPayDTO;
-import com.propertyvista.portal.rpc.portal.web.services.financial.AutoPayService;
+import com.propertyvista.portal.rpc.portal.web.services.financial.PaymentService;
 import com.propertyvista.portal.web.client.PortalWebSite;
 import com.propertyvista.portal.web.client.activity.SecurityAwareActivity;
 import com.propertyvista.portal.web.client.ui.financial.autopay.AutoPayConfirmationView;
@@ -36,15 +36,11 @@ public class AutoPayActivity extends SecurityAwareActivity implements AutoPayCon
 
     private final AutoPayView view;
 
-    protected final AutoPayService srv;
-
     private final Key entityId;
 
     public AutoPayActivity(AppPlace place) {
         this.view = PortalWebSite.getViewFactory().instantiate(AutoPayView.class);
         this.view.setPresenter(this);
-
-        srv = GWT.create(AutoPayService.class);
 
         entityId = place.getItemId();
     }
@@ -55,7 +51,7 @@ public class AutoPayActivity extends SecurityAwareActivity implements AutoPayCon
         panel.setWidget(view);
 
         assert (entityId != null);
-        srv.retreiveAutoPay(new DefaultAsyncCallback<AutoPayDTO>() {
+        GWT.<PaymentService> create(PaymentService.class).retreiveAutoPay(new DefaultAsyncCallback<AutoPayDTO>() {
             @Override
             public void onSuccess(AutoPayDTO result) {
                 view.populate(result);
