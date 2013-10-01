@@ -32,7 +32,7 @@ import com.propertyvista.domain.payment.PaymentType;
 import com.propertyvista.domain.payment.PreauthorizedPayment;
 import com.propertyvista.domain.payment.PreauthorizedPayment.PreauthorizedPaymentCoveredItem;
 import com.propertyvista.domain.tenant.lease.extradata.YardiLeaseChargeData;
-import com.propertyvista.interfaces.importer.model.PadFileModel;
+import com.propertyvista.interfaces.importer.pad.PadFileExportModel;
 
 @SuppressWarnings("serial")
 public class ExportTenantsPreauthorizedPaymentDeferredProcess extends AbstractDeferredProcess {
@@ -46,7 +46,7 @@ public class ExportTenantsPreauthorizedPaymentDeferredProcess extends AbstractDe
     @Override
     public void execute() {
         ReportTableFormatter formatter = new ReportTableXLSXFormatter(true);
-        EntityReportFormatter<PadFileModel> entityFormatter = new EntityReportFormatter<PadFileModel>(PadFileModel.class);
+        EntityReportFormatter<PadFileExportModel> entityFormatter = new EntityReportFormatter<PadFileExportModel>(PadFileExportModel.class);
         entityFormatter.createHeader(formatter);
 
         try {
@@ -97,16 +97,19 @@ public class ExportTenantsPreauthorizedPaymentDeferredProcess extends AbstractDe
         }
     }
 
-    private void formatPreauthorizedPayment(ReportTableFormatter formatter, EntityReportFormatter<PadFileModel> entityFormatter,
+    private void formatPreauthorizedPayment(ReportTableFormatter formatter, EntityReportFormatter<PadFileExportModel> entityFormatter,
             PreauthorizedPayment preauthorizedPayment) {
 
         for (PreauthorizedPaymentCoveredItem item : preauthorizedPayment.coveredItems()) {
-            PadFileModel model = EntityFactory.create(PadFileModel.class);
+            PadFileExportModel model = EntityFactory.create(PadFileExportModel.class);
 
             model.charge().setValue(item.amount().getStringView());
 
             model.property().setValue(preauthorizedPayment.tenant().lease().unit().building().propertyCode().getValue());
             model.leaseId().setValue(preauthorizedPayment.tenant().lease().leaseId().getValue());
+            model.leaseStatus().setValue(preauthorizedPayment.tenant().lease().status().getValue());
+            model.expectedMoveOut().setValue(preauthorizedPayment.tenant().lease().expectedMoveOut().getValue());
+
             model.unit().setValue(preauthorizedPayment.tenant().lease().unit().info().number().getStringView());
             model.tenantId().setValue(preauthorizedPayment.tenant().participantId().getValue());
             model.papApplicable().setValue(true);
