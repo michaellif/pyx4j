@@ -45,7 +45,6 @@ import com.google.gwt.event.logical.shared.OpenHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.resources.client.ImageResource;
 import com.google.gwt.user.client.DOM;
-import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.CheckBox;
 import com.google.gwt.user.client.ui.DockPanel;
 import com.google.gwt.user.client.ui.FlowPanel;
@@ -140,7 +139,7 @@ public class Dialog extends DialogPanel {
     }
 
     public Dialog(String caption, DialogOptions options, IsWidget body) {
-        super(false, true);
+        super();
         setGlassEnabled(true);
         setCaption(caption);
 
@@ -448,12 +447,6 @@ public class Dialog extends DialogPanel {
         }
         super.show();
 
-        if (BrowserType.isIE8()) {
-            int left = (Window.getClientWidth() - getOffsetWidth()) >> 1;
-            setPopupPosition(Math.max(Window.getScrollLeft() + left, 0), 200);
-        } else {
-            center();
-        }
         setVisible(true);
         // The insides of Dialog may be CForm that is only initialized on show.
         Scheduler.get().scheduleDeferred(new ScheduledCommand() {
@@ -509,8 +502,8 @@ public class Dialog extends DialogPanel {
     }
 
     public final native Element getDocumentActiveElement() /*-{
-                                                           return $doc.activeElement;
-                                                           }-*/;
+		return $doc.activeElement;
+    }-*/;
 
     public static void closeOpenDialogs() {
         for (int i = 0; i < openDialogs.size(); i++) {

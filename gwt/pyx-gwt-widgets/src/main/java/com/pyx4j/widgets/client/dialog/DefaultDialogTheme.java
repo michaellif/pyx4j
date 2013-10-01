@@ -51,6 +51,7 @@ public class DefaultDialogTheme extends Theme {
 
     protected void initStyles() {
         Style style = new Style(".", StyleName.Dialog);
+        style.addProperty("padding", "5px");
         style.addProperty("background-color", ThemeColor.object1, 1);
         style.addProperty("box-shadow", "10px 10px 5px rgba(0, 0, 0, 0.3)");
         addStyle(style);
