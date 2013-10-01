@@ -11,7 +11,7 @@
  * @author Dad
  * @version $Id$
  */
-package com.propertyvista.portal.web.client.ui.financial.views;
+package com.propertyvista.portal.web.client.ui.financial.views.bill;
 
 import com.propertyvista.portal.rpc.portal.web.dto.financial.BillViewDTO;
 import com.propertyvista.portal.web.client.ui.AbstractFormView;

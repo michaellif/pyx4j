@@ -11,7 +11,7 @@
  * @author Dad
  * @version $Id$
  */
-package com.propertyvista.portal.web.client.ui.financial.views;
+package com.propertyvista.portal.web.client.ui.financial.views.bill;
 
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.IsWidget;
@@ -23,7 +23,6 @@ import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.Button;
 
-import com.propertyvista.common.client.ui.components.editors.dto.bill.BillForm;
 import com.propertyvista.portal.rpc.portal.web.dto.financial.BillViewDTO;
 import com.propertyvista.portal.web.client.ui.CPortalEntityForm;
 
@@ -40,7 +39,7 @@ public class BillViewForm extends CPortalEntityForm<BillViewDTO> {
         BasicFlexFormPanel content = new BasicFlexFormPanel();
         int row = -1;
 
-        content.setWidget(++row, 0, inject(proto().billData(), new BillForm(true, true)));
+        content.setWidget(++row, 0, inject(proto().billData(), new BillForm(/* true */)));
 
         return content;
     }

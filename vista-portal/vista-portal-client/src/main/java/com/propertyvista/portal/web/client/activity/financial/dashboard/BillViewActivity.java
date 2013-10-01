@@ -29,7 +29,7 @@ import com.propertyvista.portal.rpc.portal.web.dto.financial.BillViewDTO;
 import com.propertyvista.portal.rpc.portal.web.services.financial.BillingService;
 import com.propertyvista.portal.web.client.PortalWebSite;
 import com.propertyvista.portal.web.client.activity.SecurityAwareActivity;
-import com.propertyvista.portal.web.client.ui.financial.views.BillView;
+import com.propertyvista.portal.web.client.ui.financial.views.bill.BillView;
 
 public class BillViewActivity extends SecurityAwareActivity implements BillView.Presenter {
 
