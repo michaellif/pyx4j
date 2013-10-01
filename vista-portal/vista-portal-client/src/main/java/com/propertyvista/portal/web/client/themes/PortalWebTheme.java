@@ -219,7 +219,22 @@ public class PortalWebTheme extends Theme {
 
             }
         });
-        addTheme(new DefaultDialogTheme());
+        addTheme(new DefaultDialogTheme() {
+
+            @Override
+            protected void initStyles() {
+                super.initStyles();
+                Style style = new Style(".", StyleName.Dialog);
+                style.addProperty("border", "1px solid");
+                style.addProperty("border-radius", "5px");
+                style.addProperty("background-color", ThemeColor.foreground, 1);
+                addStyle(style);
+
+                style = new Style(".", StyleName.DialogCaption);
+                style.addProperty("background-color", ThemeColor.foreground, 0.9);
+                addStyle(style);
+            }
+        });
 
         addTheme(new FormDecoratorTheme() {
 
