@@ -67,7 +67,7 @@ public class BillForm extends CEntityDecoratableForm<BillDTO> {
         int row = -1;
 
         if (showInfoSection) {
-            content.setH1(++row, 0, 2, i18n.tr("Info"));
+            content.setH1(++row, 0, 1, i18n.tr("Info"));
             content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().billingAccount().lease().unit(), new CEntityLabel<AptUnit>())).build());
             content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().billingCycle().building(), new CEntityLabel<Building>())).build());
 
@@ -77,7 +77,7 @@ public class BillForm extends CEntityDecoratableForm<BillDTO> {
 
             content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().billingCycle().targetBillExecutionDate(), new CDateLabel())).build());
 
-            content.setH1(++row, 0, 2, i18n.tr("Status"));
+            content.setH1(++row, 0, 1, i18n.tr("Status"));
             content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().billSequenceNumber(), new CNumberLabel())).build());
             content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().dueDate(), new CDateLabel())).build());
             content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().rejectReason(), new CLabel<String>())).build());
@@ -87,7 +87,7 @@ public class BillForm extends CEntityDecoratableForm<BillDTO> {
         }
 
         if (showPreviousBill) {
-            content.setH1(++row, 0, 2, i18n.tr("Previous Bill"));
+            content.setH1(++row, 0, 1, i18n.tr("Previous Bill"));
             content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().balanceForwardAmount(), new CMoneyLabel())).build());
             content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().carryForwardCredit(), new CMoneyLabel())).build());
 
@@ -102,10 +102,10 @@ public class BillForm extends CEntityDecoratableForm<BillDTO> {
             Widget pastDueAmount = new FormDecoratorBuilder(inject(proto().pastDueAmount(), new CMoneyLabel())).customLabel(i18n.tr("Previous Bill Balance"))
                     .build();
             pastDueAmount.addStyleName(BillingTheme.StyleName.BillingBillTotal.name());
-            content.setWidget(++row, 0, 2, pastDueAmount);
+            content.setWidget(++row, 0, pastDueAmount);
         }
 
-        content.setH1(++row, 0, 2, i18n.tr("Current Bill"));
+        content.setH1(++row, 0, 1, i18n.tr("Current Bill"));
         if (!showPreviousBill) {
             content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().pastDueAmount(), new CMoneyLabel())).build());
         }
@@ -117,13 +117,13 @@ public class BillForm extends CEntityDecoratableForm<BillDTO> {
         content.setWidget(++row, 0, inject(proto().depositLineItems(), new LineItemCollapsibleViewer()));
         content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().productCreditAmount(), new CMoneyLabel())).build());
 
-        content.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().currentAmount(), new CMoneyLabel())).build());
-        content.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().taxes(), new CMoneyLabel())).build());
+        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().currentAmount(), new CMoneyLabel())).build());
+        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().taxes(), new CMoneyLabel())).build());
 
         // Dues:
         Widget grandTotal = new FormDecoratorBuilder(inject(proto().totalDueAmount(), new CMoneyLabel())).build();
         grandTotal.addStyleName(BillingTheme.StyleName.BillingBillTotal.name());
-        content.setWidget(++row, 0, 2, grandTotal);
+        content.setWidget(++row, 0, grandTotal);
 
         return content;
     }
@@ -148,6 +148,9 @@ public class BillForm extends CEntityDecoratableForm<BillDTO> {
             hideLines(getValue().withdrawalLineItems(), proto().withdrawalLineItems());
             hideLines(getValue().rejectedPaymentLineItems(), proto().rejectedPaymentLineItems());
             hideLines(getValue().paymentLineItems(), proto().paymentLineItems());
+        } else {
+            get(proto().pastDueAmount()).setVisible(
+                    !getValue().pastDueAmount().isNull() && getValue().pastDueAmount().getValue().compareTo(BigDecimal.ZERO) != 0);
         }
 
         hideLines(getValue().serviceChargeLineItems(), proto().serviceChargeLineItems());
@@ -157,7 +160,7 @@ public class BillForm extends CEntityDecoratableForm<BillDTO> {
         hideLines(getValue().depositLineItems(), proto().depositLineItems());
     }
 
-    private void hideLines(InvoiceLineItemGroupDTO line, InvoiceLineItemGroupDTO line2) {
-        get(line2).setVisible(!line.lineItems().isEmpty());
+    private void hideLines(InvoiceLineItemGroupDTO value, InvoiceLineItemGroupDTO member) {
+        get(member).setVisible(!value.lineItems().isEmpty());
     }
 }

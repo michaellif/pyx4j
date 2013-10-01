@@ -18,6 +18,7 @@ import java.util.Collection;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.i18n.client.DateTimeFormat;
 import com.google.gwt.user.client.ui.HTML;
+import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
@@ -49,7 +50,7 @@ public class LineItemCollapsibleViewer extends CEntityContainer<InvoiceLineItemG
     private SimplePanel expandedPanel;
 
     public LineItemCollapsibleViewer() {
-//        asWidget().setWidth("46em");
+        asWidget().setWidth("20em");
     }
 
     @Override
@@ -66,11 +67,11 @@ public class LineItemCollapsibleViewer extends CEntityContainer<InvoiceLineItemG
         mainPanel.setWidth("100%");
 
         collapsedPanel = new SimplePanel();
-        collapsedPanel.getElement().getStyle().setMarginLeft(50, Unit.PX);
+        collapsedPanel.getElement().getStyle().setMarginLeft(30, Unit.PX);
         mainPanel.add(collapsedPanel);
 
         expandedPanel = new SimplePanel();
-        expandedPanel.getElement().getStyle().setMarginLeft(50, Unit.PX);
+        expandedPanel.getElement().getStyle().setMarginLeft(30, Unit.PX);
         mainPanel.add(expandedPanel);
 
         setExpended(false);
@@ -110,6 +111,7 @@ public class LineItemCollapsibleViewer extends CEntityContainer<InvoiceLineItemG
         if (value != null && !value.total().isNull()) {
             content.getFlexCellFormatter().setColSpan(row, 0, 2);
             content.setWidget(row, 0, new HTML(value.getMeta().getCaption()));
+            content.getCellFormatter().setHorizontalAlignment(row, 0, HasHorizontalAlignment.ALIGN_LEFT);
             content.setWidget(row, 2, new HTML(value.total().getStringView()));
 
             // styling:

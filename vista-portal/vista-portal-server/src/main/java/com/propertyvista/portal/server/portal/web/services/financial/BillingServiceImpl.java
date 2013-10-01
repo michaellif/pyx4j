@@ -30,6 +30,7 @@ import com.pyx4j.entity.shared.utils.EntityBinder;
 
 import com.propertyvista.biz.financial.ar.ARFacade;
 import com.propertyvista.biz.financial.billing.BillingFacade;
+import com.propertyvista.biz.financial.billing.BillingUtils;
 import com.propertyvista.biz.financial.payment.PaymentMethodFacade;
 import com.propertyvista.domain.financial.billing.Bill;
 import com.propertyvista.domain.payment.PreauthorizedPayment;
@@ -119,6 +120,8 @@ public class BillingServiceImpl implements BillingService {
         Persistence.service().retrieve(result.billData().billingAccount());
         Persistence.service().retrieve(result.billData().billingAccount().lease());
         Persistence.service().retrieve(result.billData().billingCycle().building(), AttachLevel.ToStringMembers);
+
+        BillingUtils.enhanceBillDto(bill, result.billData());
 
         callback.onSuccess(result);
     }

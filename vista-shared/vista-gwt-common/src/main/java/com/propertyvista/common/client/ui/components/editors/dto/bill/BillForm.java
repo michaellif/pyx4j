@@ -20,6 +20,7 @@ import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.forms.client.ui.CEntityLabel;
 import com.pyx4j.forms.client.ui.CMoneyField;
+import com.pyx4j.forms.client.ui.CMoneyLabel;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
 
@@ -62,19 +63,21 @@ public class BillForm extends CEntityDecoratableForm<BillDTO> {
         TwoColumnFlexFormPanel content = new TwoColumnFlexFormPanel();
         int row = -1;
         int col = oneColumn ? 0 : 1;
+        int span = oneColumn ? 1 : 2;
+
         if (!justPreviewBill) {
-            content.setH1(++row, 0, 2, i18n.tr("Info"));
+            content.setH1(++row, 0, span, i18n.tr("Info"));
             content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().billingAccount().lease().unit(), new CEntityLabel<AptUnit>())).build());
-            content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().billingCycle().billingCycleStartDate())).build());
-            content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().billingCycle().billingCycleEndDate())).build());
+            content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().billingCycle().building(), new CEntityLabel<Building>())).build());
+            content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().billingCycle().billingType().billingPeriod())).build());
 
             int row2 = oneColumn ? row : 0;
-            content.setWidget(++row2, col, new FormDecoratorBuilder(inject(proto().billingCycle().building(), new CEntityLabel<Building>())).build());
-            content.setWidget(++row2, col, new FormDecoratorBuilder(inject(proto().billingCycle().billingType().billingPeriod())).build());
+            content.setWidget(++row2, col, new FormDecoratorBuilder(inject(proto().billingCycle().billingCycleStartDate())).build());
+            content.setWidget(++row2, col, new FormDecoratorBuilder(inject(proto().billingCycle().billingCycleEndDate())).build());
             content.setWidget(++row2, col, new FormDecoratorBuilder(inject(proto().billingCycle().targetBillExecutionDate())).build());
             row = oneColumn ? row2 : row;
 
-            content.setH1(++row, 0, 2, i18n.tr("Status"));
+            content.setH1(++row, 0, span, i18n.tr("Status"));
             content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().billSequenceNumber())).build());
             content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().dueDate())).build());
             content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().rejectReason())).build());
@@ -86,9 +89,10 @@ public class BillForm extends CEntityDecoratableForm<BillDTO> {
         }
 
         if (!justPreviewBill) {
-            content.setH1(++row, 0, 2, i18n.tr("Last Bill"));
+            content.setH1(++row, 0, span, i18n.tr("Last Bill"));
             content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().balanceForwardAmount(), new CMoneyField())).build());
             content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().carryForwardCredit(), new CMoneyField())).build());
+
             content.setWidget(++row, 0, inject(proto().depositRefundLineItems(), new LineItemCollapsibleViewer()));
             content.setWidget(++row, 0, inject(proto().immediateAccountAdjustmentLineItems(), new LineItemCollapsibleViewer()));
             content.setWidget(++row, 0, inject(proto().previousChargeRefundLineItems(), new LineItemCollapsibleViewer()));
@@ -97,12 +101,15 @@ public class BillForm extends CEntityDecoratableForm<BillDTO> {
             content.setWidget(++row, 0, inject(proto().rejectedPaymentLineItems(), new LineItemCollapsibleViewer()));
             content.setWidget(++row, 0, inject(proto().paymentLineItems(), new LineItemCollapsibleViewer()));
 
-            Widget lastBillTotal = new FormDecoratorBuilder(inject(proto().pastDueAmount(), new CMoneyField()), "20em", "8em", "8em").build();
+            Widget lastBillTotal = new FormDecoratorBuilder(inject(proto().pastDueAmount(), new CMoneyField())).build();
             lastBillTotal.addStyleName(BillingTheme.StyleName.BillingBillTotal.name());
-            content.setWidget(++row, 0, 2, lastBillTotal);
+            content.setWidget(++row, 0, lastBillTotal);
         }
 
-        content.setH1(++row, 0, 2, i18n.tr("Current Bill"));
+        content.setH1(++row, 0, span, i18n.tr("Current Bill"));
+        if (justPreviewBill) {
+            content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().pastDueAmount(), new CMoneyLabel())).build());
+        }
         content.setWidget(++row, 0, inject(proto().serviceChargeLineItems(), new LineItemCollapsibleViewer()));
         content.setWidget(++row, 0, inject(proto().recurringFeatureChargeLineItems(), new LineItemCollapsibleViewer()));
         content.setWidget(++row, 0, inject(proto().onetimeFeatureChargeLineItems(), new LineItemCollapsibleViewer()));
@@ -111,13 +118,13 @@ public class BillForm extends CEntityDecoratableForm<BillDTO> {
         content.setWidget(++row, 0, inject(proto().depositLineItems(), new LineItemCollapsibleViewer()));
         content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().productCreditAmount(), new CMoneyField())).build());
 
-        content.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().currentAmount(), new CMoneyField()), "20em", "8em", "8em").build());
-        content.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().taxes(), new CMoneyField()), "20em", "8em", "8em").build());
+        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().currentAmount(), new CMoneyField())).build());
+        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().taxes(), new CMoneyField())).build());
 
         // Dues:
-        Widget grandTotal = new FormDecoratorBuilder(inject(proto().totalDueAmount(), new CMoneyField()), "20em", "8em", "8em").build();
+        Widget grandTotal = new FormDecoratorBuilder(inject(proto().totalDueAmount(), new CMoneyField())).build();
         grandTotal.addStyleName(BillingTheme.StyleName.BillingBillTotal.name());
-        content.setWidget(++row, 0, 2, grandTotal);
+        content.setWidget(++row, 0, grandTotal);
 
         return content;
     }
@@ -142,6 +149,9 @@ public class BillForm extends CEntityDecoratableForm<BillDTO> {
             hideLines(getValue().withdrawalLineItems(), proto().withdrawalLineItems());
             hideLines(getValue().rejectedPaymentLineItems(), proto().rejectedPaymentLineItems());
             hideLines(getValue().paymentLineItems(), proto().paymentLineItems());
+        } else {
+            get(proto().pastDueAmount()).setVisible(
+                    !getValue().pastDueAmount().isNull() && getValue().pastDueAmount().getValue().compareTo(BigDecimal.ZERO) != 0);
         }
 
         hideLines(getValue().serviceChargeLineItems(), proto().serviceChargeLineItems());
@@ -151,7 +161,7 @@ public class BillForm extends CEntityDecoratableForm<BillDTO> {
         hideLines(getValue().depositLineItems(), proto().depositLineItems());
     }
 
-    private void hideLines(InvoiceLineItemGroupDTO line, InvoiceLineItemGroupDTO line2) {
-        get(line2).setVisible(!line.lineItems().isEmpty());
+    private void hideLines(InvoiceLineItemGroupDTO value, InvoiceLineItemGroupDTO member) {
+        get(member).setVisible(!value.lineItems().isEmpty());
     }
 }
