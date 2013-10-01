@@ -13,11 +13,13 @@
  */
 package com.propertyvista.portal.server.portal.web.services.financial;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
+import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.AttachLevel;
@@ -28,11 +30,15 @@ import com.pyx4j.entity.shared.utils.EntityBinder;
 
 import com.propertyvista.biz.financial.ar.ARFacade;
 import com.propertyvista.biz.financial.billing.BillingFacade;
+import com.propertyvista.biz.financial.payment.PaymentMethodFacade;
 import com.propertyvista.domain.financial.billing.Bill;
+import com.propertyvista.domain.payment.PreauthorizedPayment;
+import com.propertyvista.domain.payment.PreauthorizedPayment.PreauthorizedPaymentCoveredItem;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.dto.BillDTO;
 import com.propertyvista.dto.TransactionHistoryDTO;
 import com.propertyvista.portal.domain.dto.BillDataDTO;
+import com.propertyvista.portal.domain.dto.financial.PaymentInfoDTO;
 import com.propertyvista.portal.rpc.portal.web.dto.financial.BillViewDTO;
 import com.propertyvista.portal.rpc.portal.web.dto.financial.BillingHistoryDTO;
 import com.propertyvista.portal.rpc.portal.web.dto.financial.BillingSummaryDTO;
@@ -89,26 +95,6 @@ public class BillingServiceImpl implements BillingService {
 
     // Internals:
 
-    private static List<BillDataDTO> retrieveBillHistory(Lease lease) {
-        List<BillDataDTO> bills = new ArrayList<BillDataDTO>();
-        EntityQueryCriteria<Bill> criteria = EntityQueryCriteria.create(Bill.class);
-
-        criteria.add(PropertyCriterion.eq(criteria.proto().billingAccount(), lease.billingAccount()));
-        for (Bill bill : Persistence.service().query(criteria)) {
-            BillDataDTO dto = EntityFactory.create(BillDataDTO.class);
-
-            dto.setPrimaryKey(bill.getPrimaryKey());
-            dto.referenceNo().setValue(bill.billSequenceNumber().getValue());
-            dto.amount().setValue(bill.totalDueAmount().getValue());
-            dto.dueDate().setValue(bill.dueDate().getValue());
-            dto.fromDate().setValue(bill.executionDate().getValue());
-
-            bills.add(dto);
-        }
-
-        return bills;
-    }
-
     @Override
     public void retreiveBill(AsyncCallback<BillViewDTO> callback, Bill entityId) {
         Bill bill = null;
@@ -136,4 +122,49 @@ public class BillingServiceImpl implements BillingService {
 
         callback.onSuccess(result);
     }
+
+    private static List<BillDataDTO> retrieveBillHistory(Lease lease) {
+        List<BillDataDTO> bills = new ArrayList<BillDataDTO>();
+        EntityQueryCriteria<Bill> criteria = EntityQueryCriteria.create(Bill.class);
+
+        criteria.add(PropertyCriterion.eq(criteria.proto().billingAccount(), lease.billingAccount()));
+        for (Bill bill : Persistence.service().query(criteria)) {
+            BillDataDTO dto = EntityFactory.create(BillDataDTO.class);
+
+            dto.setPrimaryKey(bill.getPrimaryKey());
+            dto.referenceNo().setValue(bill.billSequenceNumber().getValue());
+            dto.amount().setValue(bill.totalDueAmount().getValue());
+            dto.dueDate().setValue(bill.dueDate().getValue());
+            dto.fromDate().setValue(bill.executionDate().getValue());
+
+            bills.add(dto);
+        }
+
+        return bills;
+    }
+
+    public static List<PaymentInfoDTO> retrieveCurrentAutoPayments(Lease lease) {
+        List<PaymentInfoDTO> currentAutoPayments = new ArrayList<PaymentInfoDTO>();
+        LogicalDate excutionDate = ServerSideFactory.create(PaymentMethodFacade.class).getCurrentPreauthorizedPaymentDate(lease);
+        for (PreauthorizedPayment pap : ServerSideFactory.create(PaymentMethodFacade.class).retrieveCurrentPreauthorizedPayments(lease)) {
+            PaymentInfoDTO pi = EntityFactory.create(PaymentInfoDTO.class);
+
+            pi.amount().setValue(BigDecimal.ZERO);
+            for (PreauthorizedPaymentCoveredItem ci : pap.coveredItems()) {
+                pi.amount().setValue(pi.amount().getValue().add(ci.amount().getValue()));
+            }
+
+            pi.paymentDate().setValue(excutionDate);
+            pi.payer().set(pap.tenant());
+            Persistence.ensureRetrieve(pi.payer(), AttachLevel.ToStringMembers);
+            if (pi.payer().equals(TenantAppContext.getCurrentUserTenant())) {
+                pi.paymentMethod().set(pap.paymentMethod());
+            }
+
+            currentAutoPayments.add(pi);
+        }
+
+        return currentAutoPayments;
+    }
+
 }

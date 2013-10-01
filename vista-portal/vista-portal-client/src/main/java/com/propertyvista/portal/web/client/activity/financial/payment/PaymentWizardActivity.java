@@ -28,7 +28,7 @@ import com.propertyvista.domain.contact.AddressSimple;
 import com.propertyvista.domain.payment.LeasePaymentMethod;
 import com.propertyvista.portal.domain.dto.financial.PaymentDTO;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap.Resident.Financial.Payment;
-import com.propertyvista.portal.rpc.portal.services.resident.PaymentWizardService;
+import com.propertyvista.portal.rpc.portal.web.services.financial.PaymentWizardService;
 import com.propertyvista.portal.web.client.activity.AbstractWizardActivity;
 import com.propertyvista.portal.web.client.ui.financial.payment.PaymentWizardView;
 
