@@ -24,7 +24,7 @@ import com.propertyvista.portal.rpc.portal.web.dto.financial.BillingHistoryDTO;
 import com.propertyvista.portal.rpc.portal.web.services.financial.BillingService;
 import com.propertyvista.portal.web.client.PortalWebSite;
 import com.propertyvista.portal.web.client.activity.SecurityAwareActivity;
-import com.propertyvista.portal.web.client.ui.financial.dashboard.views.BillingHistoryView;
+import com.propertyvista.portal.web.client.ui.financial.views.BillingHistoryView;
 
 public class BillingHistoryViewActivity extends SecurityAwareActivity implements BillingHistoryView.Presenter {
 

@@ -11,14 +11,14 @@
  * @author VladL
  * @version $Id$
  */
-package com.propertyvista.portal.web.client.ui.financial.dashboard.views;
+package com.propertyvista.portal.web.client.ui.financial.views;
 
-import com.propertyvista.portal.rpc.portal.web.dto.financial.BillingHistoryDTO;
+import com.propertyvista.dto.TransactionHistoryDTO;
 import com.propertyvista.portal.web.client.ui.IFormView;
 
-public interface BillingHistoryView extends IFormView<BillingHistoryDTO> {
+public interface TransactionHistoryView extends IFormView<TransactionHistoryDTO> {
 
-    interface Presenter extends IFormViewPresenter<BillingHistoryDTO> {
+    interface Presenter extends IFormViewPresenter<TransactionHistoryDTO> {
 
     }
 }

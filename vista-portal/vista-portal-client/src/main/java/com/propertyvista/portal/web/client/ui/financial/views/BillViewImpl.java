@@ -11,15 +11,15 @@
  * @author Dad
  * @version $Id$
  */
-package com.propertyvista.portal.web.client.ui.financial.dashboard.views;
+package com.propertyvista.portal.web.client.ui.financial.views;
 
 import com.propertyvista.portal.rpc.portal.web.dto.financial.BillViewDTO;
-import com.propertyvista.portal.web.client.ui.IFormView;
+import com.propertyvista.portal.web.client.ui.AbstractFormView;
 
-public interface BillView extends IFormView<BillViewDTO> {
+public class BillViewImpl extends AbstractFormView<BillViewDTO> implements BillView {
 
-    interface Presenter extends IFormView.IFormViewPresenter<BillViewDTO> {
-
-        void payBill();
+    public BillViewImpl() {
+        setForm(new BillViewForm(this));
     }
+
 }

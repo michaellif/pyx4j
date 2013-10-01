@@ -24,7 +24,7 @@ import com.propertyvista.dto.TransactionHistoryDTO;
 import com.propertyvista.portal.rpc.portal.web.services.financial.BillingService;
 import com.propertyvista.portal.web.client.PortalWebSite;
 import com.propertyvista.portal.web.client.activity.SecurityAwareActivity;
-import com.propertyvista.portal.web.client.ui.financial.dashboard.views.TransactionHistoryView;
+import com.propertyvista.portal.web.client.ui.financial.views.TransactionHistoryView;
 
 public class TransactionHistoryViewActivity extends SecurityAwareActivity implements TransactionHistoryView.Presenter {
 

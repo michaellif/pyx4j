@@ -11,7 +11,7 @@
  * @author Dad
  * @version $Id$
  */
-package com.propertyvista.portal.web.client.ui.financial.dashboard.views;
+package com.propertyvista.portal.web.client.ui.financial.views;
 
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.IsWidget;

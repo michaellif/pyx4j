@@ -11,14 +11,14 @@
  * @author VladL
  * @version $Id$
  */
-package com.propertyvista.portal.web.client.ui.financial.dashboard.views;
+package com.propertyvista.portal.web.client.ui.financial.views;
 
-import com.propertyvista.portal.rpc.portal.web.dto.financial.BillingHistoryDTO;
+import com.propertyvista.dto.TransactionHistoryDTO;
 import com.propertyvista.portal.web.client.ui.AbstractFormView;
 
-public class BillingHistoryViewImpl extends AbstractFormView<BillingHistoryDTO> implements BillingHistoryView {
+public class TransactionHistoryViewImpl extends AbstractFormView<TransactionHistoryDTO> implements TransactionHistoryView {
 
-    public BillingHistoryViewImpl() {
-        setForm(new BillingHistoryViewForm());
+    public TransactionHistoryViewImpl() {
+        setForm(new TransactionHistoryViewForm());
     }
 }
