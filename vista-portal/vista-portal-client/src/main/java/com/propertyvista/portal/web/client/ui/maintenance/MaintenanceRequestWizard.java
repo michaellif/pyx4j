@@ -60,6 +60,8 @@ public class MaintenanceRequestWizard extends CPortalEntityWizard<MaintenanceReq
 
     public MaintenanceRequestWizard(MaintenanceRequestWizardView view) {
         super(MaintenanceRequestDTO.class, view, i18n.tr("New Maintenance Request"), i18n.tr("Submit"), ThemeColor.contrast5);
+
+        addStep(createDetailsStep());
     }
 
     public void setMaintenanceRequestCategoryMeta(MaintenanceRequestMetadata meta) {
@@ -67,8 +69,7 @@ public class MaintenanceRequestWizard extends CPortalEntityWizard<MaintenanceReq
         initSelectors();
     }
 
-    @Override
-    public IsWidget createContent() {
+    public TwoColumnFlexFormPanel createDetailsStep() {
         TwoColumnFlexFormPanel content = new TwoColumnFlexFormPanel();
         int row = -1;
 

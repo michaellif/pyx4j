@@ -54,8 +54,6 @@ public class GeneralCertificateUploadWizard extends CPortalEntityWizard<GeneralI
 
     private final TenantOwnerClickHandler tenantOwnerClickHandler;
 
-    private BasicFlexFormPanel contentPanel;
-
     /**
      * @param displayTenantOwner
      *            display the owners name (if true then populated insurance certificated entity <b>must</b> have the tenant.customer.person() name)
@@ -67,15 +65,17 @@ public class GeneralCertificateUploadWizard extends CPortalEntityWizard<GeneralI
         this.minRequiredLiability = null;
         this.displayTenantOwner = displayTenantOwner;
         this.tenantOwnerClickHandler = tenantOwnerClickHandler;
+
+        addStep(createDetailsStep());
     }
 
     public GeneralCertificateUploadWizard(GeneralCertificateUploadWizardView view) {
         this(view, false, null);
+
     }
 
-    @Override
-    public IsWidget createContent() {
-        contentPanel = new BasicFlexFormPanel(); // TODO the only reason its a field is to set a proper caption for the insurance certificate folder
+    public BasicFlexFormPanel createDetailsStep() {
+        BasicFlexFormPanel contentPanel = new BasicFlexFormPanel(); // TODO the only reason its a field is to set a proper caption for the insurance certificate folder
         int row = -1;
         if (displayTenantOwner) {
             CEntityLabel<Customer> comp = new CEntityLabel<Customer>(i18n.tr("Tenant"));

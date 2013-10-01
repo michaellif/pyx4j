@@ -59,18 +59,13 @@ public class CPortalEntityWizard<E extends IEntity> extends CEntityWizard<E> {
     }
 
     @Override
-    protected IDecorator<?> createDecorator() {
-        decorator = new WizardDecorator<E>(endButtonCaption) {
-            @Override
-            protected void onFinish() {
-                view.getPresenter().finish();
-            };
+    protected void onCancel() {
+        view.getPresenter().cancel();
+    };
 
-            @Override
-            protected void onCancel() {
-                view.getPresenter().cancel();
-            };
-        };
+    @Override
+    protected IDecorator<?> createDecorator() {
+        decorator = new WizardDecorator<E>(endButtonCaption);
 
         decorator.getBtnPrevious().setVisible(false);
         decorator.setCaption(headerCaption);

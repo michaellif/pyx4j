@@ -81,7 +81,7 @@ public class PaymentWizard extends CPortalEntityWizard<PaymentDTO> {
 
     private static final I18n i18n = I18n.get(PaymentWizard.class);
 
-    private final WizardStep paymentMethodSelectionStep, comfirmationStep;
+    private final WizardStep paymentMethodSelectionStep, confirmationStep;
 
     private final CComboBox<LeasePaymentMethod> profiledPaymentMethodsCombo = new CSimpleEntityComboBox<LeasePaymentMethod>();
 
@@ -120,7 +120,7 @@ public class PaymentWizard extends CPortalEntityWizard<PaymentDTO> {
 
         addStep(createDetailsStep());
         paymentMethodSelectionStep = addStep(createSelectPaymentMethodStep());
-        comfirmationStep = addStep(createConfirmationStep());
+        confirmationStep = addStep(createConfirmationStep());
     }
 
     private BasicFlexFormPanel createDetailsStep() {
@@ -259,7 +259,7 @@ public class PaymentWizard extends CPortalEntityWizard<PaymentDTO> {
 
 //        getDecorator().getBtnNext().setEnabled(true);
 
-        if (event.getSelectedItem().equals(comfirmationStep)) {
+        if (event.getSelectedItem().equals(confirmationStep)) {
             confirmationDetailsHolder.clear();
             confirmationDetailsHolder.setWidget(createConfirmationDetailsPanel());
 
