@@ -27,7 +27,7 @@ public class TenantPadFileDownloadServiceImpl extends ReportServiceImpl<IEntity>
 
     @Override
     public void createDownload(AsyncCallback<String> callback, ReportRequest reportRequest) {
-        callback.onSuccess(DeferredProcessRegistry.fork(new TenantPadFileDownloadDeferredProcess(), ThreadPoolNames.DOWNLOADS));
+        callback.onSuccess(DeferredProcessRegistry.fork(new ExportTenantsPreauthorizedPaymentDeferredProcess(), ThreadPoolNames.DOWNLOADS));
     }
 
 }
