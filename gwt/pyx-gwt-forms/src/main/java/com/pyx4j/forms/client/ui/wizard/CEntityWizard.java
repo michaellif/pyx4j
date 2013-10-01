@@ -53,14 +53,14 @@ public class CEntityWizard<E extends IEntity> extends CEntityForm<E> {
         });
 
         addPropertyChangeHandler(new PropertyChangeHandler() {
-            boolean sheduled = false;
+            boolean scheduled = false;
 
             @Override
             public void onPropertyChange(PropertyChangeEvent event) {
                 if (event.isEventOfType(PropertyName.valid, PropertyName.repopulated, PropertyName.showErrorsUnconditional)) {
 
-                    if (!sheduled) {
-                        sheduled = true;
+                    if (!scheduled) {
+                        scheduled = true;
                         Scheduler.get().scheduleFinally(new Scheduler.ScheduledCommand() {
                             @Override
                             public void execute() {
@@ -75,7 +75,7 @@ public class CEntityWizard<E extends IEntity> extends CEntityForm<E> {
                                     }
                                 }
 
-                                sheduled = false;
+                                scheduled = false;
                             }
                         });
                     }
@@ -86,12 +86,11 @@ public class CEntityWizard<E extends IEntity> extends CEntityForm<E> {
     }
 
     @Override
-    public IsWidget createContent() {
+    public final IsWidget createContent() {
         return wizardPanel;
     }
 
     protected void onStepChange(SelectionEvent<WizardStep> event) {
-
     }
 
     public WizardStep addStep(final BasicFlexFormPanel panel) {
@@ -118,7 +117,7 @@ public class CEntityWizard<E extends IEntity> extends CEntityForm<E> {
         super.onReset();
     }
 
-    public void previous() {
+    public final void previous() {
         int index = wizardPanel.getSelectedIndex();
 
         WizardStep step;
@@ -132,7 +131,7 @@ public class CEntityWizard<E extends IEntity> extends CEntityForm<E> {
         }
     }
 
-    public void next() {
+    public final void next() {
         WizardStep step = wizardPanel.getSelectedStep();
         step.showErrors(true);
 
@@ -155,11 +154,20 @@ public class CEntityWizard<E extends IEntity> extends CEntityForm<E> {
         if (!isValid()) {
             setUnconditionalValidationErrorRendering(true);
             MessageDialog.error(i18n.tr("Error"), getValidationResults().getValidationMessage(true, true));
+        } else {
+            onFinish();
         }
-        onFinish();
     }
 
     protected void onFinish() {
+    }
+
+    public final void cancel() {
+        onCancel();
+    }
+
+    protected void onCancel() {
+
     }
 
     public boolean isFirst() {
@@ -169,4 +177,5 @@ public class CEntityWizard<E extends IEntity> extends CEntityForm<E> {
     public boolean isLast() {
         return wizardPanel.getSelectedIndex() == wizardPanel.size() - 1;
     }
+
 }

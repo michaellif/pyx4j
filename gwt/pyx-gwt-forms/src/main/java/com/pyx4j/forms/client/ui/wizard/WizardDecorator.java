@@ -49,7 +49,7 @@ public class WizardDecorator<E extends IEntity> extends FormDecorator<E, CEntity
         btnCancel = new Button(i18n.tr("Cancel"), new Command() {
             @Override
             public void execute() {
-                onCancel();
+                getComponent().cancel();
             }
         });
         addFooterToolbarButton(btnCancel);
@@ -67,7 +67,7 @@ public class WizardDecorator<E extends IEntity> extends FormDecorator<E, CEntity
             @Override
             public void execute() {
                 if (getComponent().isLast()) {
-                    onFinish();
+                    getComponent().finish();
                 } else {
                     getComponent().next();
                     calculateButtonsState();
@@ -77,12 +77,6 @@ public class WizardDecorator<E extends IEntity> extends FormDecorator<E, CEntity
         addFooterToolbarButton(btnNext);
 
         setWidth("100%");
-    }
-
-    protected void onCancel() {
-    }
-
-    protected void onFinish() {
     }
 
     public Button getBtnPrevious() {
