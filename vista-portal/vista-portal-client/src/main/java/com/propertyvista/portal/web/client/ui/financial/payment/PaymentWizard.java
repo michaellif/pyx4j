@@ -62,7 +62,6 @@ import com.pyx4j.widgets.client.dialog.MessageDialog;
 
 import com.propertyvista.common.client.resources.VistaImages;
 import com.propertyvista.common.client.resources.VistaResources;
-import com.propertyvista.common.client.ui.components.editors.payments.PaymentMethodForm;
 import com.propertyvista.domain.contact.AddressSimple;
 import com.propertyvista.domain.payment.CreditCardInfo.CreditCardType;
 import com.propertyvista.domain.payment.LeasePaymentMethod;
@@ -75,6 +74,7 @@ import com.propertyvista.portal.web.client.ui.CPortalEntityWizard;
 import com.propertyvista.portal.web.client.ui.IWizardView;
 import com.propertyvista.portal.web.client.ui.LegalTermsDialog;
 import com.propertyvista.portal.web.client.ui.LegalTermsDialog.TermsType;
+import com.propertyvista.portal.web.client.ui.financial.paymentmethod.PaymentMethodEditor;
 import com.propertyvista.portal.web.client.ui.util.decorators.FormDecoratorBuilder;
 
 public class PaymentWizard extends CPortalEntityWizard<PaymentDTO> {
@@ -87,7 +87,7 @@ public class PaymentWizard extends CPortalEntityWizard<PaymentDTO> {
 
     private final SimplePanel confirmationDetailsHolder = new SimplePanel();
 
-    private final PaymentMethodForm<LeasePaymentMethod> paymentMethodEditor = new PaymentMethodForm<LeasePaymentMethod>(LeasePaymentMethod.class) {
+    private final PaymentMethodEditor<LeasePaymentMethod> paymentMethodEditor = new PaymentMethodEditor<LeasePaymentMethod>(LeasePaymentMethod.class) {
 
         @Override
         protected Set<CreditCardType> getAllowedCardTypes() {
