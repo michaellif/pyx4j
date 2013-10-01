@@ -40,16 +40,19 @@ public class BillForm extends CEntityDecoratableForm<BillDTO> {
 
     private static final I18n i18n = I18n.get(BillForm.class);
 
-    private final boolean justCurrentBill;
+    private final boolean showInfoSection;
+
+    private final boolean showPreviousBill;
 
     public BillForm() {
-        this(false);
+        this(true, true);
     }
 
-    public BillForm(boolean justCurrentBill) {
+    public BillForm(boolean showInfoSection, boolean showPreviousBill) {
         super(BillDTO.class);
 
-        this.justCurrentBill = justCurrentBill;
+        this.showInfoSection = showPreviousBill;
+        this.showPreviousBill = showPreviousBill;
 
         setEditable(false);
         inheritEditable(false);
@@ -62,30 +65,32 @@ public class BillForm extends CEntityDecoratableForm<BillDTO> {
     public IsWidget createContent() {
         BasicFlexFormPanel flexPanel = new BasicFlexFormPanel();
         int row = -1;
-        int col = 0;
-        if (!justCurrentBill) {
+
+        if (showInfoSection) {
             flexPanel.setH1(++row, 0, 2, i18n.tr("Info"));
             flexPanel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().billingAccount().lease().unit(), new CEntityLabel<AptUnit>())).build());
+            flexPanel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().billingCycle().building(), new CEntityLabel<Building>())).build());
+
+            flexPanel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().billingCycle().billingType().billingPeriod(), new CEnumLabel())).build());
             flexPanel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().billingCycle().billingCycleStartDate(), new CDateLabel())).build());
             flexPanel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().billingCycle().billingCycleEndDate(), new CDateLabel())).build());
 
-            flexPanel.setWidget(++row, col, new FormDecoratorBuilder(inject(proto().billingCycle().building(), new CEntityLabel<Building>())).build());
-            flexPanel.setWidget(++row, col, new FormDecoratorBuilder(inject(proto().billingCycle().billingType().billingPeriod(), new CEnumLabel())).build());
-            flexPanel.setWidget(++row, col, new FormDecoratorBuilder(inject(proto().billingCycle().targetBillExecutionDate(), new CDateLabel())).build());
+            flexPanel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().billingCycle().targetBillExecutionDate(), new CDateLabel())).build());
 
             flexPanel.setH1(++row, 0, 2, i18n.tr("Status"));
             flexPanel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().billSequenceNumber(), new CNumberLabel())).build());
             flexPanel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().dueDate(), new CDateLabel())).build());
             flexPanel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().rejectReason(), new CLabel<String>())).build());
 
-            flexPanel.setWidget(++row, col, new FormDecoratorBuilder(inject(proto().billType(), new CEnumLabel())).build());
-            flexPanel.setWidget(++row, col, new FormDecoratorBuilder(inject(proto().billStatus(), new CEnumLabel())).build());
+            flexPanel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().billType(), new CEnumLabel())).build());
+            flexPanel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().billStatus(), new CEnumLabel())).build());
         }
 
-        if (!justCurrentBill) {
-            flexPanel.setH1(++row, 0, 2, i18n.tr("Last Bill"));
+        if (showPreviousBill) {
+            flexPanel.setH1(++row, 0, 2, i18n.tr("Previous Bill"));
             flexPanel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().balanceForwardAmount(), new CMoneyLabel())).build());
             flexPanel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().carryForwardCredit(), new CMoneyLabel())).build());
+
             flexPanel.setWidget(++row, 0, inject(proto().depositRefundLineItems(), new LineItemCollapsibleViewer()));
             flexPanel.setWidget(++row, 0, inject(proto().immediateAccountAdjustmentLineItems(), new LineItemCollapsibleViewer()));
             flexPanel.setWidget(++row, 0, inject(proto().previousChargeRefundLineItems(), new LineItemCollapsibleViewer()));
@@ -94,12 +99,16 @@ public class BillForm extends CEntityDecoratableForm<BillDTO> {
             flexPanel.setWidget(++row, 0, inject(proto().rejectedPaymentLineItems(), new LineItemCollapsibleViewer()));
             flexPanel.setWidget(++row, 0, inject(proto().paymentLineItems(), new LineItemCollapsibleViewer()));
 
-            Widget lastBillTotal = new FormDecoratorBuilder(inject(proto().pastDueAmount(), new CMoneyLabel()), "20em", "8em", "8em").build();
-            lastBillTotal.addStyleName(BillingTheme.StyleName.BillingBillTotal.name());
-            flexPanel.setWidget(++row, 0, 2, lastBillTotal);
+            Widget pastDueAmount = new FormDecoratorBuilder(inject(proto().pastDueAmount(), new CMoneyLabel())).customLabel(i18n.tr("Previous Bill Balance"))
+                    .build();
+            pastDueAmount.addStyleName(BillingTheme.StyleName.BillingBillTotal.name());
+            flexPanel.setWidget(++row, 0, 2, pastDueAmount);
         }
 
         flexPanel.setH1(++row, 0, 2, i18n.tr("Current Bill"));
+        if (!showPreviousBill) {
+            flexPanel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().pastDueAmount(), new CMoneyLabel())).build());
+        }
         flexPanel.setWidget(++row, 0, inject(proto().serviceChargeLineItems(), new LineItemCollapsibleViewer()));
         flexPanel.setWidget(++row, 0, inject(proto().recurringFeatureChargeLineItems(), new LineItemCollapsibleViewer()));
         flexPanel.setWidget(++row, 0, inject(proto().onetimeFeatureChargeLineItems(), new LineItemCollapsibleViewer()));
@@ -108,11 +117,11 @@ public class BillForm extends CEntityDecoratableForm<BillDTO> {
         flexPanel.setWidget(++row, 0, inject(proto().depositLineItems(), new LineItemCollapsibleViewer()));
         flexPanel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().productCreditAmount(), new CMoneyLabel())).build());
 
-        flexPanel.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().currentAmount(), new CMoneyLabel()), "20em", "8em", "8em").build());
-        flexPanel.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().taxes(), new CMoneyLabel()), "20em", "8em", "8em").build());
+        flexPanel.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().currentAmount(), new CMoneyLabel())).build());
+        flexPanel.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().taxes(), new CMoneyLabel())).build());
 
         // Dues:
-        Widget grandTotal = new FormDecoratorBuilder(inject(proto().totalDueAmount(), new CMoneyLabel()), "20em", "8em", "8em").build();
+        Widget grandTotal = new FormDecoratorBuilder(inject(proto().totalDueAmount(), new CMoneyLabel())).build();
         grandTotal.addStyleName(BillingTheme.StyleName.BillingBillTotal.name());
         flexPanel.setWidget(++row, 0, 2, grandTotal);
 
@@ -123,9 +132,7 @@ public class BillForm extends CEntityDecoratableForm<BillDTO> {
     protected void onValueSet(boolean populate) {
         super.onValueSet(populate);
 
-//        billPanel.setVisible(getValue().billStatus().getValue() != BillStatus.Failed);
-
-        if (!justCurrentBill) {
+        if (showPreviousBill) {
             get(proto().rejectReason()).setVisible(getValue().billStatus().getValue() == BillStatus.Rejected);
             get(proto().productCreditAmount()).setVisible(
                     !getValue().productCreditAmount().isNull() && getValue().productCreditAmount().getValue().compareTo(BigDecimal.ZERO) != 0);
@@ -140,6 +147,7 @@ public class BillForm extends CEntityDecoratableForm<BillDTO> {
             hideLines(getValue().nsfChargeLineItems(), proto().nsfChargeLineItems());
             hideLines(getValue().withdrawalLineItems(), proto().withdrawalLineItems());
             hideLines(getValue().rejectedPaymentLineItems(), proto().rejectedPaymentLineItems());
+            hideLines(getValue().paymentLineItems(), proto().paymentLineItems());
         }
 
         hideLines(getValue().serviceChargeLineItems(), proto().serviceChargeLineItems());
