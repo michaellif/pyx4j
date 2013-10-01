@@ -13,25 +13,29 @@
  */
 package com.propertyvista.portal.server.portal.web.services.services;
 
+import com.google.gwt.user.client.rpc.AsyncCallback;
 
-
+import com.pyx4j.commons.Key;
 import com.pyx4j.config.server.ServerSideFactory;
+import com.pyx4j.entity.rpc.EntitySearchResult;
 import com.pyx4j.entity.server.AbstractCrudServiceDtoImpl;
 import com.pyx4j.entity.server.Persistence;
+import com.pyx4j.entity.shared.criterion.EntityListCriteria;
 
 import com.propertyvista.biz.policy.PolicyFacade;
+import com.propertyvista.biz.tenant.insurance.GeneralInsuranceFacade;
 import com.propertyvista.domain.policy.policies.TenantInsurancePolicy;
-import com.propertyvista.domain.tenant.insurance.GeneralInsuranceCertificate;
+import com.propertyvista.domain.tenant.insurance.GeneralInsurancePolicy;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.portal.rpc.portal.web.dto.insurance.GeneralInsurancePolicyDTO;
 import com.propertyvista.portal.rpc.portal.web.services.services.GeneralInsurancePolicyCrudService;
 import com.propertyvista.portal.server.portal.TenantAppContext;
 
-public class GeneralInsurancePolicyCrudServiceImpl extends AbstractCrudServiceDtoImpl<GeneralInsuranceCertificate, GeneralInsurancePolicyDTO> implements
-             GeneralInsurancePolicyCrudService {
+public class GeneralInsurancePolicyCrudServiceImpl extends AbstractCrudServiceDtoImpl<GeneralInsurancePolicy, GeneralInsurancePolicyDTO> implements
+        GeneralInsurancePolicyCrudService {
 
     public GeneralInsurancePolicyCrudServiceImpl() {
-        super(GeneralInsuranceCertificate.class, GeneralInsurancePolicyDTO.class);
+        super(GeneralInsurancePolicy.class, GeneralInsurancePolicyDTO.class);
     }
 
     @Override
@@ -47,7 +51,29 @@ public class GeneralInsurancePolicyCrudServiceImpl extends AbstractCrudServiceDt
     }
 
     @Override
-    public void enhanceRetrieved(GeneralInsuranceCertificate bo, GeneralInsurancePolicyDTO to, RetrieveTarget retrieveTarget) {
+    public void create(AsyncCallback<Key> callback, GeneralInsurancePolicyDTO dto) {
+        ServerSideFactory.create(GeneralInsuranceFacade.class).createGeneralTenantInsurance(TenantAppContext.getCurrentUserTenant(), dto.certificate());
+        Persistence.service().commit();
+        callback.onSuccess(null);
+    }
+
+    @Override
+    public void list(AsyncCallback<EntitySearchResult<GeneralInsurancePolicyDTO>> callback, EntityListCriteria<GeneralInsurancePolicyDTO> dtoCriteria) {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public void save(AsyncCallback<Key> callback, GeneralInsurancePolicyDTO to) {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public void retrieve(AsyncCallback<GeneralInsurancePolicyDTO> callback, Key entityId, com.pyx4j.entity.rpc.AbstractCrudService.RetrieveTarget retrieveTarget) {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public void enhanceRetrieved(GeneralInsurancePolicy bo, GeneralInsurancePolicyDTO to, RetrieveTarget retrieveTarget) {
         populateMinLiability(to);
     }
 
