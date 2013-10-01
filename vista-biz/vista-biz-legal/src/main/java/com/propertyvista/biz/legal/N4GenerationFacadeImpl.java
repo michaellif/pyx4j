@@ -23,7 +23,6 @@ package com.propertyvista.biz.legal;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.lang.reflect.Method;
-import java.util.LinkedList;
 import java.util.List;
 
 import org.apache.commons.io.IOUtils;
@@ -37,98 +36,42 @@ import com.itextpdf.text.pdf.PdfReader;
 import com.itextpdf.text.pdf.PdfStamper;
 
 import com.pyx4j.commons.CommonsStringUtils;
+import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.commons.SimpleMessageFormat;
+import com.pyx4j.config.server.ServerSideFactory;
+import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IEntity;
 
+import com.propertyvista.biz.financial.ar.ARFacade;
 import com.propertyvista.domain.contact.AddressStructured;
+import com.propertyvista.domain.financial.ARCode;
+import com.propertyvista.domain.financial.billing.InvoiceDebit;
 import com.propertyvista.domain.legal.N4FormFieldsData;
 import com.propertyvista.domain.legal.N4FormFieldsData.SignedBy;
 import com.propertyvista.domain.legal.N4LandlordsData;
 import com.propertyvista.domain.legal.N4LeaseData;
 import com.propertyvista.domain.legal.N4RentOwingForPeriod;
 import com.propertyvista.domain.legal.PdfFormFieldName;
+import com.propertyvista.domain.tenant.lease.Lease;
+import com.propertyvista.domain.tenant.lease.LeaseTermTenant;
 import com.propertyvista.domain.tenant.lease.Tenant;
+import com.propertyvista.server.common.util.AddressRetriever;
 
 public class N4GenerationFacadeImpl implements N4GenerationFacade {
 
     private static final String N4_FORM_FILE = "n4.pdf";
 
     @Override
-    public byte[] generateN4Letter(List<N4FormFieldsData> formData) {
+    public byte[] generateN4Letter(N4FormFieldsData formData) {
         byte[] filledForm = null;
         try {
             byte[] formTemplate = IOUtils.toByteArray(N4GenerationFacadeImpl.class.getResourceAsStream(N4_FORM_FILE));
-            List<Object> filledForms = new LinkedList<Object>();
-            for (N4FormFieldsData fieldsData : formData) {
-                filledForms.add(fillForm(fieldsData, formTemplate));
-            }
-            filledForm = joinPdfs(filledForms);
+            filledForm = fillForm(formData, formTemplate);
         } catch (Throwable e) {
             throw new RuntimeException(e);
         }
         return filledForm;
-    }
-
-    // TODO factor out this one 
-    public byte[] fillForm(IEntity fieldsData, byte[] form) throws IOException, DocumentException {
-        ByteArrayOutputStream bos = new ByteArrayOutputStream();
-        PdfReader reader = new PdfReader(form);
-        PdfStamper stamper = new PdfStamper(reader, bos);
-        AcroFields fields = stamper.getAcroFields();
-
-        for (String memberName : fieldsData.getEntityMeta().getMemberNames()) {
-            try {
-                if (fieldsData.getMember(memberName).getValueClass().equals(String.class)) {
-                    String value = fieldsData.getMember(memberName).isNull() ? "" : fieldsData.getMember(memberName).getValue().toString();
-                    fields.setField(pdfFieldName(fieldsData, memberName), value);
-                } else if (fieldsData.getMember(memberName).getValueClass().isEnum()) {
-                    // this code should work the same as for sting but it was left here just to denote it's a different field type
-                    String value = fieldsData.getMember(memberName).isNull() ? "" : fieldsData.getMember(memberName).getValue().toString();
-                    fields.setField(pdfFieldName(fieldsData, memberName), value);
-
-                } else if (fieldsData.getMember(memberName).getValueClass().isArray()) {
-                    do {
-                        if (fieldsData.getMember(memberName).isNull()) {
-                            break;
-                        }
-
-                        List<FieldPosition> fieldPositions = fields.getFieldPositions(pdfFieldName(fieldsData, memberName));
-                        if (fieldPositions == null || fieldPositions.size() == 0) {
-                            break;
-                        }
-
-                        FieldPosition signaturePosition = fieldPositions.get(0);
-                        PdfContentByte canvas = stamper.getOverContent(signaturePosition.page);
-                        Image signature = Image.getInstance((byte[]) fieldsData.getMember(memberName).getValue());
-                        signature.scaleAbsolute(signaturePosition.position.getWidth(), signaturePosition.position.getHeight());
-                        signature.setAbsolutePosition(signaturePosition.position.getLeft(), signaturePosition.position.getBottom());
-                        canvas.addImage(signature);
-                    } while (false);
-
-                }
-
-            } catch (Throwable e) {
-                throw new RuntimeException(e);
-            }
-        }
-        stamper.setFormFlattening(true);
-        stamper.close();
-        reader.close();
-        bos.close();
-        return bos.toByteArray();
-    }
-
-    private String pdfFieldName(IEntity fieldsData, String memberName) throws NoSuchMethodException, SecurityException {
-        Class<?> fieldsDataClass = fieldsData.getInstanceValueClass();
-        Method member = fieldsDataClass.getDeclaredMethod(memberName, (Class<?>[]) null);
-        PdfFormFieldName fieldName = member.getAnnotation(PdfFormFieldName.class);
-        return fieldName != null ? fieldName.value() : memberName;
-    }
-
-    public byte[] joinPdfs(List<?> pdfArray) {
-        // TODO implement this one
-        return (byte[]) pdfArray.get(0);
     }
 
     @Override
@@ -274,6 +217,80 @@ public class N4GenerationFacadeImpl implements N4GenerationFacade {
         return fieldsData;
     }
 
+    @Override
+    public N4LeaseData populateN4LeaseData(Lease leaseId, LogicalDate terminationDate) {
+        Lease lease = Persistence.service().retrieve(Lease.class, leaseId.getPrimaryKey());
+
+        N4LeaseData n4LeaseData = EntityFactory.create(N4LeaseData.class);
+
+        for (LeaseTermTenant termTenant : lease.currentTerm().version().tenants()) {
+            n4LeaseData.leaseTenants().add(termTenant.leaseParticipant());
+        }
+
+        n4LeaseData.rentalUnitAddress().set(AddressRetriever.getUnitLegalAddress(lease.unit()));
+        n4LeaseData.terminationDate().setValue(terminationDate);
+
+        List<InvoiceDebit> debits = ServerSideFactory.create(ARFacade.class).getNotCoveredDebitInvoiceLineItems(lease.billingAccount());
+
+        return n4LeaseData;
+    }
+
+    // TODO factor out this method 
+    public byte[] fillForm(IEntity fieldsData, byte[] form) throws IOException, DocumentException {
+        ByteArrayOutputStream bos = new ByteArrayOutputStream();
+        PdfReader reader = new PdfReader(form);
+        PdfStamper stamper = new PdfStamper(reader, bos);
+        AcroFields fields = stamper.getAcroFields();
+
+        for (String memberName : fieldsData.getEntityMeta().getMemberNames()) {
+            try {
+                if (fieldsData.getMember(memberName).getValueClass().equals(String.class)) {
+                    String value = fieldsData.getMember(memberName).isNull() ? "" : fieldsData.getMember(memberName).getValue().toString();
+                    fields.setField(pdfFieldName(fieldsData, memberName), value);
+                } else if (fieldsData.getMember(memberName).getValueClass().isEnum()) {
+                    // this code should work the same as for sting but it was left here just to denote it's a different field type
+                    String value = fieldsData.getMember(memberName).isNull() ? "" : fieldsData.getMember(memberName).getValue().toString();
+                    fields.setField(pdfFieldName(fieldsData, memberName), value);
+
+                } else if (fieldsData.getMember(memberName).getValueClass().isArray()) {
+                    do {
+                        if (fieldsData.getMember(memberName).isNull()) {
+                            break;
+                        }
+
+                        List<FieldPosition> fieldPositions = fields.getFieldPositions(pdfFieldName(fieldsData, memberName));
+                        if (fieldPositions == null || fieldPositions.size() == 0) {
+                            break;
+                        }
+
+                        FieldPosition signaturePosition = fieldPositions.get(0);
+                        PdfContentByte canvas = stamper.getOverContent(signaturePosition.page);
+                        Image signature = Image.getInstance((byte[]) fieldsData.getMember(memberName).getValue());
+                        signature.scaleAbsolute(signaturePosition.position.getWidth(), signaturePosition.position.getHeight());
+                        signature.setAbsolutePosition(signaturePosition.position.getLeft(), signaturePosition.position.getBottom());
+                        canvas.addImage(signature);
+                    } while (false);
+
+                }
+
+            } catch (Throwable e) {
+                throw new RuntimeException(e);
+            }
+        }
+        stamper.setFormFlattening(true);
+        stamper.close();
+        reader.close();
+        bos.close();
+        return bos.toByteArray();
+    }
+
+    private String pdfFieldName(IEntity fieldsData, String memberName) throws NoSuchMethodException, SecurityException {
+        Class<?> fieldsDataClass = fieldsData.getInstanceValueClass();
+        Method member = fieldsDataClass.getDeclaredMethod(memberName, (Class<?>[]) null);
+        PdfFormFieldName fieldName = member.getAnnotation(PdfFormFieldName.class);
+        return fieldName != null ? fieldName.value() : memberName;
+    }
+
     private String formatTenants(Iterable<Tenant> tenants) {
         StringBuilder stringBuilder = new StringBuilder();
         for (Tenant tenant : tenants) {
@@ -285,6 +302,11 @@ public class N4GenerationFacadeImpl implements N4GenerationFacade {
 
     private String formatRentalAddress(AddressStructured address) {
         return address.getStringView();
+    }
+
+    private boolean isRentARcode(ARCode value) {
+        // TODO implement this method
+        return true;
     }
 
 }

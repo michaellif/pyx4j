@@ -20,8 +20,6 @@
  */
 package com.propertyvista.biz.legal;
 
-import java.util.Arrays;
-
 import org.junit.Test;
 
 import com.propertyvista.domain.legal.N4FormFieldsData;
@@ -38,7 +36,7 @@ public class N4GenerationFacadeImplTest {
     @Test
     public void testSanity() {
         N4GenerationFacadeImpl facade = new N4GenerationFacadeImpl();
-        facade.generateN4Letter(Arrays.asList(mockFormData));
+        facade.generateN4Letter(mockFormData);
     }
 
 }

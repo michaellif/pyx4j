@@ -23,14 +23,13 @@ package com.propertyvista.biz.legal;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.util.Arrays;
 
 /** this is just a utility to generate a document to see how it looks like */
 public class MakeAFilledN4Form {
 
     public static void main(String args[]) throws FileNotFoundException, IOException {
         N4GenerationFacadeImpl facade = new N4GenerationFacadeImpl();
-        byte[] pdf = facade.generateN4Letter(Arrays.asList(MockN4FormDataFactory.makeMockN4FormFieldsData("Tenant Tenantovic")));
+        byte[] pdf = facade.generateN4Letter(MockN4FormDataFactory.makeMockN4FormFieldsData("Tenant Tenantovic"));
         FileOutputStream fos = new FileOutputStream("n4filled-test.pdf");
         fos.write(pdf);
         fos.close();

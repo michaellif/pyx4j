@@ -28,4 +28,7 @@ public interface LegalNoticeCandidate extends IEntity {
 
     IPrimitive<BigDecimal> amountOwed();
 
+    /** Number of previously issued N4s */
+    IPrimitive<Integer> n4Issued();
+
 }

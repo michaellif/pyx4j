@@ -13,16 +13,18 @@
  */
 package com.propertyvista.biz.legal;
 
-import java.util.List;
+import com.pyx4j.commons.LogicalDate;
 
 import com.propertyvista.domain.legal.N4FormFieldsData;
 import com.propertyvista.domain.legal.N4LandlordsData;
 import com.propertyvista.domain.legal.N4LeaseData;
+import com.propertyvista.domain.tenant.lease.Lease;
 
 public interface N4GenerationFacade {
 
-    byte[] generateN4Letter(List<N4FormFieldsData> formData);
+    byte[] generateN4Letter(N4FormFieldsData formData);
 
     N4FormFieldsData populateFormData(N4LeaseData leaseData, N4LandlordsData landlordsData);
 
+    N4LeaseData populateN4LeaseData(Lease leaseId, LogicalDate terminationDate);
 }
