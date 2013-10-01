@@ -21,6 +21,8 @@
 package com.propertyvista.biz.legal;
 
 import java.math.BigDecimal;
+import java.util.Arrays;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -37,6 +39,7 @@ import com.pyx4j.gwt.server.DateUtils;
 
 import com.propertyvista.domain.financial.billing.BillingCycle;
 import com.propertyvista.domain.financial.billing.InvoiceDebit;
+import com.propertyvista.domain.legal.N4RentOwingForPeriod;
 
 public class InvoiceDebitAggregatorTest {
 
@@ -48,12 +51,9 @@ public class InvoiceDebitAggregatorTest {
     public void setUp() {
         debits = new LinkedList<InvoiceDebit>();
 
-        BillingCycle billingCycleA = createBillingCycle(1, new LogicalDate(DateUtils.detectDateformat("2010-01-01")),
-                new LogicalDate(DateUtils.detectDateformat("2010-01-31")));
-        BillingCycle billingCycleB = createBillingCycle(2, new LogicalDate(DateUtils.detectDateformat("2010-02-01")),
-                new LogicalDate(DateUtils.detectDateformat("2010-02-28")));
-        BillingCycle billingCycleC = createBillingCycle(3, new LogicalDate(DateUtils.detectDateformat("2010-03-01")),
-                new LogicalDate(DateUtils.detectDateformat("2010-03-31")));
+        BillingCycle billingCycleA = createBillingCycle(1, "2010-01-01", "2010-01-31");
+        BillingCycle billingCycleB = createBillingCycle(2, "2010-02-01", "2010-02-28");
+        BillingCycle billingCycleC = createBillingCycle(3, "2010-03-01", "2010-03-31");
 
         debits.add(createInvoiceDebit(billingCycleA, "1000", "0"));
         debits.add(createInvoiceDebit(billingCycleB, "2000", "0"));
@@ -93,11 +93,58 @@ public class InvoiceDebitAggregatorTest {
         }
     }
 
-    private BillingCycle createBillingCycle(long id, LogicalDate from, LogicalDate to) {
+    @Test
+    public void testzDebitsForPeriod() {
+        Map<BillingCycle, List<InvoiceDebit>> aggregatedDebits = new HashMap<BillingCycle, List<InvoiceDebit>>();
+        BillingCycle billingCycleA = createBillingCycle(1, "2013-12-01", "2013-12-31");
+        aggregatedDebits.put(billingCycleA, Arrays.asList(//@formatter:off
+                createInvoiceDebit(billingCycleA, "1", "1"),
+                createInvoiceDebit(billingCycleA, "2", "1"),
+                createInvoiceDebit(billingCycleA, "3", "2")
+        ));//@formatter:on
+
+        BillingCycle billingCycleB = createBillingCycle(2, "2013-11-01", "2013-11-30");
+        aggregatedDebits.put(billingCycleB, Arrays.asList(//@formatter:off
+                        createInvoiceDebit(billingCycleB, "100", "100"),
+                        createInvoiceDebit(billingCycleB, "200", "100"),
+                        createInvoiceDebit(billingCycleB, "300", "200")
+        ));//@formatter:on
+
+        BillingCycle billingCycleC = createBillingCycle(3, "2013-10-01", "2013-10-31");
+        aggregatedDebits.put(billingCycleC, Arrays.asList(//@formatter:off
+                        createInvoiceDebit(billingCycleB, "1000", "1000"),
+                        createInvoiceDebit(billingCycleB, "2000", "1000"),
+                        createInvoiceDebit(billingCycleB, "3000", "2000")
+        ));//@formaterr:on
+        
+        List<N4RentOwingForPeriod> debitsForPeriod = new InvoiceDebitAggregator().debitsForPeriod(aggregatedDebits);
+        Assert.assertEquals(3, debitsForPeriod.size());
+        
+        Assert.assertEquals(new BigDecimal("6"), debitsForPeriod.get(2).rentCharged().getValue());
+        Assert.assertEquals(new BigDecimal("4"), debitsForPeriod.get(2).rentPaid().getValue());
+        Assert.assertEquals(new BigDecimal("2"), debitsForPeriod.get(2).rentOwing().getValue());
+        Assert.assertEquals(new LogicalDate(DateUtils.detectDateformat("2013-12-01")), debitsForPeriod.get(2).from().getValue());
+        Assert.assertEquals(new LogicalDate(DateUtils.detectDateformat("2013-12-31")), debitsForPeriod.get(2).to().getValue());
+        
+        Assert.assertEquals(new BigDecimal("600"), debitsForPeriod.get(1).rentCharged().getValue());
+        Assert.assertEquals(new BigDecimal("400"), debitsForPeriod.get(1).rentPaid().getValue());
+        Assert.assertEquals(new BigDecimal("200"), debitsForPeriod.get(1).rentOwing().getValue());
+        Assert.assertEquals(new LogicalDate(DateUtils.detectDateformat("2013-11-01")), debitsForPeriod.get(1).from().getValue());
+        Assert.assertEquals(new LogicalDate(DateUtils.detectDateformat("2013-11-30")), debitsForPeriod.get(1).to().getValue());
+
+        Assert.assertEquals(new BigDecimal("6000"), debitsForPeriod.get(0).rentCharged().getValue());
+        Assert.assertEquals(new BigDecimal("4000"), debitsForPeriod.get(0).rentPaid().getValue());
+        Assert.assertEquals(new BigDecimal("2000"), debitsForPeriod.get(0).rentOwing().getValue());
+        Assert.assertEquals(new LogicalDate(DateUtils.detectDateformat("2013-10-01")), debitsForPeriod.get(0).from().getValue());
+        Assert.assertEquals(new LogicalDate(DateUtils.detectDateformat("2013-10-31")), debitsForPeriod.get(0).to().getValue());
+
+    }
+
+    private BillingCycle createBillingCycle(long id, String from, String to) {
         BillingCycle billingCycle = EntityFactory.create(BillingCycle.class);
         billingCycle.setPrimaryKey(new Key(id));
-        billingCycle.billingCycleStartDate().setValue(from);
-        billingCycle.billingCycleEndDate().setValue(from);
+        billingCycle.billingCycleStartDate().setValue(from != null ? new LogicalDate(DateUtils.detectDateformat(from)) : null);
+        billingCycle.billingCycleEndDate().setValue(to != null ? new LogicalDate(DateUtils.detectDateformat(to)) : null);
         return billingCycle;
     }
 

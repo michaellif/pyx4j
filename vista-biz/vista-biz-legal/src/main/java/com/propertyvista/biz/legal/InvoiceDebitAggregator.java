@@ -56,7 +56,7 @@ public class InvoiceDebitAggregator {
         for (Map.Entry<BillingCycle, List<InvoiceDebit>> billingCycleDebits : agregatedDebits.entrySet()) {
             N4RentOwingForPeriod rentForPeriod = EntityFactory.create(N4RentOwingForPeriod.class);
             rentForPeriod.from().setValue(billingCycleDebits.getKey().billingCycleStartDate().getValue());
-            rentForPeriod.to().setValue(billingCycleDebits.getKey().billingCycleStartDate().getValue());
+            rentForPeriod.to().setValue(billingCycleDebits.getKey().billingCycleEndDate().getValue());
             rentForPeriod.rentCharged().setValue(BigDecimal.ZERO);
             rentForPeriod.rentPaid().setValue(BigDecimal.ZERO);
             rentForPeriod.rentOwing().setValue(BigDecimal.ZERO);
