@@ -51,9 +51,9 @@ public class PrimitiveHandler<TYPE extends Serializable> extends ObjectHandler<T
 
     private final Class<TYPE> valueClass;
 
-    private static final String trueText = defaultYesText();
+    private static final String trueTextEnglish = "yes";
 
-    private static final String falseText = defaultNoText();
+    private static final String falseTextEnglish = "no";
 
     private static final String dateFormat = defaultDateFormat();
 
@@ -63,12 +63,12 @@ public class PrimitiveHandler<TYPE extends Serializable> extends ObjectHandler<T
     }
 
     @I18nComment("As an answer to a question")
-    private static final String defaultNoText() {
+    private static final String i18nNoText() {
         return i18n.tr("No");
     }
 
     @I18nComment("As an answer to a question")
-    private static final String defaultYesText() {
+    private static final String i18nYesText() {
         return i18n.tr("Yes");
     }
 
@@ -131,7 +131,13 @@ public class PrimitiveHandler<TYPE extends Serializable> extends ObjectHandler<T
         } else if (valueClass.isEnum()) {
             converted = (TYPE) Enum.valueOf((Class<Enum>) valueClass, value);
         } else if (valueClass.equals(Boolean.class)) {
-            converted = (TYPE) Boolean.valueOf(value);
+            if (trueTextEnglish.equals(value) || i18nYesText().equals(value)) {
+                converted = (TYPE) Boolean.TRUE;
+            } else if (falseTextEnglish.equals(value) || i18nNoText().equals(value)) {
+                converted = (TYPE) Boolean.FALSE;
+            } else {
+                converted = (TYPE) Boolean.valueOf(value);
+            }
         } else if (valueClass.equals(Short.class)) {
             converted = (TYPE) Short.valueOf(value);
         } else if (valueClass.equals(BigDecimal.class)) {
@@ -288,13 +294,13 @@ public class PrimitiveHandler<TYPE extends Serializable> extends ObjectHandler<T
         TYPE thisValue = this.getValue();
         if (thisValue == null) {
             if (valueClass.equals(Boolean.class)) {
-                return falseText;
+                return i18nYesText();
             } else {
                 return mm.getNullString();
             }
         } else if (format == null) {
             if (valueClass.equals(Boolean.class)) {
-                return isBooleanTrue() ? trueText : falseText;
+                return isBooleanTrue() ? i18nYesText() : i18nNoText();
             } else if (thisValue instanceof Date) {
                 // TODO Add global variable for user preference
                 format = dateFormat;
