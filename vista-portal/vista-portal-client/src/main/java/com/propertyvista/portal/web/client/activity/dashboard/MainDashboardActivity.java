@@ -92,7 +92,7 @@ public class MainDashboardActivity extends SecurityAwareActivity implements Main
     @Override
     public void setAutopay() {
         if (SecurityController.checkAnyBehavior(VistaCustomerPaymentTypeBehavior.values())) {
-            AppSite.getPlaceController().goTo(new PortalSiteMap.Resident.Financial.PreauthorizedPayments());
+            AppSite.getPlaceController().goTo(new PortalSiteMap.Resident.Financial.PreauthorizedPayments.NewPreauthorizedPayment());
         }
     }
 
