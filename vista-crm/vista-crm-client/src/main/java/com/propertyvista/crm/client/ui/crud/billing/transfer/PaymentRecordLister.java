@@ -34,6 +34,7 @@ public class PaymentRecordLister extends AbstractLister<PaymentRecord> {
             new MemberColumnDescriptor.Builder(proto().id()).build(),
             new MemberColumnDescriptor.Builder(proto().billingAccount().lease().unit().building().propertyCode()).columnTitle(i18n.tr("Property Code")).visible(true).build(),
             new MemberColumnDescriptor.Builder(proto().padBillingCycle().billingCycleStartDate()).columnTitle(i18n.tr("Pre-Authorized Payment Cycle")).build(),
+            new MemberColumnDescriptor.Builder(proto().padBillingCycle().id(), false).columnTitle(i18n.tr("Pre-Authorized Payment Cycle Id")).build(),
             new MemberColumnDescriptor.Builder(proto().billingAccount().lease().unit().info().number()).columnTitle(i18n.tr("Unit")).visible(false).build(),
             new MemberColumnDescriptor.Builder(proto().billingAccount().lease().leaseId()).columnTitle(i18n.tr("Lease")).visible(true).build(),
             new MemberColumnDescriptor.Builder(proto().paymentMethod().customer()).visible(false).build(), 
