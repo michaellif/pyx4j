@@ -50,7 +50,7 @@ public class LineItemCollapsibleViewer extends CEntityContainer<InvoiceLineItemG
     private SimplePanel expandedPanel;
 
     public LineItemCollapsibleViewer() {
-        asWidget().setWidth("20em");
+        asWidget().setWidth("20.7em");
     }
 
     @Override
@@ -104,8 +104,9 @@ public class LineItemCollapsibleViewer extends CEntityContainer<InvoiceLineItemG
     private IsWidget createCollapsedContent(InvoiceLineItemGroupDTO value) {
         BasicFlexFormPanel content = new BasicFlexFormPanel();
 
-        content.getColumnFormatter().setWidth(0, "80%"); //overrides BasicFlexFormPanel's width auto-management for cells
-        content.getColumnFormatter().setWidth(2, "20%");
+        content.getColumnFormatter().setWidth(0, "8em");
+        content.getColumnFormatter().setWidth(1, "7em");
+        content.getColumnFormatter().setWidth(2, "5em");
 
         int row = 0;
         if (value != null && !value.total().isNull()) {
@@ -128,9 +129,9 @@ public class LineItemCollapsibleViewer extends CEntityContainer<InvoiceLineItemG
     private IsWidget createExpandedContent(InvoiceLineItemGroupDTO value) {
         BasicFlexFormPanel content = new BasicFlexFormPanel();
 
-        content.getColumnFormatter().setWidth(0, "40%"); //overrides BasicFlexFormPanel's width auto-management for cells
-        content.getColumnFormatter().setWidth(1, "40%");
-        content.getColumnFormatter().setWidth(2, "20%");
+        content.getColumnFormatter().setWidth(0, "7em");
+        content.getColumnFormatter().setWidth(1, "8em");
+        content.getColumnFormatter().setWidth(2, "5em");
 
         int row = 0;
         if (value != null && !value.total().isNull()) {

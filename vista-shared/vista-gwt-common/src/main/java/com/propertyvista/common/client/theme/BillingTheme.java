@@ -80,7 +80,6 @@ public class BillingTheme extends Theme {
         // ----------------------------------------------------
         style = new Style(".", StyleName.BillingDetailTotal);
         style.addProperty("color", "#B3B3B3");
-        style.addProperty("font-size", "12px");
         style.addProperty("font-weight", "bold");
         style.addProperty("text-align", "left");
         addStyle(style);
@@ -98,12 +97,10 @@ public class BillingTheme extends Theme {
 
         style = new Style(".", StyleName.BillingBillTotal, " .", DefaultWidgetDecoratorTheme.StyleName.WidgetDecoratorLabel);
         style.addProperty("color", "#666");
-        style.addProperty("font-size", "13px");
         addStyle(style);
 
         style = new Style(".", StyleName.BillingBillTotal, " .", DefaultWidgetDecoratorTheme.StyleName.WidgetDecoratorComponent);
         style.addProperty("color", "#666");
-        style.addProperty("font-size", "13px");
         style.addProperty("border-top", "2px solid #bbb");
         style.addProperty("padding-top", "4px");
         addStyle(style);
