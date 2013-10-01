@@ -27,6 +27,7 @@ public class BillingCycleLister extends AbstractLister<BillingCycleDTO> {
     public BillingCycleLister() {
         super(BillingCycleDTO.class, false);
         setColumnDescriptors(//@formatter:off
+            new MemberColumnDescriptor.Builder(proto().building(), false).build(),
             new MemberColumnDescriptor.Builder(proto().billingType()).build(),
             new MemberColumnDescriptor.Builder(proto().billingCycleStartDate()).build(),
             new MemberColumnDescriptor.Builder(proto().billingCycleEndDate()).build(),

@@ -37,22 +37,22 @@ public class BillingCycleCrudServiceImpl extends AbstractCrudServiceDtoImpl<Bill
     }
 
     @Override
-    protected void enhanceListRetrieved(BillingCycle entity, BillingCycleDTO dto) {
-        if (entity.stats().getAttachLevel() == AttachLevel.Detached) {
-            Persistence.service().retrieveMember(entity.stats());
-            dto.stats().set(entity.stats());
+    protected void enhanceListRetrieved(BillingCycle bo, BillingCycleDTO to) {
+        if (bo.stats().getAttachLevel() == AttachLevel.Detached) {
+            Persistence.service().retrieveMember(bo.stats());
+            to.stats().set(bo.stats());
         }
         {
             EntityQueryCriteria<PaymentRecord> criteria = EntityQueryCriteria.create(PaymentRecord.class);
-            criteria.eq(criteria.proto().padBillingCycle(), entity);
-            dto.pads().setValue((long) Persistence.service().count(criteria));
+            criteria.eq(criteria.proto().padBillingCycle(), bo);
+            to.pads().setValue((long) Persistence.service().count(criteria));
         }
+        Persistence.service().retrieve(to.building(), AttachLevel.ToStringMembers);
     }
 
     @Override
     protected void enhanceRetrieved(BillingCycle bo, BillingCycleDTO to, RetrieveTarget retrieveTarget) {
         enhanceListRetrieved(bo, to);
-        Persistence.service().retrieve(to.building(), AttachLevel.ToStringMembers);
 
         // calculate statistics on leases:
         // Total:

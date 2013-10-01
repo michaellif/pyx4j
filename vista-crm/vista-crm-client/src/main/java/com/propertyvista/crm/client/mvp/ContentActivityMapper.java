@@ -39,6 +39,7 @@ import com.propertyvista.crm.client.activity.crud.billing.adjustment.LeaseAdjust
 import com.propertyvista.crm.client.activity.crud.billing.bill.BillViewerActivity;
 import com.propertyvista.crm.client.activity.crud.billing.cycle.BillingCycleBillListerActivity;
 import com.propertyvista.crm.client.activity.crud.billing.cycle.BillingCycleLeaseListerActivity;
+import com.propertyvista.crm.client.activity.crud.billing.cycle.BillingCycleListerActivity;
 import com.propertyvista.crm.client.activity.crud.billing.cycle.BillingCycleViewerActivity;
 import com.propertyvista.crm.client.activity.crud.billing.payment.PaymentEditorActivity;
 import com.propertyvista.crm.client.activity.crud.billing.payment.PaymentListerActivity;
@@ -659,6 +660,8 @@ public class ContentActivityMapper implements AppActivityMapper {
                         case viewer:
                             activity = new BillingCycleViewerActivity(crudPlace);
                             break;
+                        case lister:
+                            activity = new BillingCycleListerActivity(crudPlace);
                         default:
                             break;
                         }
