@@ -71,6 +71,8 @@ class PrimaryKeyCriteriaHelper {
             return new Key((Long) value);
         } else if (value instanceof String) {
             return new Key((String) value);
+        } else if (value == null) {
+            return null;
         } else {
             throw new IllegalArgumentException(value.getClass().getName());
         }
