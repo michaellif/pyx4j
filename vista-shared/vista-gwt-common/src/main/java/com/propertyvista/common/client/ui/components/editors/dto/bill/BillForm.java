@@ -59,7 +59,6 @@ public class BillForm extends CEntityDecoratableForm<BillDTO> {
 
     @Override
     public IsWidget createContent() {
-        // form top panel:
         TwoColumnFlexFormPanel content = new TwoColumnFlexFormPanel();
         int row = -1;
         int col = oneColumn ? 0 : 1;
@@ -126,8 +125,6 @@ public class BillForm extends CEntityDecoratableForm<BillDTO> {
     @Override
     protected void onValueSet(boolean populate) {
         super.onValueSet(populate);
-
-//        billPanel.setVisible(getValue().billStatus().getValue() != BillStatus.Failed);
 
         if (!justPreviewBill) {
             get(proto().rejectReason()).setVisible(getValue().billStatus().getValue() == BillStatus.Rejected);
