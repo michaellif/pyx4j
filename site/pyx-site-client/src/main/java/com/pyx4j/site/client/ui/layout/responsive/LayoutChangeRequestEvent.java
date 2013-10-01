@@ -23,7 +23,7 @@ package com.pyx4j.site.client.ui.layout.responsive;
 import com.google.gwt.event.shared.GwtEvent;
 import com.google.gwt.user.client.ui.Widget;
 
-public class LayoutChangeRerquestEvent extends GwtEvent<LayoutChangeRerquestHandler> {
+public class LayoutChangeRequestEvent extends GwtEvent<LayoutChangeRerquestHandler> {
 
     public static Type<LayoutChangeRerquestHandler> TYPE = new Type<LayoutChangeRerquestHandler>();
 
@@ -36,11 +36,11 @@ public class LayoutChangeRerquestEvent extends GwtEvent<LayoutChangeRerquestHand
 
     private Widget popupCommunicationAnchor;
 
-    public LayoutChangeRerquestEvent(ChangeType type) {
+    public LayoutChangeRequestEvent(ChangeType type) {
         this.type = type;
     }
 
-    public LayoutChangeRerquestEvent(Widget popupCommunicationAnchor) {
+    public LayoutChangeRequestEvent(Widget popupCommunicationAnchor) {
         this.type = ChangeType.togglePopupComm;
         this.popupCommunicationAnchor = popupCommunicationAnchor;
     }

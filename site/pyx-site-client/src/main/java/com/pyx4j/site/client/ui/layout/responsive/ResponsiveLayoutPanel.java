@@ -215,7 +215,7 @@ public class ResponsiveLayoutPanel extends ComplexPanel implements RequiresResiz
             adopt(sideCommHolder);
         }
 
-        AppSite.getEventBus().addHandler(LayoutChangeRerquestEvent.TYPE, this);
+        AppSite.getEventBus().addHandler(LayoutChangeRequestEvent.TYPE, this);
 
         layoutType = LayoutType.getLayoutType(Window.getClientWidth());
 
@@ -405,7 +405,7 @@ public class ResponsiveLayoutPanel extends ComplexPanel implements RequiresResiz
     }
 
     @Override
-    public void onLayoutChangeRerquest(LayoutChangeRerquestEvent event) {
+    public void onLayoutChangeRerquest(LayoutChangeRequestEvent event) {
         switch (event.getChangeType()) {
         case toggleSideMenu:
             if (isSideMenuEnabled()) {
@@ -432,5 +432,11 @@ public class ResponsiveLayoutPanel extends ComplexPanel implements RequiresResiz
 
     public int getPageWidth() {
         return pagePanel.getOffsetWidth();
+    }
+
+    public void scrollToTop() {
+        if (pageScroll.getVerticalScrollPosition() > getHeaderDisplay().getOffsetHeight()) {
+            pageScroll.setVerticalScrollPosition(getHeaderDisplay().getOffsetHeight());
+        }
     }
 }
