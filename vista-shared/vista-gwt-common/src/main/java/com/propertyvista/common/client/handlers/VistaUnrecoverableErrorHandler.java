@@ -65,7 +65,7 @@ public class VistaUnrecoverableErrorHandler extends DefaultUnrecoverableErrorHan
 
     @Override
     protected void showWarning(String text) {
-        showMessage(text, NotificationType.WARN);
+        showMessage(text, NotificationType.WARNING);
     }
 
     @Override

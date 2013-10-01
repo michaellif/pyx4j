@@ -86,7 +86,7 @@ public class NotificationHeaderViewImpl extends FlowPanel implements Notificatio
                 case ERROR:
                     message.addStyleDependentName(PortalWebRootPaneTheme.StyleDependent.error.name());
                     break;
-                case WARN:
+                case WARNING:
                     message.addStyleDependentName(PortalWebRootPaneTheme.StyleDependent.warning.name());
                     break;
                 case INFO:

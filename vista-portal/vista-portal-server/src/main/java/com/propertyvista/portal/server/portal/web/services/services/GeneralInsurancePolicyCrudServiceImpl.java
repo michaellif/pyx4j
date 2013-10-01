@@ -13,6 +13,8 @@
  */
 package com.propertyvista.portal.server.portal.web.services.services;
 
+
+
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.server.AbstractCrudServiceDtoImpl;
 import com.pyx4j.entity.server.Persistence;
@@ -25,10 +27,10 @@ import com.propertyvista.portal.rpc.portal.web.dto.insurance.GeneralInsurancePol
 import com.propertyvista.portal.rpc.portal.web.services.services.GeneralInsurancePolicyCrudService;
 import com.propertyvista.portal.server.portal.TenantAppContext;
 
-public class GeneralInsuranceCertificateCrudServiceImpl extends AbstractCrudServiceDtoImpl<GeneralInsuranceCertificate, GeneralInsurancePolicyDTO> implements
-        GeneralInsurancePolicyCrudService {
+public class GeneralInsurancePolicyCrudServiceImpl extends AbstractCrudServiceDtoImpl<GeneralInsuranceCertificate, GeneralInsurancePolicyDTO> implements
+             GeneralInsurancePolicyCrudService {
 
-    public GeneralInsuranceCertificateCrudServiceImpl() {
+    public GeneralInsurancePolicyCrudServiceImpl() {
         super(GeneralInsuranceCertificate.class, GeneralInsurancePolicyDTO.class);
     }
 

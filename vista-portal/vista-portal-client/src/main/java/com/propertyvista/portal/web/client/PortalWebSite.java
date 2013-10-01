@@ -161,7 +161,7 @@ public class PortalWebSite extends VistaSite {
             case INFO:
                 dialogType = Type.Info;
                 break;
-            case WARN:
+            case WARNING:
                 dialogType = Type.Warning;
                 break;
             default:

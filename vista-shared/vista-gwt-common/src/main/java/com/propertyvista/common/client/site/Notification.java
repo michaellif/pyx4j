@@ -14,16 +14,24 @@
 package com.propertyvista.common.client.site;
 
 import com.pyx4j.commons.IDebugId;
+import com.pyx4j.i18n.annotations.I18n;
+import com.pyx4j.i18n.shared.I18nEnum;
 
 public class Notification {
 
+    @I18n
     public enum NotificationType implements IDebugId {
 
-        INFO, WARN, ERROR, FAILURE, CONFIRM;
+        INFO, WARNING, ERROR, FAILURE, CONFIRM;
 
         @Override
         public String debugId() {
             return this.name();
+        }
+
+        @Override
+        public String toString() {
+            return I18nEnum.toString(this);
         }
     }
 

@@ -18,7 +18,6 @@ import java.math.BigDecimal;
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.shared.IPrimitive;
 
-import com.propertyvista.domain.tenant.insurance.GeneralInsuranceCertificate;
 import com.propertyvista.domain.tenant.insurance.GeneralInsurancePolicy;
 
 @Transient

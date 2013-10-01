@@ -18,21 +18,25 @@ import com.google.gwt.dom.client.Style.TextAlign;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.resources.client.ImageResource;
 import com.google.gwt.user.client.Command;
-import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.FlowPanel;
-import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.SimplePanel;
 
+import com.pyx4j.commons.css.StyleManager;
+import com.pyx4j.commons.css.ThemeColor;
 import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.Button;
 import com.pyx4j.widgets.client.Label;
+import com.pyx4j.widgets.client.actionbar.Toolbar;
 import com.pyx4j.widgets.client.dialog.images.NotificationImages;
 
 import com.propertyvista.common.client.site.Notification;
 import com.propertyvista.common.client.site.Notification.NotificationType;
+import com.propertyvista.portal.web.client.themes.DashboardTheme;
 
-public class NotificationPageViewImpl extends Composite implements NotificationPageView {
+public class NotificationPageViewImpl extends SimplePanel implements NotificationPageView {
+
+    private static final I18n i18n = I18n.get(NotificationPageView.class);
 
     public interface NotificationTypeImages {
 
@@ -43,50 +47,19 @@ public class NotificationPageViewImpl extends Composite implements NotificationP
         ImageResource warning();
     }
 
-    private static final I18n i18n = I18n.get(NotificationPageView.class);
-
-    private final SimplePanel notificationTypeImageHolder;
-
-    private final Label messageLabel;
-
-    private final Label debugMessageLabel;
-
     private NotificationPagePresenter presenter;
+
+    private Label messageLabel;
+
+    private Label debugMessageLabel;
 
     private final NotificationTypeImages notificationTypeImageResources;
 
     public NotificationPageViewImpl(NotificationTypeImages messageTypeImageResources) {
         this.notificationTypeImageResources = messageTypeImageResources;
-        FlowPanel viewPanel = new FlowPanel();
-        viewPanel.getElement().getStyle().setTextAlign(TextAlign.CENTER);
 
-        notificationTypeImageHolder = new SimplePanel();
-        viewPanel.add(notificationTypeImageHolder);
+        setStyleName(DashboardTheme.StyleName.Dashboard.name());
 
-        messageLabel = new Label();
-        viewPanel.add(messageLabel);
-
-        debugMessageLabel = new Label();
-        debugMessageLabel.getElement().getStyle().setMarginTop(2, Unit.EM);
-        viewPanel.add(debugMessageLabel);
-
-        SimplePanel buttonHolder = new SimplePanel();
-        buttonHolder.setWidth("100%");
-        buttonHolder.getElement().getStyle().setMarginTop(2, Unit.EM);
-
-        Button acceptMessageButton = new Button(i18n.tr("Ok"), new Command() {
-            @Override
-            public void execute() {
-                presenter.acceptMessage();
-            }
-        });
-        acceptMessageButton.getElement().getStyle().setFloat(com.google.gwt.dom.client.Style.Float.NONE); // this is a must because there are people who write strage CSS
-
-        buttonHolder.setWidget(acceptMessageButton);
-
-        viewPanel.add(buttonHolder);
-
-        initWidget(viewPanel);
     }
 
     public NotificationPageViewImpl() {
@@ -121,7 +94,12 @@ public class NotificationPageViewImpl extends Composite implements NotificationP
 
     @Override
     public void populate(Notification userMessage) {
-        notificationTypeImageHolder.setWidget(new Image(getUserMessageImageResource(userMessage.getNotificationType())));
+
+        NotificationGadget notificationGadget = new NotificationGadget(this, getUserMessageImageResource(userMessage.getNotificationType()), userMessage
+                .getNotificationType().toString());
+        notificationGadget.asWidget().setWidth("100%");
+        setWidget(notificationGadget);
+
         messageLabel.setText(userMessage.getMessage());
 
         debugMessageLabel.setVisible(isDebugInfoRequired());
@@ -147,7 +125,7 @@ public class NotificationPageViewImpl extends Composite implements NotificationP
             case INFO:
                 messageImageResource = notificationTypeImageResources.info();
                 break;
-            case WARN:
+            case WARNING:
                 messageImageResource = notificationTypeImageResources.warning();
                 break;
             default:
@@ -156,5 +134,45 @@ public class NotificationPageViewImpl extends Composite implements NotificationP
             }
         }
         return messageImageResource;
+    }
+
+    class NotificationGadget extends AbstractGadget<NotificationPageViewImpl> {
+
+        NotificationGadget(NotificationPageViewImpl viewer, ImageResource imageResource, String title) {
+            super(viewer, imageResource, title, ThemeColor.foreground);
+
+            FlowPanel viewPanel = new FlowPanel();
+            viewPanel.getElement().getStyle().setTextAlign(TextAlign.CENTER);
+
+            messageLabel = new Label();
+            viewPanel.add(messageLabel);
+
+            debugMessageLabel = new Label();
+            debugMessageLabel.getElement().getStyle().setMarginTop(2, Unit.EM);
+            viewPanel.add(debugMessageLabel);
+
+            setContent(viewPanel);
+
+            setActionsToolbar(new NotificationToolbar());
+
+        }
+
+        class NotificationToolbar extends Toolbar {
+            public NotificationToolbar() {
+
+                Button paymentButton = new Button("Back", new Command() {
+
+                    @Override
+                    public void execute() {
+                        presenter.acceptMessage();
+                    }
+                });
+                paymentButton.getElement().getStyle().setProperty("background", StyleManager.getPalette().getThemeColor(ThemeColor.foreground, 1));
+                add(paymentButton);
+
+            }
+
+        }
+
     }
 }

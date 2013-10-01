@@ -60,7 +60,7 @@ import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.tenantsure.errors
 import com.propertyvista.portal.server.portal.TenantAppContext;
 import com.propertyvista.server.common.util.AddressRetriever;
 
-public class TenantSureAgreementCrudServiceImpl implements TenantSureInsurancePolicyCrudService {
+public class TenantSureInsurancePolicyCrudServiceImpl implements TenantSureInsurancePolicyCrudService {
 
     private static class ServerSideQuteStorage {
 
