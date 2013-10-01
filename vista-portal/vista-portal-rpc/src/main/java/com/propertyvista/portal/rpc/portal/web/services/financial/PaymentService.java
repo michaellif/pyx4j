@@ -17,16 +17,19 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.rpc.shared.IService;
 
+import com.propertyvista.domain.financial.PaymentRecord;
 import com.propertyvista.domain.payment.LeasePaymentMethod;
+import com.propertyvista.dto.PaymentRecordDTO;
 import com.propertyvista.portal.rpc.portal.web.dto.financial.PaymentMethodDTO;
 import com.propertyvista.portal.rpc.portal.web.dto.financial.PaymentMethodSummaryDTO;
 
 public interface PaymentService extends IService {
+
+    void retrievePayment(AsyncCallback<PaymentRecordDTO> callback, PaymentRecord itemId);
 
     void retrievePaymentMethod(AsyncCallback<PaymentMethodDTO> callback, LeasePaymentMethod itemId);
 
     void deletePaymentMethod(AsyncCallback<Boolean> callback, LeasePaymentMethod itemId);
 
     void getPaymentMethodSummary(AsyncCallback<PaymentMethodSummaryDTO> callback);
-
 }
