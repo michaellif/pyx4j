@@ -31,7 +31,7 @@ import com.pyx4j.entity.shared.IPrimitive;
 public interface BillDataDTO extends IEntity {
 
     @ToString(index = 0)
-    @Caption(name = "#")
+    @Caption(name = "Reference #")
     IPrimitive<Integer> referenceNo();
 
     @Format("MM/dd/yyyy")
