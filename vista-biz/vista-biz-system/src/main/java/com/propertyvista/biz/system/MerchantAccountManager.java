@@ -66,9 +66,9 @@ public class MerchantAccountManager {
         });
 
         if (orig == null) {
-            ServerSideFactory.create(AuditFacade.class).created(merchantAccount);
+            ServerSideFactory.create(AuditFacade.class).created(pmcMerchantAccountIndex);
         } else {
-            ServerSideFactory.create(AuditFacade.class).updated(merchantAccount, EntityDiff.getChanges(orig, merchantAccount));
+            ServerSideFactory.create(AuditFacade.class).updated(pmcMerchantAccountIndex, EntityDiff.getChanges(orig, merchantAccount));
         }
 
         pmcMerchantAccountIndex.merchantAccountKey().setValue(merchantAccount.getPrimaryKey());
