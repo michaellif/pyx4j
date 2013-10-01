@@ -21,4 +21,8 @@ public class FormerLeaseListerViewImpl extends CrmListerViewImplBase<LeaseDTO> i
     public FormerLeaseListerViewImpl() {
         setLister(new FormerLeaseLister());
     }
+
+    @Override
+    public void setPadFileControlsEnabled(boolean isEnabled) {
+    }
 }

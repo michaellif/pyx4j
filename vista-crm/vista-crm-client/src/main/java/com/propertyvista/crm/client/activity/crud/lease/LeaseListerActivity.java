@@ -16,16 +16,49 @@ package com.propertyvista.crm.client.activity.crud.lease;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.place.shared.Place;
 
+import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.essentials.rpc.report.ReportService;
+import com.pyx4j.gwt.rpc.upload.UploadService;
+import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.security.shared.SecurityController;
+import com.pyx4j.site.client.ReportDialog;
 import com.pyx4j.site.client.activity.AbstractListerActivity;
 
+import com.propertyvista.common.client.ui.components.UploadDialogBase;
+import com.propertyvista.common.client.ui.components.UploadResponseDownloadableReciver;
 import com.propertyvista.crm.client.CrmSite;
 import com.propertyvista.crm.client.ui.crud.lease.LeaseListerView;
+import com.propertyvista.crm.rpc.services.customer.TenantPadFileDownloadService;
+import com.propertyvista.crm.rpc.services.customer.TenantPadFileUploadService;
 import com.propertyvista.crm.rpc.services.lease.LeaseViewerCrudService;
+import com.propertyvista.domain.security.VistaCrmBehavior;
+import com.propertyvista.dto.DownloadableUploadResponseDTO;
 import com.propertyvista.dto.LeaseDTO;
+import com.propertyvista.portal.rpc.DeploymentConsts;
 
-public class LeaseListerActivity extends AbstractListerActivity<LeaseDTO> {
+public class LeaseListerActivity extends AbstractListerActivity<LeaseDTO> implements LeaseListerView.Presenter {
+
+    private static final I18n i18n = I18n.get(LeaseListerActivity.class);
 
     public LeaseListerActivity(Place place) {
-        super(place,  CrmSite.getViewFactory().instantiate(LeaseListerView.class), GWT.<LeaseViewerCrudService> create(LeaseViewerCrudService.class), LeaseDTO.class);
+        super(place, CrmSite.getViewFactory().instantiate(LeaseListerView.class), GWT.<LeaseViewerCrudService> create(LeaseViewerCrudService.class),
+                LeaseDTO.class);
+        ((LeaseListerView) getView()).setPadFileControlsEnabled(SecurityController.checkBehavior(VistaCrmBehavior.PropertyVistaSupport));
+    }
+
+    @Override
+    public void uploadPadFile() {
+        UploadDialogBase<IEntity, DownloadableUploadResponseDTO> dialog = new UploadDialogBase<IEntity, DownloadableUploadResponseDTO>(
+                i18n.tr("Upload PAD File"), GWT.<UploadService<IEntity, DownloadableUploadResponseDTO>> create(TenantPadFileUploadService.class),
+                TenantPadFileUploadService.SUPPORTED_FORMATS);
+        dialog.setUploadReciver(new UploadResponseDownloadableReciver<DownloadableUploadResponseDTO>(i18n.tr("PAD Upload")));
+        dialog.show();
+    }
+
+    @Override
+    public void downloadPadFile() {
+        ReportDialog d = new ReportDialog(i18n.tr(""), i18n.tr("Generating Tenant's PAD file..."));
+        d.setDownloadServletPath(GWT.getModuleBaseURL() + DeploymentConsts.downloadServletMapping);
+        d.start(GWT.<ReportService<?>> create(TenantPadFileDownloadService.class), null, null);
     }
 }

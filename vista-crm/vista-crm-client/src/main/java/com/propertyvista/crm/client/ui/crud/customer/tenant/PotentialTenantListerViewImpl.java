@@ -20,7 +20,6 @@ public class PotentialTenantListerViewImpl extends CrmListerViewImplBase<TenantD
 
     public PotentialTenantListerViewImpl() {
         PotentialTenantLister l = new PotentialTenantLister();
-        l.setTenantPadFileUploadEnable(false);
         setLister(l);
     }
 }

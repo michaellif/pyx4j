@@ -41,6 +41,10 @@ public class LeaseLister extends AbstractLister<LeaseDTO> {
 
     private final static I18n i18n = I18n.get(LeaseLister.class);
 
+    private Button padFileUpload;
+
+    private Button padFileDownload;
+
     public LeaseLister() {
         super(LeaseDTO.class, false);
 
@@ -115,11 +119,39 @@ public class LeaseLister extends AbstractLister<LeaseDTO> {
                 }
             }));
         }
+
+        addActionItem(padFileUpload = new Button(i18n.tr("Upload PAD File"), new Command() {
+            @Override
+            public void execute() {
+                onPadFileUpload();
+            }
+        }));
+
+        addActionItem(padFileDownload = new Button(i18n.tr("Download PAD File"), new Command() {
+            @Override
+            public void execute() {
+                onPadFileDownload();
+            }
+        }));
+
     }
 
     @Override
     public List<Sort> getDefaultSorting() {
         return Arrays.asList(new Sort(proto().leaseId(), false));
+    }
+
+    public void onPadFileUpload() {
+
+    }
+
+    public void onPadFileDownload() {
+
+    }
+
+    public void setPadFileControlsEnabled(boolean isEnabled) {
+        padFileDownload.setVisible(isEnabled);
+        padFileUpload.setVisible(isEnabled);
     }
 
     @Override
