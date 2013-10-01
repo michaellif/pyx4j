@@ -30,6 +30,7 @@ import org.slf4j.LoggerFactory;
 import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.core.client.Scheduler.ScheduledCommand;
 import com.google.gwt.dom.client.Element;
+import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.BlurEvent;
 import com.google.gwt.event.dom.client.BlurHandler;
 import com.google.gwt.event.dom.client.ClickEvent;
@@ -42,9 +43,12 @@ import com.google.gwt.event.dom.client.KeyDownHandler;
 import com.google.gwt.event.logical.shared.CloseHandler;
 import com.google.gwt.event.logical.shared.OpenEvent;
 import com.google.gwt.event.logical.shared.OpenHandler;
+import com.google.gwt.event.logical.shared.ResizeEvent;
+import com.google.gwt.event.logical.shared.ResizeHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.resources.client.ImageResource;
 import com.google.gwt.user.client.DOM;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.CheckBox;
 import com.google.gwt.user.client.ui.DockPanel;
 import com.google.gwt.user.client.ui.FlowPanel;
@@ -77,11 +81,17 @@ import com.pyx4j.widgets.client.actionbar.Toolbar;
 /**
  * Shared implementation for Modal Dialogs
  */
-public class Dialog extends DialogPanel {
+public class Dialog extends PopupPanel implements ProvidesResize {
 
     private static final Logger log = LoggerFactory.getLogger(Dialog.class);
 
     private static final I18n i18n = I18n.get(Dialog.class);
+
+    private final DockPanel container;
+
+    private HandlerRegistration resizeHandlerRegistration;
+
+    private final CaptionPanel captionPanel;
 
     public static enum Type {
         Error, Warning, Info, Confirm
@@ -139,7 +149,20 @@ public class Dialog extends DialogPanel {
     }
 
     public Dialog(String caption, DialogOptions options, IsWidget body) {
-        super();
+        super(false, true);
+
+        setStylePrimaryName(DefaultDialogTheme.StyleName.Dialog.name());
+
+        getElement().getStyle().setProperty("zIndex", "20");
+
+        container = new DockPanel();
+        container.getElement().getStyle().setProperty("cursor", "default");
+
+        captionPanel = new CaptionPanel();
+        container.add(captionPanel, DockPanel.NORTH);
+
+        setWidget(container);
+
         setGlassEnabled(true);
         setCaption(caption);
 
@@ -150,6 +173,15 @@ public class Dialog extends DialogPanel {
         setDialogOptions(options);
 
         setBody(body);
+    }
+
+    public void setContentWidget(Widget widget) {
+        container.add(widget, DockPanel.CENTER);
+        container.setCellHeight(widget, "100%");
+    }
+
+    public void setCaption(String caption) {
+        captionPanel.setHTML(caption);
     }
 
     public void setBody(IsWidget body) {
@@ -359,77 +391,24 @@ public class Dialog extends DialogPanel {
         }
     }
 
-    static class MessagePanel extends DockPanel implements RequiresResize {
-
-        private ResizibleScrollPanel scrollPanel;
-
-        MessagePanel(final String message, Type type) {
-
-            super();
-            setSize("100%", "100%");
-            DOM.setStyleAttribute(getElement(), "padding", "10px");
-            DOM.setStyleAttribute(getElement(), "paddingBottom", "20px");
-
-            WidgetsImageBundle images = ImageFactory.getImages();
-            ImageResource imageResource = null;
-
-            switch (type) {
-            case Info:
-                imageResource = images.info();
-                break;
-            case Confirm:
-                imageResource = images.confirm();
-                break;
-            case Warning:
-                imageResource = images.warning();
-                break;
-            case Error:
-                imageResource = images.error();
-                break;
-            default:
-                break;
-            }
-
-            Image image = new Image(imageResource);
-            DOM.setStyleAttribute(image.getElement(), "margin", "10px");
-
-            add(image, DockPanel.WEST);
-            setCellVerticalAlignment(image, DockPanel.ALIGN_MIDDLE);
-
-            HTML htmlMessage = new HTML((message == null) ? "" : message.replace("\n", "<br/>"));
-
-            HorizontalPanel htmlHolder = new HorizontalPanel();
-            htmlHolder.setSize("100%", "100%");
-            htmlHolder.add(htmlMessage);
-            htmlHolder.setCellHorizontalAlignment(htmlMessage, HasHorizontalAlignment.ALIGN_CENTER);
-            htmlHolder.setCellVerticalAlignment(htmlMessage, HasVerticalAlignment.ALIGN_MIDDLE);
-
-            if (BrowserType.isIE8()) {
-                add(htmlHolder, DockPanel.CENTER);
-                setCellHeight(htmlHolder, "100%");
-                setCellWidth(htmlHolder, "100%");
-            } else {
-                scrollPanel = new ResizibleScrollPanel();
-                scrollPanel.setSize("100%", "100%");
-                scrollPanel.setContentWidget(htmlHolder);
-                add(scrollPanel, DockPanel.CENTER);
-                setCellHeight(scrollPanel, "100%");
-                setCellWidth(scrollPanel, "100%");
-            }
-
-        }
-
-        @Override
-        public void onResize() {
-            if (scrollPanel != null) {
-                scrollPanel.onResize();
-            }
-        }
-    }
-
     @Override
     public boolean equals(Object other) {
         return (this == other);
+    }
+
+    @Override
+    public void setSize(String width, String height) {
+        if (BrowserType.isIE8()) {
+            setWidth(width);
+        } else {
+            super.setSize(width, height);
+        }
+    }
+
+    private void position() {
+        int left = (Window.getClientWidth() - getOffsetWidth()) >> 1;
+        int top = (Window.getClientHeight() - getOffsetHeight()) >> 1;
+        setPopupPosition(Math.max(Window.getScrollLeft() + left, 0), Math.max(Window.getScrollTop() + top, 0));
     }
 
     @Override
@@ -446,6 +425,16 @@ public class Dialog extends DialogPanel {
             setVisible(false);
         }
         super.show();
+
+        position();
+        if (resizeHandlerRegistration == null) {
+            resizeHandlerRegistration = Window.addResizeHandler(new ResizeHandler() {
+                @Override
+                public void onResize(ResizeEvent event) {
+                    position();
+                }
+            });
+        }
 
         setVisible(true);
         // The insides of Dialog may be CForm that is only initialized on show.
@@ -635,12 +624,82 @@ public class Dialog extends DialogPanel {
 
     }
 
-    @Override
-    public void setSize(String width, String height) {
-        if (BrowserType.isIE8()) {
-            setWidth(width);
-        } else {
-            super.setSize(width, height);
+    class CaptionPanel extends HTML {
+
+        public CaptionPanel() {
+            setWordWrap(false);
+            setStylePrimaryName(DefaultDialogTheme.StyleName.DialogCaption.name());
+            getElement().getStyle().setHeight(1.5, Unit.EM);
+            getElement().getStyle().setLineHeight(1.5, Unit.EM);
+        }
+
+    }
+
+    static class MessagePanel extends DockPanel implements RequiresResize {
+
+        private ResizibleScrollPanel scrollPanel;
+
+        MessagePanel(final String message, Type type) {
+
+            super();
+            setSize("100%", "100%");
+            DOM.setStyleAttribute(getElement(), "padding", "10px");
+            DOM.setStyleAttribute(getElement(), "paddingBottom", "20px");
+
+            WidgetsImageBundle images = ImageFactory.getImages();
+            ImageResource imageResource = null;
+
+            switch (type) {
+            case Info:
+                imageResource = images.info();
+                break;
+            case Confirm:
+                imageResource = images.confirm();
+                break;
+            case Warning:
+                imageResource = images.warning();
+                break;
+            case Error:
+                imageResource = images.error();
+                break;
+            default:
+                break;
+            }
+
+            Image image = new Image(imageResource);
+            DOM.setStyleAttribute(image.getElement(), "margin", "10px");
+
+            add(image, DockPanel.WEST);
+            setCellVerticalAlignment(image, DockPanel.ALIGN_MIDDLE);
+
+            HTML htmlMessage = new HTML((message == null) ? "" : message.replace("\n", "<br/>"));
+
+            HorizontalPanel htmlHolder = new HorizontalPanel();
+            htmlHolder.setSize("100%", "100%");
+            htmlHolder.add(htmlMessage);
+            htmlHolder.setCellHorizontalAlignment(htmlMessage, HasHorizontalAlignment.ALIGN_CENTER);
+            htmlHolder.setCellVerticalAlignment(htmlMessage, HasVerticalAlignment.ALIGN_MIDDLE);
+
+            if (BrowserType.isIE8()) {
+                add(htmlHolder, DockPanel.CENTER);
+                setCellHeight(htmlHolder, "100%");
+                setCellWidth(htmlHolder, "100%");
+            } else {
+                scrollPanel = new ResizibleScrollPanel();
+                scrollPanel.setSize("100%", "100%");
+                scrollPanel.setContentWidget(htmlHolder);
+                add(scrollPanel, DockPanel.CENTER);
+                setCellHeight(scrollPanel, "100%");
+                setCellWidth(scrollPanel, "100%");
+            }
+
+        }
+
+        @Override
+        public void onResize() {
+            if (scrollPanel != null) {
+                scrollPanel.onResize();
+            }
         }
     }
 }
