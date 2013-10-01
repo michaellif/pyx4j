@@ -42,17 +42,17 @@ import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.LeaseProducts;
 import com.propertyvista.domain.tenant.lease.Tenant;
 import com.propertyvista.dto.PreauthorizedPaymentCoveredItemDTO;
-import com.propertyvista.portal.rpc.portal.web.dto.AutoPayDTO;
-import com.propertyvista.portal.rpc.portal.web.services.financial.PreauthorizedPaymentWizardService;
+import com.propertyvista.portal.rpc.portal.web.dto.financial.AutoPayDTO;
+import com.propertyvista.portal.rpc.portal.web.services.financial.AutoPayWizardService;
 import com.propertyvista.portal.server.portal.TenantAppContext;
 import com.propertyvista.server.common.util.AddressConverter;
 import com.propertyvista.server.common.util.AddressRetriever;
 import com.propertyvista.server.common.util.LeaseParticipantUtils;
 
-public class PreauthorizedPaymentWizardServiceImpl extends AbstractCrudServiceDtoImpl<PreauthorizedPayment, AutoPayDTO> implements
-        PreauthorizedPaymentWizardService {
+public class AutoPayWizardServiceImpl extends AbstractCrudServiceDtoImpl<PreauthorizedPayment, AutoPayDTO> implements
+        AutoPayWizardService {
 
-    public PreauthorizedPaymentWizardServiceImpl() {
+    public AutoPayWizardServiceImpl() {
         super(PreauthorizedPayment.class, AutoPayDTO.class);
     }
 

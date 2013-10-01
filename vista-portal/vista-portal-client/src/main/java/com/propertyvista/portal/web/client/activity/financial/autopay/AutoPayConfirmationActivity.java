@@ -25,7 +25,7 @@ import com.pyx4j.site.rpc.AppPlace;
 
 import com.propertyvista.domain.payment.PreauthorizedPayment;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap;
-import com.propertyvista.portal.rpc.portal.web.dto.AutoPayDTO;
+import com.propertyvista.portal.rpc.portal.web.dto.financial.AutoPayDTO;
 import com.propertyvista.portal.rpc.portal.web.services.financial.AutoPayService;
 import com.propertyvista.portal.web.client.PortalWebSite;
 import com.propertyvista.portal.web.client.activity.SecurityAwareActivity;

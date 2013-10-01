@@ -15,8 +15,8 @@ package com.propertyvista.portal.web.client.ui.dashboard;
 
 import com.pyx4j.site.client.IsView;
 
-import com.propertyvista.portal.rpc.portal.web.dto.BillingSummaryDTO;
 import com.propertyvista.portal.rpc.portal.web.dto.TenantProfileSummaryDTO;
+import com.propertyvista.portal.rpc.portal.web.dto.financial.BillingSummaryDTO;
 import com.propertyvista.portal.rpc.portal.web.dto.insurance.status.InsuranceStatusDTO;
 import com.propertyvista.portal.rpc.portal.web.dto.maintenance.MaintenanceSummaryDTO;
 

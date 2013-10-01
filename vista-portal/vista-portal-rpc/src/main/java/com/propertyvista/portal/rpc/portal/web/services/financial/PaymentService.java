@@ -18,8 +18,8 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.pyx4j.rpc.shared.IService;
 
 import com.propertyvista.domain.payment.LeasePaymentMethod;
-import com.propertyvista.portal.rpc.portal.web.dto.PaymentMethodDTO;
-import com.propertyvista.portal.rpc.portal.web.dto.PaymentMethodSummaryDTO;
+import com.propertyvista.portal.rpc.portal.web.dto.financial.PaymentMethodDTO;
+import com.propertyvista.portal.rpc.portal.web.dto.financial.PaymentMethodSummaryDTO;
 
 public interface PaymentService extends IService {
 

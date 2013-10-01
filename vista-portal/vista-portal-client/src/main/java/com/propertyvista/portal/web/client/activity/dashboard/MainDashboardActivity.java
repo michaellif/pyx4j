@@ -24,8 +24,8 @@ import com.pyx4j.site.client.AppSite;
 
 import com.propertyvista.domain.security.VistaCustomerPaymentTypeBehavior;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap;
-import com.propertyvista.portal.rpc.portal.web.dto.BillingSummaryDTO;
 import com.propertyvista.portal.rpc.portal.web.dto.TenantProfileSummaryDTO;
+import com.propertyvista.portal.rpc.portal.web.dto.financial.BillingSummaryDTO;
 import com.propertyvista.portal.rpc.portal.web.dto.insurance.status.InsuranceStatusDTO;
 import com.propertyvista.portal.rpc.portal.web.dto.maintenance.MaintenanceSummaryDTO;
 import com.propertyvista.portal.rpc.portal.web.services.financial.BillingService;

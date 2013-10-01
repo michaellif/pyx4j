@@ -41,7 +41,7 @@ import com.pyx4j.widgets.client.Anchor;
 import com.propertyvista.domain.contact.AddressSimple;
 import com.propertyvista.domain.payment.CreditCardInfo.CreditCardType;
 import com.propertyvista.domain.payment.LeasePaymentMethod;
-import com.propertyvista.portal.rpc.portal.web.dto.PaymentMethodDTO;
+import com.propertyvista.portal.rpc.portal.web.dto.financial.PaymentMethodDTO;
 import com.propertyvista.portal.web.client.ui.CPortalEntityWizard;
 import com.propertyvista.portal.web.client.ui.IWizardView;
 import com.propertyvista.portal.web.client.ui.LegalTermsDialog;

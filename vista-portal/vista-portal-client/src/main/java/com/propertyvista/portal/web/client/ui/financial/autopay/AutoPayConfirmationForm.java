@@ -25,7 +25,7 @@ import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.security.client.ClientContext;
 
 import com.propertyvista.domain.payment.LeasePaymentMethod;
-import com.propertyvista.portal.rpc.portal.web.dto.AutoPayDTO;
+import com.propertyvista.portal.rpc.portal.web.dto.financial.AutoPayDTO;
 import com.propertyvista.portal.web.client.ui.CPortalEntityForm;
 import com.propertyvista.portal.web.client.ui.util.decorators.FormDecoratorBuilder;
 

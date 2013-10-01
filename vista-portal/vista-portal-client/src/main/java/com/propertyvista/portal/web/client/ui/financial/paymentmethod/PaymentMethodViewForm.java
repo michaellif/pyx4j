@@ -22,7 +22,7 @@ import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.domain.payment.LeasePaymentMethod;
-import com.propertyvista.portal.rpc.portal.web.dto.PaymentMethodDTO;
+import com.propertyvista.portal.rpc.portal.web.dto.financial.PaymentMethodDTO;
 import com.propertyvista.portal.web.client.ui.CPortalEntityForm;
 
 public class PaymentMethodViewForm extends CPortalEntityForm<PaymentMethodDTO> {

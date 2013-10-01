@@ -11,14 +11,17 @@
  * @author VladL
  * @version $Id$
  */
-package com.propertyvista.portal.rpc.portal.web.dto;
+package com.propertyvista.portal.rpc.portal.web.dto.financial;
 
+import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.entity.shared.IList;
+
+import com.propertyvista.domain.payment.PaymentMethod;
 
 @Transient
-public interface PaymentMethodSummaryDTO extends IEntity {
+public interface PaymentMethodInfoDTO extends IEntity {
 
-    IList<PaymentMethodInfoDTO> paymentMethods();
+    @ToString
+    PaymentMethod paymentMethod();
 }

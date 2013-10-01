@@ -20,7 +20,7 @@ import com.google.gwt.user.client.ui.AcceptsOneWidget;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.site.rpc.AppPlace;
 
-import com.propertyvista.portal.rpc.portal.web.dto.BillingHistoryDTO;
+import com.propertyvista.portal.rpc.portal.web.dto.financial.BillingHistoryDTO;
 import com.propertyvista.portal.rpc.portal.web.services.financial.BillingService;
 import com.propertyvista.portal.web.client.PortalWebSite;
 import com.propertyvista.portal.web.client.activity.SecurityAwareActivity;

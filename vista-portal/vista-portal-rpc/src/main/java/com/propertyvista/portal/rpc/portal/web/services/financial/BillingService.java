@@ -19,10 +19,10 @@ import com.pyx4j.rpc.shared.IService;
 
 import com.propertyvista.domain.financial.billing.Bill;
 import com.propertyvista.dto.TransactionHistoryDTO;
-import com.propertyvista.portal.rpc.portal.web.dto.BillingHistoryDTO;
-import com.propertyvista.portal.rpc.portal.web.dto.BillingSummaryDTO;
-import com.propertyvista.portal.rpc.portal.web.dto.LatestActivitiesDTO;
 import com.propertyvista.portal.rpc.portal.web.dto.financial.BillViewDTO;
+import com.propertyvista.portal.rpc.portal.web.dto.financial.BillingHistoryDTO;
+import com.propertyvista.portal.rpc.portal.web.dto.financial.BillingSummaryDTO;
+import com.propertyvista.portal.rpc.portal.web.dto.financial.LatestActivitiesDTO;
 
 public interface BillingService extends IService {
 

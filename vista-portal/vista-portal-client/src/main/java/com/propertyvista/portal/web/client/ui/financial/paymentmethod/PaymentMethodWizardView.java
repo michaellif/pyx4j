@@ -16,7 +16,7 @@ package com.propertyvista.portal.web.client.ui.financial.paymentmethod;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.propertyvista.domain.contact.AddressSimple;
-import com.propertyvista.portal.rpc.portal.web.dto.PaymentMethodDTO;
+import com.propertyvista.portal.rpc.portal.web.dto.financial.PaymentMethodDTO;
 import com.propertyvista.portal.web.client.ui.IWizardView;
 
 public interface PaymentMethodWizardView extends IWizardView<PaymentMethodDTO> {

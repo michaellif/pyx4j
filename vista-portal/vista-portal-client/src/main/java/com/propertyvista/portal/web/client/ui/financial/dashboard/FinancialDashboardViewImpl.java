@@ -22,10 +22,10 @@ import com.pyx4j.site.client.ui.layout.responsive.LayoutChangeEvent;
 import com.pyx4j.site.client.ui.layout.responsive.LayoutChangeHandler;
 import com.pyx4j.site.client.ui.layout.responsive.ResponsiveLayoutPanel.LayoutType;
 
-import com.propertyvista.portal.rpc.portal.web.dto.AutoPaySummaryDTO;
-import com.propertyvista.portal.rpc.portal.web.dto.BillingSummaryDTO;
-import com.propertyvista.portal.rpc.portal.web.dto.LatestActivitiesDTO;
-import com.propertyvista.portal.rpc.portal.web.dto.PaymentMethodSummaryDTO;
+import com.propertyvista.portal.rpc.portal.web.dto.financial.AutoPaySummaryDTO;
+import com.propertyvista.portal.rpc.portal.web.dto.financial.BillingSummaryDTO;
+import com.propertyvista.portal.rpc.portal.web.dto.financial.LatestActivitiesDTO;
+import com.propertyvista.portal.rpc.portal.web.dto.financial.PaymentMethodSummaryDTO;
 import com.propertyvista.portal.web.client.themes.DashboardTheme;
 
 public class FinancialDashboardViewImpl extends FlowPanel implements FinancialDashboardView {

@@ -18,7 +18,7 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.pyx4j.entity.rpc.AbstractCrudService;
 
 import com.propertyvista.domain.contact.AddressSimple;
-import com.propertyvista.portal.rpc.portal.web.dto.PaymentMethodDTO;
+import com.propertyvista.portal.rpc.portal.web.dto.financial.PaymentMethodDTO;
 
 public interface PaymentMethodWizardService extends AbstractCrudService<PaymentMethodDTO> {
 

@@ -35,7 +35,7 @@ import com.pyx4j.site.client.ui.layout.responsive.ResponsiveLayoutPanel.LayoutTy
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
 import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
 import com.propertyvista.domain.financial.billing.InvoiceLineItem;
-import com.propertyvista.portal.rpc.portal.web.dto.LatestActivitiesDTO;
+import com.propertyvista.portal.rpc.portal.web.dto.financial.LatestActivitiesDTO;
 import com.propertyvista.portal.web.client.resources.PortalImages;
 import com.propertyvista.portal.web.client.ui.AbstractGadget;
 import com.propertyvista.portal.web.client.ui.util.decorators.FormDecoratorBuilder;

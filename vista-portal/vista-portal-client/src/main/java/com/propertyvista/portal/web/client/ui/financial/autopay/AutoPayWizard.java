@@ -62,7 +62,7 @@ import com.propertyvista.domain.tenant.lease.Tenant;
 import com.propertyvista.dto.PaymentDataDTO;
 import com.propertyvista.dto.PaymentDataDTO.PaymentSelect;
 import com.propertyvista.dto.PreauthorizedPaymentCoveredItemDTO;
-import com.propertyvista.portal.rpc.portal.web.dto.AutoPayDTO;
+import com.propertyvista.portal.rpc.portal.web.dto.financial.AutoPayDTO;
 import com.propertyvista.portal.web.client.ui.CPortalEntityWizard;
 import com.propertyvista.portal.web.client.ui.LegalTermsDialog;
 import com.propertyvista.portal.web.client.ui.LegalTermsDialog.TermsType;

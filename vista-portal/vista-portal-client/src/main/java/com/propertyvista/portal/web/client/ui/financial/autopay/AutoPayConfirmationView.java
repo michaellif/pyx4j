@@ -13,7 +13,7 @@
  */
 package com.propertyvista.portal.web.client.ui.financial.autopay;
 
-import com.propertyvista.portal.rpc.portal.web.dto.AutoPayDTO;
+import com.propertyvista.portal.rpc.portal.web.dto.financial.AutoPayDTO;
 import com.propertyvista.portal.web.client.ui.IFormView;
 
 public interface AutoPayConfirmationView extends IFormView<AutoPayDTO> {

@@ -28,20 +28,20 @@ import com.propertyvista.domain.contact.AddressSimple;
 import com.propertyvista.domain.payment.LeasePaymentMethod;
 import com.propertyvista.domain.payment.PreauthorizedPayment;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap.Resident.Financial;
-import com.propertyvista.portal.rpc.portal.web.dto.AutoPayDTO;
-import com.propertyvista.portal.rpc.portal.web.services.financial.PreauthorizedPaymentWizardService;
+import com.propertyvista.portal.rpc.portal.web.dto.financial.AutoPayDTO;
+import com.propertyvista.portal.rpc.portal.web.services.financial.AutoPayWizardService;
 import com.propertyvista.portal.web.client.activity.AbstractWizardActivity;
 import com.propertyvista.portal.web.client.ui.financial.autopay.AutoPayWizardView;
 
 public class AutoPayWizardActivity extends AbstractWizardActivity<AutoPayDTO> implements AutoPayWizardView.Persenter {
 
     public AutoPayWizardActivity(AppPlace place) {
-        super(AutoPayWizardView.class, GWT.<PreauthorizedPaymentWizardService> create(PreauthorizedPaymentWizardService.class), AutoPayDTO.class);
+        super(AutoPayWizardView.class, GWT.<AutoPayWizardService> create(AutoPayWizardService.class), AutoPayDTO.class);
     }
 
     @Override
     public void getCurrentAddress(final AsyncCallback<AddressSimple> callback) {
-        ((PreauthorizedPaymentWizardService) getService()).getCurrentAddress(new DefaultAsyncCallback<AddressSimple>() {
+        ((AutoPayWizardService) getService()).getCurrentAddress(new DefaultAsyncCallback<AddressSimple>() {
             @Override
             public void onSuccess(AddressSimple result) {
                 callback.onSuccess(result);
@@ -51,7 +51,7 @@ public class AutoPayWizardActivity extends AbstractWizardActivity<AutoPayDTO> im
 
     @Override
     public void getProfiledPaymentMethods(final AsyncCallback<List<LeasePaymentMethod>> callback) {
-        ((PreauthorizedPaymentWizardService) getService()).getProfiledPaymentMethods(new DefaultAsyncCallback<Vector<LeasePaymentMethod>>() {
+        ((AutoPayWizardService) getService()).getProfiledPaymentMethods(new DefaultAsyncCallback<Vector<LeasePaymentMethod>>() {
             @Override
             public void onSuccess(Vector<LeasePaymentMethod> result) {
                 callback.onSuccess(result);
@@ -61,7 +61,7 @@ public class AutoPayWizardActivity extends AbstractWizardActivity<AutoPayDTO> im
 
     @Override
     public void preview(final AsyncCallback<PreauthorizedPayment> callback, AutoPayDTO currentValue) {
-        ((PreauthorizedPaymentWizardService) getService()).preview(new DefaultAsyncCallback<PreauthorizedPayment>() {
+        ((AutoPayWizardService) getService()).preview(new DefaultAsyncCallback<PreauthorizedPayment>() {
             @Override
             public void onSuccess(PreauthorizedPayment result) {
                 callback.onSuccess(result);

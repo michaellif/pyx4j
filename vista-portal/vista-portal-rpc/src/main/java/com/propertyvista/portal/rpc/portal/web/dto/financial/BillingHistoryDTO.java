@@ -11,18 +11,16 @@
  * @author VladL
  * @version $Id$
  */
-package com.propertyvista.portal.rpc.portal.web.dto;
+package com.propertyvista.portal.rpc.portal.web.dto.financial;
 
-import com.pyx4j.commons.LogicalDate;
-import com.pyx4j.entity.annotations.ToStringFormat;
 import com.pyx4j.entity.annotations.Transient;
-import com.pyx4j.entity.shared.IPrimitive;
+import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.shared.IList;
 
-import com.propertyvista.portal.domain.dto.financial.PaymentInfoDTO;
+import com.propertyvista.portal.domain.dto.BillDataDTO;
 
 @Transient
-@ToStringFormat("${0}, {1}")
-public interface AutoPayInfoDTO extends PaymentInfoDTO {
+public interface BillingHistoryDTO extends IEntity {
 
-    IPrimitive<LogicalDate> expiring();
+    IList<BillDataDTO> bills();
 }

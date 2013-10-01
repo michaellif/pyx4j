@@ -29,7 +29,7 @@ import com.pyx4j.i18n.shared.I18n;
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
 import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
 import com.propertyvista.portal.domain.dto.BillDataDTO;
-import com.propertyvista.portal.rpc.portal.web.dto.BillingHistoryDTO;
+import com.propertyvista.portal.rpc.portal.web.dto.financial.BillingHistoryDTO;
 import com.propertyvista.portal.web.client.ui.CPortalEntityForm;
 import com.propertyvista.portal.web.client.ui.util.decorators.FormDecoratorBuilder;
 

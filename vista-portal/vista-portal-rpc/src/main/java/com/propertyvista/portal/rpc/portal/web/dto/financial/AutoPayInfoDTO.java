@@ -11,17 +11,18 @@
  * @author VladL
  * @version $Id$
  */
-package com.propertyvista.portal.rpc.portal.web.dto;
+package com.propertyvista.portal.rpc.portal.web.dto.financial;
 
-import com.pyx4j.entity.annotations.ToString;
+import com.pyx4j.commons.LogicalDate;
+import com.pyx4j.entity.annotations.ToStringFormat;
 import com.pyx4j.entity.annotations.Transient;
-import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.shared.IPrimitive;
 
-import com.propertyvista.domain.payment.PaymentMethod;
+import com.propertyvista.portal.domain.dto.financial.PaymentInfoDTO;
 
 @Transient
-public interface PaymentMethodInfoDTO extends IEntity {
+@ToStringFormat("${0}, {1}")
+public interface AutoPayInfoDTO extends PaymentInfoDTO {
 
-    @ToString
-    PaymentMethod paymentMethod();
+    IPrimitive<LogicalDate> expiring();
 }

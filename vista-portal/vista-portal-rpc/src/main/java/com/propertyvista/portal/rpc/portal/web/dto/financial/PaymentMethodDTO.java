@@ -7,20 +7,29 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Sep 10, 2013
+ * Created on 2013-04-15
  * @author VladL
  * @version $Id$
  */
-package com.propertyvista.portal.rpc.portal.web.dto;
+package com.propertyvista.portal.rpc.portal.web.dto.financial;
 
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.entity.shared.IList;
+import com.pyx4j.entity.shared.IPrimitive;
+import com.pyx4j.entity.shared.IPrimitiveSet;
 
-import com.propertyvista.domain.financial.billing.InvoiceLineItem;
+import com.propertyvista.domain.payment.CreditCardInfo.CreditCardType;
+import com.propertyvista.domain.payment.LeasePaymentMethod;
+import com.propertyvista.domain.payment.PaymentType;
 
 @Transient
-public interface LatestActivitiesDTO extends IEntity {
+public interface PaymentMethodDTO extends IEntity {
 
-    IList<InvoiceLineItem> lineItems();
+    LeasePaymentMethod paymentMethod();
+
+    IPrimitive<Boolean> electronicPaymentsAllowed();
+
+    IPrimitiveSet<PaymentType> allowedPaymentTypes();
+
+    IPrimitiveSet<CreditCardType> allowedCardTypes();
 }

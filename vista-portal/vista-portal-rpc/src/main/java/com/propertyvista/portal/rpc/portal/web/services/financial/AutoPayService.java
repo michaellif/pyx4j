@@ -18,8 +18,8 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.pyx4j.rpc.shared.IService;
 
 import com.propertyvista.domain.payment.PreauthorizedPayment;
-import com.propertyvista.portal.rpc.portal.web.dto.AutoPayDTO;
-import com.propertyvista.portal.rpc.portal.web.dto.AutoPaySummaryDTO;
+import com.propertyvista.portal.rpc.portal.web.dto.financial.AutoPayDTO;
+import com.propertyvista.portal.rpc.portal.web.dto.financial.AutoPaySummaryDTO;
 
 public interface AutoPayService extends IService {
 

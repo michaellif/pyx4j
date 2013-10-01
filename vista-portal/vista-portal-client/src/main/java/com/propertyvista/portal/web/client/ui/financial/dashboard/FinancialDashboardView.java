@@ -15,12 +15,12 @@ package com.propertyvista.portal.web.client.ui.financial.dashboard;
 
 import com.pyx4j.site.client.IsView;
 
-import com.propertyvista.portal.rpc.portal.web.dto.AutoPayInfoDTO;
-import com.propertyvista.portal.rpc.portal.web.dto.AutoPaySummaryDTO;
-import com.propertyvista.portal.rpc.portal.web.dto.BillingSummaryDTO;
-import com.propertyvista.portal.rpc.portal.web.dto.LatestActivitiesDTO;
-import com.propertyvista.portal.rpc.portal.web.dto.PaymentMethodInfoDTO;
-import com.propertyvista.portal.rpc.portal.web.dto.PaymentMethodSummaryDTO;
+import com.propertyvista.portal.rpc.portal.web.dto.financial.AutoPayInfoDTO;
+import com.propertyvista.portal.rpc.portal.web.dto.financial.AutoPaySummaryDTO;
+import com.propertyvista.portal.rpc.portal.web.dto.financial.BillingSummaryDTO;
+import com.propertyvista.portal.rpc.portal.web.dto.financial.LatestActivitiesDTO;
+import com.propertyvista.portal.rpc.portal.web.dto.financial.PaymentMethodInfoDTO;
+import com.propertyvista.portal.rpc.portal.web.dto.financial.PaymentMethodSummaryDTO;
 
 public interface FinancialDashboardView extends IsView {
 
