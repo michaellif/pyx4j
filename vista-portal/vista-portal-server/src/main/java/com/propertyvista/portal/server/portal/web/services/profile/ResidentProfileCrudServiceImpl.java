@@ -11,7 +11,7 @@
  * @author vlads
  * @version $Id$
  */
-package com.propertyvista.portal.server.portal.services.resident;
+package com.propertyvista.portal.server.portal.web.services.profile;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
@@ -26,14 +26,14 @@ import com.pyx4j.server.contexts.Context;
 
 import com.propertyvista.domain.security.CustomerUser;
 import com.propertyvista.domain.tenant.Customer;
-import com.propertyvista.portal.domain.dto.ResidentDTO;
-import com.propertyvista.portal.rpc.portal.services.resident.PersonalInfoCrudService;
+import com.propertyvista.portal.rpc.portal.web.dto.ResidentProfileDTO;
+import com.propertyvista.portal.rpc.portal.web.services.profile.ResidentProfileCrudService;
 import com.propertyvista.portal.server.portal.TenantAppContext;
 
-public class PersonalInfoCrudServiceImpl implements PersonalInfoCrudService {
+public class ResidentProfileCrudServiceImpl implements ResidentProfileCrudService {
 
     @Override
-    public void retrieve(AsyncCallback<ResidentDTO> callback, Key entityId, RetrieveTarget retrieveTarget) {
+    public void retrieve(AsyncCallback<ResidentProfileDTO> callback, Key entityId, RetrieveTarget retrieveTarget) {
         CustomerUser currentUser = TenantAppContext.getCurrentUser();
         // find associated tenant entry
         EntityQueryCriteria<Customer> criteria = EntityQueryCriteria.create(Customer.class);
@@ -41,7 +41,7 @@ public class PersonalInfoCrudServiceImpl implements PersonalInfoCrudService {
         Customer tenant = Persistence.service().retrieve(criteria);
         Persistence.service().retrieve(tenant.emergencyContacts());
         // build dto
-        ResidentDTO dto = EntityFactory.create(ResidentDTO.class);
+        ResidentProfileDTO dto = EntityFactory.create(ResidentProfileDTO.class);
         dto.setValue(tenant.person().getValue());
         dto.emergencyContacts().addAll(tenant.emergencyContacts());
 
@@ -49,7 +49,7 @@ public class PersonalInfoCrudServiceImpl implements PersonalInfoCrudService {
     }
 
     @Override
-    public void save(AsyncCallback<Key> callback, ResidentDTO dto) {
+    public void save(AsyncCallback<Key> callback, ResidentProfileDTO dto) {
         CustomerUser currentUser = TenantAppContext.getCurrentUser();
         EntityQueryCriteria<Customer> criteria = EntityQueryCriteria.create(Customer.class);
         criteria.add(PropertyCriterion.eq(criteria.proto().user(), currentUser));
@@ -69,17 +69,17 @@ public class PersonalInfoCrudServiceImpl implements PersonalInfoCrudService {
     }
 
     @Override
-    public void init(AsyncCallback<ResidentDTO> callback, InitializationData initializationData) {
+    public void init(AsyncCallback<ResidentProfileDTO> callback, InitializationData initializationData) {
         throw new UnsupportedOperationException();
     }
 
     @Override
-    public void create(AsyncCallback<Key> callback, ResidentDTO editableEntity) {
+    public void create(AsyncCallback<Key> callback, ResidentProfileDTO editableEntity) {
         throw new UnsupportedOperationException();
     }
 
     @Override
-    public void list(AsyncCallback<EntitySearchResult<ResidentDTO>> callback, EntityListCriteria<ResidentDTO> criteria) {
+    public void list(AsyncCallback<EntitySearchResult<ResidentProfileDTO>> callback, EntityListCriteria<ResidentProfileDTO> criteria) {
         throw new UnsupportedOperationException();
     }
 

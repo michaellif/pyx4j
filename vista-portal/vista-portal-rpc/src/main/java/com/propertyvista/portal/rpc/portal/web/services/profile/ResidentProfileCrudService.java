@@ -7,19 +7,16 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on May 14, 2011
- * @author Dad
+ * Created on Oct 27, 2011
+ * @author vlads
  * @version $Id$
  */
-package com.propertyvista.portal.web.client.ui.profile;
+package com.propertyvista.portal.rpc.portal.web.services.profile;
+
+import com.pyx4j.entity.rpc.AbstractCrudService;
 
 import com.propertyvista.portal.rpc.portal.web.dto.ResidentProfileDTO;
-import com.propertyvista.portal.web.client.ui.IEditorView;
 
-public interface ProfilePageView extends IEditorView<ResidentProfileDTO> {
-
-    public interface ProfilePagePresenter extends IEditorPresenter<ResidentProfileDTO> {
-
-    }
+public interface ResidentProfileCrudService extends AbstractCrudService<ResidentProfileDTO> {
 
 }

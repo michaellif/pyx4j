@@ -20,7 +20,7 @@ import com.pyx4j.i18n.annotations.I18n;
 
 import com.propertyvista.dto.MaintenanceRequestDTO;
 import com.propertyvista.portal.domain.dto.financial.FinancialSummaryDTO;
-import com.propertyvista.portal.rpc.portal.web.dto.TenantProfileSummaryDTO;
+import com.propertyvista.portal.rpc.portal.web.dto.ResidentSummaryDTO;
 import com.propertyvista.portal.rpc.portal.web.dto.financial.BillingSummaryDTO;
 import com.propertyvista.portal.rpc.portal.web.dto.insurance.status.InsuranceStatusDTO;
 import com.propertyvista.portal.rpc.portal.web.dto.maintenance.MaintenanceSummaryDTO;
@@ -29,7 +29,7 @@ import com.propertyvista.portal.rpc.portal.web.dto.maintenance.MaintenanceSummar
 @I18n(strategy = I18n.I18nStrategy.IgnoreThis)
 public interface MainDashboardDTO extends IEntity {
 
-    TenantProfileSummaryDTO profileInfo();
+    ResidentSummaryDTO profileInfo();
 
     MaintenanceSummaryDTO maintenanceInfo();
 

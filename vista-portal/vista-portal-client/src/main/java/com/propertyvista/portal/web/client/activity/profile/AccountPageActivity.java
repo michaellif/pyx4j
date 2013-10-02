@@ -17,16 +17,16 @@ import com.google.gwt.core.client.GWT;
 
 import com.pyx4j.site.rpc.AppPlace;
 
-import com.propertyvista.portal.rpc.portal.web.dto.ResidentProfileDTO;
-import com.propertyvista.portal.rpc.portal.web.services.profile.ResidentProfileCrudService;
+import com.propertyvista.portal.rpc.portal.web.dto.ResidentAccountDTO;
+import com.propertyvista.portal.rpc.portal.web.services.profile.ResidentAccountCrudService;
 import com.propertyvista.portal.web.client.activity.AbstractEditorActivity;
-import com.propertyvista.portal.web.client.ui.profile.ProfilePageView;
-import com.propertyvista.portal.web.client.ui.profile.ProfilePageView.ProfilePagePresenter;
+import com.propertyvista.portal.web.client.ui.profile.AccountPageView;
+import com.propertyvista.portal.web.client.ui.profile.AccountPageView.AccountPagePresenter;
 
-public class ProfilePageActivity extends AbstractEditorActivity<ResidentProfileDTO> implements ProfilePagePresenter {
+public class AccountPageActivity extends AbstractEditorActivity<ResidentAccountDTO> implements AccountPagePresenter {
 
-    public ProfilePageActivity(AppPlace place) {
-        super(ProfilePageView.class, GWT.<ResidentProfileCrudService> create(ResidentProfileCrudService.class), place);
+    public AccountPageActivity(AppPlace place) {
+        super(AccountPageView.class, GWT.<ResidentAccountCrudService> create(ResidentAccountCrudService.class), place);
     }
 
 }

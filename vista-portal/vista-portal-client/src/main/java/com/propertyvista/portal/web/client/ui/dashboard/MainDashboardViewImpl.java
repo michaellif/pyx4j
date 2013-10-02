@@ -24,7 +24,7 @@ import com.pyx4j.site.client.ui.layout.responsive.LayoutChangeEvent;
 import com.pyx4j.site.client.ui.layout.responsive.LayoutChangeHandler;
 import com.pyx4j.site.client.ui.layout.responsive.ResponsiveLayoutPanel.LayoutType;
 
-import com.propertyvista.portal.rpc.portal.web.dto.TenantProfileSummaryDTO;
+import com.propertyvista.portal.rpc.portal.web.dto.ResidentSummaryDTO;
 import com.propertyvista.portal.rpc.portal.web.dto.financial.BillingSummaryDTO;
 import com.propertyvista.portal.rpc.portal.web.dto.insurance.status.InsuranceStatusDTO;
 import com.propertyvista.portal.rpc.portal.web.dto.maintenance.MaintenanceSummaryDTO;
@@ -115,7 +115,7 @@ public class MainDashboardViewImpl extends FlowPanel implements MainDashboardVie
     }
 
     @Override
-    public void populateProfileGadget(TenantProfileSummaryDTO profileSummary) {
+    public void populateProfileGadget(ResidentSummaryDTO profileSummary) {
         profileGadget.populate(profileSummary);
     }
 

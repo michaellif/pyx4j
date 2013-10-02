@@ -27,6 +27,7 @@ import com.pyx4j.forms.client.ui.form.FormDecoratorTheme;
 import com.pyx4j.forms.client.ui.panels.FlexFormPanelTheme;
 import com.pyx4j.site.client.ui.layout.responsive.ResponsiveLayoutTheme;
 import com.pyx4j.widgets.client.DefaultWidgetsTheme;
+import com.pyx4j.widgets.client.DefaultWidgetsTheme.StyleName;
 import com.pyx4j.widgets.client.datepicker.DefaultDatePickerTheme;
 import com.pyx4j.widgets.client.dialog.DefaultDialogTheme;
 
@@ -112,6 +113,13 @@ public class PortalWebTheme extends Theme {
 
             }
 
+            @Override
+            protected void initAnchorStyle() {
+                super.initAnchorStyle();
+                Style style = new Style(".", StyleName.Anchor);
+                style.addProperty("outline", "none");
+                addStyle(style);
+            }
         });
 
         addTheme(new DefaultWidgetDecoratorTheme() {

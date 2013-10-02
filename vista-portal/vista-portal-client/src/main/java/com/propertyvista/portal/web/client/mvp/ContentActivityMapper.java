@@ -49,6 +49,7 @@ import com.propertyvista.portal.web.client.activity.maintenance.MaintenanceDashb
 import com.propertyvista.portal.web.client.activity.maintenance.MaintenanceRequestConfirmationActivity;
 import com.propertyvista.portal.web.client.activity.maintenance.MaintenanceRequestPageActivity;
 import com.propertyvista.portal.web.client.activity.maintenance.MaintenanceRequestWizardActivity;
+import com.propertyvista.portal.web.client.activity.profile.AccountPageActivity;
 import com.propertyvista.portal.web.client.activity.profile.ProfilePageActivity;
 import com.propertyvista.portal.web.client.activity.security.PasswordChangeActivity;
 import com.propertyvista.portal.web.client.activity.security.PasswordResetActivity;
@@ -79,8 +80,10 @@ public class ContentActivityMapper implements AppActivityMapper {
                         activity = new FinancialDashboardActivity(appPlace);
                     }
 
-                    else if (appPlace instanceof Resident.ProfileViewer) {
+                    else if (appPlace instanceof Resident.Profile) {
                         activity = new ProfilePageActivity(appPlace);
+                    } else if (appPlace instanceof Resident.Account) {
+                        activity = new AccountPageActivity(appPlace);
                     }
 
                     else if (appPlace instanceof PortalSiteMap.Resident.ResidentServices) {

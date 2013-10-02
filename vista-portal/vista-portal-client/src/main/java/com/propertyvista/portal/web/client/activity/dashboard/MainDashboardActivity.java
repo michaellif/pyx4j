@@ -24,13 +24,13 @@ import com.pyx4j.site.client.AppSite;
 
 import com.propertyvista.domain.security.VistaCustomerPaymentTypeBehavior;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap;
-import com.propertyvista.portal.rpc.portal.web.dto.TenantProfileSummaryDTO;
+import com.propertyvista.portal.rpc.portal.web.dto.ResidentSummaryDTO;
 import com.propertyvista.portal.rpc.portal.web.dto.financial.BillingSummaryDTO;
 import com.propertyvista.portal.rpc.portal.web.dto.insurance.status.InsuranceStatusDTO;
 import com.propertyvista.portal.rpc.portal.web.dto.maintenance.MaintenanceSummaryDTO;
 import com.propertyvista.portal.rpc.portal.web.services.financial.BillingService;
 import com.propertyvista.portal.rpc.portal.web.services.maintenance.MaintenanceRequestCrudService;
-import com.propertyvista.portal.rpc.portal.web.services.profile.ProfileService;
+import com.propertyvista.portal.rpc.portal.web.services.profile.ResidentSummaryService;
 import com.propertyvista.portal.rpc.portal.web.services.services.InsuranceService;
 import com.propertyvista.portal.web.client.PortalWebSite;
 import com.propertyvista.portal.web.client.activity.SecurityAwareActivity;
@@ -55,9 +55,9 @@ public class MainDashboardActivity extends SecurityAwareActivity implements Main
     }
 
     private void populate() {
-        ((ProfileService) GWT.create(ProfileService.class)).retreiveProfileSummary(new DefaultAsyncCallback<TenantProfileSummaryDTO>() {
+        ((ResidentSummaryService) GWT.create(ResidentSummaryService.class)).retreiveProfileSummary(new DefaultAsyncCallback<ResidentSummaryDTO>() {
             @Override
-            public void onSuccess(TenantProfileSummaryDTO result) {
+            public void onSuccess(ResidentSummaryDTO result) {
                 view.populateProfileGadget(result);
             }
         });

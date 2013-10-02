@@ -75,10 +75,7 @@ public class PortalSiteMap implements SiteMap {
         }
 
         @PlaceProperties(navigLabel = "My Profile")
-        public static class ProfileViewer extends AppPlace {
-        }
-
-        public static class ProfileEditor extends AppPlace {
+        public static class Profile extends AppPlace {
         }
 
         @PlaceProperties(navigLabel = "My Account")

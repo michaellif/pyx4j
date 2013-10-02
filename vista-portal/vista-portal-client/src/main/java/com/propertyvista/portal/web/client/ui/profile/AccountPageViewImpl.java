@@ -7,16 +7,20 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Oct 27, 2011
- * @author vlads
+ * Created on May 15, 2011
+ * @author Dad
  * @version $Id$
  */
-package com.propertyvista.portal.rpc.portal.services.resident;
+package com.propertyvista.portal.web.client.ui.profile;
 
-import com.pyx4j.entity.rpc.AbstractCrudService;
+import com.propertyvista.portal.rpc.portal.web.dto.ResidentAccountDTO;
+import com.propertyvista.portal.web.client.ui.AbstractEditorView;
 
-import com.propertyvista.portal.domain.dto.ResidentDTO;
+public class AccountPageViewImpl extends AbstractEditorView<ResidentAccountDTO> implements AccountPageView {
 
-public interface PersonalInfoCrudService extends AbstractCrudService<ResidentDTO> {
+    public AccountPageViewImpl() {
+        super();
+        setForm(new AccountPage(this));
+    }
 
 }

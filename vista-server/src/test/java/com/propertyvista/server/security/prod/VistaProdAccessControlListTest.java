@@ -31,7 +31,7 @@ import com.pyx4j.unit.server.mock.TestLifecycle;
 import com.propertyvista.operations.rpc.services.PmcCrudService;
 import com.propertyvista.config.tests.VistaTestsDBConfigurationHSQLMemory;
 import com.propertyvista.crm.rpc.services.organization.EmployeeCrudService;
-import com.propertyvista.portal.rpc.portal.services.resident.PersonalInfoCrudService;
+import com.propertyvista.portal.rpc.portal.web.services.profile.ResidentProfileCrudService;
 import com.propertyvista.portal.rpc.ptapp.services.ApplicationStatusService;
 import com.propertyvista.portal.rpc.ptapp.services.steps.SummaryService;
 import com.propertyvista.portal.rpc.ptapp.services.steps.TenantInfoService;
@@ -76,7 +76,7 @@ public class VistaProdAccessControlListTest {
         assertPermission(false, EmployeeCrudService.class);
 
         // Portal
-        assertPermission(false, PersonalInfoCrudService.class);
+        assertPermission(false, ResidentProfileCrudService.class);
 
         TestLifecycle.endRequest();
     }

@@ -19,16 +19,16 @@ import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
 
 import com.propertyvista.domain.tenant.lease.LeaseTermTenant;
-import com.propertyvista.portal.rpc.portal.web.dto.TenantProfileSummaryDTO;
-import com.propertyvista.portal.rpc.portal.web.services.profile.ProfileService;
+import com.propertyvista.portal.rpc.portal.web.dto.ResidentSummaryDTO;
+import com.propertyvista.portal.rpc.portal.web.services.profile.ResidentSummaryService;
 import com.propertyvista.portal.server.portal.TenantAppContext;
 import com.propertyvista.server.common.util.AddressRetriever;
 
-public class ProfileServiceImpl implements ProfileService {
+public class ResidentSummaryServiceImpl implements ResidentSummaryService {
 
     @Override
-    public void retreiveProfileSummary(AsyncCallback<TenantProfileSummaryDTO> callback) {
-        TenantProfileSummaryDTO profileSummary = EntityFactory.create(TenantProfileSummaryDTO.class);
+    public void retreiveProfileSummary(AsyncCallback<ResidentSummaryDTO> callback) {
+        ResidentSummaryDTO profileSummary = EntityFactory.create(ResidentSummaryDTO.class);
 
         LeaseTermTenant tenantInLease = TenantAppContext.getCurrentUserTenantInLease();
         Persistence.service().retrieve(tenantInLease.leaseTermV());

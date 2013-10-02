@@ -13,10 +13,10 @@
  */
 package com.propertyvista.portal.web.client.ui.profile;
 
-import com.propertyvista.portal.domain.dto.ResidentDTO;
+import com.propertyvista.portal.rpc.portal.web.dto.ResidentProfileDTO;
 import com.propertyvista.portal.web.client.ui.AbstractEditorView;
 
-public class ProfilePageViewImpl extends AbstractEditorView<ResidentDTO> implements ProfilePageView {
+public class ProfilePageViewImpl extends AbstractEditorView<ResidentProfileDTO> implements ProfilePageView {
 
     public ProfilePageViewImpl() {
         super();

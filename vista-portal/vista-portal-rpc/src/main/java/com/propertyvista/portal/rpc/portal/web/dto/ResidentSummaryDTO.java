@@ -7,19 +7,25 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on May 14, 2011
- * @author Dad
+ * Created on Nov 25, 2011
+ * @author vlads
  * @version $Id$
  */
-package com.propertyvista.portal.web.client.ui.profile;
+package com.propertyvista.portal.rpc.portal.web.dto;
 
-import com.propertyvista.portal.rpc.portal.web.dto.ResidentProfileDTO;
-import com.propertyvista.portal.web.client.ui.IEditorView;
+import com.pyx4j.entity.annotations.Transient;
+import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.shared.IPrimitive;
+import com.pyx4j.i18n.annotations.I18n;
 
-public interface ProfilePageView extends IEditorView<ResidentProfileDTO> {
+@Transient
+@I18n(strategy = I18n.I18nStrategy.IgnoreThis)
+public interface ResidentSummaryDTO extends IEntity {
 
-    public interface ProfilePagePresenter extends IEditorPresenter<ResidentProfileDTO> {
+    IPrimitive<String> tenantName();
 
-    }
+    IPrimitive<String> floorplanName();
+
+    IPrimitive<String> tenantAddress();
 
 }

@@ -64,7 +64,6 @@ import com.propertyvista.portal.rpc.portal.services.resident.PaymentMethodRetrie
 import com.propertyvista.portal.rpc.portal.services.resident.PaymentMethodWizardService;
 import com.propertyvista.portal.rpc.portal.services.resident.PaymentRetrieveService;
 import com.propertyvista.portal.rpc.portal.services.resident.PaymentWizardService;
-import com.propertyvista.portal.rpc.portal.services.resident.PersonalInfoCrudService;
 import com.propertyvista.portal.rpc.portal.services.resident.PreauthorizedPaymentListService;
 import com.propertyvista.portal.rpc.portal.services.resident.PreauthorizedPaymentWizardService;
 import com.propertyvista.portal.rpc.portal.services.resident.TenantInsuranceByOtherProviderManagementService;
@@ -75,7 +74,9 @@ import com.propertyvista.portal.rpc.portal.services.resident.WeatherService;
 import com.propertyvista.portal.rpc.portal.web.services.PortalAuthenticationService;
 import com.propertyvista.portal.rpc.portal.web.services.financial.BillingService;
 import com.propertyvista.portal.rpc.portal.web.services.maintenance.MaintenanceRequestCrudService;
-import com.propertyvista.portal.rpc.portal.web.services.profile.ProfileService;
+import com.propertyvista.portal.rpc.portal.web.services.profile.ResidentAccountCrudService;
+import com.propertyvista.portal.rpc.portal.web.services.profile.ResidentProfileCrudService;
+import com.propertyvista.portal.rpc.portal.web.services.profile.ResidentSummaryService;
 import com.propertyvista.portal.rpc.portal.web.services.services.GeneralInsurancePolicyCrudService;
 import com.propertyvista.portal.rpc.portal.web.services.services.TenantSureInsurancePolicyCrudService;
 import com.propertyvista.portal.rpc.ptapp.services.ApplicationDocumentUploadService;
@@ -214,7 +215,9 @@ public class VistaPortalAccessControlList extends ServletContainerAclBuilder {
 
         grant(VistaCustomerBehavior.Tenant, new IServiceExecutePermission(MaintenanceService.class));
 
-        grant(VistaCustomerBehavior.Tenant, new IServiceExecutePermission(PersonalInfoCrudService.class));
+        grant(VistaCustomerBehavior.Tenant, new IServiceExecutePermission(ResidentProfileCrudService.class));
+        grant(VistaCustomerBehavior.Tenant, new IServiceExecutePermission(ResidentAccountCrudService.class));
+
         grant(VistaCustomerBehavior.Tenant, new IServiceExecutePermission(CommunicationCenterService.class));
         grant(VistaCustomerBehavior.Tenant, new IServiceExecutePermission(ApplicationDocumentUploadService.class));
 
@@ -237,7 +240,7 @@ public class VistaPortalAccessControlList extends ServletContainerAclBuilder {
         grant(VistaCustomerBehavior.Tenant, new IServiceExecutePermission(BillingService.class));
         grant(VistaCustomerBehavior.Tenant, new IServiceExecutePermission(MaintenanceService.class));
 
-        grant(VistaCustomerBehavior.Tenant, new IServiceExecutePermission(ProfileService.class));
+        grant(VistaCustomerBehavior.Tenant, new IServiceExecutePermission(ResidentSummaryService.class));
 
         grant(VistaCustomerBehavior.Tenant, new IServiceExecutePermission(com.propertyvista.portal.rpc.portal.web.services.services.InsuranceService.class));
 

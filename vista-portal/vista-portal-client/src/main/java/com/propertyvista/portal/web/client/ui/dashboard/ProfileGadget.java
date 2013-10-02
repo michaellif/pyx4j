@@ -25,10 +25,11 @@ import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.SimplePanel;
 
 import com.pyx4j.commons.css.ThemeColor;
-import com.pyx4j.site.client.ui.layout.responsive.ResponsiveLayoutPanel.LayoutType;
+import com.pyx4j.site.client.AppSite;
 import com.pyx4j.widgets.client.Anchor;
 
-import com.propertyvista.portal.rpc.portal.web.dto.TenantProfileSummaryDTO;
+import com.propertyvista.portal.rpc.portal.PortalSiteMap;
+import com.propertyvista.portal.rpc.portal.web.dto.ResidentSummaryDTO;
 import com.propertyvista.portal.web.client.resources.PortalImages;
 import com.propertyvista.portal.web.client.themes.DashboardTheme;
 import com.propertyvista.portal.web.client.ui.AbstractGadget;
@@ -73,14 +74,16 @@ public class ProfileGadget extends AbstractGadget<MainDashboardViewImpl> {
 
                     @Override
                     public void execute() {
+                        AppSite.getPlaceController().goTo(new PortalSiteMap.Resident.Profile());
                     }
                 });
                 add(anchor);
 
-                anchor = new Anchor("Change my Settings", new Command() {
+                anchor = new Anchor("View my Account", new Command() {
 
                     @Override
                     public void execute() {
+                        AppSite.getPlaceController().goTo(new PortalSiteMap.Resident.Account());
                     }
                 });
                 add(anchor);
@@ -118,7 +121,7 @@ public class ProfileGadget extends AbstractGadget<MainDashboardViewImpl> {
             contentPanel.add(nameLabel);
         }
 
-        void setValue(TenantProfileSummaryDTO value) {
+        void setValue(ResidentSummaryDTO value) {
             nameLabel.setHTML(value.tenantName().getValue());
         }
     }
@@ -159,13 +162,13 @@ public class ProfileGadget extends AbstractGadget<MainDashboardViewImpl> {
 
         }
 
-        void setValue(TenantProfileSummaryDTO value) {
+        void setValue(ResidentSummaryDTO value) {
             floorplanLabel.setHTML(value.floorplanName().getValue());
             addressLabel.setHTML(value.tenantAddress().getValue());
         }
     }
 
-    protected void populate(TenantProfileSummaryDTO value) {
+    protected void populate(ResidentSummaryDTO value) {
         personInfoPanel.setValue(value);
         addressPanel.setValue(value);
     }

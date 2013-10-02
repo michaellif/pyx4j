@@ -11,7 +11,7 @@
  * @author Dad
  * @version $Id$
  */
-package com.propertyvista.portal.domain.dto;
+package com.propertyvista.portal.rpc.portal.web.dto;
 
 import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.Length;
@@ -22,7 +22,7 @@ import com.propertyvista.domain.person.Person;
 import com.propertyvista.domain.tenant.EmergencyContact;
 
 @Transient
-public interface ResidentDTO extends Person {
+public interface ResidentProfileDTO extends Person {
 
     @Length(3)
     @Caption(name = "Emergency Contacts")

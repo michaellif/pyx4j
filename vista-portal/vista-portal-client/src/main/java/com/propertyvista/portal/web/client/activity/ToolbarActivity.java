@@ -106,7 +106,7 @@ public class ToolbarActivity extends AbstractActivity implements ToolbarView.Too
 
     @Override
     public void showProfile() {
-        AppSite.getPlaceController().goTo(new PortalSiteMap.Resident.ProfileViewer());
+        AppSite.getPlaceController().goTo(new PortalSiteMap.Resident.Profile());
     }
 
     private void obtainAvailableLocales() {
