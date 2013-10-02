@@ -69,15 +69,14 @@ public class LineItemCollapsibleViewer extends CEntityContainer<InvoiceLineItemG
     public final IsWidget createContent() {
         FlowPanel mainPanel = new FlowPanel();
         mainPanel.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
+        mainPanel.getElement().getStyle().setMarginLeft(2, Unit.EM);
 
         collapsedPanel = new SimplePanel();
-//        collapsedPanel.getElement().getStyle().setMarginLeft(30, Unit.PX);
         collapsedPanel.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
         collapsedPanel.getElement().getStyle().setPosition(Position.RELATIVE);
         mainPanel.add(collapsedPanel);
 
         expandedPanel = new SimplePanel();
-//        expandedPanel.getElement().getStyle().setMarginLeft(30, Unit.PX);
         expandedPanel.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
         expandedPanel.getElement().getStyle().setPosition(Position.RELATIVE);
         mainPanel.add(expandedPanel);
@@ -120,8 +119,6 @@ public class LineItemCollapsibleViewer extends CEntityContainer<InvoiceLineItemG
             content.getFlexCellFormatter().setColSpan(row, 0, 2);
 
             content.setWidget(row, 0, new HTML(value.getMeta().getCaption()));
-            content.getWidget(row, 0).getElement().getStyle().setPaddingLeft(2, Unit.EM);
-
             content.setWidget(row, 2, new HTML(value.total().getStringView()));
 
             // styling:
@@ -143,7 +140,6 @@ public class LineItemCollapsibleViewer extends CEntityContainer<InvoiceLineItemG
         int row = 0;
         if (value != null && !value.total().isNull()) {
             content.setWidget(row, 0, new HTML(value.getMeta().getCaption()));
-            content.getWidget(row, 0).getElement().getStyle().setPaddingLeft(2, Unit.EM);
             content.getFlexCellFormatter().setColSpan(row, 0, 2);
 
             // styling:
@@ -182,7 +178,6 @@ public class LineItemCollapsibleViewer extends CEntityContainer<InvoiceLineItemG
         table.getRowFormatter().setStyleName(row, BillingTheme.StyleName.BillingDetailItem.name());
 
         table.setWidget(row, 0, new HTML(date));
-        table.getWidget(row, 0).getElement().getStyle().setPaddingLeft(2, Unit.EM);
         table.getWidget(row, 0).setStyleName(BillingTheme.StyleName.BillingDetailItemDate.name());
 
         table.setWidget(row, 1, new HTML(description));
