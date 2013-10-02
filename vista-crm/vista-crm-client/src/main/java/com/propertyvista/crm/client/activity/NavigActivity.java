@@ -135,6 +135,8 @@ public class NavigActivity extends AbstractActivity implements NavigView.MainNav
         //LegalAndCollections
         folder = new NavigFolder(i18n.tr("Legal & Collections"), CrmImages.INSTANCE.legalNormal(), CrmImages.INSTANCE.legalHover(),
                 CrmImages.INSTANCE.legalActive());
+        folder.addNavigItem(new CrmSiteMap.LegalAndCollections.N4GenerationTool());
+        folder.addNavigItem(new CrmSiteMap.LegalAndCollections.PastN4());
         list.add(folder);
 
         //Finance

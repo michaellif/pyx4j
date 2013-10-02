@@ -235,6 +235,15 @@ public class CrmSiteMap implements SiteMap {
     }
 
     public static class LegalAndCollections extends AppPlace {
+
+        public static class N4GenerationTool extends CrmCrudAppPlace {
+
+        }
+
+        public static class PastN4 extends CrmCrudAppPlace {
+
+        }
+
     }
 
     public static class Finance extends AppPlace {
