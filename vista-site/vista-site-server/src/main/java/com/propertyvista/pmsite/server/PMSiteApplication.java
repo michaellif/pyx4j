@@ -59,6 +59,7 @@ import org.apache.wicket.util.time.Duration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.config.server.ServerSideConfiguration;
 import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.security.rpc.AuthenticationService;
@@ -409,7 +410,11 @@ public class PMSiteApplication extends AuthenticatedWebApplication {
         String requestUrl = httpServletRequest.getRequestURL().toString();
         log.debug("request: {}; configured: {}", requestUrl, secureBaseUrl);
         if (!requestUrl.startsWith(secureBaseUrl)) {
-            String secureUrl = secureBaseUrl + "?" + request.getUrl().getQueryString();
+            String secureUrl = secureBaseUrl;
+            String query = request.getUrl().getQueryString();
+            if (CommonsStringUtils.isStringSet(query)) {
+                secureUrl += "?" + query;
+            }
             log.debug("secure redirect {}", secureUrl);
             throw new RedirectToUrlException(secureUrl);
         }
