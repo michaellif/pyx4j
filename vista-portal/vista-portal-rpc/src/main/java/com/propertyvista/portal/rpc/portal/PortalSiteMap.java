@@ -69,8 +69,10 @@ public class PortalSiteMap implements SiteMap {
 
     }
 
-    @PlaceProperties(navigLabel = "Dashboard", caption = "Dashboard")
     public static class Resident extends AppPlace {
+
+        public static class Dashboard extends AppPlace {
+        }
 
         @PlaceProperties(navigLabel = "My Profile")
         public static class ProfileViewer extends AppPlace {
@@ -83,11 +85,8 @@ public class PortalSiteMap implements SiteMap {
         public static class Account extends AppPlace {
         }
 
+        @PlaceProperties(navigLabel = "Billing & Payment")
         public static class Financial extends AppPlace {
-
-            @PlaceProperties(navigLabel = "Billing & Payment")
-            public static class BillingDashboard extends AppPlace {
-            }
 
             public static class BillingHistory extends AppPlace {
 

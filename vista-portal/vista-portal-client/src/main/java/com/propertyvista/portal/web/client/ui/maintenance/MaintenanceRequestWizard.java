@@ -16,7 +16,6 @@ package com.propertyvista.portal.web.client.ui.maintenance;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.ui.HasVerticalAlignment;
-import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.commons.EnglishGrammar;
 import com.pyx4j.commons.css.ThemeColor;

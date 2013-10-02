@@ -27,7 +27,7 @@ public class MaintenanceRequestConfirmationPage extends CPortalEntityForm<Mainte
     private static final I18n i18n = I18n.get(MaintenanceRequestConfirmationPage.class);
 
     public MaintenanceRequestConfirmationPage(MaintenanceRequestConfirmationPageViewImpl view) {
-        super(MaintenanceRequestDTO.class, view, i18n.tr("Maintenance Request submitted Successfully!"), ThemeColor.contrast4);
+        super(MaintenanceRequestDTO.class, view, i18n.tr("Maintenance Request submitted Successfully!"), ThemeColor.contrast5);
 
         setViewable(true);
         inheritViewable(false);

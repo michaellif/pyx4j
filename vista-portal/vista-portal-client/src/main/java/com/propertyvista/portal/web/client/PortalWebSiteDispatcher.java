@@ -39,7 +39,7 @@ public class PortalWebSiteDispatcher extends AbstractAppPlaceDispatcher {
 
     @Override
     protected void obtainDefaultAuthenticatedPlace(AsyncCallback<AppPlace> callback) {
-        callback.onSuccess(new PortalSiteMap.Resident());
+        callback.onSuccess(new PortalSiteMap.Resident.Dashboard());
     }
 
     @Override

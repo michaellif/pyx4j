@@ -25,7 +25,6 @@ import com.pyx4j.site.rpc.AppPlace;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap.Resident;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap.Resident.Financial;
-import com.propertyvista.portal.rpc.portal.PortalSiteMap.Resident.Financial.BillingDashboard;
 import com.propertyvista.portal.web.client.activity.NotificationPageActivity;
 import com.propertyvista.portal.web.client.activity.SignUpActivity;
 import com.propertyvista.portal.web.client.activity.dashboard.MainDashboardActivity;
@@ -72,11 +71,11 @@ public class ContentActivityMapper implements AppActivityMapper {
                     AppPlace appPlace = (AppPlace) place;
 
                     Activity activity = null;
-                    if (appPlace instanceof Resident) {
+                    if (appPlace instanceof Resident.Dashboard) {
                         activity = new MainDashboardActivity(appPlace);
                     }
 
-                    else if (appPlace instanceof BillingDashboard) {
+                    else if (appPlace instanceof Financial) {
                         activity = new FinancialDashboardActivity(appPlace);
                     }
 

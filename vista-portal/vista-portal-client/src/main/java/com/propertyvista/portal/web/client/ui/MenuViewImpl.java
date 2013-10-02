@@ -79,9 +79,9 @@ public class MenuViewImpl extends DockPanel implements MenuView {
         add(footerHolder, DockPanel.SOUTH);
         setCellHeight(footerHolder, "1px");
 
-        mainHolder.add(new NavigItem(new Resident(), PortalImages.INSTANCE.dashboardMenu(), ThemeColor.contrast1));
+        mainHolder.add(new NavigItem(new Resident.Dashboard(), PortalImages.INSTANCE.dashboardMenu(), ThemeColor.contrast1));
 
-        mainHolder.add(new NavigItem(new Resident.Financial.BillingDashboard(), PortalImages.INSTANCE.billingMenu(), ThemeColor.contrast4));
+        mainHolder.add(new NavigItem(new Resident.Financial(), PortalImages.INSTANCE.billingMenu(), ThemeColor.contrast4));
 
         //TODO
 //        if (!VistaFeatures.instance().yardiIntegration()) {
@@ -147,7 +147,7 @@ public class MenuViewImpl extends DockPanel implements MenuView {
         this.presenter = presenter;
         AppPlace currentPlace = presenter.getWhere();
         for (NavigItem item : mainHolder.items) {
-            item.setSelected(item.getPlace().equals(currentPlace));
+            item.setSelected(currentPlace.getPlaceId().contains(item.getPlace().getPlaceId()));
         }
     }
 

@@ -40,7 +40,7 @@ public class MaintenanceRequestPage extends CPortalEntityForm<MaintenanceRequest
     private ProfilePagePresenter presenter;
 
     public MaintenanceRequestPage(MaintenanceRequestPageViewImpl view) {
-        super(MaintenanceRequestDTO.class, view, "Maintenance Request", ThemeColor.contrast2);
+        super(MaintenanceRequestDTO.class, view, "Maintenance Request", ThemeColor.contrast5);
         asWidget().setStyleName(EntityViewTheme.StyleName.EntityView.name());
     }
 
