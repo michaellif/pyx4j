@@ -17,7 +17,7 @@ codeServerPort
    9994  vista-crm-client.launch
    9995  vista-operations-client.launch
    9996  vista-portal-ptapp.launch
-   9997  vista-portal-resident.launch
+   9997  vista-site-cleint.launch
    9998  vista-ob-client.launch
    9999  vista-field-client.launch
    9980  vista-portal-web.launch
