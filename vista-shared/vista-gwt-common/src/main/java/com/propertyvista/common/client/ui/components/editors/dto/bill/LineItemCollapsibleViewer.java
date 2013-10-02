@@ -70,6 +70,7 @@ public class LineItemCollapsibleViewer extends CEntityContainer<InvoiceLineItemG
         FlowPanel mainPanel = new FlowPanel();
         mainPanel.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
         mainPanel.getElement().getStyle().setMarginLeft(2, Unit.EM);
+        mainPanel.getElement().getStyle().setPaddingTop(0.3, Unit.EM);
 
         collapsedPanel = new SimplePanel();
         collapsedPanel.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
