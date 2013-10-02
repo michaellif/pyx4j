@@ -26,5 +26,5 @@ public interface N4GenerationFacade {
 
     N4FormFieldsData populateFormData(N4LeaseData leaseData, N4LandlordsData landlordsData);
 
-    N4LeaseData populateN4LeaseData(Lease leaseId, LogicalDate terminationDate);
+    N4LeaseData getN4LeaseData(Lease leaseId, LogicalDate terminationDate);
 }

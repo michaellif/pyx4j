@@ -23,6 +23,7 @@ package com.propertyvista.biz.legal;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.lang.reflect.Method;
+import java.math.BigDecimal;
 import java.util.List;
 
 import org.apache.commons.io.IOUtils;
@@ -45,7 +46,6 @@ import com.pyx4j.entity.shared.IEntity;
 
 import com.propertyvista.biz.financial.ar.ARFacade;
 import com.propertyvista.domain.contact.AddressStructured;
-import com.propertyvista.domain.financial.ARCode;
 import com.propertyvista.domain.financial.billing.InvoiceDebit;
 import com.propertyvista.domain.legal.N4FormFieldsData;
 import com.propertyvista.domain.legal.N4FormFieldsData.SignedBy;
@@ -218,7 +218,7 @@ public class N4GenerationFacadeImpl implements N4GenerationFacade {
     }
 
     @Override
-    public N4LeaseData populateN4LeaseData(Lease leaseId, LogicalDate terminationDate) {
+    public N4LeaseData getN4LeaseData(Lease leaseId, LogicalDate terminationDate) {
         Lease lease = Persistence.service().retrieve(Lease.class, leaseId.getPrimaryKey());
 
         N4LeaseData n4LeaseData = EntityFactory.create(N4LeaseData.class);
@@ -231,6 +231,15 @@ public class N4GenerationFacadeImpl implements N4GenerationFacade {
         n4LeaseData.terminationDate().setValue(terminationDate);
 
         List<InvoiceDebit> debits = ServerSideFactory.create(ARFacade.class).getNotCoveredDebitInvoiceLineItems(lease.billingAccount());
+        // TODO filter out non-rent related debits
+        InvoiceDebitAggregator debitAggregator = new InvoiceDebitAggregator();
+        n4LeaseData.rentOwingBreakdown().addAll(debitAggregator.debitsForPeriod(debitAggregator.aggregate(debits)));
+
+        BigDecimal totalRentOwning = BigDecimal.ZERO;
+        for (N4RentOwingForPeriod rentOwingForPeriod : n4LeaseData.rentOwingBreakdown()) {
+            totalRentOwning = totalRentOwning.add(rentOwingForPeriod.rentOwing().getValue());
+        }
+        n4LeaseData.totalRentOwning().setValue(totalRentOwning);
 
         return n4LeaseData;
     }
@@ -302,11 +311,6 @@ public class N4GenerationFacadeImpl implements N4GenerationFacade {
 
     private String formatRentalAddress(AddressStructured address) {
         return address.getStringView();
-    }
-
-    private boolean isRentARcode(ARCode value) {
-        // TODO implement this method
-        return true;
     }
 
 }

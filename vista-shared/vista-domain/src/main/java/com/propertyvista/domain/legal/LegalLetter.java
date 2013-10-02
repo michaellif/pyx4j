@@ -13,7 +13,8 @@
  */
 package com.propertyvista.domain.legal;
 
-import com.pyx4j.commons.LogicalDate;
+import java.util.Date;
+
 import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.annotations.ReadOnly;
@@ -42,5 +43,5 @@ public interface LegalLetter extends File {
 
     @MemberColumn(notNull = true)
     @ReadOnly
-    IPrimitive<LogicalDate> generatedOn();
+    IPrimitive<Date> generatedOn();
 }
