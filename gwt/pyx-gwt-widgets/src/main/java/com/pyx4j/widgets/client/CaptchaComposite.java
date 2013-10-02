@@ -78,8 +78,6 @@ public class CaptchaComposite extends SimplePanel {
     private static String javaScriptURL = "www.google.com/recaptcha/api/js/recaptcha_ajax.js";
 
     public CaptchaComposite() {
-        // Image 300x57 pixels
-        this.getElement().getStyle().setHeight(57 + 30, Unit.PX);
         instanceId++;
         divName = "recaptcha_div" + String.valueOf(instanceId);
 
