@@ -12,7 +12,7 @@
 BEGIN TRANSACTION;
         
         UPDATE  larlyn.billing_billing_cycle AS bc
-        SET     target_pad_generation_date = '03-OCT-2013',
+        SET     target_pad_generation_date = '04-OCT-2013',
                 target_pad_execution_date = '04-OCT-2013',
                 actual_pad_generation_date = NULL
         FROM    (SELECT bc.id AS billing_cycle

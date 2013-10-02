@@ -23,7 +23,7 @@ BEGIN TRANSACTION;
                                 'oldc0120','oldc0170','park0400','shak0200','univ0137',
                                 'west0093','west0109')) AS t
         WHERE   p.id = t.id
-        AND     effective_from != '01-OCT-2013'
+        AND     effective_from != '01-OCT-2013';
         
 -- COMMIT;
 
@@ -43,7 +43,7 @@ BEGIN TRANSACTION;
                                 'colu0175','colu0590','esqu0804','esqu0841','gov1030b',
                                 'gove0681','gove1030','harw1100','mayo0256','scen1603')) AS t
         WHERE   p.id = t.id
-        AND     effective_from != '01-OCT-2013'
+        AND     effective_from != '01-OCT-2013';
        
        
 -- COMMIT;
