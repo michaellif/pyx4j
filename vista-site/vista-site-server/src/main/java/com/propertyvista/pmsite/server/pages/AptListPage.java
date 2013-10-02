@@ -48,14 +48,14 @@ import com.propertyvista.pmsite.server.PMSiteApplication;
 import com.propertyvista.pmsite.server.PMSiteClientPreferences;
 import com.propertyvista.pmsite.server.PMSiteContentManager;
 import com.propertyvista.pmsite.server.PMSiteWebRequest;
+import com.propertyvista.pmsite.server.PropertyFinder;
 import com.propertyvista.pmsite.server.model.PageParamsUtil;
 import com.propertyvista.pmsite.server.model.WicketUtils.AttributeClassModifier;
 import com.propertyvista.pmsite.server.model.WicketUtils.CompoundIEntityModel;
 import com.propertyvista.pmsite.server.model.WicketUtils.VolatileTemplateResourceReference;
 import com.propertyvista.pmsite.server.panels.AdvancedSearchCriteriaInputPanel;
 import com.propertyvista.pmsite.server.panels.AptListPanel;
-import com.propertyvista.portal.rpc.portal.PropertySearchCriteria;
-import com.propertyvista.portal.server.portal.PropertyFinder;
+import com.propertyvista.site.rpc.dto.PropertySearchCriteria;
 
 public class AptListPage extends BasePage {
 

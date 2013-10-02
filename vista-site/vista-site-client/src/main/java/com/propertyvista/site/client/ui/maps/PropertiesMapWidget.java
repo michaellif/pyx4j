@@ -28,8 +28,8 @@ import com.pyx4j.gwt.geo.CircleOverlay;
 import com.pyx4j.gwt.geo.MapUtils;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 
-import com.propertyvista.portal.domain.dto.PropertyDTO;
-import com.propertyvista.portal.domain.dto.PropertyListDTO;
+import com.propertyvista.site.rpc.dto.PropertyDTO;
+import com.propertyvista.site.rpc.dto.PropertyListDTO;
 
 public class PropertiesMapWidget extends AbstractMapWidget {
 

@@ -25,8 +25,8 @@ import com.google.gwt.maps.client.overlay.MarkerOptions;
 import com.pyx4j.geo.GeoPoint;
 import com.pyx4j.gwt.geo.MapUtils;
 
-import com.propertyvista.portal.domain.dto.PropertyDTO;
 import com.propertyvista.site.client.resources.MapsImages;
+import com.propertyvista.site.rpc.dto.PropertyDTO;
 
 public class PropertyMapWidget extends AbstractMapWidget {
 

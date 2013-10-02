@@ -11,7 +11,7 @@
  * @author vlads
  * @version $Id$
  */
-package com.propertyvista.portal.server.portal.services;
+package com.propertyvista.site.server.services;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,21 +25,15 @@ import com.pyx4j.rpc.shared.IgnoreSessionToken;
 import com.propertyvista.domain.property.asset.Floorplan;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
-import com.propertyvista.portal.domain.dto.PropertyDTO;
-import com.propertyvista.portal.domain.dto.PropertyListDTO;
-import com.propertyvista.portal.rpc.portal.PropertySearchCriteria;
-import com.propertyvista.portal.rpc.portal.services.PortalSiteServices;
-import com.propertyvista.portal.server.portal.PropertyFinder;
-import com.propertyvista.portal.server.ptapp.util.Converter;
+import com.propertyvista.pmsite.server.PropertyFinder;
+import com.propertyvista.site.rpc.dto.PropertyDTO;
+import com.propertyvista.site.rpc.dto.PropertyListDTO;
+import com.propertyvista.site.rpc.dto.PropertySearchCriteria;
+import com.propertyvista.site.rpc.services.PortalSiteServices;
+import com.propertyvista.site.server.Converter;
 
 @IgnoreSessionToken
 public class PortalSiteServicesImpl implements PortalSiteServices {
-
-    @Override
-    public void retrievePropertyList(AsyncCallback<PropertyListDTO> callback) {
-        //TODO move this all to special table for starte retrival
-        retrievePropertyList(callback, null);
-    }
 
     // get entire property list and set Selected flag for the properties that satisfy given search criteria
     @Override

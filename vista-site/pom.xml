@@ -18,6 +18,8 @@
     <packaging>pom</packaging>
 
     <modules>
+        <module>vista-site-rpc</module>
+        <module>vista-site-client</module>
         <module>vista-site-server</module>
     </modules>
 

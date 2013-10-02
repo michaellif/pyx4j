@@ -17,7 +17,7 @@ import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.dialog.Dialog;
 import com.pyx4j.widgets.client.dialog.OkOption;
 
-import com.propertyvista.portal.domain.dto.PropertyDTO;
+import com.propertyvista.site.rpc.dto.PropertyDTO;
 
 public class MapDialog extends Dialog {
 

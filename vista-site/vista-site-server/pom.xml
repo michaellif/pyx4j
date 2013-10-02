@@ -26,6 +26,12 @@
 
         <dependency>
             <groupId>com.propertyvista</groupId>
+            <artifactId>vista-site-rpc</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        
+        <dependency>
+            <groupId>com.propertyvista</groupId>
             <artifactId>vista-portal-server</artifactId>
             <version>${project.version}</version>
         </dependency>

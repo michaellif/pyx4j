@@ -7,19 +7,21 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on 2011-06-04
+ * Created on 2011-05-16
  * @author vlads
  * @version $Id$
  */
-package com.propertyvista.portal.domain.dto;
+package com.propertyvista.site.rpc.services;
 
-import com.pyx4j.entity.annotations.Transient;
-import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.entity.shared.IPrimitive;
+import com.google.gwt.user.client.rpc.AsyncCallback;
 
-@Transient
-public interface MediaDTO extends IEntity {
+import com.pyx4j.rpc.shared.IService;
 
-    IPrimitive<String> caption();
+import com.propertyvista.site.rpc.dto.PropertyListDTO;
+import com.propertyvista.site.rpc.dto.PropertySearchCriteria;
+
+public interface PortalSiteServices extends IService {
+
+    public void retrievePropertyList(AsyncCallback<PropertyListDTO> callback, PropertySearchCriteria search);
 
 }

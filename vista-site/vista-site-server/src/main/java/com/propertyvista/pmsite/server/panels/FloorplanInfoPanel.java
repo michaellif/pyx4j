@@ -40,9 +40,9 @@ import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.util.DomainUtil;
 import com.propertyvista.pmsite.server.PMSiteContentManager;
 import com.propertyvista.pmsite.server.PMSiteWebRequest;
+import com.propertyvista.pmsite.server.PropertyFinder;
 import com.propertyvista.pmsite.server.model.WicketUtils.SimpleImage;
 import com.propertyvista.pmsite.server.model.WicketUtils.VolatileTemplateResourceReference;
-import com.propertyvista.portal.server.portal.PropertyFinder;
 
 public class FloorplanInfoPanel extends Panel {
     private static final long serialVersionUID = 1L;

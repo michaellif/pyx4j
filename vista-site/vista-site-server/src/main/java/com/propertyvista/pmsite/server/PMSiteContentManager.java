@@ -63,7 +63,6 @@ import com.propertyvista.pmsite.server.panels.NavigationItem;
 import com.propertyvista.portal.rpc.DeploymentConsts;
 import com.propertyvista.portal.rpc.portal.ImageConsts;
 import com.propertyvista.portal.rpc.shared.SiteWasNotSetUpUserRuntimeException;
-import com.propertyvista.portal.server.portal.PropertyFinder;
 import com.propertyvista.server.proxy.HttpsProxyInjection;
 import com.propertyvista.shared.i18n.CompiledLocale;
 

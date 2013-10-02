@@ -20,7 +20,7 @@ import com.pyx4j.entity.shared.IList;
 
 import com.propertyvista.domain.RangeGroup;
 import com.propertyvista.domain.contact.AddressSimple;
-import com.propertyvista.portal.domain.dto.AmenityDTO;
+import com.propertyvista.site.rpc.dto.AmenityDTO;
 
 class Formatter {
 

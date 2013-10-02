@@ -28,11 +28,11 @@ import com.pyx4j.geo.GeoPoint;
 import com.pyx4j.gwt.geo.MapUtils;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 
-import com.propertyvista.portal.domain.dto.PropertyDTO;
-import com.propertyvista.portal.domain.dto.PropertyListDTO;
-import com.propertyvista.portal.rpc.portal.PropertySearchCriteria;
-import com.propertyvista.portal.rpc.portal.PropertySearchCriteria.SearchType;
-import com.propertyvista.portal.rpc.portal.services.PortalSiteServices;
+import com.propertyvista.site.rpc.dto.PropertyDTO;
+import com.propertyvista.site.rpc.dto.PropertyListDTO;
+import com.propertyvista.site.rpc.dto.PropertySearchCriteria;
+import com.propertyvista.site.rpc.dto.PropertySearchCriteria.SearchType;
+import com.propertyvista.site.rpc.services.PortalSiteServices;
 
 //http://localhost:8888/vista/portal/aptmap.html?gwt.codesvr=127.0.0.1:9997&city.name=Halifax&city.province.name=Nova+Scotia&searchType=city
 //

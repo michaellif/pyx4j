@@ -30,7 +30,7 @@ import com.pyx4j.i18n.shared.I18n;
 import com.propertyvista.pmsite.server.PMSiteWebRequest;
 import com.propertyvista.pmsite.server.model.WicketUtils;
 import com.propertyvista.pmsite.server.model.WicketUtils.CompoundIEntityModel;
-import com.propertyvista.portal.rpc.portal.PropertySearchCriteria;
+import com.propertyvista.site.rpc.dto.PropertySearchCriteria;
 
 public class QuickSearchCriteriaInputPanel extends Panel {
 

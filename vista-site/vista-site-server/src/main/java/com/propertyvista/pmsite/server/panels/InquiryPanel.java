@@ -52,13 +52,13 @@ import com.propertyvista.domain.tenant.lead.Guest;
 import com.propertyvista.domain.tenant.lead.Lead;
 import com.propertyvista.pmsite.server.PMSiteApplication;
 import com.propertyvista.pmsite.server.PMSiteWebRequest;
+import com.propertyvista.pmsite.server.PropertyFinder;
 import com.propertyvista.pmsite.server.model.WicketUtils;
 import com.propertyvista.pmsite.server.model.WicketUtils.CompoundIEntityModel;
 import com.propertyvista.pmsite.server.model.WicketUtils.DateInput;
 import com.propertyvista.pmsite.server.model.WicketUtils.SimpleRadioGroup;
 import com.propertyvista.pmsite.server.model.WicketUtils.VolatileTemplateResourceReference;
 import com.propertyvista.pmsite.server.pages.InquirySuccessPage;
-import com.propertyvista.portal.server.portal.PropertyFinder;
 
 public class InquiryPanel extends Panel {
     private static final long serialVersionUID = 1L;

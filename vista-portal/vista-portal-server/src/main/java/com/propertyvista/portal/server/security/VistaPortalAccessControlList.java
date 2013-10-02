@@ -49,7 +49,6 @@ import com.propertyvista.portal.rpc.portal.services.LeaseContextSelectionService
 import com.propertyvista.portal.rpc.portal.services.PasswordChangeUserService;
 import com.propertyvista.portal.rpc.portal.services.PortalPasswordResetService;
 import com.propertyvista.portal.rpc.portal.services.PortalPolicyRetrieveService;
-import com.propertyvista.portal.rpc.portal.services.PortalSiteServices;
 import com.propertyvista.portal.rpc.portal.services.PortalVistaTermsService;
 import com.propertyvista.portal.rpc.portal.services.SiteThemeServices;
 import com.propertyvista.portal.rpc.portal.services.resident.AutoPayRetrieveService;
@@ -132,8 +131,6 @@ public class VistaPortalAccessControlList extends ServletContainerAclBuilder {
         grant(new EntityPermission(City.class, EntityPermission.READ));
         grant(new EntityPermission(Country.class, EntityPermission.READ));
         grant(new EntityPermission(Province.class, EntityPermission.READ));
-
-        grant(new IServiceExecutePermission(PortalSiteServices.class));
 
         grant(new IServiceExecutePermission(SiteThemeServices.class));
 

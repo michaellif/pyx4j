@@ -30,12 +30,12 @@ import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.pmsite.server.PMSiteApplication;
 import com.propertyvista.pmsite.server.PMSiteContentManager;
 import com.propertyvista.pmsite.server.PMSiteWebRequest;
+import com.propertyvista.pmsite.server.PropertyFinder;
 import com.propertyvista.pmsite.server.model.PageParamsUtil;
 import com.propertyvista.pmsite.server.model.WicketUtils.CompoundIEntityModel;
 import com.propertyvista.pmsite.server.pages.AptDetailsPage;
 import com.propertyvista.pmsite.server.pages.AptListPage;
-import com.propertyvista.portal.rpc.portal.PropertySearchCriteria;
-import com.propertyvista.portal.server.portal.PropertyFinder;
+import com.propertyvista.site.rpc.dto.PropertySearchCriteria;
 
 public class AdvancedSearchCriteriaPanel extends Panel {
     private static final long serialVersionUID = 1L;

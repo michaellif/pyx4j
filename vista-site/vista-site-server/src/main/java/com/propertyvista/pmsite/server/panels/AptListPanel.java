@@ -44,12 +44,12 @@ import com.propertyvista.domain.property.asset.building.BuildingAmenity;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.pmsite.server.PMSiteApplication;
 import com.propertyvista.pmsite.server.PMSiteContentManager;
+import com.propertyvista.pmsite.server.PropertyFinder;
 import com.propertyvista.pmsite.server.model.WicketUtils.AttributeClassModifier;
 import com.propertyvista.pmsite.server.model.WicketUtils.JSActionLink;
 import com.propertyvista.pmsite.server.model.WicketUtils.SimpleImage;
 import com.propertyvista.pmsite.server.pages.AptDetailsPage;
 import com.propertyvista.pmsite.server.pages.AptListPage;
-import com.propertyvista.portal.server.portal.PropertyFinder;
 
 public class AptListPanel extends Panel {
     private static final long serialVersionUID = 1L;

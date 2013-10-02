@@ -11,7 +11,7 @@
  * @author stanp
  * @version $Id$
  */
-package com.propertyvista.portal.server.portal;
+package com.propertyvista.pmsite.server;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -42,10 +42,10 @@ import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.building.BuildingAmenity;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.util.DomainUtil;
-import com.propertyvista.portal.rpc.portal.PropertySearchCriteria;
-import com.propertyvista.portal.rpc.portal.PropertySearchCriteria.BathroomChoice;
-import com.propertyvista.portal.rpc.portal.PropertySearchCriteria.BedroomChoice;
-import com.propertyvista.portal.rpc.portal.PropertySearchCriteria.SearchType;
+import com.propertyvista.site.rpc.dto.PropertySearchCriteria;
+import com.propertyvista.site.rpc.dto.PropertySearchCriteria.BathroomChoice;
+import com.propertyvista.site.rpc.dto.PropertySearchCriteria.BedroomChoice;
+import com.propertyvista.site.rpc.dto.PropertySearchCriteria.SearchType;
 
 public class PropertyFinder {
 

@@ -11,7 +11,7 @@
  * @author michaellif
  * @version $Id$
  */
-package com.propertyvista.portal.domain.dto;
+package com.propertyvista.site.rpc.dto;
 
 import com.pyx4j.commons.Key;
 import com.pyx4j.commons.LogicalDate;

@@ -11,7 +11,7 @@
  * @author Dad
  * @version $Id$
  */
-package com.propertyvista.portal.rpc.portal;
+package com.propertyvista.site.rpc.dto;
 
 import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.Transient;

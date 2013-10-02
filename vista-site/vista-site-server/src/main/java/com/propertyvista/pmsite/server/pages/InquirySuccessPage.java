@@ -28,10 +28,10 @@ import com.propertyvista.domain.property.asset.Floorplan;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.pmsite.server.PMSiteApplication;
 import com.propertyvista.pmsite.server.PMSiteWebRequest;
+import com.propertyvista.pmsite.server.PropertyFinder;
 import com.propertyvista.pmsite.server.model.WicketUtils.VolatileTemplateResourceReference;
 import com.propertyvista.pmsite.server.panels.BuildingInfoPanel;
 import com.propertyvista.pmsite.server.panels.FloorplanInfoPanel;
-import com.propertyvista.portal.server.portal.PropertyFinder;
 
 public class InquirySuccessPage extends BasePage {
     private static final long serialVersionUID = 1L;

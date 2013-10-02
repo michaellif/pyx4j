@@ -11,10 +11,9 @@
  * @author dmitry
  * @version $Id$
  */
-package com.propertyvista.portal.server.ptapp.util;
+package com.propertyvista.site.server;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
 import java.util.List;
 
 import com.pyx4j.entity.server.Persistence;
@@ -25,57 +24,18 @@ import com.pyx4j.entity.shared.criterion.PropertyCriterion.Restriction;
 
 import com.propertyvista.domain.PublicVisibilityType;
 import com.propertyvista.domain.RangeGroup;
-import com.propertyvista.domain.communication.CommunicationMessage;
 import com.propertyvista.domain.media.Media;
 import com.propertyvista.domain.property.asset.Floorplan;
-import com.propertyvista.domain.property.asset.FloorplanAmenity;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.building.BuildingAmenity;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
-import com.propertyvista.dto.CommunicationCenterDTO;
 import com.propertyvista.generator.util.CommonsGenerator;
-import com.propertyvista.portal.domain.dto.AmenityDTO;
-import com.propertyvista.portal.domain.dto.FloorplanDTO;
-import com.propertyvista.portal.domain.dto.FloorplanPropertyDTO;
-import com.propertyvista.portal.domain.dto.MediaDTO;
-import com.propertyvista.portal.domain.dto.PropertyDTO;
+import com.propertyvista.site.rpc.dto.AmenityDTO;
+import com.propertyvista.site.rpc.dto.FloorplanPropertyDTO;
+import com.propertyvista.site.rpc.dto.MediaDTO;
+import com.propertyvista.site.rpc.dto.PropertyDTO;
 
 public class Converter {
-
-    public static FloorplanDTO convert(Floorplan from) {
-        FloorplanDTO to = EntityFactory.create(FloorplanDTO.class);
-
-        to.id().set(from.id());
-        to.name().setValue(from.name().getValue());
-        to.area().set(CommonsGenerator.createRange(1200d, 2600d));
-        to.marketRent().set(CommonsGenerator.createRange(600d, 1600d));
-        to.description().setValue(from.description().getValue());
-
-        if (!from.media().isEmpty()) {
-            for (Media media : from.media()) {
-                if (media.isValueDetached()) {
-                    Persistence.service().retrieve(media);
-                }
-                if (PublicVisibilityType.global.equals(media.visibility().getValue()) && Media.Type.file == (media.type().getValue())) {
-                    to.mainMedia().setValue(media.getPrimaryKey());
-                    break;
-                }
-            }
-        }
-
-        List<FloorplanAmenity> amenities = new ArrayList<FloorplanAmenity>();
-        EntityQueryCriteria<FloorplanAmenity> floorplanAmenityCriteria = EntityQueryCriteria.create(FloorplanAmenity.class);
-        floorplanAmenityCriteria.add(PropertyCriterion.eq(floorplanAmenityCriteria.proto().floorplan(), from));
-        amenities.addAll(Persistence.service().query(floorplanAmenityCriteria));
-
-        for (FloorplanAmenity amenity : amenities) {
-            AmenityDTO amntDTO = EntityFactory.create(AmenityDTO.class);
-            amntDTO.name().setValue(amenity.getStringView());
-            to.amenities().add(amntDTO);
-        }
-
-        return to;
-    }
 
     public static void minMax(RangeGroup src, RangeGroup dst) {
         if (dst.max().isNull() || dst.max().getValue() < src.max().getValue()) {
@@ -164,31 +124,6 @@ public class Converter {
         MediaDTO to = EntityFactory.create(MediaDTO.class);
         to.id().set(from.id());
         to.caption().setValue(from.caption().getValue());
-        return to;
-    }
-
-    public static CommunicationCenterDTO convert(CommunicationMessage from, String senderName) {
-        if (from == null) {
-            return null;
-        }
-        CommunicationCenterDTO to = EntityFactory.create(CommunicationCenterDTO.class);
-        to.id().set(from.id());
-        to.parent().set(from.parent());
-
-        to.sender().set(from.sender());
-
-        to.destination().set(from.destination());
-
-        to.topic().set(from.topic());
-
-        to.content().set(from.content());
-
-        to.isHighImportance().set(from.isHighImportance());
-        to.isRead().set(from.isRead());
-        to.created().set(from.created());
-        to.updated().set(from.updated());
-
-        to.senderName().setValue(senderName);
         return to;
     }
 

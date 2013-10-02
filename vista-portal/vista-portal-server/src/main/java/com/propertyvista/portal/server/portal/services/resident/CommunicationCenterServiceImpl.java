@@ -42,7 +42,6 @@ import com.propertyvista.domain.security.common.AbstractPmcUser;
 import com.propertyvista.domain.security.common.AbstractUser;
 import com.propertyvista.dto.CommunicationCenterDTO;
 import com.propertyvista.portal.rpc.portal.services.resident.CommunicationCenterService;
-import com.propertyvista.portal.server.ptapp.util.Converter;
 import com.propertyvista.server.common.security.VistaContext;
 
 public class CommunicationCenterServiceImpl extends AbstractCrudServiceDtoImpl<CommunicationMessage, CommunicationCenterDTO> implements
@@ -107,12 +106,37 @@ public class CommunicationCenterServiceImpl extends AbstractCrudServiceDtoImpl<C
                     log.error("Don't know the systemSender class: {0}", systemSender.getClass().getName());
                 }
                 //TODO add favorites
-                CommunicationCenterDTO dto = Converter.convert(myMessage, senderName);
+                CommunicationCenterDTO dto = convert(myMessage, senderName);
                 dtoList.add(dto);
             }
         }
 
         callback.onSuccess(dtoList);
+    }
+
+    public static CommunicationCenterDTO convert(CommunicationMessage from, String senderName) {
+        if (from == null) {
+            return null;
+        }
+        CommunicationCenterDTO to = EntityFactory.create(CommunicationCenterDTO.class);
+        to.id().set(from.id());
+        to.parent().set(from.parent());
+
+        to.sender().set(from.sender());
+
+        to.destination().set(from.destination());
+
+        to.topic().set(from.topic());
+
+        to.content().set(from.content());
+
+        to.isHighImportance().set(from.isHighImportance());
+        to.isRead().set(from.isRead());
+        to.created().set(from.created());
+        to.updated().set(from.updated());
+
+        to.senderName().setValue(senderName);
+        return to;
     }
 
     private List<CommunicationMessage> getMyMessages() {

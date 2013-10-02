@@ -42,12 +42,12 @@ import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.common.client.ui.components.MediaUtils;
 import com.propertyvista.domain.media.ThumbnailSize;
-import com.propertyvista.portal.domain.dto.FloorplanPropertyDTO;
-import com.propertyvista.portal.domain.dto.PropertyDTO;
 import com.propertyvista.portal.rpc.portal.ImageConsts;
 import com.propertyvista.site.client.resources.MapsImages;
 import com.propertyvista.site.client.ui.maps.PropertiesMapWidget.MarkerType;
 import com.propertyvista.site.client.ui.maps.PropertiesMapWidget.StyleSuffix;
+import com.propertyvista.site.rpc.dto.FloorplanPropertyDTO;
+import com.propertyvista.site.rpc.dto.PropertyDTO;
 
 public class PropertyMarker extends Marker {
 

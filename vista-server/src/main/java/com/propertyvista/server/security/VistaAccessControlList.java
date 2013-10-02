@@ -24,6 +24,7 @@ import com.propertyvista.crm.server.security.VistaCrmAccessControlList;
 import com.propertyvista.ob.server.security.OnboardingAccessControlList;
 import com.propertyvista.operations.server.security.VistaOperationsAccessControlList;
 import com.propertyvista.portal.server.security.VistaPortalAccessControlList;
+import com.propertyvista.site.server.security.VistaSiteAccessControlList;
 
 public class VistaAccessControlList extends ServletContainerAclBuilder {
 
@@ -44,6 +45,7 @@ public class VistaAccessControlList extends ServletContainerAclBuilder {
             grant(new EntityPermission("*", EntityPermission.READ));
         }
 
+        merge(new VistaSiteAccessControlList());
         merge(new VistaPortalAccessControlList());
         merge(new VistaCrmAccessControlList());
         merge(new VistaOperationsAccessControlList());

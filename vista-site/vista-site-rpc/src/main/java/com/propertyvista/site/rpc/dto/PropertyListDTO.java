@@ -7,19 +7,21 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on May 15, 2011
- * @author michaellif
+ * Created on 2011-06-04
+ * @author vlads
  * @version $Id$
  */
-package com.propertyvista.portal.domain.dto;
+package com.propertyvista.site.rpc.dto;
 
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.entity.shared.IPrimitive;
+import com.pyx4j.entity.shared.IList;
+import com.pyx4j.entity.shared.IPrimitiveSet;
 
 @Transient
-public interface AmenityDTO extends IEntity {
+public interface PropertyListDTO extends IEntity {
 
-    IPrimitive<String> name();
+    IList<PropertyDTO> properties();
 
+    IPrimitiveSet<Long> filterIds();
 }

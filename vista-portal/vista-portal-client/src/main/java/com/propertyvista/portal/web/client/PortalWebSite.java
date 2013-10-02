@@ -37,14 +37,13 @@ import com.propertyvista.common.client.events.NotificationEvent;
 import com.propertyvista.common.client.events.NotificationHandler;
 import com.propertyvista.common.client.handlers.VistaUnrecoverableErrorHandler;
 import com.propertyvista.common.client.policy.ClientPolicyManager;
-import com.propertyvista.common.client.site.VistaBrowserRequirments;
 import com.propertyvista.common.client.site.Notification;
 import com.propertyvista.common.client.site.Notification.NotificationType;
+import com.propertyvista.common.client.site.VistaBrowserRequirments;
 import com.propertyvista.common.client.site.VistaSite;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap;
 import com.propertyvista.portal.rpc.portal.SiteDefinitionsDTO;
 import com.propertyvista.portal.rpc.portal.services.PortalPolicyRetrieveService;
-import com.propertyvista.portal.rpc.portal.services.PortalSiteServices;
 import com.propertyvista.portal.rpc.portal.services.SiteThemeServices;
 import com.propertyvista.portal.rpc.portal.web.services.PortalAuthenticationService;
 import com.propertyvista.portal.rpc.shared.services.PolicyRetrieveService;
@@ -53,8 +52,6 @@ import com.propertyvista.portal.web.client.themes.PortalWebTheme;
 import com.propertyvista.portal.web.client.ui.PortalRootPane;
 
 public class PortalWebSite extends VistaSite {
-
-    private static PortalSiteServices portalSiteServices = GWT.create(PortalSiteServices.class);
 
     private static SiteThemeServices siteThemeServices = GWT.create(SiteThemeServices.class);
 
@@ -140,10 +137,6 @@ public class PortalWebSite extends VistaSite {
 
     public static PortalWebSite instance() {
         return (PortalWebSite) AppSite.instance();
-    }
-
-    public static PortalSiteServices getPortalSiteServices() {
-        return portalSiteServices;
     }
 
     private static class PortalUserMessageHandlerByDialog implements NotificationHandler {

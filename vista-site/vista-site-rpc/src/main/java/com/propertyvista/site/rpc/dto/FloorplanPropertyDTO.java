@@ -7,20 +7,26 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on 2011-05-16
+ * Created on 2011-02-07
  * @author vlads
  * @version $Id$
  */
-package com.propertyvista.portal.domain.dto;
+package com.propertyvista.site.rpc.dto;
 
 import com.pyx4j.entity.annotations.Transient;
-import com.pyx4j.entity.shared.IList;
+import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.shared.IPrimitive;
+
+import com.propertyvista.domain.RangeGroup;
 
 @Transient
-public interface FloorplanDetailsDTO extends FloorplanDTO {
+public interface FloorplanPropertyDTO extends IEntity {
 
-    IList<MediaDTO> media();
+    IPrimitive<String> name();
 
-    IList<AmenityDTO> buildingAmenities();
+    RangeGroup price();
 
+    IPrimitive<Integer> bedrooms();
+
+    IPrimitive<Integer> bathrooms();
 }

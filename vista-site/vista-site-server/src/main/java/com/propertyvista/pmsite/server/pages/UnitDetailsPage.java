@@ -35,9 +35,9 @@ import com.propertyvista.domain.property.asset.FloorplanAmenity;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.pmsite.server.PMSiteApplication;
 import com.propertyvista.pmsite.server.PMSiteWebRequest;
+import com.propertyvista.pmsite.server.PropertyFinder;
 import com.propertyvista.pmsite.server.model.WicketUtils.VolatileTemplateResourceReference;
 import com.propertyvista.pmsite.server.panels.FloorplanInfoPanel;
-import com.propertyvista.portal.server.portal.PropertyFinder;
 
 public class UnitDetailsPage extends BasePage {
 

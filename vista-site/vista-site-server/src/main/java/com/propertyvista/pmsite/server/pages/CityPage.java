@@ -44,14 +44,14 @@ import com.propertyvista.domain.site.HtmlContent;
 import com.propertyvista.domain.site.PageMetaTags;
 import com.propertyvista.pmsite.server.PMSiteApplication;
 import com.propertyvista.pmsite.server.PMSiteWebRequest;
+import com.propertyvista.pmsite.server.PropertyFinder;
 import com.propertyvista.pmsite.server.model.PageParamsUtil;
 import com.propertyvista.pmsite.server.model.WicketUtils.CompoundIEntityModel;
 import com.propertyvista.pmsite.server.model.WicketUtils.PageLink;
 import com.propertyvista.pmsite.server.model.WicketUtils.VolatileTemplateResourceReference;
 import com.propertyvista.pmsite.server.panels.AdvancedSearchCriteriaInputPanel;
-import com.propertyvista.portal.rpc.portal.PropertySearchCriteria;
-import com.propertyvista.portal.rpc.portal.PropertySearchCriteria.SearchType;
-import com.propertyvista.portal.server.portal.PropertyFinder;
+import com.propertyvista.site.rpc.dto.PropertySearchCriteria;
+import com.propertyvista.site.rpc.dto.PropertySearchCriteria.SearchType;
 
 public class CityPage extends BasePage {
     private static final long serialVersionUID = 1L;
