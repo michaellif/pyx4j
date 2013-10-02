@@ -11,7 +11,7 @@
  * @author Dad
  * @version $Id$
  */
-package com.propertyvista.portal.client.ui.maps;
+package com.propertyvista.site.client.ui.maps;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -72,7 +72,7 @@ public enum PropertyMapController {
     }
 
     private native void publishJs() /*-{
-		$wnd.loadMap = @com.propertyvista.portal.client.ui.maps.PropertyMapController::loadMap();
+		$wnd.loadMap = @com.propertyvista.site.client.ui.maps.PropertyMapController::loadMap();
     }-*/;
 
     private void loadProperties() {

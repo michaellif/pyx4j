@@ -11,7 +11,7 @@
  * @author michaellif
  * @version $Id$
  */
-package com.propertyvista.portal.client.ui.maps;
+package com.propertyvista.site.client.ui.maps;
 
 import com.google.gwt.dom.client.Style.Float;
 import com.google.gwt.dom.client.Style.FontWeight;
@@ -43,12 +43,12 @@ import com.pyx4j.i18n.shared.I18n;
 import com.propertyvista.common.client.ui.components.MediaUtils;
 import com.propertyvista.domain.media.ThumbnailSize;
 import com.propertyvista.portal.client.resources.PortalImages;
-import com.propertyvista.portal.client.ui.maps.PropertiesMapWidget.MarkerType;
-import com.propertyvista.portal.client.ui.maps.PropertiesMapWidget.StyleSuffix;
 import com.propertyvista.portal.client.ui.util.Formatter;
 import com.propertyvista.portal.domain.dto.FloorplanPropertyDTO;
 import com.propertyvista.portal.domain.dto.PropertyDTO;
 import com.propertyvista.portal.rpc.portal.ImageConsts;
+import com.propertyvista.site.client.ui.maps.PropertiesMapWidget.MarkerType;
+import com.propertyvista.site.client.ui.maps.PropertiesMapWidget.StyleSuffix;
 
 public class PropertyMarker extends Marker {
 

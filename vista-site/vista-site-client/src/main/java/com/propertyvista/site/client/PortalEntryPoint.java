@@ -11,7 +11,7 @@
  * @author michaellif
  * @version $Id$
  */
-package com.propertyvista.portal.client;
+package com.propertyvista.site.client;
 
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.user.client.ui.RootPanel;
@@ -19,9 +19,9 @@ import com.google.gwt.user.client.ui.RootPanel;
 import com.pyx4j.gwt.commons.UncaughtHandler;
 import com.pyx4j.gwt.geo.GoogleAPI;
 
-import com.propertyvista.portal.client.ui.maps.PropertyMapController;
-import com.propertyvista.portal.client.ui.maps.PropertyMapWidget;
 import com.propertyvista.shared.config.VistaSettings;
+import com.propertyvista.site.client.ui.maps.PropertyMapController;
+import com.propertyvista.site.client.ui.maps.PropertyMapWidget;
 
 public class PortalEntryPoint implements EntryPoint {
 
@@ -39,20 +39,17 @@ public class PortalEntryPoint implements EntryPoint {
         }
         GoogleAPI.setGoogleAPIKey(""); // Maps V2 Hack - Google won't validate empty key
         GoogleAPI.setMapApiVersion(VistaSettings.googleMapApiVersion);
+        UncaughtHandler.setUnrecoverableErrorHandler(new VistaPortalWicketFragmentUnrecoverableErrorHandler());
 
         if (RootPanel.get(APTLIST_MAP_INSERTION_ID) != null) {
             RootPanel.get(APTLIST_MAP_INSERTION_ID).add(PropertyMapController.getMapWidget());
             if (RootPanel.get(APTINFO_MAP_INSERTION_ID) != null) {
-                UncaughtHandler.setUnrecoverableErrorHandler(new VistaPortalWicketFragmentUnrecoverableErrorHandler());
                 PropertyMapWidget map = PropertyMapWidget.get();
                 RootPanel.get(APTINFO_MAP_INSERTION_ID).add(map);
                 map.setSize("300px", "300px");
                 map.loadMap();
             }
-        } else {
-            new PortalSite().onModuleLoad();
         }
-
     }
 
     public final native String getPortalGoogleAPIKey() /*-{

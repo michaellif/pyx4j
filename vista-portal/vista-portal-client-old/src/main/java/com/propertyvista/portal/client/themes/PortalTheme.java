@@ -36,10 +36,10 @@ import com.propertyvista.common.client.theme.TransactionHistoryViewerTheme;
 import com.propertyvista.common.client.theme.VistaTheme;
 import com.propertyvista.domain.site.SiteDescriptor.Skin;
 import com.propertyvista.portal.client.ui.PortalRootPane;
-import com.propertyvista.portal.client.ui.maps.PropertiesMapWidget;
 import com.propertyvista.portal.client.ui.residents.tenantinsurance.dashboard.statusviewers.TenantInsuranceStatusViewer;
 import com.propertyvista.portal.client.ui.residents.tenantinsurance.dashboard.statusviewers.TenantSureInsuranceStatusViewer;
 import com.propertyvista.portal.client.ui.residents.tenantinsurance.views.ProvideTenantInsuranceViewImpl;
+import com.propertyvista.site.client.ui.maps.PropertiesMapWidget;
 
 public class PortalTheme extends VistaTheme {
 

@@ -11,7 +11,7 @@
  * @author michaellif
  * @version $Id$
  */
-package com.propertyvista.portal.client.ui.maps;
+package com.propertyvista.site.client.ui.maps;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -109,6 +109,6 @@ public class PropertyMapWidget extends AbstractMapWidget {
     }
 
     private static native void addJSHook() /*-{
-		$wnd.locateOnMap = @com.propertyvista.portal.client.ui.maps.PropertyMapWidget::populate(DD);
+		$wnd.locateOnMap = @com.propertyvista.site.client.ui.maps.PropertyMapWidget::populate(DD);
     }-*/;
 }

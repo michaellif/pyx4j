@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE module PUBLIC "-//Google Inc.//DTD Google Web Toolkit 2.0.0//EN" "http://google-web-toolkit.googlecode.com/svn/tags/2.0.0/distro-source/core/src/gwt-module.dtd">
 <!-- @version $Revision$ ($Author$) $Date$ -->
-<module rename-to='portal'>
+<module rename-to='site'>
 
     <inherits name='com.google.gwt.user.User'/>
 
@@ -15,8 +15,8 @@
 
     <source path="client"/>
 
-    <entry-point class='com.propertyvista.portal.client.PortalEntryPoint'/>
+    <entry-point class='com.propertyvista.site.client.SiteEntryPoint'/>
 
-    <extend-configuration-property name="rpc.blacklist" value="com.propertyvista.portal.client.*" />
+    <extend-configuration-property name="rpc.blacklist" value="com.propertyvista.site.client.*" />
 
 </module>

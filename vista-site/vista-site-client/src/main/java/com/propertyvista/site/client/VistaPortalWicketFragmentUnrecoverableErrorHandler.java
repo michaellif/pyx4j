@@ -11,7 +11,7 @@
  * @author vlads
  * @version $Id$
  */
-package com.propertyvista.portal.client;
+package com.propertyvista.site.client;
 
 import com.google.gwt.user.client.Window;
 

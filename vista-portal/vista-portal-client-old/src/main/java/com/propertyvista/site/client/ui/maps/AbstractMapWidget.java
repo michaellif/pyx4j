@@ -11,7 +11,7 @@
  * @author michaellif
  * @version $Id$
  */
-package com.propertyvista.portal.client.ui.maps;
+package com.propertyvista.site.client.ui.maps;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
