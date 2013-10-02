@@ -46,6 +46,7 @@ public class BillingTheme extends Theme {
         Style style = new Style(".", StyleName.BillingLineItem);
         style.addProperty("color", "#B3B3B3");
         style.addProperty("font-weight", "bold");
+        style.addProperty("text-align", "left");
         addStyle(style);
 
         style = new Style(".", StyleName.BillingLineItemTitle);
@@ -54,45 +55,48 @@ public class BillingTheme extends Theme {
         style = new Style(".", StyleName.BillingLineItemAmount);
         style.addProperty("color", "#666666");
         style.addProperty("font-style", "normal");
-        style.addProperty("text-align", "right");
         addStyle(style);
         // ----------------------------------------------------
         style = new Style(".", StyleName.BillingDetailItem);
         style.addProperty("color", "#B3B3B3");
         style.addProperty("font-style", "italic");
-        style.addProperty("text-align", "left");
-        addStyle(style);
-
-        style = new Style(".", StyleName.BillingDetailItemDate);
-        style.addProperty("padding-right", "1em");
+        style.addProperty("font-size", "smaller");
         style.addProperty("text-align", "center");
         addStyle(style);
 
+        style = new Style(".", StyleName.BillingDetailItemDate);
+        style.addProperty("padding-left", "4px");
+        style.addProperty("padding-right", "4px");
+        addStyle(style);
+
         style = new Style(".", StyleName.BillingDetailItemTitle);
+        style.addProperty("padding-left", "4px");
+        style.addProperty("padding-right", "4px");
         addStyle(style);
 
         style = new Style(".", StyleName.BillingDetailItemAmount);
         style.addProperty("color", "#666666");
-//        style.addProperty("font-weight", "bold");
-//        style.addProperty("font-style", "normal");
-        style.addProperty("text-align", "right");
+        style.addProperty("font-style", "normal");
+        style.addProperty("text-align", "left");
         addStyle(style);
         // ----------------------------------------------------
         style = new Style(".", StyleName.BillingDetailTotal);
         style.addProperty("color", "#B3B3B3");
+        style.addProperty("font-size", "smaller");
         style.addProperty("font-weight", "bold");
-        style.addProperty("text-align", "left");
+        style.addProperty("text-align", "center");
         addStyle(style);
 
         style = new Style(".", StyleName.BillingDetailTotalTitle);
+        style.addProperty("padding-left", "4px");
+        style.addProperty("padding-right", "4px");
         addStyle(style);
 
         style = new Style(".", StyleName.BillingDetailTotalAmount);
         style.addProperty("color", "#666666");
         style.addProperty("border-top", "1px solid black");
         style.addProperty("padding-top", "4px");
-        style.addProperty("font-style", "normal");
-        style.addProperty("text-align", "right");
+        style.addProperty("text-align", "left");
         addStyle(style);
 
         style = new Style(".", StyleName.BillingBillTotal, " .", DefaultWidgetDecoratorTheme.StyleName.WidgetDecoratorLabel);

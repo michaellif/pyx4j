@@ -18,6 +18,12 @@ import com.pyx4j.forms.client.ui.decorators.WidgetDecorator;
 
 public class FormDecoratorBuilder extends WidgetDecorator.Builder {
 
+    public static final String LABEL_WIDTH = "180px";
+
+    public static final String LABEL_WIDTH_HALF = "90px";
+
+    public static final String CONTENT_WIDTH = "300px";
+
     public FormDecoratorBuilder(CComponent<?> component, String labelWidth, String componentWidth, String contentWidth) {
         super(component);
         labelWidth(labelWidth);

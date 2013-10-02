@@ -15,24 +15,29 @@ package com.propertyvista.common.client.ui.components.editors.dto.bill;
 
 import java.util.Collection;
 
+import com.google.gwt.dom.client.Style.Display;
+import com.google.gwt.dom.client.Style.Position;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.i18n.client.DateTimeFormat;
-import com.google.gwt.user.client.ui.FlexTable;
+import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTML;
+import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.SimplePanel;
-import com.google.gwt.user.client.ui.VerticalPanel;
 
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CEntityContainer;
 import com.pyx4j.forms.client.ui.decorators.BasicCollapsableDecorator;
 import com.pyx4j.forms.client.ui.decorators.IDecorator;
+import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
+import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.event.shared.ToggleEvent;
 import com.pyx4j.widgets.client.event.shared.ToggleHandler;
 
 import com.propertyvista.common.client.resources.VistaImages;
 import com.propertyvista.common.client.theme.BillingTheme;
+import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
 import com.propertyvista.domain.financial.billing.InvoiceAccountCharge;
 import com.propertyvista.domain.financial.billing.InvoiceAccountCredit;
 import com.propertyvista.domain.financial.billing.InvoiceCredit;
@@ -44,12 +49,13 @@ import com.propertyvista.dto.InvoiceLineItemGroupDTO;
 
 public class LineItemCollapsibleViewer extends CEntityContainer<InvoiceLineItemGroupDTO> implements ToggleHandler {
 
+    private static final I18n i18n = I18n.get(LineItemCollapsibleViewer.class);
+
     private SimplePanel collapsedPanel;
 
-    private SimplePanel expandedPanel = new SimplePanel();
+    private SimplePanel expandedPanel;
 
     public LineItemCollapsibleViewer() {
-        asWidget().setWidth("46em");
     }
 
     @Override
@@ -61,16 +67,21 @@ public class LineItemCollapsibleViewer extends CEntityContainer<InvoiceLineItemG
 
     @Override
     public final IsWidget createContent() {
-        VerticalPanel mainPanel = new VerticalPanel();
-        mainPanel.setHeight("1.5em");
-        mainPanel.setWidth("100%");
-        collapsedPanel = new SimplePanel();
-        collapsedPanel.getElement().getStyle().setMarginLeft(50, Unit.PX);
-        expandedPanel = new SimplePanel();
-        expandedPanel.getElement().getStyle().setMarginLeft(50, Unit.PX);
+        FlowPanel mainPanel = new FlowPanel();
+        mainPanel.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
 
+        collapsedPanel = new SimplePanel();
+//        collapsedPanel.getElement().getStyle().setMarginLeft(30, Unit.PX);
+        collapsedPanel.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
+        collapsedPanel.getElement().getStyle().setPosition(Position.RELATIVE);
         mainPanel.add(collapsedPanel);
+
+        expandedPanel = new SimplePanel();
+//        expandedPanel.getElement().getStyle().setMarginLeft(30, Unit.PX);
+        expandedPanel.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
+        expandedPanel.getElement().getStyle().setPosition(Position.RELATIVE);
         mainPanel.add(expandedPanel);
+
         setExpended(false);
         return mainPanel;
     }
@@ -99,37 +110,42 @@ public class LineItemCollapsibleViewer extends CEntityContainer<InvoiceLineItemG
     }
 
     private IsWidget createCollapsedContent(InvoiceLineItemGroupDTO value) {
-        FlexTable content = new FlexTable();
+        BasicFlexFormPanel content = new BasicFlexFormPanel();
 
-        content.getColumnFormatter().setWidth(0, "80%"); //overrides FlexTable's width auto-management for cells
-        content.getColumnFormatter().setWidth(2, "20%");
+        content.getColumnFormatter().setWidth(0, FormDecoratorBuilder.LABEL_WIDTH);
+        content.getColumnFormatter().setWidth(2, FormDecoratorBuilder.CONTENT_WIDTH);
 
         int row = 0;
         if (value != null && !value.total().isNull()) {
             content.getFlexCellFormatter().setColSpan(row, 0, 2);
+
             content.setWidget(row, 0, new HTML(value.getMeta().getCaption()));
+            content.getWidget(row, 0).getElement().getStyle().setPaddingLeft(2, Unit.EM);
+
             content.setWidget(row, 2, new HTML(value.total().getStringView()));
+
             // styling:
             content.getRowFormatter().setStyleName(row, BillingTheme.StyleName.BillingLineItem.name());
             content.getFlexCellFormatter().setStyleName(row, 0, BillingTheme.StyleName.BillingLineItemTitle.name());
             content.getFlexCellFormatter().setStyleName(row, 2, BillingTheme.StyleName.BillingLineItemAmount.name());
         }
 
-        content.setWidth("100%");
         return content;
     }
 
     private IsWidget createExpandedContent(InvoiceLineItemGroupDTO value) {
+        BasicFlexFormPanel content = new BasicFlexFormPanel();
 
-        FlexTable content = new FlexTable();
-
-        content.getColumnFormatter().setWidth(0, "40%"); //overrides FlexTable's width auto-management for cells
-        content.getColumnFormatter().setWidth(1, "40%");
-        content.getColumnFormatter().setWidth(2, "20%");
+        content.getColumnFormatter().setWidth(0, FormDecoratorBuilder.LABEL_WIDTH_HALF);
+        content.getColumnFormatter().setWidth(1, FormDecoratorBuilder.LABEL_WIDTH_HALF);
+        content.getColumnFormatter().setWidth(2, FormDecoratorBuilder.CONTENT_WIDTH);
 
         int row = 0;
         if (value != null && !value.total().isNull()) {
             content.setWidget(row, 0, new HTML(value.getMeta().getCaption()));
+            content.getWidget(row, 0).getElement().getStyle().setPaddingLeft(2, Unit.EM);
+            content.getFlexCellFormatter().setColSpan(row, 0, 2);
+
             // styling:
             content.getRowFormatter().setStyleName(row, BillingTheme.StyleName.BillingLineItem.name());
             content.getFlexCellFormatter().setStyleName(row, 0, BillingTheme.StyleName.BillingLineItemTitle.name());
@@ -156,32 +172,37 @@ public class LineItemCollapsibleViewer extends CEntityContainer<InvoiceLineItemG
                     }
                 }
             }
-            addTotalRecord(content, row++, value.getMeta().getCaption(), value.total().getStringView());
+            addTotalRecord(content, row++, i18n.tr("Total"), value.total().getStringView());
         }
 
-        content.setWidth("100%");
         return content;
     }
 
-    private void addDetailRecord(FlexTable table, int row, String date, String description, String amount) {
-        table.setHTML(row, 0, date);
-        table.setHTML(row, 1, description);
-        table.setHTML(row, 2, amount);
-        // styling:
+    private void addDetailRecord(BasicFlexFormPanel table, int row, String date, String description, String amount) {
         table.getRowFormatter().setStyleName(row, BillingTheme.StyleName.BillingDetailItem.name());
-        table.getFlexCellFormatter().setStyleName(row, 0, BillingTheme.StyleName.BillingDetailItemDate.name());
-        table.getFlexCellFormatter().setStyleName(row, 1, BillingTheme.StyleName.BillingDetailItemTitle.name());
-        table.getFlexCellFormatter().setStyleName(row, 2, BillingTheme.StyleName.BillingDetailItemAmount.name());
+
+        table.setWidget(row, 0, new HTML(date));
+        table.getWidget(row, 0).getElement().getStyle().setPaddingLeft(2, Unit.EM);
+        table.getWidget(row, 0).setStyleName(BillingTheme.StyleName.BillingDetailItemDate.name());
+
+        table.setWidget(row, 1, new HTML(description));
+        table.getWidget(row, 1).setStyleName(BillingTheme.StyleName.BillingDetailItemTitle.name());
+
+        table.setWidget(row, 2, new HTML(amount));
+        table.getWidget(row, 2).setStyleName(BillingTheme.StyleName.BillingDetailItemAmount.name());
     }
 
-    private void addTotalRecord(FlexTable table, int row, String description, String amount) {
-        table.setHTML(row, 1, description);
-        table.setHTML(row, 2, amount);
-        // styling:
+    private void addTotalRecord(BasicFlexFormPanel table, int row, String description, String amount) {
         table.getRowFormatter().setStyleName(row, BillingTheme.StyleName.BillingDetailTotal.name());
-        table.getFlexCellFormatter().setStyleName(row, 1, BillingTheme.StyleName.BillingDetailTotalTitle.name());
-        table.getFlexCellFormatter().setStyleName(row, 2, BillingTheme.StyleName.BillingDetailTotalAmount.name());
 
+        table.setWidget(row, 1, new HTML(description));
+        table.getWidget(row, 1).setStyleName(BillingTheme.StyleName.BillingDetailTotalTitle.name());
+
+        table.setWidget(row, 2, new HTML(amount));
+        table.getWidget(row, 2).setStyleName(BillingTheme.StyleName.BillingDetailTotalAmount.name());
+
+        table.getWidget(row, 2).getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
+        table.getCellFormatter().setHorizontalAlignment(row, 2, HasHorizontalAlignment.ALIGN_LEFT);
     }
 
     private static String formatDays(InvoiceLineItem lineItem) {
@@ -211,5 +232,4 @@ public class LineItemCollapsibleViewer extends CEntityContainer<InvoiceLineItemG
         }
         return "";
     }
-
 }
