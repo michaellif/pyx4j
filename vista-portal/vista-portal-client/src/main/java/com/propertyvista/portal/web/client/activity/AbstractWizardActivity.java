@@ -57,16 +57,14 @@ public abstract class AbstractWizardActivity<E extends IEntity> extends Security
         view.setPresenter(this);
     }
 
+    public AbstractWizardActivity(Class<? extends IWizardView<E>> viewType) {
+        this(viewType, null, null);
+    }
+
     @Override
     public void start(AcceptsOneWidget panel, EventBus eventBus) {
         view.setPresenter(this);
 
-        init();
-
-        panel.setWidget(view);
-    }
-
-    public void init() {
         obtainInitializationData(new DefaultAsyncCallback<AbstractCrudService.InitializationData>() {
             @Override
             public void onSuccess(InitializationData result) {
@@ -79,14 +77,12 @@ public abstract class AbstractWizardActivity<E extends IEntity> extends Security
                 }, result);
             }
         });
+
+        panel.setWidget(view);
     }
 
     public AbstractCrudService<E> getService() {
         return service;
-    }
-
-    public Class<E> getEntityClass() {
-        return entityClass;
     }
 
     public IWizardView<E> getView() {
@@ -112,12 +108,13 @@ public abstract class AbstractWizardActivity<E extends IEntity> extends Security
 
     @Override
     public void finish() {
+        assert service != null : "Service shouldn't be null or method finish() has to be implemented in subclass.";
         service.create(new AsyncCallback<Key>() {
             @Override
             public void onSuccess(Key result) {
                 ReferenceDataManager.invalidate(entityClass);
                 view.reset();
-                onSaved(result);
+                onFinish(result);
             }
 
             @Override
@@ -127,9 +124,10 @@ public abstract class AbstractWizardActivity<E extends IEntity> extends Security
                 }
             }
         }, view.getValue());
+
     }
 
-    protected void onSaved(Key result) {
+    protected void onFinish(Key result) {
         AppSite.getPlaceController().goTo(AppSite.getPlaceController().getForwardedFrom());
     }
 

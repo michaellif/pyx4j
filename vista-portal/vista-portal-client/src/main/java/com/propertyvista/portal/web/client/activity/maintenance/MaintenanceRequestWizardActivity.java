@@ -46,7 +46,7 @@ public class MaintenanceRequestWizardActivity extends AbstractWizardActivity<Mai
     }
 
     @Override
-    protected void onSaved(Key result) {
+    protected void onFinish(Key result) {
         AppSite.getPlaceController().goTo(new PortalSiteMap.Resident.Maintenance.MaintenanceRequestConfirmation(result));
     }
 

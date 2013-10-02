@@ -13,8 +13,11 @@
  */
 package com.propertyvista.portal.web.client.ui.util.decorators;
 
+import com.pyx4j.forms.client.ui.CCaptcha;
 import com.pyx4j.forms.client.ui.CComponent;
+import com.pyx4j.forms.client.ui.CTextFieldBase;
 import com.pyx4j.forms.client.ui.decorators.WidgetDecorator;
+import com.pyx4j.forms.client.ui.decorators.WidgetDecorator.Builder;
 
 import com.propertyvista.portal.web.client.ui.AbstractPortalPanel;
 
@@ -27,6 +30,8 @@ public class FormDecoratorBuilder extends WidgetDecorator.Builder {
     public static final String CONTENT_WIDTH = "250px";
 
     public static final String FULL_WIDTH = "450px";
+
+    private String watermark;
 
     public FormDecoratorBuilder(CComponent<?> component, String labelWidth, String componentWidth, String contentWidth) {
         super(component);
@@ -53,6 +58,14 @@ public class FormDecoratorBuilder extends WidgetDecorator.Builder {
                 super.updateViewable();
             }
         };
+
+        String text = watermark != null ? watermark : getComponent().getTitle();
+        if (getComponent() instanceof CTextFieldBase) {
+            ((CTextFieldBase<?, ?>) getComponent()).setWatermark(text);
+        } else if (getComponent() instanceof CCaptcha) {
+            ((CCaptcha) getComponent()).setWatermark(text);
+        }
+
         return decorator;
     }
 
@@ -75,4 +88,10 @@ public class FormDecoratorBuilder extends WidgetDecorator.Builder {
     public FormDecoratorBuilder(CComponent<?> component) {
         this(component, LABEL_WIDTH, CONTENT_WIDTH, CONTENT_WIDTH);
     }
+
+    public Builder watermark(String watermark) {
+        this.watermark = watermark;
+        return this;
+    }
+
 }

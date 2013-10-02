@@ -30,13 +30,14 @@ import com.propertyvista.common.client.ui.components.login.LoginView.DevLoginCre
 import com.propertyvista.domain.DemoData.UserType;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap;
 import com.propertyvista.portal.rpc.portal.web.services.PortalAuthenticationService;
+import com.propertyvista.portal.web.client.PortalWebSite;
 import com.propertyvista.portal.web.client.ui.landing.LandingView;
-import com.propertyvista.portal.web.client.ui.landing.LandingViewImpl;
 
 public class LandingActivity extends AbstractLoginActivty implements LandingView.LandingPresenter {
 
     public LandingActivity(Place place) {
-        super(place, new LandingViewImpl(), GWT.<AuthenticationService> create(PortalAuthenticationService.class), new PortalSiteMap.PasswordResetRequest());
+        super(place, PortalWebSite.getViewFactory().instantiate(LandingView.class), GWT.<AuthenticationService> create(PortalAuthenticationService.class),
+                new PortalSiteMap.PasswordResetRequest());
     }
 
     @Override

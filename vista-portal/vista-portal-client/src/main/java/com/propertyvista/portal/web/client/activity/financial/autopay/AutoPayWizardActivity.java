@@ -80,7 +80,7 @@ public class AutoPayWizardActivity extends AbstractWizardActivity<AutoPayDTO> im
     }
 
     @Override
-    protected void onSaved(Key result) {
+    protected void onFinish(Key result) {
         getView().reset();
         AppSite.getPlaceController().goTo(new Financial.PreauthorizedPayments.PreauthorizedPaymentSubmitted(result));
     }

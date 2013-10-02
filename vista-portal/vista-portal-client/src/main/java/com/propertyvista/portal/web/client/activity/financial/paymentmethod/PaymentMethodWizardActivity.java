@@ -46,7 +46,7 @@ public class PaymentMethodWizardActivity extends AbstractWizardActivity<PaymentM
     }
 
     @Override
-    protected void onSaved(Key result) {
+    protected void onFinish(Key result) {
         getView().reset();
         AppSite.getPlaceController().goTo(new Financial.PaymentMethods.PaymentMethodSubmitted(result));
     }

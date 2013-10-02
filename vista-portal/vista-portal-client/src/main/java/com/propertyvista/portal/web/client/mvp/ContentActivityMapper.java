@@ -43,7 +43,7 @@ import com.propertyvista.portal.web.client.activity.financial.paymentmethod.Paym
 import com.propertyvista.portal.web.client.activity.login.LandingActivity;
 import com.propertyvista.portal.web.client.activity.login.LeaseContextSelectionActivity;
 import com.propertyvista.portal.web.client.activity.login.LoginWithTokenActivity;
-import com.propertyvista.portal.web.client.activity.login.PasswordResetRequestActivity;
+import com.propertyvista.portal.web.client.activity.login.PasswordResetRequestWizardActivity;
 import com.propertyvista.portal.web.client.activity.login.VistaTermsActivity;
 import com.propertyvista.portal.web.client.activity.maintenance.MaintenanceDashboardActivity;
 import com.propertyvista.portal.web.client.activity.maintenance.MaintenanceRequestConfirmationActivity;
@@ -141,7 +141,7 @@ public class ContentActivityMapper implements AppActivityMapper {
                     } else if (place instanceof PortalSiteMap.LoginWithToken) {
                         activity = new LoginWithTokenActivity(place);
                     } else if (place instanceof PortalSiteMap.PasswordResetRequest) {
-                        activity = new PasswordResetRequestActivity(place);
+                        activity = new PasswordResetRequestWizardActivity(place);
                     } else if (place instanceof PortalSiteMap.PasswordChange) {
                         activity = new PasswordChangeActivity();
                     } else if (place instanceof PortalSiteMap.Registration) {

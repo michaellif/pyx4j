@@ -27,15 +27,15 @@ import com.pyx4j.security.rpc.PasswordResetQuestion;
 import com.propertyvista.common.client.ui.components.login.PasswordResetForm;
 import com.propertyvista.common.client.ui.components.security.PasswordResetView;
 
-public class PasswordResetViewImpl extends VerticalPanel implements PasswordResetView {
+public class PasswordResetWizardViewImpl extends VerticalPanel implements PasswordResetView {
 
-    private final static I18n i18n = I18n.get(PasswordResetViewImpl.class);
+    private final static I18n i18n = I18n.get(PasswordResetWizardViewImpl.class);
 
     private Presenter presenter;
 
     private final PasswordResetForm form;
 
-    public PasswordResetViewImpl() {
+    public PasswordResetWizardViewImpl() {
         setWidth("100%");
         setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
         form = new PasswordResetForm();

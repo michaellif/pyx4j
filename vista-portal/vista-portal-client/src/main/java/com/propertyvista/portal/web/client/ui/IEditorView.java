@@ -29,9 +29,6 @@ public interface IEditorView<E extends IEntity> extends IFormView<E> {
     @Override
     IEditorPresenter<E> getPresenter();
 
-    @Override
-    void populate(E value);
-
     public E getValue();
 
     public boolean isDirty();

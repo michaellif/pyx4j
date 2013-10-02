@@ -36,7 +36,7 @@ public class TenantSureOrderWizardActivity extends AbstractWizardActivity<Tenant
     }
 
     @Override
-    protected void onSaved(Key result) {
+    protected void onFinish(Key result) {
         AppSite.getPlaceController().goTo(new Payment.PaymentSubmitting(result));
     }
 
