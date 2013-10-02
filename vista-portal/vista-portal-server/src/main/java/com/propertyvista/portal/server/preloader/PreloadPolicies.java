@@ -28,6 +28,7 @@ import com.propertyvista.portal.server.preloader.policy.subpreloaders.MockupDepo
 import com.propertyvista.portal.server.preloader.policy.subpreloaders.MockupLeaseAdjustmentPolicyPreloader;
 import com.propertyvista.portal.server.preloader.policy.subpreloaders.MockupLeaseBillingPolicyPreloader;
 import com.propertyvista.portal.server.preloader.policy.subpreloaders.MockupProductTaxPolicyPreloader;
+import com.propertyvista.portal.server.preloader.policy.subpreloaders.N4PolicyPreloader;
 import com.propertyvista.portal.server.preloader.policy.subpreloaders.PaymentMethodSelectionPolicyPreloader;
 import com.propertyvista.portal.server.preloader.policy.subpreloaders.PreloadRestrictionsPolicies;
 import com.propertyvista.portal.server.preloader.policy.subpreloaders.ProductTaxPolicyPreloader;
@@ -50,6 +51,7 @@ public class PreloadPolicies extends AbstractPoliciesPreloader {
         add(new PaymentMethodSelectionPolicyPreloader());
         add(new AutoPayPolicyPreloader());
         add(new YardiInterfacePolicyPreloader());
+        add(new N4PolicyPreloader());
 
         if (!VistaTODO.Equifax_Off_VISTA_478) {
             add(new BackgroundCheckPolicyPreloader());

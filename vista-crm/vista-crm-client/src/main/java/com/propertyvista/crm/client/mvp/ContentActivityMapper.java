@@ -203,6 +203,9 @@ import com.propertyvista.crm.client.activity.policies.leaseterms.LegalDocumentat
 import com.propertyvista.crm.client.activity.policies.misc.DatesPolicyEditorActivity;
 import com.propertyvista.crm.client.activity.policies.misc.DatesPolicyListerActivity;
 import com.propertyvista.crm.client.activity.policies.misc.DatesPolicyViewerActivity;
+import com.propertyvista.crm.client.activity.policies.n4.N4PolicyEditorActivity;
+import com.propertyvista.crm.client.activity.policies.n4.N4PolicyListerActivity;
+import com.propertyvista.crm.client.activity.policies.n4.N4PolicyViewerActivity;
 import com.propertyvista.crm.client.activity.policies.paymenttypeselection.PaymentTypeSelectionPolicyEditorActivity;
 import com.propertyvista.crm.client.activity.policies.paymenttypeselection.PaymentTypeSelectionPolicyListerActivity;
 import com.propertyvista.crm.client.activity.policies.paymenttypeselection.PaymentTypeSelectionPolicyViewerActivity;
@@ -985,6 +988,19 @@ public class ContentActivityMapper implements AppActivityMapper {
                             break;
                         case viewer:
                             activity = new LegalDocumentationPolicyViewerActivity(crudPlace);
+                            break;
+                        }
+
+                    } else if (crudPlace instanceof CrmSiteMap.Administration.Policies.N4) {
+                        switch (crudPlace.getType()) {
+                        case lister:
+                            activity = new N4PolicyListerActivity(crudPlace);
+                            break;
+                        case editor:
+                            activity = new N4PolicyEditorActivity(crudPlace);
+                            break;
+                        case viewer:
+                            activity = new N4PolicyViewerActivity(crudPlace);
                             break;
                         }
 
