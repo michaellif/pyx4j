@@ -330,8 +330,8 @@ public class PaymentForm extends CrmEntityForm<PaymentRecordDTO> {
         profiledPaymentMethodsCombo.reset();
 
         paymentMethodEditor.reset();
-        paymentMethodEditor.setVisible(false);
         paymentMethodEditor.setViewable(true);
+        paymentMethodEditor.setVisible(false);
         paymentMethodEditorHeader.setVisible(false);
 
         get(proto().preauthorizedPayment()).setVisible(false);
@@ -386,17 +386,13 @@ public class PaymentForm extends CrmEntityForm<PaymentRecordDTO> {
                 });
 
                 if (getValue().paymentMethod().isProfiledMethod().isBooleanTrue()) {
-                    profiledPaymentMethodsCombo.setValue(getValue().paymentMethod(), true, populate);
+                    profiledPaymentMethodsCombo.setValue(getValue().paymentMethod(), false, populate);
+                    paymentMethodEditor.setViewable(true);
                 } else {
-                    paymentMethodEditor.setVisible(true);
                     paymentMethodEditor.setViewable(false);
-                    paymentMethodEditorHeader.setVisible(true);
                     get(proto().addThisPaymentMethodToProfile()).setVisible(true);
                     setupAddThisPaymentMethodToProfile(getValue().paymentMethod().type().getValue());
                 }
-
-                // TODO : this is the HACK - check CComponent.setVisible implementation!!!
-                paymentMethodEditor.setBillingAddressVisible(getValue().paymentMethod().type().getValue() != PaymentType.Cash);
             }
 
             get(proto().transactionAuthorizationNumber()).setVisible(false);
@@ -406,10 +402,7 @@ public class PaymentForm extends CrmEntityForm<PaymentRecordDTO> {
 
             if (getValue().paymentMethod().isProfiledMethod().isBooleanTrue()) {
                 profiledPaymentMethodsCombo.setVisible(true);
-                profiledPaymentMethodsCombo.setValue(getValue().paymentMethod());
-            } else {
-                paymentMethodEditor.setVisible(true);
-                paymentMethodEditorHeader.setVisible(true);
+                profiledPaymentMethodsCombo.setValue(getValue().paymentMethod(), false, populate);
             }
 
             // Need to show Direct Debit details when in status Queued
@@ -421,6 +414,10 @@ public class PaymentForm extends CrmEntityForm<PaymentRecordDTO> {
             get(proto().preauthorizedPayment()).setVisible(!getValue().preauthorizedPayment().isNull());
             preauthorizedPaymentMethodViewerHeader.setVisible(!getValue().preauthorizedPayment().isNull());
         }
+
+        paymentMethodEditor.setVisible(!getValue().paymentMethod().isEmpty());
+        paymentMethodEditorHeader.setVisible(!getValue().paymentMethod().isEmpty());
+        paymentMethodEditor.setValue(getValue().paymentMethod(), false, populate);
     }
 
     @Override

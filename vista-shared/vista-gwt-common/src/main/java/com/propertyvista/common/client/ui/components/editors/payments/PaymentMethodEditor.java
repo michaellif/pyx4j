@@ -153,14 +153,6 @@ public class PaymentMethodEditor<E extends AbstractPaymentMethod> extends CEntit
     }
 
     @Override
-    protected E preprocessValue(E value, boolean fireEvent, boolean populate) {
-        if (!isValueEmpty()) {
-            return super.preprocessValue(value, fireEvent, populate);
-        }
-        return value;
-    }
-
-    @Override
     protected void onValueSet(boolean populate) {
         super.onValueSet(populate);
 
