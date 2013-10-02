@@ -92,6 +92,7 @@ public class PortalWebTheme extends Theme {
                 style.addProperty("border-radius", "5px");
                 style.addProperty("margin", "0  0 0 10px");
                 style.addProperty("color", "#fff");
+                style.addProperty("outline", "none");
                 addStyle(style);
 
                 style = new Style(" .", DefaultWidgetsTheme.StyleName.ButtonText);
