@@ -113,12 +113,14 @@ public abstract class LeaseCrudServiceBaseImpl<DTO extends LeaseDTO> extends Abs
     }
 
     private void loadCommunicationLetters(LeaseDTO lease) {
-        Lease leaseId = EntityFactory.createIdentityStub(Lease.class, lease.getPrimaryKey());
-        Map<Lease, List<LegalLetter>> n4s = ServerSideFactory.create(N4ManagementFacade.class).getN4(Arrays.asList(leaseId), null);
-        lease.letters().addAll(n4s.get(leaseId));
+        if (false) {
+            Lease leaseId = EntityFactory.createIdentityStub(Lease.class, lease.getPrimaryKey());
+            Map<Lease, List<LegalLetter>> n4s = ServerSideFactory.create(N4ManagementFacade.class).getN4(Arrays.asList(leaseId), null);
+            lease.letters().addAll(n4s.get(leaseId));
 
-        if (!n4s.get(leaseId).isEmpty()) {
-            lease.legalStatus().setValue(i18n.tr("{0} N4''s issued", n4s.get(leaseId).size()));
+            if (!n4s.get(leaseId).isEmpty()) {
+                lease.legalStatus().setValue(i18n.tr("{0} N4''s issued", n4s.get(leaseId).size()));
+            }
         }
 
     }
