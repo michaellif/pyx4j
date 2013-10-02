@@ -21,6 +21,7 @@
 package com.propertyvista.biz.legal;
 
 import java.math.BigDecimal;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -29,6 +30,7 @@ import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.config.server.SystemDateManager;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 
 import com.propertyvista.domain.company.Employee;
 import com.propertyvista.domain.legal.LegalLetter;
@@ -64,8 +66,21 @@ public class N4ManagementFacadeImpl implements N4ManagementFacade {
 
     @Override
     public Map<Lease, List<LegalLetter>> getN4(List<Lease> leaseIds, LogicalDate generatedCutOffDate) {
-        // TODO Auto-generated method stub
-        return null;
+        Map<Lease, List<LegalLetter>> n4s = new HashMap<Lease, List<LegalLetter>>();
+        for (Lease leaseId : leaseIds) {
+            EntityQueryCriteria<LegalLetter> criteria = EntityQueryCriteria.create(LegalLetter.class);
+            criteria.eq(criteria.proto().lease(), leaseId);
+            criteria.eq(criteria.proto().type(), LegalLetter.LegalLetterType.N4);
+            if (generatedCutOffDate != null) {
+                criteria.ge(criteria.proto().generatedOn(), generatedCutOffDate);
+            }
+            criteria.asc(criteria.proto().generatedOn());
+
+            List<LegalLetter> letters = Persistence.service().query(criteria);
+
+            n4s.put(leaseId, letters);
+        }
+        return n4s;
     }
 
     private void issueN4ForLease(Lease leaseId, N4LandlordsData n4LandLordsData, LogicalDate terminationDate) {
@@ -85,12 +100,6 @@ public class N4ManagementFacadeImpl implements N4ManagementFacade {
         n4Letter.blobKey().setValue(blob.getPrimaryKey());
         n4Letter.fileSize().setValue(n4LetterBinary.length);
         Persistence.service().persist(n4Letter);
-    }
-
-    private N4LandlordsData make4landlordsData(Employee signingEmployee) {
-        N4LandlordsData n4LandlordsData = EntityFactory.create(N4LandlordsData.class);
-
-        return n4LandlordsData;
     }
 
 }

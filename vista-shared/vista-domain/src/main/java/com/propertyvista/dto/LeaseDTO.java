@@ -25,6 +25,7 @@ import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
 
+import com.propertyvista.domain.legal.LegalLetter;
 import com.propertyvista.domain.tenant.insurance.InsuranceCertificate;
 import com.propertyvista.domain.tenant.lease.Lease;
 
@@ -57,4 +58,8 @@ public interface LeaseDTO extends Lease {
 
     /** this is used for validation of tenants age, comes from restrictions policy */
     IPrimitive<Integer> ageOfMajority();
+
+    IList<LegalLetter> letters();
+
+    IPrimitive<String> legalStatus();
 }

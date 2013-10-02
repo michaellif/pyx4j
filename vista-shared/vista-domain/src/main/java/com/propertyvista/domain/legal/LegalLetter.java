@@ -44,4 +44,5 @@ public interface LegalLetter extends File {
     @MemberColumn(notNull = true)
     @ReadOnly
     IPrimitive<Date> generatedOn();
+
 }

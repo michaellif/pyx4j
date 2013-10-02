@@ -13,14 +13,22 @@
  */
 package com.propertyvista.crm.server.services.lease.common;
 
+import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
+
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.server.AbstractCrudServiceDtoImpl;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.AttachLevel;
+import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.biz.financial.payment.PaymentMethodFacade;
+import com.propertyvista.biz.legal.N4ManagementFacade;
 import com.propertyvista.biz.policy.PolicyFacade;
 import com.propertyvista.biz.tenant.insurance.TenantInsuranceFacade;
+import com.propertyvista.domain.legal.LegalLetter;
 import com.propertyvista.domain.policy.policies.RestrictionsPolicy;
 import com.propertyvista.domain.tenant.lease.BillableItem;
 import com.propertyvista.domain.tenant.lease.Lease;
@@ -31,6 +39,8 @@ import com.propertyvista.domain.tenant.lease.Tenant;
 import com.propertyvista.dto.LeaseDTO;
 
 public abstract class LeaseCrudServiceBaseImpl<DTO extends LeaseDTO> extends AbstractCrudServiceDtoImpl<Lease, DTO> {
+
+    private static final I18n i18n = I18n.get(LeaseCrudServiceBaseImpl.class);
 
     protected LeaseCrudServiceBaseImpl(Class<DTO> dtoClass) {
         super(Lease.class, dtoClass);
@@ -66,12 +76,9 @@ public abstract class LeaseCrudServiceBaseImpl<DTO extends LeaseDTO> extends Abs
             Persistence.service().retrieve(item.screening(), AttachLevel.ToStringMembers);
         }
 
-        fillTenantInsurance(to);
-
-        RestrictionsPolicy restrictionsPolicy = ServerSideFactory.create(PolicyFacade.class).obtainEffectivePolicy(to.unit(), RestrictionsPolicy.class);
-        if (restrictionsPolicy.enforceAgeOfMajority().isBooleanTrue()) {
-            to.ageOfMajority().setValue(restrictionsPolicy.ageOfMajority().getValue());
-        }
+        loadTenantInsurance(to);
+        loadRestrictions(to);
+        loadCommunicationLetters(to);
     }
 
     @Override
@@ -93,9 +100,27 @@ public abstract class LeaseCrudServiceBaseImpl<DTO extends LeaseDTO> extends Abs
         }
     }
 
-    private void fillTenantInsurance(LeaseDTO lease) {
+    private void loadTenantInsurance(LeaseDTO lease) {
         Tenant tenantId = lease.currentTerm().version().tenants().get(0).leaseParticipant().<Tenant> createIdentityStub();
         lease.tenantInsuranceCertificates().addAll(ServerSideFactory.create(TenantInsuranceFacade.class).getInsuranceCertificates(tenantId, false));
+    }
+
+    private void loadRestrictions(LeaseDTO lease) {
+        RestrictionsPolicy restrictionsPolicy = ServerSideFactory.create(PolicyFacade.class).obtainEffectivePolicy(lease.unit(), RestrictionsPolicy.class);
+        if (restrictionsPolicy.enforceAgeOfMajority().isBooleanTrue()) {
+            lease.ageOfMajority().setValue(restrictionsPolicy.ageOfMajority().getValue());
+        }
+    }
+
+    private void loadCommunicationLetters(LeaseDTO lease) {
+        Lease leaseId = EntityFactory.createIdentityStub(Lease.class, lease.getPrimaryKey());
+        Map<Lease, List<LegalLetter>> n4s = ServerSideFactory.create(N4ManagementFacade.class).getN4(Arrays.asList(leaseId), null);
+        lease.letters().addAll(n4s.get(leaseId));
+
+        if (!n4s.get(leaseId).isEmpty()) {
+            lease.legalStatus().setValue(i18n.tr("{0} N4''s issued", n4s.get(leaseId).size()));
+        }
+
     }
 
     private void fillPreauthorizedPayments(LeaseTermTenant item) {
