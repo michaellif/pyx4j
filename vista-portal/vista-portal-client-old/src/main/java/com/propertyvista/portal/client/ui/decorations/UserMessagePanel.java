@@ -62,7 +62,7 @@ public class UserMessagePanel extends HorizontalPanel implements NotificationHan
             color = "#BBB";
             image.setResource(PortalImages.INSTANCE.userMessageInfo());
             break;
-        case WARN:
+        case WARNING:
             color = "#F3931F";
             image.setResource(PortalImages.INSTANCE.warning());
             break;

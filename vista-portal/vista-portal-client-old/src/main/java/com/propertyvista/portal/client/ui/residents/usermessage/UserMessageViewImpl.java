@@ -147,7 +147,7 @@ public class UserMessageViewImpl extends Composite implements UserMessageView {
             case INFO:
                 messageImageResource = messageTypeImageResources.info();
                 break;
-            case WARN:
+            case WARNING:
                 messageImageResource = messageTypeImageResources.warning();
                 break;
             default:
