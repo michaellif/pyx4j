@@ -25,8 +25,8 @@ import com.google.gwt.maps.client.overlay.MarkerOptions;
 import com.pyx4j.geo.GeoPoint;
 import com.pyx4j.gwt.geo.MapUtils;
 
-import com.propertyvista.portal.client.resources.PortalImages;
 import com.propertyvista.portal.domain.dto.PropertyDTO;
+import com.propertyvista.site.client.resources.MapsImages;
 
 public class PropertyMapWidget extends AbstractMapWidget {
 
@@ -93,7 +93,7 @@ public class PropertyMapWidget extends AbstractMapWidget {
     private Marker createMarker(final GeoPoint point, final String title) {
         MarkerOptions markerOptions = MarkerOptions.newInstance();
         markerOptions.setTitle(title);
-        Icon icon = Icon.newInstance(PortalImages.INSTANCE.mapMarker().getSafeUri().asString());
+        Icon icon = Icon.newInstance(MapsImages.INSTANCE.mapMarker().getSafeUri().asString());
         //TODO get shadow URL
         //icon.setShadowURL(FmRiaResources.INSTANCE.mapMarkerHouseShadow().getURL());
         icon.setIconSize(Size.newInstance(38, 41));

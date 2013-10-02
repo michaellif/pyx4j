@@ -42,11 +42,10 @@ import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.common.client.ui.components.MediaUtils;
 import com.propertyvista.domain.media.ThumbnailSize;
-import com.propertyvista.portal.client.resources.PortalImages;
-import com.propertyvista.portal.client.ui.util.Formatter;
 import com.propertyvista.portal.domain.dto.FloorplanPropertyDTO;
 import com.propertyvista.portal.domain.dto.PropertyDTO;
 import com.propertyvista.portal.rpc.portal.ImageConsts;
+import com.propertyvista.site.client.resources.MapsImages;
 import com.propertyvista.site.client.ui.maps.PropertiesMapWidget.MarkerType;
 import com.propertyvista.site.client.ui.maps.PropertiesMapWidget.StyleSuffix;
 
@@ -78,7 +77,7 @@ public class PropertyMarker extends Marker {
         MarkerOptions markerOptions = MarkerOptions.newInstance();
         markerOptions.setTitle(property.address().getStringView());
         Icon icon = null;
-        icon = Icon.newInstance(PortalImages.INSTANCE.delRow().getSafeUri().asString());
+        icon = Icon.newInstance(MapsImages.INSTANCE.delRow().getSafeUri().asString());
         //TODO get shadow URL
         //icon.setShadowURL(FmRiaResources.INSTANCE.mapMarkerHouseShadow().getURL());
         icon.setIconSize(Size.newInstance(38, 41));
@@ -92,10 +91,10 @@ public class PropertyMarker extends Marker {
     public void setMarkerType(MarkerType markerType) {
         switch (markerType) {
         case inbound:
-            MarkerImpl.impl.setImage(this, PortalImages.INSTANCE.mapMarker().getSafeUri().asString());
+            MarkerImpl.impl.setImage(this, MapsImages.INSTANCE.mapMarker().getSafeUri().asString());
             break;
         case outbound:
-            MarkerImpl.impl.setImage(this, PortalImages.INSTANCE.mapMarkerOutbound().getSafeUri().asString());
+            MarkerImpl.impl.setImage(this, MapsImages.INSTANCE.mapMarkerOutbound().getSafeUri().asString());
             break;
         }
     }

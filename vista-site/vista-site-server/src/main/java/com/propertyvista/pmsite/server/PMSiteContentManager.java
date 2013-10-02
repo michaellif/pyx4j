@@ -411,7 +411,7 @@ public class PMSiteContentManager implements Serializable {
     }
 
     /*
-     * Media images rendered by media servlet at /contextPath/portal/media/{id}/{size}.jpg
+     * Media images rendered by media servlet at /contextPath/site/media/{id}/{size}.jpg
      * We want to build a relative! path from the current page down to the servlet root
      */
     public static String getPortalContextPath() {

@@ -48,11 +48,32 @@
     </dependencies>
 
     <properties>
-        <gwtModule>site</gwtModule>
-        <gwtModuleCompile>vista.${gwtModule}${appGWTModuleSufix}</gwtModuleCompile>
+        <gwtModule>sitegwt</gwtModule>
+        <gwtModuleCompile>vista.site${appGWTModuleSufix}</gwtModuleCompile>
         <warFolder>${basedir}/../../vista-server/src/main/webapp</warFolder>
         <gwtDestinationWarFolder>${warFolder}/site</gwtDestinationWarFolder>
     </properties>
+
+    <build>
+        <plugins>
+            <plugin>
+                <artifactId>maven-clean-plugin</artifactId>
+                <configuration>
+                    <filesets>
+                        <fileset>
+                            <directory>${gwtDestinationWarFolder}/${gwtModule}</directory>
+                        </fileset>
+                        <fileset>
+                            <directory>${gwtDestinationWarFolder}/../gwt-unitCache</directory>
+                        </fileset>
+                        <fileset>
+                            <directory>${warFolder}/WEB-INF/deploy/${gwtModule}</directory>
+                        </fileset>
+                    </filesets>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
 
     <profiles>
         <profile>

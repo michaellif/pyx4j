@@ -96,7 +96,7 @@
         </init-param>
         <init-param>
             <param-name>ignoreUrls</param-name>
-            <param-value>/robots.txt,/favicon.ico,/portalWeb*,/residents/\w*,/vista/https/*,/media/*,/o/*,*.siteimgrc,/debug/*</param-value>
+            <param-value>/robots.txt,/favicon.ico,/sitegwt/\w*,/vista/https/*,/media/*,/o/*,*.siteimgrc,/debug/*</param-value>
         </init-param>
     </filter>
 
@@ -266,7 +266,7 @@
 
     <servlet-mapping>
         <servlet-name>DebugServlet</servlet-name>
-        <url-pattern>/portal/debug/*</url-pattern>
+        <url-pattern>/site/debug/*</url-pattern>
     </servlet-mapping>
 
     <servlet-mapping>
@@ -363,7 +363,7 @@ http://static.dev.birchwoodsoftwaregroup.com:8888/vista/o/wsp/yardi.starlightinv
 
     <servlet-mapping>
         <servlet-name>RemoteServiceServlet</servlet-name>
-        <url-pattern>/portal/residents/srv/*</url-pattern>
+        <url-pattern>/site/gwt/srv/*</url-pattern>
     </servlet-mapping>
 
     <servlet-mapping>

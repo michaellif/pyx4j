@@ -23,7 +23,7 @@ import com.propertyvista.shared.config.VistaSettings;
 import com.propertyvista.site.client.ui.maps.PropertyMapController;
 import com.propertyvista.site.client.ui.maps.PropertyMapWidget;
 
-public class PortalEntryPoint implements EntryPoint {
+public class SiteEntryPoint implements EntryPoint {
 
     public static final String APTLIST_MAP_INSERTION_ID = "vista.aptlistmap";
 

@@ -16,6 +16,7 @@ package com.propertyvista.site.client.ui.maps;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.google.gwt.core.client.GWT;
 import com.google.gwt.maps.client.geocode.LatLngCallback;
 import com.google.gwt.maps.client.geom.LatLng;
 import com.google.gwt.maps.client.geom.LatLngBounds;
@@ -27,11 +28,11 @@ import com.pyx4j.geo.GeoPoint;
 import com.pyx4j.gwt.geo.MapUtils;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 
-import com.propertyvista.portal.client.PortalSite;
 import com.propertyvista.portal.domain.dto.PropertyDTO;
 import com.propertyvista.portal.domain.dto.PropertyListDTO;
 import com.propertyvista.portal.rpc.portal.PropertySearchCriteria;
 import com.propertyvista.portal.rpc.portal.PropertySearchCriteria.SearchType;
+import com.propertyvista.portal.rpc.portal.services.PortalSiteServices;
 
 //http://localhost:8888/vista/portal/aptmap.html?gwt.codesvr=127.0.0.1:9997&city.name=Halifax&city.province.name=Nova+Scotia&searchType=city
 //
@@ -77,7 +78,7 @@ public enum PropertyMapController {
 
     private void loadProperties() {
         if (allProperties == null) {
-            PortalSite.getPortalSiteServices().retrievePropertyList(new DefaultAsyncCallback<PropertyListDTO>() {
+            GWT.<PortalSiteServices> create(PortalSiteServices.class).retrievePropertyList(new DefaultAsyncCallback<PropertyListDTO>() {
                 @Override
                 public void onSuccess(PropertyListDTO properties) {
                     allProperties = properties;

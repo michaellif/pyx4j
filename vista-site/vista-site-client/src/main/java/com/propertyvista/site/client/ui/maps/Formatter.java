@@ -11,7 +11,7 @@
  * @author Dad
  * @version $Id$
  */
-package com.propertyvista.portal.client.ui.util;
+package com.propertyvista.site.client.ui.maps;
 
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
@@ -22,7 +22,7 @@ import com.propertyvista.domain.RangeGroup;
 import com.propertyvista.domain.contact.AddressSimple;
 import com.propertyvista.portal.domain.dto.AmenityDTO;
 
-public class Formatter {
+class Formatter {
 
     public final static String POSTFIX = " \u2022 ";
 
