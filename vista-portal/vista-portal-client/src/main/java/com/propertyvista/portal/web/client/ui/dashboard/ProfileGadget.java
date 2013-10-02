@@ -92,6 +92,7 @@ public class ProfileGadget extends AbstractGadget<MainDashboardViewImpl> {
 
                     @Override
                     public void execute() {
+                        AppSite.getPlaceController().goTo(new PortalSiteMap.PasswordChange());
                     }
                 });
                 add(anchor);
