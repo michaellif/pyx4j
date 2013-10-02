@@ -82,7 +82,7 @@ public class DefaultWidgetsTheme extends Theme {
         initRecaptchaStyle();
     }
 
-    private void initAnchorStyle() {
+    protected void initAnchorStyle() {
         Style style = new Style(".", StyleName.Anchor);
         style.addProperty("color", ThemeColor.foreground);
         addStyle(style);
