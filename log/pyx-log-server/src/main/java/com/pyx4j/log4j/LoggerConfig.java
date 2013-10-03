@@ -115,6 +115,7 @@ public class LoggerConfig {
         try {
             MDC50486.remove();
         } catch (NoClassDefFoundError ignore) {
+        } catch (NoSuchFieldError ignore) {
         }
     }
 }

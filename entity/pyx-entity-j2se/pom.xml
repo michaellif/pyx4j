@@ -71,8 +71,10 @@
             <artifactId>pyx-tests-config</artifactId>
             <version>${project.version}</version>
             <classifier>tests</classifier>
+            <optional>true</optional>
+            <scope>test</scope>
         </dependency>
-        
+
         <dependency>
             <groupId>commons-beanutils</groupId>
             <artifactId>commons-beanutils</artifactId>

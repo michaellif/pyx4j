@@ -61,7 +61,7 @@ public class I18nManager {
                     t = new POCatalog(locale);
                 } catch (IOException e) {
                     if (e instanceof FileNotFoundException) {
-                        log.info("translation for locale {} not available", locale);
+                        log.debug("translation for locale {} not available", locale);
                     } else {
                         log.error("translation for locale {} not available", locale, e);
                     }
