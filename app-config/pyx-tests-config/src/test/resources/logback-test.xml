@@ -54,7 +54,7 @@
         </encoder>
     </appender>
 
-    <logger name="org.pyx4j" level="DEBUG" />
+    <logger name="com.pyx4j" level="DEBUG" />
     <logger name="org.apache" level="INFO" />
     <logger name="com.mchange" level="ERROR" />
 
