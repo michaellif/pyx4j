@@ -13,9 +13,8 @@
  */
 package com.propertyvista.common.client.ui.components.editors.payments;
 
-import com.google.gwt.dom.client.Style.TextAlign;
 import com.google.gwt.dom.client.Style.Unit;
-import com.google.gwt.user.client.DOM;
+import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.IsWidget;
 
@@ -64,11 +63,10 @@ public class EcheckInfoEditor extends CEntityDecoratableForm<EcheckInfo> {
 
         if (!isViewable()) {
             Image image = new Image(VistaImages.INSTANCE.eChequeGuide().getSafeUri());
-            image.getElement().getStyle().setMarginTop(2, Unit.EM);
-            image.getElement().getStyle().setMarginLeft(6, Unit.EM);
-            image.getElement().getStyle().setMarginRight(6, Unit.EM);
+            image.getElement().getStyle().setMarginTop(1, Unit.EM);
+            image.getElement().getStyle().setMarginLeft(7, Unit.EM);
             panel.setWidget(++row, 0, image);
-            DOM.getParent(image.getElement()).getStyle().setTextAlign(TextAlign.LEFT);
+            panel.getFlexCellFormatter().setHorizontalAlignment(row, 0, HasHorizontalAlignment.ALIGN_CENTER);
         }
 
         return panel;
