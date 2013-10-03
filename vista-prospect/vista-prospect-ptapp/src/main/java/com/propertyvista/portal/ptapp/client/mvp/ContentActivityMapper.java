@@ -58,7 +58,7 @@ public class ContentActivityMapper implements ActivityMapper {
         } else if (place instanceof PtSiteMap.PasswordReset) {
             return new PasswordResetActivity(place);
         } else if (place instanceof PtSiteMap.Notification) {
-            return new NotificationActivity(place);
+            return new NotificationActivity((PtSiteMap.Notification) place);
 // WizardSteps:
         } else if (place instanceof PtSiteMap.Apartment) {
             return new ApartmentActivity((AppPlace) place);

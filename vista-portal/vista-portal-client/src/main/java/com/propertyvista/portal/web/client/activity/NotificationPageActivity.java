@@ -15,11 +15,11 @@ package com.propertyvista.portal.web.client.activity;
 
 import com.google.gwt.activity.shared.AbstractActivity;
 import com.google.gwt.event.shared.EventBus;
-import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.rpc.AppPlace;
+import com.pyx4j.site.rpc.NotificationAppPlace;
 
 import com.propertyvista.portal.web.client.PortalWebSite;
 import com.propertyvista.portal.web.client.ui.NotificationPageView;
@@ -28,16 +28,18 @@ public class NotificationPageActivity extends AbstractActivity implements Notifi
 
     private final NotificationPageView view;
 
-    public NotificationPageActivity(Place place) {
+    private final NotificationAppPlace place;
+
+    public NotificationPageActivity(NotificationAppPlace place) {
+        this.place = place;
         view = PortalWebSite.getViewFactory().instantiate(NotificationPageView.class);
     }
 
     @Override
     public void start(AcceptsOneWidget panel, EventBus eventBus) {
         view.setPresenter(this);
-        view.populate(PortalWebSite.instance().getNotification());
+        view.populate(place.getNotification());
         panel.setWidget(view);
-
     }
 
     @Override

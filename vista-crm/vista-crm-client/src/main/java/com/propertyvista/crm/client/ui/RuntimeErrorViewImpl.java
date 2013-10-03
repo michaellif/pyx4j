@@ -21,9 +21,8 @@ import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.HasVerticalAlignment;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
+import com.pyx4j.site.shared.domain.Notification;
 import com.pyx4j.widgets.client.Button;
-
-import com.propertyvista.common.client.site.Notification;
 
 public class RuntimeErrorViewImpl extends VerticalPanel implements RuntimeErrorView {
 

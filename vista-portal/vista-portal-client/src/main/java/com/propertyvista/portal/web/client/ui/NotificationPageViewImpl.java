@@ -24,14 +24,13 @@ import com.google.gwt.user.client.ui.SimplePanel;
 import com.pyx4j.commons.css.StyleManager;
 import com.pyx4j.commons.css.ThemeColor;
 import com.pyx4j.config.shared.ApplicationMode;
-import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.site.shared.domain.Notification;
+import com.pyx4j.site.shared.domain.Notification.NotificationType;
 import com.pyx4j.widgets.client.Button;
 import com.pyx4j.widgets.client.Label;
 import com.pyx4j.widgets.client.actionbar.Toolbar;
 import com.pyx4j.widgets.client.dialog.images.NotificationImages;
 
-import com.propertyvista.common.client.site.Notification;
-import com.propertyvista.common.client.site.Notification.NotificationType;
 import com.propertyvista.portal.web.client.themes.DashboardTheme;
 
 public class NotificationPageViewImpl extends SimplePanel implements NotificationPageView {

@@ -22,10 +22,10 @@ import com.google.gwt.user.client.ui.FlowPanel;
 
 import com.pyx4j.commons.css.IStyleName;
 import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.site.shared.domain.Notification;
 import com.pyx4j.widgets.client.Anchor;
 import com.pyx4j.widgets.client.Label;
 
-import com.propertyvista.common.client.site.Notification;
 import com.propertyvista.ob.client.themes.OnboardingStyles;
 
 public class RuntimeErrorViewImpl extends Composite implements RuntimeErrorView {

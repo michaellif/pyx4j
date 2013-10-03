@@ -16,8 +16,7 @@ package com.propertyvista.portal.web.client.ui;
 import java.util.List;
 
 import com.pyx4j.site.client.IsView;
-
-import com.propertyvista.common.client.site.Notification;
+import com.pyx4j.site.shared.domain.Notification;
 
 public interface NotificationHeaderView extends IsView {
 

@@ -14,7 +14,6 @@
 package com.propertyvista.portal.web.client.ui;
 
 import com.google.gwt.place.shared.Place;
-import com.google.gwt.place.shared.PlaceHistoryHandler.Historian;
 
 import com.pyx4j.site.client.RootPane;
 import com.pyx4j.site.client.ui.layout.responsive.ResponsiveLayoutPanel;

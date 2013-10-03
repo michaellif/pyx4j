@@ -45,8 +45,6 @@ public abstract class VistaSite extends AppSite {
 
     private static final I18n i18n = I18n.get(VistaSite.class);
 
-    private Notification notification;
-
     public VistaSite(String appId, Class<? extends SiteMap> siteMapClass, ViewFactory viewFactory) {
         this(appId, siteMapClass, viewFactory, null);
     }
@@ -77,16 +75,6 @@ public abstract class VistaSite extends AppSite {
     public static VistaSite instance() {
         return (VistaSite) AppSite.instance();
     }
-
-    protected void setNotification(Notification notification) {
-        this.notification = notification;
-    }
-
-    public Notification getNotification() {
-        return notification;
-    }
-
-    public abstract void showMessageDialog(String message, String title);
 
     protected abstract boolean isBrowserCompatible();
 

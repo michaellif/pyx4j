@@ -15,8 +15,9 @@ package com.propertyvista.site.client;
 
 import com.google.gwt.user.client.Window;
 
+import com.pyx4j.site.shared.domain.Notification.NotificationType;
+
 import com.propertyvista.common.client.handlers.VistaUnrecoverableErrorHandler;
-import com.propertyvista.common.client.site.Notification.NotificationType;
 
 public class VistaPortalWicketFragmentUnrecoverableErrorHandler extends VistaUnrecoverableErrorHandler {
 

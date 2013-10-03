@@ -20,9 +20,9 @@ import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTML;
 
 import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.site.shared.domain.Notification;
 import com.pyx4j.widgets.client.IconButton;
 
-import com.propertyvista.common.client.site.Notification;
 import com.propertyvista.portal.web.client.resources.PortalImages;
 import com.propertyvista.portal.web.client.themes.PortalWebRootPaneTheme;
 
@@ -92,7 +92,7 @@ public class NotificationHeaderViewImpl extends FlowPanel implements Notificatio
                 case INFO:
                     message.addStyleDependentName(PortalWebRootPaneTheme.StyleDependent.info.name());
                     break;
-                case CONFIRM:
+                case STATUS:
                     message.addStyleDependentName(PortalWebRootPaneTheme.StyleDependent.confirm.name());
                     break;
 

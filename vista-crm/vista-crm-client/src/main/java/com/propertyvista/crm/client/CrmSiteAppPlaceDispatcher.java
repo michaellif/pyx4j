@@ -19,6 +19,8 @@ import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.security.shared.SecurityController;
 import com.pyx4j.site.client.AbstractAppPlaceDispatcher;
 import com.pyx4j.site.rpc.AppPlace;
+import com.pyx4j.site.rpc.NotificationAppPlace;
+import com.pyx4j.site.shared.domain.Notification;
 import com.pyx4j.widgets.client.dialog.ConfirmDecline;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
 
@@ -62,9 +64,9 @@ public class CrmSiteAppPlaceDispatcher extends AbstractAppPlaceDispatcher {
     }
 
     @Override
-    public AppPlace getUserMessagePlace() {
-        AppPlace place = new CrmSiteMap.RuntimeError();
-        place.setStable(false);
+    public NotificationAppPlace getUserMessagePlace(Notification notification) {
+        NotificationAppPlace place = new CrmSiteMap.RuntimeError();
+        place.setNotification(notification);
         return place;
     }
 

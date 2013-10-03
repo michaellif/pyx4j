@@ -15,13 +15,10 @@ package com.propertyvista.crm.client.ui;
 
 import com.google.gwt.user.client.ui.IsWidget;
 
-import com.propertyvista.common.client.site.Notification;
-
-
 import com.pyx4j.site.client.IsView;
+import com.pyx4j.site.shared.domain.Notification;
 
 public interface RuntimeErrorView extends IsWidget, IsView {
-
 
     void setPresenter(Presenter presenter);
 

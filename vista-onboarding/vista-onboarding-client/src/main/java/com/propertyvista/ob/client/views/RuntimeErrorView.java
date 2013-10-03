@@ -15,7 +15,7 @@ package com.propertyvista.ob.client.views;
 
 import com.google.gwt.user.client.ui.IsWidget;
 
-import com.propertyvista.common.client.site.Notification;
+import com.pyx4j.site.shared.domain.Notification;
 
 public interface RuntimeErrorView extends IsWidget {
 

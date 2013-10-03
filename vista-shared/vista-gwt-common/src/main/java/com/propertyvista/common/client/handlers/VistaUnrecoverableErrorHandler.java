@@ -26,9 +26,9 @@ import com.pyx4j.gwt.commons.UncaughtHandler;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.security.client.ClientContext;
 import com.pyx4j.site.client.AppSite;
+import com.pyx4j.site.client.events.NotificationEvent;
+import com.pyx4j.site.shared.domain.Notification.NotificationType;
 
-import com.propertyvista.common.client.events.NotificationEvent;
-import com.propertyvista.common.client.site.Notification.NotificationType;
 import com.propertyvista.shared.config.VistaDemo;
 
 public class VistaUnrecoverableErrorHandler extends DefaultUnrecoverableErrorHandler {

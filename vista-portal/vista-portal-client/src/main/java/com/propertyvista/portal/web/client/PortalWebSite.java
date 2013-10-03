@@ -25,6 +25,8 @@ import com.pyx4j.security.client.ClientContext;
 import com.pyx4j.security.rpc.AuthenticationService;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.client.SingletonViewFactory;
+import com.pyx4j.site.client.events.NotificationEvent;
+import com.pyx4j.site.client.events.NotificationHandler;
 import com.pyx4j.site.rpc.AppPlace;
 import com.pyx4j.widgets.client.dialog.Dialog;
 import com.pyx4j.widgets.client.dialog.Dialog.Type;
@@ -33,12 +35,8 @@ import com.pyx4j.widgets.client.dialog.OkOption;
 
 import com.propertyvista.common.client.ClientNavigUtils;
 import com.propertyvista.common.client.config.VistaFeaturesCustomizationClient;
-import com.propertyvista.common.client.events.NotificationEvent;
-import com.propertyvista.common.client.events.NotificationHandler;
 import com.propertyvista.common.client.handlers.VistaUnrecoverableErrorHandler;
 import com.propertyvista.common.client.policy.ClientPolicyManager;
-import com.propertyvista.common.client.site.Notification;
-import com.propertyvista.common.client.site.Notification.NotificationType;
 import com.propertyvista.common.client.site.VistaBrowserRequirments;
 import com.propertyvista.common.client.site.VistaSite;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap;
@@ -87,11 +85,6 @@ public class PortalWebSite extends VistaSite {
     public final native String getAuthenticationToken() /*-{
 		return $wnd.gwtToken();
     }-*/;
-
-    @Override
-    public void showMessageDialog(String message, String title) {
-        setNotification(new Notification(message, NotificationType.ERROR, title));
-    }
 
     private void initialize() {
         initSiteTheme();
@@ -142,9 +135,9 @@ public class PortalWebSite extends VistaSite {
     private static class PortalUserMessageHandlerByDialog implements NotificationHandler {
 
         @Override
-        public void onUserMessage(NotificationEvent event) {
+        public void onNotification(NotificationEvent event) {
             Dialog.Type dialogType = null;
-            switch (event.getMessageType()) {
+            switch (event.getNotificationType()) {
             case ERROR:
                 dialogType = Type.Error;
                 break;
@@ -161,7 +154,7 @@ public class PortalWebSite extends VistaSite {
                 dialogType = Type.Warning;
                 break;
             }
-            new MessageDialog("", event.getMessage() + (ApplicationMode.isDevelopment() ? "\nDebug Info: " + event.getDebugMessage() : ""), dialogType,
+            new MessageDialog("", event.getMessage() + (ApplicationMode.isDevelopment() ? "\nDebug Info: " + event.getSystemInfo() : ""), dialogType,
                     new OkOption() {
                         @Override
                         public boolean onClickOk() {
@@ -175,9 +168,8 @@ public class PortalWebSite extends VistaSite {
     private class PortalUserMessageHandlerByPlace implements NotificationHandler {
 
         @Override
-        public void onUserMessage(NotificationEvent event) {
-            setNotification(event.getNotification());
-            PortalWebSite.getPlaceController().goToUserMessagePlace();
+        public void onNotification(NotificationEvent event) {
+            PortalWebSite.getPlaceController().showNotification(event.getNotification());
         }
 
     }

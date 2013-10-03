@@ -19,8 +19,8 @@ import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.rpc.AppPlace;
+import com.pyx4j.site.rpc.NotificationAppPlace;
 
-import com.propertyvista.common.client.site.VistaSite;
 import com.propertyvista.ob.client.views.OnboardingViewFactory;
 import com.propertyvista.ob.client.views.RuntimeErrorView;
 
@@ -28,14 +28,17 @@ public class RuntimeErrorActivity extends AbstractActivity implements RuntimeErr
 
     private final RuntimeErrorView view;
 
-    public RuntimeErrorActivity() {
+    private final NotificationAppPlace place;
+
+    public RuntimeErrorActivity(NotificationAppPlace place) {
+        this.place = place;
         view = OnboardingViewFactory.instance(RuntimeErrorView.class);
     }
 
     @Override
     public void start(AcceptsOneWidget panel, EventBus eventBus) {
         view.setPresenter(this);
-        view.setErrorMessage(((VistaSite) AppSite.instance()).getNotification());
+        view.setErrorMessage(place.getNotification());
         panel.setWidget(view);
     }
 

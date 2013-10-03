@@ -15,10 +15,10 @@ package com.propertyvista.crm.client.activity;
 
 import com.google.gwt.activity.shared.AbstractActivity;
 import com.google.gwt.event.shared.EventBus;
-import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
 import com.pyx4j.site.client.AppSite;
+import com.pyx4j.site.rpc.NotificationAppPlace;
 
 import com.propertyvista.crm.client.CrmSite;
 import com.propertyvista.crm.client.ui.RuntimeErrorView;
@@ -27,14 +27,17 @@ public class RuntimeErrorActivity extends AbstractActivity implements RuntimeErr
 
     private final RuntimeErrorView view;
 
-    public RuntimeErrorActivity(Place place) {
+    private final NotificationAppPlace place;
+
+    public RuntimeErrorActivity(NotificationAppPlace place) {
+        this.place = place;
         view = CrmSite.getViewFactory().instantiate(RuntimeErrorView.class);
         view.setPresenter(this);
     }
 
     @Override
     public void start(AcceptsOneWidget container, EventBus eventBus) {
-        view.setError(CrmSite.instance().getNotification());
+        view.setError(place.getNotification());
         container.setWidget(view);
     }
 

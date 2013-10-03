@@ -25,8 +25,8 @@ import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Image;
 
 import com.pyx4j.commons.CompositeDebugId;
+import com.pyx4j.site.shared.domain.Notification.NotificationType;
 
-import com.propertyvista.common.client.site.Notification.NotificationType;
 import com.propertyvista.portal.ptapp.client.resources.PortalImages;
 import com.propertyvista.portal.rpc.ptapp.VistaFormsDebugId;
 

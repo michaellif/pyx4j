@@ -14,6 +14,7 @@
 package com.propertyvista.portal.rpc.ptapp;
 
 import com.pyx4j.site.rpc.AppPlace;
+import com.pyx4j.site.rpc.NotificationAppPlace;
 import com.pyx4j.site.rpc.annotations.PlaceProperties;
 import com.pyx4j.site.shared.meta.PublicPlace;
 import com.pyx4j.site.shared.meta.SiteMap;
@@ -77,7 +78,7 @@ public class PtSiteMap implements SiteMap {
     public static class ApplicationStatus extends AppPlace {
     }
 
-    public static class Notification extends AppPlace {
+    public static class Notification extends NotificationAppPlace {
     }
 
     // FIXME this is map of Mockup Move-In AKA Welcome AKA Wizard for approved tenants, needs review for real implementation    

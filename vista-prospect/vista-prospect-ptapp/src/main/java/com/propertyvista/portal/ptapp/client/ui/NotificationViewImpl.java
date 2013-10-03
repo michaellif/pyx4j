@@ -22,8 +22,7 @@ import com.google.gwt.user.client.ui.HTML;
 
 import com.pyx4j.essentials.client.crud.CrudDebugId;
 import com.pyx4j.i18n.shared.I18n;
-
-import com.propertyvista.common.client.site.Notification;
+import com.pyx4j.site.shared.domain.Notification;
 
 public class NotificationViewImpl extends FlowPanel implements NotificationView {
 

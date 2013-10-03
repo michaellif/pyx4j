@@ -18,8 +18,9 @@ import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
-import com.propertyvista.common.client.events.NotificationEvent;
-import com.propertyvista.common.client.events.NotificationHandler;
+import com.pyx4j.site.client.events.NotificationEvent;
+import com.pyx4j.site.client.events.NotificationHandler;
+
 import com.propertyvista.portal.ptapp.client.ui.UserMessageView;
 import com.propertyvista.portal.ptapp.client.ui.viewfactories.PtAppViewFactory;
 
@@ -46,10 +47,10 @@ public class UserMessageActivity extends AbstractActivity implements UserMessage
     }
 
     @Override
-    public void onUserMessage(NotificationEvent event) {
+    public void onNotification(NotificationEvent event) {
         view.hideAll();
-        if (event.getMessageType() != null) {
-            view.show(event.getMessage(), event.getDebugMessage(), event.getMessageType());
+        if (event.getNotificationType() != null) {
+            view.show(event.getMessage(), event.getSystemInfo(), event.getNotificationType());
         }
     }
 

@@ -15,6 +15,7 @@ package com.propertyvista.crm.rpc;
 
 import com.pyx4j.i18n.annotations.I18nComment;
 import com.pyx4j.site.rpc.AppPlace;
+import com.pyx4j.site.rpc.NotificationAppPlace;
 import com.pyx4j.site.rpc.ReportsAppPlace;
 import com.pyx4j.site.rpc.annotations.PlaceProperties;
 import com.pyx4j.site.shared.meta.PublicPlace;
@@ -567,6 +568,6 @@ public class CrmSiteMap implements SiteMap {
     }
 
     @PlaceProperties(navigLabel = "Runtime Errors")
-    public static class RuntimeError extends AppPlace {
+    public static class RuntimeError extends NotificationAppPlace {
     }
 }

@@ -47,7 +47,7 @@ public class OnboardingActivityMapper implements AppActivityMapper {
                     activity = new PmcTermsActivity();
 
                 } else if (place instanceof OnboardingSiteMap.RuntimeError) {
-                    activity = new RuntimeErrorActivity();
+                    activity = new RuntimeErrorActivity((OnboardingSiteMap.RuntimeError) place);
                 }
                 callback.onSuccess(activity);
             }

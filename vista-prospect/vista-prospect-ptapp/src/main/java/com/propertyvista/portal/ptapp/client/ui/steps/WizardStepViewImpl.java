@@ -27,8 +27,8 @@ import com.pyx4j.essentials.client.crud.CrudDebugId;
 import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.AppSite;
+import com.pyx4j.site.client.events.NotificationEvent;
 
-import com.propertyvista.common.client.events.NotificationEvent;
 import com.propertyvista.misc.VistaTODO;
 
 public class WizardStepViewImpl<E extends IEntity, T extends WizardStepPresenter<E>> extends FlowPanel implements WizardStepView<E, T> {

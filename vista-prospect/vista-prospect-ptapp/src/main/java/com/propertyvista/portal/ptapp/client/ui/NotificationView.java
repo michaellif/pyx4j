@@ -15,7 +15,7 @@ package com.propertyvista.portal.ptapp.client.ui;
 
 import com.google.gwt.user.client.ui.IsWidget;
 
-import com.propertyvista.common.client.site.Notification;
+import com.pyx4j.site.shared.domain.Notification;
 
 public interface NotificationView extends IsWidget {
 

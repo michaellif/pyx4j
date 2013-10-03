@@ -16,6 +16,7 @@ package com.propertyvista.portal.rpc.portal;
 import com.pyx4j.commons.Key;
 import com.pyx4j.site.rpc.AppPlace;
 import com.pyx4j.site.rpc.CrudAppPlace;
+import com.pyx4j.site.rpc.NotificationAppPlace;
 import com.pyx4j.site.rpc.annotations.PlaceProperties;
 import com.pyx4j.site.shared.meta.PublicPlace;
 import com.pyx4j.site.shared.meta.SiteMap;
@@ -68,7 +69,7 @@ public class PortalSiteMap implements SiteMap {
     }
 
     @PlaceProperties(navigLabel = "", caption = "")
-    public static class NotificationPlace extends AppPlace implements PublicPlace {
+    public static class NotificationPlace extends NotificationAppPlace implements PublicPlace {
 
     }
 

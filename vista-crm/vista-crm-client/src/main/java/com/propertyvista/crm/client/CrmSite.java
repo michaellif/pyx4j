@@ -40,17 +40,15 @@ import com.pyx4j.security.rpc.AuthenticationService;
 import com.pyx4j.security.shared.SecurityController;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.client.SingletonViewFactory;
+import com.pyx4j.site.client.events.NotificationEvent;
+import com.pyx4j.site.client.events.NotificationHandler;
 import com.pyx4j.site.rpc.AppPlace;
 
 import com.propertyvista.common.client.ClientNavigUtils;
 import com.propertyvista.common.client.config.VistaFeaturesCustomizationClient;
-import com.propertyvista.common.client.events.NotificationEvent;
-import com.propertyvista.common.client.events.NotificationHandler;
 import com.propertyvista.common.client.handlers.VistaUnrecoverableErrorHandler;
 import com.propertyvista.common.client.policy.ClientPolicyManager;
 import com.propertyvista.common.client.site.VistaBrowserRequirments;
-import com.propertyvista.common.client.site.Notification;
-import com.propertyvista.common.client.site.Notification.NotificationType;
 import com.propertyvista.common.client.site.VistaSite;
 import com.propertyvista.common.client.theme.VistaPalette;
 import com.propertyvista.crm.client.themes.CrmTheme;
@@ -102,9 +100,8 @@ public class CrmSite extends VistaSite {
         // subscribe to UserMessageEvent fired from VistaUnrecoverableErrorHandler
         getEventBus().addHandler(NotificationEvent.getType(), new NotificationHandler() {
             @Override
-            public void onUserMessage(NotificationEvent event) {
-                setNotification(event.getNotification());
-                getPlaceController().goToUserMessagePlace();
+            public void onNotification(NotificationEvent event) {
+                getPlaceController().showNotification(event.getNotification());
             }
         });
 
@@ -116,11 +113,6 @@ public class CrmSite extends VistaSite {
     @Override
     protected boolean isBrowserCompatible() {
         return VistaBrowserRequirments.isBrowserCompatibleCrm();
-    }
-
-    @Override
-    public void showMessageDialog(String message, String title) {
-        setNotification(new Notification(message, NotificationType.ERROR, title));
     }
 
     private void initialize() {

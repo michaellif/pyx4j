@@ -18,6 +18,8 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.pyx4j.security.shared.SecurityController;
 import com.pyx4j.site.client.AbstractAppPlaceDispatcher;
 import com.pyx4j.site.rpc.AppPlace;
+import com.pyx4j.site.rpc.NotificationAppPlace;
+import com.pyx4j.site.shared.domain.Notification;
 
 import com.propertyvista.domain.security.VistaCustomerBehavior;
 import com.propertyvista.domain.security.common.VistaBasicBehavior;
@@ -26,10 +28,10 @@ import com.propertyvista.portal.rpc.portal.PortalSiteMap;
 public class PortalWebSiteDispatcher extends AbstractAppPlaceDispatcher {
 
     @Override
-    public AppPlace getUserMessagePlace() {
-        AppPlace userMessagePlace = new PortalSiteMap.NotificationPlace();
-        userMessagePlace.setStable(false);
-        return userMessagePlace;
+    public NotificationAppPlace getUserMessagePlace(Notification notification) {
+        NotificationAppPlace place = new PortalSiteMap.NotificationPlace();
+        place.setNotification(notification);
+        return place;
     }
 
     @Override

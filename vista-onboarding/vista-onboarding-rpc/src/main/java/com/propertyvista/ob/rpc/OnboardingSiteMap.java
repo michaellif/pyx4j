@@ -14,6 +14,7 @@
 package com.propertyvista.ob.rpc;
 
 import com.pyx4j.site.rpc.AppPlace;
+import com.pyx4j.site.rpc.NotificationAppPlace;
 import com.pyx4j.site.shared.meta.PublicPlace;
 import com.pyx4j.site.shared.meta.SiteMap;
 
@@ -22,7 +23,7 @@ public class OnboardingSiteMap implements SiteMap {
     public static class Landing extends AppPlace {
     }
 
-    public static class RuntimeError extends AppPlace {
+    public static class RuntimeError extends NotificationAppPlace {
     }
 
     public static class PmcAccountTerms extends AppPlace implements PublicPlace {

@@ -1295,7 +1295,7 @@ public class ContentActivityMapper implements AppActivityMapper {
                 } else if (place instanceof CrmSiteMap.LoginWithToken) {
                     activity = new LoginWithTokenActivity(place);
                 } else if (place instanceof CrmSiteMap.RuntimeError) {
-                    activity = new RuntimeErrorActivity(place);
+                    activity = new RuntimeErrorActivity((CrmSiteMap.RuntimeError) place);
 
                 } else if (place instanceof CrmSiteMap.Notifications) {
                     activity = new NotificationsActivity(place);

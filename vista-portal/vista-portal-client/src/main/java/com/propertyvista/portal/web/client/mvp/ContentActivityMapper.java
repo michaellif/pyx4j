@@ -151,7 +151,7 @@ public class ContentActivityMapper implements AppActivityMapper {
                     } else if (place instanceof PortalSiteMap.PortalTermsAndConditions) {
                         activity = new VistaTermsActivity();
                     } else if (place instanceof PortalSiteMap.NotificationPlace) {
-                        activity = new NotificationPageActivity(place);
+                        activity = new NotificationPageActivity((PortalSiteMap.NotificationPlace) place);
                     }
 
                     callback.onSuccess(activity);
