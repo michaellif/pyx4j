@@ -25,16 +25,16 @@ import java.io.File;
 import ch.qos.logback.core.joran.spi.NoAutoStart;
 
 @NoAutoStart
-public class SizeAndTimeBasedFNATPExt<E> extends ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP<E> {
+public class PyxExtensionSizeAndTimeBasedFNATP<E> extends ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP<E> {
 
-    private boolean rolloverOnStartTriggered = false;
+    private boolean fistEvenFired = false;
 
     private boolean rolloverOnStart;
 
     @Override
     public void start() {
         super.start();
-        rolloverOnStartTriggered = false;
+        fistEvenFired = false;
     }
 
     public void setRolloverOnStart(boolean rolloverOnStart) {
@@ -48,12 +48,13 @@ public class SizeAndTimeBasedFNATPExt<E> extends ch.qos.logback.core.rolling.Siz
     @Override
     public boolean isTriggeringEvent(File activeFile, final E event) {
         boolean trigger = super.isTriggeringEvent(activeFile, event);
-        if (!rolloverOnStartTriggered && isRolloverOnStart()) {
-            rolloverOnStartTriggered = true;
+        if (!fistEvenFired && isRolloverOnStart() && activeFile.exists() && (activeFile.length() > 0)) {
+            fistEvenFired = true;
             elapsedPeriodsFileName = tbrp.fileNamePatternWCS.convertMultipleArguments(dateInCurrentPeriod, currentPeriodsCounter);
             currentPeriodsCounter++;
             return true;
         } else {
+            fistEvenFired = true;
             return trigger;
         }
     }

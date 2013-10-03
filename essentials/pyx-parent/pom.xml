@@ -128,6 +128,8 @@
 
         <jettyVersion>9.0.5.v20130815</jettyVersion>
 
+        <slf4jVersion>1.7.5</slf4jVersion>
+
         <jasperreportsVersion>5.2.0</jasperreportsVersion>
         <batikVersion>1.7</batikVersion>
 
@@ -232,21 +234,28 @@
             <dependency>
                 <groupId>org.slf4j</groupId>
                 <artifactId>slf4j-api</artifactId>
-                <version>1.7.5</version>
+                <version>${slf4jVersion}</version>
             </dependency>
 
             <dependency>
                 <groupId>org.slf4j</groupId>
                 <artifactId>slf4j-jdk14</artifactId>
-                <version>1.7.5</version>
+                <version>${slf4jVersion}</version>
             </dependency>
 
             <dependency>
                 <groupId>org.slf4j</groupId>
                 <artifactId>slf4j-log4j12</artifactId>
-                <version>1.7.5</version>
+                <version>${slf4jVersion}</version>
             </dependency>
-
+            
+            <!-- log4j replacement for C3P0 and other libraries that are using log4j -->
+            <dependency>
+                <groupId>org.slf4j</groupId>
+                <artifactId>log4j-over-slf4j</artifactId>
+                <version>${slf4jVersion}</version>
+            </dependency>
+            
             <dependency>
                 <groupId>log4j</groupId>
                 <artifactId>log4j</artifactId>
@@ -256,7 +265,7 @@
             <dependency>
                 <groupId>ch.qos.logback</groupId>
                 <artifactId>logback-classic</artifactId>
-                <version>1.0.11</version>
+                <version>1.0.13</version>
             </dependency>
 
             <!-- MemoryLeakPrevention remove META-INF/services on build server -->

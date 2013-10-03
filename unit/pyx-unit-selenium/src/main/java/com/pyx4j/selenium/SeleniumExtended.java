@@ -33,7 +33,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.slf4j.helpers.FormattingTuple;
 import org.slf4j.helpers.MessageFormatter;
-import org.slf4j.impl.Log4jLoggerAdapter;
 import org.slf4j.spi.LocationAwareLogger;
 
 import com.pyx4j.commons.CommonsStringUtils;
@@ -82,7 +81,7 @@ public class SeleniumExtended extends WebDriverWrapper {
             clientLog(GWT_LOG_PREFIX + format, args);
         }
         FormattingTuple ft = MessageFormatter.arrayFormat(format, args);
-        ((Log4jLoggerAdapter) log).log(null, FQCN, LocationAwareLogger.DEBUG_INT, ft.getMessage(), null, null);
+        ((LocationAwareLogger) log).log(null, FQCN, LocationAwareLogger.DEBUG_INT, ft.getMessage(), null, null);
     }
 
     private static String escapeJS(String message) {

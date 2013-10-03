@@ -35,7 +35,7 @@
             <artifactId>pyx-i18n-j2se</artifactId>
             <version>${project.version}</version>
         </dependency>
-        
+
         <dependency>
             <groupId>com.pyx4j</groupId>
             <artifactId>pyx-log-server</artifactId>
@@ -51,7 +51,7 @@
             <groupId>org.javassist</groupId>
             <artifactId>javassist</artifactId>
         </dependency>
-        
+
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
@@ -60,10 +60,17 @@
         </dependency>
 
         <dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>slf4j-log4j12</artifactId>
+            <groupId>ch.qos.logback</groupId>
+            <artifactId>logback-classic</artifactId>
             <optional>true</optional>
             <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>com.pyx4j</groupId>
+            <artifactId>pyx-tests-config</artifactId>
+            <version>${project.version}</version>
+            <classifier>tests</classifier>
         </dependency>
         
         <dependency>
@@ -73,7 +80,7 @@
             <optional>true</optional>
             <scope>test</scope>
         </dependency>
-        
+
     </dependencies>
 
 </project>

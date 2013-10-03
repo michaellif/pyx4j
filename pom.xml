@@ -85,6 +85,7 @@
         <module>app-config/pyx-config-shared</module>
         <module>app-config/pyx-config-gwt</module>
         <module>app-config/pyx-config-server</module>
+        <module>app-config/pyx-tests-config</module>
 
         <module>gwt/pyx-gwt-server</module>
         <module>security/pyx-security-server</module>

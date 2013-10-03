@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE configuration>
+<!-- @version $Revision$ ($Author$) $Date$ -->
+<configuration debug="false">
+
+    <property name="logs-name" value="test-logs" />
+    <property name="logs-dir" value="./target" />
+
+    <appender name="ConsoleAppender-info" class="ch.qos.logback.core.ConsoleAppender">
+        <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+            <level>INFO</level>
+        </filter>
+        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+            <!-- The caller line# should clickable in eclipse console.-->
+            <pattern>%-5level %-70message\t{ %class.%method\(%file:%line\)}%n%throwable</pattern>
+        </encoder>
+    </appender>
+
+    <appender name="FileAppender" class="ch.qos.logback.core.rolling.RollingFileAppender">
+	    <file>${logs-dir}/${logs-name}.log</file>
+
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>${logs-dir}/${logs-name}.%d{yyyy-MM-dd}.%d{HHmm,aux}.%i.log</fileNamePattern>
+            <timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.PyxExtensionSizeAndTimeBasedFNATP">
+                <rolloverOnStart>true</rolloverOnStart>
+                <maxFileSize>3000KB</maxFileSize>
+            </timeBasedFileNamingAndTriggeringPolicy>
+            <maxHistory>10</maxHistory>
+        </rollingPolicy>
+
+        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+             <pattern>%-5level %date %6relative\t {%class.%method\(%file:%line\)}\t [%thread]\n\t%message\n%throwable</pattern>
+        </encoder>
+    </appender>
+
+    <!-- special file for errors only -->
+    <appender name="FileAppender.warn" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+            <level>WARN</level>
+        </filter>
+        <file>${logs-dir}/${logs-name}-warn.log</file>
+
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>${logs-dir}/${logs-name}-warn.%d{yyyy-MM-dd}.%d{HHmm,aux}.%i.log</fileNamePattern>
+            <timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.PyxExtensionSizeAndTimeBasedFNATP">
+                <rolloverOnStart>true</rolloverOnStart>
+                <maxFileSize>3000KB</maxFileSize>
+            </timeBasedFileNamingAndTriggeringPolicy>
+            <maxHistory>10</maxHistory>
+        </rollingPolicy>
+
+        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+             <pattern>%-5level %date %6relative\t {%class.%method\(%file:%line\)}\t [%thread]\n\t%message\n%throwable</pattern>
+        </encoder>
+    </appender>
+
+    <logger name="org.pyx4j" level="DEBUG" />
+    <logger name="org.apache" level="INFO" />
+    <logger name="com.mchange" level="ERROR" />
+
+	<root level="INFO">
+		<appender-ref ref="ConsoleAppender-info" />
+        <appender-ref ref="FileAppender" />
+        <appender-ref ref="FileAppender.warn" />
+	</root>
+
+</configuration>
