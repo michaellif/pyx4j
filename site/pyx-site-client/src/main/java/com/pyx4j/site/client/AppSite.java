@@ -50,6 +50,8 @@ import com.pyx4j.log4gwt.client.ClientLogger;
 import com.pyx4j.security.client.ClientSecurityController;
 import com.pyx4j.site.client.place.AppPlaceHistoryMapper;
 import com.pyx4j.site.rpc.AppPlace;
+import com.pyx4j.site.rpc.NotificationAppPlace;
+import com.pyx4j.site.shared.domain.Notification;
 import com.pyx4j.site.shared.meta.NavigNode;
 import com.pyx4j.site.shared.meta.SiteMap;
 import com.pyx4j.widgets.client.dialog.ConfirmDecline;
@@ -102,7 +104,7 @@ public abstract class AppSite implements EntryPoint {
                 }
 
                 @Override
-                public AppPlace getUserMessagePlace() {
+                public NotificationAppPlace getUserMessagePlace(Notification notification) {
                     return null;
                 }
 

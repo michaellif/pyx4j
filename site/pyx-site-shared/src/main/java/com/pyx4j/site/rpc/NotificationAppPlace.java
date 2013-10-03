@@ -1,6 +1,6 @@
 /*
  * Pyx4j framework
- * Copyright (C) 2008-2011 pyx4j.com.
+ * Copyright (C) 2006-2010 pyx4j.com.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -14,25 +14,32 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  *
- * Created on Aug 10, 2011
+ * Created on Jun 11, 2011
  * @author michaellif
  * @version $Id$
  */
-package com.pyx4j.site.client;
+package com.pyx4j.site.rpc;
 
-import com.google.gwt.user.client.rpc.AsyncCallback;
-
-import com.pyx4j.site.rpc.AppPlace;
-import com.pyx4j.site.rpc.NotificationAppPlace;
+import com.pyx4j.i18n.annotations.I18n;
+import com.pyx4j.i18n.annotations.I18n.I18nStrategy;
 import com.pyx4j.site.shared.domain.Notification;
-import com.pyx4j.widgets.client.dialog.ConfirmDecline;
 
-public interface AppPlaceDispatcher {
+@I18n(strategy = I18nStrategy.IgnoreAll)
+public abstract class NotificationAppPlace extends AppPlace {
 
-    void forwardTo(AppPlace newPlace, AsyncCallback<AppPlace> callback);
+    private Notification notification;
 
-    void confirm(String message, ConfirmDecline confirmDecline);
+    public NotificationAppPlace() {
+        setStable(false);
+        // Xui
+    }
 
-    NotificationAppPlace getUserMessagePlace(Notification notification);
+    public void setNotification(Notification notification) {
+        this.notification = notification;
+    }
+
+    public Notification getNotification() {
+        return notification;
+    }
 
 }

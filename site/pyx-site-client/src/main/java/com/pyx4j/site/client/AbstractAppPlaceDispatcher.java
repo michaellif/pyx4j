@@ -31,6 +31,8 @@ import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.security.client.BehaviorChangeEvent;
 import com.pyx4j.security.client.BehaviorChangeHandler;
 import com.pyx4j.site.rpc.AppPlace;
+import com.pyx4j.site.rpc.NotificationAppPlace;
+import com.pyx4j.site.shared.domain.Notification;
 import com.pyx4j.site.shared.meta.PublicPlace;
 import com.pyx4j.widgets.client.dialog.ConfirmDecline;
 
@@ -93,7 +95,7 @@ public abstract class AbstractAppPlaceDispatcher implements AppPlaceDispatcher {
     protected abstract AppPlace specialForward(AppPlace newPlace);
 
     @Override
-    public AppPlace getUserMessagePlace() {
+    public NotificationAppPlace getUserMessagePlace(Notification notification) {
         return null;
     }
 
