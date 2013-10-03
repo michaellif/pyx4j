@@ -30,10 +30,10 @@ import com.propertyvista.domain.payment.PreauthorizedPayment;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap.Resident.Financial;
 import com.propertyvista.portal.rpc.portal.web.dto.financial.AutoPayDTO;
 import com.propertyvista.portal.rpc.portal.web.services.financial.AutoPayWizardService;
-import com.propertyvista.portal.web.client.activity.AbstractWizardActivity;
+import com.propertyvista.portal.web.client.activity.AbstractWizardCrudActivity;
 import com.propertyvista.portal.web.client.ui.financial.autopay.AutoPayWizardView;
 
-public class AutoPayWizardActivity extends AbstractWizardActivity<AutoPayDTO> implements AutoPayWizardView.Persenter {
+public class AutoPayWizardActivity extends AbstractWizardCrudActivity<AutoPayDTO> implements AutoPayWizardView.Persenter {
 
     public AutoPayWizardActivity(AppPlace place) {
         super(AutoPayWizardView.class, GWT.<AutoPayWizardService> create(AutoPayWizardService.class), AutoPayDTO.class);

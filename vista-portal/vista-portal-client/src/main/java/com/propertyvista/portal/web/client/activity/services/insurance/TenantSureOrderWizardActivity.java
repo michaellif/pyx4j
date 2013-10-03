@@ -26,10 +26,10 @@ import com.propertyvista.portal.rpc.portal.web.dto.insurance.TenantSureInsurance
 import com.propertyvista.portal.rpc.portal.web.dto.insurance.TenantSureCoverageDTO;
 import com.propertyvista.portal.rpc.portal.web.dto.insurance.TenantSureQuoteDTO;
 import com.propertyvista.portal.rpc.portal.web.services.services.TenantSureInsurancePolicyCrudService;
-import com.propertyvista.portal.web.client.activity.AbstractWizardActivity;
+import com.propertyvista.portal.web.client.activity.AbstractWizardCrudActivity;
 import com.propertyvista.portal.web.client.ui.services.insurance.TenantSureOrderWizardView;
 
-public class TenantSureOrderWizardActivity extends AbstractWizardActivity<TenantSureInsurancePolicyDTO> implements TenantSureOrderWizardView.TenantSureOrderWizardPersenter {
+public class TenantSureOrderWizardActivity extends AbstractWizardCrudActivity<TenantSureInsurancePolicyDTO> implements TenantSureOrderWizardView.TenantSureOrderWizardPersenter {
 
     public TenantSureOrderWizardActivity(AppPlace place) {
         super(TenantSureOrderWizardView.class, GWT.<TenantSureInsurancePolicyCrudService> create(TenantSureInsurancePolicyCrudService.class), TenantSureInsurancePolicyDTO.class);

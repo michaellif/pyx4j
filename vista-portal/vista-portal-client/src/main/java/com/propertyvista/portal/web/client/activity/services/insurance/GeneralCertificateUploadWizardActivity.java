@@ -19,11 +19,11 @@ import com.pyx4j.site.rpc.AppPlace;
 
 import com.propertyvista.portal.rpc.portal.web.dto.insurance.GeneralInsurancePolicyDTO;
 import com.propertyvista.portal.rpc.portal.web.services.services.GeneralInsurancePolicyCrudService;
-import com.propertyvista.portal.web.client.activity.AbstractWizardActivity;
+import com.propertyvista.portal.web.client.activity.AbstractWizardCrudActivity;
 import com.propertyvista.portal.web.client.ui.services.insurance.GeneralCertificateUploadWizardView;
 import com.propertyvista.portal.web.client.ui.services.insurance.GeneralCertificateUploadWizardView.GeneralCertificateUploadWizardPresenter;
 
-public class GeneralCertificateUploadWizardActivity extends AbstractWizardActivity<GeneralInsurancePolicyDTO> implements GeneralCertificateUploadWizardPresenter {
+public class GeneralCertificateUploadWizardActivity extends AbstractWizardCrudActivity<GeneralInsurancePolicyDTO> implements GeneralCertificateUploadWizardPresenter {
 
     public GeneralCertificateUploadWizardActivity(AppPlace place) {
         super(GeneralCertificateUploadWizardView.class, GWT.<GeneralInsurancePolicyCrudService> create(GeneralInsurancePolicyCrudService.class),

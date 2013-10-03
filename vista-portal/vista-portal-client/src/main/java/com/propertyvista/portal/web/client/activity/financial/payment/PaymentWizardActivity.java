@@ -29,10 +29,10 @@ import com.propertyvista.domain.payment.LeasePaymentMethod;
 import com.propertyvista.portal.domain.dto.financial.PaymentDTO;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap.Resident.Financial.Payment;
 import com.propertyvista.portal.rpc.portal.web.services.financial.PaymentWizardService;
-import com.propertyvista.portal.web.client.activity.AbstractWizardActivity;
+import com.propertyvista.portal.web.client.activity.AbstractWizardCrudActivity;
 import com.propertyvista.portal.web.client.ui.financial.payment.PaymentWizardView;
 
-public class PaymentWizardActivity extends AbstractWizardActivity<PaymentDTO> implements PaymentWizardView.Persenter {
+public class PaymentWizardActivity extends AbstractWizardCrudActivity<PaymentDTO> implements PaymentWizardView.Persenter {
 
     public PaymentWizardActivity(AppPlace place) {
         super(PaymentWizardView.class, GWT.<PaymentWizardService> create(PaymentWizardService.class), PaymentDTO.class);

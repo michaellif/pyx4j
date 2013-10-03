@@ -42,11 +42,9 @@ public class PasswordResetRequestWizardActivity extends AbstractWizardActivity<P
 
     @Override
     public void start(AcceptsOneWidget panel, EventBus eventBus) {
-        getView().setPresenter(this);
-        createNewCaptchaChallenge();
-        getView().reset();
+        super.start(panel, eventBus);
         getView().populate(EntityFactory.create(PasswordRetrievalRequest.class));
-        panel.setWidget(getView());
+        createNewCaptchaChallenge();
     }
 
     @Override
@@ -54,6 +52,7 @@ public class PasswordResetRequestWizardActivity extends AbstractWizardActivity<P
         GWT.<AuthenticationService> create(PortalAuthenticationService.class).requestPasswordReset(new DefaultAsyncCallback<VoidSerializable>() {
             @Override
             public void onSuccess(VoidSerializable result) {
+                PasswordResetRequestWizardActivity.super.finish();
                 MessageDialog.info(i18n.tr("A link to the password reset page was sent to your email"));
             }
 

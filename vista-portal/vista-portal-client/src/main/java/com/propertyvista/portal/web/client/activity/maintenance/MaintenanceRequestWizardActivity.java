@@ -25,11 +25,11 @@ import com.propertyvista.domain.maintenance.MaintenanceRequestMetadata;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap;
 import com.propertyvista.portal.rpc.portal.web.dto.maintenance.MaintenanceRequestDTO;
 import com.propertyvista.portal.rpc.portal.web.services.maintenance.MaintenanceRequestCrudService;
-import com.propertyvista.portal.web.client.activity.AbstractWizardActivity;
+import com.propertyvista.portal.web.client.activity.AbstractWizardCrudActivity;
 import com.propertyvista.portal.web.client.ui.maintenance.MaintenanceRequestWizardView;
 import com.propertyvista.portal.web.client.ui.maintenance.MaintenanceRequestWizardView.MaintenanceRequestWizardPresenter;
 
-public class MaintenanceRequestWizardActivity extends AbstractWizardActivity<MaintenanceRequestDTO> implements MaintenanceRequestWizardPresenter {
+public class MaintenanceRequestWizardActivity extends AbstractWizardCrudActivity<MaintenanceRequestDTO> implements MaintenanceRequestWizardPresenter {
 
     public MaintenanceRequestWizardActivity(AppPlace place) {
         super(MaintenanceRequestWizardView.class, GWT.<MaintenanceRequestCrudService> create(MaintenanceRequestCrudService.class), MaintenanceRequestDTO.class);

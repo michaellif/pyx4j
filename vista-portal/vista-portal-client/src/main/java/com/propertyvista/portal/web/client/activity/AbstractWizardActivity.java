@@ -25,14 +25,10 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
 import com.pyx4j.commons.CommonsStringUtils;
-import com.pyx4j.commons.Key;
 import com.pyx4j.entity.rpc.AbstractCrudService;
 import com.pyx4j.entity.rpc.AbstractCrudService.InitializationData;
 import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.forms.client.ui.ReferenceDataManager;
-import com.pyx4j.gwt.commons.UnrecoverableClientError;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.site.client.AppSite;
 
 import com.propertyvista.portal.web.client.PortalWebSite;
@@ -45,13 +41,7 @@ public abstract class AbstractWizardActivity<E extends IEntity> extends Security
 
     private final IWizardView<E> view;
 
-    private final AbstractCrudService<E> service;
-
-    private final Class<E> entityClass;
-
     public AbstractWizardActivity(Class<? extends IWizardView<E>> viewType, AbstractCrudService<E> service, Class<E> entityClass) {
-        this.service = service;
-        this.entityClass = entityClass;
 
         view = PortalWebSite.getViewFactory().instantiate(viewType);
         view.setPresenter(this);
@@ -64,25 +54,8 @@ public abstract class AbstractWizardActivity<E extends IEntity> extends Security
     @Override
     public void start(AcceptsOneWidget panel, EventBus eventBus) {
         view.setPresenter(this);
-
-        obtainInitializationData(new DefaultAsyncCallback<AbstractCrudService.InitializationData>() {
-            @Override
-            public void onSuccess(InitializationData result) {
-                service.init(new DefaultAsyncCallback<E>() {
-                    @Override
-                    public void onSuccess(E result) {
-                        view.reset();
-                        view.populate(result);
-                    }
-                }, result);
-            }
-        });
-
+        view.reset();
         panel.setWidget(view);
-    }
-
-    public AbstractCrudService<E> getService() {
-        return service;
     }
 
     public IWizardView<E> getView() {
@@ -108,26 +81,11 @@ public abstract class AbstractWizardActivity<E extends IEntity> extends Security
 
     @Override
     public void finish() {
-        assert service != null : "Service shouldn't be null or method finish() has to be implemented in subclass.";
-        service.create(new AsyncCallback<Key>() {
-            @Override
-            public void onSuccess(Key result) {
-                ReferenceDataManager.invalidate(entityClass);
-                view.reset();
-                onFinish(result);
-            }
-
-            @Override
-            public void onFailure(Throwable caught) {
-                if (!view.onSaveFail(caught)) {
-                    throw new UnrecoverableClientError(caught);
-                }
-            }
-        }, view.getValue());
-
+        view.reset();
+        onFinish();
     }
 
-    protected void onFinish(Key result) {
+    protected void onFinish() {
         AppSite.getPlaceController().goTo(AppSite.getPlaceController().getForwardedFrom());
     }
 
