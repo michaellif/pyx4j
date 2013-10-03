@@ -95,6 +95,10 @@ public class OperationsSiteMap implements SiteMap {
         public static class FundsTransferRecord extends CrudAppPlace {
         }
 
+        @PlaceProperties(navigLabel = "Funds Transfer Batches")
+        public static class FundsTransferBatch extends CrudAppPlace {
+        }
+
         @PlaceProperties(navigLabel = "Funds Reconciliation Files")
         public static class FundsReconciliationFile extends CrudAppPlace {
         }

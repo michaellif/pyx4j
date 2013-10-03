@@ -25,7 +25,9 @@ import com.pyx4j.site.rpc.CrudAppPlace;
 
 import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
 import com.propertyvista.operations.client.ui.crud.OperationsEntityForm;
+import com.propertyvista.operations.domain.payment.pad.PadBatch;
 import com.propertyvista.operations.domain.payment.pad.PadDebitRecord;
+import com.propertyvista.operations.rpc.dto.PadBatchDTO;
 import com.propertyvista.operations.rpc.dto.PadDebitRecordDTO;
 import com.propertyvista.operations.rpc.dto.PadFileDTO;
 
@@ -53,18 +55,35 @@ public class PadFileForm extends OperationsEntityForm<PadFileDTO> {
         panel.setWidget(++row, 0, 1, new FormDecoratorBuilder(inject(proto().acknowledgmentStatus())).build());
 
         // TODO Sorry for the mess with DTO and DBO here,  will be fixed once we have AttacheLEvel.countOnly
-        AppPlaceBuilder<IList<PadDebitRecord>> appPlaceBuilder = new AppPlaceBuilder<IList<PadDebitRecord>>() {
-            @Override
-            public AppPlace createAppPlace(IList<PadDebitRecord> value) {
-                CrudAppPlace place = AppPlaceEntityMapper.resolvePlace(PadDebitRecordDTO.class);
-                place.formListerPlace().queryArg(EntityFactory.getEntityPrototype(PadDebitRecordDTO.class).padBatch().padFile().id().getPath().toString(),
-                        value.getOwner().getPrimaryKey().toString());
-                return place;
-            }
-        };
+        {
+            AppPlaceBuilder<IList<PadDebitRecord>> appPlaceBuilder = new AppPlaceBuilder<IList<PadDebitRecord>>() {
+                @Override
+                public AppPlace createAppPlace(IList<PadDebitRecord> value) {
+                    CrudAppPlace place = AppPlaceEntityMapper.resolvePlace(PadDebitRecordDTO.class);
+                    place.formListerPlace().queryArg(EntityFactory.getEntityPrototype(PadDebitRecordDTO.class).padBatch().padFile().id().getPath().toString(),
+                            value.getOwner().getPrimaryKey().toString());
+                    return place;
+                }
+            };
 
-        CEntityCollectionCrudHyperlink<IList<PadDebitRecord>> link = new CEntityCollectionCrudHyperlink<IList<PadDebitRecord>>(appPlaceBuilder);
-        panel.setWidget(++row, 0, 1, new FormDecoratorBuilder(inject(proto().debitRecords(), link)).build());
+            CEntityCollectionCrudHyperlink<IList<PadDebitRecord>> link = new CEntityCollectionCrudHyperlink<IList<PadDebitRecord>>(appPlaceBuilder);
+            panel.setWidget(++row, 0, 1, new FormDecoratorBuilder(inject(proto().debitRecords(), link)).build());
+        }
+
+        {
+            AppPlaceBuilder<IList<PadBatch>> appPlaceBuilder = new AppPlaceBuilder<IList<PadBatch>>() {
+                @Override
+                public AppPlace createAppPlace(IList<PadBatch> value) {
+                    CrudAppPlace place = AppPlaceEntityMapper.resolvePlace(PadBatchDTO.class);
+                    place.formListerPlace().queryArg(EntityFactory.getEntityPrototype(PadBatchDTO.class).padFile().id().getPath().toString(),
+                            value.getOwner().getPrimaryKey().toString());
+                    return place;
+                }
+            };
+
+            CEntityCollectionCrudHyperlink<IList<PadBatch>> link = new CEntityCollectionCrudHyperlink<IList<PadBatch>>(appPlaceBuilder);
+            panel.setWidget(++row, 0, 1, new FormDecoratorBuilder(inject(proto().debitRecords(), link)).build());
+        }
 
         selectTab(addTab(panel));
         setTabBarVisible(false);

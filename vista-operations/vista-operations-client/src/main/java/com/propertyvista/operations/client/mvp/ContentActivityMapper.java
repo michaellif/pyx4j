@@ -38,6 +38,7 @@ import com.propertyvista.operations.client.activity.crud.fundstransfer.fundsreco
 import com.propertyvista.operations.client.activity.crud.fundstransfer.fundsreconciliationfile.PadReconciliationFileViewerActivity;
 import com.propertyvista.operations.client.activity.crud.fundstransfer.fundsreconciliationrecord.PadReconciliationDebitRecordListerActivity;
 import com.propertyvista.operations.client.activity.crud.fundstransfer.fundsreconciliationrecord.PadReconciliationDebitRecordViewerActivity;
+import com.propertyvista.operations.client.activity.crud.fundstransfer.fundstransferbatch.PadBatchListerActivity;
 import com.propertyvista.operations.client.activity.crud.fundstransfer.fundstransferfile.PadFileListerActivity;
 import com.propertyvista.operations.client.activity.crud.fundstransfer.fundstransferfile.PadFileViewerActivity;
 import com.propertyvista.operations.client.activity.crud.fundstransfer.fundstransferrecord.PadDebitRecordListerActivity;
@@ -226,6 +227,18 @@ public class ContentActivityMapper implements AppActivityMapper {
                             break;
                         case viewer:
                             activity = new PadDebitRecordViewerActivity(crudPlace);
+                            break;
+                        default:
+                            break;
+                        }
+
+                    } else if (place instanceof OperationsSiteMap.FundsTransfer.FundsTransferRecord) {
+                        switch (crudPlace.getType()) {
+                        case lister:
+                            activity = new PadBatchListerActivity(crudPlace);
+                            break;
+                        case viewer:
+                            activity = new PadBatchViewerActivity(crudPlace);
                             break;
                         default:
                             break;
