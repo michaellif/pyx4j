@@ -2,13 +2,13 @@
 <!DOCTYPE configuration>
 <configuration debug="false">
 
-    <property name="logs-name" value="vista-server" />
+    <property name="logs-name" value="vista" />
 
     <define name="container-home" class="com.pyx4j.logback.ContainerHomeProperty"/>
     <define name="application-name" class="com.pyx4j.logback.ContextNameProperty">
         <default>vista</default>
     </define>
-    
+
     <appender name="ConsoleAppender-info" class="ch.qos.logback.core.ConsoleAppender">
         <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
             <level>INFO</level>
@@ -62,12 +62,57 @@ start new log file on each application start
         </encoder>
     </appender>
 
+    <appender name="FileAppender.alert" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+            <level>WARN</level>
+        </filter>
+        <file>${container-home}/logs/${application-name}/${logs-name}-alert.log</file>
+
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>${container-home}/logs/${application-name}/${logs-name}-warn.%d{yyyy-MM-dd}.%d{HHmm,aux}.%i.log</fileNamePattern>
+            <timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.PyxExtensionSizeAndTimeBasedFNATP">
+                <rolloverOnStart>true</rolloverOnStart>
+                <maxFileSize>3000KB</maxFileSize>
+            </timeBasedFileNamingAndTriggeringPolicy>
+            <maxHistory>30</maxHistory>
+        </rollingPolicy>
+
+        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+             <pattern>%-5level %date %6relative\t {%class.%method\(%file:%line\)} [%X{namespace}.%X{sessionNum}.%X{userID}]\t [%thread]\n\t%message\n%throwable</pattern>
+        </encoder>
+    </appender>
+
+    <appender name="FileAppender-client" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${container-home}/logs/${application-name}/${logs-name}-client.log</file>
+
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>${container-home}/logs/${application-name}/${logs-name}.%d{yyyy-MM-dd}.%d{HHmm,aux}.%i.log</fileNamePattern>
+            <timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.PyxExtensionSizeAndTimeBasedFNATP">
+                <rolloverOnStart>true</rolloverOnStart>
+                <maxFileSize>3000KB</maxFileSize>
+            </timeBasedFileNamingAndTriggeringPolicy>
+            <maxHistory>30</maxHistory>
+        </rollingPolicy>
+
+        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+             <pattern>%-5level %date %6relative\t {%class.%method\(%file:%line\)} [%X{namespace}.%X{sessionNum}.%X{userID}]\t [%thread]\n\t%message\n%throwable</pattern>
+        </encoder>
+    </appender>
+
     <logger name="com.propertyvista" level="DEBUG" />
     <logger name="com.pyx4j" level="DEBUG" />
     <logger name="org.apache" level="INFO" />
     <logger name="com.mchange" level="ERROR" />
 
     <logger name="rest" level="INFO" />
+
+	<logger name="client" level="DEBUG" >
+        <appender-ref ref="FileAppender.client" />
+    </logger>
+
+    <logger name="operations-alert" level="DEBUG" >
+        <appender-ref ref="FileAppender.alert" />
+    </logger>
 
     <root level="INFO">
         <appender-ref ref="ConsoleAppender-info" />
