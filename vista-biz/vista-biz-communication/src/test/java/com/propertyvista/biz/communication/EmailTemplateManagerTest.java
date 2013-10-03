@@ -199,14 +199,14 @@ public class EmailTemplateManagerTest extends VistaDBTestBase {
         email = MessageTemplates.createApplicationStatusEmail(mainAplt, type);
         String received = email.getHtmlBody();
         assertEquals(type.toString(), expected, received);
-        log.info(type.toString() + " content: " + received);
+        log.debug(type.toString() + " content: " + received);
 
         type = EmailTemplateType.ApplicationDeclined;
         expected = getTemplateContent(type, true);
         email = MessageTemplates.createApplicationStatusEmail(mainAplt, type);
         received = email.getHtmlBody();
         assertEquals(type.toString(), expected, received);
-        log.info(type.toString() + " content: " + received);
+        log.debug(type.toString() + " content: " + received);
 
         type = EmailTemplateType.PasswordRetrievalTenant;
         expected = getTemplateContent(type, true);
@@ -214,7 +214,7 @@ public class EmailTemplateManagerTest extends VistaDBTestBase {
                 token);
         received = email.getHtmlBody();
         assertEquals(type.toString(), expected, received);
-        log.info(type.toString() + " content: " + received);
+        log.debug(type.toString() + " content: " + received);
 
         type = EmailTemplateType.PasswordRetrievalProspect;
         expected = getTemplateContent(type, true);
@@ -222,35 +222,35 @@ public class EmailTemplateManagerTest extends VistaDBTestBase {
                 token);
         received = email.getHtmlBody();
         assertEquals(type.toString(), expected, received);
-        log.info(type.toString() + " content: " + received);
+        log.debug(type.toString() + " content: " + received);
 
         type = EmailTemplateType.PasswordRetrievalCrm;
         expected = getTemplateContent(type, true);
         email = MessageTemplates.createCrmPasswordResetEmail(crmUser, token);
         received = email.getHtmlBody();
         assertEquals(type.toString(), expected, received);
-        log.info(type.toString() + " content: " + received);
+        log.debug(type.toString() + " content: " + received);
 
         type = EmailTemplateType.TenantInvitation;
         expected = getTemplateContent(type, true);
         email = MessageTemplates.createTenantInvitationEmail(mainAplt, type, token);
         received = email.getHtmlBody();
         assertEquals(type.toString(), expected, received);
-        log.info(type.toString() + " content: " + received);
+        log.debug(type.toString() + " content: " + received);
 
         type = EmailTemplateType.ApplicationCreatedApplicant;
         expected = getTemplateContent(type, true);
         email = MessageTemplates.createTenantInvitationEmail(mainAplt, type, token);
         received = email.getHtmlBody();
         assertEquals(type.toString(), expected, received);
-        log.info(type.toString() + " content: " + received);
+        log.debug(type.toString() + " content: " + received);
 
         type = EmailTemplateType.ApplicationCreatedCoApplicant;
         expected = getTemplateContent(type, true);
         email = MessageTemplates.createTenantInvitationEmail(coAplt, type, token);
         received = email.getHtmlBody();
         assertEquals(type.toString(), expected, received);
-        log.info(type.toString() + " content: " + received);
+        log.debug(type.toString() + " content: " + received);
 
         // TODO implement guarantor template test
         type = EmailTemplateType.ApplicationCreatedGuarantor;
@@ -261,7 +261,7 @@ public class EmailTemplateManagerTest extends VistaDBTestBase {
             email = MessageTemplates.createMaintenanceRequestEmail(emailType, mr);
             received = email.getHtmlBody();
             assertEquals(emailType.toString(), expected, received);
-            log.info(type.toString() + " content: " + received);
+            log.debug(type.toString() + " content: " + received);
         }
     }
 
@@ -985,7 +985,7 @@ public class EmailTemplateManagerTest extends VistaDBTestBase {
             fmt = "";
             fmtArgs = new String[] {};
         }//@formatter:on
-        log.info("format template: " + type + " (" + fmtArgs.length + " args)");
+        log.debug("format template: " + type + " (" + fmtArgs.length + " args)");
         return SimpleMessageFormat.format(fmt, fmtArgs);
     }
 

@@ -29,7 +29,7 @@
             <artifactId>vista-site-rpc</artifactId>
             <version>${project.version}</version>
         </dependency>
-        
+
         <dependency>
             <groupId>com.propertyvista</groupId>
             <artifactId>vista-portal-server</artifactId>
@@ -67,8 +67,8 @@
         </dependency>
 
         <dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>slf4j-log4j12</artifactId>
+            <groupId>ch.qos.logback</groupId>
+            <artifactId>logback-classic</artifactId>
             <scope>test</scope>
             <optional>true</optional>
         </dependency>

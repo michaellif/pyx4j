@@ -45,25 +45,6 @@
             <artifactId>pyx-site-shared</artifactId>
         </dependency>
 
-        <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
-            <scope>test</scope>
-        </dependency>
-
-        <dependency>
-            <groupId>com.pyx4j</groupId>
-            <artifactId>pyx-entity-j2se</artifactId>
-            <scope>test</scope>
-        </dependency>
-
-        <dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>slf4j-log4j12</artifactId>
-            <scope>test</scope>
-            <optional>true</optional>
-        </dependency>
-
     </dependencies>
 
     <properties>

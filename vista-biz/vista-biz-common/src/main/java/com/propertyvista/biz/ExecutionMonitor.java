@@ -24,6 +24,7 @@ import java.util.Map;
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.apache.commons.lang.builder.ToStringBuilder;
+import org.apache.commons.lang.builder.ToStringStyle;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -439,7 +440,8 @@ public class ExecutionMonitor {
     @Override
     public String toString() {
         return "Execution Monitor: "
-                + new ToStringBuilder(this).append("processedCount", processedCount).append("failedCount", failedCount).append("erredCount", erredCount);
+                + new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).append("processedCount", processedCount).append("failedCount", failedCount)
+                        .append("erredCount", erredCount);
     }
 
 }
