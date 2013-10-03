@@ -527,6 +527,11 @@ http://static.dev.birchwoodsoftwaregroup.com:8888/vista/o/wsp/yardi.starlightinv
 
     <servlet-mapping>
         <servlet-name>PublicMediaServlet</servlet-name>
+        <url-pattern>/site/media/*</url-pattern>
+    </servlet-mapping>
+    
+    <servlet-mapping>
+        <servlet-name>PublicMediaServlet</servlet-name>
         <url-pattern>/portal/media/*</url-pattern>
     </servlet-mapping>
 
