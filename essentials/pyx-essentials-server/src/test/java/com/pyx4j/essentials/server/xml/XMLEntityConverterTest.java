@@ -29,6 +29,8 @@ import javax.xml.parsers.DocumentBuilderFactory;
 
 import junit.framework.TestCase;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
 import org.xml.sax.InputSource;
 
@@ -49,6 +51,8 @@ import com.pyx4j.entity.xml.XMLEntityWriter;
 import com.pyx4j.entity.xml.XMLStringWriter;
 
 public class XMLEntityConverterTest extends TestCase {
+
+    protected static final Logger log = LoggerFactory.getLogger(XMLEntityConverterTest.class);
 
     private static Employee createData() {
         Employee employee = EntityFactory.create(Employee.class);
@@ -87,7 +91,7 @@ public class XMLEntityConverterTest extends TestCase {
 
         XMLEntityConverter.write(xml, employee);
 
-        System.out.println(xml.toString());
+        log.debug("xml {}", xml.toString());
 
         assertTrue(xml.toString().contains("<firstName>First Name</firstName>"));
     }
@@ -132,10 +136,10 @@ public class XMLEntityConverterTest extends TestCase {
         ent1.reference().set(ent11);
 
         String xml = getXML(ent1);
-        System.out.println(xml);
+        log.debug("xml {}", xml);
         Concrete2Entity ent2 = (Concrete2Entity) XMLEntityConverter.parse(getDom(xml).getDocumentElement());
 
-        System.out.println(ent2);
+        log.debug("ent2 {}", ent2);
 
         assertTrue("item1 Not Same data\n" + ent1.toString() + "\n!=\n" + ent2.toString(), EntityGraph.fullyEqual(ent1, ent2));
     }
