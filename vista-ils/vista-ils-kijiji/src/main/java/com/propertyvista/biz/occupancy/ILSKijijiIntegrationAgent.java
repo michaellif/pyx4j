@@ -25,15 +25,19 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.pyx4j.commons.LogicalDate;
+import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.config.server.SystemDateManager;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.AttachLevel;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 
+import com.propertyvista.biz.policy.PolicyFacade;
 import com.propertyvista.domain.marketing.ils.ILSProfileBuilding;
 import com.propertyvista.domain.marketing.ils.ILSProfileFloorplan;
+import com.propertyvista.domain.policy.policies.PetPolicy;
 import com.propertyvista.domain.property.asset.Floorplan;
+import com.propertyvista.domain.property.asset.FloorplanAmenity;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.property.asset.unit.occupancy.AptUnitOccupancySegment;
@@ -116,7 +120,6 @@ public class ILSKijijiIntegrationAgent {
                     || (!unit.financial()._marketRent().isNull() && fpDto.minPrice().getValue().compareTo(unit.financial()._marketRent().getValue()) > 0)) {
                 fpDto.minPrice().set(unit.financial()._marketRent());
             }
-            // TODO - need to set ILSFloorplanDTO.isFurnished() and ILSFloorplanDTO.isPetsAllowed()
         }
 
         // order by floorplan priorities and truncate if allowed size is exceeded
@@ -143,6 +146,17 @@ public class ILSKijijiIntegrationAgent {
                 list = new ArrayList<ILSFloorplanDTO>();
                 _listing.put(floorplan.building(), list);
             }
+            // check if furnished
+            EntityQueryCriteria<FloorplanAmenity> crit = EntityQueryCriteria.create(FloorplanAmenity.class);
+            crit.eq(crit.proto().floorplan(), floorplan);
+            crit.eq(crit.proto().type(), FloorplanAmenity.Type.furnished);
+            fpDto.isFurnished().setValue(Persistence.service().count(crit) > 0);
+
+            // check if pets allowed
+            PetPolicy petPolicy = ServerSideFactory.create(PolicyFacade.class).obtainEffectivePolicy(floorplan, PetPolicy.class);
+            fpDto.isPetsAllowed().setValue(petPolicy != null && petPolicy.constraints().size() > 0);
+            fpDto.isPetsAllowed().setValue(false); // TODO - dead policy? complete implementation
+
             list.add(fpDto);
         }
 
