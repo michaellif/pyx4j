@@ -20,7 +20,7 @@ import com.propertyvista.portal.web.client.ui.IWizardView;
 
 public interface GeneralCertificateUploadWizardView extends IWizardView<GeneralInsurancePolicyDTO> {
 
-    public interface GeneralCertificateUploadWizardPresenter extends WizardPresenter<GeneralInsurancePolicyDTO> {
+    public interface GeneralCertificateUploadWizardPresenter extends IWizardPresenter<GeneralInsurancePolicyDTO> {
 
     }
 

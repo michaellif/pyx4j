@@ -20,7 +20,7 @@ import com.propertyvista.portal.web.client.ui.IWizardView;
 
 public interface TenantSureOrderWizardView extends IWizardView<TenantSureInsurancePolicyDTO> {
 
-    interface TenantSureOrderWizardPersenter extends WizardPresenter<TenantSureInsurancePolicyDTO> {
+    interface TenantSureOrderWizardPersenter extends IWizardPresenter<TenantSureInsurancePolicyDTO> {
 
         void sendQuoteDetailsEmail();
 

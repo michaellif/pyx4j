@@ -33,9 +33,9 @@ import com.pyx4j.site.client.AppSite;
 
 import com.propertyvista.portal.web.client.PortalWebSite;
 import com.propertyvista.portal.web.client.ui.IWizardView;
-import com.propertyvista.portal.web.client.ui.IWizardView.WizardPresenter;
+import com.propertyvista.portal.web.client.ui.IWizardView.IWizardPresenter;
 
-public abstract class AbstractWizardActivity<E extends IEntity> extends SecurityAwareActivity implements WizardPresenter<E> {
+public abstract class AbstractWizardActivity<E extends IEntity> extends SecurityAwareActivity implements IWizardPresenter<E> {
 
     private static final I18n i18n = I18n.get(AbstractWizardActivity.class);
 

@@ -18,7 +18,7 @@ import com.pyx4j.site.client.IsView;
 
 public interface IWizardView<E extends IEntity> extends IsView {
 
-    public interface WizardPresenter<E extends IEntity> {
+    public interface IWizardPresenter<E extends IEntity> {
 
         //TODO rename to Submit
         void finish();
@@ -27,9 +27,9 @@ public interface IWizardView<E extends IEntity> extends IsView {
 
     }
 
-    void setPresenter(WizardPresenter<E> presenter);
+    void setPresenter(IWizardPresenter<E> presenter);
 
-    WizardPresenter<E> getPresenter();
+    IWizardPresenter<E> getPresenter();
 
     void populate(E value);
 

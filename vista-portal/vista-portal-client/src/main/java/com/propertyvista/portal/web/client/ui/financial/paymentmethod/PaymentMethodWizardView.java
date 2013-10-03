@@ -21,7 +21,7 @@ import com.propertyvista.portal.web.client.ui.IWizardView;
 
 public interface PaymentMethodWizardView extends IWizardView<PaymentMethodDTO> {
 
-    interface Persenter extends WizardPresenter<PaymentMethodDTO> {
+    interface Persenter extends IWizardPresenter<PaymentMethodDTO> {
 
         void getCurrentAddress(AsyncCallback<AddressSimple> callback);
     }

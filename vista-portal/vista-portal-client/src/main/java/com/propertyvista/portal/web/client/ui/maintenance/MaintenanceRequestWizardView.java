@@ -21,7 +21,7 @@ import com.propertyvista.portal.web.client.ui.IWizardView;
 
 public interface MaintenanceRequestWizardView extends IWizardView<MaintenanceRequestDTO> {
 
-    public interface MaintenanceRequestWizardPresenter extends WizardPresenter<MaintenanceRequestDTO> {
+    public interface MaintenanceRequestWizardPresenter extends IWizardPresenter<MaintenanceRequestDTO> {
         void getCategoryMeta(final AsyncCallback<MaintenanceRequestMetadata> callback);
 
     }

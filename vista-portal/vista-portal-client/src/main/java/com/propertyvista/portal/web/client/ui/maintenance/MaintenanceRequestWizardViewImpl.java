@@ -26,7 +26,7 @@ public class MaintenanceRequestWizardViewImpl extends AbstractWizardView<Mainten
     }
 
     @Override
-    public void setPresenter(WizardPresenter<MaintenanceRequestDTO> presenter) {
+    public void setPresenter(IWizardPresenter<MaintenanceRequestDTO> presenter) {
         super.setPresenter(presenter);
         if (presenter != null) {
             ((MaintenanceRequestWizardPresenter) presenter).getCategoryMeta(new DefaultAsyncCallback<MaintenanceRequestMetadata>() {

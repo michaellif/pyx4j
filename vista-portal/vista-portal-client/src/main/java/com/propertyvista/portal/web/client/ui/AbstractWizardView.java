@@ -22,7 +22,7 @@ public abstract class AbstractWizardView<E extends IEntity> extends AbstractPort
 
     private static final I18n i18n = I18n.get(AbstractWizardView.class);
 
-    private WizardPresenter<E> presenter;
+    private IWizardPresenter<E> presenter;
 
     private CPortalEntityWizard<E> wizardForm;
 
@@ -49,12 +49,12 @@ public abstract class AbstractWizardView<E extends IEntity> extends AbstractPort
     }
 
     @Override
-    public void setPresenter(WizardPresenter<E> presenter) {
+    public void setPresenter(IWizardPresenter<E> presenter) {
         this.presenter = presenter;
     }
 
     @Override
-    public WizardPresenter<E> getPresenter() {
+    public IWizardPresenter<E> getPresenter() {
         return presenter;
     }
 
