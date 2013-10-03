@@ -7,20 +7,16 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Sep 14, 2012
+ * Created on 2013-07-31
  * @author ArtyomB
  * @version $Id$
  */
-package com.propertyvista.operations.client.ui.crud.pmc;
+package com.propertyvista.operations.client.ui.crud.pmc.mercantaccount;
 
-import com.propertyvista.operations.client.ui.crud.OperationsViewerViewImplBase;
+import com.pyx4j.site.client.ui.prime.lister.ILister;
+
 import com.propertyvista.operations.rpc.dto.PmcMerchantAccountDTO;
 
-public class MerchantAccountViewerViewImpl extends OperationsViewerViewImplBase<PmcMerchantAccountDTO> implements
-        MerchantAccountViewerView {
-
-    public MerchantAccountViewerViewImpl() {
-        setForm(new MerchantAccountForm(this));
-    }
+public interface MerchantAccountListerView extends ILister<PmcMerchantAccountDTO> {
 
 }

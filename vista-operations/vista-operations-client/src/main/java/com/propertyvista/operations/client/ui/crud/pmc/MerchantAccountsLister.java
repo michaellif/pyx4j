@@ -45,13 +45,13 @@ public class MerchantAccountsLister extends EntityDataTablePanel<PmcMerchantAcco
     @Override
     protected void onItemNew() {
         if (parentPmc != null && parentPmc.getPrimaryKey() != null) {
-            AppSite.getPlaceController().goTo(new OperationsSiteMap.Management.PmcMerchantAccounts().formNewItemPlace(parentPmc.getPrimaryKey()));
+            AppSite.getPlaceController().goTo(new OperationsSiteMap.Management.PmcMerchantAccount().formNewItemPlace(parentPmc.getPrimaryKey()));
         }
     }
 
     @Override
     protected void onItemSelect(PmcMerchantAccountDTO item) {
-        AppSite.getPlaceController().goTo(new OperationsSiteMap.Management.PmcMerchantAccounts().formViewerPlace(item.getPrimaryKey()));
+        AppSite.getPlaceController().goTo(new OperationsSiteMap.Management.PmcMerchantAccount().formViewerPlace(item.getPrimaryKey()));
     }
 
 }

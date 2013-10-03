@@ -23,7 +23,7 @@ import com.pyx4j.site.rpc.CrudAppPlace;
 
 import com.propertyvista.domain.pmc.Pmc;
 import com.propertyvista.operations.client.OperationsSite;
-import com.propertyvista.operations.client.ui.crud.pmc.MerchantAccountEditorView;
+import com.propertyvista.operations.client.ui.crud.pmc.mercantaccount.MerchantAccountEditorView;
 import com.propertyvista.operations.rpc.dto.PmcMerchantAccountDTO;
 import com.propertyvista.operations.rpc.services.PmcMerchantAccountCrudService;
 

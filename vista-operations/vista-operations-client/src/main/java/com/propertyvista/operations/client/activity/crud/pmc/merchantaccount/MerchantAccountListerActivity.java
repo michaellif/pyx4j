@@ -7,27 +7,26 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Sep 14, 2012
+ * Created on 2013-07-31
  * @author ArtyomB
  * @version $Id$
  */
 package com.propertyvista.operations.client.activity.crud.pmc.merchantaccount;
 
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.place.shared.Place;
 
-import com.pyx4j.site.client.activity.AbstractViewerActivity;
-import com.pyx4j.site.rpc.CrudAppPlace;
+import com.pyx4j.site.client.activity.AbstractListerActivity;
 
 import com.propertyvista.operations.client.OperationsSite;
-import com.propertyvista.operations.client.ui.crud.pmc.mercantaccount.MerchantAccountViewerView;
+import com.propertyvista.operations.client.ui.crud.pmc.mercantaccount.MerchantAccountListerView;
 import com.propertyvista.operations.rpc.dto.PmcMerchantAccountDTO;
 import com.propertyvista.operations.rpc.services.PmcMerchantAccountCrudService;
 
-public class MerchantAccountViewerActivity extends AbstractViewerActivity<PmcMerchantAccountDTO> {
+public class MerchantAccountListerActivity extends AbstractListerActivity<PmcMerchantAccountDTO> {
 
-    public MerchantAccountViewerActivity(CrudAppPlace place) {
-        super(place, OperationsSite.getViewFactory().instantiate(MerchantAccountViewerView.class), GWT
-                .<PmcMerchantAccountCrudService> create(PmcMerchantAccountCrudService.class));
+    public MerchantAccountListerActivity(Place place) {
+        super(place, OperationsSite.getViewFactory().instantiate(MerchantAccountListerView.class), GWT
+                .<PmcMerchantAccountCrudService> create(PmcMerchantAccountCrudService.class), PmcMerchantAccountDTO.class);
     }
-
 }

@@ -57,8 +57,8 @@ public class OperationsSiteMap implements SiteMap {
         public static class EquifaxApproval extends CrudAppPlace {
         }
 
-        public static class PmcMerchantAccounts extends CrudAppPlace {
-
+        @PlaceProperties(navigLabel = "PMC Merchant Accounts")
+        public static class PmcMerchantAccount extends CrudAppPlace {
         }
 
         @PlaceProperties(navigLabel = "Triggers")

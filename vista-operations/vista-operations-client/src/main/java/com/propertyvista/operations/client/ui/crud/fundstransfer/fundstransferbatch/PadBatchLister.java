@@ -29,7 +29,9 @@ public class PadBatchLister extends AbstractLister<PadBatchDTO> {
                     
                     new MemberColumnDescriptor.Builder(proto().pmc()).build(),
                     new MemberColumnDescriptor.Builder(proto().pmc().namespace()).visible(false).build(),
+                    
                     new MemberColumnDescriptor.Builder(proto().merchantTerminalId()).build(),
+                    
                     new MemberColumnDescriptor.Builder(proto().bankId()).build(),
                     new MemberColumnDescriptor.Builder(proto().branchTransitNumber()).build(),
                     new MemberColumnDescriptor.Builder(proto().accountNumber()).build(),

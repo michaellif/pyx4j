@@ -37,6 +37,7 @@ import com.propertyvista.operations.rpc.dto.PadFileDTO;
 import com.propertyvista.operations.rpc.dto.PadReconciliationDebitRecordDTO;
 import com.propertyvista.operations.rpc.dto.PadReconciliationFileDTO;
 import com.propertyvista.operations.rpc.dto.PmcDTO;
+import com.propertyvista.operations.rpc.dto.PmcMerchantAccountDTO;
 import com.propertyvista.operations.rpc.dto.TriggerDTO;
 
 public class OperationsEntityMapper {
@@ -45,7 +46,10 @@ public class OperationsEntityMapper {
 
     public static void init() {
         register(OperationsUser.class, OperationsSiteMap.Administration.AdminUsers.class, DEFAULT_IMAGE);
+
         register(PmcDTO.class, OperationsSiteMap.Management.PMC.class, DEFAULT_IMAGE);
+        register(PmcMerchantAccountDTO.class, OperationsSiteMap.Management.PmcMerchantAccount.class, DEFAULT_IMAGE);
+
         register(TriggerDTO.class, OperationsSiteMap.Management.Trigger.class, DEFAULT_IMAGE);
         register(Run.class, OperationsSiteMap.Management.TriggerRun.class, DEFAULT_IMAGE);
         register(RunData.class, OperationsSiteMap.Management.TriggerRunData.class, DEFAULT_IMAGE);

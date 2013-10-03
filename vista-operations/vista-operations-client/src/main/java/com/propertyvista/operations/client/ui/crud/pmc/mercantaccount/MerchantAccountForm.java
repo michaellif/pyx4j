@@ -11,7 +11,7 @@
  * @author ArtyomB
  * @version $Id$
  */
-package com.propertyvista.operations.client.ui.crud.pmc;
+package com.propertyvista.operations.client.ui.crud.pmc.mercantaccount;
 
 import java.util.Arrays;
 import java.util.List;

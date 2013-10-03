@@ -53,6 +53,7 @@ import com.propertyvista.operations.client.activity.crud.pmc.PmcEditorActivity;
 import com.propertyvista.operations.client.activity.crud.pmc.PmcListerActivity;
 import com.propertyvista.operations.client.activity.crud.pmc.PmcViewerActivity;
 import com.propertyvista.operations.client.activity.crud.pmc.merchantaccount.MerchantAccountEditorActivity;
+import com.propertyvista.operations.client.activity.crud.pmc.merchantaccount.MerchantAccountListerActivity;
 import com.propertyvista.operations.client.activity.crud.pmc.merchantaccount.MerchantAccountViewerActivity;
 import com.propertyvista.operations.client.activity.crud.scheduler.RunDataListerActivity;
 import com.propertyvista.operations.client.activity.crud.scheduler.RunDataViewerActivity;
@@ -378,8 +379,11 @@ public class ContentActivityMapper implements AppActivityMapper {
                             break;
                         }
 
-                    } else if (place instanceof OperationsSiteMap.Management.PmcMerchantAccounts) {
+                    } else if (place instanceof OperationsSiteMap.Management.PmcMerchantAccount) {
                         switch (crudPlace.getType()) {
+                        case lister:
+                            activity = new MerchantAccountListerActivity(place);
+                            break;
                         case editor:
                             activity = new MerchantAccountEditorActivity((CrudAppPlace) place);
                             break;

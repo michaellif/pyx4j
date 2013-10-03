@@ -11,15 +11,12 @@
  * @author ArtyomB
  * @version $Id$
  */
-package com.propertyvista.operations.client.ui.crud.pmc;
+package com.propertyvista.operations.client.ui.crud.pmc.mercantaccount;
 
-import com.propertyvista.operations.client.ui.crud.OperationsEditorViewImplBase;
+import com.pyx4j.site.client.ui.prime.form.IEditor;
+
 import com.propertyvista.operations.rpc.dto.PmcMerchantAccountDTO;
 
-public class MerchantAccountEditorViewImpl extends OperationsEditorViewImplBase<PmcMerchantAccountDTO> implements
-        MerchantAccountEditorView {
+public interface MerchantAccountEditorView extends IEditor<PmcMerchantAccountDTO> {
 
-    public MerchantAccountEditorViewImpl() {
-        setForm(new MerchantAccountForm(this));
-    }
 }
