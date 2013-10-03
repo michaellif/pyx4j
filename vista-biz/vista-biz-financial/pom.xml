@@ -179,7 +179,7 @@
                         <include>**/FunctionalSuite.java</include>
                         <include>**/PaymentMethodPersistenceCardsTest.java</include>
                     </includes>
-                    <forkMode>always</forkMode>
+                    <reuseForks>false</reuseForks>
                 </configuration>
             </plugin>
         </plugins>
