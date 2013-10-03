@@ -104,6 +104,7 @@ class VistaBusinessStatsReport {
 
             EntityQueryCriteria<AuditRecord> criteria = EntityQueryCriteria.create(AuditRecord.class);
             criteria.ge(criteria.proto().created(), reportSince);
+            criteria.eq(criteria.proto().event(), AuditRecordEventType.Login);
             formatter.cell(Persistence.service().count(criteria));
             formatter.newRow();
         }
@@ -225,8 +226,8 @@ class VistaBusinessStatsReport {
             for (PaymentRecord record : records) {
                 amount = amount.add(record.amount().getValue());
             }
-            data.eftCount().setValue(records.size());
-            data.eftValue().setValue(amount);
+            data.directBankingCount().setValue(records.size());
+            data.directBankingValue().setValue(amount);
         }
 
         {

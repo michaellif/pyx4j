@@ -65,9 +65,9 @@ public interface VistaBusinessStatsPmcModel extends IEntity {
 
     IPrimitive<BigDecimal> eChequeValueOneTime();
 
-    IPrimitive<Integer> eftCount();
+    IPrimitive<Integer> directBankingCount();
 
-    IPrimitive<BigDecimal> eftValue();
+    IPrimitive<BigDecimal> directBankingValue();
 
     IPrimitive<Integer> interacCount();
 
