@@ -50,6 +50,7 @@ public abstract class AbstractWizardCrudActivity<E extends IEntity> extends Abst
 
     @Override
     public void start(final AcceptsOneWidget panel, final EventBus eventBus) {
+        super.start(panel, eventBus);
 
         obtainInitializationData(new DefaultAsyncCallback<AbstractCrudService.InitializationData>() {
             @Override
@@ -57,12 +58,11 @@ public abstract class AbstractWizardCrudActivity<E extends IEntity> extends Abst
                 service.init(new DefaultAsyncCallback<E>() {
                     @Override
                     public void onSuccess(E result) {
-                        AbstractWizardCrudActivity.super.start(panel, eventBus);
+                        getView().populate(result);
                     }
                 }, result);
             }
         });
-
     }
 
     public AbstractCrudService<E> getService() {
