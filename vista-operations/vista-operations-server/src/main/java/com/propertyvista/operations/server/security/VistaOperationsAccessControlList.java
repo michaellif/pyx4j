@@ -30,6 +30,7 @@ import com.propertyvista.operations.domain.legal.VistaTerms;
 import com.propertyvista.operations.domain.payment.dbp.DirectDebitRecord;
 import com.propertyvista.operations.domain.payment.dbp.simulator.DirectDebitSimFile;
 import com.propertyvista.operations.domain.payment.dbp.simulator.DirectDebitSimRecord;
+import com.propertyvista.operations.domain.payment.pad.PadBatch;
 import com.propertyvista.operations.domain.payment.pad.PadDebitRecord;
 import com.propertyvista.operations.domain.payment.pad.PadFile;
 import com.propertyvista.operations.domain.payment.pad.PadReconciliationDebitRecord;
@@ -60,6 +61,7 @@ import com.propertyvista.operations.rpc.services.ImportUploadService;
 import com.propertyvista.operations.rpc.services.MaintenanceCrudService;
 import com.propertyvista.operations.rpc.services.MerchantAccountFileUploadService;
 import com.propertyvista.operations.rpc.services.OperationsAuthenticationService;
+import com.propertyvista.operations.rpc.services.PadBatchCrudService;
 import com.propertyvista.operations.rpc.services.PadDebitRecordCrudService;
 import com.propertyvista.operations.rpc.services.PadFileCrudService;
 import com.propertyvista.operations.rpc.services.PadReconciliationDebitRecordCrudService;
@@ -163,6 +165,9 @@ public class VistaOperationsAccessControlList extends ServletContainerAclBuilder
 
         grant(VistaOperationsBehavior.SystemAdmin, new IServiceExecutePermission(PadDebitRecordCrudService.class));
         grant(VistaOperationsBehavior.SystemAdmin, new EntityPermission(PadDebitRecord.class, EntityPermission.ALL));
+
+        grant(VistaOperationsBehavior.SystemAdmin, new IServiceExecutePermission(PadBatchCrudService.class));
+        grant(VistaOperationsBehavior.SystemAdmin, new EntityPermission(PadBatch.class, EntityPermission.ALL));
 
         grant(VistaOperationsBehavior.SystemAdmin, new IServiceExecutePermission(CardServiceSimulationCardCrudService.class));
         grant(VistaOperationsBehavior.SystemAdmin, new EntityPermission(CardServiceSimulationCard.class, EntityPermission.ALL));
