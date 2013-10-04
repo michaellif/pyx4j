@@ -7,26 +7,28 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on 2013-10-02
+ * Created on 2013-10-03
  * @author ArtyomB
  * @version $Id$
  */
 package com.propertyvista.crm.client.ui.tools.n4generation;
 
-import com.pyx4j.forms.client.ui.folder.CEntityFolder;
+import com.google.gwt.user.client.ui.FlowPanel;
+import com.google.gwt.user.client.ui.IsWidget;
 
-import com.propertyvista.crm.rpc.dto.financial.autopayreview.BulkEditableEntity;
+import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
+import com.propertyvista.crm.rpc.dto.legal.n4.N4GenerationSettingsDTO;
 
-public abstract class BulkItemsFolder<Item extends BulkEditableEntity> extends CEntityFolder<Item> {
+public class N4GenerationSettingsForm extends CEntityDecoratableForm<N4GenerationSettingsDTO> {
 
-    public BulkItemsFolder(Class<Item> rowClass) {
-        super(rowClass);
-        // TODO Auto-generated constructor stub
+    public N4GenerationSettingsForm() {
+        super(N4GenerationSettingsDTO.class);
     }
 
-    public void checkAll(boolean isChecked) {
-        // TODO Auto-generated method stub
-
+    @Override
+    public IsWidget createContent() {
+        FlowPanel panel = new FlowPanel();
+        return panel;
     }
 
 }

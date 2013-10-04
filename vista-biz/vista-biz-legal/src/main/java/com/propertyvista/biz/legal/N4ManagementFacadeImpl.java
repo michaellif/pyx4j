@@ -22,6 +22,7 @@ package com.propertyvista.biz.legal;
 
 import java.math.BigDecimal;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
@@ -47,8 +48,21 @@ public class N4ManagementFacadeImpl implements N4ManagementFacade {
 
     @Override
     public List<LegalNoticeCandidate> getN4Candidates(BigDecimal minAmountOwed, List<Building> buildingIds) {
-        // TODO Auto-generated method stub
-        return null;
+        // TODO implement this
+
+        // create some mockup
+        List<LegalNoticeCandidate> candidates = new LinkedList<LegalNoticeCandidate>();
+
+        EntityQueryCriteria<Lease> criteria = EntityQueryCriteria.create(Lease.class);
+        for (Lease lease : Persistence.service().query(criteria)) {
+            LegalNoticeCandidate candidate = EntityFactory.create(LegalNoticeCandidate.class);
+            candidate.leaseId().set(lease.createIdentityStub());
+            candidate.amountOwed().setValue(new BigDecimal("555.99"));
+
+            candidates.add(candidate);
+        }
+
+        return candidates;
     }
 
     @Override

@@ -11,7 +11,7 @@
  * @author ArtyomB
  * @version $Id$
  */
-package com.propertyvista.crm.client.ui.tools.n4generation;
+package com.propertyvista.crm.client.ui.tools.n4generation.base;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -33,8 +33,8 @@ import com.pyx4j.widgets.client.dialog.MessageDialog;
 
 import com.propertyvista.crm.rpc.dto.financial.autopayreview.BulkEditableEntity;
 
-public abstract class BulkOperationToolViewImpl<Settings extends IEntity, Item extends BulkEditableEntity> extends AbstractPrimePane implements
-        BulkOperationToolView<Settings, Item>, IsView {
+public abstract class BulkOperationToolViewImpl<Settings extends IEntity, Item extends BulkEditableEntity, Holder extends BulkItemsHolder<Item>> extends
+        AbstractPrimePane implements BulkOperationToolView<Settings, Item>, IsView {
 
     public enum Styles implements IStyleName {
 
@@ -47,13 +47,15 @@ public abstract class BulkOperationToolViewImpl<Settings extends IEntity, Item e
 
     private BulkOperationToolView.Presenter presenter;
 
-    private final ItemsHolderForm<Item> itemsHolderForm;
+    private final Class<Holder> holderClass;
 
-    private Range visibleRange;
+    private final ItemsHolderForm<Item, Holder> itemsHolderForm;
 
     private final CEntityForm<Settings> settingsForm;
 
-    public BulkOperationToolViewImpl(CEntityForm<Settings> settingsForm, ItemsHolderForm<Item> itemsHolderForm) {
+    private Range visibleRange;
+
+    public BulkOperationToolViewImpl(CEntityForm<Settings> settingsForm, Class<Holder> holderClass, ItemsHolderForm<Item, Holder> itemsHolderForm) {
         FlowPanel viewPanel = new FlowPanel();
         viewPanel.getElement().getStyle().setPosition(Position.RELATIVE);
         viewPanel.setSize("100%", "100%");
@@ -77,6 +79,7 @@ public abstract class BulkOperationToolViewImpl<Settings extends IEntity, Item e
         }));
         viewPanel.add(buttonsPanel);
 
+        this.holderClass = holderClass;
         this.itemsHolderForm = itemsHolderForm;
         itemsHolderForm.setOnMoreClicked(new Command() {
             @Override
@@ -104,7 +107,7 @@ public abstract class BulkOperationToolViewImpl<Settings extends IEntity, Item e
 
     @Override
     public void setRowData(int start, int total, List<Item> items) {
-        BulkItemsHolder holder = EntityFactory.create(BulkItemsHolder.class);
+        Holder holder = createHolderEntity();
         holder.totalItemCount().setValue(total);
         holder.items().addAll(items);
 
@@ -152,6 +155,20 @@ public abstract class BulkOperationToolViewImpl<Settings extends IEntity, Item e
         return settingsForm.getValue();
     }
 
+    @Override
+    public void setLoading(boolean isLoading) {
+        itemsHolderForm.setLoading(isLoading);
+    }
+
+    @Override
+    public void showMessage(String message) {
+        MessageDialog.info(message);
+    }
+
+    private Holder createHolderEntity() {
+        return EntityFactory.create(holderClass);
+    }
+
     private void acceptMarked() {
         visibleRange = new Range(0, PAGE_INCREMENT);
 
@@ -181,16 +198,6 @@ public abstract class BulkOperationToolViewImpl<Settings extends IEntity, Item e
                 .getValue().items().size()
                 + PAGE_INCREMENT);
         this.presenter.onRangeChanged();
-    }
-
-    @Override
-    public void setLoading(boolean isLoading) {
-        itemsHolderForm.setLoading(isLoading);
-    }
-
-    @Override
-    public void showMessage(String message) {
-        MessageDialog.info(message);
     }
 
 }

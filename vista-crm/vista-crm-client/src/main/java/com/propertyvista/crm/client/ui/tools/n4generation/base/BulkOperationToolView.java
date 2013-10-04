@@ -11,7 +11,7 @@
  * @author ArtyomB
  * @version $Id$
  */
-package com.propertyvista.crm.client.ui.tools.n4generation;
+package com.propertyvista.crm.client.ui.tools.n4generation.base;
 
 import java.util.List;
 

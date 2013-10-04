@@ -11,7 +11,7 @@
  * @author ArtyomB
  * @version $Id$
  */
-package com.propertyvista.crm.client.ui.tools.n4generation;
+package com.propertyvista.crm.client.ui.tools.n4generation.base;
 
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
@@ -30,7 +30,7 @@ import com.pyx4j.widgets.client.CheckBox;
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
 import com.propertyvista.crm.rpc.dto.financial.autopayreview.BulkEditableEntity;
 
-public abstract class ItemsHolderForm<Item extends BulkEditableEntity> extends CEntityDecoratableForm<BulkItemsHolder<Item>> {
+public abstract class ItemsHolderForm<Item extends BulkEditableEntity, Holder extends BulkItemsHolder<Item>> extends CEntityDecoratableForm<Holder> {
 
     private final static I18n i18n = I18n.get(ItemsHolderForm.class);
 
@@ -58,7 +58,7 @@ public abstract class ItemsHolderForm<Item extends BulkEditableEntity> extends C
 
     private Command onMoreClicked;
 
-    public ItemsHolderForm(Class<BulkItemsHolder<Item>> klass) {
+    public ItemsHolderForm(Class<Holder> klass) {
         super(klass);
     }
 
@@ -86,7 +86,7 @@ public abstract class ItemsHolderForm<Item extends BulkEditableEntity> extends C
     }
 
     @Override
-    protected BulkItemsHolder<Item> preprocessValue(BulkItemsHolder<Item> value, boolean fireEvent, boolean populate) {
+    protected Holder preprocessValue(Holder value, boolean fireEvent, boolean populate) {
         if (isSelectAllSet) {
             for (Item item : value.items()) {
                 item.isSelected().setValue(true);
@@ -102,7 +102,7 @@ public abstract class ItemsHolderForm<Item extends BulkEditableEntity> extends C
         renderStatsPanel();
         moreButton.setVisible(!getValue().isNull() && (getValue().totalItemCount().getValue() != getValue().items().size()));
         actionsPanel.setVisible(!getValue().isNull() && getValue().totalItemCount().getValue() != 0);
-        tableHeaderPanel.setVisible(!getValue().isNull() && getValue().totalItemCount().getValue() != 0);
+//        tableHeaderPanel.setVisible(!getValue().isNull() && (!getValue().totalItemCount().isNull() && getValue().totalItemCount().getValue() != 0));
     }
 
     private FlowPanel createStatsPanel() {
