@@ -126,7 +126,7 @@
         <gae.version>${gaeVersion}</gae.version>
 
 
-        <jettyVersion>9.0.5.v20130815</jettyVersion>
+        <jettyVersion>9.0.6.v20130930</jettyVersion>
 
         <slf4jVersion>1.7.5</slf4jVersion>
 
