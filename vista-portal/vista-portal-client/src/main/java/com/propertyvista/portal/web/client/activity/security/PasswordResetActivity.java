@@ -13,20 +13,69 @@
  */
 package com.propertyvista.portal.web.client.activity.security;
 
+import com.google.gwt.activity.shared.AbstractActivity;
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.place.shared.Place;
+import com.google.gwt.user.client.rpc.AsyncCallback;
+import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
+import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.rpc.client.DefaultAsyncCallback;
+import com.pyx4j.security.client.ClientContext;
 import com.pyx4j.security.rpc.AbstractPasswordResetService;
+import com.pyx4j.security.rpc.AuthenticationResponse;
+import com.pyx4j.security.rpc.PasswordChangeRequest;
+import com.pyx4j.security.rpc.PasswordResetQuestion;
+import com.pyx4j.site.client.AppSite;
+import com.pyx4j.site.rpc.AppPlace;
+import com.pyx4j.widgets.client.dialog.MessageDialog;
 
 import com.propertyvista.common.client.ui.components.security.AbstractPasswordResetActivity;
 import com.propertyvista.common.client.ui.components.security.PasswordResetView;
 import com.propertyvista.portal.rpc.portal.services.PortalPasswordResetService;
 import com.propertyvista.portal.web.client.PortalWebSite;
 
-public class PasswordResetActivity extends AbstractPasswordResetActivity {
+public class PasswordResetActivity extends AbstractActivity implements PasswordResetView.Presenter {
+
+    private static final I18n i18n = I18n.get(AbstractPasswordResetActivity.class);
+
+    protected final PasswordResetView view;
+
+    protected final AbstractPasswordResetService service;
 
     public PasswordResetActivity(Place place) {
-        super(place, PortalWebSite.getViewFactory().instantiate(PasswordResetView.class), GWT.<AbstractPasswordResetService> create(PortalPasswordResetService.class));
+        this.view = PortalWebSite.getViewFactory().instantiate(PasswordResetView.class);
+        this.service = GWT.<AbstractPasswordResetService> create(PortalPasswordResetService.class);
+        view.setPresenter(this);
+    }
+
+    @Override
+    public void start(AcceptsOneWidget panel, EventBus eventBus) {
+        panel.setWidget(view);
+        service.obtainPasswordResetQuestion(new DefaultAsyncCallback<PasswordResetQuestion>() {
+
+            @Override
+            public void onSuccess(PasswordResetQuestion result) {
+                view.setQuestion(result);
+            }
+        });
+    }
+
+    @Override
+    public void resetPassword(PasswordChangeRequest request) {
+        AsyncCallback<AuthenticationResponse> callback = new DefaultAsyncCallback<AuthenticationResponse>() {
+            @Override
+            public void onSuccess(AuthenticationResponse result) {
+                ClientContext.authenticated(result);
+                MessageDialog.info(i18n.tr("Your password has been reset successfully!"));
+                //let AppPlaceDispatcher manage this. e.g. go to default place as defined in AppPlaceDispatcher. Or to target URL.
+                AppSite.getPlaceController().goTo(AppPlace.NOWHERE);
+            }
+        };
+
+        service.resetPassword(callback, request);
+
     }
 
 }

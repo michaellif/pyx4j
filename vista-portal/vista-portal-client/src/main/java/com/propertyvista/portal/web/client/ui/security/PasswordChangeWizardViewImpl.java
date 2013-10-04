@@ -23,12 +23,4 @@ public class PasswordChangeWizardViewImpl extends AbstractWizardView<PasswordCha
         setWizard(new PasswordChangeWizard(this));
     }
 
-//    @Override
-//    public void initialize(Key userPk) {
-//        PasswordChangeRequest newRequest = EntityFactory.create(PasswordChangeRequest.class);
-//        newRequest.userPk().setValue(userPk);
-//        form.populate(newRequest);
-//
-//    }
-
 }

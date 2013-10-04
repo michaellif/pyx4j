@@ -24,12 +24,13 @@ import com.pyx4j.forms.client.ui.RevalidationTrigger;
 import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
 import com.pyx4j.forms.client.validators.ValidationError;
-import com.pyx4j.forms.client.validators.password.DefaultPasswordStrengthRule;
 import com.pyx4j.forms.client.validators.password.PasswordStrengthValueValidator;
 import com.pyx4j.forms.client.validators.password.PasswordStrengthWidget;
 import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.security.client.ClientContext;
 import com.pyx4j.security.rpc.PasswordChangeRequest;
 
+import com.propertyvista.common.client.ui.components.security.TenantPasswordStrengthRule;
 import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
 import com.propertyvista.portal.web.client.ui.CPortalEntityWizard;
 
@@ -39,11 +40,11 @@ public class PasswordChangeWizard extends CPortalEntityWizard<PasswordChangeRequ
 
     private PasswordStrengthWidget passwordStrengthWidget;
 
-    private final DefaultPasswordStrengthRule passwordStrengthRule;
+    private final TenantPasswordStrengthRule passwordStrengthRule;
 
     public PasswordChangeWizard(PasswordChangeWizardViewImpl view) {
         super(PasswordChangeRequest.class, view, i18n.tr("Change Password"), i18n.tr("Submit"), ThemeColor.contrast3);
-        this.passwordStrengthRule = new DefaultPasswordStrengthRule();
+        this.passwordStrengthRule = new TenantPasswordStrengthRule(ClientContext.getUserVisit().getName(), ClientContext.getUserVisit().getName());
 
         addStep(createStep());
 
