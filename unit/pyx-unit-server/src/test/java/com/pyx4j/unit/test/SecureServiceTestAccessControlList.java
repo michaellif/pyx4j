@@ -23,13 +23,14 @@ package com.pyx4j.unit.test;
 import com.pyx4j.rpc.shared.IServiceExecutePermission;
 import com.pyx4j.security.server.ReflectionEnabledAclBuilder;
 import com.pyx4j.security.shared.CoreBehavior;
+import com.pyx4j.unit.test.rpc.FirstServices;
 import com.pyx4j.unit.test.rpc.SecureService;
 
 class SecureServiceTestAccessControlList extends ReflectionEnabledAclBuilder {
 
     SecureServiceTestAccessControlList() {
+        grant(new IServiceExecutePermission(FirstServices.class));
         grant(CoreBehavior.DEVELOPER, new IServiceExecutePermission(SecureService.class));
         freeze();
     }
-
 }

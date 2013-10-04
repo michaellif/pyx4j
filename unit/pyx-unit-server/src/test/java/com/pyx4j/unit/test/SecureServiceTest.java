@@ -37,6 +37,7 @@ import com.pyx4j.security.shared.SecurityViolationException;
 import com.pyx4j.security.shared.UserVisit;
 import com.pyx4j.unit.server.mock.TestLifecycle;
 import com.pyx4j.unit.test.rpc.FirstServices;
+import com.pyx4j.unit.test.rpc.SecureNonGrantedService;
 import com.pyx4j.unit.test.rpc.SecureService;
 
 public class SecureServiceTest extends TestCase {
@@ -61,7 +62,30 @@ public class SecureServiceTest extends TestCase {
         TestLifecycle.tearDown();
     }
 
-    public void testSecurity() {
+    public void testNonGrantedServiceSecurity() {
+        TestLifecycle.testSession(new UserVisit(), CoreBehavior.USER);
+        TestLifecycle.beginRequest();
+
+        SecureNonGrantedService service = LocalService.create(SecureNonGrantedService.class);
+
+        service.doEcho(new AsyncCallback<String>() {
+
+            @Override
+            public void onFailure(Throwable caught) {
+                if (!(caught instanceof SecurityViolationException)) {
+                    fail(caught.getClass() + "" + caught.getMessage());
+                }
+            }
+
+            @Override
+            public void onSuccess(String result) {
+                fail("Service called onSuccess, SecurityViolationException expected");
+            }
+        }, null);
+
+    }
+
+    public void testGrantedServiceSecurity() {
         TestLifecycle.testSession(new UserVisit(), CoreBehavior.USER);
         TestLifecycle.beginRequest();
 
@@ -78,7 +102,7 @@ public class SecureServiceTest extends TestCase {
 
             @Override
             public void onSuccess(String result) {
-                fail("Service called  onSuccess");
+                fail("Service called onSuccess, SecurityViolationException expected");
             }
         }, null);
 

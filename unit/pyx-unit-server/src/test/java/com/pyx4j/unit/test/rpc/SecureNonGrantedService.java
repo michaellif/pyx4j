@@ -1,6 +1,6 @@
 /*
  * Pyx4j framework
- * Copyright (C) 2008-2011 pyx4j.com.
+ * Copyright (C) 2008-2013 pyx4j.com.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -14,7 +14,7 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  *
- * Created on 2011-03-25
+ * Created on Oct 4, 2013
  * @author vlads
  * @version $Id$
  */
@@ -24,13 +24,8 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.rpc.shared.IService;
 
-public interface FirstServices extends IService {
-
-    public void doNow(AsyncCallback<Boolean> callback, String request);
+public interface SecureNonGrantedService extends IService {
 
     public void doEcho(AsyncCallback<String> callback, String request);
 
-    public static final String EXCEPTION_MESSAGE = "TestExceptionMessage";
-
-    public void doException(AsyncCallback<Boolean> callback, Boolean request);
 }
