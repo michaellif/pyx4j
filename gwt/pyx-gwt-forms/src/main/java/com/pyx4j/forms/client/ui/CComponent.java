@@ -106,7 +106,7 @@ public abstract class CComponent<DATA_TYPE> implements HasHandlers, HasPropertyC
 
     private IDebugId debugIdSuffix;
 
-    private String mandatoryValidationMessage = i18n.tr("this field can't be empty");
+    private String mandatoryValidationMessage = i18n.tr("This field can't be blank");
 
     private DATA_TYPE value = null;
 

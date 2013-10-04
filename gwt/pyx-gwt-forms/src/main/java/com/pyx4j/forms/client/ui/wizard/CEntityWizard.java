@@ -146,14 +146,14 @@ public class CEntityWizard<E extends IEntity> extends CEntityForm<E> {
                 wizardPanel.selectStep(index);
             }
         } else {
-            MessageDialog.error(i18n.tr("Error"), validationResults.getValidationMessage(true, true));
+            MessageDialog.error(i18n.tr("Error"), validationResults.getValidationMessage(true, true, true));
         }
     }
 
     protected final void finish() {
         if (!isValid()) {
             setUnconditionalValidationErrorRendering(true);
-            MessageDialog.error(i18n.tr("Error"), getValidationResults().getValidationMessage(true, true));
+            MessageDialog.error(i18n.tr("Error"), getValidationResults().getValidationMessage(true, true, true));
         } else {
             onFinish();
         }

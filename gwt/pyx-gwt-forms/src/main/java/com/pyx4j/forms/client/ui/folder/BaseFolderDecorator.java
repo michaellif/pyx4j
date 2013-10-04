@@ -105,7 +105,7 @@ public abstract class BaseFolderDecorator<E extends IEntity> extends FlowPanel i
                     if (folder.isUnconditionalValidationErrorRendering()) {
                         ValidationResults validationResults = folder.getValidationResults();
                         ValidationResults results = validationResults.getValidationResultsByOriginator(folder);
-                        validationMessageHolder.setHTML(results.getValidationMessage(true, false));
+                        validationMessageHolder.setHTML(results.getValidationMessage(true, true, false));
                     } else {
                         validationMessageHolder.setHTML("");
                     }

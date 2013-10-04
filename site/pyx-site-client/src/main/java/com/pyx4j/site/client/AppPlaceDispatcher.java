@@ -33,6 +33,6 @@ public interface AppPlaceDispatcher {
 
     void confirm(String message, ConfirmDecline confirmDecline);
 
-    NotificationAppPlace getUserMessagePlace(Notification notification);
+    NotificationAppPlace getNotificationPlace(Notification notification);
 
 }

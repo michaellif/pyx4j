@@ -104,7 +104,7 @@ public abstract class AppSite implements EntryPoint {
                 }
 
                 @Override
-                public NotificationAppPlace getUserMessagePlace(Notification notification) {
+                public NotificationAppPlace getNotificationPlace(Notification notification) {
                     return null;
                 }
 

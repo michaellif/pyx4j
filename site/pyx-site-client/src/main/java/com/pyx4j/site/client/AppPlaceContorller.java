@@ -77,7 +77,7 @@ public final class AppPlaceContorller extends PlaceController {
     }
 
     public void showNotification(Notification notification) {
-        sureGoTo(dispatcher.getUserMessagePlace(notification));
+        sureGoTo(dispatcher.getNotificationPlace(notification));
     }
 
     public void goTo(final AppPlace newPlace) {

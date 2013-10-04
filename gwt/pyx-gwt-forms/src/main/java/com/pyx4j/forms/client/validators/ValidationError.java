@@ -20,6 +20,8 @@
  */
 package com.pyx4j.forms.client.validators;
 
+import java.util.Locale;
+
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.i18n.shared.I18n;
 
@@ -43,21 +45,25 @@ public class ValidationError {
         this(component, message, null);
     }
 
-    public String getMessageString(boolean showLocation) {
+    public String getMessageString(boolean showFieldName, boolean showLocation) {
         StringBuilder builder = new StringBuilder();
         String title = originator.getTitle();
         if (title != null && title.isEmpty()) {
             title = null;
         }
-        if (title != null) {
-            builder.append("'");
-            if (showLocation && locationHint != null && !locationHint.isEmpty()) {
-                builder.append(locationHint).append("/");
+        if (showFieldName) {
+            if (title != null) {
+                builder.append("'");
+                if (showLocation && locationHint != null && !locationHint.isEmpty()) {
+                    builder.append(locationHint).append("/");
+                }
+                builder.append(title).append("' ").append(i18n.tr("is not valid")).append(", ");
+            } else {
+                builder.append(i18n.tr("Field is not valid")).append(", ");
             }
-            builder.append(title).append("' ").append(i18n.tr("is not valid")).append(", ").append(message);
-        } else {
-            builder.append(i18n.tr("Field is not valid")).append(", ").append(message);
+            message = uncapitalize(message);
         }
+        builder.append(message);
         return builder.toString();
     }
 
@@ -83,5 +89,19 @@ public class ValidationError {
 
     public CComponent<?> getOriginator() {
         return originator;
+    }
+
+    public static final String uncapitalize(final String originalStr) {
+        final int splitIndex = 1;
+        final String result;
+        if (originalStr.isEmpty()) {
+            result = originalStr;
+        } else {
+            final String first = originalStr.substring(0, splitIndex).toLowerCase();
+            final String rest = originalStr.substring(splitIndex);
+            final StringBuilder uncapStr = new StringBuilder(first).append(rest);
+            result = uncapStr.toString();
+        }
+        return result;
     }
 }

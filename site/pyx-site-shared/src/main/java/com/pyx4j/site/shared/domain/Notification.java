@@ -50,7 +50,7 @@ public class Notification {
 
     private String systemInfo;
 
-    public Notification(String message, NotificationType type, String title) {
+    public Notification(String message, String title, NotificationType type) {
         this.message = message;
         this.title = title;
         notificationType = type;

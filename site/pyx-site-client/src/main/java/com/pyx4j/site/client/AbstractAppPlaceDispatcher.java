@@ -95,7 +95,7 @@ public abstract class AbstractAppPlaceDispatcher implements AppPlaceDispatcher {
     protected abstract AppPlace specialForward(AppPlace newPlace);
 
     @Override
-    public NotificationAppPlace getUserMessagePlace(Notification notification) {
+    public NotificationAppPlace getNotificationPlace(Notification notification) {
         return null;
     }
 

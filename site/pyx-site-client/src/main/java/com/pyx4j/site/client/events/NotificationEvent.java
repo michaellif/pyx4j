@@ -31,8 +31,8 @@ public class NotificationEvent extends GwtEvent<NotificationHandler> {
 
     private final Notification notification;
 
-    public NotificationEvent(String message, String systemInfo, NotificationType messageType) {
-        notification = new Notification(message, messageType, null);
+    public NotificationEvent(String message, String title, String systemInfo, NotificationType messageType) {
+        notification = new Notification(message, title, messageType);
         notification.setSystemInfo(systemInfo);
     }
 

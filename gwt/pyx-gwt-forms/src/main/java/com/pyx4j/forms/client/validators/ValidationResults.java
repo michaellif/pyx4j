@@ -63,27 +63,27 @@ public class ValidationResults {
         return results;
     }
 
-    public String getValidationMessage(boolean html, boolean showLocation) {
+    public String getValidationMessage(boolean html, boolean showFieldName, boolean showLocation) {
         StringBuilder messagesBuffer = new StringBuilder();
         LoopCounter c = new LoopCounter(validationErrors);
         if (html) {
             messagesBuffer.append("<ul style='text-align:left'>");
             for (ValidationError ve : validationErrors) {
-                messagesBuffer.append("<li>").append(ve.getMessageString(showLocation)).append("</li>");
+                messagesBuffer.append("<li>").append(ve.getMessageString(showFieldName, showLocation)).append("</li>");
             }
             messagesBuffer.append("</ul>");
         } else {
             for (ValidationError ve : validationErrors) {
                 switch (c.next()) {
                 case SINGLE:
-                    messagesBuffer.append(ve.getMessageString(showLocation));
+                    messagesBuffer.append(ve.getMessageString(showFieldName, showLocation));
                     break;
                 case FIRST:
                 case ITEM:
-                    messagesBuffer.append("- ").append(ve.getMessageString(showLocation)).append(";\n");
+                    messagesBuffer.append("- ").append(ve.getMessageString(showFieldName, showLocation)).append(";\n");
                     break;
                 case LAST:
-                    messagesBuffer.append("- ").append(ve.getMessageString(showLocation));
+                    messagesBuffer.append("- ").append(ve.getMessageString(showFieldName, showLocation));
                     break;
                 }
             }
@@ -100,7 +100,7 @@ public class ValidationResults {
         }
 
         if (validationErrors.size() > 0) {
-            messagesBuffer.append(validationErrors.get(0).getMessageString(false));
+            messagesBuffer.append(validationErrors.get(0).getMessageString(true, false));
         }
 
         return messagesBuffer.toString();

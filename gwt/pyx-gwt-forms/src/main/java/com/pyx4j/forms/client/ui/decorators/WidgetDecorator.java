@@ -289,7 +289,7 @@ public class WidgetDecorator extends FlowPanel implements IDecorator<CComponent<
 
     protected void renderValidationMessage() {
         if ((this.component.isUnconditionalValidationErrorRendering() || component.isVisited()) && !component.isValid()) {
-            validationLabel.setText(component.getValidationResults().getValidationMessage(false, false));
+            validationLabel.setText(component.getValidationResults().getValidationMessage(false, false, false));
             component.asWidget().addStyleDependentName(DefaultWidgetDecoratorTheme.StyleDependent.invalid.name());
             validationLabel.setVisible(true);
         } else {

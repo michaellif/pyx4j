@@ -99,6 +99,6 @@ public abstract class AbstractVisorEditor<E extends IEntity> extends AbstractVis
     }
 
     protected void showValidationDialog() {
-        MessageDialog.error(i18n.tr("Error"), getForm().getValidationResults().getValidationMessage(true, true));
+        MessageDialog.error(i18n.tr("Error"), getForm().getValidationResults().getValidationMessage(true, true, true));
     }
 }
