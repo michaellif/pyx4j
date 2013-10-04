@@ -28,7 +28,7 @@ import com.propertyvista.portal.rpc.portal.PortalSiteMap;
 public class PortalWebSiteDispatcher extends AbstractAppPlaceDispatcher {
 
     @Override
-    public NotificationAppPlace getUserMessagePlace(Notification notification) {
+    public NotificationAppPlace getNotificationPlace(Notification notification) {
         NotificationAppPlace place = new PortalSiteMap.NotificationPlace();
         place.setNotification(notification);
         return place;

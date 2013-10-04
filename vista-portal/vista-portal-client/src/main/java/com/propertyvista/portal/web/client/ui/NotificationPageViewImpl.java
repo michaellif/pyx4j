@@ -32,6 +32,7 @@ import com.pyx4j.widgets.client.actionbar.Toolbar;
 import com.pyx4j.widgets.client.dialog.images.NotificationImages;
 
 import com.propertyvista.portal.web.client.themes.DashboardTheme;
+import com.propertyvista.portal.web.client.themes.PortalWebRootPaneTheme;
 
 public class NotificationPageViewImpl extends SimplePanel implements NotificationPageView {
 
@@ -90,17 +91,17 @@ public class NotificationPageViewImpl extends SimplePanel implements Notificatio
     }
 
     @Override
-    public void populate(Notification userMessage) {
+    public void populate(Notification notification) {
 
-        NotificationGadget notificationGadget = new NotificationGadget(this, getUserMessageImageResource(userMessage.getNotificationType()), userMessage
-                .getNotificationType().toString());
+        NotificationGadget notificationGadget = new NotificationGadget(this, getUserMessageImageResource(notification.getNotificationType()),
+                notification.getTitle());
         notificationGadget.asWidget().setWidth("100%");
         setWidget(notificationGadget);
 
-        messageLabel.setText(userMessage.getMessage());
+        messageLabel.setText(notification.getMessage());
 
         debugMessageLabel.setVisible(isDebugInfoRequired());
-        debugMessageLabel.setText(isDebugInfoRequired() & userMessage.getSystemInfo() != null ? userMessage.getSystemInfo() : "");
+        debugMessageLabel.setText(isDebugInfoRequired() & notification.getSystemInfo() != null ? notification.getSystemInfo() : "");
     }
 
     private boolean isDebugInfoRequired() {
@@ -137,6 +138,8 @@ public class NotificationPageViewImpl extends SimplePanel implements Notificatio
 
         NotificationGadget(NotificationPageViewImpl viewer, ImageResource imageResource, String title) {
             super(viewer, imageResource, title, ThemeColor.foreground, 0.3);
+
+            addStyleName(PortalWebRootPaneTheme.StyleName.NotificationGadget.name());
 
             FlowPanel viewPanel = new FlowPanel();
             viewPanel.getElement().getStyle().setTextAlign(TextAlign.CENTER);

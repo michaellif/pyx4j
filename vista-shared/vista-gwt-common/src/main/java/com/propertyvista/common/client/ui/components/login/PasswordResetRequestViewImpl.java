@@ -30,7 +30,7 @@ public class PasswordResetRequestViewImpl extends FlowPanel implements PasswordR
             public void execute() {
                 if (!form.isValid()) {
                     form.setUnconditionalValidationErrorRendering(true);
-                    throw new UserRuntimeException(form.getValidationResults().getValidationMessage(true, false));
+                    throw new UserRuntimeException(form.getValidationResults().getValidationMessage(true, true, false));
                 }
                 presenter.requestPasswordReset(form.getValue());
             }

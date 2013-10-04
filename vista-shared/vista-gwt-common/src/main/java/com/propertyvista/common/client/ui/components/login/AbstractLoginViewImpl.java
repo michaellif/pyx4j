@@ -110,6 +110,6 @@ public abstract class AbstractLoginViewImpl extends TwoColumnFlexFormPanel imple
     }
 
     protected void showValidationDialog() {
-        MessageDialog.error(i18n.tr("Error"), form.getValidationResults().getValidationMessage(true, true));
+        MessageDialog.error(i18n.tr("Error"), form.getValidationResults().getValidationMessage(true, true, true));
     }
 }

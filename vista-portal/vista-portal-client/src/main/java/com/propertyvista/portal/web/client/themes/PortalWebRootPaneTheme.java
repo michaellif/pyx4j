@@ -37,7 +37,9 @@ public class PortalWebRootPaneTheme extends Theme {
 
         ExtraGadget, ExtraGadgetItem, ExtraGadgetItemTitle,
 
-        NotificationContainer, NotificationItem, NotificationItemTitle, NotificationItemCloseButton;
+        NotificationContainer, NotificationItem, NotificationItemTitle, NotificationItemCloseButton,
+
+        NotificationGadget;
     }
 
     public static enum StyleDependent implements IStyleDependent {
@@ -50,7 +52,8 @@ public class PortalWebRootPaneTheme extends Theme {
         initMainMenuStyles();
         initFooterStyles();
         initExtraGadgetStyles();
-        initNotificationStyles();
+        initHeaderNotificationStyles();
+        initPageNotificationStyles();
         initCommunicationStyles();
 
     }
@@ -321,7 +324,7 @@ public class PortalWebRootPaneTheme extends Theme {
 
     }
 
-    private void initNotificationStyles() {
+    private void initHeaderNotificationStyles() {
         Style style = new Style(".", StyleName.NotificationContainer);
         style.addProperty("padding-top", "10px");
         style.addProperty("display", "inline-block");
@@ -373,6 +376,13 @@ public class PortalWebRootPaneTheme extends Theme {
         style.addProperty("top", "5px");
         addStyle(style);
 
+    }
+
+    private void initPageNotificationStyles() {
+        Style style = new Style(".", StyleName.NotificationGadget, " .", DashboardTheme.StyleName.GadgetBody);
+        style.addProperty("text-align", "center");
+        style.addProperty("padding-top", "20px");
+        addStyle(style);
     }
 
     @Override

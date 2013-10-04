@@ -168,7 +168,7 @@ public class MaintenanceRequestViewerViewImpl extends CrmViewerViewImplBase<Main
                 return true;
             } else {
                 content.setUnconditionalValidationErrorRendering(true);
-                MessageDialog.error(i18n.tr("Error"), content.getValidationResults().getValidationMessage(true, true));
+                MessageDialog.error(i18n.tr("Error"), content.getValidationResults().getValidationMessage(true, true, true));
                 return false;
             }
         }

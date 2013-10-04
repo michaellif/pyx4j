@@ -95,9 +95,9 @@ public class VistaUnrecoverableErrorHandler extends DefaultUnrecoverableErrorHan
 
         boolean sessionClosed = false;
 
-        String userMessage = i18n.tr("An Unexpected Error Has Occurred.") + " ";
+        String title = i18n.tr("An Unexpected Error Has Occurred.");
 
-        userMessage += i18n.tr("Please report the incident to technical support,\n" + "describing the steps taken prior to the error.\n");
+        String userMessage = i18n.tr("Please report the incident to technical support,\n" + "describing the steps taken prior to the error.\n");
 
         if (sessionClosed) {
             userMessage += "\n" + i18n.tr("This Session Has Been Terminated To Prevent Data Corruption");
@@ -107,31 +107,31 @@ public class VistaUnrecoverableErrorHandler extends DefaultUnrecoverableErrorHan
             userMessage += "\n(DEV)\n" + caught.getMessage();
         }
 
-        StringBuilder debugMessage = new StringBuilder();
+        StringBuilder systemInfo = new StringBuilder();
 
         if (!VistaDemo.isDemo() && ApplicationMode.isDevelopment()) {
-            debugMessage.append(new Date());
+            systemInfo.append(new Date());
             if (errorCode != null) {
-                debugMessage.append("ErrorCode [" + errorCode + "]");
+                systemInfo.append("ErrorCode [" + errorCode + "]");
             }
             if (caught != null) {
-                debugMessage.append("\n" + caught.getClass());
+                systemInfo.append("\n" + caught.getClass());
                 if (caught instanceof StatusCodeException) {
-                    debugMessage.append(" StatusCode: " + (((StatusCodeException) caught).getStatusCode()));
+                    systemInfo.append(" StatusCode: " + (((StatusCodeException) caught).getStatusCode()));
                 }
             }
         }
 
-        showMessage(userMessage, debugMessage.toString(), NotificationType.ERROR);
+        showMessage(userMessage, title, systemInfo.toString(), NotificationType.ERROR);
     }
 
-    protected void showMessage(String userMessage, String debugMessage, NotificationType messageType) {
-        AppSite.getEventBus().fireEvent(new NotificationEvent(userMessage, debugMessage, messageType));
+    protected void showMessage(String userMessage, String title, String systemInfo, NotificationType messageType) {
+        AppSite.getEventBus().fireEvent(new NotificationEvent(userMessage, title, systemInfo, messageType));
 
     }
 
     protected void showMessage(String userMessage, NotificationType messageType) {
-        showMessage(userMessage, null, messageType);
+        showMessage(userMessage, null, null, messageType);
     }
 
 }

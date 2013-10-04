@@ -68,11 +68,11 @@ public class WizardStepViewImpl<E extends IEntity, T extends WizardStepPresenter
     }
 
     protected void onAction() {
-        AppSite.getEventBus().fireEvent(new NotificationEvent(null, null, null));
+        AppSite.getEventBus().fireEvent(new NotificationEvent(null, null, null, null));
         if (!form.isValid()) {
             form.setUnconditionalValidationErrorRendering(true);
             Window.scrollTo(0, 0);
-            throw new UserRuntimeException(form.getValidationResults().getValidationMessage(true, false));
+            throw new UserRuntimeException(form.getValidationResults().getValidationMessage(true, true, false));
         }
 
         doAction();

@@ -64,7 +64,7 @@ public class CrmSiteAppPlaceDispatcher extends AbstractAppPlaceDispatcher {
     }
 
     @Override
-    public NotificationAppPlace getUserMessagePlace(Notification notification) {
+    public NotificationAppPlace getNotificationPlace(Notification notification) {
         NotificationAppPlace place = new CrmSiteMap.RuntimeError();
         place.setNotification(notification);
         return place;

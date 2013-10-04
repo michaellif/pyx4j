@@ -29,7 +29,7 @@ import com.propertyvista.ob.rpc.dto.OnboardingUserVisit;
 public class OnboardingAppPlaceDispatcher extends AbstractAppPlaceDispatcher {
 
     @Override
-    public NotificationAppPlace getUserMessagePlace(Notification notification) {
+    public NotificationAppPlace getNotificationPlace(Notification notification) {
         NotificationAppPlace place = new OnboardingSiteMap.RuntimeError();
         place.setNotification(notification);
         return place;

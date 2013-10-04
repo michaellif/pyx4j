@@ -91,15 +91,16 @@ public abstract class AbstractGadget<T extends IsWidget> extends AbstractPortalP
 
         public ContainerPanel() {
 
-            setStyleName(DashboardTheme.StyleName.GadgetContent.name());
+            setStyleName(DashboardTheme.StyleName.GadgetContainer.name());
             addStyleName(BlockMixin.StyleName.PortalBlock.name());
             getElement().getStyle().setProperty("borderTopWidth", "5px");
             getElement().getStyle().setProperty("borderTopColor", StyleManager.getPalette().getThemeColor(themeColor, themeVibrance));
 
             FlowPanel containerPanel = new FlowPanel();
+            containerPanel.setStyleName(DashboardTheme.StyleName.GadgetBody.name());
+
             containerPanel.setWidth("100%");
             containerPanel.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
-            containerPanel.getElement().getStyle().setTextAlign(TextAlign.LEFT);
 
             if (imageResource != null || title != null) {
                 FlowPanel headerPanel = new FlowPanel();
@@ -123,6 +124,7 @@ public abstract class AbstractGadget<T extends IsWidget> extends AbstractPortalP
             }
 
             FlowPanel contentPanel = new FlowPanel();
+            contentPanel.setStyleName(DashboardTheme.StyleName.GadgetContent.name());
             contentPanel.getElement().getStyle().setTextAlign(TextAlign.CENTER);
 
             contentHolder = new SimplePanel();

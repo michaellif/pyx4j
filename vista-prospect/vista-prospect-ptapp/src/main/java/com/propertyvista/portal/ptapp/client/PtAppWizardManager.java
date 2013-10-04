@@ -15,16 +15,12 @@ package com.propertyvista.portal.ptapp.client;
 
 import java.util.List;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.gwt.commons.UnrecoverableClientError;
-import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.security.shared.SecurityController;
 import com.pyx4j.site.client.AppSite;
@@ -40,10 +36,6 @@ import com.propertyvista.portal.rpc.ptapp.PtSiteMap;
 import com.propertyvista.portal.rpc.ptapp.services.ApplicationService;
 
 public class PtAppWizardManager {
-
-    private static final I18n i18n = I18n.get(PtAppWizardManager.class);
-
-    private final static Logger log = LoggerFactory.getLogger(PtAppWizardManager.class);
 
     private final ApplicationService applicationService = GWT.create(ApplicationService.class);
 
