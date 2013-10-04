@@ -87,7 +87,6 @@
                 <artifactId>maven-surefire-plugin</artifactId>
                 <configuration>
                     <reuseForks>true</reuseForks>
-                    <parallel>off</parallel>
                 </configuration>
             </plugin>
 
