@@ -55,7 +55,6 @@ public class UnitTestConfigurationChangeTest extends TestCase {
     static class ServerSideConfiguration1 extends ServerSideConfiguration {
         @Override
         public AclCreator getAclCreator() {
-            System.out.println("111");
             return new AccessControlList1();
         }
     }
@@ -63,7 +62,6 @@ public class UnitTestConfigurationChangeTest extends TestCase {
     static class ServerSideConfiguration2 extends ServerSideConfiguration {
         @Override
         public AclCreator getAclCreator() {
-            System.out.println("222");
             return new AccessControlList2();
         }
     }
@@ -86,5 +84,14 @@ public class UnitTestConfigurationChangeTest extends TestCase {
 
         assertTrue(SecurityController.checkPermission(new EntityPermission("EntP1", EntityPermission.READ)));
         assertFalse(SecurityController.checkPermission(new EntityPermission("EntD1", EntityPermission.READ)));
+        assertFalse(SecurityController.checkPermission(new EntityPermission("EntP2", EntityPermission.READ)));
+        assertFalse(SecurityController.checkPermission(new EntityPermission("EntD2", EntityPermission.READ)));
+
+        ServerSideConfiguration.setInstance(new ServerSideConfiguration2());
+
+        assertFalse(SecurityController.checkPermission(new EntityPermission("EntP1", EntityPermission.READ)));
+        assertFalse(SecurityController.checkPermission(new EntityPermission("EntD1", EntityPermission.READ)));
+        assertTrue(SecurityController.checkPermission(new EntityPermission("EntP2", EntityPermission.READ)));
+        assertFalse(SecurityController.checkPermission(new EntityPermission("EntD2", EntityPermission.READ)));
     }
 }
