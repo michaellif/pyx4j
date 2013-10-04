@@ -27,6 +27,8 @@ import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.biz.policy.PolicyFacade;
+import com.propertyvista.domain.maintenance.MaintenanceRequestStatus.StatusPhase;
+import com.propertyvista.domain.moveinwizardmockup.TimeSegmentDTO.Status;
 import com.propertyvista.domain.policy.policies.TenantInsurancePolicy;
 import com.propertyvista.domain.tenant.insurance.InsuranceCertificate;
 import com.propertyvista.domain.tenant.insurance.PropertyVistaIntegratedInsurance;
@@ -35,6 +37,7 @@ import com.propertyvista.domain.tenant.lease.Tenant;
 import com.propertyvista.portal.rpc.portal.web.dto.insurance.status.GeneralInsuranceCertificateSummaryDTO;
 import com.propertyvista.portal.rpc.portal.web.dto.insurance.status.InsuranceCertificateSummaryDTO;
 import com.propertyvista.portal.rpc.portal.web.dto.insurance.status.InsuranceStatusDTO;
+import com.propertyvista.portal.rpc.portal.web.dto.insurance.status.TenantSureCertificateSummaryDTO;
 
 public class TenantInsuranceFacadeImpl implements TenantInsuranceFacade {
 
@@ -94,6 +97,14 @@ public class TenantInsuranceFacadeImpl implements TenantInsuranceFacade {
             certificateSummaryDTO.expiryDate().setValue(certificate.expiryDate().getValue());
 
             insuranceStatusDTO.certificates().add(certificateSummaryDTO);
+        }
+
+        if (insuranceStatusDTO.certificates().size() == 0) {
+            insuranceStatusDTO.status().setValue(InsuranceStatusDTO.Status.noInsurance);
+        } else if (insuranceStatusDTO.certificates().get(0) instanceof TenantSureCertificateSummaryDTO) {
+            insuranceStatusDTO.status().setValue(InsuranceStatusDTO.Status.hasTenantSure);
+        } else {
+            insuranceStatusDTO.status().setValue(InsuranceStatusDTO.Status.hasOtherInsurance);
         }
 
         return insuranceStatusDTO;
