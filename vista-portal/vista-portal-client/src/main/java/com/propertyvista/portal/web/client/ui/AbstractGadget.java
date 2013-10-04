@@ -43,21 +43,24 @@ public abstract class AbstractGadget<T extends IsWidget> extends AbstractPortalP
 
     private ThemeColor themeColor;
 
+    private double themeVibrance;
+
     private T view;
 
-    public AbstractGadget(T view, ImageResource imageResource, String title, ThemeColor themeColor) {
+    public AbstractGadget(T view, ImageResource imageResource, String title, ThemeColor themeColor, double themeVibrance) {
         this.view = view;
         this.imageResource = imageResource;
         this.title = title;
         this.themeColor = themeColor;
+        this.themeVibrance = themeVibrance;
         setStyleName(DashboardTheme.StyleName.Gadget.name());
 
         containerPanel = new ContainerPanel();
         setWidget(containerPanel);
     }
 
-    public AbstractGadget(T viewer, ThemeColor themeColor) {
-        this(viewer, null, null, themeColor);
+    public AbstractGadget(T viewer, ThemeColor themeColor, double themeVibrance) {
+        this(viewer, null, null, themeColor, themeVibrance);
     }
 
     public T getGadgetView() {
@@ -91,7 +94,7 @@ public abstract class AbstractGadget<T extends IsWidget> extends AbstractPortalP
             setStyleName(DashboardTheme.StyleName.GadgetContent.name());
             addStyleName(BlockMixin.StyleName.PortalBlock.name());
             getElement().getStyle().setProperty("borderTopWidth", "5px");
-            getElement().getStyle().setProperty("borderTopColor", StyleManager.getPalette().getThemeColor(themeColor, 1));
+            getElement().getStyle().setProperty("borderTopColor", StyleManager.getPalette().getThemeColor(themeColor, themeVibrance));
 
             FlowPanel containerPanel = new FlowPanel();
             containerPanel.setWidth("100%");

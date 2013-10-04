@@ -41,7 +41,7 @@ public class BillingSummaryGadget extends AbstractGadget<MainDashboardViewImpl> 
     private final BillingViewer billingViewer;
 
     BillingSummaryGadget(MainDashboardViewImpl viewer) {
-        super(viewer, PortalImages.INSTANCE.billingIcon(), i18n.tr("My Billing Summary"), ThemeColor.contrast4);
+        super(viewer, PortalImages.INSTANCE.billingIcon(), i18n.tr("My Billing Summary"), ThemeColor.contrast4, 1);
         setActionsToolbar(new BillingToolbar());
 
         billingViewer = new BillingViewer();

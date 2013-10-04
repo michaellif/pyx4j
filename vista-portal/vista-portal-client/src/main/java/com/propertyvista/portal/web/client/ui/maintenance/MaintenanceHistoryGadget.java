@@ -38,7 +38,7 @@ public class MaintenanceHistoryGadget extends AbstractGadget<MaintenanceDashboar
     private final ClosedMaintenanceRequestsViewer closedMaintenanceRequestsViewer;
 
     MaintenanceHistoryGadget(MaintenanceDashboardViewImpl view) {
-        super(view, PortalImages.INSTANCE.maintenanceIcon(), i18n.tr("Maintenance History"), ThemeColor.contrast5);
+        super(view, PortalImages.INSTANCE.maintenanceIcon(), i18n.tr("Maintenance History"), ThemeColor.contrast5, 1);
 
         closedMaintenanceRequestsViewer = new ClosedMaintenanceRequestsViewer();
         closedMaintenanceRequestsViewer.setViewable(true);

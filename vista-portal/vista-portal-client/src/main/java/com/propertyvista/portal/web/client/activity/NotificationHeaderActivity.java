@@ -27,7 +27,6 @@ import com.pyx4j.site.client.events.NotificationHandler;
 import com.pyx4j.site.client.ui.layout.responsive.LayoutChangeRequestEvent;
 import com.pyx4j.site.client.ui.layout.responsive.LayoutChangeRequestEvent.ChangeType;
 import com.pyx4j.site.shared.domain.Notification;
-import com.pyx4j.site.shared.domain.Notification.NotificationType;
 
 import com.propertyvista.portal.web.client.PortalWebSite;
 import com.propertyvista.portal.web.client.ui.NotificationHeaderView;
@@ -41,8 +40,8 @@ public class NotificationHeaderActivity extends AbstractActivity implements Noti
 
     static {
         notifications = new ArrayList<Notification>();
-        notifications.add(new Notification("Error Message goes here", NotificationType.ERROR, "Error Notification"));
-        notifications.add(new Notification("Info Message goes here", NotificationType.INFO, "Info Notification"));
+//        notifications.add(new Notification("Error Message goes here", NotificationType.ERROR, "Error Notification"));
+//        notifications.add(new Notification("Info Message goes here", NotificationType.INFO, "Info Notification"));
 //        notifications.add(new Notification("Warn Message goes here", NotificationType.WARN, "Warn Notification"));
 //        notifications.add(new Notification("Confirm Message goes here", NotificationType.CONFIRM, "Confirm Notification"));
 

@@ -42,7 +42,7 @@ public class InsuranceGadget extends AbstractGadget<MainDashboardViewImpl> {
     private final NavigationBar navigationBar;
 
     InsuranceGadget(MainDashboardViewImpl form) {
-        super(form, PortalImages.INSTANCE.residentServicesIcon(), i18n.tr("Tenant Insurance"), ThemeColor.contrast3);
+        super(form, PortalImages.INSTANCE.residentServicesIcon(), i18n.tr("Tenant Insurance"), ThemeColor.contrast3, 1);
 
         insuranceViewer = new InsuranceStatusViewer();
         insuranceViewer.setViewable(true);

@@ -54,7 +54,7 @@ public class AutoPayAgreementsGadget extends AbstractGadget<FinancialDashboardVi
     private final AutoPaysView view;
 
     AutoPayAgreementsGadget(FinancialDashboardViewImpl dashboardView) {
-        super(dashboardView, PortalImages.INSTANCE.billingIcon(), i18n.tr("Auto Pay Agreements"), ThemeColor.contrast4);
+        super(dashboardView, PortalImages.INSTANCE.billingIcon(), i18n.tr("Auto Pay Agreements"), ThemeColor.contrast4, 1);
         setActionsToolbar(new AutoPayAgreementsToolbar());
 
         view = new AutoPaysView();

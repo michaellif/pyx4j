@@ -47,7 +47,7 @@ public class LatestActivitiesGadget extends AbstractGadget<FinancialDashboardVie
     private final LatestActivitiesView view;
 
     LatestActivitiesGadget(FinancialDashboardViewImpl form) {
-        super(form, PortalImages.INSTANCE.billingIcon(), i18n.tr("Latest Activities"), ThemeColor.contrast4);
+        super(form, PortalImages.INSTANCE.billingIcon(), i18n.tr("Latest Activities"), ThemeColor.contrast4, 1);
 
         view = new LatestActivitiesView();
         view.setViewable(true);

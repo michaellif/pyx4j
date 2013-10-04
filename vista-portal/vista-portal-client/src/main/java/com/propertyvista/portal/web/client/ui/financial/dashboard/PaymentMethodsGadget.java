@@ -51,7 +51,7 @@ public class PaymentMethodsGadget extends AbstractGadget<FinancialDashboardViewI
     private final PaymentMethodsView view;
 
     PaymentMethodsGadget(FinancialDashboardViewImpl form) {
-        super(form, PortalImages.INSTANCE.billingIcon(), i18n.tr("Payment Methods"), ThemeColor.contrast4);
+        super(form, PortalImages.INSTANCE.billingIcon(), i18n.tr("Payment Methods"), ThemeColor.contrast4, 1);
         setActionsToolbar(new PaymentMethodsToolbar());
 
         view = new PaymentMethodsView();

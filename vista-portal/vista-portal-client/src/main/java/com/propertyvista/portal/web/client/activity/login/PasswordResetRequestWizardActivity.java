@@ -26,8 +26,11 @@ import com.pyx4j.security.rpc.AuthenticationService;
 import com.pyx4j.security.rpc.PasswordRetrievalRequest;
 import com.pyx4j.widgets.client.CaptchaComposite;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
+import com.pyx4j.site.shared.domain.Notification;
+import com.pyx4j.site.shared.domain.Notification.NotificationType;
 
 import com.propertyvista.portal.rpc.portal.web.services.PortalAuthenticationService;
+import com.propertyvista.portal.web.client.PortalWebSite;
 import com.propertyvista.portal.web.client.activity.AbstractWizardActivity;
 import com.propertyvista.portal.web.client.ui.landing.PasswordResetRequestWizardView;
 import com.propertyvista.portal.web.client.ui.landing.PasswordResetRequestWizardView.PasswordResetRequestWizardPresenter;
@@ -53,12 +56,15 @@ public class PasswordResetRequestWizardActivity extends AbstractWizardActivity<P
             @Override
             public void onSuccess(VoidSerializable result) {
                 PasswordResetRequestWizardActivity.super.finish();
-                MessageDialog.info(i18n.tr("A link to the password reset page was sent to your email"));
+                Notification message = new Notification(i18n.tr("A link to the password reset page was sent to your email"), NotificationType.INFO,
+                        i18n.tr("Password Reset"));
+                PortalWebSite.getPlaceController().showNotification(message);
             }
 
             @Override
             public void onFailure(Throwable caught) {
                 createNewCaptchaChallenge();
+                MessageDialog.info(caught.getLocalizedMessage());
             }
         }, getView().getValue());
     }

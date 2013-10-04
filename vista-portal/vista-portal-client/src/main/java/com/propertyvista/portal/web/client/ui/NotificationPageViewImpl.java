@@ -136,7 +136,7 @@ public class NotificationPageViewImpl extends SimplePanel implements Notificatio
     class NotificationGadget extends AbstractGadget<NotificationPageViewImpl> {
 
         NotificationGadget(NotificationPageViewImpl viewer, ImageResource imageResource, String title) {
-            super(viewer, imageResource, title, ThemeColor.foreground);
+            super(viewer, imageResource, title, ThemeColor.foreground, 0.3);
 
             FlowPanel viewPanel = new FlowPanel();
             viewPanel.getElement().getStyle().setTextAlign(TextAlign.CENTER);
@@ -164,7 +164,7 @@ public class NotificationPageViewImpl extends SimplePanel implements Notificatio
                         presenter.acceptMessage();
                     }
                 });
-                okButton.getElement().getStyle().setProperty("background", StyleManager.getPalette().getThemeColor(ThemeColor.foreground, 1));
+                okButton.getElement().getStyle().setProperty("background", StyleManager.getPalette().getThemeColor(ThemeColor.foreground, 0.4));
                 add(okButton);
 
             }

@@ -48,7 +48,7 @@ public class InsuranceGadget extends AbstractGadget<ServicesDashboardViewImpl> {
     private final InsuranceToolbar toolbar;
 
     InsuranceGadget(ServicesDashboardViewImpl view) {
-        super(view, PortalImages.INSTANCE.residentServicesIcon(), i18n.tr("Tenant Insurance"), ThemeColor.contrast3);
+        super(view, PortalImages.INSTANCE.residentServicesIcon(), i18n.tr("Tenant Insurance"), ThemeColor.contrast3, 1);
 
         insuranceViewer = new InsuranceStatusViewer();
         insuranceViewer.setViewable(true);

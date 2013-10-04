@@ -42,7 +42,7 @@ public class ProfileGadget extends AbstractGadget<MainDashboardViewImpl> {
     private final AddressPanel addressPanel;
 
     ProfileGadget(MainDashboardViewImpl form) {
-        super(form, ThemeColor.contrast2);
+        super(form, ThemeColor.contrast2, 1);
         asWidget().setStyleName(DashboardTheme.StyleName.Gadget.name());
 
         FlowPanel contentPanel = new FlowPanel();

@@ -37,7 +37,7 @@ public class MaintenanceGadget extends AbstractGadget<MainDashboardViewImpl> {
     private final NavigationBar navigationBar;
 
     MaintenanceGadget(MainDashboardViewImpl form) {
-        super(form, PortalImages.INSTANCE.maintenanceIcon(), i18n.tr("My Maintenance Requests"), ThemeColor.contrast5);
+        super(form, PortalImages.INSTANCE.maintenanceIcon(), i18n.tr("My Maintenance Requests"), ThemeColor.contrast5, 1);
         setActionsToolbar(new MaintenanceToolbar() {
 
             @Override

@@ -40,7 +40,7 @@ public class OpenMaintenanceRequestsGadget extends AbstractGadget<MaintenanceDas
     private final MaintenanceToolbar toolbar;
 
     OpenMaintenanceRequestsGadget(MaintenanceDashboardViewImpl view) {
-        super(view, PortalImages.INSTANCE.maintenanceIcon(), i18n.tr("Open Maintenance Requests"), ThemeColor.contrast5);
+        super(view, PortalImages.INSTANCE.maintenanceIcon(), i18n.tr("Open Maintenance Requests"), ThemeColor.contrast5, 1);
 
         openMaintenanceRequestsViewer = new OpenMaintenanceRequestsViewer();
         openMaintenanceRequestsViewer.setViewable(true);

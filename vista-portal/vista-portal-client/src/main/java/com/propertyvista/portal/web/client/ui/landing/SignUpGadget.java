@@ -42,7 +42,7 @@ public class SignUpGadget extends AbstractGadget<LandingViewImpl> {
     private final Image manageRequestsImage;
 
     SignUpGadget(LandingViewImpl view) {
-        super(view, null, i18n.tr("New Users"), ThemeColor.contrast3);
+        super(view, null, i18n.tr("New Users"), ThemeColor.contrast3, 1);
         setActionsToolbar(new SignUpToolbar());
 
         FlowPanel contentPanel = new FlowPanel();
