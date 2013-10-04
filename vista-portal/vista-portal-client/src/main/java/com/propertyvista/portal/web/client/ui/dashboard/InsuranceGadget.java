@@ -29,6 +29,7 @@ import com.propertyvista.portal.rpc.portal.PortalSiteMap;
 import com.propertyvista.portal.rpc.portal.web.dto.insurance.status.InsuranceStatusDTO;
 import com.propertyvista.portal.web.client.resources.PortalImages;
 import com.propertyvista.portal.web.client.ui.AbstractGadget;
+import com.propertyvista.portal.web.client.ui.services.dashboard.InsuranceGadgetMessages;
 import com.propertyvista.portal.web.client.ui.services.dashboard.InsuranceToolbar;
 
 public class InsuranceGadget extends AbstractGadget<MainDashboardViewImpl> {
@@ -128,14 +129,15 @@ public class InsuranceGadget extends AbstractGadget<MainDashboardViewImpl> {
 
             switch (getValue().status().getValue()) {
             case noInsurance:
-                message.setHTML("<b>" + InsuranceStatusDTO.noInsuranceStatusMessage + "</b><br/>" + InsuranceStatusDTO.noInsuranceTenantSureInvitation);
+                message.setHTML("<b>" + InsuranceGadgetMessages.noInsuranceStatusMessage + "</b><br/>"
+                        + InsuranceGadgetMessages.noInsuranceTenantSureInvitation);
                 break;
             case hasOtherInsurance:
-                message.setHTML(SimpleMessageFormat.format(InsuranceStatusDTO.hasInsuranceStatusMessage, getValue().coverageExpiryDate().getValue()) + "<br/>"
-                        + InsuranceStatusDTO.otherInsuranceTenantSureInvitation);
+                message.setHTML(SimpleMessageFormat.format(InsuranceGadgetMessages.hasInsuranceStatusMessage, getValue().coverageExpiryDate().getValue())
+                        + "<br/>" + InsuranceGadgetMessages.otherInsuranceTenantSureInvitation);
                 break;
             case hasTenantSure:
-                message.setText(SimpleMessageFormat.format(InsuranceStatusDTO.hasInsuranceStatusMessage, getValue().coverageExpiryDate().getValue()));
+                message.setText(SimpleMessageFormat.format(InsuranceGadgetMessages.hasInsuranceStatusMessage, getValue().coverageExpiryDate().getValue()));
                 break;
             }
 

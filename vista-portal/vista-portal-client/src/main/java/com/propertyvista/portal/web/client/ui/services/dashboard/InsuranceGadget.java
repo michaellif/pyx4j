@@ -27,10 +27,12 @@ import com.pyx4j.forms.client.ui.folder.BoxFolderItemDecorator;
 import com.pyx4j.forms.client.ui.folder.IFolderItemDecorator;
 import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.site.client.AppSite;
 import com.pyx4j.widgets.client.Anchor;
 import com.pyx4j.widgets.client.Label;
 
 import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
+import com.propertyvista.portal.rpc.portal.PortalSiteMap;
 import com.propertyvista.portal.rpc.portal.web.dto.insurance.status.InsuranceCertificateSummaryDTO;
 import com.propertyvista.portal.rpc.portal.web.dto.insurance.status.InsuranceStatusDTO;
 import com.propertyvista.portal.web.client.resources.PortalImages;
@@ -106,11 +108,12 @@ public class InsuranceGadget extends AbstractGadget<ServicesDashboardViewImpl> {
 
             switch (getValue().status().getValue()) {
             case noInsurance:
-                message.setHTML("<b>" + InsuranceStatusDTO.noInsuranceStatusMessage + "</b><br/>" + InsuranceStatusDTO.noInsuranceTenantSureInvitation);
+                message.setHTML("<b>" + InsuranceGadgetMessages.noInsuranceStatusMessage + "</b><br/>"
+                        + InsuranceGadgetMessages.noInsuranceTenantSureInvitation);
                 break;
             case hasOtherInsurance:
-                message.setHTML(SimpleMessageFormat.format(InsuranceStatusDTO.hasInsuranceStatusMessage, getValue().coverageExpiryDate().getValue()) + "<br/>"
-                        + InsuranceStatusDTO.otherInsuranceTenantSureInvitation);
+                message.setHTML(SimpleMessageFormat.format(InsuranceGadgetMessages.hasInsuranceStatusMessage, getValue().coverageExpiryDate().getValue())
+                        + "<br/>" + InsuranceGadgetMessages.otherInsuranceTenantSureInvitation);
                 break;
             case hasTenantSure:
                 break;
@@ -154,12 +157,6 @@ public class InsuranceGadget extends AbstractGadget<ServicesDashboardViewImpl> {
             }
 
             @Override
-            protected void onValueSet(boolean populate) {
-                System.out.println("+++++++++onValueSet" + getValue().getPrimaryKey());
-                super.onValueSet(populate);
-            }
-
-            @Override
             public IsWidget createContent() {
                 BasicFlexFormPanel content = new BasicFlexFormPanel();
                 int row = -1;
@@ -174,7 +171,8 @@ public class InsuranceGadget extends AbstractGadget<ServicesDashboardViewImpl> {
 
                     @Override
                     public void execute() {
-                        System.out.println("+++++++++View Details" + getValue().getPrimaryKey());
+                        AppSite.getPlaceController().goTo(
+                                new PortalSiteMap.Resident.ResidentServices.TenantInsurance.GeneralCertificatePage().formPlace(getValue().getPrimaryKey()));
                     }
                 });
                 detailsAnchor.getElement().getStyle().setMarginTop(30, Unit.PX);
