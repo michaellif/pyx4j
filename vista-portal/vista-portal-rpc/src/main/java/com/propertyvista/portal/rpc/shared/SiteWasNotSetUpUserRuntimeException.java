@@ -15,6 +15,9 @@ package com.propertyvista.portal.rpc.shared;
 
 import com.pyx4j.rpc.shared.ContainerHandledUserRuntimeException;
 
+/**
+ * N.B. this class is referenced in web.xml text file. exit xml when refactoring.
+ */
 public class SiteWasNotSetUpUserRuntimeException extends ContainerHandledUserRuntimeException {
 
     private static final long serialVersionUID = 1L;
