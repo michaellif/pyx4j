@@ -7,20 +7,20 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on 2011-02-20
- * @author Vlad
+ * Created on Jan 24, 2012
+ * @author ArtyomB
  * @version $Id$
  */
 package com.propertyvista.portal.web.client.ui.security;
 
 import com.pyx4j.security.rpc.PasswordChangeRequest;
 
-import com.propertyvista.portal.web.client.ui.IWizardView;
+import com.propertyvista.portal.web.client.ui.AbstractWizardView;
 
-public interface PasswordResetWizardView extends IWizardView<PasswordChangeRequest> {
+public class PasswordResetWizardViewImpl extends AbstractWizardView<PasswordChangeRequest> implements PasswordResetWizardView {
 
-    public interface PasswordResetWizardPresenter {
-
+    public PasswordResetWizardViewImpl() {
+        setWizard(new PasswordResetWizard(this));
     }
 
 }

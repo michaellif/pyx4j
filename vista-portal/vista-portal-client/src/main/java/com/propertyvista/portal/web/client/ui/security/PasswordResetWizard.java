@@ -13,8 +13,6 @@
  */
 package com.propertyvista.portal.web.client.ui.security;
 
-import com.google.gwt.dom.client.Style.Unit;
-
 import com.pyx4j.commons.css.ThemeColor;
 import com.pyx4j.forms.client.events.NValueChangeEvent;
 import com.pyx4j.forms.client.events.NValueChangeHandler;
@@ -34,15 +32,15 @@ import com.propertyvista.common.client.ui.components.security.TenantPasswordStre
 import com.propertyvista.portal.web.client.ui.CPortalEntityWizard;
 import com.propertyvista.portal.web.client.ui.util.decorators.FormDecoratorBuilder;
 
-public class PasswordChangeWizard extends CPortalEntityWizard<PasswordChangeRequest> {
+public class PasswordResetWizard extends CPortalEntityWizard<PasswordChangeRequest> {
 
-    private final static I18n i18n = I18n.get(PasswordChangeWizard.class);
+    private final static I18n i18n = I18n.get(PasswordResetWizard.class);
 
     private PasswordStrengthWidget passwordStrengthWidget;
 
     private final TenantPasswordStrengthRule passwordStrengthRule;
 
-    public PasswordChangeWizard(PasswordChangeWizardViewImpl view) {
+    public PasswordResetWizard(PasswordResetWizardViewImpl view) {
         super(PasswordChangeRequest.class, view, i18n.tr("Change Password"), i18n.tr("Submit"), ThemeColor.contrast3);
         this.passwordStrengthRule = new TenantPasswordStrengthRule(ClientContext.getUserVisit().getName(), ClientContext.getUserVisit().getName());
 
@@ -55,9 +53,6 @@ public class PasswordChangeWizard extends CPortalEntityWizard<PasswordChangeRequ
         BasicFlexFormPanel mainPanel = new BasicFlexFormPanel();
 
         int row = -1;
-
-        mainPanel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().currentPassword())).build());
-        mainPanel.setBR(++row, 0, 1);
 
         passwordStrengthWidget = new PasswordStrengthWidget(passwordStrengthRule);
         mainPanel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().newPassword())).assistantWidget(passwordStrengthWidget).build());

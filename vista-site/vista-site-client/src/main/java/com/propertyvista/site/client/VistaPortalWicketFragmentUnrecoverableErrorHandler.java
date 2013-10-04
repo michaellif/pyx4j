@@ -26,7 +26,7 @@ public class VistaPortalWicketFragmentUnrecoverableErrorHandler extends VistaUnr
     }
 
     @Override
-    protected void showMessage(String userMessage, String debugMessage, NotificationType messageType) {
+    protected void showMessage(String userMessage, String title, String systemInfo, NotificationType messageType) {
         Window.alert(userMessage);
     }
 

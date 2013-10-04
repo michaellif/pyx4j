@@ -48,6 +48,9 @@ public class PortalSiteMap implements SiteMap {
     /** This is the place wher user gets redirected to change lost/forgotten password via email (from LoginWithToken) */
     @PlaceProperties(caption = "Reset Password")
     public static class PasswordReset extends AppPlace implements PublicPlace {
+        {
+            setStable(false);
+        }
     }
 
     @PlaceProperties(caption = "Resident Registration")

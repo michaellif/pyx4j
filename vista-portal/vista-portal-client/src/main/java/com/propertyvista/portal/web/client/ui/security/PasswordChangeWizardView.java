@@ -13,7 +13,6 @@
  */
 package com.propertyvista.portal.web.client.ui.security;
 
-import com.pyx4j.forms.client.validators.password.PasswordStrengthRule;
 import com.pyx4j.security.rpc.PasswordChangeRequest;
 
 import com.propertyvista.portal.web.client.ui.IWizardView;
