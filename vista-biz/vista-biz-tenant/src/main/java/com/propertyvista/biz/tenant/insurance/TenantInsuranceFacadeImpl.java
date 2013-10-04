@@ -27,8 +27,6 @@ import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.biz.policy.PolicyFacade;
-import com.propertyvista.domain.maintenance.MaintenanceRequestStatus.StatusPhase;
-import com.propertyvista.domain.moveinwizardmockup.TimeSegmentDTO.Status;
 import com.propertyvista.domain.policy.policies.TenantInsurancePolicy;
 import com.propertyvista.domain.tenant.insurance.InsuranceCertificate;
 import com.propertyvista.domain.tenant.insurance.PropertyVistaIntegratedInsurance;
@@ -80,18 +78,17 @@ public class TenantInsuranceFacadeImpl implements TenantInsuranceFacade {
         insuranceStatusDTO.minimumRequiredLiability().setValue(tenantInsurancePolicy.minimumRequiredLiability().getValue());
 
         for (InsuranceCertificate<?> certificate : getInsuranceCertificates(tenantId, false)) {
-            InsuranceCertificateSummaryDTO certificateSummaryDTO = EntityFactory.create(InsuranceCertificateSummaryDTO.class);
-
-            certificateSummaryDTO.setPrimaryKey(certificate.getPrimaryKey());
+            InsuranceCertificateSummaryDTO certificateSummaryDTO = null;
 
             if (certificate instanceof PropertyVistaIntegratedInsurance) {
                 // TODO currently TenantSure is the only integrated provider so we don't try to understand which one it is
                 certificateSummaryDTO = ServerSideFactory.create(TenantSureFacade.class).getStatus(tenantId);
             } else {
-
                 GeneralInsuranceCertificateSummaryDTO otherProviderStatus = EntityFactory.create(GeneralInsuranceCertificateSummaryDTO.class);
                 certificateSummaryDTO = otherProviderStatus;
             }
+            certificateSummaryDTO.setPrimaryKey(certificate.getPrimaryKey());
+
             certificateSummaryDTO.insuranceProvider().setValue(certificate.insuranceProvider().getValue());
             certificateSummaryDTO.isOwner().setValue(certificate.insurancePolicy().tenant().getPrimaryKey().equals(tenantId.getPrimaryKey()));
 
@@ -103,10 +100,15 @@ public class TenantInsuranceFacadeImpl implements TenantInsuranceFacade {
 
         if (insuranceStatusDTO.certificates().size() == 0) {
             insuranceStatusDTO.status().setValue(InsuranceStatusDTO.Status.noInsurance);
-        } else if (insuranceStatusDTO.certificates().get(0) instanceof TenantSureCertificateSummaryDTO) {
-            insuranceStatusDTO.status().setValue(InsuranceStatusDTO.Status.hasTenantSure);
         } else {
             insuranceStatusDTO.status().setValue(InsuranceStatusDTO.Status.hasOtherInsurance);
+            for (InsuranceCertificateSummaryDTO c : insuranceStatusDTO.certificates()) {
+                if (insuranceStatusDTO.certificates().get(0) instanceof TenantSureCertificateSummaryDTO) {
+                    insuranceStatusDTO.status().setValue(InsuranceStatusDTO.Status.hasTenantSure);
+                    break;
+                }
+            }
+
         }
 
         return insuranceStatusDTO;
