@@ -33,7 +33,6 @@ import com.propertyvista.crm.client.ui.crud.settings.financial.tax.TaxFolder;
 import com.propertyvista.domain.policy.dto.IdAssignmentPolicyDTO;
 import com.propertyvista.domain.policy.policies.domain.IdAssignmentItem;
 import com.propertyvista.domain.policy.policies.domain.IdAssignmentItem.IdAssignmentType;
-import com.propertyvista.domain.policy.policies.domain.IdAssignmentItem.IdTarget;
 
 public class IdAssignmentPolicyForm extends PolicyDTOTabPanelBasedForm<IdAssignmentPolicyDTO> {
 
@@ -105,10 +104,23 @@ public class IdAssignmentPolicyForm extends PolicyDTOTabPanelBasedForm<IdAssignm
             protected void onValueSet(boolean populate) {
                 super.onValueSet(populate);
 
-                if (getValue().target().getValue() == IdTarget.application) {
-                    CComboBox<IdAssignmentType> combo = (CComboBox<IdAssignmentType>) get(proto().type());
+                // set predefined values for some ID types and do not allow editing:
+                CComboBox<IdAssignmentType> combo = (CComboBox<IdAssignmentType>) get(proto().type());
+                switch (getValue().target().getValue()) {
+                case application:
                     combo.getOptions().clear();
                     combo.setOptions(Arrays.asList(IdAssignmentType.generatedNumber, IdAssignmentType.generatedAlphaNumeric));
+                    combo.setEditable(false);
+                    break;
+
+                case customer:
+                    combo.getOptions().clear();
+                    combo.setOptions(Arrays.asList(IdAssignmentType.generatedNumber, IdAssignmentType.generatedAlphaNumeric));
+                    combo.setEditable(false);
+                    break;
+
+                default:
+                    combo.setEditable(true);
                 }
             }
         }

@@ -36,26 +36,26 @@ public interface IdAssignmentItem extends IEntity {
     @I18n
     public enum IdTarget {
 
-        @Translate("Building property code")
-        propertyCode,
-
-        lease,
+        accountNumber,
 
         application,
 
         customer,
 
-        tenant,
+        employee,
 
         guarantor,
 
         lead,
 
-        employee,
+        lease,
 
-        accountNumber,
+        maintenance,
 
-        maintenance;
+        @Translate("Building property code")
+        propertyCode,
+
+        tenant;
 
         @Override
         public String toString() {
