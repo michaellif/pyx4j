@@ -27,14 +27,12 @@ import com.pyx4j.forms.client.ui.folder.BoxFolderItemDecorator;
 import com.pyx4j.forms.client.ui.folder.IFolderItemDecorator;
 import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.widgets.client.Button;
+import com.pyx4j.widgets.client.Anchor;
 import com.pyx4j.widgets.client.Label;
 
-import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
 import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
 import com.propertyvista.portal.rpc.portal.web.dto.insurance.status.InsuranceCertificateSummaryDTO;
 import com.propertyvista.portal.rpc.portal.web.dto.insurance.status.InsuranceStatusDTO;
-import com.propertyvista.portal.rpc.portal.web.dto.insurance.status.TenantSureCertificateSummaryDTO;
 import com.propertyvista.portal.web.client.resources.PortalImages;
 import com.propertyvista.portal.web.client.ui.AbstractGadget;
 import com.propertyvista.portal.web.client.ui.util.decorators.FormDecoratorBuilder;
@@ -144,15 +142,21 @@ public class InsuranceGadget extends AbstractGadget<ServicesDashboardViewImpl> {
             return super.create(member);
         }
 
-        private class InsuranceCertificateViewer extends CEntityDecoratableForm<InsuranceCertificateSummaryDTO> {
+        private class InsuranceCertificateViewer extends CEntityForm<InsuranceCertificateSummaryDTO> {
 
-            private Button detailsButton;
+            private Anchor detailsAnchor;
 
             public InsuranceCertificateViewer() {
                 super(InsuranceCertificateSummaryDTO.class);
 
                 setViewable(true);
                 inheritViewable(false);
+            }
+
+            @Override
+            protected void onValueSet(boolean populate) {
+                System.out.println("+++++++++onValueSet" + getValue().getPrimaryKey());
+                super.onValueSet(populate);
             }
 
             @Override
@@ -166,30 +170,20 @@ public class InsuranceGadget extends AbstractGadget<ServicesDashboardViewImpl> {
                 content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().inceptionDate(), new CLabel<String>()), 180).build());
                 content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().expiryDate(), new CLabel<String>()), 180).build());
 
-                detailsButton = new Button(i18n.tr("View Details"), new Command() {
+                detailsAnchor = new Anchor(i18n.tr("View Details"), new Command() {
 
                     @Override
                     public void execute() {
-                        System.out.println("+++++++++View Details");
+                        System.out.println("+++++++++View Details" + getValue().getPrimaryKey());
                     }
                 });
-                detailsButton.getElement().getStyle().setMarginTop(30, Unit.PX);
+                detailsAnchor.getElement().getStyle().setMarginTop(30, Unit.PX);
 
-                detailsButton.setVisible(false);
-                content.setWidget(++row, 0, detailsButton);
+                content.setWidget(++row, 0, detailsAnchor);
 
                 return content;
             }
 
-            @Override
-            protected void onValueSet(boolean populate) {
-                super.onValueSet(populate);
-                if (getValue().isInstanceOf(TenantSureCertificateSummaryDTO.class)) {
-                    detailsButton.setVisible(true);
-                } else {
-                    detailsButton.setVisible(false);
-                }
-            }
         }
 
     }

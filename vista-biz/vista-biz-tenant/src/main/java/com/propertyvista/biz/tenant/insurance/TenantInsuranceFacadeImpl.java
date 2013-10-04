@@ -82,6 +82,8 @@ public class TenantInsuranceFacadeImpl implements TenantInsuranceFacade {
         for (InsuranceCertificate<?> certificate : getInsuranceCertificates(tenantId, false)) {
             InsuranceCertificateSummaryDTO certificateSummaryDTO = EntityFactory.create(InsuranceCertificateSummaryDTO.class);
 
+            certificateSummaryDTO.setPrimaryKey(certificate.getPrimaryKey());
+
             if (certificate instanceof PropertyVistaIntegratedInsurance) {
                 // TODO currently TenantSure is the only integrated provider so we don't try to understand which one it is
                 certificateSummaryDTO = ServerSideFactory.create(TenantSureFacade.class).getStatus(tenantId);
