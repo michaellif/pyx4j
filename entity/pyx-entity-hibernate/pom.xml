@@ -90,7 +90,7 @@
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
                 <configuration>
-                    <forkMode>once</forkMode>
+                    <reuseForks>true</reuseForks>
                     <argLine>-Xmx256m -XX:MaxPermSize=256m</argLine>
                 </configuration>
             </plugin>
