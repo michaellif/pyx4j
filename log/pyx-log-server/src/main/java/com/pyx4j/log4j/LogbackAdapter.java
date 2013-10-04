@@ -33,19 +33,21 @@ import ch.qos.logback.core.util.StatusPrinter;
 class LogbackAdapter {
 
     static void init() {
-        ILoggerFactory lc = LoggerFactory.getILoggerFactory();
-        if (lc instanceof LoggerContext) {
-            LoggerContext context = (LoggerContext) lc;
-            context.reset();
-            context.setName(LoggerConfig.getContextName());
-            for (Map.Entry<String, String> me : LoggerConfig.nameVariables.entrySet()) {
-                context.putProperty(me.getKey(), me.getValue());
+        if (false) {
+            ILoggerFactory lc = LoggerFactory.getILoggerFactory();
+            if (lc instanceof LoggerContext) {
+                LoggerContext context = (LoggerContext) lc;
+                context.reset();
+                context.setName(LoggerConfig.getContextName());
+                for (Map.Entry<String, String> me : LoggerConfig.nameVariables.entrySet()) {
+                    context.putProperty(me.getKey(), me.getValue());
+                }
+                try {
+                    new ContextInitializer(context).autoConfig();
+                } catch (JoranException je) {
+                }
+                StatusPrinter.printInCaseOfErrorsOrWarnings(context);
             }
-            try {
-                new ContextInitializer(context).autoConfig();
-            } catch (JoranException je) {
-            }
-            StatusPrinter.printInCaseOfErrorsOrWarnings(context);
         }
     }
 
