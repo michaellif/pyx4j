@@ -108,7 +108,22 @@ public class TenantInsuranceFacadeImpl implements TenantInsuranceFacade {
                     break;
                 }
             }
+        }
 
+        boolean isExpiryDateDefined = true;
+        LogicalDate coverageExpiryDate = null;
+        for (InsuranceCertificateSummaryDTO c : insuranceStatusDTO.certificates()) {
+            if (!c.expiryDate().isNull()) {
+                if (coverageExpiryDate == null || c.expiryDate().getValue().compareTo(coverageExpiryDate) > 0) {
+                    coverageExpiryDate = c.expiryDate().getValue();
+                }
+            } else {
+                isExpiryDateDefined = false;
+                break;
+            }
+        }
+        if (isExpiryDateDefined) {
+            insuranceStatusDTO.coverageExpiryDate().setValue(coverageExpiryDate);
         }
 
         return insuranceStatusDTO;

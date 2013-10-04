@@ -28,18 +28,34 @@ public final class InsuranceCertificateComparator implements Comparator<Insuranc
 
     @Override
     public int compare(InsuranceCertificate o1, InsuranceCertificate o2) {
+        int value = 0;
         if ((o1.insurancePolicy().tenant().equals(tenantId)) && !(o2.insurancePolicy().tenant().equals(tenantId))) {
-            return -1;
+            value = -1;
         } else if (!(o1.insurancePolicy().tenant().equals(tenantId)) && (o2.insurancePolicy().tenant().equals(tenantId))) {
-            return 1;
-        } else if ((o1.getInstanceValueClass().equals(TenantSureInsuranceCertificate.class))
+            value = 1;
+        }
+
+        if (value != 0) {
+            return value;
+        }
+
+        if ((o1.getInstanceValueClass().equals(TenantSureInsuranceCertificate.class))
                 && !(o2.getInstanceValueClass().equals(TenantSureInsuranceCertificate.class))) {
             return -1;
         } else if (!(o1.getInstanceValueClass().equals(TenantSureInsuranceCertificate.class))
                 && (o2.getInstanceValueClass().equals(TenantSureInsuranceCertificate.class))) {
             return 1;
-        } else {
-            return -((Comparable) o1.liabilityCoverage().getValue()).compareTo(o2.liabilityCoverage().getValue());
         }
+
+        if (value != 0) {
+            return value;
+        }
+
+        value = o1.expiryDate().getValue() == null ? -1 : -(((Comparable) o1.expiryDate().getValue()).compareTo(o2.expiryDate().getValue()));
+        if (value != 0) {
+            return value;
+        }
+
+        return -(((Comparable) o1.liabilityCoverage().getValue()).compareTo(o2.liabilityCoverage().getValue()));
     }
 }

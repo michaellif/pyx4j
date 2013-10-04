@@ -24,7 +24,9 @@ import org.junit.Before;
 import org.junit.Test;
 
 import com.pyx4j.commons.Key;
+import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.gwt.server.DateUtils;
 
 import com.propertyvista.domain.tenant.insurance.GeneralInsuranceCertificate;
 import com.propertyvista.domain.tenant.insurance.InsuranceCertificate;
@@ -49,11 +51,11 @@ public class InsuranceCertificateComparatorTest {
         tenantForDiscraction.setPrimaryKey(genKey());
 
         List<InsuranceCertificate<?>> certificates = new ArrayList<InsuranceCertificate<?>>(Arrays.asList(//@formatter:off
-               makeGeneric(tenantForDiscraction, new BigDecimal("10")),
-               makeGeneric(tenantForDiscraction, new BigDecimal("9")),
-               makeTenantSure(tenantInContext, new BigDecimal("8")),
-               makeGeneric(tenantForDiscraction, new BigDecimal("7")),
-               makeGeneric(tenantInContext, new BigDecimal("6"))
+               makeGeneric(tenantForDiscraction, new BigDecimal("10"), "2000-01-01"),
+               makeGeneric(tenantForDiscraction, new BigDecimal("9"), "2000-01-01"),
+               makeTenantSure(tenantInContext, new BigDecimal("8"), "2000-01-01"),
+               makeGeneric(tenantForDiscraction, new BigDecimal("7"), "2000-01-01"),
+               makeGeneric(tenantInContext, new BigDecimal("6"), "2000-01-01")
         ));//@formatter:on
         sort(tenantInContext, certificates);
 
@@ -71,11 +73,11 @@ public class InsuranceCertificateComparatorTest {
         tenantForDiscraction.setPrimaryKey(genKey());
 
         List<InsuranceCertificate<?>> certificates = new ArrayList<InsuranceCertificate<?>>(Arrays.asList(//@formatter:off
-               makeGeneric(tenantForDiscraction, new BigDecimal("10")),
-               makeGeneric(tenantInContext, new BigDecimal("9")),
-               makeTenantSure(tenantInContext, new BigDecimal("8")),
-               makeGeneric(tenantForDiscraction, new BigDecimal("7")),
-               makeTenantSure(tenantForDiscraction, new BigDecimal("6"))
+               makeGeneric(tenantForDiscraction, new BigDecimal("10"), "2000-01-01"),
+               makeGeneric(tenantInContext, new BigDecimal("9"), "2000-01-01"),
+               makeTenantSure(tenantInContext, new BigDecimal("8"), "2000-01-01"),
+               makeGeneric(tenantForDiscraction, new BigDecimal("7"), "2000-01-01"),
+               makeTenantSure(tenantForDiscraction, new BigDecimal("6"), "2000-01-01")
         ));//@formatter:on
         sort(tenantInContext, certificates);
 
@@ -85,7 +87,7 @@ public class InsuranceCertificateComparatorTest {
     }
 
     @Test
-    public void testPreferBiggerLiabilityCoverage() {
+    public void testPreferGreaterLiabilityCoverage() {
         Tenant tenantInContext = EntityFactory.create(Tenant.class);
         tenantInContext.setPrimaryKey(genKey());
 
@@ -93,11 +95,11 @@ public class InsuranceCertificateComparatorTest {
         tenantForDistraction.setPrimaryKey(genKey());
 
         List<InsuranceCertificate<?>> certificates = new ArrayList<InsuranceCertificate<?>>(Arrays.asList(//@formatter:off
-                makeGeneric(tenantForDistraction, new BigDecimal("10")),
-                makeGeneric(tenantInContext, new BigDecimal("9")),
-                makeGeneric(tenantInContext, new BigDecimal("10")),
-                makeGeneric(tenantForDistraction, new BigDecimal("7")),
-                makeGeneric(tenantForDistraction, new BigDecimal("6"))
+                makeGeneric(tenantForDistraction, new BigDecimal("10"), "2000-01-01"),
+                makeGeneric(tenantInContext, new BigDecimal("9"), "2000-01-01"),
+                makeGeneric(tenantInContext, new BigDecimal("10"), "2000-01-01"),
+                makeGeneric(tenantForDistraction, new BigDecimal("7"),"2000-01-01"),
+                makeGeneric(tenantForDistraction, new BigDecimal("6"), "2000-01-01")
          ));//@formatter:on
         sort(tenantInContext, certificates);
 
@@ -109,19 +111,52 @@ public class InsuranceCertificateComparatorTest {
 
     }
 
-    private InsuranceCertificate<?> makeGeneric(Tenant tenant, BigDecimal liablilityCoverage) {
+    @Test
+    public void testPreferLaterExpiryDateCoverage() {
+        Tenant tenantInContext = EntityFactory.create(Tenant.class);
+        tenantInContext.setPrimaryKey(genKey());
+
+        Tenant tenantForDistraction = EntityFactory.create(Tenant.class);
+        tenantForDistraction.setPrimaryKey(genKey());
+
+        List<InsuranceCertificate<?>> certificates = new ArrayList<InsuranceCertificate<?>>(Arrays.asList(//@formatter:off
+                makeGeneric(tenantInContext, new BigDecimal("10"), "2000-12-31"),
+                makeTenantSure(tenantInContext, new BigDecimal("9"), "2000-01-01"),
+                makeTenantSure(tenantInContext, new BigDecimal("10"), "2000-01-02"),
+                makeGeneric(tenantInContext, new BigDecimal("7"), "2000-01-03"),
+                makeGeneric(tenantInContext, new BigDecimal("6"), "2000-01-04"),
+                makeGeneric(tenantInContext, new BigDecimal("6"), null)
+                ));//@formatter:on
+        sort(tenantInContext, certificates);
+
+        Assert.assertEquals(new LogicalDate(DateUtils.detectDateformat("2000-01-02")), certificates.get(0).expiryDate().getValue());
+        Assert.assertEquals(new LogicalDate(DateUtils.detectDateformat("2000-01-01")), certificates.get(1).expiryDate().getValue());
+        Assert.assertNull(certificates.get(2).expiryDate().getValue());
+        Assert.assertEquals(new LogicalDate(DateUtils.detectDateformat("2000-12-31")), certificates.get(3).expiryDate().getValue());
+        Assert.assertEquals(new LogicalDate(DateUtils.detectDateformat("2000-01-04")), certificates.get(4).expiryDate().getValue());
+        Assert.assertEquals(new LogicalDate(DateUtils.detectDateformat("2000-01-03")), certificates.get(5).expiryDate().getValue());
+
+    }
+
+    private InsuranceCertificate<?> makeGeneric(Tenant tenant, BigDecimal liablilityCoverage, String expiryDate) {
         GeneralInsuranceCertificate cert = EntityFactory.create(GeneralInsuranceCertificate.class);
         cert.setPrimaryKey(genKey());
         cert.liabilityCoverage().setValue(liablilityCoverage);
         cert.insurancePolicy().tenant().set(tenant);
+        if (expiryDate != null) {
+            cert.expiryDate().setValue(new LogicalDate(DateUtils.detectDateformat(expiryDate)));
+        }
         return cert;
     }
 
-    private InsuranceCertificate<?> makeTenantSure(Tenant tenant, BigDecimal liablilityCoverage) {
+    private InsuranceCertificate<?> makeTenantSure(Tenant tenant, BigDecimal liablilityCoverage, String expiryDate) {
         TenantSureInsuranceCertificate cert = EntityFactory.create(TenantSureInsuranceCertificate.class);
         cert.setPrimaryKey(genKey());
         cert.liabilityCoverage().setValue(liablilityCoverage);
         cert.insurancePolicy().tenant().set(tenant);
+        if (expiryDate != null) {
+            cert.expiryDate().setValue(new LogicalDate(DateUtils.detectDateformat(expiryDate)));
+        }
         return cert;
     }
 
