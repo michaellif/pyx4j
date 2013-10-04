@@ -28,16 +28,13 @@ public class VistaTermsActivity extends AbstractActivity {
 
     private final TermsView view;
 
-    private final PortalVistaTermsService service;
-
     public VistaTermsActivity() {
-        service = GWT.<PortalVistaTermsService> create(PortalVistaTermsService.class);
         view = PortalWebSite.getViewFactory().instantiate(TermsView.class);
     }
 
     @Override
     public void start(final AcceptsOneWidget panel, EventBus eventBus) {
-        service.getVistaTerms(new DefaultAsyncCallback<String>() {
+        GWT.<PortalVistaTermsService> create(PortalVistaTermsService.class).getVistaTerms(new DefaultAsyncCallback<String>() {
             @Override
             public void onSuccess(String result) {
                 view.populate(result);
