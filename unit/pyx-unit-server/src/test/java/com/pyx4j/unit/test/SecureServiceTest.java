@@ -42,19 +42,14 @@ import com.pyx4j.unit.test.rpc.SecureService;
 
 public class SecureServiceTest extends TestCase {
 
-    private static ServerSideConfiguration initOnce;
-
     @Override
     protected void setUp() throws Exception {
-        if (initOnce == null) {
-            initOnce = new ServerSideConfiguration() {
-                @Override
-                public AclCreator getAclCreator() {
-                    return new SecureServiceTestAccessControlList();
-                }
-            };
-            ServerSideConfiguration.setInstance(initOnce);
-        }
+        ServerSideConfiguration.setInstance(new ServerSideConfiguration() {
+            @Override
+            public AclCreator getAclCreator() {
+                return new SecureServiceTestAccessControlList();
+            }
+        });
     }
 
     @Override

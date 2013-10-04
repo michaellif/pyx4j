@@ -115,12 +115,13 @@ public class AclBuilder implements AclCreator {
         }
         if ((behaviors == null) || (behaviors.size() == 0)) {
             return new AclSerializable(Collections.unmodifiableSet(new HashSet<Behavior>()), global.permissions, global.restrictions, global.accessRules);
+        } else {
+            PermissionsGroup g = new PermissionsGroup();
+            g.add(global);
+            addRecurcive(g, behaviors);
+            g.freeze();
+            return new AclSerializable(g.behaviors, g.permissions, g.restrictions, g.accessRules);
         }
-        PermissionsGroup g = new PermissionsGroup();
-        g.add(global);
-        addRecurcive(g, behaviors);
-        g.freeze();
-        return new AclSerializable(g.behaviors, g.permissions, g.restrictions, g.accessRules);
     }
 
     @Override

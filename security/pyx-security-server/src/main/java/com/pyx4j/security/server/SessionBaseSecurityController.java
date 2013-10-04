@@ -37,7 +37,8 @@ public class SessionBaseSecurityController extends SecurityController {
     private AclCreator aclCreator;
 
     public SessionBaseSecurityController() {
-        debugMode = ServerSideConfiguration.isStartedUnderJvmDebugMode() && ServerSideConfiguration.isRunningInDeveloperEnviroment();
+        debugMode = (ServerSideConfiguration.isStartedUnderUnitTest() || ServerSideConfiguration.isStartedUnderJvmDebugMode())
+                || ServerSideConfiguration.isRunningInDeveloperEnviroment();
         createAclCreator();
     }
 
@@ -70,6 +71,10 @@ public class SessionBaseSecurityController extends SecurityController {
             userAcl = v.getAcl();
         }
         if (userAcl == null) {
+            if (debugMode) {
+                // Create new Public ACL
+                createAclCreator();
+            }
             return aclCreator.createAcl(null);
         } else {
             return userAcl;
