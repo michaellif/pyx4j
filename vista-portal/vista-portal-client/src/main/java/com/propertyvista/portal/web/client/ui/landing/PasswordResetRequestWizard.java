@@ -35,7 +35,7 @@ public class PasswordResetRequestWizard extends CPortalEntityWizard<PasswordRetr
     }
 
     public BasicFlexFormPanel createStep() {
-        BasicFlexFormPanel flexPanel = new BasicFlexFormPanel();
+        BasicFlexFormPanel mainPanel = new BasicFlexFormPanel();
 
         int row = -1;
 
@@ -44,14 +44,14 @@ public class PasswordResetRequestWizard extends CPortalEntityWizard<PasswordRetr
         message.getElement().getStyle().setProperty("maxWidth", "600px");
         message.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
 
-        flexPanel.setWidget(++row, 0, message);
-        flexPanel.setBR(++row, 0, 1);
-        flexPanel.setWidget(++row, 0, new LoginDecoratorBuilder(inject(proto().email())).build());
-        flexPanel.setWidget(++row, 0, new LoginDecoratorBuilder(inject(proto().captcha()))
+        mainPanel.setWidget(++row, 0, message);
+        mainPanel.setBR(++row, 0, 1);
+        mainPanel.setWidget(++row, 0, new LoginDecoratorBuilder(inject(proto().email())).build());
+        mainPanel.setWidget(++row, 0, new LoginDecoratorBuilder(inject(proto().captcha()))
                 .watermark(LandingViewImpl.i18n.tr("Enter both security words above")).build());
-        flexPanel.setBR(++row, 0, 1);
+        mainPanel.setBR(++row, 0, 1);
 
-        return flexPanel;
+        return mainPanel;
     }
 
     public void createNewCaptchaChallenge() {

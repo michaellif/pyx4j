@@ -13,51 +13,50 @@
  */
 package com.propertyvista.portal.web.client.activity.security;
 
-import com.google.gwt.activity.shared.AbstractActivity;
 import com.google.gwt.core.shared.GWT;
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.user.client.History;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
 import com.pyx4j.commons.UserRuntimeException;
-import com.pyx4j.forms.client.validators.password.PasswordStrengthRule.PasswordStrengthVerdict;
+import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.rpc.shared.VoidSerializable;
-import com.pyx4j.security.client.ClientContext;
 import com.pyx4j.security.rpc.PasswordChangeRequest;
+import com.pyx4j.site.shared.domain.Notification;
+import com.pyx4j.site.shared.domain.Notification.NotificationType;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
 
-import com.propertyvista.common.client.ui.components.security.PasswordChangeView;
 import com.propertyvista.portal.rpc.portal.services.PasswordChangeUserService;
 import com.propertyvista.portal.web.client.PortalWebSite;
+import com.propertyvista.portal.web.client.activity.AbstractWizardActivity;
+import com.propertyvista.portal.web.client.ui.security.PasswordChangeWizardView;
+import com.propertyvista.portal.web.client.ui.security.PasswordChangeWizardView.PasswordChangePresenter;
 
-public class PasswordChangeActivity extends AbstractActivity implements PasswordChangeView.Presenter {
+public class PasswordChangeActivity extends AbstractWizardActivity<PasswordChangeRequest> implements PasswordChangePresenter {
 
     private static final I18n i18n = I18n.get(PasswordChangeActivity.class);
 
-    private final PasswordChangeView view;
-
     public PasswordChangeActivity() {
-        view = PortalWebSite.getViewFactory().instantiate(PasswordChangeView.class);
+        super(PasswordChangeWizardView.class);
     }
 
     @Override
     public void start(AcceptsOneWidget panel, EventBus eventBus) {
-        view.setPresenter(this);
-        view.setAskForCurrentPassword(true);
-        view.setAskForRequireChangePasswordOnNextSignIn(false, false, PasswordStrengthVerdict.Weak);
-        view.initialize(ClientContext.getUserVisit().getPrincipalPrimaryKey(), null);
-        panel.setWidget(view);
+
+        super.start(panel, eventBus);
+        getView().populate(EntityFactory.create(PasswordChangeRequest.class));
     }
 
     @Override
-    public void changePassword(PasswordChangeRequest request) {
+    public void finish() {
         GWT.<PasswordChangeUserService> create(PasswordChangeUserService.class).changePassword(new DefaultAsyncCallback<VoidSerializable>() {
             @Override
             public void onSuccess(VoidSerializable result) {
-                MessageDialog.info(i18n.tr("Password was changed successfully"));
-                History.back();
+                PasswordChangeActivity.super.finish();
+                Notification message = new Notification(null, i18n.tr("Password was changed successfully"), NotificationType.INFO);
+                PortalWebSite.getPlaceController().showNotification(message);
             }
 
             @Override
@@ -68,11 +67,7 @@ public class PasswordChangeActivity extends AbstractActivity implements Password
                     super.onFailure(caught);
                 }
             }
-        }, request);
+        }, getView().getValue());
     }
 
-    @Override
-    public void cancel() {
-        History.back();
-    }
 }

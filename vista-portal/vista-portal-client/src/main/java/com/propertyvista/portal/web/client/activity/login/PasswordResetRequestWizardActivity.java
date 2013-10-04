@@ -64,7 +64,7 @@ public class PasswordResetRequestWizardActivity extends AbstractWizardActivity<P
             @Override
             public void onFailure(Throwable caught) {
                 createNewCaptchaChallenge();
-                MessageDialog.info(caught.getLocalizedMessage());
+                MessageDialog.error(i18n.tr("Failed to send password reset request"), caught.getLocalizedMessage());
             }
         }, getView().getValue());
     }
