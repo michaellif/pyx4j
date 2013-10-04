@@ -103,7 +103,7 @@ public class TenantInsuranceFacadeImpl implements TenantInsuranceFacade {
         } else {
             insuranceStatusDTO.status().setValue(InsuranceStatusDTO.Status.hasOtherInsurance);
             for (InsuranceCertificateSummaryDTO c : insuranceStatusDTO.certificates()) {
-                if (insuranceStatusDTO.certificates().get(0) instanceof TenantSureCertificateSummaryDTO) {
+                if (c instanceof TenantSureCertificateSummaryDTO) {
                     insuranceStatusDTO.status().setValue(InsuranceStatusDTO.Status.hasTenantSure);
                     break;
                 }
