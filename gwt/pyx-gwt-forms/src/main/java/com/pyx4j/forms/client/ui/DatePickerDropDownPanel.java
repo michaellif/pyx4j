@@ -88,11 +88,13 @@ public class DatePickerDropDownPanel extends DropDownPanel implements Focusable 
 
     public void showDatePicker() {
         Date selectedDate = null;
-        String value = nativeDatePicker.getNativeText().trim();
-        try {
-            selectedDate = dateFormat.parse(value);
-        } catch (ParseException e) {
-            log.info("Cannot parse as date: " + value);
+        String value = nativeDatePicker.getNativeText();
+        if (value != null) {
+            try {
+                selectedDate = dateFormat.parse(value.trim());
+            } catch (ParseException e) {
+                log.info("Cannot parse as date: " + value);
+            }
         }
         if (selectedDate == null) {
             selectedDate = new Date();
@@ -100,6 +102,7 @@ public class DatePickerDropDownPanel extends DropDownPanel implements Focusable 
         picker.setDate(selectedDate);
         showRelativeTo(nativeDatePicker);
         focusPanel.setFocus(true);
+
     }
 
     public void hideDatePicker() {
