@@ -42,22 +42,17 @@ public class OpenIdServlet extends HttpServlet {
 
     private static final I18n i18n = I18n.get(OpenIdServlet.class);
 
-    public static String MAPPING = "/o/openid";
-
-    static String DOMAIN = getDevelopmentSecurityGoogleAppsDomain();
+    public static final String MAPPING = "/o/openid";
 
     public static String USER_EMAIL_ATTRIBUTE = DevelopmentSecurity.OPENID_USER_EMAIL_ATTRIBUTE;
 
-    private static final String getDevelopmentSecurityGoogleAppsDomain() {
-        return ((AbstractVistaServerSideConfiguration) ServerSideConfiguration.instance()).openIdDomain();
-    }
-
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        OpenIdResponse openIdResponse = OpenId.readResponse(request, DOMAIN);
+        String domain = ServerSideConfiguration.instance(AbstractVistaServerSideConfiguration.class).openIdDomain();
+        OpenIdResponse openIdResponse = OpenId.readResponse(request, domain);
         if (openIdResponse == null) {
             log.debug("Can't find authentication information in OpenId URL");
-            createResponsePage(response, true, OpenId.getDestinationUrl(OpenIdServlet.DOMAIN, ServerSideConfiguration.instance().getMainApplicationURL()));
+            createResponsePage(response, true, OpenId.getDestinationUrl(domain, ServerSideConfiguration.instance().getMainApplicationURL()));
         } else {
             log.info("openIdResponse.email [{}]", openIdResponse.email);
             DevSession devSession = DevSession.getSession();

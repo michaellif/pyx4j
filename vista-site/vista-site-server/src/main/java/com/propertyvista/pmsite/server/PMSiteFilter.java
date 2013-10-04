@@ -32,7 +32,7 @@ public class PMSiteFilter extends WicketFilter {
 
     private static final Logger log = LoggerFactory.getLogger(PMSiteFilter.class);
 
-    private final String IGNORE_URLS_PARAM = "ignoreUrls";
+    public static final String IGNORE_URLS_PARAM = "ignoreUrls";
 
     private final ArrayList<String> ignoreUrls = new ArrayList<String>();
 

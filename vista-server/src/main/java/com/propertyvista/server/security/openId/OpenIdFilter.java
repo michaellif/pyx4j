@@ -88,8 +88,11 @@ public class OpenIdFilter implements Filter {
                             devSession.setAttribute(REQUESTED_URL_ATTRIBUTE, receivingURL);
                         }
                     }
-                    OpenIdServlet.createResponsePage((HttpServletResponse) response, true,
-                            OpenId.getDestinationUrl(OpenIdServlet.DOMAIN, ServletUtils.getRequestBaseURL(httprequest)));
+                    OpenIdServlet.createResponsePage(
+                            (HttpServletResponse) response,
+                            true,
+                            OpenId.getDestinationUrl(ServerSideConfiguration.instance(AbstractVistaServerSideConfiguration.class).openIdDomain(),
+                                    ServletUtils.getRequestBaseURL(httprequest)));
 
                 }
             }

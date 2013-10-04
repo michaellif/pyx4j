@@ -26,8 +26,11 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.commons.Consts;
+import com.pyx4j.config.server.ServerSideConfiguration;
 import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.server.contexts.DevSession;
+
+import com.propertyvista.config.AbstractVistaServerSideConfiguration;
 
 @SuppressWarnings("serial")
 public class VistaDevSessionServlet extends HttpServlet {
@@ -57,7 +60,8 @@ public class VistaDevSessionServlet extends HttpServlet {
                 devSession = DevSession.beginSession();
             }
             devSession.setAttribute(OpenIdFilter.ACCESS_GRANTED_ATTRIBUTE, Boolean.TRUE);
-            devSession.setAttribute(OpenIdServlet.USER_EMAIL_ATTRIBUTE, "tester-a@" + OpenIdServlet.DOMAIN);
+            devSession.setAttribute(OpenIdServlet.USER_EMAIL_ATTRIBUTE,
+                    "tester-a@" + ServerSideConfiguration.instance(AbstractVistaServerSideConfiguration.class).openIdDomain());
 
             String tp = request.getParameter("long");
             if (CommonsStringUtils.isStringSet(tp)) {
