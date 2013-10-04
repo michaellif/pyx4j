@@ -31,11 +31,8 @@ public interface ComplexDTO extends Complex {
 
 //    BuildingContactInfo contactInfo();
 
+    /** Address of complex's primary building */
     AddressStructured address();
-
-//
-//    /** Address of complex's primary building */
-//    AddressStructured address();
 
     // TODO additional properties:
     // * propertyManager/anyOtherKindOfManager - fetch from primary building
