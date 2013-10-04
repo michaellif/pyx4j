@@ -212,7 +212,7 @@ public class SystemMaintenance {
     private static void loadState() {
         try {
             File file = getStorageFile();
-            if (file.canRead()) {
+            if (file.canRead() && (file.length() > 0)) {
                 SystemMaintenanceState sm = XMLEntityConverter.readFile(getSystemMaintenanceStateClass(), file);
                 if (sm != null) {
                     setSystemMaintenanceInfo(sm);
