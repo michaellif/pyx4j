@@ -13,8 +13,6 @@
  */
 package com.propertyvista.yardi.stub;
 
-import java.rmi.RemoteException;
-
 import org.apache.axis2.AxisFault;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -31,6 +29,7 @@ import com.pyx4j.essentials.j2se.util.MarshallUtil;
 import com.propertyvista.biz.system.YardiServiceException;
 import com.propertyvista.biz.system.encryption.PasswordEncryptorFacade;
 import com.propertyvista.domain.settings.PmcYardiCredential;
+import com.propertyvista.server.config.DevYardiCredentials;
 import com.propertyvista.yardi.YardiConstants;
 import com.propertyvista.yardi.bean.Messages;
 
@@ -39,8 +38,10 @@ public class YardiILSGuestCardStubImpl extends AbstractYardiStub implements Yard
     private final static Logger log = LoggerFactory.getLogger(YardiILSGuestCardStubImpl.class);
 
     @Override
-    public PhysicalProperty getPropertyMarketingInfo(PmcYardiCredential yc, String propertyId) throws YardiServiceException, RemoteException {
+    public PhysicalProperty getPropertyMarketingInfo(PmcYardiCredential yc, String propertyId) throws YardiServiceException {
         try {
+            yc = DevYardiCredentials.getTestPmcYardiCredential(); //-> REMOVE
+
             UnitAvailability_Login request = new UnitAvailability_Login();
             request.setUserName(yc.username().getValue());
             request.setPassword(ServerSideFactory.create(PasswordEncryptorFacade.class).decryptPassword(yc.password()));
@@ -48,6 +49,9 @@ public class YardiILSGuestCardStubImpl extends AbstractYardiStub implements Yard
             request.setDatabase(yc.database().getValue());
             request.setPlatform(yc.platform().getValue().name());
             request.setInterfaceEntity(YardiConstants.ILS_INTERFACE_ENTITY);
+
+            request.setInterfaceEntity("Lead2Lease"); //-> REMOVE
+
             request.setYardiPropertyId(propertyId);
             UnitAvailability_LoginResponse response = getILSGuestCardService(yc).unitAvailability_Login(request);
             if (response.getUnitAvailability_LoginResult() == null) {
@@ -68,9 +72,7 @@ public class YardiILSGuestCardStubImpl extends AbstractYardiStub implements Yard
             }
             PhysicalProperty property = MarshallUtil.unmarshal(PhysicalProperty.class, xml);
 
-            if (log.isDebugEnabled()) {
-                log.debug("\n--- GetMarketingInfo ---\n{}\n", property);
-            }
+            log.debug("\n--- GetMarketingInfo ---\n{}\n", property);
 
             return property;
         } catch (Throwable e) {

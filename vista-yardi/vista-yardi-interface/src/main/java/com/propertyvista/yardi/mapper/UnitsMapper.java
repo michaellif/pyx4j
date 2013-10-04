@@ -13,8 +13,6 @@
  */
 package com.propertyvista.yardi.mapper;
 
-import java.util.List;
-
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -33,7 +31,6 @@ import com.propertyvista.domain.property.asset.AreaMeasurementUnit;
 import com.propertyvista.domain.property.asset.Floorplan;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.property.asset.unit.AptUnitInfo.EconomicStatus;
-import com.propertyvista.domain.ref.Province;
 import com.propertyvista.server.common.util.CanadianStreetAddressParser;
 import com.propertyvista.server.common.util.StreetAddressParser.StreetAddress;
 
@@ -51,7 +48,7 @@ public class UnitsMapper {
      * Maps units from YARDI System to VISTA domain units
      * 
      */
-    public AptUnit map(RTCustomer rtCustomer, List<Province> provinces) {
+    public AptUnit map(RTCustomer rtCustomer) {
         RTUnit unitFrom = rtCustomer.getRTUnit();
         AptUnit unitTo = EntityFactory.create(AptUnit.class);
         Information info = unitFrom.getUnit().getInformation().get(0);
@@ -111,7 +108,7 @@ public class UnitsMapper {
             address.province().code().setValue(addressImported.getState());
 
             String importedCountry = addressImported.getCountry();
-            address.country().name().setValue(StringUtils.isEmpty(importedCountry) ? getCountry(provinces, addressImported.getState()) : importedCountry);
+            address.country().name().setValue(StringUtils.isEmpty(importedCountry) ? MappingUtils.getCountry(addressImported.getState()) : importedCountry);
 
             address.postalCode().setValue(addressImported.getPostalCode());
 
@@ -126,14 +123,5 @@ public class UnitsMapper {
         unitTo.financial()._marketRent().setValue(info.getMarketRent());
 
         return unitTo;
-    }
-
-    private String getCountry(List<Province> provinces, String stateCode) {
-        for (Province province : provinces) {
-            if (StringUtils.equals(province.code().getValue(), stateCode)) {
-                return province.country().name().getValue();
-            }
-        }
-        return null;
     }
 }

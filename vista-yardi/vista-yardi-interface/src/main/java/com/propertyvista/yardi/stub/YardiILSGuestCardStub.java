@@ -13,13 +13,11 @@
  */
 package com.propertyvista.yardi.stub;
 
-import java.rmi.RemoteException;
-
 import com.yardi.entity.ils.PhysicalProperty;
 
 import com.propertyvista.biz.system.YardiServiceException;
 import com.propertyvista.domain.settings.PmcYardiCredential;
 
-public interface YardiILSGuestCardStub {
-    PhysicalProperty getPropertyMarketingInfo(PmcYardiCredential yc, String propertyId) throws YardiServiceException, RemoteException;
+public interface YardiILSGuestCardStub extends ExternalInterfaceLoggingStub {
+    PhysicalProperty getPropertyMarketingInfo(PmcYardiCredential yc, String propertyId) throws YardiServiceException;
 }

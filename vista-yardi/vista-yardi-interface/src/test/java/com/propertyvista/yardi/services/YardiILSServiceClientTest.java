@@ -20,7 +20,13 @@ import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.yardi.entity.ils.Availability;
+import com.yardi.entity.ils.ILSUnit;
+import com.yardi.entity.ils.MadeReadyDate;
 import com.yardi.entity.ils.PhysicalProperty;
+import com.yardi.entity.ils.Property;
+import com.yardi.entity.ils.VacateDate;
+import com.yardi.entity.mits.Information;
 
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.shared.EntityFactory;
@@ -45,9 +51,12 @@ public class YardiILSServiceClientTest {
 
         PhysicalProperty property = null;
         try {
-            if (false) {
+            if (true) {
                 YardiILSGuestCardStub stub = ServerSideFactory.create(YardiILSGuestCardStub.class);
-                property = stub.getPropertyMarketingInfo(yc, "prvista1");
+                property = stub.getPropertyMarketingInfo(yc, "gran0002");
+                for (Property building : property.getProperty()) {
+                    log.info(print(building, "0005"));
+                }
             } else {
                 String xml = getSampleXml();
                 property = MarshallUtil.unmarshal(PhysicalProperty.class, xml);
@@ -56,7 +65,33 @@ public class YardiILSServiceClientTest {
         } catch (Throwable t) {
             throw new RuntimeException(t);
         }
+    }
 
+    private static String print(Property building, String unitId) {
+        StringBuilder sb = new StringBuilder();
+        for (ILSUnit unit : building.getILSUnit()) {
+            if (unitId != null && !unit.getId().equals(unitId)) {
+                continue;
+            }
+            sb.append("Unit: " + unit.getId() + " {\n");
+            for (Information info : unit.getUnit().getInformation()) {
+                sb.append("\tInformation: {\n") //@formatter:off
+                .append("\t\tOccupancy: " + info.getUnitOccupancyStatus() + "\n")
+                .append("\t\tLeaseStatus: " + info.getUnitLeasedStatus() + "\n")
+                .append("\t}\n");//@formatter:on
+            }
+            Availability avail = unit.getAvailability();
+            if (avail != null) {
+                sb.append("\tAvailability: {\n") //@formatter:off
+                .append("\t\tStatus: " + avail.getVacancyClass() + "\n")
+                .append("\t\tVacated on: " + printDate(avail.getVacateDate()) + "\n")
+                .append("\t\tAvailable on: " + printDate(avail.getMadeReadyDate()) + "\n")
+                .append("\t\tMoveOut Code: " + avail.getMoveOutCode() + "\n")
+                .append("\t}\n");//@formatter:on
+            }
+            sb.append("}\n");
+        }
+        return sb.toString();
     }
 
     private static String getSampleXml() throws IOException {
@@ -64,5 +99,21 @@ public class YardiILSServiceClientTest {
         String rcPath = refClass.getPackage().getName().replaceAll("\\.", "/") + "/PhysicalProperty.xml";
         InputStream is = refClass.getClassLoader().getResourceAsStream(rcPath);
         return IOUtils.toString(is);
+    }
+
+    private static String printDate(VacateDate vacDate) {
+        StringBuilder date = new StringBuilder();
+        date.append(vacDate.getYear() + "-");
+        date.append(vacDate.getMonth() + "-");
+        date.append(vacDate.getDay());
+        return date.toString();
+    }
+
+    private static String printDate(MadeReadyDate rdyDate) {
+        StringBuilder date = new StringBuilder();
+        date.append(rdyDate.getYear() + "-");
+        date.append(rdyDate.getMonth() + "-");
+        date.append(rdyDate.getDay());
+        return date.toString();
     }
 }

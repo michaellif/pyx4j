@@ -26,12 +26,10 @@ import com.pyx4j.entity.shared.AttachLevel;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 
 import com.propertyvista.biz.system.YardiServiceException;
-import com.propertyvista.config.VistaDeployment;
-import com.propertyvista.domain.pmc.Pmc;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
-import com.propertyvista.domain.ref.Province;
 import com.propertyvista.yardi.mapper.BuildingsMapper;
+import com.propertyvista.yardi.mapper.MappingUtils;
 import com.propertyvista.yardi.mapper.UnitsMapper;
 import com.propertyvista.yardi.merger.BuildingsMerger;
 import com.propertyvista.yardi.merger.UnitsMerger;
@@ -41,15 +39,13 @@ public class YardiBuildingProcessor {
     public Building updateBuilding(Key yardiInterfaceId, Property property) throws YardiServiceException {
         Building building = getBuildingFromProperty(property);
         building.integrationSystemId().setValue(yardiInterfaceId);
-        if (!isSameCountry(building)) {
-            throw new YardiServiceException("Wrong country in building ");
-        }
+        MappingUtils.ensureCountryOfOperation(building);
         String propertyCode = building.propertyCode().getValue();
-        return merge(building, getBuilding(yardiInterfaceId, propertyCode));
+        return merge(building, MappingUtils.getBuilding(yardiInterfaceId, propertyCode));
     }
 
     public AptUnit updateUnit(Building building, RTCustomer rtCustomer) throws YardiServiceException {
-        AptUnit importedUnit = new UnitsMapper().map(rtCustomer, getProvinces());
+        AptUnit importedUnit = new UnitsMapper().map(rtCustomer);
         if (building.floorplans().getAttachLevel() != AttachLevel.Attached) {
             Persistence.service().retrieveMember(building.floorplans(), AttachLevel.Attached);
         }
@@ -87,23 +83,9 @@ public class YardiBuildingProcessor {
         return units.get(0);
     }
 
-    private Building getBuilding(Key yardiInterfaceId, String propertyCode) {
-        EntityQueryCriteria<Building> criteria = EntityQueryCriteria.create(Building.class);
-        criteria.eq(criteria.proto().propertyCode(), propertyCode);
-        criteria.eq(criteria.proto().integrationSystemId(), yardiInterfaceId);
-        List<Building> buildings = Persistence.service().query(criteria);
-        return !buildings.isEmpty() ? buildings.get(0) : null;
-    }
-
     public Building getBuildingFromProperty(Property property) {
         BuildingsMapper mapper = new BuildingsMapper();
-        return mapper.map(getProvinces(), property);
-    }
-
-    public List<Province> getProvinces() {
-        EntityQueryCriteria<Province> criteria = EntityQueryCriteria.create(Province.class);
-        criteria.asc(criteria.proto().name());
-        return Persistence.service().query(criteria);
+        return mapper.map(property.getPropertyID().get(0));
     }
 
     public List<Property> getProperties(ResidentTransactions transaction) {
@@ -112,16 +94,6 @@ public class YardiBuildingProcessor {
             properties.add(property);
         }
         return properties;
-    }
-
-    private boolean isSameCountry(Building building) throws YardiServiceException {
-        Pmc pmc = VistaDeployment.getCurrentPmc();
-        String yardiCountry = building.info().address().country().name().getValue();
-        String countryOfOperation = pmc.features().countryOfOperation().getValue().toString();
-        if (yardiCountry == null) {
-            throw new YardiServiceException("Country of Operation not found for this building. Building not imported.");
-        }
-        return yardiCountry.equals(countryOfOperation);
     }
 
 }

@@ -15,7 +15,6 @@ package com.propertyvista.yardi;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 import javax.xml.bind.JAXBException;
@@ -31,6 +30,7 @@ import com.yardi.entity.resident.Property;
 import com.yardi.entity.resident.RTCustomer;
 import com.yardi.entity.resident.ResidentTransactions;
 
+import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.essentials.j2se.util.MarshallUtil;
 import com.pyx4j.gwt.server.IOUtils;
@@ -58,6 +58,16 @@ public class XmlBeanTest {
     public static void init() {
         NamespaceManager.setNamespace(VistaTestsNamespaceResolver.demoNamespace);
         VistaTestDBSetup.init();
+
+        // mock countries and provinces
+        Country country = EntityFactory.create(Country.class);
+        country.name().setValue("United States");
+        Persistence.service().persist(country);
+
+        Province province = EntityFactory.create(Province.class);
+        province.code().setValue("CA");
+        province.country().set(country);
+        Persistence.service().persist(province);
     }
 
     @Test
@@ -93,23 +103,7 @@ public class XmlBeanTest {
 
         log.info("Loaded transactions:\n{}", transactions);
 
-        YardiBuildingProcessor buildingProcessor = new YardiBuildingProcessor() {
-            @Override
-            public List<Province> getProvinces() {
-                //mock countries and provinces
-                Country country = EntityFactory.create(Country.class);
-                country.name().setValue("United States");
-
-                Province province = EntityFactory.create(Province.class);
-                province.code().setValue("CA");
-                province.country().set(country);
-
-                List<Province> provinces = new ArrayList<Province>();
-                provinces.add(province);
-                return provinces;
-            }
-        };
-
+        YardiBuildingProcessor buildingProcessor = new YardiBuildingProcessor();
         List<Property> properties = buildingProcessor.getProperties(transactions);
         for (Property property : properties) {
             Building building = buildingProcessor.getBuildingFromProperty(property);
@@ -128,7 +122,7 @@ public class XmlBeanTest {
             List<AptUnit> units = new ArrayList<AptUnit>();
 
             for (RTCustomer rtCustomer : property.getRTCustomer()) {
-                units.add(new UnitsMapper().map(rtCustomer, Collections.<Province> emptyList()));
+                units.add(new UnitsMapper().map(rtCustomer));
             }
 
             Assert.assertTrue("Has units", !units.isEmpty());

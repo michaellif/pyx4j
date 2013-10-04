@@ -27,6 +27,7 @@ import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.yardi.entity.ils.PhysicalProperty;
 import com.yardi.entity.resident.Property;
 import com.yardi.entity.resident.RTCustomer;
 import com.yardi.entity.resident.ResidentTransactions;
@@ -58,6 +59,7 @@ import com.propertyvista.domain.financial.billing.BillingCycle;
 import com.propertyvista.domain.financial.billing.InvoiceLineItem;
 import com.propertyvista.domain.financial.yardi.YardiPayment;
 import com.propertyvista.domain.financial.yardi.YardiReceiptReversal;
+import com.propertyvista.domain.property.asset.Floorplan;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.property.yardi.YardiPropertyConfiguration;
@@ -66,6 +68,7 @@ import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.operations.domain.scheduler.CompletionType;
 import com.propertyvista.yardi.bean.Properties;
 import com.propertyvista.yardi.stub.ExternalInterfaceLoggingStub;
+import com.propertyvista.yardi.stub.YardiILSGuestCardStub;
 import com.propertyvista.yardi.stub.YardiPropertyNoAccessException;
 import com.propertyvista.yardi.stub.YardiResidentNoTenantsExistException;
 import com.propertyvista.yardi.stub.YardiResidentTransactionsStub;
@@ -146,6 +149,17 @@ public class YardiResidentTransactionsService extends YardiAbstractService {
                 importLeaseCharges(yardiInterfaceId, leaseCharges, executionMonitor, stub);
             }
 
+            if (false) {
+                YardiILSGuestCardStub ilsStub = ServerSideFactory.create(YardiILSGuestCardStub.class);
+                List<PhysicalProperty> properties = getILSPropertyMarketing(ilsStub, yc, executionMonitor, propertyListCodes);
+                for (PhysicalProperty property : properties) {
+                    if (executionMonitor.isTerminationRequested()) {
+                        break;
+                    }
+                    // process each property info
+                    importPropertyMarketingInfo(yardiInterfaceId, property, executionMonitor, ilsStub);
+                }
+            }
         } finally {
             executionMonitor.addInfoEvent("yardiTime", TimeUtils.durationFormat(stub.getRequestsTime()), new BigDecimal(stub.getRequestsTime()));
         }
@@ -588,6 +602,90 @@ public class YardiResidentTransactionsService extends YardiAbstractService {
         }
 
         return transactions;
+    }
+
+    private List<PhysicalProperty> getILSPropertyMarketing(YardiILSGuestCardStub stub, PmcYardiCredential yc, ExecutionMonitor executionMonitor,
+            List<String> propertyListCodes) {
+        // update building contacts/amenities/pet policy, floorplan amenities/utilities
+        List<PhysicalProperty> marketingInfo = new ArrayList<PhysicalProperty>();
+        for (String propertyListCode : propertyListCodes) {
+            if (executionMonitor.isTerminationRequested()) {
+                break;
+            }
+
+            final Key yardiInterfaceId = yc.getPrimaryKey();
+            Building bulding = findBuilding(yardiInterfaceId, propertyListCode);
+            if (bulding == null) {
+                //TODO need to implement this. But how?
+                throw new Error("propertyListCode not implemented in this Vista version, use building codes instead of list '" + propertyListCode + "'");
+            } else {
+                if (bulding.suspended().getValue()) {
+                    executionMonitor.addInfoEvent("skip suspended property code for charges import", CompletionType.failed, propertyListCode, null);
+                } else {
+                    try {
+                        PhysicalProperty propertyMarketing = stub.getPropertyMarketingInfo(yc, bulding.propertyCode().getValue());
+                        if (propertyMarketing != null) {
+                            marketingInfo.add(propertyMarketing);
+                        }
+                        executionMonitor.addInfoEvent("ILSPropertyMarketing", propertyListCode);
+                    } catch (YardiServiceException e) {
+                        executionMonitor.addFailedEvent("ILSPropertyMarketing", propertyListCode, e);
+                    }
+                }
+            }
+        }
+
+        return marketingInfo;
+    }
+
+    private void importPropertyMarketingInfo(final Key yardiInterfaceId, PhysicalProperty propertyInfo, final ExecutionMonitor executionMonitor,
+            final ExternalInterfaceLoggingStub interfaceLog) {
+        log.info("PropertyMarketing: import started...");
+
+        for (final com.yardi.entity.ils.Property property : propertyInfo.getProperty()) {
+            String propertyCode = property.getPropertyID().getIdentification().getPrimaryID();
+
+            try {
+                log.info("Processing building: {}", propertyCode);
+
+                Building building = new UnitOfWork(TransactionScopeOption.RequiresNew).execute(new Executable<Building, YardiServiceException>() {
+
+                    @Override
+                    public Building execute() throws YardiServiceException {
+                        Building building = new YardiILSMarketingProcessor().updateProperty(yardiInterfaceId, property);
+                        ServerSideFactory.create(BuildingFacade.class).persist(building);
+                        return building;
+                    }
+                });
+
+                for (com.yardi.entity.ils.Floorplan floorplan : property.getFloorplan()) {
+                    importFloorplanMarketingInfo(building, floorplan, executionMonitor);
+                }
+
+            } catch (YardiServiceException e) {
+                executionMonitor.addFailedEvent("Building", propertyCode, e);
+                interfaceLog.logRecordedTracastions();
+            } catch (Throwable t) {
+                executionMonitor.addErredEvent("Building", propertyCode, t);
+                interfaceLog.logRecordedTracastions();
+            }
+
+            if (executionMonitor.isTerminationRequested()) {
+                break;
+            }
+        }
+    }
+
+    private void importFloorplanMarketingInfo(final Building building, final com.yardi.entity.ils.Floorplan floorplan, ExecutionMonitor executionMonitor)
+            throws YardiServiceException {
+        new UnitOfWork(TransactionScopeOption.RequiresNew).execute(new Executable<Void, YardiServiceException>() {
+            @Override
+            public Void execute() throws YardiServiceException {
+                Floorplan fp = new YardiILSMarketingProcessor().updateFloorplan(building, floorplan);
+                Persistence.service().persist(fp);
+                return null;
+            }
+        });
     }
 
     public List<Property> getProperties(ResidentTransactions transaction) {
