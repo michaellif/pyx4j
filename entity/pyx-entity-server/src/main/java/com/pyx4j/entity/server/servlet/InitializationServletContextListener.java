@@ -82,7 +82,7 @@ public class InitializationServletContextListener implements ServletContextListe
         }
     }
 
-    protected String getContextName(ServletContext servletContext) {
+    public static String getContextName(ServletContext servletContext) {
         // Can define this in web.xml
         String configContextName = servletContext.getInitParameter("contextName");
         if (CommonsStringUtils.isStringSet(configContextName)) {
