@@ -13,13 +13,20 @@
  */
 package com.propertyvista.portal.web.client.ui.services.insurance;
 
+import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.commons.css.ThemeColor;
+import com.pyx4j.forms.client.ui.CEntityForm;
+import com.pyx4j.forms.client.ui.form.EditableFormDecorator;
+import com.pyx4j.forms.client.ui.form.FormDecorator;
 import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.widgets.client.Button;
 
 import com.propertyvista.portal.rpc.portal.web.dto.insurance.GeneralInsurancePolicyDTO;
+import com.propertyvista.portal.rpc.portal.web.dto.insurance.TenantSureInsurancePolicyDTO;
+import com.propertyvista.portal.rpc.portal.web.dto.maintenance.MaintenanceRequestDTO;
 import com.propertyvista.portal.web.client.ui.CPortalEntityForm;
 import com.propertyvista.portal.web.client.ui.util.decorators.FormDecoratorBuilder;
 
@@ -45,4 +52,18 @@ public class GeneralPolicyPage extends CPortalEntityForm<GeneralInsurancePolicyD
 
     }
 
+    @Override
+    protected FormDecorator<GeneralInsurancePolicyDTO, CEntityForm<GeneralInsurancePolicyDTO>> createDecorator() {
+        FormDecorator<GeneralInsurancePolicyDTO, CEntityForm<GeneralInsurancePolicyDTO>> decorator = super.createDecorator();
+
+        Button btnEdit = new Button(i18n.tr("Remove"), new Command() {
+            @Override
+            public void execute() {
+//TODO
+            }
+        });
+        decorator.addHeaderToolbarButton(btnEdit);
+
+        return decorator;
+    }
 }
