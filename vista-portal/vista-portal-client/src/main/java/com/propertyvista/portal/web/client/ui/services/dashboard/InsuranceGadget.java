@@ -171,9 +171,17 @@ public class InsuranceGadget extends AbstractGadget<ServicesDashboardViewImpl> {
 
                     @Override
                     public void execute() {
-                        AppSite.getPlaceController().goTo(
-                                new PortalSiteMap.Resident.ResidentServices.TenantInsurance.GeneralPolicyPage().formPlace(getValue().insurancePolicy()
-                                        .getPrimaryKey()));
+                        //TODO is isManagedByTenant write flag to decide?
+                        if (true) {
+                            AppSite.getPlaceController().goTo(
+                                    new PortalSiteMap.Resident.ResidentServices.TenantInsurance.GeneralPolicyPage().formPlace(getValue().insurancePolicy()
+                                            .getPrimaryKey()));
+                        } else {
+                            AppSite.getPlaceController().goTo(
+                                    new PortalSiteMap.Resident.ResidentServices.TenantInsurance.TenantSure.TenantSurePage().formPlace(getValue()
+                                            .insurancePolicy().getPrimaryKey()));
+
+                        }
                     }
                 });
                 detailsAnchor.getElement().getStyle().setMarginTop(30, Unit.PX);
