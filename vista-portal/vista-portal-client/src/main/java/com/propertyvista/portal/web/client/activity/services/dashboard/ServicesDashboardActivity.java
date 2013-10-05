@@ -64,7 +64,7 @@ public class ServicesDashboardActivity extends SecurityAwareActivity implements 
 
     @Override
     public void addThirdPartyTenantInsuranceCertificate() {
-        AppSite.getPlaceController().goTo(new PortalSiteMap.Resident.ResidentServices.TenantInsurance.GeneralCertificateWizard());
+        AppSite.getPlaceController().goTo(new PortalSiteMap.Resident.ResidentServices.TenantInsurance.GeneralPolicyWizard());
     }
 
 }

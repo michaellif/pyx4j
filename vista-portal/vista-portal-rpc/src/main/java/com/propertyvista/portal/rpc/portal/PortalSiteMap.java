@@ -214,13 +214,13 @@ public class PortalSiteMap implements SiteMap {
             public static class TenantInsurance extends AppPlace {
 
                 /** This place is for updating insurance other than TenantSure */
-                public static class GeneralCertificateWizard extends AppPlace {
+                public static class GeneralPolicyWizard extends AppPlace {
                     {
                         setStable(false);
                     }
                 }
 
-                public static class GeneralCertificatePage extends AppPlace {
+                public static class GeneralPolicyPage extends AppPlace {
 
                 }
 

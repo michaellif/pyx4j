@@ -39,13 +39,8 @@ public class PaymentConfirmationForm extends CPortalEntityForm<PaymentRecordDTO>
 
     private static final I18n i18n = I18n.get(PaymentConfirmationForm.class);
 
-    private final AbstractFormView<PaymentRecordDTO> view;
-
     public PaymentConfirmationForm(AbstractFormView<PaymentRecordDTO> view) {
-        super(PaymentRecordDTO.class, null, i18n.tr("Payment Submitted Successfully!"), ThemeColor.contrast4);
-        this.view = view;
-        setViewable(true);
-        inheritViewable(false);
+        super(PaymentRecordDTO.class, view, i18n.tr("Payment Submitted Successfully!"), ThemeColor.contrast4);
     }
 
     @Override
@@ -71,7 +66,7 @@ public class PaymentConfirmationForm extends CPortalEntityForm<PaymentRecordDTO>
         text.add(new Anchor(i18n.tr("Sign up for Auto Pay today"), new Command() {
             @Override
             public void execute() {
-                ((PaymentConfirmationView.Presenter) view.getPresenter()).goToAutoPay();
+                ((PaymentConfirmationView.Presenter) getView().getPresenter()).goToAutoPay();
             }
         }));
 

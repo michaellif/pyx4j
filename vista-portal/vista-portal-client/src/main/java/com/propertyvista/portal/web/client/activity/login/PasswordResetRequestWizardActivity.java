@@ -24,10 +24,10 @@ import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.rpc.shared.VoidSerializable;
 import com.pyx4j.security.rpc.AuthenticationService;
 import com.pyx4j.security.rpc.PasswordRetrievalRequest;
-import com.pyx4j.widgets.client.CaptchaComposite;
-import com.pyx4j.widgets.client.dialog.MessageDialog;
 import com.pyx4j.site.shared.domain.Notification;
 import com.pyx4j.site.shared.domain.Notification.NotificationType;
+import com.pyx4j.widgets.client.CaptchaComposite;
+import com.pyx4j.widgets.client.dialog.MessageDialog;
 
 import com.propertyvista.portal.rpc.portal.web.services.PortalAuthenticationService;
 import com.propertyvista.portal.web.client.PortalWebSite;

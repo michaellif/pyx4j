@@ -27,7 +27,6 @@ import com.pyx4j.forms.client.ui.form.FormDecoratorTheme;
 import com.pyx4j.forms.client.ui.panels.FlexFormPanelTheme;
 import com.pyx4j.site.client.ui.layout.responsive.ResponsiveLayoutTheme;
 import com.pyx4j.widgets.client.DefaultWidgetsTheme;
-import com.pyx4j.widgets.client.DefaultWidgetsTheme.StyleName;
 import com.pyx4j.widgets.client.datepicker.DefaultDatePickerTheme;
 import com.pyx4j.widgets.client.dialog.DefaultDialogTheme;
 

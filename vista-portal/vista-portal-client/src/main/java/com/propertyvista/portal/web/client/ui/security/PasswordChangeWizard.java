@@ -13,8 +13,6 @@
  */
 package com.propertyvista.portal.web.client.ui.security;
 
-import com.google.gwt.dom.client.Style.Unit;
-
 import com.pyx4j.commons.css.ThemeColor;
 import com.pyx4j.forms.client.events.NValueChangeEvent;
 import com.pyx4j.forms.client.events.NValueChangeHandler;

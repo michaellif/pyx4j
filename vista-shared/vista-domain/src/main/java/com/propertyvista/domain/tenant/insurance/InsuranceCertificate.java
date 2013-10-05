@@ -30,6 +30,7 @@ import com.pyx4j.entity.annotations.Owner;
 import com.pyx4j.entity.annotations.ReadOnly;
 import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.annotations.validator.NotNull;
+import com.pyx4j.entity.shared.AttachLevel;
 import com.pyx4j.entity.shared.IPrimitive;
 
 import com.propertyvista.domain.media.ApplicationDocumentHolder;
@@ -45,7 +46,7 @@ public interface InsuranceCertificate<INSURANCE_POLICY extends InsurancePolicy<?
     @Owner
     @JoinColumn
     @ReadOnly
-    @Detached
+    @Detached(level = AttachLevel.IdOnly)
     INSURANCE_POLICY insurancePolicy();
 
     /** <code>true</code> for certificates that have been uploaded / created by tenant's initiative */

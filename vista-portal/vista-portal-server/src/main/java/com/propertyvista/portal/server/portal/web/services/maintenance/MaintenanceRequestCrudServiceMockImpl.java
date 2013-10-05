@@ -24,8 +24,8 @@ import com.pyx4j.rpc.shared.VoidSerializable;
 
 import com.propertyvista.domain.maintenance.MaintenanceRequestMetadata;
 import com.propertyvista.domain.maintenance.MaintenanceRequestStatus.StatusPhase;
-import com.propertyvista.portal.rpc.portal.web.dto.maintenance.MaintenanceRequestStatusDTO;
 import com.propertyvista.portal.rpc.portal.web.dto.maintenance.MaintenanceRequestDTO;
+import com.propertyvista.portal.rpc.portal.web.dto.maintenance.MaintenanceRequestStatusDTO;
 import com.propertyvista.portal.rpc.portal.web.dto.maintenance.MaintenanceSummaryDTO;
 import com.propertyvista.portal.rpc.portal.web.services.maintenance.MaintenanceRequestCrudService;
 

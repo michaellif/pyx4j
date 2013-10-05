@@ -16,21 +16,12 @@ package com.propertyvista.portal.web.client.ui;
 import com.pyx4j.commons.css.StyleManager;
 import com.pyx4j.commons.css.ThemeColor;
 import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.forms.client.ui.IEditableComponentFactory;
 import com.pyx4j.forms.client.ui.form.EditableFormDecorator;
-
-import com.propertyvista.common.client.ui.components.VistaEditorsComponentFactory;
 
 public abstract class CPortalEntityEditor<E extends IEntity> extends CPortalEntityForm<E> {
 
     public CPortalEntityEditor(Class<E> clazz, IEditorView<? extends IEntity> view, String headerCaption, ThemeColor themeColor) {
-        this(clazz, new VistaEditorsComponentFactory(), view, headerCaption, themeColor);
-    }
-
-    public CPortalEntityEditor(Class<E> clazz, IEditableComponentFactory factory, IEditorView<? extends IEntity> view, String headerCaption,
-            ThemeColor themeColor) {
-        super(clazz, factory, view, headerCaption, themeColor);
-        setViewable(true);
+        super(clazz, view, headerCaption, themeColor);
     }
 
     @SuppressWarnings("unchecked")

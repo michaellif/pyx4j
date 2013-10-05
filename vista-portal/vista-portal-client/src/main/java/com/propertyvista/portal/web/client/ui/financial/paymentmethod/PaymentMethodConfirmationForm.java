@@ -45,9 +45,6 @@ public class PaymentMethodConfirmationForm extends CPortalEntityForm<PaymentMeth
 
     public PaymentMethodConfirmationForm(PaymentMethodConfirmationView view) {
         super(PaymentMethodDTO.class, view, i18n.tr("New Payment Method Submitted Successfully!"), ThemeColor.contrast4);
-
-        setViewable(true);
-        inheritViewable(false);
     }
 
     @Override

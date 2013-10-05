@@ -13,7 +13,6 @@
  */
 package com.propertyvista.portal.web.client.ui.financial.dashboard;
 
-import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.commons.css.ThemeColor;
@@ -27,10 +26,6 @@ import com.pyx4j.forms.client.ui.folder.BoxFolderItemDecorator;
 import com.pyx4j.forms.client.ui.folder.IFolderItemDecorator;
 import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.site.client.AppSite;
-import com.pyx4j.site.client.ui.layout.responsive.LayoutChangeEvent;
-import com.pyx4j.site.client.ui.layout.responsive.LayoutChangeHandler;
-import com.pyx4j.site.client.ui.layout.responsive.ResponsiveLayoutPanel.LayoutType;
 
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
 import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;

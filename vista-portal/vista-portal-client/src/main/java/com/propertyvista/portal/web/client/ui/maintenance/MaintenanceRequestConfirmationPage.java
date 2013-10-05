@@ -16,7 +16,7 @@ package com.propertyvista.portal.web.client.ui.maintenance;
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.commons.css.ThemeColor;
-import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
+import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.portal.rpc.portal.web.dto.maintenance.MaintenanceRequestDTO;
@@ -28,15 +28,11 @@ public class MaintenanceRequestConfirmationPage extends CPortalEntityForm<Mainte
 
     public MaintenanceRequestConfirmationPage(MaintenanceRequestConfirmationPageViewImpl view) {
         super(MaintenanceRequestDTO.class, view, i18n.tr("Maintenance Request submitted Successfully!"), ThemeColor.contrast5);
-
-        setViewable(true);
-        inheritViewable(false);
     }
 
     @Override
     public IsWidget createContent() {
-        TwoColumnFlexFormPanel mainPanel = new TwoColumnFlexFormPanel();
-
+        BasicFlexFormPanel mainPanel = new BasicFlexFormPanel();
         return mainPanel;
     }
 

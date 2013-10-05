@@ -17,7 +17,6 @@ import com.pyx4j.commons.css.StyleManager;
 import com.pyx4j.commons.css.ThemeColor;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.forms.client.ui.CEntityForm;
-import com.pyx4j.forms.client.ui.IEditableComponentFactory;
 import com.pyx4j.forms.client.ui.form.FormDecorator;
 
 public abstract class CPortalEntityForm<E extends IEntity> extends CEntityForm<E> {
@@ -31,11 +30,7 @@ public abstract class CPortalEntityForm<E extends IEntity> extends CEntityForm<E
     private final ThemeColor themeColor;
 
     public CPortalEntityForm(Class<E> clazz, IFormView<? extends IEntity> view, String headerCaption, ThemeColor themeColor) {
-        this(clazz, null, view, headerCaption, themeColor);
-    }
-
-    public CPortalEntityForm(Class<E> clazz, IEditableComponentFactory factory, IFormView<? extends IEntity> view, String headerCaption, ThemeColor themeColor) {
-        super(clazz, factory);
+        super(clazz);
         this.view = view;
         this.headerCaption = headerCaption;
         this.themeColor = themeColor;

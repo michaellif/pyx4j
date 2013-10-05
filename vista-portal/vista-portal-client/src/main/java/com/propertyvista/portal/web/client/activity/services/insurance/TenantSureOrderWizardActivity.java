@@ -22,8 +22,8 @@ import com.pyx4j.site.rpc.AppPlace;
 
 import com.propertyvista.domain.contact.AddressSimple;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap.Resident.Financial.Payment;
-import com.propertyvista.portal.rpc.portal.web.dto.insurance.TenantSureInsurancePolicyDTO;
 import com.propertyvista.portal.rpc.portal.web.dto.insurance.TenantSureCoverageDTO;
+import com.propertyvista.portal.rpc.portal.web.dto.insurance.TenantSureInsurancePolicyDTO;
 import com.propertyvista.portal.rpc.portal.web.dto.insurance.TenantSureQuoteDTO;
 import com.propertyvista.portal.rpc.portal.web.services.services.TenantSureInsurancePolicyCrudService;
 import com.propertyvista.portal.web.client.activity.AbstractWizardCrudActivity;

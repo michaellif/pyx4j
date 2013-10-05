@@ -29,7 +29,6 @@ public class TenantSureOrderConfirmationPage extends CPortalEntityForm<TenantSur
     public TenantSureOrderConfirmationPage(TenantSureOrderConfirmationPageViewImpl view) {
         super(TenantSureInsurancePolicyDTO.class, view, i18n.tr("Insurance Request submitted Successfully!"), ThemeColor.contrast4);
 
-        setViewable(true);
         inheritViewable(false);
     }
 

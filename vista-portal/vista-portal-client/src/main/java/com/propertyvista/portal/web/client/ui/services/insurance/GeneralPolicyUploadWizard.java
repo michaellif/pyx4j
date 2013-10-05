@@ -38,9 +38,9 @@ import com.propertyvista.portal.web.client.ui.ApplicationDocumentFileUploaderFol
 import com.propertyvista.portal.web.client.ui.CPortalEntityWizard;
 import com.propertyvista.portal.web.client.ui.util.decorators.FormDecoratorBuilder;
 
-public class GeneralCertificateUploadWizard extends CPortalEntityWizard<GeneralInsurancePolicyDTO> {
+public class GeneralPolicyUploadWizard extends CPortalEntityWizard<GeneralInsurancePolicyDTO> {
 
-    private final static I18n i18n = I18n.get(GeneralCertificateUploadWizard.class);
+    private final static I18n i18n = I18n.get(GeneralPolicyUploadWizard.class);
 
     public interface TenantOwnerClickHandler {
 
@@ -60,7 +60,7 @@ public class GeneralCertificateUploadWizard extends CPortalEntityWizard<GeneralI
      * @param tenantOwnerClickHandler
      *            a handler for tenantOwner click (if not null will render tenant's name as a hyperlink that execs this handler on click)
      */
-    public GeneralCertificateUploadWizard(GeneralCertificateUploadWizardView view, boolean displayTenantOwner, TenantOwnerClickHandler tenantOwnerClickHandler) {
+    public GeneralPolicyUploadWizard(GeneralPolicyUploadWizardView view, boolean displayTenantOwner, TenantOwnerClickHandler tenantOwnerClickHandler) {
         super(GeneralInsurancePolicyDTO.class, view, i18n.tr("Insurance Certificate"), i18n.tr("Submit"), ThemeColor.contrast3);
         this.minRequiredLiability = null;
         this.displayTenantOwner = displayTenantOwner;
@@ -69,7 +69,7 @@ public class GeneralCertificateUploadWizard extends CPortalEntityWizard<GeneralI
         addStep(createDetailsStep());
     }
 
-    public GeneralCertificateUploadWizard(GeneralCertificateUploadWizardView view) {
+    public GeneralPolicyUploadWizard(GeneralPolicyUploadWizardView view) {
         this(view, false, null);
 
     }
@@ -96,7 +96,7 @@ public class GeneralCertificateUploadWizard extends CPortalEntityWizard<GeneralI
         get(proto().certificate().liabilityCoverage()).addValueValidator(new EditableValueValidator<BigDecimal>() {
             @Override
             public ValidationError isValid(CComponent<BigDecimal> component, BigDecimal value) {
-                if (GeneralCertificateUploadWizard.this.minRequiredLiability != null && value != null && value.compareTo(minRequiredLiability) < 0) {
+                if (GeneralPolicyUploadWizard.this.minRequiredLiability != null && value != null && value.compareTo(minRequiredLiability) < 0) {
                     return new ValidationError(component, i18n.tr("The minimum required liability is {0,number,#,##0.00}", minRequiredLiability));
                 }
                 return null;

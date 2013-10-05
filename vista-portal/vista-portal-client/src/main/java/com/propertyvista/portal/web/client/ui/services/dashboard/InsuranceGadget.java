@@ -172,7 +172,8 @@ public class InsuranceGadget extends AbstractGadget<ServicesDashboardViewImpl> {
                     @Override
                     public void execute() {
                         AppSite.getPlaceController().goTo(
-                                new PortalSiteMap.Resident.ResidentServices.TenantInsurance.GeneralCertificatePage().formPlace(getValue().getPrimaryKey()));
+                                new PortalSiteMap.Resident.ResidentServices.TenantInsurance.GeneralPolicyPage().formPlace(getValue().insurancePolicy()
+                                        .getPrimaryKey()));
                     }
                 });
                 detailsAnchor.getElement().getStyle().setMarginTop(30, Unit.PX);

@@ -20,13 +20,13 @@ import com.pyx4j.site.rpc.AppPlace;
 import com.propertyvista.portal.rpc.portal.web.dto.insurance.GeneralInsurancePolicyDTO;
 import com.propertyvista.portal.rpc.portal.web.services.services.GeneralInsurancePolicyCrudService;
 import com.propertyvista.portal.web.client.activity.AbstractEditorActivity;
-import com.propertyvista.portal.web.client.ui.services.insurance.GeneralCertificatePageView;
-import com.propertyvista.portal.web.client.ui.services.insurance.GeneralCertificatePageView.GeneralCertificatePagePresenter;
+import com.propertyvista.portal.web.client.ui.services.insurance.GeneralPolicyPageView;
+import com.propertyvista.portal.web.client.ui.services.insurance.GeneralPolicyPageView.GeneralPolicyPagePresenter;
 
-public class GeneralCertificatePageActivity extends AbstractEditorActivity<GeneralInsurancePolicyDTO> implements GeneralCertificatePagePresenter {
+public class GeneralPolicyPageActivity extends AbstractEditorActivity<GeneralInsurancePolicyDTO> implements GeneralPolicyPagePresenter {
 
-    public GeneralCertificatePageActivity(AppPlace place) {
-        super(GeneralCertificatePageView.class, GWT.<GeneralInsurancePolicyCrudService> create(GeneralInsurancePolicyCrudService.class), place);
+    public GeneralPolicyPageActivity(AppPlace place) {
+        super(GeneralPolicyPageView.class, GWT.<GeneralInsurancePolicyCrudService> create(GeneralInsurancePolicyCrudService.class), place);
     }
 
 }

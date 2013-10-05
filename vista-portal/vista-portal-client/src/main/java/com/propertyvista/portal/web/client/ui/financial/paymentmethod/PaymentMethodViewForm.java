@@ -31,9 +31,6 @@ public class PaymentMethodViewForm extends CPortalEntityForm<PaymentMethodDTO> {
 
     public PaymentMethodViewForm(PaymentMethodViewImpl view) {
         super(PaymentMethodDTO.class, view, i18n.tr("Payment Method"), ThemeColor.contrast4);
-
-        setViewable(true);
-        inheritViewable(false);
     }
 
     @Override

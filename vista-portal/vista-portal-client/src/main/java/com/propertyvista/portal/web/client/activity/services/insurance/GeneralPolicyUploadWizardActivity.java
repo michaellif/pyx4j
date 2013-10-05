@@ -25,16 +25,16 @@ import com.propertyvista.portal.rpc.portal.web.dto.insurance.GeneralInsurancePol
 import com.propertyvista.portal.rpc.portal.web.services.services.GeneralInsurancePolicyCrudService;
 import com.propertyvista.portal.web.client.PortalWebSite;
 import com.propertyvista.portal.web.client.activity.AbstractWizardCrudActivity;
-import com.propertyvista.portal.web.client.ui.services.insurance.GeneralCertificateUploadWizardView;
-import com.propertyvista.portal.web.client.ui.services.insurance.GeneralCertificateUploadWizardView.GeneralCertificateUploadWizardPresenter;
+import com.propertyvista.portal.web.client.ui.services.insurance.GeneralPolicyUploadWizardView;
+import com.propertyvista.portal.web.client.ui.services.insurance.GeneralPolicyUploadWizardView.GeneralPolicyUploadWizardPresenter;
 
-public class GeneralCertificateUploadWizardActivity extends AbstractWizardCrudActivity<GeneralInsurancePolicyDTO> implements
-        GeneralCertificateUploadWizardPresenter {
+public class GeneralPolicyUploadWizardActivity extends AbstractWizardCrudActivity<GeneralInsurancePolicyDTO> implements
+        GeneralPolicyUploadWizardPresenter {
 
-    private static final I18n i18n = I18n.get(GeneralCertificateUploadWizardActivity.class);
+    private static final I18n i18n = I18n.get(GeneralPolicyUploadWizardActivity.class);
 
-    public GeneralCertificateUploadWizardActivity(AppPlace place) {
-        super(GeneralCertificateUploadWizardView.class, GWT.<GeneralInsurancePolicyCrudService> create(GeneralInsurancePolicyCrudService.class),
+    public GeneralPolicyUploadWizardActivity(AppPlace place) {
+        super(GeneralPolicyUploadWizardView.class, GWT.<GeneralInsurancePolicyCrudService> create(GeneralInsurancePolicyCrudService.class),
                 GeneralInsurancePolicyDTO.class);
     }
 

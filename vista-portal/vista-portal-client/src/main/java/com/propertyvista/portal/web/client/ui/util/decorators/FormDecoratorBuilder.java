@@ -13,11 +13,8 @@
  */
 package com.propertyvista.portal.web.client.ui.util.decorators;
 
-import com.pyx4j.forms.client.ui.CCaptcha;
 import com.pyx4j.forms.client.ui.CComponent;
-import com.pyx4j.forms.client.ui.CTextFieldBase;
 import com.pyx4j.forms.client.ui.decorators.WidgetDecorator;
-import com.pyx4j.forms.client.ui.decorators.WidgetDecorator.Builder;
 
 import com.propertyvista.portal.web.client.ui.AbstractPortalPanel;
 

@@ -68,11 +68,6 @@ public class GeneralInsurancePolicyCrudServiceImpl extends AbstractCrudServiceDt
     }
 
     @Override
-    public void retrieve(AsyncCallback<GeneralInsurancePolicyDTO> callback, Key entityId, com.pyx4j.entity.rpc.AbstractCrudService.RetrieveTarget retrieveTarget) {
-        throw new UnsupportedOperationException();
-    }
-
-    @Override
     public void enhanceRetrieved(GeneralInsurancePolicy bo, GeneralInsurancePolicyDTO to, RetrieveTarget retrieveTarget) {
         populateMinLiability(to);
     }

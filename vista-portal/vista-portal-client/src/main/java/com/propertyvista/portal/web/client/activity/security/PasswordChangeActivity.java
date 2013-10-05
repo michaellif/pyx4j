@@ -15,7 +15,6 @@ package com.propertyvista.portal.web.client.activity.security;
 
 import com.google.gwt.core.shared.GWT;
 import com.google.gwt.event.shared.EventBus;
-import com.google.gwt.user.client.History;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
 import com.pyx4j.commons.UserRuntimeException;

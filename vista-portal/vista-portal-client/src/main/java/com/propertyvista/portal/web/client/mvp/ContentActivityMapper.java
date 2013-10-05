@@ -54,8 +54,8 @@ import com.propertyvista.portal.web.client.activity.profile.ProfilePageActivity;
 import com.propertyvista.portal.web.client.activity.security.PasswordChangeActivity;
 import com.propertyvista.portal.web.client.activity.security.PasswordResetActivity;
 import com.propertyvista.portal.web.client.activity.services.dashboard.ServicesDashboardActivity;
-import com.propertyvista.portal.web.client.activity.services.insurance.GeneralCertificatePageActivity;
-import com.propertyvista.portal.web.client.activity.services.insurance.GeneralCertificateUploadWizardActivity;
+import com.propertyvista.portal.web.client.activity.services.insurance.GeneralPolicyPageActivity;
+import com.propertyvista.portal.web.client.activity.services.insurance.GeneralPolicyUploadWizardActivity;
 import com.propertyvista.portal.web.client.activity.services.insurance.TenantSureOrderWizardActivity;
 
 public class ContentActivityMapper implements AppActivityMapper {
@@ -121,10 +121,10 @@ public class ContentActivityMapper implements AppActivityMapper {
 // Insurance:
                     } else if (appPlace instanceof PortalSiteMap.Resident.ResidentServices.TenantInsurance.TenantSure.TenantSureWizard) {
                         activity = new TenantSureOrderWizardActivity(appPlace);
-                    } else if (appPlace instanceof PortalSiteMap.Resident.ResidentServices.TenantInsurance.GeneralCertificateWizard) {
-                        activity = new GeneralCertificateUploadWizardActivity(appPlace);
-                    } else if (appPlace instanceof PortalSiteMap.Resident.ResidentServices.TenantInsurance.GeneralCertificatePage) {
-                        activity = new GeneralCertificatePageActivity(appPlace);
+                    } else if (appPlace instanceof PortalSiteMap.Resident.ResidentServices.TenantInsurance.GeneralPolicyWizard) {
+                        activity = new GeneralPolicyUploadWizardActivity(appPlace);
+                    } else if (appPlace instanceof PortalSiteMap.Resident.ResidentServices.TenantInsurance.GeneralPolicyPage) {
+                        activity = new GeneralPolicyPageActivity(appPlace);
 
 // Maintenance:
                     } else if (place instanceof PortalSiteMap.Resident.Maintenance) {

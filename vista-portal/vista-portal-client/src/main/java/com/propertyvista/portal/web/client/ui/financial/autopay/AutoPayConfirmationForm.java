@@ -37,8 +37,6 @@ public class AutoPayConfirmationForm extends CPortalEntityForm<AutoPayDTO> {
 
     public AutoPayConfirmationForm() {
         super(AutoPayDTO.class, null, i18n.tr("Automatic Payment Submitted Successfully!"), ThemeColor.contrast4);
-        setViewable(true);
-        inheritViewable(false);
     }
 
     @Override

@@ -29,7 +29,6 @@ import com.pyx4j.forms.client.ui.IFormat;
 import com.pyx4j.forms.client.ui.folder.BoxFolderDecorator;
 import com.pyx4j.forms.client.ui.folder.BoxFolderItemDecorator;
 import com.pyx4j.forms.client.ui.folder.CEntityFolder;
-import com.pyx4j.forms.client.ui.folder.EntityFolderColumnDescriptor;
 import com.pyx4j.forms.client.ui.folder.IFolderDecorator;
 import com.pyx4j.forms.client.ui.folder.IFolderItemDecorator;
 import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
@@ -39,7 +38,6 @@ import com.pyx4j.i18n.shared.I18n;
 import com.propertyvista.common.client.resources.VistaImages;
 import com.propertyvista.common.client.ui.components.MediaUtils;
 import com.propertyvista.domain.media.ApplicationDocumentFile;
-import com.propertyvista.portal.web.client.ui.util.decorators.FormDecoratorBuilder;
 
 public class ApplicationDocumentFileUploaderFolder extends CEntityFolder<ApplicationDocumentFile> {
 

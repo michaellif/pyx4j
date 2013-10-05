@@ -13,25 +13,17 @@
  */
 package com.propertyvista.portal.web.client.ui.services.insurance;
 
-import com.google.gwt.user.client.ui.IsWidget;
-
-import com.pyx4j.commons.css.ThemeColor;
-import com.pyx4j.i18n.shared.I18n;
+import java.math.BigDecimal;
 
 import com.propertyvista.portal.rpc.portal.web.dto.insurance.GeneralInsurancePolicyDTO;
-import com.propertyvista.portal.web.client.ui.CPortalEntityEditor;
+import com.propertyvista.portal.web.client.ui.IWizardView;
 
-public class GeneralCertificatePage extends CPortalEntityEditor<GeneralInsurancePolicyDTO> {
+public interface GeneralPolicyUploadWizardView extends IWizardView<GeneralInsurancePolicyDTO> {
 
-    private final static I18n i18n = I18n.get(GeneralCertificatePage.class);
+    public interface GeneralPolicyUploadWizardPresenter extends IWizardPresenter<GeneralInsurancePolicyDTO> {
 
-    public GeneralCertificatePage(GeneralCertificatePageView view) {
-        super(GeneralInsurancePolicyDTO.class, view, i18n.tr("Insurance Certificated"), ThemeColor.contrast3);
     }
 
-    @Override
-    public IsWidget createContent() {
-        return null;
-    }
+    void setMinRequiredLiability(BigDecimal minRequiredLiability);
 
 }

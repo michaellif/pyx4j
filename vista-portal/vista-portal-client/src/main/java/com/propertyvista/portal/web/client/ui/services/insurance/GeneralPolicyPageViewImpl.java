@@ -7,19 +7,20 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on May 14, 2011
+ * Created on May 15, 2011
  * @author Dad
  * @version $Id$
  */
 package com.propertyvista.portal.web.client.ui.services.insurance;
 
 import com.propertyvista.portal.rpc.portal.web.dto.insurance.GeneralInsurancePolicyDTO;
-import com.propertyvista.portal.web.client.ui.IEditorView;
+import com.propertyvista.portal.web.client.ui.AbstractEditorView;
 
-public interface GeneralCertificatePageView extends IEditorView<GeneralInsurancePolicyDTO> {
+public class GeneralPolicyPageViewImpl extends AbstractEditorView<GeneralInsurancePolicyDTO> implements GeneralPolicyPageView {
 
-    public interface GeneralCertificatePagePresenter extends IEditorPresenter<GeneralInsurancePolicyDTO> {
-
+    public GeneralPolicyPageViewImpl() {
+        super();
+        setForm(new GeneralPolicyPage(this));
     }
 
 }

@@ -33,9 +33,6 @@ public class AutoPayViewForm extends CPortalEntityForm<AutoPayDTO> {
 
     public AutoPayViewForm() {
         super(AutoPayDTO.class, null, i18n.tr("Auto Pay Agreement"), ThemeColor.contrast4);
-
-        setViewable(true);
-        inheritViewable(false);
     }
 
     @Override

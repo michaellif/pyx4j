@@ -22,8 +22,8 @@ import com.pyx4j.entity.shared.EntityFactory;
 
 import com.propertyvista.portal.rpc.portal.web.dto.insurance.status.GeneralInsuranceCertificateSummaryDTO;
 import com.propertyvista.portal.rpc.portal.web.dto.insurance.status.InsuranceStatusDTO;
-import com.propertyvista.portal.rpc.portal.web.dto.insurance.status.TenantSureCertificateSummaryDTO;
 import com.propertyvista.portal.rpc.portal.web.dto.insurance.status.InsuranceStatusDTO.Status;
+import com.propertyvista.portal.rpc.portal.web.dto.insurance.status.TenantSureCertificateSummaryDTO;
 import com.propertyvista.portal.rpc.portal.web.services.services.InsuranceService;
 
 public class InsuranceServiceMockImpl implements InsuranceService {
