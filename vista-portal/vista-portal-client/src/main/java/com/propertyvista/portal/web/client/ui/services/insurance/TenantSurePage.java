@@ -16,10 +16,12 @@ package com.propertyvista.portal.web.client.ui.services.insurance;
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.commons.css.ThemeColor;
+import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.portal.rpc.portal.web.dto.insurance.TenantSureInsurancePolicyDTO;
 import com.propertyvista.portal.web.client.ui.CPortalEntityEditor;
+import com.propertyvista.portal.web.client.ui.util.decorators.FormDecoratorBuilder;
 
 public class TenantSurePage extends CPortalEntityEditor<TenantSureInsurancePolicyDTO> {
 
@@ -31,7 +33,15 @@ public class TenantSurePage extends CPortalEntityEditor<TenantSureInsurancePolic
 
     @Override
     public IsWidget createContent() {
-        return null;
+        BasicFlexFormPanel mainPanel = new BasicFlexFormPanel();
+        int row = -1;
+
+        mainPanel.setH1(++row, 0, 1, i18n.tr("Basic Information"));
+        mainPanel.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().certificate().insuranceProvider()), "150px").build());
+        mainPanel.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().certificate().insuranceCertificateNumber()), "150px").build());
+        mainPanel.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().certificate().liabilityCoverage()), "150px").build());
+
+        return mainPanel;
     }
 
 }
