@@ -15,9 +15,12 @@ package com.propertyvista.portal.web.client.ui;
 
 import java.util.List;
 
+import com.google.gwt.dom.client.Style.Cursor;
 import com.google.gwt.dom.client.Style.Display;
 import com.google.gwt.dom.client.Style.Float;
 import com.google.gwt.dom.client.Style.Position;
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.FlowPanel;
@@ -31,6 +34,7 @@ import com.pyx4j.site.client.ui.layout.responsive.LayoutChangeHandler;
 import com.pyx4j.site.client.ui.layout.responsive.LayoutChangeRequestEvent;
 import com.pyx4j.site.client.ui.layout.responsive.LayoutChangeRequestEvent.ChangeType;
 import com.pyx4j.site.client.ui.layout.responsive.ResponsiveLayoutPanel.LayoutType;
+import com.pyx4j.site.rpc.AppPlace;
 import com.pyx4j.widgets.client.Button;
 import com.pyx4j.widgets.client.Button.ButtonMenuBar;
 import com.pyx4j.widgets.client.actionbar.Toolbar;
@@ -157,10 +161,23 @@ public class ToolbarViewImpl extends FlowPanel implements ToolbarView {
         brandImage = new Image(PortalImages.INSTANCE.myCommunityHeaderLogo());
         brandImage.getElement().getStyle().setFloat(Float.LEFT);
         brandImage.getElement().getStyle().setProperty("borderRadius", "4px");
+        brandImage.getElement().getStyle().setCursor(Cursor.POINTER);
+        brandImage.setTitle("Home");
 
         brandLabel = new Image(PortalImages.INSTANCE.myCommunityHeaderLogoLabel());
         brandLabel.getElement().getStyle().setFloat(Float.RIGHT);
         brandLabel.getElement().getStyle().setProperty("margin", "10px 0 0 0");
+        brandLabel.getElement().getStyle().setCursor(Cursor.POINTER);
+        brandLabel.setTitle("Home");
+
+        ClickHandler goHomeHandler = new ClickHandler() {
+            @Override
+            public void onClick(ClickEvent event) {
+                AppSite.getPlaceController().goTo(AppPlace.NOWHERE);
+            }
+        };
+        brandImage.addClickHandler(goHomeHandler);
+        brandLabel.addClickHandler(goHomeHandler);
 
         brandHolder = new FlowPanel();
         brandHolder.setStyleName(PortalWebRootPaneTheme.StyleName.BrandImage.name());
