@@ -165,18 +165,21 @@ public class VistaWebApplicationInitializer implements ServletContainerInitializ
 
         // oapi
         {
-            // TODO The WSServletContainerInitializer used.  this produces MemoryLeaks
-            if (false) {
-                ctx.addListener(WSServletContextListenerFix.class);
-            }
             {
                 FilterRegistration.Dynamic fc = ctx.addFilter("OAPIFilter", OAPIFilter.class);
                 fc.addMappingForUrlPatterns(null, true, "/interfaces/oapi/*");
+            }
+
+            // TODO avoid WSServletContainerInitializer invocation, it produces MemoryLeaks
+            // We used web.xml
+            if (false) {
+                ctx.addListener(WSServletContextListenerFix.class);
             }
             {
                 ServletRegistration.Dynamic sc = ctx.addServlet("OpenApiWsService", WSServlet.class);
                 sc.addMapping("/interfaces/oapi/ws/*");
             }
+
             {
                 ServletRegistration.Dynamic sc = ctx.addServlet("OpenApiRsService", ServletContainer.class);
                 sc.addMapping("/interfaces/oapi/rs/*");
