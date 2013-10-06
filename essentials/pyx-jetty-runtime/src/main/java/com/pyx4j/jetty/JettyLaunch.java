@@ -86,8 +86,19 @@ public abstract class JettyLaunch {
         return true;
     }
 
+    /**
+     * Override to do custom configuration
+     */
+    protected void configure(WebAppContext webAppContext) {
+
+    }
+
     public static void launch(JettyLaunch jettyLaunch) throws Exception {
-        int port = jettyLaunch.getServerPort();
+        jettyLaunch.configureAndStart();
+    }
+
+    protected final void configureAndStart() throws Exception {
+        int port = getServerPort();
         //see if port is available
         try {
             ServerSocket s = new ServerSocket(port);
@@ -96,13 +107,13 @@ public abstract class JettyLaunch {
             throw new RuntimeException("Port already in use", e);
         }
 
-        if (jettyLaunch.isRunningInDeveloperEnviroment()) {
+        if (isRunningInDeveloperEnviroment()) {
             System.setProperty("com.pyx4j.DeveloperEnviroment", Boolean.TRUE.toString());
         }
 
         Server server = new Server(port);
 
-        if (jettyLaunch.getServerSslPort() != 0) {
+        if (getServerSslPort() != 0) {
             SslContextFactory sslContextFactory = new SslContextFactory();
             sslContextFactory.setKeyStorePassword("123456");
             sslContextFactory.setKeyStoreType("JKS");
@@ -110,20 +121,20 @@ public abstract class JettyLaunch {
             sslContextFactory.setKeyManagerPassword("123456");
 
             ServerConnector connector = new ServerConnector(server, sslContextFactory);
-            connector.setPort(jettyLaunch.getServerSslPort());
+            connector.setPort(getServerSslPort());
 
             server.addConnector(connector);
         }
 
         HandlerList handlers = new HandlerList();
 
-        if (jettyLaunch.getRequestLogFile() != null) {
-            File logFile = new File(jettyLaunch.getRequestLogFile());
+        if (getRequestLogFile() != null) {
+            File logFile = new File(getRequestLogFile());
             if (!logFile.getParentFile().isDirectory()) {
                 logFile.getParentFile().mkdirs();
             }
 
-            NCSARequestLog requestLog = new NCSARequestLog(jettyLaunch.getRequestLogFile());
+            NCSARequestLog requestLog = new NCSARequestLog(getRequestLogFile());
             requestLog.setRetainDays(1);
             requestLog.setAppend(true);
             requestLog.setExtended(true);
@@ -134,21 +145,27 @@ public abstract class JettyLaunch {
         }
 
         WebAppContext webAppContext = new WebAppContext();
-        webAppContext.setDescriptor(jettyLaunch.getWarResourceBase() + "/WEB-INF/web.xml");
-        webAppContext.setContextPath(jettyLaunch.getContextPath());
+        webAppContext.setDescriptor(getWarResourceBase() + "/WEB-INF/web.xml");
+        webAppContext.setContextPath(getContextPath());
         webAppContext.setParentLoaderPriority(true);
         webAppContext.getInitParams().put("org.eclipse.jetty.servlet.Default.useFileMappedBuffer", "false");
-        webAppContext.setResourceBase(jettyLaunch.getWarResourceBase());
+        webAppContext.setResourceBase(getWarResourceBase());
+
         webAppContext.setConfigurations(new Configuration[] { new WebInfConfiguration(), new WebXmlConfiguration(), new AnnotationConfiguration() });
 
-        if (jettyLaunch.getSessionCookiePath() != null) {
-            webAppContext.getSessionHandler().getSessionManager().getSessionCookieConfig().setPath(jettyLaunch.getSessionCookiePath());
-        }
-        webAppContext.getSessionHandler().getSessionManager().getSessionCookieConfig().setMaxAge(jettyLaunch.getSessionMaxAge());
+        webAppContext.setConfigurationDiscovered(false);
 
-        if (jettyLaunch.getHashLoginServiceConfig() != null) {
-            webAppContext.getSecurityHandler().setLoginService(new HashLoginService("default", jettyLaunch.getHashLoginServiceConfig()));
+        if (getSessionCookiePath() != null) {
+            webAppContext.getSessionHandler().getSessionManager().getSessionCookieConfig().setPath(getSessionCookiePath());
         }
+        webAppContext.getSessionHandler().getSessionManager().getSessionCookieConfig().setMaxAge(getSessionMaxAge());
+
+        if (getHashLoginServiceConfig() != null) {
+            webAppContext.getSecurityHandler().setLoginService(new HashLoginService("default", getHashLoginServiceConfig()));
+        }
+
+        configure(webAppContext);
+
         handlers.addHandler(webAppContext);
 
         //handle default /
@@ -157,7 +174,7 @@ public abstract class JettyLaunch {
 
         RedirectPatternRule redirect = new RedirectPatternRule();
         redirect.setPattern("/");
-        redirect.setLocation(jettyLaunch.getContextPath());
+        redirect.setLocation(getContextPath());
         rewrite.addRule(redirect);
         handlers.addHandler(rewrite);
 
@@ -166,4 +183,5 @@ public abstract class JettyLaunch {
         server.start();
         server.join();
     }
+
 }
