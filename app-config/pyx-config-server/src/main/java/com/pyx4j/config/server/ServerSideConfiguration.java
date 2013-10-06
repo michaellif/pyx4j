@@ -85,7 +85,11 @@ public class ServerSideConfiguration {
      */
     @SuppressWarnings("unchecked")
     public static <E extends ServerSideConfiguration> E instance(Class<E> serverSideConfigurationClass) {
-        return (E) instance();
+        ServerSideConfiguration i = instance();
+        if (i.getClass().isAssignableFrom(serverSideConfigurationClass)) {
+            throw new Error(i.getClass().getName() + " cannot be cast to " + serverSideConfigurationClass.getName(), instanceDefinedFrom);
+        }
+        return (E) i;
     }
 
     public static final void setInstance(ServerSideConfiguration instance) {
