@@ -45,6 +45,7 @@ import com.pyx4j.server.contexts.LifecycleFilter;
 import com.propertyvista.biz.system.AuditSessionListener;
 import com.propertyvista.domain.security.common.VistaApplication;
 import com.propertyvista.ils.kijiji.rs.KijijiApiRsApplication;
+import com.propertyvista.misc.VistaTODO;
 import com.propertyvista.oapi.rs.OpenApiRsApplication;
 import com.propertyvista.operations.server.services.VistaConfigInfoServlet;
 import com.propertyvista.operations.server.services.simulator.CardServiceSimulationServlet;
@@ -170,21 +171,24 @@ public class VistaWebApplicationInitializer implements ServletContainerInitializ
                 fc.addMappingForUrlPatterns(null, true, "/interfaces/oapi/*");
             }
 
-            // TODO avoid WSServletContainerInitializer invocation, it produces MemoryLeaks
-            // We used web.xml
-            if (false) {
-                ctx.addListener(WSServletContextListenerFix.class);
-            }
-            {
-                ServletRegistration.Dynamic sc = ctx.addServlet("OpenApiWsService", WSServlet.class);
-                sc.addMapping("/interfaces/oapi/ws/*");
+            if (!VistaTODO.removedForProductionOAPI) {
+                // TODO avoid WSServletContainerInitializer invocation, it produces MemoryLeaks
+                // We used web.xml
+                if (false) {
+                    ctx.addListener(WSServletContextListenerFix.class);
+                }
+                {
+                    ServletRegistration.Dynamic sc = ctx.addServlet("OpenApiWsService", WSServlet.class);
+                    sc.addMapping("/interfaces/oapi/ws/*");
+                }
+
+                {
+                    ServletRegistration.Dynamic sc = ctx.addServlet("OpenApiRsService", ServletContainer.class);
+                    sc.addMapping("/interfaces/oapi/rs/*");
+                    sc.setInitParameter("javax.ws.rs.Application", OpenApiRsApplication.class.getName());
+                }
             }
 
-            {
-                ServletRegistration.Dynamic sc = ctx.addServlet("OpenApiRsService", ServletContainer.class);
-                sc.addMapping("/interfaces/oapi/rs/*");
-                sc.setInitParameter("javax.ws.rs.Application", OpenApiRsApplication.class.getName());
-            }
             {
                 ServletRegistration.Dynamic sc = ctx.addServlet("ILSKijijiService", ServletContainer.class);
                 sc.addMapping("/interfaces/ils/kijiji/*");

@@ -70,7 +70,7 @@ public class NavigSettingsActivity extends AbstractActivity implements NavigView
         list.add(folder);
 
         if (SecurityController.checkBehavior(VistaCrmBehavior.PropertyVistaAccountOwner)) {
-            if (VistaTODO.ENABLE_ONBOARDING_WIZARDS) {
+            if (VistaTODO.ENABLE_ONBOARDING_WIZARDS_IN_DEVELOPMENT && ApplicationMode.isDevelopment()) {
                 folder = new NavigFolder(i18n.tr("Settings"));
                 folder.addNavigItem(new Settings.OnlinePaymentSetup());
                 folder.addNavigItem(new Settings.CreditCheck());

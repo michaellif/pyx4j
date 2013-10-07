@@ -13,12 +13,11 @@
  */
 package com.propertyvista.misc;
 
-import com.pyx4j.config.shared.ApplicationMode;
 
 public class VistaTODO {
 
     /** enables wizards in CRM that set up credit check (equifax) and online payments */
-    public static final boolean ENABLE_ONBOARDING_WIZARDS = ApplicationMode.isDevelopment();
+    public static final boolean ENABLE_ONBOARDING_WIZARDS_IN_DEVELOPMENT = true;
 
     /*
      * This is changed by BuildMaster when creating Branch.
@@ -30,6 +29,8 @@ public class VistaTODO {
      * TODO: Do not forget to turn it on/off during/after production release !!!
      */
     public static boolean removedForProduction = true;
+
+    public static boolean removedForProductionOAPI = true;
 
     /**
      * TODO: Do not forget to turn it on/off during/after production release !!!

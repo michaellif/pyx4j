@@ -18,12 +18,18 @@ import javax.servlet.ServletContextListener;
 
 import com.sun.xml.ws.transport.http.servlet.WSServletContextListener;
 
+import com.propertyvista.misc.VistaTODO;
+
 public class WSServletContextListenerFix implements ServletContextListener {
 
-    WSServletContextListener delegate = new WSServletContextListener();
+    private WSServletContextListener delegate;
 
     @Override
     public void contextInitialized(ServletContextEvent event) {
+        if (VistaTODO.removedForProductionOAPI) {
+            return;
+        }
+        delegate = new WSServletContextListener();
         delegate.contextInitialized(event);
         JAXWS.fixMemoryLeaks();
         JAXB.fixMemoryLeaks();
@@ -31,8 +37,11 @@ public class WSServletContextListenerFix implements ServletContextListener {
 
     @Override
     public void contextDestroyed(ServletContextEvent event) {
-        delegate.contextDestroyed(event);
-        JAXWS.fixMemoryLeaks();
-        JAXB.fixMemoryLeaks();
+        if (delegate != null) {
+            delegate.contextDestroyed(event);
+            delegate = null;
+            JAXWS.fixMemoryLeaks();
+            JAXB.fixMemoryLeaks();
+        }
     }
 }
