@@ -34,6 +34,7 @@ import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.security.shared.SecurityController;
 
 import com.propertyvista.domain.security.VistaCrmBehavior;
+import com.propertyvista.domain.security.VistaCustomerBehavior;
 import com.propertyvista.domain.tenant.CustomerPicture;
 import com.propertyvista.portal.rpc.DeploymentConsts;
 import com.propertyvista.server.common.blob.ETag;
@@ -120,7 +121,8 @@ public class CustomerPictureServlet extends HttpServlet {
     }
 
     private void assertAccessRights() {
-        SecurityController.assertAnyBehavior(VistaCrmBehavior.values());
+        SecurityController.assertAnyBehavior(VistaCrmBehavior.PropertyManagement, VistaCrmBehavior.PropertyVistaAccountOwner,
+                VistaCrmBehavior.PropertyVistaSupport, VistaCustomerBehavior.Tenant);
     }
 
 }
