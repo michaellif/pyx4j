@@ -32,6 +32,7 @@ import com.pyx4j.widgets.client.ImageHolder.ImageViewport;
 import com.pyx4j.widgets.client.ImageHolder.ImageViewport.ScaleMode;
 
 import com.propertyvista.common.client.resources.VistaImages;
+import com.propertyvista.common.client.ui.components.MediaUtils;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap;
 import com.propertyvista.portal.rpc.portal.web.dto.ResidentSummaryDTO;
 import com.propertyvista.portal.web.client.resources.PortalImages;
@@ -114,13 +115,11 @@ public class ProfileGadget extends AbstractGadget<MainDashboardViewImpl> {
             FlowPanel contentPanel = new FlowPanel();
             setWidget(contentPanel);
 
-            //60x80
-            picture = new ImageViewport(new Dimension(100, 150), ScaleMode.ScaleToFit);
+            picture = new ImageViewport(new Dimension(60, 80), ScaleMode.ScaleToFit);
             picture.addStyleName(DashboardTheme.StyleName.PersonPhoto.name());
             picture.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
             picture.getElement().getStyle().setVerticalAlign(VerticalAlign.MIDDLE);
             contentPanel.add(picture);
-            picture.setImage(new Image(VistaImages.INSTANCE.profilePicture()));
 
             nameLabel = new HTML();
             nameLabel.setStyleName(DashboardTheme.StyleName.PersonName.name());
@@ -132,7 +131,9 @@ public class ProfileGadget extends AbstractGadget<MainDashboardViewImpl> {
 
         void setValue(ResidentSummaryDTO value) {
             nameLabel.setHTML(value.tenantName().getValue());
-            //            picture.setImage(new Image(value.picture().);
+            Image img = value.picture().isNull() ? new Image(VistaImages.INSTANCE.profilePicture()) : new Image(MediaUtils.createCustomerPictureUrl(value
+                    .picture()));
+            picture.setImage(img);
         }
     }
 
