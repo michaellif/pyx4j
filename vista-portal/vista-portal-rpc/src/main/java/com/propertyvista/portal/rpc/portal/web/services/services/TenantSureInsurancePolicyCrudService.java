@@ -30,14 +30,31 @@ public interface TenantSureInsurancePolicyCrudService extends AbstractCrudServic
     @Deprecated
     void getQuotationRequestParams(AsyncCallback<TenantSureQuotationRequestParamsDTO> callback);
 
-    void getQuote(AsyncCallback<TenantSureQuoteDTO> callback, TenantSureCoverageDTO coverageRequest);
-
     @Deprecated
     /** TenantSure Purchase service finish should be used */
     void acceptQuote(AsyncCallback<VoidSerializable> callback, TenantSureQuoteDTO quote, String tenantName, String tenantPhone,
             InsurancePaymentMethod paymentMethod);
 
+    void getQuote(AsyncCallback<TenantSureQuoteDTO> callback, TenantSureCoverageDTO coverageRequest);
+
     void getCurrentTenantAddress(AsyncCallback<AddressSimple> callback);
 
     void sendQuoteDetails(AsyncCallback<String> asyncCallback, String quoteId);
+
+    // Management related methods start here:
+
+    void getPreAuthorizedPaymentsAgreement(AsyncCallback<String> areementHtml);
+
+    void getFaq(AsyncCallback<String> faqHtml);
+
+    void updatePaymentMethod(AsyncCallback<VoidSerializable> callback, InsurancePaymentMethod paymentMethod);
+
+    void cancelTenantSure(AsyncCallback<VoidSerializable> callback);
+
+    void reinstate(AsyncCallback<VoidSerializable> callback);
+
+    /**
+     * if email is <code>null</code> will send the email to the tenant's email address, returns an email address that was used to send it.
+     */
+    void sendCertificate(AsyncCallback<String> defaultAsyncCallback, String email);
 }

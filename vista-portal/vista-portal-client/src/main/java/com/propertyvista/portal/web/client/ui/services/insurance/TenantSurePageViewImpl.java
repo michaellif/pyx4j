@@ -13,6 +13,9 @@
  */
 package com.propertyvista.portal.web.client.ui.services.insurance;
 
+import com.pyx4j.widgets.client.dialog.MessageDialog;
+
+import com.propertyvista.domain.tenant.insurance.TenantSureConstants;
 import com.propertyvista.portal.rpc.portal.web.dto.insurance.TenantSureInsurancePolicyDTO;
 import com.propertyvista.portal.web.client.ui.AbstractEditorView;
 
@@ -23,4 +26,15 @@ public class TenantSurePageViewImpl extends AbstractEditorView<TenantSureInsuran
         setForm(new TenantSurePage(this));
     }
 
+    @Override
+    public void setPresenter(com.propertyvista.portal.web.client.ui.IFormView.IFormViewPresenter<TenantSureInsurancePolicyDTO> presenter) {
+        ((TenantSurePage) getForm()).setPresenter((TenantSurePagePresenter) presenter);
+        super.setPresenter(presenter);
+    }
+
+    @Override
+    public void displayMakeAClaimDialog() {
+        MessageDialog.info(i18n.tr("To make a claim please call {0} at {1}", TenantSureConstants.TENANTSURE_LEGAL_NAME,
+                TenantSureConstants.TENANTSURE_PHONE_NUMBER));
+    }
 }

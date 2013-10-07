@@ -57,6 +57,7 @@ import com.propertyvista.portal.web.client.activity.services.dashboard.ServicesD
 import com.propertyvista.portal.web.client.activity.services.insurance.GeneralPolicyPageActivity;
 import com.propertyvista.portal.web.client.activity.services.insurance.GeneralPolicyUploadWizardActivity;
 import com.propertyvista.portal.web.client.activity.services.insurance.TenantSureOrderWizardActivity;
+import com.propertyvista.portal.web.client.activity.services.insurance.TenantSurePageActivity;
 
 public class ContentActivityMapper implements AppActivityMapper {
 
@@ -121,6 +122,9 @@ public class ContentActivityMapper implements AppActivityMapper {
 // Insurance:
                     } else if (appPlace instanceof PortalSiteMap.Resident.ResidentServices.TenantInsurance.TenantSure.TenantSureWizard) {
                         activity = new TenantSureOrderWizardActivity(appPlace);
+                    } else if (appPlace instanceof PortalSiteMap.Resident.ResidentServices.TenantInsurance.TenantSure.TenantSurePage) {
+                        activity = new TenantSurePageActivity(appPlace);
+
                     } else if (appPlace instanceof PortalSiteMap.Resident.ResidentServices.TenantInsurance.GeneralPolicyWizard) {
                         activity = new GeneralPolicyUploadWizardActivity(appPlace);
                     } else if (appPlace instanceof PortalSiteMap.Resident.ResidentServices.TenantInsurance.GeneralPolicyPage) {

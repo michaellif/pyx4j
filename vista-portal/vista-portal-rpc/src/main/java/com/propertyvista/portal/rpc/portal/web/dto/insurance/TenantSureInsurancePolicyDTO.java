@@ -14,9 +14,13 @@
 package com.propertyvista.portal.rpc.portal.web.dto.insurance;
 
 import com.pyx4j.entity.annotations.Transient;
+import com.pyx4j.entity.shared.IList;
+import com.pyx4j.entity.shared.IPrimitive;
 
 import com.propertyvista.domain.payment.InsurancePaymentMethod;
 import com.propertyvista.domain.tenant.insurance.TenantSureInsurancePolicy;
+import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.tenantsure.TenantSureMessageDTO;
+import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.tenantsure.TenantSurePaymentDTO;
 
 @Transient
 public interface TenantSureInsurancePolicyDTO extends TenantSureInsurancePolicy {
@@ -28,5 +32,19 @@ public interface TenantSureInsurancePolicyDTO extends TenantSureInsurancePolicy 
     TenantSureQuoteDTO quote();
 
     InsurancePaymentMethod paymentMethod();
+
+    IPrimitive<Boolean> isPaymentFailed();
+
+    IPrimitive<Boolean> isCancelled();
+
+    TenantSurePaymentDTO annualPaymentDetails();
+
+    /**
+     * The date of next payment can be <code>null</code> if the there's some problem with credit card, i.e. credit limit, cancelled or whatever, anything that
+     * caused last payment to fail.
+     */
+    TenantSurePaymentDTO nextPaymentDetails();
+
+    IList<TenantSureMessageDTO> messages();
 
 }

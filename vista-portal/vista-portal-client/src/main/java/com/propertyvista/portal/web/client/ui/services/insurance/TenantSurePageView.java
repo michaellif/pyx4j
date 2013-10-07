@@ -20,6 +20,22 @@ public interface TenantSurePageView extends IEditorView<TenantSureInsurancePolic
 
     public interface TenantSurePagePresenter extends IEditorPresenter<TenantSureInsurancePolicyDTO> {
 
+        void sendCertificate(String email);
+
+        void updateCreditCardDetails();
+
+        void viewFaq();
+
+        void viewAboutTenantSure();
+
+        void cancelTenantSure();
+
+        void reinstate();
+
+        void makeAClaim();
+
     }
+
+    void displayMakeAClaimDialog();
 
 }

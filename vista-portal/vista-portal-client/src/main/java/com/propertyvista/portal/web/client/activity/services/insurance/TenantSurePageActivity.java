@@ -29,4 +29,46 @@ public class TenantSurePageActivity extends AbstractEditorActivity<TenantSureIns
         super(TenantSurePageView.class, GWT.<TenantSureInsurancePolicyCrudService> create(TenantSureInsurancePolicyCrudService.class), place);
     }
 
+    @Override
+    public void sendCertificate(String email) {
+        // TODO Auto-generated method stub
+
+    }
+
+    @Override
+    public void updateCreditCardDetails() {
+        // TODO Auto-generated method stub
+
+    }
+
+    @Override
+    public void viewFaq() {
+        // TODO Auto-generated method stub
+
+    }
+
+    @Override
+    public void viewAboutTenantSure() {
+        // TODO Auto-generated method stub
+
+    }
+
+    @Override
+    public void cancelTenantSure() {
+        // TODO Auto-generated method stub
+
+    }
+
+    @Override
+    public void reinstate() {
+        // TODO Auto-generated method stub
+
+    }
+
+    @Override
+    public void makeAClaim() {
+        // TODO Auto-generated method stub
+
+    }
+
 }

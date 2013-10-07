@@ -17,7 +17,9 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.Collections;
+import java.util.GregorianCalendar;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -26,6 +28,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.commons.Key;
+import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.rpc.EntitySearchResult;
 import com.pyx4j.entity.server.Persistence;
@@ -47,6 +50,8 @@ import com.propertyvista.domain.payment.InsurancePaymentMethod;
 import com.propertyvista.domain.person.Person;
 import com.propertyvista.domain.policy.policies.TenantInsurancePolicy;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
+import com.propertyvista.domain.tenant.insurance.TenantSureConstants;
+import com.propertyvista.domain.tenant.insurance.TenantSurePaymentSchedule;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.Tenant;
 import com.propertyvista.operations.rpc.VistaSystemMaintenanceState;
@@ -54,6 +59,9 @@ import com.propertyvista.portal.rpc.portal.web.dto.insurance.TenantSureCoverageD
 import com.propertyvista.portal.rpc.portal.web.dto.insurance.TenantSureInsurancePolicyDTO;
 import com.propertyvista.portal.rpc.portal.web.dto.insurance.TenantSureQuoteDTO;
 import com.propertyvista.portal.rpc.portal.web.services.services.TenantSureInsurancePolicyCrudService;
+import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.tenantsure.TenantSurePaymentDTO;
+import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.tenantsure.TenantSurePaymentItemDTO;
+import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.tenantsure.TenantSurePaymentItemTaxDTO;
 import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.tenantsure.TenantSureQuotationRequestParamsDTO;
 import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.tenantsure.errors.TenantSureAlreadyPurchasedException;
 import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.tenantsure.errors.TenantSureOnMaintenanceException;
@@ -269,14 +277,56 @@ public class TenantSureInsurancePolicyCrudServiceImpl implements TenantSureInsur
 
     @Override
     public void retrieve(AsyncCallback<TenantSureInsurancePolicyDTO> callback, Key entityId, com.pyx4j.entity.rpc.AbstractCrudService.RetrieveTarget retrieveTarget) {
-        // TODO Auto-generated method stub
+        // THIS IS MOCKUP:
+        TenantSureInsurancePolicyDTO mockupPolicyDTO = EntityFactory.create(TenantSureInsurancePolicyDTO.class);
+        mockupPolicyDTO.certificate().insuranceCertificateNumber().setValue("TENANT-SURE-MOCKUP-001");
+        mockupPolicyDTO.certificate().insuranceProvider().setValue(TenantSureConstants.TENANTSURE_LEGAL_NAME);
+        mockupPolicyDTO.certificate().liabilityCoverage().setValue(new BigDecimal("1000000"));        
+        mockupPolicyDTO.certificate().inceptionDate().setValue(new LogicalDate());        
+        mockupPolicyDTO.contentsCoverage().setValue(new BigDecimal("50000"));
+        mockupPolicyDTO.deductible().setValue(new BigDecimal("2000"));
+        mockupPolicyDTO.paymentSchedule().setValue(TenantSurePaymentSchedule.Monthly);
         
+        
+        {
+        TenantSurePaymentDTO paymentDTO = EntityFactory.create(TenantSurePaymentDTO.class);
+        Calendar cal = GregorianCalendar.getInstance();
+        cal.add(Calendar.MONTH, 1);
+        cal.set(Calendar.DAY_OF_MONTH, cal.getActualMinimum(Calendar.DAY_OF_MONTH));
+        
+        paymentDTO.paymentDate().setValue(new LogicalDate(cal.getTime()));
+        paymentDTO.total().setValue(new BigDecimal("30.00"));
+        TenantSurePaymentItemDTO paymentItem = paymentDTO.paymentBreakdown().$();
+        paymentItem.description().setValue("premium");
+        paymentItem.amount().setValue(new BigDecimal("19.99"));
+        TenantSurePaymentItemTaxDTO taxA = paymentItem.taxBreakdown().$();
+        taxA.tax().setValue("HST");
+        taxA.amount().setValue(new BigDecimal("5"));
+        paymentItem.taxBreakdown().add(taxA);
+        paymentDTO.paymentBreakdown().add(paymentItem);
+        mockupPolicyDTO.nextPaymentDetails().set(paymentDTO);
+        }
+        
+        {
+            TenantSurePaymentDTO paymentDTO = EntityFactory.create(TenantSurePaymentDTO.class);            
+            paymentDTO.total().setValue(new BigDecimal("30.00"));
+            TenantSurePaymentItemDTO paymentItem = paymentDTO.paymentBreakdown().$();
+            paymentItem.description().setValue("premium");
+            paymentItem.amount().setValue(new BigDecimal("19.99"));
+            TenantSurePaymentItemTaxDTO taxA = paymentItem.taxBreakdown().$();
+            taxA.tax().setValue("HST");
+            taxA.amount().setValue(new BigDecimal("5"));
+            paymentItem.taxBreakdown().add(taxA);
+            paymentDTO.paymentBreakdown().add(paymentItem);
+            mockupPolicyDTO.annualPaymentDetails().set(paymentDTO);
+        }
+        
+        callback.onSuccess(mockupPolicyDTO);        
     }
 
     @Override
     public void create(final AsyncCallback<Key> callback, TenantSureInsurancePolicyDTO editableEntity) {
-
-        
+       
     }
 
     @Override
@@ -298,5 +348,41 @@ public class TenantSureInsurancePolicyCrudServiceImpl implements TenantSureInsur
         
     }
 
+    @Override
+    public void getPreAuthorizedPaymentsAgreement(AsyncCallback<String> areementHtml) {
+        // TODO Auto-generated method stub
+        
+    }
+
+    @Override
+    public void getFaq(AsyncCallback<String> faqHtml) {
+        // TODO Auto-generated method stub
+        
+    }
+
+
+    @Override
+    public void updatePaymentMethod(AsyncCallback<VoidSerializable> callback, InsurancePaymentMethod paymentMethod) {
+        // TODO Auto-generated method stub
+        
+    }
+
+    @Override
+    public void cancelTenantSure(AsyncCallback<VoidSerializable> callback) {
+        // TODO Auto-generated method stub
+        
+    }
+
+    @Override
+    public void reinstate(AsyncCallback<VoidSerializable> callback) {
+        // TODO Auto-generated method stub
+        
+    }
+
+    @Override
+    public void sendCertificate(AsyncCallback<String> defaultAsyncCallback, String email) {
+        // TODO Auto-generated method stub
+        
+    }
    
 }
