@@ -20,6 +20,6 @@ import com.pyx4j.entity.annotations.DiscriminatorValue;
  * Created when insurance is approved and bound
  */
 @DiscriminatorValue("InsuranceTenantSure")
-public interface TenantSureInsuranceCertificate extends InsuranceCertificate<TenantSureInsurancePolicy> {
+public interface TenantSureInsuranceCertificate extends InsuranceCertificate<TenantSureInsurancePolicy>, PropertyVistaIntegratedInsurance {
 
 }

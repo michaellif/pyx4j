@@ -33,8 +33,10 @@ import com.pyx4j.widgets.client.Label;
 
 import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap;
+import com.propertyvista.portal.rpc.portal.web.dto.insurance.status.GeneralInsuranceCertificateSummaryDTO;
 import com.propertyvista.portal.rpc.portal.web.dto.insurance.status.InsuranceCertificateSummaryDTO;
 import com.propertyvista.portal.rpc.portal.web.dto.insurance.status.InsuranceStatusDTO;
+import com.propertyvista.portal.rpc.portal.web.dto.insurance.status.TenantSureCertificateSummaryDTO;
 import com.propertyvista.portal.web.client.resources.PortalImages;
 import com.propertyvista.portal.web.client.ui.AbstractGadget;
 import com.propertyvista.portal.web.client.ui.util.decorators.FormDecoratorBuilder;
@@ -171,12 +173,11 @@ public class InsuranceGadget extends AbstractGadget<ServicesDashboardViewImpl> {
 
                     @Override
                     public void execute() {
-                        //TODO is isManagedByTenant correct flag to decide?
-                        if (true) {
+                        if (getValue() instanceof GeneralInsuranceCertificateSummaryDTO) {
                             AppSite.getPlaceController().goTo(
                                     new PortalSiteMap.Resident.ResidentServices.TenantInsurance.GeneralPolicyPage().formPlace(getValue().insurancePolicy()
                                             .getPrimaryKey()));
-                        } else {
+                        } else if (getValue() instanceof TenantSureCertificateSummaryDTO) {
                             AppSite.getPlaceController().goTo(
                                     new PortalSiteMap.Resident.ResidentServices.TenantInsurance.TenantSure.TenantSurePage().formPlace(getValue()
                                             .insurancePolicy().getPrimaryKey()));

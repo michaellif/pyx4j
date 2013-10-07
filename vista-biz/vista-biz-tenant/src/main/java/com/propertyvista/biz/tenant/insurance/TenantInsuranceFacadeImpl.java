@@ -13,10 +13,14 @@
  */
 package com.propertyvista.biz.tenant.insurance;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collections;
+import java.util.GregorianCalendar;
 import java.util.List;
 
+import com.pyx4j.commons.Key;
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.config.server.SystemDateManager;
@@ -29,7 +33,7 @@ import com.pyx4j.i18n.shared.I18n;
 import com.propertyvista.biz.policy.PolicyFacade;
 import com.propertyvista.domain.policy.policies.TenantInsurancePolicy;
 import com.propertyvista.domain.tenant.insurance.InsuranceCertificate;
-import com.propertyvista.domain.tenant.insurance.PropertyVistaIntegratedInsurance;
+import com.propertyvista.domain.tenant.insurance.TenantSureInsuranceCertificate;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.Tenant;
 import com.propertyvista.portal.rpc.portal.web.dto.insurance.status.GeneralInsuranceCertificateSummaryDTO;
@@ -40,6 +44,9 @@ import com.propertyvista.portal.rpc.portal.web.dto.insurance.status.TenantSureCe
 public class TenantInsuranceFacadeImpl implements TenantInsuranceFacade {
 
     private static final I18n i18n = I18n.get(TenantInsuranceFacadeImpl.class);
+
+    // TODO remove this mockup
+    public static final boolean TENANT_SURE_MOCKUP = true;
 
     @Override
     public List<InsuranceCertificate> getInsuranceCertificates(Tenant tenantId, boolean ownedOnly) {
@@ -65,6 +72,9 @@ public class TenantInsuranceFacadeImpl implements TenantInsuranceFacade {
         for (InsuranceCertificate certificate : sorted) {
             certificate.insurancePolicy().detach();
         }
+        if (TENANT_SURE_MOCKUP) {
+            sorted.add(makeMockupTenantSureCertificate());
+        }
         return sorted;
     }
 
@@ -80,12 +90,10 @@ public class TenantInsuranceFacadeImpl implements TenantInsuranceFacade {
         for (InsuranceCertificate<?> certificate : getInsuranceCertificates(tenantId, false)) {
             InsuranceCertificateSummaryDTO certificateSummaryDTO = null;
 
-            if (certificate instanceof PropertyVistaIntegratedInsurance) {
-                // TODO currently TenantSure is the only integrated provider so we don't try to understand which one it is
-                certificateSummaryDTO = ServerSideFactory.create(TenantSureFacade.class).getStatus(tenantId);
+            if (certificate instanceof TenantSureInsuranceCertificate) {
+                certificateSummaryDTO = EntityFactory.create(TenantSureCertificateSummaryDTO.class);
             } else {
-                GeneralInsuranceCertificateSummaryDTO otherProviderStatus = EntityFactory.create(GeneralInsuranceCertificateSummaryDTO.class);
-                certificateSummaryDTO = otherProviderStatus;
+                certificateSummaryDTO = EntityFactory.create(GeneralInsuranceCertificateSummaryDTO.class);
             }
 
             certificateSummaryDTO.setPrimaryKey(certificate.getPrimaryKey());
@@ -148,5 +156,22 @@ public class TenantInsuranceFacadeImpl implements TenantInsuranceFacade {
         ArrayList<InsuranceCertificate> sortedInsuranceCertificates = new ArrayList<InsuranceCertificate>(insuranceCertificates);
         java.util.Collections.sort(sortedInsuranceCertificates, new InsuranceCertificateComparator(tenantId));
         return sortedInsuranceCertificates;
+    }
+
+    private TenantSureInsuranceCertificate makeMockupTenantSureCertificate() {
+        TenantSureInsuranceCertificate mockupCert = EntityFactory.create(TenantSureInsuranceCertificate.class);
+        mockupCert.insurancePolicy().setPrimaryKey(new Key(1L));
+        mockupCert.insuranceCertificateNumber().setValue("TS-MOCKUP-001");
+
+        EntityQueryCriteria<Tenant> criteria = EntityQueryCriteria.create(Tenant.class);
+        criteria.eq(criteria.proto().customer().person().email(), "t001@pyx4j.com");
+        mockupCert.insurancePolicy().tenant().set(Persistence.service().retrieve(criteria));
+        Calendar cal = new GregorianCalendar();
+        mockupCert.inceptionDate().setValue(new LogicalDate(cal.getTime()));
+        cal.add(Calendar.MONTH, 12);
+        mockupCert.expiryDate().setValue(new LogicalDate(cal.getTime()));
+        mockupCert.liabilityCoverage().setValue(new BigDecimal("10000000"));
+
+        return mockupCert;
     }
 }
