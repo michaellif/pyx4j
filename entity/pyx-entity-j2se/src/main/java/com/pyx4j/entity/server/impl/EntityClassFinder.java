@@ -54,6 +54,7 @@ public class EntityClassFinder extends ClassFinder {
     }
 
     public static List<String> findEntityClassesNames() {
+        long start = System.currentTimeMillis();
         List<String> classes = new Vector<String>();
         ClassLoader cld = Thread.currentThread().getContextClassLoader();
         Enumeration<URL> urls;
@@ -72,6 +73,7 @@ public class EntityClassFinder extends ClassFinder {
                 }
             }
         }
+        log.debug("found {} in {} msec", classes.size(), System.currentTimeMillis() - start);
         return classes;
     }
 

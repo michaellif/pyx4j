@@ -71,6 +71,7 @@ public class ClassFinder {
 
     public synchronized List<String> getClasses() {
         if (classes == null) {
+            long start = System.currentTimeMillis();
             classes = new Vector<String>();
             if (baseURL.startsWith("jar:")) {
                 readJarLocation();
@@ -79,8 +80,9 @@ public class ClassFinder {
             } else if (baseURL.startsWith("bundleresource:")) {
                 readOSGiBundle();
             } else {
-                log.error("unsupporte URL {}", baseURL);
+                log.error("unsupported URL {}", baseURL);
             }
+            log.debug("{} found {} in {} msec", baseURL, classes.size(), System.currentTimeMillis() - start);
         }
         return classes;
     }
