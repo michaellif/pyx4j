@@ -199,6 +199,11 @@ public class ImageHolder extends LayoutPanel implements IWidget {
                     }
                 }
             });
+
+            // if widget has already been attached and image is loaded, call adopt() right away
+            if (isAttached() && img.getWidth() > 0) {
+                adoptImage(img);
+            }
         }
 
         private static void adoptImage(Image img) {
@@ -241,6 +246,7 @@ public class ImageHolder extends LayoutPanel implements IWidget {
             setWidgetTopBottom(image, ver, Unit.PX, ver, Unit.PX);
             // scale to fill container's width
             image.getElement().getStyle().setProperty("width", "100%");
+            image.getElement().getStyle().setProperty("backgroundSize", "100% auto");
         }
 
         private void fitVertically(Image image) {
@@ -249,6 +255,7 @@ public class ImageHolder extends LayoutPanel implements IWidget {
             setWidgetLeftRight(image, hor, Unit.PX, hor, Unit.PX);
             // scale to fill container's height
             image.getElement().getStyle().setProperty("height", "100%");
+            image.getElement().getStyle().setProperty("backgroundSize", "auto 100%");
         }
     }
 
