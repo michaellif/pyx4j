@@ -65,6 +65,7 @@ public class DashboardTheme extends Theme {
         style = new Style(".", StyleName.PersonPhoto);
         style.addProperty("border-color", ThemeColor.contrast2, 1);
         style.addProperty("border-width", "5px");
+        style.addProperty("border-style", "solid");
         style.addProperty("margin-left", "10px");
         addStyle(style);
 

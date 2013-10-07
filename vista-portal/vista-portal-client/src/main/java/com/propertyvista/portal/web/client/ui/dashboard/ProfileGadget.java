@@ -25,9 +25,13 @@ import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.SimplePanel;
 
 import com.pyx4j.commons.css.ThemeColor;
+import com.pyx4j.gwt.shared.Dimension;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.widgets.client.Anchor;
+import com.pyx4j.widgets.client.ImageHolder.ImageViewport;
+import com.pyx4j.widgets.client.ImageHolder.ImageViewport.ScaleMode;
 
+import com.propertyvista.common.client.resources.VistaImages;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap;
 import com.propertyvista.portal.rpc.portal.web.dto.ResidentSummaryDTO;
 import com.propertyvista.portal.web.client.resources.PortalImages;
@@ -104,15 +108,19 @@ public class ProfileGadget extends AbstractGadget<MainDashboardViewImpl> {
 
         private final HTML nameLabel;
 
+        private final ImageViewport picture;
+
         public PersonInfoPanel() {
             FlowPanel contentPanel = new FlowPanel();
             setWidget(contentPanel);
 
-            Image image = new Image(PortalImages.INSTANCE.avatar3());
-            image.setStyleName(DashboardTheme.StyleName.PersonPhoto.name());
-            image.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
-            image.getElement().getStyle().setVerticalAlign(VerticalAlign.MIDDLE);
-            contentPanel.add(image);
+            //60x80
+            picture = new ImageViewport(new Dimension(100, 150), ScaleMode.ScaleToFit);
+            picture.addStyleName(DashboardTheme.StyleName.PersonPhoto.name());
+            picture.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
+            picture.getElement().getStyle().setVerticalAlign(VerticalAlign.MIDDLE);
+            contentPanel.add(picture);
+            picture.setImage(new Image(VistaImages.INSTANCE.profilePicture()));
 
             nameLabel = new HTML();
             nameLabel.setStyleName(DashboardTheme.StyleName.PersonName.name());
@@ -124,6 +132,7 @@ public class ProfileGadget extends AbstractGadget<MainDashboardViewImpl> {
 
         void setValue(ResidentSummaryDTO value) {
             nameLabel.setHTML(value.tenantName().getValue());
+            //            picture.setImage(new Image(value.picture().);
         }
     }
 
