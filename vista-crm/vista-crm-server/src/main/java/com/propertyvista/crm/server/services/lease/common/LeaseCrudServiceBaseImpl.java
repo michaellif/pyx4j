@@ -28,7 +28,7 @@ import com.propertyvista.biz.financial.payment.PaymentMethodFacade;
 import com.propertyvista.biz.legal.N4ManagementFacade;
 import com.propertyvista.biz.policy.PolicyFacade;
 import com.propertyvista.biz.tenant.insurance.TenantInsuranceFacade;
-import com.propertyvista.domain.legal.LegalLetter;
+import com.propertyvista.domain.legal.N4LegalLetter;
 import com.propertyvista.domain.policy.policies.RestrictionsPolicy;
 import com.propertyvista.domain.tenant.lease.BillableItem;
 import com.propertyvista.domain.tenant.lease.Lease;
@@ -113,16 +113,13 @@ public abstract class LeaseCrudServiceBaseImpl<DTO extends LeaseDTO> extends Abs
     }
 
     private void loadCommunicationLetters(LeaseDTO lease) {
-        if (false) {
-            Lease leaseId = EntityFactory.createIdentityStub(Lease.class, lease.getPrimaryKey());
-            Map<Lease, List<LegalLetter>> n4s = ServerSideFactory.create(N4ManagementFacade.class).getN4(Arrays.asList(leaseId), null);
-            lease.letters().addAll(n4s.get(leaseId));
+        Lease leaseId = EntityFactory.createIdentityStub(Lease.class, lease.getPrimaryKey());
+        Map<Lease, List<N4LegalLetter>> n4s = ServerSideFactory.create(N4ManagementFacade.class).getN4(Arrays.asList(leaseId), null);
+        lease.letters().addAll(n4s.get(leaseId));
 
-            if (!n4s.get(leaseId).isEmpty()) {
-                lease.legalStatus().setValue(i18n.tr("{0} N4''s issued", n4s.get(leaseId).size()));
-            }
+        if (!n4s.get(leaseId).isEmpty()) {
+            lease.legalStatus().setValue(i18n.tr("{0} N4''s issued", n4s.get(leaseId).size()));
         }
-
     }
 
     private void fillPreauthorizedPayments(LeaseTermTenant item) {

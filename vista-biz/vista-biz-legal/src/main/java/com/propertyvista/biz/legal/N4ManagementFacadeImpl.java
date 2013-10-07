@@ -34,12 +34,11 @@ import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 
 import com.propertyvista.domain.company.Employee;
-import com.propertyvista.domain.legal.LegalLetter;
-import com.propertyvista.domain.legal.LegalLetter.LegalLetterType;
 import com.propertyvista.domain.legal.LegalNoticeCandidate;
 import com.propertyvista.domain.legal.N4FormFieldsData;
 import com.propertyvista.domain.legal.N4LandlordsData;
 import com.propertyvista.domain.legal.N4LeaseData;
+import com.propertyvista.domain.legal.N4LegalLetter;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.server.domain.LegalLetterBlob;
@@ -79,18 +78,17 @@ public class N4ManagementFacadeImpl implements N4ManagementFacade {
     }
 
     @Override
-    public Map<Lease, List<LegalLetter>> getN4(List<Lease> leaseIds, LogicalDate generatedCutOffDate) {
-        Map<Lease, List<LegalLetter>> n4s = new HashMap<Lease, List<LegalLetter>>();
+    public Map<Lease, List<N4LegalLetter>> getN4(List<Lease> leaseIds, LogicalDate generatedCutOffDate) {
+        Map<Lease, List<N4LegalLetter>> n4s = new HashMap<Lease, List<N4LegalLetter>>();
         for (Lease leaseId : leaseIds) {
-            EntityQueryCriteria<LegalLetter> criteria = EntityQueryCriteria.create(LegalLetter.class);
+            EntityQueryCriteria<N4LegalLetter> criteria = EntityQueryCriteria.create(N4LegalLetter.class);
             criteria.eq(criteria.proto().lease(), leaseId);
-            criteria.eq(criteria.proto().type(), LegalLetter.LegalLetterType.N4);
             if (generatedCutOffDate != null) {
                 criteria.ge(criteria.proto().generatedOn(), generatedCutOffDate);
             }
             criteria.asc(criteria.proto().generatedOn());
 
-            List<LegalLetter> letters = Persistence.service().query(criteria);
+            List<N4LegalLetter> letters = Persistence.service().query(criteria);
 
             n4s.put(leaseId, letters);
         }
@@ -107,9 +105,8 @@ public class N4ManagementFacadeImpl implements N4ManagementFacade {
         blob.contentType().setValue("application/pdf");
         Persistence.service().persist(blob);
 
-        LegalLetter n4Letter = EntityFactory.create(LegalLetter.class);
+        N4LegalLetter n4Letter = EntityFactory.create(N4LegalLetter.class);
         n4Letter.lease().set(leaseId);
-        n4Letter.type().setValue(LegalLetterType.N4);
         n4Letter.generatedOn().setValue(SystemDateManager.getDate());
         n4Letter.blobKey().setValue(blob.getPrimaryKey());
         n4Letter.fileSize().setValue(n4LetterBinary.length);

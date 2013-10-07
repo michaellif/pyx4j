@@ -20,8 +20,8 @@ import java.util.Map;
 import com.pyx4j.commons.LogicalDate;
 
 import com.propertyvista.domain.company.Employee;
-import com.propertyvista.domain.legal.LegalLetter;
 import com.propertyvista.domain.legal.LegalNoticeCandidate;
+import com.propertyvista.domain.legal.N4LegalLetter;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.tenant.lease.Lease;
 
@@ -44,6 +44,6 @@ public interface N4ManagementFacade {
      * Retrieves N4s sorted in descending order by the date of generation. If <code>generatedCutOffDate</code> is not <code>null</code> this will be the minimum
      * generation date of N4s.
      */
-    Map<Lease, List<LegalLetter>> getN4(List<Lease> leaseIds, LogicalDate generatedCutOffDate);
+    Map<Lease, List<N4LegalLetter>> getN4(List<Lease> leaseIds, LogicalDate generatedCutOffDate);
 
 }

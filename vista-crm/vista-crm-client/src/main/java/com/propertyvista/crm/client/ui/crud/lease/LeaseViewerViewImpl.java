@@ -130,6 +130,8 @@ public class LeaseViewerViewImpl extends LeaseViewerViewImplBase<LeaseDTO> imple
 
     private final MenuItem yardiImportAction;
 
+    private MenuItem issueN4action;
+
     public LeaseViewerViewImpl() {
         depositLister = new ListerInternalViewImplBase<DepositLifecycleDTO>(new DepositLifecycleLister());
         billLister = new ListerInternalViewImplBase<BillDataDTO>(new BillLister());
@@ -216,6 +218,14 @@ public class LeaseViewerViewImpl extends LeaseViewerViewImplBase<LeaseDTO> imple
         if (!VistaFeatures.instance().yardiIntegration()) {
             addAction(cancelNoticeAction);
         }
+
+        issueN4action = new MenuItem(i18n.tr("Issue N4"), new Command() {
+            @Override
+            public void execute() {
+                issueN4();
+            }
+
+        });
 
         evictAction = new MenuItem(i18n.tr("Evict..."), new Command() {
             @Override
@@ -760,6 +770,10 @@ public class LeaseViewerViewImpl extends LeaseViewerViewImplBase<LeaseDTO> imple
                 }
             }
         });
+    }
+
+    private void issueN4() {
+        ((LeaseViewerView.Presenter) getPresenter()).issueN4();
     }
 
     private abstract class RenewLeaseBox extends OkCancelDialog {

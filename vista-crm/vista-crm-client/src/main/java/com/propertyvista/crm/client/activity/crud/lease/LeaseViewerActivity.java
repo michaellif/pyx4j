@@ -271,4 +271,9 @@ public class LeaseViewerActivity extends LeaseViewerActivityBase<LeaseDTO> imple
             }
         }, getEntityId());
     }
+
+    @Override
+    public void issueN4() {
+
+    }
 }

@@ -69,6 +69,9 @@ public interface LeaseViewerView extends LeaseViewerViewBase<LeaseDTO> {
         void simpleLeaseRenew(LogicalDate leaseEndDate);
 
         void onInsuredTenantClicked(Tenant tenantId);
+
+        void issueN4();
+
     }
 
     ILister<DepositLifecycleDTO> getDepositListerView();
@@ -82,4 +85,5 @@ public interface LeaseViewerView extends LeaseViewerViewBase<LeaseDTO> {
     void reportSendMailActionResult(String message);
 
     void reportCancelNoticeFailed(UserRuntimeException caught);
+
 }

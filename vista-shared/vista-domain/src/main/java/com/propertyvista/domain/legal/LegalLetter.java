@@ -15,7 +15,10 @@ package com.propertyvista.domain.legal;
 
 import java.util.Date;
 
+import com.pyx4j.entity.annotations.AbstractEntity;
 import com.pyx4j.entity.annotations.Detached;
+import com.pyx4j.entity.annotations.Inheritance;
+import com.pyx4j.entity.annotations.Inheritance.InheritanceStrategy;
 import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.annotations.ReadOnly;
 import com.pyx4j.entity.shared.IPrimitive;
@@ -23,21 +26,13 @@ import com.pyx4j.entity.shared.IPrimitive;
 import com.propertyvista.domain.File;
 import com.propertyvista.domain.tenant.lease.Lease;
 
+@AbstractEntity
+@Inheritance(strategy = InheritanceStrategy.SINGLE_TABLE)
 public interface LegalLetter extends File {
-
-    public enum LegalLetterType {
-
-        N4
-
-    }
 
     @Detached
     @MemberColumn(notNull = true)
     Lease lease();
-
-    @MemberColumn(notNull = true)
-    @ReadOnly
-    IPrimitive<LegalLetterType> type();
 
     IPrimitive<String> notes();
 

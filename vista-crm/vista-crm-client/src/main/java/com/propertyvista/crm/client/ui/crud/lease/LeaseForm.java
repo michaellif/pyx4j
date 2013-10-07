@@ -14,6 +14,7 @@
 package com.propertyvista.crm.client.ui.crud.lease;
 
 import com.google.gwt.user.client.ui.IsWidget;
+import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.forms.client.ui.CViewer;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
@@ -22,6 +23,7 @@ import com.pyx4j.widgets.client.tabpanel.Tab;
 
 import com.propertyvista.common.client.ui.components.TransactionHistoryViewerYardi;
 import com.propertyvista.crm.client.ui.crud.lease.common.LeaseFormBase;
+import com.propertyvista.crm.client.ui.crud.lease.common.LegalLetterFolder;
 import com.propertyvista.crm.client.ui.crud.lease.invoice.TransactionHistoryViewer;
 import com.propertyvista.dto.LeaseDTO;
 import com.propertyvista.dto.TransactionHistoryDTO;
@@ -29,7 +31,7 @@ import com.propertyvista.shared.config.VistaFeatures;
 
 public class LeaseForm extends LeaseFormBase<LeaseDTO> {
 
-    private final Tab depositsTab, adjustmentsTab, billsTab, paymentsTab, financialTab;
+    private final Tab depositsTab, adjustmentsTab, billsTab, paymentsTab, financialTab, communicationTab;
 
     public LeaseForm(IForm<LeaseDTO> view) {
         super(LeaseDTO.class, view);
@@ -41,6 +43,7 @@ public class LeaseForm extends LeaseFormBase<LeaseDTO> {
         billsTab = addTab(((LeaseViewerView) getParentView()).getBillListerView().asWidget(), i18n.tr("Bills"));
         paymentsTab = addTab(((LeaseViewerView) getParentView()).getPaymentListerView().asWidget(), i18n.tr("Payments"));
         financialTab = addTab(createFinancialTransactionHistoryTab().asWidget(), i18n.tr("Financial Summary"));
+        communicationTab = addTab(createCommunicationsTab(), i18n.tr("Documents/Communication"));
     }
 
     @Override
@@ -67,5 +70,12 @@ public class LeaseForm extends LeaseFormBase<LeaseDTO> {
         financialTransactionHistory.setWidget(++row, 0, 2, inject(proto().transactionHistory(), transactionHistoryViewer));
 
         return financialTransactionHistory;
+    }
+
+    private Widget createCommunicationsTab() {
+        TwoColumnFlexFormPanel panel = new TwoColumnFlexFormPanel();
+        int row = -1;
+        panel.setWidget(++row, 0, inject(proto().letters(), new LegalLetterFolder()));
+        return panel;
     }
 }

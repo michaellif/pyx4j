@@ -55,6 +55,11 @@ public class MediaUtils {
                 + file.fileName().getStringView();
     }
 
+    public static String createLegalLetterDocumentUrl(File file) {
+        return ClientNavigUtils.getDeploymentBaseURL() + DeploymentConsts.legalLetterServletMappning + file.id().getStringView() + "/"
+                + file.fileName().getStringView();
+    }
+
     public static String createSiteImageResourceUrl(SiteImageResource resource) {
         return ClientNavigUtils.getDeploymentBaseURL() + resource.id().getStringView() + "/" + resource.fileName().getStringView()
                 + DeploymentConsts.siteImageResourceServletMapping;
