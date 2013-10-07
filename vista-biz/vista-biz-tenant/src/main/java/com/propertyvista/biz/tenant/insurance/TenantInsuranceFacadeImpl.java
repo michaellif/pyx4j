@@ -89,12 +89,14 @@ public class TenantInsuranceFacadeImpl implements TenantInsuranceFacade {
             }
 
             certificateSummaryDTO.setPrimaryKey(certificate.getPrimaryKey());
+            certificateSummaryDTO.insuranceCertificateNumber().setValue(certificate.insuranceCertificateNumber().getValue());
             certificateSummaryDTO.insurancePolicy().set(certificate.insurancePolicy());
 
             certificateSummaryDTO.insuranceProvider().setValue(certificate.insuranceProvider().getValue());
             certificateSummaryDTO.isOwner().setValue(certificate.insurancePolicy().tenant().getPrimaryKey().equals(tenantId.getPrimaryKey()));
 
             certificateSummaryDTO.liabilityCoverage().setValue(certificate.liabilityCoverage().getValue());
+            certificateSummaryDTO.inceptionDate().setValue(certificate.inceptionDate().getValue());
             certificateSummaryDTO.expiryDate().setValue(certificate.expiryDate().getValue());
 
             insuranceStatusDTO.certificates().add(certificateSummaryDTO);
