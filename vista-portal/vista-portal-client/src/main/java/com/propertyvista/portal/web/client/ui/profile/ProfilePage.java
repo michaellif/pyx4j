@@ -15,20 +15,33 @@ package com.propertyvista.portal.web.client.ui.profile;
 
 import java.util.List;
 
+import com.google.gwt.core.shared.GWT;
+import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.IsWidget;
+import com.google.gwt.user.client.ui.VerticalPanel;
+import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.commons.css.ThemeColor;
 import com.pyx4j.entity.shared.utils.EntityGraph;
+import com.pyx4j.forms.client.images.EntityFolderImages;
 import com.pyx4j.forms.client.ui.CComponent;
+import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.ui.CEntityLabel;
+import com.pyx4j.forms.client.ui.CImage;
+import com.pyx4j.forms.client.ui.CLabel;
 import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
 import com.pyx4j.forms.client.validators.ValidationError;
+import com.pyx4j.gwt.shared.FileURLBuilder;
 import com.pyx4j.i18n.shared.I18n;
 
+import com.propertyvista.common.client.resources.VistaImages;
+import com.propertyvista.common.client.ui.components.MediaUtils;
 import com.propertyvista.domain.person.Name;
+import com.propertyvista.domain.tenant.CustomerPicture;
 import com.propertyvista.domain.tenant.EmergencyContact;
 import com.propertyvista.portal.rpc.portal.web.dto.ResidentProfileDTO;
+import com.propertyvista.portal.rpc.portal.web.services.ResidentPictureUploadService;
 import com.propertyvista.portal.web.client.themes.EntityViewTheme;
 import com.propertyvista.portal.web.client.ui.CPortalEntityEditor;
 import com.propertyvista.portal.web.client.ui.profile.ProfilePageView.ProfilePagePresenter;
@@ -55,17 +68,40 @@ public class ProfilePage extends CPortalEntityEditor<ResidentProfileDTO> {
         BasicFlexFormPanel mainPanel = new BasicFlexFormPanel();
         int row = -1;
 
+        CImage<CustomerPicture> imageHolder = new CImage<CustomerPicture>(CustomerPicture.class, CImage.Type.single) {
+            @Override
+            protected EntityFolderImages getFolderIcons() {
+                return VistaImages.INSTANCE;
+            }
+
+            @Override
+            public Widget getImageEntryView(CEntityForm<CustomerPicture> entryForm) {
+                VerticalPanel infoPanel = new VerticalPanel();
+                infoPanel.add(new FormDecoratorBuilder(entryForm.inject(entryForm.proto().fileName(), new CLabel<String>())).build());
+                infoPanel.add(new FormDecoratorBuilder(entryForm.inject(entryForm.proto().caption())).build());
+                return infoPanel;
+            }
+        };
+        imageHolder.setImageFileUrlBuilder(new ImageFileURLBuilder());
+        imageHolder.setThumbnailFileUrlBuilder(new ImageFileURLBuilder());
+        imageHolder.setUploadService(GWT.<ResidentPictureUploadService> create(ResidentPictureUploadService.class));
+        imageHolder.setImageSize(150, 200);
+        imageHolder.setThumbSize(60, 80);
+        imageHolder.setThumbnailPlaceholder(new Image(VistaImages.INSTANCE.profilePicture()));
+
+        mainPanel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().pictures(), imageHolder)).customLabel("").build());
+
         mainPanel.setH1(++row, 0, 1, i18n.tr("Basic Information"));
-        mainPanel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().name(), new CEntityLabel<Name>()), "200px").customLabel(i18n.tr("Full Name"))
-                .build());
-        mainPanel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().sex()), "100px").build());
-        mainPanel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().birthDate()), "150px").build());
+        mainPanel.setWidget(++row, 0,
+                new FormDecoratorBuilder(inject(proto().person().name(), new CEntityLabel<Name>()), "200px").customLabel(i18n.tr("Full Name")).build());
+        mainPanel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().person().sex()), "100px").build());
+        mainPanel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().person().birthDate()), "150px").build());
 
         mainPanel.setH1(++row, 0, 1, i18n.tr("Contact Information"));
-        mainPanel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().homePhone()), "200px").build());
-        mainPanel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().mobilePhone()), "200px").build());
-        mainPanel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().workPhone()), "200px").build());
-        mainPanel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().email()), "230px").build());
+        mainPanel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().person().homePhone()), "200px").build());
+        mainPanel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().person().mobilePhone()), "200px").build());
+        mainPanel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().person().workPhone()), "200px").build());
+        mainPanel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().person().email()), "230px").build());
 
         mainPanel.setH1(++row, 0, 1, proto().emergencyContacts().getMeta().getCaption());
         mainPanel.setWidget(++row, 0, inject(proto().emergencyContacts(), new EmergencyContactFolder((ProfilePageViewImpl) getView())));
@@ -94,4 +130,10 @@ public class ProfilePage extends CPortalEntityEditor<ResidentProfileDTO> {
         });
     }
 
+    class ImageFileURLBuilder implements FileURLBuilder<CustomerPicture> {
+        @Override
+        public String getUrl(CustomerPicture pic) {
+            return MediaUtils.createCustomerPictureUrl(pic);
+        }
+    }
 }

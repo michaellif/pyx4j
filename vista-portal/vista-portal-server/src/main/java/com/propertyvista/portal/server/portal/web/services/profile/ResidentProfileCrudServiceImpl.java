@@ -42,7 +42,8 @@ public class ResidentProfileCrudServiceImpl implements ResidentProfileCrudServic
         Persistence.service().retrieve(tenant.emergencyContacts());
         // build dto
         ResidentProfileDTO dto = EntityFactory.create(ResidentProfileDTO.class);
-        dto.setValue(tenant.person().getValue());
+        dto.person().setValue(tenant.person().getValue());
+        dto.pictures().addAll(tenant.pictures());
         dto.emergencyContacts().addAll(tenant.emergencyContacts());
 
         callback.onSuccess(dto);
@@ -55,7 +56,11 @@ public class ResidentProfileCrudServiceImpl implements ResidentProfileCrudServic
         criteria.add(PropertyCriterion.eq(criteria.proto().user(), currentUser));
         Customer customer = Persistence.service().retrieve(criteria);
 
-        customer.person().set(dto.cast());
+        customer.person().set(dto.person().cast());
+
+        customer.pictures().clear();
+        customer.pictures().addAll(dto.pictures());
+
         customer.emergencyContacts().clear();
         customer.emergencyContacts().addAll(dto.emergencyContacts());
 

@@ -16,13 +16,19 @@ package com.propertyvista.portal.rpc.portal.web.dto;
 import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.Length;
 import com.pyx4j.entity.annotations.Transient;
+import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
 
 import com.propertyvista.domain.person.Person;
+import com.propertyvista.domain.tenant.CustomerPicture;
 import com.propertyvista.domain.tenant.EmergencyContact;
 
 @Transient
-public interface ResidentProfileDTO extends Person {
+public interface ResidentProfileDTO extends IEntity {
+
+    Person person();
+
+    IList<CustomerPicture> pictures();
 
     @Length(3)
     @Caption(name = "Emergency Contacts")
