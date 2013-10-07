@@ -54,12 +54,13 @@ public class PasswordChangeWizard extends CPortalEntityWizard<PasswordChangeRequ
 
         int row = -1;
 
-        mainPanel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().currentPassword())).build());
+        mainPanel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().currentPassword())).componentWidth("180px").build());
         mainPanel.setBR(++row, 0, 1);
 
         passwordStrengthWidget = new PasswordStrengthWidget(passwordStrengthRule);
-        mainPanel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().newPassword())).assistantWidget(passwordStrengthWidget).build());
-        mainPanel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().newPasswordConfirm())).build());
+        mainPanel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().newPassword())).componentWidth("180px").assistantWidget(passwordStrengthWidget)
+                .build());
+        mainPanel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().newPasswordConfirm())).componentWidth("180px").build());
 
         return mainPanel;
     }

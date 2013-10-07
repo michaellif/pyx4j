@@ -13,14 +13,20 @@
  */
 package com.propertyvista.portal.web.client.ui.profile;
 
+import com.google.gwt.user.client.Command;
+import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.commons.css.ThemeColor;
 import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.site.client.AppSite;
+import com.pyx4j.widgets.client.Anchor;
 
+import com.propertyvista.portal.rpc.portal.PortalSiteMap;
 import com.propertyvista.portal.rpc.portal.web.dto.ResidentAccountDTO;
 import com.propertyvista.portal.web.client.themes.EntityViewTheme;
+import com.propertyvista.portal.web.client.themes.NavigationAnchorTheme;
 import com.propertyvista.portal.web.client.ui.CPortalEntityForm;
 import com.propertyvista.portal.web.client.ui.profile.AccountPageView.AccountPagePresenter;
 
@@ -43,6 +49,24 @@ public class AccountPage extends CPortalEntityForm<ResidentAccountDTO> {
     public IsWidget createContent() {
         BasicFlexFormPanel mainPanel = new BasicFlexFormPanel();
         int row = -1;
+
+        mainPanel.setH1(++row, 0, 1, i18n.tr("Security"));
+
+        Anchor anchor = new Anchor("Change my Password", new Command() {
+
+            @Override
+            public void execute() {
+                AppSite.getPlaceController().goTo(new PortalSiteMap.PasswordChange());
+            }
+        });
+        anchor.setStyleName(NavigationAnchorTheme.StyleName.NavigationAnchor.name());
+        mainPanel.setWidget(++row, 0, anchor);
+
+        mainPanel.setH1(++row, 0, 1, i18n.tr("Mail Preferences"));
+        mainPanel.setWidget(++row, 0, 1, new HTML("Coming soon."));
+
+        mainPanel.setH1(++row, 0, 1, i18n.tr("Notification Preferences"));
+        mainPanel.setWidget(++row, 0, 1, new HTML("Coming soon."));
 
         return mainPanel;
     }

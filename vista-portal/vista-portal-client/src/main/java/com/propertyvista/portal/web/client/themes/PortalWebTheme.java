@@ -61,6 +61,8 @@ public class PortalWebTheme extends Theme {
 
         addTheme(new BlockMixin());
 
+        addTheme(new NavigationAnchorTheme());
+
         addTheme(new DefaultWidgetsTheme() {
 
             @Override
