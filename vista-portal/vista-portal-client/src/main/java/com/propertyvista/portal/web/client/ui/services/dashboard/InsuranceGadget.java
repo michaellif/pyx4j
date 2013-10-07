@@ -171,7 +171,7 @@ public class InsuranceGadget extends AbstractGadget<ServicesDashboardViewImpl> {
 
                     @Override
                     public void execute() {
-                        //TODO is isManagedByTenant write flag to decide?
+                        //TODO is isManagedByTenant correct flag to decide?
                         if (true) {
                             AppSite.getPlaceController().goTo(
                                     new PortalSiteMap.Resident.ResidentServices.TenantInsurance.GeneralPolicyPage().formPlace(getValue().insurancePolicy()
