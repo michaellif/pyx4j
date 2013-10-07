@@ -53,19 +53,26 @@ public class ResidentProfileCrudServiceImpl implements ResidentProfileCrudServic
         CustomerUser currentUser = TenantAppContext.getCurrentUser();
         EntityQueryCriteria<Customer> criteria = EntityQueryCriteria.create(Customer.class);
         criteria.add(PropertyCriterion.eq(criteria.proto().user(), currentUser));
-        Customer tenant = Persistence.service().retrieve(criteria);
+        Customer customer = Persistence.service().retrieve(criteria);
 
-        tenant.person().set(dto.cast());
-        tenant.emergencyContacts().clear();
-        tenant.emergencyContacts().addAll(dto.emergencyContacts());
+        customer.person().set(dto.cast());
+        customer.emergencyContacts().clear();
+        customer.emergencyContacts().addAll(dto.emergencyContacts());
 
-        Persistence.service().persist(tenant);
+        Persistence.service().persist(customer);
+
+        // Update user
+        Persistence.service().retrieve(customer.user());
+        customer.user().name().setValue(customer.person().name().getStringView());
+        customer.user().email().setValue(customer.person().email().getValue());
+        Persistence.service().merge(customer.user());
+
         Persistence.service().commit();
 
         // Update name label in UI
-        Context.getVisit().getUserVisit().setName(tenant.person().name().getStringView());
+        Context.getVisit().getUserVisit().setName(customer.person().name().getStringView());
 
-        callback.onSuccess(tenant.getPrimaryKey());
+        callback.onSuccess(customer.getPrimaryKey());
     }
 
     @Override
