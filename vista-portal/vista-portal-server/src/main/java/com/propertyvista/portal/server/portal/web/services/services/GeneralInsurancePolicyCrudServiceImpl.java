@@ -20,11 +20,13 @@ import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.rpc.EntitySearchResult;
 import com.pyx4j.entity.server.AbstractCrudServiceDtoImpl;
 import com.pyx4j.entity.server.Persistence;
+import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityListCriteria;
 
 import com.propertyvista.biz.policy.PolicyFacade;
 import com.propertyvista.biz.tenant.insurance.GeneralInsuranceFacade;
 import com.propertyvista.domain.policy.policies.TenantInsurancePolicy;
+import com.propertyvista.domain.tenant.insurance.GeneralInsuranceCertificate;
 import com.propertyvista.domain.tenant.insurance.GeneralInsurancePolicy;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.portal.rpc.portal.web.dto.insurance.GeneralInsurancePolicyDTO;
@@ -55,6 +57,14 @@ public class GeneralInsurancePolicyCrudServiceImpl extends AbstractCrudServiceDt
         ServerSideFactory.create(GeneralInsuranceFacade.class).createGeneralTenantInsurance(TenantAppContext.getCurrentUserTenant(), dto.certificate());
         Persistence.service().commit();
         callback.onSuccess(null);
+    }
+
+    @Override
+    public void delete(AsyncCallback<Boolean> callback, Key entityId) {
+        ServerSideFactory.create(GeneralInsuranceFacade.class).deleteGeneralInsurance(
+                EntityFactory.createIdentityStub(GeneralInsuranceCertificate.class, entityId));
+        Persistence.service().commit();
+        callback.onSuccess(true);
     }
 
     @Override

@@ -18,7 +18,7 @@ import com.propertyvista.domain.tenant.lease.Tenant;
 
 public interface GeneralInsuranceFacade {
 
-    public void createGeneralTenantInsurance(Tenant tenantId, GeneralInsuranceCertificate certifcate);
+    public void createGeneralTenantInsurance(Tenant tenantId, GeneralInsuranceCertificate certifcateId);
 
     public void deleteGeneralInsurance(GeneralInsuranceCertificate deletedCertificate);
 

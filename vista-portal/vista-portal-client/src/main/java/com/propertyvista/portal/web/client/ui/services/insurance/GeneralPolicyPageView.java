@@ -20,6 +20,8 @@ public interface GeneralPolicyPageView extends IEditorView<GeneralInsurancePolic
 
     public interface GeneralPolicyPagePresenter extends IEditorPresenter<GeneralInsurancePolicyDTO> {
 
+        void remove();
+
     }
 
 }

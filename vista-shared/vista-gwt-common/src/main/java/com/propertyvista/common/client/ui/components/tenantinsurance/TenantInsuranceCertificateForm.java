@@ -21,7 +21,6 @@ import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Label;
 
 import com.pyx4j.commons.LogicalDate;
-import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CEntityLabel;
 import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
@@ -29,11 +28,8 @@ import com.pyx4j.forms.client.validators.EditableValueValidator;
 import com.pyx4j.forms.client.validators.ValidationError;
 import com.pyx4j.i18n.shared.I18n;
 
-import com.propertyvista.common.client.ui.components.ApplicationDocumentFileUploaderFolder;
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
-import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
 import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
-import com.propertyvista.domain.media.InsuranceCertificateDocument;
 import com.propertyvista.domain.tenant.Customer;
 import com.propertyvista.domain.tenant.insurance.InsuranceCertificate;
 import com.propertyvista.domain.tenant.insurance.PropertyVistaIntegratedInsurance;
@@ -41,55 +37,12 @@ import com.propertyvista.domain.tenant.lease.Tenant;
 
 public class TenantInsuranceCertificateForm<E extends InsuranceCertificate> extends CEntityDecoratableForm<E> {
 
-    private final static I18n i18n = I18n.get(TenantInsuranceCertificateForm.class);
+    final static I18n i18n = I18n.get(TenantInsuranceCertificateForm.class);
 
     public interface TenantOwnerClickHandler {
 
         void onTenantOwnerClicked(Tenant tenantId);
 
-    }
-
-    private static class InsuranceCertificateDocumentFolder extends VistaBoxFolder<InsuranceCertificateDocument> {
-
-        public InsuranceCertificateDocumentFolder() {
-            super(InsuranceCertificateDocument.class);
-            setAddable(false);
-            setRemovable(false);
-        }
-
-        @Override
-        public CComponent<?> create(IObject<?> member) {
-            if (member instanceof InsuranceCertificateDocument) {
-                return new InsuranceCertificateDocumentEditor();
-            } else {
-                return super.create(member);
-            }
-        }
-
-    }
-
-    private static class InsuranceCertificateDocumentEditor extends CEntityDecoratableForm<InsuranceCertificateDocument> {
-
-        public InsuranceCertificateDocumentEditor() {
-            super(InsuranceCertificateDocument.class);
-        }
-
-        @Override
-        public IsWidget createContent() {
-            BasicFlexFormPanel panel = new BasicFlexFormPanel();
-            panel.setWidget(0, 0, inject(proto().documentPages(), new ApplicationDocumentFileUploaderFolder()));
-            addValueValidator(new EditableValueValidator<InsuranceCertificateDocument>() {
-                @Override
-                public ValidationError isValid(CComponent<InsuranceCertificateDocument> component, InsuranceCertificateDocument value) {
-                    if (value != null && value.documentPages().isEmpty()) {
-                        return new ValidationError(component, i18n.tr("Please upload the insurance cerificate"));
-                    } else {
-                        return null;
-                    }
-                }
-            });
-            return panel;
-        }
     }
 
     private BigDecimal minRequiredLiability;

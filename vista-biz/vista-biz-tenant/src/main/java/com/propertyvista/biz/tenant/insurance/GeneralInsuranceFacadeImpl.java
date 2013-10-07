@@ -15,10 +15,10 @@ package com.propertyvista.biz.tenant.insurance;
 
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 
 import com.propertyvista.domain.tenant.insurance.GeneralInsuranceCertificate;
 import com.propertyvista.domain.tenant.insurance.GeneralInsurancePolicy;
-import com.propertyvista.domain.tenant.insurance.InsurancePolicy;
 import com.propertyvista.domain.tenant.lease.Tenant;
 
 public class GeneralInsuranceFacadeImpl implements GeneralInsuranceFacade {
@@ -34,8 +34,13 @@ public class GeneralInsuranceFacadeImpl implements GeneralInsuranceFacade {
     }
 
     @Override
-    public void deleteGeneralInsurance(GeneralInsuranceCertificate deletedCertificate) {
-        InsurancePolicy policy = Persistence.service().retrieve(InsurancePolicy.class, deletedCertificate.insurancePolicy().getPrimaryKey());
+    public void deleteGeneralInsurance(GeneralInsuranceCertificate deletedCertificateId) {
+        EntityQueryCriteria<GeneralInsurancePolicy> criteria = EntityQueryCriteria.create(GeneralInsurancePolicy.class);
+        criteria.eq(criteria.proto().certificate(), deletedCertificateId);
+        GeneralInsurancePolicy policy = Persistence.service().retrieve(criteria);
+        if (policy == null) {
+            throw new IllegalArgumentException("insurance policy that owns certificate id " + deletedCertificateId + " was not found");
+        }
         policy.isDeleted().setValue(true);
         Persistence.service().merge(policy);
     }

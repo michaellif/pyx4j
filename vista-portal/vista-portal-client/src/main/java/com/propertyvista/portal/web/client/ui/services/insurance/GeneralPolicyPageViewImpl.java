@@ -20,7 +20,12 @@ public class GeneralPolicyPageViewImpl extends AbstractEditorView<GeneralInsuran
 
     public GeneralPolicyPageViewImpl() {
         super();
-        setForm(new GeneralPolicyPage(this));
+        setForm(new GeneralPolicyPage(this) {
+            @Override
+            protected void onRemove() {
+                ((GeneralPolicyPageView.GeneralPolicyPagePresenter) getPresenter()).remove();
+            }
+        });
     }
 
 }
