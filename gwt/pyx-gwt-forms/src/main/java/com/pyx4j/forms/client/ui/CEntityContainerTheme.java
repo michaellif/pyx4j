@@ -29,7 +29,7 @@ import com.pyx4j.commons.css.ThemeId;
 public class CEntityContainerTheme extends Theme {
 
     public static enum StyleName implements IStyleName {
-        ContentHolder
+        CEntityContainerContentHolder
     }
 
     public CEntityContainerTheme() {
@@ -42,7 +42,7 @@ public class CEntityContainerTheme extends Theme {
     }
 
     protected void initStyles() {
-        Style style = new Style(".", StyleName.ContentHolder);
+        Style style = new Style(".", StyleName.CEntityContainerContentHolder);
         style.addProperty("display", "inline");
         addStyle(style);
     }
