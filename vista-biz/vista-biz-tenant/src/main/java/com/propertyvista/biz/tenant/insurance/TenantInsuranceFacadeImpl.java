@@ -73,6 +73,9 @@ public class TenantInsuranceFacadeImpl implements TenantInsuranceFacade {
             certificate.insurancePolicy().detach();
         }
         if (TENANT_SURE_MOCKUP) {
+            if (sorted == Collections.EMPTY_LIST) {
+                sorted = new ArrayList<InsuranceCertificate>();
+            }
             sorted.add(makeMockupTenantSureCertificate());
         }
         return sorted;
