@@ -77,8 +77,6 @@ public class ProfilePage extends CPortalEntityEditor<ResidentProfileDTO> {
             @Override
             public Widget getImageEntryView(CEntityForm<CustomerPicture> entryForm) {
                 VerticalPanel infoPanel = new VerticalPanel();
-                infoPanel.add(new FormDecoratorBuilder(entryForm.inject(entryForm.proto().fileName(), new CLabel<String>())).build());
-                infoPanel.add(new FormDecoratorBuilder(entryForm.inject(entryForm.proto().caption())).build());
                 return infoPanel;
             }
         };

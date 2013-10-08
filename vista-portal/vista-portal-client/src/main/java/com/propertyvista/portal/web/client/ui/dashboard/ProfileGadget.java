@@ -28,8 +28,8 @@ import com.pyx4j.commons.css.ThemeColor;
 import com.pyx4j.gwt.shared.Dimension;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.widgets.client.Anchor;
-import com.pyx4j.widgets.client.ImageHolder.ImageViewport;
-import com.pyx4j.widgets.client.ImageHolder.ImageViewport.ScaleMode;
+import com.pyx4j.widgets.client.ImageViewport;
+import com.pyx4j.widgets.client.ImageViewport.ScaleMode;
 
 import com.propertyvista.common.client.resources.VistaImages;
 import com.propertyvista.common.client.ui.components.MediaUtils;
