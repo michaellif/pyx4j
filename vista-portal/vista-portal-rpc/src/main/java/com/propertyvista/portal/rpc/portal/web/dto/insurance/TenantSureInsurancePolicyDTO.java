@@ -25,16 +25,28 @@ import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.tenantsure.Tenant
 @Transient
 public interface TenantSureInsurancePolicyDTO extends TenantSureInsurancePolicy {
 
+    /** used during purchase process */
     TenantSureAgreementParamsDTO agreementParams();
 
+    /** used during purchase process */
     TenantSureCoverageDTO tenantSureCoverageRequest();
 
+    /** used during purchase process */
     TenantSureQuoteDTO quote();
 
+    /** used during purchase process */
+    TenantSureCoverageDTO tenantSureCoverageRequestConfirmation();
+
+    /** used during purchase process */
+    TenantSureQuoteDTO quoteConfirmation();
+
+    /** used during purchase process */
     InsurancePaymentMethod paymentMethod();
 
+    /** used during management phase */
     IPrimitive<Boolean> isPaymentFailed();
 
+    /** used during management phase */
     IPrimitive<Boolean> isCancelled();
 
     TenantSurePaymentDTO annualPaymentDetails();

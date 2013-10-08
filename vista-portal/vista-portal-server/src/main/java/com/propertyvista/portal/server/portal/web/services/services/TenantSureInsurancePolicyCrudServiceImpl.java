@@ -47,6 +47,7 @@ import com.propertyvista.biz.tenant.insurance.TenantSureOptionCode;
 import com.propertyvista.biz.tenant.insurance.TenantSureTextFacade;
 import com.propertyvista.domain.contact.AddressSimple;
 import com.propertyvista.domain.payment.InsurancePaymentMethod;
+import com.propertyvista.domain.payment.PaymentType;
 import com.propertyvista.domain.person.Person;
 import com.propertyvista.domain.policy.policies.TenantInsurancePolicy;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
@@ -55,6 +56,7 @@ import com.propertyvista.domain.tenant.insurance.TenantSurePaymentSchedule;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.Tenant;
 import com.propertyvista.operations.rpc.VistaSystemMaintenanceState;
+import com.propertyvista.portal.rpc.portal.web.dto.insurance.TenantSureAgreementParamsDTO;
 import com.propertyvista.portal.rpc.portal.web.dto.insurance.TenantSureCoverageDTO;
 import com.propertyvista.portal.rpc.portal.web.dto.insurance.TenantSureInsurancePolicyDTO;
 import com.propertyvista.portal.rpc.portal.web.dto.insurance.TenantSureQuoteDTO;
@@ -62,7 +64,6 @@ import com.propertyvista.portal.rpc.portal.web.services.services.TenantSureInsur
 import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.tenantsure.TenantSurePaymentDTO;
 import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.tenantsure.TenantSurePaymentItemDTO;
 import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.tenantsure.TenantSurePaymentItemTaxDTO;
-import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.tenantsure.TenantSureQuotationRequestParamsDTO;
 import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.tenantsure.errors.TenantSureAlreadyPurchasedException;
 import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.tenantsure.errors.TenantSureOnMaintenanceException;
 import com.propertyvista.portal.server.portal.TenantAppContext;
@@ -129,38 +130,6 @@ public class TenantSureInsurancePolicyCrudServiceImpl implements TenantSureInsur
     }
 
     @Override
-    public void getQuotationRequestParams(AsyncCallback<TenantSureQuotationRequestParamsDTO> callback) {
-        if (((VistaSystemMaintenanceState) SystemMaintenance.getSystemMaintenanceInfo()).enableTenantSureMaintenance().isBooleanTrue()) {
-            throw new TenantSureOnMaintenanceException();
-        }
-        if (ServerSideFactory.create(TenantSureFacade.class).getStatus(TenantAppContext.getCurrentUserTenant().<Tenant> createIdentityStub()) != null) {
-            throw new TenantSureAlreadyPurchasedException();
-        }
-
-        TenantSureQuotationRequestParamsDTO params = EntityFactory.create(TenantSureQuotationRequestParamsDTO.class);
-
-        Tenant tenant = Persistence.service().retrieve(Tenant.class, TenantAppContext.getCurrentUserTenant().getPrimaryKey());
-        params.tenantName().setValue(tenant.customer().person().name().getStringView());
-        params.tenantPhone().setValue(getDefaultPhone(tenant.customer().person()));
-
-        Lease lease = Persistence.service().retrieve(Lease.class, TenantAppContext.getCurrentUserLeaseIdStub().getPrimaryKey());
-        TenantInsurancePolicy tenantInsurancePolicy = ServerSideFactory.create(PolicyFacade.class).obtainEffectivePolicy(
-                lease.unit().<AptUnit> createIdentityStub(), TenantInsurancePolicy.class);
-
-        BigDecimal minRequiredLiabiliy = tenantInsurancePolicy.requireMinimumLiability().isBooleanTrue() ? tenantInsurancePolicy.minimumRequiredLiability()
-                .getValue() : BigDecimal.ZERO;
-        params.generalLiabilityCoverageOptions().addAll(filterGeneralLiabilityOptions(minRequiredLiabiliy));
-        params.contentsCoverageOptions().addAll(CONTENTS_COVERAGE_OPTIONS);
-
-        params.deductibleOptions().addAll(getDeductibleOptions());
-        // TODO fill in personal disclaimer: right now this is filled on client from resources         
-        params.preAuthorizedDebitAgreement().setValue(ServerSideFactory.create(TenantSureTextFacade.class).getPreAuthorizedAgreement());
-
-        callback.onSuccess(params);
-
-    }
-
-    @Override
     public void getQuote(AsyncCallback<TenantSureQuoteDTO> callback, TenantSureCoverageDTO quotationRequest) {
         if (((VistaSystemMaintenanceState) SystemMaintenance.getSystemMaintenanceInfo()).enableTenantSureMaintenance().isBooleanTrue()) {
             throw new TenantSureOnMaintenanceException();
@@ -201,10 +170,10 @@ public class TenantSureInsurancePolicyCrudServiceImpl implements TenantSureInsur
                 TenantAppContext.getCurrentUserTenant().<Tenant> createIdentityStub(),
                 tenantName,
                 tenantPhone
-        );//@formatter:off
+        );//@formatter:on
 
         ServerSideQuteStorage.clear();
-        
+
         callback.onSuccess(null);
     }
 
@@ -212,13 +181,14 @@ public class TenantSureInsurancePolicyCrudServiceImpl implements TenantSureInsur
     public void getCurrentTenantAddress(AsyncCallback<AddressSimple> callback) {
         callback.onSuccess(AddressRetriever.getLeaseParticipantCurrentAddressSimple(TenantAppContext.getCurrentUserTenant()));
     }
-    
+
     @Override
     public void sendQuoteDetails(AsyncCallback<String> asyncCallback, String quoteId) {
         if (ServerSideQuteStorage.get(quoteId) == null) {
             throw new Error("The requested quote " + quoteId + " was not found in client's context");
         }
-        String email = ServerSideFactory.create(TenantSureFacade.class).sendQuote(TenantAppContext.getCurrentUserTenant().<Tenant>createIdentityStub(), quoteId);        
+        String email = ServerSideFactory.create(TenantSureFacade.class).sendQuote(TenantAppContext.getCurrentUserTenant().<Tenant> createIdentityStub(),
+                quoteId);
         asyncCallback.onSuccess(email);
     }
 
@@ -246,69 +216,59 @@ public class TenantSureInsurancePolicyCrudServiceImpl implements TenantSureInsur
         return filteredValues;
     }
 
-
     @Override
     public void init(final AsyncCallback<TenantSureInsurancePolicyDTO> callback, InitializationData initializationData) {
-        getQuotationRequestParams(new AsyncCallback<TenantSureQuotationRequestParamsDTO>() {
 
-            @Override
-            public void onFailure(Throwable caught) {
-                callback.onFailure(caught);
-            }
+        TenantSureInsurancePolicyDTO tenantInsurancePolicy = EntityFactory.create(TenantSureInsurancePolicyDTO.class);
 
-            @Override
-            public void onSuccess(TenantSureQuotationRequestParamsDTO params) {
-                Tenant tenant = Persistence.service().retrieve(Tenant.class, TenantAppContext.getCurrentUserTenant().getPrimaryKey());
-                
-                TenantSureInsurancePolicyDTO tenantSureAgreement = EntityFactory.create(TenantSureInsurancePolicyDTO.class);                
-                tenantSureAgreement.tenantSureCoverageRequest().tenantName().setValue(tenant.customer().person().name().getStringView());
-                tenantSureAgreement.tenantSureCoverageRequest().tenantPhone().setValue(getDefaultPhone(tenant.customer().person()));
+        Tenant tenant = Persistence.service().retrieve(Tenant.class, TenantAppContext.getCurrentUserTenant().getPrimaryKey());
+        tenantInsurancePolicy.tenantSureCoverageRequest().tenantName().setValue(tenant.customer().person().name().getStringView());
+        tenantInsurancePolicy.tenantSureCoverageRequest().tenantPhone().setValue(getDefaultPhone(tenant.customer().person()));
+        tenantInsurancePolicy.tenantSureCoverageRequest().paymentSchedule().setValue(TenantSurePaymentSchedule.Monthly);
 
-                tenantSureAgreement.agreementParams().generalLiabilityCoverageOptions().addAll(params.generalLiabilityCoverageOptions());
-                tenantSureAgreement.agreementParams().contentsCoverageOptions().addAll(params.contentsCoverageOptions());
-                tenantSureAgreement.agreementParams().deductibleOptions().addAll(params.deductibleOptions());
-                tenantSureAgreement.agreementParams().preAuthorizedDebitAgreement().setValue(params.preAuthorizedDebitAgreement().getValue());                
-                
-                callback.onSuccess(tenantSureAgreement);
-                
-            }
-        });
+        tenantInsurancePolicy.agreementParams().set(getAgreementParams());
+
+        tenantInsurancePolicy.paymentMethod().set(EntityFactory.create(InsurancePaymentMethod.class));
+        tenantInsurancePolicy.paymentMethod().type().setValue(PaymentType.CreditCard);
+
+        callback.onSuccess(tenantInsurancePolicy);
+
     }
 
     @Override
-    public void retrieve(AsyncCallback<TenantSureInsurancePolicyDTO> callback, Key entityId, com.pyx4j.entity.rpc.AbstractCrudService.RetrieveTarget retrieveTarget) {
+    public void retrieve(AsyncCallback<TenantSureInsurancePolicyDTO> callback, Key entityId,
+            com.pyx4j.entity.rpc.AbstractCrudService.RetrieveTarget retrieveTarget) {
         // THIS IS MOCKUP:
         TenantSureInsurancePolicyDTO mockupPolicyDTO = EntityFactory.create(TenantSureInsurancePolicyDTO.class);
         mockupPolicyDTO.certificate().insuranceCertificateNumber().setValue("TENANT-SURE-MOCKUP-001");
         mockupPolicyDTO.certificate().insuranceProvider().setValue(TenantSureConstants.TENANTSURE_LEGAL_NAME);
-        mockupPolicyDTO.certificate().liabilityCoverage().setValue(new BigDecimal("1000000"));        
-        mockupPolicyDTO.certificate().inceptionDate().setValue(new LogicalDate());        
+        mockupPolicyDTO.certificate().liabilityCoverage().setValue(new BigDecimal("1000000"));
+        mockupPolicyDTO.certificate().inceptionDate().setValue(new LogicalDate());
         mockupPolicyDTO.contentsCoverage().setValue(new BigDecimal("50000"));
         mockupPolicyDTO.deductible().setValue(new BigDecimal("2000"));
         mockupPolicyDTO.paymentSchedule().setValue(TenantSurePaymentSchedule.Monthly);
-        
-        
+
         {
-        TenantSurePaymentDTO paymentDTO = EntityFactory.create(TenantSurePaymentDTO.class);
-        Calendar cal = GregorianCalendar.getInstance();
-        cal.add(Calendar.MONTH, 1);
-        cal.set(Calendar.DAY_OF_MONTH, cal.getActualMinimum(Calendar.DAY_OF_MONTH));
-        
-        paymentDTO.paymentDate().setValue(new LogicalDate(cal.getTime()));
-        paymentDTO.total().setValue(new BigDecimal("30.00"));
-        TenantSurePaymentItemDTO paymentItem = paymentDTO.paymentBreakdown().$();
-        paymentItem.description().setValue("premium");
-        paymentItem.amount().setValue(new BigDecimal("19.99"));
-        TenantSurePaymentItemTaxDTO taxA = paymentItem.taxBreakdown().$();
-        taxA.tax().setValue("HST");
-        taxA.amount().setValue(new BigDecimal("5"));
-        paymentItem.taxBreakdown().add(taxA);
-        paymentDTO.paymentBreakdown().add(paymentItem);
-        mockupPolicyDTO.nextPaymentDetails().set(paymentDTO);
+            TenantSurePaymentDTO paymentDTO = EntityFactory.create(TenantSurePaymentDTO.class);
+            Calendar cal = GregorianCalendar.getInstance();
+            cal.add(Calendar.MONTH, 1);
+            cal.set(Calendar.DAY_OF_MONTH, cal.getActualMinimum(Calendar.DAY_OF_MONTH));
+
+            paymentDTO.paymentDate().setValue(new LogicalDate(cal.getTime()));
+            paymentDTO.total().setValue(new BigDecimal("30.00"));
+            TenantSurePaymentItemDTO paymentItem = paymentDTO.paymentBreakdown().$();
+            paymentItem.description().setValue("premium");
+            paymentItem.amount().setValue(new BigDecimal("19.99"));
+            TenantSurePaymentItemTaxDTO taxA = paymentItem.taxBreakdown().$();
+            taxA.tax().setValue("HST");
+            taxA.amount().setValue(new BigDecimal("5"));
+            paymentItem.taxBreakdown().add(taxA);
+            paymentDTO.paymentBreakdown().add(paymentItem);
+            mockupPolicyDTO.nextPaymentDetails().set(paymentDTO);
         }
-        
+
         {
-            TenantSurePaymentDTO paymentDTO = EntityFactory.create(TenantSurePaymentDTO.class);            
+            TenantSurePaymentDTO paymentDTO = EntityFactory.create(TenantSurePaymentDTO.class);
             paymentDTO.total().setValue(new BigDecimal("30.00"));
             TenantSurePaymentItemDTO paymentItem = paymentDTO.paymentBreakdown().$();
             paymentItem.description().setValue("premium");
@@ -320,69 +280,94 @@ public class TenantSureInsurancePolicyCrudServiceImpl implements TenantSureInsur
             paymentDTO.paymentBreakdown().add(paymentItem);
             mockupPolicyDTO.annualPaymentDetails().set(paymentDTO);
         }
-        
-        callback.onSuccess(mockupPolicyDTO);        
+
+        callback.onSuccess(mockupPolicyDTO);
     }
 
     @Override
     public void create(final AsyncCallback<Key> callback, TenantSureInsurancePolicyDTO editableEntity) {
-       
+
     }
 
     @Override
     @ServiceExecution(waitCaption = "Saving...")
     public void save(AsyncCallback<Key> callback, TenantSureInsurancePolicyDTO editableEntity) {
         // TODO Auto-generated method stub
-        
+
     }
 
     @Override
     public void list(AsyncCallback<EntitySearchResult<TenantSureInsurancePolicyDTO>> callback, EntityListCriteria<TenantSureInsurancePolicyDTO> criteria) {
         // TODO Auto-generated method stub
-        
+
     }
 
     @Override
     public void delete(AsyncCallback<Boolean> callback, Key entityId) {
         // TODO Auto-generated method stub
-        
+
     }
 
     @Override
     public void getPreAuthorizedPaymentsAgreement(AsyncCallback<String> areementHtml) {
         // TODO Auto-generated method stub
-        
+
     }
 
     @Override
     public void getFaq(AsyncCallback<String> faqHtml) {
         // TODO Auto-generated method stub
-        
-    }
 
+    }
 
     @Override
     public void updatePaymentMethod(AsyncCallback<VoidSerializable> callback, InsurancePaymentMethod paymentMethod) {
         // TODO Auto-generated method stub
-        
+
     }
 
     @Override
     public void cancelTenantSure(AsyncCallback<VoidSerializable> callback) {
         // TODO Auto-generated method stub
-        
+
     }
 
     @Override
     public void reinstate(AsyncCallback<VoidSerializable> callback) {
         // TODO Auto-generated method stub
-        
+
     }
 
     @Override
     public void sendCertificate(AsyncCallback<String> defaultAsyncCallback, String email) {
         // TODO Auto-generated method stub
-        
+
     }
-   
+
+    private TenantSureAgreementParamsDTO getAgreementParams() {
+        if (((VistaSystemMaintenanceState) SystemMaintenance.getSystemMaintenanceInfo()).enableTenantSureMaintenance().isBooleanTrue()) {
+            throw new TenantSureOnMaintenanceException();
+        }
+        if (ServerSideFactory.create(TenantSureFacade.class).getStatus(TenantAppContext.getCurrentUserTenant().<Tenant> createIdentityStub()) != null) {
+            throw new TenantSureAlreadyPurchasedException();
+        }
+
+        TenantSureAgreementParamsDTO params = EntityFactory.create(TenantSureAgreementParamsDTO.class);
+
+        Lease lease = Persistence.service().retrieve(Lease.class, TenantAppContext.getCurrentUserLeaseIdStub().getPrimaryKey());
+        TenantInsurancePolicy tenantInsurancePolicy = ServerSideFactory.create(PolicyFacade.class).obtainEffectivePolicy(
+                lease.unit().<AptUnit> createIdentityStub(), TenantInsurancePolicy.class);
+
+        BigDecimal minRequiredLiabiliy = tenantInsurancePolicy.requireMinimumLiability().isBooleanTrue() ? tenantInsurancePolicy.minimumRequiredLiability()
+                .getValue() : BigDecimal.ZERO;
+        params.generalLiabilityCoverageOptions().addAll(filterGeneralLiabilityOptions(minRequiredLiabiliy));
+        params.contentsCoverageOptions().addAll(CONTENTS_COVERAGE_OPTIONS);
+
+        params.deductibleOptions().addAll(getDeductibleOptions());
+        // TODO fill in personal disclaimer: right now this is filled on client from resources         
+        params.preAuthorizedDebitAgreement().setValue(ServerSideFactory.create(TenantSureTextFacade.class).getPreAuthorizedAgreement());
+
+        return params;
+    }
+
 }

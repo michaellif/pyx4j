@@ -1,0 +1,67 @@
+/*
+ * (C) Copyright Property Vista Software Inc. 2011-2012 All Rights Reserved.
+ *
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * you entered into with Property Vista Software Inc.
+ *
+ * This notice and attribution to Property Vista Software Inc. may not be removed.
+ *
+ * Created on 2013-10-08
+ * @author ArtyomB
+ * @version $Id$
+ */
+package com.propertyvista.portal.web.client.ui.services.insurance;
+
+import com.google.gwt.user.client.ui.Anchor;
+import com.google.gwt.user.client.ui.Composite;
+import com.google.gwt.user.client.ui.FlowPanel;
+import com.google.gwt.user.client.ui.SimplePanel;
+
+import com.pyx4j.i18n.shared.I18n;
+
+import com.propertyvista.portal.web.client.themes.TenantSureTheme;
+
+public class TenantSure2HighCourtReferenceLinks extends Composite {
+
+    private static final I18n i18n = I18n.get(TenantSure2HighCourtReferenceLinks.class);
+
+    private final Anchor compensationDisclosureStatementAnchor;
+
+    private final Anchor privacyPolicyAnchor;
+
+    public TenantSure2HighCourtReferenceLinks() {
+        FlowPanel panel = new FlowPanel();
+        panel.setStyleName(TenantSureTheme.StyleName.TenantSureDecoratorFooter.name());
+
+        SimplePanel privacyPolicyAnchorHolder = new SimplePanel();
+        privacyPolicyAnchorHolder.setStyleName(TenantSureTheme.StyleName.TenantSureTermsLink.name());
+        privacyPolicyAnchorHolder.addStyleName(TenantSureTheme.StyleName.TenantSurePrivacyPolicyLink.name());
+
+        privacyPolicyAnchor = new Anchor(i18n.tr("Privacy Policy"));
+        privacyPolicyAnchor.setTarget("_blank");
+        privacyPolicyAnchorHolder.setWidget(privacyPolicyAnchor);
+        panel.add(privacyPolicyAnchorHolder);
+
+        SimplePanel compensationDisclosureStatementAnchorHolder = new SimplePanel();
+        compensationDisclosureStatementAnchorHolder.setStyleName(TenantSureTheme.StyleName.TenantSureTermsLink.name());
+        compensationDisclosureStatementAnchorHolder.addStyleName(TenantSureTheme.StyleName.TenantSureBillingAndCancellationsPolicyLink.name());
+
+        compensationDisclosureStatementAnchor = new Anchor(i18n.tr("Compensation Disclosure Statement"));
+        compensationDisclosureStatementAnchor.setTarget("_blank");
+        compensationDisclosureStatementAnchorHolder.setWidget(compensationDisclosureStatementAnchor);
+        panel.add(compensationDisclosureStatementAnchorHolder);
+
+        initWidget(panel);
+
+    }
+
+    public final void setPrivacyPolcyAddress(String href) {
+        privacyPolicyAnchor.setHref(href);
+    }
+
+    public final void setCompensationDisclosureStatement(String href) {
+        compensationDisclosureStatementAnchor.setHref(href);
+    }
+
+}

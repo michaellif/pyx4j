@@ -298,6 +298,11 @@ public class TenantSurePurchaseViewImpl extends Composite implements TenantSureP
         pleaseFillOutTheFormMessage.setText(i18n.tr("Please fill out the form to get a quote from Highcourt Partners Limited"));
         quoteSection.add(pleaseFillOutTheFormMessage);
 
+        retrievingQuoteMessage = new Label();
+        retrievingQuoteMessage.addStyleName(TenantSureTheme.StyleName.TSPucrhaseViewMessageText.name());
+        retrievingQuoteMessage.setText(i18n.tr("Please wait while we preparing your quote..."));
+        quoteSection.add(retrievingQuoteMessage);
+
         quoteSend = new Button(i18n.tr("Email Quote Details"), new Command() {
             @Override
             public void execute() {
@@ -310,11 +315,6 @@ public class TenantSurePurchaseViewImpl extends Composite implements TenantSureP
 
         quoteViewer = new TenantSureQuoteViewer(true);
         quoteSection.add(quoteViewer);
-
-        retrievingQuoteMessage = new Label();
-        retrievingQuoteMessage.addStyleName(TenantSureTheme.StyleName.TSPucrhaseViewMessageText.name());
-        retrievingQuoteMessage.setText(i18n.tr("Please wait while we preparing your quote..."));
-        quoteSection.add(retrievingQuoteMessage);
 
         quotationRequestStepPanel.setWidget(++qrpRow, 0, 2, quoteSection);
         quotationRequestStepPanel.getCellFormatter().setVerticalAlignment(qrpRow, 0, HasVerticalAlignment.ALIGN_MIDDLE);
