@@ -28,7 +28,6 @@ import com.pyx4j.commons.css.Theme;
 import com.pyx4j.commons.css.ThemeColor;
 import com.pyx4j.commons.css.ThemeId;
 import com.pyx4j.forms.client.ui.CComponentTheme;
-import com.pyx4j.forms.client.ui.CComponentTheme.StyleName;
 import com.pyx4j.widgets.client.DefaultWidgetsTheme;
 
 public abstract class DefaultWidgetDecoratorTheme extends Theme {

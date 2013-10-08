@@ -9,7 +9,6 @@ import com.pyx4j.forms.client.images.EntityFolderImages;
 import com.pyx4j.gwt.rpc.upload.UploadService;
 import com.pyx4j.gwt.shared.Dimension;
 import com.pyx4j.gwt.shared.FileURLBuilder;
-import com.pyx4j.widgets.client.ImageSlider;
 import com.pyx4j.widgets.client.ImageSlider.ImageSliderType;
 
 /*
