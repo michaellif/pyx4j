@@ -30,6 +30,7 @@ import com.propertyvista.domain.maintenance.MaintenanceRequestPriority;
 import com.propertyvista.portal.rpc.portal.web.dto.maintenance.MaintenanceRequestDTO;
 import com.propertyvista.portal.web.client.themes.EntityViewTheme;
 import com.propertyvista.portal.web.client.ui.CPortalEntityForm;
+import com.propertyvista.portal.web.client.ui.maintenance.MaintenanceRequestPageView.MaintenanceRequestPagePresenter;
 import com.propertyvista.portal.web.client.ui.profile.ProfilePageView.ProfilePagePresenter;
 import com.propertyvista.portal.web.client.ui.util.decorators.FormDecoratorBuilder;
 
@@ -88,7 +89,7 @@ public class MaintenanceRequestPage extends CPortalEntityForm<MaintenanceRequest
         Button btnCancel = new Button(i18n.tr("Cancel"), new Command() {
             @Override
             public void execute() {
-//TODO
+                ((MaintenanceRequestPagePresenter) getView().getPresenter()).cancelRequest();
             }
         });
         decorator.addHeaderToolbarButton(btnCancel);

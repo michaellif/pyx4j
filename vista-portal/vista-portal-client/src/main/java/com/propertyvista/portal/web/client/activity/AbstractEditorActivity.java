@@ -64,6 +64,10 @@ public abstract class AbstractEditorActivity<E extends IEntity> extends Security
         return view;
     }
 
+    public Key getEntityId() {
+        return entityId;
+    }
+
     protected void onDiscard() {
         view.reset();
         view.setPresenter(null);

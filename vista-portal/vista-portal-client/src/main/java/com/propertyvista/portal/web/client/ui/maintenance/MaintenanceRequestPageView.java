@@ -13,12 +13,17 @@
  */
 package com.propertyvista.portal.web.client.ui.maintenance;
 
+import com.propertyvista.domain.maintenance.SurveyResponse;
 import com.propertyvista.portal.rpc.portal.web.dto.maintenance.MaintenanceRequestDTO;
 import com.propertyvista.portal.web.client.ui.IEditorView;
 
 public interface MaintenanceRequestPageView extends IEditorView<MaintenanceRequestDTO> {
 
     public interface MaintenanceRequestPagePresenter extends IEditorPresenter<MaintenanceRequestDTO> {
+
+        void rateRequest(SurveyResponse rate);
+
+        void cancelRequest();
 
     }
 
