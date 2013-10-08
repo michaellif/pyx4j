@@ -25,7 +25,6 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
 import com.pyx4j.commons.CommonsStringUtils;
-import com.pyx4j.entity.rpc.AbstractCrudService;
 import com.pyx4j.entity.rpc.AbstractCrudService.InitializationData;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.i18n.shared.I18n;
@@ -41,14 +40,14 @@ public abstract class AbstractWizardActivity<E extends IEntity> extends Security
 
     private final IWizardView<E> view;
 
-    public AbstractWizardActivity(Class<? extends IWizardView<E>> viewType, AbstractCrudService<E> service, Class<E> entityClass) {
+    public AbstractWizardActivity(Class<? extends IWizardView<E>> viewType, Class<E> entityClass) {
 
         view = PortalWebSite.getViewFactory().instantiate(viewType);
         view.setPresenter(this);
     }
 
     public AbstractWizardActivity(Class<? extends IWizardView<E>> viewType) {
-        this(viewType, null, null);
+        this(viewType, null);
     }
 
     @Override
