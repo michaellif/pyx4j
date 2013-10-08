@@ -27,13 +27,13 @@ import com.pyx4j.forms.client.images.EntityFolderImages;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.ui.CEntityLabel;
-import com.pyx4j.forms.client.ui.CImage;
-import com.pyx4j.forms.client.ui.CLabel;
+import com.pyx4j.forms.client.ui.CImageSlider;
 import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
 import com.pyx4j.forms.client.validators.ValidationError;
 import com.pyx4j.gwt.shared.FileURLBuilder;
 import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.widgets.client.ImageSlider.ImageSliderType;
 
 import com.propertyvista.common.client.resources.VistaImages;
 import com.propertyvista.common.client.ui.components.MediaUtils;
@@ -68,7 +68,7 @@ public class ProfilePage extends CPortalEntityEditor<ResidentProfileDTO> {
         BasicFlexFormPanel mainPanel = new BasicFlexFormPanel();
         int row = -1;
 
-        CImage<CustomerPicture> imageHolder = new CImage<CustomerPicture>(CustomerPicture.class, CImage.Type.single) {
+        CImageSlider<CustomerPicture> imageHolder = new CImageSlider<CustomerPicture>(CustomerPicture.class, ImageSliderType.single) {
             @Override
             protected EntityFolderImages getFolderIcons() {
                 return VistaImages.INSTANCE;

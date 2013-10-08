@@ -30,12 +30,13 @@ import com.pyx4j.forms.client.images.EntityFolderImages;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.ui.CEntityLabel;
-import com.pyx4j.forms.client.ui.CImage;
+import com.pyx4j.forms.client.ui.CImageSlider;
 import com.pyx4j.forms.client.ui.CLabel;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.gwt.shared.Dimension;
 import com.pyx4j.gwt.shared.FileURLBuilder;
 import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.widgets.client.ImageSlider.ImageSliderType;
 
 import com.propertyvista.common.client.resources.VistaImages;
 import com.propertyvista.common.client.ui.components.MediaUtils;
@@ -123,11 +124,11 @@ public class PortalImageSetFolder extends VistaBoxFolder<PortalImageSet> {
     }
 
     class PortalImageSetEditor extends CEntityDecoratableForm<PortalImageSet> {
-        private final CImage<SiteImageResource> imageHolder;
+        private final CImageSlider<SiteImageResource> imageHolder;
 
         public PortalImageSetEditor() {
             super(PortalImageSet.class);
-            imageHolder = new CImage<SiteImageResource>(SiteImageResource.class, CImage.Type.multiple) {
+            imageHolder = new CImageSlider<SiteImageResource>(SiteImageResource.class, ImageSliderType.multiple) {
                 @Override
                 protected EntityFolderImages getFolderIcons() {
                     return VistaImages.INSTANCE;
