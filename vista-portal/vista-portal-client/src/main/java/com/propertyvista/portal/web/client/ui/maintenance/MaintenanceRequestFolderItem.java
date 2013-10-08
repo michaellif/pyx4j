@@ -24,6 +24,7 @@ import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.widgets.client.Anchor;
 
+import com.propertyvista.domain.maintenance.MaintenanceRequestPriority.PriorityLevel;
 import com.propertyvista.domain.maintenance.MaintenanceRequestStatus.StatusPhase;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap;
 import com.propertyvista.portal.rpc.portal.web.dto.maintenance.MaintenanceRequestStatusDTO;
@@ -47,9 +48,11 @@ public class MaintenanceRequestFolderItem extends CEntityForm<MaintenanceRequest
         BasicFlexFormPanel content = new BasicFlexFormPanel();
         int row = -1;
 
+        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().subject(), new CLabel<String>()), 180).build());
         content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().description(), new CLabel<String>()), 180).build());
         content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().status().phase(), new CLabel<StatusPhase>()), 180).build());
-        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().submissionDate(), new CLabel<String>()), 180).build());
+        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().priority().level(), new CLabel<PriorityLevel>()), 180).build());
+        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().lastUpdated(), new CLabel<String>()), 180).build());
 
         detailsLink = new Anchor(i18n.tr("View Details"), new Command() {
 

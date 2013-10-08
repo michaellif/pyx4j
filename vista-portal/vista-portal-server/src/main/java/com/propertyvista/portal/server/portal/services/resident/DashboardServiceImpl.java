@@ -95,7 +95,7 @@ public class DashboardServiceImpl implements DashboardService {
             MaintenanceRequestStatusDTO requestStatusDto = dashboard.maintenanceInfo().openMaintenanceRequests().$();
             requestStatusDto.description().setValue(maintenanceRequest.summary().getValue());
             requestStatusDto.status().set(maintenanceRequest.status().duplicate());
-            requestStatusDto.submissionDate().setValue(maintenanceRequest.submitted().getValue());
+            requestStatusDto.lastUpdated().setValue(maintenanceRequest.submitted().getValue());
             dashboard.maintenanceInfo().openMaintenanceRequests().add(requestStatusDto);
         }
 

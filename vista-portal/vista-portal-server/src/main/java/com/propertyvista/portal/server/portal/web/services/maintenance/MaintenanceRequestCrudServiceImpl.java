@@ -141,9 +141,11 @@ public class MaintenanceRequestCrudServiceImpl extends AbstractCrudServiceDtoImp
         for (MaintenanceRequest mr : requests) {
             MaintenanceRequestStatusDTO statusDto = EntityFactory.create(MaintenanceRequestStatusDTO.class);
             statusDto.id().setValue(mr.getPrimaryKey());
+            statusDto.subject().set(mr.summary());
             statusDto.description().set(mr.description());
             statusDto.status().set(mr.status());
-            statusDto.submissionDate().set(mr.submitted());
+            statusDto.priority().set(mr.priority());
+            statusDto.lastUpdated().set(mr.updated());
             if (MaintenanceRequestStatus.StatusPhase.open().contains(mr.status().phase().getValue())) {
                 dto.openMaintenanceRequests().add(statusDto);
             } else {
