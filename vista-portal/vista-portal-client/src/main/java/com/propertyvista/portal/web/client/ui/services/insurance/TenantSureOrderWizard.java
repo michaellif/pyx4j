@@ -14,6 +14,8 @@
 package com.propertyvista.portal.web.client.ui.services.insurance;
 
 import com.google.gwt.dom.client.Style.Unit;
+import com.google.gwt.event.logical.shared.ValueChangeEvent;
+import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTMLPanel;
@@ -28,12 +30,17 @@ import com.pyx4j.widgets.client.Anchor;
 import com.pyx4j.widgets.client.Button;
 import com.pyx4j.widgets.client.Label;
 
+import com.propertyvista.domain.contact.AddressSimple;
+import com.propertyvista.domain.payment.InsurancePaymentMethod;
 import com.propertyvista.domain.tenant.insurance.TenantSureConstants;
+import com.propertyvista.portal.rpc.portal.web.dto.insurance.TenantSureCoverageDTO;
 import com.propertyvista.portal.rpc.portal.web.dto.insurance.TenantSureInsurancePolicyDTO;
+import com.propertyvista.portal.rpc.portal.web.dto.insurance.TenantSureQuoteDTO;
 import com.propertyvista.portal.web.client.resources.PortalImages;
 import com.propertyvista.portal.web.client.resources.tenantsure.TenantSureResources;
 import com.propertyvista.portal.web.client.themes.TenantSureTheme;
 import com.propertyvista.portal.web.client.ui.CPortalEntityWizard;
+import com.propertyvista.portal.web.client.ui.services.insurance.TenantSureOrderWizardView.TenantSureOrderWizardPersenter;
 import com.propertyvista.portal.web.client.ui.util.decorators.FormDecoratorBuilder;
 
 public class TenantSureOrderWizard extends CPortalEntityWizard<TenantSureInsurancePolicyDTO> {
@@ -46,8 +53,6 @@ public class TenantSureOrderWizard extends CPortalEntityWizard<TenantSureInsuran
 
     private final WizardStep paymentMethodStep;
 
-    private final WizardStep confirmationStep;
-
     private TenantSure2HighCourtReferenceLinks personalInforReferenceLinks;
 
     private Button quoteSendButton;
@@ -58,6 +63,8 @@ public class TenantSureOrderWizard extends CPortalEntityWizard<TenantSureInsuran
 
     private TenantSureQuoteViewer quoteViewer;
 
+    private TenantSureOrderWizardPersenter presenter;
+
     public TenantSureOrderWizard(TenantSureOrderWizardView view, String endButtonCaption) {
         super(TenantSureInsurancePolicyDTO.class, view, i18n.tr("TenantSure Insurance"), endButtonCaption, ThemeColor.contrast3);
 
@@ -67,8 +74,6 @@ public class TenantSureOrderWizard extends CPortalEntityWizard<TenantSureInsuran
 
         paymentMethodStep = addStep(createPaymentMethodStep());
 
-        confirmationStep = addStep(createConfirmationStep());
-
     }
 
     @Override
@@ -77,6 +82,10 @@ public class TenantSureOrderWizard extends CPortalEntityWizard<TenantSureInsuran
         ((TenantSureCoverageRequestForm) get(proto().tenantSureCoverageRequest())).setCoverageParams(getValue().agreementParams());
         ((TenantSurePaymentMethodForm) get(proto().paymentMethod())).setPreAuthorizedAgreement(getValue().agreementParams().preAuthorizedDebitAgreement()
                 .getValue());
+        retrievingQuoteMessage.setVisible(false);
+        pleaseFillOutTheFormMessage.setVisible(true);
+        quoteSendButton.setVisible(false);
+        get(proto().quote()).setVisible(false);
     }
 
     private BasicFlexFormPanel createPersonalInfoStep() {
@@ -109,6 +118,14 @@ public class TenantSureOrderWizard extends CPortalEntityWizard<TenantSureInsuran
         int row = -1;
         quotationRequestStepPanel.setH1(++row, 0, 2, i18n.tr("Coverage"));
         quotationRequestStepPanel.setWidget(++row, 0, 2, inject(proto().tenantSureCoverageRequest(), new TenantSureCoverageRequestForm()));
+        get(proto().tenantSureCoverageRequest()).addValueChangeHandler(new ValueChangeHandler<TenantSureCoverageDTO>() {
+            @Override
+            public void onValueChange(ValueChangeEvent<TenantSureCoverageDTO> event) {
+                if (get(proto().tenantSureCoverageRequest()).isValid()) {
+                    presenter.getNewQuote();
+                }
+            }
+        });
 
         quotationRequestStepPanel.setH1(++row, 0, 2, i18n.tr("Quote"));
 
@@ -123,13 +140,15 @@ public class TenantSureOrderWizard extends CPortalEntityWizard<TenantSureInsuran
         quoteSendButton = new Button(i18n.tr("Email Quote Details"), new Command() {
             @Override
             public void execute() {
-                // TODO
-                // presenter.sendQuoteDetails(quoteViewer.getValue().quoteId().getValue());
+                presenter.sendQuoteDetailsEmail();
             }
         });
+        quoteSendButton.setVisible(false);
+
         retrievingQuoteMessage = new Label();
         retrievingQuoteMessage.addStyleName(TenantSureTheme.StyleName.TSPucrhaseViewMessageText.name());
         retrievingQuoteMessage.setText(i18n.tr("Please wait while we preparing your quote..."));
+        retrievingQuoteMessage.setVisible(false);
         quoteSection.add(retrievingQuoteMessage);
 
         SimplePanel quoteSendHolder = new SimplePanel(quoteSendButton);
@@ -164,8 +183,7 @@ public class TenantSureOrderWizard extends CPortalEntityWizard<TenantSureInsuran
         TenantSurePaymentMethodForm paymentMethodForm = new TenantSurePaymentMethodForm(new Command() {
             @Override
             public void execute() {
-                // TODO enable this
-                // presenter.onBillingAddressSameAsCurrentSelected();
+                presenter.populateCurrentAddressAsBillingAddress();
             }
         });
         paymentStepPanel.setWidget(++row, 0, 2, inject(proto().paymentMethod(), paymentMethodForm));
@@ -185,10 +203,31 @@ public class TenantSureOrderWizard extends CPortalEntityWizard<TenantSureInsuran
         return paymentStepPanel;
     }
 
-    private BasicFlexFormPanel createConfirmationStep() {
-        BasicFlexFormPanel panel = new BasicFlexFormPanel();
-        int row = -1;
+    public void waitForQuote() {
+        retrievingQuoteMessage.setVisible(true);
+        pleaseFillOutTheFormMessage.setVisible(false);
+        get(proto().quote()).setVisible(false);
+        quoteSendButton.setVisible(false);
+    }
 
-        return panel;
+    public void setQuote(TenantSureQuoteDTO quote) {
+        retrievingQuoteMessage.setVisible(false);
+
+        get(proto().quote()).setVisible(true);
+        quoteSendButton.setVisible(true);
+
+        get(proto().quote()).setValue(quote);
+        get(proto().quoteConfirmation()).setValue(quote.duplicate(TenantSureQuoteDTO.class));
+    }
+
+    public void setBillingAddress(AddressSimple billingAddress) {
+        TenantSurePaymentMethodForm form = ((TenantSurePaymentMethodForm) get(proto().paymentMethod()));
+        InsurancePaymentMethod paymentMethod = form.getValue();
+        paymentMethod.billingAddress().set(billingAddress);
+        form.setValue(paymentMethod);
+    }
+
+    public void setPresenter(TenantSureOrderWizardPersenter presenter) {
+        this.presenter = presenter;
     }
 }

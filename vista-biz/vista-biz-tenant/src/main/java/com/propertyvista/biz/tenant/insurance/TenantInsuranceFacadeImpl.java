@@ -93,7 +93,7 @@ public class TenantInsuranceFacadeImpl implements TenantInsuranceFacade {
         for (InsuranceCertificate<?> certificate : getInsuranceCertificates(tenantId, false)) {
             InsuranceCertificateSummaryDTO certificateSummaryDTO = null;
 
-            if (certificate instanceof TenantSureInsuranceCertificate) {
+            if (certificate.getInstanceValueClass().equals(TenantSureInsuranceCertificate.class)) {
                 certificateSummaryDTO = EntityFactory.create(TenantSureCertificateSummaryDTO.class);
             } else {
                 certificateSummaryDTO = EntityFactory.create(GeneralInsuranceCertificateSummaryDTO.class);

@@ -29,15 +29,23 @@ import com.propertyvista.portal.rpc.portal.web.services.services.TenantSureInsur
 import com.propertyvista.portal.web.client.activity.AbstractWizardCrudActivity;
 import com.propertyvista.portal.web.client.ui.services.insurance.TenantSureOrderWizardView;
 
-public class TenantSureOrderWizardActivity extends AbstractWizardCrudActivity<TenantSureInsurancePolicyDTO> implements TenantSureOrderWizardView.TenantSureOrderWizardPersenter {
+public class TenantSureOrderWizardActivity extends AbstractWizardCrudActivity<TenantSureInsurancePolicyDTO> implements
+        TenantSureOrderWizardView.TenantSureOrderWizardPersenter {
 
     public TenantSureOrderWizardActivity(AppPlace place) {
-        super(TenantSureOrderWizardView.class, GWT.<TenantSureInsurancePolicyCrudService> create(TenantSureInsurancePolicyCrudService.class), TenantSureInsurancePolicyDTO.class);
+        super(TenantSureOrderWizardView.class, GWT.<TenantSureInsurancePolicyCrudService> create(TenantSureInsurancePolicyCrudService.class),
+                TenantSureInsurancePolicyDTO.class);
     }
 
     @Override
     protected void onFinish(Key result) {
-        AppSite.getPlaceController().goTo(new Payment.PaymentSubmitting(result));
+        ((TenantSureInsurancePolicyCrudService) getService()).create(new DefaultAsyncCallback<Key>() {
+            @Override
+            public void onSuccess(Key result) {
+                AppSite.getPlaceController().goTo(new Payment.PaymentSubmitting(result));
+            }
+        }, getView().getValue());
+
     }
 
     @Override
@@ -53,6 +61,7 @@ public class TenantSureOrderWizardActivity extends AbstractWizardCrudActivity<Te
 
     @Override
     public void getNewQuote() {
+        ((TenantSureOrderWizardView) getView()).waitForQuote();
         ((TenantSureInsurancePolicyCrudService) getService()).getQuote(new DefaultAsyncCallback<TenantSureQuoteDTO>() {
             @Override
             public void onSuccess(TenantSureQuoteDTO quote) {
@@ -70,4 +79,5 @@ public class TenantSureOrderWizardActivity extends AbstractWizardCrudActivity<Te
             }
         });
     }
+
 }

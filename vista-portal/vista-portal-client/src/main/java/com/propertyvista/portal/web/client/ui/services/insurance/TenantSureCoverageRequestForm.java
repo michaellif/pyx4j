@@ -42,10 +42,6 @@ public class TenantSureCoverageRequestForm extends CEntityDecoratableForm<Tenant
         BasicFlexFormPanel contentPanel = new BasicFlexFormPanel();
         int row = -1;
 
-        contentPanel.setH2(++row, 0, 1, i18n.tr("Personal Info and Contact Information"));
-        contentPanel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().tenantName())).build());
-        contentPanel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().tenantPhone())).build());
-
         contentPanel.setH2(++row, 0, 1, i18n.tr("Coverage"));
         contentPanel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().personalLiabilityCoverage(), new MoneyComboBox())).build());
         contentPanel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().contentsCoverage(), new MoneyComboBox())).build());

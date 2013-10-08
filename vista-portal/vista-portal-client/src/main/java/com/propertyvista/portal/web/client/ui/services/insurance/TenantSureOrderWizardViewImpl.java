@@ -24,28 +24,33 @@ public class TenantSureOrderWizardViewImpl extends AbstractWizardView<TenantSure
 
     private static final I18n i18n = I18n.get(TenantSureOrderWizardViewImpl.class);
 
+    private TenantSureOrderWizard wizard;
+
     public TenantSureOrderWizardViewImpl() {
         super();
-        setWizard(new TenantSureOrderWizard(this, i18n.tr("Submit")));
+        setWizard(wizard = new TenantSureOrderWizard(this, i18n.tr("Submit")));
 
+    }
+
+    @Override
+    public void setPresenter(com.propertyvista.portal.web.client.ui.IWizardView.IWizardPresenter<TenantSureInsurancePolicyDTO> presenter) {
+        wizard.setPresenter((TenantSureOrderWizardPersenter) presenter);
+        super.setPresenter(presenter);
     }
 
     @Override
     public void waitForQuote() {
-        // TODO Auto-generated method stub
-
+        wizard.waitForQuote();
     }
 
     @Override
     public void setQuote(TenantSureQuoteDTO quote) {
-        // TODO Auto-generated method stub
-
+        wizard.setQuote(quote);
     }
 
     @Override
     public void setBillingAddress(AddressSimple billingAddress) {
-        // TODO Auto-generated method stub
-
+        wizard.setBillingAddress(billingAddress);
     }
 
     @Override

@@ -13,6 +13,7 @@
  */
 package com.propertyvista.biz.tenant.insurance;
 
+import com.pyx4j.commons.Key;
 import com.pyx4j.commons.LogicalDate;
 
 import com.propertyvista.domain.payment.InsurancePaymentMethod;
@@ -39,8 +40,10 @@ public interface TenantSureFacade {
      * - Make InsuranceTenantSure.status Active
      * 
      * If any action failed: status set to Failed and record is kept in DB
+     * 
+     * @return key of the TenantSurePolicy
      */
-    void buyInsurance(TenantSureQuoteDTO quote, Tenant tenantId, String tenantName, String tenantPhone);
+    Key buyInsurance(TenantSureQuoteDTO quote, Tenant tenantId, String tenantName, String tenantPhone);
 
     /**
      * Sends a cancellation request (cancellation itself should happen on expiry date)

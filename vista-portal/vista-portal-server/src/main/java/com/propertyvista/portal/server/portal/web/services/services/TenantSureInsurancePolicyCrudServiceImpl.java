@@ -218,6 +218,9 @@ public class TenantSureInsurancePolicyCrudServiceImpl implements TenantSureInsur
 
     @Override
     public void init(final AsyncCallback<TenantSureInsurancePolicyDTO> callback, InitializationData initializationData) {
+        if (((VistaSystemMaintenanceState) SystemMaintenance.getSystemMaintenanceInfo()).enableTenantSureMaintenance().isBooleanTrue()) {
+            throw new TenantSureOnMaintenanceException();
+        }
 
         TenantSureInsurancePolicyDTO tenantInsurancePolicy = EntityFactory.create(TenantSureInsurancePolicyDTO.class);
 
@@ -238,6 +241,10 @@ public class TenantSureInsurancePolicyCrudServiceImpl implements TenantSureInsur
     @Override
     public void retrieve(AsyncCallback<TenantSureInsurancePolicyDTO> callback, Key entityId,
             com.pyx4j.entity.rpc.AbstractCrudService.RetrieveTarget retrieveTarget) {
+        if (((VistaSystemMaintenanceState) SystemMaintenance.getSystemMaintenanceInfo()).enableTenantSureMaintenance().isBooleanTrue()) {
+            throw new TenantSureOnMaintenanceException();
+        }
+
         // THIS IS MOCKUP:
         TenantSureInsurancePolicyDTO mockupPolicyDTO = EntityFactory.create(TenantSureInsurancePolicyDTO.class);
         mockupPolicyDTO.certificate().insuranceCertificateNumber().setValue("TENANT-SURE-MOCKUP-001");
@@ -285,8 +292,33 @@ public class TenantSureInsurancePolicyCrudServiceImpl implements TenantSureInsur
     }
 
     @Override
-    public void create(final AsyncCallback<Key> callback, TenantSureInsurancePolicyDTO editableEntity) {
+    public void create(final AsyncCallback<Key> callback, TenantSureInsurancePolicyDTO policyDto) {
+        if (((VistaSystemMaintenanceState) SystemMaintenance.getSystemMaintenanceInfo()).enableTenantSureMaintenance().isBooleanTrue()) {
+            throw new TenantSureOnMaintenanceException();
+        }
 
+        policyDto.paymentMethod().tenant().set(TenantAppContext.getCurrentUserTenant());
+
+        // TODO since we pass the current user tenant to the facade function i think there's we should not settenant() filed of payment method
+        ServerSideFactory.create(TenantSureFacade.class).savePaymentMethod(//@formatter:off
+                policyDto.paymentMethod(),
+                TenantAppContext.getCurrentUserTenant().<Tenant> createIdentityStub()
+        );//@formatter:on
+
+        TenantSureQuoteDTO quote = ServerSideQuteStorage.get(policyDto.quote().quoteId().getValue());
+        if (quote == null) {
+            throw new Error("The requested quote " + policyDto.quote().getValue() + " was not found in client's context");
+        }
+        Key key = ServerSideFactory.create(TenantSureFacade.class).buyInsurance(//@formatter:off
+                quote,
+                TenantAppContext.getCurrentUserTenant().<Tenant> createIdentityStub(),
+                policyDto.tenantSureCoverageRequest().tenantName().getValue(),
+                policyDto.tenantSureCoverageRequest().tenantPhone().getValue()
+        );//@formatter:on
+
+        ServerSideQuteStorage.clear();
+
+        callback.onSuccess(key);
     }
 
     @Override
