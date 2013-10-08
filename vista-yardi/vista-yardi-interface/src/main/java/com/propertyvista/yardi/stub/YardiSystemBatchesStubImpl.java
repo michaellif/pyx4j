@@ -45,6 +45,7 @@ import com.propertyvista.biz.system.encryption.PasswordEncryptorFacade;
 import com.propertyvista.domain.settings.PmcYardiCredential;
 import com.propertyvista.yardi.YardiConstants;
 import com.propertyvista.yardi.YardiConstants.Action;
+import com.propertyvista.yardi.YardiInterface;
 import com.propertyvista.yardi.bean.Messages;
 
 public class YardiSystemBatchesStubImpl extends AbstractYardiStub implements YardiSystemBatchesStub {
@@ -65,6 +66,7 @@ public class YardiSystemBatchesStubImpl extends AbstractYardiStub implements Yar
             request.setDatabase(yc.database().getValue());
             request.setPlatform(yc.platform().getValue().name());
             request.setInterfaceEntity(YardiConstants.INTERFACE_ENTITY);
+            request.setInterfaceLicense(YardiLicense.getInterfaceLicense(YardiInterface.BillingAndPayments, yc));
             request.setYardiPropertyId(propertyId);
 
             OpenReceiptBatchResponse response = getResidentTransactionsSysBatchService(yc).openReceiptBatch(request);
@@ -103,6 +105,7 @@ public class YardiSystemBatchesStubImpl extends AbstractYardiStub implements Yar
             request.setDatabase(yc.database().getValue());
             request.setPlatform(yc.platform().getValue().name());
             request.setInterfaceEntity(YardiConstants.INTERFACE_ENTITY);
+            request.setInterfaceLicense(YardiLicense.getInterfaceLicense(YardiInterface.BillingAndPayments, yc));
             request.setBatchId(batchId);
 
             TransactionXml_type1 transactionXml = new TransactionXml_type1();
@@ -123,6 +126,7 @@ public class YardiSystemBatchesStubImpl extends AbstractYardiStub implements Yar
 
             Messages messages = MarshallUtil.unmarshal(Messages.class, responseXml);
             if (messages.isError()) {
+                YardiLicense.handleVendorLicenseError(messages);
                 throw new YardiServiceException(messages.toString());
             } else {
                 log.debug(messages.toString());
@@ -153,6 +157,7 @@ public class YardiSystemBatchesStubImpl extends AbstractYardiStub implements Yar
             request.setDatabase(yc.database().getValue());
             request.setPlatform(yc.platform().getValue().name());
             request.setInterfaceEntity(YardiConstants.INTERFACE_ENTITY);
+            request.setInterfaceLicense(YardiLicense.getInterfaceLicense(YardiInterface.BillingAndPayments, yc));
             request.setBatchId(batchId);
 
             PostReceiptBatchResponse response = getResidentTransactionsSysBatchService(yc).postReceiptBatch(request);
@@ -164,6 +169,7 @@ public class YardiSystemBatchesStubImpl extends AbstractYardiStub implements Yar
 
             Messages messages = MarshallUtil.unmarshal(Messages.class, xml);
             if (messages.isError()) {
+                YardiLicense.handleVendorLicenseError(messages);
                 throw new YardiServiceException(messages.toString());
             } else {
                 log.debug(messages.toString());
@@ -192,6 +198,7 @@ public class YardiSystemBatchesStubImpl extends AbstractYardiStub implements Yar
             request.setDatabase(yc.database().getValue());
             request.setPlatform(yc.platform().getValue().name());
             request.setInterfaceEntity(YardiConstants.INTERFACE_ENTITY);
+            request.setInterfaceLicense(YardiLicense.getInterfaceLicense(YardiInterface.BillingAndPayments, yc));
             request.setBatchId(batchId);
 
             CancelReceiptBatchResponse response = getResidentTransactionsSysBatchService(yc).cancelReceiptBatch(request);
@@ -203,6 +210,7 @@ public class YardiSystemBatchesStubImpl extends AbstractYardiStub implements Yar
 
             Messages messages = MarshallUtil.unmarshal(Messages.class, xml);
             if (messages.isError()) {
+                YardiLicense.handleVendorLicenseError(messages);
                 throw new YardiServiceException(messages.toString());
             } else {
                 log.debug(messages.toString());

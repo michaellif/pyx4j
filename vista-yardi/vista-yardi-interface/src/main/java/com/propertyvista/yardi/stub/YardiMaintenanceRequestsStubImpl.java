@@ -48,6 +48,7 @@ import com.propertyvista.biz.system.encryption.PasswordEncryptorFacade;
 import com.propertyvista.domain.settings.PmcYardiCredential;
 import com.propertyvista.yardi.YardiConstants;
 import com.propertyvista.yardi.YardiConstants.Action;
+import com.propertyvista.yardi.YardiInterface;
 import com.propertyvista.yardi.bean.Messages;
 import com.propertyvista.yardi.bean.Properties;
 
@@ -66,7 +67,8 @@ public class YardiMaintenanceRequestsStubImpl extends AbstractYardiStub implemen
             request.setServerName(yc.serverName().getValue());
             request.setDatabase(yc.database().getValue());
             request.setPlatform(yc.platform().getValue().name());
-            request.setInterfaceEntity(YardiConstants.INTERFACE_ENTITY);
+            request.setInterfaceEntity(YardiConstants.MAINTENANCE_INTERFACE_ENTITY);
+            request.setInterfaceLicense(YardiLicense.getInterfaceLicense(YardiInterface.Maintenance, yc));
 
             GetPropertyConfigurationsResponse response = getMaintenanceRequestsService(yc).getPropertyConfigurations(request);
             if (response.getGetPropertyConfigurationsResult() == null) {
@@ -86,6 +88,7 @@ public class YardiMaintenanceRequestsStubImpl extends AbstractYardiStub implemen
             if (Messages.isMessageResponse(xml)) {
                 Messages messages = MarshallUtil.unmarshal(Messages.class, xml);
                 if (messages.isError()) {
+                    YardiLicense.handleVendorLicenseError(messages);
                     throw new YardiServiceException(messages.toString());
                 } else {
                     log.info(messages.toString());
@@ -117,6 +120,7 @@ public class YardiMaintenanceRequestsStubImpl extends AbstractYardiStub implemen
             request.setDatabase(yc.database().getValue());
             request.setPlatform(yc.platform().getValue().name());
             request.setInterfaceEntity(YardiConstants.MAINTENANCE_INTERFACE_ENTITY);
+            request.setInterfaceLicense(YardiLicense.getInterfaceLicense(YardiInterface.Maintenance, yc));
 
             GetCustomValuesResponse response = getMaintenanceRequestsService(yc).getCustomValues(request);
             String xml = response.getGetCustomValuesResult().getExtraElement().toString();
@@ -131,6 +135,7 @@ public class YardiMaintenanceRequestsStubImpl extends AbstractYardiStub implemen
             if (Messages.isMessageResponse(xml)) {
                 Messages messages = MarshallUtil.unmarshal(Messages.class, xml);
                 if (messages.isError()) {
+                    YardiLicense.handleVendorLicenseError(messages);
                     throw new YardiServiceException(messages.toString());
                 } else {
                     log.info(messages.toString());
@@ -156,6 +161,7 @@ public class YardiMaintenanceRequestsStubImpl extends AbstractYardiStub implemen
             request.setDatabase(yc.database().getValue());
             request.setPlatform(yc.platform().getValue().name());
             request.setInterfaceEntity(YardiConstants.MAINTENANCE_INTERFACE_ENTITY);
+            request.setInterfaceLicense(YardiLicense.getInterfaceLicense(YardiInterface.Maintenance, yc));
 
             GetServiceRequest_SearchResponse response = getMaintenanceRequestsService(yc).getServiceRequest_Search(request);
             String xml = response.getGetServiceRequest_SearchResult().getExtraElement().toString();
@@ -171,6 +177,7 @@ public class YardiMaintenanceRequestsStubImpl extends AbstractYardiStub implemen
             if (Messages.isMessageResponse(xml)) {
                 Messages messages = MarshallUtil.unmarshal(Messages.class, xml);
                 if (messages.isError()) {
+                    YardiLicense.handleVendorLicenseError(messages);
                     log.warn("Yardi Error: {}", messages.getMessages().get(0).getValue());
                     throw new YardiServiceException(messages.toString());
                 } else {
@@ -201,6 +208,7 @@ public class YardiMaintenanceRequestsStubImpl extends AbstractYardiStub implemen
             request.setDatabase(yc.database().getValue());
             request.setPlatform(yc.platform().getValue().name());
             request.setInterfaceEntity(YardiConstants.MAINTENANCE_INTERFACE_ENTITY);
+            request.setInterfaceLicense(YardiLicense.getInterfaceLicense(YardiInterface.Maintenance, yc));
 
             ServiceRequestXml_type0 serviceRequestXml = new ServiceRequestXml_type0();
             String rawXml = MarshallUtil.marshall(requests);
@@ -222,6 +230,7 @@ public class YardiMaintenanceRequestsStubImpl extends AbstractYardiStub implemen
             if (Messages.isMessageResponse(responseXml)) {
                 Messages messages = MarshallUtil.unmarshal(Messages.class, responseXml);
                 if (messages.isError()) {
+                    YardiLicense.handleVendorLicenseError(messages);
                     throw new YardiServiceException(messages.toString());
                 } else {
                     log.info(messages.toString());

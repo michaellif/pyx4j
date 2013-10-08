@@ -57,6 +57,7 @@ import com.propertyvista.biz.system.encryption.PasswordEncryptorFacade;
 import com.propertyvista.domain.settings.PmcYardiCredential;
 import com.propertyvista.yardi.YardiConstants;
 import com.propertyvista.yardi.YardiConstants.Action;
+import com.propertyvista.yardi.YardiInterface;
 import com.propertyvista.yardi.bean.Messages;
 import com.propertyvista.yardi.bean.Properties;
 
@@ -85,6 +86,7 @@ public class YardiResidentTransactionsStubImpl extends AbstractYardiStub impleme
             request.setDatabase(yc.database().getValue());
             request.setPlatform(yc.platform().getValue().name());
             request.setInterfaceEntity(YardiConstants.INTERFACE_ENTITY);
+            request.setInterfaceLicense(YardiLicense.getInterfaceLicense(YardiInterface.BillingAndPayments, yc));
 
             GetPropertyConfigurationsResponse response = getResidentTransactionsService(yc).getPropertyConfigurations(request);
             if ((response == null) || (response.getGetPropertyConfigurationsResult() == null)
@@ -99,6 +101,7 @@ public class YardiResidentTransactionsStubImpl extends AbstractYardiStub impleme
             if (Messages.isMessageResponse(xml)) {
                 Messages messages = MarshallUtil.unmarshal(Messages.class, xml);
                 if (messages.isError()) {
+                    YardiLicense.handleVendorLicenseError(messages);
                     throw new YardiServiceException(messages.toString());
                 } else {
                     log.info(messages.toString());
@@ -131,6 +134,7 @@ public class YardiResidentTransactionsStubImpl extends AbstractYardiStub impleme
             request.setDatabase(yc.database().getValue());
             request.setPlatform(yc.platform().getValue().name());
             request.setInterfaceEntity(YardiConstants.INTERFACE_ENTITY);
+            request.setInterfaceLicense(YardiLicense.getInterfaceLicense(YardiInterface.BillingAndPayments, yc));
             request.setYardiPropertyId(propertyId);
 
             GetResidentTransactions_LoginResponse response = getResidentTransactionsService(yc).getResidentTransactions_Login(request);
@@ -151,6 +155,7 @@ public class YardiResidentTransactionsStubImpl extends AbstractYardiStub impleme
                         success = true;
                         return null;
                     } else {
+                        YardiLicense.handleVendorLicenseError(messages);
                         throw new YardiServiceException(SimpleMessageFormat.format("{0}; PropertyId {1}", messages.toString(), propertyId));
                     }
                 } else {
@@ -184,6 +189,7 @@ public class YardiResidentTransactionsStubImpl extends AbstractYardiStub impleme
             request.setDatabase(yc.database().getValue());
             request.setPlatform(yc.platform().getValue().name());
             request.setInterfaceEntity(YardiConstants.INTERFACE_ENTITY);
+            request.setInterfaceLicense(YardiLicense.getInterfaceLicense(YardiInterface.BillingAndPayments, yc));
             request.setYardiPropertyId(propertyId);
             request.setTenantId(tenantId);
 
@@ -200,6 +206,7 @@ public class YardiResidentTransactionsStubImpl extends AbstractYardiStub impleme
             if (Messages.isMessageResponse(xml)) {
                 Messages messages = MarshallUtil.unmarshal(Messages.class, xml);
                 if (messages.isError()) {
+                    YardiLicense.handleVendorLicenseError(messages);
                     throw new YardiServiceException(SimpleMessageFormat.format("{0}; PropertyId {1}, TenantId {2}", messages.toString(), propertyId, tenantId));
                 } else {
                     log.info(messages.toString());
@@ -230,6 +237,7 @@ public class YardiResidentTransactionsStubImpl extends AbstractYardiStub impleme
             request.setDatabase(yc.database().getValue());
             request.setPlatform(yc.platform().getValue().name());
             request.setInterfaceEntity(YardiConstants.INTERFACE_ENTITY);
+            request.setInterfaceLicense(YardiLicense.getInterfaceLicense(YardiInterface.BillingAndPayments, yc));
 
             String trXml = MarshallUtil.marshall(reversalTransactions);
             log.debug(trXml);
@@ -249,6 +257,7 @@ public class YardiResidentTransactionsStubImpl extends AbstractYardiStub impleme
 
             Messages messages = MarshallUtil.unmarshal(Messages.class, xml);
             if (messages.isError()) {
+                YardiLicense.handleVendorLicenseError(messages);
                 throw new YardiServiceException(messages.toString());
             } else {
                 log.debug(messages.toString());
@@ -278,6 +287,7 @@ public class YardiResidentTransactionsStubImpl extends AbstractYardiStub impleme
             request.setDatabase(yc.database().getValue());
             request.setPlatform(yc.platform().getValue().name());
             request.setInterfaceEntity(YardiConstants.INTERFACE_ENTITY);
+            request.setInterfaceLicense(YardiLicense.getInterfaceLicense(YardiInterface.BillingAndPayments, yc));
             request.setYardiPropertyId(propertyId);
 
             GetUnitInformation_LoginResponse response = getResidentTransactionsService(yc).getUnitInformation_Login(request);
@@ -291,6 +301,7 @@ public class YardiResidentTransactionsStubImpl extends AbstractYardiStub impleme
             if (Messages.isMessageResponse(xml)) {
                 Messages messages = MarshallUtil.unmarshal(Messages.class, xml);
                 if (messages.isError()) {
+                    YardiLicense.handleVendorLicenseError(messages);
                     throw new YardiServiceException(SimpleMessageFormat.format("{0}; PropertyId {1}", messages.toString(), propertyId));
                 } else {
                     log.debug(messages.toString());
@@ -327,6 +338,7 @@ public class YardiResidentTransactionsStubImpl extends AbstractYardiStub impleme
             request.setDatabase(yc.database().getValue());
             request.setPlatform(yc.platform().getValue().name());
             request.setInterfaceEntity(YardiConstants.INTERFACE_ENTITY);
+            request.setInterfaceLicense(YardiLicense.getInterfaceLicense(YardiInterface.BillingAndPayments, yc));
             request.setYardiPropertyId(propertyListCode);
             request.setPostMonth(calendar);
 
@@ -345,6 +357,7 @@ public class YardiResidentTransactionsStubImpl extends AbstractYardiStub impleme
                     if (messages.getErrorMessage().getValue().startsWith(errorMessage_NoAccess_Start)) {
                         throw new YardiPropertyNoAccessException(messages.getErrorMessage().getValue());
                     } else {
+                        YardiLicense.handleVendorLicenseError(messages);
                         throw new YardiServiceException(SimpleMessageFormat.format("{0}; PropertyListCode {1}, Date {2}", messages.toString(),
                                 propertyListCode, date));
                     }
@@ -382,6 +395,7 @@ public class YardiResidentTransactionsStubImpl extends AbstractYardiStub impleme
             request.setDatabase(yc.database().getValue());
             request.setPlatform(yc.platform().getValue().name());
             request.setInterfaceEntity(YardiConstants.INTERFACE_ENTITY);
+            request.setInterfaceLicense(YardiLicense.getInterfaceLicense(YardiInterface.BillingAndPayments, yc));
             request.setYardiPropertyId(propertyId);
             request.setTenantId(tenantId);
             request.setPostMonth(calendar);
@@ -401,6 +415,7 @@ public class YardiResidentTransactionsStubImpl extends AbstractYardiStub impleme
                     if (messages.getErrorMessage().getValue().startsWith("No tenants exist with the given search criteria")) {
                         throw new YardiResidentNoTenantsExistException(messages.getErrorMessage().getValue());
                     } else {
+                        YardiLicense.handleVendorLicenseError(messages);
                         throw new YardiServiceException(SimpleMessageFormat.format("{0}; PropertyId {1}, TenantId {2}, Date {3}", messages.toString(),
                                 propertyId, tenantId, date));
                     }

@@ -13,6 +13,7 @@
             <s:element minOccurs="0" maxOccurs="1" name="YardiPropertyId" type="s:string"/>
             <s:element minOccurs="0" maxOccurs="1" name="TenantId" type="s:string"/>
             <s:element minOccurs="0" maxOccurs="1" name="InterfaceEntity" type="s:string"/>
+            <s:element minOccurs="0" maxOccurs="1" name="InterfaceLicense" type="s:string"/>
           </s:sequence>
         </s:complexType>
       </s:element>
@@ -39,6 +40,7 @@
             <s:element minOccurs="0" maxOccurs="1" name="Platform" type="s:string"/>
             <s:element minOccurs="0" maxOccurs="1" name="YardiPropertyId" type="s:string"/>
             <s:element minOccurs="0" maxOccurs="1" name="InterfaceEntity" type="s:string"/>
+            <s:element minOccurs="0" maxOccurs="1" name="InterfaceLicense" type="s:string"/>
           </s:sequence>
         </s:complexType>
       </s:element>
@@ -65,6 +67,7 @@
             <s:element minOccurs="0" maxOccurs="1" name="Platform" type="s:string"/>
             <s:element minOccurs="0" maxOccurs="1" name="YardiPropertyId" type="s:string"/>
             <s:element minOccurs="0" maxOccurs="1" name="InterfaceEntity" type="s:string"/>
+            <s:element minOccurs="0" maxOccurs="1" name="InterfaceLicense" type="s:string"/>
             <s:element minOccurs="1" maxOccurs="1" name="FromDate" type="s:dateTime"/>
             <s:element minOccurs="1" maxOccurs="1" name="ToDate" type="s:dateTime"/>
           </s:sequence>
@@ -93,6 +96,7 @@
             <s:element minOccurs="0" maxOccurs="1" name="Platform" type="s:string"/>
             <s:element minOccurs="0" maxOccurs="1" name="YardiPropertyId" type="s:string"/>
             <s:element minOccurs="0" maxOccurs="1" name="InterfaceEntity" type="s:string"/>
+            <s:element minOccurs="0" maxOccurs="1" name="InterfaceLicense" type="s:string"/>
             <s:element minOccurs="1" maxOccurs="1" name="FromDate" type="s:dateTime"/>
             <s:element minOccurs="1" maxOccurs="1" name="ToDate" type="s:dateTime"/>
           </s:sequence>
@@ -123,6 +127,7 @@
             <s:element minOccurs="1" maxOccurs="1" name="PostMonth" type="s:dateTime"/>
             <s:element minOccurs="0" maxOccurs="1" name="TenantId" type="s:string"/>
             <s:element minOccurs="0" maxOccurs="1" name="InterfaceEntity" type="s:string"/>
+            <s:element minOccurs="0" maxOccurs="1" name="InterfaceLicense" type="s:string"/>
           </s:sequence>
         </s:complexType>
       </s:element>
@@ -150,6 +155,7 @@
             <s:element minOccurs="0" maxOccurs="1" name="YardiPropertyId" type="s:string"/>
             <s:element minOccurs="1" maxOccurs="1" name="PostMonth" type="s:dateTime"/>
             <s:element minOccurs="0" maxOccurs="1" name="InterfaceEntity" type="s:string"/>
+            <s:element minOccurs="0" maxOccurs="1" name="InterfaceLicense" type="s:string"/>
           </s:sequence>
         </s:complexType>
       </s:element>
@@ -176,6 +182,7 @@
             <s:element minOccurs="0" maxOccurs="1" name="Platform" type="s:string"/>
             <s:element minOccurs="0" maxOccurs="1" name="YardiPropertyId" type="s:string"/>
             <s:element minOccurs="0" maxOccurs="1" name="InterfaceEntity" type="s:string"/>
+            <s:element minOccurs="0" maxOccurs="1" name="InterfaceLicense" type="s:string"/>
           </s:sequence>
         </s:complexType>
       </s:element>
@@ -201,6 +208,7 @@
             <s:element minOccurs="0" maxOccurs="1" name="Database" type="s:string"/>
             <s:element minOccurs="0" maxOccurs="1" name="Platform" type="s:string"/>
             <s:element minOccurs="0" maxOccurs="1" name="InterfaceEntity" type="s:string"/>
+            <s:element minOccurs="0" maxOccurs="1" name="InterfaceLicense" type="s:string"/>
           </s:sequence>
         </s:complexType>
       </s:element>
@@ -226,6 +234,7 @@
             <s:element minOccurs="0" maxOccurs="1" name="Database" type="s:string"/>
             <s:element minOccurs="0" maxOccurs="1" name="Platform" type="s:string"/>
             <s:element minOccurs="0" maxOccurs="1" name="InterfaceEntity" type="s:string"/>
+            <s:element minOccurs="0" maxOccurs="1" name="InterfaceLicense" type="s:string"/>
             <s:element minOccurs="0" maxOccurs="1" name="TransactionXml">
               <s:complexType mixed="true">
                 <s:sequence>
@@ -258,6 +267,7 @@
             <s:element minOccurs="0" maxOccurs="1" name="Database" type="s:string"/>
             <s:element minOccurs="0" maxOccurs="1" name="Platform" type="s:string"/>
             <s:element minOccurs="0" maxOccurs="1" name="InterfaceEntity" type="s:string"/>
+            <s:element minOccurs="0" maxOccurs="1" name="InterfaceLicense" type="s:string"/>
             <s:element minOccurs="0" maxOccurs="1" name="TransactionXml">
               <s:complexType mixed="true">
                 <s:sequence>
@@ -292,6 +302,7 @@
             <s:element minOccurs="0" maxOccurs="1" name="Database" type="s:string"/>
             <s:element minOccurs="0" maxOccurs="1" name="Platform" type="s:string"/>
             <s:element minOccurs="0" maxOccurs="1" name="InterfaceEntity" type="s:string"/>
+            <s:element minOccurs="0" maxOccurs="1" name="InterfaceLicense" type="s:string"/>
             <s:element minOccurs="0" maxOccurs="1" name="PayableDoc">
               <s:complexType mixed="true">
                 <s:sequence>
@@ -324,6 +335,7 @@
             <s:element minOccurs="0" maxOccurs="1" name="Database" type="s:string"/>
             <s:element minOccurs="0" maxOccurs="1" name="Platform" type="s:string"/>
             <s:element minOccurs="0" maxOccurs="1" name="InterfaceEntity" type="s:string"/>
+            <s:element minOccurs="0" maxOccurs="1" name="InterfaceLicense" type="s:string"/>
             <s:element minOccurs="0" maxOccurs="1" name="CheckDoc">
               <s:complexType mixed="true">
                 <s:sequence>
@@ -356,6 +368,7 @@
             <s:element minOccurs="0" maxOccurs="1" name="Database" type="s:string"/>
             <s:element minOccurs="0" maxOccurs="1" name="Platform" type="s:string"/>
             <s:element minOccurs="0" maxOccurs="1" name="InterfaceEntity" type="s:string"/>
+            <s:element minOccurs="0" maxOccurs="1" name="InterfaceLicense" type="s:string"/>
             <s:element minOccurs="0" maxOccurs="1" name="YardiPropertyId" type="s:string"/>
             <s:element minOccurs="0" maxOccurs="1" name="VendorId" type="s:string"/>
             <s:element minOccurs="1" maxOccurs="1" name="InvoicePostMonthFrom" type="s:dateTime"/>
@@ -389,6 +402,7 @@
             <s:element minOccurs="0" maxOccurs="1" name="Platform" type="s:string"/>
             <s:element minOccurs="0" maxOccurs="1" name="YardiPropertyId" type="s:string"/>
             <s:element minOccurs="0" maxOccurs="1" name="InterfaceEntity" type="s:string"/>
+            <s:element minOccurs="0" maxOccurs="1" name="InterfaceLicense" type="s:string"/>
             <s:element minOccurs="0" maxOccurs="1" name="VendorId" type="s:string"/>
           </s:sequence>
         </s:complexType>
@@ -416,6 +430,7 @@
             <s:element minOccurs="0" maxOccurs="1" name="Platform" type="s:string"/>
             <s:element minOccurs="0" maxOccurs="1" name="YardiPropertyId" type="s:string"/>
             <s:element minOccurs="0" maxOccurs="1" name="InterfaceEntity" type="s:string"/>
+            <s:element minOccurs="0" maxOccurs="1" name="InterfaceLicense" type="s:string"/>
           </s:sequence>
         </s:complexType>
       </s:element>
@@ -441,6 +456,7 @@
             <s:element minOccurs="0" maxOccurs="1" name="Database" type="s:string"/>
             <s:element minOccurs="0" maxOccurs="1" name="Platform" type="s:string"/>
             <s:element minOccurs="0" maxOccurs="1" name="InterfaceEntity" type="s:string"/>
+            <s:element minOccurs="0" maxOccurs="1" name="InterfaceLicense" type="s:string"/>
             <s:element minOccurs="0" maxOccurs="1" name="PropertyId" type="s:string"/>
           </s:sequence>
         </s:complexType>
@@ -467,6 +483,7 @@
             <s:element minOccurs="0" maxOccurs="1" name="Database" type="s:string"/>
             <s:element minOccurs="0" maxOccurs="1" name="Platform" type="s:string"/>
             <s:element minOccurs="0" maxOccurs="1" name="InterfaceEntity" type="s:string"/>
+            <s:element minOccurs="0" maxOccurs="1" name="InterfaceLicense" type="s:string"/>
           </s:sequence>
         </s:complexType>
       </s:element>
@@ -637,95 +654,97 @@
   </wsdl:message>
   <wsdl:portType name="ItfResidentTransactions2_0Soap">
     <wsdl:operation name="GetResidentTransaction_Login">
-      <documentation xmlns="http://schemas.xmlsoap.org/wsdl/">Allows export of resident/transactional data for a given property/property list; will only return one resident based on the Yardi tenant code supplied.</documentation>
+      <documentation xmlns="http://schemas.xmlsoap.org/wsdl/">Allows export of resident/transactional data for a given property/property list; will only return one resident based on the Yardi tenant code supplied. Can be used thru 1/1/13 without an InterfaceLicense.</documentation>
       <wsdl:input message="tns:GetResidentTransaction_LoginSoapIn"/>
       <wsdl:output message="tns:GetResidentTransaction_LoginSoapOut"/>
     </wsdl:operation>
     <wsdl:operation name="GetResidentTransactions_Login">
-      <documentation xmlns="http://schemas.xmlsoap.org/wsdl/">Allows export of resident/transactional data for a given property/property list.</documentation>
+      <documentation xmlns="http://schemas.xmlsoap.org/wsdl/">Allows export of resident/transactional data for a given property/property list. Can be used thru 1/1/13 without an InterfaceLicense. </documentation>
       <wsdl:input message="tns:GetResidentTransactions_LoginSoapIn"/>
       <wsdl:output message="tns:GetResidentTransactions_LoginSoapOut"/>
     </wsdl:operation>
     <wsdl:operation name="GetResidentTransactions_ByChargeDate_Login">
-      <documentation xmlns="http://schemas.xmlsoap.org/wsdl/">Allows export of resident/transactional data for a given property/property list; will only extract tenants/prospects with new charges within the specified date range. Only allows the consumer to pull up to 31 days worth of information (hours not included). </documentation>
+      <documentation xmlns="http://schemas.xmlsoap.org/wsdl/">Allows export of resident/transactional data for a given property/property list; will only extract tenants/prospects with new charges within the specified date range. Only allows the consumer to pull up to 31 days worth of information (hours not included). Can be used thru 1/1/13 without an InterfaceLicense.</documentation>
       <wsdl:input message="tns:GetResidentTransactions_ByChargeDate_LoginSoapIn"/>
       <wsdl:output message="tns:GetResidentTransactions_ByChargeDate_LoginSoapOut"/>
     </wsdl:operation>
     <wsdl:operation name="GetResidentTransactions_ByApplicationDate_Login">
-      <documentation xmlns="http://schemas.xmlsoap.org/wsdl/">Allows login &amp; export of resident/transactional data for a given property/property list; will only extract tenants/prospects who have submitted an application within the specified date range. Only allows the consumer to pull up to 31 days worth of information (hours not included). </documentation>
+      <documentation xmlns="http://schemas.xmlsoap.org/wsdl/">Allows login &amp; export of resident/transactional data for a given property/property list; will only extract tenants/prospects who have submitted an application within the specified date range. Only allows the consumer to pull up to 31 days worth of information (hours not included). Can be used thru 1/1/13 without an InterfaceLicense.</documentation>
       <wsdl:input message="tns:GetResidentTransactions_ByApplicationDate_LoginSoapIn"/>
       <wsdl:output message="tns:GetResidentTransactions_ByApplicationDate_LoginSoapOut"/>
     </wsdl:operation>
     <wsdl:operation name="GetResidentLeaseCharges_Login">
-      <documentation xmlns="http://schemas.xmlsoap.org/wsdl/">Allows export of resident lease charge data for a given property/property list; will only return one resident based on the Yardi tenant code supplied.</documentation>
+      <documentation xmlns="http://schemas.xmlsoap.org/wsdl/">Allows export of resident lease charge data for a given property/property list; will only return one resident based on the Yardi tenant code supplied. Can be used thru 1/1/13 without an InterfaceLicense.</documentation>
       <wsdl:input message="tns:GetResidentLeaseCharges_LoginSoapIn"/>
       <wsdl:output message="tns:GetResidentLeaseCharges_LoginSoapOut"/>
     </wsdl:operation>
     <wsdl:operation name="GetResidentsLeaseCharges_Login">
-      <documentation xmlns="http://schemas.xmlsoap.org/wsdl/">Allows export of resident/transactional data for a given property/property list; </documentation>
+      <documentation xmlns="http://schemas.xmlsoap.org/wsdl/">Allows export of resident/transactional data for a given property/property list; Can be used thru 1/1/13 without an InterfaceLicense. </documentation>
       <wsdl:input message="tns:GetResidentsLeaseCharges_LoginSoapIn"/>
       <wsdl:output message="tns:GetResidentsLeaseCharges_LoginSoapOut"/>
     </wsdl:operation>
     <wsdl:operation name="GetUnitInformation_Login">
-      <documentation xmlns="http://schemas.xmlsoap.org/wsdl/">Allows export of resident/transactional data for a given property/property list.</documentation>
+      <documentation xmlns="http://schemas.xmlsoap.org/wsdl/">Allows export of resident/transactional data for a given property/property list. Can be used thru 1/1/13 without an InterfaceLicense. </documentation>
       <wsdl:input message="tns:GetUnitInformation_LoginSoapIn"/>
       <wsdl:output message="tns:GetUnitInformation_LoginSoapOut"/>
     </wsdl:operation>
     <wsdl:operation name="GetPropertyConfigurations">
-      <documentation xmlns="http://schemas.xmlsoap.org/wsdl/">Allows export of the Property Configuration with the Database.  The Unique Interface Entity name is needed in order to return the Property Id's the 3rd party has access to. </documentation>
+      <documentation xmlns="http://schemas.xmlsoap.org/wsdl/">Allows export of the Property Configuration with the Database.  The Unique Interface Entity name is needed in order to return the Property Id's the 3rd party has access to. Can be used thru 1/1/13 without an InterfaceLicense.</documentation>
       <wsdl:input message="tns:GetPropertyConfigurationsSoapIn"/>
       <wsdl:output message="tns:GetPropertyConfigurationsSoapOut"/>
     </wsdl:operation>
     <wsdl:operation name="ImportResidentTransactions_Login">
-      <documentation xmlns="http://schemas.xmlsoap.org/wsdl/">Allows import of resident transaction data from a 3rd party system.</documentation>
+      <documentation xmlns="http://schemas.xmlsoap.org/wsdl/">Allows import of resident transaction data from a 3rd party system. Can be used thru 1/1/13 without an InterfaceLicense.</documentation>
       <wsdl:input message="tns:ImportResidentTransactions_LoginSoapIn"/>
       <wsdl:output message="tns:ImportResidentTransactions_LoginSoapOut"/>
     </wsdl:operation>
     <wsdl:operation name="ImportResidentTransactions_DepositDate">
-      <documentation xmlns="http://schemas.xmlsoap.org/wsdl/">Allows import of resident transaction data from a 3rd party system; allows the consumer pass to in a deposit date and memo.  The deposit date and memo will represent the date and memo for the entire transactional xml file. </documentation>
+      <documentation xmlns="http://schemas.xmlsoap.org/wsdl/">Allows import of resident transaction data from a 3rd party system; allows the consumer pass to in a deposit date and memo.  The deposit date and memo will represent the date and memo for the entire transactional xml file. Can be used thru 1/1/13 without an InterfaceLicense.</documentation>
       <wsdl:input message="tns:ImportResidentTransactions_DepositDateSoapIn"/>
       <wsdl:output message="tns:ImportResidentTransactions_DepositDateSoapOut"/>
     </wsdl:operation>
     <wsdl:operation name="ImportPayable_Login">
-      <documentation xmlns="http://schemas.xmlsoap.org/wsdl/">Allows for import of payable transactions into a Yardi Voyager database.</documentation>
+      <documentation xmlns="http://schemas.xmlsoap.org/wsdl/">Allows for import of payable transactions into a Yardi Voyager database. Can be used thru 1/1/13 without an InterfaceLicense.</documentation>
       <wsdl:input message="tns:ImportPayable_LoginSoapIn"/>
       <wsdl:output message="tns:ImportPayable_LoginSoapOut"/>
     </wsdl:operation>
     <wsdl:operation name="ImportCheck_Login">
-      <documentation xmlns="http://schemas.xmlsoap.org/wsdl/">Allows for import of payable transactions into a Yardi Voyager database.</documentation>
+      <documentation xmlns="http://schemas.xmlsoap.org/wsdl/">Allows for the import of check information into a Yardi Voyager database that may be applied to payables. Can be used thru 1/1/13 without an InterfaceLicense.</documentation>
       <wsdl:input message="tns:ImportCheck_LoginSoapIn"/>
       <wsdl:output message="tns:ImportCheck_LoginSoapOut"/>
     </wsdl:operation>
     <wsdl:operation name="GetPayables">
-      <documentation xmlns="http://schemas.xmlsoap.org/wsdl/">Allows for export of payable/invoice transaction data from a Yardi Voyager database. Payable data can be filtered by Yardi Property Id, Vendor Id, post month range, and transaction date range. </documentation>
+      <documentation xmlns="http://schemas.xmlsoap.org/wsdl/">Allows for export of payable/invoice transaction data from a Yardi Voyager database. Payable data can be filtered by Yardi Property Id, Vendor Id, post month range, and transaction date range. Can be used thru 1/1/13 without an InterfaceLicense.</documentation>
       <wsdl:input message="tns:GetPayablesSoapIn"/>
       <wsdl:output message="tns:GetPayablesSoapOut"/>
     </wsdl:operation>
     <wsdl:operation name="GetVendor_Login">
-      <documentation xmlns="http://schemas.xmlsoap.org/wsdl/">Allows export of vendor information from a Yardi Voyager database.</documentation>
+      <documentation xmlns="http://schemas.xmlsoap.org/wsdl/">Allows export of vendor information from a Yardi Voyager database. Can be used thru 1/1/13 without an InterfaceLicense.</documentation>
       <wsdl:input message="tns:GetVendor_LoginSoapIn"/>
       <wsdl:output message="tns:GetVendor_LoginSoapOut"/>
     </wsdl:operation>
     <wsdl:operation name="GetVendors_Login">
-      <documentation xmlns="http://schemas.xmlsoap.org/wsdl/">Allows export of vendor information from a Yardi Voyager database.</documentation>
+      <documentation xmlns="http://schemas.xmlsoap.org/wsdl/">Allows export of vendor information from a Yardi Voyager database. Can be used thru 1/1/13 without an InterfaceLicense.</documentation>
       <wsdl:input message="tns:GetVendors_LoginSoapIn"/>
       <wsdl:output message="tns:GetVendors_LoginSoapOut"/>
     </wsdl:operation>
     <wsdl:operation name="ExportChartOfAccounts">
-      <documentation xmlns="http://schemas.xmlsoap.org/wsdl/">Allows Export of a Chart of Accounts.  Yardi Property Id is needed in the case of multiple charts. </documentation>
+      <documentation xmlns="http://schemas.xmlsoap.org/wsdl/">Allows Export of a Chart of Accounts.  Yardi Property Id is needed in the case of multiple charts. Can be used thru 1/1/13 without an InterfaceLicense.</documentation>
       <wsdl:input message="tns:ExportChartOfAccountsSoapIn"/>
       <wsdl:output message="tns:ExportChartOfAccountsSoapOut"/>
     </wsdl:operation>
     <wsdl:operation name="GetChargeTypes_Login">
-      <documentation xmlns="http://schemas.xmlsoap.org/wsdl/">Export Charge Types;</documentation>
+      <documentation xmlns="http://schemas.xmlsoap.org/wsdl/">Export Charge Types; Can be used thru 1/1/13 without an InterfaceLicense.</documentation>
       <wsdl:input message="tns:GetChargeTypes_LoginSoapIn"/>
       <wsdl:output message="tns:GetChargeTypes_LoginSoapOut"/>
     </wsdl:operation>
     <wsdl:operation name="GetVersionNumber_Str">
+      <documentation xmlns="http://schemas.xmlsoap.org/wsdl/">(Deprecated)</documentation>
       <wsdl:input message="tns:GetVersionNumber_StrSoapIn"/>
       <wsdl:output message="tns:GetVersionNumber_StrSoapOut"/>
     </wsdl:operation>
     <wsdl:operation name="GetVersionNumber">
+      <documentation xmlns="http://schemas.xmlsoap.org/wsdl/">Returns current version number of Interfaces concatenated with Billing and Payments Plugin version (XX_Y)</documentation>
       <wsdl:input message="tns:GetVersionNumberSoapIn"/>
       <wsdl:output message="tns:GetVersionNumberSoapOut"/>
     </wsdl:operation>

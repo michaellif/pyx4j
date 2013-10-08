@@ -28,10 +28,13 @@ import com.yardi.entity.ils.Property;
 import com.yardi.entity.ils.VacateDate;
 import com.yardi.entity.mits.Information;
 
+import com.pyx4j.config.server.ServerSideConfiguration;
 import com.pyx4j.config.server.ServerSideFactory;
+import com.pyx4j.entity.rdb.cfg.Configuration.DatabaseType;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.essentials.j2se.util.MarshallUtil;
 
+import com.propertyvista.config.tests.VistaTestsServerSideConfiguration;
 import com.propertyvista.domain.settings.PmcYardiCredential;
 import com.propertyvista.domain.settings.PmcYardiCredential.Platform;
 import com.propertyvista.yardi.stub.YardiILSGuestCardStub;
@@ -41,6 +44,8 @@ public class YardiILSServiceClientTest {
     private final static Logger log = LoggerFactory.getLogger(YardiILSServiceClientTest.class);
 
     public static void main(String[] args) {
+        ServerSideConfiguration.setInstance(new VistaTestsServerSideConfiguration(DatabaseType.HSQLDB));
+
         PmcYardiCredential yc = EntityFactory.create(PmcYardiCredential.class);
         yc.username().setValue("propertyvista-ilsws");
         yc.password().number().setValue("55318");

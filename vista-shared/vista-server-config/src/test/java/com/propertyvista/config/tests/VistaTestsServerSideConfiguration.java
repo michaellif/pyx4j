@@ -14,6 +14,7 @@
 package com.propertyvista.config.tests;
 
 import java.io.File;
+import java.util.Collections;
 import java.util.Set;
 
 import org.slf4j.Logger;
@@ -234,7 +235,7 @@ public class VistaTestsServerSideConfiguration extends AbstractVistaServerSideCo
 
     @Override
     public PropertiesConfiguration getConfigProperties() {
-        throw new Error("not supported in tests");
+        return new PropertiesConfiguration(Collections.<String, String> emptyMap());
     }
 
     @Override
