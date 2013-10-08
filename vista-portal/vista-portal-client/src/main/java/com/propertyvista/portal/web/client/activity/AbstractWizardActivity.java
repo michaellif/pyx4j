@@ -43,7 +43,7 @@ public abstract class AbstractWizardActivity<E extends IEntity> extends Security
     public AbstractWizardActivity(Class<? extends IWizardView<E>> viewType, Class<E> entityClass) {
 
         view = PortalWebSite.getViewFactory().instantiate(viewType);
-        view.setPresenter(this);
+
     }
 
     public AbstractWizardActivity(Class<? extends IWizardView<E>> viewType) {
