@@ -34,7 +34,7 @@ import com.pyx4j.widgets.client.ImageViewport.ScaleMode;
 
 public class ImageSlider extends LayoutPanel implements IWidget {
 
-    public interface ImageSetDataProvider {
+    public interface ImageSliderDataProvider {
 
         List<String> getImageUrls();
 
@@ -52,9 +52,9 @@ public class ImageSlider extends LayoutPanel implements IWidget {
 
     private boolean editable;
 
-    private final ImageSetDataProvider imageList;
+    private final ImageSliderDataProvider imageList;
 
-    public ImageSlider(Dimension dimension, ImageSetDataProvider imageList) {
+    public ImageSlider(Dimension dimension, ImageSliderDataProvider imageList) {
         this.imageList = imageList;
         this.editable = false;
 

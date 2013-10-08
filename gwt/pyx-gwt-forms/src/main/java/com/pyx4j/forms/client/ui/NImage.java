@@ -56,7 +56,7 @@ import com.pyx4j.widgets.client.dialog.Custom1Option;
 import com.pyx4j.widgets.client.dialog.Custom2Option;
 import com.pyx4j.widgets.client.dialog.Dialog;
 
-public class NImage<T extends IFile> extends NField<IList<T>, ImageSlider, CImage<T>, ImageSlider> implements ImageSlider.ImageSetDataProvider {
+public class NImage<T extends IFile> extends NField<IList<T>, ImageSlider, CImage<T>, ImageSlider> implements ImageSlider.ImageSliderDataProvider {
 
     private static final I18n i18n = I18n.get(NImage.class);
 
