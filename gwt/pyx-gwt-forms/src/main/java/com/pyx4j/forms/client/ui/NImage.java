@@ -48,15 +48,15 @@ import com.pyx4j.gwt.client.upload.FileUploadDialog;
 import com.pyx4j.gwt.client.upload.FileUploadReciver;
 import com.pyx4j.gwt.shared.Dimension;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.widgets.client.ImageHolder;
-import com.pyx4j.widgets.client.ImageHolder.ImageViewport;
-import com.pyx4j.widgets.client.ImageHolder.ImageViewport.ScaleMode;
+import com.pyx4j.widgets.client.ImageSlider;
+import com.pyx4j.widgets.client.ImageViewport;
+import com.pyx4j.widgets.client.ImageViewport.ScaleMode;
 import com.pyx4j.widgets.client.dialog.CancelOption;
 import com.pyx4j.widgets.client.dialog.Custom1Option;
 import com.pyx4j.widgets.client.dialog.Custom2Option;
 import com.pyx4j.widgets.client.dialog.Dialog;
 
-public class NImage<T extends IFile> extends NField<IList<T>, ImageHolder, CImage<T>, ImageHolder> implements ImageHolder.ImageDataProvider {
+public class NImage<T extends IFile> extends NField<IList<T>, ImageSlider, CImage<T>, ImageSlider> implements ImageSlider.ImageSetDataProvider {
 
     private static final I18n i18n = I18n.get(NImage.class);
 
@@ -64,7 +64,7 @@ public class NImage<T extends IFile> extends NField<IList<T>, ImageHolder, CImag
 
     private final List<String> imageUrls;
 
-    private ImageHolder widget;
+    private ImageSlider widget;
 
     protected IEditableComponentFactory factory = new EntityFormComponentFactory();
 
@@ -97,7 +97,7 @@ public class NImage<T extends IFile> extends NField<IList<T>, ImageHolder, CImag
     }
 
     @Override
-    protected ImageHolder createEditor() {
+    protected ImageSlider createEditor() {
         return createWidget();
     }
 
@@ -108,7 +108,7 @@ public class NImage<T extends IFile> extends NField<IList<T>, ImageHolder, CImag
     }
 
     @Override
-    protected ImageHolder createViewer() {
+    protected ImageSlider createViewer() {
         return createWidget();
     }
 
@@ -130,10 +130,10 @@ public class NImage<T extends IFile> extends NField<IList<T>, ImageHolder, CImag
         return imageUrls;
     }
 
-    private ImageHolder createWidget() {
+    private ImageSlider createWidget() {
         if (widget == null) {
             Dimension imageSize = getCComponent().getImageSize();
-            widget = new ImageHolder(imageSize, this);
+            widget = new ImageSlider(imageSize, this);
         }
         return widget;
     }
@@ -144,8 +144,23 @@ public class NImage<T extends IFile> extends NField<IList<T>, ImageHolder, CImag
     }
 
     @Override
-    public void editImage() {
+    public void editImageSet() {
         new ImageOrganizer(getCComponent().getImgClass(), getCComponent().getFolderIcons()).show();
+    }
+
+    @Override
+    public void setViewable(boolean viewable) {
+        super.setViewable(viewable);
+    }
+
+    @Override
+    public void setEditable(boolean editable) {
+        super.setEditable(editable);
+    }
+
+    @Override
+    public void setEnabled(boolean enabled) {
+        super.setEnabled(enabled);
     }
 
     class ImageOrganizer extends CEntityFolder<T> {
