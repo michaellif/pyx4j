@@ -16,9 +16,8 @@ package com.propertyvista.yardi.services;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.yardi.entity.mits.PropertyIDType;
-import com.yardi.entity.mits.Unit;
 import com.yardi.entity.resident.Property;
+import com.yardi.entity.resident.RTCustomer;
 import com.yardi.entity.resident.ResidentTransactions;
 
 import com.pyx4j.commons.Key;
@@ -37,27 +36,38 @@ import com.propertyvista.yardi.merger.UnitsMerger;
 
 public class YardiBuildingProcessor {
 
-    public Building updateBuilding(Key yardiInterfaceId, PropertyIDType propertyId) throws YardiServiceException {
-        Building building = getBuildingFromProperty(propertyId);
+    public Building updateBuilding(Key yardiInterfaceId, Property property) throws YardiServiceException {
+        Building building = getBuildingFromProperty(property);
         building.integrationSystemId().setValue(yardiInterfaceId);
         MappingUtils.ensureCountryOfOperation(building);
         String propertyCode = building.propertyCode().getValue();
         return merge(building, MappingUtils.getBuilding(yardiInterfaceId, propertyCode));
     }
 
-    public AptUnit updateUnit(Building building, Unit unit) throws YardiServiceException {
-        AptUnit importedUnit = new UnitsMapper().map(unit);
+    public AptUnit updateUnit(Building building, RTCustomer rtCustomer) throws YardiServiceException {
+        AptUnit importedUnit = new UnitsMapper().map(rtCustomer);
         if (building.floorplans().getAttachLevel() != AttachLevel.Attached) {
             Persistence.service().retrieveMember(building.floorplans(), AttachLevel.Attached);
         }
-        AptUnit merged = new UnitsMerger().merge(building, importedUnit, getUnit(building, importedUnit.info().number().getValue()));
-//      update(merged);
-        return merged;
+        return updateUnitForBuilding(importedUnit, building);
 
     }
 
     private Building merge(Building imported, Building existing) {
         Building merged = new BuildingsMerger().merge(imported, existing);
+//        update(merged);
+        return merged;
+    }
+
+    private AptUnit updateUnitForBuilding(AptUnit importedUnit, Building building) throws YardiServiceException {
+        if (building == null) {
+            throw new YardiServiceException("Unable to update units for building: null");
+        }
+        return mergeUnit(building, importedUnit, getUnit(building, importedUnit.info().number().getValue()));
+    }
+
+    private AptUnit mergeUnit(Building building, AptUnit importedUnit, AptUnit existingUnit) {
+        AptUnit merged = new UnitsMerger().merge(building, importedUnit, existingUnit);
 //        update(merged);
         return merged;
     }
@@ -73,9 +83,9 @@ public class YardiBuildingProcessor {
         return units.get(0);
     }
 
-    public Building getBuildingFromProperty(PropertyIDType propertyId) {
+    public Building getBuildingFromProperty(Property property) {
         BuildingsMapper mapper = new BuildingsMapper();
-        return mapper.map(propertyId);
+        return mapper.map(property.getPropertyID().get(0));
     }
 
     public List<Property> getProperties(ResidentTransactions transaction) {

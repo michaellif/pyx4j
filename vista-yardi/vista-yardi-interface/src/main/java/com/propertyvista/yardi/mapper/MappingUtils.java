@@ -19,7 +19,6 @@ import org.apache.commons.lang.StringUtils;
 
 import com.yardi.entity.mits.Address;
 
-import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.commons.Key;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
@@ -28,10 +27,12 @@ import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.propertyvista.biz.system.YardiServiceException;
 import com.propertyvista.config.VistaDeployment;
 import com.propertyvista.domain.contact.AddressStructured;
+import com.propertyvista.domain.contact.AddressStructured.StreetType;
 import com.propertyvista.domain.pmc.Pmc;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.ref.Province;
 import com.propertyvista.server.common.util.CanadianStreetAddressParser;
+import com.propertyvista.server.common.util.StreetAddressParser;
 import com.propertyvista.server.common.util.StreetAddressParser.StreetAddress;
 
 public class MappingUtils {
@@ -71,15 +72,14 @@ public class MappingUtils {
     }
 
     public static AddressStructured getAddress(Address mitsAddress) {
+        StreetAddress streetAddress = null;
         // TODO instantiate address parser according to the building country
-        StringBuilder address2 = new StringBuilder();
-        for (String addressPart : mitsAddress.getAddress2()) {
-            if (address2.length() > 0) {
-                address2.append("\n");
-            }
-            address2.append(addressPart);
+        try {
+            StreetAddressParser streetAddressParser = new CanadianStreetAddressParser();
+            streetAddress = streetAddressParser.parse(mitsAddress.getAddress1(), null);
+        } catch (Throwable e) {
+            streetAddress = new StreetAddress(null, StringUtils.EMPTY, mitsAddress.getAddress1(), StreetType.other, null);
         }
-        StreetAddress streetAddress = new CanadianStreetAddressParser().parse(CommonsStringUtils.nvl(mitsAddress.getAddress1()), address2.toString());
 
         AddressStructured address = EntityFactory.create(AddressStructured.class);
 
@@ -88,6 +88,7 @@ public class MappingUtils {
         address.streetType().setValue(streetAddress.streetType);
         address.streetDirection().setValue(streetAddress.streetDirection);
         address.city().setValue(mitsAddress.getCity());
+
         address.province().code().setValue(mitsAddress.getState());
 
         String importedCountry = mitsAddress.getCountry();

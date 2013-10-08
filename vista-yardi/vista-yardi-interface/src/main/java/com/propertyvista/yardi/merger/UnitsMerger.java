@@ -15,6 +15,7 @@ package com.propertyvista.yardi.merger;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -23,6 +24,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.pyx4j.entity.server.Persistence;
+import com.pyx4j.entity.shared.EntityFactory;
 
 import com.propertyvista.domain.property.asset.Floorplan;
 import com.propertyvista.domain.property.asset.building.Building;
@@ -58,6 +60,19 @@ public class UnitsMerger {
         return mergedList;
     }
 
+    private Floorplan getExistingFloorplan(Building building, Floorplan imported) {
+        Iterator<Floorplan> floorplanIterator = building.floorplans().iterator();
+        while (floorplanIterator.hasNext()) {
+            Floorplan existing = floorplanIterator.next();
+            Persistence.service().retrieve(existing);
+            Persistence.service().retrieve(imported);
+            if (StringUtils.equals(existing.name().getValue(), imported.name().getValue())) {
+                return existing;
+            }
+        }
+        return null;
+    }
+
     private Map<String, AptUnit> unitsByNumber(List<AptUnit> existingList) {
         Map<String, AptUnit> unitsByNumber = new HashMap<String, AptUnit>();
         for (AptUnit unit : existingList) {
@@ -67,54 +82,40 @@ public class UnitsMerger {
     }
 
     public AptUnit merge(Building building, AptUnit imported, AptUnit existing) {
-        AptUnit merged = null;
+        AptUnit merged = EntityFactory.create(AptUnit.class);
         if (existing == null) {
             merged = imported;
-            merged.building().set(building);
         } else {
-            // merge new data into existing
-            merged = existing;
 
             //info
-            merge(imported.info(), merged.info());
+            merge(imported.info(), existing.info());
 
             // marketing
-            Persistence.service().retrieve(merged.marketing());
-            merged.marketing().name().setValue(imported.marketing().name().getValue());
+            Persistence.service().retrieve(existing.marketing());
+            existing.marketing().name().setValue(imported.marketing().name().getValue());
 
             // financial
-            merged.financial()._unitRent().setValue(imported.financial()._unitRent().getValue());
-            merged.financial()._marketRent().setValue(imported.financial()._marketRent().getValue());
+            existing.financial()._unitRent().setValue(imported.financial()._unitRent().getValue());
+            existing.financial()._marketRent().setValue(imported.financial()._marketRent().getValue());
+            merged = existing;
         }
+        merged.building().set(building);
 
         // merge floorplan
-        mergeFloorplan(building, merged);
+        Floorplan floorplanExisting = getExistingFloorplan(building, merged.floorplan());
+        if (floorplanExisting != null) {
+            merged.floorplan().set(floorplanExisting);
+        } else {
+            //set floorplan for new unit
+            imported.floorplan().building().set(building);
+            Persistence.service().persist(imported.floorplan());
+
+            building.floorplans().add(imported.floorplan());
+
+            merged.floorplan().set(imported.floorplan());
+        }
 
         return merged;
-    }
-
-    private void mergeFloorplan(Building building, AptUnit unit) {
-        Floorplan fp = unit.floorplan();
-        if (fp.getPrimaryKey() != null) {
-            // already there - don't touch it as PV is the origin for marketing data
-            return;
-        }
-
-        // new unit - see if the floorplan is in the list
-        Persistence.service().retrieveMember(building.floorplans());
-        for (Floorplan existing : building.floorplans()) {
-            if (StringUtils.equals(existing.name().getValue(), fp.name().getValue())) {
-                unit.floorplan().set(existing);
-                return;
-            }
-        }
-
-        // new floorplan - persist
-        fp.building().set(building);
-        Persistence.service().persist(fp);
-
-        // add to the list
-        building.floorplans().add(fp);
     }
 
     private void merge(AptUnitInfo imported, AptUnitInfo existing) {
