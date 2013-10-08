@@ -37,7 +37,6 @@ import com.pyx4j.entity.shared.IFile;
 import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.forms.client.images.EntityFolderImages;
-import com.pyx4j.forms.client.ui.CImage.Type;
 import com.pyx4j.forms.client.ui.folder.BoxFolderItemDecorator;
 import com.pyx4j.forms.client.ui.folder.CEntityFolder;
 import com.pyx4j.forms.client.ui.folder.CEntityFolderItem;
@@ -49,6 +48,7 @@ import com.pyx4j.gwt.client.upload.FileUploadReciver;
 import com.pyx4j.gwt.shared.Dimension;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.ImageSlider;
+import com.pyx4j.widgets.client.ImageSlider.ImageSliderType;
 import com.pyx4j.widgets.client.ImageViewport;
 import com.pyx4j.widgets.client.ImageViewport.ScaleMode;
 import com.pyx4j.widgets.client.dialog.CancelOption;
@@ -56,22 +56,24 @@ import com.pyx4j.widgets.client.dialog.Custom1Option;
 import com.pyx4j.widgets.client.dialog.Custom2Option;
 import com.pyx4j.widgets.client.dialog.Dialog;
 
-public class NImage<T extends IFile> extends NField<IList<T>, ImageSlider, CImage<T>, ImageSlider> implements ImageSlider.ImageSliderDataProvider {
+public class NImageSlider<T extends IFile> extends NField<IList<T>, ImageSlider, CImageSlider<T>, ImageSlider> implements ImageSlider.ImageSliderDataProvider {
 
-    private static final I18n i18n = I18n.get(NImage.class);
+    private static final I18n i18n = I18n.get(NImageSlider.class);
 
     private final List<T> imageFiles;
 
     private final List<String> imageUrls;
 
-    private ImageSlider widget;
+    private final ImageSlider imageSlider;
 
     protected IEditableComponentFactory factory = new EntityFormComponentFactory();
 
-    public NImage(CImage<T> cComponent) {
+    public NImageSlider(CImageSlider<T> cComponent) {
         super(cComponent);
         imageFiles = new ArrayList<T>();
         imageUrls = new ArrayList<String>();
+
+        imageSlider = new ImageSlider(getCComponent().getImageSize(), this);
     }
 
     @Override
@@ -88,7 +90,7 @@ public class NImage<T extends IFile> extends NField<IList<T>, ImageSlider, CImag
     }
 
     public void reset() {
-        createWidget().reset();
+        imageSlider.reset();
     }
 
     @Override
@@ -98,23 +100,23 @@ public class NImage<T extends IFile> extends NField<IList<T>, ImageSlider, CImag
 
     @Override
     protected ImageSlider createEditor() {
-        return createWidget();
+        return imageSlider;
     }
 
     @Override
     protected void onEditorInit() {
-        createWidget().setEditable(true);
+        imageSlider.setEditable(true);
         super.onEditorInit();
     }
 
     @Override
     protected ImageSlider createViewer() {
-        return createWidget();
+        return imageSlider;
     }
 
     @Override
     protected void onViewerInit() {
-        createWidget().setEditable(false);
+        imageSlider.setEditable(false);
         super.onViewerInit();
     }
 
@@ -130,37 +132,14 @@ public class NImage<T extends IFile> extends NField<IList<T>, ImageSlider, CImag
         return imageUrls;
     }
 
-    private ImageSlider createWidget() {
-        if (widget == null) {
-            Dimension imageSize = getCComponent().getImageSize();
-            widget = new ImageSlider(imageSize, this);
-        }
-        return widget;
-    }
-
     public void resizeToFit() {
         Dimension imageSize = getCComponent().getImageSize();
-        createWidget().setImageSize(imageSize.width, imageSize.height);
+        imageSlider.setImageSize(imageSize.width, imageSize.height);
     }
 
     @Override
     public void editImageSet() {
         new ImageOrganizer(getCComponent().getImgClass(), getCComponent().getFolderIcons()).show();
-    }
-
-    @Override
-    public void setViewable(boolean viewable) {
-        super.setViewable(viewable);
-    }
-
-    @Override
-    public void setEditable(boolean editable) {
-        super.setEditable(editable);
-    }
-
-    @Override
-    public void setEnabled(boolean enabled) {
-        super.setEnabled(enabled);
     }
 
     class ImageOrganizer extends CEntityFolder<T> {
@@ -228,7 +207,7 @@ public class NImage<T extends IFile> extends NField<IList<T>, ImageSlider, CImag
             new FileUploadDialog<T>(i18n.tr("Upload Image File"), null, getCComponent().getUploadService(), new FileUploadReciver<T>() {
                 @Override
                 public void onUploadComplete(T uploadResponse) {
-                    if (getCComponent().getType() == Type.single) {
+                    if (getCComponent().getImageSliderType() == ImageSliderType.single) {
                         ImageOrganizer.this.clear();
                     }
                     callback.onSuccess(uploadResponse);
@@ -300,7 +279,7 @@ public class NImage<T extends IFile> extends NField<IList<T>, ImageSlider, CImag
 
             @Override
             public boolean onClickCustom2() {
-                NImage.this.setNativeValue(getValue());
+                NImageSlider.this.setNativeValue(getValue());
                 createViewer().reset();
                 return true;
             }
@@ -313,7 +292,8 @@ public class NImage<T extends IFile> extends NField<IList<T>, ImageSlider, CImag
 
             @Override
             public String custom1Text() {
-                if (getCComponent().getType() == CImage.Type.multiple || getCComponent().getValue() == null || getCComponent().getValue().size() == 0) {
+                if (getCComponent().getImageSliderType() == ImageSliderType.multiple || getCComponent().getValue() == null
+                        || getCComponent().getValue().size() == 0) {
                     return i18n.tr("Add Image");
                 } else {
                     return i18n.tr("Change Image");
@@ -337,5 +317,10 @@ public class NImage<T extends IFile> extends NField<IList<T>, ImageSlider, CImag
     @Override
     public Image getPlaceholder() {
         return getCComponent().getThumbnailPlaceholder();
+    }
+
+    @Override
+    public ImageSliderType getImageSliderType() {
+        return getCComponent().getImageSliderType();
     }
 }

@@ -9,15 +9,13 @@ import com.pyx4j.forms.client.images.EntityFolderImages;
 import com.pyx4j.gwt.rpc.upload.UploadService;
 import com.pyx4j.gwt.shared.Dimension;
 import com.pyx4j.gwt.shared.FileURLBuilder;
+import com.pyx4j.widgets.client.ImageSlider;
+import com.pyx4j.widgets.client.ImageSlider.ImageSliderType;
 
 /*
  * CImage allows to display and edit a single image or a set of images (using sequential navigation)  
  */
-public abstract class CImage<E extends IFile> extends CField<IList<E>, NImage<E>> {
-
-    public enum Type {
-        single, multiple
-    }
+public abstract class CImageSlider<E extends IFile> extends CField<IList<E>, NImageSlider<E>> {
 
     private Image placeholder;
 
@@ -33,22 +31,22 @@ public abstract class CImage<E extends IFile> extends CField<IList<E>, NImage<E>
 
     private final Class<E> imgClass;
 
-    private final Type type;
+    private final ImageSliderType imageSliderType;
 
-    public CImage(Class<E> imgClass, Type type) {
+    public CImageSlider(Class<E> imgClass, ImageSliderType type) {
         this.imgClass = imgClass;
-        this.type = type;
+        this.imageSliderType = type;
         this.imageSize = new Dimension(250, 250);
         this.thumbSize = new Dimension(160, 120);
-        setNativeWidget(new NImage<E>(this));
+        setNativeWidget(new NImageSlider<E>(this));
     }
 
     public Class<E> getImgClass() {
         return imgClass;
     }
 
-    public Type getType() {
-        return type;
+    public ImageSliderType getImageSliderType() {
+        return imageSliderType;
     }
 
     protected abstract EntityFolderImages getFolderIcons();

@@ -34,6 +34,10 @@ import com.pyx4j.widgets.client.ImageViewport.ScaleMode;
 
 public class ImageSlider extends LayoutPanel implements IWidget {
 
+    public enum ImageSliderType {
+        single, multiple
+    }
+
     public interface ImageSliderDataProvider {
 
         List<String> getImageUrls();
@@ -41,6 +45,8 @@ public class ImageSlider extends LayoutPanel implements IWidget {
         Image getPlaceholder();
 
         void editImageSet();
+
+        ImageSliderType getImageSliderType();
 
     }
 
@@ -66,10 +72,6 @@ public class ImageSlider extends LayoutPanel implements IWidget {
         setWidgetBottomHeight(editControl, 20, Unit.PCT, 40, Unit.PX);
 
         setImageSize(dimension.width, dimension.width);
-    }
-
-    public void showEditControl(boolean flag) {
-        editControl.setVisible(flag);
     }
 
     public void onModelChange() {
@@ -111,6 +113,7 @@ public class ImageSlider extends LayoutPanel implements IWidget {
     @Override
     public void setEditable(boolean editable) {
         this.editable = editable;
+        editControl.setVisible(editable);
     }
 
     @Override
@@ -133,7 +136,6 @@ public class ImageSlider extends LayoutPanel implements IWidget {
                 @Override
                 public void onClick(ClickEvent event) {
                     imageList.editImageSet();
-                    setVisible(false);
                 }
             });
         }
