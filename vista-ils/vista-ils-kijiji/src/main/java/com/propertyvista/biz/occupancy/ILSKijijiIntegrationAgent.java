@@ -25,17 +25,14 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.pyx4j.commons.LogicalDate;
-import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.config.server.SystemDateManager;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.AttachLevel;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 
-import com.propertyvista.biz.policy.PolicyFacade;
 import com.propertyvista.domain.marketing.ils.ILSProfileBuilding;
 import com.propertyvista.domain.marketing.ils.ILSProfileFloorplan;
-import com.propertyvista.domain.policy.policies.PetPolicy;
 import com.propertyvista.domain.property.asset.Floorplan;
 import com.propertyvista.domain.property.asset.FloorplanAmenity;
 import com.propertyvista.domain.property.asset.building.Building;
@@ -103,8 +100,7 @@ public class ILSKijijiIntegrationAgent {
         // get available units
         EntityQueryCriteria<AptUnit> critUnit = EntityQueryCriteria.create(AptUnit.class);
         critUnit.in(critUnit.proto().floorplan(), floorplanMap.keySet());
-        critUnit.eq(critUnit.proto().unitOccupancySegments().$().status(), AptUnitOccupancySegment.Status.available);
-        critUnit.eq(critUnit.proto().unitOccupancySegments().$().dateTo(), OccupancyFacade.MAX_DATE);
+        critUnit.isNotNull(critUnit.proto()._availableForRent());
         List<AptUnit> units = Persistence.service().query(critUnit);
 
         // extract floorplans
@@ -152,10 +148,8 @@ public class ILSKijijiIntegrationAgent {
             crit.eq(crit.proto().type(), FloorplanAmenity.Type.furnished);
             fpDto.isFurnished().setValue(Persistence.service().count(crit) > 0);
 
-            // check if pets allowed
-            PetPolicy petPolicy = ServerSideFactory.create(PolicyFacade.class).obtainEffectivePolicy(floorplan, PetPolicy.class);
-            fpDto.isPetsAllowed().setValue(petPolicy != null && petPolicy.constraints().size() > 0);
-            fpDto.isPetsAllowed().setValue(false); // TODO - dead policy? complete implementation
+            // TODO - check if pets allowed
+            fpDto.isPetsAllowed().setValue(false);
 
             list.add(fpDto);
         }

@@ -62,7 +62,7 @@ public class KijijiApiService {
     @Produces({ MediaType.APPLICATION_XML })
     public Response generateKijiji() throws Exception {
         // FIXME - use OAPIFilter authentication mechanism; create CrmUser with (some Interface role) per ils vendor
-        NamespaceManager.setNamespace("vista");
+        NamespaceManager.setNamespace("star");
 
         String xmlString = generateXML();
         return KijijiUtils.createSuccessResponse(xmlString);
