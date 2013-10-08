@@ -17,22 +17,16 @@ import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.yardi.entity.mits.Address;
 import com.yardi.entity.mits.Information;
+import com.yardi.entity.mits.Unit;
 import com.yardi.entity.mits.Uniteconstatusinfo;
-import com.yardi.entity.resident.RTCustomer;
-import com.yardi.entity.resident.RTUnit;
 
-import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.entity.shared.EntityFactory;
 
-import com.propertyvista.domain.contact.AddressStructured;
 import com.propertyvista.domain.property.asset.AreaMeasurementUnit;
 import com.propertyvista.domain.property.asset.Floorplan;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.property.asset.unit.AptUnitInfo.EconomicStatus;
-import com.propertyvista.server.common.util.CanadianStreetAddressParser;
-import com.propertyvista.server.common.util.StreetAddressParser.StreetAddress;
 
 /**
  * Maps units information from YARDI System to domain entities.
@@ -48,10 +42,9 @@ public class UnitsMapper {
      * Maps units from YARDI System to VISTA domain units
      * 
      */
-    public AptUnit map(RTCustomer rtCustomer) {
-        RTUnit unitFrom = rtCustomer.getRTUnit();
+    public AptUnit map(Unit unit) {
         AptUnit unitTo = EntityFactory.create(AptUnit.class);
-        Information info = unitFrom.getUnit().getInformation().get(0);
+        Information info = unit.getInformation().get(0);
 
         if (StringUtils.isEmpty(info.getUnitID())) {
             throw new IllegalStateException("Illegal UnitId. Can not be empty or null");
@@ -86,37 +79,8 @@ public class UnitsMapper {
         }
         unitTo.info().economicStatusDescription().setValue(info.getUnitEconomicStatusDescription());
 
-        // Legal address
-        if (rtCustomer.getCustomers().getCustomer().get(0).getAddress().size() > 0) {
-            Address addressImported = rtCustomer.getCustomers().getCustomer().get(0).getAddress().get(0);
-            StringBuilder address2 = new StringBuilder();
-            for (String addressPart : addressImported.getAddress2()) {
-                if (address2.length() > 0) {
-                    address2.append("\n");
-                }
-                address2.append(addressPart);
-            }
-            StreetAddress streetAddress = new CanadianStreetAddressParser().parse(CommonsStringUtils.nvl(addressImported.getAddress1()), address2.toString());
-
-            AddressStructured address = EntityFactory.create(AddressStructured.class);
-            address.streetNumber().setValue(streetAddress.streetNumber);
-            address.streetName().setValue(streetAddress.streetName);
-            address.streetType().setValue(streetAddress.streetType);
-            address.streetDirection().setValue(streetAddress.streetDirection);
-            address.city().setValue(addressImported.getCity());
-
-            address.province().code().setValue(addressImported.getState());
-
-            String importedCountry = addressImported.getCountry();
-            address.country().name().setValue(StringUtils.isEmpty(importedCountry) ? MappingUtils.getCountry(addressImported.getState()) : importedCountry);
-
-            address.postalCode().setValue(addressImported.getPostalCode());
-
-            unitTo.info().legalAddress().set(address);
-        }
-
         // marketing
-        unitTo.marketing().name().setValue(unitFrom.getUnit().getMarketingName());
+        unitTo.marketing().name().setValue(unit.getMarketingName());
 
         // financial
         unitTo.financial()._unitRent().setValue(info.getUnitRent());

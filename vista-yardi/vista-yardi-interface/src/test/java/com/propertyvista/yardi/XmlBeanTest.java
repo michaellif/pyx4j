@@ -106,7 +106,7 @@ public class XmlBeanTest {
         YardiBuildingProcessor buildingProcessor = new YardiBuildingProcessor();
         List<Property> properties = buildingProcessor.getProperties(transactions);
         for (Property property : properties) {
-            Building building = buildingProcessor.getBuildingFromProperty(property);
+            Building building = buildingProcessor.getBuildingFromProperty(property.getPropertyID().get(0));
             Assert.assertNotNull("Has buildings", building);
 
             Assert.assertFalse(building.propertyCode().isNull());
@@ -122,7 +122,7 @@ public class XmlBeanTest {
             List<AptUnit> units = new ArrayList<AptUnit>();
 
             for (RTCustomer rtCustomer : property.getRTCustomer()) {
-                units.add(new UnitsMapper().map(rtCustomer));
+                units.add(new UnitsMapper().map(rtCustomer.getRTUnit().getUnit()));
             }
 
             Assert.assertTrue("Has units", !units.isEmpty());
