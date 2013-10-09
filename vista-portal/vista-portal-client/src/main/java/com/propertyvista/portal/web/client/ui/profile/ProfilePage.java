@@ -80,10 +80,8 @@ public class ProfilePage extends CPortalEntityEditor<ResidentProfileDTO> {
             }
         };
         imageHolder.setImageFileUrlBuilder(new ImageFileURLBuilder());
-        imageHolder.setThumbnailFileUrlBuilder(new ImageFileURLBuilder());
         imageHolder.setUploadService(GWT.<ResidentPictureUploadService> create(ResidentPictureUploadService.class));
         imageHolder.setImageSize(150, 200);
-        imageHolder.setThumbSize(60, 80);
         imageHolder.setThumbnailPlaceholder(new Image(VistaImages.INSTANCE.profilePicture()));
 
         mainPanel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().picture(), imageHolder)).customLabel("").build());

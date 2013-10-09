@@ -149,10 +149,8 @@ public class LeaseParticipantForm<P extends LeaseParticipantDTO<?>> extends CrmE
             }
         };
         imageHolder.setImageFileUrlBuilder(new ImageFileURLBuilder());
-        imageHolder.setThumbnailFileUrlBuilder(new ImageFileURLBuilder());
         imageHolder.setUploadService(GWT.<CustomerPictureUploadService> create(CustomerPictureUploadService.class));
         imageHolder.setImageSize(150, 200);
-        imageHolder.setThumbSize(60, 80);
         imageHolder.setThumbnailPlaceholder(new Image(VistaImages.INSTANCE.profilePicture()));
 
         main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().participantId()), 7).build());

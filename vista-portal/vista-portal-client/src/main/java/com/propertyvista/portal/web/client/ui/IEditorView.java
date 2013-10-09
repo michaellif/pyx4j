@@ -23,7 +23,7 @@ public interface IEditorView<E extends IEntity> extends IFormView<E> {
 
         void save();
 
-        void cancel();
+        void populate();
     }
 
     @Override

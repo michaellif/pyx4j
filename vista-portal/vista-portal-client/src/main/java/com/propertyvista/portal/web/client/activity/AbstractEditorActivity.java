@@ -53,7 +53,7 @@ public abstract class AbstractEditorActivity<E extends IEntity> extends Security
     public void start(AcceptsOneWidget panel, EventBus eventBus) {
         super.start(panel, eventBus);
         panel.setWidget(getView());
-        retreive(AbstractCrudService.RetrieveTarget.View);
+        populate();
     }
 
     public AbstractCrudService<E> getService() {
@@ -66,6 +66,11 @@ public abstract class AbstractEditorActivity<E extends IEntity> extends Security
 
     public Key getEntityId() {
         return entityId;
+    }
+
+    @Override
+    public void populate() {
+        retreive(AbstractCrudService.RetrieveTarget.View);
     }
 
     protected void onDiscard() {
@@ -107,18 +112,13 @@ public abstract class AbstractEditorActivity<E extends IEntity> extends Security
     }
 
     protected void onSaved(Key result) {
-        retreive(AbstractCrudService.RetrieveTarget.View);
+        populate();
     }
 
     protected void onSaveFail(Throwable caught) {
         if (!view.onSaveFail(caught)) {
             throw new UnrecoverableClientError(caught);
         }
-    }
-
-    @Override
-    public void cancel() {
-        retreive(AbstractCrudService.RetrieveTarget.View);
     }
 
     private void retreive(final AbstractCrudService.RetrieveTarget target) {

@@ -46,7 +46,7 @@ public abstract class CPortalEntityEditor<E extends IEntity> extends CPortalEnti
 
             @Override
             protected void onCancel() {
-                getView().getPresenter().cancel();
+                getView().getPresenter().populate();
             }
         };
 
