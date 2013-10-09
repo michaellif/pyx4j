@@ -36,7 +36,6 @@ import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.gwt.shared.Dimension;
 import com.pyx4j.gwt.shared.FileURLBuilder;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.widgets.client.ImageSlider.ImageSliderType;
 
 import com.propertyvista.common.client.resources.VistaImages;
 import com.propertyvista.common.client.ui.components.MediaUtils;
@@ -128,7 +127,7 @@ public class PortalImageSetFolder extends VistaBoxFolder<PortalImageSet> {
 
         public PortalImageSetEditor() {
             super(PortalImageSet.class);
-            imageHolder = new CImageSlider<SiteImageResource>(SiteImageResource.class, ImageSliderType.multiple) {
+            imageHolder = new CImageSlider<SiteImageResource>(SiteImageResource.class) {
                 @Override
                 protected EntityFolderImages getFolderIcons() {
                     return VistaImages.INSTANCE;

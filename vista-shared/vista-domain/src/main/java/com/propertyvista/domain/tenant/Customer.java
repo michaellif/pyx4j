@@ -66,7 +66,7 @@ public interface Customer extends IEntity {
 
     @Owned
     @Detached
-    IList<CustomerPicture> pictures();
+    CustomerPicture picture();
 
     @Timestamp
     IPrimitive<Date> updated();

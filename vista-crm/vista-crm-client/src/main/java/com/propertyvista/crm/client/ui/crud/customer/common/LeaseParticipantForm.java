@@ -32,7 +32,7 @@ import com.pyx4j.forms.client.ui.CBooleanLabel;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.ui.CEnumLabel;
-import com.pyx4j.forms.client.ui.CImageSlider;
+import com.pyx4j.forms.client.ui.CImage;
 import com.pyx4j.forms.client.ui.CLabel;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
@@ -44,7 +44,6 @@ import com.pyx4j.site.client.AppPlaceEntityMapper;
 import com.pyx4j.site.client.ui.prime.form.IEditor;
 import com.pyx4j.site.client.ui.prime.form.IForm;
 import com.pyx4j.site.client.ui.prime.misc.CEntityCrudHyperlink;
-import com.pyx4j.widgets.client.ImageSlider.ImageSliderType;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
 
 import com.propertyvista.common.client.policy.ClientPolicyManager;
@@ -135,7 +134,7 @@ public class LeaseParticipantForm<P extends LeaseParticipantDTO<?>> extends CrmE
         }
 
         int row = -1;
-        CImageSlider<CustomerPicture> imageHolder = new CImageSlider<CustomerPicture>(CustomerPicture.class, ImageSliderType.single) {
+        CImage<CustomerPicture> imageHolder = new CImage<CustomerPicture>(CustomerPicture.class) {
             @Override
             protected EntityFolderImages getFolderIcons() {
                 return VistaImages.INSTANCE;
@@ -157,7 +156,7 @@ public class LeaseParticipantForm<P extends LeaseParticipantDTO<?>> extends CrmE
         imageHolder.setThumbnailPlaceholder(new Image(VistaImages.INSTANCE.profilePicture()));
 
         main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().participantId()), 7).build());
-        main.setWidget(row, 1, new FormDecoratorBuilder(inject(proto().customer().pictures(), imageHolder)).customLabel("").build());
+        main.setWidget(row, 1, new FormDecoratorBuilder(inject(proto().customer().picture(), imageHolder)).customLabel("").build());
         main.getCellFormatter().setVerticalAlignment(row, 0, HasVerticalAlignment.ALIGN_BOTTOM);
 
         main.setWidget(++row, 0, 2, inject(proto().customer().person().name(), new NameEditor(participant)));

@@ -28,7 +28,7 @@ public interface ResidentProfileDTO extends IEntity {
 
     Person person();
 
-    IList<CustomerPicture> pictures();
+    CustomerPicture picture();
 
     @Length(3)
     @Caption(name = "Emergency Contacts")

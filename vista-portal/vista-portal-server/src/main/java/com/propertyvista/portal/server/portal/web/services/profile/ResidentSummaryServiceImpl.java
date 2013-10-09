@@ -34,15 +34,13 @@ public class ResidentSummaryServiceImpl implements ResidentSummaryService {
         Persistence.service().retrieve(tenantInLease.leaseTermV());
         Persistence.service().retrieve(tenantInLease.leaseTermV().holder().lease());
         Persistence.service().retrieve(tenantInLease.leaseTermV().holder().lease().unit().floorplan());
-        Persistence.service().retrieve(tenantInLease.leaseParticipant().customer().pictures());
+        Persistence.service().retrieve(tenantInLease.leaseParticipant().customer().picture());
 
         profileSummary.tenantName().setValue(tenantInLease.leaseParticipant().customer().person().name().getStringView());
         profileSummary.floorplanName().set(tenantInLease.leaseTermV().holder().lease().unit().floorplan().marketingName());
         profileSummary.tenantAddress().setValue(AddressRetriever.getLeaseParticipantCurrentAddress(tenantInLease).getStringView());
 
-        if (tenantInLease.leaseParticipant().customer().pictures().size() > 0) {
-            profileSummary.picture().set(tenantInLease.leaseParticipant().customer().pictures().get(0));
-        }
+        profileSummary.picture().set(tenantInLease.leaseParticipant().customer().picture());
 
         callback.onSuccess(profileSummary);
 

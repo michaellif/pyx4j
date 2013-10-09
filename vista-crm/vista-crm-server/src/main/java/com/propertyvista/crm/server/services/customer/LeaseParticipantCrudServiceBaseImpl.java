@@ -75,7 +75,7 @@ public abstract class LeaseParticipantCrudServiceBaseImpl<BO extends LeasePartic
 
         to.electronicPaymentsAllowed().setValue(ServerSideFactory.create(PaymentFacade.class).isElectronicPaymentsSetup(to.leaseTermV().holder()));
 
-        Persistence.service().retrieve(to.customer().pictures());
+        Persistence.service().retrieve(to.customer().picture());
     }
 
     @Override
