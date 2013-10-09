@@ -38,14 +38,14 @@ public class ResidentProfileCrudServiceImpl implements ResidentProfileCrudServic
         // find associated tenant entry
         EntityQueryCriteria<Customer> criteria = EntityQueryCriteria.create(Customer.class);
         criteria.add(PropertyCriterion.eq(criteria.proto().user(), currentUser));
-        Customer tenant = Persistence.service().retrieve(criteria);
-        Persistence.service().retrieve(tenant.emergencyContacts());
-        Persistence.service().retrieve(tenant.picture());
+        Customer customer = Persistence.service().retrieve(criteria);
+        Persistence.service().retrieve(customer.emergencyContacts());
+        Persistence.service().retrieve(customer.picture());
         // build dto
         ResidentProfileDTO dto = EntityFactory.create(ResidentProfileDTO.class);
-        dto.person().setValue(tenant.person().getValue());
-        dto.picture().set(tenant.picture().detach());
-        dto.emergencyContacts().addAll(tenant.emergencyContacts());
+        dto.person().setValue(customer.person().getValue());
+        dto.picture().set(customer.picture().detach());
+        dto.emergencyContacts().addAll(customer.emergencyContacts());
 
         callback.onSuccess(dto);
     }
