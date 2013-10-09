@@ -69,9 +69,7 @@ public class TenantSureOrderWizard extends CPortalEntityWizard<TenantSureInsuran
         super(TenantSureInsurancePolicyDTO.class, view, i18n.tr("TenantSure Insurance"), endButtonCaption, ThemeColor.contrast3);
 
         personalInfoStep = addStep(createPersonalInfoStep());
-
         insuranceCoverageStep = addStep(createInsuranceCoverageStep());
-
         paymentMethodStep = addStep(createPaymentMethodStep());
 
     }
@@ -82,10 +80,14 @@ public class TenantSureOrderWizard extends CPortalEntityWizard<TenantSureInsuran
         ((TenantSureCoverageRequestForm) get(proto().tenantSureCoverageRequest())).setCoverageParams(getValue().agreementParams());
         ((TenantSurePaymentMethodForm) get(proto().paymentMethod())).setPreAuthorizedAgreement(getValue().agreementParams().preAuthorizedDebitAgreement()
                 .getValue());
+
+        get(proto().tenantSureCoverageRequest().tenantName()).setViewable(getValue().agreementParams().isTenantInitializedInCfc().getValue());
+        get(proto().tenantSureCoverageRequest().tenantPhone()).setViewable(getValue().agreementParams().isTenantInitializedInCfc().getValue());
+
         retrievingQuoteMessage.setVisible(false);
         pleaseFillOutTheFormMessage.setVisible(true);
         quoteSendButton.setVisible(false);
-        get(proto().quote()).setVisible(false);
+        quoteViewer.setVisible(false);
     }
 
     private BasicFlexFormPanel createPersonalInfoStep() {
