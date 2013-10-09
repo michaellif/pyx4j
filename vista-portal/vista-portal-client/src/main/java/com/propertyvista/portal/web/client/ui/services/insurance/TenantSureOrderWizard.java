@@ -118,13 +118,13 @@ public class TenantSureOrderWizard extends CPortalEntityWizard<TenantSureInsuran
         BasicFlexFormPanel quotationRequestStepPanel = new BasicFlexFormPanel();
         quotationRequestStepPanel.getElement().getStyle().setMarginBottom(2, Unit.EM);
         int row = -1;
-        quotationRequestStepPanel.setH1(++row, 0, 2, i18n.tr("Coverage"));
         quotationRequestStepPanel.setWidget(++row, 0, 2, inject(proto().tenantSureCoverageRequest(), new TenantSureCoverageRequestForm()));
         get(proto().tenantSureCoverageRequest()).addValueChangeHandler(new ValueChangeHandler<TenantSureCoverageDTO>() {
             @Override
             public void onValueChange(ValueChangeEvent<TenantSureCoverageDTO> event) {
                 if (get(proto().tenantSureCoverageRequest()).isValid()) {
                     presenter.getNewQuote();
+                    get(proto().tenantSureCoverageRequestConfirmation()).setValue(event.getValue(), false);
                 }
             }
         });
@@ -170,7 +170,7 @@ public class TenantSureOrderWizard extends CPortalEntityWizard<TenantSureInsuran
         BasicFlexFormPanel paymentStepPanel = new BasicFlexFormPanel();
         int row = -1;
 
-        paymentStepPanel.setH1(++row, 0, 2, i18n.tr("Coverage"));
+        paymentStepPanel.setH1(++row, 0, 2, i18n.tr("Summary"));
 
         TenantSureCoverageRequestForm confirmationCoverageRequestForm = new TenantSureCoverageRequestForm();
         paymentStepPanel.setWidget(++row, 0, 2, inject(proto().tenantSureCoverageRequestConfirmation(), confirmationCoverageRequestForm));
@@ -178,7 +178,6 @@ public class TenantSureOrderWizard extends CPortalEntityWizard<TenantSureInsuran
 
         TenantSureQuoteViewer paymentStepQuoteViewer = new TenantSureQuoteViewer(true);
 
-        paymentStepPanel.setH1(++row, 0, 2, i18n.tr("Quote"));
         paymentStepPanel.setWidget(++row, 0, 2, inject(proto().quoteConfirmation(), paymentStepQuoteViewer));
 
         paymentStepPanel.setH1(++row, 0, 2, i18n.tr("Payment"));
@@ -216,7 +215,9 @@ public class TenantSureOrderWizard extends CPortalEntityWizard<TenantSureInsuran
         retrievingQuoteMessage.setVisible(false);
 
         get(proto().quote()).setVisible(true);
-        quoteSendButton.setVisible(true);
+        // we don't want to to show quote send button unless we get a quote with an id
+        // because we can get a 'manual quote' i.e. tenant is asked to call HighCourt
+        quoteSendButton.setVisible(quote != null && !quote.quoteId().isNull());
 
         get(proto().quote()).setValue(quote);
         get(proto().quoteConfirmation()).setValue(quote.duplicate(TenantSureQuoteDTO.class));
