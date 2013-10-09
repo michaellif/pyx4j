@@ -15,11 +15,12 @@ CREATE OR REPLACE FUNCTION _dba_.get_building_units(    v_schema_name   TEXT,
                                                         OUT active_leases INT,
                                                         OUT avg_tpu NUMERIC(4,1),
                                                         OUT reg_units      INT,
-                                                        OUT pct_reg_units NUMERIC(4,1),
+                                                        OUT units_epay     INT,
+                                                        OUT reg_units_epay INT,
                                                         OUT total_tenants  INT,
                                                         OUT reg_tenants    INT,
-                                                        OUT pct_reg_tenants NUMERIC(4,1),
-                                                        OUT tenant_logins_this_week INT)
+                                                        OUT tenant_logins_this_week INT,
+                                                        OUT tenant_logins_this_month INT)
 AS
 $$      
 BEGIN
@@ -61,7 +62,41 @@ BEGIN
                 ||              'AND    c.registered_in_portal ) AS c ON (c.unit = a.id) '
                 ||'WHERE b.property_code = '''||v_property_code||''' '
                 INTO reg_units;
- 
+          
+              
+         EXECUTE   'SELECT COUNT(a.id)::int '
+                ||'FROM '||v_schema_name||'.apt_unit a '
+                ||'JOIN '||v_schema_name||'.building b ON (b.id = a.building) '
+                ||'JOIN         (SELECT DISTINCT unit '
+                ||              'FROM '||v_schema_name||'.lease l '
+                ||              'JOIN '||v_schema_name||'.lease_participant lp ON (lp.lease = l.id) '
+                ||              'JOIN '||v_schema_name||'.lease_term_participant ltp ON (lp.id = ltp.lease_participant) '
+                ||              'JOIN '||v_schema_name||'.payment_record p ON (ltp.id = p.lease_term_participant) '
+                ||              'JOIN '||v_schema_name||'.payment_method pm ON (pm.id = p.payment_method) '
+                ||              'WHERE  l.status = ''Active'' '
+                ||              'AND    pm.id_discriminator = ''LeasePaymentMethod'' '
+                ||              'AND    pm.payment_type IN (''DirectBanking'',''CreditCard'',''Echeck'',''Interac'') '
+                ||              'AND    DATE_TRUNC(''month'',p.last_status_change_date) = DATE_TRUNC(''month'',current_date) ) AS c ON (c.unit = a.id) '
+                ||'WHERE b.property_code = '''||v_property_code||''' '
+                INTO units_epay;
+          
+        EXECUTE   'SELECT COUNT(a.id)::int '
+                ||'FROM '||v_schema_name||'.apt_unit a '
+                ||'JOIN '||v_schema_name||'.building b ON (b.id = a.building) '
+                ||'JOIN         (SELECT DISTINCT unit '
+                ||              'FROM '||v_schema_name||'.lease l '
+                ||              'JOIN '||v_schema_name||'.lease_participant lp ON (lp.lease = l.id) '
+                ||              'JOIN '||v_schema_name||'.customer c ON (c.id = lp.customer) '
+                ||              'JOIN '||v_schema_name||'.lease_term_participant ltp ON (lp.id = ltp.lease_participant) '
+                ||              'JOIN '||v_schema_name||'.payment_record p ON (ltp.id = p.lease_term_participant) '
+                ||              'JOIN '||v_schema_name||'.payment_method pm ON (pm.id = p.payment_method) '
+                ||              'WHERE  l.status = ''Active'' '
+                ||              'AND    pm.id_discriminator = ''LeasePaymentMethod'' '
+                ||              'AND    pm.payment_type IN (''DirectBanking'',''CreditCard'',''Echeck'',''Interac'') '
+                ||              'AND    DATE_TRUNC(''month'',p.last_status_change_date) = DATE_TRUNC(''month'',current_date) '
+                ||              'AND    c.registered_in_portal) AS c ON (c.unit = a.id) '
+                ||'WHERE b.property_code = '''||v_property_code||''' '
+                INTO reg_units_epay;
  
         EXECUTE 'SELECT COUNT(p.id) '
                 ||'FROM '||v_schema_name||'.lease_participant p '
@@ -98,14 +133,28 @@ BEGIN
                         ||'AND     l.status = ''Active'' '
                         INTO  tenant_logins_this_week;
                         
+                EXECUTE 'SELECT  COUNT(a.id) '
+                        ||'FROM _admin_.audit_record a '
+                        ||'JOIN '||v_schema_name||'.customer_user cu ON (a.usr = cu.id) '
+                        ||'JOIN '||v_schema_name||'.customer c ON (c.user_id = cu.id) '
+                        ||'JOIN '||v_schema_name||'.lease_participant lp ON (lp.customer = c.id) '
+                        ||'JOIN '||v_schema_name||'.lease l ON (lp.lease = l.id) '
+                        ||'JOIN '||v_schema_name||'.apt_unit au ON (l.unit = au.id) '
+                        ||'JOIN '||v_schema_name||'.building b ON (au.building = b.id) '
+                        ||'WHERE   a.event = ''Login'' '
+                        ||'AND     DATE_TRUNC(''month'',a.created) = DATE_TRUNC(''month'',current_date) '
+                        ||'AND     l.status = ''Active'' '
+                        INTO  tenant_logins_this_month;
+                        
         ELSE
                 tenant_logins_this_week := 0;
+                tenant_logins_this_month := 0;
                 
         END IF;
                 
                 
-        pct_reg_units := ROUND(reg_units::numeric(4,1)*100/total_units,1);
-        pct_reg_tenants := ROUND(reg_tenants::numeric(4,1)*100/total_tenants,1);
+        -- pct_reg_units := ROUND(reg_units::numeric(4,1)*100/total_units,1);
+        -- pct_reg_tenants := ROUND(reg_tenants::numeric(4,1)*100/total_tenants,1);
 END;
 $$
 LANGUAGE plpgsql VOLATILE;
@@ -142,7 +191,14 @@ AS
 $$
 BEGIN
         
-        -- Tenants using epay
+        /**     ============================================================================================================
+        ***
+        ***             Tenants that TRY to use e-pay, no matter how successfull they are in it this.
+        ***             Last status change date is used to determine month
+        ***     
+        ***     ============================================================================================================
+        **/      
+        
         
         EXECUTE 'SELECT COUNT(lp.id) '
                 ||'FROM '||v_schema_name||'.payment_record p '
@@ -152,15 +208,23 @@ BEGIN
                 ||'JOIN '||v_schema_name||'.lease l ON (l.id = lp.lease) '
                 ||'JOIN '||v_schema_name||'.apt_unit a ON (a.id = l.unit) '
                 ||'JOIN '||v_schema_name||'.building b ON (b.id = a.building) '
-                ||'WHERE   DATE_TRUNC(''month'',p.finalize_date) = DATE_TRUNC(''month'',current_date) '
-                ||'AND     p.payment_status = ''Cleared'' '
+                ||'WHERE   DATE_TRUNC(''month'',p.last_status_change_date) = DATE_TRUNC(''month'',current_date) '
                 ||'AND     pm.id_discriminator = ''LeasePaymentMethod'' '
+                ||'AND     pm.payment_type IN (''DirectBanking'',''CreditCard'',''Echeck'',''Interac'') '
                 ||'AND     b.property_code = '''||v_property_code||'''  '
                 INTO count_tenants_epay;
         
         
         IF (count_tenants_epay != 0) 
         THEN
+        
+                /**     ============================================================================================================
+                ***
+                ***             For payment information only cleared records considered
+                ***     
+                ***     ============================================================================================================
+                **/      
+        
         
                 EXECUTE 'WITH t AS (    SELECT  '
                         ||'             b.property_code,'
@@ -181,6 +245,7 @@ BEGIN
                         ||'             WHERE   DATE_TRUNC(''month'',p.finalize_date) = DATE_TRUNC(''month'',current_date) '
                         ||'             AND     p.payment_status = ''Cleared'' '
                         ||'             AND     pm.id_discriminator = ''LeasePaymentMethod'' '
+                        ||'             AND     pm.payment_type IN (''DirectBanking'',''CreditCard'',''Echeck'',''Interac'') '
                         ||'             AND     b.property_code = '''||v_property_code||''' )'
                         ||'SELECT       COALESCE(a.count_trans_recur,0) AS count_trans_recur,COALESCE(a.amount_trans_recur,0) AS amount_trans_recur, '
                         ||'             COALESCE(b.count_trans_onetime,0) AS count_trans_onetime, COALESCE(b.amount_trans_onetime,0) AS amount_trans_onetime, '
@@ -354,9 +419,9 @@ BEGIN
                 ||'JOIN '||v_schema_name||'.apt_unit a ON (a.id = l.unit) '
                 ||'JOIN '||v_schema_name||'.building b ON (b.id = a.building) '
                 ||'JOIN '||v_schema_name||'.customer c ON (lp.customer = c.id) '
-                ||'WHERE   DATE_TRUNC(''month'',p.finalize_date) = DATE_TRUNC(''month'',current_date) '
-                ||'AND     p.payment_status = ''Cleared'' '
+                ||'WHERE   DATE_TRUNC(''month'',p.last_status_change_date) = DATE_TRUNC(''month'',current_date) '
                 ||'AND     pm.id_discriminator = ''LeasePaymentMethod'' '
+                ||'AND     pm.payment_type IN (''DirectBanking'',''CreditCard'',''Echeck'',''Interac'') '
                 ||'AND     b.property_code = '''||v_property_code||'''  '
                 ||'AND     c.registered_in_portal '
                 INTO count_tenants_epay_reg;
@@ -385,6 +450,7 @@ BEGIN
                         ||'             WHERE   DATE_TRUNC(''month'',p.finalize_date) = DATE_TRUNC(''month'',current_date) '
                         ||'             AND     p.payment_status = ''Cleared'' '
                         ||'             AND     pm.id_discriminator = ''LeasePaymentMethod'' '
+                        ||'             AND     pm.payment_type IN (''DirectBanking'',''CreditCard'',''Echeck'',''Interac'') '
                         ||'             AND     b.property_code = '''||v_property_code||''' '
                         ||'             AND     c.registered_in_portal )'
                         ||'SELECT       COALESCE(a.count_trans_recur,0) AS count_trans_recur,COALESCE(a.amount_trans_recur,0) AS amount_trans_recur, '
@@ -578,11 +644,12 @@ CREATE TABLE _dba_.building_stats
         active_leases                   INT,
         avg_tpu                         NUMERIC(4,1),
         reg_units                       INT,
-        pct_reg_units                   NUMERIC(4,1),
+        units_epay                      INT,
+        reg_units_epay                  INT,
         total_tenants                   INT,
         reg_tenants                     INT,
-        pct_reg_tenants                 NUMERIC(4,1),
         tenant_logins_this_week         INT,
+        tenant_logins_this_month        INT,
         count_tenants_epay              INT,
         count_trans_recur               INT,
         amount_trans_recur              NUMERIC(18,2),
@@ -645,7 +712,7 @@ $$
 BEGIN
         
         EXECUTE 'INSERT INTO _dba_.building_stats (pmc,property_code,stats_week,total_units,active_leases,'
-                ||'avg_tpu,reg_units,pct_reg_units,total_tenants,reg_tenants,pct_reg_tenants,tenant_logins_this_week,'
+                ||'avg_tpu,reg_units,units_epay,reg_units_epay,total_tenants,reg_tenants,tenant_logins_this_week,tenant_logins_this_month,'
                 ||'count_tenants_epay,count_trans_recur,amount_trans_recur,count_trans_onetime,amount_trans_onetime,'
                 ||'count_eft_recur,amount_eft_recur,count_eft_onetime,amount_eft_onetime,count_direct_debit,'
                 ||'amount_direct_debit,count_interac,amount_interac,count_visa_recur,amount_visa_recur,count_visa_onetime,'
@@ -675,15 +742,21 @@ CREATE OR REPLACE VIEW _dba_.building_stats_view AS
         SELECT  pmc AS "PMC",property_code AS "Property Code",
                 total_units AS "Total Units",
                 active_leases AS "Active Leases",
-                avg_tpu AS "Average Tenats per Unit",
+                avg_tpu AS "Average Tenants per Unit",
                 reg_units AS "Units with Registered Tenants",
-                pct_reg_units AS "% Units with Registered Tenants",
+                ROUND(reg_units::numeric(4,1)*100/total_units,1) AS "% Units with Registered Tenants",
+                units_epay AS "Units with Electronic Payments",
+                reg_units_epay AS "Units with Registered Tenants Using Electronic Payments",
+                ROUND(reg_units_epay::numeric(4,1)*100/units_epay,1) AS "% Reg. Units with Epay to Total Units with Epay",
                 total_tenants AS "Total Tenants",
                 reg_tenants AS "Registered Tenants",
-                pct_reg_tenants AS "% Registered Tenants",
-                tenant_logins_this_week AS "Tenants Logins This Week",
+                ROUND(reg_tenants::numeric(4,1)*100/total_tenants,1) AS "% Registered Tenants",
+                tenant_logins_this_week AS "Tenant Logins This Week",
+                tenant_logins_this_month AS "Tenant Logins This Month",
                 count_tenants_epay AS "Tenants Using Electronic Payments",
                 count_tenants_epay_reg AS "Registered Tenants Using Electronic Payments",
+                ROUND(count_tenants_epay_reg::numeric(4,1)*100/count_tenants_epay,1) AS "% Registered Tenants with Epay to Total Tenants with Epay",
+                ROUND(count_tenants_epay_reg::numeric(4,1)*100/reg_tenants,1) AS "% Registered Tenants with Epay to All Registered Tenants",
                 count_trans_recur AS "Transactions Processed This Month, Recurring",
                 amount_trans_recur AS "Amount Processed This Month, Recurring",
                 count_trans_recur_reg AS "Registered Tenants: Transactions Processed This Month,Recurring",
@@ -691,7 +764,7 @@ CREATE OR REPLACE VIEW _dba_.building_stats_view AS
                 count_trans_onetime AS "Transactions Processed This Month, One Time",
                 amount_trans_onetime AS "Amount Processed This Month, One Time",
                 count_trans_onetime_reg AS "Registered Tenants: Transactions Processed This Month, One Time",
-                amount_trans_onetime_reg AS "Registered Tenats: Amount Processed This Month, One Time",
+                amount_trans_onetime_reg AS "Registered Tenants: Amount Processed This Month, One Time",
                 count_eft_recur AS "EFT Transactions, Recurring",
                 amount_eft_recur AS "EFT Amount, Recurring",
                 count_eft_recur_reg AS "Registered Tenants: EFT Transactions, Recurring",
