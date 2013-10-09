@@ -24,14 +24,22 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.google.gwt.user.client.Command;
+import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.Image;
 
 import com.pyx4j.entity.shared.IFile;
+import com.pyx4j.gwt.client.upload.FileUploadDialog;
+import com.pyx4j.gwt.client.upload.FileUploadReciver;
 import com.pyx4j.gwt.shared.Dimension;
+import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.widgets.client.Button;
+import com.pyx4j.widgets.client.DropDownPanel;
 import com.pyx4j.widgets.client.ImageSlider;
 import com.pyx4j.widgets.client.ImageSlider.ImageSliderType;
 
 public class NImage<T extends IFile> extends NField<T, ImageSlider, CImage<T>, ImageSlider> implements ImageSlider.ImageSliderDataProvider {
+
+    private static final I18n i18n = I18n.get(NImage.class);
 
     private String imageUrl;
 
@@ -105,7 +113,11 @@ public class NImage<T extends IFile> extends NField<T, ImageSlider, CImage<T>, I
 
     @Override
     public void editImageSet() {
-        // new ImageOrganizer(getCComponent().getImgClass(), getCComponent().getFolderIcons()).show();
+        if (getCComponent().getValue() == null) {
+            showUploadFileDialog();
+        } else {
+            new EditMenu().showRelativeTo(imageSlider.getEditControl());
+        }
     }
 
     @Override
@@ -116,5 +128,39 @@ public class NImage<T extends IFile> extends NField<T, ImageSlider, CImage<T>, I
     @Override
     public ImageSliderType getImageSliderType() {
         return ImageSliderType.single;
+    }
+
+    private void showUploadFileDialog() {
+        new FileUploadDialog<T>(i18n.tr("Upload Image File"), null, getCComponent().getUploadService(), new FileUploadReciver<T>() {
+            @Override
+            public void onUploadComplete(T uploadResponse) {
+                getCComponent().setValue(uploadResponse);
+            }
+        }).show();
+    }
+
+    class EditMenu extends DropDownPanel {
+
+        public EditMenu() {
+            super();
+            FlowPanel mainPanel = new FlowPanel();
+            mainPanel.add(new Button(i18n.tr("Remove"), new Command() {
+
+                @Override
+                public void execute() {
+                    EditMenu.this.hide();
+                    getCComponent().setValue(null);
+                }
+            }));
+            mainPanel.add(new Button(i18n.tr("Upload fromComputer"), new Command() {
+
+                @Override
+                public void execute() {
+                    EditMenu.this.hide();
+                    showUploadFileDialog();
+                }
+            }));
+            setWidget(mainPanel);
+        }
     }
 }

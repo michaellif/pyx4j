@@ -18,11 +18,7 @@ public abstract class CImage<E extends IFile> extends CField<E, NImage<E>> {
 
     private Dimension imageSize;
 
-    private Dimension thumbSize;
-
     private FileURLBuilder<E> imageFileUrlBuilder;
-
-    private FileURLBuilder<E> thumbnailFileUrlBuilder;
 
     private UploadService<E, E> service;
 
@@ -31,7 +27,6 @@ public abstract class CImage<E extends IFile> extends CField<E, NImage<E>> {
     public CImage(Class<E> imgClass) {
         this.imgClass = imgClass;
         this.imageSize = new Dimension(250, 250);
-        this.thumbSize = new Dimension(160, 120);
         setNativeWidget(new NImage<E>(this));
     }
 
@@ -69,20 +64,8 @@ public abstract class CImage<E extends IFile> extends CField<E, NImage<E>> {
         return imageSize;
     }
 
-    public void setThumbSize(int width, int height) {
-        thumbSize = new Dimension(width, height);
-    }
-
-    public Dimension getThumbSize() {
-        return thumbSize;
-    }
-
     public void setImageFileUrlBuilder(FileURLBuilder<E> fileURLBuilder) {
         this.imageFileUrlBuilder = fileURLBuilder;
-    }
-
-    public void setThumbnailFileUrlBuilder(FileURLBuilder<E> fileURLBuilder) {
-        this.thumbnailFileUrlBuilder = fileURLBuilder;
     }
 
     public void setUploadService(UploadService<E, E> service) {

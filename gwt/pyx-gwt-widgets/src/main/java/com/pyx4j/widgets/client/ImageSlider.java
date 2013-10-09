@@ -117,6 +117,10 @@ public class ImageSlider extends LayoutPanel implements IWidget {
         return editable;
     }
 
+    public EditorControlPanel getEditControl() {
+        return editControl;
+    }
+
     class EditorControlPanel extends Label {
 
         public EditorControlPanel() {
