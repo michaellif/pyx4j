@@ -45,7 +45,6 @@ import com.propertyvista.domain.property.asset.FloorplanAmenity;
 import com.propertyvista.domain.settings.ILSConfig.ILSVendor;
 import com.propertyvista.dto.FloorplanDTO;
 import com.propertyvista.portal.rpc.portal.ImageConsts.ImageTarget;
-import com.propertyvista.shared.config.VistaFeatures;
 
 public class FloorplanForm extends CrmEntityForm<FloorplanDTO> {
 
@@ -117,11 +116,6 @@ public class FloorplanForm extends CrmEntityForm<FloorplanDTO> {
         main.setH1(++leftRow, 0, 2, proto().amenities().getMeta().getCaption());
         main.setWidget(++leftRow, 0, 2, inject(proto().amenities(), createAmenitiesListEditor()));
 
-        if (VistaFeatures.instance().yardiIntegration()) {
-            get(proto().name()).setViewable(true);
-            get(proto().bedrooms()).setViewable(true);
-            get(proto().bathrooms()).setViewable(true);
-        }
         return main;
     }
 

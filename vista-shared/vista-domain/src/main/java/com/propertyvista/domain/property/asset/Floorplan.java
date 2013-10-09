@@ -56,7 +56,6 @@ public interface Floorplan extends PolicyNode {
     @Caption(watermark = "e.g. 1bdrm+f")
     IPrimitive<String> name();
 
-    @NotNull
     @Caption(watermark = "e.g. 1 Bedroom, Furnished")
     IPrimitive<String> marketingName();
 

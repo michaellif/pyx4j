@@ -16,8 +16,9 @@ package com.propertyvista.yardi.services;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.yardi.entity.mits.PropertyIDType;
+import com.yardi.entity.mits.Unit;
 import com.yardi.entity.resident.Property;
-import com.yardi.entity.resident.RTCustomer;
 import com.yardi.entity.resident.ResidentTransactions;
 
 import com.pyx4j.commons.Key;
@@ -36,16 +37,16 @@ import com.propertyvista.yardi.merger.UnitsMerger;
 
 public class YardiBuildingProcessor {
 
-    public Building updateBuilding(Key yardiInterfaceId, Property property) throws YardiServiceException {
-        Building building = getBuildingFromProperty(property);
+    public Building updateBuilding(Key yardiInterfaceId, PropertyIDType propertyId) throws YardiServiceException {
+        Building building = getBuildingFromProperty(propertyId);
         building.integrationSystemId().setValue(yardiInterfaceId);
         MappingUtils.ensureCountryOfOperation(building);
         String propertyCode = building.propertyCode().getValue();
         return merge(building, MappingUtils.getBuilding(yardiInterfaceId, propertyCode));
     }
 
-    public AptUnit updateUnit(Building building, RTCustomer rtCustomer) throws YardiServiceException {
-        AptUnit importedUnit = new UnitsMapper().map(rtCustomer);
+    public AptUnit updateUnit(Building building, Unit unit) throws YardiServiceException {
+        AptUnit importedUnit = new UnitsMapper().map(unit);
         if (building.floorplans().getAttachLevel() != AttachLevel.Attached) {
             Persistence.service().retrieveMember(building.floorplans(), AttachLevel.Attached);
         }
@@ -83,9 +84,9 @@ public class YardiBuildingProcessor {
         return units.get(0);
     }
 
-    public Building getBuildingFromProperty(Property property) {
+    public Building getBuildingFromProperty(PropertyIDType propertyId) {
         BuildingsMapper mapper = new BuildingsMapper();
-        return mapper.map(property.getPropertyID().get(0));
+        return mapper.map(propertyId);
     }
 
     public List<Property> getProperties(ResidentTransactions transaction) {

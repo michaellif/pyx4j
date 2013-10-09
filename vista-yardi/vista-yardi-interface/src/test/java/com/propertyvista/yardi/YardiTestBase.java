@@ -49,10 +49,12 @@ import com.propertyvista.test.mock.models.LocationsDataModel;
 import com.propertyvista.test.mock.models.PmcDataModel;
 import com.propertyvista.test.mock.security.PasswordEncryptorFacadeMock;
 import com.propertyvista.yardi.mock.YardiMockServer;
+import com.propertyvista.yardi.mock.stub.YardiMockILSGuestCardStubImpl;
 import com.propertyvista.yardi.mock.stub.YardiMockMaintenanceRequestsStubImpl;
 import com.propertyvista.yardi.mock.stub.YardiMockResidentTransactionsStubImpl;
 import com.propertyvista.yardi.mock.stub.YardiMockSystemBatchesStubImpl;
 import com.propertyvista.yardi.services.YardiResidentTransactionsService;
+import com.propertyvista.yardi.stub.YardiILSGuestCardStub;
 import com.propertyvista.yardi.stub.YardiMaintenanceRequestsStub;
 import com.propertyvista.yardi.stub.YardiResidentTransactionsStub;
 import com.propertyvista.yardi.stub.YardiSystemBatchesStub;
@@ -66,6 +68,7 @@ public class YardiTestBase extends IntegrationTestBase {
         ServerSideFactory.register(YardiResidentTransactionsStub.class, YardiMockResidentTransactionsStubImpl.class);
         ServerSideFactory.register(YardiSystemBatchesStub.class, YardiMockSystemBatchesStubImpl.class);
         ServerSideFactory.register(YardiMaintenanceRequestsStub.class, YardiMockMaintenanceRequestsStubImpl.class);
+        ServerSideFactory.register(YardiILSGuestCardStub.class, YardiMockILSGuestCardStubImpl.class);
         ServerSideFactory.register(PasswordEncryptorFacade.class, PasswordEncryptorFacadeMock.class);
 
         //Init YardiMockServer

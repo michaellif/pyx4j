@@ -37,7 +37,6 @@ import com.propertyvista.domain.property.asset.Floorplan;
 import com.propertyvista.domain.property.asset.FloorplanAmenity;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
-import com.propertyvista.domain.property.asset.unit.occupancy.AptUnitOccupancySegment;
 import com.propertyvista.domain.settings.ILSConfig.ILSVendor;
 import com.propertyvista.domain.settings.ILSVendorConfig;
 import com.propertyvista.ils.kijiji.mapper.dto.ILSBuildingDTO;
@@ -103,8 +102,9 @@ public class ILSKijijiIntegrationAgent {
         critUnit.isNotNull(critUnit.proto()._availableForRent());
         List<AptUnit> units = Persistence.service().query(critUnit);
 
-        // extract floorplans
+        // extract floorplans and build availability map
         Map<Floorplan, ILSFloorplanDTO> fpDtoMap = new HashMap<Floorplan, ILSFloorplanDTO>();
+        final Map<Floorplan, LogicalDate> availMap = new HashMap<Floorplan, LogicalDate>();
         for (AptUnit unit : units) {
             Persistence.service().retrieve(unit.floorplan());
             ILSFloorplanDTO fpDto = fpDtoMap.get(unit.floorplan());
@@ -116,11 +116,17 @@ public class ILSKijijiIntegrationAgent {
                     || (!unit.financial()._marketRent().isNull() && fpDto.minPrice().getValue().compareTo(unit.financial()._marketRent().getValue()) > 0)) {
                 fpDto.minPrice().set(unit.financial()._marketRent());
             }
+            // calculate best availability date for each floorplan
+            LogicalDate bestAvail = availMap.get(unit.floorplan());
+            LogicalDate dateFrom = unit._availableForRent().getValue();
+            if (bestAvail == null || bestAvail.after(dateFrom)) {
+                availMap.put(unit.floorplan(), dateFrom);
+            }
         }
 
         // order by floorplan priorities and truncate if allowed size is exceeded
         List<Floorplan> floorplans = new ArrayList<Floorplan>(fpDtoMap.keySet());
-        floorplans = truncateList(floorplans);
+        floorplans = truncateList(floorplans, availMap);
 
         // rearrange listing by building
         Map<Building, List<ILSFloorplanDTO>> _listing = new HashMap<Building, List<ILSFloorplanDTO>>();
@@ -190,30 +196,10 @@ public class ILSKijijiIntegrationAgent {
         return dto;
     }
 
-    private List<Floorplan> truncateList(List<Floorplan> list) {
+    private List<Floorplan> truncateList(List<Floorplan> list, final Map<Floorplan, LogicalDate> availMap) {
         int maxSize = ilsCfg.maxDailyAds().getValue();
         if (list.size() <= maxSize) {
             return list;
-        }
-
-        // get availability segments
-        final Map<Floorplan, LogicalDate> availMap = new HashMap<Floorplan, LogicalDate>();
-        EntityQueryCriteria<AptUnitOccupancySegment> critAvail = EntityQueryCriteria.create(AptUnitOccupancySegment.class);
-        critAvail.in(critAvail.proto().unit().floorplan(), list);
-        critAvail.eq(critAvail.proto().status(), AptUnitOccupancySegment.Status.available);
-        critAvail.eq(critAvail.proto().dateTo(), OccupancyFacade.MAX_DATE);
-        for (AptUnitOccupancySegment avail : Persistence.service().query(critAvail)) {
-            Persistence.service().retrieve(avail.unit());
-            Persistence.service().retrieve(avail.unit().floorplan());
-
-            LogicalDate curAvail = availMap.get(avail.unit().floorplan());
-            LogicalDate dateFrom = avail.dateFrom().getValue();
-            if (dateFrom == null) {
-                dateFrom = new LogicalDate(SystemDateManager.getDate());
-            }
-            if (curAvail == null || curAvail.after(dateFrom)) {
-                availMap.put(avail.unit().floorplan(), dateFrom);
-            }
         }
 
         // sort by total score, highest first

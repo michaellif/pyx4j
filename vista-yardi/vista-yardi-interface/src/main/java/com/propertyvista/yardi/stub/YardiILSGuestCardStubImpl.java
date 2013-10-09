@@ -29,6 +29,7 @@ import com.propertyvista.biz.system.YardiServiceException;
 import com.propertyvista.domain.settings.PmcYardiCredential;
 import com.propertyvista.server.config.DevYardiCredentials;
 import com.propertyvista.yardi.YardiConstants;
+import com.propertyvista.yardi.YardiConstants.Action;
 import com.propertyvista.yardi.YardiInterface;
 import com.propertyvista.yardi.bean.Messages;
 
@@ -39,12 +40,18 @@ public class YardiILSGuestCardStubImpl extends AbstractYardiStub implements Yard
     @Override
     public PhysicalProperty getPropertyMarketingInfo(PmcYardiCredential yc, String propertyId) throws YardiServiceException {
         try {
-            boolean testDev = true;
-            if (testDev) {
-                yc = DevYardiCredentials.getTestPmcYardiCredential(); //-> REMOVE
-            }
+            init(Action.GetPropertyMarketingInfo);
 
             UnitAvailability_Login request = new UnitAvailability_Login();
+            request.setInterfaceEntity(YardiConstants.ILS_INTERFACE_ENTITY);
+
+            boolean testDev = false; // "true" to access local yardi environment
+            if (testDev) {
+                yc = DevYardiCredentials.getTestPmcYardiCredential();
+                propertyId = "gran0002";
+                request.setInterfaceEntity("Lead2Lease");
+            }
+
             request.setUserName(yc.username().getValue());
             //request.setPassword(ServerSideFactory.create(PasswordEncryptorFacade.class).decryptPassword(yc.password()));
             request.setPassword(yc.password().number().getValue());
@@ -52,14 +59,9 @@ public class YardiILSGuestCardStubImpl extends AbstractYardiStub implements Yard
             request.setServerName(yc.serverName().getValue());
             request.setDatabase(yc.database().getValue());
             request.setPlatform(yc.platform().getValue().name());
-            request.setInterfaceEntity(YardiConstants.ILS_INTERFACE_ENTITY);
             request.setInterfaceLicense(YardiLicense.getInterfaceLicense(YardiInterface.ILSGuestCard, yc));
-
-            if (testDev) {
-                request.setInterfaceEntity("Lead2Lease"); //-> REMOVE
-            }
-
             request.setYardiPropertyId(propertyId);
+
             UnitAvailability_LoginResponse response = getILSGuestCardService(yc).unitAvailability_Login(request);
             if (response.getUnitAvailability_LoginResult() == null) {
                 throw new Error("Received response is null");

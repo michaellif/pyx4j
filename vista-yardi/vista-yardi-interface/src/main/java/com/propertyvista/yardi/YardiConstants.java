@@ -22,6 +22,8 @@ public class YardiConstants {
 
         GetResidentTransactions_ByApplicationDate, GetResidentLeaseCharges, GetResidentsLeaseCharges,
 
+        GetPropertyMarketingInfo,
+
         ExportChartOfAccounts, GetVendors, GetVendor, OpenReceiptBatch, AddReceiptsToBatch, PostReceiptBatch, CancelReceiptBatch,
 
         GetServiceRequests, CreateOrEditServiceRequests, GetCustomValues

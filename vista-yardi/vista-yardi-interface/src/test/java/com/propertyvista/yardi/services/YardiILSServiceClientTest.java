@@ -57,9 +57,11 @@ public class YardiILSServiceClientTest {
         PhysicalProperty property = null;
         try {
             if (true) {
+                String prCode = "prvista1";
                 YardiILSGuestCardStub stub = ServerSideFactory.create(YardiILSGuestCardStub.class);
-                property = stub.getPropertyMarketingInfo(yc, "gran0002");
+                property = stub.getPropertyMarketingInfo(yc, prCode);
                 for (Property building : property.getProperty()) {
+                    log.info(building.getPropertyID().getIdentification().getPrimaryID() + ": " + building.getILSUnit().size() + " units");
                     log.info(print(building, "0005"));
                 }
             } else {
