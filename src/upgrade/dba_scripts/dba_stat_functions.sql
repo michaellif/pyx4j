@@ -3,7 +3,7 @@
 ***
 ***             @version $Revision$ ($Author$) $Date$
 ***
-***             Per-building statistics functions and views
+***             Per-building statistics tables, functions and views
 ***
 ***     ======================================================================================================================
 **/
@@ -18,7 +18,8 @@ CREATE OR REPLACE FUNCTION _dba_.get_building_units(    v_schema_name   TEXT,
                                                         OUT pct_reg_units NUMERIC(4,1),
                                                         OUT total_tenants  INT,
                                                         OUT reg_tenants    INT,
-                                                        OUT pct_reg_tenants NUMERIC(4,1))
+                                                        OUT pct_reg_tenants NUMERIC(4,1),
+                                                        OUT tenant_logins_this_week INT)
 AS
 $$      
 BEGIN
@@ -82,8 +83,29 @@ BEGIN
                 ||'AND  c.registered_in_portal '
                 INTO reg_tenants;
                 
-        pct_reg_units := ROUND(reg_units*100/total_units,1);
-        pct_reg_tenants := ROUND(reg_tenants*100/total_tenants,1);
+        IF (reg_tenants != 0)
+        THEN
+                EXECUTE 'SELECT  COUNT(a.id) '
+                        ||'FROM _admin_.audit_record a '
+                        ||'JOIN '||v_schema_name||'.customer_user cu ON (a.usr = cu.id) '
+                        ||'JOIN '||v_schema_name||'.customer c ON (c.user_id = cu.id) '
+                        ||'JOIN '||v_schema_name||'.lease_participant lp ON (lp.customer = c.id) '
+                        ||'JOIN '||v_schema_name||'.lease l ON (lp.lease = l.id) '
+                        ||'JOIN '||v_schema_name||'.apt_unit au ON (l.unit = au.id) '
+                        ||'JOIN '||v_schema_name||'.building b ON (au.building = b.id) '
+                        ||'WHERE   a.event = ''Login'' '
+                        ||'AND     DATE_TRUNC(''week'',a.created) = DATE_TRUNC(''week'',current_date) '
+                        ||'AND     l.status = ''Active'' '
+                        INTO  tenant_logins_this_week;
+                        
+        ELSE
+                tenant_logins_this_week := 0;
+                
+        END IF;
+                
+                
+        pct_reg_units := ROUND(reg_units::numeric(4,1)*100/total_units,1);
+        pct_reg_tenants := ROUND(reg_tenants::numeric(4,1)*100/total_tenants,1);
 END;
 $$
 LANGUAGE plpgsql VOLATILE;
@@ -159,7 +181,7 @@ BEGIN
                         ||'             WHERE   DATE_TRUNC(''month'',p.finalize_date) = DATE_TRUNC(''month'',current_date) '
                         ||'             AND     p.payment_status = ''Cleared'' '
                         ||'             AND     pm.id_discriminator = ''LeasePaymentMethod'' '
-                        ||'             AND     b.property_code = '''||v_property_code||''' ) '
+                        ||'             AND     b.property_code = '''||v_property_code||''' )'
                         ||'SELECT       COALESCE(a.count_trans_recur,0) AS count_trans_recur,COALESCE(a.amount_trans_recur,0) AS amount_trans_recur, '
                         ||'             COALESCE(b.count_trans_onetime,0) AS count_trans_onetime, COALESCE(b.amount_trans_onetime,0) AS amount_trans_onetime, '
                         ||'             COALESCE(c.count_eft_recur,0) AS count_eft_recur,COALESCE(c.amount_eft_recur,0) AS amount_eft_recur,'
@@ -364,7 +386,7 @@ BEGIN
                         ||'             AND     p.payment_status = ''Cleared'' '
                         ||'             AND     pm.id_discriminator = ''LeasePaymentMethod'' '
                         ||'             AND     b.property_code = '''||v_property_code||''' '
-                        ||'             AND     c.registered_in_portal ) '
+                        ||'             AND     c.registered_in_portal )'
                         ||'SELECT       COALESCE(a.count_trans_recur,0) AS count_trans_recur,COALESCE(a.amount_trans_recur,0) AS amount_trans_recur, '
                         ||'             COALESCE(b.count_trans_onetime,0) AS count_trans_onetime, COALESCE(b.amount_trans_onetime,0) AS amount_trans_onetime, '
                         ||'             COALESCE(c.count_eft_recur,0) AS count_eft_recur,COALESCE(c.amount_eft_recur,0) AS amount_eft_recur,'
@@ -493,5 +515,229 @@ BEGIN
 END;
 $$
 LANGUAGE plpgsql VOLATILE;             
-                  
+
+CREATE OR REPLACE FUNCTION _dba_.get_building_maintenance(      v_schema_name   TEXT,
+                                                                v_property_code TEXT,
+                                                                OUT total_maint_requests        INT,
+                                                                OUT maint_requests_this_month   INT,
+                                                                OUT tenant_maint_requests       INT,
+                                                                OUT tenant_maint_requests_this_month    INT)
+AS
+$$
+BEGIN
+
+        EXECUTE 'SELECT COUNT(m.id) '
+                ||'FROM '||v_schema_name||'.maintenance_request m '
+                ||'JOIN '||v_schema_name||'.building b ON (b.id = m.building) '
+                ||'WHERE b.property_code = '''||v_property_code||''' '
+                INTO total_maint_requests;
+                
+        IF (total_maint_requests != 0)
+        THEN
+               
+               EXECUTE 'SELECT COUNT(m.id) '
+                ||'FROM '||v_schema_name||'.maintenance_request m '
+                ||'JOIN '||v_schema_name||'.building b ON (b.id = m.building) '
+                ||'WHERE b.property_code = '''||v_property_code||''' '
+                ||'AND DATE_TRUNC(''month'',m.submitted) = DATE_TRUNC(''month'',current_date) '
+                INTO maint_requests_this_month; 
+                
+                
+                EXECUTE 'SELECT COUNT(m.id) '
+                ||'FROM '||v_schema_name||'.maintenance_request m '
+                ||'JOIN '||v_schema_name||'.building b ON (b.id = m.building) '
+                ||'WHERE b.property_code = '''||v_property_code||''' '
+                ||'AND m.reporter_discriminator = ''Tenant'' '
+                INTO tenant_maint_requests;  
+                
+                EXECUTE 'SELECT COUNT(m.id) '
+                ||'FROM '||v_schema_name||'.maintenance_request m '
+                ||'JOIN '||v_schema_name||'.building b ON (b.id = m.building) '
+                ||'WHERE b.property_code = '''||v_property_code||''' '
+                ||'AND m.reporter_discriminator = ''Tenant'' '
+                ||'AND DATE_TRUNC(''month'',m.submitted) = DATE_TRUNC(''month'',current_date) '
+                INTO tenant_maint_requests_this_month;  
+        ELSE
+              
+                maint_requests_this_month := 0;
+                tenant_maint_requests := 0;
+                tenant_maint_requests_this_month := 0;
+                
+        END IF;
+END;
+$$
+LANGUAGE plpgsql VOLATILE;
+
+
+CREATE TABLE _dba_.building_stats 
+(
+        pmc                             VARCHAR(150),
+        property_code                   VARCHAR(20),
+        stats_week                      DATE,
+        total_units                     INT,
+        active_leases                   INT,
+        avg_tpu                         NUMERIC(4,1),
+        reg_units                       INT,
+        pct_reg_units                   NUMERIC(4,1),
+        total_tenants                   INT,
+        reg_tenants                     INT,
+        pct_reg_tenants                 NUMERIC(4,1),
+        tenant_logins_this_week         INT,
+        count_tenants_epay              INT,
+        count_trans_recur               INT,
+        amount_trans_recur              NUMERIC(18,2),
+        count_trans_onetime             INT,
+        amount_trans_onetime            NUMERIC(18,2),
+        count_eft_recur                 INT,
+        amount_eft_recur                NUMERIC(18,2),
+        count_eft_onetime               INT,
+        amount_eft_onetime              NUMERIC(18,2),
+        count_direct_debit              INT,
+        amount_direct_debit             NUMERIC(18,2),
+        count_interac                   INT,
+        amount_interac                  NUMERIC(18,2),
+        count_visa_recur                INT,
+        amount_visa_recur               NUMERIC(18,2),
+        count_visa_onetime              INT,
+        amount_visa_onetime             NUMERIC(18,2),
+        count_mc_recur                  INT,
+        amount_mc_recur                 NUMERIC(18,2),
+        count_mc_onetime                INT,
+        amount_mc_onetime               NUMERIC(18,2),
+        count_visadebit_recur           INT,
+        amount_visadebit_recur          NUMERIC(18,2),
+        count_visadebit_onetime         INT,
+        amount_visadebit_onetime        NUMERIC(18,2),
+        count_tenants_epay_reg          INT,
+        count_trans_recur_reg           INT,
+        amount_trans_recur_reg          NUMERIC(18,2),
+        count_trans_onetime_reg         INT,
+        amount_trans_onetime_reg        NUMERIC(18,2),
+        count_eft_recur_reg             INT,
+        amount_eft_recur_reg            NUMERIC(18,2),
+        count_eft_onetime_reg           INT,
+        amount_eft_onetime_reg          NUMERIC(18,2),
+        count_direct_debit_reg          INT,
+        amount_direct_debit_reg         NUMERIC(18,2),
+        count_interac_reg               INT,
+        amount_interac_reg              NUMERIC(18,2),
+        count_visa_recur_reg            INT,
+        amount_visa_recur_reg           NUMERIC(18,2),
+        count_visa_onetime_reg          INT,
+        amount_visa_onetime_reg         NUMERIC(18,2),
+        count_mc_recur_reg              INT,
+        amount_mc_recur_reg             NUMERIC(18,2),
+        count_mc_onetime_reg            INT,
+        amount_mc_onetime_reg           NUMERIC(18,2),
+        count_visadebit_recur_reg       INT,
+        amount_visadebit_recur_reg      NUMERIC(18,2),
+        count_visadebit_onetime_reg     INT,
+        amount_visadebit_onetime_reg    NUMERIC(18,2),
+        total_maint_requests            INT,
+        maint_requests_this_month       INT,
+        tenant_maint_requests           INT,
+        tenant_maint_requests_this_month  INT );
+        
+
+
+CREATE OR REPLACE FUNCTION _dba_.populate_building_stats(v_schema_name text) RETURNS VOID AS
+$$
+BEGIN
+        
+        EXECUTE 'INSERT INTO _dba_.building_stats (pmc,property_code,stats_week,total_units,active_leases,'
+                ||'avg_tpu,reg_units,pct_reg_units,total_tenants,reg_tenants,pct_reg_tenants,tenant_logins_this_week,'
+                ||'count_tenants_epay,count_trans_recur,amount_trans_recur,count_trans_onetime,amount_trans_onetime,'
+                ||'count_eft_recur,amount_eft_recur,count_eft_onetime,amount_eft_onetime,count_direct_debit,'
+                ||'amount_direct_debit,count_interac,amount_interac,count_visa_recur,amount_visa_recur,count_visa_onetime,'
+                ||'amount_visa_onetime,count_mc_recur,amount_mc_recur,count_mc_onetime,amount_mc_onetime,'
+                ||'count_visadebit_recur,amount_visadebit_recur,count_visadebit_onetime,amount_visadebit_onetime,'
+                ||'count_tenants_epay_reg,count_trans_recur_reg,amount_trans_recur_reg,count_trans_onetime_reg,'
+                ||'amount_trans_onetime_reg,count_eft_recur_reg,amount_eft_recur_reg,count_eft_onetime_reg,'
+                ||'amount_eft_onetime_reg,count_direct_debit_reg,amount_direct_debit_reg,count_interac_reg,'
+                ||'amount_interac_reg,count_visa_recur_reg,amount_visa_recur_reg,count_visa_onetime_reg,'
+                ||'amount_visa_onetime_reg,count_mc_recur_reg,amount_mc_recur_reg,count_mc_onetime_reg,amount_mc_onetime_reg,'
+                ||'count_visadebit_recur_reg,amount_visadebit_recur_reg,count_visadebit_onetime_reg,amount_visadebit_onetime_reg,'
+                ||'total_maint_requests,maint_requests_this_month,tenant_maint_requests,tenant_maint_requests_this_month) '
+                ||'(SELECT '''||v_schema_name||''',property_code,DATE_TRUNC(''week'',current_date),'    
+                ||'     (_dba_.get_building_units('''||v_schema_name||''',property_code)).*, '
+                ||'     (_dba_.get_building_transactions('''||v_schema_name||''',property_code)).*,'
+                ||'     (_dba_.get_building_transactions_reg('''||v_schema_name||''',property_code)).*,'
+                ||'     (_dba_.get_building_maintenance('''||v_schema_name||''',property_code)).* '
+                ||'FROM '||v_schema_name||'.building b '
+                ||'WHERE NOT b.suspended) ';
+
+END;
+$$
+LANGUAGE plpgsql VOLATILE;
+
+CREATE OR REPLACE VIEW _dba_.building_stats_view AS
+(
+        SELECT  pmc AS "PMC",property_code AS "Property Code",
+                total_units AS "Total Units",
+                active_leases AS "Active Leases",
+                avg_tpu AS "Average Tenats per Unit",
+                reg_units AS "Units with Registered Tenants",
+                pct_reg_units AS "% Units with Registered Tenants",
+                total_tenants AS "Total Tenants",
+                reg_tenants AS "Registered Tenants",
+                pct_reg_tenants AS "% Registered Tenants",
+                tenant_logins_this_week AS "Tenants Logins This Week",
+                count_tenants_epay AS "Tenants Using Electronic Payments",
+                count_tenants_epay_reg AS "Registered Tenants Using Electronic Payments",
+                count_trans_recur AS "Transactions Processed This Month, Recurring",
+                amount_trans_recur AS "Amount Processed This Month, Recurring",
+                count_trans_recur_reg AS "Registered Tenants: Transactions Processed This Month,Recurring",
+                amount_trans_recur_reg AS "Registered Tenants: Amount Processed This Month, Recurring",
+                count_trans_onetime AS "Transactions Processed This Month, One Time",
+                amount_trans_onetime AS "Amount Processed This Month, One Time",
+                count_trans_onetime_reg AS "Registered Tenants: Transactions Processed This Month, One Time",
+                amount_trans_onetime_reg AS "Registered Tenats: Amount Processed This Month, One Time",
+                count_eft_recur AS "EFT Transactions, Recurring",
+                amount_eft_recur AS "EFT Amount, Recurring",
+                count_eft_recur_reg AS "Registered Tenants: EFT Transactions, Recurring",
+                amount_eft_recur_reg AS "Registered Tenants: EFT Amount, Recurring",
+                count_eft_onetime AS "EFT Transactions, One Time",
+                amount_eft_onetime AS "EFT Amount, One Time",
+                count_eft_onetime_reg AS "Registered Tenants: EFT Transactions, One Time",
+                amount_eft_onetime_reg AS "Registered Tenants: EFT Amount, One Time",
+                count_direct_debit AS "Direct Banking Transactions",
+                amount_direct_debit AS "Direct Banking Amount",
+                count_direct_debit_reg AS "Registered Tenants: Direct Banking Transactions",
+                amount_direct_debit_reg AS "Registered Tenants: Direct Banking Amount",
+                count_interac AS "Interac Transactions",
+                amount_interac AS "Interac Amount",
+                count_interac_reg AS "Registered Tenants: Interac Transactions",
+                amount_interac_reg AS "Registered Tenants: Interac Amount",
+                count_visa_recur AS "Visa Transactions, Recurring",
+                amount_visa_recur AS "Visa Amount, Recurring",
+                count_visa_recur_reg AS "Registered Tenants: Visa Transactions, Recurring",
+                amount_visa_recur_reg AS "Registered Tenants: Visa Amount, Recurring",
+                count_visa_onetime AS "Visa Transactions, One Time",
+                amount_visa_onetime AS "Visa Amount, One Time",
+                count_visa_onetime_reg AS "Registered Tenants: Visa Transactions, One Time",
+                amount_visa_onetime_reg AS "Registered Tenants: Visa Amount, One Time",
+                count_mc_recur  AS "MasterCard Transactions, Recurring",
+                amount_mc_recur AS "MasterCard Amount, Recurring",
+                count_mc_recur_reg  AS "Registered Tenants: MasterCard Transactions, Recurring",
+                amount_mc_recur_reg AS "Registered Tenants: MasterCard Amount, Recurring",
+                count_mc_onetime AS "MasterCard Transactions, One Time",
+                amount_mc_onetime AS "MasterCard Amount, One Time",
+                count_mc_onetime_reg AS "Registered Tenants: MasterCard Transactions, One Time",
+                amount_mc_onetime_reg AS "Registered Tenants: MasterCard Amount, One Time",
+                count_visadebit_recur AS "Visa Debit Transactions, Recurring",
+                amount_visadebit_recur AS "Visa Debit Amount, Recurring",
+                count_visadebit_recur_reg AS "Registered Tenants: Visa Debit Transactions, Recurring",
+                amount_visadebit_recur_reg AS "Registered Tenants: Visa Debit Amount, Recurring",
+                count_visadebit_onetime AS "Visa Debit Transactions, One Time",
+                amount_visadebit_onetime AS "Visa Debit Amount, One Time",
+                count_visadebit_onetime_reg AS "Registered Tenants: Visa Debit Transactions, One Time",
+                amount_visadebit_onetime_reg AS "Registered Tenants: Visa Debit Amount, One Time",
+                total_maint_requests AS "Total Maintenance Requests",
+                maint_requests_this_month AS "Maintenance Requests This Month",
+                tenant_maint_requests AS "Total Tenant Maintenance Requests",
+                tenant_maint_requests_this_month AS "Tenant Maintenance Requests This Month"
+        FROM    _dba_.building_stats
+        WHERE   reg_tenants > 0 
+        AND     stats_week = DATE_TRUNC('week',current_date)
+ );
         
