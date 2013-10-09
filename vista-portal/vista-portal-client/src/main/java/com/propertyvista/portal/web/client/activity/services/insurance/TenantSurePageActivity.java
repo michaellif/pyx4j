@@ -15,6 +15,8 @@ package com.propertyvista.portal.web.client.activity.services.insurance;
 
 import com.google.gwt.core.client.GWT;
 
+import com.pyx4j.rpc.client.DefaultAsyncCallback;
+import com.pyx4j.rpc.shared.VoidSerializable;
 import com.pyx4j.site.rpc.AppPlace;
 
 import com.propertyvista.portal.rpc.portal.web.dto.insurance.TenantSureInsurancePolicyDTO;
@@ -31,14 +33,42 @@ public class TenantSurePageActivity extends AbstractEditorActivity<TenantSureIns
 
     @Override
     public void sendCertificate(String email) {
-        // TODO Auto-generated method stub
+        ((TenantSureInsurancePolicyCrudService) getService()).sendCertificate(new DefaultAsyncCallback<String>() {
+            @Override
+            public void onSuccess(String result) {
+                ((TenantSurePageView) getView()).acknowledgeSentCertificateSuccesfully(result);
+            }
+        }, email);
+    }
 
+    @Override
+    public void cancelTenantSure() {
+        ((TenantSureInsurancePolicyCrudService) getService()).cancelTenantSure(new DefaultAsyncCallback<VoidSerializable>() {
+            @Override
+            public void onSuccess(VoidSerializable result) {
+                TenantSurePageActivity.this.populate();
+            }
+        });
+    }
+
+    @Override
+    public void reinstate() {
+        ((TenantSureInsurancePolicyCrudService) getService()).reinstate(new DefaultAsyncCallback<VoidSerializable>() {
+            @Override
+            public void onSuccess(VoidSerializable result) {
+                TenantSurePageActivity.this.populate();
+            }
+        });
+    }
+
+    @Override
+    public void makeAClaim() {
+        ((TenantSurePageView) getView()).displayMakeAClaimDialog();
     }
 
     @Override
     public void updateCreditCardDetails() {
         // TODO Auto-generated method stub
-
     }
 
     @Override
@@ -50,25 +80,6 @@ public class TenantSurePageActivity extends AbstractEditorActivity<TenantSureIns
     @Override
     public void viewAboutTenantSure() {
         // TODO Auto-generated method stub
-
-    }
-
-    @Override
-    public void cancelTenantSure() {
-        // TODO Auto-generated method stub
-
-    }
-
-    @Override
-    public void reinstate() {
-        // TODO Auto-generated method stub
-
-    }
-
-    @Override
-    public void makeAClaim() {
-        // TODO Auto-generated method stub
-
     }
 
 }

@@ -38,4 +38,6 @@ public interface TenantSurePageView extends IEditorView<TenantSureInsurancePolic
 
     void displayMakeAClaimDialog();
 
+    void acknowledgeSentCertificateSuccesfully(String email);
+
 }

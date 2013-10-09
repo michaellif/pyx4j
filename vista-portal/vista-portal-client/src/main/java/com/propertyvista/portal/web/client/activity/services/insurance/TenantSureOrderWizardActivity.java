@@ -21,7 +21,7 @@ import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.rpc.AppPlace;
 
 import com.propertyvista.domain.contact.AddressSimple;
-import com.propertyvista.portal.rpc.portal.PortalSiteMap.Resident.Financial.Payment;
+import com.propertyvista.portal.rpc.portal.PortalSiteMap;
 import com.propertyvista.portal.rpc.portal.web.dto.insurance.TenantSureCoverageDTO;
 import com.propertyvista.portal.rpc.portal.web.dto.insurance.TenantSureInsurancePolicyDTO;
 import com.propertyvista.portal.rpc.portal.web.dto.insurance.TenantSureQuoteDTO;
@@ -39,22 +39,15 @@ public class TenantSureOrderWizardActivity extends AbstractWizardCrudActivity<Te
 
     @Override
     protected void onFinish(Key result) {
-        ((TenantSureInsurancePolicyCrudService) getService()).create(new DefaultAsyncCallback<Key>() {
-            @Override
-            public void onSuccess(Key result) {
-                AppSite.getPlaceController().goTo(new Payment.PaymentSubmitting(result));
-            }
-        }, getView().getValue());
-
+        AppSite.getPlaceController().goTo(new PortalSiteMap.Resident.ResidentServices.TenantInsurance.TenantSure.TenantSureWizardConfirmation());
     }
 
     @Override
     public void sendQuoteDetailsEmail() {
         ((TenantSureInsurancePolicyCrudService) getService()).sendQuoteDetails(new DefaultAsyncCallback<String>() {
-
             @Override
             public void onSuccess(String email) {
-                ((TenantSureOrderWizardView) getView()).onSendQuoteDetailsSucess(email);
+                ((TenantSureOrderWizardView) getView()).acknowledgeSendQuoteDetailsSucess(email);
             }
         }, getView().getValue().quote().quoteId().getValue());
     }

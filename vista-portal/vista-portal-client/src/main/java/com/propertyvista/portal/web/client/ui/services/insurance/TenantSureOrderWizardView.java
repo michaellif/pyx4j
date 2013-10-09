@@ -36,6 +36,6 @@ public interface TenantSureOrderWizardView extends IWizardView<TenantSureInsuran
 
     void setBillingAddress(AddressSimple billingAddress);
 
-    void onSendQuoteDetailsSucess(String email);
+    void acknowledgeSendQuoteDetailsSucess(String email);
 
 }

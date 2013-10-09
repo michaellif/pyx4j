@@ -37,4 +37,9 @@ public class TenantSurePageViewImpl extends AbstractEditorView<TenantSureInsuran
         MessageDialog.info(i18n.tr("To make a claim please call {0} at {1}", TenantSureConstants.TENANTSURE_LEGAL_NAME,
                 TenantSureConstants.TENANTSURE_PHONE_NUMBER));
     }
+
+    @Override
+    public void acknowledgeSentCertificateSuccesfully(String email) {
+        MessageDialog.info(i18n.tr("Your insurance certificate was sent to {0}.", email));
+    }
 }
