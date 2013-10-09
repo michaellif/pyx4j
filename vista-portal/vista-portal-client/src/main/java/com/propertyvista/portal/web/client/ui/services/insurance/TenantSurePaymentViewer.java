@@ -57,7 +57,7 @@ public class TenantSurePaymentViewer extends CViewer<TenantSurePaymentDTO> {
         BasicFlexFormPanel contentPanel = new BasicFlexFormPanel();
         int outerRow = -1;
 
-        if (payment != null) {
+        if (payment != null && !payment.isNull()) {
             int innerRow = -1;
             BasicFlexFormPanel paymentBreakdownPanel = new BasicFlexFormPanel();
             for (TenantSurePaymentItemDTO paymentItem : payment.paymentBreakdown()) {
@@ -74,13 +74,18 @@ public class TenantSurePaymentViewer extends CViewer<TenantSurePaymentDTO> {
 
             if (!payment.paymentDate().isNull()) {
                 Label nextPaymentDateLabel = new Label();
-                nextPaymentDateLabel.getElement().getStyle().setWidth(100, Unit.PCT);
-                nextPaymentDateLabel.getElement().getStyle().setTextAlign(TextAlign.RIGHT);
-                nextPaymentDateLabel.setText(i18n.tr("Next Payment Date: {0}", dateFormat.format(payment.paymentDate().getValue())));
+                nextPaymentDateLabel.setText(i18n.tr("Payment Date: {0}", dateFormat.format(payment.paymentDate().getValue())));
 
                 contentPanel.setWidget(++outerRow, 0, new HTML("&nbsp;"));
                 contentPanel.setWidget(++outerRow, 0, nextPaymentDateLabel);
             }
+        } else {
+            Label noneLabel = new Label();
+            noneLabel.getElement().getStyle().setWidth(100, Unit.PCT);
+            noneLabel.getElement().getStyle().setTextAlign(TextAlign.CENTER);
+            noneLabel.setText(i18n.tr("None"));
+            contentPanel.setWidget(0, 0, noneLabel);
+
         }
 
         return contentPanel;

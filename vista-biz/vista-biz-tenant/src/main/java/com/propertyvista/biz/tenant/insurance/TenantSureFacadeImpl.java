@@ -357,6 +357,11 @@ public class TenantSureFacadeImpl implements TenantSureFacade {
                         "Your insurance has been cancelled and will expire on {0,date,short}",
                         insuranceTenantSure.certificate().expiryDate().getValue()
                 ));//@formatter:on
+                status.isCancelled().setValue(true);
+
+                // TODO not sure it's supposed to be here, i think 'TenantSurePayments' shouldn't return values related to next payment if cancelled
+                // clear next payment
+                status.nextPaymentDetails().set(null);
             }
             status.messages().add(message);
 

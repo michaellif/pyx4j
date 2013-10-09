@@ -108,8 +108,8 @@ public class TenantSureOrderWizard extends CPortalEntityWizard<TenantSureInsuran
         panel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().tenantSureCoverageRequest().tenantName())).build());
         panel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().tenantSureCoverageRequest().tenantPhone())).build());
         panel.setWidget(++row, 0, personalInforReferenceLinks = new TenantSure2HighCourtReferenceLinks());
-        personalInforReferenceLinks.setCompensationDisclosureStatement(TenantSureConstants.HIGHCOURT_PARTNERS_COMPENSATION_DISCLOSURE_STATEMENT_HREF);
-        personalInforReferenceLinks.setPrivacyPolcyAddress(TenantSureConstants.HIGHCOURT_PARTNERS_PRIVACY_POLICY_HREF);
+        personalInforReferenceLinks.setCompensationDisclosureStatementHref(TenantSureConstants.HIGHCOURT_PARTNERS_COMPENSATION_DISCLOSURE_STATEMENT_HREF);
+        personalInforReferenceLinks.setPrivacyPolcyHref(TenantSureConstants.HIGHCOURT_PARTNERS_PRIVACY_POLICY_HREF);
 
         return panel;
     }

@@ -321,7 +321,7 @@ public class PortalWebTheme extends Theme {
         addTheme(new ExtraGadgetsTheme());
         addTheme(new EntityViewTheme());
         addTheme(new TenantInsuranceTheme());
-
+        addTheme(new TenantSureTheme());
     }
 
     private void initBackground() {

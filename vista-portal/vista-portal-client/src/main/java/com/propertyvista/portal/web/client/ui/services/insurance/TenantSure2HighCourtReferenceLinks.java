@@ -56,11 +56,11 @@ public class TenantSure2HighCourtReferenceLinks extends Composite {
 
     }
 
-    public final void setPrivacyPolcyAddress(String href) {
+    public final void setPrivacyPolcyHref(String href) {
         privacyPolicyAnchor.setHref(href);
     }
 
-    public final void setCompensationDisclosureStatement(String href) {
+    public final void setCompensationDisclosureStatementHref(String href) {
         compensationDisclosureStatementAnchor.setHref(href);
     }
 

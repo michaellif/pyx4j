@@ -24,6 +24,7 @@ import com.propertyvista.portal.web.client.resources.tenantsure.TenantSureResour
 public class TenantSureTheme extends Theme {
 
     public enum StyleName implements IStyleName {//@formatter:off
+        
         TenantSureDecoratorPanel,
         TenantSureDecoratorHeader,
         TenantSureContentPanel, 
@@ -42,13 +43,17 @@ public class TenantSureTheme extends Theme {
         TSPurchaseViewError, 
         TSPaymentAmount,
         
-        TenantSureAboutContactInfo
+        TenantSureAboutContactInfo,
+        
+        TenantSureMessages,
+        TenantSureMessage
         
     }//@formatter:on
 
     public TenantSureTheme() {
         initDecoratorStyles();
         initTenantSurePurchaseViewStyles();
+        initTenantSureManagementViewStyles();
         initTenantSureAboutViewStyles();
         initSureFaqViewStyles();
         initOther();
@@ -143,6 +148,19 @@ public class TenantSureTheme extends Theme {
             addStyle(style);
         }
 
+    }
+
+    private void initTenantSureManagementViewStyles() {
+        Style style = null;
+
+        style = new Style(".", StyleName.TenantSureMessages.name());
+        style.addProperty("margin-top", "30px");
+        style.addProperty("margin-bottom", "30px");
+        style.addProperty("text-align", "center");
+        addStyle(style);
+
+        style = new Style(".", StyleName.TenantSureMessage.name());
+        addStyle(style);
     }
 
     public void initTenantSureAboutViewStyles() {

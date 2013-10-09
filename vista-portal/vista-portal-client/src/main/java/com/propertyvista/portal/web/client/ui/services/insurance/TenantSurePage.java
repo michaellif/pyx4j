@@ -37,10 +37,12 @@ import com.pyx4j.widgets.client.Button.ButtonMenuBar;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
 
 import com.propertyvista.common.client.ui.components.tenantinsurance.MoneyComboBox;
+import com.propertyvista.domain.tenant.insurance.TenantSureConstants;
 import com.propertyvista.portal.rpc.portal.web.dto.insurance.TenantSureInsurancePolicyDTO;
 import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.tenantsure.TenantSureMessageDTO;
 import com.propertyvista.portal.web.client.resources.tenantsure.TenantSureResources;
 import com.propertyvista.portal.web.client.themes.TenantInsuranceTheme;
+import com.propertyvista.portal.web.client.themes.TenantSureTheme;
 import com.propertyvista.portal.web.client.ui.CPortalEntityForm;
 import com.propertyvista.portal.web.client.ui.services.insurance.TenantSurePageView.TenantSurePagePresenter;
 import com.propertyvista.portal.web.client.ui.util.decorators.FormDecoratorBuilder;
@@ -90,6 +92,11 @@ public class TenantSurePage extends CPortalEntityForm<TenantSureInsurancePolicyD
         mainPanel.setWidget(++row, 0, inject(proto().nextPaymentDetails(), new TenantSurePaymentViewer()));
 
         mainPanel.setWidget(++row, 0, inject(proto().messages(), new TenantSureMessagesViewer()));
+
+        TenantSure2HighCourtReferenceLinks highCourtLinks = new TenantSure2HighCourtReferenceLinks();
+        highCourtLinks.setCompensationDisclosureStatementHref(TenantSureConstants.HIGHCOURT_PARTNERS_COMPENSATION_DISCLOSURE_STATEMENT_HREF);
+        highCourtLinks.setPrivacyPolcyHref(TenantSureConstants.HIGHCOURT_PARTNERS_PRIVACY_POLICY_HREF);
+        mainPanel.setWidget(++row, 0, highCourtLinks);
         return mainPanel;
     }
 
@@ -100,11 +107,10 @@ public class TenantSurePage extends CPortalEntityForm<TenantSureInsurancePolicyD
     @Override
     protected void onValueSet(boolean populate) {
         super.onValueSet(populate);
-        updateCC.setEnabled(!getValue().isCancelled().isBooleanTrue());
-        updateCC.setVisible(!getValue().isPaymentFailed().isBooleanTrue());
+        updateCC.setVisible(!getValue().isCancelled().isBooleanTrue() && !getValue().isPaymentFailed().isBooleanTrue());
         updateCCAndPay.setVisible(getValue().isPaymentFailed().isBooleanTrue());
 
-        cancelTenantSure.setEnabled(!getValue().isCancelled().isBooleanTrue());
+        cancelTenantSure.setVisible(!getValue().isCancelled().isBooleanTrue());
         reinstateTenantSure.setVisible(getValue().isCancelled().isBooleanTrue());
     }
 
@@ -226,10 +232,11 @@ public class TenantSurePage extends CPortalEntityForm<TenantSureInsurancePolicyD
         @Override
         public IsWidget createContent(IList<TenantSureMessageDTO> value) {
             FlowPanel panel = new FlowPanel();
+            panel.setStyleName(TenantSureTheme.StyleName.TenantSureMessages.name());
             if (value != null && !value.isEmpty()) {
                 for (TenantSureMessageDTO message : value) {
                     Label messageLabel = new Label(message.messageText().getValue());
-                    // TODO add style
+                    messageLabel.setStyleName(TenantSureTheme.StyleName.TenantSureMessage.name());
                     panel.add(messageLabel);
                 }
             }
