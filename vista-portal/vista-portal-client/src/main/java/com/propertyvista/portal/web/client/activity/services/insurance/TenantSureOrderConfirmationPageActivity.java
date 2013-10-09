@@ -13,12 +13,17 @@
  */
 package com.propertyvista.portal.web.client.activity.services.insurance;
 
+import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
 import com.pyx4j.commons.Key;
+import com.pyx4j.entity.rpc.AbstractCrudService.RetrieveTarget;
+import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.site.rpc.AppPlace;
 
+import com.propertyvista.portal.rpc.portal.web.dto.insurance.TenantSureInsurancePolicyDTO;
+import com.propertyvista.portal.rpc.portal.web.services.services.TenantSureInsurancePolicyCrudService;
 import com.propertyvista.portal.web.client.PortalWebSite;
 import com.propertyvista.portal.web.client.activity.SecurityAwareActivity;
 import com.propertyvista.portal.web.client.ui.services.insurance.TenantSureOrderConfirmationPageView;
@@ -28,15 +33,15 @@ public class TenantSureOrderConfirmationPageActivity extends SecurityAwareActivi
 
     private final TenantSureOrderConfirmationPageView view;
 
-//    protected final PaymentRetrieveService srv;
-
     private final Key entityId;
+
+    private final TenantSureInsurancePolicyCrudService service;
 
     public TenantSureOrderConfirmationPageActivity(AppPlace place) {
         view = PortalWebSite.getViewFactory().instantiate(TenantSureOrderConfirmationPageView.class);
         view.setPresenter(this);
 
-//        srv = GWT.create(PaymentRetrieveService.class);
+        service = GWT.create(TenantSureInsurancePolicyCrudService.class);
 
         entityId = place.getItemId();
     }
@@ -46,19 +51,17 @@ public class TenantSureOrderConfirmationPageActivity extends SecurityAwareActivi
         super.start(panel, eventBus);
         panel.setWidget(view);
 
-        assert (entityId != null);
-//        srv.retrieve(new DefaultAsyncCallback<TenantSureAgreementDTO>() {
-//            @Override
-//            public void onSuccess(TenantSureAgreementDTO result) {
-//                view.populate(result);
-//            }
-//        }, entityId);
+        service.retrieve(new DefaultAsyncCallback<TenantSureInsurancePolicyDTO>() {
+            @Override
+            public void onSuccess(TenantSureInsurancePolicyDTO result) {
+                view.populate(result);
+            }
+        }, entityId, RetrieveTarget.View);
     }
 
     @Override
     public void back() {
         // TODO Auto-generated method stub
-
     }
 
 }
