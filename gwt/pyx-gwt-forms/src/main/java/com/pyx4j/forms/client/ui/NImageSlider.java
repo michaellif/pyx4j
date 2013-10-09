@@ -207,9 +207,6 @@ public class NImageSlider<T extends IFile> extends NField<IList<T>, ImageSlider,
             new FileUploadDialog<T>(i18n.tr("Upload Image File"), null, getCComponent().getUploadService(), new FileUploadReciver<T>() {
                 @Override
                 public void onUploadComplete(T uploadResponse) {
-                    if (getCComponent().getImageSliderType() == ImageSliderType.single) {
-                        ImageOrganizer.this.clear();
-                    }
                     callback.onSuccess(uploadResponse);
                 }
             }).show();
@@ -226,7 +223,6 @@ public class NImageSlider<T extends IFile> extends NField<IList<T>, ImageSlider,
         }
 
         class Decorator extends Dialog implements IFolderDecorator<T>, Custom1Option, Custom2Option, CancelOption {
-            private CEntityFolder<T> folder;
 
             public Decorator() {
                 super(i18n.tr("Image Organizer"));
@@ -256,7 +252,6 @@ public class NImageSlider<T extends IFile> extends NField<IList<T>, ImageSlider,
 
             @Override
             public void setComponent(CEntityFolder<T> folder) {
-                this.folder = folder;
                 ScrollPanel panel = new ScrollPanel();
                 panel.add(folder.createContent());
                 panel.getElement().getStyle().setProperty("maxHeight", "500px");
@@ -292,12 +287,7 @@ public class NImageSlider<T extends IFile> extends NField<IList<T>, ImageSlider,
 
             @Override
             public String custom1Text() {
-                if (getCComponent().getImageSliderType() == ImageSliderType.multiple || getCComponent().getValue() == null
-                        || getCComponent().getValue().size() == 0) {
-                    return i18n.tr("Add Image");
-                } else {
-                    return i18n.tr("Change Image");
-                }
+                return i18n.tr("Add Image");
             }
 
             @Override
@@ -321,6 +311,6 @@ public class NImageSlider<T extends IFile> extends NField<IList<T>, ImageSlider,
 
     @Override
     public ImageSliderType getImageSliderType() {
-        return getCComponent().getImageSliderType();
+        return ImageSliderType.multiple;
     }
 }

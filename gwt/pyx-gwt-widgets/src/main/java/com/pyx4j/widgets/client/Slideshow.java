@@ -84,9 +84,13 @@ public class Slideshow extends LayoutPanel {
     }
 
     public void addItem(Widget widget) {
-//        widget.setPixelSize(getOffsetWidth(), getOffsetHeight());
         widget.setVisible(false);
         slides.add(widget);
+        controlPanel.reset();
+    }
+
+    public void removeItem(Widget widget) {
+        slides.remove(widget);
         controlPanel.reset();
     }
 

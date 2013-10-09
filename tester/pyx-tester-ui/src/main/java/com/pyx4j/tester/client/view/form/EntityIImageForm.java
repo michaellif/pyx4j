@@ -28,7 +28,6 @@ import com.google.gwt.user.client.ui.Widget;
 import com.pyx4j.forms.client.images.EntityFolderImages;
 import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.ui.CImageSlider;
-import com.pyx4j.widgets.client.ImageSlider.ImageSliderType;
 import com.pyx4j.forms.client.ui.CLabel;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
@@ -60,7 +59,7 @@ public class EntityIImageForm extends CEntityForm<EntityI> {
 //        cImage.setUploadService(GWT.<TFileUploadService> create(TFileUploadService.class));
 //        main.setWidget(++row, 0, new TesterWidgetDecorator(inject(proto().files(), cGallery)));
 
-        CImageSlider<TFile> cGallery = new CImageSlider<TFile>(TFile.class, ImageSliderType.multiple) {
+        CImageSlider<TFile> cGallery = new CImageSlider<TFile>(TFile.class) {
             @Override
             public EntityFolderImages getFolderIcons() {
                 return Images.INSTANCE;

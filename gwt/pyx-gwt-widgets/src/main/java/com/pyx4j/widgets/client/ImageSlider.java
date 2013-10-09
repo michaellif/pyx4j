@@ -74,7 +74,7 @@ public class ImageSlider extends LayoutPanel implements IWidget {
         setImageSize(dimension.width, dimension.width);
     }
 
-    public void onModelChange() {
+    public void reset() {
         slideshow.removeAllItems();
         if (imageList.getImageUrls().size() == 0) {
             // set placeholder image
@@ -89,10 +89,6 @@ public class ImageSlider extends LayoutPanel implements IWidget {
             }
         }
         slideshow.show(slideshow.getItemCount() - 1, false);
-    }
-
-    public void reset() {
-        onModelChange();
     }
 
     public void setImageSize(int width, int height) {
