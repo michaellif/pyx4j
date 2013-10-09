@@ -35,13 +35,8 @@ public class TenantSureManagementServiceImpl implements TenantSureManagementServ
 
     @Override
     public void getStatus(AsyncCallback<TenantSureCertificateSummaryDTO> callback) {
-        TenantSureCertificateSummaryDTO status = ServerSideFactory.create(TenantSureFacade.class).getStatus(
-                TenantAppContext.getCurrentUserTenantInLease().leaseParticipant().<Tenant> createIdentityStub());
-        if (status != null) {
-            callback.onSuccess(status);
-        } else {
-            throw new UserRuntimeException("Failed to retrieve TenantSure status. Probably you don't have active TenantSure insurance.");
-        }
+
+        throw new UserRuntimeException("Failed to retrieve TenantSure status. Probably you don't have active TenantSure insurance.");
     }
 
     @Override

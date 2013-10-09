@@ -59,8 +59,8 @@ import com.propertyvista.domain.tenant.lease.Tenant;
 import com.propertyvista.operations.domain.tenantsure.TenantSureSubscribers;
 import com.propertyvista.portal.rpc.portal.web.dto.insurance.TenantSureCoverageDTO;
 import com.propertyvista.portal.rpc.portal.web.dto.insurance.TenantSureCoverageDTO.PreviousClaims;
+import com.propertyvista.portal.rpc.portal.web.dto.insurance.TenantSureInsurancePolicyDTO;
 import com.propertyvista.portal.rpc.portal.web.dto.insurance.TenantSureQuoteDTO;
-import com.propertyvista.portal.rpc.portal.web.dto.insurance.status.TenantSureCertificateSummaryDTO;
 import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.tenantsure.TenantSureMessageDTO;
 import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.tenantsure.TenantSurePaymentItemDTO;
 import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.tenantsure.TenantSurePaymentItemTaxDTO;
@@ -303,20 +303,19 @@ public class TenantSureFacadeImpl implements TenantSureFacade {
     }
 
     @Override
-    public TenantSureCertificateSummaryDTO getStatus(Tenant tenantId) {
+    public TenantSureInsurancePolicyDTO getStatus(Tenant tenantId) {
         TenantSureInsurancePolicy insuranceTenantSure = retrieveActiveInsuranceTenantSure(tenantId);
         if (insuranceTenantSure == null) {
             return null;
         }
 
-        TenantSureCertificateSummaryDTO status = EntityFactory.create(TenantSureCertificateSummaryDTO.class);
-        status.insuranceCertificateNumber().setValue(insuranceTenantSure.certificate().insuranceCertificateNumber().getValue());
-        status.expiryDate().setValue(insuranceTenantSure.certificate().expiryDate().getValue());
-
-        status.liabilityCoverage().setValue(insuranceTenantSure.certificate().liabilityCoverage().getValue());
+        TenantSureInsurancePolicyDTO status = EntityFactory.create(TenantSureInsurancePolicyDTO.class);
+        status.certificate().insuranceCertificateNumber().setValue(insuranceTenantSure.certificate().insuranceCertificateNumber().getValue());
+        status.certificate().expiryDate().setValue(insuranceTenantSure.certificate().expiryDate().getValue());
+        status.certificate().inceptionDate().setValue(insuranceTenantSure.certificate().inceptionDate().getValue());
+        status.certificate().liabilityCoverage().setValue(insuranceTenantSure.certificate().liabilityCoverage().getValue());
         status.contentsCoverage().setValue(insuranceTenantSure.contentsCoverage().getValue());
         status.deductible().setValue(insuranceTenantSure.deductible().getValue());
-        status.inceptionDate().setValue(insuranceTenantSure.certificate().inceptionDate().getValue());
 
         status.annualPaymentDetails().paymentDate().setValue(null);
         status.annualPaymentDetails().paymentBreakdown().add(makePaymentItem(//@formatter:off
