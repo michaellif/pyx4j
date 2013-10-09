@@ -54,22 +54,26 @@ public class ImageSlider extends LayoutPanel implements IWidget {
 
     private final Slideshow slideshow;
 
-    private final EditorControlPanel editControl;
+    private final EditActionPanel editActionPanel;
 
     private boolean editable;
 
     private final ImageSliderDataProvider imageList;
 
     public ImageSlider(Dimension dimension, ImageSliderDataProvider imageList) {
+
         this.imageList = imageList;
         this.editable = false;
 
         slideshow = new Slideshow(0, false);
-        editControl = new EditorControlPanel();
+        slideshow.setStyleName(DefaultWidgetsTheme.StyleName.ImageSliderSlideshow.name());
+
+        editActionPanel = new EditActionPanel();
+        editActionPanel.setStyleName(DefaultWidgetsTheme.StyleName.ImageSliderEditAction.name());
 
         add(slideshow);
-        add(editControl);
-        setWidgetBottomHeight(editControl, 20, Unit.PCT, 40, Unit.PX);
+        add(editActionPanel);
+        setWidgetBottomHeight(editActionPanel, 20, Unit.PCT, 40, Unit.PX);
 
         setImageSize(dimension.width, dimension.width);
     }
@@ -109,7 +113,7 @@ public class ImageSlider extends LayoutPanel implements IWidget {
     @Override
     public void setEditable(boolean editable) {
         this.editable = editable;
-        editControl.setVisible(editable);
+        editActionPanel.setVisible(editable);
     }
 
     @Override
@@ -117,21 +121,15 @@ public class ImageSlider extends LayoutPanel implements IWidget {
         return editable;
     }
 
-    public EditorControlPanel getEditControl() {
-        return editControl;
+    public EditActionPanel getEditActionPanel() {
+        return editActionPanel;
     }
 
-    class EditorControlPanel extends Label {
+    class EditActionPanel extends Label {
 
-        public EditorControlPanel() {
+        public EditActionPanel() {
             super("Edit");
-            getElement().getStyle().setProperty("width", "100%");
-            getElement().getStyle().setProperty("lineHeight", "40px");
-            getElement().getStyle().setProperty("textAlign", "center");
-            getElement().getStyle().setProperty("background", "gray");
-            getElement().getStyle().setProperty("color", "white");
-            getElement().getStyle().setProperty("opacity", "0.8");
-            getElement().getStyle().setProperty("cursor", "pointer");
+
             addClickHandler(new ClickHandler() {
                 @Override
                 public void onClick(ClickEvent event) {

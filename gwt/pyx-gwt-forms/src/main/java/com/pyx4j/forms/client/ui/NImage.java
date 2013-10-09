@@ -49,6 +49,7 @@ public class NImage<T extends IFile> extends NField<T, ImageSlider, CImage<T>, I
 
     public NImage(CImage<T> cComponent) {
         super(cComponent);
+        setStyleName(CComponentTheme.StyleName.ImageHolder.name());
 
         imageSlider = new ImageSlider(getCComponent().getImageSize(), this);
     }
@@ -116,7 +117,7 @@ public class NImage<T extends IFile> extends NField<T, ImageSlider, CImage<T>, I
         if (getCComponent().getValue() == null) {
             showUploadFileDialog();
         } else {
-            new EditMenu().showRelativeTo(imageSlider.getEditControl());
+            new EditMenu().showRelativeTo(imageSlider.getEditActionPanel());
         }
     }
 
@@ -143,6 +144,8 @@ public class NImage<T extends IFile> extends NField<T, ImageSlider, CImage<T>, I
 
         public EditMenu() {
             super();
+            setStyleName(CComponentTheme.StyleName.ImageEditorMenu.name());
+
             FlowPanel mainPanel = new FlowPanel();
             mainPanel.add(new Button(i18n.tr("Remove"), new Command() {
 
@@ -152,7 +155,7 @@ public class NImage<T extends IFile> extends NField<T, ImageSlider, CImage<T>, I
                     getCComponent().setValue(null);
                 }
             }));
-            mainPanel.add(new Button(i18n.tr("Upload fromComputer"), new Command() {
+            mainPanel.add(new Button(i18n.tr("Upload From Computer"), new Command() {
 
                 @Override
                 public void execute() {

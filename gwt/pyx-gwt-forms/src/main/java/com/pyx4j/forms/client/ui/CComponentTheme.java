@@ -34,7 +34,9 @@ public class CComponentTheme extends Theme {
     public static enum StyleName implements IStyleName {
         FieldPanel, FieldEditorPanel, FieldViewerPanel, ValidationLabel, NoteLabel,
 
-        TabbedFormTab
+        TabbedFormTab,
+
+        ImageHolder, ImageEditorMenu
     }
 
     public static enum StyleDependent implements IStyleDependent {
@@ -57,6 +59,7 @@ public class CComponentTheme extends Theme {
         initValidationLabelStyle();
         initNoteStyle();
         initTabbedFormStyle();
+        initImageHolderStyle();
     }
 
     protected void initTextBoxStyle() {
@@ -146,4 +149,18 @@ public class CComponentTheme extends Theme {
         addStyle(style);
     }
 
+    private void initImageHolderStyle() {
+        Style style = new Style(".", StyleName.ImageEditorMenu, " .", DefaultWidgetsTheme.StyleName.Button);
+        style.addProperty("background", ThemeColor.foreground, 0.1);
+        style.addProperty("border-radius", "0px");
+        style.addProperty("border-width", "1px");
+        style.addProperty("border-style", "solid");
+        style.addProperty("border-color", ThemeColor.foreground, 0.3);
+        style.addProperty("padding", "0");
+        style.addProperty("margin", "0");
+        style.addProperty("display", "block");
+        style.addProperty("color", ThemeColor.foreground, 0.7);
+        style.addProperty("cursor", "pointer");
+        addStyle(style);
+    }
 }

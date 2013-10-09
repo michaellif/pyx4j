@@ -51,7 +51,9 @@ public class DefaultWidgetsTheme extends Theme {
 
         DropDownPanel,
 
-        Recaptcha;
+        Recaptcha,
+
+        ImageSliderSlideshow, ImageSliderEditAction;
     }
 
     public static enum StyleDependent implements IStyleDependent {
@@ -80,6 +82,7 @@ public class DefaultWidgetsTheme extends Theme {
         initRadioGroupStyle();
         initGlassPanelStyle();
         initRecaptchaStyle();
+        initImageSliderStyle();
     }
 
     protected void initAnchorStyle() {
@@ -297,6 +300,23 @@ public class DefaultWidgetsTheme extends Theme {
 
         style = new Style("#recaptcha_image img");
         style.addProperty("width", "250px !important;");
+        addStyle(style);
+    }
+
+    private void initImageSliderStyle() {
+        Style style = new Style(".", StyleName.ImageSliderSlideshow);
+        style.addProperty("border", "1px solid");
+        style.addProperty("border-color", ThemeColor.foreground, 0.3);
+        addStyle(style);
+
+        style = new Style(".", StyleName.ImageSliderEditAction);
+        style.addProperty("width", "100%");
+        style.addProperty("line-height", "40px");
+        style.addProperty("text-align", "center");
+        style.addProperty("background", ThemeColor.foreground, 0.7);
+        style.addProperty("color", "white");
+        style.addProperty("opacity", "0.8");
+        style.addProperty("cursor", "pointer");
         addStyle(style);
     }
 }
