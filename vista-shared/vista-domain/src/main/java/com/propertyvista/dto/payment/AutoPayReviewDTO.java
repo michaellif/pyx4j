@@ -42,7 +42,7 @@ public interface AutoPayReviewDTO extends IEntity {
 
     IPrimitive<LogicalDate> paymentDue();
 
-    AutoPayReviewChargeDetailDTO totalSuspended();
+    AutoPayReviewChargeDetailDTO totalPrevious();
 
-    AutoPayReviewChargeDetailDTO totalSuggested();
+    AutoPayReviewChargeDetailDTO totalCurrent();
 }

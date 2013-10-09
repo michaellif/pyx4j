@@ -52,7 +52,7 @@ import com.propertyvista.shared.config.VistaFeatures;
 
 class PreauthorizedPaymentAutoPayReviewReport {
 
-    List<AutoPayReviewDTO> reportSuspendedPreauthorizedPayments(PreauthorizedPaymentsReportCriteria reportCriteria) {
+    List<AutoPayReviewDTO> reportPreauthorizedPaymentsRequiredReview(PreauthorizedPaymentsReportCriteria reportCriteria) {
         List<AutoPayReviewDTO> records = new ArrayList<AutoPayReviewDTO>();
 
         ICursorIterator<BillingAccount> billingAccountIterator;
@@ -64,7 +64,7 @@ class PreauthorizedPaymentAutoPayReviewReport {
                 criteria.in(criteria.proto().lease().unit().building().suspended(), false);
             }
             criteria.eq(criteria.proto().lease().currentTerm().version().tenants().$().leaseParticipant().preauthorizedPayments().$().isDeleted(), false);
-            criteria.isNotNull(criteria.proto().lease().currentTerm().version().tenants().$().leaseParticipant().preauthorizedPayments().$().expiring());
+            criteria.isNotNull(criteria.proto().lease().currentTerm().version().tenants().$().leaseParticipant().preauthorizedPayments().$().updatedBySystem());
 
             if (reportCriteria.isLeasesOnNoticeOnly()) {
                 criteria.eq(criteria.proto().lease().completion(), Lease.CompletionType.Notice);
@@ -153,23 +153,23 @@ class PreauthorizedPaymentAutoPayReviewReport {
             for (AutoPayReviewChargeDTO chargeReview : pap.items()) {
                 if (!chargeReview.suspended().billableItem().isNull() && !countedSuspended.contains(chargeReview.suspended().billableItem())) {
                     countedSuspended.add(chargeReview.suspended().billableItem());
-                    DomainUtil.nvlAddBigDecimal(review.totalSuspended().totalPrice(), chargeReview.suspended().totalPrice());
+                    DomainUtil.nvlAddBigDecimal(review.totalPrevious().totalPrice(), chargeReview.suspended().totalPrice());
                 }
-                DomainUtil.nvlAddBigDecimal(review.totalSuspended().payment(), chargeReview.suspended().payment());
+                DomainUtil.nvlAddBigDecimal(review.totalPrevious().payment(), chargeReview.suspended().payment());
 
                 if (!chargeReview.suggested().billableItem().isNull() && !countedSuggested.contains(chargeReview.suggested().billableItem())) {
                     countedSuggested.add(chargeReview.suggested().billableItem());
-                    DomainUtil.nvlAddBigDecimal(review.totalSuggested().totalPrice(), chargeReview.suggested().totalPrice());
+                    DomainUtil.nvlAddBigDecimal(review.totalCurrent().totalPrice(), chargeReview.suggested().totalPrice());
                 }
-                DomainUtil.nvlAddBigDecimal(review.totalSuggested().payment(), chargeReview.suggested().payment());
+                DomainUtil.nvlAddBigDecimal(review.totalCurrent().payment(), chargeReview.suggested().payment());
             }
         }
 
-        if (!review.totalSuspended().totalPrice().isNull()) {
-            calulatePercent(review.totalSuspended());
+        if (!review.totalPrevious().totalPrice().isNull()) {
+            calulatePercent(review.totalPrevious());
         }
-        if (!review.totalSuggested().totalPrice().isNull()) {
-            calulatePercent(review.totalSuggested());
+        if (!review.totalCurrent().totalPrice().isNull()) {
+            calulatePercent(review.totalCurrent());
         }
     }
 

@@ -81,7 +81,7 @@ public class AutoPayChangesReportGenerator implements ReportGenerator, ReportExp
         reportCriteria.setLeasesOnNoticeOnly(autoPayChangesReportMetadata.leasesOnNoticeOnly().isBooleanTrue());
 
         Vector<AutoPayReviewDTO> suspenedPreauthorizedPayments = new Vector<AutoPayReviewDTO>(ServerSideFactory.create(PaymentReportFacade.class)
-                .reportSuspendedPreauthorizedPayments(reportCriteria));
+                .reportPreauthorizedPaymentsRequiredReview(reportCriteria));
 
         if (false) {
             devFillWithMockup(suspenedPreauthorizedPayments);

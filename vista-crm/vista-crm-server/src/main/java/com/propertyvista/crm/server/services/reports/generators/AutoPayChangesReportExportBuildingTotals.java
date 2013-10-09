@@ -42,16 +42,16 @@ public class AutoPayChangesReportExportBuildingTotals extends ExportTotals<AutoP
             total = EntityFactory.create(AutoPayReviewDTO.class);
             total.building().setValue(leaseReview.building().getValue());
         }
-        DomainUtil.nvlAddBigDecimal(total.totalSuspended().totalPrice(), leaseReview.totalSuspended().totalPrice());
-        DomainUtil.nvlAddBigDecimal(total.totalSuspended().payment(), leaseReview.totalSuspended().payment());
-        DomainUtil.nvlAddBigDecimal(total.totalSuggested().totalPrice(), leaseReview.totalSuggested().totalPrice());
-        DomainUtil.nvlAddBigDecimal(total.totalSuggested().payment(), leaseReview.totalSuggested().payment());
+        DomainUtil.nvlAddBigDecimal(total.totalPrevious().totalPrice(), leaseReview.totalPrevious().totalPrice());
+        DomainUtil.nvlAddBigDecimal(total.totalPrevious().payment(), leaseReview.totalPrevious().payment());
+        DomainUtil.nvlAddBigDecimal(total.totalCurrent().totalPrice(), leaseReview.totalCurrent().totalPrice());
+        DomainUtil.nvlAddBigDecimal(total.totalCurrent().payment(), leaseReview.totalCurrent().payment());
 
-        if (!total.totalSuspended().totalPrice().isNull()) {
-            AutoPayChangesReportExport.calulatePercent(total.totalSuspended());
+        if (!total.totalPrevious().totalPrice().isNull()) {
+            AutoPayChangesReportExport.calulatePercent(total.totalPrevious());
         }
-        if (!total.totalSuggested().totalPrice().isNull()) {
-            AutoPayChangesReportExport.calulatePercent(total.totalSuggested());
+        if (!total.totalCurrent().totalPrice().isNull()) {
+            AutoPayChangesReportExport.calulatePercent(total.totalCurrent());
         }
         return total;
     }
@@ -62,14 +62,14 @@ public class AutoPayChangesReportExportBuildingTotals extends ExportTotals<AutoP
         formatter.mergeCells(1, 5);
         formatter.cellsEmpty(4 + leaseInfoColumns, true);
 
-        formatter.cell(totals.totalSuspended().totalPrice().getValue());
-        formatter.cell(totals.totalSuspended().payment().getValue());
-        formatter.cell(AutoPayChangesReportExport.prc(totals.totalSuspended().percent().getValue()));
+        formatter.cell(totals.totalPrevious().totalPrice().getValue());
+        formatter.cell(totals.totalPrevious().payment().getValue());
+        formatter.cell(AutoPayChangesReportExport.prc(totals.totalPrevious().percent().getValue()));
 
-        formatter.cell(totals.totalSuggested().totalPrice().getValue());
+        formatter.cell(totals.totalCurrent().totalPrice().getValue());
         formatter.createCell();
-        formatter.cell(totals.totalSuggested().payment().getValue());
-        formatter.cell(AutoPayChangesReportExport.prc(totals.totalSuggested().percent().getValue()));
+        formatter.cell(totals.totalCurrent().payment().getValue());
+        formatter.cell(AutoPayChangesReportExport.prc(totals.totalCurrent().percent().getValue()));
         formatter.createCell();
 
         Iterator<Cell> ci = formatter.getCurentRow().cellIterator();

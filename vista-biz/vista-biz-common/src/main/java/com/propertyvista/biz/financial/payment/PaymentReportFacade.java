@@ -22,7 +22,7 @@ import com.propertyvista.dto.payment.AutoPayReviewDTO;
 
 public interface PaymentReportFacade {
 
-    List<AutoPayReviewDTO> reportSuspendedPreauthorizedPayments(PreauthorizedPaymentsReportCriteria reportCriteria);
+    List<AutoPayReviewDTO> reportPreauthorizedPaymentsRequiredReview(PreauthorizedPaymentsReportCriteria reportCriteria);
 
     List<PaymentRecord> reportPreauthorisedPayments(PreauthorizedPaymentsReportCriteria reportCriteria, ExecutionMonitor executionMonitor);
 

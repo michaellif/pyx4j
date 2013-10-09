@@ -174,7 +174,7 @@ public class PaymentMethodFacadeImpl implements PaymentMethodFacade {
 
     @Override
     public void suspendPreauthorizedPayment(PreauthorizedPayment preauthorizedPaymentId) {
-        new PreauthorizedPaymentAgreementMananger().suspendPreauthorizedPayment(preauthorizedPaymentId, true);
+        new PreauthorizedPaymentAgreementMananger().suspendPreauthorizedPayment(preauthorizedPaymentId);
     }
 
     @Override

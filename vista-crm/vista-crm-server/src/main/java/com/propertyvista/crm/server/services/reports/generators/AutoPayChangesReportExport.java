@@ -194,14 +194,14 @@ public class AutoPayChangesReportExport {
         formatter.mergeCells(1, 3);
         formatter.cellsEmpty(2 + leaseInfoColumns, true);
 
-        formatter.cell(reviewCase.totalSuspended().totalPrice().getValue());
-        formatter.cell(reviewCase.totalSuspended().payment().getValue());
-        formatter.cell(prc(reviewCase.totalSuspended().percent().getValue()));
+        formatter.cell(reviewCase.totalPrevious().totalPrice().getValue());
+        formatter.cell(reviewCase.totalPrevious().payment().getValue());
+        formatter.cell(prc(reviewCase.totalPrevious().percent().getValue()));
 
-        formatter.cell(reviewCase.totalSuggested().totalPrice().getValue());
+        formatter.cell(reviewCase.totalCurrent().totalPrice().getValue());
         formatter.createCell();
-        formatter.cell(reviewCase.totalSuggested().payment().getValue());
-        formatter.cell(prc(reviewCase.totalSuggested().percent().getValue()));
+        formatter.cell(reviewCase.totalCurrent().payment().getValue());
+        formatter.cell(prc(reviewCase.totalCurrent().percent().getValue()));
         formatter.createCell();
 
         Iterator<Cell> ci = formatter.getCurentRow().cellIterator();

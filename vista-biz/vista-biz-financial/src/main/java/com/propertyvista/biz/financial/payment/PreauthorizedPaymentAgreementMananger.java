@@ -14,13 +14,15 @@
 package com.propertyvista.biz.financial.payment;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.lang.Validate;
 import org.slf4j.Logger;
 
-import com.pyx4j.commons.EqualsHelper;
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.config.server.SystemDateManager;
@@ -51,10 +53,12 @@ import com.propertyvista.domain.payment.LeasePaymentMethod;
 import com.propertyvista.domain.payment.PreauthorizedPayment;
 import com.propertyvista.domain.payment.PreauthorizedPayment.PreauthorizedPaymentCoveredItem;
 import com.propertyvista.domain.policy.policies.AutoPayPolicy;
+import com.propertyvista.domain.policy.policies.AutoPayPolicy.ChangeRule;
+import com.propertyvista.domain.security.CustomerUser;
 import com.propertyvista.domain.tenant.lease.BillableItem;
 import com.propertyvista.domain.tenant.lease.Lease;
-import com.propertyvista.domain.tenant.lease.LeaseTerm;
 import com.propertyvista.domain.tenant.lease.Tenant;
+import com.propertyvista.domain.util.DomainUtil;
 import com.propertyvista.server.common.security.VistaContext;
 import com.propertyvista.shared.config.VistaFeatures;
 
@@ -71,6 +75,8 @@ class PreauthorizedPaymentAgreementMananger {
 
         LogicalDate nextPaymentDate = ServerSideFactory.create(PaymentMethodFacade.class)
                 .getNextPreauthorizedPaymentDate(preauthorizedPayment.tenant().lease());
+        BillingCycle nextCycle = ServerSideFactory.create(PaymentMethodFacade.class).getNextPreauthorizedPaymentBillingCycle(
+                preauthorizedPayment.tenant().lease());
 
         PreauthorizedPayment origPreauthorizedPayment;
         PreauthorizedPayment orig = null;
@@ -98,6 +104,7 @@ class PreauthorizedPaymentAgreementMananger {
                     isNew = true;
 
                     preauthorizedPayment = EntityGraph.businessDuplicate(preauthorizedPayment);
+                    preauthorizedPayment.reviewOfpap().set(origPreauthorizedPayment);
                     preauthorizedPayment.expiring().setValue(null);
                 } else {
                     boolean hasPaymentRecords = false;
@@ -114,16 +121,25 @@ class PreauthorizedPaymentAgreementMananger {
                         isNew = true;
 
                         preauthorizedPayment = EntityGraph.businessDuplicate(preauthorizedPayment);
+                        preauthorizedPayment.reviewOfpap().set(origPreauthorizedPayment);
                         preauthorizedPayment.expiring().setValue(null);
                     }
                 }
                 preauthorizedPayment.effectiveFrom().setValue(nextPaymentDate);
-
             }
         } else {
             isNew = true;
             preauthorizedPayment.effectiveFrom().setValue(nextPaymentDate);
             preauthorizedPayment.createdBy().set(VistaContext.getCurrentUserIfAvalable());
+        }
+
+        //Set Tenant intervention flag
+        if (VistaContext.getCurrentUserIfAvalable() instanceof CustomerUser) {
+            preauthorizedPayment.updatedByTenant().getValue().before(nextCycle.billingCycleStartDate().getValue());
+        }
+        if (!nextCycle.billingCycleStartDate().equals(preauthorizedPayment.updatedBySystem())) {
+            // reset review flag for old updates
+            preauthorizedPayment.updatedBySystem().setValue(null);
         }
 
         Persistence.service().merge(preauthorizedPayment);
@@ -138,43 +154,19 @@ class PreauthorizedPaymentAgreementMananger {
     }
 
     void persitPreauthorizedPaymentReview(ReviewedPapDTO preauthorizedPaymentChanges) {
-        PreauthorizedPayment origPreauthorizedPayment = Persistence.service().retrieve(PreauthorizedPayment.class,
+        PreauthorizedPayment preauthorizedPayment = Persistence.service().retrieve(PreauthorizedPayment.class,
                 preauthorizedPaymentChanges.papId().getPrimaryKey());
 
-        PreauthorizedPayment newPreauthorizedPayment = EntityGraph.businessDuplicate(origPreauthorizedPayment);
-        newPreauthorizedPayment.expiring().setValue(null);
-        newPreauthorizedPayment.coveredItems().clear();
-
-        boolean hsCharges = false;
+        preauthorizedPayment.updatedBySystem().setValue(null);
+        // Update amounts
         for (ReviewedPapChargeDTO reviewedPapCharge : preauthorizedPaymentChanges.reviewedCharges()) {
-            if (reviewedPapCharge.paymentAmountUpdate().isNull()) {
-                // Removed charges
-                continue;
-            }
-            BillableItem billableItem = Persistence.service().retrieve(BillableItem.class, reviewedPapCharge.billableItem().getPrimaryKey());
-            Validate.notNull(billableItem, "billableItem is required for PreauthorizedPaymentCoveredItem");
-            PreauthorizedPaymentCoveredItem item = EntityFactory.create(PreauthorizedPaymentCoveredItem.class);
-            item.billableItem().set(billableItem);
-            item.amount().setValue(reviewedPapCharge.paymentAmountUpdate().getValue());
-            newPreauthorizedPayment.coveredItems().add(item);
-
-            if (reviewedPapCharge.paymentAmountUpdate().getValue().compareTo(BigDecimal.ZERO) > 0) {
-                hsCharges = true;
+            for (PreauthorizedPaymentCoveredItem coveredItem : preauthorizedPayment.coveredItems()) {
+                if (reviewedPapCharge.billableItem().equals(coveredItem.billableItem())) {
+                    coveredItem.amount().setValue(reviewedPapCharge.paymentAmountUpdate().getValue());
+                }
             }
         }
-        deletePreauthorizedPayment(origPreauthorizedPayment);
-        if (hsCharges) {
-            Persistence.ensureRetrieve(origPreauthorizedPayment.tenant(), AttachLevel.Attached);
-            LogicalDate nextPaymentDate = ServerSideFactory.create(PaymentMethodFacade.class).getNextPreauthorizedPaymentDate(
-                    origPreauthorizedPayment.tenant().lease());
-
-            newPreauthorizedPayment.effectiveFrom().setValue(nextPaymentDate);
-            newPreauthorizedPayment.createdBy().set(VistaContext.getCurrentUserIfAvalable());
-
-            Persistence.service().merge(newPreauthorizedPayment);
-            ServerSideFactory.create(AuditFacade.class).updated(newPreauthorizedPayment,
-                    EntityDiff.getChanges(origPreauthorizedPayment, newPreauthorizedPayment));
-        }
+        persistPreauthorizedPayment(preauthorizedPayment, preauthorizedPayment.tenant());
     }
 
     List<PreauthorizedPayment> retrievePreauthorizedPayments(Tenant tenantId) {
@@ -232,17 +224,12 @@ class PreauthorizedPaymentAgreementMananger {
 
     }
 
-    void suspendPreauthorizedPayment(PreauthorizedPayment preauthorizedPaymentId, boolean suspend) {
+    void suspendPreauthorizedPayment(PreauthorizedPayment preauthorizedPaymentId) {
         PreauthorizedPayment preauthorizedPayment = Persistence.service().retrieve(PreauthorizedPayment.class, preauthorizedPaymentId.getPrimaryKey());
 
-        if (suspend) {
-            Persistence.service().retrieve(preauthorizedPayment.tenant());
-            LogicalDate cutOffDate = ServerSideFactory.create(PaymentMethodFacade.class).getPreauthorizedPaymentCutOffDate(
-                    preauthorizedPayment.tenant().lease());
-            preauthorizedPayment.expiring().setValue(DateUtils.daysAdd(cutOffDate, -1));
-        } else {
-            preauthorizedPayment.expiring().setValue(null);
-        }
+        Persistence.ensureRetrieve(preauthorizedPayment.tenant(), AttachLevel.Attached);
+        LogicalDate cutOffDate = ServerSideFactory.create(PaymentMethodFacade.class).getPreauthorizedPaymentCutOffDate(preauthorizedPayment.tenant().lease());
+        preauthorizedPayment.expiring().setValue(DateUtils.daysAdd(cutOffDate, -1));
 
         Persistence.service().merge(preauthorizedPayment);
     }
@@ -250,62 +237,117 @@ class PreauthorizedPaymentAgreementMananger {
     public void renewPreauthorizedPayments(Lease lease) {
         List<PreauthorizedPayment> activePaps = retrieveNextPreauthorizedPayments(lease);
         if (activePaps.isEmpty()) {
-            return; // nothing to do!..
+            // nothing to update.
+            return;
         }
 
-        // Verify that new charges not added
-        LeaseTerm.LeaseTermV previousVersion = null;
-        {
-            // get previous version
-            EntityQueryCriteria<LeaseTerm.LeaseTermV> criteria = EntityQueryCriteria.create(LeaseTerm.LeaseTermV.class);
-            criteria.eq(criteria.proto().holder(), lease.currentTerm());
-            criteria.eq(criteria.proto().versionNumber(), lease.currentTerm().version().versionNumber().getValue() - 1);
-            previousVersion = Persistence.service().retrieve(criteria);
-        }
-
-        if (previousVersion == null) {
-            return; // LeaseLifecycleSimulator or preload
-        }
-
-        boolean suspend = false;
-
-        Map<String, BillableItem> billableItems = PaymentBillableUtils.getAllBillableItems(lease.currentTerm().version());
-        Map<String, BillableItem> previousBillableItems = PaymentBillableUtils.getAllBillableItems(previousVersion);
-        if (!EqualsHelper.equals(previousBillableItems.keySet(), billableItems.keySet())) {
-            suspend = true;
-        } else {
-            for (BillableItem previousBillableItem : previousBillableItems.values()) {
-                BillableItem newBillableItem = billableItems.get(previousBillableItem.uid().getValue());
-                if ((newBillableItem == null)
-                        || (PaymentBillableUtils.getActualPrice(newBillableItem).compareTo(PaymentBillableUtils.getActualPrice(previousBillableItem)) != 0)) {
-                    suspend = true;
-                    break;
-                }
+        AutoPayPolicy autoPayPolicy = ServerSideFactory.create(PolicyFacade.class).obtainEffectivePolicy(lease.unit().building(), AutoPayPolicy.class);
+        AutoPayPolicy.ChangeRule changeRule = autoPayPolicy.onLeaseChargeChangeRule().getValue();
+        BillingCycle nextCycle = ServerSideFactory.create(PaymentMethodFacade.class).getNextPreauthorizedPaymentBillingCycle(lease);
+        if (!isPreauthorizedPaymentsApplicableForBillingCycle(lease, nextCycle, autoPayPolicy)) {
+            // Suspend All
+            for (PreauthorizedPayment pap : activePaps) {
+                suspendPreauthorizedPayment(pap);
             }
+            return;
         }
 
-        if (!suspend) {
-            // migrate each PAP to new billableItems
-            forEachAllPap: for (PreauthorizedPayment pap : activePaps) {
-                for (PreauthorizedPaymentCoveredItem pi : pap.coveredItems()) {
-                    BillableItem bi = billableItems.get(pi.billableItem().uid().getValue());
-                    // Not found or price changed, should have been caught by previous comparison
-                    if ((bi == null) || (PaymentBillableUtils.getActualPrice(bi).compareTo(PaymentBillableUtils.getActualPrice(pi.billableItem())) != 0)) {
-                        suspend = true;
-                        break forEachAllPap;
-                    } else {
-                        pi.billableItem().set(bi);
-                    }
-                }
-            }
-        }
+        Map<String, BillableItem> billableItemsCurrent = PaymentBillableUtils.getAllBillableItems(lease.currentTerm().version());
 
-        // Suspend all or update all
+        boolean reviewNotificatioRequired = false;
+
+        // migrate each PAP to new billableItems
         for (PreauthorizedPayment pap : activePaps) {
-            suspendPreauthorizedPayment(pap, suspend);
+            boolean reviewRequired = false;
+
+            List<PreauthorizedPaymentCoveredItem> newCoveredItems = new ArrayList<PreauthorizedPaymentCoveredItem>();
+
+            Map<String, BillableItem> papBillableItemsCurrent = new LinkedHashMap<String, BillableItem>(billableItemsCurrent);
+
+            for (PreauthorizedPaymentCoveredItem coveredItemOriginal : pap.coveredItems()) {
+                BillableItem billableItemCurrent = papBillableItemsCurrent.get(coveredItemOriginal.billableItem().uid().getValue());
+                if (billableItemCurrent == null) {
+                    // Not found, item removed
+                    reviewRequired = true;
+                } else {
+                    papBillableItemsCurrent.remove(coveredItemOriginal.billableItem().uid().getValue());
+
+                    // Update the price if required
+                    PreauthorizedPaymentCoveredItem newCoveredItem = EntityFactory.create(PreauthorizedPaymentCoveredItem.class);
+
+                    BigDecimal priceOriginal = PaymentBillableUtils.getActualPrice(coveredItemOriginal.billableItem());
+                    BigDecimal priceCurrent = PaymentBillableUtils.getActualPrice(billableItemCurrent);
+
+                    if (priceOriginal.compareTo(priceCurrent) != 0) {
+                        BigDecimal originalPaymentAmount = coveredItemOriginal.amount().getValue();
+                        // Price change detected
+                        if (originalPaymentAmount.compareTo(BigDecimal.ZERO) != 0) {
+                            reviewRequired = true;
+                        }
+                        if (isChangeByTenant(pap, nextCycle)) {
+                            // Tenant intervention -> amount not changed automatically
+                            newCoveredItem.amount().setValue(originalPaymentAmount);
+                        } else {
+                            newCoveredItem.amount().setValue(calulateNewPaymentValue(originalPaymentAmount, priceOriginal, priceCurrent, changeRule));
+                        }
+                    } else {
+                        // Price not changed
+                        newCoveredItem.amount().setValue(coveredItemOriginal.amount().getValue());
+                    }
+
+                    newCoveredItem.billableItem().set(billableItemCurrent);
+                    newCoveredItems.add(newCoveredItem);
+                }
+            }
+            // newly added items or not covered
+            for (Map.Entry<String, BillableItem> bi : papBillableItemsCurrent.entrySet()) {
+                BillableItem billableItemCurrent = bi.getValue();
+                reviewRequired = true;
+                PreauthorizedPaymentCoveredItem newCoveredItem = EntityFactory.create(PreauthorizedPaymentCoveredItem.class);
+                newCoveredItem.amount().setValue(BigDecimal.ZERO);
+                newCoveredItem.billableItem().set(billableItemCurrent);
+                newCoveredItems.add(newCoveredItem);
+            }
+
+            pap.coveredItems().clear();
+            pap.coveredItems().addAll(newCoveredItems);
+            if (reviewRequired) {
+                pap.updatedBySystem().setValue(nextCycle.billingCycleStartDate().getValue());
+                reviewNotificatioRequired = true;
+            } else if (!nextCycle.billingCycleStartDate().equals(pap.updatedBySystem())) {
+                // Keep review flag for multiple updates in the same month
+                pap.updatedBySystem().setValue(null);
+            }
+            persistPreauthorizedPayment(pap, pap.tenant());
         }
-        if (suspend) {
+        if (reviewNotificatioRequired) {
             ServerSideFactory.create(NotificationFacade.class).papSuspension(lease);
+        }
+    }
+
+    private boolean isChangeByTenant(PreauthorizedPayment pap, BillingCycle nextCycle) {
+        if ((pap.updatedByTenant().isNull()) || (pap.updatedByTenant().getValue().before(nextCycle.billingCycleStartDate().getValue()))) {
+            return false;
+        } else {
+            return true;
+        }
+    }
+
+    private BigDecimal calulateNewPaymentValue(BigDecimal originalPaymentAmount, BigDecimal priceOriginal, BigDecimal priceCurrent, ChangeRule changeRule) {
+        switch (changeRule) {
+        case keepUnchanged:
+            return originalPaymentAmount;
+        case keepPercentage:
+            if (originalPaymentAmount.compareTo(BigDecimal.ZERO) == 0) {
+                return BigDecimal.ZERO;
+            } else if (priceOriginal.compareTo(BigDecimal.ZERO) == 0) {
+                // 100% for payments that was base on 0$ charges
+                return priceCurrent;
+            } else {
+                return DomainUtil.roundMoney(originalPaymentAmount.multiply(priceCurrent).divide(priceOriginal, RoundingMode.HALF_UP));
+            }
+        default:
+            throw new IllegalArgumentException();
         }
     }
 
@@ -326,7 +368,7 @@ class PreauthorizedPaymentAgreementMananger {
 
         if (suspend) {
             for (PreauthorizedPayment pap : activePaps) {
-                suspendPreauthorizedPayment(pap, true);
+                suspendPreauthorizedPayment(pap);
             }
 
             ServerSideFactory.create(NotificationFacade.class).papSuspension(lease);
@@ -390,7 +432,7 @@ class PreauthorizedPaymentAgreementMananger {
 
                                     if (suspend) {
                                         suspended = true;
-                                        suspendPreauthorizedPayment(item, true);
+                                        suspendPreauthorizedPayment(item);
                                         executionMonitor.addProcessedEvent("Pap suspend");
                                     }
                                 }

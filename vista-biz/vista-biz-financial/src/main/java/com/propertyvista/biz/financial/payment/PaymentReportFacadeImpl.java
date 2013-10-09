@@ -23,8 +23,8 @@ import com.propertyvista.dto.payment.AutoPayReviewDTO;
 public class PaymentReportFacadeImpl implements PaymentReportFacade {
 
     @Override
-    public List<AutoPayReviewDTO> reportSuspendedPreauthorizedPayments(PreauthorizedPaymentsReportCriteria reportCriteria) {
-        return new PreauthorizedPaymentAutoPayReviewReport().reportSuspendedPreauthorizedPayments(reportCriteria);
+    public List<AutoPayReviewDTO> reportPreauthorizedPaymentsRequiredReview(PreauthorizedPaymentsReportCriteria reportCriteria) {
+        return new PreauthorizedPaymentAutoPayReviewReport().reportPreauthorizedPaymentsRequiredReview(reportCriteria);
     }
 
     @Override

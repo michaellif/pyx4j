@@ -51,7 +51,7 @@ public class AutoPayReviewServiceImpl implements AutoPayReviewService {
     @Override
     public void getAutoPayReviews(AsyncCallback<Vector<PapReviewDTO>> callback, AutoPayChangesReportMetadata filterSettings) {
         Vector<AutoPayReviewDTO> suspendedPreauthorizedPayments = new Vector<AutoPayReviewDTO>(ServerSideFactory.create(PaymentReportFacade.class)
-                .reportSuspendedPreauthorizedPayments(makeCriteria(filterSettings)));
+                .reportPreauthorizedPaymentsRequiredReview(makeCriteria(filterSettings)));
         Vector<PapReviewDTO> papsForReview = convert2PapReviews(suspendedPreauthorizedPayments);
         callback.onSuccess(papsForReview);
     }

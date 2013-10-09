@@ -238,18 +238,18 @@ public class AutoPayChangesReportWidget implements ReportWidget {
             builder.appendHtmlConstant("<th colspan='6' style='text-align:right;' class='" + CommonReportStyles.RRowTotal.name() + "'>"
                     + i18n.tr("Total for lease:") + "</th>");
             builder.appendHtmlConstant("<td class='" + CommonReportStyles.RCellNumber.name() + " " + CommonReportStyles.RRowTotal.name() + "'>"
-                    + reviewCase.totalSuspended().totalPrice().getStringView() + "</td>");
+                    + reviewCase.totalPrevious().totalPrice().getStringView() + "</td>");
             builder.appendHtmlConstant("<td class='" + CommonReportStyles.RCellNumber.name() + " " + CommonReportStyles.RRowTotal.name() + "'>"
-                    + reviewCase.totalSuspended().payment().getStringView() + "</td>"); // payment 
+                    + reviewCase.totalPrevious().payment().getStringView() + "</td>"); // payment 
             builder.appendHtmlConstant("<td class='" + CommonReportStyles.RCellNumber.name() + " " + CommonReportStyles.RRowTotal.name() + "'>"
-                    + reviewCase.totalSuspended().percent().getStringView() + "</td>");
+                    + reviewCase.totalPrevious().percent().getStringView() + "</td>");
             builder.appendHtmlConstant("<td class='" + CommonReportStyles.RCellNumber.name() + " " + CommonReportStyles.RRowTotal.name() + "'>"
-                    + reviewCase.totalSuggested().totalPrice().getStringView() + "</td>"); // totalPrice
+                    + reviewCase.totalCurrent().totalPrice().getStringView() + "</td>"); // totalPrice
             builder.appendHtmlConstant("<td class='" + CommonReportStyles.RCellNumber.name() + " " + CommonReportStyles.RRowTotal.name() + "'>" + "</td>"); // percent change
             builder.appendHtmlConstant("<td class='" + CommonReportStyles.RCellNumber.name() + " " + CommonReportStyles.RRowTotal.name() + "'>"
-                    + reviewCase.totalSuggested().payment().getStringView() + "</td>"); // payment
+                    + reviewCase.totalCurrent().payment().getStringView() + "</td>"); // payment
             builder.appendHtmlConstant("<td class='" + CommonReportStyles.RCellNumber.name() + " " + CommonReportStyles.RRowTotal.name() + "'>"
-                    + reviewCase.totalSuggested().percent().getStringView() + "</td>"); // %                    
+                    + reviewCase.totalCurrent().percent().getStringView() + "</td>"); // %                    
             builder.appendHtmlConstant("</tr>");
         }
         builder.appendHtmlConstant("</tbody>");

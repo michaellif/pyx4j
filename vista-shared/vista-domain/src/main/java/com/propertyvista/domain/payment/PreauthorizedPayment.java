@@ -104,6 +104,15 @@ public interface PreauthorizedPayment extends IEntity {
     @MemberColumn(notNull = true)
     Tenant tenant();
 
+    @Detached
+    @I18n(strategy = I18n.I18nStrategy.IgnoreThis)
+    PreauthorizedPayment reviewOfpap();
+
+    // billingCycleStartDate  when 
+    IPrimitive<LogicalDate> updatedByTenant();
+
+    IPrimitive<LogicalDate> updatedBySystem();
+
     @ReadOnly
     @Detached(level = AttachLevel.ToStringMembers)
     AbstractPmcUser createdBy();

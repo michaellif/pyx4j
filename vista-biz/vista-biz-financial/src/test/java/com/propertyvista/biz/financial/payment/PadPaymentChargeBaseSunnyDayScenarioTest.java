@@ -152,7 +152,7 @@ public class PadPaymentChargeBaseSunnyDayScenarioTest extends LeaseFinancialTest
         totalDueAmount("1198.74");
         // @formatter:on
 
-        // This will suspend PAP
+        // This will update PAP but the amount will not be added
         addBooking("25-May-2011"); // 30.00
         finalizeLeaseAdendum();
 
@@ -169,21 +169,19 @@ public class PadPaymentChargeBaseSunnyDayScenarioTest extends LeaseFinancialTest
         billingPeriodStartDate("1-Jul-2011").
         billingPeriodEndDate("31-Jul-2011").
         numOfProductCharges(4).
-        paymentReceivedAmount("0.00"). //If PAP not suspended: paymentReceivedAmount("-1198.74").
+        paymentReceivedAmount("-1198.74").
         serviceCharge("930.30").
         recurringFeatureCharges("140.00").
         oneTimeFeatureCharges("30.00").
         taxes("132.04").
-        totalDueAmount("2481.08"); //If PAP not suspended: totalDueAmount("1232.34");
+        totalDueAmount("1232.34");
         // @formatter:on
 
-        // TODO The tests below will not work since PAP suspended, need to renew PAP
-        if (false) {
-            advanceSysDate("18-Jul-2011");
+        advanceSysDate("18-Jul-2011");
 
-            confirmBill(true);
+        confirmBill(true);
 
-            // @formatter:off
+        // @formatter:off
         new BillTester(getLatestBill()).
         billSequenceNumber(5).
         billType(Bill.BillType.Regular).
@@ -201,13 +199,13 @@ public class PadPaymentChargeBaseSunnyDayScenarioTest extends LeaseFinancialTest
         totalDueAmount("1282.34");
         // @formatter:on
 
-            receiveAndPostPayment("18-Jul-2011", "83.60");
+        receiveAndPostPayment("18-Jul-2011", "83.60");
 
-            advanceSysDate("18-Aug-2011");
+        advanceSysDate("18-Aug-2011");
 
-            confirmBill(true);
+        confirmBill(true);
 
-            // @formatter:off
+        // @formatter:off
         new BillTester(getLatestBill()).
         billSequenceNumber(6).
         billType(Bill.BillType.Regular).
@@ -224,8 +222,7 @@ public class PadPaymentChargeBaseSunnyDayScenarioTest extends LeaseFinancialTest
         totalDueAmount("1198.74");
         // @formatter:on
 
-            printTransactionHistory(ServerSideFactory.create(ARFacade.class).getTransactionHistory(retrieveLease().billingAccount()));
-        }
+        printTransactionHistory(ServerSideFactory.create(ARFacade.class).getTransactionHistory(retrieveLease().billingAccount()));
 
     }
 }
