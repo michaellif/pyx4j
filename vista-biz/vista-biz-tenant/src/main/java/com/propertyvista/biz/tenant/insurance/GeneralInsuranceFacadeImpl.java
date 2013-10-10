@@ -28,6 +28,10 @@ public class GeneralInsuranceFacadeImpl implements GeneralInsuranceFacade {
         assertNewCertificate(certificate);
         GeneralInsurancePolicy policy = EntityFactory.create(GeneralInsurancePolicy.class);
         policy.tenant().set(tenantId);
+
+        Tenant tenant = Persistence.service().retrieve(Tenant.class, tenantId.getPrimaryKey());
+        Persistence.service().retrieve(tenant.customer().user());
+        policy.user().set(tenant.customer().user());
         policy.certificate().set(certificate);
         policy.isDeleted().setValue(false);
         Persistence.secureSave(policy);
