@@ -17,8 +17,10 @@ import com.google.gwt.core.client.GWT;
 
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.rpc.shared.VoidSerializable;
+import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.rpc.AppPlace;
 
+import com.propertyvista.portal.rpc.portal.PortalSiteMap;
 import com.propertyvista.portal.rpc.portal.web.dto.insurance.TenantSureInsurancePolicyDTO;
 import com.propertyvista.portal.rpc.portal.web.services.services.TenantSureInsurancePolicyCrudService;
 import com.propertyvista.portal.web.client.activity.AbstractEditorActivity;
@@ -68,18 +70,17 @@ public class TenantSurePageActivity extends AbstractEditorActivity<TenantSureIns
 
     @Override
     public void updateCreditCardDetails() {
-        // TODO Auto-generated method stub
+        AppSite.getPlaceController().goTo(new PortalSiteMap.Resident.ResidentServices.TenantInsurance.TenantSure.TenantSurePage.UpdateCreditCard());
     }
 
     @Override
     public void viewFaq() {
-        // TODO Auto-generated method stub
-
+        AppSite.getPlaceController().goTo(new PortalSiteMap.Resident.ResidentServices.TenantInsurance.TenantSure.TenantSurePage.Faq());
     }
 
     @Override
     public void viewAboutTenantSure() {
-        // TODO Auto-generated method stub
+        AppSite.getPlaceController().goTo(new PortalSiteMap.Resident.ResidentServices.TenantInsurance.TenantSure.TenantSurePage.About());
     }
 
 }

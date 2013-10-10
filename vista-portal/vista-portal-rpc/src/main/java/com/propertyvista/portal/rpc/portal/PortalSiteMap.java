@@ -244,6 +244,16 @@ public class PortalSiteMap implements SiteMap {
 
                         }
 
+                        @PlaceProperties(caption = "Tenant Sure Contact Info")
+                        public static class About extends AppPlace {
+
+                        }
+
+                        @PlaceProperties(caption = "FAQ")
+                        public static class Faq extends AppPlace {
+
+                        }
+
                     }
 
                     @PlaceProperties(caption = "Tenant Sure Contact Info")
