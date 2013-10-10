@@ -83,7 +83,7 @@ public class KijijiDataMapper {
             if (PublicVisibilityType.global.equals(item.visibility().getValue())) {
                 Image image = createImage(item);
                 if (image != null) {
-                    images.setImage(image);
+                    images.getImage().add(image);
                 }
             }
         }

@@ -1,140 +1,145 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<xs:schema version="1.0" xmlns:xs="http://www.w3.org/2001/XMLSchema">   
+<xs:schema version="1.0" xmlns:xs="http://www.w3.org/2001/XMLSchema">
 
-<xs:element name="Locations" type="Locations"  /> 
-<xs:complexType name="Locations"  >    
- <xs:sequence>     
-	 <xs:element name="Location" type="location" minOccurs="1" maxOccurs="unbounded" />     
- </xs:sequence> 
- </xs:complexType>  
+	<xs:element name="Locations" type="Locations" />
+	<xs:complexType name="Locations">
+		<xs:sequence>
+			<xs:element name="Location" type="location" minOccurs="1"
+				maxOccurs="unbounded" />
+		</xs:sequence>
+	</xs:complexType>
 
+	<xs:complexType name="location">
+		<xs:sequence>
+			<xs:element name="ClientLocationId" type="xs:int"
+				minOccurs="1" />
+			<xs:element name="BuildingName" type="xs:string"
+				minOccurs="1" />
+			<xs:element name="StreetAddress" type="xs:string"
+				minOccurs="1" />
+			<xs:element name="City" type="xs:string" minOccurs="1" />
+			<xs:element name="Province" type="xs:string" minOccurs="1" />
+			<xs:element name="PostalCode" type="xs:string" minOccurs="1" />
+			<xs:element name="Email" type="xs:string" />
+			<xs:element name="PhoneNumber" type="xs:string" minOccurs="1" />
+			<xs:element name="WebSite" type="xs:string" minOccurs="1" />
+			<xs:element name="Logo" type="logo" />
+			<xs:element name="Units" type="Units" minOccurs="1"
+				maxOccurs="unbounded" />
+		</xs:sequence>
+	</xs:complexType>
 
-<xs:complexType name="location">    
- 	<xs:sequence>     
-	 <xs:element name="ClientLocationId" type="xs:int"  minOccurs="1"/> 
-	 <xs:element name="BuildingName" type="xs:string"  minOccurs="1"/>    
-  	 <xs:element name="StreetAddress" type="xs:string"  minOccurs="1"/>    
-	 <xs:element name="City" type="xs:string"  minOccurs="1"/>    
-	 <xs:element name="Province" type="xs:string"  minOccurs="1"/>    
-	 <xs:element name="PostalCode" type="xs:string"  minOccurs="1"/>    
-	 <xs:element name="Email" type="xs:string"/>    
-     <xs:element name="PhoneNumber" type="xs:string" minOccurs="1"/>    
-  	 <xs:element name="WebSite" type="xs:string"  minOccurs="1"/>  
-	 <xs:element name="Logo" type="logo" />     
-	 <xs:element name="Units" type="Units" minOccurs="1" maxOccurs="unbounded"/>     
- 	</xs:sequence> 
-</xs:complexType>
- 
- <xs:complexType name="logo">    
- 	<xs:sequence>     
-	 <xs:element name="Small" type="xs:string"  minOccurs="0"/>      
-	 <xs:element name="Medium" type="xs:string"  minOccurs="0"/>    
-	 <xs:element name="Large" type="xs:string"  minOccurs="0"/>    
- 	</xs:sequence> 
- </xs:complexType>
- 
-<xs:complexType name="Units">    
- <xs:sequence>     
-	 <xs:element name="Unit" type="unit" minOccurs="1" maxOccurs="unbounded" />     
- </xs:sequence> 
- </xs:complexType>  
+	<xs:complexType name="logo">
+		<xs:sequence>
+			<xs:element name="Small" type="xs:string" minOccurs="0" />
+			<xs:element name="Medium" type="xs:string" minOccurs="0" />
+			<xs:element name="Large" type="xs:string" minOccurs="0" />
+		</xs:sequence>
+	</xs:complexType>
 
+	<xs:complexType name="Units">
+		<xs:sequence>
+			<xs:element name="Unit" type="unit" minOccurs="1"
+				maxOccurs="unbounded" />
+		</xs:sequence>
+	</xs:complexType>
 
-<xs:complexType name="unit">    
- <xs:sequence>     
-	 <xs:element name="ClientUnitId" type="xs:int"  minOccurs="1"/> 
-	 <xs:element name="Title" type="xs:string" minOccurs="1"/>    
-	 <xs:element name="Description" type="xs:string"  minOccurs="1"/>     
-	 <xs:element name="RentOrSale" type="xs:string" minOccurs="1" />     
-	 <xs:element name="OfferedBy"  minOccurs="1" >  
-	 <xs:simpleType>
-     <xs:restriction base="xs:string">
-       <xs:enumeration value="owner"/>
-       <xs:enumeration value="agent"/>
-     </xs:restriction>
-     </xs:simpleType>
-     </xs:element> 
-	 <xs:element name="UnitType"  minOccurs="1" >  
-	 <xs:simpleType>
-     <xs:restriction base="xs:string">
-       <xs:enumeration value="apartment/condo"/>
-       <xs:enumeration value="house"/>
-       <xs:enumeration value="land"/>
-     </xs:restriction>
-   	</xs:simpleType>
- 	</xs:element> 
-	 <xs:element name="Bedrooms"  minOccurs="1" > 
-	 <xs:simpleType>
-     <xs:restriction base="xs:string">
-       <xs:enumeration value="0"/>
-       <xs:enumeration value="1"/>
-       <xs:enumeration value="1.5"/>
-        <xs:enumeration value="2"/>
-       <xs:enumeration value="2.5"/>
-       <xs:enumeration value="3"/>
-        <xs:enumeration value="3.5"/>
-       <xs:enumeration value="4"/>
-       <xs:enumeration value="4.5"/>
-        <xs:enumeration value="5"/>
-       <xs:enumeration value="5.5"/>
-       <xs:enumeration value="6 or more"/>
-     </xs:restriction>
-   </xs:simpleType>
- </xs:element> 
-	 <xs:element name="Bathrooms" minOccurs="1" > 
-	 <xs:simpleType>
-     <xs:restriction base="xs:string">
-       <xs:enumeration value="0"/>
-       <xs:enumeration value="1"/>
-       <xs:enumeration value="1.5"/>
-        <xs:enumeration value="2"/>
-       <xs:enumeration value="2.5"/>
-       <xs:enumeration value="3"/>
-        <xs:enumeration value="3.5"/>
-       <xs:enumeration value="4"/>
-       <xs:enumeration value="4.5"/>
-        <xs:enumeration value="5"/>
-       <xs:enumeration value="5.5"/>
-       <xs:enumeration value="6 or more"/>
-     </xs:restriction>
-     </xs:simpleType>
-     </xs:element> 
-	 <xs:element name="Price" type="xs:string" minOccurs="0" /> 
-	 <xs:element name="SquareFootage" type="xs:int" minOccurs="0" /> 
-	 <xs:element name="Furnished" minOccurs="0" >
-	 <xs:simpleType>
-     <xs:restriction base="xs:string">
-       <xs:enumeration value="Yes"/>
-       <xs:enumeration value="No"/>
-     </xs:restriction>
-   </xs:simpleType>
- </xs:element> 
-	 <xs:element name="PetsAllowed" minOccurs="0" >
-	 <xs:simpleType>
-     <xs:restriction base="xs:string">
-       <xs:enumeration value="Yes"/>
-       <xs:enumeration value="No"/>
-     </xs:restriction>
-   </xs:simpleType>
- </xs:element> 
- <xs:element name="Images">
-  <xs:complexType>    
- 	<xs:sequence>     
-	 <xs:element name="Image" minOccurs="0" >   
-	 <xs:complexType>    
- 	 <xs:sequence>     
-	 <xs:element name="Name" type="xs:string"  minOccurs="0"/>      
-	 <xs:element name="SourceUrl" type="xs:string"  minOccurs="1"/>    
-	 <xs:element name="ClientImageId" type="xs:string"  minOccurs="0"/>    
-	 </xs:sequence> 
- 	</xs:complexType> 
- 	</xs:element> 	 
- 	</xs:sequence> 
- 	</xs:complexType> 
- 	</xs:element> 	
-	 
- 
- </xs:sequence> 
- </xs:complexType> 
+	<xs:complexType name="unit">
+		<xs:sequence>
+			<xs:element name="ClientUnitId" type="xs:int" minOccurs="1" />
+			<xs:element name="Title" type="xs:string" minOccurs="1" />
+			<xs:element name="Description" type="xs:string" minOccurs="1" />
+			<xs:element name="RentOrSale" type="xs:string" minOccurs="1" />
+			<xs:element name="OfferedBy" minOccurs="1">
+				<xs:simpleType>
+					<xs:restriction base="xs:string">
+						<xs:enumeration value="owner" />
+						<xs:enumeration value="agent" />
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+			<xs:element name="UnitType" minOccurs="1">
+				<xs:simpleType>
+					<xs:restriction base="xs:string">
+						<xs:enumeration value="apartment/condo" />
+						<xs:enumeration value="house" />
+						<xs:enumeration value="land" />
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+			<xs:element name="Bedrooms" minOccurs="1">
+				<xs:simpleType>
+					<xs:restriction base="xs:string">
+						<xs:enumeration value="0" />
+						<xs:enumeration value="1" />
+						<xs:enumeration value="1.5" />
+						<xs:enumeration value="2" />
+						<xs:enumeration value="2.5" />
+						<xs:enumeration value="3" />
+						<xs:enumeration value="3.5" />
+						<xs:enumeration value="4" />
+						<xs:enumeration value="4.5" />
+						<xs:enumeration value="5" />
+						<xs:enumeration value="5.5" />
+						<xs:enumeration value="6 or more" />
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+			<xs:element name="Bathrooms" minOccurs="1">
+				<xs:simpleType>
+					<xs:restriction base="xs:string">
+						<xs:enumeration value="0" />
+						<xs:enumeration value="1" />
+						<xs:enumeration value="1.5" />
+						<xs:enumeration value="2" />
+						<xs:enumeration value="2.5" />
+						<xs:enumeration value="3" />
+						<xs:enumeration value="3.5" />
+						<xs:enumeration value="4" />
+						<xs:enumeration value="4.5" />
+						<xs:enumeration value="5" />
+						<xs:enumeration value="5.5" />
+						<xs:enumeration value="6 or more" />
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+			<xs:element name="Price" type="xs:string" minOccurs="0" />
+			<xs:element name="SquareFootage" type="xs:int" minOccurs="0" />
+			<xs:element name="Furnished" minOccurs="0">
+				<xs:simpleType>
+					<xs:restriction base="xs:string">
+						<xs:enumeration value="Yes" />
+						<xs:enumeration value="No" />
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+			<xs:element name="PetsAllowed" minOccurs="0">
+				<xs:simpleType>
+					<xs:restriction base="xs:string">
+						<xs:enumeration value="Yes" />
+						<xs:enumeration value="No" />
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+			<xs:element name="Images">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="Image" minOccurs="0" maxOccurs="unbounded">
+							<xs:complexType>
+								<xs:sequence>
+									<xs:element name="Name" type="xs:string" minOccurs="0" />
+									<xs:element name="SourceUrl" type="xs:string"
+										minOccurs="1" />
+									<xs:element name="ClientImageId" type="xs:string"
+										minOccurs="0" />
+								</xs:sequence>
+							</xs:complexType>
+						</xs:element>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
 
-  </xs:schema>
+		</xs:sequence>
+	</xs:complexType>
+
+</xs:schema>
