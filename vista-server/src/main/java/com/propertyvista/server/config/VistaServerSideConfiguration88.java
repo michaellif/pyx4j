@@ -13,11 +13,11 @@
  */
 package com.propertyvista.server.config;
 
-public class VistaServerSideConfiguration66 extends VistaServerSideConfigurationCustom {
+public class VistaServerSideConfiguration88 extends VistaServerSideConfigurationCustom {
 
     @Override
     public Integer enviromentId() {
-        return 66;
+        return 88;
     }
 
     @Override
@@ -27,17 +27,17 @@ public class VistaServerSideConfiguration66 extends VistaServerSideConfiguration
 
     @Override
     public int interfaceSSHDPort() {
-        return 8826;
+        return 8828;
     }
 
     @Override
     public String getApplicationURLNamespace(boolean secure) {
-        return "-66.birchwoodsoftwaregroup.com/";
+        return "-88.birchwoodsoftwaregroup.com/";
     }
 
     @Override
     public String getApplicationEmailSender() {
-        return "\"Vista Support 66\" <support.www66@birchwoodsoftwaregroup.com>";
+        return "\"Vista Support 88\" <support.www88@birchwoodsoftwaregroup.com>";
     }
 
 }

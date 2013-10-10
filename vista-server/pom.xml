@@ -503,6 +503,14 @@
         </profile>
 
         <profile>
+            <id>deploy-target-env-88</id>
+            <properties>
+                <deployContext>vista88</deployContext>
+                <vista-app-ping-url>http://env-88.birchwoodsoftwaregroup.com/</vista-app-ping-url>
+            </properties>
+        </profile>
+
+        <profile>
             <id>deploy-target-env-33</id>
             <properties>
                 <deployContext>vista33</deployContext>
@@ -535,6 +543,15 @@
                 <deployContext>vista77</deployContext>
                 <vista-tomcat-url>http://qa.birchwoodsoftwaregroup.com</vista-tomcat-url>
                 <vista-app-ping-url>http://env-77.birchwoodsoftwaregroup.com/</vista-app-ping-url>
+            </properties>
+        </profile>
+
+        <profile>
+            <id>deploy-target-env-99</id>
+            <properties>
+                <deployContext>vista99</deployContext>
+                <vista-tomcat-url>http://qa.birchwoodsoftwaregroup.com</vista-tomcat-url>
+                <vista-app-ping-url>http://env-99.birchwoodsoftwaregroup.com/</vista-app-ping-url>
             </properties>
         </profile>
 

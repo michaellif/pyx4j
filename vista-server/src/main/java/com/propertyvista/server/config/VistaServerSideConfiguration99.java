@@ -7,43 +7,25 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Feb 22, 2011
+ * Created on Feb 15, 2011
  * @author vlads
  * @version $Id$
  */
 package com.propertyvista.server.config;
 
-import com.pyx4j.config.server.IPersistenceConfiguration;
-
-public class VistaServerSideConfiguration22 extends VistaServerSideConfiguration {
-
-    @Override
-    public IPersistenceConfiguration getPersistenceConfiguration() {
-        return new VistaConfigurationPostgreSQL() {
-            @Override
-            public String dbName() {
-                return "vista22";
-            }
-
-            @Override
-            public String userName() {
-                return "vista22";
-            }
-
-            @Override
-            public String password() {
-                return "vista22";
-            }
-        };
-    }
+/**
+ * See the files https://svn.pyx4j.com/svn-configs/trunk/vista/testenv/apps/catalina.base/tomcatA/conf/vista33
+ * 
+ */
+public class VistaServerSideConfiguration99 extends VistaServerSideConfigurationCustom {
 
     @Override
     public Integer enviromentId() {
-        return 22;
+        return 99;
     }
 
     @Override
-    public boolean openIdRequired() {
+    public boolean isVistaQa() {
         return true;
     }
 
@@ -53,13 +35,18 @@ public class VistaServerSideConfiguration22 extends VistaServerSideConfiguration
     }
 
     @Override
+    public int interfaceSSHDPort() {
+        return 8829;
+    }
+
+    @Override
     public String getApplicationURLNamespace(boolean secure) {
-        return "-22.birchwoodsoftwaregroup.com/";
+        return "-99.birchwoodsoftwaregroup.com/";
     }
 
     @Override
     public String getApplicationEmailSender() {
-        return "\"Vista Support 22\" <support.www22@birchwoodsoftwaregroup.com>";
+        return "\"Vista Support 99\" <support.www99@birchwoodsoftwaregroup.com>";
     }
 
 }
