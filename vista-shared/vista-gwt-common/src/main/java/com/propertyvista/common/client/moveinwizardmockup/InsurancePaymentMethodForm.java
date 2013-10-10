@@ -41,12 +41,12 @@ import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
 import com.propertyvista.common.client.ui.components.editors.AddressSimpleEditor;
 import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
 import com.propertyvista.domain.contact.AddressSimple;
-import com.propertyvista.domain.moveinwizardmockup.InsurancePaymentMethodDTO;
-import com.propertyvista.domain.moveinwizardmockup.InsurancePaymentMethodDTO.PaymentMethod;
+import com.propertyvista.domain.moveinwizardmockup.InsurancePaymentMethodMockupDTO;
+import com.propertyvista.domain.moveinwizardmockup.InsurancePaymentMethodMockupDTO.PaymentMethod;
 import com.propertyvista.domain.payment.CreditCardInfo;
 import com.propertyvista.domain.payment.CreditCardNumberIdentity;
 
-public class InsurancePaymentMethodForm extends CEntityDecoratableForm<InsurancePaymentMethodDTO> {
+public class InsurancePaymentMethodForm extends CEntityDecoratableForm<InsurancePaymentMethodMockupDTO> {
 
     private static final I18n i18n = I18n.get(InsurancePaymentMethodForm.class);
 
@@ -64,7 +64,7 @@ public class InsurancePaymentMethodForm extends CEntityDecoratableForm<Insurance
     }
 
     public InsurancePaymentMethodForm(boolean twoColumns) {
-        super(InsurancePaymentMethodDTO.class);
+        super(InsurancePaymentMethodMockupDTO.class);
         this.twoColumns = twoColumns;
     }
 
@@ -79,15 +79,15 @@ public class InsurancePaymentMethodForm extends CEntityDecoratableForm<Insurance
 
         container.setH1(++row, 0, 3, proto().paymentMethod().getMeta().getCaption());
 
-        CRadioGroupEnum<InsurancePaymentMethodDTO.PaymentMethod> radioGroup = new CRadioGroupEnum<InsurancePaymentMethodDTO.PaymentMethod>(
-                InsurancePaymentMethodDTO.PaymentMethod.class, RadioGroup.Layout.VERTICAL);
+        CRadioGroupEnum<InsurancePaymentMethodMockupDTO.PaymentMethod> radioGroup = new CRadioGroupEnum<InsurancePaymentMethodMockupDTO.PaymentMethod>(
+                InsurancePaymentMethodMockupDTO.PaymentMethod.class, RadioGroup.Layout.VERTICAL);
 
         paymentTypeImagesPanel = new FlowPanel();
         paymentTypeImagesPanel.setStyleName(NewPaymentMethodEditorTheme.StyleName.PaymentEditorImages.name());
         Image paymentTypeImage;
         FlowPanel holder;
 
-        for (PaymentMethod type : InsurancePaymentMethodDTO.PaymentMethod.values()) {
+        for (PaymentMethod type : InsurancePaymentMethodMockupDTO.PaymentMethod.values()) {
             switch (type) {
             case Visa:
                 paymentTypeImage = new Image(VistaImages.INSTANCE.paymentVISA().getSafeUri());

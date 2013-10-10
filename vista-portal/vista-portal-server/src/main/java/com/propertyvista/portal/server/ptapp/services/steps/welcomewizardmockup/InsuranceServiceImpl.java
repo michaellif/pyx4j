@@ -25,7 +25,7 @@ import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.server.contexts.Context;
 
 import com.propertyvista.domain.moveinwizardmockup.InsuranceDTO;
-import com.propertyvista.domain.moveinwizardmockup.InsurancePaymentMethodDTO.PaymentMethod;
+import com.propertyvista.domain.moveinwizardmockup.InsurancePaymentMethodMockupDTO.PaymentMethod;
 import com.propertyvista.domain.moveinwizardmockup.PurchaseInsuranceDTO.FormOfCoverage;
 import com.propertyvista.domain.moveinwizardmockup.PurchaseInsuranceDTO.HomeBuisnessOptions;
 import com.propertyvista.domain.policy.policies.domain.LegalTermsContent;

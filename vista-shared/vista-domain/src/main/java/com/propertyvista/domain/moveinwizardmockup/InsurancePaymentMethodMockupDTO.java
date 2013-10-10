@@ -27,7 +27,7 @@ import com.propertyvista.domain.contact.AddressSimple;
 import com.propertyvista.domain.payment.CreditCardInfo;
 
 @Transient
-public interface InsurancePaymentMethodDTO extends IEntity {
+public interface InsurancePaymentMethodMockupDTO extends IEntity {
 
     @I18n
     public enum PaymentMethod {

@@ -61,6 +61,7 @@ import com.propertyvista.portal.web.client.activity.services.insurance.TenantSur
 import com.propertyvista.portal.web.client.activity.services.insurance.TenantSureOrderConfirmationPageActivity;
 import com.propertyvista.portal.web.client.activity.services.insurance.TenantSureOrderWizardActivity;
 import com.propertyvista.portal.web.client.activity.services.insurance.TenantSurePageActivity;
+import com.propertyvista.portal.web.client.activity.services.insurance.tenantsurepaymentmethod.TenantSurePaymentMethodWizardActivity;
 
 public class ContentActivityMapper implements AppActivityMapper {
 
@@ -129,6 +130,8 @@ public class ContentActivityMapper implements AppActivityMapper {
                         activity = new TenantSureOrderConfirmationPageActivity(appPlace);
                     } else if (appPlace instanceof PortalSiteMap.Resident.ResidentServices.TenantInsurance.TenantSure.TenantSurePage) {
                         activity = new TenantSurePageActivity(appPlace);
+                    } else if (appPlace instanceof PortalSiteMap.Resident.ResidentServices.TenantInsurance.TenantSure.TenantSurePage.UpdateCreditCard) {
+                        activity = new TenantSurePaymentMethodWizardActivity(appPlace);
                     } else if (appPlace instanceof PortalSiteMap.Resident.ResidentServices.TenantInsurance.TenantSure.TenantSurePage.Faq) {
                         activity = new TenantSureFaqActivity(appPlace);
                     } else if (appPlace instanceof PortalSiteMap.Resident.ResidentServices.TenantInsurance.TenantSure.TenantSurePage.About) {

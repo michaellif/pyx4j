@@ -179,7 +179,7 @@ public interface PurchaseInsuranceDTO extends IEntity {
     IList<DigitalSignature> digitalSignatures();
 
     @EmbeddedEntity
-    InsurancePaymentMethodDTO paymentMethod();
+    InsurancePaymentMethodMockupDTO paymentMethod();
 
     IList<LegalTermsDescriptorDTO> agreementLegalBlurbAndPreAuthorizationAgreeement();
 
