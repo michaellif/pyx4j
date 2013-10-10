@@ -26,6 +26,10 @@ public class PreauthorizedPaymentBuilder {
 
     private final List<PreauthorizedPaymentCoveredItem> items = new ArrayList<PreauthorizedPaymentCoveredItem>();
 
+    public PreauthorizedPaymentBuilder add(BillableItem billableItem) {
+        return add(billableItem, billableItem.agreedPrice().getValue().toString());
+    }
+
     public PreauthorizedPaymentBuilder add(BillableItem billableItem, String amount) {
         PreauthorizedPaymentCoveredItem item = EntityFactory.create(PreauthorizedPaymentCoveredItem.class);
         item.billableItem().set(billableItem);

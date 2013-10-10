@@ -36,6 +36,7 @@ import com.propertyvista.domain.payment.PreauthorizedPayment;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.tenant.Customer;
+import com.propertyvista.domain.tenant.lease.BillableItem;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.Tenant;
 import com.propertyvista.test.integration.BillableItemTester;
@@ -157,7 +158,10 @@ public class YardiLeaseChargesTest extends YardiTestBase {
     @Test
     public void testChangingAmount() throws Exception {
         // Ensure PAP is active
-        new PaymentAgreementTester(getLease().billingAccount()).count(1).activeCount(1);
+        new PaymentAgreementTester(getLease().billingAccount())//
+                .count(1) //
+                .activeCount(1)//
+                .lastRecordAmount(eval("1234.56 + 50"));
 
         // @formatter:off
         new BillableItemTester(getLease().currentTerm().version().leaseProducts().featureItems().get(0)).
@@ -180,8 +184,11 @@ public class YardiLeaseChargesTest extends YardiTestBase {
         agreedPrice("55.00");  
         // @formatter:on
 
-        // Ensure PAP suspended
-        new PaymentAgreementTester(getLease().billingAccount()).count(1).activeCount(0);
+        // Ensure PAP NOT suspended
+        new PaymentAgreementTester(getLease().billingAccount())//
+                .count(1)//
+                .activeCount(1)//
+                .lastRecordAmount(eval("1234.56 + 55"));
     }
 
     /*
@@ -192,7 +199,10 @@ public class YardiLeaseChargesTest extends YardiTestBase {
     @Test
     public void testExpiredProduct() throws Exception {
         // Ensure PAP is active
-        new PaymentAgreementTester(getLease().billingAccount()).count(1).activeCount(1);
+        new PaymentAgreementTester(getLease().billingAccount())//
+                .count(1)//
+                .activeCount(1)//
+                .lastRecordAmount(eval("1234.56 + 50"));
 
         // @formatter:off
         new BillableItemTester(getLease().currentTerm().version().leaseProducts().featureItems().get(0)).
@@ -213,8 +223,11 @@ public class YardiLeaseChargesTest extends YardiTestBase {
         // Ensure feature removed
         assertEquals(0, getLease().currentTerm().version().leaseProducts().featureItems().size());
 
-        // Ensure PAP suspended
-        new PaymentAgreementTester(getLease().billingAccount()).count(1).activeCount(0);
+        // Ensure PAP NOT suspended
+        new PaymentAgreementTester(getLease().billingAccount())//
+                .count(1)//
+                .activeCount(1)//
+                .lastRecordAmount(eval("1234.56"));
     }
 
     /*
@@ -225,7 +238,10 @@ public class YardiLeaseChargesTest extends YardiTestBase {
     @Test
     public void testRemovingFeature() throws Exception {
         // Ensure PAP is active
-        new PaymentAgreementTester(getLease().billingAccount()).count(1).activeCount(1);
+        new PaymentAgreementTester(getLease().billingAccount())//
+                .count(1)//
+                .activeCount(1)//
+                .lastRecordAmount(eval("1234.56 + 50"));
 
         LeaseChargeUpdater updater = new LeaseChargeUpdater(PROPERTY_CODE, CUSTOOMER_ID, "parkA").remove();
         MockEventBus.fireEvent(new LeaseChargeUpdateEvent(updater));
@@ -234,8 +250,11 @@ public class YardiLeaseChargesTest extends YardiTestBase {
         // check feature removed
         assertEquals(0, getLease().currentTerm().version().leaseProducts().featureItems().size());
 
-        // Ensure PAP suspended
-        new PaymentAgreementTester(getLease().billingAccount()).count(1).activeCount(0);
+        // Ensure PAP not suspended
+        new PaymentAgreementTester(getLease().billingAccount())//
+                .count(1)//
+                .activeCount(1)//
+                .lastRecordAmount(eval("1234.56"));
     }
 
     /*
@@ -246,7 +265,10 @@ public class YardiLeaseChargesTest extends YardiTestBase {
     @Test
     public void testExtendingTerm() throws Exception {
         // Ensure PAP is active
-        new PaymentAgreementTester(getLease().billingAccount()).count(1).activeCount(1);
+        new PaymentAgreementTester(getLease().billingAccount())//
+                .count(1)//
+                .activeCount(1)//
+                .lastRecordAmount(eval("1234.56 + 50"));
 
         // @formatter:off
         new BillableItemTester(getLease().currentTerm().version().leaseProducts().featureItems().get(0)).
@@ -269,7 +291,10 @@ public class YardiLeaseChargesTest extends YardiTestBase {
         // @formatter:on
 
         // Ensure PAP is active
-        new PaymentAgreementTester(getLease().billingAccount()).count(1).activeCount(1);
+        new PaymentAgreementTester(getLease().billingAccount())//
+                .count(1)//
+                .activeCount(1)//
+                .lastRecordAmount(eval("1234.56 + 50"));
     }
 
     /*
@@ -295,7 +320,9 @@ public class YardiLeaseChargesTest extends YardiTestBase {
         MockEventBus.fireEvent(new LeaseChargeUpdateEvent(lease));
 
         // Ensure PAP is active
-        new PaymentAgreementTester(getLease().billingAccount()).count(1).activeCount(1);
+        new PaymentAgreementTester(getLease().billingAccount())//
+                .count(1)//
+                .activeCount(1);
 
         // expire test lease
         Calendar cal = GregorianCalendar.getInstance();
@@ -324,7 +351,10 @@ public class YardiLeaseChargesTest extends YardiTestBase {
         assertEquals(0, getLease().currentTerm().version().leaseProducts().featureItems().size());
 
         // Ensure PAP suspended
-        new PaymentAgreementTester(getLease().billingAccount()).count(1).activeCount(0);
+        new PaymentAgreementTester(getLease().billingAccount())//
+                .count(1)//
+                .activeCount(1)//
+                .lastRecordAmount(eval("0"));
     }
 
     // ---------- private -----------------
@@ -340,7 +370,14 @@ public class YardiLeaseChargesTest extends YardiTestBase {
         Persistence.service().retrieve(lease.currentTerm().version().tenants());
         Tenant tenant = lease.currentTerm().version().tenants().get(0).leaseParticipant();
         pap.paymentMethod().set(createPaymentMethod(tenant.customer(), getLease().unit().building()));
-        pap.coveredItems().addAll(new PreauthorizedPaymentBuilder().add(lease.currentTerm().version().leaseProducts().serviceItem(), "1000.00").build());
+
+        PreauthorizedPaymentBuilder pab = new PreauthorizedPaymentBuilder();
+        pab.add(lease.currentTerm().version().leaseProducts().serviceItem());
+        for (BillableItem feature : lease.currentTerm().version().leaseProducts().featureItems()) {
+            pab.add(feature);
+        }
+
+        pap.coveredItems().addAll(pab.build());
         ServerSideFactory.create(PaymentMethodFacade.class).persistPreauthorizedPayment(pap, tenant);
         return pap;
     }
