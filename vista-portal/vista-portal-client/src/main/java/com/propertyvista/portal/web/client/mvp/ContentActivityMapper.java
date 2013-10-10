@@ -56,6 +56,7 @@ import com.propertyvista.portal.web.client.activity.security.PasswordResetActivi
 import com.propertyvista.portal.web.client.activity.services.dashboard.ServicesDashboardActivity;
 import com.propertyvista.portal.web.client.activity.services.insurance.GeneralPolicyPageActivity;
 import com.propertyvista.portal.web.client.activity.services.insurance.GeneralPolicyUploadWizardActivity;
+import com.propertyvista.portal.web.client.activity.services.insurance.TenantSureAboutActivity;
 import com.propertyvista.portal.web.client.activity.services.insurance.TenantSureFaqActivity;
 import com.propertyvista.portal.web.client.activity.services.insurance.TenantSureOrderConfirmationPageActivity;
 import com.propertyvista.portal.web.client.activity.services.insurance.TenantSureOrderWizardActivity;
@@ -130,6 +131,8 @@ public class ContentActivityMapper implements AppActivityMapper {
                         activity = new TenantSurePageActivity(appPlace);
                     } else if (appPlace instanceof PortalSiteMap.Resident.ResidentServices.TenantInsurance.TenantSure.TenantSurePage.Faq) {
                         activity = new TenantSureFaqActivity(appPlace);
+                    } else if (appPlace instanceof PortalSiteMap.Resident.ResidentServices.TenantInsurance.TenantSure.TenantSurePage.About) {
+                        activity = new TenantSureAboutActivity(appPlace);
 
                     } else if (appPlace instanceof PortalSiteMap.Resident.ResidentServices.TenantInsurance.GeneralPolicyWizard) {
                         activity = new GeneralPolicyUploadWizardActivity(appPlace);
