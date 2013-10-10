@@ -23,7 +23,6 @@ import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.Button;
 
-import com.propertyvista.common.client.ui.components.tenantinsurance.InsuranceCertificateDocumentFolder;
 import com.propertyvista.portal.rpc.portal.web.dto.insurance.GeneralInsurancePolicyDTO;
 import com.propertyvista.portal.web.client.ui.CPortalEntityForm;
 import com.propertyvista.portal.web.client.ui.util.decorators.FormDecoratorBuilder;
@@ -48,7 +47,7 @@ public class GeneralPolicyPage extends CPortalEntityForm<GeneralInsurancePolicyD
         mainPanel.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().certificate().inceptionDate()), "150px").build());
         mainPanel.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().certificate().expiryDate()), "150px").build());
         mainPanel.setH2(++row, 0, 2, i18n.tr("Scanned Certificate"));
-        mainPanel.setWidget(++row, 0, 2, inject(proto().certificate().documents(), new InsuranceCertificateDocumentFolder()));
+        mainPanel.setWidget(++row, 0, 2, inject(proto().certificate().certificateScan()));
 
         return mainPanel;
 

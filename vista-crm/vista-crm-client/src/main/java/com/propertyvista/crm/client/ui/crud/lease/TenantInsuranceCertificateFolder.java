@@ -23,8 +23,8 @@ import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
 
 import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
-import com.propertyvista.common.client.ui.components.tenantinsurance.TenantInsuranceCertificateForm;
-import com.propertyvista.common.client.ui.components.tenantinsurance.TenantInsuranceCertificateForm.TenantOwnerClickHandler;
+import com.propertyvista.crm.client.activity.crud.lease.TenantInsuranceCertificateForm;
+import com.propertyvista.crm.client.activity.crud.lease.TenantInsuranceCertificateForm.TenantOwnerClickHandler;
 import com.propertyvista.domain.tenant.insurance.GeneralInsuranceCertificate;
 import com.propertyvista.domain.tenant.insurance.InsuranceCertificate;
 import com.propertyvista.domain.tenant.insurance.PropertyVistaIntegratedInsurance;
@@ -62,7 +62,6 @@ public class TenantInsuranceCertificateFolder extends VistaBoxFolder<InsuranceCe
     @Override
     protected void addItem() {
         GeneralInsuranceCertificate certificate = EntityFactory.create(GeneralInsuranceCertificate.class);
-        certificate.documents().add(certificate.documents().$());
         super.addItem(certificate);
     }
 

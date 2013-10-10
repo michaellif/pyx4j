@@ -11,14 +11,12 @@
  * @author ArtyomB
  * @version $Id$
  */
-package com.propertyvista.common.client.ui.components.tenantinsurance;
+package com.propertyvista.crm.client.activity.crud.lease;
 
 import java.math.BigDecimal;
 
-import com.google.gwt.dom.client.Style.TextAlign;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.IsWidget;
-import com.google.gwt.user.client.ui.Label;
 
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.forms.client.ui.CComponent;
@@ -50,8 +48,6 @@ public class TenantInsuranceCertificateForm<E extends InsuranceCertificate> exte
     private final boolean displayTenantOwner;
 
     private final TenantOwnerClickHandler tenantOwnerClickHandler;
-
-    private Label scannedInsuranceCertificateNotAvailable;
 
     private int insuranceCeritificatesHeaderRow;
 
@@ -136,13 +132,7 @@ public class TenantInsuranceCertificateForm<E extends InsuranceCertificate> exte
         });
 
         insuranceCeritificatesHeaderRow = ++row;
-        contentPanel.setWidget(++row, 0, 2, inject(proto().documents(), new InsuranceCertificateDocumentFolder()));
-        scannedInsuranceCertificateNotAvailable = new Label(i18n.tr("N/A"));
-        scannedInsuranceCertificateNotAvailable.getElement().getStyle().setTextAlign(TextAlign.CENTER);
-        scannedInsuranceCertificateNotAvailable.getElement().getStyle().setProperty("marginLeft", "auto");
-        scannedInsuranceCertificateNotAvailable.getElement().getStyle().setProperty("marginRight", "auto");
-        scannedInsuranceCertificateNotAvailable.setVisible(false);
-        contentPanel.setWidget(++row, 0, 2, scannedInsuranceCertificateNotAvailable);
+        contentPanel.setWidget(++row, 0, 2, inject(proto().certificateScan()));
         return contentPanel;
     }
 
@@ -154,7 +144,6 @@ public class TenantInsuranceCertificateForm<E extends InsuranceCertificate> exte
     protected void onValueSet(boolean populate) {
         super.onValueSet(populate);
         setViewable(getValue() instanceof PropertyVistaIntegratedInsurance); // TODO this should not be controlled by the form itstelf
-        scannedInsuranceCertificateNotAvailable.setVisible(isViewable() & getValue().documents().isEmpty());
         contentPanel.setH2(insuranceCeritificatesHeaderRow, 0, 1,
                 isEditable() & !isViewable() ? i18n.tr("Attach Scanned Insurance Certificate") : i18n.tr("Scanned Insurance Certificate"));
     }

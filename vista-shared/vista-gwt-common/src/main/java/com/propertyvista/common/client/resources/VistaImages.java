@@ -29,6 +29,10 @@ public interface VistaImages extends FormsImageBundle, EntityFolderImages, Widge
     ImageResource datePicker();
 
     @Override
+    @Source("clear.png")
+    ImageResource clear();
+
+    @Override
     @Source("action.png")
     ImageResource triggerDown();
 

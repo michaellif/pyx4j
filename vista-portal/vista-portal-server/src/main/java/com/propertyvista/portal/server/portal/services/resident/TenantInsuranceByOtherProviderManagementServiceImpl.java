@@ -54,7 +54,6 @@ public class TenantInsuranceByOtherProviderManagementServiceImpl implements Tena
         GeneralInsuranceCertificate insuranceCertificate = insurancePolicy.certificate();
         if (insuranceCertificate == null) {
             insuranceCertificate = EntityFactory.create(GeneralInsuranceCertificate.class);
-            insuranceCertificate.documents().add(insuranceCertificate.documents().$());
         }
         callback.onSuccess(insuranceCertificate);
     }

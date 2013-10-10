@@ -344,9 +344,6 @@ public class TenantCrudServiceImpl extends LeaseParticipantCrudServiceBaseImpl<T
             if ((insuranceCertificate instanceof PropertyVistaIntegratedInsurance) | insuranceCertificate.isManagedByTenant().isBooleanTrue()) {
                 continue;
             }
-            for (Object document : insuranceCertificate.documents()) {
-                ((InsuranceCertificateDocument) document).owner().set(insuranceCertificate);
-            }
             if (insuranceCertificate.getPrimaryKey() == null && (insuranceCertificate instanceof GeneralInsuranceCertificate)) {
                 ServerSideFactory.create(GeneralInsuranceFacade.class).createGeneralTenantInsurance(
                         EntityFactory.createIdentityStub(Tenant.class, tenantDto.getPrimaryKey()), (GeneralInsuranceCertificate) insuranceCertificate);

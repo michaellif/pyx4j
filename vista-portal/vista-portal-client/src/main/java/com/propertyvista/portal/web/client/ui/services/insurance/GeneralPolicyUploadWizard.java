@@ -24,12 +24,14 @@ import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.ui.CEntityLabel;
+import com.pyx4j.forms.client.ui.CFile;
 import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
 import com.pyx4j.forms.client.validators.ValidationError;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
+import com.propertyvista.domain.File;
 import com.propertyvista.domain.media.InsuranceCertificateDocument;
 import com.propertyvista.domain.tenant.Customer;
 import com.propertyvista.domain.tenant.lease.Tenant;
@@ -122,7 +124,7 @@ public class GeneralPolicyUploadWizard extends CPortalEntityWizard<GeneralInsura
                 return null;
             }
         });
-        contentPanel.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().certificate().expiryDate()), "150px").build());
+        contentPanel.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().certificate().expiryDate()), 150).build());
         get(proto().certificate().expiryDate()).addValueValidator(new EditableValueValidator<LogicalDate>() {
             @Override
             public ValidationError isValid(CComponent<LogicalDate> component, LogicalDate value) {
@@ -134,7 +136,17 @@ public class GeneralPolicyUploadWizard extends CPortalEntityWizard<GeneralInsura
         });
 
         contentPanel.setH2(++row, 0, 1, i18n.tr("Attach Scanned Insurance Certificate"));
-        contentPanel.setWidget(++row, 0, 1, inject(proto().certificate().documents(), new InsuranceCertificateDocumentFolder()));
+        contentPanel.setWidget(++row, 0, 1, new FormDecoratorBuilder(inject(proto().certificate().certificateScan(), new CFile<File>(new Command() {
+            @Override
+            public void execute() {
+                System.out.println("++++++++++++execute");
+            }
+        }) {
+            @Override
+            public void showFileSelectionDialog() {
+                System.out.println("++++++++++++==");
+            }
+        }), 200).build());
 
         return contentPanel;
     }

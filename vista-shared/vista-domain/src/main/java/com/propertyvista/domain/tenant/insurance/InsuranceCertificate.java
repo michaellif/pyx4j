@@ -21,6 +21,7 @@ import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.DiscriminatorValue;
 import com.pyx4j.entity.annotations.Editor;
+import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.annotations.Editor.EditorType;
 import com.pyx4j.entity.annotations.Format;
 import com.pyx4j.entity.annotations.Inheritance;
@@ -31,17 +32,15 @@ import com.pyx4j.entity.annotations.ReadOnly;
 import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.AttachLevel;
+import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
-
-import com.propertyvista.domain.media.ApplicationDocumentHolder;
-import com.propertyvista.domain.media.InsuranceCertificateDocument;
 
 @AbstractEntity
 @Inheritance(strategy = InheritanceStrategy.SINGLE_TABLE)
 @DiscriminatorValue("InsuranceCertificate")
 // TODO this format fails during update of new instances of InsuranceCertificate via BoxFolder
 //@ToStringFormat("Provider: {0}, Certificate #: {1}, Liability Coverage: ${2,choice,null#|!null#,#,##0.00}, Expiry: {3}")
-public interface InsuranceCertificate<INSURANCE_POLICY extends InsurancePolicy<?>> extends ApplicationDocumentHolder<InsuranceCertificateDocument> {
+public interface InsuranceCertificate<INSURANCE_POLICY extends InsurancePolicy<?>> extends IEntity {
 
     @Owner
     @JoinColumn
@@ -73,5 +72,9 @@ public interface InsuranceCertificate<INSURANCE_POLICY extends InsurancePolicy<?
     @NotNull
     @ToString(index = 3)
     IPrimitive<LogicalDate> expiryDate();
+
+    @Owned
+    @Detached
+    InsuranceCertificateScan certificateScan();
 
 }

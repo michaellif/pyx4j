@@ -7,11 +7,11 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Jul 19, 2013
- * @author stanp
+ * Created on Oct 9, 2013
+ * @author michaellif
  * @version $Id$
  */
-package com.propertyvista.domain.tenant;
+package com.propertyvista.domain.tenant.insurance;
 
 import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.JoinColumn;
@@ -20,12 +20,11 @@ import com.pyx4j.entity.annotations.ReadOnly;
 
 import com.propertyvista.domain.File;
 
-public interface CustomerPicture extends File {
+public interface InsuranceCertificateScan extends File {
 
     @Owner
     @Detached
     @JoinColumn
     @ReadOnly
-    Customer customer();
-
+    InsuranceCertificate<?> certificate();
 }

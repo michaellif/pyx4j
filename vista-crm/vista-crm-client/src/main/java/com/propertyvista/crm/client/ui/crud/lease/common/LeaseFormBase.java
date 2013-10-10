@@ -27,8 +27,8 @@ import com.pyx4j.widgets.client.tabpanel.Tab;
 
 import com.propertyvista.common.client.resources.VistaImages;
 import com.propertyvista.common.client.ui.components.editors.dto.bill.BillForm;
-import com.propertyvista.common.client.ui.components.tenantinsurance.TenantInsuranceCertificateForm.TenantOwnerClickHandler;
 import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
+import com.propertyvista.crm.client.activity.crud.lease.TenantInsuranceCertificateForm.TenantOwnerClickHandler;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.crm.client.ui.crud.lease.TenantInsuranceCertificateFolder;
 import com.propertyvista.crm.client.ui.crud.lease.common.term.GuarantorInLeaseFolder;
