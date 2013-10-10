@@ -19,6 +19,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Collection;
+import java.util.EnumSet;
 import java.util.Hashtable;
 import java.util.Locale;
 import java.util.Map;
@@ -38,7 +39,6 @@ import com.pyx4j.gwt.server.IOUtils;
 import com.pyx4j.gwt.shared.DownloadFormat;
 import com.pyx4j.i18n.shared.I18n;
 
-import com.propertyvista.crm.rpc.services.MediaUploadService;
 import com.propertyvista.domain.media.Media;
 import com.propertyvista.interfaces.importer.model.MediaIO;
 import com.propertyvista.portal.rpc.portal.ImageConsts.ImageTarget;
@@ -56,7 +56,8 @@ public class MediaConverter extends EntityBinder<Media, MediaIO> {
 
     private final ImageTarget imageTarget;
 
-    private static Collection<String> extensions = DownloadFormat.getExtensions(MediaUploadService.supportedFormats);
+    private static Collection<String> extensions = DownloadFormat.getExtensions(EnumSet.of(DownloadFormat.JPEG, DownloadFormat.GIF, DownloadFormat.PNG,
+            DownloadFormat.BMP));
 
     public MediaConverter(MediaConfig mediaConfig, ImageTarget imageTarget) {
         super(Media.class, MediaIO.class, false);

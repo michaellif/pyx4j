@@ -14,6 +14,7 @@
 package com.propertyvista.crm.server.services;
 
 import java.util.Collection;
+import java.util.EnumSet;
 
 import org.apache.commons.io.FilenameUtils;
 
@@ -21,28 +22,33 @@ import com.pyx4j.commons.Key;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.essentials.server.download.MimeMap;
+import com.pyx4j.essentials.server.upload.AbstractUploadServiceImpl;
 import com.pyx4j.essentials.server.upload.UploadData;
 import com.pyx4j.essentials.server.upload.UploadDeferredProcess;
-import com.pyx4j.essentials.server.upload.AbstractUploadServiceImpl;
 import com.pyx4j.gwt.rpc.upload.UploadResponse;
 import com.pyx4j.gwt.shared.DownloadFormat;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.crm.rpc.dto.MediaUploadDTO;
-import com.propertyvista.crm.rpc.services.MediaUploadService;
 import com.propertyvista.domain.File;
+import com.propertyvista.portal.rpc.portal.ImageConsts.ImageTarget;
 import com.propertyvista.server.common.blob.BlobService;
 import com.propertyvista.server.common.blob.ThumbnailService;
 import com.propertyvista.server.domain.FileBlob;
 
-public class MediaUploadServiceImpl extends AbstractUploadServiceImpl<MediaUploadDTO, File> implements MediaUploadService {
+public abstract class MediaUploadAbstractServiceImpl extends AbstractUploadServiceImpl<MediaUploadDTO, File> {
 
-    private static final I18n i18n = I18n.get(MediaUploadServiceImpl.class);
+    private static final I18n i18n = I18n.get(MediaUploadAbstractServiceImpl.class);
+
+    public static final Collection<DownloadFormat> supportedFormats = EnumSet.of(DownloadFormat.JPEG, DownloadFormat.GIF, DownloadFormat.PNG,
+            DownloadFormat.BMP);
 
     @Override
     public long getMaxSize() {
         return EntityFactory.getEntityPrototype(FileBlob.class).content().getMeta().getLength();
     }
+
+    protected abstract ImageTarget imageResizeTarget();
 
     @Override
     public String getUploadFileTypeName() {
@@ -60,8 +66,7 @@ public class MediaUploadServiceImpl extends AbstractUploadServiceImpl<MediaUploa
         response.fileContentType = MimeMap.getContentType(FilenameUtils.getExtension(response.fileName));
         Key blobKey = BlobService.persist(data.data, response.fileName, response.fileContentType);
 
-        MediaUploadDTO mediaUploadDTO = process.getData();
-        ThumbnailService.persist(blobKey, response.fileName, data.data, mediaUploadDTO.target().getValue());
+        ThumbnailService.persist(blobKey, response.fileName, data.data, imageResizeTarget());
         Persistence.service().commit();
         response.uploadKey = blobKey;
         return ProcessingStatus.completed;

@@ -13,25 +13,11 @@
  */
 package com.propertyvista.crm.rpc.services;
 
-import java.util.Collection;
-import java.util.EnumSet;
-
 import com.pyx4j.gwt.rpc.upload.UploadService;
-import com.pyx4j.gwt.shared.DownloadFormat;
 
 import com.propertyvista.crm.rpc.dto.MediaUploadDTO;
 import com.propertyvista.domain.File;
 
-//TODO remove from UI
-/**
- * 
- * @deprecated use MediaUploadBuildingService or MediaUploadFloorplanService
- * 
- */
-@Deprecated
-public interface MediaUploadService extends UploadService<MediaUploadDTO, File> {
-
-    public static final Collection<DownloadFormat> supportedFormats = EnumSet.of(DownloadFormat.JPEG, DownloadFormat.GIF, DownloadFormat.PNG,
-            DownloadFormat.BMP);
+public interface MediaUploadFloorplanService extends UploadService<MediaUploadDTO, File> {
 
 }

@@ -15,7 +15,8 @@ package com.propertyvista.server;
 
 import com.pyx4j.essentials.server.upload.AbstractUploadServlet;
 
-import com.propertyvista.crm.server.services.MediaUploadServiceImpl;
+import com.propertyvista.crm.server.services.MediaUploadBuildingServiceImpl;
+import com.propertyvista.crm.server.services.MediaUploadFloorplanServiceImpl;
 import com.propertyvista.crm.server.services.PmcDocumentFileUploadServiceImpl;
 import com.propertyvista.crm.server.services.UpdateUploadServiceImpl;
 import com.propertyvista.crm.server.services.admin.SiteImageResourceUploadServiceImpl;
@@ -33,7 +34,8 @@ public class VistaUploadServlet extends AbstractUploadServlet {
     public VistaUploadServlet() {
         bind(ImportUploadServiceImpl.class);
         bind(UpdateUploadServiceImpl.class);
-        bind(MediaUploadServiceImpl.class);
+        bind(MediaUploadFloorplanServiceImpl.class);
+        bind(MediaUploadBuildingServiceImpl.class);
         bind(SiteImageResourceUploadServiceImpl.class);
         bind(CustomerPictureUploadServiceImpl.class);
         bind(ResidentPictureUploadServiceImpl.class);

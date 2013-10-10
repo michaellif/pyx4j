@@ -26,7 +26,8 @@ import com.propertyvista.crm.rpc.services.CityIntroPageCrudService;
 import com.propertyvista.crm.rpc.services.FeedbackService;
 import com.propertyvista.crm.rpc.services.HomePageGadgetCrudService;
 import com.propertyvista.crm.rpc.services.MaintenanceCrudService;
-import com.propertyvista.crm.rpc.services.MediaUploadService;
+import com.propertyvista.crm.rpc.services.MediaUploadBuildingService;
+import com.propertyvista.crm.rpc.services.MediaUploadFloorplanService;
 import com.propertyvista.crm.rpc.services.NoteAttachmentUploadService;
 import com.propertyvista.crm.rpc.services.PageDescriptorCrudService;
 import com.propertyvista.crm.rpc.services.PmcDocumentFileUploadService;
@@ -464,7 +465,8 @@ public class VistaCrmAccessControlList extends ServletContainerAclBuilder {
 
 // - Marketing-related:
         grant(VistaCrmBehavior.Marketing, new IServiceExecutePermission(PageDescriptorCrudService.class));
-        grant(VistaCrmBehavior.Marketing, new IServiceExecutePermission(MediaUploadService.class));
+        grant(VistaCrmBehavior.Marketing, new IServiceExecutePermission(MediaUploadBuildingService.class));
+        grant(VistaCrmBehavior.Marketing, new IServiceExecutePermission(MediaUploadFloorplanService.class));
 
 // - Administration:
         grant(VistaBasicBehavior.CRM, new IServiceExecutePermission(ARCodeCrudService.class));

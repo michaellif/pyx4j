@@ -22,6 +22,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.Collection;
+import java.util.EnumSet;
 
 import javax.imageio.ImageIO;
 
@@ -39,11 +40,10 @@ import com.pyx4j.gwt.shared.Dimension;
 import com.pyx4j.gwt.shared.DownloadFormat;
 import com.pyx4j.i18n.shared.I18n;
 
-import com.propertyvista.crm.rpc.services.MediaUploadService;
-
 public class ImageResizer {
 
-    public static final Collection<String> imageExtensions = DownloadFormat.getExtensions(MediaUploadService.supportedFormats);
+    public static final Collection<String> imageExtensions = DownloadFormat.getExtensions(EnumSet.of(DownloadFormat.JPEG, DownloadFormat.GIF,
+            DownloadFormat.PNG, DownloadFormat.BMP));
 
     private static final I18n i18n = I18n.get(ImageResizer.class);
 
