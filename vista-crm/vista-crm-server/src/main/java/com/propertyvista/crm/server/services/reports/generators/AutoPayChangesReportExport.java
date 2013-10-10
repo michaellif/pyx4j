@@ -34,7 +34,7 @@ import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.dto.payment.AutoPayReviewChargeDTO;
 import com.propertyvista.dto.payment.AutoPayReviewChargeDetailDTO;
-import com.propertyvista.dto.payment.AutoPayReviewDTO;
+import com.propertyvista.dto.payment.AutoPayReviewLeaseDTO;
 import com.propertyvista.dto.payment.AutoPayReviewPreauthorizedPaymentDTO;
 
 public class AutoPayChangesReportExport {
@@ -45,7 +45,7 @@ public class AutoPayChangesReportExport {
 
     private int leaseInfoColumns = 0;
 
-    public ExportedReport createReport(List<AutoPayReviewDTO> reviewRecords, ReportProgressStatusHolder reportProgressStatusHolder) {
+    public ExportedReport createReport(List<AutoPayReviewLeaseDTO> reviewRecords, ReportProgressStatusHolder reportProgressStatusHolder) {
         int numOfRecords = reviewRecords.size();
         String stageName = i18n.tr("Preparing Excel Spreadsheet");
         reportProgressStatusHolder.set(new ReportProgressStatus(stageName, 2, 2, 0, numOfRecords));
@@ -64,7 +64,7 @@ public class AutoPayChangesReportExport {
         AutoPayChangesReportExportBuildingTotals buildingsTotals = new AutoPayChangesReportExportBuildingTotals(leaseInfoColumns);
 
         int counter = 0;
-        for (AutoPayReviewDTO review : reviewRecords) {
+        for (AutoPayReviewLeaseDTO review : reviewRecords) {
             ++counter;
 
             buildingsTotals.reportTotalIfKeyChanged(formatter, review.building().getValue());
@@ -132,7 +132,7 @@ public class AutoPayChangesReportExport {
         formatter.newRow();
     }
 
-    private void reportEntity(ReportTableXLSXFormatter formatter, AutoPayReviewDTO reviewCase) {
+    private void reportEntity(ReportTableXLSXFormatter formatter, AutoPayReviewLeaseDTO reviewCase) {
         formatter.cell(reviewCase.building().getValue());
         formatter.cell(reviewCase.unit().getValue());
         formatter.cell(reviewCase.leaseId().getValue());
@@ -159,26 +159,26 @@ public class AutoPayChangesReportExport {
 
                 formatter.cell(charge.leaseCharge().getValue());
 
-                formatter.cell(charge.suspended().totalPrice().getValue());
-                formatter.cell(charge.suspended().payment().getValue());
-                formatter.cell(prc(charge.suspended().percent().getValue()));
+                formatter.cell(charge.previous().totalPrice().getValue());
+                formatter.cell(charge.previous().payment().getValue());
+                formatter.cell(prc(charge.previous().percent().getValue()));
 
-                formatter.cell(charge.suggested().totalPrice().getValue());
+                formatter.cell(charge.current().totalPrice().getValue());
 
-                if (charge.suggested().billableItem().isNull()) {
+                if (charge.current().billableItem().isNull()) {
                     formatter.cell("Removed");
-                } else if (charge.suggested().percentChange().isNull()) {
+                } else if (charge.current().percentChange().isNull()) {
                     formatter.cell("New");
                 } else {
-                    formatter.cell(prc(charge.suggested().percentChange().getValue()));
+                    formatter.cell(prc(charge.current().percentChange().getValue()));
                 }
 
-                formatter.cell(charge.suggested().payment().getValue());
-                if (!charge.suggested().payment().isNull()) {
+                formatter.cell(charge.current().payment().getValue());
+                if (!charge.current().payment().isNull()) {
                     setCurentCellRed(formatter);
                 }
 
-                formatter.cell(prc(charge.suggested().percent().getValue()));
+                formatter.cell(prc(charge.current().percent().getValue()));
 
                 if (isFirstCharge) {
                     formatter.cell(reviewCase.paymentDue().getValue());

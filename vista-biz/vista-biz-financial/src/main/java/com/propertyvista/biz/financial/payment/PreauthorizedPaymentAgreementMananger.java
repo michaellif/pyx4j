@@ -104,7 +104,7 @@ class PreauthorizedPaymentAgreementMananger {
                     isNew = true;
 
                     preauthorizedPayment = EntityGraph.businessDuplicate(preauthorizedPayment);
-                    preauthorizedPayment.reviewOfpap().set(origPreauthorizedPayment);
+                    preauthorizedPayment.reviewOfPap().set(origPreauthorizedPayment);
                     preauthorizedPayment.expiring().setValue(null);
                 } else {
                     boolean hasPaymentRecords = false;
@@ -121,7 +121,7 @@ class PreauthorizedPaymentAgreementMananger {
                         isNew = true;
 
                         preauthorizedPayment = EntityGraph.businessDuplicate(preauthorizedPayment);
-                        preauthorizedPayment.reviewOfpap().set(origPreauthorizedPayment);
+                        preauthorizedPayment.reviewOfPap().set(origPreauthorizedPayment);
                         preauthorizedPayment.expiring().setValue(null);
                     }
                 }
@@ -266,7 +266,7 @@ class PreauthorizedPaymentAgreementMananger {
 
             for (PreauthorizedPaymentCoveredItem coveredItemOriginal : pap.coveredItems()) {
                 BillableItem billableItemCurrent = papBillableItemsCurrent.get(coveredItemOriginal.billableItem().uid().getValue());
-                if (billableItemCurrent == null) {
+                if ((billableItemCurrent == null) || (!PaymentBillableUtils.isBillableItemPapable(billableItemCurrent, nextCycle))) {
                     // Not found, item removed
                     reviewRequired = true;
                 } else {
@@ -325,7 +325,7 @@ class PreauthorizedPaymentAgreementMananger {
         }
     }
 
-    private boolean isChangeByTenant(PreauthorizedPayment pap, BillingCycle nextCycle) {
+    static boolean isChangeByTenant(PreauthorizedPayment pap, BillingCycle nextCycle) {
         if ((pap.updatedByTenant().isNull()) || (pap.updatedByTenant().getValue().before(nextCycle.billingCycleStartDate().getValue()))) {
             return false;
         } else {

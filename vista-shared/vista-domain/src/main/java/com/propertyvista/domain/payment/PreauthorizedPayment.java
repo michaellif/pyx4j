@@ -106,7 +106,7 @@ public interface PreauthorizedPayment extends IEntity {
 
     @Detached
     @I18n(strategy = I18n.I18nStrategy.IgnoreThis)
-    PreauthorizedPayment reviewOfpap();
+    PreauthorizedPayment reviewOfPap();
 
     // billingCycleStartDate  when 
     IPrimitive<LogicalDate> updatedByTenant();

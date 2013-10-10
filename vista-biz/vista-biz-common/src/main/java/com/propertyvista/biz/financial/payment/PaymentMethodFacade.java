@@ -32,7 +32,7 @@ import com.propertyvista.domain.tenant.Customer;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
 import com.propertyvista.domain.tenant.lease.Tenant;
-import com.propertyvista.dto.payment.AutoPayReviewDTO;
+import com.propertyvista.dto.payment.AutoPayReviewLeaseDTO;
 
 public interface PaymentMethodFacade {
 
@@ -66,8 +66,6 @@ public interface PaymentMethodFacade {
 
     void deletePreauthorizedPayment(PreauthorizedPayment preauthorizedPaymentId);
 
-    void suspendPreauthorizedPayment(PreauthorizedPayment preauthorizedPaymentId);
-
     /**
      * Suspend PreauthorizedPayments if required during LeaseTerm finalize.
      * 
@@ -80,7 +78,7 @@ public interface PaymentMethodFacade {
      */
     void updatePreauthorizedPayments(Lease lease);
 
-    AutoPayReviewDTO getSuspendedPreauthorizedPaymentReview(BillingAccount billingAccountId);
+    AutoPayReviewLeaseDTO getPreauthorizedPaymentRequiresReview(BillingAccount billingAccountId);
 
     List<PreauthorizedPayment> retrievePreauthorizedPayments(Tenant tenantId);
 

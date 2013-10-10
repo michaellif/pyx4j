@@ -96,7 +96,7 @@ public class AutoPayReviewViewImpl extends AbstractPrimePane implements AutoPayR
             }
         }));
 
-        setCaption(i18n.tr("Suspended AutoPays Review"));
+        setCaption(i18n.tr("AutoPays Review"));
         setContentPane(viewPanel);
         setSize("100%", "100%");
 

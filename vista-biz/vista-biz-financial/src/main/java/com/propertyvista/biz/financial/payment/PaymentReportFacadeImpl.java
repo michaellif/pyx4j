@@ -18,13 +18,13 @@ import java.util.List;
 import com.propertyvista.biz.ExecutionMonitor;
 import com.propertyvista.crm.rpc.dto.reports.EftVarianceReportRecordDTO;
 import com.propertyvista.domain.financial.PaymentRecord;
-import com.propertyvista.dto.payment.AutoPayReviewDTO;
+import com.propertyvista.dto.payment.AutoPayReviewLeaseDTO;
 
 public class PaymentReportFacadeImpl implements PaymentReportFacade {
 
     @Override
-    public List<AutoPayReviewDTO> reportPreauthorizedPaymentsRequiredReview(PreauthorizedPaymentsReportCriteria reportCriteria) {
-        return new PreauthorizedPaymentAutoPayReviewReport().reportPreauthorizedPaymentsRequiredReview(reportCriteria);
+    public List<AutoPayReviewLeaseDTO> reportPreauthorizedPaymentsRequiredReview(PreauthorizedPaymentsReportCriteria reportCriteria) {
+        return new PreauthorizedPaymentAutoPayReviewReport().reportPreauthorizedPaymentsRequiresReview(reportCriteria);
     }
 
     @Override

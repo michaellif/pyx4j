@@ -46,7 +46,7 @@ import com.propertyvista.crm.client.ui.reports.NoResultsHtml;
 import com.propertyvista.crm.client.ui.reports.ScrollBarPositionMemento;
 import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.dto.payment.AutoPayReviewChargeDTO;
-import com.propertyvista.dto.payment.AutoPayReviewDTO;
+import com.propertyvista.dto.payment.AutoPayReviewLeaseDTO;
 import com.propertyvista.dto.payment.AutoPayReviewPreauthorizedPaymentDTO;
 
 public class AutoPayChangesReportWidget implements ReportWidget {
@@ -84,15 +84,15 @@ public class AutoPayChangesReportWidget implements ReportWidget {
             return;
         }
 
-        Vector<AutoPayReviewDTO> autoPayReviews = (Vector<AutoPayReviewDTO>) data;
+        Vector<AutoPayReviewLeaseDTO> autoPayReviews = (Vector<AutoPayReviewLeaseDTO>) data;
         if (autoPayReviews.isEmpty()) {
             reportHtml.setHTML(NoResultsHtml.get());
             onWidgetReady.execute();
             return;
         }
 
-        ColumnGroup autoPaySuspended = new ColumnGroup(i18n.tr("Auto Pay - Suspended"), null);
-        ColumnGroup autoPaySuggested = new ColumnGroup(i18n.tr("Auto Pay - Suggested"), null);
+        ColumnGroup autoPaySuspended = new ColumnGroup(i18n.tr("Auto Pay - Previous"), null);
+        ColumnGroup autoPaySuggested = new ColumnGroup(i18n.tr("Auto Pay - Current"), null);
 
         int[] VERY_SHORT_COLUMN_WIDTHS = new int[] { 1200, 80, 60 };
         int[] SHORT_COLUMN_WIDTHS = new int[] { 1200, 100, 80 };
@@ -169,7 +169,7 @@ public class AutoPayChangesReportWidget implements ReportWidget {
 
         // rows
         builder.appendHtmlConstant("<tbody class=\"" + CommonReportStyles.RReportTableScrollableBody.name() + "\">");
-        for (AutoPayReviewDTO reviewCase : autoPayReviews) {
+        for (AutoPayReviewLeaseDTO reviewCase : autoPayReviews) {
             int numOfCaseRows = caseRows(reviewCase);
             boolean isFirstLine = true;
             builder.appendHtmlConstant("<tr>");
@@ -205,21 +205,21 @@ public class AutoPayChangesReportWidget implements ReportWidget {
                     builder.appendHtmlConstant("<td style='width: " + columns.get(5).getEffectiveWidth() + "px;'>"
                             + SafeHtmlUtils.htmlEscape(charge.leaseCharge().getStringView()) + "</td>");
                     builder.appendHtmlConstant("<td class='" + CommonReportStyles.RCellNumber.name() + "' style='width: " + columns.get(6).getEffectiveWidth()
-                            + "px;'>" + charge.suspended().totalPrice().getStringView() + "</td>");
+                            + "px;'>" + charge.previous().totalPrice().getStringView() + "</td>");
                     builder.appendHtmlConstant("<td class='" + CommonReportStyles.RCellNumber.name() + "' style='width: " + columns.get(7).getEffectiveWidth()
-                            + "px;'>" + charge.suspended().payment().getStringView() + "</td>");
+                            + "px;'>" + charge.previous().payment().getStringView() + "</td>");
                     builder.appendHtmlConstant("<td class='" + CommonReportStyles.RCellNumber.name() + "' style='width: " + columns.get(8).getEffectiveWidth()
-                            + "px;'>" + charge.suspended().percent().getStringView() + "</td>");
+                            + "px;'>" + charge.previous().percent().getStringView() + "</td>");
                     builder.appendHtmlConstant("<td class='" + CommonReportStyles.RCellNumber.name() + "' style='width: " + columns.get(9).getEffectiveWidth()
-                            + "px;'>" + charge.suggested().totalPrice().getStringView() + "</td>");
-                    String percentChange = SafeHtmlUtils.htmlEscape(charge.suggested().billableItem().isNull() ? i18n.tr("Removed") : charge.suggested()
-                            .percentChange().isNull() ? i18n.tr("New") : charge.suggested().percentChange().getStringView());
+                            + "px;'>" + charge.current().totalPrice().getStringView() + "</td>");
+                    String percentChange = SafeHtmlUtils.htmlEscape(charge.current().billableItem().isNull() ? i18n.tr("Removed") : charge.current()
+                            .percentChange().isNull() ? i18n.tr("New") : charge.current().percentChange().getStringView());
                     builder.appendHtmlConstant("<td class='" + CommonReportStyles.RCellNumber.name() + "' style='width: " + columns.get(10).getEffectiveWidth()
                             + "px;'>" + percentChange + "</td>");
                     builder.appendHtmlConstant("<td class='" + CommonReportStyles.RCellNumber.name() + "' style='width: " + columns.get(11).getEffectiveWidth()
-                            + "px;'>" + charge.suggested().payment().getStringView() + "</td>");
+                            + "px;'>" + charge.current().payment().getStringView() + "</td>");
                     builder.appendHtmlConstant("<td class='" + CommonReportStyles.RCellNumber.name() + "' style='width: " + columns.get(12).getEffectiveWidth()
-                            + "px;'>" + charge.suggested().percent().getStringView() + "</td>");
+                            + "px;'>" + charge.current().percent().getStringView() + "</td>");
                     if (isFirstLine) {
                         builder.appendHtmlConstant("<td rowspan='" + (numOfCaseRows + 1) + "' style='width: " + columns.get(13).getEffectiveWidth() + "px;'>"
                                 + reviewCase.paymentDue().getStringView() + "</td>");
@@ -321,7 +321,7 @@ public class AutoPayChangesReportWidget implements ReportWidget {
         onWidgetReady.execute();
     }
 
-    private int caseRows(AutoPayReviewDTO reviewCase) {
+    private int caseRows(AutoPayReviewLeaseDTO reviewCase) {
         int rows = 0;
         for (AutoPayReviewPreauthorizedPaymentDTO pap : reviewCase.pap()) {
             rows += pap.items().size();

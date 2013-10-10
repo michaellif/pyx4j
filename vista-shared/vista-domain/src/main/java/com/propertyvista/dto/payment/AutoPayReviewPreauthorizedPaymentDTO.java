@@ -26,6 +26,10 @@ import com.propertyvista.domain.payment.PreauthorizedPayment;
 @I18n(strategy = I18n.I18nStrategy.IgnoreThis)
 public interface AutoPayReviewPreauthorizedPaymentDTO extends IEntity {
 
+    IPrimitive<Boolean> reviewRequired();
+
+    IPrimitive<Boolean> changedByTenant();
+
     IPrimitive<String> tenantName();
 
     IList<AutoPayReviewChargeDTO> items();

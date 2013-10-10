@@ -43,14 +43,14 @@ import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.reports.AutoPayChangesReportMetadata;
 import com.propertyvista.domain.tenant.lease.Tenant;
 import com.propertyvista.dto.payment.AutoPayReviewChargeDTO;
-import com.propertyvista.dto.payment.AutoPayReviewDTO;
+import com.propertyvista.dto.payment.AutoPayReviewLeaseDTO;
 import com.propertyvista.dto.payment.AutoPayReviewPreauthorizedPaymentDTO;
 
 public class AutoPayReviewServiceImpl implements AutoPayReviewService {
 
     @Override
     public void getAutoPayReviews(AsyncCallback<Vector<PapReviewDTO>> callback, AutoPayChangesReportMetadata filterSettings) {
-        Vector<AutoPayReviewDTO> suspendedPreauthorizedPayments = new Vector<AutoPayReviewDTO>(ServerSideFactory.create(PaymentReportFacade.class)
+        Vector<AutoPayReviewLeaseDTO> suspendedPreauthorizedPayments = new Vector<AutoPayReviewLeaseDTO>(ServerSideFactory.create(PaymentReportFacade.class)
                 .reportPreauthorizedPaymentsRequiredReview(makeCriteria(filterSettings)));
         Vector<PapReviewDTO> papsForReview = convert2PapReviews(suspendedPreauthorizedPayments);
         callback.onSuccess(papsForReview);
@@ -87,9 +87,9 @@ public class AutoPayReviewServiceImpl implements AutoPayReviewService {
         return reportCriteria;
     }
 
-    private Vector<PapReviewDTO> convert2PapReviews(Vector<AutoPayReviewDTO> suspendedPreauthorizedPayments) {
+    private Vector<PapReviewDTO> convert2PapReviews(Vector<AutoPayReviewLeaseDTO> suspendedPreauthorizedPayments) {
         Vector<PapReviewDTO> papReviews = new Vector<PapReviewDTO>();
-        for (AutoPayReviewDTO leaseAutoPays : suspendedPreauthorizedPayments) {
+        for (AutoPayReviewLeaseDTO leaseAutoPays : suspendedPreauthorizedPayments) {
             PapReviewCaptionDTO papReviewCaption = makeCaption(leaseAutoPays);
             for (AutoPayReviewPreauthorizedPaymentDTO autoPay : leaseAutoPays.pap()) {
                 papReviews.add(makePapReview(papReviewCaption, autoPay));
@@ -113,16 +113,16 @@ public class AutoPayReviewServiceImpl implements AutoPayReviewService {
             papCharge.chargeName().setValue(autoPayCharge.leaseCharge().getValue());
             papCharge.changeType().setValue(guessChangeType(autoPayCharge));
 
-            papCharge.suspendedPrice().setValue(autoPayCharge.suspended().totalPrice().getValue());
-            papCharge.suspendedPapAmount().setValue(autoPayCharge.suspended().payment().getValue());
-            papCharge.suspendedPapPercent().setValue(autoPayCharge.suspended().percent().getValue());
+            papCharge.suspendedPrice().setValue(autoPayCharge.previous().totalPrice().getValue());
+            papCharge.suspendedPapAmount().setValue(autoPayCharge.previous().payment().getValue());
+            papCharge.suspendedPapPercent().setValue(autoPayCharge.previous().percent().getValue());
 
-            papCharge.billableItem().set(autoPayCharge.suggested().billableItem());
-            papCharge.newPrice().setValue(autoPayCharge.suggested().totalPrice().getValue());
-            papCharge.newPapAmount().setValue(autoPayCharge.suggested().payment().getValue());
-            papCharge.newPapPercent().setValue(autoPayCharge.suggested().percent().getValue());
+            papCharge.billableItem().set(autoPayCharge.current().billableItem());
+            papCharge.newPrice().setValue(autoPayCharge.current().totalPrice().getValue());
+            papCharge.newPapAmount().setValue(autoPayCharge.current().payment().getValue());
+            papCharge.newPapPercent().setValue(autoPayCharge.current().percent().getValue());
 
-            papCharge.changePercent().setValue(autoPayCharge.suggested().percentChange().getValue());
+            papCharge.changePercent().setValue(autoPayCharge.current().percentChange().getValue());
 
             papReview.charges().add(papCharge);
         }
@@ -130,19 +130,19 @@ public class AutoPayReviewServiceImpl implements AutoPayReviewService {
     }
 
     private PapChargeReviewDTO.ChangeType guessChangeType(AutoPayReviewChargeDTO charge) {
-        if (charge.suspended().isEmpty()) {
+        if (charge.previous().isEmpty()) {
             return ChangeType.New;
         }
-        if (charge.suggested().isEmpty()) {
+        if (charge.current().isEmpty()) {
             return ChangeType.Removed;
         }
-        if (charge.suggested().totalPrice().getValue().compareTo(charge.suspended().totalPrice().getValue()) == 0) {
+        if (charge.current().totalPrice().getValue().compareTo(charge.previous().totalPrice().getValue()) == 0) {
             return ChangeType.Unchanged;
         }
         return ChangeType.Changed;
     }
 
-    private PapReviewCaptionDTO makeCaption(AutoPayReviewDTO leaseAutoPays) {
+    private PapReviewCaptionDTO makeCaption(AutoPayReviewLeaseDTO leaseAutoPays) {
         PapReviewCaptionDTO caption = EntityFactory.create(PapReviewCaptionDTO.class);
         caption.building().setValue(leaseAutoPays.building().getValue());
         caption.unit().setValue(leaseAutoPays.unit().getValue());

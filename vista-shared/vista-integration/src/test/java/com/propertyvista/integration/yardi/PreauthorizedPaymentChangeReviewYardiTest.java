@@ -16,8 +16,6 @@ package com.propertyvista.integration.yardi;
 
 import java.math.BigDecimal;
 
-import org.junit.Ignore;
-
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.gwt.server.DateUtils;
@@ -26,7 +24,7 @@ import com.propertyvista.biz.financial.payment.PaymentMethodFacade;
 import com.propertyvista.domain.payment.PaymentType;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.Tenant;
-import com.propertyvista.dto.payment.AutoPayReviewDTO;
+import com.propertyvista.dto.payment.AutoPayReviewLeaseDTO;
 import com.propertyvista.dto.payment.AutoPayReviewPreauthorizedPaymentDTO;
 import com.propertyvista.test.integration.PaymentAgreementTester;
 import com.propertyvista.test.integration.PreauthorizedPaymentBuilder;
@@ -41,7 +39,6 @@ import com.propertyvista.yardi.mock.LeaseChargeUpdater;
  * @see com.propertyvista.biz.financial.payment.PreauthorizedPaymentChangeReviewInternalTest
  * 
  */
-@Ignore
 public class PreauthorizedPaymentChangeReviewYardiTest extends PaymentYardiTestBase {
 
     private Lease lease;
@@ -64,6 +61,11 @@ public class PreauthorizedPaymentChangeReviewYardiTest extends PaymentYardiTestB
                 build());
         Persistence.service().commit();
 
+        new PaymentAgreementTester(lease.billingAccount())//
+                .count(1)//
+                .activeCount(1)//
+                .lastRecordAmount(eval("500 + 80"));
+
         {
             // @formatter:off
             LeaseChargeUpdater updater = new LeaseChargeUpdater("prop123", "t000111", "rent").
@@ -77,11 +79,13 @@ public class PreauthorizedPaymentChangeReviewYardiTest extends PaymentYardiTestB
         }
         yardiImportAll(getYardiCredential("prop123"));
 
-        // PAP is suspended
-        new PaymentAgreementTester(lease.billingAccount()).count(1)//
-                .activeCount(0);
+        // PAP is updated
+        new PaymentAgreementTester(lease.billingAccount())//
+                .count(1)//
+                .activeCount(1)//
+                .lastRecordAmount(eval("600 + 80"));
 
-        AutoPayReviewDTO reviewDTO = ServerSideFactory.create(PaymentMethodFacade.class).getSuspendedPreauthorizedPaymentReview(lease.billingAccount());
+        AutoPayReviewLeaseDTO reviewDTO = ServerSideFactory.create(PaymentMethodFacade.class).getPreauthorizedPaymentRequiresReview(lease.billingAccount());
 
         // Verify created Data
         {
@@ -90,11 +94,11 @@ public class PreauthorizedPaymentChangeReviewYardiTest extends PaymentYardiTestB
             AutoPayReviewPreauthorizedPaymentDTO papReview = reviewDTO.pap().get(0);
             assertEquals("PAP Charges to review", 2, papReview.items().size());
 
-            assertEquals("New Rent Price", new BigDecimal("1200.00"), papReview.items().get(0).suggested().totalPrice().getValue());
-            assertEquals("Suggested Rent Payment", new BigDecimal("600.00"), papReview.items().get(0).suggested().payment().getValue());
+            assertEquals("New Rent Price", new BigDecimal("1200.00"), papReview.items().get(0).current().totalPrice().getValue());
+            assertEquals("Suggested Rent Payment", new BigDecimal("600.00"), papReview.items().get(0).current().payment().getValue());
 
-            assertEquals("New Parking Price", new BigDecimal("80.00"), papReview.items().get(1).suggested().totalPrice().getValue());
-            assertEquals("Suggested Parking Payment", new BigDecimal("80.00"), papReview.items().get(1).suggested().payment().getValue());
+            assertEquals("New Parking Price", new BigDecimal("80.00"), papReview.items().get(1).current().totalPrice().getValue());
+            assertEquals("Suggested Parking Payment", new BigDecimal("80.00"), papReview.items().get(1).current().payment().getValue());
         }
     }
 }

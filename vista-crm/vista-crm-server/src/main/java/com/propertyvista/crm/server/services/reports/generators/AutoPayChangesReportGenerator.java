@@ -38,7 +38,7 @@ import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.reports.AutoPayChangesReportMetadata;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.dto.payment.AutoPayReviewChargeDTO;
-import com.propertyvista.dto.payment.AutoPayReviewDTO;
+import com.propertyvista.dto.payment.AutoPayReviewLeaseDTO;
 import com.propertyvista.dto.payment.AutoPayReviewPreauthorizedPaymentDTO;
 
 public class AutoPayChangesReportGenerator implements ReportGenerator, ReportExporter {
@@ -80,7 +80,7 @@ public class AutoPayChangesReportGenerator implements ReportGenerator, ReportExp
         }
         reportCriteria.setLeasesOnNoticeOnly(autoPayChangesReportMetadata.leasesOnNoticeOnly().isBooleanTrue());
 
-        Vector<AutoPayReviewDTO> suspenedPreauthorizedPayments = new Vector<AutoPayReviewDTO>(ServerSideFactory.create(PaymentReportFacade.class)
+        Vector<AutoPayReviewLeaseDTO> suspenedPreauthorizedPayments = new Vector<AutoPayReviewLeaseDTO>(ServerSideFactory.create(PaymentReportFacade.class)
                 .reportPreauthorizedPaymentsRequiredReview(reportCriteria));
 
         if (false) {
@@ -97,18 +97,18 @@ public class AutoPayChangesReportGenerator implements ReportGenerator, ReportExp
     @Override
     public ExportedReport export(Serializable report) {
         @SuppressWarnings("unchecked")
-        Vector<AutoPayReviewDTO> records = (Vector<AutoPayReviewDTO>) report;
+        Vector<AutoPayReviewLeaseDTO> records = (Vector<AutoPayReviewLeaseDTO>) report;
         return new AutoPayChangesReportExport().createReport(records, reportProgressStatusHolder);
     }
 
     /**
      * Generate mockup data for UI debugging
      */
-    private void devFillWithMockup(Vector<AutoPayReviewDTO> data) {
+    private void devFillWithMockup(Vector<AutoPayReviewLeaseDTO> data) {
         if (!ApplicationMode.isDevelopment()) {
             return;
         }
-        AutoPayReviewDTO dto = EntityFactory.create(AutoPayReviewDTO.class);
+        AutoPayReviewLeaseDTO dto = EntityFactory.create(AutoPayReviewLeaseDTO.class);
         dto.building().setValue("building #B");
         dto.unit().setValue("unit #U");
         dto.leaseId().setValue("t000000000");
@@ -120,14 +120,14 @@ public class AutoPayChangesReportGenerator implements ReportGenerator, ReportExp
         papDto.tenantName().setValue("Ivan Vasilyevich");
         AutoPayReviewChargeDTO papItemDto = papDto.items().$();
         papItemDto.leaseCharge().setValue("ccode");
-        papItemDto.suspended().totalPrice().setValue(new BigDecimal("1000"));
-        papItemDto.suspended().percentChange().setValue(new BigDecimal("0.1"));
-        papItemDto.suspended().payment().setValue(new BigDecimal("1200"));
-        papItemDto.suspended().percent().setValue(new BigDecimal("0.25"));
-        papItemDto.suggested().totalPrice().setValue(new BigDecimal("1200"));
-        papItemDto.suggested().percentChange().setValue(new BigDecimal("0.2"));
-        papItemDto.suggested().payment().setValue(new BigDecimal("1234"));
-        papItemDto.suggested().percent().setValue(new BigDecimal("0.11"));
+        papItemDto.previous().totalPrice().setValue(new BigDecimal("1000"));
+        papItemDto.previous().percentChange().setValue(new BigDecimal("0.1"));
+        papItemDto.previous().payment().setValue(new BigDecimal("1200"));
+        papItemDto.previous().percent().setValue(new BigDecimal("0.25"));
+        papItemDto.current().totalPrice().setValue(new BigDecimal("1200"));
+        papItemDto.current().percentChange().setValue(new BigDecimal("0.2"));
+        papItemDto.current().payment().setValue(new BigDecimal("1234"));
+        papItemDto.current().percent().setValue(new BigDecimal("0.11"));
         papDto.items().add(papItemDto);
 
         for (int i = 0; i < 3; ++i) {

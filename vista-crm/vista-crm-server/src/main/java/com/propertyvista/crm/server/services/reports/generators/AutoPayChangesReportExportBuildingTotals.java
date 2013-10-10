@@ -24,9 +24,9 @@ import com.pyx4j.essentials.server.report.ReportTableXLSXFormatter;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.domain.util.DomainUtil;
-import com.propertyvista.dto.payment.AutoPayReviewDTO;
+import com.propertyvista.dto.payment.AutoPayReviewLeaseDTO;
 
-public class AutoPayChangesReportExportBuildingTotals extends ExportTotals<AutoPayReviewDTO, AutoPayReviewDTO> {
+public class AutoPayChangesReportExportBuildingTotals extends ExportTotals<AutoPayReviewLeaseDTO, AutoPayReviewLeaseDTO> {
 
     private static final I18n i18n = I18n.get(AutoPayChangesReportExportBuildingTotals.class);
 
@@ -37,9 +37,9 @@ public class AutoPayChangesReportExportBuildingTotals extends ExportTotals<AutoP
     }
 
     @Override
-    protected AutoPayReviewDTO add(AutoPayReviewDTO total, AutoPayReviewDTO leaseReview) {
+    protected AutoPayReviewLeaseDTO add(AutoPayReviewLeaseDTO total, AutoPayReviewLeaseDTO leaseReview) {
         if (total == null) {
-            total = EntityFactory.create(AutoPayReviewDTO.class);
+            total = EntityFactory.create(AutoPayReviewLeaseDTO.class);
             total.building().setValue(leaseReview.building().getValue());
         }
         DomainUtil.nvlAddBigDecimal(total.totalPrevious().totalPrice(), leaseReview.totalPrevious().totalPrice());
@@ -57,7 +57,7 @@ public class AutoPayChangesReportExportBuildingTotals extends ExportTotals<AutoP
     }
 
     @Override
-    protected void exportTotal(ReportTableXLSXFormatter formatter, String key, AutoPayReviewDTO totals) {
+    protected void exportTotal(ReportTableXLSXFormatter formatter, String key, AutoPayReviewLeaseDTO totals) {
         formatter.header(i18n.tr("Total for Building {0}:", totals.building()));
         formatter.mergeCells(1, 5);
         formatter.cellsEmpty(4 + leaseInfoColumns, true);

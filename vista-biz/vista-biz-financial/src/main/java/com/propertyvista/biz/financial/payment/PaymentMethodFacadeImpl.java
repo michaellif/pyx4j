@@ -43,7 +43,7 @@ import com.propertyvista.domain.tenant.Customer;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
 import com.propertyvista.domain.tenant.lease.Tenant;
-import com.propertyvista.dto.payment.AutoPayReviewDTO;
+import com.propertyvista.dto.payment.AutoPayReviewLeaseDTO;
 
 public class PaymentMethodFacadeImpl implements PaymentMethodFacade {
 
@@ -173,11 +173,6 @@ public class PaymentMethodFacadeImpl implements PaymentMethodFacade {
     }
 
     @Override
-    public void suspendPreauthorizedPayment(PreauthorizedPayment preauthorizedPaymentId) {
-        new PreauthorizedPaymentAgreementMananger().suspendPreauthorizedPayment(preauthorizedPaymentId);
-    }
-
-    @Override
     public void renewPreauthorizedPayments(Lease lease) {
         new PreauthorizedPaymentAgreementMananger().renewPreauthorizedPayments(lease);
     }
@@ -188,8 +183,8 @@ public class PaymentMethodFacadeImpl implements PaymentMethodFacade {
     }
 
     @Override
-    public AutoPayReviewDTO getSuspendedPreauthorizedPaymentReview(BillingAccount billingAccount) {
-        return new PreauthorizedPaymentAutoPayReviewReport().getSuspendedPreauthorizedPaymentReview(billingAccount);
+    public AutoPayReviewLeaseDTO getPreauthorizedPaymentRequiresReview(BillingAccount billingAccount) {
+        return new PreauthorizedPaymentAutoPayReviewReport().getPreauthorizedPaymentRequiresReview(billingAccount);
     }
 
     @Override

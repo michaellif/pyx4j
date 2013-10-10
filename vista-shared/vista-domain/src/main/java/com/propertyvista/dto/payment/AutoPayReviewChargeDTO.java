@@ -29,7 +29,7 @@ public interface AutoPayReviewChargeDTO extends IEntity {
 
     IPrimitive<String> leaseCharge();
 
-    AutoPayReviewChargeDetailDTO suspended();
+    AutoPayReviewChargeDetailDTO previous();
 
-    AutoPayReviewChargeDetailDTO suggested();
+    AutoPayReviewChargeDetailDTO current();
 }

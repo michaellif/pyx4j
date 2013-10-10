@@ -25,7 +25,7 @@ import com.propertyvista.domain.tenant.lease.Lease;
 
 @Transient
 @I18n(strategy = I18n.I18nStrategy.IgnoreThis)
-public interface AutoPayReviewDTO extends IEntity {
+public interface AutoPayReviewLeaseDTO extends IEntity {
 
     IPrimitive<String> building();
 
