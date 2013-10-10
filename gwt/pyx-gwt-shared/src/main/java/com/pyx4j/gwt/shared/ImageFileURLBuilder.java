@@ -14,12 +14,20 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  *
- * Created on 2011-03-22
- * @author Vlad
+ * Created on 2012-12-27
+ * @author vlads
  * @version $Id$
  */
-package com.pyx4j.forms.client.ui;
+package com.pyx4j.gwt.shared;
 
-public interface INativeHyperlink<E> extends INativeComponent<E> {
+import com.pyx4j.entity.shared.IFile;
+
+public interface ImageFileURLBuilder<E extends IFile> extends FileURLBuilder<E> {
+
+    public enum ResizeType {
+        cover, contain, none
+    }
+
+    public String getUrl(E image, Dimension dimensions, ResizeType resizeType);
 
 }

@@ -27,6 +27,8 @@ public interface FormImages extends ClientBundleWithLookup {
 
     ImageResource datePicker();
 
+    ImageResource clear();
+
     // ----
 
     ImageResource triggerUp();

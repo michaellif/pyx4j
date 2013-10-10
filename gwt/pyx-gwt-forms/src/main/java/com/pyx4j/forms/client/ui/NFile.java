@@ -31,10 +31,11 @@ import com.pyx4j.forms.client.ImageFactory;
 import com.pyx4j.widgets.client.Anchor;
 import com.pyx4j.widgets.client.Button;
 
-public class NFile<E extends IFile> extends NField<E, Anchor, CFile<E>, Anchor> implements INativeHyperlink<E> {
+public class NFile<E extends IFile> extends NField<E, Anchor, CFile<E>, Anchor> {
 
     public NFile(final CFile<E> file) {
         super(file);
+
         final Button triggerButton = new Button(ImageFactory.getImages().triggerDown());
         triggerButton.setCommand(new Command() {
 
@@ -45,6 +46,18 @@ public class NFile<E extends IFile> extends NField<E, Anchor, CFile<E>, Anchor> 
         });
 
         setTriggerButton(triggerButton);
+
+        final Button clearButton = new Button(ImageFactory.getImages().clear());
+        clearButton.setCommand(new Command() {
+
+            @Override
+            public void execute() {
+                getCComponent().setValue(null);
+            }
+        });
+
+        setClearButton(clearButton);
+
     }
 
     @Override

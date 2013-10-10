@@ -22,9 +22,8 @@ package com.pyx4j.gwt.shared;
 
 import com.pyx4j.entity.shared.IFile;
 
-//TODO change interface to getUrl(E image, Dimension, ResizeType) to image of a given size with given rule  or resize/crop where type is cover|contain|none
 public interface FileURLBuilder<E extends IFile> {
 
-    public String getUrl(E image);
+    public String getUrl(E file);
 
 }

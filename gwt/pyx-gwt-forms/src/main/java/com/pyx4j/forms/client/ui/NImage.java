@@ -35,9 +35,10 @@ import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.Button;
 import com.pyx4j.widgets.client.DropDownPanel;
 import com.pyx4j.widgets.client.ImageSlider;
+import com.pyx4j.widgets.client.ImageSlider.ImageSliderDataProvider;
 import com.pyx4j.widgets.client.ImageSlider.ImageSliderType;
 
-public class NImage<T extends IFile> extends NField<T, ImageSlider, CImage<T>, ImageSlider> implements ImageSlider.ImageSliderDataProvider {
+public class NImage<T extends IFile> extends NField<T, ImageSlider, CImage<T>, ImageSlider> {
 
     private static final I18n i18n = I18n.get(NImage.class);
 
@@ -51,7 +52,36 @@ public class NImage<T extends IFile> extends NField<T, ImageSlider, CImage<T>, I
         super(cComponent);
         setStyleName(CComponentTheme.StyleName.ImageHolder.name());
 
-        imageSlider = new ImageSlider(getCComponent().getImageSize(), this);
+        imageSlider = new ImageSlider(getCComponent().getImageSize(), new ImageSliderDataProvider() {
+
+            @Override
+            public List<String> getImageUrls() {
+                ArrayList<String> list = new ArrayList<String>();
+                if (imageUrl != null) {
+                    list.add(imageUrl);
+                }
+                return list;
+            }
+
+            @Override
+            public void editImageSet() {
+                if (getCComponent().getValue() == null) {
+                    showUploadFileDialog();
+                } else {
+                    new EditMenu().showRelativeTo(imageSlider.getEditActionPanel());
+                }
+            }
+
+            @Override
+            public Image getPlaceholder() {
+                return getCComponent().getThumbnailPlaceholder();
+            }
+
+            @Override
+            public ImageSliderType getImageSliderType() {
+                return ImageSliderType.single;
+            }
+        });
     }
 
     @Override
@@ -98,37 +128,9 @@ public class NImage<T extends IFile> extends NField<T, ImageSlider, CImage<T>, I
         }
     }
 
-    @Override
-    public List<String> getImageUrls() {
-        ArrayList<String> list = new ArrayList<String>();
-        if (imageUrl != null) {
-            list.add(imageUrl);
-        }
-        return list;
-    }
-
     public void resizeToFit() {
         Dimension imageSize = getCComponent().getImageSize();
         imageSlider.setImageSize(imageSize.width, imageSize.height);
-    }
-
-    @Override
-    public void editImageSet() {
-        if (getCComponent().getValue() == null) {
-            showUploadFileDialog();
-        } else {
-            new EditMenu().showRelativeTo(imageSlider.getEditActionPanel());
-        }
-    }
-
-    @Override
-    public Image getPlaceholder() {
-        return getCComponent().getThumbnailPlaceholder();
-    }
-
-    @Override
-    public ImageSliderType getImageSliderType() {
-        return ImageSliderType.single;
     }
 
     private void showUploadFileDialog() {

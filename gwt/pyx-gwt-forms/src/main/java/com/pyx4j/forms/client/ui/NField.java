@@ -63,9 +63,11 @@ public abstract class NField<DATA, EDITOR extends IWidget, CCOMP extends CField<
 
     private EditorPanel editorPanel;
 
+    private ViewerPanel viewerPanel;
+
     private Button triggerButton;
 
-    private ViewerPanel viewerPanel;
+    private Button clearButton;
 
     private Button actionButton;
 
@@ -89,6 +91,13 @@ public abstract class NField<DATA, EDITOR extends IWidget, CCOMP extends CField<
         this.triggerButton = triggerButton;
         if (editorPanel != null) {
             editorPanel.setTriggerButton();
+        }
+    }
+
+    public void setClearButton(Button clearButton) {
+        this.clearButton = clearButton;
+        if (editorPanel != null) {
+            editorPanel.setClearButton();
         }
     }
 
@@ -177,10 +186,8 @@ public abstract class NField<DATA, EDITOR extends IWidget, CCOMP extends CField<
     @Override
     public void setEnabled(boolean enabled) {
         if (!isViewable()) {
-            if (triggerButton != null) {
-                triggerButton.setEnabled(isEditable() && enabled);
-            }
             editor.setEnabled(enabled);
+            editorPanel.setEnabled(isEditable() && enabled);
             if (enabled) {
                 editor.removeStyleDependentName(CComponentTheme.StyleDependent.disabled.name());
             } else {
@@ -201,10 +208,8 @@ public abstract class NField<DATA, EDITOR extends IWidget, CCOMP extends CField<
     @Override
     public void setEditable(boolean editable) {
         if (!isViewable()) {
-            if (triggerButton != null) {
-                triggerButton.setEnabled(isEnabled() && editable);
-            }
             editor.setEditable(editable);
+            editorPanel.setEnabled(isEnabled() && editable);
             if (editable) {
                 editor.removeStyleDependentName(CComponentTheme.StyleDependent.readonly.name());
             } else {
@@ -244,9 +249,13 @@ public abstract class NField<DATA, EDITOR extends IWidget, CCOMP extends CField<
 
         private final Set<HandlerRegistration> triggerButtonHandlerRegistrations = new HashSet<HandlerRegistration>();
 
+        private final Set<HandlerRegistration> clearButtonHandlerRegistrations = new HashSet<HandlerRegistration>();
+
         private String baseDebugID;
 
         private final SimplePanel triggerButtonHolder;
+
+        private final SimplePanel clearButtonHolder;
 
         private final SimplePanel editorHolder;
 
@@ -269,13 +278,35 @@ public abstract class NField<DATA, EDITOR extends IWidget, CCOMP extends CField<
                 ((NFocusField<?, ?, ?, ?>) editor).addBlurHandler(focusHandlerManager);
             }
 
-            triggerButtonHolder = new SimplePanel();
-            triggerButtonHolder.getElement().getStyle().setProperty("display", "table-cell");
-            triggerButtonHolder.getElement().getStyle().setVerticalAlign(VerticalAlign.MIDDLE);
+            { // Trigger Button
+                triggerButtonHolder = new SimplePanel();
+                triggerButtonHolder.getElement().getStyle().setProperty("display", "table-cell");
+                triggerButtonHolder.getElement().getStyle().setVerticalAlign(VerticalAlign.MIDDLE);
 
-            add(triggerButtonHolder);
+                add(triggerButtonHolder);
 
-            setTriggerButton();
+                setTriggerButton();
+            }
+
+            { // Clear Button
+                clearButtonHolder = new SimplePanel();
+                clearButtonHolder.getElement().getStyle().setProperty("display", "table-cell");
+                clearButtonHolder.getElement().getStyle().setVerticalAlign(VerticalAlign.MIDDLE);
+
+                add(clearButtonHolder);
+
+                setClearButton();
+            }
+
+        }
+
+        public void setEnabled(boolean enabled) {
+            if (triggerButton != null) {
+                triggerButton.setEnabled(enabled);
+            }
+            if (clearButton != null) {
+                clearButton.setEnabled(enabled);
+            }
         }
 
         @Override
@@ -297,8 +328,6 @@ public abstract class NField<DATA, EDITOR extends IWidget, CCOMP extends CField<
 
                 triggerButtonHandlerRegistrations.add(triggerButton.addFocusHandler(focusHandlerManager));
                 triggerButtonHandlerRegistrations.add(triggerButton.addBlurHandler(focusHandlerManager));
-
-                triggerButton.sinkEvents(Event.ONDBLCLICK);
 
                 triggerButtonHandlerRegistrations.add(triggerButton.addKeyDownHandler(new KeyDownHandler() {
 
@@ -322,6 +351,8 @@ public abstract class NField<DATA, EDITOR extends IWidget, CCOMP extends CField<
                     }
                 }));
 
+                triggerButton.sinkEvents(Event.ONDBLCLICK);
+
                 triggerButtonHandlerRegistrations.add(this.addDoubleClickHandler(new DoubleClickHandler() {
                     @Override
                     public void onDoubleClick(DoubleClickEvent event) {
@@ -336,6 +367,26 @@ public abstract class NField<DATA, EDITOR extends IWidget, CCOMP extends CField<
                 triggerButton.ensureDebugId(CompositeDebugId.debugId(baseDebugID, CCompDebugId.trigger));
                 triggerButton.getElement().getStyle().setDisplay(Display.BLOCK);
                 triggerButtonHolder.setWidget(triggerButton);
+            }
+        }
+
+        public void setClearButton() {
+            if (clearButtonHolder.getWidget() != null) {
+                clearButtonHolder.clear();
+                for (HandlerRegistration handlerRegistration : clearButtonHandlerRegistrations) {
+                    handlerRegistration.removeHandler();
+                }
+                clearButtonHandlerRegistrations.clear();
+            }
+
+            if (clearButton != null) {
+
+                clearButtonHandlerRegistrations.add(clearButton.addFocusHandler(focusHandlerManager));
+                clearButtonHandlerRegistrations.add(clearButton.addBlurHandler(focusHandlerManager));
+
+                clearButton.ensureDebugId(CompositeDebugId.debugId(baseDebugID, CCompDebugId.trigger));
+                clearButton.getElement().getStyle().setDisplay(Display.BLOCK);
+                clearButtonHolder.setWidget(clearButton);
             }
         }
 

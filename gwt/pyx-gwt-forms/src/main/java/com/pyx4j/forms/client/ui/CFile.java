@@ -23,11 +23,8 @@ package com.pyx4j.forms.client.ui;
 import com.google.gwt.user.client.Command;
 
 import com.pyx4j.entity.shared.IFile;
-import com.pyx4j.i18n.shared.I18n;
 
-public abstract class CFile<E extends IFile> extends CField<E, INativeHyperlink<E>> {
-
-    private static final I18n i18n = I18n.get(CFile.class);
+public abstract class CFile<E extends IFile> extends CField<E, NFile<E>> {
 
     private IFormat<E> format;
 
