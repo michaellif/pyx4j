@@ -136,6 +136,17 @@ public class MaintenanceRequestWizard extends CPortalEntityWizard<MaintenanceReq
     }
 
     @Override
+    protected MaintenanceRequestDTO preprocessValue(MaintenanceRequestDTO value, boolean fireEvent, boolean populate) {
+        if (value.reportedForOwnUnit().isNull()) {
+            value.reportedForOwnUnit().setValue(true);
+        }
+        if (value.permissionToEnter().isNull()) {
+            value.permissionToEnter().setValue(true);
+        }
+        return value;
+    }
+
+    @Override
     protected void onValueSet(boolean populate) {
         super.onValueSet(populate);
 
