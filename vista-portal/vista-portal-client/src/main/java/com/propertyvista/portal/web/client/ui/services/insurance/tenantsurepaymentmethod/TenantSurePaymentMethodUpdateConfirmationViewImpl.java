@@ -13,13 +13,14 @@
  */
 package com.propertyvista.portal.web.client.ui.services.insurance.tenantsurepaymentmethod;
 
-import com.propertyvista.portal.rpc.portal.web.dto.financial.PaymentMethodDTO;
+import com.propertyvista.portal.rpc.portal.web.dto.insurance.InsurancePaymentMethodDTO;
 import com.propertyvista.portal.web.client.ui.AbstractFormView;
 
-public class PaymentMethodConfirmationViewImpl extends AbstractFormView<PaymentMethodDTO> implements PaymentMethodConfirmationView {
+public class TenantSurePaymentMethodUpdateConfirmationViewImpl extends AbstractFormView<InsurancePaymentMethodDTO> implements
+        TenantSurePaymentMethodUpdateConfirmationView {
 
-    public PaymentMethodConfirmationViewImpl() {
+    public TenantSurePaymentMethodUpdateConfirmationViewImpl() {
         super();
-        setForm(new PaymentMethodConfirmationForm(this));
+        setForm(new TenantSurePaymentMethodUpdateConfirmationForm(this));
     }
 }

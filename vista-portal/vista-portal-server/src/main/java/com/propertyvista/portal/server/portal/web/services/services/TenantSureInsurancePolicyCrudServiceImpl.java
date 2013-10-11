@@ -345,7 +345,6 @@ public class TenantSureInsurancePolicyCrudServiceImpl implements TenantSureInsur
         params.contentsCoverageOptions().addAll(CONTENTS_COVERAGE_OPTIONS);
 
         params.deductibleOptions().addAll(getDeductibleOptions());
-        // TODO fill in personal disclaimer: right now this is filled on client from resources         
         params.preAuthorizedDebitAgreement().setValue(ServerSideFactory.create(TenantSureTextFacade.class).getPreAuthorizedAgreement());
 
         return params;

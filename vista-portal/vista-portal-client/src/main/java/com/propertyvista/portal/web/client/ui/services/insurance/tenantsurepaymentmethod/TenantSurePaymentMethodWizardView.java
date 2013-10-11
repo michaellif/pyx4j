@@ -13,8 +13,6 @@
  */
 package com.propertyvista.portal.web.client.ui.services.insurance.tenantsurepaymentmethod;
 
-import com.google.gwt.user.client.rpc.AsyncCallback;
-
 import com.propertyvista.domain.contact.AddressSimple;
 import com.propertyvista.portal.rpc.portal.web.dto.insurance.InsurancePaymentMethodDTO;
 import com.propertyvista.portal.web.client.ui.IWizardView;
@@ -23,6 +21,9 @@ public interface TenantSurePaymentMethodWizardView extends IWizardView<Insurance
 
     interface Persenter extends IWizardPresenter<InsurancePaymentMethodDTO> {
 
-        void getCurrentAddress(AsyncCallback<AddressSimple> callback);
+        void getCurrentAddress();
     }
+
+    public void setBillingAddress(AddressSimple callback);
+
 }

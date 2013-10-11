@@ -13,16 +13,12 @@
  */
 package com.propertyvista.portal.web.client.ui.services.insurance.tenantsurepaymentmethod;
 
-import com.propertyvista.portal.rpc.portal.web.dto.financial.PaymentMethodDTO;
+import com.propertyvista.portal.rpc.portal.web.dto.insurance.InsurancePaymentMethodDTO;
 import com.propertyvista.portal.web.client.ui.IFormView;
 
-public interface PaymentMethodConfirmationView extends IFormView<PaymentMethodDTO> {
+public interface TenantSurePaymentMethodUpdateConfirmationView extends IFormView<InsurancePaymentMethodDTO> {
 
-    interface PaymentMethodConfirmationPresenter extends IFormView.IFormViewPresenter<PaymentMethodDTO> {
-
-        void goToAutoPay();
-
-        void back();
+    interface PaymentMethodConfirmationPresenter extends IFormView.IFormViewPresenter<InsurancePaymentMethodDTO> {
     }
 
 }

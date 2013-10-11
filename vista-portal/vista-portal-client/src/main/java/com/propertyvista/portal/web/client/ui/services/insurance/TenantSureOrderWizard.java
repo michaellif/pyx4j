@@ -189,18 +189,6 @@ public class TenantSureOrderWizard extends CPortalEntityWizard<TenantSureInsuran
         });
         paymentStepPanel.setWidget(++row, 0, 2, inject(proto().paymentMethod(), paymentMethodForm));
 
-        // TODO i'm not sure this is possible with this wizard
-//        processingPaymentMessage = new Label();
-//        processingPaymentMessage.addStyleName(TenantSureTheme.StyleName.TSPucrhaseViewMessageText.name());
-//        processingPaymentMessage.setText(i18n.tr("Processing payment..."));
-//        paymentStepPanel.setWidget(++row, 0, 2, processingPaymentMessage);
-//
-//        paymentProcessingErrorMessage = new Label();
-//        paymentProcessingErrorMessage.addStyleName(TenantSureTheme.StyleName.TSPucrhaseViewMessageText.name());
-//        paymentProcessingErrorMessage.addStyleName(TenantSureTheme.StyleName.TSPurchaseViewError.name());
-//
-//        paymentProcessingErrorMessage.setText("");
-//        paymentStepPanel.setWidget(++row, 0, 2, paymentProcessingErrorMessage);
         return paymentStepPanel;
     }
 

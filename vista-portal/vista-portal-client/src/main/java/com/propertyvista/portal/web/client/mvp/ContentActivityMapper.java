@@ -61,7 +61,8 @@ import com.propertyvista.portal.web.client.activity.services.insurance.TenantSur
 import com.propertyvista.portal.web.client.activity.services.insurance.TenantSureOrderConfirmationPageActivity;
 import com.propertyvista.portal.web.client.activity.services.insurance.TenantSureOrderWizardActivity;
 import com.propertyvista.portal.web.client.activity.services.insurance.TenantSurePageActivity;
-import com.propertyvista.portal.web.client.activity.services.insurance.tenantsurepaymentmethod.TenantSurePaymentMethodWizardActivity;
+import com.propertyvista.portal.web.client.activity.services.insurance.tenantsurepaymentmethod.TenantSurePaymentMethodUpdateConfirmationActivity;
+import com.propertyvista.portal.web.client.activity.services.insurance.tenantsurepaymentmethod.TenantSurePaymentMethodUpdateWizardActivity;
 
 public class ContentActivityMapper implements AppActivityMapper {
 
@@ -131,7 +132,9 @@ public class ContentActivityMapper implements AppActivityMapper {
                     } else if (appPlace instanceof PortalSiteMap.Resident.ResidentServices.TenantInsurance.TenantSure.TenantSurePage) {
                         activity = new TenantSurePageActivity(appPlace);
                     } else if (appPlace instanceof PortalSiteMap.Resident.ResidentServices.TenantInsurance.TenantSure.TenantSurePage.UpdateCreditCard) {
-                        activity = new TenantSurePaymentMethodWizardActivity(appPlace);
+                        activity = new TenantSurePaymentMethodUpdateWizardActivity(appPlace);
+                    } else if (appPlace instanceof PortalSiteMap.Resident.ResidentServices.TenantInsurance.TenantSure.TenantSurePage.UpdateCreditCardConfirmation) {
+                        activity = new TenantSurePaymentMethodUpdateConfirmationActivity(appPlace);
                     } else if (appPlace instanceof PortalSiteMap.Resident.ResidentServices.TenantInsurance.TenantSure.TenantSurePage.Faq) {
                         activity = new TenantSureFaqActivity(appPlace);
                     } else if (appPlace instanceof PortalSiteMap.Resident.ResidentServices.TenantInsurance.TenantSure.TenantSurePage.About) {

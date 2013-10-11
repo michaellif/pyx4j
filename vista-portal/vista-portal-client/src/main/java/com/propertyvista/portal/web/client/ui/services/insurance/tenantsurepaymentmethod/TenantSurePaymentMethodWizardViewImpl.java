@@ -13,18 +13,26 @@
  */
 package com.propertyvista.portal.web.client.ui.services.insurance.tenantsurepaymentmethod;
 
-import com.pyx4j.i18n.shared.I18n;
-
+import com.propertyvista.domain.contact.AddressSimple;
 import com.propertyvista.portal.rpc.portal.web.dto.insurance.InsurancePaymentMethodDTO;
 import com.propertyvista.portal.web.client.ui.AbstractWizardView;
 
 public class TenantSurePaymentMethodWizardViewImpl extends AbstractWizardView<InsurancePaymentMethodDTO> implements TenantSurePaymentMethodWizardView {
 
-    private static final I18n i18n = I18n.get(TenantSurePaymentMethodWizardViewImpl.class);
-
     public TenantSurePaymentMethodWizardViewImpl() {
         super();
         setWizard(new TenantSurePaymentMethodWizard(this));
-
     }
+
+    @Override
+    public void setBillingAddress(AddressSimple address) {
+        ((TenantSurePaymentMethodWizard) getWizard()).setBillingAddress(address);
+    }
+
+    @Override
+    public void setPresenter(com.propertyvista.portal.web.client.ui.IWizardView.IWizardPresenter<InsurancePaymentMethodDTO> presenter) {
+        ((TenantSurePaymentMethodWizard) getWizard()).setPresenter((Persenter) presenter);
+        super.setPresenter(presenter);
+    }
+
 }

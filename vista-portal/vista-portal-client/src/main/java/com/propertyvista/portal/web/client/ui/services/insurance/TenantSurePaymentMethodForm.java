@@ -46,7 +46,7 @@ public class TenantSurePaymentMethodForm extends PaymentMethodForm<InsurancePaym
 
     private final CCheckBox iAgreeBox = new CCheckBox();
 
-    protected final HTML legalTerms = new HTML();
+    private final HTML legalTerms = new HTML();
 
     private boolean isAgreedToPreauthorizedPayments;
 
@@ -101,6 +101,14 @@ public class TenantSurePaymentMethodForm extends PaymentMethodForm<InsurancePaym
     protected void onValueSet(boolean populate) {
         setBillingAddressAsCurrentEnabled(onSameAsCurrentAddressSelected != null);
         super.onValueSet(populate);
+    }
+
+    @Override
+    public void setVisited(boolean visited) {
+        super.setVisited(visited);
+        if (iAgreeBox != null) {
+            iAgreeBox.setValue(false);
+        }
     }
 
     @Override

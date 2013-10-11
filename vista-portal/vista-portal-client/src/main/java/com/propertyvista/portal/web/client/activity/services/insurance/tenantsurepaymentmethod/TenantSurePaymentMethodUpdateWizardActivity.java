@@ -14,7 +14,6 @@
 package com.propertyvista.portal.web.client.activity.services.insurance.tenantsurepaymentmethod;
 
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.commons.Key;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
@@ -22,26 +21,26 @@ import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.rpc.AppPlace;
 
 import com.propertyvista.domain.contact.AddressSimple;
-import com.propertyvista.portal.rpc.portal.PortalSiteMap.Resident.Financial;
+import com.propertyvista.portal.rpc.portal.PortalSiteMap;
 import com.propertyvista.portal.rpc.portal.web.dto.insurance.InsurancePaymentMethodDTO;
 import com.propertyvista.portal.rpc.portal.web.services.services.TenantSurePaymentMethodCrudService;
 import com.propertyvista.portal.web.client.activity.AbstractWizardCrudActivity;
 import com.propertyvista.portal.web.client.ui.services.insurance.tenantsurepaymentmethod.TenantSurePaymentMethodWizardView;
 
-public class TenantSurePaymentMethodWizardActivity extends AbstractWizardCrudActivity<InsurancePaymentMethodDTO> implements
+public class TenantSurePaymentMethodUpdateWizardActivity extends AbstractWizardCrudActivity<InsurancePaymentMethodDTO> implements
         TenantSurePaymentMethodWizardView.Persenter {
 
-    public TenantSurePaymentMethodWizardActivity(AppPlace place) {
+    public TenantSurePaymentMethodUpdateWizardActivity(AppPlace place) {
         super(TenantSurePaymentMethodWizardView.class, GWT.<TenantSurePaymentMethodCrudService> create(TenantSurePaymentMethodCrudService.class),
                 InsurancePaymentMethodDTO.class);
     }
 
     @Override
-    public void getCurrentAddress(final AsyncCallback<AddressSimple> callback) {
+    public void getCurrentAddress() {
         ((TenantSurePaymentMethodCrudService) getService()).getCurrentAddress(new DefaultAsyncCallback<AddressSimple>() {
             @Override
             public void onSuccess(AddressSimple result) {
-                callback.onSuccess(result);
+                ((TenantSurePaymentMethodWizardView) getView()).setBillingAddress(result);
             }
         });
     }
@@ -49,6 +48,6 @@ public class TenantSurePaymentMethodWizardActivity extends AbstractWizardCrudAct
     @Override
     protected void onFinish(Key result) {
         getView().reset();
-        AppSite.getPlaceController().goTo(new Financial.PaymentMethods.PaymentMethodSubmitted(result));
+        AppSite.getPlaceController().goTo(new PortalSiteMap.Resident.ResidentServices.TenantInsurance.TenantSure.TenantSurePage.UpdateCreditCardConfirmation());
     }
 }

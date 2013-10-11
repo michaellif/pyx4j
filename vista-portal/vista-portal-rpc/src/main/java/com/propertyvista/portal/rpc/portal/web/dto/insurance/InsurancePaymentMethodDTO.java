@@ -15,6 +15,7 @@ package com.propertyvista.portal.rpc.portal.web.dto.insurance;
 
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.shared.IPrimitive;
 
 import com.propertyvista.domain.payment.InsurancePaymentMethod;
 
@@ -22,4 +23,7 @@ import com.propertyvista.domain.payment.InsurancePaymentMethod;
 public interface InsurancePaymentMethodDTO extends IEntity {
 
     InsurancePaymentMethod paymentMethod();
+
+    IPrimitive<String> preauthorizedPaymentAgreement();
+
 }

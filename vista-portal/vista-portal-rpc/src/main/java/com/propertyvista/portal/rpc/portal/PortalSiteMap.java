@@ -239,6 +239,10 @@ public class PortalSiteMap implements SiteMap {
                     @PlaceProperties(navigLabel = "TenantSure Management", caption = "TenantSure Management")
                     public static class TenantSurePage extends AppPlace {
 
+                        public static class UpdateCreditCardConfirmation extends AppPlace {
+
+                        }
+
                         @PlaceProperties(caption = "Update Credit Card")
                         public static class UpdateCreditCard extends AppPlace {
 

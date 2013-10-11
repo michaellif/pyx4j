@@ -13,123 +13,61 @@
  */
 package com.propertyvista.portal.web.client.ui.services.insurance.tenantsurepaymentmethod;
 
-import com.google.gwt.dom.client.Style.Display;
-import com.google.gwt.dom.client.Style.FontWeight;
-import com.google.gwt.event.logical.shared.SelectionEvent;
 import com.google.gwt.user.client.Command;
-import com.google.gwt.user.client.ui.FlowPanel;
-import com.google.gwt.user.client.ui.HTML;
-import com.google.gwt.user.client.ui.HasHorizontalAlignment;
-import com.google.gwt.user.client.ui.HasVerticalAlignment;
-import com.google.gwt.user.client.ui.HorizontalPanel;
-import com.google.gwt.user.client.ui.SimplePanel;
-import com.google.gwt.user.client.ui.VerticalPanel;
-import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.commons.css.ThemeColor;
 import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
-import com.pyx4j.forms.client.ui.wizard.WizardStep;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.widgets.client.Anchor;
 
+import com.propertyvista.domain.contact.AddressSimple;
+import com.propertyvista.domain.payment.InsurancePaymentMethod;
 import com.propertyvista.portal.rpc.portal.web.dto.insurance.InsurancePaymentMethodDTO;
 import com.propertyvista.portal.web.client.ui.CPortalEntityWizard;
 import com.propertyvista.portal.web.client.ui.IWizardView;
-import com.propertyvista.portal.web.client.ui.LegalTermsDialog;
-import com.propertyvista.portal.web.client.ui.LegalTermsDialog.TermsType;
 import com.propertyvista.portal.web.client.ui.services.insurance.TenantSurePaymentMethodForm;
+import com.propertyvista.portal.web.client.ui.services.insurance.tenantsurepaymentmethod.TenantSurePaymentMethodWizardView.Persenter;
 
 public class TenantSurePaymentMethodWizard extends CPortalEntityWizard<InsurancePaymentMethodDTO> {
 
     private static final I18n i18n = I18n.get(TenantSurePaymentMethodWizard.class);
 
-    private final WizardStep comfirmationStep;
+    private Persenter presenter;
 
-    private final SimplePanel confirmationDetailsHolder = new SimplePanel();
+    private TenantSurePaymentMethodForm paymentMethodForm;
 
     public TenantSurePaymentMethodWizard(IWizardView<InsurancePaymentMethodDTO> view) {
-        super(InsurancePaymentMethodDTO.class, view, i18n.tr("TenantSure Payment Setup"), i18n.tr("Submit"), ThemeColor.contrast4);
+        super(InsurancePaymentMethodDTO.class, view, i18n.tr("TenantSure Payment Setup"), i18n.tr("Submit"), ThemeColor.contrast3);
 
         addStep(createPaymentMethodStep());
-        comfirmationStep = addStep(createConfirmationStep());
+    }
+
+    public void setPresenter(TenantSurePaymentMethodWizardView.Persenter presenter) {
+        this.presenter = presenter;
+    }
+
+    public void setBillingAddress(AddressSimple address) {
+        InsurancePaymentMethod paymentMethod = paymentMethodForm.getValue();
+        paymentMethod.billingAddress().set(address);
+        paymentMethodForm.setValue(paymentMethod);
+    }
+
+    @Override
+    protected void onValueSet(boolean populate) {
+        super.onValueSet(populate);
+        paymentMethodForm.setPreAuthorizedAgreement(getValue().preauthorizedPaymentAgreement().getValue());
     }
 
     private BasicFlexFormPanel createPaymentMethodStep() {
         BasicFlexFormPanel panel = new BasicFlexFormPanel(i18n.tr("Payment Method"));
 
-        panel.setWidget(0, 0, inject(proto().paymentMethod(), new TenantSurePaymentMethodForm()));
-
-        return panel;
-    }
-
-    private BasicFlexFormPanel createConfirmationStep() {
-        BasicFlexFormPanel panel = new BasicFlexFormPanel(i18n.tr("Confirmation"));
-        int row = -1;
-
-        panel.setWidget(++row, 0, confirmationDetailsHolder);
-        panel.getFlexCellFormatter().setHorizontalAlignment(row, 0, HasHorizontalAlignment.ALIGN_CENTER);
-
-        panel.setBR(++row, 0, 1);
-        panel.setHR(++row, 0, 1);
-
-        panel.setWidget(++row, 0, createLegalTermsPanel());
-        panel.getFlexCellFormatter().setAlignment(row, 0, HasHorizontalAlignment.ALIGN_CENTER, HasVerticalAlignment.ALIGN_MIDDLE);
-
-        return panel;
-    }
-
-    @Override
-    protected void onStepChange(SelectionEvent<WizardStep> event) {
-        super.onStepChange(event);
-        if (event.getSelectedItem().equals(comfirmationStep)) {
-            confirmationDetailsHolder.clear();
-            confirmationDetailsHolder.setWidget(createConfirmationDetailsPanel());
-        }
-    }
-
-    @Override
-    protected void onValueSet(final boolean populate) {
-        super.onValueSet(populate);
-    }
-
-    private Widget createConfirmationDetailsPanel() {
-        VerticalPanel panel = new VerticalPanel();
-        Widget w;
-
-        panel.add(new HTML("<br/>"));
-
-        HorizontalPanel pm = new HorizontalPanel();
-        pm.add(w = new HTML(i18n.tr("Payment Method:")));
-        w.setWidth("10em");
-        pm.add(w = new HTML(get(proto().paymentMethod()).getValue().getStringView()));
-        w.getElement().getStyle().setFontWeight(FontWeight.BOLD);
-        panel.add(pm);
-
-        return panel;
-    }
-
-    private Widget createLegalTermsPanel() {
-        FlowPanel panel = new FlowPanel();
-        Widget w;
-
-        panel.add(new HTML(i18n.tr("Be informed that you are acknowledging our")));
-        panel.add(w = new Anchor(i18n.tr("Terms Of Use"), new Command() {
+        panel.setWidget(0, 0, inject(proto().paymentMethod(), paymentMethodForm = new TenantSurePaymentMethodForm(new Command() {
             @Override
             public void execute() {
-                // TODO change this to TenantSure Preauthorized Agreement terms.
-                new LegalTermsDialog(TermsType.TermsOfUse).show();
+                presenter.getCurrentAddress();
             }
-        }));
-
-        panel.add(w = new HTML("&nbsp" + i18n.tr("and") + "&nbsp"));
-        w.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
-        panel.add(w = new Anchor(i18n.tr("Privacy Policy"), new Command() {
-            @Override
-            public void execute() {
-                new LegalTermsDialog(TermsType.PrivacyPolicy).show();
-            }
-        }));
+        })));
 
         return panel;
     }
+
 }
