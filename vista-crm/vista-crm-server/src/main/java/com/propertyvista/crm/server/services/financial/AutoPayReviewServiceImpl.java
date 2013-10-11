@@ -38,10 +38,8 @@ import com.propertyvista.crm.rpc.dto.financial.autopayreview.PapReviewCaptionDTO
 import com.propertyvista.crm.rpc.dto.financial.autopayreview.PapReviewDTO;
 import com.propertyvista.crm.rpc.dto.financial.autopayreview.ReviewedPapsHolderDTO;
 import com.propertyvista.crm.rpc.services.financial.AutoPayReviewService;
-import com.propertyvista.domain.payment.PreauthorizedPayment;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.reports.AutoPayChangesReportMetadata;
-import com.propertyvista.domain.tenant.lease.Tenant;
 import com.propertyvista.dto.payment.AutoPayReviewChargeDTO;
 import com.propertyvista.dto.payment.AutoPayReviewLeaseDTO;
 import com.propertyvista.dto.payment.AutoPayReviewPreauthorizedPaymentDTO;
@@ -102,11 +100,9 @@ public class AutoPayReviewServiceImpl implements AutoPayReviewService {
         PapReviewDTO papReview = EntityFactory.create(PapReviewDTO.class);
         papReview.papId().set(autoPay.pap());
         papReview.caption().set(papReviewCaption.duplicate(PapReviewCaptionDTO.class));
-        PreauthorizedPayment pap = Persistence.service().retrieve(PreauthorizedPayment.class, papReview.papId().getPrimaryKey());
-        Persistence.service().retrieve(pap.tenant());
-        papReview.caption().paymentMethod().setValue(pap.paymentMethod().getStringView());
-        papReview.caption().tenant().setValue(pap.tenant().getStringView());
-        papReview.caption().tenant_().set(pap.tenant().<Tenant> createIdentityStub());
+        papReview.caption().paymentMethod().setValue(autoPay.paymentMethodView().getStringView());
+        papReview.caption().tenant().setValue(autoPay.tenantName().getStringView());
+        papReview.caption().tenant_().set(autoPay.tenant_());
 
         for (AutoPayReviewChargeDTO autoPayCharge : autoPay.items()) {
             PapChargeReviewDTO papCharge = EntityFactory.create(PapChargeReviewDTO.class);

@@ -159,6 +159,10 @@ public abstract class IntegrationTestBase extends VistaDBTestBase {
         setSysDate(setDate);
     }
 
+    public void assertEquals(String message, String expected, LogicalDate actual) {
+        assertEquals(message, new LogicalDate(DateUtils.detectDateformat(expected)), actual);
+    }
+
     protected void setBillingBatchProcess() {
         scheduler.schedulePmcProcess(PmcProcessType.billing, new Schedule());
         scheduler.schedulePmcProcess(PmcProcessType.initializeFutureBillingCycles, new Schedule());

@@ -16,13 +16,10 @@ package com.propertyvista.integration.yardi;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.junit.Assert;
-
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
-import com.pyx4j.gwt.server.DateUtils;
 
 import com.propertyvista.biz.ExecutionMonitor;
 import com.propertyvista.biz.financial.payment.PaymentMethodFacade;
@@ -97,10 +94,6 @@ public class PreauthorizedPaymentProcessYardiTest extends PaymentYardiTestBase {
 
         Persistence.service().commit();
         return lease;
-    }
-
-    public static void assertEquals(String message, String expected, LogicalDate actual) {
-        Assert.assertEquals(message, new LogicalDate(DateUtils.detectDateformat(expected)), actual);
     }
 
     protected LogicalDate getTargetPadGenerationDate(Lease lease) {

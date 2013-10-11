@@ -15,16 +15,13 @@ package com.propertyvista.biz.financial.payment;
 
 import java.math.BigDecimal;
 
-import org.junit.Assert;
 import org.junit.experimental.categories.Category;
 
-import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.server.Executable;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.server.TransactionScopeOption;
 import com.pyx4j.entity.server.UnitOfWork;
-import com.pyx4j.gwt.server.DateUtils;
 
 import com.propertyvista.biz.financial.LeaseFinancialTestBase;
 import com.propertyvista.biz.financial.billing.BillTester;
@@ -32,10 +29,10 @@ import com.propertyvista.domain.financial.PaymentRecord.PaymentStatus;
 import com.propertyvista.domain.payment.PreauthorizedPayment;
 import com.propertyvista.domain.policy.policies.LeaseBillingPolicy;
 import com.propertyvista.operations.domain.scheduler.PmcProcessType;
+import com.propertyvista.test.integration.IntegrationTestBase.RegressionTests;
 import com.propertyvista.test.integration.PaymentAgreementTester;
 import com.propertyvista.test.integration.PaymentRecordTester;
 import com.propertyvista.test.integration.PreauthorizedPaymentBuilder;
-import com.propertyvista.test.integration.IntegrationTestBase.RegressionTests;
 import com.propertyvista.test.mock.MockConfig;
 import com.propertyvista.test.mock.schedule.SchedulerMock;
 
@@ -53,10 +50,6 @@ public class PadPaymentMethodCancellationTest extends LeaseFinancialTestBase {
         MockConfig config = new MockConfig();
         config.billConfirmationMethod = LeaseBillingPolicy.BillConfirmationMethod.automatic;
         preloadData(config);
-    }
-
-    public static void assertEquals(String message, String expected, LogicalDate actual) {
-        Assert.assertEquals(message, new LogicalDate(DateUtils.detectDateformat(expected)), actual);
     }
 
     public void testMethodsRemoval() throws Exception {

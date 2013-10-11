@@ -15,7 +15,6 @@ package com.propertyvista.biz.financial.payment;
 
 import org.junit.experimental.categories.Category;
 
-import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.gwt.server.DateUtils;
 
@@ -55,7 +54,7 @@ public class PadPaymentChargeBaseSunnyDayScenarioTest extends LeaseFinancialTest
 
         approveApplication(true);
 
-        assertEquals("PAD next target date", new LogicalDate(DateUtils.detectDateformat("01-Apr-2011")), getNextTargetPadExecutionDate());
+        assertEquals("PAD next target date", "01-Apr-2011", getNextTargetPadExecutionDate());
 
         // @formatter:off
         new BillTester(getLatestBill()).

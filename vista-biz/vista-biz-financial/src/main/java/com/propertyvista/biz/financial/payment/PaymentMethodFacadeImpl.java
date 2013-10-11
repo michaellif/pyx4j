@@ -147,16 +147,6 @@ public class PaymentMethodFacadeImpl implements PaymentMethodFacade {
     }
 
     @Override
-    public LogicalDate getCurrentPreauthorizedPaymentDate(Lease lease) {
-        return getCurrentPreauthorizedPaymentBillingCycle(lease).targetPadExecutionDate().getValue();
-    }
-
-    @Override
-    public LogicalDate getPreauthorizedPaymentCutOffDate(Lease lease) {
-        return getCurrentPreauthorizedPaymentBillingCycle(lease).targetPadGenerationDate().getValue();
-    }
-
-    @Override
     public BillingCycle getNextPreauthorizedPaymentBillingCycle(Lease lease) {
         LogicalDate when = new LogicalDate(SystemDateManager.getDate());
         BillingCycle cycle = ServerSideFactory.create(BillingCycleFacade.class).getBillingCycleForDate(lease, when);
@@ -165,6 +155,16 @@ public class PaymentMethodFacadeImpl implements PaymentMethodFacade {
             cycle = ServerSideFactory.create(BillingCycleFacade.class).getSubsequentBillingCycle(cycle);
         }
         return cycle;
+    }
+
+    @Override
+    public LogicalDate getCurrentPreauthorizedPaymentDate(Lease lease) {
+        return getCurrentPreauthorizedPaymentBillingCycle(lease).targetPadExecutionDate().getValue();
+    }
+
+    @Override
+    public LogicalDate getPreauthorizedPaymentCutOffDate(Lease lease) {
+        return getCurrentPreauthorizedPaymentBillingCycle(lease).targetPadGenerationDate().getValue();
     }
 
     @Override

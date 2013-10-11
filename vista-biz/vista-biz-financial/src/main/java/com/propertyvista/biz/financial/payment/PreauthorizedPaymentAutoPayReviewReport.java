@@ -30,7 +30,9 @@ import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.OrCriterion;
 
+import com.propertyvista.biz.financial.billingcycle.BillingCycleFacade;
 import com.propertyvista.domain.financial.BillingAccount;
+import com.propertyvista.domain.financial.PaymentRecord;
 import com.propertyvista.domain.financial.billing.BillingCycle;
 import com.propertyvista.domain.payment.PreauthorizedPayment;
 import com.propertyvista.domain.payment.PreauthorizedPayment.PreauthorizedPaymentCoveredItem;
@@ -118,27 +120,43 @@ class PreauthorizedPaymentAutoPayReviewReport {
         leaseReview.unit().setValue(billingAccount.lease().unit().info().number().getValue());
 
         BillingCycle nextPaymentCycle = ServerSideFactory.create(PaymentMethodFacade.class).getNextPreauthorizedPaymentBillingCycle(billingAccount.lease());
+        BillingCycle previousPaymentCycle = ServerSideFactory.create(BillingCycleFacade.class).getPriorBillingCycle(nextPaymentCycle);
 
         leaseReview.paymentDue().setValue(nextPaymentCycle.targetPadExecutionDate().getValue());
 
         boolean reviewRequired = false;
         List<PreauthorizedPayment> preauthorizedPayments = getPreauthorizedPayments(billingAccount, nextPaymentCycle);
+        Set<PreauthorizedPayment> previousCycleRemovedPayments = new HashSet<PreauthorizedPayment>();
         for (PreauthorizedPayment preauthorizedPayment : preauthorizedPayments) {
-            AutoPayReviewPreauthorizedPaymentDTO papReview = createPreauthorizedPaymentPreview(preauthorizedPayment, nextPaymentCycle);
+            AutoPayReviewPreauthorizedPaymentDTO papReview = createPreauthorizedPaymentPreview(preauthorizedPayment, previousPaymentCycle, nextPaymentCycle);
             leaseReview.pap().add(papReview);
 
             if (papReview.reviewRequired().getValue()) {
                 reviewRequired = true;
             }
+            if (!papReview.previousCyclePap().isNull()) {
+                previousCycleRemovedPayments.add(papReview.previousCyclePap());
+            }
         }
 
-        if (reviewRequired) {
-            calulateLeaseTotals(leaseReview);
-            return leaseReview;
-        } else {
+        if (!reviewRequired) {
             return null;
         }
 
+        // add PreviousCycle Removed Payment Agreements
+        {
+            EntityQueryCriteria<PaymentRecord> criteria = new EntityQueryCriteria<PaymentRecord>(PaymentRecord.class);
+            criteria.eq(criteria.proto().billingAccount(), billingAccount);
+            criteria.eq(criteria.proto().padBillingCycle(), previousPaymentCycle);
+            for (PaymentRecord paymentRecord : Persistence.service().query(criteria)) {
+                if ((!paymentRecord.preauthorizedPayment().isNull()) && (!previousCycleRemovedPayments.contains(paymentRecord.preauthorizedPayment()))) {
+                    leaseReview.pap().add(createPreviousPreauthorizedPaymentPreview(paymentRecord.preauthorizedPayment()));
+                }
+            }
+        }
+
+        calulateLeaseTotals(leaseReview);
+        return leaseReview;
     }
 
     private void calulateLeaseTotals(AutoPayReviewLeaseDTO review) {
@@ -170,21 +188,36 @@ class PreauthorizedPaymentAutoPayReviewReport {
         }
     }
 
-    private AutoPayReviewPreauthorizedPaymentDTO createPreauthorizedPaymentPreview(PreauthorizedPayment preauthorizedPayment, BillingCycle nextPaymentCycle) {
+    private AutoPayReviewPreauthorizedPaymentDTO createPreauthorizedPaymentPreview(PreauthorizedPayment preauthorizedPayment,
+            BillingCycle previousPaymentCycle, BillingCycle nextPaymentCycle) {
         AutoPayReviewPreauthorizedPaymentDTO papReview = EntityFactory.create(AutoPayReviewPreauthorizedPaymentDTO.class);
 
         papReview.pap().set(preauthorizedPayment.createIdentityStub());
+        papReview.tenant_().set(preauthorizedPayment.tenant().createIdentityStub());
         Persistence.ensureRetrieve(preauthorizedPayment.tenant(), AttachLevel.Attached);
         papReview.tenantName().setValue(preauthorizedPayment.tenant().customer().person().name().getStringView());
+
+        papReview.paymentMethodView().setValue(preauthorizedPayment.paymentMethod().getStringView());
 
         papReview.reviewRequired().setValue(nextPaymentCycle.billingCycleStartDate().equals(preauthorizedPayment.updatedBySystem()));
         papReview.changedByTenant().setValue(PreauthorizedPaymentAgreementMananger.isChangeByTenant(preauthorizedPayment, nextPaymentCycle));
 
-        Persistence.ensureRetrieve(preauthorizedPayment.reviewOfPap(), AttachLevel.Attached);
         Map<String, PreauthorizedPaymentCoveredItem> coveredItemItemsPrevious = new LinkedHashMap<String, PreauthorizedPaymentCoveredItem>();
         if (!preauthorizedPayment.reviewOfPap().isNull()) {
-            for (PreauthorizedPaymentCoveredItem coveredItem : preauthorizedPayment.reviewOfPap().coveredItems()) {
-                coveredItemItemsPrevious.put(coveredItem.billableItem().uid().getValue(), coveredItem);
+            boolean hasPaymentRecords = false;
+            {
+                EntityQueryCriteria<PaymentRecord> criteria = new EntityQueryCriteria<PaymentRecord>(PaymentRecord.class);
+                criteria.eq(criteria.proto().preauthorizedPayment(), preauthorizedPayment.reviewOfPap());
+                criteria.eq(criteria.proto().padBillingCycle(), previousPaymentCycle);
+                hasPaymentRecords = Persistence.service().count(criteria) > 0;
+            }
+            if (hasPaymentRecords) {
+                papReview.previousCyclePap().set(preauthorizedPayment.reviewOfPap().createIdentityStub());
+                Persistence.ensureRetrieve(preauthorizedPayment.reviewOfPap(), AttachLevel.Attached);
+
+                for (PreauthorizedPaymentCoveredItem coveredItem : preauthorizedPayment.reviewOfPap().coveredItems()) {
+                    coveredItemItemsPrevious.put(coveredItem.billableItem().uid().getValue(), coveredItem);
+                }
             }
         }
 
@@ -235,6 +268,37 @@ class PreauthorizedPaymentAutoPayReviewReport {
 
             papReview.items().add(chargeReview);
         }
+        return papReview;
+    }
+
+    private AutoPayReviewPreauthorizedPaymentDTO createPreviousPreauthorizedPaymentPreview(PreauthorizedPayment preauthorizedPayment) {
+        AutoPayReviewPreauthorizedPaymentDTO papReview = EntityFactory.create(AutoPayReviewPreauthorizedPaymentDTO.class);
+        Persistence.ensureRetrieve(preauthorizedPayment, AttachLevel.Attached);
+
+        papReview.previousCyclePap().set(preauthorizedPayment.createIdentityStub());
+
+        papReview.tenant_().set(preauthorizedPayment.tenant().createIdentityStub());
+        Persistence.ensureRetrieve(preauthorizedPayment.tenant(), AttachLevel.Attached);
+        papReview.tenantName().setValue(preauthorizedPayment.tenant().customer().person().name().getStringView());
+
+        papReview.paymentMethodView().setValue(preauthorizedPayment.paymentMethod().getStringView());
+
+        papReview.reviewRequired().setValue(false);
+        papReview.changedByTenant().setValue(false);
+
+        // Removed billableItem , and they don't have current price
+        for (PreauthorizedPaymentCoveredItem coveredItem : preauthorizedPayment.coveredItems()) {
+            AutoPayReviewChargeDTO chargeReview = EntityFactory.create(AutoPayReviewChargeDTO.class);
+
+            chargeReview.leaseCharge().setValue(getLeaseChargeDescription(coveredItem.billableItem()));
+            chargeReview.previous().billableItem().set(coveredItem.billableItem().createIdentityStub());
+            chargeReview.previous().totalPrice().setValue(PaymentBillableUtils.getActualPrice(coveredItem.billableItem()));
+            chargeReview.previous().payment().setValue(coveredItem.amount().getValue());
+            calulatePercent(chargeReview.previous());
+
+            papReview.items().add(chargeReview);
+        }
+
         return papReview;
     }
 
@@ -301,10 +365,7 @@ class PreauthorizedPaymentAutoPayReviewReport {
                 criteria.asc(criteria.proto().id());
                 preauthorizedPayments = Persistence.service().query(criteria);
             }
-            for (PreauthorizedPayment pap : preauthorizedPayments) {
-                // TODO Filter 
-                records.add(pap);
-            }
+            records.addAll(preauthorizedPayments);
         }
         return records;
     }
