@@ -1,0 +1,81 @@
+/**
+***     ======================================================================================================================
+***
+***             @version $Revision$ ($Author$) $Date$
+***
+***             Per-building statistics tables
+***
+***     ======================================================================================================================
+**/
+
+CREATE TABLE _dba_.building_stats 
+(
+        pmc                             VARCHAR(150),
+        property_code                   VARCHAR(20),
+        stats_week                      DATE,
+        total_units                     INT,
+        active_leases                   INT,
+        avg_tpu                         NUMERIC(4,1),
+        reg_units                       INT,
+        units_epay                      INT,
+        reg_units_epay                  INT,
+        total_tenants                   INT,
+        reg_tenants                     INT,
+        tenant_logins_this_week         INT,
+        tenant_logins_this_month        INT,
+        count_tenants_epay              INT,
+        count_trans_recur               INT,
+        amount_trans_recur              NUMERIC(18,2),
+        count_trans_onetime             INT,
+        amount_trans_onetime            NUMERIC(18,2),
+        count_eft_recur                 INT,
+        amount_eft_recur                NUMERIC(18,2),
+        count_eft_onetime               INT,
+        amount_eft_onetime              NUMERIC(18,2),
+        count_direct_debit              INT,
+        amount_direct_debit             NUMERIC(18,2),
+        count_interac                   INT,
+        amount_interac                  NUMERIC(18,2),
+        count_visa_recur                INT,
+        amount_visa_recur               NUMERIC(18,2),
+        count_visa_onetime              INT,
+        amount_visa_onetime             NUMERIC(18,2),
+        count_mc_recur                  INT,
+        amount_mc_recur                 NUMERIC(18,2),
+        count_mc_onetime                INT,
+        amount_mc_onetime               NUMERIC(18,2),
+        count_visadebit_recur           INT,
+        amount_visadebit_recur          NUMERIC(18,2),
+        count_visadebit_onetime         INT,
+        amount_visadebit_onetime        NUMERIC(18,2),
+        count_tenants_epay_reg          INT,
+        count_trans_recur_reg           INT,
+        amount_trans_recur_reg          NUMERIC(18,2),
+        count_trans_onetime_reg         INT,
+        amount_trans_onetime_reg        NUMERIC(18,2),
+        count_eft_recur_reg             INT,
+        amount_eft_recur_reg            NUMERIC(18,2),
+        count_eft_onetime_reg           INT,
+        amount_eft_onetime_reg          NUMERIC(18,2),
+        count_direct_debit_reg          INT,
+        amount_direct_debit_reg         NUMERIC(18,2),
+        count_interac_reg               INT,
+        amount_interac_reg              NUMERIC(18,2),
+        count_visa_recur_reg            INT,
+        amount_visa_recur_reg           NUMERIC(18,2),
+        count_visa_onetime_reg          INT,
+        amount_visa_onetime_reg         NUMERIC(18,2),
+        count_mc_recur_reg              INT,
+        amount_mc_recur_reg             NUMERIC(18,2),
+        count_mc_onetime_reg            INT,
+        amount_mc_onetime_reg           NUMERIC(18,2),
+        count_visadebit_recur_reg       INT,
+        amount_visadebit_recur_reg      NUMERIC(18,2),
+        count_visadebit_onetime_reg     INT,
+        amount_visadebit_onetime_reg    NUMERIC(18,2),
+        total_maint_requests            INT,
+        maint_requests_this_month       INT,
+        tenant_maint_requests           INT,
+        tenant_maint_requests_this_month  INT 
+
+);
