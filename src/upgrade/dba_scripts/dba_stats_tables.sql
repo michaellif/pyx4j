@@ -15,15 +15,15 @@ CREATE TABLE _dba_.building_stats
         stats_week                      DATE,
         total_units                     INT,
         active_leases                   INT,
-        avg_tpu                         NUMERIC(4,1),
         reg_units                       INT,
         units_epay                      INT,
         reg_units_epay                  INT,
         total_tenants                   INT,
         reg_tenants                     INT,
-        tenant_logins_this_week         INT,
-        tenant_logins_this_month        INT,
-        count_tenants_epay              INT,
+        tenants_epay                    INT,
+        reg_tenants_epay                INT,
+        count_trans_all                 INT,
+        amount_trans_all                NUMERIC(18,2),
         count_trans_recur               INT,
         amount_trans_recur              NUMERIC(18,2),
         count_trans_onetime             INT,
@@ -48,7 +48,6 @@ CREATE TABLE _dba_.building_stats
         amount_visadebit_recur          NUMERIC(18,2),
         count_visadebit_onetime         INT,
         amount_visadebit_onetime        NUMERIC(18,2),
-        count_tenants_epay_reg          INT,
         count_trans_recur_reg           INT,
         amount_trans_recur_reg          NUMERIC(18,2),
         count_trans_onetime_reg         INT,
@@ -73,9 +72,12 @@ CREATE TABLE _dba_.building_stats
         amount_visadebit_recur_reg      NUMERIC(18,2),
         count_visadebit_onetime_reg     INT,
         amount_visadebit_onetime_reg    NUMERIC(18,2),
+        tenant_login_week               INT,
+        tenant_login_month              INT,
         total_maint_requests            INT,
-        maint_requests_this_month       INT,
+        maint_requests_month            INT,
         tenant_maint_requests           INT,
-        tenant_maint_requests_this_month  INT 
-
+        tenant_maint_requests_month     INT,
+                CONSTRAINT building_stats_pmc_propcode_week_uq UNIQUE (pmc,property_code,stats_week)
 );
+
