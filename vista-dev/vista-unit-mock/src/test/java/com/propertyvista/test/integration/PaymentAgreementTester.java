@@ -21,19 +21,19 @@ import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 
 import com.propertyvista.domain.financial.BillingAccount;
-import com.propertyvista.domain.payment.PreauthorizedPayment;
-import com.propertyvista.domain.payment.PreauthorizedPayment.PreauthorizedPaymentCoveredItem;
+import com.propertyvista.domain.payment.AutopayAgreement;
+import com.propertyvista.domain.payment.AutopayAgreement.PreauthorizedPaymentCoveredItem;
 
 public class PaymentAgreementTester extends Tester {
 
     private final BillingAccount billingAccount;
 
-    private final List<PreauthorizedPayment> papRecords;
+    private final List<AutopayAgreement> papRecords;
 
     public PaymentAgreementTester(BillingAccount billingAccount) {
         super();
         this.billingAccount = billingAccount;
-        EntityQueryCriteria<PreauthorizedPayment> criteria = new EntityQueryCriteria<PreauthorizedPayment>(PreauthorizedPayment.class);
+        EntityQueryCriteria<AutopayAgreement> criteria = new EntityQueryCriteria<AutopayAgreement>(AutopayAgreement.class);
         criteria.add(PropertyCriterion.eq(criteria.proto().tenant().lease().billingAccount(), billingAccount));
         criteria.asc(criteria.proto().id());
         papRecords = Persistence.service().query(criteria);
@@ -46,8 +46,8 @@ public class PaymentAgreementTester extends Tester {
 
     public PaymentAgreementTester activeCount(int size) {
         int count = 0;
-        for (PreauthorizedPayment pap : papRecords) {
-            if (pap.expiring().isNull()) {
+        for (AutopayAgreement pap : papRecords) {
+            if (!pap.isDeleted().getValue(false)) {
                 count++;
             }
         }
@@ -55,7 +55,7 @@ public class PaymentAgreementTester extends Tester {
         return this;
     }
 
-    public PreauthorizedPayment lastRecord() {
+    public AutopayAgreement lastRecord() {
         return papRecords.get(papRecords.size() - 1);
     }
 

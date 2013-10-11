@@ -49,9 +49,9 @@ import com.propertyvista.domain.financial.billing.InvoiceDebit;
 import com.propertyvista.domain.financial.offering.Feature;
 import com.propertyvista.domain.financial.offering.ProductItem;
 import com.propertyvista.domain.financial.offering.Service;
+import com.propertyvista.domain.payment.AutopayAgreement;
 import com.propertyvista.domain.payment.LeasePaymentMethod;
 import com.propertyvista.domain.payment.PaymentType;
-import com.propertyvista.domain.payment.PreauthorizedPayment;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.tenant.Customer;
 import com.propertyvista.domain.tenant.lease.BillableItem;
@@ -526,19 +526,19 @@ public abstract class LeaseFinancialTestBase extends IntegrationTestBase {
     }
 
     @Deprecated
-    protected PreauthorizedPayment setPreauthorizedPayment(String value) {
+    protected AutopayAgreement setPreauthorizedPayment(String value) {
         throw new Error("TODO remove this");
     }
 
-    protected PreauthorizedPayment setPreauthorizedPayment(List<PreauthorizedPayment.PreauthorizedPaymentCoveredItem> items) {
-        PreauthorizedPayment preauthorizedPayment = getDataModel(LeaseDataModel.class).createPreauthorizedPayment(lease, items);
+    protected AutopayAgreement setPreauthorizedPayment(List<AutopayAgreement.PreauthorizedPaymentCoveredItem> items) {
+        AutopayAgreement preauthorizedPayment = getDataModel(LeaseDataModel.class).createPreauthorizedPayment(lease, items);
         Assert.assertNotNull("CreatePreauthorizedPayment failed to create PAP", preauthorizedPayment);
         Persistence.service().commit();
         return preauthorizedPayment;
     }
 
-    protected void deletePreauthorizedPayment(PreauthorizedPayment preauthorizedPayment) {
-        ServerSideFactory.create(PaymentMethodFacade.class).deletePreauthorizedPayment(preauthorizedPayment);
+    protected void deletePreauthorizedPayment(AutopayAgreement preauthorizedPayment) {
+        ServerSideFactory.create(PaymentMethodFacade.class).deleteAutopayAgreement(preauthorizedPayment);
         Persistence.service().commit();
     }
 
@@ -602,18 +602,13 @@ public abstract class LeaseFinancialTestBase extends IntegrationTestBase {
         Persistence.service().commit();
     }
 
-    protected LogicalDate getTargetPadGenerationDate() {
-        BillingCycle curCycle = ServerSideFactory.create(BillingCycleFacade.class).getBillingCycleForDate(retrieveLease(), new LogicalDate(getSysDate()));
-        return curCycle.targetPadGenerationDate().getValue();
+    protected LogicalDate getAutopayExecutionDate() {
+        return ServerSideFactory.create(PaymentMethodFacade.class).getNextAutopayDate(getLease());
     }
 
-    protected LogicalDate getActualPadGenerationDate() {
-        BillingCycle curCycle = ServerSideFactory.create(BillingCycleFacade.class).getBillingCycleForDate(retrieveLease(), new LogicalDate(getSysDate()));
-        return curCycle.actualPadGenerationDate().getValue();
-    }
-
-    protected LogicalDate getNextTargetPadExecutionDate() {
-        return ServerSideFactory.create(PaymentMethodFacade.class).getNextPreauthorizedPaymentDate(retrieveLease());
+    protected LogicalDate getActualAutopayExecutionDate() {
+        BillingCycle curCycle = ServerSideFactory.create(BillingCycleFacade.class).getBillingCycleForDate(getLease(), new LogicalDate(getSysDate()));
+        return curCycle.actualAutopayExecutionDate().getValue();
     }
 
     private BillableItem findBillableItem(String billableItemId, Lease lease) {

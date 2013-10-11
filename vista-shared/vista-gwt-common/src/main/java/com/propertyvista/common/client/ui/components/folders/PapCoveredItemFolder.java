@@ -25,10 +25,10 @@ import com.pyx4j.forms.client.ui.folder.EntityFolderColumnDescriptor;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.common.client.ui.components.c.PapBillableItemLabel;
-import com.propertyvista.domain.payment.PreauthorizedPayment;
-import com.propertyvista.domain.payment.PreauthorizedPayment.PreauthorizedPaymentCoveredItem;
+import com.propertyvista.domain.payment.AutopayAgreement;
+import com.propertyvista.domain.payment.AutopayAgreement.PreauthorizedPaymentCoveredItem;
 
-public class PapCoveredItemFolder extends VistaTableFolder<PreauthorizedPayment.PreauthorizedPaymentCoveredItem> {
+public class PapCoveredItemFolder extends VistaTableFolder<AutopayAgreement.PreauthorizedPaymentCoveredItem> {
 
     private static final I18n i18n = I18n.get(PapCoveredItemFolder.class);
 
@@ -37,7 +37,7 @@ public class PapCoveredItemFolder extends VistaTableFolder<PreauthorizedPayment.
     }
 
     public PapCoveredItemFolder(boolean editable) {
-        super(PreauthorizedPayment.PreauthorizedPaymentCoveredItem.class, editable);
+        super(AutopayAgreement.PreauthorizedPaymentCoveredItem.class, editable);
     }
 
     @Override

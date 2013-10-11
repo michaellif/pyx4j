@@ -27,12 +27,12 @@ import com.pyx4j.entity.annotations.ToStringFormat;
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.shared.IPrimitive;
 
-import com.propertyvista.domain.payment.PreauthorizedPayment;
+import com.propertyvista.domain.payment.AutopayAgreement;
 import com.propertyvista.dto.PaymentDataDTO;
 
 @Transient
 @ToStringFormat("")
-@ExtendsBO(PreauthorizedPayment.class)
+@ExtendsBO(AutopayAgreement.class)
 public interface PreauthorizedPaymentDTO extends PaymentDataDTO, com.propertyvista.dto.PreauthorizedPaymentDTO {
 
     @ReadOnly
@@ -45,5 +45,4 @@ public interface PreauthorizedPaymentDTO extends PaymentDataDTO, com.propertyvis
     @Caption(name = "Your next automated payment is scheduled for")
     IPrimitive<LogicalDate> nextScheduledPaymentDate();
 
-    IPrimitive<LogicalDate> paymentCutOffDate();
 }

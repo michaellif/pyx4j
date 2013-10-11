@@ -75,8 +75,7 @@ public class LeaseBillingPolicyDataModel extends MockDataModel<LeaseBillingPolic
             billingType.paymentDueDayOffset().setValue(0);
             billingType.finalDueDayOffset().setValue(15);
             billingType.billExecutionDayOffset().setValue(-15);
-            billingType.padCalculationDayOffset().setValue(-3);
-            billingType.padExecutionDayOffset().setValue(0);
+            billingType.autopayExecutionDayOffset().setValue(0);
             policy.availableBillingTypes().add(billingType);
         }
 
@@ -87,8 +86,7 @@ public class LeaseBillingPolicyDataModel extends MockDataModel<LeaseBillingPolic
             billingType.paymentDueDayOffset().setValue(0);
             billingType.finalDueDayOffset().setValue(15);
             billingType.billExecutionDayOffset().setValue(-7);
-            billingType.padCalculationDayOffset().setValue(-3);
-            billingType.padExecutionDayOffset().setValue(0);
+            billingType.autopayExecutionDayOffset().setValue(0);
             policy.availableBillingTypes().add(billingType);
         }
 
@@ -99,8 +97,7 @@ public class LeaseBillingPolicyDataModel extends MockDataModel<LeaseBillingPolic
             billingType.paymentDueDayOffset().setValue(0);
             billingType.finalDueDayOffset().setValue(15);
             billingType.billExecutionDayOffset().setValue(-7);
-            billingType.padCalculationDayOffset().setValue(-3);
-            billingType.padExecutionDayOffset().setValue(0);
+            billingType.autopayExecutionDayOffset().setValue(0);
             policy.availableBillingTypes().add(billingType);
         }
 
@@ -111,8 +108,7 @@ public class LeaseBillingPolicyDataModel extends MockDataModel<LeaseBillingPolic
             billingType.paymentDueDayOffset().setValue(0);
             billingType.finalDueDayOffset().setValue(15);
             billingType.billExecutionDayOffset().setValue(-3);
-            billingType.padCalculationDayOffset().setValue(-1);
-            billingType.padExecutionDayOffset().setValue(0);
+            billingType.autopayExecutionDayOffset().setValue(0);
             policy.availableBillingTypes().add(billingType);
         }
 

@@ -44,9 +44,8 @@ import com.propertyvista.biz.tenant.insurance.TenantInsuranceFacade;
 import com.propertyvista.biz.tenant.lease.LeaseFacade;
 import com.propertyvista.crm.rpc.services.customer.TenantCrudService;
 import com.propertyvista.domain.financial.ARCode;
-import com.propertyvista.domain.media.InsuranceCertificateDocument;
-import com.propertyvista.domain.payment.PreauthorizedPayment;
-import com.propertyvista.domain.payment.PreauthorizedPayment.PreauthorizedPaymentCoveredItem;
+import com.propertyvista.domain.payment.AutopayAgreement;
+import com.propertyvista.domain.payment.AutopayAgreement.PreauthorizedPaymentCoveredItem;
 import com.propertyvista.domain.policy.policies.RestrictionsPolicy;
 import com.propertyvista.domain.policy.policies.TenantInsurancePolicy;
 import com.propertyvista.domain.tenant.insurance.GeneralInsuranceCertificate;
@@ -153,32 +152,31 @@ public class TenantCrudServiceImpl extends LeaseParticipantCrudServiceBaseImpl<T
     private void fillPreauthorizedPayments(TenantDTO dto) {
         Persistence.ensureRetrieve(dto.lease(), AttachLevel.Attached);
 
-        for (PreauthorizedPayment pap : ServerSideFactory.create(PaymentMethodFacade.class).retrievePreauthorizedPayments(
+        for (AutopayAgreement pap : ServerSideFactory.create(PaymentMethodFacade.class).retrieveAutopayAgreements(
                 EntityFactory.createIdentityStub(Tenant.class, dto.getPrimaryKey()))) {
             dto.preauthorizedPayments().add(createPreauthorizedPaymentDto(pap));
         }
 
-        dto.nextScheduledPaymentDate().setValue(ServerSideFactory.create(PaymentMethodFacade.class).getNextPreauthorizedPaymentDate(dto.lease()));
-        dto.paymentCutOffDate().setValue(ServerSideFactory.create(PaymentMethodFacade.class).getPreauthorizedPaymentCutOffDate(dto.lease()));
+        dto.nextScheduledPaymentDate().setValue(ServerSideFactory.create(PaymentMethodFacade.class).getNextAutopayDate(dto.lease()));
     }
 
     private void savePreauthorizedPayments(TenantDTO dto) {
-        List<PreauthorizedPayment> paps = new ArrayList<PreauthorizedPayment>();
+        List<AutopayAgreement> paps = new ArrayList<AutopayAgreement>();
         for (PreauthorizedPaymentDTO papDTO : dto.preauthorizedPayments()) {
             updateCoveredItems(papDTO);
             paps.add(new PapConverter().createBO(papDTO));
         }
 
         // delete payment methods removed in UI:
-        for (PreauthorizedPayment pap : ServerSideFactory.create(PaymentMethodFacade.class).retrievePreauthorizedPayments(
+        for (AutopayAgreement pap : ServerSideFactory.create(PaymentMethodFacade.class).retrieveAutopayAgreements(
                 EntityFactory.createIdentityStub(Tenant.class, dto.getPrimaryKey()))) {
             if (!paps.contains(pap)) {
-                ServerSideFactory.create(PaymentMethodFacade.class).deletePreauthorizedPayment(pap);
+                ServerSideFactory.create(PaymentMethodFacade.class).deleteAutopayAgreement(pap);
             }
         }
 
         // save new/edited ones:
-        for (PreauthorizedPayment pap : paps) {
+        for (AutopayAgreement pap : paps) {
             // remove zero covered items:
             Iterator<PreauthorizedPaymentCoveredItem> iterator = pap.coveredItems().iterator();
             while (iterator.hasNext()) {
@@ -191,12 +189,12 @@ public class TenantCrudServiceImpl extends LeaseParticipantCrudServiceBaseImpl<T
                 }
             }
 
-            ServerSideFactory.create(PaymentMethodFacade.class).persistPreauthorizedPayment(pap,
+            ServerSideFactory.create(PaymentMethodFacade.class).persistAutopayAgreement(pap,
                     EntityFactory.createIdentityStub(Tenant.class, dto.getPrimaryKey()));
         }
     }
 
-    private PreauthorizedPaymentDTO createPreauthorizedPaymentDto(PreauthorizedPayment pap) {
+    private PreauthorizedPaymentDTO createPreauthorizedPaymentDto(AutopayAgreement pap) {
         PreauthorizedPaymentDTO papDto = new PapConverter().createTO(pap);
 
         updateCoveredItemsDto(papDto);
@@ -206,10 +204,6 @@ public class TenantCrudServiceImpl extends LeaseParticipantCrudServiceBaseImpl<T
     }
 
     private void fillCoveredItemsDto(PreauthorizedPaymentDTO papDto) {
-        if (!papDto.expiring().isNull()) {
-            return; // do not fill-up expired paps!.. 
-        }
-
         Persistence.ensureRetrieve(papDto.tenant(), AttachLevel.Attached);
         Persistence.ensureRetrieve(papDto.tenant().lease(), AttachLevel.Attached);
 
@@ -250,7 +244,6 @@ public class TenantCrudServiceImpl extends LeaseParticipantCrudServiceBaseImpl<T
         criteria.eq(criteria.proto().pap().tenant().lease(), lease);
         criteria.eq(criteria.proto().billableItem().uid(), billableItem.uid());
         criteria.eq(criteria.proto().pap().isDeleted(), Boolean.FALSE);
-        criteria.isNull(criteria.proto().pap().expiring());
 
         item.covered().setValue(BigDecimal.ZERO);
         for (PreauthorizedPaymentCoveredItem papci : Persistence.secureQuery(criteria)) {
@@ -290,7 +283,6 @@ public class TenantCrudServiceImpl extends LeaseParticipantCrudServiceBaseImpl<T
         criteria.eq(criteria.proto().pap().tenant().lease(), lease);
         criteria.eq(criteria.proto().billableItem().uid(), item.billableItem().uid());
         criteria.eq(criteria.proto().pap().isDeleted(), Boolean.FALSE);
-        criteria.isNull(criteria.proto().pap().expiring());
 
         item.covered().setValue(BigDecimal.ZERO);
         for (PreauthorizedPaymentCoveredItem papci : Persistence.secureQuery(criteria)) {
@@ -316,10 +308,10 @@ public class TenantCrudServiceImpl extends LeaseParticipantCrudServiceBaseImpl<T
         }
     }
 
-    private class PapConverter extends EntityBinder<PreauthorizedPayment, PreauthorizedPaymentDTO> {
+    private class PapConverter extends EntityBinder<AutopayAgreement, PreauthorizedPaymentDTO> {
 
         protected PapConverter() {
-            super(PreauthorizedPayment.class, PreauthorizedPaymentDTO.class);
+            super(AutopayAgreement.class, PreauthorizedPaymentDTO.class);
         }
 
         @Override

@@ -25,7 +25,6 @@ import org.slf4j.Logger;
 
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.config.server.ServerSideFactory;
-import com.pyx4j.config.server.SystemDateManager;
 import com.pyx4j.entity.server.Executable;
 import com.pyx4j.entity.server.IEntityPersistenceService.ICursorIterator;
 import com.pyx4j.entity.server.Persistence;
@@ -37,21 +36,20 @@ import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.OrCriterion;
 import com.pyx4j.entity.shared.utils.EntityDiff;
 import com.pyx4j.entity.shared.utils.EntityGraph;
-import com.pyx4j.gwt.server.DateUtils;
 
 import com.propertyvista.biz.ExecutionMonitor;
 import com.propertyvista.biz.communication.NotificationFacade;
 import com.propertyvista.biz.financial.billingcycle.BillingCycleFacade;
 import com.propertyvista.biz.policy.PolicyFacade;
 import com.propertyvista.biz.system.AuditFacade;
+import com.propertyvista.crm.rpc.dto.financial.autopayreview.ReviewedAutopayAgreementDTO;
 import com.propertyvista.crm.rpc.dto.financial.autopayreview.ReviewedPapChargeDTO;
-import com.propertyvista.crm.rpc.dto.financial.autopayreview.ReviewedPapDTO;
 import com.propertyvista.domain.financial.BillingAccount;
 import com.propertyvista.domain.financial.PaymentRecord;
 import com.propertyvista.domain.financial.billing.BillingCycle;
+import com.propertyvista.domain.payment.AutopayAgreement;
+import com.propertyvista.domain.payment.AutopayAgreement.PreauthorizedPaymentCoveredItem;
 import com.propertyvista.domain.payment.LeasePaymentMethod;
-import com.propertyvista.domain.payment.PreauthorizedPayment;
-import com.propertyvista.domain.payment.PreauthorizedPayment.PreauthorizedPaymentCoveredItem;
 import com.propertyvista.domain.policy.policies.AutoPayPolicy;
 import com.propertyvista.domain.policy.policies.AutoPayPolicy.ChangeRule;
 import com.propertyvista.domain.security.CustomerUser;
@@ -62,42 +60,37 @@ import com.propertyvista.domain.util.DomainUtil;
 import com.propertyvista.server.common.security.VistaContext;
 import com.propertyvista.shared.config.VistaFeatures;
 
-class PreauthorizedPaymentAgreementMananger {
+class AutopayAgreementMananger {
 
-    private static final Logger log = org.slf4j.LoggerFactory.getLogger(PreauthorizedPaymentAgreementMananger.class);
+    private static final Logger log = org.slf4j.LoggerFactory.getLogger(AutopayAgreementMananger.class);
 
-    PreauthorizedPayment persistPreauthorizedPayment(PreauthorizedPayment preauthorizedPayment, Tenant tenantId) {
+    AutopayAgreement persistAutopayAgreement(AutopayAgreement preauthorizedPayment, Tenant tenantId) {
         Validate.isTrue(!preauthorizedPayment.paymentMethod().isNull());
         Validate.isTrue(preauthorizedPayment.paymentMethod().type().getValue().isSchedulable());
 
         preauthorizedPayment.tenant().set(tenantId);
         Persistence.ensureRetrieve(preauthorizedPayment.tenant(), AttachLevel.Attached);
 
-        LogicalDate nextPaymentDate = ServerSideFactory.create(PaymentMethodFacade.class)
-                .getNextPreauthorizedPaymentDate(preauthorizedPayment.tenant().lease());
-        BillingCycle nextCycle = ServerSideFactory.create(PaymentMethodFacade.class).getNextPreauthorizedPaymentBillingCycle(
-                preauthorizedPayment.tenant().lease());
+        BillingCycle nextPaymentCycle = ServerSideFactory.create(PaymentMethodFacade.class).getNextAutopayBillingCycle(preauthorizedPayment.tenant().lease());
 
-        PreauthorizedPayment origPreauthorizedPayment;
-        PreauthorizedPayment orig = null;
+        AutopayAgreement origPreauthorizedPayment;
+        AutopayAgreement orig = null;
 
         boolean isNew = false;
         // Creates a new version of PAP if values changed and there are payments created
         if (!preauthorizedPayment.id().isNull()) {
-            origPreauthorizedPayment = Persistence.service().retrieve(PreauthorizedPayment.class, preauthorizedPayment.getPrimaryKey());
+            origPreauthorizedPayment = Persistence.service().retrieve(AutopayAgreement.class, preauthorizedPayment.getPrimaryKey());
             orig = origPreauthorizedPayment.duplicate();
-
             if (!EntityGraph.fullyEqual(origPreauthorizedPayment, preauthorizedPayment)) {
-
-                // If tenant modifies PAP after cut off date - original will be used in this cycle and a new one in next cycle.
-                LogicalDate cutOffDate = ServerSideFactory.create(PaymentMethodFacade.class).getPreauthorizedPaymentCutOffDate(
-                        preauthorizedPayment.tenant().lease());
-
-                boolean cutOffAppy = !origPreauthorizedPayment.effectiveFrom().isNull()
-                        && origPreauthorizedPayment.effectiveFrom().getValue().before(nextPaymentDate);
-
-                if (cutOffAppy && SystemDateManager.getDate().after(cutOffDate)) {
-                    origPreauthorizedPayment.expiring().setValue(cutOffDate);
+                boolean hasPaymentRecords = false;
+                {
+                    EntityQueryCriteria<PaymentRecord> criteria = new EntityQueryCriteria<PaymentRecord>(PaymentRecord.class);
+                    criteria.eq(criteria.proto().preauthorizedPayment(), preauthorizedPayment);
+                    hasPaymentRecords = Persistence.service().count(criteria) > 0;
+                }
+                if (hasPaymentRecords) {
+                    origPreauthorizedPayment.isDeleted().setValue(Boolean.TRUE);
+                    preauthorizedPayment.expiredFrom().setValue(nextPaymentCycle.billingCycleStartDate().getValue());
                     Persistence.service().merge(origPreauthorizedPayment);
 
                     ServerSideFactory.create(AuditFacade.class).updated(origPreauthorizedPayment, EntityDiff.getChanges(orig, origPreauthorizedPayment));
@@ -105,39 +98,23 @@ class PreauthorizedPaymentAgreementMananger {
 
                     preauthorizedPayment = EntityGraph.businessDuplicate(preauthorizedPayment);
                     preauthorizedPayment.reviewOfPap().set(origPreauthorizedPayment);
-                    preauthorizedPayment.expiring().setValue(null);
-                } else {
-                    boolean hasPaymentRecords = false;
-                    {
-                        EntityQueryCriteria<PaymentRecord> criteria = new EntityQueryCriteria<PaymentRecord>(PaymentRecord.class);
-                        criteria.eq(criteria.proto().preauthorizedPayment(), preauthorizedPayment);
-                        hasPaymentRecords = Persistence.service().count(criteria) > 0;
-                    }
-                    if (hasPaymentRecords) {
-                        origPreauthorizedPayment.isDeleted().setValue(Boolean.TRUE);
-                        Persistence.service().merge(origPreauthorizedPayment);
-
-                        ServerSideFactory.create(AuditFacade.class).updated(origPreauthorizedPayment, EntityDiff.getChanges(orig, origPreauthorizedPayment));
-                        isNew = true;
-
-                        preauthorizedPayment = EntityGraph.businessDuplicate(preauthorizedPayment);
-                        preauthorizedPayment.reviewOfPap().set(origPreauthorizedPayment);
-                        preauthorizedPayment.expiring().setValue(null);
-                    }
+                    preauthorizedPayment.expiredFrom().setValue(null);
                 }
-                preauthorizedPayment.effectiveFrom().setValue(nextPaymentDate);
+                preauthorizedPayment.isDeleted().setValue(Boolean.FALSE);
+                preauthorizedPayment.effectiveFrom().setValue(nextPaymentCycle.billingCycleStartDate().getValue());
             }
         } else {
             isNew = true;
-            preauthorizedPayment.effectiveFrom().setValue(nextPaymentDate);
+            preauthorizedPayment.isDeleted().setValue(Boolean.FALSE);
+            preauthorizedPayment.effectiveFrom().setValue(nextPaymentCycle.billingCycleStartDate().getValue());
             preauthorizedPayment.createdBy().set(VistaContext.getCurrentUserIfAvalable());
         }
 
         //Set Tenant intervention flag
         if (VistaContext.getCurrentUserIfAvalable() instanceof CustomerUser) {
-            preauthorizedPayment.updatedByTenant().getValue().before(nextCycle.billingCycleStartDate().getValue());
+            preauthorizedPayment.updatedByTenant().getValue().before(nextPaymentCycle.billingCycleStartDate().getValue());
         }
-        if (!nextCycle.billingCycleStartDate().equals(preauthorizedPayment.updatedBySystem())) {
+        if (!nextPaymentCycle.billingCycleStartDate().equals(preauthorizedPayment.updatedBySystem())) {
             // reset review flag for old updates
             preauthorizedPayment.updatedBySystem().setValue(null);
         }
@@ -153,9 +130,8 @@ class PreauthorizedPaymentAgreementMananger {
         return preauthorizedPayment;
     }
 
-    void persitPreauthorizedPaymentReview(ReviewedPapDTO preauthorizedPaymentChanges) {
-        PreauthorizedPayment preauthorizedPayment = Persistence.service().retrieve(PreauthorizedPayment.class,
-                preauthorizedPaymentChanges.papId().getPrimaryKey());
+    void persitAutopayAgreementReview(ReviewedAutopayAgreementDTO preauthorizedPaymentChanges) {
+        AutopayAgreement preauthorizedPayment = Persistence.service().retrieve(AutopayAgreement.class, preauthorizedPaymentChanges.papId().getPrimaryKey());
 
         preauthorizedPayment.updatedBySystem().setValue(null);
         // Update amounts
@@ -166,76 +142,50 @@ class PreauthorizedPaymentAgreementMananger {
                 }
             }
         }
-        persistPreauthorizedPayment(preauthorizedPayment, preauthorizedPayment.tenant());
+        persistAutopayAgreement(preauthorizedPayment, preauthorizedPayment.tenant());
     }
 
-    List<PreauthorizedPayment> retrievePreauthorizedPayments(Tenant tenantId) {
-        EntityQueryCriteria<PreauthorizedPayment> criteria = EntityQueryCriteria.create(PreauthorizedPayment.class);
+    List<AutopayAgreement> retrieveAutopayAgreements(Tenant tenantId) {
+        EntityQueryCriteria<AutopayAgreement> criteria = EntityQueryCriteria.create(AutopayAgreement.class);
         criteria.eq(criteria.proto().tenant(), tenantId);
         criteria.eq(criteria.proto().isDeleted(), Boolean.FALSE);
         return Persistence.service().query(criteria);
     }
 
-    List<PreauthorizedPayment> retrieveCurrentPreauthorizedPayments(Lease lease) {
-        BillingCycle nextCycle = ServerSideFactory.create(PaymentMethodFacade.class).getCurrentPreauthorizedPaymentBillingCycle(lease);
-        EntityQueryCriteria<PreauthorizedPayment> criteria = EntityQueryCriteria.create(PreauthorizedPayment.class);
+    List<AutopayAgreement> retrieveAutopayAgreements(Lease lease) {
+        EntityQueryCriteria<AutopayAgreement> criteria = EntityQueryCriteria.create(AutopayAgreement.class);
         criteria.eq(criteria.proto().isDeleted(), Boolean.FALSE);
         criteria.in(criteria.proto().tenant().lease(), lease);
-        {
-            OrCriterion or = criteria.or();
-            or.right().ge(criteria.proto().expiring(), nextCycle.targetPadGenerationDate());
-            or.left().isNull(criteria.proto().expiring());
-        }
-
-        return Persistence.service().query(criteria);
-    }
-
-    List<PreauthorizedPayment> retrieveNextPreauthorizedPayments(Lease lease) {
-        BillingCycle nextCycle = ServerSideFactory.create(PaymentMethodFacade.class).getNextPreauthorizedPaymentBillingCycle(lease);
-        EntityQueryCriteria<PreauthorizedPayment> criteria = EntityQueryCriteria.create(PreauthorizedPayment.class);
-        criteria.eq(criteria.proto().isDeleted(), Boolean.FALSE);
-        criteria.in(criteria.proto().tenant().lease(), lease);
-        {
-            OrCriterion or = criteria.or();
-            or.right().ge(criteria.proto().expiring(), nextCycle.targetPadGenerationDate());
-            or.left().isNull(criteria.proto().expiring());
-        }
-
         return Persistence.service().query(criteria);
     }
 
     //If Tenant removes PAP - payment will NOT be canceled.
-    void deletePreauthorizedPayment(PreauthorizedPayment preauthorizedPaymentId) {
-        PreauthorizedPayment preauthorizedPayment = Persistence.service().retrieve(PreauthorizedPayment.class, preauthorizedPaymentId.getPrimaryKey());
+    void deleteAutopayAgreement(AutopayAgreement preauthorizedPaymentId) {
+        AutopayAgreement preauthorizedPayment = Persistence.service().retrieve(AutopayAgreement.class, preauthorizedPaymentId.getPrimaryKey());
+
+        Persistence.ensureRetrieve(preauthorizedPayment.tenant(), AttachLevel.Attached);
+        BillingCycle nextPaymentCycle = ServerSideFactory.create(PaymentMethodFacade.class).getNextAutopayBillingCycle(preauthorizedPayment.tenant().lease());
+        preauthorizedPayment.expiredFrom().setValue(nextPaymentCycle.billingCycleStartDate().getValue());
+
         preauthorizedPayment.isDeleted().setValue(Boolean.TRUE);
         Persistence.service().merge(preauthorizedPayment);
         ServerSideFactory.create(AuditFacade.class).updated(preauthorizedPayment, "Deleted");
     }
 
     void deletePreauthorizedPayments(LeasePaymentMethod paymentMethod) {
-        EntityQueryCriteria<PreauthorizedPayment> criteria = EntityQueryCriteria.create(PreauthorizedPayment.class);
+        EntityQueryCriteria<AutopayAgreement> criteria = EntityQueryCriteria.create(AutopayAgreement.class);
         criteria.eq(criteria.proto().paymentMethod(), paymentMethod);
         criteria.eq(criteria.proto().isDeleted(), Boolean.FALSE);
 
-        for (PreauthorizedPayment preauthorizedPayment : Persistence.service().query(criteria, AttachLevel.IdOnly)) {
-            deletePreauthorizedPayment(preauthorizedPayment);
+        for (AutopayAgreement preauthorizedPayment : Persistence.service().query(criteria, AttachLevel.IdOnly)) {
+            deleteAutopayAgreement(preauthorizedPayment);
             new ScheduledPaymentsManager().cancelScheduledPayments(preauthorizedPayment);
         }
 
     }
 
-    void suspendPreauthorizedPayment(PreauthorizedPayment preauthorizedPaymentId) {
-        PreauthorizedPayment preauthorizedPayment = Persistence.service().retrieve(PreauthorizedPayment.class, preauthorizedPaymentId.getPrimaryKey());
-
-        Persistence.ensureRetrieve(preauthorizedPayment.tenant(), AttachLevel.Attached);
-        LogicalDate cutOffDate = ServerSideFactory.create(PaymentMethodFacade.class).getPreauthorizedPaymentCutOffDate(preauthorizedPayment.tenant().lease());
-        preauthorizedPayment.expiring().setValue(DateUtils.daysAdd(cutOffDate, -1));
-
-        Persistence.service().merge(preauthorizedPayment);
-    }
-
     public void renewPreauthorizedPayments(Lease lease) {
-        List<PreauthorizedPayment> activePaps = retrieveNextPreauthorizedPayments(lease);
+        List<AutopayAgreement> activePaps = retrieveAutopayAgreements(lease);
         if (activePaps.isEmpty()) {
             // nothing to update.
             return;
@@ -243,11 +193,11 @@ class PreauthorizedPaymentAgreementMananger {
 
         AutoPayPolicy autoPayPolicy = ServerSideFactory.create(PolicyFacade.class).obtainEffectivePolicy(lease.unit().building(), AutoPayPolicy.class);
         AutoPayPolicy.ChangeRule changeRule = autoPayPolicy.onLeaseChargeChangeRule().getValue();
-        BillingCycle nextCycle = ServerSideFactory.create(PaymentMethodFacade.class).getNextPreauthorizedPaymentBillingCycle(lease);
+        BillingCycle nextCycle = ServerSideFactory.create(PaymentMethodFacade.class).getNextAutopayBillingCycle(lease);
         if (!isPreauthorizedPaymentsApplicableForBillingCycle(lease, nextCycle, autoPayPolicy)) {
             // Suspend All
-            for (PreauthorizedPayment pap : activePaps) {
-                suspendPreauthorizedPayment(pap);
+            for (AutopayAgreement pap : activePaps) {
+                deleteAutopayAgreement(pap);
             }
             return;
         }
@@ -257,7 +207,7 @@ class PreauthorizedPaymentAgreementMananger {
         boolean reviewNotificatioRequired = false;
 
         // migrate each PAP to new billableItems
-        for (PreauthorizedPayment pap : activePaps) {
+        for (AutopayAgreement pap : activePaps) {
             boolean reviewRequired = false;
 
             List<PreauthorizedPaymentCoveredItem> newCoveredItems = new ArrayList<PreauthorizedPaymentCoveredItem>();
@@ -318,14 +268,14 @@ class PreauthorizedPaymentAgreementMananger {
                 // Keep review flag for multiple updates in the same month
                 pap.updatedBySystem().setValue(null);
             }
-            persistPreauthorizedPayment(pap, pap.tenant());
+            persistAutopayAgreement(pap, pap.tenant());
         }
         if (reviewNotificatioRequired) {
             ServerSideFactory.create(NotificationFacade.class).papSuspension(lease);
         }
     }
 
-    static boolean isChangeByTenant(PreauthorizedPayment pap, BillingCycle nextCycle) {
+    static boolean isChangeByTenant(AutopayAgreement pap, BillingCycle nextCycle) {
         if ((pap.updatedByTenant().isNull()) || (pap.updatedByTenant().getValue().before(nextCycle.billingCycleStartDate().getValue()))) {
             return false;
         } else {
@@ -352,14 +302,14 @@ class PreauthorizedPaymentAgreementMananger {
     }
 
     public void updatePreauthorizedPayments(Lease lease) {
-        List<PreauthorizedPayment> activePaps = retrieveNextPreauthorizedPayments(lease);
+        List<AutopayAgreement> activePaps = retrieveAutopayAgreements(lease);
         if (activePaps.isEmpty()) {
             return; // nothing to do!..
         }
 
         boolean suspend = false;
 
-        BillingCycle nextCycle = ServerSideFactory.create(PaymentMethodFacade.class).getNextPreauthorizedPaymentBillingCycle(lease);
+        BillingCycle nextCycle = ServerSideFactory.create(PaymentMethodFacade.class).getNextAutopayBillingCycle(lease);
         AutoPayPolicy autoPayPolicy = ServerSideFactory.create(PolicyFacade.class).obtainEffectivePolicy(lease.unit().building(), AutoPayPolicy.class);
 
         if (!isPreauthorizedPaymentsApplicableForBillingCycle(lease, nextCycle, autoPayPolicy)) {
@@ -367,15 +317,15 @@ class PreauthorizedPaymentAgreementMananger {
         }
 
         if (suspend) {
-            for (PreauthorizedPayment pap : activePaps) {
-                suspendPreauthorizedPayment(pap);
+            for (AutopayAgreement pap : activePaps) {
+                deleteAutopayAgreement(pap);
             }
 
             ServerSideFactory.create(NotificationFacade.class).papSuspension(lease);
         }
     }
 
-    public void updatePreauthorizedPayments(final ExecutionMonitor executionMonitor, LogicalDate forDate) {
+    public void deleteExpiringAutopayAgreement(final ExecutionMonitor executionMonitor, LogicalDate forDate) {
         EntityQueryCriteria<BillingCycle> criteria = EntityQueryCriteria.create(BillingCycle.class);
         criteria.le(criteria.proto().billingCycleStartDate(), forDate);
         criteria.ge(criteria.proto().billingCycleEndDate(), forDate);
@@ -385,7 +335,7 @@ class PreauthorizedPaymentAgreementMananger {
             while (billingCycleIterator.hasNext()) {
                 BillingCycle nextCycle = ServerSideFactory.create(BillingCycleFacade.class).getSubsequentBillingCycle(billingCycleIterator.next());
                 final BillingCycle suspensionCycle;
-                if (!forDate.before(nextCycle.targetPadGenerationDate().getValue())) {
+                if (!forDate.before(nextCycle.targetAutopayExecutionDate().getValue())) {
                     suspensionCycle = ServerSideFactory.create(BillingCycleFacade.class).getSubsequentBillingCycle(nextCycle);
                 } else {
                     suspensionCycle = nextCycle;
@@ -423,7 +373,7 @@ class PreauthorizedPaymentAgreementMananger {
                                 AutoPayPolicy autoPayPolicy = ServerSideFactory.create(PolicyFacade.class).obtainEffectivePolicy(
                                         account.lease().unit().building(), AutoPayPolicy.class);
 
-                                for (PreauthorizedPayment item : retrieveNextPreauthorizedPayments(account.lease())) {
+                                for (AutopayAgreement item : retrieveAutopayAgreements(account.lease())) {
                                     boolean suspend = false;
 
                                     if (!isPreauthorizedPaymentsApplicableForBillingCycle(account.lease(), suspensionCycle, autoPayPolicy)) {
@@ -432,7 +382,7 @@ class PreauthorizedPaymentAgreementMananger {
 
                                     if (suspend) {
                                         suspended = true;
-                                        suspendPreauthorizedPayment(item);
+                                        deleteAutopayAgreement(item);
                                         executionMonitor.addProcessedEvent("Pap suspend");
                                     }
                                 }

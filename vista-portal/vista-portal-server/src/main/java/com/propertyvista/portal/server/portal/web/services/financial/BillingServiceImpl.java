@@ -33,8 +33,8 @@ import com.propertyvista.biz.financial.billing.BillingFacade;
 import com.propertyvista.biz.financial.billing.BillingUtils;
 import com.propertyvista.biz.financial.payment.PaymentMethodFacade;
 import com.propertyvista.domain.financial.billing.Bill;
-import com.propertyvista.domain.payment.PreauthorizedPayment;
-import com.propertyvista.domain.payment.PreauthorizedPayment.PreauthorizedPaymentCoveredItem;
+import com.propertyvista.domain.payment.AutopayAgreement;
+import com.propertyvista.domain.payment.AutopayAgreement.PreauthorizedPaymentCoveredItem;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.dto.BillDTO;
 import com.propertyvista.dto.TransactionHistoryDTO;
@@ -148,8 +148,8 @@ public class BillingServiceImpl implements BillingService {
 
     public static List<PaymentInfoDTO> retrieveCurrentAutoPayments(Lease lease) {
         List<PaymentInfoDTO> currentAutoPayments = new ArrayList<PaymentInfoDTO>();
-        LogicalDate excutionDate = ServerSideFactory.create(PaymentMethodFacade.class).getCurrentPreauthorizedPaymentDate(lease);
-        for (PreauthorizedPayment pap : ServerSideFactory.create(PaymentMethodFacade.class).retrieveCurrentPreauthorizedPayments(lease)) {
+        LogicalDate excutionDate = ServerSideFactory.create(PaymentMethodFacade.class).getNextAutopayDate(lease);
+        for (AutopayAgreement pap : ServerSideFactory.create(PaymentMethodFacade.class).retrieveAutopayAgreements(lease)) {
             PaymentInfoDTO pi = EntityFactory.create(PaymentInfoDTO.class);
 
             pi.amount().setValue(BigDecimal.ZERO);

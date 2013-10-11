@@ -27,15 +27,15 @@ import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 
 import com.propertyvista.biz.financial.billingcycle.BillingCycleFacade;
 import com.propertyvista.biz.system.AuditFacade;
-import com.propertyvista.crm.rpc.dto.financial.autopayreview.ReviewedPapDTO;
+import com.propertyvista.crm.rpc.dto.financial.autopayreview.ReviewedAutopayAgreementDTO;
 import com.propertyvista.domain.financial.BillingAccount;
 import com.propertyvista.domain.financial.PaymentRecord;
 import com.propertyvista.domain.financial.billing.BillingCycle;
+import com.propertyvista.domain.payment.AutopayAgreement;
 import com.propertyvista.domain.payment.CreditCardInfo;
 import com.propertyvista.domain.payment.InsurancePaymentMethod;
 import com.propertyvista.domain.payment.LeasePaymentMethod;
 import com.propertyvista.domain.payment.PaymentType;
-import com.propertyvista.domain.payment.PreauthorizedPayment;
 import com.propertyvista.domain.pmc.Pmc;
 import com.propertyvista.domain.pmc.PmcPaymentMethod;
 import com.propertyvista.domain.property.asset.building.Building;
@@ -61,7 +61,7 @@ public class PaymentMethodFacadeImpl implements PaymentMethodFacade {
         ServerSideFactory.create(AuditFacade.class).updated(paymentMethod, "Deleted");
         new ScheduledPaymentsManager().cancelScheduledPayments(paymentMethod);
         // delete associated PreauthorizedPayments
-        new PreauthorizedPaymentAgreementMananger().deletePreauthorizedPayments(paymentMethod);
+        new AutopayAgreementMananger().deletePreauthorizedPayments(paymentMethod);
     }
 
     @Override
@@ -111,84 +111,63 @@ public class PaymentMethodFacadeImpl implements PaymentMethodFacade {
     }
 
     @Override
-    public PreauthorizedPayment persistPreauthorizedPayment(PreauthorizedPayment preauthorizedPayment, Tenant tenantId) {
-        return new PreauthorizedPaymentAgreementMananger().persistPreauthorizedPayment(preauthorizedPayment, tenantId);
+    public AutopayAgreement persistAutopayAgreement(AutopayAgreement preauthorizedPayment, Tenant tenantId) {
+        return new AutopayAgreementMananger().persistAutopayAgreement(preauthorizedPayment, tenantId);
     }
 
     @Override
-    public void persitPreauthorizedPaymentReview(ReviewedPapDTO preauthorizedPaymentChanges) {
-        new PreauthorizedPaymentAgreementMananger().persitPreauthorizedPaymentReview(preauthorizedPaymentChanges);
+    public void persitAutopayAgreementReview(ReviewedAutopayAgreementDTO preauthorizedPaymentChanges) {
+        new AutopayAgreementMananger().persitAutopayAgreementReview(preauthorizedPaymentChanges);
     }
 
     @Override
-    public void deletePreauthorizedPayment(PreauthorizedPayment preauthorizedPayment) {
-        new PreauthorizedPaymentAgreementMananger().deletePreauthorizedPayment(preauthorizedPayment);
+    public void deleteAutopayAgreement(AutopayAgreement preauthorizedPayment) {
+        new AutopayAgreementMananger().deleteAutopayAgreement(preauthorizedPayment);
     }
 
     @Override
-    public List<PreauthorizedPayment> retrievePreauthorizedPayments(Tenant tenantId) {
-        return new PreauthorizedPaymentAgreementMananger().retrievePreauthorizedPayments(tenantId);
+    public List<AutopayAgreement> retrieveAutopayAgreements(Tenant tenantId) {
+        return new AutopayAgreementMananger().retrieveAutopayAgreements(tenantId);
     }
 
     @Override
-    public List<PreauthorizedPayment> retrieveCurrentPreauthorizedPayments(Lease lease) {
-        return new PreauthorizedPaymentAgreementMananger().retrieveCurrentPreauthorizedPayments(lease);
+    public List<AutopayAgreement> retrieveAutopayAgreements(Lease lease) {
+        return new AutopayAgreementMananger().retrieveAutopayAgreements(lease);
     }
 
     @Override
-    public BillingCycle getCurrentPreauthorizedPaymentBillingCycle(Lease lease) {
+    public BillingCycle getNextAutopayBillingCycle(Lease lease) {
         LogicalDate when = new LogicalDate(SystemDateManager.getDate());
         BillingCycle cycle = ServerSideFactory.create(BillingCycleFacade.class).getBillingCycleForDate(lease, when);
         cycle = ServerSideFactory.create(BillingCycleFacade.class).getSubsequentBillingCycle(cycle);
-        if (!when.before(cycle.targetPadExecutionDate().getValue())) {
+        if (!when.before(cycle.targetAutopayExecutionDate().getValue())) {
             cycle = ServerSideFactory.create(BillingCycleFacade.class).getSubsequentBillingCycle(cycle);
         }
         return cycle;
     }
 
     @Override
-    public BillingCycle getNextPreauthorizedPaymentBillingCycle(Lease lease) {
-        LogicalDate when = new LogicalDate(SystemDateManager.getDate());
-        BillingCycle cycle = ServerSideFactory.create(BillingCycleFacade.class).getBillingCycleForDate(lease, when);
-        cycle = ServerSideFactory.create(BillingCycleFacade.class).getSubsequentBillingCycle(cycle);
-        if (!when.before(cycle.targetPadGenerationDate().getValue())) {
-            cycle = ServerSideFactory.create(BillingCycleFacade.class).getSubsequentBillingCycle(cycle);
-        }
-        return cycle;
+    public LogicalDate getNextAutopayDate(Lease lease) {
+        return getNextAutopayBillingCycle(lease).targetAutopayExecutionDate().getValue();
     }
 
     @Override
-    public LogicalDate getCurrentPreauthorizedPaymentDate(Lease lease) {
-        return getCurrentPreauthorizedPaymentBillingCycle(lease).targetPadExecutionDate().getValue();
-    }
-
-    @Override
-    public LogicalDate getPreauthorizedPaymentCutOffDate(Lease lease) {
-        return getCurrentPreauthorizedPaymentBillingCycle(lease).targetPadGenerationDate().getValue();
-    }
-
-    @Override
-    public LogicalDate getNextPreauthorizedPaymentDate(Lease lease) {
-        return getNextPreauthorizedPaymentBillingCycle(lease).targetPadExecutionDate().getValue();
-    }
-
-    @Override
-    public void renewPreauthorizedPayments(Lease lease) {
-        new PreauthorizedPaymentAgreementMananger().renewPreauthorizedPayments(lease);
+    public void renewAutopayAgreement(Lease lease) {
+        new AutopayAgreementMananger().renewPreauthorizedPayments(lease);
     }
 
     @Override
     public void updatePreauthorizedPayments(Lease lease) {
-        new PreauthorizedPaymentAgreementMananger().updatePreauthorizedPayments(lease);
+        new AutopayAgreementMananger().updatePreauthorizedPayments(lease);
     }
 
     @Override
-    public AutoPayReviewLeaseDTO getPreauthorizedPaymentRequiresReview(BillingAccount billingAccount) {
-        return new PreauthorizedPaymentAutoPayReviewReport().getPreauthorizedPaymentRequiresReview(billingAccount);
+    public AutoPayReviewLeaseDTO getAutopayAgreementRequiresReview(BillingAccount billingAccount) {
+        return new AutopayReviewReport().getPreauthorizedPaymentRequiresReview(billingAccount);
     }
 
     @Override
     public List<PaymentRecord> calulatePreauthorizedPayment(BillingCycle billingCycle, BillingAccount billingAccountId) {
-        return new PreauthorizedPaymentsManager().calulatePreauthorizedPayment(billingCycle, billingAccountId);
+        return new AutopaytManager().calulatePreauthorizedPayment(billingCycle, billingAccountId);
     }
 }

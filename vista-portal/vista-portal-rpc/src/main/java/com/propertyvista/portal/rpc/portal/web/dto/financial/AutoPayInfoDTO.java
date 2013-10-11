@@ -13,10 +13,8 @@
  */
 package com.propertyvista.portal.rpc.portal.web.dto.financial;
 
-import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.annotations.ToStringFormat;
 import com.pyx4j.entity.annotations.Transient;
-import com.pyx4j.entity.shared.IPrimitive;
 
 import com.propertyvista.portal.domain.dto.financial.PaymentInfoDTO;
 
@@ -24,5 +22,4 @@ import com.propertyvista.portal.domain.dto.financial.PaymentInfoDTO;
 @ToStringFormat("${0}, {1}")
 public interface AutoPayInfoDTO extends PaymentInfoDTO {
 
-    IPrimitive<LogicalDate> expiring();
 }

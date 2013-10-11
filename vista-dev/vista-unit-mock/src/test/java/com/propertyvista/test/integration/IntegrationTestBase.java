@@ -185,7 +185,6 @@ public abstract class IntegrationTestBase extends VistaDBTestBase {
     protected void setPaymentBatchProcess() {
         // schedule payment process to run daily
         scheduler.schedulePmcProcess(PmcProcessType.paymentsIssue, new Schedule());
-        scheduler.schedulePmcProcess(PmcProcessType.paymentsUpdate, new Schedule());
         scheduler.schedulePmcProcess(PmcProcessType.paymentsScheduledEcheck, new Schedule());
     }
 

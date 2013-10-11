@@ -20,7 +20,7 @@ import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.i18n.annotations.I18n;
 
-import com.propertyvista.domain.payment.PreauthorizedPayment;
+import com.propertyvista.domain.payment.AutopayAgreement;
 import com.propertyvista.domain.tenant.lease.Tenant;
 
 @Transient
@@ -41,9 +41,9 @@ public interface AutoPayReviewPreauthorizedPaymentDTO extends IEntity {
 
     // References to actual data (not used in report display)
     @Detached
-    PreauthorizedPayment pap();
+    AutopayAgreement pap();
 
     @Detached
-    PreauthorizedPayment previousCyclePap();
+    AutopayAgreement previousCyclePap();
 
 }

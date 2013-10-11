@@ -21,7 +21,7 @@ import com.pyx4j.rpc.shared.IService;
 import com.pyx4j.rpc.shared.VoidSerializable;
 
 import com.propertyvista.crm.rpc.dto.tenant.PreauthorizedPaymentsDTO;
-import com.propertyvista.domain.payment.PreauthorizedPayment;
+import com.propertyvista.domain.payment.AutopayAgreement;
 import com.propertyvista.domain.tenant.lease.Tenant;
 import com.propertyvista.dto.PreauthorizedPaymentDTO;
 
@@ -33,7 +33,7 @@ public interface PreauthorizedPaymentsVisorService extends IService {
 
     void create(AsyncCallback<PreauthorizedPaymentDTO> callback, Tenant tenantId);
 
-    void delete(AsyncCallback<VoidSerializable> callback, PreauthorizedPayment pad);
+    void delete(AsyncCallback<VoidSerializable> callback, AutopayAgreement pad);
 
-    void recollect(AsyncCallback<Vector<PreauthorizedPayment>> callback, Tenant tenantId);
+    void recollect(AsyncCallback<Vector<AutopayAgreement>> callback, Tenant tenantId);
 }

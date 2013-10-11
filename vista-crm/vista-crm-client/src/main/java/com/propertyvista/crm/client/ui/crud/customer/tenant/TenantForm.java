@@ -46,7 +46,6 @@ import com.propertyvista.common.client.ui.components.folders.EmergencyContactFol
 import com.propertyvista.common.client.ui.components.folders.PapCoveredItemDtoFolder;
 import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
 import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
-import com.propertyvista.common.client.ui.misc.PapExpirationWarning;
 import com.propertyvista.crm.client.activity.crud.customer.tenant.TenantEditorActivity;
 import com.propertyvista.crm.client.ui.crud.customer.common.LeaseParticipantForm;
 import com.propertyvista.crm.client.ui.crud.lease.TenantInsuranceCertificateFolder;
@@ -82,7 +81,7 @@ public class TenantForm extends LeaseParticipantForm<TenantDTO> {
         super.onValueSet(populate);
 
         LogicalDate today = new LogicalDate(ClientContext.getServerDate());
-        if (!today.before(getValue().paymentCutOffDate().getValue()) && !today.after(getValue().nextScheduledPaymentDate().getValue())) {
+        if (!today.after(getValue().nextScheduledPaymentDate().getValue())) {
             get(proto().nextScheduledPaymentDate()).setNote(cutOffDateWarning, NoteStyle.Warn);
         } else {
             get(proto().nextScheduledPaymentDate()).setNote(null);
@@ -201,8 +200,6 @@ public class TenantForm extends LeaseParticipantForm<TenantDTO> {
 
         private class PreauthorizedPaymentEditor extends CEntityDecoratableForm<PreauthorizedPaymentDTO> {
 
-            private final PapExpirationWarning expirationWarning = new PapExpirationWarning();
-
             public PreauthorizedPaymentEditor() {
                 super(PreauthorizedPaymentDTO.class);
             }
@@ -211,8 +208,6 @@ public class TenantForm extends LeaseParticipantForm<TenantDTO> {
             public IsWidget createContent() {
                 TwoColumnFlexFormPanel content = new TwoColumnFlexFormPanel();
                 int row = -1;
-
-                content.setWidget(++row, 0, 2, expirationWarning.getExpirationWarningPanel());
 
                 content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().id(), new CNumberLabel()), 10).build());
 
@@ -243,10 +238,6 @@ public class TenantForm extends LeaseParticipantForm<TenantDTO> {
             @Override
             protected void onValueSet(boolean populate) {
                 super.onValueSet(populate);
-
-                expirationWarning.prepareView(getValue().expiring());
-                setEditable(getValue().expiring().isNull());
-
                 get(proto().id()).setVisible(!getValue().id().isNull());
                 get(proto().creationDate()).setVisible(!getValue().creationDate().isNull());
                 get(proto().createdBy()).setVisible(!getValue().createdBy().isNull());

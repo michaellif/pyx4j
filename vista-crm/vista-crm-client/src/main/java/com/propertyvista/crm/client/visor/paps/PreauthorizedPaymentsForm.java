@@ -39,7 +39,6 @@ import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
 import com.propertyvista.common.client.ui.components.folders.PapCoveredItemDtoFolder;
 import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
 import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
-import com.propertyvista.common.client.ui.misc.PapExpirationWarning;
 import com.propertyvista.crm.rpc.dto.tenant.PreauthorizedPaymentsDTO;
 import com.propertyvista.domain.payment.LeasePaymentMethod;
 import com.propertyvista.domain.security.common.AbstractPmcUser;
@@ -84,7 +83,7 @@ public class PreauthorizedPaymentsForm extends CEntityDecoratableForm<Preauthori
         super.onValueSet(populate);
 
         LogicalDate today = new LogicalDate(ClientContext.getServerDate());
-        if (!today.before(getValue().paymentCutOffDate().getValue()) && !today.after(getValue().nextScheduledPaymentDate().getValue())) {
+        if (!today.after(getValue().nextScheduledPaymentDate().getValue())) {
             get(proto().nextScheduledPaymentDate()).setNote(cutOffDateWarning, NoteStyle.Warn);
         } else {
             get(proto().nextScheduledPaymentDate()).setNote(null);
@@ -128,8 +127,6 @@ public class PreauthorizedPaymentsForm extends CEntityDecoratableForm<Preauthori
 
         private class PreauthorizedPaymentEditor extends CEntityDecoratableForm<PreauthorizedPaymentDTO> {
 
-            private final PapExpirationWarning expirationWarning = new PapExpirationWarning();
-
             public PreauthorizedPaymentEditor() {
                 super(PreauthorizedPaymentDTO.class);
             }
@@ -138,8 +135,6 @@ public class PreauthorizedPaymentsForm extends CEntityDecoratableForm<Preauthori
             public IsWidget createContent() {
                 TwoColumnFlexFormPanel content = new TwoColumnFlexFormPanel();
                 int row = -1;
-
-                content.setWidget(++row, 0, 2, expirationWarning.getExpirationWarningPanel());
 
                 content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().id(), new CNumberLabel()), 10).build());
 
@@ -170,9 +165,6 @@ public class PreauthorizedPaymentsForm extends CEntityDecoratableForm<Preauthori
             @Override
             protected void onValueSet(boolean populate) {
                 super.onValueSet(populate);
-
-                expirationWarning.prepareView(getValue().expiring());
-                setEditable(getValue().expiring().isNull());
 
                 get(proto().id()).setVisible(!getValue().id().isNull());
                 get(proto().creationDate()).setVisible(!getValue().creationDate().isNull());

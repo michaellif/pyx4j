@@ -19,7 +19,7 @@ import com.pyx4j.rpc.shared.IService;
 
 import com.propertyvista.domain.financial.PaymentRecord;
 import com.propertyvista.domain.payment.LeasePaymentMethod;
-import com.propertyvista.domain.payment.PreauthorizedPayment;
+import com.propertyvista.domain.payment.AutopayAgreement;
 import com.propertyvista.dto.PaymentRecordDTO;
 import com.propertyvista.portal.rpc.portal.web.dto.financial.AutoPayDTO;
 import com.propertyvista.portal.rpc.portal.web.dto.financial.AutoPaySummaryDTO;
@@ -36,9 +36,9 @@ public interface PaymentService extends IService {
 
     void getPaymentMethodSummary(AsyncCallback<PaymentMethodSummaryDTO> callback);
 
-    void deleteAutoPay(AsyncCallback<Boolean> callback, PreauthorizedPayment entityId);
+    void deleteAutoPay(AsyncCallback<Boolean> callback, AutopayAgreement entityId);
 
-    void retreiveAutoPay(AsyncCallback<AutoPayDTO> callback, PreauthorizedPayment entityId);
+    void retreiveAutoPay(AsyncCallback<AutoPayDTO> callback, AutopayAgreement entityId);
 
     void getAutoPaySummary(AsyncCallback<AutoPaySummaryDTO> callback);
 }

@@ -30,9 +30,9 @@ import com.propertyvista.biz.financial.payment.PaymentFacade;
 import com.propertyvista.biz.financial.payment.PaymentMethodFacade;
 import com.propertyvista.biz.tenant.lease.LeaseFacade;
 import com.propertyvista.domain.financial.PaymentRecord;
+import com.propertyvista.domain.payment.AutopayAgreement;
+import com.propertyvista.domain.payment.AutopayAgreement.PreauthorizedPaymentCoveredItem;
 import com.propertyvista.domain.payment.LeasePaymentMethod;
-import com.propertyvista.domain.payment.PreauthorizedPayment;
-import com.propertyvista.domain.payment.PreauthorizedPayment.PreauthorizedPaymentCoveredItem;
 import com.propertyvista.domain.security.common.VistaApplication;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.dto.PaymentRecordDTO;
@@ -112,16 +112,16 @@ public class PaymentServiceImpl implements PaymentService {
     }
 
     @Override
-    public void deleteAutoPay(AsyncCallback<Boolean> callback, PreauthorizedPayment itemId) {
-        ServerSideFactory.create(PaymentMethodFacade.class).deletePreauthorizedPayment(itemId);
+    public void deleteAutoPay(AsyncCallback<Boolean> callback, AutopayAgreement itemId) {
+        ServerSideFactory.create(PaymentMethodFacade.class).deleteAutopayAgreement(itemId);
         Persistence.service().commit();
 
         callback.onSuccess(true);
     }
 
     @Override
-    public void retreiveAutoPay(AsyncCallback<AutoPayDTO> callback, PreauthorizedPayment entityId) {
-        PreauthorizedPayment dbo = Persistence.secureRetrieve(PreauthorizedPayment.class, entityId.getPrimaryKey());
+    public void retreiveAutoPay(AsyncCallback<AutoPayDTO> callback, AutopayAgreement entityId) {
+        AutopayAgreement dbo = Persistence.secureRetrieve(AutopayAgreement.class, entityId.getPrimaryKey());
         AutoPayDTO dto = new AutoPayDtoBinder().createTO(dbo);
 
         // enhance dto:
@@ -140,8 +140,7 @@ public class PaymentServiceImpl implements PaymentService {
         dto.leaseId().set(lease.leaseId());
         dto.leaseStatus().set(lease.status());
 
-        dto.nextScheduledPaymentDate().setValue(ServerSideFactory.create(PaymentMethodFacade.class).getNextPreauthorizedPaymentDate(lease));
-        dto.paymentCutOffDate().setValue(ServerSideFactory.create(PaymentMethodFacade.class).getPreauthorizedPaymentCutOffDate(lease));
+        dto.nextScheduledPaymentDate().setValue(ServerSideFactory.create(PaymentMethodFacade.class).getNextAutopayDate(lease));
 
         dto.total().setValue(BigDecimal.ZERO);
         for (PreauthorizedPaymentCoveredItem item : dto.coveredItems()) {
@@ -158,8 +157,8 @@ public class PaymentServiceImpl implements PaymentService {
         Lease lease = TenantAppContext.getCurrentUserLease();
 
         summary.currentAutoPayments().addAll(retrieveCurrentAutoPayments(lease));
-        summary.currentAutoPayDate().setValue(ServerSideFactory.create(PaymentMethodFacade.class).getCurrentPreauthorizedPaymentDate(lease));
-        summary.nextAutoPayDate().setValue(ServerSideFactory.create(PaymentMethodFacade.class).getNextPreauthorizedPaymentDate(lease));
+        summary.currentAutoPayDate().setValue(ServerSideFactory.create(PaymentMethodFacade.class).getNextAutopayDate(lease));
+        summary.nextAutoPayDate().setValue(ServerSideFactory.create(PaymentMethodFacade.class).getNextAutopayDate(lease));
         summary.modificationsAllowed().setValue(!ServerSideFactory.create(LeaseFacade.class).isMoveOutWithinNextBillingCycle(lease));
 
         callback.onSuccess(summary);
@@ -198,8 +197,8 @@ public class PaymentServiceImpl implements PaymentService {
 
     private static List<AutoPayInfoDTO> retrieveCurrentAutoPayments(Lease lease) {
         List<AutoPayInfoDTO> currentAutoPayments = new ArrayList<AutoPayInfoDTO>();
-        LogicalDate excutionDate = ServerSideFactory.create(PaymentMethodFacade.class).getCurrentPreauthorizedPaymentDate(lease);
-        for (PreauthorizedPayment pap : ServerSideFactory.create(PaymentMethodFacade.class).retrieveCurrentPreauthorizedPayments(lease)) {
+        LogicalDate excutionDate = ServerSideFactory.create(PaymentMethodFacade.class).getNextAutopayDate(lease);
+        for (AutopayAgreement pap : ServerSideFactory.create(PaymentMethodFacade.class).retrieveAutopayAgreements(lease)) {
             AutoPayInfoDTO autoPayInfo = EntityFactory.create(AutoPayInfoDTO.class);
             autoPayInfo.id().setValue(pap.id().getValue());
 
@@ -214,7 +213,6 @@ public class PaymentServiceImpl implements PaymentService {
             if (autoPayInfo.payer().equals(TenantAppContext.getCurrentUserTenant())) {
                 autoPayInfo.paymentMethod().set(pap.paymentMethod());
             }
-            autoPayInfo.expiring().setValue(pap.expiring().getValue());
 
             currentAutoPayments.add(autoPayInfo);
         }
@@ -222,10 +220,10 @@ public class PaymentServiceImpl implements PaymentService {
         return currentAutoPayments;
     }
 
-    class AutoPayDtoBinder extends EntityBinder<PreauthorizedPayment, AutoPayDTO> {
+    class AutoPayDtoBinder extends EntityBinder<AutopayAgreement, AutoPayDTO> {
 
         protected AutoPayDtoBinder() {
-            super(PreauthorizedPayment.class, AutoPayDTO.class);
+            super(AutopayAgreement.class, AutoPayDTO.class);
         }
 
         @Override

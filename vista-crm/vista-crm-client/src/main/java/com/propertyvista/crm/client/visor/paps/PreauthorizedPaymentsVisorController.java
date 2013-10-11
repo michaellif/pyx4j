@@ -31,7 +31,7 @@ import com.pyx4j.site.client.ui.visor.IVisorEditor;
 
 import com.propertyvista.crm.rpc.dto.tenant.PreauthorizedPaymentsDTO;
 import com.propertyvista.crm.rpc.services.customer.PreauthorizedPaymentsVisorService;
-import com.propertyvista.domain.payment.PreauthorizedPayment;
+import com.propertyvista.domain.payment.AutopayAgreement;
 import com.propertyvista.domain.tenant.lease.Tenant;
 import com.propertyvista.dto.PreauthorizedPaymentDTO;
 
@@ -82,7 +82,7 @@ public class PreauthorizedPaymentsVisorController extends AbstractVisorControlle
      *            - edited PADs
      * @return - allow/disable visor close
      */
-    public boolean onClose(List<PreauthorizedPayment> pads) {
+    public boolean onClose(List<AutopayAgreement> pads) {
         return true;
     }
 
@@ -100,9 +100,9 @@ public class PreauthorizedPaymentsVisorController extends AbstractVisorControlle
         save(new DefaultAsyncCallback<VoidSerializable>() {
             @Override
             public void onSuccess(VoidSerializable result) {
-                service.recollect(new DefaultAsyncCallback<Vector<PreauthorizedPayment>>() {
+                service.recollect(new DefaultAsyncCallback<Vector<AutopayAgreement>>() {
                     @Override
-                    public void onSuccess(Vector<PreauthorizedPayment> result) {
+                    public void onSuccess(Vector<AutopayAgreement> result) {
                         if (onClose(result)) {
                             getParentView().hideVisor();
                         }

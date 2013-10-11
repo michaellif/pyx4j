@@ -17,12 +17,12 @@ import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
 
-import com.propertyvista.domain.payment.PreauthorizedPayment;
+import com.propertyvista.domain.payment.AutopayAgreement;
 
 @Transient
-public interface ReviewedPapDTO extends IEntity {
+public interface ReviewedAutopayAgreementDTO extends IEntity {
 
-    PreauthorizedPayment papId();
+    AutopayAgreement papId();
 
     IList<ReviewedPapChargeDTO> reviewedCharges();
 

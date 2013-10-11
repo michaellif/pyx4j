@@ -34,7 +34,7 @@ import com.propertyvista.crm.client.ui.reports.autopayreviewer.AutoPayReviewView
 import com.propertyvista.crm.rpc.dto.financial.autopayreview.PapChargeReviewDTO;
 import com.propertyvista.crm.rpc.dto.financial.autopayreview.PapReviewDTO;
 import com.propertyvista.crm.rpc.dto.financial.autopayreview.ReviewedPapChargeDTO;
-import com.propertyvista.crm.rpc.dto.financial.autopayreview.ReviewedPapDTO;
+import com.propertyvista.crm.rpc.dto.financial.autopayreview.ReviewedAutopayAgreementDTO;
 import com.propertyvista.crm.rpc.dto.financial.autopayreview.ReviewedPapsHolderDTO;
 import com.propertyvista.crm.rpc.services.financial.AutoPayReviewService;
 import com.propertyvista.domain.reports.AutoPayChangesReportMetadata;
@@ -130,7 +130,7 @@ public class AutoPayReviewActivity extends AbstractActivity implements AutoPayRe
     private ReviewedPapsHolderDTO makeReviewedPaps(List<PapReviewDTO> papReviews) {
         ReviewedPapsHolderDTO reviewedPapsHolder = EntityFactory.create(ReviewedPapsHolderDTO.class);
         for (PapReviewDTO papReview : papReviews) {
-            ReviewedPapDTO reviewedPap = EntityFactory.create(ReviewedPapDTO.class);
+            ReviewedAutopayAgreementDTO reviewedPap = EntityFactory.create(ReviewedAutopayAgreementDTO.class);
             reviewedPap.papId().set(papReview.papId());
 
             for (PapChargeReviewDTO papChargeReview : papReview.charges()) {

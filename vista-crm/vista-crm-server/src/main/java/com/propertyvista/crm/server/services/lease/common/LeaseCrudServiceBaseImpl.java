@@ -126,6 +126,6 @@ public abstract class LeaseCrudServiceBaseImpl<DTO extends LeaseDTO> extends Abs
         item.leaseParticipant().preauthorizedPayments().setAttachLevel(AttachLevel.Attached);
         item.leaseParticipant().preauthorizedPayments().clear();
         item.leaseParticipant().preauthorizedPayments()
-                .addAll(ServerSideFactory.create(PaymentMethodFacade.class).retrievePreauthorizedPayments(item.leaseParticipant()));
+                .addAll(ServerSideFactory.create(PaymentMethodFacade.class).retrieveAutopayAgreements(item.leaseParticipant()));
     }
 }

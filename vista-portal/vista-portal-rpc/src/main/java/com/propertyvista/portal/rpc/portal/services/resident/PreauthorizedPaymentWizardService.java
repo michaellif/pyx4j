@@ -21,7 +21,7 @@ import com.pyx4j.entity.rpc.AbstractCrudService;
 
 import com.propertyvista.domain.contact.AddressSimple;
 import com.propertyvista.domain.payment.LeasePaymentMethod;
-import com.propertyvista.domain.payment.PreauthorizedPayment;
+import com.propertyvista.domain.payment.AutopayAgreement;
 import com.propertyvista.portal.rpc.portal.dto.PreauthorizedPaymentDTO;
 
 public interface PreauthorizedPaymentWizardService extends AbstractCrudService<PreauthorizedPaymentDTO> {
@@ -30,5 +30,5 @@ public interface PreauthorizedPaymentWizardService extends AbstractCrudService<P
 
     void getProfiledPaymentMethods(AsyncCallback<Vector<LeasePaymentMethod>> callback);
 
-    void preview(AsyncCallback<PreauthorizedPayment> callback, PreauthorizedPaymentDTO currentValue);
+    void preview(AsyncCallback<AutopayAgreement> callback, PreauthorizedPaymentDTO currentValue);
 }

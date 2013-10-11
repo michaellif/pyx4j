@@ -21,7 +21,7 @@ import com.pyx4j.entity.server.Persistence;
 
 import com.propertyvista.biz.financial.LeaseFinancialTestBase;
 import com.propertyvista.biz.tenant.lease.LeaseFacade;
-import com.propertyvista.domain.payment.PreauthorizedPayment;
+import com.propertyvista.domain.payment.AutopayAgreement;
 import com.propertyvista.domain.policy.policies.LeaseBillingPolicy;
 import com.propertyvista.domain.tenant.lease.BillableItem;
 import com.propertyvista.domain.tenant.lease.Lease;
@@ -59,7 +59,7 @@ public class PreauthorizedPaymentChangeReviewInternalTest extends LeaseFinancial
         BillableItem parking = addOutdoorParking();
         approveApplication(true);
 
-        PreauthorizedPayment pap1 = setPreauthorizedPayment(new PreauthorizedPaymentBuilder(). //
+        AutopayAgreement pap1 = setPreauthorizedPayment(new PreauthorizedPaymentBuilder(). //
                 add(getLease().currentTerm().version().leaseProducts().serviceItem(), "500.00"). //
                 add(parking, "80.00"). //
                 build());
@@ -81,7 +81,7 @@ public class PreauthorizedPaymentChangeReviewInternalTest extends LeaseFinancial
                 .activeCount(1)//
                 .lastRecordAmount(eval("580.00 + 100.00"));
 
-        AutoPayReviewLeaseDTO reviewDTO = ServerSideFactory.create(PaymentMethodFacade.class).getPreauthorizedPaymentRequiresReview(getLease().billingAccount());
+        AutoPayReviewLeaseDTO reviewDTO = ServerSideFactory.create(PaymentMethodFacade.class).getAutopayAgreementRequiresReview(getLease().billingAccount());
 
         // Verify created Data
         {
@@ -104,7 +104,7 @@ public class PreauthorizedPaymentChangeReviewInternalTest extends LeaseFinancial
         BillableItem parking = addOutdoorParking();
         approveApplication(true);
 
-        PreauthorizedPayment pap1 = setPreauthorizedPayment(new PreauthorizedPaymentBuilder(). //
+        AutopayAgreement pap1 = setPreauthorizedPayment(new PreauthorizedPaymentBuilder(). //
                 add(getLease().currentTerm().version().leaseProducts().serviceItem(), "1000.00"). //
                 add(parking, "80.00"). //
                 build());
@@ -115,7 +115,7 @@ public class PreauthorizedPaymentChangeReviewInternalTest extends LeaseFinancial
             Persistence.service().commit();
         }
 
-        AutoPayReviewLeaseDTO reviewDTO = ServerSideFactory.create(PaymentMethodFacade.class).getPreauthorizedPaymentRequiresReview(getLease().billingAccount());
+        AutoPayReviewLeaseDTO reviewDTO = ServerSideFactory.create(PaymentMethodFacade.class).getAutopayAgreementRequiresReview(getLease().billingAccount());
 
         // Verify created Data
         {

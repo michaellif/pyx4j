@@ -1297,44 +1297,7 @@ public class EmailTemplateManagerTest extends VistaDBTestBase {
             billingType.paymentDueDayOffset().setValue(0);
             billingType.finalDueDayOffset().setValue(15);
             billingType.billExecutionDayOffset().setValue(-15);
-            billingType.padCalculationDayOffset().setValue(-3);
-            billingType.padExecutionDayOffset().setValue(0);
-            policy.availableBillingTypes().add(billingType);
-        }
-
-        {
-            LeaseBillingTypePolicyItem billingType = EntityFactory.create(LeaseBillingTypePolicyItem.class);
-            billingType.billingPeriod().setValue(BillingPeriod.SemiMonthly);
-            billingType.billingCycleStartDay().setValue(1);
-            billingType.paymentDueDayOffset().setValue(0);
-            billingType.finalDueDayOffset().setValue(15);
-            billingType.billExecutionDayOffset().setValue(-7);
-            billingType.padCalculationDayOffset().setValue(-3);
-            billingType.padExecutionDayOffset().setValue(0);
-            policy.availableBillingTypes().add(billingType);
-        }
-
-        {
-            LeaseBillingTypePolicyItem billingType = EntityFactory.create(LeaseBillingTypePolicyItem.class);
-            billingType.billingPeriod().setValue(BillingPeriod.BiWeekly);
-            billingType.billingCycleStartDay().setValue(1);
-            billingType.paymentDueDayOffset().setValue(0);
-            billingType.finalDueDayOffset().setValue(15);
-            billingType.billExecutionDayOffset().setValue(-7);
-            billingType.padCalculationDayOffset().setValue(-3);
-            billingType.padExecutionDayOffset().setValue(0);
-            policy.availableBillingTypes().add(billingType);
-        }
-
-        {
-            LeaseBillingTypePolicyItem billingType = EntityFactory.create(LeaseBillingTypePolicyItem.class);
-            billingType.billingPeriod().setValue(BillingPeriod.Weekly);
-            billingType.billingCycleStartDay().setValue(1);
-            billingType.paymentDueDayOffset().setValue(0);
-            billingType.finalDueDayOffset().setValue(15);
-            billingType.billExecutionDayOffset().setValue(-3);
-            billingType.padCalculationDayOffset().setValue(-1);
-            billingType.padExecutionDayOffset().setValue(0);
+            billingType.autopayExecutionDayOffset().setValue(0);
             policy.availableBillingTypes().add(billingType);
         }
 

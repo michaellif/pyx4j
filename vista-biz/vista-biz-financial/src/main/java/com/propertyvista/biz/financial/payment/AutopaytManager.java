@@ -38,23 +38,22 @@ import com.pyx4j.i18n.shared.I18n;
 import com.propertyvista.biz.ExecutionMonitor;
 import com.propertyvista.domain.financial.BillingAccount;
 import com.propertyvista.domain.financial.PaymentRecord;
-import com.propertyvista.domain.financial.PaymentRecord.PaymentStatus;
 import com.propertyvista.domain.financial.billing.BillingCycle;
-import com.propertyvista.domain.payment.PreauthorizedPayment;
-import com.propertyvista.domain.payment.PreauthorizedPayment.PreauthorizedPaymentCoveredItem;
+import com.propertyvista.domain.payment.AutopayAgreement;
+import com.propertyvista.domain.payment.AutopayAgreement.PreauthorizedPaymentCoveredItem;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
 import com.propertyvista.domain.tenant.lease.LeaseTermTenant;
 
-class PreauthorizedPaymentsManager {
+class AutopaytManager {
 
-    private static final I18n i18n = I18n.get(PreauthorizedPaymentsManager.class);
+    private static final I18n i18n = I18n.get(AutopaytManager.class);
 
     static class PreauthorizedAmount {
 
         LeaseTermTenant leaseTermTenant;
 
-        PreauthorizedPayment preauthorizedPayment;
+        AutopayAgreement preauthorizedPayment;
 
         BigDecimal amount;
 
@@ -77,8 +76,8 @@ class PreauthorizedPaymentsManager {
         EntityQueryCriteria<BillingCycle> criteria;
         {//TODO->Closure
             criteria = EntityQueryCriteria.create(BillingCycle.class);
-            criteria.eq(criteria.proto().targetPadGenerationDate(), runDate);
-            criteria.isNull(criteria.proto().actualPadGenerationDate());
+            criteria.eq(criteria.proto().targetAutopayExecutionDate(), runDate);
+            criteria.isNull(criteria.proto().actualAutopayExecutionDate());
             if ((reportCriteria != null) && (reportCriteria.selectedBuildings != null)) {
                 criteria.in(criteria.proto().building(), reportCriteria.selectedBuildings);
             } else {
@@ -112,25 +111,6 @@ class PreauthorizedPaymentsManager {
         }
     }
 
-    void updateScheduledPreauthorisedPayments(final ExecutionMonitor executionMonitor, LogicalDate runDate) {
-        ICursorIterator<BillingCycle> billingCycleIterator;
-        {//TODO->Closure
-            EntityQueryCriteria<BillingCycle> criteria = EntityQueryCriteria.create(BillingCycle.class);
-            criteria.le(criteria.proto().targetPadGenerationDate(), runDate);
-            criteria.ge(criteria.proto().targetPadExecutionDate(), runDate);
-            criteria.isNotNull(criteria.proto().actualPadGenerationDate());
-            criteria.asc(criteria.proto().building().propertyCode());
-            billingCycleIterator = Persistence.service().query(null, criteria, AttachLevel.Attached);
-        }
-        try {
-            while (billingCycleIterator.hasNext()) {
-                updateBillingCyclePreauthorisedPayments(billingCycleIterator.next(), executionMonitor);
-            }
-        } finally {
-            billingCycleIterator.close();
-        }
-    }
-
     private void createBillingCyclePreauthorisedPayments(final BillingCycle billingCycle, final ExecutionMonitor executionMonitor, final boolean reportOny,
             final List<PaymentRecord> resultingPaymentRecords, final PreauthorizedPaymentsReportCriteria reportCriteria) {
 
@@ -158,7 +138,7 @@ class PreauthorizedPaymentsManager {
                 }
 
                 if (!reportOny) {
-                    billingCycle.actualPadGenerationDate().setValue(new LogicalDate(SystemDateManager.getDate()));
+                    billingCycle.actualAutopayExecutionDate().setValue(new LogicalDate(SystemDateManager.getDate()));
                     Persistence.service().persist(billingCycle);
                 }
 
@@ -225,7 +205,7 @@ class PreauthorizedPaymentsManager {
             paymentRecord.notice().setValue(record.notice);
             paymentRecord.padBillingCycle().set(billingCycle);
             paymentRecord.billingAccount().set(billingAccount);
-            paymentRecord.targetDate().setValue(billingCycle.targetPadExecutionDate().getValue());
+            paymentRecord.targetDate().setValue(billingCycle.targetAutopayExecutionDate().getValue());
             createNoticeMessage(paymentRecord, record.notice);
             paymentRecords.add(paymentRecord);
         }
@@ -261,27 +241,21 @@ class PreauthorizedPaymentsManager {
         }
 
         for (LeaseTermTenant leaseParticipant : leaseParticipants) {
-            List<PreauthorizedPayment> preauthorizedPayments;
+            List<AutopayAgreement> preauthorizedPayments;
             {
-                EntityQueryCriteria<PreauthorizedPayment> criteria = EntityQueryCriteria.create(PreauthorizedPayment.class);
+                EntityQueryCriteria<AutopayAgreement> criteria = EntityQueryCriteria.create(AutopayAgreement.class);
                 criteria.eq(criteria.proto().tenant(), leaseParticipant.leaseParticipant().cast());
                 criteria.eq(criteria.proto().isDeleted(), false);
-
                 {
                     OrCriterion or = criteria.or();
-                    or.right().ge(criteria.proto().expiring(), billingCycle.targetPadGenerationDate());
-                    or.left().isNull(criteria.proto().expiring());
-                }
-                {
-                    OrCriterion or = criteria.or();
-                    or.right().le(criteria.proto().effectiveFrom(), billingCycle.targetPadExecutionDate());
+                    or.right().le(criteria.proto().effectiveFrom(), billingCycle.billingCycleStartDate());
                     or.left().isNull(criteria.proto().effectiveFrom());
                 }
 
                 criteria.asc(criteria.proto().id());
                 preauthorizedPayments = Persistence.service().query(criteria);
             }
-            for (PreauthorizedPayment pap : preauthorizedPayments) {
+            for (AutopayAgreement pap : preauthorizedPayments) {
 
                 Validate.isTrue(pap.paymentMethod().type().getValue().isSchedulable());
 
@@ -297,81 +271,6 @@ class PreauthorizedPaymentsManager {
             }
         }
         return records;
-    }
-
-    private void updateBillingCyclePreauthorisedPayments(final BillingCycle billingCycle, final ExecutionMonitor executionMonitor) {
-        new UnitOfWork(TransactionScopeOption.RequiresNew).execute(new Executable<Void, RuntimeException>() {
-
-            @Override
-            public Void execute() throws RuntimeException {
-                ICursorIterator<BillingAccount> billingAccountIterator;
-                { //TODO->Closure
-                    EntityQueryCriteria<BillingAccount> criteria = EntityQueryCriteria.create(BillingAccount.class);
-                    criteria.eq(criteria.proto().lease().unit().building(), billingCycle.building());
-                    criteria.eq(criteria.proto().billingType(), billingCycle.billingType());
-
-                    criteria.eq(criteria.proto().payments().$().padBillingCycle(), billingCycle);
-                    billingAccountIterator = Persistence.service().query(null, criteria, AttachLevel.Attached);
-                }
-                try {
-                    while (billingAccountIterator.hasNext()) {
-                        updateBillingAccountPreauthorisedPayments(billingCycle, billingAccountIterator.next(), executionMonitor);
-                    }
-                } finally {
-                    billingAccountIterator.close();
-                }
-                return null;
-            }
-        });
-    }
-
-    private void updateBillingAccountPreauthorisedPayments(BillingCycle billingCycle, BillingAccount billingAccount, ExecutionMonitor executionMonitor) {
-        {
-            EntityQueryCriteria<PaymentRecord> criteria = EntityQueryCriteria.create(PaymentRecord.class);
-            criteria.eq(criteria.proto().padBillingCycle(), billingCycle);
-            criteria.eq(criteria.proto().billingAccount(), billingAccount);
-            criteria.in(criteria.proto().paymentStatus(), PaymentStatus.Scheduled, PaymentStatus.PendingAction);
-            if (Persistence.service().count(criteria) == 0) {
-                //Nothing to update
-                return;
-            }
-        }
-
-        boolean hasPendingAction = false;
-        {
-            EntityQueryCriteria<PaymentRecord> criteria = EntityQueryCriteria.create(PaymentRecord.class);
-            criteria.eq(criteria.proto().padBillingCycle(), billingCycle);
-            criteria.eq(criteria.proto().billingAccount(), billingAccount);
-            criteria.in(criteria.proto().paymentStatus(), PaymentStatus.PendingAction);
-            hasPendingAction = (Persistence.service().count(criteria) != 0);
-
-        }
-        boolean electronicPaymentsNotSetup = !PaymentUtils.isElectronicPaymentsSetup(billingAccount);
-
-        List<PreauthorizedAmount> records = calulatePapAmounts(billingCycle, billingAccount);
-
-        for (PreauthorizedAmount record : records) {
-
-            EntityQueryCriteria<PaymentRecord> criteria = EntityQueryCriteria.create(PaymentRecord.class);
-            criteria.eq(criteria.proto().padBillingCycle(), billingCycle);
-            criteria.eq(criteria.proto().billingAccount(), billingAccount);
-            criteria.eq(criteria.proto().preauthorizedPayment(), record.preauthorizedPayment);
-            criteria.in(criteria.proto().paymentStatus(), PaymentStatus.Scheduled, PaymentStatus.PendingAction);
-
-            PaymentRecord paymentRecord = Persistence.service().retrieve(criteria);
-
-            if ((paymentRecord != null)
-                    && (electronicPaymentsNotSetup || hasPendingAction || (paymentRecord.amount().getValue().compareTo(record.amount) != 0))) {
-                paymentRecord.amount().setValue(record.amount);
-                createNoticeMessage(paymentRecord, record.notice);
-                ServerSideFactory.create(PaymentFacade.class).persistPayment(paymentRecord);
-                PaymentRecord paymentRecordUpdated = ServerSideFactory.create(PaymentFacade.class).schedulePayment(paymentRecord);
-                if ((paymentRecord.amount().getValue().compareTo(record.amount) != 0)
-                        || (!paymentRecordUpdated.paymentStatus().equals(paymentRecord.paymentStatus()))) {
-                    executionMonitor.addProcessedEvent(paymentRecord.paymentMethod().type().getStringView(), paymentRecord.amount().getValue());
-                }
-            }
-        }
     }
 
     private void createNoticeMessage(PaymentRecord paymentRecord, String calulationsNotice) {

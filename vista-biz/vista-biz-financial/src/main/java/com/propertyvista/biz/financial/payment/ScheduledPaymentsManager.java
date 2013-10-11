@@ -38,7 +38,7 @@ import com.propertyvista.domain.financial.PaymentRecord.PaymentStatus;
 import com.propertyvista.domain.financial.billing.BillingCycle;
 import com.propertyvista.domain.payment.LeasePaymentMethod;
 import com.propertyvista.domain.payment.PaymentType;
-import com.propertyvista.domain.payment.PreauthorizedPayment;
+import com.propertyvista.domain.payment.AutopayAgreement;
 import com.propertyvista.domain.property.yardi.YardiPropertyConfiguration;
 
 class ScheduledPaymentsManager {
@@ -67,7 +67,7 @@ class ScheduledPaymentsManager {
         }
     }
 
-    void cancelScheduledPayments(PreauthorizedPayment preauthorizedPayment) {
+    void cancelScheduledPayments(AutopayAgreement preauthorizedPayment) {
         EntityQueryCriteria<PaymentRecord> criteria = new EntityQueryCriteria<PaymentRecord>(PaymentRecord.class);
         criteria.eq(criteria.proto().preauthorizedPayment(), preauthorizedPayment);
         criteria.in(criteria.proto().paymentStatus(), PaymentStatus.Scheduled, PaymentStatus.PendingAction);
@@ -100,7 +100,7 @@ class ScheduledPaymentsManager {
         ICursorIterator<BillingCycle> billingCycleIterator;
         {//TODO->Closure
             EntityQueryCriteria<BillingCycle> criteria = EntityQueryCriteria.create(BillingCycle.class);
-            criteria.eq(criteria.proto().targetPadExecutionDate(), forDate);
+            criteria.eq(criteria.proto().targetAutopayExecutionDate(), forDate);
             criteria.in(criteria.proto().building().suspended(), false);
             billingCycleIterator = Persistence.service().query(null, criteria, AttachLevel.Attached);
         }
@@ -115,7 +115,7 @@ class ScheduledPaymentsManager {
 
                 LogicalDate arDate = arDatesByPropertyCode.get(billingCycle.building().propertyCode().getValue());
 
-                if ((arDate == null) || (!isSameMonth(arDate, billingCycle.targetPadExecutionDate().getValue()))) {
+                if ((arDate == null) || (!isSameMonth(arDate, billingCycle.targetAutopayExecutionDate().getValue()))) {
                     executionMonitor.addErredEvent("accountsReceivable", "Unexpected Accounts Receivable Post date " + arDate + //
                             "; Property " + billingCycle.building().propertyCode().getValue());
                 } else {

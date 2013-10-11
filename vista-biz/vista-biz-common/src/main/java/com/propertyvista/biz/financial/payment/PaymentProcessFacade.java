@@ -45,11 +45,9 @@ public interface PaymentProcessFacade {
 
     void createPmcPreauthorisedPayments(ExecutionMonitor executionMonitor, LogicalDate padGenerationDate);
 
-    void updatePmcScheduledPreauthorisedPayments(ExecutionMonitor executionMonitor, LogicalDate forDate);
-
     void processPmcScheduledPayments(ExecutionMonitor executionMonitor, PaymentType paymentType, LogicalDate forDate);
 
-    void updatePreauthorizedPaymentAgreements(ExecutionMonitor executionMonitor, LogicalDate forDate);
+    void deleteExpiringAutopayAgreement(ExecutionMonitor executionMonitor, LogicalDate forDate);
 
     void verifyYardiPaymentIntegration(ExecutionMonitor executionMonitor, LogicalDate forDate);
 

@@ -32,7 +32,7 @@ import com.propertyvista.biz.financial.payment.PaymentMethodFacade;
 import com.propertyvista.domain.payment.EcheckInfo;
 import com.propertyvista.domain.payment.LeasePaymentMethod;
 import com.propertyvista.domain.payment.PaymentType;
-import com.propertyvista.domain.payment.PreauthorizedPayment;
+import com.propertyvista.domain.payment.AutopayAgreement;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.tenant.Customer;
@@ -365,8 +365,8 @@ public class YardiLeaseChargesTest extends YardiTestBase {
         return getCurrentLease(unit);
     }
 
-    private PreauthorizedPayment createPap(Lease lease) {
-        PreauthorizedPayment pap = EntityFactory.create(PreauthorizedPayment.class);
+    private AutopayAgreement createPap(Lease lease) {
+        AutopayAgreement pap = EntityFactory.create(AutopayAgreement.class);
         Persistence.service().retrieve(lease.currentTerm().version().tenants());
         Tenant tenant = lease.currentTerm().version().tenants().get(0).leaseParticipant();
         pap.paymentMethod().set(createPaymentMethod(tenant.customer(), getLease().unit().building()));
@@ -378,7 +378,7 @@ public class YardiLeaseChargesTest extends YardiTestBase {
         }
 
         pap.coveredItems().addAll(pab.build());
-        ServerSideFactory.create(PaymentMethodFacade.class).persistPreauthorizedPayment(pap, tenant);
+        ServerSideFactory.create(PaymentMethodFacade.class).persistAutopayAgreement(pap, tenant);
         return pap;
     }
 

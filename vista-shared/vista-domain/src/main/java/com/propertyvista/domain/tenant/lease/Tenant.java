@@ -24,7 +24,7 @@ import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.ISet;
 import com.pyx4j.i18n.annotations.I18n;
 
-import com.propertyvista.domain.payment.PreauthorizedPayment;
+import com.propertyvista.domain.payment.AutopayAgreement;
 
 @I18n(strategy = I18n.I18nStrategy.IgnoreThis)
 @DiscriminatorValue("Tenant")
@@ -34,7 +34,7 @@ public interface Tenant extends LeaseParticipant<LeaseTermTenant> {
     @Detached(level = AttachLevel.Detached)
     @OrderBy(PrimaryKey.class)
     @Caption(name = "Pre-Authorized Payments")
-    IList<PreauthorizedPayment> preauthorizedPayments();
+    IList<AutopayAgreement> preauthorizedPayments();
 
     // ----------------------------------------------------
     // parent <-> child relationship:

@@ -28,8 +28,8 @@ import com.pyx4j.entity.shared.EntityFactory;
 import com.propertyvista.biz.financial.ar.ARFacade;
 import com.propertyvista.biz.financial.billing.BillingFacade;
 import com.propertyvista.biz.financial.payment.PaymentMethodFacade;
-import com.propertyvista.domain.payment.PreauthorizedPayment;
-import com.propertyvista.domain.payment.PreauthorizedPayment.PreauthorizedPaymentCoveredItem;
+import com.propertyvista.domain.payment.AutopayAgreement;
+import com.propertyvista.domain.payment.AutopayAgreement.PreauthorizedPaymentCoveredItem;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.portal.domain.dto.financial.FinancialSummaryDTO;
 import com.propertyvista.portal.domain.dto.financial.PaymentInfoDTO;
@@ -74,8 +74,8 @@ public class BillSummaryServiceImpl implements BillSummaryService {
 
     public static List<PaymentInfoDTO> retrieveCurrentAutoPayments(Lease lease) {
         List<PaymentInfoDTO> currentAutoPayments = new ArrayList<PaymentInfoDTO>();
-        LogicalDate excutionDate = ServerSideFactory.create(PaymentMethodFacade.class).getCurrentPreauthorizedPaymentDate(lease);
-        for (PreauthorizedPayment pap : ServerSideFactory.create(PaymentMethodFacade.class).retrieveCurrentPreauthorizedPayments(lease)) {
+        LogicalDate excutionDate = ServerSideFactory.create(PaymentMethodFacade.class).getNextAutopayDate(lease);
+        for (AutopayAgreement pap : ServerSideFactory.create(PaymentMethodFacade.class).retrieveAutopayAgreements(lease)) {
             PaymentInfoDTO pi = EntityFactory.create(PaymentInfoDTO.class);
 
             pi.amount().setValue(BigDecimal.ZERO);

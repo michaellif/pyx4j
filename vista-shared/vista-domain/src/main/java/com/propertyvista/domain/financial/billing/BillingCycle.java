@@ -61,17 +61,13 @@ public interface BillingCycle extends IEntity {
     // @Comment(name = "Bill Processing Day", description = "Number of days between Bill Processing Day and Billing Period Start Date") 
     IPrimitive<LogicalDate> targetBillExecutionDate();
 
-    // @Comment(name = "PAD Validation Day", description = "Number of days between PAD Validation Day and Billing Period Start Date") 
-    IPrimitive<LogicalDate> targetPadGenerationDate();
-
-    // @Comment(name = "PAD Processing Day", description = "Number of days between PAD Processing Day and Billing Period Start Date") 
-    IPrimitive<LogicalDate> targetPadExecutionDate();
+    IPrimitive<LogicalDate> targetAutopayExecutionDate();
 
     @ReadOnly(allowOverrideNull = true)
     IPrimitive<LogicalDate> actualBillExecutionDate();
 
     @ReadOnly(allowOverrideNull = true)
-    IPrimitive<LogicalDate> actualPadGenerationDate();
+    IPrimitive<LogicalDate> actualAutopayExecutionDate();
 
     // Used as different entity to avoid transaction isolation problems in HDQLDB
     @Owned

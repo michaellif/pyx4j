@@ -61,7 +61,7 @@ public class AutoPayConfirmationForm extends CPortalEntityForm<AutoPayDTO> {
         super.onValueSet(populate);
 
         LogicalDate today = new LogicalDate(ClientContext.getServerDate());
-        if (!today.before(getValue().paymentCutOffDate().getValue()) && !today.after(getValue().nextScheduledPaymentDate().getValue())) {
+        if (!today.after(getValue().nextScheduledPaymentDate().getValue())) {
             get(proto().nextScheduledPaymentDate()).setNote(cutOffDateWarning, NoteStyle.Warn);
         } else {
             get(proto().nextScheduledPaymentDate()).setNote(null);

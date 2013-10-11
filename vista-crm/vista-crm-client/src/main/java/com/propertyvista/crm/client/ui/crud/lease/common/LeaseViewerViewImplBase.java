@@ -26,7 +26,7 @@ import com.propertyvista.crm.client.ui.components.boxes.LeaseTermSelectorDialog;
 import com.propertyvista.crm.client.ui.crud.CrmViewerViewImplBase;
 import com.propertyvista.crm.client.ui.crud.lease.LeaseViewerViewImpl;
 import com.propertyvista.crm.client.visor.paps.PreauthorizedPaymentsVisorController;
-import com.propertyvista.domain.payment.PreauthorizedPayment;
+import com.propertyvista.domain.payment.AutopayAgreement;
 import com.propertyvista.domain.tenant.lease.LeaseTerm;
 import com.propertyvista.domain.tenant.lease.LeaseTermTenant;
 import com.propertyvista.dto.LeaseDTO;
@@ -124,7 +124,7 @@ public class LeaseViewerViewImplBase<DTO extends LeaseDTO> extends CrmViewerView
                 public void execute() {
                     new PreauthorizedPaymentsVisorController(LeaseViewerViewImplBase.this, tenant.leaseParticipant().getPrimaryKey()) {
                         @Override
-                        public boolean onClose(List<PreauthorizedPayment> pads) {
+                        public boolean onClose(List<AutopayAgreement> pads) {
                             getPresenter().populate();
                             return true;
                         }

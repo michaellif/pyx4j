@@ -52,8 +52,8 @@ import com.propertyvista.domain.payment.CreditCardInfo;
 import com.propertyvista.domain.payment.CreditCardInfo.CreditCardType;
 import com.propertyvista.domain.payment.LeasePaymentMethod;
 import com.propertyvista.domain.payment.PaymentType;
-import com.propertyvista.domain.payment.PreauthorizedPayment;
-import com.propertyvista.domain.payment.PreauthorizedPayment.PreauthorizedPaymentCoveredItem;
+import com.propertyvista.domain.payment.AutopayAgreement;
+import com.propertyvista.domain.payment.AutopayAgreement.PreauthorizedPaymentCoveredItem;
 import com.propertyvista.domain.tenant.lease.BillableItem;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.Lease.CompletionType;
@@ -277,7 +277,7 @@ public class LeaseLifecycleSimulator {
 
             if (!mainTenant.leaseParticipant().customer().paymentMethods().isEmpty()) {
                 // new approach:
-                PreauthorizedPayment pap = EntityFactory.create(PreauthorizedPayment.class);
+                AutopayAgreement pap = EntityFactory.create(AutopayAgreement.class);
 
                 pap.paymentMethod().set(mainTenant.leaseParticipant().customer().paymentMethods().iterator().next());
 

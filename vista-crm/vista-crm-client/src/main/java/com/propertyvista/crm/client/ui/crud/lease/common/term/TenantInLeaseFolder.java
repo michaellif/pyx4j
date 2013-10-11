@@ -49,9 +49,8 @@ import com.propertyvista.common.client.ui.components.editors.NameEditor;
 import com.propertyvista.common.client.ui.components.folders.PapCoveredItemFolder;
 import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
 import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
-import com.propertyvista.common.client.ui.misc.PapExpirationWarning;
 import com.propertyvista.common.client.ui.validators.BirthdayDateValidator;
-import com.propertyvista.domain.payment.PreauthorizedPayment;
+import com.propertyvista.domain.payment.AutopayAgreement;
 import com.propertyvista.domain.policy.policies.domain.IdAssignmentItem.IdTarget;
 import com.propertyvista.domain.security.common.AbstractPmcUser;
 import com.propertyvista.domain.tenant.Customer;
@@ -307,41 +306,37 @@ public class TenantInLeaseFolder extends LeaseTermParticipantFolder<LeaseTermTen
             get(proto().role()).setValue(LeaseTermParticipant.Role.Applicant);
         }
 
-        void setPreauthorizedPayments(List<PreauthorizedPayment> pads) {
+        void setPreauthorizedPayments(List<AutopayAgreement> pads) {
             getValue().leaseParticipant().preauthorizedPayments().clear();
             getValue().leaseParticipant().preauthorizedPayments().addAll(pads);
             preauthorizedPayments.setValue(getValue().leaseParticipant().preauthorizedPayments());
         }
     }
 
-    private class PreauthorizedPayments extends VistaBoxFolder<PreauthorizedPayment> {
+    private class PreauthorizedPayments extends VistaBoxFolder<AutopayAgreement> {
 
         public PreauthorizedPayments() {
-            super(PreauthorizedPayment.class);
+            super(AutopayAgreement.class);
         }
 
         @Override
         public CComponent<?> create(IObject<?> member) {
-            if (member instanceof PreauthorizedPayment) {
+            if (member instanceof AutopayAgreement) {
                 return new PreauthorizedPaymentViewer();
             }
             return super.create(member);
         }
 
-        private class PreauthorizedPaymentViewer extends CEntityDecoratableForm<PreauthorizedPayment> {
-
-            private final PapExpirationWarning expirationWarning = new PapExpirationWarning();
+        private class PreauthorizedPaymentViewer extends CEntityDecoratableForm<AutopayAgreement> {
 
             public PreauthorizedPaymentViewer() {
-                super(PreauthorizedPayment.class);
+                super(AutopayAgreement.class);
             }
 
             @Override
             public IsWidget createContent() {
                 TwoColumnFlexFormPanel content = new TwoColumnFlexFormPanel();
                 int row = -1;
-
-                content.setWidget(++row, 0, 2, expirationWarning.getExpirationWarningPanel());
 
                 content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().id(), new CNumberLabel()), 10).build());
 
@@ -358,8 +353,6 @@ public class TenantInLeaseFolder extends LeaseTermParticipantFolder<LeaseTermTen
             @Override
             protected void onValueSet(boolean populate) {
                 super.onValueSet(populate);
-
-                expirationWarning.prepareView(getValue().expiring());
 
                 get(proto().id()).setVisible(!getValue().id().isNull());
                 get(proto().creationDate()).setVisible(!getValue().creationDate().isNull());

@@ -18,10 +18,10 @@ import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.i18n.annotations.I18n;
 
-import com.propertyvista.domain.payment.PreauthorizedPayment;
+import com.propertyvista.domain.payment.AutopayAgreement;
 
 /**
- * @see PreauthorizedPayment.PreauthorizedPaymentCoveredItem
+ * @see AutopayAgreement.PreauthorizedPaymentCoveredItem
  */
 @Transient
 @I18n(strategy = I18n.I18nStrategy.IgnoreThis)

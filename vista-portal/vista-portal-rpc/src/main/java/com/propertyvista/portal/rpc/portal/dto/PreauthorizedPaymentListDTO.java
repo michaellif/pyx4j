@@ -20,13 +20,13 @@ import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
 
-import com.propertyvista.domain.payment.PreauthorizedPayment;
+import com.propertyvista.domain.payment.AutopayAgreement;
 
 @Transient
 public interface PreauthorizedPaymentListDTO extends IEntity {
 
     @Transient
-    public interface ListItemDTO extends PreauthorizedPayment {
+    public interface ListItemDTO extends AutopayAgreement {
     }
 
     @Caption(name = "Pre-Authorized Payments")

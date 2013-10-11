@@ -28,14 +28,13 @@ import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.AttachLevel;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
-import com.pyx4j.entity.shared.criterion.OrCriterion;
 
 import com.propertyvista.biz.financial.billingcycle.BillingCycleFacade;
 import com.propertyvista.domain.financial.BillingAccount;
 import com.propertyvista.domain.financial.PaymentRecord;
 import com.propertyvista.domain.financial.billing.BillingCycle;
-import com.propertyvista.domain.payment.PreauthorizedPayment;
-import com.propertyvista.domain.payment.PreauthorizedPayment.PreauthorizedPaymentCoveredItem;
+import com.propertyvista.domain.payment.AutopayAgreement;
+import com.propertyvista.domain.payment.AutopayAgreement.PreauthorizedPaymentCoveredItem;
 import com.propertyvista.domain.tenant.lease.BillableItem;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
@@ -47,7 +46,7 @@ import com.propertyvista.dto.payment.AutoPayReviewLeaseDTO;
 import com.propertyvista.dto.payment.AutoPayReviewPreauthorizedPaymentDTO;
 import com.propertyvista.shared.config.VistaFeatures;
 
-class PreauthorizedPaymentAutoPayReviewReport {
+class AutopayReviewReport {
 
     List<AutoPayReviewLeaseDTO> reportPreauthorizedPaymentsRequiresReview(PreauthorizedPaymentsReportCriteria reportCriteria) {
         List<AutoPayReviewLeaseDTO> records = new ArrayList<AutoPayReviewLeaseDTO>();
@@ -119,15 +118,15 @@ class PreauthorizedPaymentAutoPayReviewReport {
 
         leaseReview.unit().setValue(billingAccount.lease().unit().info().number().getValue());
 
-        BillingCycle nextPaymentCycle = ServerSideFactory.create(PaymentMethodFacade.class).getNextPreauthorizedPaymentBillingCycle(billingAccount.lease());
+        BillingCycle nextPaymentCycle = ServerSideFactory.create(PaymentMethodFacade.class).getNextAutopayBillingCycle(billingAccount.lease());
         BillingCycle previousPaymentCycle = ServerSideFactory.create(BillingCycleFacade.class).getPriorBillingCycle(nextPaymentCycle);
 
-        leaseReview.paymentDue().setValue(nextPaymentCycle.targetPadExecutionDate().getValue());
+        leaseReview.paymentDue().setValue(nextPaymentCycle.targetAutopayExecutionDate().getValue());
 
         boolean reviewRequired = false;
-        List<PreauthorizedPayment> preauthorizedPayments = getPreauthorizedPayments(billingAccount, nextPaymentCycle);
-        Set<PreauthorizedPayment> previousCycleRemovedPayments = new HashSet<PreauthorizedPayment>();
-        for (PreauthorizedPayment preauthorizedPayment : preauthorizedPayments) {
+        List<AutopayAgreement> preauthorizedPayments = getPreauthorizedPayments(billingAccount, nextPaymentCycle);
+        Set<AutopayAgreement> previousCycleRemovedPayments = new HashSet<AutopayAgreement>();
+        for (AutopayAgreement preauthorizedPayment : preauthorizedPayments) {
             AutoPayReviewPreauthorizedPaymentDTO papReview = createPreauthorizedPaymentPreview(preauthorizedPayment, previousPaymentCycle, nextPaymentCycle);
             leaseReview.pap().add(papReview);
 
@@ -188,8 +187,8 @@ class PreauthorizedPaymentAutoPayReviewReport {
         }
     }
 
-    private AutoPayReviewPreauthorizedPaymentDTO createPreauthorizedPaymentPreview(PreauthorizedPayment preauthorizedPayment,
-            BillingCycle previousPaymentCycle, BillingCycle nextPaymentCycle) {
+    private AutoPayReviewPreauthorizedPaymentDTO createPreauthorizedPaymentPreview(AutopayAgreement preauthorizedPayment, BillingCycle previousPaymentCycle,
+            BillingCycle nextPaymentCycle) {
         AutoPayReviewPreauthorizedPaymentDTO papReview = EntityFactory.create(AutoPayReviewPreauthorizedPaymentDTO.class);
 
         papReview.pap().set(preauthorizedPayment.createIdentityStub());
@@ -200,7 +199,7 @@ class PreauthorizedPaymentAutoPayReviewReport {
         papReview.paymentMethodView().setValue(preauthorizedPayment.paymentMethod().getStringView());
 
         papReview.reviewRequired().setValue(nextPaymentCycle.billingCycleStartDate().equals(preauthorizedPayment.updatedBySystem()));
-        papReview.changedByTenant().setValue(PreauthorizedPaymentAgreementMananger.isChangeByTenant(preauthorizedPayment, nextPaymentCycle));
+        papReview.changedByTenant().setValue(AutopayAgreementMananger.isChangeByTenant(preauthorizedPayment, nextPaymentCycle));
 
         Map<String, PreauthorizedPaymentCoveredItem> coveredItemItemsPrevious = new LinkedHashMap<String, PreauthorizedPaymentCoveredItem>();
         if (!preauthorizedPayment.reviewOfPap().isNull()) {
@@ -271,7 +270,7 @@ class PreauthorizedPaymentAutoPayReviewReport {
         return papReview;
     }
 
-    private AutoPayReviewPreauthorizedPaymentDTO createPreviousPreauthorizedPaymentPreview(PreauthorizedPayment preauthorizedPayment) {
+    private AutoPayReviewPreauthorizedPaymentDTO createPreviousPreauthorizedPaymentPreview(AutopayAgreement preauthorizedPayment) {
         AutoPayReviewPreauthorizedPaymentDTO papReview = EntityFactory.create(AutoPayReviewPreauthorizedPaymentDTO.class);
         Persistence.ensureRetrieve(preauthorizedPayment, AttachLevel.Attached);
 
@@ -324,8 +323,8 @@ class PreauthorizedPaymentAutoPayReviewReport {
         }
     }
 
-    private List<PreauthorizedPayment> getPreauthorizedPayments(BillingAccount billingAccount, BillingCycle nextPaymentCycle) {
-        List<PreauthorizedPayment> records = new ArrayList<PreauthorizedPayment>();
+    private List<AutopayAgreement> getPreauthorizedPayments(BillingAccount billingAccount, BillingCycle nextPaymentCycle) {
+        List<AutopayAgreement> records = new ArrayList<AutopayAgreement>();
 
         List<LeaseTermTenant> leaseParticipants;
         {
@@ -350,18 +349,11 @@ class PreauthorizedPaymentAutoPayReviewReport {
         }
 
         for (LeaseTermTenant leaseParticipant : leaseParticipants) {
-            List<PreauthorizedPayment> preauthorizedPayments;
+            List<AutopayAgreement> preauthorizedPayments;
             {
-                EntityQueryCriteria<PreauthorizedPayment> criteria = EntityQueryCriteria.create(PreauthorizedPayment.class);
+                EntityQueryCriteria<AutopayAgreement> criteria = EntityQueryCriteria.create(AutopayAgreement.class);
                 criteria.eq(criteria.proto().tenant(), leaseParticipant.leaseParticipant().cast());
                 criteria.eq(criteria.proto().isDeleted(), false);
-
-                {
-                    OrCriterion or = criteria.or();
-                    or.right().ge(criteria.proto().expiring(), nextPaymentCycle.targetPadGenerationDate());
-                    or.left().isNull(criteria.proto().expiring());
-                }
-
                 criteria.asc(criteria.proto().id());
                 preauthorizedPayments = Persistence.service().query(criteria);
             }

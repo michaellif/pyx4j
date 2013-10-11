@@ -42,8 +42,8 @@ import com.propertyvista.domain.security.common.AbstractPmcUser;
 import com.propertyvista.domain.tenant.lease.BillableItem;
 import com.propertyvista.domain.tenant.lease.Tenant;
 
-@Caption(name = "Pre-Authorized Payment")
-public interface PreauthorizedPayment extends IEntity {
+@Caption(name = "Pre-Authorized Payment Agreement")
+public interface AutopayAgreement extends IEntity {
 
     public interface PreauthorizedPaymentCoveredItem extends IEntity {
 
@@ -68,7 +68,7 @@ public interface PreauthorizedPayment extends IEntity {
         @JoinColumn
         @MemberColumn(notNull = true)
         @I18n(strategy = I18n.I18nStrategy.IgnoreThis)
-        PreauthorizedPayment pap();
+        AutopayAgreement pap();
 
         @OrderColumn
         IPrimitive<Integer> orderId();
@@ -80,11 +80,15 @@ public interface PreauthorizedPayment extends IEntity {
     @NotNull
     IPrimitive<Boolean> isDeleted();
 
-    // set to getNextScheduledPreauthorizedPaymentDate during creation
+    /**
+     * billingCycleStartDate when it is first effective (inclusive)
+     */
     IPrimitive<LogicalDate> effectiveFrom();
 
-    // Set when tenant modifies PAP after cut off date to cutOffDate or when is called suspendPreauthorizedPayment to cutOffDate date -1 so it will not work for next PAP
-    IPrimitive<LogicalDate> expiring();
+    /**
+     * billingCycleStartDate when it is no loner effective (exclusive)
+     */
+    IPrimitive<LogicalDate> expiredFrom();
 
     @NotNull
     @ToString(index = 0)
@@ -106,11 +110,16 @@ public interface PreauthorizedPayment extends IEntity {
 
     @Detached
     @I18n(strategy = I18n.I18nStrategy.IgnoreThis)
-    PreauthorizedPayment reviewOfPap();
+    AutopayAgreement reviewOfPap();
 
-    // billingCycleStartDate  when 
+    /**
+     * billingCycleStartDate when it was changed by Tenant
+     */
     IPrimitive<LogicalDate> updatedByTenant();
 
+    /**
+     * billingCycleStartDate when it was renewed/changed by system
+     */
     IPrimitive<LogicalDate> updatedBySystem();
 
     @ReadOnly

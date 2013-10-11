@@ -16,7 +16,6 @@ package com.propertyvista.biz.financial.payment;
 import org.junit.experimental.categories.Category;
 
 import com.pyx4j.config.server.ServerSideFactory;
-import com.pyx4j.gwt.server.DateUtils;
 
 import com.propertyvista.biz.financial.LeaseFinancialTestBase;
 import com.propertyvista.biz.financial.ar.ARFacade;
@@ -54,7 +53,7 @@ public class PadPaymentChargeBaseSunnyDayScenarioTest extends LeaseFinancialTest
 
         approveApplication(true);
 
-        assertEquals("PAD next target date", "01-Apr-2011", getNextTargetPadExecutionDate());
+        assertEquals("PAD next target date", "01-Apr-2011", getAutopayExecutionDate());
 
         // @formatter:off
         new BillTester(getLatestBill()).
@@ -86,10 +85,12 @@ public class PadPaymentChargeBaseSunnyDayScenarioTest extends LeaseFinancialTest
 
         advanceSysDate("1-Apr-2011");
         // Expect PAD executed, verify amount
-        new PaymentRecordTester(getLease().billingAccount()).count(2). //
-                lastRecordStatus(PaymentStatus.Queued).lastRecordAmount("1198.74");
+        new PaymentRecordTester(getLease().billingAccount())//
+                .count(2). //
+                lastRecordStatus(PaymentStatus.Queued)//
+                .lastRecordAmount("1198.74");
 
-        assertEquals("PAD next target date", DateUtils.detectDateformat("01-May-2011"), getNextTargetPadExecutionDate());
+        assertEquals("PAD next target date", "01-May-2011", getAutopayExecutionDate());
 
         advanceSysDate("18-Apr-2011");
 
@@ -113,20 +114,16 @@ public class PadPaymentChargeBaseSunnyDayScenarioTest extends LeaseFinancialTest
         totalDueAmount(eval("1198.74"));
         // @formatter:on
 
-        // we are in the april cycle and pad date is 3 days before Apr 1
-        assertEquals("PAD target date", DateUtils.detectDateformat("29-Mar-2011"), getTargetPadGenerationDate());
-        // the pad for Apr 1 has been executed and the next one is for May 1
-        assertEquals("PAD execution date", DateUtils.detectDateformat("29-Mar-2011"), getActualPadGenerationDate());
-        assertEquals("PAD next target date", DateUtils.detectDateformat("01-May-2011"), getNextTargetPadExecutionDate());
+        assertEquals("PAD next target date", "01-May-2011", getAutopayExecutionDate());
         // if pad did not run - still return the old date for the cycle
         setSysDate("01-May-2011");
-        assertEquals("PAD next target date", DateUtils.detectDateformat("01-Jun-2011"), getNextTargetPadExecutionDate());
+        assertEquals("PAD next target date", "01-Jun-2011", getAutopayExecutionDate());
         // now roll time back and run pad - should see the date for next cycle
         setSysDate("27-Apr-2011");
 
         advanceSysDate("01-May-2011");
         // Expect PAD executed,
-        assertEquals("PAD next target date", DateUtils.detectDateformat("01-Jun-2011"), getNextTargetPadExecutionDate());
+        assertEquals("PAD next target date", "01-Jun-2011", getAutopayExecutionDate());
         new PaymentRecordTester(getLease().billingAccount()).count(3). //
                 lastRecordStatus(PaymentStatus.Queued).lastRecordAmount("1198.74");
 

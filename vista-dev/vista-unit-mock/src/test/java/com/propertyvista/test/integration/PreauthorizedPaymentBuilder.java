@@ -19,7 +19,7 @@ import java.util.List;
 
 import com.pyx4j.entity.shared.EntityFactory;
 
-import com.propertyvista.domain.payment.PreauthorizedPayment.PreauthorizedPaymentCoveredItem;
+import com.propertyvista.domain.payment.AutopayAgreement.PreauthorizedPaymentCoveredItem;
 import com.propertyvista.domain.tenant.lease.BillableItem;
 
 public class PreauthorizedPaymentBuilder {

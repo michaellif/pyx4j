@@ -48,8 +48,8 @@ import com.propertyvista.biz.financial.payment.PaymentMethodFacade;
 import com.propertyvista.domain.payment.EcheckInfo;
 import com.propertyvista.domain.payment.LeasePaymentMethod;
 import com.propertyvista.domain.payment.PaymentType;
-import com.propertyvista.domain.payment.PreauthorizedPayment;
-import com.propertyvista.domain.payment.PreauthorizedPayment.PreauthorizedPaymentCoveredItem;
+import com.propertyvista.domain.payment.AutopayAgreement;
+import com.propertyvista.domain.payment.AutopayAgreement.PreauthorizedPaymentCoveredItem;
 import com.propertyvista.domain.tenant.Customer;
 import com.propertyvista.domain.tenant.lease.BillableItem;
 import com.propertyvista.domain.tenant.lease.Lease;
@@ -282,7 +282,7 @@ public class TenantPadProcessor {
         assignUid(leasePadEntities);
         calulateLeasePercents(leasePadEntities);
 
-        final List<PreauthorizedPayment> createdOrExistingPaps = new ArrayList<PreauthorizedPayment>();
+        final List<AutopayAgreement> createdOrExistingPaps = new ArrayList<AutopayAgreement>();
 
         for (final PadFileModel padFileModel : leasePadEntities) {
             if ((!padFileModel._processorInformation().status().isNull())
@@ -292,10 +292,10 @@ public class TenantPadProcessor {
 
             final TenantPadCounter saveCounter = new TenantPadCounter();
             try {
-                PreauthorizedPayment pap = new UnitOfWork(TransactionScopeOption.RequiresNew).execute(new Executable<PreauthorizedPayment, RuntimeException>() {
+                AutopayAgreement pap = new UnitOfWork(TransactionScopeOption.RequiresNew).execute(new Executable<AutopayAgreement, RuntimeException>() {
 
                     @Override
-                    public PreauthorizedPayment execute() throws RuntimeException {
+                    public AutopayAgreement execute() throws RuntimeException {
                         return savePad(padFileModel, saveCounter);
                     }
                 });
@@ -319,12 +319,12 @@ public class TenantPadProcessor {
             @Override
             public Void execute() throws RuntimeException {
 
-                EntityQueryCriteria<PreauthorizedPayment> criteria = EntityQueryCriteria.create(PreauthorizedPayment.class);
+                EntityQueryCriteria<AutopayAgreement> criteria = EntityQueryCriteria.create(AutopayAgreement.class);
                 criteria.eq(criteria.proto().tenant().lease(), lease);
                 criteria.eq(criteria.proto().isDeleted(), Boolean.FALSE);
-                for (PreauthorizedPayment pap : Persistence.service().query(criteria)) {
+                for (AutopayAgreement pap : Persistence.service().query(criteria)) {
                     if (!createdOrExistingPaps.contains(pap)) {
-                        ServerSideFactory.create(PaymentMethodFacade.class).deletePreauthorizedPayment(pap);
+                        ServerSideFactory.create(PaymentMethodFacade.class).deleteAutopayAgreement(pap);
                         counters.removed++;
                     }
                 }
@@ -839,7 +839,7 @@ public class TenantPadProcessor {
 
     }
 
-    private PreauthorizedPayment savePad(PadFileModel padFileModel, TenantPadCounter counters) {
+    private AutopayAgreement savePad(PadFileModel padFileModel, TenantPadCounter counters) {
 
         Tenant tenant = padFileModel._processorInformation().tenant();
 
@@ -854,7 +854,7 @@ public class TenantPadProcessor {
             details.nameOn().setValue(tenant.customer().person().name().getStringView());
         }
 
-        PreauthorizedPayment correspondingPap = null;
+        AutopayAgreement correspondingPap = null;
 
         Persistence.service().retrieve(tenant.customer());
         Persistence.service().retrieveMember(tenant.customer().paymentMethods());
@@ -862,9 +862,9 @@ public class TenantPadProcessor {
         if (existingPaymentMethod != null) {
             // Update PAP if one exists for existing PaymentMethod
             if (!padFileModel.charge().isNull() || !padFileModel._processorInformation().percent().isNull()) {
-                List<PreauthorizedPayment> paps = new ArrayList<PreauthorizedPayment>();
+                List<AutopayAgreement> paps = new ArrayList<AutopayAgreement>();
                 {
-                    EntityQueryCriteria<PreauthorizedPayment> criteria = EntityQueryCriteria.create(PreauthorizedPayment.class);
+                    EntityQueryCriteria<AutopayAgreement> criteria = EntityQueryCriteria.create(AutopayAgreement.class);
                     criteria.eq(criteria.proto().paymentMethod(), existingPaymentMethod);
                     criteria.eq(criteria.proto().tenant(), tenant);
                     criteria.eq(criteria.proto().isDeleted(), false);
@@ -872,9 +872,9 @@ public class TenantPadProcessor {
                 }
                 //We do not support import of more then one PAP per PaymentMethod
                 boolean sameAmountPapFound = false;
-                for (PreauthorizedPayment pap : paps) {
+                for (AutopayAgreement pap : paps) {
                     if (!isSameAmount(pap, padFileModel)) {
-                        ServerSideFactory.create(PaymentMethodFacade.class).deletePreauthorizedPayment(pap);
+                        ServerSideFactory.create(PaymentMethodFacade.class).deleteAutopayAgreement(pap);
                     } else {
                         sameAmountPapFound = true;
                         correspondingPap = pap;
@@ -927,7 +927,7 @@ public class TenantPadProcessor {
         return null;
     }
 
-    private boolean isSameAmount(PreauthorizedPayment pap, PadFileModel padFileModel) {
+    private boolean isSameAmount(AutopayAgreement pap, PadFileModel padFileModel) {
         if (pap.coveredItems().size() != padFileModel._processorInformation().accountCharges().size()) {
             return false;
         }
@@ -954,8 +954,8 @@ public class TenantPadProcessor {
         return true;
     }
 
-    private PreauthorizedPayment createPAP(LeasePaymentMethod method, PadFileModel padFileModel, Tenant tenant) {
-        PreauthorizedPayment pap = EntityFactory.create(PreauthorizedPayment.class);
+    private AutopayAgreement createPAP(LeasePaymentMethod method, PadFileModel padFileModel, Tenant tenant) {
+        AutopayAgreement pap = EntityFactory.create(AutopayAgreement.class);
         pap.paymentMethod().set(method);
         pap.tenant().set(tenant);
 

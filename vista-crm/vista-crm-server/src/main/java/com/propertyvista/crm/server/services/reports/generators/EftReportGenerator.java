@@ -29,8 +29,8 @@ import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.Path;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria.Sort;
-import com.pyx4j.entity.shared.utils.EntityComparatorFactory;
 import com.pyx4j.entity.shared.utils.EntityBinder;
+import com.pyx4j.entity.shared.utils.EntityComparatorFactory;
 import com.pyx4j.essentials.server.services.reports.ReportExporter;
 import com.pyx4j.essentials.server.services.reports.ReportProgressStatus;
 import com.pyx4j.gwt.server.IOUtils;
@@ -131,9 +131,9 @@ public class EftReportGenerator implements ReportExporter {
             Set<LogicalDate> padGenerationDays = new HashSet<LogicalDate>();
             EntityQueryCriteria<BillingCycle> criteria = EntityQueryCriteria.create(BillingCycle.class);
             criteria.eq(criteria.proto().billingCycleStartDate(), reportMetadata.billingCycleStartDate().getValue());
-            criteria.isNull(criteria.proto().actualPadGenerationDate());
+            criteria.isNull(criteria.proto().actualAutopayExecutionDate());
             for (BillingCycle cycle : Persistence.secureQuery(criteria)) {
-                padGenerationDays.add(cycle.targetPadGenerationDate().getValue());
+                padGenerationDays.add(cycle.targetAutopayExecutionDate().getValue());
             }
 
             normalizeBuildingsFilter(reportMetadata);

@@ -33,8 +33,8 @@ import com.propertyvista.domain.financial.PaymentRecord;
 import com.propertyvista.domain.financial.offering.ProductItem;
 import com.propertyvista.domain.payment.LeasePaymentMethod;
 import com.propertyvista.domain.payment.PaymentType;
-import com.propertyvista.domain.payment.PreauthorizedPayment;
-import com.propertyvista.domain.payment.PreauthorizedPayment.PreauthorizedPaymentCoveredItem;
+import com.propertyvista.domain.payment.AutopayAgreement;
+import com.propertyvista.domain.payment.AutopayAgreement.PreauthorizedPaymentCoveredItem;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.tenant.Customer;
@@ -170,7 +170,7 @@ public class LeaseDataModel extends MockDataModel<Lease> {
      * 
      * Set Preauthorized Payment to first found tenant with eCheck payment method, otherwise returns false
      */
-    public PreauthorizedPayment createPreauthorizedPayment(Lease lease, List<PreauthorizedPaymentCoveredItem> items) {
+    public AutopayAgreement createPreauthorizedPayment(Lease lease, List<PreauthorizedPaymentCoveredItem> items) {
         Persistence.service().retrieveMember(lease.leaseParticipants());
         // Get first tenant
         Tenant tenant = lease.leaseParticipants().iterator().next().cast();
@@ -178,11 +178,11 @@ public class LeaseDataModel extends MockDataModel<Lease> {
 
         for (LeasePaymentMethod paymentMethod : profileMethods) {
             if (paymentMethod.type().getValue() == PaymentType.Echeck) {
-                PreauthorizedPayment pap = EntityFactory.create(PreauthorizedPayment.class);
+                AutopayAgreement pap = EntityFactory.create(AutopayAgreement.class);
                 pap.paymentMethod().set(paymentMethod);
                 pap.coveredItems().addAll(items);
                 pap.comments().setValue("Preauthorized Payment");
-                ServerSideFactory.create(PaymentMethodFacade.class).persistPreauthorizedPayment(pap, tenant);
+                ServerSideFactory.create(PaymentMethodFacade.class).persistAutopayAgreement(pap, tenant);
                 return pap;
             }
         }

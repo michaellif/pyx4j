@@ -18,14 +18,14 @@ import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
 
-import com.propertyvista.domain.payment.PreauthorizedPayment;
+import com.propertyvista.domain.payment.AutopayAgreement;
 import com.propertyvista.domain.tenant.lease.Lease;
 
 @Transient
 public interface PapReviewDTO extends IEntity, BulkEditableEntity {
 
     @Detached
-    PreauthorizedPayment papId();
+    AutopayAgreement papId();
 
     PapReviewCaptionDTO caption();
 

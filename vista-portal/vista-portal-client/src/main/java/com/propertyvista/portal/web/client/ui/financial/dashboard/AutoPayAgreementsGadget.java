@@ -14,10 +14,7 @@
 package com.propertyvista.portal.web.client.ui.financial.dashboard;
 
 import com.google.gwt.user.client.Command;
-import com.google.gwt.user.client.ui.HTML;
-import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.IsWidget;
-import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.commons.css.StyleManager;
 import com.pyx4j.commons.css.ThemeColor;
@@ -36,7 +33,6 @@ import com.pyx4j.widgets.client.Button;
 import com.pyx4j.widgets.client.actionbar.Toolbar;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
 
-import com.propertyvista.common.client.theme.VistaTheme;
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
 import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
 import com.propertyvista.domain.payment.PaymentMethod;
@@ -141,20 +137,11 @@ public class AutoPayAgreementsGadget extends AbstractGadget<FinancialDashboardVi
 
         private class AutoPayViewer extends CEntityDecoratableForm<AutoPayInfoDTO> {
 
-            private final BasicFlexFormPanel expirationWarning = new BasicFlexFormPanel();
-
             public AutoPayViewer() {
                 super(AutoPayInfoDTO.class);
 
                 setViewable(true);
                 inheritViewable(false);
-
-                Widget expirationWarningLabel = new HTML(i18n.tr("This Pre-Authorized Payment is expired - needs to be replaced with new one!"));
-                expirationWarningLabel.setStyleName(VistaTheme.StyleName.warningMessage.name());
-                expirationWarning.setWidget(0, 0, expirationWarningLabel);
-                expirationWarning.getCellFormatter().setHorizontalAlignment(0, 0, HasHorizontalAlignment.ALIGN_CENTER);
-                expirationWarning.setHR(1, 0, 1);
-                expirationWarning.setBR(2, 0, 1);
             }
 
             @Override
@@ -162,8 +149,6 @@ public class AutoPayAgreementsGadget extends AbstractGadget<FinancialDashboardVi
                 BasicFlexFormPanel content = new BasicFlexFormPanel();
                 int row = -1;
 
-                content.setWidget(++row, 0, expirationWarning);
-                content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().expiring()), 100).build());
                 content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().payer(), new CEntityLabel<Tenant>()), 250).build());
                 content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().paymentMethod(), new CEntityLabel<PaymentMethod>()), 250).build());
                 content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().amount()), 100).build());
@@ -182,10 +167,6 @@ public class AutoPayAgreementsGadget extends AbstractGadget<FinancialDashboardVi
             @Override
             protected void onValueSet(boolean populate) {
                 super.onValueSet(populate);
-
-                expirationWarning.setVisible(!getValue().expiring().isNull());
-                get(proto().expiring()).setVisible(!getValue().expiring().isNull());
-
                 ((CEntityFolderItem<AutoPayInfoDTO>) getParent()).setRemovable(!getValue().paymentMethod().isEmpty());
             }
         }

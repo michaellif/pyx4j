@@ -17,10 +17,10 @@ import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.shared.IList;
 
-import com.propertyvista.domain.payment.PreauthorizedPayment;
+import com.propertyvista.domain.payment.AutopayAgreement;
 
 @Transient
-public interface PreauthorizedPaymentDTO extends PreauthorizedPayment {
+public interface PreauthorizedPaymentDTO extends AutopayAgreement {
 
     @Owned
     IList<PreauthorizedPaymentCoveredItemDTO> coveredItemsDTO();

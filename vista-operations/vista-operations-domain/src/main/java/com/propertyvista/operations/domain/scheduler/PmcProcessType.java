@@ -44,9 +44,6 @@ public enum PmcProcessType implements Serializable {
     @Translate("P 1 - Issue PreAuthorized Payments")
     paymentsIssue(PmcProcessOptions.RunForDay),
 
-    @Translate("P 2 - Update PreAuthorized Payments")
-    paymentsUpdate(PmcProcessOptions.RunForDay),
-
     @Translate("P 3 - Process Scheduled eCheque Payments")
     paymentsScheduledEcheck(PmcProcessOptions.RunForDay),
 

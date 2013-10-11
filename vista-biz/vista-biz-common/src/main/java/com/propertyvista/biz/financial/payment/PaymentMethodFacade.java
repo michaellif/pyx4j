@@ -17,14 +17,14 @@ import java.util.List;
 
 import com.pyx4j.commons.LogicalDate;
 
-import com.propertyvista.crm.rpc.dto.financial.autopayreview.ReviewedPapDTO;
+import com.propertyvista.crm.rpc.dto.financial.autopayreview.ReviewedAutopayAgreementDTO;
 import com.propertyvista.domain.financial.BillingAccount;
 import com.propertyvista.domain.financial.PaymentRecord;
 import com.propertyvista.domain.financial.billing.BillingCycle;
+import com.propertyvista.domain.payment.AutopayAgreement;
 import com.propertyvista.domain.payment.CreditCardInfo;
 import com.propertyvista.domain.payment.InsurancePaymentMethod;
 import com.propertyvista.domain.payment.LeasePaymentMethod;
-import com.propertyvista.domain.payment.PreauthorizedPayment;
 import com.propertyvista.domain.pmc.Pmc;
 import com.propertyvista.domain.pmc.PmcPaymentMethod;
 import com.propertyvista.domain.property.asset.building.Building;
@@ -60,39 +60,33 @@ public interface PaymentMethodFacade {
 
     // PAP:
 
-    PreauthorizedPayment persistPreauthorizedPayment(PreauthorizedPayment preauthorizedPayment, Tenant tenantId);
+    AutopayAgreement persistAutopayAgreement(AutopayAgreement preauthorizedPayment, Tenant tenantId);
 
-    void persitPreauthorizedPaymentReview(ReviewedPapDTO preauthorizedPaymentChanges);
+    void persitAutopayAgreementReview(ReviewedAutopayAgreementDTO preauthorizedPaymentChanges);
 
-    void deletePreauthorizedPayment(PreauthorizedPayment preauthorizedPaymentId);
+    void deleteAutopayAgreement(AutopayAgreement preauthorizedPaymentId);
 
     /**
      * Suspend PreauthorizedPayments if required during LeaseTerm finalize.
      * 
      * Update PreauthorizedPaymentCoveredItem to point to new BillableItem (May not be required after BillableItem version support)
      */
-    void renewPreauthorizedPayments(Lease lease);
+    void renewAutopayAgreement(Lease lease);
 
     /**
      * Suspend/Restore PreauthorizedPayments according to LeaseState and AutoPay policy during Lease persist.
      */
     void updatePreauthorizedPayments(Lease lease);
 
-    AutoPayReviewLeaseDTO getPreauthorizedPaymentRequiresReview(BillingAccount billingAccountId);
+    AutoPayReviewLeaseDTO getAutopayAgreementRequiresReview(BillingAccount billingAccountId);
 
-    List<PreauthorizedPayment> retrievePreauthorizedPayments(Tenant tenantId);
+    List<AutopayAgreement> retrieveAutopayAgreements(Tenant tenantId);
 
-    List<PreauthorizedPayment> retrieveCurrentPreauthorizedPayments(Lease lease);
+    List<AutopayAgreement> retrieveAutopayAgreements(Lease lease);
 
-    BillingCycle getCurrentPreauthorizedPaymentBillingCycle(Lease lease);
+    BillingCycle getNextAutopayBillingCycle(Lease lease);
 
-    LogicalDate getCurrentPreauthorizedPaymentDate(Lease lease);
-
-    LogicalDate getPreauthorizedPaymentCutOffDate(Lease lease);
-
-    BillingCycle getNextPreauthorizedPaymentBillingCycle(Lease lease);
-
-    LogicalDate getNextPreauthorizedPaymentDate(Lease lease);
+    LogicalDate getNextAutopayDate(Lease lease);
 
     List<PaymentRecord> calulatePreauthorizedPayment(BillingCycle billingCycle, BillingAccount billingAccountId);
 }

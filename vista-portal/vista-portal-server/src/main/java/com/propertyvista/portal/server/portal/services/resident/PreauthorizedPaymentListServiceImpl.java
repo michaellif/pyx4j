@@ -28,16 +28,16 @@ import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 
 import com.propertyvista.biz.financial.payment.PaymentMethodFacade;
 import com.propertyvista.biz.tenant.lease.LeaseFacade;
-import com.propertyvista.domain.payment.PreauthorizedPayment;
+import com.propertyvista.domain.payment.AutopayAgreement;
 import com.propertyvista.portal.rpc.portal.dto.PreauthorizedPaymentListDTO;
 import com.propertyvista.portal.rpc.portal.services.resident.PreauthorizedPaymentListService;
 import com.propertyvista.portal.server.portal.TenantAppContext;
 
-public class PreauthorizedPaymentListServiceImpl extends AbstractListServiceDtoImpl<PreauthorizedPayment, PreauthorizedPaymentListDTO.ListItemDTO> implements
+public class PreauthorizedPaymentListServiceImpl extends AbstractListServiceDtoImpl<AutopayAgreement, PreauthorizedPaymentListDTO.ListItemDTO> implements
         PreauthorizedPaymentListService {
 
     public PreauthorizedPaymentListServiceImpl() {
-        super(PreauthorizedPayment.class, PreauthorizedPaymentListDTO.ListItemDTO.class);
+        super(AutopayAgreement.class, PreauthorizedPaymentListDTO.ListItemDTO.class);
     }
 
     @Override
@@ -46,15 +46,14 @@ public class PreauthorizedPaymentListServiceImpl extends AbstractListServiceDtoI
     }
 
     @Override
-    protected void enhanceListCriteria(EntityListCriteria<PreauthorizedPayment> dbCriteria,
-            EntityListCriteria<PreauthorizedPaymentListDTO.ListItemDTO> dtoCriteria) {
+    protected void enhanceListCriteria(EntityListCriteria<AutopayAgreement> dbCriteria, EntityListCriteria<PreauthorizedPaymentListDTO.ListItemDTO> dtoCriteria) {
         dbCriteria.add(PropertyCriterion.eq(dbCriteria.proto().tenant().lease(), TenantAppContext.getCurrentUserLeaseIdStub()));
         dbCriteria.add(PropertyCriterion.eq(dbCriteria.proto().isDeleted(), Boolean.FALSE));
         dbCriteria.sort(new Sort(dbCriteria.proto().tenant(), false));
     }
 
     @Override
-    protected void enhanceListRetrieved(PreauthorizedPayment entity, PreauthorizedPaymentListDTO.ListItemDTO dto) {
+    protected void enhanceListRetrieved(AutopayAgreement entity, PreauthorizedPaymentListDTO.ListItemDTO dto) {
         super.enhanceListRetrieved(entity, dto);
         Persistence.ensureRetrieve(dto.tenant(), AttachLevel.Attached);
         Persistence.ensureRetrieve(dto.tenant().customer().user(), AttachLevel.Attached);
@@ -67,7 +66,7 @@ public class PreauthorizedPaymentListServiceImpl extends AbstractListServiceDtoI
 
     @Override
     public void delete(AsyncCallback<Boolean> callback, Key entityId) {
-        ServerSideFactory.create(PaymentMethodFacade.class).deletePreauthorizedPayment(Persistence.service().retrieve(boClass, entityId));
+        ServerSideFactory.create(PaymentMethodFacade.class).deleteAutopayAgreement(Persistence.service().retrieve(boClass, entityId));
         Persistence.service().commit();
 
         callback.onSuccess(Boolean.TRUE);
@@ -82,10 +81,9 @@ public class PreauthorizedPaymentListServiceImpl extends AbstractListServiceDtoI
 
                 dto.preauthorizedPayments().addAll(result.getData());
                 dto.currentPaymentDate().setValue(
-                        ServerSideFactory.create(PaymentMethodFacade.class).getCurrentPreauthorizedPaymentDate(TenantAppContext.getCurrentUserLeaseIdStub()));
+                        ServerSideFactory.create(PaymentMethodFacade.class).getNextAutopayDate(TenantAppContext.getCurrentUserLeaseIdStub()));
                 dto.nextPaymentDate().setValue(
-                        ServerSideFactory.create(PaymentMethodFacade.class).getNextPreauthorizedPaymentDate(
-                                TenantAppContext.getCurrentUserLeaseIdStub()));
+                        ServerSideFactory.create(PaymentMethodFacade.class).getNextAutopayDate(TenantAppContext.getCurrentUserLeaseIdStub()));
                 dto.isMoveOutWithinNextBillingCycle().setValue(
                         ServerSideFactory.create(LeaseFacade.class).isMoveOutWithinNextBillingCycle(TenantAppContext.getCurrentUserLeaseIdStub()));
 

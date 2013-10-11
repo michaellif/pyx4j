@@ -245,7 +245,7 @@ public abstract class LeaseAbstractManager {
         if (leaseTerm.equals(leaseTerm.lease().currentTerm())) {
             updateLeaseDeposits(leaseTerm.lease());
 
-            ServerSideFactory.create(PaymentMethodFacade.class).renewPreauthorizedPayments(leaseTerm.lease());
+            ServerSideFactory.create(PaymentMethodFacade.class).renewAutopayAgreement(leaseTerm.lease());
         }
 
         return leaseTerm;
@@ -709,7 +709,7 @@ public abstract class LeaseAbstractManager {
 
     public boolean isMoveOutWithinNextBillingCycle(Lease leaseId) {
         Lease lease = Persistence.service().retrieve(Lease.class, leaseId.getPrimaryKey());
-        BillingCycle nextCycle = ServerSideFactory.create(PaymentMethodFacade.class).getNextPreauthorizedPaymentBillingCycle(lease);
+        BillingCycle nextCycle = ServerSideFactory.create(PaymentMethodFacade.class).getNextAutopayBillingCycle(lease);
         AutoPayPolicy autoPayPolicy = ServerSideFactory.create(PolicyFacade.class).obtainEffectivePolicy(lease.unit().building(), AutoPayPolicy.class);
 
         return (autoPayPolicy.excludeLastBillingPeriodCharge().getValue(Boolean.TRUE) && (beforeOrEqual(lease.expectedMoveOut(),

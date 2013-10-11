@@ -52,8 +52,7 @@ public class BillingCyclePolicyChangeTest extends LeaseFinancialTestBase {
         .billingCycleStartDate("01-Apr-2013")
         .billingCycleEndDate("30-Apr-2013")
         .billExecutionDate("17-Mar-2013")
-        .padGenerationDate("29-Mar-2013")
-        .padExecutionDate("01-Apr-2013");
+        .autopayExecutionDate("01-Apr-2013");
         // @formatter:on
 
         // CASE 1: Update policy on BEFORE EXECUTION DATE; all new dates are in the future
@@ -67,8 +66,7 @@ public class BillingCyclePolicyChangeTest extends LeaseFinancialTestBase {
         // @formatter:off
         new BillingCycleTester(billingCycle)
         .billExecutionDate("18-Mar-2013") // updated
-        .padGenerationDate("30-Mar-2013") // updated
-        .padExecutionDate("31-Mar-2013"); // updated
+        .autopayExecutionDate("31-Mar-2013"); // updated
         // @formatter:on
 
         // CASE 2: Update policy BEFORE EXECUTION DATE - new exec day is today
@@ -81,8 +79,7 @@ public class BillingCyclePolicyChangeTest extends LeaseFinancialTestBase {
         // @formatter:off
         new BillingCycleTester(billingCycle)
         .billExecutionDate("18-Mar-2013") // no change
-        .padGenerationDate("29-Mar-2013") // updated
-        .padExecutionDate("01-Apr-2013"); // updated
+        .autopayExecutionDate("01-Apr-2013"); // updated
         // @formatter:on
 
         // CASE 3: Update policy AFTER BILL EXEC DATE - new padGen day is in the future
@@ -97,8 +94,7 @@ public class BillingCyclePolicyChangeTest extends LeaseFinancialTestBase {
         // @formatter:off
         new BillingCycleTester(billingCycle)
         .billExecutionDate("18-Mar-2013") // no change
-        .padGenerationDate("28-Mar-2013") // updated
-        .padExecutionDate("31-Mar-2013"); // updated
+        .autopayExecutionDate("31-Mar-2013"); // updated
         // @formatter:on
 
         // CASE 4: Update policy AFTER PAD GEN DATE - new padExec day is in the future
@@ -112,8 +108,7 @@ public class BillingCyclePolicyChangeTest extends LeaseFinancialTestBase {
         // @formatter:off
         new BillingCycleTester(billingCycle)
         .billExecutionDate("18-Mar-2013") // no change
-        .padGenerationDate("28-Mar-2013") // no change
-        .padExecutionDate("01-Apr-2013"); // updated
+        .autopayExecutionDate("01-Apr-2013"); // updated
         // @formatter:on
 
         // CASE 5: Update policy ON PAD EXEC DATE - new padExec day is in the future
@@ -127,8 +122,7 @@ public class BillingCyclePolicyChangeTest extends LeaseFinancialTestBase {
         // @formatter:off
         new BillingCycleTester(billingCycle)
         .billExecutionDate("18-Mar-2013") // no change
-        .padGenerationDate("28-Mar-2013") // no change
-        .padExecutionDate("01-Apr-2013"); // no change
+        .autopayExecutionDate("01-Apr-2013"); // no change
         // @formatter:on
     }
 
@@ -150,8 +144,7 @@ public class BillingCyclePolicyChangeTest extends LeaseFinancialTestBase {
         .billingCycleStartDate("01-Apr-2013")
         .billingCycleEndDate("30-Apr-2013")
         .billExecutionDate("18-Mar-2013") // updated
-        .padGenerationDate("30-Mar-2013") // updated
-        .padExecutionDate("31-Mar-2013"); // updated
+        .autopayExecutionDate("31-Mar-2013"); // updated
         // @formatter:on
 
         // CASE 2: delete newly created policy and validate the dates are back to original values
@@ -166,8 +159,7 @@ public class BillingCyclePolicyChangeTest extends LeaseFinancialTestBase {
         .billingCycleStartDate("01-Apr-2013")
         .billingCycleEndDate("30-Apr-2013")
         .billExecutionDate("17-Mar-2013")
-        .padGenerationDate("29-Mar-2013")
-        .padExecutionDate("01-Apr-2013");
+        .autopayExecutionDate("01-Apr-2013");
         // @formatter:on
     }
 
@@ -185,8 +177,7 @@ public class BillingCyclePolicyChangeTest extends LeaseFinancialTestBase {
         for (LeaseBillingTypePolicyItem item : policy.availableBillingTypes()) {
             if (item.billingPeriod().getValue().equals(BillingPeriod.Monthly)) {
                 item.billExecutionDayOffset().setValue(billExecOffset);
-                item.padCalculationDayOffset().setValue(padCalcOffset);
-                item.padExecutionDayOffset().setValue(padExecOffset);
+                item.autopayExecutionDayOffset().setValue(padExecOffset);
                 break;
             }
         }
@@ -203,8 +194,7 @@ public class BillingCyclePolicyChangeTest extends LeaseFinancialTestBase {
         billingType.paymentDueDayOffset().setValue(0);
         billingType.finalDueDayOffset().setValue(15);
         billingType.billExecutionDayOffset().setValue(-15);
-        billingType.padCalculationDayOffset().setValue(-3);
-        billingType.padExecutionDayOffset().setValue(0);
+        billingType.autopayExecutionDayOffset().setValue(0);
         policy.availableBillingTypes().add(billingType);
         Persistence.service().persist(policy);
         return policy;

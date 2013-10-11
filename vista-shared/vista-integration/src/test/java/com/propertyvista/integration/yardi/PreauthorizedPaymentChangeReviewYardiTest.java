@@ -85,7 +85,7 @@ public class PreauthorizedPaymentChangeReviewYardiTest extends PaymentYardiTestB
                 .activeCount(1)//
                 .lastRecordAmount(eval("600 + 80"));
 
-        AutoPayReviewLeaseDTO reviewDTO = ServerSideFactory.create(PaymentMethodFacade.class).getPreauthorizedPaymentRequiresReview(lease.billingAccount());
+        AutoPayReviewLeaseDTO reviewDTO = ServerSideFactory.create(PaymentMethodFacade.class).getAutopayAgreementRequiresReview(lease.billingAccount());
 
         // Verify created Data
         {

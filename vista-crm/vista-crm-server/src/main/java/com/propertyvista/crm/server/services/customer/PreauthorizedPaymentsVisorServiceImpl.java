@@ -38,9 +38,9 @@ import com.propertyvista.biz.financial.payment.PaymentMethodFacade;
 import com.propertyvista.crm.rpc.dto.tenant.PreauthorizedPaymentsDTO;
 import com.propertyvista.crm.rpc.services.customer.PreauthorizedPaymentsVisorService;
 import com.propertyvista.domain.financial.ARCode;
+import com.propertyvista.domain.payment.AutopayAgreement;
+import com.propertyvista.domain.payment.AutopayAgreement.PreauthorizedPaymentCoveredItem;
 import com.propertyvista.domain.payment.LeasePaymentMethod;
-import com.propertyvista.domain.payment.PreauthorizedPayment;
-import com.propertyvista.domain.payment.PreauthorizedPayment.PreauthorizedPaymentCoveredItem;
 import com.propertyvista.domain.tenant.lease.BillableItem;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
@@ -75,8 +75,8 @@ public class PreauthorizedPaymentsVisorServiceImpl implements PreauthorizedPayme
     }
 
     @Override
-    public void delete(AsyncCallback<VoidSerializable> callback, PreauthorizedPayment pad) {
-        ServerSideFactory.create(PaymentMethodFacade.class).deletePreauthorizedPayment(pad);
+    public void delete(AsyncCallback<VoidSerializable> callback, AutopayAgreement pad) {
+        ServerSideFactory.create(PaymentMethodFacade.class).deleteAutopayAgreement(pad);
         Persistence.service().commit();
 
         callback.onSuccess(null);
@@ -84,21 +84,21 @@ public class PreauthorizedPaymentsVisorServiceImpl implements PreauthorizedPayme
 
     @Override
     public void save(AsyncCallback<VoidSerializable> callback, PreauthorizedPaymentsDTO dto) {
-        List<PreauthorizedPayment> paps = new ArrayList<PreauthorizedPayment>();
+        List<AutopayAgreement> paps = new ArrayList<AutopayAgreement>();
         for (PreauthorizedPaymentDTO papDTO : dto.preauthorizedPayments()) {
             updateCoveredItems(papDTO);
             paps.add(new PapConverter().createBO(papDTO));
         }
 
         // delete payment methods removed in UI:
-        for (PreauthorizedPayment pap : ServerSideFactory.create(PaymentMethodFacade.class).retrievePreauthorizedPayments(dto.tenant())) {
+        for (AutopayAgreement pap : ServerSideFactory.create(PaymentMethodFacade.class).retrieveAutopayAgreements(dto.tenant())) {
             if (!paps.contains(pap)) {
-                ServerSideFactory.create(PaymentMethodFacade.class).deletePreauthorizedPayment(pap);
+                ServerSideFactory.create(PaymentMethodFacade.class).deleteAutopayAgreement(pap);
             }
         }
 
         // save new/edited ones:
-        for (PreauthorizedPayment pap : paps) {
+        for (AutopayAgreement pap : paps) {
             // remove zero covered items:
             Iterator<PreauthorizedPaymentCoveredItem> iterator = pap.coveredItems().iterator();
             while (iterator.hasNext()) {
@@ -111,7 +111,7 @@ public class PreauthorizedPaymentsVisorServiceImpl implements PreauthorizedPayme
                 }
             }
 
-            ServerSideFactory.create(PaymentMethodFacade.class).persistPreauthorizedPayment(pap, dto.tenant());
+            ServerSideFactory.create(PaymentMethodFacade.class).persistAutopayAgreement(pap, dto.tenant());
         }
 
         Persistence.service().commit();
@@ -120,8 +120,8 @@ public class PreauthorizedPaymentsVisorServiceImpl implements PreauthorizedPayme
     }
 
     @Override
-    public void recollect(AsyncCallback<Vector<PreauthorizedPayment>> callback, Tenant tenantId) {
-        callback.onSuccess(new Vector<PreauthorizedPayment>(ServerSideFactory.create(PaymentMethodFacade.class).retrievePreauthorizedPayments(tenantId)));
+    public void recollect(AsyncCallback<Vector<AutopayAgreement>> callback, Tenant tenantId) {
+        callback.onSuccess(new Vector<AutopayAgreement>(ServerSideFactory.create(PaymentMethodFacade.class).retrieveAutopayAgreements(tenantId)));
     }
 
     private void fillTenantInfo(PreauthorizedPaymentsDTO dto) {
@@ -139,9 +139,7 @@ public class PreauthorizedPaymentsVisorServiceImpl implements PreauthorizedPayme
             dto.tenantInfo().role().setValue(ltp.role().getValue());
         }
 
-        dto.nextScheduledPaymentDate().setValue(
-                ServerSideFactory.create(PaymentMethodFacade.class).getNextPreauthorizedPaymentDate(dto.tenant().lease()));
-        dto.paymentCutOffDate().setValue(ServerSideFactory.create(PaymentMethodFacade.class).getPreauthorizedPaymentCutOffDate(dto.tenant().lease()));
+        dto.nextScheduledPaymentDate().setValue(ServerSideFactory.create(PaymentMethodFacade.class).getNextAutopayDate(dto.tenant().lease()));
     }
 
     private void fillAvailablePaymentMethods(PreauthorizedPaymentsDTO papDto) {
@@ -159,12 +157,12 @@ public class PreauthorizedPaymentsVisorServiceImpl implements PreauthorizedPayme
         Persistence.ensureRetrieve(dto.tenant(), AttachLevel.Attached);
         Persistence.ensureRetrieve(dto.tenant().lease(), AttachLevel.Attached);
 
-        for (PreauthorizedPayment pap : ServerSideFactory.create(PaymentMethodFacade.class).retrievePreauthorizedPayments(dto.tenant())) {
+        for (AutopayAgreement pap : ServerSideFactory.create(PaymentMethodFacade.class).retrieveAutopayAgreements(dto.tenant())) {
             dto.preauthorizedPayments().add(createPreauthorizedPaymentDto(pap));
         }
     }
 
-    private PreauthorizedPaymentDTO createPreauthorizedPaymentDto(PreauthorizedPayment pap) {
+    private PreauthorizedPaymentDTO createPreauthorizedPaymentDto(AutopayAgreement pap) {
         PreauthorizedPaymentDTO papDto = new PapConverter().createTO(pap);
 
         updateCoveredItemsDto(papDto);
@@ -174,10 +172,6 @@ public class PreauthorizedPaymentsVisorServiceImpl implements PreauthorizedPayme
     }
 
     private void fillCoveredItemsDto(PreauthorizedPaymentDTO papDto) {
-        if (!papDto.expiring().isNull()) {
-            return; // do not fill-up expired paps!.. 
-        }
-
         Persistence.ensureRetrieve(papDto.tenant(), AttachLevel.Attached);
         Persistence.ensureRetrieve(papDto.tenant().lease(), AttachLevel.Attached);
 
@@ -218,7 +212,6 @@ public class PreauthorizedPaymentsVisorServiceImpl implements PreauthorizedPayme
         criteria.eq(criteria.proto().pap().tenant().lease(), lease);
         criteria.eq(criteria.proto().billableItem().uid(), billableItem.uid());
         criteria.eq(criteria.proto().pap().isDeleted(), Boolean.FALSE);
-        criteria.isNull(criteria.proto().pap().expiring());
 
         item.covered().setValue(BigDecimal.ZERO);
         for (PreauthorizedPaymentCoveredItem papci : Persistence.secureQuery(criteria)) {
@@ -258,7 +251,6 @@ public class PreauthorizedPaymentsVisorServiceImpl implements PreauthorizedPayme
         criteria.eq(criteria.proto().pap().tenant().lease(), lease);
         criteria.eq(criteria.proto().billableItem().uid(), item.billableItem().uid());
         criteria.eq(criteria.proto().pap().isDeleted(), Boolean.FALSE);
-        criteria.isNull(criteria.proto().pap().expiring());
 
         item.covered().setValue(BigDecimal.ZERO);
         for (PreauthorizedPaymentCoveredItem papci : Persistence.secureQuery(criteria)) {
@@ -284,10 +276,10 @@ public class PreauthorizedPaymentsVisorServiceImpl implements PreauthorizedPayme
         }
     }
 
-    private class PapConverter extends EntityBinder<PreauthorizedPayment, PreauthorizedPaymentDTO> {
+    private class PapConverter extends EntityBinder<AutopayAgreement, PreauthorizedPaymentDTO> {
 
         protected PapConverter() {
-            super(PreauthorizedPayment.class, PreauthorizedPaymentDTO.class);
+            super(AutopayAgreement.class, PreauthorizedPaymentDTO.class);
         }
 
         @Override

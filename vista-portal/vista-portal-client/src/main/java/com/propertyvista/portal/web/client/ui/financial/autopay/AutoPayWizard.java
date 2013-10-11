@@ -54,10 +54,10 @@ import com.pyx4j.widgets.client.dialog.MessageDialog;
 
 import com.propertyvista.common.client.theme.VistaTheme;
 import com.propertyvista.domain.contact.AddressSimple;
+import com.propertyvista.domain.payment.AutopayAgreement;
 import com.propertyvista.domain.payment.CreditCardInfo.CreditCardType;
 import com.propertyvista.domain.payment.LeasePaymentMethod;
 import com.propertyvista.domain.payment.PaymentType;
-import com.propertyvista.domain.payment.PreauthorizedPayment;
 import com.propertyvista.domain.tenant.lease.Tenant;
 import com.propertyvista.dto.PaymentDataDTO;
 import com.propertyvista.dto.PaymentDataDTO.PaymentSelect;
@@ -251,9 +251,9 @@ public class AutoPayWizard extends CPortalEntityWizard<AutoPayDTO> {
         } else if (event.getSelectedItem().equals(comfirmationStep)) {
 
             confirmationDetailsHolder.clear();
-            ((AutoPayWizardView.Persenter) getView().getPresenter()).preview(new DefaultAsyncCallback<PreauthorizedPayment>() {
+            ((AutoPayWizardView.Persenter) getView().getPresenter()).preview(new DefaultAsyncCallback<AutopayAgreement>() {
                 @Override
-                public void onSuccess(PreauthorizedPayment result) {
+                public void onSuccess(AutopayAgreement result) {
                     get(proto().coveredItems()).populate(result.coveredItems());
                     confirmationDetailsHolder.setWidget(createConfirmationDetailsPanel());
                 }
@@ -296,7 +296,7 @@ public class AutoPayWizard extends CPortalEntityWizard<AutoPayDTO> {
         });
 
         LogicalDate today = new LogicalDate(ClientContext.getServerDate());
-        if (!today.before(getValue().paymentCutOffDate().getValue()) && !today.after(getValue().nextScheduledPaymentDate().getValue())) {
+        if (!today.after(getValue().nextScheduledPaymentDate().getValue())) {
             get(proto().nextScheduledPaymentDate()).setNote(cutOffDateWarning, NoteStyle.Warn);
         } else {
             get(proto().nextScheduledPaymentDate()).setNote(null);

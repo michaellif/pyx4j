@@ -30,6 +30,7 @@ import com.pyx4j.entity.shared.AttachLevel;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
+import com.pyx4j.entity.shared.utils.EntityGraph;
 
 import com.propertyvista.biz.financial.billing.BillDateUtils;
 import com.propertyvista.biz.policy.PolicyFacade;
@@ -241,11 +242,12 @@ class BillingCycleManager {
 
             // iterate over future billing cycles
             EntityQueryCriteria<BillingCycle> criteria = new EntityQueryCriteria<BillingCycle>(BillingCycle.class);
-            criteria.add(PropertyCriterion.in(criteria.proto().building(), buildings));
-            criteria.add(PropertyCriterion.eq(criteria.proto().billingType().billingPeriod(), newItem.billingPeriod()));
-            criteria.add(PropertyCriterion.gt(criteria.proto().billingCycleStartDate(), SystemDateManager.getDate()));
+            criteria.in(criteria.proto().building(), buildings);
+            criteria.eq(criteria.proto().billingType().billingPeriod(), newItem.billingPeriod());
+            criteria.gt(criteria.proto().billingCycleStartDate(), SystemDateManager.getDate());
             for (BillingCycle billingCycle : Persistence.service().query(criteria)) {
                 // For each cycle we can update ANY date that is in the future
+                boolean updated = false;
                 LogicalDate startDate = billingCycle.billingCycleStartDate().getValue();
                 Date now = SystemDateManager.getDate();
 
@@ -254,25 +256,20 @@ class BillingCycleManager {
                     // Ok, we have not passed that date yet - check that new date is also in the future
                     LogicalDate billExecDate = BillDateUtils.calculateBillingCycleDateByOffset(newItem.billExecutionDayOffset().getValue(), startDate);
                     if (now.before(billExecDate)) {
-                        billingCycle.targetBillExecutionDate().setValue(billExecDate);
-                    }
-                }
-                // PadGenerationDate
-                if (now.before(billingCycle.targetPadGenerationDate().getValue())) {
-                    LogicalDate padCalcDate = BillDateUtils.calculateBillingCycleDateByOffset(newItem.padCalculationDayOffset().getValue(), startDate);
-                    if (now.before(padCalcDate)) {
-                        billingCycle.targetPadGenerationDate().setValue(padCalcDate);
+                        updated |= EntityGraph.updateMember(billingCycle.targetBillExecutionDate(), billExecDate);
                     }
                 }
                 // PadExecutionDate
-                if (now.before(billingCycle.targetPadExecutionDate().getValue())) {
-                    LogicalDate padExecDate = BillDateUtils.calculateBillingCycleDateByOffset(newItem.padExecutionDayOffset().getValue(), startDate);
+                if (now.before(billingCycle.targetAutopayExecutionDate().getValue())) {
+                    LogicalDate padExecDate = BillDateUtils.calculateBillingCycleDateByOffset(newItem.autopayExecutionDayOffset().getValue(), startDate);
                     if (now.before(padExecDate)) {
-                        billingCycle.targetPadExecutionDate().setValue(padExecDate);
+                        updated |= EntityGraph.updateMember(billingCycle.targetAutopayExecutionDate(), padExecDate);
                     }
                 }
 
-                Persistence.service().persist(billingCycle);
+                if (updated) {
+                    Persistence.service().persist(billingCycle);
+                }
             }
         }
     }
@@ -339,10 +336,10 @@ class BillingCycleManager {
 
         billingCycle.targetBillExecutionDate().setValue(
                 BillDateUtils.calculateBillingCycleDateByOffset(policy.billExecutionDayOffset().getValue(), billingCycle.billingCycleStartDate().getValue()));
-        billingCycle.targetPadGenerationDate().setValue(
-                BillDateUtils.calculateBillingCycleDateByOffset(policy.padCalculationDayOffset().getValue(), billingCycle.billingCycleStartDate().getValue()));
-        billingCycle.targetPadExecutionDate().setValue(
-                BillDateUtils.calculateBillingCycleDateByOffset(policy.padExecutionDayOffset().getValue(), billingCycle.billingCycleStartDate().getValue()));
+        billingCycle.targetAutopayExecutionDate()
+                .setValue(
+                        BillDateUtils.calculateBillingCycleDateByOffset(policy.autopayExecutionDayOffset().getValue(), billingCycle.billingCycleStartDate()
+                                .getValue()));
 
         Persistence.service().persist(billingCycle);
         return billingCycle;

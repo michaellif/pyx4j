@@ -23,7 +23,7 @@ import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.rpc.AppPlace;
 
-import com.propertyvista.domain.payment.PreauthorizedPayment;
+import com.propertyvista.domain.payment.AutopayAgreement;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap;
 import com.propertyvista.portal.rpc.portal.web.dto.financial.AutoPayDTO;
 import com.propertyvista.portal.rpc.portal.web.services.financial.PaymentService;
@@ -55,7 +55,7 @@ public class AutoPayConfirmationActivity extends SecurityAwareActivity implement
             public void onSuccess(AutoPayDTO result) {
                 view.populate(result);
             }
-        }, EntityFactory.createIdentityStub(PreauthorizedPayment.class, entityId));
+        }, EntityFactory.createIdentityStub(AutopayAgreement.class, entityId));
     }
 
     @Override

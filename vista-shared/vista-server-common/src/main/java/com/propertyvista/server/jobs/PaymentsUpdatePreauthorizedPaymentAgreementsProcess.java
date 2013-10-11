@@ -28,7 +28,7 @@ public class PaymentsUpdatePreauthorizedPaymentAgreementsProcess implements PmcP
 
     @Override
     public void executePmcJob(PmcProcessContext context) {
-        ServerSideFactory.create(PaymentProcessFacade.class).updatePreauthorizedPaymentAgreements(context.getExecutionMonitor(),
+        ServerSideFactory.create(PaymentProcessFacade.class).deleteExpiringAutopayAgreement(context.getExecutionMonitor(),
                 new LogicalDate(context.getForDate()));
     }
 

@@ -23,6 +23,6 @@ public interface ReviewedPapsHolderDTO extends IEntity {
 
     IPrimitive<Boolean> acceptAll();
 
-    IList<ReviewedPapDTO> acceptedReviewedPaps();
+    IList<ReviewedAutopayAgreementDTO> acceptedReviewedPaps();
 
 }

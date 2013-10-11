@@ -53,5 +53,4 @@ public interface PreauthorizedPaymentsDTO extends IEntity {
 
     IPrimitive<LogicalDate> nextScheduledPaymentDate();
 
-    IPrimitive<LogicalDate> paymentCutOffDate();
 }

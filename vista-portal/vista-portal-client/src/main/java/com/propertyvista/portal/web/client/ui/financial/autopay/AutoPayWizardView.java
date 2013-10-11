@@ -19,7 +19,7 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.propertyvista.domain.contact.AddressSimple;
 import com.propertyvista.domain.payment.LeasePaymentMethod;
-import com.propertyvista.domain.payment.PreauthorizedPayment;
+import com.propertyvista.domain.payment.AutopayAgreement;
 import com.propertyvista.portal.rpc.portal.web.dto.financial.AutoPayDTO;
 import com.propertyvista.portal.web.client.ui.IWizardView;
 
@@ -31,6 +31,6 @@ public interface AutoPayWizardView extends IWizardView<AutoPayDTO> {
 
         void getProfiledPaymentMethods(AsyncCallback<List<LeasePaymentMethod>> callback);
 
-        void preview(AsyncCallback<PreauthorizedPayment> callback, AutoPayDTO currentValue);
+        void preview(AsyncCallback<AutopayAgreement> callback, AutoPayDTO currentValue);
     }
 }

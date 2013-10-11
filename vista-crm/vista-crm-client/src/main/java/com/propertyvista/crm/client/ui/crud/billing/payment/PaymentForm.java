@@ -56,16 +56,15 @@ import com.propertyvista.common.client.ui.components.editors.payments.EcheckInfo
 import com.propertyvista.common.client.ui.components.editors.payments.PaymentMethodEditor;
 import com.propertyvista.common.client.ui.components.folders.PapCoveredItemFolder;
 import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
-import com.propertyvista.common.client.ui.misc.PapExpirationWarning;
 import com.propertyvista.common.client.ui.validators.FutureDateIncludeTodayValidator;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.crm.rpc.services.financial.RevealAccountNumberService;
 import com.propertyvista.domain.contact.AddressSimple;
+import com.propertyvista.domain.payment.AutopayAgreement;
 import com.propertyvista.domain.payment.CreditCardInfo.CreditCardType;
 import com.propertyvista.domain.payment.EcheckInfo;
 import com.propertyvista.domain.payment.LeasePaymentMethod;
 import com.propertyvista.domain.payment.PaymentType;
-import com.propertyvista.domain.payment.PreauthorizedPayment;
 import com.propertyvista.domain.security.VistaCrmBehavior;
 import com.propertyvista.domain.security.common.AbstractPmcUser;
 import com.propertyvista.domain.tenant.lease.Guarantor;
@@ -494,12 +493,10 @@ public class PaymentForm extends CrmEntityForm<PaymentRecordDTO> {
         }
     }
 
-    private class PreauthorizedPaymentViewer extends CEntityDecoratableForm<PreauthorizedPayment> {
-
-        private final PapExpirationWarning expirationWarning = new PapExpirationWarning();
+    private class PreauthorizedPaymentViewer extends CEntityDecoratableForm<AutopayAgreement> {
 
         public PreauthorizedPaymentViewer() {
-            super(PreauthorizedPayment.class);
+            super(AutopayAgreement.class);
             setViewable(true);
         }
 
@@ -507,8 +504,6 @@ public class PaymentForm extends CrmEntityForm<PaymentRecordDTO> {
         public IsWidget createContent() {
             TwoColumnFlexFormPanel content = new TwoColumnFlexFormPanel();
             int row = -1;
-
-            content.setWidget(++row, 0, 2, expirationWarning.getExpirationWarningPanel());
 
             content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().creationDate()), 9).build());
             content.setWidget(row, 1, new FormDecoratorBuilder(inject(proto().createdBy(), new CEntityLabel<AbstractPmcUser>()), 22).build());
@@ -525,10 +520,6 @@ public class PaymentForm extends CrmEntityForm<PaymentRecordDTO> {
         @Override
         protected void onValueSet(boolean populate) {
             super.onValueSet(populate);
-
-            expirationWarning.prepareView(getValue().expiring());
-            setEditable(getValue().expiring().isNull());
-
             get(proto().createdBy()).setVisible(!getValue().createdBy().isNull());
         }
     }

@@ -29,8 +29,8 @@ import com.pyx4j.gwt.server.deferred.AbstractDeferredProcess;
 import com.propertyvista.config.VistaDeployment;
 import com.propertyvista.domain.payment.EcheckInfo;
 import com.propertyvista.domain.payment.PaymentType;
-import com.propertyvista.domain.payment.PreauthorizedPayment;
-import com.propertyvista.domain.payment.PreauthorizedPayment.PreauthorizedPaymentCoveredItem;
+import com.propertyvista.domain.payment.AutopayAgreement;
+import com.propertyvista.domain.payment.AutopayAgreement.PreauthorizedPaymentCoveredItem;
 import com.propertyvista.domain.tenant.lease.extradata.YardiLeaseChargeData;
 import com.propertyvista.interfaces.importer.pad.PadFileExportModel;
 
@@ -52,16 +52,16 @@ public class ExportTenantsPreauthorizedPaymentDeferredProcess extends AbstractDe
         try {
             Persistence.service().startBackgroundProcessTransaction();
 
-            final EntityQueryCriteria<PreauthorizedPayment> criteria = EntityQueryCriteria.create(PreauthorizedPayment.class);
+            final EntityQueryCriteria<AutopayAgreement> criteria = EntityQueryCriteria.create(AutopayAgreement.class);
             criteria.eq(criteria.proto().isDeleted(), Boolean.FALSE);
             criteria.asc(criteria.proto().tenant().lease().unit().building().propertyCode());
             criteria.asc(criteria.proto().tenant().lease().leaseId());
             maximum = Persistence.service().count(criteria);
 
-            ICursorIterator<PreauthorizedPayment> tenants = Persistence.service().query(null, criteria, AttachLevel.Attached);
+            ICursorIterator<AutopayAgreement> tenants = Persistence.service().query(null, criteria, AttachLevel.Attached);
             try {
                 while (tenants.hasNext()) {
-                    PreauthorizedPayment preauthorizedPayment = tenants.next();
+                    AutopayAgreement preauthorizedPayment = tenants.next();
                     Persistence.service().retrieveMember(preauthorizedPayment.tenant());
                     Persistence.service().retrieveMember(preauthorizedPayment.tenant().lease());
                     Persistence.service().retrieveMember(preauthorizedPayment.tenant().lease().unit().building());
@@ -98,7 +98,7 @@ public class ExportTenantsPreauthorizedPaymentDeferredProcess extends AbstractDe
     }
 
     private void formatPreauthorizedPayment(ReportTableFormatter formatter, EntityReportFormatter<PadFileExportModel> entityFormatter,
-            PreauthorizedPayment preauthorizedPayment) {
+            AutopayAgreement preauthorizedPayment) {
 
         for (PreauthorizedPaymentCoveredItem item : preauthorizedPayment.coveredItems()) {
             PadFileExportModel model = EntityFactory.create(PadFileExportModel.class);

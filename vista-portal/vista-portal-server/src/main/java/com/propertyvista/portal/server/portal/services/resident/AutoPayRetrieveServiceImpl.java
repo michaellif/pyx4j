@@ -24,8 +24,8 @@ import com.pyx4j.entity.shared.utils.EntityBinder;
 
 import com.propertyvista.biz.financial.payment.PaymentFacade;
 import com.propertyvista.biz.financial.payment.PaymentMethodFacade;
-import com.propertyvista.domain.payment.PreauthorizedPayment;
-import com.propertyvista.domain.payment.PreauthorizedPayment.PreauthorizedPaymentCoveredItem;
+import com.propertyvista.domain.payment.AutopayAgreement;
+import com.propertyvista.domain.payment.AutopayAgreement.PreauthorizedPaymentCoveredItem;
 import com.propertyvista.domain.security.common.VistaApplication;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.portal.rpc.portal.dto.PreauthorizedPaymentDTO;
@@ -34,11 +34,10 @@ import com.propertyvista.portal.server.portal.TenantAppContext;
 import com.propertyvista.server.common.util.AddressConverter;
 import com.propertyvista.server.common.util.AddressRetriever;
 
-public class AutoPayRetrieveServiceImpl extends EntityBinder<PreauthorizedPayment, PreauthorizedPaymentDTO> implements
-        AutoPayRetrieveService {
+public class AutoPayRetrieveServiceImpl extends EntityBinder<AutopayAgreement, PreauthorizedPaymentDTO> implements AutoPayRetrieveService {
 
     public AutoPayRetrieveServiceImpl() {
-        super(PreauthorizedPayment.class, PreauthorizedPaymentDTO.class);
+        super(AutopayAgreement.class, PreauthorizedPaymentDTO.class);
     }
 
     @Override
@@ -48,7 +47,7 @@ public class AutoPayRetrieveServiceImpl extends EntityBinder<PreauthorizedPaymen
 
     @Override
     public void retrieve(AsyncCallback<PreauthorizedPaymentDTO> callback, Key entityId) {
-        PreauthorizedPayment dbo = Persistence.secureRetrieve(PreauthorizedPayment.class, entityId);
+        AutopayAgreement dbo = Persistence.secureRetrieve(AutopayAgreement.class, entityId);
         PreauthorizedPaymentDTO dto = createTO(dbo);
 
         // enhance dto:
@@ -67,8 +66,7 @@ public class AutoPayRetrieveServiceImpl extends EntityBinder<PreauthorizedPaymen
         dto.leaseId().set(lease.leaseId());
         dto.leaseStatus().set(lease.status());
 
-        dto.nextScheduledPaymentDate().setValue(ServerSideFactory.create(PaymentMethodFacade.class).getNextPreauthorizedPaymentDate(lease));
-        dto.paymentCutOffDate().setValue(ServerSideFactory.create(PaymentMethodFacade.class).getPreauthorizedPaymentCutOffDate(lease));
+        dto.nextScheduledPaymentDate().setValue(ServerSideFactory.create(PaymentMethodFacade.class).getNextAutopayDate(lease));
 
         dto.total().setValue(BigDecimal.ZERO);
         for (PreauthorizedPaymentCoveredItem item : dto.coveredItems()) {

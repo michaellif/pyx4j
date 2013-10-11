@@ -39,8 +39,6 @@ import com.pyx4j.forms.client.ui.CPercentageField;
 import com.pyx4j.forms.client.ui.IFormat;
 import com.pyx4j.forms.client.ui.folder.EntityFolderColumnDescriptor;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
-import com.pyx4j.forms.client.validators.EditableValueValidator;
-import com.pyx4j.forms.client.validators.ValidationError;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.dialogs.SelectEnumDialog;
 import com.pyx4j.site.client.ui.prime.form.IForm;
@@ -272,8 +270,6 @@ public class LeaseBillingPolicyForm extends PolicyDTOTabPanelBasedForm<LeaseBill
 
             private final CComboBox<Integer> padExecDayOffset;
 
-            private final CComboBox<Integer> padCalcDayOffset;
-
             public LeaseBillingTypeEditor() {
                 super(LeaseBillingTypePolicyItem.class);
 
@@ -293,7 +289,6 @@ public class LeaseBillingPolicyForm extends PolicyDTOTabPanelBasedForm<LeaseBill
                 dueDayOffset = new CComboBox<Integer>();
                 finalDueDayOffset = new CComboBox<Integer>();
                 billDayOffset = new CComboBox<Integer>();
-                padCalcDayOffset = new CComboBox<Integer>();
                 padExecDayOffset = new CComboBox<Integer>();
             }
 
@@ -307,29 +302,7 @@ public class LeaseBillingPolicyForm extends PolicyDTOTabPanelBasedForm<LeaseBill
                 content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().paymentDueDayOffset(), dueDayOffset), 15).labelWidth(20).build());
                 content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().finalDueDayOffset(), finalDueDayOffset), 15).labelWidth(20).build());
                 content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().billExecutionDayOffset(), billDayOffset), 15).labelWidth(20).build());
-                content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().padCalculationDayOffset(), padCalcDayOffset), 15).labelWidth(20).build());
-                content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().padExecutionDayOffset(), padExecDayOffset), 15).labelWidth(20).build());
-
-                // validators
-                padCalcDayOffset.addValueChangeHandler(new ValueChangeHandler<Integer>() {
-                    @Override
-                    public void onValueChange(ValueChangeEvent<Integer> event) {
-                        padExecDayOffset.revalidate();
-                    }
-                });
-                padExecDayOffset.addValueValidator(new EditableValueValidator<Integer>() {
-                    @Override
-                    public ValidationError isValid(CComponent<Integer> component, Integer value) {
-                        if (value == null || padCalcDayOffset.getValue() == null) {
-                            return null;
-                        } else if (value.compareTo(padCalcDayOffset.getValue()) >= 0) {
-                            return null;
-                        } else {
-                            return new ValidationError(component, i18n.tr("Must be greater than or equal to {0}", proto().padCalculationDayOffset().getMeta()
-                                    .getCaption()));
-                        }
-                    }
-                });
+                content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().autopayExecutionDayOffset(), padExecDayOffset), 15).labelWidth(20).build());
 
                 if (!VistaFeatures.instance().yardiIntegration()) {
                     get(proto().finalDueDayOffset()).setVisible(false);
@@ -346,7 +319,6 @@ public class LeaseBillingPolicyForm extends PolicyDTOTabPanelBasedForm<LeaseBill
                     dueDayOffset.setOptions(makeList(0, maxOffset / 2));
                     finalDueDayOffset.setOptions(makeList(0, maxOffset));
                     billDayOffset.setOptions(makeList(-maxOffset / 2, -1));
-                    padCalcDayOffset.setOptions(makeList(-maxOffset / 2, maxOffset / 2));
                     padExecDayOffset.setOptions(makeList(-maxOffset / 2, maxOffset / 2));
                 }
             }

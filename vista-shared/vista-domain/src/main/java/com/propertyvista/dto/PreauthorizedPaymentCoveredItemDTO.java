@@ -23,10 +23,10 @@ import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.shared.IPrimitive;
 
-import com.propertyvista.domain.payment.PreauthorizedPayment;
+import com.propertyvista.domain.payment.AutopayAgreement;
 
 @Transient
-public interface PreauthorizedPaymentCoveredItemDTO extends PreauthorizedPayment.PreauthorizedPaymentCoveredItem {
+public interface PreauthorizedPaymentCoveredItemDTO extends AutopayAgreement.PreauthorizedPaymentCoveredItem {
 
     @ReadOnly
     @ToString(index = 10)

@@ -326,7 +326,7 @@ public class LeaseTermCrudServiceImpl extends AbstractVersionedCrudServiceDtoImp
         Persistence.ensureRetrieve(item.leaseTermV().holder().lease(), AttachLevel.Attached);
         if (item.leaseTermV().equals(item.leaseTermV().holder().lease().currentTerm().version())) {
             item.leaseParticipant().preauthorizedPayments()
-                    .addAll(ServerSideFactory.create(PaymentMethodFacade.class).retrievePreauthorizedPayments(item.leaseParticipant()));
+                    .addAll(ServerSideFactory.create(PaymentMethodFacade.class).retrieveAutopayAgreements(item.leaseParticipant()));
         }
     }
 

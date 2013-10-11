@@ -66,11 +66,7 @@ public interface LeaseBillingTypePolicyItem extends IEntity {
     IPrimitive<Integer> finalDueDayOffset();
 
     @NotNull
-    @Caption(description = "When to calculate Preauthorized Payments, relative to Start Day")
-    IPrimitive<Integer> padCalculationDayOffset();
-
-    @NotNull
-    @Caption(description = "When to run Preauthorized Payments, relative to Start Day")
-    IPrimitive<Integer> padExecutionDayOffset();
+    @Caption(description = "When to run PreAuthorized Payments, relative to Start Day")
+    IPrimitive<Integer> autopayExecutionDayOffset();
 
 }

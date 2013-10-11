@@ -24,7 +24,7 @@ import com.pyx4j.gwt.rpc.deferred.DeferredProcessProgressResponse;
 import com.pyx4j.gwt.server.deferred.AbstractDeferredProcess;
 
 import com.propertyvista.biz.financial.payment.PaymentMethodFacade;
-import com.propertyvista.crm.rpc.dto.financial.autopayreview.ReviewedPapDTO;
+import com.propertyvista.crm.rpc.dto.financial.autopayreview.ReviewedAutopayAgreementDTO;
 import com.propertyvista.crm.rpc.dto.financial.autopayreview.ReviewedPapsHolderDTO;
 
 public class AutoPayReviewDeferredProcess extends AbstractDeferredProcess {
@@ -48,8 +48,8 @@ public class AutoPayReviewDeferredProcess extends AbstractDeferredProcess {
         new UnitOfWork(TransactionScopeOption.RequiresNew, ConnectionTarget.BackgroundProcess).execute(new Executable<Void, RuntimeException>() {
             @Override
             public Void execute() {
-                for (ReviewedPapDTO preauthorizedPaymentChanges : acceptedReviews.acceptedReviewedPaps()) {
-                    ServerSideFactory.create(PaymentMethodFacade.class).persitPreauthorizedPaymentReview(preauthorizedPaymentChanges);
+                for (ReviewedAutopayAgreementDTO preauthorizedPaymentChanges : acceptedReviews.acceptedReviewedPaps()) {
+                    ServerSideFactory.create(PaymentMethodFacade.class).persitAutopayAgreementReview(preauthorizedPaymentChanges);
                     progress.addAndGet(1);
                     if (canceled) {
                         break;

@@ -26,7 +26,7 @@ import com.pyx4j.site.rpc.AppPlace;
 
 import com.propertyvista.domain.contact.AddressSimple;
 import com.propertyvista.domain.payment.LeasePaymentMethod;
-import com.propertyvista.domain.payment.PreauthorizedPayment;
+import com.propertyvista.domain.payment.AutopayAgreement;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap.Resident.Financial;
 import com.propertyvista.portal.rpc.portal.web.dto.financial.AutoPayDTO;
 import com.propertyvista.portal.rpc.portal.web.services.financial.AutoPayWizardService;
@@ -60,10 +60,10 @@ public class AutoPayWizardActivity extends AbstractWizardCrudActivity<AutoPayDTO
     }
 
     @Override
-    public void preview(final AsyncCallback<PreauthorizedPayment> callback, AutoPayDTO currentValue) {
-        ((AutoPayWizardService) getService()).preview(new DefaultAsyncCallback<PreauthorizedPayment>() {
+    public void preview(final AsyncCallback<AutopayAgreement> callback, AutoPayDTO currentValue) {
+        ((AutoPayWizardService) getService()).preview(new DefaultAsyncCallback<AutopayAgreement>() {
             @Override
-            public void onSuccess(PreauthorizedPayment result) {
+            public void onSuccess(AutopayAgreement result) {
                 callback.onSuccess(result);
             }
         }, currentValue);

@@ -33,9 +33,9 @@ import com.propertyvista.biz.financial.payment.PaymentFacade;
 import com.propertyvista.biz.financial.payment.PaymentMethodFacade;
 import com.propertyvista.domain.contact.AddressSimple;
 import com.propertyvista.domain.financial.ARCode;
+import com.propertyvista.domain.payment.AutopayAgreement;
+import com.propertyvista.domain.payment.AutopayAgreement.PreauthorizedPaymentCoveredItem;
 import com.propertyvista.domain.payment.LeasePaymentMethod;
-import com.propertyvista.domain.payment.PreauthorizedPayment;
-import com.propertyvista.domain.payment.PreauthorizedPayment.PreauthorizedPaymentCoveredItem;
 import com.propertyvista.domain.security.common.VistaApplication;
 import com.propertyvista.domain.tenant.lease.BillableItem;
 import com.propertyvista.domain.tenant.lease.Lease;
@@ -49,11 +49,11 @@ import com.propertyvista.server.common.util.AddressConverter;
 import com.propertyvista.server.common.util.AddressRetriever;
 import com.propertyvista.server.common.util.LeaseParticipantUtils;
 
-public class PreauthorizedPaymentWizardServiceImpl extends AbstractCrudServiceDtoImpl<PreauthorizedPayment, PreauthorizedPaymentDTO> implements
+public class PreauthorizedPaymentWizardServiceImpl extends AbstractCrudServiceDtoImpl<AutopayAgreement, PreauthorizedPaymentDTO> implements
         PreauthorizedPaymentWizardService {
 
     public PreauthorizedPaymentWizardServiceImpl() {
-        super(PreauthorizedPayment.class, PreauthorizedPaymentDTO.class);
+        super(AutopayAgreement.class, PreauthorizedPaymentDTO.class);
     }
 
     @Override
@@ -84,8 +84,7 @@ public class PreauthorizedPaymentWizardServiceImpl extends AbstractCrudServiceDt
 
         dto.tenant().set(TenantAppContext.getCurrentUserTenant());
 
-        dto.nextScheduledPaymentDate().setValue(ServerSideFactory.create(PaymentMethodFacade.class).getNextPreauthorizedPaymentDate(lease));
-        dto.paymentCutOffDate().setValue(ServerSideFactory.create(PaymentMethodFacade.class).getPreauthorizedPaymentCutOffDate(dto.tenant().lease()));
+        dto.nextScheduledPaymentDate().setValue(ServerSideFactory.create(PaymentMethodFacade.class).getNextAutopayDate(lease));
 
         fillCoveredItems(dto, lease.currentTerm().version().leaseProducts());
 
@@ -94,7 +93,7 @@ public class PreauthorizedPaymentWizardServiceImpl extends AbstractCrudServiceDt
 
     @Override
     public void save(AsyncCallback<Key> callback, PreauthorizedPaymentDTO dto) {
-        PreauthorizedPayment entity = createBO(dto);
+        AutopayAgreement entity = createBO(dto);
 
         Lease lease = TenantAppContext.getCurrentUserLease();
         ServerSideFactory.create(PaymentFacade.class).validatePaymentMethod(lease.billingAccount(), dto.paymentMethod(), VistaApplication.portal);
@@ -107,7 +106,7 @@ public class PreauthorizedPaymentWizardServiceImpl extends AbstractCrudServiceDt
 
         updateCoveredItems(entity, dto);
 
-        ServerSideFactory.create(PaymentMethodFacade.class).persistPreauthorizedPayment(entity,
+        ServerSideFactory.create(PaymentMethodFacade.class).persistAutopayAgreement(entity,
                 EntityFactory.createIdentityStub(Tenant.class, TenantAppContext.getCurrentUserTenant().getPrimaryKey()));
         Persistence.service().commit();
 
@@ -125,8 +124,8 @@ public class PreauthorizedPaymentWizardServiceImpl extends AbstractCrudServiceDt
     }
 
     @Override
-    public void preview(AsyncCallback<PreauthorizedPayment> callback, PreauthorizedPaymentDTO currentValue) {
-        PreauthorizedPayment entity = createBO(currentValue);
+    public void preview(AsyncCallback<AutopayAgreement> callback, PreauthorizedPaymentDTO currentValue) {
+        AutopayAgreement entity = createBO(currentValue);
 
         updateCoveredItems(entity, currentValue);
 
@@ -172,7 +171,6 @@ public class PreauthorizedPaymentWizardServiceImpl extends AbstractCrudServiceDt
         criteria.eq(criteria.proto().pap().tenant().lease(), TenantAppContext.getCurrentUserLeaseIdStub());
         criteria.eq(criteria.proto().billableItem().uid(), billableItem.uid());
         criteria.eq(criteria.proto().pap().isDeleted(), Boolean.FALSE);
-        criteria.isNull(criteria.proto().pap().expiring());
 
         item.covered().setValue(BigDecimal.ZERO);
         for (PreauthorizedPaymentCoveredItem papci : Persistence.secureQuery(criteria)) {
@@ -193,7 +191,7 @@ public class PreauthorizedPaymentWizardServiceImpl extends AbstractCrudServiceDt
         return item;
     }
 
-    private void updateCoveredItems(PreauthorizedPayment entity, PreauthorizedPaymentDTO dto) {
+    private void updateCoveredItems(AutopayAgreement entity, PreauthorizedPaymentDTO dto) {
         entity.coveredItems().clear();
         for (PreauthorizedPaymentCoveredItemDTO item : dto.coveredItemsDTO()) {
             if (item.amount().getValue().compareTo(BigDecimal.ZERO) > 0) {

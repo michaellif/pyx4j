@@ -49,9 +49,7 @@ public class PreauthorizedPaymentCyclesTest extends LeaseFinancialTestBase {
 
             assertEquals("billingCycleStartDate", "2011-01-01", curentCycle.billingCycleStartDate().getValue());
 
-            assertEquals("CurrentPreauthorizedPaymentDate", "2011-02-01", f.getCurrentPreauthorizedPaymentDate(lease));
-            assertEquals("NextPreauthorizedPaymentDate", "2011-02-01", f.getNextPreauthorizedPaymentDate(lease));
-            assertEquals("PreauthorizedPaymentCutOffDate", "2011-01-29", f.getPreauthorizedPaymentCutOffDate(lease));
+            assertEquals("NextPreauthorizedPaymentDate", "2011-02-01", f.getNextAutopayDate(lease));
         }
 
         {
@@ -61,9 +59,7 @@ public class PreauthorizedPaymentCyclesTest extends LeaseFinancialTestBase {
 
             assertEquals("billingCycleStartDate", "2011-01-01", curentCycle.billingCycleStartDate().getValue());
 
-            assertEquals("CurrentPreauthorizedPaymentDate", "2011-02-01", f.getCurrentPreauthorizedPaymentDate(lease));
-            assertEquals("NextPreauthorizedPaymentDate", "2011-03-01", f.getNextPreauthorizedPaymentDate(lease)); // <-- changes
-            assertEquals("PreauthorizedPaymentCutOffDate", "2011-01-29", f.getPreauthorizedPaymentCutOffDate(lease));
+            assertEquals("NextPreauthorizedPaymentDate", "2011-03-01", f.getNextAutopayDate(lease)); // <-- changes
         }
 
         {
@@ -73,9 +69,7 @@ public class PreauthorizedPaymentCyclesTest extends LeaseFinancialTestBase {
 
             assertEquals("billingCycleStartDate", "2011-01-01", curentCycle.billingCycleStartDate().getValue());
 
-            assertEquals("CurrentPreauthorizedPaymentDate", "2011-02-01", f.getCurrentPreauthorizedPaymentDate(lease));
-            assertEquals("NextPreauthorizedPaymentDate", "2011-03-01", f.getNextPreauthorizedPaymentDate(lease));
-            assertEquals("PreauthorizedPaymentCutOffDate", "2011-01-29", f.getPreauthorizedPaymentCutOffDate(lease));
+            assertEquals("NextPreauthorizedPaymentDate", "2011-03-01", f.getNextAutopayDate(lease));
         }
     }
 
@@ -86,8 +80,7 @@ public class PreauthorizedPaymentCyclesTest extends LeaseFinancialTestBase {
             LeaseBillingTypePolicyItem monthlyBillingTypeItem = policy.availableBillingTypes().get(0);
             assert monthlyBillingTypeItem.billingPeriod().getValue() == BillingPeriod.Monthly;
 
-            monthlyBillingTypeItem.padCalculationDayOffset().setValue(2);
-            monthlyBillingTypeItem.padExecutionDayOffset().setValue(4);
+            monthlyBillingTypeItem.autopayExecutionDayOffset().setValue(4);
 
             Persistence.service().persist(policy);
             ServerSideFactory.create(BillingCycleFacade.class).onLeaseBillingPolicyChange(policy);
@@ -106,9 +99,7 @@ public class PreauthorizedPaymentCyclesTest extends LeaseFinancialTestBase {
 
             assertEquals("billingCycleStartDate", "2011-01-01", curentCycle.billingCycleStartDate().getValue());
 
-            assertEquals("CurrentPreauthorizedPaymentDate", "2011-02-05", f.getCurrentPreauthorizedPaymentDate(lease));
-            assertEquals("NextPreauthorizedPaymentDate", "2011-02-05", f.getNextPreauthorizedPaymentDate(lease));
-            assertEquals("PreauthorizedPaymentCutOffDate", "2011-02-03", f.getPreauthorizedPaymentCutOffDate(lease));
+            assertEquals("NextPreauthorizedPaymentDate", "2011-02-05", f.getNextAutopayDate(lease));
         }
 
         //TODO
@@ -119,9 +110,7 @@ public class PreauthorizedPaymentCyclesTest extends LeaseFinancialTestBase {
 
             assertEquals("billingCycleStartDate", "2011-02-01", curentCycle.billingCycleStartDate().getValue());
 
-            assertEquals("CurrentPreauthorizedPaymentDate", "2011-02-05", f.getCurrentPreauthorizedPaymentDate(lease));
-            assertEquals("NextPreauthorizedPaymentDate", "2011-02-05", f.getNextPreauthorizedPaymentDate(lease)); // <-- changes
-            assertEquals("PreauthorizedPaymentCutOffDate", "2011-02-03", f.getPreauthorizedPaymentCutOffDate(lease));
+            assertEquals("NextPreauthorizedPaymentDate", "2011-02-05", f.getNextAutopayDate(lease)); // <-- changes
         }
 
         //TODO
@@ -132,9 +121,7 @@ public class PreauthorizedPaymentCyclesTest extends LeaseFinancialTestBase {
 
             assertEquals("billingCycleStartDate", "2011-01-01", curentCycle.billingCycleStartDate().getValue());
 
-            assertEquals("CurrentPreauthorizedPaymentDate", "2011-02-05", f.getCurrentPreauthorizedPaymentDate(lease));
-            assertEquals("NextPreauthorizedPaymentDate", "2011-03-05", f.getNextPreauthorizedPaymentDate(lease));
-            assertEquals("PreauthorizedPaymentCutOffDate", "2011-02-03", f.getPreauthorizedPaymentCutOffDate(lease));
+            assertEquals("NextPreauthorizedPaymentDate", "2011-03-05", f.getNextAutopayDate(lease));
         }
 
     }

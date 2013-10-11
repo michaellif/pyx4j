@@ -24,12 +24,12 @@ public class PaymentReportFacadeImpl implements PaymentReportFacade {
 
     @Override
     public List<AutoPayReviewLeaseDTO> reportPreauthorizedPaymentsRequiredReview(PreauthorizedPaymentsReportCriteria reportCriteria) {
-        return new PreauthorizedPaymentAutoPayReviewReport().reportPreauthorizedPaymentsRequiresReview(reportCriteria);
+        return new AutopayReviewReport().reportPreauthorizedPaymentsRequiresReview(reportCriteria);
     }
 
     @Override
     public List<PaymentRecord> reportPreauthorisedPayments(PreauthorizedPaymentsReportCriteria reportCriteria, ExecutionMonitor executionMonitor) {
-        return new PreauthorizedPaymentsManager().reportPreauthorisedPayments(reportCriteria, executionMonitor);
+        return new AutopaytManager().reportPreauthorisedPayments(reportCriteria, executionMonitor);
     }
 
     @Override
