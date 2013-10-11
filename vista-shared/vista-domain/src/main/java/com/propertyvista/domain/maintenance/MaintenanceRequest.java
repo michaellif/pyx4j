@@ -95,10 +95,12 @@ public interface MaintenanceRequest extends IEntity {
 
     // --------------------------------------
 
+    @NotNull
     @Length(2048)
     @Editor(type = Editor.EditorType.textarea)
     IPrimitive<String> description();
 
+    @NotNull
     IPrimitive<String> summary();
 
     // --------------------------------------

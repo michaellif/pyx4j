@@ -19,6 +19,7 @@ import com.google.gwt.event.dom.client.ChangeEvent;
 import com.google.gwt.event.dom.client.ChangeHandler;
 
 import com.pyx4j.forms.client.ui.CComboBox;
+import com.pyx4j.forms.client.validators.ValidationResults;
 
 import com.propertyvista.domain.maintenance.MaintenanceRequestCategory;
 import com.propertyvista.domain.maintenance.MaintenanceRequestMetadata;
@@ -93,6 +94,39 @@ public class MaintenanceRequestCategoryChoice extends CComboBox<MaintenanceReque
         // compare categories using PK
         return value1 != null && value2 != null && !value1.isValueDetached() && !value2.isValueDetached() && value1.getPrimaryKey() != null
                 && value1.getPrimaryKey().equals(value2.getPrimaryKey());
+    }
+
+    @Override
+    public boolean isValueEmpty() {
+        return getValue() == null || getValue().isEmpty();
+    }
+
+    // TODO - here for testing; remove...
+    @Override
+    public void revalidate() {
+        super.revalidate();
+    }
+
+    @Override
+    public void setUnconditionalValidationErrorRendering(boolean flag) {
+        super.setUnconditionalValidationErrorRendering(flag);
+        if (parent != null) {
+            parent.setUnconditionalValidationErrorRendering(flag);
+        }
+    }
+
+    @Override
+    public ValidationResults getValidationResults() {
+        ValidationResults results = super.getValidationResults();
+        if (parent != null) {
+            results.appendValidationErrors(parent.getValidationResults());
+        }
+        return results;
+    }
+
+    @Override
+    public boolean isValid() {
+        return super.isValid() && (parent != null ? parent.isValid() : true);
     }
 
     protected boolean isLeaf(MaintenanceRequestCategory opt) {

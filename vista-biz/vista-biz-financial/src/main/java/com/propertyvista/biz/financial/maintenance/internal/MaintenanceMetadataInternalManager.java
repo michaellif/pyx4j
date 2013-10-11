@@ -15,12 +15,14 @@ package com.propertyvista.biz.financial.maintenance.internal;
 
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
+import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.biz.financial.maintenance.MaintenanceMetadataAbstractManager;
 import com.propertyvista.domain.maintenance.MaintenanceRequestMetadata;
 import com.propertyvista.domain.property.asset.building.Building;
 
 public class MaintenanceMetadataInternalManager extends MaintenanceMetadataAbstractManager {
+    private final static I18n i18n = I18n.get(MaintenanceMetadataInternalManager.class);
 
     private static class SingletonHolder {
         public static final MaintenanceMetadataInternalManager INSTANCE = new MaintenanceMetadataInternalManager();
@@ -32,7 +34,7 @@ public class MaintenanceMetadataInternalManager extends MaintenanceMetadataAbstr
 
     @Override
     protected String[] getLevels() {
-        return new String[] { "IssueElement", "IssueRepairSubject", "IssueSubjectDetails", "IssueClassification" };
+        return new String[] { i18n.tr("Area"), i18n.tr("Repair Subject"), i18n.tr("Details"), i18n.tr("Issue") };
     }
 
     @Override
