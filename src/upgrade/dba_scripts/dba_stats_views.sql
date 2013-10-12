@@ -19,12 +19,13 @@ CREATE OR REPLACE VIEW _dba_.building_stats_view AS
                 reg_units_epay AS "Units with Registered Tenants Using Electronic Payments",
                 ROUND(reg_units_epay::numeric(4,1)*100/units_epay,1) AS "% Reg. Units with Epay to Total Units with Epay",
                 total_tenants AS "Total Tenants",
+                ROUND(total_tenants/total_units::numeric(4,1),1) AS "Average Tenant per Unit",
                 reg_tenants AS "Registered Tenants",
                 ROUND(reg_tenants::numeric(4,1)*100/total_tenants,1) AS "% Registered Tenants",
-                tenant_logins_this_week AS "Tenant Logins This Week",
-                tenant_logins_this_month AS "Tenant Logins This Month",
+                tenant_login_week AS "Tenant Logins This Week",
+                tenant_login_month AS "Tenant Logins This Month",
                 tenants_epay AS "Tenants Using Electronic Payments",
-                tenants_epay_reg AS "Registered Tenants Using Electronic Payments",
+                reg_tenants_epay AS "Registered Tenants Using Electronic Payments",
                 ROUND(reg_tenants_epay::numeric(4,1)*100/tenants_epay,1) AS "% Registered Tenants with Epay to Total Tenants with Epay",
                 ROUND(reg_tenants_epay::numeric(4,1)*100/reg_tenants,1) AS "% Registered Tenants with Epay to All Registered Tenants",
                 count_trans_recur AS "Transactions Processed This Month, Recurring",
@@ -76,10 +77,10 @@ CREATE OR REPLACE VIEW _dba_.building_stats_view AS
                 count_visadebit_onetime_reg AS "Registered Tenants: Visa Debit Transactions, One Time",
                 amount_visadebit_onetime_reg AS "Registered Tenants: Visa Debit Amount, One Time",
                 total_maint_requests AS "Total Maintenance Requests",
-                maint_requests_this_month AS "Maintenance Requests This Month",
+                maint_requests_month AS "Maintenance Requests This Month",
                 tenant_maint_requests AS "Total Tenant Maintenance Requests",
-                tenant_maint_requests_this_month AS "Tenant Maintenance Requests This Month"
+                tenant_maint_requests_month AS "Tenant Maintenance Requests This Month"          
         FROM    _dba_.building_stats
         WHERE   reg_tenants > 0 
-        AND     stats_week = DATE_TRUNC('week',current_date)
+        AND     stats_week = (SELECT MAX(stats_week) FROM _dba_.building_stats)  
  );
