@@ -16,8 +16,6 @@ package com.propertyvista.integration.yardi;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.junit.Ignore;
-
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.server.Persistence;
@@ -41,8 +39,6 @@ import com.propertyvista.yardi.mock.RtCustomerUpdateEvent;
 import com.propertyvista.yardi.mock.RtCustomerUpdater;
 import com.propertyvista.yardi.services.YardiResidentTransactionsService;
 
-//TODO VISTA-3547
-@Ignore
 public class PreauthorizedPaymentProcessYardiTest extends PaymentYardiTestBase {
 
     private final List<Lease> leasesAll = new ArrayList<Lease>();
@@ -103,38 +99,24 @@ public class PreauthorizedPaymentProcessYardiTest extends PaymentYardiTestBase {
         return ServerSideFactory.create(PaymentMethodFacade.class).getNextAutopayDate(lease);
     }
 
-    //TODO VISTA-3547
-    @Ignore
-    public void TODO_testPadSuccessful() throws Exception {
-        assertEquals("PAD next Generation date", "2011-01-29", getNextAutopayDate(leasesAll.get(0)));
+    public void testPadSuccessful() throws Exception {
+        assertEquals("PAD next Generation date", "2011-02-01", getNextAutopayDate(leasesAll.get(0)));
 
         // PAD creation triggered at the end of the month
-        advanceSysDate("2011-01-29");
-
-        // Expect PAD executed, verify amount
-        new PaymentRecordTester(leasesAll.get(0).billingAccount()).count(1). //
-                lastRecordStatus(PaymentStatus.Scheduled).lastRecordAmount("580.00");
-
         // Post and process all payments
         advanceSysDate("2011-02-01");
 
+        // Expect PAD executed, verify amount
         for (Lease lease : leasesAll) {
-            new PaymentRecordTester(lease.billingAccount()).count(1). //
-                    lastRecordStatus(PaymentStatus.Cleared).lastRecordAmount("580.00");
+            new PaymentRecordTester(lease.billingAccount())//
+                    .count(1) //
+                    .lastRecordStatus(PaymentStatus.Cleared)//
+                    .lastRecordAmount("580.00");
         }
     }
 
-    //TODO VISTA-3547
-    @Ignore
-    public void TODO_testBatchPartialCompleation() throws Exception {
-        assertEquals("PAD next Generation date", "2011-01-29", getNextAutopayDate(leasesAll.get(0)));
-
-        // PAD creation triggered at the end of the month
-        advanceSysDate("2011-01-29");
-
-        // Expect PAD executed, verify amount
-        new PaymentRecordTester(leasesAll.get(0).billingAccount()).count(1). //
-                lastRecordStatus(PaymentStatus.Scheduled).lastRecordAmount("580.00");
+    public void testBatchPartialCompleation() throws Exception {
+        assertEquals("PAD next Generation date", "2011-02-01", getNextAutopayDate(leasesAll.get(0)));
 
         // Make some lease fail to post
         List<Lease> leaseToFail = new ArrayList<Lease>();
@@ -146,20 +128,26 @@ public class PreauthorizedPaymentProcessYardiTest extends PaymentYardiTestBase {
             MockEventBus.fireEvent(new RtCustomerUpdateEvent(updater));
         }
 
+        // PAD creation triggered at the end of the month
         // Post and process all payments
         advanceSysDate("2011-02-01");
 
+        // Expect PAD executed, verify amount
         for (Lease lease : leaseToFail) {
-            new PaymentRecordTester(lease.billingAccount()).count(1). //
-                    lastRecordStatus(PaymentStatus.Scheduled);
+            new PaymentRecordTester(lease.billingAccount())//
+                    .count(1) //
+                    .lastRecordStatus(PaymentStatus.Scheduled)//
+                    .lastRecordAmount("580.00");
         }
 
         for (Lease lease : leasesAll) {
             if (leaseToFail.contains(lease)) {
                 continue;
             }
-            new PaymentRecordTester(lease.billingAccount()).count(1). //
-                    lastRecordStatus(PaymentStatus.Cleared).lastRecordAmount("580.00");
+            new PaymentRecordTester(lease.billingAccount())//
+                    .count(1) //
+                    .lastRecordStatus(PaymentStatus.Cleared)//
+                    .lastRecordAmount("580.00");
         }
 
         // Recover the tenants
@@ -171,8 +159,9 @@ public class PreauthorizedPaymentProcessYardiTest extends PaymentYardiTestBase {
 
         advanceSysDate("2011-02-02");
         for (Lease lease : leaseToFail) {
-            new PaymentRecordTester(lease.billingAccount()).count(1). //
-                    lastRecordStatus(PaymentStatus.Cleared);
+            new PaymentRecordTester(lease.billingAccount())//
+                    .count(1)//
+                    .lastRecordStatus(PaymentStatus.Cleared);
         }
     }
 }
