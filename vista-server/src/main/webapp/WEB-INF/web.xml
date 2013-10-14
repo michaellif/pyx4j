@@ -33,8 +33,7 @@ N.B.   keep this file empty, See resources/META-INF/services/javax.servlet.Servl
     </welcome-file-list>
 
     <session-config>
-        <!-- set 20 for production -->
-        <session-timeout>240</session-timeout>
+        <session-timeout>20</session-timeout>
     </session-config>
 
     <error-page>

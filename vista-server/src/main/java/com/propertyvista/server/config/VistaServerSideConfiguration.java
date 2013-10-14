@@ -63,6 +63,12 @@ public class VistaServerSideConfiguration extends AbstractVistaServerSideConfigu
 
     private PropertiesConfiguration configProperties;
 
+    public VistaServerSideConfiguration() {
+        if (this.isDevelopmentBehavior()) {
+            setOverrideSessionMaxInactiveInterval(2 * Consts.HOURS2SEC);
+        }
+    }
+
     @Override
     public ServerSideConfiguration selectInstanceByContextName(ServletContext servletContext, String contextName) {
         if ("vista11".equals(contextName)) {

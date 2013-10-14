@@ -35,6 +35,13 @@ public interface SimulationDTO extends IEntity {
 
     NetworkSimulation networkSimulation();
 
+    IPrimitive<String> devSessionDuration();
+
+    IPrimitive<String> applicationSessionDuration();
+
+    @ReadOnly
+    IPrimitive<String> containerSessionTimeout();
+
     VistaSystemsSimulationConfigDTO systems();
 
     IPrimitive<Boolean> fundsTransferSimulationConfigurable();

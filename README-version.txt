@@ -7,7 +7,6 @@
     <version>x+1</version><!--vista-version-->
 
 * When creating Branch change VistaTODO.codeBaseIsProdBranch=true in Branch to support dual development environments
-  change web.xml session-timeout to 20
 
 *
   To "patch.number" be changed (set) for every next production deployment build in Branch

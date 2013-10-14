@@ -16,6 +16,7 @@ package com.propertyvista.operations.client.ui.crud.simulation;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 
+import com.pyx4j.forms.client.ui.CLabel;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.prime.form.IForm;
@@ -56,6 +57,11 @@ public class SimulationForm extends OperationsEntityForm<SimulationDTO> {
 
         content.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().networkSimulation().enabled()), 5, true).build());
         content.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().networkSimulation().delay()), 10, true).build());
+
+        content.setH2(++row, 0, 2, i18n.tr("New Session duration"));
+        content.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().devSessionDuration()), 10, true).build());
+        content.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().applicationSessionDuration()), 10, true).build());
+        content.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().containerSessionTimeout(), new CLabel<String>()), 10, true).build());
 
         return content;
     }
