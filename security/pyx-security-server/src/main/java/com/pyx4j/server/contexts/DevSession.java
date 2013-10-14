@@ -151,6 +151,14 @@ public class DevSession {
         }
     }
 
+    public static int getSessionDuration() {
+        return sessionDuration;
+    }
+
+    public static void setSessionDuration(int sessionDuration) {
+        DevSession.sessionDuration = sessionDuration;
+    }
+
     public static void cleanup() {
         sessions.clear();
     }

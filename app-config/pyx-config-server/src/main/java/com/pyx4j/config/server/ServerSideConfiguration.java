@@ -61,6 +61,8 @@ public class ServerSideConfiguration {
 
     private EnvironmentType environmentType;
 
+    private Integer overrideSessionMaxInactiveInterval;
+
     private static Boolean isStartedUnderEclipse;
 
     private static Boolean jvmDebugMode;
@@ -288,6 +290,14 @@ public class ServerSideConfiguration {
         case GAESandbox:
             return "JSESSIONID";
         }
+    }
+
+    public Integer getOverrideSessionMaxInactiveInterval() {
+        return overrideSessionMaxInactiveInterval;
+    }
+
+    public void setOverrideSessionMaxInactiveInterval(Integer overrideSessionMaxInactiveInterval) {
+        this.overrideSessionMaxInactiveInterval = overrideSessionMaxInactiveInterval;
     }
 
     public String getDevelopmentSessionCookieName() {

@@ -225,6 +225,10 @@ public class Lifecycle {
         Context.setSession(session);
         LoggerConfig.mdcPut(LoggerConfig.MDC_sessionNum, session.getId());
 
+        if (ServerSideConfiguration.instance().getOverrideSessionMaxInactiveInterval() != null) {
+            session.setMaxInactiveInterval(ServerSideConfiguration.instance().getOverrideSessionMaxInactiveInterval());
+        }
+
         String sessionToken;
         SecureRandom random = new SecureRandom();
         sessionToken = Long.toHexString(random.nextLong());

@@ -21,6 +21,9 @@
 package com.pyx4j.commons;
 
 import java.util.Date;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 // GWT requires Date
 @SuppressWarnings("deprecation")
@@ -126,6 +129,63 @@ public class TimeUtils {
             }
         }
         return sb.toString();
+    }
+
+    public static int durationParseSeconds(String value) {
+        int multiplier = 1;
+
+        Map<String, Integer> timeUnits = new HashMap<String, Integer>();
+        timeUnits.put("s", 1);
+        timeUnits.put("sec", 1);
+        timeUnits.put("second", 1);
+        timeUnits.put("seconds", 1);
+        timeUnits.put("m", Consts.MIN2SEC);
+        timeUnits.put("min", Consts.MIN2SEC);
+        timeUnits.put("minute", Consts.MIN2SEC);
+        timeUnits.put("minutes", Consts.MIN2SEC);
+        timeUnits.put("h", Consts.HOURS2SEC);
+        timeUnits.put("hour", Consts.HOURS2SEC);
+        timeUnits.put("hours", Consts.HOURS2SEC);
+        timeUnits.put("d", Consts.DAY2HOURS * Consts.HOURS2SEC);
+        timeUnits.put("day", Consts.DAY2HOURS * Consts.HOURS2SEC);
+        timeUnits.put("days", Consts.DAY2HOURS * Consts.HOURS2SEC);
+        timeUnits.put("month", 30 * Consts.DAY2HOURS * Consts.HOURS2SEC);
+        timeUnits.put("months", 30 * Consts.DAY2HOURS * Consts.HOURS2SEC);
+
+        String text = value.trim();
+
+        for (Map.Entry<String, Integer> me : timeUnits.entrySet()) {
+            if (text.endsWith(me.getKey())) {
+                text = text.substring(0, text.length() - me.getKey().length());
+                multiplier = me.getValue();
+                break;
+            }
+        }
+
+        return Integer.valueOf(text.trim()).intValue() * multiplier;
+    }
+
+    public static String durationFormatSeconds(int seconds) {
+        Map<String, Integer> timeUnits = new LinkedHashMap<String, Integer>();
+        timeUnits.put("month:months", 30 * Consts.DAY2HOURS * Consts.HOURS2SEC);
+        timeUnits.put("day:days", Consts.DAY2HOURS * Consts.HOURS2SEC);
+        timeUnits.put("hour:hours", Consts.HOURS2SEC);
+        timeUnits.put("minute:minutes", Consts.MIN2SEC);
+        timeUnits.put("second:seconds", 1);
+
+        StringBuilder b = new StringBuilder();
+        for (Map.Entry<String, Integer> me : timeUnits.entrySet()) {
+            int value = seconds / me.getValue();
+            if (value != 0) {
+                seconds = seconds - (value * me.getValue());
+                if (value == 1) {
+                    b.append(" 1 ").append(me.getKey().split(":")[0]);
+                } else {
+                    b.append(" ").append(value).append(" ").append(me.getKey().split(":")[1]);
+                }
+            }
+        }
+        return b.toString();
     }
 
     public static long since(long start) {
