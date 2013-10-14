@@ -16,8 +16,6 @@ package com.propertyvista.integration.yardi;
 
 import java.rmi.RemoteException;
 
-import org.junit.Ignore;
-
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.gwt.server.DateUtils;
 
@@ -34,8 +32,6 @@ import com.propertyvista.test.mock.models.LeaseDataModel;
 import com.propertyvista.yardi.mock.RtCustomerUpdateEvent;
 import com.propertyvista.yardi.mock.RtCustomerUpdater;
 
-//TODO VISTA-3547
-@Ignore
 public class PreauthorizedPaymentSuspensionTest extends PaymentYardiTestBase {
 
     private Lease lease;
@@ -54,9 +50,7 @@ public class PreauthorizedPaymentSuspensionTest extends PaymentYardiTestBase {
         getDataModel(CustomerDataModel.class).addPaymentMethod(tenant.customer(), lease.unit().building(), PaymentType.Echeck);
     }
 
-    //TODO VISTA-3547
-    @Ignore
-    public void TODO_testLeaseEndSuspension1() throws Exception {
+    public void testLeaseEndSuspensionInclLastPeriodEndOfMonth() throws Exception {
         getDataModel(AutoPayPolicyDataModel.class).setExcludeLastBillingPeriodCharge(false);
         Persistence.service().commit();
 
@@ -66,12 +60,10 @@ public class PreauthorizedPaymentSuspensionTest extends PaymentYardiTestBase {
             MockEventBus.fireEvent(new RtCustomerUpdateEvent(updater));
         }
 
-        leaseEndSuspentionTestSequence();
+        leaseEndSuspentionTestSequenceInclLastPeriod();
     }
 
-    //TODO VISTA-3547
-    @Ignore
-    public void TODO_testLeaseEndSuspension2() throws Exception {
+    public void testLeaseEndSuspensionInclLastPeriodStartOfMonth() throws Exception {
         getDataModel(AutoPayPolicyDataModel.class).setExcludeLastBillingPeriodCharge(false);
         Persistence.service().commit();
 
@@ -81,12 +73,10 @@ public class PreauthorizedPaymentSuspensionTest extends PaymentYardiTestBase {
             MockEventBus.fireEvent(new RtCustomerUpdateEvent(updater));
         }
 
-        leaseEndSuspentionTestSequence();
+        leaseEndSuspentionTestSequenceInclLastPeriod();
     }
 
-    //TODO VISTA-3547
-    @Ignore
-    public void testLeaseEndSuspension3() throws Exception {
+    public void testLeaseEndSuspensionInclLastPeriod() throws Exception {
         getDataModel(AutoPayPolicyDataModel.class).setExcludeLastBillingPeriodCharge(false);
         Persistence.service().commit();
 
@@ -96,11 +86,13 @@ public class PreauthorizedPaymentSuspensionTest extends PaymentYardiTestBase {
             MockEventBus.fireEvent(new RtCustomerUpdateEvent(updater));
         }
 
-        leaseEndSuspentionTestSequence();
+        leaseEndSuspentionTestSequenceInclLastPeriod();
     }
 
-    private void leaseEndSuspentionTestSequence() throws RemoteException, YardiServiceException {
+    private void leaseEndSuspentionTestSequenceInclLastPeriod() throws RemoteException, YardiServiceException {
         createSomePap();
+
+        // There should be no AutoPay payments in 2012-04
 
         setSysDate("2012-01-11");
         yardiImportAll(getYardiCredential("prop123"));
@@ -112,7 +104,7 @@ public class PreauthorizedPaymentSuspensionTest extends PaymentYardiTestBase {
 
         setSysDate("2012-02-29");
         yardiImportAll(getYardiCredential("prop123"));
-        new PaymentAgreementTester(lease.billingAccount()).activeCount(0); // PAP is suspended!
+        new PaymentAgreementTester(lease.billingAccount()).activeCount(1); // PAP is NOT suspended!
 
         // new round:
         createSomePap();
@@ -139,9 +131,7 @@ public class PreauthorizedPaymentSuspensionTest extends PaymentYardiTestBase {
         new PaymentAgreementTester(lease.billingAccount()).activeCount(0); // PAP is suspended!        
     }
 
-    //TODO VISTA-3547
-    @Ignore
-    public void TODO_testLeaseEndByPolicySuspension1() throws Exception {
+    public void testLeaseEndByPolicySuspension1() throws Exception {
         getDataModel(AutoPayPolicyDataModel.class).setExcludeLastBillingPeriodCharge(true);
         Persistence.service().commit();
 
@@ -167,9 +157,7 @@ public class PreauthorizedPaymentSuspensionTest extends PaymentYardiTestBase {
         leaseEndSuspentionByPolicyTestSequence();
     }
 
-    //TODO VISTA-3547
-    @Ignore
-    public void TODO_testLeaseEndByPolicySuspension3() throws Exception {
+    public void testLeaseEndByPolicySuspension3() throws Exception {
         getDataModel(AutoPayPolicyDataModel.class).setExcludeLastBillingPeriodCharge(true);
         Persistence.service().commit();
 

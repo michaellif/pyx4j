@@ -19,7 +19,7 @@ import com.pyx4j.config.server.ServerSideFactory;
 import com.propertyvista.biz.financial.payment.PaymentProcessFacade;
 import com.propertyvista.domain.settings.PmcVistaFeatures;
 
-public class PaymentsUpdatePreauthorizedPaymentAgreementsProcess implements PmcProcess {
+public class PaymentsAutopayLastMonthSuspendProcess implements PmcProcess {
 
     @Override
     public boolean start(PmcProcessContext context) {

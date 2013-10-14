@@ -138,12 +138,11 @@ public class PaymentMethodFacadeImpl implements PaymentMethodFacade {
     @Override
     public BillingCycle getNextAutopayBillingCycle(Lease lease) {
         LogicalDate when = new LogicalDate(SystemDateManager.getDate());
-        BillingCycle cycle = ServerSideFactory.create(BillingCycleFacade.class).getBillingCycleForDate(lease, when);
-        cycle = ServerSideFactory.create(BillingCycleFacade.class).getSubsequentBillingCycle(cycle);
-        if (!when.before(cycle.targetAutopayExecutionDate().getValue())) {
-            cycle = ServerSideFactory.create(BillingCycleFacade.class).getSubsequentBillingCycle(cycle);
+        BillingCycle billingCycle = ServerSideFactory.create(BillingCycleFacade.class).getBillingCycleForDate(lease, when);
+        while (!billingCycle.targetAutopayExecutionDate().getValue().after(when)) {
+            billingCycle = ServerSideFactory.create(BillingCycleFacade.class).getSubsequentBillingCycle(billingCycle);
         }
-        return cycle;
+        return billingCycle;
     }
 
     @Override

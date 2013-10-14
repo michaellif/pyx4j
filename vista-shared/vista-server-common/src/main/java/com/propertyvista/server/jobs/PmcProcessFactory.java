@@ -47,7 +47,7 @@ public class PmcProcessFactory {
             return new PaymentsScheduledProcess(PaymentType.Echeck);
 
         case paymentsLastMonthSuspend:
-            return new PaymentsUpdatePreauthorizedPaymentAgreementsProcess();
+            return new PaymentsAutopayLastMonthSuspendProcess();
 
         case paymentsBmoReceive:
             return new PaymentsBmoReceiveProcess();

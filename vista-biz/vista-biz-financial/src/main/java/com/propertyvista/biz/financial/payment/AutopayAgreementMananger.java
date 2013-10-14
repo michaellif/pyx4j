@@ -90,7 +90,7 @@ class AutopayAgreementMananger {
                 }
                 if (hasPaymentRecords) {
                     origPreauthorizedPayment.isDeleted().setValue(Boolean.TRUE);
-                    preauthorizedPayment.expiredFrom().setValue(nextPaymentCycle.billingCycleStartDate().getValue());
+                    origPreauthorizedPayment.expiredFrom().setValue(nextPaymentCycle.billingCycleStartDate().getValue());
                     Persistence.service().merge(origPreauthorizedPayment);
 
                     ServerSideFactory.create(AuditFacade.class).updated(origPreauthorizedPayment, EntityDiff.getChanges(orig, origPreauthorizedPayment));

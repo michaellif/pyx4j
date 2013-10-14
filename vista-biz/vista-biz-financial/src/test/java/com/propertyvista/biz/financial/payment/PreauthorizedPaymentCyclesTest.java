@@ -13,6 +13,8 @@
  */
 package com.propertyvista.biz.financial.payment;
 
+import org.junit.experimental.categories.Category;
+
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.config.server.SystemDateManager;
@@ -25,8 +27,10 @@ import com.propertyvista.domain.financial.billing.BillingCycle;
 import com.propertyvista.domain.policy.policies.LeaseBillingPolicy;
 import com.propertyvista.domain.policy.policies.domain.LeaseBillingTypePolicyItem;
 import com.propertyvista.domain.tenant.lease.Lease;
+import com.propertyvista.test.integration.IntegrationTestBase.RegressionTests;
 import com.propertyvista.test.mock.models.LeaseBillingPolicyDataModel;
 
+@Category(RegressionTests.class)
 public class PreauthorizedPaymentCyclesTest extends LeaseFinancialTestBase {
 
     @Override
@@ -53,21 +57,21 @@ public class PreauthorizedPaymentCyclesTest extends LeaseFinancialTestBase {
         }
 
         {
-            setSysDate("2011-01-29");
-            BillingCycle curentCycle = ServerSideFactory.create(BillingCycleFacade.class).getBillingCycleForDate(lease,
-                    new LogicalDate(SystemDateManager.getDate()));
-
-            assertEquals("billingCycleStartDate", "2011-01-01", curentCycle.billingCycleStartDate().getValue());
-
-            assertEquals("NextPreauthorizedPaymentDate", "2011-03-01", f.getNextAutopayDate(lease)); // <-- changes
-        }
-
-        {
             setSysDate("2011-01-31");
             BillingCycle curentCycle = ServerSideFactory.create(BillingCycleFacade.class).getBillingCycleForDate(lease,
                     new LogicalDate(SystemDateManager.getDate()));
 
             assertEquals("billingCycleStartDate", "2011-01-01", curentCycle.billingCycleStartDate().getValue());
+
+            assertEquals("NextPreauthorizedPaymentDate", "2011-02-01", f.getNextAutopayDate(lease));
+        }
+
+        {
+            setSysDate("2011-02-01");
+            BillingCycle curentCycle = ServerSideFactory.create(BillingCycleFacade.class).getBillingCycleForDate(lease,
+                    new LogicalDate(SystemDateManager.getDate()));
+
+            assertEquals("billingCycleStartDate", "2011-02-01", curentCycle.billingCycleStartDate().getValue());
 
             assertEquals("NextPreauthorizedPaymentDate", "2011-03-01", f.getNextAutopayDate(lease));
         }
@@ -102,8 +106,7 @@ public class PreauthorizedPaymentCyclesTest extends LeaseFinancialTestBase {
             assertEquals("NextPreauthorizedPaymentDate", "2011-02-05", f.getNextAutopayDate(lease));
         }
 
-        //TODO
-        if (false) {
+        {
             setSysDate("2011-02-01");
             BillingCycle curentCycle = ServerSideFactory.create(BillingCycleFacade.class).getBillingCycleForDate(lease,
                     new LogicalDate(SystemDateManager.getDate()));
@@ -113,13 +116,12 @@ public class PreauthorizedPaymentCyclesTest extends LeaseFinancialTestBase {
             assertEquals("NextPreauthorizedPaymentDate", "2011-02-05", f.getNextAutopayDate(lease)); // <-- changes
         }
 
-        //TODO
-        if (false) {
-            setSysDate("2011-02-03");
+        {
+            setSysDate("2011-02-05");
             BillingCycle curentCycle = ServerSideFactory.create(BillingCycleFacade.class).getBillingCycleForDate(lease,
                     new LogicalDate(SystemDateManager.getDate()));
 
-            assertEquals("billingCycleStartDate", "2011-01-01", curentCycle.billingCycleStartDate().getValue());
+            assertEquals("billingCycleStartDate", "2011-02-01", curentCycle.billingCycleStartDate().getValue());
 
             assertEquals("NextPreauthorizedPaymentDate", "2011-03-05", f.getNextAutopayDate(lease));
         }

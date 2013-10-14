@@ -28,13 +28,11 @@ import com.propertyvista.biz.financial.billing.BillTester;
 import com.propertyvista.domain.financial.PaymentRecord.PaymentStatus;
 import com.propertyvista.domain.payment.AutopayAgreement;
 import com.propertyvista.domain.policy.policies.LeaseBillingPolicy;
-import com.propertyvista.operations.domain.scheduler.PmcProcessType;
 import com.propertyvista.test.integration.IntegrationTestBase.RegressionTests;
 import com.propertyvista.test.integration.PaymentAgreementTester;
 import com.propertyvista.test.integration.PaymentRecordTester;
 import com.propertyvista.test.integration.PreauthorizedPaymentBuilder;
 import com.propertyvista.test.mock.MockConfig;
-import com.propertyvista.test.mock.schedule.SchedulerMock;
 
 @Category(RegressionTests.class)
 public class PadPaymentMethodCancellationTest extends LeaseFinancialTestBase {
@@ -89,25 +87,26 @@ public class PadPaymentMethodCancellationTest extends LeaseFinancialTestBase {
         deletePreauthorizedPayment(preauthorizedPayment1);
 
         final AutopayAgreement preauthorizedPayment2 = setPreauthorizedPayment(new PreauthorizedPaymentBuilder().add(
-                getLease().currentTerm().version().leaseProducts().serviceItem(), "1120.00").build());
-
-        // new payment is not automatically created, existing record sent to Caleodon
+                getLease().currentTerm().version().leaseProducts().serviceItem(), "1010.00").build());
 
         advanceSysDate("2011-05-02");
 
-        new PaymentRecordTester(getLease().billingAccount()).count(2).lastRecordStatus(PaymentStatus.Queued);
+        new PaymentRecordTester(getLease().billingAccount())//
+                .count(2)//
+                .lastRecordStatus(PaymentStatus.Queued)//
+                .lastRecordAmount("1010.00"); //;
 
         advanceSysDate("2011-05-20");
         new BillTester(getLatestBill())//
                 .billingCyclePeriodStartDate("2011-06-01")//
-                .totalDueAmount("2150.30");
+                .totalDueAmount("2260.30");
 
         advanceSysDate("2011-06-01");
 
         new PaymentRecordTester(getLease().billingAccount())//
                 .count(3)//
                 .lastRecordStatus(PaymentStatus.Queued)//
-                .lastRecordAmount("1120.00");
+                .lastRecordAmount("1010.00");
 
         // Cancel paymentMethod used in preauthorizedPayment
         new UnitOfWork(TransactionScopeOption.RequiresNew).execute(new Executable<Void, RuntimeException>() {
@@ -125,8 +124,7 @@ public class PadPaymentMethodCancellationTest extends LeaseFinancialTestBase {
 
     }
 
-    //TODO VISTA-3547
-    public void TODO_testAgreementUpdate() throws Exception {
+    public void testAgreementUpdate() throws Exception {
         setSysDate("2010-12-19");
 
         createLease("2011-01-01", "2012-03-10", new BigDecimal("1000.00"), null);
@@ -134,8 +132,8 @@ public class PadPaymentMethodCancellationTest extends LeaseFinancialTestBase {
         setBillingBatchProcess();
         setLeaseBatchProcess();
 
-        // Do Not start payment
-        //setPaymentBatchProcess();
+        // Start payment
+        setPaymentBatchProcess();
 
         advanceSysDate("2010-12-20");
 
@@ -147,9 +145,9 @@ public class PadPaymentMethodCancellationTest extends LeaseFinancialTestBase {
                 .billingCyclePeriodStartDate("2011-01-01")//
                 .totalDueAmount("2050.30");
 
-        assertEquals("", "2011-01-01", ServerSideFactory.create(PaymentMethodFacade.class).getNextAutopayDate(getLease()));
+        assertEquals("NextAutopay", "2011-01-01", ServerSideFactory.create(PaymentMethodFacade.class).getNextAutopayDate(getLease()));
 
-        // Add 100% PAP
+        // Add PAP
         AutopayAgreement pa1 = setPreauthorizedPayment(new PreauthorizedPaymentBuilder(). //
                 add(getLease().currentTerm().version().leaseProducts().serviceItem(), "1000.01"). // 1000.00 + 12%
                 build());
@@ -167,10 +165,16 @@ public class PadPaymentMethodCancellationTest extends LeaseFinancialTestBase {
                 .count(1)//
                 .lastRecordAmount("1000.02");
 
-        // Move to CutOffDate
-        advanceSysDate("2010-12-29");
+        // Move to Pay Date
+        advanceSysDate("2011-01-01");
 
-        assertEquals("", "2011-02-01", ServerSideFactory.create(PaymentMethodFacade.class).getNextAutopayDate(getLease()));
+        assertEquals("NextAutopay", "2011-02-01", ServerSideFactory.create(PaymentMethodFacade.class).getNextAutopayDate(getLease()));
+
+        // Payment generated with amount we entered 
+        new PaymentRecordTester(getLease().billingAccount())//
+                .count(1)//
+                .lastRecordStatus(PaymentStatus.Queued)//
+                .lastRecordAmount("1000.02");
 
         // Record should not be updated, and new PA created
         pa1.coveredItems().get(0).amount().setValue(new BigDecimal("1000.03"));
@@ -182,7 +186,7 @@ public class PadPaymentMethodCancellationTest extends LeaseFinancialTestBase {
                 .lastRecordAmount("1000.03");
 
         Persistence.service().retrieve(pa1);
-        assertEquals("", "2010-12-29", pa1.expiredFrom().getValue());
+        assertEquals("", "2011-02-01", pa1.expiredFrom().getValue());
 
         assertEquals("", "2011-02-01", pa2.effectiveFrom().getValue());
 
@@ -200,7 +204,12 @@ public class PadPaymentMethodCancellationTest extends LeaseFinancialTestBase {
         assertEquals("New record should not be created", pa2.getPrimaryKey(), pa2e.getPrimaryKey());
 
         // Move to next period
-        advanceSysDate("2011-01-01");
+        advanceSysDate("2011-02-01");
+
+        new PaymentRecordTester(getLease().billingAccount())//
+                .count(2)//
+                .lastRecordStatus(PaymentStatus.Queued)//
+                .lastRecordAmount("1000.04");
 
         // Record should be updated, and new PA NOT created
         pa2.coveredItems().get(0).amount().setValue(new BigDecimal("1000.05"));
@@ -208,34 +217,56 @@ public class PadPaymentMethodCancellationTest extends LeaseFinancialTestBase {
         Persistence.service().commit();
 
         new PaymentAgreementTester(getLease().billingAccount())//
-                .count(2)//
+                .count(3)//
                 .lastRecordAmount("1000.05");
 
         // Test PAP creation
-
-        // Run PAP creation for past month
-        SchedulerMock.runProcess(PmcProcessType.paymentsIssue, "2010-12-29");
+        advanceSysDate("2011-03-01");
 
         // Pap generated with amount we entered before CutOffDate
         new PaymentRecordTester(getLease().billingAccount())//
-                .count(1)//
-                .lastRecordStatus(PaymentStatus.Scheduled).lastRecordAmount("1000.02");
-
-        // Now enable processes
-        setPaymentBatchProcess();
-        advanceSysDate("2011-01-02");
-        new PaymentRecordTester(getLease().billingAccount())//
-                .count(1)//
+                .count(3)//
                 .lastRecordStatus(PaymentStatus.Queued)//
-                .lastRecordAmount("1000.02");
-
-        // Move to Next pap generation date
-        advanceSysDate("2011-01-29");
-
-        // Pap generated with new amount
-        new PaymentRecordTester(getLease().billingAccount())//
-                .count(2)//
-                .lastRecordStatus(PaymentStatus.Scheduled)//
                 .lastRecordAmount("1000.05");
+
+    }
+
+    public void testMoveOut() throws Exception {
+        setSysDate("2011-03-10");
+        createLease("2011-04-01", "2011-06-10", new BigDecimal("1000.00"), null);
+        approveApplication(true);
+
+        // Start payment
+        setLeaseBatchProcess();
+        setPaymentBatchProcess();
+
+        setPreauthorizedPayment(new PreauthorizedPaymentBuilder(). //
+                add(getLease().currentTerm().version().leaseProducts().serviceItem(), "1000.00").build());
+
+        new PaymentAgreementTester(getLease().billingAccount())//
+                .count(1)//
+                .activeCount(1) //
+                .lastRecordAmount("1000.00");
+
+        advanceSysDate("2011-04-01");
+        new PaymentRecordTester(getLease().billingAccount())//
+                .count(1);
+
+        advanceSysDate("2011-05-01");
+        new PaymentRecordTester(getLease().billingAccount())//
+                .count(2);
+
+        // Last month payment not created
+        advanceSysDate("2011-06-01");
+        new PaymentRecordTester(getLease().billingAccount())//
+                .count(2);
+
+        new PaymentAgreementTester(getLease().billingAccount())//
+                .count(1)//
+                .activeCount(0);
+
+        advanceSysDate("2011-07-01");
+        new PaymentRecordTester(getLease().billingAccount())//
+                .count(2);
     }
 }

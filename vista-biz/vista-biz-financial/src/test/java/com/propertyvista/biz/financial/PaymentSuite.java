@@ -22,11 +22,23 @@ import com.propertyvista.biz.financial.payment.PadPaymentMethodCancellationTest;
 import com.propertyvista.biz.financial.payment.PadPaymentPercentAmountValidationTest;
 import com.propertyvista.biz.financial.payment.PadProcessingTest;
 import com.propertyvista.biz.financial.payment.PadTransactionUtilsTest;
+import com.propertyvista.biz.financial.payment.PaymentMethodPersistenceCardsTest;
 import com.propertyvista.biz.financial.payment.PaymentMethodPersistenceEcheckTest;
+import com.propertyvista.biz.financial.payment.PreauthorizedPaymentChangeReviewInternalTest;
+import com.propertyvista.biz.financial.payment.PreauthorizedPaymentCyclesTest;
 
 @RunWith(Suite.class)
-@Suite.SuiteClasses({ PaymentMethodPersistenceEcheckTest.class, PadTransactionUtilsTest.class, PadPaymentChargeBaseSunnyDayScenarioTest.class,
-        PadPaymentMethodCancellationTest.class, PadPaymentPercentAmountValidationTest.class, PadPaymentFixedAmountValidationTest.class, PadProcessingTest.class })
+@Suite.SuiteClasses({ PaymentMethodPersistenceEcheckTest.class, //
+        PaymentMethodPersistenceCardsTest.class, //
+        PadTransactionUtilsTest.class, //
+        PadPaymentChargeBaseSunnyDayScenarioTest.class, //
+        PadPaymentMethodCancellationTest.class, //
+        PadPaymentPercentAmountValidationTest.class, //
+        PadPaymentFixedAmountValidationTest.class, //
+        PadProcessingTest.class, //
+        PadTransactionUtilsTest.class, //
+        PreauthorizedPaymentChangeReviewInternalTest.class, //
+        PreauthorizedPaymentCyclesTest.class })
 public class PaymentSuite {
 
 }
