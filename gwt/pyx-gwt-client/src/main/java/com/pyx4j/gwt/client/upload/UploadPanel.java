@@ -43,6 +43,7 @@ import com.google.gwt.user.client.ui.SimplePanel;
 import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.config.client.ClientDeploymentConfig;
 import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.shared.IFile;
 import com.pyx4j.gwt.client.deferred.DeferredProgressListener;
 import com.pyx4j.gwt.client.deferred.DeferredProgressPanel;
 import com.pyx4j.gwt.rpc.deferred.DeferredProcessProgressResponse;
@@ -56,7 +57,7 @@ import com.pyx4j.rpc.client.IServiceBase;
 import com.pyx4j.rpc.shared.VoidSerializable;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
 
-public class UploadPanel<U extends IEntity, R extends IEntity> extends SimplePanel implements FormPanel.SubmitCompleteHandler, FormPanel.SubmitHandler,
+public class UploadPanel<U extends IEntity, R extends IFile> extends SimplePanel implements FormPanel.SubmitCompleteHandler, FormPanel.SubmitHandler,
         DeferredProgressListener {
 
     private final static Logger log = LoggerFactory.getLogger(UploadPanel.class);

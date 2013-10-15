@@ -30,6 +30,7 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.commons.UserRuntimeException;
 import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.shared.IFile;
 import com.pyx4j.gwt.rpc.deferred.DeferredProcessProgressResponse;
 import com.pyx4j.gwt.rpc.upload.UploadId;
 import com.pyx4j.gwt.rpc.upload.UploadResponse;
@@ -38,7 +39,7 @@ import com.pyx4j.gwt.server.deferred.DeferredProcessRegistry;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.shared.VoidSerializable;
 
-public abstract class AbstractUploadServiceImpl<U extends IEntity, R extends IEntity> implements UploadService<U, R>, UploadReciver<U, R> {
+public abstract class AbstractUploadServiceImpl<U extends IEntity, R extends IFile> implements UploadService<U, R>, UploadReciver<U, R> {
 
     private static final I18n i18n = I18n.get(AbstractUploadServiceImpl.class);
 
@@ -50,8 +51,8 @@ public abstract class AbstractUploadServiceImpl<U extends IEntity, R extends IEn
         callback.onSuccess(getMaxSize());
     }
 
-    protected UploadDeferredProcess<U, R> createUploadDeferredProcess(U data) {
-        return new UploadDeferredProcess<U, R>(data);
+    protected DeferredUploadProcess<U, R> createUploadDeferredProcess(U data) {
+        return new DeferredUploadProcess<U, R>(data);
     }
 
     @Override
@@ -70,7 +71,7 @@ public abstract class AbstractUploadServiceImpl<U extends IEntity, R extends IEn
     @Override
     public void getUploadResponse(AsyncCallback<UploadResponse<R>> callback, UploadId uploadId) {
         @SuppressWarnings("unchecked")
-        UploadDeferredProcess<U, R> process = (UploadDeferredProcess<U, R>) DeferredProcessRegistry.get(uploadId.getDeferredCorrelationId());
+        DeferredUploadProcess<U, R> process = (DeferredUploadProcess<U, R>) DeferredProcessRegistry.get(uploadId.getDeferredCorrelationId());
         if (process != null) {
             DeferredProcessProgressResponse response = process.status();
             if (response.isCompleted()) {

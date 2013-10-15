@@ -25,10 +25,11 @@ import java.util.Vector;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.shared.IFile;
 import com.pyx4j.rpc.shared.IService;
 import com.pyx4j.rpc.shared.VoidSerializable;
 
-public interface UploadService<U extends IEntity, R extends IEntity> extends IService {
+public interface UploadService<U extends IEntity, R extends IFile> extends IService {
 
     public static final String PostCorrelationID = "correlationID";
 

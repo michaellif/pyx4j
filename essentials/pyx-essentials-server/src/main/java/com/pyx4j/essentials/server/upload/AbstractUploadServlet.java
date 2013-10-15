@@ -74,7 +74,7 @@ public abstract class AbstractUploadServlet extends HttpServlet {
     protected int slowUploadSeconds = 0;
 
     @SuppressWarnings("unchecked")
-    protected <T extends UploadReciver<?, ?> & UploadService<?, ?>> void bind(Class<T> serviceImpClass) {
+    protected <T extends UploadReciver<?, ?> & UploadService<?, ?>> void register(Class<T> serviceImpClass) {
         for (Class<?> itf : serviceImpClass.getInterfaces()) {
             if (UploadService.class.isAssignableFrom(itf)) {
                 mappedUploads.put((Class<UploadService<?, ?>>) itf, (Class<? extends UploadReciver<?, ?>>) serviceImpClass);
@@ -101,7 +101,7 @@ public abstract class AbstractUploadServlet extends HttpServlet {
             return;
         }
         @SuppressWarnings("rawtypes")
-        UploadDeferredProcess process = null;
+        DeferredUploadProcess process = null;
         try {
             if (!ServletFileUpload.isMultipartContent(request)) {
                 out.println(i18n.tr("Invalid Request Type"));
@@ -156,7 +156,7 @@ public abstract class AbstractUploadServlet extends HttpServlet {
                         log.debug(" form field {}", item.getFieldName());
                         if (UploadService.PostCorrelationID.equals(item.getFieldName())) {
                             uploadData.deferredCorrelationId = Streams.asString(item.openStream());
-                            process = (UploadDeferredProcess<?, ?>) DeferredProcessRegistry.get(uploadData.deferredCorrelationId);
+                            process = (DeferredUploadProcess<?, ?>) DeferredProcessRegistry.get(uploadData.deferredCorrelationId);
                             if (process != null) {
                                 progressListener.processInfo = process.status();
                                 process.setResponse(uploadResponse);

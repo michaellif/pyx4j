@@ -26,7 +26,7 @@ import com.pyx4j.gwt.rpc.upload.UploadResponse;
 import com.pyx4j.gwt.server.deferred.IDeferredProcess;
 
 @SuppressWarnings("serial")
-public class UploadDeferredProcess<U extends IEntity, R extends IEntity> implements IDeferredProcess {
+public class DeferredUploadProcess<U extends IEntity, R extends IEntity> implements IDeferredProcess {
 
     private final DeferredProcessProgressResponse status;
 
@@ -34,11 +34,11 @@ public class UploadDeferredProcess<U extends IEntity, R extends IEntity> impleme
 
     private UploadResponse<R> response;
 
-    protected UploadDeferredProcess() {
+    protected DeferredUploadProcess() {
         this(null);
     }
 
-    public UploadDeferredProcess(U data) {
+    public DeferredUploadProcess(U data) {
         this.status = new DeferredProcessProgressResponse();
         this.data = data;
     }

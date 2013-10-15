@@ -38,7 +38,7 @@ public abstract class AbstractFileUploadServiceImpl<E extends IFile> extends Abs
     protected abstract E fileUploadRecived(byte[] data, E uploadData);
 
     @Override
-    public ProcessingStatus onUploadReceived(UploadData data, UploadDeferredProcess<E, E> process, UploadResponse<E> response) {
+    public ProcessingStatus onUploadReceived(UploadData data, DeferredUploadProcess<E, E> process, UploadResponse<E> response) {
         response.fileContentType = MimeMap.getContentType(FilenameUtils.getExtension(response.fileName));
 
         E fileInstance = process.getData();

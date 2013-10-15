@@ -26,18 +26,22 @@ import com.pyx4j.commons.Key;
 import com.pyx4j.entity.shared.IEntity;
 
 @SuppressWarnings("serial")
+@Deprecated
 public class UploadResponse<E extends IEntity> implements Serializable {
 
+    @Deprecated
     public String fileName;
 
     /**
      * Size in bytes
      */
+    @Deprecated
     public int fileSize;
 
     /**
      * Server side time when we got the file
      */
+    @Deprecated
     public long timestamp;
 
     /**
@@ -48,11 +52,13 @@ public class UploadResponse<E extends IEntity> implements Serializable {
     /**
      * Optional
      */
+    @Deprecated
     public String fileContentType;
 
     /**
      * Optional Id if created by server. Can be null;
      */
+    @Deprecated
     public Key uploadKey;
 
     /**

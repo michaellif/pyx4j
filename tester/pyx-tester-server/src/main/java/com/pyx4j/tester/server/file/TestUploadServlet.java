@@ -26,7 +26,7 @@ import com.pyx4j.essentials.server.upload.AbstractUploadServlet;
 public class TestUploadServlet extends AbstractUploadServlet {
 
     public TestUploadServlet() {
-        bind(TFileUploadServiceImpl.class);
+        register(TFileUploadServiceImpl.class);
     }
 
 }

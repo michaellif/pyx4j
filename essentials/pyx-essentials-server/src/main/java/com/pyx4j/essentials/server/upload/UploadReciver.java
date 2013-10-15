@@ -41,6 +41,6 @@ public interface UploadReciver<U extends IEntity, R extends IEntity> {
         processWillContinue
     }
 
-    public ProcessingStatus onUploadReceived(UploadData data, UploadDeferredProcess<U, R> process, UploadResponse<R> response);
+    public ProcessingStatus onUploadReceived(UploadData data, DeferredUploadProcess<U, R> process, UploadResponse<R> response);
 
 }
