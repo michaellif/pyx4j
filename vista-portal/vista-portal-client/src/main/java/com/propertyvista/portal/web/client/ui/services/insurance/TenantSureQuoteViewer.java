@@ -61,25 +61,24 @@ public class TenantSureQuoteViewer extends CViewer<TenantSureQuoteDTO> {
         if (quote != null && !quote.isNull()) {
             if (quote.specialQuote().isNull()) {
                 int row = 0;
-                paymentBreakdownPanel.setH2(++row, 0, 3, i18n.tr("Quote Number"));
+                paymentBreakdownPanel.setH2(++row, 0, 2, i18n.tr("Quote Number"));
 
-                paymentBreakdownPanel.setWidget(++row, 0, new HTML(quote.quoteId().getValue()));
-                paymentBreakdownPanel.getFlexCellFormatter().setColSpan(row, 0, 3);
-                paymentBreakdownPanel.getFlexCellFormatter().setHorizontalAlignment(row, 0, HasHorizontalAlignment.ALIGN_RIGHT);
+                paymentBreakdownPanel.setWidget(++row, 0, 2, new HTML(quote.quoteId().getValue()));
+                paymentBreakdownPanel.getFlexCellFormatter().setHorizontalAlignment(row, 0, HasHorizontalAlignment.ALIGN_CENTER);
 
                 if (quote.paymentSchedule().getValue() == TenantSurePaymentSchedule.Monthly) {
                     if (!quote.totalFirstPayable().isNull()) {
-                        paymentBreakdownPanel.setH2(++row, 0, 3, i18n.tr("First Payment*"));
+                        paymentBreakdownPanel.setH2(++row, 0, 2, i18n.tr("First Payment*"));
                         addDetailRecord(paymentBreakdownPanel, ++row, "", quote.totalFirstPayable().getValue());
                     }
 
-                    paymentBreakdownPanel.setH2(++row, 0, 3, i18n.tr("Recurring Monthly Payments"));
+                    paymentBreakdownPanel.setH2(++row, 0, 2, i18n.tr("Recurring Monthly Payments"));
                     addDetailRecord(paymentBreakdownPanel, ++row, "", quote.totalMonthlyPayable().getValue());
 
-                    paymentBreakdownPanel.setH2(++row, 0, 3, i18n.tr("Total Annual Payment"));
+                    paymentBreakdownPanel.setH2(++row, 0, 2, i18n.tr("Total Annual Payment"));
                     addDetailRecord(paymentBreakdownPanel, ++row, quote.annualPremium().getMeta().getCaption(), quote.annualPremium().getValue());
                 } else {
-                    paymentBreakdownPanel.setH2(++row, 0, 3, i18n.tr("Annual Payment"));
+                    paymentBreakdownPanel.setH2(++row, 0, 2, i18n.tr("Annual Payment"));
                     addDetailRecord(paymentBreakdownPanel, ++row, quote.annualPremium().getMeta().getCaption(), quote.annualPremium().getValue());
                 }
 
@@ -118,22 +117,21 @@ public class TenantSureQuoteViewer extends CViewer<TenantSureQuoteDTO> {
     }
 
     private void addDetailRecord(FlexTable table, int row, String description, BigDecimal amount) {
-        table.setHTML(row, 1, description);
-        table.setHTML(row, 2, currencyFormat.format(amount));
+        table.setHTML(row, 0, description);
+        table.setHTML(row, 1, currencyFormat.format(amount));
         // styling:
         table.getRowFormatter().setStyleName(row, BillingTheme.StyleName.BillingDetailItem.name());
-        table.getFlexCellFormatter().setStyleName(row, 0, BillingTheme.StyleName.BillingDetailItemDate.name());
-        table.getFlexCellFormatter().setStyleName(row, 1, BillingTheme.StyleName.BillingDetailItemTitle.name());
-        table.getFlexCellFormatter().setStyleName(row, 2, BillingTheme.StyleName.BillingDetailItemAmount.name());
+        table.getFlexCellFormatter().setStyleName(row, 0, BillingTheme.StyleName.BillingDetailItemTitle.name());
+        table.getFlexCellFormatter().setStyleName(row, 1, BillingTheme.StyleName.BillingDetailItemAmount.name());
     }
 
     private void addTotalRecord(FlexTable table, int row, String description, BigDecimal amount) {
-        table.setHTML(row, 1, description);
-        table.setHTML(row, 2, currencyFormat.format(amount));
+        table.setHTML(row, 0, description);
+        table.setHTML(row, 1, currencyFormat.format(amount));
         // styling:
         table.getRowFormatter().setStyleName(row, BillingTheme.StyleName.BillingDetailTotal.name());
-        table.getFlexCellFormatter().setStyleName(row, 1, BillingTheme.StyleName.BillingDetailTotalTitle.name());
-        table.getFlexCellFormatter().setStyleName(row, 2, BillingTheme.StyleName.BillingDetailTotalAmount.name());
+        table.getFlexCellFormatter().setStyleName(row, 0, BillingTheme.StyleName.BillingDetailTotalTitle.name());
+        table.getFlexCellFormatter().setStyleName(row, 1, BillingTheme.StyleName.BillingDetailTotalAmount.name());
     }
 
 }

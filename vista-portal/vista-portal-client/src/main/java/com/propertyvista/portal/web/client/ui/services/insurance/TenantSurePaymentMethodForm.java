@@ -20,9 +20,7 @@ import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.HTML;
-import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.IsWidget;
-import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.forms.client.ui.CCheckBox;
@@ -31,7 +29,6 @@ import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.security.client.ClientContext;
 
-import com.propertyvista.common.client.theme.NewPaymentMethodEditorTheme;
 import com.propertyvista.common.client.ui.components.editors.payments.PaymentMethodForm;
 import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
 import com.propertyvista.domain.contact.AddressSimple;
@@ -44,9 +41,9 @@ public class TenantSurePaymentMethodForm extends PaymentMethodForm<InsurancePaym
 
     private final Command onSameAsCurrentAddressSelected;
 
-    private final CCheckBox iAgreeBox = new CCheckBox();
+    private CCheckBox iAgreeBox;
 
-    private final HTML legalTerms = new HTML();
+    private HTML legalTerms;
 
     private boolean isAgreedToPreauthorizedPayments;
 
@@ -79,20 +76,21 @@ public class TenantSurePaymentMethodForm extends PaymentMethodForm<InsurancePaym
     private Widget createLegalTermsPanel() {
         BasicFlexFormPanel panel = new BasicFlexFormPanel();
 
-        panel.setH1(0, 0, 3, i18n.tr("Pre-Authorized Agreement"));
+        panel.setH1(0, 0, 2, i18n.tr("Pre-Authorized Agreement"));
 
-        panel.setWidget(1, 0, new ScrollPanel(legalTerms));
-        panel.getWidget(1, 0).setStyleName(NewPaymentMethodEditorTheme.StyleName.PaymentEditorLegalTerms.name());
+        legalTerms = new HTML();
 
-        panel.setWidget(2, 0, new FormDecoratorBuilder(iAgreeBox, 5, 3, 3).customLabel(i18n.tr("I Agree")).build());
-        panel.getFlexCellFormatter().setHorizontalAlignment(2, 0, HasHorizontalAlignment.ALIGN_CENTER);
+        panel.setWidget(1, 0, 2, legalTerms);
 
+        iAgreeBox = new CCheckBox();
         iAgreeBox.addValueChangeHandler(new ValueChangeHandler<Boolean>() {
             @Override
             public void onValueChange(ValueChangeEvent<Boolean> event) {
                 onIAgree(event.getValue());
             }
         });
+        panel.setWidget(2, 0, 2,
+                new FormDecoratorBuilder(iAgreeBox).customLabel(i18n.tr("I Agree")).labelWidth("100px").componentWidth("20px").contentWidth("20px").build());
 
         return panel;
     }
