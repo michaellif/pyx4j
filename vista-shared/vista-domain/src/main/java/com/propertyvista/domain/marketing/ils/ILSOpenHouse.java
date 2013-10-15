@@ -46,7 +46,7 @@ public interface ILSOpenHouse extends IEntity {
     }
 
     @MemberColumn(OpenHouseDateId.class)
-    IPrimitive<LogicalDate> date();
+    IPrimitive<LogicalDate> eventDate();
 
     @Editor(type = Editor.EditorType.timepicker)
     IPrimitive<Time> startTime();

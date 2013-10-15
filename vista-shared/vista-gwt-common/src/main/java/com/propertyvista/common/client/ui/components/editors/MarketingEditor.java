@@ -133,7 +133,7 @@ public class MarketingEditor extends CEntityDecoratableForm<Marketing> {
                 TwoColumnFlexFormPanel content = new TwoColumnFlexFormPanel();
                 int row = -1;
 
-                content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().date())).build());
+                content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().eventDate())).build());
                 content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().startTime())).build());
                 content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().endTime())).build());
                 content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().appointmentRequired())).build());
