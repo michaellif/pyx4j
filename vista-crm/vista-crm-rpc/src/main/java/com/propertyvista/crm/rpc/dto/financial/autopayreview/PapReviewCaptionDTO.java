@@ -49,6 +49,8 @@ public interface PapReviewCaptionDTO extends IEntity {
     /** specifies that the lease of PAP that this caption belongs to has more PAPs */
     IPrimitive<Boolean> hasLeaseWithOtherPaps();
 
+    IPrimitive<Boolean> changedByTenant();
+
     IPrimitive<LogicalDate> paymentDue();
 
 }

@@ -55,10 +55,16 @@ public class PapReviewCaptionViewer extends CViewer<PapReviewCaptionDTO> {
         caption.setStyleName(Styles.AutoPayReviewCaption.name());
         papCaptionPanel.add(caption);
 
+        if (value.changedByTenant().isBooleanTrue()) {
+            HTML changedByTenantWarning = new HTML(i18n.tr("Tenant Defined"));
+            changedByTenantWarning.setStyleName(Styles.AutoPayReviewCaptionWarning.name());
+            papCaptionPanel.add(changedByTenantWarning);
+        }
+
         if (value.hasLeaseWithOtherPaps().isBooleanTrue()) {
-            HTML warning = new HTML(i18n.tr("This lease has more than one AutoPay"));
-            warning.setStyleName(Styles.AutoPayReviewCaptionWarning.name());
-            papCaptionPanel.add(warning);
+            HTML hasOtherPapsWarning = new HTML(i18n.tr("This lease has more than one AutoPay"));
+            hasOtherPapsWarning.setStyleName(Styles.AutoPayReviewCaptionWarning.name());
+            papCaptionPanel.add(hasOtherPapsWarning);
         }
         return papCaptionPanel;
     }
