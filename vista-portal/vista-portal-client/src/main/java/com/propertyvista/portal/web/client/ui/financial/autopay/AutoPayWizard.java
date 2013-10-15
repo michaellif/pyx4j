@@ -34,7 +34,6 @@ import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
-import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.commons.css.ThemeColor;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.forms.client.ui.CComboBox;
@@ -72,8 +71,6 @@ import com.propertyvista.portal.web.client.ui.util.decorators.FormDecoratorBuild
 public class AutoPayWizard extends CPortalEntityWizard<AutoPayDTO> {
 
     static final I18n i18n = I18n.get(AutoPayWizard.class);
-
-    private static String cutOffDateWarning = i18n.tr("All changes will take effect after this date!");
 
     private final WizardStep detailsStep, paymentMethodSelectionStep, comfirmationStep;
 
@@ -233,7 +230,7 @@ public class AutoPayWizard extends CPortalEntityWizard<AutoPayDTO> {
 
         panel.setBR(++row, 0, 1);
 
-        panel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().nextScheduledPaymentDate(), new CDateLabel()), 100).labelWidth(30).build());
+        panel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().nextScheduledPaymentDate(), new CDateLabel()), 100).labelWidth("250px").build());
 
         panel.setHR(++row, 0, 1);
 
@@ -294,13 +291,6 @@ public class AutoPayWizard extends CPortalEntityWizard<AutoPayDTO> {
                 paymentMethodSelectionStep.setStepVisible(hasProfiledMethods);
             }
         });
-
-        LogicalDate today = new LogicalDate(ClientContext.getServerDate());
-        if (!today.after(getValue().nextScheduledPaymentDate().getValue())) {
-            get(proto().nextScheduledPaymentDate()).setNote(cutOffDateWarning, NoteStyle.Warn);
-        } else {
-            get(proto().nextScheduledPaymentDate()).setNote(null);
-        }
     }
 
     private void loadProfiledPaymentMethods(final AsyncCallback<Void> callback) {

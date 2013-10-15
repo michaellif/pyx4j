@@ -20,13 +20,14 @@ import com.propertyvista.portal.web.client.ui.AbstractPortalPanel;
 
 public class FormDecoratorBuilder extends WidgetDecorator.Builder {
 
+    // While changing any value(s) ensure all others consistency!   
     public static final String LABEL_WIDTH = "220px";
 
-    public static final String LABEL_WIDTH_HALF = "100px";
+    public static final String LABEL_WIDTH_HALF = "110px";
 
     public static final String CONTENT_WIDTH = "250px";
 
-    public static final String FULL_WIDTH = "450px";
+    public static final String FULL_WIDTH = "470px";
 
     public FormDecoratorBuilder(CComponent<?> component, String labelWidth, String componentWidth, String contentWidth) {
         super(component);

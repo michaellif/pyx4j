@@ -15,14 +15,12 @@ package com.propertyvista.portal.web.client.ui.financial.autopay;
 
 import com.google.gwt.user.client.ui.IsWidget;
 
-import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.commons.css.ThemeColor;
 import com.pyx4j.forms.client.ui.CDateLabel;
 import com.pyx4j.forms.client.ui.CEntityLabel;
 import com.pyx4j.forms.client.ui.decorators.WidgetDecorator.Builder.Alignment;
 import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.security.client.ClientContext;
 
 import com.propertyvista.domain.payment.LeasePaymentMethod;
 import com.propertyvista.portal.rpc.portal.web.dto.financial.AutoPayDTO;
@@ -32,8 +30,6 @@ import com.propertyvista.portal.web.client.ui.util.decorators.FormDecoratorBuild
 public class AutoPayConfirmationForm extends CPortalEntityForm<AutoPayDTO> {
 
     private static final I18n i18n = I18n.get(AutoPayConfirmationForm.class);
-
-    private static String cutOffDateWarning = i18n.tr("All changes will take effect after this date!");
 
     public AutoPayConfirmationForm() {
         super(AutoPayDTO.class, null, i18n.tr("Automatic Payment Submitted Successfully!"), ThemeColor.contrast4);
@@ -54,17 +50,5 @@ public class AutoPayConfirmationForm extends CPortalEntityForm<AutoPayDTO> {
         mainPanel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().nextScheduledPaymentDate(), new CDateLabel()), 100).labelWidth(20).build());
 
         return mainPanel;
-    }
-
-    @Override
-    protected void onValueSet(boolean populate) {
-        super.onValueSet(populate);
-
-        LogicalDate today = new LogicalDate(ClientContext.getServerDate());
-        if (!today.after(getValue().nextScheduledPaymentDate().getValue())) {
-            get(proto().nextScheduledPaymentDate()).setNote(cutOffDateWarning, NoteStyle.Warn);
-        } else {
-            get(proto().nextScheduledPaymentDate()).setNote(null);
-        }
     }
 }
