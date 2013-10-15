@@ -20,7 +20,6 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Label;
 
-import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.entity.shared.utils.EntityGraph;
 import com.pyx4j.forms.client.ui.CComponent;
@@ -33,7 +32,6 @@ import com.pyx4j.forms.client.validators.EditableValueValidator;
 import com.pyx4j.forms.client.validators.ValidationError;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
-import com.pyx4j.security.client.ClientContext;
 import com.pyx4j.site.client.ui.dialogs.AbstractEntitySelectorDialog;
 import com.pyx4j.site.client.ui.dialogs.EntitySelectorListDialog;
 import com.pyx4j.site.client.ui.prime.form.IForm;
@@ -60,8 +58,6 @@ public class TenantForm extends LeaseParticipantForm<TenantDTO> {
 
     private static final I18n i18n = I18n.get(TenantForm.class);
 
-    private static String cutOffDateWarning = i18n.tr("All changes will take effect after this date!");
-
     private Label noRequirementsLabel;
 
     private final Tab autoPaymentsTab;
@@ -79,13 +75,6 @@ public class TenantForm extends LeaseParticipantForm<TenantDTO> {
     @Override
     protected void onValueSet(boolean populate) {
         super.onValueSet(populate);
-
-        LogicalDate today = new LogicalDate(ClientContext.getServerDate());
-        if (!today.after(getValue().nextScheduledPaymentDate().getValue())) {
-            get(proto().nextScheduledPaymentDate()).setNote(cutOffDateWarning, NoteStyle.Warn);
-        } else {
-            get(proto().nextScheduledPaymentDate()).setNote(null);
-        }
 
         setTabVisible(autoPaymentsTab, getValue().lease().status().getValue().isCurrent());
         get(proto().preauthorizedPayments()).setEditable(!getValue().isMoveOutWithinNextBillingCycle().getValue(false));
