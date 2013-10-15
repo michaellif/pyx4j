@@ -18,8 +18,8 @@
     <packaging>pom</packaging>
 
     <modules>
-        <module>vista-ils-kijiji-gen</module>
-        <module>vista-ils-kijiji</module>
+        <module>vista-ils-feed-gen</module>
+        <module>vista-ils-feed</module>
     </modules>
 
 </project>

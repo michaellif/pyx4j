@@ -13,8 +13,8 @@
         <relativePath>../pom.xml</relativePath>
     </parent>
 
-    <artifactId>vista-ils-kijiji-gen</artifactId>
-    <name>vista-ils-kijiji-gen</name>
+    <artifactId>vista-ils-feed-gen</artifactId>
+    <name>vista-ils-feed-gen</name>
 
     <dependencies>
 

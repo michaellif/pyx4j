@@ -13,14 +13,14 @@
         <relativePath>../pom.xml</relativePath>
     </parent>
 
-    <artifactId>vista-ils-kijiji</artifactId>
-    <name>vista-ils-kijiji</name>
+    <artifactId>vista-feed-kijiji</artifactId>
+    <name>vista-ils-feed</name>
 
     <dependencies>
 
         <dependency>
             <groupId>com.propertyvista</groupId>
-            <artifactId>vista-ils-kijiji-gen</artifactId>
+            <artifactId>vista-ils-feed-gen</artifactId>
             <version>${project.version}</version>
         </dependency>
 
