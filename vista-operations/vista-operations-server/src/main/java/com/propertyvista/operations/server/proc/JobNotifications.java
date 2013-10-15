@@ -25,6 +25,7 @@ import com.pyx4j.site.rpc.AppPlaceInfo;
 import com.propertyvista.config.AbstractVistaServerSideConfiguration;
 import com.propertyvista.config.VistaDeployment;
 import com.propertyvista.domain.security.common.VistaApplication;
+import com.propertyvista.operations.domain.scheduler.PmcProcessOptions;
 import com.propertyvista.operations.domain.scheduler.Run;
 import com.propertyvista.operations.domain.scheduler.Trigger;
 import com.propertyvista.operations.domain.scheduler.TriggerNotification;
@@ -83,7 +84,9 @@ public class JobNotifications {
         }
 
         message += SimpleMessageFormat.format("Execution of process {0} is {1},<br/>\n", trigger.name(), run.status());
-        message += SimpleMessageFormat.format("For Date: {0}<br/>\n", run.forDate());
+        if (trigger.triggerType().getValue().hasOption(PmcProcessOptions.RunForDay)) {
+            message += SimpleMessageFormat.format("For Date: {0}<br/>\n", run.forDate());
+        }
         message += SimpleMessageFormat.format("Statistics: {0}<br/>\n", run.executionReport().getStringView());
         if (!run.errorMessage().isNull()) {
             message += SimpleMessageFormat.format("Error Message: {0}<br/>\n", run.errorMessage());
