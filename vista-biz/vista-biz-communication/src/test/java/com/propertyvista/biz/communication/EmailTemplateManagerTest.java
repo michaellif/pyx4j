@@ -174,7 +174,7 @@ public class EmailTemplateManagerTest extends VistaDBTestBase {
         appUrl = AppPlaceInfo.absoluteUrl(VistaDeployment.getBaseApplicationURL(VistaApplication.prospect, true), true, PtSiteMap.LoginWithToken.class,
                 AuthenticationService.AUTH_TOKEN_ARG, token);
 
-        mrViewPortalUrl = tenantHomeUrl + "?place=resident/maintenance/view_maintenance_request";
+        mrViewPortalUrl = tenantHomeUrl + "?place=resident/maintenance/maintenance_request_page";
 
     }
 
