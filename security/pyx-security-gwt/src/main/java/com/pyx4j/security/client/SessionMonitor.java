@@ -151,6 +151,10 @@ public class SessionMonitor implements RPCStatusChangeHandler, StorageEventHandl
 
     private void start() {
         maxInactiveIntervalMillis = Consts.SEC2MSEC * (ClientContext.getServerSession().getMaxInactiveInterval() - 2 * Consts.MIN2SEC);
+        if (maxInactiveIntervalMillis <= Consts.MIN2MSEC) {
+            // Development testing
+            maxInactiveIntervalMillis = Consts.MIN2MSEC;
+        }
         update();
         sessionStart = System.currentTimeMillis();
         lastActivity = sessionStart;
