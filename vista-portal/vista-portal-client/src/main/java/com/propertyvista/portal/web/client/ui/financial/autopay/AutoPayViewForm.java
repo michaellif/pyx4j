@@ -43,11 +43,11 @@ public class AutoPayViewForm extends CPortalEntityForm<AutoPayDTO> {
         mainPanel.setWidget(++row, 0,
                 new FormDecoratorBuilder(inject(proto().paymentMethod(), new CEntityLabel<LeasePaymentMethod>()), 200).labelAlignment(Alignment.left).build());
         mainPanel.setWidget(++row, 0, inject(proto().coveredItems(), new PapCoveredItemFolder()));
+
+        mainPanel.setHR(++row, 0, 1);
+
         mainPanel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().total()), 100).build());
-
-        mainPanel.setBR(++row, 0, 1);
-
-        mainPanel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().nextScheduledPaymentDate(), new CDateLabel()), 100).labelWidth(20).build());
+        mainPanel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().nextScheduledPaymentDate(), new CDateLabel()), 100).build());
 
         return mainPanel;
     }
