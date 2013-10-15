@@ -46,7 +46,7 @@ public class GeneralInsuranceFacadeImpl implements GeneralInsuranceFacade {
             throw new IllegalArgumentException("insurance policy that owns certificate id " + deletedCertificateId + " was not found");
         }
         policy.isDeleted().setValue(true);
-        Persistence.service().merge(policy);
+        Persistence.service().persist(policy);
     }
 
     private void assertNewCertificate(GeneralInsuranceCertificate certificate) {
