@@ -41,16 +41,16 @@ public class EmergencyContactForm extends CEntityForm<EmergencyContact> {
         BasicFlexFormPanel main = new BasicFlexFormPanel();
 
         int row = -1;
-        main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().name(), new CEntityLabel<Name>()), "200px").customLabel(i18n.tr("Full Name")).build());
-        main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().email()), "230px").build());
-        main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().homePhone()), "200px").build());
-        main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().mobilePhone()), "200px").build());
-        main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().workPhone()), "200px").build());
-        main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().address().street1()), "200px").customLabel("Address").build());
-        main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().address().city()), "200px").build());
-        main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().address().province()), "200px").build());
-        main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().address().country()), "200px").build());
-        main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().address().postalCode()), "200px").build());
+        main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().name(), new CEntityLabel<Name>()), 200).customLabel(i18n.tr("Full Name")).build());
+        main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().email()), 230).build());
+        main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().homePhone()), 200).build());
+        main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().mobilePhone()), 200).build());
+        main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().workPhone()), 200).build());
+        main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().address().street1()), 200).customLabel("Address").build());
+        main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().address().city()), 200).build());
+        main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().address().province()), 200).build());
+        main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().address().country()), 200).build());
+        main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().address().postalCode()), 200).build());
 
         AbstractPortalPanel.updateDecoratorsLayout(main, view.getWidgetLayout());
 

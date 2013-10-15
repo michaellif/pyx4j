@@ -87,16 +87,16 @@ public class ProfilePage extends CPortalEntityEditor<ResidentProfileDTO> {
         mainPanel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().picture(), imageHolder)).customLabel("").build());
 
         mainPanel.setH1(++row, 0, 1, i18n.tr("Basic Information"));
-        mainPanel.setWidget(++row, 0,
-                new FormDecoratorBuilder(inject(proto().person().name(), new CEntityLabel<Name>()), "200px").customLabel(i18n.tr("Full Name")).build());
-        mainPanel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().person().sex()), "100px").build());
-        mainPanel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().person().birthDate()), "150px").build());
+        mainPanel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().person().name(), new CEntityLabel<Name>()), 200)
+                .customLabel(i18n.tr("Full Name")).build());
+        mainPanel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().person().sex()), 100).build());
+        mainPanel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().person().birthDate()), 150).build());
 
         mainPanel.setH1(++row, 0, 1, i18n.tr("Contact Information"));
-        mainPanel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().person().homePhone()), "200px").build());
-        mainPanel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().person().mobilePhone()), "200px").build());
-        mainPanel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().person().workPhone()), "200px").build());
-        mainPanel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().person().email()), "230px").build());
+        mainPanel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().person().homePhone()), 200).build());
+        mainPanel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().person().mobilePhone()), 200).build());
+        mainPanel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().person().workPhone()), 200).build());
+        mainPanel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().person().email()), 230).build());
 
         mainPanel.setH1(++row, 0, 1, proto().emergencyContacts().getMeta().getCaption());
         mainPanel.setWidget(++row, 0, inject(proto().emergencyContacts(), new EmergencyContactFolder((ProfilePageViewImpl) getView())));

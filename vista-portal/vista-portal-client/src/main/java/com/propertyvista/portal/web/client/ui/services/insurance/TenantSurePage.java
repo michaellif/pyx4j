@@ -73,12 +73,12 @@ public class TenantSurePage extends CPortalEntityForm<TenantSureInsurancePolicyD
         mainPanel.setWidget(++row, 0, 2, makeGreetingPanel());
 
         mainPanel.setH3(++row, 0, 1, i18n.tr("Coverage"));
-        mainPanel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().certificate().insuranceCertificateNumber()), "300px").build());
-        mainPanel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().certificate().inceptionDate()), "150px").build());
-        mainPanel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().certificate().expiryDate()), "150px").build());
+        mainPanel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().certificate().insuranceCertificateNumber()), 300).build());
+        mainPanel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().certificate().inceptionDate()), 150).build());
+        mainPanel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().certificate().expiryDate()), 150).build());
 
-        mainPanel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().certificate().liabilityCoverage()), "150px").build());
-        mainPanel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().contentsCoverage()), "150px").build());
+        mainPanel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().certificate().liabilityCoverage()), 150).build());
+        mainPanel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().contentsCoverage()), 150).build());
 
         // TODO investigate why format of annotated on the field doesn't work
         IFormat<BigDecimal> currencyFormat = new MoneyComboBox.MoneyComboBoxFormat();

@@ -111,10 +111,10 @@ public class LineItemCollapsibleViewer extends CEntityContainer<InvoiceLineItemG
 
     private IsWidget createCollapsedContent(InvoiceLineItemGroupDTO value) {
         BasicFlexFormPanel content = new BasicFlexFormPanel();
-        content.setWidth(FormDecoratorBuilder.FULL_WIDTH);
+        content.setWidth(FormDecoratorBuilder.LABEL_WIDTH + FormDecoratorBuilder.CONTENT_WIDTH + "px");
 
-        content.getColumnFormatter().setWidth(0, FormDecoratorBuilder.LABEL_WIDTH);
-        content.getColumnFormatter().setWidth(2, FormDecoratorBuilder.CONTENT_WIDTH);
+        content.getColumnFormatter().setWidth(0, FormDecoratorBuilder.LABEL_WIDTH + "px");
+        content.getColumnFormatter().setWidth(2, FormDecoratorBuilder.CONTENT_WIDTH + "px");
 
         int row = 0;
         if (value != null && !value.total().isNull()) {
@@ -135,9 +135,9 @@ public class LineItemCollapsibleViewer extends CEntityContainer<InvoiceLineItemG
     private IsWidget createExpandedContent(InvoiceLineItemGroupDTO value) {
         BasicFlexFormPanel content = new BasicFlexFormPanel();
 
-        content.getColumnFormatter().setWidth(0, FormDecoratorBuilder.LABEL_WIDTH_HALF);
-        content.getColumnFormatter().setWidth(1, FormDecoratorBuilder.LABEL_WIDTH_HALF);
-        content.getColumnFormatter().setWidth(2, FormDecoratorBuilder.CONTENT_WIDTH);
+        content.getColumnFormatter().setWidth(0, FormDecoratorBuilder.LABEL_WIDTH / 2 + "px");
+        content.getColumnFormatter().setWidth(1, FormDecoratorBuilder.LABEL_WIDTH / 2 + "px");
+        content.getColumnFormatter().setWidth(2, FormDecoratorBuilder.CONTENT_WIDTH + "px");
 
         int row = 0;
         if (value != null && !value.total().isNull()) {

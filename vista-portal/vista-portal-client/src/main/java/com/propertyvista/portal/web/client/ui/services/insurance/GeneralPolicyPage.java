@@ -41,11 +41,11 @@ public class GeneralPolicyPage extends CPortalEntityForm<GeneralInsurancePolicyD
         int row = -1;
 
         mainPanel.setH1(++row, 0, 1, i18n.tr("Basic Information"));
-        mainPanel.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().certificate().insuranceProvider()), "150px").build());
-        mainPanel.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().certificate().insuranceCertificateNumber()), "150px").build());
-        mainPanel.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().certificate().liabilityCoverage()), "150px").build());
-        mainPanel.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().certificate().inceptionDate()), "150px").build());
-        mainPanel.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().certificate().expiryDate()), "150px").build());
+        mainPanel.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().certificate().insuranceProvider()), 150).build());
+        mainPanel.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().certificate().insuranceCertificateNumber()), 150).build());
+        mainPanel.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().certificate().liabilityCoverage()), 150).build());
+        mainPanel.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().certificate().inceptionDate()), 150).build());
+        mainPanel.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().certificate().expiryDate()), 150).build());
         mainPanel.setH2(++row, 0, 2, i18n.tr("Scanned Certificate"));
         mainPanel.setWidget(++row, 0, 2, inject(proto().certificate().certificateScan()));
 

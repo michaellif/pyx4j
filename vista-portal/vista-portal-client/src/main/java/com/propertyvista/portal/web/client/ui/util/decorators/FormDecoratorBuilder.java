@@ -20,14 +20,10 @@ import com.propertyvista.portal.web.client.ui.AbstractPortalPanel;
 
 public class FormDecoratorBuilder extends WidgetDecorator.Builder {
 
-    // While changing any value(s) ensure all others consistency!   
-    public static final String LABEL_WIDTH = "220px";
+    // default sizes (in pixels): 
+    public static final int LABEL_WIDTH = 220;
 
-    public static final String LABEL_WIDTH_HALF = "110px";
-
-    public static final String CONTENT_WIDTH = "250px";
-
-    public static final String FULL_WIDTH = "470px";
+    public static final int CONTENT_WIDTH = 250;
 
     public FormDecoratorBuilder(CComponent<?> component, String labelWidth, String componentWidth, String contentWidth) {
         super(component);
@@ -37,9 +33,25 @@ public class FormDecoratorBuilder extends WidgetDecorator.Builder {
         layout(AbstractPortalPanel.getWidgetLayout());
     }
 
+    public FormDecoratorBuilder(CComponent<?> component, int labelWidth, int componentWidth, int contentWidth) {
+        this(component, labelWidth + "px", componentWidth + "px", contentWidth + "px");
+    }
+
+    public FormDecoratorBuilder(CComponent<?> component, int labelWidth, int componentWidth) {
+        this(component, labelWidth, componentWidth, CONTENT_WIDTH);
+    }
+
+    public FormDecoratorBuilder(CComponent<?> component, int componentWidth) {
+        this(component, LABEL_WIDTH, componentWidth, CONTENT_WIDTH);
+    }
+
+    public FormDecoratorBuilder(CComponent<?> component) {
+        this(component, LABEL_WIDTH, CONTENT_WIDTH, CONTENT_WIDTH);
+    }
+
     @Override
     public WidgetDecorator build() {
-        WidgetDecorator decorator = new WidgetDecorator(this) {
+        return new WidgetDecorator(this) {
             @Override
             protected void updateViewable() {
                 if (getComnponent().isViewable()) {
@@ -54,27 +66,5 @@ public class FormDecoratorBuilder extends WidgetDecorator.Builder {
                 super.updateViewable();
             }
         };
-        return decorator;
     }
-
-    public FormDecoratorBuilder(CComponent<?> component, int componentWidth) {
-        this(component, componentWidth + "px");
-    }
-
-    public FormDecoratorBuilder(CComponent<?> component, String componentWidth) {
-        this(component, LABEL_WIDTH, componentWidth, CONTENT_WIDTH);
-    }
-
-    public FormDecoratorBuilder(CComponent<?> component, int labelWidth, int componentWidth) {
-        this(component, labelWidth + "px", componentWidth + "px", CONTENT_WIDTH);
-    }
-
-    public FormDecoratorBuilder(CComponent<?> component, int labelWidth, int componentWidth, int contentWidth) {
-        this(component, labelWidth + "px", componentWidth + "px", contentWidth + "px");
-    }
-
-    public FormDecoratorBuilder(CComponent<?> component) {
-        this(component, LABEL_WIDTH, CONTENT_WIDTH, CONTENT_WIDTH);
-    }
-
 }
