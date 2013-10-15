@@ -64,6 +64,9 @@ public class MaintenanceRequestWizard extends CPortalEntityWizard<MaintenanceReq
     }
 
     public void setMaintenanceRequestCategoryMeta(MaintenanceRequestMetadata meta) {
+        if (meta == null || meta.isNull()) {
+            throw new RuntimeException(i18n.tr("Maintenance Metadata not configured."));
+        }
         this.meta = meta;
         initSelectors();
     }
@@ -173,7 +176,7 @@ public class MaintenanceRequestWizard extends CPortalEntityWizard<MaintenanceReq
     }
 
     public void initSelectors() {
-        if (meta == null) {
+        if (meta == null || meta.isNull()) {
             return;
         }
 
@@ -181,6 +184,9 @@ public class MaintenanceRequestWizard extends CPortalEntityWizard<MaintenanceReq
 
         // create category selectors - bottom-up
         int levels = meta.categoryLevels().size();
+        if (levels < 1) {
+            throw new RuntimeException(i18n.tr("Invalid Maintenance configuration: no category levels found."));
+        }
         MaintenanceRequestCategoryChoice choice = null;
         for (int i = 0; i < levels; i++) {
             if (i == 0) {

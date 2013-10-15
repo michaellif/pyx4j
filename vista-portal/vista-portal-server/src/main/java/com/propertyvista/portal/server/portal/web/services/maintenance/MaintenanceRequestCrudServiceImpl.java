@@ -125,6 +125,9 @@ public class MaintenanceRequestCrudServiceImpl extends AbstractCrudServiceDtoImp
     @Override
     public void getCategoryMeta(AsyncCallback<MaintenanceRequestMetadata> callback, boolean levelsOnly) {
         Tenant tenant = TenantAppContext.getCurrentUserTenantInLease().leaseParticipant();
+        Persistence.ensureRetrieve(tenant.lease(), AttachLevel.Attached);
+        Persistence.ensureRetrieve(tenant.lease().unit(), AttachLevel.Attached);
+        Persistence.ensureRetrieve(tenant.lease().unit().building(), AttachLevel.Attached);
         Building building = tenant.lease().unit().building();
         MaintenanceRequestMetadata meta = ServerSideFactory.create(MaintenanceFacade.class).getMaintenanceMetadata(building);
         if (levelsOnly) {

@@ -77,7 +77,8 @@ public class MaintenanceMetadataYardiManager extends MaintenanceMetadataAbstract
         YardiMaintenanceMetaOrigination metaOrig = Persistence.service().retrieve(criteria);
         if (metaOrig != null) {
             Persistence.service().retrieve(metaOrig.metadata());
-            return metaOrig.metadata();
+            // need to detach meta to make it accessible to client over the wire
+            return metaOrig.metadata().detach();
         } else {
             // very first time - create empty meta entity that will be populated by yardi maintenance service
             meta = EntityFactory.create(MaintenanceRequestMetadata.class);
