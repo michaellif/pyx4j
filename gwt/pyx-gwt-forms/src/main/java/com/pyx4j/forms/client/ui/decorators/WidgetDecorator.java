@@ -176,7 +176,7 @@ public class WidgetDecorator extends FlowPanel implements IDecorator<CComponent<
         contentPanel = new FlowPanel();
 
         contentPanel.setStyleName(WidgetDecoratorContentPanel.name());
-        contentPanel.getElement().getStyle().setProperty("textAlign", "left");
+        contentPanel.getElement().getStyle().setProperty("textAlign", builder.componentAlignment.name());
         contentPanel.setWidth(builder.contentWidth);
         contentPanel.add(componentHolder);
         contentPanel.add(assistantWidgetHolder);
