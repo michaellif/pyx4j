@@ -68,6 +68,7 @@ public class LineItemCollapsibleViewer extends CEntityContainer<InvoiceLineItemG
     @Override
     public final IsWidget createContent() {
         FlowPanel mainPanel = new FlowPanel();
+
         mainPanel.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
         mainPanel.getElement().getStyle().setMarginLeft(2, Unit.EM);
         mainPanel.getElement().getStyle().setPaddingTop(0.3, Unit.EM);
@@ -112,8 +113,9 @@ public class LineItemCollapsibleViewer extends CEntityContainer<InvoiceLineItemG
     private IsWidget createCollapsedContent(InvoiceLineItemGroupDTO value) {
         BasicFlexFormPanel content = new BasicFlexFormPanel();
 
-        content.getColumnFormatter().setWidth(0, FormDecoratorBuilder.LABEL_WIDTH);
-        content.getColumnFormatter().setWidth(2, FormDecoratorBuilder.CONTENT_WIDTH);
+        content.getColumnFormatter().setWidth(0, "80%"); //overrides FlexTable's width auto-management for cells
+        content.getColumnFormatter().setWidth(2, "20%");
+        content.setWidth(FormDecoratorBuilder.LABEL_WIDTH + FormDecoratorBuilder.CONTENT_WIDTH + "em");
 
         int row = 0;
         if (value != null && !value.total().isNull()) {
@@ -134,9 +136,10 @@ public class LineItemCollapsibleViewer extends CEntityContainer<InvoiceLineItemG
     private IsWidget createExpandedContent(InvoiceLineItemGroupDTO value) {
         BasicFlexFormPanel content = new BasicFlexFormPanel();
 
-        content.getColumnFormatter().setWidth(0, FormDecoratorBuilder.LABEL_WIDTH_HALF);
-        content.getColumnFormatter().setWidth(1, FormDecoratorBuilder.LABEL_WIDTH_HALF);
-        content.getColumnFormatter().setWidth(2, FormDecoratorBuilder.CONTENT_WIDTH);
+        content.getColumnFormatter().setWidth(0, "20%"); //overrides FlexTable's width auto-management for cells
+        content.getColumnFormatter().setWidth(1, "60%");
+        content.getColumnFormatter().setWidth(2, "20%");
+        content.setWidth(FormDecoratorBuilder.LABEL_WIDTH + FormDecoratorBuilder.CONTENT_WIDTH + "em");
 
         int row = 0;
         if (value != null && !value.total().isNull()) {
@@ -198,7 +201,7 @@ public class LineItemCollapsibleViewer extends CEntityContainer<InvoiceLineItemG
         table.getWidget(row, 2).setStyleName(BillingTheme.StyleName.BillingDetailTotalAmount.name());
 
         table.getWidget(row, 2).getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
-        table.getCellFormatter().setHorizontalAlignment(row, 2, HasHorizontalAlignment.ALIGN_LEFT);
+        table.getCellFormatter().setHorizontalAlignment(row, 2, HasHorizontalAlignment.ALIGN_RIGHT);
     }
 
     private static String formatDays(InvoiceLineItem lineItem) {

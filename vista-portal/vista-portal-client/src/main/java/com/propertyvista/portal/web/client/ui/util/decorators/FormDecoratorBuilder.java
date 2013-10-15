@@ -42,11 +42,11 @@ public class FormDecoratorBuilder extends WidgetDecorator.Builder {
     }
 
     public FormDecoratorBuilder(CComponent<?> component, int componentWidth) {
-        this(component, LABEL_WIDTH, componentWidth, CONTENT_WIDTH);
+        this(component, LABEL_WIDTH, componentWidth);
     }
 
     public FormDecoratorBuilder(CComponent<?> component) {
-        this(component, LABEL_WIDTH, CONTENT_WIDTH, CONTENT_WIDTH);
+        this(component, CONTENT_WIDTH);
     }
 
     @Override

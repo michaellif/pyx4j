@@ -55,6 +55,7 @@ public class BillingTheme extends Theme {
         style = new Style(".", StyleName.BillingLineItemAmount);
         style.addProperty("color", "#666666");
         style.addProperty("font-style", "normal");
+        style.addProperty("text-align", "right");
         addStyle(style);
         // ----------------------------------------------------
         style = new Style(".", StyleName.BillingDetailItem);
@@ -77,14 +78,14 @@ public class BillingTheme extends Theme {
         style = new Style(".", StyleName.BillingDetailItemAmount);
         style.addProperty("color", "#666666");
         style.addProperty("font-style", "normal");
-        style.addProperty("text-align", "left");
+        style.addProperty("text-align", "right");
         addStyle(style);
         // ----------------------------------------------------
         style = new Style(".", StyleName.BillingDetailTotal);
         style.addProperty("color", "#B3B3B3");
         style.addProperty("font-size", "smaller");
         style.addProperty("font-weight", "bold");
-        style.addProperty("text-align", "center");
+        style.addProperty("text-align", "right");
         addStyle(style);
 
         style = new Style(".", StyleName.BillingDetailTotalTitle);
@@ -96,7 +97,7 @@ public class BillingTheme extends Theme {
         style.addProperty("color", "#666666");
         style.addProperty("border-top", "1px solid black");
         style.addProperty("padding-top", "4px");
-        style.addProperty("text-align", "left");
+        style.addProperty("text-align", "right");
         addStyle(style);
 
         style = new Style(".", StyleName.BillingBillTotal, " .", DefaultWidgetDecoratorTheme.StyleName.WidgetDecoratorLabel);

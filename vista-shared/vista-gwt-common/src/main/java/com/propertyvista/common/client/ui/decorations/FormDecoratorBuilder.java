@@ -18,11 +18,12 @@ import com.pyx4j.forms.client.ui.decorators.WidgetDecorator;
 
 public class FormDecoratorBuilder extends WidgetDecorator.Builder {
 
-    public static final String LABEL_WIDTH = "180px";
+    // default sizes (in EMs): 
+    public static final int LABEL_WIDTH = 15;
 
-    public static final String LABEL_WIDTH_HALF = "90px";
+    public static final int CONTENT_WIDTH = 25;
 
-    public static final String CONTENT_WIDTH = "300px";
+    public static final int CONTENT_WIDTH_DUAL = 65;
 
     public FormDecoratorBuilder(CComponent<?> component, String labelWidth, String componentWidth, String contentWidth) {
         super(component);
@@ -32,9 +33,29 @@ public class FormDecoratorBuilder extends WidgetDecorator.Builder {
 
     }
 
+    public FormDecoratorBuilder(CComponent<?> component, int labelWidth, int componentWidth, int contentWidth) {
+        this(component, labelWidth + "em", componentWidth + "em", contentWidth + "em");
+    }
+
+    public FormDecoratorBuilder(CComponent<?> component, int componentWidth, boolean dual) {
+        this(component, LABEL_WIDTH, componentWidth, (dual ? CONTENT_WIDTH_DUAL : CONTENT_WIDTH));
+    }
+
+    public FormDecoratorBuilder(CComponent<?> component, int componentWidth) {
+        this(component, componentWidth, false);
+    }
+
+    public FormDecoratorBuilder(CComponent<?> component, boolean dual) {
+        this(component, (dual ? CONTENT_WIDTH_DUAL : CONTENT_WIDTH), dual);
+    }
+
+    public FormDecoratorBuilder(CComponent<?> component) {
+        this(component, false);
+    }
+
     @Override
     public WidgetDecorator build() {
-        WidgetDecorator decorator = new WidgetDecorator(this) {
+        return new WidgetDecorator(this) {
             @Override
             protected void updateViewable() {
                 if (getComnponent().isViewable()) {
@@ -49,27 +70,5 @@ public class FormDecoratorBuilder extends WidgetDecorator.Builder {
                 super.updateViewable();
             }
         };
-        return decorator;
-    }
-
-    public FormDecoratorBuilder(CComponent<?> component, int labelWidth, int componentWidth, int contentWidth) {
-        this(component, labelWidth + "em", componentWidth + "em", contentWidth + "em");
-    }
-
-    public FormDecoratorBuilder(CComponent<?> component, int componentWidth, boolean dual) {
-        this(component, "15em", componentWidth + "em", dual ? "65em" : "25em");
-        // assert dual && componentWidth <= 58 || !dual && componentWidth <= 23;
-    }
-
-    public FormDecoratorBuilder(CComponent<?> component, int componentWidth) {
-        this(component, componentWidth, false);
-    }
-
-    public FormDecoratorBuilder(CComponent<?> component, boolean dual) {
-        this(component, dual ? 55 : 15, dual);
-    }
-
-    public FormDecoratorBuilder(CComponent<?> component) {
-        this(component, false);
     }
 }
