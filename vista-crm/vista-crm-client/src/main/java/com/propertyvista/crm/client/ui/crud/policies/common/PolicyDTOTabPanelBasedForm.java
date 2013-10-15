@@ -16,6 +16,7 @@ package com.propertyvista.crm.client.ui.crud.policies.common;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -220,6 +221,15 @@ public abstract class PolicyDTOTabPanelBasedForm<POLICY_DTO extends PolicyDTOBas
                             @Override
                             public void onValueChange(ValueChangeEvent event) {
                                 setValue((PolicyNode) event.getValue());
+                            }
+                        });
+                        comboBox.setOptionsComparator(new Comparator() {
+                            @Override
+                            public int compare(Object o1, Object o2) {
+                                if (o1 == null || o2 == null) {
+                                    return o1 == null ? -1 : (o2 == null) ? 1 : 0;
+                                }
+                                return ((PolicyNode) o1).getStringView().compareTo(((PolicyNode) o2).getStringView());
                             }
                         });
                         comp = comboBox;
