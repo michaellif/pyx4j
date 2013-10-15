@@ -212,7 +212,7 @@ public class EmailTemplateRootObjectLoader {
             // generate url for maintenance request viewer in Resident Portal
             String residentUrl = VistaDeployment.getBaseApplicationURL(VistaApplication.portal, true);
             String mrUrl = AppPlaceInfo.absoluteUrl(residentUrl, true,
-                    new PortalSiteMap.Resident.Maintenance.ViewMaintenanceRequest().formPlace(mr.getPrimaryKey()));
+                    new PortalSiteMap.Resident.Maintenance.MaintenanceRequestPage().formPlace(mr.getPrimaryKey()));
             t.requestViewUrl().setValue(mrUrl);
         } else if (tObj instanceof MaintenanceRequestWOT) {
             MaintenanceRequestWOT t = (MaintenanceRequestWOT) tObj;

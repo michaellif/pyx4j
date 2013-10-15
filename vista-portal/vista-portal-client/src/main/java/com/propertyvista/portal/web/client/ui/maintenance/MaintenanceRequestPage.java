@@ -27,26 +27,28 @@ import com.pyx4j.widgets.client.Button;
 
 import com.propertyvista.domain.maintenance.MaintenanceRequestCategory;
 import com.propertyvista.domain.maintenance.MaintenanceRequestPriority;
+import com.propertyvista.domain.maintenance.MaintenanceRequestStatus.StatusPhase;
 import com.propertyvista.portal.rpc.portal.web.dto.maintenance.MaintenanceRequestDTO;
 import com.propertyvista.portal.web.client.themes.EntityViewTheme;
 import com.propertyvista.portal.web.client.ui.CPortalEntityForm;
 import com.propertyvista.portal.web.client.ui.maintenance.MaintenanceRequestPageView.MaintenanceRequestPagePresenter;
-import com.propertyvista.portal.web.client.ui.profile.ProfilePageView.ProfilePagePresenter;
 import com.propertyvista.portal.web.client.ui.util.decorators.FormDecoratorBuilder;
 
 public class MaintenanceRequestPage extends CPortalEntityForm<MaintenanceRequestDTO> {
 
     private static final I18n i18n = I18n.get(MaintenanceRequestPage.class);
 
-    private ProfilePagePresenter presenter;
+    private final Button btnCancel;
 
     public MaintenanceRequestPage(MaintenanceRequestPageViewImpl view) {
         super(MaintenanceRequestDTO.class, view, "Maintenance Request", ThemeColor.contrast5);
+        btnCancel = new Button(i18n.tr("Cancel"), new Command() {
+            @Override
+            public void execute() {
+                ((MaintenanceRequestPagePresenter) getView().getPresenter()).cancelRequest();
+            }
+        });
         asWidget().setStyleName(EntityViewTheme.StyleName.EntityView.name());
-    }
-
-    public void setPresenter(ProfilePagePresenter presenter) {
-        this.presenter = presenter;
     }
 
     @Override
@@ -71,6 +73,7 @@ public class MaintenanceRequestPage extends CPortalEntityForm<MaintenanceRequest
         mainPanel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().summary()), 250).build());
         mainPanel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().description()), 250).build());
         mainPanel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().priority(), new CEntityLabel<MaintenanceRequestPriority>()), 250).build());
+        mainPanel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().status().phase()), 250).build());
 
         mainPanel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().petInstructions()), 250).build());
 
@@ -86,14 +89,13 @@ public class MaintenanceRequestPage extends CPortalEntityForm<MaintenanceRequest
     protected FormDecorator<MaintenanceRequestDTO, CEntityForm<MaintenanceRequestDTO>> createDecorator() {
         FormDecorator<MaintenanceRequestDTO, CEntityForm<MaintenanceRequestDTO>> decorator = super.createDecorator();
 
-        Button btnCancel = new Button(i18n.tr("Cancel"), new Command() {
-            @Override
-            public void execute() {
-                ((MaintenanceRequestPagePresenter) getView().getPresenter()).cancelRequest();
-            }
-        });
         decorator.addHeaderToolbarButton(btnCancel);
 
         return decorator;
+    }
+
+    @Override
+    protected void onValueSet(boolean populate) {
+        btnCancel.setVisible(getValue() != null && StatusPhase.open().contains(getValue().status().phase().getValue()));
     }
 }
