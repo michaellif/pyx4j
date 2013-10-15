@@ -242,8 +242,8 @@ public class PMSiteContentManager implements Serializable {
         for (int i = 0; i < 4 && i < siteDescriptor.childPages().size(); i++) {
             PageDescriptor descriptor = siteDescriptor.childPages().get(i);
             if (descriptor != null) {
-                // show residents only if enabled
-                if (descriptor.type().getValue() != Type.residents || siteDescriptor.residentPortalSettings().enabled().isBooleanTrue()) {
+                // exclude resident portal from menu items
+                if (descriptor.type().getValue() != Type.residents) {
                     list.add(new NavigationItem(descriptor));
                 }
             } else {

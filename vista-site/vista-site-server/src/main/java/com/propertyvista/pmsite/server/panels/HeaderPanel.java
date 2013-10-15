@@ -27,6 +27,7 @@ import com.propertyvista.pmsite.server.model.WicketUtils.PageLink;
 import com.propertyvista.pmsite.server.model.WicketUtils.ResourceImage;
 import com.propertyvista.pmsite.server.model.WicketUtils.SimpleImage;
 import com.propertyvista.pmsite.server.pages.LandingPage;
+import com.propertyvista.pmsite.server.pages.MyCommunityPage;
 
 public class HeaderPanel extends Panel {
 
@@ -62,7 +63,7 @@ public class HeaderPanel extends Panel {
                     && SystemState.Online.equals(SystemMaintenance.getState());
         } catch (Exception ignore) {
         }
-        add(residentsEnabled ? new AuthenticationPanel("auth") : new Label("auth"));
+        add(residentsEnabled ? new PageLink("auth", MyCommunityPage.class) : new Label("auth"));
         // main menu
         if (!residentsOnly) {
             add(new MainNavigationPanel("mainNavig"));
