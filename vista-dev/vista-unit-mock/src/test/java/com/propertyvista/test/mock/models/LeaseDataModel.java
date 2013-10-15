@@ -34,7 +34,7 @@ import com.propertyvista.domain.financial.offering.ProductItem;
 import com.propertyvista.domain.payment.LeasePaymentMethod;
 import com.propertyvista.domain.payment.PaymentType;
 import com.propertyvista.domain.payment.AutopayAgreement;
-import com.propertyvista.domain.payment.AutopayAgreement.PreauthorizedPaymentCoveredItem;
+import com.propertyvista.domain.payment.AutopayAgreement.AutopayAgreementCoveredItem;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.tenant.Customer;
@@ -170,7 +170,7 @@ public class LeaseDataModel extends MockDataModel<Lease> {
      * 
      * Set Preauthorized Payment to first found tenant with eCheck payment method, otherwise returns false
      */
-    public AutopayAgreement createPreauthorizedPayment(Lease lease, List<PreauthorizedPaymentCoveredItem> items) {
+    public AutopayAgreement createPreauthorizedPayment(Lease lease, List<AutopayAgreementCoveredItem> items) {
         Persistence.service().retrieveMember(lease.leaseParticipants());
         // Get first tenant
         Tenant tenant = lease.leaseParticipants().iterator().next().cast();

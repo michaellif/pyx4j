@@ -45,7 +45,7 @@ import com.propertyvista.biz.tenant.lease.LeaseFacade;
 import com.propertyvista.crm.rpc.services.customer.TenantCrudService;
 import com.propertyvista.domain.financial.ARCode;
 import com.propertyvista.domain.payment.AutopayAgreement;
-import com.propertyvista.domain.payment.AutopayAgreement.PreauthorizedPaymentCoveredItem;
+import com.propertyvista.domain.payment.AutopayAgreement.AutopayAgreementCoveredItem;
 import com.propertyvista.domain.policy.policies.RestrictionsPolicy;
 import com.propertyvista.domain.policy.policies.TenantInsurancePolicy;
 import com.propertyvista.domain.tenant.insurance.GeneralInsuranceCertificate;
@@ -178,9 +178,9 @@ public class TenantCrudServiceImpl extends LeaseParticipantCrudServiceBaseImpl<T
         // save new/edited ones:
         for (AutopayAgreement pap : paps) {
             // remove zero covered items:
-            Iterator<PreauthorizedPaymentCoveredItem> iterator = pap.coveredItems().iterator();
+            Iterator<AutopayAgreementCoveredItem> iterator = pap.coveredItems().iterator();
             while (iterator.hasNext()) {
-                PreauthorizedPaymentCoveredItem item = iterator.next();
+                AutopayAgreementCoveredItem item = iterator.next();
                 if (item.amount().getValue().compareTo(BigDecimal.ZERO) <= 0) {
                     iterator.remove();
                     if (item.getPrimaryKey() != null) {
@@ -227,7 +227,7 @@ public class TenantCrudServiceImpl extends LeaseParticipantCrudServiceBaseImpl<T
     }
 
     private boolean isCoveredItemExist(PreauthorizedPaymentDTO papDto, BillableItem billableItem) {
-        for (PreauthorizedPaymentCoveredItem item : papDto.coveredItemsDTO()) {
+        for (AutopayAgreementCoveredItem item : papDto.coveredItemsDTO()) {
             if (item.billableItem().id().equals(billableItem.id())) {
                 return true;
             }
@@ -239,14 +239,14 @@ public class TenantCrudServiceImpl extends LeaseParticipantCrudServiceBaseImpl<T
         PreauthorizedPaymentCoveredItemDTO item = EntityFactory.create(PreauthorizedPaymentCoveredItemDTO.class);
 
         // calculate already covered amount by other tenants/paps: 
-        EntityQueryCriteria<PreauthorizedPaymentCoveredItem> criteria = new EntityQueryCriteria<PreauthorizedPaymentCoveredItem>(
-                PreauthorizedPaymentCoveredItem.class);
+        EntityQueryCriteria<AutopayAgreementCoveredItem> criteria = new EntityQueryCriteria<AutopayAgreementCoveredItem>(
+                AutopayAgreementCoveredItem.class);
         criteria.eq(criteria.proto().pap().tenant().lease(), lease);
         criteria.eq(criteria.proto().billableItem().uid(), billableItem.uid());
         criteria.eq(criteria.proto().pap().isDeleted(), Boolean.FALSE);
 
         item.covered().setValue(BigDecimal.ZERO);
-        for (PreauthorizedPaymentCoveredItem papci : Persistence.secureQuery(criteria)) {
+        for (AutopayAgreementCoveredItem papci : Persistence.secureQuery(criteria)) {
             item.covered().setValue(item.covered().getValue().add(papci.amount().getValue()));
         }
 
@@ -269,7 +269,7 @@ public class TenantCrudServiceImpl extends LeaseParticipantCrudServiceBaseImpl<T
         Persistence.ensureRetrieve(papDto.tenant().lease(), AttachLevel.Attached);
 
         papDto.coveredItemsDTO().clear();
-        for (PreauthorizedPaymentCoveredItem item : papDto.coveredItems()) {
+        for (AutopayAgreementCoveredItem item : papDto.coveredItems()) {
             PreauthorizedPaymentCoveredItemDTO itemDto = item.duplicate(PreauthorizedPaymentCoveredItemDTO.class);
             papDto.coveredItemsDTO().add(updateCoveredItemDto(itemDto, papDto.tenant().lease()));
         }
@@ -277,15 +277,15 @@ public class TenantCrudServiceImpl extends LeaseParticipantCrudServiceBaseImpl<T
 
     private PreauthorizedPaymentCoveredItemDTO updateCoveredItemDto(PreauthorizedPaymentCoveredItemDTO item, Lease lease) {
         // calculate already covered amount by other tenants/paps: 
-        EntityQueryCriteria<PreauthorizedPaymentCoveredItem> criteria = new EntityQueryCriteria<PreauthorizedPaymentCoveredItem>(
-                PreauthorizedPaymentCoveredItem.class);
+        EntityQueryCriteria<AutopayAgreementCoveredItem> criteria = new EntityQueryCriteria<AutopayAgreementCoveredItem>(
+                AutopayAgreementCoveredItem.class);
         criteria.ne(criteria.proto().pap(), item.pap());
         criteria.eq(criteria.proto().pap().tenant().lease(), lease);
         criteria.eq(criteria.proto().billableItem().uid(), item.billableItem().uid());
         criteria.eq(criteria.proto().pap().isDeleted(), Boolean.FALSE);
 
         item.covered().setValue(BigDecimal.ZERO);
-        for (PreauthorizedPaymentCoveredItem papci : Persistence.secureQuery(criteria)) {
+        for (AutopayAgreementCoveredItem papci : Persistence.secureQuery(criteria)) {
             item.covered().setValue(item.covered().getValue().add(papci.amount().getValue()));
         }
 
@@ -303,7 +303,7 @@ public class TenantCrudServiceImpl extends LeaseParticipantCrudServiceBaseImpl<T
         papDto.coveredItems().clear();
         for (PreauthorizedPaymentCoveredItemDTO item : papDto.coveredItemsDTO()) {
             if (item.amount().getValue().compareTo(BigDecimal.ZERO) > 0) {
-                papDto.coveredItems().add(item.duplicate(PreauthorizedPaymentCoveredItem.class));
+                papDto.coveredItems().add(item.duplicate(AutopayAgreementCoveredItem.class));
             }
         }
     }

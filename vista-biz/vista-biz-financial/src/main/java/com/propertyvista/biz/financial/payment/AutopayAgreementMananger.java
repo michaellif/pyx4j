@@ -48,7 +48,7 @@ import com.propertyvista.domain.financial.BillingAccount;
 import com.propertyvista.domain.financial.PaymentRecord;
 import com.propertyvista.domain.financial.billing.BillingCycle;
 import com.propertyvista.domain.payment.AutopayAgreement;
-import com.propertyvista.domain.payment.AutopayAgreement.PreauthorizedPaymentCoveredItem;
+import com.propertyvista.domain.payment.AutopayAgreement.AutopayAgreementCoveredItem;
 import com.propertyvista.domain.payment.LeasePaymentMethod;
 import com.propertyvista.domain.policy.policies.AutoPayPolicy;
 import com.propertyvista.domain.policy.policies.AutoPayPolicy.ChangeRule;
@@ -136,7 +136,7 @@ class AutopayAgreementMananger {
         preauthorizedPayment.updatedBySystem().setValue(null);
         // Update amounts
         for (ReviewedPapChargeDTO reviewedPapCharge : preauthorizedPaymentChanges.reviewedCharges()) {
-            for (PreauthorizedPaymentCoveredItem coveredItem : preauthorizedPayment.coveredItems()) {
+            for (AutopayAgreementCoveredItem coveredItem : preauthorizedPayment.coveredItems()) {
                 if (reviewedPapCharge.billableItem().equals(coveredItem.billableItem())) {
                     coveredItem.amount().setValue(reviewedPapCharge.paymentAmountUpdate().getValue());
                 }
@@ -210,11 +210,11 @@ class AutopayAgreementMananger {
         for (AutopayAgreement pap : activePaps) {
             boolean reviewRequired = false;
 
-            List<PreauthorizedPaymentCoveredItem> newCoveredItems = new ArrayList<PreauthorizedPaymentCoveredItem>();
+            List<AutopayAgreementCoveredItem> newCoveredItems = new ArrayList<AutopayAgreementCoveredItem>();
 
             Map<String, BillableItem> papBillableItemsCurrent = new LinkedHashMap<String, BillableItem>(billableItemsCurrent);
 
-            for (PreauthorizedPaymentCoveredItem coveredItemOriginal : pap.coveredItems()) {
+            for (AutopayAgreementCoveredItem coveredItemOriginal : pap.coveredItems()) {
                 BillableItem billableItemCurrent = papBillableItemsCurrent.get(coveredItemOriginal.billableItem().uid().getValue());
                 if ((billableItemCurrent == null) || (!PaymentBillableUtils.isBillableItemPapable(billableItemCurrent, nextCycle))) {
                     // Not found, item removed
@@ -223,7 +223,7 @@ class AutopayAgreementMananger {
                     papBillableItemsCurrent.remove(coveredItemOriginal.billableItem().uid().getValue());
 
                     // Update the price if required
-                    PreauthorizedPaymentCoveredItem newCoveredItem = EntityFactory.create(PreauthorizedPaymentCoveredItem.class);
+                    AutopayAgreementCoveredItem newCoveredItem = EntityFactory.create(AutopayAgreementCoveredItem.class);
 
                     BigDecimal priceOriginal = PaymentBillableUtils.getActualPrice(coveredItemOriginal.billableItem());
                     BigDecimal priceCurrent = PaymentBillableUtils.getActualPrice(billableItemCurrent);
@@ -253,7 +253,7 @@ class AutopayAgreementMananger {
             for (Map.Entry<String, BillableItem> bi : papBillableItemsCurrent.entrySet()) {
                 BillableItem billableItemCurrent = bi.getValue();
                 reviewRequired = true;
-                PreauthorizedPaymentCoveredItem newCoveredItem = EntityFactory.create(PreauthorizedPaymentCoveredItem.class);
+                AutopayAgreementCoveredItem newCoveredItem = EntityFactory.create(AutopayAgreementCoveredItem.class);
                 newCoveredItem.amount().setValue(BigDecimal.ZERO);
                 newCoveredItem.billableItem().set(billableItemCurrent);
                 newCoveredItems.add(newCoveredItem);

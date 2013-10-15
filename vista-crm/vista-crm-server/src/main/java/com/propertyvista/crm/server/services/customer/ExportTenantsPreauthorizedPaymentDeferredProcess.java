@@ -30,7 +30,7 @@ import com.propertyvista.config.VistaDeployment;
 import com.propertyvista.domain.payment.EcheckInfo;
 import com.propertyvista.domain.payment.PaymentType;
 import com.propertyvista.domain.payment.AutopayAgreement;
-import com.propertyvista.domain.payment.AutopayAgreement.PreauthorizedPaymentCoveredItem;
+import com.propertyvista.domain.payment.AutopayAgreement.AutopayAgreementCoveredItem;
 import com.propertyvista.domain.tenant.lease.extradata.YardiLeaseChargeData;
 import com.propertyvista.interfaces.importer.pad.PadFileExportModel;
 
@@ -100,7 +100,7 @@ public class ExportTenantsPreauthorizedPaymentDeferredProcess extends AbstractDe
     private void formatPreauthorizedPayment(ReportTableFormatter formatter, EntityReportFormatter<PadFileExportModel> entityFormatter,
             AutopayAgreement preauthorizedPayment) {
 
-        for (PreauthorizedPaymentCoveredItem item : preauthorizedPayment.coveredItems()) {
+        for (AutopayAgreementCoveredItem item : preauthorizedPayment.coveredItems()) {
             PadFileExportModel model = EntityFactory.create(PadFileExportModel.class);
 
             model.charge().setValue(item.amount().getStringView());

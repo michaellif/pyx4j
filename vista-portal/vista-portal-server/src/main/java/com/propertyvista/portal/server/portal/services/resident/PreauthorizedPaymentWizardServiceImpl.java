@@ -34,7 +34,7 @@ import com.propertyvista.biz.financial.payment.PaymentMethodFacade;
 import com.propertyvista.domain.contact.AddressSimple;
 import com.propertyvista.domain.financial.ARCode;
 import com.propertyvista.domain.payment.AutopayAgreement;
-import com.propertyvista.domain.payment.AutopayAgreement.PreauthorizedPaymentCoveredItem;
+import com.propertyvista.domain.payment.AutopayAgreement.AutopayAgreementCoveredItem;
 import com.propertyvista.domain.payment.LeasePaymentMethod;
 import com.propertyvista.domain.security.common.VistaApplication;
 import com.propertyvista.domain.tenant.lease.BillableItem;
@@ -154,7 +154,7 @@ public class PreauthorizedPaymentWizardServiceImpl extends AbstractCrudServiceDt
     }
 
     private boolean isCoveredItemExist(PreauthorizedPaymentDTO papDto, BillableItem billableItem) {
-        for (PreauthorizedPaymentCoveredItem item : papDto.coveredItemsDTO()) {
+        for (AutopayAgreementCoveredItem item : papDto.coveredItemsDTO()) {
             if (item.billableItem().id().equals(billableItem.id())) {
                 return true;
             }
@@ -166,14 +166,14 @@ public class PreauthorizedPaymentWizardServiceImpl extends AbstractCrudServiceDt
         PreauthorizedPaymentCoveredItemDTO item = EntityFactory.create(PreauthorizedPaymentCoveredItemDTO.class);
 
         // calculate already covered amount by other tenants/paps: 
-        EntityQueryCriteria<PreauthorizedPaymentCoveredItem> criteria = new EntityQueryCriteria<PreauthorizedPaymentCoveredItem>(
-                PreauthorizedPaymentCoveredItem.class);
+        EntityQueryCriteria<AutopayAgreementCoveredItem> criteria = new EntityQueryCriteria<AutopayAgreementCoveredItem>(
+                AutopayAgreementCoveredItem.class);
         criteria.eq(criteria.proto().pap().tenant().lease(), TenantAppContext.getCurrentUserLeaseIdStub());
         criteria.eq(criteria.proto().billableItem().uid(), billableItem.uid());
         criteria.eq(criteria.proto().pap().isDeleted(), Boolean.FALSE);
 
         item.covered().setValue(BigDecimal.ZERO);
-        for (PreauthorizedPaymentCoveredItem papci : Persistence.secureQuery(criteria)) {
+        for (AutopayAgreementCoveredItem papci : Persistence.secureQuery(criteria)) {
             item.covered().setValue(item.covered().getValue().add(papci.amount().getValue()));
         }
 
@@ -195,7 +195,7 @@ public class PreauthorizedPaymentWizardServiceImpl extends AbstractCrudServiceDt
         entity.coveredItems().clear();
         for (PreauthorizedPaymentCoveredItemDTO item : dto.coveredItemsDTO()) {
             if (item.amount().getValue().compareTo(BigDecimal.ZERO) > 0) {
-                entity.coveredItems().add(item.duplicate(PreauthorizedPaymentCoveredItem.class));
+                entity.coveredItems().add(item.duplicate(AutopayAgreementCoveredItem.class));
             }
         }
     }

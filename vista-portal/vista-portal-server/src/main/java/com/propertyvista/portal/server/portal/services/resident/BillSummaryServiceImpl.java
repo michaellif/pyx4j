@@ -29,7 +29,7 @@ import com.propertyvista.biz.financial.ar.ARFacade;
 import com.propertyvista.biz.financial.billing.BillingFacade;
 import com.propertyvista.biz.financial.payment.PaymentMethodFacade;
 import com.propertyvista.domain.payment.AutopayAgreement;
-import com.propertyvista.domain.payment.AutopayAgreement.PreauthorizedPaymentCoveredItem;
+import com.propertyvista.domain.payment.AutopayAgreement.AutopayAgreementCoveredItem;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.portal.domain.dto.financial.FinancialSummaryDTO;
 import com.propertyvista.portal.domain.dto.financial.PaymentInfoDTO;
@@ -79,7 +79,7 @@ public class BillSummaryServiceImpl implements BillSummaryService {
             PaymentInfoDTO pi = EntityFactory.create(PaymentInfoDTO.class);
 
             pi.amount().setValue(BigDecimal.ZERO);
-            for (PreauthorizedPaymentCoveredItem ci : pap.coveredItems()) {
+            for (AutopayAgreementCoveredItem ci : pap.coveredItems()) {
                 pi.amount().setValue(pi.amount().getValue().add(ci.amount().getValue()));
             }
 

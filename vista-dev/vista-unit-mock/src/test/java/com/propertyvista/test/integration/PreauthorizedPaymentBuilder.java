@@ -19,26 +19,26 @@ import java.util.List;
 
 import com.pyx4j.entity.shared.EntityFactory;
 
-import com.propertyvista.domain.payment.AutopayAgreement.PreauthorizedPaymentCoveredItem;
+import com.propertyvista.domain.payment.AutopayAgreement.AutopayAgreementCoveredItem;
 import com.propertyvista.domain.tenant.lease.BillableItem;
 
 public class PreauthorizedPaymentBuilder {
 
-    private final List<PreauthorizedPaymentCoveredItem> items = new ArrayList<PreauthorizedPaymentCoveredItem>();
+    private final List<AutopayAgreementCoveredItem> items = new ArrayList<AutopayAgreementCoveredItem>();
 
     public PreauthorizedPaymentBuilder add(BillableItem billableItem) {
         return add(billableItem, billableItem.agreedPrice().getValue().toString());
     }
 
     public PreauthorizedPaymentBuilder add(BillableItem billableItem, String amount) {
-        PreauthorizedPaymentCoveredItem item = EntityFactory.create(PreauthorizedPaymentCoveredItem.class);
+        AutopayAgreementCoveredItem item = EntityFactory.create(AutopayAgreementCoveredItem.class);
         item.billableItem().set(billableItem);
         item.amount().setValue(new BigDecimal(amount));
         items.add(item);
         return this;
     }
 
-    public List<PreauthorizedPaymentCoveredItem> build() {
+    public List<AutopayAgreementCoveredItem> build() {
         return items;
     }
 }

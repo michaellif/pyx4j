@@ -25,10 +25,10 @@ import com.pyx4j.i18n.shared.I18n;
 import com.propertyvista.common.client.ui.components.c.PapBillableItemLabel;
 import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
 import com.propertyvista.domain.payment.AutopayAgreement;
-import com.propertyvista.domain.payment.AutopayAgreement.PreauthorizedPaymentCoveredItem;
+import com.propertyvista.domain.payment.AutopayAgreement.AutopayAgreementCoveredItem;
 import com.propertyvista.portal.web.client.ui.util.decorators.FormDecoratorBuilder;
 
-public class PapCoveredItemFolder extends VistaBoxFolder<AutopayAgreement.PreauthorizedPaymentCoveredItem> {
+public class PapCoveredItemFolder extends VistaBoxFolder<AutopayAgreement.AutopayAgreementCoveredItem> {
 
     private static final I18n i18n = I18n.get(PapCoveredItemFolder.class);
 
@@ -37,21 +37,21 @@ public class PapCoveredItemFolder extends VistaBoxFolder<AutopayAgreement.Preaut
     }
 
     public PapCoveredItemFolder(boolean editable) {
-        super(AutopayAgreement.PreauthorizedPaymentCoveredItem.class, editable);
+        super(AutopayAgreement.AutopayAgreementCoveredItem.class, editable);
     }
 
     @Override
     public CComponent<?> create(IObject<?> member) {
-        if (member instanceof PreauthorizedPaymentCoveredItem) {
+        if (member instanceof AutopayAgreementCoveredItem) {
             return new CoveredItemViewer();
         }
         return super.create(member);
     }
 
-    class CoveredItemViewer extends CEntityForm<PreauthorizedPaymentCoveredItem> {
+    class CoveredItemViewer extends CEntityForm<AutopayAgreementCoveredItem> {
 
         public CoveredItemViewer() {
-            super(PreauthorizedPaymentCoveredItem.class);
+            super(AutopayAgreementCoveredItem.class);
 
             setViewable(true);
             inheritViewable(false);

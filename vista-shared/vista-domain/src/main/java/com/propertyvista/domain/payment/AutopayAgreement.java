@@ -45,7 +45,7 @@ import com.propertyvista.domain.tenant.lease.Tenant;
 @Caption(name = "Pre-Authorized Payment Agreement")
 public interface AutopayAgreement extends IEntity {
 
-    public interface PreauthorizedPaymentCoveredItem extends IEntity {
+    public interface AutopayAgreementCoveredItem extends IEntity {
 
         @NotNull
         // TODO make ReadOnly with BillableItem versioning
@@ -75,7 +75,7 @@ public interface AutopayAgreement extends IEntity {
     }
 
     @Owned
-    IList<PreauthorizedPaymentCoveredItem> coveredItems();
+    IList<AutopayAgreementCoveredItem> coveredItems();
 
     @NotNull
     IPrimitive<Boolean> isDeleted();

@@ -40,7 +40,7 @@ import com.propertyvista.domain.financial.BillingAccount;
 import com.propertyvista.domain.financial.PaymentRecord;
 import com.propertyvista.domain.financial.billing.BillingCycle;
 import com.propertyvista.domain.payment.AutopayAgreement;
-import com.propertyvista.domain.payment.AutopayAgreement.PreauthorizedPaymentCoveredItem;
+import com.propertyvista.domain.payment.AutopayAgreement.AutopayAgreementCoveredItem;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
 import com.propertyvista.domain.tenant.lease.LeaseTermTenant;
@@ -264,7 +264,7 @@ class AutopaytManager {
                 record.preauthorizedPayment = pap;
 
                 record.amount = BigDecimal.ZERO;
-                for (PreauthorizedPaymentCoveredItem item : pap.coveredItems()) {
+                for (AutopayAgreementCoveredItem item : pap.coveredItems()) {
                     record.amount = record.amount.add(item.amount().getValue());
                 }
                 records.add(record);

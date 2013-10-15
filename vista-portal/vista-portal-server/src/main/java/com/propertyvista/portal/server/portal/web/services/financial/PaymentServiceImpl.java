@@ -31,7 +31,7 @@ import com.propertyvista.biz.financial.payment.PaymentMethodFacade;
 import com.propertyvista.biz.tenant.lease.LeaseFacade;
 import com.propertyvista.domain.financial.PaymentRecord;
 import com.propertyvista.domain.payment.AutopayAgreement;
-import com.propertyvista.domain.payment.AutopayAgreement.PreauthorizedPaymentCoveredItem;
+import com.propertyvista.domain.payment.AutopayAgreement.AutopayAgreementCoveredItem;
 import com.propertyvista.domain.payment.LeasePaymentMethod;
 import com.propertyvista.domain.security.common.VistaApplication;
 import com.propertyvista.domain.tenant.lease.Lease;
@@ -143,7 +143,7 @@ public class PaymentServiceImpl implements PaymentService {
         dto.nextScheduledPaymentDate().setValue(ServerSideFactory.create(PaymentMethodFacade.class).getNextAutopayDate(lease));
 
         dto.total().setValue(BigDecimal.ZERO);
-        for (PreauthorizedPaymentCoveredItem item : dto.coveredItems()) {
+        for (AutopayAgreementCoveredItem item : dto.coveredItems()) {
             dto.total().setValue(dto.total().getValue().add(item.amount().getValue()));
         }
 
@@ -203,7 +203,7 @@ public class PaymentServiceImpl implements PaymentService {
             autoPayInfo.id().setValue(pap.id().getValue());
 
             autoPayInfo.amount().setValue(BigDecimal.ZERO);
-            for (PreauthorizedPaymentCoveredItem ci : pap.coveredItems()) {
+            for (AutopayAgreementCoveredItem ci : pap.coveredItems()) {
                 autoPayInfo.amount().setValue(autoPayInfo.amount().getValue().add(ci.amount().getValue()));
             }
 

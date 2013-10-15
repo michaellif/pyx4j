@@ -22,7 +22,7 @@ import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 
 import com.propertyvista.domain.financial.BillingAccount;
 import com.propertyvista.domain.payment.AutopayAgreement;
-import com.propertyvista.domain.payment.AutopayAgreement.PreauthorizedPaymentCoveredItem;
+import com.propertyvista.domain.payment.AutopayAgreement.AutopayAgreementCoveredItem;
 
 public class PaymentAgreementTester extends Tester {
 
@@ -61,7 +61,7 @@ public class PaymentAgreementTester extends Tester {
 
     public PaymentAgreementTester lastRecordAmount(String amount) {
         BigDecimal paAmount = BigDecimal.ZERO;
-        for (PreauthorizedPaymentCoveredItem item : lastRecord().coveredItems()) {
+        for (AutopayAgreementCoveredItem item : lastRecord().coveredItems()) {
             paAmount = paAmount.add(item.amount().getValue());
         }
         assertEquals("Amount of last Record", new BigDecimal(amount), paAmount);

@@ -49,7 +49,7 @@ import com.propertyvista.domain.payment.EcheckInfo;
 import com.propertyvista.domain.payment.LeasePaymentMethod;
 import com.propertyvista.domain.payment.PaymentType;
 import com.propertyvista.domain.payment.AutopayAgreement;
-import com.propertyvista.domain.payment.AutopayAgreement.PreauthorizedPaymentCoveredItem;
+import com.propertyvista.domain.payment.AutopayAgreement.AutopayAgreementCoveredItem;
 import com.propertyvista.domain.tenant.Customer;
 import com.propertyvista.domain.tenant.lease.BillableItem;
 import com.propertyvista.domain.tenant.lease.Lease;
@@ -934,7 +934,7 @@ public class TenantPadProcessor {
 
         for (PadFileModel charge : padFileModel._processorInformation().accountCharges()) {
             boolean found = false;
-            for (PreauthorizedPaymentCoveredItem padItem : pap.coveredItems()) {
+            for (AutopayAgreementCoveredItem padItem : pap.coveredItems()) {
                 if (!charge.chargeCode().getValue().equals(padItem.billableItem().extraData().duplicate(YardiLeaseChargeData.class).chargeCode().getValue())) {
                     continue;
                 } else if (charge._processorInformation().chargeEftAmount().getValue().compareTo(padItem.amount().getValue()) != 0) {
@@ -1010,7 +1010,7 @@ public class TenantPadProcessor {
                 billableItems.remove(matchingBillableItem);
                 billableItemsProcesed.add(matchingBillableItem);
 
-                PreauthorizedPaymentCoveredItem padItem = EntityFactory.create(PreauthorizedPaymentCoveredItem.class);
+                AutopayAgreementCoveredItem padItem = EntityFactory.create(AutopayAgreementCoveredItem.class);
                 padItem.billableItem().set(matchingBillableItem);
                 padItem.amount().setValue(charge._processorInformation().chargeEftAmount().getValue());
                 pap.coveredItems().add(padItem);
@@ -1027,7 +1027,7 @@ public class TenantPadProcessor {
                 continue;
             }
             boolean found = false;
-            for (PreauthorizedPaymentCoveredItem padItem : pap.coveredItems()) {
+            for (AutopayAgreementCoveredItem padItem : pap.coveredItems()) {
                 if (padItem.billableItem().equals(lease.currentTerm().version().leaseProducts().serviceItem())) {
                     found = true;
                     padItem.amount().setValue(padItem.amount().getValue().add(charge._processorInformation().chargeEftAmount().getValue()));

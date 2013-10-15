@@ -530,7 +530,7 @@ public abstract class LeaseFinancialTestBase extends IntegrationTestBase {
         throw new Error("TODO remove this");
     }
 
-    protected AutopayAgreement setPreauthorizedPayment(List<AutopayAgreement.PreauthorizedPaymentCoveredItem> items) {
+    protected AutopayAgreement setPreauthorizedPayment(List<AutopayAgreement.AutopayAgreementCoveredItem> items) {
         AutopayAgreement preauthorizedPayment = getDataModel(LeaseDataModel.class).createPreauthorizedPayment(lease, items);
         Assert.assertNotNull("CreatePreauthorizedPayment failed to create PAP", preauthorizedPayment);
         Persistence.service().commit();

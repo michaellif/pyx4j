@@ -21,7 +21,7 @@ import com.pyx4j.i18n.annotations.I18n;
 import com.propertyvista.domain.payment.AutopayAgreement;
 
 /**
- * @see AutopayAgreement.PreauthorizedPaymentCoveredItem
+ * @see AutopayAgreement.AutopayAgreementCoveredItem
  */
 @Transient
 @I18n(strategy = I18n.I18nStrategy.IgnoreThis)

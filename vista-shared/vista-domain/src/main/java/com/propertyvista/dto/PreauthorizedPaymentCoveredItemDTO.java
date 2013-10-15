@@ -26,7 +26,7 @@ import com.pyx4j.entity.shared.IPrimitive;
 import com.propertyvista.domain.payment.AutopayAgreement;
 
 @Transient
-public interface PreauthorizedPaymentCoveredItemDTO extends AutopayAgreement.PreauthorizedPaymentCoveredItem {
+public interface PreauthorizedPaymentCoveredItemDTO extends AutopayAgreement.AutopayAgreementCoveredItem {
 
     @ReadOnly
     @ToString(index = 10)

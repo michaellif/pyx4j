@@ -34,7 +34,7 @@ import com.propertyvista.biz.financial.billing.BillingUtils;
 import com.propertyvista.biz.financial.payment.PaymentMethodFacade;
 import com.propertyvista.domain.financial.billing.Bill;
 import com.propertyvista.domain.payment.AutopayAgreement;
-import com.propertyvista.domain.payment.AutopayAgreement.PreauthorizedPaymentCoveredItem;
+import com.propertyvista.domain.payment.AutopayAgreement.AutopayAgreementCoveredItem;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.dto.BillDTO;
 import com.propertyvista.dto.TransactionHistoryDTO;
@@ -153,7 +153,7 @@ public class BillingServiceImpl implements BillingService {
             PaymentInfoDTO pi = EntityFactory.create(PaymentInfoDTO.class);
 
             pi.amount().setValue(BigDecimal.ZERO);
-            for (PreauthorizedPaymentCoveredItem ci : pap.coveredItems()) {
+            for (AutopayAgreementCoveredItem ci : pap.coveredItems()) {
                 pi.amount().setValue(pi.amount().getValue().add(ci.amount().getValue()));
             }
 

@@ -34,7 +34,7 @@ import com.propertyvista.domain.financial.BillingAccount;
 import com.propertyvista.domain.financial.PaymentRecord;
 import com.propertyvista.domain.financial.billing.BillingCycle;
 import com.propertyvista.domain.payment.AutopayAgreement;
-import com.propertyvista.domain.payment.AutopayAgreement.PreauthorizedPaymentCoveredItem;
+import com.propertyvista.domain.payment.AutopayAgreement.AutopayAgreementCoveredItem;
 import com.propertyvista.domain.tenant.lease.BillableItem;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
@@ -201,7 +201,7 @@ class AutopayReviewReport {
         papReview.reviewRequired().setValue(nextPaymentCycle.billingCycleStartDate().equals(preauthorizedPayment.updatedBySystem()));
         papReview.changedByTenant().setValue(AutopayAgreementMananger.isChangeByTenant(preauthorizedPayment, nextPaymentCycle));
 
-        Map<String, PreauthorizedPaymentCoveredItem> coveredItemItemsPrevious = new LinkedHashMap<String, PreauthorizedPaymentCoveredItem>();
+        Map<String, AutopayAgreementCoveredItem> coveredItemItemsPrevious = new LinkedHashMap<String, AutopayAgreementCoveredItem>();
         if (!preauthorizedPayment.reviewOfPap().isNull()) {
             boolean hasPaymentRecords = false;
             {
@@ -214,13 +214,13 @@ class AutopayReviewReport {
                 papReview.previousCyclePap().set(preauthorizedPayment.reviewOfPap().createIdentityStub());
                 Persistence.ensureRetrieve(preauthorizedPayment.reviewOfPap(), AttachLevel.Attached);
 
-                for (PreauthorizedPaymentCoveredItem coveredItem : preauthorizedPayment.reviewOfPap().coveredItems()) {
+                for (AutopayAgreementCoveredItem coveredItem : preauthorizedPayment.reviewOfPap().coveredItems()) {
                     coveredItemItemsPrevious.put(coveredItem.billableItem().uid().getValue(), coveredItem);
                 }
             }
         }
 
-        for (PreauthorizedPaymentCoveredItem coveredItem : preauthorizedPayment.coveredItems()) {
+        for (AutopayAgreementCoveredItem coveredItem : preauthorizedPayment.coveredItems()) {
             AutoPayReviewChargeDTO chargeReview = EntityFactory.create(AutoPayReviewChargeDTO.class);
             chargeReview.leaseCharge().setValue(getLeaseChargeDescription(coveredItem.billableItem()));
             chargeReview.current().billableItem().set(coveredItem.billableItem().createIdentityStub());
@@ -228,7 +228,7 @@ class AutopayReviewReport {
             chargeReview.current().payment().setValue(coveredItem.amount().getValue());
             calulatePercent(chargeReview.current());
 
-            PreauthorizedPaymentCoveredItem coveredItemItemPrevious = coveredItemItemsPrevious.remove(coveredItem.billableItem().uid().getValue());
+            AutopayAgreementCoveredItem coveredItemItemPrevious = coveredItemItemsPrevious.remove(coveredItem.billableItem().uid().getValue());
             if (coveredItemItemPrevious != null) {
                 chargeReview.previous().billableItem().set(coveredItemItemPrevious.billableItem().createIdentityStub());
                 chargeReview.previous().totalPrice().setValue(PaymentBillableUtils.getActualPrice(coveredItemItemPrevious.billableItem()));
@@ -256,7 +256,7 @@ class AutopayReviewReport {
         }
 
         // Removed billableItem are shown at the end, and they don't have current price
-        for (PreauthorizedPaymentCoveredItem coveredItem : coveredItemItemsPrevious.values()) {
+        for (AutopayAgreementCoveredItem coveredItem : coveredItemItemsPrevious.values()) {
             AutoPayReviewChargeDTO chargeReview = EntityFactory.create(AutoPayReviewChargeDTO.class);
 
             chargeReview.leaseCharge().setValue(getLeaseChargeDescription(coveredItem.billableItem()));
@@ -286,7 +286,7 @@ class AutopayReviewReport {
         papReview.changedByTenant().setValue(false);
 
         // Removed billableItem , and they don't have current price
-        for (PreauthorizedPaymentCoveredItem coveredItem : preauthorizedPayment.coveredItems()) {
+        for (AutopayAgreementCoveredItem coveredItem : preauthorizedPayment.coveredItems()) {
             AutoPayReviewChargeDTO chargeReview = EntityFactory.create(AutoPayReviewChargeDTO.class);
 
             chargeReview.leaseCharge().setValue(getLeaseChargeDescription(coveredItem.billableItem()));
