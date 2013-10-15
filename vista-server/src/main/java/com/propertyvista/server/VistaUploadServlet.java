@@ -32,18 +32,18 @@ import com.propertyvista.portal.server.ptapp.services.ApplicationDocumentUploadS
 public class VistaUploadServlet extends AbstractUploadServlet {
 
     public VistaUploadServlet() {
-        bind(ImportUploadServiceImpl.class);
-        bind(UpdateUploadServiceImpl.class);
-        bind(MediaUploadFloorplanServiceImpl.class);
-        bind(MediaUploadBuildingServiceImpl.class);
-        bind(SiteImageResourceUploadServiceImpl.class);
-        bind(CustomerPictureUploadServiceImpl.class);
-        bind(ResidentPictureUploadServiceImpl.class);
-        bind(ApplicationDocumentUploadServiceImpl.class);
-        bind(PmcDocumentFileUploadServiceImpl.class);
-        bind(EncryptedStorageServicePrivateKeyUploadServiceImpl.class);
-        bind(TenantPadFileUploadServiceImpl.class);
-        bind(MerchantAccountFileUploadServiceImpl.class);
+        register(ImportUploadServiceImpl.class);
+        register(UpdateUploadServiceImpl.class);
+        register(MediaUploadFloorplanServiceImpl.class);
+        register(MediaUploadBuildingServiceImpl.class);
+        register(SiteImageResourceUploadServiceImpl.class);
+        register(CustomerPictureUploadServiceImpl.class);
+        register(ResidentPictureUploadServiceImpl.class);
+        register(ApplicationDocumentUploadServiceImpl.class);
+        register(PmcDocumentFileUploadServiceImpl.class);
+        register(EncryptedStorageServicePrivateKeyUploadServiceImpl.class);
+        register(TenantPadFileUploadServiceImpl.class);
+        register(MerchantAccountFileUploadServiceImpl.class);
     }
 
 }

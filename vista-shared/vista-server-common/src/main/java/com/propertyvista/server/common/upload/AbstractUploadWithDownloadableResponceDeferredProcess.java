@@ -16,12 +16,12 @@ package com.propertyvista.server.common.upload;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.essentials.server.upload.UploadData;
-import com.pyx4j.essentials.server.upload.UploadDeferredProcess;
+import com.pyx4j.essentials.server.upload.DeferredUploadProcess;
 import com.pyx4j.gwt.rpc.upload.UploadResponse;
 
 import com.propertyvista.dto.DownloadableUploadResponseDTO;
 
-public abstract class AbstractUploadWithDownloadableResponceDeferredProcess<U extends IEntity> extends UploadDeferredProcess<U, DownloadableUploadResponseDTO> {
+public abstract class AbstractUploadWithDownloadableResponceDeferredProcess<U extends IEntity> extends DeferredUploadProcess<U, DownloadableUploadResponseDTO> {
 
     private static final long serialVersionUID = 1L;
 

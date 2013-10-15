@@ -18,6 +18,7 @@ import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
 import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.shared.IFile;
 import com.pyx4j.gwt.client.upload.UploadPanel;
 import com.pyx4j.gwt.rpc.upload.UploadResponse;
 import com.pyx4j.gwt.rpc.upload.UploadService;
@@ -33,7 +34,7 @@ public abstract class ApplicationDocumentUploaderDialog extends VerticalPanel im
 
     private static final I18n i18n = I18n.get(ApplicationDocumentUploaderDialog.class);
 
-    private final UploadPanel<IEntity, IEntity> uploadPanel;
+    private final UploadPanel<IEntity, IFile> uploadPanel;
 
     private final Dialog dialog;
 
@@ -41,7 +42,7 @@ public abstract class ApplicationDocumentUploaderDialog extends VerticalPanel im
     public ApplicationDocumentUploaderDialog(String title) {
         dialog = new Dialog(title, this, null);
 
-        uploadPanel = new UploadPanel<IEntity, IEntity>((UploadService<IEntity, IEntity>) GWT.create(ApplicationDocumentUploadService.class)) {
+        uploadPanel = new UploadPanel<IEntity, IFile>((UploadService<IEntity, IFile>) GWT.create(ApplicationDocumentUploadService.class)) {
 
             @Override
             protected void onUploadSubmit() {
@@ -56,7 +57,7 @@ public abstract class ApplicationDocumentUploaderDialog extends VerticalPanel im
             }
 
             @Override
-            protected void onUploadComplete(UploadResponse<IEntity> serverUploadResponse) {
+            protected void onUploadComplete(UploadResponse<IFile> serverUploadResponse) {
                 dialog.hide();
                 ApplicationDocumentUploaderDialog.this.onUploadComplete(serverUploadResponse);
             }
@@ -83,7 +84,7 @@ public abstract class ApplicationDocumentUploaderDialog extends VerticalPanel im
         dialog.show();
     }
 
-    protected abstract void onUploadComplete(UploadResponse<IEntity> serverUploadResponse);
+    protected abstract void onUploadComplete(UploadResponse<IFile> serverUploadResponse);
 
     @Override
     public boolean onClickOk() {

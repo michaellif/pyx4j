@@ -17,10 +17,11 @@ import java.util.Collection;
 import java.util.EnumSet;
 
 import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.shared.IFile;
 import com.pyx4j.gwt.rpc.upload.UploadService;
 import com.pyx4j.gwt.shared.DownloadFormat;
 
-public interface ApplicationDocumentUploadService extends UploadService<IEntity, IEntity> {
+public interface ApplicationDocumentUploadService extends UploadService<IEntity, IFile> {
 
     public static final Collection<DownloadFormat> supportedFormats = EnumSet.of(DownloadFormat.JPEG, DownloadFormat.GIF, DownloadFormat.PNG,
             DownloadFormat.TIF, DownloadFormat.BMP, DownloadFormat.PDF);

@@ -19,7 +19,7 @@ import com.pyx4j.commons.SimpleMessageFormat;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.essentials.server.upload.UploadData;
-import com.pyx4j.essentials.server.upload.UploadDeferredProcess;
+import com.pyx4j.essentials.server.upload.DeferredUploadProcess;
 import com.pyx4j.gwt.rpc.upload.UploadResponse;
 import com.pyx4j.gwt.shared.DownloadFormat;
 import com.pyx4j.server.contexts.Lifecycle;
@@ -29,7 +29,7 @@ import com.propertyvista.dto.DownloadableUploadResponseDTO;
 import com.propertyvista.interfaces.importer.model.ImportIO;
 import com.propertyvista.interfaces.importer.processor.ImportProcessor;
 
-public class ImportUploadDeferredProcess extends UploadDeferredProcess<ImportUploadDTO, DownloadableUploadResponseDTO> {
+public class ImportUploadDeferredProcess extends DeferredUploadProcess<ImportUploadDTO, DownloadableUploadResponseDTO> {
 
     private static final long serialVersionUID = 1L;
 

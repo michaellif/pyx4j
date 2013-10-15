@@ -19,9 +19,10 @@ import java.util.concurrent.Callable;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.shared.IFile;
 import com.pyx4j.essentials.server.upload.AbstractUploadServiceImpl;
 import com.pyx4j.essentials.server.upload.UploadData;
-import com.pyx4j.essentials.server.upload.UploadDeferredProcess;
+import com.pyx4j.essentials.server.upload.DeferredUploadProcess;
 import com.pyx4j.gwt.rpc.upload.UploadResponse;
 import com.pyx4j.gwt.shared.DownloadFormat;
 import com.pyx4j.i18n.shared.I18n;
@@ -30,7 +31,7 @@ import com.propertyvista.crm.rpc.services.PmcDocumentFileUploadService;
 import com.propertyvista.server.domain.PmcDocumentBlob;
 import com.propertyvista.server.jobs.TaskRunner;
 
-public class PmcDocumentFileUploadServiceImpl extends AbstractUploadServiceImpl<IEntity, IEntity> implements PmcDocumentFileUploadService {
+public class PmcDocumentFileUploadServiceImpl extends AbstractUploadServiceImpl<IEntity, IFile> implements PmcDocumentFileUploadService {
 
     private static final I18n i18n = I18n.get(I18n.class);
 
@@ -51,7 +52,7 @@ public class PmcDocumentFileUploadServiceImpl extends AbstractUploadServiceImpl<
 
     @Override
     public com.pyx4j.essentials.server.upload.UploadReciver.ProcessingStatus onUploadReceived(final UploadData data,
-            UploadDeferredProcess<IEntity, IEntity> process, final UploadResponse<IEntity> response) {
+            DeferredUploadProcess<IEntity, IFile> process, final UploadResponse<IFile> response) {
         return TaskRunner.runInOperationsNamespace(new Callable<ProcessingStatus>() {
 
             @Override

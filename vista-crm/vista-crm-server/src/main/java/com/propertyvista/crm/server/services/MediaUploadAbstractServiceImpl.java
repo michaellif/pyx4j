@@ -24,7 +24,7 @@ import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.essentials.server.download.MimeMap;
 import com.pyx4j.essentials.server.upload.AbstractUploadServiceImpl;
 import com.pyx4j.essentials.server.upload.UploadData;
-import com.pyx4j.essentials.server.upload.UploadDeferredProcess;
+import com.pyx4j.essentials.server.upload.DeferredUploadProcess;
 import com.pyx4j.gwt.rpc.upload.UploadResponse;
 import com.pyx4j.gwt.shared.DownloadFormat;
 import com.pyx4j.i18n.shared.I18n;
@@ -61,7 +61,7 @@ public abstract class MediaUploadAbstractServiceImpl extends AbstractUploadServi
     }
 
     @Override
-    public ProcessingStatus onUploadReceived(final UploadData data, final UploadDeferredProcess<MediaUploadDTO, File> process,
+    public ProcessingStatus onUploadReceived(final UploadData data, final DeferredUploadProcess<MediaUploadDTO, File> process,
             final UploadResponse<File> response) {
         response.fileContentType = MimeMap.getContentType(FilenameUtils.getExtension(response.fileName));
         Key blobKey = BlobService.persist(data.data, response.fileName, response.fileContentType);

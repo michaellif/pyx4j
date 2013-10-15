@@ -20,6 +20,7 @@ import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.shared.IFile;
 import com.pyx4j.gwt.client.upload.UploadPanel;
 import com.pyx4j.gwt.client.upload.UploadResponseReciver;
 import com.pyx4j.gwt.rpc.upload.UploadResponse;
@@ -31,7 +32,7 @@ import com.pyx4j.widgets.client.dialog.OkCancelDialog;
 
 import com.propertyvista.portal.rpc.DeploymentConsts;
 
-public class UploadDialogBase<U extends IEntity, R extends IEntity> extends OkCancelDialog {
+public class UploadDialogBase<U extends IEntity, R extends IFile> extends OkCancelDialog {
 
     private static final I18n i18n = I18n.get(UploadDialogBase.class);
 

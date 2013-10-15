@@ -18,6 +18,7 @@ import java.util.Collection;
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.shared.IFile;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.folder.IFolderItemDecorator;
@@ -56,11 +57,11 @@ public class PmcBusinessInformationDocumentFolder extends VistaBoxFolder<PmcBusi
 
     }
 
-    private final UploadService<IEntity, IEntity> service;
+    private final UploadService<IEntity, IFile> service;
 
     private final Collection<DownloadFormat> supportedFormats;
 
-    public PmcBusinessInformationDocumentFolder(UploadService<IEntity, IEntity> service, Collection<DownloadFormat> supportedFormats) {
+    public PmcBusinessInformationDocumentFolder(UploadService<IEntity, IFile> service, Collection<DownloadFormat> supportedFormats) {
         super(PmcBusinessInfoDocument.class);
         setAddable(false);
         setRemovable(false);

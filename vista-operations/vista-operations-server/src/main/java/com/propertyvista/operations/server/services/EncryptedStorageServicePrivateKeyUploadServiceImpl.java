@@ -18,7 +18,7 @@ import com.sun.jersey.core.util.Base64;
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.essentials.server.upload.AbstractUploadServiceImpl;
 import com.pyx4j.essentials.server.upload.UploadData;
-import com.pyx4j.essentials.server.upload.UploadDeferredProcess;
+import com.pyx4j.essentials.server.upload.DeferredUploadProcess;
 import com.pyx4j.gwt.rpc.upload.UploadResponse;
 
 import com.propertyvista.biz.system.encryption.EncryptedStorageFacade;
@@ -40,7 +40,7 @@ public class EncryptedStorageServicePrivateKeyUploadServiceImpl extends Abstract
 
     @Override
     public com.pyx4j.essentials.server.upload.UploadReciver.ProcessingStatus onUploadReceived(UploadData data,
-            UploadDeferredProcess<PrivateKeyDTO, PrivateKeyDTO> process, UploadResponse<PrivateKeyDTO> response) {
+            DeferredUploadProcess<PrivateKeyDTO, PrivateKeyDTO> process, UploadResponse<PrivateKeyDTO> response) {
 
         byte[] keyData = Base64.decode(data.data);
 

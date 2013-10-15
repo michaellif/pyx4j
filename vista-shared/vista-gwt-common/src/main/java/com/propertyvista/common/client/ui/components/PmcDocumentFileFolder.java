@@ -23,6 +23,7 @@ import com.google.gwt.user.client.Window;
 
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.shared.IFile;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CTextField;
@@ -91,9 +92,9 @@ public class PmcDocumentFileFolder extends VistaTableFolder<PmcDocumentFile> {
 
     private final Collection<DownloadFormat> supportedFormats;
 
-    private final UploadService<IEntity, IEntity> uploadService;
+    private final UploadService<IEntity, IFile> uploadService;
 
-    public PmcDocumentFileFolder(UploadService<IEntity, IEntity> uploadService, Collection<DownloadFormat> supportedFormats) {
+    public PmcDocumentFileFolder(UploadService<IEntity, IFile> uploadService, Collection<DownloadFormat> supportedFormats) {
         super(PmcDocumentFile.class);
         setOrderable(false);
         this.uploadService = uploadService;
@@ -105,7 +106,7 @@ public class PmcDocumentFileFolder extends VistaTableFolder<PmcDocumentFile> {
         new PmcDocumentFileUploaderDialog(uploadService, supportedFormats) {
 
             @Override
-            protected void onUploadComplete(UploadResponse<IEntity> serverUploadResponse) {
+            protected void onUploadComplete(UploadResponse<IFile> serverUploadResponse) {
 
                 PmcDocumentFile docPage = EntityFactory.create(PmcDocumentFile.class);
                 docPage.blobKey().setValue(serverUploadResponse.uploadKey);

@@ -18,6 +18,7 @@ import com.google.gwt.dom.client.Style;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
 import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.shared.IFile;
 import com.pyx4j.gwt.client.upload.UploadPanel;
 import com.pyx4j.gwt.rpc.upload.UploadResponse;
 import com.pyx4j.gwt.rpc.upload.UploadService;
@@ -33,7 +34,7 @@ public abstract class FileUploadDialog extends VerticalPanel implements OkCancel
 
     private static final I18n i18n = I18n.get(FileUploadDialog.class);
 
-    private final UploadPanel<IEntity, IEntity> uploadPanel;
+    private final UploadPanel<IEntity, IFile> uploadPanel;
 
     private final Dialog dialog;
 
@@ -41,7 +42,7 @@ public abstract class FileUploadDialog extends VerticalPanel implements OkCancel
     public FileUploadDialog() {
         dialog = new Dialog(i18n.tr("Upload Image File"), this, null);
 
-        uploadPanel = new UploadPanel<IEntity, IEntity>((UploadService<IEntity, IEntity>) GWT.create(MediaUploadService.class)) {
+        uploadPanel = new UploadPanel<IEntity, IFile>((UploadService<IEntity, IFile>) GWT.create(MediaUploadService.class)) {
 
             @Override
             protected void onUploadSubmit() {
@@ -56,7 +57,7 @@ public abstract class FileUploadDialog extends VerticalPanel implements OkCancel
             }
 
             @Override
-            protected void onUploadComplete(UploadResponse<IEntity> serverUploadResponse) {
+            protected void onUploadComplete(UploadResponse<IFile> serverUploadResponse) {
                 dialog.hide();
                 FileUploadDialog.this.onUploadComplete(serverUploadResponse);
             }

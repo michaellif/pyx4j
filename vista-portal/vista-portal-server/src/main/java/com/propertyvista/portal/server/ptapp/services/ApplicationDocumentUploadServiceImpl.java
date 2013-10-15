@@ -22,10 +22,11 @@ import org.slf4j.LoggerFactory;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.shared.IFile;
 import com.pyx4j.essentials.server.download.MimeMap;
 import com.pyx4j.essentials.server.upload.AbstractUploadServiceImpl;
 import com.pyx4j.essentials.server.upload.UploadData;
-import com.pyx4j.essentials.server.upload.UploadDeferredProcess;
+import com.pyx4j.essentials.server.upload.DeferredUploadProcess;
 import com.pyx4j.gwt.rpc.upload.UploadResponse;
 import com.pyx4j.gwt.shared.DownloadFormat;
 import com.pyx4j.i18n.shared.I18n;
@@ -34,7 +35,7 @@ import com.propertyvista.portal.rpc.ptapp.services.ApplicationDocumentUploadServ
 import com.propertyvista.server.adapters.ApplicationDocumentUploadedBlobSecurityAdapterImpl;
 import com.propertyvista.server.domain.ApplicationDocumentBlob;
 
-public class ApplicationDocumentUploadServiceImpl extends AbstractUploadServiceImpl<IEntity, IEntity> implements ApplicationDocumentUploadService {
+public class ApplicationDocumentUploadServiceImpl extends AbstractUploadServiceImpl<IEntity, IFile> implements ApplicationDocumentUploadService {
 
     private static final I18n i18n = I18n.get(ApplicationDocumentUploadServiceImpl.class);
 
@@ -56,7 +57,7 @@ public class ApplicationDocumentUploadServiceImpl extends AbstractUploadServiceI
     }
 
     @Override
-    public ProcessingStatus onUploadReceived(UploadData data, UploadDeferredProcess<IEntity, IEntity> process, UploadResponse<IEntity> response) {
+    public ProcessingStatus onUploadReceived(UploadData data, DeferredUploadProcess<IEntity, IFile> process, UploadResponse<IFile> response) {
         response.fileContentType = MimeMap.getContentType(FilenameUtils.getExtension(response.fileName));
 
         ApplicationDocumentBlob applicationDocumentData = EntityFactory.create(ApplicationDocumentBlob.class);

@@ -21,6 +21,7 @@ import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
 import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.shared.IFile;
 import com.pyx4j.gwt.client.upload.UploadPanel;
 import com.pyx4j.gwt.rpc.upload.UploadResponse;
 import com.pyx4j.gwt.rpc.upload.UploadService;
@@ -36,15 +37,15 @@ public abstract class PmcDocumentFileUploaderDialog extends Composite implements
 
     private static final I18n i18n = I18n.get(PmcDocumentFileUploaderDialog.class);
 
-    private final UploadPanel<IEntity, IEntity> uploadPanel;
+    private final UploadPanel<IEntity, IFile> uploadPanel;
 
     private final Dialog dialog;
 
     @SuppressWarnings("unchecked")
-    public PmcDocumentFileUploaderDialog(UploadService<IEntity, IEntity> uploadService, Collection<DownloadFormat> supportedFormats) {
+    public PmcDocumentFileUploaderDialog(UploadService<IEntity, IFile> uploadService, Collection<DownloadFormat> supportedFormats) {
         dialog = new Dialog(i18n.tr("Upload Document"), this, null);
 
-        uploadPanel = new UploadPanel<IEntity, IEntity>(uploadService) {
+        uploadPanel = new UploadPanel<IEntity, IFile>(uploadService) {
             @Override
             protected void onUploadSubmit() {
                 dialog.getOkButton().setEnabled(false);
@@ -58,7 +59,7 @@ public abstract class PmcDocumentFileUploaderDialog extends Composite implements
             }
 
             @Override
-            protected void onUploadComplete(UploadResponse<IEntity> serverUploadResponse) {
+            protected void onUploadComplete(UploadResponse<IFile> serverUploadResponse) {
                 dialog.hide();
                 PmcDocumentFileUploaderDialog.this.onUploadComplete(serverUploadResponse);
             }
@@ -103,6 +104,6 @@ public abstract class PmcDocumentFileUploaderDialog extends Composite implements
         return true;
     }
 
-    protected abstract void onUploadComplete(UploadResponse<IEntity> serverUploadResponse);
+    protected abstract void onUploadComplete(UploadResponse<IFile> serverUploadResponse);
 
 }

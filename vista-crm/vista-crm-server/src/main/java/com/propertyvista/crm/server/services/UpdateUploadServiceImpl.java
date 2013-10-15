@@ -22,7 +22,7 @@ import org.slf4j.LoggerFactory;
 import com.pyx4j.commons.SimpleMessageFormat;
 import com.pyx4j.essentials.server.upload.AbstractUploadServiceImpl;
 import com.pyx4j.essentials.server.upload.UploadData;
-import com.pyx4j.essentials.server.upload.UploadDeferredProcess;
+import com.pyx4j.essentials.server.upload.DeferredUploadProcess;
 import com.pyx4j.gwt.rpc.upload.UploadResponse;
 import com.pyx4j.gwt.server.deferred.DeferredProcessRegistry;
 import com.pyx4j.gwt.server.deferred.DeferredProcessorThread;
@@ -66,12 +66,12 @@ public class UpdateUploadServiceImpl extends AbstractUploadServiceImpl<ImportUpl
     }
 
     @Override
-    protected UploadDeferredProcess<ImportUploadDTO, DownloadableUploadResponseDTO> createUploadDeferredProcess(ImportUploadDTO data) {
+    protected DeferredUploadProcess<ImportUploadDTO, DownloadableUploadResponseDTO> createUploadDeferredProcess(ImportUploadDTO data) {
         return new ImportUploadDeferredProcess(data);
     }
 
     @Override
-    public ProcessingStatus onUploadReceived(final UploadData data, final UploadDeferredProcess<ImportUploadDTO, DownloadableUploadResponseDTO> process,
+    public ProcessingStatus onUploadReceived(final UploadData data, final DeferredUploadProcess<ImportUploadDTO, DownloadableUploadResponseDTO> process,
             final UploadResponse<DownloadableUploadResponseDTO> response) {
         process.getData().type().setValue(ImportUploadDTO.ImportType.updateUnitAvailability);
         process.onUploadReceived(data, response);
@@ -81,7 +81,7 @@ public class UpdateUploadServiceImpl extends AbstractUploadServiceImpl<ImportUpl
     }
 
     @Deprecated
-    public ProcessingStatus OLD_onUploadRecived(final UploadData data, final UploadDeferredProcess<ImportUploadDTO, DownloadableUploadResponseDTO> process,
+    public ProcessingStatus OLD_onUploadRecived(final UploadData data, final DeferredUploadProcess<ImportUploadDTO, DownloadableUploadResponseDTO> process,
             final UploadResponse<DownloadableUploadResponseDTO> response) {
         final String namespace = NamespaceManager.getNamespace();
 
@@ -99,7 +99,7 @@ public class UpdateUploadServiceImpl extends AbstractUploadServiceImpl<ImportUpl
         return ProcessingStatus.processWillContinue;
     }
 
-    private static void runImport(UploadData data, UploadDeferredProcess<ImportUploadDTO, DownloadableUploadResponseDTO> process,
+    private static void runImport(UploadData data, DeferredUploadProcess<ImportUploadDTO, DownloadableUploadResponseDTO> process,
             UploadResponse<DownloadableUploadResponseDTO> response) {
 
         ImportIO importIO = ImportUtils.parse(process.getData().dataFormat().getValue(), data.data,
