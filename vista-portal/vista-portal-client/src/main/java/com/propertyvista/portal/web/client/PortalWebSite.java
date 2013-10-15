@@ -22,6 +22,9 @@ import com.pyx4j.essentials.client.SessionInactiveDialog;
 import com.pyx4j.gwt.commons.UncaughtHandler;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.security.client.ClientContext;
+import com.pyx4j.security.client.SessionInactiveEvent;
+import com.pyx4j.security.client.SessionInactiveHandler;
+import com.pyx4j.security.client.SessionMonitor;
 import com.pyx4j.security.rpc.AuthenticationService;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.client.SingletonViewFactory;
@@ -70,8 +73,6 @@ public class PortalWebSite extends VistaSite {
 
         hideLoadingIndicator();
 
-        SessionInactiveDialog.register();
-
         if (verifyBrowserCompatibility()) {
             initialize();
         }
@@ -82,12 +83,17 @@ public class PortalWebSite extends VistaSite {
         return VistaBrowserRequirments.isBrowserCompatiblePortal();
     }
 
-    public final native String getAuthenticationToken() /*-{
-		return $wnd.gwtToken();
-    }-*/;
-
     private void initialize() {
         initSiteTheme();
+
+        SessionInactiveDialog.register();
+        SessionMonitor.addSessionInactiveHandler(new SessionInactiveHandler() {
+            @Override
+            public void onSessionInactive(SessionInactiveEvent event) {
+                AppSite.getPlaceController().goTo(new PortalSiteMap.Login());
+            }
+        });
+
         ClientPolicyManager.initialize(GWT.<PolicyRetrieveService> create(PortalPolicyRetrieveService.class));
     }
 
