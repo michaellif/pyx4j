@@ -21,6 +21,7 @@ BEGIN TRANSACTION;
         ALTER SEQUENCE insurance_tenant_sure_client_seq RENAME TO tenant_sure_insurance_policy_client_seq;
         ALTER SEQUENCE insurance_tenant_sure_report_seq RENAME TO tenant_sure_insurance_policy_report_seq;
         ALTER SEQUENCE insurance_tenant_sure_transaction_seq RENAME TO tenant_sure_transaction_seq;
+        ALTER SEQUENCE preauthorized_payment_seq RENAME TO autopay_agreement_seq;
         
  
         -- Sequences to drop
@@ -41,12 +42,14 @@ BEGIN TRANSACTION;
         CREATE SEQUENCE ilsvendor_config_seq START WITH 1 INCREMENT BY 1 NO MAXVALUE NO MINVALUE CACHE 1;
         CREATE SEQUENCE initialization_data_seq START WITH 1 INCREMENT BY 1 NO MAXVALUE NO MINVALUE CACHE 1;
         CREATE SEQUENCE insurance_certificate_seq START WITH 1 INCREMENT BY 1 NO MAXVALUE NO MINVALUE CACHE 1;
+        CREATE SEQUENCE insurance_certificate_scan_seq START WITH 1 INCREMENT BY 1 NO MAXVALUE NO MINVALUE CACHE 1;
         CREATE SEQUENCE legal_letter_blob_seq START WITH 1 INCREMENT BY 1 NO MAXVALUE NO MINVALUE CACHE 1;
         CREATE SEQUENCE legal_letter_seq START WITH 1 INCREMENT BY 1 NO MAXVALUE NO MINVALUE CACHE 1;
         CREATE SEQUENCE n4_policy_seq START WITH 1 INCREMENT BY 1 NO MAXVALUE NO MINVALUE CACHE 1;
         
   
         -- Change owner to vista
+        ALTER SEQUENCE autopay_agreement_seq OWNER TO vista;
         ALTER SEQUENCE ilsbatch$units_seq OWNER TO vista ;
         ALTER SEQUENCE ilsbatch_seq OWNER TO vista ;
         ALTER SEQUENCE ilsconfig_seq OWNER TO vista ;
@@ -57,6 +60,7 @@ BEGIN TRANSACTION;
         ALTER SEQUENCE initialization_data_seq OWNER TO vista ;
         ALTER SEQUENCE insurance_policy_seq OWNER TO vista ;
         ALTER SEQUENCE insurance_certificate_seq OWNER TO vista;
+        ALTER SEQUENCE insurance_certificate_scan_seq OWNER TO vista;
         ALTER SEQUENCE legal_letter_blob_seq OWNER TO vista ;
         ALTER SEQUENCE legal_letter_seq OWNER TO vista ;
         ALTER SEQUENCE n4_policy_seq OWNER TO vista ;
