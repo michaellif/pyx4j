@@ -18,7 +18,6 @@ import com.google.gwt.user.client.ui.RootLayoutPanel;
 
 import com.pyx4j.commons.css.StyleManager;
 import com.pyx4j.config.shared.ApplicationMode;
-import com.pyx4j.essentials.client.SessionInactiveDialog;
 import com.pyx4j.gwt.commons.UncaughtHandler;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.security.client.ClientContext;
@@ -86,13 +85,7 @@ public class PortalWebSite extends VistaSite {
     private void initialize() {
         initSiteTheme();
 
-        SessionInactiveDialog.register();
-        SessionMonitor.addSessionInactiveHandler(new SessionInactiveHandler() {
-            @Override
-            public void onSessionInactive(SessionInactiveEvent event) {
-                AppSite.getPlaceController().goTo(new PortalSiteMap.Login());
-            }
-        });
+        PortalSessionInactiveHandler.register();
 
         ClientPolicyManager.initialize(GWT.<PolicyRetrieveService> create(PortalPolicyRetrieveService.class));
     }
