@@ -74,6 +74,15 @@
         </dependency>
 
         <dependency>
+            <groupId>com.propertyvista</groupId>
+            <artifactId>vista-unit-mock</artifactId>
+            <version>${project.version}</version>
+            <classifier>tests</classifier>
+            <scope>test</scope>
+            <optional>true</optional>
+        </dependency>
+
+        <dependency>
             <groupId>javax.servlet</groupId>
             <artifactId>javax.servlet-api</artifactId>
             <scope>provided</scope>
