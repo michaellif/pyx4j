@@ -180,16 +180,6 @@ public class PortalSiteMap implements SiteMap {
             public static class MaintenanceRequestWizard extends AppPlace {
             }
 
-            public static class MaintenanceRequestConfirmation extends AppPlace {
-                public MaintenanceRequestConfirmation() {
-
-                }
-
-                public MaintenanceRequestConfirmation(Key paymentRecordID) {
-                    formPlace(paymentRecordID);
-                }
-            }
-
             public static class MaintenanceRequestPage extends AppPlace {
             }
 

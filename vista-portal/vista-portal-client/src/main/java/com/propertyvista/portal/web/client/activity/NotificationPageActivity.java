@@ -44,7 +44,11 @@ public class NotificationPageActivity extends AbstractActivity implements Notifi
 
     @Override
     public void acceptMessage() {
-        AppSite.getPlaceController().goTo(AppPlace.NOWHERE);
+        if (place.getContinuePlace() == null) {
+            AppSite.getPlaceController().goTo(AppPlace.NOWHERE);
+        } else {
+            AppSite.getPlaceController().goTo(place.getContinuePlace());
+        }
     }
 
 }
