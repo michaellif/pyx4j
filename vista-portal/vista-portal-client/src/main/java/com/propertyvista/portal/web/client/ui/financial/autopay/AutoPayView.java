@@ -14,11 +14,10 @@
 package com.propertyvista.portal.web.client.ui.financial.autopay;
 
 import com.propertyvista.portal.rpc.portal.web.dto.financial.AutoPayDTO;
-import com.propertyvista.portal.web.client.ui.IFormView;
+import com.propertyvista.portal.web.client.ui.IEditorView;
 
-public interface AutoPayView extends IFormView<AutoPayDTO> {
+public interface AutoPayView extends IEditorView<AutoPayDTO> {
 
-    interface Presenter extends IFormView.IFormViewPresenter<AutoPayDTO> {
-        void back();
+    public interface Presenter extends IEditorPresenter<AutoPayDTO> {
     }
 }

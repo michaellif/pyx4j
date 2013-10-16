@@ -14,12 +14,12 @@
 package com.propertyvista.portal.web.client.ui.financial.autopay;
 
 import com.propertyvista.portal.rpc.portal.web.dto.financial.AutoPayDTO;
-import com.propertyvista.portal.web.client.ui.AbstractFormView;
+import com.propertyvista.portal.web.client.ui.AbstractEditorView;
 
-public class AutoPayViewImpl extends AbstractFormView<AutoPayDTO> implements AutoPayView {
+public class AutoPayViewImpl extends AbstractEditorView<AutoPayDTO> implements AutoPayView {
 
     public AutoPayViewImpl() {
         super();
-        setForm(new AutoPayViewForm());
+        setForm(new AutoPayViewForm(this));
     }
 }

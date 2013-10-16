@@ -16,16 +16,14 @@ package com.propertyvista.portal.web.client.ui.financial.paymentmethod;
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.commons.css.ThemeColor;
-import com.pyx4j.forms.client.ui.CEntityForm;
-import com.pyx4j.forms.client.ui.form.FormDecorator;
 import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.domain.payment.LeasePaymentMethod;
 import com.propertyvista.portal.rpc.portal.web.dto.financial.PaymentMethodDTO;
-import com.propertyvista.portal.web.client.ui.CPortalEntityForm;
+import com.propertyvista.portal.web.client.ui.CPortalEntityEditor;
 
-public class PaymentMethodViewForm extends CPortalEntityForm<PaymentMethodDTO> {
+public class PaymentMethodViewForm extends CPortalEntityEditor<PaymentMethodDTO> {
 
     private static final I18n i18n = I18n.get(PaymentMethodViewForm.class);
 
@@ -41,12 +39,5 @@ public class PaymentMethodViewForm extends CPortalEntityForm<PaymentMethodDTO> {
         content.setWidget(++row, 0, inject(proto().paymentMethod(), new PaymentMethodEditor<LeasePaymentMethod>(LeasePaymentMethod.class)));
 
         return content;
-    }
-
-    @Override
-    protected FormDecorator<PaymentMethodDTO, CEntityForm<PaymentMethodDTO>> createDecorator() {
-        FormDecorator<PaymentMethodDTO, CEntityForm<PaymentMethodDTO>> decorator = super.createDecorator();
-
-        return decorator;
     }
 }

@@ -14,54 +14,17 @@
 package com.propertyvista.portal.web.client.activity.financial.autopay;
 
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.event.shared.EventBus;
-import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
-import com.pyx4j.commons.Key;
-import com.pyx4j.entity.shared.EntityFactory;
-import com.pyx4j.rpc.client.DefaultAsyncCallback;
-import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.rpc.AppPlace;
 
-import com.propertyvista.domain.payment.AutopayAgreement;
-import com.propertyvista.portal.rpc.portal.PortalSiteMap;
 import com.propertyvista.portal.rpc.portal.web.dto.financial.AutoPayDTO;
-import com.propertyvista.portal.rpc.portal.web.services.financial.PaymentService;
-import com.propertyvista.portal.web.client.PortalWebSite;
-import com.propertyvista.portal.web.client.activity.SecurityAwareActivity;
-import com.propertyvista.portal.web.client.ui.financial.autopay.AutoPayConfirmationView;
+import com.propertyvista.portal.rpc.portal.web.services.financial.AutoPayWizardService;
+import com.propertyvista.portal.web.client.activity.AbstractEditorActivity;
 import com.propertyvista.portal.web.client.ui.financial.autopay.AutoPayView;
 
-public class AutoPayActivity extends SecurityAwareActivity implements AutoPayConfirmationView.Presenter {
-
-    private final AutoPayView view;
-
-    private final Key entityId;
+public class AutoPayActivity extends AbstractEditorActivity<AutoPayDTO> implements AutoPayView.Presenter {
 
     public AutoPayActivity(AppPlace place) {
-        this.view = PortalWebSite.getViewFactory().instantiate(AutoPayView.class);
-        this.view.setPresenter(this);
-
-        entityId = place.getItemId();
+        super(AutoPayView.class, GWT.<AutoPayWizardService> create(AutoPayWizardService.class), place);
     }
-
-    @Override
-    public void start(AcceptsOneWidget panel, EventBus eventBus) {
-        super.start(panel, eventBus);
-        panel.setWidget(view);
-
-        assert (entityId != null);
-        GWT.<PaymentService> create(PaymentService.class).retreiveAutoPay(new DefaultAsyncCallback<AutoPayDTO>() {
-            @Override
-            public void onSuccess(AutoPayDTO result) {
-                view.populate(result);
-            }
-        }, EntityFactory.createIdentityStub(AutopayAgreement.class, entityId));
-    }
-
-    @Override
-    public void back() {
-        AppSite.getPlaceController().goTo(new PortalSiteMap.Resident.Financial.PreauthorizedPayments());
-    }
-
 }

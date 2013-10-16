@@ -113,6 +113,35 @@ public class AutoPayWizardServiceImpl extends AbstractCrudServiceDtoImpl<Autopay
     }
 
     @Override
+    protected void enhanceRetrieved(AutopayAgreement bo, AutoPayDTO to, com.pyx4j.entity.rpc.AbstractCrudService.RetrieveTarget retrieveTarget) {
+        super.enhanceRetrieved(bo, to, retrieveTarget);
+
+        Lease lease = TenantAppContext.getCurrentUserLease();
+        Persistence.service().retrieve(lease.unit().building());
+
+        to.electronicPaymentsAllowed().setValue(ServerSideFactory.create(PaymentFacade.class).isElectronicPaymentsSetup(lease.billingAccount()));
+        to.allowedPaymentTypes().setCollectionValue(
+                ServerSideFactory.create(PaymentFacade.class).getAllowedPaymentTypes(lease.billingAccount(), VistaApplication.portal));
+
+        new AddressConverter.StructuredToSimpleAddressConverter().copyBOtoTO(AddressRetriever.getLeaseAddress(lease), to.address());
+
+        to.propertyCode().set(lease.unit().building().propertyCode());
+        to.unitNumber().set(lease.unit().info().number());
+
+        to.leaseId().set(lease.leaseId());
+        to.leaseStatus().set(lease.status());
+
+        to.nextScheduledPaymentDate().setValue(ServerSideFactory.create(PaymentMethodFacade.class).getNextAutopayDate(lease));
+
+        to.total().setValue(BigDecimal.ZERO);
+        for (AutopayAgreementCoveredItem item : to.coveredItems()) {
+            to.total().setValue(to.total().getValue().add(item.amount().getValue()));
+        }
+
+        fillCoveredItems(to, lease.currentTerm().version().leaseProducts());
+    }
+
+    @Override
     public void getProfiledPaymentMethods(AsyncCallback<Vector<LeasePaymentMethod>> callback) {
         callback.onSuccess(new Vector<LeasePaymentMethod>(LeaseParticipantUtils.getProfiledPaymentMethods(TenantAppContext.getCurrentUserTenantInLease())));
     }
@@ -165,8 +194,7 @@ public class AutoPayWizardServiceImpl extends AbstractCrudServiceDtoImpl<Autopay
         PreauthorizedPaymentCoveredItemDTO item = EntityFactory.create(PreauthorizedPaymentCoveredItemDTO.class);
 
         // calculate already covered amount by other tenants/paps: 
-        EntityQueryCriteria<AutopayAgreementCoveredItem> criteria = new EntityQueryCriteria<AutopayAgreementCoveredItem>(
-                AutopayAgreementCoveredItem.class);
+        EntityQueryCriteria<AutopayAgreementCoveredItem> criteria = new EntityQueryCriteria<AutopayAgreementCoveredItem>(AutopayAgreementCoveredItem.class);
         criteria.eq(criteria.proto().pap().tenant().lease(), TenantAppContext.getCurrentUserLeaseIdStub());
         criteria.eq(criteria.proto().billableItem().uid(), billableItem.uid());
         criteria.eq(criteria.proto().pap().isDeleted(), Boolean.FALSE);
