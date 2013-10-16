@@ -99,9 +99,12 @@ public class PortalImageSetFolder extends VistaBoxFolder<PortalImageSet> {
         new AvailableLocaleSelectorDialog(usedLocales) {
             @Override
             public boolean onClickOk() {
-                PortalImageSet item = EntityFactory.create(PortalImageSet.class);
-                item.locale().set(getSelectedLocale());
-                PortalImageSetFolder.super.addItem(item);
+                AvailableLocale locale = getSelectedLocale();
+                if (locale != null) {
+                    PortalImageSet item = EntityFactory.create(PortalImageSet.class);
+                    item.locale().set(locale);
+                    PortalImageSetFolder.super.addItem(item);
+                }
                 return true;
             }
         }.show();

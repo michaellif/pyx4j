@@ -79,9 +79,12 @@ class PageContentFolder extends VistaBoxFolder<PageContent> {
         new AvailableLocaleSelectorDialog(usedLocales) {
             @Override
             public boolean onClickOk() {
-                PageContent item = EntityFactory.create(PageContent.class);
-                item.locale().set(getSelectedLocale());
-                PageContentFolder.super.addItem(item);
+                AvailableLocale locale = getSelectedLocale();
+                if (locale != null) {
+                    PageContent item = EntityFactory.create(PageContent.class);
+                    item.locale().set(locale);
+                    PageContentFolder.super.addItem(item);
+                }
                 return true;
             }
         }.show();

@@ -21,6 +21,7 @@ import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 
 import com.propertyvista.domain.ref.Country;
 import com.propertyvista.domain.ref.Province;
+import com.propertyvista.domain.site.AvailableLocale;
 
 /**
  * Midnight Solution for Province combo box filter
@@ -32,7 +33,8 @@ public class ReferenceDataServiceVistaImpl extends ReferenceDataServiceImpl {
 
     @Override
     protected <T extends IEntity> EntitySearchResult<T> query(EntityQueryCriteria<T> criteria) {
-        if ((criteria.getEntityClass() == Province.class) || (criteria.getEntityClass() == Country.class)) {
+        if ((criteria.getEntityClass() == Province.class) || (criteria.getEntityClass() == Country.class)
+                || (criteria.getEntityClass() == AvailableLocale.class)) {
             EntitySearchResult<T> result = new EntitySearchResult<T>();
             result.setData(Persistence.secureQuery(criteria));
             return result;

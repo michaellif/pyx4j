@@ -66,9 +66,12 @@ class MetaTagsFolder extends VistaBoxFolder<PageMetaTags> {
         new AvailableLocaleSelectorDialog(usedLocales) {
             @Override
             public boolean onClickOk() {
-                PageMetaTags titles = EntityFactory.create(PageMetaTags.class);
-                titles.locale().set(getSelectedLocale());
-                MetaTagsFolder.super.addItem(titles);
+                AvailableLocale locale = getSelectedLocale();
+                if (locale != null) {
+                    PageMetaTags titles = EntityFactory.create(PageMetaTags.class);
+                    titles.locale().set(locale);
+                    MetaTagsFolder.super.addItem(titles);
+                }
                 return true;
             }
         }.show();

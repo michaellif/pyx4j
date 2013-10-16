@@ -26,6 +26,7 @@ import com.propertyvista.crm.client.ui.crud.settings.website.content.pages.PageE
 import com.propertyvista.crm.client.ui.crud.settings.website.general.AvailableLocaleSelectorDialog;
 import com.propertyvista.crm.rpc.services.PageDescriptorCrudService;
 import com.propertyvista.crm.rpc.services.PageDescriptorCrudService.PageDescriptorInitializationData;
+import com.propertyvista.domain.site.AvailableLocale;
 import com.propertyvista.domain.site.PageDescriptor;
 
 public class PageEditorActivity extends CrmEditorActivity<PageDescriptor> implements PageEditor.Presenter {
@@ -47,11 +48,14 @@ public class PageEditorActivity extends CrmEditorActivity<PageDescriptor> implem
         new AvailableLocaleSelectorDialog(null) {
             @Override
             public boolean onClickOk() {
-                PageDescriptorCrudService.PageDescriptorInitializationData id = EntityFactory
-                        .create(PageDescriptorCrudService.PageDescriptorInitializationData.class);
-                id.pageParent().setValue(pageParentArg);
-                id.pageLocale().set(getSelectedLocale());
-                callback.onSuccess(id);
+                AvailableLocale locale = getSelectedLocale();
+                if (locale != null) {
+                    PageDescriptorCrudService.PageDescriptorInitializationData id = EntityFactory
+                            .create(PageDescriptorCrudService.PageDescriptorInitializationData.class);
+                    id.pageParent().setValue(pageParentArg);
+                    id.pageLocale().set(locale);
+                    callback.onSuccess(id);
+                }
                 return true;
             }
 

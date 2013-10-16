@@ -34,7 +34,7 @@ import com.pyx4j.widgets.client.dialog.OkCancelOption;
 import com.propertyvista.domain.site.AvailableLocale;
 import com.propertyvista.shared.i18n.CompiledLocale;
 
-public class AvailableLocaleSelectorDialog extends Dialog implements OkCancelOption {
+public abstract class AvailableLocaleSelectorDialog extends Dialog implements OkCancelOption {
     private final static I18n i18n = I18n.get(AvailableLocaleSelectorDialog.class);
 
     private final static String title = i18n.tr("Select Locale");
@@ -105,15 +105,11 @@ public class AvailableLocaleSelectorDialog extends Dialog implements OkCancelOpt
         int optSize = localeSelector.getOptions().size();
         if (optSize == 0) {
             panel.add(new Label("Sorry, no more items to choose from."));
+            getOkButton().setVisible(false);
         } else {
             panel.add(localeSelector);
             localeSelector.getWidget().getEditor().setVisibleItemCount(optSize + 1);
         }
-    }
-
-    @Override
-    public boolean onClickOk() {
-        return true;
     }
 
     @Override

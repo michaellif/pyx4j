@@ -66,9 +66,12 @@ class SiteTitlesFolder extends VistaBoxFolder<SiteTitles> {
         new AvailableLocaleSelectorDialog(usedLocales) {
             @Override
             public boolean onClickOk() {
-                SiteTitles titles = EntityFactory.create(SiteTitles.class);
-                titles.locale().set(getSelectedLocale());
-                SiteTitlesFolder.super.addItem(titles);
+                AvailableLocale locale = getSelectedLocale();
+                if (locale != null) {
+                    SiteTitles titles = EntityFactory.create(SiteTitles.class);
+                    titles.locale().set(locale);
+                    SiteTitlesFolder.super.addItem(titles);
+                }
                 return true;
             }
         }.show();

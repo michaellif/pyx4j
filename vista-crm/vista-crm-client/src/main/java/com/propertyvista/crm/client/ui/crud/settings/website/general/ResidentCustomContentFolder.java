@@ -68,9 +68,12 @@ public class ResidentCustomContentFolder extends VistaBoxFolder<HtmlContent> {
         new AvailableLocaleSelectorDialog(usedLocales) {
             @Override
             public boolean onClickOk() {
-                HtmlContent item = EntityFactory.create(HtmlContent.class);
-                item.locale().set(getSelectedLocale());
-                ResidentCustomContentFolder.super.addItem(item);
+                AvailableLocale locale = getSelectedLocale();
+                if (locale != null) {
+                    HtmlContent item = EntityFactory.create(HtmlContent.class);
+                    item.locale().set(locale);
+                    ResidentCustomContentFolder.super.addItem(item);
+                }
                 return true;
             }
         }.show();
