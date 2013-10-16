@@ -24,7 +24,19 @@ public class NotificationFacadeMock implements NotificationFacade {
     }
 
     @Override
-    public void papSuspension(Lease leaseId) {
+    public void autoPayReviewRequiredNotification(Lease leaseId) {
+    }
+
+    @Override
+    public void autoPayTerminatedNotification(Lease leaseId) {
+    }
+
+    @Override
+    public void aggregateNotificationsStart() {
+    }
+
+    @Override
+    public void aggregatedNotificationsSend() {
     }
 
 }

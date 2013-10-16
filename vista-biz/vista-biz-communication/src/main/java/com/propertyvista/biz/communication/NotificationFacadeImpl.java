@@ -20,12 +20,27 @@ import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.AttachLevel;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 
+import com.propertyvista.biz.communication.notifications.AbstractNotification;
+import com.propertyvista.biz.communication.notifications.AutoPayReviewRequiredNotification;
+import com.propertyvista.biz.communication.notifications.NotificationsAggregator;
+import com.propertyvista.biz.communication.notifications.NotificationsUtils;
 import com.propertyvista.domain.company.Employee;
 import com.propertyvista.domain.company.Notification;
 import com.propertyvista.domain.financial.PaymentRecord;
 import com.propertyvista.domain.tenant.lease.Lease;
 
 public class NotificationFacadeImpl implements NotificationFacade {
+
+    private final ThreadLocal<NotificationsAggregator> aggregatorThreadLocal = new ThreadLocal<NotificationsAggregator>();
+
+    private void aggregateOrSend(AbstractNotification notification) {
+        NotificationsAggregator aggregator = aggregatorThreadLocal.get();
+        if (aggregator != null) {
+            aggregator.aggregate(notification);
+        } else {
+            notification.send();
+        }
+    }
 
     @Override
     public void rejectPayment(PaymentRecord paymentRecord, boolean applyNSF) {
@@ -42,10 +57,29 @@ public class NotificationFacadeImpl implements NotificationFacade {
     }
 
     @Override
-    public void papSuspension(Lease leaseId) {
-        List<Employee> employees = NotificationsUtils.getNotificationTraget(leaseId, Notification.NotificationType.PreauthorizedPaymentSuspension);
-        if (!employees.isEmpty()) {
-            ServerSideFactory.create(CommunicationFacade.class).sendPapSuspensionNotification(NotificationsUtils.toEmails(employees), leaseId);
+    public void autoPayReviewRequiredNotification(Lease leaseId) {
+        aggregateOrSend(new AutoPayReviewRequiredNotification(leaseId));
+    }
+
+    @Override
+    public void autoPayTerminatedNotification(Lease leaseId) {
+        // TODO not implemented in current scope
+    }
+
+    @Override
+    public void aggregateNotificationsStart() {
+        NotificationsAggregator aggregator = aggregatorThreadLocal.get();
+        if (aggregator == null) {
+            aggregatorThreadLocal.set(new NotificationsAggregator());
         }
+    }
+
+    @Override
+    public void aggregatedNotificationsSend() {
+        NotificationsAggregator aggregator = aggregatorThreadLocal.get();
+        if (aggregator != null) {
+            aggregator.send();
+        }
+        aggregatorThreadLocal.remove();
     }
 }

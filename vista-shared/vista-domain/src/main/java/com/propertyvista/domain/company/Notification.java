@@ -38,7 +38,7 @@ public interface Notification extends IEntity {
         @Translate("Electronic Payment Rejected (NSF)")
         ElectronicPaymentRejectedNsf,
 
-        PreauthorizedPaymentSuspension,
+        AutoPayReviewRequired,
 
         MaintenanceRequest;
 

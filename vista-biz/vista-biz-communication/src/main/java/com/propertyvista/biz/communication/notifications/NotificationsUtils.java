@@ -11,7 +11,7 @@
  * @author vlads
  * @version $Id$
  */
-package com.propertyvista.biz.communication;
+package com.propertyvista.biz.communication.notifications;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,9 +26,9 @@ import com.propertyvista.domain.company.Notification;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.tenant.lease.Lease;
 
-class NotificationsUtils {
+public class NotificationsUtils {
 
-    static List<String> toEmails(List<Employee> employees) {
+    public static List<String> toEmails(List<Employee> employees) {
         List<String> emails = new ArrayList<String>();
         for (Employee emp : employees) {
             emails.add(emp.email().getValue());
@@ -36,13 +36,13 @@ class NotificationsUtils {
         return emails;
     }
 
-    static List<Employee> getNotificationTraget(Lease leaseId, Notification.NotificationType notificationType) {
+    public static List<Employee> getNotificationTraget(Lease leaseId, Notification.NotificationType notificationType) {
         EntityQueryCriteria<Building> criteria = EntityQueryCriteria.create(Building.class);
         criteria.eq(criteria.proto().units().$()._Leases(), leaseId);
         return getNotificationTraget(Persistence.service().retrieve(criteria, AttachLevel.IdOnly), notificationType);
     }
 
-    static List<Employee> getNotificationTraget(Building buildingId, Notification.NotificationType notificationType) {
+    public static List<Employee> getNotificationTraget(Building buildingId, Notification.NotificationType notificationType) {
         EntityQueryCriteria<Employee> criteria = EntityQueryCriteria.create(Employee.class);
 
         OrCriterion or = criteria.or();

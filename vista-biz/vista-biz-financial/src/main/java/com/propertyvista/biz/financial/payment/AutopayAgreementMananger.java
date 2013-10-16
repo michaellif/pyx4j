@@ -271,7 +271,7 @@ class AutopayAgreementMananger {
             persistAutopayAgreement(pap, pap.tenant());
         }
         if (reviewNotificatioRequired) {
-            ServerSideFactory.create(NotificationFacade.class).papSuspension(lease);
+            ServerSideFactory.create(NotificationFacade.class).autoPayReviewRequiredNotification(lease);
         }
     }
 
@@ -301,27 +301,26 @@ class AutopayAgreementMananger {
         }
     }
 
-    public void updatePreauthorizedPayments(Lease lease) {
+    public void terminateAutopayAgreements(Lease lease) {
         List<AutopayAgreement> activePaps = retrieveAutopayAgreements(lease);
         if (activePaps.isEmpty()) {
             return; // nothing to do!..
         }
 
-        boolean suspend = false;
+        boolean terminate = false;
 
         BillingCycle nextCycle = ServerSideFactory.create(PaymentMethodFacade.class).getNextAutopayBillingCycle(lease);
         AutoPayPolicy autoPayPolicy = ServerSideFactory.create(PolicyFacade.class).obtainEffectivePolicy(lease.unit().building(), AutoPayPolicy.class);
 
         if (!isPreauthorizedPaymentsApplicableForBillingCycle(lease, nextCycle, autoPayPolicy)) {
-            suspend = true;
+            terminate = true;
         }
 
-        if (suspend) {
+        if (terminate) {
             for (AutopayAgreement pap : activePaps) {
                 deleteAutopayAgreement(pap);
             }
-
-            ServerSideFactory.create(NotificationFacade.class).papSuspension(lease);
+            ServerSideFactory.create(NotificationFacade.class).autoPayTerminatedNotification(lease);
         }
     }
 
@@ -329,6 +328,8 @@ class AutopayAgreementMananger {
         EntityQueryCriteria<BillingCycle> criteria = EntityQueryCriteria.create(BillingCycle.class);
         criteria.le(criteria.proto().billingCycleStartDate(), forDate);
         criteria.ge(criteria.proto().billingCycleEndDate(), forDate);
+
+        ServerSideFactory.create(NotificationFacade.class).aggregateNotificationsStart();
 
         ICursorIterator<BillingCycle> billingCycleIterator = Persistence.service().query(null, criteria, AttachLevel.Attached);
         try {
@@ -369,35 +370,35 @@ class AutopayAgreementMananger {
                         new UnitOfWork().execute(new Executable<Void, RuntimeException>() {
                             @Override
                             public Void execute() {
-                                boolean suspended = false;
+                                boolean atLeaseOneTerminated = false;
                                 AutoPayPolicy autoPayPolicy = ServerSideFactory.create(PolicyFacade.class).obtainEffectivePolicy(
                                         account.lease().unit().building(), AutoPayPolicy.class);
 
                                 for (AutopayAgreement item : retrieveAutopayAgreements(account.lease())) {
-                                    boolean suspend = false;
+                                    boolean terminate = false;
 
                                     if (!isPreauthorizedPaymentsApplicableForBillingCycle(account.lease(), suspensionCycle, autoPayPolicy)) {
-                                        suspend = true;
+                                        terminate = true;
                                     }
 
-                                    if (suspend) {
-                                        suspended = true;
+                                    if (terminate) {
+                                        atLeaseOneTerminated = true;
                                         deleteAutopayAgreement(item);
-                                        executionMonitor.addProcessedEvent("Pap suspend");
+                                        executionMonitor.addProcessedEvent("AutoPay Terminate");
                                     }
                                 }
 
-                                if (suspended) {
-                                    ServerSideFactory.create(NotificationFacade.class).papSuspension(account.lease());
+                                if (atLeaseOneTerminated) {
+                                    ServerSideFactory.create(NotificationFacade.class).autoPayTerminatedNotification(account.lease());
                                     Persistence.ensureRetrieve(account.lease(), AttachLevel.Attached);
-                                    executionMonitor.addInfoEvent("Lease with suspended Pap", "LeaseId " + account.lease().leaseId().getStringView());
+                                    executionMonitor.addInfoEvent("Lease with terminated AutoPay", "LeaseId " + account.lease().leaseId().getStringView());
                                 }
 
                                 return null;
                             }
                         });
                     } catch (Throwable error) {
-                        executionMonitor.addErredEvent("Pap suspend", error);
+                        executionMonitor.addErredEvent("AutoPay Terminate", error);
                     }
 
                     if (executionMonitor.isTerminationRequested()) {
@@ -411,6 +412,7 @@ class AutopayAgreementMananger {
             }
         } finally {
             billingCycleIterator.close();
+            ServerSideFactory.create(NotificationFacade.class).aggregatedNotificationsSend();
         }
     }
 

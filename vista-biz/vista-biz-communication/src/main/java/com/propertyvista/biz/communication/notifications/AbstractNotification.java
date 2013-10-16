@@ -7,25 +7,24 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on 2013-06-19
+ * Created on Oct 16, 2013
  * @author vlads
  * @version $Id$
  */
-package com.propertyvista.biz.communication;
+package com.propertyvista.biz.communication.notifications;
 
-import com.propertyvista.domain.financial.PaymentRecord;
-import com.propertyvista.domain.tenant.lease.Lease;
+import com.propertyvista.domain.company.Notification.NotificationType;
 
-public interface NotificationFacade {
+public abstract class AbstractNotification {
 
-    public void rejectPayment(PaymentRecord paymentRecord, boolean applyNSF);
+    protected NotificationType type;
 
-    public void autoPayReviewRequiredNotification(Lease leaseId);
+    public AbstractNotification(NotificationType type) {
+        this.type = type;
+    }
 
-    public void autoPayTerminatedNotification(Lease leaseId);
+    public abstract void send();
 
-    public void aggregateNotificationsStart();
-
-    public void aggregatedNotificationsSend();
+    public abstract boolean aggregate(AbstractNotification other);
 
 }

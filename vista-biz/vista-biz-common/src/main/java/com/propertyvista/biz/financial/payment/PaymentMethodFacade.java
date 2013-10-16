@@ -72,12 +72,12 @@ public interface PaymentMethodFacade {
      * 
      * Update PreauthorizedPaymentCoveredItem to point to new BillableItem (May not be required after BillableItem version support)
      */
-    void renewAutopayAgreement(Lease lease);
+    void renewAutopayAgreements(Lease lease);
 
     /**
-     * Suspend/Restore PreauthorizedPayments according to LeaseState and AutoPay policy during Lease persist.
+     * Terminate AutopayAgreements according to LeaseState and AutoPay policy during Lease persist.
      */
-    void updatePreauthorizedPayments(Lease lease);
+    void terminateAutopayAgreements(Lease lease);
 
     AutoPayReviewLeaseDTO getAutopayAgreementRequiresReview(BillingAccount billingAccountId);
 

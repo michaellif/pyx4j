@@ -25,6 +25,7 @@ import com.pyx4j.server.mail.Mail;
 import com.pyx4j.server.mail.MailDeliveryStatus;
 import com.pyx4j.server.mail.MailMessage;
 
+import com.propertyvista.biz.communication.notifications.NotificationsUtils;
 import com.propertyvista.config.AbstractVistaServerSideConfiguration;
 import com.propertyvista.domain.communication.EmailTemplateType;
 import com.propertyvista.domain.company.Employee;
@@ -286,11 +287,11 @@ public class CommunicationFacadeImpl implements CommunicationFacade {
     }
 
     @Override
-    public void sendPapSuspensionNotification(List<String> targetEmails, Lease leaseId) {
+    public void sendAutoPayReviewRequiredNotification(List<String> targetEmails, List<Lease> leaseIds) {
         if (disabled) {
             return;
         }
-        MailMessage m = MessageTemplates.createPapSuspentionNotificationEmail(leaseId);
+        MailMessage m = MessageTemplates.createAutoPayReviewRequiredNotificationEmail(leaseIds);
         m.setTo(targetEmails);
         Mail.send(m);
     }

@@ -64,7 +64,7 @@ public class CommunicationDevPreloader extends AbstractDataPreloader {
 
         EntityQueryCriteria<CustomerUser> criteriaCustomerUser = EntityQueryCriteria.create(CustomerUser.class);
         List<CustomerUser> listCustomerUser = Persistence.service().query(criteriaCustomerUser);
-        log.info("\n\nThere are {} customer usres " + listCustomerUser.size());
+        log.info("\n\nThere are {} customer users", listCustomerUser.size());
 
         // get a few existing CustomerUsers
         CustomerUser t001 = null;

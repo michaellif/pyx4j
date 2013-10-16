@@ -73,7 +73,7 @@ public interface CommunicationFacade {
 
     void sendPaymentReversalWithNsfNotification(List<String> targetEmail, PaymentRecord paymentRecord);
 
-    void sendPapSuspensionNotification(List<String> targetEmail, Lease leaseId);
+    void sendAutoPayReviewRequiredNotification(List<String> targetEmail, List<Lease> leaseIds);
 
     //void sendCustomerMessage(CustomerCustomMessageTemplate customMessageTemplate, Customer customer);
 

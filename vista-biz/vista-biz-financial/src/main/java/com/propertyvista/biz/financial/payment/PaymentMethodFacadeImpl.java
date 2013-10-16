@@ -163,13 +163,13 @@ public class PaymentMethodFacadeImpl implements PaymentMethodFacade {
     }
 
     @Override
-    public void renewAutopayAgreement(Lease lease) {
+    public void renewAutopayAgreements(Lease lease) {
         new AutopayAgreementMananger().renewPreauthorizedPayments(lease);
     }
 
     @Override
-    public void updatePreauthorizedPayments(Lease lease) {
-        new AutopayAgreementMananger().updatePreauthorizedPayments(lease);
+    public void terminateAutopayAgreements(Lease lease) {
+        new AutopayAgreementMananger().terminateAutopayAgreements(lease);
     }
 
     @Override

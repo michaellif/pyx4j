@@ -52,6 +52,7 @@ import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.biz.ExecutionMonitor;
 import com.propertyvista.biz.asset.BuildingFacade;
+import com.propertyvista.biz.communication.NotificationFacade;
 import com.propertyvista.biz.financial.ar.yardi.YardiARIntegrationAgent;
 import com.propertyvista.biz.financial.payment.PaymentMethodFacade;
 import com.propertyvista.biz.system.YardiServiceException;
@@ -124,6 +125,7 @@ public class YardiResidentTransactionsService extends YardiAbstractService {
         YardiResidentTransactionsStub stub = ServerSideFactory.create(YardiResidentTransactionsStub.class);
         final Key yardiInterfaceId = yc.getPrimaryKey();
         try {
+            ServerSideFactory.create(NotificationFacade.class).aggregateNotificationsStart();
             List<String> propertyListCodes;
             if (yc.propertyListCodes().isNull()) {
                 List<YardiPropertyConfiguration> propertyConfigurations = getPropertyConfigurations(stub, yc);
@@ -168,6 +170,7 @@ public class YardiResidentTransactionsService extends YardiAbstractService {
             }
         } finally {
             executionMonitor.addInfoEvent("yardiTime", TimeUtils.durationFormat(stub.getRequestsTime()), new BigDecimal(stub.getRequestsTime()));
+            ServerSideFactory.create(NotificationFacade.class).aggregatedNotificationsSend();
         }
 
         log.info("Update completed.");

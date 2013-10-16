@@ -245,7 +245,7 @@ public abstract class LeaseAbstractManager {
         if (leaseTerm.equals(leaseTerm.lease().currentTerm())) {
             updateLeaseDeposits(leaseTerm.lease());
 
-            ServerSideFactory.create(PaymentMethodFacade.class).renewAutopayAgreement(leaseTerm.lease());
+            ServerSideFactory.create(PaymentMethodFacade.class).renewAutopayAgreements(leaseTerm.lease());
         }
 
         return leaseTerm;
@@ -891,7 +891,7 @@ public abstract class LeaseAbstractManager {
         Persistence.service().merge(lease);
         Persistence.service().merge(lease.billingAccount());
 
-        ServerSideFactory.create(PaymentMethodFacade.class).updatePreauthorizedPayments(lease);
+        ServerSideFactory.create(PaymentMethodFacade.class).terminateAutopayAgreements(lease);
 
         // update reservation if necessary:
         if (doUnreserve) {

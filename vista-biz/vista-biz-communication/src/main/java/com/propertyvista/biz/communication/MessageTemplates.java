@@ -18,7 +18,9 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
+import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -56,6 +58,7 @@ import com.propertyvista.domain.policy.framework.OrganizationPoliciesNode;
 import com.propertyvista.domain.policy.framework.PolicyNode;
 import com.propertyvista.domain.policy.policies.EmailTemplatesPolicy;
 import com.propertyvista.domain.policy.policies.domain.EmailTemplate;
+import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.security.CustomerUser;
 import com.propertyvista.domain.security.OnboardingUser;
 import com.propertyvista.domain.security.common.AbstractUser;
@@ -352,22 +355,54 @@ public class MessageTemplates {
         return email;
     }
 
-    public static MailMessage createPapSuspentionNotificationEmail(Lease leaseId) {
+    public static MailMessage createAutoPayReviewRequiredNotificationEmail(List<Lease> leaseIds) {
         MailMessage email = new MailMessage();
         email.setSender(getSender());
 
         String emailBody = "";
         try {
-            emailBody = IOUtils.getTextResource("email/pap-suspension-notification.html");
+            emailBody = IOUtils.getTextResource("email/autopay-review-required-notification.html");
         } catch (IOException e) {
-            throw new Error("Failed to load email template for pap suspension notifications", e);
+            throw new Error("Failed to load email template for AutoPayReviewRequired notifications", e);
+        }
+
+        {
+            Lease lease = Persistence.service().retrieve(Lease.class, leaseIds.get(0).getPrimaryKey());
+            Building building;
+            {
+                EntityQueryCriteria<Building> criteria = EntityQueryCriteria.create(Building.class);
+                criteria.eq(criteria.proto().units(), lease.unit());
+                building = Persistence.service().retrieve(criteria);
+            }
+
+            String buildingName = building.info().name().getStringView();
+            if (StringUtils.isEmpty(buildingName)) {
+                buildingName = building.propertyCode().getStringView();
+            }
+
+            emailBody = emailBody.replace("${buildingName}", buildingName);
+            emailBody = emailBody.replace("${buildingAddress}", building.info().address().getStringView());
+
+            if (leaseIds.size() == 1) {
+                email.setSubject(i18n.tr("Auto Pay Review Required for lease {0}", lease));
+            } else {
+                email.setSubject(i18n.tr("Auto Pay Review Required for building {0}", building.info().name()));
+            }
         }
 
         String crmUrl = VistaDeployment.getBaseApplicationURL(VistaDeployment.getCurrentPmc(), VistaApplication.crm, true);
-        String leaseUrl = AppPlaceInfo.absoluteUrl(crmUrl, true, new CrmSiteMap.Tenants.Lease().formViewerPlace(leaseId.getPrimaryKey()));
-        emailBody = emailBody.replace("${leaseUrl}", leaseUrl);
-        String leaseStringView = Persistence.service().retrieve(Lease.class, leaseId.getPrimaryKey(), AttachLevel.ToStringMembers).getStringView();
-        email.setSubject(i18n.tr("PAP suspension alert for lease {0}", leaseStringView));
+        StringBuilder leaseLinks = new StringBuilder();
+        for (Lease leaseId : leaseIds) {
+            String leaseUrl = AppPlaceInfo.absoluteUrl(crmUrl, true, new CrmSiteMap.Tenants.Lease().formViewerPlace(leaseId.getPrimaryKey()));
+            Lease lease = Persistence.service().retrieve(Lease.class, leaseId.getPrimaryKey());
+            if (leaseLinks.length() > 0) {
+                leaseLinks.append("<p/>");
+            }
+            leaseLinks.append("<a href=\"" + leaseUrl + "\">" + lease.getStringView() + "</a>");
+
+        }
+        emailBody = emailBody.replace("${leaseLinks}", leaseLinks);
+
         email.setHtmlBody(wrapAdminHtml(emailBody));
         return email;
     }
