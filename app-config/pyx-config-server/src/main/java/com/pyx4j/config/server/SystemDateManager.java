@@ -25,6 +25,8 @@ import java.util.Date;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.pyx4j.commons.LogicalDate;
+
 public class SystemDateManager {
 
     private static final Logger log = LoggerFactory.getLogger(SystemDateManager.class);
@@ -54,6 +56,10 @@ public class SystemDateManager {
 
     public static Date getDate() {
         return new Date(getTimeMillis());
+    }
+
+    public static LogicalDate getLogicalDate() {
+        return new LogicalDate(getTimeMillis());
     }
 
     public static void setDate(Date date) {
