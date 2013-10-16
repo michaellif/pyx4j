@@ -107,6 +107,11 @@ class BillingCycleManager {
         return ensureBillingCycle(lease.unit().building(), lease.billingAccount().billingPeriod().getValue(), startDate);
     }
 
+    protected BillingCycle getBillingCycleForDate(Building buildingId, BillingPeriod billingPeriod, Integer billingCycleStartDay, LogicalDate date) {
+        LogicalDate startDate = calculateBillingCycleStartDate(billingPeriod, billingCycleStartDay, date);
+        return ensureBillingCycle(buildingId, billingPeriod, startDate);
+    }
+
     BillingType ensureBillingType(Building building, BillingPeriod billingPeriod, LogicalDate leaseStartDate) {
         LeaseBillingTypePolicyItem policy = retreiveLeaseBillingTypePolicyItem(building, billingPeriod);
 
@@ -275,12 +280,13 @@ class BillingCycleManager {
     }
 
     private LogicalDate calculateBillingCycleStartDate(BillingType billingType, LogicalDate date) {
+        return calculateBillingCycleStartDate(billingType.billingPeriod().getValue(), billingType.billingCycleStartDay().getValue(), date);
+    }
+
+    private LogicalDate calculateBillingCycleStartDate(BillingPeriod billingPeriod, int billingCycleStartDay, LogicalDate date) {
         Calendar calendar = new GregorianCalendar();
         calendar.setTime(date);
-
-        int billingCycleStartDay = billingType.billingCycleStartDay().getValue();
-
-        switch (billingType.billingPeriod().getValue()) {
+        switch (billingPeriod) {
         case Monthly:
             while (calendar.get(Calendar.DAY_OF_MONTH) != billingCycleStartDay) {
                 calendar.add(Calendar.DAY_OF_MONTH, -1);

@@ -17,6 +17,7 @@ import java.util.List;
 
 import com.pyx4j.commons.LogicalDate;
 
+import com.propertyvista.domain.financial.BillingAccount.BillingPeriod;
 import com.propertyvista.domain.financial.billing.BillingCycle;
 import com.propertyvista.domain.financial.billing.BillingType;
 import com.propertyvista.domain.policy.policies.LeaseBillingPolicy;
@@ -38,6 +39,11 @@ public class BillingCycleFacadeImpl implements BillingCycleFacade {
     @Override
     public BillingCycle getBillingCycleForDate(Lease lease, LogicalDate date) {
         return BillingCycleManager.instance().getBillingCycleForDate(lease, date);
+    }
+
+    @Override
+    public BillingCycle getBillingCycleForDate(Building buildingId, BillingPeriod billingPeriod, Integer billingCycleStartDay, LogicalDate date) {
+        return BillingCycleManager.instance().getBillingCycleForDate(buildingId, billingPeriod, billingCycleStartDay, date);
     }
 
     @Override

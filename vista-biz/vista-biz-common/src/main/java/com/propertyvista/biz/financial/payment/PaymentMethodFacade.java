@@ -19,6 +19,7 @@ import com.pyx4j.commons.LogicalDate;
 
 import com.propertyvista.crm.rpc.dto.financial.autopayreview.ReviewedAutopayAgreementDTO;
 import com.propertyvista.domain.financial.BillingAccount;
+import com.propertyvista.domain.financial.BillingAccount.BillingPeriod;
 import com.propertyvista.domain.financial.PaymentRecord;
 import com.propertyvista.domain.financial.billing.BillingCycle;
 import com.propertyvista.domain.payment.AutopayAgreement;
@@ -85,6 +86,8 @@ public interface PaymentMethodFacade {
     List<AutopayAgreement> retrieveAutopayAgreements(Lease lease);
 
     BillingCycle getNextAutopayBillingCycle(Lease lease);
+
+    BillingCycle getNextAutopayBillingCycle(Building buildingId, BillingPeriod billingPeriod, Integer billingCycleStartDay);
 
     LogicalDate getNextAutopayDate(Lease lease);
 

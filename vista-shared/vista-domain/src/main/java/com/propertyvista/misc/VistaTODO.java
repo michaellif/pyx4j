@@ -13,7 +13,6 @@
  */
 package com.propertyvista.misc;
 
-
 public class VistaTODO {
 
     /** enables wizards in CRM that set up credit check (equifax) and online payments */
@@ -31,6 +30,8 @@ public class VistaTODO {
     public static boolean removedForProduction = true;
 
     public static boolean removedForProductionOAPI = true;
+
+    public static boolean removedForProductionILS = false;
 
     /**
      * TODO: Do not forget to turn it on/off during/after production release !!!

@@ -29,6 +29,7 @@ import com.propertyvista.biz.financial.billingcycle.BillingCycleFacade;
 import com.propertyvista.biz.system.AuditFacade;
 import com.propertyvista.crm.rpc.dto.financial.autopayreview.ReviewedAutopayAgreementDTO;
 import com.propertyvista.domain.financial.BillingAccount;
+import com.propertyvista.domain.financial.BillingAccount.BillingPeriod;
 import com.propertyvista.domain.financial.PaymentRecord;
 import com.propertyvista.domain.financial.billing.BillingCycle;
 import com.propertyvista.domain.payment.AutopayAgreement;
@@ -139,6 +140,17 @@ public class PaymentMethodFacadeImpl implements PaymentMethodFacade {
     public BillingCycle getNextAutopayBillingCycle(Lease lease) {
         LogicalDate when = new LogicalDate(SystemDateManager.getDate());
         BillingCycle billingCycle = ServerSideFactory.create(BillingCycleFacade.class).getBillingCycleForDate(lease, when);
+        while (!billingCycle.targetAutopayExecutionDate().getValue().after(when)) {
+            billingCycle = ServerSideFactory.create(BillingCycleFacade.class).getSubsequentBillingCycle(billingCycle);
+        }
+        return billingCycle;
+    }
+
+    @Override
+    public BillingCycle getNextAutopayBillingCycle(Building buildingId, BillingPeriod billingPeriod, Integer billingCycleStartDay) {
+        LogicalDate when = new LogicalDate(SystemDateManager.getDate());
+        BillingCycle billingCycle = ServerSideFactory.create(BillingCycleFacade.class).getBillingCycleForDate(buildingId, billingPeriod, billingCycleStartDay,
+                when);
         while (!billingCycle.targetAutopayExecutionDate().getValue().after(when)) {
             billingCycle = ServerSideFactory.create(BillingCycleFacade.class).getSubsequentBillingCycle(billingCycle);
         }

@@ -17,6 +17,7 @@ import java.util.List;
 
 import com.pyx4j.commons.LogicalDate;
 
+import com.propertyvista.domain.financial.BillingAccount.BillingPeriod;
 import com.propertyvista.domain.financial.billing.BillingCycle;
 import com.propertyvista.domain.financial.billing.BillingType;
 import com.propertyvista.domain.policy.policies.LeaseBillingPolicy;
@@ -30,6 +31,8 @@ public interface BillingCycleFacade {
     BillingCycle getLeaseFirstBillingCycle(Lease lease);
 
     BillingCycle getBillingCycleForDate(Lease lease, LogicalDate date);
+
+    BillingCycle getBillingCycleForDate(Building buildingId, BillingPeriod billingPeriod, Integer billingCycleStartDay, LogicalDate date);
 
     BillingCycle getSubsequentBillingCycle(BillingCycle billingCycle);
 
