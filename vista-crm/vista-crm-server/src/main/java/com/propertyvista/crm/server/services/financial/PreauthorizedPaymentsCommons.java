@@ -40,27 +40,6 @@ import com.propertyvista.dto.PreauthorizedPaymentDTO;
 
 public class PreauthorizedPaymentsCommons {
 
-    public static void savePreauthorizedPayments(List<PreauthorizedPaymentDTO> papsDto, Tenant tenantId) {
-        List<AutopayAgreement> papsToSave = new ArrayList<AutopayAgreement>();
-
-        for (PreauthorizedPaymentDTO papDTO : papsDto) {
-            updateCoveredItems(papDTO);
-            papsToSave.add(new PapConverter().createBO(papDTO));
-        }
-
-        // delete PAPs removed in UI:
-        for (AutopayAgreement currentPap : ServerSideFactory.create(PaymentMethodFacade.class).retrieveAutopayAgreements(tenantId)) {
-            if (!papsToSave.contains(currentPap)) {
-                ServerSideFactory.create(PaymentMethodFacade.class).deleteAutopayAgreement(currentPap);
-            }
-        }
-
-        // save new/edited ones:
-        for (AutopayAgreement papToSave : papsToSave) {
-            ServerSideFactory.create(PaymentMethodFacade.class).persistAutopayAgreement(papToSave, tenantId);
-        }
-    }
-
     public static List<PreauthorizedPaymentDTO> createPreauthorizedPayments(Tenant tenantId) {
         Tenant tenant = Persistence.secureRetrieve(Tenant.class, tenantId.getPrimaryKey());
         Persistence.ensureRetrieve(tenant.lease(), AttachLevel.Attached);
@@ -81,6 +60,27 @@ public class PreauthorizedPaymentsCommons {
         fillCoveredItemsDto(papDto);
 
         return papDto;
+    }
+
+    public static void savePreauthorizedPayments(List<PreauthorizedPaymentDTO> papsDto, Tenant tenantId) {
+        List<AutopayAgreement> papsToSave = new ArrayList<AutopayAgreement>();
+
+        for (PreauthorizedPaymentDTO papDTO : papsDto) {
+            updateCoveredItems(papDTO);
+            papsToSave.add(new PapConverter().createBO(papDTO));
+        }
+
+        // delete PAPs removed in UI:
+        for (AutopayAgreement currentPap : ServerSideFactory.create(PaymentMethodFacade.class).retrieveAutopayAgreements(tenantId)) {
+            if (!papsToSave.contains(currentPap)) {
+                ServerSideFactory.create(PaymentMethodFacade.class).deleteAutopayAgreement(currentPap);
+            }
+        }
+
+        // save new/edited ones:
+        for (AutopayAgreement papToSave : papsToSave) {
+            ServerSideFactory.create(PaymentMethodFacade.class).persistAutopayAgreement(papToSave, tenantId);
+        }
     }
 
     // Internals:
