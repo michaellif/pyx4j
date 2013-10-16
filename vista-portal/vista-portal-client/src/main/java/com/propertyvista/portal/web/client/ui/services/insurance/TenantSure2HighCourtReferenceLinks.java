@@ -20,6 +20,7 @@ import com.google.gwt.user.client.ui.SimplePanel;
 
 import com.pyx4j.i18n.shared.I18n;
 
+import com.propertyvista.portal.web.client.themes.NavigationAnchorTheme;
 import com.propertyvista.portal.web.client.themes.TenantSureTheme;
 
 public class TenantSure2HighCourtReferenceLinks extends Composite {
@@ -39,6 +40,7 @@ public class TenantSure2HighCourtReferenceLinks extends Composite {
         privacyPolicyAnchorHolder.addStyleName(TenantSureTheme.StyleName.TenantSurePrivacyPolicyLink.name());
 
         privacyPolicyAnchor = new Anchor(i18n.tr("Privacy Policy"));
+        privacyPolicyAnchor.setStyleName(NavigationAnchorTheme.StyleName.NavigationAnchor.name());
         privacyPolicyAnchor.setTarget("_blank");
         privacyPolicyAnchorHolder.setWidget(privacyPolicyAnchor);
         panel.add(privacyPolicyAnchorHolder);
@@ -48,6 +50,7 @@ public class TenantSure2HighCourtReferenceLinks extends Composite {
         compensationDisclosureStatementAnchorHolder.addStyleName(TenantSureTheme.StyleName.TenantSureBillingAndCancellationsPolicyLink.name());
 
         compensationDisclosureStatementAnchor = new Anchor(i18n.tr("Compensation Disclosure Statement"));
+        compensationDisclosureStatementAnchor.setStyleName(NavigationAnchorTheme.StyleName.NavigationAnchor.name());
         compensationDisclosureStatementAnchor.setTarget("_blank");
         compensationDisclosureStatementAnchorHolder.setWidget(compensationDisclosureStatementAnchor);
         panel.add(compensationDisclosureStatementAnchorHolder);
