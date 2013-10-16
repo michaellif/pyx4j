@@ -33,6 +33,9 @@ BEGIN
         ALTER TABLE preauthorized_payment_covered_item DROP CONSTRAINT preauthorized_payment_covered_item_pap_fk;
         ALTER TABLE preauthorized_payment DROP CONSTRAINT preauthorized_payment_payment_method_fk;
         ALTER TABLE preauthorized_payment DROP CONSTRAINT preauthorized_payment_tenant_fk;
+        ALTER TABLE preauthorized_payment_covered_item DROP CONSTRAINT preauthorized_payment_covered_item_billable_item_fk;
+        
+
 
         
         -- primary keys
@@ -42,9 +45,32 @@ BEGIN
         ALTER TABLE insurance_tenant_sure_report DROP CONSTRAINT insurance_tenant_sure_report_pk;
         ALTER TABLE insurance_tenant_sure_transaction DROP CONSTRAINT insurance_tenant_sure_transaction_pk;
         ALTER TABLE preauthorized_payment DROP CONSTRAINT preauthorized_payment_pk;
+        ALTER TABLE preauthorized_payment_covered_item DROP CONSTRAINT preauthorized_payment_covered_item_pk;
 
         
         
+        -- check constraints
+        
+        ALTER TABLE identification_document DROP CONSTRAINT identification_document_owner_discriminator_d_ck;
+        ALTER TABLE ilspolicy_item DROP CONSTRAINT ilspolicy_item_provider_e_ck;
+        ALTER TABLE ilspolicy DROP CONSTRAINT ilspolicy_node_discriminator_d_ck;
+        ALTER TABLE insurance_certificate DROP CONSTRAINT insurance_certificate_cancellation_e_ck;
+        ALTER TABLE insurance_certificate DROP CONSTRAINT insurance_certificate_client_ck;
+        ALTER TABLE insurance_certificate_document DROP CONSTRAINT insurance_certificate_document_owner_discriminator_d_ck;
+        ALTER TABLE insurance_certificate DROP CONSTRAINT insurance_certificate_id_discriminator_ck;
+        ALTER TABLE insurance_certificate DROP CONSTRAINT insurance_certificate_payment_schedule_e_ck;
+        ALTER TABLE insurance_certificate DROP CONSTRAINT insurance_certificate_status_e_ck;
+        ALTER TABLE insurance_certificate DROP CONSTRAINT insurance_certificate_tenant_discriminator_d_ck;
+        ALTER TABLE insurance_tenant_sure_client DROP CONSTRAINT insurance_tenant_sure_client_tenant_discriminator_d_ck;
+        ALTER TABLE insurance_tenant_sure_report DROP CONSTRAINT insurance_tenant_sure_report_insurance_discriminator_d_ck;
+        ALTER TABLE insurance_tenant_sure_report DROP CONSTRAINT insurance_tenant_sure_report_reported_status_e_ck;
+        ALTER TABLE insurance_tenant_sure_transaction DROP CONSTRAINT insurance_tenant_sure_transaction_insurance_discriminator_d_ck;
+        ALTER TABLE insurance_tenant_sure_transaction DROP CONSTRAINT insurance_tenant_sure_transaction_payment_method_discr_d_ck;
+        ALTER TABLE insurance_tenant_sure_transaction DROP CONSTRAINT insurance_tenant_sure_transaction_status_e_ck;
+        ALTER TABLE preauthorized_payment DROP CONSTRAINT preauthorized_payment_created_by_discriminator_d_ck;
+        ALTER TABLE preauthorized_payment DROP CONSTRAINT preauthorized_payment_payment_method_discriminator_d_ck;
+        ALTER TABLE preauthorized_payment DROP CONSTRAINT preauthorized_payment_tenant_discriminator_d_ck;
+        ALTER TABLE proof_of_employment_document DROP CONSTRAINT proof_of_employment_document_owner_discriminator_d_ck;
 
         
         
@@ -230,6 +256,7 @@ BEGIN
         -- insurance_certificate
         
         ALTER TABLE insurance_certificate RENAME TO insurance_policy;
+        ALTER TABLE insurance_policy ADD COLUMN user_id BIGINT;
         
         CREATE TABLE insurance_certificate
         (
@@ -358,10 +385,10 @@ BEGIN
                 include_signature                       BOOLEAN,
                 signature_address_street1               VARCHAR(500),
                 signature_address_street2               VARCHAR(500),
-                signature_address_city                  VARCHAR,
+                signature_address_city                  VARCHAR(500),
                 signature_address_province              BIGINT,
                 signature_address_country               BIGINT,
-                signature_address_postal_code           BOOLEAN,
+                signature_address_postal_code           VARCHAR(500),
                         CONSTRAINT n4_policy_pk PRIMARY KEY(id)     
         );
         
@@ -373,8 +400,13 @@ BEGIN
         
         ALTER TABLE autopay_agreement   ADD COLUMN review_of_pap BIGINT,
                                         ADD COLUMN updated_by_tenant DATE,
-                                        ADD COLUMN updated_by_system DATE;
+                                        ADD COLUMN updated_by_system DATE,
+                                        ADD COLUMN expired_from DATE;
         
+        
+        -- preauthorized_payment_covered_item
+        
+        ALTER TABLE preauthorized_payment_covered_item RENAME TO autopay_agreement_covered_item;
         
         
         /**
@@ -385,14 +417,56 @@ BEGIN
         ***     =====================================================================================================
         **/
         
+        
+        -- email_template
+        
+        EXECUTE 'UPDATE '||v_schema_name||'.email_template '
+                ||'SET content = regexp_replace(content,''\${PortalLinks.PortalHomeUrl}'',''${PortalLinks.SiteHomeUrl}'',''g'') '
+                ||'WHERE content ~ ''\${PortalLinks.PortalHomeUrl}'' ';
+        
+        
+        -- email_templates_policy
+        
+        EXECUTE 'UPDATE '||v_schema_name||'.email_templates_policy '
+                ||'SET header = regexp_replace(header,''\${PortalLinks.PortalHomeUrl}'',''${PortalLinks.SiteHomeUrl}'',''g'') '
+                ||'WHERE header ~ ''\${PortalLinks.PortalHomeUrl}'' ';
+        
+        
+        EXECUTE 'UPDATE '||v_schema_name||'.email_templates_policy '
+                ||'SET footer = regexp_replace(footer,''\${PortalLinks.PortalHomeUrl}'',''${PortalLinks.SiteHomeUrl}'',''g'') '
+                ||'WHERE footer ~ ''\${PortalLinks.PortalHomeUrl}'' ';
+        
+        
         -- insurance_certificate
-        /*
+        
         EXECUTE 'INSERT INTO '||v_schema_name||'.insurance_certificate (id,id_discriminator,insurance_policy_discriminator,'
                 ||'insurance_policy,is_managed_by_tenant,insurance_provider,insurance_certificate_number,liability_coverage,'
                 ||'inception_date,expiry_date) '
                 ||'(SELECT nextval(''public.insurance_certificate_seq'') AS id,'
+                ||'CASE WHEN id_discriminator = ''InsuranceGeneric'' THEN ''InsuranceGeneral'' '
+                ||'ELSE id_discriminator END AS id_discriminator, '
+                ||'CASE WHEN id_discriminator = ''InsuranceGeneric'' THEN ''GeneralInsurancePolicy'' '
+                ||'ELSE ''TenantSureInsurancePolicy'' END AS insurance_policy_discriminator, '
+                ||'id AS insurance_policy, is_managed_by_tenant, insurance_provider,'
+                ||'insurance_certificate_number,liability_coverage,inception_date,expiry_date '
+                ||'FROM '||v_schema_name||'.insurance_policy) ';
         
-        */
+        
+        EXECUTE 'UPDATE '||v_schema_name||'.insurance_policy AS i '
+                ||'SET user_id = t.user_id '
+                ||'FROM (SELECT lp.id,c.user_id '
+                ||'     FROM '||v_schema_name||'.lease_participant lp '
+                ||'     JOIN '||v_schema_name||'.customer c ON (c.id = lp.customer)) AS t '
+                ||'WHERE i.tenant = t.id ';
+                
+                
+                
+        -- insurance_policy
+        
+        EXECUTE 'UPDATE '||v_schema_name||'.insurance_policy '
+                ||'SET id_discriminator = ''TenantSureInsurancePolicy'' '
+                ||'WHERE id_discriminator = ''InsuranceTenantSure'' ';
+        
         
         /**
         ***     ==========================================================================================================
@@ -453,10 +527,12 @@ BEGIN
         
         -- primary keys
         ALTER TABLE autopay_agreement ADD CONSTRAINT autopay_agreement_pk PRIMARY KEY(id);
+        ALTER TABLE autopay_agreement_covered_item ADD CONSTRAINT autopay_agreement_covered_item_pk PRIMARY KEY(id);
         ALTER TABLE insurance_policy ADD CONSTRAINT insurance_policy_pk PRIMARY KEY(id);
         ALTER TABLE tenant_sure_insurance_policy_client ADD CONSTRAINT tenant_sure_insurance_policy_client_pk PRIMARY KEY(id);
         ALTER TABLE tenant_sure_insurance_policy_report ADD CONSTRAINT tenant_sure_insurance_policy_report_pk PRIMARY KEY(id);
         ALTER TABLE tenant_sure_transaction ADD CONSTRAINT tenant_sure_transaction_pk PRIMARY KEY(id);
+        
 
         
         -- foreign keys
@@ -469,6 +545,30 @@ BEGIN
         ALTER TABLE autopay_agreement ADD CONSTRAINT autopay_agreement_review_of_pap_fk FOREIGN KEY(review_of_pap) 
                 REFERENCES autopay_agreement(id)  DEFERRABLE INITIALLY DEFERRED;
         ALTER TABLE autopay_agreement ADD CONSTRAINT autopay_agreement_tenant_fk FOREIGN KEY(tenant) REFERENCES lease_participant(id)  DEFERRABLE INITIALLY DEFERRED;
+        ALTER TABLE autopay_agreement_covered_item ADD CONSTRAINT autopay_agreement_covered_item_billable_item_fk FOREIGN KEY(billable_item) 
+                REFERENCES billable_item(id)  DEFERRABLE INITIALLY DEFERRED;
+        ALTER TABLE autopay_agreement_covered_item ADD CONSTRAINT autopay_agreement_covered_item_pap_fk FOREIGN KEY(pap) 
+                REFERENCES autopay_agreement(id)  DEFERRABLE INITIALLY DEFERRED;
+        ALTER TABLE ilsbatch$units ADD CONSTRAINT ilsbatch$units_owner_fk FOREIGN KEY(owner) REFERENCES ilsbatch(id)  DEFERRABLE INITIALLY DEFERRED;
+        ALTER TABLE ilsbatch$units ADD CONSTRAINT ilsbatch$units_value_fk FOREIGN KEY(value) REFERENCES apt_unit(id)  DEFERRABLE INITIALLY DEFERRED;
+        ALTER TABLE ilsbatch ADD CONSTRAINT ilsbatch_building_fk FOREIGN KEY(building) REFERENCES building(id)  DEFERRABLE INITIALLY DEFERRED;
+        ALTER TABLE ilsopen_house ADD CONSTRAINT ilsopen_house_marketing_fk FOREIGN KEY(marketing) REFERENCES marketing(id)  DEFERRABLE INITIALLY DEFERRED;
+        ALTER TABLE ilsprofile_building ADD CONSTRAINT ilsprofile_building_building_fk FOREIGN KEY(building) REFERENCES building(id)  DEFERRABLE INITIALLY DEFERRED;
+        ALTER TABLE ilsprofile_floorplan ADD CONSTRAINT ilsprofile_floorplan_floorplan_fk FOREIGN KEY(floorplan) REFERENCES floorplan(id)  DEFERRABLE INITIALLY DEFERRED;
+        ALTER TABLE ilsvendor_config ADD CONSTRAINT ilsvendor_config_config_fk FOREIGN KEY(config) REFERENCES ilsconfig(id)  DEFERRABLE INITIALLY DEFERRED;
+        ALTER TABLE insurance_certificate ADD CONSTRAINT insurance_certificate_insurance_policy_fk FOREIGN KEY(insurance_policy) 
+                REFERENCES insurance_policy(id)  DEFERRABLE INITIALLY DEFERRED;
+        ALTER TABLE insurance_certificate_scan ADD CONSTRAINT insurance_certificate_scan_certificate_fk FOREIGN KEY(certificate) 
+                REFERENCES insurance_certificate(id)  DEFERRABLE INITIALLY DEFERRED;
+        ALTER TABLE insurance_policy ADD CONSTRAINT insurance_policy_client_fk FOREIGN KEY(client) 
+                REFERENCES tenant_sure_insurance_policy_client(id)  DEFERRABLE INITIALLY DEFERRED;
+        ALTER TABLE insurance_policy ADD CONSTRAINT insurance_policy_tenant_fk FOREIGN KEY(tenant) REFERENCES lease_participant(id)  DEFERRABLE INITIALLY DEFERRED;
+        ALTER TABLE insurance_policy ADD CONSTRAINT insurance_policy_user_id_fk FOREIGN KEY(user_id) REFERENCES customer_user(id)  DEFERRABLE INITIALLY DEFERRED;
+        ALTER TABLE legal_letter ADD CONSTRAINT legal_letter_lease_fk FOREIGN KEY(lease) REFERENCES lease(id)  DEFERRABLE INITIALLY DEFERRED;
+        ALTER TABLE marketing ADD CONSTRAINT marketing_marketing_address_country_fk FOREIGN KEY(marketing_address_country) REFERENCES country(id)  DEFERRABLE INITIALLY DEFERRED;
+        ALTER TABLE marketing ADD CONSTRAINT marketing_marketing_address_province_fk FOREIGN KEY(marketing_address_province) REFERENCES province(id)  DEFERRABLE INITIALLY DEFERRED;
+        ALTER TABLE n4_policy ADD CONSTRAINT n4_policy_signature_address_country_fk FOREIGN KEY(signature_address_country) REFERENCES country(id)  DEFERRABLE INITIALLY DEFERRED;
+        ALTER TABLE n4_policy ADD CONSTRAINT n4_policy_signature_address_province_fk FOREIGN KEY(signature_address_province) REFERENCES province(id)  DEFERRABLE INITIALLY DEFERRED;
         ALTER TABLE tenant_sure_insurance_policy_client ADD CONSTRAINT tenant_sure_insurance_policy_client_tenant_fk FOREIGN KEY(tenant) 
                 REFERENCES lease_participant(id)  DEFERRABLE INITIALLY DEFERRED;
         ALTER TABLE tenant_sure_insurance_policy_report ADD CONSTRAINT tenant_sure_insurance_policy_report_insurance_fk FOREIGN KEY(insurance) 
@@ -479,11 +579,70 @@ BEGIN
                 REFERENCES payment_method(id)  DEFERRABLE INITIALLY DEFERRED;
         ALTER TABLE payment_record ADD CONSTRAINT payment_record_preauthorized_payment_fk FOREIGN KEY(preauthorized_payment) 
                 REFERENCES autopay_agreement(id)  DEFERRABLE INITIALLY DEFERRED;
-        ALTER TABLE preauthorized_payment_covered_item ADD CONSTRAINT preauthorized_payment_covered_item_pap_fk FOREIGN KEY(pap) 
-                REFERENCES autopay_agreement(id)  DEFERRABLE INITIALLY DEFERRED;
-
+        
 
         
+
+        -- check constraints
+        
+        ALTER TABLE apt_unit ADD CONSTRAINT apt_unit_info_legal_address_street_direction_e_ck 
+                CHECK ((info_legal_address_street_direction) IN ('east', 'north', 'northEast', 'northWest', 'south', 'southEast', 'southWest', 'west'));
+        ALTER TABLE apt_unit ADD CONSTRAINT apt_unit_info_legal_address_street_type_e_ck 
+                CHECK ((info_legal_address_street_type) IN ('alley', 'approach', 'arcade', 'avenue', 'boulevard', 'brow', 'bypass', 'causeway', 'circle', 
+                'circuit', 'circus', 'close', 'copse', 'corner', 'court', 'cove', 'crescent', 'drive', 'end', 'esplanande', 'flat', 'freeway', 'frontage', 
+                'gardens', 'glade', 'glen', 'green', 'grove', 'heights', 'highway', 'lane', 'line', 'link', 'loop', 'mall', 'mews', 'other', 'packet', 
+                'parade', 'park', 'parkway', 'place', 'promenade', 'reserve', 'ridge', 'rise', 'road', 'row', 'square', 'street', 'strip', 'tarn', 'terrace', 
+                'thoroughfaree', 'track', 'trunkway', 'view', 'vista', 'walk', 'walkway', 'way', 'yard'));
+        ALTER TABLE autopay_agreement ADD CONSTRAINT autopay_agreement_created_by_discriminator_d_ck CHECK ((created_by_discriminator) IN ('CrmUser', 'CustomerUser'));
+        ALTER TABLE autopay_agreement ADD CONSTRAINT autopay_agreement_payment_method_discriminator_d_ck CHECK (payment_method_discriminator = 'LeasePaymentMethod');
+        ALTER TABLE autopay_agreement ADD CONSTRAINT autopay_agreement_tenant_discriminator_d_ck CHECK (tenant_discriminator = 'Tenant');
+        ALTER TABLE identification_document ADD CONSTRAINT identification_document_owner_discriminator_d_ck 
+                CHECK ((owner_discriminator) IN ('CustomerScreening', 'CustomerScreeningIncome'));
+        ALTER TABLE ilsbatch ADD CONSTRAINT ilsbatch_vendor_e_ck CHECK ((vendor) IN ('emg', 'gottarent', 'kijiji'));
+        ALTER TABLE ilsprofile_building ADD CONSTRAINT ilsprofile_building_vendor_e_ck CHECK ((vendor) IN ('emg', 'gottarent', 'kijiji'));
+        ALTER TABLE ilsprofile_floorplan ADD CONSTRAINT ilsprofile_floorplan_priority_e_ck CHECK ((priority) IN ('Disabled', 'High', 'Low', 'Normal'));
+        ALTER TABLE ilsprofile_floorplan ADD CONSTRAINT ilsprofile_floorplan_vendor_e_ck CHECK ((vendor) IN ('emg', 'gottarent', 'kijiji'));
+        ALTER TABLE ilsvendor_config ADD CONSTRAINT ilsvendor_config_vendor_e_ck CHECK ((vendor) IN ('emg', 'gottarent', 'kijiji'));
+        ALTER TABLE insurance_certificate_document ADD CONSTRAINT insurance_certificate_document_owner_discriminator_d_ck 
+                CHECK ((owner_discriminator) IN ('CustomerScreening', 'CustomerScreeningIncome'));
+        ALTER TABLE insurance_certificate ADD CONSTRAINT insurance_certificate_id_discriminator_ck 
+                CHECK ((id_discriminator) IN ('InsuranceGeneral', 'InsuranceTenantSure'));
+        ALTER TABLE insurance_certificate ADD CONSTRAINT insurance_certificate_insurance_policy_discriminator_d_ck 
+                CHECK ((insurance_policy_discriminator) IN ('GeneralInsurancePolicy', 'TenantSureInsurancePolicy'));
+        ALTER TABLE insurance_certificate_scan ADD CONSTRAINT insurance_certificate_scan_certificate_discriminator_d_ck 
+                CHECK ((certificate_discriminator) IN ('InsuranceGeneral', 'InsuranceTenantSure'));
+        ALTER TABLE insurance_policy ADD CONSTRAINT insurance_policy_cancellation_e_ck 
+                CHECK ((cancellation) IN ('CancelledByTenant', 'CancelledByTenantSure', 'SkipPayment'));
+        ALTER TABLE insurance_policy ADD CONSTRAINT insurance_policy_client_ck 
+                CHECK ((id_discriminator = 'TenantSureInsurancePolicy' AND client IS NOT NULL) OR (id_discriminator != 'TenantSureInsurancePolicy' AND client IS NULL));
+        ALTER TABLE insurance_policy ADD CONSTRAINT insurance_policy_id_discriminator_ck CHECK ((id_discriminator) IN ('GeneralInsurancePolicy', 'TenantSureInsurancePolicy'));
+        ALTER TABLE insurance_policy ADD CONSTRAINT insurance_policy_payment_schedule_e_ck CHECK ((payment_schedule) IN ('Annual', 'Monthly'));
+        ALTER TABLE insurance_policy ADD CONSTRAINT insurance_policy_status_e_ck 
+                CHECK ((status) IN ('Active', 'Cancelled', 'Draft', 'Failed', 'Pending', 'PendingCancellation'));
+        ALTER TABLE insurance_policy ADD CONSTRAINT insurance_policy_tenant_discriminator_d_ck CHECK (tenant_discriminator = 'Tenant');
+        ALTER TABLE legal_letter ADD CONSTRAINT legal_letter_id_discriminator_ck CHECK ( id_discriminator = 'N4LegalLetter');
+        ALTER TABLE marketing ADD CONSTRAINT marketing_marketing_address_street_direction_e_ck 
+                CHECK ((marketing_address_street_direction) IN ('east', 'north', 'northEast', 'northWest', 'south', 'southEast', 'southWest', 'west'));
+        ALTER TABLE marketing ADD CONSTRAINT marketing_marketing_address_street_type_e_ck 
+                CHECK ((marketing_address_street_type) IN ('alley', 'approach', 'arcade', 'avenue', 'boulevard', 'brow', 'bypass', 'causeway', 'circle', 
+                'circuit', 'circus', 'close', 'copse', 'corner', 'court', 'cove', 'crescent', 'drive', 'end', 'esplanande', 'flat', 'freeway', 'frontage', 
+                'gardens', 'glade', 'glen', 'green', 'grove', 'heights', 'highway', 'lane', 'line', 'link', 'loop', 'mall', 'mews', 'other', 'packet', 
+                'parade', 'park', 'parkway', 'place', 'promenade', 'reserve', 'ridge', 'rise', 'road', 'row', 'square', 'street', 'strip', 'tarn', 'terrace', 
+                'thoroughfaree', 'track', 'trunkway', 'view', 'vista', 'walk', 'walkway', 'way', 'yard'));
+        ALTER TABLE n4_policy ADD CONSTRAINT n4_policy_node_discriminator_d_ck 
+                CHECK ((node_discriminator) IN ('Disc Complex', 'Disc_Building', 'Disc_Country', 'Disc_Floorplan', 'Disc_Province', 'OrganizationPoliciesNode', 'Unit_BuildingElement'));
+        ALTER TABLE proof_of_employment_document ADD CONSTRAINT proof_of_employment_document_owner_discriminator_d_ck 
+                CHECK ((owner_discriminator) IN ('CustomerScreening', 'CustomerScreeningIncome'));
+        ALTER TABLE tenant_sure_insurance_policy_client ADD CONSTRAINT tenant_sure_insurance_policy_client_tenant_discriminator_d_ck CHECK (tenant_discriminator = 'Tenant');
+        ALTER TABLE tenant_sure_insurance_policy_report ADD CONSTRAINT tenant_sure_insurance_policy_report_insurance_discr_d_ck 
+                CHECK (insurance_discriminator = 'TenantSureInsurancePolicy');
+        ALTER TABLE tenant_sure_insurance_policy_report ADD CONSTRAINT tenant_sure_insurance_policy_report_reported_status_e_ck 
+                CHECK ((reported_status) IN ('Active', 'Cancelled', 'New'));
+        ALTER TABLE tenant_sure_transaction ADD CONSTRAINT tenant_sure_transaction_insurance_discriminator_d_ck CHECK (insurance_discriminator = 'TenantSureInsurancePolicy');
+        ALTER TABLE tenant_sure_transaction ADD CONSTRAINT tenant_sure_transaction_payment_method_discriminator_d_ck CHECK (payment_method_discriminator = 'InsurancePaymentMethod');
+        ALTER TABLE tenant_sure_transaction ADD CONSTRAINT tenant_sure_transaction_status_e_ck 
+                CHECK ((status) IN ('AuthorizationRejected', 'AuthorizationReversal', 'Authorized', 'AuthorizedPaymentRejectedRetry', 'Cleared', 'Draft', 'PaymentError', 'PaymentRejected'));
+
 
        
         /**

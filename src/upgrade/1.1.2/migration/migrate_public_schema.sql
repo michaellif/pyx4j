@@ -22,6 +22,7 @@ BEGIN TRANSACTION;
         ALTER SEQUENCE insurance_tenant_sure_report_seq RENAME TO tenant_sure_insurance_policy_report_seq;
         ALTER SEQUENCE insurance_tenant_sure_transaction_seq RENAME TO tenant_sure_transaction_seq;
         ALTER SEQUENCE preauthorized_payment_seq RENAME TO autopay_agreement_seq;
+        ALTER SEQUENCE preauthorized_payment_covered_item_seq RENAME TO autopay_agreement_covered_item_seq;
         
  
         -- Sequences to drop
@@ -50,6 +51,7 @@ BEGIN TRANSACTION;
   
         -- Change owner to vista
         ALTER SEQUENCE autopay_agreement_seq OWNER TO vista;
+        ALTER SEQUENCE autopay_agreement_covered_item_seq OWNER TO vista;
         ALTER SEQUENCE ilsbatch$units_seq OWNER TO vista ;
         ALTER SEQUENCE ilsbatch_seq OWNER TO vista ;
         ALTER SEQUENCE ilsconfig_seq OWNER TO vista ;
