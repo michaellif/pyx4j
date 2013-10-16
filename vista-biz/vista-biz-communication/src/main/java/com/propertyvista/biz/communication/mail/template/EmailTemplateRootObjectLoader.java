@@ -61,10 +61,10 @@ public class EmailTemplateRootObjectLoader {
         }
         if (tObj instanceof PortalLinksT) {
             PortalLinksT t = (PortalLinksT) tObj;
-            t.PortalHomeUrl().setValue(VistaDeployment.getBaseApplicationURL(VistaApplication.site, false));
+            t.SiteHomeUrl().setValue(VistaDeployment.getBaseApplicationURL(VistaApplication.site, false));
             t.TenantPortalUrl().setValue(VistaDeployment.getBaseApplicationURL(VistaApplication.portal, true));
             t.ProspectPortalUrl().setValue(VistaDeployment.getBaseApplicationURL(VistaApplication.prospect, true));
-            t.CompanyLogo().setValue(t.PortalHomeUrl().getValue() + "/" + DeploymentConsts.portalLogo + DeploymentConsts.siteImageResourceServletMapping);
+            t.CompanyLogo().setValue(t.SiteHomeUrl().getValue() + "/" + DeploymentConsts.portalLogo + DeploymentConsts.siteImageResourceServletMapping);
 
             // TODO use SiteThemeServicesImpl.getSiteDescriptorFromCache()
             // TODO use proper locale

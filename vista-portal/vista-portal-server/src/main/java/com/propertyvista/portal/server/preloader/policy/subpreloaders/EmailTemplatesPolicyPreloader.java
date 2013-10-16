@@ -92,7 +92,7 @@ public class EmailTemplatesPolicyPreloader extends AbstractPolicyPreloader<Email
 
         policy.header().setValue( SimpleMessageFormat.format(//@formatter:off
                 headerRaw,
-                EmailTemplateManager.getVarname(portalT.PortalHomeUrl()),
+                EmailTemplateManager.getVarname(portalT.SiteHomeUrl()),
                 EmailTemplateManager.getVarname(portalT.CompanyLogo()),
                 EmailTemplateManager.getVarname(portalT.CompanyName()),
                 EmailTemplateManager.getVarname(portalT.CopyrightNotice())
@@ -100,7 +100,7 @@ public class EmailTemplatesPolicyPreloader extends AbstractPolicyPreloader<Email
 
         policy.footer().setValue( SimpleMessageFormat.format(//@formatter:off
                 footerRaw,
-                EmailTemplateManager.getVarname(portalT.PortalHomeUrl()),
+                EmailTemplateManager.getVarname(portalT.SiteHomeUrl()),
                 EmailTemplateManager.getVarname(portalT.CompanyLogo()),
                 EmailTemplateManager.getVarname(portalT.CompanyName()),
                 EmailTemplateManager.getVarname(portalT.CopyrightNotice())
@@ -299,7 +299,7 @@ public class EmailTemplatesPolicyPreloader extends AbstractPolicyPreloader<Email
                 EmailTemplateManager.getVarname(appT.ApplicantName()),
                 EmailTemplateManager.getVarname(leaseT.StartDateWeekDay()),
                 EmailTemplateManager.getVarname(leaseT.StartDate()),
-                EmailTemplateManager.getVarname(portalT.PortalHomeUrl()),
+                EmailTemplateManager.getVarname(portalT.SiteHomeUrl()),
                 EmailTemplateManager.getVarname(portalT.TenantPortalUrl()),
                 EmailTemplateManager.getVarname(bldT.PropertyMarketingName()),
                 EmailTemplateManager.getVarname(bldT.Administrator().ContactName())
@@ -370,7 +370,7 @@ public class EmailTemplatesPolicyPreloader extends AbstractPolicyPreloader<Email
                 EmailTemplateManager.getVarname(pwdReqT.RequestorName()),
                 EmailTemplateManager.getVarname(portalT.CompanyName()),
                 EmailTemplateManager.getVarname(pwdReqT.PasswordResetUrl()),
-                EmailTemplateManager.getVarname(portalT.PortalHomeUrl()),
+                EmailTemplateManager.getVarname(portalT.SiteHomeUrl()),
                 EmailTemplateManager.getVarname(portalT.TenantPortalUrl()),
                 EmailTemplateManager.getVarname(bldT.PropertyMarketingName()) ,
                 EmailTemplateManager.getVarname(bldT.Administrator().ContactName())

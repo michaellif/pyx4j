@@ -26,7 +26,7 @@ public interface PortalLinksT extends IEntity {
 
     IPrimitive<String> CompanyName();
 
-    IPrimitive<String> PortalHomeUrl();
+    IPrimitive<String> SiteHomeUrl();
 
     IPrimitive<String> TenantPortalUrl();
 

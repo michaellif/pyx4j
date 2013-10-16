@@ -645,7 +645,7 @@ public class EmailTemplateManagerTest extends VistaDBTestBase {
                     EmailTemplateManager.getVarname(appT.ApplicantName()),
                     EmailTemplateManager.getVarname(leaseT.StartDateWeekDay()),
                     EmailTemplateManager.getVarname(leaseT.StartDate()),
-                    EmailTemplateManager.getVarname(portalT.PortalHomeUrl()),
+                    EmailTemplateManager.getVarname(portalT.SiteHomeUrl()),
                     EmailTemplateManager.getVarname(portalT.TenantPortalUrl()),
                     EmailTemplateManager.getVarname(bldT.PropertyMarketingName()),
                     EmailTemplateManager.getVarname(bldT.Administrator().ContactName())
@@ -698,7 +698,7 @@ public class EmailTemplateManagerTest extends VistaDBTestBase {
                         EmailTemplateManager.getVarname(pwdReqT.RequestorName()),
                         EmailTemplateManager.getVarname(portalT.CompanyName()),
                         EmailTemplateManager.getVarname(pwdReqT.PasswordResetUrl()),
-                        EmailTemplateManager.getVarname(portalT.PortalHomeUrl()),
+                        EmailTemplateManager.getVarname(portalT.SiteHomeUrl()),
                         EmailTemplateManager.getVarname(portalT.TenantPortalUrl()),
                         EmailTemplateManager.getVarname(bldT.PropertyMarketingName()) ,
                         EmailTemplateManager.getVarname(bldT.Administrator().ContactName())
@@ -1003,7 +1003,7 @@ public class EmailTemplateManagerTest extends VistaDBTestBase {
             PortalLinksT portalT = EntityFactory.create(PortalLinksT.class);
             //@formatter:off
             String[] args = {
-                EmailTemplateManager.getVarname(portalT.PortalHomeUrl()),
+                EmailTemplateManager.getVarname(portalT.SiteHomeUrl()),
                 EmailTemplateManager.getVarname(portalT.CompanyLogo()),
                 EmailTemplateManager.getVarname(portalT.CompanyName()),
                 EmailTemplateManager.getVarname(portalT.CopyrightNotice()) };
