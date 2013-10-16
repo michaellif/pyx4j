@@ -135,12 +135,12 @@ public class PropertyManager {
             Transactions t = new Transactions();
             Charge charge = charges.get(chargeId);
 
-            // Don't add future products
-            if (charge.getDetail().getServiceFromDate() != null && charge.getDetail().getServiceFromDate().before(SystemDateManager.getDate())) {
+            // Don't add future products  (now < fromDate)
+            if ((charge.getDetail().getServiceFromDate() != null) && SystemDateManager.getLogicalDate().lt(charge.getDetail().getServiceFromDate())) {
                 continue;
             }
-            // Don't add expired products
-            if (charge.getDetail().getServiceToDate() != null && SystemDateManager.getDate().before(charge.getDetail().getServiceToDate())) {
+            // Don't add expired products   (now > toDate)
+            if ((charge.getDetail().getServiceToDate() != null) && SystemDateManager.getLogicalDate().gt(charge.getDetail().getServiceToDate())) {
                 continue;
             }
             t.setCharge((Charge) SerializationUtils.clone(charge));

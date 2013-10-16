@@ -333,6 +333,16 @@ public class YardiImportTest extends YardiTestBase {
 
         ResidentTransactions transactions = stub.getLeaseChargesForTenant(getYardiCredential(propertyCode), propertyCode, tenantId, null);
         assertEquals(1, transactions.getProperty().get(0).getRTCustomer().size());
-        assertTrue(transactions.getProperty().get(0).getRTCustomer().get(0).getRTServiceTransactions().getTransactions().size() > 0);
+        assertEquals("Has LeaseCharges", 0, transactions.getProperty().get(0).getRTCustomer().get(0).getRTServiceTransactions().getTransactions().size());
+
+        setSysDate("01-Jun-2012");
+
+        transactions = stub.getLeaseChargesForTenant(getYardiCredential(propertyCode), propertyCode, tenantId, null);
+        assertEquals("Has LeaseCharges", 3, transactions.getProperty().get(0).getRTCustomer().get(0).getRTServiceTransactions().getTransactions().size());
+
+        setSysDate("01-Aug-2014");
+
+        transactions = stub.getLeaseChargesForTenant(getYardiCredential(propertyCode), propertyCode, tenantId, null);
+        assertEquals("Has LeaseCharges", 0, transactions.getProperty().get(0).getRTCustomer().get(0).getRTServiceTransactions().getTransactions().size());
     }
 }
