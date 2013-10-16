@@ -207,7 +207,7 @@ public abstract class ItemsHolderForm<Item extends BulkEditableEntity, Holder ex
                 } else {
                     toggleSelectEverythingAnchor.setVisible(true);
                     toggleSelectEverythingAnchor.setText(i18n.tr("Clear selection"));
-                    counterPanel.setText(i18n.tr("All {0,number,#,##0} suspended items are selected.", getValue().items().getValue()));
+                    counterPanel.setText(i18n.tr("All {0,number,#,##0} suspended items are selected.", getValue().items().size()));
                 }
             } else {
                 counterPanel.setText(i18n.tr("No suspended AutoPays have been found"));

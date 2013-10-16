@@ -33,6 +33,24 @@ public class LegalNoticeCandidateForm extends BulkEditableEntityForm<LegalNotice
 
         panel.add(inject(proto().isSelected()));
 
+        panel.add(inject(proto().building()));
+        get(proto().building()).setViewable(true);
+
+        panel.add(inject(proto().address()));
+        get(proto().address()).setViewable(true);
+
+        panel.add(inject(proto().unit()));
+        get(proto().unit()).setViewable(true);
+
+        panel.add(inject(proto().leaseIdString()));
+        get(proto().leaseIdString()).setViewable(true);
+
+        panel.add(inject(proto().moveIn()));
+        get(proto().moveIn()).setViewable(true);
+
+        panel.add(inject(proto().moveOut()));
+        get(proto().moveOut()).setViewable(true);
+
         panel.add(inject(proto().amountOwed()));
         get(proto().amountOwed()).setViewable(true);
 

@@ -15,10 +15,15 @@ package com.propertyvista.crm.rpc.services.legal;
 
 import java.util.Vector;
 
+import com.google.gwt.user.client.rpc.AsyncCallback;
+
 import com.propertyvista.crm.rpc.dto.legal.n4.LegalNoticeCandidateDTO;
 import com.propertyvista.crm.rpc.dto.legal.n4.N4GenerationSettingsDTO;
 import com.propertyvista.domain.tenant.lease.Lease;
 
 public interface N4GenerationToolService extends AbstractBulkOperationService<N4GenerationSettingsDTO, LegalNoticeCandidateDTO, Vector<Lease>> {
+
+    @Override
+    void getItems(AsyncCallback<Vector<LegalNoticeCandidateDTO>> callback, N4GenerationSettingsDTO settings);
 
 }
