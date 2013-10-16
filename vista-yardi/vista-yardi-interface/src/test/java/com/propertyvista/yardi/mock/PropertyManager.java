@@ -134,11 +134,17 @@ public class PropertyManager {
         for (String chargeId : charges.keySet()) {
             Transactions t = new Transactions();
             Charge charge = charges.get(chargeId);
-            // Don't add expired products
-            if (charge.getDetail().getServiceToDate() == null || charge.getDetail().getServiceToDate().after(SystemDateManager.getDate())) {
-                t.setCharge((Charge) SerializationUtils.clone(charge));
-                st.getTransactions().add(t);
+
+            // Don't add future products
+            if (charge.getDetail().getServiceFromDate() != null && charge.getDetail().getServiceFromDate().before(SystemDateManager.getDate())) {
+                continue;
             }
+            // Don't add expired products
+            if (charge.getDetail().getServiceToDate() != null && SystemDateManager.getDate().before(charge.getDetail().getServiceToDate())) {
+                continue;
+            }
+            t.setCharge((Charge) SerializationUtils.clone(charge));
+            st.getTransactions().add(t);
         }
 
         return rtCustomer;
