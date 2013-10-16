@@ -100,6 +100,7 @@ public class AutoPayReviewServiceImpl implements AutoPayReviewService {
         PapReviewDTO papReview = EntityFactory.create(PapReviewDTO.class);
         papReview.papId().set(autoPay.pap());
         papReview.caption().set(papReviewCaption.duplicate(PapReviewCaptionDTO.class));
+        papReview.caption().changedByTenant().setValue(autoPay.changedByTenant().isBooleanTrue());
         papReview.caption().paymentMethod().setValue(autoPay.paymentMethodView().getStringView());
         papReview.caption().tenant().setValue(autoPay.tenantName().getStringView());
         papReview.caption().tenant_().set(autoPay.tenant_());
