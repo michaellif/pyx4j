@@ -13,12 +13,38 @@
  */
 package com.propertyvista.crm.rpc.dto.legal.n4;
 
+import java.math.BigDecimal;
+
+import com.pyx4j.commons.LogicalDate;
+import com.pyx4j.entity.annotations.Editor;
+import com.pyx4j.entity.annotations.Editor.EditorType;
+import com.pyx4j.entity.annotations.Format;
 import com.pyx4j.entity.annotations.Transient;
+import com.pyx4j.entity.shared.IPrimitive;
 
 import com.propertyvista.crm.rpc.dto.financial.autopayreview.BulkEditableEntity;
 import com.propertyvista.domain.legal.LegalNoticeCandidate;
 
 @Transient
 public interface LegalNoticeCandidateDTO extends LegalNoticeCandidate, BulkEditableEntity {
+
+    IPrimitive<String> building();
+
+    IPrimitive<String> address();
+
+    IPrimitive<String> unit();
+
+    IPrimitive<String> leaseIdString();
+
+    @Editor(type = EditorType.monthyearpicker)
+    IPrimitive<LogicalDate> moveIn();
+
+    @Editor(type = EditorType.monthyearpicker)
+    IPrimitive<LogicalDate> moveOut();
+
+    @Override
+    @Editor(type = EditorType.money)
+    @Format("#,##0.00")
+    IPrimitive<BigDecimal> amountOwed();
 
 }

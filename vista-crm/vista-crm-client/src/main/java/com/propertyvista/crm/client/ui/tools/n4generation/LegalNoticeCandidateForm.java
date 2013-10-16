@@ -32,8 +32,12 @@ public class LegalNoticeCandidateForm extends BulkEditableEntityForm<LegalNotice
         FlowPanel panel = new FlowPanel();
 
         panel.add(inject(proto().isSelected()));
+
         panel.add(inject(proto().amountOwed()));
+        get(proto().amountOwed()).setViewable(true);
+
         panel.add(inject(proto().n4Issued(), new CLabel<Integer>()));
+        get(proto().n4Issued()).setViewable(true);
 
         return panel;
     }

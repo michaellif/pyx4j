@@ -17,7 +17,8 @@ import com.propertyvista.crm.client.ui.tools.n4generation.base.BulkOperationTool
 import com.propertyvista.crm.rpc.dto.legal.n4.LegalNoticeCandidateDTO;
 import com.propertyvista.crm.rpc.dto.legal.n4.N4GenerationSettingsDTO;
 
-public class N4GenerationToolViewImpl extends BulkOperationToolViewImpl<N4GenerationSettingsDTO, LegalNoticeCandidateDTO, LegalNoticeCandidateHolder> {
+public class N4GenerationToolViewImpl extends BulkOperationToolViewImpl<N4GenerationSettingsDTO, LegalNoticeCandidateDTO, LegalNoticeCandidateHolder> implements
+        N4GenerationToolView {
 
     public N4GenerationToolViewImpl() {
         super(new N4GenerationSettingsForm(), LegalNoticeCandidateHolder.class, new LegalNoticeCandidateFolderHolderForm());

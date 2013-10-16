@@ -23,6 +23,9 @@ public class LegalNoticeCandidateFolder extends BulkItemsFolder<LegalNoticeCandi
 
     public LegalNoticeCandidateFolder() {
         super(LegalNoticeCandidateDTO.class);
+        setAddable(false);
+        setRemovable(false);
+        setOrderable(false);
     }
 
     @Override
