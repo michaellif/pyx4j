@@ -44,6 +44,9 @@ public class BuildingFacadeImpl implements BuildingFacade {
                 building.marketing().visibility().setValue(PublicVisibilityType.global);
             }
         }
+        if (building.suspended().isNull()) {
+            building.suspended().setValue(false);
+        }
         if (building.integrationSystemId().isNull()) {
             building.integrationSystemId().setValue(IntegrationSystem.internal);
         }
