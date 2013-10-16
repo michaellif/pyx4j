@@ -39,7 +39,7 @@ public class N4PolicyForm extends PolicyDTOTabPanelBasedForm<N4PolicyDTO> {
         int row = -1;
         settingsPanel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().includeSignature())).build());
         settingsPanel.setH2(++row, 0, 1, i18n.tr("This address will be used for signing N4"));
-        settingsPanel.setWidget(++row, 0, inject(proto().singnatureAddress(), new AddressSimpleEditor()));
+        settingsPanel.setWidget(++row, 0, inject(proto().signatureAddress(), new AddressSimpleEditor()));
         return Arrays.asList(settingsPanel);
     }
 

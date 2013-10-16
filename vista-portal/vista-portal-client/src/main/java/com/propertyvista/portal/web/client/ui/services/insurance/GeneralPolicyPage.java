@@ -47,7 +47,7 @@ public class GeneralPolicyPage extends CPortalEntityForm<GeneralInsurancePolicyD
         mainPanel.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().certificate().inceptionDate()), 150).build());
         mainPanel.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().certificate().expiryDate()), 150).build());
         mainPanel.setH2(++row, 0, 2, i18n.tr("Scanned Certificate"));
-        mainPanel.setWidget(++row, 0, 2, inject(proto().certificate().certificateScan()));
+//        mainPanel.setWidget(++row, 0, 2, inject(proto().certificate().certificateScan()));
 
         return mainPanel;
 

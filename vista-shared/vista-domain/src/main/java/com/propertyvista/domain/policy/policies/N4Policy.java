@@ -29,6 +29,6 @@ public interface N4Policy extends Policy {
     IPrimitive<Boolean> includeSignature();
 
     @EmbeddedEntity
-    AddressSimple singnatureAddress();
+    AddressSimple signatureAddress();
 
 }
