@@ -95,7 +95,9 @@ public class MaintenanceRequestCrudServiceImpl extends AbstractCrudServiceDtoImp
 
     @Override
     protected void persist(MaintenanceRequest bo, MaintenanceRequestDTO to) {
-        if (to.reportedForOwnUnit().isBooleanTrue() && !to.reporter().isNull()) {
+        if (!to.reportedForOwnUnit().isBooleanTrue()) {
+            bo.permissionToEnter().setValue(false);
+        } else if (!to.reporter().isNull()) {
             Persistence.ensureRetrieve(to.reporter().lease(), AttachLevel.Attached);
             bo.unit().set(to.reporter().lease().unit());
         }

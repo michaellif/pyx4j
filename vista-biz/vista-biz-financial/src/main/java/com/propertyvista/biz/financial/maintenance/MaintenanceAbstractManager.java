@@ -53,7 +53,6 @@ public abstract class MaintenanceAbstractManager {
         Persistence.ensureRetrieve(tenant.lease(), AttachLevel.Attached);
         Persistence.ensureRetrieve(tenant.lease().unit().building(), AttachLevel.Attached);
         request.building().set(tenant.lease().unit().building());
-        request.unit().set(tenant.lease().unit());
         request.reporter().set(tenant);
         return request;
     }

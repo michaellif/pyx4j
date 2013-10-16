@@ -14,6 +14,7 @@
 package com.propertyvista.portal.web.client.ui.maintenance;
 
 import com.google.gwt.user.client.Command;
+import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.commons.css.ThemeColor;
@@ -24,6 +25,7 @@ import com.pyx4j.forms.client.ui.form.FormDecorator;
 import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.Button;
+import com.pyx4j.widgets.client.dialog.OkCancelDialog;
 
 import com.propertyvista.domain.maintenance.MaintenanceRequestCategory;
 import com.propertyvista.domain.maintenance.MaintenanceRequestPriority;
@@ -42,10 +44,22 @@ public class MaintenanceRequestPage extends CPortalEntityForm<MaintenanceRequest
 
     public MaintenanceRequestPage(MaintenanceRequestPageViewImpl view) {
         super(MaintenanceRequestDTO.class, view, "Maintenance Request", ThemeColor.contrast5);
-        btnCancel = new Button(i18n.tr("Cancel"), new Command() {
+        btnCancel = new Button(i18n.tr("Cancel Request"), new Command() {
             @Override
             public void execute() {
-                ((MaintenanceRequestPagePresenter) getView().getPresenter()).cancelRequest();
+                new OkCancelDialog(i18n.tr("Please confirm")) {
+                    @Override
+                    public void setBody(IsWidget body) {
+                        super.setBody(new HTML(i18n.tr("Are you sure you would like to cancel this request?")));
+                    }
+
+                    @Override
+                    public boolean onClickOk() {
+                        ((MaintenanceRequestPagePresenter) getView().getPresenter()).cancelRequest();
+                        return true;
+                    }
+
+                }.show();
             }
         });
         asWidget().setStyleName(EntityViewTheme.StyleName.EntityView.name());
@@ -65,7 +79,15 @@ public class MaintenanceRequestPage extends CPortalEntityForm<MaintenanceRequest
                 if (value == null) {
                     return "";
                 } else {
-                    return value.name().getValue() + "-TODO";
+                    StringBuilder result = new StringBuilder();
+                    MaintenanceRequestCategory category = value;
+                    while (!category.parent().isNull()) {
+                        if (!category.name().isNull()) {
+                            result.insert(0, result.length() > 0 ? "/" : "").insert(0, category.name().getValue());
+                        }
+                        category = category.parent();
+                    }
+                    return result.toString();
                 }
             }
         }), 250).build());
