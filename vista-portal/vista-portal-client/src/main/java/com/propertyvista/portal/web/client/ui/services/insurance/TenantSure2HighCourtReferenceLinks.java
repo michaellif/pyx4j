@@ -15,9 +15,10 @@ package com.propertyvista.portal.web.client.ui.services.insurance;
 
 import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.Composite;
-import com.google.gwt.user.client.ui.FlowPanel;
+import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.SimplePanel;
 
+import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.portal.web.client.themes.NavigationAnchorTheme;
@@ -32,8 +33,9 @@ public class TenantSure2HighCourtReferenceLinks extends Composite {
     private final Anchor privacyPolicyAnchor;
 
     public TenantSure2HighCourtReferenceLinks() {
-        FlowPanel panel = new FlowPanel();
-        panel.setStyleName(TenantSureTheme.StyleName.TenantSureDecoratorFooter.name());
+        BasicFlexFormPanel panel = new BasicFlexFormPanel();
+        panel.setWidth("100%");
+        panel.setStyleName(TenantSureTheme.StyleName.TenantSure2HighCourtLinks.name());
 
         SimplePanel privacyPolicyAnchorHolder = new SimplePanel();
         privacyPolicyAnchorHolder.setStyleName(TenantSureTheme.StyleName.TenantSureTermsLink.name());
@@ -43,7 +45,9 @@ public class TenantSure2HighCourtReferenceLinks extends Composite {
         privacyPolicyAnchor.setStyleName(NavigationAnchorTheme.StyleName.NavigationAnchor.name());
         privacyPolicyAnchor.setTarget("_blank");
         privacyPolicyAnchorHolder.setWidget(privacyPolicyAnchor);
-        panel.add(privacyPolicyAnchorHolder);
+        panel.setWidget(0, 0, privacyPolicyAnchorHolder);
+        panel.getFlexCellFormatter().setHorizontalAlignment(0, 0, HasHorizontalAlignment.ALIGN_RIGHT);
+        panel.getFlexCellFormatter().setWidth(0, 0, "50%");
 
         SimplePanel compensationDisclosureStatementAnchorHolder = new SimplePanel();
         compensationDisclosureStatementAnchorHolder.setStyleName(TenantSureTheme.StyleName.TenantSureTermsLink.name());
@@ -53,7 +57,9 @@ public class TenantSure2HighCourtReferenceLinks extends Composite {
         compensationDisclosureStatementAnchor.setStyleName(NavigationAnchorTheme.StyleName.NavigationAnchor.name());
         compensationDisclosureStatementAnchor.setTarget("_blank");
         compensationDisclosureStatementAnchorHolder.setWidget(compensationDisclosureStatementAnchor);
-        panel.add(compensationDisclosureStatementAnchorHolder);
+        panel.setWidget(0, 1, compensationDisclosureStatementAnchorHolder);
+        panel.getFlexCellFormatter().setHorizontalAlignment(0, 1, HasHorizontalAlignment.ALIGN_LEFT);
+        panel.getFlexCellFormatter().setWidth(0, 1, "50%");
 
         initWidget(panel);
 

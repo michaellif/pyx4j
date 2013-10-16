@@ -28,7 +28,7 @@ public class TenantSureTheme extends Theme {
         TenantSureDecoratorPanel,
         TenantSureDecoratorHeader,
         TenantSureContentPanel, 
-        TenantSureDecoratorFooter,
+        TenantSure2HighCourtLinks,
         TenantSureTermsLink,
         TenantSurePrivacyPolicyLink,
         TenantSureBillingAndCancellationsPolicyLink,        
@@ -67,8 +67,12 @@ public class TenantSureTheme extends Theme {
     private void initDecoratorStyles() {
         Style style = null;
 
-        style = new Style(".", StyleName.TenantSureTermsLink.name());
-        style.addProperty("text-align", "center");
+        style = new Style(".", StyleName.TenantSurePrivacyPolicyLink.name());
+        style.addProperty("text-align", "right");
+        addStyle(style);
+
+        style = new Style(".", StyleName.TenantSureBillingAndCancellationsPolicyLink.name());
+        style.addProperty("text-align", "left");
         addStyle(style);
 
         style = new Style(".", StyleName.TenantSureDecoratorHeader.name());
@@ -76,7 +80,8 @@ public class TenantSureTheme extends Theme {
         style.addProperty("text-align", "center");
         addStyle(style);
 
-        style = new Style(".", StyleName.TenantSureDecoratorFooter.name());
+        style = new Style(".", StyleName.TenantSure2HighCourtLinks.name());
+        style.addProperty("margin-top", "20px");
         style.addProperty("padding-top", "20px");
         style.addProperty("text-align", "center");
         addStyle(style);

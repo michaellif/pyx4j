@@ -81,13 +81,17 @@ public class CreditCardInfoEditor extends CEntityDecoratableForm<CreditCardInfo>
 
         int row = -1;
         CMonthYearPicker monthYearPicker = new CMonthYearPicker(false);
-        panel.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().nameOn())).componentWidth("300px").contentWidth("300px").build());
-        panel.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().cardType(), typeSelector)).componentWidth("250px").contentWidth("300px").build());
-
-        panel.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().card(), cardEditor)).componentWidth("250px").contentWidth("300px").build());
-        panel.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().expiryDate(), monthYearPicker)).componentWidth("250px").contentWidth("300px")
+        panel.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().nameOn())).labelWidth("250px").componentWidth("250px").contentWidth("250px")
                 .build());
-        panel.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().securityCode())).componentWidth("250px").contentWidth("300px").build());
+        panel.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().cardType(), typeSelector)).labelWidth("250px").componentWidth("250px")
+                .contentWidth("250px").build());
+
+        panel.setWidget(++row, 0, 2,
+                new FormDecoratorBuilder(inject(proto().card(), cardEditor)).labelWidth("250px").componentWidth("250px").contentWidth("250px").build());
+        panel.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().expiryDate(), monthYearPicker)).labelWidth("250px").componentWidth("250px")
+                .contentWidth("250px").build());
+        panel.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().securityCode())).labelWidth("250px").componentWidth("250px").contentWidth("250px")
+                .build());
 
         // tweak:
         monthYearPicker.setYearRange(new Range(1900 + new Date().getYear(), 10));

@@ -40,6 +40,7 @@ import com.propertyvista.portal.rpc.portal.web.dto.insurance.TenantSureInsurance
 import com.propertyvista.portal.rpc.portal.web.dto.insurance.TenantSureQuoteDTO;
 import com.propertyvista.portal.web.client.resources.PortalImages;
 import com.propertyvista.portal.web.client.resources.tenantsure.TenantSureResources;
+import com.propertyvista.portal.web.client.themes.NavigationAnchorTheme;
 import com.propertyvista.portal.web.client.themes.TenantSureTheme;
 import com.propertyvista.portal.web.client.ui.CPortalEntityWizard;
 import com.propertyvista.portal.web.client.ui.services.insurance.TenantSureOrderWizardView.TenantSureOrderWizardPersenter;
@@ -103,11 +104,14 @@ public class TenantSureOrderWizard extends CPortalEntityWizard<TenantSureInsuran
         panel.setH1(++row, 0, 1, PortalImages.INSTANCE.residentServicesIcon(), i18n.tr("Personal Disclaimer Terms"));
         HTMLPanel personalDisclaimer = new HTMLPanel(TenantSureResources.INSTANCE.personalDisclaimer().getText());
         Anchor privacyPolicyAnchor = new Anchor(i18n.tr("Privacy Policy"));
+        privacyPolicyAnchor.setStyleName(NavigationAnchorTheme.StyleName.NavigationAnchor.name());
         privacyPolicyAnchor.setHref(TenantSureConstants.HIGHCOURT_PARTNERS_PRIVACY_POLICY_HREF);
         privacyPolicyAnchor.setTarget("_blank");
         personalDisclaimer.addAndReplaceElement(privacyPolicyAnchor, TenantSureResources.PRIVACY_POLICY_ANCHOR_ID);
 
         panel.setWidget(++row, 0, personalDisclaimer);
+
+        panel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().isAgreedToPersonalDisclaimer())).build());
 
         panel.setH1(++row, 0, 1, PortalImages.INSTANCE.residentServicesIcon(), i18n.tr("Personal & Contact Information"));
 
@@ -115,7 +119,8 @@ public class TenantSureOrderWizard extends CPortalEntityWizard<TenantSureInsuran
                 new FormDecoratorBuilder(inject(proto().tenantSureCoverageRequest().tenantName())).componentWidth("200px").contentWidth("200px").build());
         panel.setWidget(++row, 0,
                 new FormDecoratorBuilder(inject(proto().tenantSureCoverageRequest().tenantPhone())).componentWidth("200px").contentWidth("200px").build());
-        panel.setWidget(++row, 0, personalInforReferenceLinks = new TenantSure2HighCourtReferenceLinks());
+        panel.setWidget(++row, 0, 2, personalInforReferenceLinks = new TenantSure2HighCourtReferenceLinks());
+
         personalInforReferenceLinks.setCompensationDisclosureStatementHref(TenantSureConstants.HIGHCOURT_PARTNERS_COMPENSATION_DISCLOSURE_STATEMENT_HREF);
         personalInforReferenceLinks.setPrivacyPolcyHref(TenantSureConstants.HIGHCOURT_PARTNERS_PRIVACY_POLICY_HREF);
 

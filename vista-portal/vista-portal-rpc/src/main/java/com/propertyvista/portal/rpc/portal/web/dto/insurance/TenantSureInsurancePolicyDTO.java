@@ -13,7 +13,9 @@
  */
 package com.propertyvista.portal.rpc.portal.web.dto.insurance;
 
+import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.Transient;
+import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
 
@@ -58,5 +60,9 @@ public interface TenantSureInsurancePolicyDTO extends TenantSureInsurancePolicy 
     TenantSurePaymentDTO nextPaymentDetails();
 
     IList<TenantSureMessageDTO> messages();
+
+    @NotNull
+    @Caption(name = "I agree to the Terms")
+    IPrimitive<Boolean> isAgreedToPersonalDisclaimer();
 
 }
