@@ -20,6 +20,7 @@ import java.util.Vector;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.config.server.ServerSideFactory;
+import com.pyx4j.entity.server.Persistence;
 
 import com.propertyvista.biz.legal.N4ManagementFacade;
 import com.propertyvista.crm.rpc.dto.legal.n4.LegalNoticeCandidateDTO;
@@ -36,7 +37,12 @@ public class N4GenerationToolServiceImpl implements N4GenerationToolService {
 
         Vector<LegalNoticeCandidateDTO> dtoCandidates = new Vector<LegalNoticeCandidateDTO>(n4Candidates.size());
         for (LegalNoticeCandidate candidate : n4Candidates) {
-            dtoCandidates.add(candidate.duplicate(LegalNoticeCandidateDTO.class));
+            LegalNoticeCandidateDTO dto = candidate.duplicate(LegalNoticeCandidateDTO.class);
+            Lease lease = Persistence.service().retrieve(Lease.class, dto.leaseId().getPrimaryKey());
+            Persistence.service().retrieve(lease.unit());
+            Persistence.service().retrieve(lease.unit().building());
+            dto.building().setValue(lease.unit().building().propertyCode().getValue());
+            dtoCandidates.add(dto);
         }
         callback.onSuccess(dtoCandidates);
     }
