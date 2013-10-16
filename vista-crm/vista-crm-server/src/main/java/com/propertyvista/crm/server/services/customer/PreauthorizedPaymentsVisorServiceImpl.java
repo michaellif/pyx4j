@@ -52,21 +52,7 @@ public class PreauthorizedPaymentsVisorServiceImpl implements PreauthorizedPayme
 
     @Override
     public void create(AsyncCallback<PreauthorizedPaymentDTO> callback, Tenant tenantId) {
-        PreauthorizedPaymentDTO papDto = EntityFactory.create(PreauthorizedPaymentDTO.class);
-
-        papDto.tenant().set(tenantId);
-
-        fillCoveredItemsDto(papDto);
-
-        callback.onSuccess(papDto);
-    }
-
-    @Override
-    public void delete(AsyncCallback<VoidSerializable> callback, AutopayAgreement pad) {
-        ServerSideFactory.create(PaymentMethodFacade.class).deleteAutopayAgreement(pad);
-        Persistence.service().commit();
-
-        callback.onSuccess(null);
+        callback.onSuccess(PreauthorizedPaymentsCommons.createNewPreauthorizedPayment(tenantId));
     }
 
     @Override
@@ -82,6 +68,8 @@ public class PreauthorizedPaymentsVisorServiceImpl implements PreauthorizedPayme
     public void recollect(AsyncCallback<Vector<AutopayAgreement>> callback, Tenant tenantId) {
         callback.onSuccess(new Vector<AutopayAgreement>(ServerSideFactory.create(PaymentMethodFacade.class).retrieveAutopayAgreements(tenantId)));
     }
+
+    // Internals:
 
     private void fillTenantInfo(PreauthorizedPaymentsDTO dto) {
         Persistence.ensureRetrieve(dto.tenant(), AttachLevel.Attached);
@@ -114,9 +102,5 @@ public class PreauthorizedPaymentsVisorServiceImpl implements PreauthorizedPayme
 
     private void fillPreauthorizedPayments(PreauthorizedPaymentsDTO dto) {
         dto.preauthorizedPayments().addAll(PreauthorizedPaymentsCommons.createPreauthorizedPayments(dto.tenant()));
-    }
-
-    private void fillCoveredItemsDto(PreauthorizedPaymentDTO papDto) {
-        PreauthorizedPaymentsCommons.fillCoveredItemsDto(papDto);
     }
 }

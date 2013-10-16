@@ -164,7 +164,7 @@ public class AutoPayWizardServiceImpl extends AbstractCrudServiceDtoImpl<Autopay
         }
 
         PreauthorizedPaymentCoveredItemDTO itemDto;
-        if (!isCoveredItemExist(papDto, products.serviceItem())) {
+        if (products.serviceItem().agreedPrice().getValue().compareTo(BigDecimal.ZERO) > 0 && !isCoveredItemExist(papDto, products.serviceItem())) {
             itemDto = createCoveredItemDTO(products.serviceItem(), lease);
             papDto.coveredItemsDTO().add(itemDto);
             papDto.total().setValue(papDto.total().getValue().add(itemDto.amount().getValue()));
@@ -173,7 +173,8 @@ public class AutoPayWizardServiceImpl extends AbstractCrudServiceDtoImpl<Autopay
         for (BillableItem billableItem : products.featureItems()) {
             Persistence.ensureRetrieve(billableItem.item().product(), AttachLevel.Attached);
             //@formatter:off
-            if (!ARCode.Type.nonReccuringFeatures().contains(billableItem.item().product().holder().type().getValue())                                          // recursive
+            if (billableItem.agreedPrice().getValue().compareTo(BigDecimal.ZERO) > 0                                                                            // non-free
+                && !ARCode.Type.nonReccuringFeatures().contains(billableItem.item().product().holder().type().getValue())                                       // recursive
                 && (billableItem.expirationDate().isNull() || billableItem.expirationDate().getValue().after(new LogicalDate(SystemDateManager.getDate())))     // non-expired 
                 && !isCoveredItemExist(papDto, billableItem)) {                                                                                                 // absent
             //@formatter:on

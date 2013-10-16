@@ -33,7 +33,5 @@ public interface PreauthorizedPaymentsVisorService extends IService {
 
     void create(AsyncCallback<PreauthorizedPaymentDTO> callback, Tenant tenantId);
 
-    void delete(AsyncCallback<VoidSerializable> callback, AutopayAgreement pad);
-
     void recollect(AsyncCallback<Vector<AutopayAgreement>> callback, Tenant tenantId);
 }

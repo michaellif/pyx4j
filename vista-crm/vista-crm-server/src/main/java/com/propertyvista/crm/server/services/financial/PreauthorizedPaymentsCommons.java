@@ -16,7 +16,6 @@ package com.propertyvista.crm.server.services.financial;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 import com.pyx4j.commons.LogicalDate;
@@ -42,34 +41,23 @@ import com.propertyvista.dto.PreauthorizedPaymentDTO;
 public class PreauthorizedPaymentsCommons {
 
     public static void savePreauthorizedPayments(List<PreauthorizedPaymentDTO> papsDto, Tenant tenantId) {
-        List<AutopayAgreement> paps = new ArrayList<AutopayAgreement>();
+        List<AutopayAgreement> papsToSave = new ArrayList<AutopayAgreement>();
+
         for (PreauthorizedPaymentDTO papDTO : papsDto) {
             updateCoveredItems(papDTO);
-            paps.add(new PapConverter().createBO(papDTO));
+            papsToSave.add(new PapConverter().createBO(papDTO));
         }
 
-        // delete payment methods removed in UI:
-        for (AutopayAgreement pap : ServerSideFactory.create(PaymentMethodFacade.class).retrieveAutopayAgreements(tenantId)) {
-            if (!paps.contains(pap)) {
-                ServerSideFactory.create(PaymentMethodFacade.class).deleteAutopayAgreement(pap);
+        // delete PAPs removed in UI:
+        for (AutopayAgreement currentPap : ServerSideFactory.create(PaymentMethodFacade.class).retrieveAutopayAgreements(tenantId)) {
+            if (!papsToSave.contains(currentPap)) {
+                ServerSideFactory.create(PaymentMethodFacade.class).deleteAutopayAgreement(currentPap);
             }
         }
 
         // save new/edited ones:
-        for (AutopayAgreement pap : paps) {
-            // remove zero covered items:
-            Iterator<AutopayAgreementCoveredItem> iterator = pap.coveredItems().iterator();
-            while (iterator.hasNext()) {
-                AutopayAgreementCoveredItem item = iterator.next();
-                if (item.amount().getValue().compareTo(BigDecimal.ZERO) <= 0) {
-                    iterator.remove();
-                    if (item.getPrimaryKey() != null) {
-                        Persistence.service().delete(item);
-                    }
-                }
-            }
-
-            ServerSideFactory.create(PaymentMethodFacade.class).persistAutopayAgreement(pap, tenantId);
+        for (AutopayAgreement papToSave : papsToSave) {
+            ServerSideFactory.create(PaymentMethodFacade.class).persistAutopayAgreement(papToSave, tenantId);
         }
     }
 
@@ -85,16 +73,19 @@ public class PreauthorizedPaymentsCommons {
         return paps;
     }
 
-    public static PreauthorizedPaymentDTO createPreauthorizedPaymentDto(AutopayAgreement pap) {
-        PreauthorizedPaymentDTO papDto = new PapConverter().createTO(pap);
+    public static PreauthorizedPaymentDTO createNewPreauthorizedPayment(Tenant tenantId) {
+        PreauthorizedPaymentDTO papDto = EntityFactory.create(PreauthorizedPaymentDTO.class);
 
-        updateCoveredItemsDto(papDto);
+        papDto.tenant().set(tenantId);
+
         fillCoveredItemsDto(papDto);
 
         return papDto;
     }
 
-    public static void fillCoveredItemsDto(PreauthorizedPaymentDTO papDto) {
+    // Internals:
+
+    private static void fillCoveredItemsDto(PreauthorizedPaymentDTO papDto) {
         Persistence.ensureRetrieve(papDto.tenant(), AttachLevel.Attached);
         Persistence.ensureRetrieve(papDto.tenant().lease(), AttachLevel.Attached);
 
@@ -118,7 +109,16 @@ public class PreauthorizedPaymentsCommons {
         }
     }
 
-    public static boolean isCoveredItemExist(PreauthorizedPaymentDTO papDto, BillableItem billableItem) {
+    private static PreauthorizedPaymentDTO createPreauthorizedPaymentDto(AutopayAgreement pap) {
+        PreauthorizedPaymentDTO papDto = new PapConverter().createTO(pap);
+
+        updateCoveredItemsDto(papDto);
+        fillCoveredItemsDto(papDto);
+
+        return papDto;
+    }
+
+    private static boolean isCoveredItemExist(PreauthorizedPaymentDTO papDto, BillableItem billableItem) {
         for (AutopayAgreementCoveredItem item : papDto.coveredItemsDTO()) {
             if (item.billableItem().id().equals(billableItem.id())) {
                 return true;
@@ -127,7 +127,7 @@ public class PreauthorizedPaymentsCommons {
         return false;
     }
 
-    public static PreauthorizedPaymentCoveredItemDTO createCoveredItemDto(BillableItem billableItem, Lease lease, boolean isNewPap) {
+    private static PreauthorizedPaymentCoveredItemDTO createCoveredItemDto(BillableItem billableItem, Lease lease, boolean isNewPap) {
         PreauthorizedPaymentCoveredItemDTO itemDto = EntityFactory.create(PreauthorizedPaymentCoveredItemDTO.class);
 
         // calculate already covered amount by other tenants/paps: 
@@ -155,7 +155,7 @@ public class PreauthorizedPaymentsCommons {
         return itemDto;
     }
 
-    public static void updateCoveredItemsDto(PreauthorizedPaymentDTO papDto) {
+    private static void updateCoveredItemsDto(PreauthorizedPaymentDTO papDto) {
         Persistence.ensureRetrieve(papDto.tenant(), AttachLevel.Attached);
         Persistence.ensureRetrieve(papDto.tenant().lease(), AttachLevel.Attached);
 
@@ -166,7 +166,7 @@ public class PreauthorizedPaymentsCommons {
         }
     }
 
-    public static PreauthorizedPaymentCoveredItemDTO updateCoveredItemDto(PreauthorizedPaymentCoveredItemDTO itemDto, Lease lease) {
+    private static PreauthorizedPaymentCoveredItemDTO updateCoveredItemDto(PreauthorizedPaymentCoveredItemDTO itemDto, Lease lease) {
         // calculate already covered amount by other tenants/paps: 
         EntityQueryCriteria<AutopayAgreementCoveredItem> criteria = new EntityQueryCriteria<AutopayAgreementCoveredItem>(AutopayAgreementCoveredItem.class);
         criteria.ne(criteria.proto().pap(), itemDto.pap());
@@ -189,7 +189,7 @@ public class PreauthorizedPaymentsCommons {
         return itemDto;
     }
 
-    public static void updateCoveredItems(PreauthorizedPaymentDTO papDto) {
+    private static void updateCoveredItems(PreauthorizedPaymentDTO papDto) {
         papDto.coveredItems().clear();
         for (PreauthorizedPaymentCoveredItemDTO itemDto : papDto.coveredItemsDTO()) {
             if (itemDto.amount().getValue().compareTo(BigDecimal.ZERO) > 0) {
@@ -198,7 +198,7 @@ public class PreauthorizedPaymentsCommons {
         }
     }
 
-    static class PapConverter extends EntityBinder<AutopayAgreement, PreauthorizedPaymentDTO> {
+    private static class PapConverter extends EntityBinder<AutopayAgreement, PreauthorizedPaymentDTO> {
 
         protected PapConverter() {
             super(AutopayAgreement.class, PreauthorizedPaymentDTO.class);

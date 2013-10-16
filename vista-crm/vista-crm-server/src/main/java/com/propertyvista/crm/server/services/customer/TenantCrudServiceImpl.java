@@ -117,13 +117,7 @@ public class TenantCrudServiceImpl extends LeaseParticipantCrudServiceBaseImpl<T
 
     @Override
     public void createPreauthorizedPayment(AsyncCallback<PreauthorizedPaymentDTO> callback, Tenant tenantId) {
-        PreauthorizedPaymentDTO papDto = EntityFactory.create(PreauthorizedPaymentDTO.class);
-
-        papDto.tenant().set(tenantId);
-
-        PreauthorizedPaymentsCommons.fillCoveredItemsDto(papDto);
-
-        callback.onSuccess(papDto);
+        callback.onSuccess(PreauthorizedPaymentsCommons.createNewPreauthorizedPayment(tenantId));
     }
 
     @Override
