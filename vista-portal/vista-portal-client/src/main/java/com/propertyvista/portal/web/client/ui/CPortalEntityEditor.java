@@ -17,8 +17,12 @@ import com.pyx4j.commons.css.StyleManager;
 import com.pyx4j.commons.css.ThemeColor;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.forms.client.ui.form.EditableFormDecorator;
+import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.widgets.client.dialog.MessageDialog;
 
 public abstract class CPortalEntityEditor<E extends IEntity> extends CPortalEntityForm<E> {
+
+    private static final I18n i18n = I18n.get(CPortalEntityEditor.class);
 
     public CPortalEntityEditor(Class<E> clazz, IEditorView<? extends IEntity> view, String headerCaption, ThemeColor themeColor) {
         super(clazz, view, headerCaption, themeColor);
@@ -41,7 +45,12 @@ public abstract class CPortalEntityEditor<E extends IEntity> extends CPortalEnti
 
             @Override
             protected void onSave() {
-                getView().getPresenter().save();
+                if (!isValid()) {
+                    setUnconditionalValidationErrorRendering(true);
+                    MessageDialog.error(i18n.tr("Error"), i18n.tr("There has been an error. Please check your data and try again."));
+                } else {
+                    getView().getPresenter().save();
+                }
             }
 
             @Override
