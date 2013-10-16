@@ -52,7 +52,8 @@ public abstract class AbstractEditorActivity<E extends IEntity> extends Security
     @Override
     public void start(AcceptsOneWidget panel, EventBus eventBus) {
         super.start(panel, eventBus);
-        panel.setWidget(getView());
+        panel.setWidget(view);
+        view.setPresenter(this);
         populate();
     }
 

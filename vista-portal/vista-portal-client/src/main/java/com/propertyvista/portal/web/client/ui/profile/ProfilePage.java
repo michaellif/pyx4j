@@ -43,7 +43,6 @@ import com.propertyvista.portal.rpc.portal.web.dto.ResidentProfileDTO;
 import com.propertyvista.portal.rpc.portal.web.services.ResidentPictureUploadService;
 import com.propertyvista.portal.web.client.themes.EntityViewTheme;
 import com.propertyvista.portal.web.client.ui.CPortalEntityEditor;
-import com.propertyvista.portal.web.client.ui.profile.ProfilePageView.ProfilePagePresenter;
 import com.propertyvista.portal.web.client.ui.util.decorators.FormDecoratorBuilder;
 import com.propertyvista.shared.config.VistaFeatures;
 
@@ -51,15 +50,9 @@ public class ProfilePage extends CPortalEntityEditor<ResidentProfileDTO> {
 
     private static final I18n i18n = I18n.get(ProfilePage.class);
 
-    private ProfilePagePresenter presenter;
-
     public ProfilePage(ProfilePageViewImpl view) {
         super(ResidentProfileDTO.class, view, "My Profile", ThemeColor.contrast2);
         asWidget().setStyleName(EntityViewTheme.StyleName.EntityView.name());
-    }
-
-    public void setPresenter(ProfilePagePresenter presenter) {
-        this.presenter = presenter;
     }
 
     @Override
