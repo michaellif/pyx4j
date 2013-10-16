@@ -149,7 +149,7 @@ public class MaintenanceRequestForm extends CrmEntityForm<MaintenanceRequestDTO>
         int row = -1;
 
         panel.setH1(++row, 0, 2, i18n.tr("Issue Details"));
-        panel.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().requestId(), new CLabel<String>()), 20, true).build());
+        panel.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().requestId()), 20, true).build());
 
         panel.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().building(), buildingSelector), 20, true).build());
         buildingSelector.addValueChangeHandler(new ValueChangeHandler<Building>() {

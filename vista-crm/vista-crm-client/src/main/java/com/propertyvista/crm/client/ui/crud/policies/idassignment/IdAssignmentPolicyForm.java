@@ -108,12 +108,8 @@ public class IdAssignmentPolicyForm extends PolicyDTOTabPanelBasedForm<IdAssignm
                 CComboBox<IdAssignmentType> combo = (CComboBox<IdAssignmentType>) get(proto().type());
                 switch (getValue().target().getValue()) {
                 case application:
-                    combo.getOptions().clear();
-                    combo.setOptions(Arrays.asList(IdAssignmentType.generatedNumber, IdAssignmentType.generatedAlphaNumeric));
-                    combo.setEditable(false);
-                    break;
-
                 case customer:
+                case maintenance:
                     combo.getOptions().clear();
                     combo.setOptions(Arrays.asList(IdAssignmentType.generatedNumber, IdAssignmentType.generatedAlphaNumeric));
                     combo.setEditable(false);
