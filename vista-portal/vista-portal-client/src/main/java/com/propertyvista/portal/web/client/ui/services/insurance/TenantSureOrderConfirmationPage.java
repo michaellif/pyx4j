@@ -29,7 +29,7 @@ public class TenantSureOrderConfirmationPage extends CPortalEntityForm<TenantSur
     private static final I18n i18n = I18n.get(TenantSureOrderConfirmationPage.class);
 
     public TenantSureOrderConfirmationPage(TenantSureOrderConfirmationPageViewImpl view) {
-        super(TenantSureInsurancePolicyDTO.class, view, i18n.tr("TenanSure Order has been processed successfully!"), ThemeColor.contrast4);
+        super(TenantSureInsurancePolicyDTO.class, view, i18n.tr("TenanSure Order has been processed successfully!"), ThemeColor.contrast3);
 
         inheritViewable(false);
     }

@@ -23,7 +23,9 @@ import com.google.gwt.user.client.ui.HasVerticalAlignment;
 import com.google.gwt.user.client.ui.SimplePanel;
 
 import com.pyx4j.commons.css.ThemeColor;
+import com.pyx4j.forms.client.ui.decorators.IDecorator;
 import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
+import com.pyx4j.forms.client.ui.wizard.WizardDecorator;
 import com.pyx4j.forms.client.ui.wizard.WizardStep;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.Anchor;
@@ -65,6 +67,8 @@ public class TenantSureOrderWizard extends CPortalEntityWizard<TenantSureInsuran
 
     private TenantSureOrderWizardPersenter presenter;
 
+    private WizardDecorator<TenantSureInsurancePolicyDTO> wizardDecorator;
+
     public TenantSureOrderWizard(TenantSureOrderWizardView view, String endButtonCaption) {
         super(TenantSureInsurancePolicyDTO.class, view, i18n.tr("TenantSure Insurance"), endButtonCaption, ThemeColor.contrast3);
 
@@ -88,6 +92,8 @@ public class TenantSureOrderWizard extends CPortalEntityWizard<TenantSureInsuran
         pleaseFillOutTheFormMessage.setVisible(true);
         quoteSendButton.setVisible(false);
         quoteViewer.setVisible(false);
+
+        wizardDecorator.getBtnNext().setEnabled(true);
     }
 
     private BasicFlexFormPanel createPersonalInfoStep() {
@@ -211,6 +217,8 @@ public class TenantSureOrderWizard extends CPortalEntityWizard<TenantSureInsuran
 
         get(proto().quote()).setValue(quote);
         get(proto().quoteConfirmation()).setValue(quote.duplicate(TenantSureQuoteDTO.class));
+
+        wizardDecorator.getBtnNext().setEnabled(quote != null && !quote.quoteId().isNull());
     }
 
     public void setBillingAddress(AddressSimple billingAddress) {
@@ -222,5 +230,11 @@ public class TenantSureOrderWizard extends CPortalEntityWizard<TenantSureInsuran
 
     public void setPresenter(TenantSureOrderWizardPersenter presenter) {
         this.presenter = presenter;
+    }
+
+    @Override
+    protected IDecorator<?> createDecorator() {
+        wizardDecorator = (WizardDecorator<TenantSureInsurancePolicyDTO>) super.createDecorator();
+        return wizardDecorator;
     }
 }

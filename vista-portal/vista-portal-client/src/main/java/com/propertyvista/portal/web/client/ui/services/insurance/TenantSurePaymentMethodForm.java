@@ -26,6 +26,8 @@ import com.google.gwt.user.client.ui.Widget;
 import com.pyx4j.forms.client.ui.CCheckBox;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
+import com.pyx4j.forms.client.validators.EditableValueValidator;
+import com.pyx4j.forms.client.validators.ValidationError;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.security.client.ClientContext;
 
@@ -92,6 +94,16 @@ public class TenantSurePaymentMethodForm extends PaymentMethodForm<InsurancePaym
         panel.setWidget(2, 0, 2,
                 new FormDecoratorBuilder(iAgreeBox).customLabel(i18n.tr("I Agree")).labelWidth("100px").componentWidth("20px").contentWidth("20px").build());
 
+        addValueValidator(new EditableValueValidator<InsurancePaymentMethod>() {
+            @Override
+            public ValidationError isValid(CComponent<InsurancePaymentMethod> component, InsurancePaymentMethod value) {
+                if (!isAgreedToPreauthorizedPayments()) {
+                    return new ValidationError(component, i18n.tr("You must agree to Preauthorized Payments Agreement in order to continue!"));
+                } else {
+                    return null;
+                }
+            }
+        });
         return panel;
     }
 
@@ -127,6 +139,7 @@ public class TenantSurePaymentMethodForm extends PaymentMethodForm<InsurancePaym
 
     protected void onIAgree(boolean set) {
         isAgreedToPreauthorizedPayments = set;
+        revalidate();
     }
 
     public boolean isAgreedToPreauthorizedPayments() {
