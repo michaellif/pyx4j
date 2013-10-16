@@ -112,7 +112,7 @@ class AutopayAgreementMananger {
 
         //Set Tenant intervention flag
         if (VistaContext.getCurrentUserIfAvalable() instanceof CustomerUser) {
-            preauthorizedPayment.updatedByTenant().getValue().before(nextPaymentCycle.billingCycleStartDate().getValue());
+            preauthorizedPayment.updatedByTenant().setValue(nextPaymentCycle.billingCycleStartDate().getValue());
         }
         if (!nextPaymentCycle.billingCycleStartDate().equals(preauthorizedPayment.updatedBySystem())) {
             // reset review flag for old updates
