@@ -87,8 +87,10 @@ public class ProfilePage extends CPortalEntityEditor<ResidentProfileDTO> {
         mainPanel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().picture(), imageHolder)).customLabel("").build());
 
         mainPanel.setH1(++row, 0, 1, i18n.tr("Basic Information"));
+
         mainPanel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().person().name(), new CEntityLabel<Name>()), 200)
                 .customLabel(i18n.tr("Full Name")).build());
+
         mainPanel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().person().sex()), 100).build());
         mainPanel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().person().birthDate()), 150).build());
 

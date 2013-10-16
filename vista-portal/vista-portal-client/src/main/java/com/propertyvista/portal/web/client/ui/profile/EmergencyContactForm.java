@@ -15,6 +15,9 @@ package com.propertyvista.portal.web.client.ui.profile;
 
 import com.google.gwt.user.client.ui.IsWidget;
 
+import com.pyx4j.forms.client.events.PropertyChangeEvent;
+import com.pyx4j.forms.client.events.PropertyChangeHandler;
+import com.pyx4j.forms.client.events.PropertyChangeEvent.PropertyName;
 import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.ui.CEntityLabel;
 import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
@@ -38,22 +41,56 @@ public class EmergencyContactForm extends CEntityForm<EmergencyContact> {
 
     @Override
     public IsWidget createContent() {
-        BasicFlexFormPanel main = new BasicFlexFormPanel();
+        BasicFlexFormPanel mainPanel = new BasicFlexFormPanel();
 
         int row = -1;
-        main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().name(), new CEntityLabel<Name>()), 200).customLabel(i18n.tr("Full Name")).build());
-        main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().email()), 230).build());
-        main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().homePhone()), 200).build());
-        main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().mobilePhone()), 200).build());
-        main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().workPhone()), 200).build());
-        main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().address().street1()), 200).customLabel("Address").build());
-        main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().address().city()), 200).build());
-        main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().address().province()), 200).build());
-        main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().address().country()), 200).build());
-        main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().address().postalCode()), 200).build());
+        mainPanel
+                .setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().name(), new CEntityLabel<Name>()), 200).customLabel(i18n.tr("Full Name")).build());
 
-        AbstractPortalPanel.updateDecoratorsLayout(main, view.getWidgetLayout());
+        mainPanel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().name().firstName()), 200).build());
+        mainPanel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().name().lastName()), 200).build());
+        mainPanel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().name().namePrefix()), 70).build());
 
-        return main;
+        mainPanel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().email()), 230).build());
+        mainPanel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().homePhone()), 200).build());
+        mainPanel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().mobilePhone()), 200).build());
+        mainPanel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().workPhone()), 200).build());
+        mainPanel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().address().street1()), 200).customLabel("Address").build());
+        mainPanel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().address().city()), 200).build());
+        mainPanel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().address().province()), 200).build());
+        mainPanel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().address().country()), 200).build());
+        mainPanel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().address().postalCode()), 200).build());
+
+        calculateFieldsStatus();
+
+        addPropertyChangeHandler(new PropertyChangeHandler() {
+
+            @Override
+            public void onPropertyChange(PropertyChangeEvent event) {
+                if (event.isEventOfType(PropertyName.viewable)) {
+                    calculateFieldsStatus();
+                }
+            }
+        });
+
+        AbstractPortalPanel.updateDecoratorsLayout(mainPanel, view.getWidgetLayout());
+
+        return mainPanel;
     }
+
+    private void calculateFieldsStatus() {
+        if (isViewable()) {
+            get(proto().name()).setVisible(true);
+            get(proto().name().firstName()).setVisible(false);
+            get(proto().name().lastName()).setVisible(false);
+            get(proto().name().namePrefix()).setVisible(false);
+        } else {
+            get(proto().name()).setVisible(false);
+            get(proto().name().firstName()).setVisible(true);
+            get(proto().name().lastName()).setVisible(true);
+            get(proto().name().namePrefix()).setVisible(true);
+        }
+
+    }
+
 }
