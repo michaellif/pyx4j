@@ -77,7 +77,7 @@ public class AutoPayViewForm extends CPortalEntityEditor<AutoPayDTO> {
         mainPanel.setHR(++row, 0, 1);
 
         mainPanel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().total(), new CMoneyLabel()), 100).build());
-        mainPanel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().nextScheduledPaymentDate(), new CDateLabel()), 100).build());
+        mainPanel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().nextPaymentDate(), new CDateLabel()), 100).build());
 
         get(proto().coveredItems()).setVisible(isViewable());
         get(proto().coveredItemsDTO()).setVisible(!isViewable());

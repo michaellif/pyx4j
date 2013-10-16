@@ -140,7 +140,7 @@ public class PaymentServiceImpl implements PaymentService {
         dto.leaseId().set(lease.leaseId());
         dto.leaseStatus().set(lease.status());
 
-        dto.nextScheduledPaymentDate().setValue(ServerSideFactory.create(PaymentMethodFacade.class).getNextAutopayDate(lease));
+        dto.nextPaymentDate().setValue(ServerSideFactory.create(PaymentMethodFacade.class).getNextAutopayDate(lease));
 
         dto.total().setValue(BigDecimal.ZERO);
         for (AutopayAgreementCoveredItem item : dto.coveredItems()) {

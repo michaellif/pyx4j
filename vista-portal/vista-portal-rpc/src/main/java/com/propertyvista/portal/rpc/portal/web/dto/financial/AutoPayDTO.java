@@ -42,5 +42,5 @@ public interface AutoPayDTO extends PaymentDataDTO, com.propertyvista.dto.Preaut
     @Caption(name = "Payment total amount")
     IPrimitive<BigDecimal> total();
 
-    IPrimitive<LogicalDate> nextScheduledPaymentDate();
+    IPrimitive<LogicalDate> nextPaymentDate();
 }

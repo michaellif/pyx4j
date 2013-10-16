@@ -230,7 +230,7 @@ public class AutoPayWizard extends CPortalEntityWizard<AutoPayDTO> {
 
         panel.setBR(++row, 0, 1);
 
-        panel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().nextScheduledPaymentDate(), new CDateLabel()), 100).labelWidth("250px").build());
+        panel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().nextPaymentDate(), new CDateLabel()), 100).labelWidth("250px").build());
 
         panel.setHR(++row, 0, 1);
 
