@@ -94,10 +94,10 @@ public interface TenantSureCoverageDTO extends IEntity {
 
     // these are statement of fact questions
     @NotNull
-    @Caption(name = "Number of previous claims made by tenants")
+    @Caption(name = "Number of previous claims")
     IPrimitive<PreviousClaims> numberOfPreviousClaims();
 
-    @Caption(name = "Is any one of the tenants a smoker?")
+    @Caption(name = "Is any tenant a smoker?")
     @NotNull
     IPrimitive<Boolean> smoker();
 
