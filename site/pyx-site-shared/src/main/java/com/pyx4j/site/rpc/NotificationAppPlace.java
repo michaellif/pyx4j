@@ -29,6 +29,8 @@ public abstract class NotificationAppPlace extends AppPlace {
 
     private Notification notification;
 
+    private AppPlace continuePlace;
+
     public NotificationAppPlace() {
         setStable(false);
         // Xui
@@ -42,4 +44,11 @@ public abstract class NotificationAppPlace extends AppPlace {
         return notification;
     }
 
+    public AppPlace getContinuePlace() {
+        return continuePlace;
+    }
+
+    public void setContinuePlace(AppPlace continuePlace) {
+        this.continuePlace = continuePlace;
+    }
 }

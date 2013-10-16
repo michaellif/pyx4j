@@ -35,6 +35,7 @@ import com.google.web.bindery.event.shared.EventBus;
 
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.site.rpc.AppPlace;
+import com.pyx4j.site.rpc.NotificationAppPlace;
 import com.pyx4j.site.shared.domain.Notification;
 import com.pyx4j.widgets.client.PopupPanel;
 import com.pyx4j.widgets.client.dialog.ConfirmDecline;
@@ -76,8 +77,14 @@ public final class AppPlaceContorller extends PlaceController {
         return forwardedFrom;
     }
 
+    public void showNotification(Notification notification, AppPlace continuePlace) {
+        NotificationAppPlace notificationPlace = dispatcher.getNotificationPlace(notification);
+        notificationPlace.setContinuePlace(continuePlace);
+        sureGoTo(notificationPlace);
+    }
+
     public void showNotification(Notification notification) {
-        sureGoTo(dispatcher.getNotificationPlace(notification));
+        showNotification(notification, null);
     }
 
     public void goTo(final AppPlace newPlace) {
