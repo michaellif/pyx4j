@@ -19,7 +19,6 @@ import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.IsWidget;
 
-import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CDateLabel;
@@ -29,7 +28,6 @@ import com.pyx4j.forms.client.ui.folder.CEntityFolderItem;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
-import com.pyx4j.security.client.ClientContext;
 import com.pyx4j.site.client.ui.dialogs.AbstractEntitySelectorDialog;
 import com.pyx4j.site.client.ui.dialogs.EntitySelectorListDialog;
 import com.pyx4j.site.client.ui.prime.misc.CEntitySelectorLabel;
@@ -47,8 +45,6 @@ import com.propertyvista.dto.PreauthorizedPaymentDTO;
 public class PreauthorizedPaymentsForm extends CEntityDecoratableForm<PreauthorizedPaymentsDTO> {
 
     private static final I18n i18n = I18n.get(PreauthorizedPaymentsForm.class);
-
-    private static String cutOffDateWarning = i18n.tr("All changes will take effect after this date!");
 
     private final PreauthorizedPaymentsVisorView visor;
 
@@ -68,7 +64,7 @@ public class PreauthorizedPaymentsForm extends CEntityDecoratableForm<Preauthori
         main.getWidget(row, 0).getElement().getStyle().setFontSize(1.2, Unit.EM);
         main.getWidget(row, 0).setWidth("25em");
 
-        main.setWidget(row, 1, new FormDecoratorBuilder(inject(proto().nextScheduledPaymentDate(), new CDateLabel())).labelWidth(20).build());
+        main.setWidget(row, 1, new FormDecoratorBuilder(inject(proto().nextPaymentDate(), new CDateLabel())).labelWidth(20).build());
 
         main.setH3(++row, 0, 1, proto().preauthorizedPayments().getMeta().getCaption());
         main.getFlexCellFormatter().setColSpan(row, 0, 2);
@@ -81,13 +77,6 @@ public class PreauthorizedPaymentsForm extends CEntityDecoratableForm<Preauthori
     @Override
     protected void onValueSet(boolean populate) {
         super.onValueSet(populate);
-
-        LogicalDate today = new LogicalDate(ClientContext.getServerDate());
-        if (!today.after(getValue().nextScheduledPaymentDate().getValue())) {
-            get(proto().nextScheduledPaymentDate()).setNote(cutOffDateWarning, NoteStyle.Warn);
-        } else {
-            get(proto().nextScheduledPaymentDate()).setNote(null);
-        }
     }
 
     private class PreauthorizedPaymentFolder extends VistaBoxFolder<PreauthorizedPaymentDTO> {
