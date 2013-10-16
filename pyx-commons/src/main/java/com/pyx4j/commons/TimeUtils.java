@@ -21,7 +21,6 @@
 package com.pyx4j.commons;
 
 import java.util.Date;
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -134,31 +133,22 @@ public class TimeUtils {
     public static int durationParseSeconds(String value) {
         int multiplier = 1;
 
-        Map<String, Integer> timeUnits = new HashMap<String, Integer>();
-        timeUnits.put("s", 1);
-        timeUnits.put("sec", 1);
-        timeUnits.put("second", 1);
-        timeUnits.put("seconds", 1);
-        timeUnits.put("m", Consts.MIN2SEC);
-        timeUnits.put("min", Consts.MIN2SEC);
-        timeUnits.put("minute", Consts.MIN2SEC);
-        timeUnits.put("minutes", Consts.MIN2SEC);
-        timeUnits.put("h", Consts.HOURS2SEC);
-        timeUnits.put("hour", Consts.HOURS2SEC);
-        timeUnits.put("hours", Consts.HOURS2SEC);
-        timeUnits.put("d", Consts.DAY2HOURS * Consts.HOURS2SEC);
-        timeUnits.put("day", Consts.DAY2HOURS * Consts.HOURS2SEC);
-        timeUnits.put("days", Consts.DAY2HOURS * Consts.HOURS2SEC);
-        timeUnits.put("month", 30 * Consts.DAY2HOURS * Consts.HOURS2SEC);
-        timeUnits.put("months", 30 * Consts.DAY2HOURS * Consts.HOURS2SEC);
+        Map<String, Integer> timeUnits = new LinkedHashMap<String, Integer>();
+        timeUnits.put("months:month", 30 * Consts.DAY2HOURS * Consts.HOURS2SEC);
+        timeUnits.put("seconds:second:sec:s", 1);
+        timeUnits.put("minutes:minute:min:m", Consts.MIN2SEC);
+        timeUnits.put("hours:hour:h", Consts.HOURS2SEC);
+        timeUnits.put("days:day:d", Consts.DAY2HOURS * Consts.HOURS2SEC);
 
         String text = value.trim();
 
         for (Map.Entry<String, Integer> me : timeUnits.entrySet()) {
-            if (text.endsWith(me.getKey())) {
-                text = text.substring(0, text.length() - me.getKey().length());
-                multiplier = me.getValue();
-                break;
+            for (String unit : me.getKey().split(":")) {
+                if (text.endsWith(unit)) {
+                    text = text.substring(0, text.length() - unit.length()).trim();
+                    multiplier = me.getValue();
+                    break;
+                }
             }
         }
 
