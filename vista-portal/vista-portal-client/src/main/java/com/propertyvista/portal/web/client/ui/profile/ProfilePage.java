@@ -21,6 +21,7 @@ import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
+import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.commons.css.ThemeColor;
 import com.pyx4j.entity.shared.utils.EntityGraph;
 import com.pyx4j.forms.client.images.EntityFolderImages;
@@ -86,6 +87,26 @@ public class ProfilePage extends CPortalEntityEditor<ResidentProfileDTO> {
 
         mainPanel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().person().sex()), 100).build());
         mainPanel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().person().birthDate()), 150).build());
+
+        get(proto().person().birthDate()).addValueValidator(new EditableValueValidator<LogicalDate>() {
+            @Override
+            public ValidationError isValid(CComponent<LogicalDate> component, LogicalDate value) {
+                if (value != null && value.compareTo(new LogicalDate()) > 0) {
+                    return new ValidationError(component, i18n.tr("This date is in the future. Please enter your birthdate."));
+                }
+                return null;
+            }
+        });
+
+        get(proto().person().birthDate()).addValueValidator(new EditableValueValidator<LogicalDate>() {
+            @Override
+            public ValidationError isValid(CComponent<LogicalDate> component, LogicalDate value) {
+                if (value != null && value.compareTo(new LogicalDate(System.currentTimeMillis() - 120L * 365 * 24 * 60 * 60 * 1000)) < 0) {
+                    return new ValidationError(component, i18n.tr("This date is too far in the past. Please enter your birthdate."));
+                }
+                return null;
+            }
+        });
 
         mainPanel.setH1(++row, 0, 1, i18n.tr("Contact Information"));
         mainPanel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().person().homePhone()), 200).build());
