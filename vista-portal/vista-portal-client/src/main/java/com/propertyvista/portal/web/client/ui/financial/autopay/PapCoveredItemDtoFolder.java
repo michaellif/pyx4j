@@ -23,6 +23,8 @@ import com.google.gwt.user.client.ui.IsWidget;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CEntityForm;
+import com.pyx4j.forms.client.ui.CMoneyLabel;
+import com.pyx4j.forms.client.ui.CPercentageLabel;
 import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
 
@@ -63,17 +65,13 @@ public class PapCoveredItemDtoFolder extends VistaBoxFolder<PreauthorizedPayment
 
             content.setWidget(++row, 0,
                     new FormDecoratorBuilder(inject(proto().billableItem(), new PapBillableItemLabel()), 200).customLabel(i18n.tr("Lease Charge")).build());
-            content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().billableItem().agreedPrice()), 100).customLabel(i18n.tr("Price")).build());
-            content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().covered()), 100).build());
+            content.setWidget(++row, 0,
+                    new FormDecoratorBuilder(inject(proto().billableItem().agreedPrice(), new CMoneyLabel()), 100).customLabel(i18n.tr("Price")).build());
+            content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().covered(), new CMoneyLabel()), 100).build());
             content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().amount()), 100).customLabel(i18n.tr("Payment")).build());
-            content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().percent()), 100).build());
+            content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().percent(), new CPercentageLabel()), 100).build());
 
             // tweaks:
-
-            get(proto().billableItem().agreedPrice()).setEditable(false);
-            get(proto().covered()).setEditable(false);
-            get(proto().percent()).setEditable(false);
-
             get(proto().amount()).addValueChangeHandler(new ValueChangeHandler<BigDecimal>() {
                 @Override
                 public void onValueChange(ValueChangeEvent<BigDecimal> event) {

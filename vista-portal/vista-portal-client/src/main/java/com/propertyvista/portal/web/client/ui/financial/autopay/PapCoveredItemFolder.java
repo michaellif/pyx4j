@@ -19,6 +19,7 @@ import com.google.gwt.user.client.ui.IsWidget;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CEntityForm;
+import com.pyx4j.forms.client.ui.CMoneyLabel;
 import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
 
@@ -64,8 +65,9 @@ public class PapCoveredItemFolder extends VistaBoxFolder<AutopayAgreement.Autopa
 
             content.setWidget(++row, 0,
                     new FormDecoratorBuilder(inject(proto().billableItem(), new PapBillableItemLabel()), 200).customLabel(i18n.tr("Lease Charge")).build());
-            content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().billableItem().agreedPrice()), 100).customLabel(i18n.tr("Price")).build());
-            content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().amount()), 100).customLabel(i18n.tr("Payment")).build());
+            content.setWidget(++row, 0,
+                    new FormDecoratorBuilder(inject(proto().billableItem().agreedPrice(), new CMoneyLabel()), 100).customLabel(i18n.tr("Price")).build());
+            content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().amount(), new CMoneyLabel()), 100).customLabel(i18n.tr("Payment")).build());
 
             get(proto().amount()).asWidget().getElement().getStyle().setFontWeight(FontWeight.BOLD);
 
