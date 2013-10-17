@@ -21,13 +21,16 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.server.Persistence;
+import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 
 import com.propertyvista.biz.legal.N4ManagementFacade;
 import com.propertyvista.crm.rpc.dto.legal.n4.LegalNoticeCandidateDTO;
 import com.propertyvista.crm.rpc.dto.legal.n4.N4GenerationSettingsDTO;
 import com.propertyvista.crm.rpc.services.legal.N4GenerationToolService;
 import com.propertyvista.domain.legal.LegalNoticeCandidate;
+import com.propertyvista.domain.legal.N4LegalLetter;
 import com.propertyvista.domain.tenant.lease.Lease;
+import com.propertyvista.server.common.util.AddressRetriever;
 
 public class N4GenerationToolServiceImpl implements N4GenerationToolService {
 
@@ -37,19 +40,36 @@ public class N4GenerationToolServiceImpl implements N4GenerationToolService {
 
         Vector<LegalNoticeCandidateDTO> dtoCandidates = new Vector<LegalNoticeCandidateDTO>(n4Candidates.size());
         for (LegalNoticeCandidate candidate : n4Candidates) {
-            LegalNoticeCandidateDTO dto = candidate.duplicate(LegalNoticeCandidateDTO.class);
-            Lease lease = Persistence.service().retrieve(Lease.class, dto.leaseId().getPrimaryKey());
-            Persistence.service().retrieve(lease.unit());
-            Persistence.service().retrieve(lease.unit().building());
-            dto.building().setValue(lease.unit().building().propertyCode().getValue());
-            dtoCandidates.add(dto);
+            dtoCandidates.add(makeLegalNoticeCandidateDto(candidate));
         }
+
         callback.onSuccess(dtoCandidates);
     }
 
     @Override
     public void process(AsyncCallback<String> callback, Vector<Lease> accepted) {
         callback.onSuccess("meh");
+    }
+
+    private LegalNoticeCandidateDTO makeLegalNoticeCandidateDto(LegalNoticeCandidate candidate) {
+        LegalNoticeCandidateDTO dto = candidate.duplicate(LegalNoticeCandidateDTO.class);
+        Lease lease = Persistence.service().retrieve(Lease.class, dto.leaseId().getPrimaryKey());
+        Persistence.service().retrieve(lease.unit());
+        Persistence.service().retrieve(lease.unit().building());
+        dto.building().setValue(lease.unit().building().propertyCode().getValue());
+        dto.address().setValue(AddressRetriever.getUnitLegalAddress(lease.unit()).getStringView());
+        dto.unit().setValue(lease.unit().info().number().getValue());
+        dto.leaseIdString().setValue(lease.leaseId().getValue());
+        dto.moveIn().setValue(lease.actualMoveIn().getValue());
+        dto.moveOut().setValue(lease.expectedMoveOut().getValue());
+        dto.n4Issued().setValue(pastN4Count(lease));
+        return dto;
+    }
+
+    private int pastN4Count(Lease leaseId) {
+        EntityQueryCriteria<N4LegalLetter> criteria = EntityQueryCriteria.create(N4LegalLetter.class);
+        criteria.eq(criteria.proto().lease(), leaseId);
+        return Persistence.service().count(criteria);
     }
 
 }
