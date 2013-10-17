@@ -18,6 +18,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 
+import org.junit.Ignore;
 import org.junit.Test;
 
 import com.yardi.entity.mits.Customerinfo;
@@ -52,6 +53,7 @@ import com.propertyvista.yardi.mock.RtCustomerUpdateEvent;
 import com.propertyvista.yardi.mock.RtCustomerUpdater;
 import com.propertyvista.yardi.services.YardiResidentTransactionsService;
 
+@Ignore
 public class YardiLeaseChargesTest extends YardiTestBase {
 
     public static final String PROPERTY_CODE = "prop123";

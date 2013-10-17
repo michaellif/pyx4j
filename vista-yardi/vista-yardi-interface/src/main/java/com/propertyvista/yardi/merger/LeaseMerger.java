@@ -144,9 +144,10 @@ public class LeaseMerger {
                     if (serviceItemRecived) {
                         // This is wrong but we will the items to show.
                         lease.currentTerm().version().leaseProducts().featureItems().add(item);
+                        String msg = SimpleMessageFormat.format("multiple serviceItems detected on lease {0}", lease.leaseId());
+                        log.info("      " + msg);
                         if (executionMonitor != null) {
-                            executionMonitor.addFailedEvent("chargesChanged",
-                                    SimpleMessageFormat.format("multiple serviceItems detected on lease {0}", lease.leaseId()));
+                            executionMonitor.addFailedEvent("chargesChanged", msg);
                         }
                     } else {
                         // replace if service
