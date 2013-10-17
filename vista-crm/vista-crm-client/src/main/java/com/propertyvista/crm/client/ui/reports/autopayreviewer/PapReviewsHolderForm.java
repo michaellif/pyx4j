@@ -142,8 +142,8 @@ public class PapReviewsHolderForm extends CEntityDecoratableForm<PapReviewsHolde
 
         FlowPanel superCaptionsPanel = new FlowPanel();
         superCaptionsPanel.addStyleName(Styles.AutoPaySuperCaptionsPanel.name());
-        superCaptionsPanel.add(new HTML(i18n.tr("Suspended")));
-        superCaptionsPanel.add(new HTML(i18n.tr("Suggested")));
+        superCaptionsPanel.add(new HTML(i18n.tr("Previous")));
+        superCaptionsPanel.add(new HTML(i18n.tr("Current")));
         tableHeaderPanel.add(superCaptionsPanel);
 
         FlowPanel captionsPanel = new FlowPanel();
@@ -214,11 +214,11 @@ public class PapReviewsHolderForm extends CEntityDecoratableForm<PapReviewsHolde
                                 .papReviewsTotalCount().getValue()));
                         if (getValue().papReviewsTotalCount().getValue() != getValue().papReviews().size()) {
                             toggleSelectEverythingAnchor.setVisible(true);
-                            toggleSelectEverythingAnchor.setText(i18n.tr("Select all {0,number,#,##0} suspended AutoPays", getValue().papReviewsTotalCount()
+                            toggleSelectEverythingAnchor.setText(i18n.tr("Select all {0,number,#,##0} AutoPays for review", getValue().papReviewsTotalCount()
                                     .getValue()));
                         }
                     } else {
-                        counterPanel.setText(i18n.tr("Displaying {0,number,#,##0} of {1,number,#,##0} suspended AutoPays", getValue().papReviews().size(),
+                        counterPanel.setText(i18n.tr("Displaying {0,number,#,##0} of {1,number,#,##0} AutoPays for review", getValue().papReviews().size(),
                                 getValue().papReviewsTotalCount().getValue()));
                         toggleSelectEverythingAnchor.setVisible(false);
                         toggleSelectEverythingAnchor.setText("");
@@ -226,10 +226,10 @@ public class PapReviewsHolderForm extends CEntityDecoratableForm<PapReviewsHolde
                 } else {
                     toggleSelectEverythingAnchor.setVisible(true);
                     toggleSelectEverythingAnchor.setText(i18n.tr("Clear selection"));
-                    counterPanel.setText(i18n.tr("All {0,number,#,##0} suspended AutoPays are selected.", getValue().papReviewsTotalCount().getValue()));
+                    counterPanel.setText(i18n.tr("All {0,number,#,##0} AutoPays for review are selected.", getValue().papReviewsTotalCount().getValue()));
                 }
             } else {
-                counterPanel.setText(i18n.tr("No suspended AutoPays have been found"));
+                counterPanel.setText(i18n.tr("No AutoPays for review have been found"));
             }
         }
     }
