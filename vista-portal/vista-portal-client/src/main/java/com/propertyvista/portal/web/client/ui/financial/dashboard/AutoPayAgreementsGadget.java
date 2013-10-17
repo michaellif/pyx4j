@@ -167,6 +167,9 @@ public class AutoPayAgreementsGadget extends AbstractGadget<FinancialDashboardVi
             @Override
             protected void onValueSet(boolean populate) {
                 super.onValueSet(populate);
+
+                get(proto().paymentMethod()).setVisible(!getValue().paymentMethod().isNull());
+
                 ((CEntityFolderItem<AutoPayInfoDTO>) getParent()).setRemovable(!getValue().paymentMethod().isEmpty());
             }
         }

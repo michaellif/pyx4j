@@ -84,4 +84,12 @@ public class AutoPayViewForm extends CPortalEntityEditor<AutoPayDTO> {
 
         return mainPanel;
     }
+
+    @Override
+    protected void onValueSet(boolean populate) {
+        super.onValueSet(populate);
+
+        get(proto().paymentMethod()).setVisible(!getValue().paymentMethod().isNull());
+//        ((EditableFormDecorator<AutoPayDTO>) getDecorator()).getBtnEdit().setVisible(!getValue().paymentMethod().isNull());
+    }
 }

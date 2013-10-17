@@ -112,6 +112,10 @@ public class AutoPayWizardServiceImpl extends AbstractCrudServiceDtoImpl<Autopay
     protected void enhanceRetrieved(AutopayAgreement bo, AutoPayDTO to, com.pyx4j.entity.rpc.AbstractCrudService.RetrieveTarget retrieveTarget) {
         super.enhanceRetrieved(bo, to, retrieveTarget);
 
+        if (!to.tenant().equals(TenantAppContext.getCurrentUserTenant())) {
+            to.paymentMethod().set(null);
+        }
+
         Lease lease = TenantAppContext.getCurrentUserLease();
         Persistence.service().retrieve(lease.unit().building());
 

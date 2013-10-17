@@ -19,7 +19,7 @@ import com.pyx4j.entity.annotations.Transient;
 import com.propertyvista.portal.domain.dto.financial.PaymentInfoDTO;
 
 @Transient
-@ToStringFormat("${0}, {1}")
+@ToStringFormat("${0}{1,choice,null#|!null#, {1}}")
 public interface AutoPayInfoDTO extends PaymentInfoDTO {
 
 }
