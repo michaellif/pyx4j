@@ -54,6 +54,8 @@ import com.propertyvista.crm.client.ui.reports.autopayreviewer.PapReviewFolder;
 import com.propertyvista.crm.client.ui.reports.autopayreviewer.PapReviewsHolderForm;
 import com.propertyvista.crm.client.ui.tools.n4generation.LegalNoticeCandidateFolderHolderForm;
 import com.propertyvista.crm.client.ui.tools.n4generation.LegalNoticeCandidateForm;
+import com.propertyvista.crm.client.ui.tools.n4generation.N4GenerationToolViewImpl;
+import com.propertyvista.crm.client.ui.tools.n4generation.base.BulkOperationToolViewImpl;
 import com.propertyvista.crm.client.ui.tools.n4generation.base.ItemsHolderForm;
 import com.propertyvista.crm.client.ui.wizard.creditcheck.components.CreditCheckReportTypeSelector;
 
@@ -704,7 +706,38 @@ public class CrmTheme extends VistaTheme {
     }
 
     private void initBulkOperationToolStyles() {
-        Style style = new Style("." + ItemsHolderForm.Styles.BulkFolderHolder.name());
+        Style style;
+
+        style = new Style("." + BulkOperationToolViewImpl.Styles.BulkOperationButtonsPanel.name());
+        style.addProperty("padding", "0px");
+        style.addProperty("height", "30px");
+        style.addProperty("padding-top", "5px");
+        style.addProperty("text-align", "center");
+        style.addProperty("width", "100%");
+        addStyle(style);
+
+        style = new Style("." + ItemsHolderForm.Styles.BulkStatsPanel.name());
+        style.addProperty("text-align", "center");
+        style.addProperty("font-weight", "bold");
+        style.addProperty("padding-top", "5px");
+        style.addProperty("padding-bottom", "10px");
+        style.addProperty("width", "100%");
+        addStyle(style);
+
+        style = new Style("." + ItemsHolderForm.Styles.BulkStatsPanel.name() + " div");
+        style.addProperty("display", "inline");
+        addStyle(style);
+
+        style = new Style("." + ItemsHolderForm.Styles.BulkStatsPanel.name() + " a");
+        style.addProperty("margin-left", "20px");
+        style.addProperty("display", "inline");
+        addStyle(style);
+
+        style = new Style("." + ItemsHolderForm.Styles.BulkActionsPanel.name());
+        style.addProperty("height", "0px");
+        addStyle(style);
+
+        style = new Style("." + ItemsHolderForm.Styles.BulkFolderHolder.name());
         style.addProperty("overflow", "auto");
         style.addProperty("position", "absolute");
         style.addProperty("top", "73px");
@@ -716,6 +749,7 @@ public class CrmTheme extends VistaTheme {
         style = new Style("." + ItemsHolderForm.Styles.BulkFolderHolder.name() + " .EntityFolderBoxItem");
         style.addProperty("padding", "0px");
         addStyle(style);
+
     }
 
     private void initAutoPayReviewToolStyles() {
@@ -952,9 +986,19 @@ public class CrmTheme extends VistaTheme {
     }
 
     private void initN4GenerationToolStyles() {
-        Style style = new Style("." + LegalNoticeCandidateFolderHolderForm.Styles.LegalNoticeCandidateCaptions.name());
+
+        Style style;
+
+        style = new Style("." + N4GenerationToolViewImpl.Styles.N4GenerationToolView.name() + " ." + ItemsHolderForm.Styles.BulkActionsPanel.name()
+                + " .pyx4j_CheckBox:first-child");
         style.addProperty("position", "relative");
-        style.addProperty("left", "26px");
+        style.addProperty("top", "-23px");
+        style.addProperty("left", "1px");
+        addStyle(style);
+
+        style = new Style("." + LegalNoticeCandidateFolderHolderForm.Styles.LegalNoticeCandidateCaptions.name());
+        style.addProperty("position", "relative");
+        style.addProperty("left", "21px");
         addStyle(style);
 
         style = new Style("." + LegalNoticeCandidateFolderHolderForm.Styles.LegalNoticeCandidateCaptions.name() + " div");

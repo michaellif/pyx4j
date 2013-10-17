@@ -76,7 +76,7 @@ public abstract class AbstractBulkOperationToolActivity<Settings extends IEntity
                 }
             }, makeProducedItems(view.isEverythingSelected() ? items : view.getMarkedItems()));
         } else {
-            view.showMessage(i18n.tr("Please select some AutoPays first"));
+            view.showMessage(i18n.tr("Please select some items first"));
         }
     }
 

@@ -43,8 +43,6 @@ public abstract class BulkOperationToolViewImpl<Settings extends IEntity, Item e
 
     private final static I18n i18n = I18n.get(BulkOperationToolViewImpl.class);
 
-    private static final int PAGE_INCREMENT = 10;
-
     private BulkOperationToolView.Presenter presenter;
 
     private final Class<Holder> holderClass;
@@ -55,7 +53,15 @@ public abstract class BulkOperationToolViewImpl<Settings extends IEntity, Item e
 
     private Range visibleRange;
 
-    public BulkOperationToolViewImpl(CEntityForm<Settings> settingsForm, Class<Holder> holderClass, ItemsHolderForm<Item, Holder> itemsHolderForm) {
+    private Button acceptButton;
+
+    private int pageIncrement;
+
+    public BulkOperationToolViewImpl(String caption, CEntityForm<Settings> settingsForm, Class<Holder> holderClass,
+            ItemsHolderForm<Item, Holder> itemsHolderForm) {
+
+        this.pageIncrement = 10;
+
         FlowPanel viewPanel = new FlowPanel();
         viewPanel.getElement().getStyle().setPosition(Position.RELATIVE);
         viewPanel.setSize("100%", "100%");
@@ -91,18 +97,18 @@ public abstract class BulkOperationToolViewImpl<Settings extends IEntity, Item e
 
         viewPanel.add(itemsHolderForm);
 
-        addHeaderToolbarItem(new Button(i18n.tr("Accept Selected"), new Command() {
+        addHeaderToolbarItem(acceptButton = new Button(i18n.tr("Accept Selected"), new Command() {
             @Override
             public void execute() {
                 BulkOperationToolViewImpl.this.acceptMarked();
             }
         }));
 
-        setCaption(i18n.tr("Suspended AutoPays Review"));
+        setCaption(caption);
         setContentPane(viewPanel);
         setSize("100%", "100%");
 
-        visibleRange = new Range(0, PAGE_INCREMENT);
+        visibleRange = new Range(0, pageIncrement);
     }
 
     @Override
@@ -122,7 +128,7 @@ public abstract class BulkOperationToolViewImpl<Settings extends IEntity, Item e
 
     @Override
     public void resetVisibleRange() {
-        visibleRange = new Range(0, PAGE_INCREMENT);
+        visibleRange = new Range(0, pageIncrement);
     }
 
     @Override
@@ -165,12 +171,20 @@ public abstract class BulkOperationToolViewImpl<Settings extends IEntity, Item e
         MessageDialog.info(message);
     }
 
+    protected void setAcceptButtonCaption(String caption) {
+        acceptButton.setCaption(caption);
+    }
+
+    protected void setPageIncrement(int pageIncrement) {
+        this.pageIncrement = pageIncrement;
+    }
+
     private Holder createHolderEntity() {
         return EntityFactory.create(holderClass);
     }
 
     private void acceptMarked() {
-        visibleRange = new Range(0, PAGE_INCREMENT);
+        visibleRange = new Range(0, pageIncrement);
 
         itemsHolderForm.setUnconditionalValidationErrorRendering(true);
         boolean isEditable = itemsHolderForm.isEditable(); // validations can fail only when form is editable so we force it to be editable
@@ -194,9 +208,9 @@ public abstract class BulkOperationToolViewImpl<Settings extends IEntity, Item e
     }
 
     private void showMore() {
-        this.visibleRange = new Range(0, itemsHolderForm.getValue() == null || itemsHolderForm.getValue().isNull() ? PAGE_INCREMENT : itemsHolderForm
-                .getValue().items().size()
-                + PAGE_INCREMENT);
+        this.visibleRange = new Range(0, itemsHolderForm.getValue() == null || itemsHolderForm.getValue().isNull() ? pageIncrement : itemsHolderForm.getValue()
+                .items().size()
+                + pageIncrement);
         this.presenter.onRangeChanged();
     }
 
