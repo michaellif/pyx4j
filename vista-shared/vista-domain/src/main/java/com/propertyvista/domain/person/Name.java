@@ -14,6 +14,7 @@
 package com.propertyvista.domain.person;
 
 import com.pyx4j.entity.annotations.BusinessEqualValue;
+import com.pyx4j.entity.annotations.EmbeddedEntity;
 import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IEntity;
@@ -22,6 +23,7 @@ import com.pyx4j.i18n.annotations.I18n;
 import com.pyx4j.i18n.annotations.Translate;
 import com.pyx4j.i18n.shared.I18nEnum;
 
+@EmbeddedEntity
 public interface Name extends IEntity {
 
     @I18n
