@@ -183,6 +183,7 @@ public class Dialog_v2 implements ProvidesResize {
                 layout();
             }
         });
+
     }
 
     public void setCaption(String caption) {
