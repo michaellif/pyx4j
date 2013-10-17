@@ -19,4 +19,5 @@ import com.propertyvista.crm.rpc.dto.legal.n4.N4GenerationSettingsDTO;
 
 public interface N4GenerationToolView extends BulkOperationToolView<N4GenerationSettingsDTO, LegalNoticeCandidateDTO> {
 
+    void displayN4DownloadLink(String url);
 }

@@ -55,28 +55,28 @@ public abstract class AbstractBulkOperationToolActivity<Settings extends IEntity
 
     @Override
     public void populate() {
-        view.setLoading(true);
+        getView().setLoading(true);
         service.getItems(new DefaultAsyncCallback<Vector<Item>>() {
             @Override
             public void onSuccess(Vector<Item> items) {
                 AbstractBulkOperationToolActivity.this.items = items;
-                AbstractBulkOperationToolActivity.this.view.resetVisibleRange();
+                AbstractBulkOperationToolActivity.this.getView().resetVisibleRange();
                 AbstractBulkOperationToolActivity.this.populateView();
             }
-        }, view.getFilterSettings());
+        }, getView().getFilterSettings());
     }
 
     @Override
     public void acceptMarked() {
-        if (!items.isEmpty() && (view.isEverythingSelected() || !view.getMarkedItems().isEmpty())) {
+        if (!items.isEmpty() && (getView().isEverythingSelected() || !getView().getMarkedItems().isEmpty())) {
             service.process(new DefaultAsyncCallback<String>() {
                 @Override
                 public void onSuccess(String deferredCorrelationId) {
                     startAccetanceProgress(deferredCorrelationId);
                 }
-            }, makeProducedItems(view.isEverythingSelected() ? items : view.getMarkedItems()));
+            }, makeProducedItems(getView().isEverythingSelected() ? items : getView().getMarkedItems()));
         } else {
-            view.showMessage(i18n.tr("Please select some items first"));
+            getView().showMessage(i18n.tr("Please select some items first"));
         }
     }
 
@@ -87,8 +87,8 @@ public abstract class AbstractBulkOperationToolActivity<Settings extends IEntity
 
     @Override
     public void start(AcceptsOneWidget panel, EventBus eventBus) {
-        panel.setWidget(view);
-        view.setPresenter(this);
+        panel.setWidget(getView());
+        getView().setPresenter(this);
     }
 
     @Override
@@ -98,22 +98,24 @@ public abstract class AbstractBulkOperationToolActivity<Settings extends IEntity
 
     @Override
     public void onRangeChanged() {
-        view.setLoading(true);
+        getView().setLoading(true);
         populateView();
     }
 
     protected abstract AcceptedItems makeProducedItems(List<Item> list);
 
-    private void populateView() {
-        int start = view.getVisibleRange().getStart();
-        int end = Math.min(items.size(), start + view.getVisibleRange().getLength());
+    protected abstract void onSelectedProccessSuccess(DeferredProcessProgressResponse result);
 
-        view.setRowData(view.getVisibleRange().getStart(), items.size(), items.subList(start, end));
-        view.setLoading(false);
+    private void populateView() {
+        int start = getView().getVisibleRange().getStart();
+        int end = Math.min(items.size(), start + getView().getVisibleRange().getLength());
+
+        getView().setRowData(getView().getVisibleRange().getStart(), items.size(), items.subList(start, end));
+        getView().setLoading(false);
     }
 
     private void startAccetanceProgress(String deferredCorrelationId) {
-        DeferredProcessDialog d = new DeferredProcessDialog(i18n.tr("Accept Selected"), i18n.tr("Accepting Auto Pay changes ..."), false) {
+        DeferredProcessDialog d = new DeferredProcessDialog("", i18n.tr("Processing..."), false) {
             @Override
             public void onDeferredSuccess(DeferredProcessProgressResponse result) {
                 super.onDeferredSuccess(result);
@@ -122,6 +124,10 @@ public abstract class AbstractBulkOperationToolActivity<Settings extends IEntity
         };
         d.show();
         d.startProgress(deferredCorrelationId);
+    }
+
+    public BulkOperationToolView<Settings, Item> getView() {
+        return view;
     }
 
 }

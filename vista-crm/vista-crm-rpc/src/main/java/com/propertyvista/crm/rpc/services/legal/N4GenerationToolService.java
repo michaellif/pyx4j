@@ -26,4 +26,7 @@ public interface N4GenerationToolService extends AbstractBulkOperationService<N4
     @Override
     void getItems(AsyncCallback<Vector<LegalNoticeCandidateDTO>> callback, N4GenerationSettingsDTO settings);
 
+    @Override
+    public void process(AsyncCallback<String> callback, Vector<Lease> accepted);
+
 }

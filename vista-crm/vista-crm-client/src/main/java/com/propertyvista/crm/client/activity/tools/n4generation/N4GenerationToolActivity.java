@@ -18,6 +18,7 @@ import java.util.Vector;
 
 import com.google.gwt.core.client.GWT;
 
+import com.pyx4j.gwt.rpc.deferred.DeferredProcessProgressResponse;
 import com.pyx4j.site.rpc.AppPlace;
 
 import com.propertyvista.crm.client.CrmSite;
@@ -40,6 +41,12 @@ public class N4GenerationToolActivity extends AbstractBulkOperationToolActivity<
             selectedLeases.add(noticeCandidate.leaseId());
         }
         return selectedLeases;
+    }
+
+    @Override
+    protected void onSelectedProccessSuccess(DeferredProcessProgressResponse result) {
+        // TODO
+        ((N4GenerationToolView) getView()).displayN4DownloadLink("TBD");
     }
 
 }
