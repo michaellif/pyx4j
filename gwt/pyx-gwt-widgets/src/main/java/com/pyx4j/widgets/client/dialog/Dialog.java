@@ -43,6 +43,8 @@ import com.google.gwt.event.dom.client.KeyDownHandler;
 import com.google.gwt.event.logical.shared.CloseHandler;
 import com.google.gwt.event.logical.shared.OpenEvent;
 import com.google.gwt.event.logical.shared.OpenHandler;
+import com.google.gwt.event.logical.shared.ResizeEvent;
+import com.google.gwt.event.logical.shared.ResizeHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.resources.client.ImageResource;
 import com.google.gwt.user.client.DOM;
@@ -85,13 +87,13 @@ public class Dialog extends PopupPanel implements ProvidesResize {
 
     private static final I18n i18n = I18n.get(Dialog.class);
 
-    private final DockPanel container;
-
-    private final CaptionPanel captionPanel;
-
     public static enum Type {
         Error, Warning, Info, Confirm
     }
+
+    private final DockPanel container;
+
+    private final CaptionPanel captionPanel;
 
     private FocusWidget firstFocusWidget;
 
@@ -171,6 +173,13 @@ public class Dialog extends PopupPanel implements ProvidesResize {
         setDialogOptions(options);
 
         setBody(body);
+
+        Window.addResizeHandler(new ResizeHandler() {
+            @Override
+            public void onResize(ResizeEvent event) {
+                position();
+            }
+        });
     }
 
     public void setCaption(String caption) {
