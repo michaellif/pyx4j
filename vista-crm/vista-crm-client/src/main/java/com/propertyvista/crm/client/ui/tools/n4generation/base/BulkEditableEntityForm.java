@@ -13,10 +13,21 @@
  */
 package com.propertyvista.crm.client.ui.tools.n4generation.base;
 
+import com.google.gwt.event.logical.shared.ValueChangeEvent;
+import com.google.gwt.event.logical.shared.ValueChangeHandler;
+
+import com.pyx4j.commons.css.IStyleName;
+
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
 import com.propertyvista.crm.rpc.dto.financial.autopayreview.BulkEditableEntity;
 
 public abstract class BulkEditableEntityForm<Item extends BulkEditableEntity> extends CEntityDecoratableForm<Item> {
+
+    public enum Styles implements IStyleName {
+
+        BulkOperationItemSelected;
+
+    }
 
     public BulkEditableEntityForm(Class<Item> clazz) {
         super(clazz);
@@ -24,6 +35,26 @@ public abstract class BulkEditableEntityForm<Item extends BulkEditableEntity> ex
 
     public void setChecked(boolean isChecked) {
         get(proto().isSelected()).setValue(isChecked);
+    }
+
+    @Override
+    public void addValidations() {
+        super.addValidations();
+        // This is a hack because we know that this is method called after createContent();
+        get(proto().isSelected()).addValueChangeHandler(new ValueChangeHandler<Boolean>() {
+            @Override
+            public void onValueChange(ValueChangeEvent<Boolean> event) {
+                asWidget().setStyleName(Styles.BulkOperationItemSelected.name(),
+                        (get(proto().isSelected()).getValue() != null && get(proto().isSelected()).getValue()));
+            }
+        });
+    }
+
+    @Override
+    protected void onValueSet(boolean populate) {
+        super.onValueSet(populate);
+        asWidget()
+                .setStyleName(Styles.BulkOperationItemSelected.name(), (get(proto().isSelected()).getValue() != null && get(proto().isSelected()).getValue()));
     }
 
 }

@@ -37,7 +37,7 @@ public abstract class ItemsHolderForm<Item extends BulkEditableEntity, Holder ex
 
     public enum Styles implements IStyleName {
 
-        BulkStatsPanel, BulkActionsPanel, BulkEverythingIsSelected, BulkSuperCaptionsPanel, BulkFolderHolder, AutoPayLoadMore
+        BulkStatsPanel, BulkActionsPanel, BulkSelectAllBox, BulkEverythingIsSelected, BulkSuperCaptionsPanel, BulkFolderHolder, AutoPayLoadMore
 
     }
 
@@ -132,6 +132,7 @@ public abstract class ItemsHolderForm<Item extends BulkEditableEntity, Holder ex
         actionsPanel.setStyleName(Styles.BulkActionsPanel.name());
 
         checkAllVisibleItems = new CheckBox();
+        checkAllVisibleItems.addStyleName(Styles.BulkSelectAllBox.name());
         checkAllVisibleItems.setTitle(i18n.tr(i18n.tr("Check/Uncheck all visible items")));
         checkAllVisibleItems.addClickHandler(new ClickHandler() {
             @Override
@@ -201,7 +202,7 @@ public abstract class ItemsHolderForm<Item extends BulkEditableEntity, Holder ex
                             toggleSelectEverythingAnchor.setText(i18n.tr("Select all {0,number,#,##0} items", getValue().totalItemCount().getValue()));
                         }
                     } else {
-                        counterPanel.setText(i18n.tr("Displaying {0,number,#,##0} of {1,number,#,##0} suspended items", getValue().items().size(), getValue()
+                        counterPanel.setText(i18n.tr("Displaying {0,number,#,##0} of {1,number,#,##0} items", getValue().items().size(), getValue()
                                 .totalItemCount().getValue()));
                         toggleSelectEverythingAnchor.setVisible(false);
                         toggleSelectEverythingAnchor.setText("");
@@ -209,10 +210,10 @@ public abstract class ItemsHolderForm<Item extends BulkEditableEntity, Holder ex
                 } else {
                     toggleSelectEverythingAnchor.setVisible(true);
                     toggleSelectEverythingAnchor.setText(i18n.tr("Clear selection"));
-                    counterPanel.setText(i18n.tr("All {0,number,#,##0} suspended items are selected.", getValue().items().size()));
+                    counterPanel.setText(i18n.tr("All {0,number,#,##0} items are selected.", getValue().totalItemCount().getValue()));
                 }
             } else {
-                counterPanel.setText(i18n.tr("No suspended AutoPays have been found"));
+                counterPanel.setText(i18n.tr("No results were found"));
             }
         }
 
