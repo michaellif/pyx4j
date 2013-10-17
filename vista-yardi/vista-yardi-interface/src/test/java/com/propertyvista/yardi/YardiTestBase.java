@@ -103,10 +103,14 @@ public class YardiTestBase extends IntegrationTestBase {
     }
 
     protected void yardiImportAll(PmcYardiCredential yardiCredential) throws RemoteException, YardiServiceException {
+        yardiImportAll(yardiCredential, 0, 0);
+    }
+
+    protected void yardiImportAll(PmcYardiCredential yardiCredential, int expectedErred, int expectedFailed) throws RemoteException, YardiServiceException {
         ExecutionMonitor executionMonitor = new ExecutionMonitor();
         YardiResidentTransactionsService.getInstance().updateAll(yardiCredential, executionMonitor);
-        assertEquals("Import Erred", Long.valueOf(0), executionMonitor.getErred());
-        assertEquals("Import Failed", Long.valueOf(0), executionMonitor.getFailed());
+        assertEquals("Import Erred", Long.valueOf(expectedErred), executionMonitor.getErred());
+        assertEquals("Import Failed", Long.valueOf(expectedFailed), executionMonitor.getFailed());
     }
 
     protected Building getBuilding(String propertyCode) {

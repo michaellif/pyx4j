@@ -335,7 +335,7 @@ public class YardiLeaseProcessor {
             newItems.add(createBillableItem(tr.getCharge().getDetail(), chargeCodeItemNo));
         }
 
-        LeaseChargesMergeStatus mergeStatus = new LeaseMerger().mergeBillableItems(newItems, lease);
+        LeaseChargesMergeStatus mergeStatus = new LeaseMerger().mergeBillableItems(newItems, lease, executionMonitor);
         if (!LeaseChargesMergeStatus.NoChange.equals(mergeStatus)) {
             ServerSideFactory.create(LeaseFacade.class).finalize(lease);
             log.debug("        >> Finalizing lease! <<");

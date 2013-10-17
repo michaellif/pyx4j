@@ -25,9 +25,11 @@ import com.yardi.entity.mits.YardiLease;
 import com.yardi.entity.resident.RTCustomer;
 
 import com.pyx4j.commons.LogicalDate;
+import com.pyx4j.commons.SimpleMessageFormat;
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.shared.IPrimitive;
 
+import com.propertyvista.biz.ExecutionMonitor;
 import com.propertyvista.biz.tenant.lease.LeaseFacade;
 import com.propertyvista.domain.financial.ARCode;
 import com.propertyvista.domain.financial.ARCode.ActionType;
@@ -97,7 +99,7 @@ public class LeaseMerger {
         lease.billingAccount().paymentAccepted().setValue(BillingAccount.PaymentAccepted.getPaymentType(rtCustomer.getPaymentAccepted()));
     }
 
-    public LeaseChargesMergeStatus mergeBillableItems(List<BillableItem> items, Lease lease) {
+    public LeaseChargesMergeStatus mergeBillableItems(List<BillableItem> items, Lease lease, ExecutionMonitor executionMonitor) {
         LeaseChargesMergeStatus mergeStatus = LeaseChargesMergeStatus.NoChange;
         List<BillableItem> lookupList = new ArrayList<BillableItem>(lease.currentTerm().version().leaseProducts().featureItems());
         for (BillableItem item : items) {
@@ -133,11 +135,24 @@ public class LeaseMerger {
         // if changes detected - set new lease products
         if (!LeaseChargesMergeStatus.NoChange.equals(mergeStatus)) {
             lease.currentTerm().version().leaseProducts().featureItems().clear();
+
+            boolean serviceItemRecived = false;
+
             for (BillableItem item : items) {
                 // process new item
                 if (isServiceItem(item)) {
-                    // replace if service
-                    lease.currentTerm().version().leaseProducts().serviceItem().set(item);
+                    if (serviceItemRecived) {
+                        // This is wrong but we will the items to show.
+                        lease.currentTerm().version().leaseProducts().featureItems().add(item);
+                        if (executionMonitor != null) {
+                            executionMonitor.addFailedEvent("chargesChanged",
+                                    SimpleMessageFormat.format("multiple serviceItems detected on lease {0}", lease.leaseId()));
+                        }
+                    } else {
+                        // replace if service
+                        lease.currentTerm().version().leaseProducts().serviceItem().set(item);
+                        serviceItemRecived = true;
+                    }
                 } else {
                     // new feature - add it
                     lease.currentTerm().version().leaseProducts().featureItems().add(item);

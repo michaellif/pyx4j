@@ -14,8 +14,8 @@
 package com.propertyvista.yardi.mock;
 
 import java.lang.reflect.Method;
-import java.util.HashMap;
 import java.util.Iterator;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 import org.apache.commons.lang.SerializationUtils;
@@ -57,7 +57,7 @@ public class PropertyManager {
         this.propertyId = propertyId;
         property = new com.yardi.entity.mits.Property();
         transactions = new ResidentTransactions();
-        leaseCharges = new HashMap<String, Map<String, Charge>>();
+        leaseCharges = new LinkedHashMap<String, Map<String, Charge>>();
 
         transactions.getProperty().add(new com.yardi.entity.resident.Property());
     }
@@ -190,7 +190,7 @@ public class PropertyManager {
         }
 
         if (!leaseCharges.containsKey(updater.getCustomerID())) {
-            leaseCharges.put(updater.getCustomerID(), new HashMap<String, Charge>());
+            leaseCharges.put(updater.getCustomerID(), new LinkedHashMap<String, Charge>());
         }
 
         Map<com.propertyvista.yardi.mock.Name, Property<?>> map = updater.getPropertyMap();

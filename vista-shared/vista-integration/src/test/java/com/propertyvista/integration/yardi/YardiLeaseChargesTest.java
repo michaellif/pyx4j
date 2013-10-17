@@ -29,10 +29,10 @@ import com.pyx4j.gwt.server.DateUtils;
 
 import com.propertyvista.biz.ExecutionMonitor;
 import com.propertyvista.biz.financial.payment.PaymentMethodFacade;
+import com.propertyvista.domain.payment.AutopayAgreement;
 import com.propertyvista.domain.payment.EcheckInfo;
 import com.propertyvista.domain.payment.LeasePaymentMethod;
 import com.propertyvista.domain.payment.PaymentType;
-import com.propertyvista.domain.payment.AutopayAgreement;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.tenant.Customer;
@@ -150,10 +150,8 @@ public class YardiLeaseChargesTest extends YardiTestBase {
         Persistence.service().commit();
     }
 
-    /*
-     * =====================================================================
-     * - Changing product amount: new charge appear in new term; PAD suspended
-     * =====================================================================
+    /**
+     * Changing product amount: new charge appear in new term; PAD suspended
      */
     @Test
     public void testChangingAmount() throws Exception {
@@ -191,10 +189,8 @@ public class YardiLeaseChargesTest extends YardiTestBase {
                 .lastRecordAmount(eval("1234.56 + 55"));
     }
 
-    /*
-     * ====================================================================================================
-     * - Changing product expiration date to a past date: expect product removed from new term; PAD suspended
-     * ====================================================================================================
+    /**
+     * Changing product expiration date to a past date: expect product removed from new term; PAD suspended
      */
     @Test
     public void testExpiredProduct() throws Exception {
@@ -230,10 +226,8 @@ public class YardiLeaseChargesTest extends YardiTestBase {
                 .lastRecordAmount(eval("1234.56"));
     }
 
-    /*
-     * ====================================================================================
-     * - Removing existing lease product: expect product removed from new term; PAD suspended
-     * ====================================================================================
+    /**
+     * Removing existing lease product: expect product removed from new term; PAD suspended
      */
     @Test
     public void testRemovingFeature() throws Exception {
@@ -257,10 +251,55 @@ public class YardiLeaseChargesTest extends YardiTestBase {
                 .lastRecordAmount(eval("1234.56"));
     }
 
-    /*
-     * ==========================================================
-     * - Any other update: reflected in new term; no changes to PAD
-     * ==========================================================
+    @Test
+    public void testAddingSecondRent() throws Exception {
+        // Ensure PAP is active
+        new PaymentAgreementTester(getLease().billingAccount())//
+                .count(1) //
+                .activeCount(1)//
+                .lastRecordAmount(eval("1234.56 + 50"));
+
+        new BillableItemTester(getLease().currentTerm().version().leaseProducts().featureItems().get(0)). //
+                uid("rpark:1"). //
+                agreedPrice("50.00");
+
+        {
+            // @formatter:off
+            LeaseChargeUpdater updater = new LeaseChargeUpdater(PROPERTY_CODE, CUSTOOMER_ID, "rent2").
+            set(LeaseChargeUpdater.Name.Description, "Second Rent").
+            set(LeaseChargeUpdater.Name.ServiceFromDate, DateUtils.detectDateformat("01-Aug-2012")).
+            set(LeaseChargeUpdater.Name.ServiceToDate, DateUtils.detectDateformat("31-Jul-2014")).
+            set(LeaseChargeUpdater.Name.ChargeCode, "rrent").
+            set(LeaseChargeUpdater.Name.GLAccountNumber, "40000301").
+            set(LeaseChargeUpdater.Name.Amount, "500.00").
+            set(LeaseChargeUpdater.Name.Comment, "Rent (05/2013)");        
+            // @formatter:on
+            MockEventBus.fireEvent(new LeaseChargeUpdateEvent(updater));
+        }
+
+        yardiImportAll(getYardiCredential(PROPERTY_CODE), 0, 1);
+
+        new BillableItemTester(getLease().currentTerm().version().leaseProducts().serviceItem()). //
+                uid("rrent:1"). //
+                agreedPrice("1234.56");
+
+        new BillableItemTester(getLease().currentTerm().version().leaseProducts().featureItems().get(0)). //
+                uid("rpark:1"). //
+                agreedPrice("50.00");
+
+        new BillableItemTester(getLease().currentTerm().version().leaseProducts().featureItems().get(1)). //
+                uid("rrent:2"). //
+                agreedPrice("500.00");
+
+        // Ensure PAP NOT suspended
+        new PaymentAgreementTester(getLease().billingAccount())//
+                .count(1)//
+                .activeCount(1)//
+                .lastRecordAmount(eval("1234.56 + 50"));
+    }
+
+    /**
+     * Any other update: reflected in new term; no changes to PAD
      */
     @Test
     public void testExtendingTerm() throws Exception {
@@ -298,9 +337,7 @@ public class YardiLeaseChargesTest extends YardiTestBase {
     }
 
     /*
-     * ===================================================================================
-     * - Terminating lease (no data received): lease charge = 0; features removed; PAD suspended
-     * =====================================================================================
+     * Terminating lease (no data received): lease charge = 0; features removed; PAD suspended
      */
     @Test
     public void testLeaseTermination() throws Exception {
