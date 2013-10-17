@@ -54,7 +54,7 @@ import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CComponentTheme;
 import com.pyx4j.forms.client.ui.Cursor;
 import com.pyx4j.forms.client.ui.decorators.WidgetDecorator.Builder.Alignment;
-import com.pyx4j.forms.client.ui.decorators.WidgetDecorator.Builder.Layout;
+import com.pyx4j.forms.client.ui.decorators.WidgetDecorator.Builder.LabelPosition;
 
 public class WidgetDecorator extends FlowPanel implements IDecorator<CComponent<?>> {
 
@@ -193,7 +193,7 @@ public class WidgetDecorator extends FlowPanel implements IDecorator<CComponent<
         add(labelHolder);
         add(containerPanel);
 
-        setLayout(builder.layout);
+        setLabelPosition(builder.labelPosition);
 
         updateLabelAlignment();
         updateNote();
@@ -250,22 +250,30 @@ public class WidgetDecorator extends FlowPanel implements IDecorator<CComponent<
         return component;
     }
 
-    public void setLayout(Layout layout) {
-        builder.layout = layout;
+    public void setLabelPosition(LabelPosition layout) {
+        builder.labelPosition = layout;
         switch (layout) {
-        case horisontal:
+        case left:
             labelHolder.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
             labelHolder.getElement().getStyle().setVerticalAlign(VerticalAlign.MIDDLE);
             containerPanel.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
             containerPanel.getElement().getStyle().setVerticalAlign(VerticalAlign.TOP);
             removeStyleDependentName(DefaultWidgetDecoratorTheme.StyleDependent.verticalAlign.name());
             break;
-        case vertical:
+        case top:
             labelHolder.getElement().getStyle().setDisplay(Display.BLOCK);
             containerPanel.getElement().getStyle().setDisplay(Display.BLOCK);
             addStyleDependentName(DefaultWidgetDecoratorTheme.StyleDependent.verticalAlign.name());
             break;
+        case hidden:
+            labelHolder.getElement().getStyle().setDisplay(Display.NONE);
+            break;
+
         }
+    }
+
+    public LabelPosition getLabelPosition() {
+        return builder.labelPosition;
     }
 
     protected void renderMandatoryStar() {
@@ -383,8 +391,8 @@ public class WidgetDecorator extends FlowPanel implements IDecorator<CComponent<
             left, right, center
         }
 
-        public enum Layout {
-            horisontal, vertical
+        public enum LabelPosition {
+            left, top, hidden
         }
 
         private final CComponent<?> component;
@@ -407,7 +415,7 @@ public class WidgetDecorator extends FlowPanel implements IDecorator<CComponent<
 
         private Alignment componentAlignment = Alignment.left;
 
-        private Layout layout = Layout.horisontal;
+        private LabelPosition labelPosition = LabelPosition.left;
 
         public Builder(final CComponent<?> component) {
             this.component = component;
@@ -441,8 +449,18 @@ public class WidgetDecorator extends FlowPanel implements IDecorator<CComponent<
             return this;
         }
 
-        public Builder componentWidth(String componentWidth) {
-            this.componentWidth = componentWidth;
+        public Builder labelAlignment(Alignment labelAlignment) {
+            this.labelAlignment = labelAlignment;
+            return this;
+        }
+
+        public Builder labelPosition(LabelPosition position) {
+            this.labelPosition = position;
+            return this;
+        }
+
+        public Builder customLabel(String customLabel) {
+            this.customLabel = customLabel;
             return this;
         }
 
@@ -451,18 +469,13 @@ public class WidgetDecorator extends FlowPanel implements IDecorator<CComponent<
             return this;
         }
 
-        public Builder labelAlignment(Alignment labelAlignment) {
-            this.labelAlignment = labelAlignment;
+        public Builder componentWidth(String componentWidth) {
+            this.componentWidth = componentWidth;
             return this;
         }
 
         public Builder componentAlignment(Alignment componentAlignment) {
             this.componentAlignment = componentAlignment;
-            return this;
-        }
-
-        public Builder layout(Layout layout) {
-            this.layout = layout;
             return this;
         }
 
@@ -473,11 +486,6 @@ public class WidgetDecorator extends FlowPanel implements IDecorator<CComponent<
 
         public Builder useLabelSemicolon(boolean useLabelSemicolon) {
             this.useLabelSemicolon = useLabelSemicolon;
-            return this;
-        }
-
-        public Builder customLabel(String customLabel) {
-            this.customLabel = customLabel;
             return this;
         }
 
