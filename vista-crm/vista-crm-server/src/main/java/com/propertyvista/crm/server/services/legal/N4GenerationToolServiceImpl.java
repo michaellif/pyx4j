@@ -30,6 +30,7 @@ import com.propertyvista.crm.rpc.services.legal.N4GenerationToolService;
 import com.propertyvista.domain.legal.LegalNoticeCandidate;
 import com.propertyvista.domain.legal.N4LegalLetter;
 import com.propertyvista.domain.tenant.lease.Lease;
+import com.propertyvista.server.common.util.AddressConverter;
 import com.propertyvista.server.common.util.AddressRetriever;
 
 public class N4GenerationToolServiceImpl implements N4GenerationToolService {
@@ -57,10 +58,12 @@ public class N4GenerationToolServiceImpl implements N4GenerationToolService {
         Persistence.service().retrieve(lease.unit());
         Persistence.service().retrieve(lease.unit().building());
         dto.building().setValue(lease.unit().building().propertyCode().getValue());
-        dto.address().setValue(AddressRetriever.getUnitLegalAddress(lease.unit()).getStringView());
+
+        dto.address().setValue(
+                new AddressConverter.StructuredToSimpleAddressConverter().createTO(AddressRetriever.getUnitLegalAddress(lease.unit())).getStringView());
         dto.unit().setValue(lease.unit().info().number().getValue());
         dto.leaseIdString().setValue(lease.leaseId().getValue());
-        dto.moveIn().setValue(lease.actualMoveIn().getValue());
+        dto.moveIn().setValue(lease.expectedMoveIn().getValue());
         dto.moveOut().setValue(lease.expectedMoveOut().getValue());
         dto.n4Issued().setValue(pastN4Count(lease));
         return dto;

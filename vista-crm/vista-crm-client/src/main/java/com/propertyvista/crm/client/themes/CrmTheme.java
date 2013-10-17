@@ -52,6 +52,7 @@ import com.propertyvista.crm.client.ui.reports.autopayreviewer.AutoPayReviewView
 import com.propertyvista.crm.client.ui.reports.autopayreviewer.PapReviewCaptionViewer;
 import com.propertyvista.crm.client.ui.reports.autopayreviewer.PapReviewFolder;
 import com.propertyvista.crm.client.ui.reports.autopayreviewer.PapReviewsHolderForm;
+import com.propertyvista.crm.client.ui.tools.n4generation.LegalNoticeCandidateFolderHolderForm;
 import com.propertyvista.crm.client.ui.tools.n4generation.LegalNoticeCandidateForm;
 import com.propertyvista.crm.client.ui.tools.n4generation.base.ItemsHolderForm;
 import com.propertyvista.crm.client.ui.wizard.creditcheck.components.CreditCheckReportTypeSelector;
@@ -711,6 +712,10 @@ public class CrmTheme extends VistaTheme {
         style.addProperty("left", "0px");
         style.addProperty("right", "0px");
         addStyle(style);
+
+        style = new Style("." + ItemsHolderForm.Styles.BulkFolderHolder.name() + " .EntityFolderBoxItem");
+        style.addProperty("padding", "0px");
+        addStyle(style);
     }
 
     private void initAutoPayReviewToolStyles() {
@@ -947,12 +952,50 @@ public class CrmTheme extends VistaTheme {
     }
 
     private void initN4GenerationToolStyles() {
-        Style style = new Style("." + LegalNoticeCandidateForm.Styles.LegalNoticeCandidateForm.name());
+        Style style = new Style("." + LegalNoticeCandidateFolderHolderForm.Styles.LegalNoticeCandidateCaptions.name());
+        style.addProperty("position", "relative");
+        style.addProperty("left", "26px");
         addStyle(style);
 
-        style = new Style("." + LegalNoticeCandidateForm.Styles.LegalNoticeCandidateForm.name() + " div");
+        style = new Style("." + LegalNoticeCandidateFolderHolderForm.Styles.LegalNoticeCandidateCaptions.name() + " div");
+        style.addProperty("position", "relative");
+        style.addProperty("display", "inline-block");
+        style.addProperty("font-weight", "bold");
+        style.addProperty("border-left", "1px dotted");
+        addStyle(style);
+
+        style = new Style("." + LegalNoticeCandidateFolderHolderForm.Styles.LegalNoticeCandidateCaptions.name() + " div div");
+        style.addProperty("border", "none");
+        addStyle(style);
+
+        style = new Style("." + LegalNoticeCandidateForm.Styles.LegalNoticeCandidate.name());
+        addStyle(style);
+
+        style = new Style("." + LegalNoticeCandidateForm.Styles.LegalNoticeCandidate.name() + " div");
         style.addProperty("display", "inline-block");
         style.addProperty("vertical-align", "middle");
+        addStyle(style);
+
+        style = new Style("." + LegalNoticeCandidateForm.Styles.LegalNoticeCandidateDataColumn.name());
+        style.addProperty("padding-left", "5px");
+        style.addProperty("padding-right", "5px");
+        style.addProperty("border-left", "1px dotted");
+        style.addProperty("width", "100px");
+        addStyle(style);
+
+        style = new Style("." + LegalNoticeCandidateForm.Styles.LegalNoticeCandidateDataNumberColumn.name());
+        style.addProperty("text-align", "right");
+        addStyle(style);
+
+        style = new Style("." + LegalNoticeCandidateForm.Styles.LegalNoticeCandidateDataNumberColumn.name() + " .FieldPanel");
+        style.addProperty("text-align", "right");
+        addStyle(style);
+
+        style = new Style("." + LegalNoticeCandidateForm.Styles.LegalNoticeCandidateDataColumnLong.name());
+        style.addProperty("padding-left", "5px");
+        style.addProperty("padding-right", "5px");
+        style.addProperty("border-left", "1px dotted");
+        style.addProperty("width", "200px");
         addStyle(style);
 
     }

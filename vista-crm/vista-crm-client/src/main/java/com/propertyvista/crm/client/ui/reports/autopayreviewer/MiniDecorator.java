@@ -19,12 +19,15 @@ import com.google.gwt.user.client.ui.Widget;
 
 public class MiniDecorator extends SimplePanel {
 
-    public MiniDecorator(Widget widget, String styleName) {
+    public MiniDecorator(Widget widget, String... styleName) {
         setWidget(widget);
-        addStyleName(styleName);
+        for (String n : styleName) {
+            addStyleName(n);
+        }
     }
 
-    public MiniDecorator(IsWidget widget, String styleName) {
+    public MiniDecorator(IsWidget widget, String... styleName) {
         this(widget.asWidget(), styleName);
     }
+
 }

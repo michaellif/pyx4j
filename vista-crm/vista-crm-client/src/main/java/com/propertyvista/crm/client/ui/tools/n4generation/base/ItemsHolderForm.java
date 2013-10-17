@@ -19,6 +19,7 @@ import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.IsWidget;
+import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.commons.css.IStyleName;
 import com.pyx4j.forms.client.ui.CComponent;
@@ -44,7 +45,7 @@ public abstract class ItemsHolderForm<Item extends BulkEditableEntity, Holder ex
 
     private HTML counterPanel;
 
-    private FlowPanel tableHeaderPanel;
+    private Widget headerPanel;
 
     private Anchor toggleSelectEverythingAnchor;
 
@@ -66,6 +67,7 @@ public abstract class ItemsHolderForm<Item extends BulkEditableEntity, Holder ex
     public IsWidget createContent() {
         FlowPanel panel = new FlowPanel();
         panel.add(createStatsPanel());
+        panel.add(headerPanel = createHeaderPanel());
         panel.add(createActionsPanel());
         panel.add(createItemsFolderPanel());
         return panel;
@@ -75,15 +77,17 @@ public abstract class ItemsHolderForm<Item extends BulkEditableEntity, Holder ex
         return isSelectAllSet;
     }
 
-    private void onMoreClicked() {
-        if (onMoreClicked != null) {
-            onMoreClicked.execute();
-        }
-    }
-
     public void setLoading(boolean isLoading) {
         moreButton.setHTML(isLoading ? i18n.tr("Loading...") : i18n.tr("More..."));
     }
+
+    public void setOnMoreClicked(Command command) {
+        this.onMoreClicked = command;
+    }
+
+    protected abstract Widget createHeaderPanel();
+
+    protected abstract CEntityFolder<Item> createItemsFolder();
 
     @Override
     protected Holder preprocessValue(Holder value, boolean fireEvent, boolean populate) {
@@ -102,7 +106,7 @@ public abstract class ItemsHolderForm<Item extends BulkEditableEntity, Holder ex
         renderStatsPanel();
         moreButton.setVisible(!getValue().isNull() && (getValue().totalItemCount().getValue() != getValue().items().size()));
         actionsPanel.setVisible(!getValue().isNull() && getValue().totalItemCount().getValue() != 0);
-//        tableHeaderPanel.setVisible(!getValue().isNull() && (!getValue().totalItemCount().isNull() && getValue().totalItemCount().getValue() != 0));
+        headerPanel.setVisible(!getValue().isNull() && (!getValue().totalItemCount().isNull() && getValue().totalItemCount().getValue() != 0));
     }
 
     private FlowPanel createStatsPanel() {
@@ -139,8 +143,6 @@ public abstract class ItemsHolderForm<Item extends BulkEditableEntity, Holder ex
 
         return actionsPanel;
     }
-
-    protected abstract CEntityFolder<Item> createItemsFolder();
 
     private FlowPanel createItemsFolderPanel() {
         FlowPanel folderHolder = new FlowPanel();
@@ -216,8 +218,9 @@ public abstract class ItemsHolderForm<Item extends BulkEditableEntity, Holder ex
 
     }
 
-    public void setOnMoreClicked(Command command) {
-        this.onMoreClicked = command;
+    private void onMoreClicked() {
+        if (onMoreClicked != null) {
+            onMoreClicked.execute();
+        }
     }
-
 }

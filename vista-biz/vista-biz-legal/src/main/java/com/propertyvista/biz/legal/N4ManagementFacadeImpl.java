@@ -57,7 +57,6 @@ public class N4ManagementFacadeImpl implements N4ManagementFacade {
             LegalNoticeCandidate candidate = EntityFactory.create(LegalNoticeCandidate.class);
             candidate.leaseId().set(lease.createIdentityStub());
             candidate.amountOwed().setValue(new BigDecimal("555.99"));
-
             candidates.add(candidate);
         }
 

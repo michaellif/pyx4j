@@ -36,10 +36,8 @@ public interface LegalNoticeCandidateDTO extends LegalNoticeCandidate, BulkEdita
 
     IPrimitive<String> leaseIdString();
 
-    @Editor(type = EditorType.monthyearpicker)
     IPrimitive<LogicalDate> moveIn();
 
-    @Editor(type = EditorType.monthyearpicker)
     IPrimitive<LogicalDate> moveOut();
 
     @Override
