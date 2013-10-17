@@ -160,10 +160,10 @@ public interface BillingAccount extends IEntity {
 
     IPrimitive<Integer> billingCycleStartDay();
 
-    // @Comment(name = "Payment Due Day",description = "Number of days between Billing Period Start Date and Payment Due Date") 
+    @Caption(name = "Payment Due Day", description = "Number of days between Billing Period Start Date and Payment Due Date")
     IPrimitive<Integer> paymentDueDayOffset();
 
-    // @Comment(name = "Final Bill Due Day",description = "Final Bill payment Due day, relative to Lease End Day") 
+    @Caption(name = "Final Bill Due Day", description = "Final Bill payment Due day, relative to Lease End Day")
     IPrimitive<Integer> finalDueDayOffset();
 
     IPrimitive<ProrationMethod> prorationMethod();
