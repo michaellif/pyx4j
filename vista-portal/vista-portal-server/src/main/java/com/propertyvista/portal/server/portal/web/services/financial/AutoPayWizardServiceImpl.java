@@ -19,7 +19,6 @@ import java.util.Vector;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
-import com.pyx4j.commons.Key;
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.config.server.SystemDateManager;
@@ -91,25 +90,22 @@ public class AutoPayWizardServiceImpl extends AbstractCrudServiceDtoImpl<Autopay
     }
 
     @Override
-    public void save(AsyncCallback<Key> callback, AutoPayDTO dto) {
-        AutopayAgreement entity = createBO(dto);
-
+    protected void persist(AutopayAgreement bo, AutoPayDTO to) {
         Lease lease = TenantAppContext.getCurrentUserLease();
-        ServerSideFactory.create(PaymentFacade.class).validatePaymentMethod(lease.billingAccount(), dto.paymentMethod(), VistaApplication.portal);
 
-        if (entity.paymentMethod().getPrimaryKey() == null) {
-            entity.paymentMethod().customer().set(TenantAppContext.getCurrentUserCustomer());
-            entity.paymentMethod().isProfiledMethod().setValue(Boolean.TRUE);
-            ServerSideFactory.create(PaymentMethodFacade.class).persistLeasePaymentMethod(entity.paymentMethod(), lease.unit().building());
+        if (bo.paymentMethod().getPrimaryKey() == null) {
+            bo.paymentMethod().customer().set(TenantAppContext.getCurrentUserCustomer());
+            bo.paymentMethod().isProfiledMethod().setValue(Boolean.TRUE);
+
+            ServerSideFactory.create(PaymentFacade.class).validatePaymentMethod(lease.billingAccount(), to.paymentMethod(), VistaApplication.portal);
+            ServerSideFactory.create(PaymentMethodFacade.class).persistLeasePaymentMethod(bo.paymentMethod(), lease.unit().building());
         }
 
-        updateCoveredItems(entity, dto);
+        updateCoveredItems(bo, to);
 
-        ServerSideFactory.create(PaymentMethodFacade.class).persistAutopayAgreement(entity,
+        ServerSideFactory.create(PaymentFacade.class).validatePaymentMethod(lease.billingAccount(), to.paymentMethod(), VistaApplication.portal);
+        ServerSideFactory.create(PaymentMethodFacade.class).persistAutopayAgreement(bo,
                 EntityFactory.createIdentityStub(Tenant.class, TenantAppContext.getCurrentUserTenant().getPrimaryKey()));
-        Persistence.service().commit();
-
-        callback.onSuccess(entity.getPrimaryKey());
     }
 
     @Override

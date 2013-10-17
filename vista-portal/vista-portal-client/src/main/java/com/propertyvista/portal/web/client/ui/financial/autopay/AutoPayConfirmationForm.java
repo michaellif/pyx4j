@@ -47,7 +47,7 @@ public class AutoPayConfirmationForm extends CPortalEntityForm<AutoPayDTO> {
 
         mainPanel.setBR(++row, 0, 1);
 
-        mainPanel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().nextPaymentDate(), new CDateLabel()), 100).labelWidth(20).build());
+        mainPanel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().nextPaymentDate(), new CDateLabel()), 100).build());
 
         return mainPanel;
     }

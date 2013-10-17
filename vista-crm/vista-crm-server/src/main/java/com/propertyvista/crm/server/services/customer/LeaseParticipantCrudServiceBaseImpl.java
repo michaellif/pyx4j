@@ -105,7 +105,6 @@ public abstract class LeaseParticipantCrudServiceBaseImpl<BO extends LeasePartic
             paymentMethod.isProfiledMethod().setValue(true);
 
             ServerSideFactory.create(PaymentFacade.class).validatePaymentMethod(bo.lease().billingAccount(), paymentMethod, VistaApplication.crm);
-
             ServerSideFactory.create(PaymentMethodFacade.class).persistLeasePaymentMethod(paymentMethod, building);
         }
 

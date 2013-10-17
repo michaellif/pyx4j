@@ -114,8 +114,7 @@ public class PaymentCrudServiceImpl extends AbstractCrudServiceDtoImpl<PaymentRe
         to.electronicPaymentsAllowed().setValue(ServerSideFactory.create(PaymentFacade.class).isElectronicPaymentsSetup(to.billingAccount()));
         to.allowedPaymentTypes().setCollectionValue(
                 ServerSideFactory.create(PaymentFacade.class).getAllowedPaymentTypes(to.billingAccount(), VistaApplication.crm));
-        to.allowedCardTypes()
-                .setCollectionValue(ServerSideFactory.create(PaymentFacade.class).getAllowedCardTypes(to.billingAccount(), VistaApplication.crm));
+        to.allowedCardTypes().setCollectionValue(ServerSideFactory.create(PaymentFacade.class).getAllowedCardTypes(to.billingAccount(), VistaApplication.crm));
         to.participants().addAll(retrievePayableUsers(to.billingAccount().lease()));
     }
 
@@ -155,8 +154,8 @@ public class PaymentCrudServiceImpl extends AbstractCrudServiceDtoImpl<PaymentRe
                 bo.paymentMethod().isProfiledMethod().setValue(Boolean.TRUE);
             }
         }
-        ServerSideFactory.create(PaymentFacade.class).validatePaymentMethod(bo.billingAccount(), to.paymentMethod(), VistaApplication.crm);
 
+        ServerSideFactory.create(PaymentFacade.class).validatePaymentMethod(bo.billingAccount(), to.paymentMethod(), VistaApplication.crm);
         ServerSideFactory.create(PaymentFacade.class).persistPayment(bo);
     }
 

@@ -18,7 +18,6 @@ import java.util.Vector;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
-import com.pyx4j.commons.Key;
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.commons.UserRuntimeException;
 import com.pyx4j.config.server.ServerSideFactory;
@@ -27,7 +26,6 @@ import com.pyx4j.entity.server.AbstractCrudServiceDtoImpl;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.rpc.shared.ServiceExecution;
 
 import com.propertyvista.biz.financial.ar.ARFacade;
 import com.propertyvista.biz.financial.payment.PaymentException;
@@ -98,40 +96,35 @@ public class PaymentWizardServiceImpl extends AbstractCrudServiceDtoImpl<Payment
     }
 
     @Override
-    @ServiceExecution(waitCaption = "Submitting...")
-    public void save(AsyncCallback<Key> callback, PaymentDTO dto) {
-        PaymentRecord entity = createBO(dto);
-
+    protected void persist(PaymentRecord bo, PaymentDTO to) {
         Lease lease = Persistence.service().retrieve(Lease.class, TenantAppContext.getCurrentUserLeaseIdStub().getPrimaryKey());
-        ServerSideFactory.create(PaymentFacade.class).validatePaymentMethod(lease.billingAccount(), dto.paymentMethod(), VistaApplication.portal);
 
-        entity.paymentMethod().customer().set(TenantAppContext.getCurrentUserCustomer());
+        bo.paymentMethod().customer().set(TenantAppContext.getCurrentUserCustomer());
 
         // Do not change profile methods
-        if (entity.paymentMethod().id().isNull()) {
-            if (dto.addThisPaymentMethodToProfile().isBooleanTrue() && PaymentType.avalableInProfile().contains(dto.paymentMethod().type().getValue())) {
-                entity.paymentMethod().isProfiledMethod().setValue(Boolean.TRUE);
+        if (bo.paymentMethod().id().isNull()) {
+            if (to.addThisPaymentMethodToProfile().isBooleanTrue() && PaymentType.avalableInProfile().contains(to.paymentMethod().type().getValue())) {
+                bo.paymentMethod().isProfiledMethod().setValue(Boolean.TRUE);
             } else {
-                entity.paymentMethod().isProfiledMethod().setValue(Boolean.FALSE);
+                bo.paymentMethod().isProfiledMethod().setValue(Boolean.FALSE);
             }
 
             // some corrections for particular method types:
-            if (dto.paymentMethod().type().getValue() == PaymentType.Echeck) {
-                entity.paymentMethod().isProfiledMethod().setValue(Boolean.TRUE);
+            if (to.paymentMethod().type().getValue() == PaymentType.Echeck) {
+                bo.paymentMethod().isProfiledMethod().setValue(Boolean.TRUE);
             }
         }
 
-        ServerSideFactory.create(PaymentFacade.class).persistPayment(entity);
-        Persistence.service().commit();
+        ServerSideFactory.create(PaymentFacade.class).validatePaymentMethod(lease.billingAccount(), bo.paymentMethod(), VistaApplication.portal);
+        ServerSideFactory.create(PaymentFacade.class).persistPayment(bo);
+
+        Persistence.service().commit(); // this commit is necessary (before processing next)
 
         try {
-            ServerSideFactory.create(PaymentFacade.class).processPayment(entity, null);
+            ServerSideFactory.create(PaymentFacade.class).processPayment(bo, null);
         } catch (PaymentException e) {
             throw new UserRuntimeException(i18n.tr("Payment processing has been Failed!"), e);
         }
-
-        Persistence.service().commit();
-        callback.onSuccess(entity.getPrimaryKey());
     }
 
     @Override

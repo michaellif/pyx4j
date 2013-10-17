@@ -15,10 +15,8 @@ package com.propertyvista.portal.server.portal.web.services.financial;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
-import com.pyx4j.commons.Key;
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.server.AbstractCrudServiceDtoImpl;
-import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
 
 import com.propertyvista.biz.financial.payment.PaymentFacade;
@@ -47,8 +45,6 @@ public class PaymentMethodWizardServiceImpl extends AbstractCrudServiceDtoImpl<L
     @Override
     protected PaymentMethodDTO init(InitializationData initializationData) {
         Lease lease = TenantAppContext.getCurrentUserLease();
-        Persistence.service().retrieve(lease.unit());
-        Persistence.service().retrieve(lease.unit().building());
 
         PaymentMethodDTO dto = EntityFactory.create(PaymentMethodDTO.class);
 
@@ -68,22 +64,14 @@ public class PaymentMethodWizardServiceImpl extends AbstractCrudServiceDtoImpl<L
     }
 
     @Override
-    public void save(AsyncCallback<Key> callback, PaymentMethodDTO dto) {
+    protected void persist(LeasePaymentMethod bo, PaymentMethodDTO to) {
         Lease lease = TenantAppContext.getCurrentUserLease();
-        Persistence.service().retrieve(lease.unit());
 
-        dto.paymentMethod().customer().set(TenantAppContext.getCurrentUserCustomer());
+        bo.customer().set(TenantAppContext.getCurrentUserCustomer());
+        bo.isProfiledMethod().setValue(Boolean.TRUE);
 
-        ServerSideFactory.create(PaymentFacade.class).validatePaymentMethod(lease.billingAccount(), dto.paymentMethod(), VistaApplication.portal);
-
-        dto.paymentMethod().isProfiledMethod().setValue(Boolean.TRUE);
-
-        LeasePaymentMethod entity = createBO(dto);
-        ServerSideFactory.create(PaymentMethodFacade.class).persistLeasePaymentMethod(entity, lease.unit().building());
-        Key key = entity.getPrimaryKey();
-        Persistence.service().commit();
-
-        callback.onSuccess(key);
+        ServerSideFactory.create(PaymentFacade.class).validatePaymentMethod(lease.billingAccount(), bo, VistaApplication.portal);
+        ServerSideFactory.create(PaymentMethodFacade.class).persistLeasePaymentMethod(bo, lease.unit().building());
     }
 
     @Override
