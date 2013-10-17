@@ -554,9 +554,6 @@ public class CrmSiteMap implements SiteMap {
 
             public static class YardiInterface extends CrmCrudAppPlace {
             }
-
-            public static class ILSMarketing extends CrmCrudAppPlace {
-            }
         }
     }
 
