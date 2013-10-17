@@ -285,6 +285,11 @@ public class CrmSiteMap implements SiteMap {
         @PlaceProperties(navigLabel = "Aggregated Transfers")
         public static class AggregatedTransfer extends CrmCrudAppPlace {
         }
+
+        public static class AutoPayReview extends AppPlace {
+
+        }
+
     }
 
     public static class Organization extends AppPlace {
@@ -358,10 +363,6 @@ public class CrmSiteMap implements SiteMap {
                 super(ResidentInsuranceReportMetadata.class);
             }
         }
-
-    }
-
-    public static class AutoPayReview extends AppPlace {
 
     }
 

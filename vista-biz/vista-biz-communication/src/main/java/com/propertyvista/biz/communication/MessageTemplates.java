@@ -403,6 +403,8 @@ public class MessageTemplates {
         }
         emailBody = emailBody.replace("${leaseLinks}", leaseLinks);
 
+        emailBody = emailBody.replace("${autoPaysReviewLink}", AppPlaceInfo.absoluteUrl(crmUrl, true, new CrmSiteMap.Finance.AutoPayReview()));
+
         email.setHtmlBody(wrapAdminHtml(emailBody));
         return email;
     }

@@ -146,7 +146,7 @@ public class NavigActivity extends AbstractActivity implements NavigView.MainNav
         }
         folder.addNavigItem(new CrmSiteMap.Finance.Payment());
         if (SecurityController.checkBehavior(VistaCrmBehavior.Billing)) {
-            folder.addNavigItem(new CrmSiteMap.AutoPayReview());
+            folder.addNavigItem(new CrmSiteMap.Finance.AutoPayReview());
         }
 
         list.add(folder);
