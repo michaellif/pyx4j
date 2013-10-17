@@ -234,8 +234,9 @@ public class PortalWebTheme extends Theme {
             @Override
             protected void initStyles() {
                 super.initStyles();
+
                 Style style = new Style(".", StyleName.Dialog);
-                style.addProperty("border", "1px solid");
+                style.addProperty("border", "5px solid");
                 style.addProperty("border-radius", "5px");
                 style.addProperty("background-color", ThemeColor.foreground, 1);
                 addStyle(style);
