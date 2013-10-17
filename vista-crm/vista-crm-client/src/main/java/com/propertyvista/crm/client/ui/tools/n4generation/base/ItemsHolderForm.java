@@ -67,7 +67,7 @@ public abstract class ItemsHolderForm<Item extends BulkEditableEntity, Holder ex
         FlowPanel panel = new FlowPanel();
         panel.add(createStatsPanel());
         panel.add(createActionsPanel());
-        panel.add(createPapsFolderPanel());
+        panel.add(createItemsFolderPanel());
         return panel;
     }
 
@@ -142,7 +142,7 @@ public abstract class ItemsHolderForm<Item extends BulkEditableEntity, Holder ex
 
     protected abstract CEntityFolder<Item> createItemsFolder();
 
-    private FlowPanel createPapsFolderPanel() {
+    private FlowPanel createItemsFolderPanel() {
         FlowPanel folderHolder = new FlowPanel();
         folderHolder.setStyleName(Styles.BulkFolderHolder.name());
 

@@ -52,6 +52,8 @@ import com.propertyvista.crm.client.ui.reports.autopayreviewer.AutoPayReviewView
 import com.propertyvista.crm.client.ui.reports.autopayreviewer.PapReviewCaptionViewer;
 import com.propertyvista.crm.client.ui.reports.autopayreviewer.PapReviewFolder;
 import com.propertyvista.crm.client.ui.reports.autopayreviewer.PapReviewsHolderForm;
+import com.propertyvista.crm.client.ui.tools.n4generation.LegalNoticeCandidateForm;
+import com.propertyvista.crm.client.ui.tools.n4generation.base.ItemsHolderForm;
 import com.propertyvista.crm.client.ui.wizard.creditcheck.components.CreditCheckReportTypeSelector;
 
 public class CrmTheme extends VistaTheme {
@@ -144,7 +146,9 @@ public class CrmTheme extends VistaTheme {
         initReportsStyles();
         initGadgetStyles();
 
-        initAutoPayUpdaterStyles();
+        initBulkOperationToolStyles();
+        initAutoPayReviewToolStyles();
+        initN4GenerationToolStyles();
     }
 
     @Override
@@ -698,7 +702,18 @@ public class CrmTheme extends VistaTheme {
         addStyle(style);
     }
 
-    private void initAutoPayUpdaterStyles() {
+    private void initBulkOperationToolStyles() {
+        Style style = new Style("." + ItemsHolderForm.Styles.BulkFolderHolder.name());
+        style.addProperty("overflow", "auto");
+        style.addProperty("position", "absolute");
+        style.addProperty("top", "73px");
+        style.addProperty("bottom", "0px");
+        style.addProperty("left", "0px");
+        style.addProperty("right", "0px");
+        addStyle(style);
+    }
+
+    private void initAutoPayReviewToolStyles() {
 
         Style style = new Style("." + AutoPayReviewViewImpl.Styles.AutoPayReviewsFiltersFormPanel.name());
         style.addProperty("background-color", ThemeColor.object1, 0.3);
@@ -927,6 +942,17 @@ public class CrmTheme extends VistaTheme {
 
         style = new Style(".scrollable");
         style.addProperty("width", "100%");
+        addStyle(style);
+
+    }
+
+    private void initN4GenerationToolStyles() {
+        Style style = new Style("." + LegalNoticeCandidateForm.Styles.LegalNoticeCandidateForm.name());
+        addStyle(style);
+
+        style = new Style("." + LegalNoticeCandidateForm.Styles.LegalNoticeCandidateForm.name() + " div");
+        style.addProperty("display", "inline-block");
+        style.addProperty("vertical-align", "middle");
         addStyle(style);
 
     }

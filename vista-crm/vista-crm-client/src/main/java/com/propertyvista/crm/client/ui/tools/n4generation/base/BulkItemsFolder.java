@@ -15,8 +15,10 @@ package com.propertyvista.crm.client.ui.tools.n4generation.base;
 
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.folder.CEntityFolderItem;
+import com.pyx4j.forms.client.ui.folder.IFolderItemDecorator;
 
 import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
+import com.propertyvista.common.client.ui.decorations.VistaBoxFolderItemDecorator;
 import com.propertyvista.crm.rpc.dto.financial.autopayreview.BulkEditableEntity;
 
 public abstract class BulkItemsFolder<Item extends BulkEditableEntity> extends VistaBoxFolder<Item> {
@@ -34,4 +36,10 @@ public abstract class BulkItemsFolder<Item extends BulkEditableEntity> extends V
         }
     }
 
+    @Override
+    public IFolderItemDecorator<Item> createItemDecorator() {
+        VistaBoxFolderItemDecorator<Item> itemDecorator = (VistaBoxFolderItemDecorator<Item>) super.createItemDecorator();
+        itemDecorator.setCollapsible(false);
+        return itemDecorator;
+    }
 }
