@@ -43,8 +43,6 @@ import com.google.gwt.event.dom.client.KeyDownHandler;
 import com.google.gwt.event.logical.shared.CloseHandler;
 import com.google.gwt.event.logical.shared.OpenEvent;
 import com.google.gwt.event.logical.shared.OpenHandler;
-import com.google.gwt.event.logical.shared.ResizeEvent;
-import com.google.gwt.event.logical.shared.ResizeHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.resources.client.ImageResource;
 import com.google.gwt.user.client.DOM;
@@ -88,8 +86,6 @@ public class Dialog extends PopupPanel implements ProvidesResize {
     private static final I18n i18n = I18n.get(Dialog.class);
 
     private final DockPanel container;
-
-    private HandlerRegistration resizeHandlerRegistration;
 
     private final CaptionPanel captionPanel;
 
@@ -168,16 +164,13 @@ public class Dialog extends PopupPanel implements ProvidesResize {
 
         content = new ContentPanel();
         content.setStylePrimaryName(DefaultDialogTheme.StyleName.DialogContent.name());
-        setContentWidget(content);
+
+        container.add(content, DockPanel.CENTER);
+        container.setCellHeight(content, "100%");
 
         setDialogOptions(options);
 
         setBody(body);
-    }
-
-    public void setContentWidget(Widget widget) {
-        container.add(widget, DockPanel.CENTER);
-        container.setCellHeight(widget, "100%");
     }
 
     public void setCaption(String caption) {
@@ -406,8 +399,8 @@ public class Dialog extends PopupPanel implements ProvidesResize {
     }
 
     private void position() {
-        int left = (Window.getClientWidth() - getOffsetWidth()) >> 1;
-        int top = (Window.getClientHeight() - getOffsetHeight()) >> 1;
+        int left = (Window.getClientWidth() - getOffsetWidth()) / 2;
+        int top = (Window.getClientHeight() - getOffsetHeight()) / 2;
         setPopupPosition(Math.max(Window.getScrollLeft() + left, 0), Math.max(Window.getScrollTop() + top, 0));
     }
 
@@ -427,14 +420,6 @@ public class Dialog extends PopupPanel implements ProvidesResize {
         super.show();
 
         position();
-        if (resizeHandlerRegistration == null) {
-            resizeHandlerRegistration = Window.addResizeHandler(new ResizeHandler() {
-                @Override
-                public void onResize(ResizeEvent event) {
-                    position();
-                }
-            });
-        }
 
         setVisible(true);
         // The insides of Dialog may be CForm that is only initialized on show.
@@ -702,4 +687,5 @@ public class Dialog extends PopupPanel implements ProvidesResize {
             }
         }
     }
+
 }
