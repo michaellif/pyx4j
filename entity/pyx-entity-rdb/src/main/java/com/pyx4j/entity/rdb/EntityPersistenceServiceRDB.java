@@ -24,6 +24,7 @@ import java.io.Serializable;
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;
 import java.sql.SQLException;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -112,13 +113,13 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
 
     private final Mappings mappings;
 
-    public static final boolean trace = true;
+    public static final boolean trace = false;
 
-    public static final boolean traceEntity = true;
+    public static final boolean traceEntity = false;
 
-    public static final String[] traceEntities = new String[] { "AutopayAgreement", "AutopayAgreementCoveredItem" };
+    public static final List<String> traceEntities = Arrays.asList("SampleShortClassName1", "SampleShotClassName2");
 
-    public static final boolean traceSql = true;
+    public static final boolean traceSql = false;
 
     public static final boolean traceWarnings = false;
 
