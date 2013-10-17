@@ -80,18 +80,6 @@ public class PreauthorizedPaymentsCommons {
 
         // save new/edited ones:
         for (AutopayAgreement papToSave : papsToSave) {
-//            // remove zero covered items:
-//            Iterator<AutopayAgreementCoveredItem> iterator = papToSave.coveredItems().iterator();
-//            while (iterator.hasNext()) {
-//                AutopayAgreementCoveredItem item = iterator.next();
-//                if (item.amount().getValue().compareTo(BigDecimal.ZERO) <= 0) {
-//                    iterator.remove();
-//                    if (item.getPrimaryKey() != null) {
-//                        Persistence.service().delete(item);
-//                    }
-//                }
-//            }
-
             ServerSideFactory.create(PaymentMethodFacade.class).persistAutopayAgreement(papToSave, tenantId);
         }
     }
