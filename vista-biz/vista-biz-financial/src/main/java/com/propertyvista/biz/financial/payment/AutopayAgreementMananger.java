@@ -135,12 +135,15 @@ class AutopayAgreementMananger {
 
         preauthorizedPayment.updatedBySystem().setValue(null);
         // Update amounts
-        for (ReviewedPapChargeDTO reviewedPapCharge : preauthorizedPaymentChanges.reviewedCharges()) {
+        nextCharge: for (ReviewedPapChargeDTO reviewedPapCharge : preauthorizedPaymentChanges.reviewedCharges()) {
             for (AutopayAgreementCoveredItem coveredItem : preauthorizedPayment.coveredItems()) {
                 if (reviewedPapCharge.billableItem().equals(coveredItem.billableItem())) {
                     coveredItem.amount().setValue(reviewedPapCharge.paymentAmountUpdate().getValue());
+                    continue nextCharge;
                 }
             }
+            throw new Error("BillableItem item " + reviewedPapCharge.paymentAmountUpdate().getValue() + "$ "
+                    + reviewedPapCharge.billableItem().uid().getStringView() + " not found");
         }
         persistAutopayAgreement(preauthorizedPayment, preauthorizedPayment.tenant());
     }
@@ -199,6 +202,7 @@ class AutopayAgreementMananger {
             for (AutopayAgreement pap : activePaps) {
                 deleteAutopayAgreement(pap);
             }
+            ServerSideFactory.create(NotificationFacade.class).autoPayTerminatedNotification(lease);
             return;
         }
 

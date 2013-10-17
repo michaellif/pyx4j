@@ -57,22 +57,9 @@ public class PaymentBatchThreeBuildingYardiTest extends PaymentYardiTestBase {
     @Override
     protected void setUp() throws Exception {
         super.setUp();
-        {
-            // @formatter:off
-            PropertyUpdater updater = new PropertyUpdater("prop2").
-            set(PropertyUpdater.ADDRESS.Address1, "22 prop2 str").
-            set(PropertyUpdater.ADDRESS.Country, "Canada");        
-            // @formatter:on
-            MockEventBus.fireEvent(new PropertyUpdateEvent(updater));
-        }
-        {
-            // @formatter:off
-            PropertyUpdater updater = new PropertyUpdater("prop3").
-            set(PropertyUpdater.ADDRESS.Address1, "22 prop2 str").
-            set(PropertyUpdater.ADDRESS.Country, "Canada");        
-            // @formatter:on
-            MockEventBus.fireEvent(new PropertyUpdateEvent(updater));
-        }
+        createYardiBuilding("prop123");
+        createYardiBuilding("prop2");
+        createYardiBuilding("prop3");
 
         createYardiLease("prop123", "t000111");
         createYardiLease("prop123", "t000112");

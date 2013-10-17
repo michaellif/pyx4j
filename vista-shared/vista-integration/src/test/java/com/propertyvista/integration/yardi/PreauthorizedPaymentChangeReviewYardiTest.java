@@ -21,12 +21,15 @@ import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.gwt.server.DateUtils;
 
 import com.propertyvista.biz.financial.payment.PaymentMethodFacade;
+import com.propertyvista.domain.financial.PaymentRecord.PaymentStatus;
+import com.propertyvista.domain.payment.AutopayAgreement;
 import com.propertyvista.domain.payment.PaymentType;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.Tenant;
 import com.propertyvista.dto.payment.AutoPayReviewLeaseDTO;
 import com.propertyvista.dto.payment.AutoPayReviewPreauthorizedPaymentDTO;
 import com.propertyvista.test.integration.PaymentAgreementTester;
+import com.propertyvista.test.integration.PaymentRecordTester;
 import com.propertyvista.test.integration.PreauthorizedPaymentBuilder;
 import com.propertyvista.test.mock.MockEventBus;
 import com.propertyvista.test.mock.models.CustomerDataModel;
@@ -46,12 +49,15 @@ public class PreauthorizedPaymentChangeReviewYardiTest extends PaymentYardiTestB
     @Override
     protected void setUp() throws Exception {
         super.setUp();
-        createYardiLease("prop123", "t000111");
+        createYardiBuilding("prop1");
+        createYardiLease("prop1", "t000111");
         setSysDate("2011-01-01");
-        yardiImportAll(getYardiCredential("prop123"));
+        yardiImportAll(getYardiCredential("prop1"));
+        loadBuildingToModel("prop1");
         lease = loadLeaseToModel("t000111");
         Tenant tenant = lease.leaseParticipants().iterator().next().cast();
         getDataModel(CustomerDataModel.class).addPaymentMethod(tenant.customer(), lease.unit().building(), PaymentType.Echeck);
+        setPaymentBatchProcess();
     }
 
     public void testLeaseServiceChanges() throws Exception {
@@ -61,6 +67,8 @@ public class PreauthorizedPaymentChangeReviewYardiTest extends PaymentYardiTestB
                 build());
         Persistence.service().commit();
 
+        assertEquals("PAD next Generation date", "2011-02-01", ServerSideFactory.create(PaymentMethodFacade.class).getNextAutopayDate(lease));
+
         new PaymentAgreementTester(lease.billingAccount())//
                 .count(1)//
                 .activeCount(1)//
@@ -68,7 +76,7 @@ public class PreauthorizedPaymentChangeReviewYardiTest extends PaymentYardiTestB
 
         {
             // @formatter:off
-            LeaseChargeUpdater updater = new LeaseChargeUpdater("prop123", "t000111", "rent").
+            LeaseChargeUpdater updater = new LeaseChargeUpdater("prop1", "t000111", "rent").
             set(LeaseChargeUpdater.Name.Description, "Rent").
             set(LeaseChargeUpdater.Name.ServiceFromDate, DateUtils.detectDateformat("2010-01-01")).
             set(LeaseChargeUpdater.Name.ServiceToDate, DateUtils.detectDateformat("2014-12-31")).
@@ -77,13 +85,16 @@ public class PreauthorizedPaymentChangeReviewYardiTest extends PaymentYardiTestB
             // @formatter:on
             MockEventBus.fireEvent(new LeaseChargeUpdateEvent(updater));
         }
-        yardiImportAll(getYardiCredential("prop123"));
+        yardiImportAll(getYardiCredential("prop1"));
 
         // PAP is updated
         new PaymentAgreementTester(lease.billingAccount())//
                 .count(1)//
                 .activeCount(1)//
                 .lastRecordAmount(eval("600 + 80"));
+
+        AutopayAgreement newPap1 = new PaymentAgreementTester(lease.billingAccount()).lastRecord();
+        assertEquals("PAP Charges", 2, newPap1.coveredItems().size());
 
         AutoPayReviewLeaseDTO reviewDTO = ServerSideFactory.create(PaymentMethodFacade.class).getAutopayAgreementRequiresReview(lease.billingAccount());
 
@@ -100,5 +111,29 @@ public class PreauthorizedPaymentChangeReviewYardiTest extends PaymentYardiTestB
             assertEquals("New Parking Price", new BigDecimal("80.00"), papReview.items().get(1).current().totalPrice().getValue());
             assertEquals("Suggested Parking Payment", new BigDecimal("80.00"), papReview.items().get(1).current().payment().getValue());
         }
+
+        // Post and process all payments
+        advanceSysDate("2011-02-01");
+        new PaymentRecordTester(lease.billingAccount())//
+                .count(1) //
+                .lastRecordStatus(PaymentStatus.Queued)//
+                .lastRecordAmount("680.00");
+
+        {
+            // @formatter:off
+            LeaseChargeUpdater updater = new LeaseChargeUpdater("prop1", "t000111", "lock").
+            set(LeaseChargeUpdater.Name.Description, "Locker").
+            set(LeaseChargeUpdater.Name.ServiceFromDate, DateUtils.detectDateformat("2010-01-01")).
+            set(LeaseChargeUpdater.Name.ServiceToDate, DateUtils.detectDateformat("2014-12-31")).
+            set(LeaseChargeUpdater.Name.ChargeCode, "lock").
+            set(LeaseChargeUpdater.Name.Amount, "20.00");        
+            // @formatter:on
+            MockEventBus.fireEvent(new LeaseChargeUpdateEvent(updater));
+        }
+
+        yardiImportAll(getYardiCredential("prop1"));
+
+        AutopayAgreement newPap2 = new PaymentAgreementTester(lease.billingAccount()).lastRecord();
+        assertEquals("PAP Charges", 3, newPap2.coveredItems().size());
     }
 }

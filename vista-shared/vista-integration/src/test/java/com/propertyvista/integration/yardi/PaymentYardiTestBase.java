@@ -61,15 +61,17 @@ public abstract class PaymentYardiTestBase extends YardiTestBase {
 
         preloadData();
 
+    }
+
+    protected void createYardiBuilding(String propertyId) {
         {
             // @formatter:off
-            PropertyUpdater updater = new PropertyUpdater("prop123").
-            set(PropertyUpdater.ADDRESS.Address1, "11 prop123 str").
+            PropertyUpdater updater = new PropertyUpdater(propertyId).
+            set(PropertyUpdater.ADDRESS.Address1, "1 "  + propertyId + " str").
             set(PropertyUpdater.ADDRESS.Country, "Canada");        
             // @formatter:on
             MockEventBus.fireEvent(new PropertyUpdateEvent(updater));
         }
-
     }
 
     protected void createYardiLease(String propertyId, String leaseId) {

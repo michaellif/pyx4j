@@ -47,6 +47,7 @@ public class PaymentBatchSingleBuildingYardiTest extends PaymentYardiTestBase {
     @Override
     protected void setUp() throws Exception {
         super.setUp();
+        createYardiBuilding("prop123");
         createYardiLease("prop123", "t000111");
         createYardiLease("prop123", "t000112");
         createYardiLease("prop123", "t000113");

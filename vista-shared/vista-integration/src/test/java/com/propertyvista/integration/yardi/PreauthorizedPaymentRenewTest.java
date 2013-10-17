@@ -32,14 +32,14 @@ import com.propertyvista.test.mock.models.LeaseDataModel;
 import com.propertyvista.yardi.mock.RtCustomerUpdateEvent;
 import com.propertyvista.yardi.mock.RtCustomerUpdater;
 
-public class PreauthorizedPaymentSuspensionTest extends PaymentYardiTestBase {
+public class PreauthorizedPaymentRenewTest extends PaymentYardiTestBase {
 
     private Lease lease;
 
     @Override
     protected void setUp() throws Exception {
         super.setUp();
-
+        createYardiBuilding("prop123");
         createYardiLease("prop123", "t000111");
 
         setSysDate("2011-01-01");
