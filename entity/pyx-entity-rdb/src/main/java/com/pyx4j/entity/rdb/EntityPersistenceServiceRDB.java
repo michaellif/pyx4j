@@ -112,13 +112,13 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
 
     private final Mappings mappings;
 
-    public static final boolean trace = false;
+    public static final boolean trace = true;
 
-    public static final boolean traceEntity = false;
+    public static final boolean traceEntity = true;
 
-    public static final String[] traceEntities = new String[] { "ClassName" };
+    public static final String[] traceEntities = new String[] { "AutopayAgreement", "AutopayAgreementCoveredItem" };
 
-    public static final boolean traceSql = false;
+    public static final boolean traceSql = true;
 
     public static final boolean traceWarnings = false;
 
