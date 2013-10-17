@@ -26,7 +26,7 @@ public class LoginDecoratorBuilder extends FormDecoratorBuilder {
 
     public LoginDecoratorBuilder(CComponent<?> component) {
         super(component, "0", "100%", "280px");
-        customLabel("");
+        labelPosition(LabelPosition.hidden);
         useLabelSemicolon(false);
         mandatoryMarker(false);
     }

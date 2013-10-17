@@ -19,7 +19,7 @@ import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.forms.client.ui.decorators.WidgetDecorator;
-import com.pyx4j.forms.client.ui.decorators.WidgetDecorator.Builder.Layout;
+import com.pyx4j.forms.client.ui.decorators.WidgetDecorator.Builder.LabelPosition;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.client.ui.layout.responsive.LayoutChangeEvent;
 import com.pyx4j.site.client.ui.layout.responsive.LayoutChangeHandler;
@@ -27,7 +27,7 @@ import com.pyx4j.site.client.ui.layout.responsive.ResponsiveLayoutPanel.LayoutTy
 
 public abstract class AbstractPortalPanel extends SimplePanel {
 
-    private Layout widgetLayout = null;
+    private LabelPosition widgetLayout = null;
 
     public AbstractPortalPanel() {
         AppSite.getEventBus().addHandler(LayoutChangeEvent.TYPE, new LayoutChangeHandler() {
@@ -41,37 +41,39 @@ public abstract class AbstractPortalPanel extends SimplePanel {
     }
 
     public void doLayout() {
-        Layout newWdgetLayout = getWidgetLayout();
+        LabelPosition newWdgetLayout = getWidgetLayout();
         if (widgetLayout != newWdgetLayout) {
             updateDecoratorsLayout(AbstractPortalPanel.this, newWdgetLayout);
             widgetLayout = newWdgetLayout;
         }
     }
 
-    public static Layout getWidgetLayout() {
-        Layout layout;
+    public static LabelPosition getWidgetLayout() {
+        LabelPosition layout;
         switch (LayoutType.getLayoutType(Window.getClientWidth())) {
         case phonePortrait:
         case phoneLandscape:
         case tabletPortrait:
-            layout = Layout.vertical;
+            layout = LabelPosition.top;
             break;
 
         case tabletLandscape:
         case monitor:
         case huge:
-            layout = Layout.horisontal;
+            layout = LabelPosition.left;
             break;
         default:
-            layout = Layout.horisontal;
+            layout = LabelPosition.left;
         }
         return layout;
     }
 
-    public static void updateDecoratorsLayout(Widget widget, Layout layout) {
+    public static void updateDecoratorsLayout(Widget widget, LabelPosition layout) {
         if (widget instanceof WidgetDecorator) {
             WidgetDecorator decorator = (WidgetDecorator) widget;
-            decorator.setLayout(layout);
+            if (decorator.getLabelPosition() != LabelPosition.hidden) {
+                decorator.setLabelPosition(layout);
+            }
         }
         if (widget instanceof HasWidgets) {
             for (Widget childWidget : (HasWidgets) widget) {

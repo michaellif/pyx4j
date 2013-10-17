@@ -21,7 +21,7 @@ import com.google.gwt.user.client.ui.HTML;
 import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.forms.client.ui.decorators.WidgetDecorator;
 import com.pyx4j.forms.client.ui.decorators.WidgetDecorator.Builder.Alignment;
-import com.pyx4j.forms.client.ui.decorators.WidgetDecorator.Builder.Layout;
+import com.pyx4j.forms.client.ui.decorators.WidgetDecorator.Builder.LabelPosition;
 import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
@@ -109,7 +109,7 @@ public class PaymentTypeSelectionPolicyForm extends PolicyDTOTabPanelBasedForm<P
     }
 
     private WidgetDecorator alignedToCenter(IPrimitive<Boolean> check) {
-        return new FormDecoratorBuilder(inject(check), lblW, contW, contW).layout(Layout.vertical).labelAlignment(Alignment.center)
+        return new FormDecoratorBuilder(inject(check), lblW, contW, contW).labelPosition(LabelPosition.top).labelAlignment(Alignment.center)
                 .componentAlignment(Alignment.center).build();
     }
 }

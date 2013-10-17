@@ -30,7 +30,7 @@ public class FormDecoratorBuilder extends WidgetDecorator.Builder {
         labelWidth(labelWidth);
         contentWidth(contentWidth);
         componentWidth(componentWidth);
-        layout(AbstractPortalPanel.getWidgetLayout());
+        labelPosition(AbstractPortalPanel.getWidgetLayout());
     }
 
     public FormDecoratorBuilder(CComponent<?> component, int labelWidth, int componentWidth, int contentWidth) {
