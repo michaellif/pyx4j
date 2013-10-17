@@ -33,7 +33,7 @@ start new log file on each application start
                 <rolloverOnStart>true</rolloverOnStart>
                 <maxFileSize>3000KB</maxFileSize>
             </timeBasedFileNamingAndTriggeringPolicy>
-            <maxHistory>30</maxHistory>
+            <maxHistory>300</maxHistory>
         </rollingPolicy>
 
         <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
