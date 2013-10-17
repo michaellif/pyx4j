@@ -21,6 +21,7 @@ import java.util.List;
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.config.server.SystemDateManager;
+import com.pyx4j.entity.rpc.AbstractCrudService.RetrieveTarget;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.AttachLevel;
 import com.pyx4j.entity.shared.EntityFactory;
@@ -40,13 +41,13 @@ import com.propertyvista.dto.PreauthorizedPaymentDTO;
 
 public class PreauthorizedPaymentsCommons {
 
-    public static List<PreauthorizedPaymentDTO> createPreauthorizedPayments(Tenant tenantId) {
+    public static List<PreauthorizedPaymentDTO> createPreauthorizedPayments(Tenant tenantId, RetrieveTarget retrieveTarget) {
         Tenant tenant = Persistence.secureRetrieve(Tenant.class, tenantId.getPrimaryKey());
         Persistence.ensureRetrieve(tenant.lease(), AttachLevel.Attached);
 
         List<PreauthorizedPaymentDTO> paps = new ArrayList<PreauthorizedPaymentDTO>();
         for (AutopayAgreement pap : ServerSideFactory.create(PaymentMethodFacade.class).retrieveAutopayAgreements(tenantId)) {
-            paps.add(createPreauthorizedPaymentDto(pap));
+            paps.add(createPreauthorizedPaymentDto(pap, retrieveTarget));
         }
 
         return paps;
@@ -79,6 +80,18 @@ public class PreauthorizedPaymentsCommons {
 
         // save new/edited ones:
         for (AutopayAgreement papToSave : papsToSave) {
+//            // remove zero covered items:
+//            Iterator<AutopayAgreementCoveredItem> iterator = papToSave.coveredItems().iterator();
+//            while (iterator.hasNext()) {
+//                AutopayAgreementCoveredItem item = iterator.next();
+//                if (item.amount().getValue().compareTo(BigDecimal.ZERO) <= 0) {
+//                    iterator.remove();
+//                    if (item.getPrimaryKey() != null) {
+//                        Persistence.service().delete(item);
+//                    }
+//                }
+//            }
+
             ServerSideFactory.create(PaymentMethodFacade.class).persistAutopayAgreement(papToSave, tenantId);
         }
     }
@@ -109,11 +122,14 @@ public class PreauthorizedPaymentsCommons {
         }
     }
 
-    private static PreauthorizedPaymentDTO createPreauthorizedPaymentDto(AutopayAgreement pap) {
+    private static PreauthorizedPaymentDTO createPreauthorizedPaymentDto(AutopayAgreement pap, RetrieveTarget retrieveTarget) {
         PreauthorizedPaymentDTO papDto = new PapConverter().createTO(pap);
 
         updateCoveredItemsDto(papDto);
-        fillCoveredItemsDto(papDto);
+
+        if (retrieveTarget == RetrieveTarget.Edit) {
+            fillCoveredItemsDto(papDto);
+        }
 
         return papDto;
     }

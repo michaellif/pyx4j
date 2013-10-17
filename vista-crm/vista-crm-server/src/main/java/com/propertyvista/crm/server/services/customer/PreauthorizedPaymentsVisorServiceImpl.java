@@ -18,6 +18,7 @@ import java.util.Vector;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.config.server.ServerSideFactory;
+import com.pyx4j.entity.rpc.AbstractCrudService.RetrieveTarget;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.AttachLevel;
 import com.pyx4j.entity.shared.EntityFactory;
@@ -101,6 +102,6 @@ public class PreauthorizedPaymentsVisorServiceImpl implements PreauthorizedPayme
     }
 
     private void fillPreauthorizedPayments(PreauthorizedPaymentsDTO dto) {
-        dto.preauthorizedPayments().addAll(PreauthorizedPaymentsCommons.createPreauthorizedPayments(dto.tenant()));
+        dto.preauthorizedPayments().addAll(PreauthorizedPaymentsCommons.createPreauthorizedPayments(dto.tenant(), RetrieveTarget.Edit));
     }
 }

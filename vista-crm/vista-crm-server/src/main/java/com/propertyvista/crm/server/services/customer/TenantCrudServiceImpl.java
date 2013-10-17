@@ -67,7 +67,7 @@ public class TenantCrudServiceImpl extends LeaseParticipantCrudServiceBaseImpl<T
         Persistence.service().retrieve(to.customer().emergencyContacts());
         Persistence.service().retrieve(to.lease().unit().building());
 
-        fillPreauthorizedPayments(to);
+        fillPreauthorizedPayments(to, retrieveTarget);
         fillInsuranceCertificates(to);
 
         if (retrieveTarget == RetrieveTarget.Edit) {
@@ -129,9 +129,9 @@ public class TenantCrudServiceImpl extends LeaseParticipantCrudServiceBaseImpl<T
         callback.onSuccess(dto);
     }
 
-    private void fillPreauthorizedPayments(TenantDTO dto) {
+    private void fillPreauthorizedPayments(TenantDTO dto, RetrieveTarget retrieveTarget) {
         dto.preauthorizedPayments().addAll(
-                PreauthorizedPaymentsCommons.createPreauthorizedPayments(EntityFactory.createIdentityStub(Tenant.class, dto.id().getValue())));
+                PreauthorizedPaymentsCommons.createPreauthorizedPayments(EntityFactory.createIdentityStub(Tenant.class, dto.id().getValue()), retrieveTarget));
         dto.nextScheduledPaymentDate().setValue(ServerSideFactory.create(PaymentMethodFacade.class).getNextAutopayDate(dto.lease()));
     }
 
