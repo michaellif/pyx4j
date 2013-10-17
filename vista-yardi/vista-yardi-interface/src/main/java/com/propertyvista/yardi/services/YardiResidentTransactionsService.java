@@ -331,7 +331,7 @@ public class YardiResidentTransactionsService extends YardiAbstractService {
         return importedBuildings;
     }
 
-    private Building importProperty(final Key yardiInterfaceId, final PropertyIDType propertyId, ExecutionMonitor executionMonitor)
+    private Building importProperty(final Key yardiInterfaceId, final PropertyIDType propertyId, final ExecutionMonitor executionMonitor)
             throws YardiServiceException {
         log.info("Updating building {}", propertyId.getIdentification().getPrimaryID());
 
@@ -339,7 +339,7 @@ public class YardiResidentTransactionsService extends YardiAbstractService {
 
             @Override
             public Building execute() throws YardiServiceException {
-                Building building = new YardiBuildingProcessor().updateBuilding(yardiInterfaceId, propertyId);
+                Building building = new YardiBuildingProcessor(executionMonitor).updateBuilding(yardiInterfaceId, propertyId);
                 ServerSideFactory.create(BuildingFacade.class).persist(building);
                 return building;
             }
@@ -363,13 +363,19 @@ public class YardiResidentTransactionsService extends YardiAbstractService {
         return aptUnit;
     }
 
-    private void assignLegalAddress(final AptUnit unit, final Address address, ExecutionMonitor executionMonitor) throws YardiServiceException {
+    private void assignLegalAddress(final AptUnit unit, final Address address, final ExecutionMonitor executionMonitor) throws YardiServiceException {
         log.info("    assign Legal Address: {}", address.getAddress1());
 
         new UnitOfWork(TransactionScopeOption.RequiresNew).execute(new Executable<Void, YardiServiceException>() {
             @Override
             public Void execute() throws YardiServiceException {
                 unit.info().legalAddress().set(MappingUtils.getAddress(address));
+                if (unit.info().legalAddress().streetNumber().isNull()) {
+                    String msg = SimpleMessageFormat.format("    invalid address: {0}", unit.info().legalAddress().streetName().getValue());
+                    log.info(msg);
+                    executionMonitor.addErredEvent("ParseAddress", msg);
+                }
+
                 ServerSideFactory.create(BuildingFacade.class).persist(unit);
                 return null;
             }

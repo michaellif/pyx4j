@@ -21,7 +21,6 @@ import com.yardi.entity.mits.PropertyIDType;
 
 import com.pyx4j.entity.shared.EntityFactory;
 
-import com.propertyvista.domain.contact.AddressStructured.StreetType;
 import com.propertyvista.domain.property.asset.building.Building;
 
 /**
@@ -51,14 +50,4 @@ public class BuildingsMapper {
 
         return building;
     }
-
-    private StreetType getStreetType(String typeName) {
-        for (StreetType type : StreetType.values()) {
-            if (type.toString().equalsIgnoreCase(typeName)) {
-                return type;
-            }
-        }
-        return StreetType.other;
-    }
-
 }

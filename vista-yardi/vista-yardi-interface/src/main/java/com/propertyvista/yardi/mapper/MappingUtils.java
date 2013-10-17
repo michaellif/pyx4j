@@ -81,14 +81,18 @@ public class MappingUtils {
             }
             address2.append(addressPart);
         }
-        StreetAddress streetAddress = new CanadianStreetAddressParser().parse(CommonsStringUtils.nvl(mitsAddress.getAddress1()), address2.toString());
-
         AddressStructured address = EntityFactory.create(AddressStructured.class);
 
-        address.streetNumber().setValue(streetAddress.streetNumber);
-        address.streetName().setValue(streetAddress.streetName);
-        address.streetType().setValue(streetAddress.streetType);
-        address.streetDirection().setValue(streetAddress.streetDirection);
+        try {
+            StreetAddress streetAddress = new CanadianStreetAddressParser().parse(CommonsStringUtils.nvl(mitsAddress.getAddress1()), address2.toString());
+
+            address.streetNumber().setValue(streetAddress.streetNumber);
+            address.streetName().setValue(streetAddress.streetName);
+            address.streetType().setValue(streetAddress.streetType);
+            address.streetDirection().setValue(streetAddress.streetDirection);
+        } catch (Throwable e) {
+            address.streetName().setValue(mitsAddress.getAddress1() + (address2.length() > 0 ? "; " + address2.toString() : ""));
+        }
         address.city().setValue(mitsAddress.getCity());
         address.province().code().setValue(mitsAddress.getState());
 

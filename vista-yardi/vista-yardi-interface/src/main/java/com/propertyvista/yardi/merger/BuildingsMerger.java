@@ -42,10 +42,10 @@ public class BuildingsMerger {
     }
 
     private void merge(AddressStructured imported, AddressStructured existing) {
-        existing.streetName().setValue(imported.streetName().getValue());
-        existing.streetDirection().setValue(imported.streetDirection().getValue());
+        existing.streetNumber().setValue(imported.streetNumber().getValue());
         existing.streetName().setValue(imported.streetName().getValue());
         existing.streetType().setValue(imported.streetType().getValue());
+        existing.streetDirection().setValue(imported.streetDirection().getValue());
         existing.city().setValue(imported.city().getValue());
         existing.province().set(imported.province());
         existing.country().set(imported.country());

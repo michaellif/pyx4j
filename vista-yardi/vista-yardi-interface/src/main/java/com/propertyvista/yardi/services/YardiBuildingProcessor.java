@@ -16,16 +16,21 @@ package com.propertyvista.yardi.services;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.yardi.entity.mits.PropertyIDType;
 import com.yardi.entity.mits.Unit;
 import com.yardi.entity.resident.Property;
 import com.yardi.entity.resident.ResidentTransactions;
 
 import com.pyx4j.commons.Key;
+import com.pyx4j.commons.SimpleMessageFormat;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.AttachLevel;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 
+import com.propertyvista.biz.ExecutionMonitor;
 import com.propertyvista.biz.system.YardiServiceException;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
@@ -36,9 +41,28 @@ import com.propertyvista.yardi.merger.BuildingsMerger;
 import com.propertyvista.yardi.merger.UnitsMerger;
 
 public class YardiBuildingProcessor {
+    private final static Logger log = LoggerFactory.getLogger(YardiBuildingProcessor.class);
+
+    private final ExecutionMonitor executionMonitor;
+
+    public YardiBuildingProcessor() {
+        this(null);
+    }
+
+    public YardiBuildingProcessor(ExecutionMonitor executionMonitor) {
+        this.executionMonitor = executionMonitor;
+    }
 
     public Building updateBuilding(Key yardiInterfaceId, PropertyIDType propertyId) throws YardiServiceException {
         Building building = getBuildingFromProperty(propertyId);
+        if (building.info().address().streetNumber().isNull()) {
+            String msg = SimpleMessageFormat.format("      invalid address: {0}", building.info().address().streetName().getValue());
+            log.info(msg);
+            if (executionMonitor != null) {
+                executionMonitor.addErredEvent("ParseAddress", msg);
+            }
+
+        }
         building.integrationSystemId().setValue(yardiInterfaceId);
         MappingUtils.ensureCountryOfOperation(building);
         String propertyCode = building.propertyCode().getValue();
