@@ -204,20 +204,20 @@ public class YardiImportTest extends YardiTestBase {
 
         // @formatter:off
         new BillableItemTester(lease.currentTerm().version().leaseProducts().featureItems().get(0)).
-        uid("rpark:1").
-        effectiveDate("01-Jun-2012").
-        expirationDate("31-Jul-2014").
-        description("Parking B").
-        agreedPrice("60.00");  
-        // @formatter:on
-
-        // @formatter:off
-        new BillableItemTester(lease.currentTerm().version().leaseProducts().featureItems().get(1)).
         uid("rinpark:1").
         effectiveDate("01-Jun-2012").
         expirationDate("31-Jul-2014").
         description("Indoor Parking").
         agreedPrice("50.00");  
+        // @formatter:on
+
+        // @formatter:off
+        new BillableItemTester(lease.currentTerm().version().leaseProducts().featureItems().get(1)).
+        uid("rpark:1").
+        effectiveDate("01-Jun-2012").
+        expirationDate("31-Jul-2014").
+        description("Parking B").
+        agreedPrice("60.00");  
         // @formatter:on
 
         {
@@ -292,20 +292,20 @@ public class YardiImportTest extends YardiTestBase {
 
         // @formatter:off
         new BillableItemTester(lease.currentTerm().version().leaseProducts().featureItems().get(0)).
-        uid("rlock:1").
-        effectiveDate("01-Jun-2012").
-        expirationDate("31-Jul-2014").
-        description("Locker A").
-        agreedPrice("150.00");  
-        // @formatter:on
-
-        // @formatter:off
-        new BillableItemTester(lease.currentTerm().version().leaseProducts().featureItems().get(1)).
         uid("rinpark:1").
         effectiveDate("01-Jun-2012").
         expirationDate("31-Jul-2014").
         description("Indoor Parking").
         agreedPrice("50.00");  
+        // @formatter:on
+
+        // @formatter:off
+        new BillableItemTester(lease.currentTerm().version().leaseProducts().featureItems().get(1)).
+        uid("rlock:1").
+        effectiveDate("01-Jun-2012").
+        expirationDate("31-Jul-2014").
+        description("Locker A").
+        agreedPrice("150.00");  
         // @formatter:on
     }
 
