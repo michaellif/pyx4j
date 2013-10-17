@@ -30,7 +30,6 @@ import com.pyx4j.widgets.client.DefaultWidgetsTheme;
 import com.pyx4j.widgets.client.datepicker.DefaultDatePickerTheme;
 import com.pyx4j.widgets.client.dialog.DefaultDialogTheme;
 
-import com.propertyvista.common.client.theme.BillingTheme;
 import com.propertyvista.common.client.theme.HorizontalAlignCenterMixin;
 import com.propertyvista.common.client.theme.TransactionHistoryViewerTheme;
 import com.propertyvista.domain.site.SiteDescriptor.Skin;
@@ -316,7 +315,7 @@ public class PortalWebTheme extends Theme {
 
         addTheme(new TenantDashboardTheme());
         addTheme(new CommunicationCenterTheme());
-        addTheme(new BillingTheme());
+        addTheme(new PortalBillingTheme());
         addTheme(new TransactionHistoryViewerTheme());
         addTheme(new DashboardTheme());
         addTheme(new ExtraGadgetsTheme());
