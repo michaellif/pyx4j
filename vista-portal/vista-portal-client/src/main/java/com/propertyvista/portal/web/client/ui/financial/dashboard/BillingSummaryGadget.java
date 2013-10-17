@@ -92,13 +92,13 @@ public class BillingSummaryGadget extends AbstractGadget<FinancialDashboardViewI
                 }));
 
             } else {
-
-                add(new Anchor("View Transaction History", new Command() {
-                    @Override
-                    public void execute() {
-                        getGadgetView().getPresenter().viewTransactionHistory();
-                    }
-                }));
+// Disabled in Yardi till now:
+//                add(new Anchor("View Transaction History", new Command() {
+//                    @Override
+//                    public void execute() {
+//                        getGadgetView().getPresenter().viewTransactionHistory();
+//                    }
+//                }));
             }
         }
     }
