@@ -7,16 +7,20 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on 2013-10-03
+ * Created on 2013-10-17
  * @author ArtyomB
  * @version $Id$
  */
 package com.propertyvista.crm.rpc.dto.legal.n4;
 
+import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.shared.IPrimitive;
 
 @Transient
-public interface N4GenerationSettingsDTO extends IEntity {
+public interface GeneratedN4GroupDTO extends IEntity {
 
+    @ToString(index = 0)
+    IPrimitive<String> groupId();
 }

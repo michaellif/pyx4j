@@ -236,6 +236,7 @@ import com.propertyvista.crm.client.activity.reports.ResidentInsuranceReportActi
 import com.propertyvista.crm.client.activity.security.PasswordChangeActivity;
 import com.propertyvista.crm.client.activity.security.PasswordResetActivity;
 import com.propertyvista.crm.client.activity.security.PasswordResetRequestActivity;
+import com.propertyvista.crm.client.activity.tools.n4generation.N4DownloadToolActivity;
 import com.propertyvista.crm.client.activity.tools.n4generation.N4GenerationToolActivity;
 import com.propertyvista.crm.client.activity.wizard.creditcheck.CreditCheckActivity;
 import com.propertyvista.crm.client.activity.wizard.creditcheck.CreditCheckStatusViewerActivity;
@@ -660,6 +661,9 @@ public class ContentActivityMapper implements AppActivityMapper {
 // - Legal-related:
                     } else if (crudPlace instanceof CrmSiteMap.LegalAndCollections.N4GenerationTool) {
                         activity = new N4GenerationToolActivity(crudPlace);
+
+                    } else if (crudPlace instanceof CrmSiteMap.LegalAndCollections.N4DownloadTool) {
+                        activity = new N4DownloadToolActivity(crudPlace);
 
 // - Financial-related:
 

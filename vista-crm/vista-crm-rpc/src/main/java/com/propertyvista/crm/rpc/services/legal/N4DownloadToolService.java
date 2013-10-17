@@ -7,7 +7,7 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on 2013-10-03
+ * Created on 2013-10-17
  * @author ArtyomB
  * @version $Id$
  */
@@ -18,15 +18,14 @@ import java.util.Vector;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.propertyvista.crm.rpc.dto.legal.n4.LegalNoticeCandidateDTO;
-import com.propertyvista.crm.rpc.dto.legal.n4.N4GenerationSettingsDTO;
-import com.propertyvista.domain.tenant.lease.Lease;
+import com.propertyvista.crm.rpc.dto.legal.n4.N4DownloadSettingsDTO;
+import com.propertyvista.domain.legal.N4LegalLetter;
 
-public interface N4GenerationToolService extends AbstractBulkOperationService<N4GenerationSettingsDTO, LegalNoticeCandidateDTO, Vector<Lease>> {
-
-    @Override
-    void getItems(AsyncCallback<Vector<LegalNoticeCandidateDTO>> callback, N4GenerationSettingsDTO settings);
+public interface N4DownloadToolService extends AbstractBulkOperationService<N4DownloadSettingsDTO, LegalNoticeCandidateDTO, Vector<N4LegalLetter>> {
 
     @Override
-    void process(AsyncCallback<String> callback, Vector<Lease> accepted);
+    void getItems(AsyncCallback<Vector<LegalNoticeCandidateDTO>> callback, N4DownloadSettingsDTO settings);
 
+    @Override
+    void process(AsyncCallback<String> callback, Vector<N4LegalLetter> accepted);
 }

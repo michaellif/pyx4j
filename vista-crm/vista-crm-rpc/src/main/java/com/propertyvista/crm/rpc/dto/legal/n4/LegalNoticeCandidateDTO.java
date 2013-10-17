@@ -24,6 +24,7 @@ import com.pyx4j.entity.shared.IPrimitive;
 
 import com.propertyvista.crm.rpc.dto.financial.autopayreview.BulkEditableEntity;
 import com.propertyvista.domain.legal.LegalNoticeCandidate;
+import com.propertyvista.domain.legal.N4LegalLetter;
 
 @Transient
 public interface LegalNoticeCandidateDTO extends LegalNoticeCandidate, BulkEditableEntity {
@@ -44,5 +45,7 @@ public interface LegalNoticeCandidateDTO extends LegalNoticeCandidate, BulkEdita
     @Editor(type = EditorType.money)
     @Format("#,##0.00")
     IPrimitive<BigDecimal> amountOwed();
+
+    N4LegalLetter n4LetterId();
 
 }

@@ -11,12 +11,13 @@
  * @author ArtyomB
  * @version $Id$
  */
-package com.propertyvista.crm.rpc.dto.legal.n4;
+package com.propertyvista.crm.client.ui.tools.n4generation;
 
-import com.pyx4j.entity.annotations.Transient;
-import com.pyx4j.entity.shared.IEntity;
+import com.propertyvista.crm.client.ui.tools.n4generation.base.BulkOperationToolView;
+import com.propertyvista.crm.rpc.dto.legal.n4.LegalNoticeCandidateDTO;
+import com.propertyvista.crm.rpc.dto.legal.n4.N4DownloadSettingsDTO;
 
-@Transient
-public interface N4GenerationSettingsDTO extends IEntity {
+public interface N4DownloadToolView extends BulkOperationToolView<N4DownloadSettingsDTO, LegalNoticeCandidateDTO> {
 
+    void displayN4DownloadLink(String url);
 }

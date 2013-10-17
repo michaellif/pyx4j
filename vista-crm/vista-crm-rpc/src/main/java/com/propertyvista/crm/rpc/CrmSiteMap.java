@@ -237,11 +237,13 @@ public class CrmSiteMap implements SiteMap {
 
     public static class LegalAndCollections extends AppPlace {
 
+        @PlaceProperties(navigLabel = "N4 Generation Tool")
         public static class N4GenerationTool extends CrmCrudAppPlace {
 
         }
 
-        public static class PastN4 extends CrmCrudAppPlace {
+        @PlaceProperties(navigLabel = "Generated N4's")
+        public static class N4DownloadTool extends CrmCrudAppPlace {
 
         }
 

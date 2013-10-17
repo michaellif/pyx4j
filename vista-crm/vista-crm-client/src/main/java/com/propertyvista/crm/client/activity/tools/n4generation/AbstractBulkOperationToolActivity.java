@@ -119,7 +119,14 @@ public abstract class AbstractBulkOperationToolActivity<Settings extends IEntity
             @Override
             public void onDeferredSuccess(DeferredProcessProgressResponse result) {
                 super.onDeferredSuccess(result);
+                AbstractBulkOperationToolActivity.this.onSelectedProccessSuccess(result);
                 populate();
+            }
+
+            @Override
+            protected void onDeferredCompleate() {
+                super.onDeferredCompleate();
+                this.hide();
             }
         };
         d.show();

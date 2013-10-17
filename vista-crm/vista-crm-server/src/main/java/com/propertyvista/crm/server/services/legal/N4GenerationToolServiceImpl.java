@@ -22,8 +22,10 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
+import com.pyx4j.gwt.server.deferred.DeferredProcessRegistry;
 
 import com.propertyvista.biz.legal.N4ManagementFacade;
+import com.propertyvista.config.ThreadPoolNames;
 import com.propertyvista.crm.rpc.dto.legal.n4.LegalNoticeCandidateDTO;
 import com.propertyvista.crm.rpc.dto.legal.n4.N4GenerationSettingsDTO;
 import com.propertyvista.crm.rpc.services.legal.N4GenerationToolService;
@@ -48,8 +50,8 @@ public class N4GenerationToolServiceImpl implements N4GenerationToolService {
     }
 
     @Override
-    public void process(AsyncCallback<String> callback, Vector<Lease> accepted) {
-        callback.onSuccess("meh");
+    public void process(AsyncCallback<String> callback, Vector<Lease> delinquentLeases) {
+        callback.onSuccess(DeferredProcessRegistry.fork(new N4GenerationDeferredProcess(delinquentLeases), ThreadPoolNames.IMPORTS));
     }
 
     private LegalNoticeCandidateDTO makeLegalNoticeCandidateDto(LegalNoticeCandidate candidate) {
