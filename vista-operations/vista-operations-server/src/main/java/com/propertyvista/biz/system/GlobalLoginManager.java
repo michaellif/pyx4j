@@ -28,6 +28,8 @@ import com.propertyvista.config.VistaDeployment;
 import com.propertyvista.crm.rpc.dto.account.GlobalLoginResponseDTO;
 import com.propertyvista.domain.pmc.Pmc;
 import com.propertyvista.domain.security.CrmUser;
+import com.propertyvista.operations.domain.security.OperationsUser;
+import com.propertyvista.operations.domain.security.OperationsUserCredential;
 import com.propertyvista.server.domain.security.CrmUserCredential;
 import com.propertyvista.server.domain.security.GlobalCrmUserIndex;
 import com.propertyvista.server.jobs.TaskRunner;
@@ -53,6 +55,37 @@ class GlobalLoginManager {
                     }
 
                 }
+                return null;
+            }
+        });
+    }
+
+    GlobalLoginResponseDTO findAndVerifyOprationsUser(final String email, final String password) {
+        return TaskRunner.runInOperationsNamespace(new Callable<GlobalLoginResponseDTO>() {
+            @Override
+            public GlobalLoginResponseDTO call() {
+                EntityQueryCriteria<OperationsUser> criteria = EntityQueryCriteria.create(OperationsUser.class);
+                criteria.eq(criteria.proto().email(), EmailValidator.normalizeEmailAddress(email));
+                OperationsUser user = Persistence.service().retrieve(criteria);
+                if (user != null) {
+                    OperationsUserCredential credentials = Persistence.service().retrieve(OperationsUserCredential.class, user.getPrimaryKey());
+                    if (credentials == null) {
+                        throw new UserRuntimeException(i18n.tr("Invalid User Account. Please Contact Support"));
+                    }
+                    if (!credentials.enabled().isBooleanTrue()) {
+                        return null;
+                    }
+
+                    if (!ServerSideFactory.create(PasswordEncryptorFacade.class).checkUserPassword(password, credentials.credential().getValue())) {
+                        return null;
+                    }
+
+                    GlobalLoginResponseDTO responce = EntityFactory.create(GlobalLoginResponseDTO.class);
+                    responce.user().email().setValue(user.email().getValue());
+                    responce.user().name().setValue(user.name().getValue());
+                    return responce;
+                }
+
                 return null;
             }
         });

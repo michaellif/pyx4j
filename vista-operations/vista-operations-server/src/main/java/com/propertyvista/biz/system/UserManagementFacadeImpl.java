@@ -121,7 +121,11 @@ public class UserManagementFacadeImpl implements UserManagementFacade {
 
     @Override
     public GlobalLoginResponseDTO globalFindAndVerifyCrmUser(String email, String password) {
-        return new GlobalLoginManager().findAndVerifyCrmUser(email, password);
+        GlobalLoginResponseDTO dto = new GlobalLoginManager().findAndVerifyCrmUser(email, password);
+        if (dto == null) {
+            dto = new GlobalLoginManager().findAndVerifyOprationsUser(email, password);
+        }
+        return dto;
     }
 
     @Override
