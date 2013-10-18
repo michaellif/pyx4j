@@ -56,7 +56,7 @@ public class AddressRetriever {
 
     public static AddressStructured getUnitLegalAddress(AptUnit unit) {
         Persistence.ensureRetrieve(unit.building(), AttachLevel.Attached);
-        if (unit.info().legalAddressOverride().getValue(false)) {
+        if (!unit.info().legalAddressOverride().getValue(false)) {
             AddressStructured address = EntityFactory.create(AddressStructured.class);
             address.set(unit.building().info().address());
             address.suiteNumber().set(unit.info().number());
