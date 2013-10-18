@@ -21,6 +21,7 @@ public interface TenantSureResources extends ClientBundleWithLookup {
     @Source("logo-Highcourt-small.png")
     ImageResource logoHighcourt();
 
+    // TODO VISTA-3596: consider keeping this on server and fetching it via activity
     @Source("pre-authorized-payment-disclaimer.html")
     TextResource preAuthorizedPaymentDisclaimer();
 
@@ -30,14 +31,14 @@ public interface TenantSureResources extends ClientBundleWithLookup {
 
     }
 
-    // TODO VISTA-3596: consider keeping this on server and fetching it implicitly via activity
+    // TODO VISTA-3596: consider keeping this on server and fetching it via activity
     @Source("faq.html")
     TextResource faq();
 
-    /** this is id of the anchor that should hold a link to privacy policy which is injected dynamicall to the page upon population */
+    /** this is id of the anchor that should hold a link to privacy policy which is injected dynamically to the page upon population */
     public static final String PRIVACY_POLICY_ANCHOR_ID = "PrivacyPolicy";
 
-    // TODO this should be fetched as terms
+    // TODO VISTA-3596: consider keeping this on server and fetching it via activity
     @Source("personal-disclaimer.html")
     TextResource personalDisclaimer();
 
