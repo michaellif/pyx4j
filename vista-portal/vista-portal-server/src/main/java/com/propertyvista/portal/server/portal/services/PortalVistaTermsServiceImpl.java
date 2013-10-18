@@ -29,13 +29,22 @@ import com.propertyvista.server.jobs.TaskRunner;
 public class PortalVistaTermsServiceImpl implements PortalVistaTermsService {
 
     @Override
-    public void getVistaTerms(AsyncCallback<String> callback) {
+    public void getPortalTerms(AsyncCallback<String> callback) {
+        getVistaTerms(callback, VistaTerms.Target.Tenant);
+    }
+
+    @Override
+    public void getPortalPrivacyPolicy(AsyncCallback<String> callback) {
+        getVistaTerms(callback, VistaTerms.Target.TenantPrivacy);
+    }
+
+    private void getVistaTerms(AsyncCallback<String> callback, final VistaTerms.Target target) {
         String terms = TaskRunner.runInOperationsNamespace(new Callable<String>() {
             @Override
             public String call() {
                 String result = null;
                 EntityQueryCriteria<VistaTerms> criteria = EntityQueryCriteria.create(VistaTerms.class);
-                criteria.eq(criteria.proto().target(), VistaTerms.Target.Tenant);
+                criteria.eq(criteria.proto().target(), target);
                 List<VistaTerms> list = Persistence.service().query(criteria);
                 if (!list.isEmpty()) {
                     VistaTerms terms = list.get(0);
@@ -54,5 +63,4 @@ public class PortalVistaTermsServiceImpl implements PortalVistaTermsService {
         }
         callback.onSuccess(terms);
     }
-
 }

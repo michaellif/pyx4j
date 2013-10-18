@@ -25,6 +25,7 @@ import com.pyx4j.forms.client.ui.CDateLabel;
 import com.pyx4j.forms.client.ui.CEntityLabel;
 import com.pyx4j.forms.client.ui.CMoneyLabel;
 import com.pyx4j.forms.client.ui.decorators.WidgetDecorator.Builder.Alignment;
+import com.pyx4j.forms.client.ui.form.EditableFormDecorator;
 import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
 
@@ -90,6 +91,6 @@ public class AutoPayViewForm extends CPortalEntityEditor<AutoPayDTO> {
         super.onValueSet(populate);
 
         get(proto().paymentMethod()).setVisible(!getValue().paymentMethod().isNull());
-//        ((EditableFormDecorator<AutoPayDTO>) getDecorator()).getBtnEdit().setVisible(!getValue().paymentMethod().isNull());
+        ((EditableFormDecorator<AutoPayDTO>) getDecorator()).getBtnEdit().setVisible(!getValue().paymentMethod().isNull());
     }
 }

@@ -32,7 +32,6 @@ public interface SignUpView extends IsView {
         void showVistaTerms();
 
         Class<? extends Place> getPortalTermsPlace();
-
     }
 
     void setPresenter(SignUpPresenter presenter);

@@ -19,6 +19,7 @@ import com.pyx4j.rpc.shared.IService;
 
 public interface PortalVistaTermsService extends IService {
 
-    void getVistaTerms(AsyncCallback<String> callback);
+    void getPortalTerms(AsyncCallback<String> callback);
 
+    void getPortalPrivacyPolicy(AsyncCallback<String> callback);
 }

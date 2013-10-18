@@ -14,21 +14,26 @@
 package com.propertyvista.portal.web.client.activity.financial.paymentmethod;
 
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.place.shared.Place;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.commons.Key;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.site.client.AppSite;
+import com.pyx4j.site.client.NavigationUri;
 import com.pyx4j.site.rpc.AppPlace;
+import com.pyx4j.site.rpc.AppPlaceInfo;
 
 import com.propertyvista.domain.contact.AddressSimple;
+import com.propertyvista.portal.rpc.portal.PortalSiteMap;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap.Resident.Financial;
 import com.propertyvista.portal.rpc.portal.web.dto.financial.PaymentMethodDTO;
 import com.propertyvista.portal.rpc.portal.web.services.financial.PaymentMethodWizardService;
 import com.propertyvista.portal.web.client.activity.AbstractWizardCrudActivity;
 import com.propertyvista.portal.web.client.ui.financial.paymentmethod.PaymentMethodWizardView;
 
-public class PaymentMethodWizardActivity extends AbstractWizardCrudActivity<PaymentMethodDTO> implements PaymentMethodWizardView.Persenter {
+public class PaymentMethodWizardActivity extends AbstractWizardCrudActivity<PaymentMethodDTO> implements PaymentMethodWizardView.Presenter {
 
     public PaymentMethodWizardActivity(AppPlace place) {
         super(PaymentMethodWizardView.class, GWT.<PaymentMethodWizardService> create(PaymentMethodWizardService.class), PaymentMethodDTO.class);
@@ -48,5 +53,25 @@ public class PaymentMethodWizardActivity extends AbstractWizardCrudActivity<Paym
     protected void onFinish(Key result) {
         getView().reset();
         AppSite.getPlaceController().goTo(new Financial.PaymentMethods.PaymentMethodSubmitted(result));
+    }
+
+    @Override
+    public Class<? extends Place> getTermsOfUsePlace() {
+        return PortalSiteMap.PortalTermsAndConditions.class;
+    }
+
+    @Override
+    public Class<? extends Place> getPrivacyPolicyPlace() {
+        return PortalSiteMap.PortalPrivacyPolicy.class;
+    }
+
+    @Override
+    public void showTermsOfUse() {
+        Window.open(AppPlaceInfo.absoluteUrl(NavigationUri.getHostPageURL(), false, getTermsOfUsePlace()), "_blank", null);
+    }
+
+    @Override
+    public void showPrivacyPolicy() {
+        Window.open(AppPlaceInfo.absoluteUrl(NavigationUri.getHostPageURL(), false, getPrivacyPolicyPlace()), "_blank", null);
     }
 }

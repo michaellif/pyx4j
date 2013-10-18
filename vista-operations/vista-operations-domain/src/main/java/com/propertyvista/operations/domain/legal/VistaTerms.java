@@ -20,15 +20,15 @@ import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.entity.shared.IVersionData;
 import com.pyx4j.entity.shared.IVersionedEntity;
 
-import com.propertyvista.operations.domain.legal.VistaTerms.VistaTermsV;
 import com.propertyvista.domain.VistaNamespace;
+import com.propertyvista.operations.domain.legal.VistaTerms.VistaTermsV;
 
 @Table(namespace = VistaNamespace.operationsNamespace)
 public interface VistaTerms extends IVersionedEntity<VistaTermsV> {
 
     public enum Target {
 
-        PMC, Tenant, PmcCaledonTemplate, PmcCaldedonSolePropetorshipSection, PmcPaymentPad, TenantSurePreAuthorizedPaymentsAgreement;
+        PMC, Tenant, PmcCaledonTemplate, PmcCaldedonSolePropetorshipSection, PmcPaymentPad, TenantSurePreAuthorizedPaymentsAgreement, TenantPrivacy;
 
     }
 

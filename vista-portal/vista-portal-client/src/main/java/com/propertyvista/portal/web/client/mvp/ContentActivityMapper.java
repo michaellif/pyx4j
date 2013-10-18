@@ -168,8 +168,10 @@ public class ContentActivityMapper implements AppActivityMapper {
                     } else if (place instanceof PortalSiteMap.LeaseContextSelection) {
                         activity = new LeaseContextSelectionActivity();
                     } else if (place instanceof PortalSiteMap.PortalTermsAndConditions) {
-                        activity = new VistaTermsActivity();
-                    } else if (place instanceof PortalSiteMap.NotificationPlace) {
+                        activity = new VistaTermsActivity(place);
+                    } else if (place instanceof PortalSiteMap.PortalPrivacyPolicy) {
+                        activity = new VistaTermsActivity(place);
+                    } else if (appPlace instanceof PortalSiteMap.NotificationPlace) {
                         activity = new NotificationPageActivity((PortalSiteMap.NotificationPlace) place);
                     }
 

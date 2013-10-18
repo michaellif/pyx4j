@@ -15,10 +15,16 @@ package com.propertyvista.portal.web.client.ui.financial.paymentmethod;
 
 import java.util.Set;
 
+import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Style.Display;
 import com.google.gwt.dom.client.Style.FontWeight;
+import com.google.gwt.dom.client.Style.Unit;
+import com.google.gwt.dom.client.Style.WhiteSpace;
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.logical.shared.SelectionEvent;
 import com.google.gwt.user.client.Command;
+import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
@@ -36,6 +42,7 @@ import com.pyx4j.forms.client.ui.wizard.WizardStep;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.security.client.ClientContext;
+import com.pyx4j.site.rpc.AppPlaceInfo;
 import com.pyx4j.widgets.client.Anchor;
 
 import com.propertyvista.domain.contact.AddressSimple;
@@ -55,6 +62,12 @@ public class PaymentMethodWizard extends CPortalEntityWizard<PaymentMethodDTO> {
 
     private final SimplePanel confirmationDetailsHolder = new SimplePanel();
 
+    private final Anchor termsOfUseAnchor = new Anchor(i18n.tr("Terms Of Use"));
+
+    private final Anchor privacyPolicyAnchor = new Anchor(i18n.tr("Privacy Policy"));
+
+    private PaymentMethodWizardView.Presenter presenter;
+
     private final PaymentMethodEditor<LeasePaymentMethod> paymentMethodEditor = new PaymentMethodEditor<LeasePaymentMethod>(LeasePaymentMethod.class) {
 
         @Override
@@ -66,7 +79,7 @@ public class PaymentMethodWizard extends CPortalEntityWizard<PaymentMethodDTO> {
         public void onBillingAddressSameAsCurrentOne(boolean set, final CComponent<AddressSimple> comp) {
             if (set) {
                 assert (getView().getPresenter() != null);
-                ((PaymentMethodWizardView.Persenter) getView().getPresenter()).getCurrentAddress(new DefaultAsyncCallback<AddressSimple>() {
+                ((PaymentMethodWizardView.Presenter) getView().getPresenter()).getCurrentAddress(new DefaultAsyncCallback<AddressSimple>() {
                     @Override
                     public void onSuccess(AddressSimple result) {
                         comp.setValue(result, false);
@@ -88,6 +101,13 @@ public class PaymentMethodWizard extends CPortalEntityWizard<PaymentMethodDTO> {
 
         addStep(createPaymentMethodStep());
         comfirmationStep = addStep(createConfirmationStep());
+    }
+
+    public void setPresenter(PaymentMethodWizardView.Presenter presenter) {
+        this.presenter = presenter;
+
+        this.termsOfUseAnchor.setHref(AppPlaceInfo.absoluteUrl(GWT.getModuleBaseURL(), true, presenter.getTermsOfUsePlace()));
+        this.privacyPolicyAnchor.setHref(AppPlaceInfo.absoluteUrl(GWT.getModuleBaseURL(), true, presenter.getPrivacyPolicyPlace()));
     }
 
     private BasicFlexFormPanel createPaymentMethodStep() {
@@ -146,7 +166,7 @@ public class PaymentMethodWizard extends CPortalEntityWizard<PaymentMethodDTO> {
         return panel;
     }
 
-    private Widget createLegalTermsPanel() {
+    private Widget createLegalTermsPanel_() {
         FlowPanel panel = new FlowPanel();
         Widget w;
 
@@ -166,6 +186,41 @@ public class PaymentMethodWizard extends CPortalEntityWizard<PaymentMethodDTO> {
                 new LegalTermsDialog(TermsType.PrivacyPolicy).show();
             }
         }));
+
+        return panel;
+    }
+
+    private Widget createLegalTermsPanel() {
+        termsOfUseAnchor.getElement().getStyle().setDisplay(Display.INLINE);
+        termsOfUseAnchor.getElement().getStyle().setPadding(0, Unit.PX);
+        termsOfUseAnchor.getElement().getStyle().setWhiteSpace(WhiteSpace.NORMAL);
+        termsOfUseAnchor.addClickHandler(new ClickHandler() {
+            @Override
+            public void onClick(ClickEvent event) {
+                presenter.showTermsOfUse();
+                DOM.eventPreventDefault((com.google.gwt.user.client.Event) event.getNativeEvent());
+            }
+        });
+
+        privacyPolicyAnchor.getElement().getStyle().setDisplay(Display.INLINE);
+        privacyPolicyAnchor.getElement().getStyle().setPadding(0, Unit.PX);
+        privacyPolicyAnchor.getElement().getStyle().setWhiteSpace(WhiteSpace.NORMAL);
+        privacyPolicyAnchor.addClickHandler(new ClickHandler() {
+            @Override
+            public void onClick(ClickEvent event) {
+                presenter.showPrivacyPolicy();
+                DOM.eventPreventDefault((com.google.gwt.user.client.Event) event.getNativeEvent());
+            }
+        });
+
+        Widget w;
+        FlowPanel panel = new FlowPanel();
+
+        panel.add(new HTML(i18n.tr("Be informed that you are acknowledging our")));
+        panel.add(termsOfUseAnchor);
+        panel.add(w = new HTML("&nbsp" + i18n.tr("and") + "&nbsp"));
+        w.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
+        panel.add(privacyPolicyAnchor);
 
         return panel;
     }

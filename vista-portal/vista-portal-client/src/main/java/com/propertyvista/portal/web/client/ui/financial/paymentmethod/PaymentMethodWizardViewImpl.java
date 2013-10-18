@@ -17,6 +17,7 @@ import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.portal.rpc.portal.web.dto.financial.PaymentMethodDTO;
 import com.propertyvista.portal.web.client.ui.AbstractWizardView;
+import com.propertyvista.portal.web.client.ui.IWizardView;
 
 public class PaymentMethodWizardViewImpl extends AbstractWizardView<PaymentMethodDTO> implements PaymentMethodWizardView {
 
@@ -26,5 +27,11 @@ public class PaymentMethodWizardViewImpl extends AbstractWizardView<PaymentMetho
         super();
         setWizard(new PaymentMethodWizard(this));
 
+    }
+
+    @Override
+    public void setPresenter(IWizardView.IWizardPresenter<PaymentMethodDTO> presenter) {
+        super.setPresenter(presenter);
+        ((PaymentMethodWizard) getWizard()).setPresenter((PaymentMethodWizardView.Presenter) presenter);
     }
 }

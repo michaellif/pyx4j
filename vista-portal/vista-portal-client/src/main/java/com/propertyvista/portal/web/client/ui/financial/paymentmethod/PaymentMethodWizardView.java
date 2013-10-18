@@ -13,6 +13,7 @@
  */
 package com.propertyvista.portal.web.client.ui.financial.paymentmethod;
 
+import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.propertyvista.domain.contact.AddressSimple;
@@ -21,8 +22,16 @@ import com.propertyvista.portal.web.client.ui.IWizardView;
 
 public interface PaymentMethodWizardView extends IWizardView<PaymentMethodDTO> {
 
-    interface Persenter extends IWizardPresenter<PaymentMethodDTO> {
+    interface Presenter extends IWizardPresenter<PaymentMethodDTO> {
 
         void getCurrentAddress(AsyncCallback<AddressSimple> callback);
+
+        void showTermsOfUse();
+
+        void showPrivacyPolicy();
+
+        Class<? extends Place> getTermsOfUsePlace();
+
+        Class<? extends Place> getPrivacyPolicyPlace();
     }
 }

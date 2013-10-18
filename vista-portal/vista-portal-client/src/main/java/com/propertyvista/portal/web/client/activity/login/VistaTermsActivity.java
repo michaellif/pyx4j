@@ -16,10 +16,12 @@ package com.propertyvista.portal.web.client.activity.login;
 import com.google.gwt.activity.shared.AbstractActivity;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.shared.EventBus;
+import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 
+import com.propertyvista.portal.rpc.portal.PortalSiteMap;
 import com.propertyvista.portal.rpc.portal.services.PortalVistaTermsService;
 import com.propertyvista.portal.web.client.PortalWebSite;
 import com.propertyvista.portal.web.client.ui.TermsView;
@@ -28,20 +30,34 @@ public class VistaTermsActivity extends AbstractActivity {
 
     private final TermsView view;
 
-    public VistaTermsActivity() {
+    private final Place place;
+
+    public VistaTermsActivity(Place place) {
         view = PortalWebSite.getViewFactory().instantiate(TermsView.class);
+        this.place = place;
     }
 
     @Override
     public void start(final AcceptsOneWidget panel, EventBus eventBus) {
-        GWT.<PortalVistaTermsService> create(PortalVistaTermsService.class).getVistaTerms(new DefaultAsyncCallback<String>() {
-            @Override
-            public void onSuccess(String result) {
-                view.populate(result);
-                panel.setWidget(view);
-            }
-        });
+
+        if (place instanceof PortalSiteMap.PortalTermsAndConditions) {
+            GWT.<PortalVistaTermsService> create(PortalVistaTermsService.class).getPortalTerms(new DefaultAsyncCallback<String>() {
+                @Override
+                public void onSuccess(String result) {
+                    view.populate(result);
+                    panel.setWidget(view);
+                }
+            });
+        } else if (place instanceof PortalSiteMap.PortalPrivacyPolicy) {
+            GWT.<PortalVistaTermsService> create(PortalVistaTermsService.class).getPortalPrivacyPolicy(new DefaultAsyncCallback<String>() {
+                @Override
+                public void onSuccess(String result) {
+                    view.populate(result);
+                    panel.setWidget(view);
+                }
+            });
+        }
+
         panel.setWidget(view);
     }
-
 }

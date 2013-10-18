@@ -60,6 +60,9 @@ public class PortalSiteMap implements SiteMap {
     public static class PortalTermsAndConditions extends AppPlace implements PublicPlace {
     }
 
+    public static class PortalPrivacyPolicy extends AppPlace implements PublicPlace {
+    }
+
     @PlaceProperties(navigLabel = "Select Lease", caption = "Select Lease")
     public static class LeaseContextSelection extends AppPlace {
     }
