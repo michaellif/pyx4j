@@ -28,7 +28,7 @@ import com.pyx4j.entity.shared.UniqueConstraintUserRuntimeException;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.prime.AbstractPrimePane;
 import com.pyx4j.widgets.client.Button;
-import com.pyx4j.widgets.client.dialog.MessageDialog;
+import com.pyx4j.widgets.client.dialog.MessageDialog_v2;
 
 public abstract class AbstractWizard<E extends IEntity> extends AbstractPrimePane implements IWizard<E> {
 
@@ -149,7 +149,7 @@ public abstract class AbstractWizard<E extends IEntity> extends AbstractPrimePan
     }
 
     protected void showErrorDialog(String message) {
-        MessageDialog.error(i18n.tr("Error"), message);
+        MessageDialog_v2.error(i18n.tr("Error"), message);
     }
 
     protected void calculateButtonsState() {

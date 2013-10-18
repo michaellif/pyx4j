@@ -29,7 +29,7 @@ import com.google.gwt.event.shared.SimpleEventBus;
 import com.google.gwt.user.client.Window;
 
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.widgets.client.dialog.MessageDialog;
+import com.pyx4j.widgets.client.dialog.MessageDialog_v2;
 
 public class PopupWindow {
 
@@ -92,7 +92,7 @@ public class PopupWindow {
         PopupWindowHandle windowHandle = openPopupWindow(url, "", features.toString());
         if ((windowHandle == null) || (windowHandle.isClosed())) {
             // Detect blocked popup not working in Chrome
-            MessageDialog.error(i18n.tr("Popup window blocked"), i18n.tr("Your Browser Prevented This Application From Opening A Popup Window\n"
+            MessageDialog_v2.error(i18n.tr("Popup window blocked"), i18n.tr("Your Browser Prevented This Application From Opening A Popup Window\n"
                     + "Please Disable Your Popup Blocker For The Application To Function Properly"));
             return null;
         } else {

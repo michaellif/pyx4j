@@ -22,7 +22,7 @@ package com.pyx4j.essentials.client;
 
 import com.google.gwt.user.client.Command;
 
-import com.pyx4j.widgets.client.dialog.MessageDialog;
+import com.pyx4j.widgets.client.dialog.MessageDialog_v2;
 
 public class ConfirmCommand implements Command {
 
@@ -40,7 +40,7 @@ public class ConfirmCommand implements Command {
 
     @Override
     public void execute() {
-        MessageDialog.confirm(title, text, onConfirmed);
+        MessageDialog_v2.confirm(title, text, onConfirmed);
     }
 
 }

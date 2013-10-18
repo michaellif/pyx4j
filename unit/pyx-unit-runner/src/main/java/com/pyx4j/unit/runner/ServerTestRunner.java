@@ -36,7 +36,7 @@ import com.pyx4j.unit.client.GCaseMeta;
 import com.pyx4j.unit.client.ui.TestRunnerDialog;
 import com.pyx4j.unit.serverside.rpc.UnitTestInfo;
 import com.pyx4j.unit.serverside.rpc.UnitTestsServices;
-import com.pyx4j.widgets.client.dialog.MessageDialog;
+import com.pyx4j.widgets.client.dialog.MessageDialog_v2;
 
 public class ServerTestRunner {
 
@@ -66,11 +66,13 @@ public class ServerTestRunner {
 
         final AsyncCallback<Vector<UnitTestInfo>> callback = new AsyncCallback<Vector<UnitTestInfo>>() {
 
+            @Override
             public void onFailure(Throwable t) {
                 log.error("Can't load Server side TestsList", t);
-                MessageDialog.error("Server side Tests", t.getMessage());
+                MessageDialog_v2.error("Server side Tests", t.getMessage());
             }
 
+            @Override
             public void onSuccess(Vector<UnitTestInfo> result) {
                 log.info("got {} server tests ", result.size());
                 Collection<List<GCaseMeta>> testCasesGroups = new Vector<List<GCaseMeta>>();

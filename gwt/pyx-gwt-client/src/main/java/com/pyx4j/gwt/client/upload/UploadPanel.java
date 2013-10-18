@@ -55,7 +55,7 @@ import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.rpc.client.IServiceBase;
 import com.pyx4j.rpc.shared.VoidSerializable;
-import com.pyx4j.widgets.client.dialog.MessageDialog;
+import com.pyx4j.widgets.client.dialog.MessageDialog_v2;
 
 public class UploadPanel<U extends IEntity, R extends IFile> extends SimplePanel implements FormPanel.SubmitCompleteHandler, FormPanel.SubmitHandler,
         DeferredProgressListener {
@@ -218,7 +218,7 @@ public class UploadPanel<U extends IEntity, R extends IFile> extends SimplePanel
             }
             break;
         }
-        MessageDialog.error(i18n.tr("Upload Error"), message);
+        MessageDialog_v2.error(i18n.tr("Upload Error"), message);
     }
 
     protected boolean isFileValid() {

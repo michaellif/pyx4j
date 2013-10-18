@@ -41,6 +41,7 @@ import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.forms.client.validators.ValidationResults;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
+import com.pyx4j.widgets.client.dialog.MessageDialog_v2;
 import com.pyx4j.widgets.client.tabpanel.Tab;
 import com.pyx4j.widgets.client.tabpanel.WizardPanel;
 
@@ -159,7 +160,7 @@ public abstract class WizardForm<E extends IEntity> extends CEntityForm<E> imple
                 wizardPanel.selectTab(index + 1);
             }
         } else {
-            MessageDialog.error(i18n.tr("Error"), validationResults.getValidationMessage(true, true, true));
+            MessageDialog_v2.error(i18n.tr("Error"), validationResults.getValidationMessage(true, true, true));
         }
 
     }
@@ -167,7 +168,7 @@ public abstract class WizardForm<E extends IEntity> extends CEntityForm<E> imple
     protected final void finish() {
         if (!isValid()) {
             setUnconditionalValidationErrorRendering(true);
-            MessageDialog.error(i18n.tr("Error"), getValidationResults().getValidationMessage(true, true, true));
+            MessageDialog_v2.error(i18n.tr("Error"), getValidationResults().getValidationMessage(true, true, true));
         } else {
             view.getPresenter().finish();
         }

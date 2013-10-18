@@ -26,7 +26,7 @@ import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.Anchor;
 import com.pyx4j.widgets.client.Button;
-import com.pyx4j.widgets.client.dialog.MessageDialog;
+import com.pyx4j.widgets.client.dialog.MessageDialog_v2;
 
 public abstract class AbstractVisorEditor<E extends IEntity> extends AbstractVisorForm<E> implements IVisorEditor<E> {
 
@@ -99,6 +99,6 @@ public abstract class AbstractVisorEditor<E extends IEntity> extends AbstractVis
     }
 
     protected void showValidationDialog() {
-        MessageDialog.error(i18n.tr("Error"), getForm().getValidationResults().getValidationMessage(true, true, true));
+        MessageDialog_v2.error(i18n.tr("Error"), getForm().getValidationResults().getValidationMessage(true, true, true));
     }
 }

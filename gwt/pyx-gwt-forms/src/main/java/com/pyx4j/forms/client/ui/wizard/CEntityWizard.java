@@ -34,7 +34,7 @@ import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
 import com.pyx4j.forms.client.validators.ValidationResults;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.widgets.client.dialog.MessageDialog;
+import com.pyx4j.widgets.client.dialog.MessageDialog_v2;
 
 public class CEntityWizard<E extends IEntity> extends CEntityForm<E> {
 
@@ -146,14 +146,14 @@ public class CEntityWizard<E extends IEntity> extends CEntityForm<E> {
                 wizardPanel.selectStep(index);
             }
         } else {
-            MessageDialog.error(i18n.tr("Error"), validationResults.getValidationMessage(true, true, true));
+            MessageDialog_v2.error(i18n.tr("Error"), validationResults.getValidationMessage(true, true, true));
         }
     }
 
     protected final void finish() {
         if (!isValid()) {
             setUnconditionalValidationErrorRendering(true);
-            MessageDialog.error(i18n.tr("Error"), getValidationResults().getValidationMessage(true, true, true));
+            MessageDialog_v2.error(i18n.tr("Error"), getValidationResults().getValidationMessage(true, true, true));
         } else {
             onFinish();
         }

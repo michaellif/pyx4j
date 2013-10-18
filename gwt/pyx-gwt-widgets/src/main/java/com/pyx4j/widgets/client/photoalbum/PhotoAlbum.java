@@ -57,7 +57,7 @@ import com.google.gwt.user.client.ui.PopupPanel;
 import com.pyx4j.commons.css.CSSClass;
 import com.pyx4j.widgets.client.ImageFactory;
 import com.pyx4j.widgets.client.Slideshow;
-import com.pyx4j.widgets.client.dialog.MessageDialog;
+import com.pyx4j.widgets.client.dialog.MessageDialog_v2;
 
 public abstract class PhotoAlbum extends DockPanel {
 
@@ -267,7 +267,7 @@ public abstract class PhotoAlbum extends DockPanel {
     protected void slideshow(int startFrom, boolean run) {
         List<Photo> photoList = model.getPhotoList();
         if (photoList.size() == 0) {
-            MessageDialog.warn("Photoalbom is empty", "Photoalbom is empty. Add photo first.");
+            MessageDialog_v2.warn("Photoalbom is empty", "Photoalbom is empty. Add photo first.");
         } else {
             Slideshow slideshow = new Slideshow(startFrom, run);
             slideshow.setPixelSize(640, 510);

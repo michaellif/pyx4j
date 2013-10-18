@@ -40,7 +40,7 @@ import com.pyx4j.widgets.client.ImageFactory;
 import com.pyx4j.widgets.client.ImageFactory.WidgetsImageBundle;
 import com.pyx4j.widgets.client.ListBox;
 import com.pyx4j.widgets.client.RichTextArea;
-import com.pyx4j.widgets.client.dialog.MessageDialog;
+import com.pyx4j.widgets.client.dialog.MessageDialog_v2;
 
 /**
  * A sample toolbar for use with {@link RichTextArea}. It provides a simple UI for all
@@ -100,7 +100,7 @@ public class ExtendedRichTextToolbar extends Composite {
                     provider.selectImage(new AsyncCallback<String>() {
                         @Override
                         public void onFailure(Throwable caught) {
-                            MessageDialog.error(i18n.tr("Action Failed"), caught.getMessage());
+                            MessageDialog_v2.error(i18n.tr("Action Failed"), caught.getMessage());
                         }
 
                         @Override

@@ -34,7 +34,7 @@ import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.gwt.commons.DefaultUnrecoverableErrorHandler;
 import com.pyx4j.gwt.commons.UncaughtHandler;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.widgets.client.dialog.Dialog.Type;
+import com.pyx4j.widgets.client.dialog.Dialog_v2.Type;
 
 public class UnrecoverableErrorHandlerDialog extends DefaultUnrecoverableErrorHandler {
 
@@ -116,7 +116,7 @@ public class UnrecoverableErrorHandlerDialog extends DefaultUnrecoverableErrorHa
                 return true;
             }
         };
-        MessageDialog.show(i18n.tr("Application Updated"), getMessageReloadApplication(), Type.Confirm, option);
+        MessageDialog_v2.show(i18n.tr("Application Updated"), getMessageReloadApplication(), Type.Confirm, option);
     }
 
     protected String getMessageReloadApplication() {
@@ -126,19 +126,19 @@ public class UnrecoverableErrorHandlerDialog extends DefaultUnrecoverableErrorHa
 
     @Override
     protected void showWarning(String text) {
-        MessageDialog.show(i18n.tr("Warning"), text, Type.Warning, new ShowOnceDialogOptions());
+        MessageDialog_v2.show(i18n.tr("Warning"), text, Type.Warning, new ShowOnceDialogOptions());
     }
 
     @Override
     protected void showThrottle() {
-        MessageDialog.show(i18n.tr("We're Sorry"), i18n
+        MessageDialog_v2.show(i18n.tr("We're Sorry"), i18n
                 .tr("We're Sorry But Your Requests Look Similar To Automated Requests Initiated By Computer Virus Or Spyware Applications. "
                         + "To Protect Our Users, We Can't Process Your Request At This Time"), Type.Error, new ShowOnceDialogOptions());
     }
 
     @Override
     protected void showUnauthorized() {
-        MessageDialog.show(i18n.tr("We're sorry"), i18n.tr("This Session Has Been Terminated"), Type.Error, new ShowOnceDialogOptions());
+        MessageDialog_v2.show(i18n.tr("We're sorry"), i18n.tr("This Session Has Been Terminated"), Type.Error, new ShowOnceDialogOptions());
     }
 
     @Override
@@ -158,7 +158,7 @@ public class UnrecoverableErrorHandlerDialog extends DefaultUnrecoverableErrorHa
 
     @Override
     protected void showUserError(String text, UserRuntimeException cause) {
-        MessageDialog.show(i18n.tr("Error"), text, Type.Error, new ShowOnceDialogOptions());
+        MessageDialog_v2.show(i18n.tr("Error"), text, Type.Error, new ShowOnceDialogOptions());
     }
 
     @Override
@@ -191,7 +191,7 @@ public class UnrecoverableErrorHandlerDialog extends DefaultUnrecoverableErrorHa
 
         userMessage += detailsMessage;
 
-        MessageDialog.show(i18n.tr("An Unexpected Error Has Occurred"), userMessage, Type.Error, new ShowOnceDialogOptions());
+        MessageDialog_v2.show(i18n.tr("An Unexpected Error Has Occurred"), userMessage, Type.Error, new ShowOnceDialogOptions());
     }
 
 }

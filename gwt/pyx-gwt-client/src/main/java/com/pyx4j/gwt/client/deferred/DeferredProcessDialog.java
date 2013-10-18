@@ -36,7 +36,7 @@ import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.dialog.CancelOption;
 import com.pyx4j.widgets.client.dialog.CloseOption;
 import com.pyx4j.widgets.client.dialog.Dialog;
-import com.pyx4j.widgets.client.dialog.MessageDialog;
+import com.pyx4j.widgets.client.dialog.MessageDialog_v2;
 
 public class DeferredProcessDialog extends SimplePanel implements CloseOption, CancelOption, DeferredProgressListener {
 
@@ -123,7 +123,7 @@ public class DeferredProcessDialog extends SimplePanel implements CloseOption, C
         onDeferredCompleate();
         hide();
         if (!canceled) {
-            MessageDialog.error(dialog.getTitle(), result.getMessage());
+            MessageDialog_v2.error(dialog.getTitle(), result.getMessage());
         }
     }
 

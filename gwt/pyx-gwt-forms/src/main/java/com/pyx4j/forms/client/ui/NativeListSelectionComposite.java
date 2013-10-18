@@ -55,7 +55,7 @@ import com.google.gwt.user.client.ui.ListBox;
 import com.pyx4j.forms.client.ImageFactory;
 import com.pyx4j.widgets.client.Button;
 import com.pyx4j.widgets.client.GroupFocusHandler;
-import com.pyx4j.widgets.client.dialog.MessageDialog;
+import com.pyx4j.widgets.client.dialog.MessageDialog_v2;
 
 public class NativeListSelectionComposite<E> extends FocusPanel implements INativeListBox<E> {
 
@@ -305,7 +305,7 @@ public class NativeListSelectionComposite<E> extends FocusPanel implements INati
         for (E item : selected) {
             String msg = itemCannotBeRemovedMessage(item);
             if (msg != null) {
-                MessageDialog.info(msg);
+                MessageDialog_v2.info(msg);
                 continue;
             }
             selectedListBox.removeItem(item);

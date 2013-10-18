@@ -52,7 +52,7 @@ import com.pyx4j.site.shared.domain.reports.HasAdvancedSettings;
 import com.pyx4j.site.shared.domain.reports.ReportMetadata;
 import com.pyx4j.widgets.client.Button;
 import com.pyx4j.widgets.client.TextBox;
-import com.pyx4j.widgets.client.dialog.MessageDialog;
+import com.pyx4j.widgets.client.dialog.MessageDialog_v2;
 import com.pyx4j.widgets.client.dialog.OkCancelDialog;
 
 public abstract class AbstractReport<R extends ReportMetadata> extends AbstractPrimePane implements IReportsView<R> {
@@ -369,14 +369,14 @@ public abstract class AbstractReport<R extends ReportMetadata> extends AbstractP
 
     @Override
     public void onReportMetadataSaveFailed(String reason) {
-        MessageDialog.error(i18n.tr("Save Failed"), reason);
+        MessageDialog_v2.error(i18n.tr("Save Failed"), reason);
         activeSettingsForm.getValue().reportMetadataId().setValue(null);
         resetCaption();
     }
 
     @Override
     public void onReportMetadataSaveSucceed(String reportSettingsId) {
-        MessageDialog.info(i18n.tr("Report settings were saved successfuly!"));
+        MessageDialog_v2.info(i18n.tr("Report settings were saved successfuly!"));
         resetCaption();
     }
 

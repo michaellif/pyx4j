@@ -32,7 +32,7 @@ import com.pyx4j.entity.shared.utils.VersionedEntityUtils;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.Button;
 import com.pyx4j.widgets.client.Button.ButtonMenuBar;
-import com.pyx4j.widgets.client.dialog.MessageDialog;
+import com.pyx4j.widgets.client.dialog.MessageDialog_v2;
 
 public abstract class AbstractEditor<E extends IEntity> extends AbstractForm<E> implements IEditor<E> {
 
@@ -188,10 +188,10 @@ public abstract class AbstractEditor<E extends IEntity> extends AbstractForm<E> 
     }
 
     protected void showErrorDialog(String message) {
-        MessageDialog.error(i18n.tr("Error"), message);
+        MessageDialog_v2.error(i18n.tr("Error"), message);
     }
 
     protected void showValidationDialog() {
-        MessageDialog.error(i18n.tr("Error"), i18n.tr("There has been an error. Please check your data and try again."));
+        MessageDialog_v2.error(i18n.tr("Error"), i18n.tr("There has been an error. Please check your data and try again."));
     }
 }
