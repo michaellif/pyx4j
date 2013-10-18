@@ -23,6 +23,7 @@ import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.commons.SimpleMessageFormat;
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.config.server.SystemDateManager;
+import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.entity.server.Executable;
 import com.pyx4j.entity.server.IEntityPersistenceService.ICursorIterator;
 import com.pyx4j.entity.server.Persistence;
@@ -202,6 +203,11 @@ class AutopaytManager {
             paymentRecord.leaseTermParticipant().set(record.leaseTermTenant);
             paymentRecord.paymentMethod().set(record.preauthorizedPayment.paymentMethod());
             paymentRecord.preauthorizedPayment().set(record.preauthorizedPayment);
+
+            if (ApplicationMode.isDevelopment() && false) {
+                paymentRecord.dev_autopayCoveredItems().addAll(record.preauthorizedPayment.coveredItems());
+            }
+
             paymentRecord.notice().setValue(record.notice);
             paymentRecord.padBillingCycle().set(billingCycle);
             paymentRecord.billingAccount().set(billingAccount);

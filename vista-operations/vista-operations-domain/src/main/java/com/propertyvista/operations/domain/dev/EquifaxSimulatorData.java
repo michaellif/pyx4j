@@ -13,8 +13,10 @@
  */
 package com.propertyvista.operations.domain.dev;
 
+import com.pyx4j.config.shared.ApplicationDevelopmentFeature;
 import com.pyx4j.entity.annotations.Editor;
 import com.pyx4j.entity.annotations.Length;
+import com.pyx4j.entity.annotations.RequireFeature;
 import com.pyx4j.entity.annotations.Table;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
@@ -22,6 +24,7 @@ import com.pyx4j.i18n.annotations.I18n;
 
 import com.propertyvista.domain.VistaNamespace;
 
+@RequireFeature(ApplicationDevelopmentFeature.class)
 @I18n(strategy = I18n.I18nStrategy.IgnoreAll)
 @Table(prefix = "dev", namespace = VistaNamespace.operationsNamespace)
 public interface EquifaxSimulatorData extends IEntity {

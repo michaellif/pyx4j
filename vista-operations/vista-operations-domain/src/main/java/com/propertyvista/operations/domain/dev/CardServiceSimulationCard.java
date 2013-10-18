@@ -17,6 +17,7 @@ import java.math.BigDecimal;
 import java.util.Date;
 
 import com.pyx4j.commons.LogicalDate;
+import com.pyx4j.config.shared.ApplicationDevelopmentFeature;
 import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.Editor;
@@ -25,6 +26,7 @@ import com.pyx4j.entity.annotations.Format;
 import com.pyx4j.entity.annotations.JoinColumn;
 import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.annotations.Owner;
+import com.pyx4j.entity.annotations.RequireFeature;
 import com.pyx4j.entity.annotations.Table;
 import com.pyx4j.entity.annotations.Timestamp;
 import com.pyx4j.entity.annotations.Timestamp.Update;
@@ -40,6 +42,7 @@ import com.pyx4j.i18n.annotations.I18n;
 import com.propertyvista.domain.VistaNamespace;
 import com.propertyvista.domain.payment.CreditCardInfo.CreditCardType;
 
+@RequireFeature(ApplicationDevelopmentFeature.class)
 @I18n(strategy = I18n.I18nStrategy.IgnoreAll)
 @Table(prefix = "dev", namespace = VistaNamespace.operationsNamespace)
 public interface CardServiceSimulationCard extends IEntity {

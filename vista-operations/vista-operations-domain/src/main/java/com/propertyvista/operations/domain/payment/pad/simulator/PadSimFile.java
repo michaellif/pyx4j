@@ -15,12 +15,14 @@ package com.propertyvista.operations.domain.payment.pad.simulator;
 
 import java.util.Date;
 
+import com.pyx4j.config.shared.ApplicationDevelopmentFeature;
 import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.Editor;
 import com.pyx4j.entity.annotations.Format;
 import com.pyx4j.entity.annotations.OrderBy;
 import com.pyx4j.entity.annotations.Owned;
+import com.pyx4j.entity.annotations.RequireFeature;
 import com.pyx4j.entity.annotations.Table;
 import com.pyx4j.entity.annotations.Timestamp;
 import com.pyx4j.entity.annotations.ToString;
@@ -41,6 +43,7 @@ import com.propertyvista.domain.financial.FundsTransferType;
  * @see <a href="http://jira.birchwoodsoftwaregroup.com/wiki/display/VISTA/Caledon"/>
  * @see <a href="http://jira.birchwoodsoftwaregroup.com/wiki/download/attachments/4587553/CCS-PAD-File-Specifications.pdf"/>
  */
+@RequireFeature(ApplicationDevelopmentFeature.class)
 @Table(prefix = "dev", namespace = VistaNamespace.operationsNamespace)
 @I18n(strategy = I18n.I18nStrategy.IgnoreAll)
 @ToStringFormat("{3,choice,null#|0#|1#Returns for} {0} {1} {2}")

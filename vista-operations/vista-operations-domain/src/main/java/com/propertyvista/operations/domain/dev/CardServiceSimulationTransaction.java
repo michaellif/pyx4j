@@ -16,6 +16,7 @@ package com.propertyvista.operations.domain.dev;
 import java.math.BigDecimal;
 import java.util.Date;
 
+import com.pyx4j.config.shared.ApplicationDevelopmentFeature;
 import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.Editor;
 import com.pyx4j.entity.annotations.Editor.EditorType;
@@ -24,6 +25,7 @@ import com.pyx4j.entity.annotations.JoinColumn;
 import com.pyx4j.entity.annotations.Length;
 import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.annotations.Owner;
+import com.pyx4j.entity.annotations.RequireFeature;
 import com.pyx4j.entity.annotations.Table;
 import com.pyx4j.entity.annotations.Timestamp;
 import com.pyx4j.entity.annotations.Timestamp.Update;
@@ -34,6 +36,7 @@ import com.pyx4j.i18n.annotations.I18n;
 
 import com.propertyvista.domain.VistaNamespace;
 
+@RequireFeature(ApplicationDevelopmentFeature.class)
 @I18n(strategy = I18n.I18nStrategy.IgnoreAll)
 @Table(prefix = "dev", namespace = VistaNamespace.operationsNamespace)
 public interface CardServiceSimulationTransaction extends IEntity {
