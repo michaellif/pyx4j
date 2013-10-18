@@ -79,7 +79,7 @@ public abstract class AbstractWizardActivity<E extends IEntity> extends Security
     }
 
     @Override
-    public void finish() {
+    public void submit() {
         view.reset();
         onFinish();
     }

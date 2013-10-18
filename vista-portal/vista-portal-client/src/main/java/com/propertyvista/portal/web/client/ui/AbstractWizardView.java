@@ -68,7 +68,7 @@ public abstract class AbstractWizardView<E extends IEntity> extends AbstractPort
     }
 
     @Override
-    public boolean onSaveFail(Throwable caught) {
+    public boolean onSubmittionFailed(Throwable caught) {
         if (caught instanceof UniqueConstraintUserRuntimeException) {
             MessageDialog_v2.error(i18n.tr("Error"), caught.getMessage());
             return true;

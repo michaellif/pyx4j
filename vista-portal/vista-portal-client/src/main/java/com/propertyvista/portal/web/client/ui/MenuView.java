@@ -23,6 +23,8 @@ public interface MenuView extends IsView {
 
         public AppPlace getWhere();
 
+        public void logout();
+
     }
 
     void onLogedOut();

@@ -55,7 +55,7 @@ public class CPortalEntityWizard<E extends IEntity> extends CEntityWizard<E> {
 
     @Override
     protected void onFinish() {
-        view.getPresenter().finish();
+        view.getPresenter().submit();
     }
 
     @Override

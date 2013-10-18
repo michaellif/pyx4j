@@ -83,24 +83,6 @@ public class MenuViewImpl extends DockPanel implements MenuView {
 
         mainHolder.add(new NavigItem(new Resident.Financial(), PortalImages.INSTANCE.billingMenu(), ThemeColor.contrast4));
 
-        //TODO
-//        if (!VistaFeatures.instance().yardiIntegration()) {
-//            mainHolder.add(new NavigItem(new Resident.Financial.BillSummary(), PortalImages.INSTANCE.billingMenu(), ThemeColor.contrast2));
-//            mainHolder.add(new NavigItem(new Resident.Financial.BillingHistory(), PortalImages.INSTANCE.billingMenu(), ThemeColor.contrast3));
-//        } else {
-//            mainHolder.add(new NavigItem(new Resident.Financial.FinancialSummary(), PortalImages.INSTANCE.billingMenu(), ThemeColor.contrast4));
-//        }
-//
-//        if (SecurityController.checkAnyBehavior(VistaCustomerPaymentTypeBehavior.CreditCardPaymentsAllowed,
-//                VistaCustomerPaymentTypeBehavior.EcheckPaymentsAllowed)) {
-//
-//            if (PortalPaymentTypesUtil.isPreauthorizedPaumentAllowed()) {
-//                mainHolder.add(new NavigItem(new Resident.Financial.PreauthorizedPayments(), PortalImages.INSTANCE.billingMenu(), ThemeColor.contrast1));
-//            }
-//
-//            mainHolder.add(new NavigItem(new Resident.PaymentMethods(), PortalImages.INSTANCE.billingMenu(), ThemeColor.contrast2));
-//        }
-
         mainHolder.add(new NavigItem(new Resident.Maintenance(), PortalImages.INSTANCE.maintenanceMenu(), ThemeColor.contrast5));
         if (VistaTODO.ENABLE_COMMUNCATION_CENTER) {
             mainHolder.add(new NavigItem(new Resident.CommunicationCenter(), PortalImages.INSTANCE.dashboardMenu(), ThemeColor.contrast6));
@@ -124,9 +106,7 @@ public class MenuViewImpl extends DockPanel implements MenuView {
 
             @Override
             public void execute() {
-                //TODO
-                System.out.println("Logout");
-
+                presenter.logout();
             }
         }, i18n.tr("Logout"), PortalImages.INSTANCE.logoutMenu(), ThemeColor.background));
 

@@ -20,8 +20,7 @@ public interface IWizardView<E extends IEntity> extends IsView {
 
     public interface IWizardPresenter<E extends IEntity> {
 
-        //TODO rename to Submit
-        void finish();
+        void submit();
 
         void cancel();
 
@@ -39,8 +38,7 @@ public interface IWizardView<E extends IEntity> extends IsView {
 
     public boolean isDirty();
 
-    //TODO rename to onSubmittionFailed
-    boolean onSaveFail(Throwable caught);
+    boolean onSubmittionFailed(Throwable caught);
 
     void onStepChange();
 

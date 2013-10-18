@@ -61,12 +61,12 @@ public class TenantSureOrderWizardViewImpl extends AbstractWizardView<TenantSure
     }
 
     @Override
-    public boolean onSaveFail(Throwable caught) {
+    public boolean onSubmittionFailed(Throwable caught) {
         if (caught instanceof UserRuntimeException) {
             MessageDialog_v2.error(i18n.tr("Error"), caught.getMessage());
             return true;
         } else {
-            return super.onSaveFail(caught);
+            return super.onSubmittionFailed(caught);
         }
     }
 }

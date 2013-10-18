@@ -53,7 +53,7 @@ public class PasswordResetWizardViewImpl extends VerticalPanel implements Passwo
                 }
             }
         });
-        submitButton.ensureDebugId(CrudDebugId.Criteria_Submit.toString()); // TODO why we need this???
+        submitButton.ensureDebugId(CrudDebugId.Criteria_Submit.toString());
         add(submitButton);
 
     }
