@@ -16,6 +16,8 @@ package com.propertyvista.common.client.ui.components.editors;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.google.gwt.event.logical.shared.ValueChangeEvent;
+import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.ui.HasVerticalAlignment;
 import com.google.gwt.user.client.ui.IsWidget;
 
@@ -30,6 +32,7 @@ import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
 import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
 import com.propertyvista.common.client.ui.components.folders.VistaTableFolder;
 import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
+import com.propertyvista.domain.contact.AddressStructured;
 import com.propertyvista.domain.marketing.AdvertisingBlurb;
 import com.propertyvista.domain.marketing.Marketing;
 import com.propertyvista.domain.marketing.MarketingContact;
@@ -41,8 +44,13 @@ import com.propertyvista.shared.config.VistaFeatures;
 
 public class MarketingEditor extends CEntityDecoratableForm<Marketing> {
 
-    public MarketingEditor() {
+    private final CComponent<AddressStructured> propertyAddress;
+
+    private final AddressStructuredEditor addressEditor = new AddressStructuredEditor(false);
+
+    public MarketingEditor(CComponent<AddressStructured> propertyAddress) {
         super(Marketing.class);
+        this.propertyAddress = propertyAddress;
     }
 
     @Override
@@ -60,7 +68,15 @@ public class MarketingEditor extends CEntityDecoratableForm<Marketing> {
         main.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().description()), true).build());
 
         main.setH1(++row, 0, 2, proto().marketingAddress().getMeta().getCaption());
-        main.setWidget(++row, 0, 2, inject(proto().marketingAddress(), new AddressStructuredEditor(false)));
+        main.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().usePropertyAddressAsMarketing()), true).build());
+        main.setWidget(++row, 0, 2, inject(proto().marketingAddress(), addressEditor));
+        get(proto().usePropertyAddressAsMarketing()).addValueChangeHandler(new ValueChangeHandler<Boolean>() {
+            @Override
+            public void onValueChange(ValueChangeEvent<Boolean> event) {
+                boolean useBuildingAddress = event.getValue() == null ? false : event.getValue();
+                setAddressEditorState(useBuildingAddress);
+            }
+        });
 
         main.setH1(++row, 0, 2, proto().marketingContacts().getMeta().getCaption());
         main.setWidget(++row, 0, 2, inject(proto().marketingContacts().url(), new MarketingContactEditor<MarketingContactUrl>(MarketingContactUrl.class)));
@@ -89,6 +105,24 @@ public class MarketingEditor extends CEntityDecoratableForm<Marketing> {
         main.setWidget(++row, 0, 2, inject(proto().openHouseSchedule(), new OpenHouseScheduleFolder()));
 
         return main;
+    }
+
+    private void setAddressEditorState(boolean useBuildingAddress) {
+        if (useBuildingAddress) {
+            addressEditor.setEditable(false);
+            addressEditor.setValue((AddressStructured) propertyAddress.getValue().duplicate());
+        } else {
+            addressEditor.setEditable(true);
+        }
+    }
+
+    @Override
+    protected void setEditorValue(Marketing value) {
+        // reset address editor state
+        if (value != null) {
+            setAddressEditorState(value.usePropertyAddressAsMarketing().isBooleanTrue());
+        }
+        super.setEditorValue(value);
     }
 
     public static class MarketingContactEditor<T extends MarketingContact> extends CEntityDecoratableForm<T> {

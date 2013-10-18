@@ -34,7 +34,7 @@ public class KijijiUnitMapper {
 
         String title = from.profile().listingTitle().getValue();
         if (title == null) {
-            title = from.floorplan().marketingName().getValue();
+            title = from.floorplan().marketingName().isNull() ? from.floorplan().name().getValue() : from.floorplan().marketingName().getValue();
         }
         to.setTitle(title);
 

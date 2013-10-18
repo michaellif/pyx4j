@@ -340,7 +340,7 @@ public class BuildingForm extends CrmEntityForm<BuildingDTO> {
 
         int row = -1;
         flexPanel.setH1(++row, 0, 2, i18n.tr("Marketing Summary"));
-        flexPanel.setWidget(++row, 0, 2, inject(proto().marketing(), new MarketingEditor()));
+        flexPanel.setWidget(++row, 0, 2, inject(proto().marketing(), new MarketingEditor(get(proto().info().address()))));
 
         flexPanel.setH1(++row, 0, 2, i18n.tr("Media"));
         flexPanel.setWidget(++row, 0, 2, inject(proto().media(), new CrmMediaFolder(isEditable(), ImageTarget.Building)));
