@@ -253,9 +253,11 @@ BEGIN
                         CONSTRAINT initialization_data_pk PRIMARY KEY(id)
         );
         
-        */
+        
         
         ALTER TABLE initialization_data OWNER TO vista;
+        
+        */
         
         -- insurance_certificate
         
