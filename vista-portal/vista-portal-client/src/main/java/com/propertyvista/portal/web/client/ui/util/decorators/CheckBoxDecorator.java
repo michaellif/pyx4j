@@ -71,13 +71,10 @@ public class CheckBoxDecorator extends Composite implements IDecorator<CCheckBox
                 CheckBoxDecorator.this.component.getWidget().setFocus(true);
             }
         });
-
-        // TODO add property change handler
-
     }
 
     @Override
     public void onSetDebugId(IDebugId parentDebugId) {
-        // TODO Auto-generated method stub
+
     }
 }
