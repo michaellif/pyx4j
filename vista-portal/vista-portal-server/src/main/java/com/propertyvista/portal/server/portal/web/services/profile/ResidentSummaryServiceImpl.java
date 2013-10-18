@@ -21,7 +21,7 @@ import com.pyx4j.entity.shared.EntityFactory;
 import com.propertyvista.domain.tenant.lease.LeaseTermTenant;
 import com.propertyvista.portal.rpc.portal.web.dto.ResidentSummaryDTO;
 import com.propertyvista.portal.rpc.portal.web.services.profile.ResidentSummaryService;
-import com.propertyvista.portal.server.portal.TenantAppContext;
+import com.propertyvista.portal.server.security.TenantAppContext;
 import com.propertyvista.server.common.util.AddressRetriever;
 
 public class ResidentSummaryServiceImpl implements ResidentSummaryService {

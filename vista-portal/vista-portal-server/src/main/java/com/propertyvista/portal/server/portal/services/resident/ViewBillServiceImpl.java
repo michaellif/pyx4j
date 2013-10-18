@@ -27,7 +27,7 @@ import com.propertyvista.domain.financial.billing.Bill;
 import com.propertyvista.domain.tenant.lease.LeaseTermTenant;
 import com.propertyvista.dto.BillDTO;
 import com.propertyvista.portal.rpc.portal.services.resident.ViewBillService;
-import com.propertyvista.portal.server.portal.TenantAppContext;
+import com.propertyvista.portal.server.security.TenantAppContext;
 
 public class ViewBillServiceImpl extends AbstractCrudServiceDtoImpl<Bill, BillDTO> implements ViewBillService {
 

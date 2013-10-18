@@ -23,7 +23,7 @@ import com.propertyvista.domain.payment.LeasePaymentMethod;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.portal.rpc.portal.dto.PaymentMethodDTO;
 import com.propertyvista.portal.rpc.portal.services.resident.PaymentMethodRetrieveService;
-import com.propertyvista.portal.server.portal.TenantAppContext;
+import com.propertyvista.portal.server.security.TenantAppContext;
 
 public class PaymentMethodRetrieveServiceImpl extends EntityBinder<LeasePaymentMethod, PaymentMethodDTO> implements PaymentMethodRetrieveService {
 

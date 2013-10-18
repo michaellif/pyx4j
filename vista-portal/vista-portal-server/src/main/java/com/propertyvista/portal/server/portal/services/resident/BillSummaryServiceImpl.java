@@ -36,7 +36,7 @@ import com.propertyvista.portal.domain.dto.financial.PaymentInfoDTO;
 import com.propertyvista.portal.domain.dto.financial.PvBillingFinancialSummaryDTO;
 import com.propertyvista.portal.domain.dto.financial.YardiFinancialSummaryDTO;
 import com.propertyvista.portal.rpc.portal.services.resident.BillSummaryService;
-import com.propertyvista.portal.server.portal.TenantAppContext;
+import com.propertyvista.portal.server.security.TenantAppContext;
 import com.propertyvista.shared.config.VistaFeatures;
 
 public class BillSummaryServiceImpl implements BillSummaryService {

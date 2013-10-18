@@ -31,7 +31,7 @@ import com.propertyvista.biz.tenant.lease.LeaseFacade;
 import com.propertyvista.domain.payment.AutopayAgreement;
 import com.propertyvista.portal.rpc.portal.dto.PreauthorizedPaymentListDTO;
 import com.propertyvista.portal.rpc.portal.services.resident.PreauthorizedPaymentListService;
-import com.propertyvista.portal.server.portal.TenantAppContext;
+import com.propertyvista.portal.server.security.TenantAppContext;
 
 public class PreauthorizedPaymentListServiceImpl extends AbstractListServiceDtoImpl<AutopayAgreement, PreauthorizedPaymentListDTO.ListItemDTO> implements
         PreauthorizedPaymentListService {

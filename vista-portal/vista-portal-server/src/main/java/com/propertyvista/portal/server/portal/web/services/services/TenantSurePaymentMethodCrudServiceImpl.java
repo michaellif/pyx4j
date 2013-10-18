@@ -30,7 +30,7 @@ import com.propertyvista.domain.payment.InsurancePaymentMethod;
 import com.propertyvista.domain.payment.PaymentType;
 import com.propertyvista.portal.rpc.portal.web.dto.insurance.InsurancePaymentMethodDTO;
 import com.propertyvista.portal.rpc.portal.web.services.services.TenantSurePaymentMethodCrudService;
-import com.propertyvista.portal.server.portal.TenantAppContext;
+import com.propertyvista.portal.server.security.TenantAppContext;
 import com.propertyvista.server.common.util.AddressRetriever;
 
 public class TenantSurePaymentMethodCrudServiceImpl implements TenantSurePaymentMethodCrudService {

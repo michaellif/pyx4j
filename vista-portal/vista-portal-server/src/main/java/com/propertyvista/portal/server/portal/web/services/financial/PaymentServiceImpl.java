@@ -43,7 +43,7 @@ import com.propertyvista.portal.rpc.portal.web.dto.financial.PaymentMethodDTO;
 import com.propertyvista.portal.rpc.portal.web.dto.financial.PaymentMethodInfoDTO;
 import com.propertyvista.portal.rpc.portal.web.dto.financial.PaymentMethodSummaryDTO;
 import com.propertyvista.portal.rpc.portal.web.services.financial.PaymentService;
-import com.propertyvista.portal.server.portal.TenantAppContext;
+import com.propertyvista.portal.server.security.TenantAppContext;
 import com.propertyvista.server.common.util.AddressConverter;
 import com.propertyvista.server.common.util.AddressRetriever;
 import com.propertyvista.server.common.util.LeaseParticipantUtils;

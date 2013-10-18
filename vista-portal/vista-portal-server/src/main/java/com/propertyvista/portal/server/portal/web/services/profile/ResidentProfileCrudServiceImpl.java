@@ -28,7 +28,7 @@ import com.propertyvista.domain.security.CustomerUser;
 import com.propertyvista.domain.tenant.Customer;
 import com.propertyvista.portal.rpc.portal.web.dto.ResidentProfileDTO;
 import com.propertyvista.portal.rpc.portal.web.services.profile.ResidentProfileCrudService;
-import com.propertyvista.portal.server.portal.TenantAppContext;
+import com.propertyvista.portal.server.security.TenantAppContext;
 
 public class ResidentProfileCrudServiceImpl implements ResidentProfileCrudService {
 

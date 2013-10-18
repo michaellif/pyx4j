@@ -45,7 +45,7 @@ import com.propertyvista.portal.rpc.portal.web.dto.financial.BillingHistoryDTO;
 import com.propertyvista.portal.rpc.portal.web.dto.financial.BillingSummaryDTO;
 import com.propertyvista.portal.rpc.portal.web.dto.financial.LatestActivitiesDTO;
 import com.propertyvista.portal.rpc.portal.web.services.financial.BillingService;
-import com.propertyvista.portal.server.portal.TenantAppContext;
+import com.propertyvista.portal.server.security.TenantAppContext;
 import com.propertyvista.shared.config.VistaFeatures;
 
 public class BillingServiceImpl implements BillingService {

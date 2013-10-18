@@ -25,7 +25,7 @@ import com.pyx4j.rpc.shared.VoidSerializable;
 import com.propertyvista.domain.tenant.insurance.GeneralInsuranceCertificate;
 import com.propertyvista.domain.tenant.insurance.GeneralInsurancePolicy;
 import com.propertyvista.portal.rpc.portal.services.resident.TenantInsuranceByOtherProviderManagementService;
-import com.propertyvista.portal.server.portal.TenantAppContext;
+import com.propertyvista.portal.server.security.TenantAppContext;
 
 public class TenantInsuranceByOtherProviderManagementServiceImpl implements TenantInsuranceByOtherProviderManagementService {
 

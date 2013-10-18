@@ -26,18 +26,20 @@ import com.propertyvista.domain.maintenance.MaintenanceRequest;
 import com.propertyvista.domain.maintenance.MaintenanceRequestCategory;
 import com.propertyvista.domain.maintenance.YardiServiceRequest;
 import com.propertyvista.domain.media.ApplicationDocumentFile;
-import com.propertyvista.domain.payment.LeasePaymentMethod;
 import com.propertyvista.domain.payment.AutopayAgreement;
 import com.propertyvista.domain.payment.AutopayAgreement.AutopayAgreementCoveredItem;
+import com.propertyvista.domain.payment.LeasePaymentMethod;
 import com.propertyvista.domain.policy.framework.OrganizationPoliciesNode;
 import com.propertyvista.domain.policy.policies.domain.IdentificationDocumentType;
 import com.propertyvista.domain.ref.City;
 import com.propertyvista.domain.ref.Country;
 import com.propertyvista.domain.ref.Province;
 import com.propertyvista.domain.security.VistaCustomerBehavior;
+import com.propertyvista.domain.security.VistaDataAccessBehavior;
 import com.propertyvista.domain.security.common.VistaBasicBehavior;
 import com.propertyvista.domain.tenant.insurance.GeneralInsurancePolicy;
 import com.propertyvista.domain.tenant.insurance.TenantSureInsurancePolicy;
+import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.LeaseTermTenant;
 import com.propertyvista.domain.tenant.ptapp.OnlineApplication;
 import com.propertyvista.misc.VistaTODO;
@@ -99,6 +101,8 @@ import com.propertyvista.portal.rpc.ptapp.services.steps.welcomewizardmockup.Lea
 import com.propertyvista.portal.rpc.ptapp.services.steps.welcomewizardmockup.MoveInScheduleService;
 import com.propertyvista.portal.rpc.ptapp.services.steps.welcomewizardmockup.ResetWizardService;
 import com.propertyvista.portal.rpc.shared.services.CreditCardValidationService;
+import com.propertyvista.portal.server.security.access.LeasePaymentMethodTenantDatasetAccessRule;
+import com.propertyvista.portal.server.security.access.LeaseTenantDatasetAccessRule;
 import com.propertyvista.server.common.security.UserEntityInstanceAccess;
 
 public class VistaPortalAccessControlList extends ServletContainerAclBuilder {
@@ -282,6 +286,11 @@ public class VistaPortalAccessControlList extends ServletContainerAclBuilder {
 
         grant(VistaCustomerBehavior.TenantPrimary, VistaCustomerBehavior.Tenant);
         grant(VistaCustomerBehavior.TenantSecondary, VistaCustomerBehavior.Tenant);
+
+        // Data Access
+        grant(VistaCustomerBehavior.Tenant, VistaDataAccessBehavior.TenantInPortal);
+        grant(VistaDataAccessBehavior.TenantInPortal, new LeaseTenantDatasetAccessRule(), Lease.class);
+        grant(VistaDataAccessBehavior.TenantInPortal, new LeasePaymentMethodTenantDatasetAccessRule(), LeasePaymentMethod.class);
 
         grant(new IServiceExecutePermission(FooterContentService.class));
         freeze();

@@ -21,4 +21,6 @@ public enum VistaDataAccessBehavior implements Behavior {
 
     BuildingsAll,
 
+    TenantInPortal
+
 }

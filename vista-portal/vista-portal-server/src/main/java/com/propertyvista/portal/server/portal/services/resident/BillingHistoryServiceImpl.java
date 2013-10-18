@@ -26,7 +26,7 @@ import com.propertyvista.domain.financial.billing.Bill;
 import com.propertyvista.domain.tenant.lease.LeaseTermTenant;
 import com.propertyvista.portal.domain.dto.BillDataDTO;
 import com.propertyvista.portal.rpc.portal.services.resident.BillingHistoryService;
-import com.propertyvista.portal.server.portal.TenantAppContext;
+import com.propertyvista.portal.server.security.TenantAppContext;
 
 public class BillingHistoryServiceImpl implements BillingHistoryService {
 

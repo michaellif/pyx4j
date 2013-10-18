@@ -26,8 +26,8 @@ import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.portal.rpc.portal.services.resident.WeatherService;
 import com.propertyvista.portal.rpc.portal.web.dto.WeatherForecastDTO;
-import com.propertyvista.portal.server.portal.TenantAppContext;
 import com.propertyvista.portal.server.portal.services.resident.weather.WeatherForecaster;
+import com.propertyvista.portal.server.security.TenantAppContext;
 import com.propertyvista.server.common.util.AddressRetriever;
 
 public class WeatherServiceImpl implements WeatherService {
