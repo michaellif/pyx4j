@@ -60,6 +60,8 @@ public class PortalWebRootPaneTheme extends Theme {
 
     private void initHeaderStyles() {
         Style style = new Style(".", StyleName.PageHeader);
+        style.addProperty("max-width", "1200px");
+        style.addProperty("margin", "auto");
         addStyle(style);
     }
 
