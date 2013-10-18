@@ -61,7 +61,7 @@ public class TenantSureOrderConfirmationPageActivity extends SecurityAwareActivi
 
     @Override
     public void back() {
-        // TODO Auto-generated method stub
+        // TODO VISTA-3597 What to would back action do in this activity?
     }
 
 }
