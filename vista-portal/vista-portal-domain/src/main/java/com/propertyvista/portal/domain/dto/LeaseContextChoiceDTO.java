@@ -16,21 +16,17 @@ package com.propertyvista.portal.domain.dto;
 import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.shared.IPrimitive;
 
-import com.propertyvista.domain.contact.AddressStructured;
-import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.tenant.lease.Lease;
 
 @Transient
 public interface LeaseContextChoiceDTO extends IEntity {
 
     /** reference to lease */
-    Lease leaseStub();
+    Lease leaseId();
 
-    /** just for passing unit number */
-    @Caption(name = "Unit")
-    AptUnit unitView();
+    @Caption(name = "Unit Address")
+    IPrimitive<String> leasedUnitAddress();
 
-    /** address */
-    AddressStructured address();
 }

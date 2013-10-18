@@ -29,11 +29,15 @@ public interface LeaseContextSelectionView extends IsView {
 
         void populate();
 
-        void setLeaseContext(Lease leaseStub);
+        void setLeaseContext();
 
     }
 
     void setPresenter(Presenter presenter);
 
     void populate(List<LeaseContextChoiceDTO> leaseChoices);
+
+    Lease getSelectedLeaseIdStub();
+
+    void showMessage(String message);
 }

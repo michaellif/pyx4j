@@ -20,6 +20,7 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
+import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.security.client.ClientContext;
 import com.pyx4j.security.rpc.AuthenticationResponse;
@@ -33,6 +34,8 @@ import com.propertyvista.portal.web.client.PortalWebSite;
 import com.propertyvista.portal.web.client.ui.LeaseContextSelectionView;
 
 public class LeaseContextSelectionActivity extends AbstractActivity implements LeaseContextSelectionView.Presenter {
+
+    private static final I18n i18n = I18n.get(LeaseContextSelectionActivity.class);
 
     private final LeaseContextSelectionView view;
 
@@ -61,15 +64,21 @@ public class LeaseContextSelectionActivity extends AbstractActivity implements L
     }
 
     @Override
-    public void setLeaseContext(Lease leaseStub) {
-        service.setLeaseContext(new DefaultAsyncCallback<AuthenticationResponse>() {
-            @Override
-            public void onSuccess(AuthenticationResponse result) {
-                ClientContext.authenticated(result);
-                AppSite.getPlaceController().goTo(AppPlace.NOWHERE);
-            }
+    public void setLeaseContext() {
+        Lease leaseIdStub = view.getSelectedLeaseIdStub();
 
-        }, leaseStub);
+        if (leaseIdStub != null) {
+            service.setLeaseContext(new DefaultAsyncCallback<AuthenticationResponse>() {
+                @Override
+                public void onSuccess(AuthenticationResponse result) {
+                    ClientContext.authenticated(result);
+                    AppSite.getPlaceController().goTo(AppPlace.NOWHERE);
+                }
+
+            }, leaseIdStub);
+        } else {
+            view.showMessage(i18n.tr("Please choose a lease"));
+        }
     }
 
 }

@@ -19,17 +19,17 @@ import java.util.Vector;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.config.server.ServerSideFactory;
-import com.pyx4j.entity.server.Persistence;
-import com.pyx4j.entity.shared.AttachLevel;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.security.rpc.AuthenticationResponse;
 
 import com.propertyvista.biz.tenant.CustomerFacade;
+import com.propertyvista.domain.contact.AddressStructured;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.portal.domain.dto.LeaseContextChoiceDTO;
 import com.propertyvista.portal.rpc.portal.services.LeaseContextSelectionService;
 import com.propertyvista.portal.server.portal.TenantAppContext;
 import com.propertyvista.portal.server.portal.web.services.PortalAuthenticationServiceImpl;
+import com.propertyvista.server.common.util.AddressRetriever;
 
 public class LeaseContextSelectionServiceImpl implements LeaseContextSelectionService {
 
@@ -41,17 +41,14 @@ public class LeaseContextSelectionServiceImpl implements LeaseContextSelectionSe
 
         for (Lease lease : activeLeases) {
             LeaseContextChoiceDTO choice = EntityFactory.create(LeaseContextChoiceDTO.class);
-            choice.leaseStub().set(lease.createIdentityStub());
+            choice.leaseId().set(lease.createIdentityStub());
 
-            Persistence.service().retrieve(lease.unit());
-            choice.unitView().set(lease.unit().duplicate());
-            choice.unitView().setAttachLevel(AttachLevel.ToStringMembers);
-
-            Persistence.service().retrieve(lease.unit().building());
-            choice.address().set(lease.unit().building().info().address().duplicate());
+            AddressStructured address = AddressRetriever.getLeaseAddress(lease);
+            choice.leasedUnitAddress().setValue(address.getStringView());
 
             choices.add(choice);
         }
+
         callback.onSuccess(choices);
     }
 
