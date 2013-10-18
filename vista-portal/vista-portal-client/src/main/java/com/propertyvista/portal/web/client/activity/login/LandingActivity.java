@@ -29,6 +29,7 @@ import com.propertyvista.common.client.ui.components.login.AbstractLoginActivty;
 import com.propertyvista.common.client.ui.components.login.LoginView.DevLoginCredentials;
 import com.propertyvista.domain.DemoData.UserType;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap;
+import com.propertyvista.portal.rpc.portal.PortalSiteMap.PortalTerms;
 import com.propertyvista.portal.rpc.portal.web.services.PortalAuthenticationService;
 import com.propertyvista.portal.web.client.PortalWebSite;
 import com.propertyvista.portal.web.client.ui.landing.LandingView;
@@ -59,6 +60,6 @@ public class LandingActivity extends AbstractLoginActivty implements LandingView
 
     @Override
     public final Class<? extends Place> getPortalTermsPlace() {
-        return PortalSiteMap.PortalTermsAndConditions.class;
+        return PortalTerms.TermsAndConditions.class;
     }
 }

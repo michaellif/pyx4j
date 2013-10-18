@@ -15,22 +15,39 @@ package com.propertyvista.portal.web.client.ui.financial.autopay;
 
 import java.util.List;
 
+import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.propertyvista.domain.contact.AddressSimple;
-import com.propertyvista.domain.payment.LeasePaymentMethod;
 import com.propertyvista.domain.payment.AutopayAgreement;
+import com.propertyvista.domain.payment.LeasePaymentMethod;
 import com.propertyvista.portal.rpc.portal.web.dto.financial.AutoPayDTO;
 import com.propertyvista.portal.web.client.ui.IWizardView;
 
 public interface AutoPayWizardView extends IWizardView<AutoPayDTO> {
 
-    interface Persenter extends IWizardPresenter<AutoPayDTO> {
+    interface Presenter extends IWizardPresenter<AutoPayDTO> {
 
         void getCurrentAddress(AsyncCallback<AddressSimple> callback);
 
         void getProfiledPaymentMethods(AsyncCallback<List<LeasePaymentMethod>> callback);
 
         void preview(AsyncCallback<AutopayAgreement> callback, AutoPayDTO currentValue);
+
+        Class<? extends Place> getTermsOfUsePlace();
+
+        Class<? extends Place> getPrivacyPolicyPlace();
+
+        Class<? extends Place> getPadPolicyPlace();
+
+        Class<? extends Place> getCcPolicyPlace();
+
+        void showTermsOfUse();
+
+        void showPrivacyPolicy();
+
+        void showPadPolicy();
+
+        void showCcPolicy();
     }
 }

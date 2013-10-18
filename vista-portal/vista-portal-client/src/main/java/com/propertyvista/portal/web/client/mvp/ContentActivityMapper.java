@@ -167,12 +167,17 @@ public class ContentActivityMapper implements AppActivityMapper {
                         activity = new SignUpActivity(place);
                     } else if (place instanceof PortalSiteMap.LeaseContextSelection) {
                         activity = new LeaseContextSelectionActivity();
-                    } else if (place instanceof PortalSiteMap.PortalTermsAndConditions) {
-                        activity = new VistaTermsActivity(place);
-                    } else if (place instanceof PortalSiteMap.PortalPrivacyPolicy) {
-                        activity = new VistaTermsActivity(place);
                     } else if (appPlace instanceof PortalSiteMap.NotificationPlace) {
                         activity = new NotificationPageActivity((PortalSiteMap.NotificationPlace) place);
+
+// Internals/Terms: @formatter:off
+                    } else if (place instanceof PortalSiteMap.PortalTerms.BillingPolicy 
+                            || place instanceof PortalSiteMap.PortalTerms.CreditCardPolicy
+                            || place instanceof PortalSiteMap.PortalTerms.PadPolicy
+                            || place instanceof PortalSiteMap.PortalTerms.PrivacyPolicy
+                            || place instanceof PortalSiteMap.PortalTerms.TermsAndConditions) {
+                        activity = new VistaTermsActivity(place);
+                 // @formatter:on
                     }
 
                     callback.onSuccess(activity);

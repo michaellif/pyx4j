@@ -57,10 +57,22 @@ public class PortalSiteMap implements SiteMap {
     public static class Registration extends AppPlace implements PublicPlace {
     }
 
-    public static class PortalTermsAndConditions extends AppPlace implements PublicPlace {
-    }
+    public static class PortalTerms {
 
-    public static class PortalPrivacyPolicy extends AppPlace implements PublicPlace {
+        public static class TermsAndConditions extends AppPlace implements PublicPlace {
+        }
+
+        public static class PrivacyPolicy extends AppPlace implements PublicPlace {
+        }
+
+        public static class PadPolicy extends AppPlace implements PublicPlace {
+        }
+
+        public static class CreditCardPolicy extends AppPlace implements PublicPlace {
+        }
+
+        public static class BillingPolicy extends AppPlace implements PublicPlace {
+        }
     }
 
     @PlaceProperties(navigLabel = "Select Lease", caption = "Select Lease")
@@ -79,7 +91,7 @@ public class PortalSiteMap implements SiteMap {
 
     }
 
-    public static class Resident extends AppPlace {
+    public static class Resident {
 
         public static class Dashboard extends AppPlace {
         }

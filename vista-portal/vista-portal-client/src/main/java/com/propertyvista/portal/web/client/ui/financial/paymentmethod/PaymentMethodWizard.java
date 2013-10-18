@@ -23,7 +23,6 @@ import com.google.gwt.dom.client.Style.WhiteSpace;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.logical.shared.SelectionEvent;
-import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTML;
@@ -51,8 +50,6 @@ import com.propertyvista.domain.payment.LeasePaymentMethod;
 import com.propertyvista.portal.rpc.portal.web.dto.financial.PaymentMethodDTO;
 import com.propertyvista.portal.web.client.ui.CPortalEntityWizard;
 import com.propertyvista.portal.web.client.ui.IWizardView;
-import com.propertyvista.portal.web.client.ui.LegalTermsDialog;
-import com.propertyvista.portal.web.client.ui.LegalTermsDialog.TermsType;
 
 public class PaymentMethodWizard extends CPortalEntityWizard<PaymentMethodDTO> {
 
@@ -162,30 +159,6 @@ public class PaymentMethodWizard extends CPortalEntityWizard<PaymentMethodDTO> {
         pm.add(w = new HTML(get(proto().paymentMethod()).getValue().getStringView()));
         w.getElement().getStyle().setFontWeight(FontWeight.BOLD);
         panel.add(pm);
-
-        return panel;
-    }
-
-    private Widget createLegalTermsPanel_() {
-        FlowPanel panel = new FlowPanel();
-        Widget w;
-
-        panel.add(new HTML(i18n.tr("Be informed that you are acknowledging our")));
-        panel.add(w = new Anchor(i18n.tr("Terms Of Use"), new Command() {
-            @Override
-            public void execute() {
-                new LegalTermsDialog(TermsType.TermsOfUse).show();
-            }
-        }));
-
-        panel.add(w = new HTML("&nbsp" + i18n.tr("and") + "&nbsp"));
-        w.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
-        panel.add(w = new Anchor(i18n.tr("Privacy Policy"), new Command() {
-            @Override
-            public void execute() {
-                new LegalTermsDialog(TermsType.PrivacyPolicy).show();
-            }
-        }));
 
         return panel;
     }

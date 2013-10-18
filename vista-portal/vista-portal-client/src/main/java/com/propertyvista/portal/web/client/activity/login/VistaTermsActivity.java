@@ -21,7 +21,7 @@ import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 
-import com.propertyvista.portal.rpc.portal.PortalSiteMap;
+import com.propertyvista.portal.rpc.portal.PortalSiteMap.PortalTerms;
 import com.propertyvista.portal.rpc.portal.services.PortalVistaTermsService;
 import com.propertyvista.portal.web.client.PortalWebSite;
 import com.propertyvista.portal.web.client.ui.TermsView;
@@ -40,7 +40,7 @@ public class VistaTermsActivity extends AbstractActivity {
     @Override
     public void start(final AcceptsOneWidget panel, EventBus eventBus) {
 
-        if (place instanceof PortalSiteMap.PortalTermsAndConditions) {
+        if (place instanceof PortalTerms.TermsAndConditions) {
             GWT.<PortalVistaTermsService> create(PortalVistaTermsService.class).getPortalTerms(new DefaultAsyncCallback<String>() {
                 @Override
                 public void onSuccess(String result) {
@@ -48,7 +48,7 @@ public class VistaTermsActivity extends AbstractActivity {
                     panel.setWidget(view);
                 }
             });
-        } else if (place instanceof PortalSiteMap.PortalPrivacyPolicy) {
+        } else if (place instanceof PortalTerms.PrivacyPolicy) {
             GWT.<PortalVistaTermsService> create(PortalVistaTermsService.class).getPortalPrivacyPolicy(new DefaultAsyncCallback<String>() {
                 @Override
                 public void onSuccess(String result) {

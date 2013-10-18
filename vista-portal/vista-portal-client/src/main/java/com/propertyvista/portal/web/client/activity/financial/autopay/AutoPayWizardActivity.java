@@ -17,23 +17,28 @@ import java.util.List;
 import java.util.Vector;
 
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.place.shared.Place;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.commons.Key;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.site.client.AppSite;
+import com.pyx4j.site.client.NavigationUri;
 import com.pyx4j.site.rpc.AppPlace;
+import com.pyx4j.site.rpc.AppPlaceInfo;
 
 import com.propertyvista.domain.contact.AddressSimple;
-import com.propertyvista.domain.payment.LeasePaymentMethod;
 import com.propertyvista.domain.payment.AutopayAgreement;
+import com.propertyvista.domain.payment.LeasePaymentMethod;
+import com.propertyvista.portal.rpc.portal.PortalSiteMap.PortalTerms;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap.Resident.Financial;
 import com.propertyvista.portal.rpc.portal.web.dto.financial.AutoPayDTO;
 import com.propertyvista.portal.rpc.portal.web.services.financial.AutoPayWizardService;
 import com.propertyvista.portal.web.client.activity.AbstractWizardCrudActivity;
 import com.propertyvista.portal.web.client.ui.financial.autopay.AutoPayWizardView;
 
-public class AutoPayWizardActivity extends AbstractWizardCrudActivity<AutoPayDTO> implements AutoPayWizardView.Persenter {
+public class AutoPayWizardActivity extends AbstractWizardCrudActivity<AutoPayDTO> implements AutoPayWizardView.Presenter {
 
     public AutoPayWizardActivity(AppPlace place) {
         super(AutoPayWizardView.class, GWT.<AutoPayWizardService> create(AutoPayWizardService.class), AutoPayDTO.class);
@@ -83,5 +88,45 @@ public class AutoPayWizardActivity extends AbstractWizardCrudActivity<AutoPayDTO
     protected void onFinish(Key result) {
         getView().reset();
         AppSite.getPlaceController().goTo(new Financial.PreauthorizedPayments.PreauthorizedPaymentSubmitted(result));
+    }
+
+    @Override
+    public Class<? extends Place> getTermsOfUsePlace() {
+        return PortalTerms.TermsAndConditions.class;
+    }
+
+    @Override
+    public Class<? extends Place> getPrivacyPolicyPlace() {
+        return PortalTerms.PrivacyPolicy.class;
+    }
+
+    @Override
+    public Class<? extends Place> getPadPolicyPlace() {
+        return PortalTerms.PadPolicy.class;
+    }
+
+    @Override
+    public Class<? extends Place> getCcPolicyPlace() {
+        return PortalTerms.CreditCardPolicy.class;
+    }
+
+    @Override
+    public void showTermsOfUse() {
+        Window.open(AppPlaceInfo.absoluteUrl(NavigationUri.getHostPageURL(), false, getTermsOfUsePlace()), "_blank", null);
+    }
+
+    @Override
+    public void showPrivacyPolicy() {
+        Window.open(AppPlaceInfo.absoluteUrl(NavigationUri.getHostPageURL(), false, getPrivacyPolicyPlace()), "_blank", null);
+    }
+
+    @Override
+    public void showPadPolicy() {
+        Window.open(AppPlaceInfo.absoluteUrl(NavigationUri.getHostPageURL(), false, getPadPolicyPlace()), "_blank", null);
+    }
+
+    @Override
+    public void showCcPolicy() {
+        Window.open(AppPlaceInfo.absoluteUrl(NavigationUri.getHostPageURL(), false, getCcPolicyPlace()), "_blank", null);
     }
 }
