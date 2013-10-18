@@ -344,6 +344,7 @@ public class PortalWebTheme extends Theme {
     protected void initGeneralStyles() {
         Style style = new Style("html");
         style.addProperty("overflow", "hidden");
+        style.addProperty("font-size", "17px");
         addStyle(style);
 
         style = new Style("a");
