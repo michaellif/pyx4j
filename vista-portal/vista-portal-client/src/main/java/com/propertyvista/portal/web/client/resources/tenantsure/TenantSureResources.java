@@ -30,7 +30,7 @@ public interface TenantSureResources extends ClientBundleWithLookup {
 
     }
 
-    // TODO this should be fetched as terms
+    // TODO VISTA-3596: consider keeping this on server and fetching it implicitly via activity
     @Source("faq.html")
     TextResource faq();
 
