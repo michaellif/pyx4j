@@ -56,6 +56,7 @@ import com.propertyvista.portal.server.portal.PublicMediaServlet;
 import com.propertyvista.portal.server.residentskinproxy.CustomSkinProxyServlet;
 import com.propertyvista.portal.server.upload.ApplicationDocumentServlet;
 import com.propertyvista.portal.server.upload.CustomerPictureServlet;
+import com.propertyvista.portal.server.upload.LegalLetterDocumentServlet;
 import com.propertyvista.portal.server.upload.PmcDocumentServlet;
 import com.propertyvista.portal.server.upload.SiteImageResourceServlet;
 import com.propertyvista.server.VistaUploadServlet;
@@ -231,6 +232,10 @@ public class VistaWebApplicationInitializer implements ServletContainerInitializ
             {
                 ServletRegistration.Dynamic sc = ctx.addServlet("CustomerPictureServlet", CustomerPictureServlet.class);
                 sc.addMapping("*.picture");
+            }
+            {
+                ServletRegistration.Dynamic sc = ctx.addServlet("LegalLetterDocumentServlet", LegalLetterDocumentServlet.class);
+                sc.addMapping(urlPattern(VistaApplication.crm, "/legal_letter/*"));
             }
         }
 

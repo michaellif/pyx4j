@@ -21,6 +21,7 @@
 package com.propertyvista.biz.legal;
 
 import java.math.BigDecimal;
+import java.text.MessageFormat;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -120,9 +121,11 @@ public class N4ManagementFacadeImpl implements N4ManagementFacade {
 
         N4LegalLetter n4Letter = EntityFactory.create(N4LegalLetter.class);
         n4Letter.lease().set(leaseId);
+        n4Letter.amountOwed().setValue(n4LeaseData.totalRentOwning().getValue());
         n4Letter.generatedOn().setValue(SystemDateManager.getDate());
         n4Letter.blobKey().setValue(blob.getPrimaryKey());
         n4Letter.fileSize().setValue(n4LetterBinary.length);
+        n4Letter.fileName().setValue(MessageFormat.format("n4{0,date,MM-DD-yyyy}.pdf", SystemDateManager.getDate()));
         Persistence.service().persist(n4Letter);
     }
 

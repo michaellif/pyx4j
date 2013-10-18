@@ -13,6 +13,7 @@
  */
 package com.propertyvista.common.client.ui.components;
 
+import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.ui.Image;
 
 import com.pyx4j.commons.Key;
@@ -56,8 +57,7 @@ public class MediaUtils {
     }
 
     public static String createLegalLetterDocumentUrl(File file) {
-        return ClientNavigUtils.getDeploymentBaseURL() + DeploymentConsts.legalLetterServletMappning + file.id().getStringView() + "/"
-                + file.fileName().getStringView();
+        return GWT.getModuleBaseURL() + DeploymentConsts.legalLetterServletMappning + file.id().getStringView() + "/" + file.fileName().getStringView();
     }
 
     public static String createSiteImageResourceUrl(SiteImageResource resource) {

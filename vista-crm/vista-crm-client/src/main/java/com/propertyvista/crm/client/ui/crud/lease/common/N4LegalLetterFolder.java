@@ -30,15 +30,14 @@ import com.propertyvista.common.client.ui.components.MediaUtils;
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
 import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
 import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
-import com.propertyvista.domain.legal.LegalLetter;
 import com.propertyvista.domain.legal.N4LegalLetter;
 
-public class LegalLetterFolder extends VistaBoxFolder<LegalLetter> {
+public class N4LegalLetterFolder extends VistaBoxFolder<N4LegalLetter> {
 
-    private static final I18n i18n = I18n.get(LegalLetterFolder.class);
+    private static final I18n i18n = I18n.get(N4LegalLetter.class);
 
-    public LegalLetterFolder() {
-        super(LegalLetter.class);
+    public N4LegalLetterFolder() {
+        super(N4LegalLetter.class);
         setAddable(false);
         setViewable(true);
     }
@@ -63,7 +62,7 @@ public class LegalLetterFolder extends VistaBoxFolder<LegalLetter> {
             int row = -1;
             panel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().generatedOn())).build());
             panel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().amountOwed())).build());
-            panel.setWidget(++row, 0, createN4Link());
+            panel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().fileName(), createN4Link())).build());
             return panel;
         }
 
@@ -73,7 +72,7 @@ public class LegalLetterFolder extends VistaBoxFolder<LegalLetter> {
             n4Link.setNavigationCommand(new Command() {
                 @Override
                 public void execute() {
-                    Window.open(MediaUtils.createApplicationDocumentUrl(N4LegalLetterForm.this.getValue()), "_blank", null);
+                    Window.open(MediaUtils.createLegalLetterDocumentUrl(N4LegalLetterForm.this.getValue()), "_blank", null);
                 }
             });
             n4Link.setFormat(new IFormat<String>() {
