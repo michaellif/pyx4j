@@ -21,21 +21,6 @@ public interface VistaResources extends ClientBundleWithLookup {
 
     VistaResources INSTANCE = GWT.create(VistaResources.class);
 
-    @Source("Pre-AuthorizationLegalCC.html")
-    TextResource paymentPreauthorisedCC();
-
-    @Source("Pre-AuthorizationLegalPAD.html")
-    TextResource paymentPreauthorisedPAD();
-
-    @Source("LT_BillingAndRefundPolicy.html")
-    TextResource billingAndRefundPolicy();
-
-    @Source("LT_PrivacyPolicy.html")
-    TextResource privacyPolicy();
-
-    @Source("LT_TermsAndConditions.html")
-    TextResource termsAndConditions();
-
     @Source("DirectBankingInstruction.html")
     TextResource directBankingInstruction();
 

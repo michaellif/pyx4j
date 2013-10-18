@@ -28,8 +28,25 @@ public interface VistaTerms extends IVersionedEntity<VistaTermsV> {
 
     public enum Target {
 
-        PMC, Tenant, PmcCaledonTemplate, PmcCaldedonSolePropetorshipSection, PmcPaymentPad, TenantSurePreAuthorizedPaymentsAgreement, TenantPrivacy;
+        PMC,
 
+        PmcCaledonTemplate,
+
+        PmcCaldedonSolePropetorshipSection,
+
+        PmcPaymentPad,
+
+        Tenant,
+
+        TenantPrivacy,
+
+        TenantBilling,
+
+        TenantPAD,
+
+        TenantCC,
+
+        TenantSurePreAuthorizedPaymentsAgreement;
     }
 
     IPrimitive<Target> target();

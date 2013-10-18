@@ -56,6 +56,30 @@ public class VistaTermsActivity extends AbstractActivity {
                     panel.setWidget(view);
                 }
             });
+        } else if (place instanceof PortalTerms.BillingPolicy) {
+            GWT.<PortalVistaTermsService> create(PortalVistaTermsService.class).getPortalBillingPolicy(new DefaultAsyncCallback<String>() {
+                @Override
+                public void onSuccess(String result) {
+                    view.populate(result);
+                    panel.setWidget(view);
+                }
+            });
+        } else if (place instanceof PortalTerms.CreditCardPolicy) {
+            GWT.<PortalVistaTermsService> create(PortalVistaTermsService.class).getPortalCcPolicy(new DefaultAsyncCallback<String>() {
+                @Override
+                public void onSuccess(String result) {
+                    view.populate(result);
+                    panel.setWidget(view);
+                }
+            });
+        } else if (place instanceof PortalTerms.PadPolicy) {
+            GWT.<PortalVistaTermsService> create(PortalVistaTermsService.class).getPortalPadPolicy(new DefaultAsyncCallback<String>() {
+                @Override
+                public void onSuccess(String result) {
+                    view.populate(result);
+                    panel.setWidget(view);
+                }
+            });
         }
 
         panel.setWidget(view);

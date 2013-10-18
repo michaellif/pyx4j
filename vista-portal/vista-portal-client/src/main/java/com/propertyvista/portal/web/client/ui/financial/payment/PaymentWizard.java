@@ -40,6 +40,8 @@ import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.HasVerticalAlignment;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Image;
+import com.google.gwt.user.client.ui.IsWidget;
+import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
@@ -64,9 +66,11 @@ import com.pyx4j.site.rpc.AppPlaceInfo;
 import com.pyx4j.widgets.client.Anchor;
 import com.pyx4j.widgets.client.RadioGroup;
 import com.pyx4j.widgets.client.dialog.MessageDialog_v2;
+import com.pyx4j.widgets.client.dialog.OkDialog;
 
 import com.propertyvista.common.client.resources.VistaImages;
 import com.propertyvista.common.client.resources.VistaResources;
+import com.propertyvista.common.client.theme.NewPaymentMethodEditorTheme;
 import com.propertyvista.domain.contact.AddressSimple;
 import com.propertyvista.domain.payment.CreditCardInfo.CreditCardType;
 import com.propertyvista.domain.payment.LeasePaymentMethod;
@@ -77,8 +81,6 @@ import com.propertyvista.portal.domain.dto.financial.PaymentDTO;
 import com.propertyvista.portal.web.client.resources.PortalImages;
 import com.propertyvista.portal.web.client.ui.CPortalEntityWizard;
 import com.propertyvista.portal.web.client.ui.IWizardView;
-import com.propertyvista.portal.web.client.ui.LegalTermsDialog;
-import com.propertyvista.portal.web.client.ui.LegalTermsDialog.TermsType;
 import com.propertyvista.portal.web.client.ui.financial.paymentmethod.PaymentMethodEditor;
 import com.propertyvista.portal.web.client.ui.util.decorators.FormDecoratorBuilder;
 
@@ -411,7 +413,7 @@ public class PaymentWizard extends CPortalEntityWizard<PaymentDTO> {
         panel.add(new Anchor(i18n.tr("How to pay..."), new Command() {
             @Override
             public void execute() {
-                new LegalTermsDialog(TermsType.DirectBankingInstruction).show();
+                new DirectBankingInstructionDialog().show();
             }
         }));
 
@@ -497,5 +499,34 @@ public class PaymentWizard extends CPortalEntityWizard<PaymentDTO> {
         panel.add(billingPolicyAnchor);
 
         return panel;
+    }
+
+    private class DirectBankingInstructionDialog extends OkDialog {
+
+        public DirectBankingInstructionDialog() {
+            super(i18n.tr("Direct Banking Instruction"));
+            setBody(createBody());
+
+            setWidth("400px");
+        }
+
+        private IsWidget createBody() {
+            HTML legalTerms = new HTML();
+            legalTerms.setHTML(VistaResources.INSTANCE.directBankingInstruction().getText());
+
+            FlowPanel content = new FlowPanel();
+            content.setStyleName(NewPaymentMethodEditorTheme.StyleName.PaymentEditorLegalTerms.name());
+
+            Widget w;
+            content.add(w = new ScrollPanel(legalTerms));
+            w.setStyleName(NewPaymentMethodEditorTheme.StyleName.PaymentEditorLegalTermsContent.name());
+
+            return content;
+        }
+
+        @Override
+        public boolean onClickOk() {
+            return true;
+        }
     }
 }

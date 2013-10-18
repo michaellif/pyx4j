@@ -38,6 +38,21 @@ public class PortalVistaTermsServiceImpl implements PortalVistaTermsService {
         getVistaTerms(callback, VistaTerms.Target.TenantPrivacy);
     }
 
+    @Override
+    public void getPortalBillingPolicy(AsyncCallback<String> callback) {
+        getVistaTerms(callback, VistaTerms.Target.TenantBilling);
+    }
+
+    @Override
+    public void getPortalCcPolicy(AsyncCallback<String> callback) {
+        getVistaTerms(callback, VistaTerms.Target.TenantPAD);
+    }
+
+    @Override
+    public void getPortalPadPolicy(AsyncCallback<String> callback) {
+        getVistaTerms(callback, VistaTerms.Target.TenantCC);
+    }
+
     private void getVistaTerms(AsyncCallback<String> callback, final VistaTerms.Target target) {
         String terms = TaskRunner.runInOperationsNamespace(new Callable<String>() {
             @Override
@@ -63,4 +78,5 @@ public class PortalVistaTermsServiceImpl implements PortalVistaTermsService {
         }
         callback.onSuccess(terms);
     }
+
 }
