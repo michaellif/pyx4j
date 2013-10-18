@@ -320,7 +320,7 @@ public class PortalWebTheme extends Theme {
         addTheme(new DashboardTheme());
         addTheme(new ExtraGadgetsTheme());
         addTheme(new EntityViewTheme());
-        addTheme(new TenantInsuranceTheme());
+
         addTheme(new TenantSureTheme());
     }
 

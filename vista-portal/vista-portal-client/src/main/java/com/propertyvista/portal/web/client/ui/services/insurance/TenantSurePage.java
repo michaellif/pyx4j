@@ -41,7 +41,6 @@ import com.propertyvista.domain.tenant.insurance.TenantSureConstants;
 import com.propertyvista.portal.rpc.portal.web.dto.insurance.TenantSureInsurancePolicyDTO;
 import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.tenantsure.TenantSureMessageDTO;
 import com.propertyvista.portal.web.client.resources.tenantsure.TenantSureResources;
-import com.propertyvista.portal.web.client.themes.TenantInsuranceTheme;
 import com.propertyvista.portal.web.client.themes.TenantSureTheme;
 import com.propertyvista.portal.web.client.ui.CPortalEntityForm;
 import com.propertyvista.portal.web.client.ui.services.insurance.TenantSurePageView.TenantSurePagePresenter;
@@ -200,10 +199,10 @@ public class TenantSurePage extends CPortalEntityForm<TenantSureInsurancePolicyD
 
     private Widget makeGreetingPanel() {
         FlowPanel tenantSureGreetingPanel = new FlowPanel();
-        tenantSureGreetingPanel.setStyleName(TenantInsuranceTheme.StyleName.TenantSureManagementGreetingPanel.name());
+        tenantSureGreetingPanel.setStyleName(TenantSureTheme.StyleName.TenantSureManagementGreetingPanel.name());
 
         HTML greeting = new HTML(TenantSureResources.INSTANCE.managementPanelGreeting().getText());
-        greeting.setStyleName(TenantInsuranceTheme.StyleName.TenantSureManagementGreeting.name());
+        greeting.setStyleName(TenantSureTheme.StyleName.TenantSureManagementGreeting.name());
 
         tenantSureGreetingPanel.add(greeting);
         return tenantSureGreetingPanel;

@@ -21,9 +21,18 @@ import com.pyx4j.commons.css.ThemeId;
 
 import com.propertyvista.portal.web.client.resources.tenantsure.TenantSureResources;
 
+// TODO VISTA-3598 Clean up unnecessary styles
 public class TenantSureTheme extends Theme {
 
     public enum StyleName implements IStyleName {//@formatter:off
+        
+        TenantSureLogo,
+        TenantSureLogoPhone,
+        TenantSureManagementGreetingPanel,
+        TenantSureManagementGreeting,
+        TenantSureManagementContentPanel,
+        TenantSureManagementStatusDetailsPanel,
+        TenantSureManagementActionsPanel,
         
         TenantSureDecoratorPanel,
         TenantSureDecoratorHeader,
@@ -51,7 +60,8 @@ public class TenantSureTheme extends Theme {
     }//@formatter:on
 
     public TenantSureTheme() {
-        initDecoratorStyles();
+        initTenantSureCommonStyles();
+        initTenantSureDecoratorStyles();
         initTenantSurePurchaseViewStyles();
         initTenantSureManagementViewStyles();
         initTenantSureAboutViewStyles();
@@ -64,7 +74,7 @@ public class TenantSureTheme extends Theme {
         return new ClassBasedThemeId(getClass());
     }
 
-    private void initDecoratorStyles() {
+    private void initTenantSureDecoratorStyles() {
         Style style = null;
 
         style = new Style(".", StyleName.TenantSurePrivacyPolicyLink.name());
@@ -180,6 +190,50 @@ public class TenantSureTheme extends Theme {
             addStyle(style);
         }
 
+        Style style;
+
+        style = new Style(".", StyleName.TenantSureManagementGreetingPanel.name());
+        addStyle(style);
+
+        style = new Style(".", StyleName.TenantSureManagementGreetingPanel.name(), " ", ".", StyleName.TenantSureLogo.name());
+        style.addProperty("display", "inline-block");
+        style.addProperty("width", "auto");
+        addStyle(style);
+
+        style = new Style(".", StyleName.TenantSureManagementGreeting.name());
+        style.addProperty("width", "100%");
+        style.addProperty("height", "100%");
+        style.addProperty("text-align", "center");
+        style.addProperty("vertical-align", "middle");
+        style.addProperty("display", "inline-block");
+        addStyle(style);
+
+        style = new Style(".", StyleName.TenantSureManagementContentPanel.name());
+        style.addProperty("margin-top", "50px");
+        style.addProperty("margin-bottom", "50px");
+        style.addProperty("width", "100%");
+        style.addProperty("height", "100%");
+        addStyle(style);
+
+        style = new Style(".", StyleName.TenantSureManagementStatusDetailsPanel.name());
+        style.addProperty("display", "inline-block");
+        style.addProperty("width", "50%");
+        style.addProperty("vertical-align", "middle");
+        addStyle(style);
+
+        style = new Style(".", StyleName.TenantSureManagementActionsPanel.name());
+        style.addProperty("display", "inline-block");
+        style.addProperty("width", "50%");
+        style.addProperty("vertical-align", "middle");
+        style.addProperty("text-align", "center");
+        addStyle(style);
+
+        style = new Style(".", StyleName.TenantSureManagementActionsPanel.name(), " ", ".Anchor");
+        style.addProperty("display", "block");
+        style.addProperty("float", "none");
+        style.addProperty("margin", "0px");
+        style.addProperty("padding", "0px");
+        addStyle(style);
     }
 
     public void initSureFaqViewStyles() {
@@ -205,6 +259,21 @@ public class TenantSureTheme extends Theme {
         Style style = new Style("." + TenantSureTheme.StyleName.TSPaymentAmount.name());
         style.addProperty("width", "10em");
         addStyle(style);
+    }
+
+    private void initTenantSureCommonStyles() {
+
+        Style style;
+
+        style = new Style(".", StyleName.TenantSureLogo.name());
+        addStyle(style);
+
+        style = new Style(".", StyleName.TenantSureLogoPhone.name());
+        style.addProperty("width", "100%");
+        style.addProperty("display", "block");
+        style.addProperty("text-align", "center");
+        addStyle(style);
+
     }
 
 }

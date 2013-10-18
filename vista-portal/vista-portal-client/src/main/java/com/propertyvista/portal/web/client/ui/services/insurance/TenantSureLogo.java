@@ -21,14 +21,14 @@ import com.google.gwt.user.client.ui.Label;
 
 import com.propertyvista.domain.tenant.insurance.TenantSureConstants;
 import com.propertyvista.portal.web.client.resources.tenantsure.TenantSureResources;
-import com.propertyvista.portal.web.client.themes.TenantInsuranceTheme;
+import com.propertyvista.portal.web.client.themes.TenantSureTheme;
 
 public class TenantSureLogo extends Composite {
 
     public TenantSureLogo() {
         FlowPanel logoPanel = new FlowPanel();
         logoPanel.sinkEvents(Event.ONCLICK);
-        logoPanel.setStyleName(TenantInsuranceTheme.StyleName.TenantSureLogo.name());
+        logoPanel.setStyleName(TenantSureTheme.StyleName.TenantSureLogo.name());
 
         Image tenantSureLogo = new Image(TenantSureResources.INSTANCE.logoTenantSure());
         tenantSureLogo.getElement().getStyle().setProperty("display", "block");
@@ -43,7 +43,7 @@ public class TenantSureLogo extends Composite {
         logoPanel.add(highCourtLogo);
 
         Label tenantSurePhone = new Label(TenantSureConstants.TENANTSURE_PHONE_NUMBER);
-        tenantSurePhone.addStyleName(TenantInsuranceTheme.StyleName.TenantSureLogoPhone.name());
+        tenantSurePhone.addStyleName(TenantSureTheme.StyleName.TenantSureLogoPhone.name());
         logoPanel.add(tenantSurePhone);
         initWidget(logoPanel);
     }
