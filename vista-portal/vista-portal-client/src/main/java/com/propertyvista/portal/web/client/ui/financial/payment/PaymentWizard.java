@@ -17,9 +17,12 @@ import java.math.BigDecimal;
 import java.util.List;
 import java.util.Set;
 
+import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Style.Cursor;
 import com.google.gwt.dom.client.Style.Display;
 import com.google.gwt.dom.client.Style.FontWeight;
+import com.google.gwt.dom.client.Style.Unit;
+import com.google.gwt.dom.client.Style.WhiteSpace;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.logical.shared.SelectionEvent;
@@ -27,6 +30,7 @@ import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.resources.client.ImageResource;
 import com.google.gwt.user.client.Command;
+import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.FlexTable;
@@ -56,6 +60,7 @@ import com.pyx4j.gwt.commons.BrowserType;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.security.client.ClientContext;
+import com.pyx4j.site.rpc.AppPlaceInfo;
 import com.pyx4j.widgets.client.Anchor;
 import com.pyx4j.widgets.client.RadioGroup;
 import com.pyx4j.widgets.client.dialog.MessageDialog_v2;
@@ -87,6 +92,12 @@ public class PaymentWizard extends CPortalEntityWizard<PaymentDTO> {
 
     private final SimplePanel confirmationDetailsHolder = new SimplePanel();
 
+    private final Anchor termsOfUseAnchor = new Anchor(i18n.tr("Terms Of Use"));
+
+    private final Anchor privacyPolicyAnchor = new Anchor(i18n.tr("Privacy Policy"));
+
+    private final Anchor billingPolicyAnchor = new Anchor(i18n.tr("Billing And Refund Policy"));
+
     private final PaymentMethodEditor<LeasePaymentMethod> paymentMethodEditor = new PaymentMethodEditor<LeasePaymentMethod>(LeasePaymentMethod.class) {
 
         @Override
@@ -98,7 +109,7 @@ public class PaymentWizard extends CPortalEntityWizard<PaymentDTO> {
         public void onBillingAddressSameAsCurrentOne(boolean set, final CComponent<AddressSimple> comp) {
             if (set) {
                 assert (getView().getPresenter() != null);
-                ((PaymentWizardView.Persenter) getView().getPresenter()).getCurrentAddress(new DefaultAsyncCallback<AddressSimple>() {
+                ((PaymentWizardView.Presenter) getView().getPresenter()).getCurrentAddress(new DefaultAsyncCallback<AddressSimple>() {
                     @Override
                     public void onSuccess(AddressSimple result) {
                         comp.setValue(result, false);
@@ -115,12 +126,22 @@ public class PaymentWizard extends CPortalEntityWizard<PaymentDTO> {
         }
     };
 
+    private PaymentWizardView.Presenter presenter;
+
     public PaymentWizard(IWizardView<PaymentDTO> view) {
         super(PaymentDTO.class, view, i18n.tr("Payment Setup"), i18n.tr("Submit"), ThemeColor.contrast4);
 
         addStep(createDetailsStep());
         paymentMethodSelectionStep = addStep(createSelectPaymentMethodStep());
         confirmationStep = addStep(createConfirmationStep());
+    }
+
+    public void setPresenter(PaymentWizardView.Presenter presenter) {
+        this.presenter = presenter;
+
+        this.termsOfUseAnchor.setHref(AppPlaceInfo.absoluteUrl(GWT.getModuleBaseURL(), true, presenter.getTermsOfUsePlace()));
+        this.privacyPolicyAnchor.setHref(AppPlaceInfo.absoluteUrl(GWT.getModuleBaseURL(), true, presenter.getPrivacyPolicyPlace()));
+        billingPolicyAnchor.setHref(AppPlaceInfo.absoluteUrl(GWT.getModuleBaseURL(), true, presenter.getBillingPolicyPlace()));
     }
 
     private BasicFlexFormPanel createDetailsStep() {
@@ -231,7 +252,7 @@ public class PaymentWizard extends CPortalEntityWizard<PaymentDTO> {
 
         panel.setHR(++row, 0, 1);
 
-        panel.setWidget(++row, 0, BasicFlexFormPanel());
+        panel.setWidget(++row, 0, createLegalTermsPanel());
         panel.getFlexCellFormatter().setAlignment(row, 0, HasHorizontalAlignment.ALIGN_CENTER, HasVerticalAlignment.ALIGN_MIDDLE);
 
         return panel;
@@ -291,7 +312,7 @@ public class PaymentWizard extends CPortalEntityWizard<PaymentDTO> {
 
     private void loadProfiledPaymentMethods(final AsyncCallback<Void> callback) {
         profiledPaymentMethodsCombo.setOptions(null);
-        ((PaymentWizardView.Persenter) getView().getPresenter()).getProfiledPaymentMethods(new DefaultAsyncCallback<List<LeasePaymentMethod>>() {
+        ((PaymentWizardView.Presenter) getView().getPresenter()).getProfiledPaymentMethods(new DefaultAsyncCallback<List<LeasePaymentMethod>>() {
             @Override
             public void onSuccess(List<LeasePaymentMethod> result) {
                 profiledPaymentMethodsCombo.setOptions(result);
@@ -425,35 +446,55 @@ public class PaymentWizard extends CPortalEntityWizard<PaymentDTO> {
         Window.open(url, "_blank", BrowserType.isIE() ? "status=1,toolbar=1,location=1,resizable=1,scrollbars=1" : null);
     }
 
-    private Widget BasicFlexFormPanel() {
-        FlowPanel panel = new FlowPanel();
+    private Widget createLegalTermsPanel() {
+        termsOfUseAnchor.getElement().getStyle().setDisplay(Display.INLINE);
+        termsOfUseAnchor.getElement().getStyle().setPadding(0, Unit.PX);
+        termsOfUseAnchor.getElement().getStyle().setWhiteSpace(WhiteSpace.NORMAL);
+        termsOfUseAnchor.addClickHandler(new ClickHandler() {
+            @Override
+            public void onClick(ClickEvent event) {
+                presenter.showTermsOfUse();
+                DOM.eventPreventDefault((com.google.gwt.user.client.Event) event.getNativeEvent());
+            }
+        });
+
+        privacyPolicyAnchor.getElement().getStyle().setDisplay(Display.INLINE);
+        privacyPolicyAnchor.getElement().getStyle().setPadding(0, Unit.PX);
+        privacyPolicyAnchor.getElement().getStyle().setWhiteSpace(WhiteSpace.NORMAL);
+        privacyPolicyAnchor.addClickHandler(new ClickHandler() {
+            @Override
+            public void onClick(ClickEvent event) {
+                presenter.showPrivacyPolicy();
+                DOM.eventPreventDefault((com.google.gwt.user.client.Event) event.getNativeEvent());
+            }
+        });
+
+        billingPolicyAnchor.getElement().getStyle().setDisplay(Display.INLINE);
+        billingPolicyAnchor.getElement().getStyle().setPadding(0, Unit.PX);
+        billingPolicyAnchor.getElement().getStyle().setWhiteSpace(WhiteSpace.NORMAL);
+        billingPolicyAnchor.addClickHandler(new ClickHandler() {
+            @Override
+            public void onClick(ClickEvent event) {
+                presenter.showBillingPolicy();
+                DOM.eventPreventDefault((com.google.gwt.user.client.Event) event.getNativeEvent());
+            }
+        });
+
         Widget w;
+        FlowPanel panel = new FlowPanel();
 
         panel.add(new HTML(i18n.tr("Be informed that you are acknowledging our")));
-        panel.add(w = new Anchor(i18n.tr("Terms Of Use"), new Command() {
-            @Override
-            public void execute() {
-                new LegalTermsDialog(TermsType.TermsOfUse).show();
-            }
-        }));
-
-        panel.add(w = new HTML(",&nbsp"));
-        w.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
-        panel.add(w = new Anchor(i18n.tr("Privacy Policy"), new Command() {
-            @Override
-            public void execute() {
-                new LegalTermsDialog(TermsType.PrivacyPolicy).show();
-            }
-        }));
+        panel.add(termsOfUseAnchor);
 
         panel.add(w = new HTML("&nbsp" + i18n.tr("and") + "&nbsp"));
         w.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
-        panel.add(w = new Anchor(i18n.tr("Billing And Refund Policy"), new Command() {
-            @Override
-            public void execute() {
-                new LegalTermsDialog(TermsType.BillingAndRefundPolicy).show();
-            }
-        }));
+
+        panel.add(privacyPolicyAnchor);
+
+        panel.add(w = new HTML("&nbsp" + i18n.tr("and") + "&nbsp"));
+        w.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
+
+        panel.add(billingPolicyAnchor);
 
         return panel;
     }

@@ -17,22 +17,27 @@ import java.util.List;
 import java.util.Vector;
 
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.place.shared.Place;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.commons.Key;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.site.client.AppSite;
+import com.pyx4j.site.client.NavigationUri;
 import com.pyx4j.site.rpc.AppPlace;
+import com.pyx4j.site.rpc.AppPlaceInfo;
 
 import com.propertyvista.domain.contact.AddressSimple;
 import com.propertyvista.domain.payment.LeasePaymentMethod;
 import com.propertyvista.portal.domain.dto.financial.PaymentDTO;
+import com.propertyvista.portal.rpc.portal.PortalSiteMap.PortalTerms;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap.Resident.Financial.Payment;
 import com.propertyvista.portal.rpc.portal.web.services.financial.PaymentWizardService;
 import com.propertyvista.portal.web.client.activity.AbstractWizardCrudActivity;
 import com.propertyvista.portal.web.client.ui.financial.payment.PaymentWizardView;
 
-public class PaymentWizardActivity extends AbstractWizardCrudActivity<PaymentDTO> implements PaymentWizardView.Persenter {
+public class PaymentWizardActivity extends AbstractWizardCrudActivity<PaymentDTO> implements PaymentWizardView.Presenter {
 
     public PaymentWizardActivity(AppPlace place) {
         super(PaymentWizardView.class, GWT.<PaymentWizardService> create(PaymentWizardService.class), PaymentDTO.class);
@@ -61,5 +66,35 @@ public class PaymentWizardActivity extends AbstractWizardCrudActivity<PaymentDTO
     @Override
     protected void onFinish(Key result) {
         AppSite.getPlaceController().goTo(new Payment.PaymentSubmitting(result));
+    }
+
+    @Override
+    public Class<? extends Place> getTermsOfUsePlace() {
+        return PortalTerms.TermsAndConditions.class;
+    }
+
+    @Override
+    public Class<? extends Place> getPrivacyPolicyPlace() {
+        return PortalTerms.PrivacyPolicy.class;
+    }
+
+    @Override
+    public Class<? extends Place> getBillingPolicyPlace() {
+        return PortalTerms.PadPolicy.class;
+    }
+
+    @Override
+    public void showTermsOfUse() {
+        Window.open(AppPlaceInfo.absoluteUrl(NavigationUri.getHostPageURL(), false, getTermsOfUsePlace()), "_blank", null);
+    }
+
+    @Override
+    public void showPrivacyPolicy() {
+        Window.open(AppPlaceInfo.absoluteUrl(NavigationUri.getHostPageURL(), false, getPrivacyPolicyPlace()), "_blank", null);
+    }
+
+    @Override
+    public void showBillingPolicy() {
+        Window.open(AppPlaceInfo.absoluteUrl(NavigationUri.getHostPageURL(), false, getBillingPolicyPlace()), "_blank", null);
     }
 }

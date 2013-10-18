@@ -63,8 +63,6 @@ public class PaymentMethodWizard extends CPortalEntityWizard<PaymentMethodDTO> {
 
     private final Anchor privacyPolicyAnchor = new Anchor(i18n.tr("Privacy Policy"));
 
-    private PaymentMethodWizardView.Presenter presenter;
-
     private final PaymentMethodEditor<LeasePaymentMethod> paymentMethodEditor = new PaymentMethodEditor<LeasePaymentMethod>(LeasePaymentMethod.class) {
 
         @Override
@@ -92,6 +90,8 @@ public class PaymentMethodWizard extends CPortalEntityWizard<PaymentMethodDTO> {
             return ClientContext.getUserVisit().getName();
         }
     };
+
+    private PaymentMethodWizardView.Presenter presenter;
 
     public PaymentMethodWizard(IWizardView<PaymentMethodDTO> view) {
         super(PaymentMethodDTO.class, view, i18n.tr("Profile Payment Setup"), i18n.tr("Submit"), ThemeColor.contrast4);

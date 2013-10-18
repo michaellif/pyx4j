@@ -92,8 +92,6 @@ public class AutoPayWizard extends CPortalEntityWizard<AutoPayDTO> {
 
     private final Anchor preAuthorizedAgreementAnchor = new Anchor(i18n.tr("Pre-Authorized Agreement"));
 
-    private AutoPayWizardView.Presenter presenter;
-
     private final PaymentMethodEditor<LeasePaymentMethod> paymentMethodEditor = new PaymentMethodEditor<LeasePaymentMethod>(LeasePaymentMethod.class) {
 
         @Override
@@ -121,6 +119,8 @@ public class AutoPayWizard extends CPortalEntityWizard<AutoPayDTO> {
             return ClientContext.getUserVisit().getName();
         }
     };
+
+    private AutoPayWizardView.Presenter presenter;
 
     public AutoPayWizard(AutoPayWizardView view) {
         super(AutoPayDTO.class, view, i18n.tr("Automatic Payment Setup"), i18n.tr("Submit"), ThemeColor.contrast4);
@@ -386,9 +386,11 @@ public class AutoPayWizard extends CPortalEntityWizard<AutoPayDTO> {
             public void onClick(ClickEvent event) {
                 switch (get(proto().paymentMethod()).getValue().type().getValue()) {
                 case Echeck:
+                    preAuthorizedAgreementAnchor.setHref(AppPlaceInfo.absoluteUrl(GWT.getModuleBaseURL(), true, presenter.getPadPolicyPlace()));
                     presenter.showPadPolicy();
                     break;
                 case CreditCard:
+                    preAuthorizedAgreementAnchor.setHref(AppPlaceInfo.absoluteUrl(GWT.getModuleBaseURL(), true, presenter.getCcPolicyPlace()));
                     presenter.showCcPolicy();
                     break;
                 default:
@@ -417,5 +419,4 @@ public class AutoPayWizard extends CPortalEntityWizard<AutoPayDTO> {
 
         return panel;
     }
-
 }
