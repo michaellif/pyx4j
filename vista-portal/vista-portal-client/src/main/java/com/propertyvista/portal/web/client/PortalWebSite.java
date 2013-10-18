@@ -21,18 +21,15 @@ import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.gwt.commons.UncaughtHandler;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.security.client.ClientContext;
-import com.pyx4j.security.client.SessionInactiveEvent;
-import com.pyx4j.security.client.SessionInactiveHandler;
-import com.pyx4j.security.client.SessionMonitor;
 import com.pyx4j.security.rpc.AuthenticationService;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.client.SingletonViewFactory;
 import com.pyx4j.site.client.events.NotificationEvent;
 import com.pyx4j.site.client.events.NotificationHandler;
 import com.pyx4j.site.rpc.AppPlace;
-import com.pyx4j.widgets.client.dialog.Dialog;
-import com.pyx4j.widgets.client.dialog.Dialog.Type;
-import com.pyx4j.widgets.client.dialog.MessageDialog;
+import com.pyx4j.widgets.client.dialog.Dialog_v2;
+import com.pyx4j.widgets.client.dialog.Dialog_v2.Type;
+import com.pyx4j.widgets.client.dialog.MessageDialog_v2;
 import com.pyx4j.widgets.client.dialog.OkOption;
 
 import com.propertyvista.common.client.ClientNavigUtils;
@@ -135,7 +132,7 @@ public class PortalWebSite extends VistaSite {
 
         @Override
         public void onNotification(NotificationEvent event) {
-            Dialog.Type dialogType = null;
+            Dialog_v2.Type dialogType = null;
             switch (event.getNotificationType()) {
             case ERROR:
                 dialogType = Type.Error;
@@ -153,7 +150,7 @@ public class PortalWebSite extends VistaSite {
                 dialogType = Type.Warning;
                 break;
             }
-            new MessageDialog("", event.getMessage() + (ApplicationMode.isDevelopment() ? "\nDebug Info: " + event.getSystemInfo() : ""), dialogType,
+            new MessageDialog_v2("", event.getMessage() + (ApplicationMode.isDevelopment() ? "\nDebug Info: " + event.getSystemInfo() : ""), dialogType,
                     new OkOption() {
                         @Override
                         public boolean onClickOk() {

@@ -49,7 +49,7 @@ import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.security.client.ClientContext;
 import com.pyx4j.widgets.client.Anchor;
 import com.pyx4j.widgets.client.RadioGroup;
-import com.pyx4j.widgets.client.dialog.MessageDialog;
+import com.pyx4j.widgets.client.dialog.MessageDialog_v2;
 
 import com.propertyvista.common.client.theme.VistaTheme;
 import com.propertyvista.domain.contact.AddressSimple;
@@ -170,7 +170,7 @@ public class AutoPayWizard extends CPortalEntityWizard<AutoPayDTO> {
 
                         if (getValue().allowedPaymentTypes().isEmpty()) {
                             paymentMethodEditor.initNew(null);
-                            MessageDialog.warn(i18n.tr("Warning"), i18n.tr("There are no payment methods allowed!"));
+                            MessageDialog_v2.warn(i18n.tr("Warning"), i18n.tr("There are no payment methods allowed!"));
                         } else {
                             // set preferred value:
                             if (getValue().allowedPaymentTypes().contains(PaymentType.Echeck)) {

@@ -24,7 +24,7 @@ import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.client.ui.layout.responsive.LayoutChangeEvent;
 import com.pyx4j.site.client.ui.layout.responsive.LayoutChangeHandler;
 import com.pyx4j.site.client.ui.layout.responsive.ResponsiveLayoutPanel.LayoutType;
-import com.pyx4j.widgets.client.dialog.MessageDialog;
+import com.pyx4j.widgets.client.dialog.MessageDialog_v2;
 
 import com.propertyvista.portal.rpc.portal.web.dto.SelfRegistrationBuildingDTO;
 import com.propertyvista.portal.rpc.shared.EntityValidationException;
@@ -71,7 +71,7 @@ public class SignUpViewImpl extends FlowPanel implements SignUpView {
 
     @Override
     public void showError(String message) {
-        MessageDialog.error(i18n.tr("Registration Error"), message);
+        MessageDialog_v2.error(i18n.tr("Registration Error"), message);
     }
 
     @Override

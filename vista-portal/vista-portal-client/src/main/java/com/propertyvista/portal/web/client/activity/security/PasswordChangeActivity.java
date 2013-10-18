@@ -25,7 +25,7 @@ import com.pyx4j.rpc.shared.VoidSerializable;
 import com.pyx4j.security.rpc.PasswordChangeRequest;
 import com.pyx4j.site.shared.domain.Notification;
 import com.pyx4j.site.shared.domain.Notification.NotificationType;
-import com.pyx4j.widgets.client.dialog.MessageDialog;
+import com.pyx4j.widgets.client.dialog.MessageDialog_v2;
 
 import com.propertyvista.portal.rpc.portal.services.PasswordChangeUserService;
 import com.propertyvista.portal.web.client.PortalWebSite;
@@ -61,7 +61,7 @@ public class PasswordChangeActivity extends AbstractWizardActivity<PasswordChang
             @Override
             public void onFailure(Throwable caught) {
                 if (caught instanceof UserRuntimeException) {
-                    MessageDialog.error(i18n.tr("Failed to change password"), caught.getMessage());
+                    MessageDialog_v2.error(i18n.tr("Failed to change password"), caught.getMessage());
                 } else {
                     super.onFailure(caught);
                 }

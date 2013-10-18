@@ -29,7 +29,7 @@ import com.pyx4j.security.rpc.PasswordChangeRequest;
 import com.pyx4j.security.rpc.PasswordResetQuestion;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.rpc.AppPlace;
-import com.pyx4j.widgets.client.dialog.MessageDialog;
+import com.pyx4j.widgets.client.dialog.MessageDialog_v2;
 
 import com.propertyvista.common.client.ui.components.security.AbstractPasswordResetActivity;
 import com.propertyvista.common.client.ui.components.security.PasswordResetView;
@@ -68,7 +68,7 @@ public class PasswordResetActivity extends AbstractActivity implements PasswordR
             @Override
             public void onSuccess(AuthenticationResponse result) {
                 ClientContext.authenticated(result);
-                MessageDialog.info(i18n.tr("Your password has been reset successfully!"));
+                MessageDialog_v2.info(i18n.tr("Your password has been reset successfully!"));
                 //let AppPlaceDispatcher manage this. e.g. go to default place as defined in AppPlaceDispatcher. Or to target URL.
                 AppSite.getPlaceController().goTo(AppPlace.NOWHERE);
             }

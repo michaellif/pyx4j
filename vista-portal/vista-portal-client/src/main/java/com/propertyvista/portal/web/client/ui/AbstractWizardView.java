@@ -16,7 +16,7 @@ package com.propertyvista.portal.web.client.ui;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.UniqueConstraintUserRuntimeException;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.widgets.client.dialog.MessageDialog;
+import com.pyx4j.widgets.client.dialog.MessageDialog_v2;
 
 public abstract class AbstractWizardView<E extends IEntity> extends AbstractPortalPanel implements IWizardView<E> {
 
@@ -70,7 +70,7 @@ public abstract class AbstractWizardView<E extends IEntity> extends AbstractPort
     @Override
     public boolean onSaveFail(Throwable caught) {
         if (caught instanceof UniqueConstraintUserRuntimeException) {
-            MessageDialog.error(i18n.tr("Error"), caught.getMessage());
+            MessageDialog_v2.error(i18n.tr("Error"), caught.getMessage());
             return true;
         } else {
             return false;

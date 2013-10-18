@@ -15,7 +15,7 @@ package com.propertyvista.portal.web.client.ui.services.insurance;
 
 import com.pyx4j.commons.UserRuntimeException;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.widgets.client.dialog.MessageDialog;
+import com.pyx4j.widgets.client.dialog.MessageDialog_v2;
 
 import com.propertyvista.domain.contact.AddressSimple;
 import com.propertyvista.portal.rpc.portal.web.dto.insurance.TenantSureInsurancePolicyDTO;
@@ -57,13 +57,13 @@ public class TenantSureOrderWizardViewImpl extends AbstractWizardView<TenantSure
 
     @Override
     public void acknowledgeSendQuoteDetailsSucess(String email) {
-        MessageDialog.info(i18n.tr("Your quote documentation was sent to {0}", email));
+        MessageDialog_v2.info(i18n.tr("Your quote documentation was sent to {0}", email));
     }
 
     @Override
     public boolean onSaveFail(Throwable caught) {
         if (caught instanceof UserRuntimeException) {
-            MessageDialog.error(i18n.tr("Error"), caught.getMessage());
+            MessageDialog_v2.error(i18n.tr("Error"), caught.getMessage());
             return true;
         } else {
             return super.onSaveFail(caught);
