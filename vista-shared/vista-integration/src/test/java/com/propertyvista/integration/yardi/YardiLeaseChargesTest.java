@@ -18,7 +18,6 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 
-import org.junit.Ignore;
 import org.junit.Test;
 
 import com.yardi.entity.mits.Customerinfo;
@@ -53,7 +52,6 @@ import com.propertyvista.yardi.mock.RtCustomerUpdateEvent;
 import com.propertyvista.yardi.mock.RtCustomerUpdater;
 import com.propertyvista.yardi.services.YardiResidentTransactionsService;
 
-@Ignore
 public class YardiLeaseChargesTest extends YardiTestBase {
 
     public static final String PROPERTY_CODE = "prop123";
@@ -343,7 +341,7 @@ public class YardiLeaseChargesTest extends YardiTestBase {
      */
     @Test
     public void testLeaseTermination() throws Exception {
-        // create another lease to ensure non-empty transaction list
+        // create another lease to ensure non-empty transaction list for the building
         RtCustomerUpdater customer = new RtCustomerUpdater(PROPERTY_CODE, "t000222");
         customer.set(RtCustomerUpdater.YCUSTOMER.Type, Customerinfo.CURRENT_RESIDENT);
         customer.set(RtCustomerUpdater.YCUSTOMER.CustomerID, "t000222");

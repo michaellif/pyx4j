@@ -476,13 +476,21 @@ public class YardiResidentTransactionsService extends YardiAbstractService {
             String propertyCode = null;
             try {
                 // make sure we have non-empty leases and transactions
-                if (property.getRTCustomer().size() == 0 || property.getRTCustomer().get(0).getRTServiceTransactions().getTransactions().size() == 0) {
-                    log.info("No Lease Charges received for any property");
+                if (property.getRTCustomer().size() > 0) {
+                    // grab propertyCode from the first available ChargeDetail element
+                    for (RTCustomer rtCustomer : property.getRTCustomer()) {
+                        if (rtCustomer.getRTServiceTransactions().getTransactions().size() > 0) {
+                            propertyCode = rtCustomer.getRTServiceTransactions().getTransactions().get(0).getCharge().getDetail().getPropertyPrimaryID();
+                            break;
+                        }
+                    }
+                }
+
+                if (propertyCode == null) {
+                    log.info("Processed RTCustomer record with no transactions.");
                     continue;
                 }
-                // grab propertyCode from the first available ChargeDetail element
-                propertyCode = property.getRTCustomer().get(0).getRTServiceTransactions().getTransactions().get(0).getCharge().getDetail()
-                        .getPropertyPrimaryID();
+
                 log.info("Processing building: {}", propertyCode);
                 executionMonitor.addProcessedEvent("Building", propertyCode);
                 // retrieve active leases and keep track on those that have not been found in the response
