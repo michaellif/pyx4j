@@ -38,7 +38,7 @@ public class N4GenerationToolActivity extends AbstractBulkOperationToolActivity<
     protected Vector<Lease> makeProducedItems(List<LegalNoticeCandidateDTO> selectedItems) {
         Vector<Lease> selectedLeases = new Vector<Lease>();
         for (LegalNoticeCandidateDTO noticeCandidate : selectedItems) {
-            selectedLeases.add(noticeCandidate.leaseId());
+            selectedLeases.add(noticeCandidate.leaseId().<Lease> duplicate());
         }
         return selectedLeases;
     }

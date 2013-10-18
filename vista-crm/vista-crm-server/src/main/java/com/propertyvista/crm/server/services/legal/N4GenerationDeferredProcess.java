@@ -16,9 +16,12 @@ package com.propertyvista.crm.server.services.legal;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.gwt.rpc.deferred.DeferredProcessProgressResponse;
 import com.pyx4j.gwt.server.deferred.AbstractDeferredProcess;
 
+import com.propertyvista.biz.legal.N4ManagementFacade;
+import com.propertyvista.domain.company.Employee;
 import com.propertyvista.domain.tenant.lease.Lease;
 
 public class N4GenerationDeferredProcess extends AbstractDeferredProcess {
@@ -27,13 +30,23 @@ public class N4GenerationDeferredProcess extends AbstractDeferredProcess {
 
     private final AtomicInteger progress;
 
-    public N4GenerationDeferredProcess(List<Lease> delinquentLeases) {
+    private final int progressMax;
+
+    private final List<Lease> delinquentLeases;
+
+    private final Employee issuingEmployee;
+
+    public N4GenerationDeferredProcess(List<Lease> delinquentLeases, Employee issuingEmployee) {
         progress = new AtomicInteger();
         progress.set(0);
+        progressMax = delinquentLeases.size();
+        this.delinquentLeases = delinquentLeases;
+        this.issuingEmployee = issuingEmployee;
     }
 
     @Override
     public void execute() {
+        ServerSideFactory.create(N4ManagementFacade.class).issueN4(delinquentLeases, issuingEmployee, progress);
         completed = true;
     }
 
@@ -41,7 +54,7 @@ public class N4GenerationDeferredProcess extends AbstractDeferredProcess {
     public DeferredProcessProgressResponse status() {
         DeferredProcessProgressResponse status = super.status();
         status.setProgress(progress.get());
-        status.setProgressMaximum(1);
+        status.setProgressMaximum(progressMax);
         return status;
     }
 

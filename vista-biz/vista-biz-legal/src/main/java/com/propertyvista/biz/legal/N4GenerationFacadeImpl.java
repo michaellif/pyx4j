@@ -102,8 +102,8 @@ public class N4GenerationFacadeImpl implements N4GenerationFacade {
         fieldsData.globalTotalOwedHundreds().setValue(totalOwed[1]);
         fieldsData.globalTotalOwedCents().setValue(totalOwed[2]);
 
-        {
-            N4RentOwingForPeriod rentOwningForPeriod = leaseData.rentOwingBreakdown().get(1);
+        if (leaseData.rentOwingBreakdown().size() >= 1) {
+            N4RentOwingForPeriod rentOwningForPeriod = leaseData.rentOwingBreakdown().get(0);
             String[] owedFrom = N4GenerationUtils.splitDate(rentOwningForPeriod.from().getValue());
             fieldsData.owedFromDDA().setValue(owedFrom[0]);
             fieldsData.owedFromMMA().setValue(owedFrom[1]);
@@ -197,7 +197,7 @@ public class N4GenerationFacadeImpl implements N4GenerationFacade {
         fieldsData.signatureAddress().setValue(landlordsData.landlordsAddress().street1().getValue());
         fieldsData.signatureUnit().setValue(landlordsData.landlordsAddress().street2().getValue());
         fieldsData.signatureMunicipality().setValue(landlordsData.landlordsAddress().city().getValue());
-        fieldsData.signatureProvince().setValue(landlordsData.landlordsAddress().province().code().getValue().toString());
+        fieldsData.signatureProvince().setValue(landlordsData.landlordsAddress().province().code().getStringView());
         fieldsData.signaturePostalCode().setValue(landlordsData.landlordsAddress().postalCode().getValue());
 
         String[] signaturPhoneNumber = N4GenerationUtils.splitPhoneNumber(landlordsData.landlordsPhoneNumber().getValue());
@@ -214,6 +214,7 @@ public class N4GenerationFacadeImpl implements N4GenerationFacade {
 
         fieldsData.signatureEmailAddress().setValue(landlordsData.emailAddress().getValue());
 
+        // add singuature image
         return fieldsData;
     }
 

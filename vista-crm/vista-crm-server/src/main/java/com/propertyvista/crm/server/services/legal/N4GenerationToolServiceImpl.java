@@ -29,6 +29,7 @@ import com.propertyvista.config.ThreadPoolNames;
 import com.propertyvista.crm.rpc.dto.legal.n4.LegalNoticeCandidateDTO;
 import com.propertyvista.crm.rpc.dto.legal.n4.N4GenerationSettingsDTO;
 import com.propertyvista.crm.rpc.services.legal.N4GenerationToolService;
+import com.propertyvista.crm.server.util.CrmAppContext;
 import com.propertyvista.domain.legal.LegalNoticeCandidate;
 import com.propertyvista.domain.legal.N4LegalLetter;
 import com.propertyvista.domain.tenant.lease.Lease;
@@ -51,7 +52,9 @@ public class N4GenerationToolServiceImpl implements N4GenerationToolService {
 
     @Override
     public void process(AsyncCallback<String> callback, Vector<Lease> delinquentLeases) {
-        callback.onSuccess(DeferredProcessRegistry.fork(new N4GenerationDeferredProcess(delinquentLeases), ThreadPoolNames.IMPORTS));
+        // TODO employee must be set by settings
+        callback.onSuccess(DeferredProcessRegistry.fork(new N4GenerationDeferredProcess(delinquentLeases, CrmAppContext.getCurrentUserEmployee()),
+                ThreadPoolNames.IMPORTS));
     }
 
     private LegalNoticeCandidateDTO makeLegalNoticeCandidateDto(LegalNoticeCandidate candidate) {

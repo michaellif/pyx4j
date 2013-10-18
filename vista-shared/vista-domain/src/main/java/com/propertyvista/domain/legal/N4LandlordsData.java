@@ -30,8 +30,10 @@ public interface N4LandlordsData extends IEntity {
 
     AddressSimple landlordsAddress();
 
+    /** must have the following format: (XXX) XXX-XXXX */
     IPrimitive<String> landlordsPhoneNumber();
 
+    /** optional, but must have the following format: (XXX) XXX-XXXX */
     IPrimitive<String> faxNumber();
 
     IPrimitive<String> emailAddress();
@@ -41,5 +43,6 @@ public interface N4LandlordsData extends IEntity {
 
     IPrimitive<LogicalDate> signatureDate();
 
+    /** optional */
     IPrimitive<byte[]> signature();
 }

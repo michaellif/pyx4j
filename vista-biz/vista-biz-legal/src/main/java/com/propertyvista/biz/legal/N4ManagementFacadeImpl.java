@@ -25,6 +25,7 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.config.server.ServerSideFactory;
@@ -64,14 +65,27 @@ public class N4ManagementFacadeImpl implements N4ManagementFacade {
     }
 
     @Override
-    public void issueN4(List<Lease> delinquentLeases, Employee employee) throws IllegalStateException {
-        // TODO 
+    public void issueN4(List<Lease> delinquentLeases, Employee employee, AtomicInteger progress) throws IllegalStateException {
+        // TODO get terminationDate
         LogicalDate terminationDate = new LogicalDate();
 
-        N4LandlordsData n4LandLordsData = null; // TODO
+        // TODO get landlordsData 
+        N4LandlordsData n4LandLordsData = EntityFactory.create(N4LandlordsData.class);
+        {
+            n4LandLordsData.landlordsLegalName().setValue("TBD");
+            n4LandLordsData.signingEmployee().set(employee);
+            n4LandLordsData.landlordsAddress();
+            n4LandLordsData.landlordsPhoneNumber().setValue("(647) 345-1234");
+            n4LandLordsData.faxNumber().setValue("(647) 345-1234");
+            n4LandLordsData.emailAddress().setValue("tbd@pmc.net");
+            n4LandLordsData.isLandlord().setValue(false);
+            n4LandLordsData.signatureDate().setValue(new LogicalDate());
+            n4LandLordsData.signature();
+        }
 
         for (Lease leaseId : delinquentLeases) {
             issueN4ForLease(leaseId, n4LandLordsData, terminationDate);
+            progress.set(progress.get() + 1);
         }
 
     }
