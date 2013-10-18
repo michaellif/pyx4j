@@ -28,6 +28,7 @@ import com.pyx4j.entity.server.AbstractCrudServiceDtoImpl;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
+import com.pyx4j.entity.shared.criterion.OrCriterion;
 import com.pyx4j.entity.shared.utils.EntityDiff;
 import com.pyx4j.gwt.server.deferred.DeferredProcessRegistry;
 import com.pyx4j.rpc.shared.VoidSerializable;
@@ -53,6 +54,7 @@ import com.propertyvista.ob.server.PmcActivationDeferredProcess;
 import com.propertyvista.operations.domain.scheduler.PmcProcessType;
 import com.propertyvista.operations.domain.scheduler.Run;
 import com.propertyvista.operations.domain.scheduler.Trigger;
+import com.propertyvista.operations.domain.scheduler.TriggerPmcSelectionType;
 import com.propertyvista.operations.domain.vista2pmc.DefaultPaymentFees;
 import com.propertyvista.operations.rpc.dto.PmcDTO;
 import com.propertyvista.operations.rpc.services.PmcCrudService;
@@ -239,17 +241,24 @@ public class PmcCrudServiceImpl extends AbstractCrudServiceDtoImpl<Pmc, PmcDTO> 
 
     @Override
     public void runPmcProcess(AsyncCallback<Run> callback, Key entityId, PmcProcessType processType, LogicalDate executionDate) {
+        Pmc pmc = Persistence.service().retrieve(boClass, entityId);
         Trigger trigger;
         {
             EntityQueryCriteria<Trigger> criteria = EntityQueryCriteria.create(Trigger.class);
             criteria.eq(criteria.proto().triggerType(), processType);
+            {
+                OrCriterion or = criteria.or();
+                or.left().eq(criteria.proto().populationType(), TriggerPmcSelectionType.allPmc);
+                or.right().eq(criteria.proto().populationType(), TriggerPmcSelectionType.manual);
+                or.right().eq(criteria.proto().population(), pmc);
+            }
+
             criteria.asc(criteria.proto().id());
             trigger = Persistence.service().retrieve(criteria);
             if (trigger == null) {
-                throw new UserRuntimeException("The Trigger " + processType + " not found");
+                throw new UserRuntimeException("The Trigger " + processType + " not found for this PMC");
             }
         }
-        Pmc pmc = Persistence.service().retrieve(boClass, entityId);
 
         Run run = ServerSideFactory.create(OperationsTriggerFacade.class).startProcess(trigger, pmc, executionDate);
         callback.onSuccess(run.<Run> createIdentityStub());

@@ -15,11 +15,15 @@ package com.propertyvista.biz.system;
 
 import java.util.Date;
 
+import org.apache.commons.lang.time.DateUtils;
+
 import com.pyx4j.commons.Consts;
+import com.pyx4j.commons.Key;
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.commons.UserRuntimeException;
 import com.pyx4j.config.server.SystemDateManager;
 import com.pyx4j.entity.server.Persistence;
+import com.pyx4j.entity.shared.AttachLevel;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 
@@ -83,7 +87,17 @@ public class OperationsTriggerFacadeImpl implements OperationsTriggerFacade {
                 throw new UserRuntimeException("The process is already running");
             }
         }
-        Date startDate = new Date();
+        Key lastRunKey = null;
+        {
+            EntityQueryCriteria<Run> criteria = EntityQueryCriteria.create(Run.class);
+            criteria.asc(criteria.proto().id());
+            Run existingRun = Persistence.service().retrieve(criteria, AttachLevel.IdOnly);
+            if (existingRun != null) {
+                lastRunKey = existingRun.getPrimaryKey();
+            }
+        }
+        Date startDate = SystemDateManager.getDate();
+        Date startDateEnd = DateUtils.addMinutes(startDate, 2);
         JobUtils.runNow(triggerStub, pmcId, executionDate);
         // Find running Run
         long start = System.currentTimeMillis();
@@ -92,6 +106,11 @@ public class OperationsTriggerFacadeImpl implements OperationsTriggerFacade {
             EntityQueryCriteria<Run> criteria = EntityQueryCriteria.create(Run.class);
             criteria.eq(criteria.proto().trigger(), triggerStub);
             criteria.ge(criteria.proto().updated(), startDate);
+            criteria.le(criteria.proto().updated(), startDateEnd);
+            if (lastRunKey != null) {
+                criteria.ge(criteria.proto().id(), lastRunKey);
+            }
+            criteria.asc(criteria.proto().id());
             run = Persistence.service().retrieve(criteria);
             if (run != null) {
                 break;
@@ -107,7 +126,11 @@ public class OperationsTriggerFacadeImpl implements OperationsTriggerFacade {
             EntityQueryCriteria<Run> criteria = EntityQueryCriteria.create(Run.class);
             criteria.eq(criteria.proto().trigger(), triggerStub);
             criteria.ge(criteria.proto().updated(), startDate);
-            criteria.asc(criteria.proto().updated());
+            criteria.le(criteria.proto().updated(), startDateEnd);
+            if (lastRunKey != null) {
+                criteria.ge(criteria.proto().id(), lastRunKey);
+            }
+            criteria.asc(criteria.proto().id());
             run = Persistence.service().retrieve(criteria);
         }
 
