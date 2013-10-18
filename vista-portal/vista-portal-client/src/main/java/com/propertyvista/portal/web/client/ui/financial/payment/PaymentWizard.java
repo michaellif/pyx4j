@@ -81,6 +81,7 @@ import com.propertyvista.portal.domain.dto.financial.PaymentDTO;
 import com.propertyvista.portal.web.client.resources.PortalImages;
 import com.propertyvista.portal.web.client.ui.CPortalEntityWizard;
 import com.propertyvista.portal.web.client.ui.IWizardView;
+import com.propertyvista.portal.web.client.ui.financial.PortalPaymentTypesUtil;
 import com.propertyvista.portal.web.client.ui.financial.paymentmethod.PaymentMethodEditor;
 import com.propertyvista.portal.web.client.ui.util.decorators.FormDecoratorBuilder;
 
@@ -101,6 +102,11 @@ public class PaymentWizard extends CPortalEntityWizard<PaymentDTO> {
     private final Anchor billingPolicyAnchor = new Anchor(i18n.tr("Billing And Refund Policy"));
 
     private final PaymentMethodEditor<LeasePaymentMethod> paymentMethodEditor = new PaymentMethodEditor<LeasePaymentMethod>(LeasePaymentMethod.class) {
+
+        @Override
+        public Set<PaymentType> defaultPaymentTypes() {
+            return PortalPaymentTypesUtil.getAllowedPaymentTypes(true);
+        }
 
         @Override
         protected Set<CreditCardType> getAllowedCardTypes() {
@@ -507,7 +513,7 @@ public class PaymentWizard extends CPortalEntityWizard<PaymentDTO> {
             super(i18n.tr("Direct Banking Instruction"));
             setBody(createBody());
 
-            setWidth("400px");
+            setWidth("600px");
         }
 
         private IsWidget createBody() {
