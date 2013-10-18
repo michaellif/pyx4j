@@ -79,7 +79,6 @@ public class TenantSurePage extends CPortalEntityForm<TenantSureInsurancePolicyD
         mainPanel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().certificate().liabilityCoverage()), 150).build());
         mainPanel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().contentsCoverage()), 150).build());
 
-        // TODO investigate why format of annotated on the field doesn't work
         IFormat<BigDecimal> currencyFormat = new MoneyComboBox.MoneyComboBoxFormat();
         ((CTextFieldBase<BigDecimal, ?>) get(proto().certificate().liabilityCoverage())).setFormat(currencyFormat);
         ((CTextFieldBase<BigDecimal, ?>) get(proto().contentsCoverage())).setFormat(currencyFormat);
