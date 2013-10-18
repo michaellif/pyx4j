@@ -67,6 +67,7 @@ BEGIN
         ALTER TABLE insurance_tenant_sure_transaction DROP CONSTRAINT insurance_tenant_sure_transaction_insurance_discriminator_d_ck;
         ALTER TABLE insurance_tenant_sure_transaction DROP CONSTRAINT insurance_tenant_sure_transaction_payment_method_discr_d_ck;
         ALTER TABLE insurance_tenant_sure_transaction DROP CONSTRAINT insurance_tenant_sure_transaction_status_e_ck;
+        ALTER TABLE notification DROP CONSTRAINT notification_tp_e_ck;
         ALTER TABLE preauthorized_payment DROP CONSTRAINT preauthorized_payment_created_by_discriminator_d_ck;
         ALTER TABLE preauthorized_payment DROP CONSTRAINT preauthorized_payment_payment_method_discriminator_d_ck;
         ALTER TABLE preauthorized_payment DROP CONSTRAINT preauthorized_payment_tenant_discriminator_d_ck;
@@ -243,6 +244,7 @@ BEGIN
         
         ALTER TABLE ilsvendor_config OWNER TO vista;
         
+        /*
         -- initialization_data
         
         CREATE TABLE initialization_data
@@ -250,6 +252,8 @@ BEGIN
                 id                                      BIGINT                  NOT NULL,
                         CONSTRAINT initialization_data_pk PRIMARY KEY(id)
         );
+        
+        */
         
         ALTER TABLE initialization_data OWNER TO vista;
         
@@ -466,6 +470,13 @@ BEGIN
         EXECUTE 'UPDATE '||v_schema_name||'.insurance_policy '
                 ||'SET id_discriminator = ''TenantSureInsurancePolicy'' '
                 ||'WHERE id_discriminator = ''InsuranceTenantSure'' ';
+                
+      
+        -- notification
+        
+        EXECUTE 'UPDATE '||v_schema_name||'.notification '
+                ||'SET  tp = ''AutoPayReviewRequired'' '
+                ||'WHERE tp = ''PreauthorizedPaymentSuspension'' ';
         
         
         /**
@@ -631,6 +642,7 @@ BEGIN
                 'thoroughfaree', 'track', 'trunkway', 'view', 'vista', 'walk', 'walkway', 'way', 'yard'));
         ALTER TABLE n4_policy ADD CONSTRAINT n4_policy_node_discriminator_d_ck 
                 CHECK ((node_discriminator) IN ('Disc Complex', 'Disc_Building', 'Disc_Country', 'Disc_Floorplan', 'Disc_Province', 'OrganizationPoliciesNode', 'Unit_BuildingElement'));
+        ALTER TABLE notification ADD CONSTRAINT notification_tp_e_ck CHECK ((tp) IN ('AutoPayReviewRequired', 'ElectronicPaymentRejectedNsf', 'MaintenanceRequest'));
         ALTER TABLE proof_of_employment_document ADD CONSTRAINT proof_of_employment_document_owner_discriminator_d_ck 
                 CHECK ((owner_discriminator) IN ('CustomerScreening', 'CustomerScreeningIncome'));
         ALTER TABLE tenant_sure_insurance_policy_client ADD CONSTRAINT tenant_sure_insurance_policy_client_tenant_discriminator_d_ck CHECK (tenant_discriminator = 'Tenant');
