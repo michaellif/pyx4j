@@ -112,6 +112,10 @@ public class EditableFormDecorator<E extends IEntity> extends FormDecorator<E, C
     protected void onSave() {
     }
 
+    public Button getBtnEdit() {
+        return btnEdit;
+    }
+
     public Button getBtnSave() {
         return btnSave;
     }
