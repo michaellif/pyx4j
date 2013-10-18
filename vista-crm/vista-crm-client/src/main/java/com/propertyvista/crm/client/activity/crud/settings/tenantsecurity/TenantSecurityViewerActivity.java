@@ -13,6 +13,9 @@
  */
 package com.propertyvista.crm.client.activity.crud.settings.tenantsecurity;
 
+import java.io.Serializable;
+import java.util.HashMap;
+
 import com.google.gwt.activity.shared.AbstractActivity;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.shared.EventBus;
@@ -26,18 +29,16 @@ import com.pyx4j.site.client.ReportDialog;
 import com.propertyvista.crm.client.CrmSite;
 import com.propertyvista.crm.client.ui.crud.settings.tenantsecurity.TenantSecurityView;
 import com.propertyvista.crm.rpc.services.customer.ExportTenantsService;
+import com.propertyvista.domain.tenant.access.PortalAccessSecutiryCodeReportType;
 import com.propertyvista.portal.rpc.DeploymentConsts;
 
 public class TenantSecurityViewerActivity extends AbstractActivity implements TenantSecurityView.Presenter {
 
     private final I18n i18n = I18n.get(TenantSecurityView.class);
 
-    private final Place place;
-
     private final TenantSecurityView view;
 
     public TenantSecurityViewerActivity(Place place) {
-        this.place = place;
         this.view = CrmSite.getViewFactory().instantiate(TenantSecurityView.class);
     }
 
@@ -48,10 +49,13 @@ public class TenantSecurityViewerActivity extends AbstractActivity implements Te
     }
 
     @Override
-    public void generatePortalSecurityCodes() {
+    public void generatePortalSecurityCodes(PortalAccessSecutiryCodeReportType type) {
         ReportDialog d = new ReportDialog(i18n.tr(""), i18n.tr("Preparing the list of tenant portal registration codes..."));
         d.setDownloadServletPath(GWT.getModuleBaseURL() + DeploymentConsts.downloadServletMapping);
-        d.start(GWT.<ReportService<?>> create(ExportTenantsService.class), null, null);
+
+        HashMap<String, Serializable> parameters = new HashMap<String, Serializable>();
+        parameters.put(ExportTenantsService.PARAM_REPORT_TYPE, type);
+        d.start(GWT.<ReportService<?>> create(ExportTenantsService.class), null, parameters);
     }
 
     @Override

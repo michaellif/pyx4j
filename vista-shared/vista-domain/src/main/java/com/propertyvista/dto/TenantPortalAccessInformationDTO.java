@@ -20,17 +20,27 @@ import com.pyx4j.entity.shared.IPrimitive;
 @Transient
 public interface TenantPortalAccessInformationDTO extends IEntity {
 
+    IPrimitive<String> leaseId();
+
+    IPrimitive<String> unit();
+
     IPrimitive<String> address();
 
     IPrimitive<String> cityZip();
 
-    IPrimitive<String> unit();
+    IPrimitive<String> city();
+
+    IPrimitive<String> province();
+
+    IPrimitive<String> postalCode();
 
     IPrimitive<String> firstName();
 
     IPrimitive<String> middleName();
 
     IPrimitive<String> lastName();
+
+    IPrimitive<String> tenantNameFull();
 
     IPrimitive<String> portalRegistrationToken();
 

@@ -19,6 +19,8 @@ import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.AbstractPane;
 import com.pyx4j.widgets.client.Button;
 
+import com.propertyvista.domain.tenant.access.PortalAccessSecutiryCodeReportType;
+
 public class TenantSecurityViewImpl extends AbstractPane implements TenantSecurityView {
 
     private static final I18n i18n = I18n.get(TenantSecurityViewImpl.class);
@@ -26,13 +28,19 @@ public class TenantSecurityViewImpl extends AbstractPane implements TenantSecuri
     private TenantSecurityView.Presenter presenter;
 
     public TenantSecurityViewImpl() {
-        Button button = new Button(i18n.tr("Generate Security Code List for Tenants that have not Registered"), new Command() {
+        addHeaderToolbarItem(new Button(i18n.tr("Generate Security Code List for Tenants that have not Registered (Per Tenant)"), new Command() {
             @Override
             public void execute() {
-                presenter.generatePortalSecurityCodes();
+                presenter.generatePortalSecurityCodes(PortalAccessSecutiryCodeReportType.PerTenant);
             }
-        });
-        addHeaderToolbarItem(button);
+        }));
+
+        addHeaderToolbarItem(new Button(i18n.tr("Generate Security Code List for Tenants that have not Registered (Per Lease)"), new Command() {
+            @Override
+            public void execute() {
+                presenter.generatePortalSecurityCodes(PortalAccessSecutiryCodeReportType.PerLease);
+            }
+        }));
     }
 
     @Override

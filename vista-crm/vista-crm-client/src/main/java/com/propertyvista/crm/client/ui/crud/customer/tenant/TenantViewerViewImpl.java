@@ -138,7 +138,7 @@ public class TenantViewerViewImpl extends CrmViewerViewImplBase<TenantDTO> imple
                     TwoColumnFlexFormPanel panel = new TwoColumnFlexFormPanel();
                     int row = -1;
                     panel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().address())).build());
-                    panel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().cityZip())).build());
+                    panel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().postalCode())).build());
                     panel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().unit())).build());
                     panel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().firstName())).build());
                     panel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().middleName())).build());

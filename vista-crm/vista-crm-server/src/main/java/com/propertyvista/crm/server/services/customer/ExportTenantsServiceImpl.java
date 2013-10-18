@@ -22,12 +22,17 @@ import com.pyx4j.gwt.server.deferred.DeferredProcessRegistry;
 
 import com.propertyvista.config.ThreadPoolNames;
 import com.propertyvista.crm.rpc.services.customer.ExportTenantsService;
+import com.propertyvista.domain.tenant.access.PortalAccessSecutiryCodeReportType;
 
 public class ExportTenantsServiceImpl extends ReportServiceImpl<IEntity> implements ExportTenantsService {
 
     @Override
     public void createDownload(AsyncCallback<String> callback, ReportRequest reportRequest) {
-        callback.onSuccess(DeferredProcessRegistry.fork(new ExportTenantsPortalSecretsDeferredProcess(), ThreadPoolNames.DOWNLOADS));
+
+        PortalAccessSecutiryCodeReportType type = (PortalAccessSecutiryCodeReportType) reportRequest.getParameters()
+                .get(ExportTenantsService.PARAM_REPORT_TYPE);
+
+        callback.onSuccess(DeferredProcessRegistry.fork(new ExportTenantsPortalSecretsDeferredProcess(type), ThreadPoolNames.DOWNLOADS));
     }
 
 }

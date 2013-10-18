@@ -15,11 +15,13 @@ package com.propertyvista.crm.client.ui.crud.settings.tenantsecurity;
 
 import com.pyx4j.site.client.ui.IPane;
 
+import com.propertyvista.domain.tenant.access.PortalAccessSecutiryCodeReportType;
+
 public interface TenantSecurityView extends IPane {
 
     interface Presenter extends IPane.Presenter {
 
-        void generatePortalSecurityCodes();
+        void generatePortalSecurityCodes(PortalAccessSecutiryCodeReportType type);
 
     }
 

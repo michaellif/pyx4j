@@ -7,17 +7,15 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on 2013-01-16
- * @author ArtyomB
+ * Created on Oct 18, 2013
+ * @author vlads
  * @version $Id$
  */
-package com.propertyvista.crm.rpc.services.customer;
+package com.propertyvista.domain.tenant.access;
 
-import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.essentials.rpc.report.ReportService;
+public enum PortalAccessSecutiryCodeReportType {
 
-public interface ExportTenantsService extends ReportService<IEntity> {
+    PerTenant,
 
-    public static String PARAM_REPORT_TYPE = "selected-buildings";
-
+    PerLease
 }
