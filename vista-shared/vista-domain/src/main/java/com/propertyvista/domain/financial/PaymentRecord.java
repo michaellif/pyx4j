@@ -36,7 +36,6 @@ import com.pyx4j.entity.annotations.ReadOnly;
 import com.pyx4j.entity.annotations.RequireFeature;
 import com.pyx4j.entity.annotations.Timestamp;
 import com.pyx4j.entity.annotations.ToString;
-import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.AttachLevel;
 import com.pyx4j.entity.shared.IEntity;
@@ -153,9 +152,8 @@ public interface PaymentRecord extends IEntity {
 
     //This table is used to enforce refferencial integrity in tests and QA
     @RequireFeature(ApplicationDevelopmentFeature.class)
-    //TODO 
-    @Transient
-    ISet<AutopayAgreementCoveredItem> dev_autopayCoveredItems();
+    @Detached(level = AttachLevel.Detached)
+    ISet<AutopayAgreementCoveredItem> _assert_autopayCoveredItemsChanges();
 
     @NotNull
     @Detached
