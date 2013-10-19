@@ -81,7 +81,7 @@ public class SignUpGadget extends AbstractGadget<SignUpViewImpl> {
         FlowPanel loginTermsLinkPanel = new FlowPanel();
         loginTermsLinkPanel.getElement().getStyle().setTextAlign(TextAlign.LEFT);
 
-        HTML termsPrefix = new HTML(i18n.tr("By clicking LOGIN, you are acknowledging that you have read and agree to our "));
+        HTML termsPrefix = new HTML(i18n.tr("By clicking REGISTER, you are acknowledging that you have read and agree to our "));
         termsPrefix.getElement().getStyle().setDisplay(Display.INLINE);
         loginTermsLinkPanel.add(termsPrefix);
 
