@@ -13,6 +13,7 @@
  */
 package com.propertyvista.crm.server.services.customer;
 
+import com.pyx4j.commons.SimpleMessageFormat;
 import com.pyx4j.entity.server.IEntityPersistenceService.ICursorIterator;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.AttachLevel;
@@ -27,7 +28,7 @@ import com.pyx4j.gwt.rpc.deferred.DeferredProcessProgressResponse;
 import com.pyx4j.gwt.server.deferred.AbstractDeferredProcess;
 
 import com.propertyvista.config.VistaDeployment;
-import com.propertyvista.domain.contact.AddressStructured.StreetType;
+import com.propertyvista.domain.contact.AddressStructured;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.tenant.access.PortalAccessSecutiryCodeReportType;
 import com.propertyvista.domain.tenant.access.TenantPortalAccessInformationPerLeaseDTO;
@@ -174,7 +175,7 @@ public class ExportTenantsPortalSecretsDeferredProcess extends AbstractDeferredP
     public static TenantPortalAccessInformationDTO convert(Tenant tenant) {
         TenantPortalAccessInformationDTO dto = EntityFactory.create(TenantPortalAccessInformationDTO.class);
         dto.leaseId().setValue(tenant.lease().leaseId().getValue());
-        dto.address().setValue(getAddress(tenant.lease().unit().building()));
+        dto.address().setValue(getAddressLine1(tenant.lease().unit().building()));
         dto.cityZip().setValue(getCityZip(tenant.lease().unit().building()));
         dto.city().setValue(tenant.lease().unit().building().info().address().city().getValue());
         dto.postalCode().setValue(tenant.lease().unit().building().info().address().postalCode().getValue());
@@ -193,22 +194,23 @@ public class ExportTenantsPortalSecretsDeferredProcess extends AbstractDeferredP
         return dto;
     }
 
-    private static String getAddress(Building building) {
-        String address = "";
-        address += building.info().address().streetNumber() != null ? building.info().address().streetNumber().getValue() + " " : "";
-        address += building.info().address().streetName() != null ? building.info().address().streetName().getValue() + " " : "";
-        if (building.info().address().streetType().getValue() != StreetType.other) {
-            address += building.info().address().streetType() != null ? building.info().address().streetType().getValue() : "";
-        }
-        return address;
+    private static String getAddressLine1(Building building) {
+        AddressStructured address = building.info().address();
+        System.out.println(address.getStringView());
+        // This is fragment form AddressStructured @ToStringFormat
+        return SimpleMessageFormat.format("{1} {2} {3}{4,choice,other#|null#|!null# {4}}{5,choice,null#|!null# {5}}", //
+                "", address.streetNumber(),//
+                address.streetNumberSuffix(),//
+                address.streetName(),//
+                address.streetType().getValue(),//
+                address.streetDirection());
     }
 
     private static String getCityZip(Building building) {
-        String cityZip = "";
-        cityZip += building.info().address().city() != null ? building.info().address().city().getValue() + ", " : "";
-        cityZip += building.info().address().province() != null ? building.info().address().province().name().getValue() + " " : "";
-        cityZip += building.info().address().postalCode().getStringView();
-        return cityZip;
+        return SimpleMessageFormat.format("{0,choice,null#|!null#{0}, }{1,choice,null#|!null# {1}}{2,choice,null#|!null# {2}}", //
+                building.info().address().city(),//
+                building.info().address().province().name(), //
+                building.info().address().postalCode());
     }
 
     @Override
