@@ -54,6 +54,40 @@ public class CanadianStreetAddressParserTest extends TestCase {
         Assert.assertEquals("Eglinton", a.streetName);
         Assert.assertEquals(StreetType.avenue, a.streetType);
         Assert.assertNull(a.streetDirection);
+
+        a = parse("1065 Eglinton  CarambA", null);
+        Assert.assertNull(a.unitNumber);
+        Assert.assertEquals("1065", a.streetNumber);
+        Assert.assertEquals("Eglinton CarambA", a.streetName);
+        Assert.assertEquals(StreetType.other, a.streetType);
+        Assert.assertNull(a.streetDirection);
+    }
+
+    //TODO VISTA-3603
+    public void TODO_testStreetTypeAbbreviation() {
+        StreetAddress a;
+
+        a = parse("1065 Eglinton Ave", null);
+        Assert.assertNull(a.unitNumber);
+        Assert.assertEquals("1065", a.streetNumber);
+        Assert.assertEquals("Eglinton", a.streetName);
+        Assert.assertEquals(StreetType.avenue, a.streetType);
+        Assert.assertNull(a.streetDirection);
+
+        a = parse("1065 Eglinton AVENU", null);
+        Assert.assertNull(a.unitNumber);
+        Assert.assertEquals("1065", a.streetNumber);
+        Assert.assertEquals("Eglinton", a.streetName);
+        Assert.assertEquals(StreetType.avenue, a.streetType);
+        Assert.assertNull(a.streetDirection);
+
+        // Not supported by vista StreetTypes but present in refference
+        a = parse("1065 Eglinton Plaza", null);
+        Assert.assertNull(a.unitNumber);
+        Assert.assertEquals("1065", a.streetNumber);
+        Assert.assertEquals("Eglinton Plaza", a.streetName);
+        Assert.assertEquals(StreetType.other, a.streetType);
+        Assert.assertNull(a.streetDirection);
     }
 
     public void testComplexStreetName() {

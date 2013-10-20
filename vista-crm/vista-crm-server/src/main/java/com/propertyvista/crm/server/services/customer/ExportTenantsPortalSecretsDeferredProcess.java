@@ -27,6 +27,7 @@ import com.pyx4j.gwt.rpc.deferred.DeferredProcessProgressResponse;
 import com.pyx4j.gwt.server.deferred.AbstractDeferredProcess;
 
 import com.propertyvista.config.VistaDeployment;
+import com.propertyvista.domain.contact.AddressStructured.StreetType;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.tenant.access.PortalAccessSecutiryCodeReportType;
 import com.propertyvista.domain.tenant.access.TenantPortalAccessInformationPerLeaseDTO;
@@ -196,7 +197,9 @@ public class ExportTenantsPortalSecretsDeferredProcess extends AbstractDeferredP
         String address = "";
         address += building.info().address().streetNumber() != null ? building.info().address().streetNumber().getValue() + " " : "";
         address += building.info().address().streetName() != null ? building.info().address().streetName().getValue() + " " : "";
-        address += building.info().address().streetType() != null ? building.info().address().streetType().getValue() : "";
+        if (building.info().address().streetType().getValue() != StreetType.other) {
+            address += building.info().address().streetType() != null ? building.info().address().streetType().getValue() : "";
+        }
         return address;
     }
 

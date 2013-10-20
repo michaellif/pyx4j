@@ -35,7 +35,7 @@ import com.propertyvista.domain.ref.ProvinceReferenceAdapter;
 
 @EmbeddedEntity
 @I18n(strategy = I18n.I18nStrategy.IgnoreThis)
-@ToStringFormat("{0,choice,null#|!null#{0}-}{1} {2} {3}{4,choice,null#|!null# {4}}{5,choice,null#|!null# {5}}, {6}, {7} {8}, {9}")
+@ToStringFormat("{0,choice,null#|!null#{0}-}{1} {2} {3}{4,choice,other#|null#|!null# {4}}{5,choice,null#|!null# {5}}, {6}, {7} {8}, {9}")
 public interface AddressStructured extends IEntity {
 
     @I18n
