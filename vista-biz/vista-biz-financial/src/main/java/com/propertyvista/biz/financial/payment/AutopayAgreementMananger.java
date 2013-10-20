@@ -36,6 +36,7 @@ import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.OrCriterion;
 import com.pyx4j.entity.shared.utils.EntityDiff;
 import com.pyx4j.entity.shared.utils.EntityGraph;
+import com.pyx4j.essentials.server.dev.DataDump;
 
 import com.propertyvista.biz.ExecutionMonitor;
 import com.propertyvista.biz.communication.NotificationFacade;
@@ -132,7 +133,6 @@ class AutopayAgreementMananger {
 
     void persitAutopayAgreementReview(ReviewedAutopayAgreementDTO preauthorizedPaymentChanges) {
         AutopayAgreement preauthorizedPayment = Persistence.service().retrieve(AutopayAgreement.class, preauthorizedPaymentChanges.papId().getPrimaryKey());
-
         preauthorizedPayment.updatedBySystem().setValue(null);
         // Update amounts
         nextCharge: for (ReviewedPapChargeDTO reviewedPapCharge : preauthorizedPaymentChanges.reviewedCharges()) {
@@ -142,8 +142,10 @@ class AutopayAgreementMananger {
                     continue nextCharge;
                 }
             }
+            log.debug("Error with ReviewedAutopay  {} ", DataDump.toXmlString(preauthorizedPaymentChanges));
+            log.debug("Error with AutopayAgreement {} ", DataDump.toXmlString(preauthorizedPayment));
             throw new Error("BillableItem item " + reviewedPapCharge.paymentAmountUpdate().getValue() + "$ "
-                    + reviewedPapCharge.billableItem().uid().getStringView() + " not found");
+                    + reviewedPapCharge.billableItem().id().getStringView() + " not found in AutopayAgreement " + preauthorizedPayment.id().getStringView());
         }
         persistAutopayAgreement(preauthorizedPayment, preauthorizedPayment.tenant());
     }

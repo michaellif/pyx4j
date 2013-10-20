@@ -16,7 +16,6 @@ package com.propertyvista.crm.server.services.financial;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import com.pyx4j.config.server.ServerSideFactory;
-import com.pyx4j.entity.server.ConnectionTarget;
 import com.pyx4j.entity.server.Executable;
 import com.pyx4j.entity.server.TransactionScopeOption;
 import com.pyx4j.entity.server.UnitOfWork;
@@ -45,20 +44,22 @@ public class AutoPayReviewDeferredProcess extends AbstractDeferredProcess {
 
     @Override
     public void execute() {
-        new UnitOfWork(TransactionScopeOption.RequiresNew, ConnectionTarget.BackgroundProcess).execute(new Executable<Void, RuntimeException>() {
-            @Override
-            public Void execute() {
-                for (ReviewedAutopayAgreementDTO preauthorizedPaymentChanges : acceptedReviews.acceptedReviewedPaps()) {
-                    ServerSideFactory.create(PaymentMethodFacade.class).persitAutopayAgreementReview(preauthorizedPaymentChanges);
-                    progress.addAndGet(1);
-                    if (canceled) {
-                        break;
-                    }
+        for (final ReviewedAutopayAgreementDTO preauthorizedPaymentChanges : acceptedReviews.acceptedReviewedPaps()) {
 
+            new UnitOfWork(TransactionScopeOption.RequiresNew).execute(new Executable<Void, RuntimeException>() {
+                @Override
+                public Void execute() {
+                    ServerSideFactory.create(PaymentMethodFacade.class).persitAutopayAgreementReview(preauthorizedPaymentChanges);
+                    return null;
                 }
-                return null;
+            });
+
+            progress.addAndGet(1);
+            if (canceled) {
+                break;
             }
-        });
+
+        }
         completed = true;
     }
 
