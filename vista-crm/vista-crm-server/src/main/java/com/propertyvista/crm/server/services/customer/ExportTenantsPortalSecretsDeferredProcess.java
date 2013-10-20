@@ -196,7 +196,6 @@ public class ExportTenantsPortalSecretsDeferredProcess extends AbstractDeferredP
 
     private static String getAddressLine1(Building building) {
         AddressStructured address = building.info().address();
-        System.out.println(address.getStringView());
         // This is fragment form AddressStructured @ToStringFormat
         return SimpleMessageFormat.format("{1} {2} {3}{4,choice,other#|null#|!null# {4}}{5,choice,null#|!null# {5}}", //
                 "", address.streetNumber(),//

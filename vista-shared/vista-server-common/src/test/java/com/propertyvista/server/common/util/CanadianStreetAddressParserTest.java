@@ -20,6 +20,7 @@ import junit.framework.TestCase;
 
 import com.propertyvista.domain.contact.AddressStructured.StreetDirection;
 import com.propertyvista.domain.contact.AddressStructured.StreetType;
+import com.propertyvista.server.common.reference.StreetTypeAbbreviations;
 import com.propertyvista.server.common.util.StreetAddressParser.StreetAddress;
 
 public class CanadianStreetAddressParserTest extends TestCase {
@@ -61,6 +62,14 @@ public class CanadianStreetAddressParserTest extends TestCase {
         Assert.assertEquals("Eglinton CarambA", a.streetName);
         Assert.assertEquals(StreetType.other, a.streetType);
         Assert.assertNull(a.streetDirection);
+    }
+
+    public void testStreetTypeAbbreviationReference() {
+        Assert.assertEquals(StreetType.avenue, StreetTypeAbbreviations.getStreetType("Ave"));
+
+        Assert.assertEquals(StreetType.arcade, StreetTypeAbbreviations.getStreetType("aRcade"));
+        Assert.assertEquals(StreetType.arcade, StreetTypeAbbreviations.getStreetType("arc"));
+
     }
 
     //TODO VISTA-3603
