@@ -131,7 +131,9 @@ public class AutoPayWizard extends CPortalEntityWizard<AutoPayDTO> {
     public void setPresenter(AutoPayWizardView.Presenter presenter) {
         this.presenter = presenter;
 
-        this.termsOfUseAnchor.setHref(AppPlaceInfo.absoluteUrl(GWT.getModuleBaseURL(), true, presenter.getTermsOfUsePlace()));
+        if (this.presenter != null) {
+            this.termsOfUseAnchor.setHref(AppPlaceInfo.absoluteUrl(GWT.getModuleBaseURL(), true, this.presenter.getTermsOfUsePlace()));
+        }
     }
 
     private BasicFlexFormPanel createDetailsStep() {

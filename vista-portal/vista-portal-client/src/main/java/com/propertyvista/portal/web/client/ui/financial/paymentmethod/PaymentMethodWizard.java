@@ -101,7 +101,9 @@ public class PaymentMethodWizard extends CPortalEntityWizard<PaymentMethodDTO> {
     public void setPresenter(PaymentMethodWizardView.Presenter presenter) {
         this.presenter = presenter;
 
-        this.termsOfUseAnchor.setHref(AppPlaceInfo.absoluteUrl(GWT.getModuleBaseURL(), true, presenter.getTermsOfUsePlace()));
+        if (this.presenter != null) {
+            this.termsOfUseAnchor.setHref(AppPlaceInfo.absoluteUrl(GWT.getModuleBaseURL(), true, this.presenter.getTermsOfUsePlace()));
+        }
     }
 
     private BasicFlexFormPanel createPaymentMethodStep() {
