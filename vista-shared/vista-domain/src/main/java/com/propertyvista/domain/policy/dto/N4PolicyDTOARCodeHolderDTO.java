@@ -7,22 +7,18 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on 2013-10-02
+ * Created on 2013-10-21
  * @author ArtyomB
  * @version $Id$
  */
 package com.propertyvista.domain.policy.dto;
 
-import com.pyx4j.entity.annotations.ExtendsBO;
-import com.pyx4j.entity.annotations.Transient;
-import com.pyx4j.entity.shared.IList;
+import com.pyx4j.entity.shared.IEntity;
 
-import com.propertyvista.domain.policy.framework.PolicyDTOBase;
-import com.propertyvista.domain.policy.policies.N4Policy;
+import com.propertyvista.domain.financial.ARCode;
 
-@Transient
-@ExtendsBO(N4Policy.class)
-public interface N4PolicyDTO extends N4Policy, PolicyDTOBase {
+/** This is a hack to transfer ARCodes from N4PolicyDTO to N4Policy */
+public interface N4PolicyDTOARCodeHolderDTO extends IEntity {
 
-    IList<N4PolicyDTOARCodeHolderDTO> arCodes();
+    ARCode arCode();
 }

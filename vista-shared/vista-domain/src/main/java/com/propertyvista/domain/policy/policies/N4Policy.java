@@ -17,10 +17,13 @@ import com.pyx4j.entity.annotations.DiscriminatorValue;
 import com.pyx4j.entity.annotations.Editor;
 import com.pyx4j.entity.annotations.Editor.EditorType;
 import com.pyx4j.entity.annotations.EmbeddedEntity;
+import com.pyx4j.entity.annotations.RpcTransient;
 import com.pyx4j.entity.annotations.validator.NotNull;
+import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
 
 import com.propertyvista.domain.contact.AddressSimple;
+import com.propertyvista.domain.financial.ARCode;
 import com.propertyvista.domain.policy.framework.LowestApplicableNode;
 import com.propertyvista.domain.policy.framework.OrganizationPoliciesNode;
 import com.propertyvista.domain.policy.framework.Policy;
@@ -45,5 +48,8 @@ public interface N4Policy extends Policy {
 
     @Editor(type = EditorType.email)
     IPrimitive<String> emailAddress();
+
+    @RpcTransient
+    IList<ARCode> relevantArCodes();
 
 }

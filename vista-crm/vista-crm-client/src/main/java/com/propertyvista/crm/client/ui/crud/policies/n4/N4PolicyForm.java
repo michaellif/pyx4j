@@ -16,14 +16,17 @@ package com.propertyvista.crm.client.ui.crud.policies.n4;
 import java.util.Arrays;
 import java.util.List;
 
+import com.pyx4j.forms.client.ui.folder.EntityFolderColumnDescriptor;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.prime.form.IForm;
 
 import com.propertyvista.common.client.ui.components.editors.AddressSimpleEditor;
+import com.propertyvista.common.client.ui.components.folders.VistaTableFolder;
 import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
 import com.propertyvista.crm.client.ui.crud.policies.common.PolicyDTOTabPanelBasedForm;
 import com.propertyvista.domain.policy.dto.N4PolicyDTO;
+import com.propertyvista.domain.policy.dto.N4PolicyDTOARCodeHolderDTO;
 
 public class N4PolicyForm extends PolicyDTOTabPanelBasedForm<N4PolicyDTO> {
 
@@ -37,13 +40,31 @@ public class N4PolicyForm extends PolicyDTOTabPanelBasedForm<N4PolicyDTO> {
     protected List<TwoColumnFlexFormPanel> createCustomTabPanels() {
         TwoColumnFlexFormPanel settingsPanel = new TwoColumnFlexFormPanel(i18n.tr("Settings"));
         int row = -1;
-        settingsPanel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().includeSignature())).build());
-        settingsPanel.setH2(++row, 0, 1, i18n.tr("This information will be used for signing N4 letters"));
-        settingsPanel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().companyName())).build());
-        settingsPanel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().phoneNumber())).build());
-        settingsPanel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().faxNumber())).build());
-        settingsPanel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().emailAddress())).build());
-        settingsPanel.setWidget(++row, 0, inject(proto().mailingAddress(), new AddressSimpleEditor()));
+        settingsPanel.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().includeSignature())).build());
+        settingsPanel.setH1(++row, 0, 2, i18n.tr("The following information will be used for signing N4 letters:"));
+        settingsPanel.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().companyName())).build());
+        settingsPanel.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().phoneNumber())).build());
+        settingsPanel.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().faxNumber())).build());
+        settingsPanel.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().emailAddress())).build());
+        settingsPanel.setWidget(++row, 0, 2, inject(proto().mailingAddress(), new AddressSimpleEditor()));
+        settingsPanel.setH1(++row, 0, 2, i18n.tr("AR Codes used to search for delinquent leases:"));
+        settingsPanel.setWidget(++row, 0, 2, inject(proto().arCodes(), new ARCodeFolder()));
         return Arrays.asList(settingsPanel);
+    }
+
+    public static class ARCodeFolder extends VistaTableFolder<N4PolicyDTOARCodeHolderDTO> {
+
+        public ARCodeFolder() {
+            super(N4PolicyDTOARCodeHolderDTO.class);
+            setOrderable(false);
+        }
+
+        @Override
+        public List<EntityFolderColumnDescriptor> columns() {
+            return Arrays.asList(//@formatter:off
+                    new EntityFolderColumnDescriptor(proto().arCode(), "200px")
+            );//@formatter:on
+        }
+
     }
 }
