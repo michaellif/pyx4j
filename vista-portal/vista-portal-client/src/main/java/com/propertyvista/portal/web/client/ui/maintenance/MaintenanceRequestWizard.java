@@ -93,10 +93,10 @@ public class MaintenanceRequestWizard extends CPortalEntityWizard<MaintenanceReq
         content.setBR(++row, 0, 1);
 
         TwoColumnFlexFormPanel schedulePanel = new TwoColumnFlexFormPanel();
-        schedulePanel.setWidget(0, 0, new FormDecoratorBuilder(inject(proto().preferredDate1()), 110).build());
-        schedulePanel.setWidget(1, 0, new FormDecoratorBuilder(inject(proto().preferredTime1()), 110).build());
-        schedulePanel.setWidget(2, 0, new FormDecoratorBuilder(inject(proto().preferredDate2()), 110).build());
-        schedulePanel.setWidget(3, 0, new FormDecoratorBuilder(inject(proto().preferredTime2()), 110).build());
+        schedulePanel.setWidget(0, 0, new FormDecoratorBuilder(inject(proto().preferredDate1()), 120).build());
+        schedulePanel.setWidget(1, 0, new FormDecoratorBuilder(inject(proto().preferredTime1()), 120).build());
+        schedulePanel.setWidget(2, 0, new FormDecoratorBuilder(inject(proto().preferredDate2()), 120).build());
+        schedulePanel.setWidget(3, 0, new FormDecoratorBuilder(inject(proto().preferredTime2()), 120).build());
 
         accessPanel.setWidget(0, 0, new FormDecoratorBuilder(inject(proto().petInstructions()), 250).build());
         accessPanel.setWidget(1, 0, schedulePanel);
