@@ -20,6 +20,7 @@ import java.util.Set;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.ui.Label;
+import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
 import com.pyx4j.forms.client.events.AsyncValueChangeEvent;
@@ -28,18 +29,18 @@ import com.pyx4j.forms.client.ui.CEntityComboBox;
 import com.pyx4j.forms.client.ui.IFormat;
 import com.pyx4j.forms.client.ui.OptionsFilter;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.widgets.client.dialog.Dialog;
+import com.pyx4j.widgets.client.dialog.Dialog_v2;
 import com.pyx4j.widgets.client.dialog.OkCancelOption;
 
 import com.propertyvista.domain.site.AvailableLocale;
 import com.propertyvista.shared.i18n.CompiledLocale;
 
-public abstract class AvailableLocaleSelectorDialog extends Dialog implements OkCancelOption {
+public abstract class AvailableLocaleSelectorDialog extends Dialog_v2 implements OkCancelOption {
     private final static I18n i18n = I18n.get(AvailableLocaleSelectorDialog.class);
 
     private final static String title = i18n.tr("Select Locale");
 
-    private final VerticalPanel panel = new VerticalPanel();
+    private final SimplePanel panel = new SimplePanel();
 
     private final Set<AvailableLocale> usedLocales;
 
@@ -47,11 +48,13 @@ public abstract class AvailableLocaleSelectorDialog extends Dialog implements Ok
 
     public AvailableLocaleSelectorDialog(final Set<AvailableLocale> usedLocales) {
         super(title);
+        setDialogPixelWidth(400);
         setDialogOptions(this);
 
         this.usedLocales = usedLocales;
 
         final CEntityComboBox<AvailableLocale> localeSelector = new CEntityComboBox<AvailableLocale>(AvailableLocale.class);
+        localeSelector.asWidget().setWidth("100%");
         localeSelector.setFormat(new IFormat<AvailableLocale>() {
 
             @Override
@@ -64,6 +67,7 @@ public abstract class AvailableLocaleSelectorDialog extends Dialog implements Ok
                 return value != null ? value.toString() : title;
             }
         });
+
         // this triggers option load
         localeSelector.setValueByString("");
         if (localeSelector.isOptionsLoaded()) {
@@ -104,11 +108,10 @@ public abstract class AvailableLocaleSelectorDialog extends Dialog implements Ok
 
         int optSize = localeSelector.getOptions().size();
         if (optSize == 0) {
-            panel.add(new Label("Sorry, no more items to choose from."));
+            panel.setWidget(new Label("Sorry, no more items to choose from."));
             getOkButton().setVisible(false);
         } else {
-            panel.add(localeSelector);
-            localeSelector.getWidget().getEditor().setVisibleItemCount(optSize + 1);
+            panel.setWidget(localeSelector);
         }
     }
 
