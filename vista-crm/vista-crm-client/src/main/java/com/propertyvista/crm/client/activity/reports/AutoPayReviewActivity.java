@@ -33,8 +33,8 @@ import com.propertyvista.crm.client.ui.reports.autopayreviewer.AutoPayReviewView
 import com.propertyvista.crm.client.ui.reports.autopayreviewer.AutoPayReviewViewImpl;
 import com.propertyvista.crm.rpc.dto.financial.autopayreview.PapChargeReviewDTO;
 import com.propertyvista.crm.rpc.dto.financial.autopayreview.PapReviewDTO;
-import com.propertyvista.crm.rpc.dto.financial.autopayreview.ReviewedPapChargeDTO;
 import com.propertyvista.crm.rpc.dto.financial.autopayreview.ReviewedAutopayAgreementDTO;
+import com.propertyvista.crm.rpc.dto.financial.autopayreview.ReviewedPapChargeDTO;
 import com.propertyvista.crm.rpc.dto.financial.autopayreview.ReviewedPapsHolderDTO;
 import com.propertyvista.crm.rpc.services.financial.AutoPayReviewService;
 import com.propertyvista.domain.reports.AutoPayChangesReportMetadata;
@@ -134,10 +134,12 @@ public class AutoPayReviewActivity extends AbstractActivity implements AutoPayRe
             reviewedPap.papId().set(papReview.papId());
 
             for (PapChargeReviewDTO papChargeReview : papReview.charges()) {
-                ReviewedPapChargeDTO reviewedPapCharge = EntityFactory.create(ReviewedPapChargeDTO.class);
-                reviewedPapCharge.billableItem().set(papChargeReview.billableItem());
-                reviewedPapCharge.paymentAmountUpdate().setValue(papChargeReview.newPapAmount().getValue());
-                reviewedPap.reviewedCharges().add(reviewedPapCharge);
+                if (papChargeReview.changeType().getValue() != PapChargeReviewDTO.ChangeType.Removed) {
+                    ReviewedPapChargeDTO reviewedPapCharge = EntityFactory.create(ReviewedPapChargeDTO.class);
+                    reviewedPapCharge.billableItem().set(papChargeReview.billableItem());
+                    reviewedPapCharge.paymentAmountUpdate().setValue(papChargeReview.newPapAmount().getValue());
+                    reviewedPap.reviewedCharges().add(reviewedPapCharge);
+                }
             }
             reviewedPapsHolder.acceptedReviewedPaps().add(reviewedPap);
         }
