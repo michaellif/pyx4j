@@ -13,8 +13,11 @@
  */
 package com.propertyvista.biz.financial.payment;
 
+import java.util.Calendar;
 import java.util.Collection;
 import java.util.EnumSet;
+import java.util.GregorianCalendar;
+import java.util.List;
 
 import org.apache.commons.lang.Validate;
 import org.slf4j.Logger;
@@ -42,6 +45,7 @@ import com.propertyvista.domain.financial.BillingAccount;
 import com.propertyvista.domain.financial.MerchantAccount;
 import com.propertyvista.domain.financial.PaymentRecord;
 import com.propertyvista.domain.financial.PaymentRecord.PaymentStatus;
+import com.propertyvista.domain.financial.billing.InvoicePayment;
 import com.propertyvista.domain.payment.CreditCardInfo;
 import com.propertyvista.domain.payment.CreditCardInfo.CreditCardType;
 import com.propertyvista.domain.payment.LeasePaymentMethod;
@@ -367,6 +371,18 @@ public class PaymentFacadeImpl implements PaymentFacade {
             throw new UserRuntimeException(i18n.tr("Processed transaction can't be canceled"));
         }
         new PadProcessor().cancelAggregatedTransfer(at);
+    }
+
+    @Override
+    public List<InvoicePayment> getLatestPaymentActivity(BillingAccount billingAccount) {
+        Calendar cal = GregorianCalendar.getInstance();
+        cal.add(Calendar.MONTH, -3);
+        LogicalDate dateFrom = new LogicalDate(cal.getTime());
+        EntityQueryCriteria<InvoicePayment> criteria = EntityQueryCriteria.create(InvoicePayment.class);
+        criteria.add(PropertyCriterion.eq(criteria.proto().billingAccount(), billingAccount));
+        criteria.add(PropertyCriterion.gt(criteria.proto().postDate(), dateFrom));
+        criteria.add(PropertyCriterion.isNotNull(criteria.proto().paymentRecord()));
+        return Persistence.service().query(criteria);
     }
 
 }
