@@ -30,7 +30,7 @@ import com.propertyvista.domain.maintenance.MaintenanceRequest;
 @ExtendsBO
 public interface MaintenanceRequestDTO extends MaintenanceRequest {
 
-    @Caption(name = "Problem in my Apartment")
+    @Caption(name = "Problem in my Unit")
     IPrimitive<Boolean> reportedForOwnUnit();
 
     IPrimitive<LogicalDate> scheduledDate();
