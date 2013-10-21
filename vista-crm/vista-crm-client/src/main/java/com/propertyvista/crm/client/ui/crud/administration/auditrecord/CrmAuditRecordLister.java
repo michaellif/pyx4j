@@ -22,9 +22,9 @@ import com.pyx4j.site.client.ui.prime.lister.AbstractLister;
 
 import com.propertyvista.dto.AuditRecordDTO;
 
-public class CrmAuditRecordsLister extends AbstractLister<AuditRecordDTO> {
+public class CrmAuditRecordLister extends AbstractLister<AuditRecordDTO> {
 
-    public CrmAuditRecordsLister() {
+    public CrmAuditRecordLister() {
         super(AuditRecordDTO.class);
         setColumnDescriptors(//@formatter:off
                 new MemberColumnDescriptor.Builder(proto().when()).build(),
