@@ -82,7 +82,7 @@ public class CDatePicker extends CTextFieldBase<LogicalDate, NDatePicker> {
 
         private String getValidationMessage() {
             if (dateConditionValidationMessage == null) {
-                return i18n.tr("Date must be equal or greater than today's date");
+                return i18n.tr("Past Date not allowed");
             } else {
                 return dateConditionValidationMessage;
             }
