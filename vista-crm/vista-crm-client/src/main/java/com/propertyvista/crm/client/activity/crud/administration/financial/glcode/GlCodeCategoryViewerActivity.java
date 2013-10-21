@@ -7,11 +7,11 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Jan 11, 2012
+ * Created on Jan 12, 2012
  * @author ArtyomB
  * @version $Id$
  */
-package com.propertyvista.crm.client.activity.crud.administration.tax;
+package com.propertyvista.crm.client.activity.crud.administration.financial.glcode;
 
 import com.google.gwt.core.client.GWT;
 
@@ -19,16 +19,15 @@ import com.pyx4j.entity.rpc.AbstractCrudService;
 import com.pyx4j.site.rpc.CrudAppPlace;
 
 import com.propertyvista.crm.client.CrmSite;
-import com.propertyvista.crm.client.activity.crud.CrmEditorActivity;
-import com.propertyvista.crm.client.ui.crud.administration.financial.glcode.GlCodeCategoryEditorView;
+import com.propertyvista.crm.client.activity.crud.CrmViewerActivity;
+import com.propertyvista.crm.client.ui.crud.administration.financial.glcode.GlCodeCategoryViewerView;
 import com.propertyvista.crm.rpc.services.admin.GlCodeCategoryCrudService;
 import com.propertyvista.domain.financial.GlCodeCategory;
 
-public class GlCodeCategoryEditorActivity extends CrmEditorActivity<GlCodeCategory> {
+public class GlCodeCategoryViewerActivity extends CrmViewerActivity<GlCodeCategory> {
 
-    public GlCodeCategoryEditorActivity(CrudAppPlace place) {
-        super(place,  CrmSite.getViewFactory().instantiate(GlCodeCategoryEditorView.class), GWT
-                .<AbstractCrudService<GlCodeCategory>> create(GlCodeCategoryCrudService.class), GlCodeCategory.class);
+    public GlCodeCategoryViewerActivity(CrudAppPlace place) {
+        super(place,  CrmSite.getViewFactory().instantiate(GlCodeCategoryViewerView.class), GWT
+                .<AbstractCrudService<GlCodeCategory>> create(GlCodeCategoryCrudService.class));
     }
-
 }

@@ -11,7 +11,7 @@
  * @author ArtyomB
  * @version $Id$
  */
-package com.propertyvista.crm.client.activity.crud.auditrecords;
+package com.propertyvista.crm.client.activity.crud.administration.auditrecords;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.place.shared.Place;

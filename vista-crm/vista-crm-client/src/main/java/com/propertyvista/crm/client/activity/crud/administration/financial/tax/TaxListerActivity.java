@@ -7,26 +7,26 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Jan 12, 2012
+ * Created on Jan 11, 2012
  * @author ArtyomB
  * @version $Id$
  */
-package com.propertyvista.crm.client.activity.crud.administration.tax;
+package com.propertyvista.crm.client.activity.crud.administration.financial.tax;
 
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.place.shared.Place;
 
-import com.pyx4j.entity.rpc.AbstractCrudService;
-import com.pyx4j.site.rpc.CrudAppPlace;
+import com.pyx4j.entity.rpc.AbstractListService;
+import com.pyx4j.site.client.activity.AbstractListerActivity;
 
 import com.propertyvista.crm.client.CrmSite;
-import com.propertyvista.crm.client.activity.crud.CrmViewerActivity;
-import com.propertyvista.crm.client.ui.crud.administration.financial.tax.TaxViewerView;
+import com.propertyvista.crm.client.ui.crud.administration.financial.tax.TaxListerView;
 import com.propertyvista.crm.rpc.services.admin.TaxCrudService;
 import com.propertyvista.domain.financial.tax.Tax;
 
-public class TaxViewerActivity extends CrmViewerActivity<Tax> {
+public class TaxListerActivity extends AbstractListerActivity<Tax> {
 
-    public TaxViewerActivity(CrudAppPlace place) {
-        super(place,  CrmSite.getViewFactory().instantiate(TaxViewerView.class), GWT.<AbstractCrudService<Tax>> create(TaxCrudService.class));
+    public TaxListerActivity(Place place) {
+        super(place,  CrmSite.getViewFactory().instantiate(TaxListerView.class), GWT.<AbstractListService<Tax>> create(TaxCrudService.class), Tax.class);
     }
 }

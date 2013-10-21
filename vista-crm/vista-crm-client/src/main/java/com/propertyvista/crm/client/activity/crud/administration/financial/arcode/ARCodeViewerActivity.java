@@ -11,7 +11,7 @@
  * @author vadims
  * @version $Id$
  */
-package com.propertyvista.crm.client.activity.crud.administration.arcode;
+package com.propertyvista.crm.client.activity.crud.administration.financial.arcode;
 
 import com.google.gwt.core.client.GWT;
 
