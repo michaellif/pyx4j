@@ -52,23 +52,23 @@ public abstract class AddressSimpleEditorImpl<A extends AddressSimple> extends C
         int col = (oneColumn ? 0 : 1);
         int span = (oneColumn ? 1 : 2);
 
-        main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().street1()), 22).build());
-        main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().street2()), 22).build());
-        main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().city()), 15).build());
+        main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().street1())).labelWidth("150px").componentWidth("280px").contentWidth("280px").build());
+        main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().street2())).labelWidth("150px").componentWidth("280px").contentWidth("280px").build());
+        main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().city())).labelWidth("150px").componentWidth("150px").contentWidth("280px").build());
 
         row = (oneColumn ? row : -1);
 
         CComponent<Province> province = (CComponent<Province>) inject(proto().province());
-        main.setWidget(++row, col, new FormDecoratorBuilder(province, 17).build());
+        main.setWidget(++row, col, new FormDecoratorBuilder(province).labelWidth("150px").componentWidth("150px").contentWidth("280px").build());
 
         final CComponent<Country> country = (CComponent<Country>) inject(proto().country());
-        main.setWidget(++row, col, new FormDecoratorBuilder(country, 15).build());
+        main.setWidget(++row, col, new FormDecoratorBuilder(country).labelWidth("150px").componentWidth("150px").contentWidth("280px").build());
 
         CComponent<String> postalCode = (CComponent<String>) inject(proto().postalCode());
         if (postalCode instanceof CTextFieldBase) {
             ((CTextFieldBase<String, ?>) postalCode).setFormat(new PostalCodeFormat(new CountryContextCComponentProvider(country)));
         }
-        main.setWidget(++row, col, new FormDecoratorBuilder(postalCode, 7).build());
+        main.setWidget(++row, col, new FormDecoratorBuilder(postalCode).labelWidth("150px").componentWidth("150px").contentWidth("280px").build());
 
         attachFilters(proto(), province, country, postalCode);
 
