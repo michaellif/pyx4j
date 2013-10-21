@@ -48,14 +48,6 @@ public class VistaTermsActivity extends AbstractActivity {
                     panel.setWidget(view);
                 }
             });
-        } else if (place instanceof PortalTerms.PrivacyPolicy) {
-            GWT.<PortalVistaTermsService> create(PortalVistaTermsService.class).getPortalPrivacyPolicy(new DefaultAsyncCallback<String>() {
-                @Override
-                public void onSuccess(String result) {
-                    view.populate(result);
-                    panel.setWidget(view);
-                }
-            });
         } else if (place instanceof PortalTerms.BillingPolicy) {
             GWT.<PortalVistaTermsService> create(PortalVistaTermsService.class).getPortalBillingPolicy(new DefaultAsyncCallback<String>() {
                 @Override

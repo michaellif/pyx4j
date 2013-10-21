@@ -62,9 +62,6 @@ public class PortalSiteMap implements SiteMap {
         public static class TermsAndConditions extends AppPlace implements PublicPlace {
         }
 
-        public static class PrivacyPolicy extends AppPlace implements PublicPlace {
-        }
-
         public static class PadPolicy extends AppPlace implements PublicPlace {
         }
 

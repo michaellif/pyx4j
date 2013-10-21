@@ -34,11 +34,6 @@ public class PortalVistaTermsServiceImpl implements PortalVistaTermsService {
     }
 
     @Override
-    public void getPortalPrivacyPolicy(AsyncCallback<String> callback) {
-        getVistaTerms(callback, VistaTerms.Target.TenantPrivacy);
-    }
-
-    @Override
     public void getPortalBillingPolicy(AsyncCallback<String> callback) {
         getVistaTerms(callback, VistaTerms.Target.TenantBilling);
     }

@@ -89,8 +89,8 @@ import com.propertyvista.operations.client.activity.login.LoginWithTokenActivity
 import com.propertyvista.operations.client.activity.security.PasswordChangeActivity;
 import com.propertyvista.operations.client.activity.security.PasswordResetActivity;
 import com.propertyvista.operations.client.activity.security.PasswordResetRequesetActivity;
-import com.propertyvista.operations.domain.legal.VistaTerms.Target;
 import com.propertyvista.operations.rpc.OperationsSiteMap;
+import com.propertyvista.operations.rpc.OperationsSiteMap.Legal.VistaTermsAccess;
 
 public class ContentActivityMapper implements AppActivityMapper {
 
@@ -305,11 +305,10 @@ public class ContentActivityMapper implements AppActivityMapper {
                             break;
                         }
 
-                        // TODO all these legal places should be mareged to one the type of legal terms should be arg of the place
-                    } else if (place instanceof OperationsSiteMap.Legal.PortalTerms) {
+                    } else if (place instanceof OperationsSiteMap.Legal.VistaTermsAccess) {
                         switch (crudPlace.getType()) {
                         case lister:
-                            activity = new VistaTermsDefaultActivity(crudPlace, Target.Tenant);
+                            activity = new VistaTermsDefaultActivity(crudPlace, ((VistaTermsAccess) place).getTarget());
                             break;
                         case editor:
                             activity = new VistaTermsEditorActivity(crudPlace);
@@ -318,77 +317,16 @@ public class ContentActivityMapper implements AppActivityMapper {
                             activity = new VistaTermsViewerActivity(crudPlace);
                             break;
                         }
-                    } else if (place instanceof OperationsSiteMap.Legal.PmcTerms) {
-                        switch (crudPlace.getType()) {
-                        case lister:
-                            activity = new VistaTermsDefaultActivity(crudPlace, Target.PMC);
-                            break;
-                        case editor:
-                            activity = new VistaTermsEditorActivity(crudPlace);
-                            break;
-                        case viewer:
-                            activity = new VistaTermsViewerActivity(crudPlace);
-                            break;
-                        }
-                    } else if (place instanceof OperationsSiteMap.Legal.PmcCaledonTermsTemplate) {
-                        switch (crudPlace.getType()) {
-                        case lister:
-                            activity = new VistaTermsDefaultActivity(crudPlace, Target.PmcCaledonTemplate);
-                            break;
-                        case editor:
-                            activity = new VistaTermsEditorActivity(crudPlace);
-                            break;
-                        case viewer:
-                            activity = new VistaTermsViewerActivity(crudPlace);
-                            break;
-                        }
-                    } else if (place instanceof OperationsSiteMap.Legal.PmcCaldedonSolePropetorshipSectionTerms) {
-                        switch (crudPlace.getType()) {
-                        case lister:
-                            activity = new VistaTermsDefaultActivity(crudPlace, Target.PmcCaldedonSolePropetorshipSection);
-                            break;
-                        case editor:
-                            activity = new VistaTermsEditorActivity(crudPlace);
-                            break;
-                        case viewer:
-                            activity = new VistaTermsViewerActivity(crudPlace);
-                            break;
-                        }
-                    } else if (place instanceof OperationsSiteMap.Legal.PmcPaymentPad) {
-                        switch (crudPlace.getType()) {
-                        case lister:
-                            activity = new VistaTermsDefaultActivity(crudPlace, Target.PmcPaymentPad);
-                            break;
-                        case editor:
-                            activity = new VistaTermsEditorActivity(crudPlace);
-                            break;
-                        case viewer:
-                            activity = new VistaTermsViewerActivity(crudPlace);
-                            break;
-                        }
-                    } else if (place instanceof OperationsSiteMap.Legal.TenantSurePreAuthorizedPayments) {
-                        switch (crudPlace.getType()) {
-                        case lister:
-                            activity = new VistaTermsDefaultActivity(crudPlace, Target.TenantSurePreAuthorizedPaymentsAgreement);
-                            break;
-                        case editor:
-                            activity = new VistaTermsEditorActivity(crudPlace);
-                            break;
-                        case viewer:
-                            activity = new VistaTermsViewerActivity(crudPlace);
-                            break;
-                        }
-
                     } else if (place instanceof OperationsSiteMap.Management.PmcMerchantAccount) {
                         switch (crudPlace.getType()) {
                         case lister:
-                            activity = new MerchantAccountListerActivity(place);
+                            activity = new MerchantAccountListerActivity(crudPlace);
                             break;
                         case editor:
-                            activity = new MerchantAccountEditorActivity((CrudAppPlace) place);
+                            activity = new MerchantAccountEditorActivity(crudPlace);
                             break;
                         case viewer:
-                            activity = new MerchantAccountViewerActivity((CrudAppPlace) place);
+                            activity = new MerchantAccountViewerActivity(crudPlace);
                             break;
                         }
                     }

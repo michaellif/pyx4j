@@ -174,7 +174,6 @@ public class ContentActivityMapper implements AppActivityMapper {
                     } else if (place instanceof PortalSiteMap.PortalTerms.BillingPolicy 
                             || place instanceof PortalSiteMap.PortalTerms.CreditCardPolicy
                             || place instanceof PortalSiteMap.PortalTerms.PadPolicy
-                            || place instanceof PortalSiteMap.PortalTerms.PrivacyPolicy
                             || place instanceof PortalSiteMap.PortalTerms.TermsAndConditions) {
                         activity = new VistaTermsActivity(place);
                  // @formatter:on

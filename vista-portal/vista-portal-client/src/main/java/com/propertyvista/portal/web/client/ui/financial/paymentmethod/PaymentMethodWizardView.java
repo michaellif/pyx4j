@@ -28,10 +28,6 @@ public interface PaymentMethodWizardView extends IWizardView<PaymentMethodDTO> {
 
         void showTermsOfUse();
 
-        void showPrivacyPolicy();
-
         Class<? extends Place> getTermsOfUsePlace();
-
-        Class<? extends Place> getPrivacyPolicyPlace();
     }
 }

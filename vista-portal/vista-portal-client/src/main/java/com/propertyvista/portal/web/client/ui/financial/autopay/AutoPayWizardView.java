@@ -36,15 +36,11 @@ public interface AutoPayWizardView extends IWizardView<AutoPayDTO> {
 
         Class<? extends Place> getTermsOfUsePlace();
 
-        Class<? extends Place> getPrivacyPolicyPlace();
-
         Class<? extends Place> getPadPolicyPlace();
 
         Class<? extends Place> getCcPolicyPlace();
 
         void showTermsOfUse();
-
-        void showPrivacyPolicy();
 
         void showPadPolicy();
 

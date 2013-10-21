@@ -90,13 +90,19 @@ public class NavigActivity extends AbstractActivity implements NavigView.MainNav
 
         // Legal
         folder = new NavigFolder("Legal");
-        // TODO need one place in map for this, and here have different args for the place
-        folder.addNavigItem(new OperationsSiteMap.Legal.PortalTerms());
+
         folder.addNavigItem(new OperationsSiteMap.Legal.PmcTerms());
         folder.addNavigItem(new OperationsSiteMap.Legal.PmcCaledonTermsTemplate());
         folder.addNavigItem(new OperationsSiteMap.Legal.PmcCaldedonSolePropetorshipSectionTerms());
-        folder.addNavigItem(new OperationsSiteMap.Legal.PmcPaymentPad());
-        folder.addNavigItem(new OperationsSiteMap.Legal.TenantSurePreAuthorizedPayments());
+        folder.addNavigItem(new OperationsSiteMap.Legal.PmcPaymentPadTerms());
+
+        folder.addNavigItem(new OperationsSiteMap.Legal.TenantTerms());
+        folder.addNavigItem(new OperationsSiteMap.Legal.TenantBillingTerms());
+        folder.addNavigItem(new OperationsSiteMap.Legal.TenantPAD());
+        folder.addNavigItem(new OperationsSiteMap.Legal.TenantCC());
+
+        folder.addNavigItem(new OperationsSiteMap.Legal.TenantSurePreAuthorizedPaymentsAgreement());
+
         list.add(folder);
 
         // Administration

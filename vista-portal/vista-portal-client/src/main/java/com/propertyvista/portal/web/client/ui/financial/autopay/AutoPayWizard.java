@@ -88,8 +88,6 @@ public class AutoPayWizard extends CPortalEntityWizard<AutoPayDTO> {
 
     private final Anchor termsOfUseAnchor = new Anchor(i18n.tr("Terms Of Use"));
 
-    private final Anchor privacyPolicyAnchor = new Anchor(i18n.tr("Privacy Policy"));
-
     private final Anchor preAuthorizedAgreementAnchor = new Anchor(i18n.tr("Pre-Authorized Agreement"));
 
     private final PaymentMethodEditor<LeasePaymentMethod> paymentMethodEditor = new PaymentMethodEditor<LeasePaymentMethod>(LeasePaymentMethod.class) {
@@ -134,7 +132,6 @@ public class AutoPayWizard extends CPortalEntityWizard<AutoPayDTO> {
         this.presenter = presenter;
 
         this.termsOfUseAnchor.setHref(AppPlaceInfo.absoluteUrl(GWT.getModuleBaseURL(), true, presenter.getTermsOfUsePlace()));
-        this.privacyPolicyAnchor.setHref(AppPlaceInfo.absoluteUrl(GWT.getModuleBaseURL(), true, presenter.getPrivacyPolicyPlace()));
     }
 
     private BasicFlexFormPanel createDetailsStep() {
@@ -367,17 +364,6 @@ public class AutoPayWizard extends CPortalEntityWizard<AutoPayDTO> {
             }
         });
 
-        privacyPolicyAnchor.getElement().getStyle().setDisplay(Display.INLINE);
-        privacyPolicyAnchor.getElement().getStyle().setPadding(0, Unit.PX);
-        privacyPolicyAnchor.getElement().getStyle().setWhiteSpace(WhiteSpace.NORMAL);
-        privacyPolicyAnchor.addClickHandler(new ClickHandler() {
-            @Override
-            public void onClick(ClickEvent event) {
-                presenter.showPrivacyPolicy();
-                DOM.eventPreventDefault((com.google.gwt.user.client.Event) event.getNativeEvent());
-            }
-        });
-
         preAuthorizedAgreementAnchor.getElement().getStyle().setDisplay(Display.INLINE);
         preAuthorizedAgreementAnchor.getElement().getStyle().setPadding(0, Unit.PX);
         preAuthorizedAgreementAnchor.getElement().getStyle().setWhiteSpace(WhiteSpace.NORMAL);
@@ -406,11 +392,6 @@ public class AutoPayWizard extends CPortalEntityWizard<AutoPayDTO> {
 
         panel.add(new HTML(i18n.tr("Be informed that you are acknowledging our")));
         panel.add(termsOfUseAnchor);
-
-        panel.add(w = new HTML("&nbsp" + i18n.tr("and") + "&nbsp"));
-        w.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
-
-        panel.add(privacyPolicyAnchor);
 
         panel.add(w = new HTML("&nbsp" + i18n.tr("and") + "&nbsp"));
         w.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);

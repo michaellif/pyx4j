@@ -46,7 +46,7 @@ public class VistaTermsDefaultActivity extends AbstractActivity {
         srv.retrieveTerms(new DefaultAsyncCallback<Key>() {
             @Override
             public void onSuccess(Key result) {
-                CrudAppPlace dst = AppSite.getHistoryMapper().createPlace(place.getClass());
+                CrudAppPlace dst = place;// AppSite.getHistoryMapper().createPlace(place.getClass());
                 if (result != null) {
                     dst.formViewerPlace(result);
                 } else {

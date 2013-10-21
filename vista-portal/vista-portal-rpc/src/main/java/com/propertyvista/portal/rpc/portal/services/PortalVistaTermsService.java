@@ -21,8 +21,6 @@ public interface PortalVistaTermsService extends IService {
 
     void getPortalTerms(AsyncCallback<String> callback);
 
-    void getPortalPrivacyPolicy(AsyncCallback<String> callback);
-
     void getPortalBillingPolicy(AsyncCallback<String> callback);
 
     void getPortalCcPolicy(AsyncCallback<String> callback);

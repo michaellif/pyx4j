@@ -61,17 +61,7 @@ public class PaymentMethodWizardActivity extends AbstractWizardCrudActivity<Paym
     }
 
     @Override
-    public Class<? extends Place> getPrivacyPolicyPlace() {
-        return PortalTerms.PrivacyPolicy.class;
-    }
-
-    @Override
     public void showTermsOfUse() {
         Window.open(AppPlaceInfo.absoluteUrl(NavigationUri.getHostPageURL(), false, getTermsOfUsePlace()), "_blank", null);
-    }
-
-    @Override
-    public void showPrivacyPolicy() {
-        Window.open(AppPlaceInfo.absoluteUrl(NavigationUri.getHostPageURL(), false, getPrivacyPolicyPlace()), "_blank", null);
     }
 }

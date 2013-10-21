@@ -38,13 +38,13 @@ public interface VistaTerms extends IVersionedEntity<VistaTermsV> {
 
         Tenant,
 
-        TenantPrivacy,
-
         TenantBilling,
 
         TenantPAD,
 
         TenantCC,
+
+        TenantPreAuthorizedPaymentsAgreement,
 
         TenantSurePreAuthorizedPaymentsAgreement;
     }

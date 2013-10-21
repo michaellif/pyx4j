@@ -96,11 +96,6 @@ public class AutoPayWizardActivity extends AbstractWizardCrudActivity<AutoPayDTO
     }
 
     @Override
-    public Class<? extends Place> getPrivacyPolicyPlace() {
-        return PortalTerms.PrivacyPolicy.class;
-    }
-
-    @Override
     public Class<? extends Place> getPadPolicyPlace() {
         return PortalTerms.PadPolicy.class;
     }
@@ -113,11 +108,6 @@ public class AutoPayWizardActivity extends AbstractWizardCrudActivity<AutoPayDTO
     @Override
     public void showTermsOfUse() {
         Window.open(AppPlaceInfo.absoluteUrl(NavigationUri.getHostPageURL(), false, getTermsOfUsePlace()), "_blank", null);
-    }
-
-    @Override
-    public void showPrivacyPolicy() {
-        Window.open(AppPlaceInfo.absoluteUrl(NavigationUri.getHostPageURL(), false, getPrivacyPolicyPlace()), "_blank", null);
     }
 
     @Override

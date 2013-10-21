@@ -97,8 +97,6 @@ public class PaymentWizard extends CPortalEntityWizard<PaymentDTO> {
 
     private final Anchor termsOfUseAnchor = new Anchor(i18n.tr("Terms Of Use"));
 
-    private final Anchor privacyPolicyAnchor = new Anchor(i18n.tr("Privacy Policy"));
-
     private final Anchor billingPolicyAnchor = new Anchor(i18n.tr("Billing And Refund Policy"));
 
     private final PaymentMethodEditor<LeasePaymentMethod> paymentMethodEditor = new PaymentMethodEditor<LeasePaymentMethod>(LeasePaymentMethod.class) {
@@ -148,7 +146,6 @@ public class PaymentWizard extends CPortalEntityWizard<PaymentDTO> {
         this.presenter = presenter;
 
         this.termsOfUseAnchor.setHref(AppPlaceInfo.absoluteUrl(GWT.getModuleBaseURL(), true, presenter.getTermsOfUsePlace()));
-        this.privacyPolicyAnchor.setHref(AppPlaceInfo.absoluteUrl(GWT.getModuleBaseURL(), true, presenter.getPrivacyPolicyPlace()));
         billingPolicyAnchor.setHref(AppPlaceInfo.absoluteUrl(GWT.getModuleBaseURL(), true, presenter.getBillingPolicyPlace()));
     }
 
@@ -466,17 +463,6 @@ public class PaymentWizard extends CPortalEntityWizard<PaymentDTO> {
             }
         });
 
-        privacyPolicyAnchor.getElement().getStyle().setDisplay(Display.INLINE);
-        privacyPolicyAnchor.getElement().getStyle().setPadding(0, Unit.PX);
-        privacyPolicyAnchor.getElement().getStyle().setWhiteSpace(WhiteSpace.NORMAL);
-        privacyPolicyAnchor.addClickHandler(new ClickHandler() {
-            @Override
-            public void onClick(ClickEvent event) {
-                presenter.showPrivacyPolicy();
-                DOM.eventPreventDefault((com.google.gwt.user.client.Event) event.getNativeEvent());
-            }
-        });
-
         billingPolicyAnchor.getElement().getStyle().setDisplay(Display.INLINE);
         billingPolicyAnchor.getElement().getStyle().setPadding(0, Unit.PX);
         billingPolicyAnchor.getElement().getStyle().setWhiteSpace(WhiteSpace.NORMAL);
@@ -493,11 +479,6 @@ public class PaymentWizard extends CPortalEntityWizard<PaymentDTO> {
 
         panel.add(new HTML(i18n.tr("Be informed that you are acknowledging our")));
         panel.add(termsOfUseAnchor);
-
-        panel.add(w = new HTML("&nbsp" + i18n.tr("and") + "&nbsp"));
-        w.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
-
-        panel.add(privacyPolicyAnchor);
 
         panel.add(w = new HTML("&nbsp" + i18n.tr("and") + "&nbsp"));
         w.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);

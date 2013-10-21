@@ -74,6 +74,7 @@ import com.propertyvista.portal.rpc.portal.services.resident.ViewBillService;
 import com.propertyvista.portal.rpc.portal.services.resident.WeatherService;
 import com.propertyvista.portal.rpc.portal.web.services.PortalAuthenticationService;
 import com.propertyvista.portal.rpc.portal.web.services.ResidentPictureUploadService;
+import com.propertyvista.portal.rpc.portal.web.services.financial.AutoPayWizardService;
 import com.propertyvista.portal.rpc.portal.web.services.financial.BillingService;
 import com.propertyvista.portal.rpc.portal.web.services.maintenance.MaintenanceRequestCrudService;
 import com.propertyvista.portal.rpc.portal.web.services.profile.ResidentAccountCrudService;
@@ -228,15 +229,14 @@ public class VistaPortalAccessControlList extends ServletContainerAclBuilder {
 
         //========================= My Community
 
-        grant(VistaCustomerBehavior.Tenant, new IServiceExecutePermission(com.propertyvista.portal.rpc.portal.web.services.financial.BillingService.class));
+        grant(VistaCustomerBehavior.Tenant, new IServiceExecutePermission(BillingService.class));
         grant(VistaCustomerBehavior.Tenant, new IServiceExecutePermission(com.propertyvista.portal.rpc.portal.web.services.financial.PaymentService.class));
 
         grant(VistaCustomerBehavior.Tenant, new IServiceExecutePermission(
                 com.propertyvista.portal.rpc.portal.web.services.financial.PaymentMethodWizardService.class));
         grant(VistaCustomerBehavior.Tenant,
                 new IServiceExecutePermission(com.propertyvista.portal.rpc.portal.web.services.financial.PaymentWizardService.class));
-        grant(VistaCustomerBehavior.Tenant,
-                new IServiceExecutePermission(com.propertyvista.portal.rpc.portal.web.services.financial.AutoPayWizardService.class));
+        grant(VistaCustomerBehavior.Tenant, new IServiceExecutePermission(AutoPayWizardService.class));
         grant(VistaCustomerBehavior.Tenant, new IServiceExecutePermission(
                 com.propertyvista.portal.rpc.portal.web.services.SelfRegistrationBuildingsSourceService.class));
 

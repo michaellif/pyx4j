@@ -61,8 +61,6 @@ public class PaymentMethodWizard extends CPortalEntityWizard<PaymentMethodDTO> {
 
     private final Anchor termsOfUseAnchor = new Anchor(i18n.tr("Terms Of Use"));
 
-    private final Anchor privacyPolicyAnchor = new Anchor(i18n.tr("Privacy Policy"));
-
     private final PaymentMethodEditor<LeasePaymentMethod> paymentMethodEditor = new PaymentMethodEditor<LeasePaymentMethod>(LeasePaymentMethod.class) {
 
         @Override
@@ -104,7 +102,6 @@ public class PaymentMethodWizard extends CPortalEntityWizard<PaymentMethodDTO> {
         this.presenter = presenter;
 
         this.termsOfUseAnchor.setHref(AppPlaceInfo.absoluteUrl(GWT.getModuleBaseURL(), true, presenter.getTermsOfUsePlace()));
-        this.privacyPolicyAnchor.setHref(AppPlaceInfo.absoluteUrl(GWT.getModuleBaseURL(), true, presenter.getPrivacyPolicyPlace()));
     }
 
     private BasicFlexFormPanel createPaymentMethodStep() {
@@ -175,25 +172,11 @@ public class PaymentMethodWizard extends CPortalEntityWizard<PaymentMethodDTO> {
             }
         });
 
-        privacyPolicyAnchor.getElement().getStyle().setDisplay(Display.INLINE);
-        privacyPolicyAnchor.getElement().getStyle().setPadding(0, Unit.PX);
-        privacyPolicyAnchor.getElement().getStyle().setWhiteSpace(WhiteSpace.NORMAL);
-        privacyPolicyAnchor.addClickHandler(new ClickHandler() {
-            @Override
-            public void onClick(ClickEvent event) {
-                presenter.showPrivacyPolicy();
-                DOM.eventPreventDefault((com.google.gwt.user.client.Event) event.getNativeEvent());
-            }
-        });
-
         Widget w;
         FlowPanel panel = new FlowPanel();
 
         panel.add(new HTML(i18n.tr("Be informed that you are acknowledging our")));
         panel.add(termsOfUseAnchor);
-        panel.add(w = new HTML("&nbsp" + i18n.tr("and") + "&nbsp"));
-        w.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
-        panel.add(privacyPolicyAnchor);
 
         return panel;
     }

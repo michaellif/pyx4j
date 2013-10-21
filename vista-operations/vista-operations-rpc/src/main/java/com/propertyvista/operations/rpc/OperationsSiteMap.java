@@ -20,6 +20,9 @@ import com.pyx4j.site.rpc.annotations.PlaceProperties;
 import com.pyx4j.site.shared.meta.PublicPlace;
 import com.pyx4j.site.shared.meta.SiteMap;
 
+import com.propertyvista.operations.domain.legal.VistaTerms;
+import com.propertyvista.operations.domain.legal.VistaTerms.Target;
+
 public class OperationsSiteMap implements SiteMap {
 
     public interface DevelopmentOnlyPlace {
@@ -118,24 +121,74 @@ public class OperationsSiteMap implements SiteMap {
 
     public static class Legal extends AppPlace {
 
-        @PlaceProperties(caption = "Tenant Portal Terms and Conditions")
-        public static class PortalTerms extends CrudAppPlace {
+        public static class VistaTermsAccess extends CrudAppPlace {
+            private final VistaTerms.Target target;
+
+            public VistaTermsAccess(VistaTerms.Target target) {
+                this.target = target;
+            }
+
+            public VistaTerms.Target getTarget() {
+                return target;
+            }
         }
 
         @PlaceProperties(caption = "PMC Terms and Conditions")
-        public static class PmcTerms extends CrudAppPlace {
+        public static class PmcTerms extends VistaTermsAccess {
+            public PmcTerms() {
+                super(Target.PMC);
+            }
         }
 
-        public static class PmcCaledonTermsTemplate extends CrudAppPlace {
+        public static class PmcCaledonTermsTemplate extends VistaTermsAccess {
+            public PmcCaledonTermsTemplate() {
+                super(Target.PmcCaldedonSolePropetorshipSection);
+            }
         }
 
-        public static class PmcCaldedonSolePropetorshipSectionTerms extends CrudAppPlace {
+        public static class PmcCaldedonSolePropetorshipSectionTerms extends VistaTermsAccess {
+            public PmcCaldedonSolePropetorshipSectionTerms() {
+                super(Target.PmcCaldedonSolePropetorshipSection);
+            }
         }
 
-        public static class PmcPaymentPad extends CrudAppPlace {
+        public static class PmcPaymentPadTerms extends VistaTermsAccess {
+            public PmcPaymentPadTerms() {
+                super(Target.PmcPaymentPad);
+            }
         }
 
-        public static class TenantSurePreAuthorizedPayments extends CrudAppPlace {
+        @PlaceProperties(caption = "Tenant Terms and Conditions")
+        public static class TenantTerms extends VistaTermsAccess {
+            public TenantTerms() {
+                super(Target.Tenant);
+            }
+        }
+
+        public static class TenantBillingTerms extends VistaTermsAccess {
+            public TenantBillingTerms() {
+                super(Target.TenantBilling);
+            }
+        }
+
+        @PlaceProperties(caption = "Tenant PAD Terms")
+        public static class TenantPAD extends VistaTermsAccess {
+            public TenantPAD() {
+                super(Target.TenantPAD);
+            }
+        }
+
+        @PlaceProperties(caption = "Tenant Credit Card Terms")
+        public static class TenantCC extends VistaTermsAccess {
+            public TenantCC() {
+                super(Target.TenantCC);
+            }
+        }
+
+        public static class TenantSurePreAuthorizedPaymentsAgreement extends VistaTermsAccess {
+            public TenantSurePreAuthorizedPaymentsAgreement() {
+                super(Target.TenantSurePreAuthorizedPaymentsAgreement);
+            }
         }
     }
 
