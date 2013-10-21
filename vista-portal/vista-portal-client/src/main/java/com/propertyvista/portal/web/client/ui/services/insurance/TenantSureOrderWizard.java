@@ -26,7 +26,6 @@ import com.pyx4j.commons.css.ThemeColor;
 import com.pyx4j.forms.client.ui.decorators.IDecorator;
 import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
 import com.pyx4j.forms.client.ui.wizard.WizardDecorator;
-import com.pyx4j.forms.client.ui.wizard.WizardStep;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.Anchor;
 import com.pyx4j.widgets.client.Button;
@@ -50,12 +49,6 @@ public class TenantSureOrderWizard extends CPortalEntityWizard<TenantSureInsuran
 
     private static final I18n i18n = I18n.get(TenantSureOrderWizard.class);
 
-    private final WizardStep personalInfoStep;
-
-    private final WizardStep insuranceCoverageStep;
-
-    private final WizardStep paymentMethodStep;
-
     private TenantSure2HighCourtReferenceLinks personalInforReferenceLinks;
 
     private Button quoteSendButton;
@@ -73,9 +66,9 @@ public class TenantSureOrderWizard extends CPortalEntityWizard<TenantSureInsuran
     public TenantSureOrderWizard(TenantSureOrderWizardView view, String endButtonCaption) {
         super(TenantSureInsurancePolicyDTO.class, view, i18n.tr("TenantSure Insurance"), endButtonCaption, ThemeColor.contrast3);
 
-        personalInfoStep = addStep(createPersonalInfoStep());
-        insuranceCoverageStep = addStep(createInsuranceCoverageStep());
-        paymentMethodStep = addStep(createPaymentMethodStep());
+        addStep(createPersonalInfoStep());
+        addStep(createInsuranceCoverageStep());
+        addStep(createPaymentMethodStep());
 
     }
 
@@ -183,24 +176,24 @@ public class TenantSureOrderWizard extends CPortalEntityWizard<TenantSureInsuran
         BasicFlexFormPanel paymentStepPanel = new BasicFlexFormPanel();
         int row = -1;
 
-        paymentStepPanel.setH1(++row, 0, 2, i18n.tr("Summary"));
+        paymentStepPanel.setH1(++row, 0, 1, i18n.tr("Summary"));
 
         TenantSureCoverageRequestForm confirmationCoverageRequestForm = new TenantSureCoverageRequestForm();
-        paymentStepPanel.setWidget(++row, 0, 2, inject(proto().tenantSureCoverageRequestConfirmation(), confirmationCoverageRequestForm));
+        paymentStepPanel.setWidget(++row, 0, 1, inject(proto().tenantSureCoverageRequestConfirmation(), confirmationCoverageRequestForm));
         confirmationCoverageRequestForm.setViewable(true);
 
         TenantSureQuoteViewer paymentStepQuoteViewer = new TenantSureQuoteViewer(true);
 
-        paymentStepPanel.setWidget(++row, 0, 2, inject(proto().quoteConfirmation(), paymentStepQuoteViewer));
+        paymentStepPanel.setWidget(++row, 0, 1, inject(proto().quoteConfirmation(), paymentStepQuoteViewer));
 
-        paymentStepPanel.setH1(++row, 0, 2, i18n.tr("Payment"));
+        paymentStepPanel.setH1(++row, 0, 1, i18n.tr("Payment"));
         TenantSurePaymentMethodForm paymentMethodForm = new TenantSurePaymentMethodForm(new Command() {
             @Override
             public void execute() {
                 presenter.populateCurrentAddressAsBillingAddress();
             }
         });
-        paymentStepPanel.setWidget(++row, 0, 2, inject(proto().paymentMethod(), paymentMethodForm));
+        paymentStepPanel.setWidget(++row, 0, 1, inject(proto().paymentMethod(), paymentMethodForm));
 
         return paymentStepPanel;
     }
