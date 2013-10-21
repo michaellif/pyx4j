@@ -21,13 +21,12 @@ import com.pyx4j.site.client.AbstractAppPlaceDispatcher;
 import com.pyx4j.site.rpc.AppPlace;
 import com.pyx4j.widgets.client.dialog.ConfirmDecline;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
+import com.pyx4j.widgets.client.dialog.MessageDialog_v2;
 
 import com.propertyvista.domain.security.common.VistaBasicBehavior;
 import com.propertyvista.operations.rpc.OperationsSiteMap;
 
 public class OperationsSiteAppPlaceDispatcher extends AbstractAppPlaceDispatcher {
-
-    private static final I18n i18n = I18n.get(OperationsSiteAppPlaceDispatcher.class);
 
     @Override
     protected void obtainDefaulPublicPlace(AsyncCallback<AppPlace> callback) {
@@ -57,12 +56,6 @@ public class OperationsSiteAppPlaceDispatcher extends AbstractAppPlaceDispatcher
         } else {
             return null;
         }
-    }
-
-    @Override
-    public void confirm(String message, ConfirmDecline confirmDecline) {
-        MessageDialog.confirm(i18n.tr("Confirm"), i18n.tr("Are you sure you want to navigate away from this page?\n\n" + "{0}\n\n"
-                + "Press Yes to continue, or No to stay on the current page.", message), confirmDecline);
     }
 
 }
