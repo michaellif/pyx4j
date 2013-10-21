@@ -72,11 +72,17 @@ public class CanadianStreetAddressParserTest extends TestCase {
 
     }
 
-    //TODO VISTA-3603
-    public void TODO_testStreetTypeAbbreviation() {
+    public void testStreetTypeAbbreviation() {
         StreetAddress a;
 
         a = parse("1065 Eglinton Ave", null);
+        Assert.assertNull(a.unitNumber);
+        Assert.assertEquals("1065", a.streetNumber);
+        Assert.assertEquals("Eglinton", a.streetName);
+        Assert.assertEquals(StreetType.avenue, a.streetType);
+        Assert.assertNull(a.streetDirection);
+
+        a = parse("1065 Eglinton Ave.", null);
         Assert.assertNull(a.unitNumber);
         Assert.assertEquals("1065", a.streetNumber);
         Assert.assertEquals("Eglinton", a.streetName);
@@ -114,7 +120,7 @@ public class CanadianStreetAddressParserTest extends TestCase {
         Assert.assertNull(a.streetDirection);
     }
 
-    public void testFrenchStyleStreetName() {
+    public void TODO_testFrenchStyleStreetName() {
         StreetAddress a = parse("10-1065 Rue Wild Wild West", null);
         Assert.assertEquals("Rue Wild Wild", a.streetName); // because there's no enum for french stuff
         Assert.assertEquals(StreetType.other, a.streetType);

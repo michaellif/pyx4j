@@ -26,6 +26,7 @@ import com.pyx4j.commons.CommonsStringUtils;
 
 import com.propertyvista.domain.contact.AddressStructured.StreetDirection;
 import com.propertyvista.domain.contact.AddressStructured.StreetType;
+import com.propertyvista.server.common.reference.StreetTypeAbbreviations;
 
 public class CanadianStreetAddressParser implements StreetAddressParser {
 
@@ -39,301 +40,6 @@ public class CanadianStreetAddressParser implements StreetAddressParser {
             "BUREAU", // French for "suite"
             "UNITÉ" // French for unit            
     );//@formatter:on
-
-    private static final List<String> streetTypeKeywords = Arrays.asList(//@formatter:off
-            "ABBEY",
-            "ABBEY",
-            "ACRES",
-            "ACRES",
-            "ALLÉE",
-            "ALLÉE",
-            "ALLEY",
-            "ALLEY",
-            "AUTOROUTE",
-            "AUT",
-            "AVENUE",
-            "AVE",
-            "AVENUE",
-            "AV",
-            "BAY",
-            "BAY",
-            "BEACH",
-            "BEACH",
-            "BEND",
-            "BEND",
-            "BOULEVARD",
-            "BLVD",
-            "BOULEVARD",
-            "BOUL",
-            "BY-PASS",
-            "BYPASS",
-            "BYWAY",
-            "BYWAY",
-            "CAMPUS",
-            "CAMPUS",
-            "CAPE",
-            "CAPE",
-            "CARRÉ",
-            "CAR",
-            "CARREFOUR",
-            "CARREF",
-            "CENTRE",
-            "CTR",
-            "CENTRE",
-            "C",
-            "CERCLE",
-            "CERCLE",
-            "CHASE",
-            "CHASE",
-            "CHEMIN",
-            "CH",
-            "CIRCLE",
-            "CIR",
-            "CIRCUIT",
-            "CIRCT",
-            "CLOSE",
-            "CLOSE",
-            "COMMON",
-            "COMMON",
-            "CONCESSION",
-            "CONC",
-            "CORNERS",
-            "CRNRS",
-            "CÔTE",
-            "CÔTE",
-            "COUR",
-            "COUR",
-            "COURS",
-            "COURS",
-            "COURT",
-            "CRT",
-            "COVE",
-            "COVE",
-            "CRESCENT",
-            "CRES",
-            "CROISSANT",
-            "CROIS",
-            "CROSSING",
-            "CROSS",
-            "CUL-DE-SAC",
-            "CDS",
-            "DALE",
-            "DALE",
-            "DELL",
-            "DELL",
-            "DIVERSION",
-            "DIVERS",
-            "DOWNS",
-            "DOWNS",
-            "DRIVE",
-            "DR",
-            "ÉCHANGEUR",
-            "ÉCH",
-            "END",
-            "END",
-            "ESPLANADE",
-            "ESPL",
-            "ESTATES",
-            "ESTATE",
-            "EXPRESSWAY",
-            "EXPY",
-            "EXTENSION",
-            "EXTEN",
-            "FARM",
-            "FARM",
-            "FIELD",
-            "FIELD",
-            "FOREST",
-            "FOREST",
-            "FREEWAY",
-            "FWY",
-            "FRONT",
-            "FRONT",
-            "GARDENS",
-            "GDNS",
-            "GATE",
-            "GATE",
-            "GLADE",
-            "GLADE",
-            "GLEN",
-            "GLEN",
-            "GREEN",
-            "GREEN",
-            "GROUNDS",
-            "GRNDS",
-            "GROVE",
-            "GROVE",
-            "HARBOUR",
-            "HARBR",
-            "HEATH",
-            "HEATH",
-            "HEIGHTS",
-            "HTS",
-            "HIGHLANDS",
-            "HGHLDS",
-            "HIGHWAY",
-            "HWY",
-            "HILL",
-            "HILL",
-            "HOLLOW",
-            "HOLLOW",
-            "ÎLE",
-            "ÎLE",
-            "IMPASSE",
-            "IMP",
-            "INLET",
-            "INLET",
-            "ISLAND",
-            "ISLAND",
-            "KEY",
-            "KEY",
-            "KNOLL",
-            "KNOLL",
-            "LANDING",
-            "LANDNG",
-            "LANE",
-            "LANE",
-            "LIMITS",
-            "LMTS",
-            "LINE",
-            "LINE",
-            "LINK",
-            "LINK",
-            "LOOKOUT",
-            "LKOUT",
-            "LOOP",
-            "LOOP",
-            "MALL",
-            "MALL",
-            "MANOR",
-            "MANOR",
-            "MAZE",
-            "MAZE",
-            "MEADOW",
-            "MEADOW",
-            "MEWS",
-            "MEWS",
-            "MONTÉE",
-            "MONTÉE",
-            "MOOR",
-            "MOOR",
-            "MOUNT",
-            "MOUNT",
-            "MOUNTAIN",
-            "MTN",
-            "ORCHARD",
-            "ORCH",
-            "PARADE",
-            "PARADE",
-            "PARC",
-            "PARC",
-            "PARK",
-            "PK",
-            "PARKWAY",
-            "PKY",
-            "PASSAGE",
-            "PASS",
-            "PATH",
-            "PATH",
-            "PATHWAY",
-            "PTWAY",
-            "PINES",
-            "PINES",
-            "PLACE",
-            "PL",
-            "PLACE",
-            "PLACE",
-            "PLATEAU",
-            "PLAT",
-            "PLAZA",
-            "PLAZA",
-            "POINT",
-            "PT",
-            "POINTE",
-            "POINTE",
-            "PORT",
-            "PORT",
-            "PRIVATE",
-            "PVT",
-            "PROMENADE",
-            "PROM",
-            "QUAI",
-            "QUAI",
-            "QUAY",
-            "QUAY",
-            "RAMP",
-            "RAMP",
-            "RANG",
-            "RANG",
-            "RANGE",
-            "RG",
-            "RIDGE",
-            "RIDGE",
-            "RISE",
-            "RISE",
-            "ROAD",
-            "RD",
-            "ROND-POINT",
-            "RDPT",
-            "ROUTE",
-            "RTE",
-            "ROW",
-            "ROW",
-            "RUE",
-            "RUE",
-            "RUELLE",
-            "RLE",
-            "RUN",
-            "RUN",
-            "SENTIER",
-            "SENT",
-            "SQUARE",
-            "SQ",
-            "STREET",
-            "ST",
-            "SUBDIVISION",
-            "SUBDIV",
-            "TERRACE",
-            "TERR",
-            "TERRASSE",
-            "TSSE",
-            "THICKET",
-            "THICK",
-            "TOWERS",
-            "TOWERS",
-            "TOWNLINE",
-            "TLINE",
-            "TRAIL",
-            "TRAIL",
-            "TURNABOUT",
-            "TRNABT",
-            "VALE",
-            "VALE",
-            "VIA",
-            "VIA",
-            "VIEW",
-            "VIEW",
-            "VILLAGE",
-            "VILLGE",
-            "VILLAS",
-            "VILLAS",
-            "VISTA",
-            "VISTA",
-            "VOIE",
-            "VOIE",
-            "WALK",
-            "WALK",
-            "WAY",
-            "WAY",
-            "WHARF",
-            "WHARF",
-            "WOOD",
-            "WOOD",
-            "WYND",
-            "WYND"
-    );//@formatter:on 
-
-    private static final Set<String> streetTypeSet = Collections.unmodifiableSet(new HashSet<String>(streetTypeKeywords));
 
     private static final List<String> streetDirectionKeywords = Arrays.asList(//@formatter:off
             "EAST",
@@ -371,10 +77,6 @@ public class CanadianStreetAddressParser implements StreetAddressParser {
     );//@formatter:on
 
     private static final Set<String> streetDirectionSet = Collections.unmodifiableSet(new HashSet<String>(streetDirectionKeywords));
-
-    private enum ParserState {
-        UnitNumber, StreetNumber, StreetName, StreetType, StreetDirection, End
-    }
 
     @Override
     public StreetAddress parse(String address1, String address2) {
@@ -439,21 +141,15 @@ public class CanadianStreetAddressParser implements StreetAddressParser {
 
         int streetTypeTokenIndex = -1;
         for (int i = streetAddressPartUpperBound - 1; (i >= streetAddressPartLowerBound) && (streetTypeTokenIndex == -1); --i) {
-            String normalizedToken = addressTokens[i].toUpperCase();
-            if (streetTypeSet.contains(normalizedToken)) {
+            String normalizedToken = normalizeStreetTypeToken(addressTokens[i]);
+            if (StreetTypeAbbreviations.getAllAbbreviations().contains(normalizedToken)) {
                 streetTypeTokenIndex = i;
             }
         }
 
         // try to convert street type to enum
         if (streetTypeTokenIndex != -1) {
-            try {
-                // (i / 2 * 2) should convert index of abbreviation to index of associated full name of street type
-                int i = streetTypeKeywords.indexOf(addressTokens[streetTypeTokenIndex].toUpperCase());
-                streetType = StreetType.valueOf(streetTypeKeywords.get(i / 2 * 2).toLowerCase());
-            } catch (Throwable e) {
-                // we don't care
-            }
+            streetType = StreetTypeAbbreviations.getStreetType(normalizeStreetTypeToken(addressTokens[streetTypeTokenIndex]));
 
             // parse street name
             if (streetTypeTokenIndex != streetAddressPartLowerBound) {
@@ -509,129 +205,12 @@ public class CanadianStreetAddressParser implements StreetAddressParser {
         return new StreetAddress(unitNumber, streetNumber, streetName.toString(), streetType, streetDirection);
     }
 
-    /** this one cannot parse some of the test cases */
-    private StreetAddress parseDepricated(String address1, String address2) throws ParseException {
-        String[] addressTokens = address1.trim().split("\\s+");
-
-        String streetNumber = addressTokens[0];
-        String unitNumber = null;
-        if (streetNumber.contains("-")) {
-            String[] streetNumberAndUnitNumber = addressTokens[0].split("-");
-            if (streetNumberAndUnitNumber.length != 2) {
-                new ParseException("Failed to parse street address and unit number from `" + addressTokens[0] + "` for address : `" + address1 + "`", 0);
-            }
-            unitNumber = streetNumberAndUnitNumber[0];
-            streetNumber = streetNumberAndUnitNumber[1];
+    private String normalizeStreetTypeToken(String token) {
+        String normalized = token.toLowerCase();
+        if (normalized.endsWith(".")) {
+            return normalized.substring(0, normalized.length() - 1);
+        } else {
+            return normalized;
         }
-
-        int tokenIndex = 1;
-        StringBuilder streetName = new StringBuilder();
-        StreetType streetType = null;
-        StreetDirection streetDirection = null;
-
-        ParserState parserState = ParserState.StreetName;
-
-        while (tokenIndex < addressTokens.length) {
-
-            switch (parserState) {
-            case StreetName:
-                String normalizedToken = addressTokens[tokenIndex].toUpperCase();
-                if (streetTypeSet.contains(normalizedToken)) {
-                    parserState = ParserState.StreetType;
-                } else if (streetDirectionSet.contains(normalizedToken)) {
-                    parserState = ParserState.StreetDirection;
-                } else {
-                    if (streetName.length() != 0) {
-                        streetName.append(' ');
-                    }
-                    streetName.append(addressTokens[tokenIndex]);
-                    tokenIndex += 1;
-                }
-                break;
-
-            case StreetType: {
-                String streetTypeCandidate = addressTokens[tokenIndex];
-                int i = streetTypeKeywords.indexOf(streetTypeCandidate.toUpperCase());
-                try {
-                    // (i / 2 * 2) should convert index of abbreviation to index of associated full name of street type
-                    streetType = StreetType.valueOf(streetTypeKeywords.get(i / 2 * 2).toLowerCase());
-                } catch (Throwable e) {
-                    // we don't care
-                }
-
-                if (streetType == null) {
-                    streetName.append(' ').append(streetTypeCandidate);
-                    streetType = StreetType.other;
-                }
-
-                parserState = ParserState.StreetDirection;
-                tokenIndex += 1;
-                break;
-            }
-
-            case StreetDirection: {
-                String streetDirectionCandidate = addressTokens[tokenIndex];
-                int i = streetDirectionKeywords.indexOf(streetDirectionCandidate.toUpperCase());
-                if (i != -1) {
-                    streetDirectionCandidate = streetDirectionKeywords.get(i / 2 * 2);
-
-                    streetDirectionFound: for (StreetDirection d : StreetDirection.values()) {
-                        if (d.name().equalsIgnoreCase(streetDirectionCandidate)) {
-                            streetDirection = d;
-                            break streetDirectionFound;
-                        }
-                    }
-                    if (streetDirection != null) {
-                        tokenIndex += 1;
-                    } else {
-                        throw new ParseException("streed direction enum was not found for `" + addressTokens[tokenIndex] + "` in address `" + address1 + "`",
-                                tokenIndex);
-                    }
-                }
-                parserState = ParserState.UnitNumber;
-
-                break;
-            }
-            case UnitNumber: {
-                if (!unitDesignators.contains(addressTokens[tokenIndex].toUpperCase())) {
-                    parserState = ParserState.End;
-                } else {
-                    tokenIndex += 1;
-                    if (tokenIndex < addressTokens.length) {
-                        unitNumber = addressTokens[tokenIndex];
-
-                        tokenIndex += 1;
-                    } else {
-                        throw new ParseException("failed to fetch unit number from address `" + address1 + "`: no unit number after designator `"
-                                + addressTokens[tokenIndex - 1], tokenIndex - 1);
-                    }
-                }
-                break;
-            }
-
-            case End:
-            default:
-                throw new ParseException("Failed to parse address`" + address1 + "` unrecoginzed token `" + addressTokens[tokenIndex] + "`", tokenIndex);
-            }
-
-        }
-
-        // if we still didn't get unit number try to get it from address2 line
-        if (unitNumber == null & CommonsStringUtils.isStringSet(address2)) {
-            String[] address2Tokens = address2.trim().split("\\s+");
-            if (address2Tokens.length == 1) {
-                unitNumber = address2Tokens[0];
-            } else {
-                // we *assume* that address is the next token after unit designator token                
-                for (int i = 0; (unitNumber == null) & i < address2Tokens.length; ++i) {
-                    if (unitDesignators.contains(address2Tokens[i].toUpperCase())) {
-                        if (i + 1 < address2Tokens.length) {
-                            unitNumber = address2Tokens[i + 1];
-                        }
-                    }
-                }
-            }
-        }
-        return new StreetAddress(unitNumber, streetNumber, streetName.toString(), streetType, streetDirection);
     }
 }
