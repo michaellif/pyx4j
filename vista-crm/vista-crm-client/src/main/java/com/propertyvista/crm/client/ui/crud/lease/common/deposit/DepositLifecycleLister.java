@@ -31,9 +31,9 @@ public class DepositLifecycleLister extends AbstractLister<DepositLifecycleDTO> 
         super(DepositLifecycleDTO.class, false);
 
         setColumnDescriptors(//@formatter:off
-            new MemberColumnDescriptor.Builder(proto().deposit().billableItem()).columnTitle(i18n.tr("Service/Feature")).build(),
-            new MemberColumnDescriptor.Builder(proto().deposit().type()).build(),
-            new MemberColumnDescriptor.Builder(proto().deposit().amount()).build(),
+            new MemberColumnDescriptor.Builder(proto().deposit().billableItem()).searchable(false).sortable(false).columnTitle(i18n.tr("Service/Feature")).build(),
+            new MemberColumnDescriptor.Builder(proto().deposit().type()).searchable(false).sortable(false).build(),
+            new MemberColumnDescriptor.Builder(proto().deposit().amount()).searchable(false).sortable(false).build(),
             new MemberColumnDescriptor.Builder(proto().status()).build(),
             new MemberColumnDescriptor.Builder(proto().depositDate(), false).build(),
             new MemberColumnDescriptor.Builder(proto().refundDate()).build(),
