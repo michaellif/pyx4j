@@ -13,9 +13,12 @@
  */
 package com.propertyvista.portal.web.client.ui.profile;
 
+import com.google.gwt.dom.client.Style.Display;
+import com.google.gwt.dom.client.Style.TextAlign;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.IsWidget;
+import com.google.gwt.user.client.ui.ValueBoxBase.TextAlignment;
 
 import com.pyx4j.commons.css.ThemeColor;
 import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
@@ -59,14 +62,26 @@ public class AccountPage extends CPortalEntityForm<ResidentAccountDTO> {
                 AppSite.getPlaceController().goTo(new PortalSiteMap.PasswordChange());
             }
         });
+        anchor.setWidth("200px");
+        anchor.getElement().getStyle().setTextAlign(TextAlign.LEFT);
         anchor.setStyleName(NavigationAnchorTheme.StyleName.NavigationAnchor.name());
         mainPanel.setWidget(++row, 0, anchor);
 
         mainPanel.setH1(++row, 0, 1, i18n.tr("Mail Preferences"));
-        mainPanel.setWidget(++row, 0, 1, new HTML("Coming soon."));
+
+        HTML label = new HTML("Coming soon.");
+        label.setWidth("200px");
+        label.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
+        label.getElement().getStyle().setTextAlign(TextAlign.LEFT);
+        mainPanel.setWidget(++row, 0, 1, label);
 
         mainPanel.setH1(++row, 0, 1, i18n.tr("Notification Preferences"));
-        mainPanel.setWidget(++row, 0, 1, new HTML("Coming soon."));
+
+        label = new HTML("Coming soon.");
+        label.setWidth("200px");
+        label.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
+        label.getElement().getStyle().setTextAlign(TextAlign.LEFT);
+        mainPanel.setWidget(++row, 0, 1, label);
 
         return mainPanel;
     }
