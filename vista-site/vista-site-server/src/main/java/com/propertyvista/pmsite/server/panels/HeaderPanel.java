@@ -18,6 +18,7 @@ import org.apache.wicket.markup.html.panel.Panel;
 
 import com.pyx4j.essentials.rpc.SystemState;
 import com.pyx4j.essentials.server.admin.SystemMaintenance;
+import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.domain.site.AvailableLocale;
 import com.propertyvista.domain.site.PortalLogoImageResource;
@@ -30,8 +31,9 @@ import com.propertyvista.pmsite.server.pages.LandingPage;
 import com.propertyvista.pmsite.server.pages.MyCommunityPage;
 
 public class HeaderPanel extends Panel {
-
     private static final long serialVersionUID = 1L;
+
+    private static final I18n i18n = I18n.get(HeaderPanel.class);
 
     public HeaderPanel(boolean residentsOnly) {
         super("header");
@@ -63,7 +65,7 @@ public class HeaderPanel extends Panel {
                     && SystemState.Online.equals(SystemMaintenance.getState());
         } catch (Exception ignore) {
         }
-        add(residentsEnabled ? new PageLink("auth", MyCommunityPage.class) : new Label("auth"));
+        add(residentsEnabled ? new PageLink("auth", MyCommunityPage.class).setText(i18n.tr("Resident Login")) : new Label("auth"));
         // main menu
         if (!residentsOnly) {
             add(new MainNavigationPanel("mainNavig"));
