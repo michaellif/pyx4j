@@ -46,6 +46,7 @@ import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.entity.client.ClientEntityFactory;
 import com.pyx4j.gwt.commons.BrowserType;
 import com.pyx4j.gwt.commons.ClientEventBus;
+import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.log4gwt.client.ClientLogger;
 import com.pyx4j.security.client.ClientSecurityController;
 import com.pyx4j.site.client.place.AppPlaceHistoryMapper;
@@ -55,6 +56,7 @@ import com.pyx4j.site.shared.domain.Notification;
 import com.pyx4j.site.shared.meta.NavigNode;
 import com.pyx4j.site.shared.meta.SiteMap;
 import com.pyx4j.widgets.client.dialog.ConfirmDecline;
+import com.pyx4j.widgets.client.dialog.MessageDialog_v2;
 
 /**
  * Entry point classes define <code>onModuleLoad()</code>.
@@ -62,6 +64,8 @@ import com.pyx4j.widgets.client.dialog.ConfirmDecline;
 public abstract class AppSite implements EntryPoint {
 
     private static final Logger log = LoggerFactory.getLogger(AppSite.class);
+
+    private static final I18n i18n = I18n.get(AppSite.class);
 
     private static AppSite instance;
 
@@ -95,12 +99,8 @@ public abstract class AppSite implements EntryPoint {
 
                 @Override
                 public void confirm(String message, ConfirmDecline confirmDecline) {
-                    log.debug("We show JS confirm {}", message);
-                    if (Window.confirm(message)) {
-                        confirmDecline.onConfirmed();
-                    } else {
-                        confirmDecline.onDeclined();
-                    }
+                    MessageDialog_v2.confirm(i18n.tr("Confirm"), i18n.tr("Are you sure you want to navigate away from this page?\n" + "{0}\n\n"
+                            + "Press Yes to continue, or No to stay on the current page.", message), confirmDecline);
                 }
 
                 @Override

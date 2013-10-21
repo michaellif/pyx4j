@@ -20,13 +20,10 @@
  */
 package com.pyx4j.site.client;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.google.gwt.place.shared.Place;
-import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
+import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.security.client.BehaviorChangeEvent;
 import com.pyx4j.security.client.BehaviorChangeHandler;
@@ -35,10 +32,11 @@ import com.pyx4j.site.rpc.NotificationAppPlace;
 import com.pyx4j.site.shared.domain.Notification;
 import com.pyx4j.site.shared.meta.PublicPlace;
 import com.pyx4j.widgets.client.dialog.ConfirmDecline;
+import com.pyx4j.widgets.client.dialog.MessageDialog_v2;
 
 public abstract class AbstractAppPlaceDispatcher implements AppPlaceDispatcher {
 
-    private static final Logger log = LoggerFactory.getLogger(AbstractAppPlaceDispatcher.class);
+    private static final I18n i18n = I18n.get(AbstractAppPlaceDispatcher.class);
 
     private AppPlace urlEntryTargetPlace = AppPlace.NOWHERE;
 
@@ -127,22 +125,18 @@ public abstract class AbstractAppPlaceDispatcher implements AppPlaceDispatcher {
         }
     }
 
-    @Override
-    public void confirm(String message, ConfirmDecline confirmDecline) {
-        log.debug("We show JS confirm {}", message);
-        if (Window.confirm(message)) {
-            confirmDecline.onConfirmed();
-        } else {
-            confirmDecline.onDeclined();
-        }
-    }
-
     private AppPlace selectTargetPlace(AppPlace newPlace) {
         if ((newPlace == AppPlace.NOWHERE) && (urlEntryTargetPlace != AppPlace.NOWHERE)) {
             return urlEntryTargetPlace;
         } else {
             return newPlace;
         }
+    }
+
+    @Override
+    public void confirm(String message, ConfirmDecline confirmDecline) {
+        MessageDialog_v2.confirm(i18n.tr("Confirm"), i18n.tr("Are you sure you want to navigate away from this page?\n" + "{0}\n\n"
+                + "Press Yes to continue, or No to stay on the current page.", message), confirmDecline);
     }
 
 }
