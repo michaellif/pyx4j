@@ -55,6 +55,7 @@ public class N4ManagementFacadeImpl implements N4ManagementFacade {
         List<LegalNoticeCandidate> candidates = new LinkedList<LegalNoticeCandidate>();
 
         EntityQueryCriteria<Lease> criteria = EntityQueryCriteria.create(Lease.class);
+
         for (Lease lease : Persistence.service().query(criteria)) {
             LegalNoticeCandidate candidate = EntityFactory.create(LegalNoticeCandidate.class);
             candidate.leaseId().set(lease.createIdentityStub());

@@ -7,45 +7,28 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on 2013-10-03
+ * Created on 2013-10-21
  * @author ArtyomB
  * @version $Id$
  */
 package com.propertyvista.crm.rpc.dto.legal.n4;
 
-import java.math.BigDecimal;
-
 import com.pyx4j.commons.LogicalDate;
-import com.pyx4j.entity.annotations.Caption;
-import com.pyx4j.entity.annotations.Editor;
-import com.pyx4j.entity.annotations.Editor.EditorType;
-import com.pyx4j.entity.annotations.RpcTransient;
 import com.pyx4j.entity.annotations.Transient;
-import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
 
 import com.propertyvista.domain.company.Employee;
-import com.propertyvista.domain.property.asset.building.Building;
+import com.propertyvista.domain.tenant.lease.Lease;
 
 @Transient
-public interface N4GenerationSettingsDTO extends IEntity {
+public interface N4GenerationQueryDTO extends IEntity {
 
-    @RpcTransient
-    @NotNull
-    IPrimitive<LogicalDate> noticeDate();
-
-    IPrimitive<Boolean> filterByBuildings();
-
-    IList<Building> buildings();
-
-    @RpcTransient
-    @NotNull
     Employee agent();
 
-    @Caption(name = "Amount Owed >")
-    @Editor(type = EditorType.money)
-    IPrimitive<BigDecimal> minAmountOwed();
+    IList<Lease> targetDelinquentLeases();
+
+    IPrimitive<LogicalDate> noticeDate();
 
 }

@@ -59,6 +59,8 @@ public abstract class ItemsHolderForm<Item extends BulkEditableEntity, Holder ex
 
     private Command onMoreClicked;
 
+    private FlowPanel folderHolder;
+
     public ItemsHolderForm(Class<Holder> klass) {
         super(klass);
     }
@@ -107,6 +109,7 @@ public abstract class ItemsHolderForm<Item extends BulkEditableEntity, Holder ex
         moreButton.setVisible(!getValue().isNull() && (getValue().totalItemCount().getValue() != getValue().items().size()));
         actionsPanel.setVisible(!getValue().isNull() && getValue().totalItemCount().getValue() != 0);
         headerPanel.setVisible(!getValue().isNull() && (!getValue().totalItemCount().isNull() && getValue().totalItemCount().getValue() != 0));
+        folderHolder.setVisible(!getValue().isNull() && (!getValue().totalItemCount().isNull() && getValue().totalItemCount().getValue() != 0));
     }
 
     private FlowPanel createStatsPanel() {
@@ -146,9 +149,8 @@ public abstract class ItemsHolderForm<Item extends BulkEditableEntity, Holder ex
     }
 
     private FlowPanel createItemsFolderPanel() {
-        FlowPanel folderHolder = new FlowPanel();
+        folderHolder = new FlowPanel();
         folderHolder.setStyleName(Styles.BulkFolderHolder.name());
-
         folderHolder.add(inject(proto().items(), createItemsFolder()));
 
         moreButton = new HTML(i18n.tr("More..."));

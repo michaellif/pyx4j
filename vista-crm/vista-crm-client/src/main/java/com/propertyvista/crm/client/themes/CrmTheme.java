@@ -709,6 +709,10 @@ public class CrmTheme extends VistaTheme {
     private void initBulkOperationToolStyles() {
         Style style;
 
+        style = new Style("." + BulkOperationToolViewImpl.Styles.BulkOperationSettingsFormPanel.name());
+        style.addProperty("height", "150px");
+        addStyle(style);
+
         style = new Style("." + BulkOperationToolViewImpl.Styles.BulkOperationButtonsPanel.name());
         style.addProperty("padding", "0px");
         style.addProperty("height", "30px");
@@ -741,7 +745,7 @@ public class CrmTheme extends VistaTheme {
         style = new Style("." + ItemsHolderForm.Styles.BulkFolderHolder.name());
         style.addProperty("overflow", "auto");
         style.addProperty("position", "absolute");
-        style.addProperty("top", "90px");
+        style.addProperty("top", "250px");
         style.addProperty("bottom", "0px");
         style.addProperty("left", "0px");
         style.addProperty("right", "0px");
