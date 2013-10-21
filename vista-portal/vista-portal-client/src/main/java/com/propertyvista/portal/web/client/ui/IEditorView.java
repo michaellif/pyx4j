@@ -37,4 +37,6 @@ public interface IEditorView<E extends IEntity> extends IFormView<E> {
 
     void setEditable(boolean flag);
 
+    boolean isEditable();
+
 }

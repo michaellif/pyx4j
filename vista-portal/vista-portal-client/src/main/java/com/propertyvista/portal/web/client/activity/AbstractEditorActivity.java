@@ -142,7 +142,7 @@ public abstract class AbstractEditorActivity<E extends IEntity> extends Security
 
     @Override
     public String mayStop() {
-        if (view.isDirty()) {
+        if (view.isEditable() && view.isDirty()) {
             String entityName = view.getValue().getStringView();
             if (CommonsStringUtils.isEmpty(entityName)) {
                 return i18n.tr("Changes to {0} were not saved", view.getValue().getEntityMeta().getCaption());

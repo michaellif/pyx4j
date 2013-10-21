@@ -33,6 +33,11 @@ public class AbstractEditorView<E extends IEntity> extends AbstractFormView<E> i
     }
 
     @Override
+    public boolean isEditable() {
+        return getForm().isViewable();
+    }
+
+    @Override
     public IEditorPresenter<E> getPresenter() {
         return (IEditorPresenter<E>) super.getPresenter();
     }
