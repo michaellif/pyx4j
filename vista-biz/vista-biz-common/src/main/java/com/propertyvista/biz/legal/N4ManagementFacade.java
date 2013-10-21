@@ -39,7 +39,7 @@ public interface N4ManagementFacade {
      * @throws IllegalStateException
      *             if one of the given leases doesn't owe any money.
      */
-    void issueN4(List<Lease> delinquentLeases, Employee employee, AtomicInteger progress) throws IllegalStateException;
+    void issueN4(List<Lease> delinquentLeases, Employee employee, LogicalDate noticeDate, AtomicInteger progress) throws IllegalStateException;
 
     /**
      * Retrieves N4s sorted in descending order by the date of generation. If <code>generatedCutOffDate</code> is not <code>null</code> this will be the minimum

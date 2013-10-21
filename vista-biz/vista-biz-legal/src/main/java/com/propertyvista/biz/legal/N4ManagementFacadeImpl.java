@@ -35,12 +35,15 @@ import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 
+import com.propertyvista.biz.policy.PolicyFacade;
 import com.propertyvista.domain.company.Employee;
 import com.propertyvista.domain.legal.LegalNoticeCandidate;
 import com.propertyvista.domain.legal.N4FormFieldsData;
 import com.propertyvista.domain.legal.N4LandlordsData;
 import com.propertyvista.domain.legal.N4LeaseData;
 import com.propertyvista.domain.legal.N4LegalLetter;
+import com.propertyvista.domain.policy.framework.OrganizationPoliciesNode;
+import com.propertyvista.domain.policy.policies.N4Policy;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.server.domain.LegalLetterBlob;
@@ -67,26 +70,28 @@ public class N4ManagementFacadeImpl implements N4ManagementFacade {
     }
 
     @Override
-    public void issueN4(List<Lease> delinquentLeases, Employee employee, AtomicInteger progress) throws IllegalStateException {
-        // TODO get terminationDate
-        LogicalDate terminationDate = new LogicalDate();
+    public void issueN4(List<Lease> delinquentLeases, Employee employee, LogicalDate noticeDate, AtomicInteger progress) throws IllegalStateException {
 
-        // TODO get landlordsData 
+        N4Policy n4policy = ServerSideFactory.create(PolicyFacade.class).obtainEffectivePolicy(EntityFactory.create(OrganizationPoliciesNode.class),
+                N4Policy.class);
+
         N4LandlordsData n4LandLordsData = EntityFactory.create(N4LandlordsData.class);
         {
-            n4LandLordsData.landlordsLegalName().setValue("TBD");
-            n4LandLordsData.signingEmployee().set(employee);
-            n4LandLordsData.landlordsAddress();
-            n4LandLordsData.landlordsPhoneNumber().setValue("(647) 345-1234");
-            n4LandLordsData.faxNumber().setValue("(647) 345-1234");
-            n4LandLordsData.emailAddress().setValue("tbd@pmc.net");
+            n4LandLordsData.landlordsLegalName().setValue(n4policy.companyName().getValue());
+            n4LandLordsData.signingEmployee().set(Persistence.service().retrieve(Employee.class, employee.getPrimaryKey()));
+            n4LandLordsData.landlordsAddress().set(n4policy.mailingAddress());
+            n4LandLordsData.landlordsPhoneNumber().setValue(n4policy.phoneNumber().getValue());
+            n4LandLordsData.faxNumber().setValue(n4policy.faxNumber().getValue());
+            n4LandLordsData.emailAddress().setValue(n4policy.emailAddress().getValue());
             n4LandLordsData.isLandlord().setValue(false);
-            n4LandLordsData.signatureDate().setValue(new LogicalDate());
+            n4LandLordsData.signatureDate().setValue(new LogicalDate(SystemDateManager.getDate()));
+
+            // TODO fill signature from employees data
             n4LandLordsData.signature();
         }
 
         for (Lease leaseId : delinquentLeases) {
-            issueN4ForLease(leaseId, n4LandLordsData, terminationDate);
+            issueN4ForLease(leaseId, n4LandLordsData, noticeDate);
             progress.set(progress.get() + 1);
         }
 
@@ -110,8 +115,9 @@ public class N4ManagementFacadeImpl implements N4ManagementFacade {
         return n4s;
     }
 
-    private void issueN4ForLease(Lease leaseId, N4LandlordsData n4LandLordsData, LogicalDate terminationDate) {
-        N4LeaseData n4LeaseData = ServerSideFactory.create(N4GenerationFacade.class).getN4LeaseData(leaseId, terminationDate);
+    private void issueN4ForLease(Lease leaseId, N4LandlordsData n4LandLordsData, LogicalDate noticeDate) {
+
+        N4LeaseData n4LeaseData = ServerSideFactory.create(N4GenerationFacade.class).prepareN4LeaseData(leaseId, noticeDate);
         N4FormFieldsData n4FormData = ServerSideFactory.create(N4GenerationFacade.class).populateFormData(n4LeaseData, n4LandLordsData);
         byte[] n4LetterBinary = ServerSideFactory.create(N4GenerationFacade.class).generateN4Letter(n4FormData);
 
@@ -126,7 +132,7 @@ public class N4ManagementFacadeImpl implements N4ManagementFacade {
         n4Letter.generatedOn().setValue(SystemDateManager.getDate());
         n4Letter.blobKey().setValue(blob.getPrimaryKey());
         n4Letter.fileSize().setValue(n4LetterBinary.length);
-        n4Letter.fileName().setValue(MessageFormat.format("n4{0,date,MM-DD-yyyy}.pdf", SystemDateManager.getDate()));
+        n4Letter.fileName().setValue(MessageFormat.format("n4notice-{0,date,yyyy-MM-dd}.pdf", SystemDateManager.getDate()));
         Persistence.service().persist(n4Letter);
     }
 

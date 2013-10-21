@@ -28,9 +28,12 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
+import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 
 import com.propertyvista.domain.financial.billing.BillingCycle;
+import com.propertyvista.domain.financial.billing.DebitCreditLink;
 import com.propertyvista.domain.financial.billing.InvoiceDebit;
 import com.propertyvista.domain.legal.N4RentOwingForPeriod;
 
@@ -54,20 +57,34 @@ public class InvoiceDebitAggregator {
         List<N4RentOwingForPeriod> debitsForPeriod = new LinkedList<N4RentOwingForPeriod>();
 
         for (Map.Entry<BillingCycle, List<InvoiceDebit>> billingCycleDebits : agregatedDebits.entrySet()) {
-            N4RentOwingForPeriod rentForPeriod = EntityFactory.create(N4RentOwingForPeriod.class);
-            rentForPeriod.from().setValue(billingCycleDebits.getKey().billingCycleStartDate().getValue());
-            rentForPeriod.to().setValue(billingCycleDebits.getKey().billingCycleEndDate().getValue());
-            rentForPeriod.rentCharged().setValue(BigDecimal.ZERO);
-            rentForPeriod.rentPaid().setValue(BigDecimal.ZERO);
-            rentForPeriod.rentOwing().setValue(BigDecimal.ZERO);
+            N4RentOwingForPeriod rentOwingForPeriod = EntityFactory.create(N4RentOwingForPeriod.class);
+            rentOwingForPeriod.from().setValue(billingCycleDebits.getKey().billingCycleStartDate().getValue());
+            rentOwingForPeriod.to().setValue(billingCycleDebits.getKey().billingCycleEndDate().getValue());
+
+            rentOwingForPeriod.rentCharged().setValue(BigDecimal.ZERO);
+            rentOwingForPeriod.rentPaid().setValue(BigDecimal.ZERO);
+            rentOwingForPeriod.rentOwing().setValue(BigDecimal.ZERO);
 
             for (InvoiceDebit debit : billingCycleDebits.getValue()) {
-                rentForPeriod.rentCharged().setValue(rentForPeriod.rentCharged().getValue().add(debit.amount().getValue()));
-                rentForPeriod.rentOwing().setValue(rentForPeriod.rentOwing().getValue().add(debit.outstandingDebit().getValue()));
-            }
-            rentForPeriod.rentPaid().setValue(rentForPeriod.rentCharged().getValue().subtract(rentForPeriod.rentOwing().getValue()));
+                rentOwingForPeriod.rentCharged().setValue(rentOwingForPeriod.rentCharged().getValue().add(debit.amount().getValue()));
+                rentOwingForPeriod.rentCharged().setValue(rentOwingForPeriod.rentCharged().getValue().add(debit.taxTotal().getValue()));
+                rentOwingForPeriod.rentOwing().setValue(rentOwingForPeriod.rentOwing().getValue().add(debit.outstandingDebit().getValue()));
 
-            debitsForPeriod.add(rentForPeriod);
+                // although the following way for computing rent paid amount is more safe 
+                // the later computation should do well too and be faster
+                if (false) {
+                    EntityQueryCriteria<DebitCreditLink> creditLinksCriteria = EntityQueryCriteria.create(DebitCreditLink.class);
+                    creditLinksCriteria.eq(creditLinksCriteria.proto().debitItem(), debit);
+                    List<DebitCreditLink> debitCreditLinks = Persistence.service().query(creditLinksCriteria);
+
+                    for (DebitCreditLink debitCreditLink : debitCreditLinks) {
+                        rentOwingForPeriod.rentPaid().setValue(rentOwingForPeriod.rentPaid().getValue().add(debitCreditLink.amount().getValue()));
+                    }
+                }
+            }
+            rentOwingForPeriod.rentPaid().setValue(rentOwingForPeriod.rentCharged().getValue().subtract(rentOwingForPeriod.rentOwing().getValue()));
+
+            debitsForPeriod.add(rentOwingForPeriod);
         }
         Collections.sort(debitsForPeriod, new Comparator<N4RentOwingForPeriod>() {
             @Override

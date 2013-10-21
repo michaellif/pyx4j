@@ -14,33 +14,38 @@
 package com.propertyvista.crm.client.activity.tools.n4generation;
 
 import java.util.List;
-import java.util.Vector;
 
 import com.google.gwt.core.client.GWT;
 
+import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.gwt.rpc.deferred.DeferredProcessProgressResponse;
 import com.pyx4j.site.rpc.AppPlace;
 
 import com.propertyvista.crm.client.CrmSite;
 import com.propertyvista.crm.client.ui.tools.n4generation.N4GenerationToolView;
 import com.propertyvista.crm.rpc.dto.legal.n4.LegalNoticeCandidateDTO;
+import com.propertyvista.crm.rpc.dto.legal.n4.N4GenerationQueryDTO;
 import com.propertyvista.crm.rpc.dto.legal.n4.N4GenerationSettingsDTO;
 import com.propertyvista.crm.rpc.services.legal.N4GenerationToolService;
 import com.propertyvista.domain.tenant.lease.Lease;
 
-public class N4GenerationToolActivity extends AbstractBulkOperationToolActivity<N4GenerationSettingsDTO, LegalNoticeCandidateDTO, Vector<Lease>> {
+public class N4GenerationToolActivity extends AbstractBulkOperationToolActivity<N4GenerationSettingsDTO, LegalNoticeCandidateDTO, N4GenerationQueryDTO> {
 
     public N4GenerationToolActivity(AppPlace place) {
         super(place, CrmSite.getViewFactory().instantiate(N4GenerationToolView.class), GWT.<N4GenerationToolService> create(N4GenerationToolService.class));
     }
 
     @Override
-    protected Vector<Lease> makeProducedItems(List<LegalNoticeCandidateDTO> selectedItems) {
-        Vector<Lease> selectedLeases = new Vector<Lease>();
+    protected N4GenerationQueryDTO makeProducedItems(List<LegalNoticeCandidateDTO> selectedItems) {
+        N4GenerationQueryDTO query = EntityFactory.create(N4GenerationQueryDTO.class);
+
         for (LegalNoticeCandidateDTO noticeCandidate : selectedItems) {
-            selectedLeases.add(noticeCandidate.leaseId().<Lease> duplicate());
+            query.targetDelinquentLeases().add(noticeCandidate.leaseId().<Lease> duplicate());
         }
-        return selectedLeases;
+        query.noticeDate().setValue(getView().getFilterSettings().noticeDate().getValue());
+        query.agent().setValue(getView().getFilterSettings().agent().getValue());
+
+        return query;
     }
 
     @Override

@@ -14,21 +14,36 @@
 package com.propertyvista.domain.policy.policies;
 
 import com.pyx4j.entity.annotations.DiscriminatorValue;
+import com.pyx4j.entity.annotations.Editor;
+import com.pyx4j.entity.annotations.Editor.EditorType;
 import com.pyx4j.entity.annotations.EmbeddedEntity;
+import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IPrimitive;
 
 import com.propertyvista.domain.contact.AddressSimple;
 import com.propertyvista.domain.policy.framework.LowestApplicableNode;
+import com.propertyvista.domain.policy.framework.OrganizationPoliciesNode;
 import com.propertyvista.domain.policy.framework.Policy;
-import com.propertyvista.domain.property.asset.building.Building;
 
 @DiscriminatorValue("LeaseBillingPolicy")
-@LowestApplicableNode(value = Building.class)
+@LowestApplicableNode(value = OrganizationPoliciesNode.class)
 public interface N4Policy extends Policy {
 
     IPrimitive<Boolean> includeSignature();
 
+    @NotNull
+    IPrimitive<String> companyName();
+
     @EmbeddedEntity
-    AddressSimple signatureAddress();
+    AddressSimple mailingAddress();
+
+    @Editor(type = EditorType.phone)
+    IPrimitive<String> phoneNumber();
+
+    @Editor(type = EditorType.phone)
+    IPrimitive<String> faxNumber();
+
+    @Editor(type = EditorType.email)
+    IPrimitive<String> emailAddress();
 
 }

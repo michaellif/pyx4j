@@ -24,6 +24,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.lang.reflect.Method;
 import java.math.BigDecimal;
+import java.util.GregorianCalendar;
 import java.util.List;
 
 import org.apache.commons.io.IOUtils;
@@ -45,6 +46,7 @@ import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IEntity;
 
 import com.propertyvista.biz.financial.ar.ARFacade;
+import com.propertyvista.domain.contact.AddressSimple;
 import com.propertyvista.domain.contact.AddressStructured;
 import com.propertyvista.domain.financial.billing.InvoiceDebit;
 import com.propertyvista.domain.legal.N4FormFieldsData;
@@ -79,7 +81,8 @@ public class N4GenerationFacadeImpl implements N4GenerationFacade {
         N4FormFieldsData fieldsData = EntityFactory.create(N4FormFieldsData.class);
         fieldsData.to().setValue(
                 SimpleMessageFormat.format("{0}\n{1}", formatTenants(leaseData.leaseTenants()), formatRentalAddress(leaseData.rentalUnitAddress())));
-        fieldsData.from().setValue(landlordsData.landlordsLegalName().getValue());
+        fieldsData.from().setValue(
+                SimpleMessageFormat.format("{0}\n{1}", landlordsData.landlordsLegalName().getValue(), formatLandlordAddress(landlordsData.landlordsAddress())));
 
         fieldsData.tenantStreetNumber().setValue(
                 leaseData.rentalUnitAddress().streetNumber().getStringView() + leaseData.rentalUnitAddress().streetNumberSuffix().getStringView());
@@ -184,6 +187,9 @@ public class N4GenerationFacadeImpl implements N4GenerationFacade {
             fieldsData.rentOwingHundredsC().setValue(owing[1]);
             fieldsData.rentOwingCentsC().setValue(owing[2]);
         }
+        fieldsData.rentOwingThousandsTotal().setValue(totalOwed[0]);
+        fieldsData.rentOwingHundredsTotal().setValue(totalOwed[0]);
+        fieldsData.rentOwingCentsTotal().setValue(totalOwed[0]);
 
         fieldsData.signedBy().setValue(landlordsData.isLandlord().isBooleanTrue() ? SignedBy.Landlord : SignedBy.Agent);
         fieldsData.signature().setValue(landlordsData.signature().getValue());
@@ -219,16 +225,25 @@ public class N4GenerationFacadeImpl implements N4GenerationFacade {
     }
 
     @Override
-    public N4LeaseData getN4LeaseData(Lease leaseId, LogicalDate terminationDate) {
+    public N4LeaseData prepareN4LeaseData(Lease leaseId, LogicalDate noticeDate) {
         Lease lease = Persistence.service().retrieve(Lease.class, leaseId.getPrimaryKey());
 
         N4LeaseData n4LeaseData = EntityFactory.create(N4LeaseData.class);
 
-        for (LeaseTermTenant termTenant : lease.currentTerm().version().tenants()) {
-            n4LeaseData.leaseTenants().add(termTenant.leaseParticipant());
+        for (LeaseTermTenant termTenantIdStub : lease.currentTerm().version().tenants()) {
+            LeaseTermTenant termTenant = Persistence.service().retrieve(LeaseTermTenant.class, termTenantIdStub.getPrimaryKey());
+            n4LeaseData.leaseTenants().add(termTenant.leaseParticipant().<Tenant> createIdentityStub());
         }
 
         n4LeaseData.rentalUnitAddress().set(AddressRetriever.getUnitLegalAddress(lease.unit()));
+
+        int noticeAdvanceDays = terminationDaysAdvance(lease);
+
+        GregorianCalendar cal = new GregorianCalendar();
+        cal.setTime(noticeDate);
+        cal.add(GregorianCalendar.DAY_OF_YEAR, noticeAdvanceDays);
+        LogicalDate terminationDate = new LogicalDate(cal.getTime());
+
         n4LeaseData.terminationDate().setValue(terminationDate);
 
         List<InvoiceDebit> debits = ServerSideFactory.create(ARFacade.class).getNotCoveredDebitInvoiceLineItems(lease.billingAccount());
@@ -303,7 +318,8 @@ public class N4GenerationFacadeImpl implements N4GenerationFacade {
 
     private String formatTenants(Iterable<Tenant> tenants) {
         StringBuilder stringBuilder = new StringBuilder();
-        for (Tenant tenant : tenants) {
+        for (Tenant tenantIdStub : tenants) {
+            Tenant tenant = Persistence.service().retrieve(Tenant.class, tenantIdStub.getPrimaryKey());
             stringBuilder.append(tenant.customer().person().name().getStringView());
             stringBuilder.append("; ");
         }
@@ -312,6 +328,36 @@ public class N4GenerationFacadeImpl implements N4GenerationFacade {
 
     private String formatRentalAddress(AddressStructured address) {
         return address.getStringView();
+    }
+
+    private String formatLandlordAddress(AddressSimple address) {
+        return address.getStringView();
+    }
+
+    private int terminationDaysAdvance(Lease lease) {
+        if (isByMonthLease(lease) || isByYearLease(lease)) {
+            return 14;
+        } else if (isByDayLease(lease) || isByWeekLease(lease)) {
+            return 7;
+        } else {
+            throw new IllegalArgumentException("lease must be either 'by year', 'by month', 'by week' or 'by day'");
+        }
+    }
+
+    private boolean isByMonthLease(Lease lease) {
+        return true; // TODO fix this
+    }
+
+    private boolean isByYearLease(Lease lease) {
+        return true; // TODO fix this
+    }
+
+    private boolean isByDayLease(Lease lease) {
+        return false; // TODO fix this
+    }
+
+    private boolean isByWeekLease(Lease lease) {
+        return false; // TODO fix this
     }
 
 }

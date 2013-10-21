@@ -18,15 +18,15 @@ import java.util.Vector;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.propertyvista.crm.rpc.dto.legal.n4.LegalNoticeCandidateDTO;
+import com.propertyvista.crm.rpc.dto.legal.n4.N4GenerationQueryDTO;
 import com.propertyvista.crm.rpc.dto.legal.n4.N4GenerationSettingsDTO;
-import com.propertyvista.domain.tenant.lease.Lease;
 
-public interface N4GenerationToolService extends AbstractBulkOperationService<N4GenerationSettingsDTO, LegalNoticeCandidateDTO, Vector<Lease>> {
+public interface N4GenerationToolService extends AbstractBulkOperationService<N4GenerationSettingsDTO, LegalNoticeCandidateDTO, N4GenerationQueryDTO> {
 
     @Override
     void getItems(AsyncCallback<Vector<LegalNoticeCandidateDTO>> callback, N4GenerationSettingsDTO settings);
 
     @Override
-    void process(AsyncCallback<String> callback, Vector<Lease> accepted);
+    void process(AsyncCallback<String> callback, N4GenerationQueryDTO query);
 
 }

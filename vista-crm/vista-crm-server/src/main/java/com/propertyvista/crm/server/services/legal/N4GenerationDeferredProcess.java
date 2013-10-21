@@ -16,6 +16,7 @@ package com.propertyvista.crm.server.services.legal;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.gwt.rpc.deferred.DeferredProcessProgressResponse;
 import com.pyx4j.gwt.server.deferred.AbstractDeferredProcess;
@@ -36,17 +37,21 @@ public class N4GenerationDeferredProcess extends AbstractDeferredProcess {
 
     private final Employee issuingEmployee;
 
-    public N4GenerationDeferredProcess(List<Lease> delinquentLeases, Employee issuingEmployee) {
+    private final LogicalDate noticeDate;
+
+    public N4GenerationDeferredProcess(List<Lease> delinquentLeases, Employee issuingEmployee, LogicalDate noticeDate) {
         progress = new AtomicInteger();
         progress.set(0);
         progressMax = delinquentLeases.size();
+
         this.delinquentLeases = delinquentLeases;
         this.issuingEmployee = issuingEmployee;
+        this.noticeDate = noticeDate;
     }
 
     @Override
     public void execute() {
-        ServerSideFactory.create(N4ManagementFacade.class).issueN4(delinquentLeases, issuingEmployee, progress);
+        ServerSideFactory.create(N4ManagementFacade.class).issueN4(delinquentLeases, issuingEmployee, noticeDate, progress);
         completed = true;
     }
 

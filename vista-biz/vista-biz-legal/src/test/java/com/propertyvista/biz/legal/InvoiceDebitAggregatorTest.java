@@ -153,6 +153,7 @@ public class InvoiceDebitAggregatorTest {
         invoiceDebit.setPrimaryKey(new Key(gensym));
         invoiceDebit.billingCycle().set(billingCycle);
         invoiceDebit.amount().setValue(new BigDecimal(charged));
+        invoiceDebit.taxTotal().setValue(BigDecimal.ZERO);
         invoiceDebit.outstandingDebit().setValue(invoiceDebit.amount().getValue().subtract(new BigDecimal(paid)));
         return invoiceDebit;
     }

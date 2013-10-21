@@ -38,9 +38,12 @@ public class N4PolicyForm extends PolicyDTOTabPanelBasedForm<N4PolicyDTO> {
         TwoColumnFlexFormPanel settingsPanel = new TwoColumnFlexFormPanel(i18n.tr("Settings"));
         int row = -1;
         settingsPanel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().includeSignature())).build());
-        settingsPanel.setH2(++row, 0, 1, i18n.tr("This address will be used for signing N4"));
-        settingsPanel.setWidget(++row, 0, inject(proto().signatureAddress(), new AddressSimpleEditor()));
+        settingsPanel.setH2(++row, 0, 1, i18n.tr("This information will be used for signing N4 letters"));
+        settingsPanel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().companyName())).build());
+        settingsPanel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().phoneNumber())).build());
+        settingsPanel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().faxNumber())).build());
+        settingsPanel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().emailAddress())).build());
+        settingsPanel.setWidget(++row, 0, inject(proto().mailingAddress(), new AddressSimpleEditor()));
         return Arrays.asList(settingsPanel);
     }
-
 }
