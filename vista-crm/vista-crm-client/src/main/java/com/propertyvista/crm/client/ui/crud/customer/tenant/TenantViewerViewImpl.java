@@ -109,17 +109,20 @@ public class TenantViewerViewImpl extends CrmViewerViewImplBase<TenantDTO> imple
 
         super.populate(value);
 
+        boolean leaseIsActive = value.lease().status().getValue().isActive();
+
         setActionVisible(screeningAction, value.customer().personScreening().getPrimaryKey() == null);
         if (VistaFeatures.instance().yardiIntegration()) {
-            setActionVisible(maintenanceAction, value.lease().status().getValue().isActive() && !value.isPotentialTenant().isBooleanTrue());
+            setActionVisible(maintenanceAction, leaseIsActive && !value.isPotentialTenant().isBooleanTrue());
         } else {
-            setActionVisible(maintenanceAction, value.lease().status().getValue().isActive());
+            setActionVisible(maintenanceAction, leaseIsActive);
         }
 
+        boolean hasPortalAccess = LeaseTermParticipant.Role.portalAccess().contains(value.role().getValue());
+
         // Disable password change button for tenants with no associated user principal (+ regular portal access rule):
-        setActionVisible(passwordAction, !value.customer().user().isNull() && LeaseTermParticipant.Role.portalAccess().contains(value.role().getValue()));
-        setActionVisible(registrationAction, LeaseTermParticipant.Role.portalAccess().contains(value.role().getValue())
-                && !value.customer().registeredInPortal().getValue(Boolean.FALSE));
+        setActionVisible(passwordAction, leaseIsActive && hasPortalAccess && !value.customer().user().isNull());
+        setActionVisible(registrationAction, leaseIsActive && hasPortalAccess && !value.customer().registeredInPortal().getValue(Boolean.FALSE));
     }
 
     @Override
