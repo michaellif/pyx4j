@@ -92,16 +92,17 @@ public class NavigActivity extends AbstractActivity implements NavigView.MainNav
         folder = new NavigFolder("Legal");
 
         folder.addNavigItem(new OperationsSiteMap.Legal.PmcTerms());
+        folder.addNavigItem(new OperationsSiteMap.Legal.PmcPadTerms());
+
         folder.addNavigItem(new OperationsSiteMap.Legal.PmcCaledonTermsTemplate());
-        folder.addNavigItem(new OperationsSiteMap.Legal.PmcCaldedonSolePropetorshipSectionTerms());
-        folder.addNavigItem(new OperationsSiteMap.Legal.PmcPaymentPadTerms());
+        folder.addNavigItem(new OperationsSiteMap.Legal.PmcCaledonSoleProprietorshipSection());
 
         folder.addNavigItem(new OperationsSiteMap.Legal.TenantTerms());
         folder.addNavigItem(new OperationsSiteMap.Legal.TenantBillingTerms());
         folder.addNavigItem(new OperationsSiteMap.Legal.TenantPAD());
         folder.addNavigItem(new OperationsSiteMap.Legal.TenantCC());
 
-        folder.addNavigItem(new OperationsSiteMap.Legal.TenantSurePreAuthorizedPaymentsAgreement());
+        folder.addNavigItem(new OperationsSiteMap.Legal.TenantSurePapAgreement());
 
         list.add(folder);
 

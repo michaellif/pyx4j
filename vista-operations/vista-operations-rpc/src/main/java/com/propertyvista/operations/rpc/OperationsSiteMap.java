@@ -140,6 +140,13 @@ public class OperationsSiteMap implements SiteMap {
             }
         }
 
+        @PlaceProperties(caption = "PMC PAD Terms")
+        public static class PmcPadTerms extends VistaTermsAccess {
+            public PmcPadTerms() {
+                super(Target.PmcPaymentPad);
+            }
+        }
+
         @PlaceProperties(caption = "Caledon Terms and Conditions")
         public static class PmcCaledonTermsTemplate extends VistaTermsAccess {
             public PmcCaledonTermsTemplate() {
@@ -148,16 +155,9 @@ public class OperationsSiteMap implements SiteMap {
         }
 
         @PlaceProperties(caption = "Caledon Sole Propetorship Section Terms")
-        public static class PmcCaldedonSolePropetorshipSectionTerms extends VistaTermsAccess {
-            public PmcCaldedonSolePropetorshipSectionTerms() {
+        public static class PmcCaledonSoleProprietorshipSection extends VistaTermsAccess {
+            public PmcCaledonSoleProprietorshipSection() {
                 super(Target.PmcCaledonSoleProprietorshipSection);
-            }
-        }
-
-        @PlaceProperties(caption = "PMC Payment PAD Terms")
-        public static class PmcPaymentPadTerms extends VistaTermsAccess {
-            public PmcPaymentPadTerms() {
-                super(Target.PmcPaymentPad);
             }
         }
 
@@ -174,22 +174,23 @@ public class OperationsSiteMap implements SiteMap {
             }
         }
 
-        @PlaceProperties(caption = "Tenant Payment  PAD Terms")
+        @PlaceProperties(caption = "Tenant PAD Terms")
         public static class TenantPAD extends VistaTermsAccess {
             public TenantPAD() {
                 super(Target.TenantPaymentPad);
             }
         }
 
-        @PlaceProperties(caption = "Tenant Payment Credit Card Terms")
+        @PlaceProperties(caption = "Tenant Credit Card Terms")
         public static class TenantCC extends VistaTermsAccess {
             public TenantCC() {
                 super(Target.TenantPaymentCreditCard);
             }
         }
 
-        public static class TenantSurePreAuthorizedPaymentsAgreement extends VistaTermsAccess {
-            public TenantSurePreAuthorizedPaymentsAgreement() {
+        @PlaceProperties(caption = "TenantSure PAP Terms")
+        public static class TenantSurePapAgreement extends VistaTermsAccess {
+            public TenantSurePapAgreement() {
                 super(Target.TenantSurePreAuthorizedPaymentsAgreement);
             }
         }
