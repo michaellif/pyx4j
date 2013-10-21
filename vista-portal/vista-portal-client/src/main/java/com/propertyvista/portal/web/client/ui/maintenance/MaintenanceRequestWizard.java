@@ -21,6 +21,7 @@ import com.pyx4j.commons.EnglishGrammar;
 import com.pyx4j.commons.css.ThemeColor;
 import com.pyx4j.forms.client.ui.CComboBox;
 import com.pyx4j.forms.client.ui.CDateLabel;
+import com.pyx4j.forms.client.ui.CDatePicker;
 import com.pyx4j.forms.client.ui.CEntityLabel;
 import com.pyx4j.forms.client.ui.CLabel;
 import com.pyx4j.forms.client.ui.CTimeLabel;
@@ -97,6 +98,9 @@ public class MaintenanceRequestWizard extends CPortalEntityWizard<MaintenanceReq
         schedulePanel.setWidget(1, 0, new FormDecoratorBuilder(inject(proto().preferredTime1()), 120).build());
         schedulePanel.setWidget(2, 0, new FormDecoratorBuilder(inject(proto().preferredDate2()), 120).build());
         schedulePanel.setWidget(3, 0, new FormDecoratorBuilder(inject(proto().preferredTime2()), 120).build());
+        // past dates not allowed
+        ((CDatePicker) get(proto().preferredDate1())).setPastDateSelectionAllowed(false);
+        ((CDatePicker) get(proto().preferredDate2())).setPastDateSelectionAllowed(false);
 
         accessPanel.setWidget(0, 0, new FormDecoratorBuilder(inject(proto().petInstructions()), 250).build());
         accessPanel.setWidget(1, 0, schedulePanel);
