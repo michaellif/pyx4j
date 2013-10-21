@@ -34,7 +34,7 @@ public class AbstractEditorView<E extends IEntity> extends AbstractFormView<E> i
 
     @Override
     public boolean isEditable() {
-        return getForm().isViewable();
+        return !getForm().isViewable();
     }
 
     @Override
