@@ -344,7 +344,6 @@ public class PortalWebTheme extends Theme {
     protected void initGeneralStyles() {
         Style style = new Style("html");
         style.addProperty("overflow", "hidden");
-        style.addProperty("font-size", "17px");
         addStyle(style);
 
         style = new Style("a");
@@ -444,6 +443,7 @@ public class PortalWebTheme extends Theme {
         style.addProperty("margin", "0");
         style.addProperty("border", "none");
         style.addProperty("font-family", "'Lato', sans-serif");
+        style.addProperty("font-size", "16px");
         addStyle(style);
 
     }
