@@ -40,12 +40,12 @@ public class PortalVistaTermsServiceImpl implements PortalVistaTermsService {
 
     @Override
     public void getPortalCcPolicy(AsyncCallback<String> callback) {
-        getVistaTerms(callback, VistaTerms.Target.TenantPAD);
+        getVistaTerms(callback, VistaTerms.Target.TenantPaymentPad);
     }
 
     @Override
     public void getPortalPadPolicy(AsyncCallback<String> callback) {
-        getVistaTerms(callback, VistaTerms.Target.TenantCC);
+        getVistaTerms(callback, VistaTerms.Target.TenantPaymentCreditCard);
     }
 
     private void getVistaTerms(AsyncCallback<String> callback, final VistaTerms.Target target) {

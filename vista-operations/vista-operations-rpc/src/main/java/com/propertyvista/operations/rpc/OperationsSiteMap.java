@@ -140,18 +140,21 @@ public class OperationsSiteMap implements SiteMap {
             }
         }
 
+        @PlaceProperties(caption = "Caledon Terms and Conditions")
         public static class PmcCaledonTermsTemplate extends VistaTermsAccess {
             public PmcCaledonTermsTemplate() {
-                super(Target.PmcCaldedonSolePropetorshipSection);
+                super(Target.PmcCaledonTemplate);
             }
         }
 
+        @PlaceProperties(caption = "Caledon Sole Propetorship Section Terms")
         public static class PmcCaldedonSolePropetorshipSectionTerms extends VistaTermsAccess {
             public PmcCaldedonSolePropetorshipSectionTerms() {
-                super(Target.PmcCaldedonSolePropetorshipSection);
+                super(Target.PmcCaledonSoleProprietorshipSection);
             }
         }
 
+        @PlaceProperties(caption = "PMC Payment PAD Terms")
         public static class PmcPaymentPadTerms extends VistaTermsAccess {
             public PmcPaymentPadTerms() {
                 super(Target.PmcPaymentPad);
@@ -171,17 +174,17 @@ public class OperationsSiteMap implements SiteMap {
             }
         }
 
-        @PlaceProperties(caption = "Tenant PAD Terms")
+        @PlaceProperties(caption = "Tenant Payment  PAD Terms")
         public static class TenantPAD extends VistaTermsAccess {
             public TenantPAD() {
-                super(Target.TenantPAD);
+                super(Target.TenantPaymentPad);
             }
         }
 
-        @PlaceProperties(caption = "Tenant Credit Card Terms")
+        @PlaceProperties(caption = "Tenant Payment Credit Card Terms")
         public static class TenantCC extends VistaTermsAccess {
             public TenantCC() {
-                super(Target.TenantCC);
+                super(Target.TenantPaymentCreditCard);
             }
         }
 

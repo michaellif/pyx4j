@@ -52,7 +52,7 @@ public class OnlinePaymentWizardServiceImpl implements OnlinePaymentWizardServic
         onlinePaymentSetup.businessInformation().companyName().setValue(VistaDeployment.getCurrentPmc().name().getValue());
 
         initTerms(onlinePaymentSetup.caledonAgreement(), retrieveTerms(Target.PmcCaledonTemplate));
-        initTerms(onlinePaymentSetup.caledonSoleProprietorshipAgreement(), retrieveTerms(Target.PmcCaldedonSolePropetorshipSection));
+        initTerms(onlinePaymentSetup.caledonSoleProprietorshipAgreement(), retrieveTerms(Target.PmcCaledonSoleProprietorshipSection));
         initTerms(onlinePaymentSetup.paymentPadAgreement(), retrieveTerms(Target.PmcPaymentPad));
 
         callback.onSuccess(onlinePaymentSetup);

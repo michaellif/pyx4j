@@ -32,7 +32,7 @@ public interface VistaTerms extends IVersionedEntity<VistaTermsV> {
 
         PmcCaledonTemplate,
 
-        PmcCaldedonSolePropetorshipSection,
+        PmcCaledonSoleProprietorshipSection,
 
         PmcPaymentPad,
 
@@ -40,9 +40,9 @@ public interface VistaTerms extends IVersionedEntity<VistaTermsV> {
 
         TenantBilling,
 
-        TenantPAD,
+        TenantPaymentPad,
 
-        TenantCC,
+        TenantPaymentCreditCard,
 
         TenantPreAuthorizedPaymentsAgreement,
 
