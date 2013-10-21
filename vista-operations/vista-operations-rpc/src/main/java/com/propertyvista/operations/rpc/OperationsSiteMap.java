@@ -122,9 +122,9 @@ public class OperationsSiteMap implements SiteMap {
     public static class Legal extends AppPlace {
 
         public static class VistaTermsAccess extends CrudAppPlace {
-            private final VistaTerms.Target target;
+            private final Target target;
 
-            public VistaTermsAccess(VistaTerms.Target target) {
+            public VistaTermsAccess(Target target) {
                 this.target = target;
             }
 
