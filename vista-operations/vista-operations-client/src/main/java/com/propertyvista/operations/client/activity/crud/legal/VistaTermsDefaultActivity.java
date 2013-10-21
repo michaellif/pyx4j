@@ -45,8 +45,7 @@ public class VistaTermsDefaultActivity extends AbstractActivity {
         GWT.<VistaTermsCrudService> create(VistaTermsCrudService.class).retrieveTerms(new DefaultAsyncCallback<Key>() {
             @Override
             public void onSuccess(Key result) {
-                // TODO : aks VladS why we need new place creation here:
-                CrudAppPlace dst = place; //AppSite.getHistoryMapper().createPlace(place.getClass());
+                CrudAppPlace dst = AppSite.getHistoryMapper().createPlace(place.getClass());
                 if (result != null) {
                     dst.formViewerPlace(result);
                 } else {
