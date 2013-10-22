@@ -13,11 +13,13 @@
  */
 package com.propertyvista.domain.policy.dto;
 
+import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.shared.IEntity;
 
 import com.propertyvista.domain.financial.ARCode;
 
 /** This is a hack to transfer ARCodes from N4PolicyDTO to N4Policy */
+@Transient
 public interface N4PolicyDTOARCodeHolderDTO extends IEntity {
 
     ARCode arCode();
