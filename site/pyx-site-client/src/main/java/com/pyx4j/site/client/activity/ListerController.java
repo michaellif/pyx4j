@@ -37,7 +37,7 @@ import com.pyx4j.site.client.ui.prime.lister.ILister;
 import com.pyx4j.site.client.ui.prime.lister.ListerDataSource;
 import com.pyx4j.site.rpc.AppPlace;
 import com.pyx4j.site.rpc.CrudAppPlace;
-import com.pyx4j.widgets.client.dialog.MessageDialog_v2;
+import com.pyx4j.widgets.client.dialog.MessageDialog;
 
 public class ListerController<E extends IEntity> implements ILister.Presenter<E> {
 
@@ -199,7 +199,7 @@ public class ListerController<E extends IEntity> implements ILister.Presenter<E>
             public void onFailure(Throwable caught) {
                 onDeleted(itemID, false);
                 if (caught instanceof IntegrityConstraintUserRuntimeException) {
-                    MessageDialog_v2.error(i18n.tr("Item Deletion"), caught.getMessage());
+                    MessageDialog.error(i18n.tr("Item Deletion"), caught.getMessage());
                 } else {
                     throw new UnrecoverableClientError(caught);
                 }

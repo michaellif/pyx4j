@@ -112,7 +112,7 @@ public class TesterSite extends AppSite {
         return viewFactory;
     }
 
-    public void showMessageDialog(String message, String title, String buttonText, Command command) {
+    public void showMessageDialog_v2(String message, String title, String buttonText, Command command) {
         setMessage(new Message(message, title, buttonText, command));
         //TODO getPlaceController().goTo(new AdminSiteMap.GenericMessage());
     }

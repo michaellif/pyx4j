@@ -32,7 +32,7 @@ import com.pyx4j.site.rpc.NotificationAppPlace;
 import com.pyx4j.site.shared.domain.Notification;
 import com.pyx4j.site.shared.meta.PublicPlace;
 import com.pyx4j.widgets.client.dialog.ConfirmDecline;
-import com.pyx4j.widgets.client.dialog.MessageDialog_v2;
+import com.pyx4j.widgets.client.dialog.MessageDialog;
 
 public abstract class AbstractAppPlaceDispatcher implements AppPlaceDispatcher {
 
@@ -135,7 +135,7 @@ public abstract class AbstractAppPlaceDispatcher implements AppPlaceDispatcher {
 
     @Override
     public void confirm(String message, ConfirmDecline confirmDecline) {
-        MessageDialog_v2.confirm(i18n.tr("Confirm"), i18n.tr("Are you sure you want to navigate away from this page?\n" + "{0}\n\n"
+        MessageDialog.confirm(i18n.tr("Confirm"), i18n.tr("Are you sure you want to navigate away from this page?\n" + "{0}\n\n"
                 + "Press Yes to continue, or No to stay on the current page.", message), confirmDecline);
     }
 

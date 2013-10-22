@@ -51,7 +51,7 @@ public class TestRunnerDialog extends Dialog {
             @Override
             public void onFailure(Throwable reason) {
                 //TODO
-                //MessageDialog.error("Error", "Tests are not available", reason);
+                //MessageDialog_v2.error("Error", "Tests are not available", reason);
             }
 
             @Override

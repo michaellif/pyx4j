@@ -39,7 +39,7 @@ import com.pyx4j.widgets.client.Button;
 import com.pyx4j.widgets.client.RadioGroup;
 import com.pyx4j.widgets.client.combobox.ListBox;
 import com.pyx4j.widgets.client.datepicker.DatePickerComposite;
-import com.pyx4j.widgets.client.dialog.MessageDialog_v2;
+import com.pyx4j.widgets.client.dialog.MessageDialog;
 import com.pyx4j.widgets.client.photoalbum.BasicPhotoAlbumModel;
 import com.pyx4j.widgets.client.photoalbum.Photo;
 import com.pyx4j.widgets.client.photoalbum.PhotoAlbum;
@@ -90,7 +90,7 @@ public class NativeWidgetBasicViewImpl extends ScrollPanel implements NativeWidg
 
             @Override
             public void onClick(ClickEvent event) {
-                MessageDialog_v2
+                MessageDialog
                         .info("Very_Long_Message_Dialog_Very_Long_Message_Dialog_Very_Long_Message_Dialog_Very_Long_Message_Dialog<br>Very_Long_Message_Dialog_Very_Long_Message_Dialog_Very_Long_Message");
             }
         });

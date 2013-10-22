@@ -79,10 +79,6 @@ public class Dialog_v2 implements ProvidesResize {
 
     private static final I18n i18n = I18n.get(Dialog_v2.class);
 
-    public static enum Type {
-        Error, Warning, Info, Confirm
-    }
-
     private final PopupPanel popupPanel;
 
     private final FlowPanel container;

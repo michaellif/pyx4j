@@ -31,7 +31,7 @@ import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.AppPlaceEntityMapper;
 import com.pyx4j.site.client.ui.visor.IVisor;
 import com.pyx4j.site.rpc.CrudAppPlace;
-import com.pyx4j.widgets.client.dialog.MessageDialog_v2;
+import com.pyx4j.widgets.client.dialog.MessageDialog;
 
 public abstract class AbstractLister<E extends IEntity> extends EntityDataTablePanel<E> implements ILister<E> {
 
@@ -97,7 +97,7 @@ public abstract class AbstractLister<E extends IEntity> extends EntityDataTableP
 
     @Override
     protected void onItemsDelete(final List<E> items) {
-        MessageDialog_v2.confirm(i18n.tr("Confirm"), i18n.tr("Do you really want to delete checked items?"), new Command() {
+        MessageDialog.confirm(i18n.tr("Confirm"), i18n.tr("Do you really want to delete checked items?"), new Command() {
             @Override
             public void execute() {
                 for (E item : items) {

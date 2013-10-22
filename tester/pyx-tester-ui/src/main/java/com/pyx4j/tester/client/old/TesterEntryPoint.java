@@ -61,7 +61,7 @@ import com.pyx4j.widgets.client.dialog.Custom2Option;
 import com.pyx4j.widgets.client.dialog.Dialog;
 import com.pyx4j.widgets.client.dialog.Dialog_v2;
 import com.pyx4j.widgets.client.dialog.GlueOption;
-import com.pyx4j.widgets.client.dialog.MessageDialog_v2;
+import com.pyx4j.widgets.client.dialog.MessageDialog;
 import com.pyx4j.widgets.client.dialog.UnrecoverableErrorHandlerDialog;
 import com.pyx4j.widgets.client.dialog.YesNoCancelOption;
 import com.pyx4j.widgets.client.richtext.RichTextEditorDecorator;
@@ -288,7 +288,7 @@ public class TesterEntryPoint implements EntryPoint {
 
         @Override
         public void onClick(ClickEvent event) {
-            MessageDialog_v2.info("TestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTest");
+            MessageDialog.info("TestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTest");
         }
     }
 
@@ -317,7 +317,7 @@ public class TesterEntryPoint implements EntryPoint {
                 @Override
                 public boolean onClickYes() {
                     log.info("onClickYes");
-                    MessageDialog_v2.info("Yes");
+                    MessageDialog.info("Yes");
                     return false;
                 }
 

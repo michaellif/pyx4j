@@ -28,7 +28,7 @@ import com.google.gwt.user.client.ui.Frame;
 import com.google.gwt.user.client.ui.RootPanel;
 
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.widgets.client.dialog.MessageDialog_v2;
+import com.pyx4j.widgets.client.dialog.MessageDialog;
 
 public class DownloadFrame extends Frame {
 
@@ -54,7 +54,7 @@ public class DownloadFrame extends Frame {
             DOM.eventCancelBubble(event, true);
 
             String errorMessage = getDownloadFrameContent();
-            MessageDialog_v2.error(i18n.tr("Download Error"), errorMessage);
+            MessageDialog.error(i18n.tr("Download Error"), errorMessage);
 
             RootPanel.get().remove(this);
         } else {

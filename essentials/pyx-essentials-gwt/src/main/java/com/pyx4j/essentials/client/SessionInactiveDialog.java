@@ -29,8 +29,7 @@ import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.security.client.SessionInactiveEvent;
 import com.pyx4j.security.client.SessionInactiveHandler;
 import com.pyx4j.security.client.SessionMonitor;
-import com.pyx4j.widgets.client.dialog.Dialog_v2;
-import com.pyx4j.widgets.client.dialog.MessageDialog_v2;
+import com.pyx4j.widgets.client.dialog.MessageDialog;
 import com.pyx4j.widgets.client.dialog.OkOption;
 
 public class SessionInactiveDialog implements SessionInactiveHandler {
@@ -84,7 +83,7 @@ public class SessionInactiveDialog implements SessionInactiveHandler {
                             TimeUtils.minutesSince(SessionMonitor.getSessionInactiveTime()));
         }
 
-        MessageDialog_v2.show(title, reasonMessage, Dialog_v2.Type.Info, new ShowOnceDialogOptions());
+        MessageDialog.show(title, reasonMessage, MessageDialog.Type.Info, new ShowOnceDialogOptions());
     }
 
 }

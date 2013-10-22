@@ -56,7 +56,7 @@ import com.pyx4j.site.shared.domain.Notification;
 import com.pyx4j.site.shared.meta.NavigNode;
 import com.pyx4j.site.shared.meta.SiteMap;
 import com.pyx4j.widgets.client.dialog.ConfirmDecline;
-import com.pyx4j.widgets.client.dialog.MessageDialog_v2;
+import com.pyx4j.widgets.client.dialog.MessageDialog;
 
 /**
  * Entry point classes define <code>onModuleLoad()</code>.
@@ -99,7 +99,7 @@ public abstract class AppSite implements EntryPoint {
 
                 @Override
                 public void confirm(String message, ConfirmDecline confirmDecline) {
-                    MessageDialog_v2.confirm(i18n.tr("Confirm"), i18n.tr("Are you sure you want to navigate away from this page?\n" + "{0}\n\n"
+                    MessageDialog.confirm(i18n.tr("Confirm"), i18n.tr("Are you sure you want to navigate away from this page?\n" + "{0}\n\n"
                             + "Press Yes to continue, or No to stay on the current page.", message), confirmDecline);
                 }
 

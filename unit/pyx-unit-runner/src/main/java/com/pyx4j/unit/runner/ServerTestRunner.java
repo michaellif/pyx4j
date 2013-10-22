@@ -36,7 +36,7 @@ import com.pyx4j.unit.client.GCaseMeta;
 import com.pyx4j.unit.client.ui.TestRunnerDialog;
 import com.pyx4j.unit.serverside.rpc.UnitTestInfo;
 import com.pyx4j.unit.serverside.rpc.UnitTestsServices;
-import com.pyx4j.widgets.client.dialog.MessageDialog_v2;
+import com.pyx4j.widgets.client.dialog.MessageDialog;
 
 public class ServerTestRunner {
 
@@ -69,7 +69,7 @@ public class ServerTestRunner {
             @Override
             public void onFailure(Throwable t) {
                 log.error("Can't load Server side TestsList", t);
-                MessageDialog_v2.error("Server side Tests", t.getMessage());
+                MessageDialog.error("Server side Tests", t.getMessage());
             }
 
             @Override
