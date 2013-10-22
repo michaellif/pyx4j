@@ -20,7 +20,7 @@ public abstract class CImage<E extends IFile> extends CField<E, NImage<E>> {
 
     private FileURLBuilder<E> imageFileUrlBuilder;
 
-    private UploadService<E, E> service;
+    private UploadService<?, E> service;
 
     private final Class<E> imgClass;
 
@@ -68,11 +68,11 @@ public abstract class CImage<E extends IFile> extends CField<E, NImage<E>> {
         this.imageFileUrlBuilder = fileURLBuilder;
     }
 
-    public void setUploadService(UploadService<E, E> service) {
+    public void setUploadService(UploadService<?, E> service) {
         this.service = service;
     }
 
-    public UploadService<E, E> getUploadService() {
+    public UploadService<?, E> getUploadService() {
         return service;
     }
 

@@ -20,22 +20,22 @@
  */
 package com.pyx4j.gwt.client.upload;
 
+import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IFile;
-import com.pyx4j.gwt.rpc.upload.UploadResponse;
 import com.pyx4j.gwt.rpc.upload.UploadService;
 
-public class FileUploadPanel<E extends IFile> extends UploadPanel<E, E> {
+public class FileUploadPanel<U extends IEntity, E extends IFile> extends UploadPanel<U, E> {
 
     private final FileUploadReciver<E> uploadReciver;
 
-    public FileUploadPanel(UploadService<E, E> service, FileUploadReciver<E> uploadReciver) {
+    public FileUploadPanel(UploadService<U, E> service, FileUploadReciver<E> uploadReciver) {
         super(service);
         this.uploadReciver = uploadReciver;
     }
 
     @Override
-    protected void onUploadComplete(UploadResponse<E> serverUploadResponse) {
+    protected void onUploadComplete(E serverUploadResponse) {
         super.onUploadComplete(serverUploadResponse);
-        uploadReciver.onUploadComplete(serverUploadResponse.data);
+        uploadReciver.onUploadComplete(serverUploadResponse);
     }
 }

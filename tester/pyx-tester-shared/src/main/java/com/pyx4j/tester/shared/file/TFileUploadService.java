@@ -20,15 +20,10 @@
  */
 package com.pyx4j.tester.shared.file;
 
-import java.util.Collection;
-import java.util.EnumSet;
-
+import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.gwt.rpc.upload.UploadService;
-import com.pyx4j.gwt.shared.DownloadFormat;
 import com.pyx4j.tester.domain.TFile;
 
-public interface TFileUploadService extends UploadService<TFile, TFile> {
-
-    public static final Collection<DownloadFormat> supportedFormats = EnumSet.of(DownloadFormat.JPEG, DownloadFormat.GIF, DownloadFormat.PNG);
+public interface TFileUploadService extends UploadService<IEntity, TFile> {
 
 }

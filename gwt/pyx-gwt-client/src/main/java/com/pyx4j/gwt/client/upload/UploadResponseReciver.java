@@ -20,11 +20,10 @@
  */
 package com.pyx4j.gwt.client.upload;
 
-import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.gwt.rpc.upload.UploadResponse;
+import com.pyx4j.entity.shared.IFile;
 
-public interface UploadResponseReciver<R extends IEntity> {
+public interface UploadResponseReciver<R extends IFile> {
 
-    void onUploadComplete(UploadResponse<R> serverUploadResponse);
+    void onUploadComplete(R serverUploadResponse);
 
 }

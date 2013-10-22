@@ -3,6 +3,7 @@ package com.pyx4j.forms.client.ui;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Widget;
 
+import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IFile;
 import com.pyx4j.entity.shared.IList;
 import com.pyx4j.forms.client.images.EntityFolderImages;
@@ -25,7 +26,7 @@ public abstract class CImageSlider<E extends IFile> extends CField<IList<E>, NIm
 
     private FileURLBuilder<E> thumbnailFileUrlBuilder;
 
-    private UploadService<E, E> service;
+    private UploadService<? extends IEntity, E> service;
 
     private final Class<E> imgClass;
 
@@ -80,11 +81,11 @@ public abstract class CImageSlider<E extends IFile> extends CField<IList<E>, NIm
         this.thumbnailFileUrlBuilder = fileURLBuilder;
     }
 
-    public void setUploadService(UploadService<E, E> service) {
+    public void setUploadService(UploadService<?, E> service) {
         this.service = service;
     }
 
-    public UploadService<E, E> getUploadService() {
+    public UploadService<?, E> getUploadService() {
         return service;
     }
 

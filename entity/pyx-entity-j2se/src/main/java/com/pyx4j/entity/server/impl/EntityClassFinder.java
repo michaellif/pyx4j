@@ -93,7 +93,7 @@ public class EntityClassFinder extends ClassFinder {
             log.warn("Can't load class {} {}", className, e);
             return false;
         }
-        if (candidate.isInterface() && IEntity.class.isAssignableFrom(candidate)) {
+        if (candidate.isInterface() && IEntity.class.isAssignableFrom(candidate) && (!IEntity.class.equals(candidate))) {
             if ((candidate.getAnnotation(AbstractEntity.class) != null) && (!candidate.getAnnotation(AbstractEntity.class).generateMetadata())) {
                 return false;
             } else {

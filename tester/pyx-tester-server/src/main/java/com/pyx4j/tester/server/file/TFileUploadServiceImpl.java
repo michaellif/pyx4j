@@ -21,13 +21,18 @@
 package com.pyx4j.tester.server.file;
 
 import java.util.Collection;
+import java.util.EnumSet;
 
-import com.pyx4j.essentials.server.upload.AbstractFileUploadServiceImpl;
+import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.essentials.server.upload.AbstractUploadServiceImpl;
+import com.pyx4j.essentials.server.upload.UploadedData;
 import com.pyx4j.gwt.shared.DownloadFormat;
 import com.pyx4j.tester.domain.TFile;
 import com.pyx4j.tester.shared.file.TFileUploadService;
 
-public class TFileUploadServiceImpl extends AbstractFileUploadServiceImpl<TFile> implements TFileUploadService {
+public class TFileUploadServiceImpl extends AbstractUploadServiceImpl<IEntity, TFile> implements TFileUploadService {
+
+    private static final Collection<DownloadFormat> supportedFormats = EnumSet.of(DownloadFormat.JPEG, DownloadFormat.GIF, DownloadFormat.PNG);
 
     public TFileUploadServiceImpl() {
         super(TFile.class);
@@ -49,9 +54,9 @@ public class TFileUploadServiceImpl extends AbstractFileUploadServiceImpl<TFile>
     }
 
     @Override
-    protected TFile fileUploadRecived(byte[] data, TFile uploadData) {
-        uploadData.blobKey().setValue(TFileTestStorage.persist(data, uploadData.fileName().getValue(), uploadData.contentMimeType().getValue()));
-        return uploadData;
+    protected void processUploadedData(IEntity uploadInitiationData, UploadedData uploadedData, TFile response) {
+        response.blobKey()
+                .setValue(TFileTestStorage.persist(uploadedData.binaryContent, response.fileName().getValue(), response.contentMimeType().getValue()));
     }
 
 }

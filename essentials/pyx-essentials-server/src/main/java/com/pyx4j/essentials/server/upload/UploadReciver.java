@@ -20,27 +20,51 @@
  */
 package com.pyx4j.essentials.server.upload;
 
-import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.gwt.rpc.upload.UploadResponse;
+import java.util.Collection;
 
-public interface UploadReciver<U extends IEntity, R extends IEntity> {
+import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.shared.IFile;
+
+/**
+ * The server side part of UploadService (Synchronous as opposite to Async)
+ * 
+ * @param <U>
+ * @param <R>
+ */
+public interface UploadReciver<U extends IEntity, R extends IFile> {
 
     /**
      * @return Maximum size of a single uploaded file.
      */
     long getMaxSize();
 
+    /**
+     * Must return LowerCase strings, no dot in front
+     */
+    Collection<String> getSupportedExtensions();
+
+    /**
+     * Used for generic error messages
+     */
     String getUploadFileTypeName();
 
-    public void onUploadStart(String fileName);
+    /**
+     * Validate binary file type before we start receiving it to memory.
+     * 
+     * @param fileName
+     * @param contentMimeType
+     */
+    public void onUploadStarted(String fileName, String contentMimeType);
 
-    public enum ProcessingStatus {
-
-        completed,
-
-        processWillContinue
-    }
-
-    public ProcessingStatus onUploadReceived(UploadData data, DeferredUploadProcess<U, R> process, UploadResponse<R> response);
+    /**
+     * This is called by UploadServlet and in run calls onUploadReceived
+     * 
+     * @param uploadInitiationData
+     *            Data sent from UI when starting upload
+     * @param uploadedData
+     * 
+     * @return created IFile response
+     */
+    public R onUploadReceived(U uploadInitiationData, UploadedData uploadedData);
 
 }

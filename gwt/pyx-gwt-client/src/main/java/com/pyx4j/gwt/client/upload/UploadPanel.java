@@ -48,7 +48,6 @@ import com.pyx4j.gwt.client.deferred.DeferredProgressListener;
 import com.pyx4j.gwt.client.deferred.DeferredProgressPanel;
 import com.pyx4j.gwt.rpc.deferred.DeferredProcessProgressResponse;
 import com.pyx4j.gwt.rpc.upload.UploadId;
-import com.pyx4j.gwt.rpc.upload.UploadResponse;
 import com.pyx4j.gwt.rpc.upload.UploadService;
 import com.pyx4j.gwt.shared.DownloadFormat;
 import com.pyx4j.i18n.shared.I18n;
@@ -73,10 +72,6 @@ public class UploadPanel<U extends IEntity, R extends IFile> extends SimplePanel
     private final Set<String> supportedExtensions = new HashSet<String>();
 
     private Hidden postCorrelationId;
-
-    private Hidden postUploadKey;
-
-    private Hidden postDescription;
 
     private UploadId uploadId;
 
@@ -106,8 +101,6 @@ public class UploadPanel<U extends IEntity, R extends IFile> extends SimplePanel
         uploadForm.setWidget(content);
 
         content.add(postCorrelationId = new Hidden(UploadService.PostCorrelationID));
-        content.add(postUploadKey = new Hidden(UploadService.PostUploadKey));
-        content.add(postDescription = new Hidden(UploadService.PostUploadDescription));
 
         upload = new FileUpload();
         upload.getElement().setAttribute("size", "40");
@@ -146,18 +139,18 @@ public class UploadPanel<U extends IEntity, R extends IFile> extends SimplePanel
         }
     }
 
+    // TODO remove, Service call obtainSupportedExtensions(..) is made to obtain formats
+    @Deprecated
     public void setSupportedExtensions(String... extensions) {
         for (String ext : extensions) {
             supportedExtensions.add(ext.toLowerCase());
         }
     }
 
+    // TODO remove, Service call obtainSupportedExtensions(..) is made to obtain formats
+    @Deprecated
     public void setSupportedExtensions(Collection<DownloadFormat> formats) {
         supportedExtensions.addAll(DownloadFormat.getExtensions(formats));
-    }
-
-    public void setDescription(String description) {
-        postDescription.setValue(description);
     }
 
     protected U getUploadData() {
@@ -166,14 +159,11 @@ public class UploadPanel<U extends IEntity, R extends IFile> extends SimplePanel
 
     public final void uploadSubmit() {
         if (isFileValid()) {
-            service.prepareUpload(new DefaultAsyncCallback<UploadId>() {
+            service.prepareUploadProcess(new DefaultAsyncCallback<UploadId>() {
                 @Override
                 public void onSuccess(UploadId result) {
                     uploadId = result;
                     postCorrelationId.setValue(uploadId.getDeferredCorrelationId());
-                    if (uploadId.getUploadKey() != null) {
-                        postUploadKey.setValue(uploadId.getUploadKey().toString());
-                    }
                     uploadForm.submit();
                 }
             }, getUploadData());
@@ -262,10 +252,7 @@ public class UploadPanel<U extends IEntity, R extends IFile> extends SimplePanel
         if (idx >= 0) {
             message = message.substring(idx + UploadService.ResponsePrefix.length(), message.length());
             if (message.startsWith(UploadService.ResponseOk)) {
-                onSubmitUploadComplete();
-                reset();
-            } else if (message.startsWith(UploadService.ResponseProcessWillContinue)) {
-                //Continue using deferredProgressPanel
+                //Continue monitoring using deferredProgressPanel
             } else {
                 log.error("Upload server message [{}]", message);
                 onUploadError(UploadError.ServerMessage, message);
@@ -286,13 +273,21 @@ public class UploadPanel<U extends IEntity, R extends IFile> extends SimplePanel
 
     @Override
     public final void onDeferredSuccess(DeferredProcessProgressResponse result) {
-        onSubmitUploadComplete();
+        if (uploadId != null) {
+            service.getUploadResponse(new DefaultAsyncCallback<R>() {
+                @Override
+                public void onSuccess(R result) {
+                    onUploadComplete(result);
+                }
+            }, uploadId);
+        }
         reset();
     }
 
     @Override
     public final void onDeferredError(DeferredProcessProgressResponse result) {
         onUploadError(UploadError.ServerMessage, result.getMessage());
+        reset();
     }
 
     @Override
@@ -300,18 +295,7 @@ public class UploadPanel<U extends IEntity, R extends IFile> extends SimplePanel
         // Do nothing the progress is shown in panel
     }
 
-    private final void onSubmitUploadComplete() {
-        if (uploadId != null) {
-            service.getUploadResponse(new DefaultAsyncCallback<UploadResponse<R>>() {
-                @Override
-                public void onSuccess(UploadResponse<R> result) {
-                    onUploadComplete(result);
-                }
-            }, uploadId);
-        }
-    }
-
-    protected void onUploadComplete(UploadResponse<R> serverUploadResponse) {
+    protected void onUploadComplete(R serverUploadResponse) {
     }
 
 }

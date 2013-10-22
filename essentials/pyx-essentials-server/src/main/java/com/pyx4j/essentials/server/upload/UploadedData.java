@@ -20,16 +20,33 @@
  */
 package com.pyx4j.essentials.server.upload;
 
-import com.pyx4j.commons.Key;
+public class UploadedData {
 
-public class UploadData {
-
+    /**
+     * The data from HTTP MultipartContent Post, Received from prepareUploadProcess
+     */
     public String deferredCorrelationId;
 
-    public Key uploadKey;
+    /**
+     * Returns the original filename in the client's filesystem, as provided by the browser. (No path from Opera, Filename only)
+     */
+    public String fileName;
 
-    public String description;
+    /**
+     * Server side time when we got the file
+     */
+    public long timestamp;
 
-    public byte[] data;
+    public String contentMimeType;
+
+    /**
+     * Size in bytes
+     */
+    public int binaryContentSize;
+
+    /**
+     * HTTP MultipartContent Post binary data (file context)
+     */
+    public byte[] binaryContent;
 
 }

@@ -27,9 +27,11 @@ import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.Image;
 
+import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IFile;
 import com.pyx4j.gwt.client.upload.FileUploadDialog;
 import com.pyx4j.gwt.client.upload.FileUploadReciver;
+import com.pyx4j.gwt.rpc.upload.UploadService;
 import com.pyx4j.gwt.shared.Dimension;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.Button;
@@ -134,7 +136,9 @@ public class NImage<T extends IFile> extends NField<T, ImageSlider, CImage<T>, I
     }
 
     private void showUploadFileDialog() {
-        new FileUploadDialog<T>(i18n.tr("Upload Image File"), null, getCComponent().getUploadService(), new FileUploadReciver<T>() {
+        @SuppressWarnings("unchecked")
+        UploadService<IEntity, T> service = (UploadService<IEntity, T>) getCComponent().getUploadService();
+        new FileUploadDialog<IEntity, T>(i18n.tr("Upload Image File"), null, service, new FileUploadReciver<T>() {
             @Override
             public void onUploadComplete(T uploadResponse) {
                 getCComponent().setValue(uploadResponse);

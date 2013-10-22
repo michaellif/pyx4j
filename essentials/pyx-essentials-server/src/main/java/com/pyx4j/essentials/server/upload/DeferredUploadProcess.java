@@ -22,28 +22,36 @@ package com.pyx4j.essentials.server.upload;
 
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.gwt.rpc.deferred.DeferredProcessProgressResponse;
-import com.pyx4j.gwt.rpc.upload.UploadResponse;
 import com.pyx4j.gwt.server.deferred.IDeferredProcess;
+
+/**
+ * Upload status and progress holder.
+ * The reply is stored in this class.
+ * 
+ * You may override onUploadProcessed() and execute() implementation of this process to add more Deferred processing
+ */
 
 @SuppressWarnings("serial")
 public class DeferredUploadProcess<U extends IEntity, R extends IEntity> implements IDeferredProcess {
 
     private final DeferredProcessProgressResponse status;
 
-    private final U data;
+    private final U uploadInitiationData;
 
-    private UploadResponse<R> response;
+    private R response;
 
-    protected DeferredUploadProcess() {
-        this(null);
-    }
-
-    public DeferredUploadProcess(U data) {
+    public DeferredUploadProcess(U uploadInitiationData) {
         this.status = new DeferredProcessProgressResponse();
-        this.data = data;
+        this.uploadInitiationData = uploadInitiationData;
     }
 
-    public void onUploadReceived(final UploadData data, final UploadResponse<R> response) {
+    protected void onUploadProcessed(final UploadedData data, final R response) {
+        this.status().setCompleted();
+    }
+
+    public final void uploadProcessed(final UploadedData data, final R response) {
+        this.response = response;
+        onUploadProcessed(data, response);
     }
 
     @Override
@@ -60,15 +68,12 @@ public class DeferredUploadProcess<U extends IEntity, R extends IEntity> impleme
         return status;
     }
 
-    public U getData() {
-        return data;
+    public U getUploadInitiationData() {
+        return uploadInitiationData;
     }
 
-    public UploadResponse<R> getResponse() {
+    public R getResponse() {
         return response;
     }
 
-    public void setResponse(UploadResponse<R> response) {
-        this.response = response;
-    }
 }

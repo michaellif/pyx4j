@@ -29,11 +29,11 @@ import org.apache.commons.io.FilenameUtils;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.commons.UserRuntimeException;
+import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IFile;
 import com.pyx4j.gwt.rpc.deferred.DeferredProcessProgressResponse;
 import com.pyx4j.gwt.rpc.upload.UploadId;
-import com.pyx4j.gwt.rpc.upload.UploadResponse;
 import com.pyx4j.gwt.rpc.upload.UploadService;
 import com.pyx4j.gwt.server.deferred.DeferredProcessRegistry;
 import com.pyx4j.i18n.shared.I18n;
@@ -43,6 +43,12 @@ public abstract class AbstractUploadServiceImpl<U extends IEntity, R extends IFi
 
     private static final I18n i18n = I18n.get(AbstractUploadServiceImpl.class);
 
+    protected final Class<R> fileEntityClass;
+
+    public AbstractUploadServiceImpl(Class<R> fileEntityClass) {
+        this.fileEntityClass = fileEntityClass;
+    }
+
     protected void onPepareUpload(U data, UploadId id) {
     }
 
@@ -51,16 +57,67 @@ public abstract class AbstractUploadServiceImpl<U extends IEntity, R extends IFi
         callback.onSuccess(getMaxSize());
     }
 
+    /**
+     * Must return LowerCase strings, no dot in front
+     */
+    @Override
+    public Collection<String> getSupportedExtensions() {
+        return null;
+    }
+
+    @Override
+    public void obtainSupportedExtensions(AsyncCallback<Vector<String>> callback) {
+        Collection<String> extensions = getSupportedExtensions();
+        if (extensions != null) {
+            callback.onSuccess(new Vector<String>(extensions));
+        } else {
+            callback.onSuccess(null);
+        }
+    }
+
     protected DeferredUploadProcess<U, R> createUploadDeferredProcess(U data) {
         return new DeferredUploadProcess<U, R>(data);
     }
 
     @Override
-    public void prepareUpload(AsyncCallback<UploadId> callback, U data) {
+    public final void prepareUploadProcess(AsyncCallback<UploadId> callback, U data) {
         UploadId id = new UploadId();
         onPepareUpload(data, id);
         id.setDeferredCorrelationId(DeferredProcessRegistry.register(createUploadDeferredProcess(data)));
         callback.onSuccess(id);
+    }
+
+    @Override
+    public void onUploadStarted(String fileName, String contentMimeType) {
+        Collection<String> extensions = getSupportedExtensions();
+        if (extensions != null) {
+            String extension = FilenameUtils.getExtension(fileName);
+            if (extension != null) {
+                extension = extension.toLowerCase(Locale.ENGLISH);
+            }
+            if (!extensions.contains(extension)) {
+                throw new UserRuntimeException(i18n.tr("Unsupported {0} File Type {1}", getUploadFileTypeName(), extension));
+            }
+        }
+    }
+
+    protected abstract void processUploadedData(U uploadInitiationData, UploadedData uploadedData, R response);
+
+    @Override
+    public final R onUploadReceived(U uploadInitiationData, UploadedData uploadedData) {
+        R fileInstance = EntityFactory.create(fileEntityClass);
+        fileInstance.fileName().setValue(uploadedData.fileName);
+        fileInstance.fileSize().setValue(uploadedData.binaryContentSize);
+        fileInstance.timestamp().setValue(uploadedData.timestamp);
+        fileInstance.contentMimeType().setValue(uploadedData.contentMimeType);
+
+        processUploadedData(uploadInitiationData, uploadedData, fileInstance);
+
+        if (!fileInstance.blobKey().isNull()) {
+            FileUploadRegistry.register(fileInstance);
+        }
+
+        return fileInstance;
     }
 
     @Override
@@ -69,7 +126,7 @@ public abstract class AbstractUploadServiceImpl<U extends IEntity, R extends IFi
     }
 
     @Override
-    public void getUploadResponse(AsyncCallback<UploadResponse<R>> callback, UploadId uploadId) {
+    public final void getUploadResponse(AsyncCallback<R> callback, UploadId uploadId) {
         @SuppressWarnings("unchecked")
         DeferredUploadProcess<U, R> process = (DeferredUploadProcess<U, R>) DeferredProcessRegistry.get(uploadId.getDeferredCorrelationId());
         if (process != null) {
@@ -85,34 +142,4 @@ public abstract class AbstractUploadServiceImpl<U extends IEntity, R extends IFi
         }
     }
 
-    @Override
-    public void obtainSupportedExtensions(AsyncCallback<Vector<String>> callback) {
-        Collection<String> extensions = getSupportedExtensions();
-        if (extensions != null) {
-            callback.onSuccess(new Vector<String>(extensions));
-        } else {
-            callback.onSuccess(null);
-        }
-    }
-
-    /**
-     * Must return LowerCase strings, no dot in front
-     */
-    public Collection<String> getSupportedExtensions() {
-        return null;
-    }
-
-    @Override
-    public void onUploadStart(String fileName) {
-        Collection<String> extensions = getSupportedExtensions();
-        if (extensions != null) {
-            String extension = FilenameUtils.getExtension(fileName);
-            if (extension != null) {
-                extension = extension.toLowerCase(Locale.ENGLISH);
-            }
-            if (!extensions.contains(extension)) {
-                throw new UserRuntimeException(i18n.tr("Unsupported {0} File Type {1}", getUploadFileTypeName(), extension));
-            }
-        }
-    }
 }

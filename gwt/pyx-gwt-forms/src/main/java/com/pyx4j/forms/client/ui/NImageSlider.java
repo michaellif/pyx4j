@@ -33,6 +33,7 @@ import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.ScrollPanel;
 
 import com.pyx4j.commons.IDebugId;
+import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IFile;
 import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IObject;
@@ -45,6 +46,7 @@ import com.pyx4j.forms.client.ui.folder.IFolderItemDecorator;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.gwt.client.upload.FileUploadDialog;
 import com.pyx4j.gwt.client.upload.FileUploadReciver;
+import com.pyx4j.gwt.rpc.upload.UploadService;
 import com.pyx4j.gwt.shared.Dimension;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.ImageSlider;
@@ -204,7 +206,9 @@ public class NImageSlider<T extends IFile> extends NField<IList<T>, ImageSlider,
 
         @Override
         protected void createNewEntity(final AsyncCallback<T> callback) {
-            new FileUploadDialog<T>(i18n.tr("Upload Image File"), null, getCComponent().getUploadService(), new FileUploadReciver<T>() {
+            @SuppressWarnings("unchecked")
+            UploadService<IEntity, T> service = (UploadService<IEntity, T>) getCComponent().getUploadService();
+            new FileUploadDialog<IEntity, T>(i18n.tr("Upload Image File"), null, service, new FileUploadReciver<T>() {
                 @Override
                 public void onUploadComplete(T uploadResponse) {
                     callback.onSuccess(uploadResponse);

@@ -29,13 +29,20 @@ import com.pyx4j.entity.shared.IFile;
 import com.pyx4j.rpc.shared.IService;
 import com.pyx4j.rpc.shared.VoidSerializable;
 
+/**
+ * UI client facing part of upload, see UploadReciver
+ * 
+ * @param <U>
+ *            Upload initiation data, Maybe file description or other option.
+ *            Context of Upload dialog form.
+ *            May be unused the use IEnity.
+ * @param <R>
+ *            The IFile Response
+ * 
+ */
 public interface UploadService<U extends IEntity, R extends IFile> extends IService {
 
     public static final String PostCorrelationID = "correlationID";
-
-    public static final String PostUploadKey = "uploadKey";
-
-    public static final String PostUploadDescription = "uploadDescription";
 
     public static final String ResponsePrefix = "UploadResponse";
 
@@ -47,10 +54,10 @@ public interface UploadService<U extends IEntity, R extends IFile> extends IServ
 
     public void obtainSupportedExtensions(AsyncCallback<Vector<String>> callback);
 
-    public void prepareUpload(AsyncCallback<UploadId> callback, U data);
+    public void prepareUploadProcess(AsyncCallback<UploadId> callback, U data);
 
     public void cancelUpload(AsyncCallback<VoidSerializable> callback, UploadId uploadId);
 
-    public void getUploadResponse(AsyncCallback<UploadResponse<R>> callback, UploadId uploadId);
+    public void getUploadResponse(AsyncCallback<R> callback, UploadId uploadId);
 
 }
