@@ -39,6 +39,7 @@ SET search_path = '_admin_';
         ALTER TABLE audit_record DROP CONSTRAINT audit_record_app_e_ck;
         ALTER TABLE operations_alert DROP CONSTRAINT operations_alert_app_e_ck;
         ALTER TABLE scheduler_trigger DROP CONSTRAINT scheduler_trigger_trigger_type_e_ck;
+        ALTER TABLE vista_terms DROP CONSTRAINT vista_terms_target_e_ck;
 
         
         /**
@@ -145,6 +146,10 @@ SET search_path = '_admin_';
                 'paymentsReceiveAcknowledgment', 'paymentsReceiveReconciliation', 'paymentsScheduledCreditCards', 'paymentsScheduledEcheck', 'paymentsTenantSure', 
                 'tenantSureCancellation', 'tenantSureHQUpdate', 'tenantSureReports', 'tenantSureTransactionReports', 'test', 'updateArrears', 'updatePaymentsSummary', 
                 'vistaBusinessReport', 'vistaCaleonReport', 'yardiARDateVerification', 'yardiImportProcess'));
+        ALTER TABLE vista_terms ADD CONSTRAINT vista_terms_target_e_ck 
+                CHECK ((target) IN ('PMC', 'PmcCaledonSoleProprietorshipSection', 'PmcCaledonTemplate', 'PmcPaymentPad', 'Tenant', 'TenantBilling', 'TenantPaymentCreditCard', 
+                'TenantPaymentPad', 'TenantPreAuthorizedPaymentsAgreement', 'TenantSurePreAuthorizedPaymentsAgreement'));
+
 
 
                 

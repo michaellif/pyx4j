@@ -31,6 +31,8 @@ BEGIN TRANSACTION;
         DROP SEQUENCE ilspolicy_item$provinces_seq;
         DROP SEQUENCE ilspolicy_item_seq;
         DROP SEQUENCE ilspolicy_seq;
+        DROP SEQUENCE name_seq;
+        DROP SEQUENCE pricing_seq;
         
   
         -- New sequences
@@ -47,6 +49,8 @@ BEGIN TRANSACTION;
         CREATE SEQUENCE legal_letter_blob_seq START WITH 1 INCREMENT BY 1 NO MAXVALUE NO MINVALUE CACHE 1;
         CREATE SEQUENCE legal_letter_seq START WITH 1 INCREMENT BY 1 NO MAXVALUE NO MINVALUE CACHE 1;
         CREATE SEQUENCE n4_policy_seq START WITH 1 INCREMENT BY 1 NO MAXVALUE NO MINVALUE CACHE 1;
+        CREATE SEQUENCE n4_policy$relevant_ar_codes_seq START WITH 1 INCREMENT BY 1 NO MAXVALUE NO MINVALUE CACHE 1;
+        CREATE SEQUENCE payment_record$_assert_autopay_covered_items_changes_seq START WITH 1 INCREMENT BY 1 NO MAXVALUE NO MINVALUE CACHE 1;
         
   
         -- Change owner to vista
@@ -66,6 +70,8 @@ BEGIN TRANSACTION;
         ALTER SEQUENCE legal_letter_blob_seq OWNER TO vista ;
         ALTER SEQUENCE legal_letter_seq OWNER TO vista ;
         ALTER SEQUENCE n4_policy_seq OWNER TO vista ;
+        ALTER SEQUENCE n4_policy$relevant_ar_codes_seq OWNER TO vista ;
+        ALTER SEQUENCE payment_record$_assert_autopay_covered_items_changes_seq OWNER TO vista ;
         ALTER SEQUENCE tenant_sure_insurance_policy_client_seq OWNER TO vista ;
         ALTER SEQUENCE tenant_sure_insurance_policy_report_seq OWNER TO vista ;
         ALTER SEQUENCE tenant_sure_transaction_seq OWNER TO vista ;

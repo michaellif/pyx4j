@@ -361,7 +361,8 @@ BEGIN
         
         -- marketing
         
-        ALTER TABLE marketing   ADD COLUMN marketing_address_suite_number VARCHAR(500),
+        ALTER TABLE marketing   ADD COLUMN use_property_address_as_marketing BOOLEAN,
+                                ADD COLUMN marketing_address_suite_number VARCHAR(500),
                                 ADD COLUMN marketing_address_street_number VARCHAR(500),
                                 ADD COLUMN marketing_address_street_number_suffix VARCHAR(500),
                                 ADD COLUMN marketing_address_street_name VARCHAR(500),
@@ -389,16 +390,47 @@ BEGIN
                 node                                    BIGINT,
                 updated                                 TIMESTAMP,
                 include_signature                       BOOLEAN,
-                signature_address_street1               VARCHAR(500),
-                signature_address_street2               VARCHAR(500),
-                signature_address_city                  VARCHAR(500),
-                signature_address_province              BIGINT,
-                signature_address_country               BIGINT,
-                signature_address_postal_code           VARCHAR(500),
+                company_name                            VARCHAR(500),
+                mailing_address_street1                 VARCHAR(500),
+                mailing_address_street2                 VARCHAR(500),
+                mailing_address_city                    VARCHAR(500),
+                mailing_address_province                BIGINT,
+                mailing_address_country                 BIGINT,
+                mailing_address_postal_code             VARCHAR(500),
+                phone_number                            VARCHAR(500),
+                fax_number                              VARCHAR(500),
+                email_address                           VARCHAR(500),
                         CONSTRAINT n4_policy_pk PRIMARY KEY(id)     
         );
         
         ALTER TABLE n4_policy OWNER TO vista;
+        
+        
+        -- n4_policy$relevant_ar_codes
+        
+        CREATE TABLE n4_policy$relevant_ar_codes
+        (
+                id                                      BIGINT                  NOT NULL,
+                owner                                   BIGINT,
+                value                                   BIGINT,
+                seq                                     INT,
+                        CONSTRAINT n4_policy$relevant_ar_codes_pk PRIMARY KEY(id)
+        );
+        
+        ALTER TABLE n4_policy$relevant_ar_codes OWNER TO vista;
+        
+        -- payment_record$_assert_autopay_covered_items_changes
+        
+        CREATE TABLE payment_record$_assert_autopay_covered_items_changes
+        (
+                id                                      BIGINT                  NOT NULL,
+                owner                                   BIGINT,
+                value                                   BIGINT,
+                        CONSTRAINT payment_record$_assert_autopay_covered_items_changes_pk PRIMARY KEY(id)
+        );
+        
+        ALTER TABLE payment_record$_assert_autopay_covered_items_changes OWNER TO vista;
+        
         
         -- preauthorized_payment
         
@@ -472,7 +504,7 @@ BEGIN
         EXECUTE 'UPDATE '||v_schema_name||'.insurance_policy '
                 ||'SET id_discriminator = ''TenantSureInsurancePolicy'' '
                 ||'WHERE id_discriminator = ''InsuranceTenantSure'' ';
-                
+        
       
         -- notification
         
@@ -489,6 +521,12 @@ BEGIN
         ***     ==========================================================================================================
         **/
         
+        
+        -- autopay_agreement
+        
+        ALTER TABLE autopay_agreement DROP COLUMN expiring;
+        
+        
          -- billing_billing_cycle
         
         ALTER TABLE billing_billing_cycle DROP COLUMN target_pad_generation_date;
@@ -497,6 +535,16 @@ BEGIN
         
         ALTER TABLE customer_picture DROP COLUMN order_id;
         
+        
+        -- insurance_policy
+        
+        ALTER TABLE insurance_policy    DROP COLUMN expiry_date,
+                                        DROP COLUMN inception_date,
+                                        DROP COLUMN insurance_certificate_number,
+                                        DROP COLUMN insurance_provider,
+                                        DROP COLUMN is_managed_by_tenant,
+                                        DROP COLUMN is_property_vista_integrated_provider,
+                                        DROP COLUMN liability_coverage;
         
         -- ilspolicy_item$provinces
         
@@ -524,9 +572,20 @@ BEGIN
         ALTER TABLE lease_billing_type_policy_item DROP COLUMN pad_calculation_day_offset;
        
         
-       
+        -- name
+        
+        DROP TABLE name;
         
         
+        -- pricing
+        
+        DROP TABLE pricing;
+        
+        
+        -- tenant_insurance_policy
+        
+        ALTER TABLE tenant_insurance_policy     DROP COLUMN no_insurance_status_message,
+                                                DROP COLUMN tenant_insurance_invitation;
         
           
                  
@@ -580,8 +639,16 @@ BEGIN
         ALTER TABLE legal_letter ADD CONSTRAINT legal_letter_lease_fk FOREIGN KEY(lease) REFERENCES lease(id)  DEFERRABLE INITIALLY DEFERRED;
         ALTER TABLE marketing ADD CONSTRAINT marketing_marketing_address_country_fk FOREIGN KEY(marketing_address_country) REFERENCES country(id)  DEFERRABLE INITIALLY DEFERRED;
         ALTER TABLE marketing ADD CONSTRAINT marketing_marketing_address_province_fk FOREIGN KEY(marketing_address_province) REFERENCES province(id)  DEFERRABLE INITIALLY DEFERRED;
-        ALTER TABLE n4_policy ADD CONSTRAINT n4_policy_signature_address_country_fk FOREIGN KEY(signature_address_country) REFERENCES country(id)  DEFERRABLE INITIALLY DEFERRED;
-        ALTER TABLE n4_policy ADD CONSTRAINT n4_policy_signature_address_province_fk FOREIGN KEY(signature_address_province) REFERENCES province(id)  DEFERRABLE INITIALLY DEFERRED;
+        ALTER TABLE n4_policy ADD CONSTRAINT n4_policy_mailing_address_country_fk FOREIGN KEY(mailing_address_country) REFERENCES country(id)  DEFERRABLE INITIALLY DEFERRED;
+        ALTER TABLE n4_policy ADD CONSTRAINT n4_policy_mailing_address_province_fk FOREIGN KEY(mailing_address_province) REFERENCES province(id)  DEFERRABLE INITIALLY DEFERRED;
+        ALTER TABLE n4_policy$relevant_ar_codes ADD CONSTRAINT n4_policy$relevant_ar_codes_owner_fk FOREIGN KEY(owner) REFERENCES n4_policy(id)  DEFERRABLE INITIALLY DEFERRED;
+        ALTER TABLE n4_policy$relevant_ar_codes ADD CONSTRAINT n4_policy$relevant_ar_codes_value_fk FOREIGN KEY(value) REFERENCES arcode(id)  DEFERRABLE INITIALLY DEFERRED;
+        ALTER TABLE payment_record ADD CONSTRAINT payment_record_preauthorized_payment_fk FOREIGN KEY(preauthorized_payment) 
+                REFERENCES autopay_agreement(id)  DEFERRABLE INITIALLY DEFERRED;
+        ALTER TABLE payment_record$_assert_autopay_covered_items_changes ADD CONSTRAINT payment_record$_assert_autopay_covered_items_changes_owner_fk FOREIGN KEY(owner) 
+                REFERENCES payment_record(id)  DEFERRABLE INITIALLY DEFERRED;
+        ALTER TABLE payment_record$_assert_autopay_covered_items_changes ADD CONSTRAINT payment_record$_assert_autopay_covered_items_changes_value_fk FOREIGN KEY(value) 
+                REFERENCES autopay_agreement_covered_item(id)  DEFERRABLE INITIALLY DEFERRED;
         ALTER TABLE tenant_sure_insurance_policy_client ADD CONSTRAINT tenant_sure_insurance_policy_client_tenant_fk FOREIGN KEY(tenant) 
                 REFERENCES lease_participant(id)  DEFERRABLE INITIALLY DEFERRED;
         ALTER TABLE tenant_sure_insurance_policy_report ADD CONSTRAINT tenant_sure_insurance_policy_report_insurance_fk FOREIGN KEY(insurance) 
@@ -590,8 +657,7 @@ BEGIN
                 REFERENCES insurance_policy(id)  DEFERRABLE INITIALLY DEFERRED;
         ALTER TABLE tenant_sure_transaction ADD CONSTRAINT tenant_sure_transaction_payment_method_fk FOREIGN KEY(payment_method) 
                 REFERENCES payment_method(id)  DEFERRABLE INITIALLY DEFERRED;
-        ALTER TABLE payment_record ADD CONSTRAINT payment_record_preauthorized_payment_fk FOREIGN KEY(preauthorized_payment) 
-                REFERENCES autopay_agreement(id)  DEFERRABLE INITIALLY DEFERRED;
+
         
 
         
@@ -666,6 +732,14 @@ BEGIN
         ***
         ***     ====================================================================================================
         **/
+        
+        CREATE INDEX ilsbatch$units_owner_idx ON ilsbatch$units USING btree(owner);
+        CREATE INDEX ilsbatch_building_idx ON ilsbatch USING btree(building);
+        CREATE INDEX ilsopen_house_marketing_idx ON ilsopen_house USING btree(marketing);
+        CREATE INDEX ilsprofile_building_building_idx ON ilsprofile_building USING btree(building);
+        CREATE INDEX ilsprofile_floorplan_floorplan_idx ON ilsprofile_floorplan USING btree(floorplan);
+        CREATE INDEX n4_policy$relevant_ar_codes_owner_idx ON n4_policy$relevant_ar_codes USING btree(owner);
+        CREATE INDEX payment_record$_assert_autopay_covered_items_changes_owner_idx ON payment_record$_assert_autopay_covered_items_changes USING btree(owner);
         
         -- billing_arrears_snapshot -GiST index!
         
