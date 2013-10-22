@@ -45,8 +45,15 @@ public class EcheckInfoEditor extends CEntityDecoratableForm<EcheckInfo> {
     private final CPersonalIdentityField<AccountNumberIdentity> accountEditor = new CPersonalIdentityField<AccountNumberIdentity>(AccountNumberIdentity.class,
             "X xxxx;XX xxxx;XXX xxxx;XXXX xxxx;X XXXX xxxx;XX XXXX xxxx;XXX XXXX xxxx;XXXX XXXX xxxx", null);
 
+    private final double maxCompWidth;
+
     public EcheckInfoEditor() {
+        this(20);
+    }
+
+    public EcheckInfoEditor(double maxCompWidth) {
         super(EcheckInfo.class);
+        this.maxCompWidth = maxCompWidth;
     }
 
     @Override
@@ -54,8 +61,8 @@ public class EcheckInfoEditor extends CEntityDecoratableForm<EcheckInfo> {
         BasicFlexFormPanel panel = new BasicFlexFormPanel();
 
         int row = -1;
-        panel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().nameOn()), 20).build());
-        panel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().accountNo(), accountEditor), 20).build());
+        panel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().nameOn()), maxCompWidth).build());
+        panel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().accountNo(), accountEditor), maxCompWidth).build());
 
         panel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().branchTransitNumber()), 5).build());
         panel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().bankId()), 3).build());

@@ -45,7 +45,7 @@ public class CheckInfoEditor extends CEntityDecoratableForm<CheckInfo> {
         panel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().accountType()), 10).build());
         panel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().checkNo()), 5).build());
 
-        row = -1;
+        row = 0;
         panel.setWidget(++row, 1, new FormDecoratorBuilder(inject(proto().transitNo()), 10).build());
         panel.setWidget(++row, 1, new FormDecoratorBuilder(inject(proto().institutionNo()), 5).build());
         panel.setWidget(++row, 1, new FormDecoratorBuilder(inject(proto().accountNo()), 15).build());

@@ -13,32 +13,25 @@
  */
 package com.propertyvista.portal.web.client.ui.financial.paymentmethod;
 
-import java.text.ParseException;
 import java.util.Set;
 
-import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
-import com.google.gwt.user.client.DOM;
-import com.google.gwt.user.client.ui.FlowPanel;
-import com.google.gwt.user.client.ui.HasHorizontalAlignment;
-import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.IsWidget;
-import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
-import com.pyx4j.forms.client.ui.CEnumLabel;
-import com.pyx4j.forms.client.ui.CRadioGroupEnum;
-import com.pyx4j.forms.client.ui.IFormat;
+import com.pyx4j.forms.client.ui.CComboBox;
+import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.widgets.client.RadioGroup;
 
-import com.propertyvista.common.client.resources.VistaImages;
 import com.propertyvista.common.client.ui.components.VistaEditorsComponentFactory;
 import com.propertyvista.common.client.ui.components.editors.AddressSimpleEditor;
+import com.propertyvista.common.client.ui.components.editors.payments.CreditCardInfoEditor;
+import com.propertyvista.common.client.ui.components.editors.payments.EcheckInfoEditor;
 import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
 import com.propertyvista.domain.payment.AbstractPaymentMethod;
+import com.propertyvista.domain.payment.CreditCardInfo.CreditCardType;
 import com.propertyvista.domain.payment.PaymentType;
 import com.propertyvista.portal.web.client.ui.financial.PortalPaymentTypesUtil;
 
@@ -60,29 +53,17 @@ public class PaymentMethodEditor<E extends AbstractPaymentMethod> extends com.pr
         BasicFlexFormPanel content = new BasicFlexFormPanel();
         int row = -1;
 
-        if (isViewable()) {
-            content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().type(), new CEnumLabel()), 15).build());
-            content.setWidget(++row, 0, paymentDetailsHolder);
-        } else {
-            VerticalPanel paymentMethods = new VerticalPanel();
-            paymentMethods.setWidth("100%");
-
-            paymentMethods.add(inject(proto().type(), createPaymentTypesRadioGroup()).asWidget());
-            paymentMethods.add(paymentDetailsHolder);
-            DOM.setElementProperty(DOM.getParent(paymentDetailsHolder.getElement()), "align", HasHorizontalAlignment.ALIGN_CENTER.getTextAlignString());
-
-            get(proto().type()).asWidget().getElement().getStyle().setMarginLeft(15, Unit.EM);
-
-            content.setWidget(++row, 0, paymentMethods);
-        }
+        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().type(), new CComboBox<PaymentType>()), 15).build());
+        content.setWidget(++row, 0, paymentDetailsHolder);
 
         content.setH1(++row, 0, 1, proto().billingAddress().getMeta().getCaption());
         billingAddressHeader = content.getWidget(row, 0);
 
         content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().sameAsCurrent()), 5).build());
-        content.setWidget(++row, 0, inject(proto().billingAddress(), new AddressSimpleEditor()));
+        content.setWidget(++row, 0, inject(proto().billingAddress(), new AddressSimpleEditor(true, 15)));
 
         // tweaks:
+        ((CComboBox<PaymentType>) get(proto().type())).setOptions(defaultPaymentTypes());
         get(proto().type()).addValueChangeHandler(new ValueChangeHandler<PaymentType>() {
             @Override
             public void onValueChange(ValueChangeEvent<PaymentType> event) {
@@ -102,6 +83,21 @@ public class PaymentMethodEditor<E extends AbstractPaymentMethod> extends com.pr
     }
 
     @Override
+    protected CEntityForm<?> createEcheckInfoEditor() {
+        return new EcheckInfoEditor(15);
+    }
+
+    @Override
+    protected CEntityForm<?> createCreditCardInfoEditor() {
+        return new CreditCardInfoEditor(15) {
+            @Override
+            protected Set<CreditCardType> getAllowedCardTypes() {
+                return PaymentMethodEditor.this.getAllowedCardTypes();
+            }
+        };
+    }
+
+    @Override
     public void onReset() {
         super.onReset();
 
@@ -112,64 +108,14 @@ public class PaymentMethodEditor<E extends AbstractPaymentMethod> extends com.pr
     protected void onValueSet(boolean populate) {
         super.onValueSet(populate);
 
-        if (isEditable() && get(proto().type()) instanceof CRadioGroupEnum) {
+        if (get(proto().type()).isEditable() && get(proto().type()) instanceof CComboBox) {
             // set single-available option preselected for new items: 
-            CRadioGroupEnum<PaymentType> type = ((CRadioGroupEnum<PaymentType>) get(proto().type()));
+            CComboBox<PaymentType> type = ((CComboBox<PaymentType>) get(proto().type()));
             if (getValue().id().isNull() && !type.getOptions().isEmpty()) {
                 type.setValue(type.getOptions().get(0), false, populate);
             }
             setPaymentTypeSelectionEditable(getValue().id().isNull());
         }
-    }
-
-    private CRadioGroupEnum<PaymentType> createPaymentTypesRadioGroup() {
-        CRadioGroupEnum<PaymentType> pmRadioGroup = new CRadioGroupEnum<PaymentType>(PaymentType.class, RadioGroup.Layout.HORISONTAL);
-        pmRadioGroup.setFormat(new IFormat<PaymentType>() {
-            @Override
-            public PaymentType parse(String string) throws ParseException {
-                return null;
-            }
-
-            @Override
-            public String format(PaymentType value) {
-                Image paymentTypeImage;
-                FlowPanel holder = null;
-
-                if (value != null) {
-                    switch (value) {
-                    case Echeck:
-                        paymentTypeImage = new Image(VistaImages.INSTANCE.paymentECheque());
-                        break;
-                    case CreditCard:
-                        paymentTypeImage = new Image(VistaImages.INSTANCE.paymentCredit());
-                        break;
-                    case DirectBanking:
-                        paymentTypeImage = new Image(VistaImages.INSTANCE.paymentDirectBanking());
-                        break;
-                    case Interac:
-                        paymentTypeImage = new Image(VistaImages.INSTANCE.paymentInterac());
-                        break;
-                    default:
-                        paymentTypeImage = null;
-                        break;
-                    }
-
-                    if (paymentTypeImage != null) {
-                        holder = new FlowPanel();
-                        holder.add(paymentTypeImage);
-                        return holder.getElement().getInnerHTML();
-                    }
-
-                    return value.toString();
-                }
-
-                return "";
-            }
-        });
-
-        pmRadioGroup.setOptions(defaultPaymentTypes());
-
-        return pmRadioGroup;
     }
 
     @Override

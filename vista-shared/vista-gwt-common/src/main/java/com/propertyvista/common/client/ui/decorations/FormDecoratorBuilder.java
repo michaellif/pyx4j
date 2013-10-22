@@ -19,11 +19,11 @@ import com.pyx4j.forms.client.ui.decorators.WidgetDecorator;
 public class FormDecoratorBuilder extends WidgetDecorator.Builder {
 
     // default sizes (in EMs): 
-    public static final int LABEL_WIDTH = 15;
+    public static final double LABEL_WIDTH = 15;
 
-    public static final int CONTENT_WIDTH = 25;
+    public static final double CONTENT_WIDTH = 25;
 
-    public static final int CONTENT_WIDTH_DUAL = 65;
+    public static final double CONTENT_WIDTH_DUAL = 65;
 
     public FormDecoratorBuilder(CComponent<?> component, String labelWidth, String componentWidth, String contentWidth) {
         super(component);
@@ -33,15 +33,15 @@ public class FormDecoratorBuilder extends WidgetDecorator.Builder {
 
     }
 
-    public FormDecoratorBuilder(CComponent<?> component, int labelWidth, int componentWidth, int contentWidth) {
+    public FormDecoratorBuilder(CComponent<?> component, double labelWidth, double componentWidth, double contentWidth) {
         this(component, labelWidth + "em", componentWidth + "em", contentWidth + "em");
     }
 
-    public FormDecoratorBuilder(CComponent<?> component, int componentWidth, boolean dual) {
+    public FormDecoratorBuilder(CComponent<?> component, double componentWidth, boolean dual) {
         this(component, LABEL_WIDTH, componentWidth, (dual ? CONTENT_WIDTH_DUAL : CONTENT_WIDTH));
     }
 
-    public FormDecoratorBuilder(CComponent<?> component, int componentWidth) {
+    public FormDecoratorBuilder(CComponent<?> component, double componentWidth) {
         this(component, componentWidth, false);
     }
 

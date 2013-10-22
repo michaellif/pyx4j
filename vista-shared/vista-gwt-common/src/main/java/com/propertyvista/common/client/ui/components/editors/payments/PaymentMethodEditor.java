@@ -88,7 +88,7 @@ public class PaymentMethodEditor<E extends AbstractPaymentMethod> extends CEntit
                 ++row,
                 0,
                 new FormDecoratorBuilder(inject(proto().type(), new CRadioGroupEnum<PaymentType>(PaymentType.class, defaultPaymentTypes(),
-                        RadioGroup.Layout.HORISONTAL)), 35).build());
+                        RadioGroup.Layout.HORISONTAL)), 22).build());
         if (proto() instanceof PaymentMethod) {
             main.setWidget(row, 1, new FormDecoratorBuilder(inject(((PaymentMethod) proto()).createdBy(), new CEntityLabel<AbstractPmcUser>()), 22).build());
         }

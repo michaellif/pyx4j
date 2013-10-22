@@ -70,8 +70,15 @@ public class CreditCardInfoEditor extends CEntityDecoratableForm<CreditCardInfo>
     private final CPersonalIdentityField<CreditCardNumberIdentity> cardEditor = new CPersonalIdentityField<CreditCardNumberIdentity>(
             CreditCardNumberIdentity.class, "X XXXX XXXX xxxx;XXXX XXXX XXXX xxxx", null);
 
+    private final double maxCompWidth;
+
     public CreditCardInfoEditor() {
+        this(20);
+    }
+
+    public CreditCardInfoEditor(double maxCompWidth) {
         super(CreditCardInfo.class);
+        this.maxCompWidth = maxCompWidth;
     }
 
     @Override
@@ -80,11 +87,11 @@ public class CreditCardInfoEditor extends CEntityDecoratableForm<CreditCardInfo>
 
         int row = -1;
         CMonthYearPicker monthYearPicker = new CMonthYearPicker(false);
-        panel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().nameOn()), 20).build());
-        panel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().cardType(), typeSelector), 20).build());
+        panel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().nameOn()), maxCompWidth).build());
+        panel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().cardType(), typeSelector), maxCompWidth).build());
 
-        panel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().card(), cardEditor), 20).build());
-        panel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().expiryDate(), monthYearPicker), 20).build());
+        panel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().card(), cardEditor), maxCompWidth).build());
+        panel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().expiryDate(), monthYearPicker), maxCompWidth).build());
         panel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().securityCode()), 3).build());
 
         // tweak:
