@@ -202,7 +202,32 @@ public class PortalWebTheme extends Theme {
         addTheme(new CComponentTheme());
         addTheme(new CEntityContainerTheme());
 
-        addTheme(new DefaultDatePickerTheme());
+        addTheme(new DefaultDatePickerTheme() {
+
+            @Override
+            protected void initDatePickerStyle() {
+                super.initDatePickerStyle();
+
+                Style style = new Style(".gwt-DatePicker");
+                style.addProperty("border-color", ThemeColor.foreground, 1);
+                addStyle(style);
+
+                style = new Style(".", StyleName.DatePickerMonthSelector);
+                style.addProperty("background-color", ThemeColor.foreground);
+                style.addProperty("color", ThemeColor.foreground, 0.1);
+                addStyle(style);
+
+                style = new Style(" .", StyleName.DatePickerWeekdayLabel, " .", StyleName.DatePickerWeekendLabel);
+                style.addProperty("background-color", ThemeColor.background);
+                addStyle(style);
+
+                style = new Style(".", StyleName.DatePickerWeekendDayLabel);
+                style.addProperty("color", ThemeColor.background);
+                addStyle(style);
+            };
+
+        });
+
         addTheme(new DefaultEntityFolderTheme() {
             @Override
             protected ThemeColor getBackgroundColor() {
