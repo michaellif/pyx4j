@@ -71,6 +71,7 @@ public abstract class EntitySelectorTableDialog<E extends IEntity> extends Abstr
 
     public EntitySelectorTableDialog(Class<E> entityClass, boolean isVersioned, boolean isMultiselect, List<E> alreadySelected, String caption) {
         super(caption);
+
         this.entityClass = entityClass;
         this.isMultiselect = isMultiselect;
         this.alreadySelected = (alreadySelected != null ? alreadySelected : Collections.<E> emptyList());
@@ -99,6 +100,7 @@ public abstract class EntitySelectorTableDialog<E extends IEntity> extends Abstr
         dataSource = new ListerDataSource<E>(entityClass, getSelectService());
         setFilters(createRestrictionFilterForAlreadySelected());
         lister.setDataSource(dataSource);
+        lister.setHeight("500px");
 
         setBody(createBody());
     }
