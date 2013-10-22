@@ -15,6 +15,7 @@ package com.propertyvista.crm.server.services.lease;
 
 import java.rmi.RemoteException;
 import java.util.Vector;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
@@ -35,10 +36,12 @@ import com.pyx4j.rpc.shared.VoidSerializable;
 
 import com.propertyvista.biz.communication.CommunicationFacade;
 import com.propertyvista.biz.financial.ar.ARFacade;
+import com.propertyvista.biz.legal.N4ManagementFacade;
 import com.propertyvista.biz.occupancy.OccupancyFacade;
 import com.propertyvista.biz.system.YardiARFacade;
 import com.propertyvista.biz.system.YardiServiceException;
 import com.propertyvista.biz.tenant.lease.LeaseFacade;
+import com.propertyvista.crm.rpc.dto.legal.n4.N4GenerationQueryDTO;
 import com.propertyvista.crm.rpc.dto.occupancy.opconstraints.CancelMoveOutConstraintsDTO;
 import com.propertyvista.crm.rpc.services.lease.LeaseViewerCrudService;
 import com.propertyvista.crm.server.services.lease.common.LeaseViewerCrudServiceBaseImpl;
@@ -256,6 +259,14 @@ public class LeaseViewerCrudServiceImpl extends LeaseViewerCrudServiceBaseImpl<L
 
         Persistence.service().commit();
         callback.onSuccess(null);
+    }
+
+    @Override
+    public void issueN4(AsyncCallback<VoidSerializable> defaultAsyncCallback, N4GenerationQueryDTO n4GenerationQuery) {
+        ServerSideFactory.create(N4ManagementFacade.class).issueN4(n4GenerationQuery.targetDelinquentLeases(), n4GenerationQuery.agent(),
+                n4GenerationQuery.noticeDate().getValue(), new AtomicInteger());
+        Persistence.service().commit();
+        defaultAsyncCallback.onSuccess(null);
     }
 
 }

@@ -63,6 +63,7 @@ import com.propertyvista.crm.client.ui.crud.billing.payment.PaymentLister;
 import com.propertyvista.crm.client.ui.crud.customer.tenant.TenantViewerView;
 import com.propertyvista.crm.client.ui.crud.lease.common.LeaseViewerViewImplBase;
 import com.propertyvista.crm.client.ui.crud.lease.common.deposit.DepositLifecycleLister;
+import com.propertyvista.crm.client.ui.crud.lease.common.dialogs.N4GenerationQueryDialog;
 import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.crm.rpc.dto.billing.BillDataDTO;
 import com.propertyvista.crm.rpc.dto.occupancy.opconstraints.CancelMoveOutConstraintsDTO;
@@ -130,7 +131,7 @@ public class LeaseViewerViewImpl extends LeaseViewerViewImplBase<LeaseDTO> imple
 
     private final MenuItem yardiImportAction;
 
-    private MenuItem issueN4action;
+    private MenuItem issueN4Action;
 
     public LeaseViewerViewImpl() {
         depositLister = new ListerInternalViewImplBase<DepositLifecycleDTO>(new DepositLifecycleLister());
@@ -218,14 +219,6 @@ public class LeaseViewerViewImpl extends LeaseViewerViewImplBase<LeaseDTO> imple
         if (!VistaFeatures.instance().yardiIntegration()) {
             addAction(cancelNoticeAction);
         }
-
-        issueN4action = new MenuItem(i18n.tr("Issue N4"), new Command() {
-            @Override
-            public void execute() {
-                issueN4();
-            }
-
-        });
 
         evictAction = new MenuItem(i18n.tr("Evict..."), new Command() {
             @Override
@@ -440,6 +433,15 @@ public class LeaseViewerViewImpl extends LeaseViewerViewImplBase<LeaseDTO> imple
                 }
             });
         }
+
+        addActionSeparator();
+        issueN4Action = new MenuItem(i18n.tr("Issue N4"), new Command() {
+            @Override
+            public void execute() {
+                issueN4();
+            }
+        });
+        addAction(issueN4Action);
     }
 
     @Override
@@ -773,7 +775,17 @@ public class LeaseViewerViewImpl extends LeaseViewerViewImplBase<LeaseDTO> imple
     }
 
     private void issueN4() {
-        ((LeaseViewerView.Presenter) getPresenter()).issueN4();
+        new N4GenerationQueryDialog() {
+            @Override
+            public boolean onClickOk() {
+                if (super.onClickOk()) {
+                    ((LeaseViewerView.Presenter) getPresenter()).issueN4(getValue());
+                    return true;
+                } else {
+                    return false;
+                }
+            };
+        }.show();
     }
 
     private abstract class RenewLeaseBox extends OkCancelDialog {

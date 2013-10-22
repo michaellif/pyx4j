@@ -15,6 +15,7 @@ package com.propertyvista.crm.rpc.dto.legal.n4;
 
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.annotations.Transient;
+import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
@@ -25,10 +26,12 @@ import com.propertyvista.domain.tenant.lease.Lease;
 @Transient
 public interface N4GenerationQueryDTO extends IEntity {
 
+    @NotNull
     Employee agent();
 
     IList<Lease> targetDelinquentLeases();
 
+    @NotNull
     IPrimitive<LogicalDate> noticeDate();
 
 }

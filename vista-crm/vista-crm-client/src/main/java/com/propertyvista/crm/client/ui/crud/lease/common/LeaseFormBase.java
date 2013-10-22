@@ -143,6 +143,8 @@ public abstract class LeaseFormBase<DTO extends LeaseDTO> extends CrmEntityForm<
                 new FormDecoratorBuilder(
                         inject(proto().currentTerm(), new CEntityCrudHyperlink<LeaseTerm>(AppPlaceEntityMapper.resolvePlace(LeaseTerm.class))), 25).build());
 
+        flexPanel.setWidget(++leftRow, 0, new FormDecoratorBuilder(inject(proto().legalStatus())).build());
+
         flexPanel.setWidget(++leftRow, 0, new FormDecoratorBuilder(inject(proto().carryforwardBalance()), 10).build());
 
         flexPanel.setWidget(++rightRow, 1, new FormDecoratorBuilder(inject(proto().leaseId()), 10).build());

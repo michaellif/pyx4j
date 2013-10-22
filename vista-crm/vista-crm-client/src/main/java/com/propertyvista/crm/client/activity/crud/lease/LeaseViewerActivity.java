@@ -40,6 +40,7 @@ import com.propertyvista.crm.client.activity.crud.lease.common.LeaseViewerActivi
 import com.propertyvista.crm.client.ui.crud.lease.LeaseViewerView;
 import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.crm.rpc.dto.billing.BillDataDTO;
+import com.propertyvista.crm.rpc.dto.legal.n4.N4GenerationQueryDTO;
 import com.propertyvista.crm.rpc.dto.occupancy.opconstraints.CancelMoveOutConstraintsDTO;
 import com.propertyvista.crm.rpc.services.billing.BillingExecutionService;
 import com.propertyvista.crm.rpc.services.billing.LeaseAdjustmentCrudService;
@@ -273,7 +274,14 @@ public class LeaseViewerActivity extends LeaseViewerActivityBase<LeaseDTO> imple
     }
 
     @Override
-    public void issueN4() {
+    public void issueN4(N4GenerationQueryDTO n4GenerationQuery) {
+        n4GenerationQuery.targetDelinquentLeases().add(EntityFactory.createIdentityStub(Lease.class, getEntityId()));
 
+        ((LeaseViewerCrudService) getService()).issueN4(new DefaultAsyncCallback<VoidSerializable>() {
+            @Override
+            public void onSuccess(VoidSerializable result) {
+                populate();
+            }
+        }, n4GenerationQuery);
     }
 }

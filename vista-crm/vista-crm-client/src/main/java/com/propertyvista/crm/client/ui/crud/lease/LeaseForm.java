@@ -75,7 +75,7 @@ public class LeaseForm extends LeaseFormBase<LeaseDTO> {
     private Widget createCommunicationsTab() {
         TwoColumnFlexFormPanel panel = new TwoColumnFlexFormPanel();
         int row = -1;
-        panel.setWidget(++row, 0, inject(proto().letters(), new N4LegalLetterFolder()));
+        panel.setWidget(++row, 0, 2, inject(proto().letters(), new N4LegalLetterFolder()));
         return panel;
     }
 }
