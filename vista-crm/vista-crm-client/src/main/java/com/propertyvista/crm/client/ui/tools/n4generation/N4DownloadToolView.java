@@ -13,11 +13,16 @@
  */
 package com.propertyvista.crm.client.ui.tools.n4generation;
 
+import java.util.List;
+
 import com.propertyvista.crm.client.ui.tools.n4generation.base.BulkOperationToolView;
+import com.propertyvista.crm.rpc.dto.legal.n4.N4GenerationDTO;
 import com.propertyvista.crm.rpc.dto.legal.n4.LegalNoticeCandidateDTO;
 import com.propertyvista.crm.rpc.dto.legal.n4.N4DownloadSettingsDTO;
 
 public interface N4DownloadToolView extends BulkOperationToolView<N4DownloadSettingsDTO, LegalNoticeCandidateDTO> {
 
     void displayN4DownloadLink(String url);
+
+    void setGenerations(List<N4GenerationDTO> generations);
 }

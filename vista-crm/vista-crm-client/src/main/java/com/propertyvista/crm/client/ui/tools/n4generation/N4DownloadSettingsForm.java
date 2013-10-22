@@ -13,13 +13,21 @@
  */
 package com.propertyvista.crm.client.ui.tools.n4generation;
 
-import com.google.gwt.user.client.ui.FlowPanel;
+import java.util.List;
+
 import com.google.gwt.user.client.ui.IsWidget;
 
+import com.pyx4j.forms.client.ui.CComboBox;
+import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
+
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
+import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
 import com.propertyvista.crm.rpc.dto.legal.n4.N4DownloadSettingsDTO;
+import com.propertyvista.crm.rpc.dto.legal.n4.N4GenerationDTO;
 
 public class N4DownloadSettingsForm extends CEntityDecoratableForm<N4DownloadSettingsDTO> {
+
+    private CComboBox<N4GenerationDTO> generationsBox;
 
     public N4DownloadSettingsForm() {
         super(N4DownloadSettingsDTO.class);
@@ -27,8 +35,26 @@ public class N4DownloadSettingsForm extends CEntityDecoratableForm<N4DownloadSet
 
     @Override
     public IsWidget createContent() {
-        FlowPanel panel = new FlowPanel();
+        BasicFlexFormPanel panel = new BasicFlexFormPanel();
+        int row = -1;
+
+        generationsBox = new CComboBox<N4GenerationDTO>() {
+            @Override
+            public String getItemName(N4GenerationDTO o) {
+                if (o != null) {
+                    return o.groupId().getValue();
+                } else {
+                    return "";
+                }
+            }
+        };
+        panel.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().selectedGeneration(), generationsBox)).componentWidth("300px").build());
+
         return panel;
+    }
+
+    public void setGenerations(List<N4GenerationDTO> generations) {
+        generationsBox.setOptions(generations);
     }
 
 }

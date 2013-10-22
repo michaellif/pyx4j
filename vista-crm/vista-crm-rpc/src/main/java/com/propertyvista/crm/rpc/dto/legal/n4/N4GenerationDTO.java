@@ -13,13 +13,19 @@
  */
 package com.propertyvista.crm.rpc.dto.legal.n4;
 
+import java.util.Date;
+
 import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 
 @Transient
-public interface GeneratedN4GroupDTO extends IEntity {
+public interface N4GenerationDTO extends IEntity {
+
+    IPrimitive<Date> generatedOn();
+
+    IPrimitive<Integer> lettersCount();
 
     @ToString(index = 0)
     IPrimitive<String> groupId();

@@ -24,6 +24,7 @@ import java.math.BigDecimal;
 import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
@@ -116,8 +117,10 @@ public class N4ManagementFacadeImpl implements N4ManagementFacade {
             n4LandLordsData.signature();
         }
 
+        Date generationTime = SystemDateManager.getDate();
+
         for (Lease leaseId : delinquentLeases) {
-            issueN4ForLease(leaseId, n4LandLordsData, noticeDate, new HashSet<ARCode>(n4policy.relevantArCodes()));
+            issueN4ForLease(leaseId, n4LandLordsData, noticeDate, new HashSet<ARCode>(n4policy.relevantArCodes()), generationTime);
             progress.set(progress.get() + 1);
         }
 
@@ -141,7 +144,7 @@ public class N4ManagementFacadeImpl implements N4ManagementFacade {
         return n4s;
     }
 
-    private void issueN4ForLease(Lease leaseId, N4LandlordsData n4LandLordsData, LogicalDate noticeDate, Collection<ARCode> relevantArCodes) {
+    private void issueN4ForLease(Lease leaseId, N4LandlordsData n4LandLordsData, LogicalDate noticeDate, Collection<ARCode> relevantArCodes, Date generationTime) {
 
         N4LeaseData n4LeaseData = ServerSideFactory.create(N4GenerationFacade.class).prepareN4LeaseData(leaseId, noticeDate, relevantArCodes);
         N4FormFieldsData n4FormData = ServerSideFactory.create(N4GenerationFacade.class).populateFormData(n4LeaseData, n4LandLordsData);
@@ -155,7 +158,7 @@ public class N4ManagementFacadeImpl implements N4ManagementFacade {
         N4LegalLetter n4Letter = EntityFactory.create(N4LegalLetter.class);
         n4Letter.lease().set(leaseId);
         n4Letter.amountOwed().setValue(n4LeaseData.totalRentOwning().getValue());
-        n4Letter.generatedOn().setValue(SystemDateManager.getDate());
+        n4Letter.generatedOn().setValue(generationTime);
         n4Letter.blobKey().setValue(blob.getPrimaryKey());
         n4Letter.fileSize().setValue(n4LetterBinary.length);
         n4Letter.fileName().setValue(MessageFormat.format("n4notice-{0,date,yyyy-MM-dd}.pdf", SystemDateManager.getDate()));
