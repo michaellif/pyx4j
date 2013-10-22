@@ -65,14 +65,13 @@ public class CreditCardInfoEditor extends CEntityDecoratableForm<CreditCardInfo>
 
     private ValidationError isCreditCardNumberValid;
 
-    private final CPersonalIdentityField<CreditCardNumberIdentity> cardEditor;
+    private final CComboBox<CreditCardType> typeSelector = new CComboBox<CreditCardType>();
 
-    private final CComboBox<CreditCardType> typeSelector;
+    private final CPersonalIdentityField<CreditCardNumberIdentity> cardEditor = new CPersonalIdentityField<CreditCardNumberIdentity>(
+            CreditCardNumberIdentity.class, "X XXXX XXXX xxxx;XXXX XXXX XXXX xxxx", null);
 
     public CreditCardInfoEditor() {
         super(CreditCardInfo.class);
-        typeSelector = new CComboBox<CreditCardType>();
-        cardEditor = new CPersonalIdentityField<CreditCardNumberIdentity>(CreditCardNumberIdentity.class, "X XXXX XXXX xxxx;XXXX XXXX XXXX xxxx", null);
     }
 
     @Override
@@ -81,17 +80,12 @@ public class CreditCardInfoEditor extends CEntityDecoratableForm<CreditCardInfo>
 
         int row = -1;
         CMonthYearPicker monthYearPicker = new CMonthYearPicker(false);
-        panel.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().nameOn())).labelWidth("250px").componentWidth("250px").contentWidth("250px")
-                .build());
-        panel.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().cardType(), typeSelector)).labelWidth("250px").componentWidth("250px")
-                .contentWidth("250px").build());
+        panel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().nameOn()), 20).build());
+        panel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().cardType(), typeSelector), 20).build());
 
-        panel.setWidget(++row, 0, 2,
-                new FormDecoratorBuilder(inject(proto().card(), cardEditor)).labelWidth("250px").componentWidth("250px").contentWidth("250px").build());
-        panel.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().expiryDate(), monthYearPicker)).labelWidth("250px").componentWidth("250px")
-                .contentWidth("250px").build());
-        panel.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().securityCode())).labelWidth("250px").componentWidth("250px").contentWidth("250px")
-                .build());
+        panel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().card(), cardEditor), 20).build());
+        panel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().expiryDate(), monthYearPicker), 20).build());
+        panel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().securityCode()), 3).build());
 
         // tweak:
         monthYearPicker.setYearRange(new Range(1900 + new Date().getYear(), 10));

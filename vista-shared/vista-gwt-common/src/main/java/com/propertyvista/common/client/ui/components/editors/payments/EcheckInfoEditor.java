@@ -42,6 +42,9 @@ public class EcheckInfoEditor extends CEntityDecoratableForm<EcheckInfo> {
 
     private static final I18n i18n = I18n.get(EcheckInfoEditor.class);
 
+    private final CPersonalIdentityField<AccountNumberIdentity> accountEditor = new CPersonalIdentityField<AccountNumberIdentity>(AccountNumberIdentity.class,
+            "X xxxx;XX xxxx;XXX xxxx;XXXX xxxx;X XXXX xxxx;XX XXXX xxxx;XXX XXXX xxxx;XXXX XXXX xxxx", null);
+
     public EcheckInfoEditor() {
         super(EcheckInfo.class);
     }
@@ -52,11 +55,7 @@ public class EcheckInfoEditor extends CEntityDecoratableForm<EcheckInfo> {
 
         int row = -1;
         panel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().nameOn()), 20).build());
-        panel.setWidget(
-                ++row,
-                0,
-                new FormDecoratorBuilder(inject(proto().accountNo(), new CPersonalIdentityField<AccountNumberIdentity>(AccountNumberIdentity.class,
-                        "X xxxx;XX xxxx;XXX xxxx;XXXX xxxx;X XXXX xxxx;XX XXXX xxxx;XXX XXXX xxxx;XXXX XXXX xxxx", null)), 20).build());
+        panel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().accountNo(), accountEditor), 20).build());
 
         panel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().branchTransitNumber()), 5).build());
         panel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().bankId()), 3).build());
@@ -64,7 +63,6 @@ public class EcheckInfoEditor extends CEntityDecoratableForm<EcheckInfo> {
         if (!isViewable()) {
             Image image = new Image(VistaImages.INSTANCE.eChequeGuide().getSafeUri());
             image.getElement().getStyle().setMarginTop(1, Unit.EM);
-            image.getElement().getStyle().setMarginLeft(7, Unit.EM);
             panel.setWidget(++row, 0, image);
             panel.getFlexCellFormatter().setHorizontalAlignment(row, 0, HasHorizontalAlignment.ALIGN_CENTER);
         }
