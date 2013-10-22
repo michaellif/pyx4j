@@ -13,9 +13,16 @@
  */
 package com.propertyvista.crm.server.services.policies.policy;
 
+import com.google.gwt.user.client.rpc.AsyncCallback;
+
+import com.pyx4j.commons.Key;
+import com.pyx4j.entity.shared.EntityFactory;
+
 import com.propertyvista.crm.rpc.services.policies.policy.N4PolicyCrudService;
 import com.propertyvista.crm.server.services.policies.GenericPolicyCrudService;
+import com.propertyvista.domain.financial.ARCode;
 import com.propertyvista.domain.policy.dto.N4PolicyDTO;
+import com.propertyvista.domain.policy.dto.N4PolicyDTOARCodeHolderDTO;
 import com.propertyvista.domain.policy.policies.N4Policy;
 
 public class N4PolicyCrudServiceImpl extends GenericPolicyCrudService<N4Policy, N4PolicyDTO> implements N4PolicyCrudService {
@@ -24,4 +31,33 @@ public class N4PolicyCrudServiceImpl extends GenericPolicyCrudService<N4Policy, 
         super(N4Policy.class, N4PolicyDTO.class);
     }
 
+    @Override
+    public void save(AsyncCallback<Key> callback, N4PolicyDTO to) {
+        for (N4PolicyDTOARCodeHolderDTO arCodeHolder : to.arCodes()) {
+            to.relevantArCodes().add(arCodeHolder.arCode().<ARCode> createIdentityStub());
+        }
+        super.save(callback, to);
+    }
+
+    @Override
+    public void retrieve(final AsyncCallback<N4PolicyDTO> callback, Key entityId, com.pyx4j.entity.rpc.AbstractCrudService.RetrieveTarget retrieveTarget) {
+        super.retrieve(new AsyncCallback<N4PolicyDTO>() {
+
+            @Override
+            public void onSuccess(N4PolicyDTO result) {
+                for (ARCode arCode : result.relevantArCodes()) {
+                    N4PolicyDTOARCodeHolderDTO codeHolder = EntityFactory.create(N4PolicyDTOARCodeHolderDTO.class);
+                    codeHolder.arCode().set(arCode.duplicate());
+                    result.arCodes().add(codeHolder);
+                }
+                callback.onSuccess(result);
+            }
+
+            @Override
+            public void onFailure(Throwable caught) {
+                callback.onFailure(caught);
+            }
+
+        }, entityId, retrieveTarget);
+    }
 }

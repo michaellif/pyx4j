@@ -14,6 +14,7 @@
 package com.propertyvista.domain.policy.dto;
 
 import com.pyx4j.entity.annotations.Transient;
+import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IEntity;
 
 import com.propertyvista.domain.financial.ARCode;
@@ -22,5 +23,6 @@ import com.propertyvista.domain.financial.ARCode;
 @Transient
 public interface N4PolicyDTOARCodeHolderDTO extends IEntity {
 
+    @NotNull
     ARCode arCode();
 }

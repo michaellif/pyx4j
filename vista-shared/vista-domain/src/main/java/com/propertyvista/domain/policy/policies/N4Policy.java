@@ -13,12 +13,14 @@
  */
 package com.propertyvista.domain.policy.policies;
 
+import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.DiscriminatorValue;
 import com.pyx4j.entity.annotations.Editor;
 import com.pyx4j.entity.annotations.Editor.EditorType;
 import com.pyx4j.entity.annotations.EmbeddedEntity;
 import com.pyx4j.entity.annotations.RpcTransient;
 import com.pyx4j.entity.annotations.validator.NotNull;
+import com.pyx4j.entity.shared.AttachLevel;
 import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
 
@@ -50,6 +52,7 @@ public interface N4Policy extends Policy {
     IPrimitive<String> emailAddress();
 
     @RpcTransient
+    @Detached(level = AttachLevel.ToStringMembers)
     IList<ARCode> relevantArCodes();
 
 }
