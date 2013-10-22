@@ -24,6 +24,8 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.lang.reflect.Method;
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.GregorianCalendar;
 import java.util.List;
 
@@ -48,6 +50,7 @@ import com.pyx4j.entity.shared.IEntity;
 import com.propertyvista.biz.financial.ar.ARFacade;
 import com.propertyvista.domain.contact.AddressSimple;
 import com.propertyvista.domain.contact.AddressStructured;
+import com.propertyvista.domain.financial.ARCode;
 import com.propertyvista.domain.financial.billing.InvoiceDebit;
 import com.propertyvista.domain.legal.N4FormFieldsData;
 import com.propertyvista.domain.legal.N4FormFieldsData.SignedBy;
@@ -225,7 +228,7 @@ public class N4GenerationFacadeImpl implements N4GenerationFacade {
     }
 
     @Override
-    public N4LeaseData prepareN4LeaseData(Lease leaseId, LogicalDate noticeDate) {
+    public N4LeaseData prepareN4LeaseData(Lease leaseId, LogicalDate noticeDate, Collection<ARCode> acceptedArCodes) {
         Lease lease = Persistence.service().retrieve(Lease.class, leaseId.getPrimaryKey());
 
         N4LeaseData n4LeaseData = EntityFactory.create(N4LeaseData.class);
@@ -247,9 +250,16 @@ public class N4GenerationFacadeImpl implements N4GenerationFacade {
         n4LeaseData.terminationDate().setValue(terminationDate);
 
         List<InvoiceDebit> debits = ServerSideFactory.create(ARFacade.class).getNotCoveredDebitInvoiceLineItems(lease.billingAccount());
-        // TODO filter out non-rent related debits
+        // filter out non-rent related debits
+        List<InvoiceDebit> filteredDebits = new ArrayList<InvoiceDebit>(debits.size());
+        for (InvoiceDebit debit : debits) {
+            if (acceptedArCodes.contains(debit.arCode())) {
+                filteredDebits.add(debit);
+            }
+        }
+
         InvoiceDebitAggregator debitAggregator = new InvoiceDebitAggregator();
-        n4LeaseData.rentOwingBreakdown().addAll(debitAggregator.debitsForPeriod(debitAggregator.aggregate(debits)));
+        n4LeaseData.rentOwingBreakdown().addAll(debitAggregator.debitsForPeriod(debitAggregator.aggregate(filteredDebits)));
 
         BigDecimal totalRentOwning = BigDecimal.ZERO;
         for (N4RentOwingForPeriod rentOwingForPeriod : n4LeaseData.rentOwingBreakdown()) {

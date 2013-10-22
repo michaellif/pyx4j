@@ -13,8 +13,11 @@
  */
 package com.propertyvista.biz.legal;
 
+import java.util.Collection;
+
 import com.pyx4j.commons.LogicalDate;
 
+import com.propertyvista.domain.financial.ARCode;
 import com.propertyvista.domain.legal.N4FormFieldsData;
 import com.propertyvista.domain.legal.N4LandlordsData;
 import com.propertyvista.domain.legal.N4LeaseData;
@@ -26,5 +29,5 @@ public interface N4GenerationFacade {
 
     N4FormFieldsData populateFormData(N4LeaseData leaseData, N4LandlordsData landlordsData);
 
-    N4LeaseData prepareN4LeaseData(Lease leaseId, LogicalDate noticeDate);
+    N4LeaseData prepareN4LeaseData(Lease leaseId, LogicalDate noticeDate, Collection<ARCode> acceptedARCodes);
 }

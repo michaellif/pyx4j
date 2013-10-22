@@ -22,7 +22,9 @@ package com.propertyvista.biz.legal;
 
 import java.math.BigDecimal;
 import java.text.MessageFormat;
+import java.util.Collection;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -37,6 +39,7 @@ import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 
 import com.propertyvista.biz.policy.PolicyFacade;
 import com.propertyvista.domain.company.Employee;
+import com.propertyvista.domain.financial.ARCode;
 import com.propertyvista.domain.legal.LegalNoticeCandidate;
 import com.propertyvista.domain.legal.N4FormFieldsData;
 import com.propertyvista.domain.legal.N4LandlordsData;
@@ -91,7 +94,7 @@ public class N4ManagementFacadeImpl implements N4ManagementFacade {
         }
 
         for (Lease leaseId : delinquentLeases) {
-            issueN4ForLease(leaseId, n4LandLordsData, noticeDate);
+            issueN4ForLease(leaseId, n4LandLordsData, noticeDate, new HashSet<ARCode>(n4policy.relevantArCodes()));
             progress.set(progress.get() + 1);
         }
 
@@ -115,9 +118,9 @@ public class N4ManagementFacadeImpl implements N4ManagementFacade {
         return n4s;
     }
 
-    private void issueN4ForLease(Lease leaseId, N4LandlordsData n4LandLordsData, LogicalDate noticeDate) {
+    private void issueN4ForLease(Lease leaseId, N4LandlordsData n4LandLordsData, LogicalDate noticeDate, Collection<ARCode> relevantArCodes) {
 
-        N4LeaseData n4LeaseData = ServerSideFactory.create(N4GenerationFacade.class).prepareN4LeaseData(leaseId, noticeDate);
+        N4LeaseData n4LeaseData = ServerSideFactory.create(N4GenerationFacade.class).prepareN4LeaseData(leaseId, noticeDate, relevantArCodes);
         N4FormFieldsData n4FormData = ServerSideFactory.create(N4GenerationFacade.class).populateFormData(n4LeaseData, n4LandLordsData);
         byte[] n4LetterBinary = ServerSideFactory.create(N4GenerationFacade.class).generateN4Letter(n4FormData);
 
