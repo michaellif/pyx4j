@@ -218,7 +218,7 @@ public class OperationsSiteMap implements SiteMap {
         public static class AdminUsers extends CrudAppPlace {
         }
 
-        public static class EncryptedStorage extends CrudAppPlace {
+        public static class EncryptedStorage extends AppPlace {
         }
 
     }
