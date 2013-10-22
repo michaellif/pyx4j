@@ -27,8 +27,8 @@ import com.pyx4j.security.rpc.AuthenticationRequest;
 import com.pyx4j.security.shared.SecurityController;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.rpc.AppPlace;
-import com.pyx4j.widgets.client.dialog.Dialog.Type;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
+import com.pyx4j.widgets.client.dialog.MessageDialog.Type;
 import com.pyx4j.widgets.client.dialog.OkOption;
 
 import com.propertyvista.common.client.ui.components.security.AccountRecoveryOptionsDialog;

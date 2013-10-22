@@ -27,7 +27,7 @@ import com.pyx4j.security.rpc.PasswordRetrievalRequest;
 import com.pyx4j.site.shared.domain.Notification;
 import com.pyx4j.site.shared.domain.Notification.NotificationType;
 import com.pyx4j.widgets.client.CaptchaComposite;
-import com.pyx4j.widgets.client.dialog.MessageDialog_v2;
+import com.pyx4j.widgets.client.dialog.MessageDialog;
 
 import com.propertyvista.portal.rpc.portal.web.services.PortalAuthenticationService;
 import com.propertyvista.portal.web.client.PortalWebSite;
@@ -64,7 +64,7 @@ public class PasswordResetRequestWizardActivity extends AbstractWizardActivity<P
             @Override
             public void onFailure(Throwable caught) {
                 createNewCaptchaChallenge();
-                MessageDialog_v2.error(i18n.tr("Failed to send password reset request"), caught.getLocalizedMessage());
+                MessageDialog.error(i18n.tr("Failed to send password reset request"), caught.getLocalizedMessage());
             }
         }, getView().getValue());
     }

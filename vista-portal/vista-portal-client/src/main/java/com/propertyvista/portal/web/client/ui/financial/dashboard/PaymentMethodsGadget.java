@@ -32,7 +32,7 @@ import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.Anchor;
 import com.pyx4j.widgets.client.Button;
 import com.pyx4j.widgets.client.actionbar.Toolbar;
-import com.pyx4j.widgets.client.dialog.MessageDialog_v2;
+import com.pyx4j.widgets.client.dialog.MessageDialog;
 
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
 import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
@@ -121,7 +121,7 @@ public class PaymentMethodsGadget extends AbstractGadget<FinancialDashboardViewI
 
         @Override
         protected void removeItem(final CEntityFolderItem<PaymentMethodInfoDTO> item) {
-            MessageDialog_v2.confirm(i18n.tr("Please confirm"), i18n.tr("Do you really want to delete the Payment Method?"), new Command() {
+            MessageDialog.confirm(i18n.tr("Please confirm"), i18n.tr("Do you really want to delete the Payment Method?"), new Command() {
                 @Override
                 public void execute() {
                     PaymentMethodFolder.super.removeItem(item);

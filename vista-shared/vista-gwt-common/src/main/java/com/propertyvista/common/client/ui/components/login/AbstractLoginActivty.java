@@ -35,7 +35,7 @@ import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.rpc.AppPlace;
 import com.pyx4j.webstorage.client.HTML5Storage;
 import com.pyx4j.widgets.client.CaptchaComposite;
-import com.pyx4j.widgets.client.dialog.MessageDialog_v2;
+import com.pyx4j.widgets.client.dialog.MessageDialog;
 
 import com.propertyvista.domain.DemoData;
 import com.propertyvista.domain.DemoData.UserType;
@@ -131,7 +131,7 @@ public abstract class AbstractLoginActivty extends AbstractActivity implements L
                 if (caught instanceof ChallengeVerificationRequired) {
                     enableHumanVerification();
                 } else if (caught instanceof UserRuntimeException) {
-                    MessageDialog_v2.error(i18n.tr("Login Failed"), caught);
+                    MessageDialog.error(i18n.tr("Login Failed"), caught);
                 } else {
                     super.onFailure(caught);
                 }

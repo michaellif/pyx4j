@@ -34,7 +34,7 @@ import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.Button;
 import com.pyx4j.widgets.client.Button.ButtonMenuBar;
-import com.pyx4j.widgets.client.dialog.MessageDialog_v2;
+import com.pyx4j.widgets.client.dialog.MessageDialog;
 
 import com.propertyvista.common.client.ui.components.tenantinsurance.MoneyComboBox;
 import com.propertyvista.domain.tenant.insurance.TenantSureConstants;
@@ -208,7 +208,7 @@ public class TenantSurePage extends CPortalEntityForm<TenantSureInsurancePolicyD
     }
 
     private void onCancelTenantSure() {
-        MessageDialog_v2.confirm(i18n.tr("TenantSure cancellation"), i18n.tr("Are you sure you want to cancel TenantSure?"), new Command() {
+        MessageDialog.confirm(i18n.tr("TenantSure cancellation"), i18n.tr("Are you sure you want to cancel TenantSure?"), new Command() {
             @Override
             public void execute() {
                 presenter.cancelTenantSure();
@@ -217,7 +217,7 @@ public class TenantSurePage extends CPortalEntityForm<TenantSureInsurancePolicyD
     }
 
     private void onReinstateTenantSure() {
-        MessageDialog_v2.confirm(i18n.tr("TenantSure Reinstatement"), i18n.tr("Are you sure you want to reinstate TenantSure?"), new Command() {
+        MessageDialog.confirm(i18n.tr("TenantSure Reinstatement"), i18n.tr("Are you sure you want to reinstate TenantSure?"), new Command() {
             @Override
             public void execute() {
                 presenter.reinstate();

@@ -40,7 +40,7 @@ public class ExecutionReportSectionLister extends EntityDataTablePanel<Execution
 
     private final ExecutionReportMessageLister messageLister;
 
-    private final Dialog messageDialog;
+    private final Dialog MessageDialog_v2;
 
     public ExecutionReportSectionLister() {
         super(ExecutionReportSection.class);
@@ -63,20 +63,20 @@ public class ExecutionReportSectionLister extends EntityDataTablePanel<Execution
 
         setAllowZoomIn(true);
 
-        messageDialog = new OkDialog(i18n.tr("Execution Messages")) {
+        MessageDialog_v2 = new OkDialog(i18n.tr("Execution Messages")) {
             @Override
             public boolean onClickOk() {
                 return true;
             }
         };
-        messageDialog.setBody(messageLister = new ExecutionReportMessageLister());
+        MessageDialog_v2.setBody(messageLister = new ExecutionReportMessageLister());
     }
 
     @Override
     protected void onItemSelect(ExecutionReportSection item) {
         messageLister.getDataSource().setParentFiltering(item.getPrimaryKey(), ExecutionReportSection.class);
         messageLister.restoreState();
-        messageDialog.show();
+        MessageDialog_v2.show();
     }
 
     public class ExecutionReportMessageLister extends EntityDataTablePanel<ExecutionReportMessage> {

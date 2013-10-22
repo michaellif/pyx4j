@@ -22,7 +22,7 @@ import com.pyx4j.site.rpc.AppPlace;
 import com.pyx4j.site.rpc.NotificationAppPlace;
 import com.pyx4j.site.shared.domain.Notification;
 import com.pyx4j.widgets.client.dialog.ConfirmDecline;
-import com.pyx4j.widgets.client.dialog.MessageDialog_v2;
+import com.pyx4j.widgets.client.dialog.MessageDialog;
 
 import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.domain.security.common.VistaBasicBehavior;

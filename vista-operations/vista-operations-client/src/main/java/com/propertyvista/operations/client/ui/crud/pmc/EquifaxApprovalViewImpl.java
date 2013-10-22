@@ -17,8 +17,8 @@ import com.google.gwt.user.client.Command;
 
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.Button;
-import com.pyx4j.widgets.client.dialog.Dialog.Type;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
+import com.pyx4j.widgets.client.dialog.MessageDialog.Type;
 import com.pyx4j.widgets.client.dialog.OkOption;
 
 import com.propertyvista.operations.client.ui.crud.OperationsViewerViewImplBase;

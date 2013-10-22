@@ -24,7 +24,7 @@ import com.pyx4j.forms.client.ui.folder.CEntityFolderItem;
 import com.pyx4j.forms.client.ui.folder.IFolderDecorator;
 import com.pyx4j.forms.client.ui.folder.IFolderItemDecorator;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.widgets.client.dialog.MessageDialog_v2;
+import com.pyx4j.widgets.client.dialog.MessageDialog;
 
 import com.propertyvista.common.client.resources.VistaImages;
 import com.propertyvista.domain.tenant.EmergencyContact;
@@ -65,7 +65,7 @@ public class EmergencyContactFolder extends CEntityFolder<EmergencyContact> {
 
     @Override
     protected void removeItem(final CEntityFolderItem<EmergencyContact> item) {
-        MessageDialog_v2.confirm(i18n.tr("Emergency contact removal"), i18n.tr("Do you really want to remove emergency contact information?"), new Command() {
+        MessageDialog.confirm(i18n.tr("Emergency contact removal"), i18n.tr("Do you really want to remove emergency contact information?"), new Command() {
             @Override
             public void execute() {
                 EmergencyContactFolder.super.removeItem(item);

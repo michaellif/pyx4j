@@ -13,7 +13,7 @@
  */
 package com.propertyvista.portal.web.client.ui.services.insurance;
 
-import com.pyx4j.widgets.client.dialog.MessageDialog_v2;
+import com.pyx4j.widgets.client.dialog.MessageDialog;
 
 import com.propertyvista.domain.tenant.insurance.TenantSureConstants;
 import com.propertyvista.portal.rpc.portal.web.dto.insurance.TenantSureInsurancePolicyDTO;
@@ -34,12 +34,12 @@ public class TenantSurePageViewImpl extends AbstractEditorView<TenantSureInsuran
 
     @Override
     public void displayMakeAClaimDialog() {
-        MessageDialog_v2.info(i18n.tr("To make a claim please call {0} at {1}", TenantSureConstants.TENANTSURE_LEGAL_NAME,
+        MessageDialog.info(i18n.tr("To make a claim please call {0} at {1}", TenantSureConstants.TENANTSURE_LEGAL_NAME,
                 TenantSureConstants.TENANTSURE_PHONE_NUMBER));
     }
 
     @Override
     public void acknowledgeSentCertificateSuccesfully(String email) {
-        MessageDialog_v2.info(i18n.tr("Your insurance certificate was sent to {0}.", email));
+        MessageDialog.info(i18n.tr("Your insurance certificate was sent to {0}.", email));
     }
 }
