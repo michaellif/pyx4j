@@ -17,7 +17,6 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.ui.RootLayoutPanel;
 
 import com.pyx4j.commons.css.StyleManager;
-import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.gwt.commons.UncaughtHandler;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.security.client.ClientContext;
@@ -27,10 +26,6 @@ import com.pyx4j.site.client.SingletonViewFactory;
 import com.pyx4j.site.client.events.NotificationEvent;
 import com.pyx4j.site.client.events.NotificationHandler;
 import com.pyx4j.site.rpc.AppPlace;
-import com.pyx4j.widgets.client.dialog.Dialog_v2;
-import com.pyx4j.widgets.client.dialog.Dialog_v2.Type;
-import com.pyx4j.widgets.client.dialog.MessageDialog_v2;
-import com.pyx4j.widgets.client.dialog.OkOption;
 
 import com.propertyvista.common.client.ClientNavigUtils;
 import com.propertyvista.common.client.config.VistaFeaturesCustomizationClient;
@@ -52,6 +47,8 @@ public class PortalWebSite extends VistaSite {
 
     private static SiteThemeServices siteThemeServices = GWT.create(SiteThemeServices.class);
 
+    private PortalRootPane portalRootPane;
+
     public PortalWebSite() {
         super("vista-portal", PortalSiteMap.class, new SingletonViewFactory(), new PortalWebSiteDispatcher());
     }
@@ -59,13 +56,15 @@ public class PortalWebSite extends VistaSite {
     @Override
     public void onSiteLoad() {
         super.onSiteLoad();
-        AppSite.getEventBus().addHandler(NotificationEvent.getType(), new PortalUserMessageHandlerByPlace());
+        AppSite.getEventBus().addHandler(NotificationEvent.getType(), new PortalUserMessageHandler());
 
         UncaughtHandler.setUnrecoverableErrorHandler(new VistaUnrecoverableErrorHandler());
 
         getHistoryHandler().register(getPlaceController(), getEventBus(), AppPlace.NOWHERE);
 
-        RootLayoutPanel.get().add(new PortalRootPane());
+        portalRootPane = new PortalRootPane();
+
+        RootLayoutPanel.get().add(portalRootPane);
 
         hideLoadingIndicator();
 
@@ -128,40 +127,13 @@ public class PortalWebSite extends VistaSite {
         return (PortalWebSite) AppSite.instance();
     }
 
-    private static class PortalUserMessageHandlerByDialog implements NotificationHandler {
-
-        @Override
-        public void onNotification(NotificationEvent event) {
-            Dialog_v2.Type dialogType = null;
-            switch (event.getNotificationType()) {
-            case ERROR:
-                dialogType = Type.Error;
-                break;
-            case FAILURE:
-                dialogType = Type.Error;
-                break;
-            case INFO:
-                dialogType = Type.Info;
-                break;
-            case WARNING:
-                dialogType = Type.Warning;
-                break;
-            default:
-                dialogType = Type.Warning;
-                break;
-            }
-            new MessageDialog_v2("", event.getMessage() + (ApplicationMode.isDevelopment() ? "\nDebug Info: " + event.getSystemInfo() : ""), dialogType,
-                    new OkOption() {
-                        @Override
-                        public boolean onClickOk() {
-                            return true;
-                        }
-                    });
-
-        }
+    public static void scrollToTop() {
+        instance().portalRootPane.asWidget().scrollToTop();
     }
 
-    private class PortalUserMessageHandlerByPlace implements NotificationHandler {
+    //  portalRootPane
+
+    private class PortalUserMessageHandler implements NotificationHandler {
 
         @Override
         public void onNotification(NotificationEvent event) {

@@ -23,6 +23,8 @@ import com.pyx4j.forms.client.ui.wizard.CEntityWizard;
 import com.pyx4j.forms.client.ui.wizard.WizardDecorator;
 import com.pyx4j.forms.client.ui.wizard.WizardStep;
 
+import com.propertyvista.portal.web.client.PortalWebSite;
+
 public class CPortalEntityWizard<E extends IEntity> extends CEntityWizard<E> {
 
     private final IWizardView<? extends IEntity> view;
@@ -47,6 +49,7 @@ public class CPortalEntityWizard<E extends IEntity> extends CEntityWizard<E> {
     @Override
     protected void onStepChange(SelectionEvent<WizardStep> event) {
         view.onStepChange();
+        PortalWebSite.scrollToTop();
     }
 
     public IWizardView<? extends IEntity> getView() {
