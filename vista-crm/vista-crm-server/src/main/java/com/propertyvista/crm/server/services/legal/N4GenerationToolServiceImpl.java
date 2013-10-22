@@ -13,7 +13,6 @@
  */
 package com.propertyvista.crm.server.services.legal;
 
-import java.math.BigDecimal;
 import java.util.List;
 import java.util.Vector;
 
@@ -40,7 +39,8 @@ public class N4GenerationToolServiceImpl implements N4GenerationToolService {
 
     @Override
     public void getItems(AsyncCallback<Vector<LegalNoticeCandidateDTO>> callback, N4GenerationSettingsDTO settings) {
-        List<LegalNoticeCandidate> n4Candidates = ServerSideFactory.create(N4ManagementFacade.class).getN4Candidates(BigDecimal.ZERO, null);
+        List<LegalNoticeCandidate> n4Candidates = ServerSideFactory.create(N4ManagementFacade.class).getN4Candidates(settings.minAmountOwed().getValue(),
+                settings.buildings());
 
         Vector<LegalNoticeCandidateDTO> dtoCandidates = new Vector<LegalNoticeCandidateDTO>(n4Candidates.size());
         for (LegalNoticeCandidate candidate : n4Candidates) {

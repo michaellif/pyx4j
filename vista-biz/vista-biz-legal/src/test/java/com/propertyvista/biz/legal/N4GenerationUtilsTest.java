@@ -33,28 +33,47 @@ public class N4GenerationUtilsTest {
     public void testSplitCurrency() {
 
         {
-            String[] splitted1 = N4GenerationUtils.splitCurrency(new BigDecimal("1000.00"));
+            String[] splitted1 = N4GenerationUtils.splitCurrency(new BigDecimal("1000.00"), false);
             Assert.assertArrayEquals(new String[] { " 1", "000", "00" }, splitted1);
         }
 
         {
-            String[] splitted2 = N4GenerationUtils.splitCurrency(new BigDecimal("10000.00"));
+            String[] splitted1 = N4GenerationUtils.splitCurrency(new BigDecimal("1000.00"), true);
+            Assert.assertArrayEquals(new String[] { "1", "000", "00" }, splitted1);
+        }
+
+        {
+            String[] splitted2 = N4GenerationUtils.splitCurrency(new BigDecimal("10000.00"), false);
             Assert.assertArrayEquals(new String[] { "10", "000", "00" }, splitted2);
         }
 
         {
-            String[] splitted3 = N4GenerationUtils.splitCurrency(new BigDecimal("100.00"));
+            String[] splitted3 = N4GenerationUtils.splitCurrency(new BigDecimal("100.00"), false);
             Assert.assertArrayEquals(new String[] { "  ", "100", "00" }, splitted3);
         }
 
         {
-            String[] splitted4 = N4GenerationUtils.splitCurrency(new BigDecimal("10.00"));
+            String[] splitted3 = N4GenerationUtils.splitCurrency(new BigDecimal("100.00"), true);
+            Assert.assertArrayEquals(new String[] { " ", "100", "00" }, splitted3);
+        }
+
+        {
+            String[] splitted4 = N4GenerationUtils.splitCurrency(new BigDecimal("10.00"), false);
             Assert.assertArrayEquals(new String[] { "  ", " 10", "00" }, splitted4);
         }
 
         {
-            String[] splitted4 = N4GenerationUtils.splitCurrency(new BigDecimal("1.00"));
+            String[] splitted4 = N4GenerationUtils.splitCurrency(new BigDecimal("10.00"), true);
+            Assert.assertArrayEquals(new String[] { " ", " 10", "00" }, splitted4);
+        }
+
+        {
+            String[] splitted4 = N4GenerationUtils.splitCurrency(new BigDecimal("1.00"), false);
             Assert.assertArrayEquals(new String[] { "  ", "  1", "00" }, splitted4);
+        }
+        {
+            String[] splitted4 = N4GenerationUtils.splitCurrency(new BigDecimal("1.00"), true);
+            Assert.assertArrayEquals(new String[] { " ", "  1", "00" }, splitted4);
         }
     }
 

@@ -103,7 +103,7 @@ public class N4GenerationFacadeImpl implements N4GenerationFacade {
         fieldsData.terminationDateMM().setValue(globalTerminationDate[1]);
         fieldsData.terminationDateYYYY().setValue(globalTerminationDate[2]);
 
-        String[] totalOwed = N4GenerationUtils.splitCurrency(leaseData.totalRentOwning().getValue());
+        String[] totalOwed = N4GenerationUtils.splitCurrency(leaseData.totalRentOwning().getValue(), false);
         fieldsData.globalTotalOwedThousands().setValue(totalOwed[0]);
         fieldsData.globalTotalOwedHundreds().setValue(totalOwed[1]);
         fieldsData.globalTotalOwedCents().setValue(totalOwed[2]);
@@ -120,17 +120,17 @@ public class N4GenerationFacadeImpl implements N4GenerationFacade {
             fieldsData.owedToMMA().setValue(owedTo[1]);
             fieldsData.owedToYYYYA().setValue(owedTo[2]);
 
-            String[] charged = N4GenerationUtils.splitCurrency(rentOwningForPeriod.rentCharged().getValue());
+            String[] charged = N4GenerationUtils.splitCurrency(rentOwningForPeriod.rentCharged().getValue(), true);
             fieldsData.rentChargedThousandsA().setValue(charged[0]);
             fieldsData.rentChargedHundredsA().setValue(charged[1]);
             fieldsData.rentChargedCentsA().setValue(charged[2]);
 
-            String[] paid = N4GenerationUtils.splitCurrency(rentOwningForPeriod.rentPaid().getValue());
+            String[] paid = N4GenerationUtils.splitCurrency(rentOwningForPeriod.rentPaid().getValue(), true);
             fieldsData.rentPaidThousandsA().setValue(paid[0]);
             fieldsData.rentPaidHundredsA().setValue(paid[1]);
             fieldsData.rentPaidCentsA().setValue(paid[2]);
 
-            String[] owing = N4GenerationUtils.splitCurrency(rentOwningForPeriod.rentOwing().getValue());
+            String[] owing = N4GenerationUtils.splitCurrency(rentOwningForPeriod.rentOwing().getValue(), true);
             fieldsData.rentOwingThousandsA().setValue(owing[0]);
             fieldsData.rentOwingHundredsA().setValue(owing[1]);
             fieldsData.rentOwingCentsA().setValue(owing[2]);
@@ -148,17 +148,17 @@ public class N4GenerationFacadeImpl implements N4GenerationFacade {
             fieldsData.owedToMMB().setValue(owedTo[1]);
             fieldsData.owedToYYYYB().setValue(owedTo[2]);
 
-            String[] charged = N4GenerationUtils.splitCurrency(rentOwningForPeriod.rentCharged().getValue());
+            String[] charged = N4GenerationUtils.splitCurrency(rentOwningForPeriod.rentCharged().getValue(), true);
             fieldsData.rentChargedThousandsB().setValue(charged[0]);
             fieldsData.rentChargedHundredsB().setValue(charged[1]);
             fieldsData.rentChargedCentsB().setValue(charged[2]);
 
-            String[] paid = N4GenerationUtils.splitCurrency(rentOwningForPeriod.rentPaid().getValue());
+            String[] paid = N4GenerationUtils.splitCurrency(rentOwningForPeriod.rentPaid().getValue(), true);
             fieldsData.rentPaidThousandsB().setValue(paid[0]);
             fieldsData.rentPaidHundredsB().setValue(paid[1]);
             fieldsData.rentPaidCentsB().setValue(paid[2]);
 
-            String[] owing = N4GenerationUtils.splitCurrency(rentOwningForPeriod.rentOwing().getValue());
+            String[] owing = N4GenerationUtils.splitCurrency(rentOwningForPeriod.rentOwing().getValue(), true);
             fieldsData.rentOwingThousandsB().setValue(owing[0]);
             fieldsData.rentOwingHundredsB().setValue(owing[1]);
             fieldsData.rentOwingCentsB().setValue(owing[2]);
@@ -175,24 +175,24 @@ public class N4GenerationFacadeImpl implements N4GenerationFacade {
             fieldsData.owedToMMC().setValue(owedTo[1]);
             fieldsData.owedToYYYYC().setValue(owedTo[2]);
 
-            String[] charged = N4GenerationUtils.splitCurrency(rentOwningForPeriod.rentCharged().getValue());
+            String[] charged = N4GenerationUtils.splitCurrency(rentOwningForPeriod.rentCharged().getValue(), true);
             fieldsData.rentChargedThousandsC().setValue(charged[0]);
             fieldsData.rentChargedHundredsC().setValue(charged[1]);
             fieldsData.rentChargedCentsC().setValue(charged[2]);
 
-            String[] paid = N4GenerationUtils.splitCurrency(rentOwningForPeriod.rentPaid().getValue());
+            String[] paid = N4GenerationUtils.splitCurrency(rentOwningForPeriod.rentPaid().getValue(), true);
             fieldsData.rentPaidThousandsC().setValue(paid[0]);
             fieldsData.rentPaidHundredsC().setValue(paid[1]);
             fieldsData.rentPaidCentsC().setValue(paid[2]);
 
-            String[] owing = N4GenerationUtils.splitCurrency(rentOwningForPeriod.rentOwing().getValue());
+            String[] owing = N4GenerationUtils.splitCurrency(rentOwningForPeriod.rentOwing().getValue(), true);
             fieldsData.rentOwingThousandsC().setValue(owing[0]);
             fieldsData.rentOwingHundredsC().setValue(owing[1]);
             fieldsData.rentOwingCentsC().setValue(owing[2]);
         }
         fieldsData.rentOwingThousandsTotal().setValue(totalOwed[0]);
-        fieldsData.rentOwingHundredsTotal().setValue(totalOwed[0]);
-        fieldsData.rentOwingCentsTotal().setValue(totalOwed[0]);
+        fieldsData.rentOwingHundredsTotal().setValue(totalOwed[1]);
+        fieldsData.rentOwingCentsTotal().setValue(totalOwed[2]);
 
         fieldsData.signedBy().setValue(landlordsData.isLandlord().isBooleanTrue() ? SignedBy.Landlord : SignedBy.Agent);
         fieldsData.signature().setValue(landlordsData.signature().getValue());

@@ -35,8 +35,11 @@ public class N4GenerationUtils {
 
     private static final Pattern phonePattern = Pattern.compile("\\((\\d\\d\\d)\\) (\\d\\d\\d)-(\\d\\d\\d\\d)( x\\d+)?");
 
-    public static String[] splitCurrency(BigDecimal amount) {
+    public static String[] splitCurrency(BigDecimal amount, boolean oneDigitThousands) {
         if (amount.compareTo(new BigDecimal("99999.99")) > 0) {
+            throw new Error("The current amount could not be formatted (greater than $99,999.99 and cannot fit into the form field)");
+        }
+        if (oneDigitThousands && amount.compareTo(new BigDecimal("9999.99")) > 0) {
             throw new Error("The current amount could not be formatted (greater than $99,999.99 and cannot fit into the form field)");
         }
         String spaces = "     ";
@@ -51,6 +54,9 @@ public class N4GenerationUtils {
         splittedCurrency[1] = formattedAmount.substring(indexOfDot - 3, indexOfDot);
         splittedCurrency[2] = formattedAmount.substring(indexOfDot + 1, indexOfDot + 3);
 
+        if (oneDigitThousands && splittedCurrency[0].startsWith(" ") & splittedCurrency[0].length() > 1) {
+            splittedCurrency[0] = splittedCurrency[0].substring(1, splittedCurrency[0].length());
+        }
         return splittedCurrency;
     }
 

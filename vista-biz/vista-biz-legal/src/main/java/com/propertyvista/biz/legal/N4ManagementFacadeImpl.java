@@ -22,6 +22,7 @@ package com.propertyvista.biz.legal;
 
 import java.math.BigDecimal;
 import java.text.MessageFormat;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -37,14 +38,18 @@ import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 
+import com.propertyvista.biz.financial.ar.ARFacade;
 import com.propertyvista.biz.policy.PolicyFacade;
 import com.propertyvista.domain.company.Employee;
 import com.propertyvista.domain.financial.ARCode;
+import com.propertyvista.domain.financial.BillingAccount;
+import com.propertyvista.domain.financial.billing.InvoiceDebit;
 import com.propertyvista.domain.legal.LegalNoticeCandidate;
 import com.propertyvista.domain.legal.N4FormFieldsData;
 import com.propertyvista.domain.legal.N4LandlordsData;
 import com.propertyvista.domain.legal.N4LeaseData;
 import com.propertyvista.domain.legal.N4LegalLetter;
+import com.propertyvista.domain.legal.N4RentOwingForPeriod;
 import com.propertyvista.domain.policy.framework.OrganizationPoliciesNode;
 import com.propertyvista.domain.policy.policies.N4Policy;
 import com.propertyvista.domain.property.asset.building.Building;
@@ -55,20 +60,38 @@ public class N4ManagementFacadeImpl implements N4ManagementFacade {
 
     @Override
     public List<LegalNoticeCandidate> getN4Candidates(BigDecimal minAmountOwed, List<Building> buildingIds) {
-        // TODO implement this
-
-        // create some mockup
-        List<LegalNoticeCandidate> candidates = new LinkedList<LegalNoticeCandidate>();
-
-        EntityQueryCriteria<Lease> criteria = EntityQueryCriteria.create(Lease.class);
-
-        for (Lease lease : Persistence.service().query(criteria)) {
-            LegalNoticeCandidate candidate = EntityFactory.create(LegalNoticeCandidate.class);
-            candidate.leaseId().set(lease.createIdentityStub());
-            candidate.amountOwed().setValue(new BigDecimal("555.99"));
-            candidates.add(candidate);
+        if (minAmountOwed == null) {
+            minAmountOwed = BigDecimal.ZERO;
         }
 
+        N4Policy n4policy = ServerSideFactory.create(PolicyFacade.class).obtainEffectivePolicy(EntityFactory.create(OrganizationPoliciesNode.class),
+                N4Policy.class);
+        HashSet<ARCode> acceptableArCodes = new HashSet<ARCode>(n4policy.relevantArCodes());
+
+        EntityQueryCriteria<Lease> criteria = EntityQueryCriteria.create(Lease.class);
+        criteria.in(criteria.proto().status(), Lease.Status.active());
+        if (buildingIds != null && !buildingIds.isEmpty()) {
+            criteria.in(criteria.proto().unit().building(), buildingIds);
+        }
+
+        // TODO not sure that sorting should be done in this method
+        criteria.asc(criteria.proto().unit().building().propertyCode());
+        criteria.asc(criteria.proto().unit().info().number());
+
+        List<Lease> leases = Persistence.service().query(criteria);
+
+        List<LegalNoticeCandidate> candidates = new LinkedList<LegalNoticeCandidate>();
+        for (Lease lease : leases) {
+
+            BigDecimal amountOwed = amountOwed(lease.billingAccount(), acceptableArCodes);
+
+            if (amountOwed.compareTo(minAmountOwed) > 0) {
+                LegalNoticeCandidate candidate = EntityFactory.create(LegalNoticeCandidate.class);
+                candidate.leaseId().set(lease.createIdentityStub());
+                candidate.amountOwed().setValue(amountOwed);
+                candidates.add(candidate);
+            }
+        }
         return candidates;
     }
 
@@ -137,6 +160,24 @@ public class N4ManagementFacadeImpl implements N4ManagementFacade {
         n4Letter.fileSize().setValue(n4LetterBinary.length);
         n4Letter.fileName().setValue(MessageFormat.format("n4notice-{0,date,yyyy-MM-dd}.pdf", SystemDateManager.getDate()));
         Persistence.service().persist(n4Letter);
+    }
+
+    private BigDecimal amountOwed(BillingAccount billingAccount, Collection<ARCode> acceptableArCodes) {
+        List<InvoiceDebit> debits = ServerSideFactory.create(ARFacade.class).getNotCoveredDebitInvoiceLineItems(billingAccount);
+        List<InvoiceDebit> filteredDebits = new ArrayList<InvoiceDebit>(debits.size());
+        for (InvoiceDebit debit : debits) {
+            if (acceptableArCodes.contains(debit.arCode())) {
+                filteredDebits.add(debit);
+            }
+        }
+        InvoiceDebitAggregator debitAggregator = new InvoiceDebitAggregator();
+        List<N4RentOwingForPeriod> rentOwingBreakdown = debitAggregator.debitsForPeriod(debitAggregator.aggregate(filteredDebits));
+
+        BigDecimal amountOwed = BigDecimal.ZERO;
+        for (N4RentOwingForPeriod rentOwingForPeriod : rentOwingBreakdown) {
+            amountOwed = amountOwed.add(rentOwingForPeriod.rentOwing().getValue());
+        }
+        return amountOwed;
     }
 
 }
