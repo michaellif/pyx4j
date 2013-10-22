@@ -131,6 +131,18 @@ public class ResponsiveLayoutPanel extends ComplexPanel implements RequiresResiz
         pagePanel.setStyleName(ResponsiveLayoutTheme.StyleName.ResponsiveLayoutMainHolder.name());
 
         pageScroll = new ScrollPanel(pagePanel);
+        pageScroll.addScrollHandler(new ScrollHandler() {
+
+            @Override
+            public void onScroll(ScrollEvent event) {
+                if (pageScroll.getVerticalScrollPosition() <= getHeaderDisplay().getOffsetHeight()) {
+                    getHeaderDisplay().getElement().getStyle()
+                            .setOpacity(1 - (double) pageScroll.getVerticalScrollPosition() / getHeaderDisplay().getOffsetHeight());
+                } else {
+                    getHeaderDisplay().getElement().getStyle().setOpacity(1);
+                }
+            }
+        });
         pageScroll.getElement().getStyle().setOverflowY(Overflow.SCROLL);
         pageScroll.setHeight("100%");
         pageHolder.add(pageScroll);
