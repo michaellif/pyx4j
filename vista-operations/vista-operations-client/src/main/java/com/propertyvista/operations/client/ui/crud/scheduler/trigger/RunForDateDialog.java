@@ -32,7 +32,6 @@ public abstract class RunForDateDialog extends OkCancelDialog {
     public RunForDateDialog() {
         super(TriggerViewerViewImpl.i18n.tr("Run for Date"));
         setBody(createBody());
-        setHeight("100px");
     }
 
     protected Widget createBody() {

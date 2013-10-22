@@ -51,7 +51,7 @@ public abstract class CustomerSelectorDialog extends EntitySelectorTableDialog<C
 
     public CustomerSelectorDialog(boolean isMultiselect, List<Customer> alreadySelected, String caption) {
         super(Customer.class, isMultiselect, alreadySelected, caption);
-        setWidth("700px");
+        setDialogPixelWidth(700);
     }
 
     @Override

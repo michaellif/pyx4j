@@ -117,7 +117,7 @@ class SocialLinkFolder extends VistaBoxFolder<SocialLink> {
                         SocialLink link = EntityFactory.create(SocialLink.class);
                         link.socialSite().setValue(event.getValue());
                         SocialLinkFolder.super.addItem(link);
-                        hide();
+                        hide(false);
                     }
                 });
                 panel.add(selector);

@@ -58,7 +58,7 @@ public abstract class FileUploadDialog extends VerticalPanel implements OkCancel
 
             @Override
             protected void onUploadComplete(UploadResponse<IFile> serverUploadResponse) {
-                dialog.hide();
+                dialog.hide(false);
                 FileUploadDialog.this.onUploadComplete(serverUploadResponse);
             }
 
@@ -70,7 +70,7 @@ public abstract class FileUploadDialog extends VerticalPanel implements OkCancel
         uploadPanel.getElement().getStyle().setPaddingLeft(35, Style.Unit.PX);
 
         dialog.setBody(uploadPanel);
-        dialog.setPixelSize(460, 150);
+        dialog.setDialogPixelWidth(460);
     }
 
     public void show() {

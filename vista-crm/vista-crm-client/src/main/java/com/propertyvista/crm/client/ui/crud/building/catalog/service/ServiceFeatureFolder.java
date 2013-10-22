@@ -108,7 +108,7 @@ class ServiceFeatureFolder extends VistaTableFolder<Feature> {
         public FeatureSelectorDialog() {
             super(Feature.class, true, getValue(), i18n.tr("Select Feature"));
             setParentFiltering(parent.getValue().catalog().getPrimaryKey());
-            setWidth("700px");
+            setDialogPixelWidth(700);
         }
 
         @Override

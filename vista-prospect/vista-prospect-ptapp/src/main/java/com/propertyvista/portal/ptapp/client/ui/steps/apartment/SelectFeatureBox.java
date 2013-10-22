@@ -33,8 +33,8 @@ abstract class SelectFeatureBox extends EntitySelectorListDialog<ProductItem> {
     }
 
     @Override
-    public String defineWidth() {
-        return "300px";
+    public int defineWidth() {
+        return 500;
     }
 
     @Override

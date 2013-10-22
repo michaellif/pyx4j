@@ -51,7 +51,7 @@ public abstract class TenantSelectorDialog extends EntitySelectorTableDialog<Ten
 
     public TenantSelectorDialog(boolean isMultiselect, List<Tenant> alreadySelected, String caption) {
         super(Tenant.class, isMultiselect, alreadySelected, caption);
-        setWidth("700px");
+        setDialogPixelWidth(700);
     }
 
     @Override

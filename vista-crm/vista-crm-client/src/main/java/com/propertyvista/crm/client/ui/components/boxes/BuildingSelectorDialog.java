@@ -51,7 +51,7 @@ public abstract class BuildingSelectorDialog extends EntitySelectorTableDialog<B
 
     public BuildingSelectorDialog(boolean isMultiselect, List<Building> alreadySelected, String caption) {
         super(Building.class, isMultiselect, alreadySelected, caption);
-        setWidth("700px");
+        setDialogPixelWidth(700);
     }
 
     @Override

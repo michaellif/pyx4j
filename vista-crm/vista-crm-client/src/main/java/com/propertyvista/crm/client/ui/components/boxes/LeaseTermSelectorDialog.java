@@ -51,7 +51,7 @@ public abstract class LeaseTermSelectorDialog extends EntitySelectorTableDialog<
 
     public LeaseTermSelectorDialog(boolean isMultiselect, List<LeaseTerm> alreadySelected, String caption) {
         super(LeaseTerm.class, true, isMultiselect, alreadySelected, caption);
-        setWidth("700px");
+        setDialogPixelWidth(700);
     }
 
     @Override

@@ -262,7 +262,7 @@ public abstract class AddGadgetDialog extends OkDialog implements OkOptionText {
             }
         }, boardType);
         setBody(body);
-        setSize("600px", "300px");
+        setDialogPixelWidth(600);
     }
 
     @Override

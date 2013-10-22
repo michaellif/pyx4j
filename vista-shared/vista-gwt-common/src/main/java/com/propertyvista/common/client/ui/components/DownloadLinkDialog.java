@@ -55,7 +55,7 @@ public class DownloadLinkDialog extends Dialog implements CancelOption {
 
             @Override
             public void onClick(ClickEvent event) {
-                DownloadLinkDialog.this.hide();
+                DownloadLinkDialog.this.hide(false);
                 closeDownloadable();
             }
         });
@@ -72,4 +72,5 @@ public class DownloadLinkDialog extends Dialog implements CancelOption {
     protected void closeDownloadable() {
         GWT.<DownloadableService> create(DownloadableService.class).cancelDownload(null, downloadUrl);
     }
+
 }

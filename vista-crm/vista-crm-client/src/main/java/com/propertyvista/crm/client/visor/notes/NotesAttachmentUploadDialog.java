@@ -52,7 +52,7 @@ public abstract class NotesAttachmentUploadDialog extends OkCancelDialog {
 
             @Override
             protected void onUploadComplete(UploadResponse<File> serverUploadResponse) {
-                NotesAttachmentUploadDialog.this.hide();
+                NotesAttachmentUploadDialog.this.hide(false);
                 NotesAttachmentUploadDialog.this.onUploadComplete(serverUploadResponse);
             }
 
@@ -64,7 +64,7 @@ public abstract class NotesAttachmentUploadDialog extends OkCancelDialog {
         uploadPanel.getElement().getStyle().setPaddingLeft(35, Style.Unit.PX);
 
         this.setBody(uploadPanel);
-        this.setPixelSize(460, 150);
+        this.setDialogPixelWidth(460);
     }
 
     protected abstract void onUploadComplete(UploadResponse<File> serverUploadResponse);

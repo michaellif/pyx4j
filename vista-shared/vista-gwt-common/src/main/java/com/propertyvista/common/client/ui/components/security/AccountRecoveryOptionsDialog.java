@@ -56,7 +56,7 @@ public class AccountRecoveryOptionsDialog extends Composite {
         this.cancellationTimer = new Timer() {
             @Override
             public void run() {
-                AccountRecoveryOptionsDialog.this.dialog.hide();
+                AccountRecoveryOptionsDialog.this.dialog.hide(false);
             }
         };
         this.cancellationTimer.schedule(CANCEL_TIMEOUT);

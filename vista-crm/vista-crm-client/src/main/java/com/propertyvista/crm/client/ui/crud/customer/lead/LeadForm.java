@@ -76,6 +76,7 @@ public class LeadForm extends CrmEntityForm<Lead> {
 
 
 
+
             @Override
             public ValidationError isValid(CComponent<List<Guest>> component, List<Guest> value) {
                 Boolean hasContact = false;
@@ -201,7 +202,8 @@ public class LeadForm extends CrmEntityForm<Lead> {
 
         public FloorplanSelectorDialogDialog() {
             super(Floorplan.class, false, Collections.<Floorplan> emptyList(), i18n.tr("Building/Floorplan Selection"));
-            setWidth("600px");
+            setDialogPixelWidth(600);
+
         }
 
         @Override

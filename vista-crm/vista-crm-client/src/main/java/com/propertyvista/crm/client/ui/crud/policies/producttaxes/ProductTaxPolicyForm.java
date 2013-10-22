@@ -118,7 +118,7 @@ public class ProductTaxPolicyForm extends PolicyDTOTabPanelBasedForm<ProductTaxP
 
             public ProductSelectorDialog(List<ARCode> alreadySelectedProducts) {
                 super(ARCode.class, false, alreadySelectedProducts, i18n.tr("Select Product Type"));
-                setWidth("700px");
+                setDialogPixelWidth(700);
             }
 
             @Override

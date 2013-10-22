@@ -33,8 +33,7 @@ public class CreditCheckWizardViewImpl extends AbstractWizard<CreditCheckSetupDT
         setForm(new CreditCheckWizardForm(this, new Command() {
             @Override
             public void execute() {
-                new LegalTermsDialog(GWT.<PmcTermsOfServiceService> create(PmcTermsOfServiceService.class), "500px", "400px", i18n.tr("Terms of Service"))
-                        .show();
+                new LegalTermsDialog(GWT.<PmcTermsOfServiceService> create(PmcTermsOfServiceService.class), i18n.tr("Terms of Service")).show();
             }
         }));
     }

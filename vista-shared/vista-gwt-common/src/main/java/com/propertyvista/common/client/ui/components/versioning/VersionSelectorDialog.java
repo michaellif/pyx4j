@@ -32,7 +32,7 @@ public abstract class VersionSelectorDialog<V extends IVersionData<?>> extends E
     public VersionSelectorDialog(Class<V> entityVersionClass, Key entityId) {
         super(entityVersionClass, false, Collections.<V> emptyList(), i18n.tr("Select Version"));
         setParentFiltering(entityId);
-        setWidth("700px");
+        setDialogPixelWidth(700);
     }
 
     public Key getSelectedVersionId() {

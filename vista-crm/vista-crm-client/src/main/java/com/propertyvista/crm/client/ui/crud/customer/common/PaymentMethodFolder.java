@@ -67,8 +67,8 @@ public abstract class PaymentMethodFolder extends VistaBoxFolder<LeasePaymentMet
                     }
 
                     @Override
-                    public String defineWidth() {
-                        return "20em";
+                    public int defineWidth() {
+                        return 300;
                     }
                 }.show();
             }

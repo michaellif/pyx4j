@@ -23,11 +23,11 @@ public class LegalTermsDialog extends OkDialog {
 
     private boolean isLoaded;
 
-    public LegalTermsDialog(AbstractLegalTermsService service, String width, String height, String caption) {
+    public LegalTermsDialog(AbstractLegalTermsService service, String caption) {
         super(caption);
-        final LegalTermsContentViewer termsViewer = new LegalTermsContentViewer(height);
+        final LegalTermsContentViewer termsViewer = new LegalTermsContentViewer("400px");
         setBody(termsViewer);
-        setSize(width, height);
+        setDialogPixelWidth(500);
         service.retrieveLegalTerms(new DefaultAsyncCallback<LegalTermsContent>() {
 
             @Override
@@ -38,7 +38,7 @@ public class LegalTermsDialog extends OkDialog {
 
             @Override
             public void onFailure(Throwable caught) {
-                LegalTermsDialog.this.hide();
+                LegalTermsDialog.this.hide(false);
                 super.onFailure(caught);
             }
 

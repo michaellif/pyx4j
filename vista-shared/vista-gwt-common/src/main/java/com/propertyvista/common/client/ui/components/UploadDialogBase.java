@@ -59,7 +59,7 @@ public class UploadDialogBase<U extends IEntity, R extends IFile> extends OkCanc
 
             @Override
             protected void onUploadComplete(UploadResponse<R> serverUploadResponse) {
-                UploadDialogBase.this.hide();
+                UploadDialogBase.this.hide(false);
                 if (UploadDialogBase.this.uploadReciver != null) {
                     UploadDialogBase.this.uploadReciver.onUploadComplete(serverUploadResponse);
                 } else {

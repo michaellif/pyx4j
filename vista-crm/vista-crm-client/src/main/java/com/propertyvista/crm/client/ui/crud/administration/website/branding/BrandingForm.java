@@ -99,7 +99,7 @@ public class BrandingForm extends CrmEntityForm<SiteDescriptorDTO> {
                     }
                 };
                 dialog.setBody(new Image(MediaUtils.createSiteImageResourceUrl(getValue().crmLogo())));
-                dialog.center();
+                dialog.layout();
             }
         }) {
             @Override

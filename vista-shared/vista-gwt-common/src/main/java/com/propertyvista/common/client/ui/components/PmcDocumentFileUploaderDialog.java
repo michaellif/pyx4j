@@ -60,7 +60,7 @@ public abstract class PmcDocumentFileUploaderDialog extends Composite implements
 
             @Override
             protected void onUploadComplete(UploadResponse<IFile> serverUploadResponse) {
-                dialog.hide();
+                dialog.hide(false);
                 PmcDocumentFileUploaderDialog.this.onUploadComplete(serverUploadResponse);
             }
 
@@ -79,7 +79,7 @@ public abstract class PmcDocumentFileUploaderDialog extends Composite implements
         dialogBody.setCellHorizontalAlignment(uploadPanel, HasHorizontalAlignment.ALIGN_CENTER);
 
         dialog.setBody(dialogBody);
-        dialog.setPixelSize(460, 80);
+        dialog.setDialogPixelWidth(460);
     }
 
     public void show() {

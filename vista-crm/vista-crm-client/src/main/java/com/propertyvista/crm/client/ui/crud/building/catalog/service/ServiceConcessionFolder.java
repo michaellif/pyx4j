@@ -110,7 +110,7 @@ class ServiceConcessionFolder extends VistaTableFolder<Concession> {
         public ConcessionSelectorDialog() {
             super(Concession.class, true, getValue(), i18n.tr("Select Concession"));
             setParentFiltering(parent.getValue().catalog().getPrimaryKey());
-            setWidth("700px");
+            setDialogPixelWidth(700);
         }
 
         @Override

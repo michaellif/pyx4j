@@ -81,7 +81,7 @@ public class SiteImageResourceProvider extends Dialog implements CloseOption, Ri
                 if (resourceSelectionHandler != null) {
                     resourceSelectionHandler.onSuccess(imageResourceMap.get(image.getUrl()));
                 }
-                SiteImageResourceProvider.this.hide();
+                SiteImageResourceProvider.this.hide(false);
             }
 
             @Override
@@ -177,13 +177,13 @@ public class SiteImageResourceProvider extends Dialog implements CloseOption, Ri
 
     public void selectResource(AsyncCallback<SiteImageResource> callback) {
         resourceSelectionHandler = callback;
-        center();
+        layout();
     }
 
     @Override
     public void selectImage(AsyncCallback<String> callback) {
         imageSelectionHandler = callback;
-        center();
+        layout();
     }
 
     @Override

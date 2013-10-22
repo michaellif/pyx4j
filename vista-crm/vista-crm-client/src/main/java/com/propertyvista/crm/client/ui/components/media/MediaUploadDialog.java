@@ -60,7 +60,7 @@ public abstract class MediaUploadDialog extends VerticalPanel implements OkCance
 
             @Override
             protected void onUploadComplete(UploadResponse<File> serverUploadResponse) {
-                dialog.hide();
+                dialog.hide(false);
                 MediaUploadDialog.this.onUploadComplete(serverUploadResponse);
             }
 
@@ -79,7 +79,7 @@ public abstract class MediaUploadDialog extends VerticalPanel implements OkCance
         uploadPanel.getElement().getStyle().setPaddingLeft(35, Style.Unit.PX);
 
         dialog.setBody(uploadPanel);
-        dialog.setPixelSize(460, 150);
+        dialog.setDialogPixelWidth(460);
     }
 
     public void show() {

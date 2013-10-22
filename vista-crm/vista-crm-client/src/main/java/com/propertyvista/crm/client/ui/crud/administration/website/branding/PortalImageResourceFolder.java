@@ -155,7 +155,7 @@ public class PortalImageResourceFolder extends VistaBoxFolder<PortalLogoImageRes
                             }
                         };
                         dialog.setBody(new Image(MediaUtils.createSiteImageResourceUrl((SiteImageResource) getValue())));
-                        dialog.center();
+                        dialog.layout();
                     }
                 });
 

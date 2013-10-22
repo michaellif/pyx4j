@@ -51,7 +51,7 @@ public abstract class GlCodeSelectorDialog extends EntitySelectorTableDialog<GlC
 
     public GlCodeSelectorDialog(boolean isMultiselect, List<GlCode> alreadySelected, String caption) {
         super(GlCode.class, isMultiselect, alreadySelected, caption);
-        setWidth("700px");
+        setDialogPixelWidth(700);
     }
 
     @Override

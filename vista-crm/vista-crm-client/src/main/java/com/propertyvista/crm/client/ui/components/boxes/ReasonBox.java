@@ -30,7 +30,7 @@ public abstract class ReasonBox extends OkCancelDialog {
     public ReasonBox(String title) {
         super(title);
         setBody(createBody());
-        setSize("350px", "100px");
+        setDialogPixelWidth(350);
     }
 
     protected Widget createBody() {

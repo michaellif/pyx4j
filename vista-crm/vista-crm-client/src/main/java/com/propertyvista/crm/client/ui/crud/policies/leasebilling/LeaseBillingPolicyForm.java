@@ -349,7 +349,7 @@ public class LeaseBillingPolicyForm extends PolicyDTOTabPanelBasedForm<LeaseBill
                     @Override
                     public void onValueChange(ValueChangeEvent<BillingPeriod> event) {
                         selectHandler.onValueChange(event);
-                        hide();
+                        hide(false);
                     }
                 });
 

@@ -33,8 +33,8 @@ public abstract class DocumentTypeSelectorDialog extends EntitySelectorListDialo
     }
 
     @Override
-    public String defineWidth() {
-        return "40em";
+    public int defineWidth() {
+        return 600;
     }
 
     @Override

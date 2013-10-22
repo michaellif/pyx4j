@@ -29,13 +29,13 @@ import com.pyx4j.forms.client.ui.CEntityComboBox;
 import com.pyx4j.forms.client.ui.IFormat;
 import com.pyx4j.forms.client.ui.OptionsFilter;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.widgets.client.dialog.Dialog_v2;
+import com.pyx4j.widgets.client.dialog.Dialog;
 import com.pyx4j.widgets.client.dialog.OkCancelOption;
 
 import com.propertyvista.domain.site.AvailableLocale;
 import com.propertyvista.shared.i18n.CompiledLocale;
 
-public abstract class AvailableLocaleSelectorDialog extends Dialog_v2 implements OkCancelOption {
+public abstract class AvailableLocaleSelectorDialog extends Dialog implements OkCancelOption {
     private final static I18n i18n = I18n.get(AvailableLocaleSelectorDialog.class);
 
     private final static String title = i18n.tr("Select Locale");

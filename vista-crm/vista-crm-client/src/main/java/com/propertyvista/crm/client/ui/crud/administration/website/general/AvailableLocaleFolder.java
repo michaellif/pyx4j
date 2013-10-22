@@ -39,7 +39,7 @@ import com.pyx4j.forms.client.ui.folder.IFolderDecorator;
 import com.pyx4j.forms.client.ui.folder.TableFolderDecorator;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.dialog.CancelOption;
-import com.pyx4j.widgets.client.dialog.Dialog_v2;
+import com.pyx4j.widgets.client.dialog.Dialog;
 
 import com.propertyvista.common.client.ui.components.folders.VistaTableFolder;
 import com.propertyvista.domain.site.AvailableLocale;
@@ -107,7 +107,7 @@ class AvailableLocaleFolder extends VistaTableFolder<AvailableLocale> {
         }
     }
 
-    abstract class LocaleSelectorDialog extends Dialog_v2 implements CancelOption, ClickHandler {
+    abstract class LocaleSelectorDialog extends Dialog implements CancelOption, ClickHandler {
 
         private final String LocaleRadioGroup = "LocaleSelector";
 

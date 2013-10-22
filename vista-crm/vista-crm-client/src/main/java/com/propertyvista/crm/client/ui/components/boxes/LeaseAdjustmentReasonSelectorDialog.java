@@ -51,7 +51,7 @@ public abstract class LeaseAdjustmentReasonSelectorDialog extends EntitySelector
 
     public LeaseAdjustmentReasonSelectorDialog(boolean isMultiselect, List<ARCode> alreadySelected, String caption) {
         super(ARCode.class, isMultiselect, alreadySelected, caption);
-        setWidth("700px");
+        setDialogPixelWidth(700);
     }
 
     @Override

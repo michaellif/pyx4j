@@ -58,7 +58,7 @@ public abstract class ApplicationDocumentUploaderDialog extends VerticalPanel im
 
             @Override
             protected void onUploadComplete(UploadResponse<IFile> serverUploadResponse) {
-                dialog.hide();
+                dialog.hide(false);
                 ApplicationDocumentUploaderDialog.this.onUploadComplete(serverUploadResponse);
             }
 
@@ -77,7 +77,7 @@ public abstract class ApplicationDocumentUploaderDialog extends VerticalPanel im
         dialogBody.setCellHorizontalAlignment(uploadPanel, HasHorizontalAlignment.ALIGN_CENTER);
 
         dialog.setBody(dialogBody);
-        dialog.setPixelSize(460, 80);
+        dialog.setDialogPixelWidth(460);
     }
 
     public void show() {

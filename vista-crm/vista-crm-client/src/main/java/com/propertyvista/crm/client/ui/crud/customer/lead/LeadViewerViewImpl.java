@@ -71,8 +71,8 @@ public class LeadViewerViewImpl extends CrmViewerViewImplBase<Lead> implements L
                                             }
 
                                             @Override
-                                            public String defineWidth() {
-                                                return "40em";
+                                            public int defineWidth() {
+                                                return 600;
                                             }
                                         }.show();
                                     } else {

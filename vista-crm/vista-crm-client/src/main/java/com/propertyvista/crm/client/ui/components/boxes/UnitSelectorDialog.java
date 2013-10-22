@@ -51,7 +51,7 @@ public abstract class UnitSelectorDialog extends EntitySelectorTableDialog<AptUn
 
     public UnitSelectorDialog(boolean isMultiselect, List<AptUnit> alreadySelected, String caption) {
         super(AptUnit.class, isMultiselect, alreadySelected, caption);
-        setWidth("700px");
+        setDialogPixelWidth(700);
     }
 
     @Override

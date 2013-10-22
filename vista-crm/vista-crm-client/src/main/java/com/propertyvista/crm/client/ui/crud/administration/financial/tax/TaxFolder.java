@@ -83,7 +83,7 @@ public class TaxFolder extends VistaTableFolder<Tax> {
 
         public TaxSelectorDialog() {
             super(Tax.class, true, getValue(), i18n.tr("Select Tax"));
-            setWidth("700px");
+            setDialogPixelWidth(700);
         }
 
         @Override

@@ -485,7 +485,6 @@ public class MaintenanceRequestForm extends CrmEntityForm<MaintenanceRequestDTO>
                             content.populate(item.getValue());
 
                             setBody(content.asWidget());
-                            setHeight("100px");
 
                             return content;
                         }

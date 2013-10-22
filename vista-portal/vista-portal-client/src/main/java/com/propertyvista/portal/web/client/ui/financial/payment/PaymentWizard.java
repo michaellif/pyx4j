@@ -495,8 +495,7 @@ public class PaymentWizard extends CPortalEntityWizard<PaymentDTO> {
         public DirectBankingInstructionDialog() {
             super(i18n.tr("Direct Banking Instruction"));
             setBody(createBody());
-
-            setWidth("600px");
+            setDialogPixelWidth(700);
         }
 
         private IsWidget createBody() {
