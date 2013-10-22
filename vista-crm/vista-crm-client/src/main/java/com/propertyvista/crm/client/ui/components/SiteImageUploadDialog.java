@@ -19,7 +19,6 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.gwt.client.upload.UploadPanel;
-import com.pyx4j.gwt.rpc.upload.UploadResponse;
 import com.pyx4j.gwt.rpc.upload.UploadService;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.dialog.Dialog;
@@ -58,7 +57,7 @@ public abstract class SiteImageUploadDialog extends VerticalPanel implements OkC
             }
 
             @Override
-            protected void onUploadComplete(UploadResponse<SiteImageResource> serverUploadResponse) {
+            protected void onUploadComplete(SiteImageResource serverUploadResponse) {
                 dialog.hide(false);
                 SiteImageUploadDialog.this.onUploadComplete(serverUploadResponse);
             }
@@ -78,7 +77,7 @@ public abstract class SiteImageUploadDialog extends VerticalPanel implements OkC
         dialog.show();
     }
 
-    protected abstract void onUploadComplete(UploadResponse<SiteImageResource> serverUploadResponse);
+    protected abstract void onUploadComplete(SiteImageResource serverUploadResponse);
 
     @Override
     public boolean onClickOk() {

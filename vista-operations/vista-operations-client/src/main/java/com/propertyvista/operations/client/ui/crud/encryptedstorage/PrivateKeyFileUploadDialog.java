@@ -17,6 +17,7 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.entity.shared.IFile;
 import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.ui.decorators.WidgetDecorator;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
@@ -31,7 +32,7 @@ import com.propertyvista.operations.rpc.dto.PrivateKeyDTO;
 import com.propertyvista.operations.rpc.encryption.EncryptedStorageKeyDTO;
 import com.propertyvista.operations.rpc.services.EncryptedStorageServicePrivateKeyUploadService;
 
-public class PrivateKeyFileUploadDialog extends FileUploadDialog<PrivateKeyDTO> {
+public class PrivateKeyFileUploadDialog extends FileUploadDialog<PrivateKeyDTO, IFile> {
 
     private static final I18n i18n = I18n.get(PrivateKeyFileUploadDialog.class);
 
@@ -39,15 +40,15 @@ public class PrivateKeyFileUploadDialog extends FileUploadDialog<PrivateKeyDTO> 
 
     private CEntityForm<PasswordEntryDTO> form;
 
-    public PrivateKeyFileUploadDialog(EncryptedStorageKeyDTO keyToUpload, FileUploadReciver<PrivateKeyDTO> uploadReciver) {
-        super(i18n.tr("Upload Private Key File"), null, GWT
-                .<UploadService<PrivateKeyDTO, PrivateKeyDTO>> create(EncryptedStorageServicePrivateKeyUploadService.class), uploadReciver);
+    public PrivateKeyFileUploadDialog(EncryptedStorageKeyDTO keyToUpload, FileUploadReciver<IFile> uploadReciver) {
+        super(i18n.tr("Upload Private Key File"), null, GWT.<UploadService<PrivateKeyDTO, IFile>> create(EncryptedStorageServicePrivateKeyUploadService.class),
+                uploadReciver);
 
         this.keyToUpload = keyToUpload;
     }
 
     @Override
-    protected IsWidget createContent(final UploadPanel<PrivateKeyDTO, PrivateKeyDTO> uploadPanel) {
+    protected IsWidget createContent(final UploadPanel<PrivateKeyDTO, IFile> uploadPanel) {
 
         form = new CEntityForm<PasswordEntryDTO>(PasswordEntryDTO.class) {
             @Override

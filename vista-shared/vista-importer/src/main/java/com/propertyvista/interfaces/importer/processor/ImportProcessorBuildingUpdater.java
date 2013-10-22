@@ -22,7 +22,6 @@ import org.slf4j.LoggerFactory;
 import com.pyx4j.commons.ConverterUtils;
 import com.pyx4j.commons.SimpleMessageFormat;
 import com.pyx4j.gwt.rpc.deferred.DeferredProcessProgressResponse;
-import com.pyx4j.gwt.rpc.upload.UploadResponse;
 
 import com.propertyvista.crm.rpc.dto.ImportUploadDTO;
 import com.propertyvista.dto.DownloadableUploadResponseDTO;
@@ -40,8 +39,7 @@ public class ImportProcessorBuildingUpdater implements ImportProcessor {
     private final static Logger log = LoggerFactory.getLogger(ImportProcessorBuildingUpdater.class);
 
     @Override
-    public boolean validate(ImportIO data, DeferredProcessProgressResponse status, ImportUploadDTO uploadRequestInfo,
-            UploadResponse<DownloadableUploadResponseDTO> response) {
+    public boolean validate(ImportIO data, DeferredProcessProgressResponse status, ImportUploadDTO uploadRequestInfo, DownloadableUploadResponseDTO response) {
 
         status.setProgressMaximum(data.buildings().size() * 2);
         MediaConfig mediaConfig = MediaConfig.create(uploadRequestInfo);
@@ -67,8 +65,7 @@ public class ImportProcessorBuildingUpdater implements ImportProcessor {
     }
 
     @Override
-    public void persist(ImportIO data, DeferredProcessProgressResponse status, ImportUploadDTO uploadRequestInfo,
-            UploadResponse<DownloadableUploadResponseDTO> response) {
+    public void persist(ImportIO data, DeferredProcessProgressResponse status, ImportUploadDTO uploadRequestInfo, DownloadableUploadResponseDTO response) {
         SharedGeoLocator.setMode(Mode.updateCache);
         ImportCounters counters = new ImportCounters();
         status.setProgressMaximum(data.buildings().size() * 2);
@@ -85,8 +82,9 @@ public class ImportProcessorBuildingUpdater implements ImportProcessor {
                     break;
                 }
             }
-            response.message = SimpleMessageFormat.format("Updated {0} building(s), {1} floorplan(s), {2} unit(s)", counters.buildings, counters.floorplans,
-                    counters.units);
+            response.message().setValue(
+                    SimpleMessageFormat.format("Updated {0} building(s), {1} floorplan(s), {2} unit(s)", counters.buildings, counters.floorplans,
+                            counters.units));
         } finally {
             SharedGeoLocator.save();
         }

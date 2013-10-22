@@ -20,13 +20,13 @@ import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.annotations.OrderColumn;
 import com.pyx4j.entity.annotations.Owner;
 import com.pyx4j.entity.annotations.ReadOnly;
+import com.pyx4j.entity.shared.IFile;
 import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.i18n.annotations.I18n;
 
-import com.propertyvista.domain.File;
 import com.propertyvista.shared.adapters.ApplicationDocumentUploadedBlobSecurityAdapter;
 
-public interface ApplicationDocumentFile extends File {
+public interface ApplicationDocumentFile extends IFile {
 
     @Override
     @I18n(strategy = I18n.I18nStrategy.IgnoreThis)

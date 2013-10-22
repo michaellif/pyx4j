@@ -47,6 +47,7 @@ import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.PBEKeySpec;
 import javax.crypto.spec.SecretKeySpec;
 
+import org.jasypt.exceptions.EncryptionOperationNotPossibleException;
 import org.jasypt.util.binary.BasicBinaryEncryptor;
 import org.jasypt.util.binary.BinaryEncryptor;
 import org.jasypt.util.binary.StrongBinaryEncryptor;
@@ -240,7 +241,12 @@ public class EncryptedStorageFacadeImpl implements EncryptedStorageFacade {
     }
 
     private PrivateKey createPrivateKey(byte[] encryptedPrivateKeyBytes, char[] password) {
-        byte[] privateKeyBinary = getBinaryEncryptor(password).decrypt(encryptedPrivateKeyBytes);
+        byte[] privateKeyBinary;
+        try {
+            privateKeyBinary = getBinaryEncryptor(password).decrypt(encryptedPrivateKeyBytes);
+        } catch (EncryptionOperationNotPossibleException e) {
+            throw new UserRuntimeException("EncryptionOperationNotPossible or Wrong password", e);
+        }
         PrivateKey privateKey;
         try {
             KeyFactory keyFactory = KeyFactory.getInstance("RSA");

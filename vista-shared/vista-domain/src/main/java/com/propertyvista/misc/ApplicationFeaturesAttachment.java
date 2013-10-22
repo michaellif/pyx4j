@@ -7,16 +7,19 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on 2012-12-20
- * @author ArtyomB
+ * Created on Oct 22, 2013
+ * @author vlads
  * @version $Id$
  */
-package com.propertyvista.crm.rpc.dto;
+package com.propertyvista.misc;
 
-import com.pyx4j.entity.annotations.Transient;
-import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.config.shared.ApplicationFeature;
 
-@Transient
-public interface NoteAttachmentUploadDTO extends IEntity {
+public class ApplicationFeaturesAttachment implements ApplicationFeature {
+
+    @Override
+    public boolean enabled() {
+        return !VistaTODO.VISTA_2127_Attachments_For_Notes;
+    }
 
 }

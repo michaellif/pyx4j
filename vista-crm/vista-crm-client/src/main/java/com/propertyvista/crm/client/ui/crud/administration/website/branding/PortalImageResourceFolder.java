@@ -43,7 +43,6 @@ import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
 import com.propertyvista.crm.client.ui.components.cms.SiteImageResourceProvider;
 import com.propertyvista.crm.client.ui.crud.administration.website.SiteImageThumbnail;
 import com.propertyvista.crm.client.ui.crud.administration.website.general.AvailableLocaleSelectorDialog;
-import com.propertyvista.domain.File;
 import com.propertyvista.domain.site.AvailableLocale;
 import com.propertyvista.domain.site.PortalLogoImageResource;
 import com.propertyvista.domain.site.SiteImageResource;
@@ -140,7 +139,7 @@ public class PortalImageResourceFolder extends VistaBoxFolder<PortalLogoImageRes
             largeThumb.setUrl(MediaUtils.createSiteImageResourceUrl(getValue().large()));
         }
 
-        class LogoLink extends CFile<File> {
+        class LogoLink extends CFile<SiteImageResource> {
 
             private SiteImageThumbnail thumb;
 
@@ -154,7 +153,7 @@ public class PortalImageResourceFolder extends VistaBoxFolder<PortalLogoImageRes
                                 return true;
                             }
                         };
-                        dialog.setBody(new Image(MediaUtils.createSiteImageResourceUrl((SiteImageResource) getValue())));
+                        dialog.setBody(new Image(MediaUtils.createSiteImageResourceUrl(getValue())));
                         dialog.layout();
                     }
                 });

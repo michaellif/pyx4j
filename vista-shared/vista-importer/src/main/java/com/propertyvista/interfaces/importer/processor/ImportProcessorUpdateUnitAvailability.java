@@ -25,7 +25,6 @@ import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.gwt.rpc.deferred.DeferredProcessProgressResponse;
-import com.pyx4j.gwt.rpc.upload.UploadResponse;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.crm.rpc.dto.ImportUploadDTO;
@@ -49,8 +48,7 @@ public class ImportProcessorUpdateUnitAvailability implements ImportProcessor {
     private final static Logger log = LoggerFactory.getLogger(ImportProcessorUpdateUnitAvailability.class);
 
     @Override
-    public boolean validate(ImportIO data, DeferredProcessProgressResponse status, ImportUploadDTO uploadRequestInfo,
-            UploadResponse<DownloadableUploadResponseDTO> response) {
+    public boolean validate(ImportIO data, DeferredProcessProgressResponse status, ImportUploadDTO uploadRequestInfo, DownloadableUploadResponseDTO response) {
         status.setProgressMaximum(data.buildings().size() * 2);
         int count = 0;
         boolean result = true;
@@ -116,8 +114,7 @@ public class ImportProcessorUpdateUnitAvailability implements ImportProcessor {
     }
 
     @Override
-    public void persist(ImportIO data, DeferredProcessProgressResponse status, ImportUploadDTO uploadRequestInfo,
-            UploadResponse<DownloadableUploadResponseDTO> response) {
+    public void persist(ImportIO data, DeferredProcessProgressResponse status, ImportUploadDTO uploadRequestInfo, DownloadableUploadResponseDTO response) {
         SharedGeoLocator.setMode(Mode.updateCache);
         status.setProgressMaximum(data.buildings().size() * 2);
         ImportCounters counters = new ImportCounters();
@@ -136,8 +133,8 @@ public class ImportProcessorUpdateUnitAvailability implements ImportProcessor {
                     break;
                 }
             }
-            response.message = SimpleMessageFormat
-                    .format("Imported {0} building(s), {1} floorplan(s), {2} unit(s)", count, counters.floorplans, counters.units);
+            response.message().setValue(
+                    SimpleMessageFormat.format("Imported {0} building(s), {1} floorplan(s), {2} unit(s)", count, counters.floorplans, counters.units));
         } finally {
             SharedGeoLocator.save();
         }

@@ -14,7 +14,6 @@
 package com.propertyvista.common.client.ui.components;
 
 import com.pyx4j.gwt.client.upload.UploadResponseReciver;
-import com.pyx4j.gwt.rpc.upload.UploadResponse;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
 
@@ -37,26 +36,26 @@ public class UploadResponseDownloadableReciver<R extends DownloadableUploadRespo
     }
 
     @Override
-    public void onUploadComplete(UploadResponse<R> serverUploadResponse) {
-        if (serverUploadResponse.data.resultUrl().isNull()) {
-            if (serverUploadResponse.data.success().getValue()) {
-                MessageDialog.info(i18n.tr("{0} Complete", processNameCaption), serverUploadResponse.message);
+    public void onUploadComplete(R serverUploadResponse) {
+        if (serverUploadResponse.resultUrl().isNull()) {
+            if (serverUploadResponse.success().getValue()) {
+                MessageDialog.info(i18n.tr("{0} Complete", processNameCaption), serverUploadResponse.message().getValue());
             } else {
-                MessageDialog.error(i18n.tr("{0} Error", processNameCaption), serverUploadResponse.message);
+                MessageDialog.error(i18n.tr("{0} Error", processNameCaption), serverUploadResponse.message().getValue());
             }
         } else {
-            if (serverUploadResponse.data.success().getValue()) {
+            if (serverUploadResponse.success().getValue()) {
                 DownloadLinkDialog d = new DownloadLinkDialog(i18n.tr("{0} Complete", processNameCaption));
                 if (downloadServletPath != null) {
                     d.setDownloadServletPath(downloadServletPath);
                 }
-                d.show(serverUploadResponse.message, i18n.tr("Download processing results"), serverUploadResponse.data.resultUrl().getValue());
+                d.show(serverUploadResponse.message().getValue(), i18n.tr("Download processing results"), serverUploadResponse.resultUrl().getValue());
             } else {
                 DownloadLinkDialog d = new DownloadLinkDialog(i18n.tr("{0} Error", processNameCaption));
                 if (downloadServletPath != null) {
                     d.setDownloadServletPath(downloadServletPath);
                 }
-                d.show(serverUploadResponse.message, i18n.tr("Download messages"), serverUploadResponse.data.resultUrl().getValue());
+                d.show(serverUploadResponse.message().getValue(), i18n.tr("Download messages"), serverUploadResponse.resultUrl().getValue());
             }
         }
     }

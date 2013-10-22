@@ -15,26 +15,21 @@ package com.propertyvista.server.common.upload;
 
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.essentials.server.upload.AbstractUploadServiceImpl;
-import com.pyx4j.essentials.server.upload.UploadData;
-import com.pyx4j.essentials.server.upload.DeferredUploadProcess;
-import com.pyx4j.gwt.rpc.upload.UploadResponse;
-import com.pyx4j.gwt.server.deferred.DeferredProcessRegistry;
+import com.pyx4j.essentials.server.upload.UploadedData;
 
-import com.propertyvista.config.ThreadPoolNames;
 import com.propertyvista.dto.DownloadableUploadResponseDTO;
 
 public abstract class AbstractUploadWithDownloadableResponceServiceImpl<U extends IEntity> extends AbstractUploadServiceImpl<U, DownloadableUploadResponseDTO> {
+
+    protected AbstractUploadWithDownloadableResponceServiceImpl() {
+        super(DownloadableUploadResponseDTO.class);
+    }
 
     @Override
     protected abstract AbstractUploadWithDownloadableResponceDeferredProcess<U> createUploadDeferredProcess(U data);
 
     @Override
-    public final com.pyx4j.essentials.server.upload.UploadReciver.ProcessingStatus onUploadReceived(UploadData data,
-            DeferredUploadProcess<U, DownloadableUploadResponseDTO> process, UploadResponse<DownloadableUploadResponseDTO> response) {
-        process.onUploadReceived(data, response);
-        DeferredProcessRegistry.start(data.deferredCorrelationId, process, ThreadPoolNames.IMPORTS);
-        return ProcessingStatus.processWillContinue;
-
+    protected void processUploadedData(U uploadInitiationData, UploadedData uploadedData, DownloadableUploadResponseDTO response) {
     }
 
 }

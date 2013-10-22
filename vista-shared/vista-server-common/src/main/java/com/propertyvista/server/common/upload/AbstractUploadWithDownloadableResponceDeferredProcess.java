@@ -13,12 +13,12 @@
  */
 package com.propertyvista.server.common.upload;
 
-import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.essentials.server.upload.UploadData;
 import com.pyx4j.essentials.server.upload.DeferredUploadProcess;
-import com.pyx4j.gwt.rpc.upload.UploadResponse;
+import com.pyx4j.essentials.server.upload.UploadedData;
+import com.pyx4j.gwt.server.deferred.DeferredProcessRegistry;
 
+import com.propertyvista.config.ThreadPoolNames;
 import com.propertyvista.dto.DownloadableUploadResponseDTO;
 
 public abstract class AbstractUploadWithDownloadableResponceDeferredProcess<U extends IEntity> extends DeferredUploadProcess<U, DownloadableUploadResponseDTO> {
@@ -32,10 +32,14 @@ public abstract class AbstractUploadWithDownloadableResponceDeferredProcess<U ex
     }
 
     @Override
-    public final void onUploadReceived(UploadData data, UploadResponse<DownloadableUploadResponseDTO> response) {
-        binaryData = data.data;
-        response.data = EntityFactory.create(DownloadableUploadResponseDTO.class);
-        response.data.success().setValue(Boolean.FALSE);
+    public abstract void execute();
+
+    @Override
+    protected void onUploadProcessed(final UploadedData data, final DownloadableUploadResponseDTO response) {
+        // DO NOT Call super. the process will be Completed by execute() implementation 
+        binaryData = data.binaryContent;
+        // Continue execution of process
+        DeferredProcessRegistry.start(data.deferredCorrelationId, this, ThreadPoolNames.IMPORTS);
     }
 
     protected final byte[] getBinaryData() {

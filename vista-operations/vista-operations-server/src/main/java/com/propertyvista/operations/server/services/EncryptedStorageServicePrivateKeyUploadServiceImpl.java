@@ -16,17 +16,20 @@ package com.propertyvista.operations.server.services;
 import com.sun.jersey.core.util.Base64;
 
 import com.pyx4j.config.server.ServerSideFactory;
+import com.pyx4j.entity.shared.IFile;
 import com.pyx4j.essentials.server.upload.AbstractUploadServiceImpl;
-import com.pyx4j.essentials.server.upload.UploadData;
-import com.pyx4j.essentials.server.upload.DeferredUploadProcess;
-import com.pyx4j.gwt.rpc.upload.UploadResponse;
+import com.pyx4j.essentials.server.upload.UploadedData;
 
 import com.propertyvista.biz.system.encryption.EncryptedStorageFacade;
 import com.propertyvista.operations.rpc.dto.PrivateKeyDTO;
 import com.propertyvista.operations.rpc.services.EncryptedStorageServicePrivateKeyUploadService;
 
-public class EncryptedStorageServicePrivateKeyUploadServiceImpl extends AbstractUploadServiceImpl<PrivateKeyDTO, PrivateKeyDTO> implements
+public class EncryptedStorageServicePrivateKeyUploadServiceImpl extends AbstractUploadServiceImpl<PrivateKeyDTO, IFile> implements
         EncryptedStorageServicePrivateKeyUploadService {
+
+    public EncryptedStorageServicePrivateKeyUploadServiceImpl() {
+        super(IFile.class);
+    }
 
     @Override
     public long getMaxSize() {
@@ -39,15 +42,11 @@ public class EncryptedStorageServicePrivateKeyUploadServiceImpl extends Abstract
     }
 
     @Override
-    public com.pyx4j.essentials.server.upload.UploadReciver.ProcessingStatus onUploadReceived(UploadData data,
-            DeferredUploadProcess<PrivateKeyDTO, PrivateKeyDTO> process, UploadResponse<PrivateKeyDTO> response) {
+    protected void processUploadedData(PrivateKeyDTO uploadInitiationData, UploadedData uploadedData, IFile response) {
+        byte[] keyData = Base64.decode(uploadedData.binaryContent);
 
-        byte[] keyData = Base64.decode(data.data);
-
-        ServerSideFactory.create(EncryptedStorageFacade.class).uploadPrivateKey(process.getData().publicKeyKey().getValue(), keyData,
-                process.getData().password().getValue().getValue());
-
-        return ProcessingStatus.completed;
+        ServerSideFactory.create(EncryptedStorageFacade.class).uploadPrivateKey(uploadInitiationData.publicKeyKey().getValue(), keyData,
+                uploadInitiationData.password().getValue().getValue());
     }
 
 }

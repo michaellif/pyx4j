@@ -37,17 +37,17 @@ public class TenantPadFileUploadDeferredProcess extends AbstractUploadWithDownlo
     @Override
     public void execute() {
         List<PadFileModel> model = new TenantPadParser().parsePads(getBinaryData(),
-                DownloadFormat.valueByExtension(FilenameUtils.getExtension(getResponse().fileName)));
-        getResponse().message = new TenantPadProcessor().process(model);
+                DownloadFormat.valueByExtension(FilenameUtils.getExtension(getResponse().fileName().getValue())));
+        getResponse().message().setValue(new TenantPadProcessor().process(model));
 
         TenantPadCreateReport report = new TenantPadCreateReport();
         report.createReport(model);
 
-        String fileName = FilenameUtils.getBaseName(getResponse().fileName) + "_processingResults.xlsx";
+        String fileName = FilenameUtils.getBaseName(getResponse().fileName().getValue()) + "_processingResults.xlsx";
         report.createDownloadable(fileName);
 
-        getResponse().data.success().setValue(Boolean.TRUE);
-        getResponse().data.resultUrl().setValue(fileName);
+        getResponse().success().setValue(Boolean.TRUE);
+        getResponse().resultUrl().setValue(fileName);
 
         status().setCompleted();
     }

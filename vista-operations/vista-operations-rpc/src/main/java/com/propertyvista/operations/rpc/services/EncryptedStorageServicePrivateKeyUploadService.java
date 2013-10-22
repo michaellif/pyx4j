@@ -13,11 +13,11 @@
  */
 package com.propertyvista.operations.rpc.services;
 
+import com.pyx4j.entity.shared.IFile;
 import com.pyx4j.gwt.rpc.upload.UploadService;
 
 import com.propertyvista.operations.rpc.dto.PrivateKeyDTO;
 
-public interface EncryptedStorageServicePrivateKeyUploadService extends
-        UploadService<PrivateKeyDTO, PrivateKeyDTO> {
+public interface EncryptedStorageServicePrivateKeyUploadService extends UploadService<PrivateKeyDTO, IFile> {
 
 }

@@ -14,17 +14,14 @@
 package com.propertyvista.crm.server.services.admin;
 
 import java.util.Collection;
-
-import org.apache.commons.io.FilenameUtils;
+import java.util.EnumSet;
 
 import com.pyx4j.commons.Key;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
-import com.pyx4j.essentials.server.download.MimeMap;
+import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.essentials.server.upload.AbstractUploadServiceImpl;
-import com.pyx4j.essentials.server.upload.UploadData;
-import com.pyx4j.essentials.server.upload.DeferredUploadProcess;
-import com.pyx4j.gwt.rpc.upload.UploadResponse;
+import com.pyx4j.essentials.server.upload.UploadedData;
 import com.pyx4j.gwt.shared.DownloadFormat;
 import com.pyx4j.i18n.shared.I18n;
 
@@ -35,12 +32,17 @@ import com.propertyvista.server.domain.FileBlob;
 
 /**
  * @see com.propertyvista.portal.rpc.DeploymentConsts#mediaImagesServletMapping
- * 
  */
-public class SiteImageResourceUploadServiceImpl extends AbstractUploadServiceImpl<SiteImageResource, SiteImageResource> implements
-        SiteImageResourceUploadService {
+public class SiteImageResourceUploadServiceImpl extends AbstractUploadServiceImpl<IEntity, SiteImageResource> implements SiteImageResourceUploadService {
 
     private static final I18n i18n = I18n.get(SiteImageResourceUploadServiceImpl.class);
+
+    private static final Collection<DownloadFormat> supportedFormats = EnumSet.of(DownloadFormat.JPEG, DownloadFormat.GIF, DownloadFormat.PNG,
+            DownloadFormat.BMP);
+
+    public SiteImageResourceUploadServiceImpl() {
+        super(SiteImageResource.class);
+    }
 
     @Override
     public long getMaxSize() {
@@ -58,23 +60,14 @@ public class SiteImageResourceUploadServiceImpl extends AbstractUploadServiceImp
     }
 
     @Override
-    public ProcessingStatus onUploadReceived(final UploadData data, final DeferredUploadProcess<SiteImageResource, SiteImageResource> process,
-            final UploadResponse<SiteImageResource> response) {
-        response.fileContentType = MimeMap.getContentType(FilenameUtils.getExtension(response.fileName));
-        Key blobKey = BlobService.persist(data.data, response.fileName, response.fileContentType);
-        response.uploadKey = blobKey;
+    protected void processUploadedData(IEntity uploadInitiationData, UploadedData uploadedData, SiteImageResource response) {
+        Key blobKey = BlobService.persist(uploadedData.binaryContent, uploadedData.fileName, uploadedData.contentMimeType);
 
-        SiteImageResource newDocument = EntityFactory.create(SiteImageResource.class);
-        newDocument.blobKey().setValue(blobKey);
-        newDocument.fileName().setValue(response.fileName);
-        newDocument.fileSize().setValue(response.fileSize);
-        newDocument.timestamp().setValue(response.timestamp);
-        newDocument.contentMimeType().setValue(response.fileContentType);
-        Persistence.service().persist(newDocument);
+        response.blobKey().setValue(blobKey);
+
+        Persistence.service().persist(response);
+
         Persistence.service().commit();
 
-        response.data = newDocument;
-
-        return ProcessingStatus.completed;
     }
 }

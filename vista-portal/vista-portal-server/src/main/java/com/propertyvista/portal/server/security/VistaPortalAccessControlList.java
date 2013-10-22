@@ -16,6 +16,7 @@ package com.propertyvista.portal.server.security;
 import com.pyx4j.entity.rpc.ReferenceDataService;
 import com.pyx4j.entity.security.EntityPermission;
 import com.pyx4j.entity.security.InstanceAccess;
+import com.pyx4j.gwt.rpc.deferred.DeferredProcessService;
 import com.pyx4j.rpc.shared.IServiceExecutePermission;
 import com.pyx4j.security.server.ServletContainerAclBuilder;
 
@@ -252,6 +253,7 @@ public class VistaPortalAccessControlList extends ServletContainerAclBuilder {
         grant(VistaCustomerBehavior.Tenant, new IServiceExecutePermission(MaintenanceRequestCrudService.class));
 
         grant(VistaCustomerBehavior.Tenant, new IServiceExecutePermission(ResidentPictureUploadService.class));
+        grant(VistaCustomerBehavior.Tenant, new IServiceExecutePermission(DeferredProcessService.class));
 
         //=======================================
 

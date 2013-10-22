@@ -40,11 +40,11 @@ public class MerchantAccountFileUploadDeferredProcess extends AbstractUploadWith
     @Override
     public void execute() {
         List<MerchantAccountFileModel> model = new MerchantAccountParser().parseFile(getBinaryData(),
-                DownloadFormat.valueByExtension(FilenameUtils.getExtension(getResponse().fileName)));
+                DownloadFormat.valueByExtension(FilenameUtils.getExtension(getResponse().fileName().getValue())));
 
-        getResponse().message = new MerchantAccountProcessor().persistMerchantAccounts(model);
+        getResponse().message().setValue(new MerchantAccountProcessor().persistMerchantAccounts(model));
 
-        String fileName = FilenameUtils.getBaseName(getResponse().fileName) + "_processingResults.xlsx";
+        String fileName = FilenameUtils.getBaseName(getResponse().fileName().getValue()) + "_processingResults.xlsx";
 
         ReportTableFormatter formatter = new ReportTableXLSXFormatter(true);
         EntityReportFormatter<MerchantAccountFileModel> entityFormatter = new EntityReportFormatter<MerchantAccountFileModel>(MerchantAccountFileModel.class);
@@ -54,8 +54,8 @@ public class MerchantAccountFileUploadDeferredProcess extends AbstractUploadWith
         Downloadable d = new Downloadable(formatter.getBinaryData(), formatter.getContentType());
         d.save(fileName);
 
-        getResponse().data.success().setValue(Boolean.TRUE);
-        getResponse().data.resultUrl().setValue(fileName);
+        getResponse().success().setValue(Boolean.TRUE);
+        getResponse().resultUrl().setValue(fileName);
 
         status().setCompleted();
     }

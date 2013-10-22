@@ -16,13 +16,12 @@ package com.propertyvista.crm.client.ui.components.cms;
 import com.google.gwt.user.client.Command;
 
 import com.pyx4j.forms.client.ui.CFile;
-import com.pyx4j.gwt.rpc.upload.UploadResponse;
 
 import com.propertyvista.crm.client.ui.components.media.MediaUploadDialog;
-import com.propertyvista.domain.File;
+import com.propertyvista.domain.MediaFile;
 import com.propertyvista.portal.rpc.portal.ImageConsts.ImageTarget;
 
-public class FileUploadHyperlink extends CFile<File> {
+public class FileUploadHyperlink extends CFile<MediaFile> {
 
     private final ImageTarget imageTarget;
 
@@ -36,12 +35,12 @@ public class FileUploadHyperlink extends CFile<File> {
         new MediaUploadDialog() {
 
             @Override
-            protected void onUploadComplete(UploadResponse serverUploadResponse) {
-                getValue().blobKey().setValue(serverUploadResponse.uploadKey);
-                getValue().fileName().setValue(serverUploadResponse.fileName);
-                getValue().fileSize().setValue(serverUploadResponse.fileSize);
-                getValue().timestamp().setValue(serverUploadResponse.timestamp);
-                getValue().contentMimeType().setValue(serverUploadResponse.fileContentType);
+            protected void onUploadComplete(MediaFile serverUploadResponse) {
+                getValue().blobKey().setValue(serverUploadResponse.blobKey().getValue());
+                getValue().fileName().setValue(serverUploadResponse.fileName().getValue());
+                getValue().fileSize().setValue(serverUploadResponse.fileSize().getValue());
+                getValue().timestamp().setValue(serverUploadResponse.timestamp().getValue());
+                getValue().contentMimeType().setValue(serverUploadResponse.contentMimeType().getValue());
 
                 FileUploadHyperlink.this.setValue(getValue());
             }

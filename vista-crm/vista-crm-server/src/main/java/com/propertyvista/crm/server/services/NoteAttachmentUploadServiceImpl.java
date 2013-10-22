@@ -13,26 +13,25 @@
  */
 package com.propertyvista.crm.server.services;
 
-import org.apache.commons.io.FilenameUtils;
-
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
-import com.pyx4j.essentials.server.download.MimeMap;
-import com.pyx4j.essentials.server.upload.UploadData;
-import com.pyx4j.essentials.server.upload.DeferredUploadProcess;
+import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.essentials.server.upload.AbstractUploadServiceImpl;
-import com.pyx4j.gwt.rpc.upload.UploadResponse;
+import com.pyx4j.essentials.server.upload.UploadedData;
 import com.pyx4j.i18n.shared.I18n;
 
-import com.propertyvista.crm.rpc.dto.NoteAttachmentUploadDTO;
 import com.propertyvista.crm.rpc.services.NoteAttachmentUploadService;
-import com.propertyvista.domain.File;
+import com.propertyvista.domain.note.NoteAttachment;
 import com.propertyvista.server.domain.FileBlob;
 import com.propertyvista.server.domain.NoteAttachmentBlob;
 
-public class NoteAttachmentUploadServiceImpl extends AbstractUploadServiceImpl<NoteAttachmentUploadDTO, File> implements NoteAttachmentUploadService {
+public class NoteAttachmentUploadServiceImpl extends AbstractUploadServiceImpl<IEntity, NoteAttachment> implements NoteAttachmentUploadService {
 
     private static final I18n i18n = I18n.get(NoteAttachmentUploadServiceImpl.class);
+
+    public NoteAttachmentUploadServiceImpl() {
+        super(NoteAttachment.class);
+    }
 
     @Override
     public long getMaxSize() {
@@ -45,20 +44,15 @@ public class NoteAttachmentUploadServiceImpl extends AbstractUploadServiceImpl<N
     }
 
     @Override
-    public com.pyx4j.essentials.server.upload.UploadReciver.ProcessingStatus onUploadReceived(UploadData data,
-            DeferredUploadProcess<NoteAttachmentUploadDTO, File> process, UploadResponse<File> response) {
-
-        response.fileContentType = MimeMap.getContentType(FilenameUtils.getExtension(response.fileName));
-
+    protected void processUploadedData(IEntity uploadInitiationData, UploadedData uploadedData, NoteAttachment response) {
         NoteAttachmentBlob blob = EntityFactory.create(NoteAttachmentBlob.class);
-        blob.contentType().setValue(response.fileContentType);
-        blob.data().setValue(data.data);
+        blob.contentType().setValue(uploadedData.contentMimeType);
+        blob.data().setValue(uploadedData.binaryContent);
         Persistence.service().persist(blob);
 
-        response.uploadKey = blob.getPrimaryKey();
-        Persistence.service().commit();
+        response.blobKey().setValue(blob.getPrimaryKey());
 
-        return ProcessingStatus.completed;
+        Persistence.service().commit();
     }
 
 }

@@ -30,7 +30,6 @@ import com.propertyvista.crm.client.ui.components.cms.SiteImageResourceProvider;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.crm.client.ui.crud.administration.website.RichTextContentFolder;
 import com.propertyvista.crm.client.ui.crud.administration.website.SiteImageThumbnail;
-import com.propertyvista.domain.File;
 import com.propertyvista.domain.site.SiteImageResource;
 import com.propertyvista.dto.SiteDescriptorDTO;
 
@@ -89,7 +88,7 @@ public class BrandingForm extends CrmEntityForm<SiteDescriptorDTO> {
     private TwoColumnFlexFormPanel createCrmLogoTab() {
         TwoColumnFlexFormPanel content = new TwoColumnFlexFormPanel(proto().crmLogo().getMeta().getCaption());
 
-        content.setWidget(0, 0, new FormDecoratorBuilder(inject(proto().crmLogo(), new CFile<File>(new Command() {
+        content.setWidget(0, 0, new FormDecoratorBuilder(inject(proto().crmLogo(), new CFile<SiteImageResource>(new Command() {
             @Override
             public void execute() {
                 OkDialog dialog = new OkDialog(getValue().crmLogo().fileName().getValue()) {

@@ -17,10 +17,9 @@ import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.JoinColumn;
 import com.pyx4j.entity.annotations.Owner;
 import com.pyx4j.entity.annotations.ReadOnly;
+import com.pyx4j.entity.shared.IFile;
 
-import com.propertyvista.domain.File;
-
-public interface CustomerPicture extends File {
+public interface CustomerPicture extends IFile {
 
     @Owner
     @Detached

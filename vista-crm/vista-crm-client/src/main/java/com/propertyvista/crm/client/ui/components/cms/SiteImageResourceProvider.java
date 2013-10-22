@@ -31,7 +31,6 @@ import com.pyx4j.entity.rpc.EntitySearchResult;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.criterion.EntityListCriteria;
 import com.pyx4j.gwt.client.upload.UploadPanel;
-import com.pyx4j.gwt.rpc.upload.UploadResponse;
 import com.pyx4j.gwt.rpc.upload.UploadService;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.dialog.CloseOption;
@@ -122,16 +121,15 @@ public class SiteImageResourceProvider extends Dialog implements CloseOption, Ri
             }
 
             @Override
-            protected void onUploadComplete(UploadResponse<SiteImageResource> serverUploadResponse) {
-                String url = MediaUtils.createSiteImageResourceUrl(serverUploadResponse.data);
-                imageResourceMap.put(url, serverUploadResponse.data);
-                gallery.addImage(url, serverUploadResponse.data.fileName().getStringView());
+            protected void onUploadComplete(SiteImageResource serverUploadResponse) {
+                String url = MediaUtils.createSiteImageResourceUrl(serverUploadResponse);
+                imageResourceMap.put(url, serverUploadResponse);
+                gallery.addImage(url, serverUploadResponse.fileName().getStringView());
 
                 SiteImageResourceProvider.this.getCloseButton().setEnabled(true);
                 submitButton.setEnabled(true);
             }
         };
-        uploadPanel.setSupportedExtensions(SiteImageResourceUploadService.supportedFormats);
 
         submitButton = new Button(i18n.tr("Submit"));
         submitButton.addClickHandler(new ClickHandler() {

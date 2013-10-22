@@ -17,12 +17,15 @@ import java.util.Collection;
 import java.util.EnumSet;
 
 import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.entity.shared.IFile;
 import com.pyx4j.gwt.rpc.upload.UploadService;
 import com.pyx4j.gwt.shared.DownloadFormat;
 
-public interface PmcDocumentFileUploadService extends UploadService<IEntity, IFile> {
+import com.propertyvista.domain.pmc.info.PmcDocumentFile;
 
+public interface PmcDocumentFileUploadService extends UploadService<IEntity, PmcDocumentFile> {
+
+    // TODO remove, use service call
+    @Deprecated
     public static final Collection<DownloadFormat> SUPPORTED_FORMATS = EnumSet.of(DownloadFormat.JPEG, DownloadFormat.GIF, DownloadFormat.PNG,
             DownloadFormat.BMP);
 

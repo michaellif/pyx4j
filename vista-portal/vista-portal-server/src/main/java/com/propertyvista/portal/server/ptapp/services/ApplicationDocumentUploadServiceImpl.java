@@ -14,32 +14,32 @@
 package com.propertyvista.portal.server.ptapp.services;
 
 import java.util.Collection;
-
-import org.apache.commons.io.FilenameUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import java.util.EnumSet;
 
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.entity.shared.IFile;
-import com.pyx4j.essentials.server.download.MimeMap;
 import com.pyx4j.essentials.server.upload.AbstractUploadServiceImpl;
-import com.pyx4j.essentials.server.upload.UploadData;
-import com.pyx4j.essentials.server.upload.DeferredUploadProcess;
-import com.pyx4j.gwt.rpc.upload.UploadResponse;
+import com.pyx4j.essentials.server.upload.UploadedData;
 import com.pyx4j.gwt.shared.DownloadFormat;
 import com.pyx4j.i18n.shared.I18n;
 
+import com.propertyvista.domain.media.ApplicationDocumentFile;
 import com.propertyvista.portal.rpc.ptapp.services.ApplicationDocumentUploadService;
 import com.propertyvista.server.adapters.ApplicationDocumentUploadedBlobSecurityAdapterImpl;
 import com.propertyvista.server.domain.ApplicationDocumentBlob;
 
-public class ApplicationDocumentUploadServiceImpl extends AbstractUploadServiceImpl<IEntity, IFile> implements ApplicationDocumentUploadService {
+public class ApplicationDocumentUploadServiceImpl extends AbstractUploadServiceImpl<IEntity, ApplicationDocumentFile> implements
+        ApplicationDocumentUploadService {
 
     private static final I18n i18n = I18n.get(ApplicationDocumentUploadServiceImpl.class);
 
-    private static final Logger log = LoggerFactory.getLogger(ApplicationDocumentUploadServiceImpl.class);
+    private static final Collection<DownloadFormat> supportedFormats = EnumSet.of(DownloadFormat.JPEG, DownloadFormat.GIF, DownloadFormat.PNG,
+            DownloadFormat.TIF, DownloadFormat.BMP, DownloadFormat.PDF);
+
+    public ApplicationDocumentUploadServiceImpl() {
+        super(ApplicationDocumentFile.class);
+    }
 
     @Override
     public long getMaxSize() {
@@ -57,20 +57,18 @@ public class ApplicationDocumentUploadServiceImpl extends AbstractUploadServiceI
     }
 
     @Override
-    public ProcessingStatus onUploadReceived(UploadData data, DeferredUploadProcess<IEntity, IFile> process, UploadResponse<IFile> response) {
-        response.fileContentType = MimeMap.getContentType(FilenameUtils.getExtension(response.fileName));
+    protected void processUploadedData(IEntity uploadInitiationData, UploadedData uploadedData, ApplicationDocumentFile response) {
 
-        ApplicationDocumentBlob applicationDocumentData = EntityFactory.create(ApplicationDocumentBlob.class);
-        applicationDocumentData.data().setValue(data.data);
-        applicationDocumentData.contentType().setValue(response.fileContentType);
+        ApplicationDocumentBlob blob = EntityFactory.create(ApplicationDocumentBlob.class);
+        blob.data().setValue(uploadedData.binaryContent);
+        blob.contentType().setValue(uploadedData.contentMimeType);
 
-        Persistence.service().persist(applicationDocumentData);
-        response.uploadKey = applicationDocumentData.getPrimaryKey();
+        Persistence.service().persist(blob);
+        response.blobKey().setValue(blob.getPrimaryKey());
 
-        ApplicationDocumentUploadedBlobSecurityAdapterImpl.blobUploaded(applicationDocumentData.getPrimaryKey());
+        ApplicationDocumentUploadedBlobSecurityAdapterImpl.blobUploaded(blob.getPrimaryKey());
 
         Persistence.service().commit();
-        return ProcessingStatus.completed;
     }
 
 }

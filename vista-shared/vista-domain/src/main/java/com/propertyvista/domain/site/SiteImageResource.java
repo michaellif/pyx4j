@@ -13,8 +13,8 @@
  */
 package com.propertyvista.domain.site;
 
-import com.propertyvista.domain.File;
+import com.pyx4j.entity.shared.IFile;
 
-public interface SiteImageResource extends File {
+public interface SiteImageResource extends IFile {
 
 }

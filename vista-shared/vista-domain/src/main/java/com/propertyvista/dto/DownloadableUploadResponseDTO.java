@@ -20,6 +20,8 @@ import com.pyx4j.entity.shared.IPrimitive;
 @Transient
 public interface DownloadableUploadResponseDTO extends IFile {
 
+    IPrimitive<String> message();
+
     IPrimitive<Boolean> success();
 
     IPrimitive<String> resultUrl();

@@ -14,16 +14,13 @@
 package com.propertyvista.crm.server.services.customer;
 
 import java.util.Collection;
-
-import org.apache.commons.io.FilenameUtils;
+import java.util.EnumSet;
 
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
-import com.pyx4j.essentials.server.download.MimeMap;
+import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.essentials.server.upload.AbstractUploadServiceImpl;
-import com.pyx4j.essentials.server.upload.UploadData;
-import com.pyx4j.essentials.server.upload.DeferredUploadProcess;
-import com.pyx4j.gwt.rpc.upload.UploadResponse;
+import com.pyx4j.essentials.server.upload.UploadedData;
 import com.pyx4j.gwt.shared.DownloadFormat;
 import com.pyx4j.i18n.shared.I18n;
 
@@ -32,9 +29,16 @@ import com.propertyvista.domain.tenant.CustomerPicture;
 import com.propertyvista.server.domain.CustomerPictureBlob;
 import com.propertyvista.server.domain.FileBlob;
 
-public class CustomerPictureUploadServiceImpl extends AbstractUploadServiceImpl<CustomerPicture, CustomerPicture> implements CustomerPictureUploadService {
+public class CustomerPictureUploadServiceImpl extends AbstractUploadServiceImpl<IEntity, CustomerPicture> implements CustomerPictureUploadService {
 
     private static final I18n i18n = I18n.get(CustomerPictureUploadServiceImpl.class);
+
+    private static final Collection<DownloadFormat> supportedFormats = EnumSet.of(DownloadFormat.JPEG, DownloadFormat.GIF, DownloadFormat.PNG,
+            DownloadFormat.BMP);
+
+    public CustomerPictureUploadServiceImpl() {
+        super(CustomerPicture.class);
+    }
 
     @Override
     public long getMaxSize() {
@@ -52,28 +56,14 @@ public class CustomerPictureUploadServiceImpl extends AbstractUploadServiceImpl<
     }
 
     @Override
-    public ProcessingStatus onUploadReceived(final UploadData data, final DeferredUploadProcess<CustomerPicture, CustomerPicture> process,
-            final UploadResponse<CustomerPicture> response) {
-
+    protected void processUploadedData(IEntity uploadInitiationData, UploadedData uploadedData, CustomerPicture response) {
         CustomerPictureBlob blob = EntityFactory.create(CustomerPictureBlob.class);
-        blob.contentType().setValue(MimeMap.getContentType(FilenameUtils.getExtension(response.fileName)));
-        blob.data().setValue(data.data);
-
+        blob.contentType().setValue(uploadedData.contentMimeType);
+        blob.data().setValue(uploadedData.binaryContent);
         Persistence.service().persist(blob);
+
+        response.blobKey().setValue(blob.getPrimaryKey());
+
         Persistence.service().commit();
-
-        response.uploadKey = blob.getPrimaryKey();
-        response.fileContentType = blob.contentType().getValue();
-
-        CustomerPicture newDocument = EntityFactory.create(CustomerPicture.class);
-        newDocument.blobKey().setValue(response.uploadKey);
-        newDocument.fileName().setValue(response.fileName);
-        newDocument.fileSize().setValue(response.fileSize);
-        newDocument.timestamp().setValue(response.timestamp);
-        newDocument.contentMimeType().setValue(response.fileContentType);
-
-        response.data = newDocument;
-
-        return ProcessingStatus.completed;
     }
 }

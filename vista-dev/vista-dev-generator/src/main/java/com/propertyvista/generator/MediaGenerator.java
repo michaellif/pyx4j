@@ -25,7 +25,7 @@ import com.pyx4j.essentials.server.preloader.DataGenerator;
 import com.pyx4j.gwt.server.IOUtils;
 import com.pyx4j.gwt.shared.DownloadFormat;
 
-import com.propertyvista.domain.File;
+import com.propertyvista.domain.MediaFile;
 import com.propertyvista.domain.PublicVisibilityType;
 import com.propertyvista.domain.media.Media;
 import com.propertyvista.domain.property.asset.Floorplan;
@@ -61,7 +61,7 @@ public class MediaGenerator {
         Media media = EntityFactory.create(Media.class);
         media.type().setValue(Media.Type.file);
 
-        File file = EntityFactory.create(File.class);
+        MediaFile file = EntityFactory.create(MediaFile.class);
 
         file.fileName().setValue("file102.jpg");
         media.caption().setValue(CommonsGenerator.lipsumShort());

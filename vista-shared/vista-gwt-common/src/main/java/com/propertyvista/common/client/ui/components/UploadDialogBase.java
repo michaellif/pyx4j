@@ -20,19 +20,18 @@ import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.entity.shared.IFile;
 import com.pyx4j.gwt.client.upload.UploadPanel;
 import com.pyx4j.gwt.client.upload.UploadResponseReciver;
-import com.pyx4j.gwt.rpc.upload.UploadResponse;
 import com.pyx4j.gwt.rpc.upload.UploadService;
 import com.pyx4j.gwt.shared.DownloadFormat;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
 import com.pyx4j.widgets.client.dialog.OkCancelDialog;
 
+import com.propertyvista.dto.DownloadableUploadResponseDTO;
 import com.propertyvista.portal.rpc.DeploymentConsts;
 
-public class UploadDialogBase<U extends IEntity, R extends IFile> extends OkCancelDialog {
+public class UploadDialogBase<U extends IEntity, R extends DownloadableUploadResponseDTO> extends OkCancelDialog {
 
     private static final I18n i18n = I18n.get(UploadDialogBase.class);
 
@@ -58,13 +57,13 @@ public class UploadDialogBase<U extends IEntity, R extends IFile> extends OkCanc
             }
 
             @Override
-            protected void onUploadComplete(UploadResponse<R> serverUploadResponse) {
+            protected void onUploadComplete(R serverUploadResponse) {
                 UploadDialogBase.this.hide(false);
                 if (UploadDialogBase.this.uploadReciver != null) {
                     UploadDialogBase.this.uploadReciver.onUploadComplete(serverUploadResponse);
                 } else {
-                    if (CommonsStringUtils.isStringSet(serverUploadResponse.message)) {
-                        MessageDialog.info(i18n.tr("Upload Complete"), serverUploadResponse.message);
+                    if (CommonsStringUtils.isStringSet(serverUploadResponse.message().getStringView())) {
+                        MessageDialog.info(i18n.tr("Upload Complete"), serverUploadResponse.message().getStringView());
                     }
                 }
             }

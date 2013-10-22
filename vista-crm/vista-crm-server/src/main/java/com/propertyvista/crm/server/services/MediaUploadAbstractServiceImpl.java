@@ -16,27 +16,26 @@ package com.propertyvista.crm.server.services;
 import java.util.Collection;
 import java.util.EnumSet;
 
-import org.apache.commons.io.FilenameUtils;
-
 import com.pyx4j.commons.Key;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
-import com.pyx4j.essentials.server.download.MimeMap;
+import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.essentials.server.upload.AbstractUploadServiceImpl;
-import com.pyx4j.essentials.server.upload.UploadData;
-import com.pyx4j.essentials.server.upload.DeferredUploadProcess;
-import com.pyx4j.gwt.rpc.upload.UploadResponse;
+import com.pyx4j.essentials.server.upload.UploadedData;
 import com.pyx4j.gwt.shared.DownloadFormat;
 import com.pyx4j.i18n.shared.I18n;
 
-import com.propertyvista.crm.rpc.dto.MediaUploadDTO;
-import com.propertyvista.domain.File;
+import com.propertyvista.domain.MediaFile;
 import com.propertyvista.portal.rpc.portal.ImageConsts.ImageTarget;
 import com.propertyvista.server.common.blob.BlobService;
 import com.propertyvista.server.common.blob.ThumbnailService;
 import com.propertyvista.server.domain.FileBlob;
 
-public abstract class MediaUploadAbstractServiceImpl extends AbstractUploadServiceImpl<MediaUploadDTO, File> {
+public abstract class MediaUploadAbstractServiceImpl extends AbstractUploadServiceImpl<IEntity, MediaFile> {
+
+    public MediaUploadAbstractServiceImpl() {
+        super(MediaFile.class);
+    }
 
     private static final I18n i18n = I18n.get(MediaUploadAbstractServiceImpl.class);
 
@@ -61,14 +60,12 @@ public abstract class MediaUploadAbstractServiceImpl extends AbstractUploadServi
     }
 
     @Override
-    public ProcessingStatus onUploadReceived(final UploadData data, final DeferredUploadProcess<MediaUploadDTO, File> process,
-            final UploadResponse<File> response) {
-        response.fileContentType = MimeMap.getContentType(FilenameUtils.getExtension(response.fileName));
-        Key blobKey = BlobService.persist(data.data, response.fileName, response.fileContentType);
+    protected void processUploadedData(IEntity uploadInitiationData, UploadedData uploadedData, MediaFile response) {
+        Key blobKey = BlobService.persist(uploadedData.binaryContent, uploadedData.fileName, uploadedData.contentMimeType);
+        ThumbnailService.persist(blobKey, uploadedData.fileName, uploadedData.binaryContent, imageResizeTarget());
 
-        ThumbnailService.persist(blobKey, response.fileName, data.data, imageResizeTarget());
+        response.blobKey().setValue(blobKey);
+
         Persistence.service().commit();
-        response.uploadKey = blobKey;
-        return ProcessingStatus.completed;
     }
 }

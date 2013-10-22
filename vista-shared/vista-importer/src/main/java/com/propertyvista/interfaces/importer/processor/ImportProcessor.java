@@ -14,7 +14,6 @@
 package com.propertyvista.interfaces.importer.processor;
 
 import com.pyx4j.gwt.rpc.deferred.DeferredProcessProgressResponse;
-import com.pyx4j.gwt.rpc.upload.UploadResponse;
 
 import com.propertyvista.crm.rpc.dto.ImportUploadDTO;
 import com.propertyvista.dto.DownloadableUploadResponseDTO;
@@ -22,10 +21,8 @@ import com.propertyvista.interfaces.importer.model.ImportIO;
 
 public interface ImportProcessor {
 
-    public boolean validate(ImportIO data, DeferredProcessProgressResponse status, ImportUploadDTO uploadRequestInfo,
-            UploadResponse<DownloadableUploadResponseDTO> response);
+    public boolean validate(ImportIO data, DeferredProcessProgressResponse status, ImportUploadDTO uploadRequestInfo, DownloadableUploadResponseDTO response);
 
-    public void persist(ImportIO data, DeferredProcessProgressResponse status, ImportUploadDTO uploadRequestInfo,
-            UploadResponse<DownloadableUploadResponseDTO> response);
+    public void persist(ImportIO data, DeferredProcessProgressResponse status, ImportUploadDTO uploadRequestInfo, DownloadableUploadResponseDTO response);
 
 }

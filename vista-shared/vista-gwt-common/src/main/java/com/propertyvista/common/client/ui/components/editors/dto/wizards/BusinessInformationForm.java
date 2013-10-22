@@ -23,7 +23,6 @@ import com.google.gwt.user.client.ui.HasVerticalAlignment;
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.entity.shared.IFile;
 import com.pyx4j.forms.client.ui.decorators.DefaultWidgetDecoratorTheme;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.gwt.rpc.upload.UploadService;
@@ -35,6 +34,7 @@ import com.propertyvista.common.client.ui.components.PmcBusinessInformationDocum
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
 import com.propertyvista.common.client.ui.components.editors.AddressSimpleEditor;
 import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
+import com.propertyvista.domain.pmc.info.PmcDocumentFile;
 import com.propertyvista.dto.vista2pmc.BusinessInformationDTO;
 
 // TODO add document requirements label and validator
@@ -42,11 +42,11 @@ public class BusinessInformationForm extends CEntityDecoratableForm<BusinessInfo
 
     private static final I18n i18n = I18n.get(BusinessInformationForm.class);
 
-    private final UploadService<IEntity, IFile> service;
+    private final UploadService<IEntity, PmcDocumentFile> service;
 
     private final Collection<DownloadFormat> supportedFormats;
 
-    public BusinessInformationForm(UploadService<IEntity, IFile> service, Collection<DownloadFormat> supportedFormats) {
+    public BusinessInformationForm(UploadService<IEntity, PmcDocumentFile> service, Collection<DownloadFormat> supportedFormats) {
         super(BusinessInformationDTO.class);
         this.service = service;
         this.supportedFormats = supportedFormats;

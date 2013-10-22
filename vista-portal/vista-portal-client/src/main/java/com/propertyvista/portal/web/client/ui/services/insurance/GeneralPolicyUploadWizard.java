@@ -31,7 +31,7 @@ import com.pyx4j.forms.client.validators.ValidationError;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
-import com.propertyvista.domain.File;
+import com.propertyvista.domain.MediaFile;
 import com.propertyvista.domain.media.InsuranceCertificateDocument;
 import com.propertyvista.domain.tenant.Customer;
 import com.propertyvista.domain.tenant.lease.Tenant;
@@ -136,7 +136,7 @@ public class GeneralPolicyUploadWizard extends CPortalEntityWizard<GeneralInsura
         });
 
         contentPanel.setH2(++row, 0, 1, i18n.tr("Attach Scanned Insurance Certificate"));
-        contentPanel.setWidget(++row, 0, 1, new FormDecoratorBuilder(inject(proto().certificate().certificateScan(), new CFile<File>(new Command() {
+        contentPanel.setWidget(++row, 0, 1, new FormDecoratorBuilder(inject(proto().certificate().certificateScan(), new CFile<MediaFile>(new Command() {
             @Override
             public void execute() {
                 System.out.println("++++++++++++execute");

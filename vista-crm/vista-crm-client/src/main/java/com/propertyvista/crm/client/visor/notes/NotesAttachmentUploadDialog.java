@@ -16,27 +16,25 @@ package com.propertyvista.crm.client.visor.notes;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Style;
 
+import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.gwt.client.upload.UploadPanel;
-import com.pyx4j.gwt.rpc.upload.UploadResponse;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.dialog.OkCancelDialog;
 
-import com.propertyvista.crm.rpc.dto.NoteAttachmentUploadDTO;
-import com.propertyvista.crm.rpc.services.MediaUploadService;
 import com.propertyvista.crm.rpc.services.NoteAttachmentUploadService;
-import com.propertyvista.domain.File;
+import com.propertyvista.domain.note.NoteAttachment;
 import com.propertyvista.portal.rpc.DeploymentConsts;
 
 public abstract class NotesAttachmentUploadDialog extends OkCancelDialog {
 
     private static final I18n i18n = I18n.get(NotesAttachmentUploadDialog.class);
 
-    private final UploadPanel<NoteAttachmentUploadDTO, File> uploadPanel;
+    private final UploadPanel<IEntity, NoteAttachment> uploadPanel;
 
     public NotesAttachmentUploadDialog() {
         super(i18n.tr("Upload Attachment File"));
 
-        uploadPanel = new UploadPanel<NoteAttachmentUploadDTO, File>(GWT.<NoteAttachmentUploadService> create(NoteAttachmentUploadService.class)) {
+        uploadPanel = new UploadPanel<IEntity, NoteAttachment>(GWT.<NoteAttachmentUploadService> create(NoteAttachmentUploadService.class)) {
 
             @Override
             protected void onUploadSubmit() {
@@ -51,13 +49,12 @@ public abstract class NotesAttachmentUploadDialog extends OkCancelDialog {
             }
 
             @Override
-            protected void onUploadComplete(UploadResponse<File> serverUploadResponse) {
+            protected void onUploadComplete(NoteAttachment serverUploadResponse) {
                 NotesAttachmentUploadDialog.this.hide(false);
                 NotesAttachmentUploadDialog.this.onUploadComplete(serverUploadResponse);
             }
 
         };
-        uploadPanel.setSupportedExtensions(MediaUploadService.supportedFormats);
         uploadPanel.setServletPath(GWT.getModuleBaseURL() + DeploymentConsts.uploadServletMapping);
         uploadPanel.setSize("400px", "60px");
         uploadPanel.getElement().getStyle().setMarginTop(50, Style.Unit.PX);
@@ -67,7 +64,7 @@ public abstract class NotesAttachmentUploadDialog extends OkCancelDialog {
         this.setDialogPixelWidth(460);
     }
 
-    protected abstract void onUploadComplete(UploadResponse<File> serverUploadResponse);
+    protected abstract void onUploadComplete(NoteAttachment serverUploadResponse);
 
     @Override
     public boolean onClickOk() {

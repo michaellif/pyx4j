@@ -17,18 +17,15 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Style;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
-import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.gwt.client.upload.UploadPanel;
-import com.pyx4j.gwt.rpc.upload.UploadResponse;
-import com.pyx4j.gwt.rpc.upload.UploadService;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.dialog.Dialog;
 import com.pyx4j.widgets.client.dialog.OkCancelOption;
 import com.pyx4j.widgets.client.dialog.OkOptionText;
 
-import com.propertyvista.crm.rpc.dto.MediaUploadDTO;
 import com.propertyvista.crm.rpc.services.MediaUploadService;
-import com.propertyvista.domain.File;
+import com.propertyvista.domain.MediaFile;
 import com.propertyvista.portal.rpc.DeploymentConsts;
 import com.propertyvista.portal.rpc.portal.ImageConsts.ImageTarget;
 
@@ -36,7 +33,7 @@ public abstract class MediaUploadDialog extends VerticalPanel implements OkCance
 
     private static final I18n i18n = I18n.get(MediaUploadDialog.class);
 
-    private final UploadPanel<MediaUploadDTO, File> uploadPanel;
+    private final UploadPanel<IEntity, MediaFile> uploadPanel;
 
     private final Dialog dialog;
 
@@ -44,7 +41,7 @@ public abstract class MediaUploadDialog extends VerticalPanel implements OkCance
     public MediaUploadDialog() {
         dialog = new Dialog(i18n.tr("Upload Image File"), this, null);
 
-        uploadPanel = new UploadPanel<MediaUploadDTO, File>((UploadService<MediaUploadDTO, File>) GWT.create(MediaUploadService.class)) {
+        uploadPanel = new UploadPanel<IEntity, MediaFile>((MediaUploadService) GWT.create(MediaUploadService.class)) {
 
             @Override
             protected void onUploadSubmit() {
@@ -59,16 +56,9 @@ public abstract class MediaUploadDialog extends VerticalPanel implements OkCance
             }
 
             @Override
-            protected void onUploadComplete(UploadResponse<File> serverUploadResponse) {
+            protected void onUploadComplete(MediaFile serverUploadResponse) {
                 dialog.hide(false);
                 MediaUploadDialog.this.onUploadComplete(serverUploadResponse);
-            }
-
-            @Override
-            protected MediaUploadDTO getUploadData() {
-                MediaUploadDTO dto = EntityFactory.create(MediaUploadDTO.class);
-                dto.target().setValue(getImageTarget());
-                return dto;
             }
 
         };
@@ -86,7 +76,7 @@ public abstract class MediaUploadDialog extends VerticalPanel implements OkCance
         dialog.show();
     }
 
-    protected abstract void onUploadComplete(UploadResponse<File> serverUploadResponse);
+    protected abstract void onUploadComplete(MediaFile serverUploadResponse);
 
     protected abstract ImageTarget getImageTarget();
 

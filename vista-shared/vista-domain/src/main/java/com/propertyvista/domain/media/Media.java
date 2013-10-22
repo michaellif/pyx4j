@@ -26,7 +26,7 @@ import com.pyx4j.i18n.annotations.I18n;
 import com.pyx4j.i18n.annotations.Translate;
 import com.pyx4j.i18n.shared.I18nEnum;
 
-import com.propertyvista.domain.File;
+import com.propertyvista.domain.MediaFile;
 import com.propertyvista.domain.PublicVisibilityType;
 
 public interface Media extends IEntity {
@@ -58,7 +58,7 @@ public interface Media extends IEntity {
 
     @EmbeddedEntity
     @MemberColumn(name = "mediaFile")
-    File file();
+    MediaFile file();
 
     @Caption(name = "YouTube Video ID")
     IPrimitive<String> youTubeVideoID();

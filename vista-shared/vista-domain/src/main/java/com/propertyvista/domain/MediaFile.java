@@ -19,7 +19,7 @@ import com.pyx4j.entity.shared.IFile;
 import com.pyx4j.entity.shared.IPrimitive;
 
 @ToStringFormat("{0} {1,size}")
-public interface File extends IFile {
+public interface MediaFile extends IFile {
 
     @Override
     @ToString(index = 1)

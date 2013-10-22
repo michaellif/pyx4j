@@ -21,9 +21,7 @@ import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
 import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.entity.shared.IFile;
 import com.pyx4j.gwt.client.upload.UploadPanel;
-import com.pyx4j.gwt.rpc.upload.UploadResponse;
 import com.pyx4j.gwt.rpc.upload.UploadService;
 import com.pyx4j.gwt.shared.DownloadFormat;
 import com.pyx4j.i18n.shared.I18n;
@@ -31,21 +29,22 @@ import com.pyx4j.widgets.client.dialog.Dialog;
 import com.pyx4j.widgets.client.dialog.OkCancelOption;
 import com.pyx4j.widgets.client.dialog.OkOptionText;
 
+import com.propertyvista.domain.pmc.info.PmcDocumentFile;
 import com.propertyvista.portal.rpc.DeploymentConsts;
 
 public abstract class PmcDocumentFileUploaderDialog extends Composite implements OkCancelOption, OkOptionText {
 
     private static final I18n i18n = I18n.get(PmcDocumentFileUploaderDialog.class);
 
-    private final UploadPanel<IEntity, IFile> uploadPanel;
+    private final UploadPanel<IEntity, PmcDocumentFile> uploadPanel;
 
     private final Dialog dialog;
 
     @SuppressWarnings("unchecked")
-    public PmcDocumentFileUploaderDialog(UploadService<IEntity, IFile> uploadService, Collection<DownloadFormat> supportedFormats) {
+    public PmcDocumentFileUploaderDialog(UploadService<IEntity, PmcDocumentFile> uploadService, Collection<DownloadFormat> supportedFormats) {
         dialog = new Dialog(i18n.tr("Upload Document"), this, null);
 
-        uploadPanel = new UploadPanel<IEntity, IFile>(uploadService) {
+        uploadPanel = new UploadPanel<IEntity, PmcDocumentFile>(uploadService) {
             @Override
             protected void onUploadSubmit() {
                 dialog.getOkButton().setEnabled(false);
@@ -59,15 +58,11 @@ public abstract class PmcDocumentFileUploaderDialog extends Composite implements
             }
 
             @Override
-            protected void onUploadComplete(UploadResponse<IFile> serverUploadResponse) {
+            protected void onUploadComplete(PmcDocumentFile serverUploadResponse) {
                 dialog.hide(false);
                 PmcDocumentFileUploaderDialog.this.onUploadComplete(serverUploadResponse);
             }
 
-            @Override
-            protected IEntity getUploadData() {
-                return null;
-            }
         };
         uploadPanel.setSupportedExtensions(supportedFormats);
         uploadPanel.setServletPath(GWT.getModuleBaseURL() + DeploymentConsts.uploadServletMapping);
@@ -104,6 +99,6 @@ public abstract class PmcDocumentFileUploaderDialog extends Composite implements
         return true;
     }
 
-    protected abstract void onUploadComplete(UploadResponse<IFile> serverUploadResponse);
+    protected abstract void onUploadComplete(PmcDocumentFile serverUploadResponse);
 
 }

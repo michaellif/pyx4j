@@ -20,7 +20,8 @@ import com.pyx4j.commons.Key;
 import com.pyx4j.security.shared.SecurityController;
 
 import com.propertyvista.common.client.ClientNavigUtils;
-import com.propertyvista.domain.File;
+import com.propertyvista.domain.legal.LegalLetter;
+import com.propertyvista.domain.media.ApplicationDocumentFile;
 import com.propertyvista.domain.media.ThumbnailSize;
 import com.propertyvista.domain.pmc.info.PmcDocumentFile;
 import com.propertyvista.domain.security.common.VistaApplication;
@@ -51,12 +52,12 @@ public class MediaUtils {
         return baseURL + DeploymentConsts.pmcDocumentServletMapping + file.id().getStringView() + "/" + file.fileName().getStringView();
     }
 
-    public static String createApplicationDocumentUrl(File file) {
+    public static String createApplicationDocumentUrl(ApplicationDocumentFile file) {
         return ClientNavigUtils.getDeploymentBaseURL() + DeploymentConsts.applicationDocumentServletMapping + file.id().getStringView() + "/"
                 + file.fileName().getStringView();
     }
 
-    public static String createLegalLetterDocumentUrl(File file) {
+    public static String createLegalLetterDocumentUrl(LegalLetter file) {
         return GWT.getModuleBaseURL() + DeploymentConsts.legalLetterServletMappning + file.id().getStringView() + "/" + file.fileName().getStringView();
     }
 

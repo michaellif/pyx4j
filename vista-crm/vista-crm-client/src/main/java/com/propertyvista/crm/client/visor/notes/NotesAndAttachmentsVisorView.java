@@ -40,7 +40,6 @@ import com.pyx4j.forms.client.ui.folder.IFolderDecorator;
 import com.pyx4j.forms.client.ui.folder.IFolderItemDecorator;
 import com.pyx4j.forms.client.ui.folder.ItemActionsBar.ActionType;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
-import com.pyx4j.gwt.rpc.upload.UploadResponse;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.security.client.ClientContext;
@@ -57,7 +56,6 @@ import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
 import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
 import com.propertyvista.common.client.ui.decorations.VistaBoxFolderItemDecorator;
 import com.propertyvista.crm.client.resources.CrmImages;
-import com.propertyvista.domain.File;
 import com.propertyvista.domain.note.NoteAttachment;
 import com.propertyvista.domain.note.NotesAndAttachments;
 import com.propertyvista.domain.note.NotesAndAttachmentsDTO;
@@ -215,7 +213,6 @@ public class NotesAndAttachmentsVisorView extends AbstractVisorPane {
 
                     content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().user(), new CEntityLabel<CrmUser>()), 25).build());
 
-                    // TODO Removed for 1.05
                     if (!VistaTODO.VISTA_2127_Attachments_For_Notes) {
                         content.setH3(++row, 0, 2, i18n.tr("Attachments"));
                         content.setWidget(++row, 0, 2, inject(proto().attachments(), new AttachmentsEditorFolder()));
@@ -344,14 +341,8 @@ public class NotesAndAttachmentsVisorView extends AbstractVisorPane {
                 protected void addItem() {
                     new NotesAttachmentUploadDialog() {
                         @Override
-                        protected void onUploadComplete(UploadResponse<File> serverUploadResponse) {
-                            NoteAttachment attachment = EntityFactory.create(NoteAttachment.class);
-                            attachment.file().blobKey().setValue(serverUploadResponse.uploadKey);
-                            attachment.file().fileName().setValue(serverUploadResponse.fileName);
-                            attachment.file().fileSize().setValue(serverUploadResponse.fileSize);
-                            attachment.file().contentMimeType().setValue(serverUploadResponse.fileContentType);
-
-                            AttachmentsEditorFolder.this.addItem(attachment);
+                        protected void onUploadComplete(NoteAttachment serverUploadResponse) {
+                            AttachmentsEditorFolder.this.addItem(serverUploadResponse);
                         }
                     }.show();
                 }
@@ -376,7 +367,9 @@ public class NotesAndAttachmentsVisorView extends AbstractVisorPane {
                         int row = -1;
 
                         content.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().description()), 40, true).build());
-                        content.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().file()), 40, true).build());
+
+                        // TODO Binding this this ...
+                        content.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto()), 40, true).build());
 
                         return content;
                     }

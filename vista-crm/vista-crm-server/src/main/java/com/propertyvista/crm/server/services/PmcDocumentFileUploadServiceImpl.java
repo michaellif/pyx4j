@@ -14,26 +14,32 @@
 package com.propertyvista.crm.server.services;
 
 import java.util.Collection;
+import java.util.EnumSet;
 import java.util.concurrent.Callable;
 
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.entity.shared.IFile;
 import com.pyx4j.essentials.server.upload.AbstractUploadServiceImpl;
-import com.pyx4j.essentials.server.upload.UploadData;
-import com.pyx4j.essentials.server.upload.DeferredUploadProcess;
-import com.pyx4j.gwt.rpc.upload.UploadResponse;
+import com.pyx4j.essentials.server.upload.UploadedData;
 import com.pyx4j.gwt.shared.DownloadFormat;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.crm.rpc.services.PmcDocumentFileUploadService;
+import com.propertyvista.domain.pmc.info.PmcDocumentFile;
 import com.propertyvista.server.domain.PmcDocumentBlob;
 import com.propertyvista.server.jobs.TaskRunner;
 
-public class PmcDocumentFileUploadServiceImpl extends AbstractUploadServiceImpl<IEntity, IFile> implements PmcDocumentFileUploadService {
+public class PmcDocumentFileUploadServiceImpl extends AbstractUploadServiceImpl<IEntity, PmcDocumentFile> implements PmcDocumentFileUploadService {
 
     private static final I18n i18n = I18n.get(I18n.class);
+
+    public static final Collection<DownloadFormat> supportedFormats = EnumSet.of(DownloadFormat.JPEG, DownloadFormat.GIF, DownloadFormat.PNG,
+            DownloadFormat.BMP);
+
+    public PmcDocumentFileUploadServiceImpl() {
+        super(PmcDocumentFile.class);
+    }
 
     @Override
     public long getMaxSize() {
@@ -47,23 +53,24 @@ public class PmcDocumentFileUploadServiceImpl extends AbstractUploadServiceImpl<
 
     @Override
     public Collection<String> getSupportedExtensions() {
-        return DownloadFormat.getExtensions(SUPPORTED_FORMATS);
+        return DownloadFormat.getExtensions(supportedFormats);
     }
 
     @Override
-    public com.pyx4j.essentials.server.upload.UploadReciver.ProcessingStatus onUploadReceived(final UploadData data,
-            DeferredUploadProcess<IEntity, IFile> process, final UploadResponse<IFile> response) {
-        return TaskRunner.runInOperationsNamespace(new Callable<ProcessingStatus>() {
+    protected void processUploadedData(IEntity uploadInitiationData, final UploadedData uploadedData, final PmcDocumentFile response) {
+        TaskRunner.runInOperationsNamespace(new Callable<Void>() {
 
             @Override
-            public com.pyx4j.essentials.server.upload.UploadReciver.ProcessingStatus call() throws Exception {
+            public Void call() throws Exception {
                 PmcDocumentBlob blob = EntityFactory.create(PmcDocumentBlob.class);
-                blob.data().setValue(data.data);
-                blob.contentType().setValue(response.fileContentType);
+                blob.contentType().setValue(uploadedData.contentMimeType);
+                blob.data().setValue(uploadedData.binaryContent);
                 Persistence.service().persist(blob);
+
+                response.blobKey().setValue(blob.getPrimaryKey());
+
                 Persistence.service().commit();
-                response.uploadKey = blob.getPrimaryKey();
-                return ProcessingStatus.completed;
+                return null;
             }
         });
 

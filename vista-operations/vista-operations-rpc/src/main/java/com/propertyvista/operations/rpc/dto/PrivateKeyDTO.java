@@ -15,14 +15,14 @@ package com.propertyvista.operations.rpc.dto;
 
 import com.pyx4j.commons.Key;
 import com.pyx4j.entity.annotations.Transient;
-import com.pyx4j.entity.shared.IFile;
+import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.i18n.annotations.I18n;
 import com.pyx4j.security.shared.PasswordSerializable;
 
 @Transient
 @I18n(strategy = I18n.I18nStrategy.IgnoreAll)
-public interface PrivateKeyDTO extends IFile {
+public interface PrivateKeyDTO extends IEntity {
 
     IPrimitive<Key> publicKeyKey();
 

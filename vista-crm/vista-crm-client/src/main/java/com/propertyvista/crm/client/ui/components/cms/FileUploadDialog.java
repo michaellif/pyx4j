@@ -20,7 +20,6 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IFile;
 import com.pyx4j.gwt.client.upload.UploadPanel;
-import com.pyx4j.gwt.rpc.upload.UploadResponse;
 import com.pyx4j.gwt.rpc.upload.UploadService;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.dialog.Dialog;
@@ -28,13 +27,14 @@ import com.pyx4j.widgets.client.dialog.OkCancelOption;
 import com.pyx4j.widgets.client.dialog.OkOptionText;
 
 import com.propertyvista.crm.rpc.services.MediaUploadService;
+import com.propertyvista.domain.MediaFile;
 import com.propertyvista.portal.rpc.DeploymentConsts;
 
 public abstract class FileUploadDialog extends VerticalPanel implements OkCancelOption, OkOptionText {
 
     private static final I18n i18n = I18n.get(FileUploadDialog.class);
 
-    private final UploadPanel<IEntity, IFile> uploadPanel;
+    private final UploadPanel<IEntity, MediaFile> uploadPanel;
 
     private final Dialog dialog;
 
@@ -42,7 +42,7 @@ public abstract class FileUploadDialog extends VerticalPanel implements OkCancel
     public FileUploadDialog() {
         dialog = new Dialog(i18n.tr("Upload Image File"), this, null);
 
-        uploadPanel = new UploadPanel<IEntity, IFile>((UploadService<IEntity, IFile>) GWT.create(MediaUploadService.class)) {
+        uploadPanel = new UploadPanel<IEntity, MediaFile>((UploadService<IEntity, MediaFile>) GWT.create(MediaUploadService.class)) {
 
             @Override
             protected void onUploadSubmit() {
@@ -57,7 +57,7 @@ public abstract class FileUploadDialog extends VerticalPanel implements OkCancel
             }
 
             @Override
-            protected void onUploadComplete(UploadResponse<IFile> serverUploadResponse) {
+            protected void onUploadComplete(MediaFile serverUploadResponse) {
                 dialog.hide(false);
                 FileUploadDialog.this.onUploadComplete(serverUploadResponse);
             }
@@ -77,7 +77,7 @@ public abstract class FileUploadDialog extends VerticalPanel implements OkCancel
         dialog.show();
     }
 
-    protected abstract void onUploadComplete(UploadResponse serverUploadResponse);
+    protected abstract void onUploadComplete(IFile serverUploadResponse);
 
     @Override
     public boolean onClickOk() {

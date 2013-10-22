@@ -18,7 +18,6 @@ import java.util.Collection;
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.entity.shared.IFile;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.folder.IFolderItemDecorator;
@@ -32,6 +31,7 @@ import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
 import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
 import com.propertyvista.common.client.ui.decorations.VistaBoxFolderItemDecorator;
 import com.propertyvista.domain.pmc.info.PmcBusinessInfoDocument;
+import com.propertyvista.domain.pmc.info.PmcDocumentFile;
 
 public class PmcBusinessInformationDocumentFolder extends VistaBoxFolder<PmcBusinessInfoDocument> {
 
@@ -57,11 +57,11 @@ public class PmcBusinessInformationDocumentFolder extends VistaBoxFolder<PmcBusi
 
     }
 
-    private final UploadService<IEntity, IFile> service;
+    private final UploadService<IEntity, PmcDocumentFile> service;
 
     private final Collection<DownloadFormat> supportedFormats;
 
-    public PmcBusinessInformationDocumentFolder(UploadService<IEntity, IFile> service, Collection<DownloadFormat> supportedFormats) {
+    public PmcBusinessInformationDocumentFolder(UploadService<IEntity, PmcDocumentFile> service, Collection<DownloadFormat> supportedFormats) {
         super(PmcBusinessInfoDocument.class);
         setAddable(false);
         setRemovable(false);

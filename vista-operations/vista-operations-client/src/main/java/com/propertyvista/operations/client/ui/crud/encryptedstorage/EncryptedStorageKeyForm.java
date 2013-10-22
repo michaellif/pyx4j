@@ -23,6 +23,7 @@ import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Widget;
 
+import com.pyx4j.entity.shared.IFile;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.gwt.client.upload.FileUploadReciver;
 import com.pyx4j.i18n.shared.I18n;
@@ -32,7 +33,6 @@ import com.pyx4j.widgets.client.dialog.MessageDialog;
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
 import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
 import com.propertyvista.operations.client.ui.crud.encryptedstorage.EncryptedStorageView.Presenter;
-import com.propertyvista.operations.rpc.dto.PrivateKeyDTO;
 import com.propertyvista.operations.rpc.encryption.EncryptedStorageKeyDTO;
 
 public class EncryptedStorageKeyForm extends CEntityDecoratableForm<EncryptedStorageKeyDTO> {
@@ -163,10 +163,10 @@ public class EncryptedStorageKeyForm extends CEntityDecoratableForm<EncryptedSto
     }
 
     private void upload() {
-        FileUploadReciver<PrivateKeyDTO> uploadReciver = new FileUploadReciver<PrivateKeyDTO>() {
+        FileUploadReciver<IFile> uploadReciver = new FileUploadReciver<IFile>() {
 
             @Override
-            public void onUploadComplete(PrivateKeyDTO uploadResponse) {
+            public void onUploadComplete(IFile uploadResponse) {
                 presenter.refresh();
             }
         };

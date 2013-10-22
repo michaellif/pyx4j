@@ -15,11 +15,11 @@ package com.propertyvista.server.common.blob;
 
 import org.apache.commons.codec.digest.DigestUtils;
 
-import com.propertyvista.domain.File;
+import com.pyx4j.entity.shared.IFile;
 
 public class ETag {
 
-    public static String getEntityTag(File file, Object variation) {
+    public static String getEntityTag(IFile file, Object variation) {
         StringBuilder b = new StringBuilder();
         b.append(file.blobKey().getValue()).append("-");
         b.append(file.fileSize().getValue()).append("-");

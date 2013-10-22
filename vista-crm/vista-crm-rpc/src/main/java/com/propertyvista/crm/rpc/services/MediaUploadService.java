@@ -16,11 +16,11 @@ package com.propertyvista.crm.rpc.services;
 import java.util.Collection;
 import java.util.EnumSet;
 
+import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.gwt.rpc.upload.UploadService;
 import com.pyx4j.gwt.shared.DownloadFormat;
 
-import com.propertyvista.crm.rpc.dto.MediaUploadDTO;
-import com.propertyvista.domain.File;
+import com.propertyvista.domain.MediaFile;
 
 //TODO remove from UI
 /**
@@ -29,7 +29,7 @@ import com.propertyvista.domain.File;
  * 
  */
 @Deprecated
-public interface MediaUploadService extends UploadService<MediaUploadDTO, File> {
+public interface MediaUploadService extends UploadService<IEntity, MediaFile> {
 
     public static final Collection<DownloadFormat> supportedFormats = EnumSet.of(DownloadFormat.JPEG, DownloadFormat.GIF, DownloadFormat.PNG,
             DownloadFormat.BMP);

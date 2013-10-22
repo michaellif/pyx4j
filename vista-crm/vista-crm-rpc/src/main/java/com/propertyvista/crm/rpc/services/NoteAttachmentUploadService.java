@@ -13,11 +13,11 @@
  */
 package com.propertyvista.crm.rpc.services;
 
+import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.gwt.rpc.upload.UploadService;
 
-import com.propertyvista.crm.rpc.dto.NoteAttachmentUploadDTO;
-import com.propertyvista.domain.File;
+import com.propertyvista.domain.note.NoteAttachment;
 
-public interface NoteAttachmentUploadService extends UploadService<NoteAttachmentUploadDTO, File> {
+public interface NoteAttachmentUploadService extends UploadService<IEntity, NoteAttachment> {
 
 }

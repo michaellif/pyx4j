@@ -20,8 +20,6 @@ import java.util.List;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.Window;
 
-import com.pyx4j.entity.shared.EntityFactory;
-import com.pyx4j.entity.shared.IFile;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CTextField;
@@ -30,7 +28,6 @@ import com.pyx4j.forms.client.ui.folder.CEntityFolderRowEditor;
 import com.pyx4j.forms.client.ui.folder.EntityFolderColumnDescriptor;
 import com.pyx4j.forms.client.ui.folder.IFolderDecorator;
 import com.pyx4j.forms.client.ui.folder.TableFolderDecorator;
-import com.pyx4j.gwt.rpc.upload.UploadResponse;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.common.client.ui.components.folders.VistaTableFolder;
@@ -69,13 +66,8 @@ public class ApplicationDocumentFileUploaderFolder extends VistaTableFolder<Appl
 
         new ApplicationDocumentUploaderDialog(i18n.tr("Upload Document")) {
             @Override
-            protected void onUploadComplete(UploadResponse<IFile> serverUploadResponse) {
-                ApplicationDocumentFile docPage = EntityFactory.create(ApplicationDocumentFile.class);
-                docPage.blobKey().setValue(serverUploadResponse.uploadKey);
-                docPage.fileName().setValue(serverUploadResponse.fileName);
-                docPage.fileSize().setValue(serverUploadResponse.fileSize);
-                docPage.contentMimeType().setValue(serverUploadResponse.fileContentType);
-                addItem(docPage);
+            protected void onUploadComplete(ApplicationDocumentFile serverUploadResponse) {
+                addItem(serverUploadResponse);
             }
         }.show();
     }
