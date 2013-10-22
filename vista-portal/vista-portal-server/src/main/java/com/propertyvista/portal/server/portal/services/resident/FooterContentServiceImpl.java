@@ -22,6 +22,7 @@ import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.i18n.server.I18nManager;
 
+import com.propertyvista.domain.site.HtmlContent;
 import com.propertyvista.domain.site.PortalLogoImageResource;
 import com.propertyvista.domain.site.SiteDescriptor;
 import com.propertyvista.portal.rpc.portal.services.resident.FooterContentService;
@@ -34,8 +35,9 @@ public class FooterContentServiceImpl implements FooterContentService {
         PortalFooterContentDTO portalFooterDto = EntityFactory.create(PortalFooterContentDTO.class);
 
         SiteDescriptor siteDescriptor = Persistence.service().retrieve(EntityQueryCriteria.create(SiteDescriptor.class));
+        String lang = I18nManager.getThreadLocale().getLanguage();
         for (PortalLogoImageResource logo : siteDescriptor.logo()) {
-            if (new Locale(logo.locale().lang().getValue().name()).getLanguage().equals(I18nManager.getThreadLocale().getLanguage())) {
+            if (new Locale(logo.locale().lang().getValue().name()).getLanguage().equals(lang)) {
                 portalFooterDto.logo().set(siteDescriptor.logo().get(0).small().duplicate());
                 break;
             }
@@ -43,7 +45,15 @@ public class FooterContentServiceImpl implements FooterContentService {
         if (portalFooterDto.logo().isNull()) {
             // TODO throw exception logo image for current locale not found???
         }
-        portalFooterDto.content().html().setValue("<div>Property Management<br/>Contact us: 123-456-7777<br/>15 Donald Street</div>");
+
+        if (lang != null) {
+            for (HtmlContent cont : siteDescriptor.pmcInfo()) {
+                if (lang.equals(cont.locale().lang().getValue().getLanguage())) {
+                    portalFooterDto.content().html().set(cont.html());
+                    break;
+                }
+            }
+        }
         portalFooterDto.socialLinks().addAll(siteDescriptor.socialLinks());
 
         callback.onSuccess(portalFooterDto);

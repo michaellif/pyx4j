@@ -30,6 +30,7 @@ import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
+import com.pyx4j.essentials.server.preloader.DataGenerator;
 import com.pyx4j.gwt.server.IOUtils;
 import com.pyx4j.i18n.annotations.I18nComment;
 import com.pyx4j.i18n.server.ServerI18nFactory;
@@ -59,6 +60,8 @@ import com.propertyvista.domain.site.gadgets.NewsGadgetContent;
 import com.propertyvista.domain.site.gadgets.PromoGadgetContent;
 import com.propertyvista.domain.site.gadgets.QuickSearchGadgetContent;
 import com.propertyvista.domain.site.gadgets.TestimonialsGadgetContent;
+import com.propertyvista.generator.PreloadData;
+import com.propertyvista.generator.util.RandomUtil;
 import com.propertyvista.portal.rpc.DeploymentConsts;
 import com.propertyvista.portal.server.preloader.util.AbstractVistaDataPreloader;
 import com.propertyvista.server.common.blob.BlobService;
@@ -165,6 +168,14 @@ public abstract class AbstractSitePreloader extends AbstractVistaDataPreloader {
                         + "for our properties is what sets us apart on the Canadian market.", pmcName());
                 String keywords = li.i18n.tr("apartments for rent, rental apartments");
                 site.metaTags().add(createMeta(li.aLocale, title, description, keywords));
+
+                // pmc info
+                HtmlContent pmcInfo = EntityFactory.create(HtmlContent.class);
+                pmcInfo.locale().set(li.aLocale);
+                pmcInfo.html().setValue(
+                        "<div>" + pmcName() + "<br/>Contact us: " + DataGenerator.randomPhone() + "<br/>" + RandomUtil.randomInt(10000) + " "
+                                + RandomUtil.random(PreloadData.STREETS) + "</div>");
+                site.pmcInfo().add(pmcInfo);
             }
         }
 
