@@ -46,7 +46,6 @@ import com.google.gwt.event.logical.shared.OpenHandler;
 import com.google.gwt.event.logical.shared.ResizeEvent;
 import com.google.gwt.event.logical.shared.ResizeHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
-import com.google.gwt.resources.client.ImageResource;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.CheckBox;
@@ -54,11 +53,7 @@ import com.google.gwt.user.client.ui.DockPanel;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.FocusWidget;
 import com.google.gwt.user.client.ui.HTML;
-import com.google.gwt.user.client.ui.HasHorizontalAlignment;
-import com.google.gwt.user.client.ui.HasVerticalAlignment;
 import com.google.gwt.user.client.ui.HasWidgets;
-import com.google.gwt.user.client.ui.HorizontalPanel;
-import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.ListBox;
 import com.google.gwt.user.client.ui.PopupPanel;
@@ -73,8 +68,6 @@ import com.pyx4j.commons.css.CSSClass;
 import com.pyx4j.i18n.annotations.I18nComment;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.Button;
-import com.pyx4j.widgets.client.ImageFactory;
-import com.pyx4j.widgets.client.ImageFactory.WidgetsImageBundle;
 import com.pyx4j.widgets.client.actionbar.Toolbar;
 
 /**
@@ -634,61 +627,6 @@ public class Dialog_v2 implements ProvidesResize {
             getElement().getStyle().setLineHeight(1.5, Unit.EM);
         }
 
-    }
-
-    static class MessagePanel extends DockPanel implements RequiresResize {
-
-        MessagePanel(final String message, Type type) {
-
-            super();
-            setSize("100%", "100%");
-            DOM.setStyleAttribute(getElement(), "padding", "10px");
-            DOM.setStyleAttribute(getElement(), "paddingBottom", "20px");
-
-            WidgetsImageBundle images = ImageFactory.getImages();
-            ImageResource imageResource = null;
-
-            switch (type) {
-            case Info:
-                imageResource = images.info();
-                break;
-            case Confirm:
-                imageResource = images.confirm();
-                break;
-            case Warning:
-                imageResource = images.warning();
-                break;
-            case Error:
-                imageResource = images.error();
-                break;
-            default:
-                break;
-            }
-
-            Image image = new Image(imageResource);
-            DOM.setStyleAttribute(image.getElement(), "margin", "10px");
-
-            add(image, DockPanel.WEST);
-            setCellVerticalAlignment(image, DockPanel.ALIGN_MIDDLE);
-
-            HTML htmlMessage = new HTML((message == null) ? "" : message.replace("\n", "<br/>"));
-
-            HorizontalPanel htmlHolder = new HorizontalPanel();
-            htmlHolder.setSize("100%", "100%");
-            htmlHolder.add(htmlMessage);
-            htmlHolder.setCellHorizontalAlignment(htmlMessage, HasHorizontalAlignment.ALIGN_CENTER);
-            htmlHolder.setCellVerticalAlignment(htmlMessage, HasVerticalAlignment.ALIGN_MIDDLE);
-
-            add(htmlHolder, DockPanel.CENTER);
-            setCellHeight(htmlHolder, "100%");
-            setCellWidth(htmlHolder, "100%");
-
-        }
-
-        @Override
-        public void onResize() {
-            System.out.println("++++++++onResize");
-        }
     }
 
 }
