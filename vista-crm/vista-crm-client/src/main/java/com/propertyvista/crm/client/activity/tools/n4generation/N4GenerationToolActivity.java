@@ -50,8 +50,7 @@ public class N4GenerationToolActivity extends AbstractBulkOperationToolActivity<
 
     @Override
     protected void onSelectedProccessSuccess(DeferredProcessProgressResponse result) {
-        // TODO
-        ((N4GenerationToolView) getView()).displayN4DownloadLink("TBD");
+
     }
 
 }

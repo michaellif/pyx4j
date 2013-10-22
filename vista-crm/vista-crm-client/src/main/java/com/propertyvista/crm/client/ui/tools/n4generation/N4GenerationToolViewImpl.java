@@ -15,7 +15,6 @@ package com.propertyvista.crm.client.ui.tools.n4generation;
 
 import com.pyx4j.commons.css.IStyleName;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.widgets.client.dialog.MessageDialog;
 
 import com.propertyvista.crm.client.ui.tools.n4generation.base.BulkOperationToolViewImpl;
 import com.propertyvista.crm.rpc.dto.legal.n4.LegalNoticeCandidateDTO;
@@ -37,12 +36,6 @@ public class N4GenerationToolViewImpl extends BulkOperationToolViewImpl<N4Genera
         setAcceptButtonCaption(i18n.tr("Issue N4's"));
         setPageIncrement(20);
         addStyleName(Styles.N4GenerationToolView.name());
-    }
-
-    @Override
-    public void displayN4DownloadLink(String url) {
-        // TODO
-        MessageDialog.info(i18n.tr("DOWNLOAD LINK WILL APPEAR HERE"));
     }
 
 }
