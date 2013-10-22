@@ -233,7 +233,7 @@ public class EntityDataTablePanel<E extends IEntity> extends VerticalPanel {
             public void onSuccess(final EntitySearchResult<E> result) {
                 log.trace("dataTable {} data received {}", GWTJava5Helper.getSimpleName(clazz), result.getData().size());
                 // Separate RPC serialization and table painting
-                Scheduler.get().scheduleDeferred(new ScheduledCommand() {
+                Scheduler.get().scheduleFinally(new ScheduledCommand() {
                     @Override
                     public void execute() {
                         dataTablePanel.populateData(result.getData(), pageNumber, result.hasMoreData(), result.getTotalRows());

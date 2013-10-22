@@ -28,7 +28,7 @@ import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.ImageFactory;
 import com.pyx4j.widgets.client.ImageFactory.WidgetsImageBundle;
 
-public class MessageDialog extends Dialog_v2 {
+public class MessageDialog extends Dialog {
 
     private static final I18n i18n = I18n.get(MessageDialog.class);
 

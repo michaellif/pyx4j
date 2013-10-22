@@ -79,7 +79,8 @@ public abstract class EntitySelectorListDialog<E extends IEntity> extends Abstra
         };
 
         setBody(initBody(isMultiselectAllowed, data));
-        setWidth(defineWidth());
+        setDialogPixelWidth(defineWidth());
+
         getOkButton().setEnabled(false);
     }
 
@@ -107,8 +108,8 @@ public abstract class EntitySelectorListDialog<E extends IEntity> extends Abstra
         return "10em";
     }
 
-    public String defineWidth() {
-        return "40em";
+    public int defineWidth() {
+        return 600;
     }
 
     protected Widget initBody(boolean isMultiselectAllowed, List<E> data) {

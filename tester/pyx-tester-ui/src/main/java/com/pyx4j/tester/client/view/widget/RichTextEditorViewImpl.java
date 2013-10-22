@@ -46,7 +46,7 @@ public class RichTextEditorViewImpl extends ScrollPanel implements RichTextEdito
                 @Override
                 public void onSelectImage(Image image) {
                     selectionHandler.onSuccess(image.getUrl());
-                    RichTextImageDialog.this.hide();
+                    RichTextImageDialog.this.hide(false);
                 }
 
                 @Override
@@ -61,7 +61,7 @@ public class RichTextEditorViewImpl extends ScrollPanel implements RichTextEdito
         @Override
         public void selectImage(AsyncCallback<String> callback) {
             selectionHandler = callback;
-            center();
+            layout();
         }
 
         public void addImage(String url) {

@@ -23,10 +23,7 @@ package com.pyx4j.gwt.client.deferred;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.google.gwt.event.logical.shared.CloseHandler;
-import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.ui.HTML;
-import com.google.gwt.user.client.ui.PopupPanel;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
@@ -79,11 +76,7 @@ public class DeferredProcessDialog extends SimplePanel implements CloseOption, C
     }
 
     public void hide() {
-        dialog.hide();
-    }
-
-    public HandlerRegistration addCloseHandler(CloseHandler<PopupPanel> handler) {
-        return dialog.addCloseHandler(handler);
+        dialog.hide(false);
     }
 
     @Override

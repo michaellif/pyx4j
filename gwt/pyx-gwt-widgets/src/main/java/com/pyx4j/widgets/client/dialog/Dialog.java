@@ -46,7 +46,6 @@ import com.google.gwt.event.logical.shared.OpenHandler;
 import com.google.gwt.event.logical.shared.ResizeEvent;
 import com.google.gwt.event.logical.shared.ResizeHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
-import com.google.gwt.resources.client.ImageResource;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.CheckBox;
@@ -54,44 +53,35 @@ import com.google.gwt.user.client.ui.DockPanel;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.FocusWidget;
 import com.google.gwt.user.client.ui.HTML;
-import com.google.gwt.user.client.ui.HasHorizontalAlignment;
-import com.google.gwt.user.client.ui.HasVerticalAlignment;
 import com.google.gwt.user.client.ui.HasWidgets;
-import com.google.gwt.user.client.ui.HorizontalPanel;
-import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.ListBox;
 import com.google.gwt.user.client.ui.PopupPanel;
 import com.google.gwt.user.client.ui.ProvidesResize;
 import com.google.gwt.user.client.ui.RequiresResize;
+import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.commons.IDebugId;
 import com.pyx4j.commons.css.CSSClass;
-import com.pyx4j.gwt.commons.BrowserType;
 import com.pyx4j.i18n.annotations.I18nComment;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.Button;
-import com.pyx4j.widgets.client.ImageFactory;
-import com.pyx4j.widgets.client.ImageFactory.WidgetsImageBundle;
-import com.pyx4j.widgets.client.ResizibleScrollPanel;
 import com.pyx4j.widgets.client.actionbar.Toolbar;
 
 /**
  * Shared implementation for Modal Dialogs
  */
-public class Dialog extends PopupPanel implements ProvidesResize {
+public class Dialog implements ProvidesResize, IsWidget {
 
     private static final Logger log = LoggerFactory.getLogger(Dialog.class);
 
     private static final I18n i18n = I18n.get(Dialog.class);
 
-    public static enum Type {
-        Error, Warning, Info, Confirm
-    }
+    private final PopupPanel popupPanel;
 
-    private final DockPanel container;
+    private final FlowPanel container;
 
     private final CaptionPanel captionPanel;
 
@@ -142,33 +132,35 @@ public class Dialog extends PopupPanel implements ProvidesResize {
 
     private static final List<Dialog> openDialogs = new Vector<Dialog>();
 
+    private int dialogPixelWidth;
+
     public Dialog(String caption) {
         this(caption, null, null);
     }
 
     public Dialog(String caption, DialogOptions options, IsWidget body) {
-        super(false, true);
+        super();
 
-        setStylePrimaryName(DefaultDialogTheme.StyleName.Dialog.name());
+        popupPanel = new PopupPanel(false, true);
 
-        getElement().getStyle().setProperty("zIndex", "20");
+        popupPanel.getElement().getStyle().setProperty("zIndex", "20");
 
-        container = new DockPanel();
+        container = new FlowPanel();
+        container.setStylePrimaryName(DefaultDialogTheme.StyleName.Dialog.name());
         container.getElement().getStyle().setProperty("cursor", "default");
 
         captionPanel = new CaptionPanel();
-        container.add(captionPanel, DockPanel.NORTH);
+        container.add(captionPanel);
 
-        setWidget(container);
+        popupPanel.setWidget(new SimplePanel(container));
 
-        setGlassEnabled(true);
+        popupPanel.setGlassEnabled(true);
         setCaption(caption);
 
         content = new ContentPanel();
         content.setStylePrimaryName(DefaultDialogTheme.StyleName.DialogContent.name());
 
-        container.add(content, DockPanel.CENTER);
-        container.setCellHeight(content, "100%");
+        container.add(content);
 
         setDialogOptions(options);
 
@@ -177,9 +169,10 @@ public class Dialog extends PopupPanel implements ProvidesResize {
         Window.addResizeHandler(new ResizeHandler() {
             @Override
             public void onResize(ResizeEvent event) {
-                position();
+                layout();
             }
         });
+
     }
 
     public void setCaption(String caption) {
@@ -232,7 +225,7 @@ public class Dialog extends PopupPanel implements ProvidesResize {
             closeHandlerRegistration.removeHandler();
         }
         if (options instanceof CloseHandler) {
-            closeHandlerRegistration = this.addCloseHandler((CloseHandler<PopupPanel>) options);
+            closeHandlerRegistration = popupPanel.addCloseHandler((CloseHandler<PopupPanel>) options);
         }
 
     }
@@ -303,7 +296,7 @@ public class Dialog extends PopupPanel implements ProvidesResize {
     }
 
     public HandlerRegistration addKeyDownHandler(KeyDownHandler handler) {
-        return addDomHandler(handler, KeyDownEvent.getType());
+        return popupPanel.addDomHandler(handler, KeyDownEvent.getType());
     }
 
     /**
@@ -363,7 +356,7 @@ public class Dialog extends PopupPanel implements ProvidesResize {
         public void onClick(ClickEvent event) {
             Object sender = event.getSource();
             if (triggerOption(sender)) {
-                hide();
+                popupPanel.hide();
             }
         }
 
@@ -398,22 +391,25 @@ public class Dialog extends PopupPanel implements ProvidesResize {
         return (this == other);
     }
 
-    @Override
-    public void setSize(String width, String height) {
-        if (BrowserType.isIE8()) {
-            setWidth(width);
+    public void setDialogPixelWidth(int width) {
+        dialogPixelWidth = width;
+        layout();
+    }
+
+    public void layout() {
+        if (Window.getClientWidth() > dialogPixelWidth) {
+            popupPanel.setWidth(dialogPixelWidth + "px");
         } else {
-            super.setSize(width, height);
+            popupPanel.setWidth(Window.getClientWidth() + "px");
         }
+        int left = Math.max(Window.getScrollLeft() + (Window.getClientWidth() - popupPanel.getOffsetWidth()) / 2, 0);
+        popupPanel.getElement().getStyle().setPropertyPx("left", left);
+
+        int top = Math.max(Window.getScrollTop() + (Window.getClientHeight() - popupPanel.getOffsetHeight()) / 2, 0);
+        popupPanel.getElement().getStyle().setPropertyPx("top", top);
+
     }
 
-    private void position() {
-        int left = (Window.getClientWidth() - getOffsetWidth()) / 2;
-        int top = (Window.getClientHeight() - getOffsetHeight()) / 2;
-        setPopupPosition(Math.max(Window.getScrollLeft() + left, 0), Math.max(Window.getScrollTop() + top, 0));
-    }
-
-    @Override
     public void show() {
         if (openDialogs.size() == 0) {
             documentActiveElement = getDocumentActiveElement();
@@ -423,14 +419,15 @@ public class Dialog extends PopupPanel implements ProvidesResize {
             openDialogs.add(this);
         }
 
-        if (!isShowing()) {
-            setVisible(false);
+        if (!popupPanel.isShowing()) {
+            popupPanel.setVisible(false);
         }
-        super.show();
+        popupPanel.show();
 
-        position();
+        layout();
 
-        setVisible(true);
+        popupPanel.setVisible(true);
+
         // The insides of Dialog may be CForm that is only initialized on show.
         Scheduler.get().scheduleDeferred(new ScheduledCommand() {
             @Override
@@ -453,10 +450,9 @@ public class Dialog extends PopupPanel implements ProvidesResize {
         }
     }
 
-    @Override
     public void hide(boolean autoClosed) {
         openDialogs.remove(this);
-        super.hide(autoClosed);
+        popupPanel.hide(autoClosed);
 
         // Set proper focus in the Dialog blow just closed one.
         if (openDialogs.size() > 0) {
@@ -491,7 +487,7 @@ public class Dialog extends PopupPanel implements ProvidesResize {
     public static void closeOpenDialogs() {
         for (int i = 0; i < openDialogs.size(); i++) {
             Dialog d = openDialogs.get(i);
-            d.hide();
+            d.popupPanel.hide();
         }
         openDialogs.clear();
     }
@@ -629,72 +625,16 @@ public class Dialog extends PopupPanel implements ProvidesResize {
 
     }
 
-    static class MessagePanel extends DockPanel implements RequiresResize {
-
-        private ResizibleScrollPanel scrollPanel;
-
-        MessagePanel(final String message, Type type) {
-
-            super();
-            setSize("100%", "100%");
-            DOM.setStyleAttribute(getElement(), "padding", "10px");
-            DOM.setStyleAttribute(getElement(), "paddingBottom", "20px");
-
-            WidgetsImageBundle images = ImageFactory.getImages();
-            ImageResource imageResource = null;
-
-            switch (type) {
-            case Info:
-                imageResource = images.info();
-                break;
-            case Confirm:
-                imageResource = images.confirm();
-                break;
-            case Warning:
-                imageResource = images.warning();
-                break;
-            case Error:
-                imageResource = images.error();
-                break;
-            default:
-                break;
-            }
-
-            Image image = new Image(imageResource);
-            DOM.setStyleAttribute(image.getElement(), "margin", "10px");
-
-            add(image, DockPanel.WEST);
-            setCellVerticalAlignment(image, DockPanel.ALIGN_MIDDLE);
-
-            HTML htmlMessage = new HTML((message == null) ? "" : message.replace("\n", "<br/>"));
-
-            HorizontalPanel htmlHolder = new HorizontalPanel();
-            htmlHolder.setSize("100%", "100%");
-            htmlHolder.add(htmlMessage);
-            htmlHolder.setCellHorizontalAlignment(htmlMessage, HasHorizontalAlignment.ALIGN_CENTER);
-            htmlHolder.setCellVerticalAlignment(htmlMessage, HasVerticalAlignment.ALIGN_MIDDLE);
-
-            if (BrowserType.isIE8()) {
-                add(htmlHolder, DockPanel.CENTER);
-                setCellHeight(htmlHolder, "100%");
-                setCellWidth(htmlHolder, "100%");
-            } else {
-                scrollPanel = new ResizibleScrollPanel();
-                scrollPanel.setSize("100%", "100%");
-                scrollPanel.setContentWidget(htmlHolder);
-                add(scrollPanel, DockPanel.CENTER);
-                setCellHeight(scrollPanel, "100%");
-                setCellWidth(scrollPanel, "100%");
-            }
-
-        }
-
-        @Override
-        public void onResize() {
-            if (scrollPanel != null) {
-                scrollPanel.onResize();
-            }
-        }
+    @Override
+    public Widget asWidget() {
+        return popupPanel;
     }
 
+    public void addCloseHandler(CloseHandler<PopupPanel> handler) {
+        popupPanel.addCloseHandler(handler);
+    }
+
+    public String getTitle() {
+        return popupPanel.getTitle();
+    }
 }

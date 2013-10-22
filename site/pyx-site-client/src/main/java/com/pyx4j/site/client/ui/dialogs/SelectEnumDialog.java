@@ -56,7 +56,7 @@ public abstract class SelectEnumDialog<E extends Enum<E>> extends OkCancelDialog
         } else {
             setBody(initBody(selectionModel, values, defineHeight()));
         }
-        setWidth(defineWidth());
+        setDialogPixelWidth(defineWidth());
     }
 
     public String getEmptySelectionMessage() {
@@ -90,7 +90,7 @@ public abstract class SelectEnumDialog<E extends Enum<E>> extends OkCancelDialog
         return "10em";
     }
 
-    public String defineWidth() {
-        return "25em";
+    public int defineWidth() {
+        return 400;
     }
 }

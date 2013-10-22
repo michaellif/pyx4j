@@ -59,7 +59,6 @@ import com.pyx4j.widgets.client.datepicker.DatePickerComposite;
 import com.pyx4j.widgets.client.dialog.Custom1Option;
 import com.pyx4j.widgets.client.dialog.Custom2Option;
 import com.pyx4j.widgets.client.dialog.Dialog;
-import com.pyx4j.widgets.client.dialog.Dialog_v2;
 import com.pyx4j.widgets.client.dialog.GlueOption;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
 import com.pyx4j.widgets.client.dialog.UnrecoverableErrorHandlerDialog;
@@ -300,7 +299,7 @@ public class TesterEntryPoint implements EntryPoint {
 
         @Override
         public void onClick(ClickEvent event) {
-            Dialog_v2 dialog = new Dialog_v2("Caption2", new Options2() {
+            Dialog dialog = new Dialog("Caption2", new Options2() {
 
                 @Override
                 public boolean onClickCancel() {

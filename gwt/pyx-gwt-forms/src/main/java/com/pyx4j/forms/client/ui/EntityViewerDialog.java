@@ -44,8 +44,7 @@ public class EntityViewerDialog extends OkDialog {
         content.add(scroll);
         setBody(content);
 
-        setWidth("400px");
-        setHeight("400px");
+        setDialogPixelWidth(400);
 
     }
 

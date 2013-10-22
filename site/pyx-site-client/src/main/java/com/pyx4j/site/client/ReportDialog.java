@@ -110,7 +110,7 @@ public class ReportDialog extends DeferredProcessDialog {
             downloadUrl = ((DeferredReportProcessProgressResponse) result).getDownloadLink();
             if (useDownloadFrame()) {
                 new DownloadFrame(downloadServletPath + downloadUrl);
-                dialog.hide();
+                dialog.hide(false);
             } else {
                 VerticalPanel vp = new VerticalPanel();
                 this.setWidget(vp);
@@ -121,7 +121,7 @@ public class ReportDialog extends DeferredProcessDialog {
 
                     @Override
                     public void onClick(ClickEvent event) {
-                        dialog.hide();
+                        dialog.hide(false);
                     }
                 });
                 vp.add(downloadLink);

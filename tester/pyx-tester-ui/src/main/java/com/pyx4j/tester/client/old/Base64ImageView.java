@@ -66,7 +66,7 @@ public class Base64ImageView extends VerticalPanel implements CancelOption, Cust
         add(imagesPanel);
 
         dialog = new Dialog("Base64ImageView " + BrowserType.getCompiledType(), this, this);
-        dialog.setPixelSize(660, 300);
+        dialog.setDialogPixelWidth(660);
     }
 
     public void show() {

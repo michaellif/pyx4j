@@ -31,7 +31,7 @@ import com.pyx4j.gwt.rpc.upload.UploadResponse;
 import com.pyx4j.gwt.rpc.upload.UploadService;
 import com.pyx4j.gwt.shared.DownloadFormat;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.widgets.client.dialog.Dialog_v2;
+import com.pyx4j.widgets.client.dialog.Dialog;
 import com.pyx4j.widgets.client.dialog.OkCancelOption;
 import com.pyx4j.widgets.client.dialog.OkOptionText;
 
@@ -41,13 +41,13 @@ public class FileUploadDialog<E extends IFile> extends VerticalPanel implements 
 
     private final UploadPanel<E, E> uploadPanel;
 
-    protected final Dialog_v2 dialog;
+    protected final Dialog dialog;
 
     protected E uploadData;
 
     public FileUploadDialog(String dialogTitle, E uploadData, UploadService<E, E> service, FileUploadReciver<E> uploadReciver) {
 
-        dialog = new Dialog_v2(dialogTitle, this, null);
+        dialog = new Dialog(dialogTitle, this, null);
         dialog.setDialogPixelWidth(500);
 
         this.uploadData = uploadData;
