@@ -68,8 +68,9 @@ public class PortalBillingTheme extends BillingTheme {
         addStyle(style);
 
         style = new Style(".", StyleName.BillingDetailTotalTitle);
-        style.addProperty("padding-left", "4px");
-        style.addProperty("padding-right", "4px");
+        style.addProperty("padding-top", "4px");
+        style.addProperty("padding-right", "6px");
+        style.addProperty("text-align", "right");
         addStyle(style);
 
         style = new Style(".", StyleName.BillingDetailTotalAmount);
