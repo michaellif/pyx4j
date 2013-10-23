@@ -27,7 +27,6 @@ import com.pyx4j.i18n.shared.I18n;
 import com.propertyvista.domain.tenant.insurance.InsuranceCertificateScan;
 import com.propertyvista.portal.rpc.portal.web.services.services.GeneralInsurancePolicyUploadService;
 import com.propertyvista.portal.server.portal.web.services.ResidentPictureUploadServiceImpl;
-import com.propertyvista.server.domain.FileBlob;
 import com.propertyvista.server.domain.GeneralInsurancePolicyBlob;
 
 public class GeneralInsurancePolicyUploadServiceImpl extends AbstractUploadServiceImpl<IEntity, InsuranceCertificateScan> implements
@@ -44,7 +43,7 @@ public class GeneralInsurancePolicyUploadServiceImpl extends AbstractUploadServi
 
     @Override
     public long getMaxSize() {
-        return EntityFactory.getEntityPrototype(FileBlob.class).content().getMeta().getLength();
+        return EntityFactory.getEntityPrototype(GeneralInsurancePolicyBlob.class).content().getMeta().getLength();
     }
 
     @Override
