@@ -29,7 +29,7 @@ import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
 import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
-import com.propertyvista.domain.financial.billing.InvoiceLineItem;
+import com.propertyvista.domain.financial.billing.InvoicePayment;
 import com.propertyvista.portal.rpc.portal.web.dto.financial.LatestActivitiesDTO;
 import com.propertyvista.portal.web.client.resources.PortalImages;
 import com.propertyvista.portal.web.client.ui.AbstractGadget;
@@ -72,31 +72,31 @@ public class LatestActivitiesGadget extends AbstractGadget<FinancialDashboardVie
         }
     }
 
-    private class InvoiceLineItemFolder extends VistaBoxFolder<InvoiceLineItem> {
+    private class InvoiceLineItemFolder extends VistaBoxFolder<InvoicePayment> {
 
         public InvoiceLineItemFolder() {
-            super(InvoiceLineItem.class, false);
+            super(InvoicePayment.class, false);
         }
 
         @Override
-        public IFolderItemDecorator<InvoiceLineItem> createItemDecorator() {
-            BoxFolderItemDecorator<InvoiceLineItem> decor = (BoxFolderItemDecorator<InvoiceLineItem>) super.createItemDecorator();
+        public IFolderItemDecorator<InvoicePayment> createItemDecorator() {
+            BoxFolderItemDecorator<InvoicePayment> decor = (BoxFolderItemDecorator<InvoicePayment>) super.createItemDecorator();
             decor.setExpended(false);
             return decor;
         }
 
         @Override
         public CComponent<?> create(IObject<?> member) {
-            if (member instanceof InvoiceLineItem) {
+            if (member instanceof InvoicePayment) {
                 return new InvoiceLineItemViewer();
             }
             return super.create(member);
         }
 
-        private class InvoiceLineItemViewer extends CEntityDecoratableForm<InvoiceLineItem> {
+        private class InvoiceLineItemViewer extends CEntityDecoratableForm<InvoicePayment> {
 
             public InvoiceLineItemViewer() {
-                super(InvoiceLineItem.class);
+                super(InvoicePayment.class);
 
                 setViewable(true);
                 inheritViewable(false);

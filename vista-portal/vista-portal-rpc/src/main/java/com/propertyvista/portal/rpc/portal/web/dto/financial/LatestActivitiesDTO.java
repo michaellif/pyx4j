@@ -17,10 +17,10 @@ import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
 
-import com.propertyvista.domain.financial.billing.InvoiceLineItem;
+import com.propertyvista.domain.financial.billing.InvoicePayment;
 
 @Transient
 public interface LatestActivitiesDTO extends IEntity {
 
-    IList<InvoiceLineItem> lineItems();
+    IList<InvoicePayment> lineItems();
 }

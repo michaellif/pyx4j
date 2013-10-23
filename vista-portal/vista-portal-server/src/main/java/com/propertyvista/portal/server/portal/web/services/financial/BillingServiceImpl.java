@@ -31,6 +31,7 @@ import com.pyx4j.entity.shared.utils.EntityBinder;
 import com.propertyvista.biz.financial.ar.ARFacade;
 import com.propertyvista.biz.financial.billing.BillingFacade;
 import com.propertyvista.biz.financial.billing.BillingUtils;
+import com.propertyvista.biz.financial.payment.PaymentFacade;
 import com.propertyvista.biz.financial.payment.PaymentMethodFacade;
 import com.propertyvista.domain.financial.billing.Bill;
 import com.propertyvista.domain.payment.AutopayAgreement;
@@ -89,7 +90,7 @@ public class BillingServiceImpl implements BillingService {
 
         Lease lease = TenantAppContext.getCurrentUserLease();
 
-        activities.lineItems().addAll(ServerSideFactory.create(ARFacade.class).getLatestBillingActivity(lease.billingAccount()));
+        activities.lineItems().addAll(ServerSideFactory.create(PaymentFacade.class).getLatestPaymentActivity(lease.billingAccount()));
 
         callback.onSuccess(activities);
     }
