@@ -15,6 +15,7 @@ package com.propertyvista.portal.web.client.ui.services.insurance;
 
 import java.math.BigDecimal;
 
+import com.google.gwt.dom.client.Style.Display;
 import com.google.gwt.dom.client.Style.FontWeight;
 import com.google.gwt.dom.client.Style.TextAlign;
 import com.google.gwt.dom.client.Style.Unit;
@@ -57,7 +58,7 @@ public class TenantSureQuoteViewer extends CViewer<TenantSureQuoteDTO> {
     public IsWidget createContent(TenantSureQuoteDTO quote) {
         FlowPanel contentPanel = new FlowPanel();
         BasicFlexFormPanel paymentBreakdownPanel = new BasicFlexFormPanel();
-        paymentBreakdownPanel.setWidth("100%");
+
         if (quote != null && !quote.isNull()) {
             if (quote.specialQuote().isNull()) {
                 int row = 0;
@@ -110,28 +111,44 @@ public class TenantSureQuoteViewer extends CViewer<TenantSureQuoteDTO> {
 
                 contentPanel.add(specialQuoteText);
             }
-
         }
 
         return contentPanel;
     }
 
     private void addDetailRecord(FlexTable table, int row, String description, BigDecimal amount) {
-        table.setHTML(row, 0, description);
-        table.setHTML(row, 1, currencyFormat.format(amount));
+        BasicFlexFormPanel record = new BasicFlexFormPanel();
+
+        record.setWidget(row, 0, new HTML(description));
+        record.setWidget(row, 1, new HTML(currencyFormat.format(amount)));
+
         // styling:
-        table.getRowFormatter().setStyleName(row, BillingTheme.StyleName.BillingDetailItem.name());
-        table.getFlexCellFormatter().setStyleName(row, 0, BillingTheme.StyleName.BillingDetailItemTitle.name());
-        table.getFlexCellFormatter().setStyleName(row, 1, BillingTheme.StyleName.BillingDetailItemAmount.name());
+        record.getColumnFormatter().setWidth(1, "100px");
+
+        record.getRowFormatter().setStyleName(row, BillingTheme.StyleName.BillingDetailItem.name());
+        record.getWidget(row, 0).setStyleName(BillingTheme.StyleName.BillingDetailItemTitle.name());
+        record.getWidget(row, 1).setStyleName(BillingTheme.StyleName.BillingDetailItemAmount.name());
+
+        table.setWidget(row, 0, record);
     }
 
     private void addTotalRecord(FlexTable table, int row, String description, BigDecimal amount) {
-        table.setHTML(row, 0, description);
-        table.setHTML(row, 1, currencyFormat.format(amount));
+        BasicFlexFormPanel record = new BasicFlexFormPanel();
+
+        record.setWidget(row, 0, new HTML(description));
+        record.setWidget(row, 1, new HTML(currencyFormat.format(amount)));
+
         // styling:
-        table.getRowFormatter().setStyleName(row, BillingTheme.StyleName.BillingDetailTotal.name());
-        table.getFlexCellFormatter().setStyleName(row, 0, BillingTheme.StyleName.BillingDetailTotalTitle.name());
-        table.getFlexCellFormatter().setStyleName(row, 1, BillingTheme.StyleName.BillingDetailTotalAmount.name());
+        record.getColumnFormatter().setWidth(1, "100px");
+
+        record.getRowFormatter().setStyleName(row, BillingTheme.StyleName.BillingDetailTotal.name());
+        record.getWidget(row, 0).setStyleName(BillingTheme.StyleName.BillingDetailTotalTitle.name());
+        record.getWidget(row, 1).setStyleName(BillingTheme.StyleName.BillingDetailTotalAmount.name());
+
+        record.getWidget(row, 1).getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
+        record.getCellFormatter().setHorizontalAlignment(row, 1, HasHorizontalAlignment.ALIGN_LEFT);
+
+        table.setWidget(row, 0, record);
     }
 
 }
