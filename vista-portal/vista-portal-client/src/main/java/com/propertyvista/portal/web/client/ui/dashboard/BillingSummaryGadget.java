@@ -108,7 +108,9 @@ public class BillingSummaryGadget extends AbstractGadget<MainDashboardViewImpl> 
 
             BasicFlexFormPanel mainPanel = new BasicFlexFormPanel();
             mainPanel.setWidget(0, 0, new FormDecoratorBuilder(inject(proto().currentBalance()), "140px", "100px", "120px").build());
-            mainPanel.setWidget(1, 0, new FormDecoratorBuilder(inject(proto().dueDate()), "140px", "100px", "120px").build());
+            if (!VistaFeatures.instance().yardiIntegration()) {
+                mainPanel.setWidget(1, 0, new FormDecoratorBuilder(inject(proto().dueDate()), "140px", "100px", "120px").build());
+            }
 
             return mainPanel;
         }
