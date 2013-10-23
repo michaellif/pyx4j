@@ -80,7 +80,7 @@ public class TenantSurePaymentMethodForm extends PaymentMethodEditor<InsurancePa
 
         panel.setH1(0, 0, 1, i18n.tr("Pre-Authorized Agreement"));
         panel.setWidget(1, 0, legalTerms);
-        panel.setWidget(2, 0, new FormDecoratorBuilder(iAgreeBox, 20).customLabel(i18n.tr("I Agree")).build());
+        panel.setWidget(2, 0, new FormDecoratorBuilder(iAgreeBox, FormDecoratorBuilder.LABEL_WIDTH, 5, 15).customLabel(i18n.tr("I Agree")).build());
 
         iAgreeBox.addValueChangeHandler(new ValueChangeHandler<Boolean>() {
             @Override

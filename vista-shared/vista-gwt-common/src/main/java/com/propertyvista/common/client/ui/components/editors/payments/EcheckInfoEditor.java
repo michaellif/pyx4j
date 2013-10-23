@@ -47,13 +47,20 @@ public class EcheckInfoEditor extends CEntityDecoratableForm<EcheckInfo> {
 
     private final double maxCompWidth;
 
+    private final double contentWidth;
+
+    private final double labelWidth;
+
     public EcheckInfoEditor() {
-        this(20);
+        this(FormDecoratorBuilder.LABEL_WIDTH, 20, FormDecoratorBuilder.CONTENT_WIDTH);
     }
 
-    public EcheckInfoEditor(double maxCompWidth) {
+    public EcheckInfoEditor(double labelWidth, double maxCompWidth, double contentWidth) {
         super(EcheckInfo.class);
+
+        this.labelWidth = labelWidth;
         this.maxCompWidth = maxCompWidth;
+        this.contentWidth = contentWidth;
     }
 
     @Override
@@ -61,11 +68,11 @@ public class EcheckInfoEditor extends CEntityDecoratableForm<EcheckInfo> {
         BasicFlexFormPanel panel = new BasicFlexFormPanel();
 
         int row = -1;
-        panel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().nameOn()), maxCompWidth).build());
-        panel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().accountNo(), accountEditor), maxCompWidth).build());
+        panel.setWidget(++row, 0, decorator(inject(proto().nameOn()), maxCompWidth).build());
+        panel.setWidget(++row, 0, decorator(inject(proto().accountNo(), accountEditor), maxCompWidth).build());
 
-        panel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().branchTransitNumber()), 5).build());
-        panel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().bankId()), 3).build());
+        panel.setWidget(++row, 0, decorator(inject(proto().branchTransitNumber()), 5).build());
+        panel.setWidget(++row, 0, decorator(inject(proto().bankId()), 3).build());
 
         if (!isViewable()) {
             Image image = new Image(VistaImages.INSTANCE.eChequeGuide().getSafeUri());
@@ -125,5 +132,9 @@ public class EcheckInfoEditor extends CEntityDecoratableForm<EcheckInfo> {
         CTextFieldBase<?, ?> id = (CTextFieldBase<?, ?>) get(proto().accountNo());
         id.onEditingStop(); // assume new user input; will obfuscate the value if focused
         id.setValueByString(String.valueOf(System.currentTimeMillis() % 10000000));
+    }
+
+    private FormDecoratorBuilder decorator(CComponent<?> comp, double compWidth) {
+        return new FormDecoratorBuilder(comp, labelWidth, (compWidth <= contentWidth ? compWidth : contentWidth), contentWidth);
     }
 }

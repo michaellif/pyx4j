@@ -40,18 +40,25 @@ public class AddressSimpleEditor extends CEntityDecoratableForm<AddressSimple> {
 
     private final double maxCompWidth;
 
+    private final double contentWidth;
+
+    private final double labelWidth;
+
     public AddressSimpleEditor() {
         this(true);
     }
 
     public AddressSimpleEditor(boolean oneColumn) {
-        this(true, 20);
+        this(true, FormDecoratorBuilder.LABEL_WIDTH, 20, FormDecoratorBuilder.CONTENT_WIDTH);
     }
 
-    public AddressSimpleEditor(boolean oneColumn, double maxCompWidth) {
+    public AddressSimpleEditor(boolean oneColumn, double labelWidth, double maxCompWidth, double contentWidth) {
         super(AddressSimple.class);
+
+        this.labelWidth = labelWidth;
         this.oneColumn = oneColumn;
         this.maxCompWidth = maxCompWidth;
+        this.contentWidth = contentWidth;
     }
 
     @SuppressWarnings("unchecked")
@@ -62,23 +69,23 @@ public class AddressSimpleEditor extends CEntityDecoratableForm<AddressSimple> {
         int row = -1;
         int col = (oneColumn ? 0 : 1);
 
-        main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().street1()), maxCompWidth).build());
-        main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().street2()), maxCompWidth).build());
-        main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().city()), maxCompWidth).build());
+        main.setWidget(++row, 0, decorator(inject(proto().street1()), maxCompWidth).build());
+        main.setWidget(++row, 0, decorator(inject(proto().street2()), maxCompWidth).build());
+        main.setWidget(++row, 0, decorator(inject(proto().city()), maxCompWidth).build());
 
         row = (oneColumn ? row : -1);
 
         CComponent<Province> province = (CComponent<Province>) inject(proto().province());
-        main.setWidget(++row, col, new FormDecoratorBuilder(province, maxCompWidth).build());
+        main.setWidget(++row, col, decorator(province, maxCompWidth).build());
 
         final CComponent<Country> country = (CComponent<Country>) inject(proto().country());
-        main.setWidget(++row, col, new FormDecoratorBuilder(country, maxCompWidth).build());
+        main.setWidget(++row, col, decorator(country, maxCompWidth).build());
 
         CComponent<String> postalCode = (CComponent<String>) inject(proto().postalCode());
         if (postalCode instanceof CTextFieldBase) {
             ((CTextFieldBase<String, ?>) postalCode).setFormat(new PostalCodeFormat(new CountryContextCComponentProvider(country)));
         }
-        main.setWidget(++row, col, new FormDecoratorBuilder(postalCode, 10).build());
+        main.setWidget(++row, col, decorator(postalCode, 10).build());
 
         attachFilters(proto(), province, country, postalCode);
 
@@ -101,5 +108,9 @@ public class AddressSimpleEditor extends CEntityDecoratableForm<AddressSimple> {
                 }
             }
         });
+    }
+
+    private FormDecoratorBuilder decorator(CComponent<?> comp, double compWidth) {
+        return new FormDecoratorBuilder(comp, labelWidth, (compWidth <= contentWidth ? compWidth : contentWidth), contentWidth);
     }
 }

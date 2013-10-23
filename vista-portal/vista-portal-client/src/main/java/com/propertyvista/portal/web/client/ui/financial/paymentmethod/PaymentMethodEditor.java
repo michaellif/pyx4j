@@ -53,14 +53,15 @@ public class PaymentMethodEditor<E extends AbstractPaymentMethod> extends com.pr
         BasicFlexFormPanel content = new BasicFlexFormPanel();
         int row = -1;
 
-        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().type(), new CComboBox<PaymentType>()), 15).build());
+        content.setWidget(++row, 0,
+                new FormDecoratorBuilder(inject(proto().type(), new CComboBox<PaymentType>()), FormDecoratorBuilder.LABEL_WIDTH, 15, 15).build());
         content.setWidget(++row, 0, paymentDetailsHolder);
 
         content.setH1(++row, 0, 1, proto().billingAddress().getMeta().getCaption());
         billingAddressHeader = content.getWidget(row, 0);
 
-        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().sameAsCurrent()), 5).build());
-        content.setWidget(++row, 0, inject(proto().billingAddress(), new AddressSimpleEditor(true, 15)));
+        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().sameAsCurrent()), FormDecoratorBuilder.LABEL_WIDTH, 5, 15).build());
+        content.setWidget(++row, 0, inject(proto().billingAddress(), new AddressSimpleEditor(true, FormDecoratorBuilder.LABEL_WIDTH, 15, 15)));
 
         // tweaks:
         ((CComboBox<PaymentType>) get(proto().type())).setOptions(defaultPaymentTypes());
@@ -84,12 +85,12 @@ public class PaymentMethodEditor<E extends AbstractPaymentMethod> extends com.pr
 
     @Override
     protected CEntityForm<?> createEcheckInfoEditor() {
-        return new EcheckInfoEditor(15);
+        return new EcheckInfoEditor(FormDecoratorBuilder.LABEL_WIDTH, 15, 15);
     }
 
     @Override
     protected CEntityForm<?> createCreditCardInfoEditor() {
-        return new CreditCardInfoEditor(15) {
+        return new CreditCardInfoEditor(FormDecoratorBuilder.LABEL_WIDTH, 15, 15) {
             @Override
             protected Set<CreditCardType> getAllowedCardTypes() {
                 return PaymentMethodEditor.this.getAllowedCardTypes();

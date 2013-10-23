@@ -72,13 +72,20 @@ public class CreditCardInfoEditor extends CEntityDecoratableForm<CreditCardInfo>
 
     private final double maxCompWidth;
 
+    private final double contentWidth;
+
+    private final double labelWidth;
+
     public CreditCardInfoEditor() {
-        this(20);
+        this(FormDecoratorBuilder.LABEL_WIDTH, 20, FormDecoratorBuilder.CONTENT_WIDTH);
     }
 
-    public CreditCardInfoEditor(double maxCompWidth) {
+    public CreditCardInfoEditor(double labelWidth, double maxCompWidth, double contentWidth) {
         super(CreditCardInfo.class);
+
+        this.labelWidth = labelWidth;
         this.maxCompWidth = maxCompWidth;
+        this.contentWidth = contentWidth;
     }
 
     @Override
@@ -87,12 +94,12 @@ public class CreditCardInfoEditor extends CEntityDecoratableForm<CreditCardInfo>
 
         int row = -1;
         CMonthYearPicker monthYearPicker = new CMonthYearPicker(false);
-        panel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().nameOn()), maxCompWidth).build());
-        panel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().cardType(), typeSelector), maxCompWidth).build());
+        panel.setWidget(++row, 0, decorator(inject(proto().nameOn()), maxCompWidth).build());
+        panel.setWidget(++row, 0, decorator(inject(proto().cardType(), typeSelector), maxCompWidth).build());
 
-        panel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().card(), cardEditor), maxCompWidth).build());
-        panel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().expiryDate(), monthYearPicker), maxCompWidth).build());
-        panel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().securityCode()), 3).build());
+        panel.setWidget(++row, 0, decorator(inject(proto().card(), cardEditor), maxCompWidth).build());
+        panel.setWidget(++row, 0, decorator(inject(proto().expiryDate(), monthYearPicker), maxCompWidth).build());
+        panel.setWidget(++row, 0, decorator(inject(proto().securityCode()), 3).build());
 
         // tweak:
         monthYearPicker.setYearRange(new Range(1900 + new Date().getYear(), 10));
@@ -259,5 +266,9 @@ public class CreditCardInfoEditor extends CEntityDecoratableForm<CreditCardInfo>
         TimeUtils.addDays(nextMonth, 31);
         get(proto().expiryDate()).setValue(nextMonth);
         get(proto().securityCode()).setValue("123");
+    }
+
+    private FormDecoratorBuilder decorator(CComponent<?> comp, double compWidth) {
+        return new FormDecoratorBuilder(comp, labelWidth, (compWidth <= contentWidth ? compWidth : contentWidth), contentWidth);
     }
 }
