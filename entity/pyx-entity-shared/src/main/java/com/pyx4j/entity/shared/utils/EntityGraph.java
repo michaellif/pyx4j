@@ -162,6 +162,9 @@ public class EntityGraph {
         EntityMeta em = ent1.getEntityMeta();
         for (String memberName : em.getMemberNames()) {
             MemberMeta memberMeta = em.getMemberMeta(memberName);
+            if (memberMeta.isTransient()) {
+                continue;
+            }
             IObject<?> member1 = ent1.getMember(memberName);
             if (ignorePath.contains(member1.getPath())) {
                 continue;
