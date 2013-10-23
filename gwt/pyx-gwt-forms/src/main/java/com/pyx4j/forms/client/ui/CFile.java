@@ -20,24 +20,34 @@
  */
 package com.pyx4j.forms.client.ui;
 
+import com.google.gwt.core.shared.GWT;
 import com.google.gwt.user.client.Command;
 
 import com.pyx4j.entity.shared.IFile;
+import com.pyx4j.gwt.rpc.upload.UploadService;
+import com.pyx4j.gwt.shared.FileURLBuilder;
 
-public abstract class CFile<E extends IFile> extends CField<E, NFile<E>> {
+public class CFile<E extends IFile> extends CField<E, NFile<E>> {
 
     private IFormat<E> format;
 
-    public CFile() {
-        this(null);
-    }
+    private final UploadService<?, E> service;
 
-    public CFile(Command command) {
+    private FileURLBuilder<E> fileUrlBuilder;
+
+    public CFile(Class<? extends UploadService<?, E>> serviceClass) {
         super("");
+        this.service = GWT.<UploadService<?, E>> create(serviceClass);
 
         setNativeWidget(new NFile<E>(this));
 
-        setNavigationCommand(command);
+        setNavigationCommand(new Command() {
+
+            @Override
+            public void execute() {
+                System.out.println("TODO");
+            }
+        });
 
         setFormat(new IFormat<E>() {
             @Override
@@ -61,5 +71,19 @@ public abstract class CFile<E extends IFile> extends CField<E, NFile<E>> {
         return format;
     }
 
-    public abstract void showFileSelectionDialog();
+    public void setFileUrlBuilder(FileURLBuilder<E> fileURLBuilder) {
+        this.fileUrlBuilder = fileURLBuilder;
+    }
+
+    public String getImageUrl(E file) {
+        if (file == null || file.isNull() || fileUrlBuilder == null) {
+            return null;
+        } else {
+            return fileUrlBuilder.getUrl(file);
+        }
+    }
+
+    UploadService<?, E> getUploadService() {
+        return service;
+    }
 }

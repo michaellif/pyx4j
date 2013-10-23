@@ -26,38 +26,64 @@ import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.Command;
 
+import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IFile;
 import com.pyx4j.forms.client.ImageFactory;
+import com.pyx4j.gwt.client.upload.FileUploadDialog;
+import com.pyx4j.gwt.client.upload.FileUploadReciver;
+import com.pyx4j.gwt.rpc.upload.UploadService;
+import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.Anchor;
 import com.pyx4j.widgets.client.Button;
 
 public class NFile<E extends IFile> extends NField<E, Anchor, CFile<E>, Anchor> {
 
+    private static final I18n i18n = I18n.get(NFile.class);
+
+    private final Anchor fileNameAnchor;
+
     public NFile(final CFile<E> file) {
         super(file);
 
-        final Button triggerButton = new Button(ImageFactory.getImages().triggerDown());
-        triggerButton.setCommand(new Command() {
+        fileNameAnchor = new Anchor("", new Command() {
 
             @Override
             public void execute() {
-                getCComponent().showFileSelectionDialog();
+                if (getCComponent().getNavigationCommand() != null) {
+                    getCComponent().getNavigationCommand().execute();
+                }
             }
         });
 
+        Button triggerButton = new Button(ImageFactory.getImages().triggerDown(), new Command() {
+
+            @Override
+            public void execute() {
+                showUploadFileDialog();
+            }
+        });
         setTriggerButton(triggerButton);
 
-        final Button clearButton = new Button(ImageFactory.getImages().clear());
-        clearButton.setCommand(new Command() {
+        Button clearButton = new Button(ImageFactory.getImages().clear(), new Command() {
 
             @Override
             public void execute() {
                 getCComponent().setValue(null);
             }
         });
-
         setClearButton(clearButton);
 
+    }
+
+    private void showUploadFileDialog() {
+        @SuppressWarnings("unchecked")
+        UploadService<IEntity, E> service = (UploadService<IEntity, E>) getCComponent().getUploadService();
+        new FileUploadDialog<IEntity, E>(i18n.tr("Upload Image File"), null, service, new FileUploadReciver<E>() {
+            @Override
+            public void onUploadComplete(E uploadResponse) {
+                getCComponent().setValue(uploadResponse);
+            }
+        }).show();
     }
 
     @Override
@@ -72,12 +98,7 @@ public class NFile<E extends IFile> extends NField<E, Anchor, CFile<E>, Anchor> 
             }
         }
 
-        if (getEditor() != null) {
-            getEditor().setText(text);
-        }
-        if (getViewer() != null) {
-            getViewer().setText(text);
-        }
+        fileNameAnchor.setText(text);
     }
 
     @Override
@@ -88,22 +109,12 @@ public class NFile<E extends IFile> extends NField<E, Anchor, CFile<E>, Anchor> 
 
     @Override
     protected Anchor createEditor() {
-        Anchor anchor = new Anchor("");
-        anchor.addClickHandler(new ClickHandler() {
-            @Override
-            public void onClick(ClickEvent event) {
-                if (getCComponent().getNavigationCommand() != null) {
-                    getCComponent().getNavigationCommand().execute();
-                }
-            }
-
-        });
-        return anchor;
+        return fileNameAnchor;
     }
 
     @Override
     protected Anchor createViewer() {
-        return createEditor();
+        return fileNameAnchor;
     }
 
 }

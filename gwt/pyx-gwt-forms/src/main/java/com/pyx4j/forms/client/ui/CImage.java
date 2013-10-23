@@ -1,5 +1,6 @@
 package com.pyx4j.forms.client.ui;
 
+import com.google.gwt.core.shared.GWT;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Widget;
 
@@ -18,14 +19,12 @@ public abstract class CImage<E extends IFile> extends CField<E, NImage<E>> {
 
     private Dimension imageSize;
 
-    private FileURLBuilder<E> imageFileUrlBuilder;
+    private final UploadService<?, E> service;
 
-    private UploadService<?, E> service;
+    private FileURLBuilder<E> fileUrlBuilder;
 
-    private final Class<E> imgClass;
-
-    public CImage(Class<E> imgClass) {
-        this.imgClass = imgClass;
+    public CImage(Class<? extends UploadService<?, E>> serviceClass) {
+        this.service = GWT.<UploadService<?, E>> create(serviceClass);
         this.imageSize = new Dimension(250, 250);
         setNativeWidget(new NImage<E>(this));
     }
@@ -33,18 +32,6 @@ public abstract class CImage<E extends IFile> extends CField<E, NImage<E>> {
     public abstract Widget getImageEntryView(CEntityForm<E> entryForm);
 
     protected abstract EntityFolderImages getFolderIcons();
-
-    public Class<E> getImgClass() {
-        return imgClass;
-    }
-
-    public String getImageUrl(E file) {
-        if (file == null || file.isNull() || imageFileUrlBuilder == null) {
-            return null;
-        } else {
-            return imageFileUrlBuilder.getUrl(file);
-        }
-    }
 
     public void setThumbnailPlaceholder(Image placeholder) {
         this.placeholder = placeholder;
@@ -64,15 +51,19 @@ public abstract class CImage<E extends IFile> extends CField<E, NImage<E>> {
         return imageSize;
     }
 
-    public void setImageFileUrlBuilder(FileURLBuilder<E> fileURLBuilder) {
-        this.imageFileUrlBuilder = fileURLBuilder;
+    public void setFileUrlBuilder(FileURLBuilder<E> fileURLBuilder) {
+        this.fileUrlBuilder = fileURLBuilder;
     }
 
-    public void setUploadService(UploadService<?, E> service) {
-        this.service = service;
+    public String getImageUrl(E file) {
+        if (file == null || file.isNull() || fileUrlBuilder == null) {
+            return null;
+        } else {
+            return fileUrlBuilder.getUrl(file);
+        }
     }
 
-    public UploadService<?, E> getUploadService() {
+    UploadService<?, E> getUploadService() {
         return service;
     }
 
