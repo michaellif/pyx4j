@@ -13,13 +13,10 @@
  */
 package com.propertyvista.portal.web.client.ui.services.insurance;
 
-import java.math.BigDecimal;
-
 import com.google.gwt.dom.client.Style.TextAlign;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.i18n.client.DateTimeFormat;
 import com.google.gwt.i18n.client.NumberFormat;
-import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.IsWidget;
 
@@ -29,7 +26,6 @@ import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.Label;
 
-import com.propertyvista.common.client.theme.BillingTheme;
 import com.propertyvista.common.client.ui.components.tenantinsurance.MoneyComboBox;
 import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.tenantsure.TenantSurePaymentDTO;
 import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.tenantsure.TenantSurePaymentItemDTO;
@@ -62,13 +58,15 @@ public class TenantSurePaymentViewer extends CViewer<TenantSurePaymentDTO> {
             BasicFlexFormPanel paymentBreakdownPanel = new BasicFlexFormPanel();
             for (TenantSurePaymentItemDTO paymentItem : payment.paymentBreakdown()) {
 
-                addDetailRecord(paymentBreakdownPanel, ++innerRow, paymentItem.description().getValue(), paymentItem.amount().getValue());
+                new ViewerRecordWriter(currencyFormat).addDetailRecord(paymentBreakdownPanel, ++innerRow, paymentItem.description().getValue(), paymentItem
+                        .amount().getValue());
                 for (TenantSurePaymentItemTaxDTO tax : paymentItem.taxBreakdown()) {
-                    addDetailRecord(paymentBreakdownPanel, ++innerRow, tax.tax().getValue(), tax.amount().getValue());
+                    new ViewerRecordWriter(currencyFormat).addDetailRecord(paymentBreakdownPanel, ++innerRow, tax.tax().getValue(), tax.amount().getValue());
                 }
             }
             if (!payment.total().isNull()) {
-                addTotalRecord(paymentBreakdownPanel, ++innerRow, payment.total().getMeta().getCaption(), payment.total().getValue());
+                new ViewerRecordWriter(currencyFormat).addTotalRecord(paymentBreakdownPanel, ++innerRow, payment.total().getMeta().getCaption(), payment.total()
+                        .getValue());
             }
             contentPanel.setWidget(++outerRow, 0, paymentBreakdownPanel);
 
@@ -90,23 +88,4 @@ public class TenantSurePaymentViewer extends CViewer<TenantSurePaymentDTO> {
 
         return contentPanel;
     }
-
-    private void addDetailRecord(FlexTable table, int row, String description, BigDecimal amount) {
-        table.setHTML(row, 1, description);
-        table.setHTML(row, 2, currencyFormat.format(amount));
-        // styling:
-        table.getRowFormatter().setStyleName(row, BillingTheme.StyleName.BillingDetailItem.name());
-        table.getFlexCellFormatter().setStyleName(row, 1, BillingTheme.StyleName.BillingDetailItemTitle.name());
-        table.getFlexCellFormatter().setStyleName(row, 2, BillingTheme.StyleName.BillingDetailItemAmount.name());
-    }
-
-    private void addTotalRecord(FlexTable table, int row, String description, BigDecimal amount) {
-        table.setHTML(row, 1, description);
-        table.setHTML(row, 2, currencyFormat.format(amount));
-        // styling:
-        table.getRowFormatter().setStyleName(row, BillingTheme.StyleName.BillingDetailTotal.name());
-        table.getFlexCellFormatter().setStyleName(row, 1, BillingTheme.StyleName.BillingDetailTotalTitle.name());
-        table.getFlexCellFormatter().setStyleName(row, 2, BillingTheme.StyleName.BillingDetailTotalAmount.name());
-    }
-
 }
