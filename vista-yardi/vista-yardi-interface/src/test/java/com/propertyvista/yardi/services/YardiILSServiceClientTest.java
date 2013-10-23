@@ -31,12 +31,11 @@ import com.yardi.entity.mits.Information;
 import com.pyx4j.config.server.ServerSideConfiguration;
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.rdb.cfg.Configuration.DatabaseType;
-import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.essentials.j2se.util.MarshallUtil;
 
 import com.propertyvista.config.tests.VistaTestsServerSideConfiguration;
 import com.propertyvista.domain.settings.PmcYardiCredential;
-import com.propertyvista.domain.settings.PmcYardiCredential.Platform;
+import com.propertyvista.server.config.DevYardiCredentials;
 import com.propertyvista.yardi.stub.YardiILSGuestCardStub;
 
 public class YardiILSServiceClientTest {
@@ -46,29 +45,34 @@ public class YardiILSServiceClientTest {
     public static void main(String[] args) {
         ServerSideConfiguration.setInstance(new VistaTestsServerSideConfiguration(DatabaseType.HSQLDB));
 
-        PmcYardiCredential yc = EntityFactory.create(PmcYardiCredential.class);
-        yc.username().setValue("propertyvista-ilsws");
-        yc.password().number().setValue("55318");
-        yc.serverName().setValue("aspdb04");
-        yc.database().setValue("afqoml_live");
-        yc.platform().setValue(Platform.SQL);
-        yc.ilsGuestCardServiceURL().setValue("https://www.iyardiasp.com/8223thirddev/Webservices/itfilsguestcard20.asmx");
+        PmcYardiCredential yc = DevYardiCredentials.getTestPmcYardiCredential();
 
-        PhysicalProperty property = null;
         try {
             if (true) {
-                String prCode = "prvista1";
                 YardiILSGuestCardStub stub = ServerSideFactory.create(YardiILSGuestCardStub.class);
-                property = stub.getPropertyMarketingInfo(yc, prCode);
-                for (Property building : property.getProperty()) {
-                    log.info(building.getPropertyID().getIdentification().getPrimaryID() + ": " + building.getILSUnit().size() + " units");
-                    log.info(print(building, "0005"));
+                com.propertyvista.yardi.bean.Properties propConfig = null;
+                if (false) {
+                    propConfig = new com.propertyvista.yardi.bean.Properties();
+                    com.propertyvista.yardi.bean.Property prop = new com.propertyvista.yardi.bean.Property();
+                    prop.setCode(yc.propertyListCodes().getValue());
+                    propConfig.getProperties().add(prop);
+                } else {
+                    // get properties from getPropertyConfigurations()
+                    propConfig = stub.getPropertyConfigurations(yc);
+                }
+                for (com.propertyvista.yardi.bean.Property prop : propConfig.getProperties()) {
+                    PhysicalProperty property = stub.getPropertyMarketingInfo(yc, prop.getCode());
+                    log.info("PhysicalProperty: {}", property.getProperty().get(0).getPropertyID().getIdentification().getPrimaryID());
+//                for (Property building : property.getProperty()) {
+//                    log.info(building.getPropertyID().getIdentification().getPrimaryID() + ": " + building.getILSUnit().size() + " units");
+//                    log.info(print(building, "0005"));
+//                }
                 }
             } else {
                 String xml = getSampleXml();
-                property = MarshallUtil.unmarshal(PhysicalProperty.class, xml);
+                PhysicalProperty property = MarshallUtil.unmarshal(PhysicalProperty.class, xml);
+                log.info("PhysicalProperty: {}", property.getProperty().get(0).getPropertyID().getIdentification().getPrimaryID());
             }
-            log.info("PhysicalProperty: {}", property.getProperty().get(0).getPropertyID().getIdentification().getPrimaryID());
         } catch (Throwable t) {
             throw new RuntimeException(t);
         }

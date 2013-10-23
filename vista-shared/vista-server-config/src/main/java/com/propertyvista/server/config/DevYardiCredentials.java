@@ -37,6 +37,14 @@ public class DevYardiCredentials {
             cr.serverName().setValue("aspdb04");
             cr.database().setValue("afqoml_live");
         } else if (false) {
+            // ILS QA certification session 1
+            cr.propertyListCodes().setValue("ils000");
+            cr.serviceURLBase().setValue("https://www.iyardiasp.com/8223thirdqa");
+            cr.username().setValue("propertyvistails");
+            cr.password().number().setValue("55318");
+            cr.serverName().setValue("aspdb06\\sql2k5");
+            cr.database().setValue("afqoml_qa6008");
+        } else if (false) {
             cr.serviceURLBase().setValue("https://www.iyardiasp.com/8223thirdqa");
             cr.username().setValue("propertyvista");
             cr.password().number().setValue("52673");

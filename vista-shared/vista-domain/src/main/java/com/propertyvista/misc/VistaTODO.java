@@ -31,8 +31,6 @@ public class VistaTODO {
 
     public static boolean removedForProductionOAPI = true;
 
-    public static boolean removedForProductionILS = false;
-
     /**
      * TODO: Do not forget to turn it on/off during/after production release !!!
      */
@@ -78,4 +76,6 @@ public class VistaTODO {
     public static boolean VISTA_2446_Periodic_Lease_Terms = false;
 
     public static boolean VISTA_3207_TENANT_SURE_YEARLY_PAY_SCHEDULE_IMPLEMENTED = false;
+
+    public static boolean pendingYardiConfigPatchILS = true;
 }

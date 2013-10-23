@@ -124,9 +124,9 @@ public class YardiResidentTransactionsService extends YardiAbstractService {
     public void updateAll(PmcYardiCredential yc, ExecutionMonitor executionMonitor) throws YardiServiceException, RemoteException {
         YardiResidentTransactionsStub stub = ServerSideFactory.create(YardiResidentTransactionsStub.class);
         final Key yardiInterfaceId = yc.getPrimaryKey();
+        List<String> propertyListCodes = null;
         try {
             ServerSideFactory.create(NotificationFacade.class).aggregateNotificationsStart();
-            List<String> propertyListCodes;
             if (yc.propertyListCodes().isNull()) {
                 List<YardiPropertyConfiguration> propertyConfigurations = getPropertyConfigurations(stub, yc);
                 propertyListCodes = new ArrayList<String>();
@@ -137,15 +137,19 @@ public class YardiResidentTransactionsService extends YardiAbstractService {
                 propertyListCodes = Arrays.asList(yc.propertyListCodes().getValue().trim().split("\\s*,\\s*"));
             }
 
-            List<ResidentTransactions> allTransactions = getAllResidentTransactions(stub, yc, executionMonitor, propertyListCodes);
             List<Building> importedBuildings = new ArrayList<Building>();
-            for (ResidentTransactions transaction : allTransactions) {
-                if (executionMonitor.isTerminationRequested()) {
-                    break;
+            // resident transactions
+            if (!executionMonitor.isTerminationRequested()) {
+                List<ResidentTransactions> allTransactions = getAllResidentTransactions(stub, yc, executionMonitor, propertyListCodes);
+                for (ResidentTransactions transaction : allTransactions) {
+                    if (executionMonitor.isTerminationRequested()) {
+                        break;
+                    }
+                    importedBuildings.addAll(importTransaction(yardiInterfaceId, transaction, executionMonitor, stub));
                 }
-                importedBuildings.addAll(importTransaction(yardiInterfaceId, transaction, executionMonitor, stub));
             }
 
+            // lease charges
             if (!executionMonitor.isTerminationRequested()) {
                 List<ResidentTransactions> allLeaseCharges = getAllLeaseCharges(stub, yc, executionMonitor, importedBuildings);
                 for (ResidentTransactions leaseCharges : allLeaseCharges) {
@@ -157,7 +161,8 @@ public class YardiResidentTransactionsService extends YardiAbstractService {
                 }
             }
 
-            if (!executionMonitor.isTerminationRequested() && !VistaTODO.removedForProductionILS) {
+            // availability
+            if (!executionMonitor.isTerminationRequested() && !VistaTODO.pendingYardiConfigPatchILS) {
                 YardiILSGuestCardStub ilsStub = ServerSideFactory.create(YardiILSGuestCardStub.class);
                 List<PhysicalProperty> properties = getILSPropertyMarketing(ilsStub, yc, executionMonitor, propertyListCodes);
                 for (PhysicalProperty property : properties) {
@@ -228,8 +233,11 @@ public class YardiResidentTransactionsService extends YardiAbstractService {
 
     public List<YardiPropertyConfiguration> getPropertyConfigurations(YardiResidentTransactionsStub stub, PmcYardiCredential yc) throws YardiServiceException,
             RemoteException {
+        return getPropertyConfigurations(stub.getPropertyConfigurations(yc));
+    }
+
+    private List<YardiPropertyConfiguration> getPropertyConfigurations(Properties properties) {
         List<YardiPropertyConfiguration> propertyConfigurations = new ArrayList<YardiPropertyConfiguration>();
-        Properties properties = stub.getPropertyConfigurations(yc);
         for (com.propertyvista.yardi.bean.Property property : properties.getProperties()) {
             if (StringUtils.isNotEmpty(property.getCode())) {
                 YardiPropertyConfiguration configuration = EntityFactory.create(YardiPropertyConfiguration.class);
@@ -639,32 +647,20 @@ public class YardiResidentTransactionsService extends YardiAbstractService {
 
     private List<PhysicalProperty> getILSPropertyMarketing(YardiILSGuestCardStub stub, PmcYardiCredential yc, ExecutionMonitor executionMonitor,
             List<String> propertyListCodes) {
-        // update building contacts/amenities/pet policy, floorplan amenities/utilities
         List<PhysicalProperty> marketingInfo = new ArrayList<PhysicalProperty>();
         for (String propertyListCode : propertyListCodes) {
             if (executionMonitor.isTerminationRequested()) {
                 break;
             }
 
-            final Key yardiInterfaceId = yc.getPrimaryKey();
-            Building bulding = findBuilding(yardiInterfaceId, propertyListCode);
-            if (bulding == null) {
-                //TODO need to implement this. But how?
-                throw new Error("propertyListCode not implemented in this Vista version, use building codes instead of list '" + propertyListCode + "'");
-            } else {
-                if (bulding.suspended().getValue()) {
-                    executionMonitor.addInfoEvent("skip suspended property code for charges import", CompletionType.failed, propertyListCode, null);
-                } else {
-                    try {
-                        PhysicalProperty propertyMarketing = stub.getPropertyMarketingInfo(yc, bulding.propertyCode().getValue());
-                        if (propertyMarketing != null) {
-                            marketingInfo.add(propertyMarketing);
-                        }
-                        executionMonitor.addInfoEvent("ILSPropertyMarketing", propertyListCode);
-                    } catch (YardiServiceException e) {
-                        executionMonitor.addFailedEvent("ILSPropertyMarketing", propertyListCode, e);
-                    }
+            try {
+                PhysicalProperty propertyMarketing = stub.getPropertyMarketingInfo(yc, propertyListCode);
+                if (propertyMarketing != null) {
+                    marketingInfo.add(propertyMarketing);
                 }
+                executionMonitor.addInfoEvent("ILSPropertyMarketing", propertyListCode);
+            } catch (YardiServiceException e) {
+                executionMonitor.addFailedEvent("ILSPropertyMarketing", propertyListCode, e);
             }
         }
 
@@ -686,6 +682,10 @@ public class YardiResidentTransactionsService extends YardiAbstractService {
 
                 log.info("  Processing units for building: {}", propertyCode);
 
+                // clear unit availability to handle yardi Unit "Exclude" checkbox (no data sent for those units)
+                clearUnitAvailability(building, executionMonitor);
+
+                // process new availability data
                 for (ILSUnit ilsUnit : property.getILSUnit()) {
                     AptUnit aptUnit = importUnit(building, ilsUnit.getUnit(), executionMonitor);
                     updateAvailability(aptUnit, ilsUnit.getAvailability(), executionMonitor);
@@ -704,6 +704,22 @@ public class YardiResidentTransactionsService extends YardiAbstractService {
                 break;
             }
         }
+    }
+
+    private void clearUnitAvailability(final Building building, ExecutionMonitor executionMonitor) throws YardiServiceException {
+        log.info("    clear unit availability: {}", building.propertyCode().getValue());
+        new UnitOfWork(TransactionScopeOption.RequiresNew).execute(new Executable<Void, YardiServiceException>() {
+            @Override
+            public Void execute() throws YardiServiceException {
+                EntityQueryCriteria<AptUnit> crit = EntityQueryCriteria.create(AptUnit.class);
+                crit.eq(crit.proto().building(), building);
+                for (AptUnit unit : Persistence.service().query(crit)) {
+                    new YardiILSMarketingProcessor().updateAvailability(unit, null);
+                    Persistence.service().persist(unit);
+                }
+                return null;
+            }
+        });
     }
 
     private void updateAvailability(final AptUnit unit, final Availability avail, ExecutionMonitor executionMonitor) throws YardiServiceException {

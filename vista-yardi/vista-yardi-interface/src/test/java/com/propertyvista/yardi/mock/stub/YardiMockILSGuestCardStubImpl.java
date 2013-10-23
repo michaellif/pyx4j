@@ -13,10 +13,13 @@
  */
 package com.propertyvista.yardi.mock.stub;
 
+import java.rmi.RemoteException;
+
 import com.yardi.entity.ils.PhysicalProperty;
 
 import com.propertyvista.biz.system.YardiServiceException;
 import com.propertyvista.domain.settings.PmcYardiCredential;
+import com.propertyvista.yardi.bean.Properties;
 import com.propertyvista.yardi.stub.YardiILSGuestCardStub;
 
 public class YardiMockILSGuestCardStubImpl implements YardiILSGuestCardStub {
@@ -28,6 +31,12 @@ public class YardiMockILSGuestCardStubImpl implements YardiILSGuestCardStub {
 
     @Override
     public void logRecordedTracastions() {
+    }
+
+    @Override
+    public Properties getPropertyConfigurations(PmcYardiCredential yc) throws YardiServiceException, RemoteException {
+        // TODO Auto-generated method stub
+        return null;
     }
 
     @Override
