@@ -45,7 +45,7 @@ import com.pyx4j.forms.client.ui.folder.IFolderDecorator;
 import com.pyx4j.forms.client.ui.folder.IFolderItemDecorator;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.gwt.client.upload.FileUploadDialog;
-import com.pyx4j.gwt.client.upload.FileUploadReciver;
+import com.pyx4j.gwt.client.upload.UploadReceiver;
 import com.pyx4j.gwt.rpc.upload.UploadService;
 import com.pyx4j.gwt.shared.Dimension;
 import com.pyx4j.i18n.shared.I18n;
@@ -208,7 +208,7 @@ public class NImageSlider<T extends IFile> extends NField<IList<T>, ImageSlider,
         protected void createNewEntity(final AsyncCallback<T> callback) {
             @SuppressWarnings("unchecked")
             UploadService<IEntity, T> service = (UploadService<IEntity, T>) getCComponent().getUploadService();
-            new FileUploadDialog<IEntity, T>(i18n.tr("Upload Image File"), null, service, new FileUploadReciver<T>() {
+            new FileUploadDialog<IEntity, T>(i18n.tr("Upload Image File"), null, service, new UploadReceiver<T>() {
                 @Override
                 public void onUploadComplete(T uploadResponse) {
                     callback.onSuccess(uploadResponse);

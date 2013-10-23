@@ -20,8 +20,6 @@
  */
 package com.pyx4j.gwt.client.upload;
 
-import java.util.Collection;
-
 import com.google.gwt.dom.client.Style;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.VerticalPanel;
@@ -29,7 +27,6 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IFile;
 import com.pyx4j.gwt.rpc.upload.UploadService;
-import com.pyx4j.gwt.shared.DownloadFormat;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.dialog.Dialog;
 import com.pyx4j.widgets.client.dialog.OkCancelOption;
@@ -45,14 +42,24 @@ public class FileUploadDialog<U extends IEntity, E extends IFile> extends Vertic
 
     protected U uploadData;
 
-    public FileUploadDialog(String dialogTitle, U uploadData, UploadService<U, E> service, FileUploadReciver<E> uploadReciver) {
+    public FileUploadDialog(String dialogTitle, U uploadData, UploadService<U, E> service, final UploadReceiver<E> uploadReceiver) {
 
         dialog = new Dialog(dialogTitle, this, null);
         dialog.setDialogPixelWidth(500);
 
         this.uploadData = uploadData;
 
-        uploadPanel = new FileUploadPanel<U, E>(service, uploadReciver) {
+        UploadReceiver<E> receiver = new UploadReceiver<E>() {
+
+            @Override
+            public void onUploadComplete(E uploadResponse) {
+                dialog.hide(false);
+                uploadReceiver.onUploadComplete(uploadResponse);
+            }
+
+        };
+
+        uploadPanel = new UploadPanel<U, E>(service, receiver) {
 
             @Override
             protected void onUploadSubmit() {
@@ -67,12 +74,6 @@ public class FileUploadDialog<U extends IEntity, E extends IFile> extends Vertic
             }
 
             @Override
-            protected void onUploadComplete(E serverUploadResponse) {
-                dialog.hide(false);
-                super.onUploadComplete(serverUploadResponse);
-            }
-
-            @Override
             protected U getUploadData() {
                 return FileUploadDialog.this.getUploadData();
             }
@@ -82,10 +83,6 @@ public class FileUploadDialog<U extends IEntity, E extends IFile> extends Vertic
         uploadPanel.getElement().getStyle().setMarginTop(50, Style.Unit.PX);
         uploadPanel.getElement().getStyle().setPaddingLeft(35, Style.Unit.PX);
 
-    }
-
-    public void setSupportedExtensions(Collection<DownloadFormat> formats) {
-        uploadPanel.setSupportedExtensions(formats);
     }
 
     protected U getUploadData() {

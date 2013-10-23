@@ -77,6 +77,8 @@ public class UploadPanel<U extends IEntity, R extends IFile> extends SimplePanel
 
     private final DeferredProgressPanel deferredProgressPanel;
 
+    private final UploadReceiver<R> uploadReceiver;
+
     public static enum UploadError {
 
         NoFileSelected,
@@ -87,8 +89,9 @@ public class UploadPanel<U extends IEntity, R extends IFile> extends SimplePanel
 
     }
 
-    public UploadPanel(UploadService<U, R> service) {
+    public UploadPanel(UploadService<U, R> service, UploadReceiver<R> uploadReceiver) {
         this.service = service;
+        this.uploadReceiver = uploadReceiver;
         uploadForm = new FormPanel();
         uploadForm.setEncoding(FormPanel.ENCODING_MULTIPART);
         uploadForm.setMethod(FormPanel.METHOD_POST);
@@ -136,14 +139,6 @@ public class UploadPanel<U extends IEntity, R extends IFile> extends SimplePanel
                 path = path + "/";
             }
             uploadForm.setAction(path + GWT.getModuleName() + "/" + ((IServiceBase) service).getServiceClassId());
-        }
-    }
-
-    // TODO remove, Service call obtainSupportedExtensions(..) is made to obtain formats
-    @Deprecated
-    public void setSupportedExtensions(String... extensions) {
-        for (String ext : extensions) {
-            supportedExtensions.add(ext.toLowerCase());
         }
     }
 
@@ -277,7 +272,7 @@ public class UploadPanel<U extends IEntity, R extends IFile> extends SimplePanel
             service.getUploadResponse(new DefaultAsyncCallback<R>() {
                 @Override
                 public void onSuccess(R result) {
-                    onUploadComplete(result);
+                    uploadReceiver.onUploadComplete(result);
                 }
             }, uploadId);
         }
@@ -293,9 +288,6 @@ public class UploadPanel<U extends IEntity, R extends IFile> extends SimplePanel
     @Override
     public void onDeferredProgress(DeferredProcessProgressResponse result) {
         // Do nothing the progress is shown in panel
-    }
-
-    protected void onUploadComplete(R serverUploadResponse) {
     }
 
 }

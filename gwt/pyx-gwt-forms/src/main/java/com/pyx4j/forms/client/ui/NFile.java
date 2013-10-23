@@ -30,7 +30,7 @@ import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IFile;
 import com.pyx4j.forms.client.ImageFactory;
 import com.pyx4j.gwt.client.upload.FileUploadDialog;
-import com.pyx4j.gwt.client.upload.FileUploadReciver;
+import com.pyx4j.gwt.client.upload.UploadReceiver;
 import com.pyx4j.gwt.rpc.upload.UploadService;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.Anchor;
@@ -78,7 +78,7 @@ public class NFile<E extends IFile> extends NField<E, Anchor, CFile<E>, Anchor> 
     private void showUploadFileDialog() {
         @SuppressWarnings("unchecked")
         UploadService<IEntity, E> service = (UploadService<IEntity, E>) getCComponent().getUploadService();
-        new FileUploadDialog<IEntity, E>(i18n.tr("Upload Image File"), null, service, new FileUploadReciver<E>() {
+        new FileUploadDialog<IEntity, E>(i18n.tr("Upload Image File"), null, service, new UploadReceiver<E>() {
             @Override
             public void onUploadComplete(E uploadResponse) {
                 getCComponent().setValue(uploadResponse);
