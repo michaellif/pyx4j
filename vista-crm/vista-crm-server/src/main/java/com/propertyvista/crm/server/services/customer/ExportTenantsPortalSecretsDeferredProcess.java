@@ -13,7 +13,12 @@
  */
 package com.propertyvista.crm.server.services.customer;
 
+import java.util.Calendar;
+import java.util.GregorianCalendar;
+
+import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.commons.SimpleMessageFormat;
+import com.pyx4j.config.server.SystemDateManager;
 import com.pyx4j.entity.server.IEntityPersistenceService.ICursorIterator;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.AttachLevel;
@@ -80,6 +85,7 @@ public class ExportTenantsPortalSecretsDeferredProcess extends AbstractDeferredP
 
             final EntityQueryCriteria<Tenant> criteria = EntityQueryCriteria.create(Tenant.class);
             criteria.eq(criteria.proto().lease().status(), Lease.Status.Active);
+            criteria.isNull(criteria.proto().lease().completion());
             criteria.isNotNull(criteria.proto().customer().portalRegistrationToken());
             criteria.eq(criteria.proto().lease().currentTerm().version().tenants().$().leaseParticipant().id(), criteria.proto().id());
             criteria.in(criteria.proto().lease().currentTerm().version().tenants().$().role(), LeaseTermParticipant.Role.portalAccess());
@@ -89,6 +95,12 @@ public class ExportTenantsPortalSecretsDeferredProcess extends AbstractDeferredP
             criteria.asc(criteria.proto().lease().leaseId());
             maximum = Persistence.service().count(criteria);
 
+            Calendar nextMonthCalendar = new GregorianCalendar();
+            nextMonthCalendar.setTimeInMillis(SystemDateManager.getTimeMillis());
+            nextMonthCalendar.set(Calendar.DAY_OF_MONTH, 1);
+            nextMonthCalendar.add(Calendar.MONTH, 2);
+            LogicalDate moveOutNextMonthCutOff = new LogicalDate(nextMonthCalendar.getTime());
+
             Lease currentLease = null;
             TenantPortalAccessInformationPerLeaseDTO currentReportEntity = null;
 
@@ -97,6 +109,13 @@ public class ExportTenantsPortalSecretsDeferredProcess extends AbstractDeferredP
                 while (tenants.hasNext()) {
                     Tenant tenant = tenants.next();
                     Persistence.service().retrieveMember(tenant.lease());
+
+                    // Exclude Move Out
+                    if ((!tenant.lease().expectedMoveOut().isNull() && moveOutNextMonthCutOff.le(tenant.lease().expectedMoveOut().getValue()))//
+                            || (!tenant.lease().actualMoveOut().isNull() && moveOutNextMonthCutOff.le(tenant.lease().actualMoveOut().getValue()))) {
+                        continue;
+                    }
+
                     Persistence.service().retrieveMember(tenant.lease().unit().building());
 
                     switch (reportType) {
