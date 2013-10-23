@@ -31,21 +31,21 @@ import com.pyx4j.forms.client.validators.ValidationError;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.security.client.ClientContext;
 
-import com.propertyvista.common.client.ui.components.editors.payments.PaymentMethodForm;
 import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
 import com.propertyvista.domain.contact.AddressSimple;
 import com.propertyvista.domain.payment.InsurancePaymentMethod;
 import com.propertyvista.domain.payment.PaymentType;
+import com.propertyvista.portal.web.client.ui.financial.paymentmethod.PaymentMethodEditor;
 
-public class TenantSurePaymentMethodForm extends PaymentMethodForm<InsurancePaymentMethod> {
+public class TenantSurePaymentMethodForm extends PaymentMethodEditor<InsurancePaymentMethod> {
 
     private static final I18n i18n = I18n.get(TenantSurePaymentMethodForm.class);
 
     private final Command onSameAsCurrentAddressSelected;
 
-    private CCheckBox iAgreeBox;
+    private final CCheckBox iAgreeBox = new CCheckBox();
 
-    private HTML legalTerms;
+    private final HTML legalTerms = new HTML();
 
     private boolean isAgreedToPreauthorizedPayments;
 
@@ -66,11 +66,11 @@ public class TenantSurePaymentMethodForm extends PaymentMethodForm<InsurancePaym
 
     @Override
     public IsWidget createContent() {
-        BasicFlexFormPanel content = new BasicFlexFormPanel();
+        BasicFlexFormPanel content = (BasicFlexFormPanel) super.createContent();
 
-        content.setWidget(0, 0, super.createContent());
-        content.setBR(1, 0, 1);
-        content.setWidget(2, 0, createLegalTermsPanel());
+        content.setBR(content.getRowCount(), 0, 1);
+
+        content.setWidget(content.getRowCount() + 1, 0, createLegalTermsPanel());
 
         return content;
     }
@@ -78,21 +78,16 @@ public class TenantSurePaymentMethodForm extends PaymentMethodForm<InsurancePaym
     private Widget createLegalTermsPanel() {
         BasicFlexFormPanel panel = new BasicFlexFormPanel();
 
-        panel.setH1(0, 0, 2, i18n.tr("Pre-Authorized Agreement"));
+        panel.setH1(0, 0, 1, i18n.tr("Pre-Authorized Agreement"));
+        panel.setWidget(1, 0, legalTerms);
+        panel.setWidget(2, 0, new FormDecoratorBuilder(iAgreeBox, 20).customLabel(i18n.tr("I Agree")).build());
 
-        legalTerms = new HTML();
-
-        panel.setWidget(1, 0, 2, legalTerms);
-
-        iAgreeBox = new CCheckBox();
         iAgreeBox.addValueChangeHandler(new ValueChangeHandler<Boolean>() {
             @Override
             public void onValueChange(ValueChangeEvent<Boolean> event) {
                 onIAgree(event.getValue());
             }
         });
-        panel.setWidget(2, 0, 2,
-                new FormDecoratorBuilder(iAgreeBox).customLabel(i18n.tr("I Agree")).labelWidth("100px").componentWidth("20px").contentWidth("20px").build());
 
         addValueValidator(new EditableValueValidator<InsurancePaymentMethod>() {
             @Override
@@ -104,6 +99,7 @@ public class TenantSurePaymentMethodForm extends PaymentMethodForm<InsurancePaym
                 }
             }
         });
+
         return panel;
     }
 

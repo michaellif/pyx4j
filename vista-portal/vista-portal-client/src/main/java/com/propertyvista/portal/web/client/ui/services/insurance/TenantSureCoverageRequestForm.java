@@ -34,7 +34,13 @@ public class TenantSureCoverageRequestForm extends CEntityDecoratableForm<Tenant
     private static final I18n i18n = I18n.get(TenantSureCoverageRequestForm.class);
 
     public TenantSureCoverageRequestForm() {
+        this(false);
+    }
+
+    public TenantSureCoverageRequestForm(boolean readOnly) {
         super(TenantSureCoverageDTO.class);
+        setViewable(readOnly);
+        inheritViewable(!readOnly);
     }
 
     @Override

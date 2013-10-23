@@ -387,6 +387,10 @@ public class PaymentMethodEditor<E extends AbstractPaymentMethod> extends CEntit
         return EnumSet.allOf(CreditCardType.class);
     }
 
+    public void setBillingAddress(AddressSimple address) {
+        get(proto().billingAddress()).setValue(address);
+    }
+
     protected void onBillingAddressSameAsCurrentOne(boolean set, CComponent<AddressSimple> comp) {
         // Implements meaningful in derived classes...
     }

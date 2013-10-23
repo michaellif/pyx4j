@@ -61,24 +61,24 @@ public class TenantSureQuoteViewer extends CViewer<TenantSureQuoteDTO> {
         if (quote != null && !quote.isNull()) {
             if (quote.specialQuote().isNull()) {
                 int row = 0;
-                paymentBreakdownPanel.setH2(++row, 0, 2, i18n.tr("Quote Number"));
+                paymentBreakdownPanel.setH2(++row, 0, 1, i18n.tr("Quote Number"));
 
-                paymentBreakdownPanel.setWidget(++row, 0, 2, new HTML(quote.quoteId().getValue()));
+                paymentBreakdownPanel.setWidget(++row, 0, 1, new HTML(quote.quoteId().getValue()));
                 paymentBreakdownPanel.getFlexCellFormatter().setHorizontalAlignment(row, 0, HasHorizontalAlignment.ALIGN_CENTER);
 
                 if (quote.paymentSchedule().getValue() == TenantSurePaymentSchedule.Monthly) {
                     if (!quote.totalFirstPayable().isNull()) {
-                        paymentBreakdownPanel.setH2(++row, 0, 2, i18n.tr("First Payment*"));
+                        paymentBreakdownPanel.setH2(++row, 0, 1, i18n.tr("First Payment*"));
                         addDetailRecord(paymentBreakdownPanel, ++row, "", quote.totalFirstPayable().getValue());
                     }
 
-                    paymentBreakdownPanel.setH2(++row, 0, 2, i18n.tr("Recurring Monthly Payments"));
+                    paymentBreakdownPanel.setH2(++row, 0, 1, i18n.tr("Recurring Monthly Payments"));
                     addDetailRecord(paymentBreakdownPanel, ++row, "", quote.totalMonthlyPayable().getValue());
 
-                    paymentBreakdownPanel.setH2(++row, 0, 2, i18n.tr("Total Annual Payment"));
+                    paymentBreakdownPanel.setH2(++row, 0, 1, i18n.tr("Total Annual Payment"));
                     addDetailRecord(paymentBreakdownPanel, ++row, quote.annualPremium().getMeta().getCaption(), quote.annualPremium().getValue());
                 } else {
-                    paymentBreakdownPanel.setH2(++row, 0, 2, i18n.tr("Annual Payment"));
+                    paymentBreakdownPanel.setH2(++row, 0, 1, i18n.tr("Annual Payment"));
                     addDetailRecord(paymentBreakdownPanel, ++row, quote.annualPremium().getMeta().getCaption(), quote.annualPremium().getValue());
                 }
 

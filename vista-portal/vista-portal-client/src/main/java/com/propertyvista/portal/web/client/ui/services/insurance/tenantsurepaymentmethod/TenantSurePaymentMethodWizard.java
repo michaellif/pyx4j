@@ -33,7 +33,12 @@ public class TenantSurePaymentMethodWizard extends CPortalEntityWizard<Insurance
 
     private Persenter presenter;
 
-    private TenantSurePaymentMethodForm paymentMethodForm;
+    private final TenantSurePaymentMethodForm paymentMethodForm = new TenantSurePaymentMethodForm(new Command() {
+        @Override
+        public void execute() {
+            presenter.getCurrentAddress();
+        }
+    });
 
     public TenantSurePaymentMethodWizard(IWizardView<InsurancePaymentMethodDTO> view) {
         super(InsurancePaymentMethodDTO.class, view, i18n.tr("TenantSure Payment Setup"), i18n.tr("Submit"), ThemeColor.contrast3);
@@ -60,12 +65,7 @@ public class TenantSurePaymentMethodWizard extends CPortalEntityWizard<Insurance
     private BasicFlexFormPanel createPaymentMethodStep() {
         BasicFlexFormPanel panel = new BasicFlexFormPanel(i18n.tr("Payment Method"));
 
-        panel.setWidget(0, 0, inject(proto().paymentMethod(), paymentMethodForm = new TenantSurePaymentMethodForm(new Command() {
-            @Override
-            public void execute() {
-                presenter.getCurrentAddress();
-            }
-        })));
+        panel.setWidget(0, 0, inject(proto().paymentMethod(), paymentMethodForm));
 
         return panel;
     }
