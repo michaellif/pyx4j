@@ -42,6 +42,8 @@ public interface TenantPortalAccessInformationDTO extends IEntity {
 
     IPrimitive<String> tenantNameFull();
 
+    IPrimitive<String> portalRegistrationBuiding();
+
     IPrimitive<String> portalRegistrationToken();
 
 }

@@ -211,6 +211,7 @@ public class ExportTenantsPortalSecretsDeferredProcess extends AbstractDeferredP
         dto.lastName().setValue(tenant.customer().person().name().lastName().getStringView());
         dto.tenantNameFull().setValue(tenant.customer().person().name().getStringView());
 
+        dto.portalRegistrationBuiding().setValue(tenant.lease().unit().building().info().address().getStringView());
         dto.portalRegistrationToken().setValue(tenant.customer().portalRegistrationToken().getValue());
         return dto;
     }
