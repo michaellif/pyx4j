@@ -26,6 +26,8 @@ import com.itextpdf.text.pdf.PdfCopy;
 import com.itextpdf.text.pdf.PdfReader;
 
 import com.pyx4j.entity.server.Persistence;
+import com.pyx4j.essentials.rpc.report.DeferredReportProcessProgressResponse;
+import com.pyx4j.essentials.server.download.Downloadable;
 import com.pyx4j.gwt.rpc.deferred.DeferredProcessProgressResponse;
 import com.pyx4j.gwt.server.IOUtils;
 import com.pyx4j.gwt.server.deferred.AbstractDeferredProcess;
@@ -47,6 +49,8 @@ public class N4DownloadDeferredProcess extends AbstractDeferredProcess {
 
     private final int progressMax;
 
+    private volatile String fileName;
+
     public N4DownloadDeferredProcess(Vector<N4LegalLetter> accepted) {
         this.progress = new AtomicInteger();
         this.progress.set(0);
@@ -64,9 +68,9 @@ public class N4DownloadDeferredProcess extends AbstractDeferredProcess {
 
             PdfReader reader;
             int numOfPages;
-            for (N4LegalLetter n4LegalLetter : accepted) {
+            for (N4LegalLetter n4LegalLetterIdStub : accepted) {
                 progress.set(progress.get() + 1);
-
+                N4LegalLetter n4LegalLetter = Persistence.service().retrieve(N4LegalLetter.class, n4LegalLetterIdStub.getPrimaryKey());
                 LegalLetterBlob blob = Persistence.service().retrieve(LegalLetterBlob.class, n4LegalLetter.blobKey().getValue());
 
                 ByteArrayInputStream blobStream = new ByteArrayInputStream(blob.content().getValue());
@@ -83,7 +87,9 @@ public class N4DownloadDeferredProcess extends AbstractDeferredProcess {
             }
             mergedDoc.close();
 
-            bos.toByteArray();
+            Downloadable generatedN4bundle = new Downloadable(bos.toByteArray(), "application/pdf");
+            generatedN4bundle.save(fileName = "" + System.currentTimeMillis() + "-n4bundle.pdf");
+
         } catch (Throwable caught) {
             log.error("got error while merging N4's", caught);
             error = caught;
@@ -95,12 +101,22 @@ public class N4DownloadDeferredProcess extends AbstractDeferredProcess {
 
     @Override
     public DeferredProcessProgressResponse status() {
-        DeferredProcessProgressResponse status = super.status();
-        status.setProgress(progress.get());
-        status.setProgressMaximum(progressMax);
-        if (error != null) {
-            status.setError();
-            status.setErrorStatusMessage(error.getMessage());
+        DeferredReportProcessProgressResponse status = new DeferredReportProcessProgressResponse();
+        if (canceled) {
+            status.setCanceled();
+        } else if (completed) {
+            if (error != null) {
+                status.setError();
+                status.setErrorStatusMessage(error.getMessage());
+            } else {
+                status.setDownloadLink(System.currentTimeMillis() + "/" + fileName);
+            }
+            status.setCompleted();
+
+        } else {
+
+            status.setProgress(progress.get());
+            status.setProgressMaximum(progressMax);
         }
         return status;
     }

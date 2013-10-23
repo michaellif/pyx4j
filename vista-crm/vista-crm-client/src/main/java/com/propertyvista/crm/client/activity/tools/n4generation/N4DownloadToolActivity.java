@@ -20,6 +20,7 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
+import com.pyx4j.essentials.rpc.report.DeferredReportProcessProgressResponse;
 import com.pyx4j.gwt.rpc.deferred.DeferredProcessProgressResponse;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.site.rpc.AppPlace;
@@ -54,15 +55,15 @@ public class N4DownloadToolActivity extends AbstractBulkOperationToolActivity<N4
     protected Vector<N4LegalLetter> makeProducedItems(List<LegalNoticeCandidateDTO> selectedItems) {
         Vector<N4LegalLetter> selectedLetters = new Vector<N4LegalLetter>();
         for (LegalNoticeCandidateDTO noticeCandidate : selectedItems) {
-            selectedLetters.add(noticeCandidate.n4LetterId());
+            selectedLetters.add(noticeCandidate.n4LetterId().<N4LegalLetter> duplicate());
         }
         return selectedLetters;
     }
 
     @Override
     protected void onSelectedProccessSuccess(DeferredProcessProgressResponse result) {
-        // TODO
-        ((N4DownloadToolView) getView()).displayN4DownloadLink("TBD");
+        DeferredReportProcessProgressResponse response = (DeferredReportProcessProgressResponse) result;
+        ((N4DownloadToolView) getView()).displayN4DownloadLink(response.getDownloadLink());
     }
 
 }

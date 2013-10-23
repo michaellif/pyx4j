@@ -20,9 +20,9 @@ import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
 
 import com.propertyvista.crm.client.ui.tools.n4generation.base.BulkOperationToolViewImpl;
-import com.propertyvista.crm.rpc.dto.legal.n4.N4GenerationDTO;
 import com.propertyvista.crm.rpc.dto.legal.n4.LegalNoticeCandidateDTO;
 import com.propertyvista.crm.rpc.dto.legal.n4.N4DownloadSettingsDTO;
+import com.propertyvista.crm.rpc.dto.legal.n4.N4GenerationDTO;
 
 public class N4DownloadToolViewImpl extends BulkOperationToolViewImpl<N4DownloadSettingsDTO, LegalNoticeCandidateDTO, LegalNoticeCandidateHolder> implements
         N4DownloadToolView {
@@ -47,8 +47,7 @@ public class N4DownloadToolViewImpl extends BulkOperationToolViewImpl<N4Download
 
     @Override
     public void displayN4DownloadLink(String url) {
-        // TODO
-        MessageDialog.info(i18n.tr("DOWNLOAD LINK WILL APPEAR HERE"));
+        MessageDialog.info(url);
     }
 
     @Override
