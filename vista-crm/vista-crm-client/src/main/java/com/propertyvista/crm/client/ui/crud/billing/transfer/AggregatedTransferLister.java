@@ -38,6 +38,12 @@ public class AggregatedTransferLister extends AbstractLister<AggregatedTransfer>
                 new MemberColumnDescriptor.Builder(proto().merchantAccount()).searchable(false).build(),
                 
                 new MemberColumnDescriptor.Builder(proto().fundsTransferType()).build(),
+
+                new MemberColumnDescriptor.Builder(proto().netAmount()).build(),
+                new MemberColumnDescriptor.Builder(proto().adjustments(), false).build(),
+                new MemberColumnDescriptor.Builder(proto().previousBalance(), false).build(),
+                new MemberColumnDescriptor.Builder(proto().merchantBalance(), false).build(),
+                new MemberColumnDescriptor.Builder(proto().fundsReleased(), false).build(),
                 
                 new MemberColumnDescriptor.Builder(proto().grossPaymentCount()).build(),
                 new MemberColumnDescriptor.Builder(proto().grossPaymentAmount()).build(),
@@ -49,6 +55,7 @@ public class AggregatedTransferLister extends AbstractLister<AggregatedTransfer>
                 new MemberColumnDescriptor.Builder(proto().returnItemsAmount()).build(),
                 new MemberColumnDescriptor.Builder(proto().returnItemsFee()).build(),
                 new MemberColumnDescriptor.Builder(proto().returnItemsCount()).build(),
+               
                 
                 new MemberColumnDescriptor.Builder(proto().payments().$().id()).searchableOnly().columnTitle(i18n.tr("Payment Id")).build(),
                 new MemberColumnDescriptor.Builder(proto().returnedPayments().$().id()).searchableOnly().columnTitle(i18n.tr("Returned Payment Id")).build()
