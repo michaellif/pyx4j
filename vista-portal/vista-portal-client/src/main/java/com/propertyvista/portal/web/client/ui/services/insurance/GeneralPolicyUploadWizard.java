@@ -16,16 +16,10 @@ package com.propertyvista.portal.web.client.ui.services.insurance;
 import java.math.BigDecimal;
 
 import com.google.gwt.user.client.Command;
-import com.google.gwt.user.client.ui.IsWidget;
-import com.google.gwt.user.client.ui.VerticalPanel;
-import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.commons.css.ThemeColor;
-import com.pyx4j.entity.shared.IObject;
-import com.pyx4j.forms.client.images.EntityFolderImages;
 import com.pyx4j.forms.client.ui.CComponent;
-import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.ui.CEntityLabel;
 import com.pyx4j.forms.client.ui.CFile;
 import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
@@ -33,16 +27,11 @@ import com.pyx4j.forms.client.validators.EditableValueValidator;
 import com.pyx4j.forms.client.validators.ValidationError;
 import com.pyx4j.i18n.shared.I18n;
 
-import com.propertyvista.common.client.resources.VistaImages;
-import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
-import com.propertyvista.domain.MediaFile;
-import com.propertyvista.domain.media.InsuranceCertificateDocument;
 import com.propertyvista.domain.tenant.Customer;
 import com.propertyvista.domain.tenant.insurance.InsuranceCertificateScan;
 import com.propertyvista.domain.tenant.lease.Tenant;
 import com.propertyvista.portal.rpc.portal.web.dto.insurance.GeneralInsurancePolicyDTO;
 import com.propertyvista.portal.rpc.portal.web.services.services.GeneralInsurancePolicyUploadService;
-import com.propertyvista.portal.web.client.ui.ApplicationDocumentFileUploaderFolder;
 import com.propertyvista.portal.web.client.ui.CPortalEntityWizard;
 import com.propertyvista.portal.web.client.ui.util.decorators.FormDecoratorBuilder;
 

@@ -15,7 +15,6 @@ package com.propertyvista.portal.web.client.ui.profile;
 
 import java.util.List;
 
-import com.google.gwt.core.shared.GWT;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.VerticalPanel;

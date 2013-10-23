@@ -23,8 +23,8 @@ import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.security.shared.SecurityController;
 import com.pyx4j.site.client.AppSite;
 
-import com.propertyvista.domain.payment.LeasePaymentMethod;
 import com.propertyvista.domain.payment.AutopayAgreement;
+import com.propertyvista.domain.payment.LeasePaymentMethod;
 import com.propertyvista.domain.security.VistaCustomerPaymentTypeBehavior;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap.Resident.Financial;

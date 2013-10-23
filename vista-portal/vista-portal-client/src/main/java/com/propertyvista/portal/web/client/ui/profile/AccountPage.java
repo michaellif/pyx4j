@@ -18,7 +18,6 @@ import com.google.gwt.dom.client.Style.TextAlign;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.IsWidget;
-import com.google.gwt.user.client.ui.ValueBoxBase.TextAlignment;
 
 import com.pyx4j.commons.css.ThemeColor;
 import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;

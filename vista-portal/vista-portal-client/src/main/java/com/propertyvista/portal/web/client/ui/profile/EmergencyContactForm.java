@@ -16,8 +16,8 @@ package com.propertyvista.portal.web.client.ui.profile;
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.forms.client.events.PropertyChangeEvent;
-import com.pyx4j.forms.client.events.PropertyChangeHandler;
 import com.pyx4j.forms.client.events.PropertyChangeEvent.PropertyName;
+import com.pyx4j.forms.client.events.PropertyChangeHandler;
 import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.ui.CEntityLabel;
 import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
