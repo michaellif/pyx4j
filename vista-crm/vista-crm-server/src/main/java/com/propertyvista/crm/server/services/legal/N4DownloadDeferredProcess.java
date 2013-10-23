@@ -13,35 +13,95 @@
  */
 package com.propertyvista.crm.server.services.legal;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.util.Vector;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.itextpdf.text.Document;
+import com.itextpdf.text.pdf.PdfCopy;
+import com.itextpdf.text.pdf.PdfReader;
+
+import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.gwt.rpc.deferred.DeferredProcessProgressResponse;
+import com.pyx4j.gwt.server.IOUtils;
 import com.pyx4j.gwt.server.deferred.AbstractDeferredProcess;
 
 import com.propertyvista.domain.legal.N4LegalLetter;
+import com.propertyvista.server.domain.LegalLetterBlob;
 
 public class N4DownloadDeferredProcess extends AbstractDeferredProcess {
+
+    private static final Logger log = LoggerFactory.getLogger(N4DownloadDeferredProcess.class);
 
     private static final long serialVersionUID = 1L;
 
     private final AtomicInteger progress;
 
+    private final Vector<N4LegalLetter> accepted;
+
+    private volatile Throwable error;
+
+    private final int progressMax;
+
     public N4DownloadDeferredProcess(Vector<N4LegalLetter> accepted) {
-        progress = new AtomicInteger();
-        progress.set(0);
+        this.progress = new AtomicInteger();
+        this.progress.set(0);
+        this.progressMax = accepted.size();
+        this.accepted = accepted;
     }
 
     @Override
     public void execute() {
-        completed = true;
+        ByteArrayOutputStream bos = new ByteArrayOutputStream();
+        try {
+            Document mergedDoc = new Document();
+            PdfCopy copy = new PdfCopy(mergedDoc, bos);
+            mergedDoc.open();
+
+            PdfReader reader;
+            int numOfPages;
+            for (N4LegalLetter n4LegalLetter : accepted) {
+                progress.set(progress.get() + 1);
+
+                LegalLetterBlob blob = Persistence.service().retrieve(LegalLetterBlob.class, n4LegalLetter.blobKey().getValue());
+
+                ByteArrayInputStream blobStream = new ByteArrayInputStream(blob.content().getValue());
+
+                reader = new PdfReader(blobStream);
+                numOfPages = reader.getNumberOfPages();
+
+                for (int page = 1; page <= numOfPages; ++page) {
+                    copy.addPage(copy.getImportedPage(reader, page));
+                }
+
+                copy.freeReader(reader);
+                reader.close();
+            }
+            mergedDoc.close();
+
+            bos.toByteArray();
+        } catch (Throwable caught) {
+            log.error("got error while merging N4's", caught);
+            error = caught;
+        } finally {
+            IOUtils.closeQuietly(bos);
+            completed = true;
+        }
     }
 
     @Override
     public DeferredProcessProgressResponse status() {
         DeferredProcessProgressResponse status = super.status();
         status.setProgress(progress.get());
-        status.setProgressMaximum(1);
+        status.setProgressMaximum(progressMax);
+        if (error != null) {
+            status.setError();
+            status.setErrorStatusMessage(error.getMessage());
+        }
         return status;
     }
 
