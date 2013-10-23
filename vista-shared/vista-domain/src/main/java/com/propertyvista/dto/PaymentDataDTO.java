@@ -45,6 +45,7 @@ public interface PaymentDataDTO extends IEntity {
         }
     }
 
+    @Transient
     AddressSimple address();
 
     @Editor(type = EditorType.label)
