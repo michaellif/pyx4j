@@ -58,7 +58,7 @@ public class GeoLocator {
         try {
             int missed = 0;
             for (Building building : buildings) {
-                if (!populateGeo(building.info().address())) {
+                if (!populateGeo(building)) {
                     missed++;
                 }
             }
@@ -74,8 +74,8 @@ public class GeoLocator {
         }
     }
 
-    public boolean populateGeo(AddressStructured address) {
-        String geoAddress = constructGeo(address);
+    public boolean populateGeo(Building building) {
+        String geoAddress = constructGeo(building.info().address());
         GeoPoint gp = null;
         switch (mode) {
         case useCacheOnly:
@@ -95,7 +95,7 @@ public class GeoLocator {
             break;
         }
         if (gp != null) {
-            address.location().setValue(gp);
+            building.info().location().setValue(gp);
             return true;
         } else {
             log.debug("Location not fround for: {}", geoAddress);

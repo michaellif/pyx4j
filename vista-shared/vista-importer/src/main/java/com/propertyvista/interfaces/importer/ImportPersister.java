@@ -105,8 +105,8 @@ class ImportPersister {
             }
         }
 
-        if (building.info().address().location().isNull()) {
-            SharedGeoLocator.populateGeo(building.info().address());
+        if (building.info().location().isNull()) {
+            SharedGeoLocator.populateGeo(building);
         }
 
         if (!buildingIO.email().isNull()) {

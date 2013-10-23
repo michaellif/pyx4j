@@ -153,8 +153,8 @@ public class BuildingUpdater extends ImportPersister {
                 }
 
                 boolean buildingUpdated = new BuildingConverter().updateBO(buildingIO, building);
-                if (building.info().address().location().isNull()) {
-                    buildingUpdated |= SharedGeoLocator.populateGeo(building.info().address());
+                if (building.info().location().isNull()) {
+                    buildingUpdated |= SharedGeoLocator.populateGeo(building);
                 }
                 if (buildingUpdated) {
                     Persistence.service().persist(building);

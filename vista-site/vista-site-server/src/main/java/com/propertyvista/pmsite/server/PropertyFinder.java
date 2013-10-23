@@ -76,8 +76,8 @@ public class PropertyFinder {
                 // Define dbCriteria here, It works perfectly in North America, TODO test other location
                 GeoCircle geoCircle = new GeoCircle(centerPoint, searchRadiusKm);
                 GeoBox geoBox = geoCircle.getMinBox();
-                dbCriteria.add(PropertyCriterion.le(dbCriteria.proto().info().address().location(), geoBox.getNorthEast()));
-                dbCriteria.add(PropertyCriterion.ge(dbCriteria.proto().info().address().location(), geoBox.getSouthWest()));
+                dbCriteria.add(PropertyCriterion.le(dbCriteria.proto().info().location(), geoBox.getNorthEast()));
+                dbCriteria.add(PropertyCriterion.ge(dbCriteria.proto().info().location(), geoBox.getSouthWest()));
             }
         }
 
@@ -200,7 +200,7 @@ public class PropertyFinder {
                 remove.add(bld);
                 continue;
             }
-            if (bld.info().address().location().isNull() || bld.info().address().location().getValue().getLat() == 0) {
+            if (bld.info().location().isNull() || bld.info().location().getValue().getLat() == 0) {
                 remove.add(bld);
                 continue;
             }

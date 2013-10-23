@@ -122,8 +122,8 @@ public class BuildingPreloader extends BaseVistaDevDataPreloader {
         int noGeoCount = 0;
 
         for (Building building : buildings) {
-            if (building.info().address().location().isNull()) {
-                if (!SharedGeoLocator.populateGeo(building.info().address())) {
+            if (building.info().location().isNull()) {
+                if (!SharedGeoLocator.populateGeo(building)) {
                     noGeoCount++;
                     log.warn("Unable find location for {}", building.info().address().getStringView());
                 }

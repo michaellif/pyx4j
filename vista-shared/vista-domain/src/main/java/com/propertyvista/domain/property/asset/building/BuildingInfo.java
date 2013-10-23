@@ -25,6 +25,7 @@ import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.annotations.ToStringFormat;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
+import com.pyx4j.geo.GeoPoint;
 import com.pyx4j.i18n.annotations.I18n;
 import com.pyx4j.i18n.annotations.I18nComment;
 import com.pyx4j.i18n.annotations.Translate;
@@ -205,6 +206,8 @@ public interface BuildingInfo extends IEntity {
     IPrimitive<String> name();
 
     AddressStructured address();
+
+    IPrimitive<GeoPoint> location();
 
     @ToString(index = 1)
     @MemberColumn(name = "buildingType")

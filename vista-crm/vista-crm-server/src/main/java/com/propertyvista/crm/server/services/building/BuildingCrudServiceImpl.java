@@ -102,8 +102,8 @@ public class BuildingCrudServiceImpl extends AbstractCrudServiceDtoImpl<Building
 
         // Geotagging:
         to.geoLocation().set(EntityFactory.create(GeoLocation.class));
-        if (!in.info().address().location().isNull()) {
-            double lat = in.info().address().location().getValue().getLat();
+        if (!in.info().location().isNull()) {
+            double lat = in.info().location().getValue().getLat();
             if (lat < 0) {
                 to.geoLocation().latitudeType().setValue(LatitudeType.South);
                 to.geoLocation().latitude().setValue(-lat);
@@ -111,7 +111,7 @@ public class BuildingCrudServiceImpl extends AbstractCrudServiceDtoImpl<Building
                 to.geoLocation().latitudeType().setValue(LatitudeType.North);
                 to.geoLocation().latitude().setValue(lat);
             }
-            double lng = in.info().address().location().getValue().getLng();
+            double lng = in.info().location().getValue().getLng();
             if (lng < 0) {
                 to.geoLocation().longitudeType().setValue(LongitudeType.West);
                 to.geoLocation().longitude().setValue(-lng);
@@ -176,13 +176,13 @@ public class BuildingCrudServiceImpl extends AbstractCrudServiceDtoImpl<Building
                 if (LongitudeType.West.equals(in.geoLocation().longitudeType().getValue())) {
                     lng = -lng;
                 }
-                dbo.info().address().location().setValue(new GeoPoint(lat, lng));
+                dbo.info().location().setValue(new GeoPoint(lat, lng));
             }
         } else {
-            if (in.info().address().location().isNull()) {
-                SharedGeoLocator.populateGeo(in.info().address());
+            if (in.info().location().isNull()) {
+                SharedGeoLocator.populateGeo(in);
             } else {
-                dbo.info().address().location().set(null);
+                dbo.info().location().set(null);
             }
         }
 

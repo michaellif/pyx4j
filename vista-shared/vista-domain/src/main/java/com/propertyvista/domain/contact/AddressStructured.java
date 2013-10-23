@@ -23,7 +23,6 @@ import com.pyx4j.entity.annotations.ToStringFormat;
 import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
-import com.pyx4j.geo.GeoPoint;
 import com.pyx4j.i18n.annotations.I18n;
 import com.pyx4j.i18n.annotations.I18nComment;
 import com.pyx4j.i18n.shared.I18nEnum;
@@ -122,6 +121,4 @@ public interface AddressStructured extends IEntity {
     @ToString(index = 8)
     @Caption(name = "Postal Code")
     IPrimitive<String> postalCode();
-
-    IPrimitive<GeoPoint> location();
 }

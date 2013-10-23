@@ -43,7 +43,7 @@ public class BuildingConverter extends EntityBinder<Building, BuildingIO> {
         bind(toProto.centralAir(), boProto.info().centralAir());
         bind(toProto.centralHeat(), boProto.info().centralHeat());
 
-        bind(toProto.addressCoordinates(), boProto.info().address().location());
+        bind(toProto.addressCoordinates(), boProto.info().location());
         bind(toProto.website(), boProto.contacts().website());
 
         bind(toProto.propertyManager(), boProto.propertyManager().name());

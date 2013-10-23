@@ -28,7 +28,7 @@ public class PublicDataUpdater {
      * Create data used on public portal, e.g. optimization
      */
     public static void updateIndexData(Building building) {
-        if (building.info().address().location().isNull() || building.info().address().location().getValue().getLat() == 0) {
+        if (building.info().location().isNull() || building.info().location().getValue().getLat() == 0) {
             return;
         }
 
@@ -50,7 +50,7 @@ public class PublicDataUpdater {
             city = EntityFactory.create(City.class);
             city.name().setValue(building.info().address().city().getValue());
             city.province().set(building.info().address().province());
-            city.location().setValue(building.info().address().location().getValue());
+            city.location().setValue(building.info().location().getValue());
             city.hasProperties().setValue(visibleBuildingExists);
             Persistence.service().persist(city);
         }

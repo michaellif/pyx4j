@@ -60,7 +60,7 @@ public class Converter {
 
         to.description().setValue(from.marketing().description().getValue());
 
-        to.location().setValue(from.info().address().location().getValue());
+        to.location().setValue(from.info().location().getValue());
 
         BigDecimal minPrice = null, maxPrice = null;
         // List of Floorplans

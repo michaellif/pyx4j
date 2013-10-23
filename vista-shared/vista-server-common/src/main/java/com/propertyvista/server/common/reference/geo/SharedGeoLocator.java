@@ -15,7 +15,7 @@ package com.propertyvista.server.common.reference.geo;
 
 import com.pyx4j.commons.Consts;
 
-import com.propertyvista.domain.contact.AddressStructured;
+import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.server.common.reference.geo.GeoLocator.Mode;
 
 /**
@@ -37,8 +37,8 @@ public class SharedGeoLocator {
         }
     }
 
-    public static boolean populateGeo(AddressStructured address) {
-        boolean found = geoLocator.populateGeo(address);
+    public static boolean populateGeo(Building building) {
+        boolean found = geoLocator.populateGeo(building);
 
         if ((geoLocator.getCache().getUpdateCount() > 0) && (nextCachePersistTime < System.currentTimeMillis())) {
             nextCachePersistTime = System.currentTimeMillis() + cachePersistIntervals;

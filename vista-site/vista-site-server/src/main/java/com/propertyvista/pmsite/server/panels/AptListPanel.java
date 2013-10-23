@@ -78,7 +78,7 @@ public class AptListPanel extends Panel {
                 item.add(new BookmarkablePageLink<Void>("aptDetails", AptDetailsPage.class, new PageParameters().add(PMSiteApplication.ParamNameBuilding,
                         propCode)));
                 if (SystemMaintenance.getExternalConnectionsState().equals(SystemState.Online)) {
-                    GeoPoint pt = propInfo.info().address().location().getValue();
+                    GeoPoint pt = propInfo.info().location().getValue();
                     item.add(new JSActionLink("aptMapview", "showLocation(" + pt.getLat() + ", " + pt.getLng() + ")", false));
                 } else {
                     item.add(new Label("aptMapview").setVisible(false));
