@@ -97,8 +97,7 @@ public interface SiteDescriptor extends Descriptor {
 
     IPrimitive<Boolean> disableBuildingDetails();
 
-    @Owned
-    ResidentPortalSettings residentPortalSettings();
+    IPrimitive<Boolean> residentPortalEnabled();
 
     SiteImageResource crmLogo();
 

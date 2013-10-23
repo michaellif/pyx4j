@@ -62,7 +62,7 @@ public abstract class BasePage extends WebPage {
 
     public static final String META_KEYWORDS = "pageKeywords";
 
-    public static final String RESIDENT_CUSTOM_CONTENT_PANEL = "contentPanel";
+    public static final String RESIDENT_CONTENT_PANEL = "contentPanel";
 
     public static final String RESIDENT_LOGIN_PANEL = "loginPanel";
 
@@ -100,10 +100,10 @@ public abstract class BasePage extends WebPage {
         // true if only resident portal is enabled
         boolean residentOnly = cm.isResidentOnlyMode();
 
-        if (residentOnly && !(this instanceof MyCommunityPage)) {
+        if (residentOnly && !(this instanceof ResidentsPage)) {
             // render residents page for any other request
             getRequestCycle().replaceAllRequestHandlers(
-                    new RenderPageRequestHandler(new PageProvider(MyCommunityPage.class), RenderPageRequestHandler.RedirectPolicy.AUTO_REDIRECT));
+                    new RenderPageRequestHandler(new PageProvider(ResidentsPage.class), RenderPageRequestHandler.RedirectPolicy.AUTO_REDIRECT));
         }
 
         if (cm.isWebsiteEnabled()) {

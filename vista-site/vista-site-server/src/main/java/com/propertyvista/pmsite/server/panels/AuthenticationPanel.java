@@ -23,7 +23,7 @@ import com.pyx4j.server.contexts.Lifecycle;
 import com.pyx4j.site.rpc.AppPlaceInfo;
 
 import com.propertyvista.pmsite.server.model.WicketUtils.PageLink;
-import com.propertyvista.pmsite.server.pages.MyCommunityPage;
+import com.propertyvista.pmsite.server.pages.ResidentsPage;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap;
 
 @SuppressWarnings("serial")
@@ -42,12 +42,12 @@ public class AuthenticationPanel extends Panel {
                     Lifecycle.endSession();
                     setResponsePage(getPage().getClass(), getPage().getPageParameters());
                 } else {
-                    setResponsePage(MyCommunityPage.class, null);
+                    setResponsePage(ResidentsPage.class, null);
                 }
             }
         };
 
-        PageLink greet = new PageLink("greeting", MyCommunityPage.class);
+        PageLink greet = new PageLink("greeting", ResidentsPage.class);
         greet.setAnchor(AppPlaceInfo.getPlaceId(PortalSiteMap.PasswordChange.class));
 
         if (Context.isUserLoggedIn()) {

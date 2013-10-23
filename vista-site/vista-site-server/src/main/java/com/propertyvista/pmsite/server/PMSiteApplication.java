@@ -75,7 +75,7 @@ import com.propertyvista.pmsite.server.pages.InquirySuccessPage;
 import com.propertyvista.pmsite.server.pages.InternalErrorPage;
 import com.propertyvista.pmsite.server.pages.LandingPage;
 import com.propertyvista.pmsite.server.pages.MaintenancePage;
-import com.propertyvista.pmsite.server.pages.MyCommunityPage;
+import com.propertyvista.pmsite.server.pages.ResidentsPage;
 import com.propertyvista.pmsite.server.pages.StaticPage;
 import com.propertyvista.pmsite.server.pages.UnitDetailsPage;
 import com.propertyvista.shared.i18n.CompiledLocale;
@@ -107,7 +107,7 @@ public class PMSiteApplication extends AuthenticatedWebApplication {
         MountMap.put("aptlist", AptListPage.class);
         MountMap.put("aptinfo", AptDetailsPage.class);
         MountMap.put("unitinfo", UnitDetailsPage.class);
-        MountMap.put("residents", MyCommunityPage.class);
+        MountMap.put("residents", ResidentsPage.class);
         MountMap.put("inquiry", InquiryPage.class);
         MountMap.put("inquiryok", InquirySuccessPage.class);
         MountMap.put("cnt" + PMSiteContentManager.PARAMETER_PATH, StaticPage.class);
@@ -359,7 +359,7 @@ public class PMSiteApplication extends AuthenticatedWebApplication {
 
     @Override
     protected Class<? extends WebPage> getSignInPageClass() {
-        return MyCommunityPage.class;
+        return ResidentsPage.class;
     }
 
     protected String getReturnToTargetUrl() {
@@ -406,7 +406,7 @@ public class PMSiteApplication extends AuthenticatedWebApplication {
     public static void onSecurePage(Request request) {
         HttpServletRequest httpServletRequest = ((ServletWebRequest) request).getContainerRequest();
         // redirect if not secure
-        String secureBaseUrl = VistaDeployment.getBaseApplicationURL(VistaApplication.portal, true);
+        String secureBaseUrl = VistaDeployment.getBaseApplicationURL(VistaApplication.site, true);
         String requestUrl = httpServletRequest.getRequestURL().toString();
         log.debug("request: {}; configured: {}", requestUrl, secureBaseUrl);
         if (!requestUrl.startsWith(secureBaseUrl)) {

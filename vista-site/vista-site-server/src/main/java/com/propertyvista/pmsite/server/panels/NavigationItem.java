@@ -22,7 +22,7 @@ import com.propertyvista.pmsite.server.PMSiteContentManager;
 import com.propertyvista.pmsite.server.pages.BasePage;
 import com.propertyvista.pmsite.server.pages.FindAptPage;
 import com.propertyvista.pmsite.server.pages.LandingPage;
-import com.propertyvista.pmsite.server.pages.MyCommunityPage;
+import com.propertyvista.pmsite.server.pages.ResidentsPage;
 import com.propertyvista.pmsite.server.pages.StaticPage;
 
 public class NavigationItem implements Serializable {
@@ -46,7 +46,7 @@ public class NavigationItem implements Serializable {
             this.destination = FindAptPage.class;
             break;
         case residents:
-            this.destination = MyCommunityPage.class;
+            this.destination = ResidentsPage.class;
             break;
         default:
             this.destination = LandingPage.class;

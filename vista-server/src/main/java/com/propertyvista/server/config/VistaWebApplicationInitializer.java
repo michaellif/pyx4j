@@ -53,7 +53,6 @@ import com.propertyvista.pmsite.server.PMSiteApplication;
 import com.propertyvista.pmsite.server.PMSiteFilter;
 import com.propertyvista.pmsite.server.PMSiteRobotsTxtFilter;
 import com.propertyvista.portal.server.portal.PublicMediaServlet;
-import com.propertyvista.portal.server.residentskinproxy.CustomSkinProxyServlet;
 import com.propertyvista.portal.server.upload.ApplicationDocumentServlet;
 import com.propertyvista.portal.server.upload.CustomerPictureServlet;
 import com.propertyvista.portal.server.upload.LegalLetterDocumentServlet;
@@ -155,14 +154,6 @@ public class VistaWebApplicationInitializer implements ServletContainerInitializ
                 ServletRegistration.Dynamic sc = ctx.addServlet("SiteImageResourceServlet", SiteImageResourceServlet.class);
                 sc.addMapping("*.siteimgrc");
             }
-            {
-                ServletRegistration.Dynamic sc = ctx.addServlet("CustomSkinProxyServlet", CustomSkinProxyServlet.class);
-                // development URL mapping
-                sc.addMapping("/https/*");
-                //context less URL mapping
-                sc.addMapping("/site/vista/https/*");
-            }
-
         }
 
         // oapi

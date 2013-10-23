@@ -45,7 +45,6 @@ import com.propertyvista.domain.site.gadgets.CustomGadgetContent;
 import com.propertyvista.domain.site.gadgets.NewsGadgetContent;
 import com.propertyvista.domain.site.gadgets.TestimonialsGadgetContent;
 import com.propertyvista.dto.SiteDescriptorDTO;
-import com.propertyvista.server.proxy.HttpsProxyInjection;
 
 public class SiteGeneralCrudServiceImpl extends AbstractCrudServiceDtoImpl<SiteDescriptor, SiteDescriptorDTO> implements SiteGeneralCrudService {
 
@@ -82,16 +81,6 @@ public class SiteGeneralCrudServiceImpl extends AbstractCrudServiceDtoImpl<SiteD
 
     @Override
     protected void persist(final SiteDescriptor dbo, final SiteDescriptorDTO in) {
-        // generate proxy white list
-        if (in.residentPortalSettings().useCustomHtml().isBooleanTrue()) {
-            in.residentPortalSettings().proxyWhitelist().clear();
-            for (HtmlContent customHtml : in.residentPortalSettings().customHtml()) {
-                if (customHtml.isEmpty() || customHtml.html().isNull()) {
-                    continue;
-                }
-                in.residentPortalSettings().proxyWhitelist().addAll(HttpsProxyInjection.generateWhitelist(customHtml.html().getValue()));
-            }
-        }
         // keep the sort order
         for (int idx = 0; idx < in.locales().size(); idx++) {
             in.locales().get(idx).displayOrder().setValue(idx);

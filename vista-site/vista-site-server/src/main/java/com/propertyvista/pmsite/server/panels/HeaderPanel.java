@@ -28,7 +28,7 @@ import com.propertyvista.pmsite.server.model.WicketUtils.PageLink;
 import com.propertyvista.pmsite.server.model.WicketUtils.ResourceImage;
 import com.propertyvista.pmsite.server.model.WicketUtils.SimpleImage;
 import com.propertyvista.pmsite.server.pages.LandingPage;
-import com.propertyvista.pmsite.server.pages.MyCommunityPage;
+import com.propertyvista.pmsite.server.pages.ResidentsPage;
 
 public class HeaderPanel extends Panel {
     private static final long serialVersionUID = 1L;
@@ -61,11 +61,10 @@ public class HeaderPanel extends Panel {
         // show login if Residents page is enabled
         boolean residentsEnabled = false;
         try {
-            residentsEnabled = cm.getSiteDescriptor().residentPortalSettings().enabled().isBooleanTrue()
-                    && SystemState.Online.equals(SystemMaintenance.getState());
+            residentsEnabled = cm.getSiteDescriptor().residentPortalEnabled().isBooleanTrue() && SystemState.Online.equals(SystemMaintenance.getState());
         } catch (Exception ignore) {
         }
-        add(residentsEnabled ? new PageLink("auth", MyCommunityPage.class).setText(i18n.tr("Resident Login")) : new Label("auth"));
+        add(residentsEnabled ? new PageLink("auth", ResidentsPage.class).setText(i18n.tr("Resident Login")) : new Label("auth"));
         // main menu
         if (!residentsOnly) {
             add(new MainNavigationPanel("mainNavig"));

@@ -63,7 +63,6 @@ import com.propertyvista.pmsite.server.panels.NavigationItem;
 import com.propertyvista.portal.rpc.DeploymentConsts;
 import com.propertyvista.portal.rpc.portal.ImageConsts;
 import com.propertyvista.portal.rpc.shared.SiteWasNotSetUpUserRuntimeException;
-import com.propertyvista.server.proxy.HttpsProxyInjection;
 import com.propertyvista.shared.i18n.CompiledLocale;
 
 public class PMSiteContentManager implements Serializable {
@@ -109,8 +108,7 @@ public class PMSiteContentManager implements Serializable {
         } catch (NamespaceNotFoundException e) {
             foundSiteDescriptor = null;
         }
-        if ((foundSiteDescriptor == null)
-                || (!foundSiteDescriptor.enabled().isBooleanTrue() && !foundSiteDescriptor.residentPortalSettings().enabled().isBooleanTrue())) {
+        if ((foundSiteDescriptor == null) || (!foundSiteDescriptor.enabled().isBooleanTrue() && !foundSiteDescriptor.residentPortalEnabled().isBooleanTrue())) {
             throw new SiteWasNotSetUpUserRuntimeException(i18n.tr("This property management site was not set-up yet"));
         }
         siteDescriptor = foundSiteDescriptor;
@@ -585,27 +583,7 @@ public class PMSiteContentManager implements Serializable {
         return siteDescriptor.enabled().isBooleanTrue();
     }
 
-    public boolean isCustomResidentsContentEnabled() {
-        return siteDescriptor.residentPortalSettings().enabled().isBooleanTrue() && siteDescriptor.residentPortalSettings().useCustomHtml().isBooleanTrue();
-    }
-
     public boolean isResidentOnlyMode() {
-        return siteDescriptor.residentPortalSettings().enabled().isBooleanTrue() && !siteDescriptor.enabled().isBooleanTrue();
-    }
-
-    public String getCustomResidentsContent(AvailableLocale locale) {
-        String html = null;
-        String lang = locale.lang().getValue().name();
-        IList<HtmlContent> contents = getSiteDescriptor().residentPortalSettings().customHtml();
-        for (HtmlContent contentRc : contents) {
-            if (contentRc.locale().lang().getValue().name().equals(lang)) {
-                html = contentRc.html().getValue();
-            }
-        }
-        if (html == null && contents.size() > 0) {
-            html = contents.get(0).html().getValue();
-        }
-
-        return HttpsProxyInjection.injectionPortalHttps(html);
+        return siteDescriptor.residentPortalEnabled().isBooleanTrue() && !siteDescriptor.enabled().isBooleanTrue();
     }
 }

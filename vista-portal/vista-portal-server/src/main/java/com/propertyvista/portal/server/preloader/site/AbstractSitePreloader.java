@@ -47,7 +47,6 @@ import com.propertyvista.domain.site.PageDescriptor;
 import com.propertyvista.domain.site.PageMetaTags;
 import com.propertyvista.domain.site.PortalImageSet;
 import com.propertyvista.domain.site.PortalLogoImageResource;
-import com.propertyvista.domain.site.ResidentPortalSettings;
 import com.propertyvista.domain.site.SiteDescriptor;
 import com.propertyvista.domain.site.SiteDescriptor.Skin;
 import com.propertyvista.domain.site.SiteImageResource;
@@ -65,8 +64,6 @@ import com.propertyvista.generator.util.RandomUtil;
 import com.propertyvista.portal.rpc.DeploymentConsts;
 import com.propertyvista.portal.server.preloader.util.AbstractVistaDataPreloader;
 import com.propertyvista.server.common.blob.BlobService;
-import com.propertyvista.server.proxy.HttpsProxyInjection;
-import com.propertyvista.shared.config.VistaDemo;
 import com.propertyvista.shared.config.VistaFeatures;
 import com.propertyvista.shared.i18n.CompiledLocale;
 
@@ -238,7 +235,7 @@ public abstract class AbstractSitePreloader extends AbstractVistaDataPreloader {
             site.childPages().add(page);
         }
 
-        createCustomResidentPage(site, siteLocale);
+        site.residentPortalEnabled().setValue(true);
 
         createStaticPages(site, siteLocale);
 
@@ -248,35 +245,6 @@ public abstract class AbstractSitePreloader extends AbstractVistaDataPreloader {
 
         Persistence.service().persist(site);
         return null;
-    }
-
-    protected void createCustomResidentPage(SiteDescriptor site, List<LocaleInfo> siteLocale) {
-        // enable resident portal by default
-        ResidentPortalSettings settings = EntityFactory.create(ResidentPortalSettings.class);
-        settings.enabled().setValue(true);
-        settings.useCustomHtml().setValue(false);
-        for (LocaleInfo li : siteLocale) {
-            String contentText;
-            try {
-                contentText = getUTF8TextResource("CustomResidentsPage.html", li.aLocale);
-                if (contentText == null) {
-                    continue;
-                }
-                HtmlContent content = EntityFactory.create(HtmlContent.class);
-                content.locale().set(li.aLocale);
-                content.html().setValue(contentText);
-                settings.customHtml().add(content);
-
-                settings.proxyWhitelist().addAll(HttpsProxyInjection.generateWhitelist(contentText));
-            } catch (IOException ignore) {
-            }
-        }
-        if ((settings.customHtml().size() > 0) && (!VistaDemo.isDemo())) {
-            // for custom resident portal content disable public portal
-            settings.useCustomHtml().setValue(true);
-            site.enabled().setValue(false);
-        }
-        site.residentPortalSettings().set(settings);
     }
 
     protected void createStaticPages(SiteDescriptor site, List<LocaleInfo> siteLocale) {
