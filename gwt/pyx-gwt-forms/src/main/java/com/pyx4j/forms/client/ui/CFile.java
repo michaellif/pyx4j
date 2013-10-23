@@ -20,7 +20,6 @@
  */
 package com.pyx4j.forms.client.ui;
 
-import com.google.gwt.core.shared.GWT;
 import com.google.gwt.user.client.Command;
 
 import com.pyx4j.entity.shared.IFile;
@@ -35,9 +34,9 @@ public class CFile<E extends IFile> extends CField<E, NFile<E>> {
 
     private FileURLBuilder<E> fileUrlBuilder;
 
-    public CFile(Class<? extends UploadService<?, E>> serviceClass) {
+    public CFile(UploadService<?, E> service) {
         super("");
-        this.service = GWT.<UploadService<?, E>> create(serviceClass);
+        this.service = service;
 
         setNativeWidget(new NFile<E>(this));
 

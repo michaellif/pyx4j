@@ -1,6 +1,5 @@
 package com.pyx4j.forms.client.ui;
 
-import com.google.gwt.core.shared.GWT;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Widget;
 
@@ -23,8 +22,8 @@ public abstract class CImage<E extends IFile> extends CField<E, NImage<E>> {
 
     private FileURLBuilder<E> fileUrlBuilder;
 
-    public CImage(Class<? extends UploadService<?, E>> serviceClass) {
-        this.service = GWT.<UploadService<?, E>> create(serviceClass);
+    public CImage(UploadService<?, E> service) {
+        this.service = service;
         this.imageSize = new Dimension(250, 250);
         setNativeWidget(new NImage<E>(this));
     }

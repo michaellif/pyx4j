@@ -1,6 +1,5 @@
 package com.pyx4j.forms.client.ui;
 
-import com.google.gwt.core.shared.GWT;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Widget;
 
@@ -31,9 +30,9 @@ public abstract class CImageSlider<E extends IFile> extends CField<IList<E>, NIm
 
     private final Class<E> imgClass;
 
-    public CImageSlider(Class<E> imgClass, Class<? extends UploadService<?, E>> serviceClass) {
+    public CImageSlider(Class<E> imgClass, UploadService<?, E> service) {
         this.imgClass = imgClass;
-        this.service = GWT.<UploadService<?, E>> create(serviceClass);
+        this.service = service;
         this.imageSize = new Dimension(250, 250);
         this.thumbSize = new Dimension(160, 120);
         setNativeWidget(new NImageSlider<E>(this));

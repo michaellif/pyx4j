@@ -59,7 +59,7 @@ public class EntityIImageForm extends CEntityForm<EntityI> {
 //        cImage.setUploadService(GWT.<TFileUploadService> create(TFileUploadService.class));
 //        main.setWidget(++row, 0, new TesterWidgetDecorator(inject(proto().files(), cGallery)));
 
-        CImageSlider<TFile> cGallery = new CImageSlider<TFile>(TFile.class, TFileUploadService.class) {
+        CImageSlider<TFile> cGallery = new CImageSlider<TFile>(TFile.class, GWT.<TFileUploadService> create(TFileUploadService.class)) {
             @Override
             public EntityFolderImages getFolderIcons() {
                 return Images.INSTANCE;
