@@ -70,4 +70,92 @@ public class LogicalDate extends java.sql.Date {
     public int getDate() {
         return super.getDate();
     }
+
+    /**
+     * this > other
+     */
+    public boolean gt(LogicalDate other) {
+        if (other == null) {
+            return false;
+        } else {
+            return this.compareTo(other) > 0;
+        }
+    }
+
+    /**
+     * this >= other
+     */
+    public boolean ge(LogicalDate other) {
+        if (other == null) {
+            return false;
+        } else {
+            return this.compareTo(other) >= 0;
+        }
+    }
+
+    /**
+     * this < other
+     */
+    public boolean lt(LogicalDate other) {
+        if (other == null) {
+            return false;
+        } else {
+            return this.compareTo(other) < 0;
+        }
+    }
+
+    /**
+     * this <= other
+     */
+    public boolean le(LogicalDate other) {
+        if (other == null) {
+            return false;
+        } else {
+            return this.compareTo(other) <= 0;
+        }
+    }
+
+    /**
+     * this > other
+     */
+    public boolean gt(Date other) {
+        if (other == null) {
+            return false;
+        } else {
+            return this.compareTo(new LogicalDate(other)) > 0;
+        }
+    }
+
+    /**
+     * this >= other
+     */
+    public boolean ge(Date other) {
+        if (other == null) {
+            return false;
+        } else {
+            return this.compareTo(new LogicalDate(other)) >= 0;
+        }
+    }
+
+    /**
+     * this < other
+     */
+    public boolean lt(Date other) {
+        if (other == null) {
+            return false;
+        } else {
+            return this.compareTo(new LogicalDate(other)) < 0;
+        }
+    }
+
+    /**
+     * this <= other
+     */
+    public boolean le(Date other) {
+        if (other == null) {
+            return false;
+        } else {
+            return this.compareTo(new LogicalDate(other)) <= 0;
+        }
+    }
 }

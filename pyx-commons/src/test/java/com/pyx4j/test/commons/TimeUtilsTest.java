@@ -22,6 +22,7 @@ package com.pyx4j.test.commons;
 
 import junit.framework.TestCase;
 
+import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.commons.TimeUtils;
 
 public class TimeUtilsTest extends TestCase {
@@ -37,5 +38,23 @@ public class TimeUtilsTest extends TestCase {
         assertFalse("before", TimeUtils.isWithinRange(TimeUtils.createDate(2010, 12, 31), TimeUtils.createDate(2011, 1, 1), TimeUtils.createDate(2011, 1, 4)));
 
         assertFalse("after", TimeUtils.isWithinRange(TimeUtils.createDate(2010, 1, 5), TimeUtils.createDate(2011, 1, 1), TimeUtils.createDate(2011, 1, 4)));
+    }
+
+    public void testLogicalDateOperations() {
+        assertTrue("<", new LogicalDate(2000, 1, 3).lt(new LogicalDate(2000, 1, 4)));
+        assertFalse("<", new LogicalDate(2000, 1, 3).lt(new LogicalDate(2000, 1, 3)));
+        assertFalse("<", new LogicalDate(2000, 1, 3).lt(new LogicalDate(2000, 1, 2)));
+
+        assertTrue("<=", new LogicalDate(2000, 1, 3).le(new LogicalDate(2000, 1, 4)));
+        assertTrue("<=", new LogicalDate(2000, 1, 3).le(new LogicalDate(2000, 1, 3)));
+        assertFalse("<=", new LogicalDate(2000, 1, 3).le(new LogicalDate(2000, 1, 2)));
+
+        assertTrue(">", new LogicalDate(2000, 1, 3).gt(new LogicalDate(2000, 1, 2)));
+        assertFalse(">", new LogicalDate(2000, 1, 3).gt(new LogicalDate(2000, 1, 3)));
+        assertFalse(">", new LogicalDate(2000, 1, 3).gt(new LogicalDate(2000, 1, 4)));
+
+        assertTrue(">=", new LogicalDate(2000, 1, 3).ge(new LogicalDate(2000, 1, 2)));
+        assertTrue(">=", new LogicalDate(2000, 1, 3).ge(new LogicalDate(2000, 1, 3)));
+        assertFalse(">=", new LogicalDate(2000, 1, 3).ge(new LogicalDate(2000, 1, 4)));
     }
 }
