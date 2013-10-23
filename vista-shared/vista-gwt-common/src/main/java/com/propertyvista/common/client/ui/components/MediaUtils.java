@@ -20,6 +20,7 @@ import com.pyx4j.commons.Key;
 import com.pyx4j.security.shared.SecurityController;
 
 import com.propertyvista.common.client.ClientNavigUtils;
+import com.propertyvista.domain.MediaFile;
 import com.propertyvista.domain.legal.LegalLetter;
 import com.propertyvista.domain.media.ApplicationDocumentFile;
 import com.propertyvista.domain.media.ThumbnailSize;
@@ -69,6 +70,11 @@ public class MediaUtils {
     public static String createCustomerPictureUrl(CustomerPicture picture) {
         return ClientNavigUtils.getDeploymentBaseURL() + picture.blobKey().getStringView() + "/" + picture.fileName().getStringView()
                 + DeploymentConsts.customerPictureServletMapping;
+    }
+
+    public static String createMediaImageUrl(MediaFile mediaFile) {
+        return GWT.getModuleBaseURL() + DeploymentConsts.mediaImagesServletMapping + mediaFile.blobKey().getStringView() + "/" + ThumbnailSize.large.name()
+                + "." + ImageConsts.THUMBNAIL_TYPE;
     }
 
     public static String createSiteSmallLogoUrl() {

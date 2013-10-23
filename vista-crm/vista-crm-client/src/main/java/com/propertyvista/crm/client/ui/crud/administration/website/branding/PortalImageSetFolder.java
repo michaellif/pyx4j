@@ -130,7 +130,7 @@ public class PortalImageSetFolder extends VistaBoxFolder<PortalImageSet> {
 
         public PortalImageSetEditor() {
             super(PortalImageSet.class);
-            imageHolder = new CImageSlider<SiteImageResource>(SiteImageResource.class) {
+            imageHolder = new CImageSlider<SiteImageResource>(SiteImageResource.class, SiteImageResourceUploadService.class) {
                 @Override
                 protected EntityFolderImages getFolderIcons() {
                     return VistaImages.INSTANCE;
@@ -147,7 +147,6 @@ public class PortalImageSetFolder extends VistaBoxFolder<PortalImageSet> {
             };
             imageHolder.setImageFileUrlBuilder(new ImageFileURLBuilder());
             imageHolder.setThumbnailFileUrlBuilder(new ImageFileURLBuilder());
-            imageHolder.setUploadService(GWT.<SiteImageResourceUploadService> create(SiteImageResourceUploadService.class));
         }
 
         public void setImageSize(int width, int height) {

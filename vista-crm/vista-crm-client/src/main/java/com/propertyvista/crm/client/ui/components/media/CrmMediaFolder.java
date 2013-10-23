@@ -26,24 +26,33 @@ import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.SimplePanel;
+import com.google.gwt.user.client.ui.VerticalPanel;
+import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.commons.ValidationUtils;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IObject;
+import com.pyx4j.forms.client.images.EntityFolderImages;
 import com.pyx4j.forms.client.ui.CComboBox;
 import com.pyx4j.forms.client.ui.CComponent;
+import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.ui.CField;
+import com.pyx4j.forms.client.ui.CImage;
 import com.pyx4j.forms.client.ui.CTextField;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
+import com.pyx4j.gwt.shared.FileURLBuilder;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
 
+import com.propertyvista.common.client.resources.VistaImages;
+import com.propertyvista.common.client.ui.components.MediaUtils;
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
 import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
 import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
 import com.propertyvista.common.client.ui.validators.YouTubeVideoIdFormat;
 import com.propertyvista.common.client.ui.validators.YouTubeVideoIdValidator;
-import com.propertyvista.crm.client.ui.components.cms.FileUploadHyperlink;
+import com.propertyvista.crm.rpc.services.MediaUploadService;
+import com.propertyvista.domain.MediaFile;
 import com.propertyvista.domain.PublicVisibilityType;
 import com.propertyvista.domain.media.Media;
 import com.propertyvista.domain.media.ThumbnailSize;
@@ -101,21 +110,29 @@ public class CrmMediaFolder extends VistaBoxFolder<Media> {
             utubeEditor.setFormat(new YouTubeVideoIdFormat());
 
             main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().url()), 15).build());
-            Command showMediaCommand = new Command() {
+
+            CImage<MediaFile> imageHolder = new CImage<MediaFile>(MediaUploadService.class) {
                 @Override
-                public void execute() {
-                    showMedia();
+                protected EntityFolderImages getFolderIcons() {
+                    return VistaImages.INSTANCE;
+                }
+
+                @Override
+                public Widget getImageEntryView(CEntityForm<MediaFile> entryForm) {
+                    VerticalPanel infoPanel = new VerticalPanel();
+                    return infoPanel;
                 }
             };
-            ((CField) get(proto().youTubeVideoID())).setNavigationCommand(showMediaCommand);
-            ((CField) get(proto().url())).setNavigationCommand(showMediaCommand);
+            imageHolder.setFileUrlBuilder(new FileURLBuilder<MediaFile>() {
 
-            main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().file(), new FileUploadHyperlink(imageTarget, new Command() {
                 @Override
-                public void execute() {
-                    showMedia();
+                public String getUrl(MediaFile file) {
+                    return MediaUtils.createMediaImageUrl(file);
                 }
-            })), 15).build());
+            });
+            imageHolder.setImageSize(150, 200);
+
+            main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().file(), imageHolder), 15).build());
 
             row = -1;
             main.setWidget(++row, 1, new FormDecoratorBuilder(inject(proto().caption()), 15).build());
@@ -137,13 +154,6 @@ public class CrmMediaFolder extends VistaBoxFolder<Media> {
 
             thumbnailWrap.getElement().getStyle().setWidth(width, Style.Unit.PX);
             thumbnailWrap.getElement().getStyle().setMarginRight(1, Style.Unit.EM);
-
-            thumbnail.addClickHandler(new ClickHandler() {
-                @Override
-                public void onClick(ClickEvent event) {
-                    showMedia();
-                }
-            });
 
             HorizontalPanel wrap = new HorizontalPanel();
             wrap.add(main);
@@ -201,35 +211,5 @@ public class CrmMediaFolder extends VistaBoxFolder<Media> {
             }
         }
 
-        private void showMedia() {
-            Media.Type type = getValue().type().getValue();
-            switch (type) {
-            case file:
-                if (getValue().id().isNull()) {
-                    MessageDialog.error(i18n.tr("Upload Error"), i18n.tr("Please save this first"));
-                } else {
-                    MediaFileViewDialog dialog = new MediaFileViewDialog();
-                    dialog.title = getValue().caption().getValue();
-                    dialog.mediaId = getValue().id().getValue();
-                    dialog.show();
-                }
-                break;
-
-            case externalUrl:
-                String url = getValue().url().getValue();
-                if (!ValidationUtils.urlHasProtocol(url)) {
-                    url = "http://" + url;
-                }
-                Window.open(url, Media.Type.externalUrl.name(), null);
-                break;
-
-            case youTube:
-                YouTubePlayVideoDialog dialog = new YouTubePlayVideoDialog();
-                dialog.title = getValue().caption().getValue();
-                dialog.videoId = getValue().youTubeVideoID().getValue();
-                dialog.show();
-                break;
-            }
-        }
     }
 }

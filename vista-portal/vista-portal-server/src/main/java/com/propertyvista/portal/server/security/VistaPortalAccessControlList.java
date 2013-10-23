@@ -82,6 +82,7 @@ import com.propertyvista.portal.rpc.portal.web.services.profile.ResidentAccountC
 import com.propertyvista.portal.rpc.portal.web.services.profile.ResidentProfileCrudService;
 import com.propertyvista.portal.rpc.portal.web.services.profile.ResidentSummaryService;
 import com.propertyvista.portal.rpc.portal.web.services.services.GeneralInsurancePolicyCrudService;
+import com.propertyvista.portal.rpc.portal.web.services.services.GeneralInsurancePolicyUploadService;
 import com.propertyvista.portal.rpc.portal.web.services.services.TenantSureInsurancePolicyCrudService;
 import com.propertyvista.portal.rpc.portal.web.services.services.TenantSurePaymentMethodCrudService;
 import com.propertyvista.portal.rpc.ptapp.services.ApplicationDocumentUploadService;
@@ -247,6 +248,8 @@ public class VistaPortalAccessControlList extends ServletContainerAclBuilder {
         grant(VistaCustomerBehavior.Tenant, new IServiceExecutePermission(ResidentSummaryService.class));
 
         grant(VistaCustomerBehavior.Tenant, new IServiceExecutePermission(com.propertyvista.portal.rpc.portal.web.services.services.InsuranceService.class));
+
+        grant(VistaCustomerBehavior.Tenant, new IServiceExecutePermission(GeneralInsurancePolicyUploadService.class));
 
         grant(VistaCustomerBehavior.Tenant, new IServiceExecutePermission(GeneralInsurancePolicyCrudService.class));
 

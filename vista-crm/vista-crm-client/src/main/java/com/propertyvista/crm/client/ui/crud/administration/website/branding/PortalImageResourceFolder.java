@@ -32,6 +32,7 @@ import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CEntityLabel;
 import com.pyx4j.forms.client.ui.CFile;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
+import com.pyx4j.gwt.shared.FileURLBuilder;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
 import com.pyx4j.widgets.client.dialog.OkDialog;
@@ -43,6 +44,7 @@ import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
 import com.propertyvista.crm.client.ui.components.cms.SiteImageResourceProvider;
 import com.propertyvista.crm.client.ui.crud.administration.website.SiteImageThumbnail;
 import com.propertyvista.crm.client.ui.crud.administration.website.general.AvailableLocaleSelectorDialog;
+import com.propertyvista.crm.rpc.services.admin.SiteImageResourceUploadService;
 import com.propertyvista.domain.site.AvailableLocale;
 import com.propertyvista.domain.site.PortalLogoImageResource;
 import com.propertyvista.domain.site.SiteImageResource;
@@ -141,43 +143,18 @@ public class PortalImageResourceFolder extends VistaBoxFolder<PortalLogoImageRes
 
         class LogoLink extends CFile<SiteImageResource> {
 
-            private SiteImageThumbnail thumb;
-
             public LogoLink(SiteImageThumbnail thumb) {
-                setNavigationCommand(new Command() {
+                super(SiteImageResourceUploadService.class);
+                setFileUrlBuilder(new FileURLBuilder<SiteImageResource>() {
+
                     @Override
-                    public void execute() {
-                        OkDialog dialog = new OkDialog(getValue().fileName().getValue()) {
-                            @Override
-                            public boolean onClickOk() {
-                                return true;
-                            }
-                        };
-                        dialog.setBody(new Image(MediaUtils.createSiteImageResourceUrl(getValue())));
-                        dialog.layout();
+                    public String getUrl(SiteImageResource file) {
+                        return MediaUtils.createSiteImageResourceUrl(file);
                     }
                 });
 
-                this.thumb = thumb;
             }
 
-            @Override
-            public void showFileSelectionDialog() {
-                new SiteImageResourceProvider().selectResource(new AsyncCallback<SiteImageResource>() {
-                    @Override
-                    public void onFailure(Throwable caught) {
-                        MessageDialog.error(i18n.tr("Action Failed"), caught.getMessage());
-                    }
-
-                    @Override
-                    public void onSuccess(SiteImageResource rc) {
-                        if (rc != null) {
-                            setValue(rc);
-                            thumb.setUrl(MediaUtils.createSiteImageResourceUrl(rc));
-                        }
-                    }
-                });
-            }
         }
 
     }

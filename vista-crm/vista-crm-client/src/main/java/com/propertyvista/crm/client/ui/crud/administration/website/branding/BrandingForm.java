@@ -13,31 +13,27 @@
  */
 package com.propertyvista.crm.client.ui.crud.administration.website.branding;
 
-import com.google.gwt.user.client.Command;
-import com.google.gwt.user.client.rpc.AsyncCallback;
-import com.google.gwt.user.client.ui.Image;
+import com.google.gwt.user.client.ui.Widget;
 
-import com.pyx4j.forms.client.ui.CFile;
+import com.pyx4j.forms.client.images.EntityFolderImages;
+import com.pyx4j.forms.client.ui.CEntityForm;
+import com.pyx4j.forms.client.ui.CImage;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
+import com.pyx4j.gwt.shared.FileURLBuilder;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.prime.form.IForm;
-import com.pyx4j.widgets.client.dialog.MessageDialog;
-import com.pyx4j.widgets.client.dialog.OkDialog;
 
 import com.propertyvista.common.client.ui.components.MediaUtils;
 import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
-import com.propertyvista.crm.client.ui.components.cms.SiteImageResourceProvider;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.crm.client.ui.crud.administration.website.RichTextContentFolder;
-import com.propertyvista.crm.client.ui.crud.administration.website.SiteImageThumbnail;
+import com.propertyvista.crm.rpc.services.admin.SiteImageResourceUploadService;
 import com.propertyvista.domain.site.SiteImageResource;
 import com.propertyvista.dto.SiteDescriptorDTO;
 
 public class BrandingForm extends CrmEntityForm<SiteDescriptorDTO> {
 
     private static final I18n i18n = I18n.get(BrandingForm.class);
-
-    private final SiteImageThumbnail thumb = new SiteImageThumbnail();
 
     public BrandingForm(IForm<SiteDescriptorDTO> view) {
         super(SiteDescriptorDTO.class, view);
@@ -78,50 +74,32 @@ public class BrandingForm extends CrmEntityForm<SiteDescriptorDTO> {
         addTab(createCrmLogoTab());
     }
 
-    @Override
-    protected void onValueSet(boolean populate) {
-        super.onValueSet(populate);
-
-        thumb.setUrl(MediaUtils.createSiteImageResourceUrl(getValue().crmLogo()));
-    }
-
     private TwoColumnFlexFormPanel createCrmLogoTab() {
         TwoColumnFlexFormPanel content = new TwoColumnFlexFormPanel(proto().crmLogo().getMeta().getCaption());
 
-        content.setWidget(0, 0, new FormDecoratorBuilder(inject(proto().crmLogo(), new CFile<SiteImageResource>(new Command() {
-            @Override
-            public void execute() {
-                OkDialog dialog = new OkDialog(getValue().crmLogo().fileName().getValue()) {
-                    @Override
-                    public boolean onClickOk() {
-                        return true;
-                    }
-                };
-                dialog.setBody(new Image(MediaUtils.createSiteImageResourceUrl(getValue().crmLogo())));
-                dialog.layout();
-            }
-        }) {
-            @Override
-            public void showFileSelectionDialog() {
-                SiteImageResourceProvider provider = new SiteImageResourceProvider();
-                provider.selectResource(new AsyncCallback<SiteImageResource>() {
-                    @Override
-                    public void onFailure(Throwable caught) {
-                        MessageDialog.error(i18n.tr("Action Failed"), caught.getMessage());
-                    }
+        CImage<SiteImageResource> file = new CImage<SiteImageResource>(SiteImageResourceUploadService.class) {
 
-                    @Override
-                    public void onSuccess(SiteImageResource rc) {
-                        if (rc != null) {
-                            setValue(rc);
-                            thumb.setUrl(MediaUtils.createSiteImageResourceUrl(rc));
-                        }
-                    }
-                });
+            @Override
+            public Widget getImageEntryView(CEntityForm<SiteImageResource> entryForm) {
+                // TODO Auto-generated method stub
+                return null;
             }
-        }), 20).build());
 
-        content.setWidget(0, 1, thumb);
+            @Override
+            protected EntityFolderImages getFolderIcons() {
+                // TODO Auto-generated method stub
+                return null;
+            }
+        };
+        file.setFileUrlBuilder(new FileURLBuilder<SiteImageResource>() {
+
+            @Override
+            public String getUrl(SiteImageResource file) {
+                return MediaUtils.createSiteImageResourceUrl(file);
+            }
+        });
+
+        content.setWidget(0, 0, new FormDecoratorBuilder(inject(proto().crmLogo(), file), 20).build());
 
         return content;
     }

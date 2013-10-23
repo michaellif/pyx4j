@@ -134,7 +134,7 @@ public class LeaseParticipantForm<P extends LeaseParticipantDTO<?>> extends CrmE
         }
 
         int row = -1;
-        CImage<CustomerPicture> imageHolder = new CImage<CustomerPicture>(CustomerPicture.class) {
+        CImage<CustomerPicture> imageHolder = new CImage<CustomerPicture>(CustomerPictureUploadService.class) {
             @Override
             protected EntityFolderImages getFolderIcons() {
                 return VistaImages.INSTANCE;
@@ -148,8 +148,7 @@ public class LeaseParticipantForm<P extends LeaseParticipantDTO<?>> extends CrmE
                 return infoPanel;
             }
         };
-        imageHolder.setImageFileUrlBuilder(new ImageFileURLBuilder());
-        imageHolder.setUploadService(GWT.<CustomerPictureUploadService> create(CustomerPictureUploadService.class));
+        imageHolder.setFileUrlBuilder(new ImageFileURLBuilder());
         imageHolder.setImageSize(150, 200);
         imageHolder.setThumbnailPlaceholder(new Image(VistaImages.INSTANCE.profilePicture()));
 

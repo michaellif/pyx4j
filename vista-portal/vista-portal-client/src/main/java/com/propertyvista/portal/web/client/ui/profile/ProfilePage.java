@@ -61,7 +61,7 @@ public class ProfilePage extends CPortalEntityEditor<ResidentProfileDTO> {
         BasicFlexFormPanel mainPanel = new BasicFlexFormPanel();
         int row = -1;
 
-        CImage<CustomerPicture> imageHolder = new CImage<CustomerPicture>(CustomerPicture.class) {
+        CImage<CustomerPicture> imageHolder = new CImage<CustomerPicture>(ResidentPictureUploadService.class) {
             @Override
             protected EntityFolderImages getFolderIcons() {
                 return VistaImages.INSTANCE;
@@ -73,8 +73,7 @@ public class ProfilePage extends CPortalEntityEditor<ResidentProfileDTO> {
                 return infoPanel;
             }
         };
-        imageHolder.setImageFileUrlBuilder(new ImageFileURLBuilder());
-        imageHolder.setUploadService(GWT.<ResidentPictureUploadService> create(ResidentPictureUploadService.class));
+        imageHolder.setFileUrlBuilder(new ImageFileURLBuilder());
         imageHolder.setImageSize(150, 200);
         imageHolder.setThumbnailPlaceholder(new Image(VistaImages.INSTANCE.profilePicture()));
 

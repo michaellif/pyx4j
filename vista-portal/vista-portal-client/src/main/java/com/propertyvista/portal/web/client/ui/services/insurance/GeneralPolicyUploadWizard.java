@@ -17,10 +17,13 @@ import java.math.BigDecimal;
 
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.IsWidget;
+import com.google.gwt.user.client.ui.VerticalPanel;
+import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.commons.css.ThemeColor;
 import com.pyx4j.entity.shared.IObject;
+import com.pyx4j.forms.client.images.EntityFolderImages;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.ui.CEntityLabel;
@@ -30,12 +33,15 @@ import com.pyx4j.forms.client.validators.EditableValueValidator;
 import com.pyx4j.forms.client.validators.ValidationError;
 import com.pyx4j.i18n.shared.I18n;
 
+import com.propertyvista.common.client.resources.VistaImages;
 import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
 import com.propertyvista.domain.MediaFile;
 import com.propertyvista.domain.media.InsuranceCertificateDocument;
 import com.propertyvista.domain.tenant.Customer;
+import com.propertyvista.domain.tenant.insurance.InsuranceCertificateScan;
 import com.propertyvista.domain.tenant.lease.Tenant;
 import com.propertyvista.portal.rpc.portal.web.dto.insurance.GeneralInsurancePolicyDTO;
+import com.propertyvista.portal.rpc.portal.web.services.services.GeneralInsurancePolicyUploadService;
 import com.propertyvista.portal.web.client.ui.ApplicationDocumentFileUploaderFolder;
 import com.propertyvista.portal.web.client.ui.CPortalEntityWizard;
 import com.propertyvista.portal.web.client.ui.util.decorators.FormDecoratorBuilder;
@@ -136,17 +142,12 @@ public class GeneralPolicyUploadWizard extends CPortalEntityWizard<GeneralInsura
         });
 
         contentPanel.setH2(++row, 0, 1, i18n.tr("Attach Scanned Insurance Certificate"));
-        contentPanel.setWidget(++row, 0, 1, new FormDecoratorBuilder(inject(proto().certificate().certificateScan(), new CFile<MediaFile>(new Command() {
-            @Override
-            public void execute() {
-                System.out.println("++++++++++++execute");
-            }
-        }) {
-            @Override
-            public void showFileSelectionDialog() {
-                System.out.println("++++++++++++==");
-            }
-        }), 200).build());
+        contentPanel.setWidget(
+                ++row,
+                0,
+                1,
+                new FormDecoratorBuilder(inject(proto().certificate().certificateScan(), new CFile<InsuranceCertificateScan>(
+                        GeneralInsurancePolicyUploadService.class)), 200).build());
 
         return contentPanel;
     }
@@ -155,44 +156,4 @@ public class GeneralPolicyUploadWizard extends CPortalEntityWizard<GeneralInsura
         this.minRequiredLiability = minRequiredLiability;
     }
 
-    private static class InsuranceCertificateDocumentFolder extends VistaBoxFolder<InsuranceCertificateDocument> {
-
-        public InsuranceCertificateDocumentFolder() {
-            super(InsuranceCertificateDocument.class);
-        }
-
-        @Override
-        public CComponent<?> create(IObject<?> member) {
-            if (member instanceof InsuranceCertificateDocument) {
-                return new InsuranceCertificateDocumentEditor();
-            } else {
-                return super.create(member);
-            }
-        }
-
-    }
-
-    private static class InsuranceCertificateDocumentEditor extends CEntityForm<InsuranceCertificateDocument> {
-
-        public InsuranceCertificateDocumentEditor() {
-            super(InsuranceCertificateDocument.class);
-        }
-
-        @Override
-        public IsWidget createContent() {
-            BasicFlexFormPanel panel = new BasicFlexFormPanel();
-            panel.setWidget(0, 0, inject(proto().documentPages(), new ApplicationDocumentFileUploaderFolder()));
-            addValueValidator(new EditableValueValidator<InsuranceCertificateDocument>() {
-                @Override
-                public ValidationError isValid(CComponent<InsuranceCertificateDocument> component, InsuranceCertificateDocument value) {
-                    if (value != null && value.documentPages().isEmpty()) {
-                        return new ValidationError(component, i18n.tr("Please upload the insurance cerificate"));
-                    } else {
-                        return null;
-                    }
-                }
-            });
-            return panel;
-        }
-    }
 }
