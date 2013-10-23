@@ -75,55 +75,87 @@ public class LogicalDate extends java.sql.Date {
      * this > other
      */
     public boolean gt(LogicalDate other) {
-        return this.compareTo(other) > 0;
+        if (other == null) {
+            return false;
+        } else {
+            return this.compareTo(other) > 0;
+        }
     }
 
     /**
      * this >= other
      */
     public boolean ge(LogicalDate other) {
-        return this.compareTo(other) >= 0;
+        if (other == null) {
+            return false;
+        } else {
+            return this.compareTo(other) >= 0;
+        }
     }
 
     /**
      * this < other
      */
     public boolean lt(LogicalDate other) {
-        return this.compareTo(other) < 0;
+        if (other == null) {
+            return false;
+        } else {
+            return this.compareTo(other) < 0;
+        }
     }
 
     /**
      * this <= other
      */
     public boolean le(LogicalDate other) {
-        return this.compareTo(other) <= 0;
+        if (other == null) {
+            return false;
+        } else {
+            return this.compareTo(other) <= 0;
+        }
     }
 
     /**
      * this > other
      */
     public boolean gt(Date other) {
-        return this.compareTo(new LogicalDate(other)) > 0;
+        if (other == null) {
+            return false;
+        } else {
+            return this.compareTo(new LogicalDate(other)) > 0;
+        }
     }
 
     /**
      * this >= other
      */
     public boolean ge(Date other) {
-        return this.compareTo(new LogicalDate(other)) >= 0;
+        if (other == null) {
+            return false;
+        } else {
+            return this.compareTo(new LogicalDate(other)) >= 0;
+        }
     }
 
     /**
      * this < other
      */
     public boolean lt(Date other) {
-        return this.compareTo(new LogicalDate(other)) < 0;
+        if (other == null) {
+            return false;
+        } else {
+            return this.compareTo(new LogicalDate(other)) < 0;
+        }
     }
 
     /**
      * this <= other
      */
     public boolean le(Date other) {
-        return this.compareTo(new LogicalDate(other)) <= 0;
+        if (other == null) {
+            return false;
+        } else {
+            return this.compareTo(new LogicalDate(other)) <= 0;
+        }
     }
 }
