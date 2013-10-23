@@ -29,7 +29,7 @@ class BankingSimulatorConfigurationCustom extends BankingSimulatorConfiguration 
     @Override
     public String getCardServiceSimulatorUrl() {
         return config.getConfigProperties().getValue("simulator.cardServiceSimulatorUrl",
-                "http://" + "operations" + config.getApplicationURLNamespace(false) + "o/" + "CardServiceSimulation");
+                "http://" + "interfaces" + config.getApplicationURLNamespace(false) + "o/" + "CardServiceSimulation");
     }
 
     @Override
