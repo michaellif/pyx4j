@@ -13,6 +13,7 @@
  */
 package com.propertyvista.crm.client.ui.crud.administration.website.branding;
 
+import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.forms.client.images.EntityFolderImages;
@@ -77,7 +78,7 @@ public class BrandingForm extends CrmEntityForm<SiteDescriptorDTO> {
     private TwoColumnFlexFormPanel createCrmLogoTab() {
         TwoColumnFlexFormPanel content = new TwoColumnFlexFormPanel(proto().crmLogo().getMeta().getCaption());
 
-        CImage<SiteImageResource> file = new CImage<SiteImageResource>(SiteImageResourceUploadService.class) {
+        CImage<SiteImageResource> file = new CImage<SiteImageResource>(GWT.<SiteImageResourceUploadService> create(SiteImageResourceUploadService.class)) {
 
             @Override
             public Widget getImageEntryView(CEntityForm<SiteImageResource> entryForm) {

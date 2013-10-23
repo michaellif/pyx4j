@@ -134,7 +134,7 @@ public class LeaseParticipantForm<P extends LeaseParticipantDTO<?>> extends CrmE
         }
 
         int row = -1;
-        CImage<CustomerPicture> imageHolder = new CImage<CustomerPicture>(CustomerPictureUploadService.class) {
+        CImage<CustomerPicture> imageHolder = new CImage<CustomerPicture>(GWT.<CustomerPictureUploadService> create(CustomerPictureUploadService.class)) {
             @Override
             protected EntityFolderImages getFolderIcons() {
                 return VistaImages.INSTANCE;

@@ -130,7 +130,8 @@ public class PortalImageSetFolder extends VistaBoxFolder<PortalImageSet> {
 
         public PortalImageSetEditor() {
             super(PortalImageSet.class);
-            imageHolder = new CImageSlider<SiteImageResource>(SiteImageResource.class, SiteImageResourceUploadService.class) {
+            imageHolder = new CImageSlider<SiteImageResource>(SiteImageResource.class,
+                    GWT.<SiteImageResourceUploadService> create(SiteImageResourceUploadService.class)) {
                 @Override
                 protected EntityFolderImages getFolderIcons() {
                     return VistaImages.INSTANCE;

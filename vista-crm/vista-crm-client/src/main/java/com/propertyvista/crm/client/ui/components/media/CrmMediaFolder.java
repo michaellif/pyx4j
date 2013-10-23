@@ -59,6 +59,7 @@ import com.propertyvista.domain.media.ThumbnailSize;
 import com.propertyvista.portal.rpc.DeploymentConsts;
 import com.propertyvista.portal.rpc.portal.ImageConsts;
 import com.propertyvista.portal.rpc.portal.ImageConsts.ImageTarget;
+import com.propertyvista.portal.rpc.portal.web.services.ResidentPictureUploadService;
 
 public class CrmMediaFolder extends VistaBoxFolder<Media> {
 
@@ -111,7 +112,7 @@ public class CrmMediaFolder extends VistaBoxFolder<Media> {
 
             main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().url()), 15).build());
 
-            CImage<MediaFile> imageHolder = new CImage<MediaFile>(MediaUploadService.class) {
+            CImage<MediaFile> imageHolder = new CImage<MediaFile>(GWT.<MediaUploadService> create(MediaUploadService.class)) {
                 @Override
                 protected EntityFolderImages getFolderIcons() {
                     return VistaImages.INSTANCE;

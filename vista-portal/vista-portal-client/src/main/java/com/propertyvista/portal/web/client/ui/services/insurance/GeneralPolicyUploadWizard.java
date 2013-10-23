@@ -15,6 +15,7 @@ package com.propertyvista.portal.web.client.ui.services.insurance;
 
 import java.math.BigDecimal;
 
+import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.Command;
 
 import com.pyx4j.commons.LogicalDate;
@@ -135,8 +136,9 @@ public class GeneralPolicyUploadWizard extends CPortalEntityWizard<GeneralInsura
                 ++row,
                 0,
                 1,
-                new FormDecoratorBuilder(inject(proto().certificate().certificateScan(), new CFile<InsuranceCertificateScan>(
-                        GeneralInsurancePolicyUploadService.class)), 200).build());
+                new FormDecoratorBuilder(inject(proto().certificate().certificateScan(),
+                        new CFile<InsuranceCertificateScan>(GWT.<GeneralInsurancePolicyUploadService> create(GeneralInsurancePolicyUploadService.class))), 200)
+                        .build());
 
         return contentPanel;
     }

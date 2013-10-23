@@ -16,6 +16,7 @@ package com.propertyvista.crm.client.ui.crud.administration.website.branding;
 import java.util.HashSet;
 import java.util.Set;
 
+import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.Command;
@@ -48,6 +49,7 @@ import com.propertyvista.crm.rpc.services.admin.SiteImageResourceUploadService;
 import com.propertyvista.domain.site.AvailableLocale;
 import com.propertyvista.domain.site.PortalLogoImageResource;
 import com.propertyvista.domain.site.SiteImageResource;
+import com.propertyvista.portal.rpc.portal.web.services.services.GeneralInsurancePolicyUploadService;
 
 public class PortalImageResourceFolder extends VistaBoxFolder<PortalLogoImageResource> {
     private static final I18n i18n = I18n.get(PortalImageResourceFolder.class);
@@ -144,7 +146,7 @@ public class PortalImageResourceFolder extends VistaBoxFolder<PortalLogoImageRes
         class LogoLink extends CFile<SiteImageResource> {
 
             public LogoLink(SiteImageThumbnail thumb) {
-                super(SiteImageResourceUploadService.class);
+                super(GWT.<SiteImageResourceUploadService> create(SiteImageResourceUploadService.class));
                 setFileUrlBuilder(new FileURLBuilder<SiteImageResource>() {
 
                     @Override
@@ -154,7 +156,6 @@ public class PortalImageResourceFolder extends VistaBoxFolder<PortalLogoImageRes
                 });
 
             }
-
         }
 
     }
