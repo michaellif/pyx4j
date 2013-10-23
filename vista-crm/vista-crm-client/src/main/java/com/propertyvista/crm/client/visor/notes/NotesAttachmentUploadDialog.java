@@ -17,6 +17,7 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Style;
 
 import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.gwt.client.upload.UploadReceiver;
 import com.pyx4j.gwt.client.upload.UploadPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.dialog.OkCancelDialog;
@@ -34,7 +35,15 @@ public abstract class NotesAttachmentUploadDialog extends OkCancelDialog {
     public NotesAttachmentUploadDialog() {
         super(i18n.tr("Upload Attachment File"));
 
-        uploadPanel = new UploadPanel<IEntity, NoteAttachment>(GWT.<NoteAttachmentUploadService> create(NoteAttachmentUploadService.class)) {
+        uploadPanel = new UploadPanel<IEntity, NoteAttachment>(GWT.<NoteAttachmentUploadService> create(NoteAttachmentUploadService.class),
+                new UploadReceiver<NoteAttachment>() {
+
+                    @Override
+                    public void onUploadComplete(NoteAttachment result) {
+                        NotesAttachmentUploadDialog.this.hide(false);
+                        NotesAttachmentUploadDialog.this.onUploadComplete(result);
+                    }
+                }) {
 
             @Override
             protected void onUploadSubmit() {
@@ -46,12 +55,6 @@ public abstract class NotesAttachmentUploadDialog extends OkCancelDialog {
                 super.onUploadError(error, args);
                 NotesAttachmentUploadDialog.this.getOkButton().setEnabled(true);
                 uploadPanel.reset();
-            }
-
-            @Override
-            protected void onUploadComplete(NoteAttachment serverUploadResponse) {
-                NotesAttachmentUploadDialog.this.hide(false);
-                NotesAttachmentUploadDialog.this.onUploadComplete(serverUploadResponse);
             }
 
         };

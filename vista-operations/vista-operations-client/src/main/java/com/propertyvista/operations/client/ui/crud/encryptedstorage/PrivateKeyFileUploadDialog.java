@@ -22,7 +22,7 @@ import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.ui.decorators.WidgetDecorator;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.gwt.client.upload.FileUploadDialog;
-import com.pyx4j.gwt.client.upload.FileUploadReciver;
+import com.pyx4j.gwt.client.upload.UploadReceiver;
 import com.pyx4j.gwt.client.upload.UploadPanel;
 import com.pyx4j.gwt.rpc.upload.UploadService;
 import com.pyx4j.i18n.shared.I18n;
@@ -40,7 +40,7 @@ public class PrivateKeyFileUploadDialog extends FileUploadDialog<PrivateKeyDTO, 
 
     private CEntityForm<PasswordEntryDTO> form;
 
-    public PrivateKeyFileUploadDialog(EncryptedStorageKeyDTO keyToUpload, FileUploadReciver<IFile> uploadReciver) {
+    public PrivateKeyFileUploadDialog(EncryptedStorageKeyDTO keyToUpload, UploadReceiver<IFile> uploadReciver) {
         super(i18n.tr("Upload Private Key File"), null, GWT.<UploadService<PrivateKeyDTO, IFile>> create(EncryptedStorageServicePrivateKeyUploadService.class),
                 uploadReciver);
 

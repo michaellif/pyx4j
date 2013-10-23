@@ -20,6 +20,7 @@ import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.gwt.client.upload.UploadReceiver;
 import com.pyx4j.gwt.client.upload.UploadPanel;
 import com.pyx4j.gwt.client.upload.UploadResponseReciver;
 import com.pyx4j.gwt.rpc.upload.UploadService;
@@ -42,7 +43,20 @@ public class UploadDialogBase<U extends IEntity, R extends DownloadableUploadRes
     public UploadDialogBase(String caption, UploadService<U, R> uploadService, Collection<DownloadFormat> supportedFormats) {
         super(caption);
 
-        uploadPanel = new UploadPanel<U, R>(uploadService) {
+        uploadPanel = new UploadPanel<U, R>(uploadService, new UploadReceiver<R>() {
+
+            @Override
+            public void onUploadComplete(R result) {
+                UploadDialogBase.this.hide(false);
+                if (UploadDialogBase.this.uploadReciver != null) {
+                    UploadDialogBase.this.uploadReciver.onUploadComplete(result);
+                } else {
+                    if (CommonsStringUtils.isStringSet(result.message().getStringView())) {
+                        MessageDialog.info(i18n.tr("Upload Complete"), result.message().getStringView());
+                    }
+                }
+            }
+        }) {
 
             @Override
             protected void onUploadSubmit() {
@@ -54,18 +68,6 @@ public class UploadDialogBase<U extends IEntity, R extends DownloadableUploadRes
                 super.onUploadError(error, args);
                 UploadDialogBase.this.getOkButton().setEnabled(true);
                 uploadPanel.reset();
-            }
-
-            @Override
-            protected void onUploadComplete(R serverUploadResponse) {
-                UploadDialogBase.this.hide(false);
-                if (UploadDialogBase.this.uploadReciver != null) {
-                    UploadDialogBase.this.uploadReciver.onUploadComplete(serverUploadResponse);
-                } else {
-                    if (CommonsStringUtils.isStringSet(serverUploadResponse.message().getStringView())) {
-                        MessageDialog.info(i18n.tr("Upload Complete"), serverUploadResponse.message().getStringView());
-                    }
-                }
             }
 
             @Override

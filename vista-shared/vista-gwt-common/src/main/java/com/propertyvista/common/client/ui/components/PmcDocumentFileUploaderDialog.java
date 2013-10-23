@@ -21,6 +21,7 @@ import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
 import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.gwt.client.upload.UploadReceiver;
 import com.pyx4j.gwt.client.upload.UploadPanel;
 import com.pyx4j.gwt.rpc.upload.UploadService;
 import com.pyx4j.gwt.shared.DownloadFormat;
@@ -40,11 +41,17 @@ public abstract class PmcDocumentFileUploaderDialog extends Composite implements
 
     private final Dialog dialog;
 
-    @SuppressWarnings("unchecked")
     public PmcDocumentFileUploaderDialog(UploadService<IEntity, PmcDocumentFile> uploadService, Collection<DownloadFormat> supportedFormats) {
         dialog = new Dialog(i18n.tr("Upload Document"), this, null);
 
-        uploadPanel = new UploadPanel<IEntity, PmcDocumentFile>(uploadService) {
+        uploadPanel = new UploadPanel<IEntity, PmcDocumentFile>(uploadService, new UploadReceiver<PmcDocumentFile>() {
+
+            @Override
+            public void onUploadComplete(PmcDocumentFile result) {
+                dialog.hide(false);
+                PmcDocumentFileUploaderDialog.this.onUploadComplete(result);
+            }
+        }) {
             @Override
             protected void onUploadSubmit() {
                 dialog.getOkButton().setEnabled(false);
@@ -55,12 +62,6 @@ public abstract class PmcDocumentFileUploaderDialog extends Composite implements
                 super.onUploadError(error, args);
                 dialog.getOkButton().setEnabled(true);
                 uploadPanel.reset();
-            }
-
-            @Override
-            protected void onUploadComplete(PmcDocumentFile serverUploadResponse) {
-                dialog.hide(false);
-                PmcDocumentFileUploaderDialog.this.onUploadComplete(serverUploadResponse);
             }
 
         };

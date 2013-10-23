@@ -19,6 +19,7 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.gwt.client.upload.UploadPanel;
+import com.pyx4j.gwt.client.upload.UploadReceiver;
 import com.pyx4j.gwt.rpc.upload.UploadService;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.dialog.Dialog;
@@ -41,7 +42,15 @@ public abstract class ApplicationDocumentUploaderDialog extends VerticalPanel im
         dialog = new Dialog(title, this, null);
 
         uploadPanel = new UploadPanel<IEntity, ApplicationDocumentFile>(
-                GWT.<UploadService<IEntity, ApplicationDocumentFile>> create(ApplicationDocumentUploadService.class)) {
+                GWT.<UploadService<IEntity, ApplicationDocumentFile>> create(ApplicationDocumentUploadService.class),
+                new UploadReceiver<ApplicationDocumentFile>() {
+
+                    @Override
+                    public void onUploadComplete(ApplicationDocumentFile result) {
+                        dialog.hide(false);
+                        ApplicationDocumentUploaderDialog.this.onUploadComplete(result);
+                    }
+                }) {
 
             @Override
             protected void onUploadSubmit() {
@@ -53,12 +62,6 @@ public abstract class ApplicationDocumentUploaderDialog extends VerticalPanel im
                 super.onUploadError(error, args);
                 dialog.getOkButton().setEnabled(true);
                 uploadPanel.reset();
-            }
-
-            @Override
-            protected void onUploadComplete(ApplicationDocumentFile serverUploadResponse) {
-                dialog.hide(false);
-                ApplicationDocumentUploaderDialog.this.onUploadComplete(serverUploadResponse);
             }
 
             @Override

@@ -25,7 +25,7 @@ import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.entity.shared.IFile;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
-import com.pyx4j.gwt.client.upload.FileUploadReciver;
+import com.pyx4j.gwt.client.upload.UploadReceiver;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.Button;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
@@ -163,7 +163,7 @@ public class EncryptedStorageKeyForm extends CEntityDecoratableForm<EncryptedSto
     }
 
     private void upload() {
-        FileUploadReciver<IFile> uploadReciver = new FileUploadReciver<IFile>() {
+        UploadReceiver<IFile> uploadReciver = new UploadReceiver<IFile>() {
 
             @Override
             public void onUploadComplete(IFile uploadResponse) {

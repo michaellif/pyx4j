@@ -18,6 +18,7 @@ import com.google.gwt.dom.client.Style;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
 import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.gwt.client.upload.UploadReceiver;
 import com.pyx4j.gwt.client.upload.UploadPanel;
 import com.pyx4j.gwt.rpc.upload.UploadService;
 import com.pyx4j.i18n.shared.I18n;
@@ -25,6 +26,8 @@ import com.pyx4j.widgets.client.dialog.Dialog;
 import com.pyx4j.widgets.client.dialog.OkCancelOption;
 import com.pyx4j.widgets.client.dialog.OkOptionText;
 
+import com.propertyvista.common.client.ui.components.MediaUtils;
+import com.propertyvista.crm.client.ui.components.cms.SiteImageResourceProvider;
 import com.propertyvista.crm.rpc.services.MediaUploadService;
 import com.propertyvista.crm.rpc.services.admin.SiteImageResourceUploadService;
 import com.propertyvista.domain.site.SiteImageResource;
@@ -42,7 +45,15 @@ public abstract class SiteImageUploadDialog extends VerticalPanel implements OkC
     public SiteImageUploadDialog() {
         dialog = new Dialog(i18n.tr("Upload Image File"), this, null);
 
-        uploadPanel = new UploadPanel<IEntity, SiteImageResource>((UploadService<IEntity, SiteImageResource>) GWT.create(SiteImageResourceUploadService.class)) {
+        uploadPanel = new UploadPanel<IEntity, SiteImageResource>((UploadService<IEntity, SiteImageResource>) GWT.create(SiteImageResourceUploadService.class),
+                new UploadReceiver<SiteImageResource>() {
+
+                    @Override
+                    public void onUploadComplete(SiteImageResource result) {
+                        dialog.hide(false);
+                        SiteImageUploadDialog.this.onUploadComplete(result);
+                    }
+                }) {
 
             @Override
             protected void onUploadSubmit() {
@@ -54,12 +65,6 @@ public abstract class SiteImageUploadDialog extends VerticalPanel implements OkC
                 super.onUploadError(error, args);
                 dialog.getOkButton().setEnabled(true);
                 uploadPanel.reset();
-            }
-
-            @Override
-            protected void onUploadComplete(SiteImageResource serverUploadResponse) {
-                dialog.hide(false);
-                SiteImageUploadDialog.this.onUploadComplete(serverUploadResponse);
             }
 
         };

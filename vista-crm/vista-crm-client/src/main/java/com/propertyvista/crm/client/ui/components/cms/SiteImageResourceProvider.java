@@ -30,6 +30,7 @@ import com.google.gwt.user.client.ui.Label;
 import com.pyx4j.entity.rpc.EntitySearchResult;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.criterion.EntityListCriteria;
+import com.pyx4j.gwt.client.upload.UploadReceiver;
 import com.pyx4j.gwt.client.upload.UploadPanel;
 import com.pyx4j.gwt.rpc.upload.UploadService;
 import com.pyx4j.i18n.shared.I18n;
@@ -40,8 +41,10 @@ import com.pyx4j.widgets.client.richtext.ImageGallery;
 import com.pyx4j.widgets.client.richtext.RichTextImageProvider;
 
 import com.propertyvista.common.client.ui.components.MediaUtils;
+import com.propertyvista.common.client.ui.components.PmcDocumentFileUploaderDialog;
 import com.propertyvista.crm.rpc.services.admin.SiteImageResourceCrudService;
 import com.propertyvista.crm.rpc.services.admin.SiteImageResourceUploadService;
+import com.propertyvista.domain.pmc.info.PmcDocumentFile;
 import com.propertyvista.domain.site.SiteImageResource;
 
 public class SiteImageResourceProvider extends Dialog implements CloseOption, RichTextImageProvider {
@@ -105,7 +108,19 @@ public class SiteImageResourceProvider extends Dialog implements CloseOption, Ri
             }
         };
 
-        uploadPanel = new UploadPanel<IEntity, SiteImageResource>((UploadService<IEntity, SiteImageResource>) GWT.create(SiteImageResourceUploadService.class)) {
+        uploadPanel = new UploadPanel<IEntity, SiteImageResource>((UploadService<IEntity, SiteImageResource>) GWT.create(SiteImageResourceUploadService.class),
+                new UploadReceiver<SiteImageResource>() {
+
+                    @Override
+                    public void onUploadComplete(SiteImageResource result) {
+                        String url = MediaUtils.createSiteImageResourceUrl(result);
+                        imageResourceMap.put(url, result);
+                        gallery.addImage(url, result.fileName().getStringView());
+
+                        SiteImageResourceProvider.this.getCloseButton().setEnabled(true);
+                        submitButton.setEnabled(true);
+                    }
+                }) {
             @Override
             protected void onUploadSubmit() {
                 SiteImageResourceProvider.this.getCloseButton().setEnabled(false);
@@ -120,15 +135,6 @@ public class SiteImageResourceProvider extends Dialog implements CloseOption, Ri
                 uploadPanel.reset();
             }
 
-            @Override
-            protected void onUploadComplete(SiteImageResource serverUploadResponse) {
-                String url = MediaUtils.createSiteImageResourceUrl(serverUploadResponse);
-                imageResourceMap.put(url, serverUploadResponse);
-                gallery.addImage(url, serverUploadResponse.fileName().getStringView());
-
-                SiteImageResourceProvider.this.getCloseButton().setEnabled(true);
-                submitButton.setEnabled(true);
-            }
         };
 
         submitButton = new Button(i18n.tr("Submit"));
