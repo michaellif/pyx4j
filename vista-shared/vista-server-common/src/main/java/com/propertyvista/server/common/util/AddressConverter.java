@@ -19,6 +19,7 @@ import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.domain.contact.AddressSimple;
 import com.propertyvista.domain.contact.AddressStructured;
+import com.propertyvista.domain.contact.AddressStructured.StreetType;
 
 public class AddressConverter {
 
@@ -49,7 +50,7 @@ public class AddressConverter {
                 .append(val(dbo.streetName()));
             
             String streetType = valenum(dbo.streetType());
-            if (!"".equals(streetType)) {
+            if (!"".equals(streetType) && dbo.streetType().getValue() != StreetType.other) {
                 address.append(' ').append(streetType);
             }
             String streetDirection = valenum(dbo.streetDirection());
