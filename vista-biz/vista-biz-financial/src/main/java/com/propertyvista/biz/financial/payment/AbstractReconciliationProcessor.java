@@ -50,7 +50,7 @@ abstract class AbstractReconciliationProcessor {
 
     protected final ExecutionMonitor executionMonitor;
 
-    private final FundsTransferType fundsTransferType;
+    protected final FundsTransferType fundsTransferType;
 
     protected final Pmc pmc;
 
@@ -221,18 +221,18 @@ abstract class AbstractReconciliationProcessor {
         switch (debitRecord.reconciliationStatus().getValue()) {
         case PROCESSED:
             if (padDebitRecord.processingStatus().getValue() != PadDebitRecordProcessingStatus.ReconciliationReceived) {
-                throw new Error("Payment PAD transaction '" + padDebitRecord.getStringView() + "' was not attached to AggregatedTransfer");
+                throw new Error("Payment " + fundsTransferType + " transaction '" + padDebitRecord.getStringView() + "' was not attached to AggregatedTransfer");
             }
             if (padDebitRecord.processed().getValue(Boolean.FALSE)) {
-                throw new Error("Payment PAD transaction '" + padDebitRecord.getStringView() + "' already received");
+                throw new Error("Payment " + fundsTransferType + " transaction '" + padDebitRecord.getStringView() + "' already received");
             }
             break;
         case REJECTED:
             if (padDebitRecord.processingStatus().getValue() != PadDebitRecordProcessingStatus.ReconciliationReceived) {
-                throw new Error("Payment PAD transaction '" + padDebitRecord.getStringView() + "' was not attached to AggregatedTransfer");
+                throw new Error("Payment " + fundsTransferType + " transaction '" + padDebitRecord.getStringView() + "' was not attached to AggregatedTransfer");
             }
             if (padDebitRecord.processed().getValue(Boolean.FALSE)) {
-                throw new Error("Payment PAD transaction '" + padDebitRecord.getStringView() + "' already received");
+                throw new Error("Payment " + fundsTransferType + " transaction '" + padDebitRecord.getStringView() + "' already received");
             }
             break;
         case RETURNED:
@@ -268,15 +268,18 @@ abstract class AbstractReconciliationProcessor {
             public PadDebitRecord call() throws Exception {
                 EntityQueryCriteria<PadDebitRecord> criteria = EntityQueryCriteria.create(PadDebitRecord.class);
                 criteria.eq(criteria.proto().transactionId(), debitRecord.transactionId());
+                criteria.eq(criteria.proto().padBatch().padFile().fundsTransferType(), fundsTransferType);
                 criteria.ne(criteria.proto().processingStatus(), PadDebitRecordProcessingStatus.AcknowledgeReject);
                 criteria.eq(criteria.proto().padBatch().pmc(), pmc);
                 PadDebitRecord padDebitRecord = Persistence.service().retrieve(criteria);
-                retrieveOperationsPadDebitRecordDetails(padDebitRecord);
+                if (padDebitRecord != null) {
+                    retrieveOperationsPadDebitRecordDetails(padDebitRecord);
+                }
                 return padDebitRecord;
             }
         });
         if (padDebitRecord == null) {
-            throw new Error("Payment PAD transaction '" + debitRecord.transactionId().getValue() + "' not found");
+            throw new Error("Payment " + fundsTransferType + " transaction '" + debitRecord.transactionId().getValue() + "' not found");
         }
 
         return padDebitRecord;
@@ -296,7 +299,7 @@ abstract class AbstractReconciliationProcessor {
         paymentRecord.lastStatusChangeDate().setValue(new LogicalDate(SystemDateManager.getDate()));
         paymentRecord.finalizeDate().setValue(new LogicalDate(SystemDateManager.getDate()));
         Persistence.service().merge(paymentRecord);
-        log.info("Payment {} {} Cleared", paymentRecord.id().getValue(), paymentRecord.amount().getValue());
+        log.info("Payment {} {} {} Cleared", fundsTransferType, paymentRecord.id().getValue(), paymentRecord.amount().getValue());
     }
 
 }

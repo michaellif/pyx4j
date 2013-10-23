@@ -21,6 +21,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.pyx4j.commons.SimpleMessageFormat;
+import com.pyx4j.commons.Validate;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
 
@@ -29,6 +30,7 @@ import com.propertyvista.domain.financial.AggregatedTransfer;
 import com.propertyvista.domain.financial.FundsTransferType;
 import com.propertyvista.domain.financial.PaymentRecord;
 import com.propertyvista.domain.financial.PaymentRecordProcessing;
+import com.propertyvista.domain.payment.PaymentType;
 import com.propertyvista.operations.domain.payment.pad.PadDebitRecord;
 import com.propertyvista.operations.domain.payment.pad.PadDebitRecordProcessingStatus;
 import com.propertyvista.operations.domain.payment.pad.PadDebitRecordTransaction;
@@ -146,6 +148,7 @@ class DirectDebitReconciliationProcessor extends AbstractReconciliationProcessor
     protected void processReconciliationDebitRecord(PadReconciliationDebitRecord debitRecord, PadDebitRecord padDebitRecord) {
         for (PadDebitRecordTransaction transactionRecord : padDebitRecord.transactionRecords()) {
             PaymentRecord paymentRecord = Persistence.service().retrieve(PaymentRecord.class, transactionRecord.paymentRecordKey().getValue());
+            Validate.isEquals(PaymentType.DirectBanking, paymentRecord.paymentMethod().type().getValue(), "PaymentRecord {0}", paymentRecord);
 
             switch (debitRecord.reconciliationStatus().getValue()) {
             case PROCESSED:
@@ -158,7 +161,8 @@ class DirectDebitReconciliationProcessor extends AbstractReconciliationProcessor
                 rejectPaymentRecord(paymentRecord);
                 break;
             default:
-                break;
+                throw new Error("Unexpected payment record reconciliation status " + paymentRecord.getPrimaryKey() + " "
+                        + debitRecord.reconciliationStatus().getValue());
             }
         }
     }
@@ -175,7 +179,7 @@ class DirectDebitReconciliationProcessor extends AbstractReconciliationProcessor
         processing.paymentRecord().set(paymentRecord);
         Persistence.service().persist(processing);
 
-        log.info("Payment {} {} Queued", paymentRecord.id().getValue(), paymentRecord.amount().getValue());
+        log.info("Payment {} {} {} Queued", fundsTransferType, paymentRecord.id().getValue(), paymentRecord.amount().getValue());
     }
 
 }

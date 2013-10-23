@@ -154,14 +154,13 @@ class PadReconciliationProcessor extends AbstractReconciliationProcessor {
         paymentRecord.transactionErrorMessage().setValue(debitRecord.reasonCode().getValue() + " " + debitRecord.reasonText().getValue());
 
         Persistence.service().merge(paymentRecord);
-        log.info("Payment {} {} Rejected", paymentRecord.id().getValue(), paymentRecord.amount().getValue());
 
         try {
             ServerSideFactory.create(ARFacade.class).rejectPayment(paymentRecord, true);
         } catch (ARException e) {
             throw new Error("Payment can't be rejected", e);
         }
-
+        log.info("Payment {} {} {} Rejected", fundsTransferType, paymentRecord.id().getValue(), paymentRecord.amount().getValue());
     }
 
     private void reconciliationReturnedPayment(PadReconciliationDebitRecord debitRecord, PaymentRecord paymentRecord) {
@@ -184,7 +183,7 @@ class PadReconciliationProcessor extends AbstractReconciliationProcessor {
             throw new Error("Payment can't be returned", e);
         }
 
-        log.info("Payment {} {} Returned", paymentRecord.id().getValue(), paymentRecord.amount().getValue());
+        log.info("Payment {} {} {} Returned", fundsTransferType, paymentRecord.id().getValue(), paymentRecord.amount().getValue());
     }
 
 }
