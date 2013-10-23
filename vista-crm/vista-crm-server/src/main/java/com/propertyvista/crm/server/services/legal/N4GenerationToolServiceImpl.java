@@ -18,27 +18,35 @@ import java.util.Vector;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
+import com.pyx4j.commons.UserRuntimeException;
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.server.Persistence;
-import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
+import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.gwt.server.deferred.DeferredProcessRegistry;
+import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.biz.legal.N4ManagementFacade;
+import com.propertyvista.biz.policy.PolicyFacade;
 import com.propertyvista.config.ThreadPoolNames;
 import com.propertyvista.crm.rpc.dto.legal.n4.LegalNoticeCandidateDTO;
 import com.propertyvista.crm.rpc.dto.legal.n4.N4GenerationQueryDTO;
 import com.propertyvista.crm.rpc.dto.legal.n4.N4GenerationSettingsDTO;
 import com.propertyvista.crm.rpc.services.legal.N4GenerationToolService;
 import com.propertyvista.domain.legal.LegalNoticeCandidate;
-import com.propertyvista.domain.legal.N4LegalLetter;
+import com.propertyvista.domain.policy.framework.OrganizationPoliciesNode;
+import com.propertyvista.domain.policy.policies.N4Policy;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.server.common.util.AddressConverter;
 import com.propertyvista.server.common.util.AddressRetriever;
 
 public class N4GenerationToolServiceImpl implements N4GenerationToolService {
 
+    private static final I18n i18n = I18n.get(N4GenerationToolServiceImpl.class);
+
     @Override
     public void getItems(AsyncCallback<Vector<LegalNoticeCandidateDTO>> callback, N4GenerationSettingsDTO settings) {
+        assertN4PolicyIsSet();
+
         List<LegalNoticeCandidate> n4Candidates = ServerSideFactory.create(N4ManagementFacade.class).getN4Candidates(settings.minAmountOwed().getValue(),
                 settings.buildings());
 
@@ -69,14 +77,17 @@ public class N4GenerationToolServiceImpl implements N4GenerationToolService {
         dto.leaseIdString().setValue(lease.leaseId().getValue());
         dto.moveIn().setValue(lease.expectedMoveIn().getValue());
         dto.moveOut().setValue(lease.expectedMoveOut().getValue());
-        dto.n4Issued().setValue(pastN4Count(lease));
+        dto.n4Issued().setValue(N4Utils.pastN4sCount(lease));
         return dto;
     }
 
-    private int pastN4Count(Lease leaseId) {
-        EntityQueryCriteria<N4LegalLetter> criteria = EntityQueryCriteria.create(N4LegalLetter.class);
-        criteria.eq(criteria.proto().lease(), leaseId);
-        return Persistence.service().count(criteria);
+    private void assertN4PolicyIsSet() {
+        N4Policy policy = ServerSideFactory.create(PolicyFacade.class).obtainEffectivePolicy(EntityFactory.create(OrganizationPoliciesNode.class),
+                N4Policy.class);
+
+        if (policy.relevantArCodes().isEmpty()) {
+            throw new UserRuntimeException("N4 Policy has no AR Code settings. Please set up AR Codes in N4 policy!");
+        }
     }
 
 }

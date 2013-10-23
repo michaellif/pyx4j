@@ -33,24 +33,20 @@ import com.propertyvista.crm.rpc.dto.legal.n4.N4DownloadSettingsDTO;
 import com.propertyvista.crm.rpc.dto.legal.n4.N4GenerationDTO;
 import com.propertyvista.crm.rpc.services.legal.N4DownloadToolService;
 import com.propertyvista.domain.legal.N4LegalLetter;
+import com.propertyvista.server.common.util.AddressRetriever;
 
 public class N4DownloadToolServiceImpl implements N4DownloadToolService {
 
     @Override
     public void getItems(AsyncCallback<Vector<LegalNoticeCandidateDTO>> callback, N4DownloadSettingsDTO settings) {
-        // TODO just add filter
         EntityQueryCriteria<N4LegalLetter> criteria = EntityQueryCriteria.create(N4LegalLetter.class);
+        criteria.eq(criteria.proto().generatedOn(), settings.selectedGeneration().generatedOn());
 
         List<N4LegalLetter> n4LegalLetters = Persistence.service().query(criteria);
         Vector<LegalNoticeCandidateDTO> legalNoticesDto = new Vector<LegalNoticeCandidateDTO>();
+
         for (N4LegalLetter n4LegalLetter : n4LegalLetters) {
-            LegalNoticeCandidateDTO legalNotice = EntityFactory.create(LegalNoticeCandidateDTO.class);
-
-            legalNotice.n4LetterId().set(n4LegalLetter.createIdentityStub());
-            legalNotice.leaseId().set(n4LegalLetter.lease().createIdentityStub());
-            legalNoticesDto.add(legalNotice);
-
-            // todo fill rest of the data
+            legalNoticesDto.add(makeLegalNoticeCandidateDTO(n4LegalLetter));
         }
 
         callback.onSuccess(legalNoticesDto);
@@ -89,5 +85,28 @@ public class N4DownloadToolServiceImpl implements N4DownloadToolService {
         callback.onSuccess(generations);
 
         IOUtils.closeQuietly(iterator);
+    }
+
+    private LegalNoticeCandidateDTO makeLegalNoticeCandidateDTO(N4LegalLetter n4LegalLetter) {
+        LegalNoticeCandidateDTO legalNotice = EntityFactory.create(LegalNoticeCandidateDTO.class);
+        legalNotice.n4LetterId().set(n4LegalLetter.createIdentityStub());
+        legalNotice.leaseId().set(n4LegalLetter.lease().createIdentityStub());
+
+        legalNotice.n4Issued().setValue(N4Utils.pastN4sCount(legalNotice.leaseId()));
+        legalNotice.amountOwed().setValue(n4LegalLetter.amountOwed().getValue());
+
+        Persistence.service().retrieve(n4LegalLetter.lease());
+        legalNotice.leaseIdString().setValue(n4LegalLetter.lease().leaseId().getValue());
+        legalNotice.moveIn().setValue(n4LegalLetter.lease().expectedMoveIn().getValue());
+        legalNotice.moveOut().setValue(n4LegalLetter.lease().expectedMoveOut().getValue());
+
+        Persistence.service().retrieve(n4LegalLetter.lease().unit());
+        legalNotice.unit().setValue(n4LegalLetter.lease().unit().info().number().getValue());
+        legalNotice.address().setValue(AddressRetriever.getUnitLegalAddress(n4LegalLetter.lease().unit()).getStringView());
+
+        Persistence.service().retrieve(n4LegalLetter.lease().unit().building());
+        legalNotice.building().setValue(n4LegalLetter.lease().unit().building().propertyCode().getValue());
+
+        return legalNotice;
     }
 }

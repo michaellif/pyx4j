@@ -165,4 +165,5 @@ public class ArrearsGadgetServiceImpl implements ArrearsGadgetService {
     private static void add(IPrimitive<BigDecimal> a, IPrimitive<BigDecimal> b) {
         a.setValue(a.getValue().add(b.getValue()));
     }
+
 }
