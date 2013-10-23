@@ -34,13 +34,13 @@ import com.pyx4j.gwt.server.deferred.AbstractDeferredProcess;
 
 import com.propertyvista.config.VistaDeployment;
 import com.propertyvista.domain.contact.AddressStructured;
-import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.tenant.access.PortalAccessSecutiryCodeReportType;
 import com.propertyvista.domain.tenant.access.TenantPortalAccessInformationPerLeaseDTO;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
 import com.propertyvista.domain.tenant.lease.Tenant;
 import com.propertyvista.dto.TenantPortalAccessInformationDTO;
+import com.propertyvista.server.common.util.AddressRetriever;
 
 public class ExportTenantsPortalSecretsDeferredProcess extends AbstractDeferredProcess {
 
@@ -111,8 +111,8 @@ public class ExportTenantsPortalSecretsDeferredProcess extends AbstractDeferredP
                     Persistence.service().retrieveMember(tenant.lease());
 
                     // Exclude Move Out
-                    if ((!tenant.lease().expectedMoveOut().isNull() && moveOutNextMonthCutOff.le(tenant.lease().expectedMoveOut().getValue()))//
-                            || (!tenant.lease().actualMoveOut().isNull() && moveOutNextMonthCutOff.le(tenant.lease().actualMoveOut().getValue()))) {
+                    if (moveOutNextMonthCutOff.le(tenant.lease().expectedMoveOut().getValue())
+                            || moveOutNextMonthCutOff.le(tenant.lease().actualMoveOut().getValue())) {
                         continue;
                     }
 
@@ -194,12 +194,14 @@ public class ExportTenantsPortalSecretsDeferredProcess extends AbstractDeferredP
     public static TenantPortalAccessInformationDTO convert(Tenant tenant) {
         TenantPortalAccessInformationDTO dto = EntityFactory.create(TenantPortalAccessInformationDTO.class);
         dto.leaseId().setValue(tenant.lease().leaseId().getValue());
-        dto.address().setValue(getAddressLine1(tenant.lease().unit().building()));
-        dto.cityZip().setValue(getCityZip(tenant.lease().unit().building()));
-        dto.city().setValue(tenant.lease().unit().building().info().address().city().getValue());
-        dto.postalCode().setValue(tenant.lease().unit().building().info().address().postalCode().getValue());
-        dto.province().setValue(tenant.lease().unit().building().info().address().province().getStringView());
-        dto.unit().setValue(tenant.lease().unit().info().number().getValue());
+
+        AddressStructured address = AddressRetriever.getLeaseLegalAddress(tenant.lease());
+        dto.address().setValue(getAddressLine1(address));
+        dto.cityZip().setValue(getCityZip(address));
+        dto.city().setValue(address.city().getValue());
+        dto.postalCode().setValue(address.postalCode().getValue());
+        dto.province().setValue(address.province().getStringView());
+        dto.unit().setValue(address.suiteNumber().getValue());
         dto.firstName().setValue(tenant.customer().person().name().firstName().getStringView());
         if (!tenant.customer().person().name().middleName().isNull()) {
             dto.middleName().setValue(tenant.customer().person().name().middleName().getStringView());
@@ -213,8 +215,7 @@ public class ExportTenantsPortalSecretsDeferredProcess extends AbstractDeferredP
         return dto;
     }
 
-    private static String getAddressLine1(Building building) {
-        AddressStructured address = building.info().address();
+    private static String getAddressLine1(AddressStructured address) {
         // This is fragment form AddressStructured @ToStringFormat
         return SimpleMessageFormat.format("{1} {2} {3}{4,choice,other#|null#|!null# {4}}{5,choice,null#|!null# {5}}", //
                 "", address.streetNumber(),//
@@ -224,11 +225,11 @@ public class ExportTenantsPortalSecretsDeferredProcess extends AbstractDeferredP
                 address.streetDirection());
     }
 
-    private static String getCityZip(Building building) {
+    private static String getCityZip(AddressStructured address) {
         return SimpleMessageFormat.format("{0,choice,null#|!null#{0}, }{1,choice,null#|!null# {1}}{2,choice,null#|!null# {2}}", //
-                building.info().address().city(),//
-                building.info().address().province().name(), //
-                building.info().address().postalCode());
+                address.city(),//
+                address.province().name(), //
+                address.postalCode());
     }
 
     @Override
