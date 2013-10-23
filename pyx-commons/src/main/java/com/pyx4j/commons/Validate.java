@@ -35,7 +35,7 @@ public class Validate {
     }
 
     static public void isEquals(Object expected, Object actual, String messageFormat, Object... arguments) {
-        if (EqualsHelper.equals(expected, actual)) {
+        if (!EqualsHelper.equals(expected, actual)) {
             throw new Error(SimpleMessageFormat.format("expected [{0}]\n actual: [{1}]\n", expected, actual)
                     + SimpleMessageFormat.format(messageFormat, arguments));
         }
