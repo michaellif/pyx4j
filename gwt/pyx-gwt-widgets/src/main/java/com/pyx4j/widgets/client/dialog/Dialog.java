@@ -141,8 +141,6 @@ public class Dialog implements ProvidesResize, IsWidget {
     public Dialog(String caption, DialogOptions options, IsWidget body) {
         super();
 
-        setDialogPixelWidth(500);
-
         popupPanel = new PopupPanel(false, true);
 
         popupPanel.getElement().getStyle().setProperty("zIndex", "20");
@@ -174,6 +172,8 @@ public class Dialog implements ProvidesResize, IsWidget {
                 layout();
             }
         });
+
+        setDialogPixelWidth(500);
 
     }
 
