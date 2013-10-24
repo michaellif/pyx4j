@@ -50,6 +50,8 @@ public enum VistaCrmBehavior implements Behavior {
 
     OrganizationFinancial,
 
+    AggregatedTransfer,
+
     OrganizationPolicy,
 
     Contacts,
