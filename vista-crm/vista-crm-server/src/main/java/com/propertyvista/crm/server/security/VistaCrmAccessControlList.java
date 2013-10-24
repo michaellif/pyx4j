@@ -118,6 +118,7 @@ import com.propertyvista.crm.rpc.services.legal.N4GenerationToolService;
 import com.propertyvista.crm.rpc.services.notes.NotesAndAttachmentsCrudService;
 import com.propertyvista.crm.rpc.services.organization.CrmUserService;
 import com.propertyvista.crm.rpc.services.organization.EmployeeCrudService;
+import com.propertyvista.crm.rpc.services.organization.EmployeeSignatureUploadService;
 import com.propertyvista.crm.rpc.services.organization.ManagedCrmUserService;
 import com.propertyvista.crm.rpc.services.organization.PortfolioCrudService;
 import com.propertyvista.crm.rpc.services.organization.SelectCrmRoleListService;
@@ -449,6 +450,8 @@ public class VistaCrmAccessControlList extends ServletContainerAclBuilder {
         grant(VistaBasicBehavior.CRM, new EntityPermission(Employee.class, EntityPermission.READ));
         grant(VistaCrmBehavior.Organization, new EntityPermission(Employee.class, EntityPermission.ALL));
         grant(VistaBasicBehavior.CRM, new IServiceExecutePermission(EmployeeCrudService.class));
+
+        grant(VistaBasicBehavior.CRM, new IServiceExecutePermission(EmployeeSignatureUploadService.class));
 
         grant(VistaBasicBehavior.CRM, new EntityPermission(Portfolio.class, EntityPermission.READ));
         grant(VistaCrmBehavior.Organization, new EntityPermission(Portfolio.class, EntityPermission.ALL));

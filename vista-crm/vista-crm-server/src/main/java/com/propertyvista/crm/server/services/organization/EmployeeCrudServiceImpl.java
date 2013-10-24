@@ -95,6 +95,8 @@ public class EmployeeCrudServiceImpl extends AbstractCrudServiceDtoImpl<Employee
             BuildingFolderUtil.stripExtraData(item.buildings());
             Persistence.service().retrieve(item.portfolios());
         }
+
+        Persistence.service().retrieve(to.signature());
     }
 
     @Override

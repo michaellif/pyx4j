@@ -42,6 +42,7 @@ import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.propertyvista.biz.financial.ar.ARFacade;
 import com.propertyvista.biz.policy.PolicyFacade;
 import com.propertyvista.domain.company.Employee;
+import com.propertyvista.domain.company.EmployeeSignature;
 import com.propertyvista.domain.financial.ARCode;
 import com.propertyvista.domain.financial.BillingAccount;
 import com.propertyvista.domain.financial.billing.InvoiceDebit;
@@ -55,6 +56,7 @@ import com.propertyvista.domain.policy.framework.OrganizationPoliciesNode;
 import com.propertyvista.domain.policy.policies.N4Policy;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.tenant.lease.Lease;
+import com.propertyvista.server.domain.EmployeeSignatureBlob;
 import com.propertyvista.server.domain.LegalLetterBlob;
 
 public class N4ManagementFacadeImpl implements N4ManagementFacade {
@@ -113,8 +115,12 @@ public class N4ManagementFacadeImpl implements N4ManagementFacade {
             n4LandLordsData.isLandlord().setValue(false);
             n4LandLordsData.signatureDate().setValue(new LogicalDate(SystemDateManager.getDate()));
 
-            // TODO fill signature from employees data
-            n4LandLordsData.signature();
+            EmployeeSignature signature = Persistence.service().retrieve(EmployeeSignature.class,
+                    n4LandLordsData.signingEmployee().signature().getPrimaryKey());
+            if (!n4LandLordsData.signingEmployee().signature().isNull()) {
+                EmployeeSignatureBlob signatureBlob = Persistence.service().retrieve(EmployeeSignatureBlob.class, signature.blobKey().getValue());
+                n4LandLordsData.signature().setValue(signatureBlob.data().getValue());
+            }
         }
 
         Date generationTime = SystemDateManager.getDate();

@@ -88,4 +88,8 @@ public interface Employee extends Person {
     @OrderBy(PrimaryKey.class)
     @Detached(level = AttachLevel.Detached)
     IList<Notification> notifications();
+
+    @Owned
+    @Detached
+    EmployeeSignature signature();
 }

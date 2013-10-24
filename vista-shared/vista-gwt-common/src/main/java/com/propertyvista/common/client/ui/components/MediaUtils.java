@@ -21,6 +21,7 @@ import com.pyx4j.security.shared.SecurityController;
 
 import com.propertyvista.common.client.ClientNavigUtils;
 import com.propertyvista.domain.MediaFile;
+import com.propertyvista.domain.company.EmployeeSignature;
 import com.propertyvista.domain.legal.LegalLetter;
 import com.propertyvista.domain.media.ApplicationDocumentFile;
 import com.propertyvista.domain.media.ThumbnailSize;
@@ -87,5 +88,10 @@ public class MediaUtils {
 
     public static String createCrmLogoUrl() {
         return ClientNavigUtils.getDeploymentBaseURL() + "/" + DeploymentConsts.crmLogo + DeploymentConsts.siteImageResourceServletMapping;
+    }
+
+    public static String createEmployeeSignatureUrl(EmployeeSignature employeeSignature) {
+        return GWT.getModuleBaseURL() + DeploymentConsts.employeeSignatureServletMapping + employeeSignature.id().getStringView() + "/"
+                + employeeSignature.fileName().getStringView();
     }
 }
