@@ -161,7 +161,7 @@ public class NImage<T extends IFile> extends NField<T, ImageSlider, CImage<T>, I
                     getCComponent().setValue(null);
                 }
             }));
-            mainPanel.add(new Button(i18n.tr("Upload From Computer"), new Command() {
+            mainPanel.add(new Button(i18n.tr("Choose Image"), new Command() {
 
                 @Override
                 public void execute() {
