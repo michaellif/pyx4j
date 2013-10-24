@@ -50,12 +50,12 @@ public class KijijiMapperUtils {
     }
 
     public static String getSiteImageResourceUrl(SiteImageResource resource) {
-        return getPortalHomeUrl() + resource.id().getStringView() + "/" + resource.fileName().getStringView()
+        return getPortalHomeUrl() + "/" + resource.id().toString() + "/" + resource.fileName().getStringView()
                 + DeploymentConsts.siteImageResourceServletMapping;
     }
 
     public static String getMediaImgUrl(long mediaId, ThumbnailSize size) {
-        return getPortalHomeUrl() + DeploymentConsts.mediaImagesServletMapping + mediaId + "/" + size.name() + "." + ImageConsts.THUMBNAIL_TYPE;
+        return getPortalHomeUrl() + "/" + DeploymentConsts.mediaImagesServletMapping + mediaId + "/" + size.name() + "." + ImageConsts.THUMBNAIL_TYPE;
     }
 
     public static String getPortalHomeUrl() {
