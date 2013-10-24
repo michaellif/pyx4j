@@ -16,13 +16,15 @@ package com.propertyvista.crm.client.ui.crud.lease.common.term;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.google.gwt.user.client.Command;
+
 import com.pyx4j.forms.client.ui.folder.BoxFolderItemDecorator;
 import com.pyx4j.forms.client.ui.folder.IFolderItemDecorator;
 import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.widgets.client.dialog.MessageDialog;
 
 import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
 import com.propertyvista.crm.client.ui.components.boxes.CustomerSelectorDialog;
-import com.propertyvista.crm.client.ui.crud.lease.common.YesNoCancelDialog;
 import com.propertyvista.domain.tenant.Customer;
 import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
 
@@ -56,9 +58,9 @@ public abstract class LeaseTermParticipantFolder<E extends LeaseTermParticipant<
 
     @Override
     protected void addItem() {
-        new YesNoCancelDialog(getAddItemDialogCaption(), getAddItemDialogBody()) {
+        MessageDialog.confirm(getAddItemDialogCaption(), getAddItemDialogBody(), new Command() {
             @Override
-            public boolean onClickYes() {
+            public void execute() {
                 new CustomerSelectorDialog(retrieveExistingCustomers()) {
                     @Override
                     public boolean onClickOk() {
@@ -70,15 +72,13 @@ public abstract class LeaseTermParticipantFolder<E extends LeaseTermParticipant<
                         }
                     }
                 }.show();
-                return true;
             }
-
+        }, new Command() {
             @Override
-            public boolean onClickNo() {
+            public void execute() {
                 addParticipant();
-                return true;
             }
-        }.show();
+        }, null);
     }
 
     protected abstract String getAddItemDialogCaption();
