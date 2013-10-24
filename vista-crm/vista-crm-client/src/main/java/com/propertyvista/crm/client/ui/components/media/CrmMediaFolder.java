@@ -15,12 +15,8 @@ package com.propertyvista.crm.client.ui.components.media;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Style;
-import com.google.gwt.event.dom.client.ClickEvent;
-import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
-import com.google.gwt.user.client.Command;
-import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Image;
@@ -29,20 +25,19 @@ import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
-import com.pyx4j.commons.ValidationUtils;
 import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.forms.client.images.EntityFolderImages;
 import com.pyx4j.forms.client.ui.CComboBox;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CEntityForm;
-import com.pyx4j.forms.client.ui.CField;
 import com.pyx4j.forms.client.ui.CImage;
 import com.pyx4j.forms.client.ui.CTextField;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
+import com.pyx4j.gwt.rpc.upload.UploadService;
 import com.pyx4j.gwt.shared.FileURLBuilder;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.widgets.client.dialog.MessageDialog;
 
 import com.propertyvista.common.client.resources.VistaImages;
 import com.propertyvista.common.client.ui.components.MediaUtils;
@@ -51,7 +46,8 @@ import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
 import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
 import com.propertyvista.common.client.ui.validators.YouTubeVideoIdFormat;
 import com.propertyvista.common.client.ui.validators.YouTubeVideoIdValidator;
-import com.propertyvista.crm.rpc.services.MediaUploadService;
+import com.propertyvista.crm.rpc.services.MediaUploadBuildingService;
+import com.propertyvista.crm.rpc.services.MediaUploadFloorplanService;
 import com.propertyvista.domain.MediaFile;
 import com.propertyvista.domain.PublicVisibilityType;
 import com.propertyvista.domain.media.Media;
@@ -59,7 +55,6 @@ import com.propertyvista.domain.media.ThumbnailSize;
 import com.propertyvista.portal.rpc.DeploymentConsts;
 import com.propertyvista.portal.rpc.portal.ImageConsts;
 import com.propertyvista.portal.rpc.portal.ImageConsts.ImageTarget;
-import com.propertyvista.portal.rpc.portal.web.services.ResidentPictureUploadService;
 
 public class CrmMediaFolder extends VistaBoxFolder<Media> {
 
@@ -97,7 +92,6 @@ public class CrmMediaFolder extends VistaBoxFolder<Media> {
             super(Media.class);
         }
 
-        @SuppressWarnings("rawtypes")
         @Override
         public IsWidget createContent() {
             TwoColumnFlexFormPanel main = new TwoColumnFlexFormPanel();
@@ -112,7 +106,16 @@ public class CrmMediaFolder extends VistaBoxFolder<Media> {
 
             main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().url()), 15).build());
 
-            CImage<MediaFile> imageHolder = new CImage<MediaFile>(GWT.<MediaUploadService> create(MediaUploadService.class)) {
+            UploadService<IEntity, MediaFile> service = null;
+            switch (imageTarget) {
+            case Building:
+                service = GWT.<MediaUploadBuildingService> create(MediaUploadBuildingService.class);
+                break;
+            case Floorplan:
+                service = GWT.<MediaUploadFloorplanService> create(MediaUploadFloorplanService.class);
+                break;
+            }
+            CImage<MediaFile> imageHolder = new CImage<MediaFile>(service) {
                 @Override
                 protected EntityFolderImages getFolderIcons() {
                     return VistaImages.INSTANCE;
@@ -211,6 +214,5 @@ public class CrmMediaFolder extends VistaBoxFolder<Media> {
                 }
             }
         }
-
     }
 }
