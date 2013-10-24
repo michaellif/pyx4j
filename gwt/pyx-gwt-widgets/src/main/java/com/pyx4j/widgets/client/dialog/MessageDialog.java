@@ -101,6 +101,34 @@ public class MessageDialog extends Dialog {
         });
     }
 
+    public static void confirm(String title, String text, final Command onConfirmed, final Command onDeclined, final Command onCanceled) {
+        show(title, text, Type.Confirm, new YesNoCancelOption() {
+            @Override
+            public boolean onClickYes() {
+                if (onConfirmed != null) {
+                    onConfirmed.execute();
+                }
+                return true;
+            }
+
+            @Override
+            public boolean onClickNo() {
+                if (onDeclined != null) {
+                    onDeclined.execute();
+                }
+                return true;
+            }
+
+            @Override
+            public boolean onClickCancel() {
+                if (onCanceled != null) {
+                    onCanceled.execute();
+                }
+                return true;
+            }
+        });
+    }
+
     public static void confirm(String title, String text, final ConfirmDecline confirmDecline) {
         show(title, text, Type.Confirm, new YesNoOption() {
             @Override
