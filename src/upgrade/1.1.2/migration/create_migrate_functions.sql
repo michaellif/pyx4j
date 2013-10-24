@@ -34,6 +34,7 @@ BEGIN
         ALTER TABLE preauthorized_payment DROP CONSTRAINT preauthorized_payment_payment_method_fk;
         ALTER TABLE preauthorized_payment DROP CONSTRAINT preauthorized_payment_tenant_fk;
         ALTER TABLE preauthorized_payment_covered_item DROP CONSTRAINT preauthorized_payment_covered_item_billable_item_fk;
+        ALTER TABLE site_descriptor DROP CONSTRAINT site_descriptor_resident_portal_settings_fk;
         
 
 
@@ -46,7 +47,7 @@ BEGIN
         ALTER TABLE insurance_tenant_sure_transaction DROP CONSTRAINT insurance_tenant_sure_transaction_pk;
         ALTER TABLE preauthorized_payment DROP CONSTRAINT preauthorized_payment_pk;
         ALTER TABLE preauthorized_payment_covered_item DROP CONSTRAINT preauthorized_payment_covered_item_pk;
-
+        
         
         
         -- check constraints
@@ -135,7 +136,27 @@ BEGIN
         ALTER TABLE billing_billing_cycle RENAME COLUMN actual_pad_generation_date TO actual_autopay_execution_date;
         
         
+        -- building
         
+        ALTER TABLE building RENAME COLUMN info_address_location_lat TO info_location_lat;
+        ALTER TABLE building RENAME COLUMN info_address_location_lng TO info_location_lng;
+        
+       
+        -- file table renamed to notes_attachment
+        
+        ALTER TABLE file RENAME TO note_attachment;
+        
+        -- general_insurance_policy_blob
+        
+        CREATE TABLE general_insurance_policy_blob
+        (
+                id                                      BIGINT                  NOT NULL,
+                content_type                            VARCHAR(500),
+                content                                 BYTEA,
+                        CONSTRAINT general_insurance_policy_blob_pk PRIMARY KEY(id)
+        );
+        
+        ALTER TABLE general_insurance_policy_blob OWNER TO vista;
         
         -- ilsbatch
         
@@ -244,20 +265,6 @@ BEGIN
         
         ALTER TABLE ilsvendor_config OWNER TO vista;
         
-        /*
-        -- initialization_data
-        
-        CREATE TABLE initialization_data
-        (
-                id                                      BIGINT                  NOT NULL,
-                        CONSTRAINT initialization_data_pk PRIMARY KEY(id)
-        );
-        
-        
-        
-        ALTER TABLE initialization_data OWNER TO vista;
-        
-        */
         
         -- insurance_certificate
         
@@ -447,6 +454,11 @@ BEGIN
         ALTER TABLE preauthorized_payment_covered_item RENAME TO autopay_agreement_covered_item;
         
         
+        -- site_descriptor
+        
+        ALTER TABLE site_descriptor ADD COLUMN resident_portal_enabled BOOLEAN;
+        
+        
         /**
         ***     =====================================================================================================
         ***
@@ -504,6 +516,10 @@ BEGIN
         EXECUTE 'UPDATE '||v_schema_name||'.insurance_policy '
                 ||'SET id_discriminator = ''TenantSureInsurancePolicy'' '
                 ||'WHERE id_discriminator = ''InsuranceTenantSure'' ';
+                
+         EXECUTE 'UPDATE '||v_schema_name||'.insurance_policy '
+                ||'SET id_discriminator = ''GeneralInsurancePolicy'' '
+                ||'WHERE id_discriminator = ''InsuranceGeneric'' ';
         
       
         -- notification
@@ -511,6 +527,30 @@ BEGIN
         EXECUTE 'UPDATE '||v_schema_name||'.notification '
                 ||'SET  tp = ''AutoPayReviewRequired'' '
                 ||'WHERE tp = ''PreauthorizedPaymentSuspension'' ';
+                
+                
+        -- site_descriptor
+        
+        EXECUTE 'UPDATE '||v_schema_name||'.site_descriptor AS s '
+                ||'SET  resident_portal_enabled = t.enabled '
+                ||'FROM (SELECT a.id, b.enabled '
+                ||'     FROM    '||v_schema_name||'.site_descriptor a '
+                ||'     JOIN    '||v_schema_name||'.resident_portal_settings b ON (b.id = a.resident_portal_settings)) AS t '
+                ||'WHERE  s.id = t.id '; 
+                
+                
+        -- tenant_sure_insurance_policy_report
+        
+        EXECUTE 'UPDATE '||v_schema_name||'.tenant_sure_insurance_policy_report '
+                ||'SET insurance_discriminator = ''TenantSureInsurancePolicy'' '
+                ||'WHERE insurance_discriminator = ''InsuranceTenantSure'' ';
+                
+                
+        -- tenant_sure_transaction
+        
+         EXECUTE 'UPDATE '||v_schema_name||'.tenant_sure_transaction '
+                ||'SET insurance_discriminator = ''TenantSureInsurancePolicy'' '
+                ||'WHERE insurance_discriminator = ''InsuranceTenantSure'' ';
         
         
         /**
@@ -521,6 +561,8 @@ BEGIN
         ***     ==========================================================================================================
         **/
         
+        
+        SET CONSTRAINTS ALL IMMEDIATE ;
         
         -- autopay_agreement
         
@@ -535,6 +577,18 @@ BEGIN
         
         ALTER TABLE customer_picture DROP COLUMN order_id;
         
+        -- customer_screening_income_info
+        
+        ALTER TABLE customer_screening_income_info      DROP COLUMN address_location_lat,
+                                                        DROP COLUMN address_location_lng;
+                                                        
+        -- customer_screening_v
+        
+        ALTER TABLE customer_screening_v        DROP COLUMN current_address_location_lat,
+                                                DROP COLUMN current_address_location_lng,
+                                                DROP COLUMN previous_address_location_lat,
+                                                DROP COLUMN previous_address_location_lng;
+                                                
         
         -- insurance_policy
         
@@ -580,6 +634,28 @@ BEGIN
         -- pricing
         
         DROP TABLE pricing;
+        
+        
+        -- resident_portal_settings$proxy_whitelist
+        
+        DROP TABLE resident_portal_settings$proxy_whitelist;
+        
+        
+        -- resident_portal_settings$custom_html
+        
+        DROP TABLE resident_portal_settings$custom_html;
+            
+        
+        
+        -- resident_portal_settings
+        
+        DROP TABLE resident_portal_settings;
+        
+        
+        -- site_descriptor
+        
+                
+        ALTER TABLE site_descriptor DROP COLUMN resident_portal_settings;
         
         
         -- tenant_insurance_policy
@@ -682,8 +758,8 @@ BEGIN
         ALTER TABLE ilsprofile_floorplan ADD CONSTRAINT ilsprofile_floorplan_priority_e_ck CHECK ((priority) IN ('Disabled', 'High', 'Low', 'Normal'));
         ALTER TABLE ilsprofile_floorplan ADD CONSTRAINT ilsprofile_floorplan_vendor_e_ck CHECK ((vendor) IN ('emg', 'gottarent', 'kijiji'));
         ALTER TABLE ilsvendor_config ADD CONSTRAINT ilsvendor_config_vendor_e_ck CHECK ((vendor) IN ('emg', 'gottarent', 'kijiji'));
-        ALTER TABLE insurance_certificate_document ADD CONSTRAINT insurance_certificate_document_owner_discriminator_d_ck 
-                CHECK ((owner_discriminator) IN ('CustomerScreening', 'CustomerScreeningIncome'));
+        --ALTER TABLE insurance_certificate_document ADD CONSTRAINT insurance_certificate_document_owner_discriminator_d_ck 
+                -- CHECK ((owner_discriminator) IN ('CustomerScreening', 'CustomerScreeningIncome'));
         ALTER TABLE insurance_certificate ADD CONSTRAINT insurance_certificate_id_discriminator_ck 
                 CHECK ((id_discriminator) IN ('InsuranceGeneral', 'InsuranceTenantSure'));
         ALTER TABLE insurance_certificate ADD CONSTRAINT insurance_certificate_insurance_policy_discriminator_d_ck 
