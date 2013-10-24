@@ -28,7 +28,7 @@ public class NotificationFacadeMock implements NotificationFacade {
     }
 
     @Override
-    public void autoPayTerminatedNotification(Lease leaseId) {
+    public void autoPayCancelledNotification(Lease leaseId) {
     }
 
     @Override

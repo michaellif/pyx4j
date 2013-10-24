@@ -204,7 +204,7 @@ class AutopayAgreementMananger {
             for (AutopayAgreement pap : activePaps) {
                 deleteAutopayAgreement(pap);
             }
-            ServerSideFactory.create(NotificationFacade.class).autoPayTerminatedNotification(lease);
+            ServerSideFactory.create(NotificationFacade.class).autoPayCancelledNotification(lease);
             return;
         }
 
@@ -326,7 +326,7 @@ class AutopayAgreementMananger {
             for (AutopayAgreement pap : activePaps) {
                 deleteAutopayAgreement(pap);
             }
-            ServerSideFactory.create(NotificationFacade.class).autoPayTerminatedNotification(lease);
+            ServerSideFactory.create(NotificationFacade.class).autoPayCancelledNotification(lease);
         }
     }
 
@@ -390,21 +390,21 @@ class AutopayAgreementMananger {
                                     if (terminate) {
                                         atLeaseOneTerminated = true;
                                         deleteAutopayAgreement(item);
-                                        executionMonitor.addProcessedEvent("AutoPay Terminate");
+                                        executionMonitor.addProcessedEvent("AutoPay Cancel");
                                     }
                                 }
 
                                 if (atLeaseOneTerminated) {
-                                    ServerSideFactory.create(NotificationFacade.class).autoPayTerminatedNotification(account.lease());
+                                    ServerSideFactory.create(NotificationFacade.class).autoPayCancelledNotification(account.lease());
                                     Persistence.ensureRetrieve(account.lease(), AttachLevel.Attached);
-                                    executionMonitor.addInfoEvent("Lease with terminated AutoPay", "LeaseId " + account.lease().leaseId().getStringView());
+                                    executionMonitor.addInfoEvent("Lease with Cancelled AutoPay", "LeaseId " + account.lease().leaseId().getStringView());
                                 }
 
                                 return null;
                             }
                         });
                     } catch (Throwable error) {
-                        executionMonitor.addErredEvent("AutoPay Terminate", error);
+                        executionMonitor.addErredEvent("AutoPay Cancel", error);
                     }
 
                     if (executionMonitor.isTerminationRequested()) {

@@ -297,6 +297,16 @@ public class CommunicationFacadeImpl implements CommunicationFacade {
     }
 
     @Override
+    public void sendAutoPayCancelledNotification(List<String> targetEmails, List<Lease> leaseIds) {
+        if (disabled) {
+            return;
+        }
+        MailMessage m = MessageTemplates.createAutoPayCancelledNotificationEmail(leaseIds);
+        m.setTo(targetEmails);
+        Mail.send(m);
+    }
+
+    @Override
     public void sendMaintenanceRequestCreatedPMC(MaintenanceRequest request) {
         for (Employee employee : NotificationsUtils.getNotificationTraget(request.building(), Notification.NotificationType.MaintenanceRequest)) {
             sendMaintenanceRequestEmail(employee.email().getValue(), EmailTemplateType.MaintenanceRequestCreatedPMC, request);

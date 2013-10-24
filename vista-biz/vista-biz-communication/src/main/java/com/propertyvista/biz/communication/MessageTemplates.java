@@ -409,6 +409,58 @@ public class MessageTemplates {
         return email;
     }
 
+    public static MailMessage createAutoPayCancelledNotificationEmail(List<Lease> leaseIds) {
+        MailMessage email = new MailMessage();
+        email.setSender(getSender());
+
+        String emailBody = "";
+        try {
+            emailBody = IOUtils.getTextResource("email/autopay-cancelled-notification.html");
+        } catch (IOException e) {
+            throw new Error("Failed to load email template for AutoPayCancelled notifications", e);
+        }
+
+        {
+            Lease lease = Persistence.service().retrieve(Lease.class, leaseIds.get(0).getPrimaryKey());
+            Building building;
+            {
+                EntityQueryCriteria<Building> criteria = EntityQueryCriteria.create(Building.class);
+                criteria.eq(criteria.proto().units(), lease.unit());
+                building = Persistence.service().retrieve(criteria);
+            }
+
+            String buildingName = building.info().name().getStringView();
+            if (StringUtils.isEmpty(buildingName)) {
+                buildingName = building.propertyCode().getStringView();
+            }
+
+            emailBody = emailBody.replace("${buildingName}", buildingName);
+            emailBody = emailBody.replace("${buildingAddress}", building.info().address().getStringView());
+
+            if (leaseIds.size() == 1) {
+                email.setSubject(i18n.tr("Auto Pay Cancelled for lease {0}", lease));
+            } else {
+                email.setSubject(i18n.tr("Auto Pay Cancelled in building {0}", building.info().name()));
+            }
+        }
+
+        String crmUrl = VistaDeployment.getBaseApplicationURL(VistaDeployment.getCurrentPmc(), VistaApplication.crm, true);
+        StringBuilder leaseLinks = new StringBuilder();
+        for (Lease leaseId : leaseIds) {
+            String leaseUrl = AppPlaceInfo.absoluteUrl(crmUrl, true, new CrmSiteMap.Tenants.Lease().formViewerPlace(leaseId.getPrimaryKey()));
+            Lease lease = Persistence.service().retrieve(Lease.class, leaseId.getPrimaryKey());
+            if (leaseLinks.length() > 0) {
+                leaseLinks.append("<p/>");
+            }
+            leaseLinks.append("<a href=\"" + leaseUrl + "\">" + lease.getStringView() + "</a>");
+
+        }
+        emailBody = emailBody.replace("${leaseLinks}", leaseLinks);
+
+        email.setHtmlBody(wrapAdminHtml(emailBody));
+        return email;
+    }
+
     public static MailMessage createMaintenanceRequestEmail(EmailTemplateType emailType, MaintenanceRequest request) {
         EmailTemplate emailTemplate = getEmailTemplate(emailType, request.building());
 

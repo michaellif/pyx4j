@@ -21,6 +21,7 @@ import com.pyx4j.entity.shared.AttachLevel;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 
 import com.propertyvista.biz.communication.notifications.AbstractNotification;
+import com.propertyvista.biz.communication.notifications.AutoPayCancelledNotification;
 import com.propertyvista.biz.communication.notifications.AutoPayReviewRequiredNotification;
 import com.propertyvista.biz.communication.notifications.NotificationsAggregator;
 import com.propertyvista.biz.communication.notifications.NotificationsUtils;
@@ -62,8 +63,8 @@ public class NotificationFacadeImpl implements NotificationFacade {
     }
 
     @Override
-    public void autoPayTerminatedNotification(Lease leaseId) {
-        // TODO not implemented in current scope
+    public void autoPayCancelledNotification(Lease leaseId) {
+        aggregateOrSend(new AutoPayCancelledNotification(leaseId));
     }
 
     @Override

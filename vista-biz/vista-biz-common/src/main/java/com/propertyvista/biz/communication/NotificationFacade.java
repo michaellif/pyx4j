@@ -22,7 +22,7 @@ public interface NotificationFacade {
 
     public void autoPayReviewRequiredNotification(Lease leaseId);
 
-    public void autoPayTerminatedNotification(Lease leaseId);
+    public void autoPayCancelledNotification(Lease leaseId);
 
     public void aggregateNotificationsStart();
 

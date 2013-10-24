@@ -22,9 +22,9 @@ import com.propertyvista.domain.company.Employee;
 import com.propertyvista.domain.company.Notification;
 import com.propertyvista.domain.tenant.lease.Lease;
 
-public class AutoPayReviewRequiredNotification extends AbstractGroupPerBuildingNotification {
+public class AutoPayCancelledNotification extends AbstractGroupPerBuildingNotification {
 
-    public AutoPayReviewRequiredNotification(Lease leaseId) {
+    public AutoPayCancelledNotification(Lease leaseId) {
         super(Notification.NotificationType.AutoPayReviewRequired, leaseId);
     }
 
@@ -32,7 +32,7 @@ public class AutoPayReviewRequiredNotification extends AbstractGroupPerBuildingN
     public void send() {
         List<Employee> employees = NotificationsUtils.getNotificationTraget(getBuildingId(), Notification.NotificationType.AutoPayReviewRequired);
         if (!employees.isEmpty()) {
-            ServerSideFactory.create(CommunicationFacade.class).sendAutoPayReviewRequiredNotification(NotificationsUtils.toEmails(employees), getLeaseIds());
+            ServerSideFactory.create(CommunicationFacade.class).sendAutoPayCancelledNotification(NotificationsUtils.toEmails(employees), getLeaseIds());
         }
     }
 
