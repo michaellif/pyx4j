@@ -13,7 +13,7 @@
         <relativePath>../pom.xml</relativePath>
     </parent>
 
-    <artifactId>vista-feed-kijiji</artifactId>
+    <artifactId>vista-ils-feed</artifactId>
     <name>vista-ils-feed</name>
 
     <dependencies>
