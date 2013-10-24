@@ -22,8 +22,6 @@ package com.pyx4j.forms.client.ui;
 
 import java.text.ParseException;
 
-import com.google.gwt.event.dom.client.ClickEvent;
-import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.Command;
 
 import com.pyx4j.entity.shared.IEntity;

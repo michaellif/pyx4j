@@ -21,6 +21,7 @@
 package com.pyx4j.forms.client.ui;
 
 import com.google.gwt.user.client.Command;
+import com.google.gwt.user.client.Window;
 
 import com.pyx4j.entity.shared.IFile;
 import com.pyx4j.gwt.rpc.upload.UploadService;
@@ -34,9 +35,10 @@ public class CFile<E extends IFile> extends CField<E, NFile<E>> {
 
     private FileURLBuilder<E> fileUrlBuilder;
 
-    public CFile(UploadService<?, E> service) {
+    public CFile(UploadService<?, E> service, FileURLBuilder<E> fileURLBuilder) {
         super("");
         this.service = service;
+        this.fileUrlBuilder = fileURLBuilder;
 
         setNativeWidget(new NFile<E>(this));
 
@@ -44,7 +46,7 @@ public class CFile<E extends IFile> extends CField<E, NFile<E>> {
 
             @Override
             public void execute() {
-                System.out.println("TODO");
+                Window.open(fileUrlBuilder.getUrl(getValue()), "_blank", null);
             }
         });
 
@@ -68,10 +70,6 @@ public class CFile<E extends IFile> extends CField<E, NFile<E>> {
 
     public IFormat<E> getFormat() {
         return format;
-    }
-
-    public void setFileUrlBuilder(FileURLBuilder<E> fileURLBuilder) {
-        this.fileUrlBuilder = fileURLBuilder;
     }
 
     public String getImageUrl(E file) {
