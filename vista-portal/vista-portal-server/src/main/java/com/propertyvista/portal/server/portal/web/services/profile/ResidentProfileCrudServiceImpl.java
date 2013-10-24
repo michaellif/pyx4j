@@ -64,7 +64,7 @@ public class ResidentProfileCrudServiceImpl implements ResidentProfileCrudServic
         customer.emergencyContacts().clear();
         customer.emergencyContacts().addAll(dto.emergencyContacts());
 
-        Persistence.service().persist(customer);
+        Persistence.service().merge(customer);
 
         // Update user
         Persistence.service().retrieve(customer.user());
