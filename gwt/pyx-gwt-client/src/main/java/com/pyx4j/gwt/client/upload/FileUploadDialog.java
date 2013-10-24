@@ -81,7 +81,7 @@ public class FileUploadDialog<U extends IEntity, E extends IFile> extends Vertic
         };
 
         uploadPanel.getElement().getStyle().setMarginTop(50, Style.Unit.PX);
-        uploadPanel.getElement().getStyle().setPaddingLeft(35, Style.Unit.PX);
+        uploadPanel.getElement().getStyle().setPadding(20, Style.Unit.PX);
 
     }
 

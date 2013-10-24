@@ -106,6 +106,7 @@ public class UploadPanel<U extends IEntity, R extends IFile> extends SimplePanel
         content.add(postCorrelationId = new Hidden(UploadService.PostCorrelationID));
 
         upload = new FileUpload();
+        upload.setWidth("100%");
         upload.getElement().setAttribute("size", "40");
         upload.setName("upload");
 
