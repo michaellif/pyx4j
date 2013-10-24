@@ -53,7 +53,8 @@ public class PasswordResetActivity extends AbstractWizardActivity<PasswordChange
 
     @Override
     protected void onFinish() {
-        // Do not go Back on Submit
+        Notification message = new Notification(null, i18n.tr("Your password has been reset successfully!"), NotificationType.INFO);
+        PortalWebSite.getPlaceController().showNotification(message);
     }
 
     @Override
@@ -63,8 +64,6 @@ public class PasswordResetActivity extends AbstractWizardActivity<PasswordChange
             public void onSuccess(AuthenticationResponse result) {
                 PasswordResetActivity.super.submit();
                 ClientContext.authenticated(result);
-                Notification message = new Notification(null, i18n.tr("Your password has been reset successfully!"), NotificationType.INFO);
-                PortalWebSite.getPlaceController().showNotification(message);
             }
 
             @Override
