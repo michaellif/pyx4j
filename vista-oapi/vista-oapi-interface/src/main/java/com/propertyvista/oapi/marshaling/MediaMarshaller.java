@@ -18,12 +18,11 @@ import java.util.List;
 
 import com.pyx4j.entity.shared.EntityFactory;
 
-import com.propertyvista.domain.media.Media;
-import com.propertyvista.oapi.model.MediaIO;
-import com.propertyvista.oapi.model.types.MediaTypeIO;
+import com.propertyvista.domain.MediaFile;
+import com.propertyvista.oapi.model.MediaImageIO;
 import com.propertyvista.oapi.xml.StringIO;
 
-public class MediaMarshaller implements Marshaller<Media, MediaIO> {
+public class MediaMarshaller implements Marshaller<MediaFile, MediaImageIO> {
 
     private static class SingletonHolder {
         public static final MediaMarshaller INSTANCE = new MediaMarshaller();
@@ -37,40 +36,34 @@ public class MediaMarshaller implements Marshaller<Media, MediaIO> {
     }
 
     @Override
-    public MediaIO marshal(Media media) {
+    public MediaImageIO marshal(MediaFile media) {
         if (media == null || media.isNull()) {
             return null;
         }
-        MediaIO mediaIO = new MediaIO();
+        MediaImageIO mediaIO = new MediaImageIO();
         mediaIO.caption = MarshallerUtils.createIo(StringIO.class, media.caption());
-        mediaIO.mediaType = MarshallerUtils.createIo(MediaTypeIO.class, media.type());
-        mediaIO.url = MarshallerUtils.createIo(StringIO.class, media.url());
-        mediaIO.youTubeVideoID = MarshallerUtils.createIo(StringIO.class, media.youTubeVideoID());
         return mediaIO;
     }
 
-    public List<MediaIO> marshal(List<Media> mediaList) {
-        List<MediaIO> mediaIOList = new ArrayList<MediaIO>();
-        for (Media media : mediaList) {
+    public List<MediaImageIO> marshal(List<MediaFile> mediaList) {
+        List<MediaImageIO> mediaIOList = new ArrayList<MediaImageIO>();
+        for (MediaFile media : mediaList) {
             mediaIOList.add(marshal(media));
         }
         return mediaIOList;
     }
 
     @Override
-    public Media unmarshal(MediaIO mediaIO) {
-        Media media = EntityFactory.create(Media.class);
+    public MediaFile unmarshal(MediaImageIO mediaIO) {
+        MediaFile media = EntityFactory.create(MediaFile.class);
         MarshallerUtils.setValue(media.caption(), mediaIO.caption);
-        MarshallerUtils.setValue(media.type(), mediaIO.mediaType);
-        MarshallerUtils.setValue(media.url(), mediaIO.url);
-        MarshallerUtils.setValue(media.youTubeVideoID(), mediaIO.youTubeVideoID);
         return media;
     }
 
-    public List<Media> unmarshal(List<MediaIO> MediaIOList) {
-        List<Media> medias = new ArrayList<Media>();
-        for (MediaIO mediaIO : MediaIOList) {
-            Media media = EntityFactory.create(Media.class);
+    public List<MediaFile> unmarshal(List<MediaImageIO> MediaIOList) {
+        List<MediaFile> medias = new ArrayList<MediaFile>();
+        for (MediaImageIO mediaIO : MediaIOList) {
+            MediaFile media = EntityFactory.create(MediaFile.class);
             MarshallerUtils.set(media, mediaIO, MediaMarshaller.getInstance());
             medias.add(media);
         }

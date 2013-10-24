@@ -33,10 +33,10 @@ import com.pyx4j.gwt.server.IOUtils;
 import com.pyx4j.server.contexts.NamespaceManager;
 
 import com.propertyvista.domain.DemoData;
+import com.propertyvista.domain.MediaFile;
 import com.propertyvista.domain.company.Portfolio;
 import com.propertyvista.domain.financial.offering.Feature;
 import com.propertyvista.domain.financial.offering.ProductCatalog;
-import com.propertyvista.domain.media.Media;
 import com.propertyvista.domain.property.PropertyManager;
 import com.propertyvista.domain.property.asset.Boiler;
 import com.propertyvista.domain.property.asset.Complex;
@@ -83,8 +83,8 @@ public class PmcDataPreloader extends BaseVistaDevDataPreloader {
     public String delete() {
         if (ApplicationMode.isDevelopment()) {
             return deleteAll(Complex.class, Building.class, AptUnit.class, AptUnitItem.class, Floorplan.class, Vendor.class, Elevator.class, Boiler.class,
-                    Roof.class, Parking.class, ParkingSpot.class, LockerArea.class, Locker.class, Media.class, FileImageThumbnailBlob.class, FileBlob.class,
-                    Feature.class, PropertyManager.class, ProductCatalog.class);
+                    Roof.class, Parking.class, ParkingSpot.class, LockerArea.class, Locker.class, MediaFile.class, FileImageThumbnailBlob.class,
+                    FileBlob.class, Feature.class, PropertyManager.class, ProductCatalog.class);
         } else {
             return "This is production";
         }

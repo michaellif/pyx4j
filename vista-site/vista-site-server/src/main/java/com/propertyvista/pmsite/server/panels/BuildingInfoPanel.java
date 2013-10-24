@@ -29,9 +29,9 @@ import templates.TemplateResources;
 import com.pyx4j.commons.MinMaxPair;
 import com.pyx4j.i18n.shared.I18n;
 
+import com.propertyvista.domain.MediaFile;
 import com.propertyvista.domain.PublicVisibilityType;
 import com.propertyvista.domain.contact.AddressStructured;
-import com.propertyvista.domain.media.Media;
 import com.propertyvista.domain.media.ThumbnailSize;
 import com.propertyvista.domain.property.PropertyContact;
 import com.propertyvista.domain.property.PropertyContact.PropertyContactType;
@@ -58,11 +58,11 @@ public class BuildingInfoPanel extends Panel {
         SimpleImage pic = new SimpleImage("picture", PMSiteContentManager.getFistVisibleMediaImgUrl(bld.media(), ThumbnailSize.large));
         final String picId = "largeView";
         add(pic.add(AttributeModifier.replace("id", picId)));
-        add(new ListView<Media>("gallery", PMSiteContentManager.getVisibleMedia(bld.media())) {
+        add(new ListView<MediaFile>("gallery", PMSiteContentManager.getVisibleMedia(bld.media())) {
             private static final long serialVersionUID = 1L;
 
             @Override
-            protected void populateItem(ListItem<Media> item) {
+            protected void populateItem(ListItem<MediaFile> item) {
                 long mediaId = item.getModelObject().getPrimaryKey().asLong();
                 String largeSrc = PMSiteContentManager.getMediaImgUrl(mediaId, ThumbnailSize.large);
                 SimpleImage tn = new SimpleImage("thumbnail", PMSiteContentManager.getMediaImgUrl(mediaId, ThumbnailSize.small));

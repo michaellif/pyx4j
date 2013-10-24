@@ -73,7 +73,7 @@ public class MediaUtils {
     }
 
     public static String createMediaImageUrl(MediaFile mediaFile) {
-        return GWT.getModuleBaseURL() + DeploymentConsts.mediaImagesServletMapping + mediaFile.blobKey().getStringView() + "/" + ThumbnailSize.large.name()
+        return GWT.getModuleBaseURL() + DeploymentConsts.mediaImagesServletMapping + mediaFile.getPrimaryKey().toString() + "/" + ThumbnailSize.large.name()
                 + "." + ImageConsts.THUMBNAIL_TYPE;
     }
 

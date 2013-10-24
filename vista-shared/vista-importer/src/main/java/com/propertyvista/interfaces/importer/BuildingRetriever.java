@@ -20,7 +20,7 @@ import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 
-import com.propertyvista.domain.media.Media;
+import com.propertyvista.domain.MediaFile;
 import com.propertyvista.domain.property.asset.Boiler;
 import com.propertyvista.domain.property.asset.Elevator;
 import com.propertyvista.domain.property.asset.Floorplan;
@@ -82,7 +82,7 @@ public class BuildingRetriever {
         }
 
         Persistence.service().retrieve(building.media());
-        for (Media media : building.media()) {
+        for (MediaFile media : building.media()) {
             buildingIO.medias().add(new MediaConverter(buildingConfig, ImageTarget.Building).createTO(media));
         }
 
@@ -129,7 +129,7 @@ public class BuildingRetriever {
             floorplanConfig.directory = buildingConfig.directory + "floorplans/" + floorplan.name().getStringView() + "/";
 
             Persistence.service().retrieve(floorplan.media());
-            for (Media media : floorplan.media()) {
+            for (MediaFile media : floorplan.media()) {
                 floorplanIO.medias().add(new MediaConverter(floorplanConfig, ImageTarget.Floorplan).createTO(media));
             }
 

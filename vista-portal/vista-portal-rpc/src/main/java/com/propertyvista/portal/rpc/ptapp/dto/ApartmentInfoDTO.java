@@ -25,10 +25,10 @@ import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
 
+import com.propertyvista.domain.MediaFile;
 import com.propertyvista.domain.contact.AddressSimple;
 import com.propertyvista.domain.financial.offering.Concession;
 import com.propertyvista.domain.financial.offering.ProductItem;
-import com.propertyvista.domain.media.Media;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.tenant.lease.BillableItem;
 
@@ -60,7 +60,7 @@ public interface ApartmentInfoDTO extends IEntity {
     // We store the unit number separately from address because we use address in its simple incarnation
     IPrimitive<String> suiteNumber();
 
-    Media picture();
+    MediaFile picture();
 
     // Service Catalog stuff:
     IList<BillableItem> agreedUtilities();

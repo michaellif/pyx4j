@@ -33,8 +33,8 @@ import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.gwt.server.IOUtils;
 import com.pyx4j.security.shared.SecurityController;
 
+import com.propertyvista.domain.MediaFile;
 import com.propertyvista.domain.PublicVisibilityType;
-import com.propertyvista.domain.media.Media;
 import com.propertyvista.domain.media.ThumbnailSize;
 import com.propertyvista.domain.security.common.VistaBasicBehavior;
 import com.propertyvista.portal.rpc.portal.ImageConsts;
@@ -89,13 +89,13 @@ public class PublicMediaServlet extends HttpServlet {
             serveNotSet(thumbnailSize, response);
             return;
         }
-        Media media = Persistence.service().retrieve(Media.class, new Key(key));
+        MediaFile media = Persistence.service().retrieve(MediaFile.class, new Key(key));
         if (media == null) {
             log.debug("no media {} {}", id, filename);
             response.setStatus(HttpServletResponse.SC_NOT_FOUND);
             serveNotFound(thumbnailSize, response);
             return;
-        } else if (media.file().blobKey().isNull()) {
+        } else if (media.blobKey().isNull()) {
             log.debug("no media {} {} is not file", id, filename);
             response.setStatus(HttpServletResponse.SC_NOT_FOUND);
             serveNotFound(thumbnailSize, response);
@@ -108,16 +108,16 @@ public class PublicMediaServlet extends HttpServlet {
             }
         }
 
-        String token = ETag.getEntityTag(media.file(), thumbnailSize);
+        String token = ETag.getEntityTag(media, thumbnailSize);
         response.setHeader("Etag", token);
 
-        if (!media.file().timestamp().isNull()) {
+        if (!media.timestamp().isNull()) {
             long since = request.getDateHeader("If-Modified-Since");
-            if ((since != -1) && (media.file().timestamp().getValue() < since)) {
+            if ((since != -1) && (media.timestamp().getValue() < since)) {
                 response.setStatus(HttpServletResponse.SC_NOT_MODIFIED);
                 return;
             }
-            response.setDateHeader("Last-Modified", media.file().timestamp().getValue());
+            response.setDateHeader("Last-Modified", media.timestamp().getValue());
             // HTTP 1.0
             response.setDateHeader("Expires", System.currentTimeMillis() + Consts.HOURS2MSEC * cacheExpiresHours);
             // HTTP 1.1
@@ -130,13 +130,13 @@ public class PublicMediaServlet extends HttpServlet {
         }
 
         if (thumbnailSize == null) {
-            if (!media.file().contentMimeType().isNull()) {
-                response.setContentType(media.file().contentMimeType().getValue());
+            if (!media.contentMimeType().isNull()) {
+                response.setContentType(media.contentMimeType().getValue());
             }
-            BlobService.serve(media.file().blobKey().getValue(), response);
+            BlobService.serve(media.blobKey().getValue(), response);
         } else {
-            if (!ThumbnailService.serve(media.file().blobKey().getValue(), thumbnailSize, response)) {
-                log.debug("no blob {} for media {}", media.file().blobKey().getValue(), id);
+            if (!ThumbnailService.serve(media.blobKey().getValue(), thumbnailSize, response)) {
+                log.debug("no blob {} for media {}", media.blobKey().getValue(), id);
                 response.setStatus(HttpServletResponse.SC_NOT_FOUND);
                 serveNotFound(thumbnailSize, response);
             }

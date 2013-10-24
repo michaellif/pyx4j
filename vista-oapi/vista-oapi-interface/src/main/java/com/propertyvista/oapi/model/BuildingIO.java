@@ -56,7 +56,7 @@ public class BuildingIO extends AbstractElementIO {
 
     @XmlElementWrapper
     @XmlElements(@XmlElement(name = "media"))
-    public List<MediaIO> medias = new ArrayList<MediaIO>();
+    public List<MediaImageIO> medias = new ArrayList<MediaImageIO>();
 
     //mandatory for portal
     @XmlElementWrapper

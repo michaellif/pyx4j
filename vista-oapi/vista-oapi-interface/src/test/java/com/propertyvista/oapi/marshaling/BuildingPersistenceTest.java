@@ -21,7 +21,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.propertyvista.domain.contact.AddressStructured;
-import com.propertyvista.domain.media.Media;
 import com.propertyvista.domain.pmc.IntegrationSystem;
 import com.propertyvista.domain.property.asset.Parking;
 import com.propertyvista.domain.property.asset.building.Building;
@@ -35,12 +34,11 @@ import com.propertyvista.oapi.model.BuildingIO;
 import com.propertyvista.oapi.model.BuildingInfoIO;
 import com.propertyvista.oapi.model.ContactIO;
 import com.propertyvista.oapi.model.MarketingIO;
-import com.propertyvista.oapi.model.MediaIO;
+import com.propertyvista.oapi.model.MediaImageIO;
 import com.propertyvista.oapi.model.ParkingIO;
 import com.propertyvista.oapi.model.UnitIO;
 import com.propertyvista.oapi.model.types.BuildingAmenityTypeIO;
 import com.propertyvista.oapi.model.types.BuildingTypeIO;
-import com.propertyvista.oapi.model.types.MediaTypeIO;
 import com.propertyvista.oapi.model.types.ParkingTypeIO;
 import com.propertyvista.oapi.model.types.StreetTypeIO;
 import com.propertyvista.oapi.ws.WSOapiTestBase;
@@ -120,8 +118,6 @@ public class BuildingPersistenceTest extends WSOapiTestBase {
         // medias
         for (int i = 0; i < buildingIO.medias.size(); i++) {
             assertEquals(buildingIO.medias.get(i).caption.getValue(), buildingIO2.medias.get(i).caption.getValue());
-            assertEquals(buildingIO.medias.get(i).mediaType.getValue(), buildingIO2.medias.get(i).mediaType.getValue());
-            assertEquals(buildingIO.medias.get(i).url.getValue(), buildingIO2.medias.get(i).url.getValue());
         }
 
         // units
@@ -212,15 +208,11 @@ public class BuildingPersistenceTest extends WSOapiTestBase {
         contact2.phone = new StringIO("321-321-4321");
 
         // medias
-        MediaIO media1 = new MediaIO();
+        MediaImageIO media1 = new MediaImageIO();
         media1.caption = new StringIO("caption");
-        media1.url = new StringIO("google.com");
-        media1.mediaType = new MediaTypeIO(Media.Type.externalUrl);
 
-        MediaIO media2 = new MediaIO();
+        MediaImageIO media2 = new MediaImageIO();
         media2.caption = new StringIO("caption 2");
-        media2.url = new StringIO("bing.com");
-        media2.mediaType = new MediaTypeIO(Media.Type.externalUrl);
 
         // units
         UnitIO unit1 = new UnitIO();

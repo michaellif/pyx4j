@@ -22,9 +22,9 @@ import com.pyx4j.essentials.rpc.report.ReportRequest;
 import com.pyx4j.essentials.server.report.SearchReportDeferredProcess;
 import com.pyx4j.server.contexts.NamespaceManager;
 
+import com.propertyvista.domain.MediaFile;
 import com.propertyvista.domain.PublicVisibilityType;
 import com.propertyvista.domain.VistaNamespace;
-import com.propertyvista.domain.media.Media;
 import com.propertyvista.domain.pmc.Pmc;
 import com.propertyvista.domain.property.asset.Floorplan;
 import com.propertyvista.domain.property.asset.building.Building;
@@ -79,8 +79,8 @@ public class PmcDataImagesReportDeferredProcess extends SearchReportDeferredProc
             }
 
             Persistence.service().retrieve(building.media());
-            for (Media media : building.media()) {
-                exportPmcBuildingMedia(pmc, building, null, media);
+            for (MediaFile media : building.media()) {
+                exportPmcMediaFile(pmc, building, null, media);
             }
 
             EntityQueryCriteria<Floorplan> floorplanCriteria = EntityQueryCriteria.create(Floorplan.class);
@@ -88,8 +88,8 @@ public class PmcDataImagesReportDeferredProcess extends SearchReportDeferredProc
             List<Floorplan> floorplans = Persistence.service().query(floorplanCriteria);
             nextFloorplan: for (Floorplan floorplan : floorplans) {
                 Persistence.service().retrieve(floorplan.media());
-                for (Media media : floorplan.media()) {
-                    exportPmcBuildingMedia(pmc, building, floorplan, media);
+                for (MediaFile media : floorplan.media()) {
+                    exportPmcMediaFile(pmc, building, floorplan, media);
                 }
                 //Get only one Floorplan
                 break nextFloorplan;
@@ -97,11 +97,8 @@ public class PmcDataImagesReportDeferredProcess extends SearchReportDeferredProc
         }
     }
 
-    private void exportPmcBuildingMedia(Pmc pmc, Building building, Floorplan floorplan, Media media) {
+    private void exportPmcMediaFile(Pmc pmc, Building building, Floorplan floorplan, MediaFile media) {
         if (!PublicVisibilityType.global.equals(media.visibility().getValue())) {
-            return;
-        }
-        if (media.type().getValue() != Media.Type.file) {
             return;
         }
 

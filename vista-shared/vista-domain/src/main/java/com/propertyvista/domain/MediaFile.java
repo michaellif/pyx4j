@@ -15,6 +15,7 @@ package com.propertyvista.domain;
 
 import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.annotations.ToStringFormat;
+import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IFile;
 import com.pyx4j.entity.shared.IPrimitive;
 
@@ -24,4 +25,7 @@ public interface MediaFile extends IFile {
     @Override
     @ToString(index = 1)
     IPrimitive<Integer> fileSize();
+
+    @NotNull
+    IPrimitive<PublicVisibilityType> visibility();
 }

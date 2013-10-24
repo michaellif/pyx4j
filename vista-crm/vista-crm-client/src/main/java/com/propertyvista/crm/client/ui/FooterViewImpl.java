@@ -28,7 +28,6 @@ import com.pyx4j.widgets.client.Tooltip;
 
 import com.propertyvista.common.client.resources.VistaImages;
 import com.propertyvista.common.client.theme.SiteViewTheme;
-import com.propertyvista.domain.media.Media;
 
 public class FooterViewImpl extends SimplePanel implements FooterView {
 
@@ -41,7 +40,7 @@ public class FooterViewImpl extends SimplePanel implements FooterView {
         image.addClickHandler(new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
-                Window.open("http://www.propertyvista.com", Media.Type.externalUrl.name(), null);
+                Window.open("http://www.propertyvista.com", "home", null);
             }
         });
 

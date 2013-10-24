@@ -39,14 +39,14 @@ import com.pyx4j.gwt.server.IOUtils;
 import com.pyx4j.gwt.shared.DownloadFormat;
 import com.pyx4j.i18n.shared.I18n;
 
-import com.propertyvista.domain.media.Media;
+import com.propertyvista.domain.MediaFile;
 import com.propertyvista.interfaces.importer.model.MediaIO;
 import com.propertyvista.portal.rpc.portal.ImageConsts.ImageTarget;
 import com.propertyvista.server.common.blob.BlobService;
 import com.propertyvista.server.common.blob.ThumbnailService;
 import com.propertyvista.server.domain.FileImageThumbnailBlobDTO;
 
-public class MediaConverter extends EntityBinder<Media, MediaIO> {
+public class MediaConverter extends EntityBinder<MediaFile, MediaIO> {
 
     private final static Logger log = LoggerFactory.getLogger(MediaConverter.class);
 
@@ -60,7 +60,7 @@ public class MediaConverter extends EntityBinder<Media, MediaIO> {
             DownloadFormat.BMP));
 
     public MediaConverter(MediaConfig mediaConfig, ImageTarget imageTarget) {
-        super(Media.class, MediaIO.class, false);
+        super(MediaFile.class, MediaIO.class, false);
         this.mediaConfig = mediaConfig;
         this.imageTarget = imageTarget;
     }
@@ -72,30 +72,18 @@ public class MediaConverter extends EntityBinder<Media, MediaIO> {
     }
 
     @Override
-    public void copyBOtoTO(Media dbo, MediaIO dto) {
+    public void copyBOtoTO(MediaFile dbo, MediaIO dto) {
         super.copyBOtoTO(dbo, dto);
-        switch (dbo.type().getValue()) {
-        case file:
-            dto.mediaType().setValue(MediaIO.MediaType.file);
-            if (mediaConfig.baseFolder != null) {
-                dto.uri().setValue(mediaConfig.directory + dbo.file().blobKey().getStringView() + "-" + dbo.file().fileName().getStringView());
-                try {
-                    BlobService.save(dbo.file().blobKey().getValue(), new File(mediaConfig.baseFolder + dto.uri().getValue()));
-                } catch (IOException e) {
-                    throw new Error(e);
-                }
-            } else {
-                dto.uri().setValue(dbo.id().getStringView() + dbo.file().fileName().getStringView());
+        dto.mediaType().setValue(MediaIO.MediaType.file);
+        if (mediaConfig.baseFolder != null) {
+            dto.uri().setValue(mediaConfig.directory + dbo.blobKey().getStringView() + "-" + dbo.fileName().getStringView());
+            try {
+                BlobService.save(dbo.blobKey().getValue(), new File(mediaConfig.baseFolder + dto.uri().getValue()));
+            } catch (IOException e) {
+                throw new Error(e);
             }
-            break;
-        case externalUrl:
-            dto.mediaType().setValue(MediaIO.MediaType.externalUrl);
-            dto.uri().setValue(dbo.url().getValue());
-            break;
-        case youTube:
-            dto.mediaType().setValue(MediaIO.MediaType.youTube);
-            dto.uri().setValue(dbo.youTubeVideoID().getValue());
-            break;
+        } else {
+            dto.uri().setValue(dbo.id().getStringView() + dbo.fileName().getStringView());
         }
     }
 
@@ -119,6 +107,8 @@ public class MediaConverter extends EntityBinder<Media, MediaIO> {
             if (!extensions.contains(extension)) {
                 return i18n.tr("Unsupported Media File Type ''{0}'' Extension ''{1}''", dto.uri().getValue(), extension);
             }
+        default:
+            break;
         }
         return null;
     }
@@ -127,7 +117,7 @@ public class MediaConverter extends EntityBinder<Media, MediaIO> {
     private static Map<String, FileImageThumbnailBlobDTO> resized = new Hashtable<String, FileImageThumbnailBlobDTO>();
 
     @Override
-    public void copyTOtoBO(MediaIO dto, Media dbo) {
+    public void copyTOtoBO(MediaIO dto, MediaFile dbo) {
         super.copyTOtoBO(dto, dbo);
         if (dto.mediaType().isNull()) {
             if (mediaConfig.ignoreMissingMedia) {
@@ -138,7 +128,6 @@ public class MediaConverter extends EntityBinder<Media, MediaIO> {
         }
         switch (dto.mediaType().getValue()) {
         case file:
-            dbo.type().setValue(Media.Type.file);
             File file = new File(new File(mediaConfig.baseFolder), dto.uri().getValue());
             if (!file.exists()) {
                 file = FileIOUtils.findFileIgnoreCase(file);
@@ -161,48 +150,39 @@ public class MediaConverter extends EntityBinder<Media, MediaIO> {
                     throw new UserRuntimeException(i18n.tr("Unsupported Media File Type ''{0}'' Extension ''{1}''", dto.uri().getValue(), extension));
                 }
             }
-            dbo.file().fileName().setValue(file.getName());
-            dbo.file().fileSize().setValue(Long.valueOf(file.length()).intValue());
-            dbo.file().contentMimeType().setValue(MimeMap.getContentType(extension));
-            dbo.file().timestamp().setValue(System.currentTimeMillis());
+            dbo.fileName().setValue(file.getName());
+            dbo.fileSize().setValue(Long.valueOf(file.length()).intValue());
+            dbo.contentMimeType().setValue(MimeMap.getContentType(extension));
+            dbo.timestamp().setValue(System.currentTimeMillis());
 
             if (!mediaConfig.mimizePreloadDataSize) {
                 byte raw[] = getBinary(file);
-                dbo.file().blobKey().setValue(BlobService.persist(raw, dbo.file().fileName().getValue(), dbo.file().contentMimeType().getValue()));
-                ThumbnailService.persist(dbo.file().blobKey().getValue(), file.getName(), raw, imageTarget);
+                dbo.blobKey().setValue(BlobService.persist(raw, dbo.fileName().getValue(), dbo.contentMimeType().getValue()));
+                ThumbnailService.persist(dbo.blobKey().getValue(), file.getName(), raw, imageTarget);
             } else {
                 String uniqueName = MediaConverter.class.getName() + imageTarget + file.getAbsolutePath().toLowerCase(Locale.ENGLISH);
                 Key blobKey = CacheService.get(uniqueName);
                 if (blobKey == null) {
                     byte raw[] = getBinary(file);
-                    blobKey = BlobService.persist(raw, dbo.file().fileName().getValue(), dbo.file().contentMimeType().getValue());
+                    blobKey = BlobService.persist(raw, dbo.fileName().getValue(), dbo.contentMimeType().getValue());
                     CacheService.put(uniqueName, blobKey);
                     FileImageThumbnailBlobDTO thumbnailBlob = resized.get(uniqueName);
                     if (thumbnailBlob == null) {
-                        thumbnailBlob = ThumbnailService.createThumbnailBlob(dbo.file().fileName().getValue(), raw, imageTarget);
+                        thumbnailBlob = ThumbnailService.createThumbnailBlob(dbo.fileName().getValue(), raw, imageTarget);
                         if (ApplicationMode.isDevelopment()) {
                             resized.put(uniqueName, thumbnailBlob);
-                            log.info("ThumbnailBlob not cashed {}; cash size {}", dbo.file().fileName().getValue(), resized.size());
+                            log.info("ThumbnailBlob not cashed {}; cash size {}", dbo.fileName().getValue(), resized.size());
                         }
                     }
                     thumbnailBlob = (FileImageThumbnailBlobDTO) thumbnailBlob.duplicate();
                     thumbnailBlob.setPrimaryKey(blobKey);
                     ThumbnailService.persist(thumbnailBlob);
                 }
-                dbo.file().blobKey().setValue(blobKey);
+                dbo.blobKey().setValue(blobKey);
             }
 
             break;
-        case externalUrl:
-            dbo.type().setValue(Media.Type.externalUrl);
-            dbo.url().setValue(dto.uri().getValue());
-            break;
-        case youTube:
-            if (!dto.uri().getValue().matches("[a-zA-Z0-9_-]{11}")) {
-                throw new UserRuntimeException(i18n.tr("Invalid YouTube Video ID ''{0}''", dto.uri().getValue()));
-            }
-            dbo.type().setValue(Media.Type.youTube);
-            dbo.youTubeVideoID().setValue(dto.uri().getValue());
+        default:
             break;
         }
     }

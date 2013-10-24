@@ -69,8 +69,8 @@ public class FloorplanIO extends AbstractElementIO {
     public List<FloorplanAmenityIO> amenities = new ArrayList<FloorplanAmenityIO>();
 
     @XmlElementWrapper
-    @XmlElements(@XmlElement(name = "media", type = MediaIO.class))
-    public List<MediaIO> medias = new ArrayList<MediaIO>();
+    @XmlElements(@XmlElement(name = "media", type = MediaImageIO.class))
+    public List<MediaImageIO> medias = new ArrayList<MediaImageIO>();
 
     @Override
     public boolean equals(Object obj) {

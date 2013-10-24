@@ -119,7 +119,7 @@ public class MarketingEditor extends CEntityDecoratableForm<Marketing> {
     @Override
     protected void setEditorValue(Marketing value) {
         // reset address editor state
-        if (value != null) {
+        if (isEditable() && value != null) {
             setAddressEditorState(value.usePropertyAddressAsMarketing().isBooleanTrue());
         }
         super.setEditorValue(value);

@@ -15,8 +15,8 @@ package com.propertyvista.domain.company;
 
 import javax.xml.bind.annotation.XmlTransient;
 
-import com.pyx4j.entity.annotations.EmbeddedEntity;
 import com.pyx4j.entity.annotations.Length;
+import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.shared.IEntity;
@@ -24,7 +24,6 @@ import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
 
 import com.propertyvista.domain.contact.AddressStructured;
-import com.propertyvista.domain.media.Media;
 
 public interface Company extends IEntity {
 
@@ -46,7 +45,7 @@ public interface Company extends IEntity {
     @XmlTransient
     IList<OrganizationContacts> contacts();
 
-    @EmbeddedEntity
     @XmlTransient
-    Media logo();
+    @Owned
+    CompanyLogo logo();
 }

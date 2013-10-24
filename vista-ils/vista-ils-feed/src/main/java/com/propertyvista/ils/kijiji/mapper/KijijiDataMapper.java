@@ -31,8 +31,8 @@ import com.kijiji.pint.rs.ObjectFactory;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.AttachLevel;
 
+import com.propertyvista.domain.MediaFile;
 import com.propertyvista.domain.PublicVisibilityType;
-import com.propertyvista.domain.media.Media;
 import com.propertyvista.domain.media.ThumbnailSize;
 import com.propertyvista.domain.site.PortalLogoImageResource;
 import com.propertyvista.ils.kijiji.mapper.dto.ILSBuildingDTO;
@@ -58,28 +58,18 @@ public class KijijiDataMapper {
         return ilsUnit;
     }
 
-    private Image createImage(Media media) {
+    private Image createImage(MediaFile media) {
         Image image = factory.createILSUnitImagesImage();
-        switch (media.type().getValue()) {
-        case externalUrl:
-            image.setSourceUrl(media.url().getValue());
-            break;
-        case file:
-            image.setSourceUrl(KijijiMapperUtils.getMediaImgUrl(media.getPrimaryKey().asLong(), ThumbnailSize.large));
-            break;
-        default:
-            log.info("Unknown media type: {}", media.type().getValue());
-            return null;
-        }
+        image.setSourceUrl(KijijiMapperUtils.getMediaImgUrl(media.getPrimaryKey().asLong(), ThumbnailSize.large));
         image.setClientImageId(media.getPrimaryKey().toString());
         image.setName(media.caption().getValue());
 
         return image;
     }
 
-    private Images createImages(List<Media> media) {
+    private Images createImages(List<MediaFile> media) {
         Images images = factory.createILSUnitImages();
-        for (Media item : media) {
+        for (MediaFile item : media) {
             if (PublicVisibilityType.global.equals(item.visibility().getValue())) {
                 Image image = createImage(item);
                 if (image != null) {

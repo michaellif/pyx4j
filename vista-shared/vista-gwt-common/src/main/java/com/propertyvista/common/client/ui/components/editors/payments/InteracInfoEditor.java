@@ -27,7 +27,6 @@ import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.common.client.resources.VistaImages;
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
-import com.propertyvista.domain.media.Media;
 import com.propertyvista.domain.payment.InteracInfo;
 
 public class InteracInfoEditor extends CEntityDecoratableForm<InteracInfo> {
@@ -110,6 +109,6 @@ public class InteracInfoEditor extends CEntityDecoratableForm<InteracInfo> {
             url = "www.google.com";
         }
 
-        Window.open(url, Media.Type.externalUrl.name(), null);
+        Window.open(url, "site", null);
     }
 }

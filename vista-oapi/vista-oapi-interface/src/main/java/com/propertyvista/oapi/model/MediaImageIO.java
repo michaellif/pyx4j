@@ -13,13 +13,10 @@
  */
 package com.propertyvista.oapi.model;
 
-import com.propertyvista.oapi.model.types.MediaTypeIO;
 import com.propertyvista.oapi.xml.AbstractElementIO;
 import com.propertyvista.oapi.xml.StringIO;
 
-public class MediaIO extends AbstractElementIO {
-
-    public MediaTypeIO mediaType;
+public class MediaImageIO extends AbstractElementIO {
 
     public StringIO caption;
 
@@ -27,9 +24,4 @@ public class MediaIO extends AbstractElementIO {
 
     // file conversion not implemented
     public StringIO fileId;
-
-    public StringIO youTubeVideoID;
-
-    public StringIO url;
-
 }

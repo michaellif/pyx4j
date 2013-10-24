@@ -22,9 +22,9 @@ import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion.Restriction;
 
+import com.propertyvista.domain.MediaFile;
 import com.propertyvista.domain.PublicVisibilityType;
 import com.propertyvista.domain.RangeGroup;
-import com.propertyvista.domain.media.Media;
 import com.propertyvista.domain.property.asset.Floorplan;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.building.BuildingAmenity;
@@ -97,11 +97,11 @@ public class Converter {
         }
 
         if (!from.media().isEmpty()) {
-            for (Media media : from.media()) {
+            for (MediaFile media : from.media()) {
                 if (media.isValueDetached()) {
                     Persistence.service().retrieve(media);
                 }
-                if (PublicVisibilityType.global.equals(media.visibility().getValue()) && Media.Type.file == (media.type().getValue())) {
+                if (PublicVisibilityType.global.equals(media.visibility().getValue())) {
                     to.mainMedia().setValue(media.getPrimaryKey());
                     break;
                 }
@@ -120,7 +120,7 @@ public class Converter {
         return to;
     }
 
-    public static MediaDTO convert(Media from) {
+    public static MediaDTO convert(MediaFile from) {
         MediaDTO to = EntityFactory.create(MediaDTO.class);
         to.id().set(from.id());
         to.caption().setValue(from.caption().getValue());

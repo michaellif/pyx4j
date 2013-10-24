@@ -17,34 +17,42 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Vector;
 
+import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.ui.HasVerticalAlignment;
 import com.google.gwt.user.client.ui.IsWidget;
+import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IObject;
+import com.pyx4j.forms.client.images.EntityFolderImages;
 import com.pyx4j.forms.client.ui.CComponent;
+import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.ui.CEnumLabel;
+import com.pyx4j.forms.client.ui.CImageSlider;
 import com.pyx4j.forms.client.ui.folder.CEntityFolder;
 import com.pyx4j.forms.client.ui.folder.EntityFolderColumnDescriptor;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
+import com.pyx4j.gwt.shared.FileURLBuilder;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.site.client.ui.dialogs.SelectEnumDialog;
 import com.pyx4j.site.client.ui.prime.form.IForm;
 import com.pyx4j.widgets.client.tabpanel.Tab;
 
+import com.propertyvista.common.client.resources.VistaImages;
+import com.propertyvista.common.client.ui.components.MediaUtils;
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
 import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
 import com.propertyvista.common.client.ui.components.folders.VistaTableFolder;
 import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
-import com.propertyvista.crm.client.ui.components.media.CrmMediaFolder;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
+import com.propertyvista.crm.rpc.services.MediaUploadFloorplanService;
+import com.propertyvista.domain.MediaFile;
 import com.propertyvista.domain.marketing.ils.ILSProfileFloorplan;
 import com.propertyvista.domain.property.asset.Floorplan;
 import com.propertyvista.domain.property.asset.FloorplanAmenity;
 import com.propertyvista.domain.settings.ILSConfig.ILSVendor;
 import com.propertyvista.dto.FloorplanDTO;
-import com.propertyvista.portal.rpc.portal.ImageConsts.ImageTarget;
 
 public class FloorplanForm extends CrmEntityForm<FloorplanDTO> {
 
@@ -82,8 +90,34 @@ public class FloorplanForm extends CrmEntityForm<FloorplanDTO> {
         main.setWidget(row, 1, new FormDecoratorBuilder(inject(proto().description())).build());
         main.getFlexCellFormatter().setVerticalAlignment(row, 0, HasVerticalAlignment.ALIGN_TOP);
 
-        main.setH1(++row, 0, 2, i18n.tr("Media"));
-        main.setWidget(++row, 0, 2, inject(proto().media(), new CrmMediaFolder(isEditable(), ImageTarget.Floorplan)));
+        main.setH1(++row, 0, 2, i18n.tr("Images"));
+        CImageSlider<MediaFile> imageSlider = new CImageSlider<MediaFile>(MediaFile.class,
+                GWT.<MediaUploadFloorplanService> create(MediaUploadFloorplanService.class)) {
+            @Override
+            protected EntityFolderImages getFolderIcons() {
+                return VistaImages.INSTANCE;
+            }
+
+            @Override
+            public Widget getImageEntryView(CEntityForm<MediaFile> entryForm) {
+                TwoColumnFlexFormPanel main = new TwoColumnFlexFormPanel();
+
+                int row = -1;
+                main.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(entryForm.proto().caption()), 15, true).build());
+                main.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(entryForm.proto().description()), 15, true).build());
+                main.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(entryForm.proto().visibility()), 7, true).build());
+
+                return main;
+            }
+        };
+        imageSlider.setImageFileUrlBuilder(new FileURLBuilder<MediaFile>() {
+            @Override
+            public String getUrl(MediaFile file) {
+                return MediaUtils.createMediaImageUrl(file);
+            }
+        });
+        imageSlider.setImageSize(240, 160);
+        main.setWidget(++row, 0, 2, inject(proto().media(), imageSlider));
 
         main.setH1(++row, 0, 2, i18n.tr("ILS Profile"));
         main.setWidget(++row, 0, 2, inject(proto().ilsProfile(), new ILSProfileFloorplanFolder()));

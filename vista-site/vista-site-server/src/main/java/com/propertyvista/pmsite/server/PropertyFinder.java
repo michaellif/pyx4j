@@ -34,8 +34,8 @@ import com.pyx4j.geo.GeoBox;
 import com.pyx4j.geo.GeoCircle;
 import com.pyx4j.geo.GeoPoint;
 
+import com.propertyvista.domain.MediaFile;
 import com.propertyvista.domain.PublicVisibilityType;
-import com.propertyvista.domain.media.Media;
 import com.propertyvista.domain.property.asset.Floorplan;
 import com.propertyvista.domain.property.asset.FloorplanAmenity;
 import com.propertyvista.domain.property.asset.building.Building;
@@ -214,8 +214,8 @@ public class PropertyFinder {
         return buildings;
     }
 
-    public static boolean isPublicFileMedia(Media m) {
-        return (m.type().getValue() == Media.Type.file && m.visibility().getValue() == PublicVisibilityType.global);
+    public static boolean isPublicFileMedia(MediaFile m) {
+        return (m.visibility().getValue() == PublicVisibilityType.global);
     }
 
     public static Building getBuildingDetails(long propId) {

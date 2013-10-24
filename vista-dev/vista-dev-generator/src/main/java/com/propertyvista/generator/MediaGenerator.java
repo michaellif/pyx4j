@@ -16,21 +16,14 @@ package com.propertyvista.generator;
 import java.util.HashMap;
 import java.util.Map;
 
-
 import com.pyx4j.entity.cache.CacheService;
-import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.essentials.server.csv.CSVLoad;
-import com.pyx4j.essentials.server.download.MimeMap;
 import com.pyx4j.essentials.server.preloader.DataGenerator;
 import com.pyx4j.gwt.server.IOUtils;
-import com.pyx4j.gwt.shared.DownloadFormat;
 
 import com.propertyvista.domain.MediaFile;
-import com.propertyvista.domain.PublicVisibilityType;
-import com.propertyvista.domain.media.Media;
 import com.propertyvista.domain.property.asset.Floorplan;
 import com.propertyvista.domain.property.asset.building.Building;
-import com.propertyvista.generator.util.CommonsGenerator;
 import com.propertyvista.generator.util.PictureUtil;
 import com.propertyvista.generator.util.RandomUtil;
 import com.propertyvista.portal.rpc.portal.ImageConsts.ImageTarget;
@@ -52,66 +45,37 @@ public class MediaGenerator {
         return youtubeIds[DataGenerator.nextInt(youtubeIds.length, "youtubeIds", 4)];
     }
 
-    /**
-     * This is a light-weight method that simply creates a file media with a fictitious filename
-     * 
-     * @return
-     */
-    public static Media createMedia() {
-        Media media = EntityFactory.create(Media.class);
-        media.type().setValue(Media.Type.file);
-
-        MediaFile file = EntityFactory.create(MediaFile.class);
-
-        file.fileName().setValue("file102.jpg");
-        media.caption().setValue(CommonsGenerator.lipsumShort());
-        file.contentMimeType().setValue(MimeMap.getContentType(DownloadFormat.JPEG));
-        media.file().set(file);
-        media.visibility().setValue(PublicVisibilityType.global);
-
-        return media;
-    }
-
     //This is shared between created PMCs
     private static Map<String, FileImageThumbnailBlobDTO> resized = new HashMap<String, FileImageThumbnailBlobDTO>();
 
     public static void generatedBuildingMedia(Building building) {
-        {
-            Media media = EntityFactory.create(Media.class);
-            media.type().setValue(Media.Type.youTube);
-            media.caption().setValue("A " + building.info().name().getValue() + " video");
-            media.youTubeVideoID().setValue(MediaGenerator.randomYoutubeId());
-            media.visibility().setValue(PublicVisibilityType.global);
-            building.media().add(media);
-        }
-
         int imageIndex = RandomUtil.nextInt(7, "bld-img", 4) + 1;
         String filename = "building" + imageIndex;
 
         boolean newData = false;
         @SuppressWarnings("unchecked")
-        Map<Media, byte[]> data = (Map<Media, byte[]>) CacheService.get(MediaGenerator.class.getName() + filename);
+        Map<MediaFile, byte[]> data = (Map<MediaFile, byte[]>) CacheService.get(MediaGenerator.class.getName() + filename);
         if (data == null) {
             data = PictureUtil.loadResourceMedia(filename, MediaGenerator.class);
             newData = true;
         }
-        for (Map.Entry<Media, byte[]> me : data.entrySet()) {
-            Media m = me.getKey();
-            if (m.file().blobKey().isNull()) {
-                m.file().blobKey().setValue(BlobService.persist(me.getValue(), m.file().fileName().getValue(), m.file().contentMimeType().getValue()));
+        for (Map.Entry<MediaFile, byte[]> me : data.entrySet()) {
+            MediaFile m = me.getKey();
+            if (m.blobKey().isNull()) {
+                m.blobKey().setValue(BlobService.persist(me.getValue(), m.fileName().getValue(), m.contentMimeType().getValue()));
 
-                FileImageThumbnailBlobDTO thumbnailBlob = resized.get(m.file().fileName().getValue());
+                FileImageThumbnailBlobDTO thumbnailBlob = resized.get(m.fileName().getValue());
                 if (thumbnailBlob == null) {
-                    thumbnailBlob = ThumbnailService.createThumbnailBlob(m.file().fileName().getStringView(), me.getValue(), ImageTarget.Building);
-                    resized.put(m.file().fileName().getValue(), thumbnailBlob);
+                    thumbnailBlob = ThumbnailService.createThumbnailBlob(m.fileName().getStringView(), me.getValue(), ImageTarget.Building);
+                    resized.put(m.fileName().getValue(), thumbnailBlob);
                 }
                 thumbnailBlob = (FileImageThumbnailBlobDTO) thumbnailBlob.duplicate();
-                thumbnailBlob.setPrimaryKey(m.file().blobKey().getValue());
+                thumbnailBlob.setPrimaryKey(m.blobKey().getValue());
                 ThumbnailService.persist(thumbnailBlob);
                 newData = true;
             }
             if (blob_mimize_Preload_Data_Size) {
-                m = (Media) m.duplicate();
+                m = (MediaFile) m.duplicate();
                 m.setPrimaryKey(null);
             }
             building.media().add(m);
@@ -127,29 +91,29 @@ public class MediaGenerator {
         String filename = "apartment" + imageIndex;
         boolean newData = false;
         @SuppressWarnings("unchecked")
-        Map<Media, byte[]> data = (Map<Media, byte[]>) CacheService.get(MediaGenerator.class.getName() + filename);
+        Map<MediaFile, byte[]> data = (Map<MediaFile, byte[]>) CacheService.get(MediaGenerator.class.getName() + filename);
         if (data == null) {
             data = PictureUtil.loadResourceMedia(filename, MediaGenerator.class);
             newData = true;
         }
-        for (Map.Entry<Media, byte[]> me : data.entrySet()) {
-            Media m = me.getKey();
-            if (m.file().blobKey().isNull()) {
-                m.file().blobKey().setValue(BlobService.persist(me.getValue(), m.file().fileName().getValue(), m.file().contentMimeType().getValue()));
+        for (Map.Entry<MediaFile, byte[]> me : data.entrySet()) {
+            MediaFile m = me.getKey();
+            if (m.blobKey().isNull()) {
+                m.blobKey().setValue(BlobService.persist(me.getValue(), m.fileName().getValue(), m.contentMimeType().getValue()));
 
-                FileImageThumbnailBlobDTO thumbnailBlob = resized.get(m.file().fileName().getValue());
+                FileImageThumbnailBlobDTO thumbnailBlob = resized.get(m.fileName().getValue());
                 if (thumbnailBlob == null) {
-                    thumbnailBlob = ThumbnailService.createThumbnailBlob(m.file().fileName().getStringView(), me.getValue(), ImageTarget.Floorplan);
-                    resized.put(m.file().fileName().getValue(), thumbnailBlob);
+                    thumbnailBlob = ThumbnailService.createThumbnailBlob(m.fileName().getStringView(), me.getValue(), ImageTarget.Floorplan);
+                    resized.put(m.fileName().getValue(), thumbnailBlob);
                 }
                 thumbnailBlob = (FileImageThumbnailBlobDTO) thumbnailBlob.duplicate();
-                thumbnailBlob.setPrimaryKey(m.file().blobKey().getValue());
+                thumbnailBlob.setPrimaryKey(m.blobKey().getValue());
                 ThumbnailService.persist(thumbnailBlob);
 
                 newData = true;
             }
             if (blob_mimize_Preload_Data_Size) {
-                m = (Media) m.duplicate();
+                m = (MediaFile) m.duplicate();
                 m.setPrimaryKey(null);
             }
 

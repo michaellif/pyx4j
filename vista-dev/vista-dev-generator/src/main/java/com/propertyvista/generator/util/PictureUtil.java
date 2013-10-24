@@ -31,8 +31,8 @@ import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.essentials.server.download.MimeMap;
 import com.pyx4j.gwt.server.IOUtils;
 
+import com.propertyvista.domain.MediaFile;
 import com.propertyvista.domain.PublicVisibilityType;
-import com.propertyvista.domain.media.Media;
 
 /**
  * This is just a placeholder, this can be moved to another util method
@@ -41,8 +41,8 @@ public class PictureUtil {
 
     private final static Logger log = LoggerFactory.getLogger(PictureUtil.class);
 
-    public static Map<Media, byte[]> loadResourceMedia(String filenamePrefix, Class<?> clazz) {
-        Map<Media, byte[]> data = new LinkedHashMap<Media, byte[]>();
+    public static Map<MediaFile, byte[]> loadResourceMedia(String filenamePrefix, Class<?> clazz) {
+        Map<MediaFile, byte[]> data = new LinkedHashMap<MediaFile, byte[]>();
         loadResourcePicture(filenamePrefix + ".jpg", clazz, data);
         loadResourcePicture(filenamePrefix + "-1.jpg", clazz, data);
         loadResourcePicture(filenamePrefix + "-2.jpg", clazz, data);
@@ -50,7 +50,7 @@ public class PictureUtil {
         return data;
     }
 
-    private static void loadResourcePicture(String filename, Class<?> clazz, Map<Media, byte[]> data) {
+    private static void loadResourcePicture(String filename, Class<?> clazz, Map<MediaFile, byte[]> data) {
         try {
             byte raw[] = IOUtils.getResource(IOUtils.resourceFileName(filename, clazz));
             if (raw == null) {
@@ -58,15 +58,14 @@ public class PictureUtil {
                 log.debug("Could not find picture [{}] in classpath", filename);
                 return;
             }
-            Media m = EntityFactory.create(Media.class);
-            m.type().setValue(Media.Type.file);
-            m.file().fileName().setValue(filename);
+            MediaFile m = EntityFactory.create(MediaFile.class);
+            m.fileName().setValue(filename);
             m.visibility().setValue(PublicVisibilityType.global);
             m.caption().setValue(FilenameUtils.getBaseName(filename));
             String mime = MimeMap.getContentType(FilenameUtils.getExtension(filename));
-            m.file().contentMimeType().setValue(mime);
+            m.contentMimeType().setValue(mime);
 
-            m.file().fileSize().setValue(raw.length);
+            m.fileSize().setValue(raw.length);
 
             data.put(m, raw);
         } catch (IOException e) {
@@ -75,12 +74,12 @@ public class PictureUtil {
         }
     }
 
-    public static Map<Media, byte[]> loadbuildingMedia(String code) {
+    public static Map<MediaFile, byte[]> loadbuildingMedia(String code) {
         File dir = new File(new File("data", "buildings"), code);
         if (!dir.isDirectory()) {
             return Collections.emptyMap();
         }
-        Map<Media, byte[]> data = new HashMap<Media, byte[]>();
+        Map<MediaFile, byte[]> data = new HashMap<MediaFile, byte[]>();
 
         loadFiles(new File(dir, "buildings"), data);
         loadFiles(new File(dir, "res_album"), data);
@@ -88,7 +87,7 @@ public class PictureUtil {
         return data;
     }
 
-    private static void loadFiles(File dir, Map<Media, byte[]> data) {
+    private static void loadFiles(File dir, Map<MediaFile, byte[]> data) {
         if (!dir.isDirectory()) {
             return;
         }
@@ -104,19 +103,18 @@ public class PictureUtil {
             ByteArrayOutputStream b = new ByteArrayOutputStream();
             InputStream in = null;
             try {
-                Media m = EntityFactory.create(Media.class);
-                m.type().setValue(Media.Type.file);
+                MediaFile m = EntityFactory.create(MediaFile.class);
                 m.visibility().setValue(PublicVisibilityType.global);
 
-                m.file().fileName().setValue(file.getName());
+                m.fileName().setValue(file.getName());
                 m.caption().setValue(FilenameUtils.getBaseName(file.getName()));
-                m.file().contentMimeType().setValue(mime);
+                m.contentMimeType().setValue(mime);
 
                 in = new FileInputStream(file);
                 IOUtils.copyStream(in, b, 1024);
 
                 byte raw[] = b.toByteArray();
-                m.file().fileSize().setValue(raw.length);
+                m.fileSize().setValue(raw.length);
 
                 data.put(m, raw);
             } catch (IOException e) {

@@ -35,8 +35,8 @@ import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.gwt.server.ServletUtils;
 import com.pyx4j.i18n.shared.I18n;
 
+import com.propertyvista.domain.MediaFile;
 import com.propertyvista.domain.PublicVisibilityType;
-import com.propertyvista.domain.media.Media;
 import com.propertyvista.domain.media.ThumbnailSize;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.ref.City;
@@ -427,29 +427,29 @@ public class PMSiteContentManager implements Serializable {
                 + DeploymentConsts.siteImageResourceServletMapping;
     }
 
-    public static String getFistVisibleMediaImgUrl(List<Media> medias, ThumbnailSize size) {
+    public static String getFistVisibleMediaImgUrl(List<MediaFile> medias, ThumbnailSize size) {
         return getMediaImgUrl(getFistVisibleMedia(medias), size);
     }
 
-    public static long getFistVisibleMedia(List<Media> medias) {
-        for (Media media : medias) {
+    public static long getFistVisibleMedia(List<MediaFile> medias) {
+        for (MediaFile media : medias) {
             if (media.isValueDetached()) {
                 Persistence.service().retrieve(media);
             }
-            if (PublicVisibilityType.global.equals(media.visibility().getValue()) && Media.Type.file == (media.type().getValue())) {
+            if (PublicVisibilityType.global.equals(media.visibility().getValue())) {
                 return media.getPrimaryKey().asLong();
             }
         }
         return 0;
     }
 
-    public static List<Media> getVisibleMedia(List<Media> medias) {
-        List<Media> mediasVisible = new Vector<Media>();
-        for (Media media : medias) {
+    public static List<MediaFile> getVisibleMedia(List<MediaFile> medias) {
+        List<MediaFile> mediasVisible = new Vector<MediaFile>();
+        for (MediaFile media : medias) {
             if (media.isValueDetached()) {
                 Persistence.service().retrieve(media);
             }
-            if (PublicVisibilityType.global.equals(media.visibility().getValue()) && Media.Type.file == (media.type().getValue())) {
+            if (PublicVisibilityType.global.equals(media.visibility().getValue())) {
                 mediasVisible.add(media);
             }
         }

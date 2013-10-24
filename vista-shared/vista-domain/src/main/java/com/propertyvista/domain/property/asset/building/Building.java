@@ -42,13 +42,13 @@ import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.entity.shared.ISet;
 
+import com.propertyvista.domain.MediaFile;
 import com.propertyvista.domain.dashboard.gadgets.availability.UnitTurnoverStats;
 import com.propertyvista.domain.financial.BuildingMerchantAccount;
 import com.propertyvista.domain.financial.billing.BillingCycle;
 import com.propertyvista.domain.financial.billing.BuildingArrearsSnapshot;
 import com.propertyvista.domain.financial.offering.ProductCatalog;
 import com.propertyvista.domain.marketing.Marketing;
-import com.propertyvista.domain.media.Media;
 import com.propertyvista.domain.policy.framework.PolicyNode;
 import com.propertyvista.domain.property.PropertyManager;
 import com.propertyvista.domain.property.PropertyManagerReferenceAdapter;
@@ -119,7 +119,7 @@ public interface Building extends PolicyNode {
 
     @Owned
     @Detached
-    IList<Media> media();
+    IList<MediaFile> media();
 
     @Detached
     @Owned(forceCreation = true, cascade = {})

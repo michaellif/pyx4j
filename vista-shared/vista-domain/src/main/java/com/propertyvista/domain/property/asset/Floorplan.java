@@ -35,7 +35,7 @@ import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.i18n.annotations.I18n;
 
-import com.propertyvista.domain.media.Media;
+import com.propertyvista.domain.MediaFile;
 import com.propertyvista.domain.policy.framework.PolicyNode;
 import com.propertyvista.domain.property.asset.building.Building;
 
@@ -85,7 +85,7 @@ public interface Floorplan extends PolicyNode {
 
     @Detached
     @Owned
-    IList<Media> media();
+    IList<MediaFile> media();
 
     @Owned
     @I18n(strategy = I18n.I18nStrategy.IgnoreThis)
