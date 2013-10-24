@@ -19,7 +19,7 @@ import com.propertyvista.portal.web.client.ui.IWizardView;
 
 public interface PasswordResetWizardView extends IWizardView<PasswordChangeRequest> {
 
-    public interface PasswordResetWizardPresenter {
+    public interface PasswordResetWizardPresenter extends IWizardPresenter<PasswordChangeRequest> {
 
     }
 

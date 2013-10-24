@@ -43,7 +43,6 @@ public class PasswordChangeActivity extends AbstractWizardActivity<PasswordChang
 
     @Override
     public void start(AcceptsOneWidget panel, EventBus eventBus) {
-
         super.start(panel, eventBus);
         getView().populate(EntityFactory.create(PasswordChangeRequest.class));
     }
@@ -54,7 +53,7 @@ public class PasswordChangeActivity extends AbstractWizardActivity<PasswordChang
             @Override
             public void onSuccess(VoidSerializable result) {
                 PasswordChangeActivity.super.submit();
-                Notification message = new Notification(null, i18n.tr("Password was changed successfully"), NotificationType.INFO);
+                Notification message = new Notification(null, i18n.tr("Your password was changed successfully!"), NotificationType.INFO);
                 PortalWebSite.getPlaceController().showNotification(message);
             }
 
