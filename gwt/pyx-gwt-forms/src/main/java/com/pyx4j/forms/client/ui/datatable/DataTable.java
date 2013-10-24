@@ -589,6 +589,7 @@ public class DataTable<E extends IEntity> extends FlexTable implements DataTable
         public ColumnSelectorDialog() {
             super("Select Columns");
 
+            setDialogPixelWidth(300);
             FlowPanel panel = new FlowPanel();
             for (ColumnDescriptor column : model.getColumnDescriptors()) {
                 if (!column.isSearchableOnly()) {
@@ -601,8 +602,7 @@ public class DataTable<E extends IEntity> extends FlexTable implements DataTable
             }
 
             ScrollPanel scroll = new ScrollPanel(panel);
-            scroll.getElement().getStyle().setProperty("minWidth", "20em");
-            scroll.getElement().getStyle().setProperty("maxHeight", "20em");
+            scroll.setHeight("200px");
             scroll.setStyleName(DefaultDataTableTheme.StyleName.DataTableColumnMenu.name());
 
             setBody(scroll.asWidget());
