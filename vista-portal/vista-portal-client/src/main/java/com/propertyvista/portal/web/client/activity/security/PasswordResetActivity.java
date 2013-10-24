@@ -26,8 +26,6 @@ import com.pyx4j.security.client.ClientContext;
 import com.pyx4j.security.rpc.AbstractPasswordResetService;
 import com.pyx4j.security.rpc.AuthenticationResponse;
 import com.pyx4j.security.rpc.PasswordChangeRequest;
-import com.pyx4j.site.client.AppSite;
-import com.pyx4j.site.rpc.AppPlace;
 import com.pyx4j.site.shared.domain.Notification;
 import com.pyx4j.site.shared.domain.Notification.NotificationType;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
@@ -54,12 +52,17 @@ public class PasswordResetActivity extends AbstractWizardActivity<PasswordChange
     }
 
     @Override
+    protected void onFinish() {
+        // Do not go Back on Submit
+    }
+
+    @Override
     public void submit() {
         GWT.<AbstractPasswordResetService> create(PortalPasswordResetService.class).resetPassword(new DefaultAsyncCallback<AuthenticationResponse>() {
             @Override
             public void onSuccess(AuthenticationResponse result) {
-                ClientContext.authenticated(result);
                 PasswordResetActivity.super.submit();
+                ClientContext.authenticated(result);
                 Notification message = new Notification(null, i18n.tr("Your password has been reset successfully!"), NotificationType.INFO);
                 PortalWebSite.getPlaceController().showNotification(message);
             }

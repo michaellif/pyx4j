@@ -35,6 +35,9 @@ public class PortalSiteMap implements SiteMap {
     }
 
     public static class LoginWithToken extends AppPlace implements PublicPlace {
+        {
+            setStable(false);
+        }
     }
 
     /** This is the place when user must enter credentials and pass the humand verification to send the password request */
