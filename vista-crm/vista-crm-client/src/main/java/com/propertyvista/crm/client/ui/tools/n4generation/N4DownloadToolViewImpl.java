@@ -15,9 +15,15 @@ package com.propertyvista.crm.client.ui.tools.n4generation;
 
 import java.util.List;
 
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.user.client.ui.Anchor;
+import com.google.gwt.user.client.ui.FlowPanel;
+
 import com.pyx4j.commons.css.IStyleName;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.widgets.client.dialog.MessageDialog;
+import com.pyx4j.widgets.client.dialog.CancelOption;
+import com.pyx4j.widgets.client.dialog.Dialog;
 
 import com.propertyvista.crm.client.ui.tools.n4generation.base.BulkOperationToolViewImpl;
 import com.propertyvista.crm.rpc.dto.legal.n4.LegalNoticeCandidateDTO;
@@ -46,13 +52,39 @@ public class N4DownloadToolViewImpl extends BulkOperationToolViewImpl<N4Download
     }
 
     @Override
-    public void displayN4DownloadLink(String url) {
-        MessageDialog.info(url);
+    public void displayN4DownloadLink(final String url) {
+        new LinkDialog(i18n.tr("N4's are ready"), "Download N4's", url) {
+            @Override
+            public boolean onClickCancel() {
+                ((N4DownloadToolView.N4DownloadToolViewPresenter) getPresenter()).cancelDownload(url);
+                return false;
+            }
+        }.show();
     }
 
     @Override
     public void setGenerations(List<N4GenerationDTO> generations) {
         downloadSettingsForm.setGenerations(generations);
+    }
+
+    private abstract static class LinkDialog extends Dialog implements CancelOption {
+
+        private final Anchor downloadAnchor;
+
+        public LinkDialog(String caption, String anchorLabel, String url) {
+            super(caption);
+            FlowPanel panel = new FlowPanel();
+            downloadAnchor = new Anchor(anchorLabel, url, "_blank");
+            downloadAnchor.addClickHandler(new ClickHandler() {
+                @Override
+                public void onClick(ClickEvent event) {
+                    LinkDialog.this.hide(false);
+                }
+            });
+            panel.add(downloadAnchor);
+            setBody(panel);
+        }
+
     }
 
 }

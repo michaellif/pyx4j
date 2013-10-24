@@ -146,6 +146,11 @@ public abstract class BulkOperationToolViewImpl<Settings extends IEntity, Item e
     }
 
     @Override
+    public com.propertyvista.crm.client.ui.tools.n4generation.base.BulkOperationToolView.Presenter getPresenter() {
+        return presenter;
+    }
+
+    @Override
     public List<Item> getMarkedItems() {
         List<Item> selected = new LinkedList<Item>();
         for (Item item : itemsHolderForm.getValue().items()) {

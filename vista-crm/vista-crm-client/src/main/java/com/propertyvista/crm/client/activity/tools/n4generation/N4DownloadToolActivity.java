@@ -20,6 +20,7 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
+import com.pyx4j.essentials.rpc.download.DownloadableService;
 import com.pyx4j.essentials.rpc.report.DeferredReportProcessProgressResponse;
 import com.pyx4j.gwt.rpc.deferred.DeferredProcessProgressResponse;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
@@ -32,8 +33,10 @@ import com.propertyvista.crm.rpc.dto.legal.n4.N4DownloadSettingsDTO;
 import com.propertyvista.crm.rpc.dto.legal.n4.N4GenerationDTO;
 import com.propertyvista.crm.rpc.services.legal.N4DownloadToolService;
 import com.propertyvista.domain.legal.N4LegalLetter;
+import com.propertyvista.portal.rpc.DeploymentConsts;
 
-public class N4DownloadToolActivity extends AbstractBulkOperationToolActivity<N4DownloadSettingsDTO, LegalNoticeCandidateDTO, Vector<N4LegalLetter>> {
+public class N4DownloadToolActivity extends AbstractBulkOperationToolActivity<N4DownloadSettingsDTO, LegalNoticeCandidateDTO, Vector<N4LegalLetter>> implements
+        N4DownloadToolView.N4DownloadToolViewPresenter {
 
     public N4DownloadToolActivity(AppPlace place) {
         super(place, CrmSite.getViewFactory().instantiate(N4DownloadToolView.class), GWT.<N4DownloadToolService> create(N4DownloadToolService.class));
@@ -63,7 +66,13 @@ public class N4DownloadToolActivity extends AbstractBulkOperationToolActivity<N4
     @Override
     protected void onSelectedProccessSuccess(DeferredProcessProgressResponse result) {
         DeferredReportProcessProgressResponse response = (DeferredReportProcessProgressResponse) result;
-        ((N4DownloadToolView) getView()).displayN4DownloadLink(response.getDownloadLink());
+        String downloadUrl = GWT.getModuleBaseURL() + DeploymentConsts.downloadServletMapping + "/" + response.getDownloadLink();
+        ((N4DownloadToolView) getView()).displayN4DownloadLink(downloadUrl);
+    }
+
+    @Override
+    public void cancelDownload(String url) {
+        GWT.<DownloadableService> create(DownloadableService.class).cancelDownload(null, url);
     }
 
 }

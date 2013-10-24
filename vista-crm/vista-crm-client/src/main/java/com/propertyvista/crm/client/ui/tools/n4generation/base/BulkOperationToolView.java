@@ -36,6 +36,8 @@ public interface BulkOperationToolView<Settings extends IEntity, Item extends Bu
 
     void setPresenter(Presenter presenter);
 
+    Presenter getPresenter();
+
     void setRowData(int start, int total, List<Item> items);
 
     void resetVisibleRange();
