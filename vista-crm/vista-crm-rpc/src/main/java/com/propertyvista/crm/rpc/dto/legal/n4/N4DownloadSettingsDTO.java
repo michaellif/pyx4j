@@ -13,12 +13,16 @@
  */
 package com.propertyvista.crm.rpc.dto.legal.n4;
 
+import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.Transient;
+import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IEntity;
 
 @Transient
 public interface N4DownloadSettingsDTO extends IEntity {
 
+    @NotNull
+    @Caption(name = "Select Generation")
     N4GenerationDTO selectedGeneration();
 
 }
