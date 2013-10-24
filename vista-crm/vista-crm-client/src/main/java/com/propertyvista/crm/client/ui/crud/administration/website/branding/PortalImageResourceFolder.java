@@ -146,8 +146,7 @@ public class PortalImageResourceFolder extends VistaBoxFolder<PortalLogoImageRes
         class LogoLink extends CFile<SiteImageResource> {
 
             public LogoLink(SiteImageThumbnail thumb) {
-                super(GWT.<SiteImageResourceUploadService> create(SiteImageResourceUploadService.class));
-                setFileUrlBuilder(new FileURLBuilder<SiteImageResource>() {
+                super(GWT.<SiteImageResourceUploadService> create(SiteImageResourceUploadService.class), new FileURLBuilder<SiteImageResource>() {
 
                     @Override
                     public String getUrl(SiteImageResource file) {

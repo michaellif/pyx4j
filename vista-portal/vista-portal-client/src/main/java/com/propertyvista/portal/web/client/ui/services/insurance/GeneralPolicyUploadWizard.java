@@ -26,8 +26,11 @@ import com.pyx4j.forms.client.ui.CFile;
 import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
 import com.pyx4j.forms.client.validators.ValidationError;
+import com.pyx4j.gwt.shared.FileURLBuilder;
 import com.pyx4j.i18n.shared.I18n;
 
+import com.propertyvista.common.client.ui.components.MediaUtils;
+import com.propertyvista.domain.site.SiteImageResource;
 import com.propertyvista.domain.tenant.Customer;
 import com.propertyvista.domain.tenant.insurance.InsuranceCertificateScan;
 import com.propertyvista.domain.tenant.lease.Tenant;
@@ -137,8 +140,14 @@ public class GeneralPolicyUploadWizard extends CPortalEntityWizard<GeneralInsura
                 0,
                 1,
                 new FormDecoratorBuilder(inject(proto().certificate().certificateScan(),
-                        new CFile<InsuranceCertificateScan>(GWT.<GeneralInsurancePolicyUploadService> create(GeneralInsurancePolicyUploadService.class))), 200)
-                        .build());
+                        new CFile<InsuranceCertificateScan>(GWT.<GeneralInsurancePolicyUploadService> create(GeneralInsurancePolicyUploadService.class),
+                                new FileURLBuilder<InsuranceCertificateScan>() {
+
+                                    @Override
+                                    public String getUrl(InsuranceCertificateScan file) {
+                                        return MediaUtils.createInsuranceCertificateScanUrl(file);
+                                    }
+                                })), 200).build());
 
         return contentPanel;
     }

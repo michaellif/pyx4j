@@ -22,9 +22,11 @@ import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.ui.CFile;
 import com.pyx4j.forms.client.ui.form.FormDecorator;
 import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
+import com.pyx4j.gwt.shared.FileURLBuilder;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.Button;
 
+import com.propertyvista.common.client.ui.components.MediaUtils;
 import com.propertyvista.domain.tenant.insurance.InsuranceCertificateScan;
 import com.propertyvista.portal.rpc.portal.web.dto.insurance.GeneralInsurancePolicyDTO;
 import com.propertyvista.portal.rpc.portal.web.services.services.GeneralInsurancePolicyUploadService;
@@ -54,8 +56,14 @@ public class GeneralPolicyPage extends CPortalEntityForm<GeneralInsurancePolicyD
                 0,
                 1,
                 new FormDecoratorBuilder(inject(proto().certificate().certificateScan(),
-                        new CFile<InsuranceCertificateScan>(GWT.<GeneralInsurancePolicyUploadService> create(GeneralInsurancePolicyUploadService.class))), 200)
-                        .build());
+                        new CFile<InsuranceCertificateScan>(GWT.<GeneralInsurancePolicyUploadService> create(GeneralInsurancePolicyUploadService.class),
+                                new FileURLBuilder<InsuranceCertificateScan>() {
+
+                                    @Override
+                                    public String getUrl(InsuranceCertificateScan file) {
+                                        return MediaUtils.createInsuranceCertificateScanUrl(file);
+                                    }
+                                })), 200).build());
 
         return mainPanel;
 

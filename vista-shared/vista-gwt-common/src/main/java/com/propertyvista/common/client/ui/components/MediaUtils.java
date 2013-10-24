@@ -30,6 +30,7 @@ import com.propertyvista.domain.security.common.VistaApplication;
 import com.propertyvista.domain.security.common.VistaBasicBehavior;
 import com.propertyvista.domain.site.SiteImageResource;
 import com.propertyvista.domain.tenant.CustomerPicture;
+import com.propertyvista.domain.tenant.insurance.InsuranceCertificateScan;
 import com.propertyvista.portal.rpc.DeploymentConsts;
 import com.propertyvista.portal.rpc.portal.ImageConsts;
 
@@ -76,6 +77,11 @@ public class MediaUtils {
     public static String createMediaImageUrl(MediaFile mediaFile) {
         return GWT.getModuleBaseURL() + DeploymentConsts.mediaImagesServletMapping + mediaFile.getPrimaryKey().toString() + "/" + ThumbnailSize.large.name()
                 + "." + ImageConsts.THUMBNAIL_TYPE;
+    }
+
+    public static String createInsuranceCertificateScanUrl(InsuranceCertificateScan certificateScan) {
+        return ClientNavigUtils.getDeploymentBaseURL() + DeploymentConsts.applicationDocumentServletMapping + certificateScan.id().getStringView() + "/"
+                + certificateScan.fileName().getStringView();
     }
 
     public static String createSiteSmallLogoUrl() {
