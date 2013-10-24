@@ -25,6 +25,7 @@ import com.pyx4j.forms.client.ui.form.FormDecorator;
 import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.Button;
+import com.pyx4j.widgets.client.dialog.MessageDialog;
 import com.pyx4j.widgets.client.dialog.OkCancelDialog;
 
 import com.propertyvista.domain.maintenance.MaintenanceRequestCategory;
@@ -47,19 +48,13 @@ public class MaintenanceRequestPage extends CPortalEntityForm<MaintenanceRequest
         btnCancel = new Button(i18n.tr("Cancel Request"), new Command() {
             @Override
             public void execute() {
-                new OkCancelDialog(i18n.tr("Please confirm")) {
-                    @Override
-                    public void setBody(IsWidget body) {
-                        super.setBody(new HTML(i18n.tr("Are you sure you would like to cancel this request?")));
-                    }
+                MessageDialog.confirm(i18n.tr("Please confirm"), i18n.tr("Are you sure you would like to cancel this request?"), new Command() {
 
                     @Override
-                    public boolean onClickOk() {
+                    public void execute() {
                         ((MaintenanceRequestPagePresenter) getView().getPresenter()).cancelRequest();
-                        return true;
                     }
-
-                }.show();
+                });
             }
         });
         asWidget().setStyleName(EntityViewTheme.StyleName.EntityView.name());
