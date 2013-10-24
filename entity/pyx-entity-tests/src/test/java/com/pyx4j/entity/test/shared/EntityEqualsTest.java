@@ -147,6 +147,21 @@ public class EntityEqualsTest extends InitializerTestBase {
         assertFalse("Data should be different\n" + t1.toString() + "\n!=\n" + t2.toString(), EntityGraph.fullyEqual(t1, t2));
     }
 
+    public void testFullyEqualWithTransientMember() {
+        Department d1 = EntityFactory.create(Department.class);
+        d1.setPrimaryKey(new Key(11));
+
+        Department d2 = EntityFactory.create(Department.class);
+        d2.setPrimaryKey(new Key(11));
+
+        assertTrue("Same data\n" + d1.toString() + "\n!=\n" + d2.toString(), EntityGraph.fullyEqual(d1, d2));
+
+        d1.transientStuff().setValue("V1");
+        d2.transientStuff().setValue("V2");
+
+        assertTrue("Same data\n" + d1.toString() + "\n!=\n" + d2.toString(), EntityGraph.fullyEqual(d1, d2));
+    }
+
     public void testFullyEqualWithPolymorphicEntity() {
         Concrete2Entity ent1 = EntityFactory.create(Concrete2Entity.class);
         ent1.setPrimaryKey(new Key(1));
