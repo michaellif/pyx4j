@@ -31,11 +31,14 @@ import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.client.ui.layout.responsive.LayoutChangeEvent;
 import com.pyx4j.site.client.ui.layout.responsive.LayoutChangeHandler;
 import com.pyx4j.site.client.ui.layout.responsive.ResponsiveLayoutPanel.LayoutType;
+import com.pyx4j.widgets.client.Anchor;
 import com.pyx4j.widgets.client.Button;
 import com.pyx4j.widgets.client.PopupWindow.PopupWindowHandle;
 
 import com.propertyvista.common.client.ui.components.MediaUtils;
 import com.propertyvista.domain.site.SocialLink;
+import com.propertyvista.misc.VistaTODO;
+import com.propertyvista.portal.rpc.portal.PortalSiteMap;
 import com.propertyvista.portal.rpc.portal.web.dto.PortalFooterContentDTO;
 import com.propertyvista.portal.web.client.resources.PortalImages;
 import com.propertyvista.portal.web.client.themes.PortalWebRootPaneTheme;
@@ -67,7 +70,15 @@ public class FooterViewImpl extends FlowPanel implements FooterView {
         actionsPanel.getElement().getStyle().setVerticalAlign(VerticalAlign.TOP);
         actionsPanel.setWidth("50%");
 
-        SimplePanel linksPanel = new SimplePanel(new HTML("Terms of Use - Privacy - FAQ"));
+        Anchor termsAnchor = new Anchor(i18n.tr("Terms And Conditions"), new Command() {
+
+            @Override
+            public void execute() {
+                AppSite.getPlaceController().goTo(new PortalSiteMap.PortalTerms.TermsAndConditions());
+            }
+        });
+
+        SimplePanel linksPanel = new SimplePanel(termsAnchor);
         linksPanel.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
         linksPanel.getElement().getStyle().setVerticalAlign(VerticalAlign.TOP);
         linksPanel.getElement().getStyle().setProperty("textAlign", "center");
@@ -92,7 +103,10 @@ public class FooterViewImpl extends FlowPanel implements FooterView {
 
         add(pmcInfoPanel);
         add(actionsPanel);
-        add(langSelectorPanel);
+        //TODO implement lang selector
+        if (false) {
+            add(langSelectorPanel);
+        }
         add(linksPanel);
 
         doLayout(LayoutType.getLayoutType(Window.getClientWidth()));

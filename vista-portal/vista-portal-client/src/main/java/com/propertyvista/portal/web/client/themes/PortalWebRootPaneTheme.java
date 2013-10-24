@@ -219,6 +219,10 @@ public class PortalWebRootPaneTheme extends Theme {
         style.addProperty("height", "100%");
         addStyle(style);
 
+        style = new Style(".", StyleName.PageFooter, " .", DefaultWidgetsTheme.StyleName.Anchor);
+        style.addProperty("color", ThemeColor.foreground, 0.01);
+        addStyle(style);
+
         style = new Style(".", StyleName.PageFooterFollowUs);
         style.addProperty("padding", "10px 0");
         addStyle(style);

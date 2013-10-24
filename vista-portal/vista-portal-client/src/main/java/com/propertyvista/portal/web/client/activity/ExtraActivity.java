@@ -33,8 +33,9 @@ import com.propertyvista.portal.domain.dto.extra.WeatherGadgetDTO;
 import com.propertyvista.portal.domain.dto.extra.WeatherGadgetDTO.WeatherType;
 import com.propertyvista.portal.web.client.PortalWebSite;
 import com.propertyvista.portal.web.client.ui.extra.ExtraView;
+import com.propertyvista.portal.web.client.ui.extra.ExtraView.ExtraPresenter;
 
-public class ExtraActivity extends AbstractActivity {
+public class ExtraActivity extends AbstractActivity implements ExtraPresenter {
 
     private static List<ExtraGadgetDTO> gadgets = new ArrayList<ExtraGadgetDTO>();
 
@@ -46,7 +47,12 @@ public class ExtraActivity extends AbstractActivity {
             WeatherGadgetDTO data = EntityFactory.create(WeatherGadgetDTO.class);
             data.weatherType().setValue(WeatherType.sunny);
             data.temperature().setValue(25);
-            gadgets.add(data);
+
+            //TODO implement WeatherGadget
+            if (false) {
+                gadgets.add(data);
+            }
+
         }
 
         {
@@ -67,7 +73,11 @@ public class ExtraActivity extends AbstractActivity {
                 event.description().setValue("We’ve planned a fun event for you to come out, have fun and meet your neighbours.");
                 data.events().add(event);
             }
-            gadgets.add(data);
+
+            //TODO implement CommunityEventsGadget
+            if (false) {
+                gadgets.add(data);
+            }
         }
 
     }
