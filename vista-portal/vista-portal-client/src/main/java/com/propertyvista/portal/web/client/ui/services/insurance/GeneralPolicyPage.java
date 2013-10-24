@@ -13,17 +13,21 @@
  */
 package com.propertyvista.portal.web.client.ui.services.insurance;
 
+import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.commons.css.ThemeColor;
 import com.pyx4j.forms.client.ui.CEntityForm;
+import com.pyx4j.forms.client.ui.CFile;
 import com.pyx4j.forms.client.ui.form.FormDecorator;
 import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.Button;
 
+import com.propertyvista.domain.tenant.insurance.InsuranceCertificateScan;
 import com.propertyvista.portal.rpc.portal.web.dto.insurance.GeneralInsurancePolicyDTO;
+import com.propertyvista.portal.rpc.portal.web.services.services.GeneralInsurancePolicyUploadService;
 import com.propertyvista.portal.web.client.ui.CPortalEntityForm;
 import com.propertyvista.portal.web.client.ui.util.decorators.FormDecoratorBuilder;
 
@@ -40,14 +44,18 @@ public class GeneralPolicyPage extends CPortalEntityForm<GeneralInsurancePolicyD
         BasicFlexFormPanel mainPanel = new BasicFlexFormPanel();
         int row = -1;
 
-        mainPanel.setH1(++row, 0, 1, i18n.tr("Basic Information"));
-        mainPanel.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().certificate().insuranceProvider()), 150).build());
-        mainPanel.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().certificate().insuranceCertificateNumber()), 150).build());
-        mainPanel.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().certificate().liabilityCoverage()), 150).build());
-        mainPanel.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().certificate().inceptionDate()), 150).build());
-        mainPanel.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().certificate().expiryDate()), 150).build());
-        mainPanel.setH2(++row, 0, 2, i18n.tr("Scanned Certificate"));
-//        mainPanel.setWidget(++row, 0, 2, inject(proto().certificate().certificateScan()));
+        mainPanel.setWidget(++row, 0, 1, new FormDecoratorBuilder(inject(proto().certificate().insuranceProvider()), 150).build());
+        mainPanel.setWidget(++row, 0, 1, new FormDecoratorBuilder(inject(proto().certificate().insuranceCertificateNumber()), 150).build());
+        mainPanel.setWidget(++row, 0, 1, new FormDecoratorBuilder(inject(proto().certificate().liabilityCoverage()), 150).build());
+        mainPanel.setWidget(++row, 0, 1, new FormDecoratorBuilder(inject(proto().certificate().inceptionDate()), 150).build());
+        mainPanel.setWidget(++row, 0, 1, new FormDecoratorBuilder(inject(proto().certificate().expiryDate()), 150).build());
+        mainPanel.setWidget(
+                ++row,
+                0,
+                1,
+                new FormDecoratorBuilder(inject(proto().certificate().certificateScan(),
+                        new CFile<InsuranceCertificateScan>(GWT.<GeneralInsurancePolicyUploadService> create(GeneralInsurancePolicyUploadService.class))), 200)
+                        .build());
 
         return mainPanel;
 

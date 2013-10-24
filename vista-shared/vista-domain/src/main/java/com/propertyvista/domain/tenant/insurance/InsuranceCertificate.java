@@ -74,7 +74,6 @@ public interface InsuranceCertificate<INSURANCE_POLICY extends InsurancePolicy<?
     IPrimitive<LogicalDate> expiryDate();
 
     @Owned
-    @Detached
     InsuranceCertificateScan certificateScan();
 
 }

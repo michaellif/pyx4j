@@ -15,6 +15,7 @@ package com.propertyvista.domain.tenant.insurance;
 
 import com.pyx4j.entity.annotations.AbstractEntity;
 import com.pyx4j.entity.annotations.Caption;
+import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.DiscriminatorValue;
 import com.pyx4j.entity.annotations.Inheritance;
 import com.pyx4j.entity.annotations.Inheritance.InheritanceStrategy;
@@ -37,6 +38,7 @@ public interface InsurancePolicy<INSURANCE_CERTIFICATE extends InsuranceCertific
     @Owner
     @JoinColumn
     @ReadOnly
+    @Detached
     Tenant tenant();
 
     @Owned
