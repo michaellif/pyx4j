@@ -42,6 +42,7 @@ import com.propertyvista.portal.web.client.themes.NavigationAnchorTheme;
 import com.propertyvista.portal.web.client.themes.TenantSureTheme;
 import com.propertyvista.portal.web.client.ui.CPortalEntityWizard;
 import com.propertyvista.portal.web.client.ui.services.insurance.TenantSureOrderWizardView.TenantSureOrderWizardPersenter;
+import com.propertyvista.portal.web.client.ui.services.insurance.tenantsurepaymentmethod.TenantSurePaymentMethodForm;
 import com.propertyvista.portal.web.client.ui.util.decorators.FormDecoratorBuilder;
 
 public class TenantSureOrderWizard extends CPortalEntityWizard<TenantSureInsurancePolicyDTO> {

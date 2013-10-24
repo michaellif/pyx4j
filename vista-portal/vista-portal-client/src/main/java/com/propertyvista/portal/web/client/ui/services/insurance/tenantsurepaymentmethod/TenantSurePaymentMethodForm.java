@@ -11,7 +11,7 @@
  * @author ArtyomB
  * @version $Id$
  */
-package com.propertyvista.portal.web.client.ui.services.insurance;
+package com.propertyvista.portal.web.client.ui.services.insurance.tenantsurepaymentmethod;
 
 import java.util.EnumSet;
 import java.util.Set;

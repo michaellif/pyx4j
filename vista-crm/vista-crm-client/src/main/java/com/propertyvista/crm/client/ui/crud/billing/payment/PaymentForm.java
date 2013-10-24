@@ -222,7 +222,7 @@ public class PaymentForm extends CrmEntityForm<PaymentRecordDTO> {
                         PaymentDataDTO.PaymentSelect.class, RadioGroup.Layout.HORISONTAL))).build());
 
         left.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().profiledPaymentMethod(), profiledPaymentMethodsCombo), 30).build());
-        left.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().addThisPaymentMethodToProfile()), 3).build());
+        left.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().storeInProfile()), 3).build());
 
         TwoColumnFlexFormPanel right = new TwoColumnFlexFormPanel();
         row = -1;
@@ -337,7 +337,7 @@ public class PaymentForm extends CrmEntityForm<PaymentRecordDTO> {
         preauthorizedPaymentMethodViewerHeader.setVisible(false);
 
         get(proto().selectPaymentMethod()).setVisible(false);
-        get(proto().addThisPaymentMethodToProfile()).setVisible(false);
+        get(proto().storeInProfile()).setVisible(false);
         get(proto().createdBy()).setVisible(false);
 
         get(proto().profiledPaymentMethod()).setNote(null);
@@ -389,7 +389,7 @@ public class PaymentForm extends CrmEntityForm<PaymentRecordDTO> {
                     paymentMethodEditor.setViewable(true);
                 } else {
                     paymentMethodEditor.setViewable(false);
-                    get(proto().addThisPaymentMethodToProfile()).setVisible(true);
+                    get(proto().storeInProfile()).setVisible(true);
                     setupAddThisPaymentMethodToProfile(getValue().paymentMethod().type().getValue());
                 }
             }
@@ -468,7 +468,7 @@ public class PaymentForm extends CrmEntityForm<PaymentRecordDTO> {
 
     private void setProfiledPaymentMethodsVisible(boolean visible) {
         profiledPaymentMethodsCombo.setVisible(visible && !isViewable());
-        get(proto().addThisPaymentMethodToProfile()).setVisible(!visible && !isViewable() && !getValue().paymentMethod().type().isNull());
+        get(proto().storeInProfile()).setVisible(!visible && !isViewable() && !getValue().paymentMethod().type().isNull());
         setupAddThisPaymentMethodToProfile(getValue().paymentMethod().type().getValue());
     }
 
@@ -476,18 +476,18 @@ public class PaymentForm extends CrmEntityForm<PaymentRecordDTO> {
         if (paymentType != null) {
             switch (paymentType) {
             case CreditCard:
-                get(proto().addThisPaymentMethodToProfile()).setValue(true);
-                get(proto().addThisPaymentMethodToProfile()).setEnabled(true);
+                get(proto().storeInProfile()).setValue(true);
+                get(proto().storeInProfile()).setEnabled(true);
                 break;
 
             case Echeck:
-                get(proto().addThisPaymentMethodToProfile()).setValue(true);
-                get(proto().addThisPaymentMethodToProfile()).setEnabled(false);
+                get(proto().storeInProfile()).setValue(true);
+                get(proto().storeInProfile()).setEnabled(false);
                 break;
 
             default:
-                get(proto().addThisPaymentMethodToProfile()).setValue(false);
-                get(proto().addThisPaymentMethodToProfile()).setEnabled(false);
+                get(proto().storeInProfile()).setValue(false);
+                get(proto().storeInProfile()).setEnabled(false);
                 break;
             }
         }

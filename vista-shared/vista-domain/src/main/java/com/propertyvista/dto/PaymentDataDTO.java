@@ -77,5 +77,5 @@ public interface PaymentDataDTO extends IEntity {
     LeasePaymentMethod profiledPaymentMethod();
 
     @Transient
-    IPrimitive<Boolean> addThisPaymentMethodToProfile();
+    IPrimitive<Boolean> storeInProfile();
 }

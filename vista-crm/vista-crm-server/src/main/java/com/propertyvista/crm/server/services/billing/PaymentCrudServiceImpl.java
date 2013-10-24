@@ -134,7 +134,7 @@ public class PaymentCrudServiceImpl extends AbstractCrudServiceDtoImpl<PaymentRe
         dto.leaseStatus().set(dto.billingAccount().lease().status());
         dto.propertyCode().set(dto.billingAccount().lease().unit().building().propertyCode());
         dto.unitNumber().set(dto.billingAccount().lease().unit().info().number());
-        dto.addThisPaymentMethodToProfile().setValue(entity.paymentMethod().isProfiledMethod().getValue());
+        dto.storeInProfile().setValue(entity.paymentMethod().isProfiledMethod().getValue());
     }
 
     @Override
@@ -143,7 +143,7 @@ public class PaymentCrudServiceImpl extends AbstractCrudServiceDtoImpl<PaymentRe
 
         // Do not change profile methods
         if (bo.paymentMethod().id().isNull()) {
-            if (to.addThisPaymentMethodToProfile().isBooleanTrue() && PaymentType.avalableInProfile().contains(to.paymentMethod().type().getValue())) {
+            if (to.storeInProfile().isBooleanTrue() && PaymentType.avalableInProfile().contains(to.paymentMethod().type().getValue())) {
                 bo.paymentMethod().isProfiledMethod().setValue(Boolean.TRUE);
             } else {
                 bo.paymentMethod().isProfiledMethod().setValue(Boolean.FALSE);

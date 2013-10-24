@@ -109,7 +109,7 @@ public class PaymentWizardServiceImpl extends AbstractCrudServiceDtoImpl<Payment
 
         // Do not change profile methods
         if (entity.paymentMethod().id().isNull()) {
-            if (dto.addThisPaymentMethodToProfile().isBooleanTrue() && PaymentType.avalableInProfile().contains(dto.paymentMethod().type().getValue())) {
+            if (dto.storeInProfile().isBooleanTrue() && PaymentType.avalableInProfile().contains(dto.paymentMethod().type().getValue())) {
                 entity.paymentMethod().isProfiledMethod().setValue(Boolean.TRUE);
             } else {
                 entity.paymentMethod().isProfiledMethod().setValue(Boolean.FALSE);

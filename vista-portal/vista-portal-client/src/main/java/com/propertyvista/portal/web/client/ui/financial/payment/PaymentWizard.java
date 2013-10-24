@@ -171,19 +171,17 @@ public class PaymentWizard extends CPortalEntityWizard<PaymentDTO> {
         BasicFlexFormPanel panel = new BasicFlexFormPanel(i18n.tr("Payment Method Selection"));
         int row = -1;
 
-        panel.setWidget(
-                ++row,
-                0,
-                new FormDecoratorBuilder(inject(proto().selectPaymentMethod(), new CRadioGroupEnum<PaymentSelect>(PaymentSelect.class,
-                        RadioGroup.Layout.HORISONTAL)), 200).build());
+        panel.setWidget(++row, 0,
+                oldDecorator(inject(proto().selectPaymentMethod(), new CRadioGroupEnum<PaymentSelect>(PaymentSelect.class, RadioGroup.Layout.HORISONTAL)), 15)
+                        .build());
 
-        panel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().profiledPaymentMethod(), profiledPaymentMethodsCombo), 200).build());
+        panel.setWidget(++row, 0, oldDecorator(inject(proto().profiledPaymentMethod(), profiledPaymentMethodsCombo), 15).build());
 
         panel.setWidget(++row, 0, inject(proto().paymentMethod(), paymentMethodEditor));
 
         panel.setHR(++row, 0, 1);
 
-        panel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().addThisPaymentMethodToProfile()), 50).labelWidth(20).build());
+        panel.setWidget(++row, 0, oldDecorator(inject(proto().storeInProfile()), 5).build());
 
         // tweaks:
 
@@ -248,6 +246,13 @@ public class PaymentWizard extends CPortalEntityWizard<PaymentDTO> {
         });
 
         return panel;
+    }
+
+    private com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder oldDecorator(CComponent<?> comp, double compWidth) {
+        final double labelWidth = com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder.LABEL_WIDTH;
+        final double contentWidth = 15;
+        return new com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder(comp, labelWidth,
+                (compWidth <= contentWidth ? compWidth : contentWidth), contentWidth);
     }
 
     private BasicFlexFormPanel createConfirmationStep() {
@@ -333,8 +338,8 @@ public class PaymentWizard extends CPortalEntityWizard<PaymentDTO> {
     private void setProfiledPaymentMethodsVisible(boolean visible) {
         profiledPaymentMethodsCombo.setVisible(visible);
 
-        get(proto().addThisPaymentMethodToProfile()).setVisible(!visible && !getValue().paymentMethod().type().isNull());
-        if (get(proto().addThisPaymentMethodToProfile()).isVisible()) {
+        get(proto().storeInProfile()).setVisible(!visible && !getValue().paymentMethod().type().isNull());
+        if (get(proto().storeInProfile()).isVisible()) {
             setupAddThisPaymentMethodToProfile(getValue().paymentMethod().type().getValue());
         }
     }
@@ -343,21 +348,21 @@ public class PaymentWizard extends CPortalEntityWizard<PaymentDTO> {
         if (paymentType != null) {
             switch (paymentType) {
             case CreditCard:
-                get(proto().addThisPaymentMethodToProfile()).setValue(true);
-                get(proto().addThisPaymentMethodToProfile()).setEnabled(true);
-                get(proto().addThisPaymentMethodToProfile()).setVisible(true);
+                get(proto().storeInProfile()).setValue(true);
+                get(proto().storeInProfile()).setEnabled(true);
+                get(proto().storeInProfile()).setVisible(true);
                 break;
 
             case Echeck:
-                get(proto().addThisPaymentMethodToProfile()).setValue(true);
-                get(proto().addThisPaymentMethodToProfile()).setEnabled(false);
-                get(proto().addThisPaymentMethodToProfile()).setVisible(true);
+                get(proto().storeInProfile()).setValue(true);
+                get(proto().storeInProfile()).setEnabled(false);
+                get(proto().storeInProfile()).setVisible(true);
                 break;
 
             default:
-                get(proto().addThisPaymentMethodToProfile()).setValue(false);
-                get(proto().addThisPaymentMethodToProfile()).setEnabled(false);
-                get(proto().addThisPaymentMethodToProfile()).setVisible(false);
+                get(proto().storeInProfile()).setValue(false);
+                get(proto().storeInProfile()).setEnabled(false);
+                get(proto().storeInProfile()).setVisible(false);
                 break;
             }
         }
