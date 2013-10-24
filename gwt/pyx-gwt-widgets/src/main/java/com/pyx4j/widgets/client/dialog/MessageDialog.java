@@ -38,7 +38,6 @@ public class MessageDialog extends Dialog {
 
     public MessageDialog(String caption, String message, Type type, DialogOptions options) {
         super(caption, options, new MessagePanel(message, type));
-        setDialogPixelWidth(500);
     }
 
     public static void error(String title, String text) {
