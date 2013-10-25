@@ -18,9 +18,9 @@ import com.pyx4j.site.client.ui.prime.lister.AbstractLister;
 
 import com.propertyvista.operations.domain.payment.pad.simulator.PadSimBatch;
 
-public class PadBatchLister extends AbstractLister<PadSimBatch> {
+public class PadSimBatchLister extends AbstractLister<PadSimBatch> {
 
-    public PadBatchLister() {
+    public PadSimBatchLister() {
         super(PadSimBatch.class, true);
 
         setColumnDescriptors(//@formatter:off

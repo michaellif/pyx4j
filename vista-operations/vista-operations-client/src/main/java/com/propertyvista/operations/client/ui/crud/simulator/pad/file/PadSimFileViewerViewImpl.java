@@ -21,7 +21,7 @@ import com.pyx4j.site.client.ui.prime.lister.ListerInternalViewImplBase;
 import com.pyx4j.widgets.client.Button;
 
 import com.propertyvista.operations.client.ui.crud.OperationsViewerViewImplBase;
-import com.propertyvista.operations.client.ui.crud.simulator.pad.batch.PadBatchLister;
+import com.propertyvista.operations.client.ui.crud.simulator.pad.batch.PadSimBatchLister;
 import com.propertyvista.operations.domain.payment.pad.simulator.PadSimBatch;
 import com.propertyvista.operations.domain.payment.pad.simulator.PadSimFile;
 
@@ -40,7 +40,7 @@ public class PadSimFileViewerViewImpl extends OperationsViewerViewImplBase<PadSi
     Button replyReturns;
 
     public PadSimFileViewerViewImpl() {
-        batchLister = new ListerInternalViewImplBase<PadSimBatch>(new PadBatchLister());
+        batchLister = new ListerInternalViewImplBase<PadSimBatch>(new PadSimBatchLister());
 
         setForm(new PadSimFileForm(this));
 

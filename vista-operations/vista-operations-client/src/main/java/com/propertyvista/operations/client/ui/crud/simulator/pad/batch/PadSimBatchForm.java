@@ -24,11 +24,11 @@ import com.propertyvista.operations.client.ui.crud.OperationsEntityForm;
 import com.propertyvista.operations.domain.payment.pad.simulator.PadSimBatch;
 import com.propertyvista.operations.domain.payment.pad.simulator.PadSimFile;
 
-public class PadBatchForm extends OperationsEntityForm<PadSimBatch> {
+public class PadSimBatchForm extends OperationsEntityForm<PadSimBatch> {
 
-    private static final I18n i18n = I18n.get(PadBatchForm.class);
+    private static final I18n i18n = I18n.get(PadSimBatchForm.class);
 
-    public PadBatchForm(IForm<PadSimBatch> view) {
+    public PadSimBatchForm(IForm<PadSimBatch> view) {
         super(PadSimBatch.class, view);
 
         TwoColumnFlexFormPanel content = new TwoColumnFlexFormPanel(i18n.tr("General"));

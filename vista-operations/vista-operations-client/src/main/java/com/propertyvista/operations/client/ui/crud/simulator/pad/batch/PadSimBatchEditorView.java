@@ -7,18 +7,20 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on 2011-05-24
+ * Created on 2011-05-25
  * @author Vlad
  * @version $Id$
  */
 package com.propertyvista.operations.client.ui.crud.simulator.pad.batch;
 
-import com.pyx4j.site.client.ui.prime.form.IViewer;
+import com.pyx4j.site.client.ui.prime.form.IEditor;
 
 import com.propertyvista.operations.domain.payment.pad.simulator.PadSimBatch;
 
-public interface PadBatchViewerView extends IViewer<PadSimBatch> {
+public interface PadSimBatchEditorView extends IEditor<PadSimBatch> {
 
-    interface Presenter extends IViewer.Presenter {
+    interface Presenter extends IEditor.Presenter {
+
+        void calculate();
     }
 }

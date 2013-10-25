@@ -23,18 +23,18 @@ import com.pyx4j.site.client.activity.AbstractEditorActivity;
 import com.pyx4j.site.rpc.CrudAppPlace;
 
 import com.propertyvista.operations.client.OperationsSite;
-import com.propertyvista.operations.client.ui.crud.simulator.pad.batch.PadBatchEditorView;
+import com.propertyvista.operations.client.ui.crud.simulator.pad.batch.PadSimBatchEditorView;
 import com.propertyvista.operations.domain.payment.pad.MerchantReconciliationStatus;
 import com.propertyvista.operations.domain.payment.pad.TransactionReconciliationStatus;
 import com.propertyvista.operations.domain.payment.pad.simulator.PadSimBatch;
 import com.propertyvista.operations.domain.payment.pad.simulator.PadSimDebitRecord;
 import com.propertyvista.operations.rpc.services.simulator.PadSimBatchCrudService;
 
-public class PadBatchEditorActivity extends AbstractEditorActivity<PadSimBatch> implements PadBatchEditorView.Presenter {
+public class PadSimBatchEditorActivity extends AbstractEditorActivity<PadSimBatch> implements PadSimBatchEditorView.Presenter {
 
     @SuppressWarnings("unchecked")
-    public PadBatchEditorActivity(CrudAppPlace place) {
-        super(place, OperationsSite.getViewFactory().instantiate(PadBatchEditorView.class), (AbstractCrudService<PadSimBatch>) GWT
+    public PadSimBatchEditorActivity(CrudAppPlace place) {
+        super(place, OperationsSite.getViewFactory().instantiate(PadSimBatchEditorView.class), (AbstractCrudService<PadSimBatch>) GWT
                 .create(PadSimBatchCrudService.class), PadSimBatch.class);
     }
 

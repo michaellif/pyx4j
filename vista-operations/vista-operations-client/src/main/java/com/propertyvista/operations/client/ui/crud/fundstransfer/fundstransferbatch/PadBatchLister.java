@@ -25,6 +25,7 @@ public class PadBatchLister extends AbstractLister<PadBatchDTO> {
         setAllowZoomIn(true);
 
         setColumnDescriptors(//@formatter:off
+                    new MemberColumnDescriptor.Builder(proto().padFile().id()).columnTitle("File Id").searchableOnly().build(),    
                     new MemberColumnDescriptor.Builder(proto().batchNumber()).build(),    
                     
                     new MemberColumnDescriptor.Builder(proto().pmc()).build(),

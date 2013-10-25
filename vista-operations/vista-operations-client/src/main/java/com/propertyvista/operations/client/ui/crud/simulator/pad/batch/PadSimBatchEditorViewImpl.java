@@ -21,17 +21,17 @@ import com.pyx4j.widgets.client.Button;
 import com.propertyvista.operations.client.ui.crud.OperationsEditorViewImplBase;
 import com.propertyvista.operations.domain.payment.pad.simulator.PadSimBatch;
 
-public class PadBatchEditorViewImpl extends OperationsEditorViewImplBase<PadSimBatch> implements PadBatchEditorView {
+public class PadSimBatchEditorViewImpl extends OperationsEditorViewImplBase<PadSimBatch> implements PadSimBatchEditorView {
 
-    private static final I18n i18n = I18n.get(PadBatchEditorViewImpl.class);
+    private static final I18n i18n = I18n.get(PadSimBatchEditorViewImpl.class);
 
-    public PadBatchEditorViewImpl() {
-        setForm(new PadBatchForm(this));
+    public PadSimBatchEditorViewImpl() {
+        setForm(new PadSimBatchForm(this));
 
         Button calculateAction = new Button(i18n.tr("Calculate Fields"), new Command() {
             @Override
             public void execute() {
-                ((PadBatchEditorView.Presenter) getPresenter()).calculate();
+                ((PadSimBatchEditorView.Presenter) getPresenter()).calculate();
             }
         });
         addHeaderToolbarItem(calculateAction.asWidget());

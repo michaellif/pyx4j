@@ -39,6 +39,7 @@ import com.propertyvista.operations.client.activity.crud.fundstransfer.fundsreco
 import com.propertyvista.operations.client.activity.crud.fundstransfer.fundsreconciliationrecord.PadReconciliationDebitRecordListerActivity;
 import com.propertyvista.operations.client.activity.crud.fundstransfer.fundsreconciliationrecord.PadReconciliationDebitRecordViewerActivity;
 import com.propertyvista.operations.client.activity.crud.fundstransfer.fundstransferbatch.PadBatchListerActivity;
+import com.propertyvista.operations.client.activity.crud.fundstransfer.fundstransferbatch.PadBatchViewerActivity;
 import com.propertyvista.operations.client.activity.crud.fundstransfer.fundstransferfile.PadFileListerActivity;
 import com.propertyvista.operations.client.activity.crud.fundstransfer.fundstransferfile.PadFileViewerActivity;
 import com.propertyvista.operations.client.activity.crud.fundstransfer.fundstransferrecord.PadDebitRecordListerActivity;
@@ -77,8 +78,8 @@ import com.propertyvista.operations.client.activity.crud.simulator.dbp.DirectDeb
 import com.propertyvista.operations.client.activity.crud.simulator.dbp.DirectDebitSimRecordEditorActivity;
 import com.propertyvista.operations.client.activity.crud.simulator.dbp.DirectDebitSimRecordListerActivity;
 import com.propertyvista.operations.client.activity.crud.simulator.dbp.DirectDebitSimRecordViewerActivity;
-import com.propertyvista.operations.client.activity.crud.simulator.pad.PadBatchEditorActivity;
-import com.propertyvista.operations.client.activity.crud.simulator.pad.PadBatchViewerActivity;
+import com.propertyvista.operations.client.activity.crud.simulator.pad.PadSimBatchEditorActivity;
+import com.propertyvista.operations.client.activity.crud.simulator.pad.PadSimBatchViewerActivity;
 import com.propertyvista.operations.client.activity.crud.simulator.pad.PadSimFileEditorActivity;
 import com.propertyvista.operations.client.activity.crud.simulator.pad.PadSimFileListerActivity;
 import com.propertyvista.operations.client.activity.crud.simulator.pad.PadSimFileViewerActivity;
@@ -233,7 +234,7 @@ public class ContentActivityMapper implements AppActivityMapper {
                             break;
                         }
 
-                    } else if (place instanceof OperationsSiteMap.FundsTransfer.FundsTransferRecord) {
+                    } else if (place instanceof OperationsSiteMap.FundsTransfer.FundsTransferBatch) {
                         switch (crudPlace.getType()) {
                         case lister:
                             activity = new PadBatchListerActivity(crudPlace);
@@ -409,10 +410,10 @@ public class ContentActivityMapper implements AppActivityMapper {
             } else if (place instanceof OperationsSiteMap.Simulator.PadSimulation.PadSimBatch) {
                 switch (crudPlace.getType()) {
                 case editor:
-                    activity = new PadBatchEditorActivity(crudPlace);
+                    activity = new PadSimBatchEditorActivity(crudPlace);
                     break;
                 case viewer:
-                    activity = new PadBatchViewerActivity(crudPlace);
+                    activity = new PadSimBatchViewerActivity(crudPlace);
                     break;
                 }
 

@@ -20,15 +20,15 @@ import com.pyx4j.site.rpc.CrudAppPlace;
 
 import com.propertyvista.operations.client.OperationsSite;
 import com.propertyvista.operations.client.activity.crud.AdminViewerActivity;
-import com.propertyvista.operations.client.ui.crud.simulator.pad.batch.PadBatchViewerView;
+import com.propertyvista.operations.client.ui.crud.simulator.pad.batch.PadSimBatchViewerView;
 import com.propertyvista.operations.domain.payment.pad.simulator.PadSimBatch;
 import com.propertyvista.operations.rpc.services.simulator.PadSimBatchCrudService;
 
-public class PadBatchViewerActivity extends AdminViewerActivity<PadSimBatch> implements PadBatchViewerView.Presenter {
+public class PadSimBatchViewerActivity extends AdminViewerActivity<PadSimBatch> implements PadSimBatchViewerView.Presenter {
 
     @SuppressWarnings("unchecked")
-    public PadBatchViewerActivity(CrudAppPlace place) {
-        super(place, OperationsSite.getViewFactory().instantiate(PadBatchViewerView.class), (AbstractCrudService<PadSimBatch>) GWT
+    public PadSimBatchViewerActivity(CrudAppPlace place) {
+        super(place, OperationsSite.getViewFactory().instantiate(PadSimBatchViewerView.class), (AbstractCrudService<PadSimBatch>) GWT
                 .create(PadSimBatchCrudService.class));
     }
 }
