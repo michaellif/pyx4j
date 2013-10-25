@@ -20,6 +20,7 @@
  */
 package com.pyx4j.widgets.client;
 
+import com.google.gwt.dom.client.Style.Overflow;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.LoadEvent;
 import com.google.gwt.event.dom.client.LoadHandler;
@@ -44,6 +45,7 @@ public class ImageViewport extends LayoutPanel {
         this.dimension = dimension;
         this.scaleMode = scaleMode;
         setPixelSize(dimension.width, dimension.height);
+        getElement().getStyle().setOverflow(Overflow.HIDDEN);
     }
 
     public void setImage(final Image img) {

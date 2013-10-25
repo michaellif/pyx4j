@@ -23,16 +23,16 @@ package com.pyx4j.widgets.client;
 import java.util.List;
 
 import com.google.gwt.dom.client.Style.Unit;
-import com.google.gwt.event.dom.client.ClickEvent;
-import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.ui.Image;
-import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.LayoutPanel;
 
 import com.pyx4j.gwt.shared.Dimension;
+import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.ImageViewport.ScaleMode;
 
 public class ImageSlider extends LayoutPanel implements IWidget {
+
+    private static final I18n i18n = I18n.get(ImageSlider.class);
 
     public enum ImageSliderType {
         single, multiple
@@ -44,8 +44,6 @@ public class ImageSlider extends LayoutPanel implements IWidget {
 
         Image getPlaceholder();
 
-        void editImageSet();
-
         ImageSliderType getImageSliderType();
 
     }
@@ -54,13 +52,13 @@ public class ImageSlider extends LayoutPanel implements IWidget {
 
     private final Slideshow slideshow;
 
-    private final EditActionPanel editActionPanel;
+    private final Button editButton;
 
     private boolean editable;
 
     private final ImageSliderDataProvider imageList;
 
-    public ImageSlider(Dimension dimension, ImageSliderDataProvider imageList) {
+    public ImageSlider(Dimension dimension, final ImageSliderDataProvider imageList) {
 
         this.imageList = imageList;
         this.editable = false;
@@ -68,12 +66,12 @@ public class ImageSlider extends LayoutPanel implements IWidget {
         slideshow = new Slideshow(0, false);
         slideshow.setStyleName(DefaultWidgetsTheme.StyleName.ImageSliderSlideshow.name());
 
-        editActionPanel = new EditActionPanel();
-        editActionPanel.setStyleName(DefaultWidgetsTheme.StyleName.ImageSliderEditAction.name());
+        editButton = new Button(i18n.tr("Edit"));
+        editButton.setStyleName(DefaultWidgetsTheme.StyleName.ImageSliderEditAction.name());
 
         add(slideshow);
-        add(editActionPanel);
-        setWidgetBottomHeight(editActionPanel, 20, Unit.PCT, 40, Unit.PX);
+        add(editButton);
+        setWidgetBottomHeight(editButton, 20, Unit.PCT, 40, Unit.PX);
 
         setImageSize(dimension.width, dimension.width);
     }
@@ -113,7 +111,7 @@ public class ImageSlider extends LayoutPanel implements IWidget {
     @Override
     public void setEditable(boolean editable) {
         this.editable = editable;
-        editActionPanel.setVisible(editable);
+        editButton.setVisible(editable);
     }
 
     @Override
@@ -121,22 +119,8 @@ public class ImageSlider extends LayoutPanel implements IWidget {
         return editable;
     }
 
-    public EditActionPanel getEditActionPanel() {
-        return editActionPanel;
-    }
-
-    class EditActionPanel extends Label {
-
-        public EditActionPanel() {
-            super("Edit");
-
-            addClickHandler(new ClickHandler() {
-                @Override
-                public void onClick(ClickEvent event) {
-                    imageList.editImageSet();
-                }
-            });
-        }
+    public Button getEditButton() {
+        return editButton;
     }
 
 }

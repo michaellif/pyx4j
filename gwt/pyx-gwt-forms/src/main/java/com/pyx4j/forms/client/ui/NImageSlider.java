@@ -50,6 +50,7 @@ import com.pyx4j.gwt.rpc.upload.UploadService;
 import com.pyx4j.gwt.shared.Dimension;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.ImageSlider;
+import com.pyx4j.widgets.client.ImageSlider.ImageSliderDataProvider;
 import com.pyx4j.widgets.client.ImageSlider.ImageSliderType;
 import com.pyx4j.widgets.client.ImageViewport;
 import com.pyx4j.widgets.client.ImageViewport.ScaleMode;
@@ -58,7 +59,7 @@ import com.pyx4j.widgets.client.dialog.Custom1Option;
 import com.pyx4j.widgets.client.dialog.Custom2Option;
 import com.pyx4j.widgets.client.dialog.Dialog;
 
-public class NImageSlider<T extends IFile> extends NField<IList<T>, ImageSlider, CImageSlider<T>, ImageSlider> implements ImageSlider.ImageSliderDataProvider {
+public class NImageSlider<T extends IFile> extends NField<IList<T>, ImageSlider, CImageSlider<T>, ImageSlider> {
 
     private static final I18n i18n = I18n.get(NImageSlider.class);
 
@@ -75,7 +76,31 @@ public class NImageSlider<T extends IFile> extends NField<IList<T>, ImageSlider,
         imageFiles = new ArrayList<T>();
         imageUrls = new ArrayList<String>();
 
-        imageSlider = new ImageSlider(getCComponent().getImageSize(), this);
+        imageSlider = new ImageSlider(getCComponent().getImageSize(), new ImageSliderDataProvider() {
+
+            @Override
+            public List<String> getImageUrls() {
+                return imageUrls;
+            }
+
+            @Override
+            public Image getPlaceholder() {
+                return getCComponent().getThumbnailPlaceholder();
+            }
+
+            @Override
+            public ImageSliderType getImageSliderType() {
+                return ImageSliderType.multiple;
+            }
+        });
+
+        imageSlider.getEditButton().setCommand(new Command() {
+
+            @Override
+            public void execute() {
+                new ImageOrganizer(getCComponent().getImgClass(), getCComponent().getFolderIcons()).show();
+            }
+        });
     }
 
     @Override
@@ -129,19 +154,9 @@ public class NImageSlider<T extends IFile> extends NField<IList<T>, ImageSlider,
         }
     }
 
-    @Override
-    public List<String> getImageUrls() {
-        return imageUrls;
-    }
-
     public void resizeToFit() {
         Dimension imageSize = getCComponent().getImageSize();
         imageSlider.setImageSize(imageSize.width, imageSize.height);
-    }
-
-    @Override
-    public void editImageSet() {
-        new ImageOrganizer(getCComponent().getImgClass(), getCComponent().getFolderIcons()).show();
     }
 
     class ImageOrganizer extends CEntityFolder<T> {
@@ -183,7 +198,7 @@ public class NImageSlider<T extends IFile> extends NField<IList<T>, ImageSlider,
                     public IsWidget createContent() {
                         TwoColumnFlexFormPanel content = new TwoColumnFlexFormPanel();
 
-                        thumb.setImage(getPlaceholder());
+                        thumb.setImage(getCComponent().getThumbnailPlaceholder());
                         content.setWidget(0, 0, thumb);
                         content.setWidget(0, 1, getCComponent().getImageEntryView(this));
 
@@ -308,13 +323,4 @@ public class NImageSlider<T extends IFile> extends NField<IList<T>, ImageSlider,
         }
     }
 
-    @Override
-    public Image getPlaceholder() {
-        return getCComponent().getThumbnailPlaceholder();
-    }
-
-    @Override
-    public ImageSliderType getImageSliderType() {
-        return ImageSliderType.multiple;
-    }
 }

@@ -23,8 +23,9 @@ package com.pyx4j.forms.client.ui;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.google.gwt.event.logical.shared.ValueChangeEvent;
+import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.Command;
-import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.Image;
 
 import com.pyx4j.entity.shared.IEntity;
@@ -34,8 +35,7 @@ import com.pyx4j.gwt.client.upload.UploadReceiver;
 import com.pyx4j.gwt.rpc.upload.UploadService;
 import com.pyx4j.gwt.shared.Dimension;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.widgets.client.Button;
-import com.pyx4j.widgets.client.DropDownPanel;
+import com.pyx4j.widgets.client.Button.ButtonMenuBar;
 import com.pyx4j.widgets.client.ImageSlider;
 import com.pyx4j.widgets.client.ImageSlider.ImageSliderDataProvider;
 import com.pyx4j.widgets.client.ImageSlider.ImageSliderType;
@@ -66,15 +66,6 @@ public class NImage<T extends IFile> extends NField<T, ImageSlider, CImage<T>, I
             }
 
             @Override
-            public void editImageSet() {
-                if (getCComponent().getValue() == null) {
-                    showUploadFileDialog();
-                } else {
-                    new EditMenu().showRelativeTo(imageSlider.getEditActionPanel());
-                }
-            }
-
-            @Override
             public Image getPlaceholder() {
                 return getCComponent().getThumbnailPlaceholder();
             }
@@ -84,6 +75,48 @@ public class NImage<T extends IFile> extends NField<T, ImageSlider, CImage<T>, I
                 return ImageSliderType.single;
             }
         });
+
+        getCComponent().addValueChangeHandler(new ValueChangeHandler<T>() {
+
+            @Override
+            public void onValueChange(ValueChangeEvent<T> event) {
+                activateEditButton();
+            }
+
+        });
+
+        activateEditButton();
+
+    }
+
+    private void activateEditButton() {
+        T value = getCComponent().getValue();
+        if (value == null || value.isNull()) {
+            imageSlider.getEditButton().setMenu(null);
+            imageSlider.getEditButton().setCommand(new Command() {
+
+                @Override
+                public void execute() {
+                    showUploadFileDialog();
+                }
+            });
+        } else {
+            ButtonMenuBar editMenu = new ButtonMenuBar();
+            editMenu.addItem(i18n.tr("Remove"), new Command() {
+                @Override
+                public void execute() {
+                    getCComponent().setValue(null);
+                }
+            });
+            editMenu.addItem(i18n.tr("Choose Image"), new Command() {
+
+                @Override
+                public void execute() {
+                    showUploadFileDialog();
+                }
+            });
+            imageSlider.getEditButton().setMenu(editMenu);
+        }
     }
 
     @Override
@@ -146,30 +179,4 @@ public class NImage<T extends IFile> extends NField<T, ImageSlider, CImage<T>, I
         }).show();
     }
 
-    class EditMenu extends DropDownPanel {
-
-        public EditMenu() {
-            super();
-            setStyleName(CComponentTheme.StyleName.ImageEditorMenu.name());
-
-            FlowPanel mainPanel = new FlowPanel();
-            mainPanel.add(new Button(i18n.tr("Remove"), new Command() {
-
-                @Override
-                public void execute() {
-                    EditMenu.this.hide();
-                    getCComponent().setValue(null);
-                }
-            }));
-            mainPanel.add(new Button(i18n.tr("Choose Image"), new Command() {
-
-                @Override
-                public void execute() {
-                    EditMenu.this.hide();
-                    showUploadFileDialog();
-                }
-            }));
-            setWidget(mainPanel);
-        }
-    }
 }
