@@ -176,7 +176,7 @@ public class EntityDiff {
                     break;
                 default:
                     if ((memberMeta.getAnnotation(Timestamp.class) == null) && (!EqualsHelper.equals(member1, member2))) {
-                        addChanges(path, memberMeta.getCaption(), logTransient, member1.getValue(), member2.getValue());
+                        addChanges(path, memberMeta.getCaption(), logTransient, member1.getStringView(), member2.getStringView());
                     }
                 }
             }
