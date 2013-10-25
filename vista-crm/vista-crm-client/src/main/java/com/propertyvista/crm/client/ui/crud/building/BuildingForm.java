@@ -348,7 +348,7 @@ public class BuildingForm extends CrmEntityForm<BuildingDTO> {
 
         int row = -1;
         flexPanel.setH1(++row, 0, 2, i18n.tr("Marketing Summary"));
-        flexPanel.setWidget(++row, 0, 2, inject(proto().marketing(), new MarketingEditor(get(proto().info().address()))));
+        flexPanel.setWidget(++row, 0, 2, inject(proto().marketing(), new MarketingEditor(this)));
 
         flexPanel.setH1(++row, 0, 2, i18n.tr("Images"));
         CImageSlider<MediaFile> imageSlider = new CImageSlider<MediaFile>(MediaFile.class,

@@ -21,8 +21,10 @@ import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.ui.HasVerticalAlignment;
 import com.google.gwt.user.client.ui.IsWidget;
 
+import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.forms.client.ui.CComponent;
+import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.ui.folder.EntityFolderColumnDescriptor;
 import com.pyx4j.forms.client.ui.folder.IFolderDecorator;
 import com.pyx4j.forms.client.ui.folder.TableFolderDecorator;
@@ -40,17 +42,32 @@ import com.propertyvista.domain.marketing.MarketingContactEmail;
 import com.propertyvista.domain.marketing.MarketingContactPhone;
 import com.propertyvista.domain.marketing.MarketingContactUrl;
 import com.propertyvista.domain.marketing.ils.ILSOpenHouse;
+import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.shared.config.VistaFeatures;
 
 public class MarketingEditor extends CEntityDecoratableForm<Marketing> {
 
-    private final CComponent<AddressStructured> propertyAddress;
+    private final CEntityForm<? extends Building> parentForm;
 
     private final AddressStructuredEditor addressEditor = new AddressStructuredEditor(false);
 
-    public MarketingEditor(CComponent<AddressStructured> propertyAddress) {
+    private AddressStructured emptyAddr;
+
+    public MarketingEditor(CEntityForm<? extends Building> parentForm) {
         super(Marketing.class);
-        this.propertyAddress = propertyAddress;
+        this.parentForm = parentForm;
+    }
+
+    @Override
+    public boolean isValid() {
+        if (getValue() != null && !getValue().useCustomAddress().isBooleanTrue()) {
+            // clear custom address
+            if (emptyAddr == null) {
+                emptyAddr = EntityFactory.create(AddressStructured.class);
+            }
+            addressEditor.populate(emptyAddr);
+        }
+        return super.isValid();
     }
 
     @Override
@@ -67,17 +84,18 @@ public class MarketingEditor extends CEntityDecoratableForm<Marketing> {
 
         main.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().description()), true).build());
 
+        // marketing address
         main.setH1(++row, 0, 2, proto().marketingAddress().getMeta().getCaption());
-        main.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().usePropertyAddressAsMarketing()), true).build());
+        main.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().useCustomAddress()), true).build());
         main.setWidget(++row, 0, 2, inject(proto().marketingAddress(), addressEditor));
-        get(proto().usePropertyAddressAsMarketing()).addValueChangeHandler(new ValueChangeHandler<Boolean>() {
+        get(proto().useCustomAddress()).addValueChangeHandler(new ValueChangeHandler<Boolean>() {
             @Override
             public void onValueChange(ValueChangeEvent<Boolean> event) {
-                boolean useBuildingAddress = event.getValue() == null ? false : event.getValue();
-                setAddressEditorState(useBuildingAddress);
+                setAddressEditorState(event.getValue() == null ? false : event.getValue());
             }
         });
 
+        // marketing contacts
         main.setH1(++row, 0, 2, proto().marketingContacts().getMeta().getCaption());
         main.setWidget(++row, 0, 2, inject(proto().marketingContacts().url(), new MarketingContactEditor<MarketingContactUrl>(MarketingContactUrl.class)));
         main.setWidget(++row, 0, 2, inject(proto().marketingContacts().email(), new MarketingContactEditor<MarketingContactEmail>(MarketingContactEmail.class)));
@@ -107,20 +125,24 @@ public class MarketingEditor extends CEntityDecoratableForm<Marketing> {
         return main;
     }
 
-    private void setAddressEditorState(boolean useBuildingAddress) {
-        if (useBuildingAddress) {
-            addressEditor.setEditable(false);
-            addressEditor.setValue((AddressStructured) propertyAddress.getValue().duplicate());
+    private void setAddressEditorState(boolean useCustomizedAddress) {
+        if (useCustomizedAddress) {
+            addressEditor.setVisible(true);
+            if (getValue() == null || getValue().marketingAddress().isNull()) {
+                addressEditor.populate((AddressStructured) parentForm.getValue().info().address().duplicate());
+            } else {
+                addressEditor.populate(getValue().marketingAddress());
+            }
         } else {
-            addressEditor.setEditable(true);
+            addressEditor.setVisible(false);
         }
     }
 
     @Override
     protected void setEditorValue(Marketing value) {
-        // reset address editor state
-        if (isEditable() && value != null) {
-            setAddressEditorState(value.usePropertyAddressAsMarketing().isBooleanTrue());
+        // reset address editor state (
+        if (value != null) {
+            setAddressEditorState(value.useCustomAddress().isBooleanTrue());
         }
         super.setEditorValue(value);
     }

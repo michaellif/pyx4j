@@ -44,8 +44,8 @@ public interface Marketing extends IEntity {
     @Editor(type = Editor.EditorType.textarea)
     IPrimitive<String> description();
 
-    @Caption(name = "Use Property Address")
-    IPrimitive<Boolean> usePropertyAddressAsMarketing();
+    /** Indicates if the address below should be used for Marketing. Use Building address if false. */
+    IPrimitive<Boolean> useCustomAddress();
 
     @EmbeddedEntity
     AddressStructured marketingAddress();
