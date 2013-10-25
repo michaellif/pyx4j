@@ -14,6 +14,7 @@
 package com.propertyvista.operations.client.ui.crud.fundstransfer.fundstransferrecord;
 
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
+import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.prime.form.IForm;
 
 import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
@@ -21,6 +22,8 @@ import com.propertyvista.operations.client.ui.crud.OperationsEntityForm;
 import com.propertyvista.operations.rpc.dto.PadDebitRecordDTO;
 
 public class PadDebitRecordForm extends OperationsEntityForm<PadDebitRecordDTO> {
+
+    private static final I18n i18n = I18n.get(PadDebitRecordForm.class);
 
     public PadDebitRecordForm(IForm<PadDebitRecordDTO> view) {
         super(PadDebitRecordDTO.class, view);
@@ -33,6 +36,7 @@ public class PadDebitRecordForm extends OperationsEntityForm<PadDebitRecordDTO> 
 
         panel.setWidget(++row, 0, 1, new FormDecoratorBuilder(inject(proto().padBatch().padFile())).build());
         panel.setWidget(++row, 0, 1, new FormDecoratorBuilder(inject(proto().padBatch().padFile().fundsTransferType())).build());
+        panel.setWidget(++row, 0, 1, new FormDecoratorBuilder(inject(proto().padBatch().padFile().sent())).build());
 
         panel.setWidget(++row, 0, 1, new FormDecoratorBuilder(inject(proto().clientId())).build());
         panel.setWidget(++row, 0, 1, new FormDecoratorBuilder(inject(proto().amount())).build());
@@ -43,6 +47,24 @@ public class PadDebitRecordForm extends OperationsEntityForm<PadDebitRecordDTO> 
         panel.setWidget(++row, 0, 1, new FormDecoratorBuilder(inject(proto().acknowledgmentStatusCode())).build());
         panel.setWidget(++row, 0, 1, new FormDecoratorBuilder(inject(proto().processed())).build());
         panel.setWidget(++row, 0, 1, new FormDecoratorBuilder(inject(proto().processingStatus())).build());
+
+        panel.setH1(++row, 0, 2, i18n.tr("Reconciliation Record Paid Or Rejected"));
+
+        panel.setWidget(++row, 0, 1, new FormDecoratorBuilder(inject(proto().reconciliationRecordPaidOrRejected().paymentDate())).build());
+        panel.setWidget(++row, 0, 1, new FormDecoratorBuilder(inject(proto().reconciliationRecordPaidOrRejected().reconciliationStatus())).build());
+        panel.setWidget(++row, 0, 1, new FormDecoratorBuilder(inject(proto().reconciliationRecordPaidOrRejected().reasonCode())).build());
+        panel.setWidget(++row, 0, 1, new FormDecoratorBuilder(inject(proto().reconciliationRecordPaidOrRejected().reasonText())).build());
+        panel.setWidget(++row, 0, 1, new FormDecoratorBuilder(inject(proto().reconciliationRecordPaidOrRejected().fee())).build());
+        panel.setWidget(++row, 0, 1, new FormDecoratorBuilder(inject(proto().reconciliationRecordPaidOrRejected().processingStatus())).build());
+
+        panel.setH1(++row, 0, 2, i18n.tr("Reconciliation Record Return"));
+
+        panel.setWidget(++row, 0, 1, new FormDecoratorBuilder(inject(proto().reconciliationRecordReturn().paymentDate())).build());
+        panel.setWidget(++row, 0, 1, new FormDecoratorBuilder(inject(proto().reconciliationRecordReturn().reconciliationStatus())).build());
+        panel.setWidget(++row, 0, 1, new FormDecoratorBuilder(inject(proto().reconciliationRecordReturn().reasonCode())).build());
+        panel.setWidget(++row, 0, 1, new FormDecoratorBuilder(inject(proto().reconciliationRecordReturn().reasonText())).build());
+        panel.setWidget(++row, 0, 1, new FormDecoratorBuilder(inject(proto().reconciliationRecordReturn().fee())).build());
+        panel.setWidget(++row, 0, 1, new FormDecoratorBuilder(inject(proto().reconciliationRecordReturn().processingStatus())).build());
 
         selectTab(addTab(panel));
         setTabBarVisible(false);

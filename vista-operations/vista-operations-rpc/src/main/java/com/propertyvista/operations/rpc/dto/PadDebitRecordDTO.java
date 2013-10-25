@@ -22,4 +22,8 @@ import com.propertyvista.operations.domain.payment.pad.PadDebitRecord;
 @ExtendsBO(PadDebitRecord.class)
 public interface PadDebitRecordDTO extends PadDebitRecord {
 
+    PadReconciliationDebitRecordDTO reconciliationRecordPaidOrRejected();
+
+    PadReconciliationDebitRecordDTO reconciliationRecordReturn();
+
 }

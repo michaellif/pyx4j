@@ -15,6 +15,7 @@ package com.propertyvista.operations.domain.payment.pad;
 
 import java.math.BigDecimal;
 
+import com.pyx4j.entity.annotations.ColumnId;
 import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.Indexed;
 import com.pyx4j.entity.annotations.JoinColumn;
@@ -60,10 +61,14 @@ public interface PadDebitRecord extends IEntity {
     @Length(12)
     IPrimitive<String> accountNumber();
 
+    interface TransactionId extends ColumnId {
+    }
+
     //A unique value to represent the transaction/payment
     @Length(15)
     @Indexed
     @ToString
+    @JoinColumn(TransactionId.class)
     IPrimitive<String> transactionId();
 
     IPrimitive<String> acknowledgmentStatusCode();

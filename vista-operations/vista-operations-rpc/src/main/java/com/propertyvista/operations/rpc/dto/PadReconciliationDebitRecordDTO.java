@@ -20,4 +20,6 @@ import com.propertyvista.operations.domain.payment.pad.PadReconciliationDebitRec
 @Transient
 public interface PadReconciliationDebitRecordDTO extends PadReconciliationDebitRecord {
 
+    PadDebitRecordDTO debitRecord();
+
 }
