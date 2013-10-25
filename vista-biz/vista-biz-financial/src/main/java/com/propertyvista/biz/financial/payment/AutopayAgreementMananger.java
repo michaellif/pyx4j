@@ -107,6 +107,9 @@ class AutopayAgreementMananger {
                 }
                 preauthorizedPayment.isDeleted().setValue(Boolean.FALSE);
                 preauthorizedPayment.effectiveFrom().setValue(nextPaymentCycle.billingCycleStartDate().getValue());
+            } else {
+                log.debug("no changes detected in AutopayAgreement");
+                return preauthorizedPayment;
             }
         } else {
             isNew = true;
