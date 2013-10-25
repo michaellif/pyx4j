@@ -16,11 +16,13 @@ package com.propertyvista.operations.domain.payment.pad;
 import java.math.BigDecimal;
 import java.util.Date;
 
+import com.pyx4j.entity.adapters.index.AlphanumIndexAdapter;
 import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.Editor;
 import com.pyx4j.entity.annotations.Editor.EditorType;
 import com.pyx4j.entity.annotations.Format;
 import com.pyx4j.entity.annotations.Indexed;
+import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.annotations.OrderBy;
 import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.annotations.Table;
@@ -97,6 +99,7 @@ public interface PadFile extends IEntity {
      * Must be incremented by one for each file submitted to Caledon, Unique per Company ID and FundsTransferType
      */
     @Indexed(group = { "n,1" }, uniqueConstraint = true)
+    @MemberColumn(sortAdapter = AlphanumIndexAdapter.class)
     @ToString(index = 2)
     IPrimitive<String> fileCreationNumber();
 
