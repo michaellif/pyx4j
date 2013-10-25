@@ -728,9 +728,9 @@ public class TableModel {
             }
         }
         for (MemberExternalOperationsMeta member : entityOperationsMeta.getExternalMembers()) {
-            // Special handling for recursive retrieve of Owner
-            if ((entity.getOwner() != null) && (entity.getMeta() != null) && entity.getMeta().isOwnedRelationships()) {
-                // verify graph integrity
+            // Do not retrieve Owner, since already retrieved
+            if ((entity.getOwner() != null) && (member.getMemberMeta().isOwner())
+                    && entity.getOwner().isInstanceOf((Class<? extends IEntity>) member.getMemberMeta().getValueClass())) {
                 continue;
             }
             if (member.getMemberMeta().getAttachLevel() == AttachLevel.Detached) {
