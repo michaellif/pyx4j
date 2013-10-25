@@ -55,6 +55,7 @@ import com.pyx4j.forms.client.ui.CRadioGroupEnum;
 import com.pyx4j.forms.client.ui.CSimpleEntityComboBox;
 import com.pyx4j.forms.client.ui.CTextFieldBase;
 import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
+import com.pyx4j.forms.client.ui.wizard.WizardDecorator;
 import com.pyx4j.forms.client.ui.wizard.WizardStep;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
 import com.pyx4j.forms.client.validators.ValidationError;
@@ -286,18 +287,18 @@ public class PaymentWizard extends CPortalEntityWizard<PaymentDTO> {
         });
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     protected void onStepChange(SelectionEvent<WizardStep> event) {
         super.onStepChange(event);
-
-//        getDecorator().getBtnNext().setEnabled(true);
 
         if (event.getSelectedItem().equals(confirmationStep)) {
             confirmationDetailsHolder.clear();
             confirmationDetailsHolder.setWidget(createConfirmationDetailsPanel());
 
             if (get(proto().paymentMethod()).getValue().type().getValue() == PaymentType.DirectBanking) {
-//                getDecorator().getBtnNext().setEnabled(false);
+                ((WizardDecorator<PaymentDTO>) getDecorator()).getBtnNext().setVisible(false);
+//                ((WizardDecorator<PaymentDTO>) getDecorator()).getBtnCancel().setVisible(false);
             }
         }
     }
