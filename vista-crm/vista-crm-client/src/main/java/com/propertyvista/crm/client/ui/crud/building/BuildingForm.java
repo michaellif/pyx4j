@@ -363,9 +363,9 @@ public class BuildingForm extends CrmEntityForm<BuildingDTO> {
                 TwoColumnFlexFormPanel main = new TwoColumnFlexFormPanel();
 
                 int row = -1;
-                main.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(entryForm.proto().caption()), 15, true).build());
-                main.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(entryForm.proto().description()), 15, true).build());
-                main.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(entryForm.proto().visibility()), 7, true).build());
+                main.setWidget(++row, 0, 2, new FormDecoratorBuilder(entryForm.inject(entryForm.proto().caption()), 8, 15, 16).build());
+                main.setWidget(++row, 0, 2, new FormDecoratorBuilder(entryForm.inject(entryForm.proto().description()), 8, 15, 16).build());
+                main.setWidget(++row, 0, 2, new FormDecoratorBuilder(entryForm.inject(entryForm.proto().visibility()), 8, 7, 16).build());
 
                 return main;
             }
