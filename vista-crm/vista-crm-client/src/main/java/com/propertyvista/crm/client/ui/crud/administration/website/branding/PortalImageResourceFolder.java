@@ -19,37 +19,31 @@ import java.util.Set;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
-import com.google.gwt.user.client.Command;
-import com.google.gwt.user.client.rpc.AsyncCallback;
-import com.google.gwt.user.client.ui.HasVerticalAlignment;
-import com.google.gwt.user.client.ui.HorizontalPanel;
-import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.IsWidget;
+import com.google.gwt.user.client.ui.SimplePanel;
+import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IObject;
+import com.pyx4j.forms.client.images.EntityFolderImages;
 import com.pyx4j.forms.client.ui.CComponent;
+import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.ui.CEntityLabel;
-import com.pyx4j.forms.client.ui.CFile;
+import com.pyx4j.forms.client.ui.CImage;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.gwt.shared.FileURLBuilder;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.widgets.client.dialog.MessageDialog;
-import com.pyx4j.widgets.client.dialog.OkDialog;
 
+import com.propertyvista.common.client.resources.VistaImages;
 import com.propertyvista.common.client.ui.components.MediaUtils;
-import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
 import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
 import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
-import com.propertyvista.crm.client.ui.components.cms.SiteImageResourceProvider;
-import com.propertyvista.crm.client.ui.crud.administration.website.SiteImageThumbnail;
 import com.propertyvista.crm.client.ui.crud.administration.website.general.AvailableLocaleSelectorDialog;
 import com.propertyvista.crm.rpc.services.admin.SiteImageResourceUploadService;
 import com.propertyvista.domain.site.AvailableLocale;
 import com.propertyvista.domain.site.PortalLogoImageResource;
 import com.propertyvista.domain.site.SiteImageResource;
-import com.propertyvista.portal.rpc.portal.web.services.services.GeneralInsurancePolicyUploadService;
 
 public class PortalImageResourceFolder extends VistaBoxFolder<PortalLogoImageResource> {
     private static final I18n i18n = I18n.get(PortalImageResourceFolder.class);
@@ -104,14 +98,56 @@ public class PortalImageResourceFolder extends VistaBoxFolder<PortalLogoImageRes
         return super.create(member);
     }
 
-    class PortalImageResourceEditor extends CEntityDecoratableForm<PortalLogoImageResource> {
+    class PortalImageResourceEditor extends CEntityForm<PortalLogoImageResource> {
 
-        private final SiteImageThumbnail smallThumb = new SiteImageThumbnail(60);
+        private final CImage<SiteImageResource> smallLogo;
 
-        private final SiteImageThumbnail largeThumb = new SiteImageThumbnail(180);
+        private final CImage<SiteImageResource> largeLogo;
 
         public PortalImageResourceEditor() {
             super(PortalLogoImageResource.class);
+
+            smallLogo = new CImage<SiteImageResource>(GWT.<SiteImageResourceUploadService> create(SiteImageResourceUploadService.class)) {
+                @Override
+                public Widget getImageEntryView(CEntityForm<SiteImageResource> entryForm) {
+                    SimplePanel main = new SimplePanel();
+                    main.setWidget(new FormDecoratorBuilder(entryForm.inject(entryForm.proto().caption()), 8, 15, 16).build());
+                    return main;
+                }
+
+                @Override
+                protected EntityFolderImages getFolderIcons() {
+                    return VistaImages.INSTANCE;
+                }
+            };
+            smallLogo.setFileUrlBuilder(new FileURLBuilder<SiteImageResource>() {
+                @Override
+                public String getUrl(SiteImageResource file) {
+                    return MediaUtils.createSiteImageResourceUrl(file);
+                }
+            });
+            smallLogo.setImageSize(150, 100);
+
+            largeLogo = new CImage<SiteImageResource>(GWT.<SiteImageResourceUploadService> create(SiteImageResourceUploadService.class)) {
+                @Override
+                public Widget getImageEntryView(CEntityForm<SiteImageResource> entryForm) {
+                    SimplePanel main = new SimplePanel();
+                    main.setWidget(new FormDecoratorBuilder(entryForm.inject(entryForm.proto().caption()), 8, 15, 16).build());
+                    return main;
+                }
+
+                @Override
+                protected EntityFolderImages getFolderIcons() {
+                    return VistaImages.INSTANCE;
+                }
+            };
+            largeLogo.setFileUrlBuilder(new FileURLBuilder<SiteImageResource>() {
+                @Override
+                public String getUrl(SiteImageResource file) {
+                    return MediaUtils.createSiteImageResourceUrl(file);
+                }
+            });
+            largeLogo.setImageSize(300, 150);
         }
 
         @Override
@@ -121,41 +157,12 @@ public class PortalImageResourceFolder extends VistaBoxFolder<PortalLogoImageRes
             int row = -1;
             CEntityLabel<AvailableLocale> locale = new CEntityLabel<AvailableLocale>();
             locale.setEditable(false);
-            main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().locale(), locale), 10).build());
-            main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().small(), new LogoLink(smallThumb)), 20).build());
-            main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().large(), new LogoLink(largeThumb)), 20).build());
-
-            HorizontalPanel thumbsPanel = new HorizontalPanel();
-            thumbsPanel.setVerticalAlignment(HasVerticalAlignment.ALIGN_MIDDLE);
-            thumbsPanel.add(smallThumb);
-            thumbsPanel.add(largeThumb);
-            main.setWidget(0, 1, thumbsPanel);
-            main.getFlexCellFormatter().setRowSpan(0, 1, row + 1);
+            main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().locale(), locale), 5, 20, 20).build());
+            main.setWidget(row, 1, new FormDecoratorBuilder(inject(proto().large(), largeLogo), 5, 20, 20).build());
+            main.getFlexCellFormatter().setRowSpan(row, 1, 2);
+            main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().small(), smallLogo), 5, 20, 20).build());
 
             return main;
         }
-
-        @Override
-        protected void onValueSet(boolean populate) {
-            super.onValueSet(populate);
-
-            smallThumb.setUrl(MediaUtils.createSiteImageResourceUrl(getValue().small()));
-            largeThumb.setUrl(MediaUtils.createSiteImageResourceUrl(getValue().large()));
-        }
-
-        class LogoLink extends CFile<SiteImageResource> {
-
-            public LogoLink(SiteImageThumbnail thumb) {
-                super(GWT.<SiteImageResourceUploadService> create(SiteImageResourceUploadService.class), new FileURLBuilder<SiteImageResource>() {
-
-                    @Override
-                    public String getUrl(SiteImageResource file) {
-                        return MediaUtils.createSiteImageResourceUrl(file);
-                    }
-                });
-
-            }
-        }
-
     }
 }
