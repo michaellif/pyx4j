@@ -19,7 +19,9 @@ import com.pyx4j.forms.client.events.NValueChangeHandler;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CTextFieldBase;
 import com.pyx4j.forms.client.ui.RevalidationTrigger;
+import com.pyx4j.forms.client.ui.decorators.IDecorator;
 import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
+import com.pyx4j.forms.client.ui.wizard.WizardDecorator;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
 import com.pyx4j.forms.client.validators.ValidationError;
 import com.pyx4j.forms.client.validators.password.PasswordStrengthValueValidator;
@@ -45,6 +47,13 @@ public class PasswordResetWizard extends CPortalEntityWizard<PasswordChangeReque
         this.passwordStrengthRule = new TenantPasswordStrengthRule(ClientContext.getUserVisit().getName(), ClientContext.getUserVisit().getName());
 
         addStep(createStep());
+    }
+
+    @Override
+    protected IDecorator<?> createDecorator() {
+        WizardDecorator<?> decorator = (WizardDecorator<?>) super.createDecorator();
+        decorator.getBtnCancel().setVisible(false);
+        return decorator;
     }
 
     public BasicFlexFormPanel createStep() {

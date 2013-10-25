@@ -17,6 +17,7 @@ import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.ui.IEditableComponentFactory;
 
+@Deprecated
 abstract public class CEntityDecoratableForm<E extends IEntity> extends CEntityForm<E> {
 
     public CEntityDecoratableForm(Class<E> clazz) {
