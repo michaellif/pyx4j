@@ -509,11 +509,11 @@ public class TableModel {
         for (MemberOperationsMeta member : entityOperationsMeta.getColumnMembers()) {
             if (member.getMemberMeta().isEntity()) {
                 IEntity childEntity = (IEntity) member.getMember(entity);
-                if ((childEntity.getPrimaryKey() == null) && !childEntity.isNull()) {
+                if ((childEntity.getPrimaryKey() == null) && childEntity.hasValues()) {
                     log.error("Saving non persisted reference {}\n{}\n", childEntity, Trace.getCallOrigin(EntityPersistenceServiceRDB.class));
                     throw new Error("Saving non persisted reference " + childEntity.getDebugExceptionInfoString());
                 }
-                if (member.isOwnerColumn() && childEntity.isNull() && member.getMemberMeta().getAnnotation(NotNull.class) != null) {
+                if (member.isOwnerColumn() && (!childEntity.hasValues()) && member.getMemberMeta().getAnnotation(NotNull.class) != null) {
                     log.error("Saving empty owner reference {}\n{}\n", childEntity, Trace.getCallOrigin(EntityPersistenceServiceRDB.class));
                     throw new Error("Trying to save child entity with undefined owner; " + childEntity.getDebugExceptionInfoString());
                 }

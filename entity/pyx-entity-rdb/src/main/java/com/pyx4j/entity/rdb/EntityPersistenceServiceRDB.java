@@ -612,7 +612,7 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
         for (MemberOperationsMeta member : tm.operationsMeta().getCascadePersistMembers()) {
             MemberMeta memberMeta = member.getMemberMeta();
             IEntity childEntity = (IEntity) member.getMember(entity);
-            if (!childEntity.isNull() || member.isOwnedForceCreation()) {
+            if (childEntity.hasValues() || member.isOwnedForceCreation()) {
                 if (memberMeta.isOwnedRelationships()) {
                     if (!childEntity.isValueDetached()) {
                         childEntity = childEntity.cast();
@@ -697,7 +697,7 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
                                 }
                                 persist(tableModel(childEntity.getEntityMeta()), childEntity);
                             }
-                        } else if ((memberMeta.getAnnotation(Reference.class) != null) && (childEntity.getPrimaryKey() == null) && (!childEntity.isNull())) {
+                        } else if ((memberMeta.getAnnotation(Reference.class) != null) && (childEntity.getPrimaryKey() == null) && (childEntity.hasValues())) {
                             mergeReference(memberMeta, childEntity);
                         }
                         orderInParent++;
@@ -709,7 +709,7 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
             }
             for (MemberOperationsMeta member : tm.operationsMeta().getCascadePersistMembersSecondPass()) {
                 IEntity childEntity = (IEntity) member.getMember(entity);
-                if (!childEntity.isValueDetached() && ((!childEntity.isNull() || member.isOwnedForceCreation()))) {
+                if (!childEntity.isValueDetached() && ((childEntity.hasValues() || member.isOwnedForceCreation()))) {
                     childEntity = childEntity.cast();
                     persist(tableModel(childEntity.getEntityMeta()), childEntity);
                 }
@@ -793,7 +793,7 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
             }
             for (MemberOperationsMeta member : tm.operationsMeta().getCascadePersistMembersSecondPass()) {
                 IEntity childEntity = (IEntity) member.getMember(entity);
-                if (!childEntity.isValueDetached() && ((!childEntity.isNull() || member.isOwnedForceCreation()))) {
+                if (!childEntity.isValueDetached() && ((childEntity.hasValues() || member.isOwnedForceCreation()))) {
                     childEntity = childEntity.cast();
                     if (doMerge) {
                         merge(tableModel(childEntity.getEntityMeta()), childEntity);
@@ -1231,7 +1231,7 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
                     }
                     updated = true;
                 }
-                if (!childEntity.isValueDetached() && ((!childEntity.isNull() || member.isOwnedForceCreation()))) {
+                if (!childEntity.isValueDetached() && ((childEntity.hasValues() || member.isOwnedForceCreation()))) {
                     childEntity = childEntity.cast();
                     updated |= merge(tableModel(childEntity.getEntityMeta()), childEntity);
                 }

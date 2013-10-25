@@ -99,6 +99,13 @@ public interface IEntity extends IObject<Map<String, Serializable>>, Serializabl
      */
     public void clearValues();
 
+    /**
+     * Like !isNull() only ignores Owner member
+     * 
+     * @see isEmpty()
+     */
+    public boolean hasValues();
+
     public Serializable getValue(Path path);
 
     public void setValue(Path path, Serializable value);

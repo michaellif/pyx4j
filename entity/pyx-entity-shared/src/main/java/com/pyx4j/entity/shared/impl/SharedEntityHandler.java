@@ -537,6 +537,27 @@ public abstract class SharedEntityHandler extends ObjectHandler<Map<String, Seri
     }
 
     @Override
+    public boolean hasValues() {
+        Map<String, Serializable> thisValue = this.getValue(false);
+        if ((thisValue == null) || (thisValue.isEmpty())) {
+            return false;
+        }
+        int actualValuesCount = thisValue.size();
+        if (actualValuesCount > 2) {
+            return true;
+        } else {
+            if (thisValue.containsKey(CONCRETE_TYPE_DATA_ATTR)) {
+                actualValuesCount--;
+            }
+            String ownerMemberName = getEntityMeta().getOwnerMemberName();
+            if ((ownerMemberName != null) && (isActualOwner(ownerMemberName)) && (thisValue.containsKey(ownerMemberName))) {
+                actualValuesCount--;
+            }
+            return (actualValuesCount > 0);
+        }
+    }
+
+    @Override
     public boolean isValueDetached() {
         return getAttachLevel() != AttachLevel.Attached;
     }
