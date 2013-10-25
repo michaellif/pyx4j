@@ -298,6 +298,8 @@ public class LeaseViewerActivity extends LeaseViewerActivityBase<LeaseDTO> imple
             place.queryArg(EntityFactory.getEntityPrototype(AutopayAgreement.class).tenant().id().getPath().toString(), tenantId.getPrimaryKey().toString());
         }
 
+        place.queryArg(EntityFactory.getEntityPrototype(AutopayAgreement.class).isDeleted().getPath().toString(), Boolean.TRUE.toString());
+
         AppSite.getPlaceController().goTo(place);
     }
 }

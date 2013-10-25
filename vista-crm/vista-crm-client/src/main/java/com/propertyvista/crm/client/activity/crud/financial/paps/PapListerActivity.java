@@ -44,5 +44,8 @@ public class PapListerActivity extends AbstractListerActivity<AutopayAgreement> 
         if ((val = place.getFirstArg(filters.proto().tenant().lease().id().getPath().toString())) != null) {
             filters.eq(filters.proto().tenant().lease().id(), new Key(val));
         }
+        if ((val = place.getFirstArg(filters.proto().isDeleted().getPath().toString())) != null) {
+            filters.eq(filters.proto().isDeleted(), Boolean.valueOf(val));
+        }
     }
 }
