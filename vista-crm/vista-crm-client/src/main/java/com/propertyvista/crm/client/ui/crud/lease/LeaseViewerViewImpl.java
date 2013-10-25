@@ -129,6 +129,8 @@ public class LeaseViewerViewImpl extends LeaseViewerViewImplBase<LeaseDTO> imple
 
     private final MenuItem maintenanceAction;
 
+    private final MenuItem viewDeletedPapsAction;
+
     private final MenuItem yardiImportAction;
 
     private MenuItem issueN4Action;
@@ -359,6 +361,16 @@ public class LeaseViewerViewImpl extends LeaseViewerViewImplBase<LeaseDTO> imple
             }
         });
 //        addAction(maintenanceAction);
+
+        viewDeletedPapsAction = new MenuItem(i18n.tr("View Deleted PAPs"), new Command() {
+            @Override
+            public void execute() {
+                ((LeaseViewerView.Presenter) getPresenter()).viewDeletedPaps(null);
+            }
+        });
+
+        addAction(viewDeletedPapsAction);
+
         // Renewing stuff : ---------------------------------------------------------------------------------------------------
 
         renewButton = new Button(i18n.tr("Renew"));

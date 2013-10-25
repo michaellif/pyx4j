@@ -50,6 +50,7 @@ import com.propertyvista.crm.rpc.services.lease.common.DepositLifecycleCrudServi
 import com.propertyvista.crm.rpc.services.lease.common.LeaseTermCrudService;
 import com.propertyvista.domain.communication.EmailTemplateType;
 import com.propertyvista.domain.financial.BillingAccount;
+import com.propertyvista.domain.payment.AutopayAgreement;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.LeaseAdjustment;
 import com.propertyvista.domain.tenant.lease.LeaseTerm.Type;
@@ -283,5 +284,20 @@ public class LeaseViewerActivity extends LeaseViewerActivityBase<LeaseDTO> imple
                 populate();
             }
         }, n4GenerationQuery);
+    }
+
+    @Override
+    public void viewDeletedPaps(final Tenant tenantId) {
+        CrudAppPlace place = AppPlaceEntityMapper.resolvePlace(AutopayAgreement.class);
+        place.formListerPlace();
+
+        place.queryArg(EntityFactory.getEntityPrototype(AutopayAgreement.class).tenant().lease().id().getPath().toString(), currentValue.getPrimaryKey()
+                .toString());
+
+        if (tenantId != null) {
+            place.queryArg(EntityFactory.getEntityPrototype(AutopayAgreement.class).tenant().id().getPath().toString(), tenantId.getPrimaryKey().toString());
+        }
+
+        AppSite.getPlaceController().goTo(place);
     }
 }

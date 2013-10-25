@@ -35,7 +35,8 @@ public class AutoPayCrudServiceImpl extends AbstractCrudServiceImpl<AutopayAgree
     protected void enhanceRetrieved(AutopayAgreement bo, AutopayAgreement to, RetrieveTarget retrieveTarget) {
         super.enhanceRetrieved(bo, to, retrieveTarget);
 
-        Persistence.ensureRetrieve(to.tenant(), AttachLevel.ToStringMembers);
+        Persistence.ensureRetrieve(to.tenant(), AttachLevel.Attached);
+        Persistence.ensureRetrieve(to.tenant().lease(), AttachLevel.ToStringMembers);
         Persistence.ensureRetrieve(to.createdBy(), AttachLevel.ToStringMembers);
     }
 
@@ -43,7 +44,8 @@ public class AutoPayCrudServiceImpl extends AbstractCrudServiceImpl<AutopayAgree
     protected void enhanceListRetrieved(AutopayAgreement bo, AutopayAgreement dto) {
         super.enhanceListRetrieved(bo, dto);
 
-        Persistence.ensureRetrieve(dto.tenant(), AttachLevel.ToStringMembers);
+        Persistence.ensureRetrieve(dto.tenant(), AttachLevel.Attached);
+        Persistence.ensureRetrieve(dto.tenant().lease(), AttachLevel.ToStringMembers);
         Persistence.ensureRetrieve(dto.createdBy(), AttachLevel.ToStringMembers);
     }
 }
