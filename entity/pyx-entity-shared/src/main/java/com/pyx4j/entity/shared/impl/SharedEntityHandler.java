@@ -536,6 +536,7 @@ public abstract class SharedEntityHandler extends ObjectHandler<Map<String, Seri
         }
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     public boolean hasValues() {
         Map<String, Serializable> thisValue = this.getValue(false);
@@ -546,14 +547,16 @@ public abstract class SharedEntityHandler extends ObjectHandler<Map<String, Seri
         if (actualValuesCount > 2) {
             return true;
         } else {
+            Set<Map<String, Serializable>> processed = new HashSet<Map<String, Serializable>>();
             if (thisValue.containsKey(CONCRETE_TYPE_DATA_ATTR)) {
                 actualValuesCount--;
             }
             String ownerMemberName = getEntityMeta().getOwnerMemberName();
             if ((ownerMemberName != null) && (isActualOwner(ownerMemberName)) && (thisValue.containsKey(ownerMemberName))) {
+                processed.add((Map<String, Serializable>) thisValue.get(ownerMemberName));
                 actualValuesCount--;
             }
-            return (actualValuesCount > 0);
+            return !((EntityValueMap) thisValue).isNull(processed, false);
         }
     }
 
