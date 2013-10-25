@@ -57,7 +57,6 @@ public abstract class CPolymorphicEntityEditor<E extends IEntity> extends CEntit
         super(rowClass);
         this.discriminators = discriminators;
         container = new SimplePanel();
-        container.getElement().setClassName("TESTTEST");
         subtypesHash = new HashMap<IDiscriminator<? extends E>, IEntity>();
     }
 

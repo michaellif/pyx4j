@@ -24,11 +24,8 @@ import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.SimplePanel;
 
 import com.pyx4j.forms.client.validators.password.PasswordStrengthRule.PasswordStrengthVerdict;
-import com.pyx4j.i18n.shared.I18n;
 
 public class PasswordStrengthWidget extends SimplePanel {
-
-    private static I18n i18n = I18n.get(PasswordStrengthWidget.class);
 
     private Label indicator;
 
@@ -68,6 +65,7 @@ public class PasswordStrengthWidget extends SimplePanel {
             }
             indicator.getElement().getStyle().setColor(color);
         }
+
     }
 
     public void ratePassword(String password) {

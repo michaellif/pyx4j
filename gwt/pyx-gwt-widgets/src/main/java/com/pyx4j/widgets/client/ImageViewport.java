@@ -37,7 +37,6 @@ public class ImageViewport extends LayoutPanel {
     private final ScaleMode scaleMode;
 
     public ImageViewport(Dimension dimension, ScaleMode scaleMode) {
-        setStyleName("TESTTEST");
         setPixelSize(dimension.getWidth(), dimension.getHeight());
         this.scaleMode = scaleMode;
         getElement().getStyle().setOverflow(Overflow.HIDDEN);
