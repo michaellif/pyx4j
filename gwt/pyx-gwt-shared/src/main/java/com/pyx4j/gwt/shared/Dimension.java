@@ -43,11 +43,11 @@ public class Dimension implements Serializable {
         this(d.width, d.height);
     }
 
-    public double getWidth() {
+    public int getWidth() {
         return width;
     }
 
-    public double getHeight() {
+    public int getHeight() {
         return height;
     }
 

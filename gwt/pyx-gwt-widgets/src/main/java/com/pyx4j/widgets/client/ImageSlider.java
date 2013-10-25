@@ -80,12 +80,12 @@ public class ImageSlider extends LayoutPanel implements IWidget {
         slideshow.removeAllItems();
         if (imageList.getImageUrls().size() == 0) {
             // set placeholder image
-            final ImageViewport imageViewport = new ImageViewport(imageSize, ScaleMode.ScaleToFill);
+            final ImageViewport imageViewport = new ImageViewport(imageSize, ScaleMode.Cover);
             imageViewport.setImage(imageList.getPlaceholder());
             slideshow.addItem(imageViewport);
         } else {
             for (String url : imageList.getImageUrls()) {
-                final ImageViewport imageViewport = new ImageViewport(imageSize, ScaleMode.ScaleToFill);
+                final ImageViewport imageViewport = new ImageViewport(imageSize, ScaleMode.Cover);
                 imageViewport.setImage(new Image(url));
                 slideshow.addItem(imageViewport);
             }

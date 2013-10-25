@@ -192,7 +192,7 @@ public class NImageSlider<T extends IFile> extends NField<IList<T>, ImageSlider,
         public CComponent<?> create(IObject<?> member) {
             if (member.getObjectClass().equals(imgClass)) {
                 return new CEntityForm<T>(imgClass) {
-                    private final ImageViewport thumb = new ImageViewport(getCComponent().getThumbSize(), ScaleMode.ScaleToFit);
+                    private final ImageViewport thumb = new ImageViewport(getCComponent().getThumbSize(), ScaleMode.Contain);
 
                     @Override
                     public IsWidget createContent() {
