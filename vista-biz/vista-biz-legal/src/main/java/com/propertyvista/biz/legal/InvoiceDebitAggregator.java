@@ -31,6 +31,7 @@ import java.util.Map;
 import com.pyx4j.entity.shared.EntityFactory;
 
 import com.propertyvista.domain.financial.billing.BillingCycle;
+import com.propertyvista.domain.financial.billing.InvoiceCarryforwardCharge;
 import com.propertyvista.domain.financial.billing.InvoiceDebit;
 import com.propertyvista.domain.legal.N4RentOwingForPeriod;
 
@@ -40,6 +41,9 @@ public class InvoiceDebitAggregator {
         Map<BillingCycle, List<InvoiceDebit>> billingCycleDebits = new HashMap<BillingCycle, List<InvoiceDebit>>();
 
         for (InvoiceDebit debit : invoiceDebits) {
+            if (debit.getInstanceValueClass().equals(InvoiceCarryforwardCharge.class)) {
+                throw new IllegalArgumentException("Balance forward charges are not supported");
+            }
             if (!billingCycleDebits.containsKey(debit.billingCycle())) {
                 billingCycleDebits.put(debit.billingCycle(), new LinkedList<InvoiceDebit>());
             }
