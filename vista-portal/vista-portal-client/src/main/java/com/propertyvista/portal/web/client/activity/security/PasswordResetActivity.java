@@ -62,8 +62,9 @@ public class PasswordResetActivity extends AbstractWizardActivity<PasswordChange
         GWT.<AbstractPasswordResetService> create(PortalPasswordResetService.class).resetPassword(new DefaultAsyncCallback<AuthenticationResponse>() {
             @Override
             public void onSuccess(AuthenticationResponse result) {
-                PasswordResetActivity.super.submit();
+                getView().reset();
                 ClientContext.authenticated(result);
+                PasswordResetActivity.super.submit();
             }
 
             @Override

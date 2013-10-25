@@ -45,7 +45,6 @@ public class PasswordResetWizard extends CPortalEntityWizard<PasswordChangeReque
         this.passwordStrengthRule = new TenantPasswordStrengthRule(ClientContext.getUserVisit().getName(), ClientContext.getUserVisit().getName());
 
         addStep(createStep());
-
     }
 
     public BasicFlexFormPanel createStep() {
