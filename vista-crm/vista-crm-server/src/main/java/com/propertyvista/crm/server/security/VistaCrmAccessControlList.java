@@ -104,6 +104,7 @@ import com.propertyvista.crm.rpc.services.dashboard.gadgets.UnitAvailabilityStat
 import com.propertyvista.crm.rpc.services.dashboard.gadgets.UnitAvailabilitySummaryGadgetService;
 import com.propertyvista.crm.rpc.services.dashboard.gadgets.UnitTurnoverAnalysisGadgetService;
 import com.propertyvista.crm.rpc.services.financial.AggregatedTransferCrudService;
+import com.propertyvista.crm.rpc.services.financial.AutoPayCrudService;
 import com.propertyvista.crm.rpc.services.financial.AutoPayReviewService;
 import com.propertyvista.crm.rpc.services.financial.PaymentRecordListService;
 import com.propertyvista.crm.rpc.services.financial.RevealAccountNumberService;
@@ -269,6 +270,7 @@ public class VistaCrmAccessControlList extends ServletContainerAclBuilder {
         grant(VistaBasicBehavior.CRM, new IServiceExecutePermission(N4DownloadToolService.class));
 
 // - Financial:
+        grant(VistaBasicBehavior.CRM, new IServiceExecutePermission(AutoPayCrudService.class));
         grant(VistaBasicBehavior.CRM, new IServiceExecutePermission(AutoPayReviewService.class));
 
 // - Dashboard:

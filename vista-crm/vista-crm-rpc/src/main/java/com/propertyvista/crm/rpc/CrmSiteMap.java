@@ -288,10 +288,12 @@ public class CrmSiteMap implements SiteMap {
         public static class AggregatedTransfer extends CrmCrudAppPlace {
         }
 
-        public static class AutoPayReview extends AppPlace {
-
+        @PlaceProperties(navigLabel = "Auto Pays")
+        public static class AutoPay extends CrmCrudAppPlace {
         }
 
+        public static class AutoPayReview extends AppPlace {
+        }
     }
 
     public static class Organization extends AppPlace {
