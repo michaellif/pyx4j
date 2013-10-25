@@ -18,6 +18,7 @@ import java.util.Vector;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.propertyvista.crm.rpc.dto.legal.n4.LegalNoticeCandidateDTO;
+import com.propertyvista.crm.rpc.dto.legal.n4.N4GenerationInitParamsDTO;
 import com.propertyvista.crm.rpc.dto.legal.n4.N4GenerationQueryDTO;
 import com.propertyvista.crm.rpc.dto.legal.n4.N4GenerationSettingsDTO;
 
@@ -29,6 +30,6 @@ public interface N4GenerationToolService extends AbstractBulkOperationService<N4
     @Override
     void process(AsyncCallback<String> callback, N4GenerationQueryDTO query);
 
-    void initSettings(AsyncCallback<N4GenerationSettingsDTO> settings);
+    void initSettings(AsyncCallback<N4GenerationInitParamsDTO> initParams);
 
 }

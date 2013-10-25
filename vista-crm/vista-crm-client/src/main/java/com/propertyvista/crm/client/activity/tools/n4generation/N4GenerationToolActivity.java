@@ -19,11 +19,13 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.gwt.rpc.deferred.DeferredProcessProgressResponse;
+import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.site.rpc.AppPlace;
 
 import com.propertyvista.crm.client.CrmSite;
 import com.propertyvista.crm.client.ui.tools.n4generation.N4GenerationToolView;
 import com.propertyvista.crm.rpc.dto.legal.n4.LegalNoticeCandidateDTO;
+import com.propertyvista.crm.rpc.dto.legal.n4.N4GenerationInitParamsDTO;
 import com.propertyvista.crm.rpc.dto.legal.n4.N4GenerationQueryDTO;
 import com.propertyvista.crm.rpc.dto.legal.n4.N4GenerationSettingsDTO;
 import com.propertyvista.crm.rpc.services.legal.N4GenerationToolService;
@@ -53,7 +55,13 @@ public class N4GenerationToolActivity extends AbstractBulkOperationToolActivity<
     }
 
     @Override
-    protected void initViewAsync(AsyncCallback<N4GenerationSettingsDTO> callback) {
-        (GWT.<N4GenerationToolService> create(N4GenerationToolService.class)).initSettings(callback);
+    protected void initViewAsync(final AsyncCallback<N4GenerationSettingsDTO> callback) {
+        (GWT.<N4GenerationToolService> create(N4GenerationToolService.class)).initSettings(new DefaultAsyncCallback<N4GenerationInitParamsDTO>() {
+            @Override
+            public void onSuccess(N4GenerationInitParamsDTO result) {
+                ((N4GenerationToolView) getView()).setAgents(result.availableAgents());
+                callback.onSuccess(result.settings());
+            }
+        });
     }
 }

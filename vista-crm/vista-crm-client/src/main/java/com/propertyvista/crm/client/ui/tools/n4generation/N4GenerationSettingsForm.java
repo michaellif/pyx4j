@@ -13,20 +13,29 @@
  */
 package com.propertyvista.crm.client.ui.tools.n4generation;
 
+import java.util.List;
+
 import com.google.gwt.dom.client.Style.Overflow;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.IsWidget;
 
+import com.pyx4j.forms.client.ui.CComboBox;
 import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
+import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
 import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
 import com.propertyvista.crm.client.ui.reports.eft.SelectedBuildingsFolder;
 import com.propertyvista.crm.rpc.dto.legal.n4.N4GenerationSettingsDTO;
+import com.propertyvista.domain.company.Employee;
 
 public class N4GenerationSettingsForm extends CEntityDecoratableForm<N4GenerationSettingsDTO> {
+
+    private static final I18n i18n = I18n.get(N4GenerationSettingsDTO.class);
+
+    private CComboBox<Employee> agentComboBox;
 
     public N4GenerationSettingsForm() {
         super(N4GenerationSettingsDTO.class);
@@ -39,7 +48,13 @@ public class N4GenerationSettingsForm extends CEntityDecoratableForm<N4Generatio
 
         panel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().query().noticeDate())).componentWidth("150px").build());
         panel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().query().deliveryMethod())).componentWidth("150px").build());
-        panel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().query().agent())).componentWidth("150px").build());
+        agentComboBox = new CComboBox<Employee>() {
+            @Override
+            public String getItemName(Employee o) {
+                return (o != null && !o.isNull()) ? o.name().getStringView() + (o.signature().getPrimaryKey() == null ? i18n.tr(" (No Signature)") : "") : "";
+            }
+        };
+        panel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().query().agent(), agentComboBox)).componentWidth("150px").build());
 
         row = -1;
 
@@ -66,5 +81,9 @@ public class N4GenerationSettingsForm extends CEntityDecoratableForm<N4Generatio
     protected void onValueSet(boolean populate) {
         super.onValueSet(populate);
         get(proto().buildings()).setVisible(getValue().filterByBuildings().isBooleanTrue());
+    }
+
+    public void setAgents(List<Employee> agents) {
+        agentComboBox.setOptions(agents);
     }
 }

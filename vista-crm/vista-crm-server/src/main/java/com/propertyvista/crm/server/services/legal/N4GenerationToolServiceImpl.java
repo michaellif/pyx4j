@@ -22,7 +22,9 @@ import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.commons.UserRuntimeException;
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.server.Persistence;
+import com.pyx4j.entity.shared.AttachLevel;
 import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.gwt.server.deferred.DeferredProcessRegistry;
 import com.pyx4j.i18n.shared.I18n;
 
@@ -30,11 +32,13 @@ import com.propertyvista.biz.legal.N4ManagementFacade;
 import com.propertyvista.biz.policy.PolicyFacade;
 import com.propertyvista.config.ThreadPoolNames;
 import com.propertyvista.crm.rpc.dto.legal.n4.LegalNoticeCandidateDTO;
+import com.propertyvista.crm.rpc.dto.legal.n4.N4GenerationInitParamsDTO;
 import com.propertyvista.crm.rpc.dto.legal.n4.N4GenerationQueryDTO;
 import com.propertyvista.crm.rpc.dto.legal.n4.N4GenerationQueryDTO.DeliveryMethod;
 import com.propertyvista.crm.rpc.dto.legal.n4.N4GenerationSettingsDTO;
 import com.propertyvista.crm.rpc.services.legal.N4GenerationToolService;
 import com.propertyvista.crm.server.util.CrmAppContext;
+import com.propertyvista.domain.company.Employee;
 import com.propertyvista.domain.legal.LegalNoticeCandidate;
 import com.propertyvista.domain.policy.framework.OrganizationPoliciesNode;
 import com.propertyvista.domain.policy.policies.N4Policy;
@@ -68,14 +72,21 @@ public class N4GenerationToolServiceImpl implements N4GenerationToolService {
     }
 
     @Override
-    public void initSettings(AsyncCallback<N4GenerationSettingsDTO> callback) {
+    public void initSettings(AsyncCallback<N4GenerationInitParamsDTO> callback) {
         N4GenerationSettingsDTO settings = EntityFactory.create(N4GenerationSettingsDTO.class);
         settings.query().noticeDate().setValue(new LogicalDate());
         settings.query().deliveryMethod().setValue(DeliveryMethod.Hand);
         settings.query().agent().set(CrmAppContext.getCurrentUserEmployee());
 
-        callback.onSuccess(settings);
+        N4GenerationInitParamsDTO initParams = EntityFactory.create(N4GenerationInitParamsDTO.class);
+        initParams.settings().set(settings);
 
+        List<Employee> employees = Persistence.secureQuery(EntityQueryCriteria.create(Employee.class));
+        for (Employee employee : employees) {
+            Persistence.service().retrieve(employee.signature(), AttachLevel.IdOnly);
+        }
+        initParams.availableAgents().addAll(employees);
+        callback.onSuccess(initParams);
     }
 
     private LegalNoticeCandidateDTO makeLegalNoticeCandidateDto(LegalNoticeCandidate candidate) {

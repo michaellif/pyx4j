@@ -183,6 +183,10 @@ public abstract class BulkOperationToolViewImpl<Settings extends IEntity, Item e
         settingsForm.populate(settings);
     }
 
+    protected CEntityForm<Settings> getSettingsForm() {
+        return settingsForm;
+    }
+
     protected void setAcceptButtonCaption(String caption) {
         acceptButton.setCaption(caption);
     }
