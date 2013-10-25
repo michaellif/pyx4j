@@ -20,9 +20,11 @@ import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
+import com.pyx4j.entity.shared.utils.EntityDiff;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.biz.policy.PolicyFacade;
+import com.propertyvista.biz.system.AuditFacade;
 import com.propertyvista.crm.rpc.services.policies.policy.AbstractPolicyCrudService;
 import com.propertyvista.domain.policy.framework.LowestApplicableNode;
 import com.propertyvista.domain.policy.framework.OrganizationPoliciesNode;
@@ -85,6 +87,7 @@ public abstract class GenericPolicyCrudService<POLICY extends Policy, POLICY_DTO
         }
 
         boolean isNewPolicy = in.getPrimaryKey() == null;
+        POLICY orig = null;
         if (isNewPolicy) {
             EntityQueryCriteria<POLICY> criteria = new EntityQueryCriteria<POLICY>(boClass);
             criteria.add(PropertyCriterion.eq(criteria.proto().node(), node));
@@ -93,10 +96,18 @@ public abstract class GenericPolicyCrudService<POLICY extends Policy, POLICY_DTO
             if (oldPolicyAtTheSameNode != null) {
                 throw new UserRuntimeException(i18n.tr("Overriding existing policy is forbidden!"));
             }
-
+        } else {
+            orig = Persistence.service().retrieve(boClass, dbo.getPrimaryKey());
         }
+
         super.persist(dbo, in);
 
         ServerSideFactory.create(PolicyFacade.class).resetPolicyCache();
+
+        if (isNewPolicy) {
+            ServerSideFactory.create(AuditFacade.class).created(dbo);
+        } else {
+            ServerSideFactory.create(AuditFacade.class).updated(dbo, EntityDiff.getChanges(orig, dbo));
+        }
     }
 }
