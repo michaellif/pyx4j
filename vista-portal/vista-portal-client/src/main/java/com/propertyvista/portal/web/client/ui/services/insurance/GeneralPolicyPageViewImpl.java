@@ -19,7 +19,6 @@ import com.propertyvista.portal.web.client.ui.AbstractEditorView;
 public class GeneralPolicyPageViewImpl extends AbstractEditorView<GeneralInsurancePolicyDTO> implements GeneralPolicyPageView {
 
     public GeneralPolicyPageViewImpl() {
-        super();
         setForm(new GeneralPolicyPage(this) {
             @Override
             protected void onRemove() {
@@ -27,5 +26,4 @@ public class GeneralPolicyPageViewImpl extends AbstractEditorView<GeneralInsuran
             }
         });
     }
-
 }

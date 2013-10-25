@@ -19,8 +19,6 @@ import com.propertyvista.portal.web.client.ui.AbstractEditorView;
 public class ProfilePageViewImpl extends AbstractEditorView<ResidentProfileDTO> implements ProfilePageView {
 
     public ProfilePageViewImpl() {
-        super();
         setForm(new ProfilePage(this));
     }
-
 }

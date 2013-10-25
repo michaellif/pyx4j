@@ -19,6 +19,6 @@ import com.propertyvista.portal.web.client.ui.AbstractEditorView;
 public class PaymentMethodViewImpl extends AbstractEditorView<PaymentMethodDTO> implements PaymentMethodView {
 
     public PaymentMethodViewImpl() {
-        setForm(new PaymentMethodViewForm(null));
+        setForm(new PaymentMethodViewForm(this));
     }
 }

@@ -19,8 +19,6 @@ import com.propertyvista.portal.web.client.ui.AbstractEditorView;
 public class MaintenanceRequestPageViewImpl extends AbstractEditorView<MaintenanceRequestDTO> implements MaintenanceRequestPageView {
 
     public MaintenanceRequestPageViewImpl() {
-        super();
         setForm(new MaintenanceRequestPage(this));
     }
-
 }

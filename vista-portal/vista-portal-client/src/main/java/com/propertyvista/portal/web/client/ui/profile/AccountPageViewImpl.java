@@ -19,8 +19,6 @@ import com.propertyvista.portal.web.client.ui.AbstractEditorView;
 public class AccountPageViewImpl extends AbstractEditorView<ResidentAccountDTO> implements AccountPageView {
 
     public AccountPageViewImpl() {
-        super();
         setForm(new AccountPage(this));
     }
-
 }

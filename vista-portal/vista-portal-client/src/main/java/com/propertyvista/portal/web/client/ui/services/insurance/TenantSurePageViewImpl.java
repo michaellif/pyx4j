@@ -22,7 +22,6 @@ import com.propertyvista.portal.web.client.ui.AbstractEditorView;
 public class TenantSurePageViewImpl extends AbstractEditorView<TenantSureInsurancePolicyDTO> implements TenantSurePageView {
 
     public TenantSurePageViewImpl() {
-        super();
         setForm(new TenantSurePage(this));
     }
 

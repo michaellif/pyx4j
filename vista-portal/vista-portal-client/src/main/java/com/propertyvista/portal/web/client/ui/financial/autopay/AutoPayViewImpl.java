@@ -19,7 +19,6 @@ import com.propertyvista.portal.web.client.ui.AbstractEditorView;
 public class AutoPayViewImpl extends AbstractEditorView<AutoPayDTO> implements AutoPayView {
 
     public AutoPayViewImpl() {
-        super();
         setForm(new AutoPayViewForm(this));
     }
 }

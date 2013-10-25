@@ -14,45 +14,30 @@
 package com.propertyvista.portal.web.client.activity.financial.paymentmethod;
 
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.event.shared.EventBus;
-import com.google.gwt.user.client.ui.AcceptsOneWidget;
+import com.google.gwt.user.client.rpc.AsyncCallback;
 
-import com.pyx4j.commons.Key;
-import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.site.rpc.AppPlace;
 
-import com.propertyvista.domain.payment.LeasePaymentMethod;
+import com.propertyvista.domain.contact.AddressSimple;
 import com.propertyvista.portal.rpc.portal.web.dto.financial.PaymentMethodDTO;
-import com.propertyvista.portal.rpc.portal.web.services.financial.PaymentService;
-import com.propertyvista.portal.web.client.PortalWebSite;
-import com.propertyvista.portal.web.client.activity.SecurityAwareActivity;
+import com.propertyvista.portal.rpc.portal.web.services.financial.PaymentMethodWizardService;
+import com.propertyvista.portal.web.client.activity.AbstractEditorActivity;
 import com.propertyvista.portal.web.client.ui.financial.paymentmethod.PaymentMethodView;
 
-public class PaymentMethodViewActivity extends SecurityAwareActivity implements PaymentMethodView.Presenter {
-
-    private final PaymentMethodView view;
-
-    private final Key entityId;
+public class PaymentMethodViewActivity extends AbstractEditorActivity<PaymentMethodDTO> implements PaymentMethodView.Presenter {
 
     public PaymentMethodViewActivity(AppPlace place) {
-        this.view = PortalWebSite.getViewFactory().instantiate(PaymentMethodView.class);
-        this.view.setPresenter(this);
-
-        this.entityId = place.getItemId();
+        super(PaymentMethodView.class, GWT.<PaymentMethodWizardService> create(PaymentMethodWizardService.class), place);
     }
 
     @Override
-    public void start(AcceptsOneWidget panel, EventBus eventBus) {
-        super.start(panel, eventBus);
-        panel.setWidget(view);
-
-        assert (entityId != null);
-        GWT.<PaymentService> create(PaymentService.class).retrievePaymentMethod(new DefaultAsyncCallback<PaymentMethodDTO>() {
+    public void getCurrentAddress(final AsyncCallback<AddressSimple> callback) {
+        ((PaymentMethodWizardService) getService()).getCurrentAddress(new DefaultAsyncCallback<AddressSimple>() {
             @Override
-            public void onSuccess(PaymentMethodDTO result) {
-                view.populate(result);
+            public void onSuccess(AddressSimple result) {
+                callback.onSuccess(result);
             }
-        }, EntityFactory.createIdentityStub(LeasePaymentMethod.class, entityId));
+        });
     }
 }
