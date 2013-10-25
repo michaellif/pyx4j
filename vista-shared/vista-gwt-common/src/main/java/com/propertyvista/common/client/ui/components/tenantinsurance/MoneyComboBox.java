@@ -26,9 +26,9 @@ public class MoneyComboBox extends CComboBox<BigDecimal> {
 
     private static final I18n i18n = I18n.get(MoneyComboBox.class);
 
-    public static final NumberFormat CANADIAN_CURRENCY_DETAILED_FORMAT = NumberFormat.getFormat(i18n.tr("CAD #,##0.00"));
+    public static final NumberFormat CANADIAN_CURRENCY_DETAILED_FORMAT = NumberFormat.getFormat(i18n.tr("#,##0.00 CAD"));
 
-    public static final NumberFormat CANADIAN_CURRENCY_FORMAT = NumberFormat.getFormat(i18n.tr("CAD #,##0"));
+    public static final NumberFormat CANADIAN_CURRENCY_FORMAT = NumberFormat.getFormat(i18n.tr("#,##0 CAD"));
 
     public static class MoneyComboBoxFormat implements IFormat<BigDecimal> {
         @Override
