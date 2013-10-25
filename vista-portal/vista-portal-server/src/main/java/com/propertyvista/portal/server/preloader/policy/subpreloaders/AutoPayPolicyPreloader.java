@@ -31,6 +31,7 @@ public class AutoPayPolicyPreloader extends AbstractPolicyPreloader<AutoPayPolic
         policy.onLeaseChargeChangeRule().setValue(AutoPayPolicy.ChangeRule.keepPercentage);
         policy.excludeFirstBillingPeriodCharge().setValue(Boolean.FALSE);
         policy.excludeLastBillingPeriodCharge().setValue(Boolean.TRUE);
+        policy.allowCancelationByResident().setValue(Boolean.TRUE);
 
         return policy;
     }

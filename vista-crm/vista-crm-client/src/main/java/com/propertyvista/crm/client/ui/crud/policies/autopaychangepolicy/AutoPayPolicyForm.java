@@ -48,6 +48,8 @@ public class AutoPayPolicyForm extends PolicyDTOTabPanelBasedForm<AutoPayPolicyD
 
         panel.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().excludeLastBillingPeriodCharge()), 5, true).labelWidth(20).build());
 
+        panel.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().allowCancelationByResident()), 5, true).labelWidth(20).build());
+
         return panel;
     }
 

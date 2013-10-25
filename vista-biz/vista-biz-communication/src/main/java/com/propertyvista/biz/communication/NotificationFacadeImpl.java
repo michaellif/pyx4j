@@ -21,7 +21,7 @@ import com.pyx4j.entity.shared.AttachLevel;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 
 import com.propertyvista.biz.communication.notifications.AbstractNotification;
-import com.propertyvista.biz.communication.notifications.AutoPayCancelledNotification;
+import com.propertyvista.biz.communication.notifications.AutoPayCancelledBySystemNotification;
 import com.propertyvista.biz.communication.notifications.AutoPayReviewRequiredNotification;
 import com.propertyvista.biz.communication.notifications.NotificationsAggregator;
 import com.propertyvista.biz.communication.notifications.NotificationsUtils;
@@ -58,13 +58,21 @@ public class NotificationFacadeImpl implements NotificationFacade {
     }
 
     @Override
+    public void autoPayCancelledByResidentNotification(Lease leaseId) {
+        List<Employee> employees = NotificationsUtils.getNotificationTraget(leaseId, Notification.NotificationType.AutoPayCanceledByResident);
+        if (!employees.isEmpty()) {
+            ServerSideFactory.create(CommunicationFacade.class).sendAutoPayCancelledByResidentNotification(NotificationsUtils.toEmails(employees), leaseId);
+        }
+    }
+
+    @Override
     public void autoPayReviewRequiredNotification(Lease leaseId) {
         aggregateOrSend(new AutoPayReviewRequiredNotification(leaseId));
     }
 
     @Override
-    public void autoPayCancelledNotification(Lease leaseId) {
-        aggregateOrSend(new AutoPayCancelledNotification(leaseId));
+    public void autoPayCancelledBySystemNotification(Lease leaseId) {
+        aggregateOrSend(new AutoPayCancelledBySystemNotification(leaseId));
     }
 
     @Override

@@ -75,7 +75,9 @@ public interface CommunicationFacade {
 
     void sendAutoPayReviewRequiredNotification(List<String> targetEmails, List<Lease> leaseIds);
 
-    void sendAutoPayCancelledNotification(List<String> targetEmails, List<Lease> leaseIds);
+    void sendAutoPayCancelledBySystemNotification(List<String> targetEmails, List<Lease> leaseIds);
+
+    void sendAutoPayCancelledByResidentNotification(List<String> targetEmails, Lease leaseId);
 
     //void sendCustomerMessage(CustomerCustomMessageTemplate customMessageTemplate, Customer customer);
 

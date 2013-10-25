@@ -297,11 +297,21 @@ public class CommunicationFacadeImpl implements CommunicationFacade {
     }
 
     @Override
-    public void sendAutoPayCancelledNotification(List<String> targetEmails, List<Lease> leaseIds) {
+    public void sendAutoPayCancelledBySystemNotification(List<String> targetEmails, List<Lease> leaseIds) {
         if (disabled) {
             return;
         }
-        MailMessage m = MessageTemplates.createAutoPayCancelledNotificationEmail(leaseIds);
+        MailMessage m = MessageTemplates.createAutoPayCancelledBySystemNotificationEmail(leaseIds);
+        m.setTo(targetEmails);
+        Mail.send(m);
+    }
+
+    @Override
+    public void sendAutoPayCancelledByResidentNotification(List<String> targetEmails, Lease leaseId) {
+        if (disabled) {
+            return;
+        }
+        MailMessage m = MessageTemplates.createAutoPayCancelledByResidentNotificationEmail(leaseId);
         m.setTo(targetEmails);
         Mail.send(m);
     }

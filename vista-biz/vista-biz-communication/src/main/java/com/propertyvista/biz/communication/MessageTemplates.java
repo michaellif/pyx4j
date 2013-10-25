@@ -409,13 +409,13 @@ public class MessageTemplates {
         return email;
     }
 
-    public static MailMessage createAutoPayCancelledNotificationEmail(List<Lease> leaseIds) {
+    public static MailMessage createAutoPayCancelledBySystemNotificationEmail(List<Lease> leaseIds) {
         MailMessage email = new MailMessage();
         email.setSender(getSender());
 
         String emailBody = "";
         try {
-            emailBody = IOUtils.getTextResource("email/autopay-cancelled-notification.html");
+            emailBody = IOUtils.getTextResource("email/autopay-cancelled-by-system-notification.html");
         } catch (IOException e) {
             throw new Error("Failed to load email template for AutoPayCancelled notifications", e);
         }
@@ -447,6 +447,54 @@ public class MessageTemplates {
         String crmUrl = VistaDeployment.getBaseApplicationURL(VistaDeployment.getCurrentPmc(), VistaApplication.crm, true);
         StringBuilder leaseLinks = new StringBuilder();
         for (Lease leaseId : leaseIds) {
+            String leaseUrl = AppPlaceInfo.absoluteUrl(crmUrl, true, new CrmSiteMap.Tenants.Lease().formViewerPlace(leaseId.getPrimaryKey()));
+            Lease lease = Persistence.service().retrieve(Lease.class, leaseId.getPrimaryKey());
+            if (leaseLinks.length() > 0) {
+                leaseLinks.append("<p/>");
+            }
+            leaseLinks.append("<a href=\"" + leaseUrl + "\">" + lease.getStringView() + "</a>");
+
+        }
+        emailBody = emailBody.replace("${leaseLinks}", leaseLinks);
+
+        email.setHtmlBody(wrapAdminHtml(emailBody));
+        return email;
+    }
+
+    public static MailMessage createAutoPayCancelledByResidentNotificationEmail(Lease leaseId) {
+        MailMessage email = new MailMessage();
+        email.setSender(getSender());
+
+        String emailBody = "";
+        try {
+            emailBody = IOUtils.getTextResource("email/autopay-cancelled-by-system-notification.html");
+        } catch (IOException e) {
+            throw new Error("Failed to load email template for AutoPayCancelled notifications", e);
+        }
+
+        {
+            Lease lease = Persistence.service().retrieve(Lease.class, leaseId.getPrimaryKey());
+            Building building;
+            {
+                EntityQueryCriteria<Building> criteria = EntityQueryCriteria.create(Building.class);
+                criteria.eq(criteria.proto().units(), lease.unit());
+                building = Persistence.service().retrieve(criteria);
+            }
+
+            String buildingName = building.info().name().getStringView();
+            if (StringUtils.isEmpty(buildingName)) {
+                buildingName = building.propertyCode().getStringView();
+            }
+
+            emailBody = emailBody.replace("${buildingName}", buildingName);
+            emailBody = emailBody.replace("${buildingAddress}", building.info().address().getStringView());
+
+            email.setSubject(i18n.tr("Auto Pay Cancelled by Resident for lease {0}", lease));
+        }
+
+        String crmUrl = VistaDeployment.getBaseApplicationURL(VistaDeployment.getCurrentPmc(), VistaApplication.crm, true);
+        StringBuilder leaseLinks = new StringBuilder();
+        {
             String leaseUrl = AppPlaceInfo.absoluteUrl(crmUrl, true, new CrmSiteMap.Tenants.Lease().formViewerPlace(leaseId.getPrimaryKey()));
             Lease lease = Persistence.service().retrieve(Lease.class, leaseId.getPrimaryKey());
             if (leaseLinks.length() > 0) {

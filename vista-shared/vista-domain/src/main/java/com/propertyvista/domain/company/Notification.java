@@ -40,6 +40,8 @@ public interface Notification extends IEntity {
 
         AutoPayReviewRequired,
 
+        AutoPayCanceledByResident,
+
         MaintenanceRequest;
 
         @Override

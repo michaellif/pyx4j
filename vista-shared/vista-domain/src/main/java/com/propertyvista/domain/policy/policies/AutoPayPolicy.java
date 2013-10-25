@@ -52,4 +52,6 @@ public interface AutoPayPolicy extends Policy {
     IPrimitive<Boolean> excludeFirstBillingPeriodCharge();
 
     IPrimitive<Boolean> excludeLastBillingPeriodCharge();
+
+    IPrimitive<Boolean> allowCancelationByResident();
 }

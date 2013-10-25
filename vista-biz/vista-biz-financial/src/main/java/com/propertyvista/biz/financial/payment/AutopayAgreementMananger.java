@@ -24,6 +24,7 @@ import org.apache.commons.lang.Validate;
 import org.slf4j.Logger;
 
 import com.pyx4j.commons.LogicalDate;
+import com.pyx4j.commons.UserRuntimeException;
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.server.Executable;
 import com.pyx4j.entity.server.IEntityPersistenceService.ICursorIterator;
@@ -37,6 +38,7 @@ import com.pyx4j.entity.shared.criterion.OrCriterion;
 import com.pyx4j.entity.shared.utils.EntityDiff;
 import com.pyx4j.entity.shared.utils.EntityGraph;
 import com.pyx4j.essentials.server.dev.DataDump;
+import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.biz.ExecutionMonitor;
 import com.propertyvista.biz.communication.NotificationFacade;
@@ -64,6 +66,8 @@ import com.propertyvista.shared.config.VistaFeatures;
 class AutopayAgreementMananger {
 
     private static final Logger log = org.slf4j.LoggerFactory.getLogger(AutopayAgreementMananger.class);
+
+    private static final I18n i18n = I18n.get(AutopayAgreementMananger.class);
 
     AutopayAgreement persistAutopayAgreement(AutopayAgreement preauthorizedPayment, Tenant tenantId) {
         Validate.isTrue(!preauthorizedPayment.paymentMethod().isNull());
@@ -167,8 +171,19 @@ class AutopayAgreementMananger {
     //If Tenant removes PAP - payment will NOT be canceled.
     void deleteAutopayAgreement(AutopayAgreement preauthorizedPaymentId) {
         AutopayAgreement preauthorizedPayment = Persistence.service().retrieve(AutopayAgreement.class, preauthorizedPaymentId.getPrimaryKey());
-
         Persistence.ensureRetrieve(preauthorizedPayment.tenant(), AttachLevel.Attached);
+        Persistence.ensureRetrieve(preauthorizedPayment.tenant().lease(), AttachLevel.Attached);
+
+        if (VistaContext.getCurrentUserIfAvalable() instanceof CustomerUser) {
+            AutoPayPolicy autoPayPolicy = ServerSideFactory.create(PolicyFacade.class).obtainEffectivePolicy(preauthorizedPayment.tenant().lease().unit(),
+                    AutoPayPolicy.class);
+            if (!autoPayPolicy.allowCancelationByResident().getValue(true)) {
+                throw new UserRuntimeException(i18n.tr("AutoPay Agreement can't be cancelled by resident, Call office to cancel"));
+            } else {
+                ServerSideFactory.create(NotificationFacade.class).autoPayCancelledByResidentNotification(preauthorizedPayment.tenant().lease());
+            }
+        }
+
         BillingCycle nextPaymentCycle = ServerSideFactory.create(PaymentMethodFacade.class).getNextAutopayBillingCycle(preauthorizedPayment.tenant().lease());
         preauthorizedPayment.expiredFrom().setValue(nextPaymentCycle.billingCycleStartDate().getValue());
 
@@ -204,7 +219,7 @@ class AutopayAgreementMananger {
             for (AutopayAgreement pap : activePaps) {
                 deleteAutopayAgreement(pap);
             }
-            ServerSideFactory.create(NotificationFacade.class).autoPayCancelledNotification(lease);
+            ServerSideFactory.create(NotificationFacade.class).autoPayCancelledBySystemNotification(lease);
             return;
         }
 
@@ -326,7 +341,7 @@ class AutopayAgreementMananger {
             for (AutopayAgreement pap : activePaps) {
                 deleteAutopayAgreement(pap);
             }
-            ServerSideFactory.create(NotificationFacade.class).autoPayCancelledNotification(lease);
+            ServerSideFactory.create(NotificationFacade.class).autoPayCancelledBySystemNotification(lease);
         }
     }
 
@@ -395,7 +410,7 @@ class AutopayAgreementMananger {
                                 }
 
                                 if (atLeaseOneTerminated) {
-                                    ServerSideFactory.create(NotificationFacade.class).autoPayCancelledNotification(account.lease());
+                                    ServerSideFactory.create(NotificationFacade.class).autoPayCancelledBySystemNotification(account.lease());
                                     Persistence.ensureRetrieve(account.lease(), AttachLevel.Attached);
                                     executionMonitor.addInfoEvent("Lease with Cancelled AutoPay", "LeaseId " + account.lease().leaseId().getStringView());
                                 }
