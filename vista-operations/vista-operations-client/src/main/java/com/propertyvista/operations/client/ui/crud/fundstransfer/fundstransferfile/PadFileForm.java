@@ -54,7 +54,7 @@ public class PadFileForm extends OperationsEntityForm<PadFileDTO> {
         panel.setWidget(++row, 0, 1, new FormDecoratorBuilder(inject(proto().acknowledgmentRejectReasonMessage())).build());
         panel.setWidget(++row, 0, 1, new FormDecoratorBuilder(inject(proto().acknowledgmentStatus())).build());
 
-        // TODO Sorry for the mess with DTO and DBO here,  will be fixed once we have AttacheLEvel.countOnly
+        // TODO The mess with DTO and DBO here
         {
             AppPlaceBuilder<IList<PadDebitRecord>> appPlaceBuilder = new AppPlaceBuilder<IList<PadDebitRecord>>() {
                 @Override
@@ -82,7 +82,7 @@ public class PadFileForm extends OperationsEntityForm<PadFileDTO> {
             };
 
             CEntityCollectionCrudHyperlink<IList<PadBatch>> link = new CEntityCollectionCrudHyperlink<IList<PadBatch>>(appPlaceBuilder);
-            panel.setWidget(++row, 0, 1, new FormDecoratorBuilder(inject(proto().debitRecords(), link)).build());
+            panel.setWidget(++row, 0, 1, new FormDecoratorBuilder(inject(proto().batches(), link)).build());
         }
 
         selectTab(addTab(panel));
