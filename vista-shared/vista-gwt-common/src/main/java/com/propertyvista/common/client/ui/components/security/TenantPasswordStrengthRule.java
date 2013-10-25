@@ -34,8 +34,8 @@ public class TenantPasswordStrengthRule implements PasswordStrengthRule, HasDesc
 
     @Override
     public PasswordStrengthVerdict getPasswordVerdict(String password) {
-        if (password == null) {
-            return PasswordStrengthVerdict.Invalid;
+        if (password == null || password.isEmpty()) {
+            return null;
         }
         String nPassword = password.toLowerCase();
         if (nPassword.length() < 6) {
