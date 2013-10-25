@@ -178,7 +178,7 @@ class AutopayAgreementMananger {
             AutoPayPolicy autoPayPolicy = ServerSideFactory.create(PolicyFacade.class).obtainEffectivePolicy(preauthorizedPayment.tenant().lease().unit(),
                     AutoPayPolicy.class);
             if (!autoPayPolicy.allowCancelationByResident().getValue(true)) {
-                throw new UserRuntimeException(i18n.tr("AutoPay Agreement can't be cancelled by resident, Call office to cancel"));
+                throw new UserRuntimeException(i18n.tr("AutoPay Agreement can not be cancelled online. Please contact your property management office."));
             } else {
                 ServerSideFactory.create(NotificationFacade.class).autoPayCancelledByResidentNotification(preauthorizedPayment.tenant().lease());
             }
