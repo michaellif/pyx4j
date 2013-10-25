@@ -138,11 +138,12 @@ public abstract class BulkOperationToolViewImpl<Settings extends IEntity, Item e
 
     @Override
     public void setPresenter(BulkOperationToolView.Presenter presenter) {
+        this.presenter = presenter;
+
         this.settingsForm.setVisited(false);
-        this.settingsForm.populateNew(); // TODO this is not supposed to be here: settings must be populated by presenter too
+
         this.itemsHolderForm.setVisited(false);
         this.itemsHolderForm.populateNew();
-        this.presenter = presenter;
     }
 
     @Override
@@ -151,7 +152,7 @@ public abstract class BulkOperationToolViewImpl<Settings extends IEntity, Item e
     }
 
     @Override
-    public List<Item> getMarkedItems() {
+    public List<Item> getSelectedItems() {
         List<Item> selected = new LinkedList<Item>();
         for (Item item : itemsHolderForm.getValue().items()) {
             if (item.isSelected().isBooleanTrue()) {
@@ -162,7 +163,7 @@ public abstract class BulkOperationToolViewImpl<Settings extends IEntity, Item e
     }
 
     @Override
-    public Settings getFilterSettings() {
+    public Settings getSettings() {
         return settingsForm.getValue();
     }
 
@@ -174,6 +175,12 @@ public abstract class BulkOperationToolViewImpl<Settings extends IEntity, Item e
     @Override
     public void showMessage(String message) {
         MessageDialog.info(message);
+    }
+
+    @Override
+    public void setSettings(Settings settings) {
+        settingsForm.setVisited(false);
+        settingsForm.populate(settings);
     }
 
     protected void setAcceptButtonCaption(String caption) {
@@ -198,7 +205,7 @@ public abstract class BulkOperationToolViewImpl<Settings extends IEntity, Item e
         itemsHolderForm.setEditable(isEditable);
 
         if (isValid) {
-            presenter.acceptMarked();
+            presenter.acceptSelected();
         } else {
             MessageDialog.info(i18n.tr("Please fix the validation errors"));
         }
@@ -208,7 +215,7 @@ public abstract class BulkOperationToolViewImpl<Settings extends IEntity, Item e
     private void search() {
         settingsForm.setUnconditionalValidationErrorRendering(true);
         if (settingsForm.isValid()) {
-            presenter.populate();
+            presenter.search();
         }
     }
 
@@ -216,7 +223,7 @@ public abstract class BulkOperationToolViewImpl<Settings extends IEntity, Item e
         this.visibleRange = new Range(0, itemsHolderForm.getValue() == null || itemsHolderForm.getValue().isNull() ? pageIncrement : itemsHolderForm.getValue()
                 .items().size()
                 + pageIncrement);
-        this.presenter.onRangeChanged();
+        this.presenter.updateVisibleItems();
     }
 
 }

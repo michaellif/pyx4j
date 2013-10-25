@@ -18,6 +18,7 @@ import java.util.Vector;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
+import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.commons.UserRuntimeException;
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.server.Persistence;
@@ -30,8 +31,10 @@ import com.propertyvista.biz.policy.PolicyFacade;
 import com.propertyvista.config.ThreadPoolNames;
 import com.propertyvista.crm.rpc.dto.legal.n4.LegalNoticeCandidateDTO;
 import com.propertyvista.crm.rpc.dto.legal.n4.N4GenerationQueryDTO;
+import com.propertyvista.crm.rpc.dto.legal.n4.N4GenerationQueryDTO.DeliveryMethod;
 import com.propertyvista.crm.rpc.dto.legal.n4.N4GenerationSettingsDTO;
 import com.propertyvista.crm.rpc.services.legal.N4GenerationToolService;
+import com.propertyvista.crm.server.util.CrmAppContext;
 import com.propertyvista.domain.legal.LegalNoticeCandidate;
 import com.propertyvista.domain.policy.framework.OrganizationPoliciesNode;
 import com.propertyvista.domain.policy.policies.N4Policy;
@@ -62,6 +65,17 @@ public class N4GenerationToolServiceImpl implements N4GenerationToolService {
     public void process(AsyncCallback<String> callback, N4GenerationQueryDTO query) {
         callback.onSuccess(DeferredProcessRegistry.fork(new N4GenerationDeferredProcess(query.targetDelinquentLeases(), query.agent(), query.noticeDate()
                 .getValue()), ThreadPoolNames.IMPORTS));
+    }
+
+    @Override
+    public void initSettings(AsyncCallback<N4GenerationSettingsDTO> callback) {
+        N4GenerationSettingsDTO settings = EntityFactory.create(N4GenerationSettingsDTO.class);
+        settings.query().noticeDate().setValue(new LogicalDate());
+        settings.query().deliveryMethod().setValue(DeliveryMethod.Hand);
+        settings.query().agent().set(CrmAppContext.getCurrentUserEmployee());
+
+        callback.onSuccess(settings);
+
     }
 
     private LegalNoticeCandidateDTO makeLegalNoticeCandidateDto(LegalNoticeCandidate candidate) {

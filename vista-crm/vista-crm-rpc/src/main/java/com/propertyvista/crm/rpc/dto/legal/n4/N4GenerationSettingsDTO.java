@@ -15,34 +15,24 @@ package com.propertyvista.crm.rpc.dto.legal.n4;
 
 import java.math.BigDecimal;
 
-import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.Editor;
 import com.pyx4j.entity.annotations.Editor.EditorType;
-import com.pyx4j.entity.annotations.RpcTransient;
 import com.pyx4j.entity.annotations.Transient;
-import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
 
-import com.propertyvista.domain.company.Employee;
 import com.propertyvista.domain.property.asset.building.Building;
 
 @Transient
 public interface N4GenerationSettingsDTO extends IEntity {
 
-    @RpcTransient
-    @NotNull
-    IPrimitive<LogicalDate> noticeDate();
+    N4GenerationQueryDTO query();
 
     IPrimitive<Boolean> filterByBuildings();
 
     IList<Building> buildings();
-
-    @RpcTransient
-    @NotNull
-    Employee agent();
 
     @Caption(name = "Amount Owed >")
     @Editor(type = EditorType.money)

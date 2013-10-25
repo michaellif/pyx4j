@@ -26,9 +26,11 @@ public interface BulkOperationToolView<Settings extends IEntity, Item extends Bu
 
     interface Presenter extends IPrimePane.Presenter {
 
-        void acceptMarked();
+        void search();
 
-        void onRangeChanged();
+        void acceptSelected();
+
+        void updateVisibleItems();
 
     }
 
@@ -36,17 +38,19 @@ public interface BulkOperationToolView<Settings extends IEntity, Item extends Bu
 
     void setPresenter(Presenter presenter);
 
-    Presenter getPresenter();
+    void setSettings(Settings settings);
 
     void setRowData(int start, int total, List<Item> items);
 
     void resetVisibleRange();
 
+    Presenter getPresenter();
+
     Range getVisibleRange();
 
-    List<Item> getMarkedItems();
+    List<Item> getSelectedItems();
 
-    Settings getFilterSettings();
+    Settings getSettings();
 
     boolean isEverythingSelected();
 

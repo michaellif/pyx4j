@@ -29,4 +29,6 @@ public interface N4GenerationToolService extends AbstractBulkOperationService<N4
     @Override
     void process(AsyncCallback<String> callback, N4GenerationQueryDTO query);
 
+    void initSettings(AsyncCallback<N4GenerationSettingsDTO> settings);
+
 }

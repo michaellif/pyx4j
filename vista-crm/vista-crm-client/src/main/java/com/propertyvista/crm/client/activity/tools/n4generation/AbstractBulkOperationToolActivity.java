@@ -13,14 +13,17 @@
  */
 package com.propertyvista.crm.client.activity.tools.n4generation;
 
+import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Vector;
 
 import com.google.gwt.activity.shared.AbstractActivity;
 import com.google.gwt.event.shared.EventBus;
+import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
+import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.gwt.client.deferred.DeferredProcessDialog;
 import com.pyx4j.gwt.rpc.deferred.DeferredProcessProgressResponse;
@@ -45,39 +48,52 @@ public abstract class AbstractBulkOperationToolActivity<Settings extends IEntity
 
     private final AppPlace place;
 
+    private final Class<Settings> settingsClass;
+
     public AbstractBulkOperationToolActivity(AppPlace place, BulkOperationToolView<Settings, Item> view,
-            AbstractBulkOperationService<Settings, Item, AcceptedItems> service) {
+            AbstractBulkOperationService<Settings, Item, AcceptedItems> service, Class<Settings> settingsClass) {
         this.place = place;
         this.view = view;
         this.service = service;
         this.items = new LinkedList<Item>();
+        this.settingsClass = settingsClass;
     }
 
     @Override
-    public void populate() {
+    public void acceptSelected() {
+        if (!items.isEmpty() && (getView().isEverythingSelected() || !getView().getSelectedItems().isEmpty())) {
+            service.process(new DefaultAsyncCallback<String>() {
+                @Override
+                public void onSuccess(String deferredCorrelationId) {
+                    startAccetanceProgress(deferredCorrelationId);
+                }
+            }, makeProducedItems(getView().isEverythingSelected() ? items : getView().getSelectedItems()));
+        } else {
+            getView().showMessage(i18n.tr("Please select some items first"));
+        }
+    }
+
+    @Override
+    public void search() {
         getView().setLoading(true);
         service.getItems(new DefaultAsyncCallback<Vector<Item>>() {
             @Override
             public void onSuccess(Vector<Item> items) {
                 AbstractBulkOperationToolActivity.this.items = items;
                 AbstractBulkOperationToolActivity.this.getView().resetVisibleRange();
-                AbstractBulkOperationToolActivity.this.populateView();
+                AbstractBulkOperationToolActivity.this.populateItems();
+                AbstractBulkOperationToolActivity.this.getView().setLoading(false);
             }
-        }, getView().getFilterSettings());
+        }, getView().getSettings());
+    }
+
+    public BulkOperationToolView<Settings, Item> getView() {
+        return view;
     }
 
     @Override
-    public void acceptMarked() {
-        if (!items.isEmpty() && (getView().isEverythingSelected() || !getView().getMarkedItems().isEmpty())) {
-            service.process(new DefaultAsyncCallback<String>() {
-                @Override
-                public void onSuccess(String deferredCorrelationId) {
-                    startAccetanceProgress(deferredCorrelationId);
-                }
-            }, makeProducedItems(getView().isEverythingSelected() ? items : getView().getMarkedItems()));
-        } else {
-            getView().showMessage(i18n.tr("Please select some items first"));
-        }
+    public void populate() {
+        // no need to implement
     }
 
     @Override
@@ -89,6 +105,12 @@ public abstract class AbstractBulkOperationToolActivity<Settings extends IEntity
     public void start(AcceptsOneWidget panel, EventBus eventBus) {
         panel.setWidget(getView());
         getView().setPresenter(this);
+        initViewAsync(new DefaultAsyncCallback<Settings>() {
+            @Override
+            public void onSuccess(Settings result) {
+                initView(result);
+            }
+        });
     }
 
     @Override
@@ -97,21 +119,31 @@ public abstract class AbstractBulkOperationToolActivity<Settings extends IEntity
     }
 
     @Override
-    public void onRangeChanged() {
+    public void updateVisibleItems() {
         getView().setLoading(true);
-        populateView();
+        populateItems();
+        getView().setLoading(false);
     }
 
     protected abstract AcceptedItems makeProducedItems(List<Item> list);
 
     protected abstract void onSelectedProccessSuccess(DeferredProcessProgressResponse result);
 
-    private void populateView() {
+    protected void initViewAsync(AsyncCallback<Settings> callback) {
+        callback.onSuccess(EntityFactory.create(settingsClass));
+    }
+
+    protected void initView(Settings settings) {
+        getView().setSettings(settings);
+        getView().setRowData(0, 0, Collections.<Item> emptyList());
+        getView().setLoading(false);
+    }
+
+    private void populateItems() {
         int start = getView().getVisibleRange().getStart();
         int end = Math.min(items.size(), start + getView().getVisibleRange().getLength());
 
         getView().setRowData(getView().getVisibleRange().getStart(), items.size(), items.subList(start, end));
-        getView().setLoading(false);
     }
 
     private void startAccetanceProgress(String deferredCorrelationId) {
@@ -120,7 +152,7 @@ public abstract class AbstractBulkOperationToolActivity<Settings extends IEntity
             public void onDeferredSuccess(DeferredProcessProgressResponse result) {
                 super.onDeferredSuccess(result);
                 AbstractBulkOperationToolActivity.this.onSelectedProccessSuccess(result);
-                populate();
+                search();
             }
 
             @Override
@@ -131,10 +163,6 @@ public abstract class AbstractBulkOperationToolActivity<Settings extends IEntity
         };
         d.show();
         d.startProgress(deferredCorrelationId);
-    }
-
-    public BulkOperationToolView<Settings, Item> getView() {
-        return view;
     }
 
 }

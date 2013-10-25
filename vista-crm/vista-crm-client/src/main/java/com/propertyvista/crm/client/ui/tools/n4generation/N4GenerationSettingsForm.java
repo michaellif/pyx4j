@@ -37,8 +37,9 @@ public class N4GenerationSettingsForm extends CEntityDecoratableForm<N4Generatio
         BasicFlexFormPanel panel = new BasicFlexFormPanel();
         int row = -1;
 
-        panel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().noticeDate())).componentWidth("150px").build());
-        panel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().agent())).componentWidth("150px").build());
+        panel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().query().noticeDate())).componentWidth("150px").build());
+        panel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().query().deliveryMethod())).componentWidth("150px").build());
+        panel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().query().agent())).componentWidth("150px").build());
 
         row = -1;
 

@@ -16,8 +16,8 @@ package com.propertyvista.crm.client.activity.tools.n4generation;
 import java.util.List;
 
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.user.client.rpc.AsyncCallback;
 
-import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.gwt.rpc.deferred.DeferredProcessProgressResponse;
 import com.pyx4j.site.rpc.AppPlace;
 
@@ -32,18 +32,17 @@ import com.propertyvista.domain.tenant.lease.Lease;
 public class N4GenerationToolActivity extends AbstractBulkOperationToolActivity<N4GenerationSettingsDTO, LegalNoticeCandidateDTO, N4GenerationQueryDTO> {
 
     public N4GenerationToolActivity(AppPlace place) {
-        super(place, CrmSite.getViewFactory().instantiate(N4GenerationToolView.class), GWT.<N4GenerationToolService> create(N4GenerationToolService.class));
+        super(place, CrmSite.getViewFactory().instantiate(N4GenerationToolView.class), GWT.<N4GenerationToolService> create(N4GenerationToolService.class),
+                N4GenerationSettingsDTO.class);
     }
 
     @Override
     protected N4GenerationQueryDTO makeProducedItems(List<LegalNoticeCandidateDTO> selectedItems) {
-        N4GenerationQueryDTO query = EntityFactory.create(N4GenerationQueryDTO.class);
+        N4GenerationQueryDTO query = getView().getSettings().query().duplicate(N4GenerationQueryDTO.class);
 
         for (LegalNoticeCandidateDTO noticeCandidate : selectedItems) {
             query.targetDelinquentLeases().add(noticeCandidate.leaseId().<Lease> duplicate());
         }
-        query.noticeDate().setValue(getView().getFilterSettings().noticeDate().getValue());
-        query.agent().setValue(getView().getFilterSettings().agent().getValue());
 
         return query;
     }
@@ -53,4 +52,8 @@ public class N4GenerationToolActivity extends AbstractBulkOperationToolActivity<
 
     }
 
+    @Override
+    protected void initViewAsync(AsyncCallback<N4GenerationSettingsDTO> callback) {
+        (GWT.<N4GenerationToolService> create(N4GenerationToolService.class)).initSettings(callback);
+    }
 }
