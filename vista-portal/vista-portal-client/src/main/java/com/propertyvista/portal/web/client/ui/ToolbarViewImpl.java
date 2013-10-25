@@ -221,6 +221,7 @@ public class ToolbarViewImpl extends FlowPanel implements ToolbarView {
         this.loggedIn = false;
         this.hideLoginButton = hideLoginButton;
         tenantButton.setTextLabel("");
+        //TODO add image tenantButton.setImage(PortalImages.INSTANCE.avatar());
         calculateActionsState();
     }
 
@@ -228,7 +229,7 @@ public class ToolbarViewImpl extends FlowPanel implements ToolbarView {
     public void onLogedIn(String userName) {
         this.loggedIn = true;
         tenantButton.setTextLabel(userName);
-        tenantButton.setImage(PortalImages.INSTANCE.avatar());
+        //TODO add image tenantButton.setImage(PortalImages.INSTANCE.avatar());
         calculateActionsState();
     }
 
