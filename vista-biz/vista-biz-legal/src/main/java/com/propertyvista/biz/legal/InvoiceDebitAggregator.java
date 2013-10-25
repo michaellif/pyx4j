@@ -28,12 +28,9 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
-import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
-import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 
 import com.propertyvista.domain.financial.billing.BillingCycle;
-import com.propertyvista.domain.financial.billing.DebitCreditLink;
 import com.propertyvista.domain.financial.billing.InvoiceDebit;
 import com.propertyvista.domain.legal.N4RentOwingForPeriod;
 
@@ -69,18 +66,6 @@ public class InvoiceDebitAggregator {
                 rentOwingForPeriod.rentCharged().setValue(rentOwingForPeriod.rentCharged().getValue().add(debit.amount().getValue()));
                 rentOwingForPeriod.rentCharged().setValue(rentOwingForPeriod.rentCharged().getValue().add(debit.taxTotal().getValue()));
                 rentOwingForPeriod.rentOwing().setValue(rentOwingForPeriod.rentOwing().getValue().add(debit.outstandingDebit().getValue()));
-
-                // although the following way for computing rent paid amount is more safe 
-                // the later computation should do well too and be faster
-                if (false) {
-                    EntityQueryCriteria<DebitCreditLink> creditLinksCriteria = EntityQueryCriteria.create(DebitCreditLink.class);
-                    creditLinksCriteria.eq(creditLinksCriteria.proto().debitItem(), debit);
-                    List<DebitCreditLink> debitCreditLinks = Persistence.service().query(creditLinksCriteria);
-
-                    for (DebitCreditLink debitCreditLink : debitCreditLinks) {
-                        rentOwingForPeriod.rentPaid().setValue(rentOwingForPeriod.rentPaid().getValue().add(debitCreditLink.amount().getValue()));
-                    }
-                }
             }
             rentOwingForPeriod.rentPaid().setValue(rentOwingForPeriod.rentCharged().getValue().subtract(rentOwingForPeriod.rentOwing().getValue()));
 
