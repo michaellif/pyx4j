@@ -115,7 +115,7 @@ public class ProfileGadget extends AbstractGadget<MainDashboardViewImpl> {
             FlowPanel contentPanel = new FlowPanel();
             setWidget(contentPanel);
 
-            picture = new ImageViewport(new Dimension(60, 80), ScaleMode.ScaleToFit);
+            picture = new ImageViewport(new Dimension(60, 80), ScaleMode.ScaleToFill);
             picture.addStyleName(DashboardTheme.StyleName.PersonPhoto.name());
             picture.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
             picture.getElement().getStyle().setVerticalAlign(VerticalAlign.MIDDLE);
