@@ -26,4 +26,5 @@ public class N4Utils {
         criteria.eq(criteria.proto().lease(), leaseIdStub);
         return Persistence.service().count(criteria);
     }
+
 }

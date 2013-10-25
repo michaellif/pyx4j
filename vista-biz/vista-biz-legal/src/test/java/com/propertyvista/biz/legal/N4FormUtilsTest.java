@@ -27,65 +27,65 @@ import org.junit.Test;
 
 import com.pyx4j.gwt.server.DateUtils;
 
-public class N4GenerationUtilsTest {
+public class N4FormUtilsTest {
 
     @Test
     public void testSplitCurrency() {
 
         {
-            String[] splitted1 = N4GenerationUtils.splitCurrency(new BigDecimal("1000.00"), false);
+            String[] splitted1 = N4FormUtils.splitCurrency(new BigDecimal("1000.00"), false);
             Assert.assertArrayEquals(new String[] { " 1", "000", "00" }, splitted1);
         }
 
         {
-            String[] splitted1 = N4GenerationUtils.splitCurrency(new BigDecimal("1000.00"), true);
+            String[] splitted1 = N4FormUtils.splitCurrency(new BigDecimal("1000.00"), true);
             Assert.assertArrayEquals(new String[] { "1", "000", "00" }, splitted1);
         }
 
         {
-            String[] splitted2 = N4GenerationUtils.splitCurrency(new BigDecimal("10000.00"), false);
+            String[] splitted2 = N4FormUtils.splitCurrency(new BigDecimal("10000.00"), false);
             Assert.assertArrayEquals(new String[] { "10", "000", "00" }, splitted2);
         }
 
         {
-            String[] splitted3 = N4GenerationUtils.splitCurrency(new BigDecimal("100.00"), false);
+            String[] splitted3 = N4FormUtils.splitCurrency(new BigDecimal("100.00"), false);
             Assert.assertArrayEquals(new String[] { "  ", "100", "00" }, splitted3);
         }
 
         {
-            String[] splitted3 = N4GenerationUtils.splitCurrency(new BigDecimal("100.00"), true);
+            String[] splitted3 = N4FormUtils.splitCurrency(new BigDecimal("100.00"), true);
             Assert.assertArrayEquals(new String[] { " ", "100", "00" }, splitted3);
         }
 
         {
-            String[] splitted4 = N4GenerationUtils.splitCurrency(new BigDecimal("10.00"), false);
+            String[] splitted4 = N4FormUtils.splitCurrency(new BigDecimal("10.00"), false);
             Assert.assertArrayEquals(new String[] { "  ", " 10", "00" }, splitted4);
         }
 
         {
-            String[] splitted4 = N4GenerationUtils.splitCurrency(new BigDecimal("10.00"), true);
+            String[] splitted4 = N4FormUtils.splitCurrency(new BigDecimal("10.00"), true);
             Assert.assertArrayEquals(new String[] { " ", " 10", "00" }, splitted4);
         }
 
         {
-            String[] splitted4 = N4GenerationUtils.splitCurrency(new BigDecimal("1.00"), false);
+            String[] splitted4 = N4FormUtils.splitCurrency(new BigDecimal("1.00"), false);
             Assert.assertArrayEquals(new String[] { "  ", "  1", "00" }, splitted4);
         }
         {
-            String[] splitted4 = N4GenerationUtils.splitCurrency(new BigDecimal("1.00"), true);
+            String[] splitted4 = N4FormUtils.splitCurrency(new BigDecimal("1.00"), true);
             Assert.assertArrayEquals(new String[] { " ", "  1", "00" }, splitted4);
         }
     }
 
     @Test
     public void testSplitDate() {
-        String[] splitted = N4GenerationUtils.splitDate(DateUtils.detectDateformat("2013-04-01"));
+        String[] splitted = N4FormUtils.splitDate(DateUtils.detectDateformat("2013-04-01"));
         Assert.assertArrayEquals(new String[] { "01", "04", "2013" }, splitted);
     }
 
     @Test
     public void testSplitPhoneNumber() {
-        String[] splitted = N4GenerationUtils.splitPhoneNumber("(647) 555-5555");
+        String[] splitted = N4FormUtils.splitPhoneNumber("(647) 555-5555");
         Assert.assertArrayEquals(new String[] { "647", "555", "5555" }, splitted);
     }
 }

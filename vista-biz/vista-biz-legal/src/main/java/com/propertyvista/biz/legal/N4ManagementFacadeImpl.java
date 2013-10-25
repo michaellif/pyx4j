@@ -22,7 +22,6 @@ package com.propertyvista.biz.legal;
 
 import java.math.BigDecimal;
 import java.text.MessageFormat;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
@@ -84,9 +83,9 @@ public class N4ManagementFacadeImpl implements N4ManagementFacade {
         List<Lease> leases = Persistence.service().query(criteria);
 
         List<LegalNoticeCandidate> candidates = new LinkedList<LegalNoticeCandidate>();
+        LogicalDate today = SystemDateManager.getLogicalDate();
         for (Lease lease : leases) {
-
-            BigDecimal amountOwed = amountOwed(lease.billingAccount(), acceptableArCodes);
+            BigDecimal amountOwed = amountOwed(lease.billingAccount(), acceptableArCodes, today);
 
             if (amountOwed.compareTo(minAmountOwed) > 0) {
                 LegalNoticeCandidate candidate = EntityFactory.create(LegalNoticeCandidate.class);
@@ -115,8 +114,8 @@ public class N4ManagementFacadeImpl implements N4ManagementFacade {
             n4LandLordsData.isLandlord().setValue(false);
             n4LandLordsData.signatureDate().setValue(new LogicalDate(SystemDateManager.getDate()));
 
-            EmployeeSignature signature = Persistence.service().retrieve(EmployeeSignature.class,
-                    n4LandLordsData.signingEmployee().signature().getPrimaryKey());
+            EmployeeSignature signature = Persistence.service()
+                    .retrieve(EmployeeSignature.class, n4LandLordsData.signingEmployee().signature().getPrimaryKey());
             if (!n4LandLordsData.signingEmployee().signature().isNull()) {
                 EmployeeSignatureBlob signatureBlob = Persistence.service().retrieve(EmployeeSignatureBlob.class, signature.blobKey().getValue());
                 n4LandLordsData.signature().setValue(signatureBlob.data().getValue());
@@ -171,14 +170,9 @@ public class N4ManagementFacadeImpl implements N4ManagementFacade {
         Persistence.service().persist(n4Letter);
     }
 
-    private BigDecimal amountOwed(BillingAccount billingAccount, Collection<ARCode> acceptableArCodes) {
+    private BigDecimal amountOwed(BillingAccount billingAccount, Collection<ARCode> acceptableArCodes, LogicalDate asOf) {
         List<InvoiceDebit> debits = ServerSideFactory.create(ARFacade.class).getNotCoveredDebitInvoiceLineItems(billingAccount);
-        List<InvoiceDebit> filteredDebits = new ArrayList<InvoiceDebit>(debits.size());
-        for (InvoiceDebit debit : debits) {
-            if (acceptableArCodes.contains(debit.arCode())) {
-                filteredDebits.add(debit);
-            }
-        }
+        List<InvoiceDebit> filteredDebits = N4GenerationUtils.filterDebits(debits, acceptableArCodes, asOf);
         InvoiceDebitAggregator debitAggregator = new InvoiceDebitAggregator();
         List<N4RentOwingForPeriod> rentOwingBreakdown = debitAggregator.debitsForPeriod(debitAggregator.aggregate(filteredDebits));
 

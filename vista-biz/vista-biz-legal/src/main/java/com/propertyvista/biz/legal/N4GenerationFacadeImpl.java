@@ -24,7 +24,6 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.lang.reflect.Method;
 import java.math.BigDecimal;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.GregorianCalendar;
 import java.util.List;
@@ -43,6 +42,7 @@ import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.commons.SimpleMessageFormat;
 import com.pyx4j.config.server.ServerSideFactory;
+import com.pyx4j.config.server.SystemDateManager;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IEntity;
@@ -98,39 +98,39 @@ public class N4GenerationFacadeImpl implements N4GenerationFacade {
         fieldsData.tenantPostalCodeDAD().setValue(leaseData.rentalUnitAddress().postalCode().getValue().substring(4, 7));
 
         // create a date in the following format: dd/MM/YYYY        
-        String[] globalTerminationDate = N4GenerationUtils.splitDate(leaseData.terminationDate().getValue());
+        String[] globalTerminationDate = N4FormUtils.splitDate(leaseData.terminationDate().getValue());
         fieldsData.terminationDateDD().setValue(globalTerminationDate[0]);
         fieldsData.terminationDateMM().setValue(globalTerminationDate[1]);
         fieldsData.terminationDateYYYY().setValue(globalTerminationDate[2]);
 
-        String[] totalOwed = N4GenerationUtils.splitCurrency(leaseData.totalRentOwning().getValue(), false);
+        String[] totalOwed = N4FormUtils.splitCurrency(leaseData.totalRentOwning().getValue(), false);
         fieldsData.globalTotalOwedThousands().setValue(totalOwed[0]);
         fieldsData.globalTotalOwedHundreds().setValue(totalOwed[1]);
         fieldsData.globalTotalOwedCents().setValue(totalOwed[2]);
 
         if (leaseData.rentOwingBreakdown().size() >= 1) {
             N4RentOwingForPeriod rentOwningForPeriod = leaseData.rentOwingBreakdown().get(0);
-            String[] owedFrom = N4GenerationUtils.splitDate(rentOwningForPeriod.from().getValue());
+            String[] owedFrom = N4FormUtils.splitDate(rentOwningForPeriod.from().getValue());
             fieldsData.owedFromDDA().setValue(owedFrom[0]);
             fieldsData.owedFromMMA().setValue(owedFrom[1]);
             fieldsData.owedFromYYYYA().setValue(owedFrom[2]);
 
-            String[] owedTo = N4GenerationUtils.splitDate(rentOwningForPeriod.to().getValue());
+            String[] owedTo = N4FormUtils.splitDate(rentOwningForPeriod.to().getValue());
             fieldsData.owedToDDA().setValue(owedTo[0]);
             fieldsData.owedToMMA().setValue(owedTo[1]);
             fieldsData.owedToYYYYA().setValue(owedTo[2]);
 
-            String[] charged = N4GenerationUtils.splitCurrency(rentOwningForPeriod.rentCharged().getValue(), true);
+            String[] charged = N4FormUtils.splitCurrency(rentOwningForPeriod.rentCharged().getValue(), true);
             fieldsData.rentChargedThousandsA().setValue(charged[0]);
             fieldsData.rentChargedHundredsA().setValue(charged[1]);
             fieldsData.rentChargedCentsA().setValue(charged[2]);
 
-            String[] paid = N4GenerationUtils.splitCurrency(rentOwningForPeriod.rentPaid().getValue(), true);
+            String[] paid = N4FormUtils.splitCurrency(rentOwningForPeriod.rentPaid().getValue(), true);
             fieldsData.rentPaidThousandsA().setValue(paid[0]);
             fieldsData.rentPaidHundredsA().setValue(paid[1]);
             fieldsData.rentPaidCentsA().setValue(paid[2]);
 
-            String[] owing = N4GenerationUtils.splitCurrency(rentOwningForPeriod.rentOwing().getValue(), true);
+            String[] owing = N4FormUtils.splitCurrency(rentOwningForPeriod.rentOwing().getValue(), true);
             fieldsData.rentOwingThousandsA().setValue(owing[0]);
             fieldsData.rentOwingHundredsA().setValue(owing[1]);
             fieldsData.rentOwingCentsA().setValue(owing[2]);
@@ -138,54 +138,54 @@ public class N4GenerationFacadeImpl implements N4GenerationFacade {
 
         if (leaseData.rentOwingBreakdown().size() >= 2) {
             N4RentOwingForPeriod rentOwningForPeriod = leaseData.rentOwingBreakdown().get(1);
-            String[] owedFrom = N4GenerationUtils.splitDate(rentOwningForPeriod.from().getValue());
+            String[] owedFrom = N4FormUtils.splitDate(rentOwningForPeriod.from().getValue());
             fieldsData.owedFromDDB().setValue(owedFrom[0]);
             fieldsData.owedFromMMB().setValue(owedFrom[1]);
             fieldsData.owedFromYYYYB().setValue(owedFrom[2]);
 
-            String[] owedTo = N4GenerationUtils.splitDate(rentOwningForPeriod.to().getValue());
+            String[] owedTo = N4FormUtils.splitDate(rentOwningForPeriod.to().getValue());
             fieldsData.owedToDDB().setValue(owedTo[0]);
             fieldsData.owedToMMB().setValue(owedTo[1]);
             fieldsData.owedToYYYYB().setValue(owedTo[2]);
 
-            String[] charged = N4GenerationUtils.splitCurrency(rentOwningForPeriod.rentCharged().getValue(), true);
+            String[] charged = N4FormUtils.splitCurrency(rentOwningForPeriod.rentCharged().getValue(), true);
             fieldsData.rentChargedThousandsB().setValue(charged[0]);
             fieldsData.rentChargedHundredsB().setValue(charged[1]);
             fieldsData.rentChargedCentsB().setValue(charged[2]);
 
-            String[] paid = N4GenerationUtils.splitCurrency(rentOwningForPeriod.rentPaid().getValue(), true);
+            String[] paid = N4FormUtils.splitCurrency(rentOwningForPeriod.rentPaid().getValue(), true);
             fieldsData.rentPaidThousandsB().setValue(paid[0]);
             fieldsData.rentPaidHundredsB().setValue(paid[1]);
             fieldsData.rentPaidCentsB().setValue(paid[2]);
 
-            String[] owing = N4GenerationUtils.splitCurrency(rentOwningForPeriod.rentOwing().getValue(), true);
+            String[] owing = N4FormUtils.splitCurrency(rentOwningForPeriod.rentOwing().getValue(), true);
             fieldsData.rentOwingThousandsB().setValue(owing[0]);
             fieldsData.rentOwingHundredsB().setValue(owing[1]);
             fieldsData.rentOwingCentsB().setValue(owing[2]);
         }
         if (leaseData.rentOwingBreakdown().size() == 3) {
             N4RentOwingForPeriod rentOwningForPeriod = leaseData.rentOwingBreakdown().get(2);
-            String[] owedFrom = N4GenerationUtils.splitDate(rentOwningForPeriod.from().getValue());
+            String[] owedFrom = N4FormUtils.splitDate(rentOwningForPeriod.from().getValue());
             fieldsData.owedFromDDC().setValue(owedFrom[0]);
             fieldsData.owedFromMMC().setValue(owedFrom[1]);
             fieldsData.owedFromYYYYC().setValue(owedFrom[2]);
 
-            String[] owedTo = N4GenerationUtils.splitDate(rentOwningForPeriod.to().getValue());
+            String[] owedTo = N4FormUtils.splitDate(rentOwningForPeriod.to().getValue());
             fieldsData.owedToDDC().setValue(owedTo[0]);
             fieldsData.owedToMMC().setValue(owedTo[1]);
             fieldsData.owedToYYYYC().setValue(owedTo[2]);
 
-            String[] charged = N4GenerationUtils.splitCurrency(rentOwningForPeriod.rentCharged().getValue(), true);
+            String[] charged = N4FormUtils.splitCurrency(rentOwningForPeriod.rentCharged().getValue(), true);
             fieldsData.rentChargedThousandsC().setValue(charged[0]);
             fieldsData.rentChargedHundredsC().setValue(charged[1]);
             fieldsData.rentChargedCentsC().setValue(charged[2]);
 
-            String[] paid = N4GenerationUtils.splitCurrency(rentOwningForPeriod.rentPaid().getValue(), true);
+            String[] paid = N4FormUtils.splitCurrency(rentOwningForPeriod.rentPaid().getValue(), true);
             fieldsData.rentPaidThousandsC().setValue(paid[0]);
             fieldsData.rentPaidHundredsC().setValue(paid[1]);
             fieldsData.rentPaidCentsC().setValue(paid[2]);
 
-            String[] owing = N4GenerationUtils.splitCurrency(rentOwningForPeriod.rentOwing().getValue(), true);
+            String[] owing = N4FormUtils.splitCurrency(rentOwningForPeriod.rentOwing().getValue(), true);
             fieldsData.rentOwingThousandsC().setValue(owing[0]);
             fieldsData.rentOwingHundredsC().setValue(owing[1]);
             fieldsData.rentOwingCentsC().setValue(owing[2]);
@@ -209,13 +209,13 @@ public class N4GenerationFacadeImpl implements N4GenerationFacade {
         fieldsData.signatureProvince().setValue(landlordsData.landlordsAddress().province().code().getStringView());
         fieldsData.signaturePostalCode().setValue(landlordsData.landlordsAddress().postalCode().getValue());
 
-        String[] signaturPhoneNumber = N4GenerationUtils.splitPhoneNumber(landlordsData.landlordsPhoneNumber().getValue());
+        String[] signaturPhoneNumber = N4FormUtils.splitPhoneNumber(landlordsData.landlordsPhoneNumber().getValue());
         fieldsData.signaturePhoneNumberAreaCode().setValue(signaturPhoneNumber[0]);
         fieldsData.signaturePhoneNumberCombA().setValue(signaturPhoneNumber[1]);
         fieldsData.signaturePhoneNumberCombB().setValue(signaturPhoneNumber[2]);
 
         if (!CommonsStringUtils.isEmpty(landlordsData.faxNumber().getValue())) {
-            String[] signatureFaxNumber = N4GenerationUtils.splitPhoneNumber(landlordsData.faxNumber().getValue());
+            String[] signatureFaxNumber = N4FormUtils.splitPhoneNumber(landlordsData.faxNumber().getValue());
             fieldsData.signatureFaxNumberAreaCode().setValue(signatureFaxNumber[0]);
             fieldsData.signatureFaxNumberCombA().setValue(signatureFaxNumber[1]);
             fieldsData.signatureFaxNumberCombB().setValue(signatureFaxNumber[2]);
@@ -223,14 +223,12 @@ public class N4GenerationFacadeImpl implements N4GenerationFacade {
 
         fieldsData.signatureEmailAddress().setValue(landlordsData.emailAddress().getValue());
 
-        // add singuature image
         return fieldsData;
     }
 
     @Override
-    public N4LeaseData prepareN4LeaseData(Lease leaseId, LogicalDate noticeDate, Collection<ARCode> acceptedArCodes) {
+    public N4LeaseData prepareN4LeaseData(Lease leaseId, LogicalDate noticeDate, Collection<ARCode> acceptableArCodes) {
         Lease lease = Persistence.service().retrieve(Lease.class, leaseId.getPrimaryKey());
-
         N4LeaseData n4LeaseData = EntityFactory.create(N4LeaseData.class);
 
         for (LeaseTermTenant termTenantIdStub : lease.currentTerm().version().tenants()) {
@@ -250,13 +248,7 @@ public class N4GenerationFacadeImpl implements N4GenerationFacade {
         n4LeaseData.terminationDate().setValue(terminationDate);
 
         List<InvoiceDebit> debits = ServerSideFactory.create(ARFacade.class).getNotCoveredDebitInvoiceLineItems(lease.billingAccount());
-        // filter out non-rent related debits
-        List<InvoiceDebit> filteredDebits = new ArrayList<InvoiceDebit>(debits.size());
-        for (InvoiceDebit debit : debits) {
-            if (acceptedArCodes.contains(debit.arCode())) {
-                filteredDebits.add(debit);
-            }
-        }
+        List<InvoiceDebit> filteredDebits = N4GenerationUtils.filterDebits(debits, acceptableArCodes, SystemDateManager.getLogicalDate());
 
         InvoiceDebitAggregator debitAggregator = new InvoiceDebitAggregator();
         n4LeaseData.rentOwingBreakdown().addAll(debitAggregator.debitsForPeriod(debitAggregator.aggregate(filteredDebits)));
