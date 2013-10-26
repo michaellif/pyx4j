@@ -69,7 +69,7 @@ public abstract class AbstractPortalPanel extends SimplePanel {
         return layout;
     }
 
-    public static void updateDecoratorsLayout(Widget widget, LabelPosition layout) {
+    private void updateDecoratorsLayout(Widget widget, LabelPosition layout) {
         if (widget instanceof PortalWidgetDecorator) {
             PortalWidgetDecorator decorator = (PortalWidgetDecorator) widget;
             if (decorator.getLabelPosition() != LabelPosition.hidden) {
