@@ -23,7 +23,7 @@ import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.security.rpc.PasswordRetrievalRequest;
 
 import com.propertyvista.portal.web.client.ui.CPortalEntityWizard;
-import com.propertyvista.portal.web.client.ui.util.decorators.LoginDecoratorBuilder;
+import com.propertyvista.portal.web.client.ui.util.decorators.LoginWidgetDecoratorBuilder;
 
 public class PasswordResetRequestWizard extends CPortalEntityWizard<PasswordRetrievalRequest> {
 
@@ -46,8 +46,8 @@ public class PasswordResetRequestWizard extends CPortalEntityWizard<PasswordRetr
 
         mainPanel.setWidget(++row, 0, message);
         mainPanel.setBR(++row, 0, 1);
-        mainPanel.setWidget(++row, 0, new LoginDecoratorBuilder(inject(proto().email())).build());
-        mainPanel.setWidget(++row, 0, new LoginDecoratorBuilder(inject(proto().captcha()))
+        mainPanel.setWidget(++row, 0, new LoginWidgetDecoratorBuilder(inject(proto().email())).build());
+        mainPanel.setWidget(++row, 0, new LoginWidgetDecoratorBuilder(inject(proto().captcha()))
                 .watermark(LandingViewImpl.i18n.tr("Enter both security words above")).build());
         mainPanel.setBR(++row, 0, 1);
 

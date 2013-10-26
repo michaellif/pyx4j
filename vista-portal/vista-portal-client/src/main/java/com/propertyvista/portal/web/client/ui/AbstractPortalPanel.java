@@ -18,12 +18,13 @@ import com.google.gwt.user.client.ui.HasWidgets;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Widget;
 
-import com.pyx4j.forms.client.ui.decorators.WidgetDecorator;
 import com.pyx4j.forms.client.ui.decorators.WidgetDecorator.Builder.LabelPosition;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.client.ui.layout.responsive.LayoutChangeEvent;
 import com.pyx4j.site.client.ui.layout.responsive.LayoutChangeHandler;
 import com.pyx4j.site.client.ui.layout.responsive.ResponsiveLayoutPanel.LayoutType;
+
+import com.propertyvista.portal.web.client.ui.util.decorators.PortalWidgetDecorator;
 
 public abstract class AbstractPortalPanel extends SimplePanel {
 
@@ -69,8 +70,8 @@ public abstract class AbstractPortalPanel extends SimplePanel {
     }
 
     public static void updateDecoratorsLayout(Widget widget, LabelPosition layout) {
-        if (widget instanceof WidgetDecorator) {
-            WidgetDecorator decorator = (WidgetDecorator) widget;
+        if (widget instanceof PortalWidgetDecorator) {
+            PortalWidgetDecorator decorator = (PortalWidgetDecorator) widget;
             if (decorator.getLabelPosition() != LabelPosition.hidden) {
                 decorator.setLabelPosition(layout);
             }

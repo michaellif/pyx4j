@@ -41,7 +41,7 @@ import com.propertyvista.portal.rpc.portal.web.dto.financial.AutoPayInfoDTO;
 import com.propertyvista.portal.rpc.portal.web.dto.financial.AutoPaySummaryDTO;
 import com.propertyvista.portal.web.client.resources.PortalImages;
 import com.propertyvista.portal.web.client.ui.AbstractGadget;
-import com.propertyvista.portal.web.client.ui.util.decorators.FormDecoratorBuilder;
+import com.propertyvista.portal.web.client.ui.util.decorators.FormWidgetDecoratorBuilder;
 
 public class AutoPayAgreementsGadget extends AbstractGadget<FinancialDashboardViewImpl> {
 
@@ -92,7 +92,7 @@ public class AutoPayAgreementsGadget extends AbstractGadget<FinancialDashboardVi
         public IsWidget createContent() {
             int row = -1;
 
-            mainPanel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().nextAutoPayDate(), new CDateLabel()), 100).build());
+            mainPanel.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().nextAutoPayDate(), new CDateLabel()), 100).build());
             mainPanel.setBR(++row, 0, 1);
             mainPanel.setWidget(++row, 0, inject(proto().currentAutoPayments(), new AutoPayFolder()));
 
@@ -149,9 +149,9 @@ public class AutoPayAgreementsGadget extends AbstractGadget<FinancialDashboardVi
                 BasicFlexFormPanel content = new BasicFlexFormPanel();
                 int row = -1;
 
-                content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().payer(), new CEntityLabel<Tenant>()), 250).build());
-                content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().paymentMethod(), new CEntityLabel<PaymentMethod>()), 250).build());
-                content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().amount()), 100).build());
+                content.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().payer(), new CEntityLabel<Tenant>()), 250).build());
+                content.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().paymentMethod(), new CEntityLabel<PaymentMethod>()), 250).build());
+                content.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().amount()), 100).build());
 
                 content.setWidget(++row, 0, new Anchor("View Details", new Command() {
                     @Override

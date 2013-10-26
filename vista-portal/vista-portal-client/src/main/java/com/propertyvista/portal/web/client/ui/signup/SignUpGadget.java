@@ -55,7 +55,7 @@ import com.propertyvista.portal.rpc.shared.EntityValidationException.MemberValid
 import com.propertyvista.portal.web.client.resources.PortalImages;
 import com.propertyvista.portal.web.client.ui.AbstractGadget;
 import com.propertyvista.portal.web.client.ui.signup.SignUpView.SignUpPresenter;
-import com.propertyvista.portal.web.client.ui.util.decorators.LoginDecoratorBuilder;
+import com.propertyvista.portal.web.client.ui.util.decorators.LoginWidgetDecoratorBuilder;
 
 public class SignUpGadget extends AbstractGadget<SignUpViewImpl> {
 
@@ -199,7 +199,7 @@ public class SignUpGadget extends AbstractGadget<SignUpViewImpl> {
             buildingSelector = (inject(proto().building(), new BuildingSuggestBox()));
             buildingSelector.setWatermark(i18n.tr("Your building's address"));
             buildingSelector.setNote(i18n.tr("Search by typing your building's street, postal code, province etc..."));
-            flexPanel.setWidget(++row, 0, new LoginDecoratorBuilder(buildingSelector).build());
+            flexPanel.setWidget(++row, 0, new LoginWidgetDecoratorBuilder(buildingSelector).build());
             flexPanel.getFlexCellFormatter().getElement(row, 0).getStyle().setTextAlign(TextAlign.LEFT);
 
             flexPanel.setBR(++row, 0, 2);
@@ -211,18 +211,18 @@ public class SignUpGadget extends AbstractGadget<SignUpViewImpl> {
 
             flexPanel.setH4(row, 1, 1, i18n.tr("Enter your first, middle and last name the way it is spelled in your lease agreement:"));
 
-            flexPanel.setWidget(++row, 0, new LoginDecoratorBuilder(inject(proto().firstName())).build());
+            flexPanel.setWidget(++row, 0, new LoginWidgetDecoratorBuilder(inject(proto().firstName())).build());
             flexPanel.getFlexCellFormatter().getElement(row, 0).getStyle().setTextAlign(TextAlign.LEFT);
 
-            flexPanel.setWidget(++row, 0, new LoginDecoratorBuilder(inject(proto().middleName())).build());
+            flexPanel.setWidget(++row, 0, new LoginWidgetDecoratorBuilder(inject(proto().middleName())).build());
             flexPanel.getFlexCellFormatter().getElement(row, 0).getStyle().setTextAlign(TextAlign.LEFT);
 
-            flexPanel.setWidget(++row, 0, new LoginDecoratorBuilder(inject(proto().lastName())).build());
+            flexPanel.setWidget(++row, 0, new LoginWidgetDecoratorBuilder(inject(proto().lastName())).build());
             flexPanel.getFlexCellFormatter().getElement(row, 0).getStyle().setTextAlign(TextAlign.LEFT);
 
             CTextFieldBase<?, ?> emailField = (CTextFieldBase<?, ?>) inject(proto().email());
             emailField.setNote(i18n.tr("Please note: your email will be your user name"));
-            Widget widget = new LoginDecoratorBuilder(emailField).build();
+            Widget widget = new LoginWidgetDecoratorBuilder(emailField).build();
             flexPanel.setWidget(++row, 0, widget);
             flexPanel.getFlexCellFormatter().getElement(row, 0).getStyle().setTextAlign(TextAlign.LEFT);
 
@@ -237,17 +237,17 @@ public class SignUpGadget extends AbstractGadget<SignUpViewImpl> {
 
             CTextFieldBase<?, ?> securityCodeField;
             flexPanel.setWidget(++row, 0,
-                    new LoginDecoratorBuilder(securityCodeField = (CTextFieldBase<?, ?>) inject(proto().securityCode())).componentWidth("90%").build());
+                    new LoginWidgetDecoratorBuilder(securityCodeField = (CTextFieldBase<?, ?>) inject(proto().securityCode())).componentWidth("90%").build());
             flexPanel.getFlexCellFormatter().getElement(row, 0).getStyle().setTextAlign(TextAlign.LEFT);
 
             securityCodeField
                     .setTooltip(i18n
                             .tr("You should have received Security Code by mail. Don't have a Security Code? To get your own unique access code, please contact the Property Manager directly."));
 
-            flexPanel.setWidget(++row, 0, new LoginDecoratorBuilder(inject(proto().password())).watermark(i18n.tr("Create a Password")).build());
+            flexPanel.setWidget(++row, 0, new LoginWidgetDecoratorBuilder(inject(proto().password())).watermark(i18n.tr("Create a Password")).build());
             flexPanel.getFlexCellFormatter().getElement(row, 0).getStyle().setTextAlign(TextAlign.LEFT);
 
-            flexPanel.setWidget(++row, 0, new LoginDecoratorBuilder(inject(proto().passwordConfirm())).build());
+            flexPanel.setWidget(++row, 0, new LoginWidgetDecoratorBuilder(inject(proto().passwordConfirm())).build());
             flexPanel.getFlexCellFormatter().getElement(row, 0).getStyle().setTextAlign(TextAlign.LEFT);
 
             get(proto().passwordConfirm()).addValueValidator(new EditableValueValidator<String>() {

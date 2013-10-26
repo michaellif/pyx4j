@@ -84,7 +84,7 @@ import com.propertyvista.portal.web.client.ui.CPortalEntityWizard;
 import com.propertyvista.portal.web.client.ui.IWizardView;
 import com.propertyvista.portal.web.client.ui.financial.PortalPaymentTypesUtil;
 import com.propertyvista.portal.web.client.ui.financial.paymentmethod.PaymentMethodEditor;
-import com.propertyvista.portal.web.client.ui.util.decorators.FormDecoratorBuilder;
+import com.propertyvista.portal.web.client.ui.util.decorators.FormWidgetDecoratorBuilder;
 
 public class PaymentWizard extends CPortalEntityWizard<PaymentDTO> {
 
@@ -159,11 +159,11 @@ public class PaymentWizard extends CPortalEntityWizard<PaymentDTO> {
         panel.setH1(++row, 0, 1, PortalImages.INSTANCE.billingIcon(), i18n.tr("Payment Details"));
 
         panel.setWidget(++row, 0,
-                new FormDecoratorBuilder(inject(proto().leaseTermParticipant().leaseParticipant().customer().person(), new CEntityLabel<Person>()), 200)
+                new FormWidgetDecoratorBuilder(inject(proto().leaseTermParticipant().leaseParticipant().customer().person(), new CEntityLabel<Person>()), 200)
                         .customLabel(i18n.tr("Tenant")).build());
 
         panel.setBR(++row, 0, 1);
-        panel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().amount()), 100).build());
+        panel.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().amount()), 100).build());
 
         return panel;
     }
@@ -172,17 +172,19 @@ public class PaymentWizard extends CPortalEntityWizard<PaymentDTO> {
         BasicFlexFormPanel panel = new BasicFlexFormPanel(i18n.tr("Payment Method Selection"));
         int row = -1;
 
-        panel.setWidget(++row, 0,
-                oldDecorator(inject(proto().selectPaymentMethod(), new CRadioGroupEnum<PaymentSelect>(PaymentSelect.class, RadioGroup.Layout.HORISONTAL)), 15)
-                        .build());
+        panel.setWidget(
+                ++row,
+                0,
+                new FormWidgetDecoratorBuilder(inject(proto().selectPaymentMethod(), new CRadioGroupEnum<PaymentSelect>(PaymentSelect.class,
+                        RadioGroup.Layout.HORISONTAL))).build());
 
-        panel.setWidget(++row, 0, oldDecorator(inject(proto().profiledPaymentMethod(), profiledPaymentMethodsCombo), 15).build());
+        panel.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().profiledPaymentMethod(), profiledPaymentMethodsCombo)).build());
 
         panel.setWidget(++row, 0, inject(proto().paymentMethod(), paymentMethodEditor));
 
         panel.setHR(++row, 0, 1);
 
-        panel.setWidget(++row, 0, oldDecorator(inject(proto().storeInProfile()), 5).build());
+        panel.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().storeInProfile())).build());
 
         // tweaks:
 
@@ -247,13 +249,6 @@ public class PaymentWizard extends CPortalEntityWizard<PaymentDTO> {
         });
 
         return panel;
-    }
-
-    private com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder oldDecorator(CComponent<?> comp, double compWidth) {
-        final double labelWidth = com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder.LABEL_WIDTH;
-        final double contentWidth = 15;
-        return new com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder(comp, labelWidth,
-                (compWidth <= contentWidth ? compWidth : contentWidth), contentWidth);
     }
 
     private BasicFlexFormPanel createConfirmationStep() {

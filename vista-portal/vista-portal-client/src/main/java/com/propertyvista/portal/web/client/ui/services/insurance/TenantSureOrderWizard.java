@@ -43,7 +43,7 @@ import com.propertyvista.portal.web.client.themes.TenantSureTheme;
 import com.propertyvista.portal.web.client.ui.CPortalEntityWizard;
 import com.propertyvista.portal.web.client.ui.services.insurance.TenantSureOrderWizardView.TenantSureOrderWizardPersenter;
 import com.propertyvista.portal.web.client.ui.services.insurance.tenantsurepaymentmethod.TenantSurePaymentMethodForm;
-import com.propertyvista.portal.web.client.ui.util.decorators.FormDecoratorBuilder;
+import com.propertyvista.portal.web.client.ui.util.decorators.FormWidgetDecoratorBuilder;
 
 public class TenantSureOrderWizard extends CPortalEntityWizard<TenantSureInsurancePolicyDTO> {
 
@@ -110,12 +110,12 @@ public class TenantSureOrderWizard extends CPortalEntityWizard<TenantSureInsuran
 
         panel.setWidget(++row, 0, personalDisclaimer);
 
-        panel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().isAgreedToPersonalDisclaimer())).build());
+        panel.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().isAgreedToPersonalDisclaimer())).build());
 
         panel.setH1(++row, 0, 1, PortalImages.INSTANCE.residentServicesIcon(), i18n.tr("Personal & Contact Information"));
 
-        panel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().tenantSureCoverageRequest().tenantName()), 200).build());
-        panel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().tenantSureCoverageRequest().tenantPhone()), 200).build());
+        panel.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().tenantSureCoverageRequest().tenantName()), 200).build());
+        panel.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().tenantSureCoverageRequest().tenantPhone()), 200).build());
         panel.setWidget(++row, 0, 1, personalInforReferenceLinks = new TenantSure2HighCourtReferenceLinks());
 
         personalInforReferenceLinks.setCompensationDisclosureStatementHref(TenantSureConstants.HIGHCOURT_PARTNERS_COMPENSATION_DISCLOSURE_STATEMENT_HREF);

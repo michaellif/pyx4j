@@ -39,7 +39,7 @@ import com.propertyvista.portal.rpc.portal.web.dto.insurance.status.InsuranceSta
 import com.propertyvista.portal.rpc.portal.web.dto.insurance.status.TenantSureCertificateSummaryDTO;
 import com.propertyvista.portal.web.client.resources.PortalImages;
 import com.propertyvista.portal.web.client.ui.AbstractGadget;
-import com.propertyvista.portal.web.client.ui.util.decorators.FormDecoratorBuilder;
+import com.propertyvista.portal.web.client.ui.util.decorators.FormWidgetDecoratorBuilder;
 
 public class InsuranceGadget extends AbstractGadget<ServicesDashboardViewImpl> {
 
@@ -163,11 +163,11 @@ public class InsuranceGadget extends AbstractGadget<ServicesDashboardViewImpl> {
                 BasicFlexFormPanel content = new BasicFlexFormPanel();
                 int row = -1;
 
-                content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().insuranceProvider(), new CLabel<String>()), 180).build());
-                content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().insuranceCertificateNumber(), new CLabel<String>()), 180).build());
-                content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().liabilityCoverage(), new CLabel<String>()), 180).build());
-                content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().inceptionDate(), new CLabel<String>()), 180).build());
-                content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().expiryDate(), new CLabel<String>()), 180).build());
+                content.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().insuranceProvider(), new CLabel<String>()), 180).build());
+                content.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().insuranceCertificateNumber(), new CLabel<String>()), 180).build());
+                content.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().liabilityCoverage(), new CLabel<String>()), 180).build());
+                content.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().inceptionDate(), new CLabel<String>()), 180).build());
+                content.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().expiryDate(), new CLabel<String>()), 180).build());
 
                 detailsAnchor = new Anchor(i18n.tr("View Details"), new Command() {
 

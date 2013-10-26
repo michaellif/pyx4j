@@ -31,7 +31,7 @@ import com.propertyvista.portal.rpc.portal.PortalSiteMap;
 import com.propertyvista.portal.rpc.portal.web.dto.financial.BillingSummaryDTO;
 import com.propertyvista.portal.web.client.resources.PortalImages;
 import com.propertyvista.portal.web.client.ui.AbstractGadget;
-import com.propertyvista.portal.web.client.ui.util.decorators.FormDecoratorBuilder;
+import com.propertyvista.portal.web.client.ui.util.decorators.FormWidgetDecoratorBuilder;
 import com.propertyvista.shared.config.VistaFeatures;
 
 public class BillingSummaryGadget extends AbstractGadget<MainDashboardViewImpl> {
@@ -107,9 +107,9 @@ public class BillingSummaryGadget extends AbstractGadget<MainDashboardViewImpl> 
         public IsWidget createContent() {
 
             BasicFlexFormPanel mainPanel = new BasicFlexFormPanel();
-            mainPanel.setWidget(0, 0, new FormDecoratorBuilder(inject(proto().currentBalance()), "140px", "100px", "120px").build());
+            mainPanel.setWidget(0, 0, new FormWidgetDecoratorBuilder(inject(proto().currentBalance()), "140px", "100px", "120px").build());
             if (!VistaFeatures.instance().yardiIntegration()) {
-                mainPanel.setWidget(1, 0, new FormDecoratorBuilder(inject(proto().dueDate()), "140px", "100px", "120px").build());
+                mainPanel.setWidget(1, 0, new FormWidgetDecoratorBuilder(inject(proto().dueDate()), "140px", "100px", "120px").build());
             }
 
             return mainPanel;

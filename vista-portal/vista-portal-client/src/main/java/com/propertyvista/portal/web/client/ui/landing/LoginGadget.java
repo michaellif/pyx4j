@@ -61,7 +61,7 @@ import com.propertyvista.common.client.ui.components.login.LoginView.DevLoginCre
 import com.propertyvista.portal.web.client.ui.AbstractGadget;
 import com.propertyvista.portal.web.client.ui.landing.LandingView.LandingPresenter;
 import com.propertyvista.portal.web.client.ui.util.decorators.CheckBoxDecorator;
-import com.propertyvista.portal.web.client.ui.util.decorators.LoginDecoratorBuilder;
+import com.propertyvista.portal.web.client.ui.util.decorators.LoginWidgetDecoratorBuilder;
 
 public class LoginGadget extends AbstractGadget<LandingViewImpl> {
 
@@ -176,11 +176,11 @@ public class LoginGadget extends AbstractGadget<LandingViewImpl> {
             contentPanel.setBR(++row, 0, 2);
 
             CTextField emailField = inject(proto().email(), new CTextField());
-            contentPanel.setWidget(++row, 0, new LoginDecoratorBuilder(emailField).watermark(LandingViewImpl.i18n.tr("Email Address")).build());
+            contentPanel.setWidget(++row, 0, new LoginWidgetDecoratorBuilder(emailField).watermark(LandingViewImpl.i18n.tr("Email Address")).build());
             addValidator(emailField, LandingViewImpl.i18n.tr("Enter your email address"));
 
             CPasswordTextField passwordField = inject(proto().password(), new CPasswordTextField());
-            contentPanel.setWidget(++row, 0, new LoginDecoratorBuilder(passwordField).watermark(LandingViewImpl.i18n.tr("Password")).build());
+            contentPanel.setWidget(++row, 0, new LoginWidgetDecoratorBuilder(passwordField).watermark(LandingViewImpl.i18n.tr("Password")).build());
             addValidator(passwordField, LandingViewImpl.i18n.tr("Enter your password"));
 
             contentPanel.setWidget(++row, 0, new CheckBoxDecorator(inject(proto().rememberID(), new CCheckBox())));
@@ -196,7 +196,7 @@ public class LoginGadget extends AbstractGadget<LandingViewImpl> {
 
             captchaField = (CCaptcha) inject(proto().captcha());
             contentPanel.setWidget(++row, 0,
-                    (new LoginDecoratorBuilder(captchaField).watermark(LandingViewImpl.i18n.tr("Enter both security words above")).build()));
+                    (new LoginWidgetDecoratorBuilder(captchaField).watermark(LandingViewImpl.i18n.tr("Enter both security words above")).build()));
             setEnableCaptcha(false);
 
             contentPanel.setBR(++row, 0, 2);

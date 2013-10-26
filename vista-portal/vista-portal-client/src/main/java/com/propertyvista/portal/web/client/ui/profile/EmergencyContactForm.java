@@ -25,8 +25,8 @@ import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.domain.person.Name;
 import com.propertyvista.domain.tenant.EmergencyContact;
-import com.propertyvista.portal.web.client.ui.AbstractPortalPanel;
-import com.propertyvista.portal.web.client.ui.util.decorators.FormDecoratorBuilder;
+import com.propertyvista.portal.web.client.ui.AddressSimpleEditor;
+import com.propertyvista.portal.web.client.ui.util.decorators.FormWidgetDecoratorBuilder;
 
 public class EmergencyContactForm extends CEntityForm<EmergencyContact> {
 
@@ -44,22 +44,19 @@ public class EmergencyContactForm extends CEntityForm<EmergencyContact> {
         BasicFlexFormPanel mainPanel = new BasicFlexFormPanel();
 
         int row = -1;
-        mainPanel
-                .setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().name(), new CEntityLabel<Name>()), 200).customLabel(i18n.tr("Full Name")).build());
+        mainPanel.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().name(), new CEntityLabel<Name>()), 200).customLabel(i18n.tr("Full Name"))
+                .build());
 
-        mainPanel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().name().firstName()), 200).build());
-        mainPanel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().name().lastName()), 200).build());
-        mainPanel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().name().namePrefix()), 70).build());
+        mainPanel.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().name().firstName()), 200).build());
+        mainPanel.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().name().lastName()), 200).build());
+        mainPanel.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().name().namePrefix()), 70).build());
 
-        mainPanel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().email()), 230).build());
-        mainPanel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().homePhone()), 200).build());
-        mainPanel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().mobilePhone()), 200).build());
-        mainPanel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().workPhone()), 200).build());
-        mainPanel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().address().street1()), 200).customLabel("Address").build());
-        mainPanel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().address().city()), 200).build());
-        mainPanel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().address().province()), 200).build());
-        mainPanel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().address().country()), 200).build());
-        mainPanel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().address().postalCode()), 200).build());
+        mainPanel.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().email()), 230).build());
+        mainPanel.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().homePhone()), 200).build());
+        mainPanel.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().mobilePhone()), 200).build());
+        mainPanel.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().workPhone()), 200).build());
+
+        mainPanel.setWidget(++row, 0, inject(proto().address(), new AddressSimpleEditor()));
 
         calculateFieldsStatus();
 
@@ -72,8 +69,6 @@ public class EmergencyContactForm extends CEntityForm<EmergencyContact> {
                 }
             }
         });
-
-        AbstractPortalPanel.updateDecoratorsLayout(mainPanel, view.getWidgetLayout());
 
         return mainPanel;
     }

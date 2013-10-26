@@ -33,7 +33,7 @@ import com.propertyvista.domain.financial.billing.InvoicePayment;
 import com.propertyvista.portal.rpc.portal.web.dto.financial.LatestActivitiesDTO;
 import com.propertyvista.portal.web.client.resources.PortalImages;
 import com.propertyvista.portal.web.client.ui.AbstractGadget;
-import com.propertyvista.portal.web.client.ui.util.decorators.FormDecoratorBuilder;
+import com.propertyvista.portal.web.client.ui.util.decorators.FormWidgetDecoratorBuilder;
 
 public class LatestActivitiesGadget extends AbstractGadget<FinancialDashboardViewImpl> {
 
@@ -107,9 +107,9 @@ public class LatestActivitiesGadget extends AbstractGadget<FinancialDashboardVie
                 BasicFlexFormPanel content = new BasicFlexFormPanel();
                 int row = -1;
 
-                content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().amount(), new CMoneyLabel()), 100).build());
-                content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().postDate(), new CDateLabel()), 100).build());
-                content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().description(), new CLabel<String>()), 250).build());
+                content.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().amount(), new CMoneyLabel()), 100).build());
+                content.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().postDate(), new CDateLabel()), 100).build());
+                content.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().description(), new CLabel<String>()), 250).build());
 
                 return content;
             }

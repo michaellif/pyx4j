@@ -14,18 +14,17 @@
 package com.propertyvista.portal.web.client.ui.util.decorators;
 
 import com.pyx4j.forms.client.ui.CComponent;
-import com.pyx4j.forms.client.ui.decorators.WidgetDecorator;
 
 import com.propertyvista.portal.web.client.ui.AbstractPortalPanel;
 
-public class FormDecoratorBuilder extends WidgetDecorator.Builder {
+public class FormWidgetDecoratorBuilder extends PortalWidgetDecorator.Builder {
 
     // default sizes (in pixels): 
     public static final int LABEL_WIDTH = 220;
 
     public static final int CONTENT_WIDTH = 250;
 
-    public FormDecoratorBuilder(CComponent<?> component, String labelWidth, String componentWidth, String contentWidth) {
+    public FormWidgetDecoratorBuilder(CComponent<?> component, String labelWidth, String componentWidth, String contentWidth) {
         super(component);
         labelWidth(labelWidth);
         contentWidth(contentWidth);
@@ -33,25 +32,25 @@ public class FormDecoratorBuilder extends WidgetDecorator.Builder {
         labelPosition(AbstractPortalPanel.getWidgetLayout());
     }
 
-    public FormDecoratorBuilder(CComponent<?> component, int labelWidth, int componentWidth, int contentWidth) {
+    public FormWidgetDecoratorBuilder(CComponent<?> component, int labelWidth, int componentWidth, int contentWidth) {
         this(component, labelWidth + "px", componentWidth + "px", contentWidth + "px");
     }
 
-    public FormDecoratorBuilder(CComponent<?> component, int labelWidth, int componentWidth) {
+    public FormWidgetDecoratorBuilder(CComponent<?> component, int labelWidth, int componentWidth) {
         this(component, labelWidth, componentWidth, CONTENT_WIDTH);
     }
 
-    public FormDecoratorBuilder(CComponent<?> component, int componentWidth) {
+    public FormWidgetDecoratorBuilder(CComponent<?> component, int componentWidth) {
         this(component, LABEL_WIDTH, componentWidth);
     }
 
-    public FormDecoratorBuilder(CComponent<?> component) {
+    public FormWidgetDecoratorBuilder(CComponent<?> component) {
         this(component, CONTENT_WIDTH);
     }
 
     @Override
-    public WidgetDecorator build() {
-        return new WidgetDecorator(this) {
+    public PortalWidgetDecorator build() {
+        return new PortalWidgetDecorator(this) {
             @Override
             protected void updateViewable() {
                 if (getComnponent().isViewable()) {

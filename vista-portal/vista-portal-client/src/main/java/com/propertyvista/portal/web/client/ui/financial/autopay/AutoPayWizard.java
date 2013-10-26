@@ -70,7 +70,7 @@ import com.propertyvista.dto.PreauthorizedPaymentCoveredItemDTO;
 import com.propertyvista.portal.rpc.portal.web.dto.financial.AutoPayDTO;
 import com.propertyvista.portal.web.client.ui.CPortalEntityWizard;
 import com.propertyvista.portal.web.client.ui.financial.paymentmethod.PaymentMethodEditor;
-import com.propertyvista.portal.web.client.ui.util.decorators.FormDecoratorBuilder;
+import com.propertyvista.portal.web.client.ui.util.decorators.FormWidgetDecoratorBuilder;
 
 public class AutoPayWizard extends CPortalEntityWizard<AutoPayDTO> {
 
@@ -140,8 +140,8 @@ public class AutoPayWizard extends CPortalEntityWizard<AutoPayDTO> {
         BasicFlexFormPanel panel = new BasicFlexFormPanel(i18n.tr("Details"));
         int row = -1;
 
-        panel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().tenant(), new CEntityLabel<Tenant>()), 200).build());
-        panel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().address(), new CEntityLabel<AddressSimple>()), 200).build());
+        panel.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().tenant(), new CEntityLabel<Tenant>()), 200).build());
+        panel.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().address(), new CEntityLabel<AddressSimple>()), 200).build());
         panel.setWidget(++row, 0, inject(proto().coveredItemsDTO(), new PapCoveredItemDtoFolder() {
             @Override
             public void onAmontValueChange() {
@@ -166,10 +166,10 @@ public class AutoPayWizard extends CPortalEntityWizard<AutoPayDTO> {
         panel.setWidget(
                 ++row,
                 0,
-                new FormDecoratorBuilder(inject(proto().selectPaymentMethod(), new CRadioGroupEnum<PaymentSelect>(PaymentSelect.class,
+                new FormWidgetDecoratorBuilder(inject(proto().selectPaymentMethod(), new CRadioGroupEnum<PaymentSelect>(PaymentSelect.class,
                         RadioGroup.Layout.HORISONTAL)), 200).build());
 
-        panel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().profiledPaymentMethod(), profiledPaymentMethodsCombo), 200).build());
+        panel.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().profiledPaymentMethod(), profiledPaymentMethodsCombo), 200).build());
 
         panel.setWidget(++row, 0, inject(proto().paymentMethod(), paymentMethodEditor));
 
@@ -248,7 +248,7 @@ public class AutoPayWizard extends CPortalEntityWizard<AutoPayDTO> {
 
         panel.setBR(++row, 0, 1);
 
-        panel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().nextPaymentDate(), new CDateLabel()), 100).labelWidth("250px").build());
+        panel.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().nextPaymentDate(), new CDateLabel()), 100).labelWidth("250px").build());
 
         panel.setHR(++row, 0, 1);
 
@@ -284,7 +284,7 @@ public class AutoPayWizard extends CPortalEntityWizard<AutoPayDTO> {
             total = get(proto().total()).getValue();
             unbind(proto().total());
         }
-        holder.setWidget(new FormDecoratorBuilder(inject(proto().total()), 100).build());
+        holder.setWidget(new FormWidgetDecoratorBuilder(inject(proto().total()), 100).build());
         get(proto().total()).setValue(total);
         get(proto().total()).setViewable(true);
     }

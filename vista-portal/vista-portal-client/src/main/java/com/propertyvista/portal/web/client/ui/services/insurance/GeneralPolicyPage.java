@@ -31,7 +31,7 @@ import com.propertyvista.domain.tenant.insurance.InsuranceCertificateScan;
 import com.propertyvista.portal.rpc.portal.web.dto.insurance.GeneralInsurancePolicyDTO;
 import com.propertyvista.portal.rpc.portal.web.services.services.GeneralInsurancePolicyUploadService;
 import com.propertyvista.portal.web.client.ui.CPortalEntityForm;
-import com.propertyvista.portal.web.client.ui.util.decorators.FormDecoratorBuilder;
+import com.propertyvista.portal.web.client.ui.util.decorators.FormWidgetDecoratorBuilder;
 
 public class GeneralPolicyPage extends CPortalEntityForm<GeneralInsurancePolicyDTO> {
 
@@ -46,16 +46,16 @@ public class GeneralPolicyPage extends CPortalEntityForm<GeneralInsurancePolicyD
         BasicFlexFormPanel mainPanel = new BasicFlexFormPanel();
         int row = -1;
 
-        mainPanel.setWidget(++row, 0, 1, new FormDecoratorBuilder(inject(proto().certificate().insuranceProvider()), 150).build());
-        mainPanel.setWidget(++row, 0, 1, new FormDecoratorBuilder(inject(proto().certificate().insuranceCertificateNumber()), 150).build());
-        mainPanel.setWidget(++row, 0, 1, new FormDecoratorBuilder(inject(proto().certificate().liabilityCoverage()), 150).build());
-        mainPanel.setWidget(++row, 0, 1, new FormDecoratorBuilder(inject(proto().certificate().inceptionDate()), 150).build());
-        mainPanel.setWidget(++row, 0, 1, new FormDecoratorBuilder(inject(proto().certificate().expiryDate()), 150).build());
+        mainPanel.setWidget(++row, 0, 1, new FormWidgetDecoratorBuilder(inject(proto().certificate().insuranceProvider()), 150).build());
+        mainPanel.setWidget(++row, 0, 1, new FormWidgetDecoratorBuilder(inject(proto().certificate().insuranceCertificateNumber()), 150).build());
+        mainPanel.setWidget(++row, 0, 1, new FormWidgetDecoratorBuilder(inject(proto().certificate().liabilityCoverage()), 150).build());
+        mainPanel.setWidget(++row, 0, 1, new FormWidgetDecoratorBuilder(inject(proto().certificate().inceptionDate()), 150).build());
+        mainPanel.setWidget(++row, 0, 1, new FormWidgetDecoratorBuilder(inject(proto().certificate().expiryDate()), 150).build());
         mainPanel.setWidget(
                 ++row,
                 0,
                 1,
-                new FormDecoratorBuilder(inject(proto().certificate().certificateScan(),
+                new FormWidgetDecoratorBuilder(inject(proto().certificate().certificateScan(),
                         new CFile<InsuranceCertificateScan>(GWT.<GeneralInsurancePolicyUploadService> create(GeneralInsurancePolicyUploadService.class),
                                 new FileURLBuilder<InsuranceCertificateScan>() {
 

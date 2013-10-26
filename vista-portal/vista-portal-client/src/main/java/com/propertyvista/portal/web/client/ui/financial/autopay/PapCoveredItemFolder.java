@@ -27,7 +27,7 @@ import com.propertyvista.common.client.ui.components.c.PapBillableItemLabel;
 import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
 import com.propertyvista.domain.payment.AutopayAgreement;
 import com.propertyvista.domain.payment.AutopayAgreement.AutopayAgreementCoveredItem;
-import com.propertyvista.portal.web.client.ui.util.decorators.FormDecoratorBuilder;
+import com.propertyvista.portal.web.client.ui.util.decorators.FormWidgetDecoratorBuilder;
 
 public class PapCoveredItemFolder extends VistaBoxFolder<AutopayAgreement.AutopayAgreementCoveredItem> {
 
@@ -64,10 +64,10 @@ public class PapCoveredItemFolder extends VistaBoxFolder<AutopayAgreement.Autopa
             int row = -1;
 
             content.setWidget(++row, 0,
-                    new FormDecoratorBuilder(inject(proto().billableItem(), new PapBillableItemLabel()), 200).customLabel(i18n.tr("Lease Charge")).build());
+                    new FormWidgetDecoratorBuilder(inject(proto().billableItem(), new PapBillableItemLabel()), 200).customLabel(i18n.tr("Lease Charge")).build());
             content.setWidget(++row, 0,
-                    new FormDecoratorBuilder(inject(proto().billableItem().agreedPrice(), new CMoneyLabel()), 100).customLabel(i18n.tr("Price")).build());
-            content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().amount(), new CMoneyLabel()), 100).customLabel(i18n.tr("Payment")).build());
+                    new FormWidgetDecoratorBuilder(inject(proto().billableItem().agreedPrice(), new CMoneyLabel()), 100).customLabel(i18n.tr("Price")).build());
+            content.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().amount(), new CMoneyLabel()), 100).customLabel(i18n.tr("Payment")).build());
 
             get(proto().amount()).asWidget().getElement().getStyle().setFontWeight(FontWeight.BOLD);
 

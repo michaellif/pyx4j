@@ -44,7 +44,7 @@ import com.propertyvista.portal.web.client.resources.tenantsure.TenantSureResour
 import com.propertyvista.portal.web.client.themes.TenantSureTheme;
 import com.propertyvista.portal.web.client.ui.CPortalEntityForm;
 import com.propertyvista.portal.web.client.ui.services.insurance.TenantSurePageView.TenantSurePagePresenter;
-import com.propertyvista.portal.web.client.ui.util.decorators.FormDecoratorBuilder;
+import com.propertyvista.portal.web.client.ui.util.decorators.FormWidgetDecoratorBuilder;
 
 public class TenantSurePage extends CPortalEntityForm<TenantSureInsurancePolicyDTO> {
 
@@ -72,12 +72,12 @@ public class TenantSurePage extends CPortalEntityForm<TenantSureInsurancePolicyD
         mainPanel.setWidget(++row, 0, 2, makeGreetingPanel());
 
         mainPanel.setH3(++row, 0, 1, i18n.tr("Coverage"));
-        mainPanel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().certificate().insuranceCertificateNumber()), 300).build());
-        mainPanel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().certificate().inceptionDate()), 150).build());
-        mainPanel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().certificate().expiryDate()), 150).build());
+        mainPanel.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().certificate().insuranceCertificateNumber()), 300).build());
+        mainPanel.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().certificate().inceptionDate()), 150).build());
+        mainPanel.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().certificate().expiryDate()), 150).build());
 
-        mainPanel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().certificate().liabilityCoverage()), 150).build());
-        mainPanel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().contentsCoverage()), 150).build());
+        mainPanel.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().certificate().liabilityCoverage()), 150).build());
+        mainPanel.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().contentsCoverage()), 150).build());
 
         IFormat<BigDecimal> currencyFormat = new MoneyComboBox.MoneyComboBoxFormat();
         ((CTextFieldBase<BigDecimal, ?>) get(proto().certificate().liabilityCoverage())).setFormat(currencyFormat);

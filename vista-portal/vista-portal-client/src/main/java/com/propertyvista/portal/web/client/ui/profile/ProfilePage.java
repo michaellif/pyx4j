@@ -44,7 +44,7 @@ import com.propertyvista.portal.rpc.portal.web.dto.ResidentProfileDTO;
 import com.propertyvista.portal.rpc.portal.web.services.ResidentPictureUploadService;
 import com.propertyvista.portal.web.client.themes.EntityViewTheme;
 import com.propertyvista.portal.web.client.ui.CPortalEntityEditor;
-import com.propertyvista.portal.web.client.ui.util.decorators.FormDecoratorBuilder;
+import com.propertyvista.portal.web.client.ui.util.decorators.FormWidgetDecoratorBuilder;
 import com.propertyvista.shared.config.VistaFeatures;
 
 public class ProfilePage extends CPortalEntityEditor<ResidentProfileDTO> {
@@ -77,15 +77,15 @@ public class ProfilePage extends CPortalEntityEditor<ResidentProfileDTO> {
         imageHolder.setImageSize(150, 200);
         imageHolder.setThumbnailPlaceholder(new Image(VistaImages.INSTANCE.profilePicture()));
 
-        mainPanel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().picture(), imageHolder)).customLabel("").build());
+        mainPanel.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().picture(), imageHolder)).customLabel("").build());
 
         mainPanel.setH1(++row, 0, 1, i18n.tr("Basic Information"));
 
-        mainPanel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().person().name(), new CEntityLabel<Name>()), 200)
+        mainPanel.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().person().name(), new CEntityLabel<Name>()), 200)
                 .customLabel(i18n.tr("Full Name")).build());
 
-        mainPanel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().person().sex()), 100).build());
-        mainPanel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().person().birthDate()), 150).build());
+        mainPanel.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().person().sex()), 100).build());
+        mainPanel.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().person().birthDate()), 150).build());
 
         get(proto().person().birthDate()).addValueValidator(new EditableValueValidator<LogicalDate>() {
             @Override
@@ -108,10 +108,10 @@ public class ProfilePage extends CPortalEntityEditor<ResidentProfileDTO> {
         });
 
         mainPanel.setH1(++row, 0, 1, i18n.tr("Contact Information"));
-        mainPanel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().person().homePhone()), 200).build());
-        mainPanel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().person().mobilePhone()), 200).build());
-        mainPanel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().person().workPhone()), 200).build());
-        mainPanel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().person().email()), 230).build());
+        mainPanel.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().person().homePhone()), 200).build());
+        mainPanel.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().person().mobilePhone()), 200).build());
+        mainPanel.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().person().workPhone()), 200).build());
+        mainPanel.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().person().email()), 230).build());
 
         mainPanel.setH1(++row, 0, 1, proto().emergencyContacts().getMeta().getCaption());
         mainPanel.setWidget(++row, 0, inject(proto().emergencyContacts(), new EmergencyContactFolder((ProfilePageViewImpl) getView())));

@@ -26,14 +26,15 @@ import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.common.client.ui.components.VistaEditorsComponentFactory;
-import com.propertyvista.common.client.ui.components.editors.AddressSimpleEditor;
 import com.propertyvista.common.client.ui.components.editors.payments.CreditCardInfoEditor;
 import com.propertyvista.common.client.ui.components.editors.payments.EcheckInfoEditor;
 import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
 import com.propertyvista.domain.payment.AbstractPaymentMethod;
 import com.propertyvista.domain.payment.CreditCardInfo.CreditCardType;
 import com.propertyvista.domain.payment.PaymentType;
+import com.propertyvista.portal.web.client.ui.AddressSimpleEditor;
 import com.propertyvista.portal.web.client.ui.financial.PortalPaymentTypesUtil;
+import com.propertyvista.portal.web.client.ui.util.decorators.FormWidgetDecoratorBuilder;
 
 public class PaymentMethodEditor<E extends AbstractPaymentMethod> extends com.propertyvista.common.client.ui.components.editors.payments.PaymentMethodEditor<E> {
 
@@ -53,15 +54,15 @@ public class PaymentMethodEditor<E extends AbstractPaymentMethod> extends com.pr
         BasicFlexFormPanel content = new BasicFlexFormPanel();
         int row = -1;
 
-        content.setWidget(++row, 0,
-                new FormDecoratorBuilder(inject(proto().type(), new CComboBox<PaymentType>()), FormDecoratorBuilder.LABEL_WIDTH, 15, 15).build());
+        content.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().type(), new CComboBox<PaymentType>())).build());
         content.setWidget(++row, 0, paymentDetailsHolder);
 
         content.setH1(++row, 0, 1, proto().billingAddress().getMeta().getCaption());
         billingAddressHeader = content.getWidget(row, 0);
 
-        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().sameAsCurrent()), FormDecoratorBuilder.LABEL_WIDTH, 5, 15).build());
-        content.setWidget(++row, 0, inject(proto().billingAddress(), new AddressSimpleEditor(true, FormDecoratorBuilder.LABEL_WIDTH, 15, 15)));
+        content.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().sameAsCurrent())).build());
+
+        content.setWidget(++row, 0, inject(proto().billingAddress(), new AddressSimpleEditor()));
 
         // tweaks:
         ((CComboBox<PaymentType>) get(proto().type())).setOptions(defaultPaymentTypes());

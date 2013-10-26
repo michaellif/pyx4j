@@ -37,7 +37,7 @@ import com.propertyvista.portal.web.client.themes.BlockMixin;
 import com.propertyvista.portal.web.client.themes.EntityViewTheme;
 import com.propertyvista.portal.web.client.ui.CPortalEntityForm;
 import com.propertyvista.portal.web.client.ui.financial.paymentmethod.PaymentMethodConfirmationView.PaymentMethodConfirmationPresenter;
-import com.propertyvista.portal.web.client.ui.util.decorators.FormDecoratorBuilder;
+import com.propertyvista.portal.web.client.ui.util.decorators.FormWidgetDecoratorBuilder;
 
 public class PaymentMethodConfirmationForm extends CPortalEntityForm<PaymentMethodDTO> {
 
@@ -52,7 +52,7 @@ public class PaymentMethodConfirmationForm extends CPortalEntityForm<PaymentMeth
         BasicFlexFormPanel mainPanel = new BasicFlexFormPanel();
         int row = -1;
         mainPanel.setWidget(++row, 0,
-                new FormDecoratorBuilder(inject(proto().paymentMethod(), new CEntityLabel<LeasePaymentMethod>()), 250).labelAlignment(Alignment.left).build());
+                new FormWidgetDecoratorBuilder(inject(proto().paymentMethod(), new CEntityLabel<LeasePaymentMethod>()), 250).labelAlignment(Alignment.left).build());
 
         mainPanel.setHR(++row, 0, 1);
 

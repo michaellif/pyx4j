@@ -29,7 +29,7 @@ import com.pyx4j.widgets.client.actionbar.Toolbar;
 import com.propertyvista.portal.rpc.portal.web.dto.financial.BillingSummaryDTO;
 import com.propertyvista.portal.web.client.resources.PortalImages;
 import com.propertyvista.portal.web.client.ui.AbstractGadget;
-import com.propertyvista.portal.web.client.ui.util.decorators.FormDecoratorBuilder;
+import com.propertyvista.portal.web.client.ui.util.decorators.FormWidgetDecoratorBuilder;
 import com.propertyvista.shared.config.VistaFeatures;
 
 public class BillingSummaryGadget extends AbstractGadget<FinancialDashboardViewImpl> {
@@ -117,9 +117,9 @@ public class BillingSummaryGadget extends AbstractGadget<FinancialDashboardViewI
         @Override
         public IsWidget createContent() {
 
-            mainPanel.setWidget(0, 0, new FormDecoratorBuilder(inject(proto().currentBalance()), 140).build());
+            mainPanel.setWidget(0, 0, new FormWidgetDecoratorBuilder(inject(proto().currentBalance()), 140).build());
             if (!VistaFeatures.instance().yardiIntegration()) {
-                mainPanel.setWidget(1, 0, new FormDecoratorBuilder(inject(proto().dueDate()), 140).build());
+                mainPanel.setWidget(1, 0, new FormWidgetDecoratorBuilder(inject(proto().dueDate()), 140).build());
             }
 
             return mainPanel;

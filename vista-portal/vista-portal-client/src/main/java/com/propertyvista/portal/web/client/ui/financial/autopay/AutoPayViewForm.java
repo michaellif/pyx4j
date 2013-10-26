@@ -33,7 +33,7 @@ import com.propertyvista.domain.payment.LeasePaymentMethod;
 import com.propertyvista.dto.PreauthorizedPaymentCoveredItemDTO;
 import com.propertyvista.portal.rpc.portal.web.dto.financial.AutoPayDTO;
 import com.propertyvista.portal.web.client.ui.CPortalEntityEditor;
-import com.propertyvista.portal.web.client.ui.util.decorators.FormDecoratorBuilder;
+import com.propertyvista.portal.web.client.ui.util.decorators.FormWidgetDecoratorBuilder;
 
 public class AutoPayViewForm extends CPortalEntityEditor<AutoPayDTO> {
 
@@ -59,7 +59,7 @@ public class AutoPayViewForm extends CPortalEntityEditor<AutoPayDTO> {
         int row = -1;
 
         mainPanel.setWidget(++row, 0,
-                new FormDecoratorBuilder(inject(proto().paymentMethod(), new CEntityLabel<LeasePaymentMethod>()), 200).labelAlignment(Alignment.left).build());
+                new FormWidgetDecoratorBuilder(inject(proto().paymentMethod(), new CEntityLabel<LeasePaymentMethod>()), 200).labelAlignment(Alignment.left).build());
 
         mainPanel.setWidget(++row, 0, inject(proto().coveredItems(), new PapCoveredItemFolder()));
         mainPanel.setWidget(++row, 0, inject(proto().coveredItemsDTO(), new PapCoveredItemDtoFolder() {
@@ -77,8 +77,8 @@ public class AutoPayViewForm extends CPortalEntityEditor<AutoPayDTO> {
 
         mainPanel.setHR(++row, 0, 1);
 
-        mainPanel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().total(), new CMoneyLabel()), 100).build());
-        mainPanel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().nextPaymentDate(), new CDateLabel()), 100).build());
+        mainPanel.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().total(), new CMoneyLabel()), 100).build());
+        mainPanel.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().nextPaymentDate(), new CDateLabel()), 100).build());
 
         get(proto().coveredItems()).setVisible(isViewable());
         get(proto().coveredItemsDTO()).setVisible(!isViewable());

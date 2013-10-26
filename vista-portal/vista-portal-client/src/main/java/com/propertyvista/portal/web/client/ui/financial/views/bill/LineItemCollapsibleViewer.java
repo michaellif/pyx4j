@@ -44,7 +44,7 @@ import com.propertyvista.domain.financial.billing.InvoiceLineItem;
 import com.propertyvista.domain.financial.billing.InvoiceProductCharge;
 import com.propertyvista.domain.financial.billing.InvoiceSubLineItem;
 import com.propertyvista.dto.InvoiceLineItemGroupDTO;
-import com.propertyvista.portal.web.client.ui.util.decorators.FormDecoratorBuilder;
+import com.propertyvista.portal.web.client.ui.util.decorators.FormWidgetDecoratorBuilder;
 
 public class LineItemCollapsibleViewer extends CEntityContainer<InvoiceLineItemGroupDTO> implements ToggleHandler {
 
@@ -111,10 +111,10 @@ public class LineItemCollapsibleViewer extends CEntityContainer<InvoiceLineItemG
 
     private IsWidget createCollapsedContent(InvoiceLineItemGroupDTO value) {
         BasicFlexFormPanel content = new BasicFlexFormPanel();
-        content.setWidth(FormDecoratorBuilder.LABEL_WIDTH + FormDecoratorBuilder.CONTENT_WIDTH + "px");
+        content.setWidth(FormWidgetDecoratorBuilder.LABEL_WIDTH + FormWidgetDecoratorBuilder.CONTENT_WIDTH + "px");
 
-        content.getColumnFormatter().setWidth(0, FormDecoratorBuilder.LABEL_WIDTH + "px");
-        content.getColumnFormatter().setWidth(2, FormDecoratorBuilder.CONTENT_WIDTH + "px");
+        content.getColumnFormatter().setWidth(0, FormWidgetDecoratorBuilder.LABEL_WIDTH + "px");
+        content.getColumnFormatter().setWidth(2, FormWidgetDecoratorBuilder.CONTENT_WIDTH + "px");
 
         int row = 0;
         if (value != null && !value.total().isNull()) {
@@ -135,9 +135,9 @@ public class LineItemCollapsibleViewer extends CEntityContainer<InvoiceLineItemG
     private IsWidget createExpandedContent(InvoiceLineItemGroupDTO value) {
         BasicFlexFormPanel content = new BasicFlexFormPanel();
 
-        content.getColumnFormatter().setWidth(0, FormDecoratorBuilder.LABEL_WIDTH / 2 + "px");
-        content.getColumnFormatter().setWidth(1, FormDecoratorBuilder.LABEL_WIDTH / 2 + "px");
-        content.getColumnFormatter().setWidth(2, FormDecoratorBuilder.CONTENT_WIDTH + "px");
+        content.getColumnFormatter().setWidth(0, FormWidgetDecoratorBuilder.LABEL_WIDTH / 2 + "px");
+        content.getColumnFormatter().setWidth(1, FormWidgetDecoratorBuilder.LABEL_WIDTH / 2 + "px");
+        content.getColumnFormatter().setWidth(2, FormWidgetDecoratorBuilder.CONTENT_WIDTH + "px");
 
         int row = 0;
         if (value != null && !value.total().isNull()) {

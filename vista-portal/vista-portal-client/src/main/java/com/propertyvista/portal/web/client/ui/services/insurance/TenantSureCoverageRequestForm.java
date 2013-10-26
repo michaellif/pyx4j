@@ -27,7 +27,7 @@ import com.propertyvista.common.client.ui.components.tenantinsurance.YesNoComboB
 import com.propertyvista.misc.VistaTODO;
 import com.propertyvista.portal.rpc.portal.web.dto.insurance.TenantSureAgreementParamsDTO;
 import com.propertyvista.portal.rpc.portal.web.dto.insurance.TenantSureCoverageDTO;
-import com.propertyvista.portal.web.client.ui.util.decorators.FormDecoratorBuilder;
+import com.propertyvista.portal.web.client.ui.util.decorators.FormWidgetDecoratorBuilder;
 
 public class TenantSureCoverageRequestForm extends CEntityDecoratableForm<TenantSureCoverageDTO> {
 
@@ -49,17 +49,17 @@ public class TenantSureCoverageRequestForm extends CEntityDecoratableForm<Tenant
         int row = -1;
 
         contentPanel.setH1(++row, 0, 1, i18n.tr("Coverage"));
-        contentPanel.setWidget(++row, 0, 1, new FormDecoratorBuilder(inject(proto().personalLiabilityCoverage(), new MoneyComboBox())).build());
-        contentPanel.setWidget(++row, 0, 1, new FormDecoratorBuilder(inject(proto().contentsCoverage(), new MoneyComboBox())).build());
-        contentPanel.setWidget(++row, 0, 1, new FormDecoratorBuilder(inject(proto().deductible(), new MoneyComboBox())).build());
+        contentPanel.setWidget(++row, 0, 1, new FormWidgetDecoratorBuilder(inject(proto().personalLiabilityCoverage(), new MoneyComboBox())).build());
+        contentPanel.setWidget(++row, 0, 1, new FormWidgetDecoratorBuilder(inject(proto().contentsCoverage(), new MoneyComboBox())).build());
+        contentPanel.setWidget(++row, 0, 1, new FormWidgetDecoratorBuilder(inject(proto().deductible(), new MoneyComboBox())).build());
 
         contentPanel.setH1(++row, 0, 1, i18n.tr("Coverage Qualification Questions"));
-        contentPanel.setWidget(++row, 0, 1, new FormDecoratorBuilder(inject(proto().smoker(), new YesNoComboBox())).build());
-        contentPanel.setWidget(++row, 0, 1, new FormDecoratorBuilder(inject(proto().numberOfPreviousClaims())).build());
+        contentPanel.setWidget(++row, 0, 1, new FormWidgetDecoratorBuilder(inject(proto().smoker(), new YesNoComboBox())).build());
+        contentPanel.setWidget(++row, 0, 1, new FormWidgetDecoratorBuilder(inject(proto().numberOfPreviousClaims())).build());
 
         if (VistaTODO.VISTA_3207_TENANT_SURE_YEARLY_PAY_SCHEDULE_IMPLEMENTED) {
             contentPanel.setH1(++row, 0, 1, i18n.tr("Payment"));
-            contentPanel.setWidget(++row, 0, 1, new FormDecoratorBuilder(inject(proto().paymentSchedule())).build());
+            contentPanel.setWidget(++row, 0, 1, new FormWidgetDecoratorBuilder(inject(proto().paymentSchedule())).build());
         }
 
         return contentPanel;

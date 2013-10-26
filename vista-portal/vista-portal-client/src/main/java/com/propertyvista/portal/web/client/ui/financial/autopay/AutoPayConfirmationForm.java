@@ -25,7 +25,7 @@ import com.pyx4j.i18n.shared.I18n;
 import com.propertyvista.domain.payment.LeasePaymentMethod;
 import com.propertyvista.portal.rpc.portal.web.dto.financial.AutoPayDTO;
 import com.propertyvista.portal.web.client.ui.CPortalEntityForm;
-import com.propertyvista.portal.web.client.ui.util.decorators.FormDecoratorBuilder;
+import com.propertyvista.portal.web.client.ui.util.decorators.FormWidgetDecoratorBuilder;
 
 public class AutoPayConfirmationForm extends CPortalEntityForm<AutoPayDTO> {
 
@@ -41,13 +41,13 @@ public class AutoPayConfirmationForm extends CPortalEntityForm<AutoPayDTO> {
         int row = -1;
 
         mainPanel.setWidget(++row, 0,
-                new FormDecoratorBuilder(inject(proto().paymentMethod(), new CEntityLabel<LeasePaymentMethod>()), 200).labelAlignment(Alignment.left).build());
+                new FormWidgetDecoratorBuilder(inject(proto().paymentMethod(), new CEntityLabel<LeasePaymentMethod>()), 200).labelAlignment(Alignment.left).build());
         mainPanel.setWidget(++row, 0, inject(proto().coveredItems(), new PapCoveredItemFolder()));
-        mainPanel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().total()), 100).build());
+        mainPanel.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().total()), 100).build());
 
         mainPanel.setBR(++row, 0, 1);
 
-        mainPanel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().nextPaymentDate(), new CDateLabel()), 100).build());
+        mainPanel.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().nextPaymentDate(), new CDateLabel()), 100).build());
 
         return mainPanel;
     }

@@ -30,7 +30,7 @@ import com.pyx4j.security.rpc.PasswordChangeRequest;
 
 import com.propertyvista.common.client.ui.components.security.TenantPasswordStrengthRule;
 import com.propertyvista.portal.web.client.ui.CPortalEntityWizard;
-import com.propertyvista.portal.web.client.ui.util.decorators.FormDecoratorBuilder;
+import com.propertyvista.portal.web.client.ui.util.decorators.FormWidgetDecoratorBuilder;
 
 public class PasswordChangeWizard extends CPortalEntityWizard<PasswordChangeRequest> {
 
@@ -54,13 +54,13 @@ public class PasswordChangeWizard extends CPortalEntityWizard<PasswordChangeRequ
 
         int row = -1;
 
-        mainPanel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().currentPassword())).componentWidth("180px").build());
+        mainPanel.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().currentPassword())).componentWidth("180px").build());
         mainPanel.setBR(++row, 0, 1);
 
         passwordStrengthWidget = new PasswordStrengthWidget(passwordStrengthRule);
-        mainPanel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().newPassword())).componentWidth("180px").assistantWidget(passwordStrengthWidget)
+        mainPanel.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().newPassword())).componentWidth("180px").assistantWidget(passwordStrengthWidget)
                 .build());
-        mainPanel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().newPasswordConfirm())).componentWidth("180px").build());
+        mainPanel.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().newPasswordConfirm())).componentWidth("180px").build());
 
         return mainPanel;
     }

@@ -31,11 +31,11 @@ import com.pyx4j.forms.client.validators.ValidationError;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.security.client.ClientContext;
 
-import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
 import com.propertyvista.domain.contact.AddressSimple;
 import com.propertyvista.domain.payment.InsurancePaymentMethod;
 import com.propertyvista.domain.payment.PaymentType;
 import com.propertyvista.portal.web.client.ui.financial.paymentmethod.PaymentMethodEditor;
+import com.propertyvista.portal.web.client.ui.util.decorators.FormWidgetDecoratorBuilder;
 
 public class TenantSurePaymentMethodForm extends PaymentMethodEditor<InsurancePaymentMethod> {
 
@@ -80,7 +80,7 @@ public class TenantSurePaymentMethodForm extends PaymentMethodEditor<InsurancePa
 
         panel.setH1(0, 0, 1, i18n.tr("Pre-Authorized Agreement"));
         panel.setWidget(1, 0, legalTerms);
-        panel.setWidget(2, 0, new FormDecoratorBuilder(iAgreeBox, FormDecoratorBuilder.LABEL_WIDTH, 5, 15).customLabel(i18n.tr("I Agree")).build());
+        panel.setWidget(2, 0, new FormWidgetDecoratorBuilder(iAgreeBox, FormWidgetDecoratorBuilder.LABEL_WIDTH, 5, 15).customLabel(i18n.tr("I Agree")).build());
 
         iAgreeBox.addValueChangeHandler(new ValueChangeHandler<Boolean>() {
             @Override

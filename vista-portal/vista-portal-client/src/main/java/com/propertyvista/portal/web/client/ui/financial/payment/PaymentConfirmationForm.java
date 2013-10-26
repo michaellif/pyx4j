@@ -33,7 +33,7 @@ import com.propertyvista.domain.payment.LeasePaymentMethod;
 import com.propertyvista.dto.PaymentRecordDTO;
 import com.propertyvista.portal.web.client.ui.AbstractFormView;
 import com.propertyvista.portal.web.client.ui.CPortalEntityForm;
-import com.propertyvista.portal.web.client.ui.util.decorators.FormDecoratorBuilder;
+import com.propertyvista.portal.web.client.ui.util.decorators.FormWidgetDecoratorBuilder;
 
 public class PaymentConfirmationForm extends CPortalEntityForm<PaymentRecordDTO> {
 
@@ -49,8 +49,8 @@ public class PaymentConfirmationForm extends CPortalEntityForm<PaymentRecordDTO>
         int row = -1;
 
         mainPanel.setWidget(++row, 0,
-                new FormDecoratorBuilder(inject(proto().paymentMethod(), new CEntityLabel<LeasePaymentMethod>()), 250).labelAlignment(Alignment.left).build());
-        mainPanel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().amount()), 100).labelAlignment(Alignment.left).build());
+                new FormWidgetDecoratorBuilder(inject(proto().paymentMethod(), new CEntityLabel<LeasePaymentMethod>()), 250).labelAlignment(Alignment.left).build());
+        mainPanel.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().amount()), 100).labelAlignment(Alignment.left).build());
 
         mainPanel.setHR(++row, 0, 1);
 
