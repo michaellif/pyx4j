@@ -73,6 +73,9 @@ SET search_path = '_admin_';
          
          ALTER TABLE admin_pmc_yardi_credential ADD COLUMN ils_guest_card_service_url VARCHAR(500);             
         
+        -- pad_file
+        
+        ALTER TABLE pad_file ADD COLUMN file_creation_number_s VARCHAR(512);
        
         /**
         ***     ============================================================================================================
@@ -89,9 +92,11 @@ SET search_path = '_admin_';
         UPDATE  audit_record
         SET     app = 'portal'
         WHERE   app = 'residentPortal';
+        
+        UPDATE  pad_file
+        SET     file_creation_number_s = _dba_.convert_id_to_string('file_creation_number');
        
         DELETE 
-        
         FROM    scheduler_run_data
         WHERE   execution IN    (SELECT id
                                 FROM    scheduler_run

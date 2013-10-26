@@ -22,7 +22,8 @@ BEGIN
         **/
         
         -- foreign keys
-        
+        ALTER TABLE building$media DROP CONSTRAINT building$media_value_fk;
+        ALTER TABLE floorplan$media DROP CONSTRAINT floorplan$media_value_fk;
         ALTER TABLE insurance_certificate DROP CONSTRAINT insurance_certificate_client_fk;
         ALTER TABLE insurance_certificate DROP CONSTRAINT insurance_certificate_tenant_fk;
         ALTER TABLE insurance_tenant_sure_client DROP CONSTRAINT insurance_tenant_sure_client_tenant_fk;
@@ -45,6 +46,8 @@ BEGIN
         ALTER TABLE insurance_tenant_sure_client DROP CONSTRAINT insurance_tenant_sure_client_pk;
         ALTER TABLE insurance_tenant_sure_report DROP CONSTRAINT insurance_tenant_sure_report_pk;
         ALTER TABLE insurance_tenant_sure_transaction DROP CONSTRAINT insurance_tenant_sure_transaction_pk;
+        ALTER TABLE file DROP CONSTRAINT file_pk;
+        ALTER TABLE media DROP CONSTRAINT media_pk;
         ALTER TABLE preauthorized_payment DROP CONSTRAINT preauthorized_payment_pk;
         ALTER TABLE preauthorized_payment_covered_item DROP CONSTRAINT preauthorized_payment_covered_item_pk;
         
@@ -52,6 +55,8 @@ BEGIN
         
         -- check constraints
         
+        ALTER TABLE company DROP CONSTRAINT company_logo_media_type_e_ck;
+        ALTER TABLE company DROP CONSTRAINT company_logo_visibility_e_ck;
         ALTER TABLE identification_document DROP CONSTRAINT identification_document_owner_discriminator_d_ck;
         ALTER TABLE ilspolicy_item DROP CONSTRAINT ilspolicy_item_provider_e_ck;
         ALTER TABLE ilspolicy DROP CONSTRAINT ilspolicy_node_discriminator_d_ck;
@@ -68,11 +73,16 @@ BEGIN
         ALTER TABLE insurance_tenant_sure_transaction DROP CONSTRAINT insurance_tenant_sure_transaction_insurance_discriminator_d_ck;
         ALTER TABLE insurance_tenant_sure_transaction DROP CONSTRAINT insurance_tenant_sure_transaction_payment_method_discr_d_ck;
         ALTER TABLE insurance_tenant_sure_transaction DROP CONSTRAINT insurance_tenant_sure_transaction_status_e_ck;
+        ALTER TABLE media DROP CONSTRAINT media_media_type_e_ck;
+        ALTER TABLE media DROP CONSTRAINT media_visibility_e_ck;
         ALTER TABLE notification DROP CONSTRAINT notification_tp_e_ck;
         ALTER TABLE preauthorized_payment DROP CONSTRAINT preauthorized_payment_created_by_discriminator_d_ck;
         ALTER TABLE preauthorized_payment DROP CONSTRAINT preauthorized_payment_payment_method_discriminator_d_ck;
         ALTER TABLE preauthorized_payment DROP CONSTRAINT preauthorized_payment_tenant_discriminator_d_ck;
         ALTER TABLE proof_of_employment_document DROP CONSTRAINT proof_of_employment_document_owner_discriminator_d_ck;
+        ALTER TABLE vendor DROP CONSTRAINT vendor_logo_media_type_e_ck;
+        ALTER TABLE vendor DROP CONSTRAINT vendor_logo_visibility_e_ck;
+
 
         
         
@@ -129,6 +139,10 @@ BEGIN
                                 ADD COLUMN info_legal_address_province BIGINT,
                                 ADD COLUMN info_legal_address_country BIGINT,
                                 ADD COLUMN info_legal_address_postal_code VARCHAR(500);
+                                
+        -- auto_pay_policy
+        
+        ALTER TABLE auto_pay_policy ADD COLUMN allow_cancelation_by_resident BOOLEAN;
        
         -- billing_billing_cycle
         
@@ -141,6 +155,59 @@ BEGIN
         ALTER TABLE building RENAME COLUMN info_address_location_lat TO info_location_lat;
         ALTER TABLE building RENAME COLUMN info_address_location_lng TO info_location_lng;
         
+        -- company_logo
+        
+        CREATE TABLE company_logo
+        (
+                id                                      BIGINT                  NOT NULL,
+                file_name                               VARCHAR(500),
+                updated_timestamp                       BIGINT,
+                cache_version                           INT,
+                file_size                               INT,
+                content_mime_type                       VARCHAR(500),
+                caption                                 VARCHAR(500),
+                description                             VARCHAR(500),
+                blob_key                                BIGINT,
+                visibility                              VARCHAR(50),
+                company                                 BIGINT                  NOT NULL,
+                        CONSTRAINT company_logo_pk PRIMARY KEY(id)
+                        
+        );
+        
+        ALTER TABLE company_logo OWNER TO vista;
+        
+        -- employee_signature
+        
+        CREATE TABLE employee_signature
+        (
+                id                                      BIGINT                  NOT NULL,
+                file_name                               VARCHAR(500),
+                updated_timestamp                       BIGINT,
+                cache_version                           INT,
+                file_size                               INT,
+                content_mime_type                       VARCHAR(500),
+                caption                                 VARCHAR(500),
+                description                             VARCHAR(500),
+                blob_key                                BIGINT,
+                employee                                BIGINT,
+                        CONSTRAINT employee_signature_pk PRIMARY KEY(id)
+        );
+        
+        ALTER TABLE employee_signature OWNER TO vista;
+        
+        
+        -- employee_signature_blob
+        
+        CREATE TABLE employee_signature_blob
+        (
+                id                                      BIGINT                  NOT NULL,
+                content_type                            VARCHAR(500),
+                data                                    BYTEA,
+                created                                 TIMESTAMP,
+                        CONSTRAINT employee_signature_blob_pk PRIMARY KEY(id)
+        );
+        
+        ALTER TABLE employee_signature_blob OWNER TO vista;
        
         -- file table renamed to notes_attachment
         
@@ -386,8 +453,25 @@ BEGIN
                                 ADD COLUMN marketing_contacts_email_value VARCHAR(500),
                                 ADD COLUMN marketing_contacts_phone_description VARCHAR(500),
                                 ADD COLUMN marketing_contacts_phone_value VARCHAR(500);
+        
+        ALTER TABLE marketing RENAME COLUMN use_property_address_as_marketing TO use_custom_address;
                                 
-                                
+     
+        -- media
+        
+        ALTER TABLE media RENAME TO media_file;
+        
+        ALTER TABLE media_file RENAME COLUMN media_file_blob_key TO blob_key;
+        ALTER TABLE media_file RENAME COLUMN media_file_cache_version TO cache_version;
+        -- ALTER TABLE media_file RENAME COLUMN media_file_caption TO caption;
+        ALTER TABLE media_file RENAME COLUMN media_file_content_mime_type TO content_mime_type;
+        ALTER TABLE media_file RENAME COLUMN media_file_description TO description;
+        ALTER TABLE media_file RENAME COLUMN media_file_file_name TO file_name;
+        ALTER TABLE media_file RENAME COLUMN media_file_file_size TO file_size;
+        ALTER TABLE media_file RENAME COLUMN media_file_updated_timestamp TO updated_timestamp;
+        
+        
+                               
         -- n4_policy
         
         CREATE TABLE n4_policy
@@ -467,6 +551,10 @@ BEGIN
         ***     =====================================================================================================
         **/
         
+        -- auto_pay_policy
+        
+        EXECUTE 'UPDATE '||v_schema_name||'.auto_pay_policy '
+                ||'SET allow_cancelation_by_resident = TRUE ';
         
         -- email_template
         
@@ -573,6 +661,11 @@ BEGIN
         
         ALTER TABLE billing_billing_cycle DROP COLUMN target_pad_generation_date;
         
+        
+        -- company
+        
+        -- DROP TABLE company;
+        
         -- customer_picture
         
         ALTER TABLE customer_picture DROP COLUMN order_id;
@@ -662,6 +755,10 @@ BEGIN
         
         ALTER TABLE tenant_insurance_policy     DROP COLUMN no_insurance_status_message,
                                                 DROP COLUMN tenant_insurance_invitation;
+                                                
+        -- vendor
+        
+        -- DROP TABLE vendor;
         
           
                  
@@ -677,6 +774,8 @@ BEGIN
         ALTER TABLE autopay_agreement ADD CONSTRAINT autopay_agreement_pk PRIMARY KEY(id);
         ALTER TABLE autopay_agreement_covered_item ADD CONSTRAINT autopay_agreement_covered_item_pk PRIMARY KEY(id);
         ALTER TABLE insurance_policy ADD CONSTRAINT insurance_policy_pk PRIMARY KEY(id);
+        ALTER TABLE media_file ADD CONSTRAINT media_file_pk PRIMARY KEY(id);
+        ALTER TABLE note_attachment ADD CONSTRAINT note_attachment_pk PRIMARY KEY(id);
         ALTER TABLE tenant_sure_insurance_policy_client ADD CONSTRAINT tenant_sure_insurance_policy_client_pk PRIMARY KEY(id);
         ALTER TABLE tenant_sure_insurance_policy_report ADD CONSTRAINT tenant_sure_insurance_policy_report_pk PRIMARY KEY(id);
         ALTER TABLE tenant_sure_transaction ADD CONSTRAINT tenant_sure_transaction_pk PRIMARY KEY(id);
@@ -697,6 +796,10 @@ BEGIN
                 REFERENCES billable_item(id)  DEFERRABLE INITIALLY DEFERRED;
         ALTER TABLE autopay_agreement_covered_item ADD CONSTRAINT autopay_agreement_covered_item_pap_fk FOREIGN KEY(pap) 
                 REFERENCES autopay_agreement(id)  DEFERRABLE INITIALLY DEFERRED;
+        ALTER TABLE building$media ADD CONSTRAINT building$media_value_fk FOREIGN KEY(value) REFERENCES media_file(id)  DEFERRABLE INITIALLY DEFERRED;
+        ALTER TABLE company_logo ADD CONSTRAINT company_logo_company_fk FOREIGN KEY(company) REFERENCES company(id)  DEFERRABLE INITIALLY DEFERRED;
+        ALTER TABLE employee_signature ADD CONSTRAINT employee_signature_employee_fk FOREIGN KEY(employee) REFERENCES employee(id)  DEFERRABLE INITIALLY DEFERRED;
+        ALTER TABLE floorplan$media ADD CONSTRAINT floorplan$media_value_fk FOREIGN KEY(value) REFERENCES media_file(id)  DEFERRABLE INITIALLY DEFERRED;
         ALTER TABLE ilsbatch$units ADD CONSTRAINT ilsbatch$units_owner_fk FOREIGN KEY(owner) REFERENCES ilsbatch(id)  DEFERRABLE INITIALLY DEFERRED;
         ALTER TABLE ilsbatch$units ADD CONSTRAINT ilsbatch$units_value_fk FOREIGN KEY(value) REFERENCES apt_unit(id)  DEFERRABLE INITIALLY DEFERRED;
         ALTER TABLE ilsbatch ADD CONSTRAINT ilsbatch_building_fk FOREIGN KEY(building) REFERENCES building(id)  DEFERRABLE INITIALLY DEFERRED;
@@ -751,6 +854,7 @@ BEGIN
         ALTER TABLE autopay_agreement ADD CONSTRAINT autopay_agreement_created_by_discriminator_d_ck CHECK ((created_by_discriminator) IN ('CrmUser', 'CustomerUser'));
         ALTER TABLE autopay_agreement ADD CONSTRAINT autopay_agreement_payment_method_discriminator_d_ck CHECK (payment_method_discriminator = 'LeasePaymentMethod');
         ALTER TABLE autopay_agreement ADD CONSTRAINT autopay_agreement_tenant_discriminator_d_ck CHECK (tenant_discriminator = 'Tenant');
+        ALTER TABLE company_logo ADD CONSTRAINT company_logo_visibility_e_ck CHECK ((visibility) IN ('global', 'internal', 'tenant'));
         ALTER TABLE identification_document ADD CONSTRAINT identification_document_owner_discriminator_d_ck 
                 CHECK ((owner_discriminator) IN ('CustomerScreening', 'CustomerScreeningIncome'));
         ALTER TABLE ilsbatch ADD CONSTRAINT ilsbatch_vendor_e_ck CHECK ((vendor) IN ('emg', 'gottarent', 'kijiji'));
@@ -784,9 +888,11 @@ BEGIN
                 'gardens', 'glade', 'glen', 'green', 'grove', 'heights', 'highway', 'lane', 'line', 'link', 'loop', 'mall', 'mews', 'other', 'packet', 
                 'parade', 'park', 'parkway', 'place', 'promenade', 'reserve', 'ridge', 'rise', 'road', 'row', 'square', 'street', 'strip', 'tarn', 'terrace', 
                 'thoroughfaree', 'track', 'trunkway', 'view', 'vista', 'walk', 'walkway', 'way', 'yard'));
+        ALTER TABLE media_file ADD CONSTRAINT media_file_visibility_e_ck CHECK ((visibility) IN ('global', 'internal', 'tenant'));
         ALTER TABLE n4_policy ADD CONSTRAINT n4_policy_node_discriminator_d_ck 
                 CHECK ((node_discriminator) IN ('Disc Complex', 'Disc_Building', 'Disc_Country', 'Disc_Floorplan', 'Disc_Province', 'OrganizationPoliciesNode', 'Unit_BuildingElement'));
-        ALTER TABLE notification ADD CONSTRAINT notification_tp_e_ck CHECK ((tp) IN ('AutoPayReviewRequired', 'ElectronicPaymentRejectedNsf', 'MaintenanceRequest'));
+        ALTER TABLE notification ADD CONSTRAINT notification_tp_e_ck 
+                CHECK ((tp) IN ('AutoPayCanceledByResident', 'AutoPayReviewRequired', 'ElectronicPaymentRejectedNsf', 'MaintenanceRequest'));
         ALTER TABLE proof_of_employment_document ADD CONSTRAINT proof_of_employment_document_owner_discriminator_d_ck 
                 CHECK ((owner_discriminator) IN ('CustomerScreening', 'CustomerScreeningIncome'));
         ALTER TABLE tenant_sure_insurance_policy_client ADD CONSTRAINT tenant_sure_insurance_policy_client_tenant_discriminator_d_ck CHECK (tenant_discriminator = 'Tenant');
@@ -798,6 +904,7 @@ BEGIN
         ALTER TABLE tenant_sure_transaction ADD CONSTRAINT tenant_sure_transaction_payment_method_discriminator_d_ck CHECK (payment_method_discriminator = 'InsurancePaymentMethod');
         ALTER TABLE tenant_sure_transaction ADD CONSTRAINT tenant_sure_transaction_status_e_ck 
                 CHECK ((status) IN ('AuthorizationRejected', 'AuthorizationReversal', 'Authorized', 'AuthorizedPaymentRejectedRetry', 'Cleared', 'Draft', 'PaymentError', 'PaymentRejected'));
+       
 
 
        
