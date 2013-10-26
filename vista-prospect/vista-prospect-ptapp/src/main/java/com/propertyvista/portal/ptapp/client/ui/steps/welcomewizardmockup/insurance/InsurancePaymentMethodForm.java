@@ -11,7 +11,7 @@
  * @author Dad
  * @version $Id$
  */
-package com.propertyvista.common.client.moveinwizardmockup;
+package com.propertyvista.portal.ptapp.client.ui.steps.welcomewizardmockup.insurance;
 
 import java.util.Date;
 

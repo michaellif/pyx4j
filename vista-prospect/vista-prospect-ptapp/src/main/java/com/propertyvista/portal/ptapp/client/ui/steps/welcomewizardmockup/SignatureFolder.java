@@ -11,7 +11,7 @@
  * @author vladlouk
  * @version $Id$
  */
-package com.propertyvista.common.client.moveinwizardmockup.components;
+package com.propertyvista.portal.ptapp.client.ui.steps.welcomewizardmockup;
 
 import com.google.gwt.user.client.ui.IsWidget;
 

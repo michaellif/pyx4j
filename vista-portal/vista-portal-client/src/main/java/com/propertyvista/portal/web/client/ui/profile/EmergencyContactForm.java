@@ -25,7 +25,7 @@ import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.domain.person.Name;
 import com.propertyvista.domain.tenant.EmergencyContact;
-import com.propertyvista.portal.web.client.ui.AddressSimpleEditor;
+import com.propertyvista.portal.web.client.ui.PortalAddressSimpleEditor;
 import com.propertyvista.portal.web.client.ui.util.decorators.FormWidgetDecoratorBuilder;
 
 public class EmergencyContactForm extends CEntityForm<EmergencyContact> {
@@ -56,7 +56,7 @@ public class EmergencyContactForm extends CEntityForm<EmergencyContact> {
         mainPanel.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().mobilePhone()), 200).build());
         mainPanel.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().workPhone()), 200).build());
 
-        mainPanel.setWidget(++row, 0, inject(proto().address(), new AddressSimpleEditor()));
+        mainPanel.setWidget(++row, 0, inject(proto().address(), new PortalAddressSimpleEditor()));
 
         calculateFieldsStatus();
 

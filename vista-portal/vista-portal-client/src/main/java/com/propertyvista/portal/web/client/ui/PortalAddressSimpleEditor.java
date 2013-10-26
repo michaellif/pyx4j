@@ -32,9 +32,9 @@ import com.propertyvista.domain.ref.Country;
 import com.propertyvista.domain.ref.Province;
 import com.propertyvista.portal.web.client.ui.util.decorators.FormWidgetDecoratorBuilder;
 
-public class AddressSimpleEditor extends CEntityForm<AddressSimple> {
+public class PortalAddressSimpleEditor extends CEntityForm<AddressSimple> {
 
-    public AddressSimpleEditor() {
+    public PortalAddressSimpleEditor() {
         super(AddressSimple.class);
     }
 

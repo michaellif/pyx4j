@@ -17,6 +17,7 @@ import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.commons.EqualsHelper;
 import com.pyx4j.forms.client.ui.CComponent;
+import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.ui.CTextFieldBase;
 import com.pyx4j.forms.client.ui.OptionsFilter;
 import com.pyx4j.forms.client.ui.RevalidationTrigger;
@@ -24,7 +25,6 @@ import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
 
-import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
 import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
 import com.propertyvista.common.client.ui.validators.ProvinceContryFilters;
 import com.propertyvista.common.client.ui.validators.ZipCodeValueValidator;
@@ -32,7 +32,7 @@ import com.propertyvista.domain.contact.AddressSimple;
 import com.propertyvista.domain.ref.Country;
 import com.propertyvista.domain.ref.Province;
 
-public class AddressSimpleEditor extends CEntityDecoratableForm<AddressSimple> {
+public class AddressSimpleEditor extends CEntityForm<AddressSimple> {
 
     private static final I18n i18n = I18n.get(AddressSimpleEditor.class);
 

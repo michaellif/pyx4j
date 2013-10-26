@@ -11,9 +11,9 @@
  * @author ArtyomB
  * @version $Id$
  */
-package com.propertyvista.common.client.moveinwizardmockup;
+package com.propertyvista.portal.ptapp.client.ui.steps.welcomewizardmockup.insurance;
 
-import static com.propertyvista.common.client.moveinwizardmockup.components.Utils.asBigDecimals;
+import static com.propertyvista.portal.ptapp.client.ui.steps.welcomewizardmockup.Utils.asBigDecimals;
 
 import java.math.BigDecimal;
 import java.math.MathContext;
@@ -39,14 +39,14 @@ import com.pyx4j.forms.client.ui.IFormat;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
 
-import com.propertyvista.common.client.moveinwizardmockup.components.LegalTermsFolder;
-import com.propertyvista.common.client.moveinwizardmockup.components.MoneyLabeledCombo;
-import com.propertyvista.common.client.moveinwizardmockup.components.MultiDisclosurePanel;
-import com.propertyvista.common.client.moveinwizardmockup.components.SignatureFolder;
-import com.propertyvista.common.client.moveinwizardmockup.components.Utils;
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
 import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
 import com.propertyvista.domain.moveinwizardmockup.PurchaseInsuranceDTO;
+import com.propertyvista.portal.ptapp.client.ui.steps.welcomewizardmockup.LegalTermsFolder;
+import com.propertyvista.portal.ptapp.client.ui.steps.welcomewizardmockup.MoneyLabeledCombo;
+import com.propertyvista.portal.ptapp.client.ui.steps.welcomewizardmockup.MultiDisclosurePanel;
+import com.propertyvista.portal.ptapp.client.ui.steps.welcomewizardmockup.SignatureFolder;
+import com.propertyvista.portal.ptapp.client.ui.steps.welcomewizardmockup.Utils;
 
 public class InsurancePurchaseForm extends CEntityDecoratableForm<PurchaseInsuranceDTO> {
 

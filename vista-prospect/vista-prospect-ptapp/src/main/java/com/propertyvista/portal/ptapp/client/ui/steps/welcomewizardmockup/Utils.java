@@ -11,7 +11,7 @@
  * @author ArtyomB
  * @version $Id$
  */
-package com.propertyvista.common.client.moveinwizardmockup.components;
+package com.propertyvista.portal.ptapp.client.ui.steps.welcomewizardmockup;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;

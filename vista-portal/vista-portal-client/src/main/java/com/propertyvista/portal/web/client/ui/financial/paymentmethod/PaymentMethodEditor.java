@@ -32,7 +32,7 @@ import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
 import com.propertyvista.domain.payment.AbstractPaymentMethod;
 import com.propertyvista.domain.payment.CreditCardInfo.CreditCardType;
 import com.propertyvista.domain.payment.PaymentType;
-import com.propertyvista.portal.web.client.ui.AddressSimpleEditor;
+import com.propertyvista.portal.web.client.ui.PortalAddressSimpleEditor;
 import com.propertyvista.portal.web.client.ui.financial.PortalPaymentTypesUtil;
 import com.propertyvista.portal.web.client.ui.util.decorators.FormWidgetDecoratorBuilder;
 
@@ -62,7 +62,7 @@ public class PaymentMethodEditor<E extends AbstractPaymentMethod> extends com.pr
 
         content.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().sameAsCurrent())).build());
 
-        content.setWidget(++row, 0, inject(proto().billingAddress(), new AddressSimpleEditor()));
+        content.setWidget(++row, 0, inject(proto().billingAddress(), new PortalAddressSimpleEditor()));
 
         // tweaks:
         ((CComboBox<PaymentType>) get(proto().type())).setOptions(defaultPaymentTypes());
