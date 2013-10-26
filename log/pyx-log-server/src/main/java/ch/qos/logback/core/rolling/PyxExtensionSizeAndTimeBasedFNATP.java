@@ -48,13 +48,16 @@ public class PyxExtensionSizeAndTimeBasedFNATP<E> extends ch.qos.logback.core.ro
     @Override
     public boolean isTriggeringEvent(File activeFile, final E event) {
         boolean trigger = super.isTriggeringEvent(activeFile, event);
-        if (!fistEvenFired && isRolloverOnStart() && activeFile.exists() && (activeFile.length() > 0)) {
+        if (!fistEvenFired) {
             fistEvenFired = true;
-            elapsedPeriodsFileName = tbrp.fileNamePatternWCS.convertMultipleArguments(dateInCurrentPeriod, currentPeriodsCounter);
-            currentPeriodsCounter++;
-            return true;
+            if (isRolloverOnStart() && activeFile.exists() && (activeFile.length() > 0)) {
+                elapsedPeriodsFileName = tbrp.fileNamePatternWCS.convertMultipleArguments(dateInCurrentPeriod, currentPeriodsCounter);
+                currentPeriodsCounter++;
+                return true;
+            } else {
+                return trigger;
+            }
         } else {
-            fistEvenFired = true;
             return trigger;
         }
     }
