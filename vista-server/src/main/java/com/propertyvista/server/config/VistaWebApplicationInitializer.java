@@ -239,7 +239,7 @@ public class VistaWebApplicationInitializer implements ServletContainerInitializ
             {
                 ServletRegistration.Dynamic sc = ctx.addServlet("InsuranceCertificateScanServlet", InsuranceCertificateScanServlet.class);
                 sc.addMapping(urlPattern(VistaApplication.crm, "/certificate_scan/*"));
-                sc.addMapping(urlPattern(VistaApplication.prospect, "/certificate_scan/*"));
+                sc.addMapping(urlPattern(VistaApplication.portal, "/certificate_scan/*"));
             }
 
         }

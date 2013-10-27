@@ -80,7 +80,7 @@ public class MediaUtils {
     }
 
     public static String createInsuranceCertificateScanUrl(InsuranceCertificateScan certificateScan) {
-        return ClientNavigUtils.getDeploymentBaseURL() + DeploymentConsts.insuranceCertificateScanMapping + certificateScan.id().getStringView() + "/"
+        return GWT.getModuleBaseURL() + DeploymentConsts.insuranceCertificateScanMapping + certificateScan.id().getStringView() + "/"
                 + certificateScan.fileName().getStringView();
     }
 
