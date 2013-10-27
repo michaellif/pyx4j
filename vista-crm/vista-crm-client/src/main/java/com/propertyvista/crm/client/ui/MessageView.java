@@ -15,7 +15,6 @@ package com.propertyvista.crm.client.ui;
 
 import com.google.gwt.user.client.ui.IsWidget;
 
-
 import com.pyx4j.site.client.IsView;
 
 public interface MessageView extends IsWidget, IsView {

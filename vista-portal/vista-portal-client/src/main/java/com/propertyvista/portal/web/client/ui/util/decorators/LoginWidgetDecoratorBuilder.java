@@ -16,6 +16,7 @@ package com.propertyvista.portal.web.client.ui.util.decorators;
 import com.pyx4j.forms.client.ui.CCaptcha;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CTextFieldBase;
+
 import com.propertyvista.portal.web.client.ui.util.decorators.PortalWidgetDecorator.Builder;
 
 /** Sets up defaults for Landing Forms (Login, Password Reset, TenantRegsitration etc.. ), right now intended to be used not with 'editable' forms only */

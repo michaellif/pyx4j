@@ -17,10 +17,9 @@ import java.util.List;
 
 import com.google.gwt.user.client.ui.IsWidget;
 
-import com.propertyvista.crm.client.activity.NavigFolder;
-
-
 import com.pyx4j.site.client.IsView;
+
+import com.propertyvista.crm.client.activity.NavigFolder;
 
 public interface NavigView extends IsWidget, IsView {
 

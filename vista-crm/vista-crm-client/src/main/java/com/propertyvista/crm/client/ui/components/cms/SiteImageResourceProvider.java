@@ -30,8 +30,8 @@ import com.google.gwt.user.client.ui.Label;
 import com.pyx4j.entity.rpc.EntitySearchResult;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.criterion.EntityListCriteria;
-import com.pyx4j.gwt.client.upload.UploadReceiver;
 import com.pyx4j.gwt.client.upload.UploadPanel;
+import com.pyx4j.gwt.client.upload.UploadReceiver;
 import com.pyx4j.gwt.rpc.upload.UploadService;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.dialog.CloseOption;
@@ -41,10 +41,8 @@ import com.pyx4j.widgets.client.richtext.ImageGallery;
 import com.pyx4j.widgets.client.richtext.RichTextImageProvider;
 
 import com.propertyvista.common.client.ui.components.MediaUtils;
-import com.propertyvista.common.client.ui.components.PmcDocumentFileUploaderDialog;
 import com.propertyvista.crm.rpc.services.admin.SiteImageResourceCrudService;
 import com.propertyvista.crm.rpc.services.admin.SiteImageResourceUploadService;
-import com.propertyvista.domain.pmc.info.PmcDocumentFile;
 import com.propertyvista.domain.site.SiteImageResource;
 
 public class SiteImageResourceProvider extends Dialog implements CloseOption, RichTextImageProvider {

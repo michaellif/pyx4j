@@ -13,7 +13,6 @@
  */
 package com.propertyvista.portal.web.client.ui.services.insurance;
 
-import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.IsWidget;
 
@@ -29,7 +28,6 @@ import com.pyx4j.widgets.client.Button;
 import com.propertyvista.common.client.ui.components.MediaUtils;
 import com.propertyvista.domain.tenant.insurance.InsuranceCertificateScan;
 import com.propertyvista.portal.rpc.portal.web.dto.insurance.GeneralInsurancePolicyDTO;
-import com.propertyvista.portal.rpc.portal.web.services.services.GeneralInsurancePolicyUploadService;
 import com.propertyvista.portal.web.client.ui.CPortalEntityForm;
 import com.propertyvista.portal.web.client.ui.util.decorators.FormWidgetDecoratorBuilder;
 

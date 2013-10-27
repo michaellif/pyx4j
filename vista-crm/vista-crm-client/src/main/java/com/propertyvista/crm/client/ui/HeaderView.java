@@ -4,10 +4,9 @@ import java.util.List;
 
 import com.google.gwt.user.client.ui.IsWidget;
 
-import com.propertyvista.shared.i18n.CompiledLocale;
-
-
 import com.pyx4j.site.client.IsView;
+
+import com.propertyvista.shared.i18n.CompiledLocale;
 
 public interface HeaderView extends IsWidget, IsView {
 

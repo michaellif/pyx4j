@@ -37,7 +37,6 @@ import com.pyx4j.widgets.client.PopupWindow.PopupWindowHandle;
 
 import com.propertyvista.common.client.ui.components.MediaUtils;
 import com.propertyvista.domain.site.SocialLink;
-import com.propertyvista.misc.VistaTODO;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap;
 import com.propertyvista.portal.rpc.portal.web.dto.PortalFooterContentDTO;
 import com.propertyvista.portal.web.client.resources.PortalImages;

@@ -14,7 +14,6 @@
 package com.propertyvista.portal.web.client.ui.maintenance;
 
 import com.google.gwt.user.client.Command;
-import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.commons.css.ThemeColor;
@@ -26,7 +25,6 @@ import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.Button;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
-import com.pyx4j.widgets.client.dialog.OkCancelDialog;
 
 import com.propertyvista.domain.maintenance.MaintenanceRequestCategory;
 import com.propertyvista.domain.maintenance.MaintenanceRequestPriority;

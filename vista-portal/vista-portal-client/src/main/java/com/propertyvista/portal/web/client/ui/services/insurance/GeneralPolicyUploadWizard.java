@@ -30,7 +30,6 @@ import com.pyx4j.gwt.shared.FileURLBuilder;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.common.client.ui.components.MediaUtils;
-import com.propertyvista.domain.site.SiteImageResource;
 import com.propertyvista.domain.tenant.Customer;
 import com.propertyvista.domain.tenant.insurance.InsuranceCertificateScan;
 import com.propertyvista.domain.tenant.lease.Tenant;

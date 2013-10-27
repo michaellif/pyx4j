@@ -32,8 +32,8 @@ import com.propertyvista.crm.client.ui.crud.customer.lead.LeadViewerView;
 import com.propertyvista.crm.rpc.services.customer.lead.LeadCrudService;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.tenant.lead.Appointment;
-import com.propertyvista.domain.tenant.lead.Lead.ConvertToLeaseAppraisal;
 import com.propertyvista.domain.tenant.lead.Lead;
+import com.propertyvista.domain.tenant.lead.Lead.ConvertToLeaseAppraisal;
 
 public class LeadViewerActivity extends CrmViewerActivity<Lead> implements LeadViewerView.Presenter {
 
