@@ -31,6 +31,8 @@ public interface DeploymentConsts {
 
     public static final String pmcDocumentServletMapping = "pmc_document/";
 
+    public static final String insuranceCertificateScanMapping = "certificate_scan/";
+
     public static final String legalLetterServletMappning = "legal_letter/";
 
     public static final String employeeSignatureServletMapping = "employee_signature/";

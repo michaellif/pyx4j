@@ -55,15 +55,14 @@ public class GeneralPolicyPage extends CPortalEntityForm<GeneralInsurancePolicyD
                 ++row,
                 0,
                 1,
-                new FormWidgetDecoratorBuilder(inject(proto().certificate().certificateScan(),
-                        new CFile<InsuranceCertificateScan>(GWT.<GeneralInsurancePolicyUploadService> create(GeneralInsurancePolicyUploadService.class),
-                                new FileURLBuilder<InsuranceCertificateScan>() {
+                new FormWidgetDecoratorBuilder(inject(proto().certificate().certificateScan(), new CFile<InsuranceCertificateScan>(null,
+                        new FileURLBuilder<InsuranceCertificateScan>() {
 
-                                    @Override
-                                    public String getUrl(InsuranceCertificateScan file) {
-                                        return MediaUtils.createInsuranceCertificateScanUrl(file);
-                                    }
-                                })), 200).build());
+                            @Override
+                            public String getUrl(InsuranceCertificateScan file) {
+                                return MediaUtils.createInsuranceCertificateScanUrl(file);
+                            }
+                        })), 200).build());
 
         return mainPanel;
 
