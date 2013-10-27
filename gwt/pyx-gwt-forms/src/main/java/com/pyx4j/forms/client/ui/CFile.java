@@ -20,9 +20,6 @@
  */
 package com.pyx4j.forms.client.ui;
 
-import com.google.gwt.user.client.Command;
-import com.google.gwt.user.client.Window;
-
 import com.pyx4j.entity.shared.IFile;
 import com.pyx4j.gwt.rpc.upload.UploadService;
 import com.pyx4j.gwt.shared.FileURLBuilder;
@@ -41,14 +38,6 @@ public class CFile<E extends IFile> extends CField<E, NFile<E>> {
         this.fileUrlBuilder = fileURLBuilder;
 
         setNativeWidget(new NFile<E>(this));
-
-        setNavigationCommand(new Command() {
-
-            @Override
-            public void execute() {
-                Window.open(fileUrlBuilder.getUrl(getValue()), "_blank", null);
-            }
-        });
 
         setFormat(new IFormat<E>() {
             @Override
@@ -72,7 +61,8 @@ public class CFile<E extends IFile> extends CField<E, NFile<E>> {
         return format;
     }
 
-    public String getImageUrl(E file) {
+    public String getImageUrl() {
+        E file = getValue();
         if (file == null || file.isNull() || fileUrlBuilder == null) {
             return null;
         } else {
@@ -83,4 +73,5 @@ public class CFile<E extends IFile> extends CField<E, NFile<E>> {
     UploadService<?, E> getUploadService() {
         return service;
     }
+
 }

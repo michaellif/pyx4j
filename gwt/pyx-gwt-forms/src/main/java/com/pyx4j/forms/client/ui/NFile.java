@@ -23,6 +23,7 @@ package com.pyx4j.forms.client.ui;
 import java.text.ParseException;
 
 import com.google.gwt.user.client.Command;
+import com.google.gwt.user.client.Window;
 
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IFile;
@@ -47,9 +48,7 @@ public class NFile<E extends IFile> extends NField<E, Anchor, CFile<E>, Anchor> 
 
             @Override
             public void execute() {
-                if (getCComponent().getNavigationCommand() != null) {
-                    getCComponent().getNavigationCommand().execute();
-                }
+                Window.open(getCComponent().getImageUrl(), "_blank", null);
             }
         });
 
