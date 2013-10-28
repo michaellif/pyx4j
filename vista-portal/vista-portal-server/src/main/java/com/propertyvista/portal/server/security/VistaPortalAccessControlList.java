@@ -104,6 +104,7 @@ import com.propertyvista.portal.rpc.ptapp.services.steps.welcomewizardmockup.Lea
 import com.propertyvista.portal.rpc.ptapp.services.steps.welcomewizardmockup.MoveInScheduleService;
 import com.propertyvista.portal.rpc.ptapp.services.steps.welcomewizardmockup.ResetWizardService;
 import com.propertyvista.portal.rpc.shared.services.CreditCardValidationService;
+import com.propertyvista.portal.server.security.access.GeneralInsurancePolicyDatasetAccessRule;
 import com.propertyvista.portal.server.security.access.LeasePaymentMethodTenantDatasetAccessRule;
 import com.propertyvista.portal.server.security.access.LeaseTenantDatasetAccessRule;
 import com.propertyvista.server.common.security.UserEntityInstanceAccess;
@@ -296,6 +297,7 @@ public class VistaPortalAccessControlList extends ServletContainerAclBuilder {
         grant(VistaCustomerBehavior.Tenant, VistaDataAccessBehavior.TenantInPortal);
         grant(VistaDataAccessBehavior.TenantInPortal, new LeaseTenantDatasetAccessRule(), Lease.class);
         grant(VistaDataAccessBehavior.TenantInPortal, new LeasePaymentMethodTenantDatasetAccessRule(), LeasePaymentMethod.class);
+        grant(VistaDataAccessBehavior.TenantInPortal, new GeneralInsurancePolicyDatasetAccessRule(), GeneralInsurancePolicy.class);
 
         grant(new IServiceExecutePermission(FooterContentService.class));
         freeze();
