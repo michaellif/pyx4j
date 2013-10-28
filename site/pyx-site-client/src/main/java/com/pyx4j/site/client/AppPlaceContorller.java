@@ -30,7 +30,6 @@ import com.google.gwt.place.shared.PlaceController;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.Window.ClosingEvent;
 import com.google.gwt.user.client.Window.ClosingHandler;
-import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.web.bindery.event.shared.EventBus;
 
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
@@ -129,7 +128,6 @@ public final class AppPlaceContorller extends PlaceController {
                 @Override
                 public void onConfirmed() {
                     sureGoTo(newPlace);
-
                 }
 
                 @Override
