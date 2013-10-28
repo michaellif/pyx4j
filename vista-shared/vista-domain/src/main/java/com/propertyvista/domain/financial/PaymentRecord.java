@@ -36,6 +36,7 @@ import com.pyx4j.entity.annotations.ReadOnly;
 import com.pyx4j.entity.annotations.RequireFeature;
 import com.pyx4j.entity.annotations.Timestamp;
 import com.pyx4j.entity.annotations.ToString;
+import com.pyx4j.entity.annotations.ToStringFormat;
 import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.AttachLevel;
 import com.pyx4j.entity.shared.IEntity;
@@ -61,6 +62,7 @@ import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
  * 
  * @author Alexs
  */
+@ToStringFormat("{0}, ${1} - {2}")
 public interface PaymentRecord extends IEntity {
 
     @I18n
@@ -161,7 +163,7 @@ public interface PaymentRecord extends IEntity {
 
     @Override
     @Indexed
-    @ToString
+    @ToString(index = 0)
     IPrimitive<Key> id();
 
     @ReadOnly
@@ -185,6 +187,7 @@ public interface PaymentRecord extends IEntity {
      */
     IPrimitive<LogicalDate> targetDate();
 
+    @ToString(index = 1)
     @NotNull
     @Format("#,##0.00")
     @Editor(type = EditorType.money)
@@ -192,6 +195,7 @@ public interface PaymentRecord extends IEntity {
 
     LeasePaymentMethod paymentMethod();
 
+    @ToString(index = 2)
     @Editor(type = EditorType.label)
     IPrimitive<PaymentStatus> paymentStatus();
 

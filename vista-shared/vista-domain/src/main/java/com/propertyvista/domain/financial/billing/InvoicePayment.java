@@ -15,12 +15,16 @@ package com.propertyvista.domain.financial.billing;
  */
 
 import com.pyx4j.entity.annotations.DiscriminatorValue;
+import com.pyx4j.entity.annotations.ToString;
+import com.pyx4j.entity.annotations.ToStringFormat;
 
 import com.propertyvista.domain.financial.PaymentRecord;
 
+@ToStringFormat("{3}")
 @DiscriminatorValue("Payment")
 public interface InvoicePayment extends InvoiceCredit {
 
+    @ToString(index = 3)
     PaymentRecord paymentRecord();
 
 }

@@ -20,8 +20,9 @@ import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CDateLabel;
 import com.pyx4j.forms.client.ui.CEntityForm;
-import com.pyx4j.forms.client.ui.CLabel;
+import com.pyx4j.forms.client.ui.CEnumLabel;
 import com.pyx4j.forms.client.ui.CMoneyLabel;
+import com.pyx4j.forms.client.ui.CNumberLabel;
 import com.pyx4j.forms.client.ui.folder.BoxFolderItemDecorator;
 import com.pyx4j.forms.client.ui.folder.IFolderItemDecorator;
 import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
@@ -107,9 +108,11 @@ public class LatestActivitiesGadget extends AbstractGadget<FinancialDashboardVie
                 BasicFlexFormPanel content = new BasicFlexFormPanel();
                 int row = -1;
 
-                content.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().amount(), new CMoneyLabel()), 100).build());
-                content.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().postDate(), new CDateLabel()), 100).build());
-                content.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().description(), new CLabel<String>()), 250).build());
+                content.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().paymentRecord().id(), new CNumberLabel())).build());
+                content.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().paymentRecord().amount(), new CMoneyLabel())).build());
+                content.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().paymentRecord().paymentStatus(), new CEnumLabel())).build());
+                content.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().postDate(), new CDateLabel())).build());
+//                content.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().description(), new CLabel<String>())).build());
 
                 return content;
             }
