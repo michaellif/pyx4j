@@ -39,7 +39,6 @@ import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.common.client.resources.VistaImages;
 import com.propertyvista.common.client.ui.components.MediaUtils;
-import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
 import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
 import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
 import com.propertyvista.crm.client.ui.crud.administration.website.general.AvailableLocaleSelectorDialog;
@@ -125,13 +124,13 @@ public class PortalImageSetFolder extends VistaBoxFolder<PortalImageSet> {
         return super.create(member);
     }
 
-    class PortalImageSetEditor extends CEntityDecoratableForm<PortalImageSet> {
+    class PortalImageSetEditor extends CEntityForm<PortalImageSet> {
         private final CImageSlider<SiteImageResource> imageHolder;
 
         public PortalImageSetEditor() {
             super(PortalImageSet.class);
             imageHolder = new CImageSlider<SiteImageResource>(SiteImageResource.class,
-                    GWT.<SiteImageResourceUploadService> create(SiteImageResourceUploadService.class)) {
+                    GWT.<SiteImageResourceUploadService> create(SiteImageResourceUploadService.class), new ImageFileURLBuilder()) {
                 @Override
                 protected EntityFolderImages getFolderIcons() {
                     return VistaImages.INSTANCE;
@@ -146,8 +145,6 @@ public class PortalImageSetFolder extends VistaBoxFolder<PortalImageSet> {
                     return infoPanel;
                 }
             };
-            imageHolder.setImageFileUrlBuilder(new ImageFileURLBuilder());
-            imageHolder.setThumbnailFileUrlBuilder(new ImageFileURLBuilder());
         }
 
         public void setImageSize(int width, int height) {

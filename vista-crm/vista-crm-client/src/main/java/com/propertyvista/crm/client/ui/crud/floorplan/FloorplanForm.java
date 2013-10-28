@@ -92,7 +92,7 @@ public class FloorplanForm extends CrmEntityForm<FloorplanDTO> {
 
         main.setH1(++row, 0, 2, i18n.tr("Images"));
         CImageSlider<MediaFile> imageSlider = new CImageSlider<MediaFile>(MediaFile.class,
-                GWT.<MediaUploadFloorplanService> create(MediaUploadFloorplanService.class)) {
+                GWT.<MediaUploadFloorplanService> create(MediaUploadFloorplanService.class), new MediaImageUrlBuilder()) {
             @Override
             protected EntityFolderImages getFolderIcons() {
                 return VistaImages.INSTANCE;
@@ -110,12 +110,6 @@ public class FloorplanForm extends CrmEntityForm<FloorplanDTO> {
                 return main;
             }
         };
-        imageSlider.setImageFileUrlBuilder(new FileURLBuilder<MediaFile>() {
-            @Override
-            public String getUrl(MediaFile file) {
-                return MediaUtils.createMediaImageUrl(file);
-            }
-        });
         imageSlider.setImageSize(240, 160);
         main.setWidget(++row, 0, 2, inject(proto().media(), imageSlider));
 
@@ -219,4 +213,11 @@ public class FloorplanForm extends CrmEntityForm<FloorplanDTO> {
             }
         }
     }
+
+    class MediaImageUrlBuilder implements FileURLBuilder<MediaFile> {
+        @Override
+        public String getUrl(MediaFile file) {
+            return MediaUtils.createMediaImageUrl(file);
+        }
+    };
 }

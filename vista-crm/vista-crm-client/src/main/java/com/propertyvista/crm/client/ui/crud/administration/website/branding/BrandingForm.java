@@ -14,18 +14,14 @@
 package com.propertyvista.crm.client.ui.crud.administration.website.branding;
 
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.user.client.ui.SimplePanel;
-import com.google.gwt.user.client.ui.Widget;
 
-import com.pyx4j.forms.client.images.EntityFolderImages;
-import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.ui.CImage;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.gwt.shared.FileURLBuilder;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.prime.form.IForm;
+import com.pyx4j.widgets.client.ImageViewport.ScaleMode;
 
-import com.propertyvista.common.client.resources.VistaImages;
 import com.propertyvista.common.client.ui.components.MediaUtils;
 import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
@@ -80,26 +76,15 @@ public class BrandingForm extends CrmEntityForm<SiteDescriptorDTO> {
     private TwoColumnFlexFormPanel createCrmLogoTab() {
         TwoColumnFlexFormPanel content = new TwoColumnFlexFormPanel(proto().crmLogo().getMeta().getCaption());
 
-        CImage<SiteImageResource> file = new CImage<SiteImageResource>(GWT.<SiteImageResourceUploadService> create(SiteImageResourceUploadService.class)) {
-            @Override
-            public Widget getImageEntryView(CEntityForm<SiteImageResource> entryForm) {
-                SimplePanel main = new SimplePanel();
-                main.setWidget(new FormDecoratorBuilder(entryForm.inject(entryForm.proto().caption()), 8, 15, 16).build());
-                return main;
-            }
-
-            @Override
-            protected EntityFolderImages getFolderIcons() {
-                return VistaImages.INSTANCE;
-            }
-        };
-        file.setFileUrlBuilder(new FileURLBuilder<SiteImageResource>() {
-            @Override
-            public String getUrl(SiteImageResource file) {
-                return MediaUtils.createSiteImageResourceUrl(file);
-            }
-        });
+        CImage<SiteImageResource> file = new CImage<SiteImageResource>(GWT.<SiteImageResourceUploadService> create(SiteImageResourceUploadService.class),
+                new FileURLBuilder<SiteImageResource>() {
+                    @Override
+                    public String getUrl(SiteImageResource file) {
+                        return MediaUtils.createSiteImageResourceUrl(file);
+                    }
+                });
         file.setImageSize(150, 100);
+        file.setScaleMode(ScaleMode.Contain);
 
         content.setWidget(0, 0, new FormDecoratorBuilder(inject(proto().crmLogo(), file), 20).build());
 

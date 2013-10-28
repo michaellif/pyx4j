@@ -18,15 +18,11 @@ import java.util.List;
 import com.google.gwt.core.shared.GWT;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.IsWidget;
-import com.google.gwt.user.client.ui.VerticalPanel;
-import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.commons.css.ThemeColor;
 import com.pyx4j.entity.shared.utils.EntityGraph;
-import com.pyx4j.forms.client.images.EntityFolderImages;
 import com.pyx4j.forms.client.ui.CComponent;
-import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.ui.CEntityLabel;
 import com.pyx4j.forms.client.ui.CImage;
 import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
@@ -61,19 +57,8 @@ public class ProfilePage extends CPortalEntityEditor<ResidentProfileDTO> {
         BasicFlexFormPanel mainPanel = new BasicFlexFormPanel();
         int row = -1;
 
-        CImage<CustomerPicture> imageHolder = new CImage<CustomerPicture>(GWT.<ResidentPictureUploadService> create(ResidentPictureUploadService.class)) {
-            @Override
-            protected EntityFolderImages getFolderIcons() {
-                return VistaImages.INSTANCE;
-            }
-
-            @Override
-            public Widget getImageEntryView(CEntityForm<CustomerPicture> entryForm) {
-                VerticalPanel infoPanel = new VerticalPanel();
-                return infoPanel;
-            }
-        };
-        imageHolder.setFileUrlBuilder(new ImageFileURLBuilder());
+        CImage<CustomerPicture> imageHolder = new CImage<CustomerPicture>(GWT.<ResidentPictureUploadService> create(ResidentPictureUploadService.class),
+                new ImageFileURLBuilder());
         imageHolder.setImageSize(150, 200);
         imageHolder.setThumbnailPlaceholder(new Image(VistaImages.INSTANCE.profilePicture()));
 
@@ -81,8 +66,8 @@ public class ProfilePage extends CPortalEntityEditor<ResidentProfileDTO> {
 
         mainPanel.setH1(++row, 0, 1, i18n.tr("Basic Information"));
 
-        mainPanel.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().person().name(), new CEntityLabel<Name>()), 200)
-                .customLabel(i18n.tr("Full Name")).build());
+        mainPanel.setWidget(++row, 0,
+                new FormWidgetDecoratorBuilder(inject(proto().person().name(), new CEntityLabel<Name>()), 200).customLabel(i18n.tr("Full Name")).build());
 
         mainPanel.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().person().sex()), 100).build());
         mainPanel.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().person().birthDate()), 150).build());

@@ -21,18 +21,13 @@ import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.IsWidget;
-import com.google.gwt.user.client.ui.VerticalPanel;
-import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.commons.Key;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IObject;
-import com.pyx4j.forms.client.images.EntityFolderImages;
 import com.pyx4j.forms.client.ui.CComponent;
-import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.ui.CEnumLabel;
 import com.pyx4j.forms.client.ui.CImage;
-import com.pyx4j.forms.client.ui.CLabel;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
 import com.pyx4j.forms.client.validators.ValidationError;
@@ -154,27 +149,13 @@ public class EmployeeForm extends CrmEntityForm<EmployeeDTO> {
 
         main.setH3(++row, 0, 2, i18n.tr("Signature"));
 
-        CImage<EmployeeSignature> signature = new CImage<EmployeeSignature>(GWT.<EmployeeSignatureUploadService> create(EmployeeSignatureUploadService.class)) {
-
-            @Override
-            public Widget getImageEntryView(CEntityForm<EmployeeSignature> entryForm) {
-                VerticalPanel infoPanel = new VerticalPanel();
-                infoPanel.add(new FormDecoratorBuilder(entryForm.inject(entryForm.proto().fileName(), new CLabel<String>())).build());
-                infoPanel.add(new FormDecoratorBuilder(entryForm.inject(entryForm.proto().caption())).build());
-                return infoPanel;
-            }
-
-            @Override
-            protected EntityFolderImages getFolderIcons() {
-                return VistaImages.INSTANCE;
-            }
-        };
-        signature.setFileUrlBuilder(new FileURLBuilder<EmployeeSignature>() {
-            @Override
-            public String getUrl(EmployeeSignature employeeSignature) {
-                return MediaUtils.createEmployeeSignatureUrl(employeeSignature);
-            }
-        });
+        CImage<EmployeeSignature> signature = new CImage<EmployeeSignature>(GWT.<EmployeeSignatureUploadService> create(EmployeeSignatureUploadService.class),
+                new FileURLBuilder<EmployeeSignature>() {
+                    @Override
+                    public String getUrl(EmployeeSignature employeeSignature) {
+                        return MediaUtils.createEmployeeSignatureUrl(employeeSignature);
+                    }
+                });
         signature.setImageSize(200, 125);
         // TODO change this placeholder picture
         signature.setThumbnailPlaceholder(new Image(VistaImages.INSTANCE.profilePicture()));

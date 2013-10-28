@@ -21,19 +21,14 @@ import com.google.gwt.core.shared.GWT;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.HasVerticalAlignment;
 import com.google.gwt.user.client.ui.Image;
-import com.google.gwt.user.client.ui.VerticalPanel;
-import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.commons.TimeUtils;
 import com.pyx4j.entity.shared.EntityFactory;
-import com.pyx4j.forms.client.images.EntityFolderImages;
 import com.pyx4j.forms.client.ui.CBooleanLabel;
 import com.pyx4j.forms.client.ui.CComponent;
-import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.ui.CEnumLabel;
 import com.pyx4j.forms.client.ui.CImage;
-import com.pyx4j.forms.client.ui.CLabel;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
 import com.pyx4j.forms.client.validators.ValidationError;
@@ -134,21 +129,8 @@ public class LeaseParticipantForm<P extends LeaseParticipantDTO<?>> extends CrmE
         }
 
         int row = -1;
-        CImage<CustomerPicture> imageHolder = new CImage<CustomerPicture>(GWT.<CustomerPictureUploadService> create(CustomerPictureUploadService.class)) {
-            @Override
-            protected EntityFolderImages getFolderIcons() {
-                return VistaImages.INSTANCE;
-            }
-
-            @Override
-            public Widget getImageEntryView(CEntityForm<CustomerPicture> entryForm) {
-                VerticalPanel infoPanel = new VerticalPanel();
-                infoPanel.add(new FormDecoratorBuilder(entryForm.inject(entryForm.proto().fileName(), new CLabel<String>())).build());
-                infoPanel.add(new FormDecoratorBuilder(entryForm.inject(entryForm.proto().caption())).build());
-                return infoPanel;
-            }
-        };
-        imageHolder.setFileUrlBuilder(new ImageFileURLBuilder());
+        CImage<CustomerPicture> imageHolder = new CImage<CustomerPicture>(GWT.<CustomerPictureUploadService> create(CustomerPictureUploadService.class),
+                new ImageFileURLBuilder());
         imageHolder.setImageSize(150, 200);
         imageHolder.setThumbnailPlaceholder(new Image(VistaImages.INSTANCE.profilePicture()));
 

@@ -20,13 +20,10 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.ui.IsWidget;
-import com.google.gwt.user.client.ui.SimplePanel;
-import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IObject;
-import com.pyx4j.forms.client.images.EntityFolderImages;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.ui.CEntityLabel;
@@ -34,8 +31,8 @@ import com.pyx4j.forms.client.ui.CImage;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.gwt.shared.FileURLBuilder;
 import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.widgets.client.ImageViewport.ScaleMode;
 
-import com.propertyvista.common.client.resources.VistaImages;
 import com.propertyvista.common.client.ui.components.MediaUtils;
 import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
 import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
@@ -107,47 +104,15 @@ public class PortalImageResourceFolder extends VistaBoxFolder<PortalLogoImageRes
         public PortalImageResourceEditor() {
             super(PortalLogoImageResource.class);
 
-            smallLogo = new CImage<SiteImageResource>(GWT.<SiteImageResourceUploadService> create(SiteImageResourceUploadService.class)) {
-                @Override
-                public Widget getImageEntryView(CEntityForm<SiteImageResource> entryForm) {
-                    SimplePanel main = new SimplePanel();
-                    main.setWidget(new FormDecoratorBuilder(entryForm.inject(entryForm.proto().caption()), 8, 15, 16).build());
-                    return main;
-                }
-
-                @Override
-                protected EntityFolderImages getFolderIcons() {
-                    return VistaImages.INSTANCE;
-                }
-            };
-            smallLogo.setFileUrlBuilder(new FileURLBuilder<SiteImageResource>() {
-                @Override
-                public String getUrl(SiteImageResource file) {
-                    return MediaUtils.createSiteImageResourceUrl(file);
-                }
-            });
+            smallLogo = new CImage<SiteImageResource>(GWT.<SiteImageResourceUploadService> create(SiteImageResourceUploadService.class),
+                    new SiteImageResourceUrlBuilder());
             smallLogo.setImageSize(150, 100);
+            smallLogo.setScaleMode(ScaleMode.Contain);
 
-            largeLogo = new CImage<SiteImageResource>(GWT.<SiteImageResourceUploadService> create(SiteImageResourceUploadService.class)) {
-                @Override
-                public Widget getImageEntryView(CEntityForm<SiteImageResource> entryForm) {
-                    SimplePanel main = new SimplePanel();
-                    main.setWidget(new FormDecoratorBuilder(entryForm.inject(entryForm.proto().caption()), 8, 15, 16).build());
-                    return main;
-                }
-
-                @Override
-                protected EntityFolderImages getFolderIcons() {
-                    return VistaImages.INSTANCE;
-                }
-            };
-            largeLogo.setFileUrlBuilder(new FileURLBuilder<SiteImageResource>() {
-                @Override
-                public String getUrl(SiteImageResource file) {
-                    return MediaUtils.createSiteImageResourceUrl(file);
-                }
-            });
+            largeLogo = new CImage<SiteImageResource>(GWT.<SiteImageResourceUploadService> create(SiteImageResourceUploadService.class),
+                    new SiteImageResourceUrlBuilder());
             largeLogo.setImageSize(300, 150);
+            largeLogo.setScaleMode(ScaleMode.Contain);
         }
 
         @Override
@@ -163,6 +128,13 @@ public class PortalImageResourceFolder extends VistaBoxFolder<PortalLogoImageRes
             main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().small(), smallLogo), 5, 20, 20).build());
 
             return main;
+        }
+
+        class SiteImageResourceUrlBuilder implements FileURLBuilder<SiteImageResource> {
+            @Override
+            public String getUrl(SiteImageResource file) {
+                return MediaUtils.createSiteImageResourceUrl(file);
+            }
         }
     }
 }

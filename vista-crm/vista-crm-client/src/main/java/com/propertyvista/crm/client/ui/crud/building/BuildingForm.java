@@ -352,7 +352,7 @@ public class BuildingForm extends CrmEntityForm<BuildingDTO> {
 
         flexPanel.setH1(++row, 0, 2, i18n.tr("Images"));
         CImageSlider<MediaFile> imageSlider = new CImageSlider<MediaFile>(MediaFile.class,
-                GWT.<MediaUploadBuildingService> create(MediaUploadBuildingService.class)) {
+                GWT.<MediaUploadBuildingService> create(MediaUploadBuildingService.class), new MediaImageUrlBuilder()) {
             @Override
             protected EntityFolderImages getFolderIcons() {
                 return VistaImages.INSTANCE;
@@ -370,12 +370,6 @@ public class BuildingForm extends CrmEntityForm<BuildingDTO> {
                 return main;
             }
         };
-        imageSlider.setImageFileUrlBuilder(new FileURLBuilder<MediaFile>() {
-            @Override
-            public String getUrl(MediaFile file) {
-                return MediaUtils.createMediaImageUrl(file);
-            }
-        });
         imageSlider.setImageSize(240, 160);
         flexPanel.setWidget(++row, 0, 2, inject(proto().media(), imageSlider));
 
@@ -552,4 +546,11 @@ public class BuildingForm extends CrmEntityForm<BuildingDTO> {
             get(proto().merchantAccount()).setNote(null);
         }
     }
+
+    class MediaImageUrlBuilder implements FileURLBuilder<MediaFile> {
+        @Override
+        public String getUrl(MediaFile file) {
+            return MediaUtils.createMediaImageUrl(file);
+        }
+    };
 }
