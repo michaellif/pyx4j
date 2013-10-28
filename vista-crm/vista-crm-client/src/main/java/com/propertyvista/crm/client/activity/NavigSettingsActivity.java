@@ -29,9 +29,9 @@ import com.pyx4j.security.shared.SecurityController;
 import com.propertyvista.crm.client.CrmSite;
 import com.propertyvista.crm.client.ui.NavigView;
 import com.propertyvista.crm.rpc.CrmSiteMap;
+import com.propertyvista.crm.rpc.CrmSiteMap.Administration.ContentManagement;
 import com.propertyvista.crm.rpc.CrmSiteMap.Administration.Security;
 import com.propertyvista.crm.rpc.CrmSiteMap.Administration.Settings;
-import com.propertyvista.crm.rpc.CrmSiteMap.Administration.Website;
 import com.propertyvista.domain.customizations.CountryOfOperation;
 import com.propertyvista.domain.security.VistaCrmBehavior;
 import com.propertyvista.misc.VistaTODO;
@@ -102,10 +102,10 @@ public class NavigSettingsActivity extends AbstractActivity implements NavigView
         }
         list.add(folder);
 
-        folder = new NavigFolder(i18n.tr("Website"));
-        folder.addNavigItem(new Website.General());
-        folder.addNavigItem(new Website.Content());
-        folder.addNavigItem(new Website.Branding());
+        folder = new NavigFolder(i18n.tr("Content Management"));
+        folder.addNavigItem(new ContentManagement.General());
+        folder.addNavigItem(new ContentManagement.Website());
+        folder.addNavigItem(new ContentManagement.Portal());
         list.add(folder);
 
         folder = new NavigFolder(i18n.tr("Policies"));

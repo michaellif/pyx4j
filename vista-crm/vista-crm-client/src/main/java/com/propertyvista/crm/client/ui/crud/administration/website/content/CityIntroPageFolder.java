@@ -29,7 +29,7 @@ import com.pyx4j.forms.client.ui.folder.TableFolderDecorator;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.common.client.ui.components.folders.VistaTableFolder;
-import com.propertyvista.crm.rpc.CrmSiteMap.Administration.Website;
+import com.propertyvista.crm.rpc.CrmSiteMap.Administration.ContentManagement;
 import com.propertyvista.domain.site.CityIntroPage;
 
 public class CityIntroPageFolder extends VistaTableFolder<CityIntroPage> {
@@ -84,7 +84,7 @@ public class CityIntroPageFolder extends VistaTableFolder<CityIntroPage> {
                 ((CField) comp).setNavigationCommand(new Command() {
                     @Override
                     public void execute() {
-                        viewer.viewChild(getValue().getPrimaryKey(), Website.Content.CityIntroPage.class);
+                        viewer.viewChild(getValue().getPrimaryKey(), ContentManagement.Website.CityIntroPage.class);
                     }
                 });
                 return comp;

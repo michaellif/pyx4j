@@ -27,7 +27,7 @@ import com.pyx4j.site.client.ui.dialogs.SelectEnumDialog;
 
 import com.propertyvista.crm.client.ui.crud.CrmViewerViewImplBase;
 import com.propertyvista.crm.rpc.CrmCrudAppPlace;
-import com.propertyvista.crm.rpc.CrmSiteMap.Administration.Website;
+import com.propertyvista.crm.rpc.CrmSiteMap.Administration.ContentManagement;
 import com.propertyvista.crm.rpc.services.HomePageGadgetCrudService;
 import com.propertyvista.domain.site.gadgets.HomePageGadget;
 import com.propertyvista.dto.SiteDescriptorDTO;
@@ -60,7 +60,7 @@ public class ContentViewerImpl extends CrmViewerViewImplBase<SiteDescriptorDTO> 
             public void execute() {
                 Key parentId = getForm().getValue().getPrimaryKey();
                 if (parentId != null) {
-                    ((ContentViewer.Presenter) getPresenter()).editNew(parentId, Website.Content.CityIntroPage.class);
+                    ((ContentViewer.Presenter) getPresenter()).editNew(parentId, ContentManagement.Website.CityIntroPage.class);
                 }
             }
         }));

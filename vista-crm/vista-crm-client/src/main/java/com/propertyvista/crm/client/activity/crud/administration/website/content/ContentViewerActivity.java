@@ -24,7 +24,7 @@ import com.propertyvista.crm.client.activity.crud.CrmViewerActivity;
 import com.propertyvista.crm.client.ui.crud.administration.website.content.ContentViewer;
 import com.propertyvista.crm.client.ui.crud.administration.website.content.pages.PageEditor;
 import com.propertyvista.crm.rpc.CrmCrudAppPlace;
-import com.propertyvista.crm.rpc.CrmSiteMap.Administration.Website;
+import com.propertyvista.crm.rpc.CrmSiteMap.Administration.ContentManagement;
 import com.propertyvista.crm.rpc.services.PageDescriptorCrudService.PageDescriptorInitializationData;
 import com.propertyvista.crm.rpc.services.admin.SiteContentCrudService;
 import com.propertyvista.dto.SiteDescriptorDTO;
@@ -37,7 +37,7 @@ public class ContentViewerActivity extends CrmViewerActivity<SiteDescriptorDTO> 
 
     @Override
     public void viewChild(Key id) {
-        AppSite.getPlaceController().goTo(new Website.Content.Page().formViewerPlace(id));
+        AppSite.getPlaceController().goTo(new ContentManagement.Website.Page().formViewerPlace(id));
     }
 
     @Override
@@ -48,7 +48,7 @@ public class ContentViewerActivity extends CrmViewerActivity<SiteDescriptorDTO> 
     @Override
     public void editNew(Key parentid) {
         AppSite.getPlaceController().goTo(
-                new Website.Content.Page().formNewItemPlace(parentid).queryArg(PageEditor.Presenter.URL_PARAM_PAGE_PARENT,
+                new ContentManagement.Website.Page().formNewItemPlace(parentid).queryArg(PageEditor.Presenter.URL_PARAM_PAGE_PARENT,
                         PageDescriptorInitializationData.PageParent.site.name()));
     }
 

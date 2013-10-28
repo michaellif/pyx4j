@@ -859,7 +859,7 @@ public class ContentActivityMapper implements AppActivityMapper {
                             break;
                         }
 
-                    } else if (crudPlace instanceof Administration.Website.General) {
+                    } else if (crudPlace instanceof Administration.ContentManagement.General) {
                         switch (crudPlace.getType()) {
                         case editor:
                             activity = new GeneralEditorActivity(crudPlace);
@@ -872,7 +872,7 @@ public class ContentActivityMapper implements AppActivityMapper {
                             break;
                         }
 
-                    } else if (crudPlace instanceof Administration.Website.Branding) {
+                    } else if (crudPlace instanceof Administration.ContentManagement.Portal) {
                         switch (crudPlace.getType()) {
                         case editor:
                             activity = new BrandingEditorActivity(crudPlace);
@@ -885,7 +885,7 @@ public class ContentActivityMapper implements AppActivityMapper {
                             break;
                         }
 
-                    } else if (crudPlace instanceof Administration.Website.Content) {
+                    } else if (crudPlace instanceof Administration.ContentManagement.Website) {
                         switch (crudPlace.getType()) {
                         case editor:
                             activity = new ContentEditorActivity(crudPlace);
@@ -898,7 +898,7 @@ public class ContentActivityMapper implements AppActivityMapper {
                             break;
                         }
 
-                    } else if (crudPlace instanceof Administration.Website.Content.Page) {
+                    } else if (crudPlace instanceof Administration.ContentManagement.Website.Page) {
                         switch (crudPlace.getType()) {
                         case editor:
                             activity = new PageEditorActivity(crudPlace);
@@ -910,7 +910,7 @@ public class ContentActivityMapper implements AppActivityMapper {
                             break;
                         }
 
-                    } else if (crudPlace instanceof Administration.Website.Content.HomePageGadgets) {
+                    } else if (crudPlace instanceof Administration.ContentManagement.Website.HomePageGadgets) {
                         switch (crudPlace.getType()) {
                         case editor:
                             activity = new HomePageGadgetEditorActivity(crudPlace);
@@ -922,7 +922,7 @@ public class ContentActivityMapper implements AppActivityMapper {
                             break;
                         }
 
-                    } else if (crudPlace instanceof Administration.Website.Content.CityIntroPage) {
+                    } else if (crudPlace instanceof Administration.ContentManagement.Website.CityIntroPage) {
                         switch (crudPlace.getType()) {
                         case editor:
                             activity = new CityIntroPageEditorActivity(crudPlace);
