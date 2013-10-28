@@ -11,7 +11,7 @@
  * @author Vlad
  * @version $Id$
  */
-package com.propertyvista.crm.client.ui.crud.administration.website.branding;
+package com.propertyvista.crm.client.ui.crud.administration.website.general;
 
 import java.text.ParseException;
 import java.util.ArrayList;

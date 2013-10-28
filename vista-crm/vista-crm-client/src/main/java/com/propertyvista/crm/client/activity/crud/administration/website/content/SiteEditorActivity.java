@@ -21,15 +21,15 @@ import com.pyx4j.site.rpc.CrudAppPlace;
 
 import com.propertyvista.crm.client.CrmSite;
 import com.propertyvista.crm.client.activity.crud.CrmEditorActivity;
-import com.propertyvista.crm.client.ui.crud.administration.website.content.ContentEditor;
+import com.propertyvista.crm.client.ui.crud.administration.website.content.SiteEditor;
 import com.propertyvista.crm.rpc.services.admin.SiteContentCrudService;
 import com.propertyvista.domain.site.AvailableLocale;
 import com.propertyvista.dto.SiteDescriptorDTO;
 
-public class ContentEditorActivity extends CrmEditorActivity<SiteDescriptorDTO> implements ContentEditor.Presenter {
+public class SiteEditorActivity extends CrmEditorActivity<SiteDescriptorDTO> implements SiteEditor.Presenter {
 
-    public ContentEditorActivity(CrudAppPlace place) {
-        super(place,  CrmSite.getViewFactory().instantiate(ContentEditor.class), GWT.<SiteContentCrudService> create(SiteContentCrudService.class),
+    public SiteEditorActivity(CrudAppPlace place) {
+        super(place,  CrmSite.getViewFactory().instantiate(SiteEditor.class), GWT.<SiteContentCrudService> create(SiteContentCrudService.class),
                 SiteDescriptorDTO.class);
     }
 

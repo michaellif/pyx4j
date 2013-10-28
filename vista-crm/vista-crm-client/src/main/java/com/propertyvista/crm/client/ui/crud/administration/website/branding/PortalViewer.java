@@ -13,11 +13,13 @@
  */
 package com.propertyvista.crm.client.ui.crud.administration.website.branding;
 
-import com.propertyvista.crm.client.ui.crud.CrmEditorViewImplBase;
+import com.pyx4j.site.client.ui.prime.form.IViewer;
+
 import com.propertyvista.dto.SiteDescriptorDTO;
 
-public class BrandingEditorImpl extends CrmEditorViewImplBase<SiteDescriptorDTO> implements BrandingEditor {
-    public BrandingEditorImpl() {
-        setForm(new BrandingForm(this));
+public interface PortalViewer extends IViewer<SiteDescriptorDTO> {
+
+    interface Presenter extends IViewer.Presenter {
+
     }
 }

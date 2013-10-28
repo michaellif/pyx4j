@@ -11,7 +11,7 @@
  * @author VladL
  * @version $Id$
  */
-package com.propertyvista.crm.client.activity.crud.administration.website.branding;
+package com.propertyvista.crm.client.activity.crud.administration.website.content;
 
 import com.google.gwt.activity.shared.AbstractActivity;
 import com.google.gwt.activity.shared.Activity;
@@ -26,13 +26,13 @@ import com.pyx4j.gwt.commons.UnrecoverableClientError;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.rpc.CrudAppPlace;
 
-import com.propertyvista.crm.rpc.services.admin.SiteBrandingCrudService;
+import com.propertyvista.crm.rpc.services.admin.SiteContentCrudService;
 
-public class BrandingActivity extends AbstractActivity {
+public class SiteActivity extends AbstractActivity {
 
     private final CrudAppPlace place;
 
-    public BrandingActivity(Place place) {
+    public SiteActivity(Place place) {
         assert (place instanceof CrudAppPlace);
         this.place = (CrudAppPlace) place;
         withPlace(place);
@@ -40,7 +40,7 @@ public class BrandingActivity extends AbstractActivity {
 
     @Override
     public void start(AcceptsOneWidget container, EventBus eventBus) {
-        GWT.<SiteBrandingCrudService> create(SiteBrandingCrudService.class).retrieveHomeItem(new AsyncCallback<Key>() {
+        GWT.<SiteContentCrudService> create(SiteContentCrudService.class).retrieveHomeItem(new AsyncCallback<Key>() {
             @Override
             public void onSuccess(Key result) {
                 AppSite.getPlaceController().goTo(AppSite.getHistoryMapper().createPlace(place.getClass()).formViewerPlace(result));

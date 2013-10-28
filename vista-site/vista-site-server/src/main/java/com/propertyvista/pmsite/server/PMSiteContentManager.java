@@ -48,7 +48,7 @@ import com.propertyvista.domain.site.PageCaption;
 import com.propertyvista.domain.site.PageDescriptor;
 import com.propertyvista.domain.site.PageDescriptor.Type;
 import com.propertyvista.domain.site.PageMetaTags;
-import com.propertyvista.domain.site.PortalImageSet;
+import com.propertyvista.domain.site.SiteImageSet;
 import com.propertyvista.domain.site.PortalLogoImageResource;
 import com.propertyvista.domain.site.SiteDescriptor;
 import com.propertyvista.domain.site.SiteDescriptorChanges;
@@ -532,8 +532,8 @@ public class PMSiteContentManager implements Serializable {
     public SiteImageResource getSiteBanner(AvailableLocale locale) {
         List<SiteImageResource> bannerSet = null;
         String lang = locale.lang().getValue().name();
-        IList<PortalImageSet> allBanners = getSiteDescriptor().banner();
-        for (PortalImageSet banner : allBanners) {
+        IList<SiteImageSet> allBanners = getSiteDescriptor().banner();
+        for (SiteImageSet banner : allBanners) {
             if (banner.locale().lang().getValue().name().equals(lang)) {
                 bannerSet = banner.imageSet();
                 break;

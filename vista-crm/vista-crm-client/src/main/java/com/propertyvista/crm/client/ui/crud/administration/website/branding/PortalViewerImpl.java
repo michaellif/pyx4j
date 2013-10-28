@@ -18,11 +18,11 @@ import com.pyx4j.i18n.shared.I18n;
 import com.propertyvista.crm.client.ui.crud.CrmViewerViewImplBase;
 import com.propertyvista.dto.SiteDescriptorDTO;
 
-public class BrandingViewerImpl extends CrmViewerViewImplBase<SiteDescriptorDTO> implements BrandingViewer {
+public class PortalViewerImpl extends CrmViewerViewImplBase<SiteDescriptorDTO> implements PortalViewer {
 
-    private static final I18n i18n = I18n.get(BrandingViewerImpl.class);
+    private static final I18n i18n = I18n.get(PortalViewerImpl.class);
 
-    public BrandingViewerImpl() {
-        setForm(new BrandingForm(this));
+    public PortalViewerImpl() {
+        setForm(new PortalForm(this));
     }
 }

@@ -15,26 +15,17 @@ package com.propertyvista.crm.client.activity.crud.administration.website.brandi
 
 import com.google.gwt.core.client.GWT;
 
-import com.pyx4j.commons.Key;
-import com.pyx4j.forms.client.ui.ReferenceDataManager;
 import com.pyx4j.site.rpc.CrudAppPlace;
 
 import com.propertyvista.crm.client.CrmSite;
-import com.propertyvista.crm.client.activity.crud.CrmEditorActivity;
-import com.propertyvista.crm.client.ui.crud.administration.website.branding.BrandingEditor;
+import com.propertyvista.crm.client.activity.crud.CrmViewerActivity;
+import com.propertyvista.crm.client.ui.crud.administration.website.branding.PortalViewer;
 import com.propertyvista.crm.rpc.services.admin.SiteBrandingCrudService;
-import com.propertyvista.domain.site.AvailableLocale;
 import com.propertyvista.dto.SiteDescriptorDTO;
 
-public class BrandingEditorActivity extends CrmEditorActivity<SiteDescriptorDTO> implements BrandingEditor.Presenter {
+public class PortalViewerActivity extends CrmViewerActivity<SiteDescriptorDTO> implements PortalViewer.Presenter {
 
-    public BrandingEditorActivity(CrudAppPlace place) {
-        super(place,  CrmSite.getViewFactory().instantiate(BrandingEditor.class), GWT.<SiteBrandingCrudService> create(SiteBrandingCrudService.class),
-                SiteDescriptorDTO.class);
-    }
-
-    @Override
-    protected void onSaved(Key result) {
-        ReferenceDataManager.invalidate(AvailableLocale.class);
+    public PortalViewerActivity(CrudAppPlace place) {
+        super(place,  CrmSite.getViewFactory().instantiate(PortalViewer.class), GWT.<SiteBrandingCrudService> create(SiteBrandingCrudService.class));
     }
 }

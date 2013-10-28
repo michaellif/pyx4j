@@ -35,14 +35,14 @@ import com.propertyvista.domain.site.CityIntroPage;
 public class CityIntroPageFolder extends VistaTableFolder<CityIntroPage> {
     private static final I18n i18n = I18n.get(CityIntroPageFolder.class);
 
-    private final ContentForm parent;
+    private final SiteForm parent;
 
-    private final ContentViewer viewer;
+    private final SiteViewer viewer;
 
-    public CityIntroPageFolder(ContentForm parent) {
+    public CityIntroPageFolder(SiteForm parent) {
         super(CityIntroPage.class, parent.isEditable());
         this.parent = parent;
-        this.viewer = (!parent.isEditable() ? (ContentViewer) parent.getParentView() : null);
+        this.viewer = (!parent.isEditable() ? (SiteViewer) parent.getParentView() : null);
         setAddable(false);
     }
 

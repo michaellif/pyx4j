@@ -32,12 +32,12 @@ import com.propertyvista.crm.rpc.services.HomePageGadgetCrudService;
 import com.propertyvista.domain.site.gadgets.HomePageGadget;
 import com.propertyvista.dto.SiteDescriptorDTO;
 
-public class ContentViewerImpl extends CrmViewerViewImplBase<SiteDescriptorDTO> implements ContentViewer {
+public class SiteViewerImpl extends CrmViewerViewImplBase<SiteDescriptorDTO> implements SiteViewer {
 
-    private static final I18n i18n = I18n.get(ContentViewerImpl.class);
+    private static final I18n i18n = I18n.get(SiteViewerImpl.class);
 
-    public ContentViewerImpl() {
-        setForm(new ContentForm(this));
+    public SiteViewerImpl() {
+        setForm(new SiteForm(this));
 
         // Add actions:
         addAction(new MenuItem(i18n.tr("Add Child Page"), new Command() {
@@ -60,7 +60,7 @@ public class ContentViewerImpl extends CrmViewerViewImplBase<SiteDescriptorDTO> 
             public void execute() {
                 Key parentId = getForm().getValue().getPrimaryKey();
                 if (parentId != null) {
-                    ((ContentViewer.Presenter) getPresenter()).editNew(parentId, ContentManagement.Website.CityIntroPage.class);
+                    ((SiteViewer.Presenter) getPresenter()).editNew(parentId, ContentManagement.Website.CityIntroPage.class);
                 }
             }
         }));
@@ -68,17 +68,17 @@ public class ContentViewerImpl extends CrmViewerViewImplBase<SiteDescriptorDTO> 
 
     @Override
     public void viewChild(Key id) {
-        ((ContentViewer.Presenter) getPresenter()).viewChild(id);
+        ((SiteViewer.Presenter) getPresenter()).viewChild(id);
     }
 
     @Override
     public void viewChild(Key id, Class<? extends CrmCrudAppPlace> openPlaceClass) {
-        ((ContentViewer.Presenter) getPresenter()).viewChild(id, openPlaceClass);
+        ((SiteViewer.Presenter) getPresenter()).viewChild(id, openPlaceClass);
     }
 
     @Override
     public void newChild(Key parentid) {
-        ((ContentViewer.Presenter) getPresenter()).editNew(parentid);
+        ((SiteViewer.Presenter) getPresenter()).editNew(parentid);
     }
 
     class GadgetSelectorDialog extends SelectEnumDialog<HomePageGadget.GadgetType> {

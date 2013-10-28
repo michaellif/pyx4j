@@ -15,15 +15,24 @@ package com.propertyvista.crm.client.ui.crud.administration.website.general;
 
 import java.util.EnumSet;
 
+import com.google.gwt.core.client.GWT;
+
 import com.pyx4j.forms.client.ui.CCheckBox;
 import com.pyx4j.forms.client.ui.CComboBox;
+import com.pyx4j.forms.client.ui.CImage;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
+import com.pyx4j.gwt.shared.FileURLBuilder;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.prime.form.IForm;
+import com.pyx4j.widgets.client.ImageViewport.ScaleMode;
 
+import com.propertyvista.common.client.ui.components.MediaUtils;
 import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
+import com.propertyvista.crm.client.ui.crud.administration.website.RichTextContentFolder;
+import com.propertyvista.crm.rpc.services.admin.SiteImageResourceUploadService;
 import com.propertyvista.domain.site.SiteDescriptor.Skin;
+import com.propertyvista.domain.site.SiteImageResource;
 import com.propertyvista.dto.SiteDescriptorDTO;
 
 public class GeneralForm extends CrmEntityForm<SiteDescriptorDTO> {
@@ -67,5 +76,33 @@ public class GeneralForm extends CrmEntityForm<SiteDescriptorDTO> {
         content = new TwoColumnFlexFormPanel(proto().locales().getMeta().getCaption());
         content.setWidget(0, 0, 2, inject(proto().locales(), new AvailableLocaleFolder(isEditable())));
         addTab(content);
+
+        content = new TwoColumnFlexFormPanel(proto().pmcInfo().getMeta().getCaption());
+        content.setWidget(0, 0, 2, inject(proto().pmcInfo(), new RichTextContentFolder(isEditable())));
+        addTab(content);
+
+        addTab(createCrmLogoTab());
+
+        content = new TwoColumnFlexFormPanel(proto().socialLinks().getMeta().getCaption());
+        content.setWidget(0, 0, 2, inject(proto().socialLinks(), new SocialLinkFolder(isEditable())));
+        addTab(content);
+    }
+
+    private TwoColumnFlexFormPanel createCrmLogoTab() {
+        TwoColumnFlexFormPanel content = new TwoColumnFlexFormPanel(proto().crmLogo().getMeta().getCaption());
+
+        CImage<SiteImageResource> file = new CImage<SiteImageResource>(GWT.<SiteImageResourceUploadService> create(SiteImageResourceUploadService.class),
+                new FileURLBuilder<SiteImageResource>() {
+                    @Override
+                    public String getUrl(SiteImageResource file) {
+                        return MediaUtils.createSiteImageResourceUrl(file);
+                    }
+                });
+        file.setImageSize(150, 100);
+        file.setScaleMode(ScaleMode.Contain);
+
+        content.setWidget(0, 0, new FormDecoratorBuilder(inject(proto().crmLogo(), file), 20).build());
+
+        return content;
     }
 }

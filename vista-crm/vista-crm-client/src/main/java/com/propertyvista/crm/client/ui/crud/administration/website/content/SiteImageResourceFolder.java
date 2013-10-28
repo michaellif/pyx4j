@@ -11,7 +11,7 @@
  * @author stanp
  * @version $Id$
  */
-package com.propertyvista.crm.client.ui.crud.administration.website.branding;
+package com.propertyvista.crm.client.ui.crud.administration.website.content;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -42,12 +42,12 @@ import com.propertyvista.domain.site.AvailableLocale;
 import com.propertyvista.domain.site.PortalLogoImageResource;
 import com.propertyvista.domain.site.SiteImageResource;
 
-public class PortalImageResourceFolder extends VistaBoxFolder<PortalLogoImageResource> {
-    private static final I18n i18n = I18n.get(PortalImageResourceFolder.class);
+public class SiteImageResourceFolder extends VistaBoxFolder<PortalLogoImageResource> {
+    private static final I18n i18n = I18n.get(SiteImageResourceFolder.class);
 
     private final Set<AvailableLocale> usedLocales = new HashSet<AvailableLocale>();
 
-    public PortalImageResourceFolder(boolean editable) {
+    public SiteImageResourceFolder(boolean editable) {
         super(PortalLogoImageResource.class, editable);
         this.addValueChangeHandler(new ValueChangeHandler<IList<PortalLogoImageResource>>() {
             @Override
@@ -80,7 +80,7 @@ public class PortalImageResourceFolder extends VistaBoxFolder<PortalLogoImageRes
                 if (locale != null) {
                     PortalLogoImageResource item = EntityFactory.create(PortalLogoImageResource.class);
                     item.locale().set(locale);
-                    PortalImageResourceFolder.super.addItem(item);
+                    SiteImageResourceFolder.super.addItem(item);
                 }
                 return true;
             }

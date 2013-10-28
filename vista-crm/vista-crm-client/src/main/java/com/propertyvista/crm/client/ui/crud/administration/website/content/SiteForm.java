@@ -20,16 +20,40 @@ import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.prime.form.IForm;
 
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
+import com.propertyvista.crm.client.ui.crud.administration.website.RichTextContentFolder;
 import com.propertyvista.dto.SiteDescriptorDTO;
 
-public class ContentForm extends CrmEntityForm<SiteDescriptorDTO> {
+public class SiteForm extends CrmEntityForm<SiteDescriptorDTO> {
 
-    private static final I18n i18n = I18n.get(ContentForm.class);
+    private static final I18n i18n = I18n.get(SiteForm.class);
 
-    public ContentForm(IForm<SiteDescriptorDTO> view) {
+    public SiteForm(IForm<SiteDescriptorDTO> view) {
         super(SiteDescriptorDTO.class, view);
 
         TwoColumnFlexFormPanel content;
+
+        content = new TwoColumnFlexFormPanel(proto().siteTitles().getMeta().getCaption());
+        content.setWidget(0, 0, 2, inject(proto().siteTitles(), new SiteTitlesFolder(isEditable())));
+        selectTab(addTab(content));
+
+        content = new TwoColumnFlexFormPanel(i18n.tr("Site Logos"));
+        content.setWidget(0, 0, 2, inject(proto().logo(), new SiteImageResourceFolder(isEditable())));
+        addTab(content);
+
+        content = new TwoColumnFlexFormPanel(proto().slogan().getMeta().getCaption());
+        content.setWidget(0, 0, 2, inject(proto().slogan(), new RichTextContentFolder(isEditable())));
+        addTab(content);
+
+        SiteImageSetFolder imageFolder = new SiteImageSetFolder(isEditable());
+        imageFolder.setImageSize(690, 300);
+        imageFolder.setThumbSize(230, 100);
+        content = new TwoColumnFlexFormPanel(proto().banner().getMeta().getCaption());
+        content.setWidget(0, 0, 2, inject(proto().banner(), imageFolder));
+        addTab(content);
+
+        content = new TwoColumnFlexFormPanel(proto().metaTags().getMeta().getCaption());
+        content.setWidget(0, 0, 2, inject(proto().metaTags(), new MetaTagsFolder(isEditable())));
+        addTab(content);
 
         content = new TwoColumnFlexFormPanel(proto().childPages().getMeta().getCaption());
         content.setWidget(0, 0, 2, inject(proto().childPages(), new PageDescriptorFolder(this)));

@@ -127,7 +127,7 @@ public interface SiteDescriptor extends Descriptor {
     IList<HtmlContent> pmcInfo();
 
     @Owned
-    IList<PortalImageSet> banner();
+    IList<SiteImageSet> banner();
 
     @Owned
     IList<PageMetaTags> metaTags();

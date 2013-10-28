@@ -11,13 +11,13 @@
  * @author VladL
  * @version $Id$
  */
-package com.propertyvista.crm.client.ui.crud.administration.website.branding;
+package com.propertyvista.crm.client.ui.crud.administration.website.content;
 
 import com.pyx4j.site.client.ui.prime.form.IEditor;
 
 import com.propertyvista.dto.SiteDescriptorDTO;
 
-public interface BrandingEditor extends IEditor<SiteDescriptorDTO> {
+public interface SiteEditor extends IEditor<SiteDescriptorDTO> {
 
     interface Presenter extends IEditor.Presenter {
     }

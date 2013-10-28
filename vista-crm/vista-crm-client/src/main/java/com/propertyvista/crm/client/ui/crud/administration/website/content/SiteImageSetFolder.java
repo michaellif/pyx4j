@@ -11,7 +11,7 @@
  * @author stanp
  * @version $Id$
  */
-package com.propertyvista.crm.client.ui.crud.administration.website.branding;
+package com.propertyvista.crm.client.ui.crud.administration.website.content;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -44,11 +44,11 @@ import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
 import com.propertyvista.crm.client.ui.crud.administration.website.general.AvailableLocaleSelectorDialog;
 import com.propertyvista.crm.rpc.services.admin.SiteImageResourceUploadService;
 import com.propertyvista.domain.site.AvailableLocale;
-import com.propertyvista.domain.site.PortalImageSet;
+import com.propertyvista.domain.site.SiteImageSet;
 import com.propertyvista.domain.site.SiteImageResource;
 
-public class PortalImageSetFolder extends VistaBoxFolder<PortalImageSet> {
-    private static final I18n i18n = I18n.get(PortalImageSetFolder.class);
+public class SiteImageSetFolder extends VistaBoxFolder<SiteImageSet> {
+    private static final I18n i18n = I18n.get(SiteImageSetFolder.class);
 
     private final Set<AvailableLocale> usedLocales = new HashSet<AvailableLocale>();
 
@@ -56,11 +56,11 @@ public class PortalImageSetFolder extends VistaBoxFolder<PortalImageSet> {
 
     private Dimension thumbSize;
 
-    public PortalImageSetFolder(boolean editable) {
-        super(PortalImageSet.class, editable);
-        this.addValueChangeHandler(new ValueChangeHandler<IList<PortalImageSet>>() {
+    public SiteImageSetFolder(boolean editable) {
+        super(SiteImageSet.class, editable);
+        this.addValueChangeHandler(new ValueChangeHandler<IList<SiteImageSet>>() {
             @Override
-            public void onValueChange(ValueChangeEvent<IList<PortalImageSet>> event) {
+            public void onValueChange(ValueChangeEvent<IList<SiteImageSet>> event) {
                 updateUsedLocales();
             }
         });
@@ -81,7 +81,7 @@ public class PortalImageSetFolder extends VistaBoxFolder<PortalImageSet> {
 
     private void updateUsedLocales() {
         usedLocales.clear();
-        for (PortalImageSet items : getValue()) {
+        for (SiteImageSet items : getValue()) {
             usedLocales.add(items.locale());
         }
     }
@@ -100,9 +100,9 @@ public class PortalImageSetFolder extends VistaBoxFolder<PortalImageSet> {
             public boolean onClickOk() {
                 AvailableLocale locale = getSelectedLocale();
                 if (locale != null) {
-                    PortalImageSet item = EntityFactory.create(PortalImageSet.class);
+                    SiteImageSet item = EntityFactory.create(SiteImageSet.class);
                     item.locale().set(locale);
-                    PortalImageSetFolder.super.addItem(item);
+                    SiteImageSetFolder.super.addItem(item);
                 }
                 return true;
             }
@@ -111,7 +111,7 @@ public class PortalImageSetFolder extends VistaBoxFolder<PortalImageSet> {
 
     @Override
     public CComponent<?> create(IObject<?> member) {
-        if (member instanceof PortalImageSet) {
+        if (member instanceof SiteImageSet) {
             PortalImageSetEditor editor = new PortalImageSetEditor();
             if (imageSize != null) {
                 editor.setImageSize(imageSize.width, imageSize.height);
@@ -124,11 +124,11 @@ public class PortalImageSetFolder extends VistaBoxFolder<PortalImageSet> {
         return super.create(member);
     }
 
-    class PortalImageSetEditor extends CEntityForm<PortalImageSet> {
+    class PortalImageSetEditor extends CEntityForm<SiteImageSet> {
         private final CImageSlider<SiteImageResource> imageHolder;
 
         public PortalImageSetEditor() {
-            super(PortalImageSet.class);
+            super(SiteImageSet.class);
             imageHolder = new CImageSlider<SiteImageResource>(SiteImageResource.class,
                     GWT.<SiteImageResourceUploadService> create(SiteImageResourceUploadService.class), new ImageFileURLBuilder()) {
                 @Override

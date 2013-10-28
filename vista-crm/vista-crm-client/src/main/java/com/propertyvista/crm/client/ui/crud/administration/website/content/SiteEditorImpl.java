@@ -13,12 +13,11 @@
  */
 package com.propertyvista.crm.client.ui.crud.administration.website.content;
 
-import com.pyx4j.site.client.ui.prime.form.IEditor;
-
+import com.propertyvista.crm.client.ui.crud.CrmEditorViewImplBase;
 import com.propertyvista.dto.SiteDescriptorDTO;
 
-public interface ContentEditor extends IEditor<SiteDescriptorDTO> {
-
-    interface Presenter extends IEditor.Presenter {
+public class SiteEditorImpl extends CrmEditorViewImplBase<SiteDescriptorDTO> implements SiteEditor {
+    public SiteEditorImpl() {
+        setForm(new SiteForm(this));
     }
 }

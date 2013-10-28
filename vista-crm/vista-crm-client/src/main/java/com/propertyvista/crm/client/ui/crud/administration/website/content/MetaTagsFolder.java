@@ -11,7 +11,7 @@
  * @author Vlad
  * @version $Id$
  */
-package com.propertyvista.crm.client.ui.crud.administration.website.branding;
+package com.propertyvista.crm.client.ui.crud.administration.website.content;
 
 import java.util.HashSet;
 import java.util.Set;

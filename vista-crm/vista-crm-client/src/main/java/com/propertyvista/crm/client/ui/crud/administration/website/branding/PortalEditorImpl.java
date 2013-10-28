@@ -7,20 +7,17 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on 2011-05-13
- * @author Vlad
+ * Created on Jul 5, 2013
+ * @author VladL
  * @version $Id$
  */
-package com.propertyvista.domain.site;
+package com.propertyvista.crm.client.ui.crud.administration.website.branding;
 
-import com.pyx4j.entity.annotations.validator.NotNull;
-import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.entity.shared.IList;
+import com.propertyvista.crm.client.ui.crud.CrmEditorViewImplBase;
+import com.propertyvista.dto.SiteDescriptorDTO;
 
-public interface PortalImageSet extends IEntity {
-
-    @NotNull
-    AvailableLocale locale();
-
-    IList<SiteImageResource> imageSet();
+public class PortalEditorImpl extends CrmEditorViewImplBase<SiteDescriptorDTO> implements PortalEditor {
+    public PortalEditorImpl() {
+        setForm(new PortalForm(this));
+    }
 }

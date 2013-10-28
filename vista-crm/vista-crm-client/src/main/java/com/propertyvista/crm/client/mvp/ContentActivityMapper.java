@@ -55,14 +55,14 @@ import com.propertyvista.crm.client.activity.crud.administration.role.CrmRoleEdi
 import com.propertyvista.crm.client.activity.crud.administration.role.CrmRoleListerActivity;
 import com.propertyvista.crm.client.activity.crud.administration.role.CrmRoleViewerActivity;
 import com.propertyvista.crm.client.activity.crud.administration.tenantsecurity.TenantSecurityViewerActivity;
-import com.propertyvista.crm.client.activity.crud.administration.website.branding.BrandingActivity;
-import com.propertyvista.crm.client.activity.crud.administration.website.branding.BrandingEditorActivity;
-import com.propertyvista.crm.client.activity.crud.administration.website.branding.BrandingViewerActivity;
+import com.propertyvista.crm.client.activity.crud.administration.website.branding.PortalActivity;
+import com.propertyvista.crm.client.activity.crud.administration.website.branding.PortalEditorActivity;
+import com.propertyvista.crm.client.activity.crud.administration.website.branding.PortalViewerActivity;
 import com.propertyvista.crm.client.activity.crud.administration.website.content.CityIntroPageEditorActivity;
 import com.propertyvista.crm.client.activity.crud.administration.website.content.CityIntroPageViewerActivity;
-import com.propertyvista.crm.client.activity.crud.administration.website.content.ContentActivity;
-import com.propertyvista.crm.client.activity.crud.administration.website.content.ContentEditorActivity;
-import com.propertyvista.crm.client.activity.crud.administration.website.content.ContentViewerActivity;
+import com.propertyvista.crm.client.activity.crud.administration.website.content.SiteActivity;
+import com.propertyvista.crm.client.activity.crud.administration.website.content.SiteEditorActivity;
+import com.propertyvista.crm.client.activity.crud.administration.website.content.SiteViewerActivity;
 import com.propertyvista.crm.client.activity.crud.administration.website.content.HomePageGadgetEditorActivity;
 import com.propertyvista.crm.client.activity.crud.administration.website.content.HomePageGadgetViewerActivity;
 import com.propertyvista.crm.client.activity.crud.administration.website.content.PageEditorActivity;
@@ -875,26 +875,26 @@ public class ContentActivityMapper implements AppActivityMapper {
                     } else if (crudPlace instanceof Administration.ContentManagement.Portal) {
                         switch (crudPlace.getType()) {
                         case editor:
-                            activity = new BrandingEditorActivity(crudPlace);
+                            activity = new PortalEditorActivity(crudPlace);
                             break;
                         case viewer:
-                            activity = new BrandingViewerActivity(crudPlace);
+                            activity = new PortalViewerActivity(crudPlace);
                             break;
                         case lister:
-                            activity = new BrandingActivity(crudPlace);
+                            activity = new PortalActivity(crudPlace);
                             break;
                         }
 
                     } else if (crudPlace instanceof Administration.ContentManagement.Website) {
                         switch (crudPlace.getType()) {
                         case editor:
-                            activity = new ContentEditorActivity(crudPlace);
+                            activity = new SiteEditorActivity(crudPlace);
                             break;
                         case viewer:
-                            activity = new ContentViewerActivity(crudPlace);
+                            activity = new SiteViewerActivity(crudPlace);
                             break;
                         case lister:
-                            activity = new ContentActivity(crudPlace);
+                            activity = new SiteActivity(crudPlace);
                             break;
                         }
 
