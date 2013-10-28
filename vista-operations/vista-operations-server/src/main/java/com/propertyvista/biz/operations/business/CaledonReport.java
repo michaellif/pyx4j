@@ -139,7 +139,7 @@ class CaledonReport {
 
     private static void calulateLeaseStats(Lease lease, CaledonReportModel model) {
         model.leaseCount().setValue(model.leaseCount().getValue() + 1);
-        model.averageRent().setValue(model.averageRent().getValue().add(lease.currentTerm().version().leaseProducts().serviceItem().agreedPrice().getValue()));
+        DomainUtil.nvlAddBigDecimal(model.averageRent(), lease.currentTerm().version().leaseProducts().serviceItem().agreedPrice());
 
         // Calculate Max Lease charges
         BigDecimal leaseCharges = BigDecimal.ZERO;
@@ -149,7 +149,9 @@ class CaledonReport {
         List<InvoiceProductCharge> charges = ServerSideFactory.create(ARFacade.class).estimateLeaseCharges(cycle, lease);
 
         for (InvoiceProductCharge charge : charges) {
-            leaseCharges = leaseCharges.add(charge.amount().getValue());
+            if (!charge.amount().isNull()) {
+                leaseCharges = leaseCharges.add(charge.amount().getValue());
+            }
         }
 
         model.maxLeaseCharges().setValue(DomainUtil.max(model.maxLeaseCharges().getValue(), leaseCharges));
