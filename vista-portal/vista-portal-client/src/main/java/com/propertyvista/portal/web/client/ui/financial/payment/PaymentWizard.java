@@ -287,6 +287,8 @@ public class PaymentWizard extends CPortalEntityWizard<PaymentDTO> {
     protected void onStepChange(SelectionEvent<WizardStep> event) {
         super.onStepChange(event);
 
+        ((WizardDecorator<PaymentDTO>) getDecorator()).getBtnNext().setVisible(true);
+//      ((WizardDecorator<PaymentDTO>) getDecorator()).getBtnCancel().setVisible(true);
         if (event.getSelectedItem().equals(confirmationStep)) {
             confirmationDetailsHolder.clear();
             confirmationDetailsHolder.setWidget(createConfirmationDetailsPanel());
