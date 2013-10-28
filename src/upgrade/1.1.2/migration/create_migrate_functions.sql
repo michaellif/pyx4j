@@ -31,11 +31,19 @@ BEGIN
         ALTER TABLE insurance_tenant_sure_transaction DROP CONSTRAINT insurance_tenant_sure_transaction_insurance_fk;
         ALTER TABLE insurance_tenant_sure_transaction DROP CONSTRAINT insurance_tenant_sure_transaction_payment_method_fk;
         ALTER TABLE payment_record DROP CONSTRAINT payment_record_preauthorized_payment_fk;
+        ALTER TABLE portal_image_set$image_set DROP CONSTRAINT portal_image_set$image_set_owner_fk;
+        ALTER TABLE portal_image_set$image_set DROP CONSTRAINT portal_image_set$image_set_value_fk;
+        ALTER TABLE portal_image_set DROP CONSTRAINT portal_image_set_locale_fk;
+        ALTER TABLE portal_logo_image_resource DROP CONSTRAINT portal_logo_image_resource_large_fk;
+        ALTER TABLE portal_logo_image_resource DROP CONSTRAINT portal_logo_image_resource_locale_fk;
+        ALTER TABLE portal_logo_image_resource DROP CONSTRAINT portal_logo_image_resource_small_fk;
         ALTER TABLE preauthorized_payment_covered_item DROP CONSTRAINT preauthorized_payment_covered_item_pap_fk;
         ALTER TABLE preauthorized_payment DROP CONSTRAINT preauthorized_payment_payment_method_fk;
         ALTER TABLE preauthorized_payment DROP CONSTRAINT preauthorized_payment_tenant_fk;
         ALTER TABLE preauthorized_payment_covered_item DROP CONSTRAINT preauthorized_payment_covered_item_billable_item_fk;
         ALTER TABLE site_descriptor DROP CONSTRAINT site_descriptor_resident_portal_settings_fk;
+        ALTER TABLE site_descriptor$banner DROP CONSTRAINT site_descriptor$banner_value_fk;
+        ALTER TABLE site_descriptor$logo DROP CONSTRAINT site_descriptor$logo_value_fk;
         
 
 
@@ -48,6 +56,9 @@ BEGIN
         ALTER TABLE insurance_tenant_sure_transaction DROP CONSTRAINT insurance_tenant_sure_transaction_pk;
         ALTER TABLE file DROP CONSTRAINT file_pk;
         ALTER TABLE media DROP CONSTRAINT media_pk;
+        ALTER TABLE portal_image_set$image_set DROP CONSTRAINT portal_image_set$image_set_pk;
+        ALTER TABLE portal_image_set DROP CONSTRAINT portal_image_set_pk;
+        ALTER TABLE portal_logo_image_resource DROP CONSTRAINT portal_logo_image_resource_pk;
         ALTER TABLE preauthorized_payment DROP CONSTRAINT preauthorized_payment_pk;
         ALTER TABLE preauthorized_payment_covered_item DROP CONSTRAINT preauthorized_payment_covered_item_pk;
         
@@ -154,6 +165,10 @@ BEGIN
         
         ALTER TABLE building RENAME COLUMN info_address_location_lat TO info_location_lat;
         ALTER TABLE building RENAME COLUMN info_address_location_lng TO info_location_lng;
+        
+        -- company
+        
+        ALTER TABLE company ADD COLUMN logo BIGINT;
         
         -- company_logo
         
@@ -491,6 +506,9 @@ BEGIN
                 phone_number                            VARCHAR(500),
                 fax_number                              VARCHAR(500),
                 email_address                           VARCHAR(500),
+                hand_delivery_advance_days              INT,
+                mail_delivery_advance_days              INT,
+                courier_delivery_advance_days           INT,
                         CONSTRAINT n4_policy_pk PRIMARY KEY(id)     
         );
         
@@ -523,14 +541,41 @@ BEGIN
         ALTER TABLE payment_record$_assert_autopay_covered_items_changes OWNER TO vista;
         
         
+        -- portal_banner_image
+        
+        CREATE TABLE portal_banner_image
+        (
+                id                                      BIGINT                  NOT NULL,
+                locale                                  BIGINT,
+                banner                                  BIGINT,
+                        CONSTRAINT portal_banner_image_pk PRIMARY KEY(id)
+        );
+        
+        ALTER TABLE portal_banner_image OWNER TO vista;
+        
+        -- portal_image_set
+        
+        ALTER TABLE portal_image_set RENAME TO site_image_set;
+        
+        
+        -- portal_image_set$image_set
+        
+        ALTER TABLE portal_image_set$image_set RENAME TO site_image_set$image_set; 
+        
+        
+        -- portal_logo_image_resource
+        
+        ALTER TABLE portal_logo_image_resource RENAME TO site_logo_image_resource;
+        
         -- preauthorized_payment
         
         ALTER TABLE preauthorized_payment RENAME TO autopay_agreement;
         
         ALTER TABLE autopay_agreement   ADD COLUMN review_of_pap BIGINT,
                                         ADD COLUMN updated_by_tenant DATE,
-                                        ADD COLUMN updated_by_system DATE,
-                                        ADD COLUMN expired_from DATE;
+                                        ADD COLUMN updated_by_system DATE;
+                                       
+        ALTER TABLE autopay_agreement RENAME COLUMN expiring TO expired_from;
         
         
         -- preauthorized_payment_covered_item
@@ -543,6 +588,11 @@ BEGIN
         ALTER TABLE site_descriptor ADD COLUMN resident_portal_enabled BOOLEAN;
         
         
+        -- vendor
+        
+        ALTER TABLE vendor ADD COLUMN logo BIGINT;
+        
+        
         /**
         ***     =====================================================================================================
         ***
@@ -550,6 +600,14 @@ BEGIN
         ***
         ***     =====================================================================================================
         **/
+        
+        
+        -- autopay_agreement
+        
+        EXECUTE 'UPDATE '||v_schema_name||'.autopay_agreement '
+                ||'SET is_deleted = TRUE '
+                ||'WHERE expired_from IS NOT NULL';
+        
         
         -- auto_pay_policy
         
@@ -654,7 +712,7 @@ BEGIN
         
         -- autopay_agreement
         
-        ALTER TABLE autopay_agreement DROP COLUMN expiring;
+        
         
         
          -- billing_billing_cycle
@@ -797,7 +855,6 @@ BEGIN
         ALTER TABLE autopay_agreement_covered_item ADD CONSTRAINT autopay_agreement_covered_item_pap_fk FOREIGN KEY(pap) 
                 REFERENCES autopay_agreement(id)  DEFERRABLE INITIALLY DEFERRED;
         ALTER TABLE building$media ADD CONSTRAINT building$media_value_fk FOREIGN KEY(value) REFERENCES media_file(id)  DEFERRABLE INITIALLY DEFERRED;
-        ALTER TABLE company_logo ADD CONSTRAINT company_logo_company_fk FOREIGN KEY(company) REFERENCES company(id)  DEFERRABLE INITIALLY DEFERRED;
         ALTER TABLE employee_signature ADD CONSTRAINT employee_signature_employee_fk FOREIGN KEY(employee) REFERENCES employee(id)  DEFERRABLE INITIALLY DEFERRED;
         ALTER TABLE floorplan$media ADD CONSTRAINT floorplan$media_value_fk FOREIGN KEY(value) REFERENCES media_file(id)  DEFERRABLE INITIALLY DEFERRED;
         ALTER TABLE ilsbatch$units ADD CONSTRAINT ilsbatch$units_owner_fk FOREIGN KEY(owner) REFERENCES ilsbatch(id)  DEFERRABLE INITIALLY DEFERRED;
@@ -916,6 +973,7 @@ BEGIN
         ***     ====================================================================================================
         **/
         
+        CREATE INDEX company_logo_company_idx ON company_logo USING btree(company);
         CREATE INDEX ilsbatch$units_owner_idx ON ilsbatch$units USING btree(owner);
         CREATE INDEX ilsbatch_building_idx ON ilsbatch USING btree(building);
         CREATE INDEX ilsopen_house_marketing_idx ON ilsopen_house USING btree(marketing);

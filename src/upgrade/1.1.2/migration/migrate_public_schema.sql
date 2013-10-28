@@ -22,6 +22,9 @@ BEGIN TRANSACTION;
         ALTER SEQUENCE insurance_tenant_sure_report_seq RENAME TO tenant_sure_insurance_policy_report_seq;
         ALTER SEQUENCE insurance_tenant_sure_transaction_seq RENAME TO tenant_sure_transaction_seq;
         ALTER SEQUENCE media_seq RENAME TO media_file_seq;
+        ALTER SEQUENCE portal_image_set_seq  RENAME TO site_image_set_seq ;
+        ALTER SEQUENCE portal_image_set$image_set_seq RENAME TO site_image_set$image_set_seq;
+        ALTER SEQUENCE portal_logo_image_resource_seq RENAME TO site_logo_image_resource_seq; 
         ALTER SEQUENCE preauthorized_payment_seq RENAME TO autopay_agreement_seq;
         ALTER SEQUENCE preauthorized_payment_covered_item_seq RENAME TO autopay_agreement_covered_item_seq;
         
@@ -60,6 +63,9 @@ BEGIN TRANSACTION;
         CREATE SEQUENCE n4_policy_seq START WITH 1 INCREMENT BY 1 NO MAXVALUE NO MINVALUE CACHE 1;
         CREATE SEQUENCE n4_policy$relevant_ar_codes_seq START WITH 1 INCREMENT BY 1 NO MAXVALUE NO MINVALUE CACHE 1;
         CREATE SEQUENCE payment_record$_assert_autopay_covered_items_changes_seq START WITH 1 INCREMENT BY 1 NO MAXVALUE NO MINVALUE CACHE 1;
+        CREATE SEQUENCE portal_banner_image_seq START WITH 1 INCREMENT BY 1 NO MAXVALUE NO MINVALUE CACHE 1;
+        CREATE SEQUENCE site_descriptor$portal_banner_seq START WITH 1 INCREMENT BY 1 NO MAXVALUE NO MINVALUE CACHE 1;
+
         
   
         -- Change owner to vista
@@ -86,6 +92,11 @@ BEGIN TRANSACTION;
         ALTER SEQUENCE n4_policy_seq OWNER TO vista ;
         ALTER SEQUENCE n4_policy$relevant_ar_codes_seq OWNER TO vista ;
         ALTER SEQUENCE payment_record$_assert_autopay_covered_items_changes_seq OWNER TO vista ;
+        ALTER SEQUENCE portal_banner_image_seq OWNER TO vista ;
+        ALTER SEQUENCE site_descriptor$portal_banner_seq OWNER TO vista ;
+        ALTER SEQUENCE site_image_set$image_set_seq OWNER TO vista ;
+        ALTER SEQUENCE site_image_set_seq OWNER TO vista ;
+        ALTER SEQUENCE site_logo_image_resource_seq OWNER TO vista ;
         ALTER SEQUENCE tenant_sure_insurance_policy_client_seq OWNER TO vista ;
         ALTER SEQUENCE tenant_sure_insurance_policy_report_seq OWNER TO vista ;
         ALTER SEQUENCE tenant_sure_transaction_seq OWNER TO vista ;
