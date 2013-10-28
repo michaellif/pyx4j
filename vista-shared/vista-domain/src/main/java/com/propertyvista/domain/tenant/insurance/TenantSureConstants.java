@@ -25,7 +25,7 @@ public class TenantSureConstants {
 
     public static final String TENANTSURE_EMAIL = "info@highcourtpartners.com";
 
-    public static final String HIGHCOURT_PARTNERS_PRIVACY_POLICY_HREF = "http://highcourtpartners.com/privacy-policy.html";
+    public static final String HIGHCOURT_PARTNERS_PRIVACY_POLICY_HREF = "http://www.highcourtpartners.com/privacy.html";
 
     public static final String HIGHCOURT_PARTNERS_COMPENSATION_DISCLOSURE_STATEMENT_HREF = "http://highcourtpartners.com/client-portal.html";
 
