@@ -249,7 +249,7 @@ public class PMSiteApplication extends AuthenticatedWebApplication {
                         }
                     }
                     // not our page - show error
-                    internalError = new Exception("Page Not Found: " + request.getUrl().toString());
+                    internalError = new PMSitePageNotFoundException("Page Not Found: " + request.getUrl().toString());
                     return new RenderPageRequestHandler(new PageProvider(InternalErrorPage.class));
                 }
 

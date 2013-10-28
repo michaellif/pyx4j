@@ -23,6 +23,7 @@ import org.slf4j.LoggerFactory;
 import com.pyx4j.config.shared.ApplicationMode;
 
 import com.propertyvista.pmsite.server.PMSiteApplication;
+import com.propertyvista.pmsite.server.PMSitePageNotFoundException;
 
 public class InternalErrorPage extends ErrorPage {
     private static final long serialVersionUID = 1L;
@@ -33,7 +34,11 @@ public class InternalErrorPage extends ErrorPage {
         StringWriter err = new StringWriter();
         // get internal exception if available
         Exception e = PMSiteApplication.get().getInternalError();
-        log.error("site error", e);
+        if (e instanceof PMSitePageNotFoundException) {
+            log.debug(e.getMessage());
+        } else {
+            log.error("site error", e);
+        }
         if (e == null) {
             err.write("Unknown Error");
         } else if (ApplicationMode.isDevelopment()) {
