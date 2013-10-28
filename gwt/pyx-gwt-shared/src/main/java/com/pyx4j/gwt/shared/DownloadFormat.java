@@ -57,7 +57,9 @@ public enum DownloadFormat {
 
     JAVA_SERIALIZED("ser", "Java Serialized Object"),
 
-    JAR("jar", "Java Archive");
+    JAR("jar", "Java Archive"),
+
+    ARCHIVE(new String[] { "zip", "rar", "7z", "tar.gz", "tgz" }, "Archive");
 
     private String[] extensions;
 
