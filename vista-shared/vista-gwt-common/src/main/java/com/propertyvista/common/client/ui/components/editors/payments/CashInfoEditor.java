@@ -15,13 +15,13 @@ package com.propertyvista.common.client.ui.components.editors.payments;
 
 import com.google.gwt.user.client.ui.IsWidget;
 
+import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
 
-import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
 import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
 import com.propertyvista.domain.payment.CashInfo;
 
-public class CashInfoEditor extends CEntityDecoratableForm<CashInfo> {
+public class CashInfoEditor extends CEntityForm<CashInfo> {
 
     public CashInfoEditor() {
         super(CashInfo.class);

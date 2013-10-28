@@ -18,16 +18,16 @@ import com.google.gwt.user.client.ui.IsWidget;
 import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.forms.client.events.DevShortcutEvent;
 import com.pyx4j.forms.client.events.DevShortcutHandler;
+import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.ui.CTextFieldBase;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
 
-import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
 import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
 import com.propertyvista.domain.payment.AccountType;
 import com.propertyvista.domain.payment.CheckInfo;
 
-public class CheckInfoEditor extends CEntityDecoratableForm<CheckInfo> {
+public class CheckInfoEditor extends CEntityForm<CheckInfo> {
 
     private static final I18n i18n = I18n.get(CheckInfoEditor.class);
 

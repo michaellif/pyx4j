@@ -83,7 +83,7 @@ import com.propertyvista.portal.web.client.resources.PortalImages;
 import com.propertyvista.portal.web.client.ui.CPortalEntityWizard;
 import com.propertyvista.portal.web.client.ui.IWizardView;
 import com.propertyvista.portal.web.client.ui.financial.PortalPaymentTypesUtil;
-import com.propertyvista.portal.web.client.ui.financial.paymentmethod.PaymentMethodEditor;
+import com.propertyvista.portal.web.client.ui.financial.paymentmethod.editor.PaymentMethodEditor;
 import com.propertyvista.portal.web.client.ui.util.decorators.FormWidgetDecoratorBuilder;
 
 public class PaymentWizard extends CPortalEntityWizard<PaymentDTO> {

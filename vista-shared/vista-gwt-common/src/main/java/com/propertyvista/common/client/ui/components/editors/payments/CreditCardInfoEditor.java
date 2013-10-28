@@ -34,6 +34,7 @@ import com.pyx4j.forms.client.events.PropertyChangeEvent.PropertyName;
 import com.pyx4j.forms.client.events.PropertyChangeHandler;
 import com.pyx4j.forms.client.ui.CComboBox;
 import com.pyx4j.forms.client.ui.CComponent;
+import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.ui.CMonthYearPicker;
 import com.pyx4j.forms.client.ui.CPersonalIdentityField;
 import com.pyx4j.forms.client.ui.CTextComponent;
@@ -43,7 +44,6 @@ import com.pyx4j.forms.client.validators.ValidationError;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 
-import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
 import com.propertyvista.common.client.ui.components.editors.payments.CreditCardNumberTypeValidator.CreditCardTypeProvider;
 import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
 import com.propertyvista.common.client.ui.validators.FutureDateValidator;
@@ -54,7 +54,7 @@ import com.propertyvista.domain.util.ValidationUtils;
 import com.propertyvista.misc.CreditCardNumberGenerator;
 import com.propertyvista.portal.rpc.shared.services.CreditCardValidationService;
 
-public class CreditCardInfoEditor extends CEntityDecoratableForm<CreditCardInfo> {
+public class CreditCardInfoEditor extends CEntityForm<CreditCardInfo> {
 
     private static final I18n i18n = I18n.get(CreditCardInfoEditor.class);
 
@@ -65,27 +65,13 @@ public class CreditCardInfoEditor extends CEntityDecoratableForm<CreditCardInfo>
 
     private ValidationError isCreditCardNumberValid;
 
-    private final CComboBox<CreditCardType> typeSelector = new CComboBox<CreditCardType>();
+    protected final CComboBox<CreditCardType> typeSelector = new CComboBox<CreditCardType>();
 
-    private final CPersonalIdentityField<CreditCardNumberIdentity> cardEditor = new CPersonalIdentityField<CreditCardNumberIdentity>(
+    protected final CPersonalIdentityField<CreditCardNumberIdentity> cardEditor = new CPersonalIdentityField<CreditCardNumberIdentity>(
             CreditCardNumberIdentity.class, "X XXXX XXXX xxxx;XXXX XXXX XXXX xxxx", null);
 
-    private final double maxCompWidth;
-
-    private final double contentWidth;
-
-    private final double labelWidth;
-
     public CreditCardInfoEditor() {
-        this(FormDecoratorBuilder.LABEL_WIDTH, 20, FormDecoratorBuilder.CONTENT_WIDTH);
-    }
-
-    public CreditCardInfoEditor(double labelWidth, double maxCompWidth, double contentWidth) {
         super(CreditCardInfo.class);
-
-        this.labelWidth = labelWidth;
-        this.maxCompWidth = maxCompWidth;
-        this.contentWidth = contentWidth;
     }
 
     @Override
@@ -94,12 +80,12 @@ public class CreditCardInfoEditor extends CEntityDecoratableForm<CreditCardInfo>
 
         int row = -1;
         CMonthYearPicker monthYearPicker = new CMonthYearPicker(false);
-        panel.setWidget(++row, 0, decorator(inject(proto().nameOn()), maxCompWidth).build());
-        panel.setWidget(++row, 0, decorator(inject(proto().cardType(), typeSelector), maxCompWidth).build());
+        panel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().nameOn()), 20).build());
+        panel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().cardType(), typeSelector), 20).build());
 
-        panel.setWidget(++row, 0, decorator(inject(proto().card(), cardEditor), maxCompWidth).build());
-        panel.setWidget(++row, 0, decorator(inject(proto().expiryDate(), monthYearPicker), maxCompWidth).build());
-        panel.setWidget(++row, 0, decorator(inject(proto().securityCode()), 3).build());
+        panel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().card(), cardEditor), 20).build());
+        panel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().expiryDate(), monthYearPicker), 20).build());
+        panel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().securityCode()), 3).build());
 
         // tweak:
         monthYearPicker.setYearRange(new Range(1900 + new Date().getYear(), 10));
@@ -266,9 +252,5 @@ public class CreditCardInfoEditor extends CEntityDecoratableForm<CreditCardInfo>
         TimeUtils.addDays(nextMonth, 31);
         get(proto().expiryDate()).setValue(nextMonth);
         get(proto().securityCode()).setValue("123");
-    }
-
-    private FormDecoratorBuilder decorator(CComponent<?> comp, double compWidth) {
-        return new FormDecoratorBuilder(comp, labelWidth, (compWidth <= contentWidth ? compWidth : contentWidth), contentWidth);
     }
 }

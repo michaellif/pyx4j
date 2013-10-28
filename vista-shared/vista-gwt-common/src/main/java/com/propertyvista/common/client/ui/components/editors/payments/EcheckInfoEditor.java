@@ -23,6 +23,7 @@ import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.forms.client.events.DevShortcutEvent;
 import com.pyx4j.forms.client.events.DevShortcutHandler;
 import com.pyx4j.forms.client.ui.CComponent;
+import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.ui.CPersonalIdentityField;
 import com.pyx4j.forms.client.ui.CTextFieldBase;
 import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
@@ -31,36 +32,21 @@ import com.pyx4j.forms.client.validators.ValidationError;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.common.client.resources.VistaImages;
-import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
 import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
 import com.propertyvista.common.client.ui.validators.EcheckAccountNumberValidator;
 import com.propertyvista.domain.payment.AccountNumberIdentity;
 import com.propertyvista.domain.payment.EcheckInfo;
 import com.propertyvista.domain.util.ValidationUtils;
 
-public class EcheckInfoEditor extends CEntityDecoratableForm<EcheckInfo> {
+public class EcheckInfoEditor extends CEntityForm<EcheckInfo> {
 
     private static final I18n i18n = I18n.get(EcheckInfoEditor.class);
 
-    private final CPersonalIdentityField<AccountNumberIdentity> accountEditor = new CPersonalIdentityField<AccountNumberIdentity>(AccountNumberIdentity.class,
-            "X xxxx;XX xxxx;XXX xxxx;XXXX xxxx;X XXXX xxxx;XX XXXX xxxx;XXX XXXX xxxx;XXXX XXXX xxxx", null);
-
-    private final double maxCompWidth;
-
-    private final double contentWidth;
-
-    private final double labelWidth;
+    protected final CPersonalIdentityField<AccountNumberIdentity> accountEditor = new CPersonalIdentityField<AccountNumberIdentity>(
+            AccountNumberIdentity.class, "X xxxx;XX xxxx;XXX xxxx;XXXX xxxx;X XXXX xxxx;XX XXXX xxxx;XXX XXXX xxxx;XXXX XXXX xxxx", null);
 
     public EcheckInfoEditor() {
-        this(FormDecoratorBuilder.LABEL_WIDTH, 20, FormDecoratorBuilder.CONTENT_WIDTH);
-    }
-
-    public EcheckInfoEditor(double labelWidth, double maxCompWidth, double contentWidth) {
         super(EcheckInfo.class);
-
-        this.labelWidth = labelWidth;
-        this.maxCompWidth = maxCompWidth;
-        this.contentWidth = contentWidth;
     }
 
     @Override
@@ -68,13 +54,13 @@ public class EcheckInfoEditor extends CEntityDecoratableForm<EcheckInfo> {
         BasicFlexFormPanel panel = new BasicFlexFormPanel();
 
         int row = -1;
-        panel.setWidget(++row, 0, decorator(inject(proto().nameOn()), maxCompWidth).build());
-        panel.setWidget(++row, 0, decorator(inject(proto().accountNo(), accountEditor), maxCompWidth).build());
+        panel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().nameOn()), 20).build());
+        panel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().accountNo(), accountEditor), 20).build());
 
-        panel.setWidget(++row, 0, decorator(inject(proto().branchTransitNumber()), 5).build());
-        panel.setWidget(++row, 0, decorator(inject(proto().bankId()), 3).build());
+        panel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().branchTransitNumber()), 5).build());
+        panel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().bankId()), 3).build());
 
-        if (!isViewable()) {
+        if (!isViewable() && isEditable()) {
             Image image = new Image(VistaImages.INSTANCE.eChequeGuide().getSafeUri());
             image.getElement().getStyle().setMarginTop(1, Unit.EM);
             panel.setWidget(++row, 0, image);
@@ -132,9 +118,5 @@ public class EcheckInfoEditor extends CEntityDecoratableForm<EcheckInfo> {
         CTextFieldBase<?, ?> id = (CTextFieldBase<?, ?>) get(proto().accountNo());
         id.onEditingStop(); // assume new user input; will obfuscate the value if focused
         id.setValueByString(String.valueOf(System.currentTimeMillis() % 10000000));
-    }
-
-    private FormDecoratorBuilder decorator(CComponent<?> comp, double compWidth) {
-        return new FormDecoratorBuilder(comp, labelWidth, (compWidth <= contentWidth ? compWidth : contentWidth), contentWidth);
     }
 }

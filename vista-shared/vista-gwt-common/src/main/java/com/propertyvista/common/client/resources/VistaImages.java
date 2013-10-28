@@ -127,6 +127,9 @@ public interface VistaImages extends FormsImageBundle, EntityFolderImages, Widge
     @Source("e_cheque-guide.png")
     ImageResource eChequeGuide();
 
+    @Source("e_cheque-guide-narrow.png")
+    ImageResource eChequeGuideNarrow();
+
     @Source("profile-picture.png")
     ImageResource profilePicture();
 }

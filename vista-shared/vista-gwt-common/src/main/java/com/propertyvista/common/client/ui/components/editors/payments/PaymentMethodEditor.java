@@ -36,7 +36,6 @@ import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.RadioGroup;
 
-import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
 import com.propertyvista.common.client.ui.components.editors.AddressSimpleEditor;
 import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
 import com.propertyvista.domain.contact.AddressSimple;
@@ -54,7 +53,7 @@ import com.propertyvista.domain.payment.PaymentType;
 import com.propertyvista.domain.pmc.PmcPaymentMethod;
 import com.propertyvista.domain.security.common.AbstractPmcUser;
 
-public class PaymentMethodEditor<E extends AbstractPaymentMethod> extends CEntityDecoratableForm<E> {
+public class PaymentMethodEditor<E extends AbstractPaymentMethod> extends CEntityForm<E> {
 
     private static final I18n i18n = I18n.get(PaymentMethodEditor.class);
 

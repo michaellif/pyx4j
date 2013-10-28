@@ -7,28 +7,34 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Jun 27, 2011
+ * Created on Jun 27, 20011
  * @author Dad
  * @version $Id$
  */
-package com.propertyvista.portal.web.client.ui.financial.paymentmethod;
+package com.propertyvista.portal.web.client.ui.financial.paymentmethod.editor;
 
+import java.util.Date;
 import java.util.Set;
 
+import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
+import com.google.gwt.user.client.ui.HasHorizontalAlignment;
+import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Widget;
+import com.google.gwt.view.client.Range;
 
 import com.pyx4j.forms.client.ui.CComboBox;
 import com.pyx4j.forms.client.ui.CEntityForm;
+import com.pyx4j.forms.client.ui.CMonthYearPicker;
 import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
 
+import com.propertyvista.common.client.resources.VistaImages;
 import com.propertyvista.common.client.ui.components.VistaEditorsComponentFactory;
 import com.propertyvista.common.client.ui.components.editors.payments.CreditCardInfoEditor;
 import com.propertyvista.common.client.ui.components.editors.payments.EcheckInfoEditor;
-import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
 import com.propertyvista.domain.payment.AbstractPaymentMethod;
 import com.propertyvista.domain.payment.CreditCardInfo.CreditCardType;
 import com.propertyvista.domain.payment.PaymentType;
@@ -86,12 +92,53 @@ public class PaymentMethodEditor<E extends AbstractPaymentMethod> extends com.pr
 
     @Override
     protected CEntityForm<?> createEcheckInfoEditor() {
-        return new EcheckInfoEditor(FormDecoratorBuilder.LABEL_WIDTH, 15, 15);
+        return new EcheckInfoEditor() {
+            @Override
+            public IsWidget createContent() {
+                BasicFlexFormPanel panel = new BasicFlexFormPanel();
+
+                int row = -1;
+                panel.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().nameOn())).build());
+                panel.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().accountNo(), accountEditor)).build());
+
+                panel.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().branchTransitNumber()), 150).build());
+                panel.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().bankId()), 50).build());
+
+                if (!isViewable() && isEditable()) {
+                    Image image = new Image(VistaImages.INSTANCE.eChequeGuideNarrow().getSafeUri());
+                    image.getElement().getStyle().setMarginTop(1, Unit.EM);
+                    panel.setWidget(++row, 0, image);
+                    panel.getFlexCellFormatter().setHorizontalAlignment(row, 0, HasHorizontalAlignment.ALIGN_CENTER);
+                }
+
+                return panel;
+            }
+        };
     }
 
     @Override
     protected CEntityForm<?> createCreditCardInfoEditor() {
-        return new CreditCardInfoEditor(FormDecoratorBuilder.LABEL_WIDTH, 15, 15) {
+        return new CreditCardInfoEditor() {
+            @Override
+            public IsWidget createContent() {
+                BasicFlexFormPanel panel = new BasicFlexFormPanel();
+
+                int row = -1;
+                CMonthYearPicker monthYearPicker = new CMonthYearPicker(false);
+                panel.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().nameOn())).build());
+                panel.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().cardType(), typeSelector)).build());
+
+                panel.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().card(), cardEditor)).build());
+                panel.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().expiryDate(), monthYearPicker), 125).build());
+                panel.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().securityCode()), 50).build());
+
+                // tweak:
+                monthYearPicker.setYearRange(new Range(1900 + new Date().getYear(), 10));
+                get(proto().securityCode()).setVisible(isEditable());
+
+                return panel;
+            }
+
             @Override
             protected Set<CreditCardType> getAllowedCardTypes() {
                 return PaymentMethodEditor.this.getAllowedCardTypes();

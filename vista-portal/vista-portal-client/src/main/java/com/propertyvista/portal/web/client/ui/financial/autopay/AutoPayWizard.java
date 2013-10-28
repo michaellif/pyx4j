@@ -69,7 +69,7 @@ import com.propertyvista.dto.PaymentDataDTO.PaymentSelect;
 import com.propertyvista.dto.PreauthorizedPaymentCoveredItemDTO;
 import com.propertyvista.portal.rpc.portal.web.dto.financial.AutoPayDTO;
 import com.propertyvista.portal.web.client.ui.CPortalEntityWizard;
-import com.propertyvista.portal.web.client.ui.financial.paymentmethod.PaymentMethodEditor;
+import com.propertyvista.portal.web.client.ui.financial.paymentmethod.editor.PaymentMethodEditor;
 import com.propertyvista.portal.web.client.ui.util.decorators.FormWidgetDecoratorBuilder;
 
 public class AutoPayWizard extends CPortalEntityWizard<AutoPayDTO> {

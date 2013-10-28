@@ -22,14 +22,14 @@ import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.IsWidget;
 
+import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.common.client.resources.VistaImages;
-import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
 import com.propertyvista.domain.payment.InteracInfo;
 
-public class InteracInfoEditor extends CEntityDecoratableForm<InteracInfo> {
+public class InteracInfoEditor extends CEntityForm<InteracInfo> {
 
     private static final I18n i18n = I18n.get(InteracInfoEditor.class);
 

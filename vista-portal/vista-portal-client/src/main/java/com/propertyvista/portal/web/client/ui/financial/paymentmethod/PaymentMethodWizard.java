@@ -50,6 +50,7 @@ import com.propertyvista.domain.payment.LeasePaymentMethod;
 import com.propertyvista.portal.rpc.portal.web.dto.financial.PaymentMethodDTO;
 import com.propertyvista.portal.web.client.ui.CPortalEntityWizard;
 import com.propertyvista.portal.web.client.ui.IWizardView;
+import com.propertyvista.portal.web.client.ui.financial.paymentmethod.editor.PaymentMethodEditor;
 
 public class PaymentMethodWizard extends CPortalEntityWizard<PaymentMethodDTO> {
 
