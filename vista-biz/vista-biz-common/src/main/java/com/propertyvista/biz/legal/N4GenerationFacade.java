@@ -29,5 +29,5 @@ public interface N4GenerationFacade {
 
     N4FormFieldsData populateFormData(N4LeaseData leaseData, N4LandlordsData landlordsData);
 
-    N4LeaseData prepareN4LeaseData(Lease leaseId, LogicalDate noticeDate, Collection<ARCode> acceptedARCodes);
+    N4LeaseData prepareN4LeaseData(Lease leaseId, LogicalDate noticeDate, int terminationAdvanceDays, Collection<ARCode> acceptedARCodes);
 }

@@ -20,6 +20,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 import com.pyx4j.commons.LogicalDate;
 
+import com.propertyvista.crm.rpc.dto.legal.n4.N4GenerationQueryDTO.DeliveryMethod;
 import com.propertyvista.domain.company.Employee;
 import com.propertyvista.domain.legal.LegalNoticeCandidate;
 import com.propertyvista.domain.legal.N4LegalLetter;
@@ -39,7 +40,8 @@ public interface N4ManagementFacade {
      * @throws IllegalStateException
      *             if one of the given leases doesn't owe any money.
      */
-    void issueN4(List<Lease> delinquentLeases, Employee employee, LogicalDate noticeDate, AtomicInteger progress) throws IllegalStateException;
+    void issueN4(List<Lease> delinquentLeases, Employee employee, LogicalDate noticeDate, DeliveryMethod deliveryMethod, AtomicInteger progress)
+            throws IllegalStateException;
 
     /**
      * Retrieves N4s sorted in descending order by the date of generation. If <code>generatedCutOffDate</code> is not <code>null</code> this will be the minimum

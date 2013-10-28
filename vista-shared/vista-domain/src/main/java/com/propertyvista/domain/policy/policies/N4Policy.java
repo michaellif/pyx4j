@@ -55,4 +55,13 @@ public interface N4Policy extends Policy {
     @Detached(level = AttachLevel.ToStringMembers)
     IList<ARCode> relevantArCodes();
 
+    @NotNull
+    IPrimitive<Integer> handDeliveryAdvanceDays();
+
+    @NotNull
+    IPrimitive<Integer> mailDeliveryAdvanceDays();
+
+    @NotNull
+    IPrimitive<Integer> courierDeliveryAdvanceDays();
+
 }

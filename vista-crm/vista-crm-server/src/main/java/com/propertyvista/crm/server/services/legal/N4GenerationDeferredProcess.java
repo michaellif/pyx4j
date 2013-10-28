@@ -22,6 +22,7 @@ import com.pyx4j.gwt.rpc.deferred.DeferredProcessProgressResponse;
 import com.pyx4j.gwt.server.deferred.AbstractDeferredProcess;
 
 import com.propertyvista.biz.legal.N4ManagementFacade;
+import com.propertyvista.crm.rpc.dto.legal.n4.N4GenerationQueryDTO.DeliveryMethod;
 import com.propertyvista.domain.company.Employee;
 import com.propertyvista.domain.tenant.lease.Lease;
 
@@ -39,7 +40,9 @@ public class N4GenerationDeferredProcess extends AbstractDeferredProcess {
 
     private final LogicalDate noticeDate;
 
-    public N4GenerationDeferredProcess(List<Lease> delinquentLeases, Employee issuingEmployee, LogicalDate noticeDate) {
+    private final DeliveryMethod deliveryMethod;
+
+    public N4GenerationDeferredProcess(List<Lease> delinquentLeases, Employee issuingEmployee, LogicalDate noticeDate, DeliveryMethod deliveryMethod) {
         progress = new AtomicInteger();
         progress.set(0);
         progressMax = delinquentLeases.size();
@@ -47,11 +50,12 @@ public class N4GenerationDeferredProcess extends AbstractDeferredProcess {
         this.delinquentLeases = delinquentLeases;
         this.issuingEmployee = issuingEmployee;
         this.noticeDate = noticeDate;
+        this.deliveryMethod = deliveryMethod;
     }
 
     @Override
     public void execute() {
-        ServerSideFactory.create(N4ManagementFacade.class).issueN4(delinquentLeases, issuingEmployee, noticeDate, progress);
+        ServerSideFactory.create(N4ManagementFacade.class).issueN4(delinquentLeases, issuingEmployee, noticeDate, deliveryMethod, progress);
         completed = true;
     }
 

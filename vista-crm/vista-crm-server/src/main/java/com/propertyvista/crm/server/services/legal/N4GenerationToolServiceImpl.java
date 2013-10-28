@@ -68,7 +68,7 @@ public class N4GenerationToolServiceImpl implements N4GenerationToolService {
     @Override
     public void process(AsyncCallback<String> callback, N4GenerationQueryDTO query) {
         callback.onSuccess(DeferredProcessRegistry.fork(new N4GenerationDeferredProcess(query.targetDelinquentLeases(), query.agent(), query.noticeDate()
-                .getValue()), ThreadPoolNames.IMPORTS));
+                .getValue(), query.deliveryMethod().getValue()), ThreadPoolNames.IMPORTS));
     }
 
     @Override

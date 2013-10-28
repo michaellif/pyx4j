@@ -264,7 +264,7 @@ public class LeaseViewerCrudServiceImpl extends LeaseViewerCrudServiceBaseImpl<L
     @Override
     public void issueN4(AsyncCallback<VoidSerializable> defaultAsyncCallback, N4GenerationQueryDTO n4GenerationQuery) {
         ServerSideFactory.create(N4ManagementFacade.class).issueN4(n4GenerationQuery.targetDelinquentLeases(), n4GenerationQuery.agent(),
-                n4GenerationQuery.noticeDate().getValue(), new AtomicInteger());
+                n4GenerationQuery.noticeDate().getValue(), n4GenerationQuery.deliveryMethod().getValue(), new AtomicInteger());
         Persistence.service().commit();
         defaultAsyncCallback.onSuccess(null);
     }

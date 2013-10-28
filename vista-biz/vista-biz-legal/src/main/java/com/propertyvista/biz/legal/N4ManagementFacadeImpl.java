@@ -40,6 +40,7 @@ import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 
 import com.propertyvista.biz.financial.ar.ARFacade;
 import com.propertyvista.biz.policy.PolicyFacade;
+import com.propertyvista.crm.rpc.dto.legal.n4.N4GenerationQueryDTO.DeliveryMethod;
 import com.propertyvista.domain.company.Employee;
 import com.propertyvista.domain.company.EmployeeSignature;
 import com.propertyvista.domain.financial.ARCode;
@@ -98,7 +99,8 @@ public class N4ManagementFacadeImpl implements N4ManagementFacade {
     }
 
     @Override
-    public void issueN4(List<Lease> delinquentLeases, Employee employee, LogicalDate noticeDate, AtomicInteger progress) throws IllegalStateException {
+    public void issueN4(List<Lease> delinquentLeases, Employee employee, LogicalDate noticeDate, DeliveryMethod deliveryMethod, AtomicInteger progress)
+            throws IllegalStateException {
 
         N4Policy n4policy = ServerSideFactory.create(PolicyFacade.class).obtainEffectivePolicy(EntityFactory.create(OrganizationPoliciesNode.class),
                 N4Policy.class);
@@ -124,8 +126,23 @@ public class N4ManagementFacadeImpl implements N4ManagementFacade {
 
         Date generationTime = SystemDateManager.getDate();
 
+        int terminationDateAdvanceDays = 0;
+        switch (deliveryMethod) {
+        case Mail:
+            terminationDateAdvanceDays = n4policy.mailDeliveryAdvanceDays().getValue();
+            break;
+        case Hand:
+            terminationDateAdvanceDays = n4policy.handDeliveryAdvanceDays().getValue();
+            break;
+        case Courier:
+            terminationDateAdvanceDays = n4policy.courierDeliveryAdvanceDays().getValue();
+            break;
+        default:
+            throw new IllegalArgumentException("unknown delivery method '" + deliveryMethod.name() + "'");
+        }
+
         for (Lease leaseId : delinquentLeases) {
-            issueN4ForLease(leaseId, n4LandLordsData, noticeDate, new HashSet<ARCode>(n4policy.relevantArCodes()), generationTime);
+            issueN4ForLease(leaseId, n4LandLordsData, noticeDate, terminationDateAdvanceDays, new HashSet<ARCode>(n4policy.relevantArCodes()), generationTime);
             progress.set(progress.get() + 1);
         }
 
@@ -149,9 +166,11 @@ public class N4ManagementFacadeImpl implements N4ManagementFacade {
         return n4s;
     }
 
-    private void issueN4ForLease(Lease leaseId, N4LandlordsData n4LandLordsData, LogicalDate noticeDate, Collection<ARCode> relevantArCodes, Date generationTime) {
+    private void issueN4ForLease(Lease leaseId, N4LandlordsData n4LandLordsData, LogicalDate noticeDate, int terminationDateAdvanceDays,
+            Collection<ARCode> relevantArCodes, Date generationTime) {
 
-        N4LeaseData n4LeaseData = ServerSideFactory.create(N4GenerationFacade.class).prepareN4LeaseData(leaseId, noticeDate, relevantArCodes);
+        N4LeaseData n4LeaseData = ServerSideFactory.create(N4GenerationFacade.class).prepareN4LeaseData(leaseId, noticeDate, terminationDateAdvanceDays,
+                relevantArCodes);
         N4FormFieldsData n4FormData = ServerSideFactory.create(N4GenerationFacade.class).populateFormData(n4LeaseData, n4LandLordsData);
         byte[] n4LetterBinary = ServerSideFactory.create(N4GenerationFacade.class).generateN4Letter(n4FormData);
 

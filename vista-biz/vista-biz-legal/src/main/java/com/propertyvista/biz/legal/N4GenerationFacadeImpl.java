@@ -227,7 +227,7 @@ public class N4GenerationFacadeImpl implements N4GenerationFacade {
     }
 
     @Override
-    public N4LeaseData prepareN4LeaseData(Lease leaseId, LogicalDate noticeDate, Collection<ARCode> acceptableArCodes) {
+    public N4LeaseData prepareN4LeaseData(Lease leaseId, LogicalDate noticeDate, int terminationAdvanceDays, Collection<ARCode> acceptableArCodes) {
         Lease lease = Persistence.service().retrieve(Lease.class, leaseId.getPrimaryKey());
         N4LeaseData n4LeaseData = EntityFactory.create(N4LeaseData.class);
 
@@ -242,7 +242,7 @@ public class N4GenerationFacadeImpl implements N4GenerationFacade {
 
         GregorianCalendar cal = new GregorianCalendar();
         cal.setTime(noticeDate);
-        cal.add(GregorianCalendar.DAY_OF_YEAR, noticeAdvanceDays);
+        cal.add(GregorianCalendar.DAY_OF_YEAR, noticeAdvanceDays + terminationAdvanceDays);
         LogicalDate terminationDate = new LogicalDate(cal.getTime());
 
         n4LeaseData.terminationDate().setValue(terminationDate);
