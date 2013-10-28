@@ -87,8 +87,22 @@ public final class AppPlaceContorller extends PlaceController {
         showNotification(notification, null);
     }
 
+    public void goTo(final AppPlace newPlace, final boolean withConfirm) {
+        log.debug("requested to go to: " + newPlace);
+        dispatcher.forwardTo(newPlace, new DefaultAsyncCallback<AppPlace>() {
+            @Override
+            public void onSuccess(final AppPlace result) {
+                if (withConfirm) {
+                    maybeGoTo(result);
+                } else {
+                    sureGoTo(result);
+                }
+            }
+        });
+    }
+
     public void goTo(final AppPlace newPlace) {
-        maybeGoTo(newPlace);
+        goTo(newPlace, true);
     }
 
     /**
@@ -97,8 +111,7 @@ public final class AppPlaceContorller extends PlaceController {
     @Override
     public void goTo(final Place newPlace) {
         //TODO external request - handle unstable tokens. If stable counterpart exists - execute, otherwise go to NOWHERE
-
-        maybeGoTo((AppPlace) newPlace);
+        goTo((AppPlace) newPlace);
     }
 
     private String confirmGoTo(Place newPlace) {
@@ -109,37 +122,26 @@ public final class AppPlaceContorller extends PlaceController {
     }
 
     private void maybeGoTo(final AppPlace newPlace) {
-        log.debug("requested to go to: " + newPlace);
+        String warning = confirmGoTo(newPlace);
+        if (warning != null) {
+            dispatcher.confirm(warning, new ConfirmDecline() {
 
-        AsyncCallback<AppPlace> callback = new DefaultAsyncCallback<AppPlace>() {
+                @Override
+                public void onConfirmed() {
+                    sureGoTo(newPlace);
 
-            @Override
-            public void onSuccess(final AppPlace result) {
-                String warning = confirmGoTo(result);
-                if (warning != null) {
-                    dispatcher.confirm(warning, new ConfirmDecline() {
-
-                        @Override
-                        public void onConfirmed() {
-                            sureGoTo(result);
-
-                        }
-
-                        @Override
-                        public void onDeclined() {
-                            // In case we pressed a back or forward while navigating inside the application we need to restore the history token
-                            // We should not fire event since application state change did not happened 
-                            AppSite.getHistoryHandler().restoreStableHistoryToken();
-                        }
-                    });
-                } else {
-                    sureGoTo(result);
                 }
-            }
 
-        };
-
-        dispatcher.forwardTo(newPlace, callback);
+                @Override
+                public void onDeclined() {
+                    // In case we pressed a back or forward while navigating inside the application we need to restore the history token
+                    // We should not fire event since application state change did not happened 
+                    AppSite.getHistoryHandler().restoreStableHistoryToken();
+                }
+            });
+        } else {
+            sureGoTo(newPlace);
+        }
     }
 
     private void sureGoTo(AppPlace newPlace) {
