@@ -13,6 +13,7 @@
  */
 package com.propertyvista.portal.web.client.ui.services.insurance;
 
+import com.google.gwt.core.shared.GWT;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.IsWidget;
 
@@ -28,6 +29,7 @@ import com.pyx4j.widgets.client.Button;
 import com.propertyvista.common.client.ui.components.MediaUtils;
 import com.propertyvista.domain.tenant.insurance.InsuranceCertificateScan;
 import com.propertyvista.portal.rpc.portal.web.dto.insurance.GeneralInsurancePolicyDTO;
+import com.propertyvista.portal.rpc.portal.web.services.services.InsuranceCertificateScanUploadService;
 import com.propertyvista.portal.web.client.ui.CPortalEntityForm;
 import com.propertyvista.portal.web.client.ui.util.decorators.FormWidgetDecoratorBuilder;
 
@@ -53,14 +55,15 @@ public class GeneralPolicyPage extends CPortalEntityForm<GeneralInsurancePolicyD
                 ++row,
                 0,
                 1,
-                new FormWidgetDecoratorBuilder(inject(proto().certificate().certificateScan(), new CFile<InsuranceCertificateScan>(null,
-                        new FileURLBuilder<InsuranceCertificateScan>() {
+                new FormWidgetDecoratorBuilder(inject(proto().certificate().certificateScan(),
+                        new CFile<InsuranceCertificateScan>(GWT.<InsuranceCertificateScanUploadService> create(InsuranceCertificateScanUploadService.class),
+                                new FileURLBuilder<InsuranceCertificateScan>() {
 
-                            @Override
-                            public String getUrl(InsuranceCertificateScan file) {
-                                return MediaUtils.createInsuranceCertificateScanUrl(file);
-                            }
-                        })), 200).build());
+                                    @Override
+                                    public String getUrl(InsuranceCertificateScan file) {
+                                        return MediaUtils.createInsuranceCertificateScanUrl(file);
+                                    }
+                                })), 200).build());
 
         return mainPanel;
 

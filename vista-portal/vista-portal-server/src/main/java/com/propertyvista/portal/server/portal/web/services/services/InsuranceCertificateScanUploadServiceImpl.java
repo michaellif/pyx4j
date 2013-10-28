@@ -33,7 +33,7 @@ public class InsuranceCertificateScanUploadServiceImpl extends AbstractUploadSer
         InsuranceCertificateScanUploadService {
 
     public static final Collection<DownloadFormat> supportedFormats = EnumSet.of(DownloadFormat.JPEG, DownloadFormat.GIF, DownloadFormat.PNG,
-            DownloadFormat.PDF);
+            DownloadFormat.PDF, DownloadFormat.ARCHIVE);
 
     private static final I18n i18n = I18n.get(ResidentPictureUploadServiceImpl.class);
 

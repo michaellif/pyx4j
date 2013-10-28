@@ -146,7 +146,7 @@ public class GeneralPolicyUploadWizard extends CPortalEntityWizard<GeneralInsura
                                     }
                                 })), 200).build());
 
-        get(proto().certificate().certificateScan()).setNote(i18n.tr("Attach Scanned Insurance Certificate"));
+        get(proto().certificate().certificateScan()).setNote(i18n.tr("Attach Scanned Insurance Certificate (picture, PDF or archive file)"));
 
         return contentPanel;
     }
