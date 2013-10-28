@@ -23,9 +23,11 @@ package com.propertyvista.biz.legal;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.Map;
 
 import com.itextpdf.text.DocumentException;
 import com.itextpdf.text.pdf.AcroFields;
+import com.itextpdf.text.pdf.AcroFields.Item;
 import com.itextpdf.text.pdf.PdfCopyFields;
 import com.itextpdf.text.pdf.PdfReader;
 
@@ -49,7 +51,12 @@ public class N4PrepareForm {
             // so I will implment mapping using annotation and not using the same name as member
             renameFields(reader.getAcroFields());
         }
-        removeInteractiveFields(reader.getAcroFields());
+        AcroFields fields = reader.getAcroFields();
+
+        for (Map.Entry<String, Item> field : fields.getFields().entrySet()) {
+            System.out.println(field.getKey());
+        }
+        removeInteractiveFields(fields);
 
         String moddedDocFileName = makeModdedFileName();
         FileOutputStream fos = new FileOutputStream(moddedDocFileName);

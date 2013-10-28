@@ -34,7 +34,7 @@ import com.propertyvista.domain.tenant.Customer;
 import com.propertyvista.domain.tenant.insurance.InsuranceCertificateScan;
 import com.propertyvista.domain.tenant.lease.Tenant;
 import com.propertyvista.portal.rpc.portal.web.dto.insurance.GeneralInsurancePolicyDTO;
-import com.propertyvista.portal.rpc.portal.web.services.services.GeneralInsurancePolicyUploadService;
+import com.propertyvista.portal.rpc.portal.web.services.services.InsuranceCertificateScanUploadService;
 import com.propertyvista.portal.web.client.ui.CPortalEntityWizard;
 import com.propertyvista.portal.web.client.ui.util.decorators.FormWidgetDecoratorBuilder;
 
@@ -139,7 +139,7 @@ public class GeneralPolicyUploadWizard extends CPortalEntityWizard<GeneralInsura
                 0,
                 1,
                 new FormWidgetDecoratorBuilder(inject(proto().certificate().certificateScan(),
-                        new CFile<InsuranceCertificateScan>(GWT.<GeneralInsurancePolicyUploadService> create(GeneralInsurancePolicyUploadService.class),
+                        new CFile<InsuranceCertificateScan>(GWT.<InsuranceCertificateScanUploadService> create(InsuranceCertificateScanUploadService.class),
                                 new FileURLBuilder<InsuranceCertificateScan>() {
 
                                     @Override

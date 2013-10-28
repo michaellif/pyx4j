@@ -20,6 +20,7 @@ import com.propertyvista.crm.server.services.MediaUploadFloorplanServiceImpl;
 import com.propertyvista.crm.server.services.PmcDocumentFileUploadServiceImpl;
 import com.propertyvista.crm.server.services.UpdateUploadServiceImpl;
 import com.propertyvista.crm.server.services.admin.SiteImageResourceUploadServiceImpl;
+import com.propertyvista.crm.server.services.customer.CrmInsuranceCertificateScanUploadServiceImpl;
 import com.propertyvista.crm.server.services.customer.CustomerPictureUploadServiceImpl;
 import com.propertyvista.crm.server.services.customer.TenantPadFileUploadServiceImpl;
 import com.propertyvista.crm.server.services.organization.EmployeeSignatureUploadServiceImpl;
@@ -27,7 +28,7 @@ import com.propertyvista.operations.server.services.EncryptedStorageServicePriva
 import com.propertyvista.operations.server.services.ImportUploadServiceImpl;
 import com.propertyvista.operations.server.services.MerchantAccountFileUploadServiceImpl;
 import com.propertyvista.portal.server.portal.web.services.ResidentPictureUploadServiceImpl;
-import com.propertyvista.portal.server.portal.web.services.services.GeneralInsurancePolicyUploadServiceImpl;
+import com.propertyvista.portal.server.portal.web.services.services.InsuranceCertificateScanUploadServiceImpl;
 import com.propertyvista.portal.server.ptapp.services.ApplicationDocumentUploadServiceImpl;
 
 @SuppressWarnings("serial")
@@ -42,7 +43,8 @@ public class VistaUploadServlet extends AbstractUploadServlet {
         register(CustomerPictureUploadServiceImpl.class);
         register(ResidentPictureUploadServiceImpl.class);
         register(ApplicationDocumentUploadServiceImpl.class);
-        register(GeneralInsurancePolicyUploadServiceImpl.class);
+        register(InsuranceCertificateScanUploadServiceImpl.class);
+        register(CrmInsuranceCertificateScanUploadServiceImpl.class);
         register(PmcDocumentFileUploadServiceImpl.class);
         register(EncryptedStorageServicePrivateKeyUploadServiceImpl.class);
         register(TenantPadFileUploadServiceImpl.class);

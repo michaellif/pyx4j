@@ -25,19 +25,19 @@ import com.pyx4j.gwt.shared.DownloadFormat;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.domain.tenant.insurance.InsuranceCertificateScan;
-import com.propertyvista.portal.rpc.portal.web.services.services.GeneralInsurancePolicyUploadService;
+import com.propertyvista.portal.rpc.portal.web.services.services.InsuranceCertificateScanUploadService;
 import com.propertyvista.portal.server.portal.web.services.ResidentPictureUploadServiceImpl;
 import com.propertyvista.server.domain.GeneralInsurancePolicyBlob;
 
-public class GeneralInsurancePolicyUploadServiceImpl extends AbstractUploadServiceImpl<IEntity, InsuranceCertificateScan> implements
-        GeneralInsurancePolicyUploadService {
+public class InsuranceCertificateScanUploadServiceImpl extends AbstractUploadServiceImpl<IEntity, InsuranceCertificateScan> implements
+        InsuranceCertificateScanUploadService {
 
     public static final Collection<DownloadFormat> supportedFormats = EnumSet.of(DownloadFormat.JPEG, DownloadFormat.GIF, DownloadFormat.PNG,
             DownloadFormat.PDF);
 
     private static final I18n i18n = I18n.get(ResidentPictureUploadServiceImpl.class);
 
-    public GeneralInsurancePolicyUploadServiceImpl() {
+    public InsuranceCertificateScanUploadServiceImpl() {
         super(InsuranceCertificateScan.class);
     }
 

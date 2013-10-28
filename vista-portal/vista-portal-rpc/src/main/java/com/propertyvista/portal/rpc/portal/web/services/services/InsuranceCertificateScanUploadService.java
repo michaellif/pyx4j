@@ -18,6 +18,6 @@ import com.pyx4j.gwt.rpc.upload.UploadService;
 
 import com.propertyvista.domain.tenant.insurance.InsuranceCertificateScan;
 
-public interface GeneralInsurancePolicyUploadService extends UploadService<IEntity, InsuranceCertificateScan> {
+public interface InsuranceCertificateScanUploadService extends UploadService<IEntity, InsuranceCertificateScan> {
 
 }
