@@ -133,7 +133,6 @@ public class GeneralPolicyUploadWizard extends CPortalEntityWizard<GeneralInsura
             }
         });
 
-        contentPanel.setH2(++row, 0, 1, i18n.tr("Attach Scanned Insurance Certificate"));
         contentPanel.setWidget(
                 ++row,
                 0,
@@ -147,6 +146,8 @@ public class GeneralPolicyUploadWizard extends CPortalEntityWizard<GeneralInsura
                                         return MediaUtils.createInsuranceCertificateScanUrl(file);
                                     }
                                 })), 200).build());
+
+        get(proto().certificate().certificateScan()).setNote(i18n.tr("Attach Scanned Insurance Certificate"));
 
         return contentPanel;
     }
