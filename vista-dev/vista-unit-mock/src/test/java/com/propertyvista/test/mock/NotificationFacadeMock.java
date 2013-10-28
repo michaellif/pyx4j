@@ -43,4 +43,8 @@ public class NotificationFacadeMock implements NotificationFacade {
     public void aggregatedNotificationsSend() {
     }
 
+    @Override
+    public void yardiUnableToRejectPayment(PaymentRecord paymentRecord, boolean applyNSF) {
+    }
+
 }
