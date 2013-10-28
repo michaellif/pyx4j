@@ -34,7 +34,7 @@ import com.pyx4j.entity.shared.AttachLevel;
 import com.propertyvista.domain.MediaFile;
 import com.propertyvista.domain.PublicVisibilityType;
 import com.propertyvista.domain.media.ThumbnailSize;
-import com.propertyvista.domain.site.PortalLogoImageResource;
+import com.propertyvista.domain.site.SiteLogoImageResource;
 import com.propertyvista.ils.kijiji.mapper.dto.ILSBuildingDTO;
 import com.propertyvista.ils.kijiji.mapper.dto.ILSFloorplanDTO;
 
@@ -92,7 +92,7 @@ public class KijijiDataMapper {
 
     private ILSLogo createLogo() {
         ILSLogo logo = factory.createILSLogo();
-        PortalLogoImageResource siteLogo = KijijiMapperUtils.getSiteLogo();
+        SiteLogoImageResource siteLogo = KijijiMapperUtils.getSiteLogo();
         logo.setSmall(KijijiMapperUtils.getSiteImageResourceUrl(siteLogo.small()));
         logo.setLarge(KijijiMapperUtils.getSiteImageResourceUrl(siteLogo.large()));
 

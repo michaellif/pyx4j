@@ -11,12 +11,12 @@
  * @author stanp
  * @version $Id$
  */
-package com.propertyvista.crm.client.ui.crud.administration.website.content;
+package com.propertyvista.crm.client.ui.crud.administration.website.branding;
 
 import java.util.HashSet;
 import java.util.Set;
 
-import com.google.gwt.core.client.GWT;
+import com.google.gwt.core.shared.GWT;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.ui.IsWidget;
@@ -29,9 +29,9 @@ import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.ui.CEntityLabel;
 import com.pyx4j.forms.client.ui.CImage;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
+import com.pyx4j.gwt.shared.Dimension;
 import com.pyx4j.gwt.shared.FileURLBuilder;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.widgets.client.ImageViewport.ScaleMode;
 
 import com.propertyvista.common.client.ui.components.MediaUtils;
 import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
@@ -39,27 +39,38 @@ import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
 import com.propertyvista.crm.client.ui.crud.administration.website.general.AvailableLocaleSelectorDialog;
 import com.propertyvista.crm.rpc.services.admin.SiteImageResourceUploadService;
 import com.propertyvista.domain.site.AvailableLocale;
-import com.propertyvista.domain.site.SiteLogoImageResource;
+import com.propertyvista.domain.site.PortalBannerImage;
 import com.propertyvista.domain.site.SiteImageResource;
 
-public class SiteImageResourceFolder extends VistaBoxFolder<SiteLogoImageResource> {
-    private static final I18n i18n = I18n.get(SiteImageResourceFolder.class);
+public class PortalBannerImageFolder extends VistaBoxFolder<PortalBannerImage> {
+    private static final I18n i18n = I18n.get(PortalBannerImageFolder.class);
 
     private final Set<AvailableLocale> usedLocales = new HashSet<AvailableLocale>();
 
-    public SiteImageResourceFolder(boolean editable) {
-        super(SiteLogoImageResource.class, editable);
-        this.addValueChangeHandler(new ValueChangeHandler<IList<SiteLogoImageResource>>() {
+    private Dimension imageSize;
+
+    public PortalBannerImageFolder(boolean editable) {
+        super(PortalBannerImage.class, editable);
+        this.addValueChangeHandler(new ValueChangeHandler<IList<PortalBannerImage>>() {
             @Override
-            public void onValueChange(ValueChangeEvent<IList<SiteLogoImageResource>> event) {
+            public void onValueChange(ValueChangeEvent<IList<PortalBannerImage>> event) {
                 updateUsedLocales();
             }
         });
     }
 
+    public void setImageSize(int width, int height) {
+        imageSize = new Dimension(width, height);
+        for (CComponent<?> comp : getComponents()) {
+            if (comp instanceof PortalBannerImageEditor) {
+                ((PortalBannerImageEditor) comp).setImageSize(width, height);
+            }
+        }
+    }
+
     private void updateUsedLocales() {
         usedLocales.clear();
-        for (SiteLogoImageResource items : getValue()) {
+        for (PortalBannerImage items : getValue()) {
             usedLocales.add(items.locale());
         }
     }
@@ -78,9 +89,9 @@ public class SiteImageResourceFolder extends VistaBoxFolder<SiteLogoImageResourc
             public boolean onClickOk() {
                 AvailableLocale locale = getSelectedLocale();
                 if (locale != null) {
-                    SiteLogoImageResource item = EntityFactory.create(SiteLogoImageResource.class);
+                    PortalBannerImage item = EntityFactory.create(PortalBannerImage.class);
                     item.locale().set(locale);
-                    SiteImageResourceFolder.super.addItem(item);
+                    PortalBannerImageFolder.super.addItem(item);
                 }
                 return true;
             }
@@ -89,30 +100,28 @@ public class SiteImageResourceFolder extends VistaBoxFolder<SiteLogoImageResourc
 
     @Override
     public CComponent<?> create(IObject<?> member) {
-        if (member instanceof SiteLogoImageResource) {
-            return new PortalImageResourceEditor();
+        if (member instanceof PortalBannerImage) {
+            PortalBannerImageEditor editor = new PortalBannerImageEditor();
+            if (imageSize != null) {
+                editor.setImageSize(imageSize.width, imageSize.height);
+            }
+            return editor;
         }
         return super.create(member);
     }
 
-    class PortalImageResourceEditor extends CEntityForm<SiteLogoImageResource> {
+    class PortalBannerImageEditor extends CEntityForm<PortalBannerImage> {
+        private final CImage<SiteImageResource> imageHolder;
 
-        private final CImage<SiteImageResource> smallLogo;
+        public PortalBannerImageEditor() {
+            super(PortalBannerImage.class);
+            imageHolder = new CImage<SiteImageResource>(GWT.<SiteImageResourceUploadService> create(SiteImageResourceUploadService.class),
+                    new ImageFileURLBuilder());
+            imageHolder.setNote(i18n.tr("Recommended banner size is {0}", "1200x200"));
+        }
 
-        private final CImage<SiteImageResource> largeLogo;
-
-        public PortalImageResourceEditor() {
-            super(SiteLogoImageResource.class);
-
-            smallLogo = new CImage<SiteImageResource>(GWT.<SiteImageResourceUploadService> create(SiteImageResourceUploadService.class),
-                    new SiteImageResourceUrlBuilder());
-            smallLogo.setImageSize(150, 100);
-            smallLogo.setScaleMode(ScaleMode.Contain);
-
-            largeLogo = new CImage<SiteImageResource>(GWT.<SiteImageResourceUploadService> create(SiteImageResourceUploadService.class),
-                    new SiteImageResourceUrlBuilder());
-            largeLogo.setImageSize(300, 150);
-            largeLogo.setScaleMode(ScaleMode.Contain);
+        public void setImageSize(int width, int height) {
+            imageHolder.setImageSize(width, height);
         }
 
         @Override
@@ -122,19 +131,17 @@ public class SiteImageResourceFolder extends VistaBoxFolder<SiteLogoImageResourc
             int row = -1;
             CEntityLabel<AvailableLocale> locale = new CEntityLabel<AvailableLocale>();
             locale.setEditable(false);
-            main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().locale(), locale), 5, 20, 20).build());
-            main.setWidget(row, 1, new FormDecoratorBuilder(inject(proto().large(), largeLogo), 5, 20, 20).build());
-            main.getFlexCellFormatter().setRowSpan(row, 1, 2);
-            main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().small(), smallLogo), 5, 20, 20).build());
+            main.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().locale(), locale), true).build());
+            main.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().banner(), imageHolder), true).build());
 
             return main;
         }
+    }
 
-        class SiteImageResourceUrlBuilder implements FileURLBuilder<SiteImageResource> {
-            @Override
-            public String getUrl(SiteImageResource file) {
-                return MediaUtils.createSiteImageResourceUrl(file);
-            }
+    class ImageFileURLBuilder implements FileURLBuilder<SiteImageResource> {
+        @Override
+        public String getUrl(SiteImageResource file) {
+            return MediaUtils.createSiteImageResourceUrl(file);
         }
     }
 }

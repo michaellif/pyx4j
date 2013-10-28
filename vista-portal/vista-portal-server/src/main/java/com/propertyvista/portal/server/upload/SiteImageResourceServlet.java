@@ -31,7 +31,7 @@ import com.pyx4j.commons.Consts;
 import com.pyx4j.commons.Key;
 import com.pyx4j.entity.server.Persistence;
 
-import com.propertyvista.domain.site.PortalLogoImageResource;
+import com.propertyvista.domain.site.SiteLogoImageResource;
 import com.propertyvista.domain.site.SiteDescriptor;
 import com.propertyvista.domain.site.SiteImageResource;
 import com.propertyvista.portal.rpc.DeploymentConsts;
@@ -79,7 +79,7 @@ public class SiteImageResourceServlet extends HttpServlet {
             // see if locale is given
             String locale = request.getParameter("locale");
             if (locale != null && locale.length() > 0) {
-                for (PortalLogoImageResource logo : descriptor.logo()) {
+                for (SiteLogoImageResource logo : descriptor.logo()) {
                     if (logo.locale().lang().getValue().name().equals(locale)) {
                         key = logo.small().getPrimaryKey();
                         break;
@@ -102,7 +102,7 @@ public class SiteImageResourceServlet extends HttpServlet {
             // see if locale is given
             String locale = request.getParameter("locale");
             if (locale != null && locale.length() > 0) {
-                for (PortalLogoImageResource logo : descriptor.logo()) {
+                for (SiteLogoImageResource logo : descriptor.logo()) {
                     if (logo.locale().lang().getValue().name().equals(locale)) {
                         key = logo.large().getPrimaryKey();
                         break;

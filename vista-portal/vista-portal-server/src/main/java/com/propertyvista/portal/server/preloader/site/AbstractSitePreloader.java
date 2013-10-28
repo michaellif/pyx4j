@@ -46,7 +46,7 @@ import com.propertyvista.domain.site.PageContent;
 import com.propertyvista.domain.site.PageDescriptor;
 import com.propertyvista.domain.site.PageMetaTags;
 import com.propertyvista.domain.site.SiteImageSet;
-import com.propertyvista.domain.site.PortalLogoImageResource;
+import com.propertyvista.domain.site.SiteLogoImageResource;
 import com.propertyvista.domain.site.SiteDescriptor;
 import com.propertyvista.domain.site.SiteDescriptor.Skin;
 import com.propertyvista.domain.site.SiteImageResource;
@@ -540,7 +540,7 @@ public abstract class AbstractSitePreloader extends AbstractVistaDataPreloader {
         SiteImageResource logoLarge = makeSiteImage(DeploymentConsts.portalLogo, cType);
         if (logoSmall != null || logoLarge != null) {
             for (LocaleInfo li : siteLocale) {
-                PortalLogoImageResource res = site.logo().$();
+                SiteLogoImageResource res = site.logo().$();
                 res.locale().set(li.aLocale);
                 res.small().set(logoSmall);
                 res.large().set(logoLarge);

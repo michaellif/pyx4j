@@ -20,7 +20,7 @@ import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.propertyvista.config.VistaDeployment;
 import com.propertyvista.domain.media.ThumbnailSize;
 import com.propertyvista.domain.security.common.VistaApplication;
-import com.propertyvista.domain.site.PortalLogoImageResource;
+import com.propertyvista.domain.site.SiteLogoImageResource;
 import com.propertyvista.domain.site.SiteDescriptor;
 import com.propertyvista.domain.site.SiteImageResource;
 import com.propertyvista.portal.rpc.DeploymentConsts;
@@ -35,10 +35,10 @@ public class KijijiMapperUtils {
     }
 
     // TODO - account for locale
-    public static PortalLogoImageResource getSiteLogo() {
-        PortalLogoImageResource logo = null;
-        IList<PortalLogoImageResource> allLogos = getSiteDescriptor().logo();
-        for (PortalLogoImageResource logoRc : allLogos) {
+    public static SiteLogoImageResource getSiteLogo() {
+        SiteLogoImageResource logo = null;
+        IList<SiteLogoImageResource> allLogos = getSiteDescriptor().logo();
+        for (SiteLogoImageResource logoRc : allLogos) {
             if (logoRc.locale().lang().getValue() == CompiledLocale.en_CA) {
                 logo = logoRc;
             }

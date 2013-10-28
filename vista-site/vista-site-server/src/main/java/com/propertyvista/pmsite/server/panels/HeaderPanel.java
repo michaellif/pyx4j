@@ -21,7 +21,7 @@ import com.pyx4j.essentials.server.admin.SystemMaintenance;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.domain.site.AvailableLocale;
-import com.propertyvista.domain.site.PortalLogoImageResource;
+import com.propertyvista.domain.site.SiteLogoImageResource;
 import com.propertyvista.pmsite.server.PMSiteContentManager;
 import com.propertyvista.pmsite.server.PMSiteWebRequest;
 import com.propertyvista.pmsite.server.model.WicketUtils.PageLink;
@@ -44,7 +44,7 @@ public class HeaderPanel extends Panel {
         // logo
         PMSiteContentManager cm = ((PMSiteWebRequest) getRequest()).getContentManager();
         AvailableLocale locale = ((PMSiteWebRequest) getRequest()).getSiteLocale();
-        PortalLogoImageResource logo = cm.getSiteLogo(locale);
+        SiteLogoImageResource logo = cm.getSiteLogo(locale);
         if (logo == null) {
             logoImg = new SimpleImage("logoImg", "");
             logoImg.setVisible(false);

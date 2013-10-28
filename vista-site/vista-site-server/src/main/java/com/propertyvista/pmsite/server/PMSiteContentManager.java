@@ -49,7 +49,7 @@ import com.propertyvista.domain.site.PageDescriptor;
 import com.propertyvista.domain.site.PageDescriptor.Type;
 import com.propertyvista.domain.site.PageMetaTags;
 import com.propertyvista.domain.site.SiteImageSet;
-import com.propertyvista.domain.site.PortalLogoImageResource;
+import com.propertyvista.domain.site.SiteLogoImageResource;
 import com.propertyvista.domain.site.SiteDescriptor;
 import com.propertyvista.domain.site.SiteDescriptorChanges;
 import com.propertyvista.domain.site.SiteImageResource;
@@ -514,11 +514,11 @@ public class PMSiteContentManager implements Serializable {
         return siteDescriptor;
     }
 
-    public PortalLogoImageResource getSiteLogo(AvailableLocale locale) {
-        PortalLogoImageResource logo = null;
+    public SiteLogoImageResource getSiteLogo(AvailableLocale locale) {
+        SiteLogoImageResource logo = null;
         String lang = locale.lang().getValue().name();
-        IList<PortalLogoImageResource> allLogos = getSiteDescriptor().logo();
-        for (PortalLogoImageResource logoRc : allLogos) {
+        IList<SiteLogoImageResource> allLogos = getSiteDescriptor().logo();
+        for (SiteLogoImageResource logoRc : allLogos) {
             if (logoRc.locale().lang().getValue().name().equals(lang)) {
                 logo = logoRc;
             }

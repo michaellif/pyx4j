@@ -90,6 +90,8 @@ public interface SiteDescriptor extends Descriptor {
     @Owned
     SitePalette sitePalette();
 
+    // General ================================================================
+
     @Caption(name = "Website Enabled")
     IPrimitive<Boolean> enabled();
 
@@ -101,7 +103,13 @@ public interface SiteDescriptor extends Descriptor {
 
     SiteImageResource crmLogo();
 
-    // Content ================================================================
+    @Owned
+    IList<HtmlContent> pmcInfo();
+
+    @Owned
+    IList<SocialLink> socialLinks();
+
+    // Site ================================================================
 
     @Owned
     IList<HomePageGadget> homePageGadgetsNarrow();
@@ -112,19 +120,14 @@ public interface SiteDescriptor extends Descriptor {
     @Owned
     IList<CityIntroPage> cityIntroPages();
 
-    // Branding ===============================================================
-
     @Owned
     IList<SiteTitles> siteTitles();
 
     @Owned
-    IList<PortalLogoImageResource> logo();
+    IList<SiteLogoImageResource> logo();
 
     @Owned
     IList<HtmlContent> slogan();
-
-    @Owned
-    IList<HtmlContent> pmcInfo();
 
     @Owned
     IList<SiteImageSet> banner();
@@ -132,8 +135,10 @@ public interface SiteDescriptor extends Descriptor {
     @Owned
     IList<PageMetaTags> metaTags();
 
+    // Portal ===============================================================
+
     @Owned
-    IList<SocialLink> socialLinks();
+    IList<PortalBannerImage> portalBanner();
 
     // Internals:
 
