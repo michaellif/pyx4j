@@ -116,6 +116,10 @@ public class NImageSlider<T extends IFile> extends NField<IList<T>, ImageSlider,
         reset();
     }
 
+    public void setScaleMode(ScaleMode scaleMode) {
+        imageSlider.setScaleMode(scaleMode);
+    }
+
     public void reset() {
         imageSlider.reset();
     }

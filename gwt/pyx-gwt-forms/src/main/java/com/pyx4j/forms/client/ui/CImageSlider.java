@@ -10,6 +10,7 @@ import com.pyx4j.forms.client.images.EntityFolderImages;
 import com.pyx4j.gwt.rpc.upload.UploadService;
 import com.pyx4j.gwt.shared.Dimension;
 import com.pyx4j.gwt.shared.FileURLBuilder;
+import com.pyx4j.widgets.client.ImageViewport.ScaleMode;
 
 /*
  * CImage allows to display and edit a single image or a set of images (using sequential navigation)  
@@ -22,17 +23,16 @@ public abstract class CImageSlider<E extends IFile> extends CField<IList<E>, NIm
 
     private Dimension thumbSize;
 
-    private FileURLBuilder<E> imageFileUrlBuilder;
-
-    private FileURLBuilder<E> thumbnailFileUrlBuilder;
+    private final FileURLBuilder<E> imageFileUrlBuilder;
 
     private final UploadService<? extends IEntity, E> service;
 
     private final Class<E> imgClass;
 
-    public CImageSlider(Class<E> imgClass, UploadService<?, E> service) {
+    public CImageSlider(Class<E> imgClass, UploadService<?, E> service, FileURLBuilder<E> fileURLBuilder) {
         this.imgClass = imgClass;
         this.service = service;
+        this.imageFileUrlBuilder = fileURLBuilder;
         this.imageSize = new Dimension(250, 250);
         this.thumbSize = new Dimension(160, 120);
         setNativeWidget(new NImageSlider<E>(this));
@@ -57,6 +57,10 @@ public abstract class CImageSlider<E extends IFile> extends CField<IList<E>, NIm
         return placeholder;
     }
 
+    public void setScaleMode(ScaleMode scaleMode) {
+        getWidget().setScaleMode(scaleMode);
+    }
+
     public void setImageSize(int width, int height) {
         imageSize = new Dimension(width, height);
         getWidget().resizeToFit();
@@ -72,14 +76,6 @@ public abstract class CImageSlider<E extends IFile> extends CField<IList<E>, NIm
 
     public Dimension getThumbSize() {
         return thumbSize;
-    }
-
-    public void setImageFileUrlBuilder(FileURLBuilder<E> fileURLBuilder) {
-        this.imageFileUrlBuilder = fileURLBuilder;
-    }
-
-    public void setThumbnailFileUrlBuilder(FileURLBuilder<E> fileURLBuilder) {
-        this.thumbnailFileUrlBuilder = fileURLBuilder;
     }
 
     UploadService<?, E> getUploadService() {

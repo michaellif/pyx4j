@@ -50,6 +50,8 @@ public class ImageSlider extends LayoutPanel implements IWidget {
 
     private Dimension imageSize;
 
+    private ScaleMode scaleMode = ScaleMode.Cover;
+
     private final Slideshow slideshow;
 
     private final Button editButton;
@@ -76,16 +78,20 @@ public class ImageSlider extends LayoutPanel implements IWidget {
         setImageSize(dimension.width, dimension.width);
     }
 
+    public void setScaleMode(ScaleMode scaleMode) {
+        this.scaleMode = scaleMode;
+    }
+
     public void reset() {
         slideshow.removeAllItems();
         if (imageList.getImageUrls().size() == 0) {
             // set placeholder image
-            final ImageViewport imageViewport = new ImageViewport(imageSize, ScaleMode.Cover);
+            final ImageViewport imageViewport = new ImageViewport(imageSize, scaleMode);
             imageViewport.setImage(imageList.getPlaceholder());
             slideshow.addItem(imageViewport);
         } else {
             for (String url : imageList.getImageUrls()) {
-                final ImageViewport imageViewport = new ImageViewport(imageSize, ScaleMode.Cover);
+                final ImageViewport imageViewport = new ImageViewport(imageSize, scaleMode);
                 imageViewport.setImage(new Image(url));
                 slideshow.addItem(imageViewport);
             }

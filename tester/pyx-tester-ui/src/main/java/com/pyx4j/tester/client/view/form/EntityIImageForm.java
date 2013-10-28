@@ -53,13 +53,8 @@ public class EntityIImageForm extends CEntityForm<EntityI> {
         int row = -1;
         main.setH2(++row, 0, 1, i18n.tr("CImage is here"));
 
-//        CImage<TFile> cImage = new CImage<TFile>(CImage.Type.multiple);
-//        cImage.setImageFileUrlBuilder(new ImageFileURLBuilder(false));
-//        cImage.setThumbnailFileUrlBuilder(new ImageFileURLBuilder(true));
-//        cImage.setUploadService(GWT.<TFileUploadService> create(TFileUploadService.class));
-//        main.setWidget(++row, 0, new TesterWidgetDecorator(inject(proto().files(), cGallery)));
-
-        CImageSlider<TFile> cGallery = new CImageSlider<TFile>(TFile.class, GWT.<TFileUploadService> create(TFileUploadService.class)) {
+        CImageSlider<TFile> cGallery = new CImageSlider<TFile>(TFile.class, GWT.<TFileUploadService> create(TFileUploadService.class), new ImageFileURLBuilder(
+                false)) {
             @Override
             public EntityFolderImages getFolderIcons() {
                 return Images.INSTANCE;
@@ -74,9 +69,6 @@ public class EntityIImageForm extends CEntityForm<EntityI> {
                 return infoPanel;
             }
         };
-
-        cGallery.setImageFileUrlBuilder(new ImageFileURLBuilder(false));
-        cGallery.setThumbnailFileUrlBuilder(new ImageFileURLBuilder(true));
 
         main.setWidget(++row, 0, inject(proto().files(), cGallery));
 

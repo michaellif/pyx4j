@@ -39,6 +39,7 @@ import com.pyx4j.widgets.client.Button.ButtonMenuBar;
 import com.pyx4j.widgets.client.ImageSlider;
 import com.pyx4j.widgets.client.ImageSlider.ImageSliderDataProvider;
 import com.pyx4j.widgets.client.ImageSlider.ImageSliderType;
+import com.pyx4j.widgets.client.ImageViewport.ScaleMode;
 
 public class NImage<T extends IFile> extends NField<T, ImageSlider, CImage<T>, ImageSlider> {
 
@@ -84,12 +85,17 @@ public class NImage<T extends IFile> extends NField<T, ImageSlider, CImage<T>, I
             }
 
         });
+    }
 
-        activateEditButton();
-
+    public void setScaleMode(ScaleMode scaleMode) {
+        imageSlider.setScaleMode(scaleMode);
     }
 
     private void activateEditButton() {
+        if (!getCComponent().isEditable()) {
+            return;
+        }
+
         T value = getCComponent().getValue();
         if (value == null || value.isNull()) {
             imageSlider.getEditButton().setMenu(null);
@@ -127,6 +133,7 @@ public class NImage<T extends IFile> extends NField<T, ImageSlider, CImage<T>, I
 
     public void reset() {
         imageSlider.reset();
+        activateEditButton();
     }
 
     @Override
