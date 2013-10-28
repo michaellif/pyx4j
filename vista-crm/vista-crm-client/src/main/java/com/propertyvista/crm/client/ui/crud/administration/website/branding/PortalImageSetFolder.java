@@ -145,6 +145,7 @@ public class PortalImageSetFolder extends VistaBoxFolder<PortalImageSet> {
                     return infoPanel;
                 }
             };
+            imageHolder.setNote(i18n.tr("Recommended banner size is {0}", "920x375"));
         }
 
         public void setImageSize(int width, int height) {
@@ -162,8 +163,8 @@ public class PortalImageSetFolder extends VistaBoxFolder<PortalImageSet> {
             int row = -1;
             CEntityLabel<AvailableLocale> locale = new CEntityLabel<AvailableLocale>();
             locale.setEditable(false);
-            main.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().locale(), locale), 10, true).build());
-            main.setWidget(++row, 0, 2, inject(proto().imageSet(), imageHolder));
+            main.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().locale(), locale), true).build());
+            main.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().imageSet(), imageHolder), true).build());
 
             return main;
         }
