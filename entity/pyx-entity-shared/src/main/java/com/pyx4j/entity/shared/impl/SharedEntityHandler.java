@@ -544,8 +544,8 @@ public abstract class SharedEntityHandler extends ObjectHandler<Map<String, Seri
             return false;
         }
         int actualValuesCount = thisValue.size();
-        if (actualValuesCount > 2) {
-            return true;
+        if (actualValuesCount == 0) {
+            return false;
         } else {
             Set<Map<String, Serializable>> processed = new HashSet<Map<String, Serializable>>();
             if (thisValue.containsKey(CONCRETE_TYPE_DATA_ATTR)) {
@@ -556,7 +556,11 @@ public abstract class SharedEntityHandler extends ObjectHandler<Map<String, Seri
                 processed.add((Map<String, Serializable>) thisValue.get(ownerMemberName));
                 actualValuesCount--;
             }
-            return !((EntityValueMap) thisValue).isNull(processed, false);
+            if (actualValuesCount == 0) {
+                return false;
+            } else {
+                return !((EntityValueMap) thisValue).isNull(processed, false);
+            }
         }
     }
 
