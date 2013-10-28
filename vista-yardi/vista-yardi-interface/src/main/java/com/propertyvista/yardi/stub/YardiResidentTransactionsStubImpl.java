@@ -52,6 +52,7 @@ import com.pyx4j.commons.SimpleMessageFormat;
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.essentials.j2se.util.MarshallUtil;
 
+import com.propertyvista.biz.system.UnableToPostTerminalYardiServiceException;
 import com.propertyvista.biz.system.YardiServiceException;
 import com.propertyvista.biz.system.encryption.PasswordEncryptorFacade;
 import com.propertyvista.domain.settings.PmcYardiCredential;
@@ -66,6 +67,10 @@ public class YardiResidentTransactionsStubImpl extends AbstractYardiStub impleme
     private final static Logger log = LoggerFactory.getLogger(YardiResidentTransactionsStubImpl.class);
 
     private static String errorMessage_NoAccess_Start = "Invalid or no access to Yardi Property";
+
+    private static String errorMessage_AlredyNSF_Start = "May not  NSF  a receipt that has been NSF";
+
+    private static String errorMessage_PostMonthAccess_Start = "Cannot  NSF  a receipt whose post month is outside your allowable range";
 
     @Override
     public String ping(PmcYardiCredential yc) throws RemoteException {
@@ -258,7 +263,13 @@ public class YardiResidentTransactionsStubImpl extends AbstractYardiStub impleme
             Messages messages = MarshallUtil.unmarshal(Messages.class, xml);
             if (messages.isError()) {
                 YardiLicense.handleVendorLicenseError(messages);
-                throw new YardiServiceException(messages.toString());
+                if (messages.getErrorMessage().getValue().startsWith(errorMessage_AlredyNSF_Start)) {
+                    throw new UnableToPostTerminalYardiServiceException(messages.getErrorMessage().getValue());
+                } else if (messages.getErrorMessage().getValue().startsWith(errorMessage_PostMonthAccess_Start)) {
+                    throw new UnableToPostTerminalYardiServiceException(messages.getErrorMessage().getValue());
+                } else {
+                    throw new YardiServiceException(messages.toString());
+                }
             } else {
                 log.debug(messages.toString());
             }

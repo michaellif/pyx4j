@@ -91,4 +91,9 @@ public class NotificationFacadeImpl implements NotificationFacade {
         }
         aggregatorThreadLocal.remove();
     }
+
+    @Override
+    public void yardiUnableToRejectPayment(PaymentRecord paymentRecord, boolean applyNSF) {
+        // TODO Auto-generated method stub
+    }
 }

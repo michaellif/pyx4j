@@ -28,10 +28,12 @@ import com.pyx4j.entity.shared.AttachLevel;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.i18n.shared.I18n;
 
+import com.propertyvista.biz.communication.NotificationFacade;
 import com.propertyvista.biz.financial.ar.ARAbstractPaymentManager;
 import com.propertyvista.biz.financial.ar.ARException;
 import com.propertyvista.biz.financial.billingcycle.BillingCycleFacade;
 import com.propertyvista.biz.financial.payment.PaymentBatchContext;
+import com.propertyvista.biz.system.UnableToPostTerminalYardiServiceException;
 import com.propertyvista.biz.system.YardiARFacade;
 import com.propertyvista.biz.system.YardiServiceException;
 import com.propertyvista.domain.financial.PaymentRecord;
@@ -130,6 +132,10 @@ class ARYardiPaymentManager extends ARAbstractPaymentManager {
         } catch (RemoteException e) {
             throw new ARException(SimpleMessageFormat.format("Posting receipt {0} reversal to Yardi failed due to communication failure; Lease Id {1}", //
                     paymentRecord.id(), paymentRecord.billingAccount().lease().leaseId()), e);
+        } catch (UnableToPostTerminalYardiServiceException e) {
+            paymentRecord.notice().setValue(e.getMessage());
+            Persistence.service().merge(paymentRecord);
+            ServerSideFactory.create(NotificationFacade.class).yardiUnableToRejectPayment(paymentRecord, applyNSF);
         } catch (YardiServiceException e) {
             throw new ARException(SimpleMessageFormat.format("Posting receipt {0} reversal to Yardi failed; Lease Id {1}", //
                     paymentRecord.id(), paymentRecord.billingAccount().lease().leaseId()), e);
