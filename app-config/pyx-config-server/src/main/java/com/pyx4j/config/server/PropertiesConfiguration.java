@@ -67,7 +67,7 @@ public class PropertiesConfiguration {
         if (value == null) {
             return defaultValue;
         } else {
-            return Integer.valueOf(value).intValue();
+            return Integer.valueOf(value.trim()).intValue();
         }
     }
 
@@ -85,7 +85,7 @@ public class PropertiesConfiguration {
         if (value == null) {
             return defaultValue;
         } else {
-            return Boolean.valueOf(value).booleanValue();
+            return Boolean.valueOf(value.trim()).booleanValue();
         }
     }
 
@@ -94,6 +94,7 @@ public class PropertiesConfiguration {
         if (value == null) {
             return defaultValue;
         } else {
+            value = value.trim();
             for (T t : EnumSet.allOf(enumClass)) {
                 if (t.name().equalsIgnoreCase(value)) {
                     return t;
@@ -119,6 +120,7 @@ public class PropertiesConfiguration {
         if (value == null) {
             return values[0];
         } else {
+            value = value.trim();
             for (T t : values) {
                 if (t.name().equalsIgnoreCase(value)) {
                     return t;
