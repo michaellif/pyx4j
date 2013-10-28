@@ -86,12 +86,7 @@ public class ToolbarActivity extends AbstractActivity implements ToolbarView.Too
 
     @Override
     public void logout() {
-        ClientContext.logout(GWT.<AuthenticationService> create(PortalAuthenticationService.class), new DefaultAsyncCallback<AuthenticationResponse>() {
-            @Override
-            public void onSuccess(AuthenticationResponse result) {
-                AppSite.getPlaceController().goTo(new PortalSiteMap.Login());
-            }
-        });
+        ClientContext.logout(GWT.<AuthenticationService> create(PortalAuthenticationService.class), null);
     }
 
     @Override
