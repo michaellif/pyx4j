@@ -34,6 +34,7 @@ import com.propertyvista.biz.financial.billing.BillingUtils;
 import com.propertyvista.biz.financial.payment.PaymentFacade;
 import com.propertyvista.biz.financial.payment.PaymentMethodFacade;
 import com.propertyvista.domain.financial.billing.Bill;
+import com.propertyvista.domain.financial.billing.InvoicePayment;
 import com.propertyvista.domain.payment.AutopayAgreement;
 import com.propertyvista.domain.payment.AutopayAgreement.AutopayAgreementCoveredItem;
 import com.propertyvista.domain.tenant.lease.Lease;
@@ -45,6 +46,7 @@ import com.propertyvista.portal.rpc.portal.web.dto.financial.BillViewDTO;
 import com.propertyvista.portal.rpc.portal.web.dto.financial.BillingHistoryDTO;
 import com.propertyvista.portal.rpc.portal.web.dto.financial.BillingSummaryDTO;
 import com.propertyvista.portal.rpc.portal.web.dto.financial.LatestActivitiesDTO;
+import com.propertyvista.portal.rpc.portal.web.dto.financial.LatestActivitiesDTO.InvoicePaymentDTO;
 import com.propertyvista.portal.rpc.portal.web.services.financial.BillingService;
 import com.propertyvista.portal.server.security.TenantAppContext;
 import com.propertyvista.shared.config.VistaFeatures;
@@ -90,7 +92,20 @@ public class BillingServiceImpl implements BillingService {
 
         Lease lease = TenantAppContext.getCurrentUserLease();
 
-        activities.lineItems().addAll(ServerSideFactory.create(PaymentFacade.class).getLatestPaymentActivity(lease.billingAccount()));
+        for (InvoicePayment item : ServerSideFactory.create(PaymentFacade.class).getLatestPaymentActivity(lease.billingAccount())) {
+            InvoicePaymentDTO paymentInfo = EntityFactory.create(InvoicePaymentDTO.class);
+
+            paymentInfo.id().set(item.paymentRecord().id());
+            paymentInfo.amount().setValue(item.paymentRecord().amount().getValue());
+            paymentInfo.paymentStatus().setValue(item.paymentRecord().paymentStatus().getValue());
+            paymentInfo.paymentStatus().setValue(item.paymentRecord().paymentStatus().getValue());
+            paymentInfo.postDate().setValue(item.postDate().getValue());
+
+            Persistence.ensureRetrieve(item.paymentRecord().leaseTermParticipant(), AttachLevel.Attached);
+            paymentInfo.payer().set(item.paymentRecord().leaseTermParticipant().leaseParticipant().customer().person().name());
+
+            activities.payments().add(paymentInfo);
+        }
 
         callback.onSuccess(activities);
     }
