@@ -365,7 +365,6 @@ public abstract class NField<DATA, EDITOR extends IWidget, CCOMP extends CField<
                 }));
 
                 triggerButton.ensureDebugId(CompositeDebugId.debugId(baseDebugID, CCompDebugId.trigger));
-                triggerButton.getElement().getStyle().setDisplay(Display.BLOCK);
                 triggerButtonHolder.setWidget(triggerButton);
             }
         }

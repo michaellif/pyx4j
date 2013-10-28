@@ -24,6 +24,7 @@ import java.text.ParseException;
 
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.Window;
+import com.google.gwt.user.client.ui.FlowPanel;
 
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IFile;
@@ -34,34 +35,33 @@ import com.pyx4j.gwt.rpc.upload.UploadService;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.Anchor;
 import com.pyx4j.widgets.client.Button;
+import com.pyx4j.widgets.client.IWidget;
 
-public class NFile<E extends IFile> extends NField<E, Anchor, CFile<E>, Anchor> {
+public class NFile<E extends IFile> extends NField<E, NFile<E>.ContentPanel, CFile<E>, NFile<E>.ContentPanel> {
 
     private static final I18n i18n = I18n.get(NFile.class);
 
-    private final Anchor fileNameAnchor;
+    private final ContentPanel contentPanel;
+
+    private final Button changeButton;
+
+    private final Button clearButton;
 
     public NFile(final CFile<E> file) {
         super(file);
 
-        fileNameAnchor = new Anchor("", new Command() {
+        contentPanel = new ContentPanel();
 
-            @Override
-            public void execute() {
-                Window.open(getCComponent().getImageUrl(), "_blank", null);
-            }
-        });
-
-        Button triggerButton = new Button(ImageFactory.getImages().triggerDown(), new Command() {
+        changeButton = new Button(ImageFactory.getImages().triggerDown(), new Command() {
 
             @Override
             public void execute() {
                 showUploadFileDialog();
             }
         });
-        setTriggerButton(triggerButton);
+        setTriggerButton(changeButton);
 
-        Button clearButton = new Button(ImageFactory.getImages().clear(), new Command() {
+        clearButton = new Button(ImageFactory.getImages().clear(), new Command() {
 
             @Override
             public void execute() {
@@ -85,17 +85,8 @@ public class NFile<E extends IFile> extends NField<E, Anchor, CFile<E>, Anchor> 
 
     @Override
     public void setNativeValue(E value) {
-        String text = "";
-        CFile<E> comp = getCComponent();
-        if (value != null) {
-            if (comp.getFormat() != null) {
-                text = comp.getFormat().format(value);
-            } else {
-                text = value.toString();
-            }
-        }
+        contentPanel.setNativeValue(value);
 
-        fileNameAnchor.setText(text);
     }
 
     @Override
@@ -105,13 +96,85 @@ public class NFile<E extends IFile> extends NField<E, Anchor, CFile<E>, Anchor> 
     }
 
     @Override
-    protected Anchor createEditor() {
-        return fileNameAnchor;
+    protected ContentPanel createEditor() {
+        return contentPanel;
     }
 
     @Override
-    protected Anchor createViewer() {
-        return fileNameAnchor;
+    protected ContentPanel createViewer() {
+        return contentPanel;
     }
 
+    class ContentPanel extends FlowPanel implements IWidget {
+
+        private final Anchor fileNameAnchor;
+
+        private final Anchor uploadAnchor;
+
+        public ContentPanel() {
+            fileNameAnchor = new Anchor("", new Command() {
+
+                @Override
+                public void execute() {
+                    Window.open(getCComponent().getImageUrl(), "_blank", null);
+                }
+            });
+            add(fileNameAnchor);
+
+            uploadAnchor = new Anchor(i18n.tr("Upload File ..."), new Command() {
+
+                @Override
+                public void execute() {
+                    showUploadFileDialog();
+                }
+            });
+            add(uploadAnchor);
+
+        }
+
+        public void setNativeValue(E value) {
+
+            if (value == null || value.isNull()) {
+                clearButton.setVisible(false);
+                uploadAnchor.setVisible(true);
+                fileNameAnchor.setVisible(false);
+                fileNameAnchor.setText("");
+            } else {
+                clearButton.setVisible(true);
+                uploadAnchor.setVisible(false);
+                fileNameAnchor.setVisible(true);
+
+                String text = "";
+                CFile<E> comp = getCComponent();
+                if (value != null) {
+                    if (comp.getFormat() != null) {
+                        text = comp.getFormat().format(value);
+                    } else {
+                        text = value.toString();
+                    }
+                }
+                fileNameAnchor.setText(text);
+            }
+
+        }
+
+        @Override
+        public void setEnabled(boolean enabled) {
+        }
+
+        @Override
+        public boolean isEnabled() {
+            return true;
+        }
+
+        @Override
+        public void setEditable(boolean editable) {
+        }
+
+        @Override
+        public boolean isEditable() {
+            return true;
+        }
+
+    }
 }
