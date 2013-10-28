@@ -90,9 +90,9 @@ public class GeneralPolicyUploadWizard extends CPortalEntityWizard<GeneralInsura
             //TODO    contentPanel.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().tenant(), comp), 150).build());
         }
 
-        contentPanel.setWidget(++row, 0, 2, new FormWidgetDecoratorBuilder(inject(proto().certificate().insuranceProvider()), 150).build());
-        contentPanel.setWidget(++row, 0, 2, new FormWidgetDecoratorBuilder(inject(proto().certificate().insuranceCertificateNumber()), 150).build());
-        contentPanel.setWidget(++row, 0, 2, new FormWidgetDecoratorBuilder(inject(proto().certificate().liabilityCoverage()), 150).build());
+        contentPanel.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().certificate().insuranceProvider()), 150).build());
+        contentPanel.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().certificate().insuranceCertificateNumber()), 150).build());
+        contentPanel.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().certificate().liabilityCoverage()), 150).build());
         get(proto().certificate().liabilityCoverage()).addValueValidator(new EditableValueValidator<BigDecimal>() {
             @Override
             public ValidationError isValid(CComponent<BigDecimal> component, BigDecimal value) {
@@ -111,7 +111,7 @@ public class GeneralPolicyUploadWizard extends CPortalEntityWizard<GeneralInsura
                 return null;
             }
         });
-        contentPanel.setWidget(++row, 0, 2, new FormWidgetDecoratorBuilder(inject(proto().certificate().inceptionDate()), 150).build());
+        contentPanel.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().certificate().inceptionDate()), 150).build());
 
         get(proto().certificate().inceptionDate()).addValueValidator(new EditableValueValidator<LogicalDate>() {
             @Override
@@ -122,7 +122,7 @@ public class GeneralPolicyUploadWizard extends CPortalEntityWizard<GeneralInsura
                 return null;
             }
         });
-        contentPanel.setWidget(++row, 0, 2, new FormWidgetDecoratorBuilder(inject(proto().certificate().expiryDate()), 150).build());
+        contentPanel.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().certificate().expiryDate()), 150).build());
         get(proto().certificate().expiryDate()).addValueValidator(new EditableValueValidator<LogicalDate>() {
             @Override
             public ValidationError isValid(CComponent<LogicalDate> component, LogicalDate value) {
@@ -136,7 +136,6 @@ public class GeneralPolicyUploadWizard extends CPortalEntityWizard<GeneralInsura
         contentPanel.setWidget(
                 ++row,
                 0,
-                1,
                 new FormWidgetDecoratorBuilder(inject(proto().certificate().certificateScan(),
                         new CFile<InsuranceCertificateScan>(GWT.<InsuranceCertificateScanUploadService> create(InsuranceCertificateScanUploadService.class),
                                 new FileURLBuilder<InsuranceCertificateScan>() {
