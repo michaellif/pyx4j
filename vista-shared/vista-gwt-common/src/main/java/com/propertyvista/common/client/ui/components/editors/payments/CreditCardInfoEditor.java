@@ -226,11 +226,14 @@ public class CreditCardInfoEditor extends CEntityForm<CreditCardInfo> {
                     isCreditCardNumberCheckSent = true;
                     return new ValidationError(component, i18n.tr("Validation in progress"));
                 }
+            } else {
+                return new ValidationError(component, i18n.tr("Invalid Card Number"));
             }
         } else if (value != null && value.obfuscatedNumber().isNull()) {
             return new ValidationError(component, i18n.tr("Invalid Card Number"));
+        } else {
+            return null;
         }
-        return null;
     }
 
     private void setCreditCardNumberValidationResult(ValidationError error) {
