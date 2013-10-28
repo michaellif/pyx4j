@@ -127,7 +127,7 @@ public class BillingProcessManager {
             @Override
             public boolean accept(Lease lease) {
                 //Don't run bill on cycle that out of boundaries of lease end
-                return billingCycle.billingCycleStartDate().getValue().compareTo(lease.leaseTo().getValue()) <= 0;
+                return billingCycle.billingCycleStartDate().compareTo(lease.leaseTo()) <= 0;
             }
         });
         runBilling(billingCycle, filteredLeaseIterator, executionMonitor);
