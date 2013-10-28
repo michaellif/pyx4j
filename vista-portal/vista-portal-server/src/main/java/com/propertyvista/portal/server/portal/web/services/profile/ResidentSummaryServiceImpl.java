@@ -40,7 +40,9 @@ public class ResidentSummaryServiceImpl implements ResidentSummaryService {
         profileSummary.floorplanName().set(tenantInLease.leaseTermV().holder().lease().unit().floorplan().marketingName());
         profileSummary.tenantAddress().setValue(AddressRetriever.getLeaseParticipantCurrentAddress(tenantInLease).getStringView());
 
-        profileSummary.picture().set(tenantInLease.leaseParticipant().customer().picture());
+        if (tenantInLease.leaseParticipant().customer().picture().hasValues()) {
+            profileSummary.picture().set(tenantInLease.leaseParticipant().customer().picture());
+        }
 
         callback.onSuccess(profileSummary);
 

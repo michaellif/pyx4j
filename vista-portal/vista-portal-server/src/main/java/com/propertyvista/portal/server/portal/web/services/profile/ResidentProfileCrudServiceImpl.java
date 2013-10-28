@@ -44,7 +44,9 @@ public class ResidentProfileCrudServiceImpl implements ResidentProfileCrudServic
         // build dto
         ResidentProfileDTO dto = EntityFactory.create(ResidentProfileDTO.class);
         dto.person().setValue(customer.person().getValue());
-        dto.picture().set(customer.picture().detach());
+        if (customer.picture().hasValues()) {
+            dto.picture().set(customer.picture().detach());
+        }
         dto.emergencyContacts().addAll(customer.emergencyContacts());
 
         callback.onSuccess(dto);
