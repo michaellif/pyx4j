@@ -136,6 +136,8 @@ class GlobalLoginManager {
                 criteria.eq(criteria.proto().pmc(), pmc);
                 criteria.eq(criteria.proto().crmUser(), user.getPrimaryKey());
                 GlobalCrmUserIndex idx = Persistence.service().retrieve(criteria);
+                assert idx != null : "GlobalCrmUserIndex for '" + user.getStringView() + "' (id=" + user.id().getStringView() + ") not found";
+
                 idx.email().setValue(user.email().getValue());
                 Persistence.service().persist(idx);
                 return null;
