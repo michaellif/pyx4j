@@ -11,7 +11,7 @@
  * @author ArtyomB
  * @version $Id$
  */
-package com.propertyvista.operations.rpc.services.simulator;
+package com.propertyvista.operations.rpc.services;
 
 import com.pyx4j.entity.rpc.AbstractCrudService;
 

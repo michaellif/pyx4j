@@ -22,7 +22,7 @@ import com.propertyvista.operations.client.OperationsSite;
 import com.propertyvista.operations.client.activity.crud.AdminViewerActivity;
 import com.propertyvista.operations.client.ui.crud.simulation.SimulationViewerView;
 import com.propertyvista.operations.rpc.dto.SimulationDTO;
-import com.propertyvista.operations.rpc.services.simulator.SimulationService;
+import com.propertyvista.operations.rpc.services.SimulationService;
 
 public class SimulationViewerActivity extends AdminViewerActivity<SimulationDTO> implements SimulationViewerView.Presenter {
 

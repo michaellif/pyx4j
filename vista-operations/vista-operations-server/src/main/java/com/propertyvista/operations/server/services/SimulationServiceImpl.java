@@ -11,7 +11,7 @@
  * @author ArtyomB
  * @version $Id$
  */
-package com.propertyvista.operations.server.services.simulator;
+package com.propertyvista.operations.server.services;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
@@ -37,7 +37,7 @@ import com.propertyvista.config.VistaSystemsSimulationConfig;
 import com.propertyvista.operations.domain.dev.CardServiceSimulatorConfig;
 import com.propertyvista.operations.domain.dev.EquifaxSimulatorConfig;
 import com.propertyvista.operations.rpc.dto.SimulationDTO;
-import com.propertyvista.operations.rpc.services.simulator.SimulationService;
+import com.propertyvista.operations.rpc.services.SimulationService;
 
 public class SimulationServiceImpl extends AdminServiceImpl implements SimulationService {
 
