@@ -132,7 +132,7 @@ public class PortalBannerImageFolder extends VistaBoxFolder<PortalBannerImage> {
             CEntityLabel<AvailableLocale> locale = new CEntityLabel<AvailableLocale>();
             locale.setEditable(false);
             main.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().locale(), locale), true).build());
-            main.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().banner(), imageHolder), true).build());
+            main.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().image(), imageHolder), true).build());
 
             return main;
         }

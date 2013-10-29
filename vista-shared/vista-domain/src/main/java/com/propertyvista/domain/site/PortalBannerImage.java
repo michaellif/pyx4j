@@ -20,5 +20,5 @@ public interface PortalBannerImage extends IEntity {
     @NotNull
     AvailableLocale locale();
 
-    SiteImageResource banner();
+    SiteImageResource image();
 }
