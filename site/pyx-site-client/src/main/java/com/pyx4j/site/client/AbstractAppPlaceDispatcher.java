@@ -31,8 +31,6 @@ import com.pyx4j.site.rpc.AppPlace;
 import com.pyx4j.site.rpc.NotificationAppPlace;
 import com.pyx4j.site.shared.domain.Notification;
 import com.pyx4j.site.shared.meta.PublicPlace;
-import com.pyx4j.widgets.client.dialog.ConfirmDecline;
-import com.pyx4j.widgets.client.dialog.MessageDialog;
 
 public abstract class AbstractAppPlaceDispatcher implements AppPlaceDispatcher {
 

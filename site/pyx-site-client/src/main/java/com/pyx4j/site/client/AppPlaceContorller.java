@@ -60,15 +60,6 @@ public final class AppPlaceContorller extends PlaceController {
         this.eventBus = eventBus;
         this.dispatcher = dispatcher;
 
-        Window.addWindowClosingHandler(new ClosingHandler() {
-            @Override
-            public void onWindowClosing(ClosingEvent event) {
-                String warning = confirmGoTo(AppPlace.NOWHERE);
-                if (warning != null) {
-                    event.setMessage(warning);
-                }
-            }
-        });
     }
 
     @Override
@@ -127,7 +118,7 @@ public final class AppPlaceContorller extends PlaceController {
     private void maybeGoTo(final AppPlace newPlace) {
         String warning = confirmGoTo(newPlace);
         if (warning != null) {
-            confirmGoTo(warning, new ConfirmDecline() {
+            ConfirmDecline confirmDecline = new ConfirmDecline() {
 
                 @Override
                 public void onConfirmed() {
@@ -140,7 +131,10 @@ public final class AppPlaceContorller extends PlaceController {
                     // We should not fire event since application state change did not happened 
                     AppSite.getHistoryHandler().restoreStableHistoryToken();
                 }
-            });
+            };
+
+            MessageDialog.confirm(i18n.tr("Confirm"), i18n.tr("Are you sure you want to navigate away from this page?\n" + "{0}\n\n"
+                    + "Press Yes to continue, or No to stay on the current page.", warning), confirmDecline);
         } else {
             sureGoTo(newPlace);
         }
@@ -154,11 +148,5 @@ public final class AppPlaceContorller extends PlaceController {
 
         eventBus.fireEvent(new PlaceChangeEvent(where));
     }
-
-    public void confirmGoTo(String message, ConfirmDecline confirmDecline) {
-        MessageDialog.confirm(i18n.tr("Confirm"), i18n.tr("Are you sure you want to navigate away from this page?\n" + "{0}\n\n"
-                + "Press Yes to continue, or No to stay on the current page.", message), confirmDecline);
-    }
-    
 
 }

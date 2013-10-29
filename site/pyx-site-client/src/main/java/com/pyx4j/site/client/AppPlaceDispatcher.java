@@ -25,7 +25,6 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.pyx4j.site.rpc.AppPlace;
 import com.pyx4j.site.rpc.NotificationAppPlace;
 import com.pyx4j.site.shared.domain.Notification;
-import com.pyx4j.widgets.client.dialog.ConfirmDecline;
 
 public interface AppPlaceDispatcher {
 
