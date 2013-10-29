@@ -48,18 +48,29 @@ public class N4PolicyForm extends PolicyDTOTabPanelBasedForm<N4PolicyDTO> {
 
     @Override
     protected List<TwoColumnFlexFormPanel> createCustomTabPanels() {
-        TwoColumnFlexFormPanel settingsPanel = new TwoColumnFlexFormPanel(i18n.tr("Settings"));
+
+        TwoColumnFlexFormPanel signaturePanel = new TwoColumnFlexFormPanel(i18n.tr("Signature"));
         int row = -1;
-        settingsPanel.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().includeSignature())).build());
-        settingsPanel.setH1(++row, 0, 2, i18n.tr("The following information will be used for signing N4 letters:"));
-        settingsPanel.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().companyName())).build());
-        settingsPanel.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().phoneNumber())).build());
-        settingsPanel.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().faxNumber())).build());
-        settingsPanel.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().emailAddress())).build());
-        settingsPanel.setWidget(++row, 0, 2, inject(proto().mailingAddress(), new AddressSimpleEditor()));
-        settingsPanel.setH1(++row, 0, 2, i18n.tr("AR Codes used to search for delinquent leases:"));
-        settingsPanel.setWidget(++row, 0, 2, inject(proto().arCodes(), new ARCodeFolder()));
-        return Arrays.asList(settingsPanel);
+        signaturePanel.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().includeSignature())).build());
+        signaturePanel.setH1(++row, 0, 2, i18n.tr("The following information will be used for signing N4 letters:"));
+        signaturePanel.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().companyName())).build());
+        signaturePanel.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().phoneNumber())).build());
+        signaturePanel.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().faxNumber())).build());
+        signaturePanel.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().emailAddress())).build());
+        signaturePanel.setWidget(++row, 0, 2, inject(proto().mailingAddress(), new AddressSimpleEditor()));
+
+        TwoColumnFlexFormPanel arPanel = new TwoColumnFlexFormPanel(i18n.tr("Delivery"));
+        row = -1;
+        arPanel.setH1(++row, 0, 2, i18n.tr("AR Codes used to search for delinquent leases:"));
+        arPanel.setWidget(++row, 0, 2, inject(proto().arCodes(), new ARCodeFolder()));
+
+        TwoColumnFlexFormPanel deliveryPanel = new TwoColumnFlexFormPanel(i18n.tr("Delivery"));
+        row = -1;
+        deliveryPanel.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().handDeliveryAdvanceDays())).build());
+        deliveryPanel.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().mailDeliveryAdvanceDays())).build());
+        deliveryPanel.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().courierDeliveryAdvanceDays())).build());
+
+        return Arrays.asList(signaturePanel, arPanel, deliveryPanel);
     }
 
     public static class ARCodeFolder extends VistaTableFolder<N4PolicyDTOARCodeHolderDTO> {
