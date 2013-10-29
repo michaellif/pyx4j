@@ -100,6 +100,10 @@ public class FormDecorator<E extends IEntity, T extends CEntityForm<E>> extends 
         mainPanel.setWidget(widget);
     }
 
+    public Label getCaptionLabel() {
+        return captionLabel;
+    }
+
     public Panel getHeaderPanel() {
         return headerPanel;
     }
