@@ -29,6 +29,4 @@ public interface VistaSystemsSimulationConfigDTO extends IEntity {
     IPrimitive<Boolean> useCardServiceSimulator();
 
     IPrimitive<Boolean> useEquifaxSimulator();
-
-    OnboardingSimpulationsErrorsDTO onboarding();
 }

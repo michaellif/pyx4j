@@ -37,7 +37,6 @@ public class SimulationForm extends OperationsEntityForm<SimulationDTO> {
         selectTab(addTab(createGeneralTab()));
         addTab(createCaledonTab());
         addTab(createEquifaxTab());
-        addTab(createOnboardingTab());
     }
 
     @Override
@@ -131,13 +130,4 @@ public class SimulationForm extends OperationsEntityForm<SimulationDTO> {
         return content;
     }
 
-    private TwoColumnFlexFormPanel createOnboardingTab() {
-        TwoColumnFlexFormPanel content = new TwoColumnFlexFormPanel(i18n.tr("On-Boarding"));
-        int row = -1;
-
-        content.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().systems().onboarding().enabled()), 5, true).build());
-        content.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().systems().onboarding().simpulationType()), true).build());
-
-        return content;
-    }
 }
