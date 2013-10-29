@@ -36,6 +36,8 @@ import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.MouseDownEvent;
 import com.google.gwt.event.dom.client.MouseDownHandler;
+import com.google.gwt.event.dom.client.MouseOverEvent;
+import com.google.gwt.event.dom.client.MouseOverHandler;
 import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.Focusable;
@@ -249,6 +251,20 @@ public class WidgetDecorator extends FlowPanel implements IDecorator<CComponent<
                     }
                 }
             }, MouseDownEvent.getType());
+
+            addDomHandler(new MouseOverHandler() {
+
+                @Override
+                public void onMouseOver(MouseOverEvent event) {
+                    if (event.isControlKeyDown() && event.isShiftKeyDown()) {
+                        try {
+                            ((CComponent<Object>) getComnponent()).setValue(builder.mockValue);
+                        } catch (Exception e) {
+                            throw new Error("Failed to set mock value", e);
+                        }
+                    }
+                }
+            }, MouseOverEvent.getType());
         }
     }
 
