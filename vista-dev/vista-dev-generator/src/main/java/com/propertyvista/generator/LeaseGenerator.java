@@ -65,7 +65,7 @@ public class LeaseGenerator extends DataGenerator {
 
     public Lease createLease(AptUnit unit) {
         LogicalDate effectiveAvailableForRent = new LogicalDate(Math.max(unit._availableForRent().getValue().getTime(), RandomUtil
-                .randomLogicalDate(2012, 2012).getTime()));
+                .randomLogicalDate(2013, 2013).getTime()));
         LogicalDate createdDate = new LogicalDate(effectiveAvailableForRent.getTime() + Math.abs(random().nextLong()) % MAX_CREATE_WAIT);
 
         LogicalDate leaseFrom = new LogicalDate(createdDate.getTime() + Math.abs(random().nextLong()) % MAX_RESERVED_DURATION);
