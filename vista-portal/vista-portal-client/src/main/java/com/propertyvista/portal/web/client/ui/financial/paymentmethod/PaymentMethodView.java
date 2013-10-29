@@ -21,7 +21,7 @@ import com.propertyvista.portal.web.client.ui.IEditorView;
 
 public interface PaymentMethodView extends IEditorView<PaymentMethodDTO> {
 
-    interface Presenter extends IEditorPresenter<PaymentMethodDTO> {
+    public interface Presenter extends IEditorPresenter<PaymentMethodDTO> {
 
         void getCurrentAddress(AsyncCallback<AddressSimple> callback);
     }

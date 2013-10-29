@@ -22,7 +22,9 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.commons.css.ThemeColor;
+import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.ui.CEntityLabel;
+import com.pyx4j.forms.client.ui.form.FormDecorator;
 import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.Anchor;
@@ -94,9 +96,12 @@ public class PaymentConfirmationForm extends CPortalEntityForm<PaymentRecordDTO>
     public void onReset() {
         super.onReset();
 
-        getDecorator().setCaption(headerUndefined);
-        getDecorator().getCaptionLabel().removeStyleName(VistaTheme.StyleName.infoMessage.name());
-        getDecorator().getCaptionLabel().removeStyleName(VistaTheme.StyleName.errorMessage.name());
+        @SuppressWarnings("unchecked")
+        FormDecorator<PaymentRecordDTO, CEntityForm<PaymentRecordDTO>> decorator = ((FormDecorator<PaymentRecordDTO, CEntityForm<PaymentRecordDTO>>) getDecorator());
+        decorator.setCaption(headerUndefined);
+
+        decorator.getCaptionLabel().removeStyleName(VistaTheme.StyleName.infoMessage.name());
+        decorator.getCaptionLabel().removeStyleName(VistaTheme.StyleName.errorMessage.name());
 
         get(proto().transactionErrorMessage()).setVisible(false);
         get(proto().transactionAuthorizationNumber()).setVisible(false);
@@ -107,15 +112,18 @@ public class PaymentConfirmationForm extends CPortalEntityForm<PaymentRecordDTO>
     protected void onValueSet(boolean populate) {
         super.onValueSet(populate);
 
+        @SuppressWarnings("unchecked")
+        FormDecorator<PaymentRecordDTO, CEntityForm<PaymentRecordDTO>> decorator = ((FormDecorator<PaymentRecordDTO, CEntityForm<PaymentRecordDTO>>) getDecorator());
+
         if (getValue().paymentStatus().getValue().isFailed()) {
-            getDecorator().setCaption(headerFailed);
-            getDecorator().getCaptionLabel().addStyleName(VistaTheme.StyleName.errorMessage.name());
+            decorator.setCaption(headerFailed);
+            decorator.addStyleName(VistaTheme.StyleName.errorMessage.name());
 
             get(proto().transactionErrorMessage()).setVisible(true);
             autoPaySignupPanel.setVisible(false);
         } else {
-            getDecorator().setCaption(headerSuccess);
-            getDecorator().getCaptionLabel().addStyleName(VistaTheme.StyleName.infoMessage.name());
+            decorator.setCaption(headerSuccess);
+            decorator.addStyleName(VistaTheme.StyleName.infoMessage.name());
 
             get(proto().transactionAuthorizationNumber()).setVisible(!getValue().transactionAuthorizationNumber().isNull());
         }
