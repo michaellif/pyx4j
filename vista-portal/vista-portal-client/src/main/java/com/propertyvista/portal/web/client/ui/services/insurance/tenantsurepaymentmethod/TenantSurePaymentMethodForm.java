@@ -16,6 +16,7 @@ package com.propertyvista.portal.web.client.ui.services.insurance.tenantsurepaym
 import java.util.EnumSet;
 import java.util.Set;
 
+import com.google.gwt.dom.client.Style.TextAlign;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.Command;
@@ -79,6 +80,7 @@ public class TenantSurePaymentMethodForm extends PaymentMethodEditor<InsurancePa
         BasicFlexFormPanel panel = new BasicFlexFormPanel();
 
         panel.setH1(0, 0, 1, i18n.tr("Pre-Authorized Agreement"));
+        legalTerms.getElement().getStyle().setTextAlign(TextAlign.JUSTIFY);
         panel.setWidget(1, 0, legalTerms);
         panel.setWidget(2, 0, new FormWidgetDecoratorBuilder(iAgreeBox, FormWidgetDecoratorBuilder.LABEL_WIDTH, 5, 15).customLabel(i18n.tr("I Agree")).build());
 
