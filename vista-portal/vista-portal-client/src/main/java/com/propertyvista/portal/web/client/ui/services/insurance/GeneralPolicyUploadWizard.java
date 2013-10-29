@@ -84,9 +84,12 @@ public class GeneralPolicyUploadWizard extends CPortalEntityWizard<GeneralInsura
             //TODO    contentPanel.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().tenant(), comp), 150).build());
         }
 
-        contentPanel.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().certificate().insuranceProvider()), 150).build());
-        contentPanel.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().certificate().insuranceCertificateNumber()), 150).build());
-        contentPanel.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().certificate().liabilityCoverage()), 150).build());
+        contentPanel.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().certificate().insuranceProvider()), 150).mockValue("Insurance Provider")
+                .build());
+        contentPanel.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().certificate().insuranceCertificateNumber()), 150).mockValue("ABC123")
+                .build());
+        contentPanel.setWidget(++row, 0,
+                new FormWidgetDecoratorBuilder(inject(proto().certificate().liabilityCoverage()), 150).mockValue(new BigDecimal("222.33")).build());
         get(proto().certificate().liabilityCoverage()).addValueValidator(new EditableValueValidator<BigDecimal>() {
             @Override
             public ValidationError isValid(CComponent<BigDecimal> component, BigDecimal value) {
@@ -105,7 +108,11 @@ public class GeneralPolicyUploadWizard extends CPortalEntityWizard<GeneralInsura
                 return null;
             }
         });
-        contentPanel.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().certificate().inceptionDate()), 150).build());
+        contentPanel.setWidget(
+                ++row,
+                0,
+                new FormWidgetDecoratorBuilder(inject(proto().certificate().inceptionDate()), 150).mockValue(
+                        new LogicalDate(System.currentTimeMillis() - (long) 182 * 24 * 60 * 60 * 1000)).build());
 
         get(proto().certificate().inceptionDate()).addValueValidator(new EditableValueValidator<LogicalDate>() {
             @Override
@@ -116,7 +123,12 @@ public class GeneralPolicyUploadWizard extends CPortalEntityWizard<GeneralInsura
                 return null;
             }
         });
-        contentPanel.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().certificate().expiryDate()), 150).build());
+        contentPanel.setWidget(
+                ++row,
+                0,
+                new FormWidgetDecoratorBuilder(inject(proto().certificate().expiryDate()), 150).mockValue(
+                        new LogicalDate(System.currentTimeMillis() + (long) 182 * 24 * 60 * 60 * 1000)).build());
+
         get(proto().certificate().expiryDate()).addValueValidator(new EditableValueValidator<LogicalDate>() {
             @Override
             public ValidationError isValid(CComponent<LogicalDate> component, LogicalDate value) {

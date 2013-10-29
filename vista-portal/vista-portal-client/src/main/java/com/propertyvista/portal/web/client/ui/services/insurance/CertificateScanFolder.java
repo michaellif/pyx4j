@@ -73,7 +73,7 @@ public class CertificateScanFolder extends VistaBoxFolder<InsuranceCertificateDo
                                         }
                                     })), 250).build());
 
-            content.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().description()), 200).build());
+            content.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().description()), 200).mockValue("Description").build());
 
             return content;
         }

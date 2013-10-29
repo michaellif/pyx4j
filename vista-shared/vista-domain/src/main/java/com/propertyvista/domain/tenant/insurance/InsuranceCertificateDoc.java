@@ -34,5 +34,6 @@ public interface InsuranceCertificateDoc extends IEntity {
     @NotNull
     InsuranceCertificateScan scan();
 
+    @NotNull
     IPrimitive<String> description();
 }
