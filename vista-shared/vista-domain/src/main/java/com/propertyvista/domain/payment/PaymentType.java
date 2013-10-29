@@ -43,7 +43,7 @@ public enum PaymentType {
 
     // group sets:
 
-    public static EnumSet<PaymentType> avalableInPortal() {
+    public static EnumSet<PaymentType> availableInPortal() {
         if (VistaTODO.removedForProduction) {
             return EnumSet.of(Echeck, CreditCard);
         } else {
@@ -51,23 +51,23 @@ public enum PaymentType {
         }
     }
 
-    public static EnumSet<PaymentType> avalableInCrm() {
+    public static EnumSet<PaymentType> availableInCrm() {
         return EnumSet.of(Cash, Check, Echeck, CreditCard);
     }
 
-    public static EnumSet<PaymentType> avalableInProfile() {
+    public static EnumSet<PaymentType> availableInProfile() {
         return EnumSet.of(Echeck, CreditCard);
     }
 
-    public static EnumSet<PaymentType> avalableForPmc() {
+    public static EnumSet<PaymentType> availableForPmc() {
         return EnumSet.of(CreditCard);
     }
 
-    public static EnumSet<PaymentType> avalableInInsurance() {
+    public static EnumSet<PaymentType> availableInInsurance() {
         return EnumSet.of(CreditCard);
     }
 
-    public static EnumSet<PaymentType> avalableForNsf() {
+    public static EnumSet<PaymentType> availableForNsf() {
         return EnumSet.of(Check, Echeck, DirectBanking, CreditCard);
     }
 

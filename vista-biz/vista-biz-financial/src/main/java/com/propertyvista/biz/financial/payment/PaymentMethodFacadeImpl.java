@@ -93,7 +93,7 @@ public class PaymentMethodFacadeImpl implements PaymentMethodFacade {
     @Override
     public InsurancePaymentMethod persistInsurancePaymentMethod(InsurancePaymentMethod paymentMethod, Tenant tenantId) {
         Validate.isTrue(paymentMethod.tenant().equals(tenantId));
-        Validate.isTrue(PaymentType.avalableInInsurance().contains(paymentMethod.type().getValue()));
+        Validate.isTrue(PaymentType.availableInInsurance().contains(paymentMethod.type().getValue()));
         return PaymentMethodPersister.persistInsurancePaymentMethod(paymentMethod);
     }
 

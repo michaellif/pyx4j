@@ -22,6 +22,7 @@ import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.rpc.AsyncCallback;
+import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.HasVerticalAlignment;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Widget;
@@ -36,6 +37,7 @@ import com.pyx4j.forms.client.ui.CLabel;
 import com.pyx4j.forms.client.ui.CNumberLabel;
 import com.pyx4j.forms.client.ui.CRadioGroupEnum;
 import com.pyx4j.forms.client.ui.CSimpleEntityComboBox;
+import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
 import com.pyx4j.forms.client.validators.ValidationError;
@@ -51,7 +53,7 @@ import com.pyx4j.site.rpc.AppPlace;
 import com.pyx4j.widgets.client.RadioGroup;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
 
-import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
+import com.propertyvista.common.client.theme.VistaTheme;
 import com.propertyvista.common.client.ui.components.editors.payments.EcheckInfoEditor;
 import com.propertyvista.common.client.ui.components.editors.payments.PaymentMethodEditor;
 import com.propertyvista.common.client.ui.components.folders.PapCoveredItemFolder;
@@ -84,10 +86,12 @@ public class PaymentForm extends CrmEntityForm<PaymentRecordDTO> {
 
     private final CComboBox<LeasePaymentMethod> profiledPaymentMethodsCombo = new CSimpleEntityComboBox<LeasePaymentMethod>();
 
+    private final NoticeViewer noticeViewer = new NoticeViewer();
+
     private final PaymentMethodEditor<LeasePaymentMethod> paymentMethodEditor = new PaymentMethodEditor<LeasePaymentMethod>(LeasePaymentMethod.class) {
         @Override
         public Set<PaymentType> defaultPaymentTypes() {
-            return PaymentType.avalableInCrm();
+            return PaymentType.availableInCrm();
         }
 
         @Override
@@ -148,8 +152,10 @@ public class PaymentForm extends CrmEntityForm<PaymentRecordDTO> {
     public PaymentForm(IForm<PaymentRecordDTO> view) {
         super(PaymentRecordDTO.class, view);
 
-        TwoColumnFlexFormPanel content = new TwoColumnFlexFormPanel(i18n.tr("General"));
+        TwoColumnFlexFormPanel content = new TwoColumnFlexFormPanel();
         int row = -1;
+
+        content.setWidget(++row, 0, 1, noticeViewer.getNoticePanel());
 
         content.setWidget(++row, 0, createDetailsPanel());
 
@@ -170,11 +176,11 @@ public class PaymentForm extends CrmEntityForm<PaymentRecordDTO> {
         });
 
         selectTab(addTab(content));
+        setTabBarVisible(false);
     }
 
     @SuppressWarnings("unchecked")
     private IsWidget createDetailsPanel() {
-
         TwoColumnFlexFormPanel left = new TwoColumnFlexFormPanel();
         int row = -1;
 
@@ -330,8 +336,10 @@ public class PaymentForm extends CrmEntityForm<PaymentRecordDTO> {
 
         paymentMethodEditor.reset();
         paymentMethodEditor.setViewable(true);
-        paymentMethodEditor.setVisible(false);
-        paymentMethodEditorHeader.setVisible(false);
+
+// TODO : investigate why invisible paymentMethodEditor is not populated!?          
+//        paymentMethodEditor.setVisible(false);
+//        paymentMethodEditorHeader.setVisible(false);
 
         get(proto().preauthorizedPayment()).setVisible(false);
         preauthorizedPaymentMethodViewerHeader.setVisible(false);
@@ -340,7 +348,7 @@ public class PaymentForm extends CrmEntityForm<PaymentRecordDTO> {
         get(proto().storeInProfile()).setVisible(false);
         get(proto().createdBy()).setVisible(false);
 
-        get(proto().profiledPaymentMethod()).setNote(null);
+        noticeViewer.updateVisibility();
     }
 
     @Override
@@ -357,7 +365,7 @@ public class PaymentForm extends CrmEntityForm<PaymentRecordDTO> {
         get(proto().lastStatusChangeDate()).setVisible(!isNew);
         get(proto().createdBy()).setVisible(!getValue().createdBy().isNull());
 
-        get(proto().profiledPaymentMethod()).setNote(getValue().notice().getValue());
+        noticeViewer.updateVisibility();
 
         if (isEditable()) {
             paymentMethodEditor.setPaymentTypes(getValue().allowedPaymentTypes());
@@ -416,7 +424,7 @@ public class PaymentForm extends CrmEntityForm<PaymentRecordDTO> {
 
         paymentMethodEditor.setVisible(!getValue().paymentMethod().isEmpty());
         paymentMethodEditorHeader.setVisible(!getValue().paymentMethod().isEmpty());
-        paymentMethodEditor.setValue(getValue().paymentMethod(), false, populate);
+//        paymentMethodEditor.setValue(getValue().paymentMethod(), false, populate);
     }
 
     @Override
@@ -493,7 +501,7 @@ public class PaymentForm extends CrmEntityForm<PaymentRecordDTO> {
         }
     }
 
-    private class PreauthorizedPaymentViewer extends CEntityDecoratableForm<AutopayAgreement> {
+    private class PreauthorizedPaymentViewer extends CEntityForm<AutopayAgreement> {
 
         public PreauthorizedPaymentViewer() {
             super(AutopayAgreement.class);
@@ -520,7 +528,31 @@ public class PaymentForm extends CrmEntityForm<PaymentRecordDTO> {
         @Override
         protected void onValueSet(boolean populate) {
             super.onValueSet(populate);
+
             get(proto().createdBy()).setVisible(!getValue().createdBy().isNull());
+        }
+    }
+
+    private class NoticeViewer {
+
+        private final BasicFlexFormPanel noticePanel = new BasicFlexFormPanel();
+
+        public NoticeViewer() {
+            noticePanel.setWidget(0, 0, 1, inject(proto().notice()));
+            noticePanel.getWidget(0, 0).setStyleName(VistaTheme.StyleName.warningMessage.name());
+            noticePanel.getCellFormatter().setHorizontalAlignment(0, 0, HasHorizontalAlignment.ALIGN_CENTER);
+
+            noticePanel.setHR(1, 0, 1);
+
+            noticePanel.setWidth("100%");
+        }
+
+        public BasicFlexFormPanel getNoticePanel() {
+            return noticePanel;
+        }
+
+        public void updateVisibility() {
+            noticePanel.setVisible(getValue() != null && !getValue().notice().isNull());
         }
     }
 }

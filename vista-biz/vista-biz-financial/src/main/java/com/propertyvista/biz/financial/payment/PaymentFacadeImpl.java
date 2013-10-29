@@ -96,10 +96,10 @@ public class PaymentFacadeImpl implements PaymentFacade {
     public void validatePaymentMethod(BillingAccount billingAccount, LeasePaymentMethod paymentMethod, VistaApplication vistaApplication) {
         switch (vistaApplication) {
         case portal:
-            Validate.isTrue(PaymentType.avalableInPortal().contains(paymentMethod.type().getValue()), "Payment type not acceptable");
+            Validate.isTrue(PaymentType.availableInPortal().contains(paymentMethod.type().getValue()), "Payment type not acceptable");
             break;
         case crm:
-            Validate.isTrue(PaymentType.avalableInCrm().contains(paymentMethod.type().getValue()), "Payment type not acceptable");
+            Validate.isTrue(PaymentType.availableInCrm().contains(paymentMethod.type().getValue()), "Payment type not acceptable");
             break;
         default:
             throw new IllegalArgumentException();
