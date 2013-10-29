@@ -40,6 +40,12 @@ public class PortalSiteMap implements SiteMap {
         }
     }
 
+    public static class Logout extends AppPlace implements PublicPlace {
+        {
+            setStable(false);
+        }
+    }
+
     /** This is the place when user must enter credentials and pass the humand verification to send the password request */
     @PlaceProperties(caption = "Reset Password")
     public static class PasswordResetRequest extends AppPlace implements PublicPlace {

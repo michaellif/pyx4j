@@ -14,20 +14,18 @@
 package com.propertyvista.portal.web.client.mvp;
 
 import com.google.gwt.activity.shared.Activity;
+import com.google.gwt.activity.shared.ActivityMapper;
 import com.google.gwt.place.shared.Place;
-import com.google.gwt.user.client.rpc.AsyncCallback;
-
-import com.pyx4j.site.client.activity.AppActivityMapper;
 
 import com.propertyvista.portal.web.client.activity.HeaderActivity;
 
-public class HeaderActivityMapper implements AppActivityMapper {
+public class HeaderActivityMapper implements ActivityMapper {
 
     public HeaderActivityMapper() {
     }
 
     @Override
-    public void obtainActivity(Place place, AsyncCallback<Activity> callback) {
-        callback.onSuccess(new HeaderActivity(place));
+    public Activity getActivity(Place place) {
+        return new HeaderActivity(place);
     }
 }

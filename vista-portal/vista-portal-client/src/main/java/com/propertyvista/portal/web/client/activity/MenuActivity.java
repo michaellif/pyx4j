@@ -78,7 +78,7 @@ public class MenuActivity extends AbstractActivity implements MenuView.MenuPrese
 
     @Override
     public void logout() {
-        ClientContext.logout(GWT.<AuthenticationService> create(PortalAuthenticationService.class), null);
+        AppSite.getPlaceController().goTo(new PortalSiteMap.Logout());
     }
 
     @Override

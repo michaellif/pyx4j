@@ -18,25 +18,16 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
-import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.security.client.ClientContext;
-import com.pyx4j.security.rpc.AuthenticationResponse;
 import com.pyx4j.security.rpc.AuthenticationService;
-import com.pyx4j.site.client.AppSite;
 
-import com.propertyvista.portal.rpc.portal.PortalSiteMap;
 import com.propertyvista.portal.rpc.portal.web.services.PortalAuthenticationService;
 
 public class LogoutActivity extends AbstractActivity {
 
     @Override
     public void start(AcceptsOneWidget panel, EventBus eventBus) {
-        ClientContext.logout(GWT.<AuthenticationService> create(PortalAuthenticationService.class), new DefaultAsyncCallback<AuthenticationResponse>() {
-            @Override
-            public void onSuccess(AuthenticationResponse result) {
-                AppSite.getPlaceController().goTo(new PortalSiteMap.Login());
-            }
-        });
+        ClientContext.logout(GWT.<AuthenticationService> create(PortalAuthenticationService.class), null);
     }
 
 }

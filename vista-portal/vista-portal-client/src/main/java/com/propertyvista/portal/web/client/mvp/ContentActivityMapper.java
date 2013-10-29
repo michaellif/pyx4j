@@ -25,6 +25,7 @@ import com.pyx4j.site.rpc.AppPlace;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap.LeaseContextSelection;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap.Login;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap.LoginWithToken;
+import com.propertyvista.portal.rpc.portal.PortalSiteMap.Logout;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap.NotificationPlace;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap.PasswordChange;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap.PasswordReset;
@@ -50,6 +51,7 @@ import com.propertyvista.portal.web.client.activity.financial.paymentmethod.Paym
 import com.propertyvista.portal.web.client.activity.login.LandingActivity;
 import com.propertyvista.portal.web.client.activity.login.LeaseContextSelectionActivity;
 import com.propertyvista.portal.web.client.activity.login.LoginWithTokenActivity;
+import com.propertyvista.portal.web.client.activity.login.LogoutActivity;
 import com.propertyvista.portal.web.client.activity.login.PasswordResetRequestWizardActivity;
 import com.propertyvista.portal.web.client.activity.login.VistaTermsActivity;
 import com.propertyvista.portal.web.client.activity.maintenance.MaintenanceDashboardActivity;
@@ -156,6 +158,8 @@ public class ContentActivityMapper implements AppActivityMapper {
 // Internals:
                     } else if (place instanceof Login) {
                         activity = new LandingActivity(place);
+                    } else if (place instanceof Logout) {
+                        activity = new LogoutActivity();
                     } else if (place instanceof PasswordReset) {
                         activity = new PasswordResetActivity(place);
                     } else if (place instanceof LoginWithToken) {
