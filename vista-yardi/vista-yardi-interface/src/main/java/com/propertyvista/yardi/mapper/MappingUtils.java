@@ -72,7 +72,7 @@ public class MappingUtils {
         }
     }
 
-    public static AddressStructured getAddress(Address mitsAddress) {
+    public static AddressStructured getAddress(Address mitsAddress, StringBuilder error) {
         // TODO instantiate address parser according to the building country
         StringBuilder address2 = new StringBuilder();
         for (String addressPart : mitsAddress.getAddress2()) {
@@ -92,6 +92,7 @@ public class MappingUtils {
             address.streetDirection().setValue(streetAddress.streetDirection);
         } catch (Throwable e) {
             address.streetName().setValue(mitsAddress.getAddress1() + (address2.length() > 0 ? "; " + address2.toString() : ""));
+            error.append(e.getMessage());
         }
         address.city().setValue(mitsAddress.getCity());
         address.province().code().setValue(mitsAddress.getState());

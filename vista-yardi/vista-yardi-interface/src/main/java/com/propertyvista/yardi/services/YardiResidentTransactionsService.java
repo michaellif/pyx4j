@@ -372,16 +372,21 @@ public class YardiResidentTransactionsService extends YardiAbstractService {
     }
 
     private void assignLegalAddress(final AptUnit unit, final Address address, final ExecutionMonitor executionMonitor) throws YardiServiceException {
+        if (address.getAddress1() == null) {
+            return;
+        }
+
         log.info("    assign Legal Address: {}", address.getAddress1());
 
         new UnitOfWork(TransactionScopeOption.RequiresNew).execute(new Executable<Void, YardiServiceException>() {
             @Override
             public Void execute() throws YardiServiceException {
-                unit.info().legalAddress().set(MappingUtils.getAddress(address));
-                if (unit.info().legalAddress().streetNumber().isNull()) {
-                    String msg = SimpleMessageFormat.format("    invalid address: {0}", unit.info().legalAddress().streetName().getValue());
+                StringBuilder addrErr = new StringBuilder();
+                unit.info().legalAddress().set(MappingUtils.getAddress(address, addrErr));
+                if (addrErr.length() > 0) {
+                    String msg = SimpleMessageFormat.format("    invalid address: {0}", addrErr);
                     log.info(msg);
-                    executionMonitor.addErredEvent("ParseAddress", msg);
+                    executionMonitor.addInfoEvent("ParseAddress", msg);
                 }
 
                 ServerSideFactory.create(BuildingFacade.class).persist(unit);

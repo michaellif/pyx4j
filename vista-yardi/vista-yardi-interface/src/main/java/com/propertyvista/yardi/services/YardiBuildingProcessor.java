@@ -19,6 +19,7 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.yardi.entity.mits.Address;
 import com.yardi.entity.mits.PropertyIDType;
 import com.yardi.entity.mits.Unit;
 import com.yardi.entity.resident.Property;
@@ -55,18 +56,25 @@ public class YardiBuildingProcessor {
 
     public Building updateBuilding(Key yardiInterfaceId, PropertyIDType propertyId) throws YardiServiceException {
         Building building = getBuildingFromProperty(propertyId);
-        if (building.info().address().streetNumber().isNull()) {
-            String msg = SimpleMessageFormat.format("      invalid address: {0}", building.info().address().streetName().getValue());
+
+        Address address = propertyId.getAddress().get(0);
+        log.info("    assign Building Address: {}", address.getAddress1());
+
+        StringBuilder addrErr = new StringBuilder();
+        building.info().address().set(MappingUtils.getAddress(address, addrErr));
+        if (addrErr.length() > 0) {
+            String msg = SimpleMessageFormat.format("      invalid address: {0}", addrErr);
             log.info(msg);
             if (executionMonitor != null) {
-                executionMonitor.addErredEvent("ParseAddress", msg);
+                executionMonitor.addInfoEvent("ParseAddress", msg);
             }
 
         }
+
         building.integrationSystemId().setValue(yardiInterfaceId);
         MappingUtils.ensureCountryOfOperation(building);
-        String propertyCode = building.propertyCode().getValue();
-        return merge(building, MappingUtils.getBuilding(yardiInterfaceId, propertyCode));
+
+        return merge(building, MappingUtils.getBuilding(yardiInterfaceId, building.propertyCode().getValue()));
     }
 
     public AptUnit updateUnit(Building building, Unit unit) throws YardiServiceException {
