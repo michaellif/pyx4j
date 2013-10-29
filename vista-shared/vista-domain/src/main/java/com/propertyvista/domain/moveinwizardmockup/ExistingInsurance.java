@@ -24,13 +24,11 @@ import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 
-import com.propertyvista.domain.media.ApplicationDocumentHolder;
-import com.propertyvista.domain.media.InsuranceCertificateDocument;
 import com.propertyvista.domain.tenant.insurance.InsuranceCertificate;
 
 @DiscriminatorValue(value = "ExistingInsurance")
 @Transient
-public interface ExistingInsurance extends IEntity, ApplicationDocumentHolder<InsuranceCertificateDocument> {
+public interface ExistingInsurance extends IEntity {
 
     IPrimitive<String> insuranceProvider();
 

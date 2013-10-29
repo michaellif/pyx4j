@@ -133,20 +133,8 @@ public class GeneralPolicyUploadWizard extends CPortalEntityWizard<GeneralInsura
             }
         });
 
-        contentPanel.setWidget(
-                ++row,
-                0,
-                new FormWidgetDecoratorBuilder(inject(proto().certificate().certificateScan(),
-                        new CFile<InsuranceCertificateScan>(GWT.<InsuranceCertificateScanUploadService> create(InsuranceCertificateScanUploadService.class),
-                                new FileURLBuilder<InsuranceCertificateScan>() {
-
-                                    @Override
-                                    public String getUrl(InsuranceCertificateScan file) {
-                                        return MediaUtils.createInsuranceCertificateScanUrl(file);
-                                    }
-                                })), 200).build());
-
-        get(proto().certificate().certificateScan()).setNote(i18n.tr("Attach Scanned Insurance Certificate (picture, PDF or archive file)"));
+        contentPanel.setH1(++row, 0, 1, "Attach Scanned Insurance Certificate");
+        contentPanel.setWidget(++row, 0, inject(proto().certificate().certificateDocs(), new CertificateScanFolder()));
 
         return contentPanel;
     }

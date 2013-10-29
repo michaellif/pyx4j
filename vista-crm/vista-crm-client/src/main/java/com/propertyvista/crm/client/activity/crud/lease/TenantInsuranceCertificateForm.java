@@ -135,7 +135,7 @@ public class TenantInsuranceCertificateForm<E extends InsuranceCertificate> exte
             }
         });
 
-        contentPanel.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().certificateScan(), makeInsuranceCertificateScanUploadWidget()))
+        contentPanel.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().certificateDocs(), makeInsuranceCertificateScanUploadWidget()))
                 .componentWidth("200px").build());
         return contentPanel;
     }

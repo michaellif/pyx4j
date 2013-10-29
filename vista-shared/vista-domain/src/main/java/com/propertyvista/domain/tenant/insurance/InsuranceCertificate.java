@@ -21,19 +21,22 @@ import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.DiscriminatorValue;
 import com.pyx4j.entity.annotations.Editor;
-import com.pyx4j.entity.annotations.Owned;
+import com.pyx4j.entity.annotations.OrderBy;
 import com.pyx4j.entity.annotations.Editor.EditorType;
 import com.pyx4j.entity.annotations.Format;
 import com.pyx4j.entity.annotations.Inheritance;
 import com.pyx4j.entity.annotations.Inheritance.InheritanceStrategy;
 import com.pyx4j.entity.annotations.JoinColumn;
+import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.annotations.Owner;
 import com.pyx4j.entity.annotations.ReadOnly;
 import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.AttachLevel;
 import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
+import com.pyx4j.entity.shared.IEntity.PrimaryKey;
 
 @AbstractEntity
 @Inheritance(strategy = InheritanceStrategy.SINGLE_TABLE)
@@ -74,6 +77,7 @@ public interface InsuranceCertificate<INSURANCE_POLICY extends InsurancePolicy<?
     IPrimitive<LogicalDate> expiryDate();
 
     @Owned
-    InsuranceCertificateScan certificateScan();
+    @OrderBy(PrimaryKey.class)
+    IList<InsuranceCertificateDoc> certificateDocs();
 
 }

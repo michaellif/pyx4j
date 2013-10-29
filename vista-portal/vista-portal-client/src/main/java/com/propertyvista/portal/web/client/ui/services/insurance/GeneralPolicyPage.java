@@ -51,19 +51,9 @@ public class GeneralPolicyPage extends CPortalEntityForm<GeneralInsurancePolicyD
         mainPanel.setWidget(++row, 0, 1, new FormWidgetDecoratorBuilder(inject(proto().certificate().liabilityCoverage()), 150).build());
         mainPanel.setWidget(++row, 0, 1, new FormWidgetDecoratorBuilder(inject(proto().certificate().inceptionDate()), 150).build());
         mainPanel.setWidget(++row, 0, 1, new FormWidgetDecoratorBuilder(inject(proto().certificate().expiryDate()), 150).build());
-        mainPanel.setWidget(
-                ++row,
-                0,
-                1,
-                new FormWidgetDecoratorBuilder(inject(proto().certificate().certificateScan(),
-                        new CFile<InsuranceCertificateScan>(GWT.<InsuranceCertificateScanUploadService> create(InsuranceCertificateScanUploadService.class),
-                                new FileURLBuilder<InsuranceCertificateScan>() {
 
-                                    @Override
-                                    public String getUrl(InsuranceCertificateScan file) {
-                                        return MediaUtils.createInsuranceCertificateScanUrl(file);
-                                    }
-                                })), 200).build());
+        mainPanel.setH1(++row, 0, 1, "Scanned Insurance Certificate");
+        mainPanel.setWidget(++row, 0, 1, inject(proto().certificate().certificateDocs(), new CertificateScanFolder()));
 
         return mainPanel;
 

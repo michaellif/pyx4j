@@ -7,14 +7,30 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Oct 9, 2013
+ * Created on Oct 29, 2013
  * @author michaellif
  * @version $Id$
  */
 package com.propertyvista.domain.tenant.insurance;
 
-import com.pyx4j.entity.shared.IFile;
+import com.pyx4j.entity.annotations.Detached;
+import com.pyx4j.entity.annotations.JoinColumn;
+import com.pyx4j.entity.annotations.Owned;
+import com.pyx4j.entity.annotations.Owner;
+import com.pyx4j.entity.annotations.ReadOnly;
+import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.shared.IPrimitive;
 
-public interface InsuranceCertificateScan extends IFile {
+public interface InsuranceCertificateDoc extends IEntity {
 
+    @Owner
+    @Detached
+    @JoinColumn
+    @ReadOnly
+    InsuranceCertificate<?> certificate();
+
+    @Owned
+    InsuranceCertificateScan scan();
+
+    IPrimitive<String> description();
 }

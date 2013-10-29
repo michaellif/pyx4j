@@ -43,8 +43,6 @@ public class InsuranceAlreadyAvailabileForm extends CEntityDecoratableForm<Exist
         content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().personalLiability()), 10).build());
         content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().insuranceStartDate()), 10).build());
         content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().insuranceExpirationDate()), 10).build());
-        content.setH2(++row, 0, 1, i18n.tr("Attach Insurance Certificate"));
-        content.setWidget(++row, 0, inject(proto().documents(), new InsuranceUploaderFolder()));
 
         addValueValidator(new EditableValueValidator<ExistingInsurance>() {
 

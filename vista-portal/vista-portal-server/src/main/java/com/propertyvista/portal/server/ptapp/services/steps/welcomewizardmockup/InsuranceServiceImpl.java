@@ -134,9 +134,6 @@ public class InsuranceServiceImpl implements InsuranceService {
 
         insurance.purchaseInsurance().paymentMethod().currentAddress().set(WelcomeWizardDemoData.applicantsAddress());
 
-        // EXISTING INSURACE PART INTIALIZATION
-        insurance.existingInsurance().documents().add(insurance.existingInsurance().documents().$());
-
         callback.onSuccess(insurance);
     }
 
