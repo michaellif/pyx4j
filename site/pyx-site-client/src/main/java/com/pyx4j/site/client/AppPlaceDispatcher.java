@@ -31,8 +31,6 @@ public interface AppPlaceDispatcher {
 
     void forwardTo(AppPlace newPlace, AsyncCallback<AppPlace> callback);
 
-    void confirm(String message, ConfirmDecline confirmDecline);
-
     NotificationAppPlace getNotificationPlace(Notification notification);
 
 }

@@ -32,16 +32,20 @@ import com.google.gwt.user.client.Window.ClosingEvent;
 import com.google.gwt.user.client.Window.ClosingHandler;
 import com.google.web.bindery.event.shared.EventBus;
 
+import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.site.rpc.AppPlace;
 import com.pyx4j.site.rpc.NotificationAppPlace;
 import com.pyx4j.site.shared.domain.Notification;
 import com.pyx4j.widgets.client.PopupPanel;
 import com.pyx4j.widgets.client.dialog.ConfirmDecline;
+import com.pyx4j.widgets.client.dialog.MessageDialog;
 
 public final class AppPlaceContorller extends PlaceController {
 
     private static final Logger log = LoggerFactory.getLogger(AppPlaceContorller.class);
+
+    private static final I18n i18n = I18n.get(AppPlaceContorller.class);
 
     private final EventBus eventBus;
 
@@ -123,7 +127,7 @@ public final class AppPlaceContorller extends PlaceController {
     private void maybeGoTo(final AppPlace newPlace) {
         String warning = confirmGoTo(newPlace);
         if (warning != null) {
-            dispatcher.confirm(warning, new ConfirmDecline() {
+            confirmGoTo(warning, new ConfirmDecline() {
 
                 @Override
                 public void onConfirmed() {
@@ -150,5 +154,11 @@ public final class AppPlaceContorller extends PlaceController {
 
         eventBus.fireEvent(new PlaceChangeEvent(where));
     }
+
+    public void confirmGoTo(String message, ConfirmDecline confirmDecline) {
+        MessageDialog.confirm(i18n.tr("Confirm"), i18n.tr("Are you sure you want to navigate away from this page?\n" + "{0}\n\n"
+                + "Press Yes to continue, or No to stay on the current page.", message), confirmDecline);
+    }
+    
 
 }
