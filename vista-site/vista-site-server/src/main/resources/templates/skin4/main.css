@@ -135,6 +135,10 @@ select {
 #siteAuthInsert {
 	float:right;
 	margin-top:10px;
+	color:  #000000;
+}
+
+#siteAuthInsert:hover {
 }
 
 .main #siteAuthInsert .greeting {

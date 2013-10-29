@@ -132,6 +132,10 @@ select {
 #siteAuthInsert {
 	float:right;
 	margin-top:10px;
+	color: #DDD3B4;
+	font-size: 15px;
+    margin: 0 15px;
+    padding: 10px 0;
 }
 #siteAuthInsert .greeting {
 	color:  ${object1_20};

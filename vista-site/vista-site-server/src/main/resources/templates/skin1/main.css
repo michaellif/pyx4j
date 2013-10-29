@@ -118,7 +118,13 @@ select {
 #siteAuthInsert {
 	float:right;
 	margin-top:10px;
+	font-size:15px;
 }
+#siteAuthInsert:hover {
+	color: ${contrast1_100};
+	text-decoration: none;
+}
+
 #siteAuthInsert .greeting {
 	color: ${foreground_100};
 	font-weight: bold;
