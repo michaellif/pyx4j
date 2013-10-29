@@ -109,8 +109,8 @@ public class LatestActivitiesGadget extends AbstractGadget<FinancialDashboardVie
 
                 content.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().id(), new CNumberLabel())).build());
                 content.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().amount())).build());
-                content.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().paymentStatus())).build());
                 content.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().postDate())).build());
+                content.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().paymentStatus())).build());
                 content.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().payer(), new CEntityLabel<Name>())).build());
 
                 return content;

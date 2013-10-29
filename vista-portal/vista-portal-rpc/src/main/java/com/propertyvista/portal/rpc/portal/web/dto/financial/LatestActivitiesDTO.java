@@ -36,7 +36,7 @@ import com.propertyvista.domain.person.Name;
 public interface LatestActivitiesDTO extends IEntity {
 
     @Transient
-    @ToStringFormat("{0}, ${1} - {2}")
+    @ToStringFormat("${1}, {2} - {3}")
     public interface InvoicePaymentDTO extends IEntity {
         @Override
         @Indexed
@@ -52,13 +52,13 @@ public interface LatestActivitiesDTO extends IEntity {
 
         @ToString(index = 2)
         @Editor(type = EditorType.label)
-        IPrimitive<PaymentStatus> paymentStatus();
+        IPrimitive<LogicalDate> postDate();
 
         @ToString(index = 3)
         @Editor(type = EditorType.label)
-        IPrimitive<LogicalDate> postDate();
+        IPrimitive<PaymentStatus> paymentStatus();
 
-        @ToString(index = 2)
+        @ToString(index = 4)
         @Editor(type = EditorType.label)
         Name payer();
     }
