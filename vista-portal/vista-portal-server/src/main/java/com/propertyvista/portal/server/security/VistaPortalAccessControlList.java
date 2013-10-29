@@ -39,6 +39,7 @@ import com.propertyvista.domain.security.VistaCustomerBehavior;
 import com.propertyvista.domain.security.VistaDataAccessBehavior;
 import com.propertyvista.domain.security.common.VistaBasicBehavior;
 import com.propertyvista.domain.tenant.insurance.GeneralInsurancePolicy;
+import com.propertyvista.domain.tenant.insurance.InsuranceCertificateScan;
 import com.propertyvista.domain.tenant.insurance.TenantSureInsurancePolicy;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.LeaseTermTenant;
@@ -59,13 +60,13 @@ import com.propertyvista.portal.rpc.portal.services.resident.BillSummaryService;
 import com.propertyvista.portal.rpc.portal.services.resident.BillingHistoryService;
 import com.propertyvista.portal.rpc.portal.services.resident.CommunicationCenterService;
 import com.propertyvista.portal.rpc.portal.services.resident.DashboardService;
-import com.propertyvista.portal.rpc.portal.services.resident.PortalContentService;
 import com.propertyvista.portal.rpc.portal.services.resident.MaintenanceService;
 import com.propertyvista.portal.rpc.portal.services.resident.PaymentMethodCrudService;
 import com.propertyvista.portal.rpc.portal.services.resident.PaymentMethodRetrieveService;
 import com.propertyvista.portal.rpc.portal.services.resident.PaymentMethodWizardService;
 import com.propertyvista.portal.rpc.portal.services.resident.PaymentRetrieveService;
 import com.propertyvista.portal.rpc.portal.services.resident.PaymentWizardService;
+import com.propertyvista.portal.rpc.portal.services.resident.PortalContentService;
 import com.propertyvista.portal.rpc.portal.services.resident.PreauthorizedPaymentListService;
 import com.propertyvista.portal.rpc.portal.services.resident.PreauthorizedPaymentWizardService;
 import com.propertyvista.portal.rpc.portal.services.resident.TenantInsuranceByOtherProviderManagementService;
@@ -105,6 +106,7 @@ import com.propertyvista.portal.rpc.ptapp.services.steps.welcomewizardmockup.Mov
 import com.propertyvista.portal.rpc.ptapp.services.steps.welcomewizardmockup.ResetWizardService;
 import com.propertyvista.portal.rpc.shared.services.CreditCardValidationService;
 import com.propertyvista.portal.server.security.access.GeneralInsurancePolicyDatasetAccessRule;
+import com.propertyvista.portal.server.security.access.InsuranceCertificateScanDatasetAccessRule;
 import com.propertyvista.portal.server.security.access.LeasePaymentMethodTenantDatasetAccessRule;
 import com.propertyvista.portal.server.security.access.LeaseTenantDatasetAccessRule;
 import com.propertyvista.server.common.security.UserEntityInstanceAccess;
@@ -263,6 +265,7 @@ public class VistaPortalAccessControlList extends ServletContainerAclBuilder {
 
         // Tenant Insurance and TenantSure
         grant(VistaCustomerBehavior.Tenant, new EntityPermission(GeneralInsurancePolicy.class, CRUD));
+        grant(VistaCustomerBehavior.Tenant, new EntityPermission(InsuranceCertificateScan.class, EntityPermission.READ));
         grant(VistaCustomerBehavior.Tenant, new IServiceExecutePermission(GeneralInsurancePolicyCrudService.class));
 
         grant(VistaCustomerBehavior.Tenant, new EntityPermission(TenantSureInsurancePolicy.class, CRUD));
@@ -298,6 +301,7 @@ public class VistaPortalAccessControlList extends ServletContainerAclBuilder {
         grant(VistaDataAccessBehavior.TenantInPortal, new LeaseTenantDatasetAccessRule(), Lease.class);
         grant(VistaDataAccessBehavior.TenantInPortal, new LeasePaymentMethodTenantDatasetAccessRule(), LeasePaymentMethod.class);
         grant(VistaDataAccessBehavior.TenantInPortal, new GeneralInsurancePolicyDatasetAccessRule(), GeneralInsurancePolicy.class);
+        grant(VistaDataAccessBehavior.TenantInPortal, new InsuranceCertificateScanDatasetAccessRule(), InsuranceCertificateScan.class);
 
         grant(new IServiceExecutePermission(PortalContentService.class));
         freeze();

@@ -13,8 +13,17 @@
  */
 package com.propertyvista.domain.tenant.insurance;
 
+import com.pyx4j.entity.annotations.Detached;
+import com.pyx4j.entity.annotations.JoinColumn;
+import com.pyx4j.entity.annotations.Owner;
+import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IFile;
 
 public interface InsuranceCertificateScan extends IFile {
 
+    @Owner
+    @Detached
+    @JoinColumn
+    @NotNull
+    InsuranceCertificateDoc certificateDoc();
 }

@@ -42,11 +42,10 @@ public class InsuranceCertificateScanServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         try {
-            InsuranceCertificateScan docFile = Persistence.service().retrieve(InsuranceCertificateScan.class, parseKey(request.getPathInfo()));
+            InsuranceCertificateScan docFile = Persistence.secureRetrieve(InsuranceCertificateScan.class, parseKey(request.getPathInfo()));
             if (docFile == null) {
                 throw new FileNotFoundException("document file was not found");
             }
-            assertPermission(docFile);
 
             GeneralInsurancePolicyBlob blob = Persistence.service().retrieve(GeneralInsurancePolicyBlob.class, docFile.blobKey().getValue());
             if (blob == null) {
@@ -75,7 +74,4 @@ public class InsuranceCertificateScanServlet extends HttpServlet {
         return new Key(key);
     }
 
-    private void assertPermission(InsuranceCertificateScan docFile) {
-        // TODO implement permission check for doc file
-    }
 }
