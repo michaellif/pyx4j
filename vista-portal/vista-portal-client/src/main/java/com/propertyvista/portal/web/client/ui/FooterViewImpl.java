@@ -38,7 +38,7 @@ import com.pyx4j.widgets.client.PopupWindow.PopupWindowHandle;
 import com.propertyvista.common.client.ui.components.MediaUtils;
 import com.propertyvista.domain.site.SocialLink;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap;
-import com.propertyvista.portal.rpc.portal.web.dto.PortalFooterContentDTO;
+import com.propertyvista.portal.rpc.portal.web.dto.PortalContentDTO;
 import com.propertyvista.portal.web.client.resources.PortalImages;
 import com.propertyvista.portal.web.client.themes.PortalWebRootPaneTheme;
 
@@ -121,9 +121,9 @@ public class FooterViewImpl extends FlowPanel implements FooterView {
     }
 
     @Override
-    public void setContent(PortalFooterContentDTO content) {
-        pmcInfoPanel.setPmcInfo(content.content().html().getValue());
-        pmcInfoPanel.setPmcLogo(MediaUtils.createSiteImageResourceUrl(content.logo()));
+    public void setContent(PortalContentDTO content) {
+        pmcInfoPanel.setPmcInfo(content.pmcInfo().html().getValue());
+        pmcInfoPanel.setPmcLogo(MediaUtils.createSiteImageResourceUrl(content.logoSmall()));
 
         followUsPanel.setSocialLinks(content.socialLinks());
 

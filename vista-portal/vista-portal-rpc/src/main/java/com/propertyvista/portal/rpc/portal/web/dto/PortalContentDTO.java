@@ -16,17 +16,29 @@ package com.propertyvista.portal.rpc.portal.web.dto;
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
+import com.pyx4j.entity.shared.IPrimitive;
 
 import com.propertyvista.domain.site.HtmlContent;
+import com.propertyvista.domain.site.PortalBannerImage;
+import com.propertyvista.domain.site.SiteDescriptor.Skin;
 import com.propertyvista.domain.site.SiteImageResource;
+import com.propertyvista.domain.site.SitePalette;
 import com.propertyvista.domain.site.SocialLink;
 
 @Transient
-public interface PortalFooterContentDTO extends IEntity {
+public interface PortalContentDTO extends IEntity {
 
-    SiteImageResource logo();
+    IPrimitive<Skin> skin();
 
-    HtmlContent content();
+    SitePalette sitePalette();
+
+    SiteImageResource logoSmall();
+
+    SiteImageResource logoLarge();
+
+    HtmlContent pmcInfo();
+
+    PortalBannerImage portalBanner();
 
     IList<SocialLink> socialLinks();
 }

@@ -17,10 +17,10 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.rpc.shared.IService;
 
-import com.propertyvista.portal.rpc.portal.web.dto.PortalFooterContentDTO;
+import com.propertyvista.portal.rpc.portal.web.dto.PortalContentDTO;
 
-public interface FooterContentService extends IService {
+public interface PortalContentService extends IService {
 
-    void getFooterContent(AsyncCallback<PortalFooterContentDTO> callback);
+    void getPortalContent(AsyncCallback<PortalContentDTO> callback);
 
 }

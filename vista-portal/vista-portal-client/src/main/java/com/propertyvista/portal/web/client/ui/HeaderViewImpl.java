@@ -25,18 +25,21 @@ import com.pyx4j.site.client.ui.layout.responsive.LayoutChangeRequestEvent.Chang
 
 import com.propertyvista.common.client.theme.HorizontalAlignCenterMixin;
 import com.propertyvista.common.client.ui.components.MediaUtils;
+import com.propertyvista.portal.rpc.portal.web.dto.PortalContentDTO;
 import com.propertyvista.portal.web.client.themes.PortalWebRootPaneTheme;
 
 public class HeaderViewImpl extends SimplePanel implements HeaderView {
+
+    private final Image bannerImage;
 
     public HeaderViewImpl() {
 
         setStyleName(PortalWebRootPaneTheme.StyleName.PageHeader.name());
 
-        Image logoImage = new Image(MediaUtils.createSiteLargeLogoUrl());
-        logoImage.setWidth("100%");
+        bannerImage = new Image();
+        bannerImage.setWidth("100%");
 
-        logoImage.addLoadHandler(new LoadHandler() {
+        bannerImage.addLoadHandler(new LoadHandler() {
 
             @Override
             public void onLoad(LoadEvent event) {
@@ -44,11 +47,16 @@ public class HeaderViewImpl extends SimplePanel implements HeaderView {
             }
         });
 
-        logoImage.addStyleName(HorizontalAlignCenterMixin.StyleName.HorizontalAlignCenter.name());
-        logoImage.getElement().getStyle().setDisplay(Display.BLOCK);
+        bannerImage.addStyleName(HorizontalAlignCenterMixin.StyleName.HorizontalAlignCenter.name());
+        bannerImage.getElement().getStyle().setDisplay(Display.BLOCK);
 
-        setWidget(logoImage);
+        setWidget(bannerImage);
 
+    }
+
+    @Override
+    public void setContent(PortalContentDTO content) {
+        bannerImage.setUrl(MediaUtils.createSiteImageResourceUrl(content.portalBanner().image()));
     }
 
 }

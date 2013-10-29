@@ -21,8 +21,8 @@ import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 
-import com.propertyvista.portal.rpc.portal.services.resident.FooterContentService;
-import com.propertyvista.portal.rpc.portal.web.dto.PortalFooterContentDTO;
+import com.propertyvista.portal.rpc.portal.services.resident.PortalContentService;
+import com.propertyvista.portal.rpc.portal.web.dto.PortalContentDTO;
 import com.propertyvista.portal.web.client.PortalWebSite;
 import com.propertyvista.portal.web.client.ui.FooterView;
 
@@ -30,17 +30,17 @@ public class FooterActivity extends AbstractActivity {
 
     private final FooterView view;
 
-    private final FooterContentService service;
+    private final PortalContentService service;
 
     private static final FooterActivity instance = new FooterActivity();
 
     private FooterActivity() {
         view = PortalWebSite.getViewFactory().instantiate(FooterView.class);
-        service = GWT.<FooterContentService> create(FooterContentService.class);
-        service.getFooterContent(new DefaultAsyncCallback<PortalFooterContentDTO>() {
+        service = GWT.<PortalContentService> create(PortalContentService.class);
+        service.getPortalContent(new DefaultAsyncCallback<PortalContentDTO>() {
             @Override
-            public void onSuccess(PortalFooterContentDTO footerContent) {
-                view.setContent(footerContent);
+            public void onSuccess(PortalContentDTO content) {
+                view.setContent(content);
             }
         });
     }
