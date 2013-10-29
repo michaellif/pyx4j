@@ -59,10 +59,10 @@ public class N4PolicyForm extends PolicyDTOTabPanelBasedForm<N4PolicyDTO> {
         signaturePanel.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().emailAddress())).build());
         signaturePanel.setWidget(++row, 0, 2, inject(proto().mailingAddress(), new AddressSimpleEditor()));
 
-        TwoColumnFlexFormPanel arPanel = new TwoColumnFlexFormPanel(i18n.tr("Delivery"));
+        TwoColumnFlexFormPanel arCodesPanel = new TwoColumnFlexFormPanel(i18n.tr("AR Codes"));
         row = -1;
-        arPanel.setH1(++row, 0, 2, i18n.tr("AR Codes used to search for delinquent leases:"));
-        arPanel.setWidget(++row, 0, 2, inject(proto().arCodes(), new ARCodeFolder()));
+        arCodesPanel.setH1(++row, 0, 2, i18n.tr("AR Codes used to search for delinquent leases:"));
+        arCodesPanel.setWidget(++row, 0, 2, inject(proto().arCodes(), new ARCodeFolder()));
 
         TwoColumnFlexFormPanel deliveryPanel = new TwoColumnFlexFormPanel(i18n.tr("Delivery"));
         row = -1;
@@ -70,7 +70,7 @@ public class N4PolicyForm extends PolicyDTOTabPanelBasedForm<N4PolicyDTO> {
         deliveryPanel.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().mailDeliveryAdvanceDays())).build());
         deliveryPanel.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().courierDeliveryAdvanceDays())).build());
 
-        return Arrays.asList(signaturePanel, arPanel, deliveryPanel);
+        return Arrays.asList(signaturePanel, arCodesPanel, deliveryPanel);
     }
 
     public static class ARCodeFolder extends VistaTableFolder<N4PolicyDTOARCodeHolderDTO> {
