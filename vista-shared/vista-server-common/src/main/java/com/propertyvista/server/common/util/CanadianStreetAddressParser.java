@@ -79,7 +79,7 @@ public class CanadianStreetAddressParser implements StreetAddressParser {
     private static final Set<String> streetDirectionSet = Collections.unmodifiableSet(new HashSet<String>(streetDirectionKeywords));
 
     @Override
-    public StreetAddress parse(String address1, String address2) {
+    public StreetAddress parse(String address1, String address2) throws ParseException {
         String[] addressTokens = address1.trim().split("\\s+");
 
         String streetNumber = addressTokens[0];
@@ -164,6 +164,8 @@ public class CanadianStreetAddressParser implements StreetAddressParser {
             } else {
                 // deal with French street name
                 streetName = StringUtils.join(addressTokens, ' ', streetAddressPartLowerBound + 1, streetAddressPartUpperBound - 1);
+                // TODO deal with French names                
+                throw new ParseException("failed to parse street Name", streetTypeTokenIndex);
             }
 
             // try parse street direction: if present must be the last part of the street address part
@@ -200,6 +202,11 @@ public class CanadianStreetAddressParser implements StreetAddressParser {
                 streetName = streetName + ' ' + streetName;
             }
             streetType = StreetType.other;
+        }
+
+        if ((unitNumber != null && unitNumber.contains(",")) || streetNumber == null || !streetNumber.matches("(\\d)+\\s*([a-zA-Z]*|\\d+/\\d+)")
+                || streetName.startsWith("-")) {
+            throw new ParseException("Parsed street address validation didn't pass! Parsing attempt failed", 0);
         }
 
         return new StreetAddress(unitNumber, streetNumber, streetName.toString(), streetType, streetDirection);

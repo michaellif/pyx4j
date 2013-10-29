@@ -120,13 +120,6 @@ public class CanadianStreetAddressParserTest extends TestCase {
         Assert.assertNull(a.streetDirection);
     }
 
-    public void TODO_testFrenchStyleStreetName() {
-        StreetAddress a = parse("10-1065 Rue Wild Wild West", null);
-        Assert.assertEquals("Rue Wild Wild", a.streetName); // because there's no enum for french stuff
-        Assert.assertEquals(StreetType.other, a.streetType);
-        Assert.assertEquals(StreetDirection.west, a.streetDirection);
-    }
-
     public void testUnitNumberParsingBeforeCivicNumber() {
         StreetAddress a = parse("10-1065      Eglinton   Avenue    Northeast", null);
         Assert.assertEquals("10", a.unitNumber);
@@ -192,6 +185,49 @@ public class CanadianStreetAddressParserTest extends TestCase {
 
     }
 
+    public void testParsingFailures() {
+        StreetAddress a; // for debugging
+        {
+            Boolean parseFailed = false;
+            try {
+                a = parser.parse("457 - 499 Albert Street", null);
+            } catch (ParseException e) {
+                parseFailed = true;
+            }
+
+            Assert.assertTrue(parseFailed);
+        }
+        {
+            Boolean parseFailed = false;
+            try {
+                a = parser.parse("211-Baseline Road W", "Unit 00211");
+            } catch (ParseException e) {
+                parseFailed = true;
+            }
+
+            Assert.assertTrue(parseFailed);
+        }
+
+        {
+            Boolean parseFailed = false;
+            try {
+                a = parser.parse("3000,3015 and 3017 Baseline Road W", null);
+            } catch (ParseException e) {
+                parseFailed = true;
+            }
+
+            Assert.assertTrue(parseFailed);
+        }
+    }
+
+    // TODO French Style Street Names
+    public void TODO_testFrenchStyleStreetName() {
+        StreetAddress a = parse("10-1065 Rue Wild Wild West", null);
+        Assert.assertEquals("Rue Wild Wild", a.streetName); // because there's no enum for french stuff
+        Assert.assertEquals(StreetType.other, a.streetType);
+        Assert.assertEquals(StreetDirection.west, a.streetDirection);
+    }
+
     private StreetAddress parse(String address1, String address2) {
         try {
             return parser.parse(address1, address2);
@@ -199,4 +235,5 @@ public class CanadianStreetAddressParserTest extends TestCase {
             throw new Error(e);
         }
     }
+
 }
