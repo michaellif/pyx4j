@@ -45,11 +45,12 @@ import com.propertyvista.domain.site.PageCaption;
 import com.propertyvista.domain.site.PageContent;
 import com.propertyvista.domain.site.PageDescriptor;
 import com.propertyvista.domain.site.PageMetaTags;
-import com.propertyvista.domain.site.SiteImageSet;
-import com.propertyvista.domain.site.SiteLogoImageResource;
+import com.propertyvista.domain.site.PortalBannerImage;
 import com.propertyvista.domain.site.SiteDescriptor;
 import com.propertyvista.domain.site.SiteDescriptor.Skin;
 import com.propertyvista.domain.site.SiteImageResource;
+import com.propertyvista.domain.site.SiteImageSet;
+import com.propertyvista.domain.site.SiteLogoImageResource;
 import com.propertyvista.domain.site.SiteTitles;
 import com.propertyvista.domain.site.SocialLink;
 import com.propertyvista.domain.site.SocialLink.SocialSite;
@@ -242,6 +243,8 @@ public abstract class AbstractSitePreloader extends AbstractVistaDataPreloader {
         createLogo(site, siteLocale);
 
         createCrmLogo(site);
+
+        createPortalBanner(site, siteLocale);
 
         Persistence.service().persist(site);
         return null;
@@ -576,6 +579,19 @@ public abstract class AbstractSitePreloader extends AbstractVistaDataPreloader {
                 cont.locale().set(li.aLocale);
                 cont.html().setValue(sloganHtml);
                 site.slogan().add(cont);
+            }
+        }
+    }
+
+    private void createPortalBanner(SiteDescriptor site, List<LocaleInfo> siteLocale) {
+        String cType = "image/png";
+        SiteImageResource image = makeSiteImage("portal-banner.png", cType);
+        if (image != null) {
+            for (LocaleInfo li : siteLocale) {
+                PortalBannerImage banner = site.portalBanner().$();
+                banner.locale().set(li.aLocale);
+                banner.image().set(image);
+                site.portalBanner().add(banner);
             }
         }
     }
