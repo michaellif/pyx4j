@@ -14,12 +14,14 @@
 package com.propertyvista.domain.note;
 
 import com.pyx4j.entity.annotations.RequireFeature;
+import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.shared.IFile;
 
 import com.propertyvista.misc.ApplicationFeaturesAttachment;
 
 //TODO implement Attachments
 @RequireFeature(ApplicationFeaturesAttachment.class)
+@Transient
 public interface NoteAttachment extends IFile {
 
 }
