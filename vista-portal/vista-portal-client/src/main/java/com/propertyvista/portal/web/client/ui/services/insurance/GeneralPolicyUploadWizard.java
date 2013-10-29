@@ -133,7 +133,7 @@ public class GeneralPolicyUploadWizard extends CPortalEntityWizard<GeneralInsura
             }
         });
 
-        contentPanel.setH1(++row, 0, 1, "Attach Scanned Insurance Certificate");
+        contentPanel.setH1(++row, 0, 1, "Attach Scanned Insurance Certificate Documents");
         contentPanel.setWidget(++row, 0, inject(proto().certificate().certificateDocs(), new CertificateScanFolder()));
 
         return contentPanel;
