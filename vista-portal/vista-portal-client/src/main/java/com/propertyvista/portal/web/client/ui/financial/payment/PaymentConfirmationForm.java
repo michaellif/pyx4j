@@ -23,12 +23,12 @@ import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.commons.css.ThemeColor;
 import com.pyx4j.forms.client.ui.CEntityLabel;
-import com.pyx4j.forms.client.ui.decorators.WidgetDecorator.Builder.Alignment;
 import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.Anchor;
 
 import com.propertyvista.common.client.resources.VistaImages;
+import com.propertyvista.common.client.theme.VistaTheme;
 import com.propertyvista.domain.payment.LeasePaymentMethod;
 import com.propertyvista.dto.PaymentRecordDTO;
 import com.propertyvista.portal.web.client.ui.AbstractFormView;
@@ -39,24 +39,37 @@ public class PaymentConfirmationForm extends CPortalEntityForm<PaymentRecordDTO>
 
     private static final I18n i18n = I18n.get(PaymentConfirmationForm.class);
 
+    private static final String headerUndefined = i18n.tr("Payment status indefined...");
+
+    private static final String headerSuccess = i18n.tr("Payment Submitted Successfully!");
+
+    private static final String headerFailed = i18n.tr("Payment Submittion Failed!");
+
+    private Widget autoPaySignupPanel;
+
     public PaymentConfirmationForm(AbstractFormView<PaymentRecordDTO> view) {
-        super(PaymentRecordDTO.class, view, i18n.tr("Payment Submitted Successfully!"), ThemeColor.contrast4);
+        super(PaymentRecordDTO.class, view, "", ThemeColor.contrast4);
     }
 
     @Override
     public IsWidget createContent() {
-        BasicFlexFormPanel mainPanel = new BasicFlexFormPanel();
+        BasicFlexFormPanel content = new BasicFlexFormPanel();
         int row = -1;
 
-        mainPanel.setWidget(++row, 0,
-                new FormWidgetDecoratorBuilder(inject(proto().paymentMethod(), new CEntityLabel<LeasePaymentMethod>()), 250).labelAlignment(Alignment.left).build());
-        mainPanel.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().amount()), 100).labelAlignment(Alignment.left).build());
+        content.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().paymentMethod(), new CEntityLabel<LeasePaymentMethod>())).build());
+        content.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().amount())).build());
+        content.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().transactionAuthorizationNumber())).build());
 
-        mainPanel.setHR(++row, 0, 1);
+        content.setHR(++row, 0, 1);
 
-        mainPanel.setWidget(++row, 0, createAutoPaySignupPanel());
+        content.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().transactionErrorMessage())).build());
 
-        return mainPanel;
+        content.setWidget(++row, 0, autoPaySignupPanel = createAutoPaySignupPanel());
+
+        // tweak:
+        get(proto().transactionErrorMessage()).asWidget().setStyleName(VistaTheme.StyleName.errorMessage.name());
+
+        return content;
     }
 
     private Widget createAutoPaySignupPanel() {
@@ -75,5 +88,36 @@ public class PaymentConfirmationForm extends CPortalEntityForm<PaymentRecordDTO>
         panel.add(text);
 
         return panel;
+    }
+
+    @Override
+    public void onReset() {
+        super.onReset();
+
+        getDecorator().setCaption(headerUndefined);
+        getDecorator().getCaptionLabel().removeStyleName(VistaTheme.StyleName.infoMessage.name());
+        getDecorator().getCaptionLabel().removeStyleName(VistaTheme.StyleName.errorMessage.name());
+
+        get(proto().transactionErrorMessage()).setVisible(false);
+        get(proto().transactionAuthorizationNumber()).setVisible(false);
+        autoPaySignupPanel.setVisible(true);
+    }
+
+    @Override
+    protected void onValueSet(boolean populate) {
+        super.onValueSet(populate);
+
+        if (getValue().paymentStatus().getValue().isFailed()) {
+            getDecorator().setCaption(headerFailed);
+            getDecorator().getCaptionLabel().addStyleName(VistaTheme.StyleName.errorMessage.name());
+
+            get(proto().transactionErrorMessage()).setVisible(true);
+            autoPaySignupPanel.setVisible(false);
+        } else {
+            getDecorator().setCaption(headerSuccess);
+            getDecorator().getCaptionLabel().addStyleName(VistaTheme.StyleName.infoMessage.name());
+
+            get(proto().transactionAuthorizationNumber()).setVisible(!getValue().transactionAuthorizationNumber().isNull());
+        }
     }
 }

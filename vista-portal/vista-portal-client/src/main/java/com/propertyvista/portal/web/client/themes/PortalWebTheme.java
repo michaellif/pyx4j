@@ -32,6 +32,7 @@ import com.pyx4j.widgets.client.dialog.DefaultDialogTheme;
 
 import com.propertyvista.common.client.theme.HorizontalAlignCenterMixin;
 import com.propertyvista.common.client.theme.TransactionHistoryViewerTheme;
+import com.propertyvista.common.client.theme.VistaTheme.StyleName;
 import com.propertyvista.domain.site.SiteDescriptor.Skin;
 import com.propertyvista.portal.web.client.resources.PortalImages;
 
@@ -49,8 +50,8 @@ public class PortalWebTheme extends Theme {
         initGeneralStyles();
         initBodyStyles();
         initMenuBarStyles();
-
         initBackground();
+        initMessageStyles();
 
         addTheme(new PortalWebRootPaneTheme());
 
@@ -516,6 +517,26 @@ public class PortalWebTheme extends Theme {
         style = new Style(".gwt-MenuBar-horizontal .gwt-MenuItem");
         style.addProperty("vertical-align", "bottom");
         style.addProperty("background", "transparent");
+        addStyle(style);
+    }
+
+    protected void initMessageStyles() {
+        Style style = new Style(".", StyleName.errorMessage);
+        style.addProperty("font-size", "1.2em");
+        style.addProperty("font-weight", "bolder");
+        style.addProperty("color", "#EF231B");
+        addStyle(style);
+
+        style = new Style(".", StyleName.warningMessage);
+        style.addProperty("font-size", "1.2em");
+        style.addProperty("font-weight", "bolder");
+        style.addProperty("color", "#F68308");
+        addStyle(style);
+
+        style = new Style(".", StyleName.infoMessage);
+        style.addProperty("font-size", "1.2em");
+        style.addProperty("font-weight", "bolder");
+        style.addProperty("color", "#0091DC");
         addStyle(style);
     }
 

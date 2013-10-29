@@ -65,4 +65,9 @@ public abstract class CPortalEntityForm<E extends IEntity> extends CEntityForm<E
 
         return decorator;
     }
+
+    @Override
+    public FormDecorator<E, CEntityForm<E>> getDecorator() {
+        return decorator;
+    }
 }

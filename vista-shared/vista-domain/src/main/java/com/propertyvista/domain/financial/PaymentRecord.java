@@ -99,6 +99,10 @@ public interface PaymentRecord extends IEntity {
 
         // state sets:
 
+        public static Collection<PaymentStatus> failed() {
+            return EnumSet.of(Rejected, Returned);
+        }
+
         public static Collection<PaymentStatus> processed() {
             return EnumSet.of(Rejected, Cleared, Returned);
         }
@@ -119,6 +123,10 @@ public interface PaymentRecord extends IEntity {
         }
 
         // states:
+        public boolean isFailed() {
+            return failed().contains(this);
+        }
+
         public boolean isProcessed() {
             return processed().contains(this);
         }
