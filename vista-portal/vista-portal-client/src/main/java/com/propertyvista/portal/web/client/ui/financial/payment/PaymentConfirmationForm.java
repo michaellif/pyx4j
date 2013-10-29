@@ -117,13 +117,13 @@ public class PaymentConfirmationForm extends CPortalEntityForm<PaymentRecordDTO>
 
         if (getValue().paymentStatus().getValue().isFailed()) {
             decorator.setCaption(headerFailed);
-            decorator.addStyleName(VistaTheme.StyleName.errorMessage.name());
+            decorator.getCaptionLabel().addStyleName(VistaTheme.StyleName.errorMessage.name());
 
             get(proto().transactionErrorMessage()).setVisible(true);
             autoPaySignupPanel.setVisible(false);
         } else {
             decorator.setCaption(headerSuccess);
-            decorator.addStyleName(VistaTheme.StyleName.infoMessage.name());
+            decorator.getCaptionLabel().addStyleName(VistaTheme.StyleName.infoMessage.name());
 
             get(proto().transactionAuthorizationNumber()).setVisible(!getValue().transactionAuthorizationNumber().isNull());
         }
