@@ -80,6 +80,7 @@ import com.propertyvista.operations.rpc.services.scheduler.RunDataCrudService;
 import com.propertyvista.operations.rpc.services.scheduler.SelectPmcListService;
 import com.propertyvista.operations.rpc.services.scheduler.TriggerCrudService;
 import com.propertyvista.operations.rpc.services.simulator.CardServiceSimulationCardCrudService;
+import com.propertyvista.operations.rpc.services.simulator.CardServiceSimulationConfigService;
 import com.propertyvista.operations.rpc.services.simulator.CardServiceSimulationMerchantAccountCrudService;
 import com.propertyvista.operations.rpc.services.simulator.CardServiceSimulationTransactionCrudService;
 import com.propertyvista.operations.rpc.services.simulator.DirectDebitSimFileCrudService;
@@ -169,6 +170,7 @@ public class VistaOperationsAccessControlList extends ServletContainerAclBuilder
         grant(VistaOperationsBehavior.SystemAdmin, new IServiceExecutePermission(PadBatchCrudService.class));
         grant(VistaOperationsBehavior.SystemAdmin, new EntityPermission(PadBatch.class, EntityPermission.ALL));
 
+        grant(VistaOperationsBehavior.SystemAdmin, new IServiceExecutePermission(CardServiceSimulationConfigService.class));
         grant(VistaOperationsBehavior.SystemAdmin, new IServiceExecutePermission(CardServiceSimulationCardCrudService.class));
         grant(VistaOperationsBehavior.SystemAdmin, new EntityPermission(CardServiceSimulationCard.class, EntityPermission.ALL));
 

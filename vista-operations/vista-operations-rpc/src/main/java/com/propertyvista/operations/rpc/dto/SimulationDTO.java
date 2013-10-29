@@ -49,5 +49,6 @@ public interface SimulationDTO extends IEntity {
     EquifaxSimulatorConfig equifax();
 
     // TODO This should be in separate server/separate forms
+    @Deprecated
     CardServiceSimulatorConfig cardService();
 }
