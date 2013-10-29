@@ -167,10 +167,10 @@ public class CaledonHttpClient {
 
     private CaledonResponse buildResponse(String responseBody) {
         log.debug("responseBody {}", responseBody);
-        CaledonResponse response = new CaledonResponse();
         if (responseBody.length() == 0) {
-            return response;
+            throw new PaymentProcessingException("Response is empty");
         }
+        CaledonResponse response = new CaledonResponse();
         Map<String, String> values = new HashMap<String, String>();
         String[] nameValues = responseBody.split("&");
         if (nameValues.length > 0) {
@@ -184,7 +184,7 @@ public class CaledonHttpClient {
                 }
             }
         }
-
+        int tokenCount = 0;
         for (Field field : CaledonResponse.class.getDeclaredFields()) {
             HttpResponseField nameDeclared = field.getAnnotation(HttpResponseField.class);
             if (nameDeclared == null) {
@@ -198,7 +198,11 @@ public class CaledonHttpClient {
                     log.error("object value access error", e);
                     throw new PaymentProcessingException("System error", e);
                 }
+                tokenCount++;
             }
+        }
+        if (tokenCount == 0) {
+            throw new PaymentProcessingException("Response is empty");
         }
         return response;
     }

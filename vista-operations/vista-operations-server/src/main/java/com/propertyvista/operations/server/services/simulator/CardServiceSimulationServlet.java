@@ -53,7 +53,7 @@ public class CardServiceSimulationServlet extends HttpServlet {
                 simulatorConfig = EntityFactory.create(CardServiceSimulatorConfig.class);
             }
             switch (simulatorConfig.responseType().getValue(CardServiceSimulatorConfig.SimpulationType.SimulateTransations)) {
-            case DropConnection:
+            case RespondEmpty:
                 return;
             case RespondWithHttpCode:
                 httpResponse.sendError(simulatorConfig.responseHttpCode().getValue(0), "Simulated code");

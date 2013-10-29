@@ -33,7 +33,7 @@ public interface CardServiceSimulatorConfig extends IEntity {
 
         SimulateTransations,
 
-        DropConnection,
+        RespondEmpty,
 
         RespondWithText,
 

@@ -147,11 +147,11 @@ class CreditCardProcessor {
             response = proc.createToken(merchant, ccInfo, token);
         }
 
-        if (response.success().getValue()) {
+        if (response.success().getValue(false)) {
             cc.token().setValue(token.code().getValue());
-        } else if (response.code().getValue().equals("1019")) {
+        } else if (response.code().getValue("").equals("1019")) {
             throw new UserRuntimeException(i18n.tr("Merchant account is not setup to receive CreditCard Payments"));
-        } else if (response.code().getValue().equals("1001")) {
+        } else if (response.code().getValue("").equals("1001")) {
             throw new UserRuntimeException(i18n.tr("Merchant account is not activated"));
         } else {
             throw new UserRuntimeException(response.message().getValue());
@@ -224,7 +224,7 @@ class CreditCardProcessor {
             paymentRecord.transactionErrorMessage().setValue(response.message().getValue());
         }
 
-        if (response.success().getValue()) {
+        if (response.success().getValue(false)) {
             UnitOfWork.addTransactionCompensationHandler(new CompensationHandler() {
 
                 @Override
