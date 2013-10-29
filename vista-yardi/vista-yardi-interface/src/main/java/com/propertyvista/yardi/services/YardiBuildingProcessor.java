@@ -57,20 +57,6 @@ public class YardiBuildingProcessor {
     public Building updateBuilding(Key yardiInterfaceId, PropertyIDType propertyId) throws YardiServiceException {
         Building building = getBuildingFromProperty(propertyId);
 
-        Address address = propertyId.getAddress().get(0);
-        log.info("    assign Building Address: {}", address.getAddress1());
-
-        StringBuilder addrErr = new StringBuilder();
-        building.info().address().set(MappingUtils.getAddress(address, addrErr));
-        if (addrErr.length() > 0) {
-            String msg = SimpleMessageFormat.format("      invalid address: {0}", addrErr);
-            log.info(msg);
-            if (executionMonitor != null) {
-                executionMonitor.addInfoEvent("ParseAddress", msg);
-            }
-
-        }
-
         building.integrationSystemId().setValue(yardiInterfaceId);
         MappingUtils.ensureCountryOfOperation(building);
 
@@ -117,8 +103,22 @@ public class YardiBuildingProcessor {
     }
 
     public Building getBuildingFromProperty(PropertyIDType propertyId) {
-        BuildingsMapper mapper = new BuildingsMapper();
-        return mapper.map(propertyId);
+        Building building = new BuildingsMapper().map(propertyId);
+
+        Address address = propertyId.getAddress().get(0);
+        log.info("    assign Building Address: {}", address.getAddress1());
+
+        StringBuilder addrErr = new StringBuilder();
+        building.info().address().set(MappingUtils.getAddress(address, addrErr));
+        if (addrErr.length() > 0) {
+            String msg = SimpleMessageFormat.format("      invalid address: {0}", addrErr);
+            log.info(msg);
+            if (executionMonitor != null) {
+                executionMonitor.addInfoEvent("ParseAddress", msg);
+            }
+
+        }
+        return building;
     }
 
     public List<Property> getProperties(ResidentTransactions transaction) {
