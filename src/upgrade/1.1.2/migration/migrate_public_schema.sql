@@ -16,6 +16,8 @@ BEGIN TRANSACTION;
  
         -- Renamed sequences
  
+        ALTER SEQUENCE application_document_file_seq RENAME TO insurance_certificate_scan_seq;
+        ALTER SEQUENCE application_document_blob_seq RENAME TO general_insurance_policy_blob_seq;
         ALTER SEQUENCE file_seq RENAME TO note_attachment_seq;
         ALTER SEQUENCE insurance_certificate_seq RENAME TO insurance_policy_seq;
         ALTER SEQUENCE insurance_tenant_sure_client_seq RENAME TO tenant_sure_insurance_policy_client_seq;
@@ -45,10 +47,12 @@ BEGIN TRANSACTION;
         
   
         -- New sequences
+        CREATE SEQUENCE application_document_file_seq START WITH 1 INCREMENT BY 1 NO MAXVALUE NO MINVALUE CACHE 1;
+        CREATE SEQUENCE application_document_blob_seq START WITH 1 INCREMENT BY 1 NO MAXVALUE NO MINVALUE CACHE 1;
         CREATE SEQUENCE company_logo_seq START WITH 1 INCREMENT BY 1 NO MAXVALUE NO MINVALUE CACHE 1;
         CREATE SEQUENCE employee_signature_blob_seq START WITH 1 INCREMENT BY 1 NO MAXVALUE NO MINVALUE CACHE 1;
         CREATE SEQUENCE employee_signature_seq START WITH 1 INCREMENT BY 1 NO MAXVALUE NO MINVALUE CACHE 1;
-        CREATE SEQUENCE general_insurance_policy_blob_seq START WITH 1 INCREMENT BY 1 NO MAXVALUE NO MINVALUE CACHE 1;
+        -- CREATE SEQUENCE general_insurance_policy_blob_seq START WITH 1 INCREMENT BY 1 NO MAXVALUE NO MINVALUE CACHE 1;
         CREATE SEQUENCE ilsbatch$units_seq START WITH 1 INCREMENT BY 1 NO MAXVALUE NO MINVALUE CACHE 1;
         CREATE SEQUENCE ilsbatch_seq START WITH 1 INCREMENT BY 1 NO MAXVALUE NO MINVALUE CACHE 1;
         CREATE SEQUENCE ilsconfig_seq START WITH 1 INCREMENT BY 1 NO MAXVALUE NO MINVALUE CACHE 1;
@@ -57,7 +61,7 @@ BEGIN TRANSACTION;
         CREATE SEQUENCE ilsprofile_floorplan_seq START WITH 1 INCREMENT BY 1 NO MAXVALUE NO MINVALUE CACHE 1;
         CREATE SEQUENCE ilsvendor_config_seq START WITH 1 INCREMENT BY 1 NO MAXVALUE NO MINVALUE CACHE 1;
         CREATE SEQUENCE insurance_certificate_seq START WITH 1 INCREMENT BY 1 NO MAXVALUE NO MINVALUE CACHE 1;
-        CREATE SEQUENCE insurance_certificate_scan_seq START WITH 1 INCREMENT BY 1 NO MAXVALUE NO MINVALUE CACHE 1;
+        -- CREATE SEQUENCE insurance_certificate_scan_seq START WITH 1 INCREMENT BY 1 NO MAXVALUE NO MINVALUE CACHE 1;
         CREATE SEQUENCE legal_letter_blob_seq START WITH 1 INCREMENT BY 1 NO MAXVALUE NO MINVALUE CACHE 1;
         CREATE SEQUENCE legal_letter_seq START WITH 1 INCREMENT BY 1 NO MAXVALUE NO MINVALUE CACHE 1;
         CREATE SEQUENCE n4_policy_seq START WITH 1 INCREMENT BY 1 NO MAXVALUE NO MINVALUE CACHE 1;
@@ -69,6 +73,9 @@ BEGIN TRANSACTION;
         
   
         -- Change owner to vista
+        
+        ALTER SEQUENCE application_document_file_seq OWNER TO vista;
+        ALTER SEQUENCE application_document_blob_seq OWNER TO vista;
         ALTER SEQUENCE autopay_agreement_seq OWNER TO vista;
         ALTER SEQUENCE autopay_agreement_covered_item_seq OWNER TO vista;
         ALTER SEQUENCE company_logo_seq OWNER TO vista ;

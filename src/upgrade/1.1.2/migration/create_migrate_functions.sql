@@ -50,6 +50,8 @@ BEGIN
         
         -- primary keys
         
+        ALTER TABLE application_document_file DROP CONSTRAINT application_document_file_pk;
+        ALTER TABLE application_document_blob DROP CONSTRAINT application_document_blob_pk;
         ALTER TABLE insurance_certificate DROP CONSTRAINT insurance_certificate_pk;
         ALTER TABLE insurance_tenant_sure_client DROP CONSTRAINT insurance_tenant_sure_client_pk;
         ALTER TABLE insurance_tenant_sure_report DROP CONSTRAINT insurance_tenant_sure_report_pk;
@@ -66,6 +68,7 @@ BEGIN
         
         -- check constraints
         
+        ALTER TABLE application_document_file DROP CONSTRAINT application_document_file_owner_discriminator_d_ck;
         ALTER TABLE company DROP CONSTRAINT company_logo_media_type_e_ck;
         ALTER TABLE company DROP CONSTRAINT company_logo_visibility_e_ck;
         ALTER TABLE identification_document DROP CONSTRAINT identification_document_owner_discriminator_d_ck;
@@ -105,6 +108,8 @@ BEGIN
         ***     ======================================================================================================
         **/
         
+        DROP INDEX portal_image_set$image_set_owner_idx;
+        
         /**
         ***    ======================================================================================================
         ***
@@ -135,6 +140,28 @@ BEGIN
         ***
         ***     ======================================================================================================
         **/
+        
+        -- application_document_file - renamed and re-created
+        
+        ALTER TABLE application_document_file RENAME TO insurance_certificate_scan;
+        
+        CREATE TABLE application_document_file (LIKE insurance_certificate_scan);
+        
+        ALTER TABLE application_document_file OWNER TO vista;
+        
+        ALTER TABLE insurance_certificate_scan  ADD COLUMN certificate BIGINT,
+                                                ADD COLUMN certificate_discriminator VARCHAR(50);
+        
+        
+         -- application_document_blob - renamed and re-created
+       
+        ALTER TABLE application_document_blob RENAME TO general_insurance_policy_blob;
+        
+        CREATE TABLE application_document_blob (LIKE general_insurance_policy_blob);
+        
+        ALTER TABLE application_document_blob OWNER TO vista;
+        
+        ALTER TABLE general_insurance_policy_blob RENAME COLUMN data TO content;
         
         -- apt-unit
         
@@ -184,7 +211,6 @@ BEGIN
                 description                             VARCHAR(500),
                 blob_key                                BIGINT,
                 visibility                              VARCHAR(50),
-                company                                 BIGINT                  NOT NULL,
                         CONSTRAINT company_logo_pk PRIMARY KEY(id)
                         
         );
@@ -228,6 +254,7 @@ BEGIN
         
         ALTER TABLE file RENAME TO note_attachment;
         
+        /*
         -- general_insurance_policy_blob
         
         CREATE TABLE general_insurance_policy_blob
@@ -237,6 +264,8 @@ BEGIN
                 content                                 BYTEA,
                         CONSTRAINT general_insurance_policy_blob_pk PRIMARY KEY(id)
         );
+        
+        */
         
         ALTER TABLE general_insurance_policy_blob OWNER TO vista;
         
@@ -370,7 +399,7 @@ BEGIN
         
         ALTER TABLE insurance_certificate OWNER TO vista;
         
-        
+        /*
         -- insurance_certificate_scan
         
         CREATE TABLE insurance_certificate_scan
@@ -390,6 +419,8 @@ BEGIN
         );
         
         ALTER TABLE insurance_certificate_scan OWNER TO vista;
+        
+        */
         
         -- insurance_tenant_sure_client
         
@@ -587,6 +618,19 @@ BEGIN
         
         ALTER TABLE site_descriptor ADD COLUMN resident_portal_enabled BOOLEAN;
         
+        -- site_descriptor$portal_banner
+        
+        CREATE TABLE site_descriptor$portal_banner
+        (
+                id                                      BIGINT                  NOT NULL,
+                owner                                   BIGINT,
+                value                                   BIGINT,
+                seq                                     INT,
+                        CONSTRAINT site_descriptor$portal_banner_pk PRIMARY KEY(id)
+        );
+        
+        ALTER TABLE site_descriptor$portal_banner OWNER TO vista;
+        
         
         -- vendor
         
@@ -655,6 +699,21 @@ BEGIN
                 ||'     JOIN '||v_schema_name||'.customer c ON (c.id = lp.customer)) AS t '
                 ||'WHERE i.tenant = t.id ';
                 
+       
+        -- insurance_certificate_scan
+       
+        EXECUTE 'UPDATE '||v_schema_name||'.insurance_certificate_scan AS s '
+                ||'SET  certificate_discriminator = t.id_discriminator, '
+                ||'     certificate = t.cert_id '
+                ||'FROM         (SELECT         c.id AS cert_id,c.id_discriminator,s.id '
+                ||'             FROM    '||v_schema_name||'.insurance_certificate c '
+                ||'             JOIN    '||v_schema_name||'.insurance_certificate_document d ON (c.insurance_policy = d.owner) '
+                ||'             JOIN    '||v_schema_name||'.insurance_certificate_scan s ON (d.id = s.owner)) AS t '
+                ||'WHERE s.id = t.id ';
+                
+              
+                
+        
                 
                 
         -- insurance_policy
@@ -829,14 +888,22 @@ BEGIN
         **/
         
         -- primary keys
+        ALTER TABLE application_document_blob ADD CONSTRAINT application_document_blob_pk PRIMARY KEY(id);
+        ALTER TABLE application_document_file ADD CONSTRAINT application_document_file_pk PRIMARY KEY(id);
         ALTER TABLE autopay_agreement ADD CONSTRAINT autopay_agreement_pk PRIMARY KEY(id);
         ALTER TABLE autopay_agreement_covered_item ADD CONSTRAINT autopay_agreement_covered_item_pk PRIMARY KEY(id);
+        ALTER TABLE general_insurance_policy_blob ADD CONSTRAINT general_insurance_policy_blob_pk PRIMARY KEY(id);
+        ALTER TABLE insurance_certificate_scan ADD CONSTRAINT insurance_certificate_scan_pk PRIMARY KEY(id);
         ALTER TABLE insurance_policy ADD CONSTRAINT insurance_policy_pk PRIMARY KEY(id);
         ALTER TABLE media_file ADD CONSTRAINT media_file_pk PRIMARY KEY(id);
         ALTER TABLE note_attachment ADD CONSTRAINT note_attachment_pk PRIMARY KEY(id);
         ALTER TABLE tenant_sure_insurance_policy_client ADD CONSTRAINT tenant_sure_insurance_policy_client_pk PRIMARY KEY(id);
         ALTER TABLE tenant_sure_insurance_policy_report ADD CONSTRAINT tenant_sure_insurance_policy_report_pk PRIMARY KEY(id);
         ALTER TABLE tenant_sure_transaction ADD CONSTRAINT tenant_sure_transaction_pk PRIMARY KEY(id);
+        ALTER TABLE site_image_set$image_set ADD CONSTRAINT site_image_set$image_set_pk PRIMARY KEY(id);
+        ALTER TABLE site_image_set ADD CONSTRAINT site_image_set_pk PRIMARY KEY(id);
+        ALTER TABLE site_logo_image_resource ADD CONSTRAINT site_logo_image_resource_pk PRIMARY KEY(id);
+
         
 
         
@@ -973,7 +1040,6 @@ BEGIN
         ***     ====================================================================================================
         **/
         
-        CREATE INDEX company_logo_company_idx ON company_logo USING btree(company);
         CREATE INDEX ilsbatch$units_owner_idx ON ilsbatch$units USING btree(owner);
         CREATE INDEX ilsbatch_building_idx ON ilsbatch USING btree(building);
         CREATE INDEX ilsopen_house_marketing_idx ON ilsopen_house USING btree(marketing);
@@ -986,7 +1052,6 @@ BEGIN
         
         CREATE INDEX billing_arrears_snapshot_from_date_to_date_idx ON billing_arrears_snapshot 
                 USING GiST (box(point(from_date,from_date),point(to_date,to_date)) box_ops);
-        
         
         
         
