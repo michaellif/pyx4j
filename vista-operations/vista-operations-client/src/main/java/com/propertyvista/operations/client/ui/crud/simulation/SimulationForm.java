@@ -81,6 +81,9 @@ public class SimulationForm extends OperationsEntityForm<SimulationDTO> {
         content.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().cardService().responseHttpCode()), 15, true).build());
         content.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().cardService().responseText()), 15, true).build());
 
+        content.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().cardService().acceptCardExpiryFrom()), 15, true).build());
+        content.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().cardService().acceptCardExpiryTo()), 15, true).build());
+
         get(proto().cardService().responseType()).addValueChangeHandler(new ValueChangeHandler<CardServiceSimulatorConfig.SimpulationType>() {
 
             @Override
@@ -101,6 +104,8 @@ public class SimulationForm extends OperationsEntityForm<SimulationDTO> {
         get(proto().cardService().responseCode()).setVisible(false);
         get(proto().cardService().responseText()).setVisible(false);
         get(proto().cardService().responseHttpCode()).setVisible(false);
+        get(proto().cardService().acceptCardExpiryFrom()).setVisible(false);
+        get(proto().cardService().acceptCardExpiryTo()).setVisible(false);
 
         switch (getValue().cardService().responseType().getValue()) {
         case RespondWithCode:
@@ -111,6 +116,10 @@ public class SimulationForm extends OperationsEntityForm<SimulationDTO> {
             break;
         case RespondWithHttpCode:
             get(proto().cardService().responseHttpCode()).setVisible(true);
+            break;
+        case SimulateTransations:
+            get(proto().cardService().acceptCardExpiryFrom()).setVisible(true);
+            get(proto().cardService().acceptCardExpiryTo()).setVisible(true);
             break;
         default:
             break;

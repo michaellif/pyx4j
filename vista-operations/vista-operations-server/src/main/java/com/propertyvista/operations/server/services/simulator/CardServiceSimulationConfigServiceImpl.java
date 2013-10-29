@@ -19,7 +19,6 @@ import com.pyx4j.commons.Key;
 import com.pyx4j.entity.rpc.EntitySearchResult;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.criterion.EntityListCriteria;
-import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 
 import com.propertyvista.operations.domain.dev.CardServiceSimulatorConfig;
 import com.propertyvista.operations.rpc.dto.CardServiceSimulatorConfigDTO;
@@ -40,10 +39,7 @@ public class CardServiceSimulationConfigServiceImpl implements CardServiceSimula
     @Override
     public void retrieve(AsyncCallback<CardServiceSimulatorConfigDTO> callback, Key entityId,
             com.pyx4j.entity.rpc.AbstractCrudService.RetrieveTarget retrieveTarget) {
-        CardServiceSimulatorConfig config = Persistence.service().retrieve(EntityQueryCriteria.create(CardServiceSimulatorConfig.class));
-        if (config.responseType().isNull()) {
-            config.responseType().setValue(CardServiceSimulatorConfig.SimpulationType.SimulateTransations);
-        }
+        CardServiceSimulatorConfig config = CardServiceSimulationUtils.getCardServiceSimulatorConfig();
         callback.onSuccess(config.duplicate(CardServiceSimulatorConfigDTO.class));
 
     }

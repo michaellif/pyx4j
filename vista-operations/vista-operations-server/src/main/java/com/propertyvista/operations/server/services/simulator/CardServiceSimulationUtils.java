@@ -20,18 +20,41 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.EnumSet;
 
+import org.apache.commons.lang.time.DateUtils;
+
 import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.config.server.SystemDateManager;
+import com.pyx4j.entity.server.Persistence;
+import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 
 import com.propertyvista.domain.payment.CreditCardInfo.CreditCardType;
 import com.propertyvista.domain.util.ValidationUtils;
 import com.propertyvista.operations.domain.dev.CardServiceSimulationTransaction.SimpulationTransactionType;
+import com.propertyvista.operations.domain.dev.CardServiceSimulatorConfig;
 import com.propertyvista.payment.caledon.CaledonTokenAction;
 import com.propertyvista.payment.caledon.CaledonTransactionType;
 import com.propertyvista.payment.caledon.dev.VisaDebitInternalValidator;
 
-class CardServiceSimulationUtils {
+public class CardServiceSimulationUtils {
+
+    public static CardServiceSimulatorConfig getCardServiceSimulatorConfig() {
+        CardServiceSimulatorConfig simulatorConfig = Persistence.service().retrieve(EntityQueryCriteria.create(CardServiceSimulatorConfig.class));
+        if (simulatorConfig == null) {
+            simulatorConfig = EntityFactory.create(CardServiceSimulatorConfig.class);
+        }
+        if (simulatorConfig.responseType().isNull()) {
+            simulatorConfig.responseType().setValue(CardServiceSimulatorConfig.SimpulationType.SimulateTransations);
+        }
+        if (simulatorConfig.acceptCardExpiryFrom().isNull()) {
+            simulatorConfig.acceptCardExpiryFrom().setValue(new LogicalDate(CardServiceSimulationUtils.getExpiryMonthStart()));
+        }
+        if (simulatorConfig.acceptCardExpiryTo().isNull()) {
+            simulatorConfig.acceptCardExpiryTo().setValue(new LogicalDate(DateUtils.addYears(getExpiryMonthStart(), 5)));
+        }
+        return simulatorConfig;
+    }
 
     static Date getExpiryMonthStart() {
         Calendar c = Calendar.getInstance();

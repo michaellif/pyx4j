@@ -34,10 +34,10 @@ import com.pyx4j.server.contexts.DevSession;
 
 import com.propertyvista.config.AbstractVistaServerSideConfiguration;
 import com.propertyvista.config.VistaSystemsSimulationConfig;
-import com.propertyvista.operations.domain.dev.CardServiceSimulatorConfig;
 import com.propertyvista.operations.domain.dev.EquifaxSimulatorConfig;
 import com.propertyvista.operations.rpc.dto.SimulationDTO;
 import com.propertyvista.operations.rpc.services.SimulationService;
+import com.propertyvista.operations.server.services.simulator.CardServiceSimulationUtils;
 
 public class SimulationServiceImpl extends AdminServiceImpl implements SimulationService {
 
@@ -57,10 +57,7 @@ public class SimulationServiceImpl extends AdminServiceImpl implements Simulatio
 
         result.equifax().set(Persistence.service().retrieve(EntityQueryCriteria.create(EquifaxSimulatorConfig.class)));
 
-        result.cardService().set(Persistence.service().retrieve(EntityQueryCriteria.create(CardServiceSimulatorConfig.class)));
-        if (result.cardService().responseType().isNull()) {
-            result.cardService().responseType().setValue(CardServiceSimulatorConfig.SimpulationType.SimulateTransations);
-        }
+        result.cardService().set(CardServiceSimulationUtils.getCardServiceSimulatorConfig());
 
         result.fundsTransferSimulationConfigurable().setValue(
                 ServerSideConfiguration.instance(AbstractVistaServerSideConfiguration.class).getBankingSimulatorConfiguration()

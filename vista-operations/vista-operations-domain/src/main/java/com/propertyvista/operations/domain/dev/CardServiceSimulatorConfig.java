@@ -13,6 +13,7 @@
  */
 package com.propertyvista.operations.domain.dev;
 
+import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.config.shared.ApplicationDevelopmentFeature;
 import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.RequireFeature;
@@ -53,5 +54,11 @@ public interface CardServiceSimulatorConfig extends IEntity {
 
     @Caption(name = "Delay", description = "milliseconds")
     IPrimitive<Integer> delay();
+
+    @Caption(description = "Do not accept cards before this date")
+    IPrimitive<LogicalDate> acceptCardExpiryFrom();
+
+    @Caption(description = "Do not accept cards after this date")
+    IPrimitive<LogicalDate> acceptCardExpiryTo();
 
 }

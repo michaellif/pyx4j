@@ -26,9 +26,6 @@ import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.pyx4j.entity.server.Persistence;
-import com.pyx4j.entity.shared.EntityFactory;
-import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.server.contexts.NamespaceManager;
 
 import com.propertyvista.domain.VistaNamespace;
@@ -48,11 +45,8 @@ public class CardServiceSimulationServlet extends HttpServlet {
         NamespaceManager.setNamespace(VistaNamespace.operationsNamespace);
         String responseBody = null;
         try {
-            CardServiceSimulatorConfig simulatorConfig = Persistence.service().retrieve(EntityQueryCriteria.create(CardServiceSimulatorConfig.class));
-            if (simulatorConfig == null) {
-                simulatorConfig = EntityFactory.create(CardServiceSimulatorConfig.class);
-            }
-            switch (simulatorConfig.responseType().getValue(CardServiceSimulatorConfig.SimpulationType.SimulateTransations)) {
+            CardServiceSimulatorConfig simulatorConfig = CardServiceSimulationUtils.getCardServiceSimulatorConfig();
+            switch (simulatorConfig.responseType().getValue()) {
             case RespondEmpty:
                 return;
             case RespondWithHttpCode:

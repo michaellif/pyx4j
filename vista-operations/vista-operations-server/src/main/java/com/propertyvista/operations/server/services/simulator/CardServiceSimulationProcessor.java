@@ -28,6 +28,7 @@ import com.propertyvista.operations.domain.dev.CardServiceSimulationCard;
 import com.propertyvista.operations.domain.dev.CardServiceSimulationMerchantAccount;
 import com.propertyvista.operations.domain.dev.CardServiceSimulationToken;
 import com.propertyvista.operations.domain.dev.CardServiceSimulationTransaction;
+import com.propertyvista.operations.domain.dev.CardServiceSimulatorConfig;
 import com.propertyvista.payment.caledon.CaledonRequest;
 import com.propertyvista.payment.caledon.CaledonRequestToken;
 import com.propertyvista.payment.caledon.CaledonResponse;
@@ -213,12 +214,16 @@ public class CardServiceSimulationProcessor {
         transaction.reference().setValue(caledonRequest.referenceNumber);
         transaction.transactionType().setValue(CardServiceSimulationUtils.toSimTransactionType(transactionType));
 
+        CardServiceSimulatorConfig config = CardServiceSimulationUtils.getCardServiceSimulatorConfig();
         if (!card.responseCode().isNull()) {
             caledonResponse.code = card.responseCode().getStringView();
             caledonResponse.text = "Simulated Card code '" + card.responseCode().getStringView() + "'";
-        } else if (card.expiryDate().getValue().before(CardServiceSimulationUtils.getExpiryMonthStart())) {
+        } else if (card.expiryDate().getValue().lt(config.acceptCardExpiryFrom().getValue())) {
             caledonResponse.code = "1254";
             caledonResponse.text = "EXPIRED CARD";
+        } else if (card.expiryDate().getValue().gt(config.acceptCardExpiryTo().getValue())) {
+            caledonResponse.code = "1280";
+            caledonResponse.text = "DATE INVALID";
         } else {
 
             BigDecimal newBalance;
