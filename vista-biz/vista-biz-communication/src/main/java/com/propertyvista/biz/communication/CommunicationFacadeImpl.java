@@ -287,6 +287,16 @@ public class CommunicationFacadeImpl implements CommunicationFacade {
     }
 
     @Override
+    public void sendPaymentYardiUnableToRejectNotification(List<String> targetEmails, PaymentRecord paymentRecord, boolean applyNSF, String yardiErrorMessage) {
+        if (disabled) {
+            return;
+        }
+        MailMessage m = MessageTemplates.createPostToYardiFailedNotificationEmail(paymentRecord, applyNSF, yardiErrorMessage);
+        m.setTo(targetEmails);
+        Mail.send(m);
+    }
+
+    @Override
     public void sendAutoPayReviewRequiredNotification(List<String> targetEmails, List<Lease> leaseIds) {
         if (disabled) {
             return;

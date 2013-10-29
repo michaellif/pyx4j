@@ -13,18 +13,11 @@
  */
 package com.propertyvista.biz.communication.notifications;
 
-import com.propertyvista.domain.company.Notification.NotificationType;
 
 public abstract class AbstractNotification {
 
-    protected NotificationType type;
-
-    public AbstractNotification(NotificationType type) {
-        this.type = type;
-    }
+    public abstract boolean aggregate(AbstractNotification other);
 
     public abstract void send();
-
-    public abstract boolean aggregate(AbstractNotification other);
 
 }

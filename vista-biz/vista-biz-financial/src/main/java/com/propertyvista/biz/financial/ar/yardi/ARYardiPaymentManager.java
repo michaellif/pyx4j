@@ -135,7 +135,7 @@ class ARYardiPaymentManager extends ARAbstractPaymentManager {
         } catch (UnableToPostTerminalYardiServiceException e) {
             paymentRecord.notice().setValue(e.getMessage());
             Persistence.service().merge(paymentRecord);
-            ServerSideFactory.create(NotificationFacade.class).yardiUnableToRejectPayment(paymentRecord, applyNSF);
+            ServerSideFactory.create(NotificationFacade.class).yardiUnableToRejectPayment(paymentRecord, applyNSF, e.getMessage());
         } catch (YardiServiceException e) {
             throw new ARException(SimpleMessageFormat.format("Posting receipt {0} reversal to Yardi failed; Lease Id {1}", //
                     paymentRecord.id(), paymentRecord.billingAccount().lease().leaseId()), e);

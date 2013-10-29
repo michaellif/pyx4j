@@ -126,7 +126,7 @@ class YardiLicense {
     }
 
     static void handleVendorLicenseError(Messages messages) {
-        if (messages.getErrorMessage().getValue().contains(errorMessage_VendorLicense_Fragement)) {
+        if (messages.hasErrorMessage(errorMessage_VendorLicense_Fragement)) {
             restLicenseCache();
         }
     }

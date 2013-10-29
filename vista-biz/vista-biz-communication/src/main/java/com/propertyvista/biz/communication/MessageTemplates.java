@@ -24,7 +24,6 @@ import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.commons.SimpleMessageFormat;
 import com.pyx4j.commons.UserRuntimeException;
@@ -325,14 +324,14 @@ public class MessageTemplates {
         String paymentAmount = i18n.tr("${0,number,#,##0.00}", paymentRecord.amount().getValue());
 
         String rejectionReason = i18n.tr("UNKNOWN");
-        if (CommonsStringUtils.isStringSet(paymentRecord.transactionErrorMessage().getValue())) {
+        if (!paymentRecord.transactionErrorMessage().isNull()) {
             rejectionReason = paymentRecord.transactionErrorMessage().getValue();
         }
 
         email.setSubject(i18n.tr("NSF Alert for Building {0}, Unit {1}, Lease {2}, Tenant {3} {4}", buildingId, unitId, leaseId, tenantId, tenantName));
         String emailBody = "";
         try {
-            emailBody = IOUtils.getTextResource("email/nsf-notification.html");
+            emailBody = IOUtils.getTextResource("email/payment-nsf-notification.html");
         } catch (IOException e) {
             throw new Error("Failed to load email template for nsf notifications", e);
         }
@@ -349,6 +348,66 @@ public class MessageTemplates {
                 .replace("${paymentAmount}", paymentAmount)
                 .replace("${paymentUrl}", paymentRecordUrl)
                 .replace("${rejectionReason}", rejectionReason);
+        //@formatter:on
+        email.setHtmlBody(wrapAdminHtml(emailBody));
+
+        return email;
+    }
+
+    public static MailMessage createPostToYardiFailedNotificationEmail(PaymentRecord paymentRecord, boolean applyNSF, String yardiErrorMessage) {
+        MailMessage email = new MailMessage();
+        email.setSender(getSender());
+
+        String crmUrl = VistaDeployment.getBaseApplicationURL(VistaDeployment.getCurrentPmc(), VistaApplication.crm, true);
+        BillingAccount billingAccount = Persistence.service().retrieve(BillingAccount.class, paymentRecord.billingAccount().getPrimaryKey());
+
+        Persistence.service().retrieve(billingAccount.lease());
+        String leaseId = billingAccount.lease().leaseId().getValue();
+        String leaseUrl = AppPlaceInfo.absoluteUrl(crmUrl, true, new CrmSiteMap.Tenants.Lease().formViewerPlace(billingAccount.lease().getPrimaryKey()));
+
+        Persistence.ensureRetrieve(paymentRecord.leaseTermParticipant(), AttachLevel.Attached);
+
+        String tenantUrl = AppPlaceInfo.absoluteUrl(crmUrl, true,
+                new CrmSiteMap.Tenants.Tenant().formViewerPlace(paymentRecord.leaseTermParticipant().leaseParticipant().getPrimaryKey()));
+        String tenantId = paymentRecord.leaseTermParticipant().leaseParticipant().participantId().getStringView();
+
+        String tenantName = paymentRecord.leaseTermParticipant().leaseParticipant().customer().person().name().getStringView();
+
+        String unitId = billingAccount.lease().unit().info().number().getValue();
+        Persistence.service().retrieve(billingAccount.lease().unit().building(), AttachLevel.ToStringMembers);
+        String buildingId = billingAccount.lease().unit().building().getStringView();
+
+        String paymentRecordUrl = AppPlaceInfo.absoluteUrl(crmUrl, true, new CrmSiteMap.Finance.Payment().formViewerPlace(paymentRecord.getPrimaryKey()));
+        String paymentId = paymentRecord.getPrimaryKey().toString();
+        String paymentAmount = i18n.tr("${0,number,#,##0.00}", paymentRecord.amount().getValue());
+
+        String rejectionReason = i18n.tr("UNKNOWN");
+        if (!paymentRecord.transactionErrorMessage().isNull()) {
+            rejectionReason = paymentRecord.transactionErrorMessage().getValue();
+        }
+
+        email.setSubject(i18n.tr("NSF Alert for Building {0}, Unit {1}, Lease {2}, Tenant {3} {4} -  failed to post into Yardi, needs to be posted manually",
+                buildingId, unitId, leaseId, tenantId, tenantName));
+        String emailBody = "";
+        try {
+            emailBody = IOUtils.getTextResource("email/payment-post-to-yardi-failed-notification.html");
+        } catch (IOException e) {
+            throw new Error("Failed to load email template for post-to-yardi-failed notifications", e);
+        }
+        //@formatter:off
+        emailBody = emailBody
+                .replace("${buildingId}", buildingId)
+                .replace("${unitId}", unitId)
+                .replace("${leaseId}", leaseId)
+                .replace("${leaseUrl}", leaseUrl)
+                .replace("${tenantId}", tenantId)
+                .replace("${tenantName}", tenantName)
+                .replace("${tenantUrl}", tenantUrl)
+                .replace("${paymentId}", paymentId)
+                .replace("${paymentAmount}", paymentAmount)
+                .replace("${paymentUrl}", paymentRecordUrl)
+                .replace("${rejectionReason}", rejectionReason)
+                .replace("${yardiErrorMessage}", yardiErrorMessage);
         //@formatter:on
         email.setHtmlBody(wrapAdminHtml(emailBody));
 

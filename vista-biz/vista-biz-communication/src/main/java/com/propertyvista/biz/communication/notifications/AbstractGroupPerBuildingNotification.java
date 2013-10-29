@@ -31,7 +31,6 @@ public abstract class AbstractGroupPerBuildingNotification extends AbstractNotif
     private final List<Lease> leaseIds = new ArrayList<Lease>();
 
     protected AbstractGroupPerBuildingNotification(NotificationType type, Lease leaseId) {
-        super(type);
         this.leaseIds.add(leaseId);
 
         EntityQueryCriteria<Building> criteria = EntityQueryCriteria.create(Building.class);

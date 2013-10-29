@@ -86,4 +86,35 @@ public class Messages {
         }
         return null;
     }
+
+    public boolean hasErrorMessage(String... messageFragments) {
+        for (Message message : messages) {
+            if ((message.getType() == MessageType.Error) && (message.getValue() != null)) {
+                for (String messageFragment : messageFragments) {
+                    if (message.getValue().contains(messageFragment)) {
+                        return true;
+                    }
+                }
+            }
+        }
+        return false;
+    }
+
+    public String getPrettyErrorMessageText() {
+        if (messages.size() == 0) {
+            throw new Error("Can't parse Message");
+        }
+        for (Message message : messages) {
+            if (message.getType() == MessageType.Error) {
+                String text = message.getValue();
+
+                text = text.replace("Message Type=Error.", "");
+                text = text.replace("Item Number=0.", "");
+
+                return text.trim();
+            }
+        }
+        return null;
+    }
+
 }

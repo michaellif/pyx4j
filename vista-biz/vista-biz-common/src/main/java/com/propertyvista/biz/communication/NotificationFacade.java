@@ -20,7 +20,7 @@ public interface NotificationFacade {
 
     public void rejectPayment(PaymentRecord paymentRecord, boolean applyNSF);
 
-    public void yardiUnableToRejectPayment(PaymentRecord paymentRecord, boolean applyNSF);
+    public void yardiUnableToRejectPayment(PaymentRecord paymentRecord, boolean applyNSF, String yardiErrorMessage);
 
     public void autoPayReviewRequiredNotification(Lease leaseId);
 

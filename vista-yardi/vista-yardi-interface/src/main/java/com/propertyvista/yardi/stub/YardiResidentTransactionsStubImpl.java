@@ -66,11 +66,24 @@ public class YardiResidentTransactionsStubImpl extends AbstractYardiStub impleme
 
     private final static Logger log = LoggerFactory.getLogger(YardiResidentTransactionsStubImpl.class);
 
-    private static String errorMessage_NoAccess_Start = "Invalid or no access to Yardi Property";
+    private static final String errorMessage_NoAccess = "Invalid or no access to Yardi Property";
 
-    private static String errorMessage_AlredyNSF_Start = "May not  NSF  a receipt that has been NSF";
+    private static final String errorMessage_TenantNotFound = "No tenants exist with the given search criteria";
 
-    private static String errorMessage_PostMonthAccess_Start = "Cannot  NSF  a receipt whose post month is outside your allowable range";
+    //-- payment reversal post messages
+
+    private static final String errorMessage_AlreadyNSF1 = "May not  NSF  a receipt that has been NSF";
+
+    private static final String errorMessage_AlreadyNSF2 = "May not  reverse  a receipt that has been NSF";
+
+    private static final String errorMessage_AlreadyReversed = "Receipt has already been reversed";
+
+    private static final String errorMessage_PostMonthAccess1 = "Cannot  NSF  a receipt whose post month is outside your allowable range";
+
+    private static final String errorMessage_PostMonthAccess2 = "Cannot  reverse  a receipt whose post month is outside your allowable range";
+
+    private static final String[] unableToPostTerminalMessages = new String[] { errorMessage_AlreadyNSF1, errorMessage_AlreadyNSF2,
+            errorMessage_AlreadyReversed, errorMessage_PostMonthAccess1, errorMessage_PostMonthAccess2 };
 
     @Override
     public String ping(PmcYardiCredential yc) throws RemoteException {
@@ -154,9 +167,9 @@ public class YardiResidentTransactionsStubImpl extends AbstractYardiStub impleme
             if (Messages.isMessageResponse(xml)) {
                 Messages messages = MarshallUtil.unmarshal(Messages.class, xml);
                 if (messages.isError()) {
-                    if (messages.getErrorMessage().getValue().startsWith(errorMessage_NoAccess_Start)) {
+                    if (messages.hasErrorMessage(errorMessage_NoAccess)) {
                         throw new YardiPropertyNoAccessException(messages.getErrorMessage().getValue());
-                    } else if (messages.getErrorMessage().getValue().startsWith("No tenants exist with the given search criteria")) {
+                    } else if (messages.hasErrorMessage(errorMessage_TenantNotFound)) {
                         success = true;
                         return null;
                     } else {
@@ -263,10 +276,8 @@ public class YardiResidentTransactionsStubImpl extends AbstractYardiStub impleme
             Messages messages = MarshallUtil.unmarshal(Messages.class, xml);
             if (messages.isError()) {
                 YardiLicense.handleVendorLicenseError(messages);
-                if (messages.getErrorMessage().getValue().startsWith(errorMessage_AlredyNSF_Start)) {
-                    throw new UnableToPostTerminalYardiServiceException(messages.getErrorMessage().getValue());
-                } else if (messages.getErrorMessage().getValue().startsWith(errorMessage_PostMonthAccess_Start)) {
-                    throw new UnableToPostTerminalYardiServiceException(messages.getErrorMessage().getValue());
+                if (messages.hasErrorMessage(unableToPostTerminalMessages)) {
+                    throw new UnableToPostTerminalYardiServiceException(messages.getPrettyErrorMessageText());
                 } else {
                     throw new YardiServiceException(messages.toString());
                 }
@@ -365,7 +376,7 @@ public class YardiResidentTransactionsStubImpl extends AbstractYardiStub impleme
             if (Messages.isMessageResponse(xml)) {
                 Messages messages = MarshallUtil.unmarshal(Messages.class, xml);
                 if (messages.isError()) {
-                    if (messages.getErrorMessage().getValue().startsWith(errorMessage_NoAccess_Start)) {
+                    if (messages.hasErrorMessage(errorMessage_NoAccess)) {
                         throw new YardiPropertyNoAccessException(messages.getErrorMessage().getValue());
                     } else {
                         YardiLicense.handleVendorLicenseError(messages);
@@ -423,7 +434,7 @@ public class YardiResidentTransactionsStubImpl extends AbstractYardiStub impleme
             if (Messages.isMessageResponse(xml)) {
                 Messages messages = MarshallUtil.unmarshal(Messages.class, xml);
                 if (messages.isError()) {
-                    if (messages.getErrorMessage().getValue().startsWith("No tenants exist with the given search criteria")) {
+                    if (messages.hasErrorMessage(errorMessage_TenantNotFound)) {
                         throw new YardiResidentNoTenantsExistException(messages.getErrorMessage().getValue());
                     } else {
                         YardiLicense.handleVendorLicenseError(messages);

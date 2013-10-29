@@ -73,6 +73,8 @@ public interface CommunicationFacade {
 
     void sendPaymentReversalWithNsfNotification(List<String> targetEmail, PaymentRecord paymentRecord);
 
+    void sendPaymentYardiUnableToRejectNotification(List<String> targetEmail, PaymentRecord paymentRecord, boolean applyNSF, String yardiErrorMessage);
+
     void sendAutoPayReviewRequiredNotification(List<String> targetEmails, List<Lease> leaseIds);
 
     void sendAutoPayCancelledBySystemNotification(List<String> targetEmails, List<Lease> leaseIds);

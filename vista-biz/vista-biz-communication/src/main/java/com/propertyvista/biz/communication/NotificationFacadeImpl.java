@@ -13,20 +13,13 @@
  */
 package com.propertyvista.biz.communication;
 
-import java.util.List;
-
-import com.pyx4j.config.server.ServerSideFactory;
-import com.pyx4j.entity.server.Persistence;
-import com.pyx4j.entity.shared.AttachLevel;
-import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
-
 import com.propertyvista.biz.communication.notifications.AbstractNotification;
+import com.propertyvista.biz.communication.notifications.AutoPayCancelledByResidentNotification;
 import com.propertyvista.biz.communication.notifications.AutoPayCancelledBySystemNotification;
 import com.propertyvista.biz.communication.notifications.AutoPayReviewRequiredNotification;
 import com.propertyvista.biz.communication.notifications.NotificationsAggregator;
-import com.propertyvista.biz.communication.notifications.NotificationsUtils;
-import com.propertyvista.domain.company.Employee;
-import com.propertyvista.domain.company.Notification;
+import com.propertyvista.biz.communication.notifications.PostToYardiFailedNotification;
+import com.propertyvista.biz.communication.notifications.RejectPaymentNotification;
 import com.propertyvista.domain.financial.PaymentRecord;
 import com.propertyvista.domain.tenant.lease.Lease;
 
@@ -41,38 +34,6 @@ public class NotificationFacadeImpl implements NotificationFacade {
         } else {
             notification.send();
         }
-    }
-
-    @Override
-    public void rejectPayment(PaymentRecord paymentRecord, boolean applyNSF) {
-        if (applyNSF) {
-            EntityQueryCriteria<Lease> criteria = EntityQueryCriteria.create(Lease.class);
-            criteria.eq(criteria.proto().billingAccount(), paymentRecord.billingAccount());
-            Lease leaseId = Persistence.service().retrieve(criteria, AttachLevel.IdOnly);
-            List<Employee> employees = NotificationsUtils.getNotificationTraget(leaseId, Notification.NotificationType.ElectronicPaymentRejectedNsf);
-            if (!employees.isEmpty()) {
-                ServerSideFactory.create(CommunicationFacade.class).sendPaymentReversalWithNsfNotification(NotificationsUtils.toEmails(employees),
-                        paymentRecord);
-            }
-        }
-    }
-
-    @Override
-    public void autoPayCancelledByResidentNotification(Lease leaseId) {
-        List<Employee> employees = NotificationsUtils.getNotificationTraget(leaseId, Notification.NotificationType.AutoPayCanceledByResident);
-        if (!employees.isEmpty()) {
-            ServerSideFactory.create(CommunicationFacade.class).sendAutoPayCancelledByResidentNotification(NotificationsUtils.toEmails(employees), leaseId);
-        }
-    }
-
-    @Override
-    public void autoPayReviewRequiredNotification(Lease leaseId) {
-        aggregateOrSend(new AutoPayReviewRequiredNotification(leaseId));
-    }
-
-    @Override
-    public void autoPayCancelledBySystemNotification(Lease leaseId) {
-        aggregateOrSend(new AutoPayCancelledBySystemNotification(leaseId));
     }
 
     @Override
@@ -93,7 +54,28 @@ public class NotificationFacadeImpl implements NotificationFacade {
     }
 
     @Override
-    public void yardiUnableToRejectPayment(PaymentRecord paymentRecord, boolean applyNSF) {
-        // TODO Auto-generated method stub
+    public void rejectPayment(PaymentRecord paymentRecord, boolean applyNSF) {
+        aggregateOrSend(new RejectPaymentNotification(paymentRecord, applyNSF));
     }
+
+    @Override
+    public void yardiUnableToRejectPayment(PaymentRecord paymentRecord, boolean applyNSF, String yardiErrorMessage) {
+        aggregateOrSend(new PostToYardiFailedNotification(paymentRecord, applyNSF, yardiErrorMessage));
+    }
+
+    @Override
+    public void autoPayCancelledByResidentNotification(Lease leaseId) {
+        aggregateOrSend(new AutoPayCancelledByResidentNotification(leaseId));
+    }
+
+    @Override
+    public void autoPayReviewRequiredNotification(Lease leaseId) {
+        aggregateOrSend(new AutoPayReviewRequiredNotification(leaseId));
+    }
+
+    @Override
+    public void autoPayCancelledBySystemNotification(Lease leaseId) {
+        aggregateOrSend(new AutoPayCancelledBySystemNotification(leaseId));
+    }
+
 }
