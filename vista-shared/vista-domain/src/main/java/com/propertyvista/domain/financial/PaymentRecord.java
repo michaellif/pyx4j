@@ -90,6 +90,8 @@ public interface PaymentRecord extends IEntity {
 
         Returned,
 
+        Void,
+
         Canceled;
 
         @Override
@@ -100,11 +102,11 @@ public interface PaymentRecord extends IEntity {
         // state sets:
 
         public static Collection<PaymentStatus> failed() {
-            return EnumSet.of(Rejected, Returned);
+            return EnumSet.of(Rejected, Returned, Void);
         }
 
         public static Collection<PaymentStatus> processed() {
-            return EnumSet.of(Rejected, Cleared, Returned);
+            return EnumSet.of(Rejected, Cleared, Returned, Void);
         }
 
         public static Collection<PaymentStatus> cancelable() {

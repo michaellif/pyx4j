@@ -26,6 +26,7 @@ import com.pyx4j.commons.UserRuntimeException;
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.config.server.SystemDateManager;
 import com.pyx4j.entity.server.CompensationHandler;
+import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.server.UnitOfWork;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.i18n.shared.I18n;
@@ -233,6 +234,9 @@ class CreditCardProcessor {
                         PaymentResponse response = new CaledonPaymentProcessor().voidTransaction(merchant, request);
                         if (response.success().getValue()) {
                             log.info("transaction successfully voided {}", response.message().getValue());
+                            paymentRecord.paymentStatus().setValue(PaymentRecord.PaymentStatus.Void);
+                            paymentRecord.lastStatusChangeDate().setValue(new LogicalDate(SystemDateManager.getDate()));
+                            Persistence.service().merge(paymentRecord);
                         } else {
                             log.error("Unable to void CC transaction {} {} {}; response {} {}", merchant.terminalID().getValue(), request.referenceNumber()
                                     .getValue(), //
