@@ -48,12 +48,13 @@ public class N4GenerationSettingsForm extends CEntityDecoratableForm<N4Generatio
 
         panel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().query().noticeDate())).componentWidth("150px").build());
         panel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().query().deliveryMethod())).componentWidth("150px").build());
-        agentComboBox = new CComboBox<Employee>() {
+        agentComboBox = new CComboBox<Employee>("", CComboBox.NotInOptionsPolicy.DISCARD) {
             @Override
             public String getItemName(Employee o) {
                 return (o != null && !o.isNull()) ? o.name().getStringView() + (o.signature().getPrimaryKey() == null ? i18n.tr(" (No Signature)") : "") : "";
             }
         };
+        agentComboBox.setMandatory(true);
         panel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().query().agent(), agentComboBox)).componentWidth("150px").build());
 
         row = -1;
