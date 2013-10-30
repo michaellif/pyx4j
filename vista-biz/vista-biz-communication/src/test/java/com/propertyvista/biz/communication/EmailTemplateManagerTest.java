@@ -48,6 +48,7 @@ import com.propertyvista.biz.system.encryption.PasswordEncryptorFacade;
 import com.propertyvista.biz.tenant.lease.LeaseFacade;
 import com.propertyvista.config.VistaDeployment;
 import com.propertyvista.config.tests.VistaDBTestBase;
+import com.propertyvista.config.tests.VistaTestDBSetup;
 import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.domain.communication.EmailTemplateType;
 import com.propertyvista.domain.contact.AddressStructured.StreetType;
@@ -160,6 +161,7 @@ public class EmailTemplateManagerTest extends VistaDBTestBase {
     @Override
     public void setUp() throws Exception {
         super.setUp();
+        VistaTestDBSetup.initNamespace();
         ServerSideFactory.register(PasswordEncryptorFacade.class, PasswordEncryptorFacadeMock.class);
 
         TestLifecycle.testSession(null, VistaBasicBehavior.CRM);
