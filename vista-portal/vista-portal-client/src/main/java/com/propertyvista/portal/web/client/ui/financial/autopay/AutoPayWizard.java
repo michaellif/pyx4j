@@ -305,8 +305,6 @@ public class AutoPayWizard extends CPortalEntityWizard<AutoPayDTO> {
                 get(proto().selectPaymentMethod()).setVisible(hasProfiledMethods);
                 get(proto().selectPaymentMethod()).setValue(hasProfiledMethods ? PaymentDataDTO.PaymentSelect.Profiled : PaymentDataDTO.PaymentSelect.New,
                         true, populate);
-
-                paymentMethodSelectionStep.setStepVisible(hasProfiledMethods);
             }
         });
     }

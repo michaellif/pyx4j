@@ -314,8 +314,6 @@ public class PaymentWizard extends CPortalEntityWizard<PaymentDTO> {
                 get(proto().selectPaymentMethod()).reset();
                 get(proto().selectPaymentMethod()).setEnabled(hasProfiledMethods);
                 get(proto().selectPaymentMethod()).setValue(hasProfiledMethods ? PaymentSelect.Profiled : PaymentSelect.New, true, populate);
-
-                paymentMethodSelectionStep.setStepVisible(hasProfiledMethods);
             }
         });
     }
