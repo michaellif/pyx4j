@@ -41,13 +41,11 @@ import com.itextpdf.text.pdf.PdfStamper;
 import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.commons.SimpleMessageFormat;
-import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.config.server.SystemDateManager;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IEntity;
 
-import com.propertyvista.biz.financial.ar.ARFacade;
 import com.propertyvista.domain.contact.AddressSimple;
 import com.propertyvista.domain.contact.AddressStructured;
 import com.propertyvista.domain.financial.ARCode;
@@ -66,6 +64,12 @@ import com.propertyvista.server.common.util.AddressRetriever;
 public class N4GenerationFacadeImpl implements N4GenerationFacade {
 
     private static final String N4_FORM_FILE = "n4.pdf";
+
+    private final InternalBillingInvoiceDebitFetcherImpl invoiceDebitFetcher;
+
+    public N4GenerationFacadeImpl() {
+        invoiceDebitFetcher = new InternalBillingInvoiceDebitFetcherImpl();
+    }
 
     @Override
     public byte[] generateN4Letter(N4FormFieldsData formData) {
@@ -247,9 +251,7 @@ public class N4GenerationFacadeImpl implements N4GenerationFacade {
 
         n4LeaseData.terminationDate().setValue(terminationDate);
 
-        List<InvoiceDebit> debits = ServerSideFactory.create(ARFacade.class).getNotCoveredDebitInvoiceLineItems(lease.billingAccount());
-        List<InvoiceDebit> filteredDebits = N4GenerationUtils.filterDebits(debits, acceptableArCodes, SystemDateManager.getLogicalDate());
-
+        List<InvoiceDebit> filteredDebits = invoiceDebitFetcher.getInvoiceDebits(acceptableArCodes, lease.billingAccount(), SystemDateManager.getLogicalDate());
         InvoiceDebitAggregator debitAggregator = new InvoiceDebitAggregator();
         n4LeaseData.rentOwingBreakdown().addAll(debitAggregator.debitsForPeriod(debitAggregator.aggregate(filteredDebits)));
 
