@@ -36,6 +36,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.pyx4j.commons.IHaveServiceCallMarker;
+import com.pyx4j.commons.IStringView;
 import com.pyx4j.config.server.ServerSideConfiguration;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.xml.XMLEntityWriter;
@@ -90,6 +91,16 @@ public class DataDump {
 
     public static void dumpToDirectory(String baseDirectory, String type, IEntity ent) {
         dumpAny(baseDirectory, type, ent, DataType.Entity);
+    }
+
+    public static IStringView xmlStringView(final IEntity ent) {
+        return new IStringView() {
+            @Override
+            public String getStringView() {
+                return toXmlString(ent);
+            }
+
+        };
     }
 
     public static String toXmlString(IEntity ent) {
