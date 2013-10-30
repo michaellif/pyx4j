@@ -57,6 +57,7 @@ import com.propertyvista.portal.web.client.activity.login.VistaTermsActivity;
 import com.propertyvista.portal.web.client.activity.maintenance.MaintenanceDashboardActivity;
 import com.propertyvista.portal.web.client.activity.maintenance.MaintenanceRequestPageActivity;
 import com.propertyvista.portal.web.client.activity.maintenance.MaintenanceRequestWizardActivity;
+import com.propertyvista.portal.web.client.activity.offers.dashboard.OffersDashboardActivity;
 import com.propertyvista.portal.web.client.activity.profile.AccountPageActivity;
 import com.propertyvista.portal.web.client.activity.profile.ProfilePageActivity;
 import com.propertyvista.portal.web.client.activity.security.PasswordChangeActivity;
@@ -182,6 +183,9 @@ public class ContentActivityMapper implements AppActivityMapper {
                             || place instanceof PortalTerms.TermsAndConditions) {
                         activity = new VistaTermsActivity(place);
                  // @formatter:on
+
+                    } else if (place instanceof Resident.Offers) {
+                        activity = new OffersDashboardActivity(place);
                     }
 
                     callback.onSuccess(activity);
