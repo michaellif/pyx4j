@@ -288,7 +288,7 @@ public class Mappings {
                     try {
                         model.ensureForeignKeys(persistenceContext);
                     } catch (SQLException e) {
-                        log.error("Foreign Keys creation error", e);
+                        log.error("{} Foreign Keys creation error", entityMeta.getPersistenceName(), e);
                         throw new RuntimeException(e);
                     }
                 }
