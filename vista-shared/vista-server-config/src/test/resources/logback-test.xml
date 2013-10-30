@@ -6,6 +6,8 @@
     <property name="logs-name" value="test-logs" />
     <property name="logs-dir" value="./target" />
 
+    <conversionRule conversionWord="message" converterClass="com.pyx4j.logback.IStringViewMessageConverter" />
+
     <appender name="ConsoleAppender-info" class="ch.qos.logback.core.ConsoleAppender">
         <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
             <level>INFO</level>
@@ -56,8 +58,8 @@
 
     <logger name="com.propertyvista" level="DEBUG" />
     <logger name="com.propertyvista.server.jobs" level="WARN" />
-    
-    
+
+
     <logger name="com.pyx4j" level="DEBUG" />
     <logger name="org.apache" level="INFO" />
     <logger name="org.hsqldb" level="WARN" />

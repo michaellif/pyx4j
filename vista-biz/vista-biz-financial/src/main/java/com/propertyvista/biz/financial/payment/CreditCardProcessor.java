@@ -233,36 +233,32 @@ class CreditCardProcessor {
                     try {
                         PaymentResponse response = new CaledonPaymentProcessor().voidTransaction(merchant, request);
                         if (response.success().getValue()) {
-                            log.info("transaction {} successfully voided {}", response.message().getValue());
+                            log.info("transaction {} successfully voided {}", request.referenceNumber(), response.message());
                             PaymentRecord record = Persistence.service().retrieve(PaymentRecord.class, paymentRecord.getPrimaryKey());
                             record.paymentStatus().setValue(PaymentRecord.PaymentStatus.Void);
                             record.finalizeDate().setValue(new LogicalDate(SystemDateManager.getDate()));
                             Persistence.service().persist(record);
                         } else {
                             log.error("Unable to void CC transaction {} {} {}; response {} {}", //
-                                    merchant.terminalID().getValue(), //
-                                    request.referenceNumber().getValue(), //
-                                    request.amount().getValue(), //
-                                    response.code().getValue(), //
-                                    response.message().getValue());
+                                    merchant.terminalID(), //
+                                    request.referenceNumber(), //
+                                    request.amount(), //
+                                    response.code(), //
+                                    response.message());
 
                             ServerSideFactory.create(OperationsAlertFacade.class).record(paymentRecord,
                                     "Unable to void CC transaction {0} {1} {2}; response {3} {4}",//
-                                    merchant.terminalID().getValue(), //
-                                    request.referenceNumber().getValue(), // 
-                                    request.amount().getValue(), //
-                                    response.code().getValue(), //
-                                    response.message().getValue());
+                                    merchant.terminalID(), //
+                                    request.referenceNumber(), // 
+                                    request.amount(), //
+                                    response.code(), //
+                                    response.message());
                         }
                     } catch (Throwable e) {
-                        log.error("Unable to void CC transaction {} {} {}", merchant.terminalID().getValue(), request.referenceNumber().getValue(), request
-                                .amount().getValue(), e);
+                        log.error("Unable to void CC transaction {} {} {}", merchant.terminalID(), request.referenceNumber(), request.amount(), e);
 
                         ServerSideFactory.create(OperationsAlertFacade.class).record(paymentRecord, "Unable to void CC transaction {0} {1} {2}; response {3}",//
-                                merchant.terminalID().getValue(), //
-                                request.referenceNumber().getValue(), //
-                                request.amount().getValue(), //
-                                e);
+                                merchant.terminalID(), request.referenceNumber(), request.amount(), e);
                     }
 
                     return null;

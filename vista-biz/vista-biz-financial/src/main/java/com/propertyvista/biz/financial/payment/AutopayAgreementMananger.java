@@ -149,8 +149,8 @@ class AutopayAgreementMananger {
                     continue nextCharge;
                 }
             }
-            log.debug("Error with ReviewedAutopay  {} ", DataDump.toXmlString(preauthorizedPaymentChanges));
-            log.debug("Error with AutopayAgreement {} ", DataDump.toXmlString(preauthorizedPayment));
+            log.debug("Error with ReviewedAutopay  {}", DataDump.xmlStringView(preauthorizedPaymentChanges));
+            log.debug("Error with AutopayAgreement {}", DataDump.xmlStringView(preauthorizedPayment));
             throw new Error("BillableItem item " + reviewedPapCharge.paymentAmountUpdate().getValue() + "$ "
                     + reviewedPapCharge.billableItem().id().getStringView() + " not found in AutopayAgreement " + preauthorizedPayment.id().getStringView());
         }
