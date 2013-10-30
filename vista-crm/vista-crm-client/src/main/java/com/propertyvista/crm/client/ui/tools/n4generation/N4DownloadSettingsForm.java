@@ -38,7 +38,7 @@ public class N4DownloadSettingsForm extends CEntityDecoratableForm<N4DownloadSet
         BasicFlexFormPanel panel = new BasicFlexFormPanel();
         int row = -1;
 
-        generationsBox = new CComboBox<N4GenerationDTO>() {
+        generationsBox = new CComboBox<N4GenerationDTO>("", com.pyx4j.forms.client.ui.CComboBox.NotInOptionsPolicy.DISCARD) {
             @Override
             public String getItemName(N4GenerationDTO o) {
                 if (o != null) {
@@ -48,6 +48,7 @@ public class N4DownloadSettingsForm extends CEntityDecoratableForm<N4DownloadSet
                 }
             }
         };
+        generationsBox.setMandatory(true);
         panel.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().selectedGeneration(), generationsBox)).componentWidth("300px").build());
 
         return panel;
