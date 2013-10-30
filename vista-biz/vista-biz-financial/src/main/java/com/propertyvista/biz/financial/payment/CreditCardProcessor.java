@@ -213,31 +213,33 @@ class CreditCardProcessor {
 
         IPaymentProcessor proc = new CaledonPaymentProcessor();
 
-        PaymentResponse response = proc.realTimeSale(merchant, request);
-        if (response.success().getValue()) {
-            log.debug("ccTransaction accepted {}", response);
+        final PaymentResponse sailResponse = proc.realTimeSale(merchant, request);
+        if (sailResponse.success().getValue()) {
+            log.debug("ccTransaction accepted {}", sailResponse);
             paymentRecord.paymentStatus().setValue(PaymentRecord.PaymentStatus.Cleared);
             paymentRecord.lastStatusChangeDate().setValue(new LogicalDate(SystemDateManager.getDate()));
-            paymentRecord.transactionAuthorizationNumber().setValue(response.authorizationNumber().getValue());
+            paymentRecord.transactionAuthorizationNumber().setValue(sailResponse.authorizationNumber().getValue());
         } else {
-            log.debug("ccTransaction rejected {}", response);
+            log.debug("ccTransaction rejected {}", sailResponse);
             paymentRecord.paymentStatus().setValue(PaymentRecord.PaymentStatus.Rejected);
             paymentRecord.lastStatusChangeDate().setValue(new LogicalDate(SystemDateManager.getDate()));
-            paymentRecord.transactionAuthorizationNumber().setValue(response.code().getValue());
-            paymentRecord.transactionErrorMessage().setValue(response.message().getValue());
+            paymentRecord.transactionAuthorizationNumber().setValue(sailResponse.code().getValue());
+            paymentRecord.transactionErrorMessage().setValue(sailResponse.message().getValue());
         }
 
-        if (response.success().getValue(false)) {
+        if (sailResponse.success().getValue(false)) {
             UnitOfWork.addTransactionCompensationHandler(new CompensationHandler() {
 
                 @Override
                 public Void execute() {
                     try {
-                        PaymentResponse response = new CaledonPaymentProcessor().voidTransaction(merchant, request);
-                        if (response.success().getValue()) {
-                            log.info("transaction {} successfully voided {}", request.referenceNumber(), response.message());
+                        PaymentResponse voidResponse = new CaledonPaymentProcessor().voidTransaction(merchant, request);
+                        if (voidResponse.success().getValue()) {
+                            log.info("transaction {} successfully voided {}", request.referenceNumber(), voidResponse.message());
                             PaymentRecord record = Persistence.service().retrieve(PaymentRecord.class, paymentRecord.getPrimaryKey());
+                            record.transactionAuthorizationNumber().setValue(sailResponse.authorizationNumber().getValue());
                             record.paymentStatus().setValue(PaymentRecord.PaymentStatus.Void);
+                            paymentRecord.lastStatusChangeDate().setValue(new LogicalDate(SystemDateManager.getDate()));
                             record.finalizeDate().setValue(new LogicalDate(SystemDateManager.getDate()));
                             Persistence.service().persist(record);
                         } else {
@@ -245,16 +247,16 @@ class CreditCardProcessor {
                                     merchant.terminalID(), //
                                     request.referenceNumber(), //
                                     request.amount(), //
-                                    response.code(), //
-                                    response.message());
+                                    voidResponse.code(), //
+                                    voidResponse.message());
 
                             ServerSideFactory.create(OperationsAlertFacade.class).record(paymentRecord,
                                     "Unable to void CC transaction {0} {1} {2}; response {3} {4}",//
                                     merchant.terminalID(), //
                                     request.referenceNumber(), // 
                                     request.amount(), //
-                                    response.code(), //
-                                    response.message());
+                                    voidResponse.code(), //
+                                    voidResponse.message());
                         }
                     } catch (Throwable e) {
                         log.error("Unable to void CC transaction {} {} {}", merchant.terminalID(), request.referenceNumber(), request.amount(), e);
