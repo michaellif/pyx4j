@@ -33,13 +33,13 @@ public class N4PolicyCrudServiceImpl extends GenericPolicyCrudService<N4Policy, 
     }
 
     @Override
-    public void save(AsyncCallback<Key> callback, N4PolicyDTO to) {
+    protected void save(N4Policy bo, N4PolicyDTO to) {
         for (N4PolicyDTOARCodeHolderDTO arCodeHolder : to.arCodes()) {
             // TODO the following horrible code is a workaround agains something that VladS broke in intestines of his framework couple of days ago:
             // to.relevantArCodes().add(arCodeHolder.arCode().<ARCode> createIdentityStub());
             to.relevantArCodes().add(Persistence.service().retrieve(ARCode.class, arCodeHolder.arCode().getPrimaryKey()));
         }
-        super.save(callback, to);
+        super.save(bo, to);
     }
 
     @Override
