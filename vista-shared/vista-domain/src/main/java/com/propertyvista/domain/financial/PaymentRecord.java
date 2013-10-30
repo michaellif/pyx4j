@@ -62,7 +62,7 @@ import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
  * 
  * @author Alexs
  */
-@ToStringFormat("{0}, ${1} - {2}")
+@ToStringFormat("{0}, ${1,number,#,##0.00} - {2}")
 public interface PaymentRecord extends IEntity {
 
     @I18n
