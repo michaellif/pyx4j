@@ -49,7 +49,8 @@ public class RDBDatastorePersistenceEnvironment extends PersistenceEnvironment {
     @Before
     public IEntityPersistenceService setupDatastore() {
         NamespaceManager.setNamespace("-t");
-        return new EntityPersistenceServiceRDB(configuration);
+        EntityPersistenceServiceRDB srv = new EntityPersistenceServiceRDB(configuration);
+        return srv;
     }
 
     @Override

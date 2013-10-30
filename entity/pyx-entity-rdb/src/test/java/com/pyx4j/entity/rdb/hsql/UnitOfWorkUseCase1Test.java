@@ -18,21 +18,17 @@
  * @author vlads
  * @version $Id$
  */
-package com.pyx4j.entity.rdb.derby;
+package com.pyx4j.entity.rdb.hsql;
 
 import com.pyx4j.entity.rdb.PersistenceEnvironmentFactory;
-import com.pyx4j.entity.rdb.TransactionTestCase;
+import com.pyx4j.entity.rdb.UnitOfWorkUseCase1TestCase;
 import com.pyx4j.entity.test.server.PersistenceEnvironment;
 
-public class TransactionTest extends TransactionTestCase {
+public class UnitOfWorkUseCase1Test extends UnitOfWorkUseCase1TestCase {
 
     @Override
     protected PersistenceEnvironment getPersistenceEnvironment() {
-        return PersistenceEnvironmentFactory.getDerbyPersistenceEnvironment();
+        return PersistenceEnvironmentFactory.getHSQLPersistenceEnvironment();
     }
 
-    @Override
-    protected boolean isDerbyLockBug() {
-        return true;
-    }
 }

@@ -248,7 +248,7 @@ public abstract class TransactionTestCase extends DatastoreTestBase {
         assertExists(setId, "1.2");
     }
 
-    protected boolean isHSQLBug() {
+    protected boolean isDerbyLockBug() {
         return false;
     }
 
@@ -265,8 +265,8 @@ public abstract class TransactionTestCase extends DatastoreTestBase {
         srv.startTransaction(TransactionScopeOption.Suppress, ConnectionTarget.Web);
         {
             srv.persist(createEntity2(setId, "2.0"));
-            // TODO verify HSQL Lock in next version
-            if (!isHSQLBug()) {
+            // TODO verify Lock in next version
+            if (!isDerbyLockBug()) {
                 assertNotExists(setId, "1.2");
             }
         }

@@ -31,8 +31,4 @@ public class TransactionTest extends TransactionTestCase {
         return PersistenceEnvironmentFactory.getHSQLPersistenceEnvironment();
     }
 
-    @Override
-    protected boolean isHSQLBug() {
-        return true;
-    }
 }

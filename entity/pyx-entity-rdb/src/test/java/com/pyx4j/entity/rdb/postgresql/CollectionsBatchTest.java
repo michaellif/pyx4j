@@ -25,6 +25,7 @@ import com.pyx4j.entity.test.server.CollectionsBatchTestCase;
 import com.pyx4j.entity.test.server.PersistenceEnvironment;
 
 public class CollectionsBatchTest extends CollectionsBatchTestCase {
+
     @Override
     protected PersistenceEnvironment getPersistenceEnvironment() {
         return PersistenceEnvironmentFactory.getPostgreSQLPersistenceEnvironment();
