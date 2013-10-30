@@ -30,10 +30,12 @@ import com.pyx4j.server.contexts.NamespaceManager;
 import com.pyx4j.server.mail.Mail;
 
 import com.propertyvista.domain.VistaNamespace;
+import com.propertyvista.domain.note.NotesAndAttachments;
 import com.propertyvista.domain.policy.policies.YardiInterfacePolicy;
 import com.propertyvista.domain.tenant.lead.Lead;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.server.domain.IdAssignmentSequence;
+import com.propertyvista.server.domain.security.CustomerUserCredential;
 
 public class VistaTestDBSetup {
 
@@ -74,7 +76,11 @@ public class VistaTestDBSetup {
     }
 
     /**
-     * Resolves HSQL DB tables creation concurrency
+     * Resolves HSQL DB tables creation concurrency for HSQL Switch to TRANSACTION CONTROL MVCC
+     * 
+     * All entity are not initialized because it takes allot of time in each test!
+     * 
+     * TODO Find out why this tables initialization are causing problems
      */
     public static void initNamespace() {
         new UnitOfWork(TransactionScopeOption.RequiresNew).execute(new Executable<Void, RuntimeException>() {
@@ -86,7 +92,9 @@ public class VistaTestDBSetup {
                 classes.add(IdAssignmentSequence.class);
                 classes.add(Lease.class);
                 classes.add(Lead.class);
+                classes.add(NotesAndAttachments.class);
                 classes.add(YardiInterfacePolicy.class);
+                classes.add(CustomerUserCredential.class);
                 ((EntityPersistenceServiceRDB) Persistence.service()).ensureSchemaModel(classes);
                 return null;
             }
