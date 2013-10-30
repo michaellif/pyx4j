@@ -30,12 +30,9 @@ import com.pyx4j.server.contexts.NamespaceManager;
 import com.pyx4j.server.mail.Mail;
 
 import com.propertyvista.domain.VistaNamespace;
-import com.propertyvista.domain.pmc.PmcAccountNumbers;
-import com.propertyvista.domain.pmc.PmcMerchantAccountIndex;
 import com.propertyvista.domain.policy.policies.YardiInterfacePolicy;
 import com.propertyvista.domain.tenant.lead.Lead;
 import com.propertyvista.domain.tenant.lease.Lease;
-import com.propertyvista.operations.domain.security.AuditRecord;
 import com.propertyvista.server.domain.IdAssignmentSequence;
 
 public class VistaTestDBSetup {
@@ -70,12 +67,7 @@ public class VistaTestDBSetup {
             public Void execute() {
                 NamespaceManager.setNamespace(VistaNamespace.operationsNamespace);
                 RDBUtils.ensureNamespace();
-                //RDBUtils.initAllEntityTables();
-                List<Class<? extends IEntity>> classes = new ArrayList<Class<? extends IEntity>>();
-                classes.add(AuditRecord.class);
-                classes.add(PmcAccountNumbers.class);
-                classes.add(PmcMerchantAccountIndex.class);
-                ((EntityPersistenceServiceRDB) Persistence.service()).ensureSchemaModel(classes);
+                RDBUtils.initNameSpaceSpecificEntityTables();
                 return null;
             }
         });
