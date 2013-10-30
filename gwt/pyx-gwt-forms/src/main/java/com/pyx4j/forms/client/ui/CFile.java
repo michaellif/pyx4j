@@ -74,4 +74,9 @@ public class CFile<E extends IFile> extends CField<E, NFile<E>> {
         return service;
     }
 
+    @Override
+    public boolean isValueEmpty() {
+        return super.isValueEmpty() || !getValue().hasValues();
+    }
+
 }

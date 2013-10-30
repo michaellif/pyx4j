@@ -177,4 +177,5 @@ public class NFile<E extends IFile> extends NField<E, NFile<E>.ContentPanel, CFi
         }
 
     }
+
 }
