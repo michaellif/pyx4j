@@ -37,6 +37,7 @@ SET search_path = '_admin_';
         
         ALTER TABLE admin_pmc_dns_name DROP CONSTRAINT admin_pmc_dns_name_target_e_ck;
         ALTER TABLE audit_record DROP CONSTRAINT audit_record_app_e_ck;
+        ALTER TABLE dev_card_service_simulator_config DROP CONSTRAINT dev_card_service_simulator_config_response_type_e_ck;
         ALTER TABLE operations_alert DROP CONSTRAINT operations_alert_app_e_ck;
         ALTER TABLE scheduler_trigger DROP CONSTRAINT scheduler_trigger_trigger_type_e_ck;
         ALTER TABLE vista_terms DROP CONSTRAINT vista_terms_target_e_ck;
@@ -69,9 +70,15 @@ SET search_path = '_admin_';
         ***     =======================================================================================================
         **/
         
-         -- admin_pmc_yardi_credential
+        -- admin_pmc_yardi_credential
          
-         ALTER TABLE admin_pmc_yardi_credential ADD COLUMN ils_guest_card_service_url VARCHAR(500);             
+        ALTER TABLE admin_pmc_yardi_credential ADD COLUMN ils_guest_card_service_url VARCHAR(500);  
+         
+         
+        -- dev_card_service_simulator_config
+        
+        ALTER TABLE dev_card_service_simulator_config   ADD COLUMN accept_card_expiry_to DATE,
+                                                        ADD COLUMN accept_card_expiry_from DATE;            
         
         -- pad_file
         
@@ -143,6 +150,8 @@ SET search_path = '_admin_';
         
         ALTER TABLE admin_pmc_dns_name ADD CONSTRAINT admin_pmc_dns_name_target_e_ck CHECK ((target) IN ('crm', 'field', 'portal', 'prospect', 'site'));
         ALTER TABLE audit_record ADD CONSTRAINT audit_record_app_e_ck CHECK ((app) IN ('crm', 'field', 'onboarding', 'operations', 'portal', 'prospect', 'site'));
+        ALTER TABLE dev_card_service_simulator_config ADD CONSTRAINT dev_card_service_simulator_config_response_type_e_ck 
+                CHECK ((response_type) IN ('RespondEmpty', 'RespondWithCode', 'RespondWithHttpCode', 'RespondWithText', 'SimulateTransations'));
         ALTER TABLE operations_alert ADD CONSTRAINT operations_alert_app_e_ck CHECK ((app) IN ('crm', 'field', 'onboarding', 'operations', 'portal', 'prospect', 'site'));
         ALTER TABLE scheduler_trigger ADD CONSTRAINT scheduler_trigger_trigger_type_e_ck 
                 CHECK ((trigger_type) IN ('billing', 'cleanup', 'depositInterestAdjustment', 'depositRefund', 'equifaxRetention', 'initializeFutureBillingCycles', 

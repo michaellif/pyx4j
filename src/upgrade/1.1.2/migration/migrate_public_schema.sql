@@ -18,8 +18,8 @@ BEGIN TRANSACTION;
  
         ALTER SEQUENCE application_document_file_seq RENAME TO insurance_certificate_scan_seq;
         ALTER SEQUENCE application_document_blob_seq RENAME TO general_insurance_policy_blob_seq;
-        ALTER SEQUENCE file_seq RENAME TO note_attachment_seq;
         ALTER SEQUENCE insurance_certificate_seq RENAME TO insurance_policy_seq;
+        ALTER SEQUENCE insurance_certificate_document_seq RENAME TO insurance_certificate_doc_seq;
         ALTER SEQUENCE insurance_tenant_sure_client_seq RENAME TO tenant_sure_insurance_policy_client_seq;
         ALTER SEQUENCE insurance_tenant_sure_report_seq RENAME TO tenant_sure_insurance_policy_report_seq;
         ALTER SEQUENCE insurance_tenant_sure_transaction_seq RENAME TO tenant_sure_transaction_seq;
@@ -32,7 +32,8 @@ BEGIN TRANSACTION;
         
  
         -- Sequences to drop
-         -- DROP SEQUENCE file_seq;
+        
+        DROP SEQUENCE file_seq;
         DROP SEQUENCE ilspolicy_item$buildings_seq;
         DROP SEQUENCE ilspolicy_item$cities_seq;
         DROP SEQUENCE ilspolicy_item$provinces_seq;
@@ -82,6 +83,7 @@ BEGIN TRANSACTION;
         ALTER SEQUENCE employee_signature_blob_seq OWNER TO vista ;
         ALTER SEQUENCE employee_signature_seq OWNER TO vista ;
         ALTER SEQUENCE general_insurance_policy_blob_seq OWNER TO vista ;
+        ALTER SEQUENCE insurance_certificate_doc_seq OWNER TO vista;
         ALTER SEQUENCE ilsbatch$units_seq OWNER TO vista ;
         ALTER SEQUENCE ilsbatch_seq OWNER TO vista ;
         ALTER SEQUENCE ilsconfig_seq OWNER TO vista ;
@@ -95,7 +97,6 @@ BEGIN TRANSACTION;
         ALTER SEQUENCE legal_letter_blob_seq OWNER TO vista ;
         ALTER SEQUENCE legal_letter_seq OWNER TO vista ;
         ALTER SEQUENCE media_file_seq OWNER TO vista ;
-        ALTER SEQUENCE note_attachment_seq OWNER TO vista ;
         ALTER SEQUENCE n4_policy_seq OWNER TO vista ;
         ALTER SEQUENCE n4_policy$relevant_ar_codes_seq OWNER TO vista ;
         ALTER SEQUENCE payment_record$_assert_autopay_covered_items_changes_seq OWNER TO vista ;

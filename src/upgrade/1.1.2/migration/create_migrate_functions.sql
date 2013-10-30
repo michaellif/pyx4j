@@ -53,6 +53,7 @@ BEGIN
         ALTER TABLE application_document_file DROP CONSTRAINT application_document_file_pk;
         ALTER TABLE application_document_blob DROP CONSTRAINT application_document_blob_pk;
         ALTER TABLE insurance_certificate DROP CONSTRAINT insurance_certificate_pk;
+        ALTER TABLE insurance_certificate_document DROP CONSTRAINT insurance_certificate_document_pk;
         ALTER TABLE insurance_tenant_sure_client DROP CONSTRAINT insurance_tenant_sure_client_pk;
         ALTER TABLE insurance_tenant_sure_report DROP CONSTRAINT insurance_tenant_sure_report_pk;
         ALTER TABLE insurance_tenant_sure_transaction DROP CONSTRAINT insurance_tenant_sure_transaction_pk;
@@ -90,6 +91,8 @@ BEGIN
         ALTER TABLE media DROP CONSTRAINT media_media_type_e_ck;
         ALTER TABLE media DROP CONSTRAINT media_visibility_e_ck;
         ALTER TABLE notification DROP CONSTRAINT notification_tp_e_ck;
+        ALTER TABLE payment_record DROP CONSTRAINT payment_record_payment_status_e_ck;
+        ALTER TABLE payments_summary DROP CONSTRAINT payments_summary_status_e_ck;
         ALTER TABLE preauthorized_payment DROP CONSTRAINT preauthorized_payment_created_by_discriminator_d_ck;
         ALTER TABLE preauthorized_payment DROP CONSTRAINT preauthorized_payment_payment_method_discriminator_d_ck;
         ALTER TABLE preauthorized_payment DROP CONSTRAINT preauthorized_payment_tenant_discriminator_d_ck;
@@ -149,8 +152,7 @@ BEGIN
         
         ALTER TABLE application_document_file OWNER TO vista;
         
-        ALTER TABLE insurance_certificate_scan  ADD COLUMN certificate BIGINT,
-                                                ADD COLUMN certificate_discriminator VARCHAR(50);
+        ALTER TABLE insurance_certificate_scan RENAME COLUMN owner TO certificate_doc;
         
         
          -- application_document_blob - renamed and re-created
@@ -250,24 +252,7 @@ BEGIN
         
         ALTER TABLE employee_signature_blob OWNER TO vista;
        
-        -- file table renamed to notes_attachment
         
-        ALTER TABLE file RENAME TO note_attachment;
-        
-        /*
-        -- general_insurance_policy_blob
-        
-        CREATE TABLE general_insurance_policy_blob
-        (
-                id                                      BIGINT                  NOT NULL,
-                content_type                            VARCHAR(500),
-                content                                 BYTEA,
-                        CONSTRAINT general_insurance_policy_blob_pk PRIMARY KEY(id)
-        );
-        
-        */
-        
-        ALTER TABLE general_insurance_policy_blob OWNER TO vista;
         
         -- ilsbatch
         
@@ -399,28 +384,16 @@ BEGIN
         
         ALTER TABLE insurance_certificate OWNER TO vista;
         
-        /*
-        -- insurance_certificate_scan
         
-        CREATE TABLE insurance_certificate_scan
-        (
-                id                                      BIGINT                  NOT NULL,
-                file_name                               VARCHAR(500),
-                updated_timestamp                       BIGINT,
-                cache_version                           INT,
-                file_size                               INT,
-                content_mime_type                       VARCHAR(500),
-                caption                                 VARCHAR(500),
-                description                             VARCHAR(500),
-                blob_key                                BIGINT,
-                certificate_discriminator               VARCHAR(50),
-                certificate                             BIGINT,
-                        CONSTRAINT insurance_certificate_scan_pk PRIMARY KEY(id)
-        );
+        -- insurance_certificate_document
         
-        ALTER TABLE insurance_certificate_scan OWNER TO vista;
+        ALTER TABLE insurance_certificate_document RENAME TO insurance_certificate_doc;
         
-        */
+        ALTER TABLE insurance_certificate_doc   ADD COLUMN certificate BIGINT,
+                                                ADD COLUMN certificate_discriminator VARCHAR(50),
+                                                ADD COLUMN description VARCHAR(500);
+        
+        
         
         -- insurance_tenant_sure_client
         
@@ -578,7 +551,7 @@ BEGIN
         (
                 id                                      BIGINT                  NOT NULL,
                 locale                                  BIGINT,
-                banner                                  BIGINT,
+                image                                   BIGINT,
                         CONSTRAINT portal_banner_image_pk PRIMARY KEY(id)
         );
         
@@ -700,18 +673,16 @@ BEGIN
                 ||'WHERE i.tenant = t.id ';
                 
        
+       
         -- insurance_certificate_scan
        
-        EXECUTE 'UPDATE '||v_schema_name||'.insurance_certificate_scan AS s '
+        EXECUTE 'UPDATE '||v_schema_name||'.insurance_certificate_doc AS d '
                 ||'SET  certificate_discriminator = t.id_discriminator, '
                 ||'     certificate = t.cert_id '
-                ||'FROM         (SELECT         c.id AS cert_id,c.id_discriminator,s.id '
+                ||'FROM         (SELECT         c.id AS cert_id,c.id_discriminator, d.id '
                 ||'             FROM    '||v_schema_name||'.insurance_certificate c '
-                ||'             JOIN    '||v_schema_name||'.insurance_certificate_document d ON (c.insurance_policy = d.owner) '
-                ||'             JOIN    '||v_schema_name||'.insurance_certificate_scan s ON (d.id = s.owner)) AS t '
-                ||'WHERE s.id = t.id ';
-                
-              
+                ||'             JOIN    '||v_schema_name||'.insurance_certificate_doc d ON (c.insurance_policy = d.owner)) AS t '
+                ||'WHERE d.id = t.id ';     
                 
         
                 
@@ -781,7 +752,19 @@ BEGIN
         
         -- company
         
-        -- DROP TABLE company;
+        ALTER TABLE company     DROP COLUMN logo_caption,
+                                DROP COLUMN logo_media_file_blob_key,
+                                DROP COLUMN logo_media_file_cache_version,
+                                DROP COLUMN logo_media_file_caption,
+                                DROP COLUMN logo_media_file_content_mime_type,
+                                DROP COLUMN logo_media_file_description,
+                                DROP COLUMN logo_media_file_file_name,
+                                DROP COLUMN logo_media_file_file_size,
+                                DROP COLUMN logo_media_file_updated_timestamp,
+                                DROP COLUMN logo_media_type,
+                                DROP COLUMN logo_url,
+                                DROP COLUMN logo_visibility,
+                                DROP COLUMN logo_you_tube_video_id;
         
         -- customer_picture
         
@@ -799,6 +782,29 @@ BEGIN
                                                 DROP COLUMN previous_address_location_lat,
                                                 DROP COLUMN previous_address_location_lng;
                                                 
+        -- file
+        
+        DROP TABLE file;
+        
+        
+        -- general_insurance_policy_blob
+        
+        ALTER TABLE general_insurance_policy_blob DROP COLUMN created;
+                                                
+        
+        -- insurance_certificate_doc
+        
+        ALTER TABLE insurance_certificate_doc   DROP COLUMN order_in_owner,
+                                                DROP COLUMN owner,
+                                                DROP COLUMN owner_discriminator;
+                                                
+   
+        -- insurance_certificate_scan
+                                                     
+        ALTER TABLE insurance_certificate_scan  DROP COLUMN order_in_owner,
+                                                DROP COLUMN owner_discriminator;
+                
+        
         
         -- insurance_policy
         
@@ -835,6 +841,14 @@ BEGIN
         
         ALTER TABLE lease_billing_type_policy_item DROP COLUMN pad_calculation_day_offset;
        
+        
+        -- media_file
+        
+        ALTER TABLE media_file  DROP COLUMN media_file_caption,
+                                DROP COLUMN media_type,
+                                DROP COLUMN url,
+                                DROP COLUMN you_tube_video_id;
+        
         
         -- name
         
@@ -874,8 +888,20 @@ BEGIN
                                                 DROP COLUMN tenant_insurance_invitation;
                                                 
         -- vendor
-        
-        -- DROP TABLE vendor;
+               
+        ALTER TABLE vendor      DROP COLUMN logo_caption,
+                                DROP COLUMN logo_media_file_blob_key,
+                                DROP COLUMN logo_media_file_cache_version,
+                                DROP COLUMN logo_media_file_caption,
+                                DROP COLUMN logo_media_file_content_mime_type,
+                                DROP COLUMN logo_media_file_description,
+                                DROP COLUMN logo_media_file_file_name,
+                                DROP COLUMN logo_media_file_file_size,
+                                DROP COLUMN logo_media_file_updated_timestamp,
+                                DROP COLUMN logo_media_type,
+                                DROP COLUMN logo_url,
+                                DROP COLUMN logo_visibility,
+                                DROP COLUMN logo_you_tube_video_id;
         
           
                  
@@ -893,10 +919,10 @@ BEGIN
         ALTER TABLE autopay_agreement ADD CONSTRAINT autopay_agreement_pk PRIMARY KEY(id);
         ALTER TABLE autopay_agreement_covered_item ADD CONSTRAINT autopay_agreement_covered_item_pk PRIMARY KEY(id);
         ALTER TABLE general_insurance_policy_blob ADD CONSTRAINT general_insurance_policy_blob_pk PRIMARY KEY(id);
+        ALTER TABLE insurance_certificate_doc ADD CONSTRAINT insurance_certificate_doc_pk PRIMARY KEY(id);
         ALTER TABLE insurance_certificate_scan ADD CONSTRAINT insurance_certificate_scan_pk PRIMARY KEY(id);
         ALTER TABLE insurance_policy ADD CONSTRAINT insurance_policy_pk PRIMARY KEY(id);
         ALTER TABLE media_file ADD CONSTRAINT media_file_pk PRIMARY KEY(id);
-        ALTER TABLE note_attachment ADD CONSTRAINT note_attachment_pk PRIMARY KEY(id);
         ALTER TABLE tenant_sure_insurance_policy_client ADD CONSTRAINT tenant_sure_insurance_policy_client_pk PRIMARY KEY(id);
         ALTER TABLE tenant_sure_insurance_policy_report ADD CONSTRAINT tenant_sure_insurance_policy_report_pk PRIMARY KEY(id);
         ALTER TABLE tenant_sure_transaction ADD CONSTRAINT tenant_sure_transaction_pk PRIMARY KEY(id);
@@ -922,6 +948,7 @@ BEGIN
         ALTER TABLE autopay_agreement_covered_item ADD CONSTRAINT autopay_agreement_covered_item_pap_fk FOREIGN KEY(pap) 
                 REFERENCES autopay_agreement(id)  DEFERRABLE INITIALLY DEFERRED;
         ALTER TABLE building$media ADD CONSTRAINT building$media_value_fk FOREIGN KEY(value) REFERENCES media_file(id)  DEFERRABLE INITIALLY DEFERRED;
+        ALTER TABLE company ADD CONSTRAINT company_logo_fk FOREIGN KEY(logo) REFERENCES company_logo(id)  DEFERRABLE INITIALLY DEFERRED;
         ALTER TABLE employee_signature ADD CONSTRAINT employee_signature_employee_fk FOREIGN KEY(employee) REFERENCES employee(id)  DEFERRABLE INITIALLY DEFERRED;
         ALTER TABLE floorplan$media ADD CONSTRAINT floorplan$media_value_fk FOREIGN KEY(value) REFERENCES media_file(id)  DEFERRABLE INITIALLY DEFERRED;
         ALTER TABLE ilsbatch$units ADD CONSTRAINT ilsbatch$units_owner_fk FOREIGN KEY(owner) REFERENCES ilsbatch(id)  DEFERRABLE INITIALLY DEFERRED;
@@ -933,8 +960,10 @@ BEGIN
         ALTER TABLE ilsvendor_config ADD CONSTRAINT ilsvendor_config_config_fk FOREIGN KEY(config) REFERENCES ilsconfig(id)  DEFERRABLE INITIALLY DEFERRED;
         ALTER TABLE insurance_certificate ADD CONSTRAINT insurance_certificate_insurance_policy_fk FOREIGN KEY(insurance_policy) 
                 REFERENCES insurance_policy(id)  DEFERRABLE INITIALLY DEFERRED;
-        ALTER TABLE insurance_certificate_scan ADD CONSTRAINT insurance_certificate_scan_certificate_fk FOREIGN KEY(certificate) 
+        ALTER TABLE insurance_certificate_doc ADD CONSTRAINT insurance_certificate_doc_certificate_fk FOREIGN KEY(certificate) 
                 REFERENCES insurance_certificate(id)  DEFERRABLE INITIALLY DEFERRED;
+        ALTER TABLE insurance_certificate_scan ADD CONSTRAINT insurance_certificate_scan_certificate_doc_fk FOREIGN KEY(certificate_doc) 
+                REFERENCES insurance_certificate_doc(id)  DEFERRABLE INITIALLY DEFERRED;
         ALTER TABLE insurance_policy ADD CONSTRAINT insurance_policy_client_fk FOREIGN KEY(client) 
                 REFERENCES tenant_sure_insurance_policy_client(id)  DEFERRABLE INITIALLY DEFERRED;
         ALTER TABLE insurance_policy ADD CONSTRAINT insurance_policy_tenant_fk FOREIGN KEY(tenant) REFERENCES lease_participant(id)  DEFERRABLE INITIALLY DEFERRED;
@@ -946,8 +975,20 @@ BEGIN
         ALTER TABLE n4_policy ADD CONSTRAINT n4_policy_mailing_address_province_fk FOREIGN KEY(mailing_address_province) REFERENCES province(id)  DEFERRABLE INITIALLY DEFERRED;
         ALTER TABLE n4_policy$relevant_ar_codes ADD CONSTRAINT n4_policy$relevant_ar_codes_owner_fk FOREIGN KEY(owner) REFERENCES n4_policy(id)  DEFERRABLE INITIALLY DEFERRED;
         ALTER TABLE n4_policy$relevant_ar_codes ADD CONSTRAINT n4_policy$relevant_ar_codes_value_fk FOREIGN KEY(value) REFERENCES arcode(id)  DEFERRABLE INITIALLY DEFERRED;
+        ALTER TABLE portal_banner_image ADD CONSTRAINT portal_banner_image_image_fk FOREIGN KEY(image) REFERENCES site_image_resource(id)  DEFERRABLE INITIALLY DEFERRED;
+        ALTER TABLE portal_banner_image ADD CONSTRAINT portal_banner_image_locale_fk FOREIGN KEY(locale) REFERENCES available_locale(id)  DEFERRABLE INITIALLY DEFERRED;
         ALTER TABLE payment_record ADD CONSTRAINT payment_record_preauthorized_payment_fk FOREIGN KEY(preauthorized_payment) 
                 REFERENCES autopay_agreement(id)  DEFERRABLE INITIALLY DEFERRED;
+        ALTER TABLE site_descriptor$banner ADD CONSTRAINT site_descriptor$banner_value_fk FOREIGN KEY(value) REFERENCES site_image_set(id)  DEFERRABLE INITIALLY DEFERRED;
+        ALTER TABLE site_descriptor$logo ADD CONSTRAINT site_descriptor$logo_value_fk FOREIGN KEY(value) REFERENCES site_logo_image_resource(id)  DEFERRABLE INITIALLY DEFERRED;
+        ALTER TABLE site_descriptor$portal_banner ADD CONSTRAINT site_descriptor$portal_banner_owner_fk FOREIGN KEY(owner) REFERENCES site_descriptor(id)  DEFERRABLE INITIALLY DEFERRED;
+        ALTER TABLE site_descriptor$portal_banner ADD CONSTRAINT site_descriptor$portal_banner_value_fk FOREIGN KEY(value) REFERENCES portal_banner_image(id)  DEFERRABLE INITIALLY DEFERRED;
+        ALTER TABLE site_image_set$image_set ADD CONSTRAINT site_image_set$image_set_owner_fk FOREIGN KEY(owner) REFERENCES site_image_set(id)  DEFERRABLE INITIALLY DEFERRED;
+        ALTER TABLE site_image_set$image_set ADD CONSTRAINT site_image_set$image_set_value_fk FOREIGN KEY(value) REFERENCES site_image_resource(id)  DEFERRABLE INITIALLY DEFERRED;
+        ALTER TABLE site_image_set ADD CONSTRAINT site_image_set_locale_fk FOREIGN KEY(locale) REFERENCES available_locale(id)  DEFERRABLE INITIALLY DEFERRED;
+        ALTER TABLE site_logo_image_resource ADD CONSTRAINT site_logo_image_resource_large_fk FOREIGN KEY(large) REFERENCES site_image_resource(id)  DEFERRABLE INITIALLY DEFERRED;
+        ALTER TABLE site_logo_image_resource ADD CONSTRAINT site_logo_image_resource_locale_fk FOREIGN KEY(locale) REFERENCES available_locale(id)  DEFERRABLE INITIALLY DEFERRED;
+        ALTER TABLE site_logo_image_resource ADD CONSTRAINT site_logo_image_resource_small_fk FOREIGN KEY(small) REFERENCES site_image_resource(id)  DEFERRABLE INITIALLY DEFERRED;
         ALTER TABLE payment_record$_assert_autopay_covered_items_changes ADD CONSTRAINT payment_record$_assert_autopay_covered_items_changes_owner_fk FOREIGN KEY(owner) 
                 REFERENCES payment_record(id)  DEFERRABLE INITIALLY DEFERRED;
         ALTER TABLE payment_record$_assert_autopay_covered_items_changes ADD CONSTRAINT payment_record$_assert_autopay_covered_items_changes_value_fk FOREIGN KEY(value) 
@@ -960,6 +1001,7 @@ BEGIN
                 REFERENCES insurance_policy(id)  DEFERRABLE INITIALLY DEFERRED;
         ALTER TABLE tenant_sure_transaction ADD CONSTRAINT tenant_sure_transaction_payment_method_fk FOREIGN KEY(payment_method) 
                 REFERENCES payment_method(id)  DEFERRABLE INITIALLY DEFERRED;
+        ALTER TABLE vendor ADD CONSTRAINT vendor_logo_fk FOREIGN KEY(logo) REFERENCES company_logo(id)  DEFERRABLE INITIALLY DEFERRED;
 
         
 
@@ -967,6 +1009,8 @@ BEGIN
 
         -- check constraints
         
+        ALTER TABLE application_document_file ADD CONSTRAINT application_document_file_owner_discriminator_d_ck 
+                CHECK ((owner_discriminator) IN ('IdentificationDocument', 'ProofOfEmploymentDocument'));
         ALTER TABLE apt_unit ADD CONSTRAINT apt_unit_info_legal_address_street_direction_e_ck 
                 CHECK ((info_legal_address_street_direction) IN ('east', 'north', 'northEast', 'northWest', 'south', 'southEast', 'southWest', 'west'));
         ALTER TABLE apt_unit ADD CONSTRAINT apt_unit_info_legal_address_street_type_e_ck 
@@ -992,7 +1036,7 @@ BEGIN
                 CHECK ((id_discriminator) IN ('InsuranceGeneral', 'InsuranceTenantSure'));
         ALTER TABLE insurance_certificate ADD CONSTRAINT insurance_certificate_insurance_policy_discriminator_d_ck 
                 CHECK ((insurance_policy_discriminator) IN ('GeneralInsurancePolicy', 'TenantSureInsurancePolicy'));
-        ALTER TABLE insurance_certificate_scan ADD CONSTRAINT insurance_certificate_scan_certificate_discriminator_d_ck 
+        ALTER TABLE insurance_certificate_doc ADD CONSTRAINT insurance_certificate_doc_certificate_discriminator_d_ck 
                 CHECK ((certificate_discriminator) IN ('InsuranceGeneral', 'InsuranceTenantSure'));
         ALTER TABLE insurance_policy ADD CONSTRAINT insurance_policy_cancellation_e_ck 
                 CHECK ((cancellation) IN ('CancelledByTenant', 'CancelledByTenantSure', 'SkipPayment'));
@@ -1017,6 +1061,10 @@ BEGIN
                 CHECK ((node_discriminator) IN ('Disc Complex', 'Disc_Building', 'Disc_Country', 'Disc_Floorplan', 'Disc_Province', 'OrganizationPoliciesNode', 'Unit_BuildingElement'));
         ALTER TABLE notification ADD CONSTRAINT notification_tp_e_ck 
                 CHECK ((tp) IN ('AutoPayCanceledByResident', 'AutoPayReviewRequired', 'ElectronicPaymentRejectedNsf', 'MaintenanceRequest'));
+        ALTER TABLE payment_record ADD CONSTRAINT payment_record_payment_status_e_ck 
+                CHECK ((payment_status) IN ('Canceled', 'Cleared', 'PendingAction', 'Processing', 'Queued', 'Received', 'Rejected', 'Returned', 'Scheduled', 'Submitted', 'Void'));
+        ALTER TABLE payments_summary ADD CONSTRAINT payments_summary_status_e_ck 
+                CHECK ((status) IN ('Canceled', 'Cleared', 'PendingAction', 'Processing', 'Queued', 'Received', 'Rejected', 'Returned', 'Scheduled', 'Submitted', 'Void'));
         ALTER TABLE proof_of_employment_document ADD CONSTRAINT proof_of_employment_document_owner_discriminator_d_ck 
                 CHECK ((owner_discriminator) IN ('CustomerScreening', 'CustomerScreeningIncome'));
         ALTER TABLE tenant_sure_insurance_policy_client ADD CONSTRAINT tenant_sure_insurance_policy_client_tenant_discriminator_d_ck CHECK (tenant_discriminator = 'Tenant');
@@ -1047,6 +1095,9 @@ BEGIN
         CREATE INDEX ilsprofile_floorplan_floorplan_idx ON ilsprofile_floorplan USING btree(floorplan);
         CREATE INDEX n4_policy$relevant_ar_codes_owner_idx ON n4_policy$relevant_ar_codes USING btree(owner);
         CREATE INDEX payment_record$_assert_autopay_covered_items_changes_owner_idx ON payment_record$_assert_autopay_covered_items_changes USING btree(owner);
+        CREATE INDEX site_descriptor$portal_banner_owner_idx ON site_descriptor$portal_banner USING btree(owner);
+        CREATE INDEX site_image_set$image_set_owner_idx ON site_image_set$image_set USING btree(owner);
+
         
         -- billing_arrears_snapshot -GiST index!
         
