@@ -1110,8 +1110,8 @@ public abstract class LeaseAbstractManager {
         }
 
         if (!succeeded) {
-            throw new UserRuntimeException(i18n.tr("There no service ''{0}'' for selected unit: {1} from Building: {2}", leaseTerm.lease().type().getValue()
-                    .toString(), leaseTerm.unit().getStringView(), leaseTerm.unit().building().getStringView()));
+            throw new UserRuntimeException(i18n.tr("There is no Service type of ''{0}'' for selected unit {1}, building {2}", leaseTerm.lease().type()
+                    .getValue().toString(), leaseTerm.unit().getStringView(), leaseTerm.unit().building().getStringView()));
         }
 
         return leaseTerm;
