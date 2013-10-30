@@ -14,10 +14,12 @@
 package com.propertyvista.crm.server.services.breadcrumbs;
 
 import com.pyx4j.entity.annotations.Owned;
+import com.pyx4j.entity.annotations.Table;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
 
+@Table(prefix = "test")
 public interface Level1 extends IEntity {
 
     IPrimitive<String> name();
