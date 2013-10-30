@@ -82,6 +82,16 @@ public class TenantSureFacadeImpl implements TenantSureFacade {
         }
     }
 
+    private static final int TENANT_SURE_PURCHASE_MUTEX_COUNT = 20;
+
+    private static final Object[] TENANT_SURE_PURCHASE_MUTEX;
+    static {
+        TENANT_SURE_PURCHASE_MUTEX = new Object[TENANT_SURE_PURCHASE_MUTEX_COUNT];
+        for (int i = 0; i < TENANT_SURE_PURCHASE_MUTEX_COUNT; ++i) {
+            TENANT_SURE_PURCHASE_MUTEX[i] = new Object();
+        }
+    }
+
     public TenantSureFacadeImpl() {
     }
 
@@ -156,136 +166,143 @@ public class TenantSureFacadeImpl implements TenantSureFacade {
     public Key buyInsurance(TenantSureQuoteDTO quote, Tenant tenantId, String tenantPhone, String tenantName) {
         Validate.isTrue(!quote.quoteId().isNull(), "it's impossible to buy insurance with no quote id!!!");
 
-        TenantSureInsurancePolicy tenantSurePolicy = EntityFactory.create(TenantSureInsurancePolicy.class);
-        tenantSurePolicy.tenant().set(tenantId);
-        tenantSurePolicy.quoteId().setValue(quote.quoteId().getValue());
-        tenantSurePolicy.client().set(initializeClient(tenantId, tenantPhone, tenantName));
-        tenantSurePolicy.status().setValue(TenantSureStatus.Draft);
-        tenantSurePolicy.isDeleted().setValue(Boolean.TRUE);
-
-        tenantSurePolicy.contentsCoverage().setValue(quote.coverage().contentsCoverage().getValue());
-        tenantSurePolicy.deductible().setValue(quote.coverage().deductible().getValue());
-
-        tenantSurePolicy.paymentSchedule().setValue(quote.paymentSchedule().getValue());
-        tenantSurePolicy.annualPremium().setValue(quote.annualPremium().getValue());
-        tenantSurePolicy.underwriterFee().setValue(quote.underwriterFee().getValue());
-        tenantSurePolicy.totalAnnualTax().setValue(quote.totalAnnualTax().getValue());
-        tenantSurePolicy.totalAnnualPayable().setValue(quote.totalAnnualPayable().getValue());
-        tenantSurePolicy.totalMonthlyPayable().setValue(quote.totalMonthlyPayable().getValue());
-        tenantSurePolicy.totalAnniversaryFirstMonthPayable().setValue(quote.totalAnniversaryFirstMonthPayable().getValue());
-        tenantSurePolicy.totalFirstPayable().setValue(quote.totalFirstPayable().getValue());
-
-        TenantSureInsuranceCertificate certificate = EntityFactory.create(TenantSureInsuranceCertificate.class);
-        certificate.insuranceCertificateNumber().setValue(null); // we will get certificate number later: after we have managed to preauthorize a payment transaction
-        certificate.insuranceProvider().setValue(TenantSureConstants.TENANTSURE_LEGAL_NAME);
-        certificate.liabilityCoverage().setValue(quote.coverage().personalLiabilityCoverage().getValue());
-        certificate.inceptionDate().setValue(new LogicalDate());
-        certificate.expiryDate().setValue(null); // TODO actually this is one year, but maybe it's supposed to be renewed somehow
-        tenantSurePolicy.certificate().set(certificate);
-
-        Persistence.service().merge(tenantSurePolicy);
-
-        // Start payment
-        InsurancePaymentMethod paymentMethod = TenantSurePayments.getPaymentMethod(tenantId);
-        TenantSureTransaction transaction = TenantSurePaymentScheduleFactory.create(tenantSurePolicy.paymentSchedule().getValue()).initFirstTransaction(
-                tenantSurePolicy, paymentMethod);
-        Persistence.service().persist(transaction);
-
-        Persistence.service().commit();
-
-        String tenantSureCertificateNumber = null;
-        // Like two phase commit transaction
-        {
-            try {
-                transaction = TenantSurePayments.preAuthorization(transaction);
-            } catch (Throwable e) {
-                log.error("Error", e);
-                transaction.status().setValue(TenantSureTransaction.TransactionStatus.AuthorizationRejected);
-                Persistence.service().persist(transaction);
-                tenantSurePolicy.status().setValue(TenantSureStatus.Failed);
-
-                transaction.paymentMethod().isDeleted().setValue(Boolean.TRUE);
-                Persistence.service().merge(transaction.paymentMethod());
-
-                Persistence.service().persist(tenantSurePolicy);
-                Persistence.service().commit();
-                if (e instanceof UserRuntimeException) {
-                    throw (UserRuntimeException) e;
-                } else {
-                    throw new UserRuntimeException(i18n.tr("Credit Card Authorization failed"), e);
-                }
-            }
-            transaction.status().setValue(TenantSureTransaction.TransactionStatus.Authorized);
-            Persistence.service().persist(transaction);
-            Persistence.service().commit();
-
-            try {
-                tenantSureCertificateNumber = ServerSideFactory.create(CfcApiAdapterFacade.class).bindQuote(tenantSurePolicy.quoteId().getValue());
-            } catch (Throwable e) {
-                log.error("failed to bind quote. ", e);
-                tenantSurePolicy.status().setValue(TenantSureStatus.Failed);
-
-                TenantSurePayments.preAuthorizationReversal(transaction);
-                transaction.status().setValue(TenantSureTransaction.TransactionStatus.AuthorizationReversal);
-                Persistence.service().persist(transaction);
-
-                Persistence.service().persist(tenantSurePolicy);
-                Persistence.service().commit();
-                if (e instanceof UserRuntimeException) {
-                    throw (UserRuntimeException) e;
-                } else {
-                    throw new UserRuntimeException(i18n.tr("Insurance bind failed"), e);
-                }
+        Object mutex = TENANT_SURE_PURCHASE_MUTEX[(int) tenantId.getPrimaryKey().asLong() % TENANT_SURE_PURCHASE_MUTEX_COUNT];
+        synchronized (mutex) {
+            if (retrieveActiveInsuranceTenantSure(tenantId) != null) {
+                throw new UserRuntimeException(i18n.tr("Cannot Buy Insurance: Insurance for this tenant already exists!"));
             }
 
-            tenantSurePolicy.certificate().insuranceCertificateNumber().setValue(tenantSureCertificateNumber);
-            tenantSurePolicy.status().setValue(TenantSureStatus.Active);
-            tenantSurePolicy.paymentDay().setValue(TenantSurePayments.calulatePaymentDay(tenantSurePolicy.certificate().inceptionDate().getValue()));
-            tenantSurePolicy.isDeleted().setValue(Boolean.FALSE);
+            TenantSureInsurancePolicy tenantSurePolicy = EntityFactory.create(TenantSureInsurancePolicy.class);
+            tenantSurePolicy.tenant().set(tenantId);
+            tenantSurePolicy.quoteId().setValue(quote.quoteId().getValue());
+            tenantSurePolicy.client().set(initializeClient(tenantId, tenantPhone, tenantName));
+            tenantSurePolicy.status().setValue(TenantSureStatus.Draft);
+            tenantSurePolicy.isDeleted().setValue(Boolean.TRUE);
+
+            tenantSurePolicy.contentsCoverage().setValue(quote.coverage().contentsCoverage().getValue());
+            tenantSurePolicy.deductible().setValue(quote.coverage().deductible().getValue());
+
+            tenantSurePolicy.paymentSchedule().setValue(quote.paymentSchedule().getValue());
+            tenantSurePolicy.annualPremium().setValue(quote.annualPremium().getValue());
+            tenantSurePolicy.underwriterFee().setValue(quote.underwriterFee().getValue());
+            tenantSurePolicy.totalAnnualTax().setValue(quote.totalAnnualTax().getValue());
+            tenantSurePolicy.totalAnnualPayable().setValue(quote.totalAnnualPayable().getValue());
+            tenantSurePolicy.totalMonthlyPayable().setValue(quote.totalMonthlyPayable().getValue());
+            tenantSurePolicy.totalAnniversaryFirstMonthPayable().setValue(quote.totalAnniversaryFirstMonthPayable().getValue());
+            tenantSurePolicy.totalFirstPayable().setValue(quote.totalFirstPayable().getValue());
+
+            TenantSureInsuranceCertificate certificate = EntityFactory.create(TenantSureInsuranceCertificate.class);
+            certificate.insuranceCertificateNumber().setValue(null); // we will get certificate number later: after we have managed to preauthorize a payment transaction
+            certificate.insuranceProvider().setValue(TenantSureConstants.TENANTSURE_LEGAL_NAME);
+            certificate.liabilityCoverage().setValue(quote.coverage().personalLiabilityCoverage().getValue());
+            certificate.inceptionDate().setValue(new LogicalDate());
+            certificate.expiryDate().setValue(null); // TODO actually this is one year, but maybe it's supposed to be renewed somehow
+            tenantSurePolicy.certificate().set(certificate);
 
             Persistence.service().merge(tenantSurePolicy);
 
-            createTenantSureSubscriberRecord(tenantSureCertificateNumber);
-
-            TenantSureInsurancePolicyReport tsReportStatusHolder = EntityFactory.create(TenantSureInsurancePolicyReport.class);
-            tsReportStatusHolder.insurance().set(tenantSurePolicy);
-            Persistence.service().persist(tsReportStatusHolder);
-
-            Persistence.service().commit();
-
-            try {
-                List<String> emails = new ArrayList<String>();
-                emails.add(getTenantsEmail(tenantId));
-                ServerSideFactory.create(CfcApiAdapterFacade.class).requestDocument(tenantSurePolicy.certificate().insuranceCertificateNumber().getValue(),
-                        emails);
-            } catch (Throwable e) {
-                log.error("Error sending TenantSure document", e);
-            }
-
-        }
-
-        try {
-            TenantSurePayments.compleateTransaction(transaction);
-        } catch (Throwable e) {
-            log.error("Error", e);
-
-            transaction.status().setValue(TenantSureTransaction.TransactionStatus.AuthorizedPaymentRejectedRetry);
+            // Start payment
+            InsurancePaymentMethod paymentMethod = TenantSurePayments.getPaymentMethod(tenantId);
+            TenantSureTransaction transaction = TenantSurePaymentScheduleFactory.create(tenantSurePolicy.paymentSchedule().getValue()).initFirstTransaction(
+                    tenantSurePolicy, paymentMethod);
             Persistence.service().persist(transaction);
 
-            tenantSurePolicy.status().setValue(TenantSureStatus.Pending);
-            Persistence.service().persist(tenantSurePolicy);
             Persistence.service().commit();
-            if (e instanceof UserRuntimeException) {
-                throw (UserRuntimeException) e;
-            } else {
-                throw new UserRuntimeException(i18n.tr("Credit Card payment failed, payment transaction would be completed later"), e);
-            }
-        }
-        transaction.status().setValue(TenantSureTransaction.TransactionStatus.Cleared);
-        Persistence.service().persist(transaction);
-        Persistence.service().commit();
 
-        return tenantSurePolicy.getPrimaryKey();
+            String tenantSureCertificateNumber = null;
+            // Like two phase commit transaction
+            {
+                try {
+                    transaction = TenantSurePayments.preAuthorization(transaction);
+                } catch (Throwable e) {
+                    log.error("Error", e);
+                    transaction.status().setValue(TenantSureTransaction.TransactionStatus.AuthorizationRejected);
+                    Persistence.service().persist(transaction);
+                    tenantSurePolicy.status().setValue(TenantSureStatus.Failed);
+
+                    transaction.paymentMethod().isDeleted().setValue(Boolean.TRUE);
+                    Persistence.service().merge(transaction.paymentMethod());
+
+                    Persistence.service().persist(tenantSurePolicy);
+                    Persistence.service().commit();
+                    if (e instanceof UserRuntimeException) {
+                        throw (UserRuntimeException) e;
+                    } else {
+                        throw new UserRuntimeException(i18n.tr("Credit Card Authorization failed"), e);
+                    }
+                }
+                transaction.status().setValue(TenantSureTransaction.TransactionStatus.Authorized);
+                Persistence.service().persist(transaction);
+                Persistence.service().commit();
+
+                try {
+                    tenantSureCertificateNumber = ServerSideFactory.create(CfcApiAdapterFacade.class).bindQuote(tenantSurePolicy.quoteId().getValue());
+                } catch (Throwable e) {
+                    log.error("failed to bind quote. ", e);
+                    tenantSurePolicy.status().setValue(TenantSureStatus.Failed);
+
+                    TenantSurePayments.preAuthorizationReversal(transaction);
+                    transaction.status().setValue(TenantSureTransaction.TransactionStatus.AuthorizationReversal);
+                    Persistence.service().persist(transaction);
+
+                    Persistence.service().persist(tenantSurePolicy);
+                    Persistence.service().commit();
+                    if (e instanceof UserRuntimeException) {
+                        throw (UserRuntimeException) e;
+                    } else {
+                        throw new UserRuntimeException(i18n.tr("Insurance bind failed"), e);
+                    }
+                }
+
+                tenantSurePolicy.certificate().insuranceCertificateNumber().setValue(tenantSureCertificateNumber);
+                tenantSurePolicy.status().setValue(TenantSureStatus.Active);
+                tenantSurePolicy.paymentDay().setValue(TenantSurePayments.calulatePaymentDay(tenantSurePolicy.certificate().inceptionDate().getValue()));
+                tenantSurePolicy.isDeleted().setValue(Boolean.FALSE);
+
+                Persistence.service().merge(tenantSurePolicy);
+
+                createTenantSureSubscriberRecord(tenantSureCertificateNumber);
+
+                TenantSureInsurancePolicyReport tsReportStatusHolder = EntityFactory.create(TenantSureInsurancePolicyReport.class);
+                tsReportStatusHolder.insurance().set(tenantSurePolicy);
+                Persistence.service().persist(tsReportStatusHolder);
+
+                Persistence.service().commit();
+
+                try {
+                    List<String> emails = new ArrayList<String>();
+                    emails.add(getTenantsEmail(tenantId));
+                    ServerSideFactory.create(CfcApiAdapterFacade.class).requestDocument(tenantSurePolicy.certificate().insuranceCertificateNumber().getValue(),
+                            emails);
+                } catch (Throwable e) {
+                    log.error("Error sending TenantSure document", e);
+                }
+
+            }
+
+            try {
+                TenantSurePayments.compleateTransaction(transaction);
+            } catch (Throwable e) {
+                log.error("Error", e);
+
+                transaction.status().setValue(TenantSureTransaction.TransactionStatus.AuthorizedPaymentRejectedRetry);
+                Persistence.service().persist(transaction);
+
+                tenantSurePolicy.status().setValue(TenantSureStatus.Pending);
+                Persistence.service().persist(tenantSurePolicy);
+                Persistence.service().commit();
+                if (e instanceof UserRuntimeException) {
+                    throw (UserRuntimeException) e;
+                } else {
+                    throw new UserRuntimeException(i18n.tr("Credit Card payment failed, payment transaction would be completed later"), e);
+                }
+            }
+            transaction.status().setValue(TenantSureTransaction.TransactionStatus.Cleared);
+            Persistence.service().persist(transaction);
+            Persistence.service().commit();
+
+            return tenantSurePolicy.getPrimaryKey();
+        }
     }
 
     private void createTenantSureSubscriberRecord(final String insuranceCertificateNumber) {
