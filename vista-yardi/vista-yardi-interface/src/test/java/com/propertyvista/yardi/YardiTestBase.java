@@ -82,10 +82,10 @@ public class YardiTestBase extends IntegrationTestBase {
     }
 
     @Override
-    protected void preloadData() {
-        MockConfig config = new MockConfig();
+    protected MockConfig createMockConfig() {
+        MockConfig config = super.createMockConfig();
         config.yardiIntegration = true;
-        preloadData(config);
+        return config;
     }
 
     @Override

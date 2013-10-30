@@ -16,6 +16,7 @@ package com.propertyvista.biz.financial.payment;
 import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Random;
 
 import org.apache.commons.lang.Validate;
 import org.slf4j.Logger;
@@ -135,7 +136,8 @@ class CreditCardProcessor {
             if (VistaDeployment.isVistaProduction()) {
                 prefix += "";
             } else {
-                prefix += "TEST" + new SimpleDateFormat("MMddHHmm").format(new Date());
+                prefix += "TEST" + new SimpleDateFormat("MMddHHmmss").format(new Date());
+                prefix += "r" + new Random().nextInt(100);
             }
             token.code().setValue(prefix + "V" + cc.id().getStringView());
         }

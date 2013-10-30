@@ -29,14 +29,13 @@ public class PaymentMethodPersistenceCardsTest extends PaymentMethodPersistenceT
     protected void tearDown() throws Exception {
         VistaSystemsSimulationConfig.getConfiguration().useCardServiceSimulator().setValue(Boolean.TRUE);
         super.tearDown();
-
     }
 
     @Override
-    protected void preloadData() {
-        MockConfig config = new MockConfig();
+    protected MockConfig createMockConfig() {
+        MockConfig config = super.createMockConfig();
         config.useCaledonMerchantAccounts = true;
-        preloadData(config);
+        return config;
     }
 
     public void testPersistPaymentMethodCreditCard() throws PaymentException {

@@ -23,7 +23,13 @@
             <artifactId>vista-operations-domain</artifactId>
             <version>${project.version}</version>
         </dependency>
-
+        
+        <dependency>
+            <groupId>com.propertyvista</groupId>
+            <artifactId>vista-domain-srv</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        
         <dependency>
             <groupId>com.pyx4j</groupId>
             <artifactId>pyx-essentials-j2se</artifactId>

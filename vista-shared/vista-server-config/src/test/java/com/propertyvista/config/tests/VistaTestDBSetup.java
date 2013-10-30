@@ -13,15 +13,30 @@
  */
 package com.propertyvista.config.tests;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.pyx4j.config.server.ServerSideConfiguration;
+import com.pyx4j.entity.rdb.EntityPersistenceServiceRDB;
 import com.pyx4j.entity.rdb.RDBUtils;
 import com.pyx4j.entity.rdb.cfg.Configuration;
 import com.pyx4j.entity.rdb.cfg.Configuration.DatabaseType;
+import com.pyx4j.entity.server.Executable;
 import com.pyx4j.entity.server.Persistence;
+import com.pyx4j.entity.server.TransactionScopeOption;
+import com.pyx4j.entity.server.UnitOfWork;
+import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.server.contexts.NamespaceManager;
 import com.pyx4j.server.mail.Mail;
 
 import com.propertyvista.domain.VistaNamespace;
+import com.propertyvista.domain.pmc.PmcAccountNumbers;
+import com.propertyvista.domain.pmc.PmcMerchantAccountIndex;
+import com.propertyvista.domain.policy.policies.YardiInterfacePolicy;
+import com.propertyvista.domain.tenant.lead.Lead;
+import com.propertyvista.domain.tenant.lease.Lease;
+import com.propertyvista.operations.domain.security.AuditRecord;
+import com.propertyvista.server.domain.IdAssignmentSequence;
 
 public class VistaTestDBSetup {
 
@@ -41,15 +56,49 @@ public class VistaTestDBSetup {
             initOnce = new VistaTestsServerSideConfiguration(databaseType);
             ServerSideConfiguration.setInstance(initOnce);
             Mail.getMailService().setDisabled(true);
-            if (databaseType == DatabaseType.PostgreSQL) {
-                Persistence.service();
-                NamespaceManager.setNamespace(VistaNamespace.operationsNamespace);
-                RDBUtils.ensureNamespace();
-                NamespaceManager.setNamespace(VistaTestsNamespaceResolver.demoNamespace);
-                RDBUtils.ensureNamespace();
-            }
+            initOperationsNamespace();
         }
         NamespaceManager.setNamespace(VistaTestsNamespaceResolver.demoNamespace);
+    }
+
+    /**
+     * Resolves HSQL DB tables creation concurrency
+     */
+    public static void initOperationsNamespace() {
+        new UnitOfWork(TransactionScopeOption.RequiresNew).execute(new Executable<Void, RuntimeException>() {
+            @Override
+            public Void execute() {
+                NamespaceManager.setNamespace(VistaNamespace.operationsNamespace);
+                RDBUtils.ensureNamespace();
+                //RDBUtils.initAllEntityTables();
+                List<Class<? extends IEntity>> classes = new ArrayList<Class<? extends IEntity>>();
+                classes.add(AuditRecord.class);
+                classes.add(PmcAccountNumbers.class);
+                classes.add(PmcMerchantAccountIndex.class);
+                ((EntityPersistenceServiceRDB) Persistence.service()).ensureSchemaModel(classes);
+                return null;
+            }
+        });
+    }
+
+    /**
+     * Resolves HSQL DB tables creation concurrency
+     */
+    public static void initNamespace() {
+        new UnitOfWork(TransactionScopeOption.RequiresNew).execute(new Executable<Void, RuntimeException>() {
+            @Override
+            public Void execute() {
+                RDBUtils.ensureNamespace();
+                //RDBUtils.initAllEntityTables();
+                List<Class<? extends IEntity>> classes = new ArrayList<Class<? extends IEntity>>();
+                classes.add(IdAssignmentSequence.class);
+                classes.add(Lease.class);
+                classes.add(Lead.class);
+                classes.add(YardiInterfacePolicy.class);
+                ((EntityPersistenceServiceRDB) Persistence.service()).ensureSchemaModel(classes);
+                return null;
+            }
+        });
     }
 
     public static void resetDatabase() {

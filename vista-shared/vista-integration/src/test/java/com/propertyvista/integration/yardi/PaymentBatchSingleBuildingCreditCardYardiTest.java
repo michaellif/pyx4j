@@ -26,6 +26,7 @@ import com.propertyvista.biz.ExecutionMonitor;
 import com.propertyvista.biz.financial.ar.ARFacade;
 import com.propertyvista.biz.financial.payment.PaymentBatchContext;
 import com.propertyvista.biz.financial.payment.PaymentFacade;
+import com.propertyvista.config.VistaSystemsSimulationConfig;
 import com.propertyvista.domain.financial.PaymentRecord;
 import com.propertyvista.domain.financial.PaymentRecord.PaymentStatus;
 import com.propertyvista.domain.financial.yardi.YardiPayment;
@@ -34,6 +35,7 @@ import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.operations.domain.scheduler.PmcProcessType;
 import com.propertyvista.test.integration.InvoiceLineItemTester;
 import com.propertyvista.test.integration.PaymentRecordTester;
+import com.propertyvista.test.mock.MockConfig;
 import com.propertyvista.test.mock.MockEventBus;
 import com.propertyvista.test.mock.models.LeaseDataModel;
 import com.propertyvista.test.mock.schedule.SchedulerMock;
@@ -41,7 +43,7 @@ import com.propertyvista.yardi.mock.PropertyUpdateEvent;
 import com.propertyvista.yardi.mock.PropertyUpdater;
 import com.propertyvista.yardi.services.YardiResidentTransactionsService;
 
-public class PaymentBatchSingleBuildingEcheckYardiTest extends PaymentYardiTestBase {
+public class PaymentBatchSingleBuildingCreditCardYardiTest extends PaymentYardiTestBase {
 
     private Lease lease11;
 
@@ -52,6 +54,7 @@ public class PaymentBatchSingleBuildingEcheckYardiTest extends PaymentYardiTestB
     @Override
     protected void setUp() throws Exception {
         super.setUp();
+        VistaSystemsSimulationConfig.getConfiguration().useCardServiceSimulator().setValue(Boolean.FALSE);
         createYardiBuilding("prop123");
         createYardiLease("prop123", "t000111");
         createYardiLease("prop123", "t000112");
@@ -62,17 +65,30 @@ public class PaymentBatchSingleBuildingEcheckYardiTest extends PaymentYardiTestB
 
         loadBuildingToModel("prop123");
 
-        lease11 = loadLeaseAndCreateEcheckPaymentMethod("t000111");
-        lease12 = loadLeaseAndCreateEcheckPaymentMethod("t000112");
-        lease13 = loadLeaseAndCreateEcheckPaymentMethod("t000113");
+        lease11 = loadLeaseAndCreateCreditCardPaymentMethod("t000111");
+        lease12 = loadLeaseAndCreateCreditCardPaymentMethod("t000112");
+        lease13 = loadLeaseAndCreateCreditCardPaymentMethod("t000113");
+    }
+
+    @Override
+    protected MockConfig createMockConfig() {
+        MockConfig config = super.createMockConfig();
+        config.useCaledonMerchantAccounts = true;
+        return config;
+    }
+
+    @Override
+    protected void tearDown() throws Exception {
+        VistaSystemsSimulationConfig.getConfiguration().useCardServiceSimulator().setValue(Boolean.TRUE);
+        super.tearDown();
     }
 
     public void testSuccessfulBatchPostingDirectCall() throws Exception {
         // Make a payment
         final List<PaymentRecord> paymentRecords = new ArrayList<PaymentRecord>();
-        paymentRecords.add(getDataModel(LeaseDataModel.class).createPaymentRecord(lease11, PaymentType.Echeck, "101.00"));
-        paymentRecords.add(getDataModel(LeaseDataModel.class).createPaymentRecord(lease12, PaymentType.Echeck, "102.00"));
-        paymentRecords.add(getDataModel(LeaseDataModel.class).createPaymentRecord(lease13, PaymentType.Echeck, "103.00"));
+        paymentRecords.add(getDataModel(LeaseDataModel.class).createPaymentRecord(lease11, PaymentType.CreditCard, "101.00"));
+        paymentRecords.add(getDataModel(LeaseDataModel.class).createPaymentRecord(lease12, PaymentType.CreditCard, "102.00"));
+        paymentRecords.add(getDataModel(LeaseDataModel.class).createPaymentRecord(lease13, PaymentType.CreditCard, "103.00"));
         Persistence.service().commit();
 
         new UnitOfWork(TransactionScopeOption.RequiresNew).execute(new Executable<Void, Exception>() {
@@ -87,9 +103,9 @@ public class PaymentBatchSingleBuildingEcheckYardiTest extends PaymentYardiTestB
             }
         });
 
-        new PaymentRecordTester(lease11.billingAccount()).lastRecordStatus(PaymentStatus.Queued);
-        new PaymentRecordTester(lease12.billingAccount()).lastRecordStatus(PaymentStatus.Queued);
-        new PaymentRecordTester(lease13.billingAccount()).lastRecordStatus(PaymentStatus.Queued);
+        new PaymentRecordTester(lease11.billingAccount()).lastRecordStatus(PaymentStatus.Cleared);
+        new PaymentRecordTester(lease12.billingAccount()).lastRecordStatus(PaymentStatus.Cleared);
+        new PaymentRecordTester(lease13.billingAccount()).lastRecordStatus(PaymentStatus.Cleared);
 
         YardiResidentTransactionsService.getInstance().updateAll(getYardiCredential("prop123"), new ExecutionMonitor());
         Persistence.service().commit();
@@ -97,31 +113,24 @@ public class PaymentBatchSingleBuildingEcheckYardiTest extends PaymentYardiTestB
         new InvoiceLineItemTester(lease11).count(YardiPayment.class, 1).lastRecordAmount(YardiPayment.class, "-101.00");
         new InvoiceLineItemTester(lease12).count(YardiPayment.class, 1).lastRecordAmount(YardiPayment.class, "-102.00");
         new InvoiceLineItemTester(lease13).count(YardiPayment.class, 1).lastRecordAmount(YardiPayment.class, "-103.00");
-
-        // Cancel one record, Can't use UnitOfWork in tests
-        //N.B. The transaction will lock the InvoiceLineItem table in HSQLDB, There is a Hack in YardiMockResidentTransactionsStubImpl
-        ServerSideFactory.create(PaymentFacade.class).cancel(paymentRecords.get(0));
-        Persistence.service().commit();
-
-        new InvoiceLineItemTester(lease11).count(YardiPayment.class, 0);
     }
 
     public void testSuccessfulBatchPostingProcess() throws Exception {
         // Make a payment
         final List<PaymentRecord> paymentRecords = new ArrayList<PaymentRecord>();
-        paymentRecords.add(getDataModel(LeaseDataModel.class).schedulePaymentRecord(lease11, PaymentType.Echeck, "101.00", "2011-01-02"));
-        paymentRecords.add(getDataModel(LeaseDataModel.class).schedulePaymentRecord(lease12, PaymentType.Echeck, "102.00", "2011-01-02"));
-        paymentRecords.add(getDataModel(LeaseDataModel.class).schedulePaymentRecord(lease13, PaymentType.Echeck, "103.00", "2011-01-02"));
+        paymentRecords.add(getDataModel(LeaseDataModel.class).schedulePaymentRecord(lease11, PaymentType.CreditCard, "101.00", "2011-01-02"));
+        paymentRecords.add(getDataModel(LeaseDataModel.class).schedulePaymentRecord(lease12, PaymentType.CreditCard, "102.00", "2011-01-02"));
+        paymentRecords.add(getDataModel(LeaseDataModel.class).schedulePaymentRecord(lease13, PaymentType.CreditCard, "103.00", "2011-01-02"));
         Persistence.service().commit();
 
         setSysDate("2011-01-02");
 
         //Run the batch process
-        SchedulerMock.runProcess(PmcProcessType.paymentsScheduledEcheck, "2011-01-02");
+        SchedulerMock.runProcess(PmcProcessType.paymentsScheduledCreditCards, "2011-01-02");
 
-        new PaymentRecordTester(lease11.billingAccount()).lastRecordStatus(PaymentStatus.Queued);
-        new PaymentRecordTester(lease12.billingAccount()).lastRecordStatus(PaymentStatus.Queued);
-        new PaymentRecordTester(lease13.billingAccount()).lastRecordStatus(PaymentStatus.Queued);
+        new PaymentRecordTester(lease11.billingAccount()).lastRecordStatus(PaymentStatus.Cleared);
+        new PaymentRecordTester(lease12.billingAccount()).lastRecordStatus(PaymentStatus.Cleared);
+        new PaymentRecordTester(lease13.billingAccount()).lastRecordStatus(PaymentStatus.Cleared);
 
         YardiResidentTransactionsService.getInstance().updateAll(getYardiCredential("prop123"), new ExecutionMonitor());
         Persistence.service().commit();
@@ -129,21 +138,14 @@ public class PaymentBatchSingleBuildingEcheckYardiTest extends PaymentYardiTestB
         new InvoiceLineItemTester(lease11).count(YardiPayment.class, 1).lastRecordAmount(YardiPayment.class, "-101.00");
         new InvoiceLineItemTester(lease12).count(YardiPayment.class, 1).lastRecordAmount(YardiPayment.class, "-102.00");
         new InvoiceLineItemTester(lease13).count(YardiPayment.class, 1).lastRecordAmount(YardiPayment.class, "-103.00");
-
-        // Cancel one record, Can't use UnitOfWork in tests
-        //N.B. The transaction will lock the InvoiceLineItem table in HSQLDB, There is a Hack in YardiMockResidentTransactionsStubImpl
-        ServerSideFactory.create(PaymentFacade.class).cancel(paymentRecords.get(0));
-        Persistence.service().commit();
-
-        new InvoiceLineItemTester(lease11).count(YardiPayment.class, 0);
     }
 
     public void testFailedPaymentsBatchPosting() throws Exception {
         // Make a payment
         final List<PaymentRecord> paymentRecords = new ArrayList<PaymentRecord>();
-        paymentRecords.add(getDataModel(LeaseDataModel.class).schedulePaymentRecord(lease11, PaymentType.Echeck, "101.00", "2011-01-02"));
-        paymentRecords.add(getDataModel(LeaseDataModel.class).schedulePaymentRecord(lease12, PaymentType.Echeck, "102.00", "2011-01-02"));
-        paymentRecords.add(getDataModel(LeaseDataModel.class).schedulePaymentRecord(lease13, PaymentType.Echeck, "103.00", "2011-01-02"));
+        paymentRecords.add(getDataModel(LeaseDataModel.class).schedulePaymentRecord(lease11, PaymentType.CreditCard, "101.00", "2011-01-02"));
+        paymentRecords.add(getDataModel(LeaseDataModel.class).schedulePaymentRecord(lease12, PaymentType.CreditCard, "102.00", "2011-01-02"));
+        paymentRecords.add(getDataModel(LeaseDataModel.class).schedulePaymentRecord(lease13, PaymentType.CreditCard, "103.00", "2011-01-02"));
         Persistence.service().commit();
 
         {
@@ -155,11 +157,11 @@ public class PaymentBatchSingleBuildingEcheckYardiTest extends PaymentYardiTestB
         setSysDate("2011-01-02");
 
         //Run the batch process
-        SchedulerMock.runProcess(PmcProcessType.paymentsScheduledEcheck, "2011-01-02");
+        SchedulerMock.runProcess(PmcProcessType.paymentsScheduledCreditCards, "2011-01-02");
 
-        new PaymentRecordTester(lease11.billingAccount()).lastRecordStatus(PaymentStatus.Queued);
-        new PaymentRecordTester(lease12.billingAccount()).lastRecordStatus(PaymentStatus.Scheduled);
-        new PaymentRecordTester(lease13.billingAccount()).lastRecordStatus(PaymentStatus.Queued);
+        new PaymentRecordTester(lease11.billingAccount()).lastRecordStatus(PaymentStatus.Cleared);
+        new PaymentRecordTester(lease12.billingAccount()).lastRecordStatus(PaymentStatus.Void);
+        new PaymentRecordTester(lease13.billingAccount()).lastRecordStatus(PaymentStatus.Cleared);
 
         YardiResidentTransactionsService.getInstance().updateAll(getYardiCredential("prop123"), new ExecutionMonitor());
         Persistence.service().commit();
@@ -167,12 +169,6 @@ public class PaymentBatchSingleBuildingEcheckYardiTest extends PaymentYardiTestB
         new InvoiceLineItemTester(lease11).count(YardiPayment.class, 1).lastRecordAmount(YardiPayment.class, "-101.00");
         new InvoiceLineItemTester(lease12).count(YardiPayment.class, 0);
         new InvoiceLineItemTester(lease13).count(YardiPayment.class, 1).lastRecordAmount(YardiPayment.class, "-103.00");
-
-        // Cancel one record, Can't use UnitOfWork in tests
-        //N.B. The transaction will lock the InvoiceLineItem table in HSQLDB, There is a Hack in YardiMockResidentTransactionsStubImpl
-        ServerSideFactory.create(PaymentFacade.class).cancel(paymentRecords.get(0));
-        Persistence.service().commit();
-
-        new InvoiceLineItemTester(lease11).count(YardiPayment.class, 0);
     }
+
 }
