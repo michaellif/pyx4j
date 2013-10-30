@@ -31,10 +31,7 @@ import com.pyx4j.commons.Consts;
 import com.pyx4j.commons.Key;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
-import com.pyx4j.security.shared.SecurityController;
 
-import com.propertyvista.domain.security.VistaCrmBehavior;
-import com.propertyvista.domain.security.VistaCustomerBehavior;
 import com.propertyvista.domain.tenant.CustomerPicture;
 import com.propertyvista.portal.rpc.DeploymentConsts;
 import com.propertyvista.server.common.blob.ETag;
@@ -77,17 +74,21 @@ public class CustomerPictureServlet extends HttpServlet {
 
         // retrieve blob
         CustomerPictureBlob blob = Persistence.service().retrieve(CustomerPictureBlob.class, key);
-        // retrieve picture file
-        EntityQueryCriteria<CustomerPicture> crit = EntityQueryCriteria.create(CustomerPicture.class);
-        crit.eq(crit.proto().blobKey(), key);
-        CustomerPicture file = Persistence.service().retrieve(crit);
-        if (file == null && blob == null) {
+        if (blob == null) {
             log.debug("no such document {} {}", key, filename);
             response.setStatus(HttpServletResponse.SC_NOT_FOUND);
             return;
         }
 
-        assertAccessRights();
+        // retrieve picture file
+        EntityQueryCriteria<CustomerPicture> crit = EntityQueryCriteria.create(CustomerPicture.class);
+        crit.eq(crit.proto().blobKey(), key);
+        CustomerPicture file = Persistence.secureRetrieve(crit);
+        if (file == null) {
+            log.debug("no such document {} {}", key, filename);
+            response.setStatus(HttpServletResponse.SC_NOT_FOUND);
+            return;
+        }
 
         response.setContentType(blob.contentType().getValue());
         response.getOutputStream().write(blob.data().getValue());
@@ -119,10 +120,4 @@ public class CustomerPictureServlet extends HttpServlet {
             }
         }
     }
-
-    private void assertAccessRights() {
-        SecurityController.assertAnyBehavior(VistaCrmBehavior.PropertyManagement, VistaCrmBehavior.PropertyVistaAccountOwner,
-                VistaCrmBehavior.PropertyVistaSupport, VistaCustomerBehavior.Tenant);
-    }
-
 }

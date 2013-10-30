@@ -38,6 +38,7 @@ import com.propertyvista.domain.ref.Province;
 import com.propertyvista.domain.security.VistaCustomerBehavior;
 import com.propertyvista.domain.security.VistaDataAccessBehavior;
 import com.propertyvista.domain.security.common.VistaBasicBehavior;
+import com.propertyvista.domain.tenant.CustomerPicture;
 import com.propertyvista.domain.tenant.insurance.GeneralInsurancePolicy;
 import com.propertyvista.domain.tenant.insurance.InsuranceCertificateScan;
 import com.propertyvista.domain.tenant.insurance.TenantSureInsurancePolicy;
@@ -105,6 +106,7 @@ import com.propertyvista.portal.rpc.ptapp.services.steps.welcomewizardmockup.Lea
 import com.propertyvista.portal.rpc.ptapp.services.steps.welcomewizardmockup.MoveInScheduleService;
 import com.propertyvista.portal.rpc.ptapp.services.steps.welcomewizardmockup.ResetWizardService;
 import com.propertyvista.portal.rpc.shared.services.CreditCardValidationService;
+import com.propertyvista.portal.server.security.access.CustomrPictureTenantDatasetAccessRule;
 import com.propertyvista.portal.server.security.access.GeneralInsurancePolicyDatasetAccessRule;
 import com.propertyvista.portal.server.security.access.InsuranceCertificateScanDatasetAccessRule;
 import com.propertyvista.portal.server.security.access.LeasePaymentMethodTenantDatasetAccessRule;
@@ -261,6 +263,8 @@ public class VistaPortalAccessControlList extends ServletContainerAclBuilder {
         grant(VistaCustomerBehavior.Tenant, new IServiceExecutePermission(ResidentPictureUploadService.class));
         grant(VistaCustomerBehavior.Tenant, new IServiceExecutePermission(DeferredProcessService.class));
 
+        grant(VistaCustomerBehavior.Tenant, new EntityPermission(CustomerPicture.class, CRUD));
+
         //=======================================
 
         // Tenant Insurance and TenantSure
@@ -299,6 +303,7 @@ public class VistaPortalAccessControlList extends ServletContainerAclBuilder {
         // Data Access
         grant(VistaCustomerBehavior.Tenant, VistaDataAccessBehavior.TenantInPortal);
         grant(VistaDataAccessBehavior.TenantInPortal, new LeaseTenantDatasetAccessRule(), Lease.class);
+        grant(VistaDataAccessBehavior.TenantInPortal, new CustomrPictureTenantDatasetAccessRule(), CustomerPicture.class);
         grant(VistaDataAccessBehavior.TenantInPortal, new LeasePaymentMethodTenantDatasetAccessRule(), LeasePaymentMethod.class);
         grant(VistaDataAccessBehavior.TenantInPortal, new GeneralInsurancePolicyDatasetAccessRule(), GeneralInsurancePolicy.class);
         grant(VistaDataAccessBehavior.TenantInPortal, new InsuranceCertificateScanDatasetAccessRule(), InsuranceCertificateScan.class);
