@@ -6,6 +6,8 @@
     <property name="logs-name" value="test-logs" />
     <property name="logs-dir" value="./target" />
 
+    <conversionRule conversionWord="message" converterClass="com.pyx4j.logback.IStringViewMessageConverter" />
+
     <appender name="ConsoleAppender-info" class="ch.qos.logback.core.ConsoleAppender">
         <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
             <level>INFO</level>
