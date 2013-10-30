@@ -84,7 +84,7 @@ public abstract class AbstractBulkOperationToolActivity<Settings extends IEntity
                 AbstractBulkOperationToolActivity.this.populateItems();
                 AbstractBulkOperationToolActivity.this.getView().setLoading(false);
             }
-        }, getView().getSettings());
+        }, getView().getSettings().<Settings> duplicate());
     }
 
     public BulkOperationToolView<Settings, Item> getView() {
