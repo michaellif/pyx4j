@@ -20,6 +20,7 @@ import org.slf4j.LoggerFactory;
 
 import com.pyx4j.commons.Key;
 import com.pyx4j.commons.SimpleMessageFormat;
+import com.pyx4j.config.server.ServerSideConfiguration;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IEntity;
@@ -27,6 +28,8 @@ import com.pyx4j.security.shared.UserVisit;
 import com.pyx4j.server.contexts.Context;
 import com.pyx4j.server.contexts.NamespaceManager;
 import com.pyx4j.server.contexts.Visit;
+import com.pyx4j.server.mail.Mail;
+import com.pyx4j.server.mail.MailMessage;
 
 import com.propertyvista.domain.VistaNamespace;
 import com.propertyvista.operations.domain.vista2pmc.OperationsAlert;
@@ -65,6 +68,13 @@ public class OperationsAlertFacadeImpl implements OperationsAlertFacade {
                 record.user().setValue(getPrincipalPrimaryKey());
                 Persistence.service().persist(record);
                 Persistence.service().commit();
+
+                MailMessage m = new MailMessage();
+                m.setTo("support_team@propertyvista.com,support-payments@propertyvista.com");
+                m.setSender(ServerSideConfiguration.instance().getApplicationEmailSender());
+                m.setSubject("Vista Operations Alert");
+                m.setTextBody(details);
+                Mail.send(m);
                 return null;
             }
         });

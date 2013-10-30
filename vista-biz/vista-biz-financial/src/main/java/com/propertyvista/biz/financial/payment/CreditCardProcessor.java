@@ -233,28 +233,36 @@ class CreditCardProcessor {
                     try {
                         PaymentResponse response = new CaledonPaymentProcessor().voidTransaction(merchant, request);
                         if (response.success().getValue()) {
-                            log.info("transaction successfully voided {}", response.message().getValue());
-                            paymentRecord.paymentStatus().setValue(PaymentRecord.PaymentStatus.Void);
-                            paymentRecord.lastStatusChangeDate().setValue(new LogicalDate(SystemDateManager.getDate()));
-                            Persistence.service().merge(paymentRecord);
+                            log.info("transaction {} successfully voided {}", response.message().getValue());
+                            PaymentRecord record = Persistence.service().retrieve(PaymentRecord.class, paymentRecord.getPrimaryKey());
+                            record.paymentStatus().setValue(PaymentRecord.PaymentStatus.Void);
+                            record.finalizeDate().setValue(new LogicalDate(SystemDateManager.getDate()));
+                            Persistence.service().persist(record);
                         } else {
-                            log.error("Unable to void CC transaction {} {} {}; response {} {}", merchant.terminalID().getValue(), request.referenceNumber()
-                                    .getValue(), //
+                            log.error("Unable to void CC transaction {} {} {}; response {} {}", //
+                                    merchant.terminalID().getValue(), //
+                                    request.referenceNumber().getValue(), //
                                     request.amount().getValue(), //
-                                    response.code().getValue(), response.message().getValue());
+                                    response.code().getValue(), //
+                                    response.message().getValue());
 
                             ServerSideFactory.create(OperationsAlertFacade.class).record(paymentRecord,
                                     "Unable to void CC transaction {0} {1} {2}; response {3} {4}",//
-                                    merchant.terminalID().getValue(), request.referenceNumber().getValue(), request.amount().getValue(), //
-                                    response.code().getValue(), response.message().getValue());
+                                    merchant.terminalID().getValue(), //
+                                    request.referenceNumber().getValue(), // 
+                                    request.amount().getValue(), //
+                                    response.code().getValue(), //
+                                    response.message().getValue());
                         }
                     } catch (Throwable e) {
-                        log.error("Unable to void CC transaction {} {} {}; response {} {}", merchant.terminalID().getValue(), request.referenceNumber()
-                                .getValue(), request.amount().getValue(), e);
+                        log.error("Unable to void CC transaction {} {} {}", merchant.terminalID().getValue(), request.referenceNumber().getValue(), request
+                                .amount().getValue(), e);
 
-                        ServerSideFactory.create(OperationsAlertFacade.class).record(paymentRecord,
-                                "Unable to void CC transaction {0} {1} {2}; response {3} {4}",//
-                                merchant.terminalID().getValue(), request.referenceNumber().getValue(), request.amount().getValue(), e);
+                        ServerSideFactory.create(OperationsAlertFacade.class).record(paymentRecord, "Unable to void CC transaction {0} {1} {2}; response {3}",//
+                                merchant.terminalID().getValue(), //
+                                request.referenceNumber().getValue(), //
+                                request.amount().getValue(), //
+                                e);
                     }
 
                     return null;
