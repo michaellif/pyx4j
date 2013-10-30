@@ -77,14 +77,14 @@ public class PaymentBatchThreeBuildingYardiTest extends PaymentYardiTestBase {
         loadBuildingToModel("prop2");
         loadBuildingToModel("prop3");
 
-        lease11 = loadLeaseAndCreatePaymentMethod("t000111");
-        lease12 = loadLeaseAndCreatePaymentMethod("t000112");
+        lease11 = loadLeaseAndCreateEcheckPaymentMethod("t000111");
+        lease12 = loadLeaseAndCreateEcheckPaymentMethod("t000112");
 
-        lease21 = loadLeaseAndCreatePaymentMethod("t000211");
-        lease22 = loadLeaseAndCreatePaymentMethod("t000212");
+        lease21 = loadLeaseAndCreateEcheckPaymentMethod("t000211");
+        lease22 = loadLeaseAndCreateEcheckPaymentMethod("t000212");
 
-        lease31 = loadLeaseAndCreatePaymentMethod("t000311");
-        lease32 = loadLeaseAndCreatePaymentMethod("t000312");
+        lease31 = loadLeaseAndCreateEcheckPaymentMethod("t000311");
+        lease32 = loadLeaseAndCreateEcheckPaymentMethod("t000312");
 
         // Make a payments
         paymentRecords.add(getDataModel(LeaseDataModel.class).schedulePaymentRecord(lease11, PaymentType.Echeck, "101.00", "2011-01-02"));

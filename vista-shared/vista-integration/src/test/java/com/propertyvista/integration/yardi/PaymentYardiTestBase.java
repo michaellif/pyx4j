@@ -165,10 +165,18 @@ public abstract class PaymentYardiTestBase extends YardiTestBase {
         return lease;
     }
 
-    protected Lease loadLeaseAndCreatePaymentMethod(String leaseId) {
+    protected Lease loadLeaseAndCreateEcheckPaymentMethod(String leaseId) {
         Lease lease = loadLeaseToModel(leaseId);
         Tenant tenant = lease.leaseParticipants().iterator().next().cast();
         getDataModel(CustomerDataModel.class).addPaymentMethod(tenant.customer(), lease.unit().building(), PaymentType.Echeck);
+        Persistence.service().commit();
+        return lease;
+    }
+
+    protected Lease loadLeaseAndCreateCreditCardPaymentMethod(String leaseId) {
+        Lease lease = loadLeaseToModel(leaseId);
+        Tenant tenant = lease.leaseParticipants().iterator().next().cast();
+        getDataModel(CustomerDataModel.class).addPaymentMethod(tenant.customer(), lease.unit().building(), PaymentType.CreditCard);
         Persistence.service().commit();
         return lease;
     }

@@ -25,7 +25,7 @@ public class PropertyUpdater extends Updater<ChargeDetail, PropertyUpdater> {
 
     public enum MockFeatures implements com.propertyvista.yardi.mock.Name {
 
-        BlockAccess, BlockBatchOpening;
+        BlockAccess, BlockBatchOpening, BlockTransactionPostLeases;
 
     }
 

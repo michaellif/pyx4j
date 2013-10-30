@@ -26,10 +26,13 @@ public class YardiMockPropertyFeatures {
      */
     private boolean blockBatchOpening;
 
+    private String blockTransactionPostLeases;
+
     public boolean isBlockAccess() {
         return blockAccess;
     }
 
+    @MockSetter(PropertyUpdater.MockFeatures.class)
     public void setBlockAccess(Boolean blockAccess) {
         this.blockAccess = blockAccess;
     }
@@ -38,7 +41,21 @@ public class YardiMockPropertyFeatures {
         return blockBatchOpening;
     }
 
+    @MockSetter(PropertyUpdater.MockFeatures.class)
     public void setBlockBatchOpening(Boolean blockBatchOpen) {
         this.blockBatchOpening = blockBatchOpen;
+    }
+
+    public boolean isBlockTransactionPostLease(String leaseId) {
+        return blockTransactionPostLeases != null && blockTransactionPostLeases.contains(leaseId);
+    }
+
+    public String getBlockTransactionPostLeases() {
+        return blockTransactionPostLeases;
+    }
+
+    @MockSetter(PropertyUpdater.MockFeatures.class)
+    public void setBlockTransactionPostLeases(String blockTransactionPostLeases) {
+        this.blockTransactionPostLeases = blockTransactionPostLeases;
     }
 }

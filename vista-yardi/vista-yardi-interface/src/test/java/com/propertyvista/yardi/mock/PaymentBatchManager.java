@@ -77,6 +77,11 @@ class PaymentBatchManager {
     private void validateTransaction(Transactions transaction) throws YardiServiceException {
         Validate.isTrue(propertyManager.getPropertyId().equals(transaction.getPayment().getDetail().getPropertyPrimaryID()));
         RTCustomer rtCustomer = propertyManager.getExistingRTCustomer(transaction.getPayment().getDetail().getCustomerID());
+
+        if (propertyManager.mockFeatures.isBlockTransactionPostLease(transaction.getPayment().getDetail().getCustomerID())) {
+            throw new YardiServiceException("Payments have being blocked for " + transaction.getPayment().getDetail().getCustomerID());
+        }
+
         if (rtCustomer.getPaymentAccepted() != null) {
             PaymentAccepted accepted = BillingAccount.PaymentAccepted.getPaymentType(rtCustomer.getPaymentAccepted());
             switch (accepted) {
