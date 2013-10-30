@@ -16,6 +16,7 @@ package com.propertyvista.crm.server.services.policies.policy;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.commons.Key;
+import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
 
 import com.propertyvista.crm.rpc.services.policies.policy.N4PolicyCrudService;
@@ -34,7 +35,9 @@ public class N4PolicyCrudServiceImpl extends GenericPolicyCrudService<N4Policy, 
     @Override
     public void save(AsyncCallback<Key> callback, N4PolicyDTO to) {
         for (N4PolicyDTOARCodeHolderDTO arCodeHolder : to.arCodes()) {
-            to.relevantArCodes().add(arCodeHolder.arCode().<ARCode> createIdentityStub());
+            // TODO the following horrible code is a workaround agains something that VladS broke in intestines of his framework couple of days ago:
+            // to.relevantArCodes().add(arCodeHolder.arCode().<ARCode> createIdentityStub());
+            to.relevantArCodes().add(Persistence.service().retrieve(ARCode.class, arCodeHolder.arCode().getPrimaryKey()));
         }
         super.save(callback, to);
     }
