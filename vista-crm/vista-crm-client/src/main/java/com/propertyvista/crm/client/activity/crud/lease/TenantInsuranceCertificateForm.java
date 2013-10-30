@@ -15,7 +15,6 @@ package com.propertyvista.crm.client.activity.crud.lease;
 
 import java.math.BigDecimal;
 
-import com.google.gwt.core.shared.GWT;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.IsWidget;
 
@@ -23,19 +22,14 @@ import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.ui.CEntityLabel;
-import com.pyx4j.forms.client.ui.CFile;
 import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
 import com.pyx4j.forms.client.validators.ValidationError;
-import com.pyx4j.gwt.shared.FileURLBuilder;
 import com.pyx4j.i18n.shared.I18n;
 
-import com.propertyvista.common.client.ui.components.MediaUtils;
 import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
-import com.propertyvista.crm.rpc.services.customer.CrmInsuranceCertificateScanUploadService;
 import com.propertyvista.domain.tenant.Customer;
 import com.propertyvista.domain.tenant.insurance.InsuranceCertificate;
-import com.propertyvista.domain.tenant.insurance.InsuranceCertificateScan;
 import com.propertyvista.domain.tenant.insurance.PropertyVistaIntegratedInsurance;
 import com.propertyvista.domain.tenant.lease.Tenant;
 
@@ -135,8 +129,7 @@ public class TenantInsuranceCertificateForm<E extends InsuranceCertificate> exte
             }
         });
 
-        contentPanel.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().certificateDocs(), makeInsuranceCertificateScanUploadWidget()))
-                .componentWidth("200px").build());
+        contentPanel.setWidget(++row, 0, 2, inject(proto().certificateDocs(), new InsuranceCertificateDocFolder()));
         return contentPanel;
     }
 
@@ -150,13 +143,4 @@ public class TenantInsuranceCertificateForm<E extends InsuranceCertificate> exte
         setViewable(getValue() instanceof PropertyVistaIntegratedInsurance); // TODO this should not be controlled by the form itstelf
     }
 
-    private CFile<InsuranceCertificateScan> makeInsuranceCertificateScanUploadWidget() {
-        return new CFile<InsuranceCertificateScan>(GWT.<CrmInsuranceCertificateScanUploadService> create(CrmInsuranceCertificateScanUploadService.class),
-                new FileURLBuilder<InsuranceCertificateScan>() {
-                    @Override
-                    public String getUrl(InsuranceCertificateScan file) {
-                        return MediaUtils.createInsuranceCertificateScanUrl(file);
-                    }
-                });
-    }
 }
