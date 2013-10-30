@@ -26,9 +26,9 @@ import com.pyx4j.entity.shared.EntityFactory;
 import com.propertyvista.config.tests.VistaDBTestBase;
 import com.propertyvista.domain.media.ApplicationDocument;
 import com.propertyvista.domain.media.ApplicationDocumentFile;
+import com.propertyvista.domain.media.ProofOfEmploymentDocument;
 import com.propertyvista.server.domain.ApplicationDocumentBlob;
 import com.propertyvista.server.jobs.CleanupPmcProcess.CleanupPmcProcessConfig;
-import com.propertyvista.server.jobs.testdomain.TestApplicationDocument;
 
 public class CleanupPmcProcessTestBase extends VistaDBTestBase {
 
@@ -59,8 +59,8 @@ public class CleanupPmcProcessTestBase extends VistaDBTestBase {
     }
 
     protected static ApplicationDocument createApplicationDocument(String desc, Key... blobs) {
-        TestApplicationDocument doc = EntityFactory.create(TestApplicationDocument.class);
-        doc.testValue().setValue(desc);
+        ProofOfEmploymentDocument doc = EntityFactory.create(ProofOfEmploymentDocument.class);
+        doc.description().setValue(desc);
 
         for (Key blobKey : blobs) {
             ApplicationDocumentFile file = doc.documentPages().$();
