@@ -74,6 +74,10 @@ public abstract class CImageSlider<E extends IFile> extends CField<IList<E>, NIm
         thumbSize = new Dimension(width, height);
     }
 
+    public void setOrganizerWidth(int width) {
+        getWidget().setOrganizerWidth(width);
+    }
+
     public Dimension getThumbSize() {
         return thumbSize;
     }

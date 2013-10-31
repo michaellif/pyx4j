@@ -69,6 +69,8 @@ public class NImageSlider<T extends IFile> extends NField<IList<T>, ImageSlider,
 
     private final ImageSlider imageSlider;
 
+    private int organizerWidth;
+
     protected IEditableComponentFactory factory = new EntityFormComponentFactory();
 
     public NImageSlider(CImageSlider<T> cComponent) {
@@ -163,6 +165,10 @@ public class NImageSlider<T extends IFile> extends NField<IList<T>, ImageSlider,
         imageSlider.setImageSize(imageSize.width, imageSize.height);
     }
 
+    public void setOrganizerWidth(int width) {
+        organizerWidth = width;
+    }
+
     class ImageOrganizer extends CEntityFolder<T> {
 
         private final Class<T> imgClass;
@@ -250,6 +256,9 @@ public class NImageSlider<T extends IFile> extends NField<IList<T>, ImageSlider,
             public Decorator() {
                 super(i18n.tr("Image Organizer"));
                 setDialogOptions(this);
+                if (organizerWidth > 0) {
+                    setDialogPixelWidth(organizerWidth);
+                }
             }
 
             @Override
