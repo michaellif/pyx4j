@@ -20,6 +20,7 @@ import com.pyx4j.commons.Key;
 import com.pyx4j.security.shared.SecurityController;
 
 import com.propertyvista.common.client.ClientNavigUtils;
+import com.propertyvista.common.client.VistaFileURLBuilder;
 import com.propertyvista.domain.MediaFile;
 import com.propertyvista.domain.company.EmployeeSignature;
 import com.propertyvista.domain.legal.LegalLetter;
@@ -70,18 +71,16 @@ public class MediaUtils {
     }
 
     public static String createCustomerPictureUrl(CustomerPicture picture) {
-        return ClientNavigUtils.getDeploymentBaseURL() + DeploymentConsts.customerPictureServletMapping + picture.id().getStringView() + "/"
-                + picture.fileName().getStringView();
+        return new VistaFileURLBuilder<CustomerPicture>(CustomerPicture.class).getUrl(picture);
+    }
+
+    public static String createInsuranceCertificateScanUrl(InsuranceCertificateScan certificateScan) {
+        return new VistaFileURLBuilder<InsuranceCertificateScan>(InsuranceCertificateScan.class).getUrl(certificateScan);
     }
 
     public static String createMediaImageUrl(MediaFile mediaFile) {
         return GWT.getModuleBaseURL() + DeploymentConsts.mediaImagesServletMapping + mediaFile.getPrimaryKey().toString() + "/" + ThumbnailSize.large.name()
                 + "." + ImageConsts.THUMBNAIL_TYPE;
-    }
-
-    public static String createInsuranceCertificateScanUrl(InsuranceCertificateScan certificateScan) {
-        return GWT.getModuleBaseURL() + DeploymentConsts.insuranceCertificateScanMapping + certificateScan.id().getStringView() + "/"
-                + certificateScan.fileName().getStringView();
     }
 
     public static String createSiteSmallLogoUrl() {

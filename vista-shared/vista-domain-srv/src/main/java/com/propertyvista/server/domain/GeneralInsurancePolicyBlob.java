@@ -13,19 +13,10 @@
  */
 package com.propertyvista.server.domain;
 
-import com.pyx4j.entity.annotations.Length;
 import com.pyx4j.entity.annotations.RpcTransient;
-import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.i18n.annotations.I18n;
 
 @RpcTransient
 @I18n(strategy = I18n.I18nStrategy.IgnoreAll)
-public interface GeneralInsurancePolicyBlob extends IEntity {
-
-    IPrimitive<String> contentType();
-
-    @Length(15 * 1024 * 1024)
-    IPrimitive<byte[]> content();
-
+public interface GeneralInsurancePolicyBlob extends IFileBlob {
 }

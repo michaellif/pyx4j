@@ -43,7 +43,7 @@ public class InsuranceCertificateScanUploadServiceImpl extends AbstractUploadSer
 
     @Override
     public long getMaxSize() {
-        return EntityFactory.getEntityPrototype(GeneralInsurancePolicyBlob.class).content().getMeta().getLength();
+        return EntityFactory.getEntityPrototype(GeneralInsurancePolicyBlob.class).data().getMeta().getLength();
     }
 
     @Override
@@ -60,7 +60,7 @@ public class InsuranceCertificateScanUploadServiceImpl extends AbstractUploadSer
     protected void processUploadedData(IEntity uploadInitiationData, UploadedData uploadedData, InsuranceCertificateScan response) {
         GeneralInsurancePolicyBlob blob = EntityFactory.create(GeneralInsurancePolicyBlob.class);
         blob.contentType().setValue(uploadedData.contentMimeType);
-        blob.content().setValue(uploadedData.binaryContent);
+        blob.data().setValue(uploadedData.binaryContent);
         Persistence.service().persist(blob);
 
         response.blobKey().setValue(blob.getPrimaryKey());

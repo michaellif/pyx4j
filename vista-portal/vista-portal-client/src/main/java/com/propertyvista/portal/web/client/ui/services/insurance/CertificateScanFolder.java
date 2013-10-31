@@ -21,10 +21,9 @@ import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.ui.CFile;
 import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
-import com.pyx4j.gwt.shared.IFileURLBuilder;
 import com.pyx4j.i18n.shared.I18n;
 
-import com.propertyvista.common.client.ui.components.MediaUtils;
+import com.propertyvista.common.client.VistaFileURLBuilder;
 import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
 import com.propertyvista.domain.tenant.insurance.InsuranceCertificateDoc;
 import com.propertyvista.domain.tenant.insurance.InsuranceCertificateScan;
@@ -65,13 +64,7 @@ public class CertificateScanFolder extends VistaBoxFolder<InsuranceCertificateDo
                     new FormWidgetDecoratorBuilder(inject(proto().scan(),
                             new CFile<InsuranceCertificateScan>(
                                     GWT.<InsuranceCertificateScanUploadService> create(InsuranceCertificateScanUploadService.class),
-                                    new IFileURLBuilder<InsuranceCertificateScan>() {
-
-                                        @Override
-                                        public String getUrl(InsuranceCertificateScan file) {
-                                            return MediaUtils.createInsuranceCertificateScanUrl(file);
-                                        }
-                                    })), 250).build());
+                                    new VistaFileURLBuilder<InsuranceCertificateScan>(InsuranceCertificateScan.class))), 250).build());
 
             content.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().description()), 200).mockValue("Description").build());
 

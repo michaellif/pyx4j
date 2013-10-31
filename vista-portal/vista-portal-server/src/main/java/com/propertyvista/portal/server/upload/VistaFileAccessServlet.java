@@ -14,6 +14,7 @@
 package com.propertyvista.portal.server.upload;
 
 import java.io.IOException;
+import java.util.HashMap;
 
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
@@ -33,24 +34,30 @@ import com.pyx4j.entity.shared.IFile;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.essentials.server.upload.FileUploadRegistry;
 
+import com.propertyvista.domain.tenant.CustomerPicture;
+import com.propertyvista.domain.tenant.insurance.InsuranceCertificateScan;
 import com.propertyvista.portal.rpc.DeploymentConsts;
 import com.propertyvista.server.common.blob.ETag;
+import com.propertyvista.server.domain.CustomerPictureBlob;
+import com.propertyvista.server.domain.GeneralInsurancePolicyBlob;
 import com.propertyvista.server.domain.IFileBlob;
 
-public abstract class AbstractFileAccessServlet<E extends IFile, BLOB extends IFileBlob> extends HttpServlet {
+public class VistaFileAccessServlet extends HttpServlet {
     private static final long serialVersionUID = 1L;
 
-    private final static Logger log = LoggerFactory.getLogger(AbstractFileAccessServlet.class);
+    private final static Logger log = LoggerFactory.getLogger(VistaFileAccessServlet.class);
 
     private int cacheExpiresHours = 24;
 
-    private final Class<E> fileClass;
+    private final static HashMap<String, BlobEntry> blobRegistry = new HashMap<String, BlobEntry>();
 
-    private final Class<BLOB> blobClass;
+    public static void register(Class<? extends IFile> fileClass, Class<? extends IFileBlob> blobClass) {
+        blobRegistry.put(fileClass.getSimpleName(), new BlobEntry(fileClass, blobClass));
+    }
 
-    public AbstractFileAccessServlet(Class<E> fileClass, Class<BLOB> blobClass) {
-        this.fileClass = fileClass;
-        this.blobClass = blobClass;
+    static {
+        register(CustomerPicture.class, CustomerPictureBlob.class);
+        register(InsuranceCertificateScan.class, GeneralInsurancePolicyBlob.class);
     }
 
     @Override
@@ -65,9 +72,21 @@ public abstract class AbstractFileAccessServlet<E extends IFile, BLOB extends IF
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String filename = request.getRequestURI();
 
-        String id = FilenameUtils.getPathNoEndSeparator(request.getPathInfo());
+        String[] segments = FilenameUtils.getPathNoEndSeparator(request.getPathInfo()).split("/");
 
-        if (CommonsStringUtils.isEmpty(id) || "0".equals(id)) {
+        String id = null, fileClassName = null;
+        BlobEntry blobEntry = null;
+        Class<? extends IFileBlob> blobClass = null;
+        if (segments.length == 2) {
+            fileClassName = segments[0];
+            id = segments[1];
+            blobEntry = blobRegistry.get(fileClassName);
+            if (blobEntry != null) {
+                blobClass = blobEntry.blobClass;
+            }
+        }
+
+        if (blobClass == null || CommonsStringUtils.isEmpty(id) || "0".equals(id)) {
             response.setStatus(HttpServletResponse.SC_GONE);
             return;
         }
@@ -75,33 +94,30 @@ public abstract class AbstractFileAccessServlet<E extends IFile, BLOB extends IF
         Key key;
         boolean transientFile = false;
         if (id.startsWith(DeploymentConsts.TRANSIENT_FILE_PREF)) {
-            E file = FileUploadRegistry.get(id.substring(DeploymentConsts.TRANSIENT_FILE_PREF.length()));
+            IFile file = FileUploadRegistry.get(id.substring(DeploymentConsts.TRANSIENT_FILE_PREF.length()));
+            if (file == null) {
+                log.debug("no such document {} {}", id, filename);
+                response.setStatus(HttpServletResponse.SC_NOT_FOUND);
+                return;
+            }
             key = file.blobKey().getValue();
             transientFile = true;
         } else {
             key = new Key(id);
         }
 
-        BLOB blob = Persistence.service().retrieve(blobClass, key);
+        IFileBlob blob = Persistence.service().retrieve(blobClass, key);
         if (blob == null) {
             log.debug("no such document {} {}", id, filename);
             response.setStatus(HttpServletResponse.SC_NOT_FOUND);
             return;
         }
 
-        // parent image query
-        EntityQueryCriteria<E> crit = EntityQueryCriteria.create(fileClass);
-        crit.eq(crit.proto().blobKey(), key);
-        if (transientFile) {
-            // if parent image exists deny transient mode request
-            if (Persistence.service().exists(crit)) {
-                log.debug("no such document {} {}", key, filename);
-                response.setStatus(HttpServletResponse.SC_NOT_FOUND);
-                return;
-            }
-        } else {
+        if (!transientFile) {
             // ensure access allowed
-            E file = Persistence.secureRetrieve(crit);
+            EntityQueryCriteria<? extends IFile> crit = EntityQueryCriteria.create(blobEntry.fileClass);
+            crit.eq(crit.proto().blobKey(), key);
+            IFile file = Persistence.secureRetrieve(crit);
             if (file == null) {
                 log.debug("no such document {} {}", key, filename);
                 response.setStatus(HttpServletResponse.SC_NOT_FOUND);
@@ -136,4 +152,31 @@ public abstract class AbstractFileAccessServlet<E extends IFile, BLOB extends IF
         response.setContentType(blob.contentType().getValue());
         response.getOutputStream().write(blob.data().getValue());
     }
+
+    static class BlobEntry {
+        public final Class<? extends IFile> fileClass;
+
+        public final Class<? extends IFileBlob> blobClass;
+
+        BlobEntry(Class<? extends IFile> fileClass, Class<? extends IFileBlob> blobClass) {
+            this.fileClass = fileClass;
+            this.blobClass = blobClass;
+        }
+
+        @Override
+        public boolean equals(Object other) {
+            if (other instanceof BlobEntry) {
+                BlobEntry otherEntry = (BlobEntry) other;
+                return fileClass == otherEntry.fileClass && blobClass == otherEntry.blobClass;
+            } else {
+                return super.equals(other);
+            }
+        }
+
+        @Override
+        public int hashCode() {
+            return 31 * fileClass.hashCode() + blobClass.hashCode();
+        }
+    }
+
 }

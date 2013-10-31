@@ -20,6 +20,8 @@
  */
 package com.propertyvista.common.client;
 
+import com.google.gwt.core.client.GWT;
+
 import com.pyx4j.entity.shared.IFile;
 import com.pyx4j.gwt.shared.IFileURLBuilder;
 
@@ -27,10 +29,10 @@ import com.propertyvista.portal.rpc.DeploymentConsts;
 
 public class VistaFileURLBuilder<FILE extends IFile> implements IFileURLBuilder<FILE> {
 
-    private final String servletMapping;
+    private final String fileClassName;
 
-    public VistaFileURLBuilder(String servletMapping) {
-        this.servletMapping = servletMapping;
+    public VistaFileURLBuilder(Class<FILE> fileClass) {
+        fileClassName = fileClass.getName().substring(fileClass.getName().lastIndexOf(".") + 1);
     }
 
     @Override
@@ -43,6 +45,6 @@ public class VistaFileURLBuilder<FILE extends IFile> implements IFileURLBuilder<
     }
 
     protected String getUrl(String blobId, String fileName) {
-        return ClientNavigUtils.getDeploymentBaseURL() + servletMapping + blobId + "/" + fileName;
+        return GWT.getModuleBaseURL() + DeploymentConsts.FILE_SERVLET_MAPPING + fileClassName + "/" + blobId + "/" + fileName;
     }
 }

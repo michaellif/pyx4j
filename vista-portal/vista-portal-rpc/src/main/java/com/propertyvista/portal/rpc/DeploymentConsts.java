@@ -47,6 +47,7 @@ public interface DeploymentConsts {
 
     public static final String vistaEmployeeCookie = "vistaDoNotTrack";
 
-    public static final String TRANSIENT_FILE_PREF = "u:";
+    public static final String FILE_SERVLET_MAPPING = "file/";
 
+    public static final String TRANSIENT_FILE_PREF = "u:";
 }

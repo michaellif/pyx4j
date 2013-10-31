@@ -59,7 +59,6 @@ import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
 import com.propertyvista.dto.GuarantorDTO;
 import com.propertyvista.dto.LeaseParticipantDTO;
 import com.propertyvista.dto.TenantDTO;
-import com.propertyvista.portal.rpc.DeploymentConsts;
 import com.propertyvista.shared.config.VistaFeatures;
 
 public class LeaseParticipantForm<P extends LeaseParticipantDTO<?>> extends CrmEntityForm<P> {
@@ -132,7 +131,7 @@ public class LeaseParticipantForm<P extends LeaseParticipantDTO<?>> extends CrmE
 
         int row = -1;
         CImage<CustomerPicture> imageHolder = new CImage<CustomerPicture>(GWT.<CustomerPictureUploadService> create(CustomerPictureUploadService.class),
-                new ImageFileURLBuilder());
+                new VistaFileURLBuilder<CustomerPicture>(CustomerPicture.class));
         imageHolder.setImageSize(150, 200);
         imageHolder.setThumbnailPlaceholder(new Image(VistaImages.INSTANCE.profilePicture()));
 
@@ -226,11 +225,5 @@ public class LeaseParticipantForm<P extends LeaseParticipantDTO<?>> extends CrmE
         }));
 
         return main;
-    }
-
-    class ImageFileURLBuilder extends VistaFileURLBuilder<CustomerPicture> {
-        public ImageFileURLBuilder() {
-            super(DeploymentConsts.customerPictureServletMapping);
-        }
     }
 }

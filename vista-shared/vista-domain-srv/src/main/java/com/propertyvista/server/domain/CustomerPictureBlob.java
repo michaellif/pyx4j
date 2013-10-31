@@ -13,16 +13,10 @@
  */
 package com.propertyvista.server.domain;
 
-import com.pyx4j.entity.annotations.Length;
 import com.pyx4j.entity.annotations.RpcTransient;
-import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.i18n.annotations.I18n;
 
 @RpcTransient
 @I18n(strategy = I18n.I18nStrategy.IgnoreAll)
 public interface CustomerPictureBlob extends IFileBlob {
-
-    @RpcTransient
-    @Length(15 * 1024 * 1024)
-    IPrimitive<byte[]> data();
 }

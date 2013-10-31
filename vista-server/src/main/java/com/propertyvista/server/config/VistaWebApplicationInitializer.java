@@ -54,12 +54,11 @@ import com.propertyvista.pmsite.server.PMSiteFilter;
 import com.propertyvista.pmsite.server.PMSiteRobotsTxtFilter;
 import com.propertyvista.portal.server.portal.PublicMediaServlet;
 import com.propertyvista.portal.server.upload.ApplicationDocumentServlet;
-import com.propertyvista.portal.server.upload.CustomerPictureServlet;
 import com.propertyvista.portal.server.upload.EmployeeSignatureServlet;
-import com.propertyvista.portal.server.upload.InsuranceCertificateScanServlet;
 import com.propertyvista.portal.server.upload.LegalLetterDocumentServlet;
 import com.propertyvista.portal.server.upload.PmcDocumentServlet;
 import com.propertyvista.portal.server.upload.SiteImageResourceServlet;
+import com.propertyvista.portal.server.upload.VistaFileAccessServlet;
 import com.propertyvista.server.VistaUploadServlet;
 import com.propertyvista.server.ci.DBResetServlet;
 import com.propertyvista.server.ci.EnvLinksServlet;
@@ -223,8 +222,9 @@ public class VistaWebApplicationInitializer implements ServletContainerInitializ
                 sc.addMapping(urlPattern(VistaApplication.operations, "/pmc_document/*"));
             }
             {
-                ServletRegistration.Dynamic sc = ctx.addServlet("CustomerPictureServlet", CustomerPictureServlet.class);
-                sc.addMapping("/picture/*");
+                ServletRegistration.Dynamic sc = ctx.addServlet("VistaFileAccessServlet", VistaFileAccessServlet.class);
+                sc.addMapping(urlPattern(VistaApplication.crm, "/file/*"));
+                sc.addMapping(urlPattern(VistaApplication.portal, "/file/*"));
             }
             {
                 ServletRegistration.Dynamic sc = ctx.addServlet("LegalLetterDocumentServlet", LegalLetterDocumentServlet.class);
@@ -234,12 +234,6 @@ public class VistaWebApplicationInitializer implements ServletContainerInitializ
             {
                 ServletRegistration.Dynamic sc = ctx.addServlet("EmployeeSignatureServlet", EmployeeSignatureServlet.class);
                 sc.addMapping(urlPattern(VistaApplication.crm, "/employee_signature/*"));
-            }
-
-            {
-                ServletRegistration.Dynamic sc = ctx.addServlet("InsuranceCertificateScanServlet", InsuranceCertificateScanServlet.class);
-                sc.addMapping(urlPattern(VistaApplication.crm, "/certificate_scan/*"));
-                sc.addMapping(urlPattern(VistaApplication.portal, "/certificate_scan/*"));
             }
 
         }
