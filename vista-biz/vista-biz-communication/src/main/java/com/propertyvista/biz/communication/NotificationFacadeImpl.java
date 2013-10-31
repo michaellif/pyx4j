@@ -25,7 +25,7 @@ import com.propertyvista.domain.tenant.lease.Lease;
 
 public class NotificationFacadeImpl implements NotificationFacade {
 
-    private final ThreadLocal<NotificationsAggregator> aggregatorThreadLocal = new ThreadLocal<NotificationsAggregator>();
+    private static final ThreadLocal<NotificationsAggregator> aggregatorThreadLocal = new ThreadLocal<NotificationsAggregator>();
 
     private void aggregateOrSend(AbstractNotification notification) {
         NotificationsAggregator aggregator = aggregatorThreadLocal.get();
