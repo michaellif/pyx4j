@@ -50,6 +50,7 @@ import com.propertyvista.crm.client.ui.crud.lease.TenantInsuranceCertificateFold
 import com.propertyvista.domain.payment.LeasePaymentMethod;
 import com.propertyvista.domain.security.common.AbstractPmcUser;
 import com.propertyvista.domain.tenant.EmergencyContact;
+import com.propertyvista.domain.tenant.lease.LeaseTermParticipant.Role;
 import com.propertyvista.dto.PreauthorizedPaymentDTO;
 import com.propertyvista.dto.TenantDTO;
 import com.propertyvista.shared.config.VistaFeatures;
@@ -60,23 +61,27 @@ public class TenantForm extends LeaseParticipantForm<TenantDTO> {
 
     private Label noRequirementsLabel;
 
-    private final Tab autoPaymentsTab;
+    private final Tab paymentMethodsTab, autoPaymentsTab, insuranceTab;
 
     public TenantForm(IForm<TenantDTO> view) {
         super(TenantDTO.class, view);
 
         selectTab(addTab(createDetailsTab(i18n.tr("Details"))));
         addTab(createContactsTab(i18n.tr("Emergency Contacts")));
-        addTab(createPaymentMethodsTab(i18n.tr("Payment Methods")));
+        paymentMethodsTab = addTab(createPaymentMethodsTab(i18n.tr("Payment Methods")));
         autoPaymentsTab = addTab(createPreauthorizedPaymentsTab(i18n.tr("Auto Payments")));
-        addTab(createTenantInsuranceTab(i18n.tr("Insurance")));
+        insuranceTab = addTab(createTenantInsuranceTab(i18n.tr("Insurance")));
     }
 
     @Override
     protected void onValueSet(boolean populate) {
         super.onValueSet(populate);
 
-        setTabVisible(autoPaymentsTab, getValue().lease().status().getValue().isCurrent());
+        boolean financialVisibility = (getValue().lease().status().getValue().isCurrent() && getValue().role().getValue() != Role.Dependent);
+        setTabVisible(paymentMethodsTab, financialVisibility);
+        setTabVisible(autoPaymentsTab, financialVisibility);
+        setTabVisible(insuranceTab, financialVisibility);
+
         get(proto().preauthorizedPayments()).setEditable(!getValue().isMoveOutWithinNextBillingCycle().getValue(false));
 
         updateTenantInsuranceTabControls();
