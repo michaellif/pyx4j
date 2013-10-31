@@ -50,7 +50,6 @@ import com.propertyvista.crm.client.ui.crud.lease.TenantInsuranceCertificateFold
 import com.propertyvista.domain.payment.LeasePaymentMethod;
 import com.propertyvista.domain.security.common.AbstractPmcUser;
 import com.propertyvista.domain.tenant.EmergencyContact;
-import com.propertyvista.domain.tenant.lease.LeaseTermParticipant.Role;
 import com.propertyvista.dto.PreauthorizedPaymentDTO;
 import com.propertyvista.dto.TenantDTO;
 import com.propertyvista.shared.config.VistaFeatures;
@@ -77,7 +76,8 @@ public class TenantForm extends LeaseParticipantForm<TenantDTO> {
     protected void onValueSet(boolean populate) {
         super.onValueSet(populate);
 
-        boolean financialVisibility = (getValue().lease().status().getValue().isCurrent() && getValue().role().getValue() != Role.Dependent);
+        boolean financialVisibility = (getValue().lease().status().getValue().isCurrent() /* && getValue().role().getValue() != Role.Dependent */);
+
         setTabVisible(paymentMethodsTab, financialVisibility);
         setTabVisible(autoPaymentsTab, financialVisibility);
         setTabVisible(insuranceTab, financialVisibility);
@@ -135,6 +135,7 @@ public class TenantForm extends LeaseParticipantForm<TenantDTO> {
     private TwoColumnFlexFormPanel createTenantInsuranceTab(String title) {
         TwoColumnFlexFormPanel tabPanel = new TwoColumnFlexFormPanel(title);
         int row = -1;
+
         tabPanel.setH1(++row, 0, 2, i18n.tr("Requirements"));
         tabPanel.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().minimumRequiredLiability()), true).build());
         get(proto().minimumRequiredLiability()).setEditable(false);
@@ -145,6 +146,7 @@ public class TenantForm extends LeaseParticipantForm<TenantDTO> {
 
         tabPanel.setH1(++row, 0, 2, i18n.tr("Insurance Certificates"));
         tabPanel.setWidget(++row, 0, 2, inject(proto().insuranceCertificates(), new TenantInsuranceCertificateFolder(null)));
+
         return tabPanel;
     }
 
