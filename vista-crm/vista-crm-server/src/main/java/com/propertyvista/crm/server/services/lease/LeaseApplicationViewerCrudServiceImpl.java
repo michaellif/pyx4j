@@ -61,6 +61,15 @@ public class LeaseApplicationViewerCrudServiceImpl extends LeaseViewerCrudServic
     }
 
     @Override
+    protected void enhanceListRetrieved(Lease in, LeaseApplicationDTO dto) {
+        super.enhanceListRetrieved(in, dto);
+
+        Persistence.service().retrieveMember(dto.currentTerm().version().tenants());
+        Persistence.service().retrieveMember(dto.currentTerm().version().guarantors());
+        enhanceRetrievedCommon(in, dto);
+    }
+
+    @Override
     protected void enhanceRetrieved(Lease lease, LeaseApplicationDTO to, RetrieveTarget retrieveTarget) {
         super.enhanceRetrieved(lease, to, retrieveTarget);
         enhanceRetrievedCommon(lease, to);
@@ -78,6 +87,34 @@ public class LeaseApplicationViewerCrudServiceImpl extends LeaseViewerCrudServic
 
         to.masterApplicationStatus().set(
                 ServerSideFactory.create(OnlineApplicationFacade.class).calculateOnlineApplicationStatus(to.leaseApplication().onlineApplication()));
+    }
+
+    private void enhanceRetrievedCommon(Lease in, LeaseApplicationDTO dto) {
+        dto.numberOfOccupants().setValue(dto.currentTerm().version().tenants().size());
+        dto.numberOfGuarantors().setValue(dto.currentTerm().version().guarantors().size());
+        dto.numberOfApplicants().setValue(0);
+
+        for (LeaseTermTenant tenant : dto.currentTerm().version().tenants()) {
+            Persistence.service().retrieve(tenant.screening(), AttachLevel.ToStringMembers);
+
+            switch (tenant.role().getValue()) {
+            case Applicant:
+                dto.mainApplicant().set(tenant.leaseParticipant().customer());
+                dto.numberOfApplicants().setValue(dto.numberOfApplicants().getValue() + 1);
+                break;
+            case CoApplicant:
+                dto.numberOfApplicants().setValue(dto.numberOfApplicants().getValue() + 1);
+                break;
+            case Dependent:
+                if (dto.numberOfDepentands().isNull()) {
+                    dto.numberOfDepentands().setValue(0);
+                }
+                dto.numberOfDepentands().setValue(dto.numberOfDepentands().getValue() + 1);
+                break;
+            case Guarantor:
+                break;
+            }
+        }
     }
 
     private void loadLeaseParticipant(Lease lease, LeaseApplicationDTO dto, LeaseTermParticipant<? extends LeaseParticipant<?>> leaseParticipantId) {
@@ -154,40 +191,6 @@ public class LeaseApplicationViewerCrudServiceImpl extends LeaseViewerCrudServic
         }
 
         return tenantFinancial;
-    }
-
-    @Override
-    protected void enhanceListRetrieved(Lease in, LeaseApplicationDTO dto) {
-        super.enhanceListRetrieved(in, dto);
-        enhanceRetrievedCommon(in, dto);
-    }
-
-    private void enhanceRetrievedCommon(Lease in, LeaseApplicationDTO dto) {
-        dto.numberOfOccupants().setValue(dto.currentTerm().version().tenants().size());
-        dto.numberOfGuarantors().setValue(dto.currentTerm().version().guarantors().size());
-        dto.numberOfApplicants().setValue(0);
-
-        for (LeaseTermTenant tenant : dto.currentTerm().version().tenants()) {
-            Persistence.service().retrieve(tenant.screening(), AttachLevel.ToStringMembers);
-
-            switch (tenant.role().getValue()) {
-            case Applicant:
-                dto.mainApplicant().set(tenant.leaseParticipant().customer());
-                dto.numberOfApplicants().setValue(dto.numberOfApplicants().getValue() + 1);
-                break;
-            case CoApplicant:
-                dto.numberOfApplicants().setValue(dto.numberOfApplicants().getValue() + 1);
-                break;
-            case Dependent:
-                if (dto.numberOfDepentands().isNull()) {
-                    dto.numberOfDepentands().setValue(0);
-                }
-                dto.numberOfDepentands().setValue(dto.numberOfDepentands().getValue() + 1);
-                break;
-            case Guarantor:
-                break;
-            }
-        }
     }
 
     @Override
