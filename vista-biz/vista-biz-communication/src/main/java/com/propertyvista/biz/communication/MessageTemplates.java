@@ -443,9 +443,9 @@ public class MessageTemplates {
             emailBody = emailBody.replace("${buildingAddress}", building.info().address().getStringView());
 
             if (leaseIds.size() == 1) {
-                email.setSubject(i18n.tr("Auto Pay Review Required for lease {0}", lease));
+                email.setSubject(i18n.tr("Auto Pay Review Required for lease {0}, building {0}", lease, buildingName));
             } else {
-                email.setSubject(i18n.tr("Auto Pay Review Required for building {0}", building.info().name()));
+                email.setSubject(i18n.tr("Auto Pay Review Required for building {0}", buildingName));
             }
         }
 
@@ -497,9 +497,9 @@ public class MessageTemplates {
             emailBody = emailBody.replace("${buildingAddress}", building.info().address().getStringView());
 
             if (leaseIds.size() == 1) {
-                email.setSubject(i18n.tr("Auto Pay Cancelled for lease {0}", lease));
+                email.setSubject(i18n.tr("Auto Pay Cancelled for lease {0}, building {0}", lease, buildingName));
             } else {
-                email.setSubject(i18n.tr("Auto Pay Cancelled in building {0}", building.info().name()));
+                email.setSubject(i18n.tr("Auto Pay Cancelled in building {0}", buildingName));
             }
         }
 
@@ -548,7 +548,7 @@ public class MessageTemplates {
             emailBody = emailBody.replace("${buildingName}", buildingName);
             emailBody = emailBody.replace("${buildingAddress}", building.info().address().getStringView());
 
-            email.setSubject(i18n.tr("Auto Pay Cancelled by Resident for lease {0}", lease));
+            email.setSubject(i18n.tr("Auto Pay Cancelled by Resident for lease {0}, building {0}", lease, buildingName));
         }
 
         String crmUrl = VistaDeployment.getBaseApplicationURL(VistaDeployment.getCurrentPmc(), VistaApplication.crm, true);
