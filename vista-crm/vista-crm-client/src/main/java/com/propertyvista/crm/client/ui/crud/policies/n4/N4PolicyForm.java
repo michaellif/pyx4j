@@ -14,27 +14,32 @@
 package com.propertyvista.crm.client.ui.crud.policies.n4;
 
 import java.util.Arrays;
-import java.util.Comparator;
 import java.util.List;
 
+import com.google.gwt.dom.client.Style.FontStyle;
+import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.user.client.ui.FlowPanel;
+import com.google.gwt.user.client.ui.HasVerticalAlignment;
 import com.google.gwt.user.client.ui.IsWidget;
 
-import com.pyx4j.forms.client.ui.CEntityComboBox;
-import com.pyx4j.forms.client.ui.folder.EntityFolderColumnDescriptor;
-import com.pyx4j.forms.client.ui.folder.IFolderDecorator;
+import com.pyx4j.entity.shared.IObject;
+import com.pyx4j.forms.client.ui.CComboBox;
+import com.pyx4j.forms.client.ui.CComponent;
+import com.pyx4j.forms.client.ui.CEntityForm;
+import com.pyx4j.forms.client.ui.folder.IFolderItemDecorator;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.prime.form.IForm;
+import com.pyx4j.widgets.client.Label;
 import com.pyx4j.widgets.client.dialog.OkCancelDialog;
 
-import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
 import com.propertyvista.common.client.ui.components.editors.AddressSimpleEditor;
-import com.propertyvista.common.client.ui.components.folders.VistaTableFolder;
+import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
 import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
-import com.propertyvista.common.client.ui.decorations.VistaTableFolderDecorator;
+import com.propertyvista.common.client.ui.decorations.VistaBoxFolderItemDecorator;
 import com.propertyvista.crm.client.ui.crud.policies.common.PolicyDTOTabPanelBasedForm;
 import com.propertyvista.domain.financial.ARCode;
+import com.propertyvista.domain.financial.offering.YardiChargeCode;
 import com.propertyvista.domain.policy.dto.N4PolicyDTO;
 import com.propertyvista.domain.policy.dto.N4PolicyDTOARCodeHolderDTO;
 
@@ -42,38 +47,52 @@ public class N4PolicyForm extends PolicyDTOTabPanelBasedForm<N4PolicyDTO> {
 
     public static final I18n i18n = I18n.get(N4PolicyForm.class);
 
+    private ARCodeFolder arCodeFolder;
+
     public N4PolicyForm(IForm<N4PolicyDTO> view) {
         super(N4PolicyDTO.class, view);
+    }
+
+    public void setARCodeOptions(List<ARCode> arCodeOptions) {
+        arCodeFolder.setARCodeOptions(arCodeOptions);
     }
 
     @Override
     protected List<TwoColumnFlexFormPanel> createCustomTabPanels() {
 
         TwoColumnFlexFormPanel signaturePanel = new TwoColumnFlexFormPanel(i18n.tr("Signature"));
+        FlowPanel companyNameAndPhones = new FlowPanel();
         int row = -1;
         signaturePanel.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().includeSignature())).build());
         signaturePanel.setH1(++row, 0, 2, i18n.tr("The following information will be used for signing N4 letters:"));
-        signaturePanel.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().companyName())).build());
-        signaturePanel.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().phoneNumber())).build());
-        signaturePanel.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().faxNumber())).build());
-        signaturePanel.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().emailAddress())).build());
-        signaturePanel.setWidget(++row, 0, 2, inject(proto().mailingAddress(), new AddressSimpleEditor()));
+        companyNameAndPhones.add(new FormDecoratorBuilder(inject(proto().companyName())).build());
+        companyNameAndPhones.add(new FormDecoratorBuilder(inject(proto().phoneNumber())).build());
+        companyNameAndPhones.add(new FormDecoratorBuilder(inject(proto().faxNumber())).build());
+        companyNameAndPhones.add(new FormDecoratorBuilder(inject(proto().emailAddress())).build());
+        signaturePanel.setWidget(++row, 0, 1, companyNameAndPhones);
+        signaturePanel.getFlexCellFormatter().setVerticalAlignment(row, 0, HasVerticalAlignment.ALIGN_TOP);
+
+        AddressSimpleEditor addressSimpleEditor = new AddressSimpleEditor();
+        row = 1;
+        signaturePanel.setWidget(++row, 1, 1, inject(proto().mailingAddress(), addressSimpleEditor));
 
         TwoColumnFlexFormPanel arCodesPanel = new TwoColumnFlexFormPanel(i18n.tr("AR Codes"));
         row = -1;
-        arCodesPanel.setH1(++row, 0, 2, i18n.tr("AR Codes used to search for delinquent leases:"));
-        arCodesPanel.setWidget(++row, 0, 2, inject(proto().arCodes(), new ARCodeFolder()));
+        arCodesPanel.setH1(++row, 0, 2, i18n.tr("Use the following AR Codes for calculation of charged vs. owed rent amount:"));
+        arCodesPanel.setWidget(++row, 0, 2, inject(proto().arCodes(), arCodeFolder = new ARCodeFolder()));
 
         TwoColumnFlexFormPanel deliveryPanel = new TwoColumnFlexFormPanel(i18n.tr("Delivery"));
         row = -1;
-        deliveryPanel.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().handDeliveryAdvanceDays())).build());
-        deliveryPanel.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().mailDeliveryAdvanceDays())).build());
-        deliveryPanel.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().courierDeliveryAdvanceDays())).build());
+        deliveryPanel.setWidget(++row, 0, 1, new FormDecoratorBuilder(inject(proto().handDeliveryAdvanceDays())).build());
+        deliveryPanel.setWidget(++row, 0, 1, new FormDecoratorBuilder(inject(proto().mailDeliveryAdvanceDays())).build());
+        deliveryPanel.setWidget(++row, 0, 1, new FormDecoratorBuilder(inject(proto().courierDeliveryAdvanceDays())).build());
 
         return Arrays.asList(signaturePanel, arCodesPanel, deliveryPanel);
     }
 
-    public static class ARCodeFolder extends VistaTableFolder<N4PolicyDTOARCodeHolderDTO> {
+    public static class ARCodeFolder extends VistaBoxFolder<N4PolicyDTOARCodeHolderDTO> {
+
+        private List<ARCode> arCodeOptions;
 
         public ARCodeFolder() {
             super(N4PolicyDTOARCodeHolderDTO.class);
@@ -81,24 +100,28 @@ public class N4PolicyForm extends PolicyDTOTabPanelBasedForm<N4PolicyDTO> {
             setViewable(true);
         }
 
-        @Override
-        public List<EntityFolderColumnDescriptor> columns() {
-            return Arrays.asList(//@formatter:off
-                    new EntityFolderColumnDescriptor(proto().arCode(), "280px")
-            );//@formatter:on
+        public void setARCodeOptions(List<ARCode> arCodeOptions) {
+            this.arCodeOptions = arCodeOptions;
         }
 
         @Override
-        protected IFolderDecorator<N4PolicyDTOARCodeHolderDTO> createFolderDecorator() {
-            VistaTableFolderDecorator d = (VistaTableFolderDecorator) super.createFolderDecorator();
-            d.setShowHeader(false);
-            d.setHeaderVisible(false);
+        public CComponent<?> create(IObject<?> member) {
+            if (member instanceof N4PolicyDTOARCodeHolderDTO) {
+                return new N4PolicyDTOARCodeHolderForm(null, false);
+            }
+            return super.create(member);
+        }
+
+        @Override
+        public IFolderItemDecorator<N4PolicyDTOARCodeHolderDTO> createItemDecorator() {
+            VistaBoxFolderItemDecorator<N4PolicyDTOARCodeHolderDTO> d = (VistaBoxFolderItemDecorator<N4PolicyDTOARCodeHolderDTO>) super.createItemDecorator();
+            d.setCollapsible(false);
             return d;
         }
 
         @Override
         protected void addItem() {
-            new N4PolicyDTOARCodeHolderFormDialog() {
+            new N4PolicyDTOARCodeHolderFormDialog(arCodeOptions) {
                 @Override
                 public boolean onClickOk() {
                     if (super.onClickOk()) {
@@ -117,9 +140,9 @@ public class N4PolicyForm extends PolicyDTOTabPanelBasedForm<N4PolicyDTO> {
 
         private final N4PolicyDTOARCodeHolderForm form;
 
-        public N4PolicyDTOARCodeHolderFormDialog() {
+        public N4PolicyDTOARCodeHolderFormDialog(List<ARCode> codeOptions) {
             super(i18n.tr("Select AR Code"));
-            form = new N4PolicyDTOARCodeHolderForm();
+            form = new N4PolicyDTOARCodeHolderForm(codeOptions, true);
             form.initContent();
             form.populateNew();
             setBody(form);
@@ -136,30 +159,73 @@ public class N4PolicyForm extends PolicyDTOTabPanelBasedForm<N4PolicyDTO> {
         }
     }
 
-    public static class N4PolicyDTOARCodeHolderForm extends CEntityDecoratableForm<N4PolicyDTOARCodeHolderDTO> {
+    public static class N4PolicyDTOARCodeHolderForm extends CEntityForm<N4PolicyDTOARCodeHolderDTO> {
 
-        public N4PolicyDTOARCodeHolderForm() {
+        private CComboBox<ARCode> arCodeBox;
+
+        private final boolean inlineARCodes;
+
+        private Label yardiChargeCodesLabel;
+
+        public N4PolicyDTOARCodeHolderForm(List<ARCode> codeOptions, final boolean inlineARCodes) {
             super(N4PolicyDTOARCodeHolderDTO.class);
+            this.inlineARCodes = inlineARCodes;
+            this.arCodeBox = new CComboBox<ARCode>() {
+                @Override
+                public String getItemName(ARCode o) {
+                    if (o == null) {
+                        return super.getItemName(o);
+                    }
+                    return o.getStringView()
+                            + (o.yardiChargeCodes().isEmpty() | !inlineARCodes ? "" : " "
+                                    + i18n.tr("(Yardi charge codes: {0})", yardiChargeCodesLabel(o.yardiChargeCodes())));
+                }
+            };
+            this.arCodeBox.setOptions(codeOptions);
+            this.yardiChargeCodesLabel = new Label();
+            this.yardiChargeCodesLabel.getElement().getStyle().setPaddingLeft(4, Unit.EM);
+            this.yardiChargeCodesLabel.getElement().getStyle().setFontStyle(FontStyle.ITALIC);
         }
 
         @Override
         public IsWidget createContent() {
             FlowPanel panel = new FlowPanel();
-            CEntityComboBox<ARCode> arCodeBox = new CEntityComboBox<ARCode>(ARCode.class);
-            arCodeBox.setOptionsComparator(new Comparator<ARCode>() {
-                @Override
-                public int compare(ARCode o1, ARCode o2) {
-                    if (o1 == null) {
-                        return o2 != null ? -1 : 0;
-                    }
-                    return o1.getStringView().compareTo(o2.getStringView());
-                }
-            });
-
             panel.add(inject(proto().arCode(), arCodeBox));
-
+            panel.add(yardiChargeCodesLabel);
             return panel;
         }
 
+        @Override
+        protected void onValueSet(boolean populate) {
+            super.onValueSet(populate);
+            if (!inlineARCodes && !getValue().arCode().yardiChargeCodes().isEmpty()) {
+                yardiChargeCodesLabel.setVisible(true);
+                yardiChargeCodesLabel.setText(i18n.tr("Warning! Includes the following Yardi charge codes: {0}", yardiChargeCodesLabel(getValue().arCode()
+                        .yardiChargeCodes())));
+            } else {
+                yardiChargeCodesLabel.setVisible(false);
+                yardiChargeCodesLabel.setText("");
+            }
+        }
+
+        public void setArCodeOptions(List<ARCode> arCodes) {
+            arCodeBox.setOptions(arCodes);
+        }
+
+        private static String yardiChargeCodesLabel(List<YardiChargeCode> yardiChargeCodes) {
+            StringBuilder builder = new StringBuilder();
+
+            int last = yardiChargeCodes.size();
+            int current = 1;
+            for (YardiChargeCode chargeCode : yardiChargeCodes) {
+                builder.append(chargeCode.getStringView());
+                if (current != last) {
+                    builder.append(", ");
+                }
+                current += 1;
+            }
+            return builder.toString();
+        }
     }
+
 }

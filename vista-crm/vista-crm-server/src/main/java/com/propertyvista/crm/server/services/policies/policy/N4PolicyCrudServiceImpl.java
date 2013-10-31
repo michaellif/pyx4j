@@ -13,7 +13,13 @@
  */
 package com.propertyvista.crm.server.services.policies.policy;
 
+import java.util.Vector;
+
+import com.google.gwt.user.client.rpc.AsyncCallback;
+
+import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 
 import com.propertyvista.crm.rpc.services.policies.policy.N4PolicyCrudService;
 import com.propertyvista.crm.server.services.policies.GenericPolicyCrudService;
@@ -30,7 +36,6 @@ public class N4PolicyCrudServiceImpl extends GenericPolicyCrudService<N4Policy, 
 
     @Override
     protected void save(N4Policy bo, N4PolicyDTO to) {
-        bo.relevantARCodes().clear();
         for (N4PolicyDTOARCodeHolderDTO arCodeHolder : to.arCodes()) {
             bo.relevantARCodes().add(arCodeHolder.arCode());
         }
@@ -38,13 +43,19 @@ public class N4PolicyCrudServiceImpl extends GenericPolicyCrudService<N4Policy, 
     }
 
     @Override
-    protected void enhanceRetrieved(N4Policy bo, N4PolicyDTO to, RetrieveTarget retrieveTarget) {
-        to.arCodes().clear();
+    public void getARCodeOptions(AsyncCallback<Vector<ARCode>> callback) {
+        Vector<ARCode> holders = new Vector<ARCode>(Persistence.secureQuery(EntityQueryCriteria.create(ARCode.class)));
+        callback.onSuccess(holders);
+    }
+
+    @Override
+    protected void enhanceRetrieved(N4Policy bo, N4PolicyDTO to, com.pyx4j.entity.rpc.AbstractCrudService.RetrieveTarget retrieveTarget) {
         for (ARCode arCode : bo.relevantARCodes()) {
             N4PolicyDTOARCodeHolderDTO codeHolder = EntityFactory.create(N4PolicyDTOARCodeHolderDTO.class);
             codeHolder.arCode().set(arCode.duplicate());
             to.arCodes().add(codeHolder);
         }
+        super.enhanceRetrieved(bo, to, retrieveTarget);
     }
 
 }

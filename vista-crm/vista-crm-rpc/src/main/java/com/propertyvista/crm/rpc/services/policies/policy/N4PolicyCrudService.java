@@ -13,8 +13,14 @@
  */
 package com.propertyvista.crm.rpc.services.policies.policy;
 
+import java.util.Vector;
+
+import com.google.gwt.user.client.rpc.AsyncCallback;
+
+import com.propertyvista.domain.financial.ARCode;
 import com.propertyvista.domain.policy.dto.N4PolicyDTO;
 
 public interface N4PolicyCrudService extends AbstractPolicyCrudService<N4PolicyDTO> {
 
+    void getARCodeOptions(AsyncCallback<Vector<ARCode>> callback);
 }

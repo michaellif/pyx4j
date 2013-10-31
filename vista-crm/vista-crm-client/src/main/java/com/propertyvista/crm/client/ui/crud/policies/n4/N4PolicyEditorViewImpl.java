@@ -13,7 +13,10 @@
  */
 package com.propertyvista.crm.client.ui.crud.policies.n4;
 
+import java.util.List;
+
 import com.propertyvista.crm.client.ui.crud.policies.common.PolicyEditorViewImplBase;
+import com.propertyvista.domain.financial.ARCode;
 import com.propertyvista.domain.policy.dto.N4PolicyDTO;
 
 public class N4PolicyEditorViewImpl extends PolicyEditorViewImplBase<N4PolicyDTO> implements N4PolicyEditorView {
@@ -21,4 +24,9 @@ public class N4PolicyEditorViewImpl extends PolicyEditorViewImplBase<N4PolicyDTO
     public N4PolicyEditorViewImpl() {
         setForm(new N4PolicyForm(this));
     }
+
+    @Override
+    public void setARCodeOptions(List<ARCode> arCodeOptions) {
+        ((N4PolicyForm) getForm()).setARCodeOptions(arCodeOptions);
+    };
 }

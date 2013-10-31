@@ -13,14 +13,18 @@
  */
 package com.propertyvista.crm.client.activity.policies.n4;
 
+import java.util.Vector;
+
 import com.google.gwt.core.client.GWT;
 
+import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.site.rpc.CrudAppPlace;
 
 import com.propertyvista.crm.client.CrmSite;
 import com.propertyvista.crm.client.activity.policies.common.PolicyEditorActivityBase;
 import com.propertyvista.crm.client.ui.crud.policies.n4.N4PolicyEditorView;
 import com.propertyvista.crm.rpc.services.policies.policy.N4PolicyCrudService;
+import com.propertyvista.domain.financial.ARCode;
 import com.propertyvista.domain.policy.dto.N4PolicyDTO;
 
 public class N4PolicyEditorActivity extends PolicyEditorActivityBase<N4PolicyDTO> implements N4PolicyEditorView.Presenter {
@@ -30,4 +34,14 @@ public class N4PolicyEditorActivity extends PolicyEditorActivityBase<N4PolicyDTO
                 N4PolicyDTO.class);
     }
 
+    @Override
+    public void onPopulateSuccess(final N4PolicyDTO result) {
+        GWT.<N4PolicyCrudService> create(N4PolicyCrudService.class).getARCodeOptions(new DefaultAsyncCallback<Vector<ARCode>>() {
+            @Override
+            public void onSuccess(Vector<ARCode> arCodeOptions) {
+                ((N4PolicyEditorView) getView()).setARCodeOptions(arCodeOptions);
+                N4PolicyEditorActivity.super.onPopulateSuccess(result);
+            }
+        });
+    }
 }

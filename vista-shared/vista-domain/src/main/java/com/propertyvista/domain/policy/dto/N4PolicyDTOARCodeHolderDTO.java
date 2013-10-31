@@ -25,4 +25,5 @@ public interface N4PolicyDTOARCodeHolderDTO extends IEntity {
 
     @NotNull
     ARCode arCode();
+
 }
