@@ -21,8 +21,10 @@
 package com.propertyvista.biz.legal;
 
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Set;
 
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.config.server.ServerSideFactory;
@@ -33,6 +35,7 @@ import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.propertyvista.biz.financial.ar.ARFacade;
 import com.propertyvista.domain.financial.ARCode;
 import com.propertyvista.domain.financial.BillingAccount;
+import com.propertyvista.domain.financial.billing.BillingCycle;
 import com.propertyvista.domain.financial.billing.InvoiceDebit;
 
 public class InternalBillingInvoiceDebitFetcherImpl implements InvoiceDebitFetcher {
@@ -43,10 +46,14 @@ public class InternalBillingInvoiceDebitFetcherImpl implements InvoiceDebitFetch
 
         List<InvoiceDebit> outstandingDebits = ServerSideFactory.create(ARFacade.class).getNotCoveredDebitInvoiceLineItems(billingAccount);
 
+        Set<BillingCycle> outsandingBillingCycles = new HashSet<BillingCycle>();
         List<InvoiceDebit> debitsOfOutstandingBillingCycles = new LinkedList<InvoiceDebit>();
         for (InvoiceDebit outstandingDebit : outstandingDebits) {
+            outsandingBillingCycles.add(outstandingDebit.billingCycle());
+        }
+        for (BillingCycle outstandingBillingCycle : outsandingBillingCycles) {
             EntityQueryCriteria<InvoiceDebit> criteria = EntityQueryCriteria.create(InvoiceDebit.class);
-            criteria.eq(criteria.proto().billingCycle(), outstandingDebit.billingCycle());
+            criteria.eq(criteria.proto().billingCycle(), outstandingBillingCycle);
             criteria.eq(criteria.proto().billingAccount(), billingAccount);
             debitsOfOutstandingBillingCycles.addAll(Persistence.service().query(criteria));
         }
