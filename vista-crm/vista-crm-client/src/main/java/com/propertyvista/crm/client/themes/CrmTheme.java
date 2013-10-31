@@ -711,6 +711,7 @@ public class CrmTheme extends VistaTheme {
 
         style = new Style("." + BulkOperationToolViewImpl.Styles.BulkOperationSettingsFormPanel.name());
         style.addProperty("height", "150px");
+        style.addProperty("overflow", "auto");
         addStyle(style);
 
         style = new Style("." + BulkOperationToolViewImpl.Styles.BulkOperationButtonsPanel.name());

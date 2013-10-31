@@ -42,7 +42,7 @@ public class N4DownloadToolServiceImpl implements N4DownloadToolService {
         EntityQueryCriteria<N4LegalLetter> criteria = EntityQueryCriteria.create(N4LegalLetter.class);
         criteria.eq(criteria.proto().generatedOn(), settings.selectedGeneration().generatedOn());
 
-        List<N4LegalLetter> n4LegalLetters = Persistence.service().query(criteria);
+        List<N4LegalLetter> n4LegalLetters = Persistence.secureQuery(criteria);
         Vector<LegalNoticeCandidateDTO> legalNoticesDto = new Vector<LegalNoticeCandidateDTO>();
 
         for (N4LegalLetter n4LegalLetter : n4LegalLetters) {
@@ -64,7 +64,7 @@ public class N4DownloadToolServiceImpl implements N4DownloadToolService {
 
         N4LegalLetter lastGenerationRepresentative = null;
 
-        ICursorIterator<N4LegalLetter> iterator = Persistence.service().query(null, criteria, AttachLevel.Attached);
+        ICursorIterator<N4LegalLetter> iterator = Persistence.secureQuery(null, criteria, AttachLevel.Attached);
 
         Vector<N4GenerationDTO> generations = new Vector<N4GenerationDTO>();
         while (iterator.hasNext()) {

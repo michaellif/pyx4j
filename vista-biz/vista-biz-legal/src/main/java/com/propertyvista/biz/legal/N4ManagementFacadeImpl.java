@@ -81,7 +81,7 @@ public class N4ManagementFacadeImpl implements N4ManagementFacade {
         criteria.asc(criteria.proto().unit().building().propertyCode());
         criteria.asc(criteria.proto().unit().info().number());
 
-        List<Lease> leases = Persistence.service().query(criteria);
+        List<Lease> leases = Persistence.secureQuery(criteria);
 
         List<LegalNoticeCandidate> candidates = new LinkedList<LegalNoticeCandidate>();
         LogicalDate today = SystemDateManager.getLogicalDate();

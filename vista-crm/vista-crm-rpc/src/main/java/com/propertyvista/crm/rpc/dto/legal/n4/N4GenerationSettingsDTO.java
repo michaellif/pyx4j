@@ -23,6 +23,7 @@ import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
 
+import com.propertyvista.domain.company.Portfolio;
 import com.propertyvista.domain.property.asset.building.Building;
 
 @Transient
@@ -33,6 +34,10 @@ public interface N4GenerationSettingsDTO extends IEntity {
     IPrimitive<Boolean> filterByBuildings();
 
     IList<Building> buildings();
+
+    IPrimitive<Boolean> filterByPortfolios();
+
+    IList<Portfolio> portfolios();
 
     @Caption(name = "Amount Owed >")
     @Editor(type = EditorType.money)

@@ -184,6 +184,7 @@ import com.propertyvista.domain.financial.billing.LeaseAgingBuckets;
 import com.propertyvista.domain.financial.offering.Concession;
 import com.propertyvista.domain.financial.offering.Feature;
 import com.propertyvista.domain.financial.offering.Service;
+import com.propertyvista.domain.legal.N4LegalLetter;
 import com.propertyvista.domain.maintenance.MaintenanceRequest;
 import com.propertyvista.domain.policy.policies.EmailTemplatesPolicy;
 import com.propertyvista.domain.property.asset.Boiler;
@@ -579,6 +580,8 @@ public class VistaCrmAccessControlList extends ServletContainerAclBuilder {
         grant(VistaDataAccessBehavior.BuildingsAssigned, new PaymentRecordDatasetAccessRule(), PaymentRecord.class);
         grant(VistaDataAccessBehavior.BuildingsAssigned, new BillingCycleDatasetAccessRule(), BillingCycle.class);
         grant(VistaDataAccessBehavior.BuildingsAssigned, new BillingAccountDatasetAccessRule(), BillingAccount.class);
+
+        grant(VistaDataAccessBehavior.BuildingsAssigned, new N4LegalLetterDatasetAccessRule(), N4LegalLetter.class);
 
         freeze();
     }

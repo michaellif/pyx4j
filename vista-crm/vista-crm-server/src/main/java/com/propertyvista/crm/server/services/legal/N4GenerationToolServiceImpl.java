@@ -13,7 +13,10 @@
  */
 package com.propertyvista.crm.server.services.legal;
 
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.Vector;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
@@ -39,9 +42,11 @@ import com.propertyvista.crm.rpc.dto.legal.n4.N4GenerationSettingsDTO;
 import com.propertyvista.crm.rpc.services.legal.N4GenerationToolService;
 import com.propertyvista.crm.server.util.CrmAppContext;
 import com.propertyvista.domain.company.Employee;
+import com.propertyvista.domain.company.Portfolio;
 import com.propertyvista.domain.legal.LegalNoticeCandidate;
 import com.propertyvista.domain.policy.framework.OrganizationPoliciesNode;
 import com.propertyvista.domain.policy.policies.N4Policy;
+import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.server.common.util.AddressConverter;
 import com.propertyvista.server.common.util.AddressRetriever;
@@ -54,15 +59,22 @@ public class N4GenerationToolServiceImpl implements N4GenerationToolService {
     public void getItems(AsyncCallback<Vector<LegalNoticeCandidateDTO>> callback, N4GenerationSettingsDTO settings) {
         assertN4PolicyIsSet();
 
-        List<LegalNoticeCandidate> n4Candidates = ServerSideFactory.create(N4ManagementFacade.class).getN4Candidates(settings.minAmountOwed().getValue(),
-                settings.buildings());
+        List<Building> buildingsFilter = queryBuildingsFilter(settings);
 
-        Vector<LegalNoticeCandidateDTO> dtoCandidates = new Vector<LegalNoticeCandidateDTO>(n4Candidates.size());
-        for (LegalNoticeCandidate candidate : n4Candidates) {
-            dtoCandidates.add(makeLegalNoticeCandidateDto(candidate));
+        if (!buildingsFilter.isEmpty()) {
+            List<LegalNoticeCandidate> n4Candidates = ServerSideFactory.create(N4ManagementFacade.class).getN4Candidates(settings.minAmountOwed().getValue(),
+                    buildingsFilter);
+
+            Vector<LegalNoticeCandidateDTO> dtoCandidates = new Vector<LegalNoticeCandidateDTO>(n4Candidates.size());
+            for (LegalNoticeCandidate candidate : n4Candidates) {
+                dtoCandidates.add(makeLegalNoticeCandidateDto(candidate));
+            }
+
+            callback.onSuccess(dtoCandidates);
+
+        } else {
+            callback.onSuccess(new Vector<LegalNoticeCandidateDTO>());
         }
-
-        callback.onSuccess(dtoCandidates);
     }
 
     @Override
@@ -115,4 +127,30 @@ public class N4GenerationToolServiceImpl implements N4GenerationToolService {
         }
     }
 
+    private List<Building> queryBuildingsFilter(N4GenerationSettingsDTO settings) {
+        Set<Building> buildingsFilter = new HashSet<Building>();
+        if (!settings.filterByBuildings().isBooleanTrue() && !settings.filterByPortfolios().isBooleanTrue()) {
+            buildingsFilter.addAll(Persistence.secureQuery(EntityQueryCriteria.create(Building.class)));
+        }
+        if (settings.filterByBuildings().isBooleanTrue()) {
+            Portfolio virtualPortfolio = EntityFactory.create(Portfolio.class);
+            virtualPortfolio.buildings().addAll(settings.buildings());
+            settings.filterByPortfolios().setValue(true);
+            settings.portfolios().add(virtualPortfolio);
+        }
+        if (settings.filterByPortfolios().isBooleanTrue()) {
+            for (Portfolio portfolio : settings.portfolios()) {
+                if (portfolio.isValueDetached()) {
+                    portfolio = Persistence.service().retrieve(Portfolio.class, portfolio.getPrimaryKey());
+                }
+                if (!portfolio.buildings().isEmpty()) {
+                    EntityQueryCriteria<Building> criteria = EntityQueryCriteria.create(Building.class);
+                    criteria.in(criteria.proto().id(), portfolio.buildings());
+                    buildingsFilter.addAll(Persistence.secureQuery(criteria));
+                }
+            }
+        }
+        return new ArrayList<Building>(buildingsFilter);
+
+    }
 }
