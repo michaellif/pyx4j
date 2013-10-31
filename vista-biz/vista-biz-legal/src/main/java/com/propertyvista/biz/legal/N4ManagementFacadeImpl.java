@@ -69,7 +69,7 @@ public class N4ManagementFacadeImpl implements N4ManagementFacade {
 
         N4Policy n4policy = ServerSideFactory.create(PolicyFacade.class).obtainEffectivePolicy(EntityFactory.create(OrganizationPoliciesNode.class),
                 N4Policy.class);
-        HashSet<ARCode> acceptableArCodes = new HashSet<ARCode>(n4policy.relevantArCodes());
+        HashSet<ARCode> acceptableArCodes = new HashSet<ARCode>(n4policy.relevantARCodes());
 
         EntityQueryCriteria<Lease> criteria = EntityQueryCriteria.create(Lease.class);
         criteria.in(criteria.proto().status(), Lease.Status.active());
@@ -142,7 +142,7 @@ public class N4ManagementFacadeImpl implements N4ManagementFacade {
         }
 
         for (Lease leaseId : delinquentLeases) {
-            issueN4ForLease(leaseId, n4LandLordsData, noticeDate, terminationDateAdvanceDays, new HashSet<ARCode>(n4policy.relevantArCodes()), generationTime);
+            issueN4ForLease(leaseId, n4LandLordsData, noticeDate, terminationDateAdvanceDays, new HashSet<ARCode>(n4policy.relevantARCodes()), generationTime);
             progress.set(progress.get() + 1);
         }
 

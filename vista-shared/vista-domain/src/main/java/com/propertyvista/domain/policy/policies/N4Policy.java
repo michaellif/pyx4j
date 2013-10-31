@@ -53,7 +53,7 @@ public interface N4Policy extends Policy {
 
     @RpcTransient
     @Detached(level = AttachLevel.ToStringMembers)
-    IList<ARCode> relevantArCodes();
+    IList<ARCode> relevantARCodes();
 
     @NotNull
     IPrimitive<Integer> handDeliveryAdvanceDays();

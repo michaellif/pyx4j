@@ -122,7 +122,7 @@ public class N4GenerationToolServiceImpl implements N4GenerationToolService {
         N4Policy policy = ServerSideFactory.create(PolicyFacade.class).obtainEffectivePolicy(EntityFactory.create(OrganizationPoliciesNode.class),
                 N4Policy.class);
 
-        if (policy.relevantArCodes().isEmpty()) {
+        if (policy.relevantARCodes().isEmpty()) {
             throw new UserRuntimeException("N4 Policy has no AR Code settings. Please set up AR Codes in N4 policy!");
         }
     }

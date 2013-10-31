@@ -13,10 +13,6 @@
  */
 package com.propertyvista.crm.server.services.policies.policy;
 
-import com.google.gwt.user.client.rpc.AsyncCallback;
-
-import com.pyx4j.commons.Key;
-import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
 
 import com.propertyvista.crm.rpc.services.policies.policy.N4PolicyCrudService;
@@ -34,33 +30,21 @@ public class N4PolicyCrudServiceImpl extends GenericPolicyCrudService<N4Policy, 
 
     @Override
     protected void save(N4Policy bo, N4PolicyDTO to) {
+        bo.relevantARCodes().clear();
         for (N4PolicyDTOARCodeHolderDTO arCodeHolder : to.arCodes()) {
-            // TODO the following horrible code is a workaround agains something that VladS broke in intestines of his framework couple of days ago:
-            // to.relevantArCodes().add(arCodeHolder.arCode().<ARCode> createIdentityStub());
-            bo.relevantArCodes().add(Persistence.service().retrieve(ARCode.class, arCodeHolder.arCode().getPrimaryKey()));
+            bo.relevantARCodes().add(arCodeHolder.arCode());
         }
         super.save(bo, to);
     }
 
     @Override
-    public void retrieve(final AsyncCallback<N4PolicyDTO> callback, Key entityId, com.pyx4j.entity.rpc.AbstractCrudService.RetrieveTarget retrieveTarget) {
-        super.retrieve(new AsyncCallback<N4PolicyDTO>() {
-
-            @Override
-            public void onSuccess(N4PolicyDTO result) {
-                for (ARCode arCode : result.relevantArCodes()) {
-                    N4PolicyDTOARCodeHolderDTO codeHolder = EntityFactory.create(N4PolicyDTOARCodeHolderDTO.class);
-                    codeHolder.arCode().set(arCode.duplicate());
-                    result.arCodes().add(codeHolder);
-                }
-                callback.onSuccess(result);
-            }
-
-            @Override
-            public void onFailure(Throwable caught) {
-                callback.onFailure(caught);
-            }
-
-        }, entityId, retrieveTarget);
+    protected void enhanceRetrieved(N4Policy bo, N4PolicyDTO to, RetrieveTarget retrieveTarget) {
+        to.arCodes().clear();
+        for (ARCode arCode : bo.relevantARCodes()) {
+            N4PolicyDTOARCodeHolderDTO codeHolder = EntityFactory.create(N4PolicyDTOARCodeHolderDTO.class);
+            codeHolder.arCode().set(arCode.duplicate());
+            to.arCodes().add(codeHolder);
+        }
     }
+
 }
