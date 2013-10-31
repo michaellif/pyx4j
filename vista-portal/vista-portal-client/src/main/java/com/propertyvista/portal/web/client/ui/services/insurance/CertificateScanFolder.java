@@ -21,7 +21,7 @@ import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.ui.CFile;
 import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
-import com.pyx4j.gwt.shared.FileURLBuilder;
+import com.pyx4j.gwt.shared.IFileURLBuilder;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.common.client.ui.components.MediaUtils;
@@ -65,7 +65,7 @@ public class CertificateScanFolder extends VistaBoxFolder<InsuranceCertificateDo
                     new FormWidgetDecoratorBuilder(inject(proto().scan(),
                             new CFile<InsuranceCertificateScan>(
                                     GWT.<InsuranceCertificateScanUploadService> create(InsuranceCertificateScanUploadService.class),
-                                    new FileURLBuilder<InsuranceCertificateScan>() {
+                                    new IFileURLBuilder<InsuranceCertificateScan>() {
 
                                         @Override
                                         public String getUrl(InsuranceCertificateScan file) {

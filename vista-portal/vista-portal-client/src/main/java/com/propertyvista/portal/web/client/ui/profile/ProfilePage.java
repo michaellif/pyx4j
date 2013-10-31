@@ -28,14 +28,14 @@ import com.pyx4j.forms.client.ui.CImage;
 import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
 import com.pyx4j.forms.client.validators.ValidationError;
-import com.pyx4j.gwt.shared.FileURLBuilder;
 import com.pyx4j.i18n.shared.I18n;
 
+import com.propertyvista.common.client.VistaFileURLBuilder;
 import com.propertyvista.common.client.resources.VistaImages;
-import com.propertyvista.common.client.ui.components.MediaUtils;
 import com.propertyvista.domain.person.Name;
 import com.propertyvista.domain.tenant.CustomerPicture;
 import com.propertyvista.domain.tenant.EmergencyContact;
+import com.propertyvista.portal.rpc.DeploymentConsts;
 import com.propertyvista.portal.rpc.portal.web.dto.ResidentProfileDTO;
 import com.propertyvista.portal.rpc.portal.web.services.ResidentPictureUploadService;
 import com.propertyvista.portal.web.client.themes.EntityViewTheme;
@@ -58,7 +58,7 @@ public class ProfilePage extends CPortalEntityEditor<ResidentProfileDTO> {
         int row = -1;
 
         CImage<CustomerPicture> imageHolder = new CImage<CustomerPicture>(GWT.<ResidentPictureUploadService> create(ResidentPictureUploadService.class),
-                new ImageFileURLBuilder());
+                new VistaFileURLBuilder<CustomerPicture>(DeploymentConsts.customerPictureServletMapping));
         imageHolder.setImageSize(150, 200);
         imageHolder.setThumbnailPlaceholder(new Image(VistaImages.INSTANCE.profilePicture()));
 
@@ -125,10 +125,9 @@ public class ProfilePage extends CPortalEntityEditor<ResidentProfileDTO> {
         });
     }
 
-    class ImageFileURLBuilder implements FileURLBuilder<CustomerPicture> {
-        @Override
-        public String getUrl(CustomerPicture pic) {
-            return MediaUtils.createCustomerPictureUrl(pic);
+    class ImageFileURLBuilder extends VistaFileURLBuilder<CustomerPicture> {
+        public ImageFileURLBuilder() {
+            super(DeploymentConsts.customerPictureServletMapping);
         }
     }
 }

@@ -1,0 +1,139 @@
+/*
+ * (C) Copyright Property Vista Software Inc. 2011-2012 All Rights Reserved.
+ *
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * you entered into with Property Vista Software Inc.
+ *
+ * This notice and attribution to Property Vista Software Inc. may not be removed.
+ *
+ * Created on Oct 30, 2013
+ * @author stanp
+ * @version $Id$
+ */
+package com.propertyvista.portal.server.upload;
+
+import java.io.IOException;
+
+import javax.servlet.ServletConfig;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import org.apache.commons.io.FilenameUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.pyx4j.commons.CommonsStringUtils;
+import com.pyx4j.commons.Consts;
+import com.pyx4j.commons.Key;
+import com.pyx4j.entity.server.Persistence;
+import com.pyx4j.entity.shared.IFile;
+import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
+import com.pyx4j.essentials.server.upload.FileUploadRegistry;
+
+import com.propertyvista.portal.rpc.DeploymentConsts;
+import com.propertyvista.server.common.blob.ETag;
+import com.propertyvista.server.domain.IFileBlob;
+
+public abstract class AbstractFileAccessServlet<E extends IFile, BLOB extends IFileBlob> extends HttpServlet {
+    private static final long serialVersionUID = 1L;
+
+    private final static Logger log = LoggerFactory.getLogger(AbstractFileAccessServlet.class);
+
+    private int cacheExpiresHours = 24;
+
+    private final Class<E> fileClass;
+
+    private final Class<BLOB> blobClass;
+
+    public AbstractFileAccessServlet(Class<E> fileClass, Class<BLOB> blobClass) {
+        this.fileClass = fileClass;
+        this.blobClass = blobClass;
+    }
+
+    @Override
+    public void init(ServletConfig config) throws ServletException {
+        String rate = config.getInitParameter("cacheExpiresHours");
+        if (rate != null) {
+            cacheExpiresHours = Integer.parseInt(rate);
+        }
+    }
+
+    @Override
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        String filename = request.getRequestURI();
+
+        String id = FilenameUtils.getPathNoEndSeparator(request.getPathInfo());
+
+        if (CommonsStringUtils.isEmpty(id) || "0".equals(id)) {
+            response.setStatus(HttpServletResponse.SC_GONE);
+            return;
+        }
+
+        Key key;
+        boolean transientFile = false;
+        if (id.startsWith(DeploymentConsts.TRANSIENT_FILE_PREF)) {
+            E file = FileUploadRegistry.get(id.substring(DeploymentConsts.TRANSIENT_FILE_PREF.length()));
+            key = file.blobKey().getValue();
+            transientFile = true;
+        } else {
+            key = new Key(id);
+        }
+
+        BLOB blob = Persistence.service().retrieve(blobClass, key);
+        if (blob == null) {
+            log.debug("no such document {} {}", id, filename);
+            response.setStatus(HttpServletResponse.SC_NOT_FOUND);
+            return;
+        }
+
+        // parent image query
+        EntityQueryCriteria<E> crit = EntityQueryCriteria.create(fileClass);
+        crit.eq(crit.proto().blobKey(), key);
+        if (transientFile) {
+            // if parent image exists deny transient mode request
+            if (Persistence.service().exists(crit)) {
+                log.debug("no such document {} {}", key, filename);
+                response.setStatus(HttpServletResponse.SC_NOT_FOUND);
+                return;
+            }
+        } else {
+            // ensure access allowed
+            E file = Persistence.secureRetrieve(crit);
+            if (file == null) {
+                log.debug("no such document {} {}", key, filename);
+                response.setStatus(HttpServletResponse.SC_NOT_FOUND);
+                return;
+            }
+
+            String token = ETag.getEntityTag(file, "");
+            response.setHeader("Etag", token);
+
+            if (!file.timestamp().isNull()) {
+                long since = request.getDateHeader("If-Modified-Since");
+                if ((since != -1) && (file.timestamp().getValue() < since)) {
+                    response.setStatus(HttpServletResponse.SC_NOT_MODIFIED);
+                    return;
+                }
+                response.setDateHeader("Last-Modified", file.timestamp().getValue());
+                // HTTP 1.0
+                response.setDateHeader("Expires", System.currentTimeMillis() + Consts.HOURS2MSEC * cacheExpiresHours);
+                // HTTP 1.1
+                response.setHeader("Cache-Control", "public, max-age=" + ((long) Consts.HOURS2SEC * cacheExpiresHours));
+
+            }
+            if (ETag.checkIfNoneMatch(token, request.getHeader("If-None-Match"))) {
+                response.setStatus(HttpServletResponse.SC_NOT_MODIFIED);
+            }
+
+            if (!file.contentMimeType().isNull()) {
+                response.setContentType(file.contentMimeType().getValue());
+            }
+        }
+
+        response.setContentType(blob.contentType().getValue());
+        response.getOutputStream().write(blob.data().getValue());
+    }
+}

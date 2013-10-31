@@ -32,7 +32,7 @@ import com.pyx4j.forms.client.ui.CImageSlider;
 import com.pyx4j.forms.client.ui.folder.CEntityFolder;
 import com.pyx4j.forms.client.ui.folder.EntityFolderColumnDescriptor;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
-import com.pyx4j.gwt.shared.FileURLBuilder;
+import com.pyx4j.gwt.shared.IFileURLBuilder;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.site.client.ui.dialogs.SelectEnumDialog;
@@ -214,7 +214,7 @@ public class FloorplanForm extends CrmEntityForm<FloorplanDTO> {
         }
     }
 
-    class MediaImageUrlBuilder implements FileURLBuilder<MediaFile> {
+    class MediaImageUrlBuilder implements IFileURLBuilder<MediaFile> {
         @Override
         public String getUrl(MediaFile file) {
             return MediaUtils.createMediaImageUrl(file);

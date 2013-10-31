@@ -21,7 +21,7 @@ import com.pyx4j.forms.client.ui.CCheckBox;
 import com.pyx4j.forms.client.ui.CComboBox;
 import com.pyx4j.forms.client.ui.CImage;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
-import com.pyx4j.gwt.shared.FileURLBuilder;
+import com.pyx4j.gwt.shared.IFileURLBuilder;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.prime.form.IForm;
 import com.pyx4j.widgets.client.ImageViewport.ScaleMode;
@@ -92,7 +92,7 @@ public class GeneralForm extends CrmEntityForm<SiteDescriptorDTO> {
         TwoColumnFlexFormPanel content = new TwoColumnFlexFormPanel(proto().crmLogo().getMeta().getCaption());
 
         CImage<SiteImageResource> file = new CImage<SiteImageResource>(GWT.<SiteImageResourceUploadService> create(SiteImageResourceUploadService.class),
-                new FileURLBuilder<SiteImageResource>() {
+                new IFileURLBuilder<SiteImageResource>() {
                     @Override
                     public String getUrl(SiteImageResource file) {
                         return MediaUtils.createSiteImageResourceUrl(file);

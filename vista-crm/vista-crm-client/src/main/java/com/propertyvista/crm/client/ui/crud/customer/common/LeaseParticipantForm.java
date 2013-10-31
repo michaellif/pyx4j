@@ -32,7 +32,6 @@ import com.pyx4j.forms.client.ui.CImage;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
 import com.pyx4j.forms.client.validators.ValidationError;
-import com.pyx4j.gwt.shared.FileURLBuilder;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.site.client.AppPlaceEntityMapper;
@@ -41,9 +40,9 @@ import com.pyx4j.site.client.ui.prime.form.IForm;
 import com.pyx4j.site.client.ui.prime.misc.CEntityCrudHyperlink;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
 
+import com.propertyvista.common.client.VistaFileURLBuilder;
 import com.propertyvista.common.client.policy.ClientPolicyManager;
 import com.propertyvista.common.client.resources.VistaImages;
-import com.propertyvista.common.client.ui.components.MediaUtils;
 import com.propertyvista.common.client.ui.components.editors.NameEditor;
 import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
 import com.propertyvista.common.client.ui.validators.PastDateIncludeTodayValidator;
@@ -60,6 +59,7 @@ import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
 import com.propertyvista.dto.GuarantorDTO;
 import com.propertyvista.dto.LeaseParticipantDTO;
 import com.propertyvista.dto.TenantDTO;
+import com.propertyvista.portal.rpc.DeploymentConsts;
 import com.propertyvista.shared.config.VistaFeatures;
 
 public class LeaseParticipantForm<P extends LeaseParticipantDTO<?>> extends CrmEntityForm<P> {
@@ -228,10 +228,9 @@ public class LeaseParticipantForm<P extends LeaseParticipantDTO<?>> extends CrmE
         return main;
     }
 
-    class ImageFileURLBuilder implements FileURLBuilder<CustomerPicture> {
-        @Override
-        public String getUrl(CustomerPicture pic) {
-            return MediaUtils.createCustomerPictureUrl(pic);
+    class ImageFileURLBuilder extends VistaFileURLBuilder<CustomerPicture> {
+        public ImageFileURLBuilder() {
+            super(DeploymentConsts.customerPictureServletMapping);
         }
     }
 }

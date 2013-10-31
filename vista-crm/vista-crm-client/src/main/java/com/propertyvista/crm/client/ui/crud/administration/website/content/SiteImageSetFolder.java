@@ -34,7 +34,7 @@ import com.pyx4j.forms.client.ui.CImageSlider;
 import com.pyx4j.forms.client.ui.CLabel;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.gwt.shared.Dimension;
-import com.pyx4j.gwt.shared.FileURLBuilder;
+import com.pyx4j.gwt.shared.IFileURLBuilder;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.common.client.resources.VistaImages;
@@ -170,7 +170,7 @@ public class SiteImageSetFolder extends VistaBoxFolder<SiteImageSet> {
         }
     }
 
-    class ImageFileURLBuilder implements FileURLBuilder<SiteImageResource> {
+    class ImageFileURLBuilder implements IFileURLBuilder<SiteImageResource> {
         @Override
         public String getUrl(SiteImageResource file) {
             return MediaUtils.createSiteImageResourceUrl(file);

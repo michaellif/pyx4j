@@ -26,6 +26,8 @@ public enum VistaCrmBehavior implements Behavior {
 
     OAPI,
 
+    ILS,
+
     Mechanicals,
 
     BuildingFinancial,

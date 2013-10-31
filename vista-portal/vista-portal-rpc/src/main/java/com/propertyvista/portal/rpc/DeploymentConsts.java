@@ -25,7 +25,7 @@ public interface DeploymentConsts {
 
     public static final String siteImageResourceServletMapping = "/vista.siteimgrc";
 
-    public static final String customerPictureServletMapping = "/vista.picture";
+    public static final String customerPictureServletMapping = "picture/";
 
     public static final String applicationDocumentServletMapping = "application_document/";
 
@@ -47,8 +47,6 @@ public interface DeploymentConsts {
 
     public static final String vistaEmployeeCookie = "vistaDoNotTrack";
 
-    public static final String RESIDENT_CONTENT_ID = "id=\"resident_content\"";
-
-    public static final String RESIDENT_LOGIN_ID = "id=\"resident_login\"";
+    public static final String TRANSIENT_FILE_PREF = "u:";
 
 }

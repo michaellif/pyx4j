@@ -224,7 +224,7 @@ public class VistaWebApplicationInitializer implements ServletContainerInitializ
             }
             {
                 ServletRegistration.Dynamic sc = ctx.addServlet("CustomerPictureServlet", CustomerPictureServlet.class);
-                sc.addMapping("*.picture");
+                sc.addMapping("/picture/*");
             }
             {
                 ServletRegistration.Dynamic sc = ctx.addServlet("LegalLetterDocumentServlet", LegalLetterDocumentServlet.class);
