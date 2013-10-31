@@ -20,6 +20,8 @@
  */
 package com.pyx4j.logback;
 
+import org.slf4j.helpers.MessageFormatter;
+
 import ch.qos.logback.classic.pattern.ClassicConverter;
 import ch.qos.logback.classic.spi.ILoggingEvent;
 
@@ -31,10 +33,15 @@ public class IStringViewMessageConverter extends ClassicConverter {
     public String convert(ILoggingEvent event) {
         Object[] argumentArray = event.getArgumentArray();
         if (argumentArray != null) {
+            boolean hasIStringView = false;
             for (int i = 0; i < argumentArray.length; i++) {
                 if (argumentArray[i] instanceof IStringView) {
                     argumentArray[i] = ((IStringView) argumentArray[i]).getStringView();
+                    hasIStringView = true;
                 }
+            }
+            if (hasIStringView) {
+                return MessageFormatter.arrayFormat(event.getMessage(), argumentArray).getMessage();
             }
         }
         return event.getFormattedMessage();
