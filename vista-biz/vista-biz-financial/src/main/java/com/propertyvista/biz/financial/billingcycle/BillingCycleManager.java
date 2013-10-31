@@ -20,6 +20,7 @@ import java.util.GregorianCalendar;
 import java.util.List;
 
 import com.pyx4j.commons.LogicalDate;
+import com.pyx4j.commons.UserRuntimeException;
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.config.server.SystemDateManager;
 import com.pyx4j.entity.server.Executable;
@@ -31,6 +32,7 @@ import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.entity.shared.utils.EntityGraph;
+import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.biz.financial.billing.BillDateUtils;
 import com.propertyvista.biz.policy.PolicyFacade;
@@ -43,8 +45,11 @@ import com.propertyvista.domain.policy.policies.domain.LeaseBillingTypePolicyIte
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.portal.rpc.shared.BillingException;
+import com.propertyvista.shared.config.VistaFeatures;
 
 class BillingCycleManager {
+
+    private final I18n i18n = I18n.get(BillingCycleManager.class);
 
     private static final long MILIS_IN_DAY = 1000 * 60 * 60 * 24;
 
@@ -233,6 +238,15 @@ class BillingCycleManager {
      * update future BillingCycles with new execution dates
      */
     void onLeaseBillingPolicyChange(LeaseBillingPolicy policy) {
+        // Validation
+        if (VistaFeatures.instance().yardiIntegration()) {
+            for (LeaseBillingTypePolicyItem item : policy.availableBillingTypes()) {
+                if (item.billingPeriod().getValue() != BillingPeriod.Monthly) {
+                    throw new UserRuntimeException("Only monthly periods supported in yardi");
+                }
+            }
+        }
+
         // get all affected buildings
         List<Building> buildings = ServerSideFactory.create(PolicyFacade.class).getGovernedNodesOfType(policy, Building.class);
         updateBillingCycles(policy, buildings);
