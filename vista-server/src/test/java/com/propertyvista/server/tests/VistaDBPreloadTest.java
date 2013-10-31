@@ -17,6 +17,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.pyx4j.commons.TimeUtils;
+import com.pyx4j.entity.rdb.RDBUtils;
+import com.pyx4j.entity.server.Executable;
+import com.pyx4j.entity.server.TransactionScopeOption;
+import com.pyx4j.entity.server.UnitOfWork;
 import com.pyx4j.entity.server.dataimport.DataPreloaderCollection;
 import com.pyx4j.server.contexts.Lifecycle;
 import com.pyx4j.server.contexts.NamespaceManager;
@@ -40,9 +44,27 @@ public class VistaDBPreloadTest extends VistaDBTestBase {
         try {
             Lifecycle.startElevatedUserContext();
             NamespaceManager.setNamespace(VistaNamespace.operationsNamespace);
+            new UnitOfWork(TransactionScopeOption.RequiresNew).execute(new Executable<Void, RuntimeException>() {
+                @Override
+                public Void execute() {
+                    RDBUtils.initNameSpaceSpecificEntityTables();
+                    return null;
+                }
+            });
+
             PmcCreatorDev.createPmc(VistaNamespace.demoNamespace, false);
             NamespaceManager.setNamespace(VistaNamespace.demoNamespace);
+
+            new UnitOfWork(TransactionScopeOption.RequiresNew).execute(new Executable<Void, RuntimeException>() {
+                @Override
+                public Void execute() {
+                    RDBUtils.initAllEntityTables();
+                    return null;
+                }
+            });
+
             log.info(dp.preloadAll());
+
         } finally {
             Lifecycle.endElevatedUserContext();
         }
