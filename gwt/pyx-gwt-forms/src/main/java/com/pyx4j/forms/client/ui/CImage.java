@@ -5,7 +5,7 @@ import com.google.gwt.user.client.ui.Image;
 import com.pyx4j.entity.shared.IFile;
 import com.pyx4j.gwt.rpc.upload.UploadService;
 import com.pyx4j.gwt.shared.Dimension;
-import com.pyx4j.gwt.shared.FileURLBuilder;
+import com.pyx4j.gwt.shared.IFileURLBuilder;
 import com.pyx4j.widgets.client.ImageViewport.ScaleMode;
 
 /*
@@ -19,9 +19,9 @@ public class CImage<E extends IFile> extends CField<E, NImage<E>> {
 
     private final UploadService<?, E> service;
 
-    private final FileURLBuilder<E> fileUrlBuilder;
+    private final IFileURLBuilder<E> fileUrlBuilder;
 
-    public CImage(UploadService<?, E> service, FileURLBuilder<E> fileURLBuilder) {
+    public CImage(UploadService<?, E> service, IFileURLBuilder<E> fileURLBuilder) {
         this.service = service;
         this.fileUrlBuilder = fileURLBuilder;
         this.imageSize = new Dimension(250, 250);

@@ -21,10 +21,10 @@
 package com.pyx4j.tester.shared.file;
 
 import com.pyx4j.gwt.shared.Dimension;
-import com.pyx4j.gwt.shared.FileURLBuilder;
+import com.pyx4j.gwt.shared.IFileURLBuilder;
 import com.pyx4j.tester.domain.TFile;
 
-public abstract class TFileURLBuilder implements FileURLBuilder<TFile> {
+public abstract class TFileURLBuilder implements IFileURLBuilder<TFile> {
 
     public static final Dimension THUMBNAIL_SMALL = new Dimension(70, 50);
 

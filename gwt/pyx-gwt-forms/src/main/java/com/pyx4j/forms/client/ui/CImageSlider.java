@@ -9,7 +9,7 @@ import com.pyx4j.entity.shared.IList;
 import com.pyx4j.forms.client.images.EntityFolderImages;
 import com.pyx4j.gwt.rpc.upload.UploadService;
 import com.pyx4j.gwt.shared.Dimension;
-import com.pyx4j.gwt.shared.FileURLBuilder;
+import com.pyx4j.gwt.shared.IFileURLBuilder;
 import com.pyx4j.widgets.client.ImageViewport.ScaleMode;
 
 /*
@@ -23,13 +23,13 @@ public abstract class CImageSlider<E extends IFile> extends CField<IList<E>, NIm
 
     private Dimension thumbSize;
 
-    private final FileURLBuilder<E> imageFileUrlBuilder;
+    private final IFileURLBuilder<E> imageFileUrlBuilder;
 
     private final UploadService<? extends IEntity, E> service;
 
     private final Class<E> imgClass;
 
-    public CImageSlider(Class<E> imgClass, UploadService<?, E> service, FileURLBuilder<E> fileURLBuilder) {
+    public CImageSlider(Class<E> imgClass, UploadService<?, E> service, IFileURLBuilder<E> fileURLBuilder) {
         this.imgClass = imgClass;
         this.service = service;
         this.imageFileUrlBuilder = fileURLBuilder;

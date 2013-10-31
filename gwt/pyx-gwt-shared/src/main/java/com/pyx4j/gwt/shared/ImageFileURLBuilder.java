@@ -22,7 +22,7 @@ package com.pyx4j.gwt.shared;
 
 import com.pyx4j.entity.shared.IFile;
 
-public interface ImageFileURLBuilder<E extends IFile> extends FileURLBuilder<E> {
+public interface ImageFileURLBuilder<E extends IFile> extends IFileURLBuilder<E> {
 
     public enum ResizeType {
         cover, contain, none

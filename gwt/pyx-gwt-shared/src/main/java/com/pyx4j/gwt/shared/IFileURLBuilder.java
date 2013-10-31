@@ -22,7 +22,7 @@ package com.pyx4j.gwt.shared;
 
 import com.pyx4j.entity.shared.IFile;
 
-public interface FileURLBuilder<E extends IFile> {
+public interface IFileURLBuilder<E extends IFile> {
 
     public String getUrl(E file);
 

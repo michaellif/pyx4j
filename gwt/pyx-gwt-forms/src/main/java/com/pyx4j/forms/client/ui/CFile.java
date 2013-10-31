@@ -22,7 +22,7 @@ package com.pyx4j.forms.client.ui;
 
 import com.pyx4j.entity.shared.IFile;
 import com.pyx4j.gwt.rpc.upload.UploadService;
-import com.pyx4j.gwt.shared.FileURLBuilder;
+import com.pyx4j.gwt.shared.IFileURLBuilder;
 
 public class CFile<E extends IFile> extends CField<E, NFile<E>> {
 
@@ -30,9 +30,9 @@ public class CFile<E extends IFile> extends CField<E, NFile<E>> {
 
     private final UploadService<?, E> service;
 
-    private FileURLBuilder<E> fileUrlBuilder;
+    private IFileURLBuilder<E> fileUrlBuilder;
 
-    public CFile(UploadService<?, E> service, FileURLBuilder<E> fileURLBuilder) {
+    public CFile(UploadService<?, E> service, IFileURLBuilder<E> fileURLBuilder) {
         super("");
         this.service = service;
         this.fileUrlBuilder = fileURLBuilder;
