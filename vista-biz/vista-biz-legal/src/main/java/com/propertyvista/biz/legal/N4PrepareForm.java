@@ -29,6 +29,9 @@ import com.itextpdf.text.DocumentException;
 import com.itextpdf.text.pdf.AcroFields;
 import com.itextpdf.text.pdf.AcroFields.Item;
 import com.itextpdf.text.pdf.PdfCopyFields;
+import com.itextpdf.text.pdf.PdfDictionary;
+import com.itextpdf.text.pdf.PdfName;
+import com.itextpdf.text.pdf.PdfNumber;
 import com.itextpdf.text.pdf.PdfReader;
 
 /**
@@ -52,6 +55,8 @@ public class N4PrepareForm {
             renameFields(reader.getAcroFields());
         }
         AcroFields fields = reader.getAcroFields();
+
+        tweakFields(fields);
 
         for (Map.Entry<String, Item> field : fields.getFields().entrySet()) {
             System.out.println(field.getKey());
@@ -113,6 +118,36 @@ public class N4PrepareForm {
         fields.removeField("b12c96nfn4_personnel_phone");
         fields.removeField("b12c96nfn4_personnel_fax_number");
 
+    }
+
+    private static void tweakFields(AcroFields fields) {
+        System.out.println("Adjusting colors and formatting of 'personnel first name' field");
+        // we have to do this since in the form for some reason the background of personnel first name field is not transparent and hides lines.
+        // also 'personnel first name field' is not comb (letters displayed apart and separated by lines), which is defined in FF dictionary  
+        Item lastNameField = fields.getFieldItem("b12c96nfn4_personnel_last_name");
+        PdfDictionary colorsDict = lastNameField.getWidget(0).getAsDict(PdfName.MK);
+        PdfDictionary appearanceDict = lastNameField.getWidget(0).getAsDict(PdfName.AP);
+        PdfNumber flagsDict = lastNameField.getWidget(0).getAsNumber(PdfName.FF);
+
+        Item firstNameField = fields.getFieldItem("b12c96nfn4_personnel_first_name");
+        firstNameField.getWidget(0).put(PdfName.MK, colorsDict);
+        firstNameField.getWidget(0).put(PdfName.AP, appearanceDict);
+        firstNameField.getWidget(0).put(PdfName.FF, flagsDict);
+
+        // now set up comb flag for the rest of the defective fields that should have a comb flag set (in the order of appearance in the form)        
+        setCombFlag(fields.getFieldItem("b12c96nfn4_app_province"));
+        setCombFlag(fields.getFieldItem("b12c96nfn4_personnel_first_name"));
+        setCombFlag(fields.getFieldItem("b12c96nfn4_org_unit_no"));
+        setCombFlag(fields.getFieldItem("b12c96nfn4_org_prov"));
+    }
+
+    private static void setCombFlag(Item fieldItem) {
+        PdfNumber flags = fieldItem.getWidget(0).getAsNumber(PdfName.FF);
+        if (flags == null) {
+            flags = new PdfNumber(0);
+        }
+        flags = new PdfNumber(flags.intValue() | 0x800000); // 25th bit is comb flag, i hope my mad hex skillz are correct
+        fieldItem.getWidget(0).put(PdfName.FF, flags);
     }
 
 }
