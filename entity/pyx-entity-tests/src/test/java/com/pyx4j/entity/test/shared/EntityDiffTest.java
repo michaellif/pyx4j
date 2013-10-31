@@ -67,7 +67,7 @@ public class EntityDiffTest extends InitializerTestBase {
         Employee emp2 = EntityFactory.create(Employee.class);
         emp2.employees().add(empM2);
 
-        assertEquals("List", "Employees: F1 -> \nEmployees:  -> F2", EntityDiff.getChanges(emp1, emp2));
+        assertEquals("List", "Employees: removed F1\nEmployees: added F2", EntityDiff.getChanges(emp1, emp2));
     }
 
 }
