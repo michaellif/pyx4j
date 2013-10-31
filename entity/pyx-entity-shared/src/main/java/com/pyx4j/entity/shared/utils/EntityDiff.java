@@ -144,7 +144,7 @@ public class EntityDiff {
                         getChanges(ent1Member, ent2Member, path);
                     } else if (ownedValuesOnly && !memberMeta.isOwnedRelationships()) {
                         if (!ent1Member.equals(ent2Member)) {
-                            addChanges(path, memberMeta.getCaption(), logTransient, ent1Member.getStringView(), ent2Member.getStringView());
+                            addChanges(path, memberMeta.getCaption(), logTransient, safeStringView(ent1Member), safeStringView(ent2Member));
                         }
                     } else {
                         getChanges(ent1Member, ent2Member, new DiffPath(path, memberMeta.getCaption()));
@@ -197,6 +197,21 @@ public class EntityDiff {
             }
         }
 
+        private void addChangesAction(DiffPath path, String name, boolean logTransient, String action, Object v2) {
+            if (changes.length() > 0) {
+                changes.append("\n");
+            }
+            changes.append(CommonsStringUtils.nvl_concat(path.name, name, "."));
+            changes.append(": ");
+            if (logTransient) {
+                changes.append(action).append(" **");
+            } else {
+                changes.append(action);
+                changes.append(" ");
+                changes.append(v2);
+            }
+        }
+
         private void getPrimitiveSetChanges(DiffPath path, String name, boolean logTransient, Collection<Object> set1, Collection<Object> set2) {
             List<Object> set2copy = new Vector<Object>(set2);
             if (set1 != null) {
@@ -207,13 +222,13 @@ public class EntityDiff {
                         set2copy.remove(ent1);
                     } else {
                         // removed
-                        addChanges(path, name, logTransient, ent1, "");
+                        addChangesAction(path, name, logTransient, "removed", ent1);
                     }
                 }
             }
             // Added
             for (Object ent2 : set2copy) {
-                addChanges(path, name, logTransient, "", ent2);
+                addChangesAction(path, name, logTransient, "added", ent2);
             }
         }
 
@@ -226,12 +241,23 @@ public class EntityDiff {
                     set2copy.remove(ent1);
                 } else {
                     // removed
-                    addChanges(path, null, false, ent1.getStringView(), "");
+                    addChangesAction(path, null, false, "removed", safeStringView(ent1));
                 }
             }
             // Added
             for (IEntity ent2 : set2copy) {
-                addChanges(path, null, false, "", ent2.getStringView());
+                addChangesAction(path, null, false, "added", safeStringView(ent2));
+            }
+        }
+
+        private String safeStringView(IEntity ent) {
+            switch (ent.getAttachLevel()) {
+            case IdOnly:
+                return ent.getPrimaryKey().toString();
+            case Detached:
+                return "...";
+            default:
+                return ent.getStringView();
             }
         }
 
