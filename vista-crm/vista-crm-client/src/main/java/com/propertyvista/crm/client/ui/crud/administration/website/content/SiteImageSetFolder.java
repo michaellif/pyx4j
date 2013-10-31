@@ -44,8 +44,8 @@ import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
 import com.propertyvista.crm.client.ui.crud.administration.website.general.AvailableLocaleSelectorDialog;
 import com.propertyvista.crm.rpc.services.admin.SiteImageResourceUploadService;
 import com.propertyvista.domain.site.AvailableLocale;
-import com.propertyvista.domain.site.SiteImageSet;
 import com.propertyvista.domain.site.SiteImageResource;
+import com.propertyvista.domain.site.SiteImageSet;
 
 public class SiteImageSetFolder extends VistaBoxFolder<SiteImageSet> {
     private static final I18n i18n = I18n.get(SiteImageSetFolder.class);
@@ -145,6 +145,7 @@ public class SiteImageSetFolder extends VistaBoxFolder<SiteImageSet> {
                     return infoPanel;
                 }
             };
+            imageHolder.setOrganizerWidth(800);
             imageHolder.setNote(i18n.tr("Recommended banner size is {0}", "920x375"));
         }
 
