@@ -42,6 +42,7 @@ import com.pyx4j.commons.Key;
 import com.pyx4j.commons.SimpleMessageFormat;
 import com.pyx4j.commons.TimeUtils;
 import com.pyx4j.config.server.ServerSideFactory;
+import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.entity.server.Executable;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.server.TransactionScopeOption;
@@ -162,7 +163,7 @@ public class YardiResidentTransactionsService extends YardiAbstractService {
             }
 
             // availability
-            if (!executionMonitor.isTerminationRequested() && !VistaTODO.pendingYardiConfigPatchILS) {
+            if (!executionMonitor.isTerminationRequested() && (ApplicationMode.isDevelopment() || !VistaTODO.pendingYardiConfigPatchILS)) {
                 YardiILSGuestCardStub ilsStub = ServerSideFactory.create(YardiILSGuestCardStub.class);
                 List<PhysicalProperty> properties = getILSPropertyMarketing(ilsStub, yc, executionMonitor, propertyListCodes);
                 for (PhysicalProperty property : properties) {

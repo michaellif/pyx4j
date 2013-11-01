@@ -28,6 +28,7 @@ import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.view.client.Range;
 
 import com.pyx4j.commons.ValidationUtils;
+import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.forms.client.images.EntityFolderImages;
@@ -373,8 +374,10 @@ public class BuildingForm extends CrmEntityForm<BuildingDTO> {
         imageSlider.setImageSize(240, 160);
         flexPanel.setWidget(++row, 0, 2, inject(proto().media(), imageSlider));
 
-        flexPanel.setH1(++row, 0, 2, i18n.tr("ILS Profile"));
-        flexPanel.setWidget(++row, 0, 2, inject(proto().ilsProfile(), new ILSProfileBuildingFolder()));
+        if (ApplicationMode.isDevelopment() || !VistaTODO.pendingYardiConfigPatchILS) {
+            flexPanel.setH1(++row, 0, 2, i18n.tr("ILS Profile"));
+            flexPanel.setWidget(++row, 0, 2, inject(proto().ilsProfile(), new ILSProfileBuildingFolder()));
+        }
 
         return flexPanel;
     }

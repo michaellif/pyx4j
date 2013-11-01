@@ -22,6 +22,7 @@ import com.google.gwt.user.client.ui.HasVerticalAlignment;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Widget;
 
+import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.forms.client.images.EntityFolderImages;
@@ -53,6 +54,7 @@ import com.propertyvista.domain.property.asset.Floorplan;
 import com.propertyvista.domain.property.asset.FloorplanAmenity;
 import com.propertyvista.domain.settings.ILSConfig.ILSVendor;
 import com.propertyvista.dto.FloorplanDTO;
+import com.propertyvista.misc.VistaTODO;
 
 public class FloorplanForm extends CrmEntityForm<FloorplanDTO> {
 
@@ -113,8 +115,10 @@ public class FloorplanForm extends CrmEntityForm<FloorplanDTO> {
         imageSlider.setImageSize(240, 160);
         main.setWidget(++row, 0, 2, inject(proto().media(), imageSlider));
 
-        main.setH1(++row, 0, 2, i18n.tr("ILS Profile"));
-        main.setWidget(++row, 0, 2, inject(proto().ilsProfile(), new ILSProfileFloorplanFolder()));
+        if (ApplicationMode.isDevelopment() || !VistaTODO.pendingYardiConfigPatchILS) {
+            main.setH1(++row, 0, 2, i18n.tr("ILS Profile"));
+            main.setWidget(++row, 0, 2, inject(proto().ilsProfile(), new ILSProfileFloorplanFolder()));
+        }
 
         return main;
     }
