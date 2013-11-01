@@ -44,6 +44,7 @@ import com.pyx4j.server.contexts.LifecycleFilter;
 
 import com.propertyvista.biz.system.AuditSessionListener;
 import com.propertyvista.domain.security.common.VistaApplication;
+import com.propertyvista.ils.ILSAuthFilter;
 import com.propertyvista.ils.kijiji.rs.KijijiApiRsApplication;
 import com.propertyvista.misc.VistaTODO;
 import com.propertyvista.oapi.rs.OpenApiRsApplication;
@@ -182,6 +183,10 @@ public class VistaWebApplicationInitializer implements ServletContainerInitializ
                 }
             }
 
+            {
+                FilterRegistration.Dynamic fc = ctx.addFilter("ILSAuthFilter", ILSAuthFilter.class);
+                fc.addMappingForUrlPatterns(null, true, "/interfaces/ils/*");
+            }
             {
                 ServletRegistration.Dynamic sc = ctx.addServlet("ILSKijijiService", ServletContainer.class);
                 sc.addMapping("/interfaces/ils/kijiji/*");
