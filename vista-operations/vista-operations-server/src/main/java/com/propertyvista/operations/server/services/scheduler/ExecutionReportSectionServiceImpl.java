@@ -14,6 +14,7 @@
 package com.propertyvista.operations.server.services.scheduler;
 
 import com.pyx4j.entity.server.AbstractCrudServiceImpl;
+import com.pyx4j.entity.server.Persistence;
 
 import com.propertyvista.operations.domain.scheduler.ExecutionReportSection;
 import com.propertyvista.operations.rpc.services.scheduler.ExecutionReportSectionService;
@@ -29,4 +30,19 @@ public class ExecutionReportSectionServiceImpl extends AbstractCrudServiceImpl<E
         bindCompleteObject();
     }
 
+    @Override
+    protected void enhanceRetrieved(ExecutionReportSection bo, ExecutionReportSection to, com.pyx4j.entity.rpc.AbstractCrudService.RetrieveTarget retrieveTarget) {
+        super.enhanceRetrieved(bo, to, retrieveTarget);
+        if (to.messages().size() > 0) {
+            Persistence.service().retrieve(to.messages().get(0));
+        }
+    }
+
+    @Override
+    protected void enhanceListRetrieved(ExecutionReportSection bo, ExecutionReportSection dto) {
+        super.enhanceListRetrieved(bo, dto);
+        if (dto.messages().size() > 0) {
+            Persistence.service().retrieve(dto.messages().get(0));
+        }
+    }
 }

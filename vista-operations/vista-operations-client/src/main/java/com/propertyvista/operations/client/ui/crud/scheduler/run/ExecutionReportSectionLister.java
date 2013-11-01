@@ -21,6 +21,7 @@ import com.google.gwt.core.client.GWT;
 import com.pyx4j.entity.rpc.AbstractListService;
 import com.pyx4j.entity.shared.ICollection;
 import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria.Sort;
 import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
 import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor.Builder;
@@ -55,7 +56,22 @@ public class ExecutionReportSectionLister extends EntityDataTablePanel<Execution
                 public String convert(IEntity entity) {
                     return String.valueOf(entity.isEmpty() ? 0 : ((ICollection<?,?>)entity.getMember(getColumnPath())).size());
                 }
+            },
+            new MemberColumnDescriptor(new Builder(proto().messages())) {
+                {
+                    setColumnTitle(i18n.tr("First Message"));                    
+                }
+                @Override
+                public String convert(IEntity entity) {
+                    String message = entity.isEmpty() ? "" : ((IList<ExecutionReportMessage>)entity.getMember(getColumnPath())).get(0).message().getValue();
+                    if (message.length() > 200) {
+                        message = message.substring(0, 200) + "...";
+                        
+                    }
+                    return message;
+                }
             }
+
         );//@formatter:on
 
         setDataSource(new ListerDataSource<ExecutionReportSection>(ExecutionReportSection.class,
