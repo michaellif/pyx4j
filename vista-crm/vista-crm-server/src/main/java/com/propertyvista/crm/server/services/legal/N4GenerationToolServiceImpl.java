@@ -19,6 +19,8 @@ import java.util.List;
 import java.util.Set;
 import java.util.Vector;
 
+import org.apache.commons.lang.StringUtils;
+
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.commons.LogicalDate;
@@ -98,6 +100,8 @@ public class N4GenerationToolServiceImpl implements N4GenerationToolService {
             Persistence.service().retrieve(employee.signature(), AttachLevel.IdOnly);
         }
         initParams.availableAgents().addAll(employees);
+        initParams.settings().n4PolicyErrors().setValue(StringUtils.join(validateN4Policy(), "\n"));
+
         callback.onSuccess(initParams);
     }
 
@@ -119,11 +123,24 @@ public class N4GenerationToolServiceImpl implements N4GenerationToolService {
     }
 
     private void assertN4PolicyIsSet() {
+        List<String> validationErrors = validateN4Policy();
+        if (!validationErrors.isEmpty()) {
+            throw new UserRuntimeException(StringUtils.join(validationErrors, "\n"));
+        }
+    }
+
+    private List<String> validateN4Policy() {
+        List<String> policyValidationErrors = new ArrayList<String>();
         N4Policy policy = ServerSideFactory.create(PolicyFacade.class).obtainEffectivePolicy(EntityFactory.create(OrganizationPoliciesNode.class),
                 N4Policy.class);
-
-        if (policy.relevantARCodes().isEmpty()) {
-            throw new UserRuntimeException("N4 Policy has no AR Code settings. Please set up AR Codes in N4 policy!");
+        if (policy == null) {
+            policyValidationErrors.add(i18n.tr("N4 Policy has no AR Code settings. Please set up AR Codes in N4 policy!"));
+            return policyValidationErrors;
+        } else {
+            if (policy.relevantARCodes().isEmpty()) {
+                policyValidationErrors.add(i18n.tr("N4 Policy has no AR Code settings. Please set up AR Codes in N4 policy!"));
+            }
+            return policyValidationErrors;
         }
     }
 

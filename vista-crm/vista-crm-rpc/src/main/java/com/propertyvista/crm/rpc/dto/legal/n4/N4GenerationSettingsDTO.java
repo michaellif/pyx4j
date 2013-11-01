@@ -43,4 +43,7 @@ public interface N4GenerationSettingsDTO extends IEntity {
     @Editor(type = EditorType.money)
     IPrimitive<BigDecimal> minAmountOwed();
 
+    /** errors in definition of n4 policy delimited by '\n' char */
+    IPrimitive<String> n4PolicyErrors();
+
 }

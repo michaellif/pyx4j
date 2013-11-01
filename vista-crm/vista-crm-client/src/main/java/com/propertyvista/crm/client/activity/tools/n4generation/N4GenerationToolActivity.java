@@ -18,6 +18,7 @@ import java.util.List;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
+import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.gwt.rpc.deferred.DeferredProcessProgressResponse;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.site.rpc.AppPlace;
@@ -55,7 +56,7 @@ public class N4GenerationToolActivity extends AbstractBulkOperationToolActivity<
     }
 
     @Override
-    protected void initViewAsync(final AsyncCallback<N4GenerationSettingsDTO> callback) {
+    protected void initSettings(final AsyncCallback<N4GenerationSettingsDTO> callback) {
         (GWT.<N4GenerationToolService> create(N4GenerationToolService.class)).initSettings(new DefaultAsyncCallback<N4GenerationInitParamsDTO>() {
             @Override
             public void onSuccess(N4GenerationInitParamsDTO result) {
@@ -64,4 +65,12 @@ public class N4GenerationToolActivity extends AbstractBulkOperationToolActivity<
             }
         });
     }
+
+    @Override
+    protected void initView(N4GenerationSettingsDTO settings) {
+        super.initView(settings);
+        getView().setBulkOperationEnabled(CommonsStringUtils.isEmpty(settings.n4PolicyErrors().getValue()));
+        getView().setSearchEnabled(CommonsStringUtils.isEmpty(settings.n4PolicyErrors().getValue()));
+    }
+
 }

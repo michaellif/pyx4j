@@ -42,6 +42,10 @@ public interface BulkOperationToolView<Settings extends IEntity, Item extends Bu
 
     void setRowData(int start, int total, List<Item> items);
 
+    void setSearchEnabled(boolean isEnabled);
+
+    void setBulkOperationEnabled(boolean isEnabled);
+
     void resetVisibleRange();
 
     Presenter getPresenter();

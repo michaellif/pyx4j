@@ -57,6 +57,8 @@ public abstract class BulkOperationToolViewImpl<Settings extends IEntity, Item e
 
     private int pageIncrement;
 
+    private Button searchButton;
+
     public BulkOperationToolViewImpl(String caption, CEntityForm<Settings> settingsForm, Class<Holder> holderClass,
             ItemsHolderForm<Item, Holder> itemsHolderForm) {
 
@@ -77,7 +79,7 @@ public abstract class BulkOperationToolViewImpl<Settings extends IEntity, Item e
 
         FlowPanel buttonsPanel = new FlowPanel();
         buttonsPanel.setStyleName(Styles.BulkOperationButtonsPanel.name());
-        buttonsPanel.add(new Button(i18n.tr("Search"), new Command() {
+        buttonsPanel.add(searchButton = new Button(i18n.tr("Search"), new Command() {
             @Override
             public void execute() {
                 BulkOperationToolViewImpl.this.search();
@@ -109,6 +111,17 @@ public abstract class BulkOperationToolViewImpl<Settings extends IEntity, Item e
         setSize("100%", "100%");
 
         visibleRange = new Range(0, pageIncrement);
+    }
+
+    @Override
+    public void setBulkOperationEnabled(boolean isEnabled) {
+        acceptButton.setEnabled(isEnabled);
+    }
+
+    @Override
+    public void setSearchEnabled(boolean isEnabled) {
+        searchButton.setEnabled(isEnabled);
+        itemsHolderForm.setVisible(isEnabled);
     }
 
     @Override
@@ -179,8 +192,9 @@ public abstract class BulkOperationToolViewImpl<Settings extends IEntity, Item e
 
     @Override
     public void setSettings(Settings settings) {
-        settingsForm.setVisited(false);
         settingsForm.populate(settings);
+        settingsForm.setUnconditionalValidationErrorRendering(false);
+        settingsForm.setVisited(false);
     }
 
     protected CEntityForm<Settings> getSettingsForm() {

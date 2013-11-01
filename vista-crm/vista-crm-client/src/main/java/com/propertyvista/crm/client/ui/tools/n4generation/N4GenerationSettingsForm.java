@@ -16,17 +16,25 @@ package com.propertyvista.crm.client.ui.tools.n4generation;
 import java.util.List;
 
 import com.google.gwt.dom.client.Style.Overflow;
+import com.google.gwt.dom.client.Style.TextAlign;
+import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.ui.FlowPanel;
+import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.HasVerticalAlignment;
 import com.google.gwt.user.client.ui.IsWidget;
 
+import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.forms.client.ui.CComboBox;
+import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.ui.CEntityListBox;
+import com.pyx4j.forms.client.ui.CLabel;
 import com.pyx4j.forms.client.ui.CListBox.SelectionMode;
 import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
+import com.pyx4j.forms.client.validators.EditableValueValidator;
+import com.pyx4j.forms.client.validators.ValidationError;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
@@ -43,6 +51,12 @@ public class N4GenerationSettingsForm extends CEntityForm<N4GenerationSettingsDT
 
     private final ValueChangeHandler<Boolean> visibilityChangeHandler;
 
+    private CLabel<String> policyErrorsLabel;
+
+    private FlowPanel n4FillingSettingsPanel;
+
+    private FlowPanel leasesQuerySettingsPanel;
+
     public N4GenerationSettingsForm() {
         super(N4GenerationSettingsDTO.class);
         visibilityChangeHandler = new ValueChangeHandler<Boolean>() {
@@ -56,11 +70,20 @@ public class N4GenerationSettingsForm extends CEntityForm<N4GenerationSettingsDT
     @Override
     public IsWidget createContent() {
         BasicFlexFormPanel panel = new BasicFlexFormPanel();
-        panel.getFlexCellFormatter().setVerticalAlignment(0, 0, HasVerticalAlignment.ALIGN_TOP);
-        panel.getFlexCellFormatter().setVerticalAlignment(0, 1, HasVerticalAlignment.ALIGN_TOP);
-        int row = -1;
+        panel.setWidth("100%");
+        panel.getFlexCellFormatter().setHorizontalAlignment(0, 0, HasHorizontalAlignment.ALIGN_CENTER);
+        panel.getFlexCellFormatter().setVerticalAlignment(1, 0, HasVerticalAlignment.ALIGN_TOP);
+        panel.getFlexCellFormatter().setVerticalAlignment(1, 1, HasVerticalAlignment.ALIGN_TOP);
 
-        FlowPanel n4FillingSettingsPanel = new FlowPanel();
+        policyErrorsLabel = new CLabel<String>();
+        policyErrorsLabel.asWidget().getElement().getStyle().setTextAlign(TextAlign.CENTER);
+        policyErrorsLabel.asWidget().getElement().getStyle().setPaddingTop(2, Unit.EM);
+        policyErrorsLabel.asWidget().getElement().getStyle().setPaddingBottom(2, Unit.EM);
+        policyErrorsLabel.asWidget().getElement().getStyle().setProperty("marginLeft", "auto");
+        policyErrorsLabel.asWidget().getElement().getStyle().setProperty("marginRight", "auto");
+        panel.setWidget(0, 0, 2, inject(proto().n4PolicyErrors(), policyErrorsLabel));
+
+        n4FillingSettingsPanel = new FlowPanel();
         n4FillingSettingsPanel.add(new FormDecoratorBuilder(inject(proto().query().noticeDate())).componentWidth("150px").contentWidth("150px").build());
         n4FillingSettingsPanel.add(new FormDecoratorBuilder(inject(proto().query().deliveryMethod())).componentWidth("150px").contentWidth("150px").build());
         agentComboBox = new CComboBox<Employee>("", CComboBox.NotInOptionsPolicy.DISCARD) {
@@ -73,11 +96,9 @@ public class N4GenerationSettingsForm extends CEntityForm<N4GenerationSettingsDT
         n4FillingSettingsPanel.add(new FormDecoratorBuilder(inject(proto().query().agent(), agentComboBox)).componentWidth("150px").contentWidth("150px")
                 .build());
 
-        panel.setWidget(++row, 0, n4FillingSettingsPanel);
+        panel.setWidget(1, 0, n4FillingSettingsPanel);
 
-        row = -1;
-
-        FlowPanel leasesQuerySettingsPanel = new FlowPanel();
+        leasesQuerySettingsPanel = new FlowPanel();
         leasesQuerySettingsPanel.getElement().getStyle().setOverflow(Overflow.AUTO);
 
         leasesQuerySettingsPanel.add(new FormDecoratorBuilder(inject(proto().minAmountOwed())).componentWidth("150px").contentWidth("200px").build());
@@ -90,7 +111,7 @@ public class N4GenerationSettingsForm extends CEntityForm<N4GenerationSettingsDT
         leasesQuerySettingsPanel.add(new FormDecoratorBuilder(inject(proto().portfolios(), new CEntityListBox<Portfolio>(Portfolio.class,
                 SelectionMode.SINGLE_PANEL))).useLabelSemicolon(false).customLabel("").componentWidth("200px").contentWidth("200px").build());
 
-        panel.setWidget(++row, 1, leasesQuerySettingsPanel);
+        panel.setWidget(1, 1, leasesQuerySettingsPanel);
 
         get(proto().filterByBuildings()).addValueChangeHandler(visibilityChangeHandler);
         get(proto().filterByPortfolios()).addValueChangeHandler(visibilityChangeHandler);
@@ -102,6 +123,20 @@ public class N4GenerationSettingsForm extends CEntityForm<N4GenerationSettingsDT
     }
 
     @Override
+    public void addValidations() {
+        super.addValidations();
+        addValueValidator(new EditableValueValidator<N4GenerationSettingsDTO>() {
+            @Override
+            public ValidationError isValid(CComponent<N4GenerationSettingsDTO> component, N4GenerationSettingsDTO value) {
+                if (value != null && !CommonsStringUtils.isEmpty(value.n4PolicyErrors().getValue())) {
+                    return new ValidationError(component, value.n4PolicyErrors().getValue());
+                }
+                return null;
+            }
+        });
+    }
+
+    @Override
     protected void onValueSet(boolean populate) {
         super.onValueSet(populate);
         updateComponentsVisibility();
@@ -110,6 +145,9 @@ public class N4GenerationSettingsForm extends CEntityForm<N4GenerationSettingsDT
     private void updateComponentsVisibility() {
         get(proto().buildings()).setVisible(getValue().filterByBuildings().isBooleanTrue());
         get(proto().portfolios()).setVisible(getValue().filterByPortfolios().isBooleanTrue());
+        policyErrorsLabel.setVisible(!CommonsStringUtils.isEmpty(getValue().n4PolicyErrors().getValue()));
+        n4FillingSettingsPanel.setVisible(CommonsStringUtils.isEmpty(getValue().n4PolicyErrors().getValue()));
+        leasesQuerySettingsPanel.setVisible(CommonsStringUtils.isEmpty(getValue().n4PolicyErrors().getValue()));
     }
 
 }

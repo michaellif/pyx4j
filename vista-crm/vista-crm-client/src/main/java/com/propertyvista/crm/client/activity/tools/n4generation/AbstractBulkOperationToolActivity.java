@@ -60,6 +60,18 @@ public abstract class AbstractBulkOperationToolActivity<Settings extends IEntity
     }
 
     @Override
+    public void start(AcceptsOneWidget panel, EventBus eventBus) {
+        panel.setWidget(getView());
+        getView().setPresenter(this);
+        initSettings(new DefaultAsyncCallback<Settings>() {
+            @Override
+            public void onSuccess(Settings result) {
+                initView(result);
+            }
+        });
+    }
+
+    @Override
     public void acceptSelected() {
         if (!items.isEmpty() && (getView().isEverythingSelected() || !getView().getSelectedItems().isEmpty())) {
             service.process(new DefaultAsyncCallback<String>() {
@@ -102,18 +114,6 @@ public abstract class AbstractBulkOperationToolActivity<Settings extends IEntity
     }
 
     @Override
-    public void start(AcceptsOneWidget panel, EventBus eventBus) {
-        panel.setWidget(getView());
-        getView().setPresenter(this);
-        initViewAsync(new DefaultAsyncCallback<Settings>() {
-            @Override
-            public void onSuccess(Settings result) {
-                initView(result);
-            }
-        });
-    }
-
-    @Override
     public AppPlace getPlace() {
         return place;
     }
@@ -129,7 +129,7 @@ public abstract class AbstractBulkOperationToolActivity<Settings extends IEntity
 
     protected abstract void onSelectedProccessSuccess(DeferredProcessProgressResponse result);
 
-    protected void initViewAsync(AsyncCallback<Settings> callback) {
+    protected void initSettings(AsyncCallback<Settings> callback) {
         callback.onSuccess(EntityFactory.create(settingsClass));
     }
 
@@ -137,6 +137,8 @@ public abstract class AbstractBulkOperationToolActivity<Settings extends IEntity
         getView().setSettings(settings);
         getView().setRowData(0, 0, Collections.<Item> emptyList());
         getView().setLoading(false);
+        getView().setBulkOperationEnabled(true);
+        getView().setSearchEnabled(true);
     }
 
     private void populateItems() {
