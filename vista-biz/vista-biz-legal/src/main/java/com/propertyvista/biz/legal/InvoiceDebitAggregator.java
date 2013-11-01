@@ -26,6 +26,7 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.ListIterator;
 import java.util.Map;
 
 import com.pyx4j.entity.shared.EntityFactory;
@@ -77,6 +78,30 @@ public class InvoiceDebitAggregator {
                 return o1.from().getValue().compareTo(o2.from().getValue());
             }
         });
+        if (debitsForPeriod.size() > 3) {
+            ListIterator<N4RentOwingForPeriod> li = debitsForPeriod.listIterator();
+            N4RentOwingForPeriod rentOwingForPeriodAccumulator = li.next();
+
+            int aggregatedCount = debitsForPeriod.size() - 3;
+            int currentAggregated = 0;
+
+            while (currentAggregated != aggregatedCount) {
+                N4RentOwingForPeriod rentOwingForPeriod = li.next();
+                li.remove();
+                rentOwingForPeriodAccumulator.rentCharged().setValue(
+                        rentOwingForPeriodAccumulator.rentCharged().getValue().add(rentOwingForPeriod.rentCharged().getValue()));
+                rentOwingForPeriodAccumulator.rentPaid().setValue(
+                        rentOwingForPeriodAccumulator.rentPaid().getValue().add(rentOwingForPeriod.rentPaid().getValue()));
+                rentOwingForPeriodAccumulator.rentOwing().setValue(
+                        rentOwingForPeriodAccumulator.rentOwing().getValue().add(rentOwingForPeriod.rentOwing().getValue()));
+                currentAggregated += 1;
+
+                if (currentAggregated == aggregatedCount) {
+                    rentOwingForPeriodAccumulator.to().setValue(rentOwingForPeriod.to().getValue());
+                }
+            }
+
+        }
         return debitsForPeriod;
 
     }
