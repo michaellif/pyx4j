@@ -163,7 +163,8 @@ BEGIN
         
         ALTER TABLE application_document_blob OWNER TO vista;
         
-        ALTER TABLE general_insurance_policy_blob RENAME COLUMN data TO content;
+        ALTER TABLE general_insurance_policy_blob       ADD COLUMN name VARCHAR(500),
+                                                        ADD COLUMN updated TIMESTAMP;
         
         -- apt-unit
         
@@ -218,6 +219,11 @@ BEGIN
         );
         
         ALTER TABLE company_logo OWNER TO vista;
+        
+        -- customer_picture_blob
+        
+        ALTER TABLE customer_picture_blob       ADD COLUMN name VARCHAR(500),
+                                                ADD COLUMN updated TIMESTAMP;
         
         -- employee_signature
         
@@ -519,18 +525,18 @@ BEGIN
         ALTER TABLE n4_policy OWNER TO vista;
         
         
-        -- n4_policy$relevant_ar_codes
+        -- n4_policy$relevant_arcodes
         
-        CREATE TABLE n4_policy$relevant_ar_codes
+        CREATE TABLE n4_policy$relevant_arcodes
         (
                 id                                      BIGINT                  NOT NULL,
                 owner                                   BIGINT,
                 value                                   BIGINT,
                 seq                                     INT,
-                        CONSTRAINT n4_policy$relevant_ar_codes_pk PRIMARY KEY(id)
+                        CONSTRAINT n4_policy$relevant_arcodes_pk PRIMARY KEY(id)
         );
         
-        ALTER TABLE n4_policy$relevant_ar_codes OWNER TO vista;
+        ALTER TABLE n4_policy$relevant_arcodes OWNER TO vista;
         
         -- payment_record$_assert_autopay_covered_items_changes
         
@@ -786,10 +792,6 @@ BEGIN
         
         DROP TABLE file;
         
-        
-        -- general_insurance_policy_blob
-        
-        ALTER TABLE general_insurance_policy_blob DROP COLUMN created;
                                                 
         
         -- insurance_certificate_doc
@@ -973,8 +975,8 @@ BEGIN
         ALTER TABLE marketing ADD CONSTRAINT marketing_marketing_address_province_fk FOREIGN KEY(marketing_address_province) REFERENCES province(id)  DEFERRABLE INITIALLY DEFERRED;
         ALTER TABLE n4_policy ADD CONSTRAINT n4_policy_mailing_address_country_fk FOREIGN KEY(mailing_address_country) REFERENCES country(id)  DEFERRABLE INITIALLY DEFERRED;
         ALTER TABLE n4_policy ADD CONSTRAINT n4_policy_mailing_address_province_fk FOREIGN KEY(mailing_address_province) REFERENCES province(id)  DEFERRABLE INITIALLY DEFERRED;
-        ALTER TABLE n4_policy$relevant_ar_codes ADD CONSTRAINT n4_policy$relevant_ar_codes_owner_fk FOREIGN KEY(owner) REFERENCES n4_policy(id)  DEFERRABLE INITIALLY DEFERRED;
-        ALTER TABLE n4_policy$relevant_ar_codes ADD CONSTRAINT n4_policy$relevant_ar_codes_value_fk FOREIGN KEY(value) REFERENCES arcode(id)  DEFERRABLE INITIALLY DEFERRED;
+        ALTER TABLE n4_policy$relevant_arcodes ADD CONSTRAINT n4_policy$relevant_arcodes_owner_fk FOREIGN KEY(owner) REFERENCES n4_policy(id)  DEFERRABLE INITIALLY DEFERRED;
+        ALTER TABLE n4_policy$relevant_arcodes ADD CONSTRAINT n4_policy$relevant_arcodes_value_fk FOREIGN KEY(value) REFERENCES arcode(id)  DEFERRABLE INITIALLY DEFERRED;
         ALTER TABLE portal_banner_image ADD CONSTRAINT portal_banner_image_image_fk FOREIGN KEY(image) REFERENCES site_image_resource(id)  DEFERRABLE INITIALLY DEFERRED;
         ALTER TABLE portal_banner_image ADD CONSTRAINT portal_banner_image_locale_fk FOREIGN KEY(locale) REFERENCES available_locale(id)  DEFERRABLE INITIALLY DEFERRED;
         ALTER TABLE payment_record ADD CONSTRAINT payment_record_preauthorized_payment_fk FOREIGN KEY(preauthorized_payment) 
