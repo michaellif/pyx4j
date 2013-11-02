@@ -1095,7 +1095,7 @@ BEGIN
         CREATE INDEX ilsopen_house_marketing_idx ON ilsopen_house USING btree(marketing);
         CREATE INDEX ilsprofile_building_building_idx ON ilsprofile_building USING btree(building);
         CREATE INDEX ilsprofile_floorplan_floorplan_idx ON ilsprofile_floorplan USING btree(floorplan);
-        CREATE INDEX n4_policy$relevant_ar_codes_owner_idx ON n4_policy$relevant_ar_codes USING btree(owner);
+        CREATE INDEX n4_policy$relevant_arcodes_owner_idx ON n4_policy$relevant_arcodes USING btree(owner);
         CREATE INDEX payment_record$_assert_autopay_covered_items_changes_owner_idx ON payment_record$_assert_autopay_covered_items_changes USING btree(owner);
         CREATE INDEX site_descriptor$portal_banner_owner_idx ON site_descriptor$portal_banner USING btree(owner);
         CREATE INDEX site_image_set$image_set_owner_idx ON site_image_set$image_set USING btree(owner);
