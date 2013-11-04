@@ -22,6 +22,7 @@ package com.propertyvista.common.client;
 
 import com.google.gwt.core.client.GWT;
 
+import com.pyx4j.commons.GWTJava5Helper;
 import com.pyx4j.entity.shared.IFile;
 import com.pyx4j.gwt.shared.IFileURLBuilder;
 
@@ -32,7 +33,7 @@ public class VistaFileURLBuilder<FILE extends IFile> implements IFileURLBuilder<
     private final String fileClassName;
 
     public VistaFileURLBuilder(Class<FILE> fileClass) {
-        fileClassName = fileClass.getName().substring(fileClass.getName().lastIndexOf(".") + 1);
+        fileClassName = GWTJava5Helper.getSimpleName(fileClass);
     }
 
     @Override
