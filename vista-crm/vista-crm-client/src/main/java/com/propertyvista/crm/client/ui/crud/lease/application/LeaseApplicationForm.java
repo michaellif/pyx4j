@@ -151,7 +151,7 @@ public class LeaseApplicationForm extends LeaseFormBase<LeaseApplicationDTO> {
 
         main.setBR(++row, 0, 1);
 
-        main.setWidget(++row, 0,
+        main.setWidget(++row, 0, 2,
                 inject(proto().leaseApproval().participants(), new LeaseParticipanApprovalFolder(false, ((LeaseApplicationViewerView) getParentView()))));
 
         return main;
