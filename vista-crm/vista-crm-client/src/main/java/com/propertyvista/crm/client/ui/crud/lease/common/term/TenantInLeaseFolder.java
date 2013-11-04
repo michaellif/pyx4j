@@ -269,7 +269,7 @@ public class TenantInLeaseFolder extends LeaseTermParticipantFolder<LeaseTermTen
             get(proto().role()).addValueValidator(new EditableValueValidator<LeaseTermParticipant.Role>() {
                 @Override
                 public ValidationError isValid(CComponent<LeaseTermParticipant.Role> component, LeaseTermParticipant.Role role) {
-                    if (getAgeOfMajority() != null && !getValue().leaseParticipant().customer().person().birthDate().isNull()) {
+                    if (getValue() != null && getAgeOfMajority() != null && !getValue().leaseParticipant().customer().person().birthDate().isNull()) {
                         if (role != null && Role.resposible().contains(role)) {
                             if (!TimeUtils.isOlderThan(getValue().leaseParticipant().customer().person().birthDate().getValue(), getAgeOfMajority() - 1)) {
                                 return new ValidationError(
