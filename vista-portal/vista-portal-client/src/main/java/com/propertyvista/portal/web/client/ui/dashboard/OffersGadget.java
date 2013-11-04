@@ -13,15 +13,19 @@
  */
 package com.propertyvista.portal.web.client.ui.dashboard;
 
+import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTML;
 
 import com.pyx4j.commons.css.StyleManager;
 import com.pyx4j.commons.css.ThemeColor;
 import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.site.client.AppSite;
 import com.pyx4j.widgets.client.Button;
 import com.pyx4j.widgets.client.actionbar.Toolbar;
 
+import com.propertyvista.portal.rpc.portal.PortalSiteMap;
+import com.propertyvista.portal.rpc.portal.PortalSiteMap.Resident;
 import com.propertyvista.portal.web.client.resources.PortalImages;
 import com.propertyvista.portal.web.client.ui.AbstractGadget;
 
@@ -45,7 +49,13 @@ public class OffersGadget extends AbstractGadget<MainDashboardViewImpl> {
     class ResidentServicesToolbar extends Toolbar {
         public ResidentServicesToolbar() {
 
-            Button offersButton = new Button("View my Perks & Offers");
+            Button offersButton = new Button("View my Perks & Offers", new Command() {
+
+                @Override
+                public void execute() {
+                    AppSite.getPlaceController().goTo(new PortalSiteMap.Resident.Offers());
+                }
+            });
             offersButton.getElement().getStyle().setProperty("background", StyleManager.getPalette().getThemeColor(ThemeColor.contrast6, 1));
             add(offersButton);
 
