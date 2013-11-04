@@ -106,6 +106,7 @@ import com.propertyvista.portal.rpc.ptapp.services.steps.welcomewizardmockup.Lea
 import com.propertyvista.portal.rpc.ptapp.services.steps.welcomewizardmockup.MoveInScheduleService;
 import com.propertyvista.portal.rpc.ptapp.services.steps.welcomewizardmockup.ResetWizardService;
 import com.propertyvista.portal.rpc.shared.services.CreditCardValidationService;
+import com.propertyvista.portal.server.security.access.AutopayAgreementTenantDatasetAccessRule;
 import com.propertyvista.portal.server.security.access.CustomrPictureTenantDatasetAccessRule;
 import com.propertyvista.portal.server.security.access.GeneralInsurancePolicyDatasetAccessRule;
 import com.propertyvista.portal.server.security.access.InsuranceCertificateScanDatasetAccessRule;
@@ -305,6 +306,7 @@ public class VistaPortalAccessControlList extends ServletContainerAclBuilder {
         grant(VistaDataAccessBehavior.TenantInPortal, new LeaseTenantDatasetAccessRule(), Lease.class);
         grant(VistaDataAccessBehavior.TenantInPortal, new CustomrPictureTenantDatasetAccessRule(), CustomerPicture.class);
         grant(VistaDataAccessBehavior.TenantInPortal, new LeasePaymentMethodTenantDatasetAccessRule(), LeasePaymentMethod.class);
+        grant(VistaDataAccessBehavior.TenantInPortal, new AutopayAgreementTenantDatasetAccessRule(), AutopayAgreement.class);
         grant(VistaDataAccessBehavior.TenantInPortal, new GeneralInsurancePolicyDatasetAccessRule(), GeneralInsurancePolicy.class);
         grant(VistaDataAccessBehavior.TenantInPortal, new InsuranceCertificateScanDatasetAccessRule(), InsuranceCertificateScan.class);
 
