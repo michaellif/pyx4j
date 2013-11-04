@@ -155,7 +155,6 @@ public interface BillingAccount extends IEntity {
     @NotNull
     IPrimitive<BillingPeriod> billingPeriod();
 
-    @ReadOnly(allowOverrideNull = true)
     BillingType billingType();
 
     IPrimitive<Integer> billingCycleStartDay();

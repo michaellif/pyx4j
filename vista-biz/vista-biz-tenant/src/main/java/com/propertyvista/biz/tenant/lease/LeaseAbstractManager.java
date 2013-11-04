@@ -1133,7 +1133,7 @@ public abstract class LeaseAbstractManager {
     }
 
     private void updateBillingType(Lease lease) {
-        if (!lease.leaseFrom().isNull() && !lease.unit().isNull()) {
+        if (lease.status().getValue().isDraft() && !lease.leaseFrom().isNull() && !lease.unit().isNull()) {
             lease.billingAccount().billingType().set(ServerSideFactory.create(BillingCycleFacade.class).getBillingType(lease));
         } else {
             log.debug("Can't retrieve Billing Type!..");
