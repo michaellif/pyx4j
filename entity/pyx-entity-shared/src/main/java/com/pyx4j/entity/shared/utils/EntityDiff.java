@@ -138,7 +138,7 @@ public class EntityDiff {
                 case Entity:
                     IEntity ent1Member = (IEntity) member1;
                     IEntity ent2Member = (IEntity) member2;
-                    if (ent2Member.isNull() && ent2Member.isNull()) {
+                    if (ent1Member.isNull() && ent2Member.isNull()) {
                         continue;
                     } else if (memberMeta.isEmbedded()) {
                         getChanges(ent1Member, ent2Member, path);
