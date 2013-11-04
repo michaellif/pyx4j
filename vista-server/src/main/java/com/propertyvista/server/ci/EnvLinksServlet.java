@@ -52,7 +52,8 @@ public class EnvLinksServlet extends HttpServlet {
         }
         body = body.replace("${title}", envName);
         body = body.replace("${name}", "Environment: " + envName);
-        body = body.replace("${version}", "version: " + ApplicationVersion.getProductVersion() + " " + ApplicationVersion.getBuildTime());
+        body = body.replace("${version}", "version: " + ApplicationVersion.getProductVersion() + " " + ApplicationVersion.getBuildLabel() + " "
+                + ApplicationVersion.getBuildTime());
 
         body = body.replace("${text}", new EnvLinksBuilder().toString());
 
