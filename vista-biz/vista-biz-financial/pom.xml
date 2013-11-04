@@ -175,9 +175,7 @@
                 <artifactId>maven-surefire-plugin</artifactId>
                 <configuration>
                     <includes>
-                        <include>**/RegressionSuite.java</include>
                         <include>**/FunctionalSuite.java</include>
-                        <include>**/PaymentMethodPersistenceCardsTest.java</include>
                     </includes>
                     <reuseForks>false</reuseForks>
                 </configuration>

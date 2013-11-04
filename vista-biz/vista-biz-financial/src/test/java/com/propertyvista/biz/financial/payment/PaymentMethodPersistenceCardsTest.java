@@ -13,10 +13,14 @@
  */
 package com.propertyvista.biz.financial.payment;
 
+import org.junit.experimental.categories.Category;
+
 import com.propertyvista.config.VistaSystemsSimulationConfig;
 import com.propertyvista.domain.payment.PaymentType;
+import com.propertyvista.test.integration.IntegrationTestBase.FunctionalTests;
 import com.propertyvista.test.mock.MockConfig;
 
+@Category(FunctionalTests.class)
 public class PaymentMethodPersistenceCardsTest extends PaymentMethodPersistenceTestBase {
 
     @Override

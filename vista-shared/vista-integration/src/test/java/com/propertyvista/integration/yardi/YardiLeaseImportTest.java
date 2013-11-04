@@ -15,6 +15,8 @@ package com.propertyvista.integration.yardi;
 
 import java.math.BigDecimal;
 
+import org.junit.experimental.categories.Category;
+
 import com.yardi.entity.mits.Customerinfo;
 
 import com.pyx4j.entity.server.Persistence;
@@ -24,6 +26,7 @@ import com.pyx4j.gwt.server.DateUtils;
 
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.LeaseTermParticipant.Role;
+import com.propertyvista.test.integration.IntegrationTestBase.RegressionTests;
 import com.propertyvista.test.integration.LeaseTermTenantTester;
 import com.propertyvista.test.mock.MockEventBus;
 import com.propertyvista.yardi.YardiTestBase;
@@ -36,6 +39,7 @@ import com.propertyvista.yardi.mock.PropertyUpdater;
 import com.propertyvista.yardi.mock.RtCustomerUpdateEvent;
 import com.propertyvista.yardi.mock.RtCustomerUpdater;
 
+@Category(RegressionTests.class)
 public class YardiLeaseImportTest extends YardiTestBase {
 
     @Override

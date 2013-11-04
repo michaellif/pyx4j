@@ -16,6 +16,8 @@ package com.propertyvista.integration.yardi;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.junit.experimental.categories.Category;
+
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.server.Persistence;
@@ -28,6 +30,7 @@ import com.propertyvista.domain.financial.PaymentRecord.PaymentStatus;
 import com.propertyvista.domain.payment.PaymentType;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.Tenant;
+import com.propertyvista.test.integration.IntegrationTestBase.FunctionalTests;
 import com.propertyvista.test.integration.PaymentRecordTester;
 import com.propertyvista.test.integration.PreauthorizedPaymentBuilder;
 import com.propertyvista.test.mock.MockEventBus;
@@ -39,6 +42,7 @@ import com.propertyvista.yardi.mock.RtCustomerUpdateEvent;
 import com.propertyvista.yardi.mock.RtCustomerUpdater;
 import com.propertyvista.yardi.services.YardiResidentTransactionsService;
 
+@Category(FunctionalTests.class)
 public class PreauthorizedPaymentProcessYardiTest extends PaymentYardiTestBase {
 
     private final List<Lease> leasesAll = new ArrayList<Lease>();

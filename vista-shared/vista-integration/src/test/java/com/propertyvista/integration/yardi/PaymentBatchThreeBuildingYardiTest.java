@@ -17,6 +17,7 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.junit.experimental.categories.Category;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -28,6 +29,7 @@ import com.propertyvista.domain.financial.PaymentRecord.PaymentStatus;
 import com.propertyvista.domain.payment.PaymentType;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.operations.domain.scheduler.PmcProcessType;
+import com.propertyvista.test.integration.IntegrationTestBase.FunctionalTests;
 import com.propertyvista.test.integration.PaymentRecordTester;
 import com.propertyvista.test.mock.MockEventBus;
 import com.propertyvista.test.mock.models.LeaseDataModel;
@@ -36,6 +38,7 @@ import com.propertyvista.yardi.mock.PropertyUpdateEvent;
 import com.propertyvista.yardi.mock.PropertyUpdater;
 import com.propertyvista.yardi.services.YardiResidentTransactionsService;
 
+@Category(FunctionalTests.class)
 public class PaymentBatchThreeBuildingYardiTest extends PaymentYardiTestBase {
 
     private static final Logger log = LoggerFactory.getLogger(PaymentBatchThreeBuildingYardiTest.class);

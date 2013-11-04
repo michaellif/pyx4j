@@ -16,6 +16,8 @@ package com.propertyvista.integration.yardi;
 
 import java.math.BigDecimal;
 
+import org.junit.experimental.categories.Category;
+
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.gwt.server.DateUtils;
@@ -28,6 +30,7 @@ import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.Tenant;
 import com.propertyvista.dto.payment.AutoPayReviewLeaseDTO;
 import com.propertyvista.dto.payment.AutoPayReviewPreauthorizedPaymentDTO;
+import com.propertyvista.test.integration.IntegrationTestBase.FunctionalTests;
 import com.propertyvista.test.integration.PaymentAgreementTester;
 import com.propertyvista.test.integration.PaymentRecordTester;
 import com.propertyvista.test.integration.PreauthorizedPaymentBuilder;
@@ -42,6 +45,7 @@ import com.propertyvista.yardi.mock.LeaseChargeUpdater;
  * @see com.propertyvista.biz.financial.payment.PreauthorizedPaymentChangeReviewInternalTest
  * 
  */
+@Category(FunctionalTests.class)
 public class PreauthorizedPaymentChangeReviewYardiTest extends PaymentYardiTestBase {
 
     private Lease lease;

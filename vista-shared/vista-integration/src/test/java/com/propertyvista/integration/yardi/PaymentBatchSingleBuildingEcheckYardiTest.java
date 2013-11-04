@@ -16,6 +16,8 @@ package com.propertyvista.integration.yardi;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.junit.experimental.categories.Category;
+
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.server.Executable;
 import com.pyx4j.entity.server.Persistence;
@@ -32,6 +34,7 @@ import com.propertyvista.domain.financial.yardi.YardiPayment;
 import com.propertyvista.domain.payment.PaymentType;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.operations.domain.scheduler.PmcProcessType;
+import com.propertyvista.test.integration.IntegrationTestBase.RegressionTests;
 import com.propertyvista.test.integration.InvoiceLineItemTester;
 import com.propertyvista.test.integration.PaymentRecordTester;
 import com.propertyvista.test.mock.MockEventBus;
@@ -41,6 +44,7 @@ import com.propertyvista.yardi.mock.PropertyUpdateEvent;
 import com.propertyvista.yardi.mock.PropertyUpdater;
 import com.propertyvista.yardi.services.YardiResidentTransactionsService;
 
+@Category(RegressionTests.class)
 public class PaymentBatchSingleBuildingEcheckYardiTest extends PaymentYardiTestBase {
 
     private Lease lease11;

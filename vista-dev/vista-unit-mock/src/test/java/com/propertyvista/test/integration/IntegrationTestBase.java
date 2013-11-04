@@ -61,9 +61,15 @@ public abstract class IntegrationTestBase extends VistaDBTestBase {
 
     private static final Logger log = LoggerFactory.getLogger(IntegrationTestBase.class);
 
+    /**
+     * This also includes RegressionTests
+     */
     public interface FunctionalTests {
     }
 
+    /**
+     * Minimal subset of tests executed in dev env
+     */
     public interface RegressionTests extends FunctionalTests {
     }
 

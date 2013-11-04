@@ -16,6 +16,8 @@ package com.propertyvista.integration.yardi;
 
 import java.rmi.RemoteException;
 
+import org.junit.experimental.categories.Category;
+
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.gwt.server.DateUtils;
 
@@ -23,6 +25,7 @@ import com.propertyvista.biz.system.YardiServiceException;
 import com.propertyvista.domain.payment.PaymentType;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.Tenant;
+import com.propertyvista.test.integration.IntegrationTestBase.FunctionalTests;
 import com.propertyvista.test.integration.PaymentAgreementTester;
 import com.propertyvista.test.integration.PreauthorizedPaymentBuilder;
 import com.propertyvista.test.mock.MockEventBus;
@@ -32,6 +35,7 @@ import com.propertyvista.test.mock.models.LeaseDataModel;
 import com.propertyvista.yardi.mock.RtCustomerUpdateEvent;
 import com.propertyvista.yardi.mock.RtCustomerUpdater;
 
+@Category(FunctionalTests.class)
 public class PreauthorizedPaymentRenewTest extends PaymentYardiTestBase {
 
     private Lease lease;

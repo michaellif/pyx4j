@@ -17,6 +17,7 @@ import java.math.BigDecimal;
 import java.util.List;
 
 import org.junit.Test;
+import org.junit.experimental.categories.Category;
 
 import com.yardi.entity.mits.Customerinfo;
 
@@ -32,6 +33,7 @@ import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.test.integration.BillableItemTester;
+import com.propertyvista.test.integration.IntegrationTestBase.FunctionalTests;
 import com.propertyvista.test.integration.InvoiceProductChargeTester;
 import com.propertyvista.test.mock.MockDataModel;
 import com.propertyvista.test.mock.MockEventBus;
@@ -45,6 +47,7 @@ import com.propertyvista.yardi.mock.PropertyUpdater;
 import com.propertyvista.yardi.mock.RtCustomerUpdateEvent;
 import com.propertyvista.yardi.mock.RtCustomerUpdater;
 
+@Category(FunctionalTests.class)
 public class YardiLeasePriceEstimatorTest extends YardiTestBase {
 
     public static final String PROPERTY_CODE = "prop123";
