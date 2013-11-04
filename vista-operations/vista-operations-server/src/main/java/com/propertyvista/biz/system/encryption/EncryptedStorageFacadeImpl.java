@@ -134,6 +134,7 @@ public class EncryptedStorageFacadeImpl implements EncryptedStorageFacade {
 
     @Override
     public byte[] decrypt(Key publicKeyKey, byte[] data) throws UserRuntimeException {
+        automaticActivateDecryption();
         PrivateKey privateKey = activeKeys.get(publicKeyKey);
         if (privateKey == null) {
             throw new UserRuntimeException(i18n.tr("Data Decryption not possible, Contact support to activate decryption"));
@@ -320,6 +321,24 @@ public class EncryptedStorageFacadeImpl implements EncryptedStorageFacade {
         }
     }
 
+    private void automaticActivateDecryption() {
+        if (!ApplicationMode.isDevelopment()) {
+            return;
+        }
+        if (activeKeys.size() == 0) {
+            final String password = getEncryptedStorageConfiguration().automaticActivateDecryptionKeyPassword();
+            if (password != null) {
+                TaskRunner.runInOperationsNamespace(new Callable<Void>() {
+                    @Override
+                    public Void call() {
+                        activateDecryption(getCurrentPublicKey(), password.toCharArray());
+                        return null;
+                    }
+                });
+            }
+        }
+    }
+
     @Override
     public void makeCurrent(final Key publicKeyKey) {
         EncryptedStoragePublicKey publicKey = Persistence.service().retrieve(EncryptedStoragePublicKey.class, publicKeyKey);
@@ -432,13 +451,6 @@ public class EncryptedStorageFacadeImpl implements EncryptedStorageFacade {
             throw new UserRuntimeException("PrivateKey not found");
         }
         return createPrivateKey(encryptedPrivateKeyBytes, password);
-    }
-
-    private void automaticActivateDecryption() {
-        if (!ApplicationMode.isDevelopment()) {
-            return;
-        }
-        EncryptedStorageConfiguration config = getEncryptedStorageConfiguration();
     }
 
     @Override
