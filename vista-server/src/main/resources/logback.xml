@@ -9,11 +9,14 @@
         <default>vista</default>
     </define>
     
+    <!-- OFF in Tomcat -->
+	<define name="consoleLogLevel" class="com.propertyvista.server.config.logback.ConsoleLogLevelProperty"/>
+    
     <conversionRule conversionWord="message" converterClass="com.pyx4j.logback.IStringViewMessageConverter" />
 
     <appender name="ConsoleAppender.info" class="ch.qos.logback.core.ConsoleAppender">
         <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
-            <level>INFO</level>
+            <level>${consoleLogLevel}</level>
         </filter>
         <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
             <!-- The caller line# should clickable in eclipse console.-->
