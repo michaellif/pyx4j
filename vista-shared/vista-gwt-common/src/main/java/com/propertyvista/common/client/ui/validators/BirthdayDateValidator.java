@@ -15,21 +15,30 @@ package com.propertyvista.common.client.ui.validators;
 
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.forms.client.ui.CComponent;
-import com.pyx4j.forms.client.validators.EditableValueValidator;
 import com.pyx4j.forms.client.validators.ValidationError;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.security.client.ClientContext;
 
-public class BirthdayDateValidator implements EditableValueValidator<LogicalDate> {
+public class BirthdayDateValidator extends PastDateIncludeTodayValidator {
 
     private static final I18n i18n = I18n.get(BirthdayDateValidator.class);
+
+    private static final String message1 = i18n.tr("The date must be earlier than or equal to today's date");
+
+    private static final String message2 = i18n.tr("This date is too far in the past. Please enter your birthdate.");
+
+    public BirthdayDateValidator() {
+        super(message1);
+    }
+
+    public BirthdayDateValidator(LogicalDate point) {
+        super(point, message1);
+    }
 
     @Override
     public ValidationError isValid(CComponent<LogicalDate> component, LogicalDate value) {
         if (value != null && value.compareTo(new LogicalDate(System.currentTimeMillis() - 120L * 365 * 24 * 60 * 60 * 1000)) < 0) {
-            return new ValidationError(component, i18n.tr("This date is too far in the past. Please enter your birthdate."));
+            return new ValidationError(component, message2);
         }
-        return (value == null) || value.before(new LogicalDate(ClientContext.getServerDate())) ? null : new ValidationError(component,
-                i18n.tr("The Date Must Be Earlier Than Today's Date"));
+        return super.isValid(component, value);
     }
 }
