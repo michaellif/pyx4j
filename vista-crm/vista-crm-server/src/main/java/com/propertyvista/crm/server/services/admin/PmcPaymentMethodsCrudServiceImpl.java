@@ -13,6 +13,7 @@
  */
 package com.propertyvista.crm.server.services.admin;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Vector;
 import java.util.concurrent.Callable;
@@ -76,39 +77,28 @@ public class PmcPaymentMethodsCrudServiceImpl implements PmcPaymentMethodsCrudSe
 
             @Override
             public VoidSerializable call() throws Exception {
-                List<PmcPaymentMethod> old = retrievePaymentMethods(pmc);
-                List<PmcPaymentMethod> updated = paymentMethodsHolder.paymentMethods();
-
-                for (PmcPaymentMethod oldPaymentMethod : old) {
-                    boolean isFound = false;
-                    for (PmcPaymentMethod updatedPaymentMethod : updated) {
-                        if (oldPaymentMethod.getPrimaryKey().equals(updatedPaymentMethod.getPrimaryKey())) {
-                            isFound = true;
-                            break;
-                        }
-                    }
-                    if (!isFound) {
-                        oldPaymentMethod.isDeleted().setValue(true);
-                        Persistence.service().persist(oldPaymentMethod);
+                for (PmcPaymentMethod exisitngPaymentMethod : retrievePaymentMethods(pmc)) {
+                    if (!paymentMethodsHolder.paymentMethods().contains(exisitngPaymentMethod)) {
+                        exisitngPaymentMethod.isDeleted().setValue(true);
+                        Persistence.service().persist(exisitngPaymentMethod);
                     }
                 }
-                for (PmcPaymentMethod updatedPaymentMethod : updated) {
+                List<PmcPaymentMethod> currentPMethods = new ArrayList<PmcPaymentMethod>();
+                for (PmcPaymentMethod updatedPaymentMethod : paymentMethodsHolder.paymentMethods()) {
                     if (updatedPaymentMethod.getPrimaryKey() == null) {
-                        ServerSideFactory.create(PaymentMethodFacade.class).persistPmcPaymentMethod(
-                                updatedPaymentMethod.details().duplicate(CreditCardInfo.class), pmc);
+                        currentPMethods.add(ServerSideFactory.create(PaymentMethodFacade.class).persistPmcPaymentMethod(
+                                updatedPaymentMethod.details().duplicate(CreditCardInfo.class), pmc));
                     } else {
-                        ServerSideFactory.create(PaymentMethodFacade.class).persistPmcPaymentMethod(updatedPaymentMethod);
+                        currentPMethods.add(ServerSideFactory.create(PaymentMethodFacade.class).persistPmcPaymentMethod(updatedPaymentMethod));
                     }
                 }
 
                 // now update pmc's equifax payment method:
-                Persistence.service().retrieveMember(pmc.equifaxInfo());
 
-                PmcPaymentMethod activeEquifaxPaymentMethod = null;
-                for (PmcPaymentMethod updatedPaymentMethod : updated) {
-                    if (updatedPaymentMethod.selectForEquifaxPayments().isBooleanTrue()) {
-                        activeEquifaxPaymentMethod = updatedPaymentMethod;
-                        pmc.equifaxInfo().paymentMethod().set(activeEquifaxPaymentMethod);
+                for (PmcPaymentMethod paymentMethod : currentPMethods) {
+                    if (paymentMethod.selectForEquifaxPayments().isBooleanTrue()) {
+                        Persistence.service().retrieveMember(pmc.equifaxInfo());
+                        pmc.equifaxInfo().paymentMethod().set(paymentMethod);
                         Persistence.service().persist(pmc.equifaxInfo());
                         break;
                     }
