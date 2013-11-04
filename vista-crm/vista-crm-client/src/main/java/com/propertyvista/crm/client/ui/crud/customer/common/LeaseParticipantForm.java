@@ -45,7 +45,7 @@ import com.propertyvista.common.client.policy.ClientPolicyManager;
 import com.propertyvista.common.client.resources.VistaImages;
 import com.propertyvista.common.client.ui.components.editors.NameEditor;
 import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
-import com.propertyvista.common.client.ui.validators.PastDateIncludeTodayValidator;
+import com.propertyvista.common.client.ui.validators.BirthdayDateValidator;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.crm.client.ui.crud.lease.common.CLeaseTermVHyperlink;
 import com.propertyvista.crm.rpc.services.customer.CustomerPictureUploadService;
@@ -100,7 +100,7 @@ public class LeaseParticipantForm<P extends LeaseParticipantDTO<?>> extends CrmE
 
     @Override
     public void addValidations() {
-        get(proto().customer().person().birthDate()).addValueValidator(new PastDateIncludeTodayValidator());
+        get(proto().customer().person().birthDate()).addValueValidator(new BirthdayDateValidator());
         if (!VistaFeatures.instance().yardiIntegration()) {
             get(proto().customer().person().birthDate()).addValueValidator(new EditableValueValidator<LogicalDate>() {
                 @Override

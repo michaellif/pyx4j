@@ -44,7 +44,7 @@ import com.propertyvista.common.client.ui.components.editors.NameEditor;
 import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
 import com.propertyvista.common.client.ui.components.security.UserAuditingConfigurationForm;
 import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
-import com.propertyvista.common.client.ui.validators.PastDateValidator;
+import com.propertyvista.common.client.ui.validators.BirthdayDateValidator;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.crm.client.ui.crud.organisation.common.BuildingFolder;
 import com.propertyvista.crm.client.ui.crud.organisation.common.PortfolioFolder;
@@ -87,7 +87,7 @@ public class EmployeeForm extends CrmEntityForm<EmployeeDTO> {
             }
         });
 
-        get(proto().birthDate()).addValueValidator(new PastDateValidator());
+        get(proto().birthDate()).addValueValidator(new BirthdayDateValidator());
     }
 
     @Override

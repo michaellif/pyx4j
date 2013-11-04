@@ -20,7 +20,6 @@ import com.pyx4j.entity.annotations.Editor;
 import com.pyx4j.entity.annotations.Editor.EditorType;
 import com.pyx4j.entity.annotations.EmbeddedEntity;
 import com.pyx4j.entity.annotations.ToString;
-import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.i18n.annotations.I18n;
@@ -61,6 +60,5 @@ public interface Person extends IEntity {
     @Editor(type = EditorType.email)
     IPrimitive<String> email();
 
-    @NotNull
     IPrimitive<LogicalDate> birthDate();
 }

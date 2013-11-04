@@ -67,7 +67,6 @@ public class EmergencyContactEditor extends CEntityDecoratableForm<EmergencyCont
     @Override
     public void addValidations() {
         super.addValidations();
-        get(proto().birthDate()).setMandatory(false);
         get(proto().birthDate()).addValueValidator(new BirthdayDateValidator());
     }
 }

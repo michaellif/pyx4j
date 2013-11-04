@@ -26,6 +26,9 @@ public class BirthdayDateValidator implements EditableValueValidator<LogicalDate
 
     @Override
     public ValidationError isValid(CComponent<LogicalDate> component, LogicalDate value) {
+        if (value != null && value.compareTo(new LogicalDate(System.currentTimeMillis() - 120L * 365 * 24 * 60 * 60 * 1000)) < 0) {
+            return new ValidationError(component, i18n.tr("This date is too far in the past. Please enter your birthdate."));
+        }
         return (value == null) || value.before(new LogicalDate(ClientContext.getServerDate())) ? null : new ValidationError(component,
                 i18n.tr("The Date Must Be Earlier Than Today's Date"));
     }

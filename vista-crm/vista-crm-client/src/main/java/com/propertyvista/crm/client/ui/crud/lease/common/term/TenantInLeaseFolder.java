@@ -256,6 +256,8 @@ public class TenantInLeaseFolder extends LeaseTermParticipantFolder<LeaseTermTen
 
             get(proto().leaseParticipant().customer().person().sex()).setMandatory(!VistaFeatures.instance().yardiIntegration());
             get(proto().leaseParticipant().customer().person().birthDate()).setMandatory(!VistaFeatures.instance().yardiIntegration());
+            get(proto().leaseParticipant().customer().person().birthDate()).addValueValidator(new BirthdayDateValidator());
+            get(proto().leaseParticipant().customer().person().birthDate()).addValueChangeHandler(new RevalidationTrigger<LogicalDate>(get(proto().role())));
 
             get(proto().role()).addValueChangeHandler(new ValueChangeHandler<LeaseTermParticipant.Role>() {
                 @Override
@@ -263,7 +265,6 @@ public class TenantInLeaseFolder extends LeaseTermParticipantFolder<LeaseTermTen
                     get(proto().relationship()).setVisible(event.getValue() != LeaseTermParticipant.Role.Applicant);
                 }
             });
-
             get(proto().role()).addValueChangeHandler(new RevalidationTrigger<Role>(get(proto().leaseParticipant().customer().person().birthDate())));
             get(proto().role()).addValueValidator(new EditableValueValidator<LeaseTermParticipant.Role>() {
                 @Override
@@ -281,9 +282,6 @@ public class TenantInLeaseFolder extends LeaseTermParticipantFolder<LeaseTermTen
                     return null;
                 }
             });
-
-            get(proto().leaseParticipant().customer().person().birthDate()).addValueChangeHandler(new RevalidationTrigger<LogicalDate>(get(proto().role())));
-            get(proto().leaseParticipant().customer().person().birthDate()).addValueValidator(new BirthdayDateValidator());
 
             if (ApplicationMode.isDevelopment()) {
                 this.addDevShortcutHandler(new DevShortcutHandler() {
