@@ -37,6 +37,7 @@ SET search_path = '_admin_';
         
         ALTER TABLE admin_pmc_dns_name DROP CONSTRAINT admin_pmc_dns_name_target_e_ck;
         ALTER TABLE audit_record DROP CONSTRAINT audit_record_app_e_ck;
+        ALTER TABLE audit_record DROP CONSTRAINT audit_record_event_e_ck;
         ALTER TABLE dev_card_service_simulator_config DROP CONSTRAINT dev_card_service_simulator_config_response_type_e_ck;
         ALTER TABLE operations_alert DROP CONSTRAINT operations_alert_app_e_ck;
         ALTER TABLE scheduler_trigger DROP CONSTRAINT scheduler_trigger_trigger_type_e_ck;
@@ -150,6 +151,9 @@ SET search_path = '_admin_';
         
         ALTER TABLE admin_pmc_dns_name ADD CONSTRAINT admin_pmc_dns_name_target_e_ck CHECK ((target) IN ('crm', 'field', 'portal', 'prospect', 'site'));
         ALTER TABLE audit_record ADD CONSTRAINT audit_record_app_e_ck CHECK ((app) IN ('crm', 'field', 'onboarding', 'operations', 'portal', 'prospect', 'site'));
+        ALTER TABLE audit_record ADD CONSTRAINT audit_record_event_e_ck 
+                CHECK ((event) IN ('Create', 'CredentialUpdate', 'Delete', 'EquifaxReadReport', 'EquifaxRequest', 'Info', 'Login', 'LoginFailed', 'Logout', 'PermitionsUpdate', 
+                'Read', 'SessionExpiration', 'System', 'Update'));
         ALTER TABLE dev_card_service_simulator_config ADD CONSTRAINT dev_card_service_simulator_config_response_type_e_ck 
                 CHECK ((response_type) IN ('RespondEmpty', 'RespondWithCode', 'RespondWithHttpCode', 'RespondWithText', 'SimulateTransations'));
         ALTER TABLE operations_alert ADD CONSTRAINT operations_alert_app_e_ck CHECK ((app) IN ('crm', 'field', 'onboarding', 'operations', 'portal', 'prospect', 'site'));
