@@ -33,6 +33,10 @@ public interface AuditFacade {
 
     public void created(IEntity entity);
 
+    public void created(IEntity entity, String deatils);
+
+    public void delete(IEntity entity);
+
     public void updated(IEntity entity, String changes);
 
     public void read(IEntity entity);

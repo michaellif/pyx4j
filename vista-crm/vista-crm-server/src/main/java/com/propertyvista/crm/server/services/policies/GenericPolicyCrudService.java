@@ -110,4 +110,10 @@ public abstract class GenericPolicyCrudService<POLICY extends Policy, POLICY_DTO
             ServerSideFactory.create(AuditFacade.class).updated(dbo, EntityDiff.getChanges(orig, dbo));
         }
     }
+
+    @Override
+    protected void delete(POLICY actualEntity) {
+        super.delete(actualEntity);
+        ServerSideFactory.create(AuditFacade.class).delete(actualEntity);
+    }
 }

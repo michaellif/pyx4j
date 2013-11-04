@@ -88,8 +88,18 @@ public class AuditFacadeImpl implements AuditFacade {
     }
 
     @Override
+    public void created(IEntity entity, String deatils) {
+        record(AuditRecordEventType.Create, entity, "{0}", deatils);
+    }
+
+    @Override
     public void updated(IEntity entity, String changes) {
         record(AuditRecordEventType.Update, entity, "{0}", changes);
+    }
+
+    @Override
+    public void delete(IEntity entity) {
+        record(AuditRecordEventType.Delete, entity, null);
     }
 
     @Override
