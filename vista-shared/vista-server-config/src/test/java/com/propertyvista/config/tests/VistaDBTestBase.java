@@ -16,6 +16,7 @@ package com.propertyvista.config.tests;
 import junit.framework.TestCase;
 
 import com.pyx4j.entity.cache.CacheService;
+import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.server.PersistenceServicesFactory;
 
 public abstract class VistaDBTestBase extends TestCase {
@@ -33,6 +34,13 @@ public abstract class VistaDBTestBase extends TestCase {
         super.setUp();
         CacheService.resetAll();
         VistaTestDBSetup.init();
+
+        // Avoid side effects from unfinished setUp() in another tests 
+        try {
+            Persistence.service().removeThreadLocale();
+        } catch (Throwable ignore) {
+        }
+
         //TODO investigate memory problem
         if ((runningTestsCount > 0) && (false)) {
             PersistenceServicesFactory.dispose();
