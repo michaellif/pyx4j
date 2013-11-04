@@ -358,6 +358,7 @@ public class LeaseBillingPolicyForm extends PolicyDTOTabPanelBasedForm<LeaseBill
                 } else {
                     setBody(selector);
                     selector.getWidget().getEditor().setVisibleItemCount(options.size());
+                    selector.getWidget().getEditor().setHeight("100px");
                 }
             }
 

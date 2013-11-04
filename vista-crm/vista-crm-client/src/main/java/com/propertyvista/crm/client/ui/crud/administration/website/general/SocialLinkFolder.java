@@ -122,6 +122,7 @@ class SocialLinkFolder extends VistaBoxFolder<SocialLink> {
                 });
                 panel.add(selector);
                 selector.getWidget().getEditor().setVisibleItemCount(optSize + 1);
+                selector.getWidget().getEditor().setHeight("100px");
             } else {
                 panel.add(new Label(i18n.tr("Sorry, no more items to choose from.")));
             }
