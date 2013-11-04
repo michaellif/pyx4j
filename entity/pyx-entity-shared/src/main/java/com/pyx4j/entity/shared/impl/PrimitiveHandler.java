@@ -294,7 +294,7 @@ public class PrimitiveHandler<TYPE extends Serializable> extends ObjectHandler<T
         TYPE thisValue = this.getValue();
         if (thisValue == null) {
             if (valueClass.equals(Boolean.class)) {
-                return i18nYesText();
+                return i18nNoText();
             } else {
                 return mm.getNullString();
             }
