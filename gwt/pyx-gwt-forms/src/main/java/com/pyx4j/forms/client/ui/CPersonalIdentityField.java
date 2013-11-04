@@ -138,6 +138,13 @@ public class CPersonalIdentityField<T extends IPersonalIdentity> extends CTextFi
         }
     }
 
+    @Override
+    public void setValueByString(String name) {
+        // clear obfuscatedNumber to indicate new input
+        getValue().obfuscatedNumber().setValue(null);
+        super.setValueByString(name);
+    }
+
     private static class PersonalIdentityFormat<E extends IPersonalIdentity> implements PersonalIdentityIFormat<E> {
 
         private final CPersonalIdentityField<E> component;
