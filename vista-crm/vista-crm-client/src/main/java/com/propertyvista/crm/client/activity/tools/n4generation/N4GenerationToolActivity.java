@@ -69,7 +69,6 @@ public class N4GenerationToolActivity extends AbstractBulkOperationToolActivity<
     @Override
     protected void initView(N4GenerationSettingsDTO settings) {
         super.initView(settings);
-        getView().setBulkOperationEnabled(CommonsStringUtils.isEmpty(settings.n4PolicyErrors().getValue()));
         getView().setSearchEnabled(CommonsStringUtils.isEmpty(settings.n4PolicyErrors().getValue()));
     }
 

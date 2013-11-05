@@ -137,7 +137,7 @@ public abstract class AbstractBulkOperationToolActivity<Settings extends IEntity
         getView().setSettings(settings);
         getView().setRowData(0, 0, Collections.<Item> emptyList());
         getView().setLoading(false);
-        getView().setBulkOperationEnabled(true);
+        getView().setBulkOperationEnabled(false);
         getView().setSearchEnabled(true);
     }
 
@@ -146,6 +146,7 @@ public abstract class AbstractBulkOperationToolActivity<Settings extends IEntity
         int end = Math.min(items.size(), start + getView().getVisibleRange().getLength());
 
         getView().setRowData(getView().getVisibleRange().getStart(), items.size(), items.subList(start, end));
+        getView().setBulkOperationEnabled(items.size() > 0);
     }
 
     private void startAccetanceProgress(String deferredCorrelationId) {
