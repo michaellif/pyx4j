@@ -151,6 +151,7 @@ public class WidgetDecorator extends FlowPanel implements IDecorator<CComponent<
         labelHolder = new SimplePanel();
         labelHolder.setStyleName(WidgetDecoratorLabelHolder.name());
         labelHolder.getElement().getStyle().setVerticalAlign(VerticalAlign.MIDDLE);
+        labelHolder.getElement().getStyle().setProperty("textAlign", builder.labelAlignment.name());
 
         labelHolder.setWidth(builder.labelWidth);
         labelHolder.setWidget(labelContent);
