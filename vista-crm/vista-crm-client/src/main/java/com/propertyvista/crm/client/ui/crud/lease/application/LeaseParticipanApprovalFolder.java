@@ -24,11 +24,12 @@ import com.google.gwt.user.client.ui.Widget;
 import com.pyx4j.commons.Key;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.forms.client.ui.CComponent;
+import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.ui.CEntityLabel;
 import com.pyx4j.forms.client.ui.CField;
 import com.pyx4j.forms.client.ui.CLabel;
 import com.pyx4j.forms.client.ui.IFormat;
-import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
+import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.rpc.shared.VoidSerializable;
@@ -37,7 +38,6 @@ import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.client.ui.prime.form.IViewer;
 import com.pyx4j.site.client.ui.prime.misc.CEntityCrudHyperlink;
 
-import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
 import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
 import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
 import com.propertyvista.crm.rpc.CrmSiteMap;
@@ -71,7 +71,7 @@ public class LeaseParticipanApprovalFolder extends VistaBoxFolder<LeaseParticipa
         return super.create(member);
     }
 
-    private class LeaseParticipanApprovalViewer extends CEntityDecoratableForm<LeaseParticipanApprovalDTO> {
+    private class LeaseParticipanApprovalViewer extends CEntityForm<LeaseParticipanApprovalDTO> {
 
         private Widget creditCheckResultPanel;
 
@@ -83,12 +83,29 @@ public class LeaseParticipanApprovalFolder extends VistaBoxFolder<LeaseParticipa
 
         @Override
         public IsWidget createContent() {
-            TwoColumnFlexFormPanel left = new TwoColumnFlexFormPanel();
+            BasicFlexFormPanel main = new BasicFlexFormPanel();
+
+            main.setWidget(0, 0, createLeaseParticipantInfoPanel());
+            if (VistaFeatures.instance().countryOfOperation() == CountryOfOperation.Canada) {
+                main.setWidget(0, 1, creditCheckResultPanel = createCreditCheckResultPanel());
+            }
+
+            main.getFlexCellFormatter().setVerticalAlignment(0, 0, HasVerticalAlignment.ALIGN_TOP);
+            main.getFlexCellFormatter().setVerticalAlignment(0, 1, HasVerticalAlignment.ALIGN_TOP);
+
+            main.getFlexCellFormatter().setWidth(0, 0, "35em");
+
+            return main;
+        }
+
+        Widget createLeaseParticipantInfoPanel() {
+            BasicFlexFormPanel panel = new BasicFlexFormPanel();
+
             int row = -1;
-            left.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().leaseParticipant().leaseParticipant().participantId()), 7).build());
-            left.setWidget(++row, 0,
-                    new FormDecoratorBuilder(inject(proto().leaseParticipant().leaseParticipant().customer().person().name(), new CEntityLabel<Name>()), 20)
-                            .build());
+            panel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().leaseParticipant().leaseParticipant().participantId()), 15, 15, 20).build());
+            panel.setWidget(++row, 0,
+                    new FormDecoratorBuilder(inject(proto().leaseParticipant().leaseParticipant().customer().person().name(), new CEntityLabel<Name>()), 15,
+                            20, 20).build());
             ((CField) get(proto().leaseParticipant().leaseParticipant().customer().person().name())).setNavigationCommand(new Command() {
                 @Override
                 public void execute() {
@@ -104,47 +121,29 @@ public class LeaseParticipanApprovalFolder extends VistaBoxFolder<LeaseParticipa
                 }
             });
 
-            left.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().leaseParticipant().role()), 15).build());
+            panel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().leaseParticipant().role()), 15, 15, 20).build());
 
-            left.setBR(++row, 0, 1);
+            panel.setBR(++row, 0, 1);
 
-            left.setWidget(
+            panel.setWidget(
                     ++row,
                     0,
                     new FormDecoratorBuilder(inject(proto().screening(),
-                            new CEntityCrudHyperlink<CustomerScreening>(AppPlaceEntityMapper.resolvePlace(CustomerScreening.class))), 10).build());
-
-            creditCheckResultPanel = createCreditCheckResultPanel();
-
-            // assemble main panel:
-            TwoColumnFlexFormPanel main = new TwoColumnFlexFormPanel();
-
-            main.setWidget(0, 0, left);
-            if (VistaFeatures.instance().countryOfOperation() == CountryOfOperation.Canada) {
-                main.setWidget(0, 1, creditCheckResultPanel);
-            }
-
-            main.getFlexCellFormatter().setVerticalAlignment(0, 0, HasVerticalAlignment.ALIGN_TOP);
-            main.getFlexCellFormatter().setVerticalAlignment(0, 1, HasVerticalAlignment.ALIGN_TOP);
-
-            main.getFlexCellFormatter().setWidth(0, 0, "35em");
-
-            return main;
+                            new CEntityCrudHyperlink<CustomerScreening>(AppPlaceEntityMapper.resolvePlace(CustomerScreening.class))), 15, 15, 20).build());
+            return panel;
         }
 
         Widget createCreditCheckResultPanel() {
-            TwoColumnFlexFormPanel panel = new TwoColumnFlexFormPanel();
-
-            TwoColumnFlexFormPanel left = new TwoColumnFlexFormPanel();
+            BasicFlexFormPanel left = new BasicFlexFormPanel();
 
             int row = -1;
-            left.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().creditCheck().creditCheckResult()), 10).build());
-            left.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().creditCheck().reason()), 10).build());
-            left.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().creditCheck().amountApproved()), 10).build());
+            left.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().creditCheck().creditCheckResult()), 15, 10, 10).build());
+            left.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().creditCheck().reason()), 15, 10, 10).build());
+            left.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().creditCheck().amountApproved()), 15, 10, 10).build());
 
             left.setHR(++row, 0, 1);
 
-            left.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().creditCheck().creditCheckDate()), 10).build());
+            left.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().creditCheck().creditCheckDate()), 15, 10, 10).build());
 
             CLabel<Key> creditCheckReport = new CLabel<Key>(i18n.tr("View Full Report"));
             creditCheckReport.setFormat(new IFormat<Key>() {
@@ -177,21 +176,23 @@ public class LeaseParticipanApprovalFolder extends VistaBoxFolder<LeaseParticipa
                             });
                 }
             });
-            left.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().creditCheck().creditCheckReport(), creditCheckReport), 10).build());
+            left.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().creditCheck().creditCheckReport(), creditCheckReport), 15, 10, 10).build());
 
-            TwoColumnFlexFormPanel right = new TwoColumnFlexFormPanel();
+            BasicFlexFormPanel right = new BasicFlexFormPanel();
             row = -1;
 
             right.setWidget(++row, 0, new HTML("<i>" + i18n.tr("Credit Check Parameters:") + "</i>"));
             right.getWidget(row, 0).getElement().getStyle().setFontWeight(FontWeight.NORMAL);
             right.getWidget(row, 0).getElement().getStyle().setMarginLeft(2, Unit.EM);
 
-            right.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().creditCheck().backgroundCheckPolicy().bankruptcy()), 5).labelWidth(10).build());
-            right.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().creditCheck().backgroundCheckPolicy().judgment()), 5).labelWidth(10).build());
-            right.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().creditCheck().backgroundCheckPolicy().collection()), 5).labelWidth(10).build());
-            right.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().creditCheck().backgroundCheckPolicy().chargeOff()), 5).labelWidth(10).build());
+            right.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().creditCheck().backgroundCheckPolicy().bankruptcy()), 10, 5, 5).build());
+            right.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().creditCheck().backgroundCheckPolicy().judgment()), 10, 5, 5).build());
+            right.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().creditCheck().backgroundCheckPolicy().collection()), 10, 5, 5).build());
+            right.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().creditCheck().backgroundCheckPolicy().chargeOff()), 10, 5, 5).build());
 
             // assemble main panel:
+            BasicFlexFormPanel panel = new BasicFlexFormPanel();
+
             panel.setWidget(0, 0, left);
             panel.setWidget(0, 1, right);
 
