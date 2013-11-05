@@ -101,7 +101,7 @@ public class CustomerCreditCheckLongReportForm extends CrmEntityForm<CustomerCre
     protected void onValueSet(boolean populate) {
         super.onValueSet(populate);
 
-//        get(proto().identity().deathDate()).setVisible(!getValue().identity().deathDate().isNull());
+        get(proto().identity().deathDate()).setVisible(!getValue().identity().deathDate().isNull());
     }
 
     private Widget createQuickSummary() {
