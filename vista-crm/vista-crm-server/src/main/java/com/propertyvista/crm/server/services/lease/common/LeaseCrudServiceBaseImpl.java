@@ -55,16 +55,7 @@ public abstract class LeaseCrudServiceBaseImpl<DTO extends LeaseDTO> extends Abs
     protected void enhanceRetrieved(Lease in, DTO to, RetrieveTarget retrieveTarget) {
         Persistence.service().retrieve(to.unit().building());
 
-        if (!to.currentTerm().isNull()) {
-            Persistence.service().retrieve(to.currentTerm());
-            if (to.currentTerm().version().isNull()) {
-                to.currentTerm().set(Persistence.secureRetrieveDraft(LeaseTerm.class, to.currentTerm().getPrimaryKey()));
-            }
-
-            Persistence.service().retrieveMember(to.currentTerm().version().tenants());
-            Persistence.service().retrieveMember(to.currentTerm().version().guarantors());
-        }
-
+        loadCurrentTerm(to);
         loadDetachedProducts(to);
 
         for (LeaseTermTenant item : to.currentTerm().version().tenants()) {
@@ -90,6 +81,18 @@ public abstract class LeaseCrudServiceBaseImpl<DTO extends LeaseDTO> extends Abs
     @Override
     protected void persist(Lease dbo, DTO in) {
         throw new Error("Facade should be used");
+    }
+
+    protected void loadCurrentTerm(DTO to) {
+        if (!to.currentTerm().isNull()) {
+            Persistence.service().retrieve(to.currentTerm());
+            if (to.currentTerm().version().isNull()) {
+                to.currentTerm().set(Persistence.secureRetrieveDraft(LeaseTerm.class, to.currentTerm().getPrimaryKey()));
+            }
+
+            Persistence.service().retrieveMember(to.currentTerm().version().tenants());
+            Persistence.service().retrieveMember(to.currentTerm().version().guarantors());
+        }
     }
 
     protected void loadDetachedProducts(DTO dto) {

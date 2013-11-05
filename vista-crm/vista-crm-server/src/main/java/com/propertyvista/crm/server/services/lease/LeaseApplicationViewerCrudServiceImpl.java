@@ -64,8 +64,8 @@ public class LeaseApplicationViewerCrudServiceImpl extends LeaseViewerCrudServic
     protected void enhanceListRetrieved(Lease in, LeaseApplicationDTO dto) {
         super.enhanceListRetrieved(in, dto);
 
-        Persistence.service().retrieveMember(dto.currentTerm().version().tenants());
-        Persistence.service().retrieveMember(dto.currentTerm().version().guarantors());
+        loadCurrentTerm(dto);
+
         enhanceRetrievedCommon(in, dto);
     }
 
