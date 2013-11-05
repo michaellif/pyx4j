@@ -60,13 +60,12 @@ public class BuildingDataModel extends MockDataModel<Building> {
         }
     }
 
-    public Building addBuilding() {
-
+    public Building addBuilding(String provinceCode) {
         Building building = EntityFactory.create(Building.class);
         building.propertyCode().setValue(String.valueOf(System.currentTimeMillis()).substring(5));
         building.integrationSystemId().setValue(IntegrationSystem.internal);
 
-        building.info().address().province().set(getDataModel(LocationsDataModel.class).getProvinceByCode("ON"));
+        building.info().address().province().set(getDataModel(LocationsDataModel.class).getProvinceByCode(provinceCode));
 
         generateParking(building);
         generateLockerArea(building);
@@ -81,6 +80,11 @@ public class BuildingDataModel extends MockDataModel<Building> {
         addItem(building);
 
         return building;
+    }
+
+    /** Creates Building in Ontario */
+    public Building addBuilding() {
+        return addBuilding("ON");
     }
 
     public ProductItem addResidentialUnitServiceItem(Building building, BigDecimal price) {

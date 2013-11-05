@@ -13,58 +13,10 @@
  */
 package com.propertyvista.biz.policy;
 
-import java.util.List;
 
-import org.junit.Before;
-import org.junit.Ignore;
-import org.junit.Test;
+public class PolicyManagerTest extends PolicyManagerTestBase {
 
-import com.pyx4j.commons.Key;
-import com.pyx4j.entity.server.Persistence;
-import com.pyx4j.entity.shared.EntityFactory;
-import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
-import com.pyx4j.entity.shared.criterion.PropertyCriterion;
-import com.pyx4j.security.shared.UserVisit;
-import com.pyx4j.unit.server.mock.TestLifecycle;
+    public void testSanity() {
 
-import com.propertyvista.config.tests.VistaTestDBSetup;
-import com.propertyvista.domain.security.VistaCrmBehavior;
-import com.propertyvista.domain.security.common.VistaBasicBehavior;
-
-@Ignore
-public class PolicyManagerTest {
-
-    @Before
-    public void setUp() {
-        VistaTestDBSetup.init();
-        TestLifecycle.testSession(new UserVisit(new Key(-101), "Mad Max"), VistaCrmBehavior.PropertyManagement, VistaBasicBehavior.CRM);
-        TestLifecycle.beginRequest();
-
-//        Persistence.service().delete(new EntityQueryCriteria<OrganizationPoliciesNode>(OrganizationPoliciesNode.class));
-//        Persistence.service().delete(new EntityQueryCriteria<Country>(Country.class));
-//        Persistence.service().delete(new EntityQueryCriteria<Province>(Province.class));
-//        Persistence.service().delete(new EntityQueryCriteria<Building>(Building.class));
-
-        Persistence.service().delete(new EntityQueryCriteria<FooA>(FooA.class));
-        Persistence.service().delete(new EntityQueryCriteria<FooB>(FooB.class));
-
-        FooA fooA = EntityFactory.create(FooA.class);
-        fooA.abstractFooValue().setValue(1);
-        Persistence.service().merge(fooA);
-
-        FooB FooB = EntityFactory.create(FooB.class);
-        FooB.abstractFooValue().setValue(2);
-        Persistence.service().merge(FooB);
-
-        // TODO remove data from tables
-    }
-
-    @Test
-    public void experiment() {
-
-        EntityQueryCriteria<AbstractFoo> criteria = new EntityQueryCriteria<AbstractFoo>(AbstractFoo.class);
-        criteria.add(PropertyCriterion.eq(criteria.proto().abstractFooValue(), 1));
-
-        List<AbstractFoo> aLotOfFoo = Persistence.service().query(criteria);
     }
 }
