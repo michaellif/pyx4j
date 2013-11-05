@@ -20,6 +20,7 @@ import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.forms.client.ui.CComponent;
+import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
 import com.pyx4j.forms.client.validators.ValidationError;
@@ -29,7 +30,6 @@ import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.propertyvista.common.client.policy.ClientPolicyManager;
 import com.propertyvista.common.client.ui.components.ApplicationDocumentFileUploaderFolder;
 import com.propertyvista.common.client.ui.components.DocumentTypeSelectorDialog;
-import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
 import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
 import com.propertyvista.domain.media.ApplicationDocumentFile;
 import com.propertyvista.domain.media.IdentificationDocument;
@@ -106,7 +106,7 @@ public class IdUploaderFolder extends VistaBoxFolder<IdentificationDocument> {
         }
     }
 
-    private class IdentificationDocumentEditor extends CEntityDecoratableForm<IdentificationDocument> {
+    private class IdentificationDocumentEditor extends CEntityForm<IdentificationDocument> {
 
         public IdentificationDocumentEditor() {
             super(IdentificationDocument.class);
@@ -115,11 +115,11 @@ public class IdUploaderFolder extends VistaBoxFolder<IdentificationDocument> {
         @Override
         public IsWidget createContent() {
             TwoColumnFlexFormPanel content = new TwoColumnFlexFormPanel();
-            content.setSize("100%", "100%");
+
             int row = -1;
-            content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().idType())).labelWidth(8).build());
-            content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().idNumber())).labelWidth(8).build());
-            content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().notes())).labelWidth(8).build());
+            content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().idType())).build());
+            content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().idNumber())).build());
+            content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().notes())).build());
 
             ApplicationDocumentFileUploaderFolder docPagesFolder = new ApplicationDocumentFileUploaderFolder();
             docPagesFolder.addValueValidator(new EditableValueValidator<IList<ApplicationDocumentFile>>() {
@@ -136,8 +136,8 @@ public class IdUploaderFolder extends VistaBoxFolder<IdentificationDocument> {
             // Tune ups:
             get(proto().idType()).setViewable(true);
 
-            content.setH3(++row, 0, 1, i18n.tr("Files"));
-            content.setWidget(++row, 0, inject(proto().documentPages(), docPagesFolder));
+            content.setH3(++row, 0, 2, i18n.tr("Files"));
+            content.setWidget(++row, 0, 2, inject(proto().documentPages(), docPagesFolder));
             return content;
         }
 

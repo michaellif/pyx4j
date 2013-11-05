@@ -32,7 +32,6 @@ import com.pyx4j.forms.client.ui.RevalidationTrigger;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
 
-import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
 import com.propertyvista.common.client.ui.components.folders.ProofOfEmploymentUploaderFolder;
 import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
 import com.propertyvista.common.client.ui.validators.StartEndDateValidation;
@@ -63,21 +62,19 @@ public class PersonalIncomeEditor extends CEntityForm<CustomerScreeningIncome> {
     public IsWidget createContent() {
         TwoColumnFlexFormPanel main = new TwoColumnFlexFormPanel();
         int row = -1;
-        if (isEditable()) {
-            @SuppressWarnings("unchecked")
-            CComboBox<IncomeSource> incomeSource = (CComboBox<IncomeSource>) inject(proto().incomeSource());
-            incomeSource.addValueChangeHandler(new ValueChangeHandler<IncomeSource>() {
-                @Override
-                public void onValueChange(ValueChangeEvent<IncomeSource> event) {
-                    selectDetailsEditor(event.getValue());
-                }
-            });
-            main.setWidget(++row, 0, new FormDecoratorBuilder(incomeSource, 25).build());
-        } else {
-            main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().incomeSource()), 25).build());
-        }
+
+        CComboBox<IncomeSource> incomeSource = inject(proto().incomeSource(), new CComboBox<IncomeSource>());
+        incomeSource.addValueChangeHandler(new ValueChangeHandler<IncomeSource>() {
+            @Override
+            public void onValueChange(ValueChangeEvent<IncomeSource> event) {
+                selectDetailsEditor(event.getValue());
+            }
+        });
+
+        main.setWidget(++row, 0, 2, new FormDecoratorBuilder(incomeSource, 25).build());
 
         main.setBR(++row, 0, 2);
+
         main.setWidget(++row, 0, 2, detailsHolder);
         main.setWidget(++row, 0, 2, inject(proto().documents(), fileUpload = new ProofOfEmploymentUploaderFolder()));
 
@@ -150,7 +147,7 @@ public class PersonalIncomeEditor extends CEntityForm<CustomerScreeningIncome> {
     //  Incomes variants:
     //
     private CEntityForm<IncomeInfoEmployer> createEmployerEditor() {
-        return new CEntityDecoratableForm<IncomeInfoEmployer>(IncomeInfoEmployer.class) {
+        return new CEntityForm<IncomeInfoEmployer>(IncomeInfoEmployer.class) {
 
             @Override
             public IsWidget createContent() {
@@ -165,13 +162,12 @@ public class PersonalIncomeEditor extends CEntityForm<CustomerScreeningIncome> {
                 main.setWidget(++row, 1, new FormDecoratorBuilder(inject(proto().supervisorPhone()), 15).build());
 
                 main.setH3(++row, 0, 2, proto().address().getMeta().getCaption());
-                main.setWidget(++row, 0, inject(proto().address(), new AddressStructuredEditor()));
-                main.getFlexCellFormatter().setColSpan(row, 0, 2);
+                main.setWidget(++row, 0, 2, inject(proto().address(), new AddressStructuredEditor()));
 
                 row = injectIEmploymentInfo(main, row, this);
 
                 main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().starts()), 9).build());
-                main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().ends()), 9).build());
+                main.setWidget(row, 1, new FormDecoratorBuilder(inject(proto().ends()), 9).build());
 
                 return main;
             }
@@ -204,7 +200,7 @@ public class PersonalIncomeEditor extends CEntityForm<CustomerScreeningIncome> {
     }
 
     private CEntityForm<IncomeInfoSeasonallyEmployed> createSeasonallyEmployedEditor() {
-        return new CEntityDecoratableForm<IncomeInfoSeasonallyEmployed>(IncomeInfoSeasonallyEmployed.class) {
+        return new CEntityForm<IncomeInfoSeasonallyEmployed>(IncomeInfoSeasonallyEmployed.class) {
             @Override
             public IsWidget createContent() {
                 TwoColumnFlexFormPanel main = new TwoColumnFlexFormPanel();
@@ -217,13 +213,12 @@ public class PersonalIncomeEditor extends CEntityForm<CustomerScreeningIncome> {
                 main.setWidget(++row, 1, new FormDecoratorBuilder(inject(proto().supervisorPhone()), 15).build());
 
                 main.setH3(++row, 0, 2, proto().address().getMeta().getCaption());
-                main.setWidget(++row, 0, inject(proto().address(), new AddressStructuredEditor()));
-                main.getFlexCellFormatter().setColSpan(row, 0, 2);
+                main.setWidget(++row, 0, 2, inject(proto().address(), new AddressStructuredEditor()));
 
                 row = injectIEmploymentInfo(main, row, this);
 
                 main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().starts()), 9).build());
-                main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().ends()), 9).build());
+                main.setWidget(row, 1, new FormDecoratorBuilder(inject(proto().ends()), 9).build());
 
                 return main;
             }
@@ -237,7 +232,7 @@ public class PersonalIncomeEditor extends CEntityForm<CustomerScreeningIncome> {
     }
 
     private CEntityForm<IncomeInfoStudentIncome> createStudentIncomeEditor() {
-        return new CEntityDecoratableForm<IncomeInfoStudentIncome>(IncomeInfoStudentIncome.class) {
+        return new CEntityForm<IncomeInfoStudentIncome>(IncomeInfoStudentIncome.class) {
             @Override
             public IsWidget createContent() {
                 TwoColumnFlexFormPanel main = new TwoColumnFlexFormPanel();
@@ -270,7 +265,7 @@ public class PersonalIncomeEditor extends CEntityForm<CustomerScreeningIncome> {
     }
 
     private CEntityForm<IncomeInfoSelfEmployed> createSelfEmployedEditor() {
-        return new CEntityDecoratableForm<IncomeInfoSelfEmployed>(IncomeInfoSelfEmployed.class) {
+        return new CEntityForm<IncomeInfoSelfEmployed>(IncomeInfoSelfEmployed.class) {
             @Override
             public IsWidget createContent() {
                 TwoColumnFlexFormPanel main = new TwoColumnFlexFormPanel();
@@ -284,17 +279,16 @@ public class PersonalIncomeEditor extends CEntityForm<CustomerScreeningIncome> {
                 main.setWidget(++row, 1, new FormDecoratorBuilder(inject(proto().supervisorPhone()), 15).build());
 
                 main.setH3(++row, 0, 2, proto().address().getMeta().getCaption());
-                main.setWidget(++row, 0, inject(proto().address(), new AddressStructuredEditor()));
-                main.getFlexCellFormatter().setColSpan(row, 0, 2);
+                main.setWidget(++row, 0, 2, inject(proto().address(), new AddressStructuredEditor()));
 
                 row = injectIEmploymentInfo(main, row, this);
 
                 main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().fullyOwned()), 10).build());
                 main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().monthlyRevenue()), 10).build());
-                main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().numberOfEmployees()), 4).build());
+                main.setWidget(row, 1, new FormDecoratorBuilder(inject(proto().numberOfEmployees()), 4).build());
 
                 main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().starts()), 9).build());
-                main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().ends()), 9).build());
+                main.setWidget(row, 1, new FormDecoratorBuilder(inject(proto().ends()), 9).build());
 
                 return main;
             }
@@ -308,7 +302,7 @@ public class PersonalIncomeEditor extends CEntityForm<CustomerScreeningIncome> {
     }
 
     private CEntityForm<IncomeInfoSocialServices> createSocialServicesEditor() {
-        return new CEntityDecoratableForm<IncomeInfoSocialServices>(IncomeInfoSocialServices.class) {
+        return new CEntityForm<IncomeInfoSocialServices>(IncomeInfoSocialServices.class) {
             @Override
             public IsWidget createContent() {
                 TwoColumnFlexFormPanel main = new TwoColumnFlexFormPanel();
@@ -321,13 +315,12 @@ public class PersonalIncomeEditor extends CEntityForm<CustomerScreeningIncome> {
                 main.setWidget(++row, 1, new FormDecoratorBuilder(inject(proto().supervisorPhone()), 15).build());
 
                 main.setH3(++row, 0, 2, proto().address().getMeta().getCaption());
-                main.setWidget(++row, 0, inject(proto().address(), new AddressStructuredEditor()));
-                main.getFlexCellFormatter().setColSpan(row, 0, 2);
+                main.setWidget(++row, 0, 2, inject(proto().address(), new AddressStructuredEditor()));
 
                 row = injectIEmploymentInfo(main, row, this);
 
                 main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().starts()), 9).build());
-                main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().ends()), 9).build());
+                main.setWidget(row, 1, new FormDecoratorBuilder(inject(proto().ends()), 9).build());
 
                 return main;
             }
@@ -341,7 +334,7 @@ public class PersonalIncomeEditor extends CEntityForm<CustomerScreeningIncome> {
     }
 
     private CEntityForm<IncomeInfoOther> createOtherIncomeInfoEditor(final IncomeSource incomeSource) {
-        return new CEntityDecoratableForm<IncomeInfoOther>(IncomeInfoOther.class) {
+        return new CEntityForm<IncomeInfoOther>(IncomeInfoOther.class) {
 
             @Override
             public IsWidget createContent() {
@@ -378,10 +371,10 @@ public class PersonalIncomeEditor extends CEntityForm<CustomerScreeningIncome> {
         };
     }
 
-    private static int injectIEmploymentInfo(TwoColumnFlexFormPanel main, int row, CEntityDecoratableForm<? extends IEmploymentInfo> parent) {
+    private static int injectIEmploymentInfo(TwoColumnFlexFormPanel main, int row, CEntityForm<? extends IEmploymentInfo> parent) {
         main.setH3(++row, 0, 2, i18n.tr("Employment Info"));
         main.setWidget(++row, 0, new FormDecoratorBuilder(parent.inject(parent.proto().monthlyAmount()), 9).build());
-        main.setWidget(++row, 0, new FormDecoratorBuilder(parent.inject(parent.proto().position()), 20).build());
+        main.setWidget(row, 1, new FormDecoratorBuilder(parent.inject(parent.proto().position()), 20).build());
         return row;
     }
 }

@@ -64,7 +64,6 @@ public class FinancialViewForm extends CEntityForm<TenantFinancialDTO> {
     @Override
     public void addValidations() {
         this.addValueValidator(new EditableValueValidator<TenantFinancialDTO>() {
-
             @Override
             public ValidationError isValid(CComponent<TenantFinancialDTO> component, TenantFinancialDTO value) {
                 return (value.assets().size() > 0) || (value.incomes().size() > 0) ? null : new ValidationError(component, i18n

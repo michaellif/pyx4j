@@ -16,7 +16,6 @@ package com.propertyvista.common.client.ui.components.editors.dto;
 import java.util.Date;
 import java.util.List;
 
-import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.ui.IsWidget;
@@ -97,11 +96,7 @@ public class InfoViewForm extends CEntityDecoratableForm<TenantInfoDTO> {
         main.setWidget(++row, 1, new FormDecoratorBuilder(inject(proto().person().workPhone()), 15).build());
 
         main.setH1(++row, 0, 2, i18n.tr("Identification Documents"));
-
         main.setWidget(++row, 0, 2, inject(proto().documents(), fileUpload = new IdUploaderFolder()));
-        fileUpload.asWidget().getElement().getStyle().setMarginTop(1, Unit.EM);
-        fileUpload.asWidget().getElement().getStyle().setMarginBottom(1, Unit.EM);
-        fileUpload.asWidget().setWidth("40em");
 
         main.setH1(++row, 0, 2, proto().version().currentAddress().getMeta().getCaption());
         main.setWidget(++row, 0, 2, inject(proto().version().currentAddress(), new PriorAddressEditor()));
@@ -110,27 +105,27 @@ public class InfoViewForm extends CEntityDecoratableForm<TenantInfoDTO> {
         previousAddress.setWidget(1, 0, 2, inject(proto().version().previousAddress(), new PriorAddressEditor()));
         main.setWidget(++row, 0, 2, previousAddress);
 
-        main.setH1(++row, 0, 2, proto().version().legalQuestions().getMeta().getCaption());
-        main.setWidget(++row, 0, 2, decorateLegalQuestion(inject(proto().version().legalQuestions().suedForRent())));
-        main.setHR(++row, 0, 2);
-        main.setWidget(++row, 0, 2, decorateLegalQuestion(inject(proto().version().legalQuestions().suedForDamages())));
-        main.setHR(++row, 0, 2);
-        main.setWidget(++row, 0, 2, decorateLegalQuestion(inject(proto().version().legalQuestions().everEvicted())));
-        main.setHR(++row, 0, 2);
-        main.setWidget(++row, 0, 2, decorateLegalQuestion(inject(proto().version().legalQuestions().defaultedOnLease())));
-        main.setHR(++row, 0, 2);
-        main.setWidget(++row, 0, 2, decorateLegalQuestion(inject(proto().version().legalQuestions().convictedOfFelony())));
-        main.setHR(++row, 0, 2);
-        main.setWidget(++row, 0, 2, decorateLegalQuestion(inject(proto().version().legalQuestions().legalTroubles())));
-        main.setHR(++row, 0, 2);
-        main.setWidget(++row, 0, 2, decorateLegalQuestion(inject(proto().version().legalQuestions().filedBankruptcy())));
+        TwoColumnFlexFormPanel questionary = new TwoColumnFlexFormPanel();
+        questionary.setH1(++row, 0, 2, proto().version().legalQuestions().getMeta().getCaption());
+        questionary.setWidget(++row, 0, 2, decorateLegalQuestion(inject(proto().version().legalQuestions().suedForRent())));
+        questionary.setHR(++row, 0, 2);
+        questionary.setWidget(++row, 0, 2, decorateLegalQuestion(inject(proto().version().legalQuestions().suedForDamages())));
+        questionary.setHR(++row, 0, 2);
+        questionary.setWidget(++row, 0, 2, decorateLegalQuestion(inject(proto().version().legalQuestions().everEvicted())));
+        questionary.setHR(++row, 0, 2);
+        questionary.setWidget(++row, 0, 2, decorateLegalQuestion(inject(proto().version().legalQuestions().defaultedOnLease())));
+        questionary.setHR(++row, 0, 2);
+        questionary.setWidget(++row, 0, 2, decorateLegalQuestion(inject(proto().version().legalQuestions().convictedOfFelony())));
+        questionary.setHR(++row, 0, 2);
+        questionary.setWidget(++row, 0, 2, decorateLegalQuestion(inject(proto().version().legalQuestions().legalTroubles())));
+        questionary.setHR(++row, 0, 2);
+        questionary.setWidget(++row, 0, 2, decorateLegalQuestion(inject(proto().version().legalQuestions().filedBankruptcy())));
+        main.setWidget(++row, 0, 2, questionary);
 
         if (!SecurityController.checkBehavior(VistaCustomerBehavior.Guarantor)) {
             main.setH1(++row, 0, 2, proto().emergencyContacts().getMeta().getCaption());
             main.setWidget(++row, 0, 2, inject(proto().emergencyContacts(), new EmergencyContactFolder(isEditable())));
         }
-
-        addValidations();
 
         return main;
     }
@@ -238,6 +233,6 @@ public class InfoViewForm extends CEntityDecoratableForm<TenantInfoDTO> {
     }
 
     private WidgetDecorator decorateLegalQuestion(CComponent<?> comp) {
-        return new FormDecoratorBuilder(comp, 40, 5, 45).labelAlignment(Alignment.left).useLabelSemicolon(false).build();
+        return new FormDecoratorBuilder(comp, 60, 5, FormDecoratorBuilder.CONTENT_WIDTH_DUAL).labelAlignment(Alignment.left).useLabelSemicolon(false).build();
     }
 }

@@ -17,11 +17,11 @@ import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.forms.client.ui.CComponent;
+import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.common.client.ui.components.ApplicationDocumentFileUploaderFolder;
-import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
 import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
 import com.propertyvista.domain.media.ProofOfEmploymentDocument;
 
@@ -31,19 +31,17 @@ public class ProofOfEmploymentUploaderFolder extends VistaBoxFolder<ProofOfEmplo
 
     public ProofOfEmploymentUploaderFolder() {
         super(ProofOfEmploymentDocument.class);
-        asWidget().setSize("50em", "100%");
     }
 
     @Override
     public CComponent<?> create(IObject<?> member) {
         if (member instanceof ProofOfEmploymentDocument) {
             return new ProofOfEmploymentDocumentEditor();
-        } else {
-            return super.create(member);
         }
+        return super.create(member);
     }
 
-    private class ProofOfEmploymentDocumentEditor extends CEntityDecoratableForm<ProofOfEmploymentDocument> {
+    private class ProofOfEmploymentDocumentEditor extends CEntityForm<ProofOfEmploymentDocument> {
 
         public ProofOfEmploymentDocumentEditor() {
             super(ProofOfEmploymentDocument.class);
@@ -54,9 +52,9 @@ public class ProofOfEmploymentUploaderFolder extends VistaBoxFolder<ProofOfEmplo
             TwoColumnFlexFormPanel content = new TwoColumnFlexFormPanel();
 
             int row = -1;
-            content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().description())).build());
-            content.setH3(++row, 0, 1, i18n.tr("Files"));
-            content.setWidget(++row, 0, inject(proto().documentPages(), new ApplicationDocumentFileUploaderFolder()));
+            content.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().description())).build());
+            content.setH3(++row, 0, 2, i18n.tr("Files"));
+            content.setWidget(++row, 0, 2, inject(proto().documentPages(), new ApplicationDocumentFileUploaderFolder()));
 
             return content;
         }
