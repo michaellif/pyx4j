@@ -108,19 +108,19 @@ public class CustomerCreditCheckLongReportForm extends CrmEntityForm<CustomerCre
         TwoColumnFlexFormPanel summary = new TwoColumnFlexFormPanel();
 
         int row = -1;
-        summary.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().percentOfRentCovered()), 10).labelWidth(20).build());
-        summary.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().totalAccounts()), 10).labelWidth(20).build());
-        summary.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().totalOutstandingBalance()), 10).labelWidth(20).build());
-        summary.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().outstandingRevolvingDebt()), 10).labelWidth(20).build());
-        summary.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().outstandingCollectionsBalance()), 10).labelWidth(20).build());
+        summary.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().percentOfRentCovered()), 20, 10, 20).build());
+        summary.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().totalAccounts()), 20, 10, 20).build());
+        summary.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().totalOutstandingBalance()), 20, 10, 20).build());
+        summary.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().outstandingRevolvingDebt()), 20, 10, 20).build());
+        summary.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().outstandingCollectionsBalance()), 20, 10, 20).build());
 
         row = 0;
-        summary.setWidget(++row, 1, new FormDecoratorBuilder(inject(proto().accountsWithNoLatePayments()), 10).labelWidth(20).build());
-        summary.setWidget(++row, 1, new FormDecoratorBuilder(inject(proto().numberOfLegalItems()), 10).labelWidth(20).build());
-        summary.setWidget(++row, 1, new FormDecoratorBuilder(inject(proto().numberOfBancruptciesOrActs()), 10).labelWidth(20).build());
-        summary.setWidget(++row, 1, new FormDecoratorBuilder(inject(proto().landlordCollectionsFiled()), 10).labelWidth(20).build());
+        summary.setWidget(++row, 1, new FormDecoratorBuilder(inject(proto().accountsWithNoLatePayments()), 20, 10, 20).build());
+        summary.setWidget(++row, 1, new FormDecoratorBuilder(inject(proto().numberOfLegalItems()), 20, 10, 20).build());
+        summary.setWidget(++row, 1, new FormDecoratorBuilder(inject(proto().numberOfBancruptciesOrActs()), 20, 10, 20).build());
+        summary.setWidget(++row, 1, new FormDecoratorBuilder(inject(proto().landlordCollectionsFiled()), 20, 10, 20).build());
 // Not implemented in Equifax:
-//      summary.setWidget(++row, 1, new FormDecoratorBuilder(inject(proto().numberOfEvictions()), 10).labelWidth(20).build());
+//      summary.setWidget(++row, 1, new FormDecoratorBuilder(inject(proto().numberOfEvictions()), 20, 10, 20).build());
 
         BasicFlexFormPanel accounts = new BasicFlexFormPanel();
         int col = -1;
