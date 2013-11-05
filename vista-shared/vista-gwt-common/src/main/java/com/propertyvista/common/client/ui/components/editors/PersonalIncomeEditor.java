@@ -142,7 +142,7 @@ public class PersonalIncomeEditor extends CEntityForm<CustomerScreeningIncome> {
 
                 int row = -1;
                 main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().name()), 20).build());
-                main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().employedForYears()), 4).build());
+                main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().employedForYears()), 5).build());
 
                 row = -1;
                 main.setWidget(++row, 1, new FormDecoratorBuilder(inject(proto().supervisorName()), 20).build());
@@ -153,8 +153,8 @@ public class PersonalIncomeEditor extends CEntityForm<CustomerScreeningIncome> {
 
                 row = injectIEmploymentInfo(main, row, this);
 
-                main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().starts()), 9).build());
-                main.setWidget(row, 1, new FormDecoratorBuilder(inject(proto().ends()), 9).build());
+                main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().starts()), 10).build());
+                main.setWidget(row, 1, new FormDecoratorBuilder(inject(proto().ends()), 10).build());
 
                 return main;
             }
@@ -204,8 +204,8 @@ public class PersonalIncomeEditor extends CEntityForm<CustomerScreeningIncome> {
 
                 row = injectIEmploymentInfo(main, row, this);
 
-                main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().starts()), 9).build());
-                main.setWidget(row, 1, new FormDecoratorBuilder(inject(proto().ends()), 9).build());
+                main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().starts()), 10).build());
+                main.setWidget(row, 1, new FormDecoratorBuilder(inject(proto().ends()), 10).build());
 
                 return main;
             }
@@ -260,7 +260,7 @@ public class PersonalIncomeEditor extends CEntityForm<CustomerScreeningIncome> {
 
                 int row = -1;
                 main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().name()), 20).build());
-                main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().employedForYears()), 4).build());
+                main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().employedForYears()), 5).build());
 
                 row = -1;
                 main.setWidget(++row, 1, new FormDecoratorBuilder(inject(proto().supervisorName()), 20).build());
@@ -273,10 +273,10 @@ public class PersonalIncomeEditor extends CEntityForm<CustomerScreeningIncome> {
 
                 main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().fullyOwned()), 10).build());
                 main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().monthlyRevenue()), 10).build());
-                main.setWidget(row, 1, new FormDecoratorBuilder(inject(proto().numberOfEmployees()), 4).build());
+                main.setWidget(row, 1, new FormDecoratorBuilder(inject(proto().numberOfEmployees()), 5).build());
 
-                main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().starts()), 9).build());
-                main.setWidget(row, 1, new FormDecoratorBuilder(inject(proto().ends()), 9).build());
+                main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().starts()), 10).build());
+                main.setWidget(row, 1, new FormDecoratorBuilder(inject(proto().ends()), 10).build());
 
                 return main;
             }
@@ -307,8 +307,8 @@ public class PersonalIncomeEditor extends CEntityForm<CustomerScreeningIncome> {
 
                 row = injectIEmploymentInfo(main, row, this);
 
-                main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().starts()), 9).build());
-                main.setWidget(row, 1, new FormDecoratorBuilder(inject(proto().ends()), 9).build());
+                main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().starts()), 10).build());
+                main.setWidget(row, 1, new FormDecoratorBuilder(inject(proto().ends()), 10).build());
 
                 return main;
             }
@@ -332,8 +332,8 @@ public class PersonalIncomeEditor extends CEntityForm<CustomerScreeningIncome> {
 
                 int row = -1;
                 main.setWidget(++row, 0, new FormDecoratorBuilder(name = inject(proto().name()), 25).build());
-                main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().monthlyAmount()), 9).build());
-                main.setWidget(++row, 0, new FormDecoratorBuilder(ends = inject(proto().ends()), 9).build());
+                main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().monthlyAmount()), 10).build());
+                main.setWidget(++row, 0, new FormDecoratorBuilder(ends = inject(proto().ends()), 10).build());
 
                 // some tune-up:
                 switch (incomeSource) {
@@ -361,7 +361,7 @@ public class PersonalIncomeEditor extends CEntityForm<CustomerScreeningIncome> {
 
     private static int injectIEmploymentInfo(TwoColumnFlexFormPanel main, int row, CEntityForm<? extends IEmploymentInfo> parent) {
         main.setH3(++row, 0, 2, i18n.tr("Employment Info"));
-        main.setWidget(++row, 0, new FormDecoratorBuilder(parent.inject(parent.proto().monthlyAmount()), 9).build());
+        main.setWidget(++row, 0, new FormDecoratorBuilder(parent.inject(parent.proto().monthlyAmount()), 10).build());
         main.setWidget(row, 1, new FormDecoratorBuilder(parent.inject(parent.proto().position()), 20).build());
         return row;
     }
