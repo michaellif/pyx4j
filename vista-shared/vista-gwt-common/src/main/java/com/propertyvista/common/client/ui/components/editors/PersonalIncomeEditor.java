@@ -15,8 +15,6 @@ package com.propertyvista.common.client.ui.components.editors;
 
 import java.math.BigDecimal;
 
-import com.google.gwt.event.logical.shared.ValueChangeEvent;
-import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.SimplePanel;
 
@@ -25,9 +23,9 @@ import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.forms.client.events.DevShortcutEvent;
 import com.pyx4j.forms.client.events.DevShortcutHandler;
-import com.pyx4j.forms.client.ui.CComboBox;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CEntityForm;
+import com.pyx4j.forms.client.ui.CEnumLabel;
 import com.pyx4j.forms.client.ui.RevalidationTrigger;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
@@ -63,18 +61,7 @@ public class PersonalIncomeEditor extends CEntityForm<CustomerScreeningIncome> {
         TwoColumnFlexFormPanel main = new TwoColumnFlexFormPanel();
         int row = -1;
 
-        CComboBox<IncomeSource> incomeSource = inject(proto().incomeSource(), new CComboBox<IncomeSource>());
-        incomeSource.addValueChangeHandler(new ValueChangeHandler<IncomeSource>() {
-            @Override
-            public void onValueChange(ValueChangeEvent<IncomeSource> event) {
-                selectDetailsEditor(event.getValue());
-            }
-        });
-
-        main.setWidget(++row, 0, 2, new FormDecoratorBuilder(incomeSource, 25).build());
-
-        main.setBR(++row, 0, 2);
-
+        main.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().incomeSource(), new CEnumLabel()), 25).build());
         main.setWidget(++row, 0, 2, detailsHolder);
         main.setWidget(++row, 0, 2, inject(proto().documents(), fileUpload = new ProofOfEmploymentUploaderFolder()));
 
@@ -238,20 +225,21 @@ public class PersonalIncomeEditor extends CEntityForm<CustomerScreeningIncome> {
                 TwoColumnFlexFormPanel main = new TwoColumnFlexFormPanel();
 
                 int row = -1;
-                main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().name()), 25).build());
+                main.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().name()), 25).build());
 
-                main.setH3(++row, 0, 1, proto().address().getMeta().getCaption());
-                main.setWidget(++row, 0, inject(proto().address(), new AddressStructuredEditor()));
+                main.setH3(++row, 0, 2, proto().address().getMeta().getCaption());
+                main.setWidget(++row, 0, 2, inject(proto().address(), new AddressStructuredEditor()));
 
-                main.setH3(++row, 0, 1, i18n.tr("Program Info"));
+                main.setH3(++row, 0, 2, i18n.tr("Program Info"));
                 main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().program()), 10).build());
                 main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().fieldOfStudy()), 25).build());
                 main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().fundingChoices()), 10).build());
 
-                main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().monthlyAmount()), 10).build());
+                row -= 3;
+                main.setWidget(++row, 1, new FormDecoratorBuilder(inject(proto().starts()), 10).build());
+                main.setWidget(++row, 1, new FormDecoratorBuilder(inject(proto().ends()), 10).build());
 
-                main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().starts()), 9).build());
-                main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().ends()), 9).build());
+                main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().monthlyAmount()), 10).build());
 
                 return main;
             }

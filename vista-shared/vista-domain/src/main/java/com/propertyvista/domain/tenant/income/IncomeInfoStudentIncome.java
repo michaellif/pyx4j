@@ -76,7 +76,7 @@ public interface IncomeInfoStudentIncome extends CustomerScreeningIncomeInfo {
     IPrimitive<LogicalDate> starts();
 
     @Override
-    @Caption(name = "Program (Planned) to be completed on")
+    @Caption(name = "Program End")
     IPrimitive<LogicalDate> ends();
 
     @Caption(name = "Program")

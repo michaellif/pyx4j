@@ -140,7 +140,7 @@ public class CustomerScreeningForm extends CrmEntityForm<CustomerScreening> {
         TwoColumnFlexFormPanel main = new TwoColumnFlexFormPanel(title);
 
         int row = -1;
-        main.setWidget(++row, 0, inject(proto().documents(), fileUpload = new IdUploaderFolder()));
+        main.setWidget(++row, 0, 2, inject(proto().documents(), fileUpload = new IdUploaderFolder()));
 
         return main;
     }
@@ -149,12 +149,12 @@ public class CustomerScreeningForm extends CrmEntityForm<CustomerScreening> {
         TwoColumnFlexFormPanel main = new TwoColumnFlexFormPanel(title);
 
         int row = -1;
-        main.setH1(++row, 0, 1, proto().version().currentAddress().getMeta().getCaption());
-        main.setWidget(++row, 0, inject(proto().version().currentAddress(), new PriorAddressEditor()));
+        main.setH1(++row, 0, 2, proto().version().currentAddress().getMeta().getCaption());
+        main.setWidget(++row, 0, 2, inject(proto().version().currentAddress(), new PriorAddressEditor()));
 
-        previousAddress.setH1(0, 0, 1, proto().version().previousAddress().getMeta().getCaption());
-        previousAddress.setWidget(1, 0, inject(proto().version().previousAddress(), new PriorAddressEditor()));
-        main.setWidget(++row, 0, previousAddress);
+        previousAddress.setH1(0, 0, 2, proto().version().previousAddress().getMeta().getCaption());
+        previousAddress.setWidget(1, 0, 2, inject(proto().version().previousAddress(), new PriorAddressEditor()));
+        main.setWidget(++row, 0, 2, previousAddress);
 
         return main;
     }
@@ -193,7 +193,7 @@ public class CustomerScreeningForm extends CrmEntityForm<CustomerScreening> {
     private TwoColumnFlexFormPanel createIncomesTab(String title) {
         TwoColumnFlexFormPanel main = new TwoColumnFlexFormPanel(title);
 
-        main.setWidget(0, 0, inject(proto().version().incomes(), new PersonalIncomeFolder(isEditable())));
+        main.setWidget(0, 0, 2, inject(proto().version().incomes(), new PersonalIncomeFolder(isEditable())));
 
         return main;
     }
@@ -201,7 +201,7 @@ public class CustomerScreeningForm extends CrmEntityForm<CustomerScreening> {
     private TwoColumnFlexFormPanel createAssetsTab(String title) {
         TwoColumnFlexFormPanel main = new TwoColumnFlexFormPanel(title);
 
-        main.setWidget(0, 0, inject(proto().version().assets(), new PersonalAssetFolder(isEditable())));
+        main.setWidget(0, 0, 2, inject(proto().version().assets(), new PersonalAssetFolder(isEditable())));
 
         return main;
     }

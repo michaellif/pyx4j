@@ -13,16 +13,21 @@
  */
 package com.propertyvista.common.client.ui.components.folders;
 
+import java.util.EnumSet;
+
+import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
 import com.pyx4j.forms.client.validators.ValidationError;
 import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.site.client.ui.dialogs.SelectEnumDialog;
 
 import com.propertyvista.common.client.ui.components.editors.PersonalIncomeEditor;
 import com.propertyvista.domain.tenant.income.CustomerScreeningIncome;
 import com.propertyvista.domain.tenant.income.IncomeInfoEmployer;
+import com.propertyvista.domain.tenant.income.IncomeSource;
 
 public class PersonalIncomeFolder extends VistaBoxFolder<CustomerScreeningIncome> {
 
@@ -38,6 +43,19 @@ public class PersonalIncomeFolder extends VistaBoxFolder<CustomerScreeningIncome
             return new PersonalIncomeEditor();
         }
         return super.create(member);
+    }
+
+    @Override
+    protected void addItem() {
+        new SelectEnumDialog<IncomeSource>(i18n.tr("Select Income Source"), EnumSet.allOf(IncomeSource.class)) {
+            @Override
+            public boolean onClickOk() {
+                CustomerScreeningIncome item = EntityFactory.create(CustomerScreeningIncome.class);
+                item.incomeSource().setValue(getSelectedType());
+                addItem(item);
+                return true;
+            }
+        }.show();
     }
 
     @Override
