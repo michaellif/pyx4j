@@ -78,7 +78,7 @@ public class LeaseApplicationForm extends LeaseFormBase<LeaseApplicationDTO> {
     private TwoColumnFlexFormPanel createInfoTab() {
         TwoColumnFlexFormPanel main = new TwoColumnFlexFormPanel(i18n.tr("Information"));
 
-        main.setWidget(0, 0, inject(proto().tenantInfo(), createTenantView()));
+        main.setWidget(0, 0, 2, inject(proto().tenantInfo(), createTenantView()));
 
         return main;
     }
@@ -86,7 +86,7 @@ public class LeaseApplicationForm extends LeaseFormBase<LeaseApplicationDTO> {
     private TwoColumnFlexFormPanel createFinancialTab() {
         TwoColumnFlexFormPanel main = new TwoColumnFlexFormPanel(i18n.tr("Financial"));
 
-        main.setWidget(0, 0, inject(proto().tenantFinancials(), createFinancialView()));
+        main.setWidget(0, 0, 2, inject(proto().tenantFinancials(), createFinancialView()));
 
         return main;
     }

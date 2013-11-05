@@ -49,7 +49,7 @@ public class AddressSimpleEditor extends CEntityForm<AddressSimple> {
     }
 
     public AddressSimpleEditor(boolean oneColumn) {
-        this(true, FormDecoratorBuilder.LABEL_WIDTH, 20, FormDecoratorBuilder.CONTENT_WIDTH);
+        this(oneColumn, FormDecoratorBuilder.LABEL_WIDTH, 20, FormDecoratorBuilder.CONTENT_WIDTH);
     }
 
     public AddressSimpleEditor(boolean oneColumn, double labelWidth, double maxCompWidth, double contentWidth) {

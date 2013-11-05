@@ -25,7 +25,6 @@ import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CTextFieldBase;
 import com.pyx4j.forms.client.ui.OptionsFilter;
 import com.pyx4j.forms.client.ui.RevalidationTrigger;
-import com.pyx4j.forms.client.ui.decorators.WidgetDecorator;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
@@ -168,23 +167,5 @@ public abstract class AddressStructuredEditorImpl<A extends AddressStructured> e
         get(proto().streetName()).setValue("King");
         get(proto().streetType()).setValue(StreetType.street);
         get(proto().streetDirection()).setValue(StreetDirection.west);
-    }
-
-    // this decorator was made so that address form will look well on print
-    class DecoratorBuilder extends WidgetDecorator.Builder {
-
-        public DecoratorBuilder(CComponent<?> component, String labelWidth, String componentWidth, String contentWidth) {
-            super(component);
-            labelWidth(labelWidth);
-            contentWidth(contentWidth);
-            componentWidth(componentWidth);
-            labelAlignment(Alignment.right);
-            useLabelSemicolon(true);
-
-        }
-
-        public DecoratorBuilder(CComponent<?> component, String componentWidth) {
-            this(component, "120px", componentWidth, "220px");
-        }
     }
 }

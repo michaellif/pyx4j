@@ -21,6 +21,7 @@ import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 
+import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
 import com.propertyvista.domain.PriorAddress;
 import com.propertyvista.domain.PriorAddress.OwnedRented;
 
@@ -44,8 +45,8 @@ public class PriorAddressEditor extends AddressStructuredEditorImpl<PriorAddress
         int row1 = row0 + 1;
         main.setHR(++row0, 0, 2);
 
-        main.setWidget(++row0, 0, new DecoratorBuilder(inject(proto().moveInDate()), "9em").build());
-        main.setWidget(++row0, 0, new DecoratorBuilder(inject(proto().moveOutDate()), "9em").build());
+        main.setWidget(++row0, 0, new FormDecoratorBuilder(inject(proto().moveInDate()), 10).build());
+        main.setWidget(++row0, 0, new FormDecoratorBuilder(inject(proto().moveOutDate()), 10).build());
 
         CComponent<?> rentedComponent = inject(proto().rented());
         rentedComponent.addValueChangeHandler(new ValueChangeHandler() {
@@ -57,12 +58,12 @@ public class PriorAddressEditor extends AddressStructuredEditorImpl<PriorAddress
 
         int col = 1;
 
-        main.setWidget(++row1, col, new DecoratorBuilder(rentedComponent, "15em").build());
-        main.setWidget(++row1, col, new DecoratorBuilder(inject(proto().payment()), "8em").build());
-        main.setWidget(++row1, col, new DecoratorBuilder(inject(proto().propertyCompany()), "20em").build());
-        main.setWidget(++row1, col, new DecoratorBuilder(inject(proto().managerName()), "20em").build());
-        main.setWidget(++row1, col, new DecoratorBuilder(inject(proto().managerPhone()), "20em").build());
-        main.setWidget(++row1, col, new DecoratorBuilder(inject(proto().managerEmail()), "20em").build());
+        main.setWidget(++row1, col, new FormDecoratorBuilder(rentedComponent, 15).build());
+        main.setWidget(++row1, col, new FormDecoratorBuilder(inject(proto().payment()), 8).build());
+        main.setWidget(++row1, col, new FormDecoratorBuilder(inject(proto().propertyCompany()), 20).build());
+        main.setWidget(++row1, col, new FormDecoratorBuilder(inject(proto().managerName()), 20).build());
+        main.setWidget(++row1, col, new FormDecoratorBuilder(inject(proto().managerPhone()), 20).build());
+        main.setWidget(++row1, col, new FormDecoratorBuilder(inject(proto().managerEmail()), 20).build());
 
         return main;
     }

@@ -15,16 +15,16 @@ package com.propertyvista.common.client.ui.components.editors;
 
 import com.google.gwt.user.client.ui.IsWidget;
 
+import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
 
-import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
 import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
 import com.propertyvista.common.client.ui.validators.BirthdayDateValidator;
 import com.propertyvista.domain.tenant.EmergencyContact;
 
-public class EmergencyContactEditor extends CEntityDecoratableForm<EmergencyContact> {
+public class EmergencyContactEditor extends CEntityForm<EmergencyContact> {
 
     private static final I18n i18n = I18n.get(EmergencyContactEditor.class);
 
@@ -50,15 +50,17 @@ public class EmergencyContactEditor extends CEntityDecoratableForm<EmergencyCont
         main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().sex()), 7).build());
 
         row = (oneColumn ? row : row - 1);
-        main.setWidget(++row, col, new FormDecoratorBuilder(inject(proto().birthDate()), 9).build());
+        main.setWidget(++row, col, new FormDecoratorBuilder(inject(proto().birthDate()), 10).build());
 
         main.setH3(++row, 0, 2, i18n.tr("Contact Info"));
-        main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().email()), 22).build());
         main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().homePhone()), 15).build());
+        main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().mobilePhone()), 15).build());
 
         row = (oneColumn ? row : row - 2);
-        main.setWidget(++row, col, new FormDecoratorBuilder(inject(proto().mobilePhone()), 15).build());
         main.setWidget(++row, col, new FormDecoratorBuilder(inject(proto().workPhone()), 15).build());
+        main.setWidget(++row, col, new FormDecoratorBuilder(inject(proto().email()), 22).build());
+
+        main.setHR(++row, 0, 2);
         main.setWidget(++row, 0, span, inject(proto().address(), new AddressSimpleEditor(oneColumn)));
 
         return main;
