@@ -13,8 +13,11 @@
  */
 package com.propertyvista.test.mock;
 
+import java.util.List;
+
 import com.propertyvista.biz.communication.NotificationFacade;
 import com.propertyvista.domain.financial.PaymentRecord;
+import com.propertyvista.domain.payment.AutopayAgreement;
 import com.propertyvista.domain.tenant.lease.Lease;
 
 public class NotificationFacadeMock implements NotificationFacade {
@@ -28,11 +31,11 @@ public class NotificationFacadeMock implements NotificationFacade {
     }
 
     @Override
-    public void autoPayCancelledByResidentNotification(Lease leaseId) {
+    public void autoPayCancelledByResidentNotification(Lease leaseId, List<AutopayAgreement> canceledAgreements) {
     }
 
     @Override
-    public void autoPayCancelledBySystemNotification(Lease leaseId) {
+    public void autoPayCancelledBySystemNotification(Lease leaseId, List<AutopayAgreement> canceledAgreements) {
     }
 
     @Override

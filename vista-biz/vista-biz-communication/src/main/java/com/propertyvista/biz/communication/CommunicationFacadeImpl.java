@@ -14,6 +14,7 @@
 package com.propertyvista.biz.communication;
 
 import java.util.List;
+import java.util.Map;
 
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.commons.UserRuntimeException;
@@ -32,6 +33,7 @@ import com.propertyvista.domain.company.Employee;
 import com.propertyvista.domain.company.Notification;
 import com.propertyvista.domain.financial.PaymentRecord;
 import com.propertyvista.domain.maintenance.MaintenanceRequest;
+import com.propertyvista.domain.payment.AutopayAgreement;
 import com.propertyvista.domain.pmc.Pmc;
 import com.propertyvista.domain.security.CrmUser;
 import com.propertyvista.domain.security.CustomerUser;
@@ -307,21 +309,21 @@ public class CommunicationFacadeImpl implements CommunicationFacade {
     }
 
     @Override
-    public void sendAutoPayCancelledBySystemNotification(List<String> targetEmails, List<Lease> leaseIds) {
+    public void sendAutoPayCancelledBySystemNotification(List<String> targetEmails, List<Lease> leaseIds, Map<Lease, List<AutopayAgreement>> canceledAgreements) {
         if (disabled) {
             return;
         }
-        MailMessage m = MessageTemplates.createAutoPayCancelledBySystemNotificationEmail(leaseIds);
+        MailMessage m = MessageTemplates.createAutoPayCancelledBySystemNotificationEmail(leaseIds, canceledAgreements);
         m.setTo(targetEmails);
         Mail.send(m);
     }
 
     @Override
-    public void sendAutoPayCancelledByResidentNotification(List<String> targetEmails, Lease leaseId) {
+    public void sendAutoPayCancelledByResidentNotification(List<String> targetEmails, Lease leaseId, List<AutopayAgreement> canceledAgreements) {
         if (disabled) {
             return;
         }
-        MailMessage m = MessageTemplates.createAutoPayCancelledByResidentNotificationEmail(leaseId);
+        MailMessage m = MessageTemplates.createAutoPayCancelledByResidentNotificationEmail(leaseId, canceledAgreements);
         m.setTo(targetEmails);
         Mail.send(m);
     }

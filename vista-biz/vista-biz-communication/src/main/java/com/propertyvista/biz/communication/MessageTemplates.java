@@ -19,6 +19,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
@@ -52,6 +53,7 @@ import com.propertyvista.domain.communication.EmailTemplateType;
 import com.propertyvista.domain.financial.BillingAccount;
 import com.propertyvista.domain.financial.PaymentRecord;
 import com.propertyvista.domain.maintenance.MaintenanceRequest;
+import com.propertyvista.domain.payment.AutopayAgreement;
 import com.propertyvista.domain.pmc.Pmc;
 import com.propertyvista.domain.policy.framework.OrganizationPoliciesNode;
 import com.propertyvista.domain.policy.framework.PolicyNode;
@@ -468,7 +470,7 @@ public class MessageTemplates {
         return email;
     }
 
-    public static MailMessage createAutoPayCancelledBySystemNotificationEmail(List<Lease> leaseIds) {
+    public static MailMessage createAutoPayCancelledBySystemNotificationEmail(List<Lease> leaseIds, Map<Lease, List<AutopayAgreement>> canceledAgreements) {
         MailMessage email = new MailMessage();
         email.setSender(getSender());
 
@@ -512,6 +514,11 @@ public class MessageTemplates {
                 leaseLinks.append("<p/>");
             }
             leaseLinks.append("<a href=\"" + leaseUrl + "\">" + lease.getStringView() + "</a>");
+            for (AutopayAgreement autopayAgreement : canceledAgreements.get(leaseId)) {
+                String agreementUrl = AppPlaceInfo
+                        .absoluteUrl(crmUrl, true, new CrmSiteMap.Finance.AutoPay().formViewerPlace(autopayAgreement.getPrimaryKey()));
+                leaseLinks.append(" <a href=\"" + agreementUrl + "\">Agreement ID" + autopayAgreement.getPrimaryKey() + "</a>");
+            }
 
         }
         emailBody = emailBody.replace("${leaseLinks}", leaseLinks);
@@ -520,7 +527,7 @@ public class MessageTemplates {
         return email;
     }
 
-    public static MailMessage createAutoPayCancelledByResidentNotificationEmail(Lease leaseId) {
+    public static MailMessage createAutoPayCancelledByResidentNotificationEmail(Lease leaseId, List<AutopayAgreement> canceledAgreements) {
         MailMessage email = new MailMessage();
         email.setSender(getSender());
 
@@ -560,7 +567,11 @@ public class MessageTemplates {
                 leaseLinks.append("<p/>");
             }
             leaseLinks.append("<a href=\"" + leaseUrl + "\">" + lease.getStringView() + "</a>");
-
+            for (AutopayAgreement autopayAgreement : canceledAgreements) {
+                String agreementUrl = AppPlaceInfo
+                        .absoluteUrl(crmUrl, true, new CrmSiteMap.Finance.AutoPay().formViewerPlace(autopayAgreement.getPrimaryKey()));
+                leaseLinks.append(" <a href=\"" + agreementUrl + "\">Agreement ID" + autopayAgreement.getPrimaryKey() + "</a>");
+            }
         }
         emailBody = emailBody.replace("${leaseLinks}", leaseLinks);
 

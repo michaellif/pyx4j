@@ -183,7 +183,10 @@ class AutopayAgreementMananger {
             if (!autoPayPolicy.allowCancelationByResident().getValue(true)) {
                 throw new UserRuntimeException(i18n.tr("AutoPay Agreement can not be cancelled online. Please contact your property management office."));
             } else {
-                ServerSideFactory.create(NotificationFacade.class).autoPayCancelledByResidentNotification(preauthorizedPayment.tenant().lease());
+                List<AutopayAgreement> canceledAgreements = new ArrayList<AutopayAgreement>();
+                canceledAgreements.add(preauthorizedPayment);
+                ServerSideFactory.create(NotificationFacade.class).autoPayCancelledByResidentNotification(preauthorizedPayment.tenant().lease(),
+                        canceledAgreements);
             }
         }
 
@@ -222,7 +225,7 @@ class AutopayAgreementMananger {
             for (AutopayAgreement pap : activePaps) {
                 deleteAutopayAgreement(pap);
             }
-            ServerSideFactory.create(NotificationFacade.class).autoPayCancelledBySystemNotification(lease);
+            ServerSideFactory.create(NotificationFacade.class).autoPayCancelledBySystemNotification(lease, activePaps);
             return;
         }
 
@@ -344,7 +347,7 @@ class AutopayAgreementMananger {
             for (AutopayAgreement pap : activePaps) {
                 deleteAutopayAgreement(pap);
             }
-            ServerSideFactory.create(NotificationFacade.class).autoPayCancelledBySystemNotification(lease);
+            ServerSideFactory.create(NotificationFacade.class).autoPayCancelledBySystemNotification(lease, activePaps);
         }
     }
 
@@ -394,30 +397,33 @@ class AutopayAgreementMananger {
                         new UnitOfWork().execute(new Executable<Void, RuntimeException>() {
                             @Override
                             public Void execute() {
-                                boolean atLeaseOneTerminated = false;
-                                AutoPayPolicy autoPayPolicy = ServerSideFactory.create(PolicyFacade.class).obtainEffectivePolicy(
-                                        account.lease().unit().building(), AutoPayPolicy.class);
+                                List<AutopayAgreement> activePaps = retrieveAutopayAgreements(account.lease());
+                                if (!activePaps.isEmpty()) {
+                                    boolean atLeaseOneTerminated = false;
+                                    AutoPayPolicy autoPayPolicy = ServerSideFactory.create(PolicyFacade.class).obtainEffectivePolicy(
+                                            account.lease().unit().building(), AutoPayPolicy.class);
 
-                                for (AutopayAgreement item : retrieveAutopayAgreements(account.lease())) {
                                     boolean terminate = false;
-
                                     if (!isPreauthorizedPaymentsApplicableForBillingCycle(account.lease(), suspensionCycle, autoPayPolicy)) {
                                         terminate = true;
                                     }
-
                                     if (terminate) {
-                                        atLeaseOneTerminated = true;
-                                        deleteAutopayAgreement(item);
-                                        executionMonitor.addProcessedEvent("AutoPay Cancel");
+                                        for (AutopayAgreement item : activePaps) {
+                                            if (terminate) {
+                                                atLeaseOneTerminated = true;
+                                                deleteAutopayAgreement(item);
+                                                executionMonitor.addProcessedEvent("AutoPay Cancel");
+                                            }
+                                        }
+                                        if (atLeaseOneTerminated) {
+                                            ServerSideFactory.create(NotificationFacade.class)
+                                                    .autoPayCancelledBySystemNotification(account.lease(), activePaps);
+                                            Persistence.ensureRetrieve(account.lease(), AttachLevel.Attached);
+                                            executionMonitor.addInfoEvent("Lease with Cancelled AutoPay", "LeaseId "
+                                                    + account.lease().leaseId().getStringView());
+                                        }
                                     }
                                 }
-
-                                if (atLeaseOneTerminated) {
-                                    ServerSideFactory.create(NotificationFacade.class).autoPayCancelledBySystemNotification(account.lease());
-                                    Persistence.ensureRetrieve(account.lease(), AttachLevel.Attached);
-                                    executionMonitor.addInfoEvent("Lease with Cancelled AutoPay", "LeaseId " + account.lease().leaseId().getStringView());
-                                }
-
                                 return null;
                             }
                         });

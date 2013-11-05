@@ -13,6 +13,7 @@
  */
 package com.propertyvista.biz.communication.notifications;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import com.pyx4j.config.server.ServerSideFactory;
@@ -20,14 +21,18 @@ import com.pyx4j.config.server.ServerSideFactory;
 import com.propertyvista.biz.communication.CommunicationFacade;
 import com.propertyvista.domain.company.Employee;
 import com.propertyvista.domain.company.Notification;
+import com.propertyvista.domain.payment.AutopayAgreement;
 import com.propertyvista.domain.tenant.lease.Lease;
 
 public class AutoPayCancelledByResidentNotification extends AbstractNotification {
 
     private final Lease leaseId;
 
-    public AutoPayCancelledByResidentNotification(Lease leaseId) {
+    private final List<AutopayAgreement> canceledAgreements;
+
+    public AutoPayCancelledByResidentNotification(Lease leaseId, List<AutopayAgreement> canceledAgreements) {
         this.leaseId = leaseId;
+        this.canceledAgreements = new ArrayList<AutopayAgreement>(canceledAgreements);
     }
 
     @Override
@@ -39,7 +44,8 @@ public class AutoPayCancelledByResidentNotification extends AbstractNotification
     public void send() {
         List<Employee> employees = NotificationsUtils.getNotificationTraget(leaseId, Notification.NotificationType.AutoPayCanceledByResident);
         if (!employees.isEmpty()) {
-            ServerSideFactory.create(CommunicationFacade.class).sendAutoPayCancelledByResidentNotification(NotificationsUtils.toEmails(employees), leaseId);
+            ServerSideFactory.create(CommunicationFacade.class).sendAutoPayCancelledByResidentNotification(NotificationsUtils.toEmails(employees), leaseId,
+                    canceledAgreements);
         }
     }
 

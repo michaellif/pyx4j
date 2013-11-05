@@ -13,6 +13,8 @@
  */
 package com.propertyvista.biz.communication;
 
+import java.util.List;
+
 import com.propertyvista.biz.communication.notifications.AbstractNotification;
 import com.propertyvista.biz.communication.notifications.AutoPayCancelledByResidentNotification;
 import com.propertyvista.biz.communication.notifications.AutoPayCancelledBySystemNotification;
@@ -21,6 +23,7 @@ import com.propertyvista.biz.communication.notifications.NotificationsAggregator
 import com.propertyvista.biz.communication.notifications.PostToYardiFailedNotification;
 import com.propertyvista.biz.communication.notifications.RejectPaymentNotification;
 import com.propertyvista.domain.financial.PaymentRecord;
+import com.propertyvista.domain.payment.AutopayAgreement;
 import com.propertyvista.domain.tenant.lease.Lease;
 
 public class NotificationFacadeImpl implements NotificationFacade {
@@ -64,8 +67,8 @@ public class NotificationFacadeImpl implements NotificationFacade {
     }
 
     @Override
-    public void autoPayCancelledByResidentNotification(Lease leaseId) {
-        aggregateOrSend(new AutoPayCancelledByResidentNotification(leaseId));
+    public void autoPayCancelledByResidentNotification(Lease leaseId, List<AutopayAgreement> canceledAgreements) {
+        aggregateOrSend(new AutoPayCancelledByResidentNotification(leaseId, canceledAgreements));
     }
 
     @Override
@@ -74,8 +77,8 @@ public class NotificationFacadeImpl implements NotificationFacade {
     }
 
     @Override
-    public void autoPayCancelledBySystemNotification(Lease leaseId) {
-        aggregateOrSend(new AutoPayCancelledBySystemNotification(leaseId));
+    public void autoPayCancelledBySystemNotification(Lease leaseId, List<AutopayAgreement> canceledAgreements) {
+        aggregateOrSend(new AutoPayCancelledBySystemNotification(leaseId, canceledAgreements));
     }
 
 }

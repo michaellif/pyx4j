@@ -13,7 +13,10 @@
  */
 package com.propertyvista.biz.communication;
 
+import java.util.List;
+
 import com.propertyvista.domain.financial.PaymentRecord;
+import com.propertyvista.domain.payment.AutopayAgreement;
 import com.propertyvista.domain.tenant.lease.Lease;
 
 public interface NotificationFacade {
@@ -24,9 +27,9 @@ public interface NotificationFacade {
 
     public void autoPayReviewRequiredNotification(Lease leaseId);
 
-    public void autoPayCancelledBySystemNotification(Lease leaseId);
+    public void autoPayCancelledBySystemNotification(Lease leaseId, List<AutopayAgreement> canceledAgreements);
 
-    public void autoPayCancelledByResidentNotification(Lease leaseId);
+    public void autoPayCancelledByResidentNotification(Lease leaseId, List<AutopayAgreement> canceledAgreements);
 
     public void aggregateNotificationsStart();
 

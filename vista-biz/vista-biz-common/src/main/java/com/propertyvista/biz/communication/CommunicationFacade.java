@@ -14,12 +14,14 @@
 package com.propertyvista.biz.communication;
 
 import java.util.List;
+import java.util.Map;
 
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.server.mail.MailMessage;
 
 import com.propertyvista.domain.financial.PaymentRecord;
 import com.propertyvista.domain.maintenance.MaintenanceRequest;
+import com.propertyvista.domain.payment.AutopayAgreement;
 import com.propertyvista.domain.pmc.Pmc;
 import com.propertyvista.domain.security.CrmUser;
 import com.propertyvista.domain.security.OnboardingUser;
@@ -77,9 +79,9 @@ public interface CommunicationFacade {
 
     void sendAutoPayReviewRequiredNotification(List<String> targetEmails, List<Lease> leaseIds);
 
-    void sendAutoPayCancelledBySystemNotification(List<String> targetEmails, List<Lease> leaseIds);
+    void sendAutoPayCancelledBySystemNotification(List<String> targetEmails, List<Lease> leaseIds, Map<Lease, List<AutopayAgreement>> canceledAgreements);
 
-    void sendAutoPayCancelledByResidentNotification(List<String> targetEmails, Lease leaseId);
+    void sendAutoPayCancelledByResidentNotification(List<String> targetEmails, Lease leaseId, List<AutopayAgreement> canceledAgreements);
 
     //void sendCustomerMessage(CustomerCustomMessageTemplate customMessageTemplate, Customer customer);
 
