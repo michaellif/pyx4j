@@ -6,6 +6,8 @@
   and
     <version>x+1</version><!--vista-version-->
 
+   e.g.  mvn versions:set -DgenerateBackupPoms=false
+
 * When creating Branch change VistaTODO.codeBaseIsProdBranch=true in Branch to support dual development environments
 
 *
