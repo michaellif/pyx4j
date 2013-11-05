@@ -64,11 +64,10 @@ public class ExecutionReportSectionLister extends EntityDataTablePanel<Execution
                 @Override
                 public String convert(IEntity entity) {
                     String message = entity.isEmpty() ? "" : ((IList<ExecutionReportMessage>)entity.getMember(getColumnPath())).get(0).message().getValue();
-                    if (message.length() > 200) {
-                        message = message.substring(0, 200) + "...";
-                        
+                    if (message != null && message.length() > 200) {
+                        message = message.substring(0, 200) + "...";                        
                     }
-                    return message;
+                    return message != null ? message : "";
                 }
             }
 
