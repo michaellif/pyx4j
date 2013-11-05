@@ -85,7 +85,6 @@ public class InfoViewForm extends CEntityDecoratableForm<TenantInfoDTO> {
         TwoColumnFlexFormPanel main = new TwoColumnFlexFormPanel();
 
         int row = -1;
-        main.setH1(++row, 0, 2, i18n.tr("Contact Details"));
         main.setWidget(++row, 0, 2, inject(proto().person().name(), new NameEditor(i18n.tr("Person"))));
 
         main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().person().sex()), 7).build());

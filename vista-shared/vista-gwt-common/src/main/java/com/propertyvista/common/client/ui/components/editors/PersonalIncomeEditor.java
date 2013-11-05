@@ -47,7 +47,7 @@ import com.propertyvista.domain.tenant.income.IncomeInfoSocialServices;
 import com.propertyvista.domain.tenant.income.IncomeInfoStudentIncome;
 import com.propertyvista.domain.tenant.income.IncomeSource;
 
-public class PersonalIncomeEditor extends CEntityDecoratableForm<CustomerScreeningIncome> {
+public class PersonalIncomeEditor extends CEntityForm<CustomerScreeningIncome> {
 
     private static final I18n i18n = I18n.get(PersonalIncomeEditor.class);
 
@@ -77,9 +77,9 @@ public class PersonalIncomeEditor extends CEntityDecoratableForm<CustomerScreeni
             main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().incomeSource()), 25).build());
         }
 
-        main.setBR(++row, 0, 1);
-        main.setWidget(++row, 0, detailsHolder);
-        main.setWidget(++row, 0, inject(proto().documents(), fileUpload = new ProofOfEmploymentUploaderFolder()));
+        main.setBR(++row, 0, 2);
+        main.setWidget(++row, 0, 2, detailsHolder);
+        main.setWidget(++row, 0, 2, inject(proto().documents(), fileUpload = new ProofOfEmploymentUploaderFolder()));
 
         return main;
     }
