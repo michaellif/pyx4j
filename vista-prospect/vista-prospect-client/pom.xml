@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<project
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns="http://maven.apache.org/POM/4.0.0">
+    <!-- @version $Revision$ ($Author$) $Date$ -->
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>com.propertyvista</groupId>
+        <artifactId>vista-prospect</artifactId>
+        <version>1.1.3-SNAPSHOT</version><!--vista-version-->
+        <relativePath>../pom.xml</relativePath>
+    </parent>
+
+    <artifactId>vista-prospect-client</artifactId>
+    <name>vista-prospect-client</name>
+
+    <dependencies>
+
+        <dependency>
+            <groupId>com.pyx4j</groupId>
+            <artifactId>pyx-rpc-shared</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>com.google.gwt</groupId>
+            <artifactId>gwt-user</artifactId>
+            <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>com.propertyvista</groupId>
+            <artifactId>vista-prospect-rpc</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.propertyvista</groupId>
+            <artifactId>vista-gwt-common</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.pyx4j</groupId>
+            <artifactId>pyx-essentials-gwt</artifactId>
+        </dependency>
+
+    </dependencies>
+
+    <properties>
+        <gwtModule>ptapp</gwtModule>
+        <gwtModuleCompile>vista.${gwtModule}${appGWTModuleSufix}</gwtModuleCompile>
+        <gwtDestinationWarFolder>${basedir}/../../vista-server/src/main/webapp</gwtDestinationWarFolder>
+    </properties>
+
+    <profiles>
+        <profile>
+            <id>gwtc</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>com.pyx4j</groupId>
+                        <artifactId>gwt-maven-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <id>compile-java2script</id>
+                                <phase>prepare-package</phase>
+                                <goals>
+                                    <goal>compile</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                        <configuration>
+                            <module>${gwtModuleCompile}</module>
+                            <logLevel>INFO</logLevel>
+                            <style>${gwtCompilerOutputStyle}</style>
+                            <webappDirectory>${gwtDestinationWarFolder}</webappDirectory>
+                            <generated>${project.build.directory}/gwt-generated</generated>
+                            <extra>${project.build.directory}/gwt-extra</extra>
+                            <localWorkers>${gwtLocalWorkers}</localWorkers>
+                            <draftCompile>${gwtDraftCompile}</draftCompile>
+                            <strict>true</strict>
+                            <compileReport>${gwtCompileReport}</compileReport>
+                            <enableAssertions>${gwtEnableAssertions}</enableAssertions>
+                            <!-- disableCastChecking>true</disableCastChecking -->
+                            <!-- disableClassMetadata>true</disableClassMetadata -->
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+
+        <profile>
+            <id>i18n-merge</id>
+            <properties>
+                <i18n.merge>true</i18n.merge>
+                <i18n.catalog>../../vista-i18n-catalog/src/main/resources/translations</i18n.catalog>
+            </properties>
+        </profile>
+
+        <profile>
+            <id>i18n-ru</id>
+            <properties>
+                <i18n.translate>ru</i18n.translate>
+            </properties>
+        </profile>
+
+        <profile>
+            <id>i18n-auto</id>
+            <properties>
+                <i18n.autoTranslate>true</i18n.autoTranslate>
+                <i18n.catalog>../../vista-i18n-catalog/src/main/resources/translations</i18n.catalog>
+            </properties>
+        </profile>
+
+        <profile>
+            <id>i18n</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>com.pyx4j</groupId>
+                        <artifactId>i18n-maven-plugin</artifactId>
+                        <version>${pyxVersion}</version>
+                        <executions>
+                            <execution>
+                                <id>extract-i18n</id>
+                                <goals>
+                                    <goal>extract</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                        <configuration>
+                            <poSaveLocation>${poSaveLocation}</poSaveLocation>
+                            <keysFile>keys${poSufix}.pot</keysFile>
+                            <excludes>
+                                <exclude>com.google.*</exclude>
+                            </excludes>
+                            <includes>
+                                <include>com.pyx4j*</include>
+                                <include>com.propertyvista*</include>
+                            </includes>
+                            <translate>${i18n.translate}</translate>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+
+    </profiles>
+
+</project>

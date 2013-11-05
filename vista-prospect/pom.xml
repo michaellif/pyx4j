@@ -18,7 +18,9 @@
     <packaging>pom</packaging>
 
     <modules>
-        <module>vista-prospect-ptapp</module>
+        <module>vista-prospect-rpc</module>
+        <module>vista-prospect-server</module>
+        <module>vista-prospect-client</module>
     </modules>
 
 </project>
