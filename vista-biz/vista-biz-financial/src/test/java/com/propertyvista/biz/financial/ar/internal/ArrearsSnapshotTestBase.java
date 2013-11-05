@@ -53,6 +53,7 @@ public abstract class ArrearsSnapshotTestBase extends LeaseFinancialTestBase {
 
     private void cleanUp() {
         Persistence.service().delete(EntityQueryCriteria.create(LeaseArrearsSnapshot.class));
+        Persistence.service().commit(); // added to fix table lock
     }
 
     public void runAndConfirmBilling() {

@@ -22,7 +22,6 @@ package com.propertyvista.biz.financial.ar.internal;
 
 import java.math.BigDecimal;
 
-import org.junit.Ignore;
 import org.junit.experimental.categories.Category;
 
 import com.pyx4j.config.server.ServerSideFactory;
@@ -40,7 +39,6 @@ import com.propertyvista.domain.financial.billing.InvoiceLineItem;
 import com.propertyvista.test.integration.IntegrationTestBase.FunctionalTests;
 
 @Category(FunctionalTests.class)
-@Ignore
 public class ARCreditDebitLinkManagerTest extends LeaseFinancialTestBase {
 
     @Override
@@ -84,17 +82,18 @@ public class ARCreditDebitLinkManagerTest extends LeaseFinancialTestBase {
         outstandingDebit(new BigDecimal("80.00"), 3); // deposit
         // @formatter:on
 
+        // Partial payment - default test ARPolicy rule "oldestDebtFirst" so for same bucket age the smallest amounts covered first
         setSysDate("25-Feb-2011");
         PaymentRecord payment = receiveAndPostPayment("25-Feb-2011", "300.00");
 
         // @formatter:off
         new TransactionHistoryTester(retrieveLease().billingAccount()).
         lineItemSize(5).
-        notCoveredDebitLineItemSize(3).
+        notCoveredDebitLineItemSize(2).
         notConsumedCreditInvoiceItemSize(0).
         outstandingDebit(new BigDecimal("1041.94"), 0).
-        outstandingDebit(new BigDecimal("89.60"), 1).
-        outstandingDebit(new BigDecimal("710.30"), 2).
+        outstandingDebit(new BigDecimal("0.00"), 1).
+        outstandingDebit(new BigDecimal("799.90"), 2).
         outstandingDebit(new BigDecimal("0.00"), 3);
         // @formatter:on
 

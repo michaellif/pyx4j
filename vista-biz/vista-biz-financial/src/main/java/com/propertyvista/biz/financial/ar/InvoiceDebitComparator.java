@@ -65,7 +65,7 @@ public class InvoiceDebitComparator implements Comparator<InvoiceDebit> {
 
     private int amtCompare(InvoiceDebit debit1, InvoiceDebit debit2) {
         // smaller amount first
-        return debit1.amount().getValue().compareTo(debit2.amount().getValue());
+        return debit1.outstandingDebit().getValue().compareTo(debit2.outstandingDebit().getValue());
     }
 
     private int arCompare(InvoiceDebit debit1, InvoiceDebit debit2) {

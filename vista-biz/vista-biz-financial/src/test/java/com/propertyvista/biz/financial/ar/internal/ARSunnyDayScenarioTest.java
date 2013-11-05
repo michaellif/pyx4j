@@ -22,7 +22,6 @@ package com.propertyvista.biz.financial.ar.internal;
 
 import java.math.BigDecimal;
 
-import org.junit.Ignore;
 import org.junit.experimental.categories.Category;
 
 import com.pyx4j.config.server.ServerSideFactory;
@@ -33,7 +32,6 @@ import com.propertyvista.biz.financial.ar.TransactionHistoryTester;
 import com.propertyvista.domain.financial.ARCode;
 import com.propertyvista.test.integration.IntegrationTestBase.RegressionTests;
 
-@Ignore
 @Category(RegressionTests.class)
 public class ARSunnyDayScenarioTest extends LeaseFinancialTestBase {
 
@@ -67,6 +65,7 @@ public class ARSunnyDayScenarioTest extends LeaseFinancialTestBase {
         agingBucketsCurrent(new BigDecimal("1010.30"), ARCode.Type.Deposit);
         // @formatter:on
 
+        // Partial payment - default test ARPolicy rule "oldestDebtFirst" so for same bucket age the smallest amounts covered first
         receiveAndPostPayment("22-Mar-2011", "1040.00");
 
         // @formatter:off
@@ -75,7 +74,7 @@ public class ARSunnyDayScenarioTest extends LeaseFinancialTestBase {
         notCoveredDebitLineItemSize(1).
         notConsumedCreditInvoiceItemSize(0).
         agingBucketsCurrent(new BigDecimal("298.82"), null).
-        agingBucketsCurrent(new BigDecimal("298.82"), ARCode.Type.Residential);
+        agingBucketsCurrent(new BigDecimal("298.82"), ARCode.Type.Deposit);
         // @formatter:on
 
         //==================== RUN 2 ======================//
