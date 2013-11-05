@@ -52,7 +52,7 @@ public class ProofOfEmploymentUploaderFolder extends VistaBoxFolder<ProofOfEmplo
             TwoColumnFlexFormPanel content = new TwoColumnFlexFormPanel();
 
             int row = -1;
-            content.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().description())).build());
+            content.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().description()), 50, true).build());
             content.setH3(++row, 0, 2, i18n.tr("Files"));
             content.setWidget(++row, 0, 2, inject(proto().documentPages(), new ApplicationDocumentFileUploaderFolder()));
 

@@ -61,7 +61,7 @@ public class PersonalIncomeEditor extends CEntityForm<CustomerScreeningIncome> {
         TwoColumnFlexFormPanel main = new TwoColumnFlexFormPanel();
         int row = -1;
 
-        main.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().incomeSource(), new CEnumLabel()), 25).build());
+        main.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().incomeSource(), new CEnumLabel()), 25, true).build());
         main.setWidget(++row, 0, 2, detailsHolder);
         main.setWidget(++row, 0, 2, inject(proto().documents(), fileUpload = new ProofOfEmploymentUploaderFolder()));
 

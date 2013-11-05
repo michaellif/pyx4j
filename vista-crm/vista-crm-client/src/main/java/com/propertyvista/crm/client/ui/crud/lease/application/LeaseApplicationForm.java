@@ -135,21 +135,23 @@ public class LeaseApplicationForm extends LeaseFormBase<LeaseApplicationDTO> {
         int row = -1;
         main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().leaseApplication().status(), new CEnumLabel()), 15).build());
         main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().leaseApplication().decidedBy()), 25).build());
-        main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().leaseApplication().decisionDate()), 9).build());
-        main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().leaseApplication().decisionReason()), 40).build());
+        main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().leaseApplication().decisionDate()), 10).build());
+        main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().leaseApplication().decisionReason()), 50).build());
 
         if (VistaFeatures.instance().countryOfOperation() == CountryOfOperation.Canada) {
-            main.setBR(++row, 0, 1);
+            main.setBR(++row, 0, 2);
 
-            main.setH1(++row, 0, 1, i18n.tr("Credit Check"));
+            main.setH1(++row, 0, 2, i18n.tr("Credit Check"));
             main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().leaseApproval().percenrtageApproved()), 5).build());
             main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().leaseApproval().totalAmountApproved()), 10).build());
             main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().leaseApproval().rentAmount()), 10).build());
-            main.setBR(++row, 0, 1);
-            main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().leaseApproval().suggestedDecision()), 40).build());
+
+            main.setBR(++row, 0, 2);
+
+            main.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().leaseApproval().suggestedDecision()), 50, true).build());
         }
 
-        main.setBR(++row, 0, 1);
+        main.setBR(++row, 0, 0);
 
         main.setWidget(++row, 0, 2,
                 inject(proto().leaseApproval().participants(), new LeaseParticipanApprovalFolder(false, ((LeaseApplicationViewerView) getParentView()))));
