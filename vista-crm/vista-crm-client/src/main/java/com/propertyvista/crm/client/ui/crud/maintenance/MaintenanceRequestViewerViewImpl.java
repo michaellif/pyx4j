@@ -131,7 +131,7 @@ public class MaintenanceRequestViewerViewImpl extends CrmViewerViewImplBase<Main
         public ScheduleBox() {
             super(i18n.tr("Schedule"));
             setBody(createBody());
-            setWidth("50em");
+            setWidth("55em");
         }
 
         protected Widget createBody() {
@@ -184,7 +184,7 @@ public class MaintenanceRequestViewerViewImpl extends CrmViewerViewImplBase<Main
         public RateBox(SurveyResponse currentRate) {
             super(i18n.tr("Schedule"));
             setBody(createBody(currentRate));
-            setWidth("50em");
+            setWidth("55em");
         }
 
         protected Widget createBody(SurveyResponse currentRate) {

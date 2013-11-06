@@ -31,6 +31,7 @@ import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.forms.client.ui.CComboBox;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CDateLabel;
+import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.ui.CEntityLabel;
 import com.pyx4j.forms.client.ui.CLabel;
 import com.pyx4j.forms.client.ui.CTimeLabel;
@@ -49,7 +50,6 @@ import com.pyx4j.widgets.client.images.HelperImages;
 
 import com.propertyvista.common.client.policy.ClientPolicyManager;
 import com.propertyvista.common.client.ui.components.MaintenanceRequestCategoryChoice;
-import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
 import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
 import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
 import com.propertyvista.crm.client.ui.components.boxes.BuildingSelectorDialog;
@@ -461,11 +461,10 @@ public class MaintenanceRequestForm extends CrmEntityForm<MaintenanceRequestDTO>
                 @Override
                 public void execute() {
                     new OkCancelDialog("Enter Progress Note") {
-                        private final CEntityDecoratableForm<MaintenanceRequestSchedule> content = createContent();
+                        private final CEntityForm<MaintenanceRequestSchedule> content = createContent();
 
-                        private CEntityDecoratableForm<MaintenanceRequestSchedule> createContent() {
-                            CEntityDecoratableForm<MaintenanceRequestSchedule> content = new CEntityDecoratableForm<MaintenanceRequestSchedule>(
-                                    MaintenanceRequestSchedule.class) {
+                        private CEntityForm<MaintenanceRequestSchedule> createContent() {
+                            CEntityForm<MaintenanceRequestSchedule> content = new CEntityForm<MaintenanceRequestSchedule>(MaintenanceRequestSchedule.class) {
 
                                 @Override
                                 public IsWidget createContent() {
@@ -505,7 +504,7 @@ public class MaintenanceRequestForm extends CrmEntityForm<MaintenanceRequestDTO>
             super.onValueSet(populate);
         }
 
-        class MaintenanceRequestScheduleViewer extends CEntityDecoratableForm<MaintenanceRequestSchedule> {
+        class MaintenanceRequestScheduleViewer extends CEntityForm<MaintenanceRequestSchedule> {
 
             public MaintenanceRequestScheduleViewer() {
                 super(MaintenanceRequestSchedule.class);
@@ -544,7 +543,7 @@ public class MaintenanceRequestForm extends CrmEntityForm<MaintenanceRequestDTO>
             }
         }
 
-        class NoticeOfEntryViewer extends CEntityDecoratableForm<NoticeOfEntry> {
+        class NoticeOfEntryViewer extends CEntityForm<NoticeOfEntry> {
 
             public NoticeOfEntryViewer() {
                 super(NoticeOfEntry.class);
