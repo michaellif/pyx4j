@@ -84,10 +84,8 @@ public class UnitsMerger {
             merged.marketing().name().setValue(imported.marketing().name().getValue());
 
             // financial
-            merged.financial()._unitRent().setValue(imported.financial()._unitRent().getValue());
-
-            // Update only marketRent when it is coming from yardi and value not set in Vista
-            if (merged.financial()._marketRent().isNull() && (imported.financial()._marketRent().getValue(BigDecimal.ZERO).compareTo(BigDecimal.ZERO) > 0)) {
+            // Update only marketRent when it is coming from yardi and value not set in Vista,
+            if (merged.financial()._marketRent().getValue(BigDecimal.ZERO).compareTo(BigDecimal.ZERO) == 0) {
                 merged.financial()._marketRent().setValue(imported.financial()._marketRent().getValue());
             }
         }

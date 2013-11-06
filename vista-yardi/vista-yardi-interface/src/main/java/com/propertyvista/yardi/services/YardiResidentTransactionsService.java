@@ -31,6 +31,7 @@ import com.yardi.entity.ils.Availability;
 import com.yardi.entity.ils.ILSUnit;
 import com.yardi.entity.ils.PhysicalProperty;
 import com.yardi.entity.mits.Address;
+import com.yardi.entity.mits.Information;
 import com.yardi.entity.mits.PropertyIDType;
 import com.yardi.entity.mits.Unit;
 import com.yardi.entity.resident.Property;
@@ -279,8 +280,16 @@ public class YardiResidentTransactionsService extends YardiAbstractService {
                     removeLease(activeLeases, leaseId);
 
                     try {
+                        Unit yardiUnit = rtCustomer.getRTUnit().getUnit();
+                        // VISTA-3307 Yardi API ResidentTransactions is broken! the filed unitRent is actually Market Rent, Make vista internal API consistent wit ISL
+                        {
+                            Information yardiUnitInfo = yardiUnit.getInformation().get(0);
+                            if ((yardiUnitInfo.getMarketRent() == null) || (yardiUnitInfo.getMarketRent().compareTo(BigDecimal.ZERO) == 0)) {
+                                yardiUnitInfo.setMarketRent(yardiUnitInfo.getUnitRent());
+                            }
+                        }
 
-                        AptUnit unit = importUnit(building, rtCustomer.getRTUnit().getUnit(), executionMonitor);
+                        AptUnit unit = importUnit(building, yardiUnit, executionMonitor);
                         // try to assign legal address for the unit
                         if (unit.info().legalAddress().isEmpty() && rtCustomer.getCustomers().getCustomer().get(0).getAddress().size() > 0) {
                             assignLegalAddress(unit, rtCustomer.getCustomers().getCustomer().get(0).getAddress().get(0), executionMonitor);

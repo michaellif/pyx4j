@@ -87,7 +87,6 @@ public class UnitsMapper {
         unitTo.marketing().name().setValue(unit.getMarketingName());
 
         // financial
-        unitTo.financial()._unitRent().setValue(info.getUnitRent());
         unitTo.financial()._marketRent().setValue(info.getMarketRent());
 
         return unitTo;
