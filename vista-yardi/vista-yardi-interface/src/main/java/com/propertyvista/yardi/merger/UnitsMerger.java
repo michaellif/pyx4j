@@ -13,6 +13,7 @@
  */
 package com.propertyvista.yardi.merger;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -84,7 +85,11 @@ public class UnitsMerger {
 
             // financial
             merged.financial()._unitRent().setValue(imported.financial()._unitRent().getValue());
-            merged.financial()._marketRent().setValue(imported.financial()._marketRent().getValue());
+
+            // Update only marketRent when it is coming from yardi and value not set in Vista
+            if (merged.financial()._marketRent().isNull() && (imported.financial()._marketRent().getValue(BigDecimal.ZERO).compareTo(BigDecimal.ZERO) > 0)) {
+                merged.financial()._marketRent().setValue(imported.financial()._marketRent().getValue());
+            }
         }
 
         // merge floorplan
