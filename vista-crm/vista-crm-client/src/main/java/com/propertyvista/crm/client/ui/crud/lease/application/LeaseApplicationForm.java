@@ -163,13 +163,11 @@ public class LeaseApplicationForm extends LeaseFormBase<LeaseApplicationDTO> {
         TwoColumnFlexFormPanel main = new TwoColumnFlexFormPanel(i18n.tr("Online Status Details"));
 
         int row = -1;
-        main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().leaseApplication().onlineApplication().status()), 15).labelWidth(20).build());
-        get(proto().leaseApplication().onlineApplication().status()).setViewable(true);
-        main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().masterApplicationStatus().progress()), 5).labelWidth(20).build());
-        get(proto().masterApplicationStatus().progress()).setViewable(true);
+        main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().leaseApplication().onlineApplication().status()), 20, 15, 20).build());
+        main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().masterApplicationStatus().progress()), 20, 5, 20).build());
 
-        main.setBR(++row, 0, 1);
-        main.setWidget(++row, 0, inject(proto().masterApplicationStatus().individualApplications(), new ApplicationStatusFolder()));
+        main.setBR(++row, 0, 2);
+        main.setWidget(++row, 0, 2, inject(proto().masterApplicationStatus().individualApplications(), new ApplicationStatusFolder()));
 
         return main;
     }

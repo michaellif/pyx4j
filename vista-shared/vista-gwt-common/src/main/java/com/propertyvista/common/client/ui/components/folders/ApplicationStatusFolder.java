@@ -16,8 +16,12 @@ package com.propertyvista.common.client.ui.components.folders;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.pyx4j.entity.shared.IObject;
+import com.pyx4j.forms.client.ui.CComponent;
+import com.pyx4j.forms.client.ui.CEntityLabel;
 import com.pyx4j.forms.client.ui.folder.EntityFolderColumnDescriptor;
 
+import com.propertyvista.domain.person.Name;
 import com.propertyvista.dto.OnlineApplicationStatusDTO;
 
 public class ApplicationStatusFolder extends VistaTableFolder<OnlineApplicationStatusDTO> {
@@ -35,5 +39,13 @@ public class ApplicationStatusFolder extends VistaTableFolder<OnlineApplicationS
         columns.add(new EntityFolderColumnDescriptor(proto().progress(), "7em"));
         columns.add(new EntityFolderColumnDescriptor(proto().description(), "20em"));
         return columns;
+    }
+
+    @Override
+    public CComponent<?> create(IObject<?> member) {
+        if (member.getObjectClass().equals(Name.class)) {
+            return new CEntityLabel<Name>();
+        }
+        return super.create(member);
     }
 }
