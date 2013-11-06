@@ -93,8 +93,6 @@ public class LeaseParticipanApprovalFolder extends VistaBoxFolder<LeaseParticipa
             main.getFlexCellFormatter().setVerticalAlignment(0, 0, HasVerticalAlignment.ALIGN_TOP);
             main.getFlexCellFormatter().setVerticalAlignment(0, 1, HasVerticalAlignment.ALIGN_TOP);
 
-            main.getFlexCellFormatter().setWidth(0, 0, "35em");
-
             return main;
         }
 
@@ -199,7 +197,7 @@ public class LeaseParticipanApprovalFolder extends VistaBoxFolder<LeaseParticipa
             panel.getFlexCellFormatter().setVerticalAlignment(0, 0, HasVerticalAlignment.ALIGN_TOP);
             panel.getFlexCellFormatter().setVerticalAlignment(0, 1, HasVerticalAlignment.ALIGN_TOP);
 
-            panel.getFlexCellFormatter().setWidth(0, 0, "30em");
+            panel.getWidget(0, 1).getElement().getStyle().setMarginLeft(3, Unit.EM);
 
             return panel;
         }
