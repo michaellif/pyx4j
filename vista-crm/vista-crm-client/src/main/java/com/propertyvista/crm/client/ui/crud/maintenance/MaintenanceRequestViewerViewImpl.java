@@ -24,7 +24,7 @@ import com.google.gwt.user.client.ui.Widget;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.ui.CNumberField;
-import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
+import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
 import com.pyx4j.widgets.client.dialog.OkCancelDialog;
@@ -124,14 +124,13 @@ public class MaintenanceRequestViewerViewImpl extends CrmViewerViewImplBase<Main
 
     // Internals:
 
-    private abstract class ScheduleBox extends OkCancelDialog {
+    static abstract class ScheduleBox extends OkCancelDialog {
 
         private CEntityForm<MaintenanceRequestScheduleDTO> content;
 
         public ScheduleBox() {
             super(i18n.tr("Schedule"));
             setBody(createBody());
-            setWidth("55em");
         }
 
         protected Widget createBody() {
@@ -140,7 +139,7 @@ public class MaintenanceRequestViewerViewImpl extends CrmViewerViewImplBase<Main
             content = new CEntityForm<MaintenanceRequestScheduleDTO>(MaintenanceRequestScheduleDTO.class) {
                 @Override
                 public IsWidget createContent() {
-                    BasicFlexFormPanel main = new BasicFlexFormPanel();
+                    TwoColumnFlexFormPanel main = new TwoColumnFlexFormPanel();
 
                     int row = -1;
                     main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().scheduledDate()), 10).build());
@@ -154,6 +153,7 @@ public class MaintenanceRequestViewerViewImpl extends CrmViewerViewImplBase<Main
                 @Override
                 public void addValidations() {
                     super.addValidations();
+
                 }
             };
 
@@ -177,14 +177,13 @@ public class MaintenanceRequestViewerViewImpl extends CrmViewerViewImplBase<Main
         }
     }
 
-    private abstract class RateBox extends OkCancelDialog {
+    static abstract class RateBox extends OkCancelDialog {
 
         private CEntityForm<SurveyResponse> content;
 
         public RateBox(SurveyResponse currentRate) {
             super(i18n.tr("Schedule"));
             setBody(createBody(currentRate));
-            setWidth("55em");
         }
 
         protected Widget createBody(SurveyResponse currentRate) {
@@ -193,10 +192,10 @@ public class MaintenanceRequestViewerViewImpl extends CrmViewerViewImplBase<Main
             content = new CEntityForm<SurveyResponse>(SurveyResponse.class) {
                 @Override
                 public IsWidget createContent() {
-                    BasicFlexFormPanel main = new BasicFlexFormPanel();
+                    TwoColumnFlexFormPanel main = new TwoColumnFlexFormPanel();
 
                     main.setWidget(0, 0, new FormDecoratorBuilder(inject(proto().rating()), 3).build());
-                    main.setWidget(1, 0, new FormDecoratorBuilder(inject(proto().description()), 25).build());
+                    main.setWidget(1, 0, new FormDecoratorBuilder(inject(proto().description()), 20).build());
 
                     // tweaking:
                     get(proto().rating()).setTooltip(i18n.tr("Set value in range from 1 to 5..."));
