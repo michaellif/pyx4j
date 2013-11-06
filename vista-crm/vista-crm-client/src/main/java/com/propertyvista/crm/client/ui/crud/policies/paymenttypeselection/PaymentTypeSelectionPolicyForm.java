@@ -19,15 +19,13 @@ import java.util.List;
 import com.google.gwt.user.client.ui.HTML;
 
 import com.pyx4j.entity.shared.IPrimitive;
-import com.pyx4j.forms.client.ui.decorators.WidgetDecorator;
-import com.pyx4j.forms.client.ui.decorators.WidgetDecorator.Builder.Alignment;
-import com.pyx4j.forms.client.ui.decorators.WidgetDecorator.Builder.LabelPosition;
 import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.prime.form.IForm;
 
-import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
+import com.propertyvista.common.client.ui.decorations.TableDecoratorBuilder;
+import com.propertyvista.common.client.ui.decorations.TableWidgetDecorator;
 import com.propertyvista.crm.client.ui.crud.policies.common.PolicyDTOTabPanelBasedForm;
 import com.propertyvista.domain.policy.dto.PaymentTypeSelectionPolicyDTO;
 
@@ -108,8 +106,8 @@ public class PaymentTypeSelectionPolicyForm extends PolicyDTOTabPanelBasedForm<P
         return main;
     }
 
-    private WidgetDecorator alignedToCenter(IPrimitive<Boolean> check) {
-        return new FormDecoratorBuilder(inject(check), lblW, contW, contW).labelPosition(LabelPosition.top).labelAlignment(Alignment.center)
-                .componentAlignment(Alignment.center).build();
+    private TableWidgetDecorator alignedToCenter(IPrimitive<Boolean> check) {
+        return new TableDecoratorBuilder(inject(check), lblW, contW, contW).labelPosition(TableDecoratorBuilder.LabelPosition.top)
+                .labelAlignment(TableDecoratorBuilder.Alignment.center).componentAlignment(TableDecoratorBuilder.Alignment.center).build();
     }
 }
