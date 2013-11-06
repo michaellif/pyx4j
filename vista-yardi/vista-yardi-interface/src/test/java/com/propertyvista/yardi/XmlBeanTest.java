@@ -148,7 +148,6 @@ public class XmlBeanTest {
 
                 // financial
                 AptUnitFinancial financial = aptUnit.financial();
-                Assert.assertFalse(financial._unitRent().isNull());
                 Assert.assertFalse(financial._marketRent().isNull());
             }
         }
