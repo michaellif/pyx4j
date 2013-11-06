@@ -23,11 +23,13 @@ import com.pyx4j.security.client.BehaviorChangeHandler;
 import com.pyx4j.security.client.ClientContext;
 import com.pyx4j.security.client.ContextChangeEvent;
 import com.pyx4j.security.client.ContextChangeHandler;
+import com.pyx4j.security.shared.SecurityController;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.client.ui.layout.responsive.LayoutChangeRequestEvent;
 import com.pyx4j.site.client.ui.layout.responsive.LayoutChangeRequestEvent.ChangeType;
 
 import com.propertyvista.common.client.ClientNavigUtils;
+import com.propertyvista.domain.security.VistaCustomerBehavior;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap;
 import com.propertyvista.portal.web.client.PortalWebSite;
 import com.propertyvista.portal.web.client.ui.ToolbarView;
@@ -73,9 +75,11 @@ public class ToolbarActivity extends AbstractActivity implements ToolbarView.Too
     private void updateView() {
         if (ClientContext.isAuthenticated()) {
             view.onLogedIn(ClientContext.getUserVisit().getName());
+            view.setMyLeasesVisibility(SecurityController.checkAnyBehavior(VistaCustomerBehavior.HasMultipleLeases));
         } else {
             boolean hideLoginButton = place instanceof PortalSiteMap.Login;
             view.onLogedOut(hideLoginButton);
+            view.setMyLeasesVisibility(false);
         }
     }
 
@@ -106,5 +110,10 @@ public class ToolbarActivity extends AbstractActivity implements ToolbarView.Too
     @Override
     public void setLocale(CompiledLocale locale) {
         ClientNavigUtils.changeApplicationLocale(locale);
+    }
+
+    @Override
+    public void showLeases() {
+        AppSite.getPlaceController().goTo(new PortalSiteMap.LeaseContextSelection());
     }
 }

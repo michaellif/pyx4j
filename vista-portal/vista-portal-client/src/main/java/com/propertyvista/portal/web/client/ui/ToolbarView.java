@@ -33,6 +33,8 @@ public interface ToolbarView extends IsView {
 
         void showProfile();
 
+        void showLeases();
+
         void setLocale(CompiledLocale locale);
     }
 
@@ -41,5 +43,7 @@ public interface ToolbarView extends IsView {
     void onLogedIn(String userName);
 
     void setAvailableLocales(List<CompiledLocale> locales);
+
+    void setMyLeasesVisibility(boolean isVisible);
 
 }
