@@ -110,6 +110,6 @@ public class PaymentTypeSelectionPolicyForm extends PolicyDTOTabPanelBasedForm<P
 
     private WidgetDecorator alignedToCenter(IPrimitive<Boolean> check) {
         return new FormDecoratorBuilder(inject(check), lblW, contW, contW).labelPosition(LabelPosition.top).labelAlignment(Alignment.center)
-                .componentAlignment(Alignment.center).build();
+                .useLabelSemicolon(false).componentAlignment(Alignment.center).build();
     }
 }

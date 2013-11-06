@@ -215,7 +215,7 @@ public class CustomerCreditCheckLongReportForm extends CrmEntityForm<CustomerCre
     }
 
     private WidgetDecorator alignToCenter(CComponent<?> comp, double width) {
-        return new FormDecoratorBuilder(comp, width, width, width).labelPosition(LabelPosition.top).labelAlignment(Alignment.center)
+        return new FormDecoratorBuilder(comp, width, width, width).labelPosition(LabelPosition.top).labelAlignment(Alignment.center).useLabelSemicolon(false)
                 .componentAlignment(Alignment.center).build();
     }
 
