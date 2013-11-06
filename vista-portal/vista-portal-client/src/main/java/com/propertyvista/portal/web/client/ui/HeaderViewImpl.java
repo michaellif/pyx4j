@@ -37,6 +37,7 @@ public class HeaderViewImpl extends SimplePanel implements HeaderView {
         setStyleName(PortalWebRootPaneTheme.StyleName.PageHeader.name());
 
         bannerImage = new Image();
+        bannerImage.setVisible(false);
         bannerImage.setWidth("100%");
 
         bannerImage.addLoadHandler(new LoadHandler() {
@@ -56,7 +57,12 @@ public class HeaderViewImpl extends SimplePanel implements HeaderView {
 
     @Override
     public void setContent(PortalContentDTO content) {
-        bannerImage.setUrl(MediaUtils.createSiteImageResourceUrl(content.portalBanner().image()));
+        if (!content.portalBanner().image().isNull()) {
+            bannerImage.setUrl(MediaUtils.createSiteImageResourceUrl(content.portalBanner().image()));
+            bannerImage.setVisible(true);
+        } else {
+            bannerImage.setUrl("");
+            bannerImage.setVisible(false);
+        }
     }
-
 }
