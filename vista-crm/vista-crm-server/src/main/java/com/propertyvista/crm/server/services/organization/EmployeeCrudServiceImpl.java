@@ -59,6 +59,8 @@ public class EmployeeCrudServiceImpl extends AbstractCrudServiceDtoImpl<Employee
         EmployeeDTO newEmployee = EntityFactory.create(EmployeeDTO.class);
 
         newEmployee.enabled().setValue(true);
+        newEmployee.restrictAccessToSelectedBuildingsAndPortfolios().setValue(false);
+        newEmployee.requiredPasswordChangeOnNextLogIn().setValue(true);
 
         return newEmployee;
 

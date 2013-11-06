@@ -284,14 +284,14 @@ public class EmployeeForm extends CrmEntityForm<EmployeeDTO> {
     }
 
     public List<Building> getBuildingAccess() {
-        if (get(proto().restrictAccessToSelectedBuildingsAndPortfolios()).getValue()) {
+        if (isRestrictAccessSet()) {
             return get(proto().buildingAccess()).getValue();
         }
         return null;
     }
 
     public List<Portfolio> getPortfolioAccess() {
-        if (get(proto().restrictAccessToSelectedBuildingsAndPortfolios()).getValue()) {
+        if (isRestrictAccessSet()) {
             return get(proto().portfolios()).getValue();
         }
         return null;
