@@ -45,6 +45,10 @@ public abstract class LogServicesImpl {
                 for (LogEvent event : request) {
                     ClientLog4j.log(event);
                 }
+            } else if ((log.getClass().getName().contains("logback"))) {
+                for (LogEvent event : request) {
+                    ClientLogback.log(event);
+                }
             } else {
                 for (LogEvent event : request) {
                     ClientLog.log(event);
