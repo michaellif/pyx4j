@@ -1,0 +1,64 @@
+/*
+ * (C) Copyright Property Vista Software Inc. 2011- All Rights Reserved.
+ *
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
+ * you entered into with Property Vista Software Inc.
+ *
+ * This notice and attribution to Property Vista Software Inc. may not be removed.
+ *
+ * Created on May 18, 2011
+ * @author vadims
+ * @version $Id$
+ */
+package com.propertyvista.portal.resident.activity.maintenance;
+
+import com.google.gwt.core.client.GWT;
+import com.google.gwt.event.shared.EventBus;
+import com.google.gwt.place.shared.Place;
+import com.google.gwt.user.client.ui.AcceptsOneWidget;
+
+import com.pyx4j.rpc.client.DefaultAsyncCallback;
+import com.pyx4j.site.client.AppSite;
+
+import com.propertyvista.portal.resident.ResidentPortalSite;
+import com.propertyvista.portal.resident.activity.SecurityAwareActivity;
+import com.propertyvista.portal.resident.ui.maintenance.MaintenanceDashboardView;
+import com.propertyvista.portal.resident.ui.maintenance.MaintenanceDashboardView.MaintenanceDashboardPresenter;
+import com.propertyvista.portal.rpc.portal.PortalSiteMap;
+import com.propertyvista.portal.rpc.portal.web.dto.maintenance.MaintenanceSummaryDTO;
+import com.propertyvista.portal.rpc.portal.web.services.maintenance.MaintenanceRequestCrudService;
+
+public class MaintenanceDashboardActivity extends SecurityAwareActivity implements MaintenanceDashboardPresenter {
+
+    private final MaintenanceDashboardView view;
+
+    public MaintenanceDashboardActivity(Place place) {
+        this.view = ResidentPortalSite.getViewFactory().instantiate(MaintenanceDashboardView.class);
+        this.view.setPresenter(this);
+    }
+
+    @Override
+    public void start(AcceptsOneWidget panel, EventBus eventBus) {
+        super.start(panel, eventBus);
+        panel.setWidget(view);
+        view.setPresenter(this);
+        populate();
+    }
+
+    private void populate() {
+        ((MaintenanceRequestCrudService) GWT.create(MaintenanceRequestCrudService.class))
+                .retreiveMaintenanceSummary(new DefaultAsyncCallback<MaintenanceSummaryDTO>() {
+                    @Override
+                    public void onSuccess(MaintenanceSummaryDTO result) {
+                        view.populateOpenMaintenanceRequests(result);
+                    }
+                });
+    }
+
+    @Override
+    public void createMaintenanceRequest() {
+        AppSite.getPlaceController().goTo(new PortalSiteMap.Resident.Maintenance.MaintenanceRequestWizard());
+    }
+
+}
