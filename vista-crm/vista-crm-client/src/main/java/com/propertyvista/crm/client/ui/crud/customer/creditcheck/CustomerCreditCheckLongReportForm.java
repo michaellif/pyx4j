@@ -27,6 +27,9 @@ import com.pyx4j.commons.css.StyleManager;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CEntityForm;
+import com.pyx4j.forms.client.ui.decorators.WidgetDecorator;
+import com.pyx4j.forms.client.ui.decorators.WidgetDecorator.Builder.Alignment;
+import com.pyx4j.forms.client.ui.decorators.WidgetDecorator.Builder.LabelPosition;
 import com.pyx4j.forms.client.ui.folder.EntityFolderColumnDescriptor;
 import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
@@ -38,8 +41,6 @@ import com.propertyvista.common.client.ui.components.editors.NameEditor;
 import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
 import com.propertyvista.common.client.ui.components.folders.VistaTableFolder;
 import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
-import com.propertyvista.common.client.ui.decorations.TableDecoratorBuilder;
-import com.propertyvista.common.client.ui.decorations.TableWidgetDecorator;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.crm.rpc.dto.tenant.CustomerCreditCheckLongReportDTO;
 import com.propertyvista.crm.rpc.dto.tenant.CustomerCreditCheckLongReportDTO.AccountDTO;
@@ -213,9 +214,9 @@ public class CustomerCreditCheckLongReportForm extends CrmEntityForm<CustomerCre
         return main;
     }
 
-    private TableWidgetDecorator alignToCenter(CComponent<?> comp, double width) {
-        return new TableDecoratorBuilder(comp, width, width, width).labelPosition(TableDecoratorBuilder.LabelPosition.top)
-                .labelAlignment(TableDecoratorBuilder.Alignment.center).componentAlignment(TableDecoratorBuilder.Alignment.center).build();
+    private WidgetDecorator alignToCenter(CComponent<?> comp, double width) {
+        return new FormDecoratorBuilder(comp, width, width, width).labelPosition(LabelPosition.top).labelAlignment(Alignment.center)
+                .componentAlignment(Alignment.center).build();
     }
 
     private class AccountFolder extends VistaBoxFolder<AccountDTO> {
