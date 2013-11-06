@@ -22,13 +22,13 @@ import com.google.gwt.user.client.ui.MenuItem;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.ui.CNumberField;
-import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
+import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
 import com.pyx4j.widgets.client.dialog.OkCancelDialog;
 
-import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
 import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
 import com.propertyvista.crm.client.ui.crud.CrmViewerViewImplBase;
 import com.propertyvista.domain.maintenance.MaintenanceRequestStatus.StatusPhase;
@@ -126,27 +126,27 @@ public class MaintenanceRequestViewerViewImpl extends CrmViewerViewImplBase<Main
 
     private abstract class ScheduleBox extends OkCancelDialog {
 
-        private CEntityDecoratableForm<MaintenanceRequestScheduleDTO> content;
+        private CEntityForm<MaintenanceRequestScheduleDTO> content;
 
         public ScheduleBox() {
             super(i18n.tr("Schedule"));
             setBody(createBody());
-            setHeight("100px");
+            setWidth("50em");
         }
 
         protected Widget createBody() {
             getOkButton().setEnabled(true);
 
-            content = new CEntityDecoratableForm<MaintenanceRequestScheduleDTO>(MaintenanceRequestScheduleDTO.class) {
+            content = new CEntityForm<MaintenanceRequestScheduleDTO>(MaintenanceRequestScheduleDTO.class) {
                 @Override
                 public IsWidget createContent() {
-                    TwoColumnFlexFormPanel main = new TwoColumnFlexFormPanel();
+                    BasicFlexFormPanel main = new BasicFlexFormPanel();
 
                     int row = -1;
-                    main.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().scheduledDate()), 10, true).build());
-                    main.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().scheduledTimeFrom()), 10, true).build());
-                    main.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().scheduledTimeTo()), 10, true).build());
-                    main.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().workDescription()), 40, true).build());
+                    main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().scheduledDate()), 10).build());
+                    main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().scheduledTimeFrom()), 10).build());
+                    main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().scheduledTimeTo()), 10).build());
+                    main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().workDescription()), 25).build());
 
                     return main;
                 }
@@ -154,7 +154,6 @@ public class MaintenanceRequestViewerViewImpl extends CrmViewerViewImplBase<Main
                 @Override
                 public void addValidations() {
                     super.addValidations();
-
                 }
             };
 
@@ -180,24 +179,24 @@ public class MaintenanceRequestViewerViewImpl extends CrmViewerViewImplBase<Main
 
     private abstract class RateBox extends OkCancelDialog {
 
-        private CEntityDecoratableForm<SurveyResponse> content;
+        private CEntityForm<SurveyResponse> content;
 
         public RateBox(SurveyResponse currentRate) {
             super(i18n.tr("Schedule"));
             setBody(createBody(currentRate));
-            setHeight("100px");
+            setWidth("50em");
         }
 
         protected Widget createBody(SurveyResponse currentRate) {
             getOkButton().setEnabled(true);
 
-            content = new CEntityDecoratableForm<SurveyResponse>(SurveyResponse.class) {
+            content = new CEntityForm<SurveyResponse>(SurveyResponse.class) {
                 @Override
                 public IsWidget createContent() {
-                    TwoColumnFlexFormPanel main = new TwoColumnFlexFormPanel();
+                    BasicFlexFormPanel main = new BasicFlexFormPanel();
 
-                    main.setWidget(0, 0, 2, new FormDecoratorBuilder(inject(proto().rating()), 3, true).build());
-                    main.setWidget(1, 0, 2, new FormDecoratorBuilder(inject(proto().description()), 20, true).build());
+                    main.setWidget(0, 0, new FormDecoratorBuilder(inject(proto().rating()), 3).build());
+                    main.setWidget(1, 0, new FormDecoratorBuilder(inject(proto().description()), 25).build());
 
                     // tweaking:
                     get(proto().rating()).setTooltip(i18n.tr("Set value in range from 1 to 5..."));

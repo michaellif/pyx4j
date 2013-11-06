@@ -55,6 +55,7 @@ public interface MaintenanceRequestSchedule extends IEntity {
     IPrimitive<Time> scheduledTimeTo();
 
     @NotNull
+    @Editor(type = EditorType.textarea)
     IPrimitive<String> workDescription();
 
     IPrimitive<String> progressNote();
