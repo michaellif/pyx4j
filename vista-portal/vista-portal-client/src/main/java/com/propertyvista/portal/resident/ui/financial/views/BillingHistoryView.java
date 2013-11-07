@@ -14,8 +14,8 @@
 package com.propertyvista.portal.resident.ui.financial.views;
 
 import com.propertyvista.domain.financial.billing.Bill;
-import com.propertyvista.portal.resident.ui.IFormView;
 import com.propertyvista.portal.rpc.portal.web.dto.financial.BillingHistoryDTO;
+import com.propertyvista.portal.shared.ui.IFormView;
 
 public interface BillingHistoryView extends IFormView<BillingHistoryDTO> {
 

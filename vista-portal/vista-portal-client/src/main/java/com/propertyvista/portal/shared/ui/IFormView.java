@@ -7,26 +7,26 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Apr 19, 2011
- * @author vadims
+ * Created on 2012-05-25
+ * @author Vlad
  * @version $Id$
  */
-package com.propertyvista.portal.resident.mvp;
+package com.propertyvista.portal.shared.ui;
 
-import com.google.gwt.activity.shared.Activity;
-import com.google.gwt.activity.shared.ActivityMapper;
-import com.google.gwt.place.shared.Place;
+import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.site.client.IsView;
 
-import com.propertyvista.portal.resident.activity.FooterActivity;
+public interface IFormView<E extends IEntity> extends IsView {
 
-public class FooterActivityMapper implements ActivityMapper {
+    interface IFormViewPresenter<E extends IEntity> {
 
-    public FooterActivityMapper() {
     }
 
-    @Override
-    public Activity getActivity(Place place) {
-        return FooterActivity.instance();
-    }
+    void setPresenter(IFormViewPresenter<E> presenter);
 
+    IFormViewPresenter<E> getPresenter();
+
+    void populate(E value);
+
+    void reset();
 }

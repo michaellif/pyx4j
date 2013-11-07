@@ -11,7 +11,7 @@
  * @author michaellif
  * @version $Id$
  */
-package com.propertyvista.portal.resident.activity;
+package com.propertyvista.portal.shared.activity;
 
 import com.google.gwt.activity.shared.AbstractActivity;
 import com.google.gwt.activity.shared.Activity;
@@ -21,10 +21,10 @@ import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 
-import com.propertyvista.portal.resident.ResidentPortalSite;
-import com.propertyvista.portal.resident.ui.FooterView;
 import com.propertyvista.portal.rpc.portal.services.resident.PortalContentService;
 import com.propertyvista.portal.rpc.portal.web.dto.PortalContentDTO;
+import com.propertyvista.portal.shared.PortalSite;
+import com.propertyvista.portal.shared.ui.FooterView;
 
 public class FooterActivity extends AbstractActivity {
 
@@ -35,7 +35,7 @@ public class FooterActivity extends AbstractActivity {
     private static final FooterActivity instance = new FooterActivity();
 
     private FooterActivity() {
-        view = ResidentPortalSite.getViewFactory().instantiate(FooterView.class);
+        view = PortalSite.getViewFactory().instantiate(FooterView.class);
         service = GWT.<PortalContentService> create(PortalContentService.class);
         service.getPortalContent(new DefaultAsyncCallback<PortalContentDTO>() {
             @Override

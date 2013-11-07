@@ -33,6 +33,7 @@ import com.pyx4j.widgets.client.dialog.images.NotificationImages;
 
 import com.propertyvista.portal.shared.themes.DashboardTheme;
 import com.propertyvista.portal.shared.themes.PortalRootPaneTheme;
+import com.propertyvista.portal.shared.ui.AbstractGadget;
 
 public class NotificationPageViewImpl extends SimplePanel implements NotificationPageView {
 

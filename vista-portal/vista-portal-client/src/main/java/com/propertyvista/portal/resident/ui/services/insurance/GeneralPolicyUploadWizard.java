@@ -28,9 +28,9 @@ import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.domain.tenant.Customer;
 import com.propertyvista.domain.tenant.lease.Tenant;
-import com.propertyvista.portal.resident.ui.CPortalEntityWizard;
-import com.propertyvista.portal.resident.ui.util.decorators.FormWidgetDecoratorBuilder;
 import com.propertyvista.portal.rpc.portal.web.dto.insurance.GeneralInsurancePolicyDTO;
+import com.propertyvista.portal.shared.ui.CPortalEntityWizard;
+import com.propertyvista.portal.shared.ui.util.decorators.FormWidgetDecoratorBuilder;
 
 public class GeneralPolicyUploadWizard extends CPortalEntityWizard<GeneralInsurancePolicyDTO> {
 

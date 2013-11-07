@@ -16,9 +16,9 @@ package com.propertyvista.portal.resident.ui.maintenance;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.propertyvista.domain.maintenance.MaintenanceRequestMetadata;
-import com.propertyvista.portal.resident.ui.IWizardView;
-import com.propertyvista.portal.resident.ui.IWizardView.IWizardPresenter;
 import com.propertyvista.portal.rpc.portal.web.dto.maintenance.MaintenanceRequestDTO;
+import com.propertyvista.portal.shared.ui.IWizardView;
+import com.propertyvista.portal.shared.ui.IWizardView.IWizardPresenter;
 
 public interface MaintenanceRequestWizardView extends IWizardView<MaintenanceRequestDTO> {
 

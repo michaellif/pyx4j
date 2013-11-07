@@ -11,13 +11,13 @@
  * @author vlads
  * @version $Id$
  */
-package com.propertyvista.portal.resident.mvp;
+package com.propertyvista.portal.shared.mvp;
 
 import com.google.gwt.activity.shared.Activity;
 import com.google.gwt.activity.shared.ActivityMapper;
 import com.google.gwt.place.shared.Place;
 
-import com.propertyvista.portal.resident.activity.HeaderActivity;
+import com.propertyvista.portal.shared.activity.HeaderActivity;
 
 public class HeaderActivityMapper implements ActivityMapper {
 

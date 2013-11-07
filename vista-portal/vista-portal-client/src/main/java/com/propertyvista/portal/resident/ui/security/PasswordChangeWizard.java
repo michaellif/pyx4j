@@ -29,8 +29,8 @@ import com.pyx4j.security.client.ClientContext;
 import com.pyx4j.security.rpc.PasswordChangeRequest;
 
 import com.propertyvista.common.client.ui.components.security.TenantPasswordStrengthRule;
-import com.propertyvista.portal.resident.ui.CPortalEntityWizard;
-import com.propertyvista.portal.resident.ui.util.decorators.FormWidgetDecoratorBuilder;
+import com.propertyvista.portal.shared.ui.CPortalEntityWizard;
+import com.propertyvista.portal.shared.ui.util.decorators.FormWidgetDecoratorBuilder;
 
 public class PasswordChangeWizard extends CPortalEntityWizard<PasswordChangeRequest> {
 

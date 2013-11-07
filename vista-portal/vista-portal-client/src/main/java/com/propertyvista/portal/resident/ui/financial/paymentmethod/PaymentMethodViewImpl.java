@@ -13,8 +13,8 @@
  */
 package com.propertyvista.portal.resident.ui.financial.paymentmethod;
 
-import com.propertyvista.portal.resident.ui.AbstractEditorView;
 import com.propertyvista.portal.rpc.portal.web.dto.financial.PaymentMethodDTO;
+import com.propertyvista.portal.shared.ui.AbstractEditorView;
 
 public class PaymentMethodViewImpl extends AbstractEditorView<PaymentMethodDTO> implements PaymentMethodView {
 

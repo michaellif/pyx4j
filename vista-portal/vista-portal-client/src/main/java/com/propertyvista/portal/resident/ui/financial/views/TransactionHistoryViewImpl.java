@@ -14,7 +14,7 @@
 package com.propertyvista.portal.resident.ui.financial.views;
 
 import com.propertyvista.dto.TransactionHistoryDTO;
-import com.propertyvista.portal.resident.ui.AbstractFormView;
+import com.propertyvista.portal.shared.ui.AbstractFormView;
 
 public class TransactionHistoryViewImpl extends AbstractFormView<TransactionHistoryDTO> implements TransactionHistoryView {
 

@@ -38,11 +38,11 @@ import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
 import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
 import com.propertyvista.domain.contact.AddressSimple;
 import com.propertyvista.domain.payment.PaymentDetails;
-import com.propertyvista.portal.resident.ui.AbstractGadget;
-import com.propertyvista.portal.resident.ui.util.decorators.FormWidgetDecoratorBuilder;
 import com.propertyvista.portal.rpc.portal.web.dto.financial.PaymentMethodInfoDTO;
 import com.propertyvista.portal.rpc.portal.web.dto.financial.PaymentMethodSummaryDTO;
 import com.propertyvista.portal.shared.resources.PortalImages;
+import com.propertyvista.portal.shared.ui.AbstractGadget;
+import com.propertyvista.portal.shared.ui.util.decorators.FormWidgetDecoratorBuilder;
 
 public class PaymentMethodsGadget extends AbstractGadget<FinancialDashboardViewImpl> {
 

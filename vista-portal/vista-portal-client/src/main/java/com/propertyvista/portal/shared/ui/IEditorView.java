@@ -11,22 +11,32 @@
  * @author Vlad
  * @version $Id$
  */
-package com.propertyvista.portal.resident.ui;
+package com.propertyvista.portal.shared.ui;
 
 import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.site.client.IsView;
 
-public interface IFormView<E extends IEntity> extends IsView {
+public interface IEditorView<E extends IEntity> extends IFormView<E> {
 
-    interface IFormViewPresenter<E extends IEntity> {
+    public interface IEditorPresenter<E extends IEntity> extends IFormViewPresenter<E> {
 
+        void edit();
+
+        void save();
+
+        void populate();
     }
 
-    void setPresenter(IFormViewPresenter<E> presenter);
+    @Override
+    IEditorPresenter<E> getPresenter();
 
-    IFormViewPresenter<E> getPresenter();
+    public E getValue();
 
-    void populate(E value);
+    public boolean isDirty();
 
-    void reset();
+    boolean onSaveFail(Throwable caught);
+
+    void setEditable(boolean flag);
+
+    boolean isEditable();
+
 }

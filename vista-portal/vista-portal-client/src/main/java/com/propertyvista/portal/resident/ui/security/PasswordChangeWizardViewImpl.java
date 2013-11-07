@@ -15,7 +15,7 @@ package com.propertyvista.portal.resident.ui.security;
 
 import com.pyx4j.security.rpc.PasswordChangeRequest;
 
-import com.propertyvista.portal.resident.ui.AbstractWizardView;
+import com.propertyvista.portal.shared.ui.AbstractWizardView;
 
 public class PasswordChangeWizardViewImpl extends AbstractWizardView<PasswordChangeRequest> implements PasswordChangeWizardView {
 

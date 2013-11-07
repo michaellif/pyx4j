@@ -18,7 +18,7 @@
  * @author Vlad
  * @version $Id$
  */
-package com.propertyvista.portal.resident.activity;
+package com.propertyvista.portal.shared.activity;
 
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.user.client.rpc.AsyncCallback;
@@ -30,9 +30,9 @@ import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.AppSite;
 
-import com.propertyvista.portal.resident.ResidentPortalSite;
-import com.propertyvista.portal.resident.ui.IWizardView;
-import com.propertyvista.portal.resident.ui.IWizardView.IWizardPresenter;
+import com.propertyvista.portal.shared.PortalSite;
+import com.propertyvista.portal.shared.ui.IWizardView;
+import com.propertyvista.portal.shared.ui.IWizardView.IWizardPresenter;
 
 public abstract class AbstractWizardActivity<E extends IEntity> extends SecurityAwareActivity implements IWizardPresenter<E> {
 
@@ -42,7 +42,7 @@ public abstract class AbstractWizardActivity<E extends IEntity> extends Security
 
     public AbstractWizardActivity(Class<? extends IWizardView<E>> viewType, Class<E> entityClass) {
 
-        view = ResidentPortalSite.getViewFactory().instantiate(viewType);
+        view = PortalSite.getViewFactory().instantiate(viewType);
 
     }
 

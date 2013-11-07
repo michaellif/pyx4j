@@ -30,10 +30,10 @@ import com.pyx4j.widgets.client.CaptchaComposite;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
 
 import com.propertyvista.portal.resident.ResidentPortalSite;
-import com.propertyvista.portal.resident.activity.AbstractWizardActivity;
 import com.propertyvista.portal.resident.ui.landing.PasswordResetRequestWizardView;
 import com.propertyvista.portal.resident.ui.landing.PasswordResetRequestWizardView.PasswordResetRequestWizardPresenter;
 import com.propertyvista.portal.rpc.portal.web.services.PortalAuthenticationService;
+import com.propertyvista.portal.shared.activity.AbstractWizardActivity;
 
 public class PasswordResetRequestWizardActivity extends AbstractWizardActivity<PasswordRetrievalRequest> implements PasswordResetRequestWizardPresenter {
 

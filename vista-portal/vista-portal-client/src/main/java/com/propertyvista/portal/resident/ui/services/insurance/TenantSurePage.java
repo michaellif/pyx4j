@@ -40,11 +40,11 @@ import com.propertyvista.common.client.ui.components.tenantinsurance.MoneyComboB
 import com.propertyvista.domain.tenant.insurance.TenantSureConstants;
 import com.propertyvista.portal.resident.resources.tenantsure.TenantSureResources;
 import com.propertyvista.portal.resident.themes.TenantSureTheme;
-import com.propertyvista.portal.resident.ui.CPortalEntityForm;
 import com.propertyvista.portal.resident.ui.services.insurance.TenantSurePageView.TenantSurePagePresenter;
-import com.propertyvista.portal.resident.ui.util.decorators.FormWidgetDecoratorBuilder;
 import com.propertyvista.portal.rpc.portal.web.dto.insurance.TenantSureInsurancePolicyDTO;
 import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.tenantsure.TenantSureMessageDTO;
+import com.propertyvista.portal.shared.ui.CPortalEntityForm;
+import com.propertyvista.portal.shared.ui.util.decorators.FormWidgetDecoratorBuilder;
 
 public class TenantSurePage extends CPortalEntityForm<TenantSureInsurancePolicyDTO> {
 

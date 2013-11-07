@@ -13,8 +13,8 @@
  */
 package com.propertyvista.portal.resident.ui.financial.autopay;
 
-import com.propertyvista.portal.resident.ui.AbstractEditorView;
 import com.propertyvista.portal.rpc.portal.web.dto.financial.AutoPayDTO;
+import com.propertyvista.portal.shared.ui.AbstractEditorView;
 
 public class AutoPayViewImpl extends AbstractEditorView<AutoPayDTO> implements AutoPayView {
 

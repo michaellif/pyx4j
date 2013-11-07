@@ -18,7 +18,7 @@
  * @author Vlad
  * @version $Id$
  */
-package com.propertyvista.portal.resident.activity;
+package com.propertyvista.portal.shared.activity;
 
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.user.client.rpc.AsyncCallback;
@@ -32,7 +32,7 @@ import com.pyx4j.forms.client.ui.ReferenceDataManager;
 import com.pyx4j.gwt.commons.UnrecoverableClientError;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 
-import com.propertyvista.portal.resident.ui.IWizardView;
+import com.propertyvista.portal.shared.ui.IWizardView;
 
 public abstract class AbstractWizardCrudActivity<E extends IEntity> extends AbstractWizardActivity<E> {
 

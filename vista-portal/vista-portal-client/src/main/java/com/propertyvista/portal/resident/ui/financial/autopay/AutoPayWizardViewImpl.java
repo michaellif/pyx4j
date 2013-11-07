@@ -15,9 +15,9 @@ package com.propertyvista.portal.resident.ui.financial.autopay;
 
 import com.pyx4j.i18n.shared.I18n;
 
-import com.propertyvista.portal.resident.ui.AbstractWizardView;
-import com.propertyvista.portal.resident.ui.IWizardView;
 import com.propertyvista.portal.rpc.portal.web.dto.financial.AutoPayDTO;
+import com.propertyvista.portal.shared.ui.AbstractWizardView;
+import com.propertyvista.portal.shared.ui.IWizardView;
 
 public class AutoPayWizardViewImpl extends AbstractWizardView<AutoPayDTO> implements AutoPayWizardView {
 

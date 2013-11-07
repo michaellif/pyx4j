@@ -13,8 +13,8 @@
  */
 package com.propertyvista.portal.resident.ui.services.insurance.tenantsurepaymentmethod;
 
-import com.propertyvista.portal.resident.ui.IFormView;
 import com.propertyvista.portal.rpc.portal.web.dto.insurance.InsurancePaymentMethodDTO;
+import com.propertyvista.portal.shared.ui.IFormView;
 
 public interface TenantSurePaymentMethodUpdateConfirmationView extends IFormView<InsurancePaymentMethodDTO> {
 

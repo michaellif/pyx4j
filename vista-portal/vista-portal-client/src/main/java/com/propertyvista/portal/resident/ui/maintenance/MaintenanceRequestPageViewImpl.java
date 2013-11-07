@@ -13,8 +13,8 @@
  */
 package com.propertyvista.portal.resident.ui.maintenance;
 
-import com.propertyvista.portal.resident.ui.AbstractEditorView;
 import com.propertyvista.portal.rpc.portal.web.dto.maintenance.MaintenanceRequestDTO;
+import com.propertyvista.portal.shared.ui.AbstractEditorView;
 
 public class MaintenanceRequestPageViewImpl extends AbstractEditorView<MaintenanceRequestDTO> implements MaintenanceRequestPageView {
 

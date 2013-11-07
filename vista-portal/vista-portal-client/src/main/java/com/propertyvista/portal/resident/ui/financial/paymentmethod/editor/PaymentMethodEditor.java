@@ -40,7 +40,7 @@ import com.propertyvista.domain.payment.CreditCardInfo.CreditCardType;
 import com.propertyvista.domain.payment.PaymentType;
 import com.propertyvista.portal.resident.ui.PortalAddressSimpleEditor;
 import com.propertyvista.portal.resident.ui.financial.PortalPaymentTypesUtil;
-import com.propertyvista.portal.resident.ui.util.decorators.FormWidgetDecoratorBuilder;
+import com.propertyvista.portal.shared.ui.util.decorators.FormWidgetDecoratorBuilder;
 
 public class PaymentMethodEditor<E extends AbstractPaymentMethod> extends com.propertyvista.common.client.ui.components.editors.payments.PaymentMethodEditor<E> {
 

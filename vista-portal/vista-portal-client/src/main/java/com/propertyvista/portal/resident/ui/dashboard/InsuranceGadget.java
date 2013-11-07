@@ -25,12 +25,12 @@ import com.pyx4j.site.client.AppSite;
 import com.pyx4j.widgets.client.Anchor;
 import com.pyx4j.widgets.client.Label;
 
-import com.propertyvista.portal.resident.ui.AbstractGadget;
 import com.propertyvista.portal.resident.ui.services.dashboard.InsuranceGadgetMessages;
 import com.propertyvista.portal.resident.ui.services.dashboard.InsuranceToolbar;
 import com.propertyvista.portal.rpc.portal.ResidentPortalSiteMap;
 import com.propertyvista.portal.rpc.portal.web.dto.insurance.status.InsuranceStatusDTO;
 import com.propertyvista.portal.shared.resources.PortalImages;
+import com.propertyvista.portal.shared.ui.AbstractGadget;
 
 public class InsuranceGadget extends AbstractGadget<MainDashboardViewImpl> {
 

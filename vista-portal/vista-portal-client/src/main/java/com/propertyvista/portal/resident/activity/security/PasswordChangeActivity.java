@@ -28,10 +28,10 @@ import com.pyx4j.site.shared.domain.Notification.NotificationType;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
 
 import com.propertyvista.portal.resident.ResidentPortalSite;
-import com.propertyvista.portal.resident.activity.AbstractWizardActivity;
 import com.propertyvista.portal.resident.ui.security.PasswordChangeWizardView;
 import com.propertyvista.portal.resident.ui.security.PasswordChangeWizardView.PasswordChangePresenter;
 import com.propertyvista.portal.rpc.portal.services.PasswordChangeUserService;
+import com.propertyvista.portal.shared.activity.AbstractWizardActivity;
 
 public class PasswordChangeActivity extends AbstractWizardActivity<PasswordChangeRequest> implements PasswordChangePresenter {
 

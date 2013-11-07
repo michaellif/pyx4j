@@ -11,11 +11,11 @@
  * @author ArtyomB
  * @version $Id$
  */
-package com.propertyvista.portal.resident.ui.util.decorators;
+package com.propertyvista.portal.shared.ui.util.decorators;
 
 import com.pyx4j.forms.client.ui.CComponent;
 
-import com.propertyvista.portal.resident.ui.AbstractPortalPanel;
+import com.propertyvista.portal.shared.ui.AbstractPortalPanel;
 
 public class FormWidgetDecoratorBuilder extends PortalWidgetDecorator.Builder {
 

@@ -11,7 +11,7 @@
  * @author VladL
  * @version $Id$
  */
-package com.propertyvista.portal.resident.ui;
+package com.propertyvista.portal.shared.ui;
 
 import com.google.gwt.event.logical.shared.SelectionEvent;
 
@@ -23,7 +23,7 @@ import com.pyx4j.forms.client.ui.wizard.CEntityWizard;
 import com.pyx4j.forms.client.ui.wizard.WizardDecorator;
 import com.pyx4j.forms.client.ui.wizard.WizardStep;
 
-import com.propertyvista.portal.resident.ResidentPortalSite;
+import com.propertyvista.portal.shared.PortalSite;
 
 public class CPortalEntityWizard<E extends IEntity> extends CEntityWizard<E> {
 
@@ -49,7 +49,7 @@ public class CPortalEntityWizard<E extends IEntity> extends CEntityWizard<E> {
     @Override
     protected void onStepChange(SelectionEvent<WizardStep> event) {
         view.onStepChange();
-        ResidentPortalSite.scrollToTop();
+        PortalSite.scrollToTop();
     }
 
     public IWizardView<? extends IEntity> getView() {

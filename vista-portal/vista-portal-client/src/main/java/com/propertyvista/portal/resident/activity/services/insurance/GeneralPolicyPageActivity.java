@@ -22,11 +22,11 @@ import com.pyx4j.site.shared.domain.Notification;
 import com.pyx4j.site.shared.domain.Notification.NotificationType;
 
 import com.propertyvista.portal.resident.ResidentPortalSite;
-import com.propertyvista.portal.resident.activity.AbstractEditorActivity;
 import com.propertyvista.portal.resident.ui.services.insurance.GeneralPolicyPageView;
 import com.propertyvista.portal.resident.ui.services.insurance.GeneralPolicyPageView.GeneralPolicyPagePresenter;
 import com.propertyvista.portal.rpc.portal.web.dto.insurance.GeneralInsurancePolicyDTO;
 import com.propertyvista.portal.rpc.portal.web.services.services.GeneralInsurancePolicyCrudService;
+import com.propertyvista.portal.shared.activity.AbstractEditorActivity;
 
 public class GeneralPolicyPageActivity extends AbstractEditorActivity<GeneralInsurancePolicyDTO> implements GeneralPolicyPagePresenter {
 

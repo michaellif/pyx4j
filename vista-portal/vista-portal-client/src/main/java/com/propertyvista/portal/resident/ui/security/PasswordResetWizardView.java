@@ -15,8 +15,8 @@ package com.propertyvista.portal.resident.ui.security;
 
 import com.pyx4j.security.rpc.PasswordChangeRequest;
 
-import com.propertyvista.portal.resident.ui.IWizardView;
-import com.propertyvista.portal.resident.ui.IWizardView.IWizardPresenter;
+import com.propertyvista.portal.shared.ui.IWizardView;
+import com.propertyvista.portal.shared.ui.IWizardView.IWizardPresenter;
 
 public interface PasswordResetWizardView extends IWizardView<PasswordChangeRequest> {
 

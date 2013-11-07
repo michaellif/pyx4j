@@ -14,9 +14,9 @@
 package com.propertyvista.portal.resident.ui.maintenance;
 
 import com.propertyvista.domain.maintenance.SurveyResponse;
-import com.propertyvista.portal.resident.ui.IEditorView;
-import com.propertyvista.portal.resident.ui.IEditorView.IEditorPresenter;
 import com.propertyvista.portal.rpc.portal.web.dto.maintenance.MaintenanceRequestDTO;
+import com.propertyvista.portal.shared.ui.IEditorView;
+import com.propertyvista.portal.shared.ui.IEditorView.IEditorPresenter;
 
 public interface MaintenanceRequestPageView extends IEditorView<MaintenanceRequestDTO> {
 

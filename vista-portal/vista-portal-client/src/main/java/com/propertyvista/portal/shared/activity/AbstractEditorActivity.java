@@ -11,7 +11,7 @@
  * @author michaellif
  * @version $Id$
  */
-package com.propertyvista.portal.resident.activity;
+package com.propertyvista.portal.shared.activity;
 
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.user.client.rpc.AsyncCallback;
@@ -26,9 +26,9 @@ import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.site.rpc.AppPlace;
 
-import com.propertyvista.portal.resident.ResidentPortalSite;
-import com.propertyvista.portal.resident.ui.IEditorView;
-import com.propertyvista.portal.resident.ui.IEditorView.IEditorPresenter;
+import com.propertyvista.portal.shared.PortalSite;
+import com.propertyvista.portal.shared.ui.IEditorView;
+import com.propertyvista.portal.shared.ui.IEditorView.IEditorPresenter;
 
 public abstract class AbstractEditorActivity<E extends IEntity> extends SecurityAwareActivity implements IEditorPresenter<E> {
 
@@ -41,7 +41,7 @@ public abstract class AbstractEditorActivity<E extends IEntity> extends Security
     private final Key entityId;
 
     public AbstractEditorActivity(Class<? extends IEditorView<E>> viewType, AbstractCrudService<E> service, AppPlace place) {
-        view = ResidentPortalSite.getViewFactory().instantiate(viewType);
+        view = PortalSite.getViewFactory().instantiate(viewType);
         view.setPresenter(this);
 
         this.service = service;

@@ -14,7 +14,7 @@
 package com.propertyvista.portal.resident.ui.financial.views;
 
 import com.propertyvista.dto.TransactionHistoryDTO;
-import com.propertyvista.portal.resident.ui.IFormView;
+import com.propertyvista.portal.shared.ui.IFormView;
 
 public interface TransactionHistoryView extends IFormView<TransactionHistoryDTO> {
 

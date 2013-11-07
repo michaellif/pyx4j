@@ -24,7 +24,6 @@ import com.pyx4j.site.client.AppSite;
 
 import com.propertyvista.domain.security.VistaCustomerPaymentTypeBehavior;
 import com.propertyvista.portal.resident.ResidentPortalSite;
-import com.propertyvista.portal.resident.activity.SecurityAwareActivity;
 import com.propertyvista.portal.resident.ui.dashboard.MainDashboardView;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap;
 import com.propertyvista.portal.rpc.portal.ResidentPortalSiteMap;
@@ -36,6 +35,7 @@ import com.propertyvista.portal.rpc.portal.web.services.financial.BillingService
 import com.propertyvista.portal.rpc.portal.web.services.maintenance.MaintenanceRequestCrudService;
 import com.propertyvista.portal.rpc.portal.web.services.profile.ResidentSummaryService;
 import com.propertyvista.portal.rpc.portal.web.services.services.InsuranceService;
+import com.propertyvista.portal.shared.activity.SecurityAwareActivity;
 
 public class MainDashboardActivity extends SecurityAwareActivity implements MainDashboardView.DashboardPresenter {
 

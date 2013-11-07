@@ -18,9 +18,9 @@ import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
 
 import com.propertyvista.domain.contact.AddressSimple;
-import com.propertyvista.portal.resident.ui.AbstractWizardView;
 import com.propertyvista.portal.rpc.portal.web.dto.insurance.TenantSureInsurancePolicyDTO;
 import com.propertyvista.portal.rpc.portal.web.dto.insurance.TenantSureQuoteDTO;
+import com.propertyvista.portal.shared.ui.AbstractWizardView;
 
 public class TenantSureOrderWizardViewImpl extends AbstractWizardView<TenantSureInsurancePolicyDTO> implements TenantSureOrderWizardView {
 
@@ -35,7 +35,7 @@ public class TenantSureOrderWizardViewImpl extends AbstractWizardView<TenantSure
     }
 
     @Override
-    public void setPresenter(com.propertyvista.portal.resident.ui.IWizardView.IWizardPresenter<TenantSureInsurancePolicyDTO> presenter) {
+    public void setPresenter(com.propertyvista.portal.shared.ui.IWizardView.IWizardPresenter<TenantSureInsurancePolicyDTO> presenter) {
         wizard.setPresenter((TenantSureOrderWizardPersenter) presenter);
         super.setPresenter(presenter);
     }

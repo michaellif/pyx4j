@@ -27,7 +27,6 @@ import com.propertyvista.domain.payment.AutopayAgreement;
 import com.propertyvista.domain.payment.LeasePaymentMethod;
 import com.propertyvista.domain.security.VistaCustomerPaymentTypeBehavior;
 import com.propertyvista.portal.resident.ResidentPortalSite;
-import com.propertyvista.portal.resident.activity.SecurityAwareActivity;
 import com.propertyvista.portal.resident.ui.financial.dashboard.FinancialDashboardView;
 import com.propertyvista.portal.resident.ui.financial.dashboard.FinancialDashboardView.FinancialDashboardPresenter;
 import com.propertyvista.portal.rpc.portal.ResidentPortalSiteMap;
@@ -40,6 +39,7 @@ import com.propertyvista.portal.rpc.portal.web.dto.financial.PaymentMethodInfoDT
 import com.propertyvista.portal.rpc.portal.web.dto.financial.PaymentMethodSummaryDTO;
 import com.propertyvista.portal.rpc.portal.web.services.financial.BillingService;
 import com.propertyvista.portal.rpc.portal.web.services.financial.PaymentService;
+import com.propertyvista.portal.shared.activity.SecurityAwareActivity;
 
 public class FinancialDashboardActivity extends SecurityAwareActivity implements FinancialDashboardPresenter {
 

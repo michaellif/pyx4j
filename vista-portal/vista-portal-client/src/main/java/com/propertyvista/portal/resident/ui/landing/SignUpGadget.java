@@ -26,8 +26,8 @@ import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.Button;
 import com.pyx4j.widgets.client.actionbar.Toolbar;
 
-import com.propertyvista.portal.resident.ui.AbstractGadget;
 import com.propertyvista.portal.resident.ui.landing.LandingView.LandingPresenter;
+import com.propertyvista.portal.shared.ui.AbstractGadget;
 
 public class SignUpGadget extends AbstractGadget<LandingViewImpl> {
 

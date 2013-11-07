@@ -22,7 +22,6 @@ import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
 import com.pyx4j.commons.UserRuntimeException;
 import com.pyx4j.entity.rpc.EntitySearchResult;
-import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.rpc.shared.VoidSerializable;
 import com.pyx4j.security.client.ClientContext;
@@ -41,8 +40,6 @@ import com.propertyvista.portal.rpc.portal.web.services.SelfRegistrationBuilding
 import com.propertyvista.portal.rpc.shared.EntityValidationException;
 
 public class SignUpActivity extends AbstractActivity implements SignUpView.SignUpPresenter {
-
-    private static final I18n i18n = I18n.get(I18n.class);
 
     private final SignUpView view;
 

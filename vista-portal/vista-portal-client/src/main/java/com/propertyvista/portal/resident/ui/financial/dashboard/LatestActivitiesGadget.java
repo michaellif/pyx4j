@@ -29,11 +29,11 @@ import com.pyx4j.i18n.shared.I18n;
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
 import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
 import com.propertyvista.domain.person.Name;
-import com.propertyvista.portal.resident.ui.AbstractGadget;
-import com.propertyvista.portal.resident.ui.util.decorators.FormWidgetDecoratorBuilder;
 import com.propertyvista.portal.rpc.portal.web.dto.financial.LatestActivitiesDTO;
 import com.propertyvista.portal.rpc.portal.web.dto.financial.LatestActivitiesDTO.InvoicePaymentDTO;
 import com.propertyvista.portal.shared.resources.PortalImages;
+import com.propertyvista.portal.shared.ui.AbstractGadget;
+import com.propertyvista.portal.shared.ui.util.decorators.FormWidgetDecoratorBuilder;
 
 public class LatestActivitiesGadget extends AbstractGadget<FinancialDashboardViewImpl> {
 

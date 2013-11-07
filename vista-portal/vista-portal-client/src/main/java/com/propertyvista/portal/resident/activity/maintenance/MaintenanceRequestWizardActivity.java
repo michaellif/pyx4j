@@ -25,12 +25,12 @@ import com.pyx4j.site.shared.domain.Notification.NotificationType;
 
 import com.propertyvista.domain.maintenance.MaintenanceRequestMetadata;
 import com.propertyvista.portal.resident.ResidentPortalSite;
-import com.propertyvista.portal.resident.activity.AbstractWizardCrudActivity;
 import com.propertyvista.portal.resident.ui.maintenance.MaintenanceRequestWizardView;
 import com.propertyvista.portal.resident.ui.maintenance.MaintenanceRequestWizardView.MaintenanceRequestWizardPresenter;
 import com.propertyvista.portal.rpc.portal.ResidentPortalSiteMap;
 import com.propertyvista.portal.rpc.portal.web.dto.maintenance.MaintenanceRequestDTO;
 import com.propertyvista.portal.rpc.portal.web.services.maintenance.MaintenanceRequestCrudService;
+import com.propertyvista.portal.shared.activity.AbstractWizardCrudActivity;
 
 public class MaintenanceRequestWizardActivity extends AbstractWizardCrudActivity<MaintenanceRequestDTO> implements MaintenanceRequestWizardPresenter {
 

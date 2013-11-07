@@ -11,21 +11,22 @@
  * @author Dad
  * @version $Id$
  */
-package com.propertyvista.portal.prospect.ui;
+package com.propertyvista.portal.shared.ui;
 
-import com.propertyvista.portal.shared.mvp.FooterActivityMapper;
-import com.propertyvista.portal.shared.mvp.HeaderActivityMapper;
-import com.propertyvista.portal.shared.ui.PortalRootPane;
+import com.google.gwt.place.shared.Place;
 
-public class ProspectPortalRootPane extends PortalRootPane {
+import com.pyx4j.site.client.RootPane;
+import com.pyx4j.site.client.ui.layout.responsive.ResponsiveLayoutPanel;
 
-    public ProspectPortalRootPane() {
-        super();
+public class PortalRootPane extends RootPane<ResponsiveLayoutPanel> {
 
-        bind(new HeaderActivityMapper(), asWidget().getHeaderDisplay());
-
-        bind(new FooterActivityMapper(), asWidget().getFooterDisplay());
+    public PortalRootPane() {
+        super(new ResponsiveLayoutPanel());
 
     }
 
+    @Override
+    protected void onPlaceChange(Place place) {
+        asWidget().scrollToTop();
+    }
 }

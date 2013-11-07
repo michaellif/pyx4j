@@ -33,9 +33,9 @@ import com.propertyvista.common.client.resources.VistaImages;
 import com.propertyvista.common.client.theme.VistaTheme;
 import com.propertyvista.domain.payment.LeasePaymentMethod;
 import com.propertyvista.dto.PaymentRecordDTO;
-import com.propertyvista.portal.resident.ui.AbstractFormView;
-import com.propertyvista.portal.resident.ui.CPortalEntityForm;
-import com.propertyvista.portal.resident.ui.util.decorators.FormWidgetDecoratorBuilder;
+import com.propertyvista.portal.shared.ui.AbstractFormView;
+import com.propertyvista.portal.shared.ui.CPortalEntityForm;
+import com.propertyvista.portal.shared.ui.util.decorators.FormWidgetDecoratorBuilder;
 
 public class PaymentConfirmationForm extends CPortalEntityForm<PaymentRecordDTO> {
 

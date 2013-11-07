@@ -18,8 +18,8 @@ import com.google.gwt.user.client.ui.HTML;
 import com.pyx4j.commons.css.ThemeColor;
 import com.pyx4j.i18n.shared.I18n;
 
-import com.propertyvista.portal.resident.ui.AbstractGadget;
 import com.propertyvista.portal.shared.resources.PortalImages;
+import com.propertyvista.portal.shared.ui.AbstractGadget;
 
 public class OffersGadget extends AbstractGadget<OffersDashboardViewImpl> {
 

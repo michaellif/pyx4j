@@ -13,8 +13,8 @@
  */
 package com.propertyvista.portal.resident.ui.services.insurance;
 
-import com.propertyvista.portal.resident.ui.AbstractFormView;
 import com.propertyvista.portal.rpc.portal.web.dto.insurance.TenantSureInsurancePolicyDTO;
+import com.propertyvista.portal.shared.ui.AbstractFormView;
 
 public class TenantSureOrderConfirmationPageViewImpl extends AbstractFormView<TenantSureInsurancePolicyDTO> implements TenantSureOrderConfirmationPageView {
 

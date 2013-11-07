@@ -19,8 +19,8 @@ import com.google.gwt.user.client.ui.AcceptsOneWidget;
 import com.pyx4j.site.rpc.AppPlace;
 
 import com.propertyvista.portal.resident.ResidentPortalSite;
-import com.propertyvista.portal.resident.activity.SecurityAwareActivity;
 import com.propertyvista.portal.resident.ui.services.insurance.tenantsurepaymentmethod.TenantSurePaymentMethodUpdateConfirmationView;
+import com.propertyvista.portal.shared.activity.SecurityAwareActivity;
 
 public class TenantSurePaymentMethodUpdateConfirmationActivity extends SecurityAwareActivity implements
         TenantSurePaymentMethodUpdateConfirmationView.PaymentMethodConfirmationPresenter {

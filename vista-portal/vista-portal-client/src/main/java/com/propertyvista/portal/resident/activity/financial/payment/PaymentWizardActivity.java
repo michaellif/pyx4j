@@ -31,11 +31,11 @@ import com.pyx4j.site.rpc.AppPlaceInfo;
 import com.propertyvista.domain.contact.AddressSimple;
 import com.propertyvista.domain.payment.LeasePaymentMethod;
 import com.propertyvista.portal.domain.dto.financial.PaymentDTO;
-import com.propertyvista.portal.resident.activity.AbstractWizardCrudActivity;
 import com.propertyvista.portal.resident.ui.financial.payment.PaymentWizardView;
 import com.propertyvista.portal.rpc.portal.ResidentPortalSiteMap;
 import com.propertyvista.portal.rpc.portal.ResidentPortalSiteMap.Financial.Payment;
 import com.propertyvista.portal.rpc.portal.web.services.financial.PaymentWizardService;
+import com.propertyvista.portal.shared.activity.AbstractWizardCrudActivity;
 
 public class PaymentWizardActivity extends AbstractWizardCrudActivity<PaymentDTO> implements PaymentWizardView.Presenter {
 

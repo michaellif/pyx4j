@@ -14,7 +14,7 @@
 package com.propertyvista.portal.resident.ui.financial.payment;
 
 import com.propertyvista.dto.PaymentRecordDTO;
-import com.propertyvista.portal.resident.ui.IFormView;
+import com.propertyvista.portal.shared.ui.IFormView;
 
 public interface PaymentConfirmationView extends IFormView<PaymentRecordDTO> {
 

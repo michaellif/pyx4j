@@ -16,8 +16,8 @@ package com.propertyvista.portal.resident.ui.financial.payment;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.portal.domain.dto.financial.PaymentDTO;
-import com.propertyvista.portal.resident.ui.AbstractWizardView;
-import com.propertyvista.portal.resident.ui.IWizardView;
+import com.propertyvista.portal.shared.ui.AbstractWizardView;
+import com.propertyvista.portal.shared.ui.IWizardView;
 
 public class PaymentWizardViewImpl extends AbstractWizardView<PaymentDTO> implements PaymentWizardView {
 

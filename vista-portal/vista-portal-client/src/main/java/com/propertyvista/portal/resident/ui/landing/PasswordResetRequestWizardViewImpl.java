@@ -16,7 +16,7 @@ package com.propertyvista.portal.resident.ui.landing;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.security.rpc.PasswordRetrievalRequest;
 
-import com.propertyvista.portal.resident.ui.AbstractWizardView;
+import com.propertyvista.portal.shared.ui.AbstractWizardView;
 
 public class PasswordResetRequestWizardViewImpl extends AbstractWizardView<PasswordRetrievalRequest> implements PasswordResetRequestWizardView {
 

@@ -49,9 +49,7 @@ public class ExtraActivity extends AbstractActivity implements ExtraPresenter {
             data.temperature().setValue(25);
 
             //TODO implement WeatherGadget
-            if (false) {
-                gadgets.add(data);
-            }
+            gadgets.add(data);
 
         }
 
@@ -75,9 +73,7 @@ public class ExtraActivity extends AbstractActivity implements ExtraPresenter {
             }
 
             //TODO implement CommunityEventsGadget
-            if (false) {
-                gadgets.add(data);
-            }
+            gadgets.add(data);
         }
 
     }

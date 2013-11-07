@@ -20,12 +20,12 @@ import com.pyx4j.rpc.shared.VoidSerializable;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.rpc.AppPlace;
 
-import com.propertyvista.portal.resident.activity.AbstractEditorActivity;
 import com.propertyvista.portal.resident.ui.services.insurance.TenantSurePageView;
 import com.propertyvista.portal.resident.ui.services.insurance.TenantSurePageView.TenantSurePagePresenter;
 import com.propertyvista.portal.rpc.portal.ResidentPortalSiteMap;
 import com.propertyvista.portal.rpc.portal.web.dto.insurance.TenantSureInsurancePolicyDTO;
 import com.propertyvista.portal.rpc.portal.web.services.services.TenantSureInsurancePolicyCrudService;
+import com.propertyvista.portal.shared.activity.AbstractEditorActivity;
 
 public class TenantSurePageActivity extends AbstractEditorActivity<TenantSureInsurancePolicyDTO> implements TenantSurePagePresenter {
 

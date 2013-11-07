@@ -22,8 +22,8 @@ import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.security.rpc.PasswordRetrievalRequest;
 
-import com.propertyvista.portal.resident.ui.CPortalEntityWizard;
-import com.propertyvista.portal.resident.ui.util.decorators.LoginWidgetDecoratorBuilder;
+import com.propertyvista.portal.shared.ui.CPortalEntityWizard;
+import com.propertyvista.portal.shared.ui.util.decorators.LoginWidgetDecoratorBuilder;
 
 public class PasswordResetRequestWizard extends CPortalEntityWizard<PasswordRetrievalRequest> {
 

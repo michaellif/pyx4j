@@ -18,9 +18,9 @@ import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
 import com.propertyvista.portal.resident.ResidentPortalSite;
-import com.propertyvista.portal.resident.activity.SecurityAwareActivity;
 import com.propertyvista.portal.resident.ui.offers.dashboard.OffersDashboardView;
 import com.propertyvista.portal.resident.ui.offers.dashboard.OffersDashboardView.OffersDashboardPresenter;
+import com.propertyvista.portal.shared.activity.SecurityAwareActivity;
 
 public class OffersDashboardActivity extends SecurityAwareActivity implements OffersDashboardPresenter {
 

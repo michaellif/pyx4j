@@ -33,12 +33,12 @@ import com.pyx4j.widgets.client.ImageViewport.ScaleMode;
 
 import com.propertyvista.common.client.resources.VistaImages;
 import com.propertyvista.common.client.ui.components.MediaUtils;
-import com.propertyvista.portal.resident.ui.AbstractGadget;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap;
 import com.propertyvista.portal.rpc.portal.ResidentPortalSiteMap;
 import com.propertyvista.portal.rpc.portal.web.dto.ResidentSummaryDTO;
 import com.propertyvista.portal.shared.resources.PortalImages;
 import com.propertyvista.portal.shared.themes.DashboardTheme;
+import com.propertyvista.portal.shared.ui.AbstractGadget;
 import com.propertyvista.shared.config.VistaFeatures;
 
 public class ProfileGadget extends AbstractGadget<MainDashboardViewImpl> {

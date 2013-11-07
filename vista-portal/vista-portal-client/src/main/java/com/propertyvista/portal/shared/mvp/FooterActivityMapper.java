@@ -7,21 +7,26 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Jan 24, 2012
- * @author ArtyomB
+ * Created on Apr 19, 2011
+ * @author vadims
  * @version $Id$
  */
-package com.propertyvista.portal.resident.ui.security;
+package com.propertyvista.portal.shared.mvp;
 
-import com.pyx4j.security.rpc.PasswordChangeRequest;
+import com.google.gwt.activity.shared.Activity;
+import com.google.gwt.activity.shared.ActivityMapper;
+import com.google.gwt.place.shared.Place;
 
-import com.propertyvista.portal.shared.ui.IWizardView;
-import com.propertyvista.portal.shared.ui.IWizardView.IWizardPresenter;
+import com.propertyvista.portal.shared.activity.FooterActivity;
 
-public interface PasswordChangeWizardView extends IWizardView<PasswordChangeRequest> {
+public class FooterActivityMapper implements ActivityMapper {
 
-    public interface PasswordChangePresenter extends IWizardPresenter<PasswordChangeRequest> {
+    public FooterActivityMapper() {
+    }
 
+    @Override
+    public Activity getActivity(Place place) {
+        return FooterActivity.instance();
     }
 
 }

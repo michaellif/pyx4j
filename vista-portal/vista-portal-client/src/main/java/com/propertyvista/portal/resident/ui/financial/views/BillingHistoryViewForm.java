@@ -33,9 +33,9 @@ import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
 import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
 import com.propertyvista.domain.financial.billing.Bill;
 import com.propertyvista.portal.domain.dto.BillDataDTO;
-import com.propertyvista.portal.resident.ui.CPortalEntityForm;
-import com.propertyvista.portal.resident.ui.util.decorators.FormWidgetDecoratorBuilder;
 import com.propertyvista.portal.rpc.portal.web.dto.financial.BillingHistoryDTO;
+import com.propertyvista.portal.shared.ui.CPortalEntityForm;
+import com.propertyvista.portal.shared.ui.util.decorators.FormWidgetDecoratorBuilder;
 
 public class BillingHistoryViewForm extends CPortalEntityForm<BillingHistoryDTO> {
 

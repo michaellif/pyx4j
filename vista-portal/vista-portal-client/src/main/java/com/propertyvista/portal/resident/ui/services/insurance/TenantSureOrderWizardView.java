@@ -14,10 +14,10 @@
 package com.propertyvista.portal.resident.ui.services.insurance;
 
 import com.propertyvista.domain.contact.AddressSimple;
-import com.propertyvista.portal.resident.ui.IWizardView;
-import com.propertyvista.portal.resident.ui.IWizardView.IWizardPresenter;
 import com.propertyvista.portal.rpc.portal.web.dto.insurance.TenantSureInsurancePolicyDTO;
 import com.propertyvista.portal.rpc.portal.web.dto.insurance.TenantSureQuoteDTO;
+import com.propertyvista.portal.shared.ui.IWizardView;
+import com.propertyvista.portal.shared.ui.IWizardView.IWizardPresenter;
 
 public interface TenantSureOrderWizardView extends IWizardView<TenantSureInsurancePolicyDTO> {
 
