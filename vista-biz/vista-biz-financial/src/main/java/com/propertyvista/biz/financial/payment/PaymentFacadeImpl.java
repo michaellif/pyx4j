@@ -380,8 +380,7 @@ public class PaymentFacadeImpl implements PaymentFacade {
         LogicalDate dateFrom = new LogicalDate(cal.getTime());
         EntityQueryCriteria<InvoicePayment> criteria = EntityQueryCriteria.create(InvoicePayment.class);
         criteria.add(PropertyCriterion.eq(criteria.proto().billingAccount(), billingAccount));
-        criteria.add(PropertyCriterion.gt(criteria.proto().postDate(), dateFrom));
-        criteria.add(PropertyCriterion.isNotNull(criteria.proto().paymentRecord()));
+        criteria.add(PropertyCriterion.gt(criteria.proto().paymentRecord().receivedDate(), dateFrom));
         return Persistence.service().query(criteria);
     }
 
