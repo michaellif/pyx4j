@@ -889,7 +889,7 @@
                                 <configuration>
                                     <target>
                                         <path id="portal.rpc.path">
-                                            <first count="1"><fileset dir="${basedir}/src/main/webapp/portal" includes="*.rpc" /></first>
+                                            <first count="1"><fileset dir="${basedir}/src/main/webapp/resident" includes="*.rpc" /></first>
                                         </path>
                                         <property name="portal.rpc.full-path" refid="portal.rpc.path" />
                                         <pathconvert property="portal.rpc.name" pathsep=""><path refid="portal.rpc.path"/><flattenmapper/></pathconvert>
