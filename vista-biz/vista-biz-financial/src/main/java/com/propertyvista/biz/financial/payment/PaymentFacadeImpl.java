@@ -15,6 +15,8 @@ package com.propertyvista.biz.financial.payment;
 
 import java.util.Calendar;
 import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.EnumSet;
 import java.util.GregorianCalendar;
 import java.util.List;
@@ -381,7 +383,15 @@ public class PaymentFacadeImpl implements PaymentFacade {
         EntityQueryCriteria<InvoicePayment> criteria = EntityQueryCriteria.create(InvoicePayment.class);
         criteria.add(PropertyCriterion.eq(criteria.proto().billingAccount(), billingAccount));
         criteria.add(PropertyCriterion.gt(criteria.proto().paymentRecord().receivedDate(), dateFrom));
-        return Persistence.service().query(criteria);
+        List<InvoicePayment> result = Persistence.service().query(criteria);
+        // sort recent first
+        Collections.sort(result, new Comparator<InvoicePayment>() {
+            @Override
+            public int compare(InvoicePayment o1, InvoicePayment o2) {
+                return o2.paymentRecord().receivedDate().compareTo(o1.paymentRecord().receivedDate());
+            }
+        });
+        return result;
     }
 
 }
