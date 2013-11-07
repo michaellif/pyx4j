@@ -397,7 +397,8 @@ BEGIN
         
         ALTER TABLE insurance_certificate_doc   ADD COLUMN certificate BIGINT,
                                                 ADD COLUMN certificate_discriminator VARCHAR(50),
-                                                ADD COLUMN description VARCHAR(500);
+                                                ADD COLUMN description VARCHAR(500),
+                                                ADD COLUMN scan_id BIGINT;
         
         
         
@@ -691,7 +692,21 @@ BEGIN
                 ||'WHERE d.id = t.id ';     
                 
         
+        -- insert into insurance_certificate_doc for multiple scans
+        
+        EXECUTE 'INSERT INTO '||v_schema_name||'.insurance_certificate_doc (id,certificate,certificate_discriminator,description,scan_id) '
+                ||'(SELECT nextval(''public.insurance_certificate_doc_seq'') AS id, '
+                ||'     d.certificate, d.certificate_discriminator,d.description, s.id AS scan_id '
+                ||'FROM '||v_schema_name||'.insurance_certificate_doc d '
+                ||'JOIN '||v_schema_name||'.insurance_certificate_scan s ON (d.id = s.certificate_doc) '
+                ||'WHERE s.order_in_owner > 0 ) ';
                 
+        -- update insurance_certificate_scan 
+        
+        EXECUTE 'UPDATE '||v_schema_name||'.insurance_certificate_scan AS s '
+                ||'SET certificate_doc = d.id '
+                ||'FROM '||v_schema_name||'.insurance_certificate_doc d '
+                ||'WHERE s.id = d.scan_id ';
                 
         -- insurance_policy
         
@@ -798,13 +813,15 @@ BEGIN
         
         ALTER TABLE insurance_certificate_doc   DROP COLUMN order_in_owner,
                                                 DROP COLUMN owner,
-                                                DROP COLUMN owner_discriminator;
-                                                
+                                                DROP COLUMN owner_discriminator,
+                                                DROP COLUMN scan_id;
+                                              
    
         -- insurance_certificate_scan
-                                                     
+                                                  
         ALTER TABLE insurance_certificate_scan  DROP COLUMN order_in_owner,
                                                 DROP COLUMN owner_discriminator;
+        
                 
         
         
