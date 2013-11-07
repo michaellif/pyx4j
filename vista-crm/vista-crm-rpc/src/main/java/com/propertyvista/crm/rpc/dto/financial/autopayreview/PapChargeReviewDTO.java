@@ -24,7 +24,7 @@ import com.pyx4j.entity.shared.IPrimitive;
 import com.propertyvista.domain.tenant.lease.BillableItem;
 
 @Transient
-public interface PapChargeReviewDTO extends IEntity {
+public interface PapChargeReviewDTO extends IEntity, BulkEditableEntity {
 
     public enum ChangeType {
 

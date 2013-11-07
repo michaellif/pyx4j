@@ -48,7 +48,6 @@ import com.propertyvista.crm.client.ui.gadgets.commonMk2.dashboard.AbstractDashb
 import com.propertyvista.crm.client.ui.gadgets.commonMk2.dashboard.AddGadgetDialog;
 import com.propertyvista.crm.client.ui.gadgets.forms.ArrearsGadgetSummaryForm;
 import com.propertyvista.crm.client.ui.reports.CommonReportStyles;
-import com.propertyvista.crm.client.ui.tools.autopayreview.AutoPayReviewViewImpl;
 import com.propertyvista.crm.client.ui.tools.autopayreview.PapReviewCaptionViewer;
 import com.propertyvista.crm.client.ui.tools.autopayreview.PapReviewFolder;
 import com.propertyvista.crm.client.ui.tools.autopayreview.PapReviewsHolderForm;
@@ -775,30 +774,7 @@ public class CrmTheme extends VistaTheme {
 
     private void initAutoPayReviewToolStyles() {
 
-        Style style = new Style("." + AutoPayReviewViewImpl.Styles.AutoPayReviewsFiltersFormPanel.name());
-        style.addProperty("background-color", ThemeColor.object1, 0.3);
-        style.addProperty("height", "100px");
-        style.addProperty("overflow", "auto");
-        addStyle(style);
-
-        style = new Style("." + AutoPayReviewViewImpl.Styles.AutoPayReviewsFiltersFormPanel.name() + " .EntityFolderTableDecorator");
-        style.addProperty("width", "5em");
-        addStyle(style);
-
-        style = new Style("." + AutoPayReviewViewImpl.Styles.AutoPayReviewsFiltersButtonsPanel.name());
-        style.addProperty("height", "30px");
-        style.addProperty("padding-top", "5px");
-        style.addProperty("text-align", "center");
-        style.addProperty("width", "100%");
-        addStyle(style);
-
-        style = new Style("." + AutoPayReviewViewImpl.Styles.AutoPayReviewsHolderForm.name());
-        style.addProperty("position", "absolute");
-        style.addProperty("top", "131px");
-        style.addProperty("left", "0px");
-        style.addProperty("right", "0px");
-        style.addProperty("bottom", "0px");
-        addStyle(style);
+        Style style = null;
 
         // ************************************************************************************************************
 
@@ -885,38 +861,6 @@ public class CrmTheme extends VistaTheme {
         style.addProperty("margin-right", "2px");
         addStyle(style);
 
-        // the following styles set up the layout of captions for LeasePapsReviewFolder
-        style = new Style("." + PapReviewsHolderForm.Styles.AutoPayStatsPanel.name());
-        style.addProperty("text-align", "center");
-        style.addProperty("font-weight", "bold");
-        style.addProperty("padding-top", "5px");
-        style.addProperty("padding-bottom", "10px");
-        style.addProperty("width", "100%");
-        addStyle(style);
-
-        style = new Style("." + PapReviewsHolderForm.Styles.AutoPayStatsPanel.name() + " div");
-        style.addProperty("display", "inline");
-
-        addStyle(style);
-        style = new Style("." + PapReviewsHolderForm.Styles.AutoPayStatsPanel.name() + " a");
-        style.addProperty("margin-left", "20px");
-        style.addProperty("display", "inline");
-        addStyle(style);
-
-        style = new Style("." + PapReviewsHolderForm.Styles.AutoPayEverythingIsSelected.name());
-        style.addProperty("background", ThemeColor.object1, 0.8);
-        addStyle(style);
-
-        style = new Style("." + PapReviewsHolderForm.Styles.AutoPayActionsPanel.name());
-        style.addProperty("height", "0px");
-        addStyle(style);
-
-        style = new Style("." + PapReviewsHolderForm.Styles.AutoPayActionsPanel.name() + " .pyx4j_CheckBox:first-child");
-        style.addProperty("position", "relative");
-        style.addProperty("top", "-27px");
-        style.addProperty("left", "6px");
-        addStyle(style);
-
         style = new Style("." + PapReviewsHolderForm.Styles.AutoPaySuperCaptionsPanel.name());
         style.addProperty("position", "relative");
         style.addProperty("left", "280px");
@@ -966,44 +910,6 @@ public class CrmTheme extends VistaTheme {
         style = new Style("." + PapReviewsHolderForm.Styles.AutoPayCaptionsPanel.name() + " div div");
         style.addProperty("border-left", "none");
         addStyle(style);
-
-        style = new Style("." + PapReviewsHolderForm.Styles.AutoPayNoResultsPanel.name());
-        style.addProperty("text-align", "center");
-        style.addProperty("margin-top", "2em");
-        style.addProperty("margin-buttom", "2em");
-        addStyle(style);
-
-        style = new Style("." + PapReviewsHolderForm.Styles.AutoPayFolderHolder.name());
-        style.addProperty("overflow", "auto");
-        style.addProperty("position", "absolute");
-        style.addProperty("top", "73px");
-        style.addProperty("bottom", "0px");
-        style.addProperty("left", "0px");
-        style.addProperty("right", "0px");
-        addStyle(style);
-
-        style = new Style("." + PapReviewsHolderForm.Styles.AutoPayLoadMore.name());
-        style.addProperty("cursor", "pointer");
-        style.addProperty("text-align", "center");
-        style.addProperty("vertical-align", "middle");
-        style.addProperty("margin-left", "auto");
-        style.addProperty("margin-right", "auto");
-        style.addProperty("width", "3em");
-        style.addProperty("height", "3em");
-        style.addProperty("line-height", "3em");
-        style.addProperty("padding-right", "1em");
-        style.addProperty("padding-left", "1em");
-        addStyle(style);
-
-        style = new Style("." + PapReviewsHolderForm.Styles.AutoPayLoadMore.name() + ":hover");
-        style.addProperty("border-style", "dotted");
-        style.addProperty("border-width", "1px");
-        addStyle(style);
-
-        style = new Style(".scrollable");
-        style.addProperty("width", "100%");
-        addStyle(style);
-
     }
 
     private void initN4GenerationToolStyles() {

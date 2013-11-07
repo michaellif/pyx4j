@@ -17,16 +17,17 @@ import java.util.Vector;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
-import com.pyx4j.rpc.shared.IService;
-
 import com.propertyvista.crm.rpc.dto.financial.autopayreview.PapReviewDTO;
 import com.propertyvista.crm.rpc.dto.financial.autopayreview.ReviewedPapsHolderDTO;
+import com.propertyvista.crm.rpc.services.legal.AbstractBulkOperationService;
 import com.propertyvista.domain.reports.AutoPayChangesReportMetadata;
 
-public interface AutoPayReviewService extends IService {
+public interface AutoPayReviewService extends AbstractBulkOperationService<AutoPayChangesReportMetadata, PapReviewDTO, ReviewedPapsHolderDTO> {
 
-    void getAutoPayReviews(AsyncCallback<Vector<PapReviewDTO>> callback, AutoPayChangesReportMetadata filterSettings);
+    @Override
+    public void getItems(AsyncCallback<Vector<PapReviewDTO>> callback, AutoPayChangesReportMetadata settings);
 
-    void accept(AsyncCallback<String> callback, ReviewedPapsHolderDTO acceptedReviews);
+    @Override
+    public void process(AsyncCallback<String> callback, ReviewedPapsHolderDTO accepted);
 
 }

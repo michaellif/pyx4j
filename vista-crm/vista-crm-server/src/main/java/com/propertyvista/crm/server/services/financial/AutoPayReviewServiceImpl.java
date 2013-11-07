@@ -47,7 +47,7 @@ import com.propertyvista.dto.payment.AutoPayReviewPreauthorizedPaymentDTO;
 public class AutoPayReviewServiceImpl implements AutoPayReviewService {
 
     @Override
-    public void getAutoPayReviews(AsyncCallback<Vector<PapReviewDTO>> callback, AutoPayChangesReportMetadata filterSettings) {
+    public void getItems(AsyncCallback<Vector<PapReviewDTO>> callback, AutoPayChangesReportMetadata filterSettings) {
         Vector<AutoPayReviewLeaseDTO> suspendedPreauthorizedPayments = new Vector<AutoPayReviewLeaseDTO>(ServerSideFactory.create(PaymentReportFacade.class)
                 .reportPreauthorizedPaymentsRequiredReview(makeCriteria(filterSettings)));
         Vector<PapReviewDTO> papsForReview = convert2PapReviews(suspendedPreauthorizedPayments);
@@ -55,7 +55,7 @@ public class AutoPayReviewServiceImpl implements AutoPayReviewService {
     }
 
     @Override
-    public void accept(AsyncCallback<String> callback, final ReviewedPapsHolderDTO acceptedReviews) {
+    public void process(AsyncCallback<String> callback, final ReviewedPapsHolderDTO acceptedReviews) {
         callback.onSuccess(DeferredProcessRegistry.fork(new AutoPayReviewDeferredProcess(acceptedReviews), ThreadPoolNames.IMPORTS));
     }
 

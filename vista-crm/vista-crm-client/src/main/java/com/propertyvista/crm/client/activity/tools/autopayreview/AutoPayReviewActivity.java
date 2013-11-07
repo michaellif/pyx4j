@@ -13,24 +13,18 @@
  */
 package com.propertyvista.crm.client.activity.tools.autopayreview;
 
-import java.util.LinkedList;
 import java.util.List;
-import java.util.Vector;
 
-import com.google.gwt.activity.shared.AbstractActivity;
 import com.google.gwt.core.shared.GWT;
-import com.google.gwt.event.shared.EventBus;
-import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
 import com.pyx4j.entity.shared.EntityFactory;
-import com.pyx4j.gwt.client.deferred.DeferredProcessDialog;
 import com.pyx4j.gwt.rpc.deferred.DeferredProcessProgressResponse;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.site.rpc.AppPlace;
 
+import com.propertyvista.crm.client.CrmSite;
+import com.propertyvista.crm.client.activity.tools.common.AbstractBulkOperationToolActivity;
 import com.propertyvista.crm.client.ui.tools.autopayreview.AutoPayReviewView;
-import com.propertyvista.crm.client.ui.tools.autopayreview.AutoPayReviewViewImpl;
 import com.propertyvista.crm.rpc.dto.financial.autopayreview.PapChargeReviewDTO;
 import com.propertyvista.crm.rpc.dto.financial.autopayreview.PapReviewDTO;
 import com.propertyvista.crm.rpc.dto.financial.autopayreview.ReviewedAutopayAgreementDTO;
@@ -39,95 +33,18 @@ import com.propertyvista.crm.rpc.dto.financial.autopayreview.ReviewedPapsHolderD
 import com.propertyvista.crm.rpc.services.financial.AutoPayReviewService;
 import com.propertyvista.domain.reports.AutoPayChangesReportMetadata;
 
-public class AutoPayReviewActivity extends AbstractActivity implements AutoPayReviewView.Presenter {
+public class AutoPayReviewActivity extends AbstractBulkOperationToolActivity<AutoPayChangesReportMetadata, PapReviewDTO, ReviewedPapsHolderDTO> implements
+        AutoPayReviewView.Presenter {
 
     private static final I18n i18n = I18n.get(AutoPayReviewActivity.class);
 
-    private final AutoPayReviewView view;
-
-    private List<PapReviewDTO> papReviews;
-
-    private final AutoPayReviewService autoPayReviewService;
-
-    private final AppPlace place;
-
     public AutoPayReviewActivity(AppPlace place) {
-        this.place = place;
-        this.view = new AutoPayReviewViewImpl();
-        this.autoPayReviewService = GWT.create(AutoPayReviewService.class);
-        this.papReviews = new LinkedList<PapReviewDTO>();
+        super(place, CrmSite.getViewFactory().instantiate(AutoPayReviewView.class), GWT.<AutoPayReviewService> create(AutoPayReviewService.class),
+                AutoPayChangesReportMetadata.class);
     }
 
     @Override
-    public void populate() {
-        view.setLoading(true);
-        autoPayReviewService.getAutoPayReviews(new DefaultAsyncCallback<Vector<PapReviewDTO>>() {
-            @Override
-            public void onSuccess(Vector<PapReviewDTO> papReviews) {
-                AutoPayReviewActivity.this.papReviews = papReviews;
-                AutoPayReviewActivity.this.view.resetVisibleRange();
-                AutoPayReviewActivity.this.populateView();
-            }
-        }, view.getAutoPayFilterSettings().duplicate(AutoPayChangesReportMetadata.class));
-    }
-
-    @Override
-    public void acceptMarked() {
-        if (!papReviews.isEmpty() && (view.isEverythingSelected() || !view.getMarkedPapReviews().isEmpty())) {
-            autoPayReviewService.accept(new DefaultAsyncCallback<String>() {
-                @Override
-                public void onSuccess(String deferredCorrelationId) {
-                    startAccetanceProgress(deferredCorrelationId);
-                }
-            }, makeReviewedPaps(view.isEverythingSelected() ? papReviews : view.getMarkedPapReviews()));
-        } else {
-            view.showMessage(i18n.tr("Please select some AutoPays first"));
-        }
-    }
-
-    private void startAccetanceProgress(String deferredCorrelationId) {
-        DeferredProcessDialog d = new DeferredProcessDialog(i18n.tr("Accept Selected"), i18n.tr("Accepting Auto Pay changes ..."), false) {
-            @Override
-            public void onDeferredSuccess(DeferredProcessProgressResponse result) {
-                super.onDeferredSuccess(result);
-                populate();
-            }
-        };
-        d.show();
-        d.startProgress(deferredCorrelationId);
-    }
-
-    @Override
-    public void refresh() {
-        // no need to implement
-    }
-
-    @Override
-    public void start(AcceptsOneWidget panel, EventBus eventBus) {
-        panel.setWidget(view);
-        view.setPresenter(this);
-    }
-
-    @Override
-    public AppPlace getPlace() {
-        return place;
-    }
-
-    @Override
-    public void onRangeChanged() {
-        view.setLoading(true);
-        populateView();
-    }
-
-    private void populateView() {
-        int start = view.getVisibleRange().getStart();
-        int end = Math.min(papReviews.size(), start + view.getVisibleRange().getLength());
-
-        view.setRowData(view.getVisibleRange().getStart(), papReviews.size(), papReviews.subList(start, end));
-        view.setLoading(false);
-    }
-
-    private ReviewedPapsHolderDTO makeReviewedPaps(List<PapReviewDTO> papReviews) {
+    protected ReviewedPapsHolderDTO makeProducedItems(List<PapReviewDTO> papReviews) {
         ReviewedPapsHolderDTO reviewedPapsHolder = EntityFactory.create(ReviewedPapsHolderDTO.class);
         for (PapReviewDTO papReview : papReviews) {
             ReviewedAutopayAgreementDTO reviewedPap = EntityFactory.create(ReviewedAutopayAgreementDTO.class);
@@ -145,6 +62,11 @@ public class AutoPayReviewActivity extends AbstractActivity implements AutoPayRe
         }
 
         return reviewedPapsHolder;
+    }
+
+    @Override
+    protected void onSelectedProccessSuccess(DeferredProcessProgressResponse result) {
+
     }
 
 }
