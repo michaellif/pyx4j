@@ -27,7 +27,7 @@ public class PtAppPlaceDispatcher extends AbstractAppPlaceDispatcher {
 
     @Override
     protected boolean isApplicationAuthenticated() {
-        return SecurityController.checkBehavior(VistaBasicBehavior.ProspectiveApp);
+        return SecurityController.checkBehavior(VistaBasicBehavior.ProspectivePortal);
     }
 
     @Override
@@ -54,7 +54,7 @@ public class PtAppPlaceDispatcher extends AbstractAppPlaceDispatcher {
 
     @Override
     protected AppPlace specialForward(AppPlace newPlace) {
-        if (SecurityController.checkBehavior(VistaBasicBehavior.ProspectiveAppPasswordChangeRequired)) {
+        if (SecurityController.checkBehavior(VistaBasicBehavior.ProspectivePortalPasswordChangeRequired)) {
             return new PtSiteMap.PasswordReset();
         } else if (SecurityController.checkBehavior(VistaCustomerBehavior.ApplicationSelectionRequired)) {
             return new PtSiteMap.ApplicationSelectionRequired();

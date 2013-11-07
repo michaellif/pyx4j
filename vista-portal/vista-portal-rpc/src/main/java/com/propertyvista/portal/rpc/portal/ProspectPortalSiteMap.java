@@ -7,20 +7,17 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on 2011-05-11
- * @author vlads
+ * Created on May 14, 2011
+ * @author vadims
  * @version $Id$
  */
-package com.propertyvista.portal.prospect;
+package com.propertyvista.portal.rpc.portal;
 
-import com.propertyvista.portal.prospect.ui.ProspectPortalRootPane;
-import com.propertyvista.portal.rpc.portal.ProspectPortalSiteMap;
-import com.propertyvista.portal.shared.PortalSite;
+import com.pyx4j.site.rpc.AppPlace;
 
-public class ProspectPortalSite extends PortalSite {
+public class ProspectPortalSiteMap extends PortalSiteMap {
 
-    public ProspectPortalSite() {
-        super("vista-prospect", ProspectPortalSiteMap.class, new ProspectPortalRootPane(), new ProspectPortalSiteDispatcher());
+    public static class Dashboard extends AppPlace {
     }
 
 }

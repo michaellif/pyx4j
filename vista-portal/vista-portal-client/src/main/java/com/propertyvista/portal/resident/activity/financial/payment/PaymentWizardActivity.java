@@ -33,8 +33,8 @@ import com.propertyvista.domain.payment.LeasePaymentMethod;
 import com.propertyvista.portal.domain.dto.financial.PaymentDTO;
 import com.propertyvista.portal.resident.activity.AbstractWizardCrudActivity;
 import com.propertyvista.portal.resident.ui.financial.payment.PaymentWizardView;
-import com.propertyvista.portal.rpc.portal.PortalSiteMap.PortalTerms;
-import com.propertyvista.portal.rpc.portal.PortalSiteMap.Resident.Financial.Payment;
+import com.propertyvista.portal.rpc.portal.ResidentPortalSiteMap;
+import com.propertyvista.portal.rpc.portal.ResidentPortalSiteMap.Financial.Payment;
 import com.propertyvista.portal.rpc.portal.web.services.financial.PaymentWizardService;
 
 public class PaymentWizardActivity extends AbstractWizardCrudActivity<PaymentDTO> implements PaymentWizardView.Presenter {
@@ -70,12 +70,12 @@ public class PaymentWizardActivity extends AbstractWizardCrudActivity<PaymentDTO
 
     @Override
     public Class<? extends Place> getTermsOfUsePlace() {
-        return PortalTerms.TermsAndConditions.class;
+        return ResidentPortalSiteMap.TermsAndConditions.class;
     }
 
     @Override
     public Class<? extends Place> getBillingPolicyPlace() {
-        return PortalTerms.PadPolicy.class;
+        return ResidentPortalSiteMap.PadPolicy.class;
     }
 
     @Override

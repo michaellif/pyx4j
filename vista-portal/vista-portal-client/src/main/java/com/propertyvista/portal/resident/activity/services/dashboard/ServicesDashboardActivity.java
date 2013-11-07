@@ -25,7 +25,7 @@ import com.propertyvista.portal.resident.ResidentPortalSite;
 import com.propertyvista.portal.resident.activity.SecurityAwareActivity;
 import com.propertyvista.portal.resident.ui.services.dashboard.ServicesDashboardView;
 import com.propertyvista.portal.resident.ui.services.dashboard.ServicesDashboardView.ServicesDashboardPresenter;
-import com.propertyvista.portal.rpc.portal.PortalSiteMap;
+import com.propertyvista.portal.rpc.portal.ResidentPortalSiteMap;
 import com.propertyvista.portal.rpc.portal.web.dto.insurance.status.InsuranceStatusDTO;
 import com.propertyvista.portal.rpc.portal.web.services.services.InsuranceService;
 
@@ -59,12 +59,12 @@ public class ServicesDashboardActivity extends SecurityAwareActivity implements 
 
     @Override
     public void buyTenantSure() {
-        AppSite.getPlaceController().goTo(new PortalSiteMap.Resident.ResidentServices.TenantInsurance.TenantSure.TenantSureWizard());
+        AppSite.getPlaceController().goTo(new ResidentPortalSiteMap.ResidentServices.TenantInsurance.TenantSure.TenantSureWizard());
     }
 
     @Override
     public void addThirdPartyTenantInsuranceCertificate() {
-        AppSite.getPlaceController().goTo(new PortalSiteMap.Resident.ResidentServices.TenantInsurance.GeneralPolicyWizard());
+        AppSite.getPlaceController().goTo(new ResidentPortalSiteMap.ResidentServices.TenantInsurance.GeneralPolicyWizard());
     }
 
 }

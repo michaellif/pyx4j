@@ -55,12 +55,12 @@ public class PtAuthenticationServiceImpl extends VistaAuthenticationServicesImpl
 
     @Override
     protected VistaBasicBehavior getApplicationBehavior() {
-        return VistaBasicBehavior.ProspectiveApp;
+        return VistaBasicBehavior.ProspectivePortal;
     }
 
     @Override
     protected Behavior getPasswordChangeRequiredBehavior() {
-        return VistaBasicBehavior.ProspectiveAppPasswordChangeRequired;
+        return VistaBasicBehavior.ProspectivePortalPasswordChangeRequired;
     }
 
     @Override

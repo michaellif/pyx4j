@@ -35,6 +35,7 @@ import com.propertyvista.common.client.resources.VistaImages;
 import com.propertyvista.common.client.ui.components.MediaUtils;
 import com.propertyvista.portal.resident.ui.AbstractGadget;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap;
+import com.propertyvista.portal.rpc.portal.ResidentPortalSiteMap;
 import com.propertyvista.portal.rpc.portal.web.dto.ResidentSummaryDTO;
 import com.propertyvista.portal.shared.resources.PortalImages;
 import com.propertyvista.portal.shared.themes.DashboardTheme;
@@ -79,7 +80,7 @@ public class ProfileGadget extends AbstractGadget<MainDashboardViewImpl> {
 
                     @Override
                     public void execute() {
-                        AppSite.getPlaceController().goTo(new PortalSiteMap.Resident.Profile());
+                        AppSite.getPlaceController().goTo(new ResidentPortalSiteMap.Profile());
                     }
                 });
                 add(anchor);
@@ -88,7 +89,7 @@ public class ProfileGadget extends AbstractGadget<MainDashboardViewImpl> {
 
                     @Override
                     public void execute() {
-                        AppSite.getPlaceController().goTo(new PortalSiteMap.Resident.Account());
+                        AppSite.getPlaceController().goTo(new ResidentPortalSiteMap.Account());
                     }
                 });
                 add(anchor);

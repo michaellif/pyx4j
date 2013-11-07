@@ -34,7 +34,7 @@ import com.pyx4j.widgets.client.Label;
 import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
 import com.propertyvista.portal.resident.ui.AbstractGadget;
 import com.propertyvista.portal.resident.ui.util.decorators.FormWidgetDecoratorBuilder;
-import com.propertyvista.portal.rpc.portal.PortalSiteMap;
+import com.propertyvista.portal.rpc.portal.ResidentPortalSiteMap;
 import com.propertyvista.portal.rpc.portal.web.dto.insurance.status.GeneralInsuranceCertificateSummaryDTO;
 import com.propertyvista.portal.rpc.portal.web.dto.insurance.status.InsuranceCertificateSummaryDTO;
 import com.propertyvista.portal.rpc.portal.web.dto.insurance.status.InsuranceStatusDTO;
@@ -175,11 +175,11 @@ public class InsuranceGadget extends AbstractGadget<ServicesDashboardViewImpl> {
                     public void execute() {
                         if (getValue() instanceof GeneralInsuranceCertificateSummaryDTO) {
                             AppSite.getPlaceController().goTo(
-                                    new PortalSiteMap.Resident.ResidentServices.TenantInsurance.GeneralPolicyPage().formPlace(getValue().insurancePolicy()
-                                            .getPrimaryKey()));
+                                    new ResidentPortalSiteMap.ResidentServices.TenantInsurance.GeneralPolicyPage().formPlace(getValue()
+                                            .insurancePolicy().getPrimaryKey()));
                         } else if (getValue() instanceof TenantSureCertificateSummaryDTO) {
                             AppSite.getPlaceController().goTo(
-                                    new PortalSiteMap.Resident.ResidentServices.TenantInsurance.TenantSure.TenantSurePage().formPlace(getValue()
+                                    new ResidentPortalSiteMap.ResidentServices.TenantInsurance.TenantSure.TenantSurePage().formPlace(getValue()
                                             .insurancePolicy().getPrimaryKey()));
 
                         }

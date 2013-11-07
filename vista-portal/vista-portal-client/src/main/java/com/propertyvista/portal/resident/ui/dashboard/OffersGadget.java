@@ -25,7 +25,7 @@ import com.pyx4j.widgets.client.Button;
 import com.pyx4j.widgets.client.actionbar.Toolbar;
 
 import com.propertyvista.portal.resident.ui.AbstractGadget;
-import com.propertyvista.portal.rpc.portal.PortalSiteMap;
+import com.propertyvista.portal.rpc.portal.ResidentPortalSiteMap;
 import com.propertyvista.portal.shared.resources.PortalImages;
 
 public class OffersGadget extends AbstractGadget<MainDashboardViewImpl> {
@@ -52,7 +52,7 @@ public class OffersGadget extends AbstractGadget<MainDashboardViewImpl> {
 
                 @Override
                 public void execute() {
-                    AppSite.getPlaceController().goTo(new PortalSiteMap.Resident.Offers());
+                    AppSite.getPlaceController().goTo(new ResidentPortalSiteMap.Offers());
                 }
             });
             offersButton.getElement().getStyle().setProperty("background", StyleManager.getPalette().getThemeColor(ThemeColor.contrast6, 1));

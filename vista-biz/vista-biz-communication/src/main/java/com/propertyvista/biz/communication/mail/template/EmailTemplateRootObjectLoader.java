@@ -50,6 +50,7 @@ import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
 import com.propertyvista.domain.tenant.ptapp.OnlineApplication;
 import com.propertyvista.portal.rpc.DeploymentConsts;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap;
+import com.propertyvista.portal.rpc.portal.ResidentPortalSiteMap;
 import com.propertyvista.portal.rpc.ptapp.PtSiteMap;
 
 public class EmailTemplateRootObjectLoader {
@@ -212,7 +213,7 @@ public class EmailTemplateRootObjectLoader {
             // generate url for maintenance request viewer in Resident Portal
             String residentUrl = VistaDeployment.getBaseApplicationURL(VistaApplication.resident, true);
             String mrUrl = AppPlaceInfo.absoluteUrl(residentUrl, true,
-                    new PortalSiteMap.Resident.Maintenance.MaintenanceRequestPage().formPlace(mr.getPrimaryKey()));
+                    new ResidentPortalSiteMap.Maintenance.MaintenanceRequestPage().formPlace(mr.getPrimaryKey()));
             t.requestViewUrl().setValue(mrUrl);
         } else if (tObj instanceof MaintenanceRequestWOT) {
             MaintenanceRequestWOT t = (MaintenanceRequestWOT) tObj;

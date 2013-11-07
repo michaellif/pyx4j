@@ -30,8 +30,8 @@ import com.propertyvista.portal.resident.ResidentPortalSite;
 import com.propertyvista.portal.resident.activity.SecurityAwareActivity;
 import com.propertyvista.portal.resident.ui.financial.dashboard.FinancialDashboardView;
 import com.propertyvista.portal.resident.ui.financial.dashboard.FinancialDashboardView.FinancialDashboardPresenter;
-import com.propertyvista.portal.rpc.portal.PortalSiteMap;
-import com.propertyvista.portal.rpc.portal.PortalSiteMap.Resident.Financial;
+import com.propertyvista.portal.rpc.portal.ResidentPortalSiteMap;
+import com.propertyvista.portal.rpc.portal.ResidentPortalSiteMap.Financial;
 import com.propertyvista.portal.rpc.portal.web.dto.financial.AutoPayInfoDTO;
 import com.propertyvista.portal.rpc.portal.web.dto.financial.AutoPaySummaryDTO;
 import com.propertyvista.portal.rpc.portal.web.dto.financial.BillingSummaryDTO;
@@ -90,30 +90,30 @@ public class FinancialDashboardActivity extends SecurityAwareActivity implements
 
     @Override
     public void viewCurrentBill() {
-        AppSite.getPlaceController().goTo(new PortalSiteMap.Resident.Financial.BillingHistory.BillView());
+        AppSite.getPlaceController().goTo(new ResidentPortalSiteMap.Financial.BillingHistory.BillView());
     }
 
     @Override
     public void viewBillilngHistory() {
-        AppSite.getPlaceController().goTo(new PortalSiteMap.Resident.Financial.BillingHistory());
+        AppSite.getPlaceController().goTo(new ResidentPortalSiteMap.Financial.BillingHistory());
     }
 
     @Override
     public void viewTransactionHistory() {
-        AppSite.getPlaceController().goTo(new PortalSiteMap.Resident.Financial.TransactionHistory());
+        AppSite.getPlaceController().goTo(new ResidentPortalSiteMap.Financial.TransactionHistory());
     }
 
     @Override
     public void makePayment() {
         if (SecurityController.checkAnyBehavior(VistaCustomerPaymentTypeBehavior.values())) {
-            AppSite.getPlaceController().goTo(new PortalSiteMap.Resident.Financial.Payment.PayNow());
+            AppSite.getPlaceController().goTo(new ResidentPortalSiteMap.Financial.Payment.PayNow());
         }
     }
 
     @Override
     public void addAutoPay() {
         if (SecurityController.checkAnyBehavior(VistaCustomerPaymentTypeBehavior.values())) {
-            AppSite.getPlaceController().goTo(new PortalSiteMap.Resident.Financial.PreauthorizedPayments.NewPreauthorizedPayment());
+            AppSite.getPlaceController().goTo(new ResidentPortalSiteMap.Financial.PreauthorizedPayments.NewPreauthorizedPayment());
         }
     }
 
@@ -130,13 +130,13 @@ public class FinancialDashboardActivity extends SecurityAwareActivity implements
     @Override
     public void viewPreauthorizedPayment(AutoPayInfoDTO autoPay) {
         AppSite.getPlaceController().goTo(
-                new PortalSiteMap.Resident.Financial.PreauthorizedPayments.PreauthorizedPayment().formViewerPlace(autoPay.id().getValue()));
+                new ResidentPortalSiteMap.Financial.PreauthorizedPayments.PreauthorizedPayment().formViewerPlace(autoPay.id().getValue()));
     }
 
     @Override
     public void addPaymentMethod() {
         if (SecurityController.checkAnyBehavior(VistaCustomerPaymentTypeBehavior.values())) {
-            AppSite.getPlaceController().goTo(new Financial.PaymentMethods.NewPaymentMethod());
+            AppSite.getPlaceController().goTo(new ResidentPortalSiteMap.Financial.PaymentMethods.NewPaymentMethod());
         }
     }
 
@@ -152,6 +152,6 @@ public class FinancialDashboardActivity extends SecurityAwareActivity implements
 
     @Override
     public void viewPaymentMethod(PaymentMethodInfoDTO paymentMethod) {
-        AppSite.getPlaceController().goTo(new Financial.PaymentMethods.PaymentMethod().formViewerPlace(paymentMethod.id().getValue()));
+        AppSite.getPlaceController().goTo(new ResidentPortalSiteMap.Financial.PaymentMethods.PaymentMethod().formViewerPlace(paymentMethod.id().getValue()));
     }
 }

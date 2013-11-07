@@ -61,7 +61,6 @@ import com.propertyvista.portal.resident.activity.services.insurance.TenantSureO
 import com.propertyvista.portal.resident.activity.services.insurance.TenantSurePageActivity;
 import com.propertyvista.portal.resident.activity.services.insurance.tenantsurepaymentmethod.TenantSurePaymentMethodUpdateConfirmationActivity;
 import com.propertyvista.portal.resident.activity.services.insurance.tenantsurepaymentmethod.TenantSurePaymentMethodUpdateWizardActivity;
-import com.propertyvista.portal.rpc.portal.PortalSiteMap.LeaseContextSelection;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap.Login;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap.LoginWithToken;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap.Logout;
@@ -69,9 +68,9 @@ import com.propertyvista.portal.rpc.portal.PortalSiteMap.NotificationPlace;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap.PasswordChange;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap.PasswordReset;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap.PasswordResetRequest;
-import com.propertyvista.portal.rpc.portal.PortalSiteMap.PortalTerms;
-import com.propertyvista.portal.rpc.portal.PortalSiteMap.Registration;
-import com.propertyvista.portal.rpc.portal.PortalSiteMap.Resident;
+import com.propertyvista.portal.rpc.portal.ResidentPortalSiteMap;
+import com.propertyvista.portal.rpc.portal.ResidentPortalSiteMap.LeaseContextSelection;
+import com.propertyvista.portal.rpc.portal.ResidentPortalSiteMap.Registration;
 
 public class ContentActivityMapper implements AppActivityMapper {
 
@@ -88,72 +87,72 @@ public class ContentActivityMapper implements AppActivityMapper {
                     AppPlace appPlace = (AppPlace) place;
 
                     Activity activity = null;
-                    if (appPlace instanceof Resident.Dashboard) {
+                    if (appPlace instanceof ResidentPortalSiteMap.Dashboard) {
                         activity = new MainDashboardActivity(appPlace);
-                    } else if (appPlace instanceof Resident.Profile) {
+                    } else if (appPlace instanceof ResidentPortalSiteMap.Profile) {
                         activity = new ProfilePageActivity(appPlace);
-                    } else if (appPlace instanceof Resident.Account) {
+                    } else if (appPlace instanceof ResidentPortalSiteMap.Account) {
                         activity = new AccountPageActivity(appPlace);
 
 // Financial:
-                    } else if (appPlace instanceof Resident.Financial) {
+                    } else if (appPlace instanceof ResidentPortalSiteMap.Financial) {
                         activity = new FinancialDashboardActivity(appPlace);
-                    } else if (appPlace instanceof Resident.Financial.Payment.PayNow) {
+                    } else if (appPlace instanceof ResidentPortalSiteMap.Financial.Payment.PayNow) {
                         activity = new PaymentWizardActivity(appPlace);
-                    } else if (appPlace instanceof Resident.Financial.Payment.PaymentSubmitting) {
+                    } else if (appPlace instanceof ResidentPortalSiteMap.Financial.Payment.PaymentSubmitting) {
                         activity = new PaymentConfirmationActivity(appPlace);
 
-                    } else if (appPlace instanceof Resident.Financial.PaymentMethods.PaymentMethod) {
+                    } else if (appPlace instanceof ResidentPortalSiteMap.Financial.PaymentMethods.PaymentMethod) {
                         activity = new PaymentMethodViewActivity(appPlace);
-                    } else if (appPlace instanceof Resident.Financial.PaymentMethods.NewPaymentMethod) {
+                    } else if (appPlace instanceof ResidentPortalSiteMap.Financial.PaymentMethods.NewPaymentMethod) {
                         activity = new PaymentMethodWizardActivity(appPlace);
-                    } else if (appPlace instanceof Resident.Financial.PaymentMethods.PaymentMethodSubmitted) {
+                    } else if (appPlace instanceof ResidentPortalSiteMap.Financial.PaymentMethods.PaymentMethodSubmitted) {
                         activity = new PaymentMethodConfirmationActivity(appPlace);
 
-                    } else if (appPlace instanceof Resident.Financial.PreauthorizedPayments.PreauthorizedPayment) {
+                    } else if (appPlace instanceof ResidentPortalSiteMap.Financial.PreauthorizedPayments.PreauthorizedPayment) {
                         activity = new AutoPayActivity(appPlace);
-                    } else if (appPlace instanceof Resident.Financial.PreauthorizedPayments.NewPreauthorizedPayment) {
+                    } else if (appPlace instanceof ResidentPortalSiteMap.Financial.PreauthorizedPayments.NewPreauthorizedPayment) {
                         activity = new AutoPayWizardActivity(appPlace);
-                    } else if (appPlace instanceof Resident.Financial.PreauthorizedPayments.PreauthorizedPaymentSubmitted) {
+                    } else if (appPlace instanceof ResidentPortalSiteMap.Financial.PreauthorizedPayments.PreauthorizedPaymentSubmitted) {
                         activity = new AutoPayConfirmationActivity(appPlace);
 
-                    } else if (appPlace instanceof Resident.Financial.BillingHistory) {
+                    } else if (appPlace instanceof ResidentPortalSiteMap.Financial.BillingHistory) {
                         activity = new BillingHistoryViewActivity(appPlace);
-                    } else if (appPlace instanceof Resident.Financial.TransactionHistory) {
+                    } else if (appPlace instanceof ResidentPortalSiteMap.Financial.TransactionHistory) {
                         activity = new TransactionHistoryViewActivity(appPlace);
 
-                    } else if (appPlace instanceof Resident.Financial.BillingHistory.BillView) {
+                    } else if (appPlace instanceof ResidentPortalSiteMap.Financial.BillingHistory.BillView) {
                         activity = new BillViewActivity(appPlace);
 
 // Services:
-                    } else if (appPlace instanceof Resident.ResidentServices) {
+                    } else if (appPlace instanceof ResidentPortalSiteMap.ResidentServices) {
                         activity = new ServicesDashboardActivity(appPlace);
 // Insurance:
-                    } else if (appPlace instanceof Resident.ResidentServices.TenantInsurance.TenantSure.TenantSureWizard) {
+                    } else if (appPlace instanceof ResidentPortalSiteMap.ResidentServices.TenantInsurance.TenantSure.TenantSureWizard) {
                         activity = new TenantSureOrderWizardActivity(appPlace);
-                    } else if (appPlace instanceof Resident.ResidentServices.TenantInsurance.TenantSure.TenantSureWizardConfirmation) {
+                    } else if (appPlace instanceof ResidentPortalSiteMap.ResidentServices.TenantInsurance.TenantSure.TenantSureWizardConfirmation) {
                         activity = new TenantSureOrderConfirmationPageActivity(appPlace);
-                    } else if (appPlace instanceof Resident.ResidentServices.TenantInsurance.TenantSure.TenantSurePage) {
+                    } else if (appPlace instanceof ResidentPortalSiteMap.ResidentServices.TenantInsurance.TenantSure.TenantSurePage) {
                         activity = new TenantSurePageActivity(appPlace);
-                    } else if (appPlace instanceof Resident.ResidentServices.TenantInsurance.TenantSure.TenantSurePage.UpdateCreditCard) {
+                    } else if (appPlace instanceof ResidentPortalSiteMap.ResidentServices.TenantInsurance.TenantSure.TenantSurePage.UpdateCreditCard) {
                         activity = new TenantSurePaymentMethodUpdateWizardActivity(appPlace);
-                    } else if (appPlace instanceof Resident.ResidentServices.TenantInsurance.TenantSure.TenantSurePage.UpdateCreditCardConfirmation) {
+                    } else if (appPlace instanceof ResidentPortalSiteMap.ResidentServices.TenantInsurance.TenantSure.TenantSurePage.UpdateCreditCardConfirmation) {
                         activity = new TenantSurePaymentMethodUpdateConfirmationActivity(appPlace);
-                    } else if (appPlace instanceof Resident.ResidentServices.TenantInsurance.TenantSure.TenantSurePage.Faq) {
+                    } else if (appPlace instanceof ResidentPortalSiteMap.ResidentServices.TenantInsurance.TenantSure.TenantSurePage.Faq) {
                         activity = new TenantSureFaqActivity(appPlace);
-                    } else if (appPlace instanceof Resident.ResidentServices.TenantInsurance.TenantSure.TenantSurePage.About) {
+                    } else if (appPlace instanceof ResidentPortalSiteMap.ResidentServices.TenantInsurance.TenantSure.TenantSurePage.About) {
                         activity = new TenantSureAboutActivity(appPlace);
 
-                    } else if (appPlace instanceof Resident.ResidentServices.TenantInsurance.GeneralPolicyWizard) {
+                    } else if (appPlace instanceof ResidentPortalSiteMap.ResidentServices.TenantInsurance.GeneralPolicyWizard) {
                         activity = new GeneralPolicyUploadWizardActivity(appPlace);
-                    } else if (appPlace instanceof Resident.ResidentServices.TenantInsurance.GeneralPolicyPage) {
+                    } else if (appPlace instanceof ResidentPortalSiteMap.ResidentServices.TenantInsurance.GeneralPolicyPage) {
                         activity = new GeneralPolicyPageActivity(appPlace);
 // Maintenance:
-                    } else if (place instanceof Resident.Maintenance) {
+                    } else if (place instanceof ResidentPortalSiteMap.Maintenance) {
                         activity = new MaintenanceDashboardActivity(appPlace);
-                    } else if (place instanceof Resident.Maintenance.MaintenanceRequestWizard) {
+                    } else if (place instanceof ResidentPortalSiteMap.Maintenance.MaintenanceRequestWizard) {
                         activity = new MaintenanceRequestWizardActivity(appPlace);
-                    } else if (place instanceof Resident.Maintenance.MaintenanceRequestPage) {
+                    } else if (place instanceof ResidentPortalSiteMap.Maintenance.MaintenanceRequestPage) {
                         activity = new MaintenanceRequestPageActivity(appPlace);
 
 // Internals:
@@ -177,14 +176,14 @@ public class ContentActivityMapper implements AppActivityMapper {
                         activity = new NotificationPageActivity((NotificationPlace) place);
 
 // Internals/Terms: @formatter:off
-                    } else if (place instanceof PortalTerms.BillingPolicy 
-                            || place instanceof PortalTerms.CreditCardPolicy
-                            || place instanceof PortalTerms.PadPolicy
-                            || place instanceof PortalTerms.TermsAndConditions) {
+                    } else if (place instanceof ResidentPortalSiteMap.BillingPolicy 
+                            || place instanceof ResidentPortalSiteMap.CreditCardPolicy
+                            || place instanceof ResidentPortalSiteMap.PadPolicy
+                            || place instanceof ResidentPortalSiteMap.TermsAndConditions) {
                         activity = new VistaTermsActivity(place);
                  // @formatter:on
 
-                    } else if (place instanceof Resident.Offers) {
+                    } else if (place instanceof ResidentPortalSiteMap.Offers) {
                         activity = new OffersDashboardActivity(place);
                     }
 

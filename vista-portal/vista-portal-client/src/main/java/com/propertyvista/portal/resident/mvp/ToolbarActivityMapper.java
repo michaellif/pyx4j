@@ -19,9 +19,9 @@ import com.google.gwt.place.shared.Place;
 
 import com.propertyvista.portal.resident.activity.ToolbarActivity;
 
-public class StickyHeaderActivityMapper implements ActivityMapper {
+public class ToolbarActivityMapper implements ActivityMapper {
 
-    public StickyHeaderActivityMapper() {
+    public ToolbarActivityMapper() {
     }
 
     @Override

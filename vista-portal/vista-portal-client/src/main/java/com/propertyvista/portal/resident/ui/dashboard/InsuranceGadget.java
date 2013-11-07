@@ -28,7 +28,7 @@ import com.pyx4j.widgets.client.Label;
 import com.propertyvista.portal.resident.ui.AbstractGadget;
 import com.propertyvista.portal.resident.ui.services.dashboard.InsuranceGadgetMessages;
 import com.propertyvista.portal.resident.ui.services.dashboard.InsuranceToolbar;
-import com.propertyvista.portal.rpc.portal.PortalSiteMap;
+import com.propertyvista.portal.rpc.portal.ResidentPortalSiteMap;
 import com.propertyvista.portal.rpc.portal.web.dto.insurance.status.InsuranceStatusDTO;
 import com.propertyvista.portal.shared.resources.PortalImages;
 
@@ -83,7 +83,7 @@ public class InsuranceGadget extends AbstractGadget<MainDashboardViewImpl> {
 
                 @Override
                 public void execute() {
-                    AppSite.getPlaceController().goTo(new PortalSiteMap.Resident.ResidentServices());
+                    AppSite.getPlaceController().goTo(new ResidentPortalSiteMap.ResidentServices());
                 }
             });
             add(viewServicesAnchor);

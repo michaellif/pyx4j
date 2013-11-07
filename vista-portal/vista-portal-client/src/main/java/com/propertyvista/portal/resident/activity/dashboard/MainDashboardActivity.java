@@ -27,6 +27,7 @@ import com.propertyvista.portal.resident.ResidentPortalSite;
 import com.propertyvista.portal.resident.activity.SecurityAwareActivity;
 import com.propertyvista.portal.resident.ui.dashboard.MainDashboardView;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap;
+import com.propertyvista.portal.rpc.portal.ResidentPortalSiteMap;
 import com.propertyvista.portal.rpc.portal.web.dto.ResidentSummaryDTO;
 import com.propertyvista.portal.rpc.portal.web.dto.financial.BillingSummaryDTO;
 import com.propertyvista.portal.rpc.portal.web.dto.insurance.status.InsuranceStatusDTO;
@@ -85,29 +86,29 @@ public class MainDashboardActivity extends SecurityAwareActivity implements Main
     @Override
     public void payNow() {
         if (SecurityController.checkAnyBehavior(VistaCustomerPaymentTypeBehavior.values())) {
-            AppSite.getPlaceController().goTo(new PortalSiteMap.Resident.Financial.Payment.PayNow());
+            AppSite.getPlaceController().goTo(new ResidentPortalSiteMap.Financial.Payment.PayNow());
         }
     }
 
     @Override
     public void setAutopay() {
         if (SecurityController.checkAnyBehavior(VistaCustomerPaymentTypeBehavior.values())) {
-            AppSite.getPlaceController().goTo(new PortalSiteMap.Resident.Financial.PreauthorizedPayments.NewPreauthorizedPayment());
+            AppSite.getPlaceController().goTo(new ResidentPortalSiteMap.Financial.PreauthorizedPayments.NewPreauthorizedPayment());
         }
     }
 
     @Override
     public void buyTenantSure() {
-        AppSite.getPlaceController().goTo(new PortalSiteMap.Resident.ResidentServices.TenantInsurance.TenantSure.TenantSureWizard());
+        AppSite.getPlaceController().goTo(new ResidentPortalSiteMap.ResidentServices.TenantInsurance.TenantSure.TenantSureWizard());
     }
 
     @Override
     public void addThirdPartyTenantInsuranceCertificate() {
-        AppSite.getPlaceController().goTo(new PortalSiteMap.Resident.ResidentServices.TenantInsurance.GeneralPolicyWizard());
+        AppSite.getPlaceController().goTo(new ResidentPortalSiteMap.ResidentServices.TenantInsurance.GeneralPolicyWizard());
     }
 
     @Override
     public void createMaintenanceRequest() {
-        AppSite.getPlaceController().goTo(new PortalSiteMap.Resident.Maintenance.MaintenanceRequestWizard());
+        AppSite.getPlaceController().goTo(new ResidentPortalSiteMap.Maintenance.MaintenanceRequestWizard());
     }
 }

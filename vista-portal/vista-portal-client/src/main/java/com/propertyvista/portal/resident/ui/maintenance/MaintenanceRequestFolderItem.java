@@ -27,7 +27,7 @@ import com.pyx4j.widgets.client.Anchor;
 import com.propertyvista.domain.maintenance.MaintenanceRequestPriority.PriorityLevel;
 import com.propertyvista.domain.maintenance.MaintenanceRequestStatus.StatusPhase;
 import com.propertyvista.portal.resident.ui.util.decorators.FormWidgetDecoratorBuilder;
-import com.propertyvista.portal.rpc.portal.PortalSiteMap;
+import com.propertyvista.portal.rpc.portal.ResidentPortalSiteMap;
 import com.propertyvista.portal.rpc.portal.web.dto.maintenance.MaintenanceRequestStatusDTO;
 
 public class MaintenanceRequestFolderItem extends CEntityForm<MaintenanceRequestStatusDTO> {
@@ -59,7 +59,8 @@ public class MaintenanceRequestFolderItem extends CEntityForm<MaintenanceRequest
             @Override
             public void execute() {
                 System.out.println("+++++++++View Details " + getValue().getPrimaryKey());
-                AppSite.getPlaceController().goTo(new PortalSiteMap.Resident.Maintenance.MaintenanceRequestPage().formPlace(getValue().getPrimaryKey()));
+                AppSite.getPlaceController()
+                        .goTo(new ResidentPortalSiteMap.Maintenance.MaintenanceRequestPage().formPlace(getValue().getPrimaryKey()));
             }
         });
         detailsLink.getElement().getStyle().setMarginTop(10, Unit.PX);

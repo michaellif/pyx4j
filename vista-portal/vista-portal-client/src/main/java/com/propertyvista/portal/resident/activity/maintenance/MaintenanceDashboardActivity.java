@@ -25,7 +25,7 @@ import com.propertyvista.portal.resident.ResidentPortalSite;
 import com.propertyvista.portal.resident.activity.SecurityAwareActivity;
 import com.propertyvista.portal.resident.ui.maintenance.MaintenanceDashboardView;
 import com.propertyvista.portal.resident.ui.maintenance.MaintenanceDashboardView.MaintenanceDashboardPresenter;
-import com.propertyvista.portal.rpc.portal.PortalSiteMap;
+import com.propertyvista.portal.rpc.portal.ResidentPortalSiteMap;
 import com.propertyvista.portal.rpc.portal.web.dto.maintenance.MaintenanceSummaryDTO;
 import com.propertyvista.portal.rpc.portal.web.services.maintenance.MaintenanceRequestCrudService;
 
@@ -58,7 +58,7 @@ public class MaintenanceDashboardActivity extends SecurityAwareActivity implemen
 
     @Override
     public void createMaintenanceRequest() {
-        AppSite.getPlaceController().goTo(new PortalSiteMap.Resident.Maintenance.MaintenanceRequestWizard());
+        AppSite.getPlaceController().goTo(new ResidentPortalSiteMap.Maintenance.MaintenanceRequestWizard());
     }
 
 }

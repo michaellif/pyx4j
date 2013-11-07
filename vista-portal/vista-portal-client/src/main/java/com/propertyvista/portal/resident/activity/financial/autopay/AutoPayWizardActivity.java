@@ -33,8 +33,8 @@ import com.propertyvista.domain.payment.AutopayAgreement;
 import com.propertyvista.domain.payment.LeasePaymentMethod;
 import com.propertyvista.portal.resident.activity.AbstractWizardCrudActivity;
 import com.propertyvista.portal.resident.ui.financial.autopay.AutoPayWizardView;
-import com.propertyvista.portal.rpc.portal.PortalSiteMap.PortalTerms;
-import com.propertyvista.portal.rpc.portal.PortalSiteMap.Resident.Financial;
+import com.propertyvista.portal.rpc.portal.ResidentPortalSiteMap;
+import com.propertyvista.portal.rpc.portal.ResidentPortalSiteMap.Financial;
 import com.propertyvista.portal.rpc.portal.web.dto.financial.AutoPayDTO;
 import com.propertyvista.portal.rpc.portal.web.services.financial.AutoPayWizardService;
 
@@ -87,22 +87,22 @@ public class AutoPayWizardActivity extends AbstractWizardCrudActivity<AutoPayDTO
     @Override
     protected void onFinish(Key result) {
         getView().reset();
-        AppSite.getPlaceController().goTo(new Financial.PreauthorizedPayments.PreauthorizedPaymentSubmitted(result));
+        AppSite.getPlaceController().goTo(new ResidentPortalSiteMap.Financial.PreauthorizedPayments.PreauthorizedPaymentSubmitted(result));
     }
 
     @Override
     public Class<? extends Place> getTermsOfUsePlace() {
-        return PortalTerms.TermsAndConditions.class;
+        return ResidentPortalSiteMap.TermsAndConditions.class;
     }
 
     @Override
     public Class<? extends Place> getPadPolicyPlace() {
-        return PortalTerms.PadPolicy.class;
+        return ResidentPortalSiteMap.PadPolicy.class;
     }
 
     @Override
     public Class<? extends Place> getCcPolicyPlace() {
-        return PortalTerms.CreditCardPolicy.class;
+        return ResidentPortalSiteMap.CreditCardPolicy.class;
     }
 
     @Override

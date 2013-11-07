@@ -28,7 +28,7 @@ import com.propertyvista.portal.resident.ResidentPortalSite;
 import com.propertyvista.portal.resident.activity.AbstractWizardCrudActivity;
 import com.propertyvista.portal.resident.ui.maintenance.MaintenanceRequestWizardView;
 import com.propertyvista.portal.resident.ui.maintenance.MaintenanceRequestWizardView.MaintenanceRequestWizardPresenter;
-import com.propertyvista.portal.rpc.portal.PortalSiteMap;
+import com.propertyvista.portal.rpc.portal.ResidentPortalSiteMap;
 import com.propertyvista.portal.rpc.portal.web.dto.maintenance.MaintenanceRequestDTO;
 import com.propertyvista.portal.rpc.portal.web.services.maintenance.MaintenanceRequestCrudService;
 
@@ -53,6 +53,6 @@ public class MaintenanceRequestWizardActivity extends AbstractWizardCrudActivity
     @Override
     protected void onFinish(Key result) {
         Notification message = new Notification(null, i18n.tr("Maintenance Request submitted Successfully!"), NotificationType.INFO);
-        ResidentPortalSite.getPlaceController().showNotification(message, new PortalSiteMap.Resident.Maintenance());
+        ResidentPortalSite.getPlaceController().showNotification(message, new ResidentPortalSiteMap.Maintenance());
     }
 }

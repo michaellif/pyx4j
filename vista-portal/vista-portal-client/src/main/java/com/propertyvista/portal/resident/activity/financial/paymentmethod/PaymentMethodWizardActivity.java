@@ -28,8 +28,8 @@ import com.pyx4j.site.rpc.AppPlaceInfo;
 import com.propertyvista.domain.contact.AddressSimple;
 import com.propertyvista.portal.resident.activity.AbstractWizardCrudActivity;
 import com.propertyvista.portal.resident.ui.financial.paymentmethod.PaymentMethodWizardView;
-import com.propertyvista.portal.rpc.portal.PortalSiteMap.PortalTerms;
-import com.propertyvista.portal.rpc.portal.PortalSiteMap.Resident.Financial;
+import com.propertyvista.portal.rpc.portal.ResidentPortalSiteMap;
+import com.propertyvista.portal.rpc.portal.ResidentPortalSiteMap.Financial;
 import com.propertyvista.portal.rpc.portal.web.dto.financial.PaymentMethodDTO;
 import com.propertyvista.portal.rpc.portal.web.services.financial.PaymentMethodWizardService;
 
@@ -52,12 +52,12 @@ public class PaymentMethodWizardActivity extends AbstractWizardCrudActivity<Paym
     @Override
     protected void onFinish(Key result) {
         getView().reset();
-        AppSite.getPlaceController().goTo(new Financial.PaymentMethods.PaymentMethodSubmitted(result));
+        AppSite.getPlaceController().goTo(new ResidentPortalSiteMap.Financial.PaymentMethods.PaymentMethodSubmitted(result));
     }
 
     @Override
     public Class<? extends Place> getTermsOfUsePlace() {
-        return PortalTerms.TermsAndConditions.class;
+        return ResidentPortalSiteMap.TermsAndConditions.class;
     }
 
     @Override

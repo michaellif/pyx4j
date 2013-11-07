@@ -27,7 +27,7 @@ import com.propertyvista.domain.payment.LeasePaymentMethod;
 import com.propertyvista.portal.resident.ResidentPortalSite;
 import com.propertyvista.portal.resident.activity.SecurityAwareActivity;
 import com.propertyvista.portal.resident.ui.financial.paymentmethod.PaymentMethodConfirmationView;
-import com.propertyvista.portal.rpc.portal.PortalSiteMap;
+import com.propertyvista.portal.rpc.portal.ResidentPortalSiteMap;
 import com.propertyvista.portal.rpc.portal.web.dto.financial.PaymentMethodDTO;
 import com.propertyvista.portal.rpc.portal.web.services.financial.PaymentService;
 
@@ -60,7 +60,7 @@ public class PaymentMethodConfirmationActivity extends SecurityAwareActivity imp
 
     @Override
     public void goToAutoPay() {
-        AppSite.getPlaceController().goTo(new PortalSiteMap.Resident.Financial.PreauthorizedPayments.NewPreauthorizedPayment());
+        AppSite.getPlaceController().goTo(new ResidentPortalSiteMap.Financial.PreauthorizedPayments.NewPreauthorizedPayment());
     }
 
     @Override

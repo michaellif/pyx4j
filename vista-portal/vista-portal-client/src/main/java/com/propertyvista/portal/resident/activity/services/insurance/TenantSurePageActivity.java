@@ -23,7 +23,7 @@ import com.pyx4j.site.rpc.AppPlace;
 import com.propertyvista.portal.resident.activity.AbstractEditorActivity;
 import com.propertyvista.portal.resident.ui.services.insurance.TenantSurePageView;
 import com.propertyvista.portal.resident.ui.services.insurance.TenantSurePageView.TenantSurePagePresenter;
-import com.propertyvista.portal.rpc.portal.PortalSiteMap;
+import com.propertyvista.portal.rpc.portal.ResidentPortalSiteMap;
 import com.propertyvista.portal.rpc.portal.web.dto.insurance.TenantSureInsurancePolicyDTO;
 import com.propertyvista.portal.rpc.portal.web.services.services.TenantSureInsurancePolicyCrudService;
 
@@ -70,17 +70,17 @@ public class TenantSurePageActivity extends AbstractEditorActivity<TenantSureIns
 
     @Override
     public void updateCreditCardDetails() {
-        AppSite.getPlaceController().goTo(new PortalSiteMap.Resident.ResidentServices.TenantInsurance.TenantSure.TenantSurePage.UpdateCreditCard());
+        AppSite.getPlaceController().goTo(new ResidentPortalSiteMap.ResidentServices.TenantInsurance.TenantSure.TenantSurePage.UpdateCreditCard());
     }
 
     @Override
     public void viewFaq() {
-        AppSite.getPlaceController().goTo(new PortalSiteMap.Resident.ResidentServices.TenantInsurance.TenantSure.TenantSurePage.Faq());
+        AppSite.getPlaceController().goTo(new ResidentPortalSiteMap.ResidentServices.TenantInsurance.TenantSure.TenantSurePage.Faq());
     }
 
     @Override
     public void viewAboutTenantSure() {
-        AppSite.getPlaceController().goTo(new PortalSiteMap.Resident.ResidentServices.TenantInsurance.TenantSure.TenantSurePage.About());
+        AppSite.getPlaceController().goTo(new ResidentPortalSiteMap.ResidentServices.TenantInsurance.TenantSure.TenantSurePage.About());
     }
 
 }

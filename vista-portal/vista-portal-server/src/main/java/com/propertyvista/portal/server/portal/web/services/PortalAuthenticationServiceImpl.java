@@ -72,12 +72,12 @@ public class PortalAuthenticationServiceImpl extends VistaAuthenticationServices
 
     @Override
     protected VistaBasicBehavior getApplicationBehavior() {
-        return VistaBasicBehavior.TenantPortal;
+        return VistaBasicBehavior.ResidentPortal;
     }
 
     @Override
     protected Behavior getPasswordChangeRequiredBehavior() {
-        return VistaBasicBehavior.TenantPortalPasswordChangeRequired;
+        return VistaBasicBehavior.ResidentPortalPasswordChangeRequired;
     }
 
     @Override

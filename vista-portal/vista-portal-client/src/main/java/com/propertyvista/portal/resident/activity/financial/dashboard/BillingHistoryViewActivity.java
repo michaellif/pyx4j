@@ -25,7 +25,7 @@ import com.propertyvista.domain.financial.billing.Bill;
 import com.propertyvista.portal.resident.ResidentPortalSite;
 import com.propertyvista.portal.resident.activity.SecurityAwareActivity;
 import com.propertyvista.portal.resident.ui.financial.views.BillingHistoryView;
-import com.propertyvista.portal.rpc.portal.PortalSiteMap;
+import com.propertyvista.portal.rpc.portal.ResidentPortalSiteMap;
 import com.propertyvista.portal.rpc.portal.web.dto.financial.BillingHistoryDTO;
 import com.propertyvista.portal.rpc.portal.web.services.financial.BillingService;
 
@@ -53,6 +53,6 @@ public class BillingHistoryViewActivity extends SecurityAwareActivity implements
 
     @Override
     public void viewBill(Bill itemId) {
-        AppSite.getPlaceController().goTo(new PortalSiteMap.Resident.Financial.BillingHistory.BillView().formPlace(itemId.getPrimaryKey()));
+        AppSite.getPlaceController().goTo(new ResidentPortalSiteMap.Financial.BillingHistory.BillView().formPlace(itemId.getPrimaryKey()));
     }
 }

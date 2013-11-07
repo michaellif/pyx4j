@@ -28,7 +28,7 @@ import com.propertyvista.dto.PaymentRecordDTO;
 import com.propertyvista.portal.resident.ResidentPortalSite;
 import com.propertyvista.portal.resident.activity.SecurityAwareActivity;
 import com.propertyvista.portal.resident.ui.financial.payment.PaymentConfirmationView;
-import com.propertyvista.portal.rpc.portal.PortalSiteMap;
+import com.propertyvista.portal.rpc.portal.ResidentPortalSiteMap;
 import com.propertyvista.portal.rpc.portal.web.services.financial.PaymentService;
 
 public class PaymentConfirmationActivity extends SecurityAwareActivity implements PaymentConfirmationView.Presenter {
@@ -60,7 +60,7 @@ public class PaymentConfirmationActivity extends SecurityAwareActivity implement
 
     @Override
     public void goToAutoPay() {
-        AppSite.getPlaceController().goTo(new PortalSiteMap.Resident.Financial.PreauthorizedPayments.NewPreauthorizedPayment());
+        AppSite.getPlaceController().goTo(new ResidentPortalSiteMap.Financial.PreauthorizedPayments.NewPreauthorizedPayment());
     }
 
     @Override

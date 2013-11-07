@@ -23,7 +23,7 @@ import com.pyx4j.rpc.client.DefaultAsyncCallback;
 
 import com.propertyvista.portal.resident.ResidentPortalSite;
 import com.propertyvista.portal.resident.ui.TermsView;
-import com.propertyvista.portal.rpc.portal.PortalSiteMap.PortalTerms;
+import com.propertyvista.portal.rpc.portal.ResidentPortalSiteMap;
 import com.propertyvista.portal.rpc.portal.services.PortalVistaTermsService;
 
 public class VistaTermsActivity extends AbstractActivity {
@@ -40,7 +40,7 @@ public class VistaTermsActivity extends AbstractActivity {
     @Override
     public void start(final AcceptsOneWidget panel, EventBus eventBus) {
 
-        if (place instanceof PortalTerms.TermsAndConditions) {
+        if (place instanceof ResidentPortalSiteMap.TermsAndConditions) {
             GWT.<PortalVistaTermsService> create(PortalVistaTermsService.class).getPortalTerms(new DefaultAsyncCallback<String>() {
                 @Override
                 public void onSuccess(String result) {
@@ -48,7 +48,7 @@ public class VistaTermsActivity extends AbstractActivity {
                     panel.setWidget(view);
                 }
             });
-        } else if (place instanceof PortalTerms.BillingPolicy) {
+        } else if (place instanceof ResidentPortalSiteMap.BillingPolicy) {
             GWT.<PortalVistaTermsService> create(PortalVistaTermsService.class).getPortalBillingPolicy(new DefaultAsyncCallback<String>() {
                 @Override
                 public void onSuccess(String result) {
@@ -56,7 +56,7 @@ public class VistaTermsActivity extends AbstractActivity {
                     panel.setWidget(view);
                 }
             });
-        } else if (place instanceof PortalTerms.CreditCardPolicy) {
+        } else if (place instanceof ResidentPortalSiteMap.CreditCardPolicy) {
             GWT.<PortalVistaTermsService> create(PortalVistaTermsService.class).getPortalCcPolicy(new DefaultAsyncCallback<String>() {
                 @Override
                 public void onSuccess(String result) {
@@ -64,7 +64,7 @@ public class VistaTermsActivity extends AbstractActivity {
                     panel.setWidget(view);
                 }
             });
-        } else if (place instanceof PortalTerms.PadPolicy) {
+        } else if (place instanceof ResidentPortalSiteMap.PadPolicy) {
             GWT.<PortalVistaTermsService> create(PortalVistaTermsService.class).getPortalPadPolicy(new DefaultAsyncCallback<String>() {
                 @Override
                 public void onSuccess(String result) {

@@ -37,7 +37,7 @@ import com.pyx4j.widgets.client.PopupWindow.PopupWindowHandle;
 
 import com.propertyvista.common.client.ui.components.MediaUtils;
 import com.propertyvista.domain.site.SocialLink;
-import com.propertyvista.portal.rpc.portal.PortalSiteMap;
+import com.propertyvista.portal.rpc.portal.ResidentPortalSiteMap;
 import com.propertyvista.portal.rpc.portal.web.dto.PortalContentDTO;
 import com.propertyvista.portal.shared.resources.PortalImages;
 import com.propertyvista.portal.shared.themes.PortalRootPaneTheme;
@@ -73,7 +73,7 @@ public class FooterViewImpl extends FlowPanel implements FooterView {
 
             @Override
             public void execute() {
-                AppSite.getPlaceController().goTo(new PortalSiteMap.PortalTerms.TermsAndConditions());
+                AppSite.getPlaceController().goTo(new ResidentPortalSiteMap.TermsAndConditions());
             }
         });
 

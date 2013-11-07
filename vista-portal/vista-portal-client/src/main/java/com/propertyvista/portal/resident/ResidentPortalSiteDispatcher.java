@@ -24,6 +24,7 @@ import com.pyx4j.site.shared.domain.Notification;
 import com.propertyvista.domain.security.VistaCustomerBehavior;
 import com.propertyvista.domain.security.common.VistaBasicBehavior;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap;
+import com.propertyvista.portal.rpc.portal.ResidentPortalSiteMap;
 
 public class ResidentPortalSiteDispatcher extends AbstractAppPlaceDispatcher {
 
@@ -41,17 +42,17 @@ public class ResidentPortalSiteDispatcher extends AbstractAppPlaceDispatcher {
 
     @Override
     protected void obtainDefaultAuthenticatedPlace(AsyncCallback<AppPlace> callback) {
-        callback.onSuccess(new PortalSiteMap.Resident.Dashboard());
+        callback.onSuccess(new ResidentPortalSiteMap.Dashboard());
     }
 
     @Override
     protected boolean isApplicationAuthenticated() {
-        return SecurityController.checkBehavior(VistaBasicBehavior.TenantPortal);
+        return SecurityController.checkBehavior(VistaBasicBehavior.ResidentPortal);
     }
 
     @Override
     protected void isPlaceNavigable(AppPlace targetPlace, AsyncCallback<Boolean> callback) {
-        if (targetPlace instanceof PortalSiteMap.LeaseContextSelection) {
+        if (targetPlace instanceof ResidentPortalSiteMap.LeaseContextSelection) {
             callback.onSuccess(SecurityController.checkAnyBehavior(VistaCustomerBehavior.LeaseSelectionRequired, VistaCustomerBehavior.HasMultipleLeases));
         } else {
             callback.onSuccess(Boolean.TRUE);
@@ -60,10 +61,10 @@ public class ResidentPortalSiteDispatcher extends AbstractAppPlaceDispatcher {
 
     @Override
     protected AppPlace specialForward(AppPlace newPlace) {
-        if (SecurityController.checkBehavior(VistaBasicBehavior.TenantPortalPasswordChangeRequired)) {
+        if (SecurityController.checkBehavior(VistaBasicBehavior.ResidentPortalPasswordChangeRequired)) {
             return new PortalSiteMap.PasswordReset();
         } else if (SecurityController.checkBehavior(VistaCustomerBehavior.LeaseSelectionRequired)) {
-            return new PortalSiteMap.LeaseContextSelection();
+            return new ResidentPortalSiteMap.LeaseContextSelection();
         } else {
             return null;
         }

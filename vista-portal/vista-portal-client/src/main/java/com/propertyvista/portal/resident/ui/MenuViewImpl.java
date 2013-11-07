@@ -47,8 +47,7 @@ import com.pyx4j.widgets.client.images.ButtonImages;
 
 import com.propertyvista.domain.customizations.CountryOfOperation;
 import com.propertyvista.misc.VistaTODO;
-import com.propertyvista.portal.rpc.portal.PortalSiteMap;
-import com.propertyvista.portal.rpc.portal.PortalSiteMap.Resident;
+import com.propertyvista.portal.rpc.portal.ResidentPortalSiteMap;
 import com.propertyvista.portal.shared.resources.PortalImages;
 import com.propertyvista.portal.shared.themes.PortalRootPaneTheme;
 import com.propertyvista.shared.config.VistaFeatures;
@@ -79,28 +78,28 @@ public class MenuViewImpl extends DockPanel implements MenuView {
         add(footerHolder, DockPanel.SOUTH);
         setCellHeight(footerHolder, "1px");
 
-        mainHolder.add(new NavigItem(new Resident.Dashboard(), PortalImages.INSTANCE.dashboardMenu(), ThemeColor.contrast1));
+        mainHolder.add(new NavigItem(new ResidentPortalSiteMap.Dashboard(), PortalImages.INSTANCE.dashboardMenu(), ThemeColor.contrast1));
 
-        mainHolder.add(new NavigItem(new Resident.Financial(), PortalImages.INSTANCE.billingMenu(), ThemeColor.contrast4));
+        mainHolder.add(new NavigItem(new ResidentPortalSiteMap.Financial(), PortalImages.INSTANCE.billingMenu(), ThemeColor.contrast4));
 
-        mainHolder.add(new NavigItem(new Resident.Maintenance(), PortalImages.INSTANCE.maintenanceMenu(), ThemeColor.contrast5));
+        mainHolder.add(new NavigItem(new ResidentPortalSiteMap.Maintenance(), PortalImages.INSTANCE.maintenanceMenu(), ThemeColor.contrast5));
         if (VistaTODO.ENABLE_COMMUNCATION_CENTER) {
-            mainHolder.add(new NavigItem(new Resident.CommunicationCenter(), PortalImages.INSTANCE.dashboardMenu(), ThemeColor.contrast6));
+            mainHolder.add(new NavigItem(new ResidentPortalSiteMap.CommunicationCenter(), PortalImages.INSTANCE.dashboardMenu(), ThemeColor.contrast6));
         }
 
         if (VistaFeatures.instance().countryOfOperation() == CountryOfOperation.Canada) {
-            mainHolder.add(new NavigItem(new Resident.ResidentServices(), PortalImages.INSTANCE.residentServicesMenu(), ThemeColor.contrast3));
+            mainHolder.add(new NavigItem(new ResidentPortalSiteMap.ResidentServices(), PortalImages.INSTANCE.residentServicesMenu(), ThemeColor.contrast3));
         }
 
-        mainHolder.add(new NavigItem(new Resident.Offers(), PortalImages.INSTANCE.offersMenu(), ThemeColor.contrast6));
+        mainHolder.add(new NavigItem(new ResidentPortalSiteMap.Offers(), PortalImages.INSTANCE.offersMenu(), ThemeColor.contrast6));
 
 //TODO Move to Toolbar        
 //        if (SecurityController.checkBehavior(VistaCustomerBehavior.HasMultipleLeases)) {
 //            mainHolder.add(new NavigItem(new PortalSiteMap.LeaseContextSelection(), PortalImages.INSTANCE.dashboardMenu(), ThemeColor.contrast5));
 //        }
 
-        footerHolder.add(new NavigItem(new Resident.Profile(), PortalImages.INSTANCE.profileMenu(), ThemeColor.background));
-        footerHolder.add(new NavigItem(new PortalSiteMap.Resident.Account(), PortalImages.INSTANCE.accountMenu(), ThemeColor.background));
+        footerHolder.add(new NavigItem(new ResidentPortalSiteMap.Profile(), PortalImages.INSTANCE.profileMenu(), ThemeColor.background));
+        footerHolder.add(new NavigItem(new ResidentPortalSiteMap.Account(), PortalImages.INSTANCE.accountMenu(), ThemeColor.background));
 
         footerHolder.add(new NavigItem(new Command() {
 

@@ -68,7 +68,7 @@ import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
 import com.propertyvista.domain.tenant.lease.LeaseTermTenant;
 import com.propertyvista.operations.rpc.OperationsSiteMap;
-import com.propertyvista.portal.rpc.portal.PortalSiteMap;
+import com.propertyvista.portal.rpc.portal.ResidentPortalSiteMap;
 
 public class MessageTemplates {
 
@@ -720,7 +720,7 @@ public class MessageTemplates {
             body = body.replace("${cancellationDate}", dateFormat.format(cancellationDate));
             body = body.replace("${gracePeriodEndDate}", dateFormat.format(gracePeriodEndDate));
             body = body.replace("${paymentMethodLink}", AppPlaceInfo.absoluteUrl(VistaDeployment.getBaseApplicationURL(VistaApplication.resident, true), true,
-                    PortalSiteMap.Resident.ResidentServices.TenantInsurance.TenantSure.TenantSurePage.UpdateCreditCard.class));
+                    ResidentPortalSiteMap.ResidentServices.TenantInsurance.TenantSure.TenantSurePage.UpdateCreditCard.class));
             // TODO i18n body
             template.content().setValue(wrapTenantSureHtml(body));
 

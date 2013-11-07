@@ -29,7 +29,7 @@ import com.pyx4j.widgets.client.actionbar.Toolbar;
 
 import com.propertyvista.portal.resident.ui.AbstractGadget;
 import com.propertyvista.portal.resident.ui.util.decorators.FormWidgetDecoratorBuilder;
-import com.propertyvista.portal.rpc.portal.PortalSiteMap;
+import com.propertyvista.portal.rpc.portal.ResidentPortalSiteMap;
 import com.propertyvista.portal.rpc.portal.web.dto.financial.BillingSummaryDTO;
 import com.propertyvista.portal.shared.resources.PortalImages;
 import com.propertyvista.shared.config.VistaFeatures;
@@ -89,7 +89,7 @@ public class BillingSummaryGadget extends AbstractGadget<MainDashboardViewImpl> 
 
                     @Override
                     public void execute() {
-                        AppSite.getPlaceController().goTo(new PortalSiteMap.Resident.Financial.BillingHistory.BillView());
+                        AppSite.getPlaceController().goTo(new ResidentPortalSiteMap.Financial.BillingHistory.BillView());
                     }
                 });
                 add(viewBillAnchor);

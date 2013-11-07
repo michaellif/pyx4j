@@ -30,20 +30,19 @@ import com.propertyvista.common.client.ui.components.login.LoginView.DevLoginCre
 import com.propertyvista.domain.DemoData.UserType;
 import com.propertyvista.portal.resident.ResidentPortalSite;
 import com.propertyvista.portal.resident.ui.landing.LandingView;
-import com.propertyvista.portal.rpc.portal.PortalSiteMap;
-import com.propertyvista.portal.rpc.portal.PortalSiteMap.PortalTerms;
+import com.propertyvista.portal.rpc.portal.ResidentPortalSiteMap;
 import com.propertyvista.portal.rpc.portal.web.services.PortalAuthenticationService;
 
 public class LandingActivity extends AbstractLoginActivty implements LandingView.LandingPresenter {
 
     public LandingActivity(Place place) {
         super(place, ResidentPortalSite.getViewFactory().instantiate(LandingView.class), GWT.<AuthenticationService> create(PortalAuthenticationService.class),
-                new PortalSiteMap.PasswordResetRequest());
+                new ResidentPortalSiteMap.PasswordResetRequest());
     }
 
     @Override
     public void signUp() {
-        AppSite.getPlaceController().goTo(new PortalSiteMap.Registration());
+        AppSite.getPlaceController().goTo(new ResidentPortalSiteMap.Registration());
     }
 
     @Override
@@ -60,6 +59,6 @@ public class LandingActivity extends AbstractLoginActivty implements LandingView
 
     @Override
     public final Class<? extends Place> getPortalTermsPlace() {
-        return PortalTerms.TermsAndConditions.class;
+        return ResidentPortalSiteMap.TermsAndConditions.class;
     }
 }

@@ -23,7 +23,7 @@ import com.pyx4j.site.rpc.AppPlace;
 import com.propertyvista.domain.contact.AddressSimple;
 import com.propertyvista.portal.resident.activity.AbstractWizardCrudActivity;
 import com.propertyvista.portal.resident.ui.services.insurance.TenantSureOrderWizardView;
-import com.propertyvista.portal.rpc.portal.PortalSiteMap;
+import com.propertyvista.portal.rpc.portal.ResidentPortalSiteMap;
 import com.propertyvista.portal.rpc.portal.web.dto.insurance.TenantSureCoverageDTO;
 import com.propertyvista.portal.rpc.portal.web.dto.insurance.TenantSureInsurancePolicyDTO;
 import com.propertyvista.portal.rpc.portal.web.dto.insurance.TenantSureQuoteDTO;
@@ -39,7 +39,7 @@ public class TenantSureOrderWizardActivity extends AbstractWizardCrudActivity<Te
 
     @Override
     protected void onFinish(Key result) {
-        AppSite.getPlaceController().goTo(new PortalSiteMap.Resident.ResidentServices.TenantInsurance.TenantSure.TenantSureWizardConfirmation());
+        AppSite.getPlaceController().goTo(new ResidentPortalSiteMap.ResidentServices.TenantInsurance.TenantSure.TenantSureWizardConfirmation());
     }
 
     @Override

@@ -33,6 +33,7 @@ import com.propertyvista.domain.security.VistaCustomerBehavior;
 import com.propertyvista.portal.resident.ResidentPortalSite;
 import com.propertyvista.portal.resident.ui.ToolbarView;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap;
+import com.propertyvista.portal.rpc.portal.ResidentPortalSiteMap;
 import com.propertyvista.shared.i18n.CompiledLocale;
 
 public class ToolbarActivity extends AbstractActivity implements ToolbarView.ToolbarPresenter {
@@ -95,12 +96,12 @@ public class ToolbarActivity extends AbstractActivity implements ToolbarView.Too
 
     @Override
     public void showAccount() {
-        AppSite.getPlaceController().goTo(new PortalSiteMap.Resident.Account());
+        AppSite.getPlaceController().goTo(new ResidentPortalSiteMap.Account());
     }
 
     @Override
     public void showProfile() {
-        AppSite.getPlaceController().goTo(new PortalSiteMap.Resident.Profile());
+        AppSite.getPlaceController().goTo(new ResidentPortalSiteMap.Profile());
     }
 
     private void obtainAvailableLocales() {
@@ -114,6 +115,6 @@ public class ToolbarActivity extends AbstractActivity implements ToolbarView.Too
 
     @Override
     public void showLeases() {
-        AppSite.getPlaceController().goTo(new PortalSiteMap.LeaseContextSelection());
+        AppSite.getPlaceController().goTo(new ResidentPortalSiteMap.LeaseContextSelection());
     }
 }
