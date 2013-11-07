@@ -233,6 +233,6 @@ public class InfoViewForm extends CEntityDecoratableForm<TenantInfoDTO> {
     }
 
     private WidgetDecorator decorateLegalQuestion(CComponent<?> comp) {
-        return new FormDecoratorBuilder(comp, 60, 10, FormDecoratorBuilder.CONTENT_WIDTH).labelAlignment(Alignment.left).useLabelSemicolon(false).build();
+        return new FormDecoratorBuilder(comp, 60, 10, 20).labelAlignment(Alignment.left).useLabelSemicolon(false).build();
     }
 }

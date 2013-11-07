@@ -33,7 +33,7 @@ public interface LeaseApprovalDTO extends IEntity {
     @I18n
     public enum SuggestedDecision {
 
-        @Translate("Can not be calulated - Credit Check is missing or obsolete for one or more person")
+        @Translate("Can not be calculated - Credit Check is missing or obsolete for one or more person")
         RunCreditCheck,
 
         Approve,

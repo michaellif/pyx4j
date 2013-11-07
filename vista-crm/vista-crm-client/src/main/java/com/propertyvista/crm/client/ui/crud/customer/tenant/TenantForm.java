@@ -62,6 +62,8 @@ public class TenantForm extends LeaseParticipantForm<TenantDTO> {
 
     private final Tab paymentMethodsTab, autoPaymentsTab, insuranceTab;
 
+    private boolean financialVisibility;
+
     public TenantForm(IForm<TenantDTO> view) {
         super(TenantDTO.class, view);
 
@@ -76,7 +78,7 @@ public class TenantForm extends LeaseParticipantForm<TenantDTO> {
     protected void onValueSet(boolean populate) {
         super.onValueSet(populate);
 
-        boolean financialVisibility = (getValue().lease().status().getValue().isCurrent() /* && getValue().role().getValue() != Role.Dependent */);
+        financialVisibility = (getValue().lease().status().getValue().isCurrent() /* && getValue().role().getValue() != Role.Dependent */);
 
         setTabVisible(paymentMethodsTab, financialVisibility);
         setTabVisible(autoPaymentsTab, financialVisibility);
