@@ -52,12 +52,12 @@ import com.propertyvista.crm.client.ui.reports.autopayreviewer.AutoPayReviewView
 import com.propertyvista.crm.client.ui.reports.autopayreviewer.PapReviewCaptionViewer;
 import com.propertyvista.crm.client.ui.reports.autopayreviewer.PapReviewFolder;
 import com.propertyvista.crm.client.ui.reports.autopayreviewer.PapReviewsHolderForm;
+import com.propertyvista.crm.client.ui.tools.common.BulkEditableEntityForm;
+import com.propertyvista.crm.client.ui.tools.common.BulkOperationToolViewImpl;
+import com.propertyvista.crm.client.ui.tools.common.ItemsHolderForm;
 import com.propertyvista.crm.client.ui.tools.n4generation.LegalNoticeCandidateFolderHolderForm;
 import com.propertyvista.crm.client.ui.tools.n4generation.LegalNoticeCandidateForm;
 import com.propertyvista.crm.client.ui.tools.n4generation.N4GenerationToolViewImpl;
-import com.propertyvista.crm.client.ui.tools.n4generation.base.BulkEditableEntityForm;
-import com.propertyvista.crm.client.ui.tools.n4generation.base.BulkOperationToolViewImpl;
-import com.propertyvista.crm.client.ui.tools.n4generation.base.ItemsHolderForm;
 import com.propertyvista.crm.client.ui.wizard.creditcheck.components.CreditCheckReportTypeSelector;
 
 public class CrmTheme extends VistaTheme {

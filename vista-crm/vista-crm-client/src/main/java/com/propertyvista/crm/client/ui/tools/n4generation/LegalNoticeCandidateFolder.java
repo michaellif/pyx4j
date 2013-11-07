@@ -16,7 +16,7 @@ package com.propertyvista.crm.client.ui.tools.n4generation;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.forms.client.ui.CComponent;
 
-import com.propertyvista.crm.client.ui.tools.n4generation.base.BulkItemsFolder;
+import com.propertyvista.crm.client.ui.tools.common.BulkItemsFolder;
 import com.propertyvista.crm.rpc.dto.legal.n4.LegalNoticeCandidateDTO;
 
 public class LegalNoticeCandidateFolder extends BulkItemsFolder<LegalNoticeCandidateDTO> {

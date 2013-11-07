@@ -31,7 +31,7 @@ import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.site.rpc.AppPlace;
 
-import com.propertyvista.crm.client.ui.tools.n4generation.base.BulkOperationToolView;
+import com.propertyvista.crm.client.ui.tools.common.BulkOperationToolView;
 import com.propertyvista.crm.rpc.dto.financial.autopayreview.BulkEditableEntity;
 import com.propertyvista.crm.rpc.services.legal.AbstractBulkOperationService;
 

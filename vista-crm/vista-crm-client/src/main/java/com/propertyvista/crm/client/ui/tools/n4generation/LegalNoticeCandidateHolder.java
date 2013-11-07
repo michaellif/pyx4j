@@ -15,7 +15,7 @@ package com.propertyvista.crm.client.ui.tools.n4generation;
 
 import com.pyx4j.entity.annotations.Transient;
 
-import com.propertyvista.crm.client.ui.tools.n4generation.base.BulkItemsHolder;
+import com.propertyvista.crm.client.ui.tools.common.BulkItemsHolder;
 import com.propertyvista.crm.rpc.dto.legal.n4.LegalNoticeCandidateDTO;
 
 @Transient

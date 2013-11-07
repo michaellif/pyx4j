@@ -20,7 +20,7 @@ import com.pyx4j.commons.css.IStyleName;
 import com.pyx4j.forms.client.ui.CLabel;
 
 import com.propertyvista.crm.client.ui.reports.autopayreviewer.MiniDecorator;
-import com.propertyvista.crm.client.ui.tools.n4generation.base.BulkEditableEntityForm;
+import com.propertyvista.crm.client.ui.tools.common.BulkEditableEntityForm;
 import com.propertyvista.crm.rpc.dto.legal.n4.LegalNoticeCandidateDTO;
 
 public class LegalNoticeCandidateForm extends BulkEditableEntityForm<LegalNoticeCandidateDTO> {

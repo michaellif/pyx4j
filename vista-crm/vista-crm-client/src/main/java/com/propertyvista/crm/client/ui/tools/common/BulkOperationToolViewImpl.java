@@ -11,7 +11,7 @@
  * @author ArtyomB
  * @version $Id$
  */
-package com.propertyvista.crm.client.ui.tools.n4generation.base;
+package com.propertyvista.crm.client.ui.tools.common;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -160,7 +160,7 @@ public abstract class BulkOperationToolViewImpl<Settings extends IEntity, Item e
     }
 
     @Override
-    public com.propertyvista.crm.client.ui.tools.n4generation.base.BulkOperationToolView.Presenter getPresenter() {
+    public com.propertyvista.crm.client.ui.tools.common.BulkOperationToolView.Presenter getPresenter() {
         return presenter;
     }
 
