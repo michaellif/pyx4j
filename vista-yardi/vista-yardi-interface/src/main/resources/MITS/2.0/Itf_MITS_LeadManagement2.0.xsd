@@ -1,0 +1,635 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="http://yardi.com/LeadManagement2.0" xmlns:MITS="http://my-company.com/namespace" targetNamespace="http://yardi.com/LeadManagement2.0" xmlns:CustomMITS="http://my-company.com/namespaceCustom" elementFormDefault="qualified" attributeFormDefault="unqualified">
+	<xs:import namespace="http://my-company.com/namespace" schemaLocation="./Itf_MITS_CoreData2.0.xsd"/>
+	<xs:include schemaLocation="./Itf_MITS_CustomExtension.xsd"/>
+	<xs:element name="LeadManagement">
+		<xs:annotation>
+			<xs:documentation>MITS Lead Management Final draft version 2.0e 07/31/07 </xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="Prospects">
+					<xs:annotation>
+						<xs:documentation>A collection of Prospects</xs:documentation>
+					</xs:annotation>
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element name="Prospect" maxOccurs="unbounded">
+								<xs:annotation>
+									<xs:documentation>A Unique Prospect</xs:documentation>
+								</xs:annotation>
+								<xs:complexType>
+									<xs:sequence>
+										<xs:element name="TransactionData">
+											<xs:complexType>
+												<xs:complexContent>
+													<xs:extension base="IdentificationType">
+														<xs:sequence>
+															<xs:element name="OriginatingLeadSource" minOccurs="0">
+																<xs:annotation>
+																	<xs:documentation>This is the Originating Lead Source, i.e. where did this Lead come from originally.  It is optional because this may not always be known.</xs:documentation>
+																</xs:annotation>
+															</xs:element>
+															<xs:element name="OriginatingLeadChannel" minOccurs="0">
+																<xs:annotation>
+																	<xs:documentation>Type of lead</xs:documentation>
+																</xs:annotation>
+																<xs:simpleType>
+																	<xs:restriction base="xs:string">
+																		<xs:maxLength value="64"/>
+																		<xs:enumeration value="Other"/>
+																		<xs:enumeration value="WalkIn"/>
+																		<xs:enumeration value="Phone"/>
+																		<xs:enumeration value="Email"/>
+																		<xs:enumeration value="Fax"/>
+																		<xs:enumeration value="Letter"/>
+																		<xs:enumeration value="InSystem"/>
+																		<xs:enumeration value="Kiosk"/>
+																		<xs:enumeration value="Internet"/>
+																	</xs:restriction>
+																</xs:simpleType>
+															</xs:element>
+															<xs:element name="TransactionSourceName" type="xs:string" minOccurs="0">
+																<xs:annotation>
+																	<xs:documentation>This is the name of the company sending the transaction.  This is NOT the name of the originating lead source.</xs:documentation>
+																</xs:annotation>
+															</xs:element>
+														</xs:sequence>
+													</xs:extension>
+												</xs:complexContent>
+											</xs:complexType>
+										</xs:element>
+										<xs:element name="LastUpdateDate" type="xs:dateTime" minOccurs="0"/>
+										<xs:element name="Customers" type="MITS:CustomersType" minOccurs="0">
+											<xs:annotation>
+												<xs:documentation>MITS Customers Core Data module version 2.0</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+										<xs:element name="CustomerPreferences" minOccurs="0">
+											<xs:complexType>
+												<xs:sequence>
+													<xs:element name="TargetMoveInDate" type="xs:date" minOccurs="0">
+														<xs:annotation>
+															<xs:documentation>Target move in date, not the actual on-site rental date, but a desired time frame</xs:documentation>
+														</xs:annotation>
+													</xs:element>
+													<xs:element name="DesiredFloorplan" type="xs:string" minOccurs="0"/>
+													<xs:element name="DesiredUnit" type="MITS:UnitType" minOccurs="0" maxOccurs="unbounded">
+														<xs:annotation>
+															<xs:documentation>Desired unit to rent</xs:documentation>
+														</xs:annotation>
+													</xs:element>
+													<xs:element name="DesiredRent" type="CurrencyRangeType" minOccurs="0">
+														<xs:annotation>
+															<xs:documentation>Desired rent range</xs:documentation>
+														</xs:annotation>
+													</xs:element>
+													<xs:element name="DesiredNumBedrooms" type="NumericRangeType" minOccurs="0">
+														<xs:annotation>
+															<xs:documentation>Desired Bedroom Count</xs:documentation>
+														</xs:annotation>
+													</xs:element>
+													<xs:element name="DesiredNumBathrooms" type="NumericRangeType" minOccurs="0">
+														<xs:annotation>
+															<xs:documentation>Desired Bathroom Count</xs:documentation>
+														</xs:annotation>
+													</xs:element>
+													<xs:element name="DesiredLeaseTerms" minOccurs="0">
+														<xs:simpleType>
+															<xs:restriction base="xs:string"/>
+														</xs:simpleType>
+													</xs:element>
+													<xs:element name="NumberOfOccupants" type="xs:integer" minOccurs="0"/>
+													<xs:element name="FloorLevelDesired" minOccurs="0">
+														<xs:simpleType>
+															<xs:restriction base="xs:string">
+																<xs:maxLength value="50"/>
+															</xs:restriction>
+														</xs:simpleType>
+													</xs:element>
+													<xs:element name="DesiredDeposit" type="CurrencyRangeType" minOccurs="0"/>
+													<xs:element name="Amenities" type="SpecificAmenityType" minOccurs="0">
+														<xs:annotation>
+															<xs:documentation>Details about various prospect amenities desires</xs:documentation>
+														</xs:annotation>
+													</xs:element>
+													<xs:element name="Pets" minOccurs="0" maxOccurs="unbounded">
+														<xs:annotation>
+															<xs:documentation>Details about various prospect pets</xs:documentation>
+														</xs:annotation>
+														<xs:complexType>
+															<xs:complexContent>
+																<xs:extension base="PetType"/>
+															</xs:complexContent>
+														</xs:complexType>
+													</xs:element>
+													<xs:element name="CustomerAdditionalPreferences" type="AdditionalPreference" minOccurs="0" maxOccurs="unbounded"/>
+													<xs:element name="Comment" minOccurs="0" maxOccurs="5">
+														<xs:simpleType>
+															<xs:restriction base="xs:string">
+																<xs:maxLength value="1000"/>
+															</xs:restriction>
+														</xs:simpleType>
+													</xs:element>
+												</xs:sequence>
+											</xs:complexType>
+										</xs:element>
+										<xs:element name="Events" minOccurs="0">
+											<xs:annotation>
+												<xs:documentation>Collection of events that have occured for this prospect</xs:documentation>
+											</xs:annotation>
+											<xs:complexType>
+												<xs:sequence>
+													<xs:element name="Event" type="EventType" maxOccurs="unbounded"/>
+												</xs:sequence>
+											</xs:complexType>
+										</xs:element>
+									</xs:sequence>
+								</xs:complexType>
+							</xs:element>
+						</xs:sequence>
+					</xs:complexType>
+				</xs:element>
+				<xs:element ref="CustomRecords" minOccurs="0" maxOccurs="unbounded"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:complexType name="EventType">
+		<xs:annotation>
+			<xs:documentation>EventType</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="EventID" type="IdentificationType" minOccurs="0"/>
+			<xs:element name="Agent" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Person(on-site or not) or process that primarily performed the said event</xs:documentation>
+				</xs:annotation>
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="AgentID" type="IdentificationType" minOccurs="0"/>
+						<xs:element name="AgentName" minOccurs="0">
+							<xs:complexType>
+								<xs:sequence>
+									<xs:element name="FirstName" minOccurs="0">
+										<xs:simpleType>
+											<xs:restriction base="xs:string">
+												<xs:maxLength value="50"/>
+											</xs:restriction>
+										</xs:simpleType>
+									</xs:element>
+									<xs:element name="MiddleName" minOccurs="0">
+										<xs:simpleType>
+											<xs:restriction base="xs:string">
+												<xs:maxLength value="50"/>
+											</xs:restriction>
+										</xs:simpleType>
+									</xs:element>
+									<xs:element name="LastName" minOccurs="0">
+										<xs:simpleType>
+											<xs:restriction base="xs:string">
+												<xs:maxLength value="50"/>
+											</xs:restriction>
+										</xs:simpleType>
+									</xs:element>
+									<xs:element name="NameSuffix" minOccurs="0">
+										<xs:simpleType>
+											<xs:restriction base="xs:string">
+												<xs:maxLength value="50"/>
+											</xs:restriction>
+										</xs:simpleType>
+									</xs:element>
+								</xs:sequence>
+							</xs:complexType>
+						</xs:element>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="EventReasons" type="xs:string" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Information about the event, such as reasons for failure to convert or reasons for leasing</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="FirstContact" type="xs:boolean" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>The first contcat node denotes if the containing event node is the originating contact that has created this lead</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="Comments" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Comments about the event as made by the agent</xs:documentation>
+				</xs:annotation>
+				<xs:simpleType>
+					<xs:restriction base="xs:string">
+						<xs:maxLength value="1000"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+			<xs:element name="CallData" type="CallData" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Information about a call specific action</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="EmailData" type="EmailData" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Information about a call specific action</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="Quotes" minOccurs="0">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="Quote" maxOccurs="unbounded">
+							<xs:annotation>
+								<xs:documentation>Quotes given to this event</xs:documentation>
+							</xs:annotation>
+							<xs:complexType>
+								<xs:sequence>
+									<xs:element name="QuoteDate" type="xs:dateTime" minOccurs="0">
+										<xs:annotation>
+											<xs:documentation>The date of the quote</xs:documentation>
+										</xs:annotation>
+									</xs:element>
+									<xs:element name="QuotedValidThruDate" type="xs:dateTime" minOccurs="0">
+										<xs:annotation>
+											<xs:documentation>The last day this quote is good for</xs:documentation>
+										</xs:annotation>
+									</xs:element>
+									<xs:element name="QuotedTerm" type="xs:string" minOccurs="0">
+										<xs:annotation>
+											<xs:documentation>The lease terms for this quote</xs:documentation>
+										</xs:annotation>
+									</xs:element>
+									<xs:element name="QuotedRent" type="CurrencyRangeType" minOccurs="0">
+										<xs:annotation>
+											<xs:documentation>The rent for this quote</xs:documentation>
+										</xs:annotation>
+									</xs:element>
+									<xs:element name="QuotedDeposit" type="CurrencyRangeType" minOccurs="0">
+										<xs:annotation>
+											<xs:documentation>Deposit required for this quote</xs:documentation>
+										</xs:annotation>
+									</xs:element>
+									<xs:element name="QuotedSpecials" minOccurs="0">
+										<xs:complexType>
+											<xs:sequence>
+												<xs:element name="QuotedSpecial" type="xs:string" maxOccurs="unbounded">
+													<xs:annotation>
+														<xs:documentation>Special information about this quote</xs:documentation>
+													</xs:annotation>
+												</xs:element>
+											</xs:sequence>
+										</xs:complexType>
+									</xs:element>
+								</xs:sequence>
+							</xs:complexType>
+						</xs:element>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+		</xs:sequence>
+		<xs:attribute name="EventType" type="EventTypes" use="required"/>
+		<xs:attribute name="EventDate" type="xs:dateTime" use="required"/>
+	</xs:complexType>
+	<xs:simpleType name="EventTypes">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="Application"/>
+			<xs:enumeration value="ApplicationDenied"/>
+			<xs:enumeration value="Appointment"/>
+			<xs:enumeration value="Approve"/>
+			<xs:enumeration value="Cancel"/>
+			<xs:enumeration value="CancelMoveIn"/>
+			<xs:enumeration value="CancelAppointment"/>
+			<xs:enumeration value="CancelApplication"/>
+			<xs:enumeration value="CancelNotice"/>
+			<xs:enumeration value="Contact"/>
+			<xs:enumeration value="EmailToProspect"/>
+			<xs:enumeration value="EmailFromILS"/>
+			<xs:enumeration value="EmailFromProspect"/>
+			<xs:enumeration value="FailCreditCheck"/>
+			<xs:enumeration value="LeaseSign"/>
+			<xs:enumeration value="MonthToMonth"/>
+			<xs:enumeration value="MoveIn"/>
+			<xs:enumeration value="MoveOut"/>
+			<xs:enumeration value="Notice"/>
+			<xs:enumeration value="CallToProspect"/>
+			<xs:enumeration value="CallFromProspect"/>
+			<xs:enumeration value="Renew"/>
+			<xs:enumeration value="Screen"/>
+			<xs:enumeration value="Show"/>
+			<xs:enumeration value="Transfer"/>
+			<xs:enumeration value="WalkIn"/>
+			<xs:enumeration value="Walk-In"/>
+			<xs:enumeration value="Other"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:complexType name="SpecificAmenityType">
+		<xs:annotation>
+			<xs:documentation>Amenities that belongs to unit or floorplan level 11/28/06</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="Description" minOccurs="0">
+				<xs:simpleType>
+					<xs:restriction base="xs:string">
+						<xs:maxLength value="50"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+			<xs:element name="Rank" minOccurs="0">
+				<xs:complexType>
+					<xs:simpleContent>
+						<xs:extension base="xs:integer"/>
+					</xs:simpleContent>
+				</xs:complexType>
+			</xs:element>
+		</xs:sequence>
+		<xs:attribute name="AmenityType" use="required">
+			<xs:simpleType>
+				<xs:restriction base="xs:string">
+					<xs:enumeration value="Other"/>
+					<xs:enumeration value="AdditionalStorage"/>
+					<xs:enumeration value="AirConditioner"/>
+					<xs:enumeration value="Alarm"/>
+					<xs:enumeration value="Balcony"/>
+					<xs:enumeration value="Cable"/>
+					<xs:enumeration value="Carport"/>
+					<xs:enumeration value="CeilingFan"/>
+					<xs:enumeration value="ControlledAccess"/>
+					<xs:enumeration value="Courtyard"/>
+					<xs:enumeration value="DishWasher"/>
+					<xs:enumeration value="Disposal"/>
+					<xs:enumeration value="Dryer"/>
+					<xs:enumeration value="Fireplace"/>
+					<xs:enumeration value="Furnished"/>
+					<xs:enumeration value="Garage"/>
+					<xs:enumeration value="Handrails"/>
+					<xs:enumeration value="Heat"/>
+					<xs:enumeration value="IndividualClimateControl"/>
+					<xs:enumeration value="LargeClosets"/>
+					<xs:enumeration value="Microwave"/>
+					<xs:enumeration value="Patio"/>
+					<xs:enumeration value="PrivateBalcony"/>
+					<xs:enumeration value="PrivatePatio"/>
+					<xs:enumeration value="Range"/>
+					<xs:enumeration value="Refrigerator"/>
+					<xs:enumeration value="Satellite"/>
+					<xs:enumeration value="Skylight"/>
+					<xs:enumeration value="View"/>
+					<xs:enumeration value="Washer"/>
+					<xs:enumeration value="WheelChair"/>
+					<xs:enumeration value="WD_Hookup"/>
+					<xs:enumeration value="WindowCoverings"/>
+					<xs:enumeration value="Other"/>
+				</xs:restriction>
+			</xs:simpleType>
+		</xs:attribute>
+		<xs:attribute name="SubType" use="optional">
+			<xs:simpleType>
+				<xs:restriction base="xs:string">
+					<xs:enumeration value="Central"/>
+					<xs:enumeration value="Window"/>
+					<xs:enumeration value="Wall"/>
+					<xs:enumeration value="Gas"/>
+					<xs:enumeration value="Gas or Electric"/>
+					<xs:enumeration value="Luxury"/>
+					<xs:enumeration value="Wood"/>
+					<xs:enumeration value="Electric"/>
+					<xs:enumeration value="Radiant"/>
+					<xs:enumeration value="Decorative"/>
+					<xs:enumeration value="Unspecified"/>
+				</xs:restriction>
+			</xs:simpleType>
+		</xs:attribute>
+	</xs:complexType>
+	<xs:complexType name="IdentificationType">
+		<xs:sequence>
+			<xs:element name="Identification" maxOccurs="unbounded">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="IDValue">
+							<xs:complexType>
+								<xs:simpleContent>
+									<xs:extension base="xs:string"/>
+								</xs:simpleContent>
+							</xs:complexType>
+						</xs:element>
+						<xs:element name="OrganizationName" type="xs:string" minOccurs="0"/>
+					</xs:sequence>
+					<xs:attribute name="IDType" use="required">
+						<xs:simpleType>
+							<xs:restriction base="xs:string">
+								<xs:enumeration value="building"/>
+								<xs:enumeration value="contact"/>
+								<xs:enumeration value="database"/>
+								<xs:enumeration value="event"/>
+								<xs:enumeration value="floorplan"/>
+								<xs:enumeration value="leasingagent"/>
+								<xs:enumeration value="marketingsource"/>
+								<xs:enumeration value="phase"/>
+								<xs:enumeration value="property"/>
+								<xs:enumeration value="prospect"/>
+								<xs:enumeration value="tenant"/>
+								<xs:enumeration value="unit"/>
+							</xs:restriction>
+						</xs:simpleType>
+					</xs:attribute>
+					<xs:attribute name="IDScopeType" use="required">
+						<xs:simpleType>
+							<xs:restriction base="xs:string">
+								<xs:enumeration value="sender"/>
+								<xs:enumeration value="recipient"/>
+								<xs:enumeration value="thirdparty"/>
+							</xs:restriction>
+						</xs:simpleType>
+					</xs:attribute>
+					<xs:attribute name="IDRank" use="required">
+						<xs:simpleType>
+							<xs:restriction base="xs:string">
+								<xs:enumeration value="primary"/>
+								<xs:enumeration value="secondary"/>
+								<xs:enumeration value="tertiary"/>
+								<xs:enumeration value="other"/>
+							</xs:restriction>
+						</xs:simpleType>
+					</xs:attribute>
+				</xs:complexType>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="CurrencyRangeType">
+		<xs:annotation>
+			<xs:documentation>A Range Of Currencies</xs:documentation>
+		</xs:annotation>
+		<xs:attribute name="Min">
+			<xs:annotation>
+				<xs:documentation>Minimum acceptable amount</xs:documentation>
+			</xs:annotation>
+			<xs:simpleType>
+				<xs:restriction base="xs:string">
+					<xs:pattern value="$\d+\.\d{2}"/>
+				</xs:restriction>
+			</xs:simpleType>
+		</xs:attribute>
+		<xs:attribute name="Max">
+			<xs:annotation>
+				<xs:documentation>Maximum acceptable amount</xs:documentation>
+			</xs:annotation>
+			<xs:simpleType>
+				<xs:restriction base="xs:string">
+					<xs:pattern value="$\d+\.\d{2}"/>
+				</xs:restriction>
+			</xs:simpleType>
+		</xs:attribute>
+		<xs:attribute name="Exact">
+			<xs:annotation>
+				<xs:documentation>Exact currency amount</xs:documentation>
+			</xs:annotation>
+			<xs:simpleType>
+				<xs:restriction base="xs:string">
+					<xs:pattern value="$\d+\.\d{2}"/>
+				</xs:restriction>
+			</xs:simpleType>
+		</xs:attribute>
+	</xs:complexType>
+	<xs:complexType name="NumericRangeType">
+		<xs:annotation>
+			<xs:documentation>Decimal number to two places</xs:documentation>
+		</xs:annotation>
+		<xs:attribute name="Min" type="xs:integer" use="optional"/>
+		<xs:attribute name="Max" type="xs:integer" use="optional"/>
+		<xs:attribute name="Exact" type="xs:integer" use="optional"/>
+	</xs:complexType>
+	<xs:complexType name="PetType">
+		<xs:annotation>
+			<xs:documentation>Pet</xs:documentation>
+		</xs:annotation>
+		<xs:attribute name="PetType" use="required">
+			<xs:simpleType>
+				<xs:restriction base="xs:string">
+					<xs:enumeration value="Dog"/>
+					<xs:enumeration value="Cat"/>
+					<xs:enumeration value="Bird"/>
+					<xs:enumeration value="Reptile"/>
+					<xs:enumeration value="Fish"/>
+					<xs:enumeration value="Other"/>
+				</xs:restriction>
+			</xs:simpleType>
+		</xs:attribute>
+		<xs:attribute name="Description" use="optional">
+			<xs:simpleType>
+				<xs:restriction base="xs:string">
+					<xs:maxLength value="50"/>
+				</xs:restriction>
+			</xs:simpleType>
+		</xs:attribute>
+		<xs:attribute name="Count" use="required">
+			<xs:simpleType>
+				<xs:restriction base="xs:integer"/>
+			</xs:simpleType>
+		</xs:attribute>
+		<xs:attribute name="Size" use="optional">
+			<xs:simpleType>
+				<xs:restriction base="xs:string">
+					<xs:enumeration value="Huge"/>
+					<xs:enumeration value="Large"/>
+					<xs:enumeration value="Medium"/>
+					<xs:enumeration value="Small"/>
+					<xs:enumeration value="Tiny"/>
+				</xs:restriction>
+			</xs:simpleType>
+		</xs:attribute>
+		<xs:attribute name="Weight" type="xs:string" use="optional"/>
+	</xs:complexType>
+	<xs:complexType name="CallData">
+		<xs:sequence>
+			<xs:element name="CallerId" type="IdentificationType" minOccurs="0"/>
+			<xs:element name="CallFrom" type="xs:string" minOccurs="0"/>
+			<xs:element name="CallThrough" type="xs:string" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>The number that is called </xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="RingThrough" type="xs:string" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>The number that rings on site</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="Duration" type="xs:string" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Length of the call</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="CallStatus" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Answered, Not Answerd, etc</xs:documentation>
+				</xs:annotation>
+				<xs:simpleType>
+					<xs:restriction base="xs:string">
+						<xs:enumeration value="Answer"/>
+						<xs:enumeration value="Busy"/>
+						<xs:enumeration value="Disconnect"/>
+						<xs:enumeration value="FailureToConnect"/>
+						<xs:enumeration value="NoAnswer"/>
+						<xs:enumeration value="Abandoned"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+			<xs:element name="AudioLink" type="xs:string" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>A link to the recorded conversation</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="CallTracker" type="xs:string" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>The name of the entity that has provided the tracking number</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="EmailData">
+		<xs:sequence>
+			<xs:element name="MessageId" type="xs:string" minOccurs="0"/>
+			<xs:element name="EmailDate" type="xs:dateTime" minOccurs="0"/>
+			<xs:element name="EmailAddresses">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="EmailAddress" maxOccurs="unbounded">
+							<xs:complexType>
+								<xs:attribute name="Scope">
+									<xs:simpleType>
+										<xs:restriction base="xs:string">
+											<xs:enumeration value="From"/>
+											<xs:enumeration value="To"/>
+											<xs:enumeration value="CC"/>
+											<xs:enumeration value="BCC"/>
+										</xs:restriction>
+									</xs:simpleType>
+								</xs:attribute>
+							</xs:complexType>
+						</xs:element>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="Subject" type="xs:string">
+				<xs:annotation>
+					<xs:documentation>The subject of the email</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="EmailBody" type="xs:string">
+				<xs:annotation>
+					<xs:documentation>The contents of the email</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="IsHTML" type="xs:boolean" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Boolean, was this email an HTML email</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="AdditionalPreference">
+		<xs:simpleContent>
+			<xs:extension base="xs:string">
+				<xs:attribute name="AdditionalPreferenceType" type="xs:string" use="required"/>
+			</xs:extension>
+		</xs:simpleContent>
+	</xs:complexType>
+</xs:schema>
