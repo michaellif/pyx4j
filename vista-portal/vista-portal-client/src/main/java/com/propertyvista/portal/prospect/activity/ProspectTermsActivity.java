@@ -7,35 +7,49 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on 2013-10-10
+ * Created on 2013-01-30
  * @author ArtyomB
  * @version $Id$
  */
-package com.propertyvista.portal.resident.activity.services.insurance;
+package com.propertyvista.portal.prospect.activity;
 
 import com.google.gwt.activity.shared.AbstractActivity;
+import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.shared.EventBus;
+import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
-import com.pyx4j.site.rpc.AppPlace;
+import com.pyx4j.rpc.client.DefaultAsyncCallback;
 
 import com.propertyvista.portal.resident.ResidentPortalSite;
-import com.propertyvista.portal.resident.resources.tenantsure.TenantSureResources;
+import com.propertyvista.portal.rpc.portal.ProspectPortalSiteMap;
+import com.propertyvista.portal.rpc.portal.services.PortalVistaTermsService;
 import com.propertyvista.portal.shared.ui.TermsView;
 
-public class TenantSureFaqActivity extends AbstractActivity {
+public class ProspectTermsActivity extends AbstractActivity {
 
     private final TermsView view;
 
-    public TenantSureFaqActivity(AppPlace place) {
+    private final Place place;
+
+    public ProspectTermsActivity(Place place) {
         view = ResidentPortalSite.getViewFactory().instantiate(TermsView.class);
+        this.place = place;
     }
 
     @Override
     public void start(final AcceptsOneWidget panel, EventBus eventBus) {
-        // TODO VISTA-3596: consider getting the FAQ text from server
-        view.populate(TenantSureResources.INSTANCE.faq().getText());
+
+        if (place instanceof ProspectPortalSiteMap.TermsAndConditions) {
+            GWT.<PortalVistaTermsService> create(PortalVistaTermsService.class).getResidentPortalTerms(new DefaultAsyncCallback<String>() {
+                @Override
+                public void onSuccess(String result) {
+                    view.populate(result);
+                    panel.setWidget(view);
+                }
+            });
+        }
+
         panel.setWidget(view);
     }
-
 }

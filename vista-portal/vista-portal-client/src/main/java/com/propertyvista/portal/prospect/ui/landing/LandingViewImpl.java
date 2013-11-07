@@ -34,7 +34,6 @@ import com.pyx4j.site.client.ui.layout.responsive.LayoutChangeHandler;
 import com.pyx4j.site.client.ui.layout.responsive.ResponsiveLayoutPanel.LayoutType;
 
 import com.propertyvista.common.client.ui.components.login.LoginView;
-import com.propertyvista.portal.shared.resources.PortalImages;
 import com.propertyvista.portal.shared.themes.DashboardTheme;
 
 public class LandingViewImpl extends FlowPanel implements LandingView {
@@ -51,9 +50,9 @@ public class LandingViewImpl extends FlowPanel implements LandingView {
 
         setStyleName(DashboardTheme.StyleName.LandingPage.name());
 
-        loginGadget = new LoginGadget(this);
-        loginGadget.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
-        loginGadget.getElement().getStyle().setVerticalAlign(VerticalAlign.MIDDLE);
+        signUpGadget = new SignUpGadget(this);
+        signUpGadget.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
+        signUpGadget.getElement().getStyle().setVerticalAlign(VerticalAlign.MIDDLE);
 
         HTML orLabel = new HTML("OR");
         orLabel.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
@@ -71,13 +70,13 @@ public class LandingViewImpl extends FlowPanel implements LandingView {
         orHolder.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
         orHolder.getElement().getStyle().setVerticalAlign(VerticalAlign.MIDDLE);
 
-        signUpGadget = new SignUpGadget(this);
-        signUpGadget.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
-        signUpGadget.getElement().getStyle().setVerticalAlign(VerticalAlign.MIDDLE);
+        loginGadget = new LoginGadget(this);
+        loginGadget.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
+        loginGadget.getElement().getStyle().setVerticalAlign(VerticalAlign.MIDDLE);
 
-        add(loginGadget);
-        add(orHolder);
         add(signUpGadget);
+        add(orHolder);
+        add(loginGadget);
 
         doLayout(LayoutType.getLayoutType(Window.getClientWidth()));
 
@@ -106,19 +105,6 @@ public class LandingViewImpl extends FlowPanel implements LandingView {
             loginGadget.asWidget().setWidth("46%");
             orHolder.asWidget().setWidth("8%");
             signUpGadget.asWidget().setWidth("46%");
-            break;
-        }
-
-        switch (layoutType) {
-        case phonePortrait:
-        case phoneLandscape:
-        case tabletLandscape:
-            signUpGadget.setImages(PortalImages.INSTANCE.safeAndSecureS(), PortalImages.INSTANCE.easyToUseS(), PortalImages.INSTANCE.manageRequestsS());
-            break;
-        case tabletPortrait:
-        case monitor:
-        case huge:
-            signUpGadget.setImages(PortalImages.INSTANCE.safeAndSecure(), PortalImages.INSTANCE.easyToUse(), PortalImages.INSTANCE.manageRequests());
             break;
         }
 

@@ -22,17 +22,17 @@ import com.google.gwt.user.client.ui.AcceptsOneWidget;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 
 import com.propertyvista.portal.resident.ResidentPortalSite;
-import com.propertyvista.portal.resident.ui.TermsView;
 import com.propertyvista.portal.rpc.portal.ResidentPortalSiteMap;
 import com.propertyvista.portal.rpc.portal.services.PortalVistaTermsService;
+import com.propertyvista.portal.shared.ui.TermsView;
 
-public class VistaTermsActivity extends AbstractActivity {
+public class ResidentTermsActivity extends AbstractActivity {
 
     private final TermsView view;
 
     private final Place place;
 
-    public VistaTermsActivity(Place place) {
+    public ResidentTermsActivity(Place place) {
         view = ResidentPortalSite.getViewFactory().instantiate(TermsView.class);
         this.place = place;
     }
@@ -41,7 +41,7 @@ public class VistaTermsActivity extends AbstractActivity {
     public void start(final AcceptsOneWidget panel, EventBus eventBus) {
 
         if (place instanceof ResidentPortalSiteMap.TermsAndConditions) {
-            GWT.<PortalVistaTermsService> create(PortalVistaTermsService.class).getPortalTerms(new DefaultAsyncCallback<String>() {
+            GWT.<PortalVistaTermsService> create(PortalVistaTermsService.class).getResidentPortalTerms(new DefaultAsyncCallback<String>() {
                 @Override
                 public void onSuccess(String result) {
                     view.populate(result);
@@ -49,7 +49,7 @@ public class VistaTermsActivity extends AbstractActivity {
                 }
             });
         } else if (place instanceof ResidentPortalSiteMap.BillingPolicy) {
-            GWT.<PortalVistaTermsService> create(PortalVistaTermsService.class).getPortalBillingPolicy(new DefaultAsyncCallback<String>() {
+            GWT.<PortalVistaTermsService> create(PortalVistaTermsService.class).getResidentPortalBillingPolicy(new DefaultAsyncCallback<String>() {
                 @Override
                 public void onSuccess(String result) {
                     view.populate(result);
@@ -57,7 +57,7 @@ public class VistaTermsActivity extends AbstractActivity {
                 }
             });
         } else if (place instanceof ResidentPortalSiteMap.CreditCardPolicy) {
-            GWT.<PortalVistaTermsService> create(PortalVistaTermsService.class).getPortalCcPolicy(new DefaultAsyncCallback<String>() {
+            GWT.<PortalVistaTermsService> create(PortalVistaTermsService.class).getResidentPortalCcPolicy(new DefaultAsyncCallback<String>() {
                 @Override
                 public void onSuccess(String result) {
                     view.populate(result);
@@ -65,7 +65,7 @@ public class VistaTermsActivity extends AbstractActivity {
                 }
             });
         } else if (place instanceof ResidentPortalSiteMap.PadPolicy) {
-            GWT.<PortalVistaTermsService> create(PortalVistaTermsService.class).getPortalPadPolicy(new DefaultAsyncCallback<String>() {
+            GWT.<PortalVistaTermsService> create(PortalVistaTermsService.class).getResidentPortalPadPolicy(new DefaultAsyncCallback<String>() {
                 @Override
                 public void onSuccess(String result) {
                     view.populate(result);

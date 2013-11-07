@@ -29,23 +29,29 @@ import com.propertyvista.server.jobs.TaskRunner;
 public class PortalVistaTermsServiceImpl implements PortalVistaTermsService {
 
     @Override
-    public void getPortalTerms(AsyncCallback<String> callback) {
+    public void getResidentPortalTerms(AsyncCallback<String> callback) {
         getVistaTerms(callback, VistaTerms.Target.Tenant);
     }
 
     @Override
-    public void getPortalBillingPolicy(AsyncCallback<String> callback) {
+    public void getResidentPortalBillingPolicy(AsyncCallback<String> callback) {
         getVistaTerms(callback, VistaTerms.Target.TenantBilling);
     }
 
     @Override
-    public void getPortalCcPolicy(AsyncCallback<String> callback) {
+    public void getResidentPortalCcPolicy(AsyncCallback<String> callback) {
         getVistaTerms(callback, VistaTerms.Target.TenantPaymentPad);
     }
 
     @Override
-    public void getPortalPadPolicy(AsyncCallback<String> callback) {
+    public void getResidentPortalPadPolicy(AsyncCallback<String> callback) {
         getVistaTerms(callback, VistaTerms.Target.TenantPaymentCreditCard);
+    }
+
+    @Override
+    public void getProspectPortalTerms(AsyncCallback<String> callback) {
+        //TODO implement Prospect Terms
+        getVistaTerms(callback, VistaTerms.Target.Prospect);
     }
 
     private void getVistaTerms(AsyncCallback<String> callback, final VistaTerms.Target target) {

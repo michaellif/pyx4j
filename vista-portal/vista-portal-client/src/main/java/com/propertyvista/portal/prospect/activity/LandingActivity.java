@@ -31,7 +31,6 @@ import com.propertyvista.domain.DemoData.UserType;
 import com.propertyvista.portal.prospect.ui.landing.LandingView;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap;
 import com.propertyvista.portal.rpc.portal.ProspectPortalSiteMap;
-import com.propertyvista.portal.rpc.portal.ResidentPortalSiteMap;
 import com.propertyvista.portal.rpc.portal.web.services.PortalAuthenticationService;
 import com.propertyvista.portal.shared.PortalSite;
 
@@ -48,7 +47,7 @@ public class LandingActivity extends AbstractLoginActivty implements LandingView
     }
 
     @Override
-    public void showVistaTerms() {
+    public void showProspectTerms() {
         Window.open(AppPlaceInfo.absoluteUrl(NavigationUri.getHostPageURL(), false, getPortalTermsPlace()), "_blank", null);
     }
 
@@ -61,6 +60,6 @@ public class LandingActivity extends AbstractLoginActivty implements LandingView
 
     @Override
     public final Class<? extends Place> getPortalTermsPlace() {
-        return ResidentPortalSiteMap.TermsAndConditions.class;
+        return ProspectPortalSiteMap.TermsAndConditions.class;
     }
 }

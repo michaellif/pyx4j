@@ -19,6 +19,9 @@ import com.pyx4j.site.shared.meta.PublicPlace;
 
 public class ProspectPortalSiteMap extends PortalSiteMap {
 
+    public static class TermsAndConditions extends AppPlace implements PublicPlace {
+    }
+
     @PlaceProperties(caption = "Prospect Registration")
     public static class Registration extends AppPlace implements PublicPlace {
     }

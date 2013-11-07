@@ -35,34 +35,18 @@ public class SignUpGadget extends AbstractGadget<LandingViewImpl> {
 
     private LandingPresenter presenter;
 
-    private final Image safeAndSecureImage;
-
-    private final Image easyToUseImage;
-
-    private final Image manageRequestsImage;
-
     SignUpGadget(LandingViewImpl view) {
-        super(view, null, i18n.tr("New Users"), ThemeColor.contrast3, 1);
+        super(view, null, i18n.tr("Apply Online"), ThemeColor.contrast3, 1);
         setActionsToolbar(new SignUpToolbar());
 
         FlowPanel contentPanel = new FlowPanel();
 
-        contentPanel.add(new HTML("Don't have an account yet?"));
+        contentPanel
+                .add(new HTML(
+                        "TODO!!!!!!! Introduction ‘welcome’ text goes here explaining the process. Highlight the fact that after creating an account, the user can log back in to continue later if they choose to. It’s also recommended to highlight the secure factor of this online (or in-office) application (vs. filling out paperwork)."));
 
         HorizontalPanel imagesPanel = new HorizontalPanel();
         imagesPanel.setWidth("100%");
-
-        safeAndSecureImage = new Image();
-        imagesPanel.add(safeAndSecureImage);
-        imagesPanel.setCellHorizontalAlignment(safeAndSecureImage, HorizontalPanel.ALIGN_CENTER);
-
-        easyToUseImage = new Image();
-        imagesPanel.add(easyToUseImage);
-        imagesPanel.setCellHorizontalAlignment(easyToUseImage, HorizontalPanel.ALIGN_CENTER);
-
-        manageRequestsImage = new Image();
-        imagesPanel.add(manageRequestsImage);
-        imagesPanel.setCellHorizontalAlignment(manageRequestsImage, HorizontalPanel.ALIGN_CENTER);
 
         contentPanel.add(imagesPanel);
 
@@ -73,19 +57,13 @@ public class SignUpGadget extends AbstractGadget<LandingViewImpl> {
         this.presenter = presenter;
     }
 
-    void setImages(ImageResource safeAndSecure, ImageResource easyToUse, ImageResource manageRequests) {
-        safeAndSecureImage.setResource(safeAndSecure);
-        easyToUseImage.setResource(easyToUse);
-        manageRequestsImage.setResource(manageRequests);
-    }
-
     class SignUpToolbar extends Toolbar {
 
         private final Button signUpButton;
 
         public SignUpToolbar() {
 
-            signUpButton = new Button(i18n.tr("SIGN UP"), new Command() {
+            signUpButton = new Button(i18n.tr("CREATE ACCOUNT"), new Command() {
                 @Override
                 public void execute() {
                     presenter.signUp();

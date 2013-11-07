@@ -23,7 +23,7 @@ public interface LandingView extends LoginView {
 
         void signUp();
 
-        void showVistaTerms();
+        void showProspectTerms();
 
         Class<? extends Place> getPortalTermsPlace();
 

@@ -46,7 +46,9 @@ public interface VistaTerms extends IVersionedEntity<VistaTermsV> {
 
         TenantPreAuthorizedPaymentsAgreement,
 
-        TenantSurePreAuthorizedPaymentsAgreement;
+        TenantSurePreAuthorizedPaymentsAgreement,
+
+        Prospect;
     }
 
     IPrimitive<Target> target();

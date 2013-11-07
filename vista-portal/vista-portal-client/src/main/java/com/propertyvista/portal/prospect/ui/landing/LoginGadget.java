@@ -76,7 +76,7 @@ public class LoginGadget extends AbstractGadget<LandingViewImpl> {
     private final Anchor termsAndConditionsAnchor;
 
     LoginGadget(final LandingViewImpl view) {
-        super(view, null, i18n.tr("Returning Users"), ThemeColor.contrast2, 1);
+        super(view, null, i18n.tr("Already Started an Application?"), ThemeColor.contrast2, 1);
 
         loginToolbar = new LoginToolbar();
 
@@ -96,14 +96,14 @@ public class LoginGadget extends AbstractGadget<LandingViewImpl> {
         termsPrefix.getElement().getStyle().setDisplay(Display.INLINE);
         loginTermsLinkPanel.add(termsPrefix);
 
-        termsAndConditionsAnchor = new Anchor(i18n.tr("RESIDENT PORTAL TERMS AND CONDITIONS"));
+        termsAndConditionsAnchor = new Anchor(i18n.tr("APPLICANT TERMS AND CONDITIONS"));
         termsAndConditionsAnchor.getElement().getStyle().setDisplay(Display.INLINE);
         termsAndConditionsAnchor.getElement().getStyle().setPadding(0, Unit.PX);
         termsAndConditionsAnchor.getElement().getStyle().setWhiteSpace(WhiteSpace.NORMAL);
         termsAndConditionsAnchor.addClickHandler(new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
-                presenter.showVistaTerms();
+                presenter.showProspectTerms();
                 DOM.eventPreventDefault((com.google.gwt.user.client.Event) event.getNativeEvent());
             }
         });

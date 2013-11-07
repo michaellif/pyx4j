@@ -25,7 +25,7 @@ import com.pyx4j.site.rpc.AppPlace;
 import com.propertyvista.portal.resident.activity.LandingActivity;
 import com.propertyvista.portal.resident.activity.LeaseContextSelectionActivity;
 import com.propertyvista.portal.resident.activity.SignUpActivity;
-import com.propertyvista.portal.resident.activity.VistaTermsActivity;
+import com.propertyvista.portal.resident.activity.ResidentTermsActivity;
 import com.propertyvista.portal.resident.activity.dashboard.MainDashboardActivity;
 import com.propertyvista.portal.resident.activity.financial.autopay.AutoPayActivity;
 import com.propertyvista.portal.resident.activity.financial.autopay.AutoPayConfirmationActivity;
@@ -180,7 +180,7 @@ public class ContentActivityMapper implements AppActivityMapper {
                             || place instanceof ResidentPortalSiteMap.CreditCardPolicy
                             || place instanceof ResidentPortalSiteMap.PadPolicy
                             || place instanceof ResidentPortalSiteMap.TermsAndConditions) {
-                        activity = new VistaTermsActivity(place);
+                        activity = new ResidentTermsActivity(place);
                  // @formatter:on
 
                     } else if (place instanceof ResidentPortalSiteMap.Offers) {
