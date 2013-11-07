@@ -181,7 +181,7 @@ public class VistaServerSideConfiguration extends AbstractVistaServerSideConfigu
             hostName = pmcDnsName + "-" + application.name();
         }
         String base = getApplicationDeploymentProtocol() + "://" + hostName + getApplicationURLNamespace(true);
-        if (isAppsContextlessDepoyment()) {
+        if (isAppsContextlessDepoyment() && (application != VistaApplication.prospect)) {
             return base;
         } else {
             return base + application.name();

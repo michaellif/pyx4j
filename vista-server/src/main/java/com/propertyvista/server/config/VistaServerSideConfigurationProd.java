@@ -66,7 +66,11 @@ public class VistaServerSideConfigurationProd extends VistaServerSideConfigurati
         default:
             hostName = pmcDnsName;
             if (VistaDeployment.isVistaStaging()) {
-                hostName += "-" + application.name();
+                if ((application == VistaApplication.prospect) || (application == VistaApplication.resident)) {
+                    hostName = pmcDnsName + "-" + "portal";
+                } else {
+                    hostName += "-" + application.name();
+                }
             }
         }
         if (VistaDeployment.isVistaStaging()) {
@@ -75,6 +79,7 @@ public class VistaServerSideConfigurationProd extends VistaServerSideConfigurati
         String base = protocol + "://" + hostName;
 
         String dnsName;
+        String path = "/";
         switch (application) {
         case crm:
             dnsName = ".propertyvista.com";
@@ -89,7 +94,8 @@ public class VistaServerSideConfigurationProd extends VistaServerSideConfigurati
             dnsName = ".my-community.co";
             break;
         case prospect:
-            dnsName = ".prospectportalsite.com";
+            dnsName = ".my-community.co";
+            path += application.name();
             break;
         case operations:
             if (VistaDeployment.isVistaProduction()) {
@@ -100,7 +106,7 @@ public class VistaServerSideConfigurationProd extends VistaServerSideConfigurati
         default:
             throw new IllegalArgumentException();
         }
-        return base + dnsName + dnsName + "/";
+        return base + dnsName + path;
     }
 
     @Override
