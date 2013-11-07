@@ -11,7 +11,7 @@
  * @author ArtyomB
  * @version $Id$
  */
-package com.propertyvista.crm.client.ui.reports.autopayreviewer;
+package com.propertyvista.crm.client.ui.tools.autopayreview;
 
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.forms.client.ui.CComponent;
@@ -19,7 +19,7 @@ import com.pyx4j.forms.client.ui.folder.IFolderItemDecorator;
 
 import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
 import com.propertyvista.common.client.ui.decorations.VistaBoxFolderItemDecorator;
-import com.propertyvista.crm.client.ui.reports.autopayreviewer.PapReviewFolder.Styles;
+import com.propertyvista.crm.client.ui.tools.autopayreview.PapReviewFolder.Styles;
 import com.propertyvista.crm.rpc.dto.financial.autopayreview.PapChargeReviewDTO;
 
 public final class PapChargesFolder extends VistaBoxFolder<PapChargeReviewDTO> {

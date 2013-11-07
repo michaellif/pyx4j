@@ -11,7 +11,7 @@
  * @author ArtyomB
  * @version $Id$
  */
-package com.propertyvista.crm.client.ui.reports.autopayreviewer;
+package com.propertyvista.crm.client.ui.tools.autopayreview;
 
 import java.math.BigDecimal;
 import java.math.MathContext;
@@ -28,7 +28,7 @@ import com.pyx4j.forms.client.ui.formatters.MoneyFormat;
 import com.pyx4j.forms.client.ui.formatters.PercentageFormat;
 
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
-import com.propertyvista.crm.client.ui.reports.autopayreviewer.PapReviewFolder.Styles;
+import com.propertyvista.crm.client.ui.tools.autopayreview.PapReviewFolder.Styles;
 import com.propertyvista.crm.rpc.dto.financial.autopayreview.PapChargeReviewDTO;
 import com.propertyvista.crm.rpc.dto.financial.autopayreview.PapChargeReviewDTO.ChangeType;
 

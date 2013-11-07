@@ -11,7 +11,7 @@
  * @author ArtyomB
  * @version $Id$
  */
-package com.propertyvista.crm.client.ui.reports.autopayreviewer;
+package com.propertyvista.crm.client.ui.tools.autopayreview;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -34,7 +34,7 @@ public class AutoPayReviewDataGridViewImpl extends AbstractPrimePane implements 
 
     private final AutoPayReviewDataGrid dataGrid;
 
-    private com.propertyvista.crm.client.ui.reports.autopayreviewer.AutoPayReviewView.Presenter presenter;
+    private com.propertyvista.crm.client.ui.tools.autopayreview.AutoPayReviewView.Presenter presenter;
 
     public AutoPayReviewDataGridViewImpl() {
         setSize("100%", "100%");
@@ -62,7 +62,7 @@ public class AutoPayReviewDataGridViewImpl extends AbstractPrimePane implements 
     }
 
     @Override
-    public void setPresenter(com.propertyvista.crm.client.ui.reports.autopayreviewer.AutoPayReviewView.Presenter presenter) {
+    public void setPresenter(com.propertyvista.crm.client.ui.tools.autopayreview.AutoPayReviewView.Presenter presenter) {
         this.presenter = presenter;
         this.presenter.onRangeChanged();
     }

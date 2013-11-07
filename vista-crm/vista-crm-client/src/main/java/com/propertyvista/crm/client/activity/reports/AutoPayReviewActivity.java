@@ -29,8 +29,8 @@ import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.site.rpc.AppPlace;
 
-import com.propertyvista.crm.client.ui.reports.autopayreviewer.AutoPayReviewView;
-import com.propertyvista.crm.client.ui.reports.autopayreviewer.AutoPayReviewViewImpl;
+import com.propertyvista.crm.client.ui.tools.autopayreview.AutoPayReviewView;
+import com.propertyvista.crm.client.ui.tools.autopayreview.AutoPayReviewViewImpl;
 import com.propertyvista.crm.rpc.dto.financial.autopayreview.PapChargeReviewDTO;
 import com.propertyvista.crm.rpc.dto.financial.autopayreview.PapReviewDTO;
 import com.propertyvista.crm.rpc.dto.financial.autopayreview.ReviewedAutopayAgreementDTO;

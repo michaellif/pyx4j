@@ -1,4 +1,4 @@
 /**
  * This package is an incubator for AutoPay Changes Reviewer component
  */
-package com.propertyvista.crm.client.ui.reports.autopayreviewer;
+package com.propertyvista.crm.client.ui.tools.autopayreview;

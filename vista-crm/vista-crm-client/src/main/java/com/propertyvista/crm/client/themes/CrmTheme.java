@@ -48,10 +48,10 @@ import com.propertyvista.crm.client.ui.gadgets.commonMk2.dashboard.AbstractDashb
 import com.propertyvista.crm.client.ui.gadgets.commonMk2.dashboard.AddGadgetDialog;
 import com.propertyvista.crm.client.ui.gadgets.forms.ArrearsGadgetSummaryForm;
 import com.propertyvista.crm.client.ui.reports.CommonReportStyles;
-import com.propertyvista.crm.client.ui.reports.autopayreviewer.AutoPayReviewViewImpl;
-import com.propertyvista.crm.client.ui.reports.autopayreviewer.PapReviewCaptionViewer;
-import com.propertyvista.crm.client.ui.reports.autopayreviewer.PapReviewFolder;
-import com.propertyvista.crm.client.ui.reports.autopayreviewer.PapReviewsHolderForm;
+import com.propertyvista.crm.client.ui.tools.autopayreview.AutoPayReviewViewImpl;
+import com.propertyvista.crm.client.ui.tools.autopayreview.PapReviewCaptionViewer;
+import com.propertyvista.crm.client.ui.tools.autopayreview.PapReviewFolder;
+import com.propertyvista.crm.client.ui.tools.autopayreview.PapReviewsHolderForm;
 import com.propertyvista.crm.client.ui.tools.common.BulkEditableEntityForm;
 import com.propertyvista.crm.client.ui.tools.common.BulkOperationToolViewImpl;
 import com.propertyvista.crm.client.ui.tools.common.ItemsHolderForm;
