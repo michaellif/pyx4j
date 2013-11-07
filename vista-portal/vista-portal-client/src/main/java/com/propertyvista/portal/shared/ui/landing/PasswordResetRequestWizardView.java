@@ -7,26 +7,22 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Jun 24, 2013
+ * Created on Oct 2, 2013
  * @author michaellif
  * @version $Id$
  */
-package com.propertyvista.portal.resident.mvp;
+package com.propertyvista.portal.shared.ui.landing;
 
-import com.google.gwt.activity.shared.Activity;
-import com.google.gwt.activity.shared.ActivityMapper;
-import com.google.gwt.place.shared.Place;
+import com.pyx4j.security.rpc.PasswordRetrievalRequest;
 
-import com.propertyvista.portal.shared.activity.NotificationHeaderActivity;
+import com.propertyvista.portal.shared.ui.IWizardView;
 
-public class NotificationActivityMapper implements ActivityMapper {
+public interface PasswordResetRequestWizardView extends IWizardView<PasswordRetrievalRequest> {
 
-    public NotificationActivityMapper() {
+    public interface PasswordResetRequestWizardPresenter extends IWizardPresenter<PasswordRetrievalRequest> {
+
     }
 
-    @Override
-    public Activity getActivity(Place place) {
-        return new NotificationHeaderActivity(place);
-    }
+    void createNewCaptchaChallenge();
 
 }

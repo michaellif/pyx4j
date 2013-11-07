@@ -11,22 +11,22 @@
  * @author michaellif
  * @version $Id$
  */
-package com.propertyvista.portal.resident.mvp;
+package com.propertyvista.portal.shared.ui;
 
-import com.google.gwt.activity.shared.Activity;
-import com.google.gwt.activity.shared.ActivityMapper;
-import com.google.gwt.place.shared.Place;
+import java.util.List;
 
-import com.propertyvista.portal.shared.activity.NotificationHeaderActivity;
+import com.pyx4j.site.client.IsView;
+import com.pyx4j.site.shared.domain.Notification;
 
-public class NotificationActivityMapper implements ActivityMapper {
+public interface NotificationHeaderView extends IsView {
 
-    public NotificationActivityMapper() {
+    public interface NotificationHeaderPresenter {
+
+        void acceptMessage(Notification notification);
+
     }
 
-    @Override
-    public Activity getActivity(Place place) {
-        return new NotificationHeaderActivity(place);
-    }
+    void setPresenter(NotificationHeaderPresenter presenter);
 
+    void populate(List<Notification> notifications);
 }

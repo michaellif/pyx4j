@@ -13,6 +13,7 @@
  */
 package com.propertyvista.portal.prospect.ui;
 
+import com.propertyvista.portal.prospect.mvp.ContentActivityMapper;
 import com.propertyvista.portal.shared.mvp.FooterActivityMapper;
 import com.propertyvista.portal.shared.mvp.HeaderActivityMapper;
 import com.propertyvista.portal.shared.ui.PortalRootPane;
@@ -23,6 +24,8 @@ public class ProspectPortalRootPane extends PortalRootPane {
         super();
 
         bind(new HeaderActivityMapper(), asWidget().getHeaderDisplay());
+
+        bind(new ContentActivityMapper(), asWidget().getContentDisplay());
 
         bind(new FooterActivityMapper(), asWidget().getFooterDisplay());
 

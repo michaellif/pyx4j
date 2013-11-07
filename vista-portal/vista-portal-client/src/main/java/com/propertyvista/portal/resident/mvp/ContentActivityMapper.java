@@ -22,8 +22,10 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.pyx4j.site.client.activity.AppActivityMapper;
 import com.pyx4j.site.rpc.AppPlace;
 
-import com.propertyvista.portal.resident.activity.NotificationPageActivity;
+import com.propertyvista.portal.resident.activity.LandingActivity;
+import com.propertyvista.portal.resident.activity.LeaseContextSelectionActivity;
 import com.propertyvista.portal.resident.activity.SignUpActivity;
+import com.propertyvista.portal.resident.activity.VistaTermsActivity;
 import com.propertyvista.portal.resident.activity.dashboard.MainDashboardActivity;
 import com.propertyvista.portal.resident.activity.financial.autopay.AutoPayActivity;
 import com.propertyvista.portal.resident.activity.financial.autopay.AutoPayConfirmationActivity;
@@ -37,20 +39,12 @@ import com.propertyvista.portal.resident.activity.financial.payment.PaymentWizar
 import com.propertyvista.portal.resident.activity.financial.paymentmethod.PaymentMethodConfirmationActivity;
 import com.propertyvista.portal.resident.activity.financial.paymentmethod.PaymentMethodViewActivity;
 import com.propertyvista.portal.resident.activity.financial.paymentmethod.PaymentMethodWizardActivity;
-import com.propertyvista.portal.resident.activity.login.LandingActivity;
-import com.propertyvista.portal.resident.activity.login.LeaseContextSelectionActivity;
-import com.propertyvista.portal.resident.activity.login.LoginWithTokenActivity;
-import com.propertyvista.portal.resident.activity.login.LogoutActivity;
-import com.propertyvista.portal.resident.activity.login.PasswordResetRequestWizardActivity;
-import com.propertyvista.portal.resident.activity.login.VistaTermsActivity;
 import com.propertyvista.portal.resident.activity.maintenance.MaintenanceDashboardActivity;
 import com.propertyvista.portal.resident.activity.maintenance.MaintenanceRequestPageActivity;
 import com.propertyvista.portal.resident.activity.maintenance.MaintenanceRequestWizardActivity;
 import com.propertyvista.portal.resident.activity.offers.dashboard.OffersDashboardActivity;
 import com.propertyvista.portal.resident.activity.profile.AccountPageActivity;
 import com.propertyvista.portal.resident.activity.profile.ProfilePageActivity;
-import com.propertyvista.portal.resident.activity.security.PasswordChangeActivity;
-import com.propertyvista.portal.resident.activity.security.PasswordResetActivity;
 import com.propertyvista.portal.resident.activity.services.dashboard.ServicesDashboardActivity;
 import com.propertyvista.portal.resident.activity.services.insurance.GeneralPolicyPageActivity;
 import com.propertyvista.portal.resident.activity.services.insurance.GeneralPolicyUploadWizardActivity;
@@ -71,6 +65,12 @@ import com.propertyvista.portal.rpc.portal.PortalSiteMap.PasswordResetRequest;
 import com.propertyvista.portal.rpc.portal.ResidentPortalSiteMap;
 import com.propertyvista.portal.rpc.portal.ResidentPortalSiteMap.LeaseContextSelection;
 import com.propertyvista.portal.rpc.portal.ResidentPortalSiteMap.Registration;
+import com.propertyvista.portal.shared.activity.NotificationPageActivity;
+import com.propertyvista.portal.shared.activity.login.LoginWithTokenActivity;
+import com.propertyvista.portal.shared.activity.login.LogoutActivity;
+import com.propertyvista.portal.shared.activity.login.PasswordResetRequestWizardActivity;
+import com.propertyvista.portal.shared.activity.security.PasswordChangeActivity;
+import com.propertyvista.portal.shared.activity.security.PasswordResetActivity;
 
 public class ContentActivityMapper implements AppActivityMapper {
 

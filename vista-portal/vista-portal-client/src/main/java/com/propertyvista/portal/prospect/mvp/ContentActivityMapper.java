@@ -1,0 +1,92 @@
+/*
+ * (C) Copyright Property Vista Software Inc. 2011- All Rights Reserved.
+ *
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
+ * you entered into with Property Vista Software Inc.
+ *
+ * This notice and attribution to Property Vista Software Inc. may not be removed.
+ *
+ * Created on Feb 1, 2011
+ * @author Misha
+ * @version $Id$
+ */
+package com.propertyvista.portal.prospect.mvp;
+
+import com.google.gwt.activity.shared.Activity;
+import com.google.gwt.core.client.GWT;
+import com.google.gwt.core.client.RunAsyncCallback;
+import com.google.gwt.place.shared.Place;
+import com.google.gwt.user.client.rpc.AsyncCallback;
+
+import com.pyx4j.site.client.activity.AppActivityMapper;
+import com.pyx4j.site.rpc.AppPlace;
+
+import com.propertyvista.portal.prospect.activity.DashboardActivity;
+import com.propertyvista.portal.prospect.activity.LandingActivity;
+import com.propertyvista.portal.prospect.activity.SignUpActivity;
+import com.propertyvista.portal.rpc.portal.PortalSiteMap.Login;
+import com.propertyvista.portal.rpc.portal.PortalSiteMap.LoginWithToken;
+import com.propertyvista.portal.rpc.portal.PortalSiteMap.Logout;
+import com.propertyvista.portal.rpc.portal.PortalSiteMap.NotificationPlace;
+import com.propertyvista.portal.rpc.portal.PortalSiteMap.PasswordChange;
+import com.propertyvista.portal.rpc.portal.PortalSiteMap.PasswordReset;
+import com.propertyvista.portal.rpc.portal.PortalSiteMap.PasswordResetRequest;
+import com.propertyvista.portal.rpc.portal.ProspectPortalSiteMap;
+import com.propertyvista.portal.rpc.portal.ProspectPortalSiteMap.Registration;
+import com.propertyvista.portal.shared.activity.NotificationPageActivity;
+import com.propertyvista.portal.shared.activity.login.LoginWithTokenActivity;
+import com.propertyvista.portal.shared.activity.login.LogoutActivity;
+import com.propertyvista.portal.shared.activity.login.PasswordResetRequestWizardActivity;
+import com.propertyvista.portal.shared.activity.security.PasswordChangeActivity;
+import com.propertyvista.portal.shared.activity.security.PasswordResetActivity;
+
+public class ContentActivityMapper implements AppActivityMapper {
+
+    public ContentActivityMapper() {
+    }
+
+    @Override
+    public void obtainActivity(final Place place, final AsyncCallback<Activity> callback) {
+        GWT.runAsync(new RunAsyncCallback() {
+
+            @Override
+            public void onSuccess() {
+                if (place instanceof AppPlace) {
+                    AppPlace appPlace = (AppPlace) place;
+
+                    Activity activity = null;
+                    if (appPlace instanceof ProspectPortalSiteMap.Dashboard) {
+                        activity = new DashboardActivity(appPlace);
+
+// Internals:
+                    } else if (place instanceof Login) {
+                        activity = new LandingActivity(place);
+                    } else if (place instanceof Logout) {
+                        activity = new LogoutActivity();
+                    } else if (place instanceof PasswordReset) {
+                        activity = new PasswordResetActivity(place);
+                    } else if (place instanceof LoginWithToken) {
+                        activity = new LoginWithTokenActivity(place);
+                    } else if (place instanceof PasswordResetRequest) {
+                        activity = new PasswordResetRequestWizardActivity(place);
+                    } else if (place instanceof PasswordChange) {
+                        activity = new PasswordChangeActivity();
+                    } else if (place instanceof Registration) {
+                        activity = new SignUpActivity(place);
+                    } else if (appPlace instanceof NotificationPlace) {
+                        activity = new NotificationPageActivity((NotificationPlace) place);
+
+                    }
+
+                    callback.onSuccess(activity);
+                }
+            }
+
+            @Override
+            public void onFailure(Throwable reason) {
+                callback.onFailure(reason);
+            }
+        });
+    }
+}

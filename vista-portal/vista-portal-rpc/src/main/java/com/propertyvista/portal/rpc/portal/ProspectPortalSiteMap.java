@@ -14,8 +14,14 @@
 package com.propertyvista.portal.rpc.portal;
 
 import com.pyx4j.site.rpc.AppPlace;
+import com.pyx4j.site.rpc.annotations.PlaceProperties;
+import com.pyx4j.site.shared.meta.PublicPlace;
 
 public class ProspectPortalSiteMap extends PortalSiteMap {
+
+    @PlaceProperties(caption = "Prospect Registration")
+    public static class Registration extends AppPlace implements PublicPlace {
+    }
 
     public static class Dashboard extends AppPlace {
     }

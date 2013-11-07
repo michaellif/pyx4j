@@ -7,26 +7,32 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Jun 24, 2013
- * @author michaellif
+ * Created on 2013-01-25
+ * @author ArtyomB
  * @version $Id$
  */
-package com.propertyvista.portal.resident.mvp;
+package com.propertyvista.portal.shared.ui.landing;
 
-import com.google.gwt.activity.shared.Activity;
-import com.google.gwt.activity.shared.ActivityMapper;
 import com.google.gwt.place.shared.Place;
 
-import com.propertyvista.portal.shared.activity.NotificationHeaderActivity;
+import com.propertyvista.common.client.ui.components.login.LoginView;
 
-public class NotificationActivityMapper implements ActivityMapper {
+public interface LandingView extends LoginView {
 
-    public NotificationActivityMapper() {
+    interface LandingPresenter extends LoginView.Presenter {
+
+        void signUp();
+
+        void showVistaTerms();
+
+        Class<? extends Place> getPortalTermsPlace();
+
     }
 
+    /**
+     * Resets the view, populates email and rememberMe fields and disables captcha.
+     */
     @Override
-    public Activity getActivity(Place place) {
-        return new NotificationHeaderActivity(place);
-    }
+    void reset(String email, boolean rememberUser);
 
 }
