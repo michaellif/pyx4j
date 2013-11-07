@@ -11,7 +11,7 @@
  * @author michaellif
  * @version $Id$
  */
-package com.propertyvista.portal.shared.ui.landing;
+package com.propertyvista.portal.prospect.ui.landing;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -58,8 +58,8 @@ import com.pyx4j.widgets.client.actionbar.Toolbar;
 import com.pyx4j.widgets.client.dialog.Dialog;
 
 import com.propertyvista.common.client.ui.components.login.LoginView.DevLoginCredentials;
+import com.propertyvista.portal.prospect.ui.landing.LandingView.LandingPresenter;
 import com.propertyvista.portal.shared.ui.AbstractGadget;
-import com.propertyvista.portal.shared.ui.landing.LandingView.LandingPresenter;
 import com.propertyvista.portal.shared.ui.util.decorators.CheckBoxDecorator;
 import com.propertyvista.portal.shared.ui.util.decorators.LoginWidgetDecoratorBuilder;
 

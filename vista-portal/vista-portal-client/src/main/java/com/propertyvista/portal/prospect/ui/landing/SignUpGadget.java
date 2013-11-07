@@ -11,7 +11,7 @@
  * @author michaellif
  * @version $Id$
  */
-package com.propertyvista.portal.shared.ui.landing;
+package com.propertyvista.portal.prospect.ui.landing;
 
 import com.google.gwt.resources.client.ImageResource;
 import com.google.gwt.user.client.Command;
@@ -26,8 +26,8 @@ import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.Button;
 import com.pyx4j.widgets.client.actionbar.Toolbar;
 
+import com.propertyvista.portal.prospect.ui.landing.LandingView.LandingPresenter;
 import com.propertyvista.portal.shared.ui.AbstractGadget;
-import com.propertyvista.portal.shared.ui.landing.LandingView.LandingPresenter;
 
 public class SignUpGadget extends AbstractGadget<LandingViewImpl> {
 

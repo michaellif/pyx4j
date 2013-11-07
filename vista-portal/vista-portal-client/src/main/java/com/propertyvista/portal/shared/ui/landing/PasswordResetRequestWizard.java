@@ -27,7 +27,7 @@ import com.propertyvista.portal.shared.ui.util.decorators.LoginWidgetDecoratorBu
 
 public class PasswordResetRequestWizard extends CPortalEntityWizard<PasswordRetrievalRequest> {
 
-    static final I18n i18n = I18n.get(LandingViewImpl.class);
+    static final I18n i18n = I18n.get(PasswordResetRequestWizard.class);
 
     PasswordResetRequestWizard(PasswordResetRequestWizardViewImpl view) {
         super(PasswordRetrievalRequest.class, view, i18n.tr("Reset Password"), i18n.tr("Submit"), ThemeColor.contrast3);
@@ -47,8 +47,7 @@ public class PasswordResetRequestWizard extends CPortalEntityWizard<PasswordRetr
         mainPanel.setWidget(++row, 0, message);
         mainPanel.setBR(++row, 0, 1);
         mainPanel.setWidget(++row, 0, new LoginWidgetDecoratorBuilder(inject(proto().email())).build());
-        mainPanel.setWidget(++row, 0, new LoginWidgetDecoratorBuilder(inject(proto().captcha()))
-                .watermark(LandingViewImpl.i18n.tr("Enter both security words above")).build());
+        mainPanel.setWidget(++row, 0, new LoginWidgetDecoratorBuilder(inject(proto().captcha())).watermark(i18n.tr("Enter both security words above")).build());
         mainPanel.setBR(++row, 0, 1);
 
         return mainPanel;

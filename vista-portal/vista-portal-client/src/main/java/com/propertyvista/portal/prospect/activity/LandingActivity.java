@@ -28,12 +28,12 @@ import com.pyx4j.site.rpc.AppPlaceInfo;
 import com.propertyvista.common.client.ui.components.login.AbstractLoginActivty;
 import com.propertyvista.common.client.ui.components.login.LoginView.DevLoginCredentials;
 import com.propertyvista.domain.DemoData.UserType;
+import com.propertyvista.portal.prospect.ui.landing.LandingView;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap;
 import com.propertyvista.portal.rpc.portal.ProspectPortalSiteMap;
 import com.propertyvista.portal.rpc.portal.ResidentPortalSiteMap;
 import com.propertyvista.portal.rpc.portal.web.services.PortalAuthenticationService;
 import com.propertyvista.portal.shared.PortalSite;
-import com.propertyvista.portal.shared.ui.landing.LandingView;
 
 public class LandingActivity extends AbstractLoginActivty implements LandingView.LandingPresenter {
 

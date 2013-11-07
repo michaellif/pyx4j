@@ -11,7 +11,7 @@
  * @author ArtyomB
  * @version $Id$
  */
-package com.propertyvista.portal.shared.ui.landing;
+package com.propertyvista.portal.prospect.ui.landing;
 
 import com.google.gwt.place.shared.Place;
 
