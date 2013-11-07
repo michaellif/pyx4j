@@ -43,7 +43,7 @@ public class PapReviewCaptionViewer extends CViewer<PapReviewCaptionDTO> {
         FlowPanel papCaptionPanel = new FlowPanel();
         papCaptionPanel.setStyleName(Styles.AutoPayReviewCaptionPanel.name());
         HTML caption = new HTML(//@formatter:off
-                i18n.tr("{0} {1} {2} {3,choice,null#|!null#(Expected Move Out: {3,date,short})}: {4} {5}. Due {6,date,short}",
+                i18n.tr("{0} {1} {2} {3,choice,null#|!null#(Expected Move Out: {3,date,MM/dd/yyyy})}: {4} {5}. Due {6,date,short}",
                         value.building().getValue(),
                         value.unit().getValue(),
                         value.lease().getValue(),
