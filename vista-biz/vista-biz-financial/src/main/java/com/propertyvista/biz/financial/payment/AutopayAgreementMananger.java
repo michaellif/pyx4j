@@ -392,7 +392,7 @@ class AutopayAgreementMananger {
                 }
 
                 for (final BillingAccount account : Persistence.service().query(criteria1)) {
-                    Persistence.service().retrieve(account.lease());
+                    Persistence.ensureRetrieve(account.lease(), AttachLevel.Attached);
                     try {
                         new UnitOfWork().execute(new Executable<Void, RuntimeException>() {
                             @Override
@@ -446,7 +446,10 @@ class AutopayAgreementMananger {
         }
     }
 
-    boolean isPreauthorizedPaymentsApplicableForBillingCycle(Lease lease, BillingCycle paymentCycle, AutoPayPolicy autoPayPolicy) {
+    static boolean isPreauthorizedPaymentsApplicableForBillingCycle(Lease lease, BillingCycle paymentCycle, AutoPayPolicy autoPayPolicy) {
+        if (lease.status().getValue().isFormer()) {
+            return false;
+        }
         // TODO: lease first month check:
         if (leaseFirstBillingPeriodChargePolicyCheck(lease, paymentCycle, autoPayPolicy)) {
             return false;
@@ -466,12 +469,12 @@ class AutopayAgreementMananger {
     // lease leaseXXXCheck(...) methods:
     // Note: do not synchronize it with criteria1 in updatePreauthorizedPayments(ExecutionMonitor executionMonitor, LogicalDate forDate) !!!   
 
-    private boolean leaseFirstBillingPeriodChargePolicyCheck(Lease lease, BillingCycle nextCycle, AutoPayPolicy autoPayPolicy) {
+    static private boolean leaseFirstBillingPeriodChargePolicyCheck(Lease lease, BillingCycle nextCycle, AutoPayPolicy autoPayPolicy) {
         // TODO Not implemented yet!..
         return false;
     }
 
-    private boolean leaseLastBillingPeriodChargePolicyCheck(Lease lease, BillingCycle suspensionCycle, AutoPayPolicy autoPayPolicy) {
+    static private boolean leaseLastBillingPeriodChargePolicyCheck(Lease lease, BillingCycle suspensionCycle, AutoPayPolicy autoPayPolicy) {
         if (autoPayPolicy.excludeLastBillingPeriodCharge().getValue(Boolean.TRUE)) {
             return (beforeOrEqual(lease.expectedMoveOut(), suspensionCycle.billingCycleEndDate()) || beforeOrEqual(lease.actualMoveOut(),
                     suspensionCycle.billingCycleEndDate()));
@@ -479,7 +482,7 @@ class AutopayAgreementMananger {
         return false;
     }
 
-    private boolean leaseEndDateCheck(Lease lease, BillingCycle suspensionCycle) {
+    static private boolean leaseEndDateCheck(Lease lease, BillingCycle suspensionCycle) {
         if (VistaFeatures.instance().yardiIntegration()) {
             return (before(lease.expectedMoveOut(), suspensionCycle.billingCycleStartDate()) || before(lease.actualMoveOut(),
                     suspensionCycle.billingCycleStartDate()));
@@ -489,14 +492,14 @@ class AutopayAgreementMananger {
         }
     }
 
-    private boolean before(IPrimitive<LogicalDate> one, IPrimitive<LogicalDate> two) {
+    static private boolean before(IPrimitive<LogicalDate> one, IPrimitive<LogicalDate> two) {
         if (!one.isNull() && !two.isNull()) {
             return one.getValue().before(two.getValue());
         }
         return false;
     }
 
-    private boolean beforeOrEqual(IPrimitive<LogicalDate> one, IPrimitive<LogicalDate> two) {
+    static private boolean beforeOrEqual(IPrimitive<LogicalDate> one, IPrimitive<LogicalDate> two) {
         if (!one.isNull() && !two.isNull()) {
             return !one.getValue().after(two.getValue());
         }
