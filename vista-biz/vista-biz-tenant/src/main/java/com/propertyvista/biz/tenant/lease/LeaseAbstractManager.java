@@ -240,10 +240,11 @@ public abstract class LeaseAbstractManager {
         leaseTerm.saveAction().setValue(SaveAction.saveAsFinal);
         leaseTerm = persist(leaseTerm);
 
-        // update lease deposits if current term:
+        // update lease deposits/unit rent if current term:
         Persistence.ensureRetrieve(leaseTerm.lease(), AttachLevel.Attached);
         if (leaseTerm.equals(leaseTerm.lease().currentTerm())) {
             updateLeaseDeposits(leaseTerm.lease());
+            updateUnitRentPrice(leaseTerm.lease());
 
             ServerSideFactory.create(PaymentMethodFacade.class).renewAutopayAgreements(leaseTerm.lease());
         }
@@ -407,8 +408,6 @@ public abstract class LeaseAbstractManager {
 
         }
 
-        updateUnitRentPrice(lease);
-
         // create historical billing cycles for imported leases
         BillingCycle cycle = ServerSideFactory.create(BillingCycleFacade.class).getLeaseFirstBillingCycle(lease);
         Date now = SystemDateManager.getDate();
@@ -457,6 +456,7 @@ public abstract class LeaseAbstractManager {
             lease.currentTerm().status().setValue(LeaseTerm.Status.Current);
             lease.unit().set(lease.currentTerm().unit());
             updateLeaseDeposits(lease);
+            updateUnitRentPrice(lease);
 
             // clear next reference:
             lease.nextTerm().set(null);
