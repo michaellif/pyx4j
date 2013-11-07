@@ -172,7 +172,6 @@
         <module>vista-shared</module>
         <module>vista-dev</module>
         <module>vista-portal</module>
-        <module>vista-prospect</module>
         <module>vista-yardi</module>
         <module>vista-ils</module>
         <module>vista-oapi</module>
