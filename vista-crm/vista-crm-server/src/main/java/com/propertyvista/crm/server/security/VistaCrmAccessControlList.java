@@ -508,6 +508,7 @@ public class VistaCrmAccessControlList extends ServletContainerAclBuilder {
         grant(VistaCrmBehavior.OrganizationPolicy, new IServiceExecutePermission(SelectGlCodeListService.class));
 
         grant(VistaCrmBehavior.PropertyVistaAccountOwner, new IServiceExecutePermission(MerchantAccountCrudService.class));
+        grant(VistaCrmBehavior.OrganizationFinancial, new IServiceExecutePermission(MerchantAccountCrudService.class));
 
         grant(VistaBasicBehavior.CRM, new IServiceExecutePermission(CreditCheckStatusService.class));
         grant(VistaBasicBehavior.CRM, new IServiceExecutePermission(CustomerCreditCheckLongReportService.class));

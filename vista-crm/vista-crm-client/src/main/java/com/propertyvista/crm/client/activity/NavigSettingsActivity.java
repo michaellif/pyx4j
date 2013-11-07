@@ -99,7 +99,7 @@ public class NavigSettingsActivity extends AbstractActivity implements NavigView
             folder.addNavigItem(new CrmSiteMap.Administration.Financial.GlCodeCategory());
             folder.addNavigItem(new CrmSiteMap.Administration.Financial.Tax());
         }
-        if (SecurityController.checkBehavior(VistaCrmBehavior.PropertyVistaAccountOwner)) {
+        if (SecurityController.checkAnyBehavior(VistaCrmBehavior.OrganizationFinancial, VistaCrmBehavior.PropertyVistaAccountOwner)) {
             folder.addNavigItem(new CrmSiteMap.Administration.Financial.MerchantAccount());
         }
         list.add(folder);
