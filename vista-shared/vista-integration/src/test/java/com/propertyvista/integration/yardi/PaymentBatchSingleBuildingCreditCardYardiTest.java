@@ -16,7 +16,6 @@ package com.propertyvista.integration.yardi;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.junit.Ignore;
 import org.junit.experimental.categories.Category;
 
 import com.pyx4j.config.server.ServerSideFactory;
@@ -48,7 +47,6 @@ import com.propertyvista.yardi.mock.PropertyUpdater;
 import com.propertyvista.yardi.services.YardiResidentTransactionsService;
 
 @Category(FunctionalTests.class)
-@Ignore
 public class PaymentBatchSingleBuildingCreditCardYardiTest extends PaymentYardiTestBase {
 
     private Lease lease11;
