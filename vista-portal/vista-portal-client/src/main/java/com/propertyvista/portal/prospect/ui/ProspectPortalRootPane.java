@@ -14,8 +14,10 @@
 package com.propertyvista.portal.prospect.ui;
 
 import com.propertyvista.portal.prospect.mvp.ContentActivityMapper;
+import com.propertyvista.portal.prospect.mvp.ToolbarActivityMapper;
 import com.propertyvista.portal.shared.mvp.FooterActivityMapper;
 import com.propertyvista.portal.shared.mvp.HeaderActivityMapper;
+import com.propertyvista.portal.shared.mvp.NotificationActivityMapper;
 import com.propertyvista.portal.shared.ui.PortalRootPane;
 
 public class ProspectPortalRootPane extends PortalRootPane {
@@ -24,10 +26,12 @@ public class ProspectPortalRootPane extends PortalRootPane {
         super();
 
         bind(new HeaderActivityMapper(), asWidget().getHeaderDisplay());
+        bind(new ToolbarActivityMapper(), asWidget().getToolbarDisplay());
 
         bind(new ContentActivityMapper(), asWidget().getContentDisplay());
 
         bind(new FooterActivityMapper(), asWidget().getFooterDisplay());
+        bind(new NotificationActivityMapper(), asWidget().getNotificationDisplay());
 
     }
 

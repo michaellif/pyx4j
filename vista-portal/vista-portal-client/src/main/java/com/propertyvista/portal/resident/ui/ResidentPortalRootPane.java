@@ -17,10 +17,10 @@ import com.propertyvista.portal.resident.mvp.CommunicationActivityMapper;
 import com.propertyvista.portal.resident.mvp.ContentActivityMapper;
 import com.propertyvista.portal.resident.mvp.ExtraActivityMapper;
 import com.propertyvista.portal.resident.mvp.MenuActivityMapper;
-import com.propertyvista.portal.resident.mvp.NotificationActivityMapper;
 import com.propertyvista.portal.resident.mvp.ToolbarActivityMapper;
 import com.propertyvista.portal.shared.mvp.FooterActivityMapper;
 import com.propertyvista.portal.shared.mvp.HeaderActivityMapper;
+import com.propertyvista.portal.shared.mvp.NotificationActivityMapper;
 import com.propertyvista.portal.shared.ui.PortalRootPane;
 
 public class ResidentPortalRootPane extends PortalRootPane {

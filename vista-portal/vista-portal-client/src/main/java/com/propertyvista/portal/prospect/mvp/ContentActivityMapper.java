@@ -25,13 +25,7 @@ import com.pyx4j.site.rpc.AppPlace;
 import com.propertyvista.portal.prospect.activity.DashboardActivity;
 import com.propertyvista.portal.prospect.activity.LandingActivity;
 import com.propertyvista.portal.prospect.activity.SignUpActivity;
-import com.propertyvista.portal.rpc.portal.PortalSiteMap.Login;
-import com.propertyvista.portal.rpc.portal.PortalSiteMap.LoginWithToken;
-import com.propertyvista.portal.rpc.portal.PortalSiteMap.Logout;
-import com.propertyvista.portal.rpc.portal.PortalSiteMap.NotificationPlace;
-import com.propertyvista.portal.rpc.portal.PortalSiteMap.PasswordChange;
-import com.propertyvista.portal.rpc.portal.PortalSiteMap.PasswordReset;
-import com.propertyvista.portal.rpc.portal.PortalSiteMap.PasswordResetRequest;
+import com.propertyvista.portal.rpc.portal.PortalSiteMap;
 import com.propertyvista.portal.rpc.portal.ProspectPortalSiteMap;
 import com.propertyvista.portal.rpc.portal.ProspectPortalSiteMap.Registration;
 import com.propertyvista.portal.shared.activity.NotificationPageActivity;
@@ -60,22 +54,22 @@ public class ContentActivityMapper implements AppActivityMapper {
                         activity = new DashboardActivity(appPlace);
 
 // Internals:
-                    } else if (place instanceof Login) {
+                    } else if (place instanceof PortalSiteMap.Login) {
                         activity = new LandingActivity(place);
-                    } else if (place instanceof Logout) {
+                    } else if (place instanceof PortalSiteMap.Logout) {
                         activity = new LogoutActivity();
-                    } else if (place instanceof PasswordReset) {
+                    } else if (place instanceof PortalSiteMap.PasswordReset) {
                         activity = new PasswordResetActivity(place);
-                    } else if (place instanceof LoginWithToken) {
+                    } else if (place instanceof PortalSiteMap.LoginWithToken) {
                         activity = new LoginWithTokenActivity(place);
-                    } else if (place instanceof PasswordResetRequest) {
+                    } else if (place instanceof PortalSiteMap.PasswordResetRequest) {
                         activity = new PasswordResetRequestWizardActivity(place);
-                    } else if (place instanceof PasswordChange) {
+                    } else if (place instanceof PortalSiteMap.PasswordChange) {
                         activity = new PasswordChangeActivity();
                     } else if (place instanceof Registration) {
                         activity = new SignUpActivity(place);
-                    } else if (appPlace instanceof NotificationPlace) {
-                        activity = new NotificationPageActivity((NotificationPlace) place);
+                    } else if (appPlace instanceof PortalSiteMap.NotificationPlace) {
+                        activity = new NotificationPageActivity((PortalSiteMap.NotificationPlace) place);
 
                     }
 
