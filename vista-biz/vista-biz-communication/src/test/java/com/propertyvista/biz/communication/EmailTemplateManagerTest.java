@@ -170,7 +170,7 @@ public class EmailTemplateManagerTest extends VistaDBTestBase {
         createPmc();
 
         siteHomeUrl = VistaDeployment.getBaseApplicationURL(VistaApplication.site, false);
-        tenantHomeUrl = VistaDeployment.getBaseApplicationURL(VistaApplication.portal, true);
+        tenantHomeUrl = VistaDeployment.getBaseApplicationURL(VistaApplication.resident, true);
         ptappHomeUrl = VistaDeployment.getBaseApplicationURL(VistaApplication.prospect, true);
 
         appUrl = AppPlaceInfo.absoluteUrl(VistaDeployment.getBaseApplicationURL(VistaApplication.prospect, true), true, PtSiteMap.LoginWithToken.class,
@@ -545,7 +545,7 @@ public class EmailTemplateManagerTest extends VistaDBTestBase {
             if (asString) {
                 String[] args = {
                     mainAplt.leaseParticipant().customer().user().name().getValue(),
-                    AppPlaceInfo.absoluteUrl(VistaDeployment.getBaseApplicationURL(VistaApplication.portal, true), true,
+                    AppPlaceInfo.absoluteUrl(VistaDeployment.getBaseApplicationURL(VistaApplication.resident, true), true,
                             PortalSiteMap.LoginWithToken.class, AuthenticationService.AUTH_TOKEN_ARG, token)
                 };
                 fmtArgs = args;
@@ -684,7 +684,7 @@ public class EmailTemplateManagerTest extends VistaDBTestBase {
                 String[] args = {
                     mainAplt.leaseParticipant().customer().user().name().getValue(),
                     company,
-                    AppPlaceInfo.absoluteUrl(VistaDeployment.getBaseApplicationURL(VistaApplication.portal, true) , true,
+                    AppPlaceInfo.absoluteUrl(VistaDeployment.getBaseApplicationURL(VistaApplication.resident, true) , true,
                             PortalSiteMap.LoginWithToken.class, AuthenticationService.AUTH_TOKEN_ARG, token),
                     siteHomeUrl,
                     tenantHomeUrl,

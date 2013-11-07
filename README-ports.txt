@@ -16,11 +16,11 @@ tests
 codeServerPort
    9994  vista-crm-client.launch
    9995  vista-operations-client.launch
-   9996  vista-portal-ptapp.launch
+   9996  vista-prospect-client.launch
    9997  vista-site-cleint.launch
    9998  vista-ob-client.launch
    9999  vista-field-client.launch
-   9980  vista-portal-web.launch
+   9980  vista-resident-client.launch
 
    9991  pyx-tester-*.launch
 

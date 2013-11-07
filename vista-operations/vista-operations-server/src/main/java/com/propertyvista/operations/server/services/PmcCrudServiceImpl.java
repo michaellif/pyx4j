@@ -108,7 +108,7 @@ public class PmcCrudServiceImpl extends AbstractCrudServiceDtoImpl<Pmc, PmcDTO> 
         super.enhanceRetrieved(bo, to, retrieveTarget);
 
         to.vistaCrmUrl().setValue(VistaDeployment.getBaseApplicationURL(bo, VistaApplication.crm, true));
-        to.residentPortalUrl().setValue(VistaDeployment.getBaseApplicationURL(bo, VistaApplication.portal, false));
+        to.residentPortalUrl().setValue(VistaDeployment.getBaseApplicationURL(bo, VistaApplication.resident, false));
         to.prospectPortalUrl().setValue(VistaDeployment.getBaseApplicationURL(bo, VistaApplication.prospect, true));
 
         to.defaultPaymentFees().set(Persistence.service().retrieve(EntityQueryCriteria.create(DefaultPaymentFees.class)));

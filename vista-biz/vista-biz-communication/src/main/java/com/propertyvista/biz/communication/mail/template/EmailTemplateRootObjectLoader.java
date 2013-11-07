@@ -62,7 +62,7 @@ public class EmailTemplateRootObjectLoader {
         if (tObj instanceof PortalLinksT) {
             PortalLinksT t = (PortalLinksT) tObj;
             t.SiteHomeUrl().setValue(VistaDeployment.getBaseApplicationURL(VistaApplication.site, false));
-            t.TenantPortalUrl().setValue(VistaDeployment.getBaseApplicationURL(VistaApplication.portal, true));
+            t.TenantPortalUrl().setValue(VistaDeployment.getBaseApplicationURL(VistaApplication.resident, true));
             t.ProspectPortalUrl().setValue(VistaDeployment.getBaseApplicationURL(VistaApplication.prospect, true));
             t.CompanyLogo().setValue(t.SiteHomeUrl().getValue() + "/" + DeploymentConsts.portalLogo + DeploymentConsts.siteImageResourceServletMapping);
 
@@ -210,7 +210,7 @@ public class EmailTemplateRootObjectLoader {
             t.updated().setValue(mr.updated().getStringView());
             t.cancellationNote().set(mr.cancellationNote());
             // generate url for maintenance request viewer in Resident Portal
-            String residentUrl = VistaDeployment.getBaseApplicationURL(VistaApplication.portal, true);
+            String residentUrl = VistaDeployment.getBaseApplicationURL(VistaApplication.resident, true);
             String mrUrl = AppPlaceInfo.absoluteUrl(residentUrl, true,
                     new PortalSiteMap.Resident.Maintenance.MaintenanceRequestPage().formPlace(mr.getPrimaryKey()));
             t.requestViewUrl().setValue(mrUrl);
@@ -240,7 +240,7 @@ public class EmailTemplateRootObjectLoader {
     }
 
     private static String getPortalAccessUrl(String token) {
-        return AppPlaceInfo.absoluteUrl(VistaDeployment.getBaseApplicationURL(VistaApplication.portal, true), true, PortalSiteMap.LoginWithToken.class,
+        return AppPlaceInfo.absoluteUrl(VistaDeployment.getBaseApplicationURL(VistaApplication.resident, true), true, PortalSiteMap.LoginWithToken.class,
                 AuthenticationService.AUTH_TOKEN_ARG, token);
     }
 

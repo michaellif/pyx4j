@@ -20,6 +20,7 @@
 
     <entry-point class='com.propertyvista.portal.resident.ResidentPortalSite'/>
 
+    <extend-configuration-property name="rpc.blacklist" value="com.propertyvista.portal.shared.*" />
     <extend-configuration-property name="rpc.blacklist" value="com.propertyvista.portal.resident.*" />
 
 </module>

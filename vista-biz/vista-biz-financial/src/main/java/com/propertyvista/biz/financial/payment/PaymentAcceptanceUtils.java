@@ -100,7 +100,7 @@ public class PaymentAcceptanceUtils {
 
         Collection<PaymentTypeAcceptance> requireAcceptance;
         switch (vistaApplication) {
-        case portal:
+        case resident:
             requireAcceptance = residentPortalPaymentTypeRequire;
             break;
         case crm:
@@ -129,7 +129,7 @@ public class PaymentAcceptanceUtils {
 
         Collection<CardTypeAcceptance> requireAcceptance;
         switch (vistaApplication) {
-        case portal:
+        case resident:
             requireAcceptance = residentPortalCardRequire;
             break;
         case crm:

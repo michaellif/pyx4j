@@ -74,7 +74,7 @@ public class VistaServerSideConfigurationDemoMac extends VistaServerSideConfigur
             return "http://" + pmcDnsName + ".propertyvista.ca/";
         case site:
             return "http://" + pmcDnsName + ".residentportalsite.ca/";
-        case portal:
+        case resident:
             return "http://" + pmcDnsName + ".mycommunity.ca/";
         case prospect:
             return "http://" + pmcDnsName + ".residentportalsite.ca/";

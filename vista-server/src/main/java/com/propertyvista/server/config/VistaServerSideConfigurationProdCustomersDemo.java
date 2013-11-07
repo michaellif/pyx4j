@@ -44,7 +44,7 @@ public class VistaServerSideConfigurationProdCustomersDemo extends VistaServerSi
             return "https://demo.propertyvista.com/";
         case site:
             return "http://demo.residentportalsite.com/";
-        case portal:
+        case resident:
             return "https://demo.my-community.co/";
         case prospect:
             return "http://demo.prospectportalsite.com/";

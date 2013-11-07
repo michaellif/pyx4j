@@ -54,8 +54,10 @@
     </dependencies>
 
     <properties>
-        <gwtModule>portal</gwtModule>
+        <gwtModule>resident</gwtModule>
         <gwtModuleCompile>vista.${gwtModule}${appGWTModuleSufix}</gwtModuleCompile>
+        <gwtModule1>prospect</gwtModule1>
+        <gwtModuleCompile1>vista.${gwtModule1}${appGWTModuleSufix}</gwtModuleCompile1>
         <warFolder>${basedir}/../../vista-server/src/main/webapp</warFolder>
         <gwtDestinationWarFolder>${warFolder}</gwtDestinationWarFolder>
     </properties>
@@ -75,10 +77,22 @@
                                 <goals>
                                     <goal>compile</goal>
                                 </goals>
+                                <configuration>
+                                    <module>${gwtModuleCompile}</module>
+                                </configuration>    
+                            </execution>
+                            <execution>
+                                <id>compile-java2script-1</id>
+                                <phase>prepare-package</phase>
+                                <goals>
+                                    <goal>compile</goal>
+                                </goals>
+                                <configuration>
+                                    <module>${gwtModuleCompile1}</module>
+                                </configuration>    
                             </execution>
                         </executions>
                         <configuration>
-                            <module>${gwtModuleCompile}</module>
                             <logLevel>INFO</logLevel>
                             <style>${gwtCompilerOutputStyle}</style>
                             <webappDirectory>${gwtDestinationWarFolder}</webappDirectory>

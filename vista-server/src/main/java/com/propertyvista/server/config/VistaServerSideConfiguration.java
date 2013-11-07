@@ -171,6 +171,12 @@ public class VistaServerSideConfiguration extends AbstractVistaServerSideConfigu
         case operations:
             hostName = application.name();
             break;
+        case prospect:
+            hostName = pmcDnsName + "-" + "portal";
+            break;
+        case resident:
+            hostName = pmcDnsName + "-" + "portal";
+            break;
         default:
             hostName = pmcDnsName + "-" + application.name();
         }

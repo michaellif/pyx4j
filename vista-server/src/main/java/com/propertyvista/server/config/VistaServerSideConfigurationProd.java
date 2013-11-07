@@ -85,7 +85,7 @@ public class VistaServerSideConfigurationProd extends VistaServerSideConfigurati
         case site:
             dnsName = ".residentportalsite.com";
             break;
-        case portal:
+        case resident:
             dnsName = ".my-community.co";
             break;
         case prospect:

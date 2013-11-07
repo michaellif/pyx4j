@@ -16,10 +16,11 @@
     <source path="prospect"/>
     <source path="shared"/>
     
-    <public path="resident-public" />
+    <public path="prospect-public" />
 
     <entry-point class='com.propertyvista.portal.prospect.ProspectPortalSite'/>
 
+    <extend-configuration-property name="rpc.blacklist" value="com.propertyvista.portal.shared.*" />
     <extend-configuration-property name="rpc.blacklist" value="com.propertyvista.portal.prospect.*" />
 
 </module>

@@ -100,7 +100,7 @@ class EnvLinksBuilder extends XMLStringWriter {
             writeApp(pmc, null, "Field", VistaApplication.field);
         }
         writeApp(pmc, null, "Site", VistaApplication.site);
-        writeApp(pmc, null, "Resident", VistaApplication.portal);
+        writeApp(pmc, null, "Resident", VistaApplication.resident);
         writeApp(pmc, null, "Prospect", VistaApplication.prospect);
 
         tr_hr();

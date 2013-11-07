@@ -31,8 +31,7 @@ public enum VistaApplication implements Behavior {
 
     site,
 
-    // Site for residents
-    portal,
+    resident,
 
     prospect,
 

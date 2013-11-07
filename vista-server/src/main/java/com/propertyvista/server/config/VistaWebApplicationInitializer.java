@@ -229,7 +229,7 @@ public class VistaWebApplicationInitializer implements ServletContainerInitializ
             {
                 ServletRegistration.Dynamic sc = ctx.addServlet("VistaFileAccessServlet", VistaFileAccessServlet.class);
                 sc.addMapping(urlPattern(VistaApplication.crm, "/file/*"));
-                sc.addMapping(urlPattern(VistaApplication.portal, "/file/*"));
+                sc.addMapping(urlPattern(VistaApplication.resident, "/file/*"));
             }
             {
                 ServletRegistration.Dynamic sc = ctx.addServlet("LegalLetterDocumentServlet", LegalLetterDocumentServlet.class);

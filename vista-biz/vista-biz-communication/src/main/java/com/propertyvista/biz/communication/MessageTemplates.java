@@ -685,7 +685,7 @@ public class MessageTemplates {
             String body = IOUtils.getTextResource("email/new-pmc.html");
             body = body.replace("${ownerName}", user.firstName().getValue());
             body = body.replace("${crmLink}", VistaDeployment.getBaseApplicationURL(pmc, VistaApplication.crm, true));
-            body = body.replace("${portalLink}", VistaDeployment.getBaseApplicationURL(pmc, VistaApplication.portal, true));
+            body = body.replace("${portalLink}", VistaDeployment.getBaseApplicationURL(pmc, VistaApplication.resident, true));
 
             // TODO i18n body
             template.content().setValue(wrapAdminHtml(body));
@@ -719,7 +719,7 @@ public class MessageTemplates {
             String body = IOUtils.getTextResource("email/tenantsure-payment-not-processed.html");
             body = body.replace("${cancellationDate}", dateFormat.format(cancellationDate));
             body = body.replace("${gracePeriodEndDate}", dateFormat.format(gracePeriodEndDate));
-            body = body.replace("${paymentMethodLink}", AppPlaceInfo.absoluteUrl(VistaDeployment.getBaseApplicationURL(VistaApplication.portal, true), true,
+            body = body.replace("${paymentMethodLink}", AppPlaceInfo.absoluteUrl(VistaDeployment.getBaseApplicationURL(VistaApplication.resident, true), true,
                     PortalSiteMap.Resident.ResidentServices.TenantInsurance.TenantSure.TenantSurePage.UpdateCreditCard.class));
             // TODO i18n body
             template.content().setValue(wrapTenantSureHtml(body));

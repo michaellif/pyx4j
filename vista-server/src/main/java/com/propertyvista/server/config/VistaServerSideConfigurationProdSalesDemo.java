@@ -43,7 +43,7 @@ public class VistaServerSideConfigurationProdSalesDemo extends VistaServerSideCo
             return "http://" + pmcDnsName + ".propertyvista.biz/";
         case site:
             return "http://" + pmcDnsName + ".residentportal.info/";
-        case portal:
+        case resident:
             return "https://" + pmcDnsName + ".residentportal.info/";
         case prospect:
             return "http://" + pmcDnsName + ".prospectportal.info/";

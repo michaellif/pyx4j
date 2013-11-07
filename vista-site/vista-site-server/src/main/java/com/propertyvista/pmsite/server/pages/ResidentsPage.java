@@ -39,7 +39,7 @@ public class ResidentsPage extends BasePage {
 
         if (residentPortalEnabled) {
             // redirect to MyCommunity url
-            String secureUrl = VistaDeployment.getBaseApplicationURL(VistaApplication.portal, true);
+            String secureUrl = VistaDeployment.getBaseApplicationURL(VistaApplication.resident, true);
             log.debug("redirect to url: {}", secureUrl);
             throw new RedirectToUrlException(secureUrl);
         } else {
