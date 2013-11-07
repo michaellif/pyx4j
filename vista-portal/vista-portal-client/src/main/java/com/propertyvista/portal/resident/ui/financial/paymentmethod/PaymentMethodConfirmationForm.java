@@ -32,12 +32,12 @@ import com.pyx4j.widgets.client.Anchor;
 
 import com.propertyvista.common.client.resources.VistaImages;
 import com.propertyvista.domain.payment.LeasePaymentMethod;
-import com.propertyvista.portal.resident.themes.BlockMixin;
-import com.propertyvista.portal.resident.themes.EntityViewTheme;
 import com.propertyvista.portal.resident.ui.CPortalEntityForm;
 import com.propertyvista.portal.resident.ui.financial.paymentmethod.PaymentMethodConfirmationView.PaymentMethodConfirmationPresenter;
 import com.propertyvista.portal.resident.ui.util.decorators.FormWidgetDecoratorBuilder;
 import com.propertyvista.portal.rpc.portal.web.dto.financial.PaymentMethodDTO;
+import com.propertyvista.portal.shared.themes.BlockMixin;
+import com.propertyvista.portal.shared.themes.EntityViewTheme;
 
 public class PaymentMethodConfirmationForm extends CPortalEntityForm<PaymentMethodDTO> {
 

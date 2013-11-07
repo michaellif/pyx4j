@@ -25,8 +25,8 @@ import com.pyx4j.site.client.ui.layout.responsive.LayoutChangeRequestEvent.Chang
 
 import com.propertyvista.common.client.theme.HorizontalAlignCenterMixin;
 import com.propertyvista.common.client.ui.components.MediaUtils;
-import com.propertyvista.portal.resident.themes.ResidentPortalRootPaneTheme;
 import com.propertyvista.portal.rpc.portal.web.dto.PortalContentDTO;
+import com.propertyvista.portal.shared.themes.PortalRootPaneTheme;
 
 public class HeaderViewImpl extends SimplePanel implements HeaderView {
 
@@ -34,7 +34,7 @@ public class HeaderViewImpl extends SimplePanel implements HeaderView {
 
     public HeaderViewImpl() {
 
-        setStyleName(ResidentPortalRootPaneTheme.StyleName.PageHeader.name());
+        setStyleName(PortalRootPaneTheme.StyleName.PageHeader.name());
 
         bannerImage = new Image();
         bannerImage.setVisible(false);

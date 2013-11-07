@@ -23,8 +23,8 @@ import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.shared.domain.Notification;
 import com.pyx4j.widgets.client.IconButton;
 
-import com.propertyvista.portal.resident.resources.PortalImages;
-import com.propertyvista.portal.resident.themes.ResidentPortalRootPaneTheme;
+import com.propertyvista.portal.shared.resources.PortalImages;
+import com.propertyvista.portal.shared.themes.PortalRootPaneTheme;
 
 public class NotificationHeaderViewImpl extends FlowPanel implements NotificationHeaderView {
 
@@ -36,7 +36,7 @@ public class NotificationHeaderViewImpl extends FlowPanel implements Notificatio
 
     public NotificationHeaderViewImpl() {
 
-        setStyleName(ResidentPortalRootPaneTheme.StyleName.NotificationContainer.name());
+        setStyleName(PortalRootPaneTheme.StyleName.NotificationContainer.name());
 
         contentPanel = new FlowPanel();
 
@@ -59,10 +59,10 @@ public class NotificationHeaderViewImpl extends FlowPanel implements Notificatio
             for (final Notification notification : notifications) {
 
                 FlowPanel message = new FlowPanel();
-                message.setStyleName(ResidentPortalRootPaneTheme.StyleName.NotificationItem.name());
+                message.setStyleName(PortalRootPaneTheme.StyleName.NotificationItem.name());
 
                 HTML title = new HTML(notification.getTitle());
-                title.setStyleName(ResidentPortalRootPaneTheme.StyleName.NotificationItemTitle.name());
+                title.setStyleName(PortalRootPaneTheme.StyleName.NotificationItemTitle.name());
 
                 HTML body = new HTML(notification.getMessage());
 
@@ -77,27 +77,27 @@ public class NotificationHeaderViewImpl extends FlowPanel implements Notificatio
                     }
                 });
                 message.add(closeButton);
-                closeButton.setStyleName(ResidentPortalRootPaneTheme.StyleName.NotificationItemCloseButton.name());
+                closeButton.setStyleName(PortalRootPaneTheme.StyleName.NotificationItemCloseButton.name());
 
                 switch (notification.getNotificationType()) {
                 case FAILURE:
-                    message.addStyleDependentName(ResidentPortalRootPaneTheme.StyleDependent.error.name());
+                    message.addStyleDependentName(PortalRootPaneTheme.StyleDependent.error.name());
                     break;
                 case ERROR:
-                    message.addStyleDependentName(ResidentPortalRootPaneTheme.StyleDependent.error.name());
+                    message.addStyleDependentName(PortalRootPaneTheme.StyleDependent.error.name());
                     break;
                 case WARNING:
-                    message.addStyleDependentName(ResidentPortalRootPaneTheme.StyleDependent.warning.name());
+                    message.addStyleDependentName(PortalRootPaneTheme.StyleDependent.warning.name());
                     break;
                 case INFO:
-                    message.addStyleDependentName(ResidentPortalRootPaneTheme.StyleDependent.info.name());
+                    message.addStyleDependentName(PortalRootPaneTheme.StyleDependent.info.name());
                     break;
                 case STATUS:
-                    message.addStyleDependentName(ResidentPortalRootPaneTheme.StyleDependent.confirm.name());
+                    message.addStyleDependentName(PortalRootPaneTheme.StyleDependent.confirm.name());
                     break;
 
                 default:
-                    message.addStyleDependentName(ResidentPortalRootPaneTheme.StyleDependent.info.name());
+                    message.addStyleDependentName(PortalRootPaneTheme.StyleDependent.info.name());
                     break;
                 }
 

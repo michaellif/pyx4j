@@ -33,9 +33,7 @@ import com.pyx4j.widgets.client.Label;
 
 import com.propertyvista.domain.contact.AddressSimple;
 import com.propertyvista.domain.tenant.insurance.TenantSureConstants;
-import com.propertyvista.portal.resident.resources.PortalImages;
 import com.propertyvista.portal.resident.resources.tenantsure.TenantSureResources;
-import com.propertyvista.portal.resident.themes.NavigationAnchorTheme;
 import com.propertyvista.portal.resident.themes.TenantSureTheme;
 import com.propertyvista.portal.resident.ui.CPortalEntityWizard;
 import com.propertyvista.portal.resident.ui.services.insurance.TenantSureOrderWizardView.TenantSureOrderWizardPersenter;
@@ -44,6 +42,8 @@ import com.propertyvista.portal.resident.ui.util.decorators.FormWidgetDecoratorB
 import com.propertyvista.portal.rpc.portal.web.dto.insurance.TenantSureCoverageDTO;
 import com.propertyvista.portal.rpc.portal.web.dto.insurance.TenantSureInsurancePolicyDTO;
 import com.propertyvista.portal.rpc.portal.web.dto.insurance.TenantSureQuoteDTO;
+import com.propertyvista.portal.shared.resources.PortalImages;
+import com.propertyvista.portal.shared.themes.NavigationAnchorTheme;
 
 public class TenantSureOrderWizard extends CPortalEntityWizard<TenantSureInsurancePolicyDTO> {
 

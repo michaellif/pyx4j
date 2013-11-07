@@ -22,11 +22,11 @@ import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.widgets.client.Anchor;
 
-import com.propertyvista.portal.resident.resources.PortalImages;
 import com.propertyvista.portal.resident.ui.AbstractGadget;
 import com.propertyvista.portal.resident.ui.maintenance.MaintenanceToolbar;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap;
 import com.propertyvista.portal.rpc.portal.web.dto.maintenance.MaintenanceSummaryDTO;
+import com.propertyvista.portal.shared.resources.PortalImages;
 
 public class MaintenanceGadget extends AbstractGadget<MainDashboardViewImpl> {
 

@@ -11,7 +11,7 @@
  * @author vlads
  * @version $Id$
  */
-package com.propertyvista.portal.resident;
+package com.propertyvista.portal.prospect;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.ui.RootLayoutPanel;
@@ -33,8 +33,7 @@ import com.propertyvista.common.client.handlers.VistaUnrecoverableErrorHandler;
 import com.propertyvista.common.client.policy.ClientPolicyManager;
 import com.propertyvista.common.client.site.VistaBrowserRequirments;
 import com.propertyvista.common.client.site.VistaSite;
-import com.propertyvista.portal.resident.themes.ResidentPortalTheme;
-import com.propertyvista.portal.resident.ui.ResidentPortalRootPane;
+import com.propertyvista.portal.prospect.ui.ProspectPortalRootPane;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap;
 import com.propertyvista.portal.rpc.portal.SiteDefinitionsDTO;
 import com.propertyvista.portal.rpc.portal.services.PortalPolicyRetrieveService;
@@ -43,15 +42,16 @@ import com.propertyvista.portal.rpc.portal.web.services.PortalAuthenticationServ
 import com.propertyvista.portal.rpc.shared.services.PolicyRetrieveService;
 import com.propertyvista.portal.shared.PortalSessionInactiveHandler;
 import com.propertyvista.portal.shared.themes.PortalPalette;
+import com.propertyvista.portal.shared.themes.PortalTheme;
 
-public class ResidentPortalSite extends VistaSite {
+public class ProspectPortalSite extends VistaSite {
 
     private static SiteThemeServices siteThemeServices = GWT.create(SiteThemeServices.class);
 
-    private ResidentPortalRootPane portalRootPane;
+    private ProspectPortalRootPane portalRootPane;
 
-    public ResidentPortalSite() {
-        super("vista-portal", PortalSiteMap.class, new SingletonViewFactory(), new ResidentPortalSiteDispatcher());
+    public ProspectPortalSite() {
+        super("vista-portal", PortalSiteMap.class, new SingletonViewFactory(), new ProspectPortalSiteDispatcher());
     }
 
     @Override
@@ -63,7 +63,7 @@ public class ResidentPortalSite extends VistaSite {
 
         getHistoryHandler().register(getPlaceController(), getEventBus(), AppPlace.NOWHERE);
 
-        portalRootPane = new ResidentPortalRootPane();
+        portalRootPane = new ProspectPortalRootPane();
 
         RootLayoutPanel.get().add(portalRootPane);
 
@@ -92,7 +92,7 @@ public class ResidentPortalSite extends VistaSite {
             @Override
             public void onSuccess(SiteDefinitionsDTO descriptor) {
                 hideLoadingIndicator();
-                StyleManager.installTheme(new ResidentPortalTheme(descriptor.skin().getValue()), new PortalPalette());
+                StyleManager.installTheme(new PortalTheme(descriptor.skin().getValue()), new PortalPalette());
                 VistaFeaturesCustomizationClient.setVistaFeatures(descriptor.features());
                 VistaFeaturesCustomizationClient.setGoogleAnalyticDisableForEmployee(descriptor.isGoogleAnalyticDisableForEmployee().getValue());
                 VistaFeaturesCustomizationClient.enviromentTitleVisible = descriptor.enviromentTitleVisible().getValue(Boolean.TRUE);
@@ -124,8 +124,8 @@ public class ResidentPortalSite extends VistaSite {
         }, true, null);
     }
 
-    public static ResidentPortalSite instance() {
-        return (ResidentPortalSite) AppSite.instance();
+    public static ProspectPortalSite instance() {
+        return (ProspectPortalSite) AppSite.instance();
     }
 
     public static void scrollToTop() {
@@ -138,7 +138,7 @@ public class ResidentPortalSite extends VistaSite {
 
         @Override
         public void onNotification(NotificationEvent event) {
-            ResidentPortalSite.getPlaceController().showNotification(event.getNotification());
+            ProspectPortalSite.getPlaceController().showNotification(event.getNotification());
         }
 
     }

@@ -31,8 +31,8 @@ import com.pyx4j.widgets.client.Label;
 import com.pyx4j.widgets.client.actionbar.Toolbar;
 import com.pyx4j.widgets.client.dialog.images.NotificationImages;
 
-import com.propertyvista.portal.resident.themes.DashboardTheme;
-import com.propertyvista.portal.resident.themes.ResidentPortalRootPaneTheme;
+import com.propertyvista.portal.shared.themes.DashboardTheme;
+import com.propertyvista.portal.shared.themes.PortalRootPaneTheme;
 
 public class NotificationPageViewImpl extends SimplePanel implements NotificationPageView {
 
@@ -139,7 +139,7 @@ public class NotificationPageViewImpl extends SimplePanel implements Notificatio
         NotificationGadget(NotificationPageViewImpl viewer, ImageResource imageResource, String title) {
             super(viewer, imageResource, title, ThemeColor.foreground, 0.3);
 
-            addStyleName(ResidentPortalRootPaneTheme.StyleName.NotificationGadget.name());
+            addStyleName(PortalRootPaneTheme.StyleName.NotificationGadget.name());
 
             FlowPanel viewPanel = new FlowPanel();
             viewPanel.getElement().getStyle().setTextAlign(TextAlign.CENTER);

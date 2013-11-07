@@ -22,7 +22,7 @@ import com.pyx4j.site.client.ui.layout.responsive.LayoutChangeEvent;
 import com.pyx4j.site.client.ui.layout.responsive.LayoutChangeHandler;
 import com.pyx4j.site.client.ui.layout.responsive.ResponsiveLayoutPanel.LayoutType;
 
-import com.propertyvista.portal.resident.themes.DashboardTheme;
+import com.propertyvista.portal.shared.themes.DashboardTheme;
 
 public class OffersDashboardViewImpl extends FlowPanel implements OffersDashboardView {
 

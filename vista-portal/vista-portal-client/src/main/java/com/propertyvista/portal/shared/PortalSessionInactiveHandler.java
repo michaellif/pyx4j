@@ -18,13 +18,14 @@
  * @author vlads
  * @version $Id$
  */
-package com.propertyvista.portal.resident;
+package com.propertyvista.portal.shared;
 
 import com.pyx4j.commons.TimeUtils;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.security.client.SessionInactiveEvent;
 import com.pyx4j.security.client.SessionInactiveHandler;
 import com.pyx4j.security.client.SessionMonitor;
+import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.shared.domain.Notification;
 import com.pyx4j.site.shared.domain.Notification.NotificationType;
 
@@ -58,7 +59,7 @@ public class PortalSessionInactiveHandler implements SessionInactiveHandler {
         }
 
         Notification message = new Notification(reasonMessage, "", NotificationType.INFO);
-        ResidentPortalSite.getPlaceController().showNotification(message);
+        AppSite.getPlaceController().showNotification(message);
 
     }
 

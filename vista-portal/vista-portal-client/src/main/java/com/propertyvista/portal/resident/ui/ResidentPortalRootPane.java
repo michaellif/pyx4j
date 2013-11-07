@@ -27,9 +27,9 @@ import com.propertyvista.portal.resident.mvp.MenuActivityMapper;
 import com.propertyvista.portal.resident.mvp.NotificationActivityMapper;
 import com.propertyvista.portal.resident.mvp.StickyHeaderActivityMapper;
 
-public class PortalRootPane extends RootPane<ResponsiveLayoutPanel> {
+public class ResidentPortalRootPane extends RootPane<ResponsiveLayoutPanel> {
 
-    public PortalRootPane() {
+    public ResidentPortalRootPane() {
         super(new ResponsiveLayoutPanel());
 
         bind(new HeaderActivityMapper(), asWidget().getHeaderDisplay());

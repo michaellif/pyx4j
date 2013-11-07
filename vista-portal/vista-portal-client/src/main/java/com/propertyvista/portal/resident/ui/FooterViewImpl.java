@@ -37,10 +37,10 @@ import com.pyx4j.widgets.client.PopupWindow.PopupWindowHandle;
 
 import com.propertyvista.common.client.ui.components.MediaUtils;
 import com.propertyvista.domain.site.SocialLink;
-import com.propertyvista.portal.resident.resources.PortalImages;
-import com.propertyvista.portal.resident.themes.ResidentPortalRootPaneTheme;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap;
 import com.propertyvista.portal.rpc.portal.web.dto.PortalContentDTO;
+import com.propertyvista.portal.shared.resources.PortalImages;
+import com.propertyvista.portal.shared.themes.PortalRootPaneTheme;
 
 public class FooterViewImpl extends FlowPanel implements FooterView {
 
@@ -56,7 +56,7 @@ public class FooterViewImpl extends FlowPanel implements FooterView {
 
     public FooterViewImpl() {
 
-        setStyleName(ResidentPortalRootPaneTheme.StyleName.PageFooter.name());
+        setStyleName(PortalRootPaneTheme.StyleName.PageFooter.name());
         getElement().getStyle().setDisplay(com.google.gwt.dom.client.Style.Display.INLINE_BLOCK);
 
         pmcInfoPanel = new PmcInfoPanel();
@@ -223,7 +223,7 @@ public class FooterViewImpl extends FlowPanel implements FooterView {
         private final FlowPanel contentPanel;
 
         public FollowUsPanel() {
-            setStyleName(ResidentPortalRootPaneTheme.StyleName.PageFooterFollowUs.name());
+            setStyleName(PortalRootPaneTheme.StyleName.PageFooterFollowUs.name());
 
             contentPanel = new FlowPanel();
             contentPanel.setWidth("10em");
@@ -279,10 +279,10 @@ public class FooterViewImpl extends FlowPanel implements FooterView {
         private final Image pmcLogoImage;
 
         public PmcInfoPanel() {
-            setStyleName(ResidentPortalRootPaneTheme.StyleName.PageFooterPmcInfo.name());
+            setStyleName(PortalRootPaneTheme.StyleName.PageFooterPmcInfo.name());
 
             FlowPanel contentPanel = new FlowPanel();
-            contentPanel.setStyleName(ResidentPortalRootPaneTheme.StyleName.PageFooterPmcInfoContent.name());
+            contentPanel.setStyleName(PortalRootPaneTheme.StyleName.PageFooterPmcInfoContent.name());
             contentPanel.getElement().getStyle().setProperty("margin", "0 auto");
             setWidget(contentPanel);
 
@@ -292,7 +292,7 @@ public class FooterViewImpl extends FlowPanel implements FooterView {
             contentPanel.add(pmcLogoImage);
 
             pmcTextPanel = new HTML();
-            pmcTextPanel.setStyleName(ResidentPortalRootPaneTheme.StyleName.PageFooterPmcInfoText.name());
+            pmcTextPanel.setStyleName(PortalRootPaneTheme.StyleName.PageFooterPmcInfoText.name());
             pmcTextPanel.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
             pmcTextPanel.getElement().getStyle().setVerticalAlign(VerticalAlign.TOP);
             contentPanel.add(pmcTextPanel);

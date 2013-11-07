@@ -47,10 +47,10 @@ import com.pyx4j.widgets.client.images.ButtonImages;
 
 import com.propertyvista.domain.customizations.CountryOfOperation;
 import com.propertyvista.misc.VistaTODO;
-import com.propertyvista.portal.resident.resources.PortalImages;
-import com.propertyvista.portal.resident.themes.ResidentPortalRootPaneTheme;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap.Resident;
+import com.propertyvista.portal.shared.resources.PortalImages;
+import com.propertyvista.portal.shared.themes.PortalRootPaneTheme;
 import com.propertyvista.shared.config.VistaFeatures;
 
 public class MenuViewImpl extends DockPanel implements MenuView {
@@ -66,12 +66,12 @@ public class MenuViewImpl extends DockPanel implements MenuView {
     private final NavigItemList footerHolder;
 
     public MenuViewImpl() {
-        setStyleName(ResidentPortalRootPaneTheme.StyleName.MainMenu.name());
+        setStyleName(PortalRootPaneTheme.StyleName.MainMenu.name());
 
         headerHolder = new HeaderHolder();
         mainHolder = new NavigItemList();
         footerHolder = new NavigItemList();
-        footerHolder.setStyleName(ResidentPortalRootPaneTheme.StyleName.MainMenuFooter.name());
+        footerHolder.setStyleName(PortalRootPaneTheme.StyleName.MainMenuFooter.name());
 
         add(headerHolder, DockPanel.NORTH);
         setCellHeight(headerHolder, "1px");
@@ -135,22 +135,22 @@ public class MenuViewImpl extends DockPanel implements MenuView {
         switch (layoutType) {
         case phonePortrait:
         case phoneLandscape:
-            addStyleDependentName(ResidentPortalRootPaneTheme.StyleDependent.sideMenu.name());
-            removeStyleDependentName(ResidentPortalRootPaneTheme.StyleDependent.collapsedMenu.name());
+            addStyleDependentName(PortalRootPaneTheme.StyleDependent.sideMenu.name());
+            removeStyleDependentName(PortalRootPaneTheme.StyleDependent.collapsedMenu.name());
             footerHolder.setVisible(true);
             headerHolder.setVisible(true);
             break;
         case tabletPortrait:
         case tabletLandscape:
-            removeStyleDependentName(ResidentPortalRootPaneTheme.StyleDependent.sideMenu.name());
-            addStyleDependentName(ResidentPortalRootPaneTheme.StyleDependent.collapsedMenu.name());
+            removeStyleDependentName(PortalRootPaneTheme.StyleDependent.sideMenu.name());
+            addStyleDependentName(PortalRootPaneTheme.StyleDependent.collapsedMenu.name());
             footerHolder.setVisible(false);
             headerHolder.setVisible(false);
             break;
         case monitor:
         case huge:
-            removeStyleDependentName(ResidentPortalRootPaneTheme.StyleDependent.sideMenu.name());
-            removeStyleDependentName(ResidentPortalRootPaneTheme.StyleDependent.collapsedMenu.name());
+            removeStyleDependentName(PortalRootPaneTheme.StyleDependent.sideMenu.name());
+            removeStyleDependentName(PortalRootPaneTheme.StyleDependent.collapsedMenu.name());
             footerHolder.setVisible(false);
             headerHolder.setVisible(false);
             break;
@@ -173,7 +173,7 @@ public class MenuViewImpl extends DockPanel implements MenuView {
         public NavigItemList() {
             setElement(DOM.createElement("ul"));
             items = new LinkedList<MenuViewImpl.NavigItem>();
-            setStyleName(ResidentPortalRootPaneTheme.StyleName.MainMenuHolder.name());
+            setStyleName(PortalRootPaneTheme.StyleName.MainMenuHolder.name());
             setActive(true);
 
         }
@@ -239,17 +239,17 @@ public class MenuViewImpl extends DockPanel implements MenuView {
             selected = false;
 
             setElement(DOM.createElement("li"));
-            setStyleName(ResidentPortalRootPaneTheme.StyleName.MainMenuNavigItem.name());
+            setStyleName(PortalRootPaneTheme.StyleName.MainMenuNavigItem.name());
 
             sinkEvents(Event.ONCLICK);
 
             icon = new Image(images.regular());
 
-            icon.setStyleName(ResidentPortalRootPaneTheme.StyleName.MainMenuIcon.name());
+            icon.setStyleName(PortalRootPaneTheme.StyleName.MainMenuIcon.name());
             add(icon);
 
             label = new Label(labelString);
-            label.setStyleName(ResidentPortalRootPaneTheme.StyleName.MainMenuLabel.name());
+            label.setStyleName(PortalRootPaneTheme.StyleName.MainMenuLabel.name());
             add(label);
 
             addDomHandler(new ClickHandler() {
@@ -281,12 +281,12 @@ public class MenuViewImpl extends DockPanel implements MenuView {
         public void setSelected(boolean select) {
             selected = select;
             if (select) {
-                addStyleDependentName(ResidentPortalRootPaneTheme.StyleDependent.active.name());
+                addStyleDependentName(PortalRootPaneTheme.StyleDependent.active.name());
                 getElement().getStyle().setProperty("background", color);
                 label.getElement().getStyle().setProperty("background", color);
                 icon.setResource(images.active());
             } else {
-                removeStyleDependentName(ResidentPortalRootPaneTheme.StyleDependent.active.name());
+                removeStyleDependentName(PortalRootPaneTheme.StyleDependent.active.name());
                 getElement().getStyle().setProperty("background", "");
                 label.getElement().getStyle().setProperty("background", "");
                 icon.setResource(images.regular());
@@ -320,16 +320,16 @@ public class MenuViewImpl extends DockPanel implements MenuView {
 
         public HeaderHolder() {
 
-            setStyleName(ResidentPortalRootPaneTheme.StyleName.MainMenuHeader.name());
+            setStyleName(PortalRootPaneTheme.StyleName.MainMenuHeader.name());
 
             getElement().getStyle().setPosition(Position.RELATIVE);
 
             photoImage = new Image(PortalImages.INSTANCE.avatar());
-            photoImage.setStyleName(ResidentPortalRootPaneTheme.StyleName.MainMenuHeaderPhoto.name());
+            photoImage.setStyleName(PortalRootPaneTheme.StyleName.MainMenuHeaderPhoto.name());
             photoImage.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
 
             nameLabel = new Label("Name");
-            nameLabel.setStyleName(ResidentPortalRootPaneTheme.StyleName.MainMenuHeaderName.name());
+            nameLabel.setStyleName(PortalRootPaneTheme.StyleName.MainMenuHeaderName.name());
             nameLabel.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
 
             add(photoImage);

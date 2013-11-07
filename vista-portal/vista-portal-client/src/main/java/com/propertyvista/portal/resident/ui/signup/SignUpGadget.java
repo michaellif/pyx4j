@@ -48,7 +48,6 @@ import com.pyx4j.widgets.client.Anchor;
 import com.pyx4j.widgets.client.Button;
 import com.pyx4j.widgets.client.actionbar.Toolbar;
 
-import com.propertyvista.portal.resident.resources.PortalImages;
 import com.propertyvista.portal.resident.ui.AbstractGadget;
 import com.propertyvista.portal.resident.ui.signup.SignUpView.SignUpPresenter;
 import com.propertyvista.portal.resident.ui.util.decorators.LoginWidgetDecoratorBuilder;
@@ -56,6 +55,7 @@ import com.propertyvista.portal.rpc.portal.web.dto.SelfRegistrationBuildingDTO;
 import com.propertyvista.portal.rpc.portal.web.dto.SelfRegistrationDTO;
 import com.propertyvista.portal.rpc.shared.EntityValidationException;
 import com.propertyvista.portal.rpc.shared.EntityValidationException.MemberValidationError;
+import com.propertyvista.portal.shared.resources.PortalImages;
 
 public class SignUpGadget extends AbstractGadget<SignUpViewImpl> {
 

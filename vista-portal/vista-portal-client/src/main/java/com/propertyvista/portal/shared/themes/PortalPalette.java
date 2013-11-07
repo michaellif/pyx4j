@@ -11,14 +11,14 @@
  * @author michaellif
  * @version $Id$
  */
-package com.propertyvista.portal.resident.themes;
+package com.propertyvista.portal.shared.themes;
 
 import com.pyx4j.commons.css.Palette;
 import com.pyx4j.commons.css.ThemeColor;
 
-public class ResidentPortalPalette extends Palette {
+public class PortalPalette extends Palette {
 
-    public ResidentPortalPalette() {
+    public PortalPalette() {
         putThemeColor(ThemeColor.object1, "#315EAF");
         putThemeColor(ThemeColor.object2, "B26C1F");
         putThemeColor(ThemeColor.contrast1, "#ffcb00");

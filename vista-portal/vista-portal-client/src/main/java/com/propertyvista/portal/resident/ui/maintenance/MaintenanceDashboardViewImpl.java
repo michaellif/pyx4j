@@ -17,8 +17,8 @@ import com.google.gwt.user.client.ui.FlowPanel;
 
 import com.pyx4j.i18n.shared.I18n;
 
-import com.propertyvista.portal.resident.themes.DashboardTheme;
 import com.propertyvista.portal.rpc.portal.web.dto.maintenance.MaintenanceSummaryDTO;
+import com.propertyvista.portal.shared.themes.DashboardTheme;
 
 public class MaintenanceDashboardViewImpl extends FlowPanel implements MaintenanceDashboardView {
 

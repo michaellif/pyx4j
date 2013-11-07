@@ -30,8 +30,8 @@ import com.pyx4j.commons.css.StyleManager;
 import com.pyx4j.commons.css.ThemeColor;
 import com.pyx4j.widgets.client.actionbar.Toolbar;
 
-import com.propertyvista.portal.resident.themes.BlockMixin;
-import com.propertyvista.portal.resident.themes.DashboardTheme;
+import com.propertyvista.portal.shared.themes.BlockMixin;
+import com.propertyvista.portal.shared.themes.DashboardTheme;
 
 public abstract class AbstractGadget<T extends IsWidget> extends AbstractPortalPanel {
 

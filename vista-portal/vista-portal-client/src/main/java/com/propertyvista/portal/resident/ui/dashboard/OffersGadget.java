@@ -24,9 +24,9 @@ import com.pyx4j.site.client.AppSite;
 import com.pyx4j.widgets.client.Button;
 import com.pyx4j.widgets.client.actionbar.Toolbar;
 
-import com.propertyvista.portal.resident.resources.PortalImages;
 import com.propertyvista.portal.resident.ui.AbstractGadget;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap;
+import com.propertyvista.portal.shared.resources.PortalImages;
 
 public class OffersGadget extends AbstractGadget<MainDashboardViewImpl> {
 

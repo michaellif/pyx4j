@@ -11,7 +11,7 @@
  * @author michaellif
  * @version $Id$
  */
-package com.propertyvista.portal.resident.themes;
+package com.propertyvista.portal.shared.themes;
 
 import com.pyx4j.commons.css.ClassBasedThemeId;
 import com.pyx4j.commons.css.Style;
@@ -34,13 +34,13 @@ import com.propertyvista.common.client.theme.HorizontalAlignCenterMixin;
 import com.propertyvista.common.client.theme.TransactionHistoryViewerTheme;
 import com.propertyvista.common.client.theme.VistaTheme.StyleName;
 import com.propertyvista.domain.site.SiteDescriptor.Skin;
-import com.propertyvista.portal.resident.resources.PortalImages;
+import com.propertyvista.portal.shared.resources.PortalImages;
 
-public class ResidentPortalTheme extends Theme {
+public class PortalTheme extends Theme {
 
     private final Skin skin;
 
-    public ResidentPortalTheme(Skin skin) {
+    public PortalTheme(Skin skin) {
         this.skin = skin;
         initStyles();
 
@@ -53,7 +53,7 @@ public class ResidentPortalTheme extends Theme {
         initBackground();
         initMessageStyles();
 
-        addTheme(new ResidentPortalRootPaneTheme());
+        addTheme(new PortalRootPaneTheme());
 
         addTheme(new ResponsiveLayoutTheme());
 
@@ -347,7 +347,6 @@ public class ResidentPortalTheme extends Theme {
         addTheme(new ExtraGadgetsTheme());
         addTheme(new EntityViewTheme());
 
-        addTheme(new TenantSureTheme());
     }
 
     private void initBackground() {

@@ -26,10 +26,10 @@ import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.Label;
 
 import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
-import com.propertyvista.portal.resident.resources.PortalImages;
 import com.propertyvista.portal.resident.ui.AbstractGadget;
 import com.propertyvista.portal.rpc.portal.web.dto.maintenance.MaintenanceRequestStatusDTO;
 import com.propertyvista.portal.rpc.portal.web.dto.maintenance.MaintenanceSummaryDTO;
+import com.propertyvista.portal.shared.resources.PortalImages;
 
 public class OpenMaintenanceRequestsGadget extends AbstractGadget<MaintenanceDashboardViewImpl> {
 

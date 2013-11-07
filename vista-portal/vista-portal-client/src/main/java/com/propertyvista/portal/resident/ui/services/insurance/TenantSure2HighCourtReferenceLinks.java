@@ -21,8 +21,8 @@ import com.google.gwt.user.client.ui.SimplePanel;
 import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
 
-import com.propertyvista.portal.resident.themes.NavigationAnchorTheme;
 import com.propertyvista.portal.resident.themes.TenantSureTheme;
+import com.propertyvista.portal.shared.themes.NavigationAnchorTheme;
 
 public class TenantSure2HighCourtReferenceLinks extends Composite {
 

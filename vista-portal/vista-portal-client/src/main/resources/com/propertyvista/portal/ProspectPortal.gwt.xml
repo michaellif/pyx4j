@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE module PUBLIC "-//Google Inc.//DTD Google Web Toolkit 2.0.0//EN" "http://google-web-toolkit.googlecode.com/svn/tags/2.0.0/distro-source/core/src/gwt-module.dtd">
 <!-- @version $Revision$ ($Author$) $Date$ -->
-<module rename-to='resident'>
+<module rename-to='prospect'>
 
     <inherits name='com.google.gwt.user.User'/>
 
@@ -13,13 +13,13 @@
     <inherits name='com.pyx4j.gwt.GwtGeo' />
     <inherits name="com.google.gwt.maps.GoogleMaps" />
 
-    <source path="resident"/>
+    <source path="prospect"/>
     <source path="shared"/>
     
     <public path="resident-public" />
 
-    <entry-point class='com.propertyvista.portal.resident.ResidentPortalSite'/>
+    <entry-point class='com.propertyvista.portal.prospect.ProspectPortalSite'/>
 
-    <extend-configuration-property name="rpc.blacklist" value="com.propertyvista.portal.resident.*" />
+    <extend-configuration-property name="rpc.blacklist" value="com.propertyvista.portal.prospect.*" />
 
 </module>

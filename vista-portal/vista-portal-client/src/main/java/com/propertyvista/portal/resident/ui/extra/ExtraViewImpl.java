@@ -20,9 +20,9 @@ import com.google.gwt.user.client.ui.FlowPanel;
 import com.propertyvista.portal.domain.dto.extra.CommunityEventsGadgetDTO;
 import com.propertyvista.portal.domain.dto.extra.ExtraGadgetDTO;
 import com.propertyvista.portal.domain.dto.extra.WeatherGadgetDTO;
-import com.propertyvista.portal.resident.themes.ResidentPortalRootPaneTheme;
 import com.propertyvista.portal.resident.ui.extra.events.CommunityEventsGadget;
 import com.propertyvista.portal.resident.ui.extra.weather.WeatherGadget;
+import com.propertyvista.portal.shared.themes.PortalRootPaneTheme;
 
 public class ExtraViewImpl extends FlowPanel implements ExtraView {
 
@@ -30,7 +30,7 @@ public class ExtraViewImpl extends FlowPanel implements ExtraView {
 
     public ExtraViewImpl() {
 
-        setStyleName(ResidentPortalRootPaneTheme.StyleName.ExtraGadget.name());
+        setStyleName(PortalRootPaneTheme.StyleName.ExtraGadget.name());
 
         contentPanel = new FlowPanel();
 

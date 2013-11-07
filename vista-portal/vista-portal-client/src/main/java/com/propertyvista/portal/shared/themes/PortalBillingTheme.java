@@ -11,7 +11,7 @@
  * @author VladL
  * @version $Id$
  */
-package com.propertyvista.portal.resident.themes;
+package com.propertyvista.portal.shared.themes;
 
 import com.pyx4j.commons.css.Style;
 import com.pyx4j.forms.client.ui.decorators.DefaultWidgetDecoratorTheme;

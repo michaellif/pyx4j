@@ -40,8 +40,8 @@ import com.pyx4j.widgets.client.Button.ButtonMenuBar;
 import com.pyx4j.widgets.client.actionbar.Toolbar;
 
 import com.propertyvista.common.client.ClientNavigUtils;
-import com.propertyvista.portal.resident.resources.PortalImages;
-import com.propertyvista.portal.resident.themes.ResidentPortalRootPaneTheme;
+import com.propertyvista.portal.shared.resources.PortalImages;
+import com.propertyvista.portal.shared.themes.PortalRootPaneTheme;
 import com.propertyvista.shared.i18n.CompiledLocale;
 
 public class ToolbarViewImpl extends FlowPanel implements ToolbarView {
@@ -83,7 +83,7 @@ public class ToolbarViewImpl extends FlowPanel implements ToolbarView {
     private final MenuItem myLeasesMenu;
 
     public ToolbarViewImpl() {
-        setStyleName(ResidentPortalRootPaneTheme.StyleName.MainToolbar.name());
+        setStyleName(PortalRootPaneTheme.StyleName.MainToolbar.name());
         getElement().getStyle().setProperty("whiteSpace", "nowrap");
 
         rightToolbar = new Toolbar();
@@ -199,7 +199,7 @@ public class ToolbarViewImpl extends FlowPanel implements ToolbarView {
         brandLabel.addClickHandler(goHomeHandler);
 
         brandHolder = new FlowPanel();
-        brandHolder.setStyleName(ResidentPortalRootPaneTheme.StyleName.BrandImage.name());
+        brandHolder.setStyleName(PortalRootPaneTheme.StyleName.BrandImage.name());
         brandHolder.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
 
         brandHolder.add(brandImage);

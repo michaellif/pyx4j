@@ -37,11 +37,11 @@ import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
 import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
 import com.propertyvista.domain.payment.PaymentMethod;
 import com.propertyvista.domain.tenant.lease.Tenant;
-import com.propertyvista.portal.resident.resources.PortalImages;
 import com.propertyvista.portal.resident.ui.AbstractGadget;
 import com.propertyvista.portal.resident.ui.util.decorators.FormWidgetDecoratorBuilder;
 import com.propertyvista.portal.rpc.portal.web.dto.financial.AutoPayInfoDTO;
 import com.propertyvista.portal.rpc.portal.web.dto.financial.AutoPaySummaryDTO;
+import com.propertyvista.portal.shared.resources.PortalImages;
 
 public class AutoPayAgreementsGadget extends AbstractGadget<FinancialDashboardViewImpl> {
 

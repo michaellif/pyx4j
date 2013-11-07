@@ -11,7 +11,7 @@
  * @author michaellif
  * @version $Id$
  */
-package com.propertyvista.portal.resident.themes;
+package com.propertyvista.portal.shared.themes;
 
 import com.pyx4j.commons.css.ClassBasedThemeId;
 import com.pyx4j.commons.css.IStyleDependent;
@@ -22,9 +22,9 @@ import com.pyx4j.commons.css.ThemeColor;
 import com.pyx4j.commons.css.ThemeId;
 import com.pyx4j.widgets.client.DefaultWidgetsTheme;
 
-import com.propertyvista.portal.resident.resources.PortalImages;
+import com.propertyvista.portal.shared.resources.PortalImages;
 
-public class ResidentPortalRootPaneTheme extends Theme {
+public class PortalRootPaneTheme extends Theme {
 
     public static enum StyleName implements IStyleName {
         PageHeader, PageFooter, PageFooterFollowUs, PageFooterPmcInfo, PageFooterPmcInfoContent, PageFooterPmcInfoText,
@@ -46,7 +46,7 @@ public class ResidentPortalRootPaneTheme extends Theme {
         hover, active, sideMenu, collapsedMenu, sideComm, error, warning, info, confirm
     }
 
-    public ResidentPortalRootPaneTheme() {
+    public PortalRootPaneTheme() {
         initHeaderStyles();
         initMainToolbarStyles();
         initMainMenuStyles();

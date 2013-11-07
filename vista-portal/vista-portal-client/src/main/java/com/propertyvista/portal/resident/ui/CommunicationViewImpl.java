@@ -34,8 +34,8 @@ import com.pyx4j.site.client.ui.layout.responsive.LayoutChangeHandler;
 import com.pyx4j.site.client.ui.layout.responsive.ResponsiveLayoutPanel.LayoutType;
 
 import com.propertyvista.domain.communication.Message;
-import com.propertyvista.portal.resident.resources.PortalImages;
-import com.propertyvista.portal.resident.themes.ResidentPortalRootPaneTheme;
+import com.propertyvista.portal.shared.resources.PortalImages;
+import com.propertyvista.portal.shared.themes.PortalRootPaneTheme;
 
 public class CommunicationViewImpl extends FlowPanel implements CommunicationView, RequiresResize {
 
@@ -51,10 +51,10 @@ public class CommunicationViewImpl extends FlowPanel implements CommunicationVie
 
     public CommunicationViewImpl() {
 
-        setStyleName(ResidentPortalRootPaneTheme.StyleName.Comm.name());
+        setStyleName(PortalRootPaneTheme.StyleName.Comm.name());
 
         calloutHandler = new HTML("<svg xmlns='http://www.w3.org/2000/svg' version='1.1'><polyline points='16,0 0,16 32,16' class='"
-                + ResidentPortalRootPaneTheme.StyleName.CommCallout.name() + "'/></svg>");
+                + PortalRootPaneTheme.StyleName.CommCallout.name() + "'/></svg>");
         calloutHandler.getElement().getStyle().setPosition(Position.ABSOLUTE);
         calloutHandler.getElement().getStyle().setProperty("right", "38px");
         calloutHandler.getElement().getStyle().setProperty("top", "0px");
@@ -63,7 +63,7 @@ public class CommunicationViewImpl extends FlowPanel implements CommunicationVie
         mainHolder = new FlowPanel();
 
         contentPanel = new DockLayoutPanel(Unit.PX);
-        contentPanel.setStyleName(ResidentPortalRootPaneTheme.StyleName.CommContent.name());
+        contentPanel.setStyleName(PortalRootPaneTheme.StyleName.CommContent.name());
 
         add(calloutHandler);
         add(contentPanel);
@@ -89,14 +89,14 @@ public class CommunicationViewImpl extends FlowPanel implements CommunicationVie
         case phonePortrait:
         case phoneLandscape:
             calloutHandler.setVisible(false);
-            addStyleDependentName(ResidentPortalRootPaneTheme.StyleDependent.sideComm.name());
+            addStyleDependentName(PortalRootPaneTheme.StyleDependent.sideComm.name());
             break;
         case tabletPortrait:
         case tabletLandscape:
         case monitor:
         case huge:
             calloutHandler.setVisible(true);
-            removeStyleDependentName(ResidentPortalRootPaneTheme.StyleDependent.sideComm.name());
+            removeStyleDependentName(PortalRootPaneTheme.StyleDependent.sideComm.name());
             break;
         }
     }
@@ -127,7 +127,7 @@ public class CommunicationViewImpl extends FlowPanel implements CommunicationVie
         private final Label senderField;
 
         public MessagePanel(Message message) {
-            setStyleName(ResidentPortalRootPaneTheme.StyleName.CommMessage.name());
+            setStyleName(PortalRootPaneTheme.StyleName.CommMessage.name());
 
             photoImage = new Image(PortalImages.INSTANCE.avatar2());
             subjectField = new Label(message.subject().getStringView());
@@ -160,16 +160,16 @@ public class CommunicationViewImpl extends FlowPanel implements CommunicationVie
 
         public HeaderHolder() {
 
-            setStyleName(ResidentPortalRootPaneTheme.StyleName.CommHeader.name());
+            setStyleName(PortalRootPaneTheme.StyleName.CommHeader.name());
 
             getElement().getStyle().setPosition(Position.RELATIVE);
 
             messagesLabel = new Label("Messages(5)");
-            messagesLabel.setStyleName(ResidentPortalRootPaneTheme.StyleName.CommHeaderTitle.name());
+            messagesLabel.setStyleName(PortalRootPaneTheme.StyleName.CommHeaderTitle.name());
             messagesLabel.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
 
             writeActionImage = new Image(PortalImages.INSTANCE.writeMessage());
-            writeActionImage.setStyleName(ResidentPortalRootPaneTheme.StyleName.CommHeaderWriteAction.name());
+            writeActionImage.setStyleName(PortalRootPaneTheme.StyleName.CommHeaderWriteAction.name());
             writeActionImage.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
 
             add(messagesLabel);
