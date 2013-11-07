@@ -32,9 +32,7 @@ public class RecaptchaConfig {
     private static Map<String, RecaptchaConfig> domainsMap = new HashMap<String, RecaptchaConfig>();
 
     static {
-        domainsMap.put("prospectportalsite.com", new RecaptchaConfig("6LeWXM8SAAAAAH661toeFqn51__WNXL6o0eoDqGa", "6LeWXM8SAAAAAAJ694pb4dsHmOduEG2ONfWe7WuE"));
         domainsMap.put("propertyvista.com", new RecaptchaConfig("6LeXXM8SAAAAAIR5XVBundDyFO072XcQ0IYsSD0u", "6LeXXM8SAAAAAGN6S3-bVjixUB6gAiAdgwWPtRXu"));
-        domainsMap.put("residentportalsite.com", new RecaptchaConfig("6Ld0Xc8SAAAAAMfjEb9vPZZtYb-DQvAtxy8LSeyw", "6Ld0Xc8SAAAAAO3dWBtLKuhQkkMV8b-iasUk3dXs"));
         domainsMap.put("my-community.co", new RecaptchaConfig("6LdcSuUSAAAAAO2sEo5Uazzw8tN4jMVQrPU4rbP2", "6LdcSuUSAAAAAJZUygdCvvX3DPJx54GNjjWFwydq "));
         domainsMap.put("birchwoodsoftwaregroup.com",
                 new RecaptchaConfig("6LdzXc8SAAAAAOKyhb7lGTGWPATHH8uYjeXg5jUc", "6LdzXc8SAAAAADehmgyofUx0zjuBgghbssZCIP_X"));

@@ -111,7 +111,7 @@ public class VistaDeployment {
             target = DnsNameTarget.field;
             break;
         case prospect:
-            target = DnsNameTarget.prospect;
+            target = DnsNameTarget.portal;
             break;
         case resident:
             target = DnsNameTarget.portal;

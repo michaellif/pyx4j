@@ -43,9 +43,7 @@ public interface PmcDnsName extends IEntity {
 
         site,
 
-        portal,
-
-        prospect;
+        portal;
 
         @Override
         public String toString() {
