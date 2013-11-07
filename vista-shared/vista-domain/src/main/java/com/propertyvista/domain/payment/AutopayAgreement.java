@@ -83,11 +83,13 @@ public interface AutopayAgreement extends IEntity {
     /**
      * billingCycleStartDate when it is first effective (inclusive)
      */
+    @Caption(name = "First Billing Cycle")
     IPrimitive<LogicalDate> effectiveFrom();
 
     /**
      * billingCycleStartDate when it is no loner effective (exclusive)
      */
+    @Caption(name = "Last Billing Cycle (exclusive)")
     IPrimitive<LogicalDate> expiredFrom();
 
     @NotNull

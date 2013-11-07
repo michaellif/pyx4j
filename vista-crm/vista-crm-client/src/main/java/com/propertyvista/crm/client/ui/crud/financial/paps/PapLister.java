@@ -31,21 +31,24 @@ public class PapLister extends AbstractLister<AutopayAgreement> {
         super(AutopayAgreement.class, false);
 
         setColumnDescriptors(//@formatter:off
-                new MemberColumnDescriptor.Builder(proto().tenant().lease()).build(),
-                new MemberColumnDescriptor.Builder(proto().tenant()).build(),
-                new MemberColumnDescriptor.Builder(proto().paymentMethod()).build(), 
+                new MemberColumnDescriptor.Builder(proto().tenant().lease()).searchable(false).build(),
+                new MemberColumnDescriptor.Builder(proto().tenant()).searchable(false).build(),
+                new MemberColumnDescriptor.Builder(proto().tenant().lease().id()).columnTitle(i18n.tr("Lease Id")).searchableOnly().build(),
+                new MemberColumnDescriptor.Builder(proto().tenant().id()).columnTitle(i18n.tr("Tenant Id")).searchableOnly().build(),
+                
+                new MemberColumnDescriptor.Builder(proto().paymentMethod()).searchable(false).build(),
+                new MemberColumnDescriptor.Builder(proto().paymentMethod().type()).title(i18n.tr("Payment Method Type")).visible(false).build(),
                 new MemberColumnDescriptor.Builder(proto().effectiveFrom()).build(),
                 new MemberColumnDescriptor.Builder(proto().expiredFrom()).build(),
                 
-                new MemberColumnDescriptor.Builder(proto().createdBy(), false).build(),
+                new MemberColumnDescriptor.Builder(proto().createdBy(), false).searchable(false).build(),
                 new MemberColumnDescriptor.Builder(proto().creationDate()).build(),
                 
                 new MemberColumnDescriptor.Builder(proto().updatedByTenant(), false).build(),
                 new MemberColumnDescriptor.Builder(proto().updatedBySystem(), false).build(),
                 new MemberColumnDescriptor.Builder(proto().updated()).build(),
                 
-                new MemberColumnDescriptor.Builder(proto().tenant().lease().id()).columnTitle("Lease Id").searchableOnly().build(),
-                new MemberColumnDescriptor.Builder(proto().tenant().id()).columnTitle("Tenant Id").searchableOnly().build(),
+
                 
                 new MemberColumnDescriptor.Builder(proto().isDeleted(), false).build()
         );//@formatter:on

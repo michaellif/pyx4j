@@ -18,6 +18,7 @@ import com.pyx4j.forms.client.ui.CEntityLabel;
 import com.pyx4j.forms.client.ui.CNumberLabel;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.security.shared.SecurityController;
 import com.pyx4j.site.client.ui.prime.form.IForm;
 
 import com.propertyvista.common.client.ui.components.folders.PapCoveredItemFolder;
@@ -25,6 +26,7 @@ import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.domain.payment.AutopayAgreement;
 import com.propertyvista.domain.payment.LeasePaymentMethod;
+import com.propertyvista.domain.security.VistaCrmBehavior;
 import com.propertyvista.domain.security.common.AbstractPmcUser;
 import com.propertyvista.domain.tenant.lease.Tenant;
 
@@ -66,6 +68,10 @@ public class PapForm extends CrmEntityForm<AutopayAgreement> {
     @Override
     protected void onValueSet(boolean populate) {
         super.onValueSet(populate);
+
+        boolean support = SecurityController.checkBehavior(VistaCrmBehavior.PropertyVistaSupport);
+        get(proto().updatedByTenant()).setVisible(support);
+        get(proto().updatedBySystem()).setVisible(support);
 
 //        get(proto().createdBy()).setVisible(!getValue().createdBy().isNull());
     }
