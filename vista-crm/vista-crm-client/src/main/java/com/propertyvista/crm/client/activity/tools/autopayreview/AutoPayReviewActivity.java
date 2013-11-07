@@ -11,7 +11,7 @@
  * @author ArtyomB
  * @version $Id$
  */
-package com.propertyvista.crm.client.activity.reports;
+package com.propertyvista.crm.client.activity.tools.autopayreview;
 
 import java.util.LinkedList;
 import java.util.List;

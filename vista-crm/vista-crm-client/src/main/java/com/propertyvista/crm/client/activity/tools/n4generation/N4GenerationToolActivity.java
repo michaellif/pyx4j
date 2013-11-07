@@ -24,6 +24,7 @@ import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.site.rpc.AppPlace;
 
 import com.propertyvista.crm.client.CrmSite;
+import com.propertyvista.crm.client.activity.tools.common.AbstractBulkOperationToolActivity;
 import com.propertyvista.crm.client.ui.tools.n4generation.N4GenerationToolView;
 import com.propertyvista.crm.rpc.dto.legal.n4.LegalNoticeCandidateDTO;
 import com.propertyvista.crm.rpc.dto.legal.n4.N4GenerationInitParamsDTO;

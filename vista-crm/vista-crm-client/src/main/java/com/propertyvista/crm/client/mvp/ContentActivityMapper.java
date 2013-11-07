@@ -229,7 +229,6 @@ import com.propertyvista.crm.client.activity.policies.yardiinterface.YardiInterf
 import com.propertyvista.crm.client.activity.profile.PmcPaymentMethodsEditorActivity;
 import com.propertyvista.crm.client.activity.profile.PmcPaymentMethodsViewerActivity;
 import com.propertyvista.crm.client.activity.reports.AutoPayChangesReportActivity;
-import com.propertyvista.crm.client.activity.reports.AutoPayReviewActivity;
 import com.propertyvista.crm.client.activity.reports.AvailabilityReportActivity;
 import com.propertyvista.crm.client.activity.reports.CustomerCreditCheckReportActivity;
 import com.propertyvista.crm.client.activity.reports.EftReportActivity;
@@ -238,6 +237,7 @@ import com.propertyvista.crm.client.activity.reports.ResidentInsuranceReportActi
 import com.propertyvista.crm.client.activity.security.PasswordChangeActivity;
 import com.propertyvista.crm.client.activity.security.PasswordResetActivity;
 import com.propertyvista.crm.client.activity.security.PasswordResetRequestActivity;
+import com.propertyvista.crm.client.activity.tools.autopayreview.AutoPayReviewActivity;
 import com.propertyvista.crm.client.activity.tools.n4generation.N4DownloadToolActivity;
 import com.propertyvista.crm.client.activity.tools.n4generation.N4GenerationToolActivity;
 import com.propertyvista.crm.client.activity.wizard.creditcheck.CreditCheckActivity;
