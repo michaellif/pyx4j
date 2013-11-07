@@ -1,0 +1,757 @@
+<?xml version="1.0" encoding="utf-8"?>
+<wsdl:definitions xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:s="http://www.w3.org/2001/XMLSchema" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:tns="http://tempuri.org/YSI.Interfaces.WebServices/ItfILSGuestCard" xmlns:tm="http://microsoft.com/wsdl/mime/textMatching/" xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" targetNamespace="http://tempuri.org/YSI.Interfaces.WebServices/ItfILSGuestCard" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+  <wsdl:types>
+    <s:schema elementFormDefault="qualified" targetNamespace="http://tempuri.org/YSI.Interfaces.WebServices/ItfILSGuestCard">
+      <s:element name="UnitAvailability_Login">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="UserName" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="Password" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="ServerName" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="Database" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="Platform" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="YardiPropertyId" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="InterfaceEntity" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="InterfaceLicense" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="UnitAvailability_LoginResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="UnitAvailability_LoginResult">
+              <s:complexType mixed="true">
+                <s:sequence>
+                  <s:any />
+                </s:sequence>
+              </s:complexType>
+            </s:element>
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="UnitAvailability_LoginByUnit">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="UserName" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="Password" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="ServerName" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="Database" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="Platform" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="YardiPropertyId" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="UnitTypeCode" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="UnitCode" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="InterfaceEntity" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="InterfaceLicense" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="UnitAvailability_LoginByUnitResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="UnitAvailability_LoginByUnitResult">
+              <s:complexType mixed="true">
+                <s:sequence>
+                  <s:any />
+                </s:sequence>
+              </s:complexType>
+            </s:element>
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetYardiAgentsSourcesResults_Login">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="UserName" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="Password" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="ServerName" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="Database" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="Platform" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="YardiPropertyId" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="InterfaceEntity" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="InterfaceLicense" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetYardiAgentsSourcesResults_LoginResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="GetYardiAgentsSourcesResults_LoginResult">
+              <s:complexType mixed="true">
+                <s:sequence>
+                  <s:any />
+                </s:sequence>
+              </s:complexType>
+            </s:element>
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetYardiGuestActivity_Login">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="UserName" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="Password" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="ServerName" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="Database" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="Platform" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="YardiPropertyId" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="InterfaceEntity" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="InterfaceLicense" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetYardiGuestActivity_LoginResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="GetYardiGuestActivity_LoginResult">
+              <s:complexType mixed="true">
+                <s:sequence>
+                  <s:any />
+                </s:sequence>
+              </s:complexType>
+            </s:element>
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetYardiGuestActivity_DateRange">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="UserName" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="Password" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="ServerName" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="Database" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="Platform" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="YardiPropertyId" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="InterfaceEntity" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="InterfaceLicense" type="s:string" />
+            <s:element minOccurs="1" maxOccurs="1" name="FromDate" type="s:dateTime" />
+            <s:element minOccurs="1" maxOccurs="1" name="ToDate" type="s:dateTime" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetYardiGuestActivity_DateRangeResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="GetYardiGuestActivity_DateRangeResult">
+              <s:complexType mixed="true">
+                <s:sequence>
+                  <s:any />
+                </s:sequence>
+              </s:complexType>
+            </s:element>
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetYardiGuestActivity_Search">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="UserName" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="Password" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="ServerName" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="Database" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="Platform" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="YardiPropertyId" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="InterfaceEntity" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="InterfaceLicense" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="FirstName" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="LastName" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="EmailAddress" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="PhoneNumber" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="ThirdPartyId" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="DateOfBirth" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="FederalId" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetYardiGuestActivity_SearchResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="GetYardiGuestActivity_SearchResult">
+              <s:complexType mixed="true">
+                <s:sequence>
+                  <s:any />
+                </s:sequence>
+              </s:complexType>
+            </s:element>
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetRecentYardiGuestActivity">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="UserName" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="Password" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="ServerName" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="Database" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="Platform" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="YardiPropertyId" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="InterfaceEntity" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="InterfaceLicense" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetRecentYardiGuestActivityResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="GetRecentYardiGuestActivityResult">
+              <s:complexType mixed="true">
+                <s:sequence>
+                  <s:any />
+                </s:sequence>
+              </s:complexType>
+            </s:element>
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="ImportYardiGuest_Login">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="UserName" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="Password" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="ServerName" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="Database" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="Platform" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="InterfaceEntity" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="InterfaceLicense" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="XmlDoc">
+              <s:complexType mixed="true">
+                <s:sequence>
+                  <s:any />
+                </s:sequence>
+              </s:complexType>
+            </s:element>
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="ImportYardiGuest_LoginResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="ImportYardiGuest_LoginResult">
+              <s:complexType mixed="true">
+                <s:sequence>
+                  <s:any />
+                </s:sequence>
+              </s:complexType>
+            </s:element>
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="ImportYardiGuestWithMitsMP_Login">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="UserName" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="Password" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="ServerName" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="Database" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="Platform" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="InterfaceEntity" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="InterfaceLicense" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="XmlDoc">
+              <s:complexType mixed="true">
+                <s:sequence>
+                  <s:any />
+                </s:sequence>
+              </s:complexType>
+            </s:element>
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="ImportYardiGuestWithMitsMP_LoginResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="ImportYardiGuestWithMitsMP_LoginResult">
+              <s:complexType mixed="true">
+                <s:sequence>
+                  <s:any />
+                </s:sequence>
+              </s:complexType>
+            </s:element>
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetYardiRentableItems_Login">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="UserName" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="Password" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="ServerName" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="Database" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="Platform" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="YardiPropertyId" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="InterfaceEntity" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="InterfaceLicense" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetYardiRentableItems_LoginResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="GetYardiRentableItems_LoginResult">
+              <s:complexType mixed="true">
+                <s:sequence>
+                  <s:any />
+                </s:sequence>
+              </s:complexType>
+            </s:element>
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="ImportTenantLeaseDocumentPDF">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="UserName" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="Password" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="ServerName" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="DataBase" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="Platform" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="InterfaceEntity" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="InterfaceLicense" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="PropertyId" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="TenantCode" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="AttachmentType" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="Attachment" type="s:base64Binary" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="ImportTenantLeaseDocumentPDFResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="ImportTenantLeaseDocumentPDFResult">
+              <s:complexType mixed="true">
+                <s:sequence>
+                  <s:any />
+                </s:sequence>
+              </s:complexType>
+            </s:element>
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetTenantLeaseDocuments">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="UserName" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="Password" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="ServerName" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="Database" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="Platform" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="YardiPropertyId" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="TenantCode" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="InterfaceEntity" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="InterfaceLicense" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetTenantLeaseDocumentsResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="GetTenantLeaseDocumentsResult">
+              <s:complexType mixed="true">
+                <s:sequence>
+                  <s:any />
+                </s:sequence>
+              </s:complexType>
+            </s:element>
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetTenantDocument">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="UserName" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="Password" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="ServerName" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="Database" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="Platform" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="YardiPropertyId" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="TenantCode" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="FileName" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="InterfaceEntity" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="InterfaceLicense" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetTenantDocumentResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="GetTenantDocumentResult" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetAttachmentTypesAndChargeCodes">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="UserName" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="Password" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="ServerName" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="Database" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="Platform" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="InterfaceEntity" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="InterfaceLicense" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetAttachmentTypesAndChargeCodesResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="GetAttachmentTypesAndChargeCodesResult">
+              <s:complexType mixed="true">
+                <s:sequence>
+                  <s:any />
+                </s:sequence>
+              </s:complexType>
+            </s:element>
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetVersionNumber">
+        <s:complexType />
+      </s:element>
+      <s:element name="GetVersionNumberResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="GetVersionNumberResult" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="Ping">
+        <s:complexType />
+      </s:element>
+      <s:element name="PingResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="PingResult" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+    </s:schema>
+  </wsdl:types>
+  <wsdl:message name="UnitAvailability_LoginSoapIn">
+    <wsdl:part name="parameters" element="tns:UnitAvailability_Login" />
+  </wsdl:message>
+  <wsdl:message name="UnitAvailability_LoginSoapOut">
+    <wsdl:part name="parameters" element="tns:UnitAvailability_LoginResponse" />
+  </wsdl:message>
+  <wsdl:message name="UnitAvailability_LoginByUnitSoapIn">
+    <wsdl:part name="parameters" element="tns:UnitAvailability_LoginByUnit" />
+  </wsdl:message>
+  <wsdl:message name="UnitAvailability_LoginByUnitSoapOut">
+    <wsdl:part name="parameters" element="tns:UnitAvailability_LoginByUnitResponse" />
+  </wsdl:message>
+  <wsdl:message name="GetYardiAgentsSourcesResults_LoginSoapIn">
+    <wsdl:part name="parameters" element="tns:GetYardiAgentsSourcesResults_Login" />
+  </wsdl:message>
+  <wsdl:message name="GetYardiAgentsSourcesResults_LoginSoapOut">
+    <wsdl:part name="parameters" element="tns:GetYardiAgentsSourcesResults_LoginResponse" />
+  </wsdl:message>
+  <wsdl:message name="GetYardiGuestActivity_LoginSoapIn">
+    <wsdl:part name="parameters" element="tns:GetYardiGuestActivity_Login" />
+  </wsdl:message>
+  <wsdl:message name="GetYardiGuestActivity_LoginSoapOut">
+    <wsdl:part name="parameters" element="tns:GetYardiGuestActivity_LoginResponse" />
+  </wsdl:message>
+  <wsdl:message name="GetYardiGuestActivity_DateRangeSoapIn">
+    <wsdl:part name="parameters" element="tns:GetYardiGuestActivity_DateRange" />
+  </wsdl:message>
+  <wsdl:message name="GetYardiGuestActivity_DateRangeSoapOut">
+    <wsdl:part name="parameters" element="tns:GetYardiGuestActivity_DateRangeResponse" />
+  </wsdl:message>
+  <wsdl:message name="GetYardiGuestActivity_SearchSoapIn">
+    <wsdl:part name="parameters" element="tns:GetYardiGuestActivity_Search" />
+  </wsdl:message>
+  <wsdl:message name="GetYardiGuestActivity_SearchSoapOut">
+    <wsdl:part name="parameters" element="tns:GetYardiGuestActivity_SearchResponse" />
+  </wsdl:message>
+  <wsdl:message name="GetRecentYardiGuestActivitySoapIn">
+    <wsdl:part name="parameters" element="tns:GetRecentYardiGuestActivity" />
+  </wsdl:message>
+  <wsdl:message name="GetRecentYardiGuestActivitySoapOut">
+    <wsdl:part name="parameters" element="tns:GetRecentYardiGuestActivityResponse" />
+  </wsdl:message>
+  <wsdl:message name="ImportYardiGuest_LoginSoapIn">
+    <wsdl:part name="parameters" element="tns:ImportYardiGuest_Login" />
+  </wsdl:message>
+  <wsdl:message name="ImportYardiGuest_LoginSoapOut">
+    <wsdl:part name="parameters" element="tns:ImportYardiGuest_LoginResponse" />
+  </wsdl:message>
+  <wsdl:message name="ImportYardiGuestWithMitsMP_LoginSoapIn">
+    <wsdl:part name="parameters" element="tns:ImportYardiGuestWithMitsMP_Login" />
+  </wsdl:message>
+  <wsdl:message name="ImportYardiGuestWithMitsMP_LoginSoapOut">
+    <wsdl:part name="parameters" element="tns:ImportYardiGuestWithMitsMP_LoginResponse" />
+  </wsdl:message>
+  <wsdl:message name="GetYardiRentableItems_LoginSoapIn">
+    <wsdl:part name="parameters" element="tns:GetYardiRentableItems_Login" />
+  </wsdl:message>
+  <wsdl:message name="GetYardiRentableItems_LoginSoapOut">
+    <wsdl:part name="parameters" element="tns:GetYardiRentableItems_LoginResponse" />
+  </wsdl:message>
+  <wsdl:message name="ImportTenantLeaseDocumentPDFSoapIn">
+    <wsdl:part name="parameters" element="tns:ImportTenantLeaseDocumentPDF" />
+  </wsdl:message>
+  <wsdl:message name="ImportTenantLeaseDocumentPDFSoapOut">
+    <wsdl:part name="parameters" element="tns:ImportTenantLeaseDocumentPDFResponse" />
+  </wsdl:message>
+  <wsdl:message name="GetTenantLeaseDocumentsSoapIn">
+    <wsdl:part name="parameters" element="tns:GetTenantLeaseDocuments" />
+  </wsdl:message>
+  <wsdl:message name="GetTenantLeaseDocumentsSoapOut">
+    <wsdl:part name="parameters" element="tns:GetTenantLeaseDocumentsResponse" />
+  </wsdl:message>
+  <wsdl:message name="GetTenantDocumentSoapIn">
+    <wsdl:part name="parameters" element="tns:GetTenantDocument" />
+  </wsdl:message>
+  <wsdl:message name="GetTenantDocumentSoapOut">
+    <wsdl:part name="parameters" element="tns:GetTenantDocumentResponse" />
+  </wsdl:message>
+  <wsdl:message name="GetAttachmentTypesAndChargeCodesSoapIn">
+    <wsdl:part name="parameters" element="tns:GetAttachmentTypesAndChargeCodes" />
+  </wsdl:message>
+  <wsdl:message name="GetAttachmentTypesAndChargeCodesSoapOut">
+    <wsdl:part name="parameters" element="tns:GetAttachmentTypesAndChargeCodesResponse" />
+  </wsdl:message>
+  <wsdl:message name="GetVersionNumberSoapIn">
+    <wsdl:part name="parameters" element="tns:GetVersionNumber" />
+  </wsdl:message>
+  <wsdl:message name="GetVersionNumberSoapOut">
+    <wsdl:part name="parameters" element="tns:GetVersionNumberResponse" />
+  </wsdl:message>
+  <wsdl:message name="PingSoapIn">
+    <wsdl:part name="parameters" element="tns:Ping" />
+  </wsdl:message>
+  <wsdl:message name="PingSoapOut">
+    <wsdl:part name="parameters" element="tns:PingResponse" />
+  </wsdl:message>
+  <wsdl:portType name="ItfILSGuestCardSoap">
+    <wsdl:operation name="UnitAvailability_Login">
+      <documentation xmlns="http://schemas.xmlsoap.org/wsdl/">Allows for the export of unit availibility for a given property/property list. Can be used thru 1/1/13 without an InterfaceLicense.</documentation>
+      <wsdl:input message="tns:UnitAvailability_LoginSoapIn" />
+      <wsdl:output message="tns:UnitAvailability_LoginSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="UnitAvailability_LoginByUnit">
+      <documentation xmlns="http://schemas.xmlsoap.org/wsdl/">Allows for the export of unit availibility for a specific unitcode and/or unittype. Can be used thru 1/1/13 without an InterfaceLicense.</documentation>
+      <wsdl:input message="tns:UnitAvailability_LoginByUnitSoapIn" />
+      <wsdl:output message="tns:UnitAvailability_LoginByUnitSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetYardiAgentsSourcesResults_Login">
+      <documentation xmlns="http://schemas.xmlsoap.org/wsdl/">Allows for the export of agent names, sources, and result values; which are required to enter a guest. Can be used thru 1/1/13 without an InterfaceLicense.</documentation>
+      <wsdl:input message="tns:GetYardiAgentsSourcesResults_LoginSoapIn" />
+      <wsdl:output message="tns:GetYardiAgentsSourcesResults_LoginSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetYardiGuestActivity_Login">
+      <documentation xmlns="http://schemas.xmlsoap.org/wsdl/">Allows for the export of guest activity and is subject to the optional parameter in vendor configuration which specifies the last number of days to be included. Can be used thru 1/1/13 without an InterfaceLicense.</documentation>
+      <wsdl:input message="tns:GetYardiGuestActivity_LoginSoapIn" />
+      <wsdl:output message="tns:GetYardiGuestActivity_LoginSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetYardiGuestActivity_DateRange">
+      <documentation xmlns="http://schemas.xmlsoap.org/wsdl/">Allows for the export of guest activity.  The FROM and TO dates will pull all guests with documented activity within the given period. This does not necessarily mean all events will be exported; only major events such as Show, Lease Signed, Move In events will be exported. Can be used thru 1/1/13 without an InterfaceLicense.</documentation>
+      <wsdl:input message="tns:GetYardiGuestActivity_DateRangeSoapIn" />
+      <wsdl:output message="tns:GetYardiGuestActivity_DateRangeSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetYardiGuestActivity_Search">
+      <documentation xmlns="http://schemas.xmlsoap.org/wsdl/">Allows for the export of guest activity. This method will allow the consumer enter search critera based on 1)First name 2)Last name 3)E-mail Address 4)Phone number 5)Third Party ID/Prospect Code 6)DateOfBirth 7)FederalID. Can be used thru 1/1/13 without an InterfaceLicense.</documentation>
+      <wsdl:input message="tns:GetYardiGuestActivity_SearchSoapIn" />
+      <wsdl:output message="tns:GetYardiGuestActivity_SearchSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetRecentYardiGuestActivity">
+      <documentation xmlns="http://schemas.xmlsoap.org/wsdl/">Allows for the export of guest activity.  This method will export all activity since the last export for this vendor/property combination. This does not necessarily mean all events will be exported; only major events such as Show, Lease Signed, Move In events will be exported. Can be used thru 1/1/13 without an InterfaceLicense.</documentation>
+      <wsdl:input message="tns:GetRecentYardiGuestActivitySoapIn" />
+      <wsdl:output message="tns:GetRecentYardiGuestActivitySoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="ImportYardiGuest_Login">
+      <documentation xmlns="http://schemas.xmlsoap.org/wsdl/">Allows for the import of guests into a Yardi Voyager database with MITS_LeadManagement4.0. Can be used thru 1/1/13 without an InterfaceLicense.</documentation>
+      <wsdl:input message="tns:ImportYardiGuest_LoginSoapIn" />
+      <wsdl:output message="tns:ImportYardiGuest_LoginSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="ImportYardiGuestWithMitsMP_Login">
+      <documentation xmlns="http://schemas.xmlsoap.org/wsdl/">Allows for the import of guests into a Yardi Voyager database.  The Import Xml must be wrapped with the MITS Messaging Protocol. Can be used thru 1/1/13 without an InterfaceLicense.</documentation>
+      <wsdl:input message="tns:ImportYardiGuestWithMitsMP_LoginSoapIn" />
+      <wsdl:output message="tns:ImportYardiGuestWithMitsMP_LoginSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetYardiRentableItems_Login">
+      <documentation xmlns="http://schemas.xmlsoap.org/wsdl/">Returns the available rentable items for a property. Includes the reference code, charge code, the type of item, and the amount to rent.</documentation>
+      <wsdl:input message="tns:GetYardiRentableItems_LoginSoapIn" />
+      <wsdl:output message="tns:GetYardiRentableItems_LoginSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="ImportTenantLeaseDocumentPDF">
+      <documentation xmlns="http://schemas.xmlsoap.org/wsdl/">Allows for the import of a document to a Voyager install and attaches it to a tenant record. The tenant must have executed the LeaseSign event. Can be used thru 1/1/13 without an InterfaceLicense.</documentation>
+      <wsdl:input message="tns:ImportTenantLeaseDocumentPDFSoapIn" />
+      <wsdl:output message="tns:ImportTenantLeaseDocumentPDFSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetTenantLeaseDocuments">
+      <documentation xmlns="http://schemas.xmlsoap.org/wsdl/">Returns the attachment names for a given tenant code.</documentation>
+      <wsdl:input message="tns:GetTenantLeaseDocumentsSoapIn" />
+      <wsdl:output message="tns:GetTenantLeaseDocumentsSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetTenantDocument">
+      <documentation xmlns="http://schemas.xmlsoap.org/wsdl/">Returns the attachment for a given tenant code as a string. Only returns the attachment of the Attachment Type setup for the vendor.</documentation>
+      <wsdl:input message="tns:GetTenantDocumentSoapIn" />
+      <wsdl:output message="tns:GetTenantDocumentSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetAttachmentTypesAndChargeCodes">
+      <documentation xmlns="http://schemas.xmlsoap.org/wsdl/">Returns the attachment types defined in a database. Returns the application fee charge codes configured for the third party vendor by the client.</documentation>
+      <wsdl:input message="tns:GetAttachmentTypesAndChargeCodesSoapIn" />
+      <wsdl:output message="tns:GetAttachmentTypesAndChargeCodesSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetVersionNumber">
+      <documentation xmlns="http://schemas.xmlsoap.org/wsdl/">Returns current version number of Interfaces concatenated with ILS/GuestCard Plugin version (XX_Y)</documentation>
+      <wsdl:input message="tns:GetVersionNumberSoapIn" />
+      <wsdl:output message="tns:GetVersionNumberSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="Ping">
+      <wsdl:input message="tns:PingSoapIn" />
+      <wsdl:output message="tns:PingSoapOut" />
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="ItfILSGuestCardSoap" type="tns:ItfILSGuestCardSoap">
+    <soap:binding transport="http://schemas.xmlsoap.org/soap/http" style="document" />
+    <wsdl:operation name="UnitAvailability_Login">
+      <soap:operation soapAction="http://tempuri.org/YSI.Interfaces.WebServices/ItfILSGuestCard/UnitAvailability_Login" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="UnitAvailability_LoginByUnit">
+      <soap:operation soapAction="http://tempuri.org/YSI.Interfaces.WebServices/ItfILSGuestCard/UnitAvailability_LoginByUnit" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetYardiAgentsSourcesResults_Login">
+      <soap:operation soapAction="http://tempuri.org/YSI.Interfaces.WebServices/ItfILSGuestCard/GetYardiAgentsSourcesResults_Login" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetYardiGuestActivity_Login">
+      <soap:operation soapAction="http://tempuri.org/YSI.Interfaces.WebServices/ItfILSGuestCard/GetYardiGuestActivity_Login" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetYardiGuestActivity_DateRange">
+      <soap:operation soapAction="http://tempuri.org/YSI.Interfaces.WebServices/ItfILSGuestCard/GetYardiGuestActivity_DateRange" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetYardiGuestActivity_Search">
+      <soap:operation soapAction="http://tempuri.org/YSI.Interfaces.WebServices/ItfILSGuestCard/GetYardiGuestActivity_Search" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetRecentYardiGuestActivity">
+      <soap:operation soapAction="http://tempuri.org/YSI.Interfaces.WebServices/ItfILSGuestCard/GetRecentYardiGuestActivity" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ImportYardiGuest_Login">
+      <soap:operation soapAction="http://tempuri.org/YSI.Interfaces.WebServices/ItfILSGuestCard/ImportYardiGuest_Login" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ImportYardiGuestWithMitsMP_Login">
+      <soap:operation soapAction="http://tempuri.org/YSI.Interfaces.WebServices/ItfILSGuestCard/ImportYardiGuestWithMitsMP_Login" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetYardiRentableItems_Login">
+      <soap:operation soapAction="http://tempuri.org/YSI.Interfaces.WebServices/ItfILSGuestCard/GetYardiRentableItems_Login" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ImportTenantLeaseDocumentPDF">
+      <soap:operation soapAction="http://tempuri.org/YSI.Interfaces.WebServices/ItfILSGuestCard/ImportTenantLeaseDocumentPDF" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetTenantLeaseDocuments">
+      <soap:operation soapAction="http://tempuri.org/YSI.Interfaces.WebServices/ItfILSGuestCard/GetTenantLeaseDocuments" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetTenantDocument">
+      <soap:operation soapAction="http://tempuri.org/YSI.Interfaces.WebServices/ItfILSGuestCard/GetTenantDocument" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetAttachmentTypesAndChargeCodes">
+      <soap:operation soapAction="http://tempuri.org/YSI.Interfaces.WebServices/ItfILSGuestCard/GetAttachmentTypesAndChargeCodes" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetVersionNumber">
+      <soap:operation soapAction="http://tempuri.org/YSI.Interfaces.WebServices/ItfILSGuestCard/GetVersionNumber" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="Ping">
+      <soap:operation soapAction="http://tempuri.org/YSI.Interfaces.WebServices/ItfILSGuestCard/Ping" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="ItfILSGuestCard">
+    <documentation xmlns="http://schemas.xmlsoap.org/wsdl/">Yardi ILS/Guest Card Interface Web ServiceUtilizes XML in MITS Lead Manangement 4.0, and MITS Property Marketing 4.0. All web methods contained in this web service that read/write data from Voyager will require login credentials.</documentation>
+    <wsdl:port name="ItfILSGuestCardSoap" binding="tns:ItfILSGuestCardSoap">
+      <soap:address location="http://www.iyardiasp.com/8223thirddev/Webservices/itfilsguestcard.asmx" />
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>
