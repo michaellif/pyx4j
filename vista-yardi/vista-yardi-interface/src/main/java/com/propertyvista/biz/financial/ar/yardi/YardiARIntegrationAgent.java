@@ -193,6 +193,8 @@ public class YardiARIntegrationAgent {
             reversalType.setType("Reverse");
         }
         detail.setReversal(reversalType);
+        detail.setReversalDescription(reversal.description().getStringView());
+        detail.setDescription(reversal.description().getStringView());
         setPaymentInfo(detail, reversal.paymentRecord(), reversal.billingAccount().lease());
         return detail;
     }
