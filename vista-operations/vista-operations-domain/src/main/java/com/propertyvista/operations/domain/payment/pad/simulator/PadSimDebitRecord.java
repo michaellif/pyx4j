@@ -73,7 +73,7 @@ public interface PadSimDebitRecord extends IEntity {
 
     IPrimitive<TransactionReconciliationStatus> reconciliationStatus();
 
-    @Caption(description = "900 - EDIT REJECT\n;\n 901 - NSF (DEBIT ONLY);\n 902 - ACCOUNT NOT FOUND")
+    @Caption(description = "--reject codes--\n'900' - EDIT REJECT\n;--return codes--\n'901' - NSF (DEBIT ONLY);\n'902' - ACCOUNT NOT FOUND;\n'912' INVALID/INCORRECT ACCOUNT NO")
     IPrimitive<String> reasonCode();
 
     IPrimitive<String> reasonText();
