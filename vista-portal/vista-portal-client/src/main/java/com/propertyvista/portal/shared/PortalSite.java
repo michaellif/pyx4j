@@ -40,7 +40,7 @@ import com.propertyvista.portal.rpc.portal.PortalSiteMap;
 import com.propertyvista.portal.rpc.portal.SiteDefinitionsDTO;
 import com.propertyvista.portal.rpc.portal.services.PortalPolicyRetrieveService;
 import com.propertyvista.portal.rpc.portal.services.SiteThemeServices;
-import com.propertyvista.portal.rpc.portal.web.services.PortalAuthenticationService;
+import com.propertyvista.portal.rpc.portal.web.services.ResidentAuthenticationService;
 import com.propertyvista.portal.rpc.shared.services.PolicyRetrieveService;
 import com.propertyvista.portal.shared.themes.PortalPalette;
 import com.propertyvista.portal.shared.themes.PortalTheme;
@@ -109,7 +109,7 @@ public class PortalSite extends VistaSite {
     }
 
     private void obtainAuthenticationData() {
-        ClientContext.obtainAuthenticationData(GWT.<AuthenticationService> create(PortalAuthenticationService.class), new DefaultAsyncCallback<Boolean>() {
+        ClientContext.obtainAuthenticationData(GWT.<AuthenticationService> create(ResidentAuthenticationService.class), new DefaultAsyncCallback<Boolean>() {
 
             @Override
             public void onSuccess(Boolean result) {

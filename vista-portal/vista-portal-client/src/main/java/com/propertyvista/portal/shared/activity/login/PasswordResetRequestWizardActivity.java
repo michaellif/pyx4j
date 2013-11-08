@@ -29,7 +29,7 @@ import com.pyx4j.site.shared.domain.Notification.NotificationType;
 import com.pyx4j.widgets.client.CaptchaComposite;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
 
-import com.propertyvista.portal.rpc.portal.web.services.PortalAuthenticationService;
+import com.propertyvista.portal.rpc.portal.web.services.ResidentAuthenticationService;
 import com.propertyvista.portal.shared.PortalSite;
 import com.propertyvista.portal.shared.activity.AbstractWizardActivity;
 import com.propertyvista.portal.shared.ui.landing.PasswordResetRequestWizardView;
@@ -52,7 +52,7 @@ public class PasswordResetRequestWizardActivity extends AbstractWizardActivity<P
 
     @Override
     public void submit() {
-        GWT.<AuthenticationService> create(PortalAuthenticationService.class).requestPasswordReset(new DefaultAsyncCallback<VoidSerializable>() {
+        GWT.<AuthenticationService> create(ResidentAuthenticationService.class).requestPasswordReset(new DefaultAsyncCallback<VoidSerializable>() {
             @Override
             public void onSuccess(VoidSerializable result) {
                 PasswordResetRequestWizardActivity.super.submit();
@@ -77,7 +77,7 @@ public class PasswordResetRequestWizardActivity extends AbstractWizardActivity<P
             view.createNewCaptchaChallenge();
             // view.displayPasswordResetFailedMessage();
         } else {
-            GWT.<AuthenticationService> create(PortalAuthenticationService.class).obtainRecaptchaPublicKey(new DefaultAsyncCallback<String>() {
+            GWT.<AuthenticationService> create(ResidentAuthenticationService.class).obtainRecaptchaPublicKey(new DefaultAsyncCallback<String>() {
                 @Override
                 public void onSuccess(String result) {
                     CaptchaComposite.setPublicKey(result);

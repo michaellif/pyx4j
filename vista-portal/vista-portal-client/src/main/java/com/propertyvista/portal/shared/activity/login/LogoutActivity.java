@@ -21,13 +21,13 @@ import com.google.gwt.user.client.ui.AcceptsOneWidget;
 import com.pyx4j.security.client.ClientContext;
 import com.pyx4j.security.rpc.AuthenticationService;
 
-import com.propertyvista.portal.rpc.portal.web.services.PortalAuthenticationService;
+import com.propertyvista.portal.rpc.portal.web.services.ResidentAuthenticationService;
 
 public class LogoutActivity extends AbstractActivity {
 
     @Override
     public void start(AcceptsOneWidget panel, EventBus eventBus) {
-        ClientContext.logout(GWT.<AuthenticationService> create(PortalAuthenticationService.class), null);
+        ClientContext.logout(GWT.<AuthenticationService> create(ResidentAuthenticationService.class), null);
     }
 
 }

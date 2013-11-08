@@ -21,13 +21,13 @@ import com.pyx4j.security.rpc.AuthenticationService;
 import com.propertyvista.common.client.ui.components.login.AbstractLoginWithTokenActivity;
 import com.propertyvista.common.client.ui.components.login.LoginWithTokenView;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap;
-import com.propertyvista.portal.rpc.portal.web.services.PortalAuthenticationService;
+import com.propertyvista.portal.rpc.portal.web.services.ResidentAuthenticationService;
 import com.propertyvista.portal.shared.PortalSite;
 
 public class LoginWithTokenActivity extends AbstractLoginWithTokenActivity {
 
     public LoginWithTokenActivity(Place place) {
-        super(place, PortalSite.getViewFactory().instantiate(LoginWithTokenView.class), GWT.<AuthenticationService> create(PortalAuthenticationService.class),
+        super(place, PortalSite.getViewFactory().instantiate(LoginWithTokenView.class), GWT.<AuthenticationService> create(ResidentAuthenticationService.class),
                 new PortalSiteMap.PasswordReset(), new PortalSiteMap.Login());
     }
 

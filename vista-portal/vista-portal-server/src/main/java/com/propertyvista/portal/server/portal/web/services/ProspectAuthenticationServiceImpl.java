@@ -7,11 +7,11 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Nov 14, 2011
+ * Created on 2011-06-13
  * @author vlads
  * @version $Id$
  */
-package com.propertyvista.portal.server.ptapp.services;
+package com.propertyvista.portal.server.portal.web.services;
 
 import java.util.Arrays;
 import java.util.Collection;
@@ -35,21 +35,23 @@ import com.propertyvista.domain.security.common.VistaApplication;
 import com.propertyvista.domain.security.common.VistaBasicBehavior;
 import com.propertyvista.domain.tenant.ptapp.MasterOnlineApplication;
 import com.propertyvista.domain.tenant.ptapp.OnlineApplication;
-import com.propertyvista.portal.rpc.ptapp.services.PtAuthenticationService;
+import com.propertyvista.portal.rpc.portal.web.services.ProspectAuthenticationService;
 import com.propertyvista.portal.server.ptapp.PtAppContext;
 import com.propertyvista.server.common.security.VistaAuthenticationServicesImpl;
 import com.propertyvista.server.domain.security.CustomerUserCredential;
 
-/**
- * @deprecated @see ProspectAuthenticationService
- */
-@Deprecated
-public class PtAuthenticationServiceImpl extends VistaAuthenticationServicesImpl<CustomerUser, CustomerUserCredential> implements PtAuthenticationService {
+public class ProspectAuthenticationServiceImpl extends VistaAuthenticationServicesImpl<CustomerUser, CustomerUserCredential> implements
+        ProspectAuthenticationService {
 
-    private static final I18n i18n = I18n.get(PtAuthenticationServiceImpl.class);
+    private static final I18n i18n = I18n.get(ProspectAuthenticationServiceImpl.class);
 
-    public PtAuthenticationServiceImpl() {
+    public ProspectAuthenticationServiceImpl() {
         super(CustomerUser.class, CustomerUserCredential.class);
+    }
+
+    @Override
+    protected boolean isDynamicBehaviours() {
+        return true;
     }
 
     @Override
@@ -65,11 +67,6 @@ public class PtAuthenticationServiceImpl extends VistaAuthenticationServicesImpl
     @Override
     protected Behavior getPasswordChangeRequiredBehavior() {
         return VistaBasicBehavior.ProspectivePortalPasswordChangeRequired;
-    }
-
-    @Override
-    protected boolean isDynamicBehaviours() {
-        return true;
     }
 
     @Override
@@ -131,7 +128,6 @@ public class PtAuthenticationServiceImpl extends VistaAuthenticationServicesImpl
 
     @Override
     protected void sendPasswordRetrievalToken(CustomerUser user) {
-
         // See if active Application exists
         List<OnlineApplication> applications = ServerSideFactory.create(OnlineApplicationFacade.class).getOnlineApplications(user);
         if (applications.size() == 0) {

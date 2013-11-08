@@ -27,7 +27,7 @@ import com.propertyvista.domain.contact.AddressStructured;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.portal.domain.dto.LeaseContextChoiceDTO;
 import com.propertyvista.portal.rpc.portal.services.LeaseContextSelectionService;
-import com.propertyvista.portal.server.portal.web.services.PortalAuthenticationServiceImpl;
+import com.propertyvista.portal.server.portal.web.services.ResidentAuthenticationServiceImpl;
 import com.propertyvista.portal.server.security.TenantAppContext;
 import com.propertyvista.server.common.util.AddressRetriever;
 
@@ -54,7 +54,7 @@ public class LeaseContextSelectionServiceImpl implements LeaseContextSelectionSe
 
     @Override
     public void setLeaseContext(AsyncCallback<AuthenticationResponse> callback, Lease leaseStub) {
-        callback.onSuccess(new PortalAuthenticationServiceImpl().reAuthenticate(leaseStub));
+        callback.onSuccess(new ResidentAuthenticationServiceImpl().reAuthenticate(leaseStub));
     }
 
 }

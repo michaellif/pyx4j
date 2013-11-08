@@ -75,7 +75,8 @@ import com.propertyvista.portal.rpc.portal.services.resident.TenantInsuranceServ
 import com.propertyvista.portal.rpc.portal.services.resident.TenantSureManagementService;
 import com.propertyvista.portal.rpc.portal.services.resident.ViewBillService;
 import com.propertyvista.portal.rpc.portal.services.resident.WeatherService;
-import com.propertyvista.portal.rpc.portal.web.services.PortalAuthenticationService;
+import com.propertyvista.portal.rpc.portal.web.services.ProspectAuthenticationService;
+import com.propertyvista.portal.rpc.portal.web.services.ResidentAuthenticationService;
 import com.propertyvista.portal.rpc.portal.web.services.ResidentPictureUploadService;
 import com.propertyvista.portal.rpc.portal.web.services.financial.AutoPayWizardService;
 import com.propertyvista.portal.rpc.portal.web.services.financial.BillingService;
@@ -91,7 +92,6 @@ import com.propertyvista.portal.rpc.ptapp.services.ApplicationDocumentUploadServ
 import com.propertyvista.portal.rpc.ptapp.services.ApplicationSelectionService;
 import com.propertyvista.portal.rpc.ptapp.services.ApplicationService;
 import com.propertyvista.portal.rpc.ptapp.services.ApplicationStatusService;
-import com.propertyvista.portal.rpc.ptapp.services.PtAuthenticationService;
 import com.propertyvista.portal.rpc.ptapp.services.PtPasswordResetService;
 import com.propertyvista.portal.rpc.ptapp.services.PtPolicyRetrieveService;
 import com.propertyvista.portal.rpc.ptapp.services.steps.ApartmentService;
@@ -126,7 +126,7 @@ public class VistaPortalAccessControlList extends ServletContainerAclBuilder {
             grant(new IServiceExecutePermission(ResetWizardService.class));
         }
 
-        grant(new IServiceExecutePermission(PortalAuthenticationService.class));
+        grant(new IServiceExecutePermission(ResidentAuthenticationService.class));
         grant(new IServiceExecutePermission(PortalVistaTermsService.class));
 
         grant(new IServiceExecutePermission(com.propertyvista.portal.rpc.portal.services.resident.SelfRegistrationBuildingsSourceService.class));
@@ -134,7 +134,7 @@ public class VistaPortalAccessControlList extends ServletContainerAclBuilder {
 
         grant(new EntityPermission(SelfRegistrationBuildingDTO.class, EntityPermission.READ));
 
-        grant(new IServiceExecutePermission(PtAuthenticationService.class));
+        grant(new IServiceExecutePermission(ProspectAuthenticationService.class));
 
         grant(VistaCustomerBehavior.LeaseSelectionRequired, new IServiceExecutePermission(LeaseContextSelectionService.class));
         grant(VistaCustomerBehavior.HasMultipleLeases, new IServiceExecutePermission(LeaseContextSelectionService.class));

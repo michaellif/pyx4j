@@ -46,17 +46,17 @@ import com.propertyvista.domain.tenant.Customer;
 import com.propertyvista.domain.tenant.CustomerSelfRegistration;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.portal.rpc.portal.web.dto.SelfRegistrationDTO;
-import com.propertyvista.portal.rpc.portal.web.services.PortalAuthenticationService;
+import com.propertyvista.portal.rpc.portal.web.services.ResidentAuthenticationService;
 import com.propertyvista.portal.server.security.VistaCustomerContext;
 import com.propertyvista.server.common.security.VistaAuthenticationServicesImpl;
 import com.propertyvista.server.domain.security.CustomerUserCredential;
 
-public class PortalAuthenticationServiceImpl extends VistaAuthenticationServicesImpl<CustomerUser, CustomerUserCredential> implements
-        PortalAuthenticationService {
+public class ResidentAuthenticationServiceImpl extends VistaAuthenticationServicesImpl<CustomerUser, CustomerUserCredential> implements
+        ResidentAuthenticationService {
 
-    private static final I18n i18n = I18n.get(PortalAuthenticationServiceImpl.class);
+    private static final I18n i18n = I18n.get(ResidentAuthenticationServiceImpl.class);
 
-    public PortalAuthenticationServiceImpl() {
+    public ResidentAuthenticationServiceImpl() {
         super(CustomerUser.class, CustomerUserCredential.class);
     }
 

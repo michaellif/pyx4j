@@ -31,13 +31,13 @@ import com.propertyvista.domain.DemoData.UserType;
 import com.propertyvista.portal.prospect.ui.landing.LandingView;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap;
 import com.propertyvista.portal.rpc.portal.ProspectPortalSiteMap;
-import com.propertyvista.portal.rpc.portal.web.services.PortalAuthenticationService;
+import com.propertyvista.portal.rpc.portal.web.services.ProspectAuthenticationService;
 import com.propertyvista.portal.shared.PortalSite;
 
 public class LandingActivity extends AbstractLoginActivty implements LandingView.LandingPresenter {
 
     public LandingActivity(Place place) {
-        super(place, PortalSite.getViewFactory().instantiate(LandingView.class), GWT.<AuthenticationService> create(PortalAuthenticationService.class),
+        super(place, PortalSite.getViewFactory().instantiate(LandingView.class), GWT.<AuthenticationService> create(ProspectAuthenticationService.class),
                 new PortalSiteMap.PasswordResetRequest());
     }
 
