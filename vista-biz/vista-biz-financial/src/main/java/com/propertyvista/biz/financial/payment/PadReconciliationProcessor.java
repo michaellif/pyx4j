@@ -77,7 +77,7 @@ class PadReconciliationProcessor extends AbstractReconciliationProcessor {
                 break;
             case RETURNED:
                 if (padDebitRecord.processingStatus().getValue() != PadDebitRecordProcessingStatus.ReconciliationProcessed) {
-                    throw new Error("Payment PAD transaction '" + padDebitRecord.getStringView() + "' was not processed");
+                    throw new Error("Payment PAD transaction '" + padDebitRecord.getStringView() + "' was not processed to be RETURNED");
                 }
                 paymentRecord.aggregatedTransferReturn().set(at);
                 break;
