@@ -29,6 +29,7 @@ import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.portal.rpc.portal.web.dto.SelfRegistrationBuildingDTO;
 import com.propertyvista.portal.rpc.portal.web.services.SelfRegistrationBuildingsSourceService;
 
+@Deprecated
 public class SelfRegistrationBuildingsSourceServiceImpl implements SelfRegistrationBuildingsSourceService {
 
     @Override

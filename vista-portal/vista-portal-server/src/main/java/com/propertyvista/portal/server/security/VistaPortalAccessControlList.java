@@ -129,7 +129,7 @@ public class VistaPortalAccessControlList extends ServletContainerAclBuilder {
         grant(new IServiceExecutePermission(ResidentAuthenticationService.class));
         grant(new IServiceExecutePermission(PortalVistaTermsService.class));
 
-        grant(new IServiceExecutePermission(com.propertyvista.portal.rpc.portal.services.resident.SelfRegistrationBuildingsSourceService.class));
+        grant(new IServiceExecutePermission(com.propertyvista.portal.rpc.portal.web.services.ResidentSelfRegistrationService.class));
         grant(new IServiceExecutePermission(com.propertyvista.portal.rpc.portal.web.services.SelfRegistrationBuildingsSourceService.class));
 
         grant(new EntityPermission(SelfRegistrationBuildingDTO.class, EntityPermission.READ));

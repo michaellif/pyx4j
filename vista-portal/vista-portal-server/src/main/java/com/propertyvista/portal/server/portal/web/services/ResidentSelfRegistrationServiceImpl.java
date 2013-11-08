@@ -11,7 +11,7 @@
  * @author ArtyomB
  * @version $Id$
  */
-package com.propertyvista.portal.server.portal.services.resident;
+package com.propertyvista.portal.server.portal.web.services;
 
 import java.util.Collections;
 import java.util.Comparator;
@@ -20,16 +20,21 @@ import java.util.Vector;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
+import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.rpc.EntitySearchResult;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
+import com.pyx4j.rpc.shared.VoidSerializable;
 
+import com.propertyvista.biz.tenant.CustomerFacade;
 import com.propertyvista.domain.property.asset.building.Building;
+import com.propertyvista.domain.tenant.CustomerSelfRegistration;
 import com.propertyvista.portal.rpc.portal.dto.SelfRegistrationBuildingDTO;
-import com.propertyvista.portal.rpc.portal.services.resident.SelfRegistrationBuildingsSourceService;
+import com.propertyvista.portal.rpc.portal.web.dto.SelfRegistrationDTO;
+import com.propertyvista.portal.rpc.portal.web.services.ResidentSelfRegistrationService;
 
-public class SelfRegistrationBuildingsSourceServiceImpl implements SelfRegistrationBuildingsSourceService {
+public class ResidentSelfRegistrationServiceImpl implements ResidentSelfRegistrationService {
 
     @Override
     public void obtainBuildings(AsyncCallback<EntitySearchResult<SelfRegistrationBuildingDTO>> callback) {
@@ -75,5 +80,22 @@ public class SelfRegistrationBuildingsSourceServiceImpl implements SelfRegistrat
         dto.buildingKey().set(dbo.createIdentityStub());
 
         return dto;
+    }
+
+    @Override
+    public void selfRegistration(AsyncCallback<VoidSerializable> callback, SelfRegistrationDTO request) {
+        CustomerSelfRegistration selfRegistration = EntityFactory.create(CustomerSelfRegistration.class);
+
+        selfRegistration.buildingId().set(request.building().buildingKey());
+        selfRegistration.firstName().setValue(request.firstName().getValue());
+        selfRegistration.middleName().setValue(request.middleName().getValue());
+        selfRegistration.lastName().setValue(request.lastName().getValue());
+        selfRegistration.securityCode().setValue(request.securityCode().getValue());
+        selfRegistration.email().setValue(request.email().getValue());
+        selfRegistration.password().setValue(request.password().getValue());
+
+        ServerSideFactory.create(CustomerFacade.class).selfRegistration(selfRegistration);
+        Persistence.service().commit();
+        callback.onSuccess(null);
     }
 }

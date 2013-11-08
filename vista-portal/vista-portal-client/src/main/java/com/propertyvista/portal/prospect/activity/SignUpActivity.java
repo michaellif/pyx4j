@@ -35,7 +35,7 @@ import com.propertyvista.portal.rpc.portal.ResidentPortalSiteMap;
 import com.propertyvista.portal.rpc.portal.web.dto.SelfRegistrationBuildingDTO;
 import com.propertyvista.portal.rpc.portal.web.dto.SelfRegistrationDTO;
 import com.propertyvista.portal.rpc.portal.web.services.ProspectAuthenticationService;
-import com.propertyvista.portal.rpc.portal.web.services.ResidentAuthenticationService;
+import com.propertyvista.portal.rpc.portal.web.services.ProspectSelfRegistrationService;
 import com.propertyvista.portal.rpc.portal.web.services.SelfRegistrationBuildingsSourceService;
 import com.propertyvista.portal.rpc.shared.EntityValidationException;
 import com.propertyvista.portal.shared.PortalSite;
@@ -71,8 +71,7 @@ public class SignUpActivity extends AbstractActivity implements SignUpView.SignU
 
     @Override
     public void register(final SelfRegistrationDTO value) {
-        //TODO Create a service for this!!!
-        GWT.<ResidentAuthenticationService> create(ResidentAuthenticationService.class).selfRegistration(new DefaultAsyncCallback<VoidSerializable>() {
+        GWT.<ProspectSelfRegistrationService> create(ProspectSelfRegistrationService.class).selfRegistration(new DefaultAsyncCallback<VoidSerializable>() {
             @Override
             public void onSuccess(VoidSerializable result) {
                 authenticate(value);

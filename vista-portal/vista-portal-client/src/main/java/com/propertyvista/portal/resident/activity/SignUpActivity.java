@@ -37,6 +37,7 @@ import com.propertyvista.portal.rpc.portal.web.dto.SelfRegistrationBuildingDTO;
 import com.propertyvista.portal.rpc.portal.web.dto.SelfRegistrationDTO;
 import com.propertyvista.portal.rpc.portal.web.services.ResidentAuthenticationService;
 import com.propertyvista.portal.rpc.portal.web.services.SelfRegistrationBuildingsSourceService;
+import com.propertyvista.portal.rpc.portal.web.services.ResidentSelfRegistrationService;
 import com.propertyvista.portal.rpc.shared.EntityValidationException;
 
 public class SignUpActivity extends AbstractActivity implements SignUpView.SignUpPresenter {
@@ -71,7 +72,7 @@ public class SignUpActivity extends AbstractActivity implements SignUpView.SignU
 
     @Override
     public void register(final SelfRegistrationDTO value) {
-        GWT.<ResidentAuthenticationService> create(ResidentAuthenticationService.class).selfRegistration(new DefaultAsyncCallback<VoidSerializable>() {
+        GWT.<ResidentSelfRegistrationService> create(ResidentSelfRegistrationService.class).selfRegistration(new DefaultAsyncCallback<VoidSerializable>() {
             @Override
             public void onSuccess(VoidSerializable result) {
                 authenticate(value);

@@ -11,16 +11,16 @@
  * @author ArtyomB
  * @version $Id$
  */
-package com.propertyvista.portal.rpc.portal.services.resident;
+package com.propertyvista.portal.rpc.portal.web.services;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
-import com.pyx4j.entity.rpc.EntitySearchResult;
 import com.pyx4j.rpc.shared.IService;
+import com.pyx4j.rpc.shared.VoidSerializable;
 
-import com.propertyvista.portal.rpc.portal.dto.SelfRegistrationBuildingDTO;
+import com.propertyvista.portal.rpc.portal.web.dto.SelfRegistrationDTO;
 
-public interface SelfRegistrationBuildingsSourceService extends IService {
+public interface ProspectSelfRegistrationService extends IService {
 
-    void obtainBuildings(AsyncCallback<EntitySearchResult<SelfRegistrationBuildingDTO>> callback);
+    public void selfRegistration(AsyncCallback<VoidSerializable> callback, SelfRegistrationDTO selfRegistration);
 }
