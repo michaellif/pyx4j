@@ -386,9 +386,16 @@ class AutopayAgreementMananger {
                     or1.left().le(criteria1.proto().lease().expectedMoveOut(), suspensionCycle.billingCycleEndDate());
                     or1.right().le(criteria1.proto().lease().actualMoveOut(), suspensionCycle.billingCycleEndDate());
 
-                    OrCriterion or2 = criteria1.or();
+                    OrCriterion or2 = new OrCriterion();
                     or2.left().le(criteria1.proto().lease().leaseTo(), suspensionCycle.billingCycleEndDate());
                     or2.right(or1);
+
+                    OrCriterion or3 = new OrCriterion();
+                    or3.left().in(criteria1.proto().lease().status(), Lease.Status.former());
+                    or3.right(or2);
+
+                    criteria1.add(or3);
+
                 }
 
                 for (final BillingAccount account : Persistence.service().query(criteria1)) {
