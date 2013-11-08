@@ -241,8 +241,10 @@ class CreditCardProcessor {
                             PaymentRecord record = Persistence.service().retrieve(PaymentRecord.class, paymentRecord.getPrimaryKey());
                             record.transactionAuthorizationNumber().setValue(sailResponse.authorizationNumber().getValue());
                             record.paymentStatus().setValue(PaymentRecord.PaymentStatus.Void);
-                            paymentRecord.lastStatusChangeDate().setValue(new LogicalDate(SystemDateManager.getDate()));
-                            record.finalizeDate().setValue(new LogicalDate(SystemDateManager.getDate()));
+                            LogicalDate now = new LogicalDate(SystemDateManager.getDate());
+                            record.lastStatusChangeDate().setValue(now);
+                            record.receivedDate().setValue(now);
+                            record.finalizeDate().setValue(now);
                             Persistence.service().persist(record);
                         } else {
                             log.error("Unable to void CC transaction {} {} {}; response {} {}", //
