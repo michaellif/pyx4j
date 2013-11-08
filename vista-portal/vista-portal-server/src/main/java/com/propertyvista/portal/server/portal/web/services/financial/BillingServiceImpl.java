@@ -97,9 +97,8 @@ public class BillingServiceImpl implements BillingService {
 
             paymentInfo.id().set(item.paymentRecord().id());
             paymentInfo.amount().setValue(item.paymentRecord().amount().getValue());
-            paymentInfo.paymentStatus().setValue(item.paymentRecord().paymentStatus().getValue());
-            paymentInfo.paymentStatus().setValue(item.paymentRecord().paymentStatus().getValue());
-            paymentInfo.postDate().setValue(item.postDate().getValue());
+            paymentInfo.date().setValue(item.paymentRecord().receivedDate().getValue());
+            paymentInfo.status().setValue(item.paymentRecord().paymentStatus().getValue());
 
             Persistence.ensureRetrieve(item.paymentRecord().leaseTermParticipant(), AttachLevel.Attached);
             paymentInfo.payer().set(item.paymentRecord().leaseTermParticipant().leaseParticipant().customer().person().name());

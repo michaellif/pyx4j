@@ -52,11 +52,11 @@ public interface LatestActivitiesDTO extends IEntity {
 
         @ToString(index = 2)
         @Editor(type = EditorType.label)
-        IPrimitive<LogicalDate> postDate();
+        IPrimitive<LogicalDate> date();
 
         @ToString(index = 3)
         @Editor(type = EditorType.label)
-        IPrimitive<PaymentStatus> paymentStatus();
+        IPrimitive<PaymentStatus> status();
 
         @ToString(index = 4)
         @Editor(type = EditorType.label)
