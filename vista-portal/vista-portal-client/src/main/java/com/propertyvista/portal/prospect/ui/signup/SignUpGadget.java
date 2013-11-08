@@ -78,11 +78,11 @@ public class SignUpGadget extends AbstractGadget<SignUpViewImpl> {
         FlowPanel loginTermsLinkPanel = new FlowPanel();
         loginTermsLinkPanel.getElement().getStyle().setTextAlign(TextAlign.LEFT);
 
-        HTML termsPrefix = new HTML(i18n.tr("By clicking REGISTER, you are acknowledging that you have read and agree to our "));
+        HTML termsPrefix = new HTML(i18n.tr("By clicking CREATE ACCOUNT, you are acknowledging that you have read and agree to our "));
         termsPrefix.getElement().getStyle().setDisplay(Display.INLINE);
         loginTermsLinkPanel.add(termsPrefix);
 
-        termsAndConditionsAnchor = new Anchor(i18n.tr("RESIDENT PORTAL TERMS AND CONDITIONS"));
+        termsAndConditionsAnchor = new Anchor(i18n.tr("APPLICANT TERMS AND CONDITIONS"));
         termsAndConditionsAnchor.getElement().getStyle().setDisplay(Display.INLINE);
         termsAndConditionsAnchor.getElement().getStyle().setPadding(0, Unit.PX);
         termsAndConditionsAnchor.getElement().getStyle().setWhiteSpace(WhiteSpace.NORMAL);
@@ -120,12 +120,10 @@ public class SignUpGadget extends AbstractGadget<SignUpViewImpl> {
         case phonePortrait:
         case phoneLandscape:
             signupform.signUpPersonalImage.setVisible(false);
-            signupform.signUpSecurity.setVisible(false);
             break;
 
         default:
             signupform.signUpPersonalImage.setVisible(true);
-            signupform.signUpSecurity.setVisible(true);
             break;
         }
     }
@@ -136,7 +134,7 @@ public class SignUpGadget extends AbstractGadget<SignUpViewImpl> {
 
         public SignUpToolbar() {
 
-            signUpButton = new Button(i18n.tr("REGISTER"), new Command() {
+            signUpButton = new Button(i18n.tr("CREATE ACCOUNT"), new Command() {
                 @Override
                 public void execute() {
                     signupform.setEntityValidationError(null);
@@ -159,8 +157,6 @@ public class SignUpGadget extends AbstractGadget<SignUpViewImpl> {
 
         private Image signUpPersonalImage;
 
-        private Image signUpSecurity;
-
         public SignUpForm() {
             super(SelfRegistrationDTO.class);
         }
@@ -175,7 +171,7 @@ public class SignUpGadget extends AbstractGadget<SignUpViewImpl> {
 
             signUpPersonalImage = new Image(PortalImages.INSTANCE.signUpPersonal());
             flexPanel.setWidget(++row, 0, signUpPersonalImage);
-            flexPanel.getFlexCellFormatter().setRowSpan(row, 0, 5);
+            flexPanel.getFlexCellFormatter().setRowSpan(row, 0, 7);
             flexPanel.getFlexCellFormatter().setVerticalAlignment(row, 0, HasVerticalAlignment.ALIGN_TOP);
 
             flexPanel.setH4(row, 1, 1, i18n.tr("Enter your first, middle and last name the way it is spelled in your lease agreement:"));
@@ -194,24 +190,6 @@ public class SignUpGadget extends AbstractGadget<SignUpViewImpl> {
             Widget widget = new LoginWidgetDecoratorBuilder(emailField).build();
             flexPanel.setWidget(++row, 0, widget);
             flexPanel.getFlexCellFormatter().getElement(row, 0).getStyle().setTextAlign(TextAlign.LEFT);
-
-            flexPanel.setBR(++row, 0, 2);
-
-            signUpSecurity = new Image(PortalImages.INSTANCE.signUpSecurity());
-            flexPanel.setWidget(++row, 0, signUpSecurity);
-            flexPanel.getFlexCellFormatter().setRowSpan(row, 0, 4);
-            flexPanel.getFlexCellFormatter().setVerticalAlignment(row, 0, HasVerticalAlignment.ALIGN_TOP);
-
-            flexPanel.setH4(row, 1, 1, i18n.tr("The Security Code is a secure identifier that is provided by your Property Manager specifically for you."));
-
-            CTextFieldBase<?, ?> securityCodeField;
-            flexPanel.setWidget(++row, 0, new LoginWidgetDecoratorBuilder(securityCodeField = (CTextFieldBase<?, ?>) inject(proto().securityCode()))
-                    .componentWidth("90%").build());
-            flexPanel.getFlexCellFormatter().getElement(row, 0).getStyle().setTextAlign(TextAlign.LEFT);
-
-            securityCodeField
-                    .setTooltip(i18n
-                            .tr("You should have received Security Code by mail. Don't have a Security Code? To get your own unique access code, please contact the Property Manager directly."));
 
             flexPanel.setWidget(++row, 0, new LoginWidgetDecoratorBuilder(inject(proto().password())).watermark(i18n.tr("Create a Password")).build());
             flexPanel.getFlexCellFormatter().getElement(row, 0).getStyle().setTextAlign(TextAlign.LEFT);

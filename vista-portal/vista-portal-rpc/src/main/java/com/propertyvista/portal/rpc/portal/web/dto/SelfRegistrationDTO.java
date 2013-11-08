@@ -46,6 +46,6 @@ public interface SelfRegistrationDTO extends AuthenticationRequest {
     @RpcTransient
     @Transient
     @Editor(type = EditorType.password)
-    @Caption(name = "Confirm password")
+    @Caption(name = "Confirm Password")
     IPrimitive<String> passwordConfirm();
 }

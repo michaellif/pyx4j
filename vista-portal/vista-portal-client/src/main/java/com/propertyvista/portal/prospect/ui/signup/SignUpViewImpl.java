@@ -25,6 +25,7 @@ import com.pyx4j.site.client.ui.layout.responsive.ResponsiveLayoutPanel.LayoutTy
 import com.pyx4j.widgets.client.dialog.MessageDialog;
 
 import com.propertyvista.portal.rpc.shared.EntityValidationException;
+import com.propertyvista.portal.shared.themes.DashboardTheme;
 
 public class SignUpViewImpl extends FlowPanel implements SignUpView {
 
@@ -33,6 +34,8 @@ public class SignUpViewImpl extends FlowPanel implements SignUpView {
     private final SignUpGadget gadget;
 
     public SignUpViewImpl() {
+
+        setStyleName(DashboardTheme.StyleName.Dashboard.name());
 
         getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
 
