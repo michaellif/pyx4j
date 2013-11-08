@@ -20,6 +20,8 @@
  */
 package com.pyx4j.commons;
 
+import java.util.Collection;
+
 public class Validate {
 
     public static void isTrue(Boolean expression, String messageFormat, Object... arguments) {
@@ -36,6 +38,13 @@ public class Validate {
 
     static public void isEquals(Object expected, Object actual, String messageFormat, Object... arguments) {
         if (!EqualsHelper.equals(expected, actual)) {
+            throw new Error(SimpleMessageFormat.format("expected [{0}]\n actual: [{1}]\n", expected, actual)
+                    + SimpleMessageFormat.format(messageFormat, arguments));
+        }
+    }
+
+    static public <T> void contains(Collection<T> expected, T actual, String messageFormat, Object... arguments) {
+        if (!expected.contains(actual)) {
             throw new Error(SimpleMessageFormat.format("expected [{0}]\n actual: [{1}]\n", expected, actual)
                     + SimpleMessageFormat.format(messageFormat, arguments));
         }
