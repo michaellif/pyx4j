@@ -13,6 +13,7 @@
  */
 package com.propertyvista.crm.client.ui.crud.policies.n4;
 
+import java.text.ParseException;
 import java.util.Arrays;
 import java.util.List;
 
@@ -22,10 +23,13 @@ import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HasVerticalAlignment;
 import com.google.gwt.user.client.ui.IsWidget;
 
+import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.forms.client.ui.CComboBox;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CEntityForm;
+import com.pyx4j.forms.client.ui.CPhoneField;
+import com.pyx4j.forms.client.ui.IFormat;
 import com.pyx4j.forms.client.ui.folder.IFolderItemDecorator;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
@@ -49,8 +53,41 @@ public class N4PolicyForm extends PolicyDTOTabPanelBasedForm<N4PolicyDTO> {
 
     private ARCodeFolder arCodeFolder;
 
+    private IFormat<String> phoneNumberFormatWithoutExtension;
+
     public N4PolicyForm(IForm<N4PolicyDTO> view) {
         super(N4PolicyDTO.class, view);
+        phoneNumberFormatWithoutExtension = new IFormat<String>() {
+
+            private final IFormat<String> phoneFormat = new CPhoneField.PhoneFormat();
+
+            private final String regex = "^[\\s\\d\\(\\)-]+$";
+
+            private final String errorMessage = i18n.tr("Invalid phone format. Use (123) 456-7890 format");
+
+            @Override
+            public String format(String value) {
+                return phoneFormat.format(value);
+            }
+
+            @Override
+            public String parse(String string) throws ParseException {
+                if (CommonsStringUtils.isEmpty(string)) {
+                    return null;
+                }
+                String parsed = null;
+                if (!string.matches(regex)) {
+                    throw new ParseException(errorMessage, 0);
+                }
+                try {
+                    parsed = phoneFormat.parse(string);
+                } catch (ParseException e) {
+                    throw new ParseException(errorMessage, 0);
+                }
+                return parsed;
+            }
+
+        };
     }
 
     public void setARCodeOptions(List<ARCode> arCodeOptions) {
@@ -65,9 +102,27 @@ public class N4PolicyForm extends PolicyDTOTabPanelBasedForm<N4PolicyDTO> {
         int row = -1;
         signaturePanel.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().includeSignature())).build());
         signaturePanel.setH1(++row, 0, 2, i18n.tr("The following information will be used for signing N4 letters:"));
+
         companyNameAndPhones.add(new FormDecoratorBuilder(inject(proto().companyName())).build());
-        companyNameAndPhones.add(new FormDecoratorBuilder(inject(proto().phoneNumber())).build());
-        companyNameAndPhones.add(new FormDecoratorBuilder(inject(proto().faxNumber())).build());
+        CPhoneField phoneNumberField = inject(proto().phoneNumber(), new CPhoneField() {
+            @Override
+            public IFormat<String> getFormat() {
+                return phoneNumberFormatWithoutExtension;
+            }
+        });
+        phoneNumberField.setWatermark("(___) ___-____");
+        phoneNumberField.setFormat(phoneNumberFormatWithoutExtension); // TODO y setFormat not working?
+        companyNameAndPhones.add(new FormDecoratorBuilder(phoneNumberField).build());
+
+        CPhoneField faxNumberField = inject(proto().faxNumber(), new CPhoneField() {
+            @Override
+            public IFormat<String> getFormat() {
+                return phoneNumberFormatWithoutExtension;
+            }
+        });
+        faxNumberField.setWatermark("(___) ___-____");
+        faxNumberField.setFormat(phoneNumberFormatWithoutExtension); // TODO y setFormat not working?
+        companyNameAndPhones.add(new FormDecoratorBuilder(faxNumberField).build());
         companyNameAndPhones.add(new FormDecoratorBuilder(inject(proto().emailAddress())).build());
         signaturePanel.setWidget(++row, 0, 1, companyNameAndPhones);
         signaturePanel.getFlexCellFormatter().setVerticalAlignment(row, 0, HasVerticalAlignment.ALIGN_TOP);
