@@ -195,6 +195,7 @@ BEGIN
         
         ALTER TABLE building RENAME COLUMN info_address_location_lat TO info_location_lat;
         ALTER TABLE building RENAME COLUMN info_address_location_lng TO info_location_lng;
+        ALTER TABLE building ADD COLUMN default_product_catalog BOOLEAN;
         
         -- company
         
@@ -637,6 +638,15 @@ BEGIN
         
         EXECUTE 'UPDATE '||v_schema_name||'.auto_pay_policy '
                 ||'SET allow_cancelation_by_resident = TRUE ';
+                
+        -- building
+        
+        EXECUTE 'UPDATE '||v_schema_name||'.building '
+                ||'SET default_product_catalog = t.default_product_catalog '
+                ||'FROM         (SELECT  f.default_product_catalog '
+                ||'             FROM    _admin_.admin_pmc a '
+                ||'             JOIN    _admin_.admin_pmc_vista_features f ON (a.features = f.id) '
+                ||'             WHERE   a.namespace = '''||v_schema_name||''' ) AS t ';
         
         -- email_template
         
