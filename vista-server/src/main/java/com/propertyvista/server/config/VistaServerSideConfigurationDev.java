@@ -149,7 +149,7 @@ public class VistaServerSideConfigurationDev extends VistaServerSideConfiguratio
     @Override
     public int interfaceSSHDPort() {
         if (VistaTODO.codeBaseIsProdBranch) {
-            return 0;
+            return super.interfaceSSHDPort() + 1;
         } else {
             return super.interfaceSSHDPort();
         }
