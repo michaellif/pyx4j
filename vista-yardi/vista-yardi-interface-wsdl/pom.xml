@@ -85,7 +85,7 @@
                             <packageName>com.yardi.ws.operations.ils</packageName>
                         </namespaceURI>
 			            <namespaceURI>
-			                <uri>http://tempuri.org/YSI.Interfaces.WebServices/ItfILSGuestCard40</uri>
+			                <uri>http://tempuri.org/YSI.Interfaces.WebServices/ItfILSGuestCard</uri>
                             <packageName>com.yardi.ws.operations.guestcard40</packageName>
                         </namespaceURI>
                     </namespaceURIs>
