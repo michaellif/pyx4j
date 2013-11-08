@@ -42,11 +42,11 @@ public class PapLister extends AbstractLister<AutopayAgreement> {
                 new MemberColumnDescriptor.Builder(proto().expiredFrom()).build(),
                 
                 new MemberColumnDescriptor.Builder(proto().createdBy(), false).searchable(false).build(),
-                new MemberColumnDescriptor.Builder(proto().creationDate()).build(),
+                new MemberColumnDescriptor.Builder(proto().creationDate()).searchable(false).build(),
                 
                 new MemberColumnDescriptor.Builder(proto().updatedByTenant(), false).build(),
                 new MemberColumnDescriptor.Builder(proto().updatedBySystem(), false).build(),
-                new MemberColumnDescriptor.Builder(proto().updated()).build(),
+                new MemberColumnDescriptor.Builder(proto().updated()).searchable(false).build(),
                 
 
                 
