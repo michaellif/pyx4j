@@ -93,16 +93,11 @@ public class TenantForm extends LeaseParticipantForm<TenantDTO> {
     public void addValidations() {
         super.addValidations();
 
-        get(proto().customer().emergencyContacts()).setMandatory(!VistaFeatures.instance().yardiIntegration());
         get(proto().customer().emergencyContacts()).addValueValidator(new EditableValueValidator<List<EmergencyContact>>() {
             @Override
             public ValidationError isValid(CComponent<List<EmergencyContact>> component, List<EmergencyContact> value) {
                 if (value == null || getValue() == null) {
                     return null;
-                }
-
-                if (!VistaFeatures.instance().yardiIntegration() & value.isEmpty()) {
-                    return new ValidationError(component, i18n.tr("Empty Emergency Contacts list"));
                 }
 
                 return !EntityGraph.hasBusinessDuplicates(getValue().customer().emergencyContacts()) ? null : new ValidationError(component, i18n
