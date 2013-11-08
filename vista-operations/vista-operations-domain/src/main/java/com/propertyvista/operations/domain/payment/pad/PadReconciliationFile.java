@@ -32,6 +32,7 @@ import com.propertyvista.domain.financial.FundsTransferType;
 
 @Table(namespace = VistaNamespace.operationsNamespace)
 @I18n(strategy = I18n.I18nStrategy.IgnoreAll)
+//TODO rename to FundsReconciliationFile
 public interface PadReconciliationFile extends IEntity {
 
     // YYYYMMDDhhmmss_reconciliation_rpt_pad.COMPANYID

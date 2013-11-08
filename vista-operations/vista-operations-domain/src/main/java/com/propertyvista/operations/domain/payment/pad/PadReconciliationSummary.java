@@ -39,6 +39,7 @@ import com.propertyvista.domain.pmc.PmcMerchantAccountIndex;
 
 @Table(namespace = VistaNamespace.operationsNamespace)
 @I18n(strategy = I18n.I18nStrategy.IgnoreAll)
+//TODO rename to FundsReconciliationSummary
 public interface PadReconciliationSummary extends IEntity {
 
     @Owner

@@ -26,6 +26,7 @@ import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.annotations.Owner;
 import com.pyx4j.entity.annotations.Table;
 import com.pyx4j.entity.annotations.ToString;
+import com.pyx4j.entity.annotations.ToStringFormat;
 import com.pyx4j.entity.shared.AttachLevel;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
@@ -36,6 +37,7 @@ import com.propertyvista.domain.VistaNamespace;
 
 @Table(namespace = VistaNamespace.operationsNamespace)
 @I18n(strategy = I18n.I18nStrategy.IgnoreAll)
+@ToStringFormat("Id:{1} Account:{0} Status:{2}")
 //TODO rename to FundsTransferRecord
 public interface PadDebitRecord extends IEntity {
 

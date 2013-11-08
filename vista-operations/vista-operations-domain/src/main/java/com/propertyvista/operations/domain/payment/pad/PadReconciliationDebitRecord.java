@@ -37,6 +37,7 @@ import com.propertyvista.domain.VistaNamespace;
 @Table(namespace = VistaNamespace.operationsNamespace)
 @I18n(strategy = I18n.I18nStrategy.IgnoreAll)
 @GwtBlacklist
+//TODO rename to FundsReconciliationRecord
 public interface PadReconciliationDebitRecord extends IEntity {
 
     @Owner

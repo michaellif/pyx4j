@@ -113,7 +113,7 @@ abstract class AbstractReconciliationProcessor {
 
     private void processReconciliationSummaryRecords() {
 
-        List<PadReconciliationSummary> transactions = TaskRunner.runInOperationsNamespace(new Callable<List<PadReconciliationSummary>>() {
+        List<PadReconciliationSummary> summaryTransactions = TaskRunner.runInOperationsNamespace(new Callable<List<PadReconciliationSummary>>() {
             @Override
             public List<PadReconciliationSummary> call() throws Exception {
                 EntityQueryCriteria<PadReconciliationSummary> criteria = EntityQueryCriteria.create(PadReconciliationSummary.class);
@@ -128,7 +128,7 @@ abstract class AbstractReconciliationProcessor {
             }
         });
 
-        for (final PadReconciliationSummary summary : transactions) {
+        for (final PadReconciliationSummary summary : summaryTransactions) {
 
             try {
                 new UnitOfWork(TransactionScopeOption.RequiresNew).execute(new Executable<Void, RuntimeException>() {
