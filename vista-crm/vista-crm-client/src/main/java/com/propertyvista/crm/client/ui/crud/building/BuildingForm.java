@@ -206,7 +206,9 @@ public class BuildingForm extends CrmEntityForm<BuildingDTO> {
                             new FormDecoratorBuilder(inject(proto().complex(),
                                     new CEntityCrudHyperlink<Complex>(AppPlaceEntityMapper.resolvePlace(Complex.class))), 15).build());
         }
-        flexPanel.setWidget(row++, 1, new FormDecoratorBuilder(inject(proto().useDefaultProductCatalog()), 5).build());
+        if (VistaFeatures.instance().productCatalog() && !VistaFeatures.instance().yardiIntegration()) {
+            flexPanel.setWidget(row++, 1, new FormDecoratorBuilder(inject(proto().useDefaultProductCatalog()), 5).build());
+        }
         flexPanel.setWidget(row++, 1, new FormDecoratorBuilder(inject(proto().suspended()), 5).build());
 
         flexPanel.setH1(row++, 0, 2, proto().info().address().getMeta().getCaption());

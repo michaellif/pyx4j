@@ -89,17 +89,15 @@ public class UnitForm extends CrmEntityForm<AptUnitDTO> {
         super.onValueSet(populate);
 
         get(proto().lease()).setVisible(!getValue().lease().isNull());
-        if (VistaFeatures.instance().occupancyModel() & !VistaFeatures.instance().yardiIntegration()) {
-            get(proto()._availableForRent()).setVisible(!getValue()._availableForRent().isNull());
-            get(proto().financial()._unitRent()).setVisible(!getValue().financial()._unitRent().isNull());
-        }
+        get(proto()._availableForRent()).setVisible(!getValue()._availableForRent().isNull());
+        get(proto().financial()._unitRent()).setVisible(!getValue().financial()._unitRent().isNull());
 
-        if (VistaFeatures.instance().productCatalog() && !VistaFeatures.instance().yardiIntegration()) {
-            catalogMarketPricesPanel.setVisible(!getValue().building().useDefaultProductCatalog().isBooleanTrue());
-            get(proto().financial()._marketRent()).setVisible(false);
-        } else {
+        if (VistaFeatures.instance().yardiIntegration()) {
             catalogMarketPricesPanel.setVisible(false);
-            get(proto().financial()._marketRent()).setVisible(!getValue().building().useDefaultProductCatalog().isBooleanTrue());
+            get(proto().financial()._marketRent()).setVisible(true);
+        } else {
+            get(proto().financial()._marketRent()).setVisible(!VistaFeatures.instance().productCatalog());
+            catalogMarketPricesPanel.setVisible(VistaFeatures.instance().productCatalog() && !getValue().building().useDefaultProductCatalog().isBooleanTrue());
         }
 
         updateSelectedLegalAddress();
@@ -148,14 +146,6 @@ public class UnitForm extends CrmEntityForm<AptUnitDTO> {
 
         right.setWidget(++row, 1, new FormDecoratorBuilder(inject(proto().info().area()), 8).build());
         right.setWidget(++row, 1, new FormDecoratorBuilder(inject(proto().info().areaUnits()), 8).build());
-
-        // tweak UI:
-        if (VistaFeatures.instance().occupancyModel()) {
-            get(proto()._availableForRent()).setViewable(true);
-        }
-        if (VistaFeatures.instance().productCatalog()) {
-            get(proto().financial()._unitRent()).setViewable(true);
-        }
 
         // form main panel from those two:
         TwoColumnFlexFormPanel main = new TwoColumnFlexFormPanel(title);
