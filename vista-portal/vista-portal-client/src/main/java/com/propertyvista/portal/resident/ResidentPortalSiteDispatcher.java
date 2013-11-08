@@ -46,11 +46,6 @@ public class ResidentPortalSiteDispatcher extends AbstractAppPlaceDispatcher {
     }
 
     @Override
-    protected boolean isApplicationAuthenticated() {
-        return SecurityController.checkBehavior(VistaBasicBehavior.ResidentPortal);
-    }
-
-    @Override
     protected void isPlaceNavigable(AppPlace targetPlace, AsyncCallback<Boolean> callback) {
         if (targetPlace instanceof ResidentPortalSiteMap.LeaseContextSelection) {
             callback.onSuccess(SecurityController.checkAnyBehavior(VistaCustomerBehavior.LeaseSelectionRequired, VistaCustomerBehavior.HasMultipleLeases));

@@ -16,13 +16,11 @@ package com.propertyvista.ob.client;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.security.client.ClientContext;
-import com.pyx4j.security.shared.SecurityController;
 import com.pyx4j.site.client.AbstractAppPlaceDispatcher;
 import com.pyx4j.site.rpc.AppPlace;
 import com.pyx4j.site.rpc.NotificationAppPlace;
 import com.pyx4j.site.shared.domain.Notification;
 
-import com.propertyvista.domain.security.common.VistaBasicBehavior;
 import com.propertyvista.ob.rpc.OnboardingSiteMap;
 import com.propertyvista.ob.rpc.dto.OnboardingUserVisit;
 
@@ -33,11 +31,6 @@ public class OnboardingAppPlaceDispatcher extends AbstractAppPlaceDispatcher {
         NotificationAppPlace place = new OnboardingSiteMap.RuntimeError();
         place.setNotification(notification);
         return place;
-    }
-
-    @Override
-    protected boolean isApplicationAuthenticated() {
-        return SecurityController.checkBehavior(VistaBasicBehavior.Onboarding);
     }
 
     @Override

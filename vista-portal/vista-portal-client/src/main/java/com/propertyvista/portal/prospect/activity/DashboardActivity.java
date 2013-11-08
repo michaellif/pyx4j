@@ -13,16 +13,11 @@
  */
 package com.propertyvista.portal.prospect.activity;
 
-import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
-import com.pyx4j.rpc.client.DefaultAsyncCallback;
-
 import com.propertyvista.portal.prospect.ui.DashboardView;
-import com.propertyvista.portal.rpc.portal.web.dto.ResidentSummaryDTO;
-import com.propertyvista.portal.rpc.portal.web.services.profile.ResidentSummaryService;
 import com.propertyvista.portal.shared.PortalSite;
 import com.propertyvista.portal.shared.activity.SecurityAwareActivity;
 
@@ -32,7 +27,6 @@ public class DashboardActivity extends SecurityAwareActivity implements Dashboar
 
     public DashboardActivity(Place place) {
         this.view = PortalSite.getViewFactory().instantiate(DashboardView.class);
-        this.view.setPresenter(this);
     }
 
     @Override
@@ -45,12 +39,6 @@ public class DashboardActivity extends SecurityAwareActivity implements Dashboar
     }
 
     private void populate() {
-        ((ResidentSummaryService) GWT.create(ResidentSummaryService.class)).retreiveProfileSummary(new DefaultAsyncCallback<ResidentSummaryDTO>() {
-            @Override
-            public void onSuccess(ResidentSummaryDTO result) {
-                view.populateStatusGadget(result);
-            }
-        });
 
     }
 

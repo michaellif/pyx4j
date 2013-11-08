@@ -35,11 +35,6 @@ public class CrmSiteAppPlaceDispatcher extends AbstractAppPlaceDispatcher {
     }
 
     @Override
-    protected boolean isApplicationAuthenticated() {
-        return SecurityController.checkBehavior(VistaBasicBehavior.CRM);
-    }
-
-    @Override
     protected void isPlaceNavigable(AppPlace targetPlace, AsyncCallback<Boolean> callback) {
         // TODO security for places
         callback.onSuccess(Boolean.TRUE);

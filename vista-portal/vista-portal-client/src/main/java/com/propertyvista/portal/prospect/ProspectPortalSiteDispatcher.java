@@ -45,11 +45,6 @@ public class ProspectPortalSiteDispatcher extends AbstractAppPlaceDispatcher {
     }
 
     @Override
-    protected boolean isApplicationAuthenticated() {
-        return SecurityController.checkBehavior(VistaBasicBehavior.ProspectivePortal);
-    }
-
-    @Override
     protected void isPlaceNavigable(AppPlace targetPlace, AsyncCallback<Boolean> callback) {
         callback.onSuccess(Boolean.TRUE);
     }

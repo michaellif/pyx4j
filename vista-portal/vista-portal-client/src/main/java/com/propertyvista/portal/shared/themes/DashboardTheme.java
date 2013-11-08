@@ -33,6 +33,7 @@ public class DashboardTheme extends Theme {
 
     public DashboardTheme() {
         Style style = new Style(".", StyleName.Dashboard);
+        style.addProperty("width", "100%");
         style.addProperty("margin", "0 10px 10px 0");
         addStyle(style);
 

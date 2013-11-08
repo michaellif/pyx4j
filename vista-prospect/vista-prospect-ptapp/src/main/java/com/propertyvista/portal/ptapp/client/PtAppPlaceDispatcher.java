@@ -26,11 +26,6 @@ import com.propertyvista.portal.rpc.ptapp.PtSiteMap;
 public class PtAppPlaceDispatcher extends AbstractAppPlaceDispatcher {
 
     @Override
-    protected boolean isApplicationAuthenticated() {
-        return SecurityController.checkBehavior(VistaBasicBehavior.ProspectivePortal);
-    }
-
-    @Override
     protected void obtainDefaulPublicPlace(AsyncCallback<AppPlace> callback) {
         callback.onSuccess(new PtSiteMap.Login());
     }
