@@ -213,7 +213,7 @@ public class N4GenerationFacadeImpl implements N4GenerationFacade {
         fieldsData.signatureProvince().setValue(landlordsData.landlordsAddress().province().code().getStringView());
         fieldsData.signaturePostalCode().setValue(landlordsData.landlordsAddress().postalCode().getValue());
 
-        if (!CommonsStringUtils.isStringSet(landlordsData.landlordsPhoneNumber().getValue())) {
+        if (!CommonsStringUtils.isEmpty(landlordsData.landlordsPhoneNumber().getValue())) {
             String[] signaturPhoneNumber = N4FormUtils.splitPhoneNumber(landlordsData.landlordsPhoneNumber().getValue());
             fieldsData.signaturePhoneNumberAreaCode().setValue(signaturPhoneNumber[0]);
             fieldsData.signaturePhoneNumberCombA().setValue(signaturPhoneNumber[1]);
