@@ -35,11 +35,11 @@ public class N4PolicyCrudServiceImpl extends GenericPolicyCrudService<N4Policy, 
     }
 
     @Override
-    protected void save(N4Policy bo, N4PolicyDTO to) {
+    protected void persist(N4Policy bo, N4PolicyDTO to) {
         for (N4PolicyDTOARCodeHolderDTO arCodeHolder : to.arCodes()) {
             bo.relevantARCodes().add(arCodeHolder.arCode());
         }
-        super.save(bo, to);
+        super.persist(bo, to);
     }
 
     @Override
