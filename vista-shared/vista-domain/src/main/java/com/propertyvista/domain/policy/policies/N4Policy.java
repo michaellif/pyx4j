@@ -13,6 +13,7 @@
  */
 package com.propertyvista.domain.policy.policies;
 
+import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.DiscriminatorValue;
 import com.pyx4j.entity.annotations.Editor;
 import com.pyx4j.entity.annotations.Editor.EditorType;
@@ -32,6 +33,7 @@ import com.propertyvista.domain.policy.framework.Policy;
 @LowestApplicableNode(value = OrganizationPoliciesNode.class)
 public interface N4Policy extends Policy {
 
+    @Caption(description = "Signature image taken from Employee's profile")
     IPrimitive<Boolean> includeSignature();
 
     @NotNull
