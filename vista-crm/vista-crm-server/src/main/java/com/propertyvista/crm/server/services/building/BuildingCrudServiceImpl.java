@@ -64,7 +64,7 @@ public class BuildingCrudServiceImpl extends AbstractCrudServiceDtoImpl<Building
 
         entity.suspended().setValue(false);
         entity.marketing().visibility().setValue(PublicVisibilityType.global);
-        entity.useDefaultProductCatalog().setValue(true);
+        entity.defaultProductCatalog().setValue(true);
 
         return entity;
     }

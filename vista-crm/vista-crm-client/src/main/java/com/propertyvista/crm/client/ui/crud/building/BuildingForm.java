@@ -159,7 +159,7 @@ public class BuildingForm extends CrmEntityForm<BuildingDTO> {
 
         if (catalogTab != null) {
             catalogTab.setTabVisible(SecurityController.checkBehavior(VistaCrmBehavior.ProductCatalog)
-                    && !getValue().useDefaultProductCatalog().isBooleanTrue());
+                    && !getValue().defaultProductCatalog().isBooleanTrue());
         }
 
         fillMerchantAccountStatus(getValue().merchantAccount());
@@ -207,7 +207,7 @@ public class BuildingForm extends CrmEntityForm<BuildingDTO> {
                                     new CEntityCrudHyperlink<Complex>(AppPlaceEntityMapper.resolvePlace(Complex.class))), 15).build());
         }
         if (VistaFeatures.instance().productCatalog() && !VistaFeatures.instance().yardiIntegration()) {
-            flexPanel.setWidget(row++, 1, new FormDecoratorBuilder(inject(proto().useDefaultProductCatalog()), 5).build());
+            flexPanel.setWidget(row++, 1, new FormDecoratorBuilder(inject(proto().defaultProductCatalog()), 5).build());
         }
         flexPanel.setWidget(row++, 1, new FormDecoratorBuilder(inject(proto().suspended()), 5).build());
 

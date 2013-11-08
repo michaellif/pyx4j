@@ -127,7 +127,7 @@ public interface Building extends PolicyNode {
 
     // Indicates which catalog approach to use
     @NotNull
-    IPrimitive<Boolean> useDefaultProductCatalog();
+    IPrimitive<Boolean> defaultProductCatalog();
 
     @RpcTransient
     @Detached(level = AttachLevel.Detached)

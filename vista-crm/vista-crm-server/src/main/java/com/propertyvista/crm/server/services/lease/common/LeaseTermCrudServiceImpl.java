@@ -294,7 +294,7 @@ public class LeaseTermCrudServiceImpl extends AbstractVersionedCrudServiceDtoImp
         Persistence.ensureRetrieve(currentValue.unit().building(), AttachLevel.Attached);
 
         // use default product catalog items for specific cases:
-        boolean useDefaultCatalog = (currentValue.unit().building().useDefaultProductCatalog().isBooleanTrue() || currentValue.lease().status().getValue() == Lease.Status.ExistingLease);
+        boolean useDefaultCatalog = (currentValue.unit().building().defaultProductCatalog().isBooleanTrue() || currentValue.lease().status().getValue() == Lease.Status.ExistingLease);
 
         EntityQueryCriteria<Service> serviceCriteria = new EntityQueryCriteria<Service>(Service.class);
         serviceCriteria.add(PropertyCriterion.eq(serviceCriteria.proto().catalog(), currentValue.unit().building().productCatalog()));

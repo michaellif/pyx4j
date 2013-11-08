@@ -1087,7 +1087,7 @@ public abstract class LeaseAbstractManager {
         boolean succeeded = false;
 
         // use default product catalog items for specific cases:
-        boolean useDefaultCatalog = (leaseTerm.unit().building().useDefaultProductCatalog().isBooleanTrue() || leaseTerm.lease().status().getValue() == Lease.Status.ExistingLease);
+        boolean useDefaultCatalog = (leaseTerm.unit().building().defaultProductCatalog().isBooleanTrue() || leaseTerm.lease().status().getValue() == Lease.Status.ExistingLease);
 
         EntityQueryCriteria<Service> serviceCriteria = new EntityQueryCriteria<Service>(Service.class);
         serviceCriteria.add(PropertyCriterion.eq(serviceCriteria.proto().catalog(), leaseTerm.unit().building().productCatalog()));
