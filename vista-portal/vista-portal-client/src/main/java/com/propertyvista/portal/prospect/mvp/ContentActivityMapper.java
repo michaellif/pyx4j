@@ -22,7 +22,7 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.pyx4j.site.client.activity.AppActivityMapper;
 import com.pyx4j.site.rpc.AppPlace;
 
-import com.propertyvista.portal.prospect.activity.DashboardActivity;
+import com.propertyvista.portal.prospect.activity.StatusPageActivity;
 import com.propertyvista.portal.prospect.activity.LandingActivity;
 import com.propertyvista.portal.prospect.activity.SignUpActivity;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap;
@@ -50,8 +50,8 @@ public class ContentActivityMapper implements AppActivityMapper {
                     AppPlace appPlace = (AppPlace) place;
 
                     Activity activity = null;
-                    if (appPlace instanceof ProspectPortalSiteMap.Dashboard) {
-                        activity = new DashboardActivity(appPlace);
+                    if (appPlace instanceof ProspectPortalSiteMap.Status) {
+                        activity = new StatusPageActivity(appPlace);
 
 // Internals:
                     } else if (place instanceof PortalSiteMap.Login) {

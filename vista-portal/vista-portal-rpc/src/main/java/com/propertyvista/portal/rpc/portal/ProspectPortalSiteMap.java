@@ -26,7 +26,7 @@ public class ProspectPortalSiteMap extends PortalSiteMap {
     public static class Registration extends AppPlace implements PublicPlace {
     }
 
-    public static class Dashboard extends AppPlace {
+    public static class Status extends AppPlace {
     }
 
 }

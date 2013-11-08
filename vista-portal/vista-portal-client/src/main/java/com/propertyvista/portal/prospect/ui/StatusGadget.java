@@ -41,13 +41,13 @@ import com.propertyvista.portal.shared.themes.DashboardTheme;
 import com.propertyvista.portal.shared.ui.AbstractGadget;
 import com.propertyvista.shared.config.VistaFeatures;
 
-public class StatusGadget extends AbstractGadget<DashboardViewImpl> {
+public class StatusGadget extends AbstractGadget<StatusPageViewImpl> {
 
     private final PersonInfoPanel personInfoPanel;
 
     private final AddressPanel addressPanel;
 
-    StatusGadget(DashboardViewImpl form) {
+    StatusGadget(StatusPageViewImpl form) {
         super(form, ThemeColor.contrast2, 1);
         asWidget().setStyleName(DashboardTheme.StyleName.Gadget.name());
 

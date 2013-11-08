@@ -78,6 +78,7 @@ import com.propertyvista.portal.rpc.portal.services.resident.WeatherService;
 import com.propertyvista.portal.rpc.portal.web.services.ProspectAuthenticationService;
 import com.propertyvista.portal.rpc.portal.web.services.ResidentAuthenticationService;
 import com.propertyvista.portal.rpc.portal.web.services.ResidentPictureUploadService;
+import com.propertyvista.portal.rpc.portal.web.services.application.ApplicationStatusCrudService;
 import com.propertyvista.portal.rpc.portal.web.services.financial.AutoPayWizardService;
 import com.propertyvista.portal.rpc.portal.web.services.financial.BillingService;
 import com.propertyvista.portal.rpc.portal.web.services.maintenance.MaintenanceRequestCrudService;
@@ -265,6 +266,10 @@ public class VistaPortalAccessControlList extends ServletContainerAclBuilder {
         grant(VistaCustomerBehavior.Tenant, new IServiceExecutePermission(DeferredProcessService.class));
 
         grant(VistaCustomerBehavior.Tenant, new EntityPermission(CustomerPicture.class, CRUD));
+
+        //========================= My Community Prospect Portal
+
+        grant(VistaCustomerBehavior.Prospective, new IServiceExecutePermission(ApplicationStatusCrudService.class));
 
         //=======================================
 

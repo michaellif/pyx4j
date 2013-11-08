@@ -7,24 +7,16 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Jun 18, 2011
- * @author Dad
+ * Created on Oct 27, 2011
+ * @author vlads
  * @version $Id$
  */
-package com.propertyvista.portal.prospect.ui;
+package com.propertyvista.portal.rpc.portal.web.services.application;
 
-import com.pyx4j.site.client.IsView;
+import com.pyx4j.entity.rpc.AbstractCrudService;
 
-import com.propertyvista.portal.rpc.portal.web.dto.ResidentSummaryDTO;
+import com.propertyvista.portal.rpc.portal.web.dto.application.ApplicationStatusDTO;
 
-public interface DashboardView extends IsView {
-
-    interface DashboardPresenter {
-
-    }
-
-    void setPresenter(DashboardPresenter presenter);
-
-    void populateStatusGadget(ResidentSummaryDTO profileSummary);
+public interface ApplicationStatusCrudService extends AbstractCrudService<ApplicationStatusDTO> {
 
 }

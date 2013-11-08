@@ -11,7 +11,7 @@
  * @author Dad
  * @version $Id$
  */
-package com.propertyvista.portal.resident.ui.profile;
+package com.propertyvista.portal.prospect.ui;
 
 import com.google.gwt.dom.client.Style.Display;
 import com.google.gwt.dom.client.Style.TextAlign;
@@ -25,19 +25,18 @@ import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.widgets.client.Anchor;
 
-import com.propertyvista.portal.resident.ui.profile.AccountPageView.AccountPagePresenter;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap;
-import com.propertyvista.portal.rpc.portal.web.dto.ResidentAccountDTO;
+import com.propertyvista.portal.rpc.portal.web.dto.application.ApplicationStatusDTO;
 import com.propertyvista.portal.shared.themes.EntityViewTheme;
 import com.propertyvista.portal.shared.themes.NavigationAnchorTheme;
 import com.propertyvista.portal.shared.ui.CPortalEntityForm;
 
-public class AccountPage extends CPortalEntityForm<ResidentAccountDTO> {
+public class StatusPage extends CPortalEntityForm<ApplicationStatusDTO> {
 
-    private static final I18n i18n = I18n.get(AccountPage.class);
+    private static final I18n i18n = I18n.get(StatusPage.class);
 
-    public AccountPage(AccountPageViewImpl view) {
-        super(ResidentAccountDTO.class, view, "My Account", ThemeColor.contrast2);
+    public StatusPage(StatusPageViewImpl view) {
+        super(ApplicationStatusDTO.class, view, "Application Status", ThemeColor.contrast2);
         asWidget().setStyleName(EntityViewTheme.StyleName.EntityView.name());
     }
 
@@ -46,32 +45,9 @@ public class AccountPage extends CPortalEntityForm<ResidentAccountDTO> {
         BasicFlexFormPanel mainPanel = new BasicFlexFormPanel();
         int row = -1;
 
-        mainPanel.setH1(++row, 0, 1, i18n.tr("Security"));
-
-        Anchor anchor = new Anchor("Change my Password", new Command() {
-
-            @Override
-            public void execute() {
-                AppSite.getPlaceController().goTo(new PortalSiteMap.PasswordChange());
-            }
-        });
-        anchor.setWidth("200px");
-        anchor.getElement().getStyle().setTextAlign(TextAlign.LEFT);
-        anchor.setStyleName(NavigationAnchorTheme.StyleName.NavigationAnchor.name());
-        mainPanel.setWidget(++row, 0, anchor);
-
-        mainPanel.setH1(++row, 0, 1, i18n.tr("Mail Preferences"));
-
-        HTML label = new HTML("Coming soon.");
-        label.setWidth("200px");
-        label.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
-        label.getElement().getStyle().setTextAlign(TextAlign.LEFT);
-        mainPanel.setWidget(++row, 0, 1, label);
-
-        mainPanel.setH1(++row, 0, 1, i18n.tr("Notification Preferences"));
-
-        label = new HTML("Coming soon.");
-        label.setWidth("200px");
+        HTML label = new HTML(
+                "Your application has been reviewed and has successfully been approved! You will be contacted shortly from our office management team to make move-in arrangements");
+        label.getElement().getStyle().setProperty("maxWidth", "500px");
         label.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
         label.getElement().getStyle().setTextAlign(TextAlign.LEFT);
         mainPanel.setWidget(++row, 0, 1, label);

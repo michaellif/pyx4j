@@ -7,18 +7,18 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on May 14, 2011
+ * Created on Jun 18, 2011
  * @author Dad
  * @version $Id$
  */
-package com.propertyvista.portal.resident.ui.profile;
+package com.propertyvista.portal.prospect.ui;
 
-import com.propertyvista.portal.rpc.portal.web.dto.ResidentAccountDTO;
+import com.propertyvista.portal.rpc.portal.web.dto.application.ApplicationStatusDTO;
 import com.propertyvista.portal.shared.ui.IEditorView;
 
-public interface AccountPageView extends IEditorView<ResidentAccountDTO> {
+public interface StatusPageView extends IEditorView<ApplicationStatusDTO> {
 
-    public interface AccountPagePresenter extends IEditorPresenter<ResidentAccountDTO> {
+    public interface StatusPagePresenter extends IEditorPresenter<ApplicationStatusDTO> {
 
     }
 
