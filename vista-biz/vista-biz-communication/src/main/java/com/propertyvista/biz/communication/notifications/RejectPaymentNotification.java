@@ -44,15 +44,13 @@ public class RejectPaymentNotification extends AbstractNotification {
 
     @Override
     public void send() {
-        if (applyNSF) {
-            EntityQueryCriteria<Lease> criteria = EntityQueryCriteria.create(Lease.class);
-            criteria.eq(criteria.proto().billingAccount(), paymentRecord.billingAccount());
-            Lease leaseId = Persistence.service().retrieve(criteria, AttachLevel.IdOnly);
-            List<Employee> employees = NotificationsUtils.getNotificationTraget(leaseId, Notification.NotificationType.ElectronicPaymentRejectedNsf);
-            if (!employees.isEmpty()) {
-                ServerSideFactory.create(CommunicationFacade.class).sendPaymentReversalWithNsfNotification(NotificationsUtils.toEmails(employees),
-                        paymentRecord);
-            }
+        EntityQueryCriteria<Lease> criteria = EntityQueryCriteria.create(Lease.class);
+        criteria.eq(criteria.proto().billingAccount(), paymentRecord.billingAccount());
+        Lease leaseId = Persistence.service().retrieve(criteria, AttachLevel.IdOnly);
+        List<Employee> employees = NotificationsUtils.getNotificationTraget(leaseId, Notification.NotificationType.ElectronicPaymentRejectedNsf);
+        if (!employees.isEmpty()) {
+            ServerSideFactory.create(CommunicationFacade.class)
+                    .sendPaymentRejectedNotification(NotificationsUtils.toEmails(employees), paymentRecord, applyNSF);
         }
     }
 

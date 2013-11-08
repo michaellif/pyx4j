@@ -141,6 +141,15 @@ class PadReconciliationProcessor extends AbstractReconciliationProcessor {
         }
     }
 
+    private boolean isNSFApplicable(PadReconciliationDebitRecord debitRecord) {
+        String reasonCode = debitRecord.reasonCode().getValue("").trim();
+        if (reasonCode.equals("912")) {
+            return false;
+        } else {
+            return true;
+        }
+    }
+
     private void reconciliationRejectPayment(PadReconciliationDebitRecord debitRecord, PaymentRecord paymentRecord) {
         if (!EnumSet.of(PaymentRecord.PaymentStatus.Processing, PaymentRecord.PaymentStatus.Received).contains(paymentRecord.paymentStatus().getValue())) {
             throw new Error("Processed payment '" + debitRecord.transactionId().getValue() + "' can't be rejected");
@@ -156,7 +165,7 @@ class PadReconciliationProcessor extends AbstractReconciliationProcessor {
         Persistence.service().merge(paymentRecord);
 
         try {
-            ServerSideFactory.create(ARFacade.class).rejectPayment(paymentRecord, true);
+            ServerSideFactory.create(ARFacade.class).rejectPayment(paymentRecord, isNSFApplicable(debitRecord));
         } catch (ARException e) {
             throw new Error("Payment can't be rejected", e);
         }
@@ -178,7 +187,7 @@ class PadReconciliationProcessor extends AbstractReconciliationProcessor {
         Persistence.service().merge(paymentRecord);
 
         try {
-            ServerSideFactory.create(ARFacade.class).rejectPayment(paymentRecord, true);
+            ServerSideFactory.create(ARFacade.class).rejectPayment(paymentRecord, isNSFApplicable(debitRecord));
         } catch (ARException e) {
             throw new Error("Payment can't be returned", e);
         }

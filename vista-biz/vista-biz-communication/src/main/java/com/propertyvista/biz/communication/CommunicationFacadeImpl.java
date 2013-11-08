@@ -279,11 +279,11 @@ public class CommunicationFacadeImpl implements CommunicationFacade {
     }
 
     @Override
-    public void sendPaymentReversalWithNsfNotification(List<String> targetEmails, PaymentRecord paymentRecord) {
+    public void sendPaymentRejectedNotification(List<String> targetEmails, PaymentRecord paymentRecord, boolean applyNSF) {
         if (disabled) {
             return;
         }
-        MailMessage m = MessageTemplates.createNsfNotificationEmail(paymentRecord);
+        MailMessage m = MessageTemplates.createPaymentRejectedNotificationEmail(paymentRecord, applyNSF);
         m.setTo(targetEmails);
         Mail.send(m);
     }

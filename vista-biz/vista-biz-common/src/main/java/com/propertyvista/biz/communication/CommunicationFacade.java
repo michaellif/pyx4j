@@ -73,7 +73,7 @@ public interface CommunicationFacade {
     //TODO move to OprationsNotificationFacade
     void sendOnlinePaymentSetupCompletedEmail(String userName, String userEmail);
 
-    void sendPaymentReversalWithNsfNotification(List<String> targetEmail, PaymentRecord paymentRecord);
+    void sendPaymentRejectedNotification(List<String> targetEmail, PaymentRecord paymentRecord, boolean applyNSF);
 
     void sendPaymentYardiUnableToRejectNotification(List<String> targetEmail, PaymentRecord paymentRecord, boolean applyNSF, String yardiErrorMessage);
 

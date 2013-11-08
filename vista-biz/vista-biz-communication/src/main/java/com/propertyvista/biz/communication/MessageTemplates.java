@@ -298,7 +298,7 @@ public class MessageTemplates {
         return email;
     }
 
-    public static MailMessage createNsfNotificationEmail(PaymentRecord paymentRecord) {
+    public static MailMessage createPaymentRejectedNotificationEmail(PaymentRecord paymentRecord, boolean applyNSF) {
         MailMessage email = new MailMessage();
         email.setSender(getSender());
 
@@ -330,7 +330,8 @@ public class MessageTemplates {
             rejectionReason = paymentRecord.transactionErrorMessage().getValue();
         }
 
-        email.setSubject(i18n.tr("NSF Alert for Building {0}, Unit {1}, Lease {2}, Tenant {3} {4}", buildingId, unitId, leaseId, tenantId, tenantName));
+        email.setSubject(i18n.tr("Payment Rejected Alert for Building {0}, Unit {1}, Lease {2}, Tenant {3} {4}", buildingId, unitId, leaseId, tenantId,
+                tenantName));
         String emailBody = "";
         try {
             emailBody = IOUtils.getTextResource("email/payment-nsf-notification.html");
@@ -349,7 +350,8 @@ public class MessageTemplates {
                 .replace("${paymentId}", paymentId)
                 .replace("${paymentAmount}", paymentAmount)
                 .replace("${paymentUrl}", paymentRecordUrl)
-                .replace("${rejectionReason}", rejectionReason);
+                .replace("${rejectionReason}", rejectionReason)
+                .replace("${notes}", applyNSF?i18n.tr("NSF fee will be applied."):"");
         //@formatter:on
         email.setHtmlBody(wrapAdminHtml(emailBody));
 
