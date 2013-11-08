@@ -344,6 +344,7 @@ public class ResponsiveLayoutPanel extends ComplexPanel implements RequiresResiz
 
     private void onScroll() {
         inlineMenuHolder.onPositionChange();
+        extraHolder.onPositionChange();
 
         if (inlineToolbarHolder.getAbsoluteTop() > 0) {
             if (inlineToolbarHolder.getWidget() == null) {

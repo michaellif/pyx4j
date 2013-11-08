@@ -20,18 +20,58 @@
  */
 package com.pyx4j.site.client.ui.layout.responsive;
 
+import com.google.gwt.dom.client.Style.Display;
 import com.google.gwt.dom.client.Style.Position;
+import com.google.gwt.dom.client.Style.Unit;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.SimplePanel;
 
 public class ExtraHolder extends SimplePanel {
 
+    private final ResponsiveLayoutPanel parent;
+
     public ExtraHolder(ResponsiveLayoutPanel parent) {
-        getElement().getStyle().setDisplay(com.google.gwt.dom.client.Style.Display.INLINE_BLOCK);
-        getElement().getStyle().setProperty("verticalAlign", "top");
-        getElement().getStyle().setPosition(Position.RELATIVE);
-        getElement().getStyle().setProperty("right", "0");
-        getElement().getStyle().setProperty("top", "0");
+        this.parent = parent;
         setWidget(parent.getExtraDisplay());
     }
 
+    public void onPositionChange() {
+
+        if (getWidget() != null && isAttached()) {
+            int offsetTop = parent.getStickyHeaderHolder().getOffsetHeight();
+            int offsetBottom = parent.getFooterHolder().getAbsoluteTop();
+            getWidget().setHeight("auto");
+
+            if (getAbsoluteTop() >= offsetTop) {
+                getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
+                getWidget().getElement().getStyle().setPosition(Position.STATIC);
+                getElement().getStyle().setPosition(Position.RELATIVE);
+
+                getElement().getStyle().setRight(0, Unit.PX);
+                getElement().getStyle().setTop(0, Unit.PX);
+                getElement().getStyle().setProperty("width", "auto");
+            } else {
+                getWidget().getElement().getStyle().setPosition(Position.FIXED);
+                getElement().getStyle().setWidth(getWidget().getOffsetWidth(), Unit.PX);
+                if ((offsetTop + getWidget().getOffsetHeight()) <= offsetBottom) {
+                    getWidget().getElement().getStyle().setProperty("top", offsetTop + "px");
+                    getWidget().getElement().getStyle().setProperty("bottom", "auto");
+                } else {
+                    getWidget().getElement().getStyle().setProperty("bottom", Window.getClientHeight() - offsetBottom + "px");
+                    getWidget().getElement().getStyle().setProperty("top", "auto");
+                }
+
+            }
+
+        } else {
+            getElement().getStyle().setWidth(0, Unit.PX);
+        }
+
+    }
+
+    @Override
+    protected void onLoad() {
+        super.onLoad();
+        onPositionChange();
+    }
 }

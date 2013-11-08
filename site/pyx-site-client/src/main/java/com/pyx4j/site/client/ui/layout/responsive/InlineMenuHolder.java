@@ -63,7 +63,7 @@ public class InlineMenuHolder extends SimplePanel {
             }
 
         } else {
-            getElement().getStyle().setProperty("width", "0px");
+            getElement().getStyle().setWidth(0, Unit.PX);
         }
     }
 
