@@ -27,6 +27,7 @@ import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.security.client.BehaviorChangeEvent;
 import com.pyx4j.security.client.BehaviorChangeHandler;
+import com.pyx4j.security.client.ClientContext;
 import com.pyx4j.site.rpc.AppPlace;
 import com.pyx4j.site.rpc.NotificationAppPlace;
 import com.pyx4j.site.shared.domain.Notification;
@@ -48,7 +49,7 @@ public abstract class AbstractAppPlaceDispatcher implements AppPlaceDispatcher {
                     ((SingletonViewFactory) AppSite.getViewFactory()).invalidate();
                 }
                 Place current = AppSite.getPlaceController().getWhere();
-                if ((current instanceof PublicPlace) || (!isApplicationAuthenticated())) {
+                if ((current instanceof PublicPlace) || (!ClientContext.isAuthenticated())) {
                     AppSite.getPlaceController().goTo(AppPlace.NOWHERE, false);
                 } else if (current instanceof AppPlace) {
                     isPlaceNavigable((AppPlace) current, new DefaultAsyncCallback<Boolean>() {
@@ -77,8 +78,6 @@ public abstract class AbstractAppPlaceDispatcher implements AppPlaceDispatcher {
      */
     protected abstract void obtainDefaultAuthenticatedPlace(AsyncCallback<AppPlace> callback);
 
-    protected abstract boolean isApplicationAuthenticated();
-
     /**
      * Define security for places. Called before each navigation. If it returns FALSE we will go to DefaultAuthenticatedPlace
      */
@@ -99,7 +98,7 @@ public abstract class AbstractAppPlaceDispatcher implements AppPlaceDispatcher {
     public final void forwardTo(AppPlace newPlace, final AsyncCallback<AppPlace> callback) {
         if (newPlace instanceof PublicPlace) {
             callback.onSuccess(newPlace);
-        } else if (isApplicationAuthenticated()) {
+        } else if (ClientContext.isAuthenticated()) {
             final AppPlace targetPlace = selectTargetPlace(newPlace);
             isPlaceNavigable(targetPlace, new DefaultAsyncCallback<Boolean>() {
                 @Override
