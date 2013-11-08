@@ -20,6 +20,7 @@
  */
 package com.pyx4j.site.client.ui.layout.responsive;
 
+import com.google.gwt.dom.client.Style.Display;
 import com.google.gwt.dom.client.Style.Position;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.user.client.Window;
@@ -38,18 +39,19 @@ public class InlineMenuHolder extends SimplePanel {
     public void setMenuDisplay(DisplayPanel display) {
         super.setWidget(display);
         onPositionChange();
+        getElement().getStyle().setTop(0, Unit.PX);
+        getElement().getStyle().setProperty("width", "auto");
     }
 
     public void onPositionChange() {
         if (getWidget() != null && isAttached()) {
-            int offsetTop = parent.getStickyHeaderHolder().getOffsetHeight();
+            int offsetTop = parent.getToolbarDisplay().getOffsetHeight();
             int offsetBottom = parent.getFooterHolder().getAbsoluteTop();
             getWidget().setHeight("auto");
+
             if (getAbsoluteTop() >= offsetTop) {
                 getWidget().getElement().getStyle().setPosition(Position.STATIC);
                 getElement().getStyle().setPosition(Position.ABSOLUTE);
-                getElement().getStyle().setTop(0, Unit.PX);
-                getElement().getStyle().setProperty("width", "auto");
             } else {
                 getWidget().getElement().getStyle().setPosition(Position.FIXED);
                 getElement().getStyle().setWidth(getWidget().getOffsetWidth(), Unit.PX);

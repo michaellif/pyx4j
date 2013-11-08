@@ -233,10 +233,6 @@ public class ResponsiveLayoutPanel extends ComplexPanel implements RequiresResiz
 
     }
 
-    StickyToolbarHolder getStickyHeaderHolder() {
-        return stickyToolbarHolder;
-    }
-
     SimplePanel getFooterHolder() {
         return footerHolder;
     }

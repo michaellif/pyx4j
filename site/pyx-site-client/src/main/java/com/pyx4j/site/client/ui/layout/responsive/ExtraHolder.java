@@ -33,22 +33,22 @@ public class ExtraHolder extends SimplePanel {
     public ExtraHolder(ResponsiveLayoutPanel parent) {
         this.parent = parent;
         setWidget(parent.getExtraDisplay());
+        getElement().getStyle().setRight(0, Unit.PX);
+        getElement().getStyle().setTop(0, Unit.PX);
+        getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
+
     }
 
     public void onPositionChange() {
 
         if (getWidget() != null && isAttached()) {
-            int offsetTop = parent.getStickyHeaderHolder().getOffsetHeight();
+            int offsetTop = parent.getToolbarDisplay().getOffsetHeight();
             int offsetBottom = parent.getFooterHolder().getAbsoluteTop();
             getWidget().setHeight("auto");
 
             if (getAbsoluteTop() >= offsetTop) {
-                getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
                 getWidget().getElement().getStyle().setPosition(Position.STATIC);
                 getElement().getStyle().setPosition(Position.RELATIVE);
-
-                getElement().getStyle().setRight(0, Unit.PX);
-                getElement().getStyle().setTop(0, Unit.PX);
                 getElement().getStyle().setProperty("width", "auto");
             } else {
                 getWidget().getElement().getStyle().setPosition(Position.FIXED);
@@ -60,7 +60,6 @@ public class ExtraHolder extends SimplePanel {
                     getWidget().getElement().getStyle().setProperty("bottom", Window.getClientHeight() - offsetBottom + "px");
                     getWidget().getElement().getStyle().setProperty("top", "auto");
                 }
-
             }
 
         } else {
