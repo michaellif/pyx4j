@@ -50,6 +50,7 @@ import com.propertyvista.domain.policy.framework.OrganizationPoliciesNode;
 import com.propertyvista.domain.policy.policies.N4Policy;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.tenant.lease.Lease;
+import com.propertyvista.portal.rpc.shared.PolicyNotFoundException;
 import com.propertyvista.server.common.util.AddressConverter;
 import com.propertyvista.server.common.util.AddressRetriever;
 
@@ -131,8 +132,12 @@ public class N4GenerationToolServiceImpl implements N4GenerationToolService {
 
     private List<String> validateN4Policy() {
         List<String> policyValidationErrors = new ArrayList<String>();
-        N4Policy policy = ServerSideFactory.create(PolicyFacade.class).obtainEffectivePolicy(EntityFactory.create(OrganizationPoliciesNode.class),
-                N4Policy.class);
+        N4Policy policy = null;
+        try {
+            policy = ServerSideFactory.create(PolicyFacade.class).obtainEffectivePolicy(EntityFactory.create(OrganizationPoliciesNode.class), N4Policy.class);
+        } catch (PolicyNotFoundException p) {
+            // do nothing for policy not found but don't ignore other runtime exceptions.
+        }
         if (policy == null) {
             policyValidationErrors.add(i18n.tr("N4 Policy has no AR Code settings. Please set up AR Codes in N4 policy!"));
             return policyValidationErrors;
