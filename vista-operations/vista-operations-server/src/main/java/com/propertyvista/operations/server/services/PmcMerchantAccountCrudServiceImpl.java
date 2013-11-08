@@ -32,6 +32,7 @@ import com.propertyvista.biz.system.Vista2PmcFacade;
 import com.propertyvista.domain.financial.BuildingMerchantAccount;
 import com.propertyvista.domain.financial.MerchantAccount;
 import com.propertyvista.domain.pmc.Pmc;
+import com.propertyvista.domain.pmc.Pmc.PmcStatus;
 import com.propertyvista.domain.pmc.PmcMerchantAccountIndex;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.operations.rpc.dto.PmcMerchantAccountDTO;
@@ -63,33 +64,35 @@ public class PmcMerchantAccountCrudServiceImpl extends AbstractCrudServiceDtoImp
     }
 
     public static void retriveMerchantAccountFromPmc(final PmcMerchantAccountIndex entity, final PmcMerchantAccountDTO dto) {
-        Persistence.service().retrieve(dto.pmc());
-        TaskRunner.runInTargetNamespace(dto.pmc(), new Callable<Void>() {
-            @Override
-            public Void call() {
-                dto.merchantAccount().set(Persistence.service().retrieve(MerchantAccount.class, entity.merchantAccountKey().getValue()));
-                EntityQueryCriteria<BuildingMerchantAccount> criteria = EntityQueryCriteria.create(BuildingMerchantAccount.class);
-                criteria.eq(criteria.proto().merchantAccount(), dto.merchantAccount());
-                List<BuildingMerchantAccount> buildingMerchantAccounts = Persistence.service().query(criteria);
-                List<Building> assignedBuildings = new ArrayList<Building>();
-                for (BuildingMerchantAccount buildingMerchantAccount : buildingMerchantAccounts) {
-                    Building b = EntityFactory.create(Building.class);
-                    b.propertyCode().setValue(
-                            Persistence.service().retrieve(Building.class, buildingMerchantAccount.building().getPrimaryKey(), AttachLevel.Attached)
-                                    .propertyCode().getValue());
-                    assignedBuildings.add(b);
-                }
-                Collections.sort(assignedBuildings, new Comparator<Building>() {
-                    @Override
-                    public int compare(Building o1, Building o2) {
-                        return o1.propertyCode().compareTo(o2.propertyCode());
+        Persistence.ensureRetrieve(dto.pmc(), AttachLevel.Attached);
+        if ((dto.pmc().status().getValue() != PmcStatus.Created) && (!entity.merchantAccountKey().isNull())) {
+            TaskRunner.runInTargetNamespace(dto.pmc(), new Callable<Void>() {
+                @Override
+                public Void call() {
+                    dto.merchantAccount().set(Persistence.service().retrieve(MerchantAccount.class, entity.merchantAccountKey().getValue()));
+                    EntityQueryCriteria<BuildingMerchantAccount> criteria = EntityQueryCriteria.create(BuildingMerchantAccount.class);
+                    criteria.eq(criteria.proto().merchantAccount(), dto.merchantAccount());
+                    List<BuildingMerchantAccount> buildingMerchantAccounts = Persistence.service().query(criteria);
+                    List<Building> assignedBuildings = new ArrayList<Building>();
+                    for (BuildingMerchantAccount buildingMerchantAccount : buildingMerchantAccounts) {
+                        Building b = EntityFactory.create(Building.class);
+                        b.propertyCode().setValue(
+                                Persistence.service().retrieve(Building.class, buildingMerchantAccount.building().getPrimaryKey(), AttachLevel.Attached)
+                                        .propertyCode().getValue());
+                        assignedBuildings.add(b);
                     }
-                });
-                dto.assignedBuildings().addAll(assignedBuildings);
-                return null;
-            }
-        });
-        ServerSideFactory.create(Vista2PmcFacade.class).calulateMerchantAccountStatus(dto.merchantAccount());
+                    Collections.sort(assignedBuildings, new Comparator<Building>() {
+                        @Override
+                        public int compare(Building o1, Building o2) {
+                            return o1.propertyCode().compareTo(o2.propertyCode());
+                        }
+                    });
+                    dto.assignedBuildings().addAll(assignedBuildings);
+                    return null;
+                }
+            });
+            ServerSideFactory.create(Vista2PmcFacade.class).calulateMerchantAccountStatus(dto.merchantAccount());
+        }
     }
 
     @Override
