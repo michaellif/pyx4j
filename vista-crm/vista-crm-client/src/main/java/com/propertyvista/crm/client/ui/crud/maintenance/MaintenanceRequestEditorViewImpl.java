@@ -29,8 +29,10 @@ public class MaintenanceRequestEditorViewImpl extends CrmEditorViewImplBase<Main
     public MaintenanceRequestDTO getValue() {
         // don't want all the attached info back over the wire
         MaintenanceRequestDTO value = super.getValue();
-        MaintenanceRequestCategory newCat = EntityFactory.createIdentityStub(MaintenanceRequestCategory.class, value.category().getPrimaryKey());
-        value.category().set(newCat);
+        if (!value.category().isNull()) {
+            MaintenanceRequestCategory newCat = EntityFactory.createIdentityStub(MaintenanceRequestCategory.class, value.category().getPrimaryKey());
+            value.category().set(newCat);
+        }
         return value;
     }
 }
