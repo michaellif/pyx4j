@@ -249,11 +249,11 @@ public class PortalRootPaneTheme extends Theme {
     private void initExtraGadgetStyles() {
         Style style = new Style(".", StyleName.ExtraGadget);
         style.addProperty("width", "220px");
-        style.addProperty("margin-bottom", "10px");
+        style.addProperty("margin-top", "10px");
         addStyle(style);
 
         style = new Style(".", StyleName.ExtraGadgetItem);
-        style.addProperty("margin", "10px 10px 0 0");
+        style.addProperty("margin", "0 10px 10px 0");
         addStyle(style);
 
         style = new Style(".", StyleName.ExtraGadgetItemTitle);
