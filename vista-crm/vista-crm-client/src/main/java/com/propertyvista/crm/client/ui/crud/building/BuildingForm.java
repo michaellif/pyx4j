@@ -91,82 +91,47 @@ public class BuildingForm extends CrmEntityForm<BuildingDTO> {
 
     private static final I18n i18n = I18n.get(BuildingForm.class);
 
-    private final Tab financialTab;
+    private final Tab financialTab, billingCyclesTab;
 
-    private final Tab billingCyclesTab;
+    private Tab catalogTab = null;
 
     public BuildingForm(IForm<BuildingDTO> view) {
         super(BuildingDTO.class, view);
 
-        Tab tab = null;
+        selectTab(addTab(createGeneralTab()));
 
-        tab = addTab(createGeneralTab(i18n.tr("General")));
-        selectTab(tab);
+        addTab(createDetailsTab());
 
-        addTab(createDetailsTab(i18n.tr("Details")));
+        setTabEnabled(addTab(isEditable() ? new HTML() : ((BuildingViewerView) getParentView()).getFloorplanListerView().asWidget(), i18n.tr("Floorplans")),
+                !isEditable());
 
-        tab = addTab(isEditable() ? new HTML() : ((BuildingViewerView) getParentView()).getFloorplanListerView().asWidget(), i18n.tr("Floorplans"));
-        setTabEnabled(tab, !isEditable());
+        setTabEnabled(addTab(isEditable() ? new HTML() : ((BuildingViewerView) getParentView()).getUnitListerView().asWidget(), i18n.tr("Units")),
+                !isEditable());
 
-        tab = addTab(isEditable() ? new HTML() : ((BuildingViewerView) getParentView()).getUnitListerView().asWidget(), i18n.tr("Units"));
-        setTabEnabled(tab, !isEditable());
+        setTabEnabled(addTab(createMachanicalsTab()), !isEditable());
 
-        TwoColumnFlexFormPanel flexPanel = new TwoColumnFlexFormPanel();
-        flexPanel.setWidth("100%");
-        int row = 0;
-        flexPanel.setH4(row++, 0, 2, i18n.tr("Elevators"));
-        flexPanel.setWidget(row++, 0, 2, isEditable() ? new HTML() : ((BuildingViewerView) getParentView()).getElevatorListerView().asWidget());
-        flexPanel.setH4(row++, 0, 2, i18n.tr("Boilers"));
-        flexPanel.setWidget(row++, 0, 2, isEditable() ? new HTML() : ((BuildingViewerView) getParentView()).getBoilerListerView().asWidget());
-        flexPanel.setH4(row++, 0, 2, i18n.tr("Roofs"));
-        flexPanel.setWidget(row++, 0, 2, isEditable() ? new HTML() : ((BuildingViewerView) getParentView()).getRoofListerView().asWidget());
+        setTabEnabled(addTab(createAddOnsTab()), !isEditable());
 
-        tab = addTab(flexPanel, i18n.tr("Mechanicals"));
-        setTabEnabled(tab, !isEditable());
+        financialTab = addTab(createFinancialTab());
 
-        flexPanel = new TwoColumnFlexFormPanel();
-        flexPanel.setWidth("100%");
-        row = 0;
-        flexPanel.setH4(row++, 0, 2, i18n.tr("Parking"));
-        flexPanel.setWidget(row++, 0, 2, isEditable() ? new HTML() : ((BuildingViewerView) getParentView()).getParkingListerView().asWidget());
-        flexPanel.setH4(row++, 0, 2, i18n.tr("Locker Areas"));
-        flexPanel.setWidget(row++, 0, 2, isEditable() ? new HTML() : ((BuildingViewerView) getParentView()).getLockerAreaListerView().asWidget());
+        addTab(createMarketingTab());
 
-        tab = addTab(flexPanel, i18n.tr("Add-Ons"));
-        setTabEnabled(tab, !isEditable());
-
-        financialTab = addTab(createFinancialTab(i18n.tr("Financial")));
-
-        addTab(createMarketingTab(i18n.tr("Marketing")));
-
-        flexPanel = new TwoColumnFlexFormPanel();
-        row = 0;
-        flexPanel.setH4(row++, 0, 2, i18n.tr("Services"));
-        flexPanel.setWidget(row++, 0, 2, isEditable() ? new HTML() : ((BuildingViewerView) getParentView()).getServiceListerView().asWidget());
-        flexPanel.setH4(row++, 0, 2, i18n.tr("Features"));
-        flexPanel.setWidget(row++, 0, 2, isEditable() ? new HTML() : ((BuildingViewerView) getParentView()).getFeatureListerView().asWidget());
-        if (!VistaTODO.VISTA_1756_Concessions_Should_Be_Hidden) {
-            flexPanel.setH4(row++, 0, 2, i18n.tr("Concessions"));
-            flexPanel.setWidget(row++, 0, 2, isEditable() ? new HTML() : ((BuildingViewerView) getParentView()).getConcessionListerView().asWidget());
+        if (VistaFeatures.instance().productCatalog() && !VistaFeatures.instance().yardiIntegration()) {
+            setTabEnabled(catalogTab = addTab(createCatalogTab()), !isEditable());
         }
 
-        if (VistaFeatures.instance().productCatalog() && !VistaFeatures.instance().defaultProductCatalog() && !VistaFeatures.instance().yardiIntegration()) {
-            tab = addTab(flexPanel, i18n.tr("Product Catalog"));
-            setTabEnabled(tab, !isEditable());
-        }
-
-        addTab(createContactTab(i18n.tr("Contacts")));
+        addTab(createContactTab());
 
         billingCyclesTab = addTab(isEditable() ? new HTML() : ((BuildingViewerView) getParentView()).getBillingCycleListerView().asWidget(),
                 i18n.tr("Billing Cycles"));
         setTabEnabled(billingCyclesTab, !isEditable());
-
     }
 
     @Override
     protected void onValueSet(boolean populate) {
         super.onValueSet(populate);
 
+        get(proto().complex()).setVisible(!getValue().complex().isNull());
         get(proto().externalId()).setVisible(!getValue().externalId().isNull());
         get(proto().suspended()).setEditable(SecurityController.checkBehavior(VistaCrmBehavior.PropertyVistaSupport));
 
@@ -192,6 +157,11 @@ public class BuildingForm extends CrmEntityForm<BuildingDTO> {
         financialTab.setTabVisible(SecurityController.checkBehavior(VistaCrmBehavior.BuildingFinancial));
         billingCyclesTab.setTabVisible(SecurityController.checkBehavior(VistaCrmBehavior.Billing));
 
+        if (catalogTab != null) {
+            catalogTab.setTabVisible(SecurityController.checkBehavior(VistaCrmBehavior.ProductCatalog)
+                    && !getValue().useDefaultProductCatalog().isBooleanTrue());
+        }
+
         fillMerchantAccountStatus(getValue().merchantAccount());
     }
 
@@ -208,8 +178,8 @@ public class BuildingForm extends CrmEntityForm<BuildingDTO> {
         });
     }
 
-    private TwoColumnFlexFormPanel createGeneralTab(String title) {
-        TwoColumnFlexFormPanel flexPanel = new TwoColumnFlexFormPanel(title);
+    private TwoColumnFlexFormPanel createGeneralTab() {
+        TwoColumnFlexFormPanel flexPanel = new TwoColumnFlexFormPanel(i18n.tr("General"));
 
         int row = 0;
         flexPanel.setH1(row++, 0, 2, i18n.tr("Building Summary"));
@@ -224,21 +194,20 @@ public class BuildingForm extends CrmEntityForm<BuildingDTO> {
         flexPanel.setWidget(row++, 1, new FormDecoratorBuilder(inject(proto().info().residentialStoreys()), 5).build());
 
         flexPanel.setWidget(row, 0, new FormDecoratorBuilder(inject(proto().propertyManager()), 16).build());
-        flexPanel.setWidget(row++, 1, new FormDecoratorBuilder(inject(proto().suspended()), 15).build());
-        flexPanel.setBR(row++, 1, 1);
-
-        flexPanel.setWidget(row, 0, new FormDecoratorBuilder(inject(proto().externalId()), 15).build());
+        flexPanel.setWidget(row++, 1, new FormDecoratorBuilder(inject(proto().externalId()), 15).build());
 
         if (isEditable()) {
-            flexPanel.setWidget(row++, 1, new FormDecoratorBuilder(inject(proto().complex(), new CEntityLabel<Complex>()), 15).build());
+            flexPanel.setWidget(row, 0, new FormDecoratorBuilder(inject(proto().complex(), new CEntityLabel<Complex>()), 15).build());
         } else {
             flexPanel
                     .setWidget(
-                            row++,
-                            1,
+                            row,
+                            0,
                             new FormDecoratorBuilder(inject(proto().complex(),
                                     new CEntityCrudHyperlink<Complex>(AppPlaceEntityMapper.resolvePlace(Complex.class))), 15).build());
         }
+        flexPanel.setWidget(row++, 1, new FormDecoratorBuilder(inject(proto().useDefaultProductCatalog()), 5).build());
+        flexPanel.setWidget(row++, 1, new FormDecoratorBuilder(inject(proto().suspended()), 5).build());
 
         flexPanel.setH1(row++, 0, 2, proto().info().address().getMeta().getCaption());
         flexPanel.setWidget(row, 0, inject(proto().info().address(), new AddressStructuredEditor(false)));
@@ -258,8 +227,8 @@ public class BuildingForm extends CrmEntityForm<BuildingDTO> {
         return flexPanel;
     }
 
-    private TwoColumnFlexFormPanel createDetailsTab(String title) {
-        TwoColumnFlexFormPanel flexPanel = new TwoColumnFlexFormPanel(title);
+    private TwoColumnFlexFormPanel createDetailsTab() {
+        TwoColumnFlexFormPanel flexPanel = new TwoColumnFlexFormPanel(i18n.tr("Details"));
 
         int row = -1;
         flexPanel.setH1(++row, 0, 2, i18n.tr("Information"));
@@ -316,8 +285,34 @@ public class BuildingForm extends CrmEntityForm<BuildingDTO> {
         return flexPanel;
     }
 
-    private TwoColumnFlexFormPanel createFinancialTab(String title) {
-        TwoColumnFlexFormPanel flexPanel = new TwoColumnFlexFormPanel(title);
+    private TwoColumnFlexFormPanel createMachanicalsTab() {
+        TwoColumnFlexFormPanel flexPanel = new TwoColumnFlexFormPanel(i18n.tr("Mechanicals"));
+
+        int row = 0;
+        flexPanel.setH4(row++, 0, 2, i18n.tr("Elevators"));
+        flexPanel.setWidget(row++, 0, 2, isEditable() ? new HTML() : ((BuildingViewerView) getParentView()).getElevatorListerView().asWidget());
+        flexPanel.setH4(row++, 0, 2, i18n.tr("Boilers"));
+        flexPanel.setWidget(row++, 0, 2, isEditable() ? new HTML() : ((BuildingViewerView) getParentView()).getBoilerListerView().asWidget());
+        flexPanel.setH4(row++, 0, 2, i18n.tr("Roofs"));
+        flexPanel.setWidget(row++, 0, 2, isEditable() ? new HTML() : ((BuildingViewerView) getParentView()).getRoofListerView().asWidget());
+
+        return flexPanel;
+    }
+
+    private TwoColumnFlexFormPanel createAddOnsTab() {
+        TwoColumnFlexFormPanel flexPanel = new TwoColumnFlexFormPanel(i18n.tr("Add-Ons"));
+
+        int row = 0;
+        flexPanel.setH4(row++, 0, 2, i18n.tr("Parking"));
+        flexPanel.setWidget(row++, 0, 2, isEditable() ? new HTML() : ((BuildingViewerView) getParentView()).getParkingListerView().asWidget());
+        flexPanel.setH4(row++, 0, 2, i18n.tr("Locker Areas"));
+        flexPanel.setWidget(row++, 0, 2, isEditable() ? new HTML() : ((BuildingViewerView) getParentView()).getLockerAreaListerView().asWidget());
+
+        return flexPanel;
+    }
+
+    private TwoColumnFlexFormPanel createFinancialTab() {
+        TwoColumnFlexFormPanel flexPanel = new TwoColumnFlexFormPanel(i18n.tr("Financial"));
 
         int row = 0;
         flexPanel.setBR(row++, 0, 2);
@@ -344,8 +339,8 @@ public class BuildingForm extends CrmEntityForm<BuildingDTO> {
         return flexPanel;
     }
 
-    private TwoColumnFlexFormPanel createMarketingTab(String title) {
-        TwoColumnFlexFormPanel flexPanel = new TwoColumnFlexFormPanel(title);
+    private TwoColumnFlexFormPanel createMarketingTab() {
+        TwoColumnFlexFormPanel flexPanel = new TwoColumnFlexFormPanel(i18n.tr("Marketing"));
 
         int row = -1;
         flexPanel.setH1(++row, 0, 2, i18n.tr("Marketing Summary"));
@@ -382,8 +377,24 @@ public class BuildingForm extends CrmEntityForm<BuildingDTO> {
         return flexPanel;
     }
 
-    private TwoColumnFlexFormPanel createContactTab(String title) {
-        TwoColumnFlexFormPanel flexPanel = new TwoColumnFlexFormPanel(title);
+    private TwoColumnFlexFormPanel createCatalogTab() {
+        TwoColumnFlexFormPanel flexPanel = new TwoColumnFlexFormPanel(i18n.tr("Product Catalog"));
+
+        int row = 0;
+        flexPanel.setH4(row++, 0, 2, i18n.tr("Services"));
+        flexPanel.setWidget(row++, 0, 2, isEditable() ? new HTML() : ((BuildingViewerView) getParentView()).getServiceListerView().asWidget());
+        flexPanel.setH4(row++, 0, 2, i18n.tr("Features"));
+        flexPanel.setWidget(row++, 0, 2, isEditable() ? new HTML() : ((BuildingViewerView) getParentView()).getFeatureListerView().asWidget());
+        if (!VistaTODO.VISTA_1756_Concessions_Should_Be_Hidden) {
+            flexPanel.setH4(row++, 0, 2, i18n.tr("Concessions"));
+            flexPanel.setWidget(row++, 0, 2, isEditable() ? new HTML() : ((BuildingViewerView) getParentView()).getConcessionListerView().asWidget());
+        }
+
+        return flexPanel;
+    }
+
+    private TwoColumnFlexFormPanel createContactTab() {
+        TwoColumnFlexFormPanel flexPanel = new TwoColumnFlexFormPanel(i18n.tr("Contacts"));
         int row = -1;
 
         flexPanel.setH1(++row, 0, 2, proto().contacts().organizationContacts().getMeta().getCaption());

@@ -55,7 +55,6 @@ import com.propertyvista.domain.tenant.lease.LeaseTermGuarantor;
 import com.propertyvista.domain.tenant.lease.LeaseTermTenant;
 import com.propertyvista.dto.LeaseTermDTO;
 import com.propertyvista.server.common.util.LeaseParticipantUtils;
-import com.propertyvista.shared.config.VistaFeatures;
 
 public class LeaseTermCrudServiceImpl extends AbstractVersionedCrudServiceDtoImpl<LeaseTerm, LeaseTermDTO> implements LeaseTermCrudService {
 
@@ -295,7 +294,7 @@ public class LeaseTermCrudServiceImpl extends AbstractVersionedCrudServiceDtoImp
         Persistence.ensureRetrieve(currentValue.unit().building(), AttachLevel.Attached);
 
         // use default product catalog items for specific cases:
-        boolean useDefaultCatalog = (VistaFeatures.instance().defaultProductCatalog() || currentValue.lease().status().getValue() == Lease.Status.ExistingLease);
+        boolean useDefaultCatalog = (currentValue.unit().building().useDefaultProductCatalog().isBooleanTrue() || currentValue.lease().status().getValue() == Lease.Status.ExistingLease);
 
         EntityQueryCriteria<Service> serviceCriteria = new EntityQueryCriteria<Service>(Service.class);
         serviceCriteria.add(PropertyCriterion.eq(serviceCriteria.proto().catalog(), currentValue.unit().building().productCatalog()));

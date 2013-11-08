@@ -17,13 +17,11 @@ import com.pyx4j.forms.client.ui.CEnumLabel;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.prime.form.IForm;
-import com.pyx4j.widgets.client.tabpanel.Tab;
 
 import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.domain.financial.offering.Service;
 import com.propertyvista.misc.VistaTODO;
-import com.propertyvista.shared.config.VistaFeatures;
 
 public class ServiceForm extends CrmEntityForm<Service> {
 
@@ -32,12 +30,8 @@ public class ServiceForm extends CrmEntityForm<Service> {
     public ServiceForm(IForm<Service> view) {
         super(Service.class, view);
 
-        Tab tab = addTab(createGeneralTab(i18n.tr("General")));
-        selectTab(tab);
-
-        if (!VistaFeatures.instance().defaultProductCatalog()) {
-            addTab(createEligibilityTab(i18n.tr("Eligibility")));
-        }
+        selectTab(addTab(createGeneralTab(i18n.tr("General"))));
+        addTab(createEligibilityTab(i18n.tr("Eligibility")));
     }
 
     public TwoColumnFlexFormPanel createGeneralTab(String title) {

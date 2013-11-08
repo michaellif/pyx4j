@@ -50,6 +50,9 @@ public class BuildingFacadeImpl implements BuildingFacade {
         if (building.integrationSystemId().isNull()) {
             building.integrationSystemId().setValue(IntegrationSystem.internal);
         }
+        if (building.useDefaultProductCatalog().isNull()) {
+            building.useDefaultProductCatalog().setValue(true);
+        }
         Persistence.service().merge(building);
 
         if (isNewBuilding) {

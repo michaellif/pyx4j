@@ -42,9 +42,9 @@ public class UnitServicePriceFolder extends VistaTableFolder<AptUnitServicePrice
     @Override
     public List<EntityFolderColumnDescriptor> columns() {
         ArrayList<EntityFolderColumnDescriptor> columns = new ArrayList<EntityFolderColumnDescriptor>();
-        columns.add(new EntityFolderColumnDescriptor(proto().type(), "15em"));
-        columns.add(new EntityFolderColumnDescriptor(proto().name(), "15em"));
-        columns.add(new EntityFolderColumnDescriptor(proto().price(), "7em"));
+        columns.add(new EntityFolderColumnDescriptor(proto().type(), "20em"));
+        columns.add(new EntityFolderColumnDescriptor(proto().name(), "20em"));
+        columns.add(new EntityFolderColumnDescriptor(proto().price(), "8em"));
         return columns;
     }
 

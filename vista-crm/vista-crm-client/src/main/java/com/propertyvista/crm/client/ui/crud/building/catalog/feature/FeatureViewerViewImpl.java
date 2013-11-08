@@ -18,13 +18,17 @@ import com.google.gwt.core.client.GWT;
 import com.propertyvista.crm.client.ui.crud.CrmViewerViewImplBase;
 import com.propertyvista.crm.rpc.services.selections.version.FeatureVersionService;
 import com.propertyvista.domain.financial.offering.Feature;
-import com.propertyvista.shared.config.VistaFeatures;
 
 public class FeatureViewerViewImpl extends CrmViewerViewImplBase<Feature> implements FeatureViewerView {
 
     public FeatureViewerViewImpl() {
-        super(VistaFeatures.instance().defaultProductCatalog());
         setForm(new FeatureForm(this));
         enableLooseVersioning(Feature.FeatureV.class, GWT.<FeatureVersionService> create(FeatureVersionService.class));
+    }
+
+    @Override
+    public void populate(Feature value) {
+        super.populate(value);
+        setEditingVisible(!value.isDefaultCatalogItem().isBooleanTrue());
     }
 }

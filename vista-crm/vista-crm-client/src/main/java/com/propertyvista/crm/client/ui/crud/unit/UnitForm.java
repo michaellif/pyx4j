@@ -62,6 +62,8 @@ public class UnitForm extends CrmEntityForm<AptUnitDTO> {
 
     private Widget unitLegalAddressLabel;
 
+    private final BasicFlexFormPanel catalogMarketPricesPanel = new BasicFlexFormPanel();
+
     public UnitForm(IForm<AptUnitDTO> view) {
         super(AptUnitDTO.class, view);
 
@@ -71,7 +73,7 @@ public class UnitForm extends CrmEntityForm<AptUnitDTO> {
         tab = addTab(isEditable() ? new HTML() : ((UnitViewerView) getParentView()).getUnitItemsListerView().asWidget(), i18n.tr("Details"));
         setTabEnabled(tab, !isEditable());
 
-        if (VistaFeatures.instance().occupancyModel() & !VistaFeatures.instance().yardiIntegration()) {
+        if (VistaFeatures.instance().occupancyModel() && !VistaFeatures.instance().yardiIntegration()) {
             tab = addTab(isEditable() ? new HTML() : ((UnitViewerView) getParentView()).getOccupanciesListerView().asWidget(), i18n.tr("Occupancy"));
             setTabEnabled(tab, !isEditable());
         }
@@ -91,6 +93,15 @@ public class UnitForm extends CrmEntityForm<AptUnitDTO> {
             get(proto()._availableForRent()).setVisible(!getValue()._availableForRent().isNull());
             get(proto().financial()._unitRent()).setVisible(!getValue().financial()._unitRent().isNull());
         }
+
+        if (VistaFeatures.instance().productCatalog() && !VistaFeatures.instance().yardiIntegration()) {
+            catalogMarketPricesPanel.setVisible(!getValue().building().useDefaultProductCatalog().isBooleanTrue());
+            get(proto().financial()._marketRent()).setVisible(false);
+        } else {
+            catalogMarketPricesPanel.setVisible(false);
+            get(proto().financial()._marketRent()).setVisible(!getValue().building().useDefaultProductCatalog().isBooleanTrue());
+        }
+
         updateSelectedLegalAddress();
     }
 
@@ -125,14 +136,7 @@ public class UnitForm extends CrmEntityForm<AptUnitDTO> {
                         AppPlaceEntityMapper.resolvePlace(Lease.class))), 20).build());
         left.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto()._availableForRent()), 9).build());
         left.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().financial()._unitRent()), 7).build());
-
-        if (VistaFeatures.instance().productCatalog() && !VistaFeatures.instance().defaultProductCatalog() && !VistaFeatures.instance().yardiIntegration()) {
-            left.setBR(++row, 0, 1);
-            left.setH1(++row, 0, 1, proto().marketPrices().getMeta().getCaption());
-            left.setWidget(++row, 0, inject(proto().marketPrices(), new UnitServicePriceFolder()));
-        } else {
-            left.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().financial()._marketRent()), 10).build());
-        }
+        left.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().financial()._marketRent()), 10).build());
 
         row = -1;
         TwoColumnFlexFormPanel right = new TwoColumnFlexFormPanel();
@@ -158,6 +162,12 @@ public class UnitForm extends CrmEntityForm<AptUnitDTO> {
 
         main.setWidget(0, 0, left);
         main.setWidget(0, 1, right);
+
+        if (VistaFeatures.instance().productCatalog() && !VistaFeatures.instance().yardiIntegration()) {
+            catalogMarketPricesPanel.setH1(++row, 0, 1, proto().marketPrices().getMeta().getCaption());
+            catalogMarketPricesPanel.setWidget(++row, 0, 2, inject(proto().marketPrices(), new UnitServicePriceFolder()));
+            main.setWidget(1, 0, 2, catalogMarketPricesPanel);
+        }
 
         main.getFlexCellFormatter().setVerticalAlignment(0, 0, HasVerticalAlignment.ALIGN_TOP);
         main.getFlexCellFormatter().setVerticalAlignment(0, 1, HasVerticalAlignment.ALIGN_TOP);

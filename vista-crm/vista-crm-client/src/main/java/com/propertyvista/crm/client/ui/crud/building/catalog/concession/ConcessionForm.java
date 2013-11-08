@@ -39,7 +39,7 @@ public class ConcessionForm extends CrmEntityForm<Concession> {
     public ConcessionForm(IForm<Concession> view) {
         super(Concession.class, view);
 
-        TwoColumnFlexFormPanel content = new TwoColumnFlexFormPanel(i18n.tr("General"));
+        TwoColumnFlexFormPanel content = new TwoColumnFlexFormPanel();
 
         int row = -1;
         content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().version().type()), 12).build());
@@ -67,7 +67,7 @@ public class ConcessionForm extends CrmEntityForm<Concession> {
         });
 
         selectTab(addTab(content));
-
+        setTabBarVisible(false);
     }
 
     @Override

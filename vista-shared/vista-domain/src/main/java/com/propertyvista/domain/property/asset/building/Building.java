@@ -125,6 +125,10 @@ public interface Building extends PolicyNode {
     @Owned(forceCreation = true, cascade = {})
     ProductCatalog productCatalog();
 
+    // Indicates which catalog approach to use
+    @NotNull
+    IPrimitive<Boolean> useDefaultProductCatalog();
+
     @RpcTransient
     @Detached(level = AttachLevel.Detached)
     @JoinTable(value = CrmUserBuildings.class)

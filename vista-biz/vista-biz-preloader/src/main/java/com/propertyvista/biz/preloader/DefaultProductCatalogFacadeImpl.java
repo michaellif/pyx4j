@@ -47,6 +47,7 @@ public class DefaultProductCatalogFacadeImpl implements DefaultProductCatalogFac
         Persistence.ensureRetrieve(building.productCatalog().services(), AttachLevel.Attached);
         Persistence.ensureRetrieve(building.productCatalog().features(), AttachLevel.Attached);
 
+        // create default catalog items:
         building.productCatalog().services().addAll(createDefaultServices(building.productCatalog()));
         building.productCatalog().features().addAll(createDefaultFeatures(building.productCatalog()));
 
@@ -58,9 +59,9 @@ public class DefaultProductCatalogFacadeImpl implements DefaultProductCatalogFac
         if (true)
             return; // TODO not implemented currently!..
 
-        Building building = Persistence.secureRetrieve(Building.class, buildingId.getPrimaryKey());
+        Building building = Persistence.service().retrieve(Building.class, buildingId.getPrimaryKey());
         if (building == null) {
-            throw new IllegalArgumentException("Building " + buildingId.getPrimaryKey() + " was not found");
+            throw new IllegalArgumentException("Building " + buildingId.getPrimaryKey() + " was not found!");
         }
 
         Persistence.ensureRetrieve(building.productCatalog(), AttachLevel.Attached);
@@ -69,22 +70,9 @@ public class DefaultProductCatalogFacadeImpl implements DefaultProductCatalogFac
 
         // TODO: review this!
 
-        // remove all default catalog items:
-        Iterator<Service> serviceIterator = building.productCatalog().services().iterator();
-        while (serviceIterator.hasNext()) {
-            Service service = serviceIterator.next();
-            if (service.isDefaultCatalogItem().isBooleanTrue()) {
-                serviceIterator.remove();
-            }
-        }
-
-        Iterator<Feature> featureIterator = building.productCatalog().features().iterator();
-        while (featureIterator.hasNext()) {
-            Feature feature = featureIterator.next();
-            if (feature.isDefaultCatalogItem().isBooleanTrue()) {
-                featureIterator.remove();
-            }
-        }
+        // remove old default catalog items:
+        deleteDefaultServices(building.productCatalog());
+        deleteDefaultFeatures(building.productCatalog());
 
         // create new ones:
         createFor(building);
@@ -126,9 +114,9 @@ public class DefaultProductCatalogFacadeImpl implements DefaultProductCatalogFac
 
     @Override
     public void updateUnit(Building buildingId, AptUnit unit) {
-        Building building = Persistence.secureRetrieve(Building.class, buildingId.getPrimaryKey());
+        Building building = Persistence.service().retrieve(Building.class, buildingId.getPrimaryKey());
         if (building == null) {
-            throw new IllegalArgumentException("Building " + buildingId.getPrimaryKey() + " was not found");
+            throw new IllegalArgumentException("Building " + buildingId.getPrimaryKey() + " was not found!");
         }
 
         Persistence.ensureRetrieve(building.productCatalog(), AttachLevel.Attached);
@@ -144,6 +132,16 @@ public class DefaultProductCatalogFacadeImpl implements DefaultProductCatalogFac
     }
 
     // internals:
+
+    private void deleteDefaultServices(ProductCatalog catalog) {
+        Iterator<Service> serviceIterator = catalog.services().iterator();
+        while (serviceIterator.hasNext()) {
+            Service service = serviceIterator.next();
+            if (service.isDefaultCatalogItem().isBooleanTrue()) {
+                serviceIterator.remove();
+            }
+        }
+    }
 
     private List<Service> createDefaultServices(ProductCatalog catalog) {
         EntityQueryCriteria<ARCode> criteria = EntityQueryCriteria.create(ARCode.class);
@@ -170,6 +168,16 @@ public class DefaultProductCatalogFacadeImpl implements DefaultProductCatalogFac
     }
 
     // ----------------------------------------------------------------------------------
+
+    private void deleteDefaultFeatures(ProductCatalog catalog) {
+        Iterator<Feature> featureIterator = catalog.features().iterator();
+        while (featureIterator.hasNext()) {
+            Feature feature = featureIterator.next();
+            if (feature.isDefaultCatalogItem().isBooleanTrue()) {
+                featureIterator.remove();
+            }
+        }
+    }
 
     private List<Feature> createDefaultFeatures(ProductCatalog catalog) {
         EntityQueryCriteria<ARCode> criteria = EntityQueryCriteria.create(ARCode.class);

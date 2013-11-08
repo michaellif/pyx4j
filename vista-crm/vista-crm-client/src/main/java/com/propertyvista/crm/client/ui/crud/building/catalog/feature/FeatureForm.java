@@ -30,7 +30,7 @@ public class FeatureForm extends CrmEntityForm<Feature> {
     public FeatureForm(IForm<Feature> view) {
         super(Feature.class, view);
 
-        TwoColumnFlexFormPanel content = new TwoColumnFlexFormPanel(i18n.tr("General"));
+        TwoColumnFlexFormPanel content = new TwoColumnFlexFormPanel();
 
         int row = -1;
         content.setH1(++row, 0, 2, i18n.tr("Information"));
@@ -46,6 +46,7 @@ public class FeatureForm extends CrmEntityForm<Feature> {
         content.setWidget(++row, 1, new FormDecoratorBuilder(inject(proto().version().recurring()), 4).build());
 
         selectTab(addTab(content));
+        setTabBarVisible(false);
     }
 
     @Override
