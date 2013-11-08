@@ -471,10 +471,9 @@ public class MaintenanceRequestForm extends CrmEntityForm<MaintenanceRequestDTO>
                                     TwoColumnFlexFormPanel main = new TwoColumnFlexFormPanel();
 
                                     int row = -1;
-                                    main.setWidget(++row, 0, 2,
-                                            new FormDecoratorBuilder(inject(proto().workDescription(), new CLabel<String>()), 40, true).build());
-                                    main.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().scheduledDate(), new CDateLabel()), 10, true).build());
-                                    main.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().progressNote()), 40, true).build());
+                                    main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().workDescription(), new CLabel<String>()), 40).build());
+                                    main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().scheduledDate(), new CDateLabel()), 10).build());
+                                    main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().progressNote()), 25).build());
 
                                     return main;
                                 }
@@ -557,9 +556,9 @@ public class MaintenanceRequestForm extends CrmEntityForm<MaintenanceRequestDTO>
                 content.setWidth("400px");
                 int row = -1;
                 content.setH2(++row, 0, 2, "Notice Of Entry");
-                content.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().messageDate()), true).contentWidth("350px").labelWidth("100px").build());
-                content.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().messageId()), true).contentWidth("350px").labelWidth("100px").build());
-                content.setWidget(++row, 0, 2, inject(proto().text()));
+                content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().messageDate())).contentWidth("350px").labelWidth("100px").build());
+                content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().messageId())).contentWidth("350px").labelWidth("100px").build());
+                content.setWidget(++row, 0, inject(proto().text()));
                 get(proto().text()).asWidget().setWidth("450px");
 
                 return content;
