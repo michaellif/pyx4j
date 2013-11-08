@@ -19,6 +19,7 @@ import java.util.concurrent.Callable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.config.server.SystemDateManager;
@@ -160,7 +161,8 @@ class PadReconciliationProcessor extends AbstractReconciliationProcessor {
         paymentRecord.lastStatusChangeDate().setValue(new LogicalDate(SystemDateManager.getDate()));
         paymentRecord.finalizeDate().setValue(new LogicalDate(SystemDateManager.getDate()));
 
-        paymentRecord.transactionErrorMessage().setValue(debitRecord.reasonCode().getValue() + " " + debitRecord.reasonText().getValue());
+        paymentRecord.transactionErrorMessage().setValue(
+                CommonsStringUtils.nvl_concat(debitRecord.reasonCode().getValue(), debitRecord.reasonText().getValue(), " "));
 
         Persistence.service().merge(paymentRecord);
 
@@ -182,7 +184,8 @@ class PadReconciliationProcessor extends AbstractReconciliationProcessor {
         paymentRecord.lastStatusChangeDate().setValue(new LogicalDate(SystemDateManager.getDate()));
         paymentRecord.finalizeDate().setValue(new LogicalDate(SystemDateManager.getDate()));
 
-        paymentRecord.transactionErrorMessage().setValue(debitRecord.reasonCode().getValue() + " " + debitRecord.reasonText().getValue());
+        paymentRecord.transactionErrorMessage().setValue(
+                CommonsStringUtils.nvl_concat(debitRecord.reasonCode().getValue(), debitRecord.reasonText().getValue(), " "));
 
         Persistence.service().merge(paymentRecord);
 
