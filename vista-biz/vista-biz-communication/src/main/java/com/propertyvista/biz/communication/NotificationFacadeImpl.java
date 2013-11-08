@@ -15,6 +15,11 @@ package com.propertyvista.biz.communication;
 
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.pyx4j.config.server.ServerSideFactory;
+
 import com.propertyvista.biz.communication.notifications.AbstractNotification;
 import com.propertyvista.biz.communication.notifications.AutoPayCancelledByResidentNotification;
 import com.propertyvista.biz.communication.notifications.AutoPayCancelledBySystemNotification;
@@ -22,20 +27,28 @@ import com.propertyvista.biz.communication.notifications.AutoPayReviewRequiredNo
 import com.propertyvista.biz.communication.notifications.NotificationsAggregator;
 import com.propertyvista.biz.communication.notifications.PostToYardiFailedNotification;
 import com.propertyvista.biz.communication.notifications.RejectPaymentNotification;
+import com.propertyvista.biz.system.OperationsAlertFacade;
 import com.propertyvista.domain.financial.PaymentRecord;
 import com.propertyvista.domain.payment.AutopayAgreement;
 import com.propertyvista.domain.tenant.lease.Lease;
 
 public class NotificationFacadeImpl implements NotificationFacade {
 
+    private final static Logger log = LoggerFactory.getLogger(NotificationFacadeImpl.class);
+
     private static final ThreadLocal<NotificationsAggregator> aggregatorThreadLocal = new ThreadLocal<NotificationsAggregator>();
 
     private void aggregateOrSend(AbstractNotification notification) {
-        NotificationsAggregator aggregator = aggregatorThreadLocal.get();
-        if (aggregator != null) {
-            aggregator.aggregate(notification);
-        } else {
-            notification.send();
+        try {
+            NotificationsAggregator aggregator = aggregatorThreadLocal.get();
+            if (aggregator != null) {
+                aggregator.aggregate(notification);
+            } else {
+                notification.send();
+            }
+        } catch (Throwable e) {
+            log.error("unable to send notification", e);
+            ServerSideFactory.create(OperationsAlertFacade.class).record(null, "Notification {0} failed", notification.getClass().getSimpleName(), e);
         }
     }
 

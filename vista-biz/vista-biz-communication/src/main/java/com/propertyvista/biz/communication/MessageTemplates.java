@@ -334,9 +334,9 @@ public class MessageTemplates {
                 tenantName));
         String emailBody = "";
         try {
-            emailBody = IOUtils.getTextResource("email/payment-nsf-notification.html");
+            emailBody = IOUtils.getTextResource("email/payment-rejected-notification.html");
         } catch (IOException e) {
-            throw new Error("Failed to load email template for nsf notifications", e);
+            throw new Error("Failed to load email template for payment rejected notifications", e);
         }
         //@formatter:off
         emailBody = emailBody
