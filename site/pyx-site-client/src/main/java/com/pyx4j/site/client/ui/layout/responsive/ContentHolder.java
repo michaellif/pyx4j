@@ -27,6 +27,7 @@ public class ContentHolder extends FlowPanel {
     public ContentHolder(ResponsiveLayoutPanel parent) {
         getElement().getStyle().setProperty("verticalAlign", "top");
         add(parent.getNotificationDisplay());
+        add(parent.getBreadcrumbsDisplay());
         add(parent.getContentDisplay());
     }
 

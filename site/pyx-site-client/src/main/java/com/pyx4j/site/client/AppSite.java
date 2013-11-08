@@ -63,6 +63,10 @@ import com.pyx4j.widgets.client.dialog.MessageDialog;
  */
 public abstract class AppSite implements EntryPoint {
 
+    static {
+        ClientEntityFactory.ensureIEntityImplementations();
+    }
+
     private static final Logger log = LoggerFactory.getLogger(AppSite.class);
 
     private static final I18n i18n = I18n.get(AppSite.class);
@@ -135,7 +139,6 @@ public abstract class AppSite implements EntryPoint {
             Window.Location.assign(urlBuilder.buildString());
         }
 
-        ClientEntityFactory.ensureIEntityImplementations();
         instance = this;
         Element head = Document.get().getElementsByTagName("html").getItem(0);
         head.setPropertyString("xmlns:pyx", "");

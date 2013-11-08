@@ -73,7 +73,7 @@ public class ResponsiveLayoutPanel extends ComplexPanel implements RequiresResiz
     }
 
     public enum Display {
-        header, toolbar, menu, content, footer, communication, extra, notification
+        header, toolbar, menu, content, footer, communication, extra, notification, breadcrumbs
     }
 
     private static final int ANIMATION_TIME = 500;
@@ -267,6 +267,10 @@ public class ResponsiveLayoutPanel extends ComplexPanel implements RequiresResiz
 
     public DisplayPanel getNotificationDisplay() {
         return displays.get(Display.notification);
+    }
+
+    public DisplayPanel getBreadcrumbsDisplay() {
+        return displays.get(Display.breadcrumbs);
     }
 
     public void forceLayout(int animationTime) {
