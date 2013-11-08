@@ -20,8 +20,8 @@ import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
+import com.pyx4j.site.client.AppSite;
 
-import com.propertyvista.portal.resident.ResidentPortalSite;
 import com.propertyvista.portal.rpc.portal.ProspectPortalSiteMap;
 import com.propertyvista.portal.rpc.portal.services.PortalVistaTermsService;
 import com.propertyvista.portal.shared.ui.TermsView;
@@ -33,7 +33,7 @@ public class ProspectTermsActivity extends AbstractActivity {
     private final Place place;
 
     public ProspectTermsActivity(Place place) {
-        view = ResidentPortalSite.getViewFactory().instantiate(TermsView.class);
+        view = AppSite.getViewFactory().instantiate(TermsView.class);
         this.place = place;
     }
 
