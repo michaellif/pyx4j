@@ -139,7 +139,7 @@ public class N4GenerationToolServiceImpl implements N4GenerationToolService {
             // do nothing for policy not found but don't ignore other runtime exceptions.
         }
         if (policy == null) {
-            policyValidationErrors.add(i18n.tr("N4 Policy has no AR Code settings. Please set up AR Codes in N4 policy!"));
+            policyValidationErrors.add(i18n.tr("Please set up N4 policy to use this tool (at \"Administration/Policies\")"));
             return policyValidationErrors;
         } else {
             if (policy.relevantARCodes().isEmpty()) {
