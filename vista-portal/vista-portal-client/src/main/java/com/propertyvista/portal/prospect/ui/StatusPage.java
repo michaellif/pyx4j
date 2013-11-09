@@ -15,20 +15,15 @@ package com.propertyvista.portal.prospect.ui;
 
 import com.google.gwt.dom.client.Style.Display;
 import com.google.gwt.dom.client.Style.TextAlign;
-import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.commons.css.ThemeColor;
 import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.site.client.AppSite;
-import com.pyx4j.widgets.client.Anchor;
 
-import com.propertyvista.portal.rpc.portal.PortalSiteMap;
 import com.propertyvista.portal.rpc.portal.web.dto.application.ApplicationStatusDTO;
 import com.propertyvista.portal.shared.themes.EntityViewTheme;
-import com.propertyvista.portal.shared.themes.NavigationAnchorTheme;
 import com.propertyvista.portal.shared.ui.CPortalEntityForm;
 
 public class StatusPage extends CPortalEntityForm<ApplicationStatusDTO> {
