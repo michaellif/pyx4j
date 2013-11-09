@@ -30,22 +30,22 @@ import com.pyx4j.site.client.ui.layout.responsive.LayoutChangeRequestEvent.Chang
 
 import com.propertyvista.common.client.ClientNavigUtils;
 import com.propertyvista.domain.security.VistaCustomerBehavior;
-import com.propertyvista.portal.prospect.ui.BreadcrumbsView;
+import com.propertyvista.portal.prospect.ui.StepsView;
 import com.propertyvista.portal.prospect.ui.ToolbarView;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap;
 import com.propertyvista.portal.rpc.portal.ResidentPortalSiteMap;
 import com.propertyvista.portal.shared.PortalSite;
 import com.propertyvista.shared.i18n.CompiledLocale;
 
-public class BreadcrumbsActivity extends AbstractActivity implements BreadcrumbsView.BreadcrumbsPresenter {
+public class StepsActivity extends AbstractActivity implements StepsView.StepsPresenter {
 
-    private final BreadcrumbsView view;
+    private final StepsView view;
 
     private final Place place;
 
-    public BreadcrumbsActivity(Place place) {
+    public StepsActivity(Place place) {
         this.place = place;
-        this.view = PortalSite.getViewFactory().instantiate(BreadcrumbsView.class);
+        this.view = PortalSite.getViewFactory().instantiate(StepsView.class);
         assert (view != null);
         view.setPresenter(this);
     }

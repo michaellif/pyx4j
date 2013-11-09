@@ -15,12 +15,12 @@ package com.propertyvista.portal.prospect.ui;
 
 import com.pyx4j.site.client.IsView;
 
-public interface BreadcrumbsView extends IsView {
+public interface StepsView extends IsView {
 
-    interface BreadcrumbsPresenter {
+    interface StepsPresenter {
 
     }
 
-    void setPresenter(BreadcrumbsPresenter presenter);
+    void setPresenter(StepsPresenter presenter);
 
 }

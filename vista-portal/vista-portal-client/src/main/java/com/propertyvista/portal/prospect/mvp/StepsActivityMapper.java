@@ -17,16 +17,16 @@ import com.google.gwt.activity.shared.Activity;
 import com.google.gwt.activity.shared.ActivityMapper;
 import com.google.gwt.place.shared.Place;
 
-import com.propertyvista.portal.prospect.activity.BreadcrumbsActivity;
+import com.propertyvista.portal.prospect.activity.StepsActivity;
 
-public class BreadcrumbsActivityMapper implements ActivityMapper {
+public class StepsActivityMapper implements ActivityMapper {
 
-    public BreadcrumbsActivityMapper() {
+    public StepsActivityMapper() {
     }
 
     @Override
     public Activity getActivity(Place place) {
-        return new BreadcrumbsActivity(place);
+        return new StepsActivity(place);
     }
 
 }
