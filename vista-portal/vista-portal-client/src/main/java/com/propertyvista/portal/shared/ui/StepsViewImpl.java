@@ -196,7 +196,7 @@ public class StepsViewImpl extends FlowPanel implements StepsView {
                 setHeight("32px");
                 getElement().getStyle().setProperty("minWidth", "32px");
                 getElement().getStyle().setLineHeight(32, Unit.PX);
-                getElement().getStyle().setFontSize(0.9, Unit.EM);
+                getElement().getStyle().setFontSize(1, Unit.EM);
                 getElement().getStyle().setProperty("margin", "0 1%");
                 getElement().getStyle().setProperty("borderRadius", "16px");
                 break;
@@ -204,7 +204,7 @@ public class StepsViewImpl extends FlowPanel implements StepsView {
                 setHeight("26px");
                 getElement().getStyle().setProperty("minWidth", "26px");
                 getElement().getStyle().setLineHeight(26, Unit.PX);
-                getElement().getStyle().setFontSize(0.7, Unit.EM);
+                getElement().getStyle().setFontSize(0.8, Unit.EM);
                 getElement().getStyle().setProperty("margin", "0 0.3%");
                 getElement().getStyle().setProperty("borderRadius", "13px");
                 break;
