@@ -51,9 +51,13 @@ public class PortalSite extends VistaSite {
 
     private final RootPane<ResponsiveLayoutPanel> rootPane;
 
-    public PortalSite(String appId, Class<? extends PortalSiteMap> siteMapClass, RootPane<ResponsiveLayoutPanel> rootPane, AppPlaceDispatcher placeDispatcher) {
+    private final PortalTheme portalTheme;
+
+    public PortalSite(String appId, Class<? extends PortalSiteMap> siteMapClass, RootPane<ResponsiveLayoutPanel> rootPane, AppPlaceDispatcher placeDispatcher,
+            PortalTheme portalTheme) {
         super(appId, siteMapClass, new SingletonViewFactory(), placeDispatcher);
         this.rootPane = rootPane;
+        this.portalTheme = portalTheme;
     }
 
     @Override
@@ -92,7 +96,7 @@ public class PortalSite extends VistaSite {
             @Override
             public void onSuccess(SiteDefinitionsDTO descriptor) {
                 hideLoadingIndicator();
-                StyleManager.installTheme(new PortalTheme(descriptor.skin().getValue()), new PortalPalette());
+                StyleManager.installTheme(portalTheme, new PortalPalette());
                 VistaFeaturesCustomizationClient.setVistaFeatures(descriptor.features());
                 VistaFeaturesCustomizationClient.setGoogleAnalyticDisableForEmployee(descriptor.isGoogleAnalyticDisableForEmployee().getValue());
                 VistaFeaturesCustomizationClient.enviromentTitleVisible = descriptor.enviromentTitleVisible().getValue(Boolean.TRUE);

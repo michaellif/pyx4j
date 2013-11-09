@@ -11,7 +11,7 @@
  * @author michaellif
  * @version $Id$
  */
-package com.propertyvista.portal.prospect.ui;
+package com.propertyvista.portal.shared.ui;
 
 import com.pyx4j.site.client.IsView;
 
@@ -23,4 +23,5 @@ public interface StepsView extends IsView {
 
     void setPresenter(StepsPresenter presenter);
 
+    void setStepButtons();
 }

@@ -11,20 +11,14 @@
  * @author michaellif
  * @version $Id$
  */
-package com.propertyvista.portal.resident.themes;
+package com.propertyvista.portal.prospect.themes;
 
 import com.propertyvista.portal.shared.themes.PortalTheme;
 
-public class ResidentPortalTheme extends PortalTheme {
+public class ProspectPortalTheme extends PortalTheme {
 
-    public ResidentPortalTheme() {
+    public ProspectPortalTheme() {
         super();
-    }
-
-    @Override
-    protected void initStyles() {
-        super.initStyles();
-        addTheme(new TenantSureTheme());
     }
 
 }

@@ -11,7 +11,10 @@
  * @author vlads
  * @version $Id$
  */
-package com.propertyvista.portal.prospect.ui;
+package com.propertyvista.portal.shared.ui;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import com.google.gwt.dom.client.Style.Cursor;
 import com.google.gwt.dom.client.Style.Display;
@@ -38,29 +41,21 @@ import com.pyx4j.site.client.ui.layout.responsive.LayoutChangeHandler;
 import com.pyx4j.site.client.ui.layout.responsive.ResponsiveLayoutPanel.LayoutType;
 import com.pyx4j.widgets.client.DropDownPanel;
 
+import com.propertyvista.portal.shared.themes.StepsTheme;
+
 public class StepsViewImpl extends FlowPanel implements StepsView {
 
     private static final I18n i18n = I18n.get(StepsViewImpl.class);
 
     private StepsPresenter presenter;
 
+    private final List<StepButton> stepButtons;
+
     public StepsViewImpl() {
 
-        for (int i = 1; i < 5; i++) {
-            add(new StepButton(i + "", "Step " + i, StepButton.Size.large, StepButton.Status.complete, new Command() {
+        setStyleName(StepsTheme.StyleName.WizardStepPanel.name());
 
-                @Override
-                public void execute() {
-                    // TODO Auto-generated method stub
-
-                }
-            }));
-        }
-        add(new StepButton("5", "Step 5", StepButton.Size.large, StepButton.Status.invalid, null));
-        add(new StepButton("6", "Step 6", StepButton.Size.large, StepButton.Status.selected, null));
-        for (int i = 7; i < 12; i++) {
-            add(new StepButton(i + "", "Step " + i, StepButton.Size.large, StepButton.Status.notVisited, null));
-        }
+        stepButtons = new ArrayList<StepButton>();
 
         doLayout(LayoutType.getLayoutType(Window.getClientWidth()));
 
@@ -75,12 +70,39 @@ public class StepsViewImpl extends FlowPanel implements StepsView {
     }
 
     @Override
+    public void setStepButtons() {
+        for (int i = 1; i < 5; i++) {
+            addStepButton(i + "", "Step " + i, StepButton.Size.large, StepButton.Status.complete, new Command() {
+
+                @Override
+                public void execute() {
+                    // TODO Auto-generated method stub
+
+                }
+            });
+        }
+        addStepButton("5", "Step 5", StepButton.Size.large, StepButton.Status.invalid, null);
+        addStepButton("6", "Step 6", StepButton.Size.large, StepButton.Status.selected, null);
+        for (int i = 7; i < 12; i++) {
+            addStepButton(i + "", "Step " + i, StepButton.Size.large, StepButton.Status.notVisited, null);
+        }
+    }
+
+    private void addStepButton(String label, String caption, StepButton.Size size, final StepButton.Status status, Command navigationCommand) {
+        StepButton stepButton = new StepButton(label, caption, size, status, navigationCommand);
+        add(stepButton);
+        stepButtons.add(stepButton);
+    }
+
+    @Override
     public void setPresenter(final StepsPresenter presenter) {
         this.presenter = presenter;
     }
 
     private void doLayout(LayoutType layoutType) {
-
+        for (StepButton stepButton : stepButtons) {
+            stepButton.doLayout(layoutType);
+        }
     }
 
     private static class StepButton extends HTML {
@@ -104,9 +126,8 @@ public class StepsViewImpl extends FlowPanel implements StepsView {
         StepButton(String label, String caption, Size size, final Status status, Command navigationCommand) {
             super(label);
 
+            setStyleName(StepsTheme.StyleName.WizardStepHandler.name());
             getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
-            getElement().getStyle().setFontStyle(FontStyle.ITALIC);
-            getElement().getStyle().setColor("white");
             getElement().getStyle().setVerticalAlign(VerticalAlign.MIDDLE);
             getElement().getStyle().setTextAlign(TextAlign.CENTER);
 
@@ -129,6 +150,8 @@ public class StepsViewImpl extends FlowPanel implements StepsView {
                     showCaption(false);
                 }
             });
+
+            doLayout(LayoutType.getLayoutType(Window.getClientWidth()));
 
         }
 
@@ -166,24 +189,24 @@ public class StepsViewImpl extends FlowPanel implements StepsView {
                 getElement().getStyle().setProperty("minWidth", "50px");
                 getElement().getStyle().setLineHeight(50, Unit.PX);
                 getElement().getStyle().setFontSize(1.5, Unit.EM);
-                getElement().getStyle().setProperty("margin", "10px 1%");
+                getElement().getStyle().setProperty("margin", "0 1%");
                 getElement().getStyle().setProperty("borderRadius", "25px");
                 break;
             case medium:
-                setHeight("36px");
-                getElement().getStyle().setProperty("minWidth", "36px");
-                getElement().getStyle().setLineHeight(36, Unit.PX);
-                getElement().getStyle().setFontSize(1, Unit.EM);
-                getElement().getStyle().setProperty("margin", "6px 1%");
-                getElement().getStyle().setProperty("borderRadius", "18px");
+                setHeight("32px");
+                getElement().getStyle().setProperty("minWidth", "32px");
+                getElement().getStyle().setLineHeight(32, Unit.PX);
+                getElement().getStyle().setFontSize(0.9, Unit.EM);
+                getElement().getStyle().setProperty("margin", "0 1%");
+                getElement().getStyle().setProperty("borderRadius", "16px");
                 break;
             case small:
-                setHeight("24px");
-                getElement().getStyle().setProperty("minWidth", "24px");
-                getElement().getStyle().setLineHeight(24, Unit.PX);
+                setHeight("26px");
+                getElement().getStyle().setProperty("minWidth", "26px");
+                getElement().getStyle().setLineHeight(26, Unit.PX);
                 getElement().getStyle().setFontSize(0.7, Unit.EM);
-                getElement().getStyle().setProperty("margin", "3px 0.6%");
-                getElement().getStyle().setProperty("borderRadius", "12px");
+                getElement().getStyle().setProperty("margin", "0 0.3%");
+                getElement().getStyle().setProperty("borderRadius", "13px");
                 break;
 
             }
@@ -207,14 +230,27 @@ public class StepsViewImpl extends FlowPanel implements StepsView {
             }
         }
 
+        void doLayout(LayoutType layoutType) {
+            switch (layoutType) {
+            case phonePortrait:
+            case phoneLandscape:
+                setSize(Size.small);
+                break;
+            case tabletPortrait:
+            case tabletLandscape:
+                setSize(Size.medium);
+                break;
+            case monitor:
+            case huge:
+                setSize(Size.large);
+                break;
+            }
+        }
+
         class CaptionPanel extends DropDownPanel {
             public CaptionPanel(String caption) {
                 setWidget(new HTML(caption));
-                getElement().getStyle().setProperty("background", "#aaa");
-                getElement().getStyle().setProperty("color", "#fff");
-                getElement().getStyle().setProperty("margin", "5px");
-                getElement().getStyle().setProperty("padding", "2px 10px");
-                getElement().getStyle().setProperty("borderRadius", "4px");
+                setStyleName(StepsTheme.StyleName.WizardStepHandlerCaption.name());
             }
         }
     }

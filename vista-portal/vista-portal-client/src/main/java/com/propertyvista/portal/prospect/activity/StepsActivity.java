@@ -30,11 +30,11 @@ import com.pyx4j.site.client.ui.layout.responsive.LayoutChangeRequestEvent.Chang
 
 import com.propertyvista.common.client.ClientNavigUtils;
 import com.propertyvista.domain.security.VistaCustomerBehavior;
-import com.propertyvista.portal.prospect.ui.StepsView;
 import com.propertyvista.portal.prospect.ui.ToolbarView;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap;
 import com.propertyvista.portal.rpc.portal.ResidentPortalSiteMap;
 import com.propertyvista.portal.shared.PortalSite;
+import com.propertyvista.portal.shared.ui.StepsView;
 import com.propertyvista.shared.i18n.CompiledLocale;
 
 public class StepsActivity extends AbstractActivity implements StepsView.StepsPresenter {
@@ -53,6 +53,7 @@ public class StepsActivity extends AbstractActivity implements StepsView.StepsPr
     @Override
     public void start(AcceptsOneWidget panel, EventBus eventBus) {
         panel.setWidget(view);
+        view.setStepButtons();
     }
 
 }

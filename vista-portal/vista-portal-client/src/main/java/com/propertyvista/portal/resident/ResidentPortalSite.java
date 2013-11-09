@@ -13,6 +13,7 @@
  */
 package com.propertyvista.portal.resident;
 
+import com.propertyvista.portal.resident.themes.ResidentPortalTheme;
 import com.propertyvista.portal.resident.ui.ResidentPortalRootPane;
 import com.propertyvista.portal.rpc.portal.ResidentPortalSiteMap;
 import com.propertyvista.portal.shared.PortalSite;
@@ -20,7 +21,7 @@ import com.propertyvista.portal.shared.PortalSite;
 public class ResidentPortalSite extends PortalSite {
 
     public ResidentPortalSite() {
-        super("vista-resident", ResidentPortalSiteMap.class, new ResidentPortalRootPane(), new ResidentPortalSiteDispatcher());
+        super("vista-resident", ResidentPortalSiteMap.class, new ResidentPortalRootPane(), new ResidentPortalSiteDispatcher(), new ResidentPortalTheme());
     }
 
 }
