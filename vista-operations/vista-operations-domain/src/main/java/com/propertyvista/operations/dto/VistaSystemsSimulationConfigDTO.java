@@ -16,6 +16,7 @@ package com.propertyvista.operations.dto;
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
+import com.pyx4j.essentials.rpc.admin.NetworkSimulation;
 import com.pyx4j.i18n.annotations.I18n;
 
 @Transient
@@ -29,4 +30,6 @@ public interface VistaSystemsSimulationConfigDTO extends IEntity {
     IPrimitive<Boolean> useCardServiceSimulator();
 
     IPrimitive<Boolean> useEquifaxSimulator();
+
+    NetworkSimulation yardiInterfaceNetworkSimulation();
 }

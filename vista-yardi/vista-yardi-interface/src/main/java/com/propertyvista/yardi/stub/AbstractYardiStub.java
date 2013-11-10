@@ -35,6 +35,7 @@ import com.pyx4j.essentials.j2se.HostConfig.ProxyConfig;
 
 import com.propertyvista.config.SystemConfig;
 import com.propertyvista.config.VistaDeployment;
+import com.propertyvista.config.VistaSystemsSimulationConfig;
 import com.propertyvista.domain.settings.PmcYardiCredential;
 import com.propertyvista.yardi.TransactionLog;
 import com.propertyvista.yardi.YardiConstants;
@@ -136,6 +137,15 @@ public class AbstractYardiStub implements ExternalInterfaceLoggingStub {
                 if (envelopeBuffer != null) {
                     envelopeBuffer.append(mc.getEnvelope());
                 }
+
+                if (VistaSystemsSimulationConfig.getConfiguration().yardiInterfaceNetworkSimulation().enabled().getValue(false)) {
+                    try {
+                        Thread.sleep(VistaSystemsSimulationConfig.getConfiguration().yardiInterfaceNetworkSimulation().delay().getValue(1000));
+                    } catch (InterruptedException e) {
+                        throw new Error(e);
+                    }
+                }
+
                 requestsTime += TimeUtils.since(requestStartTime);
             }
 

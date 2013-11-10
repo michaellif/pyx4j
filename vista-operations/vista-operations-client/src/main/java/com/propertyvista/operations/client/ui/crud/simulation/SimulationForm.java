@@ -36,6 +36,7 @@ public class SimulationForm extends OperationsEntityForm<SimulationDTO> {
 
         selectTab(addTab(createGeneralTab()));
         addTab(createCaledonTab());
+        addTab(createYardiTab());
         addTab(createEquifaxTab());
     }
 
@@ -76,6 +77,9 @@ public class SimulationForm extends OperationsEntityForm<SimulationDTO> {
         content.setH2(++row, 0, 2, i18n.tr("Credit Cards"));
         content.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().systems().useCardServiceSimulator()), 5, true).build());
         // TODO This should be in separate server/separate forms
+
+        content.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().cardService().responseDelay()), 5, true).build());
+
         content.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().cardService().responseType()), 15, true).build());
         content.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().cardService().responseCode()), 15, true).build());
         content.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().cardService().responseHttpCode()), 15, true).build());
@@ -92,6 +96,18 @@ public class SimulationForm extends OperationsEntityForm<SimulationDTO> {
             }
 
         });
+
+        return content;
+    }
+
+    private TwoColumnFlexFormPanel createYardiTab() {
+        TwoColumnFlexFormPanel content = new TwoColumnFlexFormPanel(i18n.tr("Yardi"));
+        int row = -1;
+
+        content.setH2(++row, 0, 2, i18n.tr("Yardi Network Simulation"));
+
+        content.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().systems().yardiInterfaceNetworkSimulation().enabled()), 5, true).build());
+        content.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().systems().yardiInterfaceNetworkSimulation().delay()), 10, true).build());
 
         return content;
     }

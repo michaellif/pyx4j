@@ -52,8 +52,8 @@ public interface CardServiceSimulatorConfig extends IEntity {
 
     IPrimitive<String> responseText();
 
-    @Caption(name = "Delay", description = "milliseconds")
-    IPrimitive<Integer> delay();
+    @Caption(name = "Response Delay", description = "milliseconds")
+    IPrimitive<Integer> responseDelay();
 
     @Caption(description = "Do not accept cards before this date")
     IPrimitive<LogicalDate> acceptCardExpiryFrom();

@@ -44,8 +44,8 @@ public class CardServiceSimulationServlet extends HttpServlet {
     protected void doGet(HttpServletRequest httpRequest, HttpServletResponse httpResponse) throws ServletException, IOException {
         NamespaceManager.setNamespace(VistaNamespace.operationsNamespace);
         String responseBody = null;
+        CardServiceSimulatorConfig simulatorConfig = CardServiceSimulationUtils.getCardServiceSimulatorConfig();
         try {
-            CardServiceSimulatorConfig simulatorConfig = CardServiceSimulationUtils.getCardServiceSimulatorConfig();
             switch (simulatorConfig.responseType().getValue()) {
             case RespondEmpty:
                 return;
@@ -71,6 +71,15 @@ public class CardServiceSimulationServlet extends HttpServlet {
             log.error("card simulator error", e);
             responseBody = "TEXT=Simulated " + e.getMessage() + "&CODE=1000";
         }
+
+        if (!simulatorConfig.responseDelay().isNull()) {
+            try {
+                Thread.sleep(simulatorConfig.responseDelay().getValue());
+            } catch (InterruptedException e) {
+                throw new Error(e);
+            }
+        }
+
         writeResponse(responseBody, httpResponse);
     }
 
