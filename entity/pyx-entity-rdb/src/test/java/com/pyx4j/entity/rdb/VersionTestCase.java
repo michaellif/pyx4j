@@ -206,7 +206,7 @@ public abstract class VersionTestCase extends DatastoreTestBase {
 
         // Retrieval of item as draft toStringMemebers
         {
-            ItemA itemA1r = srv.retrieve(ItemA.class, itemA1.getPrimaryKey().asDraftKey(), AttachLevel.ToStringMembers);
+            ItemA itemA1r = srv.retrieve(ItemA.class, itemA1.getPrimaryKey().asDraftKey(), AttachLevel.ToStringMembers, false);
             assertEquals("ToStringMembers getStringView", " - " + draftName, itemA1r.getStringView());
         }
 
@@ -264,7 +264,7 @@ public abstract class VersionTestCase extends DatastoreTestBase {
 
         // Retrieval of item as current toStringMemebers
         {
-            ItemA itemA1r = srv.retrieve(ItemA.class, itemA1.getPrimaryKey().asCurrentKey(), AttachLevel.ToStringMembers);
+            ItemA itemA1r = srv.retrieve(ItemA.class, itemA1.getPrimaryKey().asCurrentKey(), AttachLevel.ToStringMembers, false);
             assertEquals("ToStringMembers getStringView", " - " + currentName, itemA1r.getStringView());
         }
 

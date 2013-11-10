@@ -1090,7 +1090,7 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
                 primaryKey = primaryKey.asCurrentKey();
             }
         }
-        if (!tm.retrieve(getPersistenceContext(), primaryKey, baseEntity, AttachLevel.Attached)) {
+        if (!tm.retrieve(getPersistenceContext(), primaryKey, baseEntity, AttachLevel.Attached, true)) {
             if (tm.getPrimaryKeyStrategy() != Table.PrimaryKeyStrategy.ASSIGNED) {
                 throw new RuntimeException("Entity '" + tm.entityMeta().getCaption() + "' " + entity.getPrimaryKey() + " NotFound");
             } else {
@@ -1269,14 +1269,14 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
 
     @Override
     public <T extends IEntity> T retrieve(Class<T> entityClass, Key primaryKey) {
-        return retrieve(entityClass, primaryKey, AttachLevel.Attached);
+        return retrieve(entityClass, primaryKey, AttachLevel.Attached, false);
     }
 
     @Override
-    public <T extends IEntity> T retrieve(Class<T> entityClass, Key primaryKey, AttachLevel attachLevel) {
+    public <T extends IEntity> T retrieve(Class<T> entityClass, Key primaryKey, AttachLevel attachLevel, boolean forUpdate) {
         final T entity = EntityFactory.create(entityClass);
         entity.setPrimaryKey(primaryKey);
-        if (retrieve(entity, attachLevel)) {
+        if (retrieve(entity, attachLevel, forUpdate)) {
             return entity;
         } else {
             return null;
@@ -1285,11 +1285,11 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
 
     @Override
     public <T extends IEntity> boolean retrieve(T entity) {
-        return retrieve(entity, AttachLevel.Attached);
+        return retrieve(entity, AttachLevel.Attached, false);
     }
 
     @Override
-    public <T extends IEntity> boolean retrieve(T entity, AttachLevel attachLevel) {
+    public <T extends IEntity> boolean retrieve(T entity, AttachLevel attachLevel, boolean forUpdate) {
         if (entity.getPrimaryKey() == null) {
             Mappings.assertPersistableEntity(entity.getEntityMeta());
             return false;
@@ -1298,7 +1298,7 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
         try {
             entity = entity.cast();
             clearRetrieveValues(entity);
-            return cascadeRetrieve(entity, attachLevel) != null;
+            return cascadeRetrieve(entity, attachLevel, forUpdate) != null;
         } finally {
             endCallContext();
         }
@@ -1316,7 +1316,7 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
             throw new RuntimeException("Values of " + entityMember.getPath() + " already Attached");
         case IdOnly:
         case ToStringMembers:
-            retrieve(entityMember, attachLevel);
+            retrieve(entityMember, attachLevel, false);
             break;
         case Detached:
             assert (entityMember.getOwner().getPrimaryKey() != null);
@@ -1325,7 +1325,7 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
                 TableModel tm = tableModel(entityMember.getOwner().getEntityMeta());
                 tm.retrieveMember(getPersistenceContext(), entityMember.getOwner(), entityMember);
                 if (entityMember.getPrimaryKey() != null) {
-                    if (cascadeRetrieve(entityMember, attachLevel) == null) {
+                    if (cascadeRetrieve(entityMember, attachLevel, false) == null) {
                         throw new RuntimeException("Entity '" + entityMember.getEntityMeta().getCaption() + "' " + entityMember.getPrimaryKey() + " "
                                 + entityMember.getPath() + " NotFound");
                     }
@@ -1369,7 +1369,7 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
                     collectionMember.setCollectionSizeOnly(collectionMember.size());
                 } else {
                     for (IEntity childEntity : collectionMember) {
-                        if (cascadeRetrieve(childEntity, attachLevel) == null) {
+                        if (cascadeRetrieve(childEntity, attachLevel, false) == null) {
                             throw new RuntimeException("Entity '" + childEntity.getEntityMeta().getCaption() + "' " + childEntity.getPrimaryKey() + " "
                                     + childEntity.getPath() + " NotFound");
                         }
@@ -1382,7 +1382,7 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
     }
 
     @SuppressWarnings("unchecked")
-    private <T extends IEntity> T cascadeRetrieve(T entity, AttachLevel attachLevel) {
+    private <T extends IEntity> T cascadeRetrieve(T entity, AttachLevel attachLevel, boolean forUpdate) {
         if (entity.getPrimaryKey() == null) {
             Mappings.assertPersistableEntity(entity.getEntityMeta());
             return null;
@@ -1398,7 +1398,7 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
         }
 
         TableModel tm = tableModel(entity.getEntityMeta());
-        if (tm.retrieve(getPersistenceContext(), entity.getPrimaryKey(), entity, attachLevel)) {
+        if (tm.retrieve(getPersistenceContext(), entity.getPrimaryKey(), entity, attachLevel, forUpdate)) {
             entity = cascadeRetrieveMembers(entity, attachLevel);
             entity.setAttachLevel(attachLevel);
             if (attachLevel == AttachLevel.Attached) {
@@ -1453,7 +1453,7 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
         if (memberMeta.isEntity()) {
             IEntity childEntity = ((IEntity) member.getMember(entity)).cast();
             if (childEntity.getPrimaryKey() != null) {
-                if (cascadeRetrieve(childEntity, retriveAttachLevel) == null) {
+                if (cascadeRetrieve(childEntity, retriveAttachLevel, false) == null) {
                     throw new RuntimeException("Entity '" + memberMeta.getCaption() + "' [primary key =  " + childEntity.getPrimaryKey() + "; path = "
                             + childEntity.getPath() + "] is not found");
                 }
@@ -1465,7 +1465,7 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
             @SuppressWarnings("unchecked")
             ICollection<IEntity, ?> iCollectionMember = (ICollection<IEntity, ?>) member.getMember(entity);
             for (IEntity childEntity : iCollectionMember) {
-                if (cascadeRetrieve(childEntity, retriveAttachLevel) == null) {
+                if (cascadeRetrieve(childEntity, retriveAttachLevel, false) == null) {
                     throw new RuntimeException("Entity '" + childEntity.getEntityMeta().getCaption() + "' " + childEntity.getPrimaryKey() + " "
                             + childEntity.getPath() + " NotFound");
                 }
@@ -1501,7 +1501,7 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
     public <T extends IEntity> void retrieve(Iterable<T> entityIterable) {
         //TODO proper impl
         for (T e : entityIterable) {
-            retrieve(e, AttachLevel.Attached);
+            retrieve(e, AttachLevel.Attached, false);
         }
     }
 
@@ -1509,7 +1509,7 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
     public <T extends IEntity> void retrieve(Iterable<T> entityIterable, AttachLevel attachLevel) {
         //TODO proper impl
         for (T e : entityIterable) {
-            retrieve(e, attachLevel);
+            retrieve(e, attachLevel, false);
         }
     }
 
@@ -1774,7 +1774,7 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
         try {
             TableModel tm = tableModel(entityMeta);
             IEntity cascadedeleteDataEntity = EntityFactory.create(entityMeta.getEntityClass());
-            if (tm.retrieve(getPersistenceContext(), primaryKey, cascadedeleteDataEntity, AttachLevel.Attached)) {
+            if (tm.retrieve(getPersistenceContext(), primaryKey, cascadedeleteDataEntity, AttachLevel.Attached, false)) {
                 cascadeRetrieveMembers(cascadedeleteDataEntity, AttachLevel.Attached);
             } else {
                 throw new RuntimeException("Entity '" + entityMeta.getCaption() + "' " + primaryKey + " NotFound");
