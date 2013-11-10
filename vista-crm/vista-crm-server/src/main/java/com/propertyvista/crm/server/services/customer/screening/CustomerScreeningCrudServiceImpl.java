@@ -38,7 +38,7 @@ public class CustomerScreeningCrudServiceImpl extends AbstractVersionedCrudServi
         CustomerScreeningInitializationData initData = (CustomerScreeningInitializationData) initializationData;
 
         CustomerScreening screening = EntityFactory.create(CustomerScreening.class);
-        screening.screene().set(Persistence.service().retrieve(Customer.class, initData.screene().getPrimaryKey(), AttachLevel.ToStringMembers));
+        screening.screene().set(Persistence.service().retrieve(Customer.class, initData.screene().getPrimaryKey(), AttachLevel.ToStringMembers, false));
 
         return screening;
     }
@@ -49,6 +49,6 @@ public class CustomerScreeningCrudServiceImpl extends AbstractVersionedCrudServi
         Persistence.service().retrieve(to.documents());
         Persistence.service().retrieve(to.version().incomes());
         Persistence.service().retrieve(to.version().assets());
-        Persistence.service().retrieve(to.screene(), AttachLevel.ToStringMembers);
+        Persistence.service().retrieve(to.screene(), AttachLevel.ToStringMembers, false);
     }
 }

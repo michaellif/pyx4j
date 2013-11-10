@@ -173,7 +173,7 @@ public class ReportsDeferredProcess implements IDeferredProcess {
 
             @Override
             public String next() {
-                return Persistence.service().retrieve(Building.class, buildingsI.next().getPrimaryKey(), AttachLevel.Attached).propertyCode().getValue();
+                return Persistence.service().retrieve(Building.class, buildingsI.next().getPrimaryKey(), AttachLevel.Attached, false).propertyCode().getValue();
             }
 
             @Override

@@ -52,7 +52,7 @@ public class LeaseParticipantUtils {
         } else {
             leaseParticipant.effectiveScreening().set(leaseParticipant.screening());
             if (!leaseParticipant.effectiveScreening().isNull()) {
-                Persistence.service().retrieve(leaseParticipant.effectiveScreening(), attachLevel);
+                Persistence.service().retrieve(leaseParticipant.effectiveScreening(), attachLevel, false);
             }
         }
         if ((!leaseParticipant.effectiveScreening().isNull()) && (attachLevel == AttachLevel.Attached)) {

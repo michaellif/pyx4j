@@ -47,6 +47,6 @@ public class SelectTenantListServiceImpl extends AbstractListServiceImpl<Tenant>
 
     @Override
     protected void enhanceListRetrieved(Tenant entity, Tenant dto) {
-        Persistence.service().retrieve(dto.lease(), AttachLevel.ToStringMembers);
+        Persistence.service().retrieve(dto.lease(), AttachLevel.ToStringMembers, false);
     }
 }

@@ -98,7 +98,7 @@ public class N4GenerationToolServiceImpl implements N4GenerationToolService {
 
         List<Employee> employees = Persistence.secureQuery(EntityQueryCriteria.create(Employee.class));
         for (Employee employee : employees) {
-            Persistence.service().retrieve(employee.signature(), AttachLevel.IdOnly);
+            Persistence.service().retrieve(employee.signature(), AttachLevel.IdOnly, false);
         }
         initParams.availableAgents().addAll(employees);
         initParams.settings().n4PolicyErrors().setValue(StringUtils.join(validateN4Policy(), "\n"));

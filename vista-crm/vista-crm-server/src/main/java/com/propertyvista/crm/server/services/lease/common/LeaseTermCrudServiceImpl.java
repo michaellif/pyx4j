@@ -312,7 +312,7 @@ public class LeaseTermCrudServiceImpl extends AbstractVersionedCrudServiceDtoImp
 
         // load products for UI presentation:
         for (ProductItem item : currentValue.selectedServiceItems()) {
-            Persistence.service().retrieve(item, AttachLevel.ToStringMembers);
+            Persistence.service().retrieve(item, AttachLevel.ToStringMembers, false);
         }
     }
 

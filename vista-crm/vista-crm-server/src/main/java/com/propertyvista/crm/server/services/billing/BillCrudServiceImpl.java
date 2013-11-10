@@ -49,7 +49,7 @@ public class BillCrudServiceImpl extends AbstractCrudServiceDtoImpl<Bill, BillDa
         Persistence.service().retrieve(to.bill().lineItems());
         Persistence.service().retrieve(to.bill().billingAccount());
         Persistence.service().retrieve(to.bill().billingAccount().lease());
-        Persistence.service().retrieve(to.bill().billingCycle().building(), AttachLevel.ToStringMembers);
+        Persistence.service().retrieve(to.bill().billingCycle().building(), AttachLevel.ToStringMembers, false);
         BillingUtils.enhanceBillDto(bo, to.bill());
     }
 

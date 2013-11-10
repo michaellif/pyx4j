@@ -164,7 +164,7 @@ public abstract class LeaseParticipantCrudServiceBaseImpl<BO extends LeasePartic
         }
 
         //This is wrong!  TODO debug this.
-        Persistence.service().retrieve(term.holder(), AttachLevel.ToStringMembers);
+        Persistence.service().retrieve(term.holder(), AttachLevel.ToStringMembers, false);
 
         return term;
     }

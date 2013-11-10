@@ -59,12 +59,12 @@ public abstract class LeaseCrudServiceBaseImpl<DTO extends LeaseDTO> extends Abs
         loadDetachedProducts(to);
 
         for (LeaseTermTenant item : to.currentTerm().version().tenants()) {
-            Persistence.service().retrieve(item.screening(), AttachLevel.ToStringMembers);
+            Persistence.service().retrieve(item.screening(), AttachLevel.ToStringMembers, false);
             fillPreauthorizedPayments(item);
         }
 
         for (LeaseTermGuarantor item : to.currentTerm().version().guarantors()) {
-            Persistence.service().retrieve(item.screening(), AttachLevel.ToStringMembers);
+            Persistence.service().retrieve(item.screening(), AttachLevel.ToStringMembers, false);
         }
 
         loadTenantInsurance(to);

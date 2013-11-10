@@ -318,7 +318,7 @@ public class MessageTemplates {
         String tenantName = paymentRecord.leaseTermParticipant().leaseParticipant().customer().person().name().getStringView();
 
         String unitId = billingAccount.lease().unit().info().number().getValue();
-        Persistence.service().retrieve(billingAccount.lease().unit().building(), AttachLevel.ToStringMembers);
+        Persistence.service().retrieve(billingAccount.lease().unit().building(), AttachLevel.ToStringMembers, false);
         String buildingId = billingAccount.lease().unit().building().getStringView();
 
         String paymentRecordUrl = AppPlaceInfo.absoluteUrl(crmUrl, true, new CrmSiteMap.Finance.Payment().formViewerPlace(paymentRecord.getPrimaryKey()));
@@ -378,7 +378,7 @@ public class MessageTemplates {
         String tenantName = paymentRecord.leaseTermParticipant().leaseParticipant().customer().person().name().getStringView();
 
         String unitId = billingAccount.lease().unit().info().number().getValue();
-        Persistence.service().retrieve(billingAccount.lease().unit().building(), AttachLevel.ToStringMembers);
+        Persistence.service().retrieve(billingAccount.lease().unit().building(), AttachLevel.ToStringMembers, false);
         String buildingId = billingAccount.lease().unit().building().getStringView();
 
         String paymentRecordUrl = AppPlaceInfo.absoluteUrl(crmUrl, true, new CrmSiteMap.Finance.Payment().formViewerPlace(paymentRecord.getPrimaryKey()));

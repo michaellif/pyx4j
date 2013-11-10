@@ -67,7 +67,7 @@ public class PaymentRecordsSummaryGadgetServiceImpl implements PaymentRecordsSum
         try {
             if (PaymentsSummary.summaryByBuilding) {
                 while (buildingIterator.hasNext()) {
-                    Building building = Persistence.service().retrieve(Building.class, buildingIterator.next().getPrimaryKey(), AttachLevel.ToStringMembers);
+                    Building building = Persistence.service().retrieve(Building.class, buildingIterator.next().getPrimaryKey(), AttachLevel.ToStringMembers, false);
                     for (PaymentStatus paymentStatus : paymentStatusCriteria) {
                         PaymentsSummary summary = summaryHelper.calculateSummary(building, paymentStatus, targetDate);
                         if (summaryHelper.hasPayments(summary)) {

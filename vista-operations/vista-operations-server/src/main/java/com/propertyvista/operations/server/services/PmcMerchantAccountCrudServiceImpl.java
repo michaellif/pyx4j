@@ -77,7 +77,7 @@ public class PmcMerchantAccountCrudServiceImpl extends AbstractCrudServiceDtoImp
                     for (BuildingMerchantAccount buildingMerchantAccount : buildingMerchantAccounts) {
                         Building b = EntityFactory.create(Building.class);
                         b.propertyCode().setValue(
-                                Persistence.service().retrieve(Building.class, buildingMerchantAccount.building().getPrimaryKey(), AttachLevel.Attached)
+                                Persistence.service().retrieve(Building.class, buildingMerchantAccount.building().getPrimaryKey(), AttachLevel.Attached, false)
                                         .propertyCode().getValue());
                         assignedBuildings.add(b);
                     }

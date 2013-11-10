@@ -32,6 +32,7 @@ import com.pyx4j.config.server.SystemDateManager;
 import com.pyx4j.entity.server.CompensationHandler;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.server.UnitOfWork;
+import com.pyx4j.entity.shared.AttachLevel;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.i18n.shared.I18n;
@@ -116,6 +117,14 @@ public class PaymentFacadeImpl implements PaymentFacade {
 
     @Override
     public PaymentRecord persistPayment(PaymentRecord paymentRecord) {
+        if (!paymentRecord.id().isNull()) {
+            PaymentRecord paymentRecordLock = Persistence.service().retrieve(PaymentRecord.class, paymentRecord.getPrimaryKey(), AttachLevel.Attached, true);
+            if (!EnumSet.of(PaymentRecord.PaymentStatus.Submitted, PaymentRecord.PaymentStatus.Scheduled, PaymentRecord.PaymentStatus.PendingAction).contains(
+                    paymentRecordLock.paymentStatus().getValue())) {
+                throw new IllegalArgumentException("paymentStatus:" + paymentRecordLock.paymentStatus().getValue());
+            }
+        }
+
         if (paymentRecord.paymentStatus().isNull()) {
             paymentRecord.paymentStatus().setValue(PaymentRecord.PaymentStatus.Submitted);
             paymentRecord.lastStatusChangeDate().setValue(new LogicalDate(SystemDateManager.getDate()));
@@ -175,7 +184,7 @@ public class PaymentFacadeImpl implements PaymentFacade {
 
     @Override
     public PaymentRecord schedulePayment(PaymentRecord paymentId) {
-        PaymentRecord paymentRecord = Persistence.service().retrieve(PaymentRecord.class, paymentId.getPrimaryKey());
+        PaymentRecord paymentRecord = Persistence.service().retrieve(PaymentRecord.class, paymentId.getPrimaryKey(), AttachLevel.Attached, true);
         if (!EnumSet.of(PaymentRecord.PaymentStatus.Submitted, PaymentRecord.PaymentStatus.Scheduled, PaymentRecord.PaymentStatus.PendingAction).contains(
                 paymentRecord.paymentStatus().getValue())) {
             throw new IllegalArgumentException("paymentStatus:" + paymentRecord.paymentStatus().getValue());
@@ -197,7 +206,7 @@ public class PaymentFacadeImpl implements PaymentFacade {
 
     @Override
     public PaymentRecord processPayment(PaymentRecord paymentId, PaymentBatchContext paymentBatchContext) throws PaymentException {
-        final PaymentRecord paymentRecord = Persistence.service().retrieve(PaymentRecord.class, paymentId.getPrimaryKey());
+        final PaymentRecord paymentRecord = Persistence.service().retrieve(PaymentRecord.class, paymentId.getPrimaryKey(), AttachLevel.Attached, true);
         if (!EnumSet.of(PaymentRecord.PaymentStatus.Submitted, PaymentRecord.PaymentStatus.Scheduled, PaymentRecord.PaymentStatus.PendingAction).contains(
                 paymentRecord.paymentStatus().getValue())) {
             throw new IllegalArgumentException("paymentStatus:" + paymentRecord.paymentStatus().getValue());
@@ -272,7 +281,7 @@ public class PaymentFacadeImpl implements PaymentFacade {
 
     @Override
     public PaymentRecord cancel(PaymentRecord paymentId) {
-        PaymentRecord paymentRecord = Persistence.service().retrieve(PaymentRecord.class, paymentId.getPrimaryKey());
+        PaymentRecord paymentRecord = Persistence.service().retrieve(PaymentRecord.class, paymentId.getPrimaryKey(), AttachLevel.Attached, true);
         if (!PaymentRecord.PaymentStatus.cancelable().contains(paymentRecord.paymentStatus().getValue())) {
             throw new UserRuntimeException(i18n.tr("Processed payment can't be canceled"));
         }
@@ -298,7 +307,7 @@ public class PaymentFacadeImpl implements PaymentFacade {
 
     @Override
     public PaymentRecord clear(PaymentRecord paymentId) {
-        PaymentRecord paymentRecord = Persistence.service().retrieve(PaymentRecord.class, paymentId.getPrimaryKey());
+        PaymentRecord paymentRecord = Persistence.service().retrieve(PaymentRecord.class, paymentId.getPrimaryKey(), AttachLevel.Attached, true);
         if (!PaymentRecord.PaymentStatus.checkClearable().contains(paymentRecord.paymentStatus().getValue())) {
             throw new UserRuntimeException(i18n.tr("Processed payment can't be cleared"));
         }
@@ -326,7 +335,7 @@ public class PaymentFacadeImpl implements PaymentFacade {
 
     @Override
     public PaymentRecord reject(PaymentRecord paymentId, boolean applyNSF) {
-        PaymentRecord paymentRecord = Persistence.service().retrieve(PaymentRecord.class, paymentId.getPrimaryKey());
+        PaymentRecord paymentRecord = Persistence.service().retrieve(PaymentRecord.class, paymentId.getPrimaryKey(), AttachLevel.Attached, true);
         if (!PaymentRecord.PaymentStatus.checkRejectable().contains(paymentRecord.paymentStatus().getValue())) {
             throw new UserRuntimeException(i18n.tr("Processed payment can't be rejected"));
         }

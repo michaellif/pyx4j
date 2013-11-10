@@ -58,7 +58,7 @@ public class LeadCrudServiceImpl extends AbstractCrudServiceImpl<Lead> implement
     @Override
     protected void enhanceRetrieved(Lead bo, Lead to, RetrieveTarget retrieveTarget) {
         if (!to.floorplan().isNull()) {
-            Persistence.service().retrieve(to.floorplan().building(), AttachLevel.ToStringMembers);
+            Persistence.service().retrieve(to.floorplan().building(), AttachLevel.ToStringMembers, false);
         }
         if (!to.lease().isNull()) {
             Persistence.service().retrieve(to.lease());
@@ -75,7 +75,7 @@ public class LeadCrudServiceImpl extends AbstractCrudServiceImpl<Lead> implement
     @Override
     public void updateValue(AsyncCallback<Floorplan> callback, Key floorplanId) {
         Floorplan item = Persistence.service().retrieve(Floorplan.class, floorplanId);
-        Persistence.service().retrieve(item.building(), AttachLevel.ToStringMembers);
+        Persistence.service().retrieve(item.building(), AttachLevel.ToStringMembers, false);
         callback.onSuccess(item);
     }
 
@@ -90,7 +90,7 @@ public class LeadCrudServiceImpl extends AbstractCrudServiceImpl<Lead> implement
         Vector<AptUnit> units = new Vector<AptUnit>();
         for (Showing showing : Persistence.secureQuery(criteria)) {
             if (!units.contains(showing.unit())) {
-                Persistence.service().retrieve(showing.unit().building(), AttachLevel.ToStringMembers);
+                Persistence.service().retrieve(showing.unit().building(), AttachLevel.ToStringMembers, false);
                 units.add((AptUnit) showing.unit().detach());
             }
         }

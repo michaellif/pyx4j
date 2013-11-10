@@ -47,7 +47,7 @@ public class BillingCycleCrudServiceImpl extends AbstractCrudServiceDtoImpl<Bill
             criteria.eq(criteria.proto().padBillingCycle(), bo);
             to.pads().setValue((long) Persistence.service().count(criteria));
         }
-        Persistence.service().retrieve(to.building(), AttachLevel.ToStringMembers);
+        Persistence.service().retrieve(to.building(), AttachLevel.ToStringMembers, false);
     }
 
     @Override

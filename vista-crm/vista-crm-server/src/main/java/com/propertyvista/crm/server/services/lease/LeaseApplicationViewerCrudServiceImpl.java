@@ -95,7 +95,7 @@ public class LeaseApplicationViewerCrudServiceImpl extends LeaseViewerCrudServic
         dto.numberOfApplicants().setValue(0);
 
         for (LeaseTermTenant tenant : dto.currentTerm().version().tenants()) {
-            Persistence.service().retrieve(tenant.screening(), AttachLevel.ToStringMembers);
+            Persistence.service().retrieve(tenant.screening(), AttachLevel.ToStringMembers, false);
 
             switch (tenant.role().getValue()) {
             case Applicant:
@@ -151,7 +151,7 @@ public class LeaseApplicationViewerCrudServiceImpl extends LeaseViewerCrudServic
             if (!approval.creditCheck().isNull()) {
                 Persistence.ensureRetrieve(approval.creditCheck(), AttachLevel.Attached);
                 approval.screening().set(approval.creditCheck().screening());
-                Persistence.service().retrieve(approval.screening(), AttachLevel.ToStringMembers);
+                Persistence.service().retrieve(approval.screening(), AttachLevel.ToStringMembers, false);
             } else {
                 approval.screening().set(leaseParticipant.effectiveScreening());
             }
