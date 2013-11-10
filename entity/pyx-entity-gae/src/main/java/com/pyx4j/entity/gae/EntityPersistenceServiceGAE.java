@@ -1169,14 +1169,14 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
 
     @Override
     public <T extends IEntity> T retrieve(Class<T> entityClass, com.pyx4j.commons.Key primaryKey) {
-        return retrieve(entityClass, primaryKey, AttachLevel.Attached);
+        return retrieve(entityClass, primaryKey, AttachLevel.Attached, false);
     }
 
     @Override
-    public <T extends IEntity> T retrieve(Class<T> entityClass, com.pyx4j.commons.Key primaryKey, AttachLevel attachLevel) {
+    public <T extends IEntity> T retrieve(Class<T> entityClass, com.pyx4j.commons.Key primaryKey, AttachLevel attachLevel, boolean forUpdate) {
         T iEntity = EntityFactory.create(entityClass);
         iEntity.setPrimaryKey(primaryKey);
-        if (retrieve(iEntity, attachLevel)) {
+        if (retrieve(iEntity, attachLevel, false)) {
             return iEntity;
         } else {
             return null;
@@ -1185,11 +1185,11 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
 
     @Override
     public <T extends IEntity> boolean retrieve(T entity) {
-        return retrieve(entity, AttachLevel.Attached);
+        return retrieve(entity, AttachLevel.Attached, false);
     }
 
     @Override
-    public <T extends IEntity> boolean retrieve(final T iEntity, AttachLevel attachLevel) {
+    public <T extends IEntity> boolean retrieve(final T iEntity, AttachLevel attachLevel, boolean forUpdate) {
         RetrieveRequestsAggregator globalAggregator = requestAggregator.get();
         final RetrieveRequestsAggregator aggregator = (globalAggregator != null) ? globalAggregator : new RetrieveRequestsAggregator(this);
 
@@ -1241,7 +1241,7 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
     public <T extends IEntity> void retrieve(Iterable<T> entityIterable) {
         //TODO proper impl
         for (T e : entityIterable) {
-            retrieve(e, AttachLevel.Attached);
+            retrieve(e, AttachLevel.Attached, false);
         }
     }
 
@@ -1249,7 +1249,7 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
     public <T extends IEntity> void retrieve(Iterable<T> entityIterable, AttachLevel attachLevel) {
         //TODO proper impl
         for (T e : entityIterable) {
-            retrieve(e, attachLevel);
+            retrieve(e, attachLevel, false);
         }
     }
 

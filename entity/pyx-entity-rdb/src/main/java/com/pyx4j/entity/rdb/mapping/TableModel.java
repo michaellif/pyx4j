@@ -765,7 +765,7 @@ public class TableModel {
         TableModelCollections.retrieve(persistenceContext, entity, (MemberCollectionOperationsMeta) member);
     }
 
-    public boolean retrieve(PersistenceContext persistenceContext, Key primaryKey, IEntity entity, AttachLevel attachLevel) {
+    public boolean retrieve(PersistenceContext persistenceContext, Key primaryKey, IEntity entity, AttachLevel attachLevel, boolean forUpdate) {
         PreparedStatement stmt = null;
         ResultSet rs = null;
         StringBuilder sql = new StringBuilder();
@@ -774,6 +774,9 @@ public class TableModel {
             sql.append(" WHERE ").append(dialect.getNamingConvention().sqlIdColumnName()).append(" = ?");
             if (dialect.isMultitenantSharedSchema()) {
                 sql.append(" AND ").append(dialect.getNamingConvention().sqlNameSpaceColumnName()).append(" = ?");
+            }
+            if (forUpdate) {
+                sql.append(" FOR UPDATE");
             }
             if (EntityPersistenceServiceRDB.traceSql) {
                 log.debug("{}{} {}\n\tfrom:{}\t", Trace.id(), persistenceContext.txId(), sql, Trace.getCallOrigin(EntityPersistenceServiceRDB.class));

@@ -103,7 +103,7 @@ public interface IEntityPersistenceService {
 
     public <T extends IEntity> T retrieve(Class<T> entityClass, Key primaryKey);
 
-    public <T extends IEntity> T retrieve(Class<T> entityClass, Key primaryKey, AttachLevel attachLevel);
+    public <T extends IEntity> T retrieve(Class<T> entityClass, Key primaryKey, AttachLevel attachLevel, boolean forUpdate);
 
     /**
      * Fill all the information to already existing entity object that has only PK value
@@ -113,7 +113,7 @@ public interface IEntityPersistenceService {
      */
     public <T extends IEntity> boolean retrieve(T entity);
 
-    public <T extends IEntity> boolean retrieve(T entity, AttachLevel attachLevel);
+    public <T extends IEntity> boolean retrieve(T entity, AttachLevel attachLevel, boolean forUpdate);
 
     //TODO make @Deprecated and use retrieve
     public <T extends IEntity> void retrieveMember(T entityMember);

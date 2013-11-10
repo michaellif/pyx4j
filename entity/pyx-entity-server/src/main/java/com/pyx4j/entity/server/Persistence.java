@@ -214,7 +214,7 @@ public class Persistence {
 
     public static <T extends IEntity> void ensureRetrieve(T entity, AttachLevel attachLevel) {
         if (entity.getAttachLevel().ordinal() < attachLevel.ordinal()) {
-            service().retrieve(entity, attachLevel);
+            service().retrieve(entity, attachLevel, false);
         }
     }
 
