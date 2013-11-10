@@ -692,7 +692,17 @@ BEGIN
        
        
         -- insurance_certificate_scan
+        
+        -- first thing - delete everything that is not Insurance certificate
+        
+        EXECUTE 'DELETE FROM '||v_schema_name||'.insurance_certificate_scan '
+                ||'WHERE owner_discriminator != ''InsuranceCertificateDocument'' ';
+                
+        EXECUTE 'DELETE FROM '||v_schema_name||'.general_insurance_policy_blob '
+                ||'WHERE id NOT IN (SELECT blob_key FROM '||v_schema_name||'.insurance_certificate_scan ) ';
        
+        -- data update
+        
         EXECUTE 'UPDATE '||v_schema_name||'.insurance_certificate_doc AS d '
                 ||'SET  certificate_discriminator = t.id_discriminator, '
                 ||'     certificate = t.cert_id '
