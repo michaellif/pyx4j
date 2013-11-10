@@ -20,6 +20,7 @@ import com.pyx4j.entity.annotations.DiscriminatorValue;
 import com.pyx4j.entity.annotations.Inheritance;
 import com.pyx4j.entity.annotations.Inheritance.InheritanceStrategy;
 import com.pyx4j.entity.annotations.JoinColumn;
+import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.annotations.Owner;
 import com.pyx4j.entity.annotations.ReadOnly;
@@ -47,6 +48,7 @@ public interface InsurancePolicy<INSURANCE_CERTIFICATE extends InsuranceCertific
     /**
      * Indicates if this Certificate is deleted or never Activated
      */
+    @MemberColumn(notNull = true)
     IPrimitive<Boolean> isDeleted();
 
 }

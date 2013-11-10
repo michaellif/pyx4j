@@ -59,7 +59,7 @@ public class TenantInsuranceFacadeImpl implements TenantInsuranceFacade {
         } else {
             ownInsuranceCriteira.eq(ownInsuranceCriteira.proto().insurancePolicy().tenant().lease().leaseParticipants(), tenantId);
         }
-        ownInsuranceCriteira.ne(ownInsuranceCriteira.proto().insurancePolicy().isDeleted(), Boolean.TRUE);
+        ownInsuranceCriteira.eq(ownInsuranceCriteira.proto().insurancePolicy().isDeleted(), Boolean.FALSE);
         ownInsuranceCriteira.or(PropertyCriterion.gt(ownInsuranceCriteira.proto().expiryDate(), today),
                 PropertyCriterion.isNull(ownInsuranceCriteira.proto().expiryDate()));
 
