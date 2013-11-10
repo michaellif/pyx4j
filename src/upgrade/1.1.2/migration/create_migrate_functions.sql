@@ -691,6 +691,12 @@ BEGIN
                 
        
        
+        -- Update insurance_policy.is_deleted
+        
+        EXECUTE 'UPDATE '||v_schema_name||'.insurance_policy '
+                ||'SET is_deleted = FALSE '
+                ||'WHERE is_deleted IS NULL';
+       
         -- insurance_certificate_scan
         
         -- first thing - delete everything that is not Insurance certificate
@@ -1118,6 +1124,9 @@ BEGIN
        
 
 
+        -- not null
+        
+        ALTER TABLE insurance_policy ALTER COLUMN is_deleted SET NOT NULL;
        
         /**
         ***     ====================================================================================================
