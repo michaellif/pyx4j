@@ -25,6 +25,7 @@ import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.SimplePanel;
 
+import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.entity.shared.IList;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.AppSite;
@@ -195,25 +196,27 @@ public class FooterViewImpl extends FlowPanel implements FooterView {
                 break;
             }
 
-            switch (layoutType) {
-            case phonePortrait:
-                deviceImage.setResource(PortalImages.INSTANCE.phone());
-                break;
-            case phoneLandscape:
-                deviceImage.setResource(PortalImages.INSTANCE.phoneL());
-                break;
-            case tabletPortrait:
-                deviceImage.setResource(PortalImages.INSTANCE.tablet());
-                break;
-            case tabletLandscape:
-                deviceImage.setResource(PortalImages.INSTANCE.tabletL());
-                break;
-            case monitor:
-                deviceImage.setResource(PortalImages.INSTANCE.monitor());
-                break;
-            case huge:
-                deviceImage.setResource(PortalImages.INSTANCE.huge());
-                break;
+            if (ApplicationMode.isDevelopment()) {
+                switch (layoutType) {
+                case phonePortrait:
+                    deviceImage.setResource(PortalImages.INSTANCE.phone());
+                    break;
+                case phoneLandscape:
+                    deviceImage.setResource(PortalImages.INSTANCE.phoneL());
+                    break;
+                case tabletPortrait:
+                    deviceImage.setResource(PortalImages.INSTANCE.tablet());
+                    break;
+                case tabletLandscape:
+                    deviceImage.setResource(PortalImages.INSTANCE.tabletL());
+                    break;
+                case monitor:
+                    deviceImage.setResource(PortalImages.INSTANCE.monitor());
+                    break;
+                case huge:
+                    deviceImage.setResource(PortalImages.INSTANCE.huge());
+                    break;
+                }
             }
         }
     }
