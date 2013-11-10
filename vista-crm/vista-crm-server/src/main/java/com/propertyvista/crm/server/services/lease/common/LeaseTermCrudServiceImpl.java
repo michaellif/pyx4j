@@ -204,6 +204,10 @@ public class LeaseTermCrudServiceImpl extends AbstractVersionedCrudServiceDtoImp
 
     @Override
     public void setSelectedService(AsyncCallback<LeaseTermDTO> callback, ProductItem serviceId, LeaseTermDTO currentValue) {
+        if (currentValue.lease().unit().isNull()) {
+            currentValue.lease().unit().set(currentValue.unit());
+        }
+
         ServerSideFactory.create(LeaseFacade.class).setService(currentValue, serviceId);
 
         loadDetachedProducts(currentValue);
