@@ -33,7 +33,6 @@ import com.pyx4j.widgets.client.Button;
 import com.pyx4j.widgets.client.actionbar.Toolbar;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
 
-import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
 import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
 import com.propertyvista.domain.payment.PaymentMethod;
 import com.propertyvista.domain.tenant.lease.Tenant;
@@ -49,6 +48,13 @@ public class AutoPayAgreementsGadget extends AbstractGadget<FinancialDashboardVi
 
     private final AutoPaysView view;
 
+    private final Button autoPayButton = new Button("Add Auto Pay Agreement", new Command() {
+        @Override
+        public void execute() {
+            getGadgetView().getPresenter().addAutoPay();
+        }
+    });
+
     AutoPayAgreementsGadget(FinancialDashboardViewImpl dashboardView) {
         super(dashboardView, PortalImages.INSTANCE.billingIcon(), i18n.tr("Auto Pay Agreements"), ThemeColor.contrast4, 1);
         setActionsToolbar(new AutoPayAgreementsToolbar());
@@ -62,16 +68,12 @@ public class AutoPayAgreementsGadget extends AbstractGadget<FinancialDashboardVi
 
     protected void populate(AutoPaySummaryDTO value) {
         view.populate(value);
+
+        autoPayButton.setEnabled(!value.leaseStatus().getValue().isNoAutoPay());
     }
 
     class AutoPayAgreementsToolbar extends Toolbar {
         public AutoPayAgreementsToolbar() {
-            Button autoPayButton = new Button("Add Auto Pay Agreement", new Command() {
-                @Override
-                public void execute() {
-                    getGadgetView().getPresenter().addAutoPay();
-                }
-            });
             autoPayButton.getElement().getStyle().setProperty("background", StyleManager.getPalette().getThemeColor(ThemeColor.contrast4, 1));
             add(autoPayButton);
         }
@@ -135,7 +137,7 @@ public class AutoPayAgreementsGadget extends AbstractGadget<FinancialDashboardVi
             });
         }
 
-        private class AutoPayViewer extends CEntityDecoratableForm<AutoPayInfoDTO> {
+        private class AutoPayViewer extends CEntityForm<AutoPayInfoDTO> {
 
             public AutoPayViewer() {
                 super(AutoPayInfoDTO.class);

@@ -50,6 +50,13 @@ public class PaymentMethodsGadget extends AbstractGadget<FinancialDashboardViewI
 
     private final PaymentMethodsView view;
 
+    private final Button paymentMethodButton = new Button("Add Payment Method", new Command() {
+        @Override
+        public void execute() {
+            getGadgetView().getPresenter().addPaymentMethod();
+        }
+    });
+
     PaymentMethodsGadget(FinancialDashboardViewImpl form) {
         super(form, PortalImages.INSTANCE.billingIcon(), i18n.tr("Payment Methods"), ThemeColor.contrast4, 1);
         setActionsToolbar(new PaymentMethodsToolbar());
@@ -67,14 +74,8 @@ public class PaymentMethodsGadget extends AbstractGadget<FinancialDashboardViewI
 
     class PaymentMethodsToolbar extends Toolbar {
         public PaymentMethodsToolbar() {
-            Button autoPayButton = new Button("Add Payment Method", new Command() {
-                @Override
-                public void execute() {
-                    getGadgetView().getPresenter().addPaymentMethod();
-                }
-            });
-            autoPayButton.getElement().getStyle().setProperty("background", StyleManager.getPalette().getThemeColor(ThemeColor.contrast4, 1));
-            add(autoPayButton);
+            paymentMethodButton.getElement().getStyle().setProperty("background", StyleManager.getPalette().getThemeColor(ThemeColor.contrast4, 1));
+            add(paymentMethodButton);
         }
     }
 
@@ -146,7 +147,8 @@ public class PaymentMethodsGadget extends AbstractGadget<FinancialDashboardViewI
 
                 content.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().paymentMethod().creationDate(), new CDateLabel()), 100).build());
                 content.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().paymentMethod().type(), new CEnumLabel()), 150).build());
-                content.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().paymentMethod().details(), new CEntityLabel<PaymentDetails>())).build());
+                content.setWidget(++row, 0,
+                        new FormWidgetDecoratorBuilder(inject(proto().paymentMethod().details(), new CEntityLabel<PaymentDetails>())).build());
                 content.setWidget(++row, 0,
                         new FormWidgetDecoratorBuilder(inject(proto().paymentMethod().billingAddress(), new CEntityLabel<AddressSimple>())).build());
 

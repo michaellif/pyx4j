@@ -64,6 +64,7 @@ public class BillingServiceImpl implements BillingService {
             Bill bill = ServerSideFactory.create(BillingFacade.class).getLatestBill(lease);
             summary.dueDate().setValue(bill.dueDate().getValue());
         }
+        summary.leaseStatus().setValue(lease.status().getValue());
 
         callback.onSuccess(summary);
     }

@@ -20,6 +20,8 @@ import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
 
+import com.propertyvista.domain.tenant.lease.Lease.Status;
+
 @Transient
 public interface AutoPaySummaryDTO extends IEntity {
 
@@ -32,5 +34,5 @@ public interface AutoPaySummaryDTO extends IEntity {
     @Caption(name = "Your Next Auto Pay Date")
     IPrimitive<LogicalDate> nextAutoPayDate();
 
-    IPrimitive<Boolean> modificationsAllowed();
+    IPrimitive<Status> leaseStatus();
 }

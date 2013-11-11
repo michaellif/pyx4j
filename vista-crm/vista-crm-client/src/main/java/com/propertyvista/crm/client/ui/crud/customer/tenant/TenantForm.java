@@ -80,9 +80,9 @@ public class TenantForm extends LeaseParticipantForm<TenantDTO> {
 
         financialVisibility = (getValue().lease().status().getValue().isCurrent() /* && getValue().role().getValue() != Role.Dependent */);
 
-        setTabVisible(paymentMethodsTab, financialVisibility);
-        setTabVisible(autoPaymentsTab, financialVisibility);
-        setTabVisible(insuranceTab, financialVisibility);
+//        setTabVisible(paymentMethodsTab, financialVisibility);
+//        setTabVisible(autoPaymentsTab, financialVisibility);
+//        setTabVisible(insuranceTab, financialVisibility);
 
         get(proto().preauthorizedPayments()).setEditable(!getValue().isMoveOutWithinNextBillingCycle().getValue(false));
 

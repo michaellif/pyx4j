@@ -40,6 +40,13 @@ public class BillingSummaryGadget extends AbstractGadget<MainDashboardViewImpl> 
 
     private final BillingViewer billingViewer;
 
+    private final Button autoPayButton = new Button("Setup Auto Pay", new Command() {
+        @Override
+        public void execute() {
+            getGadgetView().getPresenter().setAutopay();
+        }
+    });
+
     BillingSummaryGadget(MainDashboardViewImpl viewer) {
         super(viewer, PortalImages.INSTANCE.billingIcon(), i18n.tr("My Billing Summary"), ThemeColor.contrast4, 1);
         setActionsToolbar(new BillingToolbar());
@@ -50,11 +57,12 @@ public class BillingSummaryGadget extends AbstractGadget<MainDashboardViewImpl> 
 
         setContent(billingViewer);
         setNavigationBar(new NavigationBar());
-
     }
 
     protected void populate(BillingSummaryDTO value) {
         billingViewer.populate(value);
+
+        autoPayButton.setEnabled(!value.leaseStatus().getValue().isNoAutoPay());
     }
 
     class BillingToolbar extends Toolbar {
@@ -69,13 +77,6 @@ public class BillingSummaryGadget extends AbstractGadget<MainDashboardViewImpl> 
             paymentButton.getElement().getStyle().setProperty("background", StyleManager.getPalette().getThemeColor(ThemeColor.contrast4, 1));
             add(paymentButton);
 
-            Button autoPayButton = new Button("Setup Auto Pay", new Command() {
-
-                @Override
-                public void execute() {
-                    getGadgetView().getPresenter().setAutopay();
-                }
-            });
             autoPayButton.getElement().getStyle().setProperty("background", StyleManager.getPalette().getThemeColor(ThemeColor.contrast4, 0.8));
             add(autoPayButton);
         }

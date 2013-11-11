@@ -28,7 +28,6 @@ import com.pyx4j.entity.shared.utils.EntityBinder;
 
 import com.propertyvista.biz.financial.payment.PaymentFacade;
 import com.propertyvista.biz.financial.payment.PaymentMethodFacade;
-import com.propertyvista.biz.tenant.lease.LeaseFacade;
 import com.propertyvista.domain.financial.PaymentRecord;
 import com.propertyvista.domain.payment.AutopayAgreement;
 import com.propertyvista.domain.payment.AutopayAgreement.AutopayAgreementCoveredItem;
@@ -159,7 +158,7 @@ public class PaymentServiceImpl implements PaymentService {
         summary.currentAutoPayments().addAll(retrieveCurrentAutoPayments(lease));
         summary.currentAutoPayDate().setValue(ServerSideFactory.create(PaymentMethodFacade.class).getNextAutopayDate(lease));
         summary.nextAutoPayDate().setValue(ServerSideFactory.create(PaymentMethodFacade.class).getNextAutopayDate(lease));
-        summary.modificationsAllowed().setValue(!ServerSideFactory.create(LeaseFacade.class).isMoveOutWithinNextBillingCycle(lease));
+        summary.leaseStatus().setValue(lease.status().getValue());
 
         callback.onSuccess(summary);
     }

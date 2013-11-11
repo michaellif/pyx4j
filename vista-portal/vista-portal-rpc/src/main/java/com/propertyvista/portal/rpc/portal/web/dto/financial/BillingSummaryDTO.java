@@ -23,6 +23,8 @@ import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.i18n.annotations.I18n;
 
+import com.propertyvista.domain.tenant.lease.Lease.Status;
+
 @Transient
 @I18n(strategy = I18n.I18nStrategy.IgnoreThis)
 public interface BillingSummaryDTO extends IEntity {
@@ -32,4 +34,6 @@ public interface BillingSummaryDTO extends IEntity {
 
     @Editor(type = EditorType.label)
     IPrimitive<LogicalDate> dueDate();
+
+    IPrimitive<Status> leaseStatus();
 }
