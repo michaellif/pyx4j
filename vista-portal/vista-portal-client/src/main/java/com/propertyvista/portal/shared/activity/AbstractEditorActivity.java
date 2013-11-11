@@ -24,6 +24,7 @@ import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.gwt.commons.UnrecoverableClientError;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
+import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.rpc.AppPlace;
 
 import com.propertyvista.portal.shared.PortalSite;
@@ -38,6 +39,8 @@ public abstract class AbstractEditorActivity<E extends IEntity> extends Security
 
     private final AbstractCrudService<E> service;
 
+    private final AppPlace place;
+
     private final Key entityId;
 
     public AbstractEditorActivity(Class<? extends IEditorView<E>> viewType, AbstractCrudService<E> service, AppPlace place) {
@@ -45,6 +48,7 @@ public abstract class AbstractEditorActivity<E extends IEntity> extends Security
         view.setPresenter(this);
 
         this.service = service;
+        this.place = place;
 
         entityId = place.getItemId();
     }
@@ -117,7 +121,8 @@ public abstract class AbstractEditorActivity<E extends IEntity> extends Security
     }
 
     protected void onSaved(Key result) {
-        retreive();
+        view.reset();
+        AppSite.getPlaceController().goTo(AppSite.getHistoryMapper().createPlace(place.getClass()).formPlace(result));
     }
 
     protected void onSaveFail(Throwable caught) {
