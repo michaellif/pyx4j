@@ -212,14 +212,14 @@ public class AutoPayChangesReportWidget implements ReportWidget {
                             + "px;'>" + charge.previous().percent().getStringView() + "</td>");
                     builder.appendHtmlConstant("<td class='" + CommonReportStyles.RCellNumber.name() + "' style='width: " + columns.get(9).getEffectiveWidth()
                             + "px;'>" + charge.current().totalPrice().getStringView() + "</td>");
-                    String percentChange = SafeHtmlUtils.htmlEscape(charge.current().billableItem().isNull() ? i18n.tr("Removed") : charge.current()
-                            .percentChange().isNull() ? i18n.tr("New") : charge.current().percentChange().getStringView());
-                    builder.appendHtmlConstant("<td class='" + CommonReportStyles.RCellNumber.name() + "' style='width: " + columns.get(10).getEffectiveWidth()
-                            + "px;'>" + percentChange + "</td>");
                     builder.appendHtmlConstant("<td class='" + CommonReportStyles.RCellNumber.name() + "' style='width: " + columns.get(11).getEffectiveWidth()
                             + "px;'>" + charge.current().payment().getStringView() + "</td>");
                     builder.appendHtmlConstant("<td class='" + CommonReportStyles.RCellNumber.name() + "' style='width: " + columns.get(12).getEffectiveWidth()
                             + "px;'>" + charge.current().percent().getStringView() + "</td>");
+                    String percentChange = SafeHtmlUtils.htmlEscape(charge.current().billableItem().isNull() ? i18n.tr("Removed") : charge.current()
+                            .percentChange().isNull() ? i18n.tr("New") : charge.current().percentChange().getStringView());
+                    builder.appendHtmlConstant("<td class='" + CommonReportStyles.RCellNumber.name() + "' style='width: " + columns.get(10).getEffectiveWidth()
+                            + "px;'>" + percentChange + "</td>");
                     if (isFirstLine) {
                         builder.appendHtmlConstant("<td rowspan='" + (numOfCaseRows + 1) + "' style='width: " + columns.get(13).getEffectiveWidth() + "px;'>"
                                 + reviewCase.paymentDue().getStringView() + "</td>");
