@@ -177,6 +177,8 @@ public class VistaNamespaceResolver implements NamespaceResolver {
                 int appIdx = hostName.lastIndexOf('-', envIdx - 1);
                 if (appIdx > 0) {
                     return hostName.substring(0, appIdx);
+                } else {
+                    return hostName.substring(0, envIdx);
                 }
             }
             return hostName;
