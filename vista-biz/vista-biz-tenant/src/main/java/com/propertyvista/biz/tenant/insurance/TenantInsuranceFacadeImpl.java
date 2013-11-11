@@ -49,11 +49,13 @@ public class TenantInsuranceFacadeImpl implements TenantInsuranceFacade {
     public static final boolean TENANT_SURE_MOCKUP = true;
 
     @Override
-    public List<InsuranceCertificate> getInsuranceCertificates(Tenant tenantId, boolean ownedOnly) {
+    public List<InsuranceCertificate<?>> getInsuranceCertificates(Tenant tenantId, boolean ownedOnly) {
         LogicalDate today = new LogicalDate(SystemDateManager.getDate());
 
         // try to get current insurance certificate either tenant's own or the insurance certificate of the room mate
-        EntityQueryCriteria<InsuranceCertificate> ownInsuranceCriteira = EntityQueryCriteria.create(InsuranceCertificate.class);
+        @SuppressWarnings({ "rawtypes", "unchecked" })
+        EntityQueryCriteria<InsuranceCertificate<?>> ownInsuranceCriteira = new EntityQueryCriteria(InsuranceCertificate.class);
+
         if (ownedOnly) {
             ownInsuranceCriteira.eq(ownInsuranceCriteira.proto().insurancePolicy().tenant(), tenantId);
         } else {
@@ -63,18 +65,18 @@ public class TenantInsuranceFacadeImpl implements TenantInsuranceFacade {
         ownInsuranceCriteira.or(PropertyCriterion.gt(ownInsuranceCriteira.proto().expiryDate(), today),
                 PropertyCriterion.isNull(ownInsuranceCriteira.proto().expiryDate()));
 
-        List<InsuranceCertificate> certificates = Persistence.service().query(ownInsuranceCriteira);
-        for (InsuranceCertificate certificate : certificates) {
+        List<InsuranceCertificate<?>> certificates = Persistence.service().query(ownInsuranceCriteira);
+        for (InsuranceCertificate<?> certificate : certificates) {
             Persistence.service().retrieve(certificate.insurancePolicy());
             Persistence.service().retrieve(certificate.insurancePolicy().tenant());
         }
-        List<InsuranceCertificate> sorted = sortInsuranceCertificates(certificates, tenantId);
-        for (InsuranceCertificate certificate : sorted) {
+        List<InsuranceCertificate<?>> sorted = sortInsuranceCertificates(certificates, tenantId);
+        for (InsuranceCertificate<?> certificate : sorted) {
             certificate.insurancePolicy().detach();
         }
         if (false) {
             if (sorted == Collections.EMPTY_LIST) {
-                sorted = new ArrayList<InsuranceCertificate>();
+                sorted = new ArrayList<InsuranceCertificate<?>>();
             }
             sorted.add(makeMockupTenantSureCertificate());
         }
@@ -152,11 +154,12 @@ public class TenantInsuranceFacadeImpl implements TenantInsuranceFacade {
     }
 
     /** this one chooses the best insurance certificate out of all insurance certificates */
-    private List<InsuranceCertificate> sortInsuranceCertificates(List<InsuranceCertificate> insuranceCertificates, final Tenant tenantId) {
-        if (insuranceCertificates.isEmpty()) {
+    private List<InsuranceCertificate<?>> sortInsuranceCertificates(List<InsuranceCertificate<?>> certificates, final Tenant tenantId) {
+        if (certificates.isEmpty()) {
             return Collections.emptyList();
         }
-        ArrayList<InsuranceCertificate> sortedInsuranceCertificates = new ArrayList<InsuranceCertificate>(insuranceCertificates);
+        List<InsuranceCertificate<?>> sortedInsuranceCertificates = new ArrayList<InsuranceCertificate<?>>();
+        sortedInsuranceCertificates.addAll(certificates);
         java.util.Collections.sort(sortedInsuranceCertificates, new InsuranceCertificateComparator(tenantId));
         return sortedInsuranceCertificates;
     }
