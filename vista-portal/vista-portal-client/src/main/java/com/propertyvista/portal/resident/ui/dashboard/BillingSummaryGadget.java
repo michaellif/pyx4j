@@ -40,6 +40,13 @@ public class BillingSummaryGadget extends AbstractGadget<MainDashboardViewImpl> 
 
     private final BillingViewer billingViewer;
 
+    Button paymentButton = new Button("Make a Payment", new Command() {
+        @Override
+        public void execute() {
+            getGadgetView().getPresenter().payNow();
+        }
+    });
+
     private final Button autoPayButton = new Button("Setup Auto Pay", new Command() {
         @Override
         public void execute() {
@@ -67,13 +74,6 @@ public class BillingSummaryGadget extends AbstractGadget<MainDashboardViewImpl> 
 
     class BillingToolbar extends Toolbar {
         public BillingToolbar() {
-            Button paymentButton = new Button("Make a Payment", new Command() {
-
-                @Override
-                public void execute() {
-                    getGadgetView().getPresenter().payNow();
-                }
-            });
             paymentButton.getElement().getStyle().setProperty("background", StyleManager.getPalette().getThemeColor(ThemeColor.contrast4, 1));
             add(paymentButton);
 
