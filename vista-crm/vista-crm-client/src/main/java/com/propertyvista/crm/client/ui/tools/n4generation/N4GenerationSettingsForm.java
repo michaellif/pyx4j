@@ -15,6 +15,7 @@ package com.propertyvista.crm.client.ui.tools.n4generation;
 
 import java.util.List;
 
+import com.google.gwt.dom.client.Style.Display;
 import com.google.gwt.dom.client.Style.Overflow;
 import com.google.gwt.dom.client.Style.TextAlign;
 import com.google.gwt.dom.client.Style.Unit;
@@ -32,6 +33,7 @@ import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.ui.CEntityListBox;
 import com.pyx4j.forms.client.ui.CLabel;
 import com.pyx4j.forms.client.ui.CListBox.SelectionMode;
+import com.pyx4j.forms.client.ui.decorators.WidgetDecorator;
 import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
 import com.pyx4j.forms.client.validators.ValidationError;
@@ -84,8 +86,8 @@ public class N4GenerationSettingsForm extends CEntityForm<N4GenerationSettingsDT
         panel.setWidget(0, 0, 2, inject(proto().n4PolicyErrors(), policyErrorsLabel));
 
         n4FillingSettingsPanel = new FlowPanel();
-        n4FillingSettingsPanel.add(new FormDecoratorBuilder(inject(proto().query().noticeDate())).componentWidth("150px").contentWidth("150px").build());
-        n4FillingSettingsPanel.add(new FormDecoratorBuilder(inject(proto().query().deliveryMethod())).componentWidth("150px").contentWidth("150px").build());
+        n4FillingSettingsPanel.add(new MyDecoratorBuilder(inject(proto().query().noticeDate())).componentWidth("150px").contentWidth("150px").build());
+        n4FillingSettingsPanel.add(new MyDecoratorBuilder(inject(proto().query().deliveryMethod())).componentWidth("150px").contentWidth("150px").build());
         agentComboBox = new CComboBox<Employee>("", CComboBox.NotInOptionsPolicy.DISCARD) {
             @Override
             public String getItemName(Employee o) {
@@ -93,22 +95,23 @@ public class N4GenerationSettingsForm extends CEntityForm<N4GenerationSettingsDT
             }
         };
         agentComboBox.setMandatory(true);
-        n4FillingSettingsPanel.add(new FormDecoratorBuilder(inject(proto().query().agent(), agentComboBox)).componentWidth("150px").contentWidth("150px")
-                .build());
+        n4FillingSettingsPanel
+                .add(new MyDecoratorBuilder(inject(proto().query().agent(), agentComboBox)).componentWidth("150px").contentWidth("150px").build());
 
         panel.setWidget(1, 0, n4FillingSettingsPanel);
 
         leasesQuerySettingsPanel = new FlowPanel();
         leasesQuerySettingsPanel.getElement().getStyle().setOverflow(Overflow.AUTO);
 
-        leasesQuerySettingsPanel.add(new FormDecoratorBuilder(inject(proto().minAmountOwed())).componentWidth("150px").contentWidth("200px").build());
-        leasesQuerySettingsPanel.add(new FormDecoratorBuilder(inject(proto().filterByBuildings())).componentWidth("150px").contentWidth("200px").build());
+        leasesQuerySettingsPanel.add(new MyDecoratorBuilder(inject(proto().minAmountOwed())).componentWidth("150px").contentWidth("200px").build());
+        leasesQuerySettingsPanel.add(new MyDecoratorBuilder(inject(proto().filterByBuildings())).componentWidth("150px").contentWidth("200px").build());
 
-        leasesQuerySettingsPanel.add(new FormDecoratorBuilder(inject(proto().buildings(), new CEntityListBox<Building>(Building.class,
-                SelectionMode.SINGLE_PANEL))).useLabelSemicolon(false).customLabel("").componentWidth("200px").contentWidth("200px").build());
+        leasesQuerySettingsPanel.add(new MyDecoratorBuilder(inject(proto().buildings(),
+                new CEntityListBox<Building>(Building.class, SelectionMode.SINGLE_PANEL))).useLabelSemicolon(false).customLabel("").componentWidth("200px")
+                .contentWidth("200px").build());
 
-        leasesQuerySettingsPanel.add(new FormDecoratorBuilder(inject(proto().filterByPortfolios())).componentWidth("150px").contentWidth("200px").build());
-        leasesQuerySettingsPanel.add(new FormDecoratorBuilder(inject(proto().portfolios(), new CEntityListBox<Portfolio>(Portfolio.class,
+        leasesQuerySettingsPanel.add(new MyDecoratorBuilder(inject(proto().filterByPortfolios())).componentWidth("150px").contentWidth("200px").build());
+        leasesQuerySettingsPanel.add(new MyDecoratorBuilder(inject(proto().portfolios(), new CEntityListBox<Portfolio>(Portfolio.class,
                 SelectionMode.SINGLE_PANEL))).useLabelSemicolon(false).customLabel("").componentWidth("200px").contentWidth("200px").build());
 
         panel.setWidget(1, 1, leasesQuerySettingsPanel);
@@ -150,4 +153,17 @@ public class N4GenerationSettingsForm extends CEntityForm<N4GenerationSettingsDT
         leasesQuerySettingsPanel.setVisible(CommonsStringUtils.isEmpty(getValue().n4PolicyErrors().getValue()));
     }
 
+    private static class MyDecoratorBuilder extends FormDecoratorBuilder {
+
+        public MyDecoratorBuilder(CComponent<?> component) {
+            super(component);
+        }
+
+        @Override
+        public WidgetDecorator build() {
+            WidgetDecorator d = super.build();
+            d.asWidget().getElement().getStyle().setDisplay(Display.BLOCK);
+            return d;
+        };
+    }
 }
