@@ -93,8 +93,9 @@ SET search_path = '_admin_';
         ***     ============================================================================================================
         **/
         
+        
         UPDATE  admin_pmc_dns_name
-        SET     target = 'portal'
+        SET     target = 'site'
         WHERE   target = 'residentPortal';
         
         UPDATE  audit_record
