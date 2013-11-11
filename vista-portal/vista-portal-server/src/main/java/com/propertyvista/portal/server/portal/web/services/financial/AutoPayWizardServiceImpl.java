@@ -104,8 +104,8 @@ public class AutoPayWizardServiceImpl extends AbstractCrudServiceDtoImpl<Autopay
         updateCoveredItems(bo, to);
 
         ServerSideFactory.create(PaymentFacade.class).validatePaymentMethod(lease.billingAccount(), to.paymentMethod(), VistaApplication.resident);
-        ServerSideFactory.create(PaymentMethodFacade.class).persistAutopayAgreement(bo,
-                EntityFactory.createIdentityStub(Tenant.class, TenantAppContext.getCurrentUserTenant().getPrimaryKey()));
+        bo.set(ServerSideFactory.create(PaymentMethodFacade.class).persistAutopayAgreement(bo,
+                EntityFactory.createIdentityStub(Tenant.class, TenantAppContext.getCurrentUserTenant().getPrimaryKey())));
     }
 
     @Override
