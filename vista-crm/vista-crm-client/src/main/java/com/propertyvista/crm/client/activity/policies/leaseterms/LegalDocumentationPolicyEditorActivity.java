@@ -29,7 +29,7 @@ public class LegalDocumentationPolicyEditorActivity extends PolicyEditorActivity
 
     @SuppressWarnings("unchecked")
     public LegalDocumentationPolicyEditorActivity(CrudAppPlace place) {
-        super(place, CrmSite.getViewFactory().instantiate(LegalDocumentationPolicyEditorView.class),
+        super(place, CrmSite.getViewFactory().getView(LegalDocumentationPolicyEditorView.class),
                 (AbstractPolicyCrudService<LegalDocumentationPolicyDTO>) GWT.create(LegalDocumentationPolicyCrudService.class),
                 LegalDocumentationPolicyDTO.class);
     }

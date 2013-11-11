@@ -26,7 +26,7 @@ import com.propertyvista.domain.policy.dto.ProductTaxPolicyDTO;
 public class ProductTaxPolicyListerActivity extends AbstractListerActivity<ProductTaxPolicyDTO> {
 
     public ProductTaxPolicyListerActivity(Place place) {
-        super(place,  CrmSite.getViewFactory().instantiate(ProductTaxPolicyListerView.class), GWT.<ProductTaxPolicyCrudService> create(ProductTaxPolicyCrudService.class),
+        super(place,  CrmSite.getViewFactory().getView(ProductTaxPolicyListerView.class), GWT.<ProductTaxPolicyCrudService> create(ProductTaxPolicyCrudService.class),
                 ProductTaxPolicyDTO.class);
     }
 

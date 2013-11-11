@@ -38,7 +38,7 @@ public class PaymentMethodConfirmationActivity extends SecurityAwareActivity imp
     private final Key entityId;
 
     public PaymentMethodConfirmationActivity(AppPlace place) {
-        this.view = ResidentPortalSite.getViewFactory().instantiate(PaymentMethodConfirmationView.class);
+        this.view = ResidentPortalSite.getViewFactory().getView(PaymentMethodConfirmationView.class);
         this.view.setPresenter(this);
 
         entityId = place.getItemId();

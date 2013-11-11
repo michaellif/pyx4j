@@ -33,7 +33,7 @@ public class PadReconciliationFileViewerActivity extends AbstractViewerActivity<
     private final ILister.Presenter<?> summaryLister;
 
     public PadReconciliationFileViewerActivity(CrudAppPlace place) {
-        super(place, OperationsSite.getViewFactory().instantiate(PadReconciliationFileViewerView.class), GWT
+        super(place, OperationsSite.getViewFactory().getView(PadReconciliationFileViewerView.class), GWT
                 .<AbstractCrudService<PadReconciliationFileDTO>> create(PadReconciliationFileCrudService.class));
 
         summaryLister = new ListerController<PadReconciliationSummaryDTO>(((PadReconciliationFileViewerView) getView()).getSummaryListerView(),

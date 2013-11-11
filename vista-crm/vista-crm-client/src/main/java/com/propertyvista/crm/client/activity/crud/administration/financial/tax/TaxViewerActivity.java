@@ -27,6 +27,6 @@ import com.propertyvista.domain.financial.tax.Tax;
 public class TaxViewerActivity extends CrmViewerActivity<Tax> {
 
     public TaxViewerActivity(CrudAppPlace place) {
-        super(place,  CrmSite.getViewFactory().instantiate(TaxViewerView.class), GWT.<AbstractCrudService<Tax>> create(TaxCrudService.class));
+        super(place,  CrmSite.getViewFactory().getView(TaxViewerView.class), GWT.<AbstractCrudService<Tax>> create(TaxCrudService.class));
     }
 }

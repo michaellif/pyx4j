@@ -33,7 +33,7 @@ public class ProspectTermsActivity extends AbstractActivity {
     private final Place place;
 
     public ProspectTermsActivity(Place place) {
-        view = AppSite.getViewFactory().instantiate(TermsView.class);
+        view = AppSite.getViewFactory().getView(TermsView.class);
         this.place = place;
     }
 

@@ -46,7 +46,7 @@ public class EncryptedStorageActivity extends AbstractActivity implements Encryp
 
     public EncryptedStorageActivity(AppPlace place) {
         this.place = place;
-        view = OperationsSite.getViewFactory().instantiate(EncryptedStorageView.class);
+        view = OperationsSite.getViewFactory().getView(EncryptedStorageView.class);
         service = GWT.<EncryptedStorageService> create(EncryptedStorageService.class);
     }
 

@@ -38,7 +38,7 @@ public class AutoPayConfirmationActivity extends SecurityAwareActivity implement
     private final Key entityId;
 
     public AutoPayConfirmationActivity(AppPlace place) {
-        this.view = ResidentPortalSite.getViewFactory().instantiate(AutoPayConfirmationView.class);
+        this.view = ResidentPortalSite.getViewFactory().getView(AutoPayConfirmationView.class);
         this.view.setPresenter(this);
 
         entityId = place.getItemId();

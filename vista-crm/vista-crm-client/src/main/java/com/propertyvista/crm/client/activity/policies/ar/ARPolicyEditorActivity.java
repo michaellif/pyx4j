@@ -29,7 +29,7 @@ public class ARPolicyEditorActivity extends PolicyEditorActivityBase<ARPolicyDTO
     public ARPolicyEditorActivity(CrudAppPlace place) {
         super(place,
 
-         CrmSite.getViewFactory().instantiate(ARPolicyEditorView.class),
+         CrmSite.getViewFactory().getView(ARPolicyEditorView.class),
 
         GWT.<AbstractPolicyCrudService<ARPolicyDTO>> create(ARPolicyCrudService.class),
 

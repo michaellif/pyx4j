@@ -38,7 +38,7 @@ public class TenantSureOrderConfirmationPageActivity extends SecurityAwareActivi
     private final TenantSureInsurancePolicyCrudService service;
 
     public TenantSureOrderConfirmationPageActivity(AppPlace place) {
-        view = ResidentPortalSite.getViewFactory().instantiate(TenantSureOrderConfirmationPageView.class);
+        view = ResidentPortalSite.getViewFactory().getView(TenantSureOrderConfirmationPageView.class);
         view.setPresenter(this);
 
         service = GWT.create(TenantSureInsurancePolicyCrudService.class);

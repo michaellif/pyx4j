@@ -26,7 +26,7 @@ import com.propertyvista.operations.rpc.services.PmcMerchantAccountCrudService;
 public class MerchantAccountViewerActivity extends AbstractViewerActivity<PmcMerchantAccountDTO> {
 
     public MerchantAccountViewerActivity(CrudAppPlace place) {
-        super(place, OperationsSite.getViewFactory().instantiate(MerchantAccountViewerView.class), GWT
+        super(place, OperationsSite.getViewFactory().getView(MerchantAccountViewerView.class), GWT
                 .<PmcMerchantAccountCrudService> create(PmcMerchantAccountCrudService.class));
     }
 

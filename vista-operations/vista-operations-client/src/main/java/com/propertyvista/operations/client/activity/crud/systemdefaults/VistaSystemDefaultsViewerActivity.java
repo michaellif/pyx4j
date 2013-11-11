@@ -27,7 +27,7 @@ import com.propertyvista.operations.rpc.services.Vista2PmcService;
 public class VistaSystemDefaultsViewerActivity extends AdminViewerActivity<VistaSystemDefaultsDTO> implements VistaSystemDefaultsViewerView.Presenter {
 
     public VistaSystemDefaultsViewerActivity(CrudAppPlace place) {
-        super(place, OperationsSite.getViewFactory().instantiate(VistaSystemDefaultsViewerView.class), GWT
+        super(place, OperationsSite.getViewFactory().getView(VistaSystemDefaultsViewerView.class), GWT
                 .<AbstractCrudService<VistaSystemDefaultsDTO>> create(Vista2PmcService.class));
     }
 }

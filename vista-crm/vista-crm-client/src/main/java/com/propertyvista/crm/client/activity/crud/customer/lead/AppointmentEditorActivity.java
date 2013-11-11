@@ -28,7 +28,7 @@ public class AppointmentEditorActivity extends CrmEditorActivity<Appointment> {
 
     @SuppressWarnings("unchecked")
     public AppointmentEditorActivity(CrudAppPlace place) {
-        super(place, CrmSite.getViewFactory().instantiate(AppointmentEditorView.class), (AbstractCrudService<Appointment>) GWT
+        super(place, CrmSite.getViewFactory().getView(AppointmentEditorView.class), (AbstractCrudService<Appointment>) GWT
                 .create(AppointmentCrudService.class), Appointment.class);
     }
 }

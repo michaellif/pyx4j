@@ -22,7 +22,7 @@ import com.propertyvista.domain.reports.EftVarianceReportMetadata;
 public class EftVarianceReportActivity extends CrmReportsActivity<EftVarianceReportMetadata> {
 
     public EftVarianceReportActivity(ReportsAppPlace<EftVarianceReportMetadata> reportPlace) {
-        super(EftVarianceReportMetadata.class, reportPlace, CrmSite.getViewFactory().instantiate(EftVarianceReportView.class));
+        super(EftVarianceReportMetadata.class, reportPlace, CrmSite.getViewFactory().getView(EftVarianceReportView.class));
     }
 
 }

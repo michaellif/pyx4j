@@ -33,7 +33,7 @@ public class ResidentTermsActivity extends AbstractActivity {
     private final Place place;
 
     public ResidentTermsActivity(Place place) {
-        view = ResidentPortalSite.getViewFactory().instantiate(TermsView.class);
+        view = ResidentPortalSite.getViewFactory().getView(TermsView.class);
         this.place = place;
     }
 

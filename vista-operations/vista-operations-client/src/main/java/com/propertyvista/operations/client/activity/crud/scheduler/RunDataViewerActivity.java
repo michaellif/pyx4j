@@ -29,7 +29,7 @@ import com.propertyvista.operations.rpc.services.scheduler.RunDataCrudService;
 public class RunDataViewerActivity extends AdminViewerActivity<RunData> implements RunDataViewerView.Presenter {
 
     public RunDataViewerActivity(CrudAppPlace place) {
-        super(place, OperationsSite.getViewFactory().instantiate(RunDataViewerView.class), GWT.<RunDataCrudService> create(RunDataCrudService.class));
+        super(place, OperationsSite.getViewFactory().getView(RunDataViewerView.class), GWT.<RunDataCrudService> create(RunDataCrudService.class));
     }
 
     @Override

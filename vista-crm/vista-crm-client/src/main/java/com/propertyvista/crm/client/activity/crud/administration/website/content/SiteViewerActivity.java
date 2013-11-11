@@ -32,7 +32,7 @@ import com.propertyvista.dto.SiteDescriptorDTO;
 public class SiteViewerActivity extends CrmViewerActivity<SiteDescriptorDTO> implements SiteViewer.Presenter {
 
     public SiteViewerActivity(CrudAppPlace place) {
-        super(place,  CrmSite.getViewFactory().instantiate(SiteViewer.class), GWT.<SiteContentCrudService> create(SiteContentCrudService.class));
+        super(place,  CrmSite.getViewFactory().getView(SiteViewer.class), GWT.<SiteContentCrudService> create(SiteContentCrudService.class));
     }
 
     @Override

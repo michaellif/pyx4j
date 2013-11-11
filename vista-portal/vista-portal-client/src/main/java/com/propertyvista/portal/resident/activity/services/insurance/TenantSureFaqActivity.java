@@ -28,7 +28,7 @@ public class TenantSureFaqActivity extends AbstractActivity {
     private final TermsView view;
 
     public TenantSureFaqActivity(AppPlace place) {
-        view = ResidentPortalSite.getViewFactory().instantiate(TermsView.class);
+        view = ResidentPortalSite.getViewFactory().getView(TermsView.class);
     }
 
     @Override

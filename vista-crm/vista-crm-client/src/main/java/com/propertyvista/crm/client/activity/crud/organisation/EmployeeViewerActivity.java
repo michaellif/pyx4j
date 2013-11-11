@@ -38,7 +38,7 @@ import com.propertyvista.domain.security.VistaCrmBehavior;
 public class EmployeeViewerActivity extends CrmViewerActivity<EmployeeDTO> implements EmployeeViewerView.Presenter {
 
     public EmployeeViewerActivity(CrudAppPlace place) {
-        super(place,  CrmSite.getViewFactory().instantiate(EmployeeViewerView.class), GWT.<AbstractCrudService<EmployeeDTO>> create(EmployeeCrudService.class));
+        super(place,  CrmSite.getViewFactory().getView(EmployeeViewerView.class), GWT.<AbstractCrudService<EmployeeDTO>> create(EmployeeCrudService.class));
     }
 
     @Override

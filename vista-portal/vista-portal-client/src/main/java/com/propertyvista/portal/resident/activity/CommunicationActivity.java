@@ -48,7 +48,7 @@ public class CommunicationActivity extends AbstractActivity implements Communica
     private final CommunicationView view;
 
     public CommunicationActivity(Place place) {
-        view = ResidentPortalSite.getViewFactory().instantiate(CommunicationView.class);
+        view = ResidentPortalSite.getViewFactory().getView(CommunicationView.class);
         view.setPresenter(this);
     }
 

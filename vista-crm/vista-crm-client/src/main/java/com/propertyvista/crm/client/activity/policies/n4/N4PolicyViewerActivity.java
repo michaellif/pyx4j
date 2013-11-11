@@ -26,7 +26,7 @@ import com.propertyvista.domain.policy.dto.N4PolicyDTO;
 public class N4PolicyViewerActivity extends AbstractViewerActivity<N4PolicyDTO> implements N4PolicyViewerView.Presenter {
 
     public N4PolicyViewerActivity(CrudAppPlace place) {
-        super(place, CrmSite.getViewFactory().instantiate(N4PolicyViewerView.class), GWT.<N4PolicyCrudService> create(N4PolicyCrudService.class));
+        super(place, CrmSite.getViewFactory().getView(N4PolicyViewerView.class), GWT.<N4PolicyCrudService> create(N4PolicyCrudService.class));
     }
 
 }

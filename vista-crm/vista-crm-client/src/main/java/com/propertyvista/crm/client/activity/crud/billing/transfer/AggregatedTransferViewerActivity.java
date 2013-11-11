@@ -40,7 +40,7 @@ public class AggregatedTransferViewerActivity extends CrmViewerActivity<Aggregat
     private final ILister.Presenter<PaymentRecord> rejectedBatchPaymentsLister;
 
     public AggregatedTransferViewerActivity(CrudAppPlace place) {
-        super(place,  CrmSite.getViewFactory().instantiate(AggregatedTransferViewerView.class), GWT
+        super(place,  CrmSite.getViewFactory().getView(AggregatedTransferViewerView.class), GWT
                 .<AggregatedTransferCrudService> create(AggregatedTransferCrudService.class));
 
         paymentLister = new ListerController<PaymentRecord>(((AggregatedTransferViewerView) getView()).getPaymentsListerView(),

@@ -46,7 +46,7 @@ public class LeaseApplicationViewerActivity extends LeaseViewerActivityBase<Leas
 
     @SuppressWarnings("unchecked")
     public LeaseApplicationViewerActivity(CrudAppPlace place) {
-        super(place,  CrmSite.getViewFactory().instantiate(LeaseApplicationViewerView.class), (AbstractCrudService<LeaseApplicationDTO>) GWT
+        super(place,  CrmSite.getViewFactory().getView(LeaseApplicationViewerView.class), (AbstractCrudService<LeaseApplicationDTO>) GWT
                 .create(LeaseApplicationViewerCrudService.class));
     }
 

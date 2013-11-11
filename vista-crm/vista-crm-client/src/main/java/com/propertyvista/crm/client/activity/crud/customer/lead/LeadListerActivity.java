@@ -28,6 +28,6 @@ public class LeadListerActivity extends AbstractListerActivity<Lead> {
 
     @SuppressWarnings("unchecked")
     public LeadListerActivity(Place place) {
-        super(place,  CrmSite.getViewFactory().instantiate(LeadListerView.class), (AbstractCrudService<Lead>) GWT.create(LeadCrudService.class), Lead.class);
+        super(place,  CrmSite.getViewFactory().getView(LeadListerView.class), (AbstractCrudService<Lead>) GWT.create(LeadCrudService.class), Lead.class);
     }
 }

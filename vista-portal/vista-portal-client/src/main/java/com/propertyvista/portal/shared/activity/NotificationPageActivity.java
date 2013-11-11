@@ -32,7 +32,7 @@ public class NotificationPageActivity extends AbstractActivity implements Notifi
 
     public NotificationPageActivity(NotificationAppPlace place) {
         this.place = place;
-        view = PortalSite.getViewFactory().instantiate(NotificationPageView.class);
+        view = PortalSite.getViewFactory().getView(NotificationPageView.class);
     }
 
     @Override

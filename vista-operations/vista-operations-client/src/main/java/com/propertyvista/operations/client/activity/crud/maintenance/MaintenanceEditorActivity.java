@@ -26,7 +26,7 @@ import com.propertyvista.operations.rpc.services.MaintenanceCrudService;
 public class MaintenanceEditorActivity extends AbstractEditorActivity<VistaSystemMaintenanceState> implements MaintenanceEditorView.Presenter {
 
     public MaintenanceEditorActivity(CrudAppPlace place) {
-        super(place, OperationsSite.getViewFactory().instantiate(MaintenanceEditorView.class), GWT
+        super(place, OperationsSite.getViewFactory().getView(MaintenanceEditorView.class), GWT
                 .<MaintenanceCrudService> create(MaintenanceCrudService.class), VistaSystemMaintenanceState.class);
     }
 }

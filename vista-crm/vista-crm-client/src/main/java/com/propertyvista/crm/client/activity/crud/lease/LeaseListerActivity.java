@@ -41,7 +41,7 @@ public class LeaseListerActivity extends AbstractListerActivity<LeaseDTO> implem
     private static final I18n i18n = I18n.get(LeaseListerActivity.class);
 
     public LeaseListerActivity(Place place) {
-        super(place, CrmSite.getViewFactory().instantiate(LeaseListerView.class), GWT.<LeaseViewerCrudService> create(LeaseViewerCrudService.class),
+        super(place, CrmSite.getViewFactory().getView(LeaseListerView.class), GWT.<LeaseViewerCrudService> create(LeaseViewerCrudService.class),
                 LeaseDTO.class);
         ((LeaseListerView) getView()).setPadFileControlsEnabled(SecurityController.checkBehavior(VistaCrmBehavior.PropertyVistaSupport));
     }

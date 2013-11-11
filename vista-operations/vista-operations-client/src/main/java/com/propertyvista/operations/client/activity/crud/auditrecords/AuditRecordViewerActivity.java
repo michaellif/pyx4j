@@ -26,7 +26,7 @@ import com.propertyvista.operations.rpc.services.AuditRecordCrudService;
 public class AuditRecordViewerActivity extends AbstractViewerActivity<AuditRecordOperationsDTO> {
 
     public AuditRecordViewerActivity(CrudAppPlace place) {
-        super(place, OperationsSite.getViewFactory().instantiate(AuditRecordViewerView.class), GWT
+        super(place, OperationsSite.getViewFactory().getView(AuditRecordViewerView.class), GWT
                 .<AuditRecordCrudService> create(AuditRecordCrudService.class));
     }
 

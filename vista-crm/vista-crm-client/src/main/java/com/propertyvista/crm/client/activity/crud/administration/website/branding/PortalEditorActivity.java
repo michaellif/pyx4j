@@ -29,7 +29,7 @@ import com.propertyvista.dto.SiteDescriptorDTO;
 public class PortalEditorActivity extends CrmEditorActivity<SiteDescriptorDTO> implements PortalEditor.Presenter {
 
     public PortalEditorActivity(CrudAppPlace place) {
-        super(place,  CrmSite.getViewFactory().instantiate(PortalEditor.class), GWT.<SiteBrandingCrudService> create(SiteBrandingCrudService.class),
+        super(place,  CrmSite.getViewFactory().getView(PortalEditor.class), GWT.<SiteBrandingCrudService> create(SiteBrandingCrudService.class),
                 SiteDescriptorDTO.class);
     }
 

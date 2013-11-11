@@ -28,7 +28,7 @@ public class TenantSurePaymentMethodUpdateConfirmationActivity extends SecurityA
     private final TenantSurePaymentMethodUpdateConfirmationView view;
 
     public TenantSurePaymentMethodUpdateConfirmationActivity(AppPlace place) {
-        this.view = ResidentPortalSite.getViewFactory().instantiate(TenantSurePaymentMethodUpdateConfirmationView.class);
+        this.view = ResidentPortalSite.getViewFactory().getView(TenantSurePaymentMethodUpdateConfirmationView.class);
         this.view.setPresenter(this);
 
     }

@@ -79,7 +79,7 @@ public class ExtraActivity extends AbstractActivity implements ExtraPresenter {
     }
 
     public ExtraActivity(Place place) {
-        view = ResidentPortalSite.getViewFactory().instantiate(ExtraView.class);
+        view = ResidentPortalSite.getViewFactory().getView(ExtraView.class);
     }
 
     @Override

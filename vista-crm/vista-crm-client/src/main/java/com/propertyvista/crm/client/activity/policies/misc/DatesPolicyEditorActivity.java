@@ -29,7 +29,7 @@ public class DatesPolicyEditorActivity extends PolicyEditorActivityBase<DatesPol
     public DatesPolicyEditorActivity(CrudAppPlace place) {
         super(place,
 
-         CrmSite.getViewFactory().instantiate(DatesPolicyEditorView.class),
+         CrmSite.getViewFactory().getView(DatesPolicyEditorView.class),
 
         GWT.<AbstractPolicyCrudService<DatesPolicyDTO>> create(DatesPolicyCrudService.class),
 

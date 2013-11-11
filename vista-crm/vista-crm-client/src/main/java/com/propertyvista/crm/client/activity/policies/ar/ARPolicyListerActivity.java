@@ -29,7 +29,7 @@ public class ARPolicyListerActivity extends AbstractListerActivity<ARPolicyDTO> 
     public ARPolicyListerActivity(Place place) {
         super(place,
 
-         CrmSite.getViewFactory().instantiate(ARPolicyListerView.class),
+         CrmSite.getViewFactory().getView(ARPolicyListerView.class),
 
         GWT.<AbstractListService<ARPolicyDTO>> create(ARPolicyCrudService.class),
 

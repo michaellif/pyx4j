@@ -29,7 +29,7 @@ import com.propertyvista.domain.payment.AutopayAgreement;
 public class PapListerActivity extends AbstractListerActivity<AutopayAgreement> {
 
     public PapListerActivity(Place place) {
-        super(place, CrmSite.getViewFactory().instantiate(PapListerView.class), GWT.<AutoPayCrudService> create(AutoPayCrudService.class),
+        super(place, CrmSite.getViewFactory().getView(PapListerView.class), GWT.<AutoPayCrudService> create(AutoPayCrudService.class),
                 AutopayAgreement.class);
     }
 

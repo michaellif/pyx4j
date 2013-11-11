@@ -34,7 +34,7 @@ public class ServicesDashboardActivity extends SecurityAwareActivity implements 
     private final ServicesDashboardView view;
 
     public ServicesDashboardActivity(Place place) {
-        this.view = ResidentPortalSite.getViewFactory().instantiate(ServicesDashboardView.class);
+        this.view = ResidentPortalSite.getViewFactory().getView(ServicesDashboardView.class);
         this.view.setPresenter(this);
     }
 

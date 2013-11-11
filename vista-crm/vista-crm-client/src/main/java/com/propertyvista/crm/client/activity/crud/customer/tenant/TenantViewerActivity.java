@@ -49,7 +49,7 @@ public class TenantViewerActivity extends CrmViewerActivity<TenantDTO> implement
     private Customer screeningCustomer;
 
     public TenantViewerActivity(CrudAppPlace place) {
-        super(place, CrmSite.getViewFactory().instantiate(TenantViewerView.class), GWT.<TenantCrudService> create(TenantCrudService.class));
+        super(place, CrmSite.getViewFactory().getView(TenantViewerView.class), GWT.<TenantCrudService> create(TenantCrudService.class));
     }
 
     @Override

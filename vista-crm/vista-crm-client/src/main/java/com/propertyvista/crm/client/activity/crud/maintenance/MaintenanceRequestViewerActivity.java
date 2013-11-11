@@ -38,7 +38,7 @@ public class MaintenanceRequestViewerActivity extends CrmViewerActivity<Maintena
 
     @SuppressWarnings("unchecked")
     public MaintenanceRequestViewerActivity(CrudAppPlace place) {
-        super(place, CrmSite.getViewFactory().instantiate(MaintenanceRequestViewerView.class), (AbstractCrudService<MaintenanceRequestDTO>) GWT
+        super(place, CrmSite.getViewFactory().getView(MaintenanceRequestViewerView.class), (AbstractCrudService<MaintenanceRequestDTO>) GWT
                 .create(MaintenanceCrudService.class));
     }
 

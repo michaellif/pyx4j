@@ -37,7 +37,7 @@ public class MenuActivity extends AbstractActivity implements MenuView.MenuPrese
     private final MenuView view;
 
     public MenuActivity(Place place) {
-        this.view = ResidentPortalSite.getViewFactory().instantiate(MenuView.class);
+        this.view = ResidentPortalSite.getViewFactory().getView(MenuView.class);
         view.setPresenter(this);
     }
 

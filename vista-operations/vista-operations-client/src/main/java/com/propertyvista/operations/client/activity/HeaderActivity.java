@@ -39,7 +39,7 @@ public class HeaderActivity extends AbstractActivity implements HeaderView.Prese
     private final HeaderView view;
 
     public HeaderActivity(Place place) {
-        view = OperationsSite.getViewFactory().instantiate(HeaderView.class);
+        view = OperationsSite.getViewFactory().getView(HeaderView.class);
         view.setPresenter(this);
         withPlace(place);
     }

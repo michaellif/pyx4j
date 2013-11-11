@@ -30,7 +30,7 @@ import com.propertyvista.operations.rpc.services.PadReconciliationDebitRecordCru
 public class PadReconciliationDebitRecordListerActivity extends AbstractListerActivity<PadReconciliationDebitRecordDTO> {
 
     public PadReconciliationDebitRecordListerActivity(Place place) {
-        super(place, OperationsSite.getViewFactory().instantiate(PadReconciliationDebitRecordListerView.class), GWT
+        super(place, OperationsSite.getViewFactory().getView(PadReconciliationDebitRecordListerView.class), GWT
                 .<AbstractCrudService<PadReconciliationDebitRecordDTO>> create(PadReconciliationDebitRecordCrudService.class),
                 PadReconciliationDebitRecordDTO.class);
     }

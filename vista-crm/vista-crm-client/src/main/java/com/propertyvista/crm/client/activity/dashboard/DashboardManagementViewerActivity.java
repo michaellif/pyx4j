@@ -37,7 +37,7 @@ public class DashboardManagementViewerActivity extends CrmViewerActivity<Dashboa
     private boolean canEdit;
 
     public DashboardManagementViewerActivity(CrudAppPlace place) {
-        super(place,  CrmSite.getViewFactory().instantiate(DashboardManagementViewerView.class), GWT
+        super(place,  CrmSite.getViewFactory().getView(DashboardManagementViewerView.class), GWT
                 .<DashboardMetadataCrudService> create(DashboardMetadataCrudService.class));
         canEdit = false;
     }

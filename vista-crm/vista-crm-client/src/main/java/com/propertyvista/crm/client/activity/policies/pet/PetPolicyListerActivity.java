@@ -27,7 +27,7 @@ import com.propertyvista.domain.policy.dto.PetPolicyDTO;
 public class PetPolicyListerActivity extends AbstractListerActivity<PetPolicyDTO> {
 
     public PetPolicyListerActivity(Place place) {
-        super(place,  CrmSite.getViewFactory().instantiate(PetPolicyListerView.class), GWT.<AbstractListService<PetPolicyDTO>> create(PetPolicyCrudService.class),
+        super(place,  CrmSite.getViewFactory().getView(PetPolicyListerView.class), GWT.<AbstractListService<PetPolicyDTO>> create(PetPolicyCrudService.class),
                 PetPolicyDTO.class);
     }
 

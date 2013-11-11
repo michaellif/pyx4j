@@ -28,7 +28,7 @@ public class LockerListerActivity extends AbstractListerActivity<Locker> {
 
     @SuppressWarnings("unchecked")
     public LockerListerActivity(Place place) {
-        super(place,  CrmSite.getViewFactory().instantiate(LockerListerView.class), (AbstractCrudService<Locker>) GWT.create(LockerCrudService.class), Locker.class);
+        super(place,  CrmSite.getViewFactory().getView(LockerListerView.class), (AbstractCrudService<Locker>) GWT.create(LockerCrudService.class), Locker.class);
 
     }
 

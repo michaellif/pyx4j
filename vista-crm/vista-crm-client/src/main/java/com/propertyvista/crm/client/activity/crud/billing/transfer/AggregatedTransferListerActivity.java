@@ -26,7 +26,7 @@ import com.propertyvista.domain.financial.AggregatedTransfer;
 public class AggregatedTransferListerActivity extends AbstractListerActivity<AggregatedTransfer> {
 
     public AggregatedTransferListerActivity(Place place) {
-        super(place,  CrmSite.getViewFactory().instantiate(AggregatedTransferListerView.class), GWT
+        super(place,  CrmSite.getViewFactory().getView(AggregatedTransferListerView.class), GWT
                 .<AggregatedTransferCrudService> create(AggregatedTransferCrudService.class), AggregatedTransfer.class);
     }
 }

@@ -28,7 +28,7 @@ public class UnitOccupancyViewerActivity extends CrmViewerActivity<AptUnitOccupa
 
     @SuppressWarnings("unchecked")
     public UnitOccupancyViewerActivity(CrudAppPlace place) {
-        super(place,  CrmSite.getViewFactory().instantiate(UnitOccupancyViewerView.class), (AbstractCrudService<AptUnitOccupancySegment>) GWT
+        super(place,  CrmSite.getViewFactory().getView(UnitOccupancyViewerView.class), (AbstractCrudService<AptUnitOccupancySegment>) GWT
                 .create(UnitOccupancyCrudService.class));
     }
 }

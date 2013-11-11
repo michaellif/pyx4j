@@ -27,6 +27,6 @@ import com.propertyvista.domain.property.vendor.Vendor;
 public class VendorListerActivity extends AbstractListerActivity<Vendor> {
 
     public VendorListerActivity(Place place) {
-        super(place,  CrmSite.getViewFactory().instantiate(VendorListerView.class), GWT.<AbstractListService<Vendor>> create(VendorCrudService.class), Vendor.class);
+        super(place,  CrmSite.getViewFactory().getView(VendorListerView.class), GWT.<AbstractListService<Vendor>> create(VendorCrudService.class), Vendor.class);
     }
 }

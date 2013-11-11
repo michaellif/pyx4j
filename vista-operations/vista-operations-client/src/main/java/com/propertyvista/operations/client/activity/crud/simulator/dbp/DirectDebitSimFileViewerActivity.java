@@ -33,7 +33,7 @@ public class DirectDebitSimFileViewerActivity extends AbstractViewerActivity<Dir
     private DirectDebitSimFile simFile;
 
     public DirectDebitSimFileViewerActivity(CrudAppPlace place) {
-        super(place, OperationsSite.getViewFactory().instantiate(DirectDebitSimFileViewerView.class), GWT
+        super(place, OperationsSite.getViewFactory().getView(DirectDebitSimFileViewerView.class), GWT
                 .<DirectDebitSimFileCrudService> create(DirectDebitSimFileCrudService.class));
     }
 

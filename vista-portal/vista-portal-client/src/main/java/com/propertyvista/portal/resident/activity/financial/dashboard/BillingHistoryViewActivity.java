@@ -34,7 +34,7 @@ public class BillingHistoryViewActivity extends SecurityAwareActivity implements
     private final BillingHistoryView view;
 
     public BillingHistoryViewActivity(AppPlace place) {
-        this.view = ResidentPortalSite.getViewFactory().instantiate(BillingHistoryView.class);
+        this.view = ResidentPortalSite.getViewFactory().getView(BillingHistoryView.class);
         this.view.setPresenter(this);
     }
 

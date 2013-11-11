@@ -28,7 +28,7 @@ public class BoilerEditorActivity extends CrmEditorActivity<BoilerDTO> {
 
     @SuppressWarnings("unchecked")
     public BoilerEditorActivity(CrudAppPlace place) {
-        super(place,  CrmSite.getViewFactory().instantiate(BoilerEditorView.class), (AbstractCrudService<BoilerDTO>) GWT.create(BoilerCrudService.class),
+        super(place,  CrmSite.getViewFactory().getView(BoilerEditorView.class), (AbstractCrudService<BoilerDTO>) GWT.create(BoilerCrudService.class),
                 BoilerDTO.class);
 
     }

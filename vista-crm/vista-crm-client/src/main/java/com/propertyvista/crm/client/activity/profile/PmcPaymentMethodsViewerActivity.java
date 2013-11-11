@@ -26,7 +26,7 @@ import com.propertyvista.crm.rpc.services.admin.PmcPaymentMethodsCrudService;
 public class PmcPaymentMethodsViewerActivity extends CrmViewerActivity<PmcPaymentMethodsDTO> implements PmcPaymentMethodsViewerView.Presenter {
 
     public PmcPaymentMethodsViewerActivity(CrudAppPlace place) {
-        super(place,  CrmSite.getViewFactory().instantiate(PmcPaymentMethodsViewerView.class), GWT
+        super(place,  CrmSite.getViewFactory().getView(PmcPaymentMethodsViewerView.class), GWT
                 .<PmcPaymentMethodsCrudService> create(PmcPaymentMethodsCrudService.class));
     }
 

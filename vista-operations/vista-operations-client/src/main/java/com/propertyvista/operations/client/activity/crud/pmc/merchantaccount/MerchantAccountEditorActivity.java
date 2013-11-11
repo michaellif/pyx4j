@@ -30,7 +30,7 @@ import com.propertyvista.operations.rpc.services.PmcMerchantAccountCrudService;
 public class MerchantAccountEditorActivity extends AbstractEditorActivity<PmcMerchantAccountDTO> {
 
     public MerchantAccountEditorActivity(CrudAppPlace place) {
-        super(place, OperationsSite.getViewFactory().instantiate(MerchantAccountEditorView.class), GWT
+        super(place, OperationsSite.getViewFactory().getView(MerchantAccountEditorView.class), GWT
                 .<PmcMerchantAccountCrudService> create(PmcMerchantAccountCrudService.class), PmcMerchantAccountDTO.class);
     }
 

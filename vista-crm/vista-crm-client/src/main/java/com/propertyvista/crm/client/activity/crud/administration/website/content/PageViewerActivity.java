@@ -30,7 +30,7 @@ import com.propertyvista.domain.site.PageDescriptor;
 public class PageViewerActivity extends CrmViewerActivity<PageDescriptor> implements PageViewer.Presenter {
 
     public PageViewerActivity(CrudAppPlace place) {
-        super(place,  CrmSite.getViewFactory().instantiate(PageViewer.class), GWT.<PageDescriptorCrudService> create(PageDescriptorCrudService.class));
+        super(place,  CrmSite.getViewFactory().getView(PageViewer.class), GWT.<PageDescriptorCrudService> create(PageDescriptorCrudService.class));
     }
 
     @Override

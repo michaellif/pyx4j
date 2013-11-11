@@ -41,7 +41,7 @@ public class ToolbarActivity extends AbstractActivity implements ToolbarView.Too
 
     public ToolbarActivity(Place place) {
         this.place = place;
-        this.view = PortalSite.getViewFactory().instantiate(ToolbarView.class);
+        this.view = PortalSite.getViewFactory().getView(ToolbarView.class);
         assert (view != null);
         view.setPresenter(this);
     }

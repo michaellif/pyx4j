@@ -26,7 +26,7 @@ import com.propertyvista.dto.vista2pmc.ILSConfigDTO;
 public class ILSConfigEditorActivity extends CrmEditorActivity<ILSConfigDTO> {
 
     public ILSConfigEditorActivity(CrudAppPlace place) {
-        super(place, CrmSite.getViewFactory().instantiate(ILSConfigEditorView.class), GWT.<ILSConfigCrudService> create(ILSConfigCrudService.class),
+        super(place, CrmSite.getViewFactory().getView(ILSConfigEditorView.class), GWT.<ILSConfigCrudService> create(ILSConfigCrudService.class),
                 ILSConfigDTO.class);
     }
 

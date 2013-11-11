@@ -28,6 +28,6 @@ public class ShowingViewerActivity extends CrmViewerActivity<ShowingDTO> {
 
     @SuppressWarnings("unchecked")
     public ShowingViewerActivity(CrudAppPlace place) {
-        super(place,  CrmSite.getViewFactory().instantiate(ShowingViewerView.class), (AbstractCrudService<ShowingDTO>) GWT.create(ShowingCrudService.class));
+        super(place,  CrmSite.getViewFactory().getView(ShowingViewerView.class), (AbstractCrudService<ShowingDTO>) GWT.create(ShowingCrudService.class));
     }
 }

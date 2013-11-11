@@ -32,7 +32,7 @@ public class NotificationsActivity extends AbstractActivity implements Notificat
     private final NotificationsView view;
 
     public NotificationsActivity(Place place) {
-        view = CrmSite.getViewFactory().instantiate(NotificationsView.class);
+        view = CrmSite.getViewFactory().getView(NotificationsView.class);
         withPlace(place);
     }
 

@@ -22,7 +22,7 @@ import com.propertyvista.domain.reports.AutoPayChangesReportMetadata;
 public class AutoPayChangesReportActivity extends CrmReportsActivity<AutoPayChangesReportMetadata> {
 
     public AutoPayChangesReportActivity(ReportsAppPlace<AutoPayChangesReportMetadata> reportPlace) {
-        super(AutoPayChangesReportMetadata.class, reportPlace, CrmSite.getViewFactory().instantiate(AutoPayChangesReportView.class));
+        super(AutoPayChangesReportMetadata.class, reportPlace, CrmSite.getViewFactory().getView(AutoPayChangesReportView.class));
     }
 
 }

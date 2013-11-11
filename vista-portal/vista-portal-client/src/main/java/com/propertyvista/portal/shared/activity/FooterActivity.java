@@ -35,7 +35,7 @@ public class FooterActivity extends AbstractActivity {
     private static final FooterActivity instance = new FooterActivity();
 
     private FooterActivity() {
-        view = PortalSite.getViewFactory().instantiate(FooterView.class);
+        view = PortalSite.getViewFactory().getView(FooterView.class);
         service = GWT.<PortalContentService> create(PortalContentService.class);
         service.getPortalContent(new DefaultAsyncCallback<PortalContentDTO>() {
             @Override

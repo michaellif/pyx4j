@@ -30,7 +30,7 @@ public class CityIntroPageViewerActivity extends CrmViewerActivity<CityIntroPage
 
     @SuppressWarnings("unchecked")
     public CityIntroPageViewerActivity(CrudAppPlace place) {
-        super(place,  CrmSite.getViewFactory().instantiate(CityIntroPageViewer.class), (AbstractCrudService<CityIntroPage>) GWT.create(CityIntroPageCrudService.class));
+        super(place,  CrmSite.getViewFactory().getView(CityIntroPageViewer.class), (AbstractCrudService<CityIntroPage>) GWT.create(CityIntroPageCrudService.class));
     }
 
     @Override

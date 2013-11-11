@@ -22,6 +22,6 @@ import com.propertyvista.domain.reports.CustomerCreditCheckReportMetadata;
 public class CustomerCreditCheckReportActivity extends CrmReportsActivity<CustomerCreditCheckReportMetadata> {
 
     public CustomerCreditCheckReportActivity(ReportsAppPlace<CustomerCreditCheckReportMetadata> reportPlace) {
-        super(CustomerCreditCheckReportMetadata.class, reportPlace, CrmSite.getViewFactory().instantiate(CustomerCreditCheckReportView.class));
+        super(CustomerCreditCheckReportMetadata.class, reportPlace, CrmSite.getViewFactory().getView(CustomerCreditCheckReportView.class));
     }
 }

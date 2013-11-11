@@ -28,7 +28,7 @@ import com.propertyvista.crm.rpc.services.security.CrmPasswordResetService;
 public class PasswordResetActivity extends AbstractPasswordResetActivity implements PasswordResetView.Presenter {
 
     public PasswordResetActivity(Place place) {
-        super(place, CrmSite.getViewFactory().instantiate(PasswordResetView.class), GWT.<AbstractPasswordResetService> create(CrmPasswordResetService.class));
+        super(place, CrmSite.getViewFactory().getView(PasswordResetView.class), GWT.<AbstractPasswordResetService> create(CrmPasswordResetService.class));
     }
 
     @Override

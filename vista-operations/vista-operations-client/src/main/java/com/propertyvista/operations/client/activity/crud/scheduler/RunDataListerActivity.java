@@ -28,7 +28,7 @@ public class RunDataListerActivity extends AbstractListerActivity<RunData> {
 
     @SuppressWarnings("unchecked")
     public RunDataListerActivity(Place place) {
-        super(place, OperationsSite.getViewFactory().instantiate(RunDataListerView.class), (AbstractCrudService<RunData>) GWT.create(RunDataCrudService.class),
+        super(place, OperationsSite.getViewFactory().getView(RunDataListerView.class), (AbstractCrudService<RunData>) GWT.create(RunDataCrudService.class),
                 RunData.class);
     }
 }

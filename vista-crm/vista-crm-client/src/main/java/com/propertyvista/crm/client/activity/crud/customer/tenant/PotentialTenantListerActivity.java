@@ -29,7 +29,7 @@ import com.propertyvista.dto.TenantDTO;
 public class PotentialTenantListerActivity extends AbstractListerActivity<TenantDTO> {
 
     public PotentialTenantListerActivity(Place place) {
-        super(place,  CrmSite.getViewFactory().instantiate(PotentialTenantListerView.class), GWT.<TenantCrudService> create(TenantCrudService.class), TenantDTO.class);
+        super(place,  CrmSite.getViewFactory().getView(PotentialTenantListerView.class), GWT.<TenantCrudService> create(TenantCrudService.class), TenantDTO.class);
 
         // filter out just potential tenants:
         TenantDTO proto = EntityFactory.getEntityPrototype(TenantDTO.class);

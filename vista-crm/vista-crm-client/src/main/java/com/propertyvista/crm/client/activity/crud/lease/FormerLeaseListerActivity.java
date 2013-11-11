@@ -28,7 +28,7 @@ public class FormerLeaseListerActivity extends AbstractListerActivity<LeaseDTO> 
 
     @SuppressWarnings("unchecked")
     public FormerLeaseListerActivity(Place place) {
-        super(place,  CrmSite.getViewFactory().instantiate(FormerLeaseListerView.class), (AbstractCrudService<LeaseDTO>) GWT.create(LeaseViewerCrudService.class),
+        super(place,  CrmSite.getViewFactory().getView(FormerLeaseListerView.class), (AbstractCrudService<LeaseDTO>) GWT.create(LeaseViewerCrudService.class),
                 LeaseDTO.class);
     }
 }

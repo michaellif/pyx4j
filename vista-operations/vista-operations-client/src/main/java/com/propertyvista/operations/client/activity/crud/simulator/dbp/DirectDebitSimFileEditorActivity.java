@@ -26,7 +26,7 @@ import com.propertyvista.operations.rpc.services.simulator.DirectDebitSimFileCru
 public class DirectDebitSimFileEditorActivity extends AbstractEditorActivity<DirectDebitSimFile> implements DirectDebitSimFileEditorView.Presenter {
 
     public DirectDebitSimFileEditorActivity(CrudAppPlace place) {
-        super(place, OperationsSite.getViewFactory().instantiate(DirectDebitSimFileEditorView.class), GWT
+        super(place, OperationsSite.getViewFactory().getView(DirectDebitSimFileEditorView.class), GWT
                 .<DirectDebitSimFileCrudService> create(DirectDebitSimFileCrudService.class), DirectDebitSimFile.class);
     }
 }

@@ -26,7 +26,7 @@ public class FooterActivity extends AbstractActivity {
     private final FooterView view;
 
     public FooterActivity(Place place) {
-        view = OperationsSite.getViewFactory().instantiate(FooterView.class);
+        view = OperationsSite.getViewFactory().getView(FooterView.class);
         withPlace(place);
     }
 

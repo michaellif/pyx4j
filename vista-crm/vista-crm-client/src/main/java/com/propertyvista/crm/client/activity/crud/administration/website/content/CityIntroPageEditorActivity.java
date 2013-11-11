@@ -28,7 +28,7 @@ public class CityIntroPageEditorActivity extends CrmEditorActivity<CityIntroPage
 
     @SuppressWarnings("unchecked")
     public CityIntroPageEditorActivity(CrudAppPlace place) {
-        super(place,  CrmSite.getViewFactory().instantiate(CityIntroPageEditor.class), (AbstractCrudService<CityIntroPage>) GWT.create(CityIntroPageCrudService.class),
+        super(place,  CrmSite.getViewFactory().getView(CityIntroPageEditor.class), (AbstractCrudService<CityIntroPage>) GWT.create(CityIntroPageCrudService.class),
                 CityIntroPage.class);
     }
 }

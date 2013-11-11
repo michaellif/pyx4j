@@ -36,7 +36,7 @@ import com.propertyvista.domain.tenant.lease.Lease;
 public class N4GenerationToolActivity extends AbstractBulkOperationToolActivity<N4GenerationSettingsDTO, LegalNoticeCandidateDTO, N4GenerationQueryDTO> {
 
     public N4GenerationToolActivity(AppPlace place) {
-        super(place, CrmSite.getViewFactory().instantiate(N4GenerationToolView.class), GWT.<N4GenerationToolService> create(N4GenerationToolService.class),
+        super(place, CrmSite.getViewFactory().getView(N4GenerationToolView.class), GWT.<N4GenerationToolService> create(N4GenerationToolService.class),
                 N4GenerationSettingsDTO.class);
     }
 

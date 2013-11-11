@@ -34,7 +34,7 @@ public class LoginAttemptsListerActivity extends AbstractListerActivity<LoginAtt
     private Key userKey;
 
     public LoginAttemptsListerActivity(CrudAppPlace place) {
-        super(place,  CrmSite.getViewFactory().instantiate(LoginAttemptsListerView.class), GWT
+        super(place,  CrmSite.getViewFactory().getView(LoginAttemptsListerView.class), GWT
                 .<CrmLoginAttemptsListerService> create(CrmLoginAttemptsListerService.class), LoginAttemptDTO.class);
 
         String val;

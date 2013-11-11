@@ -26,7 +26,7 @@ public class FooterActivity extends AbstractActivity {
     private final FooterView view;
 
     public FooterActivity(Place place) {
-        view = CrmSite.getViewFactory().instantiate(FooterView.class);
+        view = CrmSite.getViewFactory().getView(FooterView.class);
         withPlace(place);
     }
 

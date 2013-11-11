@@ -42,7 +42,7 @@ import com.propertyvista.portal.shared.activity.SecurityAwareActivity;
 
 public class FinancialDashboardActivity extends SecurityAwareActivity implements FinancialDashboardPresenter {
 
-    private final FinancialDashboardView view = ResidentPortalSite.getViewFactory().instantiate(FinancialDashboardView.class);
+    private final FinancialDashboardView view = ResidentPortalSite.getViewFactory().getView(FinancialDashboardView.class);
 
     private final BillingService billingService = GWT.<BillingService> create(BillingService.class);
 

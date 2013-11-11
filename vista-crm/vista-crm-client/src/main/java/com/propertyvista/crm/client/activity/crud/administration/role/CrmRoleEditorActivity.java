@@ -27,6 +27,6 @@ import com.propertyvista.domain.security.CrmRole;
 public class CrmRoleEditorActivity extends CrmEditorActivity<CrmRole> {
 
     public CrmRoleEditorActivity(CrudAppPlace place) {
-        super(place,  CrmSite.getViewFactory().instantiate(CrmRoleEditorView.class), GWT.<AbstractCrudService<CrmRole>> create(CrmRoleCrudService.class), CrmRole.class);
+        super(place,  CrmSite.getViewFactory().getView(CrmRoleEditorView.class), GWT.<AbstractCrudService<CrmRole>> create(CrmRoleCrudService.class), CrmRole.class);
     }
 }

@@ -30,7 +30,7 @@ import com.propertyvista.operations.rpc.services.PadDebitRecordCrudService;
 public class PadDebitRecordListerActivity extends AbstractListerActivity<PadDebitRecordDTO> {
 
     public PadDebitRecordListerActivity(Place place) {
-        super(place, OperationsSite.getViewFactory().instantiate(PadDebitRecordListerView.class), GWT
+        super(place, OperationsSite.getViewFactory().getView(PadDebitRecordListerView.class), GWT
                 .<AbstractCrudService<PadDebitRecordDTO>> create(PadDebitRecordCrudService.class), PadDebitRecordDTO.class);
     }
 

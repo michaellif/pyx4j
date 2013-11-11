@@ -40,7 +40,7 @@ public class LeadViewerActivity extends CrmViewerActivity<Lead> implements LeadV
     private final ILister.Presenter<Appointment> appointmentsLister;
 
     public LeadViewerActivity(CrudAppPlace place) {
-        super(place,  CrmSite.getViewFactory().instantiate(LeadViewerView.class), GWT.<LeadCrudService> create(LeadCrudService.class));
+        super(place,  CrmSite.getViewFactory().getView(LeadViewerView.class), GWT.<LeadCrudService> create(LeadCrudService.class));
 
         appointmentsLister = new AppointmentListerController(place, ((LeadViewerView) getView()).getAppointmentsListerView());
     }

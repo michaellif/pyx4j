@@ -34,7 +34,7 @@ public class MaintenanceDashboardActivity extends SecurityAwareActivity implemen
     private final MaintenanceDashboardView view;
 
     public MaintenanceDashboardActivity(Place place) {
-        this.view = ResidentPortalSite.getViewFactory().instantiate(MaintenanceDashboardView.class);
+        this.view = ResidentPortalSite.getViewFactory().getView(MaintenanceDashboardView.class);
         this.view.setPresenter(this);
     }
 

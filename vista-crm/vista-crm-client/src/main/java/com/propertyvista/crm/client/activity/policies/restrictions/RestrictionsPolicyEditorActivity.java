@@ -26,7 +26,7 @@ import com.propertyvista.domain.policy.dto.RestrictionsPolicyDTO;
 public class RestrictionsPolicyEditorActivity extends PolicyEditorActivityBase<RestrictionsPolicyDTO> {
 
     public RestrictionsPolicyEditorActivity(CrudAppPlace place) {
-        super(place,  CrmSite.getViewFactory().instantiate(RestrictionsPolicyEditorView.class), GWT
+        super(place,  CrmSite.getViewFactory().getView(RestrictionsPolicyEditorView.class), GWT
                 .<RestrictionsPolicyCrudService> create(RestrictionsPolicyCrudService.class), RestrictionsPolicyDTO.class);
     }
 

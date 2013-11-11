@@ -92,7 +92,7 @@ public class BuildingViewerActivity extends CrmViewerActivity<BuildingDTO> imple
 
     @SuppressWarnings("unchecked")
     public BuildingViewerActivity(CrudAppPlace place) {
-        super(place,  CrmSite.getViewFactory().instantiate(BuildingViewerView.class), (AbstractCrudService<BuildingDTO>) GWT.create(BuildingCrudService.class));
+        super(place,  CrmSite.getViewFactory().getView(BuildingViewerView.class), (AbstractCrudService<BuildingDTO>) GWT.create(BuildingCrudService.class));
 
         floorplanLister = ListerControllerFactory.create(((BuildingViewerView) getView()).getFloorplanListerView(),
                 (AbstractCrudService<FloorplanDTO>) GWT.create(FloorplanCrudService.class), FloorplanDTO.class, VistaCrmBehavior.PropertyManagement);

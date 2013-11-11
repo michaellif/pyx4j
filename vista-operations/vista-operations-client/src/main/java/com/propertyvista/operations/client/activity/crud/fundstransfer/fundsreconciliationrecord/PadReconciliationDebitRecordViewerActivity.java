@@ -28,7 +28,7 @@ public class PadReconciliationDebitRecordViewerActivity extends AbstractViewerAc
         PadReconciliationDebitRecordViewerView.Presenter {
 
     public PadReconciliationDebitRecordViewerActivity(CrudAppPlace place) {
-        super(place, OperationsSite.getViewFactory().instantiate(PadReconciliationDebitRecordViewerView.class), GWT
+        super(place, OperationsSite.getViewFactory().getView(PadReconciliationDebitRecordViewerView.class), GWT
                 .<AbstractCrudService<PadReconciliationDebitRecordDTO>> create(PadReconciliationDebitRecordCrudService.class));
     }
 

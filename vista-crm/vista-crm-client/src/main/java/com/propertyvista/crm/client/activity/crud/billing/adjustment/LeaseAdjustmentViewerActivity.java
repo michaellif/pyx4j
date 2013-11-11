@@ -31,7 +31,7 @@ import com.propertyvista.domain.tenant.lease.LeaseAdjustment;
 public class LeaseAdjustmentViewerActivity extends CrmViewerActivity<LeaseAdjustment> implements LeaseAdjustmentViewerView.Presenter {
 
     public LeaseAdjustmentViewerActivity(CrudAppPlace place) {
-        super(place,  CrmSite.getViewFactory().instantiate(LeaseAdjustmentViewerView.class),
+        super(place,  CrmSite.getViewFactory().getView(LeaseAdjustmentViewerView.class),
 
         GWT.<AbstractCrudService<LeaseAdjustment>> create(LeaseAdjustmentCrudService.class));
     }

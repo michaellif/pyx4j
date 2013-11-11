@@ -26,7 +26,7 @@ import com.propertyvista.domain.policy.dto.LeaseAdjustmentPolicyDTO;
 public class LeaseAdjustmentPolicyListerActivity extends AbstractListerActivity<LeaseAdjustmentPolicyDTO> {
 
     public LeaseAdjustmentPolicyListerActivity(Place place) {
-        super(place,  CrmSite.getViewFactory().instantiate(LeaseAdjustmentPolicyListerView.class), GWT
+        super(place,  CrmSite.getViewFactory().getView(LeaseAdjustmentPolicyListerView.class), GWT
                 .<LeaseAdjustmentPolicyCrudService> create(LeaseAdjustmentPolicyCrudService.class), LeaseAdjustmentPolicyDTO.class);
     }
 

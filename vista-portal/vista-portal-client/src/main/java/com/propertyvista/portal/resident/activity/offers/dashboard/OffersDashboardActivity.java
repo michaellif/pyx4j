@@ -24,7 +24,7 @@ import com.propertyvista.portal.shared.activity.SecurityAwareActivity;
 
 public class OffersDashboardActivity extends SecurityAwareActivity implements OffersDashboardPresenter {
 
-    private final OffersDashboardView view = ResidentPortalSite.getViewFactory().instantiate(OffersDashboardView.class);
+    private final OffersDashboardView view = ResidentPortalSite.getViewFactory().getView(OffersDashboardView.class);
 
     public OffersDashboardActivity(Place place) {
         this.view.setPresenter(this);

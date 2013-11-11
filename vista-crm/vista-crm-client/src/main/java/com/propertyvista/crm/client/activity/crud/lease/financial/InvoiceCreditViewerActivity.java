@@ -27,7 +27,7 @@ import com.propertyvista.crm.rpc.services.lease.financial.InvoiceCreditCrudServi
 public class InvoiceCreditViewerActivity extends AbstractViewerActivity<InvoiceCreditDTO> {
 
     public InvoiceCreditViewerActivity(CrudAppPlace place) {
-        super(place,  CrmSite.getViewFactory().instantiate(InvoiceCreditViewerView.class), GWT.<AbstractCrudService<InvoiceCreditDTO>> create(InvoiceCreditCrudService.class));
+        super(place,  CrmSite.getViewFactory().getView(InvoiceCreditViewerView.class), GWT.<AbstractCrudService<InvoiceCreditDTO>> create(InvoiceCreditCrudService.class));
     }
 
 }

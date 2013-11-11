@@ -38,7 +38,7 @@ public class GuarantorViewerActivity extends CrmViewerActivity<GuarantorDTO> imp
     private Customer screeningCustomer;
 
     public GuarantorViewerActivity(CrudAppPlace place) {
-        super(place, CrmSite.getViewFactory().instantiate(GuarantorViewerView.class), GWT.<GuarantorCrudService> create(GuarantorCrudService.class));
+        super(place, CrmSite.getViewFactory().getView(GuarantorViewerView.class), GWT.<GuarantorCrudService> create(GuarantorCrudService.class));
     }
 
     @Override

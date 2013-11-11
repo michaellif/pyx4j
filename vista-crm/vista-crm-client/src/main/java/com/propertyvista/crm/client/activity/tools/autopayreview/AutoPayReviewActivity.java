@@ -39,7 +39,7 @@ public class AutoPayReviewActivity extends AbstractBulkOperationToolActivity<Aut
     private static final I18n i18n = I18n.get(AutoPayReviewActivity.class);
 
     public AutoPayReviewActivity(AppPlace place) {
-        super(place, CrmSite.getViewFactory().instantiate(AutoPayReviewView.class), GWT.<AutoPayReviewService> create(AutoPayReviewService.class),
+        super(place, CrmSite.getViewFactory().getView(AutoPayReviewView.class), GWT.<AutoPayReviewService> create(AutoPayReviewService.class),
                 AutoPayChangesReportMetadata.class);
     }
 

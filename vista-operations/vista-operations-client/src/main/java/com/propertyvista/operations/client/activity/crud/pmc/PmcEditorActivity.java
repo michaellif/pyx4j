@@ -26,6 +26,6 @@ import com.propertyvista.operations.rpc.services.PmcCrudService;
 public class PmcEditorActivity extends AbstractEditorActivity<PmcDTO> {
 
     public PmcEditorActivity(CrudAppPlace place) {
-        super(place, OperationsSite.getViewFactory().instantiate(PmcEditorView.class), GWT.<PmcCrudService> create(PmcCrudService.class), PmcDTO.class);
+        super(place, OperationsSite.getViewFactory().getView(PmcEditorView.class), GWT.<PmcCrudService> create(PmcCrudService.class), PmcDTO.class);
     }
 }

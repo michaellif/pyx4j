@@ -29,7 +29,7 @@ import com.propertyvista.domain.financial.PaymentRecord;
 public class PaymentListerActivity extends AbstractListerActivity<PaymentRecord> {
 
     public PaymentListerActivity(AppPlace place) {
-        super(place,  CrmSite.getViewFactory().instantiate(PaymentRecordListerView.class), GWT.<PaymentRecordListService> create(PaymentRecordListService.class),
+        super(place,  CrmSite.getViewFactory().getView(PaymentRecordListerView.class), GWT.<PaymentRecordListService> create(PaymentRecordListService.class),
                 PaymentRecord.class);
 
     }

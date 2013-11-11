@@ -27,7 +27,7 @@ import com.propertyvista.operations.rpc.services.simulator.DirectDebitSimRecordC
 public class DirectDebitSimRecordListerActivity extends AbstractListerActivity<DirectDebitSimRecord> implements DirectDebitSimRecordListerView.Presenter {
 
     public DirectDebitSimRecordListerActivity(Place place) {
-        super(place, OperationsSite.getViewFactory().instantiate(DirectDebitSimRecordListerView.class), GWT
+        super(place, OperationsSite.getViewFactory().getView(DirectDebitSimRecordListerView.class), GWT
                 .<AbstractListService<DirectDebitSimRecord>> create(DirectDebitSimRecordCrudService.class), DirectDebitSimRecord.class);
     }
 

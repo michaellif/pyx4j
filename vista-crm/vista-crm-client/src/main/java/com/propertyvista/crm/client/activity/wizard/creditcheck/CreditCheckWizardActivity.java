@@ -28,7 +28,7 @@ import com.propertyvista.dto.vista2pmc.CreditCheckSetupDTO;
 public class CreditCheckWizardActivity extends CrmWizardActivity<CreditCheckSetupDTO> implements CreditCheckWizardView.Presenter {
 
     public CreditCheckWizardActivity(CrudAppPlace place) {
-        super(place, CrmSite.getViewFactory().instantiate(CreditCheckWizardView.class), GWT.<CreditCheckWizardService> create(CreditCheckWizardService.class),
+        super(place, CrmSite.getViewFactory().getView(CreditCheckWizardView.class), GWT.<CreditCheckWizardService> create(CreditCheckWizardService.class),
                 CreditCheckSetupDTO.class);
     }
 

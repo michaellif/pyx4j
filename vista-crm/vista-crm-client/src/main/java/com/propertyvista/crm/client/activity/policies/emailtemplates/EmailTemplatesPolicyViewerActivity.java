@@ -26,7 +26,7 @@ import com.propertyvista.domain.policy.dto.EmailTemplatesPolicyDTO;
 public class EmailTemplatesPolicyViewerActivity extends CrmViewerActivity<EmailTemplatesPolicyDTO> {
 
     public EmailTemplatesPolicyViewerActivity(CrudAppPlace place) {
-        super(place,  CrmSite.getViewFactory().instantiate(EmailTemplatesPolicyViewerView.class), GWT
+        super(place,  CrmSite.getViewFactory().getView(EmailTemplatesPolicyViewerView.class), GWT
                 .<EmailTemplatesPolicyCrudService> create(EmailTemplatesPolicyCrudService.class));
     }
 

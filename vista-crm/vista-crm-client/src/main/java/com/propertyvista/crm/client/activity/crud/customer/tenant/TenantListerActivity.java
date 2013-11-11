@@ -30,7 +30,7 @@ public class TenantListerActivity extends AbstractListerActivity<TenantDTO> impl
     private static final I18n i18n = I18n.get(TenantListerView.class);
 
     public TenantListerActivity(Place place) {
-        super(place, CrmSite.getViewFactory().instantiate(TenantListerView.class), GWT.<TenantCrudService> create(ActiveTenantCrudService.class),
+        super(place, CrmSite.getViewFactory().getView(TenantListerView.class), GWT.<TenantCrudService> create(ActiveTenantCrudService.class),
                 TenantDTO.class);
     }
 

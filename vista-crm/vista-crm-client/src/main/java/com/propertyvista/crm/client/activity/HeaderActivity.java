@@ -50,7 +50,7 @@ public class HeaderActivity extends AbstractActivity implements HeaderView.Prese
     private final HeaderView view;
 
     public HeaderActivity(Place place) {
-        view = CrmSite.getViewFactory().instantiate(HeaderView.class);
+        view = CrmSite.getViewFactory().getView(HeaderView.class);
         view.setPresenter(this);
         withPlace(place);
     }

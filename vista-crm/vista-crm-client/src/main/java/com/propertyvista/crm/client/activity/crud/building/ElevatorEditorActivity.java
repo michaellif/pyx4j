@@ -28,7 +28,7 @@ public class ElevatorEditorActivity extends CrmEditorActivity<ElevatorDTO> {
 
     @SuppressWarnings("unchecked")
     public ElevatorEditorActivity(CrudAppPlace place) {
-        super(place,  CrmSite.getViewFactory().instantiate(ElevatorEditorView.class), (AbstractCrudService<ElevatorDTO>) GWT.create(ElevatorCrudService.class),
+        super(place,  CrmSite.getViewFactory().getView(ElevatorEditorView.class), (AbstractCrudService<ElevatorDTO>) GWT.create(ElevatorCrudService.class),
                 ElevatorDTO.class);
     }
 }

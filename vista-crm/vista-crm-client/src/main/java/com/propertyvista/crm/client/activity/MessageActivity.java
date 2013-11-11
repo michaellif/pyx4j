@@ -26,7 +26,7 @@ public class MessageActivity extends AbstractActivity {
     private final MessageView view;
 
     public MessageActivity(Place place) {
-        view = CrmSite.getViewFactory().instantiate(MessageView.class);
+        view = CrmSite.getViewFactory().getView(MessageView.class);
     }
 
     @Override

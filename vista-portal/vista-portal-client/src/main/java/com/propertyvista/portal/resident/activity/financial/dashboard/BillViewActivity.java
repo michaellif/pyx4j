@@ -38,7 +38,7 @@ public class BillViewActivity extends SecurityAwareActivity implements BillView.
     private final Key entityId;
 
     public BillViewActivity(AppPlace place) {
-        this.view = ResidentPortalSite.getViewFactory().instantiate(BillView.class);
+        this.view = ResidentPortalSite.getViewFactory().getView(BillView.class);
         this.view.setPresenter(this);
 
         this.entityId = place.getItemId();

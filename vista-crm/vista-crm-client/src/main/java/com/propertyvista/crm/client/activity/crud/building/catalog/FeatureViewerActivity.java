@@ -28,6 +28,6 @@ public class FeatureViewerActivity extends CrmViewerActivity<Feature> {
 
     @SuppressWarnings("unchecked")
     public FeatureViewerActivity(CrudAppPlace place) {
-        super(place,  CrmSite.getViewFactory().instantiate(FeatureViewerView.class), (AbstractCrudService<Feature>) GWT.create(FeatureCrudService.class));
+        super(place,  CrmSite.getViewFactory().getView(FeatureViewerView.class), (AbstractCrudService<Feature>) GWT.create(FeatureCrudService.class));
     }
 }

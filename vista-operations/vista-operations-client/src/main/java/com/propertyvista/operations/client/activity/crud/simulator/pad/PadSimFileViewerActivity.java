@@ -39,7 +39,7 @@ public class PadSimFileViewerActivity extends AdminViewerActivity<PadSimFile> im
 
     @SuppressWarnings("unchecked")
     public PadSimFileViewerActivity(CrudAppPlace place) {
-        super(place, OperationsSite.getViewFactory().instantiate(PadSimFileViewerView.class), (AbstractCrudService<PadSimFile>) GWT
+        super(place, OperationsSite.getViewFactory().getView(PadSimFileViewerView.class), (AbstractCrudService<PadSimFile>) GWT
                 .create(PadSimFileCrudService.class));
 
         batchLister = new ListerController<PadSimBatch>(((PadSimFileViewerView) getView()).getBatchListerView(),

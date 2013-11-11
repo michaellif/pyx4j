@@ -29,7 +29,7 @@ public class StepsActivity extends AbstractActivity implements StepsView.StepsPr
 
     public StepsActivity(Place place) {
         this.place = place;
-        this.view = PortalSite.getViewFactory().instantiate(StepsView.class);
+        this.view = PortalSite.getViewFactory().getView(StepsView.class);
         assert (view != null);
         view.setPresenter(this);
     }

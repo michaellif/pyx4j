@@ -27,7 +27,7 @@ import com.propertyvista.operations.rpc.services.PadFileCrudService;
 public class PadFileViewerActivity extends AbstractViewerActivity<PadFileDTO> implements PadFileViewerView.Presenter {
 
     public PadFileViewerActivity(CrudAppPlace place) {
-        super(place, OperationsSite.getViewFactory().instantiate(PadFileViewerView.class), GWT
+        super(place, OperationsSite.getViewFactory().getView(PadFileViewerView.class), GWT
                 .<AbstractCrudService<PadFileDTO>> create(PadFileCrudService.class));
     }
 

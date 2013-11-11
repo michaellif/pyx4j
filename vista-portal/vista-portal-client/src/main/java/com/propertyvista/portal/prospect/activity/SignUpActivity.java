@@ -45,7 +45,7 @@ public class SignUpActivity extends AbstractActivity implements SignUpView.SignU
     private final SignUpView view;
 
     public SignUpActivity(Place place) {
-        this.view = PortalSite.getViewFactory().instantiate(SignUpView.class);
+        this.view = PortalSite.getViewFactory().getView(SignUpView.class);
         withPlace(place);
 
     }

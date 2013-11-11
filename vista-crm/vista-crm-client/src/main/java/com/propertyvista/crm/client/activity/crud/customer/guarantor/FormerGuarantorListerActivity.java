@@ -28,7 +28,7 @@ public class FormerGuarantorListerActivity extends AbstractListerActivity<Guaran
 
     @SuppressWarnings("unchecked")
     public FormerGuarantorListerActivity(Place place) {
-        super(place,  CrmSite.getViewFactory().instantiate(FormerGuarantorListerView.class), (AbstractCrudService<GuarantorDTO>) GWT
+        super(place,  CrmSite.getViewFactory().getView(FormerGuarantorListerView.class), (AbstractCrudService<GuarantorDTO>) GWT
                 .create(FormerGuarantorCrudService.class), GuarantorDTO.class);
     }
 

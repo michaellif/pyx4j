@@ -27,7 +27,7 @@ import com.propertyvista.domain.financial.MerchantAccount;
 public class MerchantAccountListerActivity extends AbstractListerActivity<MerchantAccount> {
 
     public MerchantAccountListerActivity(Place place) {
-        super(place,  CrmSite.getViewFactory().instantiate(MerchantAccountListerView.class), GWT
+        super(place,  CrmSite.getViewFactory().getView(MerchantAccountListerView.class), GWT
                 .<AbstractListService<MerchantAccount>> create(MerchantAccountCrudService.class), MerchantAccount.class);
     }
 

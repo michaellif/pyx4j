@@ -26,7 +26,7 @@ import com.propertyvista.crm.rpc.services.billing.BillingCycleCrudService;
 public class BillingCycleListerActivity extends AbstractListerActivity<BillingCycleDTO> {
 
     public BillingCycleListerActivity(AppPlace place) {
-        super(place, CrmSite.getViewFactory().instantiate(BillingCycleListerView.class), GWT.<BillingCycleCrudService> create(BillingCycleCrudService.class),
+        super(place, CrmSite.getViewFactory().getView(BillingCycleListerView.class), GWT.<BillingCycleCrudService> create(BillingCycleCrudService.class),
                 BillingCycleDTO.class);
     }
 

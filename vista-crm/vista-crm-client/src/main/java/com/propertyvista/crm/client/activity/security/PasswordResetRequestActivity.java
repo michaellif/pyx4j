@@ -27,7 +27,7 @@ import com.propertyvista.crm.rpc.services.pub.CrmAuthenticationService;
 public class PasswordResetRequestActivity extends AbstractPasswordResetRequestActivity implements PasswordResetRequestView.PasswordResetRequestPresenter {
 
     public PasswordResetRequestActivity(Place place) {
-        super(place, CrmSite.getViewFactory().instantiate(PasswordResetRequestView.class), GWT.<AuthenticationService> create(CrmAuthenticationService.class),
+        super(place, CrmSite.getViewFactory().getView(PasswordResetRequestView.class), GWT.<AuthenticationService> create(CrmAuthenticationService.class),
                 new CrmSiteMap.Login());
     }
 }

@@ -42,7 +42,7 @@ public abstract class AbstractWizardFormActivity<E extends IEntity> extends Secu
 
     public AbstractWizardFormActivity(Class<? extends IWizardFormView<E>> viewType, Class<E> entityClass) {
 
-        view = PortalSite.getViewFactory().instantiate(viewType);
+        view = PortalSite.getViewFactory().getView(viewType);
 
     }
 

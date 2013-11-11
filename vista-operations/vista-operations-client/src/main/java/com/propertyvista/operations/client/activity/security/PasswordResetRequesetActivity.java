@@ -27,7 +27,7 @@ import com.propertyvista.operations.rpc.services.OperationsAuthenticationService
 public class PasswordResetRequesetActivity extends AbstractPasswordResetRequestActivity implements PasswordResetRequestView.PasswordResetRequestPresenter {
 
     public PasswordResetRequesetActivity(Place place) {
-        super(place, OperationsSite.getViewFactory().instantiate(PasswordResetRequestView.class), GWT
+        super(place, OperationsSite.getViewFactory().getView(PasswordResetRequestView.class), GWT
                 .<AuthenticationService> create(OperationsAuthenticationService.class), new OperationsSiteMap.Login());
     }
 

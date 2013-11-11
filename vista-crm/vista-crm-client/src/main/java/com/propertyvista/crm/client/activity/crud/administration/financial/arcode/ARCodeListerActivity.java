@@ -26,7 +26,7 @@ import com.propertyvista.domain.financial.ARCode;
 public class ARCodeListerActivity extends AbstractListerActivity<ARCode> implements ARCodeListerView.Presenter {
 
     public ARCodeListerActivity(AppPlace place) {
-        super(place, CrmSite.getViewFactory().instantiate(ARCodeListerView.class), GWT.<ARCodeCrudService> create(ARCodeCrudService.class), ARCode.class);
+        super(place, CrmSite.getViewFactory().getView(ARCodeListerView.class), GWT.<ARCodeCrudService> create(ARCodeCrudService.class), ARCode.class);
     }
 
 }

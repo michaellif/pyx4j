@@ -27,7 +27,7 @@ import com.propertyvista.domain.financial.GlCodeCategory;
 public class GlCodeCategoryListerActivity extends AbstractListerActivity<GlCodeCategory> {
 
     public GlCodeCategoryListerActivity(Place place) {
-        super(place,  CrmSite.getViewFactory().instantiate(GlCodeCategoryListerView.class), GWT
+        super(place,  CrmSite.getViewFactory().getView(GlCodeCategoryListerView.class), GWT
                 .<AbstractListService<GlCodeCategory>> create(GlCodeCategoryCrudService.class), GlCodeCategory.class);
     }
 }

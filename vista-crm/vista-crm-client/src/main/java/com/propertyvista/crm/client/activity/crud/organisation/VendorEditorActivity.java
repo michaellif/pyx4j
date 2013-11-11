@@ -29,7 +29,7 @@ public class VendorEditorActivity extends CrmEditorActivity<Vendor> {
     public VendorEditorActivity(CrudAppPlace place) {
         super(place,
 
-         CrmSite.getViewFactory().instantiate(VendorEditorView.class),
+         CrmSite.getViewFactory().getView(VendorEditorView.class),
 
         GWT.<AbstractCrudService<Vendor>> create(VendorCrudService.class),
 

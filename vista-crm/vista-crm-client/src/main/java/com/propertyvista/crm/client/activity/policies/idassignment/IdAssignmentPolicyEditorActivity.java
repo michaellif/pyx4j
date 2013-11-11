@@ -26,7 +26,7 @@ import com.propertyvista.domain.policy.dto.IdAssignmentPolicyDTO;
 public class IdAssignmentPolicyEditorActivity extends PolicyEditorActivityBase<IdAssignmentPolicyDTO> {
 
     public IdAssignmentPolicyEditorActivity(CrudAppPlace place) {
-        super(place,  CrmSite.getViewFactory().instantiate(IdAssignmentPolicyEditorView.class), GWT
+        super(place,  CrmSite.getViewFactory().getView(IdAssignmentPolicyEditorView.class), GWT
                 .<IdAssignmentPolicyCrudService> create(IdAssignmentPolicyCrudService.class), IdAssignmentPolicyDTO.class);
     }
 }

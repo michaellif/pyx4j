@@ -26,7 +26,7 @@ import com.propertyvista.domain.policy.dto.TenantInsurancePolicyDTO;
 public class TenantInsurancePolicyViewerActivity extends CrmViewerActivity<TenantInsurancePolicyDTO> {
 
     public TenantInsurancePolicyViewerActivity(CrudAppPlace place) {
-        super(place,  CrmSite.getViewFactory().instantiate(TenantInsurancePolicyViewerView.class), GWT
+        super(place,  CrmSite.getViewFactory().getView(TenantInsurancePolicyViewerView.class), GWT
                 .<TenantInsurancePolicyCrudService> create(TenantInsurancePolicyCrudService.class));
     }
 

@@ -30,7 +30,7 @@ public class FloorplanViewerActivity extends CrmViewerActivity<FloorplanDTO> imp
 
     @SuppressWarnings("unchecked")
     public FloorplanViewerActivity(CrudAppPlace place) {
-        super(place,  CrmSite.getViewFactory().instantiate(FloorplanViewerView.class), (AbstractCrudService<FloorplanDTO>) GWT.create(FloorplanCrudService.class));
+        super(place,  CrmSite.getViewFactory().getView(FloorplanViewerView.class), (AbstractCrudService<FloorplanDTO>) GWT.create(FloorplanCrudService.class));
     }
 
     @Override

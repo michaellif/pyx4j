@@ -27,7 +27,7 @@ public class TenantSureAboutActivity extends AbstractActivity {
     private final TenantSureAboutView view;
 
     public TenantSureAboutActivity(AppPlace place) {
-        view = ResidentPortalSite.getViewFactory().instantiate(TenantSureAboutView.class);
+        view = ResidentPortalSite.getViewFactory().getView(TenantSureAboutView.class);
     }
 
     @Override

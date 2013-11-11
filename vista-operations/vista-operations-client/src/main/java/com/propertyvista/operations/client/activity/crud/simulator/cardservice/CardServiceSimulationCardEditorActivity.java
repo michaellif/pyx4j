@@ -29,7 +29,7 @@ public class CardServiceSimulationCardEditorActivity extends AbstractEditorActiv
         CardServiceSimulationCardEditorView.Presenter {
 
     public CardServiceSimulationCardEditorActivity(CrudAppPlace place) {
-        super(place, OperationsSite.getViewFactory().instantiate(CardServiceSimulationCardEditorView.class), GWT
+        super(place, OperationsSite.getViewFactory().getView(CardServiceSimulationCardEditorView.class), GWT
                 .<CardServiceSimulationCardCrudService> create(CardServiceSimulationCardCrudService.class), CardServiceSimulationCard.class);
     }
 

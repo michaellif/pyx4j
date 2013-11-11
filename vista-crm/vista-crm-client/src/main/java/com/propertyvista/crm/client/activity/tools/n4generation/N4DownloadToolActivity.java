@@ -40,7 +40,7 @@ public class N4DownloadToolActivity extends AbstractBulkOperationToolActivity<N4
         N4DownloadToolView.N4DownloadToolViewPresenter {
 
     public N4DownloadToolActivity(AppPlace place) {
-        super(place, CrmSite.getViewFactory().instantiate(N4DownloadToolView.class), GWT.<N4DownloadToolService> create(N4DownloadToolService.class),
+        super(place, CrmSite.getViewFactory().getView(N4DownloadToolView.class), GWT.<N4DownloadToolService> create(N4DownloadToolService.class),
                 N4DownloadSettingsDTO.class);
     }
 

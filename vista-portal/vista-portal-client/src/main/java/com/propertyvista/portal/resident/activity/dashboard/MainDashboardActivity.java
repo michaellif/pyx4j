@@ -41,7 +41,7 @@ public class MainDashboardActivity extends SecurityAwareActivity implements Main
     private final MainDashboardView view;
 
     public MainDashboardActivity(Place place) {
-        this.view = ResidentPortalSite.getViewFactory().instantiate(MainDashboardView.class);
+        this.view = ResidentPortalSite.getViewFactory().getView(MainDashboardView.class);
     }
 
     @Override

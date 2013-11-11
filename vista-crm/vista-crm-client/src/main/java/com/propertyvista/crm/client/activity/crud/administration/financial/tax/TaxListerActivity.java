@@ -27,6 +27,6 @@ import com.propertyvista.domain.financial.tax.Tax;
 public class TaxListerActivity extends AbstractListerActivity<Tax> {
 
     public TaxListerActivity(Place place) {
-        super(place,  CrmSite.getViewFactory().instantiate(TaxListerView.class), GWT.<AbstractListService<Tax>> create(TaxCrudService.class), Tax.class);
+        super(place,  CrmSite.getViewFactory().getView(TaxListerView.class), GWT.<AbstractListService<Tax>> create(TaxCrudService.class), Tax.class);
     }
 }

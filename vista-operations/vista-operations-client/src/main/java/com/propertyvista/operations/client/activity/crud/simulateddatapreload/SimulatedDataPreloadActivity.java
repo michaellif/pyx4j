@@ -36,7 +36,7 @@ public class SimulatedDataPreloadActivity extends AbstractActivity {
     private final SimulatedDataPreloadService service;
 
     public SimulatedDataPreloadActivity() {
-        this.view = OperationsSite.getViewFactory().instantiate(SimulatedDataPreloadView.class);
+        this.view = OperationsSite.getViewFactory().getView(SimulatedDataPreloadView.class);
         this.view.setPresenter(this);
         this.service = GWT.<SimulatedDataPreloadService> create(SimulatedDataPreloadService.class);
     }

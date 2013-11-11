@@ -48,7 +48,7 @@ public class LeaseTermEditorActivity extends CrmEditorActivity<LeaseTermDTO> imp
     private final ReturnBehaviour returnBehaviour;
 
     public LeaseTermEditorActivity(CrudAppPlace place) {
-        super(place, CrmSite.getViewFactory().instantiate(LeaseTermEditorView.class), GWT.<LeaseTermCrudService> create(LeaseTermCrudService.class),
+        super(place, CrmSite.getViewFactory().getView(LeaseTermEditorView.class), GWT.<LeaseTermCrudService> create(LeaseTermCrudService.class),
                 LeaseTermDTO.class);
 
         String val;

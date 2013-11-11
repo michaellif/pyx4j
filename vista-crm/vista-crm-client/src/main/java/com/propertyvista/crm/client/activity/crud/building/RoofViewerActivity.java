@@ -30,7 +30,7 @@ public class RoofViewerActivity extends CrmViewerActivity<RoofDTO> {
 
     @SuppressWarnings("unchecked")
     public RoofViewerActivity(CrudAppPlace place) {
-        super(place,  CrmSite.getViewFactory().instantiate(RoofViewerView.class), (AbstractCrudService<RoofDTO>) GWT.create(RoofCrudService.class));
+        super(place,  CrmSite.getViewFactory().getView(RoofViewerView.class), (AbstractCrudService<RoofDTO>) GWT.create(RoofCrudService.class));
     }
 
     @Override

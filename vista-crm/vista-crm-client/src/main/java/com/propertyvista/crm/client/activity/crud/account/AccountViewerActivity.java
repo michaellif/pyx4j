@@ -51,7 +51,7 @@ public class AccountViewerActivity extends CrmViewerActivity<EmployeeDTO> implem
     private final AbstractAccountRecoveryOptionsService accountRecoveryOptionsService;
 
     public AccountViewerActivity(CrudAppPlace place) {
-        super(place,  CrmSite.getViewFactory().instantiate(EmployeeViewerView.class), GWT.<AbstractCrudService<EmployeeDTO>> create(CrmUserService.class));
+        super(place,  CrmSite.getViewFactory().getView(EmployeeViewerView.class), GWT.<AbstractCrudService<EmployeeDTO>> create(CrmUserService.class));
         accountRecoveryOptionsService = GWT.<AbstractAccountRecoveryOptionsService> create(CrmAccountRecoveryOptionsUserService.class);
     }
 

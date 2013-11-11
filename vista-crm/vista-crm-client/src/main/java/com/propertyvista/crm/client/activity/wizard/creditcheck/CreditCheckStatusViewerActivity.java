@@ -26,7 +26,7 @@ import com.propertyvista.crm.rpc.services.vista2pmc.CreditCheckStatusCrudService
 public class CreditCheckStatusViewerActivity extends CrmViewerActivity<CreditCheckStatusDTO> implements CreditCheckStatusView.Presenter {
 
     public CreditCheckStatusViewerActivity(CrudAppPlace place) {
-        super(place, CrmSite.getViewFactory().instantiate(CreditCheckStatusView.class), GWT
+        super(place, CrmSite.getViewFactory().getView(CreditCheckStatusView.class), GWT
                 .<CreditCheckStatusCrudService> create(CreditCheckStatusCrudService.class));
     }
 

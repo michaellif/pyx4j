@@ -28,6 +28,6 @@ public class ConcessionViewerActivity extends CrmViewerActivity<Concession> {
 
     @SuppressWarnings("unchecked")
     public ConcessionViewerActivity(CrudAppPlace place) {
-        super(place,  CrmSite.getViewFactory().instantiate(ConcessionViewerView.class), (AbstractCrudService<Concession>) GWT.create(ConcessionCrudService.class));
+        super(place,  CrmSite.getViewFactory().getView(ConcessionViewerView.class), (AbstractCrudService<Concession>) GWT.create(ConcessionCrudService.class));
     }
 }

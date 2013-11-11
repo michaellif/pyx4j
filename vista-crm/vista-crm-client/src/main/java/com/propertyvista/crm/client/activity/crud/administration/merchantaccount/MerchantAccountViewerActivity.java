@@ -37,7 +37,7 @@ public class MerchantAccountViewerActivity extends CrmViewerActivity<MerchantAcc
     private final Presenter<Building> buildingLister;
 
     public MerchantAccountViewerActivity(CrudAppPlace place) {
-        super(place,  CrmSite.getViewFactory().instantiate(MerchantAccountViewerView.class), GWT
+        super(place,  CrmSite.getViewFactory().getView(MerchantAccountViewerView.class), GWT
                 .<AbstractCrudService<MerchantAccount>> create(MerchantAccountCrudService.class));
 
         buildingLister = ListerControllerFactory.create(((MerchantAccountViewerView) getView()).getBuildingListerView(),

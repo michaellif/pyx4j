@@ -28,7 +28,7 @@ public class ComplexEditorActivity extends CrmEditorActivity<ComplexDTO> impleme
 
     @SuppressWarnings("unchecked")
     public ComplexEditorActivity(CrudAppPlace place) {
-        super(place, CrmSite.getViewFactory().instantiate(ComplexEditorView.class), (AbstractCrudService<ComplexDTO>) GWT.create(ComplexCrudService.class),
+        super(place, CrmSite.getViewFactory().getView(ComplexEditorView.class), (AbstractCrudService<ComplexDTO>) GWT.create(ComplexCrudService.class),
                 ComplexDTO.class);
 
     }

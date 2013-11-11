@@ -26,7 +26,7 @@ import com.propertyvista.operations.rpc.services.scheduler.TriggerCrudService;
 public class TriggerEditorActivity extends AbstractEditorActivity<TriggerDTO> {
 
     public TriggerEditorActivity(CrudAppPlace place) {
-        super(place, OperationsSite.getViewFactory().instantiate(TriggerEditorView.class), GWT.<TriggerCrudService> create(TriggerCrudService.class),
+        super(place, OperationsSite.getViewFactory().getView(TriggerEditorView.class), GWT.<TriggerCrudService> create(TriggerCrudService.class),
                 TriggerDTO.class);
     }
 }

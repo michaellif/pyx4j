@@ -27,7 +27,7 @@ import com.propertyvista.operations.rpc.services.PadBatchCrudService;
 public class PadBatchViewerActivity extends AbstractViewerActivity<PadBatchDTO> implements PadBatchViewerView.Presenter {
 
     public PadBatchViewerActivity(CrudAppPlace place) {
-        super(place, OperationsSite.getViewFactory().instantiate(PadBatchViewerView.class), GWT
+        super(place, OperationsSite.getViewFactory().getView(PadBatchViewerView.class), GWT
                 .<AbstractCrudService<PadBatchDTO>> create(PadBatchCrudService.class));
     }
 

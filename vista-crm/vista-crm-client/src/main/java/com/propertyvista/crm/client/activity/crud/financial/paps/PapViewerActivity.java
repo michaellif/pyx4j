@@ -26,6 +26,6 @@ import com.propertyvista.domain.payment.AutopayAgreement;
 public class PapViewerActivity extends CrmViewerActivity<AutopayAgreement> implements PapViewerView.Presenter {
 
     public PapViewerActivity(CrudAppPlace place) {
-        super(place, CrmSite.getViewFactory().instantiate(PapViewerView.class), GWT.<AutoPayCrudService> create(AutoPayCrudService.class));
+        super(place, CrmSite.getViewFactory().getView(PapViewerView.class), GWT.<AutoPayCrudService> create(AutoPayCrudService.class));
     }
 }

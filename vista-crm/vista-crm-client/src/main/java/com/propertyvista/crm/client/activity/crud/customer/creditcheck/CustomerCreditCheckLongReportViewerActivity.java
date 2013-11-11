@@ -26,7 +26,7 @@ import com.propertyvista.crm.rpc.services.customer.CustomerCreditCheckLongReport
 public class CustomerCreditCheckLongReportViewerActivity extends CrmViewerActivity<CustomerCreditCheckLongReportDTO> {
 
     public CustomerCreditCheckLongReportViewerActivity(CrudAppPlace place) {
-        super(place,  CrmSite.getViewFactory().instantiate(CustomerCreditCheckLongReportViewerView.class), GWT
+        super(place,  CrmSite.getViewFactory().getView(CustomerCreditCheckLongReportViewerView.class), GWT
                 .<CustomerCreditCheckLongReportService> create(CustomerCreditCheckLongReportService.class));
     }
 }

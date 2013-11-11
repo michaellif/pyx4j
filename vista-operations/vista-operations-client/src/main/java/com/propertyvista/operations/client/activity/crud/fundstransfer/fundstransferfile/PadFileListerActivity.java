@@ -27,7 +27,7 @@ import com.propertyvista.operations.rpc.services.PadFileCrudService;
 public class PadFileListerActivity extends AbstractListerActivity<PadFileDTO> {
 
     public PadFileListerActivity(Place place) {
-        super(place, OperationsSite.getViewFactory().instantiate(PadFileListerView.class), GWT
+        super(place, OperationsSite.getViewFactory().getView(PadFileListerView.class), GWT
                 .<AbstractCrudService<PadFileDTO>> create(PadFileCrudService.class), PadFileDTO.class);
     }
 }

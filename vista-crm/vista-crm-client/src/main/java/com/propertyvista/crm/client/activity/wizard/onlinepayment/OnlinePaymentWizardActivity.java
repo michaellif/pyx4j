@@ -26,7 +26,7 @@ import com.propertyvista.dto.vista2pmc.OnlinePaymentSetupDTO;
 public class OnlinePaymentWizardActivity extends CrmWizardActivity<OnlinePaymentSetupDTO> implements OnlinePaymentWizardView.Persenter {
 
     public OnlinePaymentWizardActivity(CrudAppPlace place) {
-        super(place, CrmSite.getViewFactory().instantiate(OnlinePaymentWizardView.class), GWT
+        super(place, CrmSite.getViewFactory().getView(OnlinePaymentWizardView.class), GWT
                 .<OnlinePaymentWizardService> create(OnlinePaymentWizardService.class), OnlinePaymentSetupDTO.class);
     }
 

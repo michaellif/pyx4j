@@ -27,7 +27,7 @@ import com.propertyvista.operations.rpc.services.simulator.CardServiceSimulation
 public class CardServiceSimulationCardListerActivity extends AbstractListerActivity<CardServiceSimulationCard> {
 
     public CardServiceSimulationCardListerActivity(Place place) {
-        super(place, OperationsSite.getViewFactory().instantiate(CardServiceSimulationCardListerView.class), GWT
+        super(place, OperationsSite.getViewFactory().getView(CardServiceSimulationCardListerView.class), GWT
                 .<AbstractCrudService<CardServiceSimulationCard>> create(CardServiceSimulationCardCrudService.class), CardServiceSimulationCard.class);
     }
 }

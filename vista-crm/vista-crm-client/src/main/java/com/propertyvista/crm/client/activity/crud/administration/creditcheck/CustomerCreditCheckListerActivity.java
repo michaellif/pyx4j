@@ -26,7 +26,7 @@ import com.propertyvista.crm.rpc.services.admin.CustomerCreditCheckCrudService;
 public class CustomerCreditCheckListerActivity extends AbstractListerActivity<CustomerCreditCheckDTO> {
 
     public CustomerCreditCheckListerActivity(Place place) {
-        super(place,  CrmSite.getViewFactory().instantiate(CustomerCreditCheckListerView.class), GWT
+        super(place,  CrmSite.getViewFactory().getView(CustomerCreditCheckListerView.class), GWT
                 .<CustomerCreditCheckCrudService> create(CustomerCreditCheckCrudService.class), CustomerCreditCheckDTO.class);
     }
 

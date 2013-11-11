@@ -29,7 +29,7 @@ import com.propertyvista.operations.rpc.services.AdminPasswordResetService;
 public class PasswordResetActivity extends AbstractPasswordResetActivity {
 
     public PasswordResetActivity(Place place) {
-        super(place, OperationsSite.getViewFactory().instantiate(PasswordResetView.class), GWT
+        super(place, OperationsSite.getViewFactory().getView(PasswordResetView.class), GWT
                 .<AbstractPasswordResetService> create(AdminPasswordResetService.class));
     }
 

@@ -32,7 +32,7 @@ import com.propertyvista.domain.tenant.lead.Appointment;
 public class ShowingEditorActivity extends CrmEditorActivity<ShowingDTO> implements ShowingEditorView.Presenter {
 
     public ShowingEditorActivity(CrudAppPlace place) {
-        super(place, CrmSite.getViewFactory().instantiate(ShowingEditorView.class), GWT.<ShowingCrudService> create(ShowingCrudService.class), ShowingDTO.class);
+        super(place, CrmSite.getViewFactory().getView(ShowingEditorView.class), GWT.<ShowingCrudService> create(ShowingCrudService.class), ShowingDTO.class);
     }
 
     @Override

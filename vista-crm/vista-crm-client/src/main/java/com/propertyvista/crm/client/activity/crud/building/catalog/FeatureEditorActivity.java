@@ -28,7 +28,7 @@ public class FeatureEditorActivity extends CrmEditorActivity<Feature> {
 
     @SuppressWarnings("unchecked")
     public FeatureEditorActivity(CrudAppPlace place) {
-        super(place,  CrmSite.getViewFactory().instantiate(FeatureEditorView.class), (AbstractCrudService<Feature>) GWT.create(FeatureCrudService.class), Feature.class);
+        super(place,  CrmSite.getViewFactory().getView(FeatureEditorView.class), (AbstractCrudService<Feature>) GWT.create(FeatureCrudService.class), Feature.class);
     }
 
 }

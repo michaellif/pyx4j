@@ -29,7 +29,7 @@ public class PetPolicyEditorActivity extends PolicyEditorActivityBase<PetPolicyD
     public PetPolicyEditorActivity(CrudAppPlace place) {
         super(place,
 
-         CrmSite.getViewFactory().instantiate(PetPolicyEditorView.class),
+         CrmSite.getViewFactory().getView(PetPolicyEditorView.class),
 
         GWT.<AbstractPolicyCrudService<PetPolicyDTO>> create(PetPolicyCrudService.class),
 

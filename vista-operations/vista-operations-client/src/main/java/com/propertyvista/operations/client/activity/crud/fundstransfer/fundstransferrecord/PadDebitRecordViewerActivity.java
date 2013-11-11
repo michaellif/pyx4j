@@ -27,7 +27,7 @@ import com.propertyvista.operations.rpc.services.PadDebitRecordCrudService;
 public class PadDebitRecordViewerActivity extends AbstractViewerActivity<PadDebitRecordDTO> implements PadDebitRecordViewerView.Presenter {
 
     public PadDebitRecordViewerActivity(CrudAppPlace place) {
-        super(place, OperationsSite.getViewFactory().instantiate(PadDebitRecordViewerView.class), GWT
+        super(place, OperationsSite.getViewFactory().getView(PadDebitRecordViewerView.class), GWT
                 .<AbstractCrudService<PadDebitRecordDTO>> create(PadDebitRecordCrudService.class));
     }
 

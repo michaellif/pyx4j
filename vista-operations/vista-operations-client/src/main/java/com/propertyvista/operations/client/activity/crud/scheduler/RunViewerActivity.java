@@ -43,7 +43,7 @@ public class RunViewerActivity extends AdminViewerActivity<Run> implements RunVi
     private Timer updateViewTimer;
 
     public RunViewerActivity(CrudAppPlace place) {
-        super(place, OperationsSite.getViewFactory().instantiate(RunViewerView.class), GWT.<RunCrudService> create(RunCrudService.class));
+        super(place, OperationsSite.getViewFactory().getView(RunViewerView.class), GWT.<RunCrudService> create(RunCrudService.class));
 
         runDataLister = new ListerController<RunData>(((RunViewerView) getView()).getRunDataListerView(),
                 GWT.<RunDataCrudService> create(RunDataCrudService.class), RunData.class);

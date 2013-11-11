@@ -55,7 +55,7 @@ public class PasswordChangeActivity extends AbstractActivity implements Password
     private final String userName;
 
     public PasswordChangeActivity(Place place) {
-        view = OperationsSite.getViewFactory().instantiate(PasswordChangeView.class);
+        view = OperationsSite.getViewFactory().getView(PasswordChangeView.class);
         view.setPresenter(this);
 
         try {

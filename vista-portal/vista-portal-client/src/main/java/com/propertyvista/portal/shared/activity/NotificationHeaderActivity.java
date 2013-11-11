@@ -48,7 +48,7 @@ public class NotificationHeaderActivity extends AbstractActivity implements Noti
     }
 
     public NotificationHeaderActivity(Place place) {
-        view = PortalSite.getViewFactory().instantiate(NotificationHeaderView.class);
+        view = PortalSite.getViewFactory().getView(NotificationHeaderView.class);
         view.setPresenter(this);
 
     }

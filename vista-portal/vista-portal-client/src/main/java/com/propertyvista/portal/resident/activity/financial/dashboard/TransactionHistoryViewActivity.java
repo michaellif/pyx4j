@@ -31,7 +31,7 @@ public class TransactionHistoryViewActivity extends SecurityAwareActivity implem
     private final TransactionHistoryView view;
 
     public TransactionHistoryViewActivity(AppPlace place) {
-        this.view = ResidentPortalSite.getViewFactory().instantiate(TransactionHistoryView.class);
+        this.view = ResidentPortalSite.getViewFactory().getView(TransactionHistoryView.class);
         this.view.setPresenter(this);
     }
 

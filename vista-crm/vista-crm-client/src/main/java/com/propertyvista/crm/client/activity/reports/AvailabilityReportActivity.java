@@ -22,7 +22,7 @@ import com.propertyvista.domain.reports.AvailabilityReportMetadata;
 public class AvailabilityReportActivity extends CrmReportsActivity<AvailabilityReportMetadata> {
 
     public AvailabilityReportActivity(ReportsAppPlace<AvailabilityReportMetadata> reportPlace) {
-        super(AvailabilityReportMetadata.class, reportPlace, CrmSite.getViewFactory().instantiate(AvailabilityReportView.class));
+        super(AvailabilityReportMetadata.class, reportPlace, CrmSite.getViewFactory().getView(AvailabilityReportView.class));
     }
 
 }

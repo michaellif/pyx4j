@@ -26,7 +26,7 @@ import com.propertyvista.domain.policy.dto.YardiInterfacePolicyDTO;
 public class YardiInterfacePolicyViewerActivity extends CrmViewerActivity<YardiInterfacePolicyDTO> {
 
     public YardiInterfacePolicyViewerActivity(CrudAppPlace place) {
-        super(place,  CrmSite.getViewFactory().instantiate(YardiInterfacePolicyViewerView.class), GWT
+        super(place,  CrmSite.getViewFactory().getView(YardiInterfacePolicyViewerView.class), GWT
                 .<YardiInterfacePolicyCrudService> create(YardiInterfacePolicyCrudService.class));
     }
 

@@ -22,7 +22,7 @@ import com.propertyvista.domain.reports.ResidentInsuranceReportMetadata;
 public class ResidentInsuranceReportActivity extends CrmReportsActivity<ResidentInsuranceReportMetadata> {
 
     public ResidentInsuranceReportActivity(ReportsAppPlace<ResidentInsuranceReportMetadata> reportPlace) {
-        super(ResidentInsuranceReportMetadata.class, reportPlace, CrmSite.getViewFactory().instantiate(ResidentInsuranceReportView.class));
+        super(ResidentInsuranceReportMetadata.class, reportPlace, CrmSite.getViewFactory().getView(ResidentInsuranceReportView.class));
     }
 
 }

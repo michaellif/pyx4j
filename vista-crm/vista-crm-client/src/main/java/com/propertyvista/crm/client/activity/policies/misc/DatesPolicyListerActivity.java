@@ -29,7 +29,7 @@ public class DatesPolicyListerActivity extends AbstractListerActivity<DatesPolic
     public DatesPolicyListerActivity(Place place) {
         super(place,
 
-         CrmSite.getViewFactory().instantiate(DatesPolicyListerView.class),
+         CrmSite.getViewFactory().getView(DatesPolicyListerView.class),
 
         GWT.<AbstractListService<DatesPolicyDTO>> create(DatesPolicyCrudService.class),
 

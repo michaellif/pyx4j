@@ -28,7 +28,7 @@ public class LockerEditorActivity extends CrmEditorActivity<Locker> {
 
     @SuppressWarnings("unchecked")
     public LockerEditorActivity(CrudAppPlace place) {
-        super(place,  CrmSite.getViewFactory().instantiate(LockerEditorView.class), (AbstractCrudService<Locker>) GWT.create(LockerCrudService.class), Locker.class);
+        super(place,  CrmSite.getViewFactory().getView(LockerEditorView.class), (AbstractCrudService<Locker>) GWT.create(LockerCrudService.class), Locker.class);
 
     }
 }

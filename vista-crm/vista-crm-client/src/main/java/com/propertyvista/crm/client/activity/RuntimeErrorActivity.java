@@ -31,7 +31,7 @@ public class RuntimeErrorActivity extends AbstractActivity implements RuntimeErr
 
     public RuntimeErrorActivity(NotificationAppPlace place) {
         this.place = place;
-        view = CrmSite.getViewFactory().instantiate(RuntimeErrorView.class);
+        view = CrmSite.getViewFactory().getView(RuntimeErrorView.class);
         view.setPresenter(this);
     }
 

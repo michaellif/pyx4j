@@ -27,7 +27,7 @@ import com.propertyvista.portal.shared.PortalSite;
 public class LoginWithTokenActivity extends AbstractLoginWithTokenActivity {
 
     public LoginWithTokenActivity(Place place) {
-        super(place, PortalSite.getViewFactory().instantiate(LoginWithTokenView.class), GWT.<AuthenticationService> create(ResidentAuthenticationService.class),
+        super(place, PortalSite.getViewFactory().getView(LoginWithTokenView.class), GWT.<AuthenticationService> create(ResidentAuthenticationService.class),
                 new PortalSiteMap.PasswordReset(), new PortalSiteMap.Login());
     }
 

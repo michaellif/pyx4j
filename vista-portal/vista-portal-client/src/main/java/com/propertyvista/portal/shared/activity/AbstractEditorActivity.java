@@ -41,7 +41,7 @@ public abstract class AbstractEditorActivity<E extends IEntity> extends Security
     private final Key entityId;
 
     public AbstractEditorActivity(Class<? extends IEditorView<E>> viewType, AbstractCrudService<E> service, AppPlace place) {
-        view = PortalSite.getViewFactory().instantiate(viewType);
+        view = PortalSite.getViewFactory().getView(viewType);
         view.setPresenter(this);
 
         this.service = service;

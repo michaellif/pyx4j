@@ -31,7 +31,7 @@ public class DashboardManagementListerActivity extends AbstractListerActivity<Da
 
     @SuppressWarnings("unchecked")
     public DashboardManagementListerActivity(Place place) {
-        super(place, (DashboardManagementListerView)  CrmSite.getViewFactory().instantiate(DashboardManagementListerView.class), (AbstractCrudService<DashboardMetadata>) GWT
+        super(place, (DashboardManagementListerView)  CrmSite.getViewFactory().getView(DashboardManagementListerView.class), (AbstractCrudService<DashboardMetadata>) GWT
                 .create(DashboardMetadataCrudService.class), DashboardMetadata.class);
 
     }

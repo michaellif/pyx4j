@@ -26,7 +26,7 @@ import com.propertyvista.dto.GuarantorDTO;
 public class GuarantorEditorActivity extends LeaseParticipantEditorActivity<GuarantorDTO, GuarantorCrudService> {
 
     public GuarantorEditorActivity(CrudAppPlace place) {
-        super(place,  CrmSite.getViewFactory().instantiate(GuarantorEditorView.class), GWT.<GuarantorCrudService> create(GuarantorCrudService.class), GuarantorDTO.class);
+        super(place,  CrmSite.getViewFactory().getView(GuarantorEditorView.class), GWT.<GuarantorCrudService> create(GuarantorCrudService.class), GuarantorDTO.class);
     }
 
 }

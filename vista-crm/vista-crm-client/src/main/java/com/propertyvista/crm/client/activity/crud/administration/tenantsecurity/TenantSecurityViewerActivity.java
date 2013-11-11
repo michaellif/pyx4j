@@ -39,7 +39,7 @@ public class TenantSecurityViewerActivity extends AbstractActivity implements Te
     private final TenantSecurityView view;
 
     public TenantSecurityViewerActivity(Place place) {
-        this.view = CrmSite.getViewFactory().instantiate(TenantSecurityView.class);
+        this.view = CrmSite.getViewFactory().getView(TenantSecurityView.class);
     }
 
     @Override

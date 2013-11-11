@@ -28,6 +28,6 @@ public class UnitItemViewerActivity extends CrmViewerActivity<AptUnitItem> {
 
     @SuppressWarnings("unchecked")
     public UnitItemViewerActivity(CrudAppPlace place) {
-        super(place,  CrmSite.getViewFactory().instantiate(UnitItemViewerView.class), (AbstractCrudService<AptUnitItem>) GWT.create(UnitItemCrudService.class));
+        super(place,  CrmSite.getViewFactory().getView(UnitItemViewerView.class), (AbstractCrudService<AptUnitItem>) GWT.create(UnitItemCrudService.class));
     }
 }

@@ -42,7 +42,7 @@ public class DashboardActivity extends AbstractActivity implements DashboardView
 
     public DashboardActivity(AppPlace place) {
         this.place = place;
-        view = CrmSite.getViewFactory().instantiate(DashboardView.class);
+        view = CrmSite.getViewFactory().getView(DashboardView.class);
         dashboardId = getIdFromPlace(place);
     }
 

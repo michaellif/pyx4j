@@ -37,7 +37,7 @@ import com.propertyvista.portal.shared.PortalSite;
 public class LandingActivity extends AbstractLoginActivty implements LandingView.LandingPresenter {
 
     public LandingActivity(Place place) {
-        super(place, PortalSite.getViewFactory().instantiate(LandingView.class), GWT.<AuthenticationService> create(ProspectAuthenticationService.class),
+        super(place, PortalSite.getViewFactory().getView(LandingView.class), GWT.<AuthenticationService> create(ProspectAuthenticationService.class),
                 new PortalSiteMap.PasswordResetRequest());
     }
 

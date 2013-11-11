@@ -28,7 +28,7 @@ public class PadSimFileEditorActivity extends AbstractEditorActivity<PadSimFile>
 
     @SuppressWarnings("unchecked")
     public PadSimFileEditorActivity(CrudAppPlace place) {
-        super(place, OperationsSite.getViewFactory().instantiate(PadSimFileEditorView.class), (AbstractCrudService<PadSimFile>) GWT
+        super(place, OperationsSite.getViewFactory().getView(PadSimFileEditorView.class), (AbstractCrudService<PadSimFile>) GWT
                 .create(PadSimFileCrudService.class), PadSimFile.class);
     }
 }

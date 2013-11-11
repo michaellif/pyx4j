@@ -29,7 +29,7 @@ public class PadSimFileListerActivity extends AbstractListerActivity<PadSimFile>
 
     @SuppressWarnings("unchecked")
     public PadSimFileListerActivity(Place place) {
-        super(place, OperationsSite.getViewFactory().instantiate(PadSimFileListerView.class), (AbstractCrudService<PadSimFile>) GWT
+        super(place, OperationsSite.getViewFactory().getView(PadSimFileListerView.class), (AbstractCrudService<PadSimFile>) GWT
                 .create(PadSimFileCrudService.class), PadSimFile.class);
     }
 

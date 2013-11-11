@@ -30,7 +30,7 @@ import com.propertyvista.dto.TenantDTO;
 public class TenantEditorActivity extends LeaseParticipantEditorActivity<TenantDTO, TenantCrudService> {
 
     public TenantEditorActivity(CrudAppPlace place) {
-        super(place,  CrmSite.getViewFactory().instantiate(TenantEditorView.class), GWT.<TenantCrudService> create(TenantCrudService.class), TenantDTO.class);
+        super(place,  CrmSite.getViewFactory().getView(TenantEditorView.class), GWT.<TenantCrudService> create(TenantCrudService.class), TenantDTO.class);
     }
 
     public void createPreauthorizedPayment(AsyncCallback<PreauthorizedPaymentDTO> callback) {

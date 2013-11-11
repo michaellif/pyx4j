@@ -36,7 +36,7 @@ public class NavigActivity extends AbstractActivity implements NavigView.MainNav
     private final NavigView view;
 
     public NavigActivity(Place place) {
-        view = OperationsSite.getViewFactory().instantiate(NavigView.class);
+        view = OperationsSite.getViewFactory().getView(NavigView.class);
         view.setPresenter(this);
         withPlace(place);
     }

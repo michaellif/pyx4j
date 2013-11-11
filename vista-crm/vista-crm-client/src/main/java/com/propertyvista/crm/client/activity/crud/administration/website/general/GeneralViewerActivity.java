@@ -26,6 +26,6 @@ import com.propertyvista.dto.SiteDescriptorDTO;
 public class GeneralViewerActivity extends CrmViewerActivity<SiteDescriptorDTO> implements GeneralViewer.Presenter {
 
     public GeneralViewerActivity(CrudAppPlace place) {
-        super(place,  CrmSite.getViewFactory().instantiate(GeneralViewer.class), GWT.<SiteGeneralCrudService> create(SiteGeneralCrudService.class));
+        super(place,  CrmSite.getViewFactory().getView(GeneralViewer.class), GWT.<SiteGeneralCrudService> create(SiteGeneralCrudService.class));
     }
 }

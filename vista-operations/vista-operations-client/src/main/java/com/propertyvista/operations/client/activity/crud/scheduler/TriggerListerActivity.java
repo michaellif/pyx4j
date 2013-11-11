@@ -28,7 +28,7 @@ public class TriggerListerActivity extends AbstractListerActivity<TriggerDTO> {
 
     @SuppressWarnings("unchecked")
     public TriggerListerActivity(Place place) {
-        super(place, OperationsSite.getViewFactory().instantiate(TriggerListerView.class), (AbstractCrudService<TriggerDTO>) GWT
+        super(place, OperationsSite.getViewFactory().getView(TriggerListerView.class), (AbstractCrudService<TriggerDTO>) GWT
                 .create(TriggerCrudService.class), TriggerDTO.class);
     }
 }

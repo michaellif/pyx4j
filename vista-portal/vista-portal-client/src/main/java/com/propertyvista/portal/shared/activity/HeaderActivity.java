@@ -33,7 +33,7 @@ public class HeaderActivity extends AbstractActivity {
     private final PortalContentService service;
 
     public HeaderActivity(Place place) {
-        view = PortalSite.getViewFactory().instantiate(HeaderView.class);
+        view = PortalSite.getViewFactory().getView(HeaderView.class);
         service = GWT.<PortalContentService> create(PortalContentService.class);
         service.getPortalContent(new DefaultAsyncCallback<PortalContentDTO>() {
             @Override

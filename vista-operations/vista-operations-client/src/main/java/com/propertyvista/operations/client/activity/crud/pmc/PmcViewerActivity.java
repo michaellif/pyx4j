@@ -48,7 +48,7 @@ public class PmcViewerActivity extends AdminViewerActivity<PmcDTO> implements Pm
 
     @SuppressWarnings("unchecked")
     public PmcViewerActivity(CrudAppPlace place) {
-        super(place, OperationsSite.getViewFactory().instantiate(PmcViewerView.class), (AbstractCrudService<PmcDTO>) GWT.create(PmcCrudService.class));
+        super(place, OperationsSite.getViewFactory().getView(PmcViewerView.class), (AbstractCrudService<PmcDTO>) GWT.create(PmcCrudService.class));
 
     }
 

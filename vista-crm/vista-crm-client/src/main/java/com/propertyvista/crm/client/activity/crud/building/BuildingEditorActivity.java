@@ -32,7 +32,7 @@ import com.propertyvista.dto.BuildingDTO;
 public class BuildingEditorActivity extends CrmEditorActivity<BuildingDTO> implements BuildingEditorView.Presenter {
 
     public BuildingEditorActivity(CrudAppPlace place) {
-        super(place, CrmSite.getViewFactory().instantiate(BuildingEditorView.class), GWT.<BuildingCrudService> create(BuildingCrudService.class),
+        super(place, CrmSite.getViewFactory().getView(BuildingEditorView.class), GWT.<BuildingCrudService> create(BuildingCrudService.class),
                 BuildingDTO.class);
     }
 

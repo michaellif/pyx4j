@@ -43,7 +43,7 @@ public class LeaseContextSelectionActivity extends AbstractActivity implements L
 
     public LeaseContextSelectionActivity() {
         this.service = GWT.<LeaseContextSelectionService> create(LeaseContextSelectionService.class);
-        this.view = ResidentPortalSite.getViewFactory().instantiate(LeaseContextSelectionView.class);
+        this.view = ResidentPortalSite.getViewFactory().getView(LeaseContextSelectionView.class);
         this.view.setPresenter(this);
     }
 

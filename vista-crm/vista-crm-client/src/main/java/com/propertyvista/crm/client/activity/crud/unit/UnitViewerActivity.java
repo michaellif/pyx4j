@@ -47,7 +47,7 @@ public class UnitViewerActivity extends CrmViewerActivity<AptUnitDTO> implements
     private final UnitOccupancyManagerService occupancyManagerService;
 
     public UnitViewerActivity(CrudAppPlace place) {
-        super(place,  CrmSite.getViewFactory().instantiate(UnitViewerView.class), GWT.<UnitCrudService> create(UnitCrudService.class));
+        super(place,  CrmSite.getViewFactory().getView(UnitViewerView.class), GWT.<UnitCrudService> create(UnitCrudService.class));
 
         unitItemsLister = new ListerController<AptUnitItem>(((UnitViewerView) getView()).getUnitItemsListerView(),
                 GWT.<UnitItemCrudService> create(UnitItemCrudService.class), AptUnitItem.class);

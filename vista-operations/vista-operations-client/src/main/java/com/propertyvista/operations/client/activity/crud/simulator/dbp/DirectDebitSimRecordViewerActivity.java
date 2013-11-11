@@ -34,7 +34,7 @@ public class DirectDebitSimRecordViewerActivity extends AdminViewerActivity<Dire
     private DirectDebitSimFile file;
 
     public DirectDebitSimRecordViewerActivity(CrudAppPlace place) {
-        super(place, OperationsSite.getViewFactory().instantiate(DirectDebitSimRecordViewerView.class), GWT
+        super(place, OperationsSite.getViewFactory().getView(DirectDebitSimRecordViewerView.class), GWT
                 .<DirectDebitSimRecordCrudService> create(DirectDebitSimRecordCrudService.class));
     }
 

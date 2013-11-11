@@ -28,6 +28,6 @@ public class ServiceViewerActivity extends CrmViewerActivity<Service> {
 
     @SuppressWarnings("unchecked")
     public ServiceViewerActivity(CrudAppPlace place) {
-        super(place,  CrmSite.getViewFactory().instantiate(ServiceViewerView.class), (AbstractCrudService<Service>) GWT.create(ServiceCrudService.class));
+        super(place,  CrmSite.getViewFactory().getView(ServiceViewerView.class), (AbstractCrudService<Service>) GWT.create(ServiceCrudService.class));
     }
 }

@@ -26,6 +26,6 @@ import com.propertyvista.dto.ParkingDTO;
 public class ParkingEditorActivity extends CrmEditorActivity<ParkingDTO> implements ParkingEditorView.Presenter {
 
     public ParkingEditorActivity(CrudAppPlace place) {
-        super(place, CrmSite.getViewFactory().instantiate(ParkingEditorView.class), GWT.<ParkingCrudService> create(ParkingCrudService.class), ParkingDTO.class);
+        super(place, CrmSite.getViewFactory().getView(ParkingEditorView.class), GWT.<ParkingCrudService> create(ParkingCrudService.class), ParkingDTO.class);
     }
 }

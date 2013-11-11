@@ -30,7 +30,7 @@ public class MaintenanceRequestListerActivity extends AbstractListerActivity<Mai
 
     @SuppressWarnings("unchecked")
     public MaintenanceRequestListerActivity(Place place) {
-        super(place,  CrmSite.getViewFactory().instantiate(MaintenanceRequestListerView.class), (AbstractCrudService<MaintenanceRequestDTO>) GWT
+        super(place,  CrmSite.getViewFactory().getView(MaintenanceRequestListerView.class), (AbstractCrudService<MaintenanceRequestDTO>) GWT
                 .create(MaintenanceCrudService.class), MaintenanceRequestDTO.class);
     }
 

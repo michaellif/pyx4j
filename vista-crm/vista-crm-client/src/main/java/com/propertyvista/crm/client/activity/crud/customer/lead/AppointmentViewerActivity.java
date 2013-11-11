@@ -33,7 +33,7 @@ public class AppointmentViewerActivity extends CrmViewerActivity<Appointment> im
     private final ILister.Presenter<ShowingDTO> showingsLister;
 
     public AppointmentViewerActivity(CrudAppPlace place) {
-        super(place,  CrmSite.getViewFactory().instantiate(AppointmentViewerView.class), GWT.<AppointmentCrudService> create(AppointmentCrudService.class));
+        super(place,  CrmSite.getViewFactory().getView(AppointmentViewerView.class), GWT.<AppointmentCrudService> create(AppointmentCrudService.class));
 
         showingsLister = new ShowingListerController(((AppointmentViewerView) getView()).getShowingsListerView());
     }

@@ -28,7 +28,7 @@ public class CustomerScreeningViewerActivity extends CrmViewerActivity<CustomerS
 
     @SuppressWarnings("unchecked")
     public CustomerScreeningViewerActivity(CrudAppPlace place) {
-        super(place,  CrmSite.getViewFactory().instantiate(CustomerScreeningViewerView.class), (AbstractCrudService<CustomerScreening>) GWT
+        super(place,  CrmSite.getViewFactory().getView(CustomerScreeningViewerView.class), (AbstractCrudService<CustomerScreening>) GWT
                 .create(CustomerScreeningCrudService.class));
     }
 }

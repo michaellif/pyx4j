@@ -30,7 +30,7 @@ import com.propertyvista.operations.rpc.services.PadBatchCrudService;
 public class PadBatchListerActivity extends AbstractListerActivity<PadBatchDTO> {
 
     public PadBatchListerActivity(Place place) {
-        super(place, OperationsSite.getViewFactory().instantiate(PadBatchListerView.class), GWT
+        super(place, OperationsSite.getViewFactory().getView(PadBatchListerView.class), GWT
                 .<AbstractCrudService<PadBatchDTO>> create(PadBatchCrudService.class), PadBatchDTO.class);
     }
 

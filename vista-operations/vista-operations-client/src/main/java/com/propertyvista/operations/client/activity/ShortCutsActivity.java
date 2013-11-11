@@ -37,7 +37,7 @@ public class ShortCutsActivity extends AbstractActivity implements ShortCutsPres
     private final ShortCutsView view;
 
     public ShortCutsActivity() {
-        view = OperationsSite.getViewFactory().instantiate(ShortCutsView.class);
+        view = OperationsSite.getViewFactory().getView(ShortCutsView.class);
         view.setPresenter(this);
     }
 

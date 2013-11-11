@@ -32,7 +32,7 @@ import com.propertyvista.domain.financial.billing.Bill;
 public class BillViewerActivity extends CrmViewerActivity<BillDataDTO> implements BillViewerView.Presenter {
 
     public BillViewerActivity(CrudAppPlace place) {
-        super(place,  CrmSite.getViewFactory().instantiate(BillViewerView.class), GWT.<BillCrudService> create(BillCrudService.class));
+        super(place,  CrmSite.getViewFactory().getView(BillViewerView.class), GWT.<BillCrudService> create(BillCrudService.class));
     }
 
     @Override

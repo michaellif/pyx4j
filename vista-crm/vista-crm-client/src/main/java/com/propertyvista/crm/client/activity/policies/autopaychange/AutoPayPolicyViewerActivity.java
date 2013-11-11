@@ -26,7 +26,7 @@ import com.propertyvista.domain.policy.dto.AutoPayPolicyDTO;
 public class AutoPayPolicyViewerActivity extends CrmViewerActivity<AutoPayPolicyDTO> {
 
     public AutoPayPolicyViewerActivity(CrudAppPlace place) {
-        super(place, CrmSite.getViewFactory().instantiate(AutoPayChangePolicyViewerView.class), GWT
+        super(place, CrmSite.getViewFactory().getView(AutoPayChangePolicyViewerView.class), GWT
                 .<AutoPayPolicyCrudService> create(AutoPayPolicyCrudService.class));
     }
 }
