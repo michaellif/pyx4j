@@ -209,7 +209,20 @@
                             <bindingDirectory>src/main/resources/guestcard40</bindingDirectory>
                             <clearOutputDir>false</clearOutputDir>
                             <arguments>-extension -Xnamespace-prefix</arguments>
-			                <staleFile>${project.build.directory}/jaxb2/.StaleFlag-gc40</staleFile>
+			                <staleFile>${project.build.directory}/jaxb2/.StaleFlag-guestcard40</staleFile>
+                        </configuration>
+                    </execution>
+                    <execution>
+			            <id>leaseapp30-schema-gen</id>
+                        <goals>
+                            <goal>xjc</goal>
+                        </goals>
+                        <configuration>
+                            <schemaDirectory>src/main/resources/leaseapp30</schemaDirectory>
+                            <bindingDirectory>src/main/resources/leaseapp30</bindingDirectory>
+                            <clearOutputDir>false</clearOutputDir>
+                            <arguments>-extension -Xnamespace-prefix</arguments>
+			                <staleFile>${project.build.directory}/jaxb2/.StaleFlag-leaseapp30</staleFile>
                         </configuration>
                     </execution>
 		            <execution>

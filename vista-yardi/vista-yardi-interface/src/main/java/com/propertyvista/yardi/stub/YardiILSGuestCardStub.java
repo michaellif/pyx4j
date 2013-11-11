@@ -16,6 +16,7 @@ package com.propertyvista.yardi.stub;
 import java.rmi.RemoteException;
 
 import com.yardi.entity.ils.PhysicalProperty;
+import com.yardi.entity.leaseapp30.LeaseApplication;
 
 import com.propertyvista.biz.system.YardiServiceException;
 import com.propertyvista.domain.settings.PmcYardiCredential;
@@ -25,4 +26,7 @@ public interface YardiILSGuestCardStub extends ExternalInterfaceLoggingStub {
     Properties getPropertyConfigurations(PmcYardiCredential yc) throws YardiServiceException, RemoteException;
 
     PhysicalProperty getPropertyMarketingInfo(PmcYardiCredential yc, String propertyId) throws YardiServiceException;
+
+    void importApplication(PmcYardiCredential yc, LeaseApplication leaseApp) throws YardiServiceException;
+
 }

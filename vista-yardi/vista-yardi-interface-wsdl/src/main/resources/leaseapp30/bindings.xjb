@@ -1,0 +1,27 @@
+<jxb:bindings version="2.0"
+    xmlns:jxb="http://java.sun.com/xml/ns/jaxb" 
+    xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+    xmlns:namespace="http://jaxb2-commons.dev.java.net/namespace-prefix">
+
+    <jxb:globalBindings localScoping="toplevel">
+	<jxb:javaType name="java.util.Date" xmlType="xs:date" parseMethod="com.pyx4j.essentials.j2se.util.DateAdapter.parseDate" printMethod="com.pyx4j.essentials.j2se.util.DateAdapter.printDate"/>
+	<jxb:serializable uid="1" />
+    </jxb:globalBindings>
+
+
+    <jxb:bindings schemaLocation="http://www.nmhc.info/MITS/MITSCoreData30.xsd" >
+        <jxb:schemaBindings>
+            <jxb:package name="com.yardi.entity.leaseapp30"/>
+        </jxb:schemaBindings>
+	<jxb:bindings node="//xsd:complexType[@name='CustomerType']/xsd:complexContent/xsd:extension[@base='IdentificationType']/xsd:sequence/xsd:element[@name='Name']/xsd:complexType">
+            <jxb:class name="CustomerName"/>
+        </jxb:bindings>
+	<jxb:bindings node="//xsd:complexType[@name='PersonType']/xsd:complexContent/xsd:extension[@base='IdentificationType']/xsd:sequence/xsd:element[@name='Name']/xsd:complexType">
+            <jxb:class name="PersonName"/>
+        </jxb:bindings>
+    </jxb:bindings>
+
+    <jxb:bindings schemaLocation="Itf_MITS_LeaseApplication3.0.xsd" >
+    </jxb:bindings>
+
+</jxb:bindings>

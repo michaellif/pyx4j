@@ -16,7 +16,6 @@ package com.propertyvista.yardi.stub;
 import java.rmi.RemoteException;
 
 import javax.xml.bind.JAXBException;
-import javax.xml.stream.XMLStreamException;
 
 import org.apache.axiom.om.OMElement;
 import org.apache.axiom.om.util.AXIOMUtil;
@@ -149,8 +148,7 @@ public class YardiGuestManagementStubImpl extends AbstractYardiStub implements Y
     }
 
     @Override
-    public void importGuestInfo(PmcYardiCredential yc, LeadManagement leadInfo) throws YardiServiceException, RemoteException {
-        boolean success = false;
+    public void importGuestInfo(PmcYardiCredential yc, LeadManagement leadInfo) throws YardiServiceException {
         try {
             init(Action.ImportGuestInfo);
 
@@ -187,17 +185,10 @@ public class YardiGuestManagementStubImpl extends AbstractYardiStub implements Y
                 YardiLicense.handleVendorLicenseError(messages);
                 throw new YardiServiceException(messages.toString());
             } else {
-                log.debug(messages.toString());
+                log.info(messages.toString());
             }
-            success = true;
-        } catch (JAXBException e) {
-            throw new Error(e);
-        } catch (XMLStreamException e) {
-            throw new Error(e);
-        } finally {
-            if (!success) {
-                log.warn("Yardi transaction recorded at {}", recordedTracastionsLogs);
-            }
+        } catch (Throwable e) {
+            throw new YardiServiceException(e);
         }
     }
 

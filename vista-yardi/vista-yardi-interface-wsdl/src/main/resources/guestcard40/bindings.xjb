@@ -17,7 +17,7 @@
     <jxb:bindings schemaLocation="Itf_MITS_LeadManagement4.0.xsd" >
     </jxb:bindings>
 
-    <jxb:bindings schemaLocation="RentableItems.xsd" >
+    <jxb:bindings schemaLocation="YardiRentableItems.xsd" >
 	<jxb:bindings node="//xsd:element[@name='ItemType']/xsd:complexType">
             <jxb:class name="RentableItemType"/>
         </jxb:bindings>

@@ -1,0 +1,394 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- edited with XMLSpy v2013 sp1 (http://www.altova.com) by Alexander Graf (Yardi Systems, Inc.) -->
+<!-- Resident Data Standard-->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified" attributeFormDefault="unqualified">
+	<xs:include schemaLocation="file:///C:/Voyager60/XSD/Itf_MITS_CoreData4.0.xsd"/>
+	<xs:include schemaLocation="file:///C:/Voyager60/XSD/Itf_MITS_CustomExtension.xsd"/>
+	<xs:element name="MITS-ResidentData">
+		<xs:annotation>
+			<xs:documentation>MITS Resident Data</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="Summary" type="C_SummaryType">
+					<xs:annotation>
+						<xs:documentation>Summary data as a redundant check against concurrency, duplication and parsing errors</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element name="LeaseFiles" type="C_LeaseFilesType">
+					<xs:annotation>
+						<xs:documentation>Lease Data</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:complexType name="C_SummaryType">
+		<xs:annotation>
+			<xs:documentation>'SummaryType' used to house elements as redundant checks against concurrency, duplication and parsing errors</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="GenerationTimeStamp" type="xs:dateTime">
+				<xs:annotation>
+					<xs:documentation>Date and Time XML generated</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="SourceOrganization" type="xs:string">
+				<xs:annotation>
+					<xs:documentation>From where the XML file originates</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="TotalLeaseFiles" type="xs:int"/>
+			<xs:element name="TotalTenants" type="xs:int"/>
+			<xs:element name="Messages" type="MessagesType"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="MessagesType">
+		<xs:annotation>
+			<xs:documentation>'MessagesType' used to show error and warning details</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="Error" type="xs:string" minOccurs="0" maxOccurs="unbounded"/>
+			<xs:element name="Warning" type="xs:string" minOccurs="0" maxOccurs="unbounded"/>
+			<xs:element name="FYI" type="xs:string" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="C_PropertyFilesType">
+		<xs:annotation>
+			<xs:documentation>'PropertyFileTypes' used to group property details</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="PropertyFile" type="C_PropertyFileType" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="C_PropertyFileType">
+		<xs:annotation>
+			<xs:documentation>'PropertyFileType' used to describe property details</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="Property" type="PropertyType">
+				<xs:annotation>
+					<xs:documentation>Property Details. (Mits Core Data 4.0 - PropertyType)</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="PropertyManagementCompany" type="CompanyType" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>PMC Details. (Mits Core Data 4.0 - CompanyType)</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="LeaseFiles" type="C_LeaseFilesType">
+				<xs:annotation>
+					<xs:documentation>Lease Data</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element ref="CustomRecords" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="C_OwnerChangedType">
+		<xs:annotation>
+			<xs:documentation>'OwnerChangedType' used to house the new owners information in the case where a property changes owners / property management company</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="NewOwner" type="CompanyType" minOccurs="0"/>
+			<xs:element name="ChangedOn" type="xs:date" minOccurs="0"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="C_LeaseFilesType">
+		<xs:annotation>
+			<xs:documentation>'LeaseFileType' used to describe lease/debt details</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="LeaseFile" type="C_LeaseFileType" minOccurs="0" maxOccurs="10"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="C_LeaseFileType">
+		<xs:annotation>
+			<xs:documentation>'LeaseFileType' used to describe lease/debt details</xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="Identifiable">
+				<xs:sequence>
+					<xs:annotation>
+						<xs:documentation>
+Other ID's that can be added to the LeaseFile other than a uniquely identifying LeaseID are the following ID's: (BuildingID,UnitID,CollectionsReferenceID) and the common cases are described.
+BuildingID: Detailing the actual building to which this lease applies.
+UnitID: Detailing the actual unit to which this lease applies.</xs:documentation>
+					</xs:annotation>
+					<xs:element name="Property" type="PropertyType" minOccurs="0">
+						<xs:annotation>
+							<xs:documentation>Property Details. (Mits Core Data 4.0 - PropertyType)</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="Unit" type="UnitType" minOccurs="0">
+						<xs:annotation>
+							<xs:documentation>Unit Details. (Mits Core Data 4.0 - UnitType)</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="HousingType" type="xs:string" minOccurs="0">
+						<xs:annotation>
+							<xs:documentation>Description of type of housing</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="MoveInDate" type="xs:date" minOccurs="0"/>
+					<xs:element name="MoveOutDate" type="xs:date" minOccurs="0"/>
+					<xs:element name="NoticeDate" type="xs:date" minOccurs="0"/>
+					<xs:element name="LeaseBegin" type="xs:date" minOccurs="0"/>
+					<xs:element name="LeaseEnd" type="xs:date" minOccurs="0"/>
+					<xs:element name="MonthlyRentAmount" type="xs:double" minOccurs="0"/>
+					<xs:element name="DueDay" type="xs:int" minOccurs="0"/>
+					<xs:element name="Tenants" type="C_TenantType" minOccurs="0" maxOccurs="unbounded">
+						<xs:annotation>
+							<xs:documentation>All tenants on lease</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="LeaseCharges" type="C_LeaseChargesType" minOccurs="0" maxOccurs="unbounded">
+						<xs:annotation>
+							<xs:documentation>All set of charges associated to a resident</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="Ledger" type="C_LedgerType" minOccurs="0" maxOccurs="unbounded">
+						<xs:annotation>
+							<xs:documentation>All charges and payments associated to this lease</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element ref="CustomRecords" minOccurs="0" maxOccurs="unbounded"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="C_FileTransactionType">
+		<xs:annotation>
+			<xs:documentation>'FileTransactionType' used to describe tenants charges and payments</xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="Identifiable">
+				<xs:sequence>
+					<xs:element name="TransDate" type="xs:date"/>
+					<xs:element name="TransTypeDesc" type="xs:string" minOccurs="0"/>
+					<xs:element name="TransType" type="C_TransactionType"/>
+					<xs:element name="TransAmount" type="Money"/>
+					<xs:element name="OpenAmount" type="Money" minOccurs="0"/>
+					<xs:element ref="CustomRecords" minOccurs="0" maxOccurs="unbounded"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="C_LeaseChargesType">
+		<xs:annotation>
+			<xs:documentation>ResidentData 'LeaseChargesType' used to describe lease charges associated to the resident</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="LeaseCharge" type="C_LeaseChargeType" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="C_LedgerType">
+		<xs:annotation>
+			<xs:documentation>ResidentData 'LedgerType' used to describe transactional data</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="Transaction" type="C_ResidentTransactionType" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="C_ResidentTransactionType">
+		<xs:annotation>
+			<xs:documentation>'ResidentTransactionType' used to describe each charge and payment in a resident's ledger</xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="Identifiable">
+				<xs:sequence>
+					<xs:element name="TransID" type="xs:string" minOccurs="0"/>
+					<xs:element name="TransType" type="C_TransactionType" minOccurs="0"/>
+					<xs:element name="TransDate" type="xs:date" minOccurs="0"/>
+					<xs:element name="ChargeAmount" type="Money" minOccurs="0"/>
+					<xs:element name="PaymentAmount" type="Money" minOccurs="0"/>
+					<xs:element name="LeaseBalance" type="Money" minOccurs="0"/>
+					<xs:element name="TransTypeDesc" type="xs:string" minOccurs="0"/>
+					<xs:element name="isOpen" type="xs:boolean" minOccurs="0"/>
+					<xs:element name="Description" type="xs:string" minOccurs="0"/>
+					<xs:element name="Notes" type="xs:string" minOccurs="0" maxOccurs="unbounded"/>
+					<xs:element name="FileTransactionIDRef" type="xs:string" minOccurs="0" maxOccurs="unbounded">
+						<xs:annotation>
+							<xs:documentation>Populated if applicable/possible to tie transaction to specific file charge</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element ref="CustomRecords" minOccurs="0" maxOccurs="unbounded"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="C_LeaseChargeType">
+		<xs:annotation>
+			<xs:documentation>'LeaseChargeType' used to describe a charge </xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="Identifiable">
+				<xs:sequence>
+					<xs:element name="LeaseChargeID" type="xs:string" minOccurs="0"/>
+					<xs:element name="ChargeCode" type="xs:string" minOccurs="0"/>
+					<xs:element name="ChargeCodeDescription" type="xs:string" minOccurs="0"/>
+					<xs:element name="Amount" type="Money" minOccurs="0"/>
+					<xs:element name="StartDate" type="xs:date" minOccurs="0"/>
+					<xs:element name="EndDate" type="xs:date" minOccurs="0"/>
+					<xs:element name="Description" type="xs:string" minOccurs="0"/>
+					<xs:element name="Notes" type="xs:string" minOccurs="0" maxOccurs="unbounded"/>
+					<xs:element ref="CustomRecords" minOccurs="0" maxOccurs="unbounded"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="C_TenantType">
+		<xs:annotation>
+			<xs:documentation>ResidentData 'TenantType' used to describe tenant/resident</xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="Identifiable">
+				<xs:sequence>
+					<xs:element name="PersonDetails" type="PersonType">
+						<xs:annotation>
+							<xs:documentation>Tenants Details. (Mits Core Data 4.0 - PersonType)</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="LeaseEnd" type="xs:date" minOccurs="0"/>
+					<xs:element name="LeaseBegin" type="xs:date" minOccurs="0"/>
+					<xs:element name="MoveOutDate" type="xs:date" minOccurs="0"/>
+					<xs:element name="MoveInDate" type="xs:date" minOccurs="0"/>
+					<xs:element name="DateOfBirth" type="xs:date" minOccurs="0"/>
+					<xs:element name="SSN" type="xs:string" minOccurs="0"/>
+					<xs:element name="DriversLicense" type="xs:string" minOccurs="0"/>
+					<xs:element name="DriversLicenseState" type="xs:string" minOccurs="0"/>
+					<xs:element name="BankName" type="xs:string" minOccurs="0"/>
+					<xs:element name="BankRoutingNumber" type="xs:string" minOccurs="0"/>
+					<xs:element name="BankAccountNumber" type="xs:string" minOccurs="0"/>
+					<xs:element name="Vehicle" type="C_VehicleType" minOccurs="0" maxOccurs="10"/>
+					<xs:element name="Guarantor" type="xs:boolean" minOccurs="0">
+						<xs:annotation>
+							<xs:documentation>Set to True if tenant is guarantor</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="IsLessee" type="xs:boolean" minOccurs="0">
+						<xs:annotation>
+							<xs:documentation>Set to True if tenant is identified as a lessee</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="Income" type="C_IncomeType" minOccurs="0" maxOccurs="5">
+						<xs:annotation>
+							<xs:documentation>Incomes other than employment income</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="Employer" type="C_EmployerType" minOccurs="0" maxOccurs="5"/>
+					<xs:element name="Contact" type="C_ContactType" minOccurs="0" maxOccurs="5">
+						<xs:annotation>
+							<xs:documentation>Emergency Contact Details. (Mits Core Data 4.0 - PersonType)</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element ref="CustomRecords" minOccurs="0" maxOccurs="unbounded"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="C_ContactType">
+		<xs:annotation>
+			<xs:documentation>ResidentData 'VehicleType' used to describe a vehicle</xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="PersonType">
+				<xs:attribute name="value" type="xs:string">
+			</xs:attribute>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="C_VehicleType">
+		<xs:annotation>
+			<xs:documentation>ResidentData 'VehicleType' used to describe a vehicle</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="Color" type="xs:string" minOccurs="0"/>
+			<xs:element name="LicenseNumber" type="xs:string" minOccurs="0"/>
+			<xs:element name="LicenseState" type="xs:string" minOccurs="0"/>
+			<xs:element name="Make" type="xs:string" minOccurs="0"/>
+			<xs:element name="Model" type="xs:string" minOccurs="0"/>
+			<xs:element name="Owner" type="PersonType" minOccurs="0"/>
+			<xs:element name="PermitNumber" type="xs:string" minOccurs="0"/>
+			<xs:element name="Year" type="xs:gYear" minOccurs="0"/>
+			<xs:element name="Description" type="xs:string" minOccurs="0"/>
+			<xs:element ref="CustomRecords" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="C_EmployerType">
+		<xs:annotation>
+			<xs:documentation>'EmployerType' used to describe tenants employer</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="EmployerDetails" type="CompanyType">
+				<xs:annotation>
+					<xs:documentation>Employer Details (Mits Core Data 4.0 - CompanyType)</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="Income" type="C_IncomeType" minOccurs="0" maxOccurs="5">
+				<xs:annotation>
+					<xs:documentation>Incomes derived from the employment in question</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="JobTitle" type="xs:string" minOccurs="0"/>
+			<xs:element name="SupervisorName" type="xs:string" minOccurs="0"/>
+			<xs:element name="SupervisorContactNumber" type="PhoneType" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Supervisor Contact Details. (Mits Core Data 4.0 - PhoneType)</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+		<xs:attribute name="LastDateEmployed" type="xs:date" use="optional">
+			<xs:annotation>
+				<xs:documentation>If populated, implies that employment is not longer active</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+	</xs:complexType>
+	<xs:complexType name="C_IncomeType">
+		<xs:annotation>
+			<xs:documentation>'IncomeType' used to describe sources of income</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="IncomeSource" type="xs:string" minOccurs="0"/>
+			<xs:element name="IncomeAmount" type="xs:double"/>
+			<xs:element name="PaymentPeriod" type="C_PaymentPeriodType"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:simpleType name="C_PaymentPeriodType">
+		<xs:annotation>
+			<xs:documentation>'PaymentPeriodType' used to describe frequency of payment</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="Annually"/>
+			<xs:enumeration value="Quarterly"/>
+			<xs:enumeration value="Monthly"/>
+			<xs:enumeration value="BiWeekly"/>
+			<xs:enumeration value="Weekly"/>
+			<xs:enumeration value="Daily"/>
+			<xs:enumeration value="Hourly"/>
+			<xs:enumeration value="Other"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="C_PercentageType">
+		<xs:annotation>
+			<xs:documentation>'PercentageType' used to describe a percentage amount, e.g. "12.34%" or "80% etc..."</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:double">
+			<xs:minInclusive value="0.0"/>
+			<xs:maxInclusive value="100.0"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="C_TransactionType">
+		<xs:annotation>
+			<xs:documentation>'TransactionType' used to classify types of transactions</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="Charge"/>
+			<xs:enumeration value="Payment"/>
+			<xs:enumeration value="Adjustment"/>
+			<xs:enumeration value="Cancellation"/>
+			<xs:enumeration value="Settlement"/>
+			<xs:enumeration value="DirectPayment"/>
+			<xs:enumeration value="Other"/>
+		</xs:restriction>
+	</xs:simpleType>
+</xs:schema>
