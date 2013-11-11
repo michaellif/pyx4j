@@ -33,6 +33,11 @@ public interface NotificationFacade {
 
     public void aggregateNotificationsStart();
 
+    /**
+     * Do not send Notifications, Call in rollback
+     */
+    public void aggregatedNotificationsCancel();
+
     public void aggregatedNotificationsSend();
 
 }

@@ -61,6 +61,11 @@ public class NotificationFacadeImpl implements NotificationFacade {
     }
 
     @Override
+    public void aggregatedNotificationsCancel() {
+        aggregatorThreadLocal.remove();
+    }
+
+    @Override
     public void aggregatedNotificationsSend() {
         NotificationsAggregator aggregator = aggregatorThreadLocal.get();
         if (aggregator != null) {
