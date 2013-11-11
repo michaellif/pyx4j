@@ -23,6 +23,8 @@ public class InsuranceGadgetMessages {
 
     public static final String hasInsuranceStatusMessage = i18n.tr("According to our records you have valid tenant insurance which expire on {0}.");
 
+    public static final String hasTenantSureStatusMessage = i18n.tr("According to our records you have valid tenant insurance.");
+
     public static final String noInsuranceTenantSureInvitation = i18n
             .tr("As per your Lease Agreement, you must obtain and provide the landlord with proof of tenant insurance. We have teamed up with Highcourt Partners Limited, a licensed broker, to assist you in obtaining your tenant insurance.");
 
