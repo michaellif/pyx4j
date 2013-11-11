@@ -43,6 +43,10 @@ public class NotificationFacadeMock implements NotificationFacade {
     }
 
     @Override
+    public void aggregatedNotificationsCancel() {
+    }
+
+    @Override
     public void aggregatedNotificationsSend() {
     }
 
