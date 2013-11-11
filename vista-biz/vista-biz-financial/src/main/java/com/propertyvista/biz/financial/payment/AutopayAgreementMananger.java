@@ -391,7 +391,7 @@ class AutopayAgreementMananger {
                     or2.right(or1);
 
                     OrCriterion or3 = new OrCriterion();
-                    or3.left().in(criteria1.proto().lease().status(), Lease.Status.former());
+                    or3.left().in(criteria1.proto().lease().status(), Lease.Status.noAutoPay());
                     or3.right(or2);
 
                     criteria1.add(or3);
@@ -454,7 +454,7 @@ class AutopayAgreementMananger {
     }
 
     static boolean isPreauthorizedPaymentsApplicableForBillingCycle(Lease lease, BillingCycle paymentCycle, AutoPayPolicy autoPayPolicy) {
-        if (lease.status().getValue().isFormer()) {
+        if (lease.status().getValue().isNoAutoPay()) {
             return false;
         }
         // TODO: lease first month check:

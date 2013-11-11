@@ -225,7 +225,7 @@ class AutopaytManager {
         Persistence.ensureRetrieve(billingAccount.lease(), AttachLevel.Attached);
         AutoPayPolicy autoPayPolicy = ServerSideFactory.create(PolicyFacade.class).obtainEffectivePolicy(billingAccount.lease().unit().building(),
                 AutoPayPolicy.class);
-        if (!billingAccount.lease().status().getValue().isCurrent()
+        if (!billingAccount.lease().status().getValue().isActive()
                 || !AutopayAgreementMananger.isPreauthorizedPaymentsApplicableForBillingCycle(billingAccount.lease(), billingCycle, autoPayPolicy)) {
             // Do not create payments
             return records;

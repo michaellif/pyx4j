@@ -119,6 +119,10 @@ public interface Lease extends IEntity {
             return EnumSet.of(Cancelled, Closed);
         }
 
+        public static EnumSet<Status> noAutoPay() {
+            return EnumSet.of(Completed, Cancelled, Closed);
+        }
+
         // states:
 
         public boolean isDraft() {
@@ -139,6 +143,10 @@ public interface Lease extends IEntity {
 
         public boolean isFormer() {
             return former().contains(this);
+        }
+
+        public boolean isNoAutoPay() {
+            return noAutoPay().contains(this);
         }
     }
 
