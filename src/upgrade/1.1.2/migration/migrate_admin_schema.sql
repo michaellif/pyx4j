@@ -98,7 +98,7 @@ SET search_path = '_admin_';
         WHERE   target = 'residentPortal';
         
         UPDATE  audit_record
-        SET     app = 'site'
+        SET     app = 'portal'
         WHERE   app = 'residentPortal';
         
         UPDATE  audit_record
@@ -135,7 +135,7 @@ SET search_path = '_admin_';
         
         UPDATE  vista_terms 
         SET     target = 'PmcCaledonSoleProprietorshipSection'
-        WHERE   target = 'PmcCaldedonSoleProprietorshipSection';
+        WHERE   target = 'PmcCaldedonSolePropetorshipSection';
         
         SET CONSTRAINTS ALL IMMEDIATE;
         
