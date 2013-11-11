@@ -143,4 +143,64 @@ public interface L1FormFieldsData extends IEntity {
 
     IPrimitive<String> part4period3RentRentRentOwing();
 
+    //
+    IPrimitive<String> part4nsf1ChequeAmount();
+
+    IPrimitive<String> part4nsf1DateOfCheque();
+
+    IPrimitive<String> part4nsf1DateOfNsfCharge();
+
+    IPrimitive<String> part4nsf1BankCharge();
+
+    IPrimitive<String> part4nsf1LandlordsCharge();
+
+    IPrimitive<String> part4nsf1TotalCharge();
+
+    //
+    IPrimitive<String> part4nsf2ChequeAmount();
+
+    IPrimitive<String> part4nsf2DateOfCheque();
+
+    IPrimitive<String> part4nsf2DateOfNsfCharge();
+
+    IPrimitive<String> part4nsf2BankCharge();
+
+    IPrimitive<String> part4nsf2LandlordsCharge();
+
+    IPrimitive<String> part4nsf2TotalCharge();
+
+    //
+    IPrimitive<String> part4nsf3ChequeAmount();
+
+    IPrimitive<String> part4nsf3DateOfCheque();
+
+    IPrimitive<String> part4nsf3DateOfNsfCharge();
+
+    IPrimitive<String> part4nsf3BankCharge();
+
+    IPrimitive<String> part4nsf3LandlordsCharge();
+
+    IPrimitive<String> part4nsf3TotalCharge();
+
+    IPrimitive<String> part4nsf4ChequeAmount();
+
+    IPrimitive<String> part4nsf4DateOfCheque();
+
+    IPrimitive<String> part4nsf4DateOfNsfCharge();
+
+    IPrimitive<String> part4nsf4BankCharge();
+
+    IPrimitive<String> part4nsf4LandlordsCharge();
+
+    IPrimitive<String> part4nsf4TotalCharge();
+
+    IPrimitive<String> part4nsfTotalChargeOwed();
+
+    // Part5
+    IPrimitive<String> part5TotalRentOwing();
+
+    IPrimitive<String> part5TotalNSFChequeChargesOwing();
+
+    IPrimitive<String> part5Total();
+
 }
