@@ -75,7 +75,7 @@ public class MailMessage implements Serializable {
         this.replyTo = replyTo;
     }
 
-    private static List<String> getAddressList(String comaSeparatedAddresses) {
+    public static List<String> getAddressList(String comaSeparatedAddresses) {
         comaSeparatedAddresses = comaSeparatedAddresses.replaceAll(";", ",");
         List<String> recipients = new Vector<String>();
         StringTokenizer st = new StringTokenizer(comaSeparatedAddresses, ",");

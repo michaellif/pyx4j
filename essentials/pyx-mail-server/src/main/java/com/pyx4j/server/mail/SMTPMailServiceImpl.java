@@ -136,7 +136,7 @@ class SMTPMailServiceImpl implements IMailService {
                     address = filterDestinations(emailFilter, emails(mailMessage.getTo()));
                     if (isEmptyList(address) && (config.getBlockedMailForwardTo() != null)) {
                         address = new Vector<InternetAddress>();
-                        address.add(new InternetAddress(config.getBlockedMailForwardTo()));
+                        address.addAll(SMTPMailUtils.emails(MailMessage.getAddressList(config.getBlockedMailForwardTo())));
                     }
                     recipientsCc = filterDestinations(emailFilter, emails(mailMessage.getCc()));
                     recipientsBcc = filterDestinations(emailFilter, emails(mailMessage.getBcc()));
