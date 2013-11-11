@@ -33,7 +33,7 @@ public class RichTextEditorActivity extends AbstractActivity {
     private final RichTextEditorView view;
 
     public RichTextEditorActivity(Place place) {
-        this.view = TesterSite.getViewFactory().instantiate(RichTextEditorView.class);
+        this.view = TesterSite.getViewFactory().getView(RichTextEditorView.class);
         withPlace(place);
     }
 

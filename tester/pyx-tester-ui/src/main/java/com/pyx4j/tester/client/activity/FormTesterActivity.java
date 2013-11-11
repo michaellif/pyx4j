@@ -39,7 +39,7 @@ public class FormTesterActivity extends AbstractActivity implements FormTesterVi
     private final FormTesterView view;
 
     public FormTesterActivity(Place place) {
-        view = TesterSite.getViewFactory().instantiate(FormTesterView.class);
+        view = TesterSite.getViewFactory().getView(FormTesterView.class);
         view.setPresenter(this);
         view.installForm(TestFormType.valueOf(((AppPlace) place).getFirstArg(FORM_TYPE)));
     }

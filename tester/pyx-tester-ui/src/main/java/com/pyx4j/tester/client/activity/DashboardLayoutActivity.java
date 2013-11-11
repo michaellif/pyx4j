@@ -33,7 +33,7 @@ public class DashboardLayoutActivity extends AbstractActivity {
     private final DashboardLayoutView view;
 
     public DashboardLayoutActivity(Place place) {
-        this.view = TesterSite.getViewFactory().instantiate(DashboardLayoutView.class);
+        this.view = TesterSite.getViewFactory().getView(DashboardLayoutView.class);
         withPlace(place);
     }
 

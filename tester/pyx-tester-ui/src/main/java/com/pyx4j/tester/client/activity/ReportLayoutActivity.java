@@ -33,7 +33,7 @@ public class ReportLayoutActivity extends AbstractActivity {
     private final ReportLayoutView view;
 
     public ReportLayoutActivity(Place place) {
-        this.view = TesterSite.getViewFactory().instantiate(ReportLayoutView.class);
+        this.view = TesterSite.getViewFactory().getView(ReportLayoutView.class);
         withPlace(place);
     }
 

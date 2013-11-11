@@ -33,7 +33,7 @@ public class FolderLayoutActivity extends AbstractActivity {
     private final FolderLayoutView view;
 
     public FolderLayoutActivity(Place place) {
-        this.view = TesterSite.getViewFactory().instantiate(FolderLayoutView.class);
+        this.view = TesterSite.getViewFactory().getView(FolderLayoutView.class);
         withPlace(place);
     }
 

@@ -41,7 +41,7 @@ public class CComponentActivity extends AbstractActivity implements ConsolePrese
     private final CComponentView view;
 
     public CComponentActivity(Place place) {
-        this.view = TesterSite.getViewFactory().instantiate(CComponentView.class);
+        this.view = TesterSite.getViewFactory().getView(CComponentView.class);
         withPlace(place);
         TesterSite.getEventBus().addHandler(CComponentBrowserEvent.getType(), new CComponentBrowserHandler() {
 

@@ -32,9 +32,9 @@ public class SingletonViewFactory implements ViewFactory {
     private static ViewFactory factory = GWT.create(ViewFactory.class);
 
     @Override
-    public <T extends IsView> T instantiate(Class<T> type) {
+    public <T extends IsView> T getView(Class<T> type) {
         if (!map.containsKey(type)) {
-            map.put(type, factory.instantiate(type));
+            map.put(type, factory.getView(type));
         }
 
         @SuppressWarnings("unchecked")

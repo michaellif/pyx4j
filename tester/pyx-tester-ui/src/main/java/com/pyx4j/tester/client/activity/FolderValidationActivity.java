@@ -33,7 +33,7 @@ public class FolderValidationActivity extends AbstractActivity {
     private final FolderValidationView view;
 
     public FolderValidationActivity(Place place) {
-        this.view = TesterSite.getViewFactory().instantiate(FolderValidationView.class);
+        this.view = TesterSite.getViewFactory().getView(FolderValidationView.class);
         withPlace(place);
     }
 

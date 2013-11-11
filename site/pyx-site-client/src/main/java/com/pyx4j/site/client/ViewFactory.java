@@ -22,6 +22,6 @@ package com.pyx4j.site.client;
 
 public interface ViewFactory {
 
-    <T extends IsView> T instantiate(Class<T> clazz);
+    <T extends IsView> T getView(Class<T> clazz);
 
 }

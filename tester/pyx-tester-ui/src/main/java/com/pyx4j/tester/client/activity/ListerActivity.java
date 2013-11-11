@@ -33,7 +33,7 @@ public class ListerActivity extends AbstractActivity {
     private final ListerView view;
 
     public ListerActivity(Place place) {
-        this.view = TesterSite.getViewFactory().instantiate(ListerView.class);
+        this.view = TesterSite.getViewFactory().getView(ListerView.class);
         withPlace(place);
     }
 

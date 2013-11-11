@@ -33,7 +33,7 @@ public class NativeWidgetBasicActivity extends AbstractActivity {
     private final NativeWidgetBasicView view;
 
     public NativeWidgetBasicActivity(Place place) {
-        this.view = TesterSite.getViewFactory().instantiate(NativeWidgetBasicView.class);
+        this.view = TesterSite.getViewFactory().getView(NativeWidgetBasicView.class);
         withPlace(place);
     }
 
