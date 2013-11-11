@@ -15,12 +15,11 @@ package com.propertyvista.portal.resident.ui.services.insurance.tenantsurepaymen
 
 import com.propertyvista.domain.contact.AddressSimple;
 import com.propertyvista.portal.rpc.portal.web.dto.insurance.InsurancePaymentMethodDTO;
-import com.propertyvista.portal.shared.ui.IWizardView;
-import com.propertyvista.portal.shared.ui.IWizardView.IWizardPresenter;
+import com.propertyvista.portal.shared.ui.IWizardFormView;
 
-public interface TenantSurePaymentMethodWizardView extends IWizardView<InsurancePaymentMethodDTO> {
+public interface TenantSurePaymentMethodWizardView extends IWizardFormView<InsurancePaymentMethodDTO> {
 
-    interface Persenter extends IWizardPresenter<InsurancePaymentMethodDTO> {
+    interface Persenter extends IWizardFormPresenter<InsurancePaymentMethodDTO> {
 
         void getCurrentAddress();
     }

@@ -7,18 +7,24 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on 2013-04-10
+ * Created on 2013-04-02
  * @author VladL
  * @version $Id$
  */
-package com.propertyvista.portal.resident.ui.services.insurance.tenantsurepaymentmethod;
+package com.propertyvista.portal.prospect.ui.steps;
 
-import com.propertyvista.portal.rpc.portal.web.dto.insurance.InsurancePaymentMethodDTO;
-import com.propertyvista.portal.shared.ui.IFormView;
+import com.pyx4j.i18n.shared.I18n;
 
-public interface TenantSurePaymentMethodUpdateConfirmationView extends IFormView<InsurancePaymentMethodDTO> {
+import com.propertyvista.portal.rpc.portal.web.dto.financial.PaymentMethodDTO;
+import com.propertyvista.portal.shared.ui.AbstractWizardStepView;
 
-    interface PaymentMethodConfirmationPresenter extends IFormView.IFormPresenter<InsurancePaymentMethodDTO> {
+public class UnitStepViewImpl extends AbstractWizardStepView<PaymentMethodDTO> implements UnitStepView {
+
+    private static final I18n i18n = I18n.get(UnitStepViewImpl.class);
+
+    public UnitStepViewImpl() {
+        super();
+        setWizardStep(new UnitStep(this));
     }
 
 }

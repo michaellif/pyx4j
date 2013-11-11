@@ -18,57 +18,50 @@ import com.pyx4j.entity.shared.UniqueConstraintUserRuntimeException;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
 
-public abstract class AbstractWizardView<E extends IEntity> extends AbstractPortalPanel implements IWizardView<E> {
+public abstract class AbstractWizardStepView<E extends IEntity> extends AbstractPortalPanel implements IWizardStepView<E> {
 
-    private static final I18n i18n = I18n.get(AbstractWizardView.class);
+    private static final I18n i18n = I18n.get(AbstractWizardStepView.class);
 
-    private IWizardPresenter<E> presenter;
+    private IWizardStepPresenter<E> presenter;
 
-    private CPortalEntityWizard<E> wizardForm;
+    private CPortalEntityWizardStep<E> wizardStep;
 
-    public AbstractWizardView() {
+    public AbstractWizardStepView() {
         super();
     }
 
-    public void setWizard(CPortalEntityWizard<E> wizardForm) {
-        this.wizardForm = wizardForm;
-        setWidget(wizardForm);
-        wizardForm.initContent();
+    public void setWizardStep(CPortalEntityWizardStep<E> wizardStep) {
+        this.wizardStep = wizardStep;
+        setWidget(wizardStep);
+        wizardStep.initContent();
     }
 
     @Override
     public void populate(E value) {
-        wizardForm.populate(value);
-        wizardForm.calculateButtonsState();
+        wizardStep.populate(value);
     }
 
     @Override
     public void reset() {
-        wizardForm.reset();
-        wizardForm.calculateButtonsState();
+        wizardStep.reset();
     }
 
-    @Override
-    public void setPresenter(IWizardPresenter<E> presenter) {
+    public void setPresenter(IWizardStepPresenter<E> presenter) {
         this.presenter = presenter;
     }
 
     @Override
-    public IWizardPresenter<E> getPresenter() {
+    public IWizardStepPresenter<E> getPresenter() {
         return presenter;
     }
 
     @Override
     public E getValue() {
-        return wizardForm.getValue();
-    }
-
-    public CPortalEntityWizard<E> getWizard() {
-        return wizardForm;
+        return wizardStep.getValue();
     }
 
     @Override
-    public boolean onSubmittionFailed(Throwable caught) {
+    public boolean onSubmittionFail(Throwable caught) {
         if (caught instanceof UniqueConstraintUserRuntimeException) {
             MessageDialog.error(i18n.tr("Error"), caught.getMessage());
             return true;
@@ -78,12 +71,7 @@ public abstract class AbstractWizardView<E extends IEntity> extends AbstractPort
     }
 
     @Override
-    public void onStepChange() {
-        wizardForm.calculateButtonsState();
-    }
-
-    @Override
     public boolean isDirty() {
-        return wizardForm.isDirty();
+        return wizardStep.isDirty();
     }
 }

@@ -19,7 +19,7 @@ import com.propertyvista.portal.shared.ui.IFormView;
 
 public interface BillingHistoryView extends IFormView<BillingHistoryDTO> {
 
-    interface Presenter extends IFormViewPresenter<BillingHistoryDTO> {
+    interface Presenter extends IFormPresenter<BillingHistoryDTO> {
 
         void viewBill(Bill itemId);
     }

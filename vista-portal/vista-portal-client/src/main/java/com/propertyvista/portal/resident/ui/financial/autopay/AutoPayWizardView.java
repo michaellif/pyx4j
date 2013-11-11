@@ -22,12 +22,11 @@ import com.propertyvista.domain.contact.AddressSimple;
 import com.propertyvista.domain.payment.AutopayAgreement;
 import com.propertyvista.domain.payment.LeasePaymentMethod;
 import com.propertyvista.portal.rpc.portal.web.dto.financial.AutoPayDTO;
-import com.propertyvista.portal.shared.ui.IWizardView;
-import com.propertyvista.portal.shared.ui.IWizardView.IWizardPresenter;
+import com.propertyvista.portal.shared.ui.IWizardFormView;
 
-public interface AutoPayWizardView extends IWizardView<AutoPayDTO> {
+public interface AutoPayWizardView extends IWizardFormView<AutoPayDTO> {
 
-    interface Presenter extends IWizardPresenter<AutoPayDTO> {
+    interface Presenter extends IWizardFormPresenter<AutoPayDTO> {
 
         void getCurrentAddress(AsyncCallback<AddressSimple> callback);
 

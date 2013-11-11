@@ -33,12 +33,11 @@ import com.propertyvista.domain.payment.AutopayAgreement;
 import com.propertyvista.domain.payment.LeasePaymentMethod;
 import com.propertyvista.portal.resident.ui.financial.autopay.AutoPayWizardView;
 import com.propertyvista.portal.rpc.portal.ResidentPortalSiteMap;
-import com.propertyvista.portal.rpc.portal.ResidentPortalSiteMap.Financial;
 import com.propertyvista.portal.rpc.portal.web.dto.financial.AutoPayDTO;
 import com.propertyvista.portal.rpc.portal.web.services.financial.AutoPayWizardService;
-import com.propertyvista.portal.shared.activity.AbstractWizardCrudActivity;
+import com.propertyvista.portal.shared.activity.AbstractWizardFormCrudActivity;
 
-public class AutoPayWizardActivity extends AbstractWizardCrudActivity<AutoPayDTO> implements AutoPayWizardView.Presenter {
+public class AutoPayWizardActivity extends AbstractWizardFormCrudActivity<AutoPayDTO> implements AutoPayWizardView.Presenter {
 
     public AutoPayWizardActivity(AppPlace place) {
         super(AutoPayWizardView.class, GWT.<AutoPayWizardService> create(AutoPayWizardService.class), AutoPayDTO.class);

@@ -15,9 +15,9 @@ package com.propertyvista.portal.resident.ui.services.insurance.tenantsurepaymen
 
 import com.propertyvista.domain.contact.AddressSimple;
 import com.propertyvista.portal.rpc.portal.web.dto.insurance.InsurancePaymentMethodDTO;
-import com.propertyvista.portal.shared.ui.AbstractWizardView;
+import com.propertyvista.portal.shared.ui.AbstractWizardFormView;
 
-public class TenantSurePaymentMethodWizardViewImpl extends AbstractWizardView<InsurancePaymentMethodDTO> implements TenantSurePaymentMethodWizardView {
+public class TenantSurePaymentMethodWizardViewImpl extends AbstractWizardFormView<InsurancePaymentMethodDTO> implements TenantSurePaymentMethodWizardView {
 
     public TenantSurePaymentMethodWizardViewImpl() {
         super();
@@ -30,7 +30,7 @@ public class TenantSurePaymentMethodWizardViewImpl extends AbstractWizardView<In
     }
 
     @Override
-    public void setPresenter(com.propertyvista.portal.shared.ui.IWizardView.IWizardPresenter<InsurancePaymentMethodDTO> presenter) {
+    public void setPresenter(com.propertyvista.portal.shared.ui.IWizardFormView.IWizardFormPresenter<InsurancePaymentMethodDTO> presenter) {
         ((TenantSurePaymentMethodWizard) getWizard()).setPresenter((Persenter) presenter);
         super.setPresenter(presenter);
     }

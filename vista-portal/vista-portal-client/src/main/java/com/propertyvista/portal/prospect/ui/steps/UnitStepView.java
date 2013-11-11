@@ -7,18 +7,18 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on 2013-04-10
+ * Created on 2013-04-02
  * @author VladL
  * @version $Id$
  */
-package com.propertyvista.portal.resident.ui.services.insurance.tenantsurepaymentmethod;
+package com.propertyvista.portal.prospect.ui.steps;
 
-import com.propertyvista.portal.rpc.portal.web.dto.insurance.InsurancePaymentMethodDTO;
-import com.propertyvista.portal.shared.ui.IFormView;
+import com.propertyvista.portal.rpc.portal.web.dto.financial.PaymentMethodDTO;
+import com.propertyvista.portal.shared.ui.IWizardStepView;
 
-public interface TenantSurePaymentMethodUpdateConfirmationView extends IFormView<InsurancePaymentMethodDTO> {
+public interface UnitStepView extends IWizardStepView<PaymentMethodDTO> {
 
-    interface PaymentMethodConfirmationPresenter extends IFormView.IFormPresenter<InsurancePaymentMethodDTO> {
+    interface UnitStepPresenter extends IWizardStepPresenter<PaymentMethodDTO> {
+
     }
-
 }

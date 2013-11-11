@@ -24,8 +24,8 @@ import com.pyx4j.site.rpc.AppPlace;
 
 import com.propertyvista.portal.resident.activity.LandingActivity;
 import com.propertyvista.portal.resident.activity.LeaseContextSelectionActivity;
-import com.propertyvista.portal.resident.activity.SignUpActivity;
 import com.propertyvista.portal.resident.activity.ResidentTermsActivity;
+import com.propertyvista.portal.resident.activity.SignUpActivity;
 import com.propertyvista.portal.resident.activity.dashboard.MainDashboardActivity;
 import com.propertyvista.portal.resident.activity.financial.autopay.AutoPayActivity;
 import com.propertyvista.portal.resident.activity.financial.autopay.AutoPayConfirmationActivity;

@@ -18,7 +18,7 @@ import com.propertyvista.portal.shared.ui.IFormView;
 
 public interface PaymentConfirmationView extends IFormView<PaymentRecordDTO> {
 
-    interface Presenter extends IFormView.IFormViewPresenter<PaymentRecordDTO> {
+    interface Presenter extends IFormView.IFormPresenter<PaymentRecordDTO> {
 
         void goToAutoPay();
 

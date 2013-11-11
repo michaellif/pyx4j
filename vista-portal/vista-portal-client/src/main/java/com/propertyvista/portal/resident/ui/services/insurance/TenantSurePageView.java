@@ -15,7 +15,6 @@ package com.propertyvista.portal.resident.ui.services.insurance;
 
 import com.propertyvista.portal.rpc.portal.web.dto.insurance.TenantSureInsurancePolicyDTO;
 import com.propertyvista.portal.shared.ui.IEditorView;
-import com.propertyvista.portal.shared.ui.IEditorView.IEditorPresenter;
 
 public interface TenantSurePageView extends IEditorView<TenantSureInsurancePolicyDTO> {
 

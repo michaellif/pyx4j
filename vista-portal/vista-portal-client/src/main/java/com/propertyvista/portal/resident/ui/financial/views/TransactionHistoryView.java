@@ -18,7 +18,7 @@ import com.propertyvista.portal.shared.ui.IFormView;
 
 public interface TransactionHistoryView extends IFormView<TransactionHistoryDTO> {
 
-    interface Presenter extends IFormViewPresenter<TransactionHistoryDTO> {
+    interface Presenter extends IFormPresenter<TransactionHistoryDTO> {
 
     }
 }

@@ -26,9 +26,9 @@ import com.propertyvista.portal.resident.ui.services.insurance.GeneralPolicyUplo
 import com.propertyvista.portal.resident.ui.services.insurance.GeneralPolicyUploadWizardView.GeneralPolicyUploadWizardPresenter;
 import com.propertyvista.portal.rpc.portal.web.dto.insurance.GeneralInsurancePolicyDTO;
 import com.propertyvista.portal.rpc.portal.web.services.services.GeneralInsurancePolicyCrudService;
-import com.propertyvista.portal.shared.activity.AbstractWizardCrudActivity;
+import com.propertyvista.portal.shared.activity.AbstractWizardFormCrudActivity;
 
-public class GeneralPolicyUploadWizardActivity extends AbstractWizardCrudActivity<GeneralInsurancePolicyDTO> implements
+public class GeneralPolicyUploadWizardActivity extends AbstractWizardFormCrudActivity<GeneralInsurancePolicyDTO> implements
         GeneralPolicyUploadWizardPresenter {
 
     private static final I18n i18n = I18n.get(GeneralPolicyUploadWizardActivity.class);

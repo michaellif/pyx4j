@@ -18,13 +18,13 @@ import com.pyx4j.site.client.IsView;
 
 public interface IFormView<E extends IEntity> extends IsView {
 
-    interface IFormViewPresenter<E extends IEntity> {
+    interface IFormPresenter<E extends IEntity> {
 
     }
 
-    void setPresenter(IFormViewPresenter<E> presenter);
+    void setPresenter(IFormPresenter<E> presenter);
 
-    IFormViewPresenter<E> getPresenter();
+    IFormPresenter<E> getPresenter();
 
     void populate(E value);
 

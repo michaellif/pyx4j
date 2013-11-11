@@ -83,7 +83,7 @@ import com.propertyvista.portal.resident.ui.financial.PortalPaymentTypesUtil;
 import com.propertyvista.portal.resident.ui.financial.paymentmethod.editor.PaymentMethodEditor;
 import com.propertyvista.portal.shared.resources.PortalImages;
 import com.propertyvista.portal.shared.ui.CPortalEntityWizard;
-import com.propertyvista.portal.shared.ui.IWizardView;
+import com.propertyvista.portal.shared.ui.IWizardFormView;
 import com.propertyvista.portal.shared.ui.util.decorators.FormWidgetDecoratorBuilder;
 
 public class PaymentWizard extends CPortalEntityWizard<PaymentDTO> {
@@ -135,7 +135,7 @@ public class PaymentWizard extends CPortalEntityWizard<PaymentDTO> {
 
     private PaymentWizardView.Presenter presenter;
 
-    public PaymentWizard(IWizardView<PaymentDTO> view) {
+    public PaymentWizard(IWizardFormView<PaymentDTO> view) {
         super(PaymentDTO.class, view, i18n.tr("Payment Setup"), i18n.tr("Submit"), ThemeColor.contrast4);
 
         addStep(createDetailsStep());

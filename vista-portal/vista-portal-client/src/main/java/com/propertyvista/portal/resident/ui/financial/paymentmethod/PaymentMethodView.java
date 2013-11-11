@@ -18,7 +18,6 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.propertyvista.domain.contact.AddressSimple;
 import com.propertyvista.portal.rpc.portal.web.dto.financial.PaymentMethodDTO;
 import com.propertyvista.portal.shared.ui.IEditorView;
-import com.propertyvista.portal.shared.ui.IEditorView.IEditorPresenter;
 
 public interface PaymentMethodView extends IEditorView<PaymentMethodDTO> {
 

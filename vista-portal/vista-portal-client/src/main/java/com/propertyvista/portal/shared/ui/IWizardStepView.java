@@ -14,29 +14,34 @@
 package com.propertyvista.portal.shared.ui;
 
 import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.site.client.IsView;
 
-public interface IEditorView<E extends IEntity> extends IFormView<E> {
+import com.propertyvista.portal.shared.ui.IFormView.IFormPresenter;
 
-    public interface IEditorPresenter<E extends IEntity> extends IFormPresenter<E> {
+public interface IWizardStepView<E extends IEntity> extends IsView {
 
-        void edit();
+    public interface IWizardStepPresenter<E extends IEntity> extends IFormPresenter<E> {
 
-        void save();
+        void next();
+
+        void previous();
 
         void cancel();
+
     }
 
-    @Override
-    IEditorPresenter<E> getPresenter();
+    void setPresenter(IWizardStepPresenter<E> presenter);
+
+    IWizardStepPresenter<E> getPresenter();
+
+    void populate(E value);
+
+    void reset();
 
     public E getValue();
 
     public boolean isDirty();
 
-    boolean onSaveFail(Throwable caught);
-
-    void setEditable(boolean flag);
-
-    boolean isEditable();
+    boolean onSubmittionFail(Throwable caught);
 
 }

@@ -11,14 +11,15 @@
  * @author VladL
  * @version $Id$
  */
-package com.propertyvista.portal.resident.ui.services.insurance.tenantsurepaymentmethod;
+package com.propertyvista.portal.prospect.ui.steps;
 
-import com.propertyvista.portal.rpc.portal.web.dto.insurance.InsurancePaymentMethodDTO;
-import com.propertyvista.portal.shared.ui.IFormView;
+import com.propertyvista.portal.rpc.portal.web.dto.financial.PaymentMethodDTO;
+import com.propertyvista.portal.shared.ui.AbstractFormView;
 
-public interface TenantSurePaymentMethodUpdateConfirmationView extends IFormView<InsurancePaymentMethodDTO> {
+public class ApplicationConfirmationViewImpl extends AbstractFormView<PaymentMethodDTO> implements ApplicationConfirmationView {
 
-    interface PaymentMethodConfirmationPresenter extends IFormView.IFormPresenter<InsurancePaymentMethodDTO> {
+    public ApplicationConfirmationViewImpl() {
+        super();
+        setForm(new ApplicationConfirmationForm(this));
     }
-
 }

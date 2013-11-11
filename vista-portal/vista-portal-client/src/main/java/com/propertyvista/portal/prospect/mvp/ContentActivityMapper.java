@@ -22,9 +22,9 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.pyx4j.site.client.activity.AppActivityMapper;
 import com.pyx4j.site.rpc.AppPlace;
 
-import com.propertyvista.portal.prospect.activity.StatusPageActivity;
 import com.propertyvista.portal.prospect.activity.LandingActivity;
 import com.propertyvista.portal.prospect.activity.SignUpActivity;
+import com.propertyvista.portal.prospect.activity.StatusPageActivity;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap;
 import com.propertyvista.portal.rpc.portal.ProspectPortalSiteMap;
 import com.propertyvista.portal.rpc.portal.ProspectPortalSiteMap.Registration;

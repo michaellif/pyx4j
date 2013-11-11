@@ -32,15 +32,15 @@ import com.pyx4j.forms.client.ui.ReferenceDataManager;
 import com.pyx4j.gwt.commons.UnrecoverableClientError;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 
-import com.propertyvista.portal.shared.ui.IWizardView;
+import com.propertyvista.portal.shared.ui.IWizardFormView;
 
-public abstract class AbstractWizardCrudActivity<E extends IEntity> extends AbstractWizardActivity<E> {
+public abstract class AbstractWizardFormCrudActivity<E extends IEntity> extends AbstractWizardFormActivity<E> {
 
     private final AbstractCrudService<E> service;
 
     private final Class<E> entityClass;
 
-    public AbstractWizardCrudActivity(Class<? extends IWizardView<E>> viewType, AbstractCrudService<E> service, Class<E> entityClass) {
+    public AbstractWizardFormCrudActivity(Class<? extends IWizardFormView<E>> viewType, AbstractCrudService<E> service, Class<E> entityClass) {
         super(viewType);
 
         this.service = service;
@@ -76,7 +76,7 @@ public abstract class AbstractWizardCrudActivity<E extends IEntity> extends Abst
             @Override
             public void onSuccess(Key result) {
                 ReferenceDataManager.invalidate(entityClass);
-                AbstractWizardCrudActivity.super.submit();
+                AbstractWizardFormCrudActivity.super.submit();
                 onFinish(result);
             }
 

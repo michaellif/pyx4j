@@ -54,7 +54,7 @@ public abstract class AbstractEditorActivity<E extends IEntity> extends Security
         super.start(panel, eventBus);
         panel.setWidget(view);
         view.setPresenter(this);
-        populate();
+        retreive();
     }
 
     public AbstractCrudService<E> getService() {
@@ -70,7 +70,11 @@ public abstract class AbstractEditorActivity<E extends IEntity> extends Security
     }
 
     @Override
-    public void populate() {
+    public void cancel() {
+        retreive();
+    }
+
+    public void retreive() {
         retreive(AbstractCrudService.RetrieveTarget.View);
     }
 
@@ -113,7 +117,7 @@ public abstract class AbstractEditorActivity<E extends IEntity> extends Security
     }
 
     protected void onSaved(Key result) {
-        populate();
+        retreive();
     }
 
     protected void onSaveFail(Throwable caught) {

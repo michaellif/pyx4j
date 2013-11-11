@@ -17,12 +17,11 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.propertyvista.domain.maintenance.MaintenanceRequestMetadata;
 import com.propertyvista.portal.rpc.portal.web.dto.maintenance.MaintenanceRequestDTO;
-import com.propertyvista.portal.shared.ui.IWizardView;
-import com.propertyvista.portal.shared.ui.IWizardView.IWizardPresenter;
+import com.propertyvista.portal.shared.ui.IWizardFormView;
 
-public interface MaintenanceRequestWizardView extends IWizardView<MaintenanceRequestDTO> {
+public interface MaintenanceRequestWizardView extends IWizardFormView<MaintenanceRequestDTO> {
 
-    public interface MaintenanceRequestWizardPresenter extends IWizardPresenter<MaintenanceRequestDTO> {
+    public interface MaintenanceRequestWizardPresenter extends IWizardFormPresenter<MaintenanceRequestDTO> {
         void getCategoryMeta(final AsyncCallback<MaintenanceRequestMetadata> callback);
 
     }

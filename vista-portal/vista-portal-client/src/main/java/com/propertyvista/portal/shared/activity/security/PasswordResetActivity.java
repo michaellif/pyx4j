@@ -33,11 +33,11 @@ import com.pyx4j.widgets.client.dialog.MessageDialog;
 import com.propertyvista.common.client.ui.components.security.AbstractPasswordResetActivity;
 import com.propertyvista.portal.rpc.portal.services.PortalPasswordResetService;
 import com.propertyvista.portal.shared.PortalSite;
-import com.propertyvista.portal.shared.activity.AbstractWizardActivity;
+import com.propertyvista.portal.shared.activity.AbstractWizardFormActivity;
 import com.propertyvista.portal.shared.ui.security.PasswordResetWizardView;
 import com.propertyvista.portal.shared.ui.security.PasswordResetWizardView.PasswordResetWizardPresenter;
 
-public class PasswordResetActivity extends AbstractWizardActivity<PasswordChangeRequest> implements PasswordResetWizardPresenter {
+public class PasswordResetActivity extends AbstractWizardFormActivity<PasswordChangeRequest> implements PasswordResetWizardPresenter {
 
     private static final I18n i18n = I18n.get(AbstractPasswordResetActivity.class);
 

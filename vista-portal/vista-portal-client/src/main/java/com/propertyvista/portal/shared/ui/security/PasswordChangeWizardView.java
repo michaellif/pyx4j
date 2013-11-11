@@ -15,12 +15,11 @@ package com.propertyvista.portal.shared.ui.security;
 
 import com.pyx4j.security.rpc.PasswordChangeRequest;
 
-import com.propertyvista.portal.shared.ui.IWizardView;
-import com.propertyvista.portal.shared.ui.IWizardView.IWizardPresenter;
+import com.propertyvista.portal.shared.ui.IWizardFormView;
 
-public interface PasswordChangeWizardView extends IWizardView<PasswordChangeRequest> {
+public interface PasswordChangeWizardView extends IWizardFormView<PasswordChangeRequest> {
 
-    public interface PasswordChangePresenter extends IWizardPresenter<PasswordChangeRequest> {
+    public interface PasswordChangePresenter extends IWizardFormPresenter<PasswordChangeRequest> {
 
     }
 

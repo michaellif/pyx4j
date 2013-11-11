@@ -25,9 +25,9 @@ import com.propertyvista.portal.resident.ui.services.insurance.tenantsurepayment
 import com.propertyvista.portal.rpc.portal.ResidentPortalSiteMap;
 import com.propertyvista.portal.rpc.portal.web.dto.insurance.InsurancePaymentMethodDTO;
 import com.propertyvista.portal.rpc.portal.web.services.services.TenantSurePaymentMethodCrudService;
-import com.propertyvista.portal.shared.activity.AbstractWizardCrudActivity;
+import com.propertyvista.portal.shared.activity.AbstractWizardFormCrudActivity;
 
-public class TenantSurePaymentMethodUpdateWizardActivity extends AbstractWizardCrudActivity<InsurancePaymentMethodDTO> implements
+public class TenantSurePaymentMethodUpdateWizardActivity extends AbstractWizardFormCrudActivity<InsurancePaymentMethodDTO> implements
         TenantSurePaymentMethodWizardView.Persenter {
 
     public TenantSurePaymentMethodUpdateWizardActivity(AppPlace place) {

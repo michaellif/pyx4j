@@ -25,7 +25,6 @@ import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.widgets.client.Anchor;
 
-import com.propertyvista.portal.resident.ui.profile.AccountPageView.AccountPagePresenter;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap;
 import com.propertyvista.portal.rpc.portal.web.dto.ResidentAccountDTO;
 import com.propertyvista.portal.shared.themes.EntityViewTheme;

@@ -31,22 +31,22 @@ import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.AppSite;
 
 import com.propertyvista.portal.shared.PortalSite;
-import com.propertyvista.portal.shared.ui.IWizardView;
-import com.propertyvista.portal.shared.ui.IWizardView.IWizardPresenter;
+import com.propertyvista.portal.shared.ui.IWizardFormView;
+import com.propertyvista.portal.shared.ui.IWizardFormView.IWizardFormPresenter;
 
-public abstract class AbstractWizardActivity<E extends IEntity> extends SecurityAwareActivity implements IWizardPresenter<E> {
+public abstract class AbstractWizardFormActivity<E extends IEntity> extends SecurityAwareActivity implements IWizardFormPresenter<E> {
 
-    private static final I18n i18n = I18n.get(AbstractWizardActivity.class);
+    private static final I18n i18n = I18n.get(AbstractWizardFormActivity.class);
 
-    private final IWizardView<E> view;
+    private final IWizardFormView<E> view;
 
-    public AbstractWizardActivity(Class<? extends IWizardView<E>> viewType, Class<E> entityClass) {
+    public AbstractWizardFormActivity(Class<? extends IWizardFormView<E>> viewType, Class<E> entityClass) {
 
         view = PortalSite.getViewFactory().instantiate(viewType);
 
     }
 
-    public AbstractWizardActivity(Class<? extends IWizardView<E>> viewType) {
+    public AbstractWizardFormActivity(Class<? extends IWizardFormView<E>> viewType) {
         this(viewType, null);
     }
 
@@ -57,7 +57,7 @@ public abstract class AbstractWizardActivity<E extends IEntity> extends Security
         panel.setWidget(view);
     }
 
-    public IWizardView<E> getView() {
+    public IWizardFormView<E> getView() {
         return view;
     }
 

@@ -47,7 +47,7 @@ public class MaintenanceRequestPageActivity extends AbstractEditorActivity<Maint
         ((MaintenanceRequestCrudService) getService()).cancelMaintenanceRequest(new DefaultAsyncCallback<VoidSerializable>() {
             @Override
             public void onSuccess(VoidSerializable result) {
-                populate();
+                retreive();
             }
         }, getEntityId());
     }

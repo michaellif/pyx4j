@@ -20,7 +20,7 @@ public class AbstractFormView<E extends IEntity> extends AbstractPortalPanel imp
 
     protected static final I18n i18n = I18n.get(AbstractFormView.class);
 
-    private IFormViewPresenter<E> presenter;
+    private IFormPresenter<E> presenter;
 
     private CPortalEntityForm<E> form;
 
@@ -39,13 +39,13 @@ public class AbstractFormView<E extends IEntity> extends AbstractPortalPanel imp
     }
 
     @Override
-    public void setPresenter(IFormViewPresenter<E> presenter) {
+    public void setPresenter(IFormPresenter<E> presenter) {
         this.presenter = presenter;
         form.reset();
     }
 
     @Override
-    public IFormViewPresenter<E> getPresenter() {
+    public IFormPresenter<E> getPresenter() {
         return presenter;
     }
 

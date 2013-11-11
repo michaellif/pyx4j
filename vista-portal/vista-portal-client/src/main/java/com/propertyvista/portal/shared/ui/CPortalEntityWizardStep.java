@@ -16,46 +16,68 @@ package com.propertyvista.portal.shared.ui;
 import com.pyx4j.commons.css.StyleManager;
 import com.pyx4j.commons.css.ThemeColor;
 import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.forms.client.ui.form.EditableFormDecorator;
+import com.pyx4j.forms.client.ui.CEntityForm;
+import com.pyx4j.forms.client.ui.wizardstep.WizardStepDecorator;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
 
-public abstract class CPortalEntityEditor<E extends IEntity> extends CPortalEntityForm<E> {
+public abstract class CPortalEntityWizardStep<E extends IEntity> extends CEntityForm<E> {
 
-    private static final I18n i18n = I18n.get(CPortalEntityEditor.class);
+    private static final I18n i18n = I18n.get(CPortalEntityWizardStep.class);
 
-    public CPortalEntityEditor(Class<E> clazz, IEditorView<? extends IEntity> view, String headerCaption, ThemeColor themeColor) {
-        super(clazz, view, headerCaption, themeColor);
+    private final IWizardStepView<? extends IEntity> view;
+
+    private WizardStepDecorator<E> decorator;
+
+    private final String headerCaption;
+
+    private final String btnNextCaption;
+
+    private final ThemeColor themeColor;
+
+    public CPortalEntityWizardStep(Class<E> clazz, IWizardStepView<? extends IEntity> view, String headerCaption, String btnNextCaption, ThemeColor themeColor) {
+        super(clazz);
+        this.view = view;
+        this.headerCaption = headerCaption;
+        this.btnNextCaption = btnNextCaption;
+        this.themeColor = themeColor;
+        setViewable(true);
     }
 
-    @SuppressWarnings("unchecked")
-    @Override
-    public IEditorView<E> getView() {
-        return (IEditorView<E>) super.getView();
+    protected String getHeaderCaption() {
+        return headerCaption;
+    }
+
+    protected ThemeColor getThemeColor() {
+        return themeColor;
+    }
+
+    public IWizardStepView<? extends IEntity> getView() {
+        return view;
     }
 
     @Override
-    protected EditableFormDecorator<E> createDecorator() {
-        EditableFormDecorator<E> decorator = new EditableFormDecorator<E>() {
+    protected WizardStepDecorator<E> createDecorator() {
+        decorator = new WizardStepDecorator<E>(btnNextCaption) {
 
             @Override
-            protected void onEdit() {
-                getView().getPresenter().edit();
-            }
-
-            @Override
-            protected void onSave() {
+            protected void onNext() {
                 if (!isValid()) {
                     setUnconditionalValidationErrorRendering(true);
                     MessageDialog.error(i18n.tr("Error"), i18n.tr("There has been an error. Please check your data and try again."));
                 } else {
-                    getView().getPresenter().save();
+                    getView().getPresenter().next();
                 }
             }
 
             @Override
+            protected void onPrevious() {
+                //TODO
+            }
+
+            @Override
             protected void onCancel() {
-                getView().getPresenter().cancel();
+                //TODO
             }
         };
 

@@ -21,12 +21,11 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.propertyvista.domain.contact.AddressSimple;
 import com.propertyvista.domain.payment.LeasePaymentMethod;
 import com.propertyvista.portal.domain.dto.financial.PaymentDTO;
-import com.propertyvista.portal.shared.ui.IWizardView;
-import com.propertyvista.portal.shared.ui.IWizardView.IWizardPresenter;
+import com.propertyvista.portal.shared.ui.IWizardFormView;
 
-public interface PaymentWizardView extends IWizardView<PaymentDTO> {
+public interface PaymentWizardView extends IWizardFormView<PaymentDTO> {
 
-    interface Presenter extends IWizardPresenter<PaymentDTO> {
+    interface Presenter extends IWizardFormPresenter<PaymentDTO> {
 
         void getCurrentAddress(AsyncCallback<AddressSimple> callback);
 

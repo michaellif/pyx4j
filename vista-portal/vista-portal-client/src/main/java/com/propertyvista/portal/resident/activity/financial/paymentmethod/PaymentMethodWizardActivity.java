@@ -28,12 +28,11 @@ import com.pyx4j.site.rpc.AppPlaceInfo;
 import com.propertyvista.domain.contact.AddressSimple;
 import com.propertyvista.portal.resident.ui.financial.paymentmethod.PaymentMethodWizardView;
 import com.propertyvista.portal.rpc.portal.ResidentPortalSiteMap;
-import com.propertyvista.portal.rpc.portal.ResidentPortalSiteMap.Financial;
 import com.propertyvista.portal.rpc.portal.web.dto.financial.PaymentMethodDTO;
 import com.propertyvista.portal.rpc.portal.web.services.financial.PaymentMethodWizardService;
-import com.propertyvista.portal.shared.activity.AbstractWizardCrudActivity;
+import com.propertyvista.portal.shared.activity.AbstractWizardFormCrudActivity;
 
-public class PaymentMethodWizardActivity extends AbstractWizardCrudActivity<PaymentMethodDTO> implements PaymentMethodWizardView.Presenter {
+public class PaymentMethodWizardActivity extends AbstractWizardFormCrudActivity<PaymentMethodDTO> implements PaymentMethodWizardView.Presenter {
 
     public PaymentMethodWizardActivity(AppPlace place) {
         super(PaymentMethodWizardView.class, GWT.<PaymentMethodWizardService> create(PaymentMethodWizardService.class), PaymentMethodDTO.class);

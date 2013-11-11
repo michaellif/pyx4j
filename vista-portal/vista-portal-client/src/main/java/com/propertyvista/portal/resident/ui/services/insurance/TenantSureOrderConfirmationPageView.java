@@ -18,7 +18,7 @@ import com.propertyvista.portal.shared.ui.IFormView;
 
 public interface TenantSureOrderConfirmationPageView extends IFormView<TenantSureInsurancePolicyDTO> {
 
-    public interface TenantSureOrderConfirmationPagePresenter extends IFormView.IFormViewPresenter<TenantSureInsurancePolicyDTO> {
+    public interface TenantSureOrderConfirmationPagePresenter extends IFormView.IFormPresenter<TenantSureInsurancePolicyDTO> {
 
         void back();
     }

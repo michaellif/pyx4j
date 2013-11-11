@@ -24,7 +24,7 @@ import com.propertyvista.domain.payment.InsurancePaymentMethod;
 import com.propertyvista.portal.resident.ui.services.insurance.tenantsurepaymentmethod.TenantSurePaymentMethodWizardView.Persenter;
 import com.propertyvista.portal.rpc.portal.web.dto.insurance.InsurancePaymentMethodDTO;
 import com.propertyvista.portal.shared.ui.CPortalEntityWizard;
-import com.propertyvista.portal.shared.ui.IWizardView;
+import com.propertyvista.portal.shared.ui.IWizardFormView;
 
 public class TenantSurePaymentMethodWizard extends CPortalEntityWizard<InsurancePaymentMethodDTO> {
 
@@ -39,7 +39,7 @@ public class TenantSurePaymentMethodWizard extends CPortalEntityWizard<Insurance
         }
     });
 
-    public TenantSurePaymentMethodWizard(IWizardView<InsurancePaymentMethodDTO> view) {
+    public TenantSurePaymentMethodWizard(IWizardFormView<InsurancePaymentMethodDTO> view) {
         super(InsurancePaymentMethodDTO.class, view, i18n.tr("TenantSure Payment Setup"), i18n.tr("Submit"), ThemeColor.contrast3);
 
         addStep(createPaymentMethodStep());

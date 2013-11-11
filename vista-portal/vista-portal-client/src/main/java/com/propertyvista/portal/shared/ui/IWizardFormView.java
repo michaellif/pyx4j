@@ -16,9 +16,9 @@ package com.propertyvista.portal.shared.ui;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.site.client.IsView;
 
-public interface IWizardView<E extends IEntity> extends IsView {
+public interface IWizardFormView<E extends IEntity> extends IsView {
 
-    public interface IWizardPresenter<E extends IEntity> {
+    public interface IWizardFormPresenter<E extends IEntity> {
 
         void submit();
 
@@ -26,9 +26,9 @@ public interface IWizardView<E extends IEntity> extends IsView {
 
     }
 
-    void setPresenter(IWizardPresenter<E> presenter);
+    void setPresenter(IWizardFormPresenter<E> presenter);
 
-    IWizardPresenter<E> getPresenter();
+    IWizardFormPresenter<E> getPresenter();
 
     void populate(E value);
 

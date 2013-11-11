@@ -15,7 +15,6 @@ package com.propertyvista.portal.resident.ui.financial.autopay;
 
 import com.propertyvista.portal.rpc.portal.web.dto.financial.AutoPayDTO;
 import com.propertyvista.portal.shared.ui.IEditorView;
-import com.propertyvista.portal.shared.ui.IEditorView.IEditorPresenter;
 
 public interface AutoPayView extends IEditorView<AutoPayDTO> {
 

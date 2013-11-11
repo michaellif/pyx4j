@@ -48,7 +48,7 @@ public class TenantSurePageActivity extends AbstractEditorActivity<TenantSureIns
         ((TenantSureInsurancePolicyCrudService) getService()).cancelTenantSure(new DefaultAsyncCallback<VoidSerializable>() {
             @Override
             public void onSuccess(VoidSerializable result) {
-                TenantSurePageActivity.this.populate();
+                retreive();
             }
         });
     }
@@ -58,7 +58,7 @@ public class TenantSurePageActivity extends AbstractEditorActivity<TenantSureIns
         ((TenantSureInsurancePolicyCrudService) getService()).reinstate(new DefaultAsyncCallback<VoidSerializable>() {
             @Override
             public void onSuccess(VoidSerializable result) {
-                TenantSurePageActivity.this.populate();
+                retreive();
             }
         });
     }
