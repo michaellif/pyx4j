@@ -631,7 +631,8 @@ BEGIN
         
         EXECUTE 'UPDATE '||v_schema_name||'.autopay_agreement '
                 ||'SET is_deleted = TRUE '
-                ||'WHERE expired_from IS NOT NULL';
+                ||'WHERE (expired_from IS NOT NULL '
+                ||'AND expired_from < ''02-NOV-2013'' ) ';
         
         
         -- auto_pay_policy
