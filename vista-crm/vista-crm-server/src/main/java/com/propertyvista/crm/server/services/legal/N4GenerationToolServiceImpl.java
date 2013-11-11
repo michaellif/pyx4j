@@ -157,7 +157,10 @@ public class N4GenerationToolServiceImpl implements N4GenerationToolService {
         if (settings.filterByBuildings().isBooleanTrue()) {
             Portfolio virtualPortfolio = EntityFactory.create(Portfolio.class);
             virtualPortfolio.buildings().addAll(settings.buildings());
-            settings.filterByPortfolios().setValue(true);
+            if (!settings.filterByPortfolios().isBooleanTrue()) {
+                settings.portfolios().clear();
+                settings.filterByPortfolios().setValue(true);
+            }
             settings.portfolios().add(virtualPortfolio);
         }
         if (settings.filterByPortfolios().isBooleanTrue()) {
