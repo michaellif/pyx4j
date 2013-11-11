@@ -65,13 +65,6 @@ public class VistaServerSideConfigurationProd extends VistaServerSideConfigurati
             break;
         default:
             hostName = pmcDnsName;
-            if (VistaDeployment.isVistaStaging()) {
-                if ((application == VistaApplication.prospect) || (application == VistaApplication.resident)) {
-                    hostName = pmcDnsName + "-" + "portal";
-                } else {
-                    hostName += "-" + application.name();
-                }
-            }
         }
         if (VistaDeployment.isVistaStaging()) {
             hostName += "-staging03";
