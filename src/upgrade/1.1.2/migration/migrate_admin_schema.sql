@@ -98,8 +98,12 @@ SET search_path = '_admin_';
         WHERE   target = 'residentPortal';
         
         UPDATE  audit_record
-        SET     app = 'portal'
+        SET     app = 'site'
         WHERE   app = 'residentPortal';
+        
+        UPDATE  audit_record
+        SET     app = 'portal'
+        WHERE   app = 'resident';
         
         UPDATE  pad_file
         SET     file_creation_number_s = _dba_.convert_id_to_string('file_creation_number');
@@ -127,6 +131,11 @@ SET search_path = '_admin_';
         DELETE 
         FROM    scheduler_trigger
         WHERE   trigger_type = 'paymentsUpdate';
+        
+        
+        UPDATE  vista_terms 
+        SET     target = 'PmcCaledonSoleProprietorshipSection'
+        WHERE   target = 'PmcCaldedonSoleProprietorshipSection';
         
         SET CONSTRAINTS ALL IMMEDIATE;
         
