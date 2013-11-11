@@ -147,13 +147,17 @@ public class TenantCrudServiceImpl extends LeaseParticipantCrudServiceBaseImpl<T
     }
 
     private void updateInsuranceCertificates(TenantDTO tenantDto) {
-        List<InsuranceCertificate> oldInsuranceCertificates = ServerSideFactory.create(TenantInsuranceFacade.class).getInsuranceCertificates(
+        List<InsuranceCertificate<?>> oldInsuranceCertificates = ServerSideFactory.create(TenantInsuranceFacade.class).getInsuranceCertificates(
                 EntityFactory.createIdentityStub(Tenant.class, tenantDto.getPrimaryKey()), true);
 
-        Collection<InsuranceCertificate> deletedInsuranceCertificates = CollectionUtils.subtract(oldInsuranceCertificates, tenantDto.insuranceCertificates());
-        for (InsuranceCertificate insuranceCertificate : tenantDto.insuranceCertificates()) {
+        @SuppressWarnings("unchecked")
+        Collection<InsuranceCertificate<?>> deletedInsuranceCertificates = CollectionUtils
+                .subtract(oldInsuranceCertificates, tenantDto.insuranceCertificates());
+
+        for (InsuranceCertificate<?> insuranceCertificate : tenantDto.insuranceCertificates()) {
             // skip certificates that cannot be updated by pmc
-            if ((insuranceCertificate instanceof PropertyVistaIntegratedInsurance) | insuranceCertificate.isManagedByTenant().isBooleanTrue()) {
+            if ((insuranceCertificate instanceof PropertyVistaIntegratedInsurance) || insuranceCertificate.isManagedByTenant().isBooleanTrue()) {
+                log.debug("skip update of ManagedByTenant Certificate", insuranceCertificate);
                 continue;
             }
             if (insuranceCertificate.getPrimaryKey() == null && (insuranceCertificate instanceof GeneralInsuranceCertificate)) {
@@ -161,15 +165,18 @@ public class TenantCrudServiceImpl extends LeaseParticipantCrudServiceBaseImpl<T
                         EntityFactory.createIdentityStub(Tenant.class, tenantDto.getPrimaryKey()), (GeneralInsuranceCertificate) insuranceCertificate);
             } else {
                 // check that nobody is tampering the PV/Tenant managed insurance certificates (we have to validate the type of the data based on pk from our db and don't rely on flags from outside)
-                InsuranceCertificate oldInsuranceCertificate = Persistence.service().retrieve(InsuranceCertificate.class, insuranceCertificate.getPrimaryKey());
+                InsuranceCertificate<?> oldInsuranceCertificate = Persistence.service().retrieve(InsuranceCertificate.class,
+                        insuranceCertificate.getPrimaryKey());
                 if (!(oldInsuranceCertificate instanceof PropertyVistaIntegratedInsurance) || !oldInsuranceCertificate.isManagedByTenant().isBooleanTrue()) {
                     Persistence.secureSave(insuranceCertificate);
+                } else {
+                    log.debug("skip update of ManagedByTenant Certificate", insuranceCertificate);
                 }
             }
 
         }
 
-        for (InsuranceCertificate deletedCertificate : deletedInsuranceCertificates) {
+        for (InsuranceCertificate<?> deletedCertificate : deletedInsuranceCertificates) {
             if ((deletedCertificate instanceof PropertyVistaIntegratedInsurance) || deletedCertificate.isManagedByTenant().isBooleanTrue()) {
                 throw new SecurityViolationException("it's forbidden to delete property vista integrated or user managed insurance certificates");
             }

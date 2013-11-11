@@ -21,7 +21,7 @@ import com.propertyvista.portal.rpc.portal.web.dto.insurance.status.InsuranceSta
 
 public interface TenantInsuranceFacade {
 
-    List<InsuranceCertificate> getInsuranceCertificates(Tenant tenantId, boolean ownedOnly);
+    List<InsuranceCertificate<?>> getInsuranceCertificates(Tenant tenantId, boolean ownedOnly);
 
     InsuranceStatusDTO getInsuranceStatus(Tenant tenantId);
 

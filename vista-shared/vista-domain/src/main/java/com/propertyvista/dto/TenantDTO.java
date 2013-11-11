@@ -40,7 +40,7 @@ public interface TenantDTO extends LeaseParticipantDTO<LeaseTermTenant> {
     @Caption(description = "This is the minimum liability that was set by tenant insurance policy")
     IPrimitive<BigDecimal> minimumRequiredLiability();
 
-    IList<InsuranceCertificate> insuranceCertificates();
+    IList<InsuranceCertificate<?>> insuranceCertificates();
 
     @Caption(name = "Pre-Authorized Payments")
     IList<PreauthorizedPaymentDTO> preauthorizedPayments();
