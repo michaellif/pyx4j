@@ -30,6 +30,7 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
+import com.google.gwt.safehtml.shared.SafeHtmlUtils;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.ui.CheckBox;
@@ -78,7 +79,7 @@ public class TreePickerPanel<E> extends PickerPanel<E> {
             treeItem = new PickerTreeItem(option);
             tree.addItem(treeItem);
             if (!plainList) {
-                treeItem.addItem("Loading...");
+                treeItem.addItem(SafeHtmlUtils.fromTrustedString("Loading..."));
             }
 
             treeItem.setUserObject(option);
