@@ -38,6 +38,17 @@ public interface L1FormFieldsData extends IEntity {
 
     }
 
+    public enum TypeOfLandlord {
+
+        Male, Female, Company
+
+    }
+
+    public enum LandlordOrAgent {
+
+        Landlord, Agent
+    }
+
     IPrimitive<String> totalRentOwing();
 
     IPrimitive<String> totalRentOwingAsOf();
@@ -202,5 +213,60 @@ public interface L1FormFieldsData extends IEntity {
     IPrimitive<String> part5TotalNSFChequeChargesOwing();
 
     IPrimitive<String> part5Total();
+
+    // Part6
+    IPrimitive<String> part6_firstName();
+
+    IPrimitive<String> part6_lastName();
+
+    IPrimitive<TypeOfLandlord> part6_typeOfLandlord();
+
+    IPrimitive<String> part6_streetAddress();
+
+    IPrimitive<String> part6_unit();
+
+    IPrimitive<String> part6_municipality();
+
+    IPrimitive<String> part6_provice();
+
+    IPrimitive<String> part6_postalCode();
+
+    IPrimitive<String> part6_dayPhoneNumber();
+
+    IPrimitive<String> part6_eveningPhoneNumber();
+
+    IPrimitive<String> part6_faxNumber();
+
+    IPrimitive<String> part6_emailAddress();
+
+    IPrimitive<String> part6_agentsFirstName();
+
+    IPrimitive<String> part6_agentsLastName();
+
+    IPrimitive<String> part6_agentsCompanyName();
+
+    IPrimitive<String> part6_agentsMailingAddress();
+
+    IPrimitive<String> part6_agentsUnit();
+
+    IPrimitive<String> part6_agentsMunicipality();
+
+    IPrimitive<String> part6_agentsProvince();
+
+    IPrimitive<String> part6_agentsPostalCode();
+
+    IPrimitive<String> part6_agentsPhoneNumber();
+
+    IPrimitive<String> part6_agentsFaxNumber();
+
+    IPrimitive<String> part6_agentsEmail();
+
+    // Part7
+
+    IPrimitive<byte[]> part7_signature();
+
+    IPrimitive<LandlordOrAgent> part7_landlordOrAgent();
+
+    IPrimitive<String> part7_date();
 
 }
