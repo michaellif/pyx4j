@@ -7,65 +7,48 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on 2011-02-09
- * @author vlads
+ * Created on Aug 4, 2011
+ * @author michaellif
  * @version $Id$
  */
-package com.propertyvista.domain.tenant.ptapp;
-
-import java.io.Serializable;
+package com.propertyvista.domain.tenant.prospect;
 
 import javax.xml.bind.annotation.XmlType;
 
+import com.pyx4j.commons.LogicalDate;
+import com.pyx4j.entity.adapters.index.AlphanumIndexAdapter;
 import com.pyx4j.entity.annotations.Detached;
-import com.pyx4j.entity.annotations.JoinColumn;
+import com.pyx4j.entity.annotations.Indexed;
+import com.pyx4j.entity.annotations.Length;
 import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.annotations.Owner;
 import com.pyx4j.entity.annotations.ReadOnly;
+import com.pyx4j.entity.annotations.Timestamp;
+import com.pyx4j.entity.annotations.Timestamp.Update;
+import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
+import com.pyx4j.entity.shared.ISet;
 import com.pyx4j.i18n.annotations.I18n;
-import com.pyx4j.i18n.annotations.Translate;
 import com.pyx4j.i18n.shared.I18nEnum;
 
-import com.propertyvista.domain.tenant.Customer;
+import com.propertyvista.domain.tenant.lease.LeaseApplication;
 
-/**
- * This is an application progress for tenant, secondary tenant and guarantors.
- */
-public interface OnlineApplication extends IEntity {
+public interface MasterOnlineApplication extends IEntity {
 
-    @I18n(context = "OnlineApplication")
-    @XmlType(name = "OnlineApplicationStatus")
+    @I18n(context = "MasterOnlineApplication")
+    @XmlType(name = "MasterOnlineApplicationStatus")
     public enum Status {
 
-        Invited,
+        Incomplete, // Mapped to Lease status ApplicationInProgress
 
-        Incomplete,
+        Submitted, // LeaseApplication.Status.Draft
 
         InformationRequested,
 
-        Submitted;
-
-        @Override
-        public String toString() {
-            return I18nEnum.toString(this);
-        }
-    }
-
-    @I18n
-    @XmlType(name = "CustomerRole")
-    public static enum Role implements Serializable {
-
-        Applicant,
-
-        @Translate("Co-Applicant")
-        CoApplicant,
-
-        Guarantor;
+        Cancelled; // LeaseApplication.Status.Draft
 
         @Override
         public String toString() {
@@ -74,26 +57,23 @@ public interface OnlineApplication extends IEntity {
     }
 
     @Owner
-    @NotNull
     @MemberColumn(notNull = true)
-    @ReadOnly
-    @Detached
-    @JoinColumn
-    MasterOnlineApplication masterOnlineApplication();
+    LeaseApplication leaseApplication();
 
     @NotNull
     @ReadOnly
-    Customer customer();
-
-    @NotNull
-    @ReadOnly
-    IPrimitive<Role> role();
+    @ToString
+    @Length(14)
+    @Indexed(uniqueConstraint = true, ignoreCase = true)
+    @MemberColumn(sortAdapter = AlphanumIndexAdapter.class)
+    IPrimitive<String> onlineApplicationId();
 
     IPrimitive<Status> status();
 
     @Owned
-    IList<ApplicationWizardStep> steps();
+    @Detached
+    ISet<OnlineApplication> applications();
 
-    @Owned
-    IList<DigitalSignature> signatures();
+    @Timestamp(Update.Created)
+    IPrimitive<LogicalDate> createDate();
 }

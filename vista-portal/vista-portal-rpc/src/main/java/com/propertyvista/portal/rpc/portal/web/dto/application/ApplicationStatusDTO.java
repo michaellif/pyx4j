@@ -13,10 +13,33 @@
  */
 package com.propertyvista.portal.rpc.portal.web.dto.application;
 
+import com.pyx4j.entity.annotations.Caption;
+import com.pyx4j.entity.annotations.Format;
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.shared.IPrimitive;
+
+import com.propertyvista.domain.person.Name;
+import com.propertyvista.domain.tenant.prospect.OnlineApplication;
 
 @Transient
 public interface ApplicationStatusDTO extends IEntity {
 
+    IPrimitive<OnlineApplication.Status> status();
+
+    /**
+     * Tenant/Guarantor
+     */
+    Name person();
+
+    IPrimitive<OnlineApplication.Role> role();
+
+    /**
+     * Completed steps/total steps in %
+     */
+    @Format("#0.00")
+    @Caption(name = "Progress (%)")
+    IPrimitive<Double> progress();
+
+    IPrimitive<String> description();
 }

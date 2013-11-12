@@ -11,7 +11,7 @@
  * @author vlads
  * @version $Id$
  */
-package com.propertyvista.domain.tenant.ptapp;
+package com.propertyvista.domain.tenant.prospect;
 
 import java.io.Serializable;
 
