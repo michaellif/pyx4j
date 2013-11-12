@@ -20,9 +20,18 @@
  */
 package com.propertyvista.portal.shared.activity;
 
-import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.i18n.shared.I18n;
+import com.google.gwt.event.shared.EventBus;
+import com.google.gwt.user.client.rpc.AsyncCallback;
+import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
+import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.gwt.commons.UnrecoverableClientError;
+import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.rpc.client.DefaultAsyncCallback;
+
+import com.propertyvista.portal.prospect.ui.steps.UnitStepView;
+import com.propertyvista.portal.rpc.portal.services.AbstractWizardStepService;
+import com.propertyvista.portal.rpc.portal.services.UnitStepService;
 import com.propertyvista.portal.shared.PortalSite;
 import com.propertyvista.portal.shared.ui.IWizardStepView;
 import com.propertyvista.portal.shared.ui.IWizardStepView.IWizardStepPresenter;
@@ -33,8 +42,92 @@ public abstract class AbstractWizardStepActivity<E extends IEntity> extends Secu
 
     private final IWizardStepView<E> view;
 
-    public AbstractWizardStepActivity(Class<? extends IWizardStepView<E>> viewType, Class<E> entityClass) {
+    private final AbstractWizardStepService<E> service;
+
+    public AbstractWizardStepActivity(Class<? extends IWizardStepView<E>> viewType, AbstractWizardStepService<E> service) {
         view = PortalSite.getViewFactory().getView(viewType);
+        this.service = service;
     }
 
+    @Override
+    public void start(AcceptsOneWidget panel, EventBus eventBus) {
+        super.start(panel, eventBus);
+        panel.setWidget(view);
+        view.setPresenter(this);
+        service.retrieve(new DefaultAsyncCallback<E>() {
+            @Override
+            public void onSuccess(E result) {
+                view.reset();
+                view.populate(result);
+            }
+        });
+    }
+
+    public abstract void navigateToNextStep();
+
+    public abstract void navigateToPreviousStep();
+
+    public abstract void navigateOut();
+
+    public IWizardStepView<E> getView() {
+        return view;
+    }
+
+    protected void onDiscard() {
+        view.reset();
+        view.setPresenter(null);
+    }
+
+    @Override
+    public void onCancel() {
+        onDiscard();
+        super.onCancel();
+    }
+
+    @Override
+    public void onStop() {
+        onDiscard();
+        super.onStop();
+    }
+
+    @Override
+    public void cancel() {
+        navigateOut();
+    }
+
+    @Override
+    public void next() {
+        service.submit(new AsyncCallback<E>() {
+            @Override
+            public void onSuccess(E result) {
+                navigateToNextStep();
+            }
+
+            @Override
+            public void onFailure(Throwable caught) {
+                onSubmittionFail(caught);
+            }
+        }, view.getValue());
+    }
+
+    protected void onSubmittionFail(Throwable caught) {
+        if (!view.onSubmittionFail(caught)) {
+            throw new UnrecoverableClientError(caught);
+        }
+    }
+
+    @Override
+    public void previous() {
+        service.submit(new AsyncCallback<E>() {
+            @Override
+            public void onSuccess(E result) {
+                navigateToPreviousStep();
+            }
+
+            @Override
+            public void onFailure(Throwable caught) {
+                onSubmittionFail(caught);
+            }
+        }, view.getValue());
+    }
 }

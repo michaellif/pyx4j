@@ -29,4 +29,12 @@ public class ProspectPortalSiteMap extends PortalSiteMap {
     public static class Status extends AppPlace {
     }
 
+    public static class Application extends AppPlace {
+
+        public static class UnitStep extends AppPlace {
+
+        }
+
+    }
+
 }

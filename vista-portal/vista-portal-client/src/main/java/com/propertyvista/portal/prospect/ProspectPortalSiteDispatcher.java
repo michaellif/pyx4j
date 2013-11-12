@@ -41,7 +41,7 @@ public class ProspectPortalSiteDispatcher extends AbstractAppPlaceDispatcher {
 
     @Override
     protected void obtainDefaultAuthenticatedPlace(AsyncCallback<AppPlace> callback) {
-        callback.onSuccess(new ProspectPortalSiteMap.Status());
+        callback.onSuccess(new ProspectPortalSiteMap.Application.UnitStep());
     }
 
     @Override

@@ -25,6 +25,7 @@ import com.pyx4j.site.rpc.AppPlace;
 import com.propertyvista.portal.prospect.activity.LandingActivity;
 import com.propertyvista.portal.prospect.activity.SignUpActivity;
 import com.propertyvista.portal.prospect.activity.StatusPageActivity;
+import com.propertyvista.portal.prospect.activity.steps.UnitStepActivity;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap;
 import com.propertyvista.portal.rpc.portal.ProspectPortalSiteMap;
 import com.propertyvista.portal.rpc.portal.ProspectPortalSiteMap.Registration;
@@ -54,22 +55,26 @@ public class ContentActivityMapper implements AppActivityMapper {
                         activity = new StatusPageActivity(appPlace);
 
 // Internals:
-                    } else if (place instanceof PortalSiteMap.Login) {
-                        activity = new LandingActivity(place);
-                    } else if (place instanceof PortalSiteMap.Logout) {
+                    } else if (appPlace instanceof PortalSiteMap.Login) {
+                        activity = new LandingActivity(appPlace);
+                    } else if (appPlace instanceof PortalSiteMap.Logout) {
                         activity = new LogoutActivity();
-                    } else if (place instanceof PortalSiteMap.PasswordReset) {
-                        activity = new PasswordResetActivity(place);
-                    } else if (place instanceof PortalSiteMap.LoginWithToken) {
-                        activity = new LoginWithTokenActivity(place);
-                    } else if (place instanceof PortalSiteMap.PasswordResetRequest) {
-                        activity = new PasswordResetRequestWizardActivity(place);
-                    } else if (place instanceof PortalSiteMap.PasswordChange) {
+                    } else if (appPlace instanceof PortalSiteMap.PasswordReset) {
+                        activity = new PasswordResetActivity(appPlace);
+                    } else if (appPlace instanceof PortalSiteMap.LoginWithToken) {
+                        activity = new LoginWithTokenActivity(appPlace);
+                    } else if (appPlace instanceof PortalSiteMap.PasswordResetRequest) {
+                        activity = new PasswordResetRequestWizardActivity(appPlace);
+                    } else if (appPlace instanceof PortalSiteMap.PasswordChange) {
                         activity = new PasswordChangeActivity();
-                    } else if (place instanceof Registration) {
-                        activity = new SignUpActivity(place);
+                    } else if (appPlace instanceof Registration) {
+                        activity = new SignUpActivity(appPlace);
                     } else if (appPlace instanceof PortalSiteMap.NotificationPlace) {
-                        activity = new NotificationPageActivity((PortalSiteMap.NotificationPlace) place);
+                        activity = new NotificationPageActivity((PortalSiteMap.NotificationPlace) appPlace);
+
+// Steps:
+                    } else if (appPlace instanceof ProspectPortalSiteMap.Application.UnitStep) {
+                        activity = new UnitStepActivity(appPlace);
 
                     }
 

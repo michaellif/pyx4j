@@ -56,6 +56,7 @@ import com.propertyvista.portal.rpc.portal.services.PortalPasswordResetService;
 import com.propertyvista.portal.rpc.portal.services.PortalPolicyRetrieveService;
 import com.propertyvista.portal.rpc.portal.services.PortalVistaTermsService;
 import com.propertyvista.portal.rpc.portal.services.SiteThemeServices;
+import com.propertyvista.portal.rpc.portal.services.UnitStepService;
 import com.propertyvista.portal.rpc.portal.services.resident.AutoPayRetrieveService;
 import com.propertyvista.portal.rpc.portal.services.resident.BillSummaryService;
 import com.propertyvista.portal.rpc.portal.services.resident.BillingHistoryService;
@@ -168,6 +169,8 @@ public class VistaPortalAccessControlList extends ServletContainerAclBuilder {
         grant(VistaCustomerBehavior.Prospective, new IServiceExecutePermission(ChargesService.class));
         grant(VistaCustomerBehavior.Prospective, new IServiceExecutePermission(SummaryService.class));
         grant(VistaCustomerBehavior.Prospective, new IServiceExecutePermission(PaymentService.class));
+
+        grant(VistaCustomerBehavior.Prospective, new IServiceExecutePermission(UnitStepService.class));
 
         // Old TODO remove
         grant(VistaCustomerBehavior.Prospective, new IServiceExecutePermission(ReferenceDataService.class));

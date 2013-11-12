@@ -44,13 +44,10 @@ public abstract class AbstractEditorActivity<E extends IEntity> extends Security
     private final Key entityId;
 
     public AbstractEditorActivity(Class<? extends IEditorView<E>> viewType, AbstractCrudService<E> service, AppPlace place) {
-        view = PortalSite.getViewFactory().getView(viewType);
-        view.setPresenter(this);
-
         this.service = service;
         this.place = place;
-
         entityId = place.getItemId();
+        view = PortalSite.getViewFactory().getView(viewType);
     }
 
     @Override

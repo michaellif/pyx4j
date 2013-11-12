@@ -20,17 +20,17 @@ import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.portal.prospect.ui.steps.UnitStepView.UnitStepPresenter;
-import com.propertyvista.portal.rpc.portal.web.dto.financial.PaymentMethodDTO;
+import com.propertyvista.portal.rpc.portal.web.dto.application.UnitInfoDTO;
 import com.propertyvista.portal.shared.ui.CPortalEntityWizardStep;
 
-public class UnitStep extends CPortalEntityWizardStep<PaymentMethodDTO> {
+public class UnitStep extends CPortalEntityWizardStep<UnitInfoDTO> {
 
     private static final I18n i18n = I18n.get(UnitStep.class);
 
     private UnitStepPresenter presenter;
 
     public UnitStep(UnitStepView view) {
-        super(PaymentMethodDTO.class, view, i18n.tr("Unit"), i18n.tr("Next"), ThemeColor.contrast4);
+        super(UnitInfoDTO.class, view, i18n.tr("Unit"), i18n.tr("Next"), ThemeColor.contrast4);
     }
 
     @Override
