@@ -60,6 +60,7 @@ public class VistaServerSideConfigurationProd extends VistaServerSideConfigurati
         switch (application) {
         case onboarding:
             hostName = "start";
+            break;
         case operations:
             hostName = application.name();
             break;
