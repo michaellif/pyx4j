@@ -20,9 +20,6 @@
  */
 package com.propertyvista.biz.legal;
 
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.lang.reflect.Method;
 import java.math.BigDecimal;
 import java.util.Collection;
 import java.util.GregorianCalendar;
@@ -30,21 +27,12 @@ import java.util.List;
 
 import org.apache.commons.io.IOUtils;
 
-import com.itextpdf.text.DocumentException;
-import com.itextpdf.text.Image;
-import com.itextpdf.text.pdf.AcroFields;
-import com.itextpdf.text.pdf.AcroFields.FieldPosition;
-import com.itextpdf.text.pdf.PdfContentByte;
-import com.itextpdf.text.pdf.PdfReader;
-import com.itextpdf.text.pdf.PdfStamper;
-
 import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.commons.SimpleMessageFormat;
 import com.pyx4j.config.server.SystemDateManager;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
-import com.pyx4j.entity.shared.IEntity;
 
 import com.propertyvista.domain.contact.AddressSimple;
 import com.propertyvista.domain.contact.AddressStructured;
@@ -55,7 +43,6 @@ import com.propertyvista.domain.legal.N4FormFieldsData.SignedBy;
 import com.propertyvista.domain.legal.N4LandlordsData;
 import com.propertyvista.domain.legal.N4LeaseData;
 import com.propertyvista.domain.legal.N4RentOwingForPeriod;
-import com.propertyvista.domain.legal.PdfFormFieldName;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.LeaseTermTenant;
 import com.propertyvista.domain.tenant.lease.Tenant;
@@ -76,7 +63,7 @@ public class N4GenerationFacadeImpl implements N4GenerationFacade {
         byte[] filledForm = null;
         try {
             byte[] formTemplate = IOUtils.toByteArray(N4GenerationFacadeImpl.class.getResourceAsStream(N4_FORM_FILE));
-            filledForm = fillForm(formData, formTemplate);
+            filledForm = FormUtils.fillForm(formData, formTemplate);
         } catch (Throwable e) {
             throw new RuntimeException(e);
         }
@@ -102,39 +89,39 @@ public class N4GenerationFacadeImpl implements N4GenerationFacade {
         fieldsData.tenantPostalCodeDAD().setValue(leaseData.rentalUnitAddress().postalCode().getValue().substring(4, 7));
 
         // create a date in the following format: dd/MM/YYYY        
-        String[] globalTerminationDate = N4FormUtils.splitDate(leaseData.terminationDate().getValue());
+        String[] globalTerminationDate = FormUtils.splitDate(leaseData.terminationDate().getValue());
         fieldsData.terminationDateDD().setValue(globalTerminationDate[0]);
         fieldsData.terminationDateMM().setValue(globalTerminationDate[1]);
         fieldsData.terminationDateYYYY().setValue(globalTerminationDate[2]);
 
-        String[] totalOwed = N4FormUtils.splitCurrency(leaseData.totalRentOwning().getValue(), false);
+        String[] totalOwed = FormUtils.splitCurrency(leaseData.totalRentOwning().getValue(), false);
         fieldsData.globalTotalOwedThousands().setValue(totalOwed[0]);
         fieldsData.globalTotalOwedHundreds().setValue(totalOwed[1]);
         fieldsData.globalTotalOwedCents().setValue(totalOwed[2]);
 
         if (leaseData.rentOwingBreakdown().size() >= 1) {
             N4RentOwingForPeriod rentOwningForPeriod = leaseData.rentOwingBreakdown().get(0);
-            String[] owedFrom = N4FormUtils.splitDate(rentOwningForPeriod.from().getValue());
+            String[] owedFrom = FormUtils.splitDate(rentOwningForPeriod.from().getValue());
             fieldsData.owedFromDDA().setValue(owedFrom[0]);
             fieldsData.owedFromMMA().setValue(owedFrom[1]);
             fieldsData.owedFromYYYYA().setValue(owedFrom[2]);
 
-            String[] owedTo = N4FormUtils.splitDate(rentOwningForPeriod.to().getValue());
+            String[] owedTo = FormUtils.splitDate(rentOwningForPeriod.to().getValue());
             fieldsData.owedToDDA().setValue(owedTo[0]);
             fieldsData.owedToMMA().setValue(owedTo[1]);
             fieldsData.owedToYYYYA().setValue(owedTo[2]);
 
-            String[] charged = N4FormUtils.splitCurrency(rentOwningForPeriod.rentCharged().getValue(), true);
+            String[] charged = FormUtils.splitCurrency(rentOwningForPeriod.rentCharged().getValue(), true);
             fieldsData.rentChargedThousandsA().setValue(charged[0]);
             fieldsData.rentChargedHundredsA().setValue(charged[1]);
             fieldsData.rentChargedCentsA().setValue(charged[2]);
 
-            String[] paid = N4FormUtils.splitCurrency(rentOwningForPeriod.rentPaid().getValue(), true);
+            String[] paid = FormUtils.splitCurrency(rentOwningForPeriod.rentPaid().getValue(), true);
             fieldsData.rentPaidThousandsA().setValue(paid[0]);
             fieldsData.rentPaidHundredsA().setValue(paid[1]);
             fieldsData.rentPaidCentsA().setValue(paid[2]);
 
-            String[] owing = N4FormUtils.splitCurrency(rentOwningForPeriod.rentOwing().getValue(), true);
+            String[] owing = FormUtils.splitCurrency(rentOwningForPeriod.rentOwing().getValue(), true);
             fieldsData.rentOwingThousandsA().setValue(owing[0]);
             fieldsData.rentOwingHundredsA().setValue(owing[1]);
             fieldsData.rentOwingCentsA().setValue(owing[2]);
@@ -142,54 +129,54 @@ public class N4GenerationFacadeImpl implements N4GenerationFacade {
 
         if (leaseData.rentOwingBreakdown().size() >= 2) {
             N4RentOwingForPeriod rentOwningForPeriod = leaseData.rentOwingBreakdown().get(1);
-            String[] owedFrom = N4FormUtils.splitDate(rentOwningForPeriod.from().getValue());
+            String[] owedFrom = FormUtils.splitDate(rentOwningForPeriod.from().getValue());
             fieldsData.owedFromDDB().setValue(owedFrom[0]);
             fieldsData.owedFromMMB().setValue(owedFrom[1]);
             fieldsData.owedFromYYYYB().setValue(owedFrom[2]);
 
-            String[] owedTo = N4FormUtils.splitDate(rentOwningForPeriod.to().getValue());
+            String[] owedTo = FormUtils.splitDate(rentOwningForPeriod.to().getValue());
             fieldsData.owedToDDB().setValue(owedTo[0]);
             fieldsData.owedToMMB().setValue(owedTo[1]);
             fieldsData.owedToYYYYB().setValue(owedTo[2]);
 
-            String[] charged = N4FormUtils.splitCurrency(rentOwningForPeriod.rentCharged().getValue(), true);
+            String[] charged = FormUtils.splitCurrency(rentOwningForPeriod.rentCharged().getValue(), true);
             fieldsData.rentChargedThousandsB().setValue(charged[0]);
             fieldsData.rentChargedHundredsB().setValue(charged[1]);
             fieldsData.rentChargedCentsB().setValue(charged[2]);
 
-            String[] paid = N4FormUtils.splitCurrency(rentOwningForPeriod.rentPaid().getValue(), true);
+            String[] paid = FormUtils.splitCurrency(rentOwningForPeriod.rentPaid().getValue(), true);
             fieldsData.rentPaidThousandsB().setValue(paid[0]);
             fieldsData.rentPaidHundredsB().setValue(paid[1]);
             fieldsData.rentPaidCentsB().setValue(paid[2]);
 
-            String[] owing = N4FormUtils.splitCurrency(rentOwningForPeriod.rentOwing().getValue(), true);
+            String[] owing = FormUtils.splitCurrency(rentOwningForPeriod.rentOwing().getValue(), true);
             fieldsData.rentOwingThousandsB().setValue(owing[0]);
             fieldsData.rentOwingHundredsB().setValue(owing[1]);
             fieldsData.rentOwingCentsB().setValue(owing[2]);
         }
         if (leaseData.rentOwingBreakdown().size() == 3) {
             N4RentOwingForPeriod rentOwningForPeriod = leaseData.rentOwingBreakdown().get(2);
-            String[] owedFrom = N4FormUtils.splitDate(rentOwningForPeriod.from().getValue());
+            String[] owedFrom = FormUtils.splitDate(rentOwningForPeriod.from().getValue());
             fieldsData.owedFromDDC().setValue(owedFrom[0]);
             fieldsData.owedFromMMC().setValue(owedFrom[1]);
             fieldsData.owedFromYYYYC().setValue(owedFrom[2]);
 
-            String[] owedTo = N4FormUtils.splitDate(rentOwningForPeriod.to().getValue());
+            String[] owedTo = FormUtils.splitDate(rentOwningForPeriod.to().getValue());
             fieldsData.owedToDDC().setValue(owedTo[0]);
             fieldsData.owedToMMC().setValue(owedTo[1]);
             fieldsData.owedToYYYYC().setValue(owedTo[2]);
 
-            String[] charged = N4FormUtils.splitCurrency(rentOwningForPeriod.rentCharged().getValue(), true);
+            String[] charged = FormUtils.splitCurrency(rentOwningForPeriod.rentCharged().getValue(), true);
             fieldsData.rentChargedThousandsC().setValue(charged[0]);
             fieldsData.rentChargedHundredsC().setValue(charged[1]);
             fieldsData.rentChargedCentsC().setValue(charged[2]);
 
-            String[] paid = N4FormUtils.splitCurrency(rentOwningForPeriod.rentPaid().getValue(), true);
+            String[] paid = FormUtils.splitCurrency(rentOwningForPeriod.rentPaid().getValue(), true);
             fieldsData.rentPaidThousandsC().setValue(paid[0]);
             fieldsData.rentPaidHundredsC().setValue(paid[1]);
             fieldsData.rentPaidCentsC().setValue(paid[2]);
 
-            String[] owing = N4FormUtils.splitCurrency(rentOwningForPeriod.rentOwing().getValue(), true);
+            String[] owing = FormUtils.splitCurrency(rentOwningForPeriod.rentOwing().getValue(), true);
             fieldsData.rentOwingThousandsC().setValue(owing[0]);
             fieldsData.rentOwingHundredsC().setValue(owing[1]);
             fieldsData.rentOwingCentsC().setValue(owing[2]);
@@ -214,14 +201,14 @@ public class N4GenerationFacadeImpl implements N4GenerationFacade {
         fieldsData.signaturePostalCode().setValue(landlordsData.landlordsAddress().postalCode().getValue());
 
         if (!CommonsStringUtils.isEmpty(landlordsData.landlordsPhoneNumber().getValue())) {
-            String[] signaturPhoneNumber = N4FormUtils.splitPhoneNumber(landlordsData.landlordsPhoneNumber().getValue());
+            String[] signaturPhoneNumber = FormUtils.splitPhoneNumber(landlordsData.landlordsPhoneNumber().getValue());
             fieldsData.signaturePhoneNumberAreaCode().setValue(signaturPhoneNumber[0]);
             fieldsData.signaturePhoneNumberCombA().setValue(signaturPhoneNumber[1]);
             fieldsData.signaturePhoneNumberCombB().setValue(signaturPhoneNumber[2]);
         }
 
         if (!CommonsStringUtils.isEmpty(landlordsData.faxNumber().getValue())) {
-            String[] signatureFaxNumber = N4FormUtils.splitPhoneNumber(landlordsData.faxNumber().getValue());
+            String[] signatureFaxNumber = FormUtils.splitPhoneNumber(landlordsData.faxNumber().getValue());
             fieldsData.signatureFaxNumberAreaCode().setValue(signatureFaxNumber[0]);
             fieldsData.signatureFaxNumberCombA().setValue(signatureFaxNumber[1]);
             fieldsData.signatureFaxNumberCombB().setValue(signatureFaxNumber[2]);
@@ -264,62 +251,6 @@ public class N4GenerationFacadeImpl implements N4GenerationFacade {
         n4LeaseData.totalRentOwning().setValue(totalRentOwning);
 
         return n4LeaseData;
-    }
-
-    // TODO factor out this method 
-    public byte[] fillForm(IEntity fieldsData, byte[] form) throws IOException, DocumentException {
-        ByteArrayOutputStream bos = new ByteArrayOutputStream();
-        PdfReader reader = new PdfReader(form);
-        PdfStamper stamper = new PdfStamper(reader, bos);
-        AcroFields fields = stamper.getAcroFields();
-
-        for (String memberName : fieldsData.getEntityMeta().getMemberNames()) {
-            try {
-                if (fieldsData.getMember(memberName).getValueClass().equals(String.class)) {
-                    String value = fieldsData.getMember(memberName).isNull() ? "" : fieldsData.getMember(memberName).getValue().toString();
-                    fields.setField(pdfFieldName(fieldsData, memberName), value);
-                } else if (fieldsData.getMember(memberName).getValueClass().isEnum()) {
-                    // this code should work the same as for sting but it was left here just to denote it's a different field type
-                    String value = fieldsData.getMember(memberName).isNull() ? "" : fieldsData.getMember(memberName).getValue().toString();
-                    fields.setField(pdfFieldName(fieldsData, memberName), value);
-
-                } else if (fieldsData.getMember(memberName).getValueClass().isArray()) {
-                    do {
-                        if (fieldsData.getMember(memberName).isNull()) {
-                            break;
-                        }
-
-                        List<FieldPosition> fieldPositions = fields.getFieldPositions(pdfFieldName(fieldsData, memberName));
-                        if (fieldPositions == null || fieldPositions.size() == 0) {
-                            break;
-                        }
-
-                        FieldPosition signaturePosition = fieldPositions.get(0);
-                        PdfContentByte canvas = stamper.getOverContent(signaturePosition.page);
-                        Image signature = Image.getInstance((byte[]) fieldsData.getMember(memberName).getValue());
-                        signature.scaleAbsolute(signaturePosition.position.getWidth(), signaturePosition.position.getHeight());
-                        signature.setAbsolutePosition(signaturePosition.position.getLeft(), signaturePosition.position.getBottom());
-                        canvas.addImage(signature);
-                    } while (false);
-
-                }
-
-            } catch (Throwable e) {
-                throw new RuntimeException(e);
-            }
-        }
-        stamper.setFormFlattening(true);
-        stamper.close();
-        reader.close();
-        bos.close();
-        return bos.toByteArray();
-    }
-
-    private String pdfFieldName(IEntity fieldsData, String memberName) throws NoSuchMethodException, SecurityException {
-        Class<?> fieldsDataClass = fieldsData.getInstanceValueClass();
-        Method member = fieldsDataClass.getDeclaredMethod(memberName, (Class<?>[]) null);
-        PdfFormFieldName fieldName = member.getAnnotation(PdfFormFieldName.class);
-        return fieldName != null ? fieldName.value() : memberName;
     }
 
     private String formatTenants(Iterable<Tenant> tenants) {
