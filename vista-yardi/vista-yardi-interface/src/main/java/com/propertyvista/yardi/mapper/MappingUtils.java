@@ -14,7 +14,9 @@
 package com.propertyvista.yardi.mapper;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 import org.apache.commons.lang.StringUtils;
 
@@ -32,6 +34,7 @@ import com.propertyvista.config.VistaDeployment;
 import com.propertyvista.domain.contact.AddressStructured;
 import com.propertyvista.domain.pmc.Pmc;
 import com.propertyvista.domain.property.asset.building.Building;
+import com.propertyvista.domain.ref.Country;
 import com.propertyvista.domain.ref.Province;
 import com.propertyvista.server.common.util.CanadianStreetAddressParser;
 import com.propertyvista.server.common.util.StreetAddressParser.StreetAddress;
@@ -94,11 +97,31 @@ public class MappingUtils {
             address.streetName().setValue(mitsAddress.getAddress1() + (address2.length() > 0 ? "; " + address2.toString() : ""));
             error.append(e.getMessage());
         }
-        address.city().setValue(mitsAddress.getCity());
-        address.province().code().setValue(mitsAddress.getState());
 
         String importedCountry = mitsAddress.getCountry();
-        address.country().name().setValue(StringUtils.isEmpty(importedCountry) ? MappingUtils.getCountry(mitsAddress.getState()) : importedCountry);
+        Country country = null;
+        if (StringUtils.isEmpty(importedCountry)) {
+            error.append("\n");
+        } else {
+            try {
+                country = getCountryByName(importedCountry);
+            } catch (Throwable e) {
+                error.append("\n");
+                error.append("failed to get country from MITS address: " + e.getMessage());
+            }
+        }
+        address.country().set(country);
+
+        Province province = null;
+        try {
+            province = getProvinceByCode(mitsAddress.getState());
+        } catch (Throwable e) {
+            error.append("\n");
+            error.append("failed to get province from MITS address: " + e.getMessage());
+        }
+        address.province().set(province);
+
+        address.city().setValue(mitsAddress.getCity());
 
         address.postalCode().setValue(mitsAddress.getPostalCode());
 
@@ -113,5 +136,51 @@ public class MappingUtils {
             // ignore
         }
         return date;
+    }
+
+    /**
+     * @throws Exception
+     *             if province not found
+     */
+    private static final Province getProvinceByCode(String code) throws Exception {
+        if (code == null) {
+            throw new IllegalArgumentException("province code should not be NULL");
+        }
+        String normalizedCode = code.trim().toUpperCase(Locale.CANADA);
+
+        EntityQueryCriteria<Province> criteria = EntityQueryCriteria.create(Province.class);
+        criteria.eq(criteria.proto().code(), normalizedCode);
+        List<Province> provinces = Persistence.service().query(criteria);
+        if (provinces.isEmpty()) {
+            throw new Exception("province not found code = '" + code + "'");
+        }
+        if (provinces.size() > 1) {
+            throw new Exception("more than one province was found code = '" + code + "': " + provinces);
+        }
+        return provinces.get(0);
+    }
+
+    private static final Country getCountryByName(String name) throws Exception {
+        if (name == null) {
+            throw new IllegalArgumentException("county name should not be NULL");
+        }
+        String normalizedName = name.trim().toUpperCase(Locale.CANADA);
+
+        EntityQueryCriteria<Country> criteria = EntityQueryCriteria.create(Country.class);
+        List<Country> countries = Persistence.service().query(criteria);
+
+        List<Country> foundCountries = new ArrayList<Country>();
+        for (Country country : countries) {
+            if (country.name().getValue().toUpperCase(Locale.CANADA).compareTo(normalizedName) == 0) {
+                foundCountries.add(country);
+            }
+        }
+        if (foundCountries.isEmpty()) {
+            throw new Exception("country not found name = '" + name + "'");
+        }
+        if (foundCountries.size() > 1) {
+            throw new Exception("more than one country was found name = '" + name + "': " + countries);
+        }
+        return foundCountries.get(0);
     }
 }
