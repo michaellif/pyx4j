@@ -86,7 +86,7 @@ public class ViewFactoryGenerator extends Generator {
     private void printFactoryMethod(List<JClassType> clazzes, SourceWriter sourceWriter) {
         sourceWriter.println();
 
-        sourceWriter.println("public <T extends " + IsView.class.getName() + "> T instantiate( Class<T> clazz ) {");
+        sourceWriter.println("public <T extends " + IsView.class.getName() + "> T getView( Class<T> clazz ) {");
 
         for (JClassType classType : clazzes) {
             if (classType.isAbstract())
