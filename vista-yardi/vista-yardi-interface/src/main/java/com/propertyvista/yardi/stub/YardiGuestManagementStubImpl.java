@@ -26,15 +26,21 @@ import org.slf4j.LoggerFactory;
 import com.yardi.entity.guestcard40.LeadManagement;
 import com.yardi.entity.guestcard40.RentableItems;
 import com.yardi.entity.ils.PhysicalProperty;
+import com.yardi.entity.leaseapp30.LeaseApplication;
 import com.yardi.ws.ItfILSGuestCard;
+import com.yardi.ws.ItfILSGuestCard2_0;
+import com.yardi.ws.ItfILSGuestCard2_0Stub;
 import com.yardi.ws.ItfILSGuestCardStub;
 import com.yardi.ws.operations.guestcard40.GetYardiRentableItems_Login;
 import com.yardi.ws.operations.guestcard40.GetYardiRentableItems_LoginResponse;
 import com.yardi.ws.operations.guestcard40.ImportYardiGuest_Login;
 import com.yardi.ws.operations.guestcard40.ImportYardiGuest_LoginResponse;
-import com.yardi.ws.operations.guestcard40.UnitAvailability_Login;
-import com.yardi.ws.operations.guestcard40.UnitAvailability_LoginResponse;
 import com.yardi.ws.operations.guestcard40.XmlDoc_type0;
+import com.yardi.ws.operations.ils.ImportApplication_Login;
+import com.yardi.ws.operations.ils.ImportApplication_LoginResponse;
+import com.yardi.ws.operations.ils.UnitAvailability_Login;
+import com.yardi.ws.operations.ils.UnitAvailability_LoginResponse;
+import com.yardi.ws.operations.ils.XmlDocument_type0;
 
 import com.pyx4j.commons.SimpleMessageFormat;
 import com.pyx4j.config.server.ServerSideFactory;
@@ -52,6 +58,8 @@ public class YardiGuestManagementStubImpl extends AbstractYardiStub implements Y
 
     private final static Logger log = LoggerFactory.getLogger(YardiGuestManagementStubImpl.class);
 
+    private final boolean testMode = true;
+
     @Override
     public RentableItems getRentableItems(PmcYardiCredential yc) throws YardiServiceException, RemoteException {
         try {
@@ -63,13 +71,16 @@ public class YardiGuestManagementStubImpl extends AbstractYardiStub implements Y
             request.setInterfaceLicense(YardiLicense.getInterfaceLicense(YardiInterface.ILSGuestCard, yc));
 
             request.setUserName(yc.username().getValue());
-            request.setPassword(yc.password().number().getValue());
-            request.setPassword(ServerSideFactory.create(PasswordEncryptorFacade.class).decryptPassword(yc.password()));
+            if (testMode) { // TODO
+                request.setPassword(yc.password().number().getValue());
+            } else {
+                request.setPassword(ServerSideFactory.create(PasswordEncryptorFacade.class).decryptPassword(yc.password()));
+            }
             request.setServerName(yc.serverName().getValue());
             request.setDatabase(yc.database().getValue());
             request.setPlatform(yc.platform().getValue().name());
 
-            GetYardiRentableItems_LoginResponse response = getGuestManagementService(yc).getYardiRentableItems_Login(request);
+            GetYardiRentableItems_LoginResponse response = getILSGuestCardService(yc).getYardiRentableItems_Login(request);
             if ((response == null) || (response.getGetYardiRentableItems_LoginResult() == null)
                     || (response.getGetYardiRentableItems_LoginResult().getExtraElement() == null)) {
                 throw new YardiServiceException(SimpleMessageFormat.format(
@@ -111,15 +122,18 @@ public class YardiGuestManagementStubImpl extends AbstractYardiStub implements Y
             request.setInterfaceLicense(YardiLicense.getInterfaceLicense(YardiInterface.ILSGuestCard, yc));
 
             request.setUserName(yc.username().getValue());
-            request.setPassword(yc.password().number().getValue());
-            request.setPassword(ServerSideFactory.create(PasswordEncryptorFacade.class).decryptPassword(yc.password()));
+            if (testMode) { // TODO
+                request.setPassword(yc.password().number().getValue());
+            } else {
+                request.setPassword(ServerSideFactory.create(PasswordEncryptorFacade.class).decryptPassword(yc.password()));
+            }
             request.setServerName(yc.serverName().getValue());
             request.setDatabase(yc.database().getValue());
             request.setPlatform(yc.platform().getValue().name());
 
             request.setYardiPropertyId(propertyId);
 
-            UnitAvailability_LoginResponse response = getGuestManagementService(yc).unitAvailability_Login(request);
+            UnitAvailability_LoginResponse response = getILSGuestCard20Service(yc).unitAvailability_Login(request);
             if (response.getUnitAvailability_LoginResult() == null) {
                 throw new Error("Received response is null");
             }
@@ -158,8 +172,11 @@ public class YardiGuestManagementStubImpl extends AbstractYardiStub implements Y
             request.setInterfaceLicense(YardiLicense.getInterfaceLicense(YardiInterface.ILSGuestCard, yc));
 
             request.setUserName(yc.username().getValue());
-            request.setPassword(yc.password().number().getValue());
-            request.setPassword(ServerSideFactory.create(PasswordEncryptorFacade.class).decryptPassword(yc.password()));
+            if (testMode) { // TODO
+                request.setPassword(yc.password().number().getValue());
+            } else {
+                request.setPassword(ServerSideFactory.create(PasswordEncryptorFacade.class).decryptPassword(yc.password()));
+            }
             request.setServerName(yc.serverName().getValue());
             request.setDatabase(yc.database().getValue());
             request.setPlatform(yc.platform().getValue().name());
@@ -171,7 +188,7 @@ public class YardiGuestManagementStubImpl extends AbstractYardiStub implements Y
             xmlDoc.setExtraElement(element);
             request.setXmlDoc(xmlDoc);
 
-            ImportYardiGuest_LoginResponse response = getGuestManagementService(yc).importYardiGuest_Login(request);
+            ImportYardiGuest_LoginResponse response = getILSGuestCardService(yc).importYardiGuest_Login(request);
             if ((response == null) || (response.getImportYardiGuest_LoginResult() == null)
                     || (response.getImportYardiGuest_LoginResult().getExtraElement() == null)) {
                 throw new YardiServiceException("importResidentTransactions received NULL response");
@@ -192,18 +209,81 @@ public class YardiGuestManagementStubImpl extends AbstractYardiStub implements Y
         }
     }
 
-    private ItfILSGuestCard getGuestManagementService(PmcYardiCredential yc) throws AxisFault {
-        ItfILSGuestCardStub serviceStub = new ItfILSGuestCardStub(guestCardServiceURL(yc));
-        addMessageContextListener("GuestManagement", serviceStub, null);
+    @Override
+    public void importApplication(PmcYardiCredential yc, LeaseApplication leaseApp) throws YardiServiceException {
+        try {
+            init(Action.ImportApplication);
+
+            ImportApplication_Login request = new ImportApplication_Login();
+
+            request.setInterfaceEntity(YardiConstants.ILS_INTERFACE_ENTITY);
+            request.setInterfaceLicense(YardiLicense.getInterfaceLicense(YardiInterface.ILSGuestCard, yc));
+
+            request.setUserName(yc.username().getValue());
+            if (testMode) { // TODO
+                request.setPassword(yc.password().number().getValue());
+            } else {
+                request.setPassword(ServerSideFactory.create(PasswordEncryptorFacade.class).decryptPassword(yc.password()));
+            }
+            request.setServerName(yc.serverName().getValue());
+            request.setDatabase(yc.database().getValue());
+            request.setPlatform(yc.platform().getValue().name());
+
+            String leaseAppXml = MarshallUtil.marshall(leaseApp);
+            log.debug(leaseAppXml);
+            XmlDocument_type0 xmlDoc = new XmlDocument_type0();
+            OMElement element = AXIOMUtil.stringToOM(leaseAppXml);
+            xmlDoc.setExtraElement(element);
+            request.setXmlDocument(xmlDoc);
+
+            ImportApplication_LoginResponse response = getILSGuestCard20Service(yc).importApplication_Login(request);
+            if ((response == null) || (response.getImportApplication_LoginResult() == null)
+                    || (response.getImportApplication_LoginResult().getExtraElement() == null)) {
+                throw new YardiServiceException("importResidentTransactions received NULL response");
+            }
+            String xml = response.getImportApplication_LoginResult().getExtraElement().toString();
+
+            log.debug("ImportApplication: {}", xml);
+
+            Messages messages = MarshallUtil.unmarshal(Messages.class, xml);
+            if (messages.isError()) {
+                YardiLicense.handleVendorLicenseError(messages);
+                throw new YardiServiceException(messages.toString());
+            } else {
+                log.info(messages.toString());
+            }
+        } catch (Throwable e) {
+            throw new YardiServiceException(e);
+        }
+    }
+
+    private ItfILSGuestCard getILSGuestCardService(PmcYardiCredential yc) throws AxisFault {
+        ItfILSGuestCardStub serviceStub = new ItfILSGuestCardStub(ilsGuestCardServiceURL(yc));
+        addMessageContextListener("ILSGuestCard", serviceStub, null);
         setTransportOptions(serviceStub, yc);
         return serviceStub;
     }
 
-    private String guestCardServiceURL(PmcYardiCredential yc) {
+    private ItfILSGuestCard2_0 getILSGuestCard20Service(PmcYardiCredential yc) throws AxisFault {
+        ItfILSGuestCard2_0Stub serviceStub = new ItfILSGuestCard2_0Stub(ilsGuestCard20ServiceURL(yc));
+        addMessageContextListener("ILSGuestCard20", serviceStub, null);
+        setTransportOptions(serviceStub, yc);
+        return serviceStub;
+    }
+
+    private String ilsGuestCardServiceURL(PmcYardiCredential yc) {
         if (yc.ilsGuestCardServiceURL().isNull()) {
             return serviceWithPath(yc, "webservices/itfilsguestcard.asmx");
         } else {
             return yc.ilsGuestCardServiceURL().getValue();
+        }
+    }
+
+    private String ilsGuestCard20ServiceURL(PmcYardiCredential yc) {
+        if (yc.ilsGuestCard20ServiceURL().isNull()) {
+            return serviceWithPath(yc, "webservices/itfilsguestcard20.asmx");
+        } else {
+            return yc.ilsGuestCard20ServiceURL().getValue();
         }
     }
 }

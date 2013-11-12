@@ -18,6 +18,7 @@ import java.rmi.RemoteException;
 import com.yardi.entity.guestcard40.LeadManagement;
 import com.yardi.entity.guestcard40.RentableItems;
 import com.yardi.entity.ils.PhysicalProperty;
+import com.yardi.entity.leaseapp30.LeaseApplication;
 
 import com.propertyvista.biz.system.YardiServiceException;
 import com.propertyvista.domain.settings.PmcYardiCredential;
@@ -29,4 +30,6 @@ public interface YardiGuestManagementStub extends ExternalInterfaceLoggingStub {
     PhysicalProperty getPropertyMarketingInfo(PmcYardiCredential yc, String propertyId) throws YardiServiceException;
 
     void importGuestInfo(PmcYardiCredential yc, LeadManagement leadInfo) throws YardiServiceException;
+
+    void importApplication(PmcYardiCredential yc, LeaseApplication leaseApp) throws YardiServiceException;
 }

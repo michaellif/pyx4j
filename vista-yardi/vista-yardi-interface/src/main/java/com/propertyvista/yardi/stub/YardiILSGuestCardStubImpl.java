@@ -17,23 +17,17 @@ import java.rmi.RemoteException;
 
 import javax.xml.bind.JAXBException;
 
-import org.apache.axiom.om.OMElement;
-import org.apache.axiom.om.util.AXIOMUtil;
 import org.apache.axis2.AxisFault;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.yardi.entity.ils.PhysicalProperty;
-import com.yardi.entity.leaseapp30.LeaseApplication;
 import com.yardi.ws.ItfILSGuestCard2_0;
 import com.yardi.ws.ItfILSGuestCard2_0Stub;
 import com.yardi.ws.operations.ils.GetPropertyConfigurations;
 import com.yardi.ws.operations.ils.GetPropertyConfigurationsResponse;
-import com.yardi.ws.operations.ils.ImportApplication_Login;
-import com.yardi.ws.operations.ils.ImportApplication_LoginResponse;
 import com.yardi.ws.operations.ils.UnitAvailability_Login;
 import com.yardi.ws.operations.ils.UnitAvailability_LoginResponse;
-import com.yardi.ws.operations.ils.XmlDocument_type0;
 
 import com.pyx4j.commons.SimpleMessageFormat;
 import com.pyx4j.config.server.ServerSideFactory;
@@ -63,7 +57,6 @@ public class YardiILSGuestCardStubImpl extends AbstractYardiStub implements Yard
             request.setInterfaceLicense(YardiLicense.getInterfaceLicense(YardiInterface.ILSGuestCard, yc));
 
             request.setUserName(yc.username().getValue());
-            request.setPassword(yc.password().number().getValue());
             request.setPassword(ServerSideFactory.create(PasswordEncryptorFacade.class).decryptPassword(yc.password()));
             request.setServerName(yc.serverName().getValue());
             request.setDatabase(yc.database().getValue());
@@ -147,51 +140,6 @@ public class YardiILSGuestCardStubImpl extends AbstractYardiStub implements Yard
         }
     }
 
-    @Override
-    public void importApplication(PmcYardiCredential yc, LeaseApplication leaseApp) throws YardiServiceException {
-        try {
-            init(Action.ImportApplication);
-
-            ImportApplication_Login request = new ImportApplication_Login();
-
-            request.setInterfaceEntity(YardiConstants.ILS_INTERFACE_ENTITY);
-            request.setInterfaceLicense(YardiLicense.getInterfaceLicense(YardiInterface.ILSGuestCard, yc));
-
-            request.setUserName(yc.username().getValue());
-            request.setPassword(yc.password().number().getValue());
-            request.setPassword(ServerSideFactory.create(PasswordEncryptorFacade.class).decryptPassword(yc.password()));
-            request.setServerName(yc.serverName().getValue());
-            request.setDatabase(yc.database().getValue());
-            request.setPlatform(yc.platform().getValue().name());
-
-            String leaseAppXml = MarshallUtil.marshall(leaseApp);
-            log.debug(leaseAppXml);
-            XmlDocument_type0 xmlDoc = new XmlDocument_type0();
-            OMElement element = AXIOMUtil.stringToOM(leaseAppXml);
-            xmlDoc.setExtraElement(element);
-            request.setXmlDocument(xmlDoc);
-
-            ImportApplication_LoginResponse response = getILSGuestCardService(yc).importApplication_Login(request);
-            if ((response == null) || (response.getImportApplication_LoginResult() == null)
-                    || (response.getImportApplication_LoginResult().getExtraElement() == null)) {
-                throw new YardiServiceException("importResidentTransactions received NULL response");
-            }
-            String xml = response.getImportApplication_LoginResult().getExtraElement().toString();
-
-            log.debug("ImportApplication: {}", xml);
-
-            Messages messages = MarshallUtil.unmarshal(Messages.class, xml);
-            if (messages.isError()) {
-                YardiLicense.handleVendorLicenseError(messages);
-                throw new YardiServiceException(messages.toString());
-            } else {
-                log.info(messages.toString());
-            }
-        } catch (Throwable e) {
-            throw new YardiServiceException(e);
-        }
-    }
-
     private ItfILSGuestCard2_0 getILSGuestCardService(PmcYardiCredential yc) throws AxisFault {
         ItfILSGuestCard2_0Stub serviceStub = new ItfILSGuestCard2_0Stub(ilsGuestCardServiceURL(yc));
         addMessageContextListener("ILSGuestCard", serviceStub, null);
@@ -200,10 +148,10 @@ public class YardiILSGuestCardStubImpl extends AbstractYardiStub implements Yard
     }
 
     private String ilsGuestCardServiceURL(PmcYardiCredential yc) {
-        if (yc.ilsGuestCardServiceURL().isNull()) {
+        if (yc.ilsGuestCard20ServiceURL().isNull()) {
             return serviceWithPath(yc, "webservices/itfilsguestcard20.asmx");
         } else {
-            return yc.ilsGuestCardServiceURL().getValue();
+            return yc.ilsGuestCard20ServiceURL().getValue();
         }
     }
 

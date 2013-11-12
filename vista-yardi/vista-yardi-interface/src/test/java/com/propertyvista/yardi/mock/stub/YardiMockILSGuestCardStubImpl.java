@@ -16,7 +16,6 @@ package com.propertyvista.yardi.mock.stub;
 import java.rmi.RemoteException;
 
 import com.yardi.entity.ils.PhysicalProperty;
-import com.yardi.entity.leaseapp30.LeaseApplication;
 
 import com.propertyvista.biz.system.YardiServiceException;
 import com.propertyvista.domain.settings.PmcYardiCredential;
@@ -44,12 +43,6 @@ public class YardiMockILSGuestCardStubImpl implements YardiILSGuestCardStub {
     public PhysicalProperty getPropertyMarketingInfo(PmcYardiCredential yc, String propertyId) throws YardiServiceException {
         // TODO Auto-generated method stub
         return null;
-    }
-
-    @Override
-    public void importApplication(PmcYardiCredential yc, LeaseApplication leaseApp) throws YardiServiceException {
-        // TODO Auto-generated method stub
-
     }
 
 }
