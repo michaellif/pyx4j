@@ -17,7 +17,7 @@ import java.util.List;
 
 import com.pyx4j.site.client.IsView;
 
-import com.propertyvista.portal.domain.dto.extra.ExtraGadgetDTO;
+import com.propertyvista.portal.rpc.portal.web.dto.ExtraGadgetDTO;
 
 public interface ExtraView extends IsView {
 

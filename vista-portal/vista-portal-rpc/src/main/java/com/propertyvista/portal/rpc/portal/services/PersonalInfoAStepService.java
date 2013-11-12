@@ -7,16 +7,14 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Mar 13, 2011
- * @author Misha
+ * Created on Mar 10, 2011
+ * @author vlads
  * @version $Id$
  */
-package com.propertyvista.portal.domain.dto.extra;
+package com.propertyvista.portal.rpc.portal.services;
 
-import com.pyx4j.entity.annotations.Transient;
-import com.pyx4j.entity.shared.IEntity;
+import com.propertyvista.portal.rpc.portal.web.dto.application.PersonalInfoAStepDTO;
 
-@Transient
-public interface ExtraGadgetDTO extends IEntity {
+public interface PersonalInfoAStepService extends AbstractWizardStepService<PersonalInfoAStepDTO> {
 
 }

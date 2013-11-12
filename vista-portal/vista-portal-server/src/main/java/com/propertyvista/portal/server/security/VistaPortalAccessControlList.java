@@ -50,12 +50,21 @@ import com.propertyvista.portal.domain.ptapp.Charges;
 import com.propertyvista.portal.domain.ptapp.PaymentInformation;
 import com.propertyvista.portal.domain.ptapp.Summary;
 import com.propertyvista.portal.rpc.portal.dto.SelfRegistrationBuildingDTO;
+import com.propertyvista.portal.rpc.portal.services.ContactsStepService;
+import com.propertyvista.portal.rpc.portal.services.FinancialStepService;
 import com.propertyvista.portal.rpc.portal.services.LeaseContextSelectionService;
+import com.propertyvista.portal.rpc.portal.services.OptionsStepService;
 import com.propertyvista.portal.rpc.portal.services.PasswordChangeUserService;
+import com.propertyvista.portal.rpc.portal.services.PaymentStepService;
+import com.propertyvista.portal.rpc.portal.services.PeopleStepService;
+import com.propertyvista.portal.rpc.portal.services.PersonalInfoAStepService;
+import com.propertyvista.portal.rpc.portal.services.PersonalInfoBStepService;
+import com.propertyvista.portal.rpc.portal.services.PmcCustomStepService;
 import com.propertyvista.portal.rpc.portal.services.PortalPasswordResetService;
 import com.propertyvista.portal.rpc.portal.services.PortalPolicyRetrieveService;
 import com.propertyvista.portal.rpc.portal.services.PortalVistaTermsService;
 import com.propertyvista.portal.rpc.portal.services.SiteThemeServices;
+import com.propertyvista.portal.rpc.portal.services.SummaryStepService;
 import com.propertyvista.portal.rpc.portal.services.UnitStepService;
 import com.propertyvista.portal.rpc.portal.services.resident.AutoPayRetrieveService;
 import com.propertyvista.portal.rpc.portal.services.resident.BillSummaryService;
@@ -171,6 +180,15 @@ public class VistaPortalAccessControlList extends ServletContainerAclBuilder {
         grant(VistaCustomerBehavior.Prospective, new IServiceExecutePermission(PaymentService.class));
 
         grant(VistaCustomerBehavior.Prospective, new IServiceExecutePermission(UnitStepService.class));
+        grant(VistaCustomerBehavior.Prospective, new IServiceExecutePermission(OptionsStepService.class));
+        grant(VistaCustomerBehavior.Prospective, new IServiceExecutePermission(PersonalInfoAStepService.class));
+        grant(VistaCustomerBehavior.Prospective, new IServiceExecutePermission(PersonalInfoBStepService.class));
+        grant(VistaCustomerBehavior.Prospective, new IServiceExecutePermission(FinancialStepService.class));
+        grant(VistaCustomerBehavior.Prospective, new IServiceExecutePermission(PeopleStepService.class));
+        grant(VistaCustomerBehavior.Prospective, new IServiceExecutePermission(ContactsStepService.class));
+        grant(VistaCustomerBehavior.Prospective, new IServiceExecutePermission(PmcCustomStepService.class));
+        grant(VistaCustomerBehavior.Prospective, new IServiceExecutePermission(SummaryStepService.class));
+        grant(VistaCustomerBehavior.Prospective, new IServiceExecutePermission(PaymentStepService.class));
 
         // Old TODO remove
         grant(VistaCustomerBehavior.Prospective, new IServiceExecutePermission(ReferenceDataService.class));

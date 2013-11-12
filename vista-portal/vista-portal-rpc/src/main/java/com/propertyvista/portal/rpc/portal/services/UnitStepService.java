@@ -13,8 +13,8 @@
  */
 package com.propertyvista.portal.rpc.portal.services;
 
-import com.propertyvista.portal.rpc.portal.web.dto.application.UnitInfoDTO;
+import com.propertyvista.portal.rpc.portal.web.dto.application.UnitStepDTO;
 
-public interface UnitStepService extends AbstractWizardStepService<UnitInfoDTO> {
+public interface UnitStepService extends AbstractWizardStepService<UnitStepDTO> {
 
 }

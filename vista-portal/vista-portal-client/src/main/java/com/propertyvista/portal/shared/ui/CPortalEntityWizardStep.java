@@ -72,12 +72,12 @@ public abstract class CPortalEntityWizardStep<E extends IEntity> extends CEntity
 
             @Override
             protected void onPrevious() {
-                //TODO
+                getView().getPresenter().previous();
             }
 
             @Override
             protected void onCancel() {
-                //TODO
+                getView().getPresenter().cancel();
             }
         };
 

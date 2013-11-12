@@ -32,13 +32,8 @@ import com.propertyvista.domain.financial.offering.ProductItem;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.tenant.lease.BillableItem;
 
-/**
- * For primary - Unit for lease info + price + term
- * For secondary/guarantor - Unit for lease info + price + term + all tenants + split info, add-ons
- * 
- */
 @Transient
-public interface UnitInfoDTO extends IEntity {
+public interface UnitStepDTO extends IEntity {
 
     // Floorplan data:
     IPrimitive<String> floorplan();
@@ -54,8 +49,6 @@ public interface UnitInfoDTO extends IEntity {
 
     // Unit data:
     AddressSimple address();
-
-    IPrimitive<String> landlordName();
 
     // We store the unit number separately from address because we use address in its simple incarnation
     IPrimitive<String> suiteNumber();

@@ -70,6 +70,7 @@ public class StepsViewImpl extends FlowPanel implements StepsView {
 
     @Override
     public void setStepButtons() {
+        removeAllStepButtons();
         for (int i = 1; i < 5; i++) {
             addStepButton(i + "", "Step " + i, StepButton.Size.large, StepButton.Status.complete, new Command() {
 
@@ -91,6 +92,11 @@ public class StepsViewImpl extends FlowPanel implements StepsView {
         StepButton stepButton = new StepButton(label, caption, size, status, navigationCommand);
         add(stepButton);
         stepButtons.add(stepButton);
+    }
+
+    private void removeAllStepButtons() {
+        clear();
+        stepButtons.clear();
     }
 
     @Override

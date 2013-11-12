@@ -27,13 +27,13 @@ import com.pyx4j.site.client.ui.layout.responsive.LayoutChangeRequestEvent;
 import com.pyx4j.site.client.ui.layout.responsive.LayoutChangeRequestEvent.ChangeType;
 
 import com.propertyvista.portal.domain.dto.CommunityEventDTO;
-import com.propertyvista.portal.domain.dto.extra.CommunityEventsGadgetDTO;
-import com.propertyvista.portal.domain.dto.extra.ExtraGadgetDTO;
-import com.propertyvista.portal.domain.dto.extra.WeatherGadgetDTO;
-import com.propertyvista.portal.domain.dto.extra.WeatherGadgetDTO.WeatherType;
 import com.propertyvista.portal.resident.ResidentPortalSite;
 import com.propertyvista.portal.resident.ui.extra.ExtraView;
 import com.propertyvista.portal.resident.ui.extra.ExtraView.ExtraPresenter;
+import com.propertyvista.portal.rpc.portal.web.dto.CommunityEventsGadgetDTO;
+import com.propertyvista.portal.rpc.portal.web.dto.ExtraGadgetDTO;
+import com.propertyvista.portal.rpc.portal.web.dto.WeatherGadgetDTO;
+import com.propertyvista.portal.rpc.portal.web.dto.WeatherGadgetDTO.WeatherType;
 
 public class ExtraActivity extends AbstractActivity implements ExtraPresenter {
 

@@ -15,10 +15,10 @@ package com.propertyvista.portal.prospect.ui.steps;
 
 import com.pyx4j.i18n.shared.I18n;
 
-import com.propertyvista.portal.rpc.portal.web.dto.application.UnitInfoDTO;
+import com.propertyvista.portal.rpc.portal.web.dto.application.UnitStepDTO;
 import com.propertyvista.portal.shared.ui.AbstractWizardStepView;
 
-public class UnitStepViewImpl extends AbstractWizardStepView<UnitInfoDTO> implements UnitStepView {
+public class UnitStepViewImpl extends AbstractWizardStepView<UnitStepDTO> implements UnitStepView {
 
     private static final I18n i18n = I18n.get(UnitStepViewImpl.class);
 

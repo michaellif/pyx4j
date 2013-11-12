@@ -15,36 +15,28 @@ package com.propertyvista.portal.prospect.activity.steps;
 
 import com.google.gwt.core.client.GWT;
 
+import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.rpc.AppPlace;
 
 import com.propertyvista.portal.prospect.ui.steps.UnitStepView;
+import com.propertyvista.portal.rpc.portal.ProspectPortalSiteMap;
 import com.propertyvista.portal.rpc.portal.services.UnitStepService;
-import com.propertyvista.portal.rpc.portal.web.dto.application.UnitInfoDTO;
+import com.propertyvista.portal.rpc.portal.web.dto.application.UnitStepDTO;
 import com.propertyvista.portal.shared.activity.AbstractWizardStepActivity;
 
-public class UnitStepActivity extends AbstractWizardStepActivity<UnitInfoDTO> {
+public class UnitStepActivity extends AbstractProspectWizardStepActivity<UnitStepDTO> {
 
     public UnitStepActivity(AppPlace place) {
         super(UnitStepView.class, GWT.<UnitStepService> create(UnitStepService.class));
-        // TODO Auto-generated constructor stub
-    }
-
-    @Override
-    public void navigateOut() {
-        // TODO Auto-generated method stub
-
     }
 
     @Override
     public void navigateToNextStep() {
-        // TODO Auto-generated method stub
-
+        AppSite.getPlaceController().goTo(new ProspectPortalSiteMap.Application.OptionsStep());
     }
 
     @Override
     public void navigateToPreviousStep() {
-        // TODO Auto-generated method stub
-
     }
 
 }

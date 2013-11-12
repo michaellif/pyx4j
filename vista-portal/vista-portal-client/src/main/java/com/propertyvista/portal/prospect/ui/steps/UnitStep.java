@@ -20,17 +20,17 @@ import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.portal.prospect.ui.steps.UnitStepView.UnitStepPresenter;
-import com.propertyvista.portal.rpc.portal.web.dto.application.UnitInfoDTO;
+import com.propertyvista.portal.rpc.portal.web.dto.application.UnitStepDTO;
 import com.propertyvista.portal.shared.ui.CPortalEntityWizardStep;
 
-public class UnitStep extends CPortalEntityWizardStep<UnitInfoDTO> {
+public class UnitStep extends CPortalEntityWizardStep<UnitStepDTO> {
 
     private static final I18n i18n = I18n.get(UnitStep.class);
 
     private UnitStepPresenter presenter;
 
     public UnitStep(UnitStepView view) {
-        super(UnitInfoDTO.class, view, i18n.tr("Unit"), i18n.tr("Next"), ThemeColor.contrast4);
+        super(UnitStepDTO.class, view, i18n.tr("Unit Selection"), i18n.tr("Next"), ThemeColor.contrast4);
     }
 
     @Override
@@ -38,7 +38,7 @@ public class UnitStep extends CPortalEntityWizardStep<UnitInfoDTO> {
         BasicFlexFormPanel mainPanel = new BasicFlexFormPanel();
         int row = -1;
 
-        mainPanel.setH1(++row, 0, 1, i18n.tr("Unit"));
+        mainPanel.setH1(++row, 0, 1, i18n.tr("Select an Available Unit"));
 
         return mainPanel;
     }
