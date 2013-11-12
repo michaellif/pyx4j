@@ -13,8 +13,10 @@
  */
 package com.propertyvista.biz.legal;
 
+import com.propertyvista.domain.legal.L1FormFieldsData;
+
 public interface L1GenerationFacade {
 
-    byte[] generateL1Letter();
+    byte[] generateL1Letter(L1FormFieldsData fieldsData);
 
 }
