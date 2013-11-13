@@ -280,6 +280,17 @@ public class PaymentWizard extends CPortalEntityWizard<PaymentDTO> {
                 return null;
             }
         });
+
+        profiledPaymentMethodsCombo.addValueValidator(new EditableValueValidator<LeasePaymentMethod>() {
+            @Override
+            public ValidationError isValid(CComponent<LeasePaymentMethod> component, LeasePaymentMethod value) {
+                if (value != null) {
+                    return (paymentMethodEditor.defaultPaymentTypes().contains(value.type().getValue()) ? null : new ValidationError(component, i18n
+                            .tr("Not Allowed Payment type!")));
+                }
+                return null;
+            }
+        });
     }
 
     @SuppressWarnings("unchecked")
