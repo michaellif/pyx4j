@@ -45,6 +45,7 @@ import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.security.shared.SecurityController;
 import com.pyx4j.site.client.AppPlaceEntityMapper;
+import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.client.ui.dialogs.AbstractEntitySelectorDialog;
 import com.pyx4j.site.client.ui.dialogs.EntitySelectorListDialog;
 import com.pyx4j.site.client.ui.prime.form.IForm;
@@ -60,6 +61,7 @@ import com.propertyvista.common.client.ui.components.folders.PapCoveredItemFolde
 import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
 import com.propertyvista.common.client.ui.validators.FutureDateIncludeTodayValidator;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
+import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.crm.rpc.services.financial.RevealAccountNumberService;
 import com.propertyvista.domain.contact.AddressSimple;
 import com.propertyvista.domain.payment.AutopayAgreement;
@@ -512,6 +514,17 @@ public class PaymentForm extends CrmEntityForm<PaymentRecordDTO> {
         public IsWidget createContent() {
             TwoColumnFlexFormPanel content = new TwoColumnFlexFormPanel();
             int row = -1;
+
+            CNumberLabel comp;
+            content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().id(), comp = new CNumberLabel()), 10).build());
+            comp.setNavigationCommand(new Command() {
+                @Override
+                public void execute() {
+                    if (!getValue().id().isNull()) {
+                        AppSite.getPlaceController().goTo(new CrmSiteMap.Finance.AutoPay().formViewerPlace(getValue().getPrimaryKey()));
+                    }
+                }
+            });
 
             content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().creationDate()), 9).build());
             content.setWidget(row, 1, new FormDecoratorBuilder(inject(proto().createdBy(), new CEntityLabel<AbstractPmcUser>()), 22).build());

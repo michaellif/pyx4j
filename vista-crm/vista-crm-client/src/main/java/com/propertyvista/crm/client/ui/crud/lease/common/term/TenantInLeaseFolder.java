@@ -30,6 +30,7 @@ import com.pyx4j.forms.client.events.DevShortcutEvent;
 import com.pyx4j.forms.client.events.DevShortcutHandler;
 import com.pyx4j.forms.client.ui.CComboBox;
 import com.pyx4j.forms.client.ui.CComponent;
+import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.ui.CEntityLabel;
 import com.pyx4j.forms.client.ui.CNumberLabel;
 import com.pyx4j.forms.client.ui.RevalidationTrigger;
@@ -325,7 +326,7 @@ public class TenantInLeaseFolder extends LeaseTermParticipantFolder<LeaseTermTen
             return super.create(member);
         }
 
-        private class PreauthorizedPaymentViewer extends CEntityDecoratableForm<AutopayAgreement> {
+        private class PreauthorizedPaymentViewer extends CEntityForm<AutopayAgreement> {
 
             public PreauthorizedPaymentViewer() {
                 super(AutopayAgreement.class);
