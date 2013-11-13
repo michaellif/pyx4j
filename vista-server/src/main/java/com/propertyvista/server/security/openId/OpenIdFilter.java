@@ -52,10 +52,11 @@ public class OpenIdFilter implements Filter {
     private static Collection<String> servletPathNoAuthentication = new HashSet<String>();
 
     static {
-        servletPathNoAuthentication.addAll(allApplicationsUrls("public"));
         servletPathNoAuthentication.addAll(allApplicationsUrls("o"));
+        servletPathNoAuthentication.addAll(allApplicationsUrls("public"));
         servletPathNoAuthentication.addAll(allApplicationsUrls("debug"));
         servletPathNoAuthentication.add("o");
+        servletPathNoAuthentication.add("public");
         servletPathNoAuthentication.add("static");
         servletPathNoAuthentication.add("interfaces");
     }
