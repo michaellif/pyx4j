@@ -13,8 +13,6 @@
  */
 package com.propertyvista.yardi.mapper;
 
-import java.math.BigInteger;
-
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -92,7 +90,7 @@ public class UnitsMapper {
         return unitTo;
     }
 
-    private Double getArea(BigInteger minArea, BigInteger maxArea) {
+    private Double getArea(Integer minArea, Integer maxArea) {
         Double result = null;
         if (minArea != null) {
             result = minArea.doubleValue();

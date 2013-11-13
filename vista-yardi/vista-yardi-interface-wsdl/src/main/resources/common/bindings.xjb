@@ -2,8 +2,10 @@
 							xmlns:xsd="http://www.w3.org/2001/XMLSchema"
 							xmlns:namespace="http://jaxb2-commons.dev.java.net/namespace-prefix">
     <jxb:globalBindings localScoping="toplevel">
-		<jxb:javaType name="java.util.Date" xmlType="xs:date" parseMethod="com.pyx4j.essentials.j2se.util.DateAdapter.parseDate" printMethod="com.pyx4j.essentials.j2se.util.DateAdapter.printDate"/>
-		<jxb:serializable uid="1" />
+	<jxb:javaType name="java.lang.Integer" xmlType="xs:integer" parseMethod="javax.xml.bind.DatatypeConverter.parseInt" printMethod="javax.xml.bind.DatatypeConverter.printInt"/>
+	<jxb:javaType name="java.util.Date" xmlType="xs:date" parseMethod="com.propertyvista.yardi.xml.bind.DateAdapter.parseDate" printMethod="com.propertyvista.yardi.xml.bind.DateAdapter.printDate"/>
+	<jxb:javaType name="java.sql.Timestamp" xmlType="xs:dateTime" parseMethod="com.propertyvista.yardi.xml.bind.DateAdapter.parseDateTime" printMethod="com.propertyvista.yardi.xml.bind.DateAdapter.printDateTime"/>
+	<jxb:serializable uid="1" />
 	</jxb:globalBindings>
 	<jxb:bindings namespace="http://my-company.com/namespace" schemaLocation="Itf_MITS_CoreData2.0.xsd" >
         <jxb:schemaBindings>

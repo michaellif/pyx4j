@@ -60,7 +60,7 @@ import com.propertyvista.yardi.stub.YardiGuestManagementStub;
 public class YardiNewGuestWorkflowTest {
     private final static Logger log = LoggerFactory.getLogger(YardiNewGuestWorkflowTest.class);
 
-    private final static boolean mockMode = true;
+    private final static boolean mockMode = false;
 
     public static void main(String[] args) {
         ServerSideConfiguration.setInstance(new VistaTestsServerSideConfiguration(DatabaseType.HSQLDB));
@@ -175,7 +175,7 @@ public class YardiNewGuestWorkflowTest {
         for (String unit : units) {
             System.out.print(" #" + unit);
         }
-
+        System.out.println();
     }
 
     static String getDateAvail(Availability avail) {

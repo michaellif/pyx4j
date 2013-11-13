@@ -239,7 +239,7 @@ public class YardiMaintenanceProcessor {
         if (mr.submitted().isNull()) {
             mr.submitted().setValue(request.getServiceRequestDate());
         }
-        mr.updated().setValue(request.getUpdateDate().toGregorianCalendar().getTime());
+        mr.updated().setValue(request.getUpdateDate());
 
         return mr;
     }
