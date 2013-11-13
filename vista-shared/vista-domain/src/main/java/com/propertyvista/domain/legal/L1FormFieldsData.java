@@ -13,9 +13,19 @@
  */
 package com.propertyvista.domain.legal;
 
+import java.math.BigDecimal;
+
+import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
+
+import com.propertyvista.domain.legal.utils.PartitionedCanadianPostalCodeFormatter;
+import com.propertyvista.domain.legal.utils.PartitionedDateFormatter;
+import com.propertyvista.domain.legal.utils.PartitionedMoneyFormatter;
+import com.propertyvista.domain.legal.utils.PdfFormField;
+import com.propertyvista.domain.legal.utils.UnpartitionedDateFormatter;
+import com.propertyvista.domain.legal.utils.UppercaseFormatter;
 
 @Transient
 public interface L1FormFieldsData extends IEntity {
@@ -49,26 +59,40 @@ public interface L1FormFieldsData extends IEntity {
         Landlord, Agent
     }
 
-    IPrimitive<String> totalRentOwing();
+    @PdfFormField(value = "[@@b12c96nfl1_rentOwn.0{2},@@b12c96nfl1_rentOwn.1{3},@@b12c96nfl1_rentOwn.2{2}]", formatter = PartitionedMoneyFormatter.class)
+    IPrimitive<BigDecimal> totalRentOwing();
 
-    IPrimitive<String> totalRentOwingAsOf();
+    @PdfFormField(value = "[@@b12c96nfl1_LastDateRentOwn.0{2},@@b12c96nfl1_LastDateRentOwn.1{2},@@b12c96nfl1_LastDateRentOwn.2{4}]", formatter = PartitionedDateFormatter.class)
+    IPrimitive<LogicalDate> totalRentOwingAsOf();
 
-    IPrimitive<String> fillingDate();
+    @PdfFormField(value = "b12c96nmfiling_date", formatter = UnpartitionedDateFormatter.class)
+    IPrimitive<LogicalDate> fillingDate();
 
     // Part1
-    IPrimitive<String> streetNumber();
+    @PdfFormField(value = "b12c96nfapp_street_no", formatter = UppercaseFormatter.class)
+    IPrimitive<String> part1_streetNumber();
 
-    IPrimitive<String> streetName();
+    @PdfFormField(value = "b12c96nfapp_street_name", formatter = UppercaseFormatter.class)
+    IPrimitive<String> part1_streetName();
 
-    IPrimitive<String> streetType();
+    @PdfFormField(value = "b12c96nfapp_street_label", formatter = UppercaseFormatter.class)
+    IPrimitive<String> part1_streetType();
 
-    IPrimitive<String> direction();
+    @PdfFormField(value = "b12c96nfapp_street_direction", formatter = UppercaseFormatter.class)
+    IPrimitive<String> part1_direction();
 
-    IPrimitive<String> unit();
+    @PdfFormField(value = "b12c96nfapp_unit_no", formatter = UppercaseFormatter.class)
+    IPrimitive<String> part1_unit();
 
-    IPrimitive<String> municipality();
+    @PdfFormField(value = "b12c96nfapp_city", formatter = UppercaseFormatter.class)
+    IPrimitive<String> part1_municipality();
 
-    IPrimitive<String> postalCode();
+    @PdfFormField(value = "[b12c96nfapp_postal_code_1{3},@@b12c96nfapp_postal_code_2.0{3}]", formatter = PartitionedCanadianPostalCodeFormatter.class)
+    IPrimitive<String> part1_postalCode();
+
+    IPrimitive<String> part1_fileNumber1();
+
+    IPrimitive<String> part1_fileNumber2();
 
     // Part2
     IPrimitive<String> tenant1FirstName();

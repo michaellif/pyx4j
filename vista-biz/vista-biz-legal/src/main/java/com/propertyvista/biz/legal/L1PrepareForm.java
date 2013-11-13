@@ -59,7 +59,7 @@ public class L1PrepareForm {
         copyFields.addDocument(reader);
         copyFields.close();
 
-        System.out.println("Successfully modded an N4 template and saved it at: " + moddedDocFileName);
+        System.out.println("Successfully modded an L1 template and saved it at: " + moddedDocFileName);
     }
 
     private static String makeModdedFileName() {
@@ -72,24 +72,10 @@ public class L1PrepareForm {
     }
 
     private static void tweakFields(AcroFields fields) {
-//        System.out.println("Adjusting colors and formatting of 'personnel first name' field");
-//        // we have to do this since in the form for some reason the background of personnel first name field is not transparent and hides lines.
-//        // also 'personnel first name field' is not comb (letters displayed apart and separated by lines), which is defined in FF dictionary  
-//        Item lastNameField = fields.getFieldItem("b12c96nfn4_personnel_last_name");
-//        PdfDictionary colorsDict = lastNameField.getWidget(0).getAsDict(PdfName.MK);
-//        PdfDictionary appearanceDict = lastNameField.getWidget(0).getAsDict(PdfName.AP);
-//        PdfNumber flagsDict = lastNameField.getWidget(0).getAsNumber(PdfName.FF);
-//
-//        Item firstNameField = fields.getFieldItem("b12c96nfn4_personnel_first_name");
-//        firstNameField.getWidget(0).put(PdfName.MK, colorsDict);
-//        firstNameField.getWidget(0).put(PdfName.AP, appearanceDict);
-//        firstNameField.getWidget(0).put(PdfName.FF, flagsDict);
-//
-//        // now set up comb flag for the rest of the defective fields that should have a comb flag set (in the order of appearance in the form)        
-//        setCombFlag(fields.getFieldItem("b12c96nfn4_app_province"));
-//        setCombFlag(fields.getFieldItem("b12c96nfn4_personnel_first_name"));
-//        setCombFlag(fields.getFieldItem("b12c96nfn4_org_unit_no"));
-//        setCombFlag(fields.getFieldItem("b12c96nfn4_org_prov"));
+
+        // set up comb flag for the rest of the defective fields that should have a comb flag set (in the order of appearance in the form)        
+        setCombFlag(fields.getFieldItem("b12c96nfapp_city"));
+        setCombFlag(fields.getFieldItem("b12c96nfapp_province"));
     }
 
     private static void setCombFlag(Item fieldItem) {
