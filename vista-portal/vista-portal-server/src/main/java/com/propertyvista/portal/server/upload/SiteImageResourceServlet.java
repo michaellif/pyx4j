@@ -35,7 +35,7 @@ import com.propertyvista.domain.site.SiteLogoImageResource;
 import com.propertyvista.domain.site.SiteDescriptor;
 import com.propertyvista.domain.site.SiteImageResource;
 import com.propertyvista.portal.rpc.DeploymentConsts;
-import com.propertyvista.portal.server.portal.services.SiteThemeServicesImpl;
+import com.propertyvista.portal.server.portal.shared.services.SiteThemeServicesImpl;
 import com.propertyvista.server.common.blob.ETag;
 import com.propertyvista.server.domain.FileBlob;
 

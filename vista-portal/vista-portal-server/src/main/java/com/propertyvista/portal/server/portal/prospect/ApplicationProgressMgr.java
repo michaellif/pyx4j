@@ -38,7 +38,7 @@ import com.propertyvista.domain.tenant.prospect.ApplicationWizardStep;
 import com.propertyvista.domain.tenant.prospect.OnlineApplication;
 import com.propertyvista.dto.TenantInLeaseDTO;
 import com.propertyvista.misc.VistaTODO;
-import com.propertyvista.portal.rpc.ptapp.PtSiteMap;
+import com.propertyvista.portal.rpc.portal.prospect.PtSiteMap;
 
 public class ApplicationProgressMgr {
 
