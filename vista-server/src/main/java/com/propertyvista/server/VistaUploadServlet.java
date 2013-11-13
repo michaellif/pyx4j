@@ -27,8 +27,8 @@ import com.propertyvista.crm.server.services.organization.EmployeeSignatureUploa
 import com.propertyvista.operations.server.services.EncryptedStorageServicePrivateKeyUploadServiceImpl;
 import com.propertyvista.operations.server.services.ImportUploadServiceImpl;
 import com.propertyvista.operations.server.services.MerchantAccountFileUploadServiceImpl;
-import com.propertyvista.portal.server.portal.web.services.ResidentPictureUploadServiceImpl;
-import com.propertyvista.portal.server.portal.web.services.services.InsuranceCertificateScanUploadServiceImpl;
+import com.propertyvista.portal.server.portal.resident.services.ResidentPictureUploadServiceImpl;
+import com.propertyvista.portal.server.portal.resident.services.services.InsuranceCertificateScanUploadServiceImpl;
 
 @SuppressWarnings("serial")
 public class VistaUploadServlet extends AbstractUploadServlet {
