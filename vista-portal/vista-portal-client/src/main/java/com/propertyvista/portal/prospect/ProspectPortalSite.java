@@ -13,15 +13,25 @@
  */
 package com.propertyvista.portal.prospect;
 
+import com.google.gwt.core.client.GWT;
+
+import com.pyx4j.security.rpc.AuthenticationService;
+
 import com.propertyvista.portal.prospect.themes.ProspectPortalTheme;
 import com.propertyvista.portal.prospect.ui.ProspectPortalRootPane;
 import com.propertyvista.portal.rpc.portal.ProspectPortalSiteMap;
+import com.propertyvista.portal.rpc.portal.web.services.ProspectAuthenticationService;
 import com.propertyvista.portal.shared.PortalSite;
 
 public class ProspectPortalSite extends PortalSite {
 
     public ProspectPortalSite() {
         super("vista-prospect", ProspectPortalSiteMap.class, new ProspectPortalRootPane(), new ProspectPortalSiteDispatcher(), new ProspectPortalTheme());
+    }
+
+    @Override
+    protected AuthenticationService getAuthenticationService() {
+        return GWT.create(ProspectAuthenticationService.class);
     }
 
 }

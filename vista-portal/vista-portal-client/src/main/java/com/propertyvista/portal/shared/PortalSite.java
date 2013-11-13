@@ -40,12 +40,11 @@ import com.propertyvista.portal.rpc.portal.PortalSiteMap;
 import com.propertyvista.portal.rpc.portal.SiteDefinitionsDTO;
 import com.propertyvista.portal.rpc.portal.services.PortalPolicyRetrieveService;
 import com.propertyvista.portal.rpc.portal.services.SiteThemeServices;
-import com.propertyvista.portal.rpc.portal.web.services.ResidentAuthenticationService;
 import com.propertyvista.portal.rpc.shared.services.PolicyRetrieveService;
 import com.propertyvista.portal.shared.themes.PortalPalette;
 import com.propertyvista.portal.shared.themes.PortalTheme;
 
-public class PortalSite extends VistaSite {
+public abstract class PortalSite extends VistaSite {
 
     private static SiteThemeServices siteThemeServices = GWT.create(SiteThemeServices.class);
 
@@ -112,8 +111,10 @@ public class PortalSite extends VistaSite {
 
     }
 
+    protected abstract AuthenticationService getAuthenticationService();
+
     private void obtainAuthenticationData() {
-        ClientContext.obtainAuthenticationData(GWT.<AuthenticationService> create(ResidentAuthenticationService.class), new DefaultAsyncCallback<Boolean>() {
+        ClientContext.obtainAuthenticationData(getAuthenticationService(), new DefaultAsyncCallback<Boolean>() {
 
             @Override
             public void onSuccess(Boolean result) {

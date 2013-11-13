@@ -13,15 +13,25 @@
  */
 package com.propertyvista.portal.resident;
 
+import com.google.gwt.core.client.GWT;
+
+import com.pyx4j.security.rpc.AuthenticationService;
+
 import com.propertyvista.portal.resident.themes.ResidentPortalTheme;
 import com.propertyvista.portal.resident.ui.ResidentPortalRootPane;
 import com.propertyvista.portal.rpc.portal.ResidentPortalSiteMap;
+import com.propertyvista.portal.rpc.portal.web.services.ResidentAuthenticationService;
 import com.propertyvista.portal.shared.PortalSite;
 
 public class ResidentPortalSite extends PortalSite {
 
     public ResidentPortalSite() {
         super("vista-resident", ResidentPortalSiteMap.class, new ResidentPortalRootPane(), new ResidentPortalSiteDispatcher(), new ResidentPortalTheme());
+    }
+
+    @Override
+    protected AuthenticationService getAuthenticationService() {
+        return GWT.create(ResidentAuthenticationService.class);
     }
 
 }
