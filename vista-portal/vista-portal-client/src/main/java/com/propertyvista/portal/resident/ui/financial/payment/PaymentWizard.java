@@ -286,7 +286,7 @@ public class PaymentWizard extends CPortalEntityWizard<PaymentDTO> {
             public ValidationError isValid(CComponent<LeasePaymentMethod> component, LeasePaymentMethod value) {
                 if (value != null) {
                     return (paymentMethodEditor.defaultPaymentTypes().contains(value.type().getValue()) ? null : new ValidationError(component, i18n
-                            .tr("Not Allowed Payment type!")));
+                            .tr("Not allowed payment type!")));
                 }
                 return null;
             }

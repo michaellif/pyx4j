@@ -49,6 +49,8 @@ import com.pyx4j.forms.client.ui.CRadioGroupEnum;
 import com.pyx4j.forms.client.ui.CSimpleEntityComboBox;
 import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
 import com.pyx4j.forms.client.ui.wizard.WizardStep;
+import com.pyx4j.forms.client.validators.EditableValueValidator;
+import com.pyx4j.forms.client.validators.ValidationError;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.security.client.ClientContext;
@@ -305,6 +307,22 @@ public class AutoPayWizard extends CPortalEntityWizard<AutoPayDTO> {
                 get(proto().selectPaymentMethod()).setVisible(hasProfiledMethods);
                 get(proto().selectPaymentMethod()).setValue(hasProfiledMethods ? PaymentDataDTO.PaymentSelect.Profiled : PaymentDataDTO.PaymentSelect.New,
                         true, populate);
+            }
+        });
+    }
+
+    @Override
+    public void addValidations() {
+        super.addValidations();
+
+        profiledPaymentMethodsCombo.addValueValidator(new EditableValueValidator<LeasePaymentMethod>() {
+            @Override
+            public ValidationError isValid(CComponent<LeasePaymentMethod> component, LeasePaymentMethod value) {
+                if (value != null) {
+                    return (paymentMethodEditor.defaultPaymentTypes().contains(value.type().getValue()) ? null : new ValidationError(component, i18n
+                            .tr("Not allowed payment type!")));
+                }
+                return null;
             }
         });
     }
