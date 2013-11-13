@@ -3,7 +3,8 @@
 <!-- @version $Revision$ ($Author$) $Date$ -->
 <module rename-to="onboarding">
     <inherits name='com.propertyvista.ob.Onboarding'/>
-    <inherits name='com.propertyvista.common.VistaLocaleAll'/>
+    <!-- VISTA-3524 inherits name='com.propertyvista.common.VistaLocaleAll'/ -->
+    <inherits name='com.propertyvista.common.VistaLocaleEn_CA'/>
 
     <replace-with class="com.pyx4j.config.shared.ApplicationMode.ProductionMode">
         <when-type-is class="com.pyx4j.config.shared.ApplicationMode.Mode"/>
