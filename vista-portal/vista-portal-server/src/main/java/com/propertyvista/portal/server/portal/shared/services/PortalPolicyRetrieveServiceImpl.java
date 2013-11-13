@@ -11,9 +11,9 @@
  * @author VladL
  * @version $Id$
  */
-package com.propertyvista.portal.server.portal.services;
+package com.propertyvista.portal.server.portal.shared.services;
 
-import com.propertyvista.portal.rpc.portal.services.PortalPolicyRetrieveService;
+import com.propertyvista.portal.rpc.portal.shared.services.PortalPolicyRetrieveService;
 import com.propertyvista.server.common.policy.PolicyRetrieveServiceImpl;
 
 public class PortalPolicyRetrieveServiceImpl extends PolicyRetrieveServiceImpl implements PortalPolicyRetrieveService {

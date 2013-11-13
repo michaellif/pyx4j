@@ -11,9 +11,9 @@
  * @author vlads
  * @version $Id$
  */
-package com.propertyvista.portal.server.portal.services;
+package com.propertyvista.portal.server.portal.shared.services;
 
-import com.propertyvista.portal.rpc.portal.services.PasswordChangeUserService;
+import com.propertyvista.portal.rpc.portal.shared.services.PasswordChangeUserService;
 import com.propertyvista.server.common.security.VistaUserSelfPasswordChangeServiceImpl;
 import com.propertyvista.server.domain.security.CustomerUserCredential;
 

@@ -11,12 +11,12 @@
  * @author vlads
  * @version $Id$
  */
-package com.propertyvista.portal.server.portal.services;
+package com.propertyvista.portal.server.portal.shared.services;
 
 import com.pyx4j.security.rpc.AuthenticationResponse;
 
-import com.propertyvista.portal.rpc.portal.services.PortalPasswordResetService;
-import com.propertyvista.portal.server.portal.web.services.ResidentAuthenticationServiceImpl;
+import com.propertyvista.portal.rpc.portal.shared.services.PortalPasswordResetService;
+import com.propertyvista.portal.server.portal.resident.services.ResidentAuthenticationServiceImpl;
 import com.propertyvista.server.common.security.VistaPasswordResetServiceImpl;
 import com.propertyvista.server.domain.security.CustomerUserCredential;
 
