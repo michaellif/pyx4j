@@ -26,13 +26,13 @@ xmlns:xjc="http://java.sun.com/xml/ns/jaxb/xjc"
 	<jxb:bindings node="//xsd:complexType[@name='Property']">
             <jxb:class name="PropertyMarketingSources"/>
         </jxb:bindings>
-	<jxb:bindings node="//xsd:complexType[@name='Agents']/xsd:element[@name='AgentName']/xsd:complexType">
+	<jxb:bindings node="//xsd:complexType[@name='Agents']/xsd:sequence/xsd:element[@name='AgentName']/xsd:complexType">
             <jxb:class name="MarketingAgent"/>
         </jxb:bindings>
-	<jxb:bindings node="//xsd:complexType[@name='Sources']/xsd:element[@name='SourceName']/xsd:complexType">
+	<jxb:bindings node="//xsd:complexType[@name='Sources']/xsd:sequence/xsd:element[@name='SourceName']/xsd:complexType">
             <jxb:class name="MarketingSource"/>
         </jxb:bindings>
-	<jxb:bindings node="//xsd:complexType[@name='Results']/xsd:element[@name='Result']/xsd:complexType">
+	<jxb:bindings node="//xsd:complexType[@name='Results']/xsd:sequence/xsd:element[@name='Result']/xsd:complexType">
             <jxb:class name="MarketingResult"/>
         </jxb:bindings>
     </jxb:bindings>

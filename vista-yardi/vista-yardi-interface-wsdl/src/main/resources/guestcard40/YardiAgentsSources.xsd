@@ -2,7 +2,9 @@
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
 	<xs:element name="Properties">
 		<xs:complexType>
-			<xs:element name="Property" type="Property" maxOccurs="unbounded"/>
+			<xs:sequence>
+				<xs:element name="Property" type="Property" maxOccurs="unbounded"/>
+			</xs:sequence>
 		</xs:complexType>
 	</xs:element>
 
@@ -20,36 +22,42 @@
 		</xs:sequence>
 	</xs:complexType>
 	<xs:complexType name="Agents">
-		<xs:element name="AgentName" minOccurs="0" maxOccurs="unbounded">
-			<xs:complexType>
-				<xs:simpleContent>
-					<xs:extension base="xs:string">
-						<xs:attribute name="InactiveDate" type="xs:date" use="optional"/>
-					</xs:extension>
-				</xs:simpleContent>
-			</xs:complexType>
-		</xs:element>
+		<xs:sequence>
+			<xs:element name="AgentName" minOccurs="0" maxOccurs="unbounded">
+				<xs:complexType>
+					<xs:simpleContent>
+						<xs:extension base="xs:string">
+							<xs:attribute name="InactiveDate" type="xs:date" use="optional"/>
+						</xs:extension>
+					</xs:simpleContent>
+				</xs:complexType>
+			</xs:element>
+		</xs:sequence>
 	</xs:complexType>
 	<xs:complexType name="Sources">
-		<xs:element name="SourceName" minOccurs="0" maxOccurs="unbounded">
-			<xs:complexType>
-				<xs:simpleContent>
-					<xs:extension base="xs:string">
-						<xs:attribute name="InactiveDate" type="xs:date" use="optional"/>
-					</xs:extension>
-				</xs:simpleContent>
-			</xs:complexType>
-		</xs:element>
+		<xs:sequence>
+			<xs:element name="SourceName" minOccurs="0" maxOccurs="unbounded">
+				<xs:complexType>
+					<xs:simpleContent>
+						<xs:extension base="xs:string">
+							<xs:attribute name="InactiveDate" type="xs:date" use="optional"/>
+						</xs:extension>
+					</xs:simpleContent>
+				</xs:complexType>
+			</xs:element>
+		</xs:sequence>
 	</xs:complexType>
 	<xs:complexType name="Results">
-		<xs:element name="Result" minOccurs="0" maxOccurs="unbounded">
-			<xs:complexType>
-				<xs:simpleContent>
-					<xs:extension base="xs:string">
-						<xs:attribute name="InactiveDate" type="xs:date" use="optional"/>
-					</xs:extension>
-				</xs:simpleContent>
-			</xs:complexType>
-		</xs:element>
+		<xs:sequence>
+			<xs:element name="Result" minOccurs="0" maxOccurs="unbounded">
+				<xs:complexType>
+					<xs:simpleContent>
+						<xs:extension base="xs:string">
+							<xs:attribute name="InactiveDate" type="xs:date" use="optional"/>
+						</xs:extension>
+					</xs:simpleContent>
+				</xs:complexType>
+			</xs:element>
+		</xs:sequence>
 	</xs:complexType>
 </xs:schema>
