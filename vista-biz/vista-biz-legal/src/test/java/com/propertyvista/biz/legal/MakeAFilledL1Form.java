@@ -28,7 +28,7 @@ import java.io.IOException;
 public class MakeAFilledL1Form {
 
     public static void main(String args[]) throws FileNotFoundException, IOException {
-        L4GenerationFacadeImpl facade = new L4GenerationFacadeImpl();
+        L1GenerationFacadeImpl facade = new L1GenerationFacadeImpl();
         byte[] pdf = facade.generateL1Letter(MockL1FormDataFactory.makeMockL1FormFieldsData());
         FileOutputStream fos = new FileOutputStream("l4filled-test.pdf");
         fos.write(pdf);

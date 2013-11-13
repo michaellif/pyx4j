@@ -20,14 +20,51 @@
  */
 package com.propertyvista.biz.legal;
 
+import java.io.ByteArrayOutputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.math.BigDecimal;
 
+import org.apache.commons.io.IOUtils;
 import org.junit.Assert;
 import org.junit.Test;
 
+import com.google.gwt.editor.client.Editor.Ignore;
+import com.itextpdf.text.DocumentException;
+import com.itextpdf.text.pdf.AcroFields;
+import com.itextpdf.text.pdf.PdfReader;
+import com.itextpdf.text.pdf.PdfStamper;
+
+import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.gwt.server.DateUtils;
 
 public class FormUtilsTest {
+
+    private final byte[] MOCK_FORM;
+
+    private static final boolean DUMP_PDFS = false;
+
+    public FormUtilsTest() throws IOException {
+        MOCK_FORM = IOUtils.toByteArray(N4GenerationFacadeImpl.class.getResourceAsStream("MockForm.pdf"));
+    }
+
+    @Ignore
+    @Test
+    public void dont_testFillForm() throws IOException, DocumentException {
+        MockFormFieldsData fieldsData = EntityFactory.create(MockFormFieldsData.class);
+        fieldsData.field1().setValue("mock-mock");
+        fieldsData.field2().setValue("124567890");
+
+        byte[] filledForm = FormUtils.fillForm(fieldsData, MOCK_FORM, false);
+
+        assertFieldEquals(filledForm, "field1", "mock-mock");
+
+        assertFieldEquals(filledForm, "field2_1", "12");
+        assertFieldEquals(filledForm, "field2_2", "456");
+        assertFieldEquals(filledForm, "field2_3", "7890");
+
+        dumpPdf("testFillForm", filledForm);
+    }
 
     @Test
     public void testSplitCurrency() {
@@ -87,5 +124,22 @@ public class FormUtilsTest {
     public void testSplitPhoneNumber() {
         String[] splitted = FormUtils.splitPhoneNumber("(647) 555-5555");
         Assert.assertArrayEquals(new String[] { "647", "555", "5555" }, splitted);
+    }
+
+    private void assertFieldEquals(byte[] form, String field, String expectedValue) throws IOException, DocumentException {
+        ByteArrayOutputStream bos = new ByteArrayOutputStream();
+        PdfReader reader = new PdfReader(form);
+        PdfStamper stamper = new PdfStamper(reader, bos);
+        AcroFields fields = stamper.getAcroFields();
+
+        Assert.assertEquals(expectedValue, fields.getField(field));
+    }
+
+    private void dumpPdf(String pdfName, byte[] filledForm) throws IOException {
+        if (DUMP_PDFS) {
+            FileOutputStream fos = new FileOutputStream(pdfName + ".pdf");
+            fos.write(filledForm);
+            fos.close();
+        }
     }
 }

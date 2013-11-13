@@ -42,7 +42,7 @@ import com.itextpdf.text.pdf.PdfStamper;
 import com.pyx4j.commons.SimpleMessageFormat;
 import com.pyx4j.entity.shared.IEntity;
 
-import com.propertyvista.domain.legal.PdfFormFieldName;
+import com.propertyvista.domain.legal.utils.PdfFormFieldName;
 
 public class FormUtils {
 
@@ -98,6 +98,10 @@ public class FormUtils {
     }
 
     public static byte[] fillForm(IEntity fieldsData, byte[] form) throws IOException, DocumentException {
+        return fillForm(fieldsData, form, true);
+    }
+
+    public static byte[] fillForm(IEntity fieldsData, byte[] form, boolean flatten) throws IOException, DocumentException {
         ByteArrayOutputStream bos = new ByteArrayOutputStream();
         PdfReader reader = new PdfReader(form);
         PdfStamper stamper = new PdfStamper(reader, bos);
@@ -107,9 +111,13 @@ public class FormUtils {
             try {
                 if (fieldsData.getMember(memberName).getValueClass().equals(String.class)) {
                     String value = fieldsData.getMember(memberName).isNull() ? "" : fieldsData.getMember(memberName).getValue().toString();
-                    fields.setField(pdfFieldName(fieldsData, memberName), value);
+                    if (isSingleMapping(fieldsData, memberName)) {
+                        fields.setField(pdfFieldName(fieldsData, memberName), value);
+                    } else {
+
+                    }
                 } else if (fieldsData.getMember(memberName).getValueClass().isEnum()) {
-                    // this code should work the same as for sting but it was left here just to denote it's a different field type
+                    // this code should work the same as for string but it was left here just to denote it's a different field type
                     String value = fieldsData.getMember(memberName).isNull() ? "" : fieldsData.getMember(memberName).getValue().toString();
                     fields.setField(pdfFieldName(fieldsData, memberName), value);
 
@@ -138,11 +146,18 @@ public class FormUtils {
                 throw new RuntimeException(e);
             }
         }
-        stamper.setFormFlattening(true);
+        stamper.setFormFlattening(flatten);
         stamper.close();
         reader.close();
         bos.close();
         return bos.toByteArray();
+    }
+
+    private static boolean isSingleMapping(IEntity fieldsData, String memberName) throws NoSuchMethodException, SecurityException {
+        Class<?> fieldsDataClass = fieldsData.getInstanceValueClass();
+        Method member = fieldsDataClass.getDeclaredMethod(memberName, (Class<?>[]) null);
+        PdfFormFieldName fieldName = member.getAnnotation(PdfFormFieldName.class);
+        return !fieldName.value().startsWith("[");
     }
 
     private static String pdfFieldName(IEntity fieldsData, String memberName) throws NoSuchMethodException, SecurityException {

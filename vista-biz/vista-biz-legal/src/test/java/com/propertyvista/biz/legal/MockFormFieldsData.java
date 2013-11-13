@@ -14,30 +14,25 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  *
- * Created on 2013-11-12
+ * Created on 2013-11-13
  * @author ArtyomB
  * @version $Id$
  */
 package com.propertyvista.biz.legal;
 
-import org.apache.commons.io.IOUtils;
+import com.pyx4j.entity.annotations.Transient;
+import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.shared.IPrimitive;
 
-import com.propertyvista.domain.legal.L1FormFieldsData;
+import com.propertyvista.domain.legal.utils.PdfFormFieldName;
 
-public class L4GenerationFacadeImpl implements L1GenerationFacade {
+@Transient
+public interface MockFormFieldsData extends IEntity {
 
-    private static final String N4_FORM_FILE = "l1.pdf";
+    @PdfFormFieldName("field1")
+    IPrimitive<String> field1();
 
-    @Override
-    public byte[] generateL1Letter(L1FormFieldsData fieldsData) {
-        byte[] filledForm = null;
-        try {
-            byte[] formTemplate = IOUtils.toByteArray(N4GenerationFacadeImpl.class.getResourceAsStream(N4_FORM_FILE));
-            filledForm = FormUtils.fillForm(fieldsData, formTemplate);
-        } catch (Throwable e) {
-            throw new RuntimeException(e);
-        }
-        return filledForm;
-    }
+    @PdfFormFieldName("[field2{2},field2{3},field3{4}]")
+    IPrimitive<String> field2();
 
 }

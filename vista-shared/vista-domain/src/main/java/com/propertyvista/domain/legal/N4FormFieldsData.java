@@ -17,6 +17,8 @@ import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 
+import com.propertyvista.domain.legal.utils.PdfFormFieldName;
+
 @Transient
 /** This maps directly to the fields of PDF template of N4 Form */
 public interface N4FormFieldsData extends IEntity {
