@@ -29,7 +29,6 @@ import org.apache.commons.io.IOUtils;
 import org.junit.Assert;
 import org.junit.Test;
 
-import com.google.gwt.editor.client.Editor.Ignore;
 import com.itextpdf.text.DocumentException;
 import com.itextpdf.text.pdf.AcroFields;
 import com.itextpdf.text.pdf.PdfReader;
@@ -48,9 +47,7 @@ public class FormUtilsTest {
         MOCK_FORM = IOUtils.toByteArray(N4GenerationFacadeImpl.class.getResourceAsStream("MockForm.pdf"));
     }
 
-    @Ignore
-    @Test
-    public void dont_testFillForm() throws IOException, DocumentException {
+    public void testFillForm() throws IOException, DocumentException {
         MockFormFieldsData fieldsData = EntityFactory.create(MockFormFieldsData.class);
         fieldsData.field1().setValue("mock-mock");
         fieldsData.field2().setValue("124567890");
