@@ -23,8 +23,10 @@ import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.gwt.server.DateUtils;
 
 import com.propertyvista.domain.contact.AddressStructured;
-import com.propertyvista.portal.rpc.portal.web.dto.WeatherForecastDTO;
-import com.propertyvista.portal.rpc.portal.web.dto.WeatherForecastDTO.TemperatureUnit;
+import com.propertyvista.portal.rpc.portal.resident.dto.WeatherForecastDTO;
+import com.propertyvista.portal.rpc.portal.resident.dto.WeatherForecastDTO.TemperatureUnit;
+import com.propertyvista.portal.server.portal.resident.services.weather.openweathermap.OpenWeatherMapApiImpl;
+import com.propertyvista.portal.server.portal.resident.services.weather.openweathermap.OpenWeatherMapWeatherForecaster;
 
 public class OpenWeatherMapWeatherForecasterTest extends TestCase {
 

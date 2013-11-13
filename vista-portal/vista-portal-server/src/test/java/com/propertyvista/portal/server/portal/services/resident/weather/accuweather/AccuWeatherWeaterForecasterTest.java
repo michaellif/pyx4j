@@ -24,9 +24,10 @@ import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.gwt.server.DateUtils;
 
 import com.propertyvista.domain.contact.AddressStructured;
-import com.propertyvista.portal.rpc.portal.web.dto.WeatherForecastDTO;
-import com.propertyvista.portal.server.portal.services.resident.weather.accuweather.beans.ForecastBundle;
-import com.propertyvista.portal.server.portal.services.resident.weather.accuweather.readers.ForecastBundleReader;
+import com.propertyvista.portal.rpc.portal.resident.dto.WeatherForecastDTO;
+import com.propertyvista.portal.server.portal.resident.services.weather.accuweather.AccuWeatherWeatherForecaster;
+import com.propertyvista.portal.server.portal.resident.services.weather.accuweather.beans.ForecastBundle;
+import com.propertyvista.portal.server.portal.resident.services.weather.accuweather.readers.ForecastBundleReader;
 import com.propertyvista.portal.server.portal.services.resident.weather.accuweather.utils.MockAccuWeatherApi;
 
 public class AccuWeatherWeaterForecasterTest extends TestCase {

@@ -17,6 +17,9 @@ import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Unmarshaller;
 
+import com.propertyvista.portal.server.portal.resident.services.weather.openweathermap.OpenWeatherMapApi;
+import com.propertyvista.portal.server.portal.resident.services.weather.openweathermap.Weatherdata;
+
 /**
  * Returns static data parsed from a resource response file provided in the constructor
  */

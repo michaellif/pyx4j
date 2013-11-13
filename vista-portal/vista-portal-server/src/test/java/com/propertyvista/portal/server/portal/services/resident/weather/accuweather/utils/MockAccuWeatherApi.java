@@ -13,8 +13,8 @@
  */
 package com.propertyvista.portal.server.portal.services.resident.weather.accuweather.utils;
 
-import com.propertyvista.portal.server.portal.services.resident.weather.accuweather.AccuWeatherApi;
-import com.propertyvista.portal.server.portal.services.resident.weather.accuweather.beans.ForecastBundle;
+import com.propertyvista.portal.server.portal.resident.services.weather.accuweather.AccuWeatherApi;
+import com.propertyvista.portal.server.portal.resident.services.weather.accuweather.beans.ForecastBundle;
 
 /**
  * This mock only knows A0A "0A0, Toronto, Canada" location which is "12345". For any other it's going to return <code>null</code>
