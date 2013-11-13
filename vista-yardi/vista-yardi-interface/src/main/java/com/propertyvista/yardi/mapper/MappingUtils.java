@@ -99,16 +99,17 @@ public class MappingUtils {
         }
 
         String importedCountry = mitsAddress.getCountry();
-        Country country = null;
         if (StringUtils.isEmpty(importedCountry)) {
+            // assume country as countryOfOperation if not not set in Yardi!
+            importedCountry = VistaDeployment.getCurrentPmc().features().countryOfOperation().getValue().toString();
+        }
+
+        Country country = null;
+        try {
+            country = getCountryByName(importedCountry);
+        } catch (Throwable e) {
             error.append("\n");
-        } else {
-            try {
-                country = getCountryByName(importedCountry);
-            } catch (Throwable e) {
-                error.append("\n");
-                error.append("failed to get country from MITS address: " + e.getMessage());
-            }
+            error.append("failed to get country from MITS address: " + e.getMessage());
         }
         address.country().set(country);
 
