@@ -7,18 +7,19 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on 2013-02-11
- * @author ArtyomB
+ * Created on Aug 16, 2013
+ * @author VladL
  * @version $Id$
  */
-package com.propertyvista.portal.domain.dto.financial;
+package com.propertyvista.portal.rpc.portal.web.dto.financial;
 
 import com.pyx4j.entity.annotations.Transient;
+import com.pyx4j.entity.shared.IList;
 
-import com.propertyvista.dto.TransactionHistoryDTO;
+import com.propertyvista.dto.PaymentRecordDTO;
 
 @Transient
-public interface YardiFinancialSummaryDTO extends FinancialSummaryDTO {
+public interface PaymentDTO extends PaymentRecordDTO {
 
-    TransactionHistoryDTO transactionsHistory();
+    IList<PaymentInfoDTO> currentAutoPayments();
 }

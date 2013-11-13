@@ -7,26 +7,20 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Apr 24, 2012
- * @author ArtyomB
+ * Created on Jun 27, 2011
+ * @author Dad
  * @version $Id$
  */
-package com.propertyvista.portal.domain.dto;
+package com.propertyvista.portal.rpc.portal.web.dto.financial;
 
-import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.entity.shared.IPrimitive;
+import com.pyx4j.entity.shared.IList;
 
-import com.propertyvista.domain.tenant.lease.Lease;
+import com.propertyvista.domain.payment.LeasePaymentMethod;
 
 @Transient
-public interface LeaseContextChoiceDTO extends IEntity {
+public interface PaymentMethodListDTO extends IEntity {
 
-    /** reference to lease */
-    Lease leaseId();
-
-    @Caption(name = "Unit Address")
-    IPrimitive<String> leasedUnitAddress();
-
+    IList<LeasePaymentMethod> paymentMethods();
 }

@@ -40,12 +40,12 @@ import com.propertyvista.domain.payment.AutopayAgreement.AutopayAgreementCovered
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.dto.BillDTO;
 import com.propertyvista.dto.TransactionHistoryDTO;
-import com.propertyvista.portal.domain.dto.BillDataDTO;
-import com.propertyvista.portal.domain.dto.financial.PaymentInfoDTO;
+import com.propertyvista.portal.rpc.portal.web.dto.financial.BillDataDTO;
 import com.propertyvista.portal.rpc.portal.web.dto.financial.BillViewDTO;
 import com.propertyvista.portal.rpc.portal.web.dto.financial.BillingHistoryDTO;
 import com.propertyvista.portal.rpc.portal.web.dto.financial.BillingSummaryDTO;
 import com.propertyvista.portal.rpc.portal.web.dto.financial.LatestActivitiesDTO;
+import com.propertyvista.portal.rpc.portal.web.dto.financial.PaymentInfoDTO;
 import com.propertyvista.portal.rpc.portal.web.dto.financial.LatestActivitiesDTO.InvoicePaymentDTO;
 import com.propertyvista.portal.rpc.portal.web.services.financial.BillingService;
 import com.propertyvista.portal.server.security.TenantAppContext;

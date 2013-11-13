@@ -21,7 +21,7 @@ import com.pyx4j.entity.rpc.AbstractCrudService;
 
 import com.propertyvista.domain.contact.AddressSimple;
 import com.propertyvista.domain.payment.LeasePaymentMethod;
-import com.propertyvista.portal.domain.dto.financial.PaymentDTO;
+import com.propertyvista.portal.rpc.portal.web.dto.financial.PaymentDTO;
 
 public interface PaymentWizardService extends AbstractCrudService<PaymentDTO> {
 

@@ -7,16 +7,26 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Sep 7, 2011
- * @author Vlad
+ * Created on Apr 24, 2012
+ * @author ArtyomB
  * @version $Id$
  */
-package com.propertyvista.portal.domain.ptapp;
+package com.propertyvista.portal.rpc.portal.dto;
 
+import com.pyx4j.entity.annotations.Caption;
+import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.shared.IPrimitive;
 
-import com.propertyvista.domain.IBoundToApplication;
+import com.propertyvista.domain.tenant.lease.Lease;
 
-public interface Summary extends IEntity, IBoundToApplication {
+@Transient
+public interface LeaseContextChoiceDTO extends IEntity {
+
+    /** reference to lease */
+    Lease leaseId();
+
+    @Caption(name = "Unit Address")
+    IPrimitive<String> leasedUnitAddress();
 
 }

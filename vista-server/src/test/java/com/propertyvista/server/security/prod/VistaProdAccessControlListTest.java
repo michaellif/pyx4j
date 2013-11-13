@@ -32,7 +32,6 @@ import com.propertyvista.config.tests.VistaTestsDBConfigurationHSQLMemory;
 import com.propertyvista.crm.rpc.services.organization.EmployeeCrudService;
 import com.propertyvista.operations.rpc.services.PmcCrudService;
 import com.propertyvista.portal.rpc.portal.web.services.profile.ResidentProfileCrudService;
-import com.propertyvista.portal.rpc.ptapp.services.ApplicationStatusService;
 import com.propertyvista.server.config.VistaServerSideConfigurationProd;
 
 public class VistaProdAccessControlListTest {
@@ -63,7 +62,6 @@ public class VistaProdAccessControlListTest {
     @Test
     public void publicServicePermissions() {
         TestLifecycle.beginRequest();
-        assertPermission(false, ApplicationStatusService.class);
 
         // Admin
         assertPermission(false, PmcCrudService.class);

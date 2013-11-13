@@ -11,7 +11,7 @@
  * @author Vlad
  * @version $Id$
  */
-package com.propertyvista.portal.test.domain.util;
+package com.propertyvista.domain.util;
 
 import junit.framework.TestCase;
 

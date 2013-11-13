@@ -25,7 +25,7 @@ import com.pyx4j.security.rpc.AuthenticationResponse;
 import com.propertyvista.biz.tenant.CustomerFacade;
 import com.propertyvista.domain.contact.AddressStructured;
 import com.propertyvista.domain.tenant.lease.Lease;
-import com.propertyvista.portal.domain.dto.LeaseContextChoiceDTO;
+import com.propertyvista.portal.rpc.portal.dto.LeaseContextChoiceDTO;
 import com.propertyvista.portal.rpc.portal.services.LeaseContextSelectionService;
 import com.propertyvista.portal.server.portal.web.services.ResidentAuthenticationServiceImpl;
 import com.propertyvista.portal.server.security.TenantAppContext;

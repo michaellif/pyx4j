@@ -7,41 +7,34 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Aug 15, 2013
- * @author VladL
+ * Created on 2013-02-11
+ * @author ArtyomB
  * @version $Id$
  */
-package com.propertyvista.portal.domain.dto.financial;
+package com.propertyvista.portal.rpc.portal.web.dto.financial;
 
 import java.math.BigDecimal;
 
-import com.pyx4j.commons.LogicalDate;
+import com.pyx4j.entity.annotations.AbstractEntity;
 import com.pyx4j.entity.annotations.Editor;
 import com.pyx4j.entity.annotations.Editor.EditorType;
-import com.pyx4j.entity.annotations.ToString;
+import com.pyx4j.entity.annotations.Format;
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
 
-import com.propertyvista.domain.payment.PaymentMethod;
-import com.propertyvista.domain.tenant.lease.Tenant;
+import com.propertyvista.domain.financial.billing.InvoiceLineItem;
 
 @Transient
-public interface PaymentInfoDTO extends IEntity {
+@AbstractEntity
+public interface FinancialSummaryDTO extends IEntity {
 
-    @ToString(index = 0)
-    @Editor(type = EditorType.moneylabel)
-    IPrimitive<BigDecimal> amount();
+    @Format("#,##0.00")
+    @Editor(type = EditorType.money)
+    IPrimitive<BigDecimal> currentBalance();
 
-    @ToString(index = 1)
-    @Editor(type = EditorType.label)
-    PaymentMethod paymentMethod();
+    IList<PaymentInfoDTO> currentAutoPayments();
 
-    @ToString(index = 2)
-    @Editor(type = EditorType.label)
-    Tenant payer();
-
-    @ToString(index = 3)
-    @Editor(type = EditorType.label)
-    IPrimitive<LogicalDate> paymentDate();
+    IList<InvoiceLineItem> latestActivities();
 }

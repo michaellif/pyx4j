@@ -33,7 +33,7 @@ import com.pyx4j.widgets.client.Button;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
 
 import com.propertyvista.domain.tenant.lease.Lease;
-import com.propertyvista.portal.domain.dto.LeaseContextChoiceDTO;
+import com.propertyvista.portal.rpc.portal.dto.LeaseContextChoiceDTO;
 
 public class LeaseContextSelectionViewImpl implements LeaseContextSelectionView {
 

@@ -36,7 +36,7 @@ import com.propertyvista.domain.payment.LeasePaymentMethod;
 import com.propertyvista.domain.payment.PaymentType;
 import com.propertyvista.domain.security.common.VistaApplication;
 import com.propertyvista.domain.tenant.lease.Lease;
-import com.propertyvista.portal.domain.dto.financial.PaymentDTO;
+import com.propertyvista.portal.rpc.portal.web.dto.financial.PaymentDTO;
 import com.propertyvista.portal.rpc.portal.web.services.financial.PaymentWizardService;
 import com.propertyvista.portal.server.security.TenantAppContext;
 import com.propertyvista.server.common.util.AddressConverter;
