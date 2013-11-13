@@ -14,12 +14,25 @@
 package com.propertyvista.yardi.services;
 
 import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.util.List;
+import java.text.SimpleDateFormat;
+import java.util.Collection;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
+import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.yardi.entity.guestcard40.LeadManagement;
+import com.yardi.entity.guestcard40.MarketingAgent;
+import com.yardi.entity.guestcard40.MarketingSource;
+import com.yardi.entity.guestcard40.MarketingSources;
+import com.yardi.entity.guestcard40.PropertyMarketingSources;
+import com.yardi.entity.guestcard40.Prospects;
 import com.yardi.entity.ils.Availability;
 import com.yardi.entity.ils.ILSUnit;
 import com.yardi.entity.ils.MadeReadyDate;
@@ -30,6 +43,7 @@ import com.pyx4j.config.server.ServerSideConfiguration;
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.rdb.cfg.Configuration.DatabaseType;
 import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.essentials.j2se.util.MarshallUtil;
 
 import com.propertyvista.config.tests.VistaTestsServerSideConfiguration;
 import com.propertyvista.domain.settings.PmcYardiCredential;
@@ -54,18 +68,91 @@ public class YardiNewGuestWorkflowTest {
         PmcYardiCredential yc = getTestPmcYardiCredential();
         try {
             YardiGuestManagementStub stub = ServerSideFactory.create(YardiGuestManagementStub.class);
+            MarketingSources sources = null;
+            if (mockMode) {
+                String xml = getMarketingSourcesXml();
+                sources = MarshallUtil.unmarshal(MarketingSources.class, xml);
+            } else {
+                sources = stub.getYardiMarketingSources(yc, yc.propertyListCodes().getValue());
+            }
+
+            String agentName = null;
+            String sourceName = null;
+            for (PropertyMarketingSources source : sources.getProperty()) {
+                if (yc.propertyListCodes().getValue().equals(source.getPropertyCode())) {
+                    for (MarketingAgent agent : source.getPropertyRequiredFields().getAgents().getAgentName()) {
+                        if ("Property Vista".equals(agent.getValue())) {
+                            agentName = agent.getValue();
+                        }
+                    }
+                    for (MarketingSource src : source.getPropertyRequiredFields().getSources().getSourceName()) {
+                        if ("ILS".equals(src.getValue())) {
+                            sourceName = src.getValue();
+                        }
+                    }
+                }
+            }
+
+            if (agentName == null) {
+                System.out.println("Marketing Agent 'Property Vista' is not configured. Exit.");
+                return;
+            }
+
+            if (sourceName == null) {
+                System.out.println("Marketing Source 'ILS' is not configured. Exit.");
+                return;
+            }
+
+            Map<String, ILSUnit> units = new HashMap<String, ILSUnit>();
             if (mockMode) {
                 System.out.println("Available Units: #156 (2008-1-10),  #158 (2008-1-11),  #159 (2011-3-21), ");
             } else {
                 PhysicalProperty property = stub.getPropertyMarketingInfo(yc, yc.propertyListCodes().getValue());
                 log.info("PhysicalProperty: {}", property.getProperty().get(0).getPropertyID().getIdentification().getPrimaryID());
-                printUnits(property.getProperty().get(0).getILSUnit());
+                for (ILSUnit ilsUnit : property.getProperty().get(0).getILSUnit()) {
+                    Availability avail = ilsUnit.getAvailability();
+                    if (avail == null) {
+                        continue;
+                    }
+                    units.put(ilsUnit.getUnit().getInformation().get(0).getUnitID(), ilsUnit);
+                }
+                printUnits(units.keySet());
             }
 
-            String unitNo = readLine("Enter Unit #: ");
-            String guestName = readLine("Guest Name: ");
+            ILSUnit ilsUnit = null;
+            Date moveIn = null;
+            String guestName = null;
+            while (ilsUnit == null) {
+                String unitNo = readLine("Enter Unit #: ");
+                ilsUnit = units.get(unitNo);
+                if (ilsUnit == null) {
+                    System.out.println("Unit not found: " + unitNo + " - please try again...");
+                    continue;
+                }
 
-            System.out.println("Application Complete.");
+                String moveInStr = readLine("MoveIn (yyyy-mm-dd): ");
+                moveIn = new SimpleDateFormat("yyyy-mm-dd").parse(moveInStr);
+                if (moveIn == null) {
+                    System.out.println("Invalid date: " + moveInStr + " - please try again...");
+                    continue;
+                }
+
+                guestName = readLine("Guest Name: ");
+                if (guestName == null || guestName.trim().split(" ").length != 2) {
+                    System.out.println("Invalid name: " + guestName + " - please try again...");
+                    continue;
+                }
+            }
+            Prospects guestInfo = new Prospects();
+            int beds = ilsUnit.getUnit().getInformation().get(0).getUnitBedrooms().intValue();
+            guestInfo.getProspect().add(new YardiGuestProcessor().getProspect(guestName, moveIn, beds, agentName, sourceName));
+            LeadManagement lead = new LeadManagement();
+            lead.setProspects(guestInfo);
+            stub.importGuestInfo(yc, lead);
+
+            System.out.println("Guest Import Complete.");
+
+            // Import Application
         } catch (Throwable t) {
             throw new RuntimeException(t);
         }
@@ -83,14 +170,10 @@ public class YardiNewGuestWorkflowTest {
         return cr;
     }
 
-    static void printUnits(List<ILSUnit> units) {
+    static void printUnits(Collection<String> units) {
         System.out.print("Available Units:");
-        for (ILSUnit ilsUnit : units) {
-            Availability avail = ilsUnit.getAvailability();
-            if (avail == null) {
-                continue;
-            }
-            System.out.print(" #" + ilsUnit.getUnit().getInformation().get(0).getUnitID() + " (" + getDateAvail(avail) + "), ");
+        for (String unit : units) {
+            System.out.print(" #" + unit);
         }
 
     }
@@ -124,4 +207,12 @@ public class YardiNewGuestWorkflowTest {
             throw new RuntimeException(e);
         }
     }
+
+    private static String getMarketingSourcesXml() throws IOException {
+        Class<?> refClass = YardiILSServiceClientTest.class;
+        String rcPath = refClass.getPackage().getName().replaceAll("\\.", "/") + "/AgentSources-Properties.xml";
+        InputStream is = refClass.getClassLoader().getResourceAsStream(rcPath);
+        return IOUtils.toString(is);
+    }
+
 }

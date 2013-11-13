@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+	<xs:element name="Properties">
+		<xs:complexType>
+			<xs:element name="Property" type="Property" maxOccurs="unbounded"/>
+		</xs:complexType>
+	</xs:element>
+
+	<xs:complexType name="Property">
+		<xs:sequence>
+			<xs:element name="PropertyCode" type="xs:string"/>
+			<xs:element name="PropertyRequiredFields" type="PropertyRequiredFields"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="PropertyRequiredFields">
+		<xs:sequence>
+			<xs:element name="Agents" type="Agents"/>
+			<xs:element name="Sources" type="Sources"/>
+			<xs:element name="Results" type="Results"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="Agents">
+		<xs:element name="AgentName" minOccurs="0" maxOccurs="unbounded">
+			<xs:complexType>
+				<xs:simpleContent>
+					<xs:extension base="xs:string">
+						<xs:attribute name="InactiveDate" type="xs:date" use="optional"/>
+					</xs:extension>
+				</xs:simpleContent>
+			</xs:complexType>
+		</xs:element>
+	</xs:complexType>
+	<xs:complexType name="Sources">
+		<xs:element name="SourceName" minOccurs="0" maxOccurs="unbounded">
+			<xs:complexType>
+				<xs:simpleContent>
+					<xs:extension base="xs:string">
+						<xs:attribute name="InactiveDate" type="xs:date" use="optional"/>
+					</xs:extension>
+				</xs:simpleContent>
+			</xs:complexType>
+		</xs:element>
+	</xs:complexType>
+	<xs:complexType name="Results">
+		<xs:element name="Result" minOccurs="0" maxOccurs="unbounded">
+			<xs:complexType>
+				<xs:simpleContent>
+					<xs:extension base="xs:string">
+						<xs:attribute name="InactiveDate" type="xs:date" use="optional"/>
+					</xs:extension>
+				</xs:simpleContent>
+			</xs:complexType>
+		</xs:element>
+	</xs:complexType>
+</xs:schema>

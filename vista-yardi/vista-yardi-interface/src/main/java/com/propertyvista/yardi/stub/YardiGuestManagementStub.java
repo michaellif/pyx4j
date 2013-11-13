@@ -13,9 +13,8 @@
  */
 package com.propertyvista.yardi.stub;
 
-import java.rmi.RemoteException;
-
 import com.yardi.entity.guestcard40.LeadManagement;
+import com.yardi.entity.guestcard40.MarketingSources;
 import com.yardi.entity.guestcard40.RentableItems;
 import com.yardi.entity.ils.PhysicalProperty;
 import com.yardi.entity.leaseapp30.LeaseApplication;
@@ -25,9 +24,11 @@ import com.propertyvista.domain.settings.PmcYardiCredential;
 
 public interface YardiGuestManagementStub extends ExternalInterfaceLoggingStub {
 
-    RentableItems getRentableItems(PmcYardiCredential yc) throws YardiServiceException, RemoteException;
+    RentableItems getRentableItems(PmcYardiCredential yc) throws YardiServiceException;
 
     PhysicalProperty getPropertyMarketingInfo(PmcYardiCredential yc, String propertyId) throws YardiServiceException;
+
+    MarketingSources getYardiMarketingSources(PmcYardiCredential yc, String propertyId) throws YardiServiceException;
 
     void importGuestInfo(PmcYardiCredential yc, LeadManagement leadInfo) throws YardiServiceException;
 

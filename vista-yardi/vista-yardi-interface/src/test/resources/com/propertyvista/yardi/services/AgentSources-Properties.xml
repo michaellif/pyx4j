@@ -1,0 +1,21 @@
+<Properties xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="">
+	<Property>
+		<PropertyCode>prvista2</PropertyCode>
+		<PropertyRequiredFields>
+			<Agents>
+				<AgentName>Ben Herman</AgentName>
+				<AgentName>Charles White</AgentName>
+				<AgentName>Dean Nelson</AgentName>
+				<AgentName>Property Vista</AgentName>
+			</Agents>
+			<Sources>
+				<SourceName>Drive by</SourceName>
+				<SourceName>Internet</SourceName>
+				<SourceName>Newspaper</SourceName>
+				<SourceName>Referral</SourceName>
+				<SourceName>ILS</SourceName>
+			</Sources>
+			<Results />
+		</PropertyRequiredFields>
+	</Property>
+</Properties>

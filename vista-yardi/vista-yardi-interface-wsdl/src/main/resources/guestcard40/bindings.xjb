@@ -1,10 +1,12 @@
 <jxb:bindings version="2.0"
     xmlns:jxb="http://java.sun.com/xml/ns/jaxb" 
     xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+xmlns:xjc="http://java.sun.com/xml/ns/jaxb/xjc"
     xmlns:namespace="http://jaxb2-commons.dev.java.net/namespace-prefix">
 
     <jxb:globalBindings localScoping="toplevel">
 	<jxb:javaType name="java.util.Date" xmlType="xs:date" parseMethod="com.pyx4j.essentials.j2se.util.DateAdapter.parseDate" printMethod="com.pyx4j.essentials.j2se.util.DateAdapter.printDate"/>
+	<jxb:javaType name="java.util.Date" xmlType="xs:dateTime" parseMethod="com.pyx4j.essentials.j2se.util.DateAdapter.parseDate" printMethod="com.pyx4j.essentials.j2se.util.DateAdapter.printDate"/>
 	<jxb:serializable uid="1" />
     </jxb:globalBindings>
 
@@ -15,6 +17,24 @@
     </jxb:bindings>
 
     <jxb:bindings schemaLocation="Itf_MITS_LeadManagement4.0.xsd" >
+    </jxb:bindings>
+
+    <jxb:bindings schemaLocation="YardiAgentsSources.xsd" >
+	<jxb:bindings node="//xsd:element[@name='Properties']">
+            <jxb:class name="MarketingSources"/>
+        </jxb:bindings>
+	<jxb:bindings node="//xsd:complexType[@name='Property']">
+            <jxb:class name="PropertyMarketingSources"/>
+        </jxb:bindings>
+	<jxb:bindings node="//xsd:complexType[@name='Agents']/xsd:element[@name='AgentName']/xsd:complexType">
+            <jxb:class name="MarketingAgent"/>
+        </jxb:bindings>
+	<jxb:bindings node="//xsd:complexType[@name='Sources']/xsd:element[@name='SourceName']/xsd:complexType">
+            <jxb:class name="MarketingSource"/>
+        </jxb:bindings>
+	<jxb:bindings node="//xsd:complexType[@name='Results']/xsd:element[@name='Result']/xsd:complexType">
+            <jxb:class name="MarketingResult"/>
+        </jxb:bindings>
     </jxb:bindings>
 
     <jxb:bindings schemaLocation="YardiRentableItems.xsd" >

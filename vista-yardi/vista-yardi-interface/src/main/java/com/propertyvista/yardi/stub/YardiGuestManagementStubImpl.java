@@ -13,10 +13,6 @@
  */
 package com.propertyvista.yardi.stub;
 
-import java.rmi.RemoteException;
-
-import javax.xml.bind.JAXBException;
-
 import org.apache.axiom.om.OMElement;
 import org.apache.axiom.om.util.AXIOMUtil;
 import org.apache.axis2.AxisFault;
@@ -24,6 +20,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.yardi.entity.guestcard40.LeadManagement;
+import com.yardi.entity.guestcard40.MarketingSources;
 import com.yardi.entity.guestcard40.RentableItems;
 import com.yardi.entity.ils.PhysicalProperty;
 import com.yardi.entity.leaseapp30.LeaseApplication;
@@ -31,6 +28,8 @@ import com.yardi.ws.ItfILSGuestCard;
 import com.yardi.ws.ItfILSGuestCard2_0;
 import com.yardi.ws.ItfILSGuestCard2_0Stub;
 import com.yardi.ws.ItfILSGuestCardStub;
+import com.yardi.ws.operations.guestcard40.GetYardiAgentsSourcesResults_Login;
+import com.yardi.ws.operations.guestcard40.GetYardiAgentsSourcesResults_LoginResponse;
 import com.yardi.ws.operations.guestcard40.GetYardiRentableItems_Login;
 import com.yardi.ws.operations.guestcard40.GetYardiRentableItems_LoginResponse;
 import com.yardi.ws.operations.guestcard40.ImportYardiGuest_Login;
@@ -61,7 +60,7 @@ public class YardiGuestManagementStubImpl extends AbstractYardiStub implements Y
     private final boolean testMode = true;
 
     @Override
-    public RentableItems getRentableItems(PmcYardiCredential yc) throws YardiServiceException, RemoteException {
+    public RentableItems getRentableItems(PmcYardiCredential yc) throws YardiServiceException {
         try {
             init(Action.GetYardiRentableItems);
 
@@ -106,7 +105,62 @@ public class YardiGuestManagementStubImpl extends AbstractYardiStub implements Y
 
             return rentableItems;
 
-        } catch (JAXBException e) {
+        } catch (Throwable e) {
+            throw new Error(e);
+        }
+    }
+
+    @Override
+    public MarketingSources getYardiMarketingSources(PmcYardiCredential yc, String propertyId) throws YardiServiceException {
+        try {
+            init(Action.GetYardiMarketingSources);
+
+            GetYardiAgentsSourcesResults_Login request = new GetYardiAgentsSourcesResults_Login();
+
+            request.setInterfaceEntity(YardiConstants.ILS_INTERFACE_ENTITY);
+            request.setInterfaceLicense(YardiLicense.getInterfaceLicense(YardiInterface.ILSGuestCard, yc));
+
+            request.setUserName(yc.username().getValue());
+            if (testMode) { // TODO
+                request.setPassword(yc.password().number().getValue());
+            } else {
+                request.setPassword(ServerSideFactory.create(PasswordEncryptorFacade.class).decryptPassword(yc.password()));
+            }
+            request.setServerName(yc.serverName().getValue());
+            request.setDatabase(yc.database().getValue());
+            request.setPlatform(yc.platform().getValue().name());
+
+            request.setYardiPropertyId(propertyId);
+
+            GetYardiAgentsSourcesResults_LoginResponse response = getILSGuestCardService(yc).getYardiAgentsSourcesResults_Login(request);
+            if ((response == null) || (response.getGetYardiAgentsSourcesResults_LoginResult() == null)
+                    || (response.getGetYardiAgentsSourcesResults_LoginResult().getExtraElement() == null)) {
+                throw new YardiServiceException(SimpleMessageFormat.format(
+                        "Yardi connection configuration error, Login error or database ''{0}'' do not exists on Yardi server", yc.database()));
+            }
+
+            OMElement root = response.getGetYardiAgentsSourcesResults_LoginResult().getExtraElement();
+            String xml = root.toString();
+
+            log.debug("GetYardiMarketingSources Result: {}", xml);
+
+            if (Messages.isMessageResponse(xml)) {
+                Messages messages = MarshallUtil.unmarshal(Messages.class, xml);
+                if (messages.isError()) {
+                    YardiLicense.handleVendorLicenseError(messages);
+                    throw new YardiServiceException(messages.toString());
+                } else {
+                    log.info(messages.toString());
+                }
+            }
+
+            MarketingSources marketingSources = MarshallUtil.unmarshal(MarketingSources.class, xml);
+
+            log.debug("\n--- GetYardiMarketingSources ---\n{}\n", marketingSources);
+
+            return marketingSources;
+
+        } catch (Throwable e) {
             throw new Error(e);
         }
     }
