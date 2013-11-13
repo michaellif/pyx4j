@@ -52,17 +52,18 @@ public class OpenIdFilter implements Filter {
     private static Collection<String> servletPathNoAuthentication = new HashSet<String>();
 
     static {
-        servletPathNoAuthentication.addAll(allApplicationsUrls("/public/"));
-        servletPathNoAuthentication.addAll(allApplicationsUrls("/o/"));
-        servletPathNoAuthentication.addAll(allApplicationsUrls("/debug/"));
-        servletPathNoAuthentication.add("/static/");
-        servletPathNoAuthentication.add("/interfaces/");
+        servletPathNoAuthentication.addAll(allApplicationsUrls("public"));
+        servletPathNoAuthentication.addAll(allApplicationsUrls("o"));
+        servletPathNoAuthentication.addAll(allApplicationsUrls("debug"));
+        servletPathNoAuthentication.add("o");
+        servletPathNoAuthentication.add("static");
+        servletPathNoAuthentication.add("interfaces");
     }
 
     private static Collection<String> allApplicationsUrls(String url) {
         ArrayList<String> arlPatterns = new ArrayList<String>();
         for (VistaApplication application : VistaApplication.values()) {
-            arlPatterns.add("/" + application.name() + url);
+            arlPatterns.add(application.name() + "/" + url);
         }
         return arlPatterns;
     }
@@ -78,12 +79,12 @@ public class OpenIdFilter implements Filter {
 
     private boolean noAuthenticationRequired(String servletPath) {
         String servletPathParts[] = servletPath.split("/");
-        if ((servletPathParts.length > 1) && servletPathNoAuthentication.contains(servletPathParts[0] + "/")) {
+        if ((servletPathParts.length >= 2) && servletPathNoAuthentication.contains(servletPathParts[1])) {
             return true;
-        } else if ((servletPathParts.length > 2) && servletPathNoAuthentication.contains(servletPathParts[0] + "/" + servletPathParts[1])) {
+        } else if ((servletPathParts.length >= 3) && servletPathNoAuthentication.contains(servletPathParts[1] + "/" + servletPathParts[2])) {
             return true;
         } else if (servletPath.endsWith("/robots.txt") || servletPath.endsWith("/favicon.ico")) {
-            return false;
+            return true;
         } else {
             return false;
         }
