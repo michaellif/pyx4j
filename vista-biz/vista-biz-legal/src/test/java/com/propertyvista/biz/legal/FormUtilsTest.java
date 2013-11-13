@@ -32,7 +32,6 @@ import org.junit.Test;
 import com.itextpdf.text.DocumentException;
 import com.itextpdf.text.pdf.AcroFields;
 import com.itextpdf.text.pdf.PdfReader;
-import com.itextpdf.text.pdf.PdfStamper;
 
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.gwt.server.DateUtils;
@@ -47,20 +46,55 @@ public class FormUtilsTest {
         MOCK_FORM = IOUtils.toByteArray(N4GenerationFacadeImpl.class.getResourceAsStream("MockForm.pdf"));
     }
 
-    public void testFillForm() throws IOException, DocumentException {
+    @Test
+    public void testFillFormSimpleField() throws IOException, DocumentException {
         MockFormFieldsData fieldsData = EntityFactory.create(MockFormFieldsData.class);
         fieldsData.field1().setValue("mock-mock");
         fieldsData.field2().setValue("124567890");
 
         byte[] filledForm = FormUtils.fillForm(fieldsData, MOCK_FORM, false);
+        dumpPdf("testFillFormSimpleField", filledForm);
 
         assertFieldEquals(filledForm, "field1", "mock-mock");
+    }
+
+    @Test
+    public void testFillFormPartitionedField() throws IOException, DocumentException {
+        MockFormFieldsData fieldsData = EntityFactory.create(MockFormFieldsData.class);
+        fieldsData.field2().setValue("124567890");
+
+        byte[] filledForm = FormUtils.fillForm(fieldsData, MOCK_FORM, false);
+        dumpPdf("testFillFormPartitionedField", filledForm);
 
         assertFieldEquals(filledForm, "field2_1", "12");
         assertFieldEquals(filledForm, "field2_2", "456");
         assertFieldEquals(filledForm, "field2_3", "7890");
+    }
 
-        dumpPdf("testFillForm", filledForm);
+    @Test
+    public void testFillFormPartitionedFieldWithPadding() throws IOException, DocumentException {
+        MockFormFieldsData fieldsData = EntityFactory.create(MockFormFieldsData.class);
+        fieldsData.field2().setValue("567890");
+
+        byte[] filledForm = FormUtils.fillForm(fieldsData, MOCK_FORM, false);
+        dumpPdf("testFillFormPartitionedFieldWithPadding", filledForm);
+
+        assertFieldEquals(filledForm, "field2_1", "  ");
+        assertFieldEquals(filledForm, "field2_2", " 56");
+        assertFieldEquals(filledForm, "field2_3", "7890");
+    }
+
+    @Test
+    public void testFillFormPartitionedFieldWithPaddingAgain() throws IOException, DocumentException {
+        MockFormFieldsData fieldsData = EntityFactory.create(MockFormFieldsData.class);
+        fieldsData.field2().setValue("0");
+
+        byte[] filledForm = FormUtils.fillForm(fieldsData, MOCK_FORM, false);
+        dumpPdf("testFillFormPartitionedFieldWithPaddingAgain", filledForm);
+
+        assertFieldEquals(filledForm, "field2_1", "  ");
+        assertFieldEquals(filledForm, "field2_2", "   ");
+        assertFieldEquals(filledForm, "field2_3", "   0");
     }
 
     @Test
@@ -126,8 +160,7 @@ public class FormUtilsTest {
     private void assertFieldEquals(byte[] form, String field, String expectedValue) throws IOException, DocumentException {
         ByteArrayOutputStream bos = new ByteArrayOutputStream();
         PdfReader reader = new PdfReader(form);
-        PdfStamper stamper = new PdfStamper(reader, bos);
-        AcroFields fields = stamper.getAcroFields();
+        AcroFields fields = reader.getAcroFields();
 
         Assert.assertEquals(expectedValue, fields.getField(field));
     }

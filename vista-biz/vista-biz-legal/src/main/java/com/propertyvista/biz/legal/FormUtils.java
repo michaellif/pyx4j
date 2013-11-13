@@ -22,7 +22,6 @@ package com.propertyvista.biz.legal;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.lang.reflect.Method;
 import java.math.BigDecimal;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -41,6 +40,7 @@ import com.itextpdf.text.pdf.PdfStamper;
 
 import com.pyx4j.commons.SimpleMessageFormat;
 import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.shared.IObject;
 
 import com.propertyvista.domain.legal.utils.PdfFormFieldName;
 
@@ -109,36 +109,21 @@ public class FormUtils {
 
         for (String memberName : fieldsData.getEntityMeta().getMemberNames()) {
             try {
-                if (fieldsData.getMember(memberName).getValueClass().equals(String.class)) {
-                    String value = fieldsData.getMember(memberName).isNull() ? "" : fieldsData.getMember(memberName).getValue().toString();
-                    if (isSingleMapping(fieldsData, memberName)) {
-                        fields.setField(pdfFieldName(fieldsData, memberName), value);
-                    } else {
+                IObject<?> field = fieldsData.getMember(memberName);
+                if (field.isNull()) {
+                    continue;
+                }
 
-                    }
+                PdfFormFieldName fieldName = fieldsData.getInstanceValueClass().getDeclaredMethod(memberName, (Class<?>[]) null)
+                        .getAnnotation(PdfFormFieldName.class);
+                if (field.getValueClass().equals(String.class)) {
+                    setStringField(fieldName, fields, (String) field.getValue());
+
                 } else if (fieldsData.getMember(memberName).getValueClass().isEnum()) {
-                    // this code should work the same as for string but it was left here just to denote it's a different field type
-                    String value = fieldsData.getMember(memberName).isNull() ? "" : fieldsData.getMember(memberName).getValue().toString();
-                    fields.setField(pdfFieldName(fieldsData, memberName), value);
+                    setEnumField(fieldName, fields, field.getValue().toString());
 
                 } else if (fieldsData.getMember(memberName).getValueClass().isArray()) {
-                    do {
-                        if (fieldsData.getMember(memberName).isNull()) {
-                            break;
-                        }
-
-                        List<FieldPosition> fieldPositions = fields.getFieldPositions(pdfFieldName(fieldsData, memberName));
-                        if (fieldPositions == null || fieldPositions.size() == 0) {
-                            break;
-                        }
-
-                        FieldPosition signaturePosition = fieldPositions.get(0);
-                        PdfContentByte canvas = stamper.getOverContent(signaturePosition.page);
-                        Image signature = Image.getInstance((byte[]) fieldsData.getMember(memberName).getValue());
-                        signature.scaleAbsolute(signaturePosition.position.getWidth(), signaturePosition.position.getHeight());
-                        signature.setAbsolutePosition(signaturePosition.position.getLeft(), signaturePosition.position.getBottom());
-                        canvas.addImage(signature);
-                    } while (false);
+                    setImageField(fieldName, fields, stamper, (byte[]) field.getValue());
 
                 }
 
@@ -153,18 +138,71 @@ public class FormUtils {
         return bos.toByteArray();
     }
 
-    private static boolean isSingleMapping(IEntity fieldsData, String memberName) throws NoSuchMethodException, SecurityException {
-        Class<?> fieldsDataClass = fieldsData.getInstanceValueClass();
-        Method member = fieldsDataClass.getDeclaredMethod(memberName, (Class<?>[]) null);
-        PdfFormFieldName fieldName = member.getAnnotation(PdfFormFieldName.class);
+    private static void setStringField(PdfFormFieldName fieldName, AcroFields fields, String value) throws IOException, DocumentException {
+        if (isSingleMapping(fieldName)) {
+            fields.setField(fieldName.value(), value);
+        } else if (isMultipleMapping(fieldName)) {
+            String[] fieldNamesAndSizes = fieldName.value().substring(1, fieldName.value().length() - 1).split(",");
+            String[] fieldNames = new String[fieldNamesAndSizes.length];
+            int[] fieldSizes = new int[fieldNamesAndSizes.length];
+            int totalSize = 0;
+            for (int i = 0; i < fieldNamesAndSizes.length; ++i) {
+                String fieldNameAndSize = fieldNamesAndSizes[i];
+                int openBracketIndex = fieldNameAndSize.indexOf("{");
+                int closeBracketIndex = fieldNameAndSize.indexOf("}");
+                fieldNames[i] = fieldNameAndSize.substring(0, openBracketIndex);
+                fieldSizes[i] = Integer.parseInt(fieldNameAndSize.substring(openBracketIndex + 1, closeBracketIndex));
+                totalSize += fieldSizes[i];
+            }
+            if (totalSize < value.length()) {
+                throw new IllegalArgumentException("cannot fill field '" + fieldName.value() + "' with value '" + value + "' because the value is too long");
+            }
+
+            String paddedValue = value;
+            if (totalSize > value.length()) {
+                while (paddedValue.length() != totalSize) {
+                    paddedValue = " " + paddedValue;
+                }
+//                for (int paddingCounter = totalSize - value.length(); paddingCounter > 0; --paddingCounter) {
+//                    paddedValue = " " + paddedValue;
+//                }
+            }
+
+            int lastPartStartIndex = 0;
+            for (int i = 0; i < fieldNames.length; ++i) {
+                int lastPartEndIndex = lastPartStartIndex + fieldSizes[i];
+                String subValue = paddedValue.substring(lastPartStartIndex, lastPartEndIndex);
+                lastPartStartIndex = lastPartEndIndex;
+                fields.setField(fieldNames[i], subValue);
+            }
+        }
+    }
+
+    private static void setEnumField(PdfFormFieldName fieldName, AcroFields fields, String value) throws IOException, DocumentException {
+        fields.setField(fieldName.value(), value);
+    }
+
+    private static void setImageField(PdfFormFieldName fieldName, AcroFields fields, PdfStamper stamper, byte[] image) throws IOException, DocumentException {
+        List<FieldPosition> fieldPositions = fields.getFieldPositions(fieldName.value());
+        if (fieldPositions == null || fieldPositions.size() == 0) {
+            return;
+        }
+
+        FieldPosition signaturePosition = fieldPositions.get(0);
+        PdfContentByte canvas = stamper.getOverContent(signaturePosition.page);
+        Image signature = Image.getInstance(image);
+        signature.scaleAbsolute(signaturePosition.position.getWidth(), signaturePosition.position.getHeight());
+        signature.setAbsolutePosition(signaturePosition.position.getLeft(), signaturePosition.position.getBottom());
+        canvas.addImage(signature);
+
+    }
+
+    private static boolean isSingleMapping(PdfFormFieldName fieldName) {
         return !fieldName.value().startsWith("[");
     }
 
-    private static String pdfFieldName(IEntity fieldsData, String memberName) throws NoSuchMethodException, SecurityException {
-        Class<?> fieldsDataClass = fieldsData.getInstanceValueClass();
-        Method member = fieldsDataClass.getDeclaredMethod(memberName, (Class<?>[]) null);
-        PdfFormFieldName fieldName = member.getAnnotation(PdfFormFieldName.class);
-        return fieldName != null ? fieldName.value() : memberName;
+    private static boolean isMultipleMapping(PdfFormFieldName fieldName) {
+        return fieldName.value().startsWith("[");
     }
 
 }

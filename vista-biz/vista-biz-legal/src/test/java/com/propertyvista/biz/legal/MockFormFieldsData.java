@@ -32,7 +32,7 @@ public interface MockFormFieldsData extends IEntity {
     @PdfFormFieldName("field1")
     IPrimitive<String> field1();
 
-    @PdfFormFieldName("[field2{2},field2{3},field3{4}]")
+    @PdfFormFieldName("[field2_1{2},field2_2{3},field2_3{4}]")
     IPrimitive<String> field2();
 
 }
