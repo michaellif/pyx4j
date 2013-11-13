@@ -18,7 +18,7 @@ import com.google.gwt.user.client.ui.HTML;
 
 import com.pyx4j.i18n.shared.I18n;
 
-import com.propertyvista.portal.rpc.portal.web.dto.application.RentalSummaryDTO;
+import com.propertyvista.portal.rpc.portal.prospect.dto.RentalSummaryDTO;
 import com.propertyvista.portal.shared.themes.BlockMixin;
 import com.propertyvista.portal.shared.themes.ExtraGadgetsTheme;
 import com.propertyvista.portal.shared.themes.PortalRootPaneTheme;

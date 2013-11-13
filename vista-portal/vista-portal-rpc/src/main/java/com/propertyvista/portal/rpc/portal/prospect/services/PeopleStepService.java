@@ -13,7 +13,7 @@
  */
 package com.propertyvista.portal.rpc.portal.prospect.services;
 
-import com.propertyvista.portal.rpc.portal.web.dto.application.PeopleStepDTO;
+import com.propertyvista.portal.rpc.portal.prospect.dto.PeopleStepDTO;
 
 public interface PeopleStepService extends AbstractWizardStepService<PeopleStepDTO> {
 

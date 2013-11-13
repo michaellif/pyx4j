@@ -13,7 +13,7 @@
  */
 package com.propertyvista.portal.rpc.portal.prospect.services;
 
-import com.propertyvista.portal.rpc.portal.web.dto.application.OptionsStepDTO;
+import com.propertyvista.portal.rpc.portal.prospect.dto.OptionsStepDTO;
 
 public interface OptionsStepService extends AbstractWizardStepService<OptionsStepDTO> {
 

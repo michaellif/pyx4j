@@ -15,7 +15,7 @@ package com.propertyvista.portal.prospect.ui;
 
 import com.google.gwt.user.client.ui.FlowPanel;
 
-import com.propertyvista.portal.rpc.portal.web.dto.application.RentalSummaryDTO;
+import com.propertyvista.portal.rpc.portal.prospect.dto.RentalSummaryDTO;
 import com.propertyvista.portal.shared.themes.PortalRootPaneTheme;
 
 public class RentalSummaryViewImpl extends FlowPanel implements RentalSummaryView {

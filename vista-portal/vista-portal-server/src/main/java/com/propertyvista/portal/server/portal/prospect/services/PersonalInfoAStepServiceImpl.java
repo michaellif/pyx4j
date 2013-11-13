@@ -17,8 +17,8 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.entity.shared.EntityFactory;
 
+import com.propertyvista.portal.rpc.portal.prospect.dto.PersonalInfoAStepDTO;
 import com.propertyvista.portal.rpc.portal.prospect.services.PersonalInfoAStepService;
-import com.propertyvista.portal.rpc.portal.web.dto.application.PersonalInfoAStepDTO;
 
 public class PersonalInfoAStepServiceImpl implements PersonalInfoAStepService {
 

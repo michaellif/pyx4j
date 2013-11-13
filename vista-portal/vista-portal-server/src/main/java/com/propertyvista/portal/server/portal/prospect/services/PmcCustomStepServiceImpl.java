@@ -17,8 +17,8 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.entity.shared.EntityFactory;
 
+import com.propertyvista.portal.rpc.portal.prospect.dto.PmcCustomStepDTO;
 import com.propertyvista.portal.rpc.portal.prospect.services.PmcCustomStepService;
-import com.propertyvista.portal.rpc.portal.web.dto.application.PmcCustomStepDTO;
 
 public class PmcCustomStepServiceImpl implements PmcCustomStepService {
 

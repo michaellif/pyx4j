@@ -16,7 +16,7 @@ package com.propertyvista.portal.prospect.ui.steps;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.portal.prospect.ui.steps.FinancialStep;
-import com.propertyvista.portal.rpc.portal.web.dto.application.FinancialStepDTO;
+import com.propertyvista.portal.rpc.portal.prospect.dto.FinancialStepDTO;
 import com.propertyvista.portal.shared.ui.AbstractWizardStepView;
 
 public class FinancialStepViewImpl extends AbstractWizardStepView<FinancialStepDTO> implements FinancialStepView {

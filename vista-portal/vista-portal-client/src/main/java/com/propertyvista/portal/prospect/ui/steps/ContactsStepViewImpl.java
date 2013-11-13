@@ -15,7 +15,7 @@ package com.propertyvista.portal.prospect.ui.steps;
 
 import com.pyx4j.i18n.shared.I18n;
 
-import com.propertyvista.portal.rpc.portal.web.dto.application.ContactsStepDTO;
+import com.propertyvista.portal.rpc.portal.prospect.dto.ContactsStepDTO;
 import com.propertyvista.portal.shared.ui.AbstractWizardStepView;
 
 public class ContactsStepViewImpl extends AbstractWizardStepView<ContactsStepDTO> implements ContactsStepView {

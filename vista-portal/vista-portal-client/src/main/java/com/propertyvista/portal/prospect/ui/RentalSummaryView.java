@@ -15,7 +15,7 @@ package com.propertyvista.portal.prospect.ui;
 
 import com.pyx4j.site.client.IsView;
 
-import com.propertyvista.portal.rpc.portal.web.dto.application.RentalSummaryDTO;
+import com.propertyvista.portal.rpc.portal.prospect.dto.RentalSummaryDTO;
 
 public interface RentalSummaryView extends IsView {
 

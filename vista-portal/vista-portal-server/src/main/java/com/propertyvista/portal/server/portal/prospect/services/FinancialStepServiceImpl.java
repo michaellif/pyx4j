@@ -17,8 +17,8 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.entity.shared.EntityFactory;
 
+import com.propertyvista.portal.rpc.portal.prospect.dto.FinancialStepDTO;
 import com.propertyvista.portal.rpc.portal.prospect.services.FinancialStepService;
-import com.propertyvista.portal.rpc.portal.web.dto.application.FinancialStepDTO;
 
 public class FinancialStepServiceImpl implements FinancialStepService {
 

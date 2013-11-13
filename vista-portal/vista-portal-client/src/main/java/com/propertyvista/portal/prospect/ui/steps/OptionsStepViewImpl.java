@@ -15,7 +15,7 @@ package com.propertyvista.portal.prospect.ui.steps;
 
 import com.pyx4j.i18n.shared.I18n;
 
-import com.propertyvista.portal.rpc.portal.web.dto.application.OptionsStepDTO;
+import com.propertyvista.portal.rpc.portal.prospect.dto.OptionsStepDTO;
 import com.propertyvista.portal.shared.ui.AbstractWizardStepView;
 
 public class OptionsStepViewImpl extends AbstractWizardStepView<OptionsStepDTO> implements OptionsStepView {

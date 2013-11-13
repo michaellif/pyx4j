@@ -13,7 +13,7 @@
  */
 package com.propertyvista.portal.prospect.ui.steps;
 
-import com.propertyvista.portal.rpc.portal.web.dto.application.PeopleStepDTO;
+import com.propertyvista.portal.rpc.portal.prospect.dto.PeopleStepDTO;
 import com.propertyvista.portal.shared.ui.IWizardStepView;
 
 public interface PeopleStepView extends IWizardStepView<PeopleStepDTO> {

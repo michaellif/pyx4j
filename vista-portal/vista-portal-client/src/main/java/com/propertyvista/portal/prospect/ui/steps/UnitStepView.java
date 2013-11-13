@@ -13,7 +13,7 @@
  */
 package com.propertyvista.portal.prospect.ui.steps;
 
-import com.propertyvista.portal.rpc.portal.web.dto.application.UnitStepDTO;
+import com.propertyvista.portal.rpc.portal.prospect.dto.UnitStepDTO;
 import com.propertyvista.portal.shared.ui.IWizardStepView;
 
 public interface UnitStepView extends IWizardStepView<UnitStepDTO> {

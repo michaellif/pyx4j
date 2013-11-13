@@ -13,7 +13,7 @@
  */
 package com.propertyvista.portal.prospect.ui.steps;
 
-import com.propertyvista.portal.rpc.portal.web.dto.application.PmcCustomStepDTO;
+import com.propertyvista.portal.rpc.portal.prospect.dto.PmcCustomStepDTO;
 import com.propertyvista.portal.shared.ui.IWizardStepView;
 
 public interface PmcCustomStepView extends IWizardStepView<PmcCustomStepDTO> {

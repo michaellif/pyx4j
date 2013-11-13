@@ -26,7 +26,7 @@ import com.pyx4j.site.client.ui.layout.responsive.LayoutChangeRequestEvent.Chang
 import com.propertyvista.portal.prospect.ProspectPortalSite;
 import com.propertyvista.portal.prospect.ui.RentalSummaryView;
 import com.propertyvista.portal.prospect.ui.RentalSummaryView.RentalSummaryPresenter;
-import com.propertyvista.portal.rpc.portal.web.dto.application.RentalSummaryDTO;
+import com.propertyvista.portal.rpc.portal.prospect.dto.RentalSummaryDTO;
 
 public class RentalSummaryActivity extends AbstractActivity implements RentalSummaryPresenter {
 

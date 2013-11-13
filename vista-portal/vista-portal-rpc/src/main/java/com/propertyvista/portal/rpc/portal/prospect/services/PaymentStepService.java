@@ -13,7 +13,7 @@
  */
 package com.propertyvista.portal.rpc.portal.prospect.services;
 
-import com.propertyvista.portal.rpc.portal.web.dto.application.PaymentStepDTO;
+import com.propertyvista.portal.rpc.portal.prospect.dto.PaymentStepDTO;
 
 public interface PaymentStepService extends AbstractWizardStepService<PaymentStepDTO> {
 

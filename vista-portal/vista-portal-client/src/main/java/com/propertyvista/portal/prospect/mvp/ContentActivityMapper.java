@@ -24,7 +24,7 @@ import com.pyx4j.site.rpc.AppPlace;
 
 import com.propertyvista.portal.prospect.activity.LandingActivity;
 import com.propertyvista.portal.prospect.activity.SignUpActivity;
-import com.propertyvista.portal.prospect.activity.StatusPageActivity;
+import com.propertyvista.portal.prospect.activity.ApplicationStatusPageActivity;
 import com.propertyvista.portal.prospect.activity.steps.ContactsStepActivity;
 import com.propertyvista.portal.prospect.activity.steps.FinancialStepActivity;
 import com.propertyvista.portal.prospect.activity.steps.OptionsStepActivity;
@@ -61,7 +61,7 @@ public class ContentActivityMapper implements AppActivityMapper {
 
                     Activity activity = null;
                     if (appPlace instanceof ProspectPortalSiteMap.Status) {
-                        activity = new StatusPageActivity(appPlace);
+                        activity = new ApplicationStatusPageActivity(appPlace);
 
 // Internals:
                     } else if (appPlace instanceof PortalSiteMap.Login) {

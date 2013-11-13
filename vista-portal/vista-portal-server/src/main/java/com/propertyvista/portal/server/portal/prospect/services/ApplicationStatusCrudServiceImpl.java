@@ -15,48 +15,22 @@ package com.propertyvista.portal.server.portal.prospect.services;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
-import com.pyx4j.commons.Key;
-import com.pyx4j.entity.rpc.EntitySearchResult;
 import com.pyx4j.entity.shared.EntityFactory;
-import com.pyx4j.entity.shared.criterion.EntityListCriteria;
 
-import com.propertyvista.portal.rpc.portal.prospect.services.ApplicationStatusCrudService;
-import com.propertyvista.portal.rpc.portal.web.dto.application.ApplicationStatusDTO;
+import com.propertyvista.portal.rpc.portal.prospect.dto.ApplicationStatusDTO;
+import com.propertyvista.portal.rpc.portal.prospect.dto.RentalSummaryDTO;
+import com.propertyvista.portal.rpc.portal.prospect.services.ApplicationStatusService;
 
-public class ApplicationStatusCrudServiceImpl implements ApplicationStatusCrudService {
-
-    @Override
-    public void init(AsyncCallback<ApplicationStatusDTO> callback, com.pyx4j.entity.rpc.AbstractCrudService.InitializationData initializationData) {
-        // TODO Auto-generated method stub
-
-    }
+public class ApplicationStatusCrudServiceImpl implements ApplicationStatusService {
 
     @Override
-    public void retrieve(AsyncCallback<ApplicationStatusDTO> callback, Key entityId, com.pyx4j.entity.rpc.AbstractCrudService.RetrieveTarget retrieveTarget) {
+    public void retrieveApplicationStatus(AsyncCallback<ApplicationStatusDTO> callback) {
         ApplicationStatusDTO account = EntityFactory.create(ApplicationStatusDTO.class);
         callback.onSuccess(account);
     }
 
     @Override
-    public void create(AsyncCallback<Key> callback, ApplicationStatusDTO editableEntity) {
-        // TODO Auto-generated method stub
-
-    }
-
-    @Override
-    public void save(AsyncCallback<Key> callback, ApplicationStatusDTO editableEntity) {
-        // TODO Auto-generated method stub
-
-    }
-
-    @Override
-    public void list(AsyncCallback<EntitySearchResult<ApplicationStatusDTO>> callback, EntityListCriteria<ApplicationStatusDTO> criteria) {
-        // TODO Auto-generated method stub
-
-    }
-
-    @Override
-    public void delete(AsyncCallback<Boolean> callback, Key entityId) {
+    public void retrieveRentalSummary(AsyncCallback<RentalSummaryDTO> callback) {
         // TODO Auto-generated method stub
 
     }

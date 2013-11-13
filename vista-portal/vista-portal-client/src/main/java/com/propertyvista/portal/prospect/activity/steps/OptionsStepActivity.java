@@ -20,8 +20,8 @@ import com.pyx4j.site.rpc.AppPlace;
 
 import com.propertyvista.portal.prospect.ui.steps.OptionsStepView;
 import com.propertyvista.portal.rpc.portal.ProspectPortalSiteMap;
+import com.propertyvista.portal.rpc.portal.prospect.dto.OptionsStepDTO;
 import com.propertyvista.portal.rpc.portal.prospect.services.OptionsStepService;
-import com.propertyvista.portal.rpc.portal.web.dto.application.OptionsStepDTO;
 
 public class OptionsStepActivity extends AbstractProspectWizardStepActivity<OptionsStepDTO> {
 
