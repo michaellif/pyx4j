@@ -15,6 +15,7 @@ package com.propertyvista.portal.resident;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
+import com.pyx4j.security.client.ClientContext;
 import com.pyx4j.security.shared.SecurityController;
 import com.pyx4j.site.client.AbstractAppPlaceDispatcher;
 import com.pyx4j.site.rpc.AppPlace;
@@ -36,13 +37,12 @@ public class ResidentPortalSiteDispatcher extends AbstractAppPlaceDispatcher {
     }
 
     @Override
-    protected void obtainDefaulPublicPlace(AsyncCallback<AppPlace> callback) {
-        callback.onSuccess(new PortalSiteMap.Login());
-    }
-
-    @Override
-    protected void obtainDefaultAuthenticatedPlace(AsyncCallback<AppPlace> callback) {
-        callback.onSuccess(new ResidentPortalSiteMap.Dashboard());
+    protected void obtainDefaultPlace(AsyncCallback<AppPlace> callback) {
+        if (ClientContext.isAuthenticated()) {
+            callback.onSuccess(new ResidentPortalSiteMap.Dashboard());
+        } else {
+            callback.onSuccess(new PortalSiteMap.Login());
+        }
     }
 
     @Override
@@ -55,7 +55,7 @@ public class ResidentPortalSiteDispatcher extends AbstractAppPlaceDispatcher {
     }
 
     @Override
-    protected AppPlace specialForward(AppPlace newPlace) {
+    protected AppPlace mandatoryActionForward(AppPlace newPlace) {
         if (SecurityController.checkBehavior(VistaBasicBehavior.ResidentPortalPasswordChangeRequired)) {
             return new PortalSiteMap.PasswordReset();
         } else if (SecurityController.checkBehavior(VistaCustomerBehavior.LeaseSelectionRequired)) {

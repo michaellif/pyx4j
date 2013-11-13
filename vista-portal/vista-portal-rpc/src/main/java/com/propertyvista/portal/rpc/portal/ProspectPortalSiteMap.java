@@ -26,6 +26,10 @@ public class ProspectPortalSiteMap extends PortalSiteMap {
     public static class Registration extends AppPlace implements PublicPlace {
     }
 
+    @PlaceProperties(navigLabel = "Select Lease", caption = "Select Lease")
+    public static class ApplicationContextSelection extends AppPlace {
+    }
+
     public static class Status extends AppPlace {
     }
 

@@ -15,7 +15,7 @@ package com.propertyvista.crm.client;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
-import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.security.client.ClientContext;
 import com.pyx4j.security.shared.SecurityController;
 import com.pyx4j.site.client.AbstractAppPlaceDispatcher;
 import com.pyx4j.site.rpc.AppPlace;
@@ -27,13 +27,6 @@ import com.propertyvista.domain.security.common.VistaBasicBehavior;
 
 public class CrmSiteAppPlaceDispatcher extends AbstractAppPlaceDispatcher {
 
-    private static final I18n i18n = I18n.get(CrmSiteAppPlaceDispatcher.class);
-
-    @Override
-    protected void obtainDefaulPublicPlace(AsyncCallback<AppPlace> callback) {
-        callback.onSuccess(new CrmSiteMap.Login());
-    }
-
     @Override
     protected void isPlaceNavigable(AppPlace targetPlace, AsyncCallback<Boolean> callback) {
         // TODO security for places
@@ -41,12 +34,16 @@ public class CrmSiteAppPlaceDispatcher extends AbstractAppPlaceDispatcher {
     }
 
     @Override
-    protected void obtainDefaultAuthenticatedPlace(AsyncCallback<AppPlace> callback) {
-        callback.onSuccess(CrmSite.getSystemDashboardPlace());
+    protected void obtainDefaultPlace(AsyncCallback<AppPlace> callback) {
+        if (ClientContext.isAuthenticated()) {
+            callback.onSuccess(CrmSite.getSystemDashboardPlace());
+        } else {
+            callback.onSuccess(new CrmSiteMap.Login());
+        }
     }
 
     @Override
-    protected AppPlace specialForward(AppPlace newPlace) {
+    protected AppPlace mandatoryActionForward(AppPlace newPlace) {
         if (SecurityController.checkBehavior(VistaBasicBehavior.CRMPasswordChangeRequired)) {
             return new CrmSiteMap.PasswordReset();
         } else if (SecurityController.checkBehavior(VistaBasicBehavior.CRMSetupAccountRecoveryOptionsRequired)) {

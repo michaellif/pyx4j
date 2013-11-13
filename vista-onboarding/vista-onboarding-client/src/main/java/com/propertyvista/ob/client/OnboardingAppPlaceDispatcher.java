@@ -34,26 +34,25 @@ public class OnboardingAppPlaceDispatcher extends AbstractAppPlaceDispatcher {
     }
 
     @Override
-    protected void obtainDefaulPublicPlace(AsyncCallback<AppPlace> callback) {
-        callback.onSuccess(new OnboardingSiteMap.PmcAccountCreationRequest());
-    }
+    protected void obtainDefaultPlace(AsyncCallback<AppPlace> callback) {
+        if (ClientContext.isAuthenticated()) {
+            if (ClientContext.getUserVisit() instanceof OnboardingUserVisit) {
+                OnboardingUserVisit visit = (OnboardingUserVisit) ClientContext.getUserVisit();
+                switch (visit.status) {
+                case accountCreated:
+                    callback.onSuccess(new OnboardingSiteMap.PmcAccountCreationComplete());
+                    break;
+                case accountCreation:
+                    callback.onSuccess(new OnboardingSiteMap.PmcAccountCreationProgress().placeArg("id", visit.accountCreationDeferredCorrelationId));
+                    break;
+                default:
+                    callback.onSuccess(new OnboardingSiteMap.PmcAccountCreationRequest());
+                    break;
+                }
 
-    @Override
-    protected void obtainDefaultAuthenticatedPlace(AsyncCallback<AppPlace> callback) {
-        if (ClientContext.getUserVisit() instanceof OnboardingUserVisit) {
-            OnboardingUserVisit visit = (OnboardingUserVisit) ClientContext.getUserVisit();
-            switch (visit.status) {
-            case accountCreated:
-                callback.onSuccess(new OnboardingSiteMap.PmcAccountCreationComplete());
-                break;
-            case accountCreation:
-                callback.onSuccess(new OnboardingSiteMap.PmcAccountCreationProgress().placeArg("id", visit.accountCreationDeferredCorrelationId));
-                break;
-            default:
+            } else {
                 callback.onSuccess(new OnboardingSiteMap.PmcAccountCreationRequest());
-                break;
             }
-
         } else {
             callback.onSuccess(new OnboardingSiteMap.PmcAccountCreationRequest());
         }
@@ -65,7 +64,7 @@ public class OnboardingAppPlaceDispatcher extends AbstractAppPlaceDispatcher {
     }
 
     @Override
-    protected AppPlace specialForward(AppPlace newPlace) {
+    protected AppPlace mandatoryActionForward(AppPlace newPlace) {
         return null;
     }
 
