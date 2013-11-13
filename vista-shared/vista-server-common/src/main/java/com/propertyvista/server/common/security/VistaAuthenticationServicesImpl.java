@@ -249,6 +249,13 @@ public abstract class VistaAuthenticationServicesImpl<U extends AbstractUser, E 
             throw new UserRuntimeException(AbstractAntiBot.GENERIC_LOGIN_FAILED_MESSAGE);
         }
         String email = EmailValidator.normalizeEmailAddress(request.email().getValue());
+        if (VistaDeployment.isVistaStaging()) {
+            if (!email.startsWith("s!")) {
+                throw new UserRuntimeException(i18n.tr("Application is Unavailable due to short maintenance.\nPlease try again in one hour"));
+            } else {
+                email = email.substring(2, email.length());
+            }
+        }
         AbstractAntiBot.assertLogin(LoginType.userLogin, email, request.captcha().getValue());
 
         EntityQueryCriteria<U> criteria = new EntityQueryCriteria<U>(userClass);
