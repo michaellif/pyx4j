@@ -29,7 +29,6 @@ import com.propertyvista.operations.server.services.ImportUploadServiceImpl;
 import com.propertyvista.operations.server.services.MerchantAccountFileUploadServiceImpl;
 import com.propertyvista.portal.server.portal.web.services.ResidentPictureUploadServiceImpl;
 import com.propertyvista.portal.server.portal.web.services.services.InsuranceCertificateScanUploadServiceImpl;
-import com.propertyvista.portal.server.ptapp.services.ApplicationDocumentUploadServiceImpl;
 
 @SuppressWarnings("serial")
 public class VistaUploadServlet extends AbstractUploadServlet {
@@ -42,7 +41,6 @@ public class VistaUploadServlet extends AbstractUploadServlet {
         register(SiteImageResourceUploadServiceImpl.class);
         register(CustomerPictureUploadServiceImpl.class);
         register(ResidentPictureUploadServiceImpl.class);
-        register(ApplicationDocumentUploadServiceImpl.class);
         register(InsuranceCertificateScanUploadServiceImpl.class);
         register(CrmInsuranceCertificateScanUploadServiceImpl.class);
         register(PmcDocumentFileUploadServiceImpl.class);

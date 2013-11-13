@@ -28,13 +28,11 @@ import com.pyx4j.security.shared.SecurityController;
 import com.pyx4j.server.mail.Mail;
 import com.pyx4j.unit.server.mock.TestLifecycle;
 
-import com.propertyvista.operations.rpc.services.PmcCrudService;
 import com.propertyvista.config.tests.VistaTestsDBConfigurationHSQLMemory;
 import com.propertyvista.crm.rpc.services.organization.EmployeeCrudService;
+import com.propertyvista.operations.rpc.services.PmcCrudService;
 import com.propertyvista.portal.rpc.portal.web.services.profile.ResidentProfileCrudService;
 import com.propertyvista.portal.rpc.ptapp.services.ApplicationStatusService;
-import com.propertyvista.portal.rpc.ptapp.services.steps.SummaryService;
-import com.propertyvista.portal.rpc.ptapp.services.steps.TenantInfoService;
 import com.propertyvista.server.config.VistaServerSideConfigurationProd;
 
 public class VistaProdAccessControlListTest {
@@ -65,8 +63,6 @@ public class VistaProdAccessControlListTest {
     @Test
     public void publicServicePermissions() {
         TestLifecycle.beginRequest();
-        assertPermission(false, TenantInfoService.class);
-        assertPermission(false, SummaryService.class);
         assertPermission(false, ApplicationStatusService.class);
 
         // Admin

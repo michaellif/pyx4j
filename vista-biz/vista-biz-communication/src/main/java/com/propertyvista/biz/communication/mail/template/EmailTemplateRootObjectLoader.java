@@ -235,7 +235,7 @@ public class EmailTemplateRootObjectLoader {
     }
 
     private static String getPtappAccessUrl(String token) {
-        return AppPlaceInfo.absoluteUrl(VistaDeployment.getBaseApplicationURL(VistaApplication.prospect, true), true, PtSiteMap.LoginWithToken.class,
+        return AppPlaceInfo.absoluteUrl(VistaDeployment.getBaseApplicationURL(VistaApplication.prospect, true), true, PortalSiteMap.LoginWithToken.class,
                 AuthenticationService.AUTH_TOKEN_ARG, token);
 
     }

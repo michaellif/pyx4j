@@ -173,7 +173,7 @@ public class EmailTemplateManagerTest extends VistaDBTestBase {
         tenantHomeUrl = VistaDeployment.getBaseApplicationURL(VistaApplication.resident, true);
         ptappHomeUrl = VistaDeployment.getBaseApplicationURL(VistaApplication.prospect, true);
 
-        appUrl = AppPlaceInfo.absoluteUrl(VistaDeployment.getBaseApplicationURL(VistaApplication.prospect, true), true, PtSiteMap.LoginWithToken.class,
+        appUrl = AppPlaceInfo.absoluteUrl(VistaDeployment.getBaseApplicationURL(VistaApplication.prospect, true), true, PortalSiteMap.LoginWithToken.class,
                 AuthenticationService.AUTH_TOKEN_ARG, token);
 
         mrViewPortalUrl = tenantHomeUrl + "?place=maintenance/maintenance_request_page";
@@ -563,7 +563,7 @@ public class EmailTemplateManagerTest extends VistaDBTestBase {
                 String[] args = {
                     mainAplt.leaseParticipant().customer().user().name().getValue(),
                     AppPlaceInfo.absoluteUrl(VistaDeployment.getBaseApplicationURL( VistaApplication.prospect, true), true,
-                            PtSiteMap.LoginWithToken.class, AuthenticationService.AUTH_TOKEN_ARG, token)
+                            PortalSiteMap.LoginWithToken.class, AuthenticationService.AUTH_TOKEN_ARG, token)
                 };
                 fmtArgs = args;
             } else {

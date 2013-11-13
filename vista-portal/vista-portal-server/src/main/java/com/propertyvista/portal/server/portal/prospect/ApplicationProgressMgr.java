@@ -155,15 +155,13 @@ public class ApplicationProgressMgr {
     }
 
     public static void invalidateSummaryStep(OnlineApplication application) {
-        if (!VistaTODO.enableWelcomeWizardDemoMode) {
-            ApplicationWizardStep summaryStep = findWizardStep(application, PtSiteMap.Summary.class);
-            switch (summaryStep.status().getValue()) {
-            case latest:
-            case complete:
-                summaryStep.status().setValue(ApplicationWizardStep.Status.invalid);
-                Persistence.service().merge(summaryStep);
-                break;
-            }
+        ApplicationWizardStep summaryStep = findWizardStep(application, PtSiteMap.Summary.class);
+        switch (summaryStep.status().getValue()) {
+        case latest:
+        case complete:
+            summaryStep.status().setValue(ApplicationWizardStep.Status.invalid);
+            Persistence.service().merge(summaryStep);
+            break;
         }
     }
 

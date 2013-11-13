@@ -140,9 +140,8 @@ public class OnlineApplicationFacadeImpl implements OnlineApplicationFacade {
 
     @Override
     public void submitOnlineApplication(OnlineApplication application) {
-        if (!VistaTODO.enableWelcomeWizardDemoMode) {
-            application.status().setValue(OnlineApplication.Status.Submitted);
-            Persistence.service().persist(application);
+        application.status().setValue(OnlineApplication.Status.Submitted);
+        Persistence.service().persist(application);
 
 // TODO: update behaviour somehow: 
 //            CustomerUser user = application.customer().user();
@@ -166,38 +165,37 @@ public class OnlineApplicationFacadeImpl implements OnlineApplicationFacade {
 //        }
 //            Persistence.service().persist(credential);
 
-            MasterOnlineApplication ma = application.masterOnlineApplication();
-            Persistence.service().retrieve(ma);
-            Persistence.service().retrieve(ma.leaseApplication().lease());
+        MasterOnlineApplication ma = application.masterOnlineApplication();
+        Persistence.service().retrieve(ma);
+        Persistence.service().retrieve(ma.leaseApplication().lease());
 
-            // Invite customers:
-            switch (application.role().getValue()) {
-            case Applicant:
-                inviteCoApplicants(ma.leaseApplication().lease());
-                inviteGuarantors(ma.leaseApplication().lease(), application.customer());
-                break;
-            case CoApplicant:
-                inviteGuarantors(ma.leaseApplication().lease(), application.customer());
-                break;
-            case Guarantor:
-                break;
-            }
+        // Invite customers:
+        switch (application.role().getValue()) {
+        case Applicant:
+            inviteCoApplicants(ma.leaseApplication().lease());
+            inviteGuarantors(ma.leaseApplication().lease(), application.customer());
+            break;
+        case CoApplicant:
+            inviteGuarantors(ma.leaseApplication().lease(), application.customer());
+            break;
+        case Guarantor:
+            break;
+        }
 
-            // check application completeness:
-            boolean allApplicationsSubmited = true;
-            Persistence.service().retrieve(ma.applications());
-            for (OnlineApplication app : ma.applications()) {
-                if (app.status().getValue() != OnlineApplication.Status.Submitted) {
-                    allApplicationsSubmited = false;
-                    break;
-                }
+        // check application completeness:
+        boolean allApplicationsSubmited = true;
+        Persistence.service().retrieve(ma.applications());
+        for (OnlineApplication app : ma.applications()) {
+            if (app.status().getValue() != OnlineApplication.Status.Submitted) {
+                allApplicationsSubmited = false;
+                break;
             }
-            if (allApplicationsSubmited) {
-                ma.status().setValue(MasterOnlineApplication.Status.Submitted);
-                Persistence.service().persist(ma);
-                ma.leaseApplication().status().setValue(LeaseApplication.Status.PendingDecision);
-                Persistence.service().persist(ma.leaseApplication());
-            }
+        }
+        if (allApplicationsSubmited) {
+            ma.status().setValue(MasterOnlineApplication.Status.Submitted);
+            Persistence.service().persist(ma);
+            ma.leaseApplication().status().setValue(LeaseApplication.Status.PendingDecision);
+            Persistence.service().persist(ma.leaseApplication());
         }
     }
 
@@ -328,32 +326,21 @@ public class OnlineApplicationFacadeImpl implements OnlineApplicationFacade {
 
     private static List<ApplicationWizardStep> createApplicantApplicationProgress(LeaseTermTenant applicant) {
         List<ApplicationWizardStep> progress = new Vector<ApplicationWizardStep>();
-        if (VistaTODO.enableWelcomeWizardDemoMode) {
-            for (Class<? extends AppPlace> place : Arrays.<Class<? extends AppPlace>> asList(//@formatter:off
-                        PtSiteMap.WelcomeWizard.ReviewLease.class,                        
-                        PtSiteMap.WelcomeWizard.Insurance.class,
-                        PtSiteMap.WelcomeWizard.MoveInSchedule.class
-                    )) {//@formatter:on
-                progress.add(createWizardStep(place, ApplicationWizardStep.Status.notVisited));
-            }
-            progress.get(0).status().setValue(ApplicationWizardStep.Status.latest);
 
-        } else {
-            progress.add(createWizardStep(PtSiteMap.Apartment.class, ApplicationWizardStep.Status.latest));
-            progress.add(createWizardStep(PtSiteMap.Tenants.class, ApplicationWizardStep.Status.notVisited));
-            progress.add(createWizardStep(PtSiteMap.Info.class, ApplicationWizardStep.Status.notVisited));
-            progress.add(createWizardStep(PtSiteMap.Financial.class, ApplicationWizardStep.Status.notVisited));
+        progress.add(createWizardStep(PtSiteMap.Apartment.class, ApplicationWizardStep.Status.latest));
+        progress.add(createWizardStep(PtSiteMap.Tenants.class, ApplicationWizardStep.Status.notVisited));
+        progress.add(createWizardStep(PtSiteMap.Info.class, ApplicationWizardStep.Status.notVisited));
+        progress.add(createWizardStep(PtSiteMap.Financial.class, ApplicationWizardStep.Status.notVisited));
 // TODO : Charges and Payment steps are closed (removed) so far...        
-            if (false) {
-                progress.add(createWizardStep(PtSiteMap.Charges.class, ApplicationWizardStep.Status.notVisited));
-            }
-            progress.add(createWizardStep(PtSiteMap.Summary.class, ApplicationWizardStep.Status.notVisited));
-// TODO : Charges and Payment steps are closed (removed) so far...        
-            if (false) {
-                progress.add(createWizardStep(PtSiteMap.Payment.class, ApplicationWizardStep.Status.notVisited));
-            }
-            progress.add(createWizardStep(PtSiteMap.Completion.class, ApplicationWizardStep.Status.notVisited));
+        if (false) {
+            progress.add(createWizardStep(PtSiteMap.Charges.class, ApplicationWizardStep.Status.notVisited));
         }
+        progress.add(createWizardStep(PtSiteMap.Summary.class, ApplicationWizardStep.Status.notVisited));
+// TODO : Charges and Payment steps are closed (removed) so far...        
+        if (false) {
+            progress.add(createWizardStep(PtSiteMap.Payment.class, ApplicationWizardStep.Status.notVisited));
+        }
+        progress.add(createWizardStep(PtSiteMap.Completion.class, ApplicationWizardStep.Status.notVisited));
         return progress;
     }
 

@@ -37,11 +37,6 @@ public class VistaTODO {
     public static final boolean ENABLE_COMMUNCATION_CENTER = false;
 
     /**
-     * Set <code>true</code> to let PtApp show a demo wizard for approved tenants
-     */
-    public static final boolean enableWelcomeWizardDemoMode = false;
-
-    /**
      * Check that lease from is in the future compared to transaction time (currently if is true billing tests fail)
      */
     public static final boolean checkLeaseDatesOnUnitReservation = false;

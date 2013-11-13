@@ -45,7 +45,6 @@ import com.propertyvista.domain.tenant.insurance.TenantSureInsurancePolicy;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.LeaseTermTenant;
 import com.propertyvista.domain.tenant.prospect.OnlineApplication;
-import com.propertyvista.misc.VistaTODO;
 import com.propertyvista.portal.domain.ptapp.Charges;
 import com.propertyvista.portal.domain.ptapp.PaymentInformation;
 import com.propertyvista.portal.domain.ptapp.Summary;
@@ -103,17 +102,6 @@ import com.propertyvista.portal.rpc.ptapp.services.ApplicationDocumentUploadServ
 import com.propertyvista.portal.rpc.ptapp.services.ApplicationStatusService;
 import com.propertyvista.portal.rpc.ptapp.services.PtPasswordResetService;
 import com.propertyvista.portal.rpc.ptapp.services.PtPolicyRetrieveService;
-import com.propertyvista.portal.rpc.ptapp.services.steps.ApartmentService;
-import com.propertyvista.portal.rpc.ptapp.services.steps.ChargesService;
-import com.propertyvista.portal.rpc.ptapp.services.steps.PaymentService;
-import com.propertyvista.portal.rpc.ptapp.services.steps.SummaryService;
-import com.propertyvista.portal.rpc.ptapp.services.steps.TenantFinancialService;
-import com.propertyvista.portal.rpc.ptapp.services.steps.TenantInfoService;
-import com.propertyvista.portal.rpc.ptapp.services.steps.TenantService;
-import com.propertyvista.portal.rpc.ptapp.services.steps.welcomewizardmockup.InsuranceService;
-import com.propertyvista.portal.rpc.ptapp.services.steps.welcomewizardmockup.LeaseReviewService;
-import com.propertyvista.portal.rpc.ptapp.services.steps.welcomewizardmockup.MoveInScheduleService;
-import com.propertyvista.portal.rpc.ptapp.services.steps.welcomewizardmockup.ResetWizardService;
 import com.propertyvista.portal.rpc.shared.services.CreditCardValidationService;
 import com.propertyvista.portal.server.security.access.AutopayAgreementTenantDatasetAccessRule;
 import com.propertyvista.portal.server.security.access.CustomrPictureTenantDatasetAccessRule;
@@ -128,12 +116,6 @@ public class VistaPortalAccessControlList extends ServletContainerAclBuilder {
     private final static int CRUD = EntityPermission.CREATE | EntityPermission.READ | EntityPermission.UPDATE;
 
     public VistaPortalAccessControlList() {
-        if (VistaTODO.enableWelcomeWizardDemoMode) {
-            grant(new IServiceExecutePermission(LeaseReviewService.class));
-            grant(new IServiceExecutePermission(InsuranceService.class));
-            grant(new IServiceExecutePermission(MoveInScheduleService.class));
-            grant(new IServiceExecutePermission(ResetWizardService.class));
-        }
 
         grant(new IServiceExecutePermission(ResidentAuthenticationService.class));
         grant(new IServiceExecutePermission(PortalVistaTermsService.class));
@@ -165,14 +147,6 @@ public class VistaPortalAccessControlList extends ServletContainerAclBuilder {
         grant(VistaBasicBehavior.ProspectivePortal, new IServiceExecutePermission(PasswordChangeUserService.class));
         grant(VistaCustomerBehavior.Prospective, new IServiceExecutePermission(PtPolicyRetrieveService.class));
         grant(VistaCustomerBehavior.Prospective, new IServiceExecutePermission(ApplicationDocumentUploadService.class));
-
-        grant(VistaCustomerBehavior.Prospective, new IServiceExecutePermission(ApartmentService.class));
-        grant(VistaCustomerBehavior.Prospective, new IServiceExecutePermission(TenantService.class));
-        grant(VistaCustomerBehavior.Prospective, new IServiceExecutePermission(TenantInfoService.class));
-        grant(VistaCustomerBehavior.Prospective, new IServiceExecutePermission(TenantFinancialService.class));
-        grant(VistaCustomerBehavior.Prospective, new IServiceExecutePermission(ChargesService.class));
-        grant(VistaCustomerBehavior.Prospective, new IServiceExecutePermission(SummaryService.class));
-        grant(VistaCustomerBehavior.Prospective, new IServiceExecutePermission(PaymentService.class));
 
         grant(VistaCustomerBehavior.Prospective, new IServiceExecutePermission(UnitStepService.class));
         grant(VistaCustomerBehavior.Prospective, new IServiceExecutePermission(OptionsStepService.class));
@@ -212,7 +186,6 @@ public class VistaPortalAccessControlList extends ServletContainerAclBuilder {
         grant(VistaCustomerBehavior.ProspectiveSubmitted, new IServiceExecutePermission(PtPolicyRetrieveService.class));
         grant(VistaCustomerBehavior.ProspectiveSubmitted, new EntityPermission(IdentificationDocumentType.class, EntityPermission.READ));
         grant(VistaCustomerBehavior.ProspectiveSubmitted, new IServiceExecutePermission(ApplicationStatusService.class));
-        grant(VistaCustomerBehavior.ProspectiveSubmitted, new IServiceExecutePermission(SummaryService.class));
         //grant(VistaTenantBehavior.ProspectiveSubmitted, new IServiceExecutePermission(ChargesService.class));
 
         grant(VistaCustomerBehavior.ProspectiveSubmitted, new EntityPermission(Summary.class, applicationEntityAccess, EntityPermission.READ));
