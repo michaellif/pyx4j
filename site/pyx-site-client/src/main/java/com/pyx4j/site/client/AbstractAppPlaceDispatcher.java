@@ -23,7 +23,6 @@ package com.pyx4j.site.client;
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
-import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.security.client.BehaviorChangeEvent;
 import com.pyx4j.security.client.BehaviorChangeHandler;
@@ -35,9 +34,7 @@ import com.pyx4j.site.shared.meta.PublicPlace;
 
 public abstract class AbstractAppPlaceDispatcher implements AppPlaceDispatcher {
 
-    private static final I18n i18n = I18n.get(AbstractAppPlaceDispatcher.class);
-
-    private AppPlace urlEntryTargetPlace = AppPlace.NOWHERE;
+    private AppPlace entryPlace = AppPlace.NOWHERE;
 
     protected AbstractAppPlaceDispatcher() {
 
@@ -68,15 +65,7 @@ public abstract class AbstractAppPlaceDispatcher implements AppPlaceDispatcher {
 
     }
 
-    /**
-     * Called when application is not authenticated and url points NOWHERE of hidden(authenticated only) place
-     */
-    protected abstract void obtainDefaulPublicPlace(AsyncCallback<AppPlace> callback);
-
-    /**
-     * Fallback place for authenticated application
-     */
-    protected abstract void obtainDefaultAuthenticatedPlace(AsyncCallback<AppPlace> callback);
+    protected abstract void obtainDefaultPlace(AsyncCallback<AppPlace> callback);
 
     /**
      * Define security for places. Called before each navigation. If it returns FALSE we will go to DefaultAuthenticatedPlace
@@ -87,7 +76,7 @@ public abstract class AbstractAppPlaceDispatcher implements AppPlaceDispatcher {
      * This the only customization point, used for places like PasswordChangeRequired e.g. user can only go to one single place.
      * Only called when isApplicationAuthenticated() returns FALSE
      */
-    protected abstract AppPlace specialForward(AppPlace newPlace);
+    protected abstract AppPlace mandatoryActionForward(AppPlace newPlace);
 
     @Override
     public NotificationAppPlace getNotificationPlace(Notification notification) {
@@ -99,32 +88,32 @@ public abstract class AbstractAppPlaceDispatcher implements AppPlaceDispatcher {
         if (newPlace instanceof PublicPlace) {
             callback.onSuccess(newPlace);
         } else if (ClientContext.isAuthenticated()) {
-            final AppPlace targetPlace = selectTargetPlace(newPlace);
+            final AppPlace targetPlace = resolveEntryPlace(newPlace);
             isPlaceNavigable(targetPlace, new DefaultAsyncCallback<Boolean>() {
                 @Override
                 public void onSuccess(Boolean result) {
                     if ((result) && (targetPlace != AppPlace.NOWHERE)) {
                         callback.onSuccess(targetPlace);
                     } else {
-                        obtainDefaultAuthenticatedPlace(callback);
+                        obtainDefaultPlace(callback);
                     }
                 }
             });
-            urlEntryTargetPlace = AppPlace.NOWHERE;
+            entryPlace = AppPlace.NOWHERE;
         } else {
-            AppPlace special = specialForward(newPlace);
+            AppPlace special = mandatoryActionForward(newPlace);
             if (special != null) {
                 callback.onSuccess(special);
             } else {
-                urlEntryTargetPlace = newPlace;
-                obtainDefaulPublicPlace(callback);
+                entryPlace = newPlace;
+                obtainDefaultPlace(callback);
             }
         }
     }
 
-    private AppPlace selectTargetPlace(AppPlace newPlace) {
-        if ((newPlace == AppPlace.NOWHERE) && (urlEntryTargetPlace != AppPlace.NOWHERE)) {
-            return urlEntryTargetPlace;
+    private AppPlace resolveEntryPlace(AppPlace newPlace) {
+        if ((newPlace == AppPlace.NOWHERE) && (entryPlace != AppPlace.NOWHERE)) {
+            return entryPlace;
         } else {
             return newPlace;
         }
