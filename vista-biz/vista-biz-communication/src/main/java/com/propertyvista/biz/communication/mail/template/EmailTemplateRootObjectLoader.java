@@ -51,7 +51,7 @@ import com.propertyvista.domain.tenant.prospect.OnlineApplication;
 import com.propertyvista.portal.rpc.DeploymentConsts;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap;
 import com.propertyvista.portal.rpc.portal.ResidentPortalSiteMap;
-import com.propertyvista.portal.rpc.ptapp.PtSiteMap;
+import com.propertyvista.portal.rpc.portal.prospect.PtSiteMap;
 
 public class EmailTemplateRootObjectLoader {
     private static final I18n i18n = I18n.get(EmailTemplateRootObjectLoader.class);
