@@ -245,11 +245,11 @@ public class AutoPayChangesReportWidget implements ReportWidget {
                     + reviewCase.totalPrevious().percent().getStringView() + "</td>");
             builder.appendHtmlConstant("<td class='" + CommonReportStyles.RCellNumber.name() + " " + CommonReportStyles.RRowTotal.name() + "'>"
                     + reviewCase.totalCurrent().totalPrice().getStringView() + "</td>"); // totalPrice
-            builder.appendHtmlConstant("<td class='" + CommonReportStyles.RCellNumber.name() + " " + CommonReportStyles.RRowTotal.name() + "'>" + "</td>"); // percent change
             builder.appendHtmlConstant("<td class='" + CommonReportStyles.RCellNumber.name() + " " + CommonReportStyles.RRowTotal.name() + "'>"
                     + reviewCase.totalCurrent().payment().getStringView() + "</td>"); // payment
             builder.appendHtmlConstant("<td class='" + CommonReportStyles.RCellNumber.name() + " " + CommonReportStyles.RRowTotal.name() + "'>"
-                    + reviewCase.totalCurrent().percent().getStringView() + "</td>"); // %                    
+                    + reviewCase.totalCurrent().percent().getStringView() + "</td>"); // %
+            builder.appendHtmlConstant("<td class='" + CommonReportStyles.RCellNumber.name() + " " + CommonReportStyles.RRowTotal.name() + "'>" + "</td>"); // percent change
             builder.appendHtmlConstant("</tr>");
         }
         builder.appendHtmlConstant("</tbody>");
