@@ -128,6 +128,10 @@ class GlobalLoginManager {
     }
 
     void updateGlobalCrmUserIndex(final CrmUser user) {
+        // DO not update global index for support
+        if (user.email().getValue().equals(CrmUser.VISTA_SUPPORT_ACCOUNT_EMAIL)) {
+            return;
+        }
         final Pmc pmc = VistaDeployment.getCurrentPmc();
         TaskRunner.runInOperationsNamespace(new Callable<Void>() {
             @Override
