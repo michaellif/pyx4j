@@ -14,6 +14,9 @@
 package com.propertyvista.server.security.openId;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashSet;
 
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
@@ -33,6 +36,7 @@ import com.pyx4j.server.contexts.AntiDoS;
 import com.pyx4j.server.contexts.DevSession;
 
 import com.propertyvista.config.AbstractVistaServerSideConfiguration;
+import com.propertyvista.domain.security.common.VistaApplication;
 import com.propertyvista.server.common.security.DevelopmentSecurity;
 
 public class OpenIdFilter implements Filter {
@@ -45,6 +49,24 @@ public class OpenIdFilter implements Filter {
 
     private static boolean enabled;
 
+    private static Collection<String> servletPathNoAuthentication = new HashSet<String>();
+
+    static {
+        servletPathNoAuthentication.addAll(allApplicationsUrls("/public/"));
+        servletPathNoAuthentication.addAll(allApplicationsUrls("/o/"));
+        servletPathNoAuthentication.addAll(allApplicationsUrls("/debug/"));
+        servletPathNoAuthentication.add("/static/");
+        servletPathNoAuthentication.add("/interfaces/");
+    }
+
+    private static Collection<String> allApplicationsUrls(String url) {
+        ArrayList<String> arlPatterns = new ArrayList<String>();
+        for (VistaApplication application : VistaApplication.values()) {
+            arlPatterns.add("/" + application.name() + url);
+        }
+        return arlPatterns;
+    }
+
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {
         enabled = ((AbstractVistaServerSideConfiguration) ServerSideConfiguration.instance()).openIdRequired();
@@ -52,6 +74,19 @@ public class OpenIdFilter implements Filter {
 
     @Override
     public void destroy() {
+    }
+
+    private boolean noAuthenticationRequired(String servletPath) {
+        String servletPathParts[] = servletPath.split("/");
+        if ((servletPathParts.length > 1) && servletPathNoAuthentication.contains(servletPathParts[0] + "/")) {
+            return true;
+        } else if ((servletPathParts.length > 2) && servletPathNoAuthentication.contains(servletPathParts[0] + "/" + servletPathParts[1])) {
+            return true;
+        } else if (servletPath.endsWith("/robots.txt") || servletPath.endsWith("/favicon.ico")) {
+            return false;
+        } else {
+            return false;
+        }
     }
 
     @Override
@@ -64,10 +99,7 @@ public class OpenIdFilter implements Filter {
             } else {
                 HttpServletRequest httprequest = (HttpServletRequest) request;
                 String servletPath = httprequest.getServletPath();
-                if (servletPath.startsWith("/o/") || servletPath.endsWith("/o/openid") || servletPath.startsWith("/public/")
-                        || servletPath.startsWith("/static/") || servletPath.startsWith("/interfaces/") || servletPath.startsWith("/crm/debug/")
-                        || servletPath.startsWith("/ptapp/debug/") || servletPath.startsWith("/debug/") || servletPath.endsWith("/favicon.ico")
-                        || servletPath.endsWith("/robots.txt")) {
+                if (noAuthenticationRequired(servletPath)) {
                     chain.doFilter(request, response);
                 } else if (httprequest.getRequestURI().endsWith(".js") || httprequest.getRequestURI().contains("/srv/")) {
                     ((HttpServletResponse) response).setStatus(HttpServletResponse.SC_UNAUTHORIZED);
