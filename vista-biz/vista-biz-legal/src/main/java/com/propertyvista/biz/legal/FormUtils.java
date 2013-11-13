@@ -38,11 +38,12 @@ import com.itextpdf.text.pdf.PdfContentByte;
 import com.itextpdf.text.pdf.PdfReader;
 import com.itextpdf.text.pdf.PdfStamper;
 
+import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.commons.SimpleMessageFormat;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IObject;
 
-import com.propertyvista.domain.legal.utils.PdfFormFieldName;
+import com.propertyvista.domain.legal.utils.PdfFormField;
 
 public class FormUtils {
 
@@ -114,10 +115,9 @@ public class FormUtils {
                     continue;
                 }
 
-                PdfFormFieldName fieldName = fieldsData.getInstanceValueClass().getDeclaredMethod(memberName, (Class<?>[]) null)
-                        .getAnnotation(PdfFormFieldName.class);
-                if (field.getValueClass().equals(String.class)) {
-                    setStringField(fieldName, fields, (String) field.getValue());
+                PdfFormField fieldName = fieldsData.getInstanceValueClass().getDeclaredMethod(memberName, (Class<?>[]) null).getAnnotation(PdfFormField.class);
+                if (isTextField(field)) {
+                    setTextField(fieldName, fields, field.getValue());
 
                 } else if (fieldsData.getMember(memberName).getValueClass().isEnum()) {
                     setEnumField(fieldName, fields, field.getValue().toString());
@@ -138,7 +138,9 @@ public class FormUtils {
         return bos.toByteArray();
     }
 
-    private static void setStringField(PdfFormFieldName fieldName, AcroFields fields, String value) throws IOException, DocumentException {
+    private static void setTextField(PdfFormField fieldName, AcroFields fields, Object object) throws IOException, DocumentException, InstantiationException,
+            IllegalAccessException {
+        String value = fieldName.formatter().newInstance().format(object);
         if (isSingleMapping(fieldName)) {
             fields.setField(fieldName.value(), value);
         } else if (isMultipleMapping(fieldName)) {
@@ -155,7 +157,7 @@ public class FormUtils {
                 totalSize += fieldSizes[i];
             }
             if (totalSize < value.length()) {
-                throw new IllegalArgumentException("cannot fill field '" + fieldName.value() + "' with value '" + value + "' because the value is too long");
+                throw new IllegalArgumentException("cannot fill field '" + fieldName.value() + "' with value '" + object + "' because the value is too long");
             }
 
             String paddedValue = value;
@@ -163,9 +165,6 @@ public class FormUtils {
                 while (paddedValue.length() != totalSize) {
                     paddedValue = " " + paddedValue;
                 }
-//                for (int paddingCounter = totalSize - value.length(); paddingCounter > 0; --paddingCounter) {
-//                    paddedValue = " " + paddedValue;
-//                }
             }
 
             int lastPartStartIndex = 0;
@@ -178,11 +177,11 @@ public class FormUtils {
         }
     }
 
-    private static void setEnumField(PdfFormFieldName fieldName, AcroFields fields, String value) throws IOException, DocumentException {
+    private static void setEnumField(PdfFormField fieldName, AcroFields fields, String value) throws IOException, DocumentException {
         fields.setField(fieldName.value(), value);
     }
 
-    private static void setImageField(PdfFormFieldName fieldName, AcroFields fields, PdfStamper stamper, byte[] image) throws IOException, DocumentException {
+    private static void setImageField(PdfFormField fieldName, AcroFields fields, PdfStamper stamper, byte[] image) throws IOException, DocumentException {
         List<FieldPosition> fieldPositions = fields.getFieldPositions(fieldName.value());
         if (fieldPositions == null || fieldPositions.size() == 0) {
             return;
@@ -197,12 +196,17 @@ public class FormUtils {
 
     }
 
-    private static boolean isSingleMapping(PdfFormFieldName fieldName) {
+    private static boolean isSingleMapping(PdfFormField fieldName) {
         return !fieldName.value().startsWith("[");
     }
 
-    private static boolean isMultipleMapping(PdfFormFieldName fieldName) {
+    private static boolean isMultipleMapping(PdfFormField fieldName) {
         return fieldName.value().startsWith("[");
+    }
+
+    private static boolean isTextField(IObject<?> field) {
+        return field.getValueClass().equals(String.class) || field.getValueClass().equals(Integer.class) || field.getValueClass().equals(BigDecimal.class)
+                || field.getValueClass().equals(LogicalDate.class) || field.getValueClass().equals(Date.class);
     }
 
 }

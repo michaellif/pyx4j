@@ -53,7 +53,7 @@ public class FormUtilsTest {
         fieldsData.field2().setValue("124567890");
 
         byte[] filledForm = FormUtils.fillForm(fieldsData, MOCK_FORM, false);
-        dumpPdf("testFillFormSimpleField", filledForm);
+        dumpPdf(filledForm);
 
         assertFieldEquals(filledForm, "field1", "mock-mock");
     }
@@ -64,7 +64,7 @@ public class FormUtilsTest {
         fieldsData.field2().setValue("124567890");
 
         byte[] filledForm = FormUtils.fillForm(fieldsData, MOCK_FORM, false);
-        dumpPdf("testFillFormPartitionedField", filledForm);
+        dumpPdf(filledForm);
 
         assertFieldEquals(filledForm, "field2_1", "12");
         assertFieldEquals(filledForm, "field2_2", "456");
@@ -77,7 +77,7 @@ public class FormUtilsTest {
         fieldsData.field2().setValue("567890");
 
         byte[] filledForm = FormUtils.fillForm(fieldsData, MOCK_FORM, false);
-        dumpPdf("testFillFormPartitionedFieldWithPadding", filledForm);
+        dumpPdf(filledForm);
 
         assertFieldEquals(filledForm, "field2_1", "  ");
         assertFieldEquals(filledForm, "field2_2", " 56");
@@ -90,11 +90,22 @@ public class FormUtilsTest {
         fieldsData.field2().setValue("0");
 
         byte[] filledForm = FormUtils.fillForm(fieldsData, MOCK_FORM, false);
-        dumpPdf("testFillFormPartitionedFieldWithPaddingAgain", filledForm);
+        dumpPdf(filledForm);
 
         assertFieldEquals(filledForm, "field2_1", "  ");
         assertFieldEquals(filledForm, "field2_2", "   ");
         assertFieldEquals(filledForm, "field2_3", "   0");
+    }
+
+    @Test
+    public void testFillFormFormatting() throws IOException, DocumentException {
+        MockFormFieldsData fieldsData = EntityFactory.create(MockFormFieldsData.class);
+        fieldsData.field10().setValue("abcde");
+
+        byte[] filledForm = FormUtils.fillForm(fieldsData, MOCK_FORM, false);
+        dumpPdf(filledForm);
+
+        assertFieldEquals(filledForm, "field10", "a!b!c!d!e!");
     }
 
     @Test
@@ -165,11 +176,16 @@ public class FormUtilsTest {
         Assert.assertEquals(expectedValue, fields.getField(field));
     }
 
-    private void dumpPdf(String pdfName, byte[] filledForm) throws IOException {
+    private void dumpPdf(byte[] filledForm) throws IOException {
         if (DUMP_PDFS) {
-            FileOutputStream fos = new FileOutputStream(pdfName + ".pdf");
+            FileOutputStream fos = new FileOutputStream(getMethodName() + ".pdf");
             fos.write(filledForm);
             fos.close();
         }
+    }
+
+    private static String getMethodName() {
+        StackTraceElement[] ste = Thread.currentThread().getStackTrace();
+        return ste[ste.length - 1].getMethodName();
     }
 }

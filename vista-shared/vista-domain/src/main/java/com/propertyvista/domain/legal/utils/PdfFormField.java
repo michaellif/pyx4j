@@ -17,20 +17,34 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 
 @Retention(RetentionPolicy.RUNTIME)
-public @interface PdfFormFieldName {
+public @interface PdfFormField {
+
+    public static class DefaultPdfFormatter implements PdfFormFieldFormatter {
+
+        @Override
+        public String format(Object object) {
+            return object.toString();
+        }
+
+    }
 
     /**
-     * either name of the field, or multiple fields by following format:
+     * Either name of the field, or multiple fields by following format:
      * 
      * <pre>
      * [field1Name{field1Size},field2Name{field2Size},...,fieldNName{fieldNSize}]
      * </pre>
      * 
      * The string provided by the property will be padded from left so it's size is <code>field1Size + field2Size + ... + fieldNSize</code>, but if the string
-     * length
-     * overflows the sum of sizes of an exception will be thrown.
+     * length overflows the sum of sizes of an exception will be thrown.
      * 
+     * <br>
+     * Formatter is applied before partitioning.
      */
     String value() default "";
 
+    /**
+     * Sets formatter for text fields.
+     */
+    Class<? extends PdfFormFieldFormatter> formatter() default DefaultPdfFormatter.class;
 }
