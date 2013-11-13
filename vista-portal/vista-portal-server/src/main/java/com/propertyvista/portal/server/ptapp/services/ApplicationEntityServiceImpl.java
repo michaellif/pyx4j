@@ -22,8 +22,8 @@ import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.security.shared.SecurityViolationException;
 
 import com.propertyvista.domain.IBoundToApplication;
-import com.propertyvista.domain.tenant.ptapp.OnlineApplication;
-import com.propertyvista.portal.server.ptapp.PtAppContext;
+import com.propertyvista.domain.tenant.prospect.OnlineApplication;
+import com.propertyvista.portal.server.portal.prospect.ProspectApplicationContext;
 
 public class ApplicationEntityServiceImpl {
 
@@ -31,7 +31,7 @@ public class ApplicationEntityServiceImpl {
 
     public static <E extends IEntity & IBoundToApplication> void saveApplicationEntity(E entity) {
         // app specific security stuff
-        final OnlineApplication application = PtAppContext.retrieveCurrentUserApplication();
+        final OnlineApplication application = ProspectApplicationContext.retrieveCurrentUserApplication();
         if ((!entity.application().isNull()) && (!entity.application().equals(application))) {
             throw new SecurityViolationException("Permission denied");
         }
@@ -49,12 +49,12 @@ public class ApplicationEntityServiceImpl {
 
     protected <T extends IBoundToApplication> T retrieveApplicationEntity(Class<T> clazz) {
         EntityQueryCriteria<T> criteria = EntityQueryCriteria.create(clazz);
-        criteria.add(PropertyCriterion.eq(criteria.proto().application(), PtAppContext.retrieveCurrentUserApplication()));
+        criteria.add(PropertyCriterion.eq(criteria.proto().application(), ProspectApplicationContext.retrieveCurrentUserApplication()));
         return Persistence.secureRetrieve(criteria);
     }
 
     protected <T extends IBoundToApplication> void retrieveApplicationEntity(T entity) {
-        retrieveApplicationEntity(entity, PtAppContext.retrieveCurrentUserApplication());
+        retrieveApplicationEntity(entity, ProspectApplicationContext.retrieveCurrentUserApplication());
     }
 
     protected <T extends IBoundToApplication> void retrieveApplicationEntity(T entity, OnlineApplication application) {

@@ -44,28 +44,29 @@ import com.propertyvista.domain.tenant.insurance.InsuranceCertificateScan;
 import com.propertyvista.domain.tenant.insurance.TenantSureInsurancePolicy;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.LeaseTermTenant;
-import com.propertyvista.domain.tenant.ptapp.OnlineApplication;
+import com.propertyvista.domain.tenant.prospect.OnlineApplication;
 import com.propertyvista.misc.VistaTODO;
 import com.propertyvista.portal.domain.ptapp.Charges;
 import com.propertyvista.portal.domain.ptapp.PaymentInformation;
 import com.propertyvista.portal.domain.ptapp.Summary;
 import com.propertyvista.portal.rpc.portal.dto.SelfRegistrationBuildingDTO;
-import com.propertyvista.portal.rpc.portal.services.ContactsStepService;
-import com.propertyvista.portal.rpc.portal.services.FinancialStepService;
+import com.propertyvista.portal.rpc.portal.prospect.services.ApplicationStatusCrudService;
+import com.propertyvista.portal.rpc.portal.prospect.services.ContactsStepService;
+import com.propertyvista.portal.rpc.portal.prospect.services.FinancialStepService;
+import com.propertyvista.portal.rpc.portal.prospect.services.OptionsStepService;
+import com.propertyvista.portal.rpc.portal.prospect.services.PaymentStepService;
+import com.propertyvista.portal.rpc.portal.prospect.services.PeopleStepService;
+import com.propertyvista.portal.rpc.portal.prospect.services.PersonalInfoAStepService;
+import com.propertyvista.portal.rpc.portal.prospect.services.PersonalInfoBStepService;
+import com.propertyvista.portal.rpc.portal.prospect.services.PmcCustomStepService;
+import com.propertyvista.portal.rpc.portal.prospect.services.SummaryStepService;
+import com.propertyvista.portal.rpc.portal.prospect.services.UnitStepService;
 import com.propertyvista.portal.rpc.portal.services.LeaseContextSelectionService;
-import com.propertyvista.portal.rpc.portal.services.OptionsStepService;
 import com.propertyvista.portal.rpc.portal.services.PasswordChangeUserService;
-import com.propertyvista.portal.rpc.portal.services.PaymentStepService;
-import com.propertyvista.portal.rpc.portal.services.PeopleStepService;
-import com.propertyvista.portal.rpc.portal.services.PersonalInfoAStepService;
-import com.propertyvista.portal.rpc.portal.services.PersonalInfoBStepService;
-import com.propertyvista.portal.rpc.portal.services.PmcCustomStepService;
 import com.propertyvista.portal.rpc.portal.services.PortalPasswordResetService;
 import com.propertyvista.portal.rpc.portal.services.PortalPolicyRetrieveService;
 import com.propertyvista.portal.rpc.portal.services.PortalVistaTermsService;
 import com.propertyvista.portal.rpc.portal.services.SiteThemeServices;
-import com.propertyvista.portal.rpc.portal.services.SummaryStepService;
-import com.propertyvista.portal.rpc.portal.services.UnitStepService;
 import com.propertyvista.portal.rpc.portal.services.resident.AutoPayRetrieveService;
 import com.propertyvista.portal.rpc.portal.services.resident.BillSummaryService;
 import com.propertyvista.portal.rpc.portal.services.resident.BillingHistoryService;
@@ -88,7 +89,6 @@ import com.propertyvista.portal.rpc.portal.services.resident.WeatherService;
 import com.propertyvista.portal.rpc.portal.web.services.ProspectAuthenticationService;
 import com.propertyvista.portal.rpc.portal.web.services.ResidentAuthenticationService;
 import com.propertyvista.portal.rpc.portal.web.services.ResidentPictureUploadService;
-import com.propertyvista.portal.rpc.portal.web.services.application.ApplicationStatusCrudService;
 import com.propertyvista.portal.rpc.portal.web.services.financial.AutoPayWizardService;
 import com.propertyvista.portal.rpc.portal.web.services.financial.BillingService;
 import com.propertyvista.portal.rpc.portal.web.services.maintenance.MaintenanceRequestCrudService;
@@ -100,8 +100,6 @@ import com.propertyvista.portal.rpc.portal.web.services.services.InsuranceCertif
 import com.propertyvista.portal.rpc.portal.web.services.services.TenantSureInsurancePolicyCrudService;
 import com.propertyvista.portal.rpc.portal.web.services.services.TenantSurePaymentMethodCrudService;
 import com.propertyvista.portal.rpc.ptapp.services.ApplicationDocumentUploadService;
-import com.propertyvista.portal.rpc.ptapp.services.ApplicationSelectionService;
-import com.propertyvista.portal.rpc.ptapp.services.ApplicationService;
 import com.propertyvista.portal.rpc.ptapp.services.ApplicationStatusService;
 import com.propertyvista.portal.rpc.ptapp.services.PtPasswordResetService;
 import com.propertyvista.portal.rpc.ptapp.services.PtPolicyRetrieveService;
@@ -149,8 +147,6 @@ public class VistaPortalAccessControlList extends ServletContainerAclBuilder {
 
         grant(VistaCustomerBehavior.LeaseSelectionRequired, new IServiceExecutePermission(LeaseContextSelectionService.class));
         grant(VistaCustomerBehavior.HasMultipleLeases, new IServiceExecutePermission(LeaseContextSelectionService.class));
-        grant(VistaCustomerBehavior.ApplicationSelectionRequired, new IServiceExecutePermission(ApplicationSelectionService.class));
-        grant(VistaCustomerBehavior.HasMultipleApplications, new IServiceExecutePermission(ApplicationSelectionService.class));
 
         // Old TODO remove
         grant(new IServiceExecutePermission(ReferenceDataService.class));
@@ -168,7 +164,6 @@ public class VistaPortalAccessControlList extends ServletContainerAclBuilder {
         grant(VistaBasicBehavior.ResidentPortal, new IServiceExecutePermission(PasswordChangeUserService.class));
         grant(VistaBasicBehavior.ProspectivePortal, new IServiceExecutePermission(PasswordChangeUserService.class));
         grant(VistaCustomerBehavior.Prospective, new IServiceExecutePermission(PtPolicyRetrieveService.class));
-        grant(VistaCustomerBehavior.Prospective, new IServiceExecutePermission(ApplicationService.class));
         grant(VistaCustomerBehavior.Prospective, new IServiceExecutePermission(ApplicationDocumentUploadService.class));
 
         grant(VistaCustomerBehavior.Prospective, new IServiceExecutePermission(ApartmentService.class));
@@ -216,7 +211,6 @@ public class VistaPortalAccessControlList extends ServletContainerAclBuilder {
         grant(VistaCustomerBehavior.ProspectiveSubmitted, new EntityPermission(OrganizationPoliciesNode.class, EntityPermission.READ));
         grant(VistaCustomerBehavior.ProspectiveSubmitted, new IServiceExecutePermission(PtPolicyRetrieveService.class));
         grant(VistaCustomerBehavior.ProspectiveSubmitted, new EntityPermission(IdentificationDocumentType.class, EntityPermission.READ));
-        grant(VistaCustomerBehavior.ProspectiveSubmitted, new IServiceExecutePermission(ApplicationService.class));
         grant(VistaCustomerBehavior.ProspectiveSubmitted, new IServiceExecutePermission(ApplicationStatusService.class));
         grant(VistaCustomerBehavior.ProspectiveSubmitted, new IServiceExecutePermission(SummaryService.class));
         //grant(VistaTenantBehavior.ProspectiveSubmitted, new IServiceExecutePermission(ChargesService.class));

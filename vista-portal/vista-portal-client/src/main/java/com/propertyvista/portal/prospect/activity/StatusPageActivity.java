@@ -19,8 +19,8 @@ import com.pyx4j.site.rpc.AppPlace;
 
 import com.propertyvista.portal.prospect.ui.StatusPageView;
 import com.propertyvista.portal.prospect.ui.StatusPageView.StatusPagePresenter;
+import com.propertyvista.portal.rpc.portal.prospect.services.ApplicationStatusCrudService;
 import com.propertyvista.portal.rpc.portal.web.dto.application.ApplicationStatusDTO;
-import com.propertyvista.portal.rpc.portal.web.services.application.ApplicationStatusCrudService;
 import com.propertyvista.portal.shared.activity.AbstractEditorActivity;
 
 public class StatusPageActivity extends AbstractEditorActivity<ApplicationStatusDTO> implements StatusPagePresenter {

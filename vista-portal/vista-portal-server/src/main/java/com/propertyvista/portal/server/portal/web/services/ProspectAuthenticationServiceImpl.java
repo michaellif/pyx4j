@@ -33,10 +33,10 @@ import com.propertyvista.domain.security.CustomerUser;
 import com.propertyvista.domain.security.VistaCustomerBehavior;
 import com.propertyvista.domain.security.common.VistaApplication;
 import com.propertyvista.domain.security.common.VistaBasicBehavior;
-import com.propertyvista.domain.tenant.ptapp.MasterOnlineApplication;
-import com.propertyvista.domain.tenant.ptapp.OnlineApplication;
+import com.propertyvista.domain.tenant.prospect.MasterOnlineApplication;
+import com.propertyvista.domain.tenant.prospect.OnlineApplication;
 import com.propertyvista.portal.rpc.portal.web.services.ProspectAuthenticationService;
-import com.propertyvista.portal.server.ptapp.PtAppContext;
+import com.propertyvista.portal.server.portal.prospect.ProspectApplicationContext;
 import com.propertyvista.server.common.security.VistaAuthenticationServicesImpl;
 import com.propertyvista.server.domain.security.CustomerUserCredential;
 
@@ -117,10 +117,10 @@ public class ProspectAuthenticationServiceImpl extends VistaAuthenticationServic
 
         // set application in context here:
         if (selectedApplication != null) {
-            PtAppContext.setCurrentUserApplication(selectedApplication);
+            ProspectApplicationContext.setCurrentUserApplication(selectedApplication);
             MasterOnlineApplication masterOnlineApplication = Persistence.service().retrieve(MasterOnlineApplication.class,
                     selectedApplication.masterOnlineApplication().getPrimaryKey());
-            PtAppContext.setCurrentUserLease(masterOnlineApplication.leaseApplication().lease());
+            ProspectApplicationContext.setCurrentUserLease(masterOnlineApplication.leaseApplication().lease());
         }
 
         return sessionToken;

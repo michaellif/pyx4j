@@ -20,7 +20,7 @@ import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
 
 import com.propertyvista.domain.policy.policies.domain.LegalTermsContent;
-import com.propertyvista.domain.tenant.ptapp.IAgree;
+import com.propertyvista.domain.tenant.IAgree;
 
 @Transient
 public interface LegalTermsDescriptorDTO extends IEntity {

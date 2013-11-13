@@ -20,8 +20,8 @@ import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 
 import com.propertyvista.domain.person.Name;
-import com.propertyvista.domain.tenant.ptapp.OnlineApplication.Role;
-import com.propertyvista.domain.tenant.ptapp.OnlineApplication.Status;
+import com.propertyvista.domain.tenant.prospect.OnlineApplication.Role;
+import com.propertyvista.domain.tenant.prospect.OnlineApplication.Status;
 
 @Transient
 public interface OnlineApplicationStatusDTO extends IEntity {

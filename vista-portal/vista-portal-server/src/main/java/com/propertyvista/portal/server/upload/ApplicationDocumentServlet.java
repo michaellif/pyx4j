@@ -40,7 +40,7 @@ import com.propertyvista.domain.IUserEntity;
 import com.propertyvista.domain.media.ApplicationDocumentFile;
 import com.propertyvista.domain.security.VistaCrmBehavior;
 import com.propertyvista.domain.security.VistaCustomerBehavior;
-import com.propertyvista.portal.server.ptapp.PtAppContext;
+import com.propertyvista.portal.server.portal.prospect.ProspectApplicationContext;
 import com.propertyvista.server.domain.ApplicationDocumentBlob;
 
 @SuppressWarnings("serial")
@@ -93,7 +93,7 @@ public class ApplicationDocumentServlet extends HttpServlet {
                     }
                     if (entity.isInstanceOf(IUserEntity.class)) {
                         Key documentOwnerUserKey = ((IUserEntity) entity).user().getPrimaryKey();
-                        if (documentOwnerUserKey != null && documentOwnerUserKey.equals(PtAppContext.getCurrentUserPrimaryKey())) {
+                        if (documentOwnerUserKey != null && documentOwnerUserKey.equals(ProspectApplicationContext.getCurrentUserPrimaryKey())) {
                             isAccessRightsFound[0] = true;
                             return false;
                         } else {
@@ -106,7 +106,7 @@ public class ApplicationDocumentServlet extends HttpServlet {
 
                                     documentOwnerUserKey,
 
-                                    PtAppContext.getCurrentUserPrimaryKey()
+                                    ProspectApplicationContext.getCurrentUserPrimaryKey()
 
                             ));
 

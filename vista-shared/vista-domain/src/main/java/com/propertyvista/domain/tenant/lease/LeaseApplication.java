@@ -30,7 +30,7 @@ import com.pyx4j.i18n.annotations.I18n;
 import com.pyx4j.i18n.shared.I18nEnum;
 
 import com.propertyvista.domain.company.Employee;
-import com.propertyvista.domain.tenant.ptapp.MasterOnlineApplication;
+import com.propertyvista.domain.tenant.prospect.MasterOnlineApplication;
 
 public interface LeaseApplication extends IEntity {
 

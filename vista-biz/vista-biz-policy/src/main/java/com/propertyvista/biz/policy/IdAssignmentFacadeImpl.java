@@ -37,7 +37,7 @@ import com.propertyvista.domain.tenant.lease.Guarantor;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.LeaseParticipant;
 import com.propertyvista.domain.tenant.lease.Tenant;
-import com.propertyvista.domain.tenant.ptapp.MasterOnlineApplication;
+import com.propertyvista.domain.tenant.prospect.MasterOnlineApplication;
 import com.propertyvista.server.domain.IdAssignmentSequence;
 import com.propertyvista.server.jobs.TaskRunner;
 

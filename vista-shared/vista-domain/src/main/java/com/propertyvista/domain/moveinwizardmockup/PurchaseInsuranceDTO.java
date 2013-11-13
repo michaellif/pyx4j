@@ -28,7 +28,7 @@ import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.i18n.annotations.I18n;
 import com.pyx4j.i18n.shared.I18nEnum;
 
-import com.propertyvista.domain.tenant.ptapp.DigitalSignature;
+import com.propertyvista.domain.tenant.prospect.DigitalSignature;
 import com.propertyvista.dto.LegalTermsDescriptorDTO;
 
 @Transient

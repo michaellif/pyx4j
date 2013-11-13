@@ -20,7 +20,7 @@ import com.pyx4j.site.rpc.AppPlace;
 
 import com.propertyvista.portal.prospect.ui.steps.PeopleStepView;
 import com.propertyvista.portal.rpc.portal.ProspectPortalSiteMap;
-import com.propertyvista.portal.rpc.portal.services.PeopleStepService;
+import com.propertyvista.portal.rpc.portal.prospect.services.PeopleStepService;
 import com.propertyvista.portal.rpc.portal.web.dto.application.PeopleStepDTO;
 
 public class PeopleStepActivity extends AbstractProspectWizardStepActivity<PeopleStepDTO> {

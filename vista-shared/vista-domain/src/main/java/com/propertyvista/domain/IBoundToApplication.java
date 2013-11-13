@@ -20,7 +20,7 @@ import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.i18n.annotations.I18n;
 
-import com.propertyvista.domain.tenant.ptapp.OnlineApplication;
+import com.propertyvista.domain.tenant.prospect.OnlineApplication;
 
 /**
  * Mark that IEntity is only bound to one PotentialTenant Application.

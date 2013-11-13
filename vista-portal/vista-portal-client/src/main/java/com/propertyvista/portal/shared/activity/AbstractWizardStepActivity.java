@@ -30,8 +30,8 @@ import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 
 import com.propertyvista.portal.prospect.ui.steps.UnitStepView;
-import com.propertyvista.portal.rpc.portal.services.AbstractWizardStepService;
-import com.propertyvista.portal.rpc.portal.services.UnitStepService;
+import com.propertyvista.portal.rpc.portal.prospect.services.AbstractWizardStepService;
+import com.propertyvista.portal.rpc.portal.prospect.services.UnitStepService;
 import com.propertyvista.portal.shared.PortalSite;
 import com.propertyvista.portal.shared.ui.IWizardStepView;
 import com.propertyvista.portal.shared.ui.IWizardStepView.IWizardStepPresenter;

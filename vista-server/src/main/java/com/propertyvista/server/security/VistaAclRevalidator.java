@@ -23,8 +23,8 @@ import com.propertyvista.crm.server.services.pub.CrmAuthenticationServiceImpl;
 import com.propertyvista.domain.security.common.VistaApplication;
 import com.propertyvista.ob.server.services.OnboardingAuthenticationServiceImpl;
 import com.propertyvista.operations.server.services.OperationsAuthenticationServiceImpl;
+import com.propertyvista.portal.server.portal.web.services.ProspectAuthenticationServiceImpl;
 import com.propertyvista.portal.server.portal.web.services.ResidentAuthenticationServiceImpl;
-import com.propertyvista.portal.server.ptapp.services.PtAuthenticationServiceImpl;
 
 public class VistaAclRevalidator implements AclRevalidator {
 
@@ -44,7 +44,7 @@ public class VistaAclRevalidator implements AclRevalidator {
             aclRevalidator = new OperationsAuthenticationServiceImpl();
             break;
         case prospect:
-            aclRevalidator = new PtAuthenticationServiceImpl();
+            aclRevalidator = new ProspectAuthenticationServiceImpl();
             break;
         case resident:
             aclRevalidator = new ResidentAuthenticationServiceImpl();

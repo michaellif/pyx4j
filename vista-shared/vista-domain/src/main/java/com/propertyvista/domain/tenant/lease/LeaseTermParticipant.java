@@ -43,7 +43,7 @@ import com.pyx4j.i18n.shared.I18nEnum;
 import com.propertyvista.domain.tenant.CustomerCreditCheck;
 import com.propertyvista.domain.tenant.CustomerScreening;
 import com.propertyvista.domain.tenant.lease.LeaseTerm.LeaseTermV;
-import com.propertyvista.domain.tenant.ptapp.OnlineApplication;
+import com.propertyvista.domain.tenant.prospect.OnlineApplication;
 
 @AbstractEntity
 @Inheritance(strategy = Inheritance.InheritanceStrategy.SINGLE_TABLE)

@@ -20,7 +20,7 @@ import com.pyx4j.site.rpc.AppPlace;
 
 import com.propertyvista.portal.prospect.ui.steps.UnitStepView;
 import com.propertyvista.portal.rpc.portal.ProspectPortalSiteMap;
-import com.propertyvista.portal.rpc.portal.services.UnitStepService;
+import com.propertyvista.portal.rpc.portal.prospect.services.UnitStepService;
 import com.propertyvista.portal.rpc.portal.web.dto.application.UnitStepDTO;
 import com.propertyvista.portal.shared.activity.AbstractWizardStepActivity;
 
