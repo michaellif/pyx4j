@@ -85,6 +85,9 @@ public class PmcProcessDispatcherJob implements Job {
             NamespaceManager.setNamespace(VistaNamespace.operationsNamespace);
             Persistence.service().startTransaction(TransactionScopeOption.Suppress, ConnectionTarget.BackgroundProcess);
             Trigger process = Persistence.service().retrieve(Trigger.class, new Key(dataMap.getLong(JobData.triggerId.name())));
+            if (process == null) {
+                throw new Error("Scheduled process " + dataMap.getLong(JobData.triggerId.name()) + " not found");
+            }
 
             if ((process.scheduleSuspended().getValue(Boolean.FALSE)) && (dataMap.getBoolean(JobData.manualExecution.name()) != Boolean.TRUE)) {
                 log.info("Ignored suspended triggers{}", process.getStringView());
