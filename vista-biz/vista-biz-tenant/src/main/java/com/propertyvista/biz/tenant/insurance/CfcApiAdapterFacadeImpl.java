@@ -58,8 +58,8 @@ import com.propertyvista.config.TenantSureConfiguration;
 import com.propertyvista.config.VistaInterfaceCredentials;
 import com.propertyvista.domain.tenant.insurance.TenantSureInsurancePolicyClient;
 import com.propertyvista.domain.tenant.lease.Tenant;
-import com.propertyvista.portal.rpc.portal.web.dto.insurance.TenantSureCoverageDTO;
-import com.propertyvista.portal.rpc.portal.web.dto.insurance.TenantSureQuoteDTO;
+import com.propertyvista.portal.rpc.portal.resident.dto.insurance.TenantSureCoverageDTO;
+import com.propertyvista.portal.rpc.portal.resident.dto.insurance.TenantSureQuoteDTO;
 
 /** This is an adapter class for CFC SOAP API */
 // TODO CFCAPISOAP

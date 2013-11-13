@@ -32,7 +32,7 @@ import com.pyx4j.i18n.shared.I18n;
 import com.propertyvista.biz.tenant.insurance.TenantSureOptionCode;
 import com.propertyvista.domain.tenant.insurance.TenantSureInsurancePolicyClient;
 import com.propertyvista.domain.tenant.lease.LeaseTermTenant;
-import com.propertyvista.portal.rpc.portal.web.dto.insurance.TenantSureCoverageDTO;
+import com.propertyvista.portal.rpc.portal.resident.dto.insurance.TenantSureCoverageDTO;
 
 /**
  * For more information see

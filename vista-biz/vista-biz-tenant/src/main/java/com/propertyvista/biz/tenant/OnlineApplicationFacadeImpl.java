@@ -46,7 +46,7 @@ import com.propertyvista.domain.tenant.prospect.OnlineApplication;
 import com.propertyvista.domain.tenant.prospect.OnlineApplication.Role;
 import com.propertyvista.dto.MasterOnlineApplicationOnlineStatusDTO;
 import com.propertyvista.dto.OnlineApplicationStatusDTO;
-import com.propertyvista.portal.rpc.ptapp.PtSiteMap;
+import com.propertyvista.portal.rpc.portal.prospect.PtSiteMap;
 
 public class OnlineApplicationFacadeImpl implements OnlineApplicationFacade {
 
