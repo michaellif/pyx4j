@@ -13,7 +13,7 @@
  */
 package com.propertyvista.portal.resident.ui.profile;
 
-import com.propertyvista.portal.rpc.portal.web.dto.ResidentProfileDTO;
+import com.propertyvista.portal.rpc.portal.resident.dto.ResidentProfileDTO;
 import com.propertyvista.portal.shared.ui.AbstractEditorView;
 
 public class ProfilePageViewImpl extends AbstractEditorView<ResidentProfileDTO> implements ProfilePageView {

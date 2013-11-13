@@ -18,8 +18,8 @@ import com.google.gwt.core.client.GWT;
 import com.pyx4j.site.rpc.AppPlace;
 
 import com.propertyvista.portal.resident.ui.financial.autopay.AutoPayView;
-import com.propertyvista.portal.rpc.portal.web.dto.financial.AutoPayDTO;
-import com.propertyvista.portal.rpc.portal.web.services.financial.AutoPayWizardService;
+import com.propertyvista.portal.rpc.portal.resident.dto.financial.AutoPayDTO;
+import com.propertyvista.portal.rpc.portal.resident.services.financial.AutoPayWizardService;
 import com.propertyvista.portal.shared.activity.AbstractEditorActivity;
 
 public class AutoPayActivity extends AbstractEditorActivity<AutoPayDTO> implements AutoPayView.Presenter {

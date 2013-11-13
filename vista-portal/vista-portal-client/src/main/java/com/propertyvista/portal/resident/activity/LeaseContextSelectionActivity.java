@@ -30,8 +30,8 @@ import com.pyx4j.site.rpc.AppPlace;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.portal.resident.ResidentPortalSite;
 import com.propertyvista.portal.resident.ui.LeaseContextSelectionView;
-import com.propertyvista.portal.rpc.portal.dto.LeaseContextChoiceDTO;
-import com.propertyvista.portal.rpc.portal.services.LeaseContextSelectionService;
+import com.propertyvista.portal.rpc.portal.resident.services.LeaseContextSelectionService;
+import com.propertyvista.portal.rpc.portal.shared.dto.LeaseContextChoiceDTO;
 
 public class LeaseContextSelectionActivity extends AbstractActivity implements LeaseContextSelectionView.Presenter {
 

@@ -21,7 +21,7 @@ import com.google.gwt.user.client.ui.AcceptsOneWidget;
 import com.pyx4j.security.client.ClientContext;
 import com.pyx4j.security.rpc.AuthenticationService;
 
-import com.propertyvista.portal.rpc.portal.web.services.ResidentAuthenticationService;
+import com.propertyvista.portal.rpc.portal.resident.services.ResidentAuthenticationService;
 
 public class LogoutActivity extends AbstractActivity {
 

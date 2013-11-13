@@ -21,7 +21,7 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.propertyvista.domain.contact.AddressSimple;
 import com.propertyvista.domain.payment.AutopayAgreement;
 import com.propertyvista.domain.payment.LeasePaymentMethod;
-import com.propertyvista.portal.rpc.portal.web.dto.financial.AutoPayDTO;
+import com.propertyvista.portal.rpc.portal.resident.dto.financial.AutoPayDTO;
 import com.propertyvista.portal.shared.ui.IWizardFormView;
 
 public interface AutoPayWizardView extends IWizardFormView<AutoPayDTO> {

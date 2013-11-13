@@ -16,7 +16,7 @@ package com.propertyvista.portal.rpc.shared.dto.tenantinsurance.tenantsure;
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.shared.IEntity;
 
-import com.propertyvista.portal.rpc.portal.web.dto.insurance.TenantSureCoverageDTO;
+import com.propertyvista.portal.rpc.portal.resident.dto.insurance.TenantSureCoverageDTO;
 
 @Transient
 public interface TenantSureQuotationRequestDTO extends IEntity {

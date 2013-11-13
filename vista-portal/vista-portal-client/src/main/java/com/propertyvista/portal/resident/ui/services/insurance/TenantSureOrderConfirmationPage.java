@@ -21,7 +21,7 @@ import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.Label;
 
 import com.propertyvista.portal.resident.themes.TenantSureTheme;
-import com.propertyvista.portal.rpc.portal.web.dto.insurance.TenantSureInsurancePolicyDTO;
+import com.propertyvista.portal.rpc.portal.resident.dto.insurance.TenantSureInsurancePolicyDTO;
 import com.propertyvista.portal.shared.ui.CPortalEntityForm;
 
 public class TenantSureOrderConfirmationPage extends CPortalEntityForm<TenantSureInsurancePolicyDTO> {

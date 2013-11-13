@@ -32,11 +32,11 @@ import com.pyx4j.site.rpc.AppPlaceInfo;
 
 import com.propertyvista.portal.prospect.ui.signup.SignUpView;
 import com.propertyvista.portal.rpc.portal.ResidentPortalSiteMap;
-import com.propertyvista.portal.rpc.portal.web.dto.SelfRegistrationBuildingDTO;
-import com.propertyvista.portal.rpc.portal.web.dto.SelfRegistrationDTO;
-import com.propertyvista.portal.rpc.portal.web.services.ProspectAuthenticationService;
-import com.propertyvista.portal.rpc.portal.web.services.ProspectSelfRegistrationService;
-import com.propertyvista.portal.rpc.portal.web.services.SelfRegistrationBuildingsSourceService;
+import com.propertyvista.portal.rpc.portal.resident.dto.SelfRegistrationBuildingDTO;
+import com.propertyvista.portal.rpc.portal.resident.dto.SelfRegistrationDTO;
+import com.propertyvista.portal.rpc.portal.resident.services.ProspectAuthenticationService;
+import com.propertyvista.portal.rpc.portal.resident.services.ProspectSelfRegistrationService;
+import com.propertyvista.portal.rpc.portal.resident.services.SelfRegistrationBuildingsSourceService;
 import com.propertyvista.portal.rpc.shared.EntityValidationException;
 import com.propertyvista.portal.shared.PortalSite;
 

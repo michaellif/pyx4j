@@ -13,7 +13,7 @@
  */
 package com.propertyvista.portal.resident.ui.financial.views.bill;
 
-import com.propertyvista.portal.rpc.portal.web.dto.financial.BillViewDTO;
+import com.propertyvista.portal.rpc.portal.resident.dto.financial.BillViewDTO;
 import com.propertyvista.portal.shared.ui.AbstractFormView;
 
 public class BillViewImpl extends AbstractFormView<BillViewDTO> implements BillView {

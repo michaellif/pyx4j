@@ -13,7 +13,7 @@
  */
 package com.propertyvista.portal.prospect.ui.steps;
 
-import com.propertyvista.portal.rpc.portal.web.dto.financial.PaymentMethodDTO;
+import com.propertyvista.portal.rpc.portal.resident.dto.financial.PaymentMethodDTO;
 import com.propertyvista.portal.shared.ui.AbstractFormView;
 
 public class ApplicationConfirmationViewImpl extends AbstractFormView<PaymentMethodDTO> implements ApplicationConfirmationView {

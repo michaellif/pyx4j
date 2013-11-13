@@ -25,8 +25,8 @@ import com.propertyvista.portal.resident.ResidentPortalSite;
 import com.propertyvista.portal.resident.ui.maintenance.MaintenanceDashboardView;
 import com.propertyvista.portal.resident.ui.maintenance.MaintenanceDashboardView.MaintenanceDashboardPresenter;
 import com.propertyvista.portal.rpc.portal.ResidentPortalSiteMap;
-import com.propertyvista.portal.rpc.portal.web.dto.maintenance.MaintenanceSummaryDTO;
-import com.propertyvista.portal.rpc.portal.web.services.maintenance.MaintenanceRequestCrudService;
+import com.propertyvista.portal.rpc.portal.resident.dto.maintenance.MaintenanceSummaryDTO;
+import com.propertyvista.portal.rpc.portal.resident.services.maintenance.MaintenanceRequestCrudService;
 import com.propertyvista.portal.shared.activity.SecurityAwareActivity;
 
 public class MaintenanceDashboardActivity extends SecurityAwareActivity implements MaintenanceDashboardPresenter {

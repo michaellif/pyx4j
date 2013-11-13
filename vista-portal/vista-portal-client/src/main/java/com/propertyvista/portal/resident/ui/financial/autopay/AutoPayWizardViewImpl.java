@@ -15,7 +15,7 @@ package com.propertyvista.portal.resident.ui.financial.autopay;
 
 import com.pyx4j.i18n.shared.I18n;
 
-import com.propertyvista.portal.rpc.portal.web.dto.financial.AutoPayDTO;
+import com.propertyvista.portal.rpc.portal.resident.dto.financial.AutoPayDTO;
 import com.propertyvista.portal.shared.ui.AbstractWizardFormView;
 import com.propertyvista.portal.shared.ui.IWizardFormView;
 

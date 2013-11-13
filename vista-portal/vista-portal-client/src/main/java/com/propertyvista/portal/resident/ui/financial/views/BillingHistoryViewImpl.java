@@ -13,7 +13,7 @@
  */
 package com.propertyvista.portal.resident.ui.financial.views;
 
-import com.propertyvista.portal.rpc.portal.web.dto.financial.BillingHistoryDTO;
+import com.propertyvista.portal.rpc.portal.resident.dto.financial.BillingHistoryDTO;
 import com.propertyvista.portal.shared.ui.AbstractFormView;
 
 public class BillingHistoryViewImpl extends AbstractFormView<BillingHistoryDTO> implements BillingHistoryView {

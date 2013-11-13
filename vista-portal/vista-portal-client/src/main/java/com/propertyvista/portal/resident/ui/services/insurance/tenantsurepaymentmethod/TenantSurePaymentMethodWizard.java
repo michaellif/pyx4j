@@ -22,7 +22,7 @@ import com.pyx4j.i18n.shared.I18n;
 import com.propertyvista.domain.contact.AddressSimple;
 import com.propertyvista.domain.payment.InsurancePaymentMethod;
 import com.propertyvista.portal.resident.ui.services.insurance.tenantsurepaymentmethod.TenantSurePaymentMethodWizardView.Persenter;
-import com.propertyvista.portal.rpc.portal.web.dto.insurance.InsurancePaymentMethodDTO;
+import com.propertyvista.portal.rpc.portal.resident.dto.insurance.InsurancePaymentMethodDTO;
 import com.propertyvista.portal.shared.ui.CPortalEntityWizard;
 import com.propertyvista.portal.shared.ui.IWizardFormView;
 

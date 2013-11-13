@@ -19,9 +19,9 @@ import com.google.gwt.user.client.ui.FlowPanel;
 
 import com.propertyvista.portal.resident.ui.extra.events.CommunityEventsGadget;
 import com.propertyvista.portal.resident.ui.extra.weather.WeatherGadget;
-import com.propertyvista.portal.rpc.portal.web.dto.CommunityEventsGadgetDTO;
-import com.propertyvista.portal.rpc.portal.web.dto.ExtraGadgetDTO;
-import com.propertyvista.portal.rpc.portal.web.dto.WeatherGadgetDTO;
+import com.propertyvista.portal.rpc.portal.resident.dto.CommunityEventsGadgetDTO;
+import com.propertyvista.portal.rpc.portal.resident.dto.ExtraGadgetDTO;
+import com.propertyvista.portal.rpc.portal.resident.dto.WeatherGadgetDTO;
 import com.propertyvista.portal.shared.themes.PortalRootPaneTheme;
 
 public class ExtraViewImpl extends FlowPanel implements ExtraView {

@@ -14,7 +14,7 @@
 package com.propertyvista.portal.resident.ui.services.insurance.tenantsurepaymentmethod;
 
 import com.propertyvista.domain.contact.AddressSimple;
-import com.propertyvista.portal.rpc.portal.web.dto.insurance.InsurancePaymentMethodDTO;
+import com.propertyvista.portal.rpc.portal.resident.dto.insurance.InsurancePaymentMethodDTO;
 import com.propertyvista.portal.shared.ui.IWizardFormView;
 
 public interface TenantSurePaymentMethodWizardView extends IWizardFormView<InsurancePaymentMethodDTO> {

@@ -26,14 +26,14 @@ import com.propertyvista.domain.security.VistaCustomerPaymentTypeBehavior;
 import com.propertyvista.portal.resident.ResidentPortalSite;
 import com.propertyvista.portal.resident.ui.dashboard.MainDashboardView;
 import com.propertyvista.portal.rpc.portal.ResidentPortalSiteMap;
-import com.propertyvista.portal.rpc.portal.web.dto.ResidentSummaryDTO;
-import com.propertyvista.portal.rpc.portal.web.dto.financial.BillingSummaryDTO;
-import com.propertyvista.portal.rpc.portal.web.dto.insurance.status.InsuranceStatusDTO;
-import com.propertyvista.portal.rpc.portal.web.dto.maintenance.MaintenanceSummaryDTO;
-import com.propertyvista.portal.rpc.portal.web.services.financial.BillingService;
-import com.propertyvista.portal.rpc.portal.web.services.maintenance.MaintenanceRequestCrudService;
-import com.propertyvista.portal.rpc.portal.web.services.profile.ResidentSummaryService;
-import com.propertyvista.portal.rpc.portal.web.services.services.InsuranceService;
+import com.propertyvista.portal.rpc.portal.resident.dto.ResidentSummaryDTO;
+import com.propertyvista.portal.rpc.portal.resident.dto.financial.BillingSummaryDTO;
+import com.propertyvista.portal.rpc.portal.resident.dto.insurance.status.InsuranceStatusDTO;
+import com.propertyvista.portal.rpc.portal.resident.dto.maintenance.MaintenanceSummaryDTO;
+import com.propertyvista.portal.rpc.portal.resident.services.financial.BillingService;
+import com.propertyvista.portal.rpc.portal.resident.services.maintenance.MaintenanceRequestCrudService;
+import com.propertyvista.portal.rpc.portal.resident.services.profile.ResidentSummaryService;
+import com.propertyvista.portal.rpc.portal.resident.services.services.InsuranceService;
 import com.propertyvista.portal.shared.activity.SecurityAwareActivity;
 
 public class MainDashboardActivity extends SecurityAwareActivity implements MainDashboardView.DashboardPresenter {

@@ -27,8 +27,8 @@ import com.propertyvista.domain.payment.AutopayAgreement;
 import com.propertyvista.portal.resident.ResidentPortalSite;
 import com.propertyvista.portal.resident.ui.financial.autopay.AutoPayConfirmationView;
 import com.propertyvista.portal.rpc.portal.ResidentPortalSiteMap;
-import com.propertyvista.portal.rpc.portal.web.dto.financial.AutoPayDTO;
-import com.propertyvista.portal.rpc.portal.web.services.financial.PaymentService;
+import com.propertyvista.portal.rpc.portal.resident.dto.financial.AutoPayDTO;
+import com.propertyvista.portal.rpc.portal.resident.services.financial.PaymentService;
 import com.propertyvista.portal.shared.activity.SecurityAwareActivity;
 
 public class AutoPayConfirmationActivity extends SecurityAwareActivity implements AutoPayConfirmationView.Presenter {

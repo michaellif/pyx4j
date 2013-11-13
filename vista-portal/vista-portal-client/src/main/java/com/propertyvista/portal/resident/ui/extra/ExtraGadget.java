@@ -17,7 +17,7 @@ import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.Widget;
 
-import com.propertyvista.portal.rpc.portal.web.dto.ExtraGadgetDTO;
+import com.propertyvista.portal.rpc.portal.resident.dto.ExtraGadgetDTO;
 import com.propertyvista.portal.shared.themes.BlockMixin;
 import com.propertyvista.portal.shared.themes.PortalRootPaneTheme;
 

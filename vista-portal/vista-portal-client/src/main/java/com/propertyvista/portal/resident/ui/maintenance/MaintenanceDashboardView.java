@@ -15,7 +15,7 @@ package com.propertyvista.portal.resident.ui.maintenance;
 
 import com.pyx4j.site.client.IsView;
 
-import com.propertyvista.portal.rpc.portal.web.dto.maintenance.MaintenanceSummaryDTO;
+import com.propertyvista.portal.rpc.portal.resident.dto.maintenance.MaintenanceSummaryDTO;
 
 public interface MaintenanceDashboardView extends IsView {
 

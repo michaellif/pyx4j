@@ -33,7 +33,7 @@ import com.pyx4j.widgets.client.Label;
 import com.propertyvista.common.client.theme.BillingTheme;
 import com.propertyvista.common.client.ui.components.tenantinsurance.MoneyComboBox;
 import com.propertyvista.domain.tenant.insurance.TenantSurePaymentSchedule;
-import com.propertyvista.portal.rpc.portal.web.dto.insurance.TenantSureQuoteDTO;
+import com.propertyvista.portal.rpc.portal.resident.dto.insurance.TenantSureQuoteDTO;
 
 public class TenantSureQuoteViewer extends CViewer<TenantSureQuoteDTO> {
 

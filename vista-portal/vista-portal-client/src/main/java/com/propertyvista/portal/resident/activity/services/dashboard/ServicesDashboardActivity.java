@@ -25,8 +25,8 @@ import com.propertyvista.portal.resident.ResidentPortalSite;
 import com.propertyvista.portal.resident.ui.services.dashboard.ServicesDashboardView;
 import com.propertyvista.portal.resident.ui.services.dashboard.ServicesDashboardView.ServicesDashboardPresenter;
 import com.propertyvista.portal.rpc.portal.ResidentPortalSiteMap;
-import com.propertyvista.portal.rpc.portal.web.dto.insurance.status.InsuranceStatusDTO;
-import com.propertyvista.portal.rpc.portal.web.services.services.InsuranceService;
+import com.propertyvista.portal.rpc.portal.resident.dto.insurance.status.InsuranceStatusDTO;
+import com.propertyvista.portal.rpc.portal.resident.services.services.InsuranceService;
 import com.propertyvista.portal.shared.activity.SecurityAwareActivity;
 
 public class ServicesDashboardActivity extends SecurityAwareActivity implements ServicesDashboardPresenter {

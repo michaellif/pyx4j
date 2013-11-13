@@ -21,7 +21,7 @@ import com.pyx4j.security.rpc.AuthenticationService;
 import com.propertyvista.common.client.ui.components.login.AbstractLoginWithTokenActivity;
 import com.propertyvista.common.client.ui.components.login.LoginWithTokenView;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap;
-import com.propertyvista.portal.rpc.portal.web.services.ResidentAuthenticationService;
+import com.propertyvista.portal.rpc.portal.resident.services.ResidentAuthenticationService;
 import com.propertyvista.portal.shared.PortalSite;
 
 public class LoginWithTokenActivity extends AbstractLoginWithTokenActivity {

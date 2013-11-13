@@ -24,10 +24,10 @@ import com.pyx4j.site.client.ui.layout.responsive.LayoutChangeEvent;
 import com.pyx4j.site.client.ui.layout.responsive.LayoutChangeHandler;
 import com.pyx4j.site.client.ui.layout.responsive.ResponsiveLayoutPanel.LayoutType;
 
-import com.propertyvista.portal.rpc.portal.web.dto.ResidentSummaryDTO;
-import com.propertyvista.portal.rpc.portal.web.dto.financial.BillingSummaryDTO;
-import com.propertyvista.portal.rpc.portal.web.dto.insurance.status.InsuranceStatusDTO;
-import com.propertyvista.portal.rpc.portal.web.dto.maintenance.MaintenanceSummaryDTO;
+import com.propertyvista.portal.rpc.portal.resident.dto.ResidentSummaryDTO;
+import com.propertyvista.portal.rpc.portal.resident.dto.financial.BillingSummaryDTO;
+import com.propertyvista.portal.rpc.portal.resident.dto.insurance.status.InsuranceStatusDTO;
+import com.propertyvista.portal.rpc.portal.resident.dto.maintenance.MaintenanceSummaryDTO;
 import com.propertyvista.portal.shared.themes.DashboardTheme;
 
 public class MainDashboardViewImpl extends FlowPanel implements MainDashboardView {

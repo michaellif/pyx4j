@@ -35,8 +35,8 @@ import com.propertyvista.common.client.ui.validators.PastDateIncludeTodayValidat
 import com.propertyvista.domain.person.Name;
 import com.propertyvista.domain.tenant.CustomerPicture;
 import com.propertyvista.domain.tenant.EmergencyContact;
-import com.propertyvista.portal.rpc.portal.web.dto.ResidentProfileDTO;
-import com.propertyvista.portal.rpc.portal.web.services.ResidentPictureUploadService;
+import com.propertyvista.portal.rpc.portal.resident.dto.ResidentProfileDTO;
+import com.propertyvista.portal.rpc.portal.resident.services.ResidentPictureUploadService;
 import com.propertyvista.portal.shared.themes.EntityViewTheme;
 import com.propertyvista.portal.shared.ui.CPortalEntityEditor;
 import com.propertyvista.portal.shared.ui.util.decorators.FormWidgetDecoratorBuilder;

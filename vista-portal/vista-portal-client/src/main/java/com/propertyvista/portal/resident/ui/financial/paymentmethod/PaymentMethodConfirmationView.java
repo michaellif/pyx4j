@@ -13,7 +13,7 @@
  */
 package com.propertyvista.portal.resident.ui.financial.paymentmethod;
 
-import com.propertyvista.portal.rpc.portal.web.dto.financial.PaymentMethodDTO;
+import com.propertyvista.portal.rpc.portal.resident.dto.financial.PaymentMethodDTO;
 import com.propertyvista.portal.shared.ui.IFormView;
 
 public interface PaymentMethodConfirmationView extends IFormView<PaymentMethodDTO> {

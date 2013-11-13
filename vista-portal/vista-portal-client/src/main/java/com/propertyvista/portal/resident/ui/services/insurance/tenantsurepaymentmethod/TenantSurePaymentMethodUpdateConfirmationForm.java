@@ -21,7 +21,7 @@ import com.pyx4j.commons.css.ThemeColor;
 import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
 
-import com.propertyvista.portal.rpc.portal.web.dto.insurance.InsurancePaymentMethodDTO;
+import com.propertyvista.portal.rpc.portal.resident.dto.insurance.InsurancePaymentMethodDTO;
 import com.propertyvista.portal.shared.ui.CPortalEntityForm;
 
 public class TenantSurePaymentMethodUpdateConfirmationForm extends CPortalEntityForm<InsurancePaymentMethodDTO> {

@@ -32,8 +32,8 @@ import com.pyx4j.widgets.client.Anchor;
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
 import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
 import com.propertyvista.domain.financial.billing.Bill;
-import com.propertyvista.portal.rpc.portal.web.dto.financial.BillDataDTO;
-import com.propertyvista.portal.rpc.portal.web.dto.financial.BillingHistoryDTO;
+import com.propertyvista.portal.rpc.portal.resident.dto.financial.BillDataDTO;
+import com.propertyvista.portal.rpc.portal.resident.dto.financial.BillingHistoryDTO;
 import com.propertyvista.portal.shared.ui.CPortalEntityForm;
 import com.propertyvista.portal.shared.ui.util.decorators.FormWidgetDecoratorBuilder;
 

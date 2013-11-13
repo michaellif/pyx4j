@@ -27,7 +27,7 @@ import com.pyx4j.site.shared.domain.Notification;
 import com.pyx4j.site.shared.domain.Notification.NotificationType;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
 
-import com.propertyvista.portal.rpc.portal.services.PasswordChangeUserService;
+import com.propertyvista.portal.rpc.portal.shared.services.PasswordChangeUserService;
 import com.propertyvista.portal.shared.PortalSite;
 import com.propertyvista.portal.shared.activity.AbstractWizardFormActivity;
 import com.propertyvista.portal.shared.ui.security.PasswordChangeWizardView;

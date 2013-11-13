@@ -31,7 +31,7 @@ import com.pyx4j.site.shared.domain.Notification.NotificationType;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
 
 import com.propertyvista.common.client.ui.components.security.AbstractPasswordResetActivity;
-import com.propertyvista.portal.rpc.portal.services.PortalPasswordResetService;
+import com.propertyvista.portal.rpc.portal.shared.services.PortalPasswordResetService;
 import com.propertyvista.portal.shared.PortalSite;
 import com.propertyvista.portal.shared.activity.AbstractWizardFormActivity;
 import com.propertyvista.portal.shared.ui.security.PasswordResetWizardView;

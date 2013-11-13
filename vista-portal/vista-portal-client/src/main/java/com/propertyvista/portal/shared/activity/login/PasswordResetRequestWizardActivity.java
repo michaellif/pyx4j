@@ -29,7 +29,7 @@ import com.pyx4j.site.shared.domain.Notification.NotificationType;
 import com.pyx4j.widgets.client.CaptchaComposite;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
 
-import com.propertyvista.portal.rpc.portal.web.services.ResidentAuthenticationService;
+import com.propertyvista.portal.rpc.portal.resident.services.ResidentAuthenticationService;
 import com.propertyvista.portal.shared.PortalSite;
 import com.propertyvista.portal.shared.activity.AbstractWizardFormActivity;
 import com.propertyvista.portal.shared.ui.landing.PasswordResetRequestWizardView;

@@ -24,8 +24,8 @@ import com.pyx4j.site.shared.domain.Notification.NotificationType;
 import com.propertyvista.portal.resident.ResidentPortalSite;
 import com.propertyvista.portal.resident.ui.services.insurance.GeneralPolicyUploadWizardView;
 import com.propertyvista.portal.resident.ui.services.insurance.GeneralPolicyUploadWizardView.GeneralPolicyUploadWizardPresenter;
-import com.propertyvista.portal.rpc.portal.web.dto.insurance.GeneralInsurancePolicyDTO;
-import com.propertyvista.portal.rpc.portal.web.services.services.GeneralInsurancePolicyCrudService;
+import com.propertyvista.portal.rpc.portal.resident.dto.insurance.GeneralInsurancePolicyDTO;
+import com.propertyvista.portal.rpc.portal.resident.services.services.GeneralInsurancePolicyCrudService;
 import com.propertyvista.portal.shared.activity.AbstractWizardFormCrudActivity;
 
 public class GeneralPolicyUploadWizardActivity extends AbstractWizardFormCrudActivity<GeneralInsurancePolicyDTO> implements

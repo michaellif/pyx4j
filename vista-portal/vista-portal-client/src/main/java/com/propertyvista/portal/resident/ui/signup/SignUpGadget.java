@@ -49,8 +49,8 @@ import com.pyx4j.widgets.client.Button;
 import com.pyx4j.widgets.client.actionbar.Toolbar;
 
 import com.propertyvista.portal.resident.ui.signup.SignUpView.SignUpPresenter;
-import com.propertyvista.portal.rpc.portal.web.dto.SelfRegistrationBuildingDTO;
-import com.propertyvista.portal.rpc.portal.web.dto.SelfRegistrationDTO;
+import com.propertyvista.portal.rpc.portal.resident.dto.SelfRegistrationBuildingDTO;
+import com.propertyvista.portal.rpc.portal.resident.dto.SelfRegistrationDTO;
 import com.propertyvista.portal.rpc.shared.EntityValidationException;
 import com.propertyvista.portal.rpc.shared.EntityValidationException.MemberValidationError;
 import com.propertyvista.portal.shared.resources.PortalImages;

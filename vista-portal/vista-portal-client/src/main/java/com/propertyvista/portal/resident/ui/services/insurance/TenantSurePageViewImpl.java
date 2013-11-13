@@ -16,7 +16,7 @@ package com.propertyvista.portal.resident.ui.services.insurance;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
 
 import com.propertyvista.domain.tenant.insurance.TenantSureConstants;
-import com.propertyvista.portal.rpc.portal.web.dto.insurance.TenantSureInsurancePolicyDTO;
+import com.propertyvista.portal.rpc.portal.resident.dto.insurance.TenantSureInsurancePolicyDTO;
 import com.propertyvista.portal.shared.ui.AbstractEditorView;
 
 public class TenantSurePageViewImpl extends AbstractEditorView<TenantSureInsurancePolicyDTO> implements TenantSurePageView {

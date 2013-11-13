@@ -28,7 +28,7 @@ import com.propertyvista.dto.PaymentRecordDTO;
 import com.propertyvista.portal.resident.ResidentPortalSite;
 import com.propertyvista.portal.resident.ui.financial.payment.PaymentConfirmationView;
 import com.propertyvista.portal.rpc.portal.ResidentPortalSiteMap;
-import com.propertyvista.portal.rpc.portal.web.services.financial.PaymentService;
+import com.propertyvista.portal.rpc.portal.resident.services.financial.PaymentService;
 import com.propertyvista.portal.shared.activity.SecurityAwareActivity;
 
 public class PaymentConfirmationActivity extends SecurityAwareActivity implements PaymentConfirmationView.Presenter {

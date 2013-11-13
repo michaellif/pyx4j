@@ -25,7 +25,7 @@ import com.pyx4j.site.client.ui.layout.responsive.LayoutChangeRequestEvent.Chang
 
 import com.propertyvista.common.client.theme.HorizontalAlignCenterMixin;
 import com.propertyvista.common.client.ui.components.MediaUtils;
-import com.propertyvista.portal.rpc.portal.web.dto.PortalContentDTO;
+import com.propertyvista.portal.rpc.portal.resident.dto.PortalContentDTO;
 import com.propertyvista.portal.shared.themes.PortalRootPaneTheme;
 
 public class HeaderViewImpl extends SimplePanel implements HeaderView {

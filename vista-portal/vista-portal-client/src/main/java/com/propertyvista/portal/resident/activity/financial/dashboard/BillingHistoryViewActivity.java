@@ -25,8 +25,8 @@ import com.propertyvista.domain.financial.billing.Bill;
 import com.propertyvista.portal.resident.ResidentPortalSite;
 import com.propertyvista.portal.resident.ui.financial.views.BillingHistoryView;
 import com.propertyvista.portal.rpc.portal.ResidentPortalSiteMap;
-import com.propertyvista.portal.rpc.portal.web.dto.financial.BillingHistoryDTO;
-import com.propertyvista.portal.rpc.portal.web.services.financial.BillingService;
+import com.propertyvista.portal.rpc.portal.resident.dto.financial.BillingHistoryDTO;
+import com.propertyvista.portal.rpc.portal.resident.services.financial.BillingService;
 import com.propertyvista.portal.shared.activity.SecurityAwareActivity;
 
 public class BillingHistoryViewActivity extends SecurityAwareActivity implements BillingHistoryView.Presenter {

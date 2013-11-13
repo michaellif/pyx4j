@@ -15,7 +15,7 @@ package com.propertyvista.portal.resident.ui.services.insurance;
 
 import java.math.BigDecimal;
 
-import com.propertyvista.portal.rpc.portal.web.dto.insurance.GeneralInsurancePolicyDTO;
+import com.propertyvista.portal.rpc.portal.resident.dto.insurance.GeneralInsurancePolicyDTO;
 import com.propertyvista.portal.shared.ui.IWizardFormView;
 
 public interface GeneralPolicyUploadWizardView extends IWizardFormView<GeneralInsurancePolicyDTO> {

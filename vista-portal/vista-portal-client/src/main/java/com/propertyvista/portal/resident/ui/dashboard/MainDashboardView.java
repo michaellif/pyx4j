@@ -15,10 +15,10 @@ package com.propertyvista.portal.resident.ui.dashboard;
 
 import com.pyx4j.site.client.IsView;
 
-import com.propertyvista.portal.rpc.portal.web.dto.ResidentSummaryDTO;
-import com.propertyvista.portal.rpc.portal.web.dto.financial.BillingSummaryDTO;
-import com.propertyvista.portal.rpc.portal.web.dto.insurance.status.InsuranceStatusDTO;
-import com.propertyvista.portal.rpc.portal.web.dto.maintenance.MaintenanceSummaryDTO;
+import com.propertyvista.portal.rpc.portal.resident.dto.ResidentSummaryDTO;
+import com.propertyvista.portal.rpc.portal.resident.dto.financial.BillingSummaryDTO;
+import com.propertyvista.portal.rpc.portal.resident.dto.insurance.status.InsuranceStatusDTO;
+import com.propertyvista.portal.rpc.portal.resident.dto.maintenance.MaintenanceSummaryDTO;
 
 public interface MainDashboardView extends IsView {
 

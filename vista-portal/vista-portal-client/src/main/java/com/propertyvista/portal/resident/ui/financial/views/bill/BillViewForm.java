@@ -23,7 +23,7 @@ import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.Button;
 
-import com.propertyvista.portal.rpc.portal.web.dto.financial.BillViewDTO;
+import com.propertyvista.portal.rpc.portal.resident.dto.financial.BillViewDTO;
 import com.propertyvista.portal.shared.ui.CPortalEntityForm;
 
 public class BillViewForm extends CPortalEntityForm<BillViewDTO> {

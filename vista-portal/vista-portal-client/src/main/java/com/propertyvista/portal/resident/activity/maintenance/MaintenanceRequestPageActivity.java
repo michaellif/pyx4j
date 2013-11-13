@@ -22,8 +22,8 @@ import com.pyx4j.site.rpc.AppPlace;
 import com.propertyvista.domain.maintenance.SurveyResponse;
 import com.propertyvista.portal.resident.ui.maintenance.MaintenanceRequestPageView;
 import com.propertyvista.portal.resident.ui.maintenance.MaintenanceRequestPageView.MaintenanceRequestPagePresenter;
-import com.propertyvista.portal.rpc.portal.web.dto.maintenance.MaintenanceRequestDTO;
-import com.propertyvista.portal.rpc.portal.web.services.maintenance.MaintenanceRequestCrudService;
+import com.propertyvista.portal.rpc.portal.resident.dto.maintenance.MaintenanceRequestDTO;
+import com.propertyvista.portal.rpc.portal.resident.services.maintenance.MaintenanceRequestCrudService;
 import com.propertyvista.portal.shared.activity.AbstractEditorActivity;
 
 public class MaintenanceRequestPageActivity extends AbstractEditorActivity<MaintenanceRequestDTO> implements MaintenanceRequestPagePresenter {

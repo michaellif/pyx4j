@@ -33,8 +33,8 @@ import com.propertyvista.domain.payment.LeasePaymentMethod;
 import com.propertyvista.portal.resident.ui.financial.payment.PaymentWizardView;
 import com.propertyvista.portal.rpc.portal.ResidentPortalSiteMap;
 import com.propertyvista.portal.rpc.portal.ResidentPortalSiteMap.Financial.Payment;
-import com.propertyvista.portal.rpc.portal.web.dto.financial.PaymentDTO;
-import com.propertyvista.portal.rpc.portal.web.services.financial.PaymentWizardService;
+import com.propertyvista.portal.rpc.portal.resident.dto.financial.PaymentDTO;
+import com.propertyvista.portal.rpc.portal.resident.services.financial.PaymentWizardService;
 import com.propertyvista.portal.shared.activity.AbstractWizardFormCrudActivity;
 
 public class PaymentWizardActivity extends AbstractWizardFormCrudActivity<PaymentDTO> implements PaymentWizardView.Presenter {

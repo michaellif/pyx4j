@@ -25,8 +25,8 @@ import com.pyx4j.site.rpc.AppPlace;
 import com.propertyvista.portal.resident.ResidentPortalSite;
 import com.propertyvista.portal.resident.ui.services.insurance.TenantSureOrderConfirmationPageView;
 import com.propertyvista.portal.resident.ui.services.insurance.TenantSureOrderConfirmationPageView.TenantSureOrderConfirmationPagePresenter;
-import com.propertyvista.portal.rpc.portal.web.dto.insurance.TenantSureInsurancePolicyDTO;
-import com.propertyvista.portal.rpc.portal.web.services.services.TenantSureInsurancePolicyCrudService;
+import com.propertyvista.portal.rpc.portal.resident.dto.insurance.TenantSureInsurancePolicyDTO;
+import com.propertyvista.portal.rpc.portal.resident.services.services.TenantSureInsurancePolicyCrudService;
 import com.propertyvista.portal.shared.activity.SecurityAwareActivity;
 
 public class TenantSureOrderConfirmationPageActivity extends SecurityAwareActivity implements TenantSureOrderConfirmationPagePresenter {

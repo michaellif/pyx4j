@@ -16,7 +16,7 @@ package com.propertyvista.portal.resident.ui.maintenance;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 
 import com.propertyvista.domain.maintenance.MaintenanceRequestMetadata;
-import com.propertyvista.portal.rpc.portal.web.dto.maintenance.MaintenanceRequestDTO;
+import com.propertyvista.portal.rpc.portal.resident.dto.maintenance.MaintenanceRequestDTO;
 import com.propertyvista.portal.shared.ui.AbstractWizardFormView;
 
 public class MaintenanceRequestWizardViewImpl extends AbstractWizardFormView<MaintenanceRequestDTO> implements MaintenanceRequestWizardView {

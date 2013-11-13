@@ -15,7 +15,7 @@ package com.propertyvista.portal.shared.ui;
 
 import com.pyx4j.site.client.IsView;
 
-import com.propertyvista.portal.rpc.portal.web.dto.PortalContentDTO;
+import com.propertyvista.portal.rpc.portal.resident.dto.PortalContentDTO;
 
 public interface HeaderView extends IsView {
 

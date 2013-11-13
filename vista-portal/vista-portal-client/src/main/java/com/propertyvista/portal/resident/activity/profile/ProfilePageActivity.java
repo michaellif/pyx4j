@@ -19,8 +19,8 @@ import com.pyx4j.site.rpc.AppPlace;
 
 import com.propertyvista.portal.resident.ui.profile.ProfilePageView;
 import com.propertyvista.portal.resident.ui.profile.ProfilePageView.ProfilePagePresenter;
-import com.propertyvista.portal.rpc.portal.web.dto.ResidentProfileDTO;
-import com.propertyvista.portal.rpc.portal.web.services.profile.ResidentProfileCrudService;
+import com.propertyvista.portal.rpc.portal.resident.dto.ResidentProfileDTO;
+import com.propertyvista.portal.rpc.portal.resident.services.profile.ResidentProfileCrudService;
 import com.propertyvista.portal.shared.activity.AbstractEditorActivity;
 
 public class ProfilePageActivity extends AbstractEditorActivity<ResidentProfileDTO> implements ProfilePagePresenter {

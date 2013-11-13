@@ -23,7 +23,7 @@ import com.pyx4j.site.rpc.AppPlace;
 import com.propertyvista.dto.TransactionHistoryDTO;
 import com.propertyvista.portal.resident.ResidentPortalSite;
 import com.propertyvista.portal.resident.ui.financial.views.TransactionHistoryView;
-import com.propertyvista.portal.rpc.portal.web.services.financial.BillingService;
+import com.propertyvista.portal.rpc.portal.resident.services.financial.BillingService;
 import com.propertyvista.portal.shared.activity.SecurityAwareActivity;
 
 public class TransactionHistoryViewActivity extends SecurityAwareActivity implements TransactionHistoryView.Presenter {

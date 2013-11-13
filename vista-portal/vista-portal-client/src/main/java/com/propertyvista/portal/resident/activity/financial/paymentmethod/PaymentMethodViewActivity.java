@@ -21,8 +21,8 @@ import com.pyx4j.site.rpc.AppPlace;
 
 import com.propertyvista.domain.contact.AddressSimple;
 import com.propertyvista.portal.resident.ui.financial.paymentmethod.PaymentMethodView;
-import com.propertyvista.portal.rpc.portal.web.dto.financial.PaymentMethodDTO;
-import com.propertyvista.portal.rpc.portal.web.services.financial.PaymentMethodWizardService;
+import com.propertyvista.portal.rpc.portal.resident.dto.financial.PaymentMethodDTO;
+import com.propertyvista.portal.rpc.portal.resident.services.financial.PaymentMethodWizardService;
 import com.propertyvista.portal.shared.activity.AbstractEditorActivity;
 
 public class PaymentMethodViewActivity extends AbstractEditorActivity<PaymentMethodDTO> implements PaymentMethodView.Presenter {

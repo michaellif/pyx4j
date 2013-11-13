@@ -13,7 +13,7 @@
  */
 package com.propertyvista.portal.resident.ui.services.insurance;
 
-import com.propertyvista.portal.rpc.portal.web.dto.insurance.GeneralInsurancePolicyDTO;
+import com.propertyvista.portal.rpc.portal.resident.dto.insurance.GeneralInsurancePolicyDTO;
 import com.propertyvista.portal.shared.ui.AbstractEditorView;
 
 public class GeneralPolicyPageViewImpl extends AbstractEditorView<GeneralInsurancePolicyDTO> implements GeneralPolicyPageView {
