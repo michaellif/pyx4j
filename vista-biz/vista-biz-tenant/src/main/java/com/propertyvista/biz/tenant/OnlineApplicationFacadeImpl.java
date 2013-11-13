@@ -13,7 +13,6 @@
  */
 package com.propertyvista.biz.tenant;
 
-import java.util.Arrays;
 import java.util.List;
 import java.util.Vector;
 
@@ -41,13 +40,12 @@ import com.propertyvista.domain.tenant.lease.LeaseTerm;
 import com.propertyvista.domain.tenant.lease.LeaseTermGuarantor;
 import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
 import com.propertyvista.domain.tenant.lease.LeaseTermTenant;
-import com.propertyvista.domain.tenant.prospect.MasterOnlineApplication;
 import com.propertyvista.domain.tenant.prospect.ApplicationWizardStep;
+import com.propertyvista.domain.tenant.prospect.MasterOnlineApplication;
 import com.propertyvista.domain.tenant.prospect.OnlineApplication;
 import com.propertyvista.domain.tenant.prospect.OnlineApplication.Role;
 import com.propertyvista.dto.MasterOnlineApplicationOnlineStatusDTO;
 import com.propertyvista.dto.OnlineApplicationStatusDTO;
-import com.propertyvista.misc.VistaTODO;
 import com.propertyvista.portal.rpc.ptapp.PtSiteMap;
 
 public class OnlineApplicationFacadeImpl implements OnlineApplicationFacade {

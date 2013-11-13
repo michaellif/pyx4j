@@ -83,11 +83,6 @@ public class ProspectApplicationContext extends VistaCustomerContext {
         return Persistence.service().retrieve(OnlineApplication.class, getCurrentUserApplicationPrimaryKey());
     }
 
-    @Deprecated
-    public static Key getCurrentUserLeasePrimaryKey() {
-        return ProspectApplicationContext.retrieveCurrentUserApplication().masterOnlineApplication().leaseApplication().lease().getPrimaryKey();
-    }
-
     public static Lease retrieveCurrentUserLease() {
         return Persistence.service().retrieve(Lease.class, getCurrentUserLeaseIdStub().getPrimaryKey());
     }
