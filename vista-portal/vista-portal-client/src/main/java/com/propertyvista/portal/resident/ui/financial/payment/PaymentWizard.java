@@ -136,7 +136,7 @@ public class PaymentWizard extends CPortalEntityWizard<PaymentDTO> {
     private PaymentWizardView.Presenter presenter;
 
     public PaymentWizard(IWizardFormView<PaymentDTO> view) {
-        super(PaymentDTO.class, view, i18n.tr("Payment Setup"), i18n.tr("Submit"), ThemeColor.contrast4);
+        super(PaymentDTO.class, view, i18n.tr("One time Payment"), i18n.tr("Submit"), ThemeColor.contrast4);
 
         addStep(createDetailsStep());
         paymentMethodSelectionStep = addStep(createSelectPaymentMethodStep());
