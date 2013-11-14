@@ -30,7 +30,7 @@ public class MakeAFilledL1Form {
     public static void main(String args[]) throws FileNotFoundException, IOException {
         L1GenerationFacadeImpl facade = new L1GenerationFacadeImpl();
         byte[] pdf = facade.generateL1Letter(MockL1FormDataFactory.makeMockL1FormFieldsData());
-        FileOutputStream fos = new FileOutputStream("l4filled-test.pdf");
+        FileOutputStream fos = new FileOutputStream("l1filled-test.pdf");
         fos.write(pdf);
         fos.close();
     }

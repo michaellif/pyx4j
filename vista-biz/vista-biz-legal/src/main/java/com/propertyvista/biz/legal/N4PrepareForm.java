@@ -146,7 +146,7 @@ public class N4PrepareForm {
         if (flags == null) {
             flags = new PdfNumber(0);
         }
-        flags = new PdfNumber(flags.intValue() | 0x800000); // 25th bit is comb flag, i hope my mad hex skillz are correct
+        flags = new PdfNumber(flags.intValue() | 0x1000000); // 25th bit is comb flag, i hope my mad hex skillz are correct
         fieldItem.getWidget(0).put(PdfName.FF, flags);
     }
 
