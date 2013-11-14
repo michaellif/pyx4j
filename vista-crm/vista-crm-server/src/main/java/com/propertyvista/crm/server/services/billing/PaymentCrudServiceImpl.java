@@ -86,6 +86,8 @@ public class PaymentCrudServiceImpl extends AbstractCrudServiceDtoImpl<PaymentRe
                 ServerSideFactory.create(PaymentFacade.class).getAllowedPaymentTypes(dto.billingAccount(), VistaApplication.crm));
         dto.allowedCardTypes()
                 .setCollectionValue(ServerSideFactory.create(PaymentFacade.class).getAllowedCardTypes(dto.billingAccount(), VistaApplication.crm));
+        dto.convienceFeeApplicableCardTypes().setCollectionValue(
+                ServerSideFactory.create(PaymentFacade.class).getConvienceFeeApplicableCardTypes(dto.billingAccount(), VistaApplication.crm));
 
         dto.leaseId().set(billingAccount.lease().leaseId());
         dto.leaseStatus().set(billingAccount.lease().status());
@@ -115,6 +117,8 @@ public class PaymentCrudServiceImpl extends AbstractCrudServiceDtoImpl<PaymentRe
         to.allowedPaymentTypes().setCollectionValue(
                 ServerSideFactory.create(PaymentFacade.class).getAllowedPaymentTypes(to.billingAccount(), VistaApplication.crm));
         to.allowedCardTypes().setCollectionValue(ServerSideFactory.create(PaymentFacade.class).getAllowedCardTypes(to.billingAccount(), VistaApplication.crm));
+        to.convienceFeeApplicableCardTypes().setCollectionValue(
+                ServerSideFactory.create(PaymentFacade.class).getConvienceFeeApplicableCardTypes(to.billingAccount(), VistaApplication.crm));
         to.participants().addAll(retrievePayableUsers(to.billingAccount().lease()));
     }
 

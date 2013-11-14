@@ -96,6 +96,11 @@ public class PaymentFacadeImpl implements PaymentFacade {
     }
 
     @Override
+    public Collection<CreditCardType> getConvienceFeeApplicableCardTypes(BillingAccount billingAccountId, VistaApplication vistaApplication) {
+        return Collections.emptyList();
+    }
+
+    @Override
     public void validatePaymentMethod(BillingAccount billingAccount, LeasePaymentMethod paymentMethod, VistaApplication vistaApplication) {
         switch (vistaApplication) {
         case resident:

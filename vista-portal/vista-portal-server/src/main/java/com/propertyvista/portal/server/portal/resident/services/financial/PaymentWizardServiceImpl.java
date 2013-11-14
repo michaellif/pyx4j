@@ -70,6 +70,8 @@ public class PaymentWizardServiceImpl extends AbstractCrudServiceDtoImpl<Payment
                 ServerSideFactory.create(PaymentFacade.class).getAllowedPaymentTypes(lease.billingAccount(), VistaApplication.resident));
         dto.allowedCardTypes().setCollectionValue(
                 ServerSideFactory.create(PaymentFacade.class).getAllowedCardTypes(lease.billingAccount(), VistaApplication.resident));
+        dto.convienceFeeApplicableCardTypes().setCollectionValue(
+                ServerSideFactory.create(PaymentFacade.class).getConvienceFeeApplicableCardTypes(lease.billingAccount(), VistaApplication.resident));
 
         new AddressConverter.StructuredToSimpleAddressConverter().copyBOtoTO(AddressRetriever.getLeaseAddress(lease), dto.address());
 

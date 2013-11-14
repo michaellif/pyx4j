@@ -35,6 +35,8 @@ public interface PaymentFacade {
 
     Collection<CreditCardType> getAllowedCardTypes(BillingAccount billingAccountId, VistaApplication vistaApplication);
 
+    Collection<CreditCardType> getConvienceFeeApplicableCardTypes(BillingAccount billingAccountId, VistaApplication vistaApplication);
+
     void validatePaymentMethod(BillingAccount billingAccount, LeasePaymentMethod paymentMethod, VistaApplication vistaApplication);
 
     boolean isElectronicPaymentsSetup(BillingAccount billingAccountId);
