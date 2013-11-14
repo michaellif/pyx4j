@@ -30,8 +30,6 @@ import javax.xml.transform.stream.StreamResult;
 import com.kijiji.pint.rs.ILSLocations;
 import com.kijiji.pint.rs.ObjectFactory;
 
-import com.pyx4j.server.contexts.NamespaceManager;
-
 import com.propertyvista.biz.occupancy.ILSKijijiIntegrationAgent;
 import com.propertyvista.ils.kijiji.mapper.KijijiDataMapper;
 import com.propertyvista.ils.kijiji.mapper.dto.ILSBuildingDTO;
@@ -60,10 +58,8 @@ public class KijijiApiService {
 
     @GET
     @Produces({ MediaType.APPLICATION_XML })
+    /** Uses {@link ILSAuthFilter} for service authentication and environment setup */
     public Response generateKijiji() throws Exception {
-        // FIXME - use OAPIFilter authentication mechanism; create CrmUser with (some Interface role) per ils vendor
-        NamespaceManager.setNamespace("star");
-
         String xmlString = generateXML();
         return KijijiUtils.createSuccessResponse(xmlString);
     }
