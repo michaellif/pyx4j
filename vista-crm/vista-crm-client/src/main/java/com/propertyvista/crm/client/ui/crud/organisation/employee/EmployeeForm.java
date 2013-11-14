@@ -35,6 +35,7 @@ import com.pyx4j.gwt.shared.IFileURLBuilder;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.dialogs.SelectEnumDialog;
 import com.pyx4j.site.client.ui.prime.form.IForm;
+import com.pyx4j.widgets.client.ImageViewport.ScaleMode;
 
 import com.propertyvista.common.client.policy.ClientPolicyManager;
 import com.propertyvista.common.client.resources.VistaImages;
@@ -156,9 +157,9 @@ public class EmployeeForm extends CrmEntityForm<EmployeeDTO> {
                         return MediaUtils.createEmployeeSignatureUrl(employeeSignature);
                     }
                 });
-        signature.setImageSize(200, 125);
-        // TODO change this placeholder picture
-        signature.setThumbnailPlaceholder(new Image(VistaImages.INSTANCE.profilePicture()));
+        signature.setScaleMode(ScaleMode.Contain);
+        signature.setImageSize(368, 60);
+        signature.setThumbnailPlaceholder(new Image(VistaImages.INSTANCE.signaturePlaceholder()));
         main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().signature(), signature)).customLabel("").build());
         return main;
     }

@@ -132,4 +132,8 @@ public interface VistaImages extends FormsImageBundle, EntityFolderImages, Widge
 
     @Source("profile-picture.png")
     ImageResource profilePicture();
+
+    @Source("signature-placeholder.jpeg")
+    ImageResource signaturePlaceholder();
+
 }
