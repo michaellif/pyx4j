@@ -42,7 +42,10 @@ import com.propertyvista.domain.payment.CreditCardInfo.CreditCardType;
 import com.propertyvista.domain.pmc.Pmc;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.util.ValidationUtils;
+import com.propertyvista.dto.payment.ConvienceFeeCalulationResponseTO;
 import com.propertyvista.payment.CCInformation;
+import com.propertyvista.payment.FeeCalulationRequest;
+import com.propertyvista.payment.FeeCalulationResponse;
 import com.propertyvista.payment.IPaymentProcessor;
 import com.propertyvista.payment.Merchant;
 import com.propertyvista.payment.PaymentInstrument;
@@ -94,6 +97,10 @@ class CreditCardProcessor {
         }
     }
 
+    static IPaymentProcessor getPaymentProcessor() {
+        return new CaledonPaymentProcessor();
+    }
+
     static void persistToken(String merchantTerminalId, CreditCardInfo cc) {
         Merchant merchant = EntityFactory.create(Merchant.class);
         merchant.terminalID().setValue(merchantTerminalId);
@@ -142,12 +149,11 @@ class CreditCardProcessor {
             token.code().setValue(prefix + "V" + cc.id().getStringView());
         }
 
-        IPaymentProcessor proc = new CaledonPaymentProcessor();
         PaymentResponse response;
         if (!cc.token().isNull()) {
-            response = proc.updateToken(merchant, ccInfo, token);
+            response = getPaymentProcessor().updateToken(merchant, ccInfo, token);
         } else {
-            response = proc.createToken(merchant, ccInfo, token);
+            response = getPaymentProcessor().createToken(merchant, ccInfo, token);
         }
 
         if (response.success().getValue(false)) {
@@ -171,8 +177,7 @@ class CreditCardProcessor {
             CCInformation ccInfo = EntityFactory.create(CCInformation.class);
             ccInfo.creditCardNumber().setValue(cc.card().number().getValue());
 
-            IPaymentProcessor proc = new CaledonPaymentProcessor();
-            PaymentResponse response = proc.validateVisaDebit(ccInfo);
+            PaymentResponse response = getPaymentProcessor().validateVisaDebit(ccInfo);
             return response.success().getValue();
         }
     }
@@ -206,6 +211,8 @@ class CreditCardProcessor {
         final Merchant merchant = EntityFactory.create(Merchant.class);
         merchant.terminalID().setValue(account.merchantTerminalId().getValue());
 
+        // TODO use ServerSideFactory.create(CreditCardFacade.class).
+
         final PaymentRequest request = EntityFactory.create(PaymentRequest.class);
         request.referenceNumber().setValue(ReferenceNumberPrefix.RentPayments.getValue() + paymentRecord.id().getStringView());
         request.amount().setValue(paymentRecord.amount().getValue());
@@ -213,9 +220,7 @@ class CreditCardProcessor {
 
         request.paymentInstrument().set(createPaymentInstrument(cc));
 
-        IPaymentProcessor proc = new CaledonPaymentProcessor();
-
-        final PaymentResponse sailResponse = proc.realTimeSale(merchant, request);
+        final PaymentResponse sailResponse = getPaymentProcessor().realTimeSale(merchant, request);
         if (sailResponse.success().getValue()) {
             log.debug("ccTransaction accepted {}", sailResponse);
             paymentRecord.paymentStatus().setValue(PaymentRecord.PaymentStatus.Cleared);
@@ -235,7 +240,7 @@ class CreditCardProcessor {
                 @Override
                 public Void execute() {
                     try {
-                        PaymentResponse voidResponse = new CaledonPaymentProcessor().voidTransaction(merchant, request);
+                        PaymentResponse voidResponse = getPaymentProcessor().voidTransaction(merchant, request);
                         if (voidResponse.success().getValue()) {
                             log.info("transaction {} successfully voided {}", request.referenceNumber(), voidResponse.message());
                             PaymentRecord record = Persistence.service().retrieve(PaymentRecord.class, paymentRecord.getPrimaryKey());
@@ -286,9 +291,7 @@ class CreditCardProcessor {
 
         request.paymentInstrument().set(createPaymentInstrument(cc));
 
-        IPaymentProcessor proc = new CaledonPaymentProcessor();
-
-        PaymentResponse response = proc.realTimeSale(merchant, request);
+        PaymentResponse response = getPaymentProcessor().realTimeSale(merchant, request);
         if (response.success().getValue()) {
             log.debug("ccPayment transaction accepted {}", response);
         } else {
@@ -316,9 +319,7 @@ class CreditCardProcessor {
 
         request.paymentInstrument().set(createPaymentInstrument(cc));
 
-        IPaymentProcessor proc = new CaledonPaymentProcessor();
-
-        PaymentResponse response = proc.realTimePreAuthorization(merchant, request);
+        PaymentResponse response = getPaymentProcessor().realTimePreAuthorization(merchant, request);
         if (response.success().getValue()) {
             log.debug("ccTransaction accepted {}", response);
             return response.authorizationNumber().getValue();
@@ -337,9 +338,7 @@ class CreditCardProcessor {
 
         request.paymentInstrument().set(createPaymentInstrument(cc));
 
-        IPaymentProcessor proc = new CaledonPaymentProcessor();
-
-        PaymentResponse response = proc.realTimePreAuthorizationReversal(merchant, request);
+        PaymentResponse response = getPaymentProcessor().realTimePreAuthorizationReversal(merchant, request);
         if (response.success().getValue()) {
             log.debug("ccTransaction accepted {}", response);
         } else {
@@ -358,9 +357,7 @@ class CreditCardProcessor {
 
         request.paymentInstrument().set(createPaymentInstrument(cc));
 
-        IPaymentProcessor proc = new CaledonPaymentProcessor();
-
-        PaymentResponse response = proc.realTimePreAuthorizationCompletion(merchant, request);
+        PaymentResponse response = getPaymentProcessor().realTimePreAuthorizationCompletion(merchant, request);
         if (response.success().getValue()) {
             log.debug("ccTransaction accepted {}", response);
             return response.authorizationNumber().getValue();
@@ -370,4 +367,32 @@ class CreditCardProcessor {
         }
     }
 
+    public static ConvienceFeeCalulationResponseTO getConvienceFee(String merchantTerminalId, CreditCardType cardType, BigDecimal amount) {
+        Merchant merchant = EntityFactory.create(Merchant.class);
+        merchant.terminalID().setValue(merchantTerminalId);
+
+        //TODO
+        String referenceNumber = "TODO1";
+
+        FeeCalulationRequest request = EntityFactory.create(FeeCalulationRequest.class);
+        request.amount().setValue(amount);
+        request.cardType().setValue(cardType);
+
+        request.referenceNumber().setValue(referenceNumber);
+
+        FeeCalulationResponse response = getPaymentProcessor().getConvienceFee(merchant, request);
+
+        if (response.success().getValue()) {
+            log.debug("fee calulatedd {}", response);
+
+            ConvienceFeeCalulationResponseTO to = EntityFactory.create(ConvienceFeeCalulationResponseTO.class);
+            to.transactionNumber().setValue(referenceNumber);
+            to.amount().setValue(amount);
+            to.feeAmount().setValue(response.feeAmount().getValue());
+            return to;
+        } else {
+            log.debug("cc Fee Calulation rejected {}", response);
+            throw new UserRuntimeException(i18n.tr("Card Fee Calulation failed {0}", response.message()));
+        }
+    }
 }

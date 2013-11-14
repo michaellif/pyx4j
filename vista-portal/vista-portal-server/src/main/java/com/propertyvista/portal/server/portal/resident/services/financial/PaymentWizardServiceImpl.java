@@ -31,11 +31,14 @@ import com.propertyvista.biz.financial.ar.ARFacade;
 import com.propertyvista.biz.financial.payment.PaymentException;
 import com.propertyvista.biz.financial.payment.PaymentFacade;
 import com.propertyvista.domain.contact.AddressSimple;
+import com.propertyvista.domain.financial.BillingAccount;
 import com.propertyvista.domain.financial.PaymentRecord;
+import com.propertyvista.domain.payment.CreditCardInfo.CreditCardType;
 import com.propertyvista.domain.payment.LeasePaymentMethod;
 import com.propertyvista.domain.payment.PaymentType;
 import com.propertyvista.domain.security.common.VistaApplication;
 import com.propertyvista.domain.tenant.lease.Lease;
+import com.propertyvista.dto.payment.ConvienceFeeCalulationResponseTO;
 import com.propertyvista.portal.rpc.portal.resident.dto.financial.PaymentDTO;
 import com.propertyvista.portal.rpc.portal.resident.services.financial.PaymentWizardService;
 import com.propertyvista.portal.server.security.TenantAppContext;
@@ -137,5 +140,11 @@ public class PaymentWizardServiceImpl extends AbstractCrudServiceDtoImpl<Payment
     @Override
     public void getProfiledPaymentMethods(AsyncCallback<Vector<LeasePaymentMethod>> callback) {
         callback.onSuccess(new Vector<LeasePaymentMethod>(LeaseParticipantUtils.getProfiledPaymentMethods(TenantAppContext.getCurrentUserTenantInLease())));
+    }
+
+    @Override
+    public void getConvienceFee(AsyncCallback<ConvienceFeeCalulationResponseTO> callback, BillingAccount billingAccountId, CreditCardType cardType,
+            BigDecimal amount) {
+        callback.onSuccess(ServerSideFactory.create(PaymentFacade.class).getConvienceFee(billingAccountId, cardType, amount));
     }
 }

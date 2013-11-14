@@ -13,6 +13,7 @@
  */
 package com.propertyvista.biz.financial.payment;
 
+import java.math.BigDecimal;
 import java.util.Calendar;
 import java.util.Collection;
 import java.util.Collections;
@@ -57,6 +58,7 @@ import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.security.common.VistaApplication;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.LeaseTerm;
+import com.propertyvista.dto.payment.ConvienceFeeCalulationResponseTO;
 import com.propertyvista.server.common.security.VistaContext;
 
 public class PaymentFacadeImpl implements PaymentFacade {
@@ -98,6 +100,12 @@ public class PaymentFacadeImpl implements PaymentFacade {
     @Override
     public Collection<CreditCardType> getConvienceFeeApplicableCardTypes(BillingAccount billingAccountId, VistaApplication vistaApplication) {
         return Collections.emptyList();
+    }
+
+    @Override
+    public ConvienceFeeCalulationResponseTO getConvienceFee(BillingAccount billingAccountId, CreditCardType cardType, BigDecimal amount) {
+        MerchantAccount account = PaymentUtils.retrieveValidMerchantAccount(billingAccountId);
+        return ServerSideFactory.create(CreditCardFacade.class).getConvienceFee(account.merchantTerminalId().getValue(), cardType, amount);
     }
 
     @Override

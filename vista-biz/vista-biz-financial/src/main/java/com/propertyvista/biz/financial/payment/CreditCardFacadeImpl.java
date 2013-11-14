@@ -16,7 +16,8 @@ package com.propertyvista.biz.financial.payment;
 import java.math.BigDecimal;
 
 import com.propertyvista.domain.payment.CreditCardInfo;
-import com.propertyvista.payment.caledon.CaledonPaymentProcessor;
+import com.propertyvista.domain.payment.CreditCardInfo.CreditCardType;
+import com.propertyvista.dto.payment.ConvienceFeeCalulationResponseTO;
 
 public class CreditCardFacadeImpl implements CreditCardFacade {
 
@@ -53,11 +54,16 @@ public class CreditCardFacadeImpl implements CreditCardFacade {
 
     @Override
     public boolean isNetworkError(String responseCode) {
-        return new CaledonPaymentProcessor().isNetworkError(responseCode);
+        return CreditCardProcessor.getPaymentProcessor().isNetworkError(responseCode);
     }
 
     @Override
     public boolean validateVisaDebit(CreditCardInfo creditCardInfo) {
         return CreditCardProcessor.validateVisaDebit(creditCardInfo);
+    }
+
+    @Override
+    public ConvienceFeeCalulationResponseTO getConvienceFee(String merchantTerminalId, CreditCardType cardType, BigDecimal amount) {
+        return CreditCardProcessor.getConvienceFee(merchantTerminalId, cardType, amount);
     }
 }

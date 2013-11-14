@@ -25,6 +25,8 @@ public interface IPaymentProcessor {
 
     PaymentResponse validateVisaDebit(CCInformation ccinfo);
 
+    FeeCalulationResponse getConvienceFee(Merchant merchant, FeeCalulationRequest request);
+
     PaymentResponse createToken(Merchant merchant, CCInformation ccinfo, Token token);
 
     PaymentResponse updateToken(Merchant merchant, CCInformation ccinfo, Token token);

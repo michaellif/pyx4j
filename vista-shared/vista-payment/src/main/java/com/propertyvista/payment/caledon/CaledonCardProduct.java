@@ -27,7 +27,7 @@ public enum CaledonCardProduct {
 
     MasterCardBusiness("MB");
 
-    public final String intrfaceId;
+    private final String intrfaceId;
 
     CaledonCardProduct(String intrfaceId) {
         this.intrfaceId = intrfaceId;

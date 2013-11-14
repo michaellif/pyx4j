@@ -19,7 +19,7 @@ public enum CaledonFeeRequestTypes {
 
     PaymentWithFee("P");
 
-    public final String intrfaceId;
+    private final String intrfaceId;
 
     CaledonFeeRequestTypes(String intrfaceId) {
         this.intrfaceId = intrfaceId;

@@ -21,6 +21,8 @@ import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.entity.shared.EntityFactory;
 
 import com.propertyvista.payment.CCInformation;
+import com.propertyvista.payment.FeeCalulationRequest;
+import com.propertyvista.payment.FeeCalulationResponse;
 import com.propertyvista.payment.IPaymentProcessor;
 import com.propertyvista.payment.Merchant;
 import com.propertyvista.payment.PaymentInstrument;
@@ -256,5 +258,11 @@ public class CaledonPaymentProcessor implements IPaymentProcessor {
             response.message().setValue("The card number did not pass check-digit tests for that card type.");
             return response;
         }
+    }
+
+    @Override
+    public FeeCalulationResponse getConvienceFee(Merchant merchant, FeeCalulationRequest request) {
+        // TODO Auto-generated method stub
+        return null;
     }
 }

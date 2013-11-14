@@ -13,6 +13,7 @@
  */
 package com.propertyvista.portal.rpc.portal.resident.services.financial;
 
+import java.math.BigDecimal;
 import java.util.Vector;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
@@ -20,7 +21,10 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.pyx4j.entity.rpc.AbstractCrudService;
 
 import com.propertyvista.domain.contact.AddressSimple;
+import com.propertyvista.domain.financial.BillingAccount;
+import com.propertyvista.domain.payment.CreditCardInfo.CreditCardType;
 import com.propertyvista.domain.payment.LeasePaymentMethod;
+import com.propertyvista.dto.payment.ConvienceFeeCalulationResponseTO;
 import com.propertyvista.portal.rpc.portal.resident.dto.financial.PaymentDTO;
 
 public interface PaymentWizardService extends AbstractCrudService<PaymentDTO> {
@@ -28,4 +32,6 @@ public interface PaymentWizardService extends AbstractCrudService<PaymentDTO> {
     void getCurrentAddress(AsyncCallback<AddressSimple> callback);
 
     void getProfiledPaymentMethods(AsyncCallback<Vector<LeasePaymentMethod>> callback);
+
+    void getConvienceFee(AsyncCallback<ConvienceFeeCalulationResponseTO> callback, BillingAccount billingAccountId, CreditCardType cardType, BigDecimal amount);
 }

@@ -16,6 +16,8 @@ package com.propertyvista.biz.financial.payment;
 import java.math.BigDecimal;
 
 import com.propertyvista.domain.payment.CreditCardInfo;
+import com.propertyvista.domain.payment.CreditCardInfo.CreditCardType;
+import com.propertyvista.dto.payment.ConvienceFeeCalulationResponseTO;
 
 public interface CreditCardFacade {
 
@@ -60,5 +62,7 @@ public interface CreditCardFacade {
     public String completion(BigDecimal amount, String merchantTerminalId, ReferenceNumberPrefix uniquePrefix, String referenceNumber, CreditCardInfo cc);
 
     public boolean validateVisaDebit(CreditCardInfo creditCardInfo);
+
+    public ConvienceFeeCalulationResponseTO getConvienceFee(String merchantTerminalId, CreditCardType cardType, BigDecimal amount);
 
 }

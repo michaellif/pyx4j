@@ -91,9 +91,13 @@ class PaymentUtils {
     }
 
     static MerchantAccount retrieveValidMerchantAccount(PaymentRecord paymentRecord) {
+        return retrieveValidMerchantAccount(paymentRecord.billingAccount());
+    }
+
+    static MerchantAccount retrieveValidMerchantAccount(BillingAccount billingAccountId) {
         EntityQueryCriteria<MerchantAccount> criteria = EntityQueryCriteria.create(MerchantAccount.class);
         criteria.add(PropertyCriterion.eq(criteria.proto().invalid(), Boolean.FALSE));
-        criteria.add(PropertyCriterion.eq(criteria.proto()._buildings().$().units().$()._Leases().$().billingAccount(), paymentRecord.billingAccount()));
+        criteria.add(PropertyCriterion.eq(criteria.proto()._buildings().$().units().$()._Leases().$().billingAccount(), billingAccountId));
         for (MerchantAccount merchantAccount : Persistence.service().query(criteria)) {
             if (!merchantAccount.merchantTerminalId().isNull()) {
                 return merchantAccount;
