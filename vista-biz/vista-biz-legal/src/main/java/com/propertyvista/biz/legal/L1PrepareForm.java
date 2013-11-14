@@ -76,6 +76,14 @@ public class L1PrepareForm {
         // set up comb flag for the rest of the defective fields that should have a comb flag set (in the order of appearance in the form)        
         setCombFlag(fields.getFieldItem("b12c96nfapp_city"));
         setCombFlag(fields.getFieldItem("b12c96nfapp_province"));
+        setCombFlag(fields.getFieldItem("b12c96nfP2_last_name"));
+        setCombFlag(fields.getFieldItem("b12c96nfP2_2_first_name"));
+        setCombFlag(fields.getFieldItem("b12c96nfP2_2_last_name"));
+        setCombFlag(fields.getFieldItem("b12c96nfP2_st_address"));
+        setCombFlag(fields.getFieldItem("b12c96nfP2_unit_no"));
+        setCombFlag(fields.getFieldItem("b12c96nfP2_city"));
+        setCombFlag(fields.getFieldItem("b12c96nfP2_prov"));
+        setCombFlag(fields.getFieldItem("b12c96nfP2_postal"));
     }
 
     private static void setCombFlag(Item fieldItem) {

@@ -22,7 +22,9 @@ import com.pyx4j.entity.shared.IPrimitive;
 
 import com.propertyvista.domain.legal.utils.PartitionedCanadianPostalCodeFormatter;
 import com.propertyvista.domain.legal.utils.PartitionedDateFormatter;
+import com.propertyvista.domain.legal.utils.PartitionedFileNumberFormatter;
 import com.propertyvista.domain.legal.utils.PartitionedMoneyFormatter;
+import com.propertyvista.domain.legal.utils.PartitionedPhoneFormatter;
 import com.propertyvista.domain.legal.utils.PdfFormField;
 import com.propertyvista.domain.legal.utils.UnpartitionedDateFormatter;
 import com.propertyvista.domain.legal.utils.UppercaseFormatter;
@@ -30,11 +32,10 @@ import com.propertyvista.domain.legal.utils.UppercaseFormatter;
 @Transient
 public interface L1FormFieldsData extends IEntity {
 
-    public enum Gender {
-
-        Male, Female
-
-    }
+    public enum Gender {//@formatter:off
+        Male {@Override public String toString() { return "M"; }},
+        Female {@Override public String toString() { return "F"; }},
+    }//@formatter:on
 
     public enum YesNo {
 
@@ -90,43 +91,60 @@ public interface L1FormFieldsData extends IEntity {
     @PdfFormField(value = "[b12c96nfapp_postal_code_1{3},@@b12c96nfapp_postal_code_2.0{3}]", formatter = PartitionedCanadianPostalCodeFormatter.class)
     IPrimitive<String> part1_postalCode();
 
+    @PdfFormField(value = "[b12c96nfdivision_code_1{3},@@b12c96nfcase_number_1.0{5}]", formatter = PartitionedFileNumberFormatter.class)
     IPrimitive<String> part1_fileNumber1();
 
+    @PdfFormField(value = "[b12c96nfdivision_code_2{3},@@b12c96nfcase_number_2.0{5}]", formatter = PartitionedFileNumberFormatter.class)
     IPrimitive<String> part1_fileNumber2();
 
     // Part2
-    IPrimitive<String> tenant1FirstName();
+    @PdfFormField(value = "b12c96nfP2_first_name", formatter = UppercaseFormatter.class)
+    IPrimitive<String> part2_tenant1FirstName();
 
-    IPrimitive<String> tenant1LastName();
+    @PdfFormField(value = "b12c96nfP2_last_name", formatter = UppercaseFormatter.class)
+    IPrimitive<String> part2_tenant1LastName();
 
-    IPrimitive<Gender> tenant1Gender();
+    @PdfFormField(value = "b12c96nfP2_1_gender")
+    IPrimitive<Gender> part2_tenant1Gender();
 
-    IPrimitive<String> tenant2FirstName();
+    @PdfFormField(value = "b12c96nfP2_2_first_name", formatter = UppercaseFormatter.class)
+    IPrimitive<String> part2_tenant2FirstName();
 
-    IPrimitive<String> tenant2LastName();
+    @PdfFormField(value = "b12c96nfP2_2_last_name", formatter = UppercaseFormatter.class)
+    IPrimitive<String> part2_tenant2LastName();
 
-    IPrimitive<Gender> tenant2Gender();
+    @PdfFormField(value = "b12c96nfP2_2_gender")
+    IPrimitive<Gender> part2_tenant2Gender();
 
-    IPrimitive<String> part2MailingAddress();
+    @PdfFormField(value = "b12c96nfP2_st_address", formatter = UppercaseFormatter.class)
+    IPrimitive<String> part2_MailingAddress();
 
-    IPrimitive<String> part2unit();
+    @PdfFormField(value = "b12c96nfP2_unit_no", formatter = UppercaseFormatter.class)
+    IPrimitive<String> part2_unit();
 
-    IPrimitive<String> part2municipality();
+    @PdfFormField(value = "b12c96nfP2_city", formatter = UppercaseFormatter.class)
+    IPrimitive<String> part2_municipality();
 
-    IPrimitive<String> part2provice();
+    @PdfFormField(value = "b12c96nfP2_prov", formatter = UppercaseFormatter.class)
+    IPrimitive<String> part2_provice();
 
-    IPrimitive<String> part2postalCode();
+    @PdfFormField(value = "b12c96nfP2_postal", formatter = UppercaseFormatter.class)
+    IPrimitive<String> part2_postalCode();
 
-    IPrimitive<String> part2dayPhoneNumber();
+    @PdfFormField(value = "[@@b12c96nfP2_day_phone.0{3},@@b12c96nfP2_day_phone.1{3},@@b12c96nfP2_day_phone.2{4}]", formatter = PartitionedPhoneFormatter.class)
+    IPrimitive<String> part2_dayPhoneNumber();
 
-    IPrimitive<String> part2eveningPhoneNumber();
+    @PdfFormField(value = "[@@b12c96nfP2_evg_phone.0{3},@@b12c96nfP2_evg_phone.1{3},@@b12c96nfP2_evg_phone.2{4}]", formatter = PartitionedPhoneFormatter.class)
+    IPrimitive<String> part2_eveningPhoneNumber();
 
-    IPrimitive<String> part2faxNumber();
+    @PdfFormField(value = "[@@b12c96nfP2_fax.0{3},@@b12c96nfP2_fax.1{3},@@b12c96nfP2_fax.2{4}]", formatter = PartitionedPhoneFormatter.class)
+    IPrimitive<String> part2_faxNumber();
 
-    IPrimitive<String> part2emailAddress();
+    // TODO? in theory email's recipent is might be case sensitive, but the form requires everything CAPITALIZED 
+    @PdfFormField(value = "b12c96nfP2_email", formatter = UppercaseFormatter.class)
+    IPrimitive<String> part2_emailAddress();
 
     // Part3
-
     IPrimitive<Boolean> part3ApplyingToCollectCharges();
 
     IPrimitive<Boolean> part3ApplyingToCollectNSF();
