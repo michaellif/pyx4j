@@ -31,7 +31,7 @@ import com.pyx4j.unit.server.mock.TestLifecycle;
 import com.propertyvista.config.tests.VistaTestsDBConfigurationHSQLMemory;
 import com.propertyvista.crm.rpc.services.organization.EmployeeCrudService;
 import com.propertyvista.operations.rpc.services.PmcCrudService;
-import com.propertyvista.portal.rpc.portal.web.services.profile.ResidentProfileCrudService;
+import com.propertyvista.portal.rpc.portal.resident.services.profile.ResidentProfileCrudService;
 import com.propertyvista.server.config.VistaServerSideConfigurationProd;
 
 public class VistaProdAccessControlListTest {
