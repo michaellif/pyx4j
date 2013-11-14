@@ -120,8 +120,8 @@ public class UnrecoverableErrorHandlerDialog extends DefaultUnrecoverableErrorHa
     }
 
     protected String getMessageReloadApplication() {
-        return i18n.tr("We Updated Our Application\nIn Order To Continue Using This Application You Need To Refresh The Page"
-                + "\nDo You Want To Refresh The Page Now?");
+        return i18n.tr("We updated our application. In order to continue using this application you need to refresh the page."
+                + " Do you want to refresh the page now?");
     }
 
     @Override
