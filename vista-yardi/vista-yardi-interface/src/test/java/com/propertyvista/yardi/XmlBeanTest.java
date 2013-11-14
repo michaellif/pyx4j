@@ -16,6 +16,7 @@ package com.propertyvista.yardi;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.Callable;
 
 import javax.xml.bind.JAXBException;
 
@@ -38,13 +39,16 @@ import com.pyx4j.server.contexts.NamespaceManager;
 
 import com.propertyvista.config.tests.VistaTestDBSetup;
 import com.propertyvista.config.tests.VistaTestsNamespaceResolver;
+import com.propertyvista.domain.customizations.CountryOfOperation;
 import com.propertyvista.domain.marketing.Marketing;
+import com.propertyvista.domain.pmc.Pmc;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.property.asset.unit.AptUnitFinancial;
 import com.propertyvista.domain.property.asset.unit.AptUnitInfo;
 import com.propertyvista.domain.ref.Country;
 import com.propertyvista.domain.ref.Province;
+import com.propertyvista.server.jobs.TaskRunner;
 import com.propertyvista.yardi.bean.Properties;
 import com.propertyvista.yardi.mapper.UnitsMapper;
 import com.propertyvista.yardi.services.YardiBuildingProcessor;
@@ -59,6 +63,8 @@ public class XmlBeanTest {
         NamespaceManager.setNamespace(VistaTestsNamespaceResolver.demoNamespace);
         VistaTestDBSetup.init();
 
+        createPmc();
+
         // mock countries and provinces
         Country country = EntityFactory.create(Country.class);
         country.name().setValue("United States");
@@ -68,6 +74,20 @@ public class XmlBeanTest {
         province.code().setValue("CA");
         province.country().set(country);
         Persistence.service().persist(province);
+    }
+
+    public static synchronized void createPmc() {
+        final Pmc pmc = EntityFactory.create(Pmc.class);
+        pmc.namespace().setValue(VistaTestsNamespaceResolver.demoNamespace);
+        pmc.features().countryOfOperation().setValue(CountryOfOperation.US);
+
+        TaskRunner.runInOperationsNamespace(new Callable<Void>() {
+            @Override
+            public Void call() {
+                Persistence.service().persist(pmc);
+                return null;
+            }
+        });
     }
 
     @Test
