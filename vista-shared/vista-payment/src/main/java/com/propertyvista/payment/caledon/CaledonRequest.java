@@ -17,15 +17,19 @@ import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import javax.validation.constraints.Size;
+
 public class CaledonRequest {
 
     @HttpRequestField(value = "TERMID", first = true)
+    @Size(max = 8)
     public String terminalID;
 
     @HttpRequestField("PASS")
     public String password;
 
     @HttpRequestField("CARD")
+    @Size(max = 25)
     public String creditCardNumber;
 
     @HttpRequestField("EXP")
@@ -42,6 +46,7 @@ public class CaledonRequest {
     public String merchantDescription;
 
     @HttpRequestField("REF")
+    @Size(max = 60)
     public String referenceNumber;
 
     @HttpRequestField("RESEND")
@@ -54,13 +59,7 @@ public class CaledonRequest {
     public String amount;
 
     public void setAmount(BigDecimal value) {
-        BigDecimal centValue = value.multiply(new BigDecimal("100"));
-        this.amount = centValue.setScale(0).toString();
-    }
-
-    @Deprecated
-    public void setAmountCents(int amount) {
-        this.amount = String.valueOf(amount);
+        this.amount = CaledonCardsUtils.formatAmount(value);
     }
 
     @HttpRequestField("TYPE")
