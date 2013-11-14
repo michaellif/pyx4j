@@ -19,8 +19,8 @@ import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.rpc.AppPlace;
 
 import com.propertyvista.portal.prospect.ui.steps.FinancialStepView;
-import com.propertyvista.portal.rpc.portal.ProspectPortalSiteMap;
-import com.propertyvista.portal.rpc.portal.prospect.dto.FinancialStepDTO;
+import com.propertyvista.portal.rpc.portal.prospect.ProspectPortalSiteMap;
+import com.propertyvista.portal.rpc.portal.prospect.dto.steps.FinancialStepDTO;
 import com.propertyvista.portal.rpc.portal.prospect.services.FinancialStepService;
 
 public class FinancialStepActivity extends AbstractProspectWizardStepActivity<FinancialStepDTO> {

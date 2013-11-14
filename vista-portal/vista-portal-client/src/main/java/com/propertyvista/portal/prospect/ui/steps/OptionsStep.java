@@ -20,7 +20,7 @@ import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.portal.prospect.ui.steps.OptionsStepView.OptionsStepPresenter;
-import com.propertyvista.portal.rpc.portal.prospect.dto.OptionsStepDTO;
+import com.propertyvista.portal.rpc.portal.prospect.dto.steps.OptionsStepDTO;
 import com.propertyvista.portal.shared.ui.CPortalEntityWizardStep;
 
 public class OptionsStep extends CPortalEntityWizardStep<OptionsStepDTO> {

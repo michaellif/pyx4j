@@ -15,7 +15,7 @@ package com.propertyvista.portal.prospect.ui.steps;
 
 import com.pyx4j.i18n.shared.I18n;
 
-import com.propertyvista.portal.rpc.portal.prospect.dto.PersonalInfoAStepDTO;
+import com.propertyvista.portal.rpc.portal.prospect.dto.steps.PersonalInfoAStepDTO;
 import com.propertyvista.portal.shared.ui.AbstractWizardStepView;
 
 public class PersonalInfoAStepViewImpl extends AbstractWizardStepView<PersonalInfoAStepDTO> implements PersonalInfoAStepView {

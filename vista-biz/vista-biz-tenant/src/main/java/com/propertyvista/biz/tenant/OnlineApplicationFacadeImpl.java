@@ -25,8 +25,6 @@ import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria.VersionedCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.site.rpc.AppPlace;
-import com.pyx4j.site.rpc.AppPlaceInfo;
 
 import com.propertyvista.biz.communication.CommunicationFacade;
 import com.propertyvista.biz.policy.IdAssignmentFacade;
@@ -40,13 +38,13 @@ import com.propertyvista.domain.tenant.lease.LeaseTerm;
 import com.propertyvista.domain.tenant.lease.LeaseTermGuarantor;
 import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
 import com.propertyvista.domain.tenant.lease.LeaseTermTenant;
-import com.propertyvista.domain.tenant.prospect.ApplicationWizardStep;
+import com.propertyvista.domain.tenant.prospect.ApplicationStepDescriptor;
+import com.propertyvista.domain.tenant.prospect.ApplicationStepDescriptor.StepId;
 import com.propertyvista.domain.tenant.prospect.MasterOnlineApplication;
 import com.propertyvista.domain.tenant.prospect.OnlineApplication;
 import com.propertyvista.domain.tenant.prospect.OnlineApplication.Role;
 import com.propertyvista.dto.MasterOnlineApplicationOnlineStatusDTO;
 import com.propertyvista.dto.OnlineApplicationStatusDTO;
-import com.propertyvista.portal.rpc.portal.prospect.PtSiteMap;
 
 public class OnlineApplicationFacadeImpl implements OnlineApplicationFacade {
 
@@ -235,7 +233,7 @@ public class OnlineApplicationFacadeImpl implements OnlineApplicationFacade {
                     switch (app.steps().get(i).status().getValue()) {
                     case complete:
                         ++complete;
-                    case latest:
+                    case visited:
                         if (i + 1 == app.steps().size()) {
                             ++complete; // count last 'Completion' step...
                         }
@@ -315,64 +313,49 @@ public class OnlineApplicationFacadeImpl implements OnlineApplicationFacade {
         return app;
     }
 
-    private static ApplicationWizardStep createWizardStep(Class<? extends AppPlace> place, ApplicationWizardStep.Status status) {
-        ApplicationWizardStep ws = EntityFactory.create(ApplicationWizardStep.class);
-        ws.placeId().setValue(AppPlaceInfo.getPlaceId(place));
+    private static ApplicationStepDescriptor createWizardStep(StepId stepId, ApplicationStepDescriptor.Status status) {
+        ApplicationStepDescriptor ws = EntityFactory.create(ApplicationStepDescriptor.class);
+        ws.stepId().setValue(stepId);
         ws.status().setValue(status);
         return ws;
     }
 
-    private static List<ApplicationWizardStep> createApplicantApplicationProgress(LeaseTermTenant applicant) {
-        List<ApplicationWizardStep> progress = new Vector<ApplicationWizardStep>();
-
-        progress.add(createWizardStep(PtSiteMap.Apartment.class, ApplicationWizardStep.Status.latest));
-        progress.add(createWizardStep(PtSiteMap.Tenants.class, ApplicationWizardStep.Status.notVisited));
-        progress.add(createWizardStep(PtSiteMap.Info.class, ApplicationWizardStep.Status.notVisited));
-        progress.add(createWizardStep(PtSiteMap.Financial.class, ApplicationWizardStep.Status.notVisited));
-// TODO : Charges and Payment steps are closed (removed) so far...        
-        if (false) {
-            progress.add(createWizardStep(PtSiteMap.Charges.class, ApplicationWizardStep.Status.notVisited));
-        }
-        progress.add(createWizardStep(PtSiteMap.Summary.class, ApplicationWizardStep.Status.notVisited));
-// TODO : Charges and Payment steps are closed (removed) so far...        
-        if (false) {
-            progress.add(createWizardStep(PtSiteMap.Payment.class, ApplicationWizardStep.Status.notVisited));
-        }
-        progress.add(createWizardStep(PtSiteMap.Completion.class, ApplicationWizardStep.Status.notVisited));
+    private static List<ApplicationStepDescriptor> createApplicantApplicationProgress(LeaseTermTenant applicant) {
+        List<ApplicationStepDescriptor> progress = new Vector<ApplicationStepDescriptor>();
+        progress.add(createWizardStep(StepId.unit, ApplicationStepDescriptor.Status.notVisited));
+        progress.add(createWizardStep(StepId.options, ApplicationStepDescriptor.Status.notVisited));
+        progress.add(createWizardStep(StepId.personalInfoA, ApplicationStepDescriptor.Status.notVisited));
+        progress.add(createWizardStep(StepId.personalInfoB, ApplicationStepDescriptor.Status.notVisited));
+        progress.add(createWizardStep(StepId.financial, ApplicationStepDescriptor.Status.notVisited));
+        progress.add(createWizardStep(StepId.people, ApplicationStepDescriptor.Status.notVisited));
+        progress.add(createWizardStep(StepId.contacts, ApplicationStepDescriptor.Status.notVisited));
+        progress.add(createWizardStep(StepId.pmcCustom, ApplicationStepDescriptor.Status.notVisited));
+        progress.add(createWizardStep(StepId.summary, ApplicationStepDescriptor.Status.notVisited));
+        progress.add(createWizardStep(StepId.payment, ApplicationStepDescriptor.Status.notVisited));
         return progress;
     }
 
-    private static List<ApplicationWizardStep> createCoApplicantApplicationProgress(LeaseTermTenant coApplicant) {
-        List<ApplicationWizardStep> progress = new Vector<ApplicationWizardStep>();
-        progress.add(createWizardStep(PtSiteMap.Apartment.class, ApplicationWizardStep.Status.latest));
-        progress.add(createWizardStep(PtSiteMap.Tenants.class, ApplicationWizardStep.Status.notVisited));
-        progress.add(createWizardStep(PtSiteMap.Info.class, ApplicationWizardStep.Status.notVisited));
-        progress.add(createWizardStep(PtSiteMap.Financial.class, ApplicationWizardStep.Status.notVisited));
-// TODO : Charges and Payment steps are closed (removed) so far...        
-        if (false) {
-            progress.add(createWizardStep(PtSiteMap.Charges.class, ApplicationWizardStep.Status.notVisited));
-        }
-        progress.add(createWizardStep(PtSiteMap.Summary.class, ApplicationWizardStep.Status.notVisited));
-// TODO : Charges and Payment steps are closed (removed) so far...        
-        if (false) {
-            progress.add(createWizardStep(PtSiteMap.Payment.class, ApplicationWizardStep.Status.notVisited));
-        }
-        progress.add(createWizardStep(PtSiteMap.Completion.class, ApplicationWizardStep.Status.notVisited));
+    private static List<ApplicationStepDescriptor> createCoApplicantApplicationProgress(LeaseTermTenant coApplicant) {
+        List<ApplicationStepDescriptor> progress = new Vector<ApplicationStepDescriptor>();
+        progress.add(createWizardStep(StepId.lease, ApplicationStepDescriptor.Status.notVisited));
+        progress.add(createWizardStep(StepId.personalInfoA, ApplicationStepDescriptor.Status.notVisited));
+        progress.add(createWizardStep(StepId.personalInfoB, ApplicationStepDescriptor.Status.notVisited));
+        progress.add(createWizardStep(StepId.financial, ApplicationStepDescriptor.Status.notVisited));
+        progress.add(createWizardStep(StepId.contacts, ApplicationStepDescriptor.Status.notVisited));
+        progress.add(createWizardStep(StepId.pmcCustom, ApplicationStepDescriptor.Status.notVisited));
+        progress.add(createWizardStep(StepId.summary, ApplicationStepDescriptor.Status.notVisited));
         return progress;
     }
 
-    private static List<ApplicationWizardStep> createGuarantorApplicationProgress(LeaseTermGuarantor guarantor) {
-        List<ApplicationWizardStep> progress = new Vector<ApplicationWizardStep>();
-        progress.add(createWizardStep(PtSiteMap.Apartment.class, ApplicationWizardStep.Status.latest));
-        progress.add(createWizardStep(PtSiteMap.Tenants.class, ApplicationWizardStep.Status.notVisited));
-        progress.add(createWizardStep(PtSiteMap.Info.class, ApplicationWizardStep.Status.notVisited));
-        progress.add(createWizardStep(PtSiteMap.Financial.class, ApplicationWizardStep.Status.notVisited));
-// TODO : Charges and Payment steps are closed (removed) so far...        
-        if (false) {
-            progress.add(createWizardStep(PtSiteMap.Charges.class, ApplicationWizardStep.Status.notVisited));
-        }
-        progress.add(createWizardStep(PtSiteMap.Summary.class, ApplicationWizardStep.Status.notVisited));
-        progress.add(createWizardStep(PtSiteMap.Completion.class, ApplicationWizardStep.Status.notVisited));
+    private static List<ApplicationStepDescriptor> createGuarantorApplicationProgress(LeaseTermGuarantor guarantor) {
+        List<ApplicationStepDescriptor> progress = new Vector<ApplicationStepDescriptor>();
+        progress.add(createWizardStep(StepId.lease, ApplicationStepDescriptor.Status.notVisited));
+        progress.add(createWizardStep(StepId.personalInfoA, ApplicationStepDescriptor.Status.notVisited));
+        progress.add(createWizardStep(StepId.personalInfoB, ApplicationStepDescriptor.Status.notVisited));
+        progress.add(createWizardStep(StepId.financial, ApplicationStepDescriptor.Status.notVisited));
+        progress.add(createWizardStep(StepId.contacts, ApplicationStepDescriptor.Status.notVisited));
+        progress.add(createWizardStep(StepId.pmcCustom, ApplicationStepDescriptor.Status.notVisited));
+        progress.add(createWizardStep(StepId.summary, ApplicationStepDescriptor.Status.notVisited));
         return progress;
     }
 

@@ -11,7 +11,7 @@
  * @author michaellif
  * @version $Id$
  */
-package com.propertyvista.portal.rpc.portal.prospect.dto;
+package com.propertyvista.portal.rpc.portal.prospect.dto.steps;
 
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.shared.IEntity;

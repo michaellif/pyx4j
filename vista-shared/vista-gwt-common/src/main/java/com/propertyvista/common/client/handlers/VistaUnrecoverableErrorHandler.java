@@ -46,8 +46,8 @@ public class VistaUnrecoverableErrorHandler extends DefaultUnrecoverableErrorHan
 
     @Override
     protected void showReloadApplication() {
-        String message = i18n.tr("We Updated Our Application\nIn Order To Continue Using This Application You Need To Refresh The Page"
-                + "\nPlease Refresh The Page Now");
+        String message = i18n.tr("We updated our application. In order to continue using this application you need to refresh the page."
+                + " Please refresh the page now.");
         showMessage(message, NotificationType.FAILURE);
     }
 
@@ -70,8 +70,8 @@ public class VistaUnrecoverableErrorHandler extends DefaultUnrecoverableErrorHan
 
     @Override
     protected void showThrottle() {
-        showMessage(i18n.tr("We're Sorry But Your Requests Look Similar To Automated Requests Initiated By Computer Virus Or Spyware Applications. "
-                + "To Protect Our Users, We Can't Process Your Request At This Time"), NotificationType.FAILURE);
+        showMessage(i18n.tr("We're sorry but your requests look similar to automated requests initiated by computer virus or spyware applications. "
+                + "To protect our users, we can't process your request at this time."), NotificationType.FAILURE);
     }
 
     @Override
@@ -97,10 +97,10 @@ public class VistaUnrecoverableErrorHandler extends DefaultUnrecoverableErrorHan
 
         String title = i18n.tr("An Unexpected Error Has Occurred.");
 
-        String userMessage = i18n.tr("Please report the incident to technical support,\n" + "describing the steps taken prior to the error.\n");
+        String userMessage = i18n.tr("Please report the incident to technical support, describing the steps taken prior to the error.\n");
 
         if (sessionClosed) {
-            userMessage += "\n" + i18n.tr("This Session Has Been Terminated To Prevent Data Corruption");
+            userMessage += "\n" + i18n.tr("This session has been terminated to prevent data corruption.");
         }
 
         if (ApplicationMode.isDevelopment() && CommonsStringUtils.isStringSet(caught.getMessage()) && caught.getMessage().length() < 220) {

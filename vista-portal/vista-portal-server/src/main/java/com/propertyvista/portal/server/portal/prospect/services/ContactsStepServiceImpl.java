@@ -17,7 +17,7 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.entity.shared.EntityFactory;
 
-import com.propertyvista.portal.rpc.portal.prospect.dto.ContactsStepDTO;
+import com.propertyvista.portal.rpc.portal.prospect.dto.steps.ContactsStepDTO;
 import com.propertyvista.portal.rpc.portal.prospect.services.ContactsStepService;
 
 public class ContactsStepServiceImpl implements ContactsStepService {

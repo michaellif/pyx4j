@@ -13,7 +13,7 @@
  */
 package com.propertyvista.portal.prospect.ui.steps;
 
-import com.propertyvista.portal.rpc.portal.prospect.dto.PaymentStepDTO;
+import com.propertyvista.portal.rpc.portal.prospect.dto.steps.PaymentStepDTO;
 import com.propertyvista.portal.shared.ui.IWizardStepView;
 
 public interface PaymentStepView extends IWizardStepView<PaymentStepDTO> {

@@ -17,8 +17,8 @@ import com.google.gwt.activity.shared.Activity;
 import com.google.gwt.activity.shared.ActivityMapper;
 import com.google.gwt.place.shared.Place;
 
-import com.propertyvista.portal.prospect.activity.StepsActivity;
-import com.propertyvista.portal.rpc.portal.Step;
+import com.propertyvista.portal.prospect.activity.ApplicationStepsActivity;
+import com.propertyvista.portal.rpc.portal.prospect.StepPlace;
 
 public class StepsActivityMapper implements ActivityMapper {
 
@@ -27,8 +27,8 @@ public class StepsActivityMapper implements ActivityMapper {
 
     @Override
     public Activity getActivity(Place place) {
-        if (place instanceof Step) {
-            return new StepsActivity(place);
+        if (place instanceof StepPlace) {
+            return new ApplicationStepsActivity(place);
         } else {
             return null;
         }

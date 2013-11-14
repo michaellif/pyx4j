@@ -13,7 +13,7 @@
  */
 package com.propertyvista.portal.rpc.portal.prospect.services;
 
-import com.propertyvista.portal.rpc.portal.prospect.dto.ContactsStepDTO;
+import com.propertyvista.portal.rpc.portal.prospect.dto.steps.ContactsStepDTO;
 
 public interface ContactsStepService extends AbstractWizardStepService<ContactsStepDTO> {
 

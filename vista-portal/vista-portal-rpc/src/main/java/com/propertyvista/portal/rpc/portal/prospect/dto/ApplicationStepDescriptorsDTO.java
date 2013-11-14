@@ -7,16 +7,22 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Aug 8, 2011
- * @author michaellif
+ * Created on Jun 18, 2011
+ * @author Dad
  * @version $Id$
  */
 package com.propertyvista.portal.rpc.portal.prospect.dto;
 
+import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.shared.IList;
+
+import com.propertyvista.domain.tenant.prospect.ApplicationStepDescriptor;
 
 @Transient
-public interface PersonalInfoBStepDTO extends IEntity {
+public interface ApplicationStepDescriptorsDTO extends IEntity {
 
+    @Owned
+    IList<ApplicationStepDescriptor> steps();
 }

@@ -28,7 +28,7 @@ import com.propertyvista.domain.security.common.VistaApplication;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.portal.rpc.portal.resident.dto.financial.PaymentMethodDTO;
 import com.propertyvista.portal.rpc.portal.resident.services.financial.PaymentMethodWizardService;
-import com.propertyvista.portal.server.security.TenantAppContext;
+import com.propertyvista.portal.server.portal.resident.ResidentPortalContext;
 import com.propertyvista.server.common.util.AddressRetriever;
 
 public class PaymentMethodWizardServiceImpl extends AbstractCrudServiceDtoImpl<LeasePaymentMethod, PaymentMethodDTO> implements PaymentMethodWizardService {
@@ -44,7 +44,7 @@ public class PaymentMethodWizardServiceImpl extends AbstractCrudServiceDtoImpl<L
 
     @Override
     protected PaymentMethodDTO init(InitializationData initializationData) {
-        Lease lease = TenantAppContext.getCurrentUserLease();
+        Lease lease = ResidentPortalContext.getCurrentUserLease();
 
         PaymentMethodDTO dto = EntityFactory.create(PaymentMethodDTO.class);
 
@@ -65,9 +65,9 @@ public class PaymentMethodWizardServiceImpl extends AbstractCrudServiceDtoImpl<L
 
     @Override
     protected void persist(LeasePaymentMethod bo, PaymentMethodDTO to) {
-        Lease lease = TenantAppContext.getCurrentUserLease();
+        Lease lease = ResidentPortalContext.getCurrentUserLease();
 
-        bo.customer().set(TenantAppContext.getCurrentUserCustomer());
+        bo.customer().set(ResidentPortalContext.getCurrentUserCustomer());
         bo.isProfiledMethod().setValue(Boolean.TRUE);
 
         ServerSideFactory.create(PaymentFacade.class).validatePaymentMethod(lease.billingAccount(), bo, VistaApplication.resident);
@@ -76,6 +76,6 @@ public class PaymentMethodWizardServiceImpl extends AbstractCrudServiceDtoImpl<L
 
     @Override
     public void getCurrentAddress(AsyncCallback<AddressSimple> callback) {
-        callback.onSuccess(AddressRetriever.getLeaseParticipantCurrentAddressSimple(TenantAppContext.getCurrentUserTenant()));
+        callback.onSuccess(AddressRetriever.getLeaseParticipantCurrentAddressSimple(ResidentPortalContext.getCurrentUserTenant()));
     }
 }

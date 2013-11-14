@@ -11,13 +11,15 @@
  * @author vadims
  * @version $Id$
  */
-package com.propertyvista.portal.rpc.portal;
+package com.propertyvista.portal.rpc.portal.resident;
 
 import com.pyx4j.commons.Key;
 import com.pyx4j.site.rpc.AppPlace;
 import com.pyx4j.site.rpc.CrudAppPlace;
 import com.pyx4j.site.rpc.annotations.PlaceProperties;
 import com.pyx4j.site.shared.meta.PublicPlace;
+
+import com.propertyvista.portal.rpc.portal.PortalSiteMap;
 
 public class ResidentPortalSiteMap extends PortalSiteMap {
 

@@ -11,7 +11,7 @@
  * @author vlads
  * @version $Id$
  */
-package com.propertyvista.portal.server.security;
+package com.propertyvista.portal.server.portal.resident;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -31,15 +31,16 @@ import com.propertyvista.domain.tenant.Customer;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.LeaseTermTenant;
 import com.propertyvista.domain.tenant.lease.Tenant;
+import com.propertyvista.portal.server.security.VistaCustomerContext;
 
 /**
  * This may be an optimization point for future.
  */
-public class TenantAppContext extends VistaCustomerContext {
+public class ResidentPortalContext extends VistaCustomerContext {
 
-    private final static Logger log = LoggerFactory.getLogger(TenantAppContext.class);
+    private final static Logger log = LoggerFactory.getLogger(ResidentPortalContext.class);
 
-    private static final I18n i18n = I18n.get(TenantAppContext.class);
+    private static final I18n i18n = I18n.get(ResidentPortalContext.class);
 
     public static CustomerUser getCurrentUser() {
         Visit v = Context.getVisit();
@@ -56,20 +57,20 @@ public class TenantAppContext extends VistaCustomerContext {
 
     public static Customer getCurrentUserCustomer() {
         EntityQueryCriteria<Customer> criteria = EntityQueryCriteria.create(Customer.class);
-        criteria.add(PropertyCriterion.eq(criteria.proto().user(), TenantAppContext.getCurrentUser()));
+        criteria.add(PropertyCriterion.eq(criteria.proto().user(), ResidentPortalContext.getCurrentUser()));
         return Persistence.service().retrieve(criteria);
     }
 
     public static Tenant getCurrentUserTenant() {
         EntityQueryCriteria<Tenant> criteria = EntityQueryCriteria.create(Tenant.class);
         criteria.add(PropertyCriterion.eq(criteria.proto().lease(), getCurrentUserLeaseIdStub()));
-        criteria.add(PropertyCriterion.eq(criteria.proto().customer().user(), TenantAppContext.getCurrentUser()));
+        criteria.add(PropertyCriterion.eq(criteria.proto().customer().user(), ResidentPortalContext.getCurrentUser()));
         return Persistence.service().retrieve(criteria);
     }
 
     public static LeaseTermTenant getCurrentUserTenantInLease() {
         EntityQueryCriteria<LeaseTermTenant> criteria = EntityQueryCriteria.create(LeaseTermTenant.class);
-        criteria.eq(criteria.proto().leaseParticipant().customer().user(), TenantAppContext.getCurrentUser());
+        criteria.eq(criteria.proto().leaseParticipant().customer().user(), ResidentPortalContext.getCurrentUser());
         criteria.eq(criteria.proto().leaseParticipant().lease(), getCurrentUserLeaseIdStub());
         criteria.isCurrent(criteria.proto().leaseTermV());
         criteria.eq(criteria.proto().leaseTermV().holder(), criteria.proto().leaseTermV().holder().lease().currentTerm());

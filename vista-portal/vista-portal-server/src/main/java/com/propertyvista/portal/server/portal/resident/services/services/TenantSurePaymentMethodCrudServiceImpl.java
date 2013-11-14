@@ -30,7 +30,7 @@ import com.propertyvista.domain.payment.InsurancePaymentMethod;
 import com.propertyvista.domain.payment.PaymentType;
 import com.propertyvista.portal.rpc.portal.resident.dto.insurance.InsurancePaymentMethodDTO;
 import com.propertyvista.portal.rpc.portal.resident.services.services.TenantSurePaymentMethodCrudService;
-import com.propertyvista.portal.server.security.TenantAppContext;
+import com.propertyvista.portal.server.portal.resident.ResidentPortalContext;
 import com.propertyvista.server.common.util.AddressRetriever;
 
 public class TenantSurePaymentMethodCrudServiceImpl implements TenantSurePaymentMethodCrudService {
@@ -46,15 +46,15 @@ public class TenantSurePaymentMethodCrudServiceImpl implements TenantSurePayment
 
     @Override
     public void create(AsyncCallback<Key> callback, InsurancePaymentMethodDTO editableEntity) {
-        editableEntity.paymentMethod().tenant().set(TenantAppContext.getCurrentUserTenant());
-        ServerSideFactory.create(TenantSureFacade.class).updatePaymentMethod(editableEntity.paymentMethod(), TenantAppContext.getCurrentUserTenant());
+        editableEntity.paymentMethod().tenant().set(ResidentPortalContext.getCurrentUserTenant());
+        ServerSideFactory.create(TenantSureFacade.class).updatePaymentMethod(editableEntity.paymentMethod(), ResidentPortalContext.getCurrentUserTenant());
         Persistence.service().commit();
         callback.onSuccess(null);
     }
 
     @Override
     public void getCurrentAddress(AsyncCallback<AddressSimple> callback) {
-        callback.onSuccess(AddressRetriever.getLeaseParticipantCurrentAddressSimple(TenantAppContext.getCurrentUserTenant()));
+        callback.onSuccess(AddressRetriever.getLeaseParticipantCurrentAddressSimple(ResidentPortalContext.getCurrentUserTenant()));
     }
 
     @Override

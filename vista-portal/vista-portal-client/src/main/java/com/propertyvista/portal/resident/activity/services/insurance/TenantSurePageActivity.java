@@ -22,7 +22,7 @@ import com.pyx4j.site.rpc.AppPlace;
 
 import com.propertyvista.portal.resident.ui.services.insurance.TenantSurePageView;
 import com.propertyvista.portal.resident.ui.services.insurance.TenantSurePageView.TenantSurePagePresenter;
-import com.propertyvista.portal.rpc.portal.ResidentPortalSiteMap;
+import com.propertyvista.portal.rpc.portal.resident.ResidentPortalSiteMap;
 import com.propertyvista.portal.rpc.portal.resident.dto.insurance.TenantSureInsurancePolicyDTO;
 import com.propertyvista.portal.rpc.portal.resident.services.services.TenantSureInsurancePolicyCrudService;
 import com.propertyvista.portal.shared.activity.AbstractEditorActivity;

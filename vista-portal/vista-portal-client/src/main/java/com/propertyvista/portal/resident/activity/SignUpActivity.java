@@ -32,7 +32,7 @@ import com.pyx4j.site.rpc.AppPlaceInfo;
 
 import com.propertyvista.portal.resident.ResidentPortalSite;
 import com.propertyvista.portal.resident.ui.signup.SignUpView;
-import com.propertyvista.portal.rpc.portal.ResidentPortalSiteMap;
+import com.propertyvista.portal.rpc.portal.resident.ResidentPortalSiteMap;
 import com.propertyvista.portal.rpc.portal.resident.dto.SelfRegistrationBuildingDTO;
 import com.propertyvista.portal.rpc.portal.resident.dto.SelfRegistrationDTO;
 import com.propertyvista.portal.rpc.portal.resident.services.ResidentAuthenticationService;

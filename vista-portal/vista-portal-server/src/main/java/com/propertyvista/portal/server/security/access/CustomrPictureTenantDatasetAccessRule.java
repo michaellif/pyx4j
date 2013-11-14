@@ -17,7 +17,7 @@ import com.pyx4j.entity.security.DatasetAccessRule;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 
 import com.propertyvista.domain.tenant.CustomerPicture;
-import com.propertyvista.portal.server.security.TenantAppContext;
+import com.propertyvista.portal.server.portal.resident.ResidentPortalContext;
 
 public class CustomrPictureTenantDatasetAccessRule implements DatasetAccessRule<CustomerPicture> {
 
@@ -25,7 +25,7 @@ public class CustomrPictureTenantDatasetAccessRule implements DatasetAccessRule<
 
     @Override
     public void applyRule(EntityQueryCriteria<CustomerPicture> criteria) {
-        criteria.eq(criteria.proto().id(), TenantAppContext.getCurrentUserTenantInLease().leaseParticipant().customer().picture());
+        criteria.eq(criteria.proto().id(), ResidentPortalContext.getCurrentUserTenantInLease().leaseParticipant().customer().picture());
     }
 
 }

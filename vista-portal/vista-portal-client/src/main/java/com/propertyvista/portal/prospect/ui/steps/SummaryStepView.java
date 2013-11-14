@@ -13,7 +13,7 @@
  */
 package com.propertyvista.portal.prospect.ui.steps;
 
-import com.propertyvista.portal.rpc.portal.prospect.dto.SummaryStepDTO;
+import com.propertyvista.portal.rpc.portal.prospect.dto.steps.SummaryStepDTO;
 import com.propertyvista.portal.shared.ui.IWizardStepView;
 
 public interface SummaryStepView extends IWizardStepView<SummaryStepDTO> {

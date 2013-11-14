@@ -43,7 +43,7 @@ import com.propertyvista.domain.tenant.lease.Tenant;
 import com.propertyvista.dto.PreauthorizedPaymentCoveredItemDTO;
 import com.propertyvista.portal.rpc.portal.resident.dto.financial.AutoPayDTO;
 import com.propertyvista.portal.rpc.portal.resident.services.financial.AutoPayWizardService;
-import com.propertyvista.portal.server.security.TenantAppContext;
+import com.propertyvista.portal.server.portal.resident.ResidentPortalContext;
 import com.propertyvista.server.common.util.AddressConverter;
 import com.propertyvista.server.common.util.AddressRetriever;
 import com.propertyvista.server.common.util.LeaseParticipantUtils;
@@ -61,7 +61,7 @@ public class AutoPayWizardServiceImpl extends AbstractCrudServiceDtoImpl<Autopay
 
     @Override
     protected AutoPayDTO init(InitializationData initializationData) {
-        Lease lease = TenantAppContext.getCurrentUserLease();
+        Lease lease = ResidentPortalContext.getCurrentUserLease();
         Persistence.service().retrieve(lease.unit().building());
 
         AutoPayDTO dto = EntityFactory.create(AutoPayDTO.class);
@@ -82,7 +82,7 @@ public class AutoPayWizardServiceImpl extends AbstractCrudServiceDtoImpl<Autopay
         dto.leaseId().set(lease.leaseId());
         dto.leaseStatus().set(lease.status());
 
-        dto.tenant().set(TenantAppContext.getCurrentUserTenant());
+        dto.tenant().set(ResidentPortalContext.getCurrentUserTenant());
 
         dto.nextPaymentDate().setValue(ServerSideFactory.create(PaymentMethodFacade.class).getNextAutopayDate(lease));
 
@@ -93,10 +93,10 @@ public class AutoPayWizardServiceImpl extends AbstractCrudServiceDtoImpl<Autopay
 
     @Override
     protected void persist(AutopayAgreement bo, AutoPayDTO to) {
-        Lease lease = TenantAppContext.getCurrentUserLease();
+        Lease lease = ResidentPortalContext.getCurrentUserLease();
 
         if (bo.paymentMethod().getPrimaryKey() == null) {
-            bo.paymentMethod().customer().set(TenantAppContext.getCurrentUserCustomer());
+            bo.paymentMethod().customer().set(ResidentPortalContext.getCurrentUserCustomer());
             bo.paymentMethod().isProfiledMethod().setValue(Boolean.TRUE);
 
             ServerSideFactory.create(PaymentFacade.class).validatePaymentMethod(lease.billingAccount(), to.paymentMethod(), VistaApplication.resident);
@@ -107,18 +107,18 @@ public class AutoPayWizardServiceImpl extends AbstractCrudServiceDtoImpl<Autopay
 
         ServerSideFactory.create(PaymentFacade.class).validatePaymentMethod(lease.billingAccount(), to.paymentMethod(), VistaApplication.resident);
         bo.set(ServerSideFactory.create(PaymentMethodFacade.class).persistAutopayAgreement(bo,
-                EntityFactory.createIdentityStub(Tenant.class, TenantAppContext.getCurrentUserTenant().getPrimaryKey())));
+                EntityFactory.createIdentityStub(Tenant.class, ResidentPortalContext.getCurrentUserTenant().getPrimaryKey())));
     }
 
     @Override
     protected void enhanceRetrieved(AutopayAgreement bo, AutoPayDTO to, com.pyx4j.entity.rpc.AbstractCrudService.RetrieveTarget retrieveTarget) {
         super.enhanceRetrieved(bo, to, retrieveTarget);
 
-        if (!to.tenant().equals(TenantAppContext.getCurrentUserTenant())) {
+        if (!to.tenant().equals(ResidentPortalContext.getCurrentUserTenant())) {
             to.paymentMethod().set(null);
         }
 
-        Lease lease = TenantAppContext.getCurrentUserLease();
+        Lease lease = ResidentPortalContext.getCurrentUserLease();
         Persistence.service().retrieve(lease.unit().building());
 
         to.electronicPaymentsAllowed().setValue(ServerSideFactory.create(PaymentFacade.class).isElectronicPaymentsSetup(lease.billingAccount()));
@@ -141,12 +141,12 @@ public class AutoPayWizardServiceImpl extends AbstractCrudServiceDtoImpl<Autopay
 
     @Override
     public void getProfiledPaymentMethods(AsyncCallback<Vector<LeasePaymentMethod>> callback) {
-        callback.onSuccess(new Vector<LeasePaymentMethod>(LeaseParticipantUtils.getProfiledPaymentMethods(TenantAppContext.getCurrentUserTenantInLease())));
+        callback.onSuccess(new Vector<LeasePaymentMethod>(LeaseParticipantUtils.getProfiledPaymentMethods(ResidentPortalContext.getCurrentUserTenantInLease())));
     }
 
     @Override
     public void getCurrentAddress(AsyncCallback<AddressSimple> callback) {
-        callback.onSuccess(AddressRetriever.getLeaseParticipantCurrentAddressSimple(TenantAppContext.getCurrentUserTenant()));
+        callback.onSuccess(AddressRetriever.getLeaseParticipantCurrentAddressSimple(ResidentPortalContext.getCurrentUserTenant()));
     }
 
     @Override

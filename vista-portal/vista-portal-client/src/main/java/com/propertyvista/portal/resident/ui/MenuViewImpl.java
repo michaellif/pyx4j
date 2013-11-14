@@ -47,7 +47,7 @@ import com.pyx4j.widgets.client.images.ButtonImages;
 
 import com.propertyvista.domain.customizations.CountryOfOperation;
 import com.propertyvista.misc.VistaTODO;
-import com.propertyvista.portal.rpc.portal.ResidentPortalSiteMap;
+import com.propertyvista.portal.rpc.portal.resident.ResidentPortalSiteMap;
 import com.propertyvista.portal.shared.resources.PortalImages;
 import com.propertyvista.portal.shared.themes.PortalRootPaneTheme;
 import com.propertyvista.shared.config.VistaFeatures;

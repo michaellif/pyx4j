@@ -27,7 +27,7 @@ import com.propertyvista.domain.maintenance.MaintenanceRequestMetadata;
 import com.propertyvista.portal.resident.ResidentPortalSite;
 import com.propertyvista.portal.resident.ui.maintenance.MaintenanceRequestWizardView;
 import com.propertyvista.portal.resident.ui.maintenance.MaintenanceRequestWizardView.MaintenanceRequestWizardPresenter;
-import com.propertyvista.portal.rpc.portal.ResidentPortalSiteMap;
+import com.propertyvista.portal.rpc.portal.resident.ResidentPortalSiteMap;
 import com.propertyvista.portal.rpc.portal.resident.dto.maintenance.MaintenanceRequestDTO;
 import com.propertyvista.portal.rpc.portal.resident.services.maintenance.MaintenanceRequestCrudService;
 import com.propertyvista.portal.shared.activity.AbstractWizardFormCrudActivity;

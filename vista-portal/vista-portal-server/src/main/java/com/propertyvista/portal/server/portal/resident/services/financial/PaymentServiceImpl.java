@@ -42,7 +42,7 @@ import com.propertyvista.portal.rpc.portal.resident.dto.financial.PaymentMethodD
 import com.propertyvista.portal.rpc.portal.resident.dto.financial.PaymentMethodInfoDTO;
 import com.propertyvista.portal.rpc.portal.resident.dto.financial.PaymentMethodSummaryDTO;
 import com.propertyvista.portal.rpc.portal.resident.services.financial.PaymentService;
-import com.propertyvista.portal.server.security.TenantAppContext;
+import com.propertyvista.portal.server.portal.resident.ResidentPortalContext;
 import com.propertyvista.server.common.util.AddressConverter;
 import com.propertyvista.server.common.util.AddressRetriever;
 import com.propertyvista.server.common.util.LeaseParticipantUtils;
@@ -60,7 +60,7 @@ public class PaymentServiceImpl implements PaymentService {
         }.createTO(dbo);
 
         // enhance dto:
-        Lease lease = TenantAppContext.getCurrentUserLease();
+        Lease lease = ResidentPortalContext.getCurrentUserLease();
         Persistence.service().retrieve(lease.unit());
         Persistence.service().retrieve(lease.unit().building());
 
@@ -84,7 +84,7 @@ public class PaymentServiceImpl implements PaymentService {
         PaymentMethodDTO dto = new PaymentMethodDtoBinder().createTO(Persistence.secureRetrieve(LeasePaymentMethod.class, itemId.getPrimaryKey()));
 
         // enhance dto:
-        Lease lease = TenantAppContext.getCurrentUserLease();
+        Lease lease = ResidentPortalContext.getCurrentUserLease();
         Persistence.service().retrieve(lease.unit());
         Persistence.service().retrieve(lease.unit().building());
 
@@ -103,7 +103,7 @@ public class PaymentServiceImpl implements PaymentService {
     public void getPaymentMethodSummary(AsyncCallback<PaymentMethodSummaryDTO> callback) {
         PaymentMethodSummaryDTO summary = EntityFactory.create(PaymentMethodSummaryDTO.class);
 
-        Lease lease = TenantAppContext.getCurrentUserLease();
+        Lease lease = ResidentPortalContext.getCurrentUserLease();
 
         summary.paymentMethods().addAll(retrievePaymentMethods(lease));
 
@@ -124,7 +124,7 @@ public class PaymentServiceImpl implements PaymentService {
         AutoPayDTO dto = new AutoPayDtoBinder().createTO(dbo);
 
         // enhance dto:
-        Lease lease = TenantAppContext.getCurrentUserLease();
+        Lease lease = ResidentPortalContext.getCurrentUserLease();
         Persistence.service().retrieve(lease.unit().building());
 
         dto.electronicPaymentsAllowed().setValue(ServerSideFactory.create(PaymentFacade.class).isElectronicPaymentsSetup(lease.billingAccount()));
@@ -153,7 +153,7 @@ public class PaymentServiceImpl implements PaymentService {
     public void getAutoPaySummary(AsyncCallback<AutoPaySummaryDTO> callback) {
         AutoPaySummaryDTO summary = EntityFactory.create(AutoPaySummaryDTO.class);
 
-        Lease lease = TenantAppContext.getCurrentUserLease();
+        Lease lease = ResidentPortalContext.getCurrentUserLease();
 
         summary.currentAutoPayments().addAll(retrieveCurrentAutoPayments(lease));
         summary.currentAutoPayDate().setValue(ServerSideFactory.create(PaymentMethodFacade.class).getNextAutopayDate(lease));
@@ -168,7 +168,7 @@ public class PaymentServiceImpl implements PaymentService {
     private static List<PaymentMethodInfoDTO> retrievePaymentMethods(Lease lease) {
         List<PaymentMethodInfoDTO> paymentMethods = new ArrayList<PaymentMethodInfoDTO>();
 
-        for (LeasePaymentMethod pm : LeaseParticipantUtils.getProfiledPaymentMethods(TenantAppContext.getCurrentUserTenantInLease())) {
+        for (LeasePaymentMethod pm : LeaseParticipantUtils.getProfiledPaymentMethods(ResidentPortalContext.getCurrentUserTenantInLease())) {
             PaymentMethodInfoDTO pmi = EntityFactory.create(PaymentMethodInfoDTO.class);
 
             pmi.id().setValue(pm.id().getValue());
@@ -209,7 +209,7 @@ public class PaymentServiceImpl implements PaymentService {
             autoPayInfo.paymentDate().setValue(excutionDate);
             autoPayInfo.payer().set(pap.tenant());
             Persistence.ensureRetrieve(autoPayInfo.payer(), AttachLevel.ToStringMembers);
-            if (autoPayInfo.payer().equals(TenantAppContext.getCurrentUserTenant())) {
+            if (autoPayInfo.payer().equals(ResidentPortalContext.getCurrentUserTenant())) {
                 autoPayInfo.paymentMethod().set(pap.paymentMethod());
             }
 

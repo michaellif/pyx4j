@@ -18,7 +18,7 @@ import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 
 import com.propertyvista.domain.tenant.insurance.GeneralInsurancePolicy;
-import com.propertyvista.portal.server.security.TenantAppContext;
+import com.propertyvista.portal.server.portal.resident.ResidentPortalContext;
 
 public class GeneralInsurancePolicyDatasetAccessRule implements DatasetAccessRule<GeneralInsurancePolicy> {
 
@@ -26,8 +26,8 @@ public class GeneralInsurancePolicyDatasetAccessRule implements DatasetAccessRul
 
     @Override
     public void applyRule(EntityQueryCriteria<GeneralInsurancePolicy> criteria) {
-        criteria.or(PropertyCriterion.eq(criteria.proto().tenant(), TenantAppContext.getCurrentUserTenant().getPrimaryKey()),
-                PropertyCriterion.eq(criteria.proto().tenant().lease().leaseParticipants(), TenantAppContext.getCurrentUserTenant().getPrimaryKey()));
+        criteria.or(PropertyCriterion.eq(criteria.proto().tenant(), ResidentPortalContext.getCurrentUserTenant().getPrimaryKey()),
+                PropertyCriterion.eq(criteria.proto().tenant().lease().leaseParticipants(), ResidentPortalContext.getCurrentUserTenant().getPrimaryKey()));
     }
 
 }

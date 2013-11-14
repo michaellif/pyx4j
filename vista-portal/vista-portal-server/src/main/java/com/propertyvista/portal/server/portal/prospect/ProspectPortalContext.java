@@ -33,21 +33,21 @@ import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.prospect.OnlineApplication;
 import com.propertyvista.portal.server.security.VistaCustomerContext;
 
-public class ProspectApplicationContext extends VistaCustomerContext {
+public class ProspectPortalContext extends VistaCustomerContext {
 
-    private final static Logger log = LoggerFactory.getLogger(ProspectApplicationContext.class);
+    private final static Logger log = LoggerFactory.getLogger(ProspectPortalContext.class);
 
-    private static final I18n i18n = I18n.get(ProspectApplicationContext.class);
+    private static final I18n i18n = I18n.get(ProspectPortalContext.class);
 
-    public static ProspectApplicationAttributes getVisitAttributes() {
+    public static ProspectPortalAttributes getVisitAttributes() {
         Visit v = Context.getVisit();
         if ((v == null) || (!v.isUserLoggedIn())) {
             log.trace("no session");
             throw new UnRecoverableRuntimeException(i18n.tr("No Session"));
         }
-        ProspectApplicationAttributes attr = (ProspectApplicationAttributes) v.getAttribute("pt-visit");
+        ProspectPortalAttributes attr = (ProspectPortalAttributes) v.getAttribute("pt-visit");
         if (attr == null) {
-            attr = new ProspectApplicationAttributes();
+            attr = new ProspectPortalAttributes();
             v.setAttribute("pt-visit", attr);
         }
         return attr;
@@ -89,7 +89,7 @@ public class ProspectApplicationContext extends VistaCustomerContext {
 
     public static Customer retrieveCurrentUserCustomer() {
         EntityQueryCriteria<Customer> criteria = EntityQueryCriteria.create(Customer.class);
-        criteria.add(PropertyCriterion.eq(criteria.proto().user(), ProspectApplicationContext.getCurrentUser()));
+        criteria.add(PropertyCriterion.eq(criteria.proto().user(), ProspectPortalContext.getCurrentUser()));
         return Persistence.service().retrieve(criteria);
     }
 }

@@ -18,7 +18,7 @@ import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 
 import com.propertyvista.domain.tenant.insurance.InsuranceCertificateScan;
-import com.propertyvista.portal.server.security.TenantAppContext;
+import com.propertyvista.portal.server.portal.resident.ResidentPortalContext;
 
 public class InsuranceCertificateScanDatasetAccessRule implements DatasetAccessRule<InsuranceCertificateScan> {
 
@@ -27,9 +27,9 @@ public class InsuranceCertificateScanDatasetAccessRule implements DatasetAccessR
     @Override
     public void applyRule(EntityQueryCriteria<InsuranceCertificateScan> criteria) {
         criteria.or(
-                PropertyCriterion.eq(criteria.proto().certificateDoc().certificate().insurancePolicy().tenant(), TenantAppContext.getCurrentUserTenant()), // 
+                PropertyCriterion.eq(criteria.proto().certificateDoc().certificate().insurancePolicy().tenant(), ResidentPortalContext.getCurrentUserTenant()), // 
                 PropertyCriterion.eq(criteria.proto().certificateDoc().certificate().insurancePolicy().tenant().lease().leaseParticipants(),
-                        TenantAppContext.getCurrentUserTenant()));
+                        ResidentPortalContext.getCurrentUserTenant()));
     }
 
 }

@@ -11,8 +11,8 @@
  * @author michaellif
  * @version $Id$
  */
-package com.propertyvista.portal.rpc.portal;
+package com.propertyvista.portal.rpc.portal.prospect;
 
-public interface Step {
+public interface StepPlace {
 
 }

@@ -48,7 +48,7 @@ import com.propertyvista.portal.rpc.portal.resident.dto.financial.LatestActiviti
 import com.propertyvista.portal.rpc.portal.resident.dto.financial.PaymentInfoDTO;
 import com.propertyvista.portal.rpc.portal.resident.dto.financial.LatestActivitiesDTO.InvoicePaymentDTO;
 import com.propertyvista.portal.rpc.portal.resident.services.financial.BillingService;
-import com.propertyvista.portal.server.security.TenantAppContext;
+import com.propertyvista.portal.server.portal.resident.ResidentPortalContext;
 import com.propertyvista.shared.config.VistaFeatures;
 
 public class BillingServiceImpl implements BillingService {
@@ -57,7 +57,7 @@ public class BillingServiceImpl implements BillingService {
     public void retreiveBillingSummary(AsyncCallback<BillingSummaryDTO> callback) {
         BillingSummaryDTO summary = EntityFactory.create(BillingSummaryDTO.class);
 
-        Lease lease = TenantAppContext.getCurrentUserLease();
+        Lease lease = ResidentPortalContext.getCurrentUserLease();
 
         summary.currentBalance().setValue(ServerSideFactory.create(ARFacade.class).getCurrentBalance(lease.billingAccount()));
         if (!VistaFeatures.instance().yardiIntegration()) {
@@ -73,7 +73,7 @@ public class BillingServiceImpl implements BillingService {
     public void retreiveBillingHistory(AsyncCallback<BillingHistoryDTO> callback) {
         BillingHistoryDTO history = EntityFactory.create(BillingHistoryDTO.class);
 
-        Lease lease = TenantAppContext.getCurrentUserLease();
+        Lease lease = ResidentPortalContext.getCurrentUserLease();
 
         history.bills().addAll(retrieveBillHistory(lease));
 
@@ -82,7 +82,7 @@ public class BillingServiceImpl implements BillingService {
 
     @Override
     public void retreiveTransactionHistory(AsyncCallback<TransactionHistoryDTO> callback) {
-        Lease lease = TenantAppContext.getCurrentUserLease();
+        Lease lease = ResidentPortalContext.getCurrentUserLease();
 
         callback.onSuccess(ServerSideFactory.create(ARFacade.class).getTransactionHistory(lease.billingAccount()));
     }
@@ -91,7 +91,7 @@ public class BillingServiceImpl implements BillingService {
     public void retreiveLatestActivities(AsyncCallback<LatestActivitiesDTO> callback) {
         LatestActivitiesDTO activities = EntityFactory.create(LatestActivitiesDTO.class);
 
-        Lease lease = TenantAppContext.getCurrentUserLease();
+        Lease lease = ResidentPortalContext.getCurrentUserLease();
 
         for (InvoicePayment item : ServerSideFactory.create(PaymentFacade.class).getLatestPaymentActivity(lease.billingAccount())) {
             InvoicePaymentDTO paymentInfo = EntityFactory.create(InvoicePaymentDTO.class);
@@ -117,7 +117,7 @@ public class BillingServiceImpl implements BillingService {
         Bill bill = null;
         if (entityId == null) {
             // find current bill instead:
-            bill = ServerSideFactory.create(BillingFacade.class).getLatestConfirmedBill(TenantAppContext.getCurrentUserLease());
+            bill = ServerSideFactory.create(BillingFacade.class).getLatestConfirmedBill(ResidentPortalContext.getCurrentUserLease());
         } else {
             bill = Persistence.secureRetrieve(Bill.class, entityId.getPrimaryKey());
         }
@@ -176,7 +176,7 @@ public class BillingServiceImpl implements BillingService {
             pi.paymentDate().setValue(excutionDate);
             pi.payer().set(pap.tenant());
             Persistence.ensureRetrieve(pi.payer(), AttachLevel.ToStringMembers);
-            if (pi.payer().equals(TenantAppContext.getCurrentUserTenant())) {
+            if (pi.payer().equals(ResidentPortalContext.getCurrentUserTenant())) {
                 pi.paymentMethod().set(pap.paymentMethod());
             }
 

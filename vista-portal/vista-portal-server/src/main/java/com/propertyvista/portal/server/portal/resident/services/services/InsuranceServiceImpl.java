@@ -21,7 +21,7 @@ import com.propertyvista.biz.tenant.insurance.TenantInsuranceFacade;
 import com.propertyvista.domain.tenant.lease.Tenant;
 import com.propertyvista.portal.rpc.portal.resident.dto.insurance.status.InsuranceStatusDTO;
 import com.propertyvista.portal.rpc.portal.resident.services.services.InsuranceService;
-import com.propertyvista.portal.server.security.TenantAppContext;
+import com.propertyvista.portal.server.portal.resident.ResidentPortalContext;
 
 public class InsuranceServiceImpl implements InsuranceService {
 
@@ -31,7 +31,7 @@ public class InsuranceServiceImpl implements InsuranceService {
             new InsuranceServiceMockImpl().retreiveInsuranceStatus(callback);
         } else {
             callback.onSuccess(ServerSideFactory.create(TenantInsuranceFacade.class).getInsuranceStatus(
-                    TenantAppContext.getCurrentUserTenantInLease().leaseParticipant().<Tenant> createIdentityStub()));
+                    ResidentPortalContext.getCurrentUserTenantInLease().leaseParticipant().<Tenant> createIdentityStub()));
         }
     }
 

@@ -17,7 +17,7 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.entity.shared.EntityFactory;
 
-import com.propertyvista.portal.rpc.portal.prospect.dto.SummaryStepDTO;
+import com.propertyvista.portal.rpc.portal.prospect.dto.steps.SummaryStepDTO;
 import com.propertyvista.portal.rpc.portal.prospect.services.SummaryStepService;
 
 public class SummaryStepServiceImpl implements SummaryStepService {

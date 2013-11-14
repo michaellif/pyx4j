@@ -13,7 +13,7 @@
  */
 package com.propertyvista.portal.prospect.ui.steps;
 
-import com.propertyvista.portal.rpc.portal.prospect.dto.OptionsStepDTO;
+import com.propertyvista.portal.rpc.portal.prospect.dto.steps.OptionsStepDTO;
 import com.propertyvista.portal.shared.ui.IWizardStepView;
 
 public interface OptionsStepView extends IWizardStepView<OptionsStepDTO> {

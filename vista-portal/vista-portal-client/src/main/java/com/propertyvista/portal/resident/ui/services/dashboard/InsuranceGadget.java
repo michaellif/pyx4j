@@ -32,7 +32,7 @@ import com.pyx4j.widgets.client.Anchor;
 import com.pyx4j.widgets.client.Label;
 
 import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
-import com.propertyvista.portal.rpc.portal.ResidentPortalSiteMap;
+import com.propertyvista.portal.rpc.portal.resident.ResidentPortalSiteMap;
 import com.propertyvista.portal.rpc.portal.resident.dto.insurance.status.GeneralInsuranceCertificateSummaryDTO;
 import com.propertyvista.portal.rpc.portal.resident.dto.insurance.status.InsuranceCertificateSummaryDTO;
 import com.propertyvista.portal.rpc.portal.resident.dto.insurance.status.InsuranceStatusDTO;

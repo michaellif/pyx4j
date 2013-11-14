@@ -19,7 +19,7 @@ import com.pyx4j.security.rpc.AuthenticationService;
 
 import com.propertyvista.portal.resident.themes.ResidentPortalTheme;
 import com.propertyvista.portal.resident.ui.ResidentPortalRootPane;
-import com.propertyvista.portal.rpc.portal.ResidentPortalSiteMap;
+import com.propertyvista.portal.rpc.portal.resident.ResidentPortalSiteMap;
 import com.propertyvista.portal.rpc.portal.resident.services.ResidentAuthenticationService;
 import com.propertyvista.portal.shared.PortalSite;
 

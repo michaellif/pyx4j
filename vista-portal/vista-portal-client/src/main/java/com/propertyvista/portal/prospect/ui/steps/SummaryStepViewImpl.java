@@ -15,7 +15,7 @@ package com.propertyvista.portal.prospect.ui.steps;
 
 import com.pyx4j.i18n.shared.I18n;
 
-import com.propertyvista.portal.rpc.portal.prospect.dto.SummaryStepDTO;
+import com.propertyvista.portal.rpc.portal.prospect.dto.steps.SummaryStepDTO;
 import com.propertyvista.portal.shared.ui.AbstractWizardStepView;
 
 public class SummaryStepViewImpl extends AbstractWizardStepView<SummaryStepDTO> implements SummaryStepView {

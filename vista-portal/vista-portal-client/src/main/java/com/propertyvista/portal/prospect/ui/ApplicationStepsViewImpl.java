@@ -11,7 +11,7 @@
  * @author vlads
  * @version $Id$
  */
-package com.propertyvista.portal.shared.ui;
+package com.propertyvista.portal.prospect.ui;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -40,17 +40,19 @@ import com.pyx4j.site.client.ui.layout.responsive.LayoutChangeHandler;
 import com.pyx4j.site.client.ui.layout.responsive.ResponsiveLayoutPanel.LayoutType;
 import com.pyx4j.widgets.client.DropDownPanel;
 
+import com.propertyvista.domain.tenant.prospect.ApplicationStepDescriptor;
+import com.propertyvista.portal.rpc.portal.prospect.dto.ApplicationStepDescriptorsDTO;
 import com.propertyvista.portal.shared.themes.StepsTheme;
 
-public class StepsViewImpl extends FlowPanel implements StepsView {
+public class ApplicationStepsViewImpl extends FlowPanel implements ApplicationStepsView {
 
-    private static final I18n i18n = I18n.get(StepsViewImpl.class);
+    private static final I18n i18n = I18n.get(ApplicationStepsViewImpl.class);
 
-    private StepsPresenter presenter;
+    private ApplicationStepsPresenter presenter;
 
     private final List<StepButton> stepButtons;
 
-    public StepsViewImpl() {
+    public ApplicationStepsViewImpl() {
 
         setStyleName(StepsTheme.StyleName.WizardStepPanel.name());
 
@@ -69,27 +71,17 @@ public class StepsViewImpl extends FlowPanel implements StepsView {
     }
 
     @Override
-    public void setStepButtons() {
+    public void setStepButtons(ApplicationStepDescriptorsDTO stepDescriptors) {
         removeAllStepButtons();
-        for (int i = 1; i < 5; i++) {
-            addStepButton(i + "", "Step " + i, StepButton.Size.large, StepButton.Status.complete, new Command() {
 
-                @Override
-                public void execute() {
-                    // TODO Auto-generated method stub
-
-                }
-            });
-        }
-        addStepButton("5", "Step 5", StepButton.Size.large, StepButton.Status.invalid, null);
-        addStepButton("6", "Step 6", StepButton.Size.large, StepButton.Status.selected, null);
-        for (int i = 7; i < 12; i++) {
-            addStepButton(i + "", "Step " + i, StepButton.Size.large, StepButton.Status.notVisited, null);
+        for (int i = 0; i < stepDescriptors.steps().size(); i++) {
+            ApplicationStepDescriptor stepDescriptor = stepDescriptors.steps().get(i);
+            addStepButton((i + 1) + "", stepDescriptor.stepId().getValue().getCaption(), stepDescriptor.status().getValue(), null);
         }
     }
 
-    private void addStepButton(String label, String caption, StepButton.Size size, final StepButton.Status status, Command navigationCommand) {
-        StepButton stepButton = new StepButton(label, caption, size, status, navigationCommand);
+    private void addStepButton(String label, String caption, final ApplicationStepDescriptor.Status status, Command navigationCommand) {
+        StepButton stepButton = new StepButton(label, caption, status, navigationCommand);
         add(stepButton);
         stepButtons.add(stepButton);
     }
@@ -100,7 +92,7 @@ public class StepsViewImpl extends FlowPanel implements StepsView {
     }
 
     @Override
-    public void setPresenter(final StepsPresenter presenter) {
+    public void setPresenter(final ApplicationStepsPresenter presenter) {
         this.presenter = presenter;
     }
 
@@ -116,19 +108,15 @@ public class StepsViewImpl extends FlowPanel implements StepsView {
             large, medium, small
         }
 
-        static enum Status {
-            notVisited, selected, complete, invalid
-        }
-
         private Command command;
 
-        private Status status;
+        private ApplicationStepDescriptor.Status status;
 
         private final CaptionPanel captionPanel;
 
         private HandlerRegistration clickHandlerRegistration;
 
-        StepButton(String label, String caption, Size size, final Status status, Command navigationCommand) {
+        StepButton(String label, String caption, final ApplicationStepDescriptor.Status status, Command navigationCommand) {
             super(label);
 
             setStyleName(StepsTheme.StyleName.WizardStepHandler.name());
@@ -136,7 +124,6 @@ public class StepsViewImpl extends FlowPanel implements StepsView {
             getElement().getStyle().setVerticalAlign(VerticalAlign.MIDDLE);
             getElement().getStyle().setTextAlign(TextAlign.CENTER);
 
-            setSize(size);
             setStatus(status);
             setNavigation(navigationCommand);
 
@@ -217,13 +204,13 @@ public class StepsViewImpl extends FlowPanel implements StepsView {
             }
         }
 
-        void setStatus(Status status) {
+        void setStatus(ApplicationStepDescriptor.Status status) {
             this.status = status;
             switch (status) {
             case notVisited:
                 getElement().getStyle().setBackgroundColor("#999");
                 break;
-            case selected:
+            case visited:
                 getElement().getStyle().setBackgroundColor("#179bdd");
                 break;
             case complete:

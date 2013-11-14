@@ -41,7 +41,7 @@ import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.dto.payment.ConvienceFeeCalulationResponseTO;
 import com.propertyvista.portal.rpc.portal.resident.dto.financial.PaymentDTO;
 import com.propertyvista.portal.rpc.portal.resident.services.financial.PaymentWizardService;
-import com.propertyvista.portal.server.security.TenantAppContext;
+import com.propertyvista.portal.server.portal.resident.ResidentPortalContext;
 import com.propertyvista.server.common.util.AddressConverter;
 import com.propertyvista.server.common.util.AddressRetriever;
 import com.propertyvista.server.common.util.LeaseParticipantUtils;
@@ -61,7 +61,7 @@ public class PaymentWizardServiceImpl extends AbstractCrudServiceDtoImpl<Payment
 
     @Override
     protected PaymentDTO init(InitializationData initializationData) {
-        Lease lease = TenantAppContext.getCurrentUserLease();
+        Lease lease = ResidentPortalContext.getCurrentUserLease();
         Persistence.service().retrieve(lease.unit());
         Persistence.service().retrieve(lease.unit().building());
 
@@ -84,7 +84,7 @@ public class PaymentWizardServiceImpl extends AbstractCrudServiceDtoImpl<Payment
         dto.leaseId().set(lease.leaseId());
         dto.leaseStatus().set(lease.status());
 
-        dto.leaseTermParticipant().set(TenantAppContext.getCurrentUserTenantInLease());
+        dto.leaseTermParticipant().set(ResidentPortalContext.getCurrentUserTenantInLease());
 
         // some default values:
         dto.createdDate().setValue(new LogicalDate(SystemDateManager.getDate()));
@@ -102,9 +102,9 @@ public class PaymentWizardServiceImpl extends AbstractCrudServiceDtoImpl<Payment
 
     @Override
     protected void persist(PaymentRecord bo, PaymentDTO to) {
-        Lease lease = Persistence.service().retrieve(Lease.class, TenantAppContext.getCurrentUserLeaseIdStub().getPrimaryKey());
+        Lease lease = Persistence.service().retrieve(Lease.class, ResidentPortalContext.getCurrentUserLeaseIdStub().getPrimaryKey());
 
-        bo.paymentMethod().customer().set(TenantAppContext.getCurrentUserCustomer());
+        bo.paymentMethod().customer().set(ResidentPortalContext.getCurrentUserCustomer());
 
         // Do not change profile methods
         if (bo.paymentMethod().id().isNull()) {
@@ -134,12 +134,12 @@ public class PaymentWizardServiceImpl extends AbstractCrudServiceDtoImpl<Payment
 
     @Override
     public void getCurrentAddress(AsyncCallback<AddressSimple> callback) {
-        callback.onSuccess(AddressRetriever.getLeaseParticipantCurrentAddressSimple(TenantAppContext.getCurrentUserTenant()));
+        callback.onSuccess(AddressRetriever.getLeaseParticipantCurrentAddressSimple(ResidentPortalContext.getCurrentUserTenant()));
     }
 
     @Override
     public void getProfiledPaymentMethods(AsyncCallback<Vector<LeasePaymentMethod>> callback) {
-        callback.onSuccess(new Vector<LeasePaymentMethod>(LeaseParticipantUtils.getProfiledPaymentMethods(TenantAppContext.getCurrentUserTenantInLease())));
+        callback.onSuccess(new Vector<LeasePaymentMethod>(LeaseParticipantUtils.getProfiledPaymentMethods(ResidentPortalContext.getCurrentUserTenantInLease())));
     }
 
     @Override

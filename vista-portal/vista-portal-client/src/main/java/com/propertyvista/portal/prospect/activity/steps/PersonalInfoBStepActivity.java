@@ -19,8 +19,8 @@ import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.rpc.AppPlace;
 
 import com.propertyvista.portal.prospect.ui.steps.PersonalInfoBStepView;
-import com.propertyvista.portal.rpc.portal.ProspectPortalSiteMap;
-import com.propertyvista.portal.rpc.portal.prospect.dto.PersonalInfoBStepDTO;
+import com.propertyvista.portal.rpc.portal.prospect.ProspectPortalSiteMap;
+import com.propertyvista.portal.rpc.portal.prospect.dto.steps.PersonalInfoBStepDTO;
 import com.propertyvista.portal.rpc.portal.prospect.services.PersonalInfoBStepService;
 
 public class PersonalInfoBStepActivity extends AbstractProspectWizardStepActivity<PersonalInfoBStepDTO> {

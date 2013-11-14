@@ -19,8 +19,8 @@ import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.rpc.AppPlace;
 
 import com.propertyvista.portal.prospect.ui.steps.PmcCustomStepView;
-import com.propertyvista.portal.rpc.portal.ProspectPortalSiteMap;
-import com.propertyvista.portal.rpc.portal.prospect.dto.PmcCustomStepDTO;
+import com.propertyvista.portal.rpc.portal.prospect.ProspectPortalSiteMap;
+import com.propertyvista.portal.rpc.portal.prospect.dto.steps.PmcCustomStepDTO;
 import com.propertyvista.portal.rpc.portal.prospect.services.PmcCustomStepService;
 
 public class PmcCustomStepActivity extends AbstractProspectWizardStepActivity<PmcCustomStepDTO> {

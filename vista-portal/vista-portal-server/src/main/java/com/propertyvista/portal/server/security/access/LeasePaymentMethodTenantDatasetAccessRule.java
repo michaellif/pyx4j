@@ -17,7 +17,7 @@ import com.pyx4j.entity.security.DatasetAccessRule;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 
 import com.propertyvista.domain.payment.LeasePaymentMethod;
-import com.propertyvista.portal.server.security.TenantAppContext;
+import com.propertyvista.portal.server.portal.resident.ResidentPortalContext;
 
 public class LeasePaymentMethodTenantDatasetAccessRule implements DatasetAccessRule<LeasePaymentMethod> {
 
@@ -25,7 +25,7 @@ public class LeasePaymentMethodTenantDatasetAccessRule implements DatasetAccessR
 
     @Override
     public void applyRule(EntityQueryCriteria<LeasePaymentMethod> criteria) {
-        criteria.eq(criteria.proto().customer().user(), TenantAppContext.getCurrentUser());
+        criteria.eq(criteria.proto().customer().user(), ResidentPortalContext.getCurrentUser());
     }
 
 }

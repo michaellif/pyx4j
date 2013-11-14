@@ -7,29 +7,31 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on 2011-02-24
+ * Created on Nov 14, 2011
  * @author vlads
  * @version $Id$
  */
-package com.propertyvista.domain.tenant.prospect;
+package com.propertyvista.portal.server.portal.prospect;
 
 import java.io.Serializable;
 
-import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.entity.shared.IPrimitive;
-import com.pyx4j.i18n.annotations.I18n;
+import com.pyx4j.commons.Key;
 
-@I18n(strategy = I18n.I18nStrategy.IgnoreAll)
-public interface ApplicationWizardStep extends IEntity {
+public class ProspectPortalAttributes implements Serializable {
 
-    public enum Status implements Serializable {
+    private static final long serialVersionUID = 1L;
 
-        notVisited, latest, complete, invalid
+    private Key applicationPrimaryKey;
+
+    protected ProspectPortalAttributes() {
 
     }
 
-    IPrimitive<String> placeId();
+    public Key getApplicationPrimaryKey() {
+        return applicationPrimaryKey;
+    }
 
-    IPrimitive<Status> status();
-
+    public void setApplicationPrimaryKey(Key applicationPrimaryKey) {
+        this.applicationPrimaryKey = applicationPrimaryKey;
+    }
 }

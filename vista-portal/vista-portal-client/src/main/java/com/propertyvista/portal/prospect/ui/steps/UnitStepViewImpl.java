@@ -15,7 +15,7 @@ package com.propertyvista.portal.prospect.ui.steps;
 
 import com.pyx4j.i18n.shared.I18n;
 
-import com.propertyvista.portal.rpc.portal.prospect.dto.UnitStepDTO;
+import com.propertyvista.portal.rpc.portal.prospect.dto.steps.UnitStepDTO;
 import com.propertyvista.portal.shared.ui.AbstractWizardStepView;
 
 public class UnitStepViewImpl extends AbstractWizardStepView<UnitStepDTO> implements UnitStepView {

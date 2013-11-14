@@ -27,7 +27,7 @@ import com.propertyvista.domain.contact.AddressStructured;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.portal.rpc.portal.resident.services.LeaseContextSelectionService;
 import com.propertyvista.portal.rpc.portal.shared.dto.LeaseContextChoiceDTO;
-import com.propertyvista.portal.server.security.TenantAppContext;
+import com.propertyvista.portal.server.portal.resident.ResidentPortalContext;
 import com.propertyvista.server.common.util.AddressRetriever;
 
 public class LeaseContextSelectionServiceImpl implements LeaseContextSelectionService {
@@ -35,7 +35,7 @@ public class LeaseContextSelectionServiceImpl implements LeaseContextSelectionSe
     @Override
     public void getLeaseContextChoices(AsyncCallback<Vector<LeaseContextChoiceDTO>> callback) {
 
-        List<Lease> activeLeases = ServerSideFactory.create(CustomerFacade.class).getActiveLeases(TenantAppContext.getCurrentUser());
+        List<Lease> activeLeases = ServerSideFactory.create(CustomerFacade.class).getActiveLeases(ResidentPortalContext.getCurrentUser());
         Vector<LeaseContextChoiceDTO> choices = new Vector<LeaseContextChoiceDTO>(activeLeases.size());
 
         for (Lease lease : activeLeases) {

@@ -13,7 +13,7 @@
  */
 package com.propertyvista.portal.rpc.portal.prospect.services;
 
-import com.propertyvista.portal.rpc.portal.prospect.dto.UnitStepDTO;
+import com.propertyvista.portal.rpc.portal.prospect.dto.steps.UnitStepDTO;
 
 public interface UnitStepService extends AbstractWizardStepService<UnitStepDTO> {
 

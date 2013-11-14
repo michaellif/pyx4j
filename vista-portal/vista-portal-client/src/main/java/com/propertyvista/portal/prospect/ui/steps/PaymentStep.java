@@ -20,7 +20,7 @@ import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.portal.prospect.ui.steps.PaymentStepView.PaymentStepPresenter;
-import com.propertyvista.portal.rpc.portal.prospect.dto.PaymentStepDTO;
+import com.propertyvista.portal.rpc.portal.prospect.dto.steps.PaymentStepDTO;
 import com.propertyvista.portal.shared.ui.CPortalEntityWizardStep;
 
 public class PaymentStep extends CPortalEntityWizardStep<PaymentStepDTO> {

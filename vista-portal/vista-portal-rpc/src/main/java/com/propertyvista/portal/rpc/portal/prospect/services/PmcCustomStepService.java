@@ -13,7 +13,7 @@
  */
 package com.propertyvista.portal.rpc.portal.prospect.services;
 
-import com.propertyvista.portal.rpc.portal.prospect.dto.PmcCustomStepDTO;
+import com.propertyvista.portal.rpc.portal.prospect.dto.steps.PmcCustomStepDTO;
 
 public interface PmcCustomStepService extends AbstractWizardStepService<PmcCustomStepDTO> {
 

@@ -20,7 +20,7 @@ import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.portal.prospect.ui.steps.PersonalInfoAStepView.PersonalInfoAStepPresenter;
-import com.propertyvista.portal.rpc.portal.prospect.dto.PersonalInfoAStepDTO;
+import com.propertyvista.portal.rpc.portal.prospect.dto.steps.PersonalInfoAStepDTO;
 import com.propertyvista.portal.shared.ui.CPortalEntityWizardStep;
 
 public class PersonalInfoAStep extends CPortalEntityWizardStep<PersonalInfoAStepDTO> {

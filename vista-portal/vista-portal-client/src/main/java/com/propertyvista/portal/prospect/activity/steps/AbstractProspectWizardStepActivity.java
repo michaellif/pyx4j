@@ -16,7 +16,7 @@ package com.propertyvista.portal.prospect.activity.steps;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.site.client.AppSite;
 
-import com.propertyvista.portal.rpc.portal.ProspectPortalSiteMap;
+import com.propertyvista.portal.rpc.portal.prospect.ProspectPortalSiteMap;
 import com.propertyvista.portal.rpc.portal.prospect.services.AbstractWizardStepService;
 import com.propertyvista.portal.shared.activity.AbstractWizardStepActivity;
 import com.propertyvista.portal.shared.ui.IWizardStepView;

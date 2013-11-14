@@ -21,7 +21,7 @@ import com.pyx4j.entity.shared.EntityFactory;
 import com.propertyvista.domain.tenant.lease.LeaseTermTenant;
 import com.propertyvista.portal.rpc.portal.resident.dto.ResidentSummaryDTO;
 import com.propertyvista.portal.rpc.portal.resident.services.profile.ResidentSummaryService;
-import com.propertyvista.portal.server.security.TenantAppContext;
+import com.propertyvista.portal.server.portal.resident.ResidentPortalContext;
 import com.propertyvista.server.common.util.AddressRetriever;
 
 public class ResidentSummaryServiceImpl implements ResidentSummaryService {
@@ -30,7 +30,7 @@ public class ResidentSummaryServiceImpl implements ResidentSummaryService {
     public void retreiveProfileSummary(AsyncCallback<ResidentSummaryDTO> callback) {
         ResidentSummaryDTO profileSummary = EntityFactory.create(ResidentSummaryDTO.class);
 
-        LeaseTermTenant tenantInLease = TenantAppContext.getCurrentUserTenantInLease();
+        LeaseTermTenant tenantInLease = ResidentPortalContext.getCurrentUserTenantInLease();
         Persistence.service().retrieve(tenantInLease.leaseTermV());
         Persistence.service().retrieve(tenantInLease.leaseTermV().holder().lease());
         Persistence.service().retrieve(tenantInLease.leaseTermV().holder().lease().unit().floorplan());

@@ -92,7 +92,7 @@ public interface OnlineApplication extends IEntity {
     IPrimitive<Status> status();
 
     @Owned
-    IList<ApplicationWizardStep> steps();
+    IList<ApplicationStepDescriptor> steps();
 
     @Owned
     IList<DigitalSignature> signatures();

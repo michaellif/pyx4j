@@ -18,7 +18,7 @@ import com.pyx4j.entity.security.InstanceAccess;
 import com.pyx4j.entity.shared.IEntity;
 
 import com.propertyvista.domain.IBoundToApplication;
-import com.propertyvista.portal.server.portal.prospect.ProspectApplicationContext;
+import com.propertyvista.portal.server.portal.prospect.ProspectPortalContext;
 
 public class ApplicationEntityInstanceAccess implements InstanceAccess {
 
@@ -27,7 +27,7 @@ public class ApplicationEntityInstanceAccess implements InstanceAccess {
     @Override
     public boolean allow(IEntity entity) {
         return (entity instanceof IBoundToApplication)
-                && (EqualsHelper.equals(((IBoundToApplication) entity).application().getPrimaryKey(), ProspectApplicationContext.getCurrentUserApplicationPrimaryKey()));
+                && (EqualsHelper.equals(((IBoundToApplication) entity).application().getPrimaryKey(), ProspectPortalContext.getCurrentUserApplicationPrimaryKey()));
     }
 
 }

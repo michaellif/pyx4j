@@ -17,7 +17,7 @@ import com.pyx4j.entity.security.DatasetAccessRule;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 
 import com.propertyvista.domain.payment.AutopayAgreement;
-import com.propertyvista.portal.server.security.TenantAppContext;
+import com.propertyvista.portal.server.portal.resident.ResidentPortalContext;
 
 public class AutopayAgreementTenantDatasetAccessRule implements DatasetAccessRule<AutopayAgreement> {
 
@@ -25,7 +25,7 @@ public class AutopayAgreementTenantDatasetAccessRule implements DatasetAccessRul
 
     @Override
     public void applyRule(EntityQueryCriteria<AutopayAgreement> criteria) {
-        criteria.eq(criteria.proto().tenant().customer().user(), TenantAppContext.getCurrentUser());
+        criteria.eq(criteria.proto().tenant().customer().user(), ResidentPortalContext.getCurrentUser());
     }
 
 }

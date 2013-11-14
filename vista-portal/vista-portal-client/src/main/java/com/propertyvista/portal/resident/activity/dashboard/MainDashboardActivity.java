@@ -25,7 +25,7 @@ import com.pyx4j.site.client.AppSite;
 import com.propertyvista.domain.security.VistaCustomerPaymentTypeBehavior;
 import com.propertyvista.portal.resident.ResidentPortalSite;
 import com.propertyvista.portal.resident.ui.dashboard.MainDashboardView;
-import com.propertyvista.portal.rpc.portal.ResidentPortalSiteMap;
+import com.propertyvista.portal.rpc.portal.resident.ResidentPortalSiteMap;
 import com.propertyvista.portal.rpc.portal.resident.dto.ResidentSummaryDTO;
 import com.propertyvista.portal.rpc.portal.resident.dto.financial.BillingSummaryDTO;
 import com.propertyvista.portal.rpc.portal.resident.dto.insurance.status.InsuranceStatusDTO;

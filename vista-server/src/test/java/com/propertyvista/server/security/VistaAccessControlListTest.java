@@ -43,7 +43,7 @@ import com.propertyvista.domain.tenant.prospect.OnlineApplication;
 import com.propertyvista.dto.TenantFinancialDTO;
 import com.propertyvista.portal.rpc.portal.prospect.services.UnitStepService;
 import com.propertyvista.portal.rpc.ptapp.dto.TenantInLeaseListDTO;
-import com.propertyvista.portal.server.portal.prospect.ProspectApplicationContext;
+import com.propertyvista.portal.server.portal.prospect.ProspectPortalContext;
 
 public class VistaAccessControlListTest {
 
@@ -138,7 +138,7 @@ public class VistaAccessControlListTest {
 
         OnlineApplication application = EntityFactory.create(OnlineApplication.class);
         application.setPrimaryKey(new Key(-251));
-        ProspectApplicationContext.setCurrentUserApplication(application);
+        ProspectPortalContext.setCurrentUserApplication(application);
 
         assertEntityPermission(true, ApplicationDocumentFile.class, application);
         assertEntityPermission(true, TenantInLeaseListDTO.class, application);

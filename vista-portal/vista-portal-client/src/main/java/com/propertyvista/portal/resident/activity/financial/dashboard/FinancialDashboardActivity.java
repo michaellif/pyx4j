@@ -29,7 +29,7 @@ import com.propertyvista.domain.security.VistaCustomerPaymentTypeBehavior;
 import com.propertyvista.portal.resident.ResidentPortalSite;
 import com.propertyvista.portal.resident.ui.financial.dashboard.FinancialDashboardView;
 import com.propertyvista.portal.resident.ui.financial.dashboard.FinancialDashboardView.FinancialDashboardPresenter;
-import com.propertyvista.portal.rpc.portal.ResidentPortalSiteMap;
+import com.propertyvista.portal.rpc.portal.resident.ResidentPortalSiteMap;
 import com.propertyvista.portal.rpc.portal.resident.dto.financial.AutoPayInfoDTO;
 import com.propertyvista.portal.rpc.portal.resident.dto.financial.AutoPaySummaryDTO;
 import com.propertyvista.portal.rpc.portal.resident.dto.financial.BillingSummaryDTO;

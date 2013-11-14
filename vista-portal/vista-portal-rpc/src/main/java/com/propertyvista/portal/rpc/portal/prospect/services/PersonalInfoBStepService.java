@@ -13,7 +13,7 @@
  */
 package com.propertyvista.portal.rpc.portal.prospect.services;
 
-import com.propertyvista.portal.rpc.portal.prospect.dto.PersonalInfoBStepDTO;
+import com.propertyvista.portal.rpc.portal.prospect.dto.steps.PersonalInfoBStepDTO;
 
 public interface PersonalInfoBStepService extends AbstractWizardStepService<PersonalInfoBStepDTO> {
 

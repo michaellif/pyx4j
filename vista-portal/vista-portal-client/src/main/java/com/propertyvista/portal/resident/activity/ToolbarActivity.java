@@ -33,7 +33,7 @@ import com.propertyvista.domain.security.VistaCustomerBehavior;
 import com.propertyvista.portal.resident.ResidentPortalSite;
 import com.propertyvista.portal.resident.ui.ToolbarView;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap;
-import com.propertyvista.portal.rpc.portal.ResidentPortalSiteMap;
+import com.propertyvista.portal.rpc.portal.resident.ResidentPortalSiteMap;
 import com.propertyvista.shared.i18n.CompiledLocale;
 
 public class ToolbarActivity extends AbstractActivity implements ToolbarView.ToolbarPresenter {

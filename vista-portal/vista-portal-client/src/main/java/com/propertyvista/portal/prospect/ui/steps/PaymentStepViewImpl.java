@@ -15,7 +15,7 @@ package com.propertyvista.portal.prospect.ui.steps;
 
 import com.pyx4j.i18n.shared.I18n;
 
-import com.propertyvista.portal.rpc.portal.prospect.dto.PaymentStepDTO;
+import com.propertyvista.portal.rpc.portal.prospect.dto.steps.PaymentStepDTO;
 import com.propertyvista.portal.shared.ui.AbstractWizardStepView;
 
 public class PaymentStepViewImpl extends AbstractWizardStepView<PaymentStepDTO> implements PaymentStepView {

@@ -19,8 +19,8 @@ import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.rpc.AppPlace;
 
 import com.propertyvista.portal.prospect.ui.steps.ContactsStepView;
-import com.propertyvista.portal.rpc.portal.ProspectPortalSiteMap;
-import com.propertyvista.portal.rpc.portal.prospect.dto.ContactsStepDTO;
+import com.propertyvista.portal.rpc.portal.prospect.ProspectPortalSiteMap;
+import com.propertyvista.portal.rpc.portal.prospect.dto.steps.ContactsStepDTO;
 import com.propertyvista.portal.rpc.portal.prospect.services.ContactsStepService;
 
 public class ContactsStepActivity extends AbstractProspectWizardStepActivity<ContactsStepDTO> {

@@ -25,7 +25,7 @@ import com.pyx4j.site.shared.domain.Notification;
 import com.propertyvista.domain.security.VistaCustomerBehavior;
 import com.propertyvista.domain.security.common.VistaBasicBehavior;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap;
-import com.propertyvista.portal.rpc.portal.ResidentPortalSiteMap;
+import com.propertyvista.portal.rpc.portal.resident.ResidentPortalSiteMap;
 
 public class ResidentPortalSiteDispatcher extends AbstractAppPlaceDispatcher {
 

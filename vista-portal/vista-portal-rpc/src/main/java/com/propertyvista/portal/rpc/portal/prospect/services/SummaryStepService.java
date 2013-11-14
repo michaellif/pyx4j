@@ -13,7 +13,7 @@
  */
 package com.propertyvista.portal.rpc.portal.prospect.services;
 
-import com.propertyvista.portal.rpc.portal.prospect.dto.SummaryStepDTO;
+import com.propertyvista.portal.rpc.portal.prospect.dto.steps.SummaryStepDTO;
 
 public interface SummaryStepService extends AbstractWizardStepService<SummaryStepDTO> {
 

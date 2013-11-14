@@ -17,7 +17,7 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.entity.shared.EntityFactory;
 
-import com.propertyvista.portal.rpc.portal.prospect.dto.UnitStepDTO;
+import com.propertyvista.portal.rpc.portal.prospect.dto.steps.UnitStepDTO;
 import com.propertyvista.portal.rpc.portal.prospect.services.UnitStepService;
 
 public class UnitStepServiceImpl implements UnitStepService {

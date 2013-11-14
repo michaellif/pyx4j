@@ -31,7 +31,7 @@ import com.propertyvista.domain.tenant.insurance.GeneralInsurancePolicy;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.portal.rpc.portal.resident.dto.insurance.GeneralInsurancePolicyDTO;
 import com.propertyvista.portal.rpc.portal.resident.services.services.GeneralInsurancePolicyCrudService;
-import com.propertyvista.portal.server.security.TenantAppContext;
+import com.propertyvista.portal.server.portal.resident.ResidentPortalContext;
 
 public class GeneralInsurancePolicyCrudServiceImpl extends AbstractCrudServiceDtoImpl<GeneralInsurancePolicy, GeneralInsurancePolicyDTO> implements
         GeneralInsurancePolicyCrudService {
@@ -54,7 +54,7 @@ public class GeneralInsurancePolicyCrudServiceImpl extends AbstractCrudServiceDt
 
     @Override
     public void create(AsyncCallback<Key> callback, GeneralInsurancePolicyDTO dto) {
-        ServerSideFactory.create(GeneralInsuranceFacade.class).createGeneralTenantInsurance(TenantAppContext.getCurrentUserTenant(), dto.certificate());
+        ServerSideFactory.create(GeneralInsuranceFacade.class).createGeneralTenantInsurance(ResidentPortalContext.getCurrentUserTenant(), dto.certificate());
         Persistence.service().commit();
         callback.onSuccess(null);
     }
@@ -83,7 +83,7 @@ public class GeneralInsurancePolicyCrudServiceImpl extends AbstractCrudServiceDt
     }
 
     private void populateMinLiability(GeneralInsurancePolicyDTO to) {
-        Lease lease = Persistence.service().retrieve(Lease.class, TenantAppContext.getCurrentUserLeaseIdStub().getPrimaryKey());
+        Lease lease = Persistence.service().retrieve(Lease.class, ResidentPortalContext.getCurrentUserLeaseIdStub().getPrimaryKey());
         TenantInsurancePolicy insurancePolicy = ServerSideFactory.create(PolicyFacade.class).obtainEffectivePolicy(lease.unit(), TenantInsurancePolicy.class);
         to.minLiability().setValue(insurancePolicy.requireMinimumLiability().isBooleanTrue() ? insurancePolicy.minimumRequiredLiability().getValue() : null);
     }

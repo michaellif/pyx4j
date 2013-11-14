@@ -19,8 +19,8 @@ import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.rpc.AppPlace;
 
 import com.propertyvista.portal.prospect.ui.steps.SummaryStepView;
-import com.propertyvista.portal.rpc.portal.ProspectPortalSiteMap;
-import com.propertyvista.portal.rpc.portal.prospect.dto.SummaryStepDTO;
+import com.propertyvista.portal.rpc.portal.prospect.ProspectPortalSiteMap;
+import com.propertyvista.portal.rpc.portal.prospect.dto.steps.SummaryStepDTO;
 import com.propertyvista.portal.rpc.portal.prospect.services.SummaryStepService;
 
 public class SummaryStepActivity extends AbstractProspectWizardStepActivity<SummaryStepDTO> {
