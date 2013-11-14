@@ -33,7 +33,7 @@ import com.propertyvista.domain.settings.PmcYardiCredential;
 import com.propertyvista.yardi.YardiInterface;
 import com.propertyvista.yardi.bean.Messages;
 
-class YardiLicense {
+public class YardiLicense {
 
     static String errorMessage_VendorLicense_Fragement = "License invalid for Vendor";
 
@@ -87,7 +87,7 @@ class YardiLicense {
         }
     }
 
-    static void restLicenseCache() {
+    public static void restLicenseCache() {
         configLoaded = false;
         licenseBody.clear();
     }
