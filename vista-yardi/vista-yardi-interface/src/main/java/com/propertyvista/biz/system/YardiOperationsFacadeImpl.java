@@ -25,7 +25,7 @@ public class YardiOperationsFacadeImpl implements YardiOperationsFacade {
 
     @Override
     public void verifyInterface(PmcYardiCredential yc, Void yardiInterfaceType) {
-        // TODO implement ping
+        // TODO implement ping   VISTA-3820
     }
 
 }
