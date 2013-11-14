@@ -21,6 +21,8 @@ public enum YardiInterface {
 
     ILSGuestCard,
 
-    CreditScreening
+    CreditScreening,
+
+    Collections
 
 }
