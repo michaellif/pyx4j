@@ -20,6 +20,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.EnumSet;
 
+import org.apache.commons.lang.math.NumberUtils;
 import org.apache.commons.lang.time.DateUtils;
 
 import com.pyx4j.commons.CommonsStringUtils;
@@ -83,6 +84,14 @@ public class CardServiceSimulationUtils {
 
             BigDecimal money = new BigDecimal(valueDollars + "." + valueCents);
             return money.setScale(2);
+        }
+    }
+
+    static boolean isValidAmount(String value) {
+        if (CommonsStringUtils.isEmpty(value) || (!NumberUtils.isNumber(value))) {
+            return false;
+        } else {
+            return true;
         }
     }
 
