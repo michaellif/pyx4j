@@ -42,7 +42,7 @@ import com.propertyvista.domain.payment.CreditCardInfo.CreditCardType;
 import com.propertyvista.domain.pmc.Pmc;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.util.ValidationUtils;
-import com.propertyvista.dto.payment.ConvienceFeeCalulationResponseTO;
+import com.propertyvista.dto.payment.ConvenienceFeeCalulationResponseTO;
 import com.propertyvista.payment.CCInformation;
 import com.propertyvista.payment.FeeCalulationRequest;
 import com.propertyvista.payment.FeeCalulationResponse;
@@ -367,7 +367,7 @@ class CreditCardProcessor {
         }
     }
 
-    public static ConvienceFeeCalulationResponseTO getConvienceFee(String merchantTerminalId, CreditCardType cardType, BigDecimal amount) {
+    public static ConvenienceFeeCalulationResponseTO getConvenienceFee(String merchantTerminalId, CreditCardType cardType, BigDecimal amount) {
         Merchant merchant = EntityFactory.create(Merchant.class);
         merchant.terminalID().setValue(merchantTerminalId);
 
@@ -380,12 +380,12 @@ class CreditCardProcessor {
 
         request.referenceNumber().setValue(referenceNumber);
 
-        FeeCalulationResponse response = getPaymentProcessor().getConvienceFee(merchant, request);
+        FeeCalulationResponse response = getPaymentProcessor().getConvenienceFee(merchant, request);
 
         if (response.success().getValue()) {
             log.debug("fee calulatedd {}", response);
 
-            ConvienceFeeCalulationResponseTO to = EntityFactory.create(ConvienceFeeCalulationResponseTO.class);
+            ConvenienceFeeCalulationResponseTO to = EntityFactory.create(ConvenienceFeeCalulationResponseTO.class);
             to.transactionNumber().setValue(referenceNumber);
             to.amount().setValue(amount);
             to.feeAmount().setValue(response.feeAmount().getValue());

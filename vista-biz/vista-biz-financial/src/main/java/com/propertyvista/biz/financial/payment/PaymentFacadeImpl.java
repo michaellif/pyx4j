@@ -58,7 +58,7 @@ import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.security.common.VistaApplication;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.LeaseTerm;
-import com.propertyvista.dto.payment.ConvienceFeeCalulationResponseTO;
+import com.propertyvista.dto.payment.ConvenienceFeeCalulationResponseTO;
 import com.propertyvista.server.common.security.VistaContext;
 
 public class PaymentFacadeImpl implements PaymentFacade {
@@ -98,14 +98,14 @@ public class PaymentFacadeImpl implements PaymentFacade {
     }
 
     @Override
-    public Collection<CreditCardType> getConvienceFeeApplicableCardTypes(BillingAccount billingAccountId, VistaApplication vistaApplication) {
-        return PaymentUtils.getConvienceFeeApplicableCardTypes(billingAccountId, vistaApplication);
+    public Collection<CreditCardType> getConvenienceFeeApplicableCardTypes(BillingAccount billingAccountId, VistaApplication vistaApplication) {
+        return PaymentUtils.getConvenienceFeeApplicableCardTypes(billingAccountId, vistaApplication);
     }
 
     @Override
-    public ConvienceFeeCalulationResponseTO getConvienceFee(BillingAccount billingAccountId, CreditCardType cardType, BigDecimal amount) {
+    public ConvenienceFeeCalulationResponseTO getConvenienceFee(BillingAccount billingAccountId, CreditCardType cardType, BigDecimal amount) {
         MerchantAccount account = PaymentUtils.retrieveValidMerchantAccount(billingAccountId);
-        return ServerSideFactory.create(CreditCardFacade.class).getConvienceFee(account.merchantTerminalId().getValue(), cardType, amount);
+        return ServerSideFactory.create(CreditCardFacade.class).getConvenienceFee(account.merchantTerminalId().getValue(), cardType, amount);
     }
 
     @Override

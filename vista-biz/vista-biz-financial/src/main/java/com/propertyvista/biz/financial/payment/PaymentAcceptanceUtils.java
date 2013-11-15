@@ -92,10 +92,10 @@ public class PaymentAcceptanceUtils {
 
     private static Collection<CardTypeAcceptance> crmCardRequire = buildCardAcceptanceMatrixCrm();
 
-    private static Collection<CardTypeAcceptance> residentPortalCardRequire = VistaTODO.convienceFeeEnabled ? buildCardAcceptanceMatrixWithConvienceFeePortal()
+    private static Collection<CardTypeAcceptance> residentPortalCardRequire = VistaTODO.convenienceFeeEnabled ? buildCardAcceptanceMatrixWithConvenienceFeePortal()
             : buildCardAcceptanceMatrixPortal();
 
-    private static Collection<CardTypeAcceptance> residentPortalCardWithoutConvienceFee = VistaTODO.convienceFeeEnabled ? buildCardAcceptanceMatrixWithoutConvienceFeePortal()
+    private static Collection<CardTypeAcceptance> residentPortalCardWithoutConvenienceFee = VistaTODO.convenienceFeeEnabled ? buildCardAcceptanceMatrixWithoutConvenienceFeePortal()
             : Collections.<CardTypeAcceptance> emptyList();
 
     static Collection<PaymentType> getAllowedPaymentTypes(VistaApplication vistaApplication, boolean electronicPaymentsAllowed, boolean requireCashEquivalent,
@@ -128,13 +128,13 @@ public class PaymentAcceptanceUtils {
     }
 
     public static Collection<CreditCardType> getAllowedCreditCardTypes(VistaApplication vistaApplication, boolean requireCashEquivalent,
-            PaymentTypeSelectionPolicy paymentMethodSelectionPolicy, boolean forConvienceFeeOnly) {
+            PaymentTypeSelectionPolicy paymentMethodSelectionPolicy, boolean forConvenienceFeeOnly) {
         Collection<CardTypeAcceptance> requireAcceptance;
         Collection<CardTypeAcceptance> feeAcceptance;
         switch (vistaApplication) {
         case resident:
             requireAcceptance = residentPortalCardRequire;
-            feeAcceptance = residentPortalCardWithoutConvienceFee;
+            feeAcceptance = residentPortalCardWithoutConvenienceFee;
             break;
         case crm:
             requireAcceptance = crmCardRequire;
@@ -153,15 +153,15 @@ public class PaymentAcceptanceUtils {
                 allowedPaymentTypes.add(acceptance.cardType);
             }
         }
-        if (forConvienceFeeOnly) {
-            // From accepted cards select the one the fee are no accepted by PMC, e.g. for VistaConvienceFee
-            Collection<CreditCardType> convienceFeePaymentTypes = new ArrayList<CreditCardType>();
+        if (forConvenienceFeeOnly) {
+            // From accepted cards select the one the fee are no accepted by PMC, e.g. for Vista Convenience Fee
+            Collection<CreditCardType> convenienceFeePaymentTypes = new ArrayList<CreditCardType>();
             for (CardTypeAcceptance acceptance : feeAcceptance) {
                 if (allowedPaymentTypes.contains(acceptance.cardType) && (!acceptance.accept(selection))) {
-                    convienceFeePaymentTypes.add(acceptance.cardType);
+                    convenienceFeePaymentTypes.add(acceptance.cardType);
                 }
             }
-            return Collections.unmodifiableCollection(convienceFeePaymentTypes);
+            return Collections.unmodifiableCollection(convenienceFeePaymentTypes);
         } else {
             return Collections.unmodifiableCollection(allowedPaymentTypes);
         }
@@ -271,7 +271,7 @@ public class PaymentAcceptanceUtils {
     }
 
     @SuppressWarnings("unchecked")
-    private static Collection<CardTypeAcceptance> buildCardAcceptanceMatrixWithConvienceFeePortal() {
+    private static Collection<CardTypeAcceptance> buildCardAcceptanceMatrixWithConvenienceFeePortal() {
         Collection<CardTypeAcceptance> require = new ArrayList<CardTypeAcceptance>();
         ElectronicPaymentMethodSelection p = EntityFactory.getEntityPrototype(ElectronicPaymentMethodSelection.class);
 
@@ -288,7 +288,7 @@ public class PaymentAcceptanceUtils {
     }
 
     @SuppressWarnings("unchecked")
-    private static Collection<CardTypeAcceptance> buildCardAcceptanceMatrixWithoutConvienceFeePortal() {
+    private static Collection<CardTypeAcceptance> buildCardAcceptanceMatrixWithoutConvenienceFeePortal() {
         Collection<CardTypeAcceptance> require = new ArrayList<CardTypeAcceptance>();
         ElectronicPaymentMethodSelection p = EntityFactory.getEntityPrototype(ElectronicPaymentMethodSelection.class);
 

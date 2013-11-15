@@ -74,5 +74,5 @@ public class VistaTODO {
 
     public static boolean pendingYardiConfigPatchILS = true;
 
-    public static boolean convienceFeeEnabled = true;
+    public static boolean convenienceFeeEnabled = true;
 }

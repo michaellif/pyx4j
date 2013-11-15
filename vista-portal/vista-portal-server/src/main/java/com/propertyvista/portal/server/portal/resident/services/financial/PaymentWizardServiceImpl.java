@@ -38,7 +38,7 @@ import com.propertyvista.domain.payment.LeasePaymentMethod;
 import com.propertyvista.domain.payment.PaymentType;
 import com.propertyvista.domain.security.common.VistaApplication;
 import com.propertyvista.domain.tenant.lease.Lease;
-import com.propertyvista.dto.payment.ConvienceFeeCalulationResponseTO;
+import com.propertyvista.dto.payment.ConvenienceFeeCalulationResponseTO;
 import com.propertyvista.portal.rpc.portal.resident.dto.financial.PaymentDTO;
 import com.propertyvista.portal.rpc.portal.resident.services.financial.PaymentWizardService;
 import com.propertyvista.portal.server.portal.resident.ResidentPortalContext;
@@ -73,8 +73,8 @@ public class PaymentWizardServiceImpl extends AbstractCrudServiceDtoImpl<Payment
                 ServerSideFactory.create(PaymentFacade.class).getAllowedPaymentTypes(lease.billingAccount(), VistaApplication.resident));
         dto.allowedCardTypes().setCollectionValue(
                 ServerSideFactory.create(PaymentFacade.class).getAllowedCardTypes(lease.billingAccount(), VistaApplication.resident));
-        dto.convienceFeeApplicableCardTypes().setCollectionValue(
-                ServerSideFactory.create(PaymentFacade.class).getConvienceFeeApplicableCardTypes(lease.billingAccount(), VistaApplication.resident));
+        dto.convenienceFeeApplicableCardTypes().setCollectionValue(
+                ServerSideFactory.create(PaymentFacade.class).getConvenienceFeeApplicableCardTypes(lease.billingAccount(), VistaApplication.resident));
 
         new AddressConverter.StructuredToSimpleAddressConverter().copyBOtoTO(AddressRetriever.getLeaseAddress(lease), dto.address());
 
@@ -143,8 +143,8 @@ public class PaymentWizardServiceImpl extends AbstractCrudServiceDtoImpl<Payment
     }
 
     @Override
-    public void getConvienceFee(AsyncCallback<ConvienceFeeCalulationResponseTO> callback, BillingAccount billingAccountId, CreditCardType cardType,
+    public void getConvenienceFee(AsyncCallback<ConvenienceFeeCalulationResponseTO> callback, BillingAccount billingAccountId, CreditCardType cardType,
             BigDecimal amount) {
-        callback.onSuccess(ServerSideFactory.create(PaymentFacade.class).getConvienceFee(billingAccountId, cardType, amount));
+        callback.onSuccess(ServerSideFactory.create(PaymentFacade.class).getConvenienceFee(billingAccountId, cardType, amount));
     }
 }

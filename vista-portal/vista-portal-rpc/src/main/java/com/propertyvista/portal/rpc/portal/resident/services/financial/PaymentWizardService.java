@@ -24,7 +24,7 @@ import com.propertyvista.domain.contact.AddressSimple;
 import com.propertyvista.domain.financial.BillingAccount;
 import com.propertyvista.domain.payment.CreditCardInfo.CreditCardType;
 import com.propertyvista.domain.payment.LeasePaymentMethod;
-import com.propertyvista.dto.payment.ConvienceFeeCalulationResponseTO;
+import com.propertyvista.dto.payment.ConvenienceFeeCalulationResponseTO;
 import com.propertyvista.portal.rpc.portal.resident.dto.financial.PaymentDTO;
 
 public interface PaymentWizardService extends AbstractCrudService<PaymentDTO> {
@@ -33,5 +33,5 @@ public interface PaymentWizardService extends AbstractCrudService<PaymentDTO> {
 
     void getProfiledPaymentMethods(AsyncCallback<Vector<LeasePaymentMethod>> callback);
 
-    void getConvienceFee(AsyncCallback<ConvienceFeeCalulationResponseTO> callback, BillingAccount billingAccountId, CreditCardType cardType, BigDecimal amount);
+    void getConvenienceFee(AsyncCallback<ConvenienceFeeCalulationResponseTO> callback, BillingAccount billingAccountId, CreditCardType cardType, BigDecimal amount);
 }

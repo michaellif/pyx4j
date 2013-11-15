@@ -17,7 +17,7 @@ import java.math.BigDecimal;
 
 import com.propertyvista.domain.payment.CreditCardInfo;
 import com.propertyvista.domain.payment.CreditCardInfo.CreditCardType;
-import com.propertyvista.dto.payment.ConvienceFeeCalulationResponseTO;
+import com.propertyvista.dto.payment.ConvenienceFeeCalulationResponseTO;
 
 public class CreditCardFacadeImpl implements CreditCardFacade {
 
@@ -63,7 +63,7 @@ public class CreditCardFacadeImpl implements CreditCardFacade {
     }
 
     @Override
-    public ConvienceFeeCalulationResponseTO getConvienceFee(String merchantTerminalId, CreditCardType cardType, BigDecimal amount) {
-        return CreditCardProcessor.getConvienceFee(merchantTerminalId, cardType, amount);
+    public ConvenienceFeeCalulationResponseTO getConvenienceFee(String merchantTerminalId, CreditCardType cardType, BigDecimal amount) {
+        return CreditCardProcessor.getConvenienceFee(merchantTerminalId, cardType, amount);
     }
 }

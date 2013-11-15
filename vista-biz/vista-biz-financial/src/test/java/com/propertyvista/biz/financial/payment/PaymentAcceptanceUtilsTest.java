@@ -50,8 +50,65 @@ public class PaymentAcceptanceUtilsTest extends TestCase {
         }
     }
 
-    public void testConvienceFeeAcceptance() {
-        if (!VistaTODO.convienceFeeEnabled) {
+    public void testPaymentTypeSelectionNoConvenienceFee() {
+        if (VistaTODO.convenienceFeeEnabled) {
+            //tests are not applicable
+        }
+
+        // Nothing accepted, fee applied on all but On CashEquivalent
+        {
+            PaymentTypeSelectionPolicy selectionPolicy = EntityFactory.create(PaymentTypeSelectionPolicy.class);
+
+            for (CreditCardType creditCardType : CreditCardType.values()) {
+                assertAllowed(VistaApplication.resident, false, selectionPolicy, creditCardType, Expect.Disable);
+                assertAllowed(VistaApplication.crm, false, selectionPolicy, creditCardType, Expect.Disable);
+                // On CashEquivalent
+                assertAllowed(VistaApplication.resident, true, selectionPolicy, creditCardType, Expect.Disable);
+                assertAllowed(VistaApplication.crm, true, selectionPolicy, creditCardType, Expect.Disable);
+            }
+        }
+
+        // Accepted only MasterCard on CashEquivalent
+        {
+            PaymentTypeSelectionPolicy selectionPolicy = EntityFactory.create(PaymentTypeSelectionPolicy.class);
+            selectionPolicy.cashEquivalentCreditCardMasterCard().setValue(true);
+
+            for (CreditCardType creditCardType : CreditCardType.values()) {
+                assertAllowed(VistaApplication.resident, false, selectionPolicy, creditCardType, Expect.Disable);
+                assertAllowed(VistaApplication.crm, false, selectionPolicy, creditCardType, Expect.Disable);
+            }
+            // On CashEquivalent
+            assertAllowed(VistaApplication.resident, true, selectionPolicy, CreditCardType.MasterCard, Expect.Disable);
+            assertAllowed(VistaApplication.resident, true, selectionPolicy, CreditCardType.Visa, Expect.Disable);
+            assertAllowed(VistaApplication.resident, true, selectionPolicy, CreditCardType.VisaDebit, Expect.Disable);
+        }
+
+        // Accepted only MasterCard in portal; e.g. There are no fee on MasterCard
+        {
+            PaymentTypeSelectionPolicy selectionPolicy = EntityFactory.create(PaymentTypeSelectionPolicy.class);
+            // This is need 
+            selectionPolicy.acceptedCreditCardMasterCard().setValue(true);
+            selectionPolicy.residentPortalCreditCardMasterCard().setValue(true);
+
+            assertAllowed(VistaApplication.resident, false, selectionPolicy, CreditCardType.MasterCard, Expect.NoFee);
+            assertAllowed(VistaApplication.resident, false, selectionPolicy, CreditCardType.Visa, Expect.Disable);
+            assertAllowed(VistaApplication.resident, false, selectionPolicy, CreditCardType.VisaDebit, Expect.Disable);
+
+            assertAllowed(VistaApplication.crm, false, selectionPolicy, CreditCardType.MasterCard, Expect.NoFee);
+            assertAllowed(VistaApplication.crm, false, selectionPolicy, CreditCardType.Visa, Expect.Disable);
+            assertAllowed(VistaApplication.crm, false, selectionPolicy, CreditCardType.VisaDebit, Expect.Disable);
+
+            // On CashEquivalent
+            for (CreditCardType creditCardType : CreditCardType.values()) {
+                assertAllowed(VistaApplication.resident, true, selectionPolicy, creditCardType, Expect.Disable);
+                assertAllowed(VistaApplication.crm, true, selectionPolicy, creditCardType, Expect.Disable);
+            }
+        }
+
+    }
+
+    public void testConvenienceFeeAcceptance() {
+        if (!VistaTODO.convenienceFeeEnabled) {
             //tests are not applicable
             return;
         }

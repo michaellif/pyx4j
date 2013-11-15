@@ -66,7 +66,7 @@ public interface PaymentDataDTO extends IEntity {
 
     IPrimitiveSet<CreditCardType> allowedCardTypes();
 
-    IPrimitiveSet<CreditCardType> convienceFeeApplicableCardTypes();
+    IPrimitiveSet<CreditCardType> convenienceFeeApplicableCardTypes();
 
     // UI-only (control organization) members:
 

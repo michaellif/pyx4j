@@ -261,7 +261,7 @@ public class CaledonPaymentProcessor implements IPaymentProcessor {
     }
 
     @Override
-    public FeeCalulationResponse getConvienceFee(Merchant merchant, FeeCalulationRequest request) {
+    public FeeCalulationResponse getConvenienceFee(Merchant merchant, FeeCalulationRequest request) {
         // TODO Auto-generated method stub
         return null;
     }

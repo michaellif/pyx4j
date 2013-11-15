@@ -27,7 +27,7 @@ import com.propertyvista.domain.payment.PaymentType;
 import com.propertyvista.domain.security.common.VistaApplication;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.LeaseTerm;
-import com.propertyvista.dto.payment.ConvienceFeeCalulationResponseTO;
+import com.propertyvista.dto.payment.ConvenienceFeeCalulationResponseTO;
 
 public interface PaymentFacade {
 
@@ -37,9 +37,9 @@ public interface PaymentFacade {
 
     Collection<CreditCardType> getAllowedCardTypes(BillingAccount billingAccountId, VistaApplication vistaApplication);
 
-    Collection<CreditCardType> getConvienceFeeApplicableCardTypes(BillingAccount billingAccountId, VistaApplication vistaApplication);
+    Collection<CreditCardType> getConvenienceFeeApplicableCardTypes(BillingAccount billingAccountId, VistaApplication vistaApplication);
 
-    ConvienceFeeCalulationResponseTO getConvienceFee(BillingAccount billingAccountId, CreditCardType cardType, BigDecimal amount);
+    ConvenienceFeeCalulationResponseTO getConvenienceFee(BillingAccount billingAccountId, CreditCardType cardType, BigDecimal amount);
 
     void validatePaymentMethod(BillingAccount billingAccount, LeasePaymentMethod paymentMethod, VistaApplication vistaApplication);
 
