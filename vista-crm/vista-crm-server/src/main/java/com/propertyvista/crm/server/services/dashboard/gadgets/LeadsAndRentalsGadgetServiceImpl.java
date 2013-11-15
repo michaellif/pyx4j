@@ -91,7 +91,7 @@ public class LeadsAndRentalsGadgetServiceImpl implements LeadsAndRentalsGadgetSe
 
     <Criteria extends EntityQueryCriteria<? extends Lead>> Criteria leasesFromLeadsCriteria(Criteria criteria, Vector<Building> buildingsFilter) {
         leadsCriteria(criteria, buildingsFilter);
-        criteria.add(PropertyCriterion.ne(criteria.proto().lease(), null));
+        criteria.add(PropertyCriterion.isNotNull(criteria.proto().lease()));
         criteria.add(PropertyCriterion.ne(criteria.proto().lease().status(), Lease.Status.Application));
 
         return criteria;

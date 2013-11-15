@@ -129,7 +129,7 @@ public class AvailabilityReportsGenerator implements ReportGenerator {
 
         criteria.le(criteria.proto().statusFrom(), metadata.asOf());
         criteria.ge(criteria.proto().statusUntil(), metadata.asOf());
-        criteria.ne(criteria.proto().vacancyStatus(), null);
+        criteria.isNotNull(criteria.proto().vacancyStatus());
 
         return criteria;
     }
