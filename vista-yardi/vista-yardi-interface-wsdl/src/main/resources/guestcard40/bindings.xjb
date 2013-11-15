@@ -39,10 +39,10 @@
     </jxb:bindings>
 
     <jxb:bindings schemaLocation="YardiRentableItems.xsd" >
-	<jxb:bindings node="//xsd:element[@name='ItemType']/xsd:complexType">
+	<jxb:bindings node="//xsd:complexType[@name='ItemType']">
             <jxb:class name="RentableItemType"/>
         </jxb:bindings>
-	<jxb:bindings node="//xsd:element[@name='Item']/xsd:complexType">
+	<jxb:bindings node="//xsd:complexType[@name='Item']">
             <jxb:class name="RentableItem"/>
         </jxb:bindings>
     </jxb:bindings>

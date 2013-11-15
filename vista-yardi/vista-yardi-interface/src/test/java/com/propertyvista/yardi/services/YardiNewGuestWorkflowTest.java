@@ -18,21 +18,29 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.yardi.entity.guestcard40.AdditionalPreference;
+import com.yardi.entity.guestcard40.Identification;
 import com.yardi.entity.guestcard40.LeadManagement;
 import com.yardi.entity.guestcard40.MarketingAgent;
 import com.yardi.entity.guestcard40.MarketingSource;
 import com.yardi.entity.guestcard40.MarketingSources;
 import com.yardi.entity.guestcard40.PropertyMarketingSources;
+import com.yardi.entity.guestcard40.Prospect;
 import com.yardi.entity.guestcard40.Prospects;
+import com.yardi.entity.guestcard40.RentableItemType;
+import com.yardi.entity.guestcard40.RentableItems;
 import com.yardi.entity.ils.Availability;
 import com.yardi.entity.ils.ILSUnit;
 import com.yardi.entity.ils.MadeReadyDate;
@@ -62,12 +70,16 @@ public class YardiNewGuestWorkflowTest {
 
     private final static boolean mockMode = false;
 
+    private static YardiGuestManagementStub stub = ServerSideFactory.create(YardiGuestManagementStub.class);
+
+    private static PmcYardiCredential yc = getTestPmcYardiCredential();
+
     public static void main(String[] args) {
         ServerSideConfiguration.setInstance(new VistaTestsServerSideConfiguration(DatabaseType.HSQLDB));
 
-        PmcYardiCredential yc = getTestPmcYardiCredential();
         try {
-            YardiGuestManagementStub stub = ServerSideFactory.create(YardiGuestManagementStub.class);
+
+            // get marketing agents and sources
             MarketingSources sources = null;
             if (mockMode) {
                 String xml = getMarketingSourcesXml();
@@ -93,6 +105,28 @@ public class YardiNewGuestWorkflowTest {
                 }
             }
 
+            // retrieve guests
+            LeadManagement guestActivity = stub.getGuestActivity(yc, yc.propertyListCodes().getValue());
+            if (guestActivity.getProspects().getProspect().size() > 0) {
+                Map<String, Prospect> guests = new HashMap<String, Prospect>();
+                for (Prospect guest : guestActivity.getProspects().getProspect()) {
+                    for (Identification id : guest.getCustomers().getCustomer().get(0).getIdentification()) {
+                        if ("ProspectID".equals(id.getIDType())) {
+                            guests.put(id.getIDValue(), guest);
+                            break;
+                        }
+                    }
+                }
+
+                printIds(guests.keySet(), "Current Guests");
+                String guestId = readLine("Update Guest #: ");
+                if (!StringUtils.isEmpty(guestId)) {
+                    updateRentableItems(guests.get(guestId));
+                    System.out.println("Done - Exit.");
+                }
+            }
+
+            // add new guest
             if (agentName == null) {
                 System.out.println("Marketing Agent 'Property Vista' is not configured. Exit.");
                 return;
@@ -116,7 +150,7 @@ public class YardiNewGuestWorkflowTest {
                     }
                     units.put(ilsUnit.getUnit().getInformation().get(0).getUnitID(), ilsUnit);
                 }
-                printUnits(units.keySet());
+                printIds(units.keySet(), "Available Units");
             }
 
             ILSUnit ilsUnit = null;
@@ -144,8 +178,7 @@ public class YardiNewGuestWorkflowTest {
                 }
             }
             Prospects guestInfo = new Prospects();
-            int beds = ilsUnit.getUnit().getInformation().get(0).getUnitBedrooms().intValue();
-            guestInfo.getProspect().add(new YardiGuestProcessor().getProspect(guestName, moveIn, beds, agentName, sourceName));
+            guestInfo.getProspect().add(new YardiGuestProcessor().getProspect(guestName, ilsUnit, moveIn, agentName, sourceName));
             LeadManagement lead = new LeadManagement();
             lead.setProspects(guestInfo);
             stub.importGuestInfo(yc, lead);
@@ -170,12 +203,34 @@ public class YardiNewGuestWorkflowTest {
         return cr;
     }
 
-    static void printUnits(Collection<String> units) {
-        System.out.print("Available Units:");
-        for (String unit : units) {
-            System.out.print(" #" + unit);
+    static void printIds(Collection<String> ids, String prompt) {
+        System.out.print(prompt + ":");
+        for (String id : ids) {
+            System.out.print(id + ", ");
         }
         System.out.println();
+    }
+
+    static void updateRentableItems(Prospect guest) {
+        // print already selected items
+        List<String> selectedItems = new ArrayList<String>();
+        for (AdditionalPreference item : guest.getCustomerPreferences().getCustomerAdditionalPreferences()) {
+            selectedItems.add(item.getAdditionalPreferenceType());
+        }
+        printIds(selectedItems, "Selected Items");
+        // print available (unused) items for select
+        List<String> availItems = new ArrayList<String>();
+        try {
+            RentableItems items = stub.getRentableItems(yc);
+            for (RentableItemType type : items.getItemType()) {
+                availItems.add(type.getCode());
+            }
+            availItems.removeAll(selectedItems);
+        } catch (Throwable t) {
+            throw new RuntimeException(t);
+        }
+        printIds(availItems, "Available Items");
+        // add selected item
     }
 
     static String getDateAvail(Availability avail) {
