@@ -92,8 +92,8 @@ public class PaymentAcceptanceUtils {
 
     private static Collection<CardTypeAcceptance> crmCardRequire = buildCardAcceptanceMatrixCrm();
 
-    private static Collection<CardTypeAcceptance> residentPortalCardRequire = VistaTODO.convienceFeeEnabled ? buildCardAcceptanceMatrixPortal()
-            : buildCardAcceptanceMatrixWithConvienceFeePortal();
+    private static Collection<CardTypeAcceptance> residentPortalCardRequire = VistaTODO.convienceFeeEnabled ? buildCardAcceptanceMatrixWithConvienceFeePortal()
+            : buildCardAcceptanceMatrixPortal();
 
     private static Collection<CardTypeAcceptance> residentPortalCardWithoutConvienceFee = VistaTODO.convienceFeeEnabled ? buildCardAcceptanceMatrixWithoutConvienceFeePortal()
             : Collections.<CardTypeAcceptance> emptyList();
@@ -157,7 +157,7 @@ public class PaymentAcceptanceUtils {
             // From accepted cards select the one the fee are no accepted by PMC, e.g. for VistaConvienceFee
             Collection<CreditCardType> convienceFeePaymentTypes = new ArrayList<CreditCardType>();
             for (CardTypeAcceptance acceptance : feeAcceptance) {
-                if (!acceptance.accept(selection)) {
+                if (allowedPaymentTypes.contains(acceptance.cardType) && (!acceptance.accept(selection))) {
                     convienceFeePaymentTypes.add(acceptance.cardType);
                 }
             }
