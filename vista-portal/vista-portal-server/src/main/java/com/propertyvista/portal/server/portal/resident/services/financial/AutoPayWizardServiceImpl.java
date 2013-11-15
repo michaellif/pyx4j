@@ -15,6 +15,9 @@ package com.propertyvista.portal.server.portal.resident.services.financial;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.util.Collection;
+import java.util.Iterator;
+import java.util.List;
 import java.util.Vector;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
@@ -34,7 +37,10 @@ import com.propertyvista.domain.contact.AddressSimple;
 import com.propertyvista.domain.financial.ARCode;
 import com.propertyvista.domain.payment.AutopayAgreement;
 import com.propertyvista.domain.payment.AutopayAgreement.AutopayAgreementCoveredItem;
+import com.propertyvista.domain.payment.CreditCardInfo;
+import com.propertyvista.domain.payment.CreditCardInfo.CreditCardType;
 import com.propertyvista.domain.payment.LeasePaymentMethod;
+import com.propertyvista.domain.payment.PaymentType;
 import com.propertyvista.domain.security.common.VistaApplication;
 import com.propertyvista.domain.tenant.lease.BillableItem;
 import com.propertyvista.domain.tenant.lease.Lease;
@@ -73,6 +79,9 @@ public class AutoPayWizardServiceImpl extends AbstractCrudServiceDtoImpl<Autopay
                 ServerSideFactory.create(PaymentFacade.class).getAllowedCardTypes(lease.billingAccount(), VistaApplication.resident));
         dto.convenienceFeeApplicableCardTypes().setCollectionValue(
                 ServerSideFactory.create(PaymentFacade.class).getConvenienceFeeApplicableCardTypes(lease.billingAccount(), VistaApplication.resident));
+
+        // TODO: Currently allow just non-convenience fee cards (VISTA-3817, change 0):
+        dto.allowedCardTypes().removeAll(dto.convenienceFeeApplicableCardTypes());
 
         new AddressConverter.StructuredToSimpleAddressConverter().copyBOtoTO(AddressRetriever.getLeaseAddress(lease), dto.address());
 
@@ -141,7 +150,26 @@ public class AutoPayWizardServiceImpl extends AbstractCrudServiceDtoImpl<Autopay
 
     @Override
     public void getProfiledPaymentMethods(AsyncCallback<Vector<LeasePaymentMethod>> callback) {
-        callback.onSuccess(new Vector<LeasePaymentMethod>(LeaseParticipantUtils.getProfiledPaymentMethods(ResidentPortalContext.getCurrentUserTenantInLease())));
+        // TODO: Currently allow just non-convenience fee cards (VISTA-3817, change 0):
+        callback.onSuccess(new Vector<LeasePaymentMethod>(removeConvienceFeeApplicableCards(LeaseParticipantUtils
+                .getProfiledPaymentMethods(ResidentPortalContext.getCurrentUserTenantInLease()))));
+    }
+
+    public List<LeasePaymentMethod> removeConvienceFeeApplicableCards(List<LeasePaymentMethod> paymentMethods) {
+        Lease lease = ResidentPortalContext.getCurrentUserLease();
+
+        Collection<CreditCardType> restricted = ServerSideFactory.create(PaymentFacade.class).getConvenienceFeeApplicableCardTypes(lease.billingAccount(),
+                VistaApplication.resident);
+
+        Iterator<LeasePaymentMethod> it = paymentMethods.iterator();
+        while (it.hasNext()) {
+            LeasePaymentMethod method = it.next();
+            if (method.type().getValue() == PaymentType.CreditCard && restricted.contains(method.details().<CreditCardInfo> cast().cardType().getValue())) {
+                it.remove();
+            }
+        }
+
+        return paymentMethods;
     }
 
     @Override
