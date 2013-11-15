@@ -84,7 +84,7 @@ public class PMSiteApplication extends AuthenticatedWebApplication {
 
     private static final Logger log = LoggerFactory.getLogger(PMSiteApplication.class);
 
-    private Exception internalError;
+    private PMSiteInternalException internalError;
 
     private final String[] persistParams = { "gwt.codesvr" };
 
@@ -249,7 +249,7 @@ public class PMSiteApplication extends AuthenticatedWebApplication {
                         }
                     }
                     // not our page - show error
-                    internalError = new PMSitePageNotFoundException("Page Not Found: " + request.getUrl().toString());
+                    internalError = new PMSiteInternalException(new Error("Page Not Found"));
                     return new RenderPageRequestHandler(new PageProvider(InternalErrorPage.class));
                 }
 
@@ -276,7 +276,7 @@ public class PMSiteApplication extends AuthenticatedWebApplication {
             @Override
             public IRequestHandler onException(RequestCycle cycle, java.lang.Exception e) {
                 // store exception for further use by InternalErrorPage
-                internalError = e;
+                internalError = new PMSiteInternalException(e);
                 return new RenderPageRequestHandler(new PageProvider(InternalErrorPage.class));
             }
         });

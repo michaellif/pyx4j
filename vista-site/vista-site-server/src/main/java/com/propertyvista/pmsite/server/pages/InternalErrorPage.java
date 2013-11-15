@@ -23,7 +23,6 @@ import org.slf4j.LoggerFactory;
 import com.pyx4j.config.shared.ApplicationMode;
 
 import com.propertyvista.pmsite.server.PMSiteApplication;
-import com.propertyvista.pmsite.server.PMSitePageNotFoundException;
 
 public class InternalErrorPage extends ErrorPage {
     private static final long serialVersionUID = 1L;
@@ -34,20 +33,26 @@ public class InternalErrorPage extends ErrorPage {
         StringWriter err = new StringWriter();
         // get internal exception if available
         Exception e = PMSiteApplication.get().getInternalError();
-        if (e instanceof PMSitePageNotFoundException) {
-            log.debug(e.getMessage());
-        } else {
-            log.error("site error", e);
-        }
-        if (e == null) {
-            err.write("Unknown Error");
-        } else if (ApplicationMode.isDevelopment()) {
+
+        if (ApplicationMode.isDevelopment()) {
             err.write(ApplicationMode.DEV);
             e.printStackTrace(new PrintWriter(err));
+            log.error(ApplicationMode.DEV, e);
         } else {
-            err.write(e.getMessage());
+            err.write(getOriginalCause(e).getMessage());
+            log.warn("'{}' caused by: '{}'", e.getMessage(), getOriginalCause(e).getMessage());
         }
         add(new Label("errorContent", err.toString()));
+    }
+
+    public Throwable getOriginalCause(Throwable t) {
+        Throwable cause = t;
+        while (cause != null) {
+            if ((cause = cause.getCause()) != null) {
+                t = cause;
+            }
+        }
+        return t;
     }
 
     @Override

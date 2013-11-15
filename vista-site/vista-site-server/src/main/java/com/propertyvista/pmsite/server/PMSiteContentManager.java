@@ -48,11 +48,11 @@ import com.propertyvista.domain.site.PageCaption;
 import com.propertyvista.domain.site.PageDescriptor;
 import com.propertyvista.domain.site.PageDescriptor.Type;
 import com.propertyvista.domain.site.PageMetaTags;
-import com.propertyvista.domain.site.SiteImageSet;
-import com.propertyvista.domain.site.SiteLogoImageResource;
 import com.propertyvista.domain.site.SiteDescriptor;
 import com.propertyvista.domain.site.SiteDescriptorChanges;
 import com.propertyvista.domain.site.SiteImageResource;
+import com.propertyvista.domain.site.SiteImageSet;
+import com.propertyvista.domain.site.SiteLogoImageResource;
 import com.propertyvista.domain.site.SiteTitles;
 import com.propertyvista.domain.site.SocialLink;
 import com.propertyvista.domain.site.SocialLink.SocialSite;
@@ -227,7 +227,7 @@ public class PMSiteContentManager implements Serializable {
             if (!parameters.get(paramName).isEmpty()) {
                 current = getPageDescriptor(pages, parameters.get(paramName).toString());
                 if (current == null) {
-                    throw new Error("No page found");
+                    throw new PMSiteInternalException(new Error("Static Page Not Found"));
                 }
                 pages = current.childPages();
             }

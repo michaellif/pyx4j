@@ -13,11 +13,23 @@
  */
 package com.propertyvista.pmsite.server;
 
-public class PMSitePageNotFoundException extends Exception {
+import org.apache.wicket.request.cycle.RequestCycle;
+
+public class PMSiteInternalException extends RuntimeException {
     private static final long serialVersionUID = 1L;
 
-    public PMSitePageNotFoundException(String message) {
-        super(message);
+    public PMSiteInternalException(Throwable t) {
+        super("PMSite error on request: " + RequestCycle.get().getRequest().getUrl().toString(), t);
+    }
+
+    public static boolean hasCaused(Throwable e) {
+        while (e != null) {
+            if (e instanceof PMSiteInternalException) {
+                return true;
+            }
+            e = e.getCause();
+        }
+        return false;
     }
 
 }
