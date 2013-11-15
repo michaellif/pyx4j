@@ -6,6 +6,9 @@
     <inherits name='com.google.gwt.user.User'/>
 
     <inherits name='com.propertyvista.portal.Rpc' />
+    <inherits name='com.pyx4j.entity.EntityShared'/>
+   
+    <inherits name='com.propertyvista.Domain' />
 
     <inherits name='com.propertyvista.common.VistaCommon' />
 
