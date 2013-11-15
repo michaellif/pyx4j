@@ -26,7 +26,6 @@ import com.pyx4j.forms.client.ui.folder.IFolderItemDecorator;
 import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
 
-import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
 import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
 import com.propertyvista.domain.person.Name;
 import com.propertyvista.portal.rpc.portal.resident.dto.financial.LatestActivitiesDTO;
@@ -93,7 +92,7 @@ public class LatestActivitiesGadget extends AbstractGadget<FinancialDashboardVie
             return super.create(member);
         }
 
-        private class InvoiceLineItemViewer extends CEntityDecoratableForm<InvoicePaymentDTO> {
+        private class InvoiceLineItemViewer extends CEntityForm<InvoicePaymentDTO> {
 
             public InvoiceLineItemViewer() {
                 super(InvoicePaymentDTO.class);
@@ -109,11 +108,19 @@ public class LatestActivitiesGadget extends AbstractGadget<FinancialDashboardVie
 
                 content.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().id(), new CNumberLabel())).build());
                 content.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().amount())).build());
+                content.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().convenienceFee())).build());
                 content.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().date())).build());
                 content.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().status())).build());
                 content.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().payer(), new CEntityLabel<Name>())).build());
 
                 return content;
+            }
+
+            @Override
+            protected void onValueSet(boolean populate) {
+                super.onValueSet(populate);
+
+                get(proto().convenienceFee()).setVisible(getValue().convenienceFee().isNull());
             }
         }
     }

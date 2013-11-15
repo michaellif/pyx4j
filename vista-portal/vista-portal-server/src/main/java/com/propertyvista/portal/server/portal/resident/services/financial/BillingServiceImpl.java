@@ -45,8 +45,8 @@ import com.propertyvista.portal.rpc.portal.resident.dto.financial.BillViewDTO;
 import com.propertyvista.portal.rpc.portal.resident.dto.financial.BillingHistoryDTO;
 import com.propertyvista.portal.rpc.portal.resident.dto.financial.BillingSummaryDTO;
 import com.propertyvista.portal.rpc.portal.resident.dto.financial.LatestActivitiesDTO;
-import com.propertyvista.portal.rpc.portal.resident.dto.financial.PaymentInfoDTO;
 import com.propertyvista.portal.rpc.portal.resident.dto.financial.LatestActivitiesDTO.InvoicePaymentDTO;
+import com.propertyvista.portal.rpc.portal.resident.dto.financial.PaymentInfoDTO;
 import com.propertyvista.portal.rpc.portal.resident.services.financial.BillingService;
 import com.propertyvista.portal.server.portal.resident.ResidentPortalContext;
 import com.propertyvista.shared.config.VistaFeatures;
@@ -98,6 +98,7 @@ public class BillingServiceImpl implements BillingService {
 
             paymentInfo.id().set(item.paymentRecord().id());
             paymentInfo.amount().setValue(item.paymentRecord().amount().getValue());
+            paymentInfo.convenienceFee().setValue(item.paymentRecord().convenienceFee().getValue());
             paymentInfo.date().setValue(item.paymentRecord().receivedDate().getValue());
             paymentInfo.status().setValue(item.paymentRecord().paymentStatus().getValue());
 

@@ -50,6 +50,10 @@ public interface LatestActivitiesDTO extends IEntity {
         @Editor(type = EditorType.moneylabel)
         IPrimitive<BigDecimal> amount();
 
+        @Format("#,##0.00")
+        @Editor(type = EditorType.money)
+        IPrimitive<BigDecimal> convenienceFee();
+
         @ToString(index = 2)
         @Editor(type = EditorType.label)
         IPrimitive<LogicalDate> date();
