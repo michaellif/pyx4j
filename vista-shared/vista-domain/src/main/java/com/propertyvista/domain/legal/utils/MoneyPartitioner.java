@@ -7,21 +7,33 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on 2013-11-14
+ * Created on 2013-11-15
  * @author ArtyomB
  * @version $Id$
  */
 package com.propertyvista.domain.legal.utils;
 
-public class PartitionedFileNumberFormatter implements PdfFormFieldFormatter {
+public class MoneyPartitioner implements Partitioner {
 
     @Override
-    public String format(Object object) {
-        String value = (String) object;
-        if (value.length() != 9 && !value.contains("-")) {
-            throw new IllegalArgumentException("invalid format of file number '" + value + "': expected 'XXX-XXXXX'");
+    public String getPart(String value, int partIndex) {
+        String part = null;
+        switch (partIndex) {
+        case 0:
+            part = value.contains(",") ? value.split(",")[0] : "";
+            break;
+        case 1:
+            part = value.split("\\.")[0];
+            part = part.contains(",") ? part.split(",")[1] : part;
+            break;
+        case 2:
+            part = value.split("\\.")[1];
+            break;
+        default:
+            part = "";
+            break;
         }
-        return value.replace("-", "");
+        return part;
     }
 
 }

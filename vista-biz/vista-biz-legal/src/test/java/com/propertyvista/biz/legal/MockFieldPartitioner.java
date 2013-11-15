@@ -14,27 +14,34 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  *
- * Created on 2013-11-13
+ * Created on 2013-11-15
  * @author ArtyomB
  * @version $Id$
  */
 package com.propertyvista.biz.legal;
 
-import com.propertyvista.domain.legal.utils.Formatter;
+import com.propertyvista.domain.legal.utils.Partitioner;
 
-/**
- * separates letters by <code>!</code>, i.e <code>abcde</code> will be turned into <code>a!b!c!d!e!</code>
- */
-public class MockFieldFormatter implements Formatter {
+public class MockFieldPartitioner implements Partitioner {
 
     @Override
-    public String format(Object object) {
-        String value = object.toString();
-        String formattedValue = "";
-        for (int i = 0; i < value.length(); ++i) {
-            formattedValue += value.charAt(i);
-            formattedValue += "!";
+    public String getPart(String value, int partIndex) {
+
+        switch (partIndex) {
+        case 0:
+            return value.length() > 7 ? value.substring(0, value.length() - 7) : "";
+        case 1:
+            if (value.length() > 4) {
+                value = value.substring(0, value.length() - 4);
+                value = value.substring(Math.max(value.length() - 3, 0));
+            } else {
+                return "";
+            }
+        case 2:
+            return value.substring(Math.max(value.length() - 4, 0));
+        default:
+            return "";
         }
-        return formattedValue;
     }
+
 }

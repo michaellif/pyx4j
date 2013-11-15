@@ -7,18 +7,22 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on 2013-11-15
+ * Created on 2013-11-13
  * @author ArtyomB
  * @version $Id$
  */
 package com.propertyvista.domain.legal.utils;
 
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
+import java.util.Date;
 
-@Retention(RetentionPolicy.RUNTIME)
-public @interface PdfFormFieldFormatter {
+import com.pyx4j.commons.SimpleMessageFormat;
 
-    Class<? extends Formatter> value();
+public class DateFormatter implements Formatter {
+
+    @Override
+    public String format(Object object) {
+        Date value = (Date) object;
+        return SimpleMessageFormat.format("{0,date,dd/MM/YYYY}", value);
+    }
 
 }

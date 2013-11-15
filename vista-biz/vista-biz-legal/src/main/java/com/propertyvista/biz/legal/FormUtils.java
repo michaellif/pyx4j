@@ -22,10 +22,13 @@ package com.propertyvista.biz.legal;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.lang.annotation.Annotation;
 import java.math.BigDecimal;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -43,7 +46,11 @@ import com.pyx4j.commons.SimpleMessageFormat;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IObject;
 
-import com.propertyvista.domain.legal.utils.PdfFormField;
+import com.propertyvista.domain.legal.utils.Formatter;
+import com.propertyvista.domain.legal.utils.Partitioner;
+import com.propertyvista.domain.legal.utils.PdfFormFieldFormatter;
+import com.propertyvista.domain.legal.utils.PdfFormFieldMapping;
+import com.propertyvista.domain.legal.utils.PdfFormFieldPartitioner;
 
 public class FormUtils {
 
@@ -115,16 +122,29 @@ public class FormUtils {
                     continue;
                 }
 
-                PdfFormField fieldName = fieldsData.getInstanceValueClass().getDeclaredMethod(memberName, (Class<?>[]) null).getAnnotation(PdfFormField.class);
+                List<Formatter> formatters = new LinkedList<Formatter>();
+                Partitioner partitioner = null;
+                String[] fieldMapping = null;
+                for (Annotation annotation : fieldsData.getInstanceValueClass().getDeclaredMethod(memberName, (Class<?>[]) null).getAnnotations()) {
+                    if (annotation.annotationType().equals(PdfFormFieldMapping.class)) {
+                        fieldMapping = ((PdfFormFieldMapping) annotation).value().split(",");
+                    } else if (annotation.annotationType().equals(PdfFormFieldFormatter.class)) {
+                        formatters.add(((PdfFormFieldFormatter) annotation).value().newInstance());
+                    } else if (annotation.annotationType().equals(PdfFormFieldPartitioner.class)) {
+                        partitioner = ((PdfFormFieldPartitioner) annotation).value().newInstance();
+                    }
+                }
+
                 if (isTextField(field)) {
-                    setTextField(fieldName, fields, field.getValue());
+                    setTextField(fieldMapping, partitioner, formatters, fields, field.getValue());
 
                 } else if (fieldsData.getMember(memberName).getValueClass().isEnum()) {
-                    setEnumField(fieldName, fields, field.getValue().toString());
+                    // TODO add checks that field mapping doesn't have multiple mappings and no length
+                    setEnumField(fieldMapping[0], fields, field.getValue().toString());
 
                 } else if (fieldsData.getMember(memberName).getValueClass().isArray()) {
-                    setImageField(fieldName, fields, stamper, (byte[]) field.getValue());
-
+                    // TODO add checks that field mapping doesn't have multiple mappings and no length
+                    setImageField(fieldMapping[0], fields, stamper, (byte[]) field.getValue());
                 }
 
             } catch (Throwable e) {
@@ -138,51 +158,53 @@ public class FormUtils {
         return bos.toByteArray();
     }
 
-    private static void setTextField(PdfFormField fieldName, AcroFields fields, Object object) throws IOException, DocumentException, InstantiationException,
-            IllegalAccessException {
-        String value = fieldName.formatter().newInstance().format(object);
-        if (isSingleMapping(fieldName)) {
-            fields.setField(fieldName.value(), value);
-        } else if (isMultipleMapping(fieldName)) {
-            String[] fieldNamesAndSizes = fieldName.value().substring(1, fieldName.value().length() - 1).split(",");
-            String[] fieldNames = new String[fieldNamesAndSizes.length];
-            int[] fieldSizes = new int[fieldNamesAndSizes.length];
-            int totalSize = 0;
-            for (int i = 0; i < fieldNamesAndSizes.length; ++i) {
-                String fieldNameAndSize = fieldNamesAndSizes[i];
-                int openBracketIndex = fieldNameAndSize.indexOf("{");
-                int closeBracketIndex = fieldNameAndSize.indexOf("}");
-                fieldNames[i] = fieldNameAndSize.substring(0, openBracketIndex);
-                fieldSizes[i] = Integer.parseInt(fieldNameAndSize.substring(openBracketIndex + 1, closeBracketIndex));
-                totalSize += fieldSizes[i];
-            }
-            if (totalSize < value.length()) {
-                throw new IllegalArgumentException("cannot fill field '" + fieldName.value() + "' with value '" + object + "' because the value is too long");
-            }
-
-            String paddedValue = value;
-            if (totalSize > value.length()) {
-                while (paddedValue.length() != totalSize) {
-                    paddedValue = " " + paddedValue;
-                }
-            }
-
-            int lastPartStartIndex = 0;
-            for (int i = 0; i < fieldNames.length; ++i) {
-                int lastPartEndIndex = lastPartStartIndex + fieldSizes[i];
-                String subValue = paddedValue.substring(lastPartStartIndex, lastPartEndIndex);
-                lastPartStartIndex = lastPartEndIndex;
-                fields.setField(fieldNames[i], subValue);
+    private static void setTextField(String[] fieldMapping, Partitioner partitioner, List<Formatter> formatters, AcroFields fields, Object object)
+            throws IOException, DocumentException, InstantiationException, IllegalAccessException {
+        String value = null;
+        if (formatters.isEmpty()) {
+            value = object.toString();
+        } else {
+            Iterator<Formatter> i = formatters.iterator();
+            Formatter formatter = i.next();
+            value = formatter.format(object);
+            while (i.hasNext()) {
+                formatter = i.next();
+                value = formatter.format(value);
             }
         }
+
+        for (int partIndex = 0; partIndex < fieldMapping.length; ++partIndex) {
+            String fieldNameAndLength = fieldMapping[partIndex];
+            int fieldLength = -1;
+            String fieldName = fieldNameAndLength;
+            if (fieldNameAndLength.contains("{")) {
+                int openBracketIndex = fieldNameAndLength.indexOf("{");
+                int closeBracketIndex = fieldNameAndLength.indexOf("}");
+                fieldLength = Integer.parseInt(fieldNameAndLength.substring(openBracketIndex + 1, closeBracketIndex));
+                fieldName = fieldNameAndLength.substring(0, openBracketIndex);
+            }
+
+            String part = partitioner == null ? value : partitioner.getPart(value, partIndex);
+            if (fieldLength != -1) {
+                if (part.length() > fieldLength) {
+                    throw new IllegalArgumentException("part '" + part + "' of field '" + fieldName + "' has greater length then allowed (allowed length is "
+                            + fieldLength + ")");
+                }
+                while (part.length() != fieldLength) {
+                    part = " " + part;
+                }
+            }
+            fields.setField(fieldName, part);
+        }
+
     }
 
-    private static void setEnumField(PdfFormField fieldName, AcroFields fields, String value) throws IOException, DocumentException {
-        fields.setField(fieldName.value(), value);
+    private static void setEnumField(String fieldName, AcroFields fields, String value) throws IOException, DocumentException {
+        fields.setField(fieldName, value);
     }
 
-    private static void setImageField(PdfFormField fieldName, AcroFields fields, PdfStamper stamper, byte[] image) throws IOException, DocumentException {
-        List<FieldPosition> fieldPositions = fields.getFieldPositions(fieldName.value());
+    private static void setImageField(String fieldName, AcroFields fields, PdfStamper stamper, byte[] image) throws IOException, DocumentException {
+        List<FieldPosition> fieldPositions = fields.getFieldPositions(fieldName);
         if (fieldPositions == null || fieldPositions.size() == 0) {
             return;
         }
@@ -196,11 +218,11 @@ public class FormUtils {
 
     }
 
-    private static boolean isSingleMapping(PdfFormField fieldName) {
+    private static boolean isSingleMapping(PdfFormFieldMapping fieldName) {
         return !fieldName.value().startsWith("[");
     }
 
-    private static boolean isMultipleMapping(PdfFormField fieldName) {
+    private static boolean isMultipleMapping(PdfFormFieldMapping fieldName) {
         return fieldName.value().startsWith("[");
     }
 

@@ -7,28 +7,27 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on 2013-11-13
+ * Created on 2013-11-15
  * @author ArtyomB
  * @version $Id$
  */
 package com.propertyvista.domain.legal.utils;
 
-import java.math.BigDecimal;
-
-import com.pyx4j.commons.SimpleMessageFormat;
-
-/**
- * 
- * formats money to be ready for partitioning into sub fields ie. value <code>1000</code> will be formatted into <code>100000</code>. basically appends two
- * digits representing decimal signs to the right.
- * 
- */
-public class PartitionedMoneyFormatter implements PdfFormFieldFormatter {
+public class CanadianPostalCodePartitioner implements Partitioner {
 
     @Override
-    public String format(Object object) {
-        BigDecimal value = (BigDecimal) object;
-        return SimpleMessageFormat.format("{0,number,#0.00}", value).replace(".", "");
+    public String getPart(String value, int partIndex) {
+        String part = null;
+        switch (partIndex) {
+        case 0:
+        case 1:
+            part = value.split(" ")[partIndex];
+            break;
+        default:
+            part = "";
+            break;
+        }
+        return part;
     }
 
 }

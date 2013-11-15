@@ -13,14 +13,24 @@
  */
 package com.propertyvista.domain.legal.utils;
 
-public class PartitionedPhoneFormatter implements PdfFormFieldFormatter {
+public class FileNumberPartitioner implements Partitioner {
 
     @Override
-    public String format(Object object) {
-        String value = (String) object;
-        // TODO add check for format correctness
-        value = value.trim().replace("(", "").replace(")", "").replace("-", "").replace(" ", "");
-        return value;
+    public String getPart(String value, int partIndex) {
+        if (value.length() != 9 && !value.contains("-")) {
+            throw new IllegalArgumentException("invalid format of file number '" + value + "': expected 'XXX-XXXXX'");
+        }
+        String part = null;
+        switch (partIndex) {
+        case 0:
+        case 1:
+            part = value.split("-")[partIndex];
+            break;
+        default:
+            part = "";
+            break;
+        }
+        return part;
     }
 
 }

@@ -13,12 +13,21 @@
  */
 package com.propertyvista.domain.legal.utils;
 
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
+public class DatePartitioner implements Partitioner {
 
-@Retention(RetentionPolicy.RUNTIME)
-public @interface PdfFormFieldFormatter {
-
-    Class<? extends Formatter> value();
+    @Override
+    public String getPart(String value, int partIndex) {
+        String part = null;
+        switch (partIndex) {
+        case 0:
+        case 1:
+        case 2:
+            part = value.split("/")[partIndex];
+            break;
+        default:
+            part = "";
+        }
+        return part;
+    }
 
 }

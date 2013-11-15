@@ -20,13 +20,16 @@ import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 
-import com.propertyvista.domain.legal.utils.PartitionedCanadianPostalCodeFormatter;
-import com.propertyvista.domain.legal.utils.PartitionedDateFormatter;
-import com.propertyvista.domain.legal.utils.PartitionedFileNumberFormatter;
-import com.propertyvista.domain.legal.utils.PartitionedMoneyFormatter;
-import com.propertyvista.domain.legal.utils.PartitionedPhoneFormatter;
-import com.propertyvista.domain.legal.utils.PdfFormField;
-import com.propertyvista.domain.legal.utils.UnpartitionedDateFormatter;
+import com.propertyvista.domain.legal.utils.CanadianPostalCodePartitioner;
+import com.propertyvista.domain.legal.utils.DateFormatter;
+import com.propertyvista.domain.legal.utils.DatePartitioner;
+import com.propertyvista.domain.legal.utils.FileNumberPartitioner;
+import com.propertyvista.domain.legal.utils.MoneyFormatter;
+import com.propertyvista.domain.legal.utils.MoneyPartitioner;
+import com.propertyvista.domain.legal.utils.PdfFormFieldFormatter;
+import com.propertyvista.domain.legal.utils.PdfFormFieldMapping;
+import com.propertyvista.domain.legal.utils.PdfFormFieldPartitioner;
+import com.propertyvista.domain.legal.utils.PhoneNumberPartitioner;
 import com.propertyvista.domain.legal.utils.UppercaseFormatter;
 
 @Transient
@@ -60,88 +63,116 @@ public interface L1FormFieldsData extends IEntity {
         Landlord, Agent
     }
 
-    @PdfFormField(value = "[@@b12c96nfl1_rentOwn.0{2},@@b12c96nfl1_rentOwn.1{3},@@b12c96nfl1_rentOwn.2{2}]", formatter = PartitionedMoneyFormatter.class)
+    @PdfFormFieldFormatter(MoneyFormatter.class)
+    @PdfFormFieldPartitioner(MoneyPartitioner.class)
+    @PdfFormFieldMapping("@@b12c96nfl1_rentOwn.0{2},@@b12c96nfl1_rentOwn.1{3},@@b12c96nfl1_rentOwn.2{2}")
     IPrimitive<BigDecimal> totalRentOwing();
 
-    @PdfFormField(value = "[@@b12c96nfl1_LastDateRentOwn.0{2},@@b12c96nfl1_LastDateRentOwn.1{2},@@b12c96nfl1_LastDateRentOwn.2{4}]", formatter = PartitionedDateFormatter.class)
+    @PdfFormFieldFormatter(DateFormatter.class)
+    @PdfFormFieldPartitioner(DatePartitioner.class)
+    @PdfFormFieldMapping("@@b12c96nfl1_LastDateRentOwn.0{2},@@b12c96nfl1_LastDateRentOwn.1{2},@@b12c96nfl1_LastDateRentOwn.2{4}")
     IPrimitive<LogicalDate> totalRentOwingAsOf();
 
-    @PdfFormField(value = "b12c96nmfiling_date", formatter = UnpartitionedDateFormatter.class)
+    @PdfFormFieldFormatter(DateFormatter.class)
+    @PdfFormFieldMapping(value = "b12c96nmfiling_date")
     IPrimitive<LogicalDate> fillingDate();
 
     // Part1
-    @PdfFormField(value = "b12c96nfapp_street_no", formatter = UppercaseFormatter.class)
+    @PdfFormFieldFormatter(UppercaseFormatter.class)
+    @PdfFormFieldMapping("b12c96nfapp_street_no")
     IPrimitive<String> part1_streetNumber();
 
-    @PdfFormField(value = "b12c96nfapp_street_name", formatter = UppercaseFormatter.class)
+    @PdfFormFieldFormatter(UppercaseFormatter.class)
+    @PdfFormFieldMapping(value = "b12c96nfapp_street_name")
     IPrimitive<String> part1_streetName();
 
-    @PdfFormField(value = "b12c96nfapp_street_label", formatter = UppercaseFormatter.class)
+    @PdfFormFieldFormatter(UppercaseFormatter.class)
+    @PdfFormFieldMapping("b12c96nfapp_street_label")
     IPrimitive<String> part1_streetType();
 
-    @PdfFormField(value = "b12c96nfapp_street_direction", formatter = UppercaseFormatter.class)
+    @PdfFormFieldFormatter(UppercaseFormatter.class)
+    @PdfFormFieldMapping("b12c96nfapp_street_direction")
     IPrimitive<String> part1_direction();
 
-    @PdfFormField(value = "b12c96nfapp_unit_no", formatter = UppercaseFormatter.class)
+    @PdfFormFieldFormatter(UppercaseFormatter.class)
+    @PdfFormFieldMapping(value = "b12c96nfapp_unit_no")
     IPrimitive<String> part1_unit();
 
-    @PdfFormField(value = "b12c96nfapp_city", formatter = UppercaseFormatter.class)
+    @PdfFormFieldFormatter(UppercaseFormatter.class)
+    @PdfFormFieldMapping(value = "b12c96nfapp_city")
     IPrimitive<String> part1_municipality();
 
-    @PdfFormField(value = "[b12c96nfapp_postal_code_1{3},@@b12c96nfapp_postal_code_2.0{3}]", formatter = PartitionedCanadianPostalCodeFormatter.class)
+    @PdfFormFieldFormatter(UppercaseFormatter.class)
+    @PdfFormFieldPartitioner(CanadianPostalCodePartitioner.class)
+    @PdfFormFieldMapping("b12c96nfapp_postal_code_1{3},@@b12c96nfapp_postal_code_2.0{3}")
     IPrimitive<String> part1_postalCode();
 
-    @PdfFormField(value = "[b12c96nfdivision_code_1{3},@@b12c96nfcase_number_1.0{5}]", formatter = PartitionedFileNumberFormatter.class)
+    @PdfFormFieldPartitioner(FileNumberPartitioner.class)
+    @PdfFormFieldMapping("b12c96nfdivision_code_1{3},@@b12c96nfcase_number_1.0{5}")
     IPrimitive<String> part1_fileNumber1();
 
-    @PdfFormField(value = "[b12c96nfdivision_code_2{3},@@b12c96nfcase_number_2.0{5}]", formatter = PartitionedFileNumberFormatter.class)
+    @PdfFormFieldPartitioner(FileNumberPartitioner.class)
+    @PdfFormFieldMapping("b12c96nfdivision_code_2{3},@@b12c96nfcase_number_2.0{5}")
     IPrimitive<String> part1_fileNumber2();
 
     // Part2
-    @PdfFormField(value = "b12c96nfP2_first_name", formatter = UppercaseFormatter.class)
+    @PdfFormFieldFormatter(UppercaseFormatter.class)
+    @PdfFormFieldMapping(value = "b12c96nfP2_first_name")
     IPrimitive<String> part2_tenant1FirstName();
 
-    @PdfFormField(value = "b12c96nfP2_last_name", formatter = UppercaseFormatter.class)
+    @PdfFormFieldFormatter(UppercaseFormatter.class)
+    @PdfFormFieldMapping(value = "b12c96nfP2_last_name")
     IPrimitive<String> part2_tenant1LastName();
 
-    @PdfFormField(value = "b12c96nfP2_1_gender")
+    @PdfFormFieldMapping(value = "b12c96nfP2_1_gender")
     IPrimitive<Gender> part2_tenant1Gender();
 
-    @PdfFormField(value = "b12c96nfP2_2_first_name", formatter = UppercaseFormatter.class)
+    @PdfFormFieldFormatter(UppercaseFormatter.class)
+    @PdfFormFieldMapping(value = "b12c96nfP2_2_first_name")
     IPrimitive<String> part2_tenant2FirstName();
 
-    @PdfFormField(value = "b12c96nfP2_2_last_name", formatter = UppercaseFormatter.class)
+    @PdfFormFieldFormatter(UppercaseFormatter.class)
+    @PdfFormFieldMapping(value = "b12c96nfP2_2_last_name")
     IPrimitive<String> part2_tenant2LastName();
 
-    @PdfFormField(value = "b12c96nfP2_2_gender")
+    @PdfFormFieldMapping(value = "b12c96nfP2_2_gender")
     IPrimitive<Gender> part2_tenant2Gender();
 
-    @PdfFormField(value = "b12c96nfP2_st_address", formatter = UppercaseFormatter.class)
+    @PdfFormFieldFormatter(UppercaseFormatter.class)
+    @PdfFormFieldMapping(value = "b12c96nfP2_st_address")
     IPrimitive<String> part2_MailingAddress();
 
-    @PdfFormField(value = "b12c96nfP2_unit_no", formatter = UppercaseFormatter.class)
+    @PdfFormFieldFormatter(UppercaseFormatter.class)
+    @PdfFormFieldMapping(value = "b12c96nfP2_unit_no")
     IPrimitive<String> part2_unit();
 
-    @PdfFormField(value = "b12c96nfP2_city", formatter = UppercaseFormatter.class)
+    @PdfFormFieldFormatter(UppercaseFormatter.class)
+    @PdfFormFieldMapping(value = "b12c96nfP2_city")
     IPrimitive<String> part2_municipality();
 
-    @PdfFormField(value = "b12c96nfP2_prov", formatter = UppercaseFormatter.class)
+    @PdfFormFieldFormatter(UppercaseFormatter.class)
+    @PdfFormFieldMapping(value = "b12c96nfP2_prov")
     IPrimitive<String> part2_provice();
 
-    @PdfFormField(value = "b12c96nfP2_postal", formatter = UppercaseFormatter.class)
+    @PdfFormFieldFormatter(UppercaseFormatter.class)
+    @PdfFormFieldMapping("b12c96nfP2_postal")
     IPrimitive<String> part2_postalCode();
 
-    @PdfFormField(value = "[@@b12c96nfP2_day_phone.0{3},@@b12c96nfP2_day_phone.1{3},@@b12c96nfP2_day_phone.2{4}]", formatter = PartitionedPhoneFormatter.class)
+    @PdfFormFieldPartitioner(PhoneNumberPartitioner.class)
+    @PdfFormFieldMapping("@@b12c96nfP2_day_phone.0{3},@@b12c96nfP2_day_phone.1{3},@@b12c96nfP2_day_phone.2{4}")
     IPrimitive<String> part2_dayPhoneNumber();
 
-    @PdfFormField(value = "[@@b12c96nfP2_evg_phone.0{3},@@b12c96nfP2_evg_phone.1{3},@@b12c96nfP2_evg_phone.2{4}]", formatter = PartitionedPhoneFormatter.class)
+    @PdfFormFieldPartitioner(PhoneNumberPartitioner.class)
+    @PdfFormFieldMapping("@@b12c96nfP2_evg_phone.0{3},@@b12c96nfP2_evg_phone.1{3},@@b12c96nfP2_evg_phone.2{4}")
     IPrimitive<String> part2_eveningPhoneNumber();
 
-    @PdfFormField(value = "[@@b12c96nfP2_fax.0{3},@@b12c96nfP2_fax.1{3},@@b12c96nfP2_fax.2{4}]", formatter = PartitionedPhoneFormatter.class)
+    @PdfFormFieldPartitioner(PhoneNumberPartitioner.class)
+    @PdfFormFieldMapping("@@b12c96nfP2_fax.0{3},@@b12c96nfP2_fax.1{3},@@b12c96nfP2_fax.2{4}")
     IPrimitive<String> part2_faxNumber();
 
-    // TODO? in theory email's recipent is might be case sensitive, but the form requires everything CAPITALIZED 
-    @PdfFormField(value = "b12c96nfP2_email", formatter = UppercaseFormatter.class)
+    // TODO? in theory email's recipent is might be case sensitive, but the form requires everything CAPITALIZED
+    @PdfFormFieldFormatter(UppercaseFormatter.class)
+    @PdfFormFieldMapping("b12c96nfP2_email")
     IPrimitive<String> part2_emailAddress();
 
     // Part3

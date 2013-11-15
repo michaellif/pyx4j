@@ -7,22 +7,14 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on 2013-11-13
+ * Created on 2013-11-15
  * @author ArtyomB
  * @version $Id$
  */
 package com.propertyvista.domain.legal.utils;
 
-import java.util.Date;
+public interface Partitioner {
 
-import com.pyx4j.commons.SimpleMessageFormat;
-
-public class PartitionedDateFormatter implements PdfFormFieldFormatter {
-
-    @Override
-    public String format(Object object) {
-        Date value = (Date) object;
-        return SimpleMessageFormat.format("{0,date,ddMMYYYY}", value);
-    }
+    String getPart(String value, int partIndex);
 
 }

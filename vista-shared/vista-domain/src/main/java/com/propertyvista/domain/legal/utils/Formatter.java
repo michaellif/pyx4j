@@ -7,22 +7,14 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on 2013-11-13
+ * Created on 2013-09-24
  * @author ArtyomB
  * @version $Id$
  */
 package com.propertyvista.domain.legal.utils;
 
+public interface Formatter {
 
-public class PartitionedCanadianPostalCodeFormatter implements PdfFormFieldFormatter {
+    String format(Object object);
 
-    @Override
-    public String format(Object object) {
-        String value = ((String) object).trim();
-        if (value.length() != 7 && value.charAt(3) != ' ') {
-            throw new IllegalArgumentException("got wrong postal code '" + value + "', expecting value inf 'ADA DAD' format");
-        }
-
-        return value.toUpperCase().replace(" ", "");
-    }
 }

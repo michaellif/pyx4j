@@ -63,9 +63,9 @@ public class MockL1FormDataFactory {
         fieldsData.part2_municipality().setValue("Toronto");
         fieldsData.part2_provice().setValue("Ontario");
         fieldsData.part2_postalCode().setValue("A1A 1A1");
-        fieldsData.part2_dayPhoneNumber().setValue("(647) 123 1234");
-        fieldsData.part2_eveningPhoneNumber().setValue("(647) 123 1234");
-        fieldsData.part2_faxNumber().setValue("(647) 123 1234");
+        fieldsData.part2_dayPhoneNumber().setValue("(647) 123-1234");
+        fieldsData.part2_eveningPhoneNumber().setValue("(647) 123-1234");
+        fieldsData.part2_faxNumber().setValue("(647) 123-1234");
         fieldsData.part2_emailAddress().setValue("don.quixote@mancha.gov.es");
 
         return fieldsData;

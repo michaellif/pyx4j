@@ -17,9 +17,9 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 
 @Retention(RetentionPolicy.RUNTIME)
-public @interface PdfFormField {
+public @interface PdfFormFieldMapping {
 
-    public static class DefaultPdfFormatter implements PdfFormFieldFormatter {
+    public static class DefaultPdfFormatter implements Formatter {
 
         @Override
         public String format(Object object) {
@@ -32,7 +32,7 @@ public @interface PdfFormField {
      * Either name of the field, or multiple fields by following format:
      * 
      * <pre>
-     * [field1Name{field1Size},field2Name{field2Size},...,fieldNName{fieldNSize}]
+     * field1Name{field1Size},field2Name{field2Size},...,fieldNName{fieldNSize}
      * </pre>
      * 
      * The string provided by the property will be padded from left so it's size is <code>field1Size + field2Size + ... + fieldNSize</code>, but if the string
@@ -43,8 +43,4 @@ public @interface PdfFormField {
      */
     String value() default "";
 
-    /**
-     * Sets formatter for text fields.
-     */
-    Class<? extends PdfFormFieldFormatter> formatter() default DefaultPdfFormatter.class;
 }

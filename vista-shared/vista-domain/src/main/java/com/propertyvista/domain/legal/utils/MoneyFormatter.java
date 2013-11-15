@@ -7,22 +7,21 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on 2013-11-13
+ * Created on 2013-11-15
  * @author ArtyomB
  * @version $Id$
  */
 package com.propertyvista.domain.legal.utils;
 
-import java.util.Date;
+import java.math.BigDecimal;
 
 import com.pyx4j.commons.SimpleMessageFormat;
 
-public class UnpartitionedDateFormatter implements PdfFormFieldFormatter {
+public class MoneyFormatter implements Formatter {
 
     @Override
     public String format(Object object) {
-        Date value = (Date) object;
-        return SimpleMessageFormat.format("dd/MM/YYYY", value);
+        return SimpleMessageFormat.format("{0,number,#,##0.00}", (BigDecimal) object);
     }
 
 }

@@ -14,7 +14,7 @@
 package com.propertyvista.domain.legal.utils;
 
 
-public class UppercaseFormatter implements PdfFormFieldFormatter {
+public class UppercaseFormatter implements Formatter {
 
     @Override
     public String format(Object object) {
