@@ -400,6 +400,8 @@ public class PaymentWizard extends CPortalEntityWizard<PaymentDTO> {
                 if (!result.fee().isNull()) {
                     panel.add(createDecorator(i18n.tr("Convenience Fee:"), result.fee().getStringView()));
                     panel.add(createDecorator(i18n.tr("Payment Total:"), result.total().getStringView()));
+
+                    getValue().convenienceFee().setValue(result.fee().getValue());
                 }
             }
         }, inData);

@@ -120,7 +120,7 @@ public class LatestActivitiesGadget extends AbstractGadget<FinancialDashboardVie
             protected void onValueSet(boolean populate) {
                 super.onValueSet(populate);
 
-                get(proto().convenienceFee()).setVisible(getValue().convenienceFee().isNull());
+                get(proto().convenienceFee()).setVisible(!getValue().convenienceFee().isNull());
             }
         }
     }
