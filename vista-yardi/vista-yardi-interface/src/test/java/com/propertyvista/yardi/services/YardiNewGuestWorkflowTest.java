@@ -32,6 +32,8 @@ import org.slf4j.LoggerFactory;
 
 import com.yardi.entity.guestcard40.AdditionalPreference;
 import com.yardi.entity.guestcard40.CustomerPreferences;
+import com.yardi.entity.guestcard40.EventType;
+import com.yardi.entity.guestcard40.EventTypes;
 import com.yardi.entity.guestcard40.LeadManagement;
 import com.yardi.entity.guestcard40.MarketingAgent;
 import com.yardi.entity.guestcard40.MarketingSource;
@@ -81,6 +83,10 @@ public class YardiNewGuestWorkflowTest {
         yc = getTestPmcYardiCredential();
     }
 
+    private static final String AGENT = "Property Vista";
+
+    private static final String SOURCE = "ILS";
+
     public static void main(String[] args) {
 
         try {
@@ -99,12 +105,12 @@ public class YardiNewGuestWorkflowTest {
             for (PropertyMarketingSources source : sources.getProperty()) {
                 if (yc.propertyListCodes().getValue().equals(source.getPropertyCode())) {
                     for (MarketingAgent agent : source.getPropertyRequiredFields().getAgents().getAgentName()) {
-                        if ("Property Vista".equals(agent.getValue())) {
+                        if (AGENT.equals(agent.getValue())) {
                             agentName = agent.getValue();
                         }
                     }
                     for (MarketingSource src : source.getPropertyRequiredFields().getSources().getSourceName()) {
-                        if ("ILS".equals(src.getValue())) {
+                        if (SOURCE.equals(src.getValue())) {
                             sourceName = src.getValue();
                         }
                     }
@@ -260,6 +266,9 @@ public class YardiNewGuestWorkflowTest {
             item.setAdditionalPreferenceType(itemName);
             guest.setCustomerPreferences(new CustomerPreferences());
             guest.getCustomerPreferences().getCustomerAdditionalPreferences().add(item);
+            EventType event = new YardiGuestProcessor().getNewEvent(AGENT, SOURCE, EventTypes.OTHER, false);
+            guest.getEvents().getEvent().clear();
+            guest.getEvents().getEvent().add(event);
             updateGuest(guest);
         }
     }

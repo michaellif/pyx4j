@@ -51,7 +51,7 @@ public class YardiGuestProcessor {
         guest.setCustomerPreferences(getCustomerPreferences(moveIn, unit.getInformation().size() > 0 ? unit.getInformation().get(0) : null));
         // add first contact event
         Events events = new Events();
-        events.getEvent().add(getNewEvent(agent, source, EventTypes.EMAIL, true));
+        events.getEvent().add(getNewEvent(agent, source, EventTypes.OTHER, true));
         guest.setEvents(events);
 
         return guest;
@@ -97,7 +97,7 @@ public class YardiGuestProcessor {
         return unit;
     }
 
-    private EventType getNewEvent(String agent, String source, EventTypes type, boolean firstContact) {
+    public EventType getNewEvent(String agent, String source, EventTypes type, boolean firstContact) {
         EventType appEvent = new EventType();
         appEvent.setEventType(type);
         appEvent.setEventDate(new Timestamp(new Date().getTime()));
@@ -135,6 +135,7 @@ public class YardiGuestProcessor {
     private Agent getAgent(String name) {
         Agent agent = new Agent();
         AgentName agentName = new AgentName();
+        agentName.setFirstName("");
         agentName.setLastName(name);
         agent.setAgentName(agentName);
         return agent;
