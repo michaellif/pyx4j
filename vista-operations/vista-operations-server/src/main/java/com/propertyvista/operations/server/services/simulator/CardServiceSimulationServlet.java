@@ -15,6 +15,7 @@ package com.propertyvista.operations.server.services.simulator;
 
 import java.io.IOException;
 import java.lang.reflect.Field;
+import java.lang.reflect.Modifier;
 
 import javax.servlet.ServletException;
 import javax.servlet.ServletOutputStream;
@@ -51,7 +52,7 @@ public class CardServiceSimulationServlet extends HttpServlet {
         String responseBody = null;
         CardServiceSimulatorConfig simulatorConfig = CardServiceSimulationUtils.getCardServiceSimulatorConfig();
 
-        boolean convFeeApi = httpRequest.getServletPath().endsWith("/convfee");
+        boolean convFeeApi = httpRequest.getRequestURI().endsWith("/convfee/");
 
         try {
             switch (simulatorConfig.responseType().getValue()) {
@@ -127,7 +128,13 @@ public class CardServiceSimulationServlet extends HttpServlet {
             String value = httpRequest.getParameter(nameDeclared.value());
             if (value != null) {
                 try {
-                    field.set(caledonRequest, value);
+                    if (Modifier.isFinal(field.getModifiers())) {
+                        if (!value.equals(field.get(caledonRequest))) {
+                            throw new AssertionError("field expected " + field.get(caledonRequest) + " bug got " + value);
+                        }
+                    } else {
+                        field.set(caledonRequest, value);
+                    }
                 } catch (Throwable e) {
                     log.error("object value access error", e);
                     throw new Error("System error", e);

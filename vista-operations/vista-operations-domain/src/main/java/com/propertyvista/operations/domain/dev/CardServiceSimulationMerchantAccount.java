@@ -24,6 +24,7 @@ import com.pyx4j.entity.annotations.Editor.EditorType;
 import com.pyx4j.entity.annotations.Format;
 import com.pyx4j.entity.annotations.Indexed;
 import com.pyx4j.entity.annotations.Length;
+import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.annotations.RequireFeature;
 import com.pyx4j.entity.annotations.Table;
@@ -56,6 +57,21 @@ public interface CardServiceSimulationMerchantAccount extends IEntity {
 
     @Caption(description = "Force rejection code on all transactions to this Account")
     IPrimitive<String> responseCode();
+
+    @Editor(type = EditorType.percentage)
+    @Format("#,##0.00")
+    @MemberColumn(scale = 4)
+    IPrimitive<BigDecimal> visaCreditConvenienceFee();
+
+    @Editor(type = EditorType.percentage)
+    @Format("#,##0.00")
+    @MemberColumn(scale = 4)
+    IPrimitive<BigDecimal> masterCardConvenienceFee();
+
+    @Editor(type = EditorType.percentage)
+    @Format("#,##0.00")
+    @MemberColumn(scale = 4)
+    IPrimitive<BigDecimal> visaDebitConvenienceFee();
 
     @Timestamp(Update.Created)
     @Format("MM/dd/yyyy HH:mm")

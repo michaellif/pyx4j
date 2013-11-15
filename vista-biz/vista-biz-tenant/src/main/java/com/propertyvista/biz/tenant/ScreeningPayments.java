@@ -87,8 +87,8 @@ class ScreeningPayments {
 
         // Do authorization
         try {
-            String authorizationNumber = ServerSideFactory.create(CreditCardFacade.class).preAuthorization(transaction.amount().getValue(),
-                    merchantTerminalId(), ReferenceNumberPrefix.EquifaxScreening, transaction.getPrimaryKey().toString(),
+            String authorizationNumber = ServerSideFactory.create(CreditCardFacade.class).preAuthorization(merchantTerminalId(),
+                    transaction.amount().getValue(), ReferenceNumberPrefix.EquifaxScreening, transaction.getPrimaryKey().toString(),
                     (CreditCardInfo) transaction.paymentMethod().details().cast());
 
             transaction.status().setValue(CustomerCreditCheckTransaction.TransactionStatus.Authorized);
@@ -159,7 +159,7 @@ class ScreeningPayments {
         });
 
         try {
-            String authorizationNumber = ServerSideFactory.create(CreditCardFacade.class).completion(transaction.amount().getValue(), merchantTerminalId(),
+            String authorizationNumber = ServerSideFactory.create(CreditCardFacade.class).completion(merchantTerminalId(), transaction.amount().getValue(),
                     ReferenceNumberPrefix.EquifaxScreening, transaction.getPrimaryKey().toString(),
                     (CreditCardInfo) transaction.paymentMethod().details().cast());
             transaction.transactionAuthorizationNumber().setValue(authorizationNumber);

@@ -203,6 +203,10 @@ public interface PaymentRecord extends IEntity {
     @Editor(type = EditorType.money)
     IPrimitive<BigDecimal> amount();
 
+    @Format("#,##0.00")
+    @Editor(type = EditorType.money)
+    IPrimitive<BigDecimal> convenienceFee();
+
     LeasePaymentMethod paymentMethod();
 
     @ToString(index = 2)

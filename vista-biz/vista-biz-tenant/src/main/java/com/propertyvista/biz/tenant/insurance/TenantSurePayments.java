@@ -112,7 +112,7 @@ class TenantSurePayments {
     static TenantSureTransaction preAuthorization(TenantSureTransaction transaction) {
         BigDecimal amount = transaction.amount().getValue();
         String referenceNumber = transaction.id().getStringView();
-        String authorizationNumber = ServerSideFactory.create(CreditCardFacade.class).preAuthorization(amount, tenantSureMerchantTerminalId(),
+        String authorizationNumber = ServerSideFactory.create(CreditCardFacade.class).preAuthorization(tenantSureMerchantTerminalId(), amount,
                 ReferenceNumberPrefix.TenantSure, referenceNumber, (CreditCardInfo) transaction.paymentMethod().details().cast());
         transaction.transactionAuthorizationNumber().setValue(authorizationNumber);
         transaction.transactionDate().setValue(SystemDateManager.getDate());
@@ -128,7 +128,7 @@ class TenantSurePayments {
     static void compleateTransaction(TenantSureTransaction transaction) {
         BigDecimal amount = transaction.amount().getValue();
         String referenceNumber = transaction.id().getStringView();
-        String authorizationNumber = ServerSideFactory.create(CreditCardFacade.class).completion(amount, tenantSureMerchantTerminalId(),
+        String authorizationNumber = ServerSideFactory.create(CreditCardFacade.class).completion(tenantSureMerchantTerminalId(), amount,
                 ReferenceNumberPrefix.TenantSure, referenceNumber, (CreditCardInfo) transaction.paymentMethod().details().cast());
         transaction.transactionAuthorizationNumber().setValue(authorizationNumber);
         transaction.transactionDate().setValue(SystemDateManager.getDate());
@@ -252,9 +252,9 @@ class TenantSurePayments {
         try {
             String referenceNumber = transaction.id().getStringView();
 
-            CreditCardTransactionResponse response = ServerSideFactory.create(CreditCardFacade.class).realTimeSale(transaction.amount().getValue(),
-                    tenantSureMerchantTerminalId(), ReferenceNumberPrefix.TenantSure, referenceNumber,
-                    (CreditCardInfo) transaction.paymentMethod().details().cast());
+            CreditCardTransactionResponse response = ServerSideFactory.create(CreditCardFacade.class).realTimeSale(tenantSureMerchantTerminalId(),
+                    transaction.amount().getValue(), null, ReferenceNumberPrefix.TenantSure,
+                    referenceNumber, (CreditCardInfo) transaction.paymentMethod().details().cast());
 
             if (response.success().getValue()) {
                 transaction.transactionAuthorizationNumber().setValue(response.authorizationNumber().getValue());

@@ -32,14 +32,20 @@ public class CreditCardFacadeImpl implements CreditCardFacade {
     }
 
     @Override
-    public CreditCardTransactionResponse realTimeSale(BigDecimal amount, String merchantTerminalId, ReferenceNumberPrefix uniquePrefix, String referenceNumber,
-            CreditCardInfo cc) {
-        return CreditCardProcessor.realTimeSale(amount, merchantTerminalId, uniquePrefix.getValue() + referenceNumber, cc);
+    public CreditCardTransactionResponse realTimeSale(String merchantTerminalId, BigDecimal amount, BigDecimal convenienceFee,
+            ReferenceNumberPrefix uniquePrefix, String referenceNumber, CreditCardInfo cc) {
+        return CreditCardProcessor.realTimeSale(merchantTerminalId, amount, convenienceFee, uniquePrefix.getValue() + referenceNumber, cc);
     }
 
     @Override
-    public String preAuthorization(BigDecimal amount, String merchantTerminalId, ReferenceNumberPrefix uniquePrefix, String referenceNumber, CreditCardInfo cc) {
-        return CreditCardProcessor.preAuthorization(amount, merchantTerminalId, uniquePrefix.getValue() + referenceNumber, cc);
+    public CreditCardTransactionResponse voidTransaction(String merchantTerminalId, BigDecimal amount, ReferenceNumberPrefix uniquePrefix,
+            String referenceNumber) {
+        return CreditCardProcessor.voidTransaction(merchantTerminalId, amount, uniquePrefix.getValue() + referenceNumber);
+    }
+
+    @Override
+    public String preAuthorization(String merchantTerminalId, BigDecimal amount, ReferenceNumberPrefix uniquePrefix, String referenceNumber, CreditCardInfo cc) {
+        return CreditCardProcessor.preAuthorization(merchantTerminalId, amount, uniquePrefix.getValue() + referenceNumber, cc);
     }
 
     @Override
@@ -48,8 +54,8 @@ public class CreditCardFacadeImpl implements CreditCardFacade {
     }
 
     @Override
-    public String completion(BigDecimal amount, String merchantTerminalId, ReferenceNumberPrefix uniquePrefix, String referenceNumber, CreditCardInfo cc) {
-        return CreditCardProcessor.completion(amount, merchantTerminalId, uniquePrefix.getValue() + referenceNumber, cc);
+    public String completion(String merchantTerminalId, BigDecimal amount, ReferenceNumberPrefix uniquePrefix, String referenceNumber, CreditCardInfo cc) {
+        return CreditCardProcessor.completion(merchantTerminalId, amount, uniquePrefix.getValue() + referenceNumber, cc);
     }
 
     @Override

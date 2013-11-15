@@ -22,21 +22,12 @@ import org.apache.commons.lang.Validate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.commons.UserRuntimeException;
-import com.pyx4j.config.server.ServerSideFactory;
-import com.pyx4j.config.server.SystemDateManager;
-import com.pyx4j.entity.server.CompensationHandler;
-import com.pyx4j.entity.server.Persistence;
-import com.pyx4j.entity.server.UnitOfWork;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.i18n.shared.I18n;
 
-import com.propertyvista.biz.financial.payment.CreditCardFacade.ReferenceNumberPrefix;
-import com.propertyvista.biz.system.OperationsAlertFacade;
 import com.propertyvista.config.VistaDeployment;
 import com.propertyvista.domain.financial.MerchantAccount;
-import com.propertyvista.domain.financial.PaymentRecord;
 import com.propertyvista.domain.payment.CreditCardInfo;
 import com.propertyvista.domain.payment.CreditCardInfo.CreditCardType;
 import com.propertyvista.domain.pmc.Pmc;
@@ -186,6 +177,7 @@ class CreditCardProcessor {
         if (!cc.token().isNull()) {
             Token token = EntityFactory.create(Token.class);
             token.code().setValue(cc.token().getStringView());
+            token.cardType().setValue(cc.cardType().getValue());
             return token;
         } else {
             if (!ValidationUtils.isCreditCardNumberValid(cc.card().number().getValue())) {
@@ -201,87 +193,33 @@ class CreditCardProcessor {
             ccInfo.creditCardNumber().setValue(cc.card().number().getValue());
             ccInfo.creditCardExpiryDate().setValue(cc.expiryDate().getValue());
             ccInfo.securityCode().setValue(cc.securityCode().getValue());
+            ccInfo.cardType().setValue(cc.cardType().getValue());
             return ccInfo;
         }
     }
 
-    public static void realTimeSale(final PaymentRecord paymentRecord) {
-        MerchantAccount account = PaymentUtils.retrieveValidMerchantAccount(paymentRecord);
+    static CreditCardTransactionResponse realTimeSale(String merchantTerminalId, BigDecimal amount, BigDecimal convenienceFee, String referenceNumber,
+            CreditCardInfo cc) {
+        Merchant merchant = EntityFactory.create(Merchant.class);
+        merchant.terminalID().setValue(merchantTerminalId);
 
-        final Merchant merchant = EntityFactory.create(Merchant.class);
-        merchant.terminalID().setValue(account.merchantTerminalId().getValue());
-
-        // TODO use ServerSideFactory.create(CreditCardFacade.class).
-
-        final PaymentRequest request = EntityFactory.create(PaymentRequest.class);
-        request.referenceNumber().setValue(ReferenceNumberPrefix.RentPayments.getValue() + paymentRecord.id().getStringView());
-        request.amount().setValue(paymentRecord.amount().getValue());
-        CreditCardInfo cc = paymentRecord.paymentMethod().details().cast();
+        PaymentRequest request = EntityFactory.create(PaymentRequest.class);
+        request.referenceNumber().setValue(referenceNumber);
+        request.amount().setValue(amount);
+        request.convenienceFee().setValue(convenienceFee);
 
         request.paymentInstrument().set(createPaymentInstrument(cc));
 
-        final PaymentResponse sailResponse = getPaymentProcessor().realTimeSale(merchant, request);
-        if (sailResponse.success().getValue()) {
-            log.debug("ccTransaction accepted {}", sailResponse);
-            paymentRecord.paymentStatus().setValue(PaymentRecord.PaymentStatus.Cleared);
-            paymentRecord.lastStatusChangeDate().setValue(new LogicalDate(SystemDateManager.getDate()));
-            paymentRecord.transactionAuthorizationNumber().setValue(sailResponse.authorizationNumber().getValue());
+        PaymentResponse response = getPaymentProcessor().realTimeSale(merchant, request);
+        if (response.success().getValue()) {
+            log.debug("ccPayment transaction accepted {}", response);
         } else {
-            log.debug("ccTransaction rejected {}", sailResponse);
-            paymentRecord.paymentStatus().setValue(PaymentRecord.PaymentStatus.Rejected);
-            paymentRecord.lastStatusChangeDate().setValue(new LogicalDate(SystemDateManager.getDate()));
-            paymentRecord.transactionAuthorizationNumber().setValue(sailResponse.code().getValue());
-            paymentRecord.transactionErrorMessage().setValue(sailResponse.message().getValue());
+            log.debug("ccPayment transaction rejected {}", response);
         }
-
-        if (sailResponse.success().getValue(false)) {
-            UnitOfWork.addTransactionCompensationHandler(new CompensationHandler() {
-
-                @Override
-                public Void execute() {
-                    try {
-                        PaymentResponse voidResponse = getPaymentProcessor().voidTransaction(merchant, request);
-                        if (voidResponse.success().getValue()) {
-                            log.info("transaction {} successfully voided {}", request.referenceNumber(), voidResponse.message());
-                            PaymentRecord record = Persistence.service().retrieve(PaymentRecord.class, paymentRecord.getPrimaryKey());
-                            record.transactionAuthorizationNumber().setValue(sailResponse.authorizationNumber().getValue());
-                            record.paymentStatus().setValue(PaymentRecord.PaymentStatus.Void);
-                            LogicalDate now = new LogicalDate(SystemDateManager.getDate());
-                            record.lastStatusChangeDate().setValue(now);
-                            record.receivedDate().setValue(now);
-                            record.finalizeDate().setValue(now);
-                            Persistence.service().persist(record);
-                        } else {
-                            log.error("Unable to void CC transaction {} {} {}; response {} {}", //
-                                    merchant.terminalID(), //
-                                    request.referenceNumber(), //
-                                    request.amount(), //
-                                    voidResponse.code(), //
-                                    voidResponse.message());
-
-                            ServerSideFactory.create(OperationsAlertFacade.class).record(paymentRecord,
-                                    "Unable to void CC transaction {0} {1} {2}; response {3} {4}",//
-                                    merchant.terminalID(), //
-                                    request.referenceNumber(), // 
-                                    request.amount(), //
-                                    voidResponse.code(), //
-                                    voidResponse.message());
-                        }
-                    } catch (Throwable e) {
-                        log.error("Unable to void CC transaction {} {} {}", merchant.terminalID(), request.referenceNumber(), request.amount(), e);
-
-                        ServerSideFactory.create(OperationsAlertFacade.class).record(paymentRecord, "Unable to void CC transaction {0} {1} {2}; response {3}",//
-                                merchant.terminalID(), request.referenceNumber(), request.amount(), e);
-                    }
-
-                    return null;
-                }
-            });
-        }
-
+        return createResponse(response);
     }
 
-    static CreditCardTransactionResponse realTimeSale(BigDecimal amount, String merchantTerminalId, String referenceNumber, CreditCardInfo cc) {
+    static CreditCardTransactionResponse voidTransaction(String merchantTerminalId, BigDecimal amount, String referenceNumber) {
         Merchant merchant = EntityFactory.create(Merchant.class);
         merchant.terminalID().setValue(merchantTerminalId);
 
@@ -289,9 +227,7 @@ class CreditCardProcessor {
         request.referenceNumber().setValue(referenceNumber);
         request.amount().setValue(amount);
 
-        request.paymentInstrument().set(createPaymentInstrument(cc));
-
-        PaymentResponse response = getPaymentProcessor().realTimeSale(merchant, request);
+        PaymentResponse response = getPaymentProcessor().voidTransaction(merchant, request);
         if (response.success().getValue()) {
             log.debug("ccPayment transaction accepted {}", response);
         } else {
@@ -309,7 +245,7 @@ class CreditCardProcessor {
         return response;
     }
 
-    static String preAuthorization(BigDecimal amount, String merchantTerminalId, String referenceNumber, CreditCardInfo cc) {
+    static String preAuthorization(String merchantTerminalId, BigDecimal amount, String referenceNumber, CreditCardInfo cc) {
         Merchant merchant = EntityFactory.create(Merchant.class);
         merchant.terminalID().setValue(merchantTerminalId);
 
@@ -347,7 +283,7 @@ class CreditCardProcessor {
         }
     }
 
-    static String completion(BigDecimal amount, String merchantTerminalId, String referenceNumber, CreditCardInfo cc) {
+    static String completion(String merchantTerminalId, BigDecimal amount, String referenceNumber, CreditCardInfo cc) {
         Merchant merchant = EntityFactory.create(Merchant.class);
         merchant.terminalID().setValue(merchantTerminalId);
 

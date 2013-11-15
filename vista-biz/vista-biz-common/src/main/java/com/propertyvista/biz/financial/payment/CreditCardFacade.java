@@ -49,17 +49,20 @@ public interface CreditCardFacade {
 
     public void persistToken(String merchantTerminalId, CreditCardInfo cc);
 
-    public CreditCardTransactionResponse realTimeSale(BigDecimal amount, String merchantTerminalId, ReferenceNumberPrefix uniquePrefix, String referenceNumber,
-            CreditCardInfo cc);
+    public CreditCardTransactionResponse realTimeSale(String merchantTerminalId, BigDecimal amount, BigDecimal convenienceFee, ReferenceNumberPrefix uniquePrefix,
+            String referenceNumber, CreditCardInfo cc);
+
+    public CreditCardTransactionResponse voidTransaction(String merchantTerminalId, BigDecimal amount, ReferenceNumberPrefix uniquePrefix,
+            String referenceNumber);
 
     /**
      * @return authorizationNumber
      */
-    public String preAuthorization(BigDecimal amount, String merchantTerminalId, ReferenceNumberPrefix uniquePrefix, String referenceNumber, CreditCardInfo cc);
+    public String preAuthorization(String merchantTerminalId, BigDecimal amount, ReferenceNumberPrefix uniquePrefix, String referenceNumber, CreditCardInfo cc);
 
     public void preAuthorizationReversal(String merchantTerminalId, ReferenceNumberPrefix uniquePrefix, String referenceNumber, CreditCardInfo cc);
 
-    public String completion(BigDecimal amount, String merchantTerminalId, ReferenceNumberPrefix uniquePrefix, String referenceNumber, CreditCardInfo cc);
+    public String completion(String merchantTerminalId, BigDecimal amount, ReferenceNumberPrefix uniquePrefix, String referenceNumber, CreditCardInfo cc);
 
     public boolean validateVisaDebit(CreditCardInfo creditCardInfo);
 

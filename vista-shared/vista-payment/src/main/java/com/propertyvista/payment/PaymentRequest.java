@@ -29,6 +29,8 @@ public interface PaymentRequest extends IEntity {
 
     IPrimitive<BigDecimal> amount();
 
+    IPrimitive<BigDecimal> convenienceFee();
+
     @Length(60)
     IPrimitive<String> referenceNumber();
 

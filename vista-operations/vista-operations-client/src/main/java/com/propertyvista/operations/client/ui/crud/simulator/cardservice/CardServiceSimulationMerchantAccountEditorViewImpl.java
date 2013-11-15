@@ -37,6 +37,10 @@ public class CardServiceSimulationMerchantAccountEditorViewImpl extends Operatio
             tabPanel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().responseCode())).build());
             tabPanel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().created())).build());
 
+            tabPanel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().visaCreditConvenienceFee())).build());
+            tabPanel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().masterCardConvenienceFee())).build());
+            tabPanel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().visaDebitConvenienceFee())).build());
+
             setTabBarVisible(false);
             selectTab(addTab(tabPanel));
         }

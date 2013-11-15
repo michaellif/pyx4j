@@ -244,7 +244,7 @@ public class PaymentFacadeImpl implements PaymentFacade {
             break;
         case CreditCard:
             // The credit card processing is done in new transaction and committed regardless of results
-            CreditCardProcessor.realTimeSale(paymentRecord);
+            PaymentCreditCard.processPayment(paymentRecord);
             paymentRecord.finalizeDate().setValue(new LogicalDate(SystemDateManager.getDate()));
             break;
         case Echeck:

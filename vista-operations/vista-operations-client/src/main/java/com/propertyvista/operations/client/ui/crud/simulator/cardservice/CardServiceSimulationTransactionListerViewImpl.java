@@ -36,6 +36,7 @@ public class CardServiceSimulationTransactionListerViewImpl extends OperationsLi
                     new MemberColumnDescriptor.Builder(proto().card().merchant()).build(),
                     new MemberColumnDescriptor.Builder(proto().transactionType() ).build(),
                     new MemberColumnDescriptor.Builder(proto().amount()).build(),
+                    new MemberColumnDescriptor.Builder(proto().convenienceFee()).build(),
                     new MemberColumnDescriptor.Builder(proto().reference()).build(),
                     new MemberColumnDescriptor.Builder(proto().responseCode()).build(),
                     new MemberColumnDescriptor.Builder(proto().authorizationNumber()).build(),

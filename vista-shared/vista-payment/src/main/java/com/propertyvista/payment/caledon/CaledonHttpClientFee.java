@@ -62,7 +62,7 @@ public class CaledonHttpClientFee {
         boolean useCardServiceSimulator = VistaSystemsSimulationConfig.getConfiguration().useCardServiceSimulator().getValue(Boolean.FALSE);
         if (useCardServiceSimulator) {
             url = ServerSideConfiguration.instance(AbstractVistaServerSideConfiguration.class).getBankingSimulatorConfiguration().getCardServiceSimulatorUrl()
-                    + "/convfee";
+                    + "/convfee/";
         } else {
             url = urlProd;
         }

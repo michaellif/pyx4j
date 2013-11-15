@@ -16,11 +16,15 @@ package com.propertyvista.payment;
 import com.pyx4j.entity.annotations.AbstractEntity;
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.i18n.annotations.I18n;
+
+import com.propertyvista.domain.payment.CreditCardInfo.CreditCardType;
 
 @Transient
 @I18n(strategy = I18n.I18nStrategy.IgnoreAll)
 @AbstractEntity
 public interface PaymentInstrument extends IEntity {
 
+    IPrimitive<CreditCardType> cardType();
 }
