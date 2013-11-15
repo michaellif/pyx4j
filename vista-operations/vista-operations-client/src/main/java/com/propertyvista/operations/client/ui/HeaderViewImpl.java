@@ -111,12 +111,12 @@ public class HeaderViewImpl extends HorizontalPanel implements HeaderView {
         account.setHTML(i18n.tr("Account"));
         account.asWidget().getElement().getStyle().setMarginRight(1, Unit.EM);
 
-        toolbar.add(greetings);
-        toolbar.add(account);
-        toolbar.add(login);
-        toolbar.add(logout);
+        toolbar.addItem(greetings);
+        toolbar.addItem(account);
+        toolbar.addItem(login);
+        toolbar.addItem(logout);
 
-        return toolbar;
+        return toolbar.asWidget();
     }
 
     @Override

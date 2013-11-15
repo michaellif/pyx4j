@@ -191,7 +191,7 @@ public class TenantSurePage extends CPortalEntityForm<TenantSureInsurancePolicyD
         actions.addItem(aboutTenantSure);
 
         btnActions.setMenu(actions);
-        decorator.addHeaderToolbarButton(btnActions);
+        decorator.addHeaderToolbarWidget(btnActions);
 
         return decorator;
     }

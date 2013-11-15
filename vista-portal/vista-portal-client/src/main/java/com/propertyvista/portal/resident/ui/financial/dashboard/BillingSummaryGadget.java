@@ -67,10 +67,8 @@ public class BillingSummaryGadget extends AbstractGadget<FinancialDashboardViewI
                 }
             });
             paymentButton.getElement().getStyle().setProperty("background", StyleManager.getPalette().getThemeColor(ThemeColor.contrast4, 1));
-            add(paymentButton);
-
+            addItem(paymentButton);
         }
-
     }
 
     class NavigationBar extends FlowPanel {

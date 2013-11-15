@@ -75,7 +75,7 @@ public class PaymentMethodsGadget extends AbstractGadget<FinancialDashboardViewI
     class PaymentMethodsToolbar extends Toolbar {
         public PaymentMethodsToolbar() {
             paymentMethodButton.getElement().getStyle().setProperty("background", StyleManager.getPalette().getThemeColor(ThemeColor.contrast4, 1));
-            add(paymentMethodButton);
+            addItem(paymentMethodButton);
         }
     }
 

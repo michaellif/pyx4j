@@ -17,7 +17,7 @@ import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.portal.rpc.portal.resident.dto.financial.AutoPayDTO;
 import com.propertyvista.portal.shared.ui.AbstractWizardFormView;
-import com.propertyvista.portal.shared.ui.IWizardFormView;
+import com.propertyvista.portal.shared.ui.IWizardView;
 
 public class AutoPayWizardViewImpl extends AbstractWizardFormView<AutoPayDTO> implements AutoPayWizardView {
 
@@ -29,7 +29,7 @@ public class AutoPayWizardViewImpl extends AbstractWizardFormView<AutoPayDTO> im
     }
 
     @Override
-    public void setPresenter(IWizardFormView.IWizardFormPresenter<AutoPayDTO> presenter) {
+    public void setPresenter(IWizardView.IWizardFormPresenter<AutoPayDTO> presenter) {
         super.setPresenter(presenter);
         ((AutoPayWizard) getWizard()).setPresenter((AutoPayWizardView.Presenter) presenter);
     }

@@ -29,11 +29,11 @@ import com.pyx4j.widgets.client.dialog.MessageDialog;
 
 import com.propertyvista.portal.rpc.portal.shared.services.PasswordChangeUserService;
 import com.propertyvista.portal.shared.PortalSite;
-import com.propertyvista.portal.shared.activity.AbstractWizardFormActivity;
+import com.propertyvista.portal.shared.activity.AbstractWizardActivity;
 import com.propertyvista.portal.shared.ui.security.PasswordChangeWizardView;
 import com.propertyvista.portal.shared.ui.security.PasswordChangeWizardView.PasswordChangePresenter;
 
-public class PasswordChangeActivity extends AbstractWizardFormActivity<PasswordChangeRequest> implements PasswordChangePresenter {
+public class PasswordChangeActivity extends AbstractWizardActivity<PasswordChangeRequest> implements PasswordChangePresenter {
 
     private static final I18n i18n = I18n.get(PasswordChangeActivity.class);
 

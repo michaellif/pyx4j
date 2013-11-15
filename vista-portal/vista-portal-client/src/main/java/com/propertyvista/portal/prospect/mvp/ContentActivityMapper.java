@@ -24,17 +24,8 @@ import com.pyx4j.site.rpc.AppPlace;
 
 import com.propertyvista.portal.prospect.activity.LandingActivity;
 import com.propertyvista.portal.prospect.activity.SignUpActivity;
-import com.propertyvista.portal.prospect.activity.ApplicationStatusPageActivity;
-import com.propertyvista.portal.prospect.activity.steps.ContactsStepActivity;
-import com.propertyvista.portal.prospect.activity.steps.FinancialStepActivity;
-import com.propertyvista.portal.prospect.activity.steps.OptionsStepActivity;
-import com.propertyvista.portal.prospect.activity.steps.PaymentStepActivity;
-import com.propertyvista.portal.prospect.activity.steps.PeopleStepActivity;
-import com.propertyvista.portal.prospect.activity.steps.PersonalInfoAStepActivity;
-import com.propertyvista.portal.prospect.activity.steps.PersonalInfoBStepActivity;
-import com.propertyvista.portal.prospect.activity.steps.PmcCustomStepActivity;
-import com.propertyvista.portal.prospect.activity.steps.SummaryStepActivity;
-import com.propertyvista.portal.prospect.activity.steps.UnitStepActivity;
+import com.propertyvista.portal.prospect.activity.application.ApplicationStatusPageActivity;
+import com.propertyvista.portal.prospect.activity.application.ApplicationWizardActivity;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap;
 import com.propertyvista.portal.rpc.portal.prospect.ProspectPortalSiteMap;
 import com.propertyvista.portal.rpc.portal.prospect.ProspectPortalSiteMap.Registration;
@@ -81,27 +72,8 @@ public class ContentActivityMapper implements AppActivityMapper {
                     } else if (appPlace instanceof PortalSiteMap.NotificationPlace) {
                         activity = new NotificationPageActivity((PortalSiteMap.NotificationPlace) appPlace);
 
-// Steps:
-                    } else if (appPlace instanceof ProspectPortalSiteMap.Application.UnitStep) {
-                        activity = new UnitStepActivity(appPlace);
-                    } else if (appPlace instanceof ProspectPortalSiteMap.Application.OptionsStep) {
-                        activity = new OptionsStepActivity(appPlace);
-                    } else if (appPlace instanceof ProspectPortalSiteMap.Application.PersonalInfoAStep) {
-                        activity = new PersonalInfoAStepActivity(appPlace);
-                    } else if (appPlace instanceof ProspectPortalSiteMap.Application.PersonalInfoBStep) {
-                        activity = new PersonalInfoBStepActivity(appPlace);
-                    } else if (appPlace instanceof ProspectPortalSiteMap.Application.FinancialStep) {
-                        activity = new FinancialStepActivity(appPlace);
-                    } else if (appPlace instanceof ProspectPortalSiteMap.Application.PeopleStep) {
-                        activity = new PeopleStepActivity(appPlace);
-                    } else if (appPlace instanceof ProspectPortalSiteMap.Application.ContactsStep) {
-                        activity = new ContactsStepActivity(appPlace);
-                    } else if (appPlace instanceof ProspectPortalSiteMap.Application.PmcCustomStep) {
-                        activity = new PmcCustomStepActivity(appPlace);
-                    } else if (appPlace instanceof ProspectPortalSiteMap.Application.SummaryStep) {
-                        activity = new SummaryStepActivity(appPlace);
-                    } else if (appPlace instanceof ProspectPortalSiteMap.Application.PaymentStep) {
-                        activity = new PaymentStepActivity(appPlace);
+                    } else if (appPlace instanceof ProspectPortalSiteMap.Application) {
+                        activity = new ApplicationWizardActivity(appPlace);
 
                     }
 

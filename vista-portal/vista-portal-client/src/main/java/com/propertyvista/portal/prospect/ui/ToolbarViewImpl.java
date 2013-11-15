@@ -103,12 +103,12 @@ public class ToolbarViewImpl extends FlowPanel implements ToolbarView {
 
         languageButton = new Button(ClientNavigUtils.getCurrentLocale().toString());
 
-        rightToolbar.add(loginButton);
-        rightToolbar.add(tenantButton);
+        rightToolbar.addItem(loginButton);
+        rightToolbar.addItem(tenantButton);
 
         //TODO implement lang selector
         if (false) {
-            rightToolbar.add(languageButton);
+            rightToolbar.addItem(languageButton);
         }
 
         rightToolbar.getElement().getStyle().setPosition(Position.ABSOLUTE);
@@ -121,7 +121,7 @@ public class ToolbarViewImpl extends FlowPanel implements ToolbarView {
                 AppSite.getEventBus().fireEvent(new LayoutChangeRequestEvent(ChangeType.toggleSideMenu));
             }
         });
-        leftToolbar.add(sideMenuButton);
+        leftToolbar.addItem(sideMenuButton);
         leftToolbar.getElement().getStyle().setPosition(Position.ABSOLUTE);
         leftToolbar.getElement().getStyle().setProperty("left", "0");
 

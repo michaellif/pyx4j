@@ -153,7 +153,7 @@ public class PortalTheme extends Theme {
 
                 style = new Style(".", StyleName.FormFlexPanelH1);
                 style.addProperty("margin", "0");
-                style.addProperty("background-color", "transparent");
+                style.addProperty("background", "transparent");
                 addStyle(style);
 
                 style = new Style(".", StyleName.FormFlexPanelH1Label);
@@ -175,9 +175,6 @@ public class PortalTheme extends Theme {
                 style.addProperty("font-style", "italic");
                 addStyle(style);
 
-                style = new Style(".", StyleName.FormFlexPanelH1);
-                style.addGradient(ThemeColor.foreground, 0.2, ThemeColor.foreground, 0.2);
-                addStyle(style);
             }
         });
 

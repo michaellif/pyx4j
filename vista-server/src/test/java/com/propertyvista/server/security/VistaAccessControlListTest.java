@@ -41,7 +41,6 @@ import com.propertyvista.domain.security.VistaCustomerBehavior;
 import com.propertyvista.domain.tenant.lease.LeaseTermTenant;
 import com.propertyvista.domain.tenant.prospect.OnlineApplication;
 import com.propertyvista.dto.TenantFinancialDTO;
-import com.propertyvista.portal.rpc.portal.prospect.services.UnitStepService;
 import com.propertyvista.portal.rpc.ptapp.dto.TenantInLeaseListDTO;
 import com.propertyvista.portal.server.portal.prospect.ProspectPortalContext;
 
@@ -78,7 +77,6 @@ public class VistaAccessControlListTest {
     @Test
     public void publicServicePermissions() {
         TestLifecycle.beginRequest();
-        assertPermission(false, UnitStepService.class);
 
         TestLifecycle.endRequest();
 
@@ -88,7 +86,6 @@ public class VistaAccessControlListTest {
     public void prospectiveTenantServicePermissions() {
         TestLifecycle.testSession(null, VistaCustomerBehavior.Prospective);
         TestLifecycle.beginRequest();
-        assertPermission(true, UnitStepService.class);
 
         TestLifecycle.endRequest();
     }
@@ -98,7 +95,6 @@ public class VistaAccessControlListTest {
     public void prospectiveSubmittedTenantServicePermissions() {
         TestLifecycle.testSession(null, VistaCustomerBehavior.ProspectiveSubmitted);
         TestLifecycle.beginRequest();
-        assertPermission(true, UnitStepService.class);
 
         TestLifecycle.endRequest();
     }

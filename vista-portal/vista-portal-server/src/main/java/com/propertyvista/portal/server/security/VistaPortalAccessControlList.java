@@ -46,16 +46,7 @@ import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.LeaseTermTenant;
 import com.propertyvista.domain.tenant.prospect.OnlineApplication;
 import com.propertyvista.portal.rpc.portal.prospect.services.ApplicationStatusService;
-import com.propertyvista.portal.rpc.portal.prospect.services.ContactsStepService;
-import com.propertyvista.portal.rpc.portal.prospect.services.FinancialStepService;
-import com.propertyvista.portal.rpc.portal.prospect.services.OptionsStepService;
-import com.propertyvista.portal.rpc.portal.prospect.services.PaymentStepService;
-import com.propertyvista.portal.rpc.portal.prospect.services.PeopleStepService;
-import com.propertyvista.portal.rpc.portal.prospect.services.PersonalInfoAStepService;
-import com.propertyvista.portal.rpc.portal.prospect.services.PersonalInfoBStepService;
-import com.propertyvista.portal.rpc.portal.prospect.services.PmcCustomStepService;
-import com.propertyvista.portal.rpc.portal.prospect.services.SummaryStepService;
-import com.propertyvista.portal.rpc.portal.prospect.services.UnitStepService;
+import com.propertyvista.portal.rpc.portal.prospect.services.ApplicationWizardService;
 import com.propertyvista.portal.rpc.portal.resident.services.LeaseContextSelectionService;
 import com.propertyvista.portal.rpc.portal.resident.services.ProspectAuthenticationService;
 import com.propertyvista.portal.rpc.portal.resident.services.ResidentAuthenticationService;
@@ -119,17 +110,6 @@ public class VistaPortalAccessControlList extends ServletContainerAclBuilder {
 
         grant(VistaBasicBehavior.ResidentPortal, new IServiceExecutePermission(PasswordChangeUserService.class));
         grant(VistaBasicBehavior.ProspectivePortal, new IServiceExecutePermission(PasswordChangeUserService.class));
-
-        grant(VistaCustomerBehavior.Prospective, new IServiceExecutePermission(UnitStepService.class));
-        grant(VistaCustomerBehavior.Prospective, new IServiceExecutePermission(OptionsStepService.class));
-        grant(VistaCustomerBehavior.Prospective, new IServiceExecutePermission(PersonalInfoAStepService.class));
-        grant(VistaCustomerBehavior.Prospective, new IServiceExecutePermission(PersonalInfoBStepService.class));
-        grant(VistaCustomerBehavior.Prospective, new IServiceExecutePermission(FinancialStepService.class));
-        grant(VistaCustomerBehavior.Prospective, new IServiceExecutePermission(PeopleStepService.class));
-        grant(VistaCustomerBehavior.Prospective, new IServiceExecutePermission(ContactsStepService.class));
-        grant(VistaCustomerBehavior.Prospective, new IServiceExecutePermission(PmcCustomStepService.class));
-        grant(VistaCustomerBehavior.Prospective, new IServiceExecutePermission(SummaryStepService.class));
-        grant(VistaCustomerBehavior.Prospective, new IServiceExecutePermission(PaymentStepService.class));
 
         // Old TODO remove
         grant(VistaCustomerBehavior.Prospective, new IServiceExecutePermission(ReferenceDataService.class));
@@ -199,6 +179,7 @@ public class VistaPortalAccessControlList extends ServletContainerAclBuilder {
         //========================= My Community Prospect Portal
 
         grant(VistaCustomerBehavior.Prospective, new IServiceExecutePermission(ApplicationStatusService.class));
+        grant(VistaCustomerBehavior.Prospective, new IServiceExecutePermission(ApplicationWizardService.class));
 
         //=======================================
 

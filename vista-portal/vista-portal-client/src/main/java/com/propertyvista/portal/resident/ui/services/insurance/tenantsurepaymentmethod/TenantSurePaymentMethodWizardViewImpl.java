@@ -30,7 +30,7 @@ public class TenantSurePaymentMethodWizardViewImpl extends AbstractWizardFormVie
     }
 
     @Override
-    public void setPresenter(com.propertyvista.portal.shared.ui.IWizardFormView.IWizardFormPresenter<InsurancePaymentMethodDTO> presenter) {
+    public void setPresenter(com.propertyvista.portal.shared.ui.IWizardView.IWizardFormPresenter<InsurancePaymentMethodDTO> presenter) {
         ((TenantSurePaymentMethodWizard) getWizard()).setPresenter((Persenter) presenter);
         super.setPresenter(presenter);
     }

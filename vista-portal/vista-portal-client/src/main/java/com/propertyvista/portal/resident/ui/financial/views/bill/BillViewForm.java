@@ -54,7 +54,7 @@ public class BillViewForm extends CPortalEntityForm<BillViewDTO> {
                 ((BillView.Presenter) getView().getPresenter()).payBill();
             }
         });
-        decorator.addHeaderToolbarButton(btnPay);
+        decorator.addHeaderToolbarWidget(btnPay);
 
         return decorator;
     }

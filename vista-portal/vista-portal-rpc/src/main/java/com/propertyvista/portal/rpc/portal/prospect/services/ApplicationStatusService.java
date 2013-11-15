@@ -17,7 +17,6 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.rpc.shared.IService;
 
-import com.propertyvista.portal.rpc.portal.prospect.dto.ApplicationStepDescriptorsDTO;
 import com.propertyvista.portal.rpc.portal.prospect.dto.ApplicationStatusDTO;
 import com.propertyvista.portal.rpc.portal.prospect.dto.RentalSummaryDTO;
 
@@ -26,7 +25,5 @@ public interface ApplicationStatusService extends IService {
     void retrieveApplicationStatus(AsyncCallback<ApplicationStatusDTO> callback);
 
     void retrieveRentalSummary(AsyncCallback<RentalSummaryDTO> callback);
-
-    void retrieveApplicationStepDescriptors(AsyncCallback<ApplicationStepDescriptorsDTO> callback);
 
 }

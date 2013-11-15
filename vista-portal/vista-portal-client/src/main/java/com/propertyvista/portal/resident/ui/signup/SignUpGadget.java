@@ -160,7 +160,7 @@ public class SignUpGadget extends AbstractGadget<SignUpViewImpl> {
                 }
             });
             signUpButton.getElement().getStyle().setProperty("background", StyleManager.getPalette().getThemeColor(ThemeColor.contrast2, 1));
-            add(signUpButton);
+            addItem(signUpButton);
 
         }
     }
@@ -236,8 +236,8 @@ public class SignUpGadget extends AbstractGadget<SignUpViewImpl> {
             flexPanel.setH4(row, 1, 1, i18n.tr("The Security Code is a secure identifier that is provided by your Property Manager specifically for you."));
 
             CTextFieldBase<?, ?> securityCodeField;
-            flexPanel.setWidget(++row, 0,
-                    new LoginWidgetDecoratorBuilder(securityCodeField = (CTextFieldBase<?, ?>) inject(proto().securityCode())).componentWidth("90%").build());
+            flexPanel.setWidget(++row, 0, new LoginWidgetDecoratorBuilder(securityCodeField = (CTextFieldBase<?, ?>) inject(proto().securityCode()))
+                    .componentWidth("90%").build());
             flexPanel.getFlexCellFormatter().getElement(row, 0).getStyle().setTextAlign(TextAlign.LEFT);
 
             securityCodeField

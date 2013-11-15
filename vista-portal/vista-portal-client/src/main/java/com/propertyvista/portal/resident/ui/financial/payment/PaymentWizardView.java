@@ -21,9 +21,9 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.propertyvista.domain.contact.AddressSimple;
 import com.propertyvista.domain.payment.LeasePaymentMethod;
 import com.propertyvista.portal.rpc.portal.resident.dto.financial.PaymentDTO;
-import com.propertyvista.portal.shared.ui.IWizardFormView;
+import com.propertyvista.portal.shared.ui.IWizardView;
 
-public interface PaymentWizardView extends IWizardFormView<PaymentDTO> {
+public interface PaymentWizardView extends IWizardView<PaymentDTO> {
 
     interface Presenter extends IWizardFormPresenter<PaymentDTO> {
 

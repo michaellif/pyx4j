@@ -212,18 +212,18 @@ public class HeaderViewImpl extends HorizontalPanel implements HeaderView {
         getSatisfaction.ensureDebugId("getSatisfaction");
         getSatisfaction.setHTML(i18n.tr("Support"));
 
-        toolbar.add(thisIsProduction);
-        toolbar.add(thisIsDemo);
+        toolbar.addItem(thisIsProduction);
+        toolbar.addItem(thisIsDemo);
 
-        toolbar.add(greetings);
-        toolbar.add(home);
-        toolbar.add(settings);
-        toolbar.add(login);
-        toolbar.add(logout);
-        toolbar.add(languageMenu);
-        toolbar.add(getSatisfaction);
+        toolbar.addItem(greetings);
+        toolbar.addItem(home);
+        toolbar.addItem(settings);
+        toolbar.addItem(login);
+        toolbar.addItem(logout);
+        toolbar.addItem(languageMenu);
+        toolbar.addItem(getSatisfaction);
 
-        return toolbar;
+        return toolbar.asWidget();
     }
 
     @Override

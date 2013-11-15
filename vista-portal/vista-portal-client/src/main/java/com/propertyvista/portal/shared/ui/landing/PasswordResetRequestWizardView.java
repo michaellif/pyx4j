@@ -15,9 +15,9 @@ package com.propertyvista.portal.shared.ui.landing;
 
 import com.pyx4j.security.rpc.PasswordRetrievalRequest;
 
-import com.propertyvista.portal.shared.ui.IWizardFormView;
+import com.propertyvista.portal.shared.ui.IWizardView;
 
-public interface PasswordResetRequestWizardView extends IWizardFormView<PasswordRetrievalRequest> {
+public interface PasswordResetRequestWizardView extends IWizardView<PasswordRetrievalRequest> {
 
     public interface PasswordResetRequestWizardPresenter extends IWizardFormPresenter<PasswordRetrievalRequest> {
 

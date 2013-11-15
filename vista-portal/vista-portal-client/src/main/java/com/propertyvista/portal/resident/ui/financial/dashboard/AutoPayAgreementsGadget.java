@@ -75,7 +75,7 @@ public class AutoPayAgreementsGadget extends AbstractGadget<FinancialDashboardVi
     class AutoPayAgreementsToolbar extends Toolbar {
         public AutoPayAgreementsToolbar() {
             autoPayButton.getElement().getStyle().setProperty("background", StyleManager.getPalette().getThemeColor(ThemeColor.contrast4, 1));
-            add(autoPayButton);
+            addItem(autoPayButton);
         }
     }
 

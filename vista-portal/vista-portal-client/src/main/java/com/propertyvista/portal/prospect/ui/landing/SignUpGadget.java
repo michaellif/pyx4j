@@ -68,7 +68,7 @@ public class SignUpGadget extends AbstractGadget<LandingViewImpl> {
                 }
             });
             signUpButton.getElement().getStyle().setProperty("background", StyleManager.getPalette().getThemeColor(ThemeColor.contrast3, 1));
-            add(signUpButton);
+            addItem(signUpButton);
 
         }
     }

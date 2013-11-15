@@ -27,7 +27,7 @@ import com.propertyvista.portal.shared.PortalSite;
 
 public class CPortalEntityWizard<E extends IEntity> extends CEntityWizard<E> {
 
-    private final IWizardFormView<? extends IEntity> view;
+    private final IWizardView<? extends IEntity> view;
 
     private WizardDecorator<E> decorator;
 
@@ -37,7 +37,7 @@ public class CPortalEntityWizard<E extends IEntity> extends CEntityWizard<E> {
 
     private final ThemeColor themeColor;
 
-    public CPortalEntityWizard(Class<E> rootClass, final IWizardFormView<? extends IEntity> view, String headerCaption, String endButtonCaption,
+    public CPortalEntityWizard(Class<E> rootClass, final IWizardView<? extends IEntity> view, String headerCaption, String endButtonCaption,
             ThemeColor themeColor) {
         super(rootClass);
         this.view = view;
@@ -48,11 +48,12 @@ public class CPortalEntityWizard<E extends IEntity> extends CEntityWizard<E> {
 
     @Override
     protected void onStepChange(SelectionEvent<WizardStep> event) {
+        super.onStepChange(event);
         view.onStepChange();
         PortalSite.scrollToTop();
     }
 
-    public IWizardFormView<? extends IEntity> getView() {
+    public IWizardView<? extends IEntity> getView() {
         return view;
     }
 

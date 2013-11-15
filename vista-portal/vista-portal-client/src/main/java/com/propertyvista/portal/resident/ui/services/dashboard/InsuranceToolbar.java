@@ -41,7 +41,7 @@ public abstract class InsuranceToolbar extends Toolbar {
             }
         });
         purchaseButton.getElement().getStyle().setProperty("background", StyleManager.getPalette().getThemeColor(ThemeColor.contrast3, 1));
-        add(purchaseButton);
+        addItem(purchaseButton);
 
         proofButton = new Button("", new Command() {
 
@@ -51,7 +51,7 @@ public abstract class InsuranceToolbar extends Toolbar {
             }
         });
         proofButton.getElement().getStyle().setProperty("background", StyleManager.getPalette().getThemeColor(ThemeColor.contrast3, 0.8));
-        add(proofButton);
+        addItem(proofButton);
 
         recalculateState(null);
     }

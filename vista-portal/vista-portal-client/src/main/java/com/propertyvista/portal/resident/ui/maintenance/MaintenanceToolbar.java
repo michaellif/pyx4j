@@ -39,7 +39,7 @@ public abstract class MaintenanceToolbar extends Toolbar {
             }
         });
         createButton.getElement().getStyle().setProperty("background", StyleManager.getPalette().getThemeColor(ThemeColor.contrast5, 1));
-        add(createButton);
+        addItem(createButton);
 
         recalculateState(null);
     }

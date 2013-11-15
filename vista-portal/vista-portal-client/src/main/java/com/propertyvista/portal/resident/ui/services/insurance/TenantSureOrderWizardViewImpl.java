@@ -35,7 +35,7 @@ public class TenantSureOrderWizardViewImpl extends AbstractWizardFormView<Tenant
     }
 
     @Override
-    public void setPresenter(com.propertyvista.portal.shared.ui.IWizardFormView.IWizardFormPresenter<TenantSureInsurancePolicyDTO> presenter) {
+    public void setPresenter(com.propertyvista.portal.shared.ui.IWizardView.IWizardFormPresenter<TenantSureInsurancePolicyDTO> presenter) {
         wizard.setPresenter((TenantSureOrderWizardPersenter) presenter);
         super.setPresenter(presenter);
     }

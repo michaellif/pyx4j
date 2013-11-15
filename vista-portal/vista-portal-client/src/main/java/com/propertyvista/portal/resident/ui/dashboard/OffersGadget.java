@@ -56,7 +56,7 @@ public class OffersGadget extends AbstractGadget<MainDashboardViewImpl> {
                 }
             });
             offersButton.getElement().getStyle().setProperty("background", StyleManager.getPalette().getThemeColor(ThemeColor.contrast6, 1));
-            add(offersButton);
+            addItem(offersButton);
 
         }
     }

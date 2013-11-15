@@ -150,17 +150,17 @@ public class ToolbarViewImpl extends FlowPanel implements ToolbarView {
             }
         });
 
-        rightToolbar.add(loginButton);
-        rightToolbar.add(tenantButton);
+        rightToolbar.addItem(loginButton);
+        rightToolbar.addItem(tenantButton);
 
         //TODO implement lang selector
         if (false) {
-            rightToolbar.add(languageButton);
+            rightToolbar.addItem(languageButton);
         }
 
         //TODO implement communication
         if (false) {
-            rightToolbar.add(communicationButton);
+            rightToolbar.addItem(communicationButton);
         }
 
         rightToolbar.getElement().getStyle().setPosition(Position.ABSOLUTE);
@@ -173,7 +173,7 @@ public class ToolbarViewImpl extends FlowPanel implements ToolbarView {
                 AppSite.getEventBus().fireEvent(new LayoutChangeRequestEvent(ChangeType.toggleSideMenu));
             }
         });
-        leftToolbar.add(sideMenuButton);
+        leftToolbar.addItem(sideMenuButton);
         leftToolbar.getElement().getStyle().setPosition(Position.ABSOLUTE);
         leftToolbar.getElement().getStyle().setProperty("left", "0");
 

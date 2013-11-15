@@ -168,10 +168,8 @@ public class NotificationPageViewImpl extends SimplePanel implements Notificatio
                     }
                 });
                 okButton.getElement().getStyle().setProperty("background", StyleManager.getPalette().getThemeColor(ThemeColor.foreground, 0.4));
-                add(okButton);
-
+                addItem(okButton);
             }
-
         }
 
     }

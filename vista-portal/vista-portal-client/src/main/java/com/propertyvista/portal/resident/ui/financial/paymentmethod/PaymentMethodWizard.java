@@ -50,7 +50,7 @@ import com.propertyvista.domain.payment.LeasePaymentMethod;
 import com.propertyvista.portal.resident.ui.financial.paymentmethod.editor.PaymentMethodEditor;
 import com.propertyvista.portal.rpc.portal.resident.dto.financial.PaymentMethodDTO;
 import com.propertyvista.portal.shared.ui.CPortalEntityWizard;
-import com.propertyvista.portal.shared.ui.IWizardFormView;
+import com.propertyvista.portal.shared.ui.IWizardView;
 
 public class PaymentMethodWizard extends CPortalEntityWizard<PaymentMethodDTO> {
 
@@ -92,7 +92,7 @@ public class PaymentMethodWizard extends CPortalEntityWizard<PaymentMethodDTO> {
 
     private PaymentMethodWizardView.Presenter presenter;
 
-    public PaymentMethodWizard(IWizardFormView<PaymentMethodDTO> view) {
+    public PaymentMethodWizard(IWizardView<PaymentMethodDTO> view) {
         super(PaymentMethodDTO.class, view, i18n.tr("Profile Payment Setup"), i18n.tr("Submit"), ThemeColor.contrast4);
 
         addStep(createPaymentMethodStep());

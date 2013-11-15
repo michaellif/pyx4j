@@ -63,7 +63,7 @@ public class GeneralPolicyPage extends CPortalEntityForm<GeneralInsurancePolicyD
                 onRemove();
             }
         });
-        decorator.addHeaderToolbarButton(btnEdit);
+        decorator.addHeaderToolbarWidget(btnEdit);
 
         return decorator;
     }

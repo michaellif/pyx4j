@@ -241,8 +241,8 @@ public class LoginGadget extends AbstractGadget<LandingViewImpl> {
             loginButton.getElement().getStyle().setProperty("background", StyleManager.getPalette().getThemeColor(ThemeColor.contrast2, 1));
             devLoginButton.getElement().getStyle().setProperty("background", StyleManager.getPalette().getThemeColor(ThemeColor.contrast2, 0.7));
 
-            add(loginButton);
-            add(devLoginButton);
+            addItem(loginButton);
+            addItem(devLoginButton);
 
         }
 

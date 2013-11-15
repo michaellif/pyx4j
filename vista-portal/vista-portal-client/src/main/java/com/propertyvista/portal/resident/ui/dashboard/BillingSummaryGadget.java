@@ -75,10 +75,10 @@ public class BillingSummaryGadget extends AbstractGadget<MainDashboardViewImpl> 
     class BillingToolbar extends Toolbar {
         public BillingToolbar() {
             paymentButton.getElement().getStyle().setProperty("background", StyleManager.getPalette().getThemeColor(ThemeColor.contrast4, 1));
-            add(paymentButton);
+            addItem(paymentButton);
 
             autoPayButton.getElement().getStyle().setProperty("background", StyleManager.getPalette().getThemeColor(ThemeColor.contrast4, 0.8));
-            add(autoPayButton);
+            addItem(autoPayButton);
         }
     }
 

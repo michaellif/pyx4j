@@ -15,16 +15,12 @@ package com.propertyvista.portal.server.portal.prospect.services;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
-import com.pyx4j.commons.UserRuntimeException;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.i18n.shared.I18n;
 
-import com.propertyvista.domain.tenant.prospect.OnlineApplication;
 import com.propertyvista.portal.rpc.portal.prospect.dto.ApplicationStatusDTO;
-import com.propertyvista.portal.rpc.portal.prospect.dto.ApplicationStepDescriptorsDTO;
 import com.propertyvista.portal.rpc.portal.prospect.dto.RentalSummaryDTO;
 import com.propertyvista.portal.rpc.portal.prospect.services.ApplicationStatusService;
-import com.propertyvista.portal.server.portal.prospect.ProspectPortalContext;
 
 public class ApplicationStatusServiceImpl implements ApplicationStatusService {
 
@@ -40,19 +36,6 @@ public class ApplicationStatusServiceImpl implements ApplicationStatusService {
     public void retrieveRentalSummary(AsyncCallback<RentalSummaryDTO> callback) {
         // TODO Auto-generated method stub
 
-    }
-
-    @Override
-    public void retrieveApplicationStepDescriptors(AsyncCallback<ApplicationStepDescriptorsDTO> callback) {
-        OnlineApplication application = ProspectPortalContext.retrieveCurrentUserApplication();
-        if (application == null) {
-            throw new UserRuntimeException(i18n.tr("You have no applications assigned"));
-        }
-
-        ApplicationStepDescriptorsDTO stepDescriptors = EntityFactory.create(ApplicationStepDescriptorsDTO.class);
-        stepDescriptors.steps().set(application.steps());
-
-        callback.onSuccess(stepDescriptors);
     }
 
 }

@@ -26,7 +26,6 @@ import com.propertyvista.domain.security.VistaCustomerBehavior;
 import com.propertyvista.domain.security.common.VistaBasicBehavior;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap;
 import com.propertyvista.portal.rpc.portal.prospect.ProspectPortalSiteMap;
-import com.propertyvista.portal.rpc.portal.prospect.StepPlace;
 
 public class ProspectPortalSiteDispatcher extends AbstractAppPlaceDispatcher {
 
@@ -40,7 +39,7 @@ public class ProspectPortalSiteDispatcher extends AbstractAppPlaceDispatcher {
     @Override
     protected void obtainDefaultPlace(AsyncCallback<AppPlace> callback) {
         if (ClientContext.isAuthenticated()) {
-            callback.onSuccess(new ProspectPortalSiteMap.Status());
+            callback.onSuccess(new ProspectPortalSiteMap.Application());
         } else {
             callback.onSuccess(new PortalSiteMap.Login());
         }

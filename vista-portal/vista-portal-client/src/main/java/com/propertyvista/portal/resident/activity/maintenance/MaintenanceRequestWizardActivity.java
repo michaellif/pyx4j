@@ -30,9 +30,9 @@ import com.propertyvista.portal.resident.ui.maintenance.MaintenanceRequestWizard
 import com.propertyvista.portal.rpc.portal.resident.ResidentPortalSiteMap;
 import com.propertyvista.portal.rpc.portal.resident.dto.maintenance.MaintenanceRequestDTO;
 import com.propertyvista.portal.rpc.portal.resident.services.maintenance.MaintenanceRequestCrudService;
-import com.propertyvista.portal.shared.activity.AbstractWizardFormCrudActivity;
+import com.propertyvista.portal.shared.activity.AbstractWizardCrudActivity;
 
-public class MaintenanceRequestWizardActivity extends AbstractWizardFormCrudActivity<MaintenanceRequestDTO> implements MaintenanceRequestWizardPresenter {
+public class MaintenanceRequestWizardActivity extends AbstractWizardCrudActivity<MaintenanceRequestDTO> implements MaintenanceRequestWizardPresenter {
 
     private static final I18n i18n = I18n.get(MaintenanceRequestWizardActivity.class);
 
