@@ -33,5 +33,7 @@ public class ApplicationWizardViewImpl extends AbstractWizardFormView<Applicatio
     public void setPresenter(IWizardView.IWizardFormPresenter<ApplicationDTO> presenter) {
         super.setPresenter(presenter);
         ((ApplicationWizard) getWizard()).setPresenter((ApplicationWizardPresenter) presenter);
+
+        ((ApplicationWizard) getWizard()).updateProgress();
     }
 }

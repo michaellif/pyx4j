@@ -13,9 +13,18 @@
  */
 package com.propertyvista.portal.prospect.ui.application;
 
+import java.util.List;
+
+import com.google.gwt.core.client.Scheduler;
+
+import com.pyx4j.commons.css.StyleManager;
 import com.pyx4j.commons.css.ThemeColor;
+import com.pyx4j.forms.client.ui.decorators.IDecorator;
 import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
+import com.pyx4j.forms.client.ui.wizard.WizardDecorator;
+import com.pyx4j.forms.client.ui.wizard.WizardProgressIndicator;
 import com.pyx4j.forms.client.ui.wizard.WizardStep;
+import com.pyx4j.forms.client.validators.ValidationResults;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.portal.prospect.ui.application.ApplicationWizardView.ApplicationWizardPresenter;
@@ -63,6 +72,7 @@ public class ApplicationWizard extends CPortalEntityWizard<ApplicationDTO> {
         pmcCustomStep = addStep(createPmcCustomStep());
         summaryStep = addStep(createSummaryStep());
         paymentStep = addStep(createPaymentStep());
+
     }
 
     public void setPresenter(ApplicationWizardPresenter presenter) {
@@ -70,70 +80,114 @@ public class ApplicationWizard extends CPortalEntityWizard<ApplicationDTO> {
     }
 
     private BasicFlexFormPanel createLeaseStep() {
-        BasicFlexFormPanel panel = new BasicFlexFormPanel();
+        BasicFlexFormPanel panel = new BasicFlexFormPanel(i18n.tr("Lease Information"));
         int row = -1;
-        panel.setH1(++row, 0, 1, i18n.tr("Lease Information"));
+        panel.setH1(++row, 0, 1, panel.getTitle());
         return panel;
     }
 
     private BasicFlexFormPanel createUnitStep() {
-        BasicFlexFormPanel panel = new BasicFlexFormPanel();
+        BasicFlexFormPanel panel = new BasicFlexFormPanel(i18n.tr("Unit Selection"));
         int row = -1;
-        panel.setH1(++row, 0, 1, i18n.tr("Unit Selection"));
+        panel.setH1(++row, 0, 1, panel.getTitle());
         return panel;
     }
 
     private BasicFlexFormPanel createOptionsStep() {
         BasicFlexFormPanel panel = new BasicFlexFormPanel(i18n.tr("Unit Options"));
         int row = -1;
+        panel.setH1(++row, 0, 1, panel.getTitle());
         return panel;
     }
 
     private BasicFlexFormPanel createPersonalInfoAStep() {
         BasicFlexFormPanel panel = new BasicFlexFormPanel(i18n.tr("About You"));
         int row = -1;
+        panel.setH1(++row, 0, 1, panel.getTitle());
         return panel;
     }
 
     private BasicFlexFormPanel createPersonalInfoBStep() {
         BasicFlexFormPanel panel = new BasicFlexFormPanel(i18n.tr("Additional Information"));
         int row = -1;
+        panel.setH1(++row, 0, 1, panel.getTitle());
         return panel;
     }
 
     private BasicFlexFormPanel createFinancialStep() {
         BasicFlexFormPanel panel = new BasicFlexFormPanel(i18n.tr("Financial"));
         int row = -1;
+        panel.setH1(++row, 0, 1, panel.getTitle());
         return panel;
     }
 
     private BasicFlexFormPanel createPeopleStep() {
         BasicFlexFormPanel panel = new BasicFlexFormPanel(i18n.tr("People"));
         int row = -1;
+        panel.setH1(++row, 0, 1, panel.getTitle());
         return panel;
     }
 
     private BasicFlexFormPanel createContactsStep() {
         BasicFlexFormPanel panel = new BasicFlexFormPanel(i18n.tr("Contacts"));
         int row = -1;
+        panel.setH1(++row, 0, 1, panel.getTitle());
         return panel;
     }
 
     private BasicFlexFormPanel createPmcCustomStep() {
         BasicFlexFormPanel panel = new BasicFlexFormPanel(i18n.tr("PMC Custom"));
         int row = -1;
+        panel.setH1(++row, 0, 1, panel.getTitle());
         return panel;
     }
 
     private BasicFlexFormPanel createSummaryStep() {
         BasicFlexFormPanel panel = new BasicFlexFormPanel(i18n.tr("Summary"));
         int row = -1;
+        panel.setH1(++row, 0, 1, panel.getTitle());
         return panel;
     }
 
     private BasicFlexFormPanel createPaymentStep() {
         BasicFlexFormPanel panel = new BasicFlexFormPanel(i18n.tr("Payment"));
         int row = -1;
+        panel.setH1(++row, 0, 1, panel.getTitle());
         return panel;
     }
+
+    @Override
+    protected IDecorator<?> createDecorator() {
+        return new ApplicationWizardDecorator();
+    }
+
+    class ApplicationWizardDecorator extends WizardDecorator<ApplicationDTO> implements WizardProgressIndicator {
+
+        private final ApplicationProgressPanel progressPanel;
+
+        public ApplicationWizardDecorator() {
+            super(i18n.tr("Submit"));
+
+            setCaption(i18n.tr("Lease Application"));
+
+            getMainPanel().getElement().getStyle().setProperty("borderTopWidth", "5px");
+            getMainPanel().getElement().getStyle().setProperty("borderTopColor", StyleManager.getPalette().getThemeColor(ThemeColor.contrast4, 1));
+
+            getHeaderPanel().getElement().getStyle().setProperty("borderTopWidth", "5px");
+            getHeaderPanel().getElement().getStyle().setProperty("borderTopColor", StyleManager.getPalette().getThemeColor(ThemeColor.contrast4, 1));
+
+            getFooterPanel().getElement().getStyle().setProperty("borderTopWidth", "5px");
+            getFooterPanel().getElement().getStyle().setProperty("borderTopColor", StyleManager.getPalette().getThemeColor(ThemeColor.contrast4, 1));
+
+            progressPanel = new ApplicationProgressPanel();
+            getHeaderPanel().clear();
+            getHeaderPanel().add(progressPanel);
+        }
+
+        @Override
+        public void updateProgress(List<WizardStep> steps) {
+            progressPanel.updateStepButtons(steps);
+        }
+    }
+
 }

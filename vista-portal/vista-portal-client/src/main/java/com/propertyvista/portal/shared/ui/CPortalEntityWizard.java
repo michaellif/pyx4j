@@ -13,8 +13,6 @@
  */
 package com.propertyvista.portal.shared.ui;
 
-import com.google.gwt.event.logical.shared.SelectionEvent;
-
 import com.pyx4j.commons.css.StyleManager;
 import com.pyx4j.commons.css.ThemeColor;
 import com.pyx4j.entity.shared.IEntity;
@@ -28,8 +26,6 @@ import com.propertyvista.portal.shared.PortalSite;
 public class CPortalEntityWizard<E extends IEntity> extends CEntityWizard<E> {
 
     private final IWizardView<? extends IEntity> view;
-
-    private WizardDecorator<E> decorator;
 
     private final String headerCaption;
 
@@ -47,8 +43,8 @@ public class CPortalEntityWizard<E extends IEntity> extends CEntityWizard<E> {
     }
 
     @Override
-    protected void onStepChange(SelectionEvent<WizardStep> event) {
-        super.onStepChange(event);
+    protected void onStepSelected(WizardStep selectedStep) {
+        super.onStepSelected(selectedStep);
         view.onStepChange();
         PortalSite.scrollToTop();
     }
@@ -69,7 +65,7 @@ public class CPortalEntityWizard<E extends IEntity> extends CEntityWizard<E> {
 
     @Override
     protected IDecorator<?> createDecorator() {
-        decorator = new WizardDecorator<E>(endButtonCaption);
+        WizardDecorator<E> decorator = new WizardDecorator<E>(endButtonCaption);
 
         decorator.getBtnPrevious().setVisible(false);
         decorator.setCaption(headerCaption);
@@ -87,8 +83,8 @@ public class CPortalEntityWizard<E extends IEntity> extends CEntityWizard<E> {
     }
 
     public void calculateButtonsState() {
-        if (decorator != null) {
-            decorator.calculateButtonsState();
+        if (getDecorator() != null) {
+            ((WizardDecorator<?>) getDecorator()).calculateButtonsState();
         }
     }
 

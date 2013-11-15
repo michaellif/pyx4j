@@ -22,7 +22,6 @@ import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.dom.client.Style.WhiteSpace;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
-import com.google.gwt.event.logical.shared.SelectionEvent;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTML;
@@ -137,9 +136,9 @@ public class PaymentMethodWizard extends CPortalEntityWizard<PaymentMethodDTO> {
     }
 
     @Override
-    protected void onStepChange(SelectionEvent<WizardStep> event) {
-        super.onStepChange(event);
-        if (event.getSelectedItem().equals(comfirmationStep)) {
+    protected void onStepSelected(WizardStep selectedStep) {
+        super.onStepSelected(selectedStep);
+        if (selectedStep.equals(comfirmationStep)) {
             confirmationDetailsHolder.clear();
             confirmationDetailsHolder.setWidget(createConfirmationDetailsPanel());
         }

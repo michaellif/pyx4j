@@ -25,7 +25,6 @@ import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.dom.client.Style.WhiteSpace;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
-import com.google.gwt.event.logical.shared.SelectionEvent;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.resources.client.ImageResource;
@@ -301,12 +300,12 @@ public class PaymentWizard extends CPortalEntityWizard<PaymentDTO> {
 
     @SuppressWarnings("unchecked")
     @Override
-    protected void onStepChange(SelectionEvent<WizardStep> event) {
-        super.onStepChange(event);
+    protected void onStepSelected(WizardStep selectedStep) {
+        super.onStepSelected(selectedStep);
 
         ((WizardDecorator<PaymentDTO>) getDecorator()).getBtnNext().setVisible(true);
 //      ((WizardDecorator<PaymentDTO>) getDecorator()).getBtnCancel().setVisible(true);
-        if (event.getSelectedItem().equals(confirmationStep)) {
+        if (selectedStep.equals(confirmationStep)) {
             confirmationDetailsHolder.clear();
             confirmationDetailsHolder.setWidget(createConfirmationDetailsPanel());
 

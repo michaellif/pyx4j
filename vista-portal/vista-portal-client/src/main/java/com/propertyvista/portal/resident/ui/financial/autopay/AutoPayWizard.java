@@ -25,7 +25,6 @@ import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.dom.client.Style.WhiteSpace;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
-import com.google.gwt.event.logical.shared.SelectionEvent;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.DOM;
@@ -266,11 +265,11 @@ public class AutoPayWizard extends CPortalEntityWizard<AutoPayDTO> {
     }
 
     @Override
-    protected void onStepChange(SelectionEvent<WizardStep> event) {
-        super.onStepChange(event);
-        if (event.getSelectedItem().equals(detailsStep)) {
+    protected void onStepSelected(WizardStep selectedStep) {
+        super.onStepSelected(selectedStep);
+        if (selectedStep.equals(detailsStep)) {
             switchTotal(detailsTotalHolder);
-        } else if (event.getSelectedItem().equals(comfirmationStep)) {
+        } else if (selectedStep.equals(comfirmationStep)) {
 
             confirmationDetailsHolder.clear();
             ((AutoPayWizardView.Presenter) getView().getPresenter()).preview(new DefaultAsyncCallback<AutopayAgreement>() {
