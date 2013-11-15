@@ -13,12 +13,15 @@
  */
 package com.propertyvista.portal.resident.ui.financial.paymentmethod;
 
+import java.util.Set;
+
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.commons.css.ThemeColor;
 import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
 
+import com.propertyvista.domain.payment.CreditCardInfo.CreditCardType;
 import com.propertyvista.domain.payment.LeasePaymentMethod;
 import com.propertyvista.portal.resident.ui.financial.paymentmethod.editor.PaymentMethodEditor;
 import com.propertyvista.portal.rpc.portal.resident.dto.financial.PaymentMethodDTO;
@@ -37,7 +40,12 @@ public class PaymentMethodViewForm extends CPortalEntityEditor<PaymentMethodDTO>
         BasicFlexFormPanel content = new BasicFlexFormPanel();
         int row = -1;
 
-        content.setWidget(++row, 0, inject(proto().paymentMethod(), new PaymentMethodEditor<LeasePaymentMethod>(LeasePaymentMethod.class)));
+        content.setWidget(++row, 0, inject(proto().paymentMethod(), new PaymentMethodEditor<LeasePaymentMethod>(LeasePaymentMethod.class) {
+            @Override
+            protected Set<CreditCardType> getConvienceFeeApplicableCardTypes() {
+                return PaymentMethodViewForm.this.getValue().convenienceFeeApplicableCardTypes();
+            }
+        }));
 
         return content;
     }

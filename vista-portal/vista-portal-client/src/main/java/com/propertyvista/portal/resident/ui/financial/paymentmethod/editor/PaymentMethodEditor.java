@@ -14,6 +14,7 @@
 package com.propertyvista.portal.resident.ui.financial.paymentmethod.editor;
 
 import java.util.Date;
+import java.util.EnumSet;
 import java.util.Set;
 
 import com.google.gwt.dom.client.Style.Unit;
@@ -53,6 +54,10 @@ public class PaymentMethodEditor<E extends AbstractPaymentMethod> extends com.pr
     @Override
     public Set<PaymentType> defaultPaymentTypes() {
         return PortalPaymentTypesUtil.getAllowedPaymentTypes(false);
+    }
+
+    protected Set<CreditCardType> getConvienceFeeApplicableCardTypes() {
+        return EnumSet.noneOf(CreditCardType.class);
     }
 
     @Override
@@ -136,12 +141,43 @@ public class PaymentMethodEditor<E extends AbstractPaymentMethod> extends com.pr
                 monthYearPicker.setYearRange(new Range(1900 + new Date().getYear(), 10));
                 get(proto().securityCode()).setVisible(isEditable());
 
+                get(proto().cardType()).addValueChangeHandler(new ValueChangeHandler<CreditCardType>() {
+                    @Override
+                    public void onValueChange(ValueChangeEvent<CreditCardType> event) {
+                        decorateConvienceFeeApplicableCard(event.getValue());
+                    }
+                });
+
                 return panel;
             }
 
             @Override
             protected Set<CreditCardType> getAllowedCardTypes() {
                 return PaymentMethodEditor.this.getAllowedCardTypes();
+            }
+
+            protected Set<CreditCardType> getConvienceFeeApplicableCardTypes() {
+                return PaymentMethodEditor.this.getConvienceFeeApplicableCardTypes();
+            }
+
+            private void decorateConvienceFeeApplicableCard(CreditCardType type) {
+                if (type != null && getConvienceFeeApplicableCardTypes().contains(type)) {
+                    get(proto().cardType()).setNote(i18n.tr("*Convenience Fee will apply"), NoteStyle.Warn);
+                } else {
+                    get(proto().cardType()).setNote(null);
+                }
+            }
+
+            @Override
+            public void onReset() {
+                super.onReset();
+                get(proto().cardType()).setNote(null);
+            }
+
+            @Override
+            protected void onValueSet(boolean populate) {
+                super.onValueSet(populate);
+                decorateConvienceFeeApplicableCard(getValue().cardType().getValue());
             }
         };
     }

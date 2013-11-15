@@ -70,6 +70,11 @@ public class PaymentMethodWizard extends CPortalEntityWizard<PaymentMethodDTO> {
         }
 
         @Override
+        protected Set<CreditCardType> getConvienceFeeApplicableCardTypes() {
+            return PaymentMethodWizard.this.getValue().convenienceFeeApplicableCardTypes();
+        };
+
+        @Override
         public void onBillingAddressSameAsCurrentOne(boolean set, final CComponent<AddressSimple> comp) {
             if (set) {
                 assert (getView().getPresenter() != null);

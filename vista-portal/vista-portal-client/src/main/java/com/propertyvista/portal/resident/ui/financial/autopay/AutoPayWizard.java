@@ -78,7 +78,7 @@ public class AutoPayWizard extends CPortalEntityWizard<AutoPayDTO> {
 
     static final I18n i18n = I18n.get(AutoPayWizard.class);
 
-    private final WizardStep detailsStep, paymentMethodSelectionStep, comfirmationStep;
+    private final WizardStep detailsStep, comfirmationStep;
 
     private final CComboBox<LeasePaymentMethod> profiledPaymentMethodsCombo = new CSimpleEntityComboBox<LeasePaymentMethod>();
 
@@ -98,6 +98,11 @@ public class AutoPayWizard extends CPortalEntityWizard<AutoPayDTO> {
         protected Set<CreditCardType> getAllowedCardTypes() {
             return AutoPayWizard.this.getValue().allowedCardTypes();
         }
+
+        @Override
+        protected Set<CreditCardType> getConvienceFeeApplicableCardTypes() {
+            return AutoPayWizard.this.getValue().convenienceFeeApplicableCardTypes();
+        };
 
         @Override
         public void onBillingAddressSameAsCurrentOne(boolean set, final CComponent<AddressSimple> comp) {
@@ -126,7 +131,7 @@ public class AutoPayWizard extends CPortalEntityWizard<AutoPayDTO> {
         super(AutoPayDTO.class, view, i18n.tr("Automatic Payment Setup"), i18n.tr("Submit"), ThemeColor.contrast4);
 
         detailsStep = addStep(createDetailsStep());
-        paymentMethodSelectionStep = addStep(createSelectPaymentMethodStep());
+        addStep(createSelectPaymentMethodStep());
         comfirmationStep = addStep(createConfirmationStep());
     }
 

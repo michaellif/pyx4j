@@ -80,6 +80,7 @@ import com.propertyvista.domain.person.Person;
 import com.propertyvista.dto.PaymentDataDTO.PaymentSelect;
 import com.propertyvista.portal.resident.ui.financial.PortalPaymentTypesUtil;
 import com.propertyvista.portal.resident.ui.financial.paymentmethod.editor.PaymentMethodEditor;
+import com.propertyvista.portal.rpc.portal.resident.dto.financial.PaymentConvenienceFeeDTO;
 import com.propertyvista.portal.rpc.portal.resident.dto.financial.PaymentDTO;
 import com.propertyvista.portal.shared.resources.PortalImages;
 import com.propertyvista.portal.shared.ui.CPortalEntityWizard;
@@ -90,7 +91,7 @@ public class PaymentWizard extends CPortalEntityWizard<PaymentDTO> {
 
     private static final I18n i18n = I18n.get(PaymentWizard.class);
 
-    private final WizardStep paymentMethodSelectionStep, confirmationStep;
+    private final WizardStep confirmationStep;
 
     private final CComboBox<LeasePaymentMethod> profiledPaymentMethodsCombo = new CSimpleEntityComboBox<LeasePaymentMethod>();
 
@@ -111,6 +112,11 @@ public class PaymentWizard extends CPortalEntityWizard<PaymentDTO> {
         protected Set<CreditCardType> getAllowedCardTypes() {
             return PaymentWizard.this.getValue().allowedCardTypes();
         }
+
+        @Override
+        protected Set<CreditCardType> getConvienceFeeApplicableCardTypes() {
+            return PaymentWizard.this.getValue().convenienceFeeApplicableCardTypes();
+        };
 
         @Override
         public void onBillingAddressSameAsCurrentOne(boolean set, final CComponent<AddressSimple> comp) {
@@ -139,7 +145,7 @@ public class PaymentWizard extends CPortalEntityWizard<PaymentDTO> {
         super(PaymentDTO.class, view, i18n.tr("One time Payment"), i18n.tr("Submit"), ThemeColor.contrast4);
 
         addStep(createDetailsStep());
-        paymentMethodSelectionStep = addStep(createSelectPaymentMethodStep());
+        addStep(createSelectPaymentMethodStep());
         confirmationStep = addStep(createConfirmationStep());
     }
 
@@ -376,7 +382,7 @@ public class PaymentWizard extends CPortalEntityWizard<PaymentDTO> {
     }
 
     private Widget createConfirmationDetailsPanel() {
-        VerticalPanel panel = new VerticalPanel();
+        final VerticalPanel panel = new VerticalPanel();
 
         panel.add(new HTML(getValue().leaseTermParticipant().leaseParticipant().customer().person().getStringView()));
         panel.add(new HTML(getValue().address().getStringView()));
@@ -385,6 +391,19 @@ public class PaymentWizard extends CPortalEntityWizard<PaymentDTO> {
 
         panel.add(createDecorator(i18n.tr("Payment Method:"), get(proto().paymentMethod()).getValue().getStringView()));
         panel.add(createDecorator(i18n.tr("Amount to pay:"), ((CTextFieldBase<?, ?>) get(proto().amount())).getFormattedValue()));
+
+        PaymentConvenienceFeeDTO inData = EntityFactory.create(PaymentConvenienceFeeDTO.class);
+        inData.paymentMethod().set(get(proto().paymentMethod()).getValue());
+        inData.amount().setValue(get(proto().amount()).getValue());
+        ((PaymentWizardView.Presenter) getView().getPresenter()).getConvenienceFee(new DefaultAsyncCallback<PaymentConvenienceFeeDTO>() {
+            @Override
+            public void onSuccess(PaymentConvenienceFeeDTO result) {
+                if (!result.fee().isNull()) {
+                    panel.add(createDecorator(i18n.tr("Convenience Fee:"), result.fee().getStringView()));
+                    panel.add(createDecorator(i18n.tr("Payment Total:"), result.total().getStringView()));
+                }
+            }
+        }, inData);
 
         if (get(proto().paymentMethod()).getValue().type().getValue() == PaymentType.DirectBanking) {
             panel.add(createDirectBankingPanel());

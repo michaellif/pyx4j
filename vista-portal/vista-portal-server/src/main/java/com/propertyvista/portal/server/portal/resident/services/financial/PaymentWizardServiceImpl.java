@@ -31,14 +31,15 @@ import com.propertyvista.biz.financial.ar.ARFacade;
 import com.propertyvista.biz.financial.payment.PaymentException;
 import com.propertyvista.biz.financial.payment.PaymentFacade;
 import com.propertyvista.domain.contact.AddressSimple;
-import com.propertyvista.domain.financial.BillingAccount;
 import com.propertyvista.domain.financial.PaymentRecord;
+import com.propertyvista.domain.payment.CreditCardInfo;
 import com.propertyvista.domain.payment.CreditCardInfo.CreditCardType;
 import com.propertyvista.domain.payment.LeasePaymentMethod;
 import com.propertyvista.domain.payment.PaymentType;
 import com.propertyvista.domain.security.common.VistaApplication;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.dto.payment.ConvenienceFeeCalulationResponseTO;
+import com.propertyvista.portal.rpc.portal.resident.dto.financial.PaymentConvenienceFeeDTO;
 import com.propertyvista.portal.rpc.portal.resident.dto.financial.PaymentDTO;
 import com.propertyvista.portal.rpc.portal.resident.services.financial.PaymentWizardService;
 import com.propertyvista.portal.server.portal.resident.ResidentPortalContext;
@@ -143,8 +144,22 @@ public class PaymentWizardServiceImpl extends AbstractCrudServiceDtoImpl<Payment
     }
 
     @Override
-    public void getConvenienceFee(AsyncCallback<ConvenienceFeeCalulationResponseTO> callback, BillingAccount billingAccountId, CreditCardType cardType,
-            BigDecimal amount) {
-        callback.onSuccess(ServerSideFactory.create(PaymentFacade.class).getConvenienceFee(billingAccountId, cardType, amount));
+    public void getConvenienceFee(AsyncCallback<PaymentConvenienceFeeDTO> callback, PaymentConvenienceFeeDTO inData) {
+        if (inData.paymentMethod().details().isInstanceOf(CreditCardInfo.class)) {
+            Lease lease = ResidentPortalContext.getCurrentUserLease();
+
+            CreditCardType ccType = inData.paymentMethod().details().<CreditCardInfo> cast().cardType().getValue();
+            if (ServerSideFactory.create(PaymentFacade.class).getConvenienceFeeApplicableCardTypes(lease.billingAccount(), VistaApplication.resident)
+                    .contains(ccType)) {
+                ConvenienceFeeCalulationResponseTO result = ServerSideFactory.create(PaymentFacade.class).getConvenienceFee(lease.billingAccount(), ccType,
+                        inData.amount().getValue());
+
+                inData.fee().setValue(result.feeAmount().getValue());
+                inData.total().setValue(inData.amount().getValue().add(result.feeAmount().getValue()));
+                inData.transactionNumber().setValue(result.transactionNumber().getValue());
+            }
+        }
+
+        callback.onSuccess(inData);
     }
 }

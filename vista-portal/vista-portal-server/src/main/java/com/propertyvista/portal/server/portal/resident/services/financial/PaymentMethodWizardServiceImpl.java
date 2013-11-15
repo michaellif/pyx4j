@@ -53,6 +53,8 @@ public class PaymentMethodWizardServiceImpl extends AbstractCrudServiceDtoImpl<L
                 ServerSideFactory.create(PaymentFacade.class).getAllowedPaymentTypes(lease.billingAccount(), VistaApplication.resident));
         dto.allowedCardTypes().setCollectionValue(
                 ServerSideFactory.create(PaymentFacade.class).getAllowedCardTypes(lease.billingAccount(), VistaApplication.resident));
+        dto.convenienceFeeApplicableCardTypes().setCollectionValue(
+                ServerSideFactory.create(PaymentFacade.class).getConvenienceFeeApplicableCardTypes(lease.billingAccount(), VistaApplication.resident));
 
         if (dto.allowedPaymentTypes().contains(PaymentType.Echeck)) {
             dto.paymentMethod().type().setValue(PaymentType.Echeck);

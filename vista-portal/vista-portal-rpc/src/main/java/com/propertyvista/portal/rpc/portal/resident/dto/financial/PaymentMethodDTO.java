@@ -32,4 +32,6 @@ public interface PaymentMethodDTO extends IEntity {
     IPrimitiveSet<PaymentType> allowedPaymentTypes();
 
     IPrimitiveSet<CreditCardType> allowedCardTypes();
+
+    IPrimitiveSet<CreditCardType> convenienceFeeApplicableCardTypes();
 }

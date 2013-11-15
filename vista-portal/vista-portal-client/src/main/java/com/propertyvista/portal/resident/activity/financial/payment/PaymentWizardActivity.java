@@ -33,6 +33,7 @@ import com.propertyvista.domain.payment.LeasePaymentMethod;
 import com.propertyvista.portal.resident.ui.financial.payment.PaymentWizardView;
 import com.propertyvista.portal.rpc.portal.resident.ResidentPortalSiteMap;
 import com.propertyvista.portal.rpc.portal.resident.ResidentPortalSiteMap.Financial.Payment;
+import com.propertyvista.portal.rpc.portal.resident.dto.financial.PaymentConvenienceFeeDTO;
 import com.propertyvista.portal.rpc.portal.resident.dto.financial.PaymentDTO;
 import com.propertyvista.portal.rpc.portal.resident.services.financial.PaymentWizardService;
 import com.propertyvista.portal.shared.activity.AbstractWizardCrudActivity;
@@ -61,6 +62,11 @@ public class PaymentWizardActivity extends AbstractWizardCrudActivity<PaymentDTO
                 callback.onSuccess(result);
             }
         });
+    }
+
+    @Override
+    public void getConvenienceFee(AsyncCallback<PaymentConvenienceFeeDTO> callback, PaymentConvenienceFeeDTO inData) {
+        ((PaymentWizardService) getService()).getConvenienceFee(callback, inData);
     }
 
     @Override
