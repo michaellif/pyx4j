@@ -92,11 +92,14 @@ public class PaymentAcceptanceUtils {
 
     private static Collection<CardTypeAcceptance> crmCardRequire = buildCardAcceptanceMatrixCrm();
 
-    private static Collection<CardTypeAcceptance> residentPortalCardRequire = buildCardAcceptanceMatrixPortal();
+    private static Collection<CardTypeAcceptance> residentPortalCardRequire = VistaTODO.convienceFeeEnabled ? buildCardAcceptanceMatrixPortal()
+            : buildCardAcceptanceMatrixWithConvienceFeePortal();
+
+    private static Collection<CardTypeAcceptance> residentPortalCardWithoutConvienceFee = VistaTODO.convienceFeeEnabled ? buildCardAcceptanceMatrixWithoutConvienceFeePortal()
+            : Collections.<CardTypeAcceptance> emptyList();
 
     static Collection<PaymentType> getAllowedPaymentTypes(VistaApplication vistaApplication, boolean electronicPaymentsAllowed, boolean requireCashEquivalent,
             PaymentTypeSelectionPolicy paymentMethodSelectionPolicy) {
-        Collection<PaymentType> allowedPaymentTypes = new ArrayList<PaymentType>();
 
         Collection<PaymentTypeAcceptance> requireAcceptance;
         switch (vistaApplication) {
@@ -114,6 +117,7 @@ public class PaymentAcceptanceUtils {
         selection.electronicPayments().setValue(electronicPaymentsAllowed);
         selection.notCashEquivalent().setValue(!requireCashEquivalent);
 
+        Collection<PaymentType> allowedPaymentTypes = new ArrayList<PaymentType>();
         for (PaymentTypeAcceptance acceptance : requireAcceptance) {
             if (acceptance.accept(selection)) {
                 allowedPaymentTypes.add(acceptance.paymentType);
@@ -124,16 +128,17 @@ public class PaymentAcceptanceUtils {
     }
 
     public static Collection<CreditCardType> getAllowedCreditCardTypes(VistaApplication vistaApplication, boolean requireCashEquivalent,
-            PaymentTypeSelectionPolicy paymentMethodSelectionPolicy) {
-        Collection<CreditCardType> allowedPaymentTypes = new ArrayList<CreditCardType>();
-
+            PaymentTypeSelectionPolicy paymentMethodSelectionPolicy, boolean forConvienceFeeOnly) {
         Collection<CardTypeAcceptance> requireAcceptance;
+        Collection<CardTypeAcceptance> feeAcceptance;
         switch (vistaApplication) {
         case resident:
             requireAcceptance = residentPortalCardRequire;
+            feeAcceptance = residentPortalCardWithoutConvienceFee;
             break;
         case crm:
             requireAcceptance = crmCardRequire;
+            feeAcceptance = Collections.<CardTypeAcceptance> emptyList();
             break;
         default:
             throw new IllegalArgumentException();
@@ -142,13 +147,24 @@ public class PaymentAcceptanceUtils {
         ElectronicPaymentMethodSelection selection = paymentMethodSelectionPolicy.duplicate(ElectronicPaymentMethodSelection.class);
         selection.notCashEquivalent().setValue(!requireCashEquivalent);
 
+        Collection<CreditCardType> allowedPaymentTypes = new ArrayList<CreditCardType>();
         for (CardTypeAcceptance acceptance : requireAcceptance) {
             if (acceptance.accept(selection)) {
                 allowedPaymentTypes.add(acceptance.cardType);
             }
         }
-
-        return Collections.unmodifiableCollection(allowedPaymentTypes);
+        if (forConvienceFeeOnly) {
+            // From accepted cards select the one the fee are no accepted by PMC, e.g. for VistaConvienceFee
+            Collection<CreditCardType> convienceFeePaymentTypes = new ArrayList<CreditCardType>();
+            for (CardTypeAcceptance acceptance : feeAcceptance) {
+                if (!acceptance.accept(selection)) {
+                    convienceFeePaymentTypes.add(acceptance.cardType);
+                }
+            }
+            return Collections.unmodifiableCollection(convienceFeePaymentTypes);
+        } else {
+            return Collections.unmodifiableCollection(allowedPaymentTypes);
+        }
     }
 
     @SuppressWarnings("unchecked")
@@ -250,6 +266,37 @@ public class PaymentAcceptanceUtils {
 
         require.add(new CardTypeAcceptance(CreditCardType.VisaDebit, p.acceptedVisaDebit(), p.residentPortalVisaDebit(), p.notCashEquivalent()));
         require.add(new CardTypeAcceptance(CreditCardType.VisaDebit, p.acceptedVisaDebit(), p.residentPortalVisaDebit(), p.cashEquivalentVisaDebit()));
+
+        return require;
+    }
+
+    @SuppressWarnings("unchecked")
+    private static Collection<CardTypeAcceptance> buildCardAcceptanceMatrixWithConvienceFeePortal() {
+        Collection<CardTypeAcceptance> require = new ArrayList<CardTypeAcceptance>();
+        ElectronicPaymentMethodSelection p = EntityFactory.getEntityPrototype(ElectronicPaymentMethodSelection.class);
+
+        require.add(new CardTypeAcceptance(CreditCardType.MasterCard, p.notCashEquivalent()));
+        require.add(new CardTypeAcceptance(CreditCardType.MasterCard, p.cashEquivalentCreditCardMasterCard()));
+
+        require.add(new CardTypeAcceptance(CreditCardType.Visa, p.notCashEquivalent()));
+        require.add(new CardTypeAcceptance(CreditCardType.Visa, p.cashEquivalentCreditCardVisa()));
+
+        require.add(new CardTypeAcceptance(CreditCardType.VisaDebit, p.notCashEquivalent()));
+        require.add(new CardTypeAcceptance(CreditCardType.VisaDebit, p.cashEquivalentVisaDebit()));
+
+        return require;
+    }
+
+    @SuppressWarnings("unchecked")
+    private static Collection<CardTypeAcceptance> buildCardAcceptanceMatrixWithoutConvienceFeePortal() {
+        Collection<CardTypeAcceptance> require = new ArrayList<CardTypeAcceptance>();
+        ElectronicPaymentMethodSelection p = EntityFactory.getEntityPrototype(ElectronicPaymentMethodSelection.class);
+
+        require.add(new CardTypeAcceptance(CreditCardType.MasterCard, p.acceptedCreditCardMasterCard(), p.residentPortalCreditCardMasterCard()));
+
+        require.add(new CardTypeAcceptance(CreditCardType.Visa, p.acceptedCreditCardVisa(), p.residentPortalCreditCardVisa()));
+
+        require.add(new CardTypeAcceptance(CreditCardType.VisaDebit, p.acceptedVisaDebit(), p.residentPortalVisaDebit()));
 
         return require;
     }

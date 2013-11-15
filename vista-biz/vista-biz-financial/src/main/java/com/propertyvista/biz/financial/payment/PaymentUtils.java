@@ -127,6 +127,14 @@ class PaymentUtils {
     }
 
     public static Collection<CreditCardType> getAllowedCardTypes(BillingAccount billingAccountId, VistaApplication vistaApplication) {
+        return getCardTypes(billingAccountId, vistaApplication, false);
+    }
+
+    public static Collection<CreditCardType> getConvienceFeeApplicableCardTypes(BillingAccount billingAccountId, VistaApplication vistaApplication) {
+        return getCardTypes(billingAccountId, vistaApplication, true);
+    }
+
+    private static Collection<CreditCardType> getCardTypes(BillingAccount billingAccountId, VistaApplication vistaApplication, boolean forConvienceFeeOnly) {
         BillingAccount billingAccount = billingAccountId.duplicate();
         Persistence.ensureRetrieve(billingAccount, AttachLevel.Attached);
         PaymentAccepted paymentAccepted = billingAccount.paymentAccepted().getValue();
@@ -141,7 +149,7 @@ class PaymentUtils {
                     PaymentTypeSelectionPolicy.class);
         }
         return PaymentAcceptanceUtils.getAllowedCreditCardTypes(vistaApplication, paymentAccepted == PaymentAccepted.CashEquivalent,
-                paymentMethodSelectionPolicy);
+                paymentMethodSelectionPolicy, forConvienceFeeOnly);
     }
 
     public static MerchantAccount retrieveMerchantAccount(Building buildingStub) {

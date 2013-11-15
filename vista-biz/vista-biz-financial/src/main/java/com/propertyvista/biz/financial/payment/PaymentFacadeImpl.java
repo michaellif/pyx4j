@@ -99,7 +99,7 @@ public class PaymentFacadeImpl implements PaymentFacade {
 
     @Override
     public Collection<CreditCardType> getConvienceFeeApplicableCardTypes(BillingAccount billingAccountId, VistaApplication vistaApplication) {
-        return Collections.emptyList();
+        return PaymentUtils.getConvienceFeeApplicableCardTypes(billingAccountId, vistaApplication);
     }
 
     @Override
