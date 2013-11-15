@@ -95,6 +95,10 @@ public abstract class FiltersBuilder {
         addCriterion(PropertyCriterion.like(criteria_proto_member, value));
     }
 
+    public final void ne(IObject<?> criteria_proto_member, IPrimitive<?> value) {
+        addCriterion(PropertyCriterion.ne(criteria_proto_member, value));
+    }
+
     public final void ne(IObject<?> criteria_proto_member, Serializable value) {
         addCriterion(PropertyCriterion.ne(criteria_proto_member, value));
     }

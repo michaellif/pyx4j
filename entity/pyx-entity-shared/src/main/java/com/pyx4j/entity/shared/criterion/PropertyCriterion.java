@@ -83,7 +83,7 @@ public class PropertyCriterion implements Criterion {
         if (value.isPrototype()) {
             this.value = value.getPath();
         } else {
-            this.value = (Serializable) value.getValue();
+            this.value = value.getValue();
         }
     }
 
@@ -139,6 +139,10 @@ public class PropertyCriterion implements Criterion {
 
     public static PropertyCriterion like(IObject<?> member, String value) {
         return new PropertyCriterion(member, Restriction.RDB_LIKE, value);
+    }
+
+    public static PropertyCriterion ne(IObject<?> member, IPrimitive<?> value) {
+        return new PropertyCriterion(member, Restriction.NOT_EQUAL, value);
     }
 
     public static PropertyCriterion ne(IObject<?> member, Serializable value) {
