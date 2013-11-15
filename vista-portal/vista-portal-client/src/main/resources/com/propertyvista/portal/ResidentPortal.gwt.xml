@@ -6,7 +6,6 @@
     <inherits name='com.google.gwt.user.User'/>
 
     <inherits name='com.propertyvista.portal.Rpc' />
-    <inherits name='com.propertyvista.portal.Domain' />
 
     <inherits name='com.propertyvista.common.VistaCommon' />
 
