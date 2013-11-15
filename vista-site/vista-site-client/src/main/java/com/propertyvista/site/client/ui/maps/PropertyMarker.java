@@ -13,6 +13,7 @@
  */
 package com.propertyvista.site.client.ui.maps;
 
+import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Style.Float;
 import com.google.gwt.dom.client.Style.FontWeight;
 import com.google.gwt.dom.client.Style.Unit;
@@ -159,7 +160,7 @@ public class PropertyMarker extends Marker {
 
                 @Override
                 public void onClick(ClickEvent event) {
-                    Window.Location.assign(getDetailsUrl() + "=" + property.propertyCode().getValue());
+                    Window.Location.assign(GWT.getHostPageBaseURL() + getDetailsUrl() + "=" + property.propertyCode().getValue());
                 }
             });
             content.add(viewDetailsItem);
