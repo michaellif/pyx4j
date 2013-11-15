@@ -60,6 +60,7 @@ public class PaymentConfirmationForm extends CPortalEntityForm<PaymentRecordDTO>
 
         content.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().paymentMethod(), new CEntityLabel<LeasePaymentMethod>())).build());
         content.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().amount())).build());
+        content.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().convenienceFee())).build());
         content.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().transactionAuthorizationNumber())).build());
 
         content.setHR(++row, 0, 1);
@@ -127,5 +128,7 @@ public class PaymentConfirmationForm extends CPortalEntityForm<PaymentRecordDTO>
 
             get(proto().transactionAuthorizationNumber()).setVisible(!getValue().transactionAuthorizationNumber().isNull());
         }
+
+        get(proto().convenienceFee()).setVisible(!getValue().convenienceFee().isNull());
     }
 }
