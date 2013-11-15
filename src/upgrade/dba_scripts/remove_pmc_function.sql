@@ -60,7 +60,7 @@ BEGIN
         
         DELETE FROM _admin_.admin_pmc WHERE id = v_pmc_id;
         
-        EXECUTE 'DROP SCHEMA '||v_namespace||' CASCADE';
+        -- EXECUTE 'DROP SCHEMA '||v_namespace||' CASCADE';
 END;
 $$
 LANGUAGE plpgsql VOLATILE;
