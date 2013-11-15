@@ -42,7 +42,7 @@ public class Toolbar implements IsWidget {
     }
 
     public void addItem(IsWidget widget) {
-        panel.insert(widget, panel.getWidgetCount());
+        insertItem(widget, panel.getWidgetCount());
     }
 
     public void insertItem(IsWidget widget, int beforeIndex) {
