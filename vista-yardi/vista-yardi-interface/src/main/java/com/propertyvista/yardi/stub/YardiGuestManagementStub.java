@@ -24,7 +24,7 @@ import com.propertyvista.domain.settings.PmcYardiCredential;
 
 public interface YardiGuestManagementStub extends ExternalInterfaceLoggingStub {
 
-    RentableItems getRentableItems(PmcYardiCredential yc) throws YardiServiceException;
+    RentableItems getRentableItems(PmcYardiCredential yc, String propertyId) throws YardiServiceException;
 
     PhysicalProperty getPropertyMarketingInfo(PmcYardiCredential yc, String propertyId) throws YardiServiceException;
 

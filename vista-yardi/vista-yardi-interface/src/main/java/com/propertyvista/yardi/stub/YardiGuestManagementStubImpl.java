@@ -62,7 +62,7 @@ public class YardiGuestManagementStubImpl extends AbstractYardiStub implements Y
     private final boolean testMode = true;
 
     @Override
-    public RentableItems getRentableItems(PmcYardiCredential yc) throws YardiServiceException {
+    public RentableItems getRentableItems(PmcYardiCredential yc, String propertyId) throws YardiServiceException {
         try {
             init(Action.GetYardiRentableItems);
 
@@ -80,6 +80,8 @@ public class YardiGuestManagementStubImpl extends AbstractYardiStub implements Y
             request.setServerName(yc.serverName().getValue());
             request.setDatabase(yc.database().getValue());
             request.setPlatform(yc.platform().getValue().name());
+
+            request.setYardiPropertyId(propertyId);
 
             GetYardiRentableItems_LoginResponse response = getILSGuestCardService(yc).getYardiRentableItems_Login(request);
             if ((response == null) || (response.getGetYardiRentableItems_LoginResult() == null)

@@ -31,11 +31,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.yardi.entity.guestcard40.AdditionalPreference;
-import com.yardi.entity.guestcard40.Identification;
+import com.yardi.entity.guestcard40.CustomerPreferences;
 import com.yardi.entity.guestcard40.LeadManagement;
 import com.yardi.entity.guestcard40.MarketingAgent;
 import com.yardi.entity.guestcard40.MarketingSource;
 import com.yardi.entity.guestcard40.MarketingSources;
+import com.yardi.entity.guestcard40.NameType;
 import com.yardi.entity.guestcard40.PropertyMarketingSources;
 import com.yardi.entity.guestcard40.Prospect;
 import com.yardi.entity.guestcard40.Prospects;
@@ -70,12 +71,17 @@ public class YardiNewGuestWorkflowTest {
 
     private final static boolean mockMode = false;
 
-    private static YardiGuestManagementStub stub = ServerSideFactory.create(YardiGuestManagementStub.class);
+    private static YardiGuestManagementStub stub;
 
-    private static PmcYardiCredential yc = getTestPmcYardiCredential();
+    private static PmcYardiCredential yc;
+
+    static {
+        ServerSideConfiguration.setInstance(new VistaTestsServerSideConfiguration(DatabaseType.HSQLDB));
+        stub = ServerSideFactory.create(YardiGuestManagementStub.class);
+        yc = getTestPmcYardiCredential();
+    }
 
     public static void main(String[] args) {
-        ServerSideConfiguration.setInstance(new VistaTestsServerSideConfiguration(DatabaseType.HSQLDB));
 
         try {
 
@@ -110,19 +116,16 @@ public class YardiNewGuestWorkflowTest {
             if (guestActivity.getProspects().getProspect().size() > 0) {
                 Map<String, Prospect> guests = new HashMap<String, Prospect>();
                 for (Prospect guest : guestActivity.getProspects().getProspect()) {
-                    for (Identification id : guest.getCustomers().getCustomer().get(0).getIdentification()) {
-                        if ("ProspectID".equals(id.getIDType())) {
-                            guests.put(id.getIDValue(), guest);
-                            break;
-                        }
-                    }
+                    NameType name = guest.getCustomers().getCustomer().get(0).getName();
+                    guests.put(name.getFirstName() + " " + name.getLastName(), guest);
                 }
 
                 printIds(guests.keySet(), "Current Guests");
-                String guestId = readLine("Update Guest #: ");
-                if (!StringUtils.isEmpty(guestId)) {
-                    updateRentableItems(guests.get(guestId));
+                String guestName = readLine("Update Guest: ");
+                if (!StringUtils.isEmpty(guestName)) {
+                    updateRentableItems(guests.get(guestName));
                     System.out.println("Done - Exit.");
+                    return;
                 }
             }
 
@@ -158,6 +161,9 @@ public class YardiNewGuestWorkflowTest {
             String guestName = null;
             while (ilsUnit == null) {
                 String unitNo = readLine("Enter Unit #: ");
+                if (StringUtils.isEmpty(unitNo)) {
+                    return;
+                }
                 ilsUnit = units.get(unitNo);
                 if (ilsUnit == null) {
                     System.out.println("Unit not found: " + unitNo + " - please try again...");
@@ -165,6 +171,9 @@ public class YardiNewGuestWorkflowTest {
                 }
 
                 String moveInStr = readLine("MoveIn (yyyy-mm-dd): ");
+                if (StringUtils.isEmpty(moveInStr)) {
+                    return;
+                }
                 moveIn = new SimpleDateFormat("yyyy-mm-dd").parse(moveInStr);
                 if (moveIn == null) {
                     System.out.println("Invalid date: " + moveInStr + " - please try again...");
@@ -172,20 +181,31 @@ public class YardiNewGuestWorkflowTest {
                 }
 
                 guestName = readLine("Guest Name: ");
+                if (StringUtils.isEmpty(guestName)) {
+                    return;
+                }
                 if (guestName == null || guestName.trim().split(" ").length != 2) {
                     System.out.println("Invalid name: " + guestName + " - please try again...");
                     continue;
                 }
             }
-            Prospects guestInfo = new Prospects();
-            guestInfo.getProspect().add(new YardiGuestProcessor().getProspect(guestName, ilsUnit, moveIn, agentName, sourceName));
-            LeadManagement lead = new LeadManagement();
-            lead.setProspects(guestInfo);
-            stub.importGuestInfo(yc, lead);
+            Prospect guest = new YardiGuestProcessor().getProspect(guestName, ilsUnit, moveIn, agentName, sourceName);
+            updateGuest(guest);
 
             System.out.println("Guest Import Complete.");
 
             // Import Application
+        } catch (Throwable t) {
+            throw new RuntimeException(t);
+        }
+    }
+
+    static void updateGuest(Prospect guest) {
+        LeadManagement lead = new LeadManagement();
+        lead.setProspects(new Prospects());
+        lead.getProspects().getProspect().add(guest);
+        try {
+            stub.importGuestInfo(yc, lead);
         } catch (Throwable t) {
             throw new RuntimeException(t);
         }
@@ -221,7 +241,7 @@ public class YardiNewGuestWorkflowTest {
         // print available (unused) items for select
         List<String> availItems = new ArrayList<String>();
         try {
-            RentableItems items = stub.getRentableItems(yc);
+            RentableItems items = stub.getRentableItems(yc, yc.propertyListCodes().getValue());
             for (RentableItemType type : items.getItemType()) {
                 availItems.add(type.getCode());
             }
@@ -229,8 +249,19 @@ public class YardiNewGuestWorkflowTest {
         } catch (Throwable t) {
             throw new RuntimeException(t);
         }
+        if (availItems.size() == 0) {
+            return;
+        }
         printIds(availItems, "Available Items");
         // add selected item
+        String itemName = readLine("Add Item: ");
+        if (!StringUtils.isEmpty(itemName)) {
+            AdditionalPreference item = new AdditionalPreference();
+            item.setAdditionalPreferenceType(itemName);
+            guest.setCustomerPreferences(new CustomerPreferences());
+            guest.getCustomerPreferences().getCustomerAdditionalPreferences().add(item);
+            updateGuest(guest);
+        }
     }
 
     static String getDateAvail(Availability avail) {
