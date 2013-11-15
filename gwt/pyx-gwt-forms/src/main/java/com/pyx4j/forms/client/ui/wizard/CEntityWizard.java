@@ -20,6 +20,8 @@
  */
 package com.pyx4j.forms.client.ui.wizard;
 
+import java.util.List;
+
 import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.event.logical.shared.SelectionEvent;
 import com.google.gwt.event.logical.shared.SelectionHandler;
@@ -48,7 +50,7 @@ public class CEntityWizard<E extends IEntity> extends CEntityForm<E> {
         wizardPanel.addSelectionHandler(new SelectionHandler<WizardStep>() {
             @Override
             public void onSelection(SelectionEvent<WizardStep> event) {
-                onStepChange(event);
+                onStepSelected(event.getSelectedItem());
             }
         });
 
@@ -90,7 +92,7 @@ public class CEntityWizard<E extends IEntity> extends CEntityForm<E> {
         return wizardPanel;
     }
 
-    protected void onStepChange(SelectionEvent<WizardStep> event) {
+    protected void onStepSelected(WizardStep selectedStep) {
 
     }
 
@@ -109,12 +111,15 @@ public class CEntityWizard<E extends IEntity> extends CEntityForm<E> {
         return wizardPanel.getSelectedStep();
     }
 
+    public List<WizardStep> getAllSteps() {
+        return wizardPanel.getAllSteps();
+    }
+
     @Override
     public void onReset() {
         if (wizardPanel.size() > 0) {
             wizardPanel.selectStep(0);
         }
-
         super.onReset();
     }
 
@@ -179,4 +184,9 @@ public class CEntityWizard<E extends IEntity> extends CEntityForm<E> {
         return wizardPanel.getSelectedIndex() == wizardPanel.size() - 1;
     }
 
+    public void updateProgress() {
+        if (getDecorator() instanceof WizardProgressIndicator) {
+            ((WizardProgressIndicator) getDecorator()).updateProgress(getAllSteps());
+        }
+    }
 }

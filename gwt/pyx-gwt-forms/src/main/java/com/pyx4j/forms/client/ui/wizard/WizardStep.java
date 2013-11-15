@@ -34,9 +34,9 @@ public class WizardStep extends SimplePanel implements IValidatable {
 
     private boolean enabled = true;
 
-    private boolean dirty = false;
-
     private boolean visible = true;
+
+    private boolean complete = true;
 
     private String warning = null;
 
@@ -59,14 +59,6 @@ public class WizardStep extends SimplePanel implements IValidatable {
         this.title = title;
     }
 
-    public void setStepDirty(boolean dirty) {
-        this.dirty = dirty;
-    }
-
-    public boolean isStepDirty() {
-        return dirty;
-    }
-
     public void setStepVisible(boolean visible) {
         this.visible = visible;
     }
@@ -81,6 +73,14 @@ public class WizardStep extends SimplePanel implements IValidatable {
 
     public boolean isStepEnabled() {
         return enabled;
+    }
+
+    public void setStepComplete(boolean complete) {
+        this.complete = complete;
+    }
+
+    public boolean isStepComplete() {
+        return complete;
     }
 
     public void setStepWarning(String message) {

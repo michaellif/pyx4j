@@ -20,6 +20,10 @@
  */
 package com.pyx4j.forms.client.ui.wizard;
 
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+
 import com.google.gwt.event.logical.shared.BeforeSelectionEvent;
 import com.google.gwt.event.logical.shared.BeforeSelectionHandler;
 import com.google.gwt.event.logical.shared.HasBeforeSelectionHandlers;
@@ -30,6 +34,7 @@ import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.ui.DeckPanel;
 import com.google.gwt.user.client.ui.HasWidgets;
 import com.google.gwt.user.client.ui.IndexedPanel;
+import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.forms.client.ui.form.FormDecoratorTheme;
 
@@ -72,6 +77,15 @@ public class WizardPanel extends DeckPanel implements HasWidgets, IndexedPanel.F
 
     public WizardStep getStep(int index) {
         return (WizardStep) getWidget(index);
+    }
+
+    public List<WizardStep> getAllSteps() {
+        List<WizardStep> list = new ArrayList<WizardStep>();
+        Iterator<Widget> iterator = getChildren().iterator();
+        while (iterator.hasNext()) {
+            list.add((WizardStep) iterator.next());
+        }
+        return list;
     }
 
     public int size() {
