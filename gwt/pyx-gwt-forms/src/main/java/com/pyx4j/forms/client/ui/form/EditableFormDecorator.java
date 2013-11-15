@@ -48,7 +48,7 @@ public class EditableFormDecorator<E extends IEntity> extends FormDecorator<E, C
                 onEdit();
             }
         });
-        addHeaderToolbarButton(btnEdit);
+        addHeaderToolbarWidget(btnEdit);
 
         btnCancel = new Button(i18n.tr("Cancel"), new Command() {
             @Override
@@ -56,7 +56,7 @@ public class EditableFormDecorator<E extends IEntity> extends FormDecorator<E, C
                 onCancel();
             }
         });
-        addFooterToolbarButton(btnCancel);
+        addFooterToolbarWidget(btnCancel);
 
         btnSave = new Button(i18n.tr("Save"), new Command() {
             @Override
@@ -64,7 +64,7 @@ public class EditableFormDecorator<E extends IEntity> extends FormDecorator<E, C
                 onSave();
             }
         });
-        addFooterToolbarButton(btnSave);
+        addFooterToolbarWidget(btnSave);
 
         setWidth("100%");
 

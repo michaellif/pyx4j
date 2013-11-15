@@ -25,12 +25,12 @@ import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.SimplePanel;
+import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.commons.IDebugId;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.ui.decorators.IDecorator;
-import com.pyx4j.widgets.client.Button;
 import com.pyx4j.widgets.client.actionbar.Toolbar;
 
 public class FormDecorator<E extends IEntity, T extends CEntityForm<E>> extends FlowPanel implements IDecorator<T> {
@@ -72,12 +72,12 @@ public class FormDecorator<E extends IEntity, T extends CEntityForm<E>> extends 
         add(footerPanel);
     }
 
-    public void addHeaderToolbarButton(Button button) {
-        headerToolbar.add(button);
+    public void addHeaderToolbarWidget(IsWidget widget) {
+        headerToolbar.addItem(widget);
     }
 
-    public void addFooterToolbarButton(Button button) {
-        footerToolbar.add(button);
+    public void addFooterToolbarWidget(IsWidget widget) {
+        footerToolbar.addItem(widget);
     }
 
     @Override

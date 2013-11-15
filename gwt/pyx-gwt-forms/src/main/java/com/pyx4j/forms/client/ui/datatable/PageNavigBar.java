@@ -81,26 +81,26 @@ public class PageNavigBar extends Toolbar {
         firstButton = new Button(DataTableImages.INSTANCE.first());
         firstButton.setVisible(false);
         firstButton.getElement().getStyle().setMarginRight(0, Unit.PX);
-        add(firstButton);
+        addItem(firstButton);
 
         prevButton = new Button(DataTableImages.INSTANCE.prev());
         prevButton.setVisible(false);
         prevButton.getElement().getStyle().setMarginRight(5, Unit.PX);
-        add(prevButton);
+        addItem(prevButton);
 
         countLabel = new Label(String.valueOf(CommonsStringUtils.NO_BREAK_SPACE_UTF8), true);
         countLabel.getElement().getStyle().setMarginRight(5, Unit.PX);
         countLabel.getElement().getStyle().setFontWeight(FontWeight.BOLD);
-        add(countLabel);
+        addItem(countLabel);
 
         nextButton = new Button(DataTableImages.INSTANCE.next());
         nextButton.setVisible(false);
         nextButton.getElement().getStyle().setMarginRight(0, Unit.PX);
-        add(nextButton);
+        addItem(nextButton);
 
         lastButton = new Button(DataTableImages.INSTANCE.last());
         lastButton.setVisible(false);
-        add(lastButton);
+        addItem(lastButton);
 
         pageSizeContentPanel = new HorizontalPanel();
         pageSizeContentPanel.getElement().getStyle().setMarginRight(12, Unit.PX);
@@ -113,7 +113,7 @@ public class PageNavigBar extends Toolbar {
 
         pageSizeContentPanel.add(pageSizeSelector);
         pageSizeSelector.getElement().getStyle().setMarginLeft(3, Unit.PX);
-        add(pageSizeContentPanel);
+        addItem(pageSizeContentPanel);
 
         pageSizeSelector.addChangeHandler(new ChangeHandler() {
 

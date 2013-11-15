@@ -248,40 +248,40 @@ public class Dialog implements ProvidesResize, IsWidget {
 
         if (options instanceof Custom1Option) {
             custom1Button = createButton(((Custom1Option) options).custom1Text(), ((Custom1Option) options).getCustom1DebugID(), buttonsHandler, true);
-            customButtonsToolbar.add(custom1Button);
+            customButtonsToolbar.addItem(custom1Button);
         }
         if (options instanceof Custom2Option) {
             custom2Button = createButton(((Custom2Option) options).custom2Text(), ((Custom2Option) options).getCustom2DebugID(), buttonsHandler, true);
-            customButtonsToolbar.add(custom2Button);
+            customButtonsToolbar.addItem(custom2Button);
         }
         if (options instanceof Custom3Option) {
             custom3Button = createButton(((Custom3Option) options).custom3Text(), ((Custom3Option) options).getCustom3DebugID(), buttonsHandler, true);
-            customButtonsToolbar.add(custom3Button);
+            customButtonsToolbar.addItem(custom3Button);
         }
         if (options instanceof Custom4Option) {
             custom4Button = createButton(((Custom4Option) options).custom4Text(), ((Custom4Option) options).getCustom4DebugID(), buttonsHandler, true);
-            customButtonsToolbar.add(custom4Button);
+            customButtonsToolbar.addItem(custom4Button);
         }
 
         if (options instanceof YesOption) {
             yesButton = createButton(defaultYesText(), DialogDebugId.Dialog_Yes, buttonsHandler, true);
-            defaultButtonsToolbar.add(yesButton);
+            defaultButtonsToolbar.addItem(yesButton);
         }
         if (options instanceof NoOption) {
             noButton = createButton(defaultNoText(), DialogDebugId.Dialog_No, buttonsHandler, true);
-            defaultButtonsToolbar.add(noButton);
+            defaultButtonsToolbar.addItem(noButton);
         }
         if (options instanceof OkOption) {
             okButton = createButton(optionTextOk(), DialogDebugId.Dialog_Ok, buttonsHandler, true);
-            defaultButtonsToolbar.add(okButton);
+            defaultButtonsToolbar.addItem(okButton);
         }
         if (options instanceof CancelOption) {
             cancelButton = createButton(optionTextCancel(), DialogDebugId.Dialog_Cancel, buttonsHandler, true);
-            defaultButtonsToolbar.add(cancelButton);
+            defaultButtonsToolbar.addItem(cancelButton);
         }
         if (options instanceof CloseOption) {
             closeButton = createButton(optionTextClose(), DialogDebugId.Dialog_Close, buttonsHandler, true);
-            defaultButtonsToolbar.add(closeButton);
+            defaultButtonsToolbar.addItem(closeButton);
         }
 
         return buttonsPanel;

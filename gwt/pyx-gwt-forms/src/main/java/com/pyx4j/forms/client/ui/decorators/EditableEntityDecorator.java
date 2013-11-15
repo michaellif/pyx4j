@@ -60,7 +60,7 @@ public class EditableEntityDecorator<E extends IEntity> extends FlowPanel implem
 
             }
         });
-        footerToolbar.add(btnSave);
+        footerToolbar.addItem(btnSave);
 
         btnCancel = new Button(i18n.tr("Cancel"), new Command() {
             @Override
@@ -68,7 +68,7 @@ public class EditableEntityDecorator<E extends IEntity> extends FlowPanel implem
 
             }
         });
-        footerToolbar.add(btnCancel);
+        footerToolbar.addItem(btnCancel);
 
     }
 

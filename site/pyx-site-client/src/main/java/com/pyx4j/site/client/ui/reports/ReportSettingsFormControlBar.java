@@ -49,7 +49,7 @@ public abstract class ReportSettingsFormControlBar extends Composite {
         isAdvanced = false;
 
         controlPanelToolbar = new Toolbar();
-        controlPanelToolbar.add(modeToggle = new Anchor(i18n.tr("advanced"), new Command() {
+        controlPanelToolbar.addItem(modeToggle = new Anchor(i18n.tr("advanced"), new Command() {
             @Override
             public void execute() {
                 isAdvanced = !isAdvanced;
@@ -59,7 +59,7 @@ public abstract class ReportSettingsFormControlBar extends Composite {
         }));
         modeToggle.getElement().getStyle().setMarginRight(2, Unit.EM);
 
-        controlPanelToolbar.add(apply = new Button(i18n.tr("Apply"), new Command() {
+        controlPanelToolbar.addItem(apply = new Button(i18n.tr("Apply"), new Command() {
             @Override
             public void execute() {
                 onApply();

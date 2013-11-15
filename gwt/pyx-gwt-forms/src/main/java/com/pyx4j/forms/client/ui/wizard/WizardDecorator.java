@@ -52,7 +52,7 @@ public class WizardDecorator<E extends IEntity> extends FormDecorator<E, CEntity
                 getComponent().cancel();
             }
         });
-        addFooterToolbarButton(btnCancel);
+        addFooterToolbarWidget(btnCancel);
 
         btnPrevious = new Button(i18n.tr("Previous"), new Command() {
             @Override
@@ -61,7 +61,7 @@ public class WizardDecorator<E extends IEntity> extends FormDecorator<E, CEntity
                 calculateButtonsState();
             }
         });
-        addFooterToolbarButton(btnPrevious);
+        addFooterToolbarWidget(btnPrevious);
 
         btnNext = new Button(i18n.tr("Next"), new Command() {
             @Override
@@ -74,7 +74,7 @@ public class WizardDecorator<E extends IEntity> extends FormDecorator<E, CEntity
                 }
             }
         });
-        addFooterToolbarButton(btnNext);
+        addFooterToolbarWidget(btnNext);
 
         setWidth("100%");
     }

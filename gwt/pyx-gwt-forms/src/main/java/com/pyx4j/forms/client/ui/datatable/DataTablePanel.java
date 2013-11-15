@@ -105,7 +105,7 @@ public class DataTablePanel<E extends IEntity> extends VerticalPanel {
                 filterPanel.setFilters(null);
             }
         });
-        topActionsBar.getToolbar().add(filterButton);
+        topActionsBar.getToolbar().addItem(filterButton);
 
         setDataTableModel(new DataTableModel<E>(clazz));
     }
@@ -129,14 +129,14 @@ public class DataTablePanel<E extends IEntity> extends VerticalPanel {
     }
 
     public void setAddActionCommand(Command addActionCommand) {
-        topActionsBar.getToolbar().insert(
+        topActionsBar.getToolbar().insertItem(
                 addButton = new Button(EntityFolderImages.INSTANCE.addButton().hover(), i18n.tr("New {0}", entityPrototype.getEntityMeta().getCaption()),
                         addActionCommand), 0);
     }
 
     public void setDelActionCommand(Command delActionCommand) {
-        topActionsBar.getToolbar().insert(delButton = new Button(EntityFolderImages.INSTANCE.delButton().hover(), i18n.tr("Delete Checked"), delActionCommand),
-                1);
+        topActionsBar.getToolbar().insertItem(
+                delButton = new Button(EntityFolderImages.INSTANCE.delButton().hover(), i18n.tr("Delete Checked"), delActionCommand), 1);
 
         delButton.setEnabled(getDataTableModel().isAnyChecked());
         getDataTable().setHasCheckboxColumn(true);
@@ -194,7 +194,7 @@ public class DataTablePanel<E extends IEntity> extends VerticalPanel {
     }
 
     public void addUpperActionItem(Widget widget) {
-        topActionsBar.getToolbar().add(widget);
+        topActionsBar.getToolbar().addItem(widget);
     }
 
     public DataTable<E> getDataTable() {

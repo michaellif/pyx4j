@@ -91,6 +91,7 @@ public class CEntityWizard<E extends IEntity> extends CEntityForm<E> {
     }
 
     protected void onStepChange(SelectionEvent<WizardStep> event) {
+
     }
 
     public WizardStep addStep(final BasicFlexFormPanel panel) {

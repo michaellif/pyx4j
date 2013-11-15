@@ -20,6 +20,7 @@
  */
 package com.pyx4j.widgets.client.actionbar;
 
+import com.google.gwt.dom.client.Element;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.SimplePanel;
@@ -31,35 +32,48 @@ import com.pyx4j.widgets.client.DefaultWidgetsTheme;
  * @author michaellif
  * 
  */
-public class Toolbar extends FlowPanel {
+public class Toolbar implements IsWidget {
+
+    private final FlowPanel panel;
 
     public Toolbar() {
-        setStyleName(DefaultWidgetsTheme.StyleName.Toolbar.name());
+        panel = new FlowPanel();
+        panel.setStyleName(DefaultWidgetsTheme.StyleName.Toolbar.name());
     }
 
-    @Override
-    public void add(Widget widget) {
-        insert(widget, getWidgetCount());
+    public void addItem(IsWidget widget) {
+        panel.insert(widget, panel.getWidgetCount());
     }
 
-    @Override
-    public void insert(IsWidget widget, int beforeIndex) {
-        insert(widget, beforeIndex);
-    }
-
-    @Override
-    public void insert(Widget widget, int beforeIndex) {
+    public void insertItem(IsWidget widget, int beforeIndex) {
         SimplePanel itemHolder = new SimplePanel();
         itemHolder.setStyleName(DefaultWidgetsTheme.StyleName.ToolbarItem.name());
 
         itemHolder.setWidget(widget);
-        super.insert(itemHolder, beforeIndex);
+        panel.insert(itemHolder, beforeIndex);
     }
 
     public BarSeparator insertSeparator(int beforeIndex) {
         BarSeparator separator = new BarSeparator();
-        insert(separator, beforeIndex);
+        insertItem(separator, beforeIndex);
         return separator;
+    }
+
+    @Override
+    public Widget asWidget() {
+        return panel;
+    }
+
+    public void setStylePrimaryName(String name) {
+        panel.setStylePrimaryName(name);
+    }
+
+    public void addStyleName(String name) {
+        panel.addStyleName(name);
+    }
+
+    public Element getElement() {
+        return panel.getElement();
     }
 
 }
