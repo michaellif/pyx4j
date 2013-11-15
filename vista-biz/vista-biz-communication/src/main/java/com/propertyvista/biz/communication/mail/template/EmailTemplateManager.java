@@ -24,7 +24,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.pyx4j.commons.GWTJava5Helper;
-import com.pyx4j.commons.UserRuntimeException;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IObject;
@@ -44,7 +43,6 @@ import com.propertyvista.biz.communication.mail.template.model.PasswordRequestPr
 import com.propertyvista.biz.communication.mail.template.model.PasswordRequestTenantT;
 import com.propertyvista.biz.communication.mail.template.model.PortalLinksT;
 import com.propertyvista.domain.communication.EmailTemplateType;
-import com.propertyvista.misc.VistaTODO;
 
 public class EmailTemplateManager {
 
@@ -148,12 +146,7 @@ public class EmailTemplateManager {
             if (varEnd != -1) {
                 final String varName = htmlTemplate.substring(varStart, varEnd);
                 final String value = getVarValue(varName, data);
-                if (value == null) {
-                    log.error("Missing data value of {} in {}", varName, data);
-                    if (!VistaTODO.vladsLeaseMigration) {
-                        throw new UserRuntimeException("Missing data value of ${" + varName + "}");
-                    }
-                } else {
+                if (value != null) {
                     buffer.append(value);
                 }
                 pos = varEnd + 1;
