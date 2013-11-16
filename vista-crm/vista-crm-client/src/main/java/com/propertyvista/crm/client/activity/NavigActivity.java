@@ -147,7 +147,9 @@ public class NavigActivity extends AbstractActivity implements NavigView.MainNav
         if (SecurityController.checkBehavior(VistaCrmBehavior.AggregatedTransfer)) {
             folder.addNavigItem(new CrmSiteMap.Finance.AggregatedTransfer());
         }
-        folder.addNavigItem(new CrmSiteMap.Finance.Payment());
+        if (SecurityController.checkAnyBehavior(VistaCrmBehavior.AggregatedTransfer, VistaCrmBehavior.Billing)) {
+            folder.addNavigItem(new CrmSiteMap.Finance.Payment());
+        }
         if (SecurityController.checkBehavior(VistaCrmBehavior.Billing)) {
             folder.addNavigItem(new CrmSiteMap.Finance.AutoPayReview());
         }
