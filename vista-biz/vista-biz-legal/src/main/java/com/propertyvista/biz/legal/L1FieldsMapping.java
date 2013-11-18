@@ -190,6 +190,7 @@ public class L1FieldsMapping extends PdfFieldsMapping<L1FormFieldsData> {
                 .mapTo("@@b12c96nfP2_fax.2{4}")
             .define();
         
+        // TODO? in theory email's recipent is might be case sensitive, but the form requires everything CAPITALIZED
         field(proto().part2_emailAddress())
             .formatBy(new UppercaseFormatter())
                 .mapTo("b12c96nfP2_email")
