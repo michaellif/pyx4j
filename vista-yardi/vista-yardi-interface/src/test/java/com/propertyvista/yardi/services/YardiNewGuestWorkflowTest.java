@@ -32,10 +32,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.yardi.entity.guestcard40.AdditionalPreference;
+import com.yardi.entity.guestcard40.Customer;
 import com.yardi.entity.guestcard40.CustomerInfo;
 import com.yardi.entity.guestcard40.CustomerPreferences;
 import com.yardi.entity.guestcard40.EventType;
 import com.yardi.entity.guestcard40.EventTypes;
+import com.yardi.entity.guestcard40.Identification;
 import com.yardi.entity.guestcard40.LeadManagement;
 import com.yardi.entity.guestcard40.MarketingAgent;
 import com.yardi.entity.guestcard40.MarketingSource;
@@ -131,17 +133,23 @@ public class YardiNewGuestWorkflowTest {
 
             // retrieve guests
             LeadManagement guestActivity = stub.getGuestActivity(yc, yc.propertyListCodes().getValue());
-            if (guestActivity.getProspects().getProspect().size() > 0) {
-                Map<String, Prospect> guests = new HashMap<String, Prospect>();
-                for (Prospect guest : guestActivity.getProspects().getProspect()) {
-                    NameType name = guest.getCustomers().getCustomer().get(0).getName();
-                    guests.put(name.getFirstName() + " " + name.getLastName(), guest);
+            Map<String, Prospect> guests = new HashMap<String, Prospect>();
+            for (Prospect guest : guestActivity.getProspects().getProspect()) {
+                Customer c = guest.getCustomers().getCustomer().get(0);
+                if (!EnumSet.of(CustomerInfo.GUEST, CustomerInfo.PROSPECT, CustomerInfo.APPLICANT).contains(c.getType())) {
+                    // drop tenants
+                    continue;
                 }
+                NameType name = c.getName();
+                guests.put(name.getFirstName() + " " + name.getLastName(), guest);
+            }
+            if (guests.size() > 0) {
                 // update rentable items
                 printIds(guests.keySet(), "Current Guests");
                 String guestName = readLine("Update Guest: ");
                 if (!StringUtils.isEmpty(guestName)) {
                     Prospect guest = guests.get(guestName);
+//                    allocateUnit(guest);
                     updateRentableItems(guest);
                     executeEvents(guest);
                     System.out.println("Done - Exit.");
@@ -201,6 +209,8 @@ public class YardiNewGuestWorkflowTest {
             }
             Prospect guest = new YardiGuestProcessor().getProspect(guestName, ilsUnit, moveIn, agentName, sourceName);
             updateGuest(guest);
+            // allocate unit
+            holdUnit(guest, ilsUnit);
 
             System.out.println("Guest Import Complete.");
 
@@ -231,6 +241,44 @@ public class YardiNewGuestWorkflowTest {
         cr.database().setValue("afqoml_live");
         cr.platform().setValue(PmcYardiCredential.Platform.SQL);
         return cr;
+    }
+
+    static void allocateUnit(Prospect guest) {
+        Map<String, ILSUnit> units = new HashMap<String, ILSUnit>();
+        PhysicalProperty property;
+        try {
+            property = stub.getPropertyMarketingInfo(yc, yc.propertyListCodes().getValue());
+        } catch (Throwable t) {
+            throw new RuntimeException(t);
+        }
+        for (ILSUnit ilsUnit : property.getProperty().get(0).getILSUnit()) {
+            Availability avail = ilsUnit.getAvailability();
+            if (avail == null) {
+                continue;
+            }
+            units.put(ilsUnit.getUnit().getInformation().get(0).getUnitID(), ilsUnit);
+        }
+        printIds(units.keySet(), "Available Units");
+
+        ILSUnit ilsUnit = null;
+        String unitNo = readLine("Enter Unit #: ");
+        if ((ilsUnit = units.get(unitNo)) != null) {
+            holdUnit(guest, ilsUnit);
+        }
+    }
+
+    static void holdUnit(Prospect guest, ILSUnit ilsUnit) {
+        EventType event = new YardiGuestProcessor().getNewEvent(AGENT, SOURCE, EventTypes.HOLD, false);
+        Identification holdId = new Identification();
+        holdId.setIDType(ilsUnit.getUnit().getInformation().get(0).getUnitID());
+        holdId.setIDValue("0");
+        event.setEventID(holdId);
+
+        guest.getEvents().getEvent().clear();
+        guest.getEvents().getEvent().add(event);
+        guest.getCustomers().getCustomer().get(0).setType(CustomerInfo.PROSPECT);
+
+        updateGuest(guest);
     }
 
     static void updateRentableItems(Prospect guest) {
@@ -276,9 +324,13 @@ public class YardiNewGuestWorkflowTest {
     static void executeEvents(Prospect guest) {
         // execute event
         printIds(EnumSet.of(EventTypes.APPLICATION, EventTypes.APPROVE, EventTypes.LEASE_SIGN), "Events");
-        EventTypes type;
+        EventTypes type = null;
         do {
-            type = EventTypes.valueOf(readLine("Execute Event: "));
+            try {
+                type = EventTypes.valueOf(readLine("Execute Event: "));
+            } catch (Exception ignore) {
+
+            }
             if (type != null) {
                 EventType event = new YardiGuestProcessor().getNewEvent(AGENT, SOURCE, type, false);
                 switch (type) {

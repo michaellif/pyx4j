@@ -16,6 +16,7 @@ package com.propertyvista.yardi.services;
 import java.sql.Timestamp;
 import java.util.Date;
 
+import com.yardi.entity.guestcard40.AddressInfo;
 import com.yardi.entity.guestcard40.AddressType;
 import com.yardi.entity.guestcard40.Agent;
 import com.yardi.entity.guestcard40.AgentName;
@@ -74,6 +75,7 @@ public class YardiGuestProcessor {
         addr.setPostalCode("90123");
         addr.setCity("Hometown");
         addr.setAddressLine1("123 Main St");
+        addr.setAddressType(AddressInfo.CURRENT);
         return addr;
     }
 
