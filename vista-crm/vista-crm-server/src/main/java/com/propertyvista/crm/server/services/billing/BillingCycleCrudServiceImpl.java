@@ -42,11 +42,9 @@ public class BillingCycleCrudServiceImpl extends AbstractCrudServiceDtoImpl<Bill
             Persistence.service().retrieveMember(bo.stats());
             to.stats().set(bo.stats());
         }
-        {
-            EntityQueryCriteria<PaymentRecord> criteria = EntityQueryCriteria.create(PaymentRecord.class);
-            criteria.eq(criteria.proto().padBillingCycle(), bo);
-            to.pads().setValue((long) Persistence.service().count(criteria));
-        }
+
+        calcStatistics(bo, to);
+
         Persistence.service().retrieve(to.building(), AttachLevel.ToStringMembers, false);
     }
 
@@ -54,7 +52,15 @@ public class BillingCycleCrudServiceImpl extends AbstractCrudServiceDtoImpl<Bill
     protected void enhanceRetrieved(BillingCycle bo, BillingCycleDTO to, RetrieveTarget retrieveTarget) {
         enhanceListRetrieved(bo, to);
 
-        // calculate statistics on leases:
+        calcStatistics(bo, to);
+    }
+
+    @Override
+    protected void persist(BillingCycle bo, BillingCycleDTO to) {
+        throw new IllegalArgumentException();
+    }
+
+    private void calcStatistics(BillingCycle bo, BillingCycleDTO to) {
         // Total:
         EntityQueryCriteria<BillingAccount> criteriaTotal = EntityQueryCriteria.create(BillingAccount.class);
         criteriaTotal.add(PropertyCriterion.eq(criteriaTotal.proto().billingType(), bo.billingType()));
@@ -65,12 +71,11 @@ public class BillingCycleCrudServiceImpl extends AbstractCrudServiceDtoImpl<Bill
         criteriaNotRun.add(PropertyCriterion.eq(criteriaNotRun.proto().billingType(), bo.billingType()));
         criteriaNotRun.add(PropertyCriterion.eq(criteriaNotRun.proto().bills().$().billingCycle(), bo));
         criteriaNotRun.add(PropertyCriterion.notExists(criteriaNotRun.proto().bills()));
-
         to.notRun().setValue((long) Persistence.service().count(criteriaNotRun));
-    }
 
-    @Override
-    protected void persist(BillingCycle bo, BillingCycleDTO to) {
-        throw new IllegalArgumentException();
+        // PADs:
+        EntityQueryCriteria<PaymentRecord> criteriaPADs = EntityQueryCriteria.create(PaymentRecord.class);
+        criteriaPADs.eq(criteriaPADs.proto().padBillingCycle(), bo);
+        to.pads().setValue((long) Persistence.service().count(criteriaPADs));
     }
 }

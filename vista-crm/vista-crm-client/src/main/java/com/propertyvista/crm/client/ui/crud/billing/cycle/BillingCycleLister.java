@@ -32,15 +32,15 @@ public class BillingCycleLister extends AbstractLister<BillingCycleDTO> {
             new MemberColumnDescriptor.Builder(proto().billingCycleStartDate()).build(),
             new MemberColumnDescriptor.Builder(proto().billingCycleEndDate()).build(),
             new MemberColumnDescriptor.Builder(proto().targetBillExecutionDate()).build(),
-            new MemberColumnDescriptor.Builder(proto().notRun()).build(),      
+            new MemberColumnDescriptor.Builder(proto().notRun()).sortable(false).searchable(false).build(),      
             new MemberColumnDescriptor.Builder(proto().stats().notConfirmed()).build(),        
             new MemberColumnDescriptor.Builder(proto().stats().failed()).build(), 
             new MemberColumnDescriptor.Builder(proto().stats().rejected()).build(),  
             new MemberColumnDescriptor.Builder(proto().stats().confirmed()).build(), 
-            new MemberColumnDescriptor.Builder(proto().total()).build(),
-            new MemberColumnDescriptor.Builder(proto().actualAutopayExecutionDate()).build(),
+            new MemberColumnDescriptor.Builder(proto().total()).sortable(false).searchable(false).build(),
             new MemberColumnDescriptor.Builder(proto().pads()).sortable(false).searchable(false).build(),
-            new MemberColumnDescriptor.Builder(proto().targetAutopayExecutionDate()).build()
+            new MemberColumnDescriptor.Builder(proto().targetAutopayExecutionDate()).build(),
+            new MemberColumnDescriptor.Builder(proto().actualAutopayExecutionDate()).build()
         );//@formatter:on
     }
 
