@@ -29,11 +29,11 @@ public class EmployeeLister extends AbstractLister<EmployeeDTO> {
 
         setColumnDescriptors(//@formatter:off
             new MemberColumnDescriptor.Builder(proto().employeeId()).build(),
-            new MemberColumnDescriptor.Builder(proto().name()).build(),
+            new MemberColumnDescriptor.Builder(proto().name()).searchable(false).build(),
             new MemberColumnDescriptor.Builder(proto().title()).build(),
             new MemberColumnDescriptor.Builder(proto().name().firstName()).searchableOnly().build(),
             new MemberColumnDescriptor.Builder(proto().name().lastName()).searchableOnly().build(),
-            new MemberColumnDescriptor.Builder(proto().email(), false).build(),
+            new MemberColumnDescriptor.Builder(proto().email()).build(),
             new MemberColumnDescriptor.Builder(proto().updated(), false).build()
         );//@formatter:on
     }
