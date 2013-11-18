@@ -20,6 +20,8 @@
  */
 package com.propertyvista.biz.legal;
 
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -73,6 +75,8 @@ public abstract class PdfFieldsMapping<E extends IEntity> {
 
         private Partitioner partitioner = null;
 
+        private List<String> states = Collections.emptyList();
+
         public PdfFieldDescriptorBuilder(IObject<?> field) {
             this.field = field;
         }
@@ -92,8 +96,13 @@ public abstract class PdfFieldsMapping<E extends IEntity> {
             return this;
         }
 
+        public PdfFieldDescriptorBuilder states(String... states) {
+            this.states = Arrays.asList(states);
+            return this;
+        }
+
         public void define() {
-            mapping.put(field.getFieldName(), new PdfFieldDescriptor(formatters, mappings, partitioner));
+            mapping.put(field.getFieldName(), new PdfFieldDescriptor(formatters, mappings, partitioner, states));
         }
     }
 }

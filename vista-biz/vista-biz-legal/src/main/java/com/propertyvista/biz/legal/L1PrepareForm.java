@@ -25,6 +25,8 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.Map;
 
+import org.apache.commons.lang.StringUtils;
+
 import com.itextpdf.text.DocumentException;
 import com.itextpdf.text.pdf.AcroFields;
 import com.itextpdf.text.pdf.AcroFields.Item;
@@ -47,6 +49,11 @@ public class L1PrepareForm {
         System.out.println("========================================");
         for (Map.Entry<String, Item> field : fields.getFields().entrySet()) {
             System.out.println(field.getKey());
+
+            String[] appearanceStates = fields.getAppearanceStates(field.getKey());
+            if (appearanceStates != null && appearanceStates.length > 0) {
+                System.out.println("\t\tstates: " + StringUtils.join(appearanceStates, ", "));
+            }
         }
         System.out.println("========================================");
 

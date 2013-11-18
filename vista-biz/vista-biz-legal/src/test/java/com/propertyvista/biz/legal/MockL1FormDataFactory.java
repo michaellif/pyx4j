@@ -68,6 +68,10 @@ public class MockL1FormDataFactory {
         fieldsData.part2_faxNumber().setValue("(647) 123-1234");
         fieldsData.part2_emailAddress().setValue("don.quixote@mancha.gov.es");
 
+        // Part3
+        fieldsData.part3ApplyingToCollectCharges().setValue(true);
+        fieldsData.part3ApplyingToCollectNSF().setValue(true);
+
         return fieldsData;
     }
 }

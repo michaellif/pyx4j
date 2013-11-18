@@ -27,6 +27,7 @@ import java.math.BigDecimal;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -140,12 +141,13 @@ public class FormUtils {
                             partitioner = ((PdfFormFieldPartitioner) annotation).value().newInstance();
                         }
                     }
-                    fieldDescriptor = new PdfFieldDescriptor(formatters, mappedFields, partitioner);
+                    fieldDescriptor = new PdfFieldDescriptor(formatters, mappedFields, partitioner, Collections.<String> emptyList());
                 }
 
                 if (isTextField(field)) {
                     setTextField(fieldDescriptor, fields, field.getValue());
-
+                } else if (isCheckbox(field)) {
+                    setCheckBox(fieldDescriptor, fields, (Boolean) field.getValue());
                 } else if (fieldsData.getMember(memberName).getValueClass().isEnum()) {
                     // TODO add checks that field mapping doesn't have multiple mappings and no length
                     setEnumField(fieldDescriptor, fields, field.getValue().toString());
@@ -228,9 +230,19 @@ public class FormUtils {
 
     }
 
+    private static void setCheckBox(PdfFieldDescriptor fieldDescriptor, AcroFields fields, Boolean value) throws IOException, DocumentException {
+        if (value) {
+            fields.setField(fieldDescriptor.mappedFields().get(0), fieldDescriptor.states().get(0));
+        }
+    }
+
     private static boolean isTextField(IObject<?> field) {
         return field.getValueClass().equals(String.class) || field.getValueClass().equals(Integer.class) || field.getValueClass().equals(BigDecimal.class)
                 || field.getValueClass().equals(LogicalDate.class) || field.getValueClass().equals(Date.class);
+    }
+
+    private static boolean isCheckbox(IObject<?> field) {
+        return field.getValueClass().equals(Boolean.class);
     }
 
 }

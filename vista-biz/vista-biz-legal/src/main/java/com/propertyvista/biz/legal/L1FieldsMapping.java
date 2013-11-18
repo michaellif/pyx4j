@@ -196,5 +196,18 @@ public class L1FieldsMapping extends PdfFieldsMapping<L1FormFieldsData> {
                 .mapTo("b12c96nfP2_email")
             .define();
         
+        
+        // PART 3
+        field(proto().part3ApplyingToCollectCharges())
+                .states("1")
+                .mapTo("b12c96nfl1_Choice_Arrear")
+            .define();
+        
+        field(proto().part3ApplyingToCollectNSF())
+                .states("2")
+                .mapTo("b12c96nfl1_Choice_NSF")
+            .define();
+        
+                
     }//@formatter:on
 }

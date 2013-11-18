@@ -34,10 +34,13 @@ public class PdfFieldDescriptor {
 
     private final Partitioner partitioner;
 
-    public PdfFieldDescriptor(List<Formatter> formatters, List<String> mappedFields, Partitioner partitioner) {
+    private final List<String> states;
+
+    public PdfFieldDescriptor(List<Formatter> formatters, List<String> mappedFields, Partitioner partitioner, List<String> states) {
         this.formatters = formatters;
         this.mappedFields = mappedFields;
         this.partitioner = partitioner;
+        this.states = states;
     }
 
     public List<String> mappedFields() {
@@ -50,5 +53,9 @@ public class PdfFieldDescriptor {
 
     public List<Formatter> formatters() {
         return Collections.unmodifiableList(formatters);
+    }
+
+    public List<String> states() {
+        return Collections.unmodifiableList(states);
     }
 }
