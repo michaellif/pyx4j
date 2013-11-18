@@ -28,6 +28,7 @@ import com.pyx4j.gwt.rpc.deferred.DeferredProcessProgressResponse;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.rpc.shared.VoidSerializable;
+import com.pyx4j.security.shared.SecurityController;
 import com.pyx4j.site.client.AppPlaceEntityMapper;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.client.activity.ListerController;
@@ -51,6 +52,7 @@ import com.propertyvista.crm.rpc.services.lease.common.LeaseTermCrudService;
 import com.propertyvista.domain.communication.EmailTemplateType;
 import com.propertyvista.domain.financial.BillingAccount;
 import com.propertyvista.domain.payment.AutopayAgreement;
+import com.propertyvista.domain.security.VistaCrmBehavior;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.LeaseAdjustment;
 import com.propertyvista.domain.tenant.lease.LeaseTerm.Type;
@@ -112,10 +114,12 @@ public class LeaseViewerActivity extends LeaseViewerActivityBase<LeaseDTO> imple
     }
 
     protected void populateBills(Lease result) {
-        EntityFiltersBuilder<BillDataDTO> filters = EntityFiltersBuilder.create(BillDataDTO.class);
-        filters.eq(filters.proto().bill().billingAccount().id(), result.billingAccount().getPrimaryKey());
-        billLister.setPreDefinedFilters(filters.getFilters());
-        billLister.populate();
+        if (SecurityController.checkBehavior(VistaCrmBehavior.Billing)) {
+            EntityFiltersBuilder<BillDataDTO> filters = EntityFiltersBuilder.create(BillDataDTO.class);
+            filters.eq(filters.proto().bill().billingAccount().id(), result.billingAccount().getPrimaryKey());
+            billLister.setPreDefinedFilters(filters.getFilters());
+            billLister.populate();
+        }
     }
 
     protected void populatePayments(Lease result) {

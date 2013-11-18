@@ -18,6 +18,7 @@ import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.forms.client.ui.CViewer;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
+import com.pyx4j.security.shared.SecurityController;
 import com.pyx4j.site.client.ui.prime.form.IForm;
 import com.pyx4j.widgets.client.tabpanel.Tab;
 
@@ -25,6 +26,7 @@ import com.propertyvista.common.client.ui.components.TransactionHistoryViewerYar
 import com.propertyvista.crm.client.ui.crud.lease.common.LeaseFormBase;
 import com.propertyvista.crm.client.ui.crud.lease.common.N4LegalLetterFolder;
 import com.propertyvista.crm.client.ui.crud.lease.invoice.TransactionHistoryViewer;
+import com.propertyvista.domain.security.VistaCrmBehavior;
 import com.propertyvista.dto.LeaseDTO;
 import com.propertyvista.dto.TransactionHistoryDTO;
 import com.propertyvista.shared.config.VistaFeatures;
@@ -52,13 +54,15 @@ public class LeaseForm extends LeaseFormBase<LeaseDTO> {
 
         setTabVisible(depositsTab, !getValue().status().getValue().isDraft());
         setTabVisible(adjustmentsTab, !getValue().status().getValue().isDraft());
-        setTabVisible(billsTab, !getValue().status().getValue().isDraft());
+        setTabVisible(billsTab, !getValue().status().getValue().isDraft() && SecurityController.checkBehavior(VistaCrmBehavior.Billing));
         setTabVisible(paymentsTab, !getValue().status().getValue().isDraft());
         setTabVisible(financialTab, !getValue().status().getValue().isDraft());
 
-        setTabVisible(depositsTab, !VistaFeatures.instance().yardiIntegration());
-        setTabVisible(adjustmentsTab, !VistaFeatures.instance().yardiIntegration());
-        setTabVisible(billsTab, !VistaFeatures.instance().yardiIntegration());
+        if (VistaFeatures.instance().yardiIntegration()) {
+            setTabVisible(depositsTab, false);
+            setTabVisible(adjustmentsTab, false);
+            setTabVisible(billsTab, false);
+        }
     }
 
     private IsWidget createFinancialTransactionHistoryTab() {
