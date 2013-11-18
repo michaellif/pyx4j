@@ -74,7 +74,7 @@ public interface L1FormFieldsData extends IEntity {
     IPrimitive<LogicalDate> totalRentOwingAsOf();
 
     @PdfFormFieldFormatter(DateFormatter.class)
-    @PdfFormFieldMapping(value = "b12c96nmfiling_date")
+    @PdfFormFieldMapping("b12c96nmfiling_date")
     IPrimitive<LogicalDate> fillingDate();
 
     // Part1
@@ -95,7 +95,7 @@ public interface L1FormFieldsData extends IEntity {
     IPrimitive<String> part1_direction();
 
     @PdfFormFieldFormatter(UppercaseFormatter.class)
-    @PdfFormFieldMapping(value = "b12c96nfapp_unit_no")
+    @PdfFormFieldMapping("b12c96nfapp_unit_no")
     IPrimitive<String> part1_unit();
 
     @PdfFormFieldFormatter(UppercaseFormatter.class)

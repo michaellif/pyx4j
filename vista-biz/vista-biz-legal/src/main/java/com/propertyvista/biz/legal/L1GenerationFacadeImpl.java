@@ -33,7 +33,7 @@ public class L1GenerationFacadeImpl implements L1GenerationFacade {
         byte[] filledForm = null;
         try {
             byte[] formTemplate = IOUtils.toByteArray(N4GenerationFacadeImpl.class.getResourceAsStream(N4_FORM_FILE));
-            filledForm = FormUtils.fillForm(fieldsData, null, formTemplate);
+            filledForm = FormUtils.fillForm(fieldsData, new L1FieldsMapping(), formTemplate);
         } catch (Throwable e) {
             throw new RuntimeException(e);
         }
