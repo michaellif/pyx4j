@@ -72,7 +72,15 @@ public class ApplicationProgressPanel extends FlowPanel {
 
         for (int i = 0; i < steps.size(); i++) {
             WizardStep step = steps.get(i);
-            addStepButton((i + 1) + "", step.getStepTitle(), StepButton.StepStatus.notComplete, null);
+            StepButton.StepStatus stepStatus = StepButton.StepStatus.notComplete;
+
+            if (step.isStepCurrent()) {
+                stepStatus = StepButton.StepStatus.current;
+            } else if (step.isStepComplete()) {
+                stepStatus = StepButton.StepStatus.complete;
+            }
+
+            addStepButton((i + 1) + "", step.getStepTitle(), stepStatus, null);
         }
     }
 
@@ -188,12 +196,12 @@ public class ApplicationProgressPanel extends FlowPanel {
                 getElement().getStyle().setProperty("borderRadius", "15px");
                 break;
             case small:
-                setHeight("26px");
-                getElement().getStyle().setProperty("minWidth", "26px");
-                getElement().getStyle().setLineHeight(26, Unit.PX);
+                setHeight("24px");
+                getElement().getStyle().setProperty("minWidth", "24px");
+                getElement().getStyle().setLineHeight(24, Unit.PX);
                 getElement().getStyle().setFontSize(0.8, Unit.EM);
-                getElement().getStyle().setProperty("margin", "0 0.3%");
-                getElement().getStyle().setProperty("borderRadius", "13px");
+                getElement().getStyle().setProperty("margin", "0 0.2%");
+                getElement().getStyle().setProperty("borderRadius", "12px");
                 break;
 
             }
