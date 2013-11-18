@@ -119,6 +119,7 @@ public class CEntityWizard<E extends IEntity> extends CEntityForm<E> {
     public void onReset() {
         if (wizardPanel.size() > 0) {
             wizardPanel.selectStep(0);
+            updateProgress();
         }
         super.onReset();
     }
@@ -134,6 +135,7 @@ public class CEntityWizard<E extends IEntity> extends CEntityForm<E> {
         if (index >= 0) {
             step.showErrors(false);
             wizardPanel.selectStep(index);
+            updateProgress();
         }
     }
 
@@ -150,6 +152,7 @@ public class CEntityWizard<E extends IEntity> extends CEntityForm<E> {
 
             if (step.isStepVisible() && index < wizardPanel.size()) {
                 wizardPanel.selectStep(index);
+                updateProgress();
             }
         } else {
             MessageDialog.error(i18n.tr("Error"), validationResults.getValidationMessage(true, true, true));
