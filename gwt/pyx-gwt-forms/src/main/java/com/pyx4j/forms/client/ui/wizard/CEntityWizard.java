@@ -111,6 +111,10 @@ public class CEntityWizard<E extends IEntity> extends CEntityForm<E> {
         return wizardPanel.getSelectedStep();
     }
 
+    public int getSelectedIndex() {
+        return wizardPanel.getSelectedIndex();
+    }
+
     public List<WizardStep> getAllSteps() {
         return wizardPanel.getAllSteps();
     }
@@ -118,13 +122,19 @@ public class CEntityWizard<E extends IEntity> extends CEntityForm<E> {
     @Override
     public void onReset() {
         if (wizardPanel.size() > 0) {
-            wizardPanel.selectStep(0);
-            updateProgress();
+            selectStep(0);
         }
         super.onReset();
     }
 
-    public final void previous() {
+    public final void selectStep(int index) {
+        WizardStep step = wizardPanel.getStep(index);
+        step.showErrors(false);
+        wizardPanel.selectStep(step);
+        updateProgress();
+    }
+
+    public final void previousStep() {
         int index = wizardPanel.getSelectedIndex();
 
         WizardStep step;
@@ -133,13 +143,11 @@ public class CEntityWizard<E extends IEntity> extends CEntityForm<E> {
         } while (!step.isStepVisible() && index > 0);
 
         if (index >= 0) {
-            step.showErrors(false);
-            wizardPanel.selectStep(index);
-            updateProgress();
+            selectStep(index);
         }
     }
 
-    public final void next() {
+    public final void nextStep() {
         WizardStep step = wizardPanel.getSelectedStep();
         step.showErrors(true);
 
@@ -151,8 +159,7 @@ public class CEntityWizard<E extends IEntity> extends CEntityForm<E> {
             } while (!step.isStepVisible() && index < wizardPanel.size() - 1);
 
             if (step.isStepVisible() && index < wizardPanel.size()) {
-                wizardPanel.selectStep(index);
-                updateProgress();
+                selectStep(index);
             }
         } else {
             MessageDialog.error(i18n.tr("Error"), validationResults.getValidationMessage(true, true, true));
@@ -189,7 +196,7 @@ public class CEntityWizard<E extends IEntity> extends CEntityForm<E> {
 
     public void updateProgress() {
         if (getDecorator() instanceof WizardProgressIndicator) {
-            ((WizardProgressIndicator) getDecorator()).updateProgress(getAllSteps());
+            ((WizardProgressIndicator) getDecorator()).updateProgress();
         }
     }
 }

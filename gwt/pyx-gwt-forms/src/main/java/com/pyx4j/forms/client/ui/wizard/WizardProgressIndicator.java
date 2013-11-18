@@ -20,9 +20,7 @@
  */
 package com.pyx4j.forms.client.ui.wizard;
 
-import java.util.List;
-
 public interface WizardProgressIndicator {
 
-    void updateProgress(List<WizardStep> steps);
+    void updateProgress();
 }

@@ -57,7 +57,7 @@ public class WizardDecorator<E extends IEntity> extends FormDecorator<E, CEntity
         btnPrevious = new Button(i18n.tr("Previous"), new Command() {
             @Override
             public void execute() {
-                getComponent().previous();
+                getComponent().previousStep();
                 calculateButtonsState();
             }
         });
@@ -69,7 +69,7 @@ public class WizardDecorator<E extends IEntity> extends FormDecorator<E, CEntity
                 if (getComponent().isLast()) {
                     getComponent().finish();
                 } else {
-                    getComponent().next();
+                    getComponent().nextStep();
                     calculateButtonsState();
                 }
             }

@@ -38,7 +38,7 @@ public class WizardStep extends SimplePanel implements IValidatable {
 
     private boolean visible = true;
 
-    private boolean complete = true;
+    private boolean complete = false;
 
     private String warning = null;
 
