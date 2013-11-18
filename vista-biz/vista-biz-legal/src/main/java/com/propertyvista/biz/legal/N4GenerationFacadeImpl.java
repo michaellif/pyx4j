@@ -63,7 +63,7 @@ public class N4GenerationFacadeImpl implements N4GenerationFacade {
         byte[] filledForm = null;
         try {
             byte[] formTemplate = IOUtils.toByteArray(N4GenerationFacadeImpl.class.getResourceAsStream(N4_FORM_FILE));
-            filledForm = FormUtils.fillForm(formData, formTemplate);
+            filledForm = FormUtils.fillForm(formData, null, formTemplate);
         } catch (Throwable e) {
             throw new RuntimeException(e);
         }

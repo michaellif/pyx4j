@@ -52,7 +52,7 @@ public class FormUtilsTest {
         fieldsData.field1().setValue("mock-mock");
         fieldsData.field2().setValue("124567890");
 
-        byte[] filledForm = FormUtils.fillForm(fieldsData, MOCK_FORM, false);
+        byte[] filledForm = FormUtils.fillForm(fieldsData, null, MOCK_FORM, false);
         dumpPdf(filledForm);
 
         assertFieldEquals(filledForm, "field1", "mock-mock");
@@ -63,7 +63,7 @@ public class FormUtilsTest {
         MockFormFieldsData fieldsData = EntityFactory.create(MockFormFieldsData.class);
         fieldsData.field2().setValue("124567890");
 
-        byte[] filledForm = FormUtils.fillForm(fieldsData, MOCK_FORM, false);
+        byte[] filledForm = FormUtils.fillForm(fieldsData, null, MOCK_FORM, false);
         dumpPdf(filledForm);
 
         assertFieldEquals(filledForm, "field2_1", "12");
@@ -76,7 +76,7 @@ public class FormUtilsTest {
         MockFormFieldsData fieldsData = EntityFactory.create(MockFormFieldsData.class);
         fieldsData.field2().setValue("567890");
 
-        byte[] filledForm = FormUtils.fillForm(fieldsData, MOCK_FORM, false);
+        byte[] filledForm = FormUtils.fillForm(fieldsData, null, MOCK_FORM, false);
         dumpPdf(filledForm);
 
         assertFieldEquals(filledForm, "field2_1", "  ");
@@ -89,7 +89,7 @@ public class FormUtilsTest {
         MockFormFieldsData fieldsData = EntityFactory.create(MockFormFieldsData.class);
         fieldsData.field2().setValue("0");
 
-        byte[] filledForm = FormUtils.fillForm(fieldsData, MOCK_FORM, false);
+        byte[] filledForm = FormUtils.fillForm(fieldsData, null, MOCK_FORM, false);
         dumpPdf(filledForm);
 
         assertFieldEquals(filledForm, "field2_1", "  ");
@@ -102,7 +102,7 @@ public class FormUtilsTest {
         MockFormFieldsData fieldsData = EntityFactory.create(MockFormFieldsData.class);
         fieldsData.field10().setValue("abcde");
 
-        byte[] filledForm = FormUtils.fillForm(fieldsData, MOCK_FORM, false);
+        byte[] filledForm = FormUtils.fillForm(fieldsData, null, MOCK_FORM, false);
         dumpPdf(filledForm);
 
         assertFieldEquals(filledForm, "field10", "a!b!c!d!e!");

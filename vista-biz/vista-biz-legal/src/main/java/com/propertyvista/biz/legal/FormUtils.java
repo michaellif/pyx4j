@@ -26,6 +26,7 @@ import java.lang.annotation.Annotation;
 import java.math.BigDecimal;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -105,11 +106,11 @@ public class FormUtils {
         }
     }
 
-    public static byte[] fillForm(IEntity fieldsData, byte[] form) throws IOException, DocumentException {
-        return fillForm(fieldsData, form, true);
+    public static byte[] fillForm(IEntity fieldsData, PdfFieldsMapping<?> mapping, byte[] form) throws IOException, DocumentException {
+        return fillForm(fieldsData, mapping, form, true);
     }
 
-    public static byte[] fillForm(IEntity fieldsData, byte[] form, boolean flatten) throws IOException, DocumentException {
+    public static byte[] fillForm(IEntity fieldsData, PdfFieldsMapping<?> mapping, byte[] form, boolean flatten) throws IOException, DocumentException {
         ByteArrayOutputStream bos = new ByteArrayOutputStream();
         PdfReader reader = new PdfReader(form);
         PdfStamper stamper = new PdfStamper(reader, bos);
@@ -122,29 +123,36 @@ public class FormUtils {
                     continue;
                 }
 
-                List<Formatter> formatters = new LinkedList<Formatter>();
-                Partitioner partitioner = null;
-                String[] fieldMapping = null;
-                for (Annotation annotation : fieldsData.getInstanceValueClass().getDeclaredMethod(memberName, (Class<?>[]) null).getAnnotations()) {
-                    if (annotation.annotationType().equals(PdfFormFieldMapping.class)) {
-                        fieldMapping = ((PdfFormFieldMapping) annotation).value().split(",");
-                    } else if (annotation.annotationType().equals(PdfFormFieldFormatter.class)) {
-                        formatters.add(((PdfFormFieldFormatter) annotation).value().newInstance());
-                    } else if (annotation.annotationType().equals(PdfFormFieldPartitioner.class)) {
-                        partitioner = ((PdfFormFieldPartitioner) annotation).value().newInstance();
+                PdfFieldDescriptor fieldDescriptor = null;
+                if (mapping != null) {
+                    fieldDescriptor = mapping.getDescriptor(memberName);
+                } else {
+                    List<Formatter> formatters = new LinkedList<Formatter>();
+                    Partitioner partitioner = null;
+                    List<String> mappedFields = null;
+
+                    for (Annotation annotation : fieldsData.getInstanceValueClass().getDeclaredMethod(memberName, (Class<?>[]) null).getAnnotations()) {
+                        if (annotation.annotationType().equals(PdfFormFieldMapping.class)) {
+                            mappedFields = Arrays.asList(((PdfFormFieldMapping) annotation).value().split(","));
+                        } else if (annotation.annotationType().equals(PdfFormFieldFormatter.class)) {
+                            formatters.add(((PdfFormFieldFormatter) annotation).value().newInstance());
+                        } else if (annotation.annotationType().equals(PdfFormFieldPartitioner.class)) {
+                            partitioner = ((PdfFormFieldPartitioner) annotation).value().newInstance();
+                        }
                     }
+                    fieldDescriptor = new PdfFieldDescriptor(formatters, mappedFields, partitioner);
                 }
 
                 if (isTextField(field)) {
-                    setTextField(fieldMapping, partitioner, formatters, fields, field.getValue());
+                    setTextField(fieldDescriptor, fields, field.getValue());
 
                 } else if (fieldsData.getMember(memberName).getValueClass().isEnum()) {
                     // TODO add checks that field mapping doesn't have multiple mappings and no length
-                    setEnumField(fieldMapping[0], fields, field.getValue().toString());
+                    setEnumField(fieldDescriptor, fields, field.getValue().toString());
 
                 } else if (fieldsData.getMember(memberName).getValueClass().isArray()) {
                     // TODO add checks that field mapping doesn't have multiple mappings and no length
-                    setImageField(fieldMapping[0], fields, stamper, (byte[]) field.getValue());
+                    setImageField(fieldDescriptor, fields, stamper, (byte[]) field.getValue());
                 }
 
             } catch (Throwable e) {
@@ -158,13 +166,13 @@ public class FormUtils {
         return bos.toByteArray();
     }
 
-    private static void setTextField(String[] fieldMapping, Partitioner partitioner, List<Formatter> formatters, AcroFields fields, Object object)
-            throws IOException, DocumentException, InstantiationException, IllegalAccessException {
+    private static void setTextField(PdfFieldDescriptor fieldDescriptor, AcroFields fields, Object object) throws IOException, DocumentException,
+            InstantiationException, IllegalAccessException {
         String value = null;
-        if (formatters.isEmpty()) {
+        if (fieldDescriptor.formatters().isEmpty()) {
             value = object.toString();
         } else {
-            Iterator<Formatter> i = formatters.iterator();
+            Iterator<Formatter> i = fieldDescriptor.formatters().iterator();
             Formatter formatter = i.next();
             value = formatter.format(object);
             while (i.hasNext()) {
@@ -173,8 +181,9 @@ public class FormUtils {
             }
         }
 
-        for (int partIndex = 0; partIndex < fieldMapping.length; ++partIndex) {
-            String fieldNameAndLength = fieldMapping[partIndex];
+        List<String> mappedFields = fieldDescriptor.mappedFields();
+        for (int partIndex = 0; partIndex < mappedFields.size(); ++partIndex) {
+            String fieldNameAndLength = mappedFields.get(partIndex);
             int fieldLength = -1;
             String fieldName = fieldNameAndLength;
             if (fieldNameAndLength.contains("{")) {
@@ -184,7 +193,7 @@ public class FormUtils {
                 fieldName = fieldNameAndLength.substring(0, openBracketIndex);
             }
 
-            String part = partitioner == null ? value : partitioner.getPart(value, partIndex);
+            String part = fieldDescriptor.partitioner() == null ? value : fieldDescriptor.partitioner().getPart(value, partIndex);
             if (fieldLength != -1) {
                 if (part.length() > fieldLength) {
                     throw new IllegalArgumentException("part '" + part + "' of field '" + fieldName + "' has greater length then allowed (allowed length is "
@@ -199,12 +208,13 @@ public class FormUtils {
 
     }
 
-    private static void setEnumField(String fieldName, AcroFields fields, String value) throws IOException, DocumentException {
-        fields.setField(fieldName, value);
+    private static void setEnumField(PdfFieldDescriptor fieldDescriptor, AcroFields fields, String value) throws IOException, DocumentException {
+        fields.setField(fieldDescriptor.mappedFields().get(0), value);
     }
 
-    private static void setImageField(String fieldName, AcroFields fields, PdfStamper stamper, byte[] image) throws IOException, DocumentException {
-        List<FieldPosition> fieldPositions = fields.getFieldPositions(fieldName);
+    private static void setImageField(PdfFieldDescriptor fieldDescriptor, AcroFields fields, PdfStamper stamper, byte[] image) throws IOException,
+            DocumentException {
+        List<FieldPosition> fieldPositions = fields.getFieldPositions(fieldDescriptor.mappedFields().get(0));
         if (fieldPositions == null || fieldPositions.size() == 0) {
             return;
         }
@@ -216,14 +226,6 @@ public class FormUtils {
         signature.setAbsolutePosition(signaturePosition.position.getLeft(), signaturePosition.position.getBottom());
         canvas.addImage(signature);
 
-    }
-
-    private static boolean isSingleMapping(PdfFormFieldMapping fieldName) {
-        return !fieldName.value().startsWith("[");
-    }
-
-    private static boolean isMultipleMapping(PdfFormFieldMapping fieldName) {
-        return fieldName.value().startsWith("[");
     }
 
     private static boolean isTextField(IObject<?> field) {
