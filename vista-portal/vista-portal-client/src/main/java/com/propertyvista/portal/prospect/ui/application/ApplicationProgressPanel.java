@@ -27,12 +27,12 @@ import com.google.gwt.event.dom.client.MouseOutEvent;
 import com.google.gwt.event.dom.client.MouseOutHandler;
 import com.google.gwt.event.dom.client.MouseOverEvent;
 import com.google.gwt.event.dom.client.MouseOverHandler;
-import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTML;
 
+import com.pyx4j.forms.client.ui.wizard.CEntityWizard;
 import com.pyx4j.forms.client.ui.wizard.WizardStep;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.AppSite;
@@ -41,13 +41,24 @@ import com.pyx4j.site.client.ui.layout.responsive.LayoutChangeHandler;
 import com.pyx4j.site.client.ui.layout.responsive.ResponsiveLayoutPanel.LayoutType;
 import com.pyx4j.widgets.client.DropDownPanel;
 
+import com.propertyvista.portal.rpc.portal.prospect.dto.ApplicationDTO;
 import com.propertyvista.portal.shared.themes.StepsTheme;
 
 public class ApplicationProgressPanel extends FlowPanel {
 
     private static final I18n i18n = I18n.get(ApplicationProgressPanel.class);
 
+    static enum StepSize {
+        large, medium, small
+    }
+
+    static enum StepStatus {
+        notComplete, complete, invalid, current
+    }
+
     private final List<StepButton> stepButtons;
+
+    private CEntityWizard<ApplicationDTO> component;
 
     public ApplicationProgressPanel() {
 
@@ -67,25 +78,27 @@ public class ApplicationProgressPanel extends FlowPanel {
         });
     }
 
-    public void updateStepButtons(List<WizardStep> steps) {
+    public void updateStepButtons() {
         removeAllStepButtons();
+
+        List<WizardStep> steps = component.getAllSteps();
 
         for (int i = 0; i < steps.size(); i++) {
             WizardStep step = steps.get(i);
-            StepButton.StepStatus stepStatus = StepButton.StepStatus.notComplete;
+            StepStatus stepStatus = StepStatus.notComplete;
 
             if (step.isStepCurrent()) {
-                stepStatus = StepButton.StepStatus.current;
+                stepStatus = StepStatus.current;
             } else if (step.isStepComplete()) {
-                stepStatus = StepButton.StepStatus.complete;
+                stepStatus = StepStatus.complete;
             }
 
-            addStepButton((i + 1) + "", step.getStepTitle(), stepStatus, null);
+            addStepButton((i + 1) + "", step.getStepTitle(), stepStatus, i);
         }
     }
 
-    private void addStepButton(String label, String caption, final StepButton.StepStatus status, Command navigationCommand) {
-        StepButton stepButton = new StepButton(label, caption, status, navigationCommand);
+    private void addStepButton(String label, String caption, final StepStatus status, int stepIndex) {
+        StepButton stepButton = new StepButton(label, caption, status, stepIndex);
         add(stepButton);
         stepButtons.add(stepButton);
     }
@@ -101,25 +114,17 @@ public class ApplicationProgressPanel extends FlowPanel {
         }
     }
 
-    private static class StepButton extends HTML {
+    public void setWizard(CEntityWizard<ApplicationDTO> component) {
+        this.component = component;
+    }
 
-        static enum Size {
-            large, medium, small
-        }
+    private class StepButton extends HTML {
 
-        static enum StepStatus {
-            notComplete, complete, invalid, current
-        }
-
-        private Command command;
-
-        private StepButton.StepStatus status;
+        private StepStatus status;
 
         private final CaptionPanel captionPanel;
 
-        private HandlerRegistration clickHandlerRegistration;
-
-        StepButton(String label, String caption, final StepButton.StepStatus status, Command navigationCommand) {
+        StepButton(String label, String caption, final StepStatus status, final int stepIndex) {
             super(label);
 
             setStyleName(StepsTheme.StyleName.WizardStepHandler.name());
@@ -128,7 +133,24 @@ public class ApplicationProgressPanel extends FlowPanel {
             getElement().getStyle().setTextAlign(TextAlign.CENTER);
 
             setStatus(status);
-            setNavigation(navigationCommand);
+
+            if (stepIndex > component.getSelectedIndex()) {
+                getElement().getStyle().setCursor(Cursor.DEFAULT);
+            } else {
+                addClickHandler(new ClickHandler() {
+                    @Override
+                    public void onClick(ClickEvent event) {
+                        new Command() {
+
+                            @Override
+                            public void execute() {
+                                component.selectStep(stepIndex);
+                            }
+                        }.execute();
+                    }
+                });
+                getElement().getStyle().setCursor(Cursor.POINTER);
+            }
 
             captionPanel = new CaptionPanel(caption);
 
@@ -158,26 +180,7 @@ public class ApplicationProgressPanel extends FlowPanel {
             }
         }
 
-        void setNavigation(final Command command) {
-            this.command = command;
-            if (command == null) {
-                if (clickHandlerRegistration != null) {
-                    clickHandlerRegistration.removeHandler();
-                }
-                clickHandlerRegistration = null;
-                getElement().getStyle().setCursor(Cursor.DEFAULT);
-            } else {
-                clickHandlerRegistration = addClickHandler(new ClickHandler() {
-                    @Override
-                    public void onClick(ClickEvent event) {
-                        command.execute();
-                    }
-                });
-                getElement().getStyle().setCursor(Cursor.POINTER);
-            }
-        }
-
-        void setSize(Size size) {
+        void setSize(StepSize size) {
             switch (size) {
             case large:
                 setHeight("50px");
@@ -207,7 +210,7 @@ public class ApplicationProgressPanel extends FlowPanel {
             }
         }
 
-        void setStatus(StepButton.StepStatus status) {
+        void setStatus(StepStatus status) {
             this.status = status;
             switch (status) {
             case notComplete:
@@ -229,15 +232,15 @@ public class ApplicationProgressPanel extends FlowPanel {
             switch (layoutType) {
             case phonePortrait:
             case phoneLandscape:
-                setSize(Size.small);
+                setSize(StepSize.small);
                 break;
             case tabletPortrait:
             case tabletLandscape:
-                setSize(Size.medium);
+                setSize(StepSize.medium);
                 break;
             case monitor:
             case huge:
-                setSize(Size.large);
+                setSize(StepSize.large);
                 break;
             }
         }

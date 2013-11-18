@@ -21,6 +21,7 @@ import com.pyx4j.commons.css.StyleManager;
 import com.pyx4j.commons.css.ThemeColor;
 import com.pyx4j.forms.client.ui.decorators.IDecorator;
 import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
+import com.pyx4j.forms.client.ui.wizard.CEntityWizard;
 import com.pyx4j.forms.client.ui.wizard.WizardDecorator;
 import com.pyx4j.forms.client.ui.wizard.WizardProgressIndicator;
 import com.pyx4j.forms.client.ui.wizard.WizardStep;
@@ -185,8 +186,14 @@ public class ApplicationWizard extends CPortalEntityWizard<ApplicationDTO> {
         }
 
         @Override
-        public void updateProgress(List<WizardStep> steps) {
-            progressPanel.updateStepButtons(steps);
+        public void updateProgress() {
+            progressPanel.updateStepButtons();
+        }
+
+        @Override
+        public void setComponent(CEntityWizard<ApplicationDTO> component) {
+            super.setComponent(component);
+            progressPanel.setWizard(component);
         }
     }
 
