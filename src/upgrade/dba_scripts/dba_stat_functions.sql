@@ -46,7 +46,7 @@ BEGIN
                         ||'LEFT JOIN    '||v_schema_name||'.payment_record p ON (ltp.id = p.lease_term_participant) '
                         ||'LEFT JOIN    '||v_schema_name||'.payment_method pm ON (pm.id = p.payment_method) '
                         ||'LEFT JOIN    '||v_schema_name||'.payment_payment_details ppd ON (pm.details = ppd.id) '
-                        ||'LEFT JOIN    '||v_schema_name||'.preauthorized_payment pap ON (pap.id = p.preauthorized_payment) '
+                        ||'LEFT JOIN    '||v_schema_name||'.autopay_agreement pap ON (pap.id = p.preauthorized_payment) '
                         ||'WHERE NOT    b.suspended )'; 
                        
                 -- Insert building info and total units
