@@ -37,36 +37,6 @@ public class ProspectPortalSiteMap extends PortalSiteMap {
 
     public static class Application extends AppPlace {
 
-        public static class UnitStep extends AppPlace implements StepPlace {
-        }
-
-        public static class OptionsStep extends AppPlace implements StepPlace {
-        }
-
-        public static class PersonalInfoAStep extends AppPlace implements StepPlace {
-        }
-
-        public static class PersonalInfoBStep extends AppPlace implements StepPlace {
-        }
-
-        public static class FinancialStep extends AppPlace implements StepPlace {
-        }
-
-        public static class PeopleStep extends AppPlace implements StepPlace {
-        }
-
-        public static class ContactsStep extends AppPlace implements StepPlace {
-        }
-
-        public static class PmcCustomStep extends AppPlace implements StepPlace {
-        }
-
-        public static class SummaryStep extends AppPlace implements StepPlace {
-        }
-
-        public static class PaymentStep extends AppPlace implements StepPlace {
-        }
-
     }
 
 }
