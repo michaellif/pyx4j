@@ -127,37 +127,39 @@ public interface L1FormFieldsData extends IEntity {
     IPrimitive<LogicalDate> part3lastPeriodInterestPaidTo();
 
     // Part4
-    IPrimitive<String> part4period1From();
+    IPrimitive<LogicalDate> part4period1From();
 
-    IPrimitive<String> part4period1To();
+    IPrimitive<LogicalDate> part4period1To();
 
-    IPrimitive<String> part4period1RentCharged();
+    IPrimitive<BigDecimal> part4period1RentCharged();
 
-    IPrimitive<String> part4period1RentRentPaid();
+    IPrimitive<BigDecimal> part4period1RentPaid();
 
-    IPrimitive<String> part4period1RentRentRentOwing();
-
-    //
-    IPrimitive<String> part4period2From();
-
-    IPrimitive<String> part4period2To();
-
-    IPrimitive<String> part4period2RentCharged();
-
-    IPrimitive<String> part4period2RentRentPaid();
-
-    IPrimitive<String> part4period2RentRentRentOwing();
+    IPrimitive<BigDecimal> part4period1RentOwing();
 
     //
-    IPrimitive<String> part4period3From();
+    IPrimitive<LogicalDate> part4period2From();
 
-    IPrimitive<String> part4period3To();
+    IPrimitive<LogicalDate> part4period2To();
 
-    IPrimitive<String> part4period3RentCharged();
+    IPrimitive<BigDecimal> part4period2RentCharged();
 
-    IPrimitive<String> part4period3RentRentPaid();
+    IPrimitive<BigDecimal> part4period2RentPaid();
 
-    IPrimitive<String> part4period3RentRentRentOwing();
+    IPrimitive<BigDecimal> part4period2RentOwing();
+
+    //
+    IPrimitive<LogicalDate> part4period3From();
+
+    IPrimitive<LogicalDate> part4period3To();
+
+    IPrimitive<BigDecimal> part4period3RentCharged();
+
+    IPrimitive<BigDecimal> part4period3RentPaid();
+
+    IPrimitive<BigDecimal> part4period3RentOwing();
+
+    IPrimitive<BigDecimal> part4totalRentOwing();
 
     //
     IPrimitive<String> part4nsf1ChequeAmount();

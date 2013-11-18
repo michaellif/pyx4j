@@ -81,6 +81,27 @@ public class MockL1FormDataFactory {
         fieldsData.part3lastPeriodInterestPaidFrom().setValue(new LogicalDate(DateUtils.detectDateformat("2013-01-31")));
         fieldsData.part3lastPeriodInterestPaidTo().setValue(new LogicalDate(DateUtils.detectDateformat("2013-01-31")));
 
+        // Part4
+
+        fieldsData.part4period1From().setValue(new LogicalDate(DateUtils.detectDateformat("2009-01-01")));
+        fieldsData.part4period1To().setValue(new LogicalDate(DateUtils.detectDateformat("2009-01-31")));
+        fieldsData.part4period1RentCharged().setValue(new BigDecimal("1111.99"));
+        fieldsData.part4period1RentPaid().setValue(new BigDecimal("2222.88"));
+        fieldsData.part4period1RentOwing().setValue(new BigDecimal("3333.77"));
+
+        fieldsData.part4period2From().setValue(new LogicalDate(DateUtils.detectDateformat("2010-01-01")));
+        fieldsData.part4period2To().setValue(new LogicalDate(DateUtils.detectDateformat("2010-01-31")));
+        fieldsData.part4period2RentCharged().setValue(new BigDecimal("1111.11"));
+        fieldsData.part4period2RentPaid().setValue(new BigDecimal("2222.22"));
+        fieldsData.part4period2RentOwing().setValue(new BigDecimal("3333.33"));
+
+        fieldsData.part4period3From().setValue(new LogicalDate(DateUtils.detectDateformat("2011-01-01")));
+        fieldsData.part4period3To().setValue(new LogicalDate(DateUtils.detectDateformat("2011-01-31")));
+        fieldsData.part4period3RentCharged().setValue(new BigDecimal("1111.00"));
+        fieldsData.part4period3RentPaid().setValue(new BigDecimal("2222.66"));
+        fieldsData.part4period3RentOwing().setValue(new BigDecimal("3333.44"));
+        fieldsData.part4totalRentOwing().setValue(new BigDecimal("12345.67"));
+
         return fieldsData;
     }
 }

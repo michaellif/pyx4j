@@ -255,6 +255,135 @@ public class L1FieldsMapping extends PdfFieldsMapping<L1FormFieldsData> {
                     .mapTo("@@b12c96nfl1_deposit_interest_end.2{4}")
                 .define();
         
-                
+        // PART 4
+
+        field(proto().part4period1From())
+                .formatBy(new DateFormatter())
+                .partitionBy(new DatePartitioner())
+                    .mapTo("@@b12c96nfl1_a1_start.0{2}")
+                    .mapTo("@@b12c96nfl1_a1_start.1{2}")
+                    .mapTo("@@b12c96nfl1_a1_start.2{4}")
+                .define();
+        
+        field(proto().part4period1To())
+                .formatBy(new DateFormatter())
+                .partitionBy(new DatePartitioner())
+                    .mapTo("@@b12c96nfl1_a1_end.0{2}")
+                    .mapTo("@@b12c96nfl1_a1_end.1{2}")
+                    .mapTo("@@b12c96nfl1_a1_end.2{4}")
+                .define();
+        
+        field(proto().part4period1RentCharged())
+                .formatBy(new MoneyFormatter())
+                .partitionBy(new MoneyPartitioner())
+                    .mapTo("@@b12c96nfl1_a1_charged.0{1}")
+                    .mapTo("@@b12c96nfl1_a1_charged.1{3}")
+                    .mapTo("@@b12c96nfl1_a1_charged.2{2}")
+                .define();
+        
+        field(proto().part4period1RentPaid())
+                .formatBy(new MoneyFormatter())
+                .partitionBy(new MoneyPartitioner())
+                    .mapTo("@@b12c96nfl1_a1_paid.0{1}")
+                    .mapTo("@@b12c96nfl1_a1_paid.1{3}")
+                    .mapTo("@@b12c96nfl1_a1_paid.2{2}")
+                .define();
+        
+        field(proto().part4period1RentOwing())
+                .formatBy(new MoneyFormatter())
+                .partitionBy(new MoneyPartitioner())
+                    .mapTo("@@b12c96nfl1_a1_owing.0{1}")
+                    .mapTo("@@b12c96nfl1_a1_owing.1{3}")
+                    .mapTo("@@b12c96nfl1_a1_owing.2{2}")
+                .define();
+        
+        field(proto().part4period2From())
+            .formatBy(new DateFormatter())
+            .partitionBy(new DatePartitioner())
+                .mapTo("@@b12c96nfl1_a2_start.0{2}")
+                .mapTo("@@b12c96nfl1_a2_start.1{2}")
+                .mapTo("@@b12c96nfl1_a2_start.2{4}")
+            .define();
+        
+        field(proto().part4period2To())
+            .formatBy(new DateFormatter())
+            .partitionBy(new DatePartitioner())
+                .mapTo("@@b12c96nfl1_a2_end.0{2}")
+                .mapTo("@@b12c96nfl1_a2_end.1{2}")
+                .mapTo("@@b12c96nfl1_a2_end.2{4}")
+            .define();
+        
+        field(proto().part4period2RentCharged())
+            .formatBy(new MoneyFormatter())
+            .partitionBy(new MoneyPartitioner())
+                .mapTo("@@b12c96nfl1_a2_charged.0{1}")
+                .mapTo("@@b12c96nfl1_a2_charged.1{3}")
+                .mapTo("@@b12c96nfl1_a2_charged.2{2}")
+            .define();
+        
+        field(proto().part4period2RentPaid())
+            .formatBy(new MoneyFormatter())
+            .partitionBy(new MoneyPartitioner())
+                .mapTo("@@b12c96nfl1_a2_paid.0{1}")
+                .mapTo("@@b12c96nfl1_a2_paid.1{3}")
+                .mapTo("@@b12c96nfl1_a2_paid.2{2}")
+            .define();
+        
+        field(proto().part4period2RentOwing())
+            .formatBy(new MoneyFormatter())
+            .partitionBy(new MoneyPartitioner())
+                .mapTo("@@b12c96nfl1_a2_owing.0{1}")
+                .mapTo("@@b12c96nfl1_a2_owing.1{3}")
+                .mapTo("@@b12c96nfl1_a2_owing.2{2}")
+            .define();
+        
+        field(proto().part4period3From())
+            .formatBy(new DateFormatter())
+            .partitionBy(new DatePartitioner())
+                .mapTo("@@b12c96nfl1_a3_start.0{2}")
+                .mapTo("@@b12c96nfl1_a3_start.1{2}")
+                .mapTo("@@b12c96nfl1_a3_start.2{4}")
+            .define();
+        
+        field(proto().part4period3To())
+            .formatBy(new DateFormatter())
+            .partitionBy(new DatePartitioner())
+                .mapTo("@@b12c96nfl1_a3_end.0{2}")
+                .mapTo("@@b12c96nfl1_a3_end.1{2}")
+                .mapTo("@@b12c96nfl1_a3_end.2{4}")
+            .define();
+        
+        field(proto().part4period3RentCharged())
+            .formatBy(new MoneyFormatter())
+            .partitionBy(new MoneyPartitioner())
+                .mapTo("@@b12c96nfl1_a3_charged.0{1}")
+                .mapTo("@@b12c96nfl1_a3_charged.1{3}")
+                .mapTo("@@b12c96nfl1_a3_charged.2{2}")
+            .define();
+        
+        field(proto().part4period3RentPaid())
+            .formatBy(new MoneyFormatter())
+            .partitionBy(new MoneyPartitioner())
+                .mapTo("@@b12c96nfl1_a3_paid.0{1}")
+                .mapTo("@@b12c96nfl1_a3_paid.1{3}")
+                .mapTo("@@b12c96nfl1_a3_paid.2{2}")
+            .define();
+            
+        field(proto().part4period3RentOwing())
+            .formatBy(new MoneyFormatter())
+            .partitionBy(new MoneyPartitioner())
+                .mapTo("@@b12c96nfl1_a3_owing.0{1}")
+                .mapTo("@@b12c96nfl1_a3_owing.1{3}")
+                .mapTo("@@b12c96nfl1_a3_owing.2{2}")
+            .define();
+        
+        field(proto().part4totalRentOwing())
+            .formatBy(new MoneyFormatter())
+            .partitionBy(new MoneyPartitioner())
+                .mapTo("@@b12c96nfl1_total_rent_owed.0{2}")
+                .mapTo("@@b12c96nfl1_total_rent_owed.1{3}")
+                .mapTo("@@b12c96nfl1_total_rent_owed.2{2}")
+            .define();
+
     }//@formatter:on
 }
