@@ -20,6 +20,19 @@ COMMIT;
 
 BEGIN TRANSACTION;
         
+        DELETE FROM _admin_.scheduler_execution_report
+        WHERE id IN     (SELECT         execution_report 
+                        FROM    _admin_.scheduler_run_data
+                        WHERE   execution = 6228);
+                        
+        DELETE FROM  _admin_.scheduler_run_data
+        WHERE   execution = 6228;
+        
+        
+        DELETE FROM _admin_.scheduler_run 
+        WHERE   trgr = 21;
+        
+        
         DELETE FROM _admin_.scheduler_trigger_schedule
         WHERE id = 25;
 
