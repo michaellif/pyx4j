@@ -21,6 +21,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
+import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -31,6 +32,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.yardi.entity.guestcard40.AdditionalPreference;
+import com.yardi.entity.guestcard40.CustomerInfo;
 import com.yardi.entity.guestcard40.CustomerPreferences;
 import com.yardi.entity.guestcard40.EventType;
 import com.yardi.entity.guestcard40.EventTypes;
@@ -117,25 +119,6 @@ public class YardiNewGuestWorkflowTest {
                 }
             }
 
-            // retrieve guests
-            LeadManagement guestActivity = stub.getGuestActivity(yc, yc.propertyListCodes().getValue());
-            if (guestActivity.getProspects().getProspect().size() > 0) {
-                Map<String, Prospect> guests = new HashMap<String, Prospect>();
-                for (Prospect guest : guestActivity.getProspects().getProspect()) {
-                    NameType name = guest.getCustomers().getCustomer().get(0).getName();
-                    guests.put(name.getFirstName() + " " + name.getLastName(), guest);
-                }
-
-                printIds(guests.keySet(), "Current Guests");
-                String guestName = readLine("Update Guest: ");
-                if (!StringUtils.isEmpty(guestName)) {
-                    updateRentableItems(guests.get(guestName));
-                    System.out.println("Done - Exit.");
-                    return;
-                }
-            }
-
-            // add new guest
             if (agentName == null) {
                 System.out.println("Marketing Agent 'Property Vista' is not configured. Exit.");
                 return;
@@ -146,6 +129,27 @@ public class YardiNewGuestWorkflowTest {
                 return;
             }
 
+            // retrieve guests
+            LeadManagement guestActivity = stub.getGuestActivity(yc, yc.propertyListCodes().getValue());
+            if (guestActivity.getProspects().getProspect().size() > 0) {
+                Map<String, Prospect> guests = new HashMap<String, Prospect>();
+                for (Prospect guest : guestActivity.getProspects().getProspect()) {
+                    NameType name = guest.getCustomers().getCustomer().get(0).getName();
+                    guests.put(name.getFirstName() + " " + name.getLastName(), guest);
+                }
+                // update rentable items
+                printIds(guests.keySet(), "Current Guests");
+                String guestName = readLine("Update Guest: ");
+                if (!StringUtils.isEmpty(guestName)) {
+                    Prospect guest = guests.get(guestName);
+                    updateRentableItems(guest);
+                    executeEvents(guest);
+                    System.out.println("Done - Exit.");
+                    return;
+                }
+            }
+
+            // create new guest
             Map<String, ILSUnit> units = new HashMap<String, ILSUnit>();
             if (mockMode) {
                 System.out.println("Available Units: #156 (2008-1-10),  #158 (2008-1-11),  #159 (2011-3-21), ");
@@ -229,14 +233,6 @@ public class YardiNewGuestWorkflowTest {
         return cr;
     }
 
-    static void printIds(Collection<String> ids, String prompt) {
-        System.out.print(prompt + ":");
-        for (String id : ids) {
-            System.out.print(id + ", ");
-        }
-        System.out.println();
-    }
-
     static void updateRentableItems(Prospect guest) {
         // print already selected items
         List<String> selectedItems = new ArrayList<String>();
@@ -251,26 +247,68 @@ public class YardiNewGuestWorkflowTest {
             for (RentableItemType type : items.getItemType()) {
                 availItems.add(type.getCode());
             }
-            availItems.removeAll(selectedItems);
         } catch (Throwable t) {
             throw new RuntimeException(t);
         }
         if (availItems.size() == 0) {
+            System.out.println("Rentable Items not available. Exit.");
             return;
         }
         printIds(availItems, "Available Items");
         // add selected item
-        String itemName = readLine("Add Item: ");
-        if (!StringUtils.isEmpty(itemName)) {
-            AdditionalPreference item = new AdditionalPreference();
-            item.setAdditionalPreferenceType(itemName);
+        String items = readLine("Add Items: ");
+        if (!StringUtils.isEmpty(items)) {
             guest.setCustomerPreferences(new CustomerPreferences());
-            guest.getCustomerPreferences().getCustomerAdditionalPreferences().add(item);
+            String[] itemNames = items.split(",");
+            for (String itemName : itemNames) {
+                AdditionalPreference item = new AdditionalPreference();
+                item.setAdditionalPreferenceType(itemName.trim());
+                guest.getCustomerPreferences().getCustomerAdditionalPreferences().add(item);
+            }
             EventType event = new YardiGuestProcessor().getNewEvent(AGENT, SOURCE, EventTypes.OTHER, false);
             guest.getEvents().getEvent().clear();
             guest.getEvents().getEvent().add(event);
+            guest.getCustomers().getCustomer().get(0).setType(CustomerInfo.PROSPECT);
             updateGuest(guest);
         }
+    }
+
+    static void executeEvents(Prospect guest) {
+        // execute event
+        printIds(EnumSet.of(EventTypes.APPLICATION, EventTypes.APPROVE, EventTypes.LEASE_SIGN), "Events");
+        EventTypes type;
+        do {
+            type = EventTypes.valueOf(readLine("Execute Event: "));
+            if (type != null) {
+                EventType event = new YardiGuestProcessor().getNewEvent(AGENT, SOURCE, type, false);
+                switch (type) {
+                case LEASE_SIGN:
+                    event.setQuotes(guest.getEvents().getEvent().get(0).getQuotes());
+                    break;
+                default:
+                    break;
+                }
+                guest.getEvents().getEvent().clear();
+                guest.getEvents().getEvent().add(event);
+                guest.getCustomers().getCustomer().get(0).setType(CustomerInfo.PROSPECT);
+                updateGuest(guest);
+            }
+        } while (type != null);
+    }
+
+    static void printIds(Collection<?> ids, String prompt) {
+        StringBuilder result = new StringBuilder();
+        for (Object id : ids) {
+            if (result.length() > 0) {
+                result.append(", ");
+            }
+            if (id instanceof Enum) {
+                result.append(((Enum<?>) id).name());
+            } else {
+                result.append(id);
+            }
+        }
+        System.out.println(prompt + ": " + result);
     }
 
     static String getDateAvail(Availability avail) {
