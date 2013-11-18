@@ -206,6 +206,13 @@
             </dependency>
 
             <dependency>
+                <groupId>com.google.gwt</groupId>
+                <artifactId>gwt-codeserver</artifactId>
+                <version>${gwtVersion}</version>
+                <scope>provided</scope>
+            </dependency>
+
+            <dependency>
                 <groupId>com.google.appengine</groupId>
                 <artifactId>appengine-api-stubs</artifactId>
                 <version>${gaeVersion}</version>
