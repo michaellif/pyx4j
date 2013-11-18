@@ -22,6 +22,7 @@ package com.pyx4j.tester.client.view;
 
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.safehtml.shared.SafeHtmlUtils;
 import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Tree;
@@ -43,14 +44,14 @@ public class NavigViewImpl extends SimplePanel implements NavigView {
         setSize("100%", "100%");
         Tree tree = new Tree();
 
-        TreeItem formRoot = new TreeItem("Form");
+        TreeItem formRoot = new TreeItem(SafeHtmlUtils.fromSafeConstant("Form"));
         formRoot.addItem(createNavigItem(FormTesterView.TestFormType.FormBasic));
         formRoot.addItem(createNavigItem(FormTesterView.TestFormType.ImageForm));
         formRoot.addItem(createNavigItem(FormTesterView.TestFormType.FolderLayout));
         formRoot.setState(true);
         tree.addItem(formRoot);
 
-        TreeItem nativeWidgetRoot = new TreeItem("Native Widgets");
+        TreeItem nativeWidgetRoot = new TreeItem(SafeHtmlUtils.fromSafeConstant("Native Widgets"));
         nativeWidgetRoot.addItem(new TreeItem(new NavigItemAnchor(new TesterSiteMap.NativeWidget.NativeWidgetBasic(), "Native Widgets")));
         nativeWidgetRoot.addItem(new TreeItem(new NavigItemAnchor(new TesterSiteMap.NativeWidget.RichTextEditor(), "Rich Text Editor")));
         nativeWidgetRoot.addItem(new TreeItem(new NavigItemAnchor(new TesterSiteMap.NativeWidget.Lister(), "Lister")));
