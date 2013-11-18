@@ -118,13 +118,13 @@ public interface L1FormFieldsData extends IEntity {
 
     IPrimitive<String> part3otherRentPaymentPeriod();
 
-    IPrimitive<String> part3AmountOfRentOnDeposit();
+    IPrimitive<BigDecimal> part3AmountOfRentOnDeposit();
 
-    IPrimitive<String> part3dateOfDepositCollection();
+    IPrimitive<LogicalDate> part3dateOfDepositCollection();
 
-    IPrimitive<String> part3lastPeriodInterestPaidFrom();
+    IPrimitive<LogicalDate> part3lastPeriodInterestPaidFrom();
 
-    IPrimitive<String> part3lastPeriodInterestPaidTo();
+    IPrimitive<LogicalDate> part3lastPeriodInterestPaidTo();
 
     // Part4
     IPrimitive<String> part4period1From();

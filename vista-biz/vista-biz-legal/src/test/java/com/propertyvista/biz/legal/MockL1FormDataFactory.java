@@ -28,6 +28,8 @@ import com.pyx4j.gwt.server.DateUtils;
 
 import com.propertyvista.domain.legal.L1FormFieldsData;
 import com.propertyvista.domain.legal.L1FormFieldsData.Gender;
+import com.propertyvista.domain.legal.L1FormFieldsData.RentPaymentPeriod;
+import com.propertyvista.domain.legal.L1FormFieldsData.YesNo;
 
 public class MockL1FormDataFactory {
 
@@ -71,6 +73,13 @@ public class MockL1FormDataFactory {
         // Part3
         fieldsData.part3ApplyingToCollectCharges().setValue(true);
         fieldsData.part3ApplyingToCollectNSF().setValue(true);
+        fieldsData.part3IsTenatStillInPossesionOfTheUnit().setValue(YesNo.Yes);
+        fieldsData.part3RentPaymentPeriod().setValue(RentPaymentPeriod.other);
+        fieldsData.part3otherRentPaymentPeriod().setValue("muhahaha");
+        fieldsData.part3AmountOfRentOnDeposit().setValue(new BigDecimal("9123.57"));
+        fieldsData.part3dateOfDepositCollection().setValue(new LogicalDate(DateUtils.detectDateformat("2013-01-31")));
+        fieldsData.part3lastPeriodInterestPaidFrom().setValue(new LogicalDate(DateUtils.detectDateformat("2013-01-31")));
+        fieldsData.part3lastPeriodInterestPaidTo().setValue(new LogicalDate(DateUtils.detectDateformat("2013-01-31")));
 
         return fieldsData;
     }

@@ -208,6 +208,53 @@ public class L1FieldsMapping extends PdfFieldsMapping<L1FormFieldsData> {
                 .mapTo("b12c96nfl1_Choice_NSF")
             .define();
         
+        field(proto().part3IsTenatStillInPossesionOfTheUnit())
+                .states("Y", "N")
+                .mapTo("b12c96nfl1_Choice_possession")
+            .define();
+        
+        field(proto().part3RentPaymentPeriod())
+                .states("W", "M", "O")
+                .mapTo("b12c96nfl1_Choice_Tenancy")
+            .define();
+        
+        field(proto().part3otherRentPaymentPeriod())
+                .formatBy(new UppercaseFormatter())
+                .mapTo("b12c96nml1_img_others")
+            .define();
+        
+        field(proto().part3AmountOfRentOnDeposit())
+                .formatBy(new MoneyFormatter())
+                .partitionBy(new MoneyPartitioner())
+                    .mapTo("@@b12c96nfl1_rent_deposit.0{1}")
+                    .mapTo("@@b12c96nfl1_rent_deposit.1{3}")
+                    .mapTo("@@b12c96nfl1_rent_deposit.2{2}")
+                .define();
+        
+        field(proto().part3dateOfDepositCollection())
+                .formatBy(new DateFormatter())
+                .partitionBy(new DatePartitioner())
+                    .mapTo("@@b12c96nfl1_deposit_collected.0{2}")
+                    .mapTo("@@b12c96nfl1_deposit_collected.1{2}")
+                    .mapTo("@@b12c96nfl1_deposit_collected.2{4}")
+                .define();
+        
+        field(proto().part3lastPeriodInterestPaidFrom())
+                .formatBy(new DateFormatter())
+                .partitionBy(new DatePartitioner())
+                    .mapTo("@@b12c96nfl1_deposit_interest_start.0{2}")
+                    .mapTo("@@b12c96nfl1_deposit_interest_start.1{2}")
+                    .mapTo("@@b12c96nfl1_deposit_interest_start.2{4}")
+                .define();
+        
+        field(proto().part3lastPeriodInterestPaidTo())
+                .formatBy(new DateFormatter())
+                .partitionBy(new DatePartitioner())
+                    .mapTo("@@b12c96nfl1_deposit_interest_end.0{2}")
+                    .mapTo("@@b12c96nfl1_deposit_interest_end.1{2}")
+                    .mapTo("@@b12c96nfl1_deposit_interest_end.2{4}")
+                .define();
+        
                 
     }//@formatter:on
 }

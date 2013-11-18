@@ -150,7 +150,11 @@ public class FormUtils {
                     setCheckBox(fieldDescriptor, fields, (Boolean) field.getValue());
                 } else if (fieldsData.getMember(memberName).getValueClass().isEnum()) {
                     // TODO add checks that field mapping doesn't have multiple mappings and no length
-                    setEnumField(fieldDescriptor, fields, field.getValue().toString());
+                    Class<?> enumType = fieldsData.getMember(memberName).getValueClass();
+                    // TODO make something more clean to defining enums
+                    String value = fieldDescriptor.states().isEmpty() ? field.getValue().toString() : fieldDescriptor.states().get(
+                            ((Enum) field.getValue()).ordinal());
+                    setEnumField(fieldDescriptor, fields, value);
 
                 } else if (fieldsData.getMember(memberName).getValueClass().isArray()) {
                     // TODO add checks that field mapping doesn't have multiple mappings and no length
