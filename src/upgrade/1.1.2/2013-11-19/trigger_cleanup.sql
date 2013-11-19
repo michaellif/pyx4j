@@ -16,6 +16,8 @@ BEGIN TRANSACTION;
         SET     trgr = 17
         WHERE   trgr = 20;
         
+        DELETE FROM _admin_.scheduler_trigger_pmc WHERE trgr = 20;
+        
         DELETE FROM _admin_.scheduler_trigger WHERE id = 20;
         
         
@@ -24,6 +26,8 @@ BEGIN TRANSACTION;
         UPDATE  _admin_.scheduler_run
         SET     trgr = 17
         WHERE   trgr = 29;
+        
+        DELETE FROM _admin_.scheduler_trigger_pmc WHERE trgr = 29;
         
         DELETE FROM _admin_.scheduler_trigger WHERE id = 29;
         
@@ -34,6 +38,8 @@ BEGIN TRANSACTION;
         SET     trgr = 12
         WHERE   trgr = 26;
         
+        DELETE FROM _admin_.scheduler_trigger_pmc WHERE trgr = 26;
+                
         DELETE FROM _admin_.scheduler_trigger WHERE id = 26;
         
 COMMIT;
