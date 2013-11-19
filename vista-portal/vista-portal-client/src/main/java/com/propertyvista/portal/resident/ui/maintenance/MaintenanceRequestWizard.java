@@ -78,7 +78,7 @@ public class MaintenanceRequestWizard extends CPortalEntityWizard<MaintenanceReq
 
         content.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().requestId(), new CLabel<String>()), 250).build());
         content.setBR(++row, 0, 1);
-        content.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().reportedForOwnUnit()), 250).build());
+        content.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().reportedForOwnUnit()), 250).mockValue(true).build());
         content.setBR(++row, 0, 1);
 
         // category panel
@@ -88,7 +88,7 @@ public class MaintenanceRequestWizard extends CPortalEntityWizard<MaintenanceReq
         content.getCellFormatter().setVerticalAlignment(row, 0, HasVerticalAlignment.ALIGN_TOP);
 
         // Description
-        content.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().summary()), 250).build());
+        content.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().summary()), 250).mockValue("Maintenance Request Summary").build());
         content.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().description()), 250).build());
         content.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().priority(), prioritySelector), 250).build());
         content.setBR(++row, 0, 1);
@@ -105,14 +105,15 @@ public class MaintenanceRequestWizard extends CPortalEntityWizard<MaintenanceReq
         accessPanel.setWidget(0, 0, new FormWidgetDecoratorBuilder(inject(proto().petInstructions()), 250).build());
         accessPanel.setWidget(1, 0, schedulePanel);
 
-        permissionPanel.setWidget(0, 0, new FormWidgetDecoratorBuilder(inject(proto().permissionToEnter()), 250).build());
+        permissionPanel.setWidget(0, 0, new FormWidgetDecoratorBuilder(inject(proto().permissionToEnter()), 250).mockValue(true).build());
         permissionPanel.setWidget(1, 0, accessPanel);
         content.setWidget(++row, 0, permissionPanel);
         content.setBR(++row, 0, 1);
 
         int innerRow = -1;
         statusPanel.setH1(++innerRow, 0, 1, i18n.tr("Status"));
-        statusPanel.setWidget(++innerRow, 0, new FormWidgetDecoratorBuilder(inject(proto().status(), new CEntityLabel<MaintenanceRequestStatus>()), 100).build());
+        statusPanel.setWidget(++innerRow, 0,
+                new FormWidgetDecoratorBuilder(inject(proto().status(), new CEntityLabel<MaintenanceRequestStatus>()), 100).build());
         statusPanel.setWidget(++innerRow, 0, new FormWidgetDecoratorBuilder(inject(proto().updated(), new CDateLabel()), 100).build());
         statusPanel.setWidget(++innerRow, 0, new FormWidgetDecoratorBuilder(inject(proto().submitted(), new CDateLabel()), 100).build());
         statusPanel.setBR(++innerRow, 0, 1);
