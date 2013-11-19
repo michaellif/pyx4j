@@ -22,7 +22,7 @@ package com.propertyvista.biz.legal.form.fieldadapters;
 
 import com.propertyvista.domain.legal.utils.Partitioner;
 
-public class MoneyNsfPartitioner implements Partitioner {
+public class MoneyShortPartitioner implements Partitioner {
 
     @Override
     public String getPart(String value, int partIndex) {

@@ -26,7 +26,7 @@ import com.pyx4j.commons.SimpleMessageFormat;
 
 import com.propertyvista.domain.legal.utils.Formatter;
 
-public class MoneyNsfFormatter implements Formatter {
+public class MoneyShortFormatter implements Formatter {
 
     @Override
     public String format(Object object) {

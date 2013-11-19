@@ -22,8 +22,10 @@ package com.propertyvista.biz.legal;
 
 import java.util.List;
 
-import com.propertyvista.biz.legal.form.fieldadapters.MoneyNsfFormatter;
-import com.propertyvista.biz.legal.form.fieldadapters.MoneyNsfPartitioner;
+import com.pyx4j.entity.shared.IObject;
+
+import com.propertyvista.biz.legal.form.fieldadapters.MoneyShortFormatter;
+import com.propertyvista.biz.legal.form.fieldadapters.MoneyShortPartitioner;
 import com.propertyvista.biz.legal.form.utils.LandlordAndTenantBoardPdfFormUtils;
 import com.propertyvista.domain.legal.L1FormFieldsData;
 import com.propertyvista.domain.legal.utils.CanadianPostalCodePartitioner;
@@ -42,177 +44,62 @@ public class L1FieldsMapping extends PdfFieldsMapping<L1FormFieldsData> {
     }
 
     @Override
-    protected void configure() {//@formatter:off
+    protected void configure() {//@formatter:off        
+        money(proto().totalRentOwing()).mapTo(fieldsPartition("@@b12c96nfl1_rentOwn", 2, 3, 2)).define();        
+        date(proto().totalRentOwingAsOf()).mapTo(fieldsPartition("@@b12c96nfl1_LastDateRentOwn", 2, 2, 4)).define();        
+        date(proto().fillingDate()).mapTo("b12c96nmfiling_date").partitionBy(null).define();
         
-        field(proto().totalRentOwing())
-            .formatBy(new MoneyFormatter())
-            .partitionBy(new MoneyPartitioner())
-                .mapTo("@@b12c96nfl1_rentOwn.0{2}")
-                .mapTo("@@b12c96nfl1_rentOwn.1{3}")
-                .mapTo("@@b12c96nfl1_rentOwn.2{2}")
-            .define();
+        // PART1        
+        text(proto().part1_streetNumber()).mapTo("b12c96nfapp_street_no").define();            
+        text(proto().part1_streetName()).mapTo("b12c96nfapp_street_name").define();        
+        text(proto().part1_streetType()).mapTo("b12c96nfapp_street_label").define();        
+        text(proto().part1_direction()).mapTo("b12c96nfapp_street_direction").define();        
+        text(proto().part1_unit()).mapTo("b12c96nfapp_unit_no").define();        
+        text(proto().part1_municipality()).mapTo("b12c96nfapp_city").define();                
         
-        field(proto().totalRentOwingAsOf())
-            .formatBy(new DateFormatter())
-            .partitionBy(new DatePartitioner())
-                .mapTo("@@b12c96nfl1_LastDateRentOwn.0{2}")
-                .mapTo("@@b12c96nfl1_LastDateRentOwn.1{2}")
-                .mapTo("@@b12c96nfl1_LastDateRentOwn.2{4}")
-            .define();
-        
-        field(proto().fillingDate())
-            .formatBy(new DateFormatter())
-                .mapTo("b12c96nmfiling_date")
-            .define();
-        
-        // PART1
-        
-        field(proto().part1_streetNumber())
-            .formatBy(new UppercaseFormatter())
-                .mapTo("b12c96nfapp_street_no")
-            .define();    
-        
-        field(proto().part1_streetName())
-            .formatBy(new UppercaseFormatter())
-                .mapTo("b12c96nfapp_street_name")
-            .define();
-        
-        field(proto().part1_streetType())
-            .formatBy(new UppercaseFormatter())
-                .mapTo("b12c96nfapp_street_label")
-            .define();
-        
-        field(proto().part1_direction())
-            .formatBy(new UppercaseFormatter())
-                .mapTo("b12c96nfapp_street_direction")
-            .define();
-        
-        field(proto().part1_unit())
-            .formatBy(new UppercaseFormatter())
-                .mapTo("b12c96nfapp_unit_no")
-            .define();
-        
-        field(proto().part1_municipality())
-            .formatBy(new UppercaseFormatter())
-                .mapTo("b12c96nfapp_city")
-            .define();                
-        
-        field(proto().part1_postalCode())
-            .formatBy(new UppercaseFormatter())
+        text(proto().part1_postalCode())           
             .partitionBy(new CanadianPostalCodePartitioner())
                 .mapTo("b12c96nfapp_postal_code_1{3}")
                 .mapTo("@@b12c96nfapp_postal_code_2.0{3}")
             .define();
         
-        field(proto().part1_fileNumber1())
-            .formatBy(new UppercaseFormatter())
+        text(proto().part1_fileNumber1())            
             .partitionBy(new FileNumberPartitioner())
                 .mapTo("b12c96nfdivision_code_1{3}")
                 .mapTo("@@b12c96nfcase_number_1.0{5}")
             .define();
         
-        field(proto().part1_fileNumber2())
-            .formatBy(new UppercaseFormatter())
+        text(proto().part1_fileNumber2())           
             .partitionBy(new FileNumberPartitioner())
                 .mapTo("b12c96nfdivision_code_2{3}")
                 .mapTo("@@b12c96nfcase_number_2.0{5}")
              .define();
                 
-        // PART2
+        // PART2        
+        text(proto().part2_tenant1FirstName()).mapTo("b12c96nfP2_first_name").define();        
+        text(proto().part2_tenant1LastName()).mapTo("b12c96nfP2_last_name").define();        
+        field(proto().part2_tenant1Gender()).mapTo("b12c96nfP2_1_gender").define();
         
-        field(proto().part2_tenant1FirstName())
-            .formatBy(new UppercaseFormatter())
-                .mapTo("b12c96nfP2_first_name")
-            .define();
+        text(proto().part2_tenant2FirstName()).mapTo("b12c96nfP2_2_first_name").define();        
+        text(proto().part2_tenant2LastName()).mapTo("b12c96nfP2_2_last_name").define();        
+        field(proto().part2_tenant2Gender()).mapTo("b12c96nfP2_2_gender").define();
         
-        field(proto().part2_tenant1LastName())
-            .formatBy(new UppercaseFormatter())
-                .mapTo("b12c96nfP2_last_name")
-            .define();
+        text(proto().part2_MailingAddress()).mapTo("b12c96nfP2_st_address").define();       
+        text(proto().part2_unit()).mapTo("b12c96nfP2_unit_no").define();   
+        text(proto().part2_municipality()).mapTo("b12c96nfP2_city").define();
+        text(proto().part2_provice()).mapTo("b12c96nfP2_prov").define();        
+        text(proto().part2_postalCode()).mapTo("b12c96nfP2_postal").define();
         
-        field(proto().part2_tenant1Gender())
-                .mapTo("b12c96nfP2_1_gender")
-            .define();
+        phone(proto().part2_dayPhoneNumber()).mapTo(phonePartition("@@b12c96nfP2_day_phone")).define();
+        phone(proto().part2_eveningPhoneNumber()).mapTo(phonePartition("@@b12c96nfP2_evg_phone")).define();        
+        phone(proto().part2_faxNumber()).mapTo(phonePartition("@@b12c96nfP2_fax")).define();
         
-        field(proto().part2_tenant2FirstName())
-            .formatBy(new UppercaseFormatter())
-                .mapTo("b12c96nfP2_2_first_name")
-            .define();
-        
-        field(proto().part2_tenant2LastName())
-            .formatBy(new UppercaseFormatter())
-                .mapTo("b12c96nfP2_2_last_name")
-            .define();
-        
-        field(proto().part2_tenant2Gender())
-                .mapTo("b12c96nfP2_2_gender")
-             .define();
-        
-        field(proto().part2_MailingAddress())
-            .formatBy(new UppercaseFormatter())
-                .mapTo("b12c96nfP2_st_address")
-             .define();
-        
-        
-        field(proto().part2_unit())
-            .formatBy(new UppercaseFormatter())
-                .mapTo("b12c96nfP2_unit_no")
-            .define();
-        
-        field(proto().part2_municipality())
-            .formatBy(new UppercaseFormatter())
-                .mapTo("b12c96nfP2_city")
-            .define();
-        
-        field(proto().part2_provice())
-            .formatBy(new UppercaseFormatter())
-                .mapTo("b12c96nfP2_prov")
-            .define();
-        
-        field(proto().part2_postalCode())
-            .formatBy(new UppercaseFormatter())
-                .mapTo("b12c96nfP2_postal")
-            .define();
-        
-        field(proto().part2_dayPhoneNumber())
-            .partitionBy(new PhoneNumberPartitioner())
-                .mapTo("@@b12c96nfP2_day_phone.0{3}")
-                .mapTo("@@b12c96nfP2_day_phone.1{3}")
-                .mapTo("@@b12c96nfP2_day_phone.2{4}")
-            .define();
-        
-        field(proto().part2_eveningPhoneNumber())
-            .partitionBy(new PhoneNumberPartitioner())
-                .mapTo("@@b12c96nfP2_evg_phone.0{3}")
-                .mapTo("@@b12c96nfP2_evg_phone.1{3}")
-                .mapTo("@@b12c96nfP2_evg_phone.2{4}")
-            .define();
-        
-        field(proto().part2_faxNumber())
-            .partitionBy(new PhoneNumberPartitioner())
-                .mapTo("@@b12c96nfP2_fax.0{3}")
-                .mapTo("@@b12c96nfP2_fax.1{3}")
-                .mapTo("@@b12c96nfP2_fax.2{4}")
-            .define();
-        
-        // TODO? in theory email's recipent is might be case sensitive, but the form requires everything CAPITALIZED
-        field(proto().part2_emailAddress())
-            .formatBy(new UppercaseFormatter())
-                .mapTo("b12c96nfP2_email")
-            .define();
-        
-        
+        // TODO? in theory email's recipient is might be case sensitive, but the form requires everything CAPITALIZED
+        text(proto().part2_emailAddress()).mapTo("b12c96nfP2_email").define();
+                
         // PART 3
-        field(proto().part3ApplyingToCollectCharges())
-                .states("1")
-                .mapTo("b12c96nfl1_Choice_Arrear")
-            .define();
-        
-        field(proto().part3ApplyingToCollectNSF())
-                .states("2")
-                .mapTo("b12c96nfl1_Choice_NSF")
-            .define();
-        
+        field(proto().part3ApplyingToCollectCharges()).states("1").mapTo("b12c96nfl1_Choice_Arrear").define();
+        field(proto().part3ApplyingToCollectNSF()).states("2").mapTo("b12c96nfl1_Choice_NSF").define();
         field(proto().part3IsTenatStillInPossesionOfTheUnit())
                 .states("Y", "N")
                 .mapTo("b12c96nfl1_Choice_possession")
@@ -223,216 +110,78 @@ public class L1FieldsMapping extends PdfFieldsMapping<L1FormFieldsData> {
                 .mapTo("b12c96nfl1_Choice_Tenancy")
             .define();
         
-        field(proto().part3otherRentPaymentPeriod())
-                .formatBy(new UppercaseFormatter())
-                .mapTo("b12c96nml1_img_others")
-            .define();
+        text(proto().part3otherRentPaymentPeriod()).mapTo("b12c96nml1_img_others").define();
         
-        field(proto().part3AmountOfRentOnDeposit())
-                .formatBy(new MoneyFormatter())
-                .partitionBy(new MoneyPartitioner())
-                    .mapTo("@@b12c96nfl1_rent_deposit.0{1}")
-                    .mapTo("@@b12c96nfl1_rent_deposit.1{3}")
-                    .mapTo("@@b12c96nfl1_rent_deposit.2{2}")
-                .define();
-        
-        field(proto().part3dateOfDepositCollection())
-                .formatBy(new DateFormatter())
-                .partitionBy(new DatePartitioner())
-                    .mapTo("@@b12c96nfl1_deposit_collected.0{2}")
-                    .mapTo("@@b12c96nfl1_deposit_collected.1{2}")
-                    .mapTo("@@b12c96nfl1_deposit_collected.2{4}")
-                .define();
-        
-        field(proto().part3lastPeriodInterestPaidFrom())
-                .formatBy(new DateFormatter())
-                .partitionBy(new DatePartitioner())
-                    .mapTo("@@b12c96nfl1_deposit_interest_start.0{2}")
-                    .mapTo("@@b12c96nfl1_deposit_interest_start.1{2}")
-                    .mapTo("@@b12c96nfl1_deposit_interest_start.2{4}")
-                .define();
-        
-        field(proto().part3lastPeriodInterestPaidTo())
-                .formatBy(new DateFormatter())
-                .partitionBy(new DatePartitioner())
-                    .mapTo("@@b12c96nfl1_deposit_interest_end.0{2}")
-                    .mapTo("@@b12c96nfl1_deposit_interest_end.1{2}")
-                    .mapTo("@@b12c96nfl1_deposit_interest_end.2{4}")
-                .define();
+        money(proto().part3AmountOfRentOnDeposit()).mapTo(fieldsPartition("@@b12c96nfl1_rent_deposit", 1, 3,2)).define();
+        date(proto().part3dateOfDepositCollection()).mapTo(datePartition("@@b12c96nfl1_deposit_collected")).define();
+        date(proto().part3lastPeriodInterestPaidFrom()).mapTo(datePartition("@@b12c96nfl1_deposit_interest_start")).define();
+        date(proto().part3lastPeriodInterestPaidTo()).mapTo(datePartition("@@b12c96nfl1_deposit_interest_end")).define();
         
         // PART 4
 
         // section 1
-        field(proto().part4period1From())
-                .formatBy(new DateFormatter())
-                .partitionBy(new DatePartitioner())
-                    .mapTo("@@b12c96nfl1_a1_start.0{2}")
-                    .mapTo("@@b12c96nfl1_a1_start.1{2}")
-                    .mapTo("@@b12c96nfl1_a1_start.2{4}")
-                .define();
+        date(proto().part4period1From()).mapTo(datePartition("@@b12c96nfl1_a1_start")).define();
+        date(proto().part4period1To()).mapTo(datePartition("@@b12c96nfl1_a1_end")).define();
+        money(proto().part4period1RentCharged()).mapTo(fieldsPartition("@@b12c96nfl1_a1_charged", 1,3, 2)).define();
+        money(proto().part4period1RentPaid()).mapTo(fieldsPartition("@@b12c96nfl1_a1_paid", 1, 3, 2)).define();
+        money(proto().part4period1RentOwing()).mapTo(fieldsPartition("@@b12c96nfl1_a1_owing", 1, 3, 2)).define();
+
+        date(proto().part4period2From()).mapTo(datePartition("@@b12c96nfl1_a2_start")).define();
+        date(proto().part4period2To()).mapTo(datePartition("@@b12c96nfl1_a2_end")).define();
+        money(proto().part4period2RentCharged()).mapTo(fieldsPartition("@@b12c96nfl1_a2_charged", 1,3, 2)).define();
+        money(proto().part4period2RentPaid()).mapTo(fieldsPartition("@@b12c96nfl1_a2_paid", 1, 3, 2)).define();
+        money(proto().part4period2RentOwing()).mapTo(fieldsPartition("@@b12c96nfl1_a2_owing", 1, 3, 2)).define();
+
+        date(proto().part4period3From()).mapTo(datePartition("@@b12c96nfl1_a3_start")).define();
+        date(proto().part4period3To()).mapTo(datePartition("@@b12c96nfl1_a3_end")).define();
+        money(proto().part4period3RentCharged()).mapTo(fieldsPartition("@@b12c96nfl1_a3_charged", 1,3, 2)).define();
+        money(proto().part4period3RentPaid()).mapTo(fieldsPartition("@@b12c96nfl1_a3_paid", 1, 3, 2)).define();
+        money(proto().part4period3RentOwing()).mapTo(fieldsPartition("@@b12c96nfl1_a3_owing", 1, 3, 2)).define();
         
-        field(proto().part4period1To())
-                .formatBy(new DateFormatter())
-                .partitionBy(new DatePartitioner())
-                    .mapTo("@@b12c96nfl1_a1_end.0{2}")
-                    .mapTo("@@b12c96nfl1_a1_end.1{2}")
-                    .mapTo("@@b12c96nfl1_a1_end.2{4}")
-                .define();
         
-        field(proto().part4period1RentCharged())
-                .formatBy(new MoneyFormatter())
-                .partitionBy(new MoneyPartitioner())
-                    .mapTo("@@b12c96nfl1_a1_charged.0{1}")
-                    .mapTo("@@b12c96nfl1_a1_charged.1{3}")
-                    .mapTo("@@b12c96nfl1_a1_charged.2{2}")
-                .define();
-        
-        field(proto().part4period1RentPaid())
-                .formatBy(new MoneyFormatter())
-                .partitionBy(new MoneyPartitioner())
-                    .mapTo("@@b12c96nfl1_a1_paid.0{1}")
-                    .mapTo("@@b12c96nfl1_a1_paid.1{3}")
-                    .mapTo("@@b12c96nfl1_a1_paid.2{2}")
-                .define();
-        
-        field(proto().part4period1RentOwing())
-                .formatBy(new MoneyFormatter())
-                .partitionBy(new MoneyPartitioner())
-                    .mapTo("@@b12c96nfl1_a1_owing.0{1}")
-                    .mapTo("@@b12c96nfl1_a1_owing.1{3}")
-                    .mapTo("@@b12c96nfl1_a1_owing.2{2}")
-                .define();
-        
-        field(proto().part4period2From())
-            .formatBy(new DateFormatter())
-            .partitionBy(new DatePartitioner())
-                .mapTo("@@b12c96nfl1_a2_start.0{2}")
-                .mapTo("@@b12c96nfl1_a2_start.1{2}")
-                .mapTo("@@b12c96nfl1_a2_start.2{4}")
-            .define();
-        
-        field(proto().part4period2To())
-            .formatBy(new DateFormatter())
-            .partitionBy(new DatePartitioner())
-                .mapTo("@@b12c96nfl1_a2_end.0{2}")
-                .mapTo("@@b12c96nfl1_a2_end.1{2}")
-                .mapTo("@@b12c96nfl1_a2_end.2{4}")
-            .define();
-        
-        field(proto().part4period2RentCharged())
-            .formatBy(new MoneyFormatter())
-            .partitionBy(new MoneyPartitioner())
-                .mapTo("@@b12c96nfl1_a2_charged.0{1}")
-                .mapTo("@@b12c96nfl1_a2_charged.1{3}")
-                .mapTo("@@b12c96nfl1_a2_charged.2{2}")
-            .define();
-        
-        field(proto().part4period2RentPaid())
-            .formatBy(new MoneyFormatter())
-            .partitionBy(new MoneyPartitioner())
-                .mapTo("@@b12c96nfl1_a2_paid.0{1}")
-                .mapTo("@@b12c96nfl1_a2_paid.1{3}")
-                .mapTo("@@b12c96nfl1_a2_paid.2{2}")
-            .define();
-        
-        field(proto().part4period2RentOwing())
-            .formatBy(new MoneyFormatter())
-            .partitionBy(new MoneyPartitioner())
-                .mapTo("@@b12c96nfl1_a2_owing.0{1}")
-                .mapTo("@@b12c96nfl1_a2_owing.1{3}")
-                .mapTo("@@b12c96nfl1_a2_owing.2{2}")
-            .define();
-        
-        field(proto().part4period3From())
-            .formatBy(new DateFormatter())
-            .partitionBy(new DatePartitioner())
-                .mapTo("@@b12c96nfl1_a3_start.0{2}")
-                .mapTo("@@b12c96nfl1_a3_start.1{2}")
-                .mapTo("@@b12c96nfl1_a3_start.2{4}")
-            .define();
-        
-        field(proto().part4period3To())
-            .formatBy(new DateFormatter())
-            .partitionBy(new DatePartitioner())
-                .mapTo("@@b12c96nfl1_a3_end.0{2}")
-                .mapTo("@@b12c96nfl1_a3_end.1{2}")
-                .mapTo("@@b12c96nfl1_a3_end.2{4}")
-            .define();
-        
-        field(proto().part4period3RentCharged())
-            .formatBy(new MoneyFormatter())
-            .partitionBy(new MoneyPartitioner())
-                .mapTo("@@b12c96nfl1_a3_charged.0{1}")
-                .mapTo("@@b12c96nfl1_a3_charged.1{3}")
-                .mapTo("@@b12c96nfl1_a3_charged.2{2}")
-            .define();
-        
-        field(proto().part4period3RentPaid())
-            .formatBy(new MoneyFormatter())
-            .partitionBy(new MoneyPartitioner())
-                .mapTo("@@b12c96nfl1_a3_paid.0{1}")
-                .mapTo("@@b12c96nfl1_a3_paid.1{3}")
-                .mapTo("@@b12c96nfl1_a3_paid.2{2}")
-            .define();
-            
-        field(proto().part4period3RentOwing())
-            .formatBy(new MoneyFormatter())
-            .partitionBy(new MoneyPartitioner())
-                .mapTo("@@b12c96nfl1_a3_owing.0{1}")
-                .mapTo("@@b12c96nfl1_a3_owing.1{3}")
-                .mapTo("@@b12c96nfl1_a3_owing.2{2}")
-            .define();
-        
-        field(proto().part4totalRentOwing())
-            .formatBy(new MoneyFormatter())
-            .partitionBy(new MoneyPartitioner())
-                .mapTo("@@b12c96nfl1_total_rent_owed.0{2}")
-                .mapTo("@@b12c96nfl1_total_rent_owed.1{3}")
-                .mapTo("@@b12c96nfl1_total_rent_owed.2{2}")
-            .define();
+        money(proto().part4totalRentOwing()).mapTo(fieldsPartition("@@b12c96nfl1_total_rent_owed", 2, 3, 2)).define();
 
         // section 2
-        field(proto().part4nsf1ChequeAmount())
-            .formatBy(new MoneyNsfFormatter())
-            .mapTo(fieldsPartition("@@b12c96nfl1_a1_chq", 4, 2))
-            .partitionBy(new MoneyNsfPartitioner())                
-            .define();
-        
-        field(proto().part4nsf1DateOfCheque())
-            .formatBy(new DateFormatter())
-            .mapTo(fieldsPartition("@@b12c96nfl1_d1_chq", 2, 2, 4))
-            .partitionBy(new DatePartitioner())                
-            .define();
-        
-        field(proto().part4nsf1DateOfNsfCharge())
-            .formatBy(new DateFormatter())
-            .mapTo(fieldsPartition("@@b12c96nfl1_d1_nsf_l", 2, 2, 4))
-            .partitionBy(new DatePartitioner())                
-            .define();
-        
-        field(proto().part4nsf1BankCharge())
-            .formatBy(new MoneyNsfFormatter())
-            .mapTo(fieldsPartition("@@b12c96nfl1_a1_nsf", 2, 2))
-            .partitionBy(new MoneyNsfPartitioner())                
-            .define();
-        
-        field(proto().part4nsf1LandlordsCharge())
-            .formatBy(new MoneyNsfFormatter())
-            .mapTo(fieldsPartition("@@b12c96nfl1_a1_adm", 2, 2))
-            .partitionBy(new MoneyNsfPartitioner())                
-            .define();
-        
-        field(proto().part4nsf1TotalCharge())
-            .formatBy(new MoneyNsfFormatter())
-            .mapTo(fieldsPartition("@@b12c96nfl1_a1_t_charge", 3, 2))
-            .partitionBy(new MoneyNsfPartitioner())                
-            .define();
+        moneyShort(proto().part4nsf1ChequeAmount()).mapTo(fieldsPartition("@@b12c96nfl1_a1_chq", 4, 2)).define();
+        date(proto().part4nsf1DateOfCheque()).mapTo(datePartition("@@b12c96nfl1_d1_chq")).define();
+        date(proto().part4nsf1DateOfNsfCharge()).mapTo(datePartition("@@b12c96nfl1_d1_nsf_l")).define();
+        moneyShort(proto().part4nsf1BankCharge()).mapTo(fieldsPartition("@@b12c96nfl1_a1_nsf", 2, 2)).define();
+        moneyShort(proto().part4nsf1LandlordsCharge()).mapTo(fieldsPartition("@@b12c96nfl1_a1_adm", 2, 2)).define();
+        moneyShort(proto().part4nsf1TotalCharge()).mapTo(fieldsPartition("@@b12c96nfl1_a1_t_charge", 3, 2)).define();
         
     }//@formatter:on
 
     /** generate names of partitioned fields according to convention used in L1 form */
     private List<String> fieldsPartition(String fieldName, int... partLengthsVector) {
         return LandlordAndTenantBoardPdfFormUtils.split(fieldName, partLengthsVector);
+    }
+
+    private List<String> phonePartition(String fieldName) {
+        return LandlordAndTenantBoardPdfFormUtils.split(fieldName, 3, 3, 4);
+    }
+
+    private List<String> datePartition(String fieldName) {
+        return LandlordAndTenantBoardPdfFormUtils.split(fieldName, 2, 2, 4);
+    }
+
+    private PdfFieldDescriptorBuilder money(IObject<?> member) {
+        return field(member).formatBy(new MoneyFormatter()).partitionBy(new MoneyPartitioner());
+    }
+
+    private PdfFieldDescriptorBuilder moneyShort(IObject<?> member) {
+        return field(member).formatBy(new MoneyShortFormatter()).partitionBy(new MoneyShortPartitioner());
+    }
+
+    private PdfFieldDescriptorBuilder date(IObject<?> member) {
+        return field(member).formatBy(new DateFormatter()).partitionBy(new DatePartitioner());
+    }
+
+    private PdfFieldDescriptorBuilder text(IObject<?> member) {
+        return field(member).formatBy(new UppercaseFormatter());
+    }
+
+    private PdfFieldDescriptorBuilder phone(IObject<?> member) {
+        return field(member).partitionBy(new PhoneNumberPartitioner());
     }
 
 }
