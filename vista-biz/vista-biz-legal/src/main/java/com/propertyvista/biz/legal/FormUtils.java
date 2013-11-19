@@ -162,7 +162,8 @@ public class FormUtils {
                 }
 
             } catch (Throwable e) {
-                throw new RuntimeException(e);
+                throw new RuntimeException("got error while processing filling field '" + memberName + "' filled with '"
+                        + fieldsData.getMember(memberName).getValue() + "'", e);
             }
         }
         stamper.setFormFlattening(flatten);

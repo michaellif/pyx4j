@@ -86,8 +86,13 @@ public abstract class PdfFieldsMapping<E extends IEntity> {
             return this;
         }
 
-        public PdfFieldDescriptorBuilder mapTo(String fieldName) {
-            this.mappings.add(fieldName);
+        public PdfFieldDescriptorBuilder mapTo(String... fieldName) {
+            mapTo(Arrays.asList(fieldName));
+            return this;
+        }
+
+        public PdfFieldDescriptorBuilder mapTo(List<String> fields) {
+            this.mappings.addAll(fields);
             return this;
         }
 

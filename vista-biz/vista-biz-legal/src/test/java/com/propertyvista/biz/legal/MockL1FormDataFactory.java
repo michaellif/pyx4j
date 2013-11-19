@@ -102,6 +102,13 @@ public class MockL1FormDataFactory {
         fieldsData.part4period3RentOwing().setValue(new BigDecimal("3333.44"));
         fieldsData.part4totalRentOwing().setValue(new BigDecimal("12345.67"));
 
+        fieldsData.part4nsf1ChequeAmount().setValue(new BigDecimal("6666.66"));
+        fieldsData.part4nsf1DateOfCheque().setValue(new LogicalDate(DateUtils.detectDateformat("2009-01-01")));
+        fieldsData.part4nsf1DateOfNsfCharge().setValue(new LogicalDate(DateUtils.detectDateformat("2009-01-05")));
+        fieldsData.part4nsf1BankCharge().setValue(new BigDecimal("10.99"));
+        fieldsData.part4nsf1LandlordsCharge().setValue(new BigDecimal("16.99"));
+        fieldsData.part4nsf1TotalCharge().setValue(new BigDecimal("777.99"));
+
         return fieldsData;
     }
 }

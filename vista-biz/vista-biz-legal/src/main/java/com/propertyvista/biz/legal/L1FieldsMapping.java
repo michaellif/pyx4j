@@ -20,6 +20,11 @@
  */
 package com.propertyvista.biz.legal;
 
+import java.util.List;
+
+import com.propertyvista.biz.legal.form.fieldadapters.MoneyNsfFormatter;
+import com.propertyvista.biz.legal.form.fieldadapters.MoneyNsfPartitioner;
+import com.propertyvista.biz.legal.form.utils.LandlordAndTenantBoardPdfFormUtils;
 import com.propertyvista.domain.legal.L1FormFieldsData;
 import com.propertyvista.domain.legal.utils.CanadianPostalCodePartitioner;
 import com.propertyvista.domain.legal.utils.DateFormatter;
@@ -257,6 +262,7 @@ public class L1FieldsMapping extends PdfFieldsMapping<L1FormFieldsData> {
         
         // PART 4
 
+        // section 1
         field(proto().part4period1From())
                 .formatBy(new DateFormatter())
                 .partitionBy(new DatePartitioner())
@@ -385,5 +391,48 @@ public class L1FieldsMapping extends PdfFieldsMapping<L1FormFieldsData> {
                 .mapTo("@@b12c96nfl1_total_rent_owed.2{2}")
             .define();
 
+        // section 2
+        field(proto().part4nsf1ChequeAmount())
+            .formatBy(new MoneyNsfFormatter())
+            .mapTo(fieldsPartition("@@b12c96nfl1_a1_chq", 4, 2))
+            .partitionBy(new MoneyNsfPartitioner())                
+            .define();
+        
+        field(proto().part4nsf1DateOfCheque())
+            .formatBy(new DateFormatter())
+            .mapTo(fieldsPartition("@@b12c96nfl1_d1_chq", 2, 2, 4))
+            .partitionBy(new DatePartitioner())                
+            .define();
+        
+        field(proto().part4nsf1DateOfNsfCharge())
+            .formatBy(new DateFormatter())
+            .mapTo(fieldsPartition("@@b12c96nfl1_d1_nsf_l", 2, 2, 4))
+            .partitionBy(new DatePartitioner())                
+            .define();
+        
+        field(proto().part4nsf1BankCharge())
+            .formatBy(new MoneyNsfFormatter())
+            .mapTo(fieldsPartition("@@b12c96nfl1_a1_nsf", 2, 2))
+            .partitionBy(new MoneyNsfPartitioner())                
+            .define();
+        
+        field(proto().part4nsf1LandlordsCharge())
+            .formatBy(new MoneyNsfFormatter())
+            .mapTo(fieldsPartition("@@b12c96nfl1_a1_adm", 2, 2))
+            .partitionBy(new MoneyNsfPartitioner())                
+            .define();
+        
+        field(proto().part4nsf1TotalCharge())
+            .formatBy(new MoneyNsfFormatter())
+            .mapTo(fieldsPartition("@@b12c96nfl1_a1_t_charge", 3, 2))
+            .partitionBy(new MoneyNsfPartitioner())                
+            .define();
+        
     }//@formatter:on
+
+    /** generate names of partitioned fields according to convention used in L1 form */
+    private List<String> fieldsPartition(String fieldName, int... partLengthsVector) {
+        return LandlordAndTenantBoardPdfFormUtils.split(fieldName, partLengthsVector);
+    }
+
 }

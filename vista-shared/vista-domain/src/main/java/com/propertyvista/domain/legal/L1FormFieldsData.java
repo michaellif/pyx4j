@@ -162,17 +162,17 @@ public interface L1FormFieldsData extends IEntity {
     IPrimitive<BigDecimal> part4totalRentOwing();
 
     //
-    IPrimitive<String> part4nsf1ChequeAmount();
+    IPrimitive<BigDecimal> part4nsf1ChequeAmount();
 
-    IPrimitive<String> part4nsf1DateOfCheque();
+    IPrimitive<LogicalDate> part4nsf1DateOfCheque();
 
-    IPrimitive<String> part4nsf1DateOfNsfCharge();
+    IPrimitive<LogicalDate> part4nsf1DateOfNsfCharge();
 
-    IPrimitive<String> part4nsf1BankCharge();
+    IPrimitive<BigDecimal> part4nsf1BankCharge();
 
-    IPrimitive<String> part4nsf1LandlordsCharge();
+    IPrimitive<BigDecimal> part4nsf1LandlordsCharge();
 
-    IPrimitive<String> part4nsf1TotalCharge();
+    IPrimitive<BigDecimal> part4nsf1TotalCharge();
 
     //
     IPrimitive<String> part4nsf2ChequeAmount();
