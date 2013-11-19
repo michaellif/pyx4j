@@ -25,9 +25,9 @@ import org.slf4j.LoggerFactory;
 
 import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.core.client.Scheduler.ScheduledCommand;
-import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.place.shared.PlaceChangeEvent;
 import com.google.gwt.user.client.Timer;
+import com.google.web.bindery.event.shared.HandlerRegistration;
 
 import com.pyx4j.commons.TimeUtils;
 import com.pyx4j.rpc.client.RPCManager;

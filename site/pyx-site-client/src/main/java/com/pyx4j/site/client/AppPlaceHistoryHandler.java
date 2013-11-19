@@ -25,10 +25,8 @@ import java.util.logging.Logger;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
-import com.google.gwt.event.shared.LegacyHandlerWrapper;
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.place.shared.PlaceChangeEvent;
-import com.google.gwt.place.shared.PlaceController;
 import com.google.gwt.place.shared.PlaceHistoryMapper;
 import com.google.gwt.user.client.History;
 import com.google.web.bindery.event.shared.EventBus;
@@ -93,8 +91,6 @@ public class AppPlaceHistoryHandler {
 
     private AppPlaceContorller placeController;
 
-    private AppPlace defaultPlace = AppPlace.NOWHERE;
-
     private String lastStablePlaceToken = "";
 
     /**
@@ -132,24 +128,12 @@ public class AppPlaceHistoryHandler {
     }
 
     /**
-     * Legacy method tied to the old location for {@link EventBus}.
-     * 
-     * @deprecated use {@link #register(PlaceController, EventBus, Place)}
-     */
-    @Deprecated
-    public com.google.gwt.event.shared.HandlerRegistration register(AppPlaceContorller placeController, com.google.gwt.event.shared.EventBus eventBus,
-            AppPlace defaultPlace) {
-        return new LegacyHandlerWrapper(register(placeController, (EventBus) eventBus, defaultPlace));
-    }
-
-    /**
      * Initialize this place history handler.
      * 
      * @return a registration object to de-register the handler
      */
-    public HandlerRegistration register(AppPlaceContorller placeController, EventBus eventBus, AppPlace defaultPlace) {
+    public HandlerRegistration register(AppPlaceContorller placeController, EventBus eventBus) {
         this.placeController = placeController;
-        this.defaultPlace = defaultPlace;
 
         final HandlerRegistration placeReg = eventBus.addHandler(PlaceChangeEvent.TYPE, new PlaceChangeEvent.Handler() {
             @Override
@@ -173,7 +157,6 @@ public class AppPlaceHistoryHandler {
         return new HandlerRegistration() {
             @Override
             public void removeHandler() {
-                AppPlaceHistoryHandler.this.defaultPlace = AppPlace.NOWHERE;
                 AppPlaceHistoryHandler.this.placeController = null;
                 placeReg.removeHandler();
                 historyReg.removeHandler();
@@ -200,7 +183,7 @@ public class AppPlaceHistoryHandler {
         Place newPlace = null;
 
         if ("".equals(token)) {
-            newPlace = defaultPlace;
+            newPlace = AppPlace.NOWHERE;
         }
 
         if (newPlace == null) {
@@ -209,16 +192,13 @@ public class AppPlaceHistoryHandler {
 
         if (newPlace == null) {
             log().warning("Unrecognized history token: " + token);
-            newPlace = defaultPlace;
+            newPlace = AppPlace.NOWHERE;
         }
 
         placeController.goTo(newPlace);
     }
 
     private String tokenForPlace(AppPlace newPlace) {
-        if (defaultPlace.equals(newPlace)) {
-            return "";
-        }
 
         String token = mapper.getToken(newPlace);
         if (token != null) {

@@ -88,34 +88,31 @@ public abstract class AbstractAppPlaceDispatcher implements AppPlaceDispatcher {
         if (newPlace instanceof PublicPlace) {
             callback.onSuccess(newPlace);
         } else if (ClientContext.isAuthenticated()) {
-            final AppPlace targetPlace = resolveEntryPlace(newPlace);
-            isPlaceNavigable(targetPlace, new DefaultAsyncCallback<Boolean>() {
-                @Override
-                public void onSuccess(Boolean result) {
-                    if ((result) && (targetPlace != AppPlace.NOWHERE)) {
-                        callback.onSuccess(targetPlace);
-                    } else {
-                        obtainDefaultPlace(callback);
-                    }
-                }
-            });
-            entryPlace = AppPlace.NOWHERE;
-        } else {
             AppPlace special = mandatoryActionForward(newPlace);
             if (special != null) {
                 callback.onSuccess(special);
             } else {
-                entryPlace = newPlace;
-                obtainDefaultPlace(callback);
+                final AppPlace targetPlace;
+                if ((entryPlace != AppPlace.NOWHERE) && (newPlace == AppPlace.NOWHERE)) {
+                    targetPlace = entryPlace;
+                } else {
+                    targetPlace = newPlace;
+                }
+                isPlaceNavigable(targetPlace, new DefaultAsyncCallback<Boolean>() {
+                    @Override
+                    public void onSuccess(Boolean result) {
+                        if (result && (targetPlace != AppPlace.NOWHERE)) {
+                            callback.onSuccess(targetPlace);
+                        } else {
+                            obtainDefaultPlace(callback);
+                        }
+                    }
+                });
+                entryPlace = AppPlace.NOWHERE;
             }
-        }
-    }
-
-    private AppPlace resolveEntryPlace(AppPlace newPlace) {
-        if ((newPlace == AppPlace.NOWHERE) && (entryPlace != AppPlace.NOWHERE)) {
-            return entryPlace;
         } else {
-            return newPlace;
+            entryPlace = newPlace;
+            obtainDefaultPlace(callback);
         }
     }
 

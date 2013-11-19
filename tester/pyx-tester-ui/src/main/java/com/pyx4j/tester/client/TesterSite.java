@@ -78,7 +78,7 @@ public class TesterSite extends AppSite {
 
         DefaultErrorHandlerDialog.register();
 
-        getHistoryHandler().register(getPlaceController(), getEventBus(), new TesterSiteMap.Landing());
+        getHistoryHandler().register(getPlaceController(), getEventBus());
 
         StyleManager.installTheme(new TesterTheme(), new TesterPalette());
 

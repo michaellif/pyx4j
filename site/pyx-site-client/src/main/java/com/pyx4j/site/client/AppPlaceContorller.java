@@ -27,9 +27,6 @@ import com.google.gwt.place.shared.Place;
 import com.google.gwt.place.shared.PlaceChangeEvent;
 import com.google.gwt.place.shared.PlaceChangeRequestEvent;
 import com.google.gwt.place.shared.PlaceController;
-import com.google.gwt.user.client.Window;
-import com.google.gwt.user.client.Window.ClosingEvent;
-import com.google.gwt.user.client.Window.ClosingHandler;
 import com.google.web.bindery.event.shared.EventBus;
 
 import com.pyx4j.i18n.shared.I18n;

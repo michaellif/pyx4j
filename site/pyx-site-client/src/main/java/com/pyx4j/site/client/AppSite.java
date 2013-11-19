@@ -30,7 +30,6 @@ import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Document;
 import com.google.gwt.dom.client.Element;
-import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.http.client.UrlBuilder;
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.DOM;
@@ -39,6 +38,7 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.RootLayoutPanel;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.UIObject;
+import com.google.web.bindery.event.shared.EventBus;
 
 import com.pyx4j.commons.UserAgentDetection;
 import com.pyx4j.config.client.ClientApplicationVersion;
@@ -55,8 +55,6 @@ import com.pyx4j.site.rpc.NotificationAppPlace;
 import com.pyx4j.site.shared.domain.Notification;
 import com.pyx4j.site.shared.meta.NavigNode;
 import com.pyx4j.site.shared.meta.SiteMap;
-import com.pyx4j.widgets.client.dialog.ConfirmDecline;
-import com.pyx4j.widgets.client.dialog.MessageDialog;
 
 /**
  * Entry point classes define <code>onModuleLoad()</code>.

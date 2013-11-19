@@ -27,7 +27,7 @@ import java.util.Set;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.google.gwt.event.shared.HandlerRegistration;
+import com.google.web.bindery.event.shared.HandlerRegistration;
 
 import com.pyx4j.commons.EqualsHelper;
 import com.pyx4j.config.shared.ApplicationMode;
