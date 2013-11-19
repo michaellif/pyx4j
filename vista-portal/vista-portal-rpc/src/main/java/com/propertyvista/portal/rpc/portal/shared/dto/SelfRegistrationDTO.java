@@ -11,7 +11,7 @@
  * @author vlads
  * @version $Id$
  */
-package com.propertyvista.portal.rpc.portal.resident.dto;
+package com.propertyvista.portal.rpc.portal.shared.dto;
 
 import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.Editor;
@@ -25,10 +25,6 @@ import com.pyx4j.security.rpc.AuthenticationRequest;
 @Transient
 public interface SelfRegistrationDTO extends AuthenticationRequest {
 
-    //building  ComboBox
-    @NotNull
-    SelfRegistrationBuildingDTO building();
-
     @NotNull
     IPrimitive<String> firstName();
 
@@ -36,9 +32,6 @@ public interface SelfRegistrationDTO extends AuthenticationRequest {
 
     @NotNull
     IPrimitive<String> lastName();
-
-    @NotNull
-    IPrimitive<String> securityCode();
 
     // email and password inherited
 

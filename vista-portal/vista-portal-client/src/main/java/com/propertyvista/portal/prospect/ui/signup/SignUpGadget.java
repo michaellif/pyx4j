@@ -47,7 +47,7 @@ import com.pyx4j.widgets.client.Button;
 import com.pyx4j.widgets.client.actionbar.Toolbar;
 
 import com.propertyvista.portal.prospect.ui.signup.SignUpView.SignUpPresenter;
-import com.propertyvista.portal.rpc.portal.resident.dto.SelfRegistrationDTO;
+import com.propertyvista.portal.rpc.portal.resident.dto.ResidentSelfRegistrationDTO;
 import com.propertyvista.portal.rpc.shared.EntityValidationException;
 import com.propertyvista.portal.rpc.shared.EntityValidationException.MemberValidationError;
 import com.propertyvista.portal.shared.resources.PortalImages;
@@ -151,14 +151,14 @@ public class SignUpGadget extends AbstractGadget<SignUpViewImpl> {
         }
     }
 
-    class SignUpForm extends CEntityForm<SelfRegistrationDTO> {
+    class SignUpForm extends CEntityForm<ResidentSelfRegistrationDTO> {
 
         private EntityValidationException entityValidationError;
 
         private Image signUpPersonalImage;
 
         public SignUpForm() {
-            super(SelfRegistrationDTO.class);
+            super(ResidentSelfRegistrationDTO.class);
         }
 
         @SuppressWarnings("unchecked")

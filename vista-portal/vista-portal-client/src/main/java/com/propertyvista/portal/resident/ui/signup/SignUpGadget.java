@@ -50,7 +50,7 @@ import com.pyx4j.widgets.client.actionbar.Toolbar;
 
 import com.propertyvista.portal.resident.ui.signup.SignUpView.SignUpPresenter;
 import com.propertyvista.portal.rpc.portal.resident.dto.SelfRegistrationBuildingDTO;
-import com.propertyvista.portal.rpc.portal.resident.dto.SelfRegistrationDTO;
+import com.propertyvista.portal.rpc.portal.resident.dto.ResidentSelfRegistrationDTO;
 import com.propertyvista.portal.rpc.shared.EntityValidationException;
 import com.propertyvista.portal.rpc.shared.EntityValidationException.MemberValidationError;
 import com.propertyvista.portal.shared.resources.PortalImages;
@@ -165,7 +165,7 @@ public class SignUpGadget extends AbstractGadget<SignUpViewImpl> {
         }
     }
 
-    class SignUpForm extends CEntityForm<SelfRegistrationDTO> {
+    class SignUpForm extends CEntityForm<ResidentSelfRegistrationDTO> {
 
         private BuildingSuggestBox buildingSelector;
 
@@ -178,7 +178,7 @@ public class SignUpGadget extends AbstractGadget<SignUpViewImpl> {
         private Image signUpSecurity;
 
         public SignUpForm() {
-            super(SelfRegistrationDTO.class);
+            super(ResidentSelfRegistrationDTO.class);
         }
 
         @SuppressWarnings("unchecked")

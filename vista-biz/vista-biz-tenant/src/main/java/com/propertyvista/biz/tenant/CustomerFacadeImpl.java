@@ -47,7 +47,7 @@ import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
 import com.propertyvista.domain.tenant.lease.Tenant;
 import com.propertyvista.domain.tenant.prospect.OnlineApplication;
 import com.propertyvista.operations.domain.legal.VistaTerms.VistaTermsV;
-import com.propertyvista.portal.rpc.portal.resident.dto.SelfRegistrationDTO;
+import com.propertyvista.portal.rpc.portal.resident.dto.ResidentSelfRegistrationDTO;
 import com.propertyvista.portal.rpc.shared.EntityValidationException;
 import com.propertyvista.server.common.security.AccessKey;
 import com.propertyvista.server.domain.security.CustomerUserCredential;
@@ -202,7 +202,7 @@ public class CustomerFacadeImpl implements CustomerFacade {
         List<Tenant> tenants = Persistence.service().query(criteria);
 
         if (tenants.size() == 0) {
-            throw EntityValidationException.make(SelfRegistrationDTO.class)
+            throw EntityValidationException.make(ResidentSelfRegistrationDTO.class)
                     .addError(selfRegistration.securityCode(), i18n.tr("The Security Code was incorrect")).build();
         }
 
@@ -214,7 +214,7 @@ public class CustomerFacadeImpl implements CustomerFacade {
             }
         }
         if (tenant == null) {
-            throw EntityValidationException.make(SelfRegistrationDTO.class)//@formatter:off
+            throw EntityValidationException.make(ResidentSelfRegistrationDTO.class)//@formatter:off
                     .addError(selfRegistration.firstName(), i18n.tr("The name provided does not match our records"))
                     .addError(selfRegistration.middleName(), i18n.tr("The name provided does not match our records"))
                     .addError(selfRegistration.lastName(), i18n.tr("The name provided does not match our records"))
@@ -226,7 +226,7 @@ public class CustomerFacadeImpl implements CustomerFacade {
         try {
             persistCustomer(tenant.customer());
         } catch (UniqueConstraintUserRuntimeException e) {
-            throw EntityValidationException.make(SelfRegistrationDTO.class)//@formatter:off
+            throw EntityValidationException.make(ResidentSelfRegistrationDTO.class)//@formatter:off
                     .addError(selfRegistration.email(), i18n.tr("Your Email already registered, Contact Property Owner"))
                     .build();//@formatter:on            
         }

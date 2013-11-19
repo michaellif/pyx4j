@@ -22,12 +22,14 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.pyx4j.site.client.activity.AppActivityMapper;
 import com.pyx4j.site.rpc.AppPlace;
 
+import com.propertyvista.portal.prospect.activity.ApplicationContextSelectionActivity;
 import com.propertyvista.portal.prospect.activity.LandingActivity;
 import com.propertyvista.portal.prospect.activity.SignUpActivity;
 import com.propertyvista.portal.prospect.activity.application.ApplicationStatusPageActivity;
 import com.propertyvista.portal.prospect.activity.application.ApplicationWizardActivity;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap;
 import com.propertyvista.portal.rpc.portal.prospect.ProspectPortalSiteMap;
+import com.propertyvista.portal.rpc.portal.prospect.ProspectPortalSiteMap.ApplicationContextSelection;
 import com.propertyvista.portal.rpc.portal.prospect.ProspectPortalSiteMap.Registration;
 import com.propertyvista.portal.shared.activity.NotificationPageActivity;
 import com.propertyvista.portal.shared.activity.login.LoginWithTokenActivity;
@@ -69,6 +71,8 @@ public class ContentActivityMapper implements AppActivityMapper {
                         activity = new PasswordChangeActivity();
                     } else if (appPlace instanceof Registration) {
                         activity = new SignUpActivity(appPlace);
+                    } else if (place instanceof ApplicationContextSelection) {
+                        activity = new ApplicationContextSelectionActivity();
                     } else if (appPlace instanceof PortalSiteMap.NotificationPlace) {
                         activity = new NotificationPageActivity((PortalSiteMap.NotificationPlace) appPlace);
 

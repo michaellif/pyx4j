@@ -34,7 +34,7 @@ import com.propertyvista.portal.resident.ResidentPortalSite;
 import com.propertyvista.portal.resident.ui.signup.SignUpView;
 import com.propertyvista.portal.rpc.portal.resident.ResidentPortalSiteMap;
 import com.propertyvista.portal.rpc.portal.resident.dto.SelfRegistrationBuildingDTO;
-import com.propertyvista.portal.rpc.portal.resident.dto.SelfRegistrationDTO;
+import com.propertyvista.portal.rpc.portal.resident.dto.ResidentSelfRegistrationDTO;
 import com.propertyvista.portal.rpc.portal.resident.services.ResidentAuthenticationService;
 import com.propertyvista.portal.rpc.portal.resident.services.ResidentSelfRegistrationService;
 import com.propertyvista.portal.rpc.portal.resident.services.SelfRegistrationBuildingsSourceService;
@@ -71,7 +71,7 @@ public class SignUpActivity extends AbstractActivity implements SignUpView.SignU
     }
 
     @Override
-    public void register(final SelfRegistrationDTO value) {
+    public void register(final ResidentSelfRegistrationDTO value) {
         GWT.<ResidentSelfRegistrationService> create(ResidentSelfRegistrationService.class).selfRegistration(new DefaultAsyncCallback<VoidSerializable>() {
             @Override
             public void onSuccess(VoidSerializable result) {
