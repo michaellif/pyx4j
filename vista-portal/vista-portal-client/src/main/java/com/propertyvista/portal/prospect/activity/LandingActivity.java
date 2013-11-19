@@ -31,7 +31,7 @@ import com.propertyvista.domain.DemoData.UserType;
 import com.propertyvista.portal.prospect.ui.landing.LandingView;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap;
 import com.propertyvista.portal.rpc.portal.prospect.ProspectPortalSiteMap;
-import com.propertyvista.portal.rpc.portal.resident.services.ProspectAuthenticationService;
+import com.propertyvista.portal.rpc.portal.prospect.services.ProspectAuthenticationService;
 import com.propertyvista.portal.shared.PortalSite;
 
 public class LandingActivity extends AbstractLoginActivty implements LandingView.LandingPresenter {

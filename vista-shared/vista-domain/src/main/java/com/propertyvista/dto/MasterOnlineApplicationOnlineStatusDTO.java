@@ -13,6 +13,8 @@
  */
 package com.propertyvista.dto;
 
+import java.math.BigDecimal;
+
 import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.Format;
 import com.pyx4j.entity.annotations.Transient;
@@ -30,5 +32,5 @@ public interface MasterOnlineApplicationOnlineStatusDTO extends IEntity {
      */
     @Format("#0.00")
     @Caption(name = "Overall Application Progress (%)")
-    IPrimitive<Double> progress();
+    IPrimitive<BigDecimal> progress();
 }

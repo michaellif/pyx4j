@@ -15,11 +15,11 @@ package com.propertyvista.portal.prospect.ui.application;
 
 import com.pyx4j.i18n.shared.I18n;
 
-import com.propertyvista.portal.rpc.portal.prospect.dto.ApplicationDTO;
+import com.propertyvista.portal.rpc.portal.prospect.dto.OnlineApplicationDTO;
 import com.propertyvista.portal.shared.ui.AbstractWizardFormView;
 import com.propertyvista.portal.shared.ui.IWizardView;
 
-public class ApplicationWizardViewImpl extends AbstractWizardFormView<ApplicationDTO> implements ApplicationWizardView {
+public class ApplicationWizardViewImpl extends AbstractWizardFormView<OnlineApplicationDTO> implements ApplicationWizardView {
 
     private static final I18n i18n = I18n.get(ApplicationWizardViewImpl.class);
 
@@ -30,7 +30,7 @@ public class ApplicationWizardViewImpl extends AbstractWizardFormView<Applicatio
     }
 
     @Override
-    public void setPresenter(IWizardView.IWizardFormPresenter<ApplicationDTO> presenter) {
+    public void setPresenter(IWizardView.IWizardFormPresenter<OnlineApplicationDTO> presenter) {
         super.setPresenter(presenter);
         ((ApplicationWizard) getWizard()).setPresenter((ApplicationWizardPresenter) presenter);
 

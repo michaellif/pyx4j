@@ -32,7 +32,7 @@ import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.tenant.CustomerSelfRegistration;
 import com.propertyvista.portal.rpc.portal.resident.dto.SelfRegistrationDTO;
 import com.propertyvista.portal.rpc.portal.resident.services.ResidentSelfRegistrationService;
-import com.propertyvista.portal.rpc.portal.shared.dto.SelfRegistrationBuildingDTO;
+import com.propertyvista.portal.rpc.portal.resident.services.SelfRegistrationBuildingDTO;
 
 public class ResidentSelfRegistrationServiceImpl implements ResidentSelfRegistrationService {
 

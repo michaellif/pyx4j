@@ -19,7 +19,7 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.rpc.shared.IService;
 
-import com.propertyvista.portal.rpc.portal.shared.dto.SelfRegistrationBuildingDTO;
+import com.propertyvista.portal.rpc.portal.resident.services.SelfRegistrationBuildingDTO;
 
 // We use PortalAuthenticationService to submit SelfRegistrationDTO
 public interface PortalSelfRegistrationService extends IService {

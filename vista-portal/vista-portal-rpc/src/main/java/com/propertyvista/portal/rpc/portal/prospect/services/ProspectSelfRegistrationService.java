@@ -11,7 +11,7 @@
  * @author ArtyomB
  * @version $Id$
  */
-package com.propertyvista.portal.rpc.portal.resident.services;
+package com.propertyvista.portal.rpc.portal.prospect.services;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 

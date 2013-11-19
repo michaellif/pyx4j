@@ -11,7 +11,7 @@
  * @author ArtyomB
  * @version $Id$
  */
-package com.propertyvista.portal.resident.ui;
+package com.propertyvista.portal.prospect.ui;
 
 import java.util.List;
 
@@ -32,21 +32,21 @@ import com.pyx4j.site.client.ui.prime.lister.ListerDataSource;
 import com.pyx4j.widgets.client.Button;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
 
-import com.propertyvista.domain.tenant.lease.Lease;
-import com.propertyvista.portal.rpc.portal.resident.dto.LeaseContextChoiceDTO;
+import com.propertyvista.domain.tenant.prospect.OnlineApplication;
+import com.propertyvista.portal.rpc.portal.prospect.dto.OnlineApplicationContextChoiceDTO;
 
-public class LeaseContextSelectionViewImpl implements LeaseContextSelectionView {
+public class ApplicationContextSelectionViewImpl implements ApplicationContextSelectionView {
 
-    private final static I18n i18n = I18n.get(LeaseContextSelectionViewImpl.class);
+    private final static I18n i18n = I18n.get(ApplicationContextSelectionViewImpl.class);
 
     private final Panel panel;
 
-    private final LeaseContextChoicesLister lister;
+    private final ApplicationContextChoicesLister lister;
 
-    private Presenter presenter;
+    private ApplicationContextSelectionPresenter presenter;
 
-    public LeaseContextSelectionViewImpl() {
-        lister = new LeaseContextChoicesLister();
+    public ApplicationContextSelectionViewImpl() {
+        lister = new ApplicationContextChoicesLister();
         lister.setSize("100%", "100%");
         lister.showColumnSelector(false);
 
@@ -54,22 +54,22 @@ public class LeaseContextSelectionViewImpl implements LeaseContextSelectionView 
         content.setSize("100%", "100%");
 
         int row = -1;
-        content.setH1(++row, 0, 2, i18n.tr("Please select the lease you want to manage and click ''Continue'':"));
+        content.setH1(++row, 0, 2, i18n.tr("Please select the Application you want to manage and click ''Continue'':"));
         content.setWidget(++row, 0, 2, lister);
 
         final Button chooseButton = new Button(i18n.tr("Continue"), new Command() {
             @Override
             public void execute() {
-                LeaseContextChoiceDTO choice = lister.getSelectedItem();
+                OnlineApplicationContextChoiceDTO choice = lister.getSelectedItem();
                 if (choice != null) {
                     presenter.setLeaseContext();
                 }
             }
         });
         chooseButton.setEnabled(false);
-        lister.addItemSelectionHandler(new ItemSelectionHandler<LeaseContextChoiceDTO>() {
+        lister.addItemSelectionHandler(new ItemSelectionHandler<OnlineApplicationContextChoiceDTO>() {
             @Override
-            public void onSelect(LeaseContextChoiceDTO selectedItem) {
+            public void onSelect(OnlineApplicationContextChoiceDTO selectedItem) {
                 chooseButton.setEnabled(selectedItem != null);
             }
         });
@@ -87,19 +87,19 @@ public class LeaseContextSelectionViewImpl implements LeaseContextSelectionView 
     }
 
     @Override
-    public void setPresenter(Presenter presenter) {
+    public void setPresenter(ApplicationContextSelectionPresenter presenter) {
         this.presenter = presenter;
     }
 
     @Override
-    public void populate(List<LeaseContextChoiceDTO> leaseChoices) {
-        lister.setDataSource(new LeaseContextChoicesDataSource(leaseChoices));
+    public void populate(List<OnlineApplicationContextChoiceDTO> leaseChoices) {
+        lister.setDataSource(new ApplicationContextChoicesDataSource(leaseChoices));
         lister.obtain(0);
     }
 
     @Override
-    public Lease getSelectedLeaseIdStub() {
-        return lister.getSelectedItem().leaseId().duplicate();
+    public OnlineApplication getSelectedApplication() {
+        return lister.getSelectedItem().onlineApplication().duplicate();
     }
 
     @Override
@@ -107,22 +107,22 @@ public class LeaseContextSelectionViewImpl implements LeaseContextSelectionView 
         MessageDialog.info(message);
     }
 
-    private static class LeaseContextChoicesLister extends EntityDataTablePanel<LeaseContextChoiceDTO> {
+    private static class ApplicationContextChoicesLister extends EntityDataTablePanel<OnlineApplicationContextChoiceDTO> {
 
-        public LeaseContextChoicesLister() {
-            super(LeaseContextChoiceDTO.class, false, false);
+        public ApplicationContextChoicesLister() {
+            super(OnlineApplicationContextChoiceDTO.class, false, false);
             setSelectable(true);
             getDataTablePanel().setFilteringEnabled(false);
             setColumnDescriptors(//@formatter:off
-                    new MemberColumnDescriptor.Builder(proto().leasedUnitAddress()).build()
+                    new MemberColumnDescriptor.Builder(proto().leaseApplicationUnitAddress()).build()
             );//@formatter:on
         }
     }
 
-    private static class LeaseContextChoicesDataSource extends ListerDataSource<LeaseContextChoiceDTO> {
+    private static class ApplicationContextChoicesDataSource extends ListerDataSource<OnlineApplicationContextChoiceDTO> {
 
-        public LeaseContextChoicesDataSource(List<LeaseContextChoiceDTO> leaseChoices) {
-            super(LeaseContextChoiceDTO.class, new InMemeoryListService<LeaseContextChoiceDTO>(leaseChoices));
+        public ApplicationContextChoicesDataSource(List<OnlineApplicationContextChoiceDTO> applicationChoices) {
+            super(OnlineApplicationContextChoiceDTO.class, new InMemeoryListService<OnlineApplicationContextChoiceDTO>(applicationChoices));
         }
 
     }

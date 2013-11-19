@@ -23,7 +23,7 @@ import com.propertyvista.domain.person.Name;
 import com.propertyvista.domain.tenant.prospect.OnlineApplication;
 
 @Transient
-public interface ApplicationStatusDTO extends IEntity {
+public interface OnlineApplicationStatusDTO extends IEntity {
 
     IPrimitive<OnlineApplication.Status> status();
 

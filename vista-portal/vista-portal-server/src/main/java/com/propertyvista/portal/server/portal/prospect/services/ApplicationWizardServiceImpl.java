@@ -16,13 +16,13 @@ package com.propertyvista.portal.server.portal.prospect.services;
 import com.pyx4j.entity.server.AbstractCrudServiceDtoImpl;
 
 import com.propertyvista.domain.tenant.prospect.OnlineApplication;
-import com.propertyvista.portal.rpc.portal.prospect.dto.ApplicationDTO;
+import com.propertyvista.portal.rpc.portal.prospect.dto.OnlineApplicationDTO;
 import com.propertyvista.portal.rpc.portal.prospect.services.ApplicationWizardService;
 
-public class ApplicationWizardServiceImpl extends AbstractCrudServiceDtoImpl<OnlineApplication, ApplicationDTO> implements ApplicationWizardService {
+public class ApplicationWizardServiceImpl extends AbstractCrudServiceDtoImpl<OnlineApplication, OnlineApplicationDTO> implements ApplicationWizardService {
 
     public ApplicationWizardServiceImpl() {
-        super(OnlineApplication.class, ApplicationDTO.class);
+        super(OnlineApplication.class, OnlineApplicationDTO.class);
     }
 
     @Override

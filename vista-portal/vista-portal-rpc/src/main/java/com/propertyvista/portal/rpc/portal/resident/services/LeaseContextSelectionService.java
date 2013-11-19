@@ -21,7 +21,7 @@ import com.pyx4j.rpc.shared.IService;
 import com.pyx4j.security.rpc.AuthenticationResponse;
 
 import com.propertyvista.domain.tenant.lease.Lease;
-import com.propertyvista.portal.rpc.portal.shared.dto.LeaseContextChoiceDTO;
+import com.propertyvista.portal.rpc.portal.resident.dto.LeaseContextChoiceDTO;
 
 public interface LeaseContextSelectionService extends IService {
 

@@ -13,12 +13,12 @@
  */
 package com.propertyvista.portal.prospect.ui.application;
 
-import com.propertyvista.portal.rpc.portal.prospect.dto.ApplicationDTO;
+import com.propertyvista.portal.rpc.portal.prospect.dto.OnlineApplicationDTO;
 import com.propertyvista.portal.shared.ui.IWizardView;
 
-public interface ApplicationWizardView extends IWizardView<ApplicationDTO> {
+public interface ApplicationWizardView extends IWizardView<OnlineApplicationDTO> {
 
-    public interface ApplicationWizardPresenter extends IWizardFormPresenter<ApplicationDTO> {
+    public interface ApplicationWizardPresenter extends IWizardFormPresenter<OnlineApplicationDTO> {
 
     }
 }

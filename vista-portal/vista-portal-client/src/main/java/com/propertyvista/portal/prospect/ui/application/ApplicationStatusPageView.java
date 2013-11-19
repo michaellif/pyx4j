@@ -13,12 +13,12 @@
  */
 package com.propertyvista.portal.prospect.ui.application;
 
-import com.propertyvista.portal.rpc.portal.prospect.dto.ApplicationStatusDTO;
+import com.propertyvista.portal.rpc.portal.prospect.dto.OnlineApplicationStatusDTO;
 import com.propertyvista.portal.shared.ui.IFormView;
 
-public interface ApplicationStatusPageView extends IFormView<ApplicationStatusDTO> {
+public interface ApplicationStatusPageView extends IFormView<OnlineApplicationStatusDTO> {
 
-    public interface ApplicationStatusPagePresenter extends IFormPresenter<ApplicationStatusDTO> {
+    public interface ApplicationStatusPagePresenter extends IFormPresenter<OnlineApplicationStatusDTO> {
 
     }
 

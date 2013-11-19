@@ -13,10 +13,9 @@
  */
 package com.propertyvista.biz.tenant;
 
+import java.math.BigDecimal;
 import java.util.List;
-import java.util.Vector;
 
-import com.pyx4j.commons.SimpleMessageFormat;
 import com.pyx4j.commons.UserRuntimeException;
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.server.Persistence;
@@ -38,8 +37,6 @@ import com.propertyvista.domain.tenant.lease.LeaseTerm;
 import com.propertyvista.domain.tenant.lease.LeaseTermGuarantor;
 import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
 import com.propertyvista.domain.tenant.lease.LeaseTermTenant;
-import com.propertyvista.domain.tenant.prospect.ApplicationStepDescriptor;
-import com.propertyvista.domain.tenant.prospect.ApplicationStepDescriptor.StepId;
 import com.propertyvista.domain.tenant.prospect.MasterOnlineApplication;
 import com.propertyvista.domain.tenant.prospect.OnlineApplication;
 import com.propertyvista.domain.tenant.prospect.OnlineApplication.Role;
@@ -212,7 +209,7 @@ public class OnlineApplicationFacadeImpl implements OnlineApplicationFacade {
         }
 
         MasterOnlineApplicationOnlineStatusDTO maStatus = EntityFactory.create(MasterOnlineApplicationOnlineStatusDTO.class);
-        double progressSum = 0.0;
+        BigDecimal progressSum = new BigDecimal("0.0");
 
         for (OnlineApplication app : ma.applications()) {
             if (app.isValueDetached()) {
@@ -226,31 +223,16 @@ public class OnlineApplicationFacadeImpl implements OnlineApplicationFacade {
             status.role().set(app.role());
 
             // calculate progress:
-            status.progress().setValue(0d);
+            status.progress().setValue(app.progress().getValue());
+
             if (!status.person().isEmpty()) {
-                int complete = 0;
-                for (int i = 0; i < app.steps().size(); ++i) {
-                    switch (app.steps().get(i).status().getValue()) {
-                    case complete:
-                        ++complete;
-                    case visited:
-                        if (i + 1 == app.steps().size()) {
-                            ++complete; // count last 'Completion' step...
-                        }
-                        break;
-                    }
-                }
-
-                status.progress().setValue(1.0 * complete / app.steps().size() * 100.0);
-                status.description().setValue(SimpleMessageFormat.format("{0} out of {1} steps completed", complete, app.steps().size()));
-
                 maStatus.individualApplications().add(status);
             }
 
-            progressSum += status.progress().getValue();
+            progressSum = progressSum.add(status.progress().getValue());
         }
 
-        maStatus.progress().setValue(progressSum / ma.applications().size());
+        maStatus.progress().setValue(progressSum.divide(new BigDecimal(ma.applications().size())));
         return maStatus;
     }
 
@@ -288,18 +270,6 @@ public class OnlineApplicationFacadeImpl implements OnlineApplicationFacade {
         OnlineApplication app = EntityFactory.create(OnlineApplication.class);
         app.status().setValue(OnlineApplication.Status.Invited);
 
-        switch (role) {
-        case Applicant:
-            app.steps().addAll(createApplicantApplicationProgress((LeaseTermTenant) participant));
-            break;
-        case CoApplicant:
-            app.steps().addAll(createCoApplicantApplicationProgress((LeaseTermTenant) participant));
-            break;
-        case Guarantor:
-            app.steps().addAll(createGuarantorApplicationProgress((LeaseTermGuarantor) participant));
-            break;
-        }
-
         // create empty new screening if null:
         if (participant.screening().isNull()) {
             participant.screening().set(EntityFactory.create(CustomerScreening.class));
@@ -311,52 +281,6 @@ public class OnlineApplicationFacadeImpl implements OnlineApplicationFacade {
         app.role().setValue(role);
         Persistence.service().persist(app);
         return app;
-    }
-
-    private static ApplicationStepDescriptor createWizardStep(StepId stepId, ApplicationStepDescriptor.Status status) {
-        ApplicationStepDescriptor ws = EntityFactory.create(ApplicationStepDescriptor.class);
-        ws.stepId().setValue(stepId);
-        ws.status().setValue(status);
-        return ws;
-    }
-
-    private static List<ApplicationStepDescriptor> createApplicantApplicationProgress(LeaseTermTenant applicant) {
-        List<ApplicationStepDescriptor> progress = new Vector<ApplicationStepDescriptor>();
-        progress.add(createWizardStep(StepId.unit, ApplicationStepDescriptor.Status.notVisited));
-        progress.add(createWizardStep(StepId.options, ApplicationStepDescriptor.Status.notVisited));
-        progress.add(createWizardStep(StepId.personalInfoA, ApplicationStepDescriptor.Status.notVisited));
-        progress.add(createWizardStep(StepId.personalInfoB, ApplicationStepDescriptor.Status.notVisited));
-        progress.add(createWizardStep(StepId.financial, ApplicationStepDescriptor.Status.notVisited));
-        progress.add(createWizardStep(StepId.people, ApplicationStepDescriptor.Status.notVisited));
-        progress.add(createWizardStep(StepId.contacts, ApplicationStepDescriptor.Status.notVisited));
-        progress.add(createWizardStep(StepId.pmcCustom, ApplicationStepDescriptor.Status.notVisited));
-        progress.add(createWizardStep(StepId.summary, ApplicationStepDescriptor.Status.notVisited));
-        progress.add(createWizardStep(StepId.payment, ApplicationStepDescriptor.Status.notVisited));
-        return progress;
-    }
-
-    private static List<ApplicationStepDescriptor> createCoApplicantApplicationProgress(LeaseTermTenant coApplicant) {
-        List<ApplicationStepDescriptor> progress = new Vector<ApplicationStepDescriptor>();
-        progress.add(createWizardStep(StepId.lease, ApplicationStepDescriptor.Status.notVisited));
-        progress.add(createWizardStep(StepId.personalInfoA, ApplicationStepDescriptor.Status.notVisited));
-        progress.add(createWizardStep(StepId.personalInfoB, ApplicationStepDescriptor.Status.notVisited));
-        progress.add(createWizardStep(StepId.financial, ApplicationStepDescriptor.Status.notVisited));
-        progress.add(createWizardStep(StepId.contacts, ApplicationStepDescriptor.Status.notVisited));
-        progress.add(createWizardStep(StepId.pmcCustom, ApplicationStepDescriptor.Status.notVisited));
-        progress.add(createWizardStep(StepId.summary, ApplicationStepDescriptor.Status.notVisited));
-        return progress;
-    }
-
-    private static List<ApplicationStepDescriptor> createGuarantorApplicationProgress(LeaseTermGuarantor guarantor) {
-        List<ApplicationStepDescriptor> progress = new Vector<ApplicationStepDescriptor>();
-        progress.add(createWizardStep(StepId.lease, ApplicationStepDescriptor.Status.notVisited));
-        progress.add(createWizardStep(StepId.personalInfoA, ApplicationStepDescriptor.Status.notVisited));
-        progress.add(createWizardStep(StepId.personalInfoB, ApplicationStepDescriptor.Status.notVisited));
-        progress.add(createWizardStep(StepId.financial, ApplicationStepDescriptor.Status.notVisited));
-        progress.add(createWizardStep(StepId.contacts, ApplicationStepDescriptor.Status.notVisited));
-        progress.add(createWizardStep(StepId.pmcCustom, ApplicationStepDescriptor.Status.notVisited));
-        progress.add(createWizardStep(StepId.summary, ApplicationStepDescriptor.Status.notVisited));
-        return progress;
     }
 
 }

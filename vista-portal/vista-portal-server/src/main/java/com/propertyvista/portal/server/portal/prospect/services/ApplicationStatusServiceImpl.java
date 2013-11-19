@@ -18,7 +18,7 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.i18n.shared.I18n;
 
-import com.propertyvista.portal.rpc.portal.prospect.dto.ApplicationStatusDTO;
+import com.propertyvista.portal.rpc.portal.prospect.dto.OnlineApplicationStatusDTO;
 import com.propertyvista.portal.rpc.portal.prospect.dto.RentalSummaryDTO;
 import com.propertyvista.portal.rpc.portal.prospect.services.ApplicationStatusService;
 
@@ -27,8 +27,8 @@ public class ApplicationStatusServiceImpl implements ApplicationStatusService {
     private static final I18n i18n = I18n.get(ApplicationStatusServiceImpl.class);
 
     @Override
-    public void retrieveApplicationStatus(AsyncCallback<ApplicationStatusDTO> callback) {
-        ApplicationStatusDTO account = EntityFactory.create(ApplicationStatusDTO.class);
+    public void retrieveApplicationStatus(AsyncCallback<OnlineApplicationStatusDTO> callback) {
+        OnlineApplicationStatusDTO account = EntityFactory.create(OnlineApplicationStatusDTO.class);
         callback.onSuccess(account);
     }
 

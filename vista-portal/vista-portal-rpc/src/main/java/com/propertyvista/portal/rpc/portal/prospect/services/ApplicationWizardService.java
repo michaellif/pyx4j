@@ -15,8 +15,8 @@ package com.propertyvista.portal.rpc.portal.prospect.services;
 
 import com.pyx4j.entity.rpc.AbstractCrudService;
 
-import com.propertyvista.portal.rpc.portal.prospect.dto.ApplicationDTO;
+import com.propertyvista.portal.rpc.portal.prospect.dto.OnlineApplicationDTO;
 
-public interface ApplicationWizardService extends AbstractCrudService<ApplicationDTO> {
+public interface ApplicationWizardService extends AbstractCrudService<OnlineApplicationDTO> {
 
 }

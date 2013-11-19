@@ -13,10 +13,10 @@
  */
 package com.propertyvista.portal.prospect.ui.application;
 
-import com.propertyvista.portal.rpc.portal.prospect.dto.ApplicationStatusDTO;
+import com.propertyvista.portal.rpc.portal.prospect.dto.OnlineApplicationStatusDTO;
 import com.propertyvista.portal.shared.ui.AbstractFormView;
 
-public class ApplicationStatusPageViewImpl extends AbstractFormView<ApplicationStatusDTO> implements ApplicationStatusPageView {
+public class ApplicationStatusPageViewImpl extends AbstractFormView<OnlineApplicationStatusDTO> implements ApplicationStatusPageView {
 
     public ApplicationStatusPageViewImpl() {
         setForm(new ApplicationStatusPage(this));

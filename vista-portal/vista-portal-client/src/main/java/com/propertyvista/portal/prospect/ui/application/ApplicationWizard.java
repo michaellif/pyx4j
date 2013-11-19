@@ -29,10 +29,10 @@ import com.pyx4j.forms.client.validators.ValidationResults;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.portal.prospect.ui.application.ApplicationWizardView.ApplicationWizardPresenter;
-import com.propertyvista.portal.rpc.portal.prospect.dto.ApplicationDTO;
+import com.propertyvista.portal.rpc.portal.prospect.dto.OnlineApplicationDTO;
 import com.propertyvista.portal.shared.ui.CPortalEntityWizard;
 
-public class ApplicationWizard extends CPortalEntityWizard<ApplicationDTO> {
+public class ApplicationWizard extends CPortalEntityWizard<OnlineApplicationDTO> {
 
     private static final I18n i18n = I18n.get(ApplicationWizard.class);
 
@@ -61,7 +61,7 @@ public class ApplicationWizard extends CPortalEntityWizard<ApplicationDTO> {
     private ApplicationWizardPresenter presenter;
 
     public ApplicationWizard(ApplicationWizardViewImpl view) {
-        super(ApplicationDTO.class, view, i18n.tr("Profile Payment Setup"), i18n.tr("Submit"), ThemeColor.contrast4);
+        super(OnlineApplicationDTO.class, view, i18n.tr("Profile Payment Setup"), i18n.tr("Submit"), ThemeColor.contrast4);
         leaseStep = addStep(createLeaseStep());
         unitStep = addStep(createUnitStep());
         optionsStep = addStep(createOptionsStep());
@@ -162,7 +162,7 @@ public class ApplicationWizard extends CPortalEntityWizard<ApplicationDTO> {
         return new ApplicationWizardDecorator();
     }
 
-    class ApplicationWizardDecorator extends WizardDecorator<ApplicationDTO> implements WizardProgressIndicator {
+    class ApplicationWizardDecorator extends WizardDecorator<OnlineApplicationDTO> implements WizardProgressIndicator {
 
         private final ApplicationProgressPanel progressPanel;
 
@@ -191,7 +191,7 @@ public class ApplicationWizard extends CPortalEntityWizard<ApplicationDTO> {
         }
 
         @Override
-        public void setComponent(CEntityWizard<ApplicationDTO> component) {
+        public void setComponent(CEntityWizard<OnlineApplicationDTO> component) {
             super.setComponent(component);
             progressPanel.setWizard(component);
         }

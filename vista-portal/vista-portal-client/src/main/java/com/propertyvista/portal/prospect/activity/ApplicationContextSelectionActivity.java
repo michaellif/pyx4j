@@ -11,7 +11,7 @@
  * @author ArtyomB
  * @version $Id$
  */
-package com.propertyvista.portal.resident.activity;
+package com.propertyvista.portal.prospect.activity;
 
 import java.util.Vector;
 
@@ -27,23 +27,24 @@ import com.pyx4j.security.rpc.AuthenticationResponse;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.rpc.AppPlace;
 
-import com.propertyvista.domain.tenant.lease.Lease;
-import com.propertyvista.portal.resident.ResidentPortalSite;
-import com.propertyvista.portal.resident.ui.LeaseContextSelectionView;
-import com.propertyvista.portal.rpc.portal.resident.dto.LeaseContextChoiceDTO;
-import com.propertyvista.portal.rpc.portal.resident.services.LeaseContextSelectionService;
+import com.propertyvista.domain.tenant.prospect.OnlineApplication;
+import com.propertyvista.portal.prospect.ProspectPortalSite;
+import com.propertyvista.portal.prospect.ui.ApplicationContextSelectionView;
+import com.propertyvista.portal.prospect.ui.ApplicationContextSelectionView.ApplicationContextSelectionPresenter;
+import com.propertyvista.portal.rpc.portal.prospect.dto.OnlineApplicationContextChoiceDTO;
+import com.propertyvista.portal.rpc.portal.prospect.services.ApplicationContextSelectionService;
 
-public class LeaseContextSelectionActivity extends AbstractActivity implements LeaseContextSelectionView.Presenter {
+public class ApplicationContextSelectionActivity extends AbstractActivity implements ApplicationContextSelectionPresenter {
 
-    private static final I18n i18n = I18n.get(LeaseContextSelectionActivity.class);
+    private static final I18n i18n = I18n.get(ApplicationContextSelectionActivity.class);
 
-    private final LeaseContextSelectionView view;
+    private final ApplicationContextSelectionView view;
 
-    private final LeaseContextSelectionService service;
+    private final ApplicationContextSelectionService service;
 
-    public LeaseContextSelectionActivity() {
-        this.service = GWT.<LeaseContextSelectionService> create(LeaseContextSelectionService.class);
-        this.view = ResidentPortalSite.getViewFactory().getView(LeaseContextSelectionView.class);
+    public ApplicationContextSelectionActivity() {
+        this.service = GWT.<ApplicationContextSelectionService> create(ApplicationContextSelectionService.class);
+        this.view = ProspectPortalSite.getViewFactory().getView(ApplicationContextSelectionView.class);
         this.view.setPresenter(this);
     }
 
@@ -55,9 +56,9 @@ public class LeaseContextSelectionActivity extends AbstractActivity implements L
 
     @Override
     public void populate() {
-        service.getLeaseContextChoices(new DefaultAsyncCallback<Vector<LeaseContextChoiceDTO>>() {
+        service.getApplicationContextChoices(new DefaultAsyncCallback<Vector<OnlineApplicationContextChoiceDTO>>() {
             @Override
-            public void onSuccess(Vector<LeaseContextChoiceDTO> result) {
+            public void onSuccess(Vector<OnlineApplicationContextChoiceDTO> result) {
                 view.populate(result);
             }
         });
@@ -65,10 +66,10 @@ public class LeaseContextSelectionActivity extends AbstractActivity implements L
 
     @Override
     public void setLeaseContext() {
-        Lease leaseIdStub = view.getSelectedLeaseIdStub();
+        OnlineApplication leaseIdStub = view.getSelectedApplication();
 
         if (leaseIdStub != null) {
-            service.setLeaseContext(new DefaultAsyncCallback<AuthenticationResponse>() {
+            service.setApplicationContext(new DefaultAsyncCallback<AuthenticationResponse>() {
                 @Override
                 public void onSuccess(AuthenticationResponse result) {
                     ClientContext.authenticated(result);

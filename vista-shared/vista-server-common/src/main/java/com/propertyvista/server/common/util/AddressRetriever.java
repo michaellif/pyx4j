@@ -23,6 +23,7 @@ import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.LeaseParticipant;
 import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
+import com.propertyvista.domain.tenant.prospect.OnlineApplication;
 
 public class AddressRetriever {
 
@@ -84,6 +85,11 @@ public class AddressRetriever {
         AddressSimple address = EntityFactory.create(AddressSimple.class);
         new AddressConverter.StructuredToSimpleAddressConverter().copyBOtoTO(getLeaseAddress(lease), address);
         return address;
+    }
+
+    public static AddressStructured getOnlineApplicationAddress(OnlineApplication onlineApplication) {
+        // TODO Auto-generated method stub
+        return null;
     }
 
 }

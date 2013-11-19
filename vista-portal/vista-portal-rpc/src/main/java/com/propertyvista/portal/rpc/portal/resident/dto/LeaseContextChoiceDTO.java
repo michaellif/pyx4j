@@ -7,24 +7,26 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Nov 26, 2011
- * @author vlads
+ * Created on Apr 24, 2012
+ * @author ArtyomB
  * @version $Id$
  */
-package com.propertyvista.portal.rpc.portal.shared.dto;
+package com.propertyvista.portal.rpc.portal.resident.dto;
 
+import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
-import com.pyx4j.i18n.annotations.I18n;
+
+import com.propertyvista.domain.tenant.lease.Lease;
 
 @Transient
-@I18n(strategy = I18n.I18nStrategy.IgnoreThis)
-@Deprecated
-public interface SatisfactionSurveyResponceDTO extends IEntity {
+public interface LeaseContextChoiceDTO extends IEntity {
 
-    IPrimitive<String> description();
+    /** reference to lease */
+    Lease leaseId();
 
-    IPrimitive<Integer> rating();
+    @Caption(name = "Unit Address")
+    IPrimitive<String> leasedUnitAddress();
 
 }

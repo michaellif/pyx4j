@@ -20,7 +20,7 @@ import com.pyx4j.security.rpc.AuthenticationService;
 import com.propertyvista.portal.prospect.themes.ProspectPortalTheme;
 import com.propertyvista.portal.prospect.ui.ProspectPortalRootPane;
 import com.propertyvista.portal.rpc.portal.prospect.ProspectPortalSiteMap;
-import com.propertyvista.portal.rpc.portal.resident.services.ProspectAuthenticationService;
+import com.propertyvista.portal.rpc.portal.prospect.services.ProspectAuthenticationService;
 import com.propertyvista.portal.shared.PortalSite;
 
 public class ProspectPortalSite extends PortalSite {

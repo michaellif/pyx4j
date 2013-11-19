@@ -21,15 +21,15 @@ import com.pyx4j.site.rpc.AppPlace;
 
 import com.propertyvista.portal.prospect.ui.application.ApplicationWizardView;
 import com.propertyvista.portal.prospect.ui.application.ApplicationWizardView.ApplicationWizardPresenter;
-import com.propertyvista.portal.rpc.portal.prospect.dto.ApplicationDTO;
+import com.propertyvista.portal.rpc.portal.prospect.dto.OnlineApplicationDTO;
 import com.propertyvista.portal.rpc.portal.prospect.services.ApplicationWizardService;
 import com.propertyvista.portal.rpc.portal.resident.ResidentPortalSiteMap.Financial;
 import com.propertyvista.portal.shared.activity.AbstractWizardCrudActivity;
 
-public class ApplicationWizardActivity extends AbstractWizardCrudActivity<ApplicationDTO> implements ApplicationWizardPresenter {
+public class ApplicationWizardActivity extends AbstractWizardCrudActivity<OnlineApplicationDTO> implements ApplicationWizardPresenter {
 
     public ApplicationWizardActivity(AppPlace place) {
-        super(ApplicationWizardView.class, GWT.<ApplicationWizardService> create(ApplicationWizardService.class), ApplicationDTO.class);
+        super(ApplicationWizardView.class, GWT.<ApplicationWizardService> create(ApplicationWizardService.class), OnlineApplicationDTO.class);
     }
 
     @Override

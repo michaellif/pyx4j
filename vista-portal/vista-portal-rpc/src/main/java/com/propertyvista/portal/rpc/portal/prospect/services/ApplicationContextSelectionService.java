@@ -7,23 +7,26 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Oct 27, 2011
- * @author vlads
+ * Created on Apr 24, 2012
+ * @author ArtyomB
  * @version $Id$
  */
 package com.propertyvista.portal.rpc.portal.prospect.services;
 
+import java.util.Vector;
+
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.rpc.shared.IService;
+import com.pyx4j.security.rpc.AuthenticationResponse;
 
-import com.propertyvista.portal.rpc.portal.prospect.dto.OnlineApplicationStatusDTO;
-import com.propertyvista.portal.rpc.portal.prospect.dto.RentalSummaryDTO;
+import com.propertyvista.domain.tenant.prospect.OnlineApplication;
+import com.propertyvista.portal.rpc.portal.prospect.dto.OnlineApplicationContextChoiceDTO;
 
-public interface ApplicationStatusService extends IService {
+public interface ApplicationContextSelectionService extends IService {
 
-    void retrieveApplicationStatus(AsyncCallback<OnlineApplicationStatusDTO> callback);
+    void getApplicationContextChoices(AsyncCallback<Vector<OnlineApplicationContextChoiceDTO>> callback);
 
-    void retrieveRentalSummary(AsyncCallback<RentalSummaryDTO> callback);
+    void setApplicationContext(AsyncCallback<AuthenticationResponse> callback, OnlineApplication applicationStub);
 
 }

@@ -11,21 +11,21 @@
  * @author ArtyomB
  * @version $Id$
  */
-package com.propertyvista.portal.resident.ui;
+package com.propertyvista.portal.prospect.ui;
 
 import java.util.List;
 
 import com.pyx4j.site.client.IsView;
 
-import com.propertyvista.domain.tenant.lease.Lease;
-import com.propertyvista.portal.rpc.portal.resident.dto.LeaseContextChoiceDTO;
+import com.propertyvista.domain.tenant.prospect.OnlineApplication;
+import com.propertyvista.portal.rpc.portal.prospect.dto.OnlineApplicationContextChoiceDTO;
 
 /**
- * This view is used to resolve ambiguity when a customer with more than one lease logs in to a portal.
+ * This view is used to resolve ambiguity when a customer with more than one applications logs in to a portal.
  */
-public interface LeaseContextSelectionView extends IsView {
+public interface ApplicationContextSelectionView extends IsView {
 
-    interface Presenter {
+    public interface ApplicationContextSelectionPresenter {
 
         void populate();
 
@@ -33,11 +33,11 @@ public interface LeaseContextSelectionView extends IsView {
 
     }
 
-    void setPresenter(Presenter presenter);
+    void setPresenter(ApplicationContextSelectionPresenter presenter);
 
-    void populate(List<LeaseContextChoiceDTO> leaseChoices);
+    void populate(List<OnlineApplicationContextChoiceDTO> leaseChoices);
 
-    Lease getSelectedLeaseIdStub();
+    OnlineApplication getSelectedApplication();
 
     void showMessage(String message);
 }

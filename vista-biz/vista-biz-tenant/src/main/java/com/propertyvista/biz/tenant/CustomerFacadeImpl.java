@@ -45,6 +45,7 @@ import com.propertyvista.domain.tenant.CustomerSelfRegistration;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
 import com.propertyvista.domain.tenant.lease.Tenant;
+import com.propertyvista.domain.tenant.prospect.OnlineApplication;
 import com.propertyvista.operations.domain.legal.VistaTerms.VistaTermsV;
 import com.propertyvista.portal.rpc.portal.resident.dto.SelfRegistrationDTO;
 import com.propertyvista.portal.rpc.shared.EntityValidationException;
@@ -252,6 +253,12 @@ public class CustomerFacadeImpl implements CustomerFacade {
         Persistence.service().persist(credential);
         log.info("tenant {} {} registered for tenant portal", selfRegistration.firstName(), selfRegistration.lastName());
 
+    }
+
+    @Override
+    public List<OnlineApplication> getActiveOnlineApplications(CustomerUser customerUser) {
+        // TODO Auto-generated method stub
+        return null;
     }
 
 }

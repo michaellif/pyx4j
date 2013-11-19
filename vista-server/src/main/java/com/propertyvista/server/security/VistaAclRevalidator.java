@@ -23,7 +23,7 @@ import com.propertyvista.crm.server.services.pub.CrmAuthenticationServiceImpl;
 import com.propertyvista.domain.security.common.VistaApplication;
 import com.propertyvista.ob.server.services.OnboardingAuthenticationServiceImpl;
 import com.propertyvista.operations.server.services.OperationsAuthenticationServiceImpl;
-import com.propertyvista.portal.server.portal.resident.services.ProspectAuthenticationServiceImpl;
+import com.propertyvista.portal.server.portal.prospect.services.ProspectAuthenticationServiceImpl;
 import com.propertyvista.portal.server.portal.resident.services.ResidentAuthenticationServiceImpl;
 
 public class VistaAclRevalidator implements AclRevalidator {

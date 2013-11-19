@@ -41,7 +41,7 @@ import com.pyx4j.site.client.ui.layout.responsive.LayoutChangeHandler;
 import com.pyx4j.site.client.ui.layout.responsive.ResponsiveLayoutPanel.LayoutType;
 import com.pyx4j.widgets.client.DropDownPanel;
 
-import com.propertyvista.portal.rpc.portal.prospect.dto.ApplicationDTO;
+import com.propertyvista.portal.rpc.portal.prospect.dto.OnlineApplicationDTO;
 import com.propertyvista.portal.shared.themes.StepsTheme;
 
 public class ApplicationProgressPanel extends FlowPanel {
@@ -58,7 +58,7 @@ public class ApplicationProgressPanel extends FlowPanel {
 
     private final List<StepButton> stepButtons;
 
-    private CEntityWizard<ApplicationDTO> component;
+    private CEntityWizard<OnlineApplicationDTO> component;
 
     public ApplicationProgressPanel() {
 
@@ -114,7 +114,7 @@ public class ApplicationProgressPanel extends FlowPanel {
         }
     }
 
-    public void setWizard(CEntityWizard<ApplicationDTO> component) {
+    public void setWizard(CEntityWizard<OnlineApplicationDTO> component) {
         this.component = component;
     }
 

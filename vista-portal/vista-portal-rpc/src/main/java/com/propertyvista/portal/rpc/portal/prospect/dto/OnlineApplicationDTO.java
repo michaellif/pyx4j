@@ -18,6 +18,6 @@ import com.pyx4j.entity.annotations.Transient;
 import com.propertyvista.domain.tenant.prospect.OnlineApplication;
 
 @Transient
-public interface ApplicationDTO extends OnlineApplication {
+public interface OnlineApplicationDTO extends OnlineApplication {
 
 }
