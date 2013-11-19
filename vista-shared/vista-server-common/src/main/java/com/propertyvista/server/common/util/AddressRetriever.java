@@ -50,6 +50,15 @@ public class AddressRetriever {
         return address;
     }
 
+    public static AddressStructured getOnlineApplicationAddress(OnlineApplication onlineApplication) {
+        Persistence.ensureRetrieve(onlineApplication, AttachLevel.Attached);
+        Persistence.ensureRetrieve(onlineApplication.masterOnlineApplication(), AttachLevel.Attached);
+        Persistence.ensureRetrieve(onlineApplication.masterOnlineApplication().leaseApplication(), AttachLevel.Attached);
+        return getLeaseAddress(onlineApplication.masterOnlineApplication().leaseApplication().lease());
+    }
+
+    // Legal Address:
+
     public static AddressStructured getLeaseLegalAddress(Lease lease) {
         Persistence.ensureRetrieve(lease, AttachLevel.Attached);
         return getUnitLegalAddress(lease.unit());
@@ -87,9 +96,9 @@ public class AddressRetriever {
         return address;
     }
 
-    public static AddressStructured getOnlineApplicationAddress(OnlineApplication onlineApplication) {
-        // TODO Auto-generated method stub
-        return null;
+    public static AddressSimple getOnlineApplicationAddressSimple(OnlineApplication onlineApplication) {
+        AddressSimple address = EntityFactory.create(AddressSimple.class);
+        new AddressConverter.StructuredToSimpleAddressConverter().copyBOtoTO(getOnlineApplicationAddress(onlineApplication), address);
+        return address;
     }
-
 }

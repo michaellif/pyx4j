@@ -99,45 +99,35 @@ public class CustomerFacadeImpl implements CustomerFacade {
 
     @Override
     public List<Lease> getActiveLeases(CustomerUser customerUser) {
-        Customer customer;
-        {
-            EntityQueryCriteria<Customer> criteria = EntityQueryCriteria.create(Customer.class);
-            criteria.eq(criteria.proto().user(), customerUser);
-            customer = Persistence.service().retrieve(criteria);
-            if (customer == null) {
-                return null;
+        List<Lease> leases = new ArrayList<Lease>();
+
+        Customer customer = findCustomer(customerUser);
+        if (customer != null) {
+            {
+                EntityQueryCriteria<Lease> criteria = EntityQueryCriteria.create(Lease.class);
+                criteria.in(criteria.proto().status(), Lease.Status.current());
+                criteria.in(criteria.proto().unit().building().suspended(), false);
+                criteria.eq(criteria.proto().currentTerm().version().tenants().$().leaseParticipant().customer(), customer);
+                criteria.in(criteria.proto().currentTerm().version().tenants().$().role(), LeaseTermParticipant.Role.portalAccess());
+                leases.addAll(Persistence.service().query(criteria));
+            }
+            // TODO guarantors portal not supported for now
+            if (false) {
+                EntityQueryCriteria<Lease> criteria = EntityQueryCriteria.create(Lease.class);
+                criteria.in(criteria.proto().status(), Lease.Status.current());
+                criteria.eq(criteria.proto().currentTerm().version().guarantors().$().leaseParticipant().customer(), customer);
+                leases.addAll(Persistence.service().query(criteria));
             }
         }
 
-        List<Lease> leases = new ArrayList<Lease>();
-        {
-            EntityQueryCriteria<Lease> criteria = EntityQueryCriteria.create(Lease.class);
-            criteria.in(criteria.proto().status(), Lease.Status.current());
-            criteria.in(criteria.proto().unit().building().suspended(), false);
-            criteria.eq(criteria.proto().currentTerm().version().tenants().$().leaseParticipant().customer(), customer);
-            criteria.in(criteria.proto().currentTerm().version().tenants().$().role(), LeaseTermParticipant.Role.portalAccess());
-            leases.addAll(Persistence.service().query(criteria));
-        }
-        // TODO guarantors portal not supported for now
-        if (false) {
-            EntityQueryCriteria<Lease> criteria = EntityQueryCriteria.create(Lease.class);
-            criteria.in(criteria.proto().status(), Lease.Status.current());
-            criteria.eq(criteria.proto().currentTerm().version().guarantors().$().leaseParticipant().customer(), customer);
-            leases.addAll(Persistence.service().query(criteria));
-        }
         return leases;
     }
 
     @Override
     public boolean hasToAcceptTerms(CustomerUser customerUser) {
-        Customer customer;
-        {
-            EntityQueryCriteria<Customer> criteria = EntityQueryCriteria.create(Customer.class);
-            criteria.add(PropertyCriterion.eq(criteria.proto().user(), customerUser));
-            customer = Persistence.service().retrieve(criteria);
-            if (customer == null) {
-                return true;
-            }
+        Customer customer = findCustomer(customerUser);
+        if (customer == null) {
+            return true;
         }
 
         final CustomerAcceptedTerms acceptedTerms;
@@ -257,8 +247,24 @@ public class CustomerFacadeImpl implements CustomerFacade {
 
     @Override
     public List<OnlineApplication> getActiveOnlineApplications(CustomerUser customerUser) {
-        // TODO Auto-generated method stub
-        return null;
+        List<OnlineApplication> applications = new ArrayList<OnlineApplication>();
+
+        Customer customer = findCustomer(customerUser);
+        if (customer != null) {
+            EntityQueryCriteria<OnlineApplication> criteria = EntityQueryCriteria.create(OnlineApplication.class);
+            criteria.in(criteria.proto().status(), Lease.Status.current());
+            criteria.in(criteria.proto().customer(), customer);
+            applications.addAll(Persistence.service().query(criteria));
+        }
+
+        return applications;
     }
 
+    // internals:
+
+    private Customer findCustomer(CustomerUser customerUser) {
+        EntityQueryCriteria<Customer> criteria = EntityQueryCriteria.create(Customer.class);
+        criteria.eq(criteria.proto().user(), customerUser);
+        return Persistence.service().retrieve(criteria);
+    }
 }
