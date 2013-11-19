@@ -27,6 +27,7 @@ import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.prime.form.IForm;
 
+import com.propertyvista.common.client.theme.VistaTheme;
 import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
 import com.propertyvista.crm.client.ui.crud.policies.common.PolicyDTOTabPanelBasedForm;
 import com.propertyvista.domain.policy.dto.PaymentTypeSelectionPolicyDTO;
@@ -81,6 +82,9 @@ public class PaymentTypeSelectionPolicyForm extends PolicyDTOTabPanelBasedForm<P
         residentPortal.setWidget(0, ++col, alignedToCenter(proto().residentPortalVisaDebit()));
         residentPortal.setWidget(0, ++col, alignedToCenter(proto().residentPortalInterac()));
 
+//        residentPortal.setWidget(1, 0, col, new HTML(i18n.tr("Note: If card is disabled, Convenience Fee will apply for Portal payments.")));
+//        residentPortal.getWidget(1, 0).setStyleName(VistaTheme.StyleName.infoMessage.name());
+
         BasicFlexFormPanel cashEquivalent = new BasicFlexFormPanel();
         col = -1;
         cashEquivalent.setH4(0, ++col, 1, i18n.tr("Cash Equivalent:"));
@@ -104,6 +108,10 @@ public class PaymentTypeSelectionPolicyForm extends PolicyDTOTabPanelBasedForm<P
         main.setWidget(++row, 0, 2, residentPortal);
         main.setHR(++row, 0, 2);
         main.setWidget(++row, 0, 2, cashEquivalent);
+        main.setHR(++row, 0, 2);
+        main.setBR(++row, 0, 2);
+        main.setWidget(++row, 0, 2, new HTML(i18n.tr("Note: If card is disabled, Convenience Fee will apply for Portal payments.")));
+        main.getWidget(row, 0).setStyleName(VistaTheme.StyleName.infoMessage.name());
 
         return main;
     }
