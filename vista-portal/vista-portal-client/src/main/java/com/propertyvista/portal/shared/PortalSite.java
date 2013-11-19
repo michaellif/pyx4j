@@ -66,7 +66,7 @@ public abstract class PortalSite extends VistaSite {
 
         UncaughtHandler.setUnrecoverableErrorHandler(new VistaUnrecoverableErrorHandler());
 
-        getHistoryHandler().register(getPlaceController(), getEventBus(), AppPlace.NOWHERE);
+        getHistoryHandler().register(getPlaceController(), getEventBus());
 
         RootLayoutPanel.get().add(rootPane);
 

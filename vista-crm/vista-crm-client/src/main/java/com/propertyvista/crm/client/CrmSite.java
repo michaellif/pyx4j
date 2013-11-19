@@ -79,7 +79,7 @@ public class CrmSite extends VistaSite {
 
         UncaughtHandler.setUnrecoverableErrorHandler(new VistaUnrecoverableErrorHandler());
 
-        getHistoryHandler().register(getPlaceController(), getEventBus(), AppPlace.NOWHERE);
+        getHistoryHandler().register(getPlaceController(), getEventBus());
 
         HTML feedbackWidgetContainer = new HTML();
         feedbackWidgetContainer.getElement().setAttribute("id", "feedback_widget_container"); //getSatisfaction button container

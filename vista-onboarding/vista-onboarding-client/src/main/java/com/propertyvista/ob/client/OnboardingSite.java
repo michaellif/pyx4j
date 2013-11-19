@@ -70,7 +70,7 @@ public class OnboardingSite extends VistaSite {
             }
         });
 
-        getHistoryHandler().register(getPlaceController(), getEventBus(), AppPlace.NOWHERE);
+        getHistoryHandler().register(getPlaceController(), getEventBus());
         StyleManager.installTheme(new OnboardingTheme(), new OnboardingPalette());
 
         if (verifyBrowserCompatibility()) {

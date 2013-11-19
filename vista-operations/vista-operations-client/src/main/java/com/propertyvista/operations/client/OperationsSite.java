@@ -43,7 +43,7 @@ public class OperationsSite extends VistaSite {
         OperationsEntityMapper.init();
         DefaultErrorHandlerDialog.register();
 
-        getHistoryHandler().register(getPlaceController(), getEventBus(), new OperationsSiteMap.Management());
+        getHistoryHandler().register(getPlaceController(), getEventBus());
         StyleManager.installTheme(new OperationsTheme(), new OperationsPalette());
 
         if (verifyBrowserCompatibility()) {
