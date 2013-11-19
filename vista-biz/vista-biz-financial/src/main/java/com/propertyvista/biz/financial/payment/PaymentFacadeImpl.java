@@ -129,6 +129,24 @@ public class PaymentFacadeImpl implements PaymentFacade {
     }
 
     @Override
+    public void validatePayment(PaymentRecord paymentRecord, VistaApplication vistaApplication) {
+        if (paymentRecord.paymentMethod().details().isInstanceOf(CreditCardInfo.class)) {
+            CreditCardType ccType = paymentRecord.paymentMethod().details().<CreditCardInfo> cast().cardType().getValue();
+            if (ServerSideFactory.create(PaymentFacade.class).getConvenienceFeeApplicableCardTypes(paymentRecord.billingAccount(), vistaApplication)
+                    .contains(ccType)) {
+                Validate.notNull(paymentRecord.convenienceFee().getValue(), "Convenience Fee fee not calculated");
+            }
+        }
+        if (!paymentRecord.paymentMethod().id().isNull()) {
+            EntityQueryCriteria<LeasePaymentMethod> criteria = new EntityQueryCriteria<LeasePaymentMethod>(LeasePaymentMethod.class);
+            criteria.eq(criteria.proto().id(), paymentRecord.paymentMethod().id());
+            criteria.eq(criteria.proto().customer()._tenantInLease().$().lease().billingAccount(), paymentRecord.billingAccount());
+            criteria.eq(criteria.proto().isDeleted(), Boolean.FALSE);
+            Validate.isTrue(1 == Persistence.service().count(criteria), "Payment record owner is not on lease");
+        }
+    }
+
+    @Override
     public PaymentRecord persistPayment(PaymentRecord paymentRecord) {
         if (!paymentRecord.id().isNull()) {
             PaymentRecord paymentRecordLock = Persistence.service().retrieve(PaymentRecord.class, paymentRecord.getPrimaryKey(), AttachLevel.Attached, true);

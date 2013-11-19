@@ -106,6 +106,7 @@ public class PaymentWizardServiceImpl extends AbstractCrudServiceDtoImpl<Payment
         Lease lease = Persistence.service().retrieve(Lease.class, ResidentPortalContext.getCurrentUserLeaseIdStub().getPrimaryKey());
 
         bo.paymentMethod().customer().set(ResidentPortalContext.getCurrentUserCustomer());
+        bo.billingAccount().set(lease.billingAccount());
 
         // Do not change profile methods
         if (bo.paymentMethod().id().isNull()) {
@@ -122,6 +123,8 @@ public class PaymentWizardServiceImpl extends AbstractCrudServiceDtoImpl<Payment
         }
 
         ServerSideFactory.create(PaymentFacade.class).validatePaymentMethod(lease.billingAccount(), bo.paymentMethod(), VistaApplication.resident);
+        ServerSideFactory.create(PaymentFacade.class).validatePayment(bo, VistaApplication.resident);
+
         ServerSideFactory.create(PaymentFacade.class).persistPayment(bo);
 
         Persistence.service().commit(); // this commit is necessary (before processing next)
@@ -144,22 +147,22 @@ public class PaymentWizardServiceImpl extends AbstractCrudServiceDtoImpl<Payment
     }
 
     @Override
-    public void getConvenienceFee(AsyncCallback<PaymentConvenienceFeeDTO> callback, PaymentConvenienceFeeDTO inData) {
-        if (inData.paymentMethod().details().isInstanceOf(CreditCardInfo.class)) {
+    public void getConvenienceFee(AsyncCallback<PaymentConvenienceFeeDTO> callback, PaymentConvenienceFeeDTO to) {
+        if (to.paymentMethod().details().isInstanceOf(CreditCardInfo.class)) {
             Lease lease = ResidentPortalContext.getCurrentUserLease();
 
-            CreditCardType ccType = inData.paymentMethod().details().<CreditCardInfo> cast().cardType().getValue();
+            CreditCardType ccType = to.paymentMethod().details().<CreditCardInfo> cast().cardType().getValue();
             if (ServerSideFactory.create(PaymentFacade.class).getConvenienceFeeApplicableCardTypes(lease.billingAccount(), VistaApplication.resident)
                     .contains(ccType)) {
                 ConvenienceFeeCalulationResponseTO result = ServerSideFactory.create(PaymentFacade.class).getConvenienceFee(lease.billingAccount(), ccType,
-                        inData.amount().getValue());
+                        to.amount().getValue());
 
-                inData.fee().setValue(result.feeAmount().getValue());
-                inData.total().setValue(inData.amount().getValue().add(result.feeAmount().getValue()));
-                inData.transactionNumber().setValue(result.transactionNumber().getValue());
+                to.fee().setValue(result.feeAmount().getValue());
+                to.total().setValue(to.amount().getValue().add(result.feeAmount().getValue()));
+                to.transactionNumber().setValue(result.transactionNumber().getValue());
             }
         }
 
-        callback.onSuccess(inData);
+        callback.onSuccess(to);
     }
 }

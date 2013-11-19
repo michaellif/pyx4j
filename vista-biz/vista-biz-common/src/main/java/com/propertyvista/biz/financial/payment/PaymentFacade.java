@@ -43,6 +43,8 @@ public interface PaymentFacade {
 
     void validatePaymentMethod(BillingAccount billingAccount, LeasePaymentMethod paymentMethod, VistaApplication vistaApplication);
 
+    void validatePayment(PaymentRecord paymentRecord, VistaApplication vistaApplication);
+
     boolean isElectronicPaymentsSetup(BillingAccount billingAccountId);
 
     boolean isElectronicPaymentsSetup(Lease leaseId);
