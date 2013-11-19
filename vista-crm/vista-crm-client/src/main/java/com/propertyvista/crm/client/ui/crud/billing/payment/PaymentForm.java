@@ -34,6 +34,7 @@ import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.ui.CEntityLabel;
 import com.pyx4j.forms.client.ui.CField;
 import com.pyx4j.forms.client.ui.CLabel;
+import com.pyx4j.forms.client.ui.CMoneyLabel;
 import com.pyx4j.forms.client.ui.CNumberLabel;
 import com.pyx4j.forms.client.ui.CRadioGroupEnum;
 import com.pyx4j.forms.client.ui.CSimpleEntityComboBox;
@@ -231,6 +232,7 @@ public class PaymentForm extends CrmEntityForm<PaymentRecordDTO> {
 
         left.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().profiledPaymentMethod(), profiledPaymentMethodsCombo), 30).build());
         left.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().storeInProfile()), 3).build());
+        left.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().convenienceFee(), new CMoneyLabel()), 10).build());
 
         TwoColumnFlexFormPanel right = new TwoColumnFlexFormPanel();
         row = -1;
@@ -349,6 +351,8 @@ public class PaymentForm extends CrmEntityForm<PaymentRecordDTO> {
         get(proto().selectPaymentMethod()).setVisible(false);
         get(proto().storeInProfile()).setVisible(false);
         get(proto().createdBy()).setVisible(false);
+        get(proto().convenienceFee()).setVisible(false);
+        get(proto().notes()).setVisible(false);
 
         noticeViewer.updateVisibility();
     }
@@ -366,6 +370,8 @@ public class PaymentForm extends CrmEntityForm<PaymentRecordDTO> {
         get(proto().paymentStatus()).setVisible(!isNew);
         get(proto().lastStatusChangeDate()).setVisible(!isNew);
         get(proto().createdBy()).setVisible(!getValue().createdBy().isNull());
+        get(proto().convenienceFee()).setVisible(!getValue().convenienceFee().isNull());
+        get(proto().notes()).setVisible(isEditable() || !getValue().notes().isNull());
 
         noticeViewer.updateVisibility();
 
@@ -415,9 +421,9 @@ public class PaymentForm extends CrmEntityForm<PaymentRecordDTO> {
             }
 
             // Need to show Direct Debit details when in status Queued
-            boolean transactionResult = getValue().paymentMethod().isNull() ? false : (getValue().paymentMethod().type().getValue().isTransactable());
+            boolean transactionResult = (getValue().paymentMethod().isNull() ? false : getValue().paymentMethod().type().getValue().isTransactable());
 
-            get(proto().transactionAuthorizationNumber()).setVisible(transactionResult);
+            get(proto().transactionAuthorizationNumber()).setVisible(transactionResult && !getValue().transactionAuthorizationNumber().isNull());
             get(proto().transactionErrorMessage()).setVisible(transactionResult && !getValue().transactionErrorMessage().isNull());
 
             get(proto().preauthorizedPayment()).setVisible(!getValue().preauthorizedPayment().isNull());
