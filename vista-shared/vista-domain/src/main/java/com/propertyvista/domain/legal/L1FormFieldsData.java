@@ -175,44 +175,59 @@ public interface L1FormFieldsData extends IEntity {
     IPrimitive<BigDecimal> part4nsf1TotalCharge();
 
     //
-    IPrimitive<String> part4nsf2ChequeAmount();
+    IPrimitive<BigDecimal> part4nsf2ChequeAmount();
 
-    IPrimitive<String> part4nsf2DateOfCheque();
+    IPrimitive<LogicalDate> part4nsf2DateOfCheque();
 
-    IPrimitive<String> part4nsf2DateOfNsfCharge();
+    IPrimitive<LogicalDate> part4nsf2DateOfNsfCharge();
 
-    IPrimitive<String> part4nsf2BankCharge();
+    IPrimitive<BigDecimal> part4nsf2BankCharge();
 
-    IPrimitive<String> part4nsf2LandlordsCharge();
+    IPrimitive<BigDecimal> part4nsf2LandlordsCharge();
 
-    IPrimitive<String> part4nsf2TotalCharge();
+    IPrimitive<BigDecimal> part4nsf2TotalCharge();
 
     //
-    IPrimitive<String> part4nsf3ChequeAmount();
+    IPrimitive<BigDecimal> part4nsf3ChequeAmount();
 
-    IPrimitive<String> part4nsf3DateOfCheque();
+    IPrimitive<LogicalDate> part4nsf3DateOfCheque();
 
-    IPrimitive<String> part4nsf3DateOfNsfCharge();
+    IPrimitive<LogicalDate> part4nsf3DateOfNsfCharge();
 
-    IPrimitive<String> part4nsf3BankCharge();
+    IPrimitive<BigDecimal> part4nsf3BankCharge();
 
-    IPrimitive<String> part4nsf3LandlordsCharge();
+    IPrimitive<BigDecimal> part4nsf3LandlordsCharge();
 
-    IPrimitive<String> part4nsf3TotalCharge();
+    IPrimitive<BigDecimal> part4nsf3TotalCharge();
 
-    IPrimitive<String> part4nsf4ChequeAmount();
+    //
+    IPrimitive<BigDecimal> part4nsf4ChequeAmount();
 
-    IPrimitive<String> part4nsf4DateOfCheque();
+    IPrimitive<LogicalDate> part4nsf4DateOfCheque();
 
-    IPrimitive<String> part4nsf4DateOfNsfCharge();
+    IPrimitive<LogicalDate> part4nsf4DateOfNsfCharge();
 
-    IPrimitive<String> part4nsf4BankCharge();
+    IPrimitive<BigDecimal> part4nsf4BankCharge();
 
-    IPrimitive<String> part4nsf4LandlordsCharge();
+    IPrimitive<BigDecimal> part4nsf4LandlordsCharge();
 
-    IPrimitive<String> part4nsf4TotalCharge();
+    IPrimitive<BigDecimal> part4nsf4TotalCharge();
 
-    IPrimitive<String> part4nsfTotalChargeOwed();
+    //
+    IPrimitive<BigDecimal> part4nsf5ChequeAmount();
+
+    IPrimitive<LogicalDate> part4nsf5DateOfCheque();
+
+    IPrimitive<LogicalDate> part4nsf5DateOfNsfCharge();
+
+    IPrimitive<BigDecimal> part4nsf5BankCharge();
+
+    IPrimitive<BigDecimal> part4nsf5LandlordsCharge();
+
+    IPrimitive<BigDecimal> part4nsf5TotalCharge();
+
+    //
+    IPrimitive<BigDecimal> part4nsfTotalChargeOwed();
 
     // Part5
     IPrimitive<String> part5TotalRentOwing();

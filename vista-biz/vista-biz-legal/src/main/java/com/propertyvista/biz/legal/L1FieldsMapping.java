@@ -149,6 +149,35 @@ public class L1FieldsMapping extends PdfFieldsMapping<L1FormFieldsData> {
         moneyShort(proto().part4nsf1LandlordsCharge()).mapTo(fieldsPartition("@@b12c96nfl1_a1_adm", 2, 2)).define();
         moneyShort(proto().part4nsf1TotalCharge()).mapTo(fieldsPartition("@@b12c96nfl1_a1_t_charge", 3, 2)).define();
         
+        moneyShort(proto().part4nsf2ChequeAmount()).mapTo(fieldsPartition("@@b12c96nfl1_a2_chq", 4, 2)).define();
+        date(proto().part4nsf2DateOfCheque()).mapTo(datePartition("@@b12c96nfl1_d2_chq")).define();
+        date(proto().part4nsf2DateOfNsfCharge()).mapTo(datePartition("@@b12c96nfl1_d2_nsf_l")).define();
+        moneyShort(proto().part4nsf2BankCharge()).mapTo(fieldsPartition("@@b12c96nfl1_a2_nsf", 2, 2)).define();
+        moneyShort(proto().part4nsf2LandlordsCharge()).mapTo(fieldsPartition("@@b12c96nfl1_a2_adm", 2, 2)).define();
+        moneyShort(proto().part4nsf2TotalCharge()).mapTo(fieldsPartition("@@b12c96nfl1_a2_t_charge", 3, 2)).define();
+        
+        moneyShort(proto().part4nsf3ChequeAmount()).mapTo(fieldsPartition("@@b12c96nfl1_a3_chq", 4, 2)).define();
+        date(proto().part4nsf3DateOfCheque()).mapTo(datePartition("@@b12c96nfl1_d3_chq")).define();
+        date(proto().part4nsf3DateOfNsfCharge()).mapTo(datePartition("@@b12c96nfl1_d3_nsf_l")).define();
+        moneyShort(proto().part4nsf3BankCharge()).mapTo(fieldsPartition("@@b12c96nfl1_a3_nsf", 2, 2)).define();
+        moneyShort(proto().part4nsf3LandlordsCharge()).mapTo(fieldsPartition("@@b12c96nfl1_a3_adm", 2, 2)).define();
+        moneyShort(proto().part4nsf3TotalCharge()).mapTo(fieldsPartition("@@b12c96nfl1_a3_t_charge", 3, 2)).define();
+        
+        moneyShort(proto().part4nsf4ChequeAmount()).mapTo(fieldsPartition("@@b12c96nfl1_a4_chq", 4, 2)).define();
+        date(proto().part4nsf4DateOfCheque()).mapTo(datePartition("@@b12c96nfl1_d4_chq")).define();
+        date(proto().part4nsf4DateOfNsfCharge()).mapTo(datePartition("@@b12c96nfl1_d4_nsf_l")).define();
+        moneyShort(proto().part4nsf4BankCharge()).mapTo(fieldsPartition("@@b12c96nfl1_a4_nsf", 2, 2)).define();
+        moneyShort(proto().part4nsf4LandlordsCharge()).mapTo(fieldsPartition("@@b12c96nfl1_a4_adm", 2, 2)).define();
+        moneyShort(proto().part4nsf4TotalCharge()).mapTo(fieldsPartition("@@b12c96nfl1_a4_t_charge", 3, 2)).define();
+        
+        moneyShort(proto().part4nsf5ChequeAmount()).mapTo(fieldsPartition("@@b12c96nfl1_a5_chq", 4, 2)).define();
+        date(proto().part4nsf5DateOfCheque()).mapTo(datePartition("@@b12c96nfl1_d5_chq")).define();
+        date(proto().part4nsf5DateOfNsfCharge()).mapTo(datePartition("@@b12c96nfl1_d5_nsf_l")).define();
+        moneyShort(proto().part4nsf5BankCharge()).mapTo(fieldsPartition("@@b12c96nfl1_a5_nsf", 2, 2)).define();
+        moneyShort(proto().part4nsf5LandlordsCharge()).mapTo(fieldsPartition("@@b12c96nfl1_a5_adm", 2, 2)).define();
+        moneyShort(proto().part4nsf5TotalCharge()).mapTo(fieldsPartition("@@b12c96nfl1_a5_t_charge", 3, 2)).define();
+        
+        money(proto().part4nsfTotalChargeOwed()).mapTo(fieldsPartition("@@b12c96nfl1_t_nsfadm_charge", 2, 3, 2)).define();        
     }//@formatter:on
 
     /** generate names of partitioned fields according to convention used in L1 form */

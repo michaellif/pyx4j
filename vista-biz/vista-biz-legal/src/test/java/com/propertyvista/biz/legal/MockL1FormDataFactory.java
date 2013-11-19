@@ -102,12 +102,43 @@ public class MockL1FormDataFactory {
         fieldsData.part4period3RentOwing().setValue(new BigDecimal("3333.44"));
         fieldsData.part4totalRentOwing().setValue(new BigDecimal("12345.67"));
 
+        // section 2
         fieldsData.part4nsf1ChequeAmount().setValue(new BigDecimal("6666.66"));
         fieldsData.part4nsf1DateOfCheque().setValue(new LogicalDate(DateUtils.detectDateformat("2009-01-01")));
         fieldsData.part4nsf1DateOfNsfCharge().setValue(new LogicalDate(DateUtils.detectDateformat("2009-01-05")));
         fieldsData.part4nsf1BankCharge().setValue(new BigDecimal("10.99"));
         fieldsData.part4nsf1LandlordsCharge().setValue(new BigDecimal("16.99"));
         fieldsData.part4nsf1TotalCharge().setValue(new BigDecimal("777.99"));
+
+        fieldsData.part4nsf2ChequeAmount().setValue(new BigDecimal("7776.77"));
+        fieldsData.part4nsf2DateOfCheque().setValue(new LogicalDate(DateUtils.detectDateformat("2010-01-01")));
+        fieldsData.part4nsf2DateOfNsfCharge().setValue(new LogicalDate(DateUtils.detectDateformat("2010-01-05")));
+        fieldsData.part4nsf2BankCharge().setValue(new BigDecimal("13.11"));
+        fieldsData.part4nsf2LandlordsCharge().setValue(new BigDecimal("26.99"));
+        fieldsData.part4nsf2TotalCharge().setValue(new BigDecimal("712.99"));
+
+        fieldsData.part4nsf3ChequeAmount().setValue(new BigDecimal("8888.88"));
+        fieldsData.part4nsf3DateOfCheque().setValue(new LogicalDate(DateUtils.detectDateformat("2018-01-01")));
+        fieldsData.part4nsf3DateOfNsfCharge().setValue(new LogicalDate(DateUtils.detectDateformat("2080-01-05")));
+        fieldsData.part4nsf3BankCharge().setValue(new BigDecimal("88.81"));
+        fieldsData.part4nsf3LandlordsCharge().setValue(new BigDecimal("86.98"));
+        fieldsData.part4nsf3TotalCharge().setValue(new BigDecimal("882.98"));
+
+        fieldsData.part4nsf4ChequeAmount().setValue(new BigDecimal("4444.44"));
+        fieldsData.part4nsf4DateOfCheque().setValue(new LogicalDate(DateUtils.detectDateformat("2044-01-01")));
+        fieldsData.part4nsf4DateOfNsfCharge().setValue(new LogicalDate(DateUtils.detectDateformat("2044-01-05")));
+        fieldsData.part4nsf4BankCharge().setValue(new BigDecimal("44.41"));
+        fieldsData.part4nsf4LandlordsCharge().setValue(new BigDecimal("44.55"));
+        fieldsData.part4nsf4TotalCharge().setValue(new BigDecimal("444.44"));
+
+        fieldsData.part4nsf5ChequeAmount().setValue(new BigDecimal("5555.55"));
+        fieldsData.part4nsf5DateOfCheque().setValue(new LogicalDate(DateUtils.detectDateformat("2055-01-01")));
+        fieldsData.part4nsf5DateOfNsfCharge().setValue(new LogicalDate(DateUtils.detectDateformat("2055-01-05")));
+        fieldsData.part4nsf5BankCharge().setValue(new BigDecimal("54.41"));
+        fieldsData.part4nsf5LandlordsCharge().setValue(new BigDecimal("54.55"));
+        fieldsData.part4nsf5TotalCharge().setValue(new BigDecimal("355.10"));
+
+        fieldsData.part4nsfTotalChargeOwed().setValue(new BigDecimal("53362.10"));
 
         return fieldsData;
     }
