@@ -136,8 +136,8 @@ public class YardiNewGuestWorkflowTest {
             Map<String, Prospect> guests = new HashMap<String, Prospect>();
             for (Prospect guest : guestActivity.getProspects().getProspect()) {
                 Customer c = guest.getCustomers().getCustomer().get(0);
-                if (!EnumSet.of(CustomerInfo.GUEST, CustomerInfo.PROSPECT, CustomerInfo.APPLICANT).contains(c.getType())) {
-                    // drop tenants
+                if (EnumSet.of(CustomerInfo.CURRENT_RESIDENT, CustomerInfo.FORMER_RESIDENT, CustomerInfo.FUTURE_RESIDENT).contains(c.getType())) {
+                    // drop residents
                     continue;
                 }
                 NameType name = c.getName();
@@ -326,16 +326,20 @@ public class YardiNewGuestWorkflowTest {
         printIds(EnumSet.of(EventTypes.APPLICATION, EventTypes.APPROVE, EventTypes.LEASE_SIGN), "Events");
         EventTypes type = null;
         do {
+            String typeStr = readLine("Execute Event: ");
+            if (StringUtils.isEmpty(typeStr)) {
+                break;
+            }
             try {
-                type = EventTypes.valueOf(readLine("Execute Event: "));
+                type = EventTypes.valueOf(typeStr);
             } catch (Exception ignore) {
-
+                // ignore
             }
             if (type != null) {
                 EventType event = new YardiGuestProcessor().getNewEvent(AGENT, SOURCE, type, false);
                 switch (type) {
                 case LEASE_SIGN:
-                    event.setQuotes(guest.getEvents().getEvent().get(0).getQuotes());
+                    event.setQuotes(new YardiGuestProcessor().getNewQuotes(900));
                     break;
                 default:
                     break;

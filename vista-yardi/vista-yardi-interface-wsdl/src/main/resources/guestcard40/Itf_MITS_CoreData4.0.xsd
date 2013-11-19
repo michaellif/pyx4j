@@ -574,6 +574,8 @@
 		<xs:restriction base="xs:string">
 			<xs:enumeration value="guest"/>
 			<xs:enumeration value="applicant"/>
+			<xs:enumeration value="approved_applicant"/>
+			<xs:enumeration value="denied_applicant"/>
 			<xs:enumeration value="customer"/>
 			<xs:enumeration value="current_resident"/>
 			<xs:enumeration value="former_resident"/>
@@ -583,6 +585,7 @@
 			<xs:enumeration value="roommate"/>
 			<xs:enumeration value="spouse"/>
 			<xs:enumeration value="guarantor"/>
+			<xs:enumeration value="canceled"/>
 		</xs:restriction>
 	</xs:simpleType>
 	<xs:simpleType name="Decimal4Digits2Fraction">

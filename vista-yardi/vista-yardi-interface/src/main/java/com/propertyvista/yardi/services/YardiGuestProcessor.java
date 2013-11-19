@@ -20,6 +20,7 @@ import com.yardi.entity.guestcard40.AddressInfo;
 import com.yardi.entity.guestcard40.AddressType;
 import com.yardi.entity.guestcard40.Agent;
 import com.yardi.entity.guestcard40.AgentName;
+import com.yardi.entity.guestcard40.CurrencyRangeType;
 import com.yardi.entity.guestcard40.Customer;
 import com.yardi.entity.guestcard40.CustomerInfo;
 import com.yardi.entity.guestcard40.CustomerPreferences;
@@ -32,6 +33,8 @@ import com.yardi.entity.guestcard40.Identification;
 import com.yardi.entity.guestcard40.NameType;
 import com.yardi.entity.guestcard40.NumericRangeType;
 import com.yardi.entity.guestcard40.Prospect;
+import com.yardi.entity.guestcard40.Quote;
+import com.yardi.entity.guestcard40.Quotes;
 import com.yardi.entity.guestcard40.UnitType;
 import com.yardi.entity.ils.ILSUnit;
 import com.yardi.entity.mits.Information;
@@ -107,6 +110,16 @@ public class YardiGuestProcessor {
         appEvent.setTransactionSource(source);
         appEvent.setFirstContact(firstContact);
         return appEvent;
+    }
+
+    public Quotes getNewQuotes(int amount) {
+        Quote quote = new Quote();
+        CurrencyRangeType value = new CurrencyRangeType();
+        value.setExact(String.valueOf(amount));
+        quote.setQuotedRent(value);
+        Quotes quotes = new Quotes();
+        quotes.getQuote().add(quote);
+        return quotes;
     }
 
     private Identification getGuestId() {
