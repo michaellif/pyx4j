@@ -115,17 +115,17 @@ public class CardServiceSimulationProcessor {
 
     private static BigDecimal feeCalulation(CardServiceSimulationMerchantAccount merchantAccount, String cardProduct, BigDecimal amount) {
         BigDecimal feePercent = new BigDecimal(".10");
-        if (cardProduct.equals(CaledonCardProduct.VisaCredit)) {
+        if (cardProduct.equals(CaledonCardProduct.VisaCredit.getIntrfaceValue())) {
             feePercent = new BigDecimal(".03");
             if (!merchantAccount.visaCreditConvenienceFee().isNull()) {
                 feePercent = merchantAccount.visaCreditConvenienceFee().getValue();
             }
-        } else if (cardProduct.equals(CaledonCardProduct.VisaDebit)) {
+        } else if (cardProduct.equals(CaledonCardProduct.VisaDebit.getIntrfaceValue())) {
             feePercent = new BigDecimal(".01");
             if (!merchantAccount.visaDebitConvenienceFee().isNull()) {
                 feePercent = merchantAccount.visaDebitConvenienceFee().getValue();
             }
-        } else if (cardProduct.equals(CaledonCardProduct.MasterCardCredit)) {
+        } else if (cardProduct.equals(CaledonCardProduct.MasterCardCredit.getIntrfaceValue())) {
             feePercent = new BigDecimal(".02");
             if (!merchantAccount.masterCardConvenienceFee().isNull()) {
                 feePercent = merchantAccount.masterCardConvenienceFee().getValue();
