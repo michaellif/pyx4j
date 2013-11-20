@@ -94,6 +94,11 @@ public class PaymentMethodFacadeImpl implements PaymentMethodFacade {
             return Collections.emptyList();
         }
 
+        if (usage == PaymentMethodUsage.InProfile) {
+            // Show all Already saved Method,  Do not apply filtering
+            return allMethods;
+        }
+
         BillingAccount billingAccount;
         {
             EntityQueryCriteria<BillingAccount> criteria = new EntityQueryCriteria<BillingAccount>(BillingAccount.class);
