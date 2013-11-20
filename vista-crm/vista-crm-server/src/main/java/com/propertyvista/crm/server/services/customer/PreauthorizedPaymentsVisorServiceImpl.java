@@ -13,6 +13,7 @@
  */
 package com.propertyvista.crm.server.services.customer;
 
+import java.util.List;
 import java.util.Vector;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
@@ -27,11 +28,13 @@ import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.rpc.shared.VoidSerializable;
 
 import com.propertyvista.biz.financial.payment.PaymentMethodFacade;
+import com.propertyvista.biz.financial.payment.PaymentMethodFacade.PaymentMethodUsage;
 import com.propertyvista.crm.rpc.dto.tenant.PreauthorizedPaymentsDTO;
 import com.propertyvista.crm.rpc.services.customer.PreauthorizedPaymentsVisorService;
 import com.propertyvista.crm.server.services.financial.PreauthorizedPaymentsCommons;
 import com.propertyvista.domain.payment.AutopayAgreement;
 import com.propertyvista.domain.payment.LeasePaymentMethod;
+import com.propertyvista.domain.security.common.VistaApplication;
 import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
 import com.propertyvista.domain.tenant.lease.Tenant;
 import com.propertyvista.dto.PreauthorizedPaymentDTO;
@@ -93,12 +96,10 @@ public class PreauthorizedPaymentsVisorServiceImpl implements PreauthorizedPayme
     private void fillAvailablePaymentMethods(PreauthorizedPaymentsDTO papDto) {
         Persistence.ensureRetrieve(papDto.tenant(), AttachLevel.Attached);
 
-        EntityListCriteria<LeasePaymentMethod> criteria = new EntityListCriteria<LeasePaymentMethod>(LeasePaymentMethod.class);
-        criteria.add(PropertyCriterion.eq(criteria.proto().customer(), papDto.tenant().customer()));
-        criteria.add(PropertyCriterion.eq(criteria.proto().isProfiledMethod(), Boolean.TRUE));
-        criteria.add(PropertyCriterion.eq(criteria.proto().isDeleted(), Boolean.FALSE));
+        List<LeasePaymentMethod> methods = ServerSideFactory.create(PaymentMethodFacade.class).retrieveLeasePaymentMethods(papDto.tenant(),
+                PaymentMethodUsage.AutopayAgreementSetup, VistaApplication.crm);
 
-        papDto.availablePaymentMethods().addAll(Persistence.service().query(criteria));
+        papDto.availablePaymentMethods().addAll(methods);
     }
 
     private void fillPreauthorizedPayments(PreauthorizedPaymentsDTO dto) {

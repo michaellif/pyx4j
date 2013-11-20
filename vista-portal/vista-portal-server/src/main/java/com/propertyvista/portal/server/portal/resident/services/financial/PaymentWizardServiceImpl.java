@@ -14,6 +14,7 @@
 package com.propertyvista.portal.server.portal.resident.services.financial;
 
 import java.math.BigDecimal;
+import java.util.List;
 import java.util.Vector;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
@@ -30,6 +31,8 @@ import com.pyx4j.i18n.shared.I18n;
 import com.propertyvista.biz.financial.ar.ARFacade;
 import com.propertyvista.biz.financial.payment.PaymentException;
 import com.propertyvista.biz.financial.payment.PaymentFacade;
+import com.propertyvista.biz.financial.payment.PaymentMethodFacade;
+import com.propertyvista.biz.financial.payment.PaymentMethodFacade.PaymentMethodUsage;
 import com.propertyvista.domain.contact.AddressSimple;
 import com.propertyvista.domain.financial.PaymentRecord;
 import com.propertyvista.domain.payment.CreditCardInfo;
@@ -45,7 +48,6 @@ import com.propertyvista.portal.rpc.portal.resident.services.financial.PaymentWi
 import com.propertyvista.portal.server.portal.resident.ResidentPortalContext;
 import com.propertyvista.server.common.util.AddressConverter;
 import com.propertyvista.server.common.util.AddressRetriever;
-import com.propertyvista.server.common.util.LeaseParticipantUtils;
 
 public class PaymentWizardServiceImpl extends AbstractCrudServiceDtoImpl<PaymentRecord, PaymentDTO> implements PaymentWizardService {
 
@@ -143,7 +145,9 @@ public class PaymentWizardServiceImpl extends AbstractCrudServiceDtoImpl<Payment
 
     @Override
     public void getProfiledPaymentMethods(AsyncCallback<Vector<LeasePaymentMethod>> callback) {
-        callback.onSuccess(new Vector<LeasePaymentMethod>(LeaseParticipantUtils.getProfiledPaymentMethods(ResidentPortalContext.getCurrentUserTenantInLease())));
+        List<LeasePaymentMethod> methods = ServerSideFactory.create(PaymentMethodFacade.class).retrieveLeasePaymentMethods(
+                ResidentPortalContext.getCurrentUserTenantInLease(), PaymentMethodUsage.OneTimePayments, VistaApplication.resident);
+        callback.onSuccess(new Vector<LeasePaymentMethod>(methods));
     }
 
     @Override

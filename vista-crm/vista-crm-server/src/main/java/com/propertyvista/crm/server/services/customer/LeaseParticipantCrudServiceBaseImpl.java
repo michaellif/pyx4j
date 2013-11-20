@@ -13,6 +13,7 @@
  */
 package com.propertyvista.crm.server.services.customer;
 
+import java.util.List;
 import java.util.Vector;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
@@ -28,6 +29,7 @@ import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 
 import com.propertyvista.biz.financial.payment.PaymentFacade;
 import com.propertyvista.biz.financial.payment.PaymentMethodFacade;
+import com.propertyvista.biz.financial.payment.PaymentMethodFacade.PaymentMethodUsage;
 import com.propertyvista.biz.tenant.CustomerFacade;
 import com.propertyvista.crm.rpc.services.customer.LeaseParticipantCrudServiceBase;
 import com.propertyvista.domain.contact.AddressSimple;
@@ -63,7 +65,9 @@ public abstract class LeaseParticipantCrudServiceBaseImpl<BO extends LeasePartic
 
         // fill/update payment methods: 
         to.paymentMethods().clear();
-        to.paymentMethods().addAll(ServerSideFactory.create(PaymentMethodFacade.class).retrieveLeasePaymentMethods(bo.customer()));
+        List<LeasePaymentMethod> methods = ServerSideFactory.create(PaymentMethodFacade.class).retrieveLeasePaymentMethods(bo, PaymentMethodUsage.InProfile,
+                VistaApplication.crm);
+        to.paymentMethods().addAll(methods);
         if (retrieveTarget == RetrieveTarget.Edit) {
             for (LeasePaymentMethod method : to.paymentMethods()) {
                 Persistence.service().retrieve(method.details());
@@ -88,7 +92,8 @@ public abstract class LeaseParticipantCrudServiceBaseImpl<BO extends LeasePartic
         ServerSideFactory.create(CustomerFacade.class).persistCustomer(bo.customer());
 
         // delete payment methods removed in UI:
-        for (LeasePaymentMethod paymentMethod : ServerSideFactory.create(PaymentMethodFacade.class).retrieveLeasePaymentMethods(bo.customer())) {
+        for (LeasePaymentMethod paymentMethod : ServerSideFactory.create(PaymentMethodFacade.class).retrieveLeasePaymentMethods(bo,
+                PaymentMethodUsage.InProfile, VistaApplication.crm)) {
             if (!to.paymentMethods().contains(paymentMethod)) {
                 ServerSideFactory.create(PaymentMethodFacade.class).deleteLeasePaymentMethod(paymentMethod);
             }

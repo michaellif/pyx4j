@@ -155,7 +155,11 @@ public class CustomerDataModel extends MockDataModel<Customer> {
     }
 
     public List<LeasePaymentMethod> retrieveSerializableProfilePaymentMethods(Customer customer) {
-        List<LeasePaymentMethod> profileMethods = ServerSideFactory.create(PaymentMethodFacade.class).retrieveLeasePaymentMethods(customer);
+        EntityQueryCriteria<LeasePaymentMethod> criteria = new EntityQueryCriteria<LeasePaymentMethod>(LeasePaymentMethod.class);
+        criteria.eq(criteria.proto().customer(), customer);
+        criteria.eq(criteria.proto().isProfiledMethod(), Boolean.TRUE);
+        criteria.eq(criteria.proto().isDeleted(), Boolean.FALSE);
+        List<LeasePaymentMethod> profileMethods = Persistence.service().query(criteria);
         RpcEntityServiceFilter.filterRpcTransient((Serializable) profileMethods);
         return profileMethods;
     }

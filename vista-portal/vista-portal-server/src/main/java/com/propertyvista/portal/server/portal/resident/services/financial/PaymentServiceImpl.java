@@ -28,6 +28,7 @@ import com.pyx4j.entity.shared.utils.EntityBinder;
 
 import com.propertyvista.biz.financial.payment.PaymentFacade;
 import com.propertyvista.biz.financial.payment.PaymentMethodFacade;
+import com.propertyvista.biz.financial.payment.PaymentMethodFacade.PaymentMethodUsage;
 import com.propertyvista.domain.financial.PaymentRecord;
 import com.propertyvista.domain.payment.AutopayAgreement;
 import com.propertyvista.domain.payment.AutopayAgreement.AutopayAgreementCoveredItem;
@@ -45,7 +46,6 @@ import com.propertyvista.portal.rpc.portal.resident.services.financial.PaymentSe
 import com.propertyvista.portal.server.portal.resident.ResidentPortalContext;
 import com.propertyvista.server.common.util.AddressConverter;
 import com.propertyvista.server.common.util.AddressRetriever;
-import com.propertyvista.server.common.util.LeaseParticipantUtils;
 
 public class PaymentServiceImpl implements PaymentService {
 
@@ -168,7 +168,10 @@ public class PaymentServiceImpl implements PaymentService {
     private static List<PaymentMethodInfoDTO> retrievePaymentMethods(Lease lease) {
         List<PaymentMethodInfoDTO> paymentMethods = new ArrayList<PaymentMethodInfoDTO>();
 
-        for (LeasePaymentMethod pm : LeaseParticipantUtils.getProfiledPaymentMethods(ResidentPortalContext.getCurrentUserTenantInLease())) {
+        List<LeasePaymentMethod> methods = ServerSideFactory.create(PaymentMethodFacade.class).retrieveLeasePaymentMethods(
+                ResidentPortalContext.getCurrentUserTenantInLease(), PaymentMethodUsage.InProfile, VistaApplication.resident);
+
+        for (LeasePaymentMethod pm : methods) {
             PaymentMethodInfoDTO pmi = EntityFactory.create(PaymentMethodInfoDTO.class);
 
             pmi.id().setValue(pm.id().getValue());

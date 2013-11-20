@@ -29,8 +29,9 @@ import com.propertyvista.domain.payment.LeasePaymentMethod;
 import com.propertyvista.domain.pmc.Pmc;
 import com.propertyvista.domain.pmc.PmcPaymentMethod;
 import com.propertyvista.domain.property.asset.building.Building;
-import com.propertyvista.domain.tenant.Customer;
+import com.propertyvista.domain.security.common.VistaApplication;
 import com.propertyvista.domain.tenant.lease.Lease;
+import com.propertyvista.domain.tenant.lease.LeaseParticipant;
 import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
 import com.propertyvista.domain.tenant.lease.Tenant;
 import com.propertyvista.dto.payment.AutoPayReviewLeaseDTO;
@@ -43,9 +44,19 @@ public interface PaymentMethodFacade {
 
     void deleteLeasePaymentMethod(LeasePaymentMethod paymentMethodId);
 
-    List<LeasePaymentMethod> retrieveLeasePaymentMethods(LeaseTermParticipant<?> participant);
+    public enum PaymentMethodUsage {
 
-    List<LeasePaymentMethod> retrieveLeasePaymentMethods(Customer customer);
+        InProfile,
+
+        OneTimePayments,
+
+        AutopayAgreementSetup
+    }
+
+    List<LeasePaymentMethod> retrieveLeasePaymentMethods(LeaseTermParticipant<? extends LeaseParticipant<?>> participantId, PaymentMethodUsage usage,
+            VistaApplication vistaApplication);
+
+    List<LeasePaymentMethod> retrieveLeasePaymentMethods(LeaseParticipant<?> participantId, PaymentMethodUsage usage, VistaApplication vistaApplication);
 
     // Insurance:
 
