@@ -137,11 +137,11 @@ public interface L1FormFieldsData extends IEntity {
     IPrimitive<BigDecimal> part4_nsfTotalChargeOwed();
 
     // Part5
-    IPrimitive<String> part5TotalRentOwing();
+    IPrimitive<BigDecimal> part5_TotalRentOwing();
 
-    IPrimitive<String> part5TotalNSFChequeChargesOwing();
+    IPrimitive<BigDecimal> part5_TotalNsfChequeChargesOwing();
 
-    IPrimitive<String> part5Total();
+    IPrimitive<BigDecimal> part5_Total();
 
     // Part6
     IPrimitive<String> part6_firstName();

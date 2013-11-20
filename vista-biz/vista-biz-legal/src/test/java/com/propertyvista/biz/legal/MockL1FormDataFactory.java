@@ -159,6 +159,11 @@ public class MockL1FormDataFactory {
 
         fieldsData.part4_nsfTotalChargeOwed().setValue(new BigDecimal("53362.10"));
 
+        // PART 5
+        fieldsData.part5_TotalRentOwing().setValue(new BigDecimal("29876.54"));
+        fieldsData.part5_TotalNsfChequeChargesOwing().setValue(new BigDecimal("9876.54"));
+        fieldsData.part5_Total().setValue(new BigDecimal("39876.54"));
+
         return fieldsData;
     }
 }

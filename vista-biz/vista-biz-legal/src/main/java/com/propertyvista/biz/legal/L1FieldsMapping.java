@@ -178,6 +178,12 @@ public class L1FieldsMapping extends LtbFormFieldsMapping<L1FormFieldsData> {
                 }}
         )).define();
         
-        money(proto().part4_nsfTotalChargeOwed()).mapTo(fieldsPartition("@@b12c96nfl1_t_nsfadm_charge", 2, 3, 2)).define();        
+        money(proto().part4_nsfTotalChargeOwed()).mapTo(fieldsPartition("@@b12c96nfl1_t_nsfadm_charge", 2, 3, 2)).define();
+        
+        // PART 5
+        money(proto().part5_TotalRentOwing()).mapTo(fieldsPartition("@@b12c96nfl1_renttotal", 2, 3, 2)).define();
+        money(proto().part5_TotalNsfChequeChargesOwing()).mapTo(fieldsPartition("@@b12c96nfl1_nsf_total", 1, 3, 2)).define();
+        money(proto().part5_Total()).mapTo(fieldsPartition("@@b12c96nfl1_totalown", 2, 3, 2)).define();
+        
     }//@formatter:on
 }
