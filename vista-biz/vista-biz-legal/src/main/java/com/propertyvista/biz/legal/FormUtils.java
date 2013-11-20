@@ -132,6 +132,9 @@ public class FormUtils {
                         for (String tableRowFieldName : rowEntity.getEntityMeta().getMemberNames()) {
                             IObject<?> tableRowField = rowEntity.getMember(tableRowFieldName);
                             PdfFieldDescriptor rowFieldDescriptor = mapping.getDescriptor(tableField, rowEntity.getMember(tableRowFieldName), row);
+                            if (rowFieldDescriptor == null) {
+                                continue;
+                            }
                             if (isTextField(tableRowField)) {
                                 setTextField(rowFieldDescriptor, pdfFormFields, tableRowField.getValue());
 
@@ -172,6 +175,9 @@ public class FormUtils {
                         }
                     }
                     fieldDescriptor = new PdfFieldDescriptor(formatters, mappedFields, partitioner, Collections.<String> emptyList());
+                }
+                if (fieldDescriptor == null) {
+                    continue;
                 }
 
                 if (isTextField(field)) {
