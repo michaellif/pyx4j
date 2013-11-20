@@ -118,7 +118,7 @@ public class TenantSureOrderWizard extends CPortalEntityWizard<TenantSureInsuran
             @Override
             public ValidationError isValid(CComponent<Boolean> component, Boolean value) {
                 if (value != null && !value) {
-                    return new ValidationError(component, i18n.tr("You must agree to Personal Disclaimer to continue"));
+                    return new ValidationError(component, i18n.tr("You must agree to the personal disclaimer terms to continue"));
                 }
                 return null;
             }
