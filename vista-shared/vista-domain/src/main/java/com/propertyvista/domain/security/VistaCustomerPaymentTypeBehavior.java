@@ -13,6 +13,8 @@
  */
 package com.propertyvista.domain.security;
 
+import java.util.EnumSet;
+
 import com.pyx4j.security.shared.Behavior;
 
 public enum VistaCustomerPaymentTypeBehavior implements Behavior {
@@ -23,6 +25,13 @@ public enum VistaCustomerPaymentTypeBehavior implements Behavior {
 
     InteracPaymentsAllowed,
 
-    DirectBankingPaymentsAllowed
+    DirectBankingPaymentsAllowed;
 
+    public static EnumSet<VistaCustomerPaymentTypeBehavior> forAutoPay() {
+        return EnumSet.of(EcheckPaymentsAllowed, CreditCardPaymentsAllowed);
+    }
+
+    public static EnumSet<VistaCustomerPaymentTypeBehavior> forPaymentMethodSetup() {
+        return EnumSet.of(EcheckPaymentsAllowed, CreditCardPaymentsAllowed);
+    }
 }
