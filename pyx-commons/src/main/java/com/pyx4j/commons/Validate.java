@@ -30,6 +30,12 @@ public class Validate {
         }
     }
 
+    public static void isFalse(Boolean expression, String messageFormat, Object... arguments) {
+        if (expression) {
+            throw new Error(SimpleMessageFormat.format("expected [false]\n actual: [{0}]\n", expression) + SimpleMessageFormat.format(messageFormat, arguments));
+        }
+    }
+
     public static void notNull(Object object, String messageFormat, Object... arguments) {
         if (object == null) {
             throw new Error(SimpleMessageFormat.format("expected [null]\n actual: [{0}]\n", object) + SimpleMessageFormat.format(messageFormat, arguments));
