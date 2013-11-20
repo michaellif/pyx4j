@@ -51,20 +51,17 @@ public class L1FieldsMapping extends LtbFormFieldsMapping<L1FormFieldsData> {
         
         text(proto().part1_postalCode())           
             .partitionBy(new CanadianPostalCodePartitioner())
-                .mapTo("b12c96nfapp_postal_code_1{3}")
-                .mapTo("@@b12c96nfapp_postal_code_2.0{3}")
+                .mapTo("b12c96nfapp_postal_code_1{3}", "@@b12c96nfapp_postal_code_2.0{3}")
             .define();
         
         text(proto().part1_fileNumber1())            
             .partitionBy(new FileNumberPartitioner())
-                .mapTo("b12c96nfdivision_code_1{3}")
-                .mapTo("@@b12c96nfcase_number_1.0{5}")
+                .mapTo("b12c96nfdivision_code_1{3}", "@@b12c96nfcase_number_1.0{5}")
             .define();
         
         text(proto().part1_fileNumber2())           
             .partitionBy(new FileNumberPartitioner())
-                .mapTo("b12c96nfdivision_code_2{3}")
-                .mapTo("@@b12c96nfcase_number_2.0{5}")
+                .mapTo("b12c96nfdivision_code_2{3}", "@@b12c96nfcase_number_2.0{5}")
              .define();
                 
         // PART2        
