@@ -48,6 +48,30 @@ public interface L1FormFieldsData extends IEntity {
         Landlord, Agent
     }
 
+    public enum PaymentMethod {
+
+        Chash, DebitCard, MoneyOrder, CertifiedCheque
+
+    }
+
+    public enum CreditCardType {
+
+        Vista, MasterCard, AmericanExpress
+
+    }
+
+    public enum ApplicationPackageDeliveryMethodToLandlord {
+
+        Pickup, ByMail, ByFax
+
+    }
+
+    public enum ApplicationPackageDeliveryMethodToTenant {
+
+        ByMail, ByCourier, ByAnotherMethod
+
+    }
+
     IPrimitive<BigDecimal> totalRentOwing();
 
     IPrimitive<LogicalDate> totalRentOwingAsOf();
@@ -166,11 +190,42 @@ public interface L1FormFieldsData extends IEntity {
     IPrimitive<String> part6_agentsEmail();
 
     // Part7
-
     IPrimitive<byte[]> part7_signature();
 
     IPrimitive<LandlordOrAgent> part7_landlordOrAgent();
 
     IPrimitive<LogicalDate> part7_date();
+
+    // PAYMENT AND SCHEDULING FORM
+    // PART1
+
+    IPrimitive<PaymentMethod> section2_part1_paymentMethod();
+
+    IPrimitive<CreditCardType> section2_part1_creditCardType();
+
+    IPrimitive<String> section2_part1_creditCardNumber();
+
+    IPrimitive<LogicalDate> section2_part1_expiryDate();
+
+    IPrimitive<String> section2_part1_cardholdersName();
+
+    // PART2
+    IPrimitive<ApplicationPackageDeliveryMethodToLandlord> section2_part2_applicationPackageDeliveryMethodToLandlord();
+
+    IPrimitive<LogicalDate> section2_part2_pickupDate();
+
+    IPrimitive<String> section2_part2_officeName();
+
+    IPrimitive<String> section2_part2_fax();
+
+    IPrimitive<YesNo> section2_part2_isSameDayDeliveryToTenant();
+
+    IPrimitive<LogicalDate> section2_part2_toTenantDeliveryDate();
+
+    // PART3
+
+    IPrimitive<Boolean> section2_part3_isFrenchServiceRequired();
+
+    IPrimitive<Boolean> section2_part3_isSignLanguageServiceRequired();
 
 }
