@@ -223,7 +223,9 @@ public class OnlineApplicationFacadeImpl implements OnlineApplicationFacade {
             progressSum = progressSum.add(status.progress().getValue());
         }
 
-        maStatus.progress().setValue(progressSum.divide(new BigDecimal(ma.applications().size())));
+        if (!ma.applications().isEmpty()) {
+            maStatus.progress().setValue(progressSum.divide(new BigDecimal(ma.applications().size())));
+        }
         return maStatus;
     }
 
@@ -270,6 +272,7 @@ public class OnlineApplicationFacadeImpl implements OnlineApplicationFacade {
         app.masterOnlineApplication().set(masterOnlineApplication);
         app.customer().set(participant.leaseParticipant().customer());
         app.role().setValue(role);
+        app.progress().setValue(BigDecimal.ZERO);
         Persistence.service().persist(app);
         return app;
     }
