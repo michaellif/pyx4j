@@ -50,13 +50,9 @@ public interface L1FormFieldsData extends IEntity {
 
     public enum PaymentMethod {
 
-        Chash, DebitCard, MoneyOrder, CertifiedCheque
+        Chash, DebitCard, MoneyOrder, CertifiedCheque,
 
-    }
-
-    public enum CreditCardType {
-
-        Vista, MasterCard, AmericanExpress
+        Visa, MasterCard, AmericanExpress
 
     }
 
@@ -201,8 +197,6 @@ public interface L1FormFieldsData extends IEntity {
 
     IPrimitive<PaymentMethod> section2_part1_paymentMethod();
 
-    IPrimitive<CreditCardType> section2_part1_creditCardType();
-
     IPrimitive<String> section2_part1_creditCardNumber();
 
     IPrimitive<LogicalDate> section2_part1_expiryDate();
@@ -223,7 +217,6 @@ public interface L1FormFieldsData extends IEntity {
     IPrimitive<LogicalDate> section2_part2_toTenantDeliveryDate();
 
     // PART3
-
     IPrimitive<Boolean> section2_part3_isFrenchServiceRequired();
 
     IPrimitive<Boolean> section2_part3_isSignLanguageServiceRequired();

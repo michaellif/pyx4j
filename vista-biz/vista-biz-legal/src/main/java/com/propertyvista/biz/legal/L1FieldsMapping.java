@@ -22,6 +22,8 @@ package com.propertyvista.biz.legal;
 
 import java.util.Arrays;
 
+import com.propertyvista.biz.legal.form.fieldadapters.CreditCardExpiryDateFormatter;
+import com.propertyvista.biz.legal.form.fieldadapters.CreditCardExpiryDatePartitioner;
 import com.propertyvista.domain.legal.L1FormFieldsData;
 import com.propertyvista.domain.legal.NsfChargeDetails;
 import com.propertyvista.domain.legal.RentOwingForPeriod;
@@ -225,6 +227,17 @@ public class L1FieldsMapping extends LtbFormFieldsMapping<L1FormFieldsData> {
         field(proto().part7_signature()).mapTo("b12c96nmlandlord_agent_signature").define();
         field(proto().part7_landlordOrAgent()).states("L", "A").mapTo("b12c96nfsigned_by").define();
         date(proto().part7_date()).mapTo(datePartition("@@b12c96nfdate_signed")).define();
+        
+        
+        // L1 Payment and Schedule Subform Fields
+        field(proto().section2_part1_paymentMethod()).states("CASH", "DEBT", "MORD", "CHEQ", "VI", "MAST", "AMEX").mapTo("b12c96nfpayment_method").define();
+        text(proto().section2_part1_creditCardNumber()).mapTo("b12c96nfcardholder_card_no").define();
+        field(proto().section2_part1_expiryDate())
+            .formatBy(new CreditCardExpiryDateFormatter())
+            .partitionBy(new CreditCardExpiryDatePartitioner())
+            .mapTo("@@b12c96nfcreditcard_expiry_date_mm.0{2}", "b12c96nfcreditcard_expiry_date_yy{2}")
+            .define();
+        text(proto().section2_part1_cardholdersName()).mapTo("b12c96nfcardholder_name").define();
         
     }//@formatter:on
 }

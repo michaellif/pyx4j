@@ -32,6 +32,7 @@ import com.pyx4j.gwt.server.DateUtils;
 import com.propertyvista.domain.legal.L1FormFieldsData;
 import com.propertyvista.domain.legal.L1FormFieldsData.Gender;
 import com.propertyvista.domain.legal.L1FormFieldsData.LandlordOrAgent;
+import com.propertyvista.domain.legal.L1FormFieldsData.PaymentMethod;
 import com.propertyvista.domain.legal.L1FormFieldsData.RentPaymentPeriod;
 import com.propertyvista.domain.legal.L1FormFieldsData.YesNo;
 import com.propertyvista.domain.legal.NsfChargeDetails;
@@ -172,7 +173,7 @@ public class MockL1FormDataFactory {
         fieldsData.part5_TotalNsfChequeChargesOwing().setValue(new BigDecimal("9876.54"));
         fieldsData.part5_Total().setValue(new BigDecimal("39876.54"));
 
-        // PART 7
+        // PART 6
         L1LandlordsContactInfo landlordsContactInfo = fieldsData.part6_landlordsContactInfos().$();
         landlordsContactInfo.typeOfLandlord().setValue(TypeOfLandlord.Company);
         landlordsContactInfo.firstName().setValue("Art");
@@ -200,6 +201,7 @@ public class MockL1FormDataFactory {
         fieldsData.part6_agentsFaxNumber().setValue("(647) 123-6666");
         fieldsData.part6_agentsEmail().setValue("mad.hatter@wonderland.net");
 
+        // PART 7
         try {
             fieldsData.part7_signature().setValue(IOUtils.toByteArray(MockL1FormDataFactory.class.getResourceAsStream(SIGNATURE)));
         } catch (ClassCastException e) {
@@ -209,6 +211,12 @@ public class MockL1FormDataFactory {
         }
         fieldsData.part7_landlordOrAgent().setValue(LandlordOrAgent.Agent);
         fieldsData.part7_date().setValue(new LogicalDate(DateUtils.detectDateformat("2055-01-01")));
+
+        // L1 Schedule and Payment
+        fieldsData.section2_part1_paymentMethod().setValue(PaymentMethod.MasterCard);
+        fieldsData.section2_part1_creditCardNumber().setValue("5123 1231 1231 1231");
+        fieldsData.section2_part1_expiryDate().setValue(new LogicalDate(DateUtils.detectDateformat("2013-05-01")));
+        fieldsData.section2_part1_cardholdersName().setValue("YOZHIK V TUMANE");
 
         return fieldsData;
     }
