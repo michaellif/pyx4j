@@ -23,9 +23,12 @@ import com.google.gwt.user.client.ui.HasVerticalAlignment;
 import com.google.gwt.user.client.ui.SimplePanel;
 
 import com.pyx4j.commons.css.ThemeColor;
+import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.decorators.IDecorator;
 import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
 import com.pyx4j.forms.client.ui.wizard.WizardDecorator;
+import com.pyx4j.forms.client.validators.EditableValueValidator;
+import com.pyx4j.forms.client.validators.ValidationError;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.Anchor;
 import com.pyx4j.widgets.client.Button;
@@ -111,6 +114,15 @@ public class TenantSureOrderWizard extends CPortalEntityWizard<TenantSureInsuran
         panel.setWidget(++row, 0, personalDisclaimer);
 
         panel.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().isAgreedToPersonalDisclaimer())).build());
+        get(proto().isAgreedToPersonalDisclaimer()).addValueValidator(new EditableValueValidator<Boolean>() {
+            @Override
+            public ValidationError isValid(CComponent<Boolean> component, Boolean value) {
+                if (value != null && !value) {
+                    return new ValidationError(component, i18n.tr("You must agree to Personal Disclaimer to continue"));
+                }
+                return null;
+            }
+        });
 
         panel.setH1(++row, 0, 1, PortalImages.INSTANCE.residentServicesIcon(), i18n.tr("Personal & Contact Information"));
 
