@@ -118,7 +118,7 @@ public class MockN4FormDataFactory {
             mockFormData.rentOwingHundredsC().setValue("235");
             mockFormData.rentOwingCentsC().setValue("15");
         }
-        // TODO add signature
+
         mockFormData.signedBy().setValue(SignedBy.Agent);
         try {
             mockFormData.signature().setValue(IOUtils.toByteArray(N4GenerationFacadeImpl.class.getResourceAsStream(SIGNATURE)));

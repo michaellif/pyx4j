@@ -20,7 +20,10 @@
  */
 package com.propertyvista.biz.legal;
 
+import java.io.IOException;
 import java.math.BigDecimal;
+
+import org.apache.commons.io.IOUtils;
 
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.shared.EntityFactory;
@@ -28,6 +31,7 @@ import com.pyx4j.gwt.server.DateUtils;
 
 import com.propertyvista.domain.legal.L1FormFieldsData;
 import com.propertyvista.domain.legal.L1FormFieldsData.Gender;
+import com.propertyvista.domain.legal.L1FormFieldsData.LandlordOrAgent;
 import com.propertyvista.domain.legal.L1FormFieldsData.RentPaymentPeriod;
 import com.propertyvista.domain.legal.L1FormFieldsData.YesNo;
 import com.propertyvista.domain.legal.NsfChargeDetails;
@@ -36,6 +40,8 @@ import com.propertyvista.domain.legal.utils.L1LandlordsContactInfo;
 import com.propertyvista.domain.legal.utils.L1LandlordsContactInfo.TypeOfLandlord;
 
 public class MockL1FormDataFactory {
+
+    private final static String SIGNATURE = "mock-signature.jpg";
 
     public static L1FormFieldsData makeMockL1FormFieldsData() {
         L1FormFieldsData fieldsData = EntityFactory.create(L1FormFieldsData.class);
@@ -193,6 +199,16 @@ public class MockL1FormDataFactory {
         fieldsData.part6_agentsPhoneNumber().setValue("(647) 123-5555");
         fieldsData.part6_agentsFaxNumber().setValue("(647) 123-6666");
         fieldsData.part6_agentsEmail().setValue("mad.hatter@wonderland.net");
+
+        try {
+            fieldsData.part7_signature().setValue(IOUtils.toByteArray(MockL1FormDataFactory.class.getResourceAsStream(SIGNATURE)));
+        } catch (ClassCastException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        fieldsData.part7_landlordOrAgent().setValue(LandlordOrAgent.Agent);
+        fieldsData.part7_date().setValue(new LogicalDate(DateUtils.detectDateformat("2055-01-01")));
 
         return fieldsData;
     }

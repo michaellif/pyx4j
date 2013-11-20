@@ -171,6 +171,6 @@ public interface L1FormFieldsData extends IEntity {
 
     IPrimitive<LandlordOrAgent> part7_landlordOrAgent();
 
-    IPrimitive<String> part7_date();
+    IPrimitive<LogicalDate> part7_date();
 
 }

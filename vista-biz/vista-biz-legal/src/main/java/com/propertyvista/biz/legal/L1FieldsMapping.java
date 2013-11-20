@@ -220,5 +220,11 @@ public class L1FieldsMapping extends LtbFormFieldsMapping<L1FormFieldsData> {
         phone(proto().part6_agentsFaxNumber()).mapTo(phonePartition("@@b12c96nfpersonnel_fax_number")).define();
         text(proto().part6_agentsEmail()).mapTo("b12c96nfpersonnel_email").define();
         
+        
+        // PART 7
+        field(proto().part7_signature()).mapTo("b12c96nmlandlord_agent_signature").define();
+        field(proto().part7_landlordOrAgent()).states("L", "A").mapTo("b12c96nfsigned_by").define();
+        date(proto().part7_date()).mapTo(datePartition("@@b12c96nfdate_signed")).define();
+        
     }//@formatter:on
 }
