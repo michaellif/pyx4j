@@ -21,12 +21,8 @@ import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 
-import com.propertyvista.domain.property.asset.building.Building;
-
 @Transient
-public interface CustomerSelfRegistration extends IEntity {
-
-    Building buildingId();
+public interface ProspectSignUp extends IEntity {
 
     @NotNull
     IPrimitive<String> firstName();
@@ -35,9 +31,6 @@ public interface CustomerSelfRegistration extends IEntity {
 
     @NotNull
     IPrimitive<String> lastName();
-
-    @NotNull
-    IPrimitive<String> securityCode();
 
     @Editor(type = EditorType.email)
     @NotNull

@@ -32,11 +32,11 @@ import com.pyx4j.site.rpc.AppPlaceInfo;
 
 import com.propertyvista.portal.prospect.ui.signup.SignUpView;
 import com.propertyvista.portal.prospect.ui.signup.SignUpView.SignUpPresenter;
+import com.propertyvista.portal.rpc.portal.prospect.dto.ProspectSignUpDTO;
 import com.propertyvista.portal.rpc.portal.prospect.services.ProspectAuthenticationService;
-import com.propertyvista.portal.rpc.portal.prospect.services.ProspectSelfRegistrationService;
+import com.propertyvista.portal.rpc.portal.prospect.services.ProspectSignUpService;
 import com.propertyvista.portal.rpc.portal.resident.ResidentPortalSiteMap;
 import com.propertyvista.portal.rpc.portal.resident.dto.SelfRegistrationBuildingDTO;
-import com.propertyvista.portal.rpc.portal.resident.dto.ResidentSelfRegistrationDTO;
 import com.propertyvista.portal.rpc.portal.resident.services.SelfRegistrationBuildingsSourceService;
 import com.propertyvista.portal.rpc.shared.EntityValidationException;
 import com.propertyvista.portal.shared.PortalSite;
@@ -71,8 +71,8 @@ public class SignUpActivity extends AbstractActivity implements SignUpPresenter 
     }
 
     @Override
-    public void register(final ResidentSelfRegistrationDTO value) {
-        GWT.<ProspectSelfRegistrationService> create(ProspectSelfRegistrationService.class).selfRegistration(new DefaultAsyncCallback<VoidSerializable>() {
+    public void signUp(final ProspectSignUpDTO value) {
+        GWT.<ProspectSignUpService> create(ProspectSignUpService.class).signUp(new DefaultAsyncCallback<VoidSerializable>() {
             @Override
             public void onSuccess(VoidSerializable result) {
                 authenticate(value);

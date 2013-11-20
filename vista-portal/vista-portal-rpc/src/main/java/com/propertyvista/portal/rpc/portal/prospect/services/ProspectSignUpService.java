@@ -18,9 +18,9 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.pyx4j.rpc.shared.IService;
 import com.pyx4j.rpc.shared.VoidSerializable;
 
-import com.propertyvista.portal.rpc.portal.resident.dto.ResidentSelfRegistrationDTO;
+import com.propertyvista.portal.rpc.portal.prospect.dto.ProspectSignUpDTO;
 
-public interface ProspectSelfRegistrationService extends IService {
+public interface ProspectSignUpService extends IService {
 
-    public void selfRegistration(AsyncCallback<VoidSerializable> callback, ResidentSelfRegistrationDTO selfRegistration);
+    public void signUp(AsyncCallback<VoidSerializable> callback, ProspectSignUpDTO request);
 }

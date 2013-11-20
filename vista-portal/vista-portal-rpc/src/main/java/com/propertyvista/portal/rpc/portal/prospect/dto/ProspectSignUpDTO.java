@@ -18,6 +18,6 @@ import com.pyx4j.entity.annotations.Transient;
 import com.propertyvista.portal.rpc.portal.shared.dto.SelfRegistrationDTO;
 
 @Transient
-public interface ProspectSelfRegistrationDTO extends SelfRegistrationDTO {
+public interface ProspectSignUpDTO extends SelfRegistrationDTO {
 
 }

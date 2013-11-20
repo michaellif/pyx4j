@@ -47,7 +47,7 @@ import com.pyx4j.widgets.client.Button;
 import com.pyx4j.widgets.client.actionbar.Toolbar;
 
 import com.propertyvista.portal.prospect.ui.signup.SignUpView.SignUpPresenter;
-import com.propertyvista.portal.rpc.portal.resident.dto.ResidentSelfRegistrationDTO;
+import com.propertyvista.portal.rpc.portal.prospect.dto.ProspectSignUpDTO;
 import com.propertyvista.portal.rpc.shared.EntityValidationException;
 import com.propertyvista.portal.rpc.shared.EntityValidationException.MemberValidationError;
 import com.propertyvista.portal.shared.resources.PortalImages;
@@ -141,7 +141,7 @@ public class SignUpGadget extends AbstractGadget<SignUpViewImpl> {
                     signupform.revalidate();
                     signupform.setUnconditionalValidationErrorRendering(true);
                     if (signupform.isValid()) {
-                        presenter.register(signupform.getValue());
+                        presenter.signUp(signupform.getValue());
                     }
                 }
             });
@@ -151,14 +151,14 @@ public class SignUpGadget extends AbstractGadget<SignUpViewImpl> {
         }
     }
 
-    class SignUpForm extends CEntityForm<ResidentSelfRegistrationDTO> {
+    class SignUpForm extends CEntityForm<ProspectSignUpDTO> {
 
         private EntityValidationException entityValidationError;
 
         private Image signUpPersonalImage;
 
         public SignUpForm() {
-            super(ResidentSelfRegistrationDTO.class);
+            super(ProspectSignUpDTO.class);
         }
 
         @SuppressWarnings("unchecked")

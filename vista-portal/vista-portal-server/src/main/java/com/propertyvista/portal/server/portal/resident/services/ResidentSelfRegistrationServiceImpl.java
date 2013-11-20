@@ -29,7 +29,7 @@ import com.pyx4j.rpc.shared.VoidSerializable;
 
 import com.propertyvista.biz.tenant.CustomerFacade;
 import com.propertyvista.domain.property.asset.building.Building;
-import com.propertyvista.domain.tenant.CustomerSelfRegistration;
+import com.propertyvista.domain.tenant.ResidentSelfRegistration;
 import com.propertyvista.portal.rpc.portal.resident.dto.ResidentSelfRegistrationDTO;
 import com.propertyvista.portal.rpc.portal.resident.services.ResidentSelfRegistrationService;
 import com.propertyvista.portal.rpc.portal.resident.services.SelfRegistrationBuildingDTO;
@@ -83,18 +83,18 @@ public class ResidentSelfRegistrationServiceImpl implements ResidentSelfRegistra
     }
 
     @Override
-    public void selfRegistration(AsyncCallback<VoidSerializable> callback, ResidentSelfRegistrationDTO request) {
-        CustomerSelfRegistration selfRegistration = EntityFactory.create(CustomerSelfRegistration.class);
+    public void selfRegistration(AsyncCallback<VoidSerializable> callback, ResidentSelfRegistrationDTO dto) {
+        ResidentSelfRegistration request = EntityFactory.create(ResidentSelfRegistration.class);
 
-        selfRegistration.buildingId().set(request.building().buildingKey());
-        selfRegistration.firstName().setValue(request.firstName().getValue());
-        selfRegistration.middleName().setValue(request.middleName().getValue());
-        selfRegistration.lastName().setValue(request.lastName().getValue());
-        selfRegistration.securityCode().setValue(request.securityCode().getValue());
-        selfRegistration.email().setValue(request.email().getValue());
-        selfRegistration.password().setValue(request.password().getValue());
+        request.buildingId().set(dto.building().buildingKey());
+        request.firstName().setValue(dto.firstName().getValue());
+        request.middleName().setValue(dto.middleName().getValue());
+        request.lastName().setValue(dto.lastName().getValue());
+        request.securityCode().setValue(dto.securityCode().getValue());
+        request.email().setValue(dto.email().getValue());
+        request.password().setValue(dto.password().getValue());
 
-        ServerSideFactory.create(CustomerFacade.class).selfRegistration(selfRegistration);
+        ServerSideFactory.create(CustomerFacade.class).residentSelfRegistration(request);
         Persistence.service().commit();
         callback.onSuccess(null);
     }
