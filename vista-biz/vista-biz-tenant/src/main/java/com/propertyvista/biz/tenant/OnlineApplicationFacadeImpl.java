@@ -70,22 +70,10 @@ public class OnlineApplicationFacadeImpl implements OnlineApplicationFacade {
 
     @Override
     public List<OnlineApplication> getOnlineApplications(CustomerUser customerUser) {
-        Customer customer;
-        {
-            EntityQueryCriteria<Customer> criteria = EntityQueryCriteria.create(Customer.class);
-            criteria.add(PropertyCriterion.eq(criteria.proto().user(), customerUser));
-            customer = Persistence.service().retrieve(criteria);
-            if (customer == null) {
-                return null;
-            }
-        }
-
-        {
-            // See if active Application exists
-            EntityQueryCriteria<OnlineApplication> criteria = EntityQueryCriteria.create(OnlineApplication.class);
-            criteria.add(PropertyCriterion.eq(criteria.proto().customer(), customer));
-            return Persistence.service().query(criteria);
-        }
+        // See if active Application exists
+        EntityQueryCriteria<OnlineApplication> criteria = EntityQueryCriteria.create(OnlineApplication.class);
+        criteria.add(PropertyCriterion.eq(criteria.proto().customer().user(), customerUser));
+        return Persistence.service().query(criteria);
     }
 
     @Override

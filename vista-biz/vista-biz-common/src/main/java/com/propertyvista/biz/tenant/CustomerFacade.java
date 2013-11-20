@@ -38,5 +38,6 @@ public interface CustomerFacade {
 
     void selfRegistration(CustomerSelfRegistration selfRegistration);
 
+    @Deprecated
     List<OnlineApplication> getActiveOnlineApplications(CustomerUser customerUser);
 }
