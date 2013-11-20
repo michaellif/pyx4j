@@ -14,8 +14,10 @@
 package com.propertyvista.operations.client.ui.crud.pmc;
 
 import java.util.Arrays;
+import java.util.List;
 
 import com.pyx4j.entity.shared.criterion.Criterion;
+import com.pyx4j.entity.shared.criterion.EntityQueryCriteria.Sort;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
 import com.pyx4j.site.client.ui.prime.lister.AbstractLister;
@@ -34,6 +36,7 @@ public class DirectDebitRecordLister extends AbstractLister<DirectDebitRecord> {
                 new MemberColumnDescriptor.Builder(proto().pmc()).build(),
                 new MemberColumnDescriptor.Builder(proto().pmc().namespace()).visible(false).build(),
                 new MemberColumnDescriptor.Builder(proto().accountNumber()).build(),
+                new MemberColumnDescriptor.Builder(proto().amount()).build(),
                 new MemberColumnDescriptor.Builder(proto().paymentReferenceNumber()).build(),
                 new MemberColumnDescriptor.Builder(proto().customerName()).build(),
                 new MemberColumnDescriptor.Builder(proto().receivedDate()).build(),
@@ -42,6 +45,7 @@ public class DirectDebitRecordLister extends AbstractLister<DirectDebitRecord> {
         } else {
             setColumnDescriptors(//@formatter:off                
                     new MemberColumnDescriptor.Builder(proto().accountNumber()).build(),
+                    new MemberColumnDescriptor.Builder(proto().amount()).build(),
                     new MemberColumnDescriptor.Builder(proto().paymentReferenceNumber()).build(),
                     new MemberColumnDescriptor.Builder(proto().customerName()).build(),
                     new MemberColumnDescriptor.Builder(proto().receivedDate()).build(),
@@ -55,6 +59,11 @@ public class DirectDebitRecordLister extends AbstractLister<DirectDebitRecord> {
         this.getDataSource().setPreDefinedFilters(Arrays.<Criterion> asList(//@formatter:off
                 PropertyCriterion.eq(proto().pmc(), pmc)
         ));//@formatter:on
+    }
+
+    @Override
+    public List<Sort> getDefaultSorting() {
+        return Arrays.asList(new Sort(proto().id(), true));
     }
 
 }

@@ -30,10 +30,18 @@ public class DirectDebitRecordForm extends OperationsEntityForm<DirectDebitRecor
 
         panel.setWidget(++row, 0, 1, new FormDecoratorBuilder(inject(proto().pmc().name())).customLabel("PMC:").build());
         panel.setWidget(++row, 0, 1, new FormDecoratorBuilder(inject(proto().accountNumber())).build());
+        panel.setWidget(++row, 0, 1, new FormDecoratorBuilder(inject(proto().amount())).build());
         panel.setWidget(++row, 0, 1, new FormDecoratorBuilder(inject(proto().paymentReferenceNumber())).build());
         panel.setWidget(++row, 0, 1, new FormDecoratorBuilder(inject(proto().customerName())).build());
         panel.setWidget(++row, 0, 1, new FormDecoratorBuilder(inject(proto().receivedDate())).build());
         panel.setWidget(++row, 0, 1, new FormDecoratorBuilder(inject(proto().processingStatus())).build());
+
+        panel.setH1(++row, 0, 2, "Trace");
+
+        panel.setWidget(++row, 0, 1, new FormDecoratorBuilder(inject(proto().trace().collectionDate())).build());
+        panel.setWidget(++row, 0, 1, new FormDecoratorBuilder(inject(proto().trace().locationCode())).build());
+        panel.setWidget(++row, 0, 1, new FormDecoratorBuilder(inject(proto().trace().sourceCode())).build());
+        panel.setWidget(++row, 0, 1, new FormDecoratorBuilder(inject(proto().trace().traceNumber())).build());
 
         selectTab(addTab(panel));
         setTabBarVisible(false);
