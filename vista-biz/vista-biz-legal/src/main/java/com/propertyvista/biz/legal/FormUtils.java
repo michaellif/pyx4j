@@ -46,6 +46,7 @@ import com.itextpdf.text.pdf.PdfStamper;
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.commons.SimpleMessageFormat;
 import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IObject;
 
 import com.propertyvista.domain.legal.utils.Formatter;
@@ -115,7 +116,7 @@ public class FormUtils {
         ByteArrayOutputStream bos = new ByteArrayOutputStream();
         PdfReader reader = new PdfReader(form);
         PdfStamper stamper = new PdfStamper(reader, bos);
-        AcroFields fields = stamper.getAcroFields();
+        AcroFields pdfFormFields = stamper.getAcroFields();
 
         for (String memberName : fieldsData.getEntityMeta().getMemberNames()) {
             try {
@@ -123,16 +124,45 @@ public class FormUtils {
                 if (field.isNull()) {
                     continue;
                 }
+                // TODO should fix/refactor parts of the function to act recursively on tables
+                if (field instanceof IList) {
+                    IList<?> tableField = (IList<?>) field;
+                    for (int row = 0; row < tableField.size(); ++row) {
+                        IEntity rowEntity = tableField.get(row);
+                        for (String tableRowFieldName : rowEntity.getEntityMeta().getMemberNames()) {
+                            IObject<?> tableRowField = rowEntity.getMember(tableRowFieldName);
+                            PdfFieldDescriptor rowFieldDescriptor = mapping.getDescriptor(tableField, rowEntity.getMember(tableRowFieldName), row);
+                            if (isTextField(tableRowField)) {
+                                setTextField(rowFieldDescriptor, pdfFormFields, tableRowField.getValue());
+
+                            } else if (isCheckbox(tableRowField)) {
+                                setCheckBox(rowFieldDescriptor, pdfFormFields, (Boolean) tableRowField.getValue());
+
+                            } else if (field.getValueClass().isEnum()) {
+                                // TODO add checks that field mapping doesn't have multiple mappings and no length
+                                Class<?> enumType = field.getValueClass();
+                                // TODO make something more clean to defining enums
+                                String value = rowFieldDescriptor.states().isEmpty() ? tableRowField.getValue().toString() : rowFieldDescriptor.states().get(
+                                        ((Enum) tableRowField.getValue()).ordinal());
+                                setEnumField(rowFieldDescriptor, pdfFormFields, value);
+
+                            } else if (tableRowField.getValueClass().isArray()) {
+                                // TODO add checks that field mapping doesn't have multiple mappings and no length
+                                setImageField(rowFieldDescriptor, pdfFormFields, stamper, (byte[]) tableRowField.getValue());
+                            }
+                        }
+                    }
+                }
 
                 PdfFieldDescriptor fieldDescriptor = null;
                 if (mapping != null) {
-                    fieldDescriptor = mapping.getDescriptor(memberName);
+                    fieldDescriptor = mapping.getDescriptor(field);
                 } else {
                     List<Formatter> formatters = new LinkedList<Formatter>();
                     Partitioner partitioner = null;
                     List<String> mappedFields = null;
 
-                    for (Annotation annotation : fieldsData.getInstanceValueClass().getDeclaredMethod(memberName, (Class<?>[]) null).getAnnotations()) {
+                    for (Annotation annotation : fieldsData.getInstanceValueClass().getDeclaredMethod(field.getFieldName(), (Class<?>[]) null).getAnnotations()) {
                         if (annotation.annotationType().equals(PdfFormFieldMapping.class)) {
                             mappedFields = Arrays.asList(((PdfFormFieldMapping) annotation).value().split(","));
                         } else if (annotation.annotationType().equals(PdfFormFieldFormatter.class)) {
@@ -145,20 +175,22 @@ public class FormUtils {
                 }
 
                 if (isTextField(field)) {
-                    setTextField(fieldDescriptor, fields, field.getValue());
+                    setTextField(fieldDescriptor, pdfFormFields, field.getValue());
+
                 } else if (isCheckbox(field)) {
-                    setCheckBox(fieldDescriptor, fields, (Boolean) field.getValue());
-                } else if (fieldsData.getMember(memberName).getValueClass().isEnum()) {
+                    setCheckBox(fieldDescriptor, pdfFormFields, (Boolean) field.getValue());
+
+                } else if (field.getValueClass().isEnum()) {
                     // TODO add checks that field mapping doesn't have multiple mappings and no length
-                    Class<?> enumType = fieldsData.getMember(memberName).getValueClass();
+                    Class<?> enumType = field.getValueClass();
                     // TODO make something more clean to defining enums
                     String value = fieldDescriptor.states().isEmpty() ? field.getValue().toString() : fieldDescriptor.states().get(
                             ((Enum) field.getValue()).ordinal());
-                    setEnumField(fieldDescriptor, fields, value);
+                    setEnumField(fieldDescriptor, pdfFormFields, value);
 
-                } else if (fieldsData.getMember(memberName).getValueClass().isArray()) {
+                } else if (field.getValueClass().isArray()) {
                     // TODO add checks that field mapping doesn't have multiple mappings and no length
-                    setImageField(fieldDescriptor, fields, stamper, (byte[]) field.getValue());
+                    setImageField(fieldDescriptor, pdfFormFields, stamper, (byte[]) field.getValue());
                 }
 
             } catch (Throwable e) {

@@ -18,6 +18,7 @@ import java.math.BigDecimal;
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
 
 @Transient
@@ -127,107 +128,13 @@ public interface L1FormFieldsData extends IEntity {
     IPrimitive<LogicalDate> part3lastPeriodInterestPaidTo();
 
     // Part4
-    IPrimitive<LogicalDate> part4period1From();
+    IList<RentOwingForPeriod> part4_rentOwingBreakdown();
 
-    IPrimitive<LogicalDate> part4period1To();
+    IPrimitive<BigDecimal> part4_totalRentOwing();
 
-    IPrimitive<BigDecimal> part4period1RentCharged();
+    IList<NsfChargeDetails> part4_nsfChargesBreakdown();
 
-    IPrimitive<BigDecimal> part4period1RentPaid();
-
-    IPrimitive<BigDecimal> part4period1RentOwing();
-
-    //
-    IPrimitive<LogicalDate> part4period2From();
-
-    IPrimitive<LogicalDate> part4period2To();
-
-    IPrimitive<BigDecimal> part4period2RentCharged();
-
-    IPrimitive<BigDecimal> part4period2RentPaid();
-
-    IPrimitive<BigDecimal> part4period2RentOwing();
-
-    //
-    IPrimitive<LogicalDate> part4period3From();
-
-    IPrimitive<LogicalDate> part4period3To();
-
-    IPrimitive<BigDecimal> part4period3RentCharged();
-
-    IPrimitive<BigDecimal> part4period3RentPaid();
-
-    IPrimitive<BigDecimal> part4period3RentOwing();
-
-    IPrimitive<BigDecimal> part4totalRentOwing();
-
-    //
-    IPrimitive<BigDecimal> part4nsf1ChequeAmount();
-
-    IPrimitive<LogicalDate> part4nsf1DateOfCheque();
-
-    IPrimitive<LogicalDate> part4nsf1DateOfNsfCharge();
-
-    IPrimitive<BigDecimal> part4nsf1BankCharge();
-
-    IPrimitive<BigDecimal> part4nsf1LandlordsCharge();
-
-    IPrimitive<BigDecimal> part4nsf1TotalCharge();
-
-    //
-    IPrimitive<BigDecimal> part4nsf2ChequeAmount();
-
-    IPrimitive<LogicalDate> part4nsf2DateOfCheque();
-
-    IPrimitive<LogicalDate> part4nsf2DateOfNsfCharge();
-
-    IPrimitive<BigDecimal> part4nsf2BankCharge();
-
-    IPrimitive<BigDecimal> part4nsf2LandlordsCharge();
-
-    IPrimitive<BigDecimal> part4nsf2TotalCharge();
-
-    //
-    IPrimitive<BigDecimal> part4nsf3ChequeAmount();
-
-    IPrimitive<LogicalDate> part4nsf3DateOfCheque();
-
-    IPrimitive<LogicalDate> part4nsf3DateOfNsfCharge();
-
-    IPrimitive<BigDecimal> part4nsf3BankCharge();
-
-    IPrimitive<BigDecimal> part4nsf3LandlordsCharge();
-
-    IPrimitive<BigDecimal> part4nsf3TotalCharge();
-
-    //
-    IPrimitive<BigDecimal> part4nsf4ChequeAmount();
-
-    IPrimitive<LogicalDate> part4nsf4DateOfCheque();
-
-    IPrimitive<LogicalDate> part4nsf4DateOfNsfCharge();
-
-    IPrimitive<BigDecimal> part4nsf4BankCharge();
-
-    IPrimitive<BigDecimal> part4nsf4LandlordsCharge();
-
-    IPrimitive<BigDecimal> part4nsf4TotalCharge();
-
-    //
-    IPrimitive<BigDecimal> part4nsf5ChequeAmount();
-
-    IPrimitive<LogicalDate> part4nsf5DateOfCheque();
-
-    IPrimitive<LogicalDate> part4nsf5DateOfNsfCharge();
-
-    IPrimitive<BigDecimal> part4nsf5BankCharge();
-
-    IPrimitive<BigDecimal> part4nsf5LandlordsCharge();
-
-    IPrimitive<BigDecimal> part4nsf5TotalCharge();
-
-    //
-    IPrimitive<BigDecimal> part4nsfTotalChargeOwed();
+    IPrimitive<BigDecimal> part4_nsfTotalChargeOwed();
 
     // Part5
     IPrimitive<String> part5TotalRentOwing();

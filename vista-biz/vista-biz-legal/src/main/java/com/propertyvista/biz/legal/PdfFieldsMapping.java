@@ -28,6 +28,7 @@ import java.util.List;
 
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IObject;
 
 import com.propertyvista.domain.legal.utils.Formatter;
@@ -39,19 +40,21 @@ public abstract class PdfFieldsMapping<E extends IEntity> {
 
     private final HashMap<String, PdfFieldDescriptor> mapping;
 
+    private final HashMap<String, List<PdfFieldsMapping<?>>> tablesMapping;
+
     public PdfFieldsMapping(Class<E> klass) {
         proto = EntityFactory.getEntityPrototype(klass);
         mapping = new HashMap<String, PdfFieldDescriptor>();
-
+        tablesMapping = new HashMap<String, List<PdfFieldsMapping<?>>>();
         configure();
     }
 
     public final PdfFieldDescriptor getDescriptor(IObject<?> field) {
-        return getDescriptor(field.getFieldName());
+        return mapping.get(field.getFieldName());
     }
 
-    public final PdfFieldDescriptor getDescriptor(String fieldName) {
-        return mapping.get(fieldName);
+    public final PdfFieldDescriptor getDescriptor(IList<?> tableField, IObject<?> field, int row) {
+        return tablesMapping.get(tableField.getFieldName()).get(row).getDescriptor(field);
     }
 
     /** called from constructor, should hold descriptors of fields */
@@ -63,6 +66,10 @@ public abstract class PdfFieldsMapping<E extends IEntity> {
 
     protected final PdfFieldDescriptorBuilder field(IObject<?> field) {
         return new PdfFieldDescriptorBuilder(field);
+    }
+
+    protected final <TableRow extends IEntity> PdfTableDescriptorBuilder<TableRow> table(IList<TableRow> tableField) {
+        return new PdfTableDescriptorBuilder<TableRow>(tableField.getFieldName(), tableField.getValueClass());
     }
 
     protected class PdfFieldDescriptorBuilder {
@@ -109,5 +116,31 @@ public abstract class PdfFieldsMapping<E extends IEntity> {
         public void define() {
             mapping.put(field.getFieldName(), new PdfFieldDescriptor(formatters, mappings, partitioner, states));
         }
+    }
+
+    protected class PdfTableDescriptorBuilder<TableRow extends IEntity> {
+
+        private final LinkedList<PdfFieldsMapping<?>> rowMapping;
+
+        private final String fieldName;
+
+        public PdfTableDescriptorBuilder(String fieldName, Class<TableRow> tableRowKlass) {
+            this.rowMapping = new LinkedList<PdfFieldsMapping<?>>();
+            this.fieldName = fieldName;
+        }
+
+        public PdfTableDescriptorBuilder rowMapping(List<? extends PdfFieldsMapping<TableRow>> rowMapping) {
+            this.rowMapping.addAll(rowMapping);
+            return this;
+        }
+
+        public PdfTableDescriptorBuilder rowMapping(PdfFieldsMapping<TableRow>... rowMapping) {
+            return rowMapping(Arrays.asList(rowMapping));
+        }
+
+        public void define() {
+            tablesMapping.put(fieldName, rowMapping);
+        }
+
     }
 }
