@@ -22,10 +22,12 @@ import com.pyx4j.commons.css.ThemeColor;
 import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.security.shared.SecurityController;
 import com.pyx4j.widgets.client.Anchor;
 import com.pyx4j.widgets.client.Button;
 import com.pyx4j.widgets.client.actionbar.Toolbar;
 
+import com.propertyvista.domain.security.VistaCustomerPaymentTypeBehavior;
 import com.propertyvista.portal.rpc.portal.resident.dto.financial.BillingSummaryDTO;
 import com.propertyvista.portal.shared.resources.PortalImages;
 import com.propertyvista.portal.shared.ui.AbstractGadget;
@@ -37,6 +39,8 @@ public class BillingSummaryGadget extends AbstractGadget<FinancialDashboardViewI
     private static final I18n i18n = I18n.get(BillingSummaryGadget.class);
 
     private final BillingView view;
+
+    private final Button paymentButton = new Button("Make a Payment");
 
     BillingSummaryGadget(FinancialDashboardViewImpl viewer) {
         super(viewer, PortalImages.INSTANCE.billingIcon(), i18n.tr("My Billing Summary"), ThemeColor.contrast4, 1);
@@ -54,13 +58,13 @@ public class BillingSummaryGadget extends AbstractGadget<FinancialDashboardViewI
 
     protected void populate(BillingSummaryDTO value) {
         view.populate(value);
+
+        paymentButton.setVisible(SecurityController.checkAnyBehavior(VistaCustomerPaymentTypeBehavior.values()));
     }
 
     class BillingToolbar extends Toolbar {
         public BillingToolbar() {
-
-            Button paymentButton = new Button("Make a Payment", new Command() {
-
+            paymentButton.setCommand(new Command() {
                 @Override
                 public void execute() {
                     getGadgetView().getPresenter().makePayment();

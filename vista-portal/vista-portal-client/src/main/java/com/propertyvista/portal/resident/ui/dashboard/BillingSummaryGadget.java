@@ -22,11 +22,13 @@ import com.pyx4j.commons.css.ThemeColor;
 import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.security.shared.SecurityController;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.widgets.client.Anchor;
 import com.pyx4j.widgets.client.Button;
 import com.pyx4j.widgets.client.actionbar.Toolbar;
 
+import com.propertyvista.domain.security.VistaCustomerPaymentTypeBehavior;
 import com.propertyvista.portal.rpc.portal.resident.ResidentPortalSiteMap;
 import com.propertyvista.portal.rpc.portal.resident.dto.financial.BillingSummaryDTO;
 import com.propertyvista.portal.shared.resources.PortalImages;
@@ -40,19 +42,9 @@ public class BillingSummaryGadget extends AbstractGadget<MainDashboardViewImpl> 
 
     private final BillingViewer billingViewer;
 
-    Button paymentButton = new Button("Make a Payment", new Command() {
-        @Override
-        public void execute() {
-            getGadgetView().getPresenter().payNow();
-        }
-    });
+    private final Button paymentButton = new Button("Make a Payment");
 
-    private final Button autoPayButton = new Button("Setup Auto Pay", new Command() {
-        @Override
-        public void execute() {
-            getGadgetView().getPresenter().setAutopay();
-        }
-    });
+    private final Button autoPayButton = new Button("Setup Auto Pay");
 
     BillingSummaryGadget(MainDashboardViewImpl viewer) {
         super(viewer, PortalImages.INSTANCE.billingIcon(), i18n.tr("My Billing Summary"), ThemeColor.contrast4, 1);
@@ -69,14 +61,28 @@ public class BillingSummaryGadget extends AbstractGadget<MainDashboardViewImpl> 
     protected void populate(BillingSummaryDTO value) {
         billingViewer.populate(value);
 
-        autoPayButton.setEnabled(!value.leaseStatus().getValue().isNoAutoPay());
+        autoPayButton.setVisible(!value.leaseStatus().getValue().isNoAutoPay()
+                && SecurityController.checkAnyBehavior(VistaCustomerPaymentTypeBehavior.forAutoPay()));
+        paymentButton.setVisible(SecurityController.checkAnyBehavior(VistaCustomerPaymentTypeBehavior.values()));
     }
 
     class BillingToolbar extends Toolbar {
         public BillingToolbar() {
+            paymentButton.setCommand(new Command() {
+                @Override
+                public void execute() {
+                    getGadgetView().getPresenter().payNow();
+                }
+            });
             paymentButton.getElement().getStyle().setProperty("background", StyleManager.getPalette().getThemeColor(ThemeColor.contrast4, 1));
             addItem(paymentButton);
 
+            autoPayButton.setCommand(new Command() {
+                @Override
+                public void execute() {
+                    getGadgetView().getPresenter().setAutopay();
+                }
+            });
             autoPayButton.getElement().getStyle().setProperty("background", StyleManager.getPalette().getThemeColor(ThemeColor.contrast4, 0.8));
             addItem(autoPayButton);
         }

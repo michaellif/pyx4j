@@ -29,15 +29,16 @@ import com.pyx4j.forms.client.ui.folder.CEntityFolderItem;
 import com.pyx4j.forms.client.ui.folder.IFolderItemDecorator;
 import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.security.shared.SecurityController;
 import com.pyx4j.widgets.client.Anchor;
 import com.pyx4j.widgets.client.Button;
 import com.pyx4j.widgets.client.actionbar.Toolbar;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
 
-import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
 import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
 import com.propertyvista.domain.contact.AddressSimple;
 import com.propertyvista.domain.payment.PaymentDetails;
+import com.propertyvista.domain.security.VistaCustomerPaymentTypeBehavior;
 import com.propertyvista.portal.rpc.portal.resident.dto.financial.PaymentMethodInfoDTO;
 import com.propertyvista.portal.rpc.portal.resident.dto.financial.PaymentMethodSummaryDTO;
 import com.propertyvista.portal.shared.resources.PortalImages;
@@ -50,12 +51,7 @@ public class PaymentMethodsGadget extends AbstractGadget<FinancialDashboardViewI
 
     private final PaymentMethodsView view;
 
-    private final Button paymentMethodButton = new Button("Add Payment Method", new Command() {
-        @Override
-        public void execute() {
-            getGadgetView().getPresenter().addPaymentMethod();
-        }
-    });
+    private final Button paymentMethodButton = new Button("Add Payment Method");
 
     PaymentMethodsGadget(FinancialDashboardViewImpl form) {
         super(form, PortalImages.INSTANCE.billingIcon(), i18n.tr("Payment Methods"), ThemeColor.contrast4, 1);
@@ -70,10 +66,18 @@ public class PaymentMethodsGadget extends AbstractGadget<FinancialDashboardViewI
 
     protected void populate(PaymentMethodSummaryDTO value) {
         view.populate(value);
+
+        paymentMethodButton.setVisible(SecurityController.checkAnyBehavior(VistaCustomerPaymentTypeBehavior.forPaymentMethodSetup()));
     }
 
     class PaymentMethodsToolbar extends Toolbar {
         public PaymentMethodsToolbar() {
+            paymentMethodButton.setCommand(new Command() {
+                @Override
+                public void execute() {
+                    getGadgetView().getPresenter().addPaymentMethod();
+                }
+            });
             paymentMethodButton.getElement().getStyle().setProperty("background", StyleManager.getPalette().getThemeColor(ThemeColor.contrast4, 1));
             addItem(paymentMethodButton);
         }
@@ -131,7 +135,7 @@ public class PaymentMethodsGadget extends AbstractGadget<FinancialDashboardViewI
             });
         }
 
-        private class PaymentMethodViewer extends CEntityDecoratableForm<PaymentMethodInfoDTO> {
+        private class PaymentMethodViewer extends CEntityForm<PaymentMethodInfoDTO> {
 
             public PaymentMethodViewer() {
                 super(PaymentMethodInfoDTO.class);

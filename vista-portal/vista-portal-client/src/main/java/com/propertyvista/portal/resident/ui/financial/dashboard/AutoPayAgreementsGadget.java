@@ -28,6 +28,7 @@ import com.pyx4j.forms.client.ui.folder.CEntityFolderItem;
 import com.pyx4j.forms.client.ui.folder.IFolderItemDecorator;
 import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.security.shared.SecurityController;
 import com.pyx4j.widgets.client.Anchor;
 import com.pyx4j.widgets.client.Button;
 import com.pyx4j.widgets.client.actionbar.Toolbar;
@@ -35,6 +36,7 @@ import com.pyx4j.widgets.client.dialog.MessageDialog;
 
 import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
 import com.propertyvista.domain.payment.PaymentMethod;
+import com.propertyvista.domain.security.VistaCustomerPaymentTypeBehavior;
 import com.propertyvista.domain.tenant.lease.Tenant;
 import com.propertyvista.portal.rpc.portal.resident.dto.financial.AutoPayInfoDTO;
 import com.propertyvista.portal.rpc.portal.resident.dto.financial.AutoPaySummaryDTO;
@@ -48,12 +50,7 @@ public class AutoPayAgreementsGadget extends AbstractGadget<FinancialDashboardVi
 
     private final AutoPaysView view;
 
-    private final Button autoPayButton = new Button("Add Auto Pay Agreement", new Command() {
-        @Override
-        public void execute() {
-            getGadgetView().getPresenter().addAutoPay();
-        }
-    });
+    private final Button autoPayButton = new Button("Add Auto Pay Agreement");
 
     AutoPayAgreementsGadget(FinancialDashboardViewImpl dashboardView) {
         super(dashboardView, PortalImages.INSTANCE.billingIcon(), i18n.tr("Auto Pay Agreements"), ThemeColor.contrast4, 1);
@@ -69,11 +66,18 @@ public class AutoPayAgreementsGadget extends AbstractGadget<FinancialDashboardVi
     protected void populate(AutoPaySummaryDTO value) {
         view.populate(value);
 
-        autoPayButton.setEnabled(!value.leaseStatus().getValue().isNoAutoPay());
+        autoPayButton.setVisible(!value.leaseStatus().getValue().isNoAutoPay()
+                && SecurityController.checkAnyBehavior(VistaCustomerPaymentTypeBehavior.forAutoPay()));
     }
 
     class AutoPayAgreementsToolbar extends Toolbar {
         public AutoPayAgreementsToolbar() {
+            autoPayButton.setCommand(new Command() {
+                @Override
+                public void execute() {
+                    getGadgetView().getPresenter().addAutoPay();
+                }
+            });
             autoPayButton.getElement().getStyle().setProperty("background", StyleManager.getPalette().getThemeColor(ThemeColor.contrast4, 1));
             addItem(autoPayButton);
         }
