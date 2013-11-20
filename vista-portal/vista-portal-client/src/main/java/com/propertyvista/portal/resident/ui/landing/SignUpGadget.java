@@ -24,10 +24,10 @@ import com.pyx4j.commons.css.StyleManager;
 import com.pyx4j.commons.css.ThemeColor;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.Button;
-import com.pyx4j.widgets.client.actionbar.Toolbar;
 
 import com.propertyvista.portal.resident.ui.landing.LandingView.LandingPresenter;
 import com.propertyvista.portal.shared.ui.AbstractGadget;
+import com.propertyvista.portal.shared.ui.GadgetToolbar;
 
 public class SignUpGadget extends AbstractGadget<LandingViewImpl> {
 
@@ -79,7 +79,7 @@ public class SignUpGadget extends AbstractGadget<LandingViewImpl> {
         manageRequestsImage.setResource(manageRequests);
     }
 
-    class SignUpToolbar extends Toolbar {
+    class SignUpToolbar extends GadgetToolbar {
 
         private final Button signUpButton;
 

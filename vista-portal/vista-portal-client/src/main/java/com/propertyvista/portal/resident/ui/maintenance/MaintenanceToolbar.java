@@ -19,11 +19,11 @@ import com.pyx4j.commons.css.StyleManager;
 import com.pyx4j.commons.css.ThemeColor;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.Button;
-import com.pyx4j.widgets.client.actionbar.Toolbar;
 
 import com.propertyvista.portal.rpc.portal.resident.dto.maintenance.MaintenanceSummaryDTO;
+import com.propertyvista.portal.shared.ui.GadgetToolbar;
 
-public abstract class MaintenanceToolbar extends Toolbar {
+public abstract class MaintenanceToolbar extends GadgetToolbar {
 
     static final I18n i18n = I18n.get(MaintenanceToolbar.class);
 

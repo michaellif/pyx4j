@@ -184,6 +184,7 @@ public class VistaPortalAccessControlList extends ServletContainerAclBuilder {
 
         grant(VistaCustomerBehavior.Prospective, new IServiceExecutePermission(ApplicationStatusService.class));
         grant(VistaCustomerBehavior.Prospective, new IServiceExecutePermission(ApplicationWizardService.class));
+        grant(VistaCustomerBehavior.Prospective, new IServiceExecutePermission(ApplicationContextSelectionService.class));
 
         //=======================================
 

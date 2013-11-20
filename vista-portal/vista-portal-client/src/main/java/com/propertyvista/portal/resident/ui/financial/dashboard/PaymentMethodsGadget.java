@@ -32,7 +32,6 @@ import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.security.shared.SecurityController;
 import com.pyx4j.widgets.client.Anchor;
 import com.pyx4j.widgets.client.Button;
-import com.pyx4j.widgets.client.actionbar.Toolbar;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
 
 import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
@@ -43,6 +42,7 @@ import com.propertyvista.portal.rpc.portal.resident.dto.financial.PaymentMethodI
 import com.propertyvista.portal.rpc.portal.resident.dto.financial.PaymentMethodSummaryDTO;
 import com.propertyvista.portal.shared.resources.PortalImages;
 import com.propertyvista.portal.shared.ui.AbstractGadget;
+import com.propertyvista.portal.shared.ui.GadgetToolbar;
 import com.propertyvista.portal.shared.ui.util.decorators.FormWidgetDecoratorBuilder;
 
 public class PaymentMethodsGadget extends AbstractGadget<FinancialDashboardViewImpl> {
@@ -70,7 +70,7 @@ public class PaymentMethodsGadget extends AbstractGadget<FinancialDashboardViewI
         paymentMethodButton.setVisible(SecurityController.checkAnyBehavior(VistaCustomerPaymentTypeBehavior.forPaymentMethodSetup()));
     }
 
-    class PaymentMethodsToolbar extends Toolbar {
+    class PaymentMethodsToolbar extends GadgetToolbar {
         public PaymentMethodsToolbar() {
             paymentMethodButton.setCommand(new Command() {
                 @Override

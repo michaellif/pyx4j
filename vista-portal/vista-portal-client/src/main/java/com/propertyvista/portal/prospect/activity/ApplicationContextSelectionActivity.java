@@ -20,7 +20,6 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
-import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.security.client.ClientContext;
 import com.pyx4j.security.rpc.AuthenticationResponse;
@@ -35,8 +34,6 @@ import com.propertyvista.portal.rpc.portal.prospect.dto.OnlineApplicationContext
 import com.propertyvista.portal.rpc.portal.prospect.services.ApplicationContextSelectionService;
 
 public class ApplicationContextSelectionActivity extends AbstractActivity implements ApplicationContextSelectionPresenter {
-
-    private static final I18n i18n = I18n.get(ApplicationContextSelectionActivity.class);
 
     private final ApplicationContextSelectionView view;
 
@@ -65,21 +62,25 @@ public class ApplicationContextSelectionActivity extends AbstractActivity implem
     }
 
     @Override
-    public void setLeaseContext() {
-        OnlineApplication leaseIdStub = view.getSelectedApplication();
-
-        if (leaseIdStub != null) {
+    public void setApplicationContext() {
+        OnlineApplication application = view.getSelectedApplication();
+        if (application != null) {
             service.setApplicationContext(new DefaultAsyncCallback<AuthenticationResponse>() {
                 @Override
                 public void onSuccess(AuthenticationResponse result) {
+
                     ClientContext.authenticated(result);
                     AppSite.getPlaceController().goTo(AppPlace.NOWHERE);
+
+                    throw new Error("Application wasn't selected");
+
                 }
 
-            }, leaseIdStub);
+            }, application);
         } else {
-            view.showMessage(i18n.tr("Please choose a lease"));
+            throw new Error("Application wasn't selected");
         }
+
     }
 
 }

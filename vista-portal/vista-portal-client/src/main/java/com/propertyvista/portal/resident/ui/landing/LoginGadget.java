@@ -54,12 +54,12 @@ import com.pyx4j.security.rpc.AuthenticationRequest;
 import com.pyx4j.site.rpc.AppPlaceInfo;
 import com.pyx4j.widgets.client.Anchor;
 import com.pyx4j.widgets.client.Button;
-import com.pyx4j.widgets.client.actionbar.Toolbar;
 import com.pyx4j.widgets.client.dialog.Dialog;
 
 import com.propertyvista.common.client.ui.components.login.LoginView.DevLoginCredentials;
 import com.propertyvista.portal.resident.ui.landing.LandingView.LandingPresenter;
 import com.propertyvista.portal.shared.ui.AbstractGadget;
+import com.propertyvista.portal.shared.ui.GadgetToolbar;
 import com.propertyvista.portal.shared.ui.util.decorators.CheckBoxDecorator;
 import com.propertyvista.portal.shared.ui.util.decorators.LoginWidgetDecoratorBuilder;
 
@@ -227,7 +227,7 @@ public class LoginGadget extends AbstractGadget<LandingViewImpl> {
         }
     }
 
-    class LoginToolbar extends Toolbar {
+    class LoginToolbar extends GadgetToolbar {
 
         private final LoginButton loginButton;
 

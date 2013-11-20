@@ -29,7 +29,7 @@ public interface ApplicationContextSelectionView extends IsView {
 
         void populate();
 
-        void setLeaseContext();
+        void setApplicationContext();
 
     }
 
@@ -39,5 +39,4 @@ public interface ApplicationContextSelectionView extends IsView {
 
     OnlineApplication getSelectedApplication();
 
-    void showMessage(String message);
 }

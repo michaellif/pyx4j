@@ -28,7 +28,6 @@ import com.pyx4j.site.shared.domain.Notification;
 import com.pyx4j.site.shared.domain.Notification.NotificationType;
 import com.pyx4j.widgets.client.Button;
 import com.pyx4j.widgets.client.Label;
-import com.pyx4j.widgets.client.actionbar.Toolbar;
 import com.pyx4j.widgets.client.dialog.images.NotificationImages;
 
 import com.propertyvista.portal.shared.themes.DashboardTheme;
@@ -157,7 +156,7 @@ public class NotificationPageViewImpl extends SimplePanel implements Notificatio
 
         }
 
-        class NotificationToolbar extends Toolbar {
+        class NotificationToolbar extends GadgetToolbar {
             public NotificationToolbar() {
 
                 Button okButton = new Button("OK", new Command() {

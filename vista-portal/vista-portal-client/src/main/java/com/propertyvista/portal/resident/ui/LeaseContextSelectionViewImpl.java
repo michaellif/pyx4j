@@ -18,8 +18,6 @@ import java.util.List;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
-import com.google.gwt.user.client.ui.Panel;
-import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.entity.rpc.InMemeoryListService;
@@ -39,7 +37,7 @@ public class LeaseContextSelectionViewImpl implements LeaseContextSelectionView 
 
     private final static I18n i18n = I18n.get(LeaseContextSelectionViewImpl.class);
 
-    private final Panel panel;
+    private final BasicFlexFormPanel content;
 
     private final LeaseContextChoicesLister lister;
 
@@ -50,7 +48,7 @@ public class LeaseContextSelectionViewImpl implements LeaseContextSelectionView 
         lister.setSize("100%", "100%");
         lister.showColumnSelector(false);
 
-        BasicFlexFormPanel content = new BasicFlexFormPanel();
+        content = new BasicFlexFormPanel();
         content.setSize("100%", "100%");
 
         int row = -1;
@@ -78,12 +76,11 @@ public class LeaseContextSelectionViewImpl implements LeaseContextSelectionView 
         content.getFlexCellFormatter().setHorizontalAlignment(row, 0, HasHorizontalAlignment.ALIGN_CENTER);
         content.getFlexCellFormatter().getElement(row, 0).getStyle().setPaddingTop(0.5, Unit.EM);
 
-        panel = new ScrollPanel(content);
     }
 
     @Override
     public Widget asWidget() {
-        return panel;
+        return content;
     }
 
     @Override

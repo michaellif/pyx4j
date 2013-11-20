@@ -28,7 +28,6 @@ import com.google.gwt.user.client.ui.SimplePanel;
 
 import com.pyx4j.commons.css.StyleManager;
 import com.pyx4j.commons.css.ThemeColor;
-import com.pyx4j.widgets.client.actionbar.Toolbar;
 
 import com.propertyvista.portal.shared.themes.BlockMixin;
 import com.propertyvista.portal.shared.themes.DashboardTheme;
@@ -67,8 +66,8 @@ public abstract class AbstractGadget<T extends IsWidget> extends AbstractPortalP
         return view;
     }
 
-    protected void setActionsToolbar(Toolbar actionsToolbar) {
-        containerPanel.actionsToolbarHolder.setWidget(actionsToolbar);
+    protected void setActionsToolbar(GadgetToolbar gadgetToolbar) {
+        containerPanel.actionsToolbarHolder.setWidget(gadgetToolbar);
         containerPanel.actionsToolbarHolder.setVisible(true);
     }
 
