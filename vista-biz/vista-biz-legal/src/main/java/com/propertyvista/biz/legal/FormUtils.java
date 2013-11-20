@@ -141,7 +141,7 @@ public class FormUtils {
                             } else if (isCheckbox(tableRowField)) {
                                 setCheckBox(rowFieldDescriptor, pdfFormFields, (Boolean) tableRowField.getValue());
 
-                            } else if (field.getValueClass().isEnum()) {
+                            } else if (tableRowField.getValueClass().isEnum()) {
                                 // TODO add checks that field mapping doesn't have multiple mappings and no length
                                 Class<?> enumType = field.getValueClass();
                                 // TODO make something more clean to defining enums
