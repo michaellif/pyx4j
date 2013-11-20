@@ -91,6 +91,18 @@ public class L1PrepareForm {
         setCombFlag(fields.getFieldItem("b12c96nfP2_city"));
         setCombFlag(fields.getFieldItem("b12c96nfP2_prov"));
         setCombFlag(fields.getFieldItem("b12c96nfP2_postal"));
+
+        setCombFlag(fields.getFieldItem("b12c96nfP1_unit_no"));
+        setCombFlag(fields.getFieldItem("b12c96nfP1_city"));
+        setCombFlag(fields.getFieldItem("b12c96nfP1_prov"));
+        setCombFlag(fields.getFieldItem("b12c96nfP1_postal"));
+
+        setCombFlag(fields.getFieldItem("b12c96nforg_name"));
+        setCombFlag(fields.getFieldItem("b12c96nforg_unit_no"));
+        setCombFlag(fields.getFieldItem("b12c96nforg_city"));
+        setCombFlag(fields.getFieldItem("b12c96nforg_prov"));
+        setCombFlag(fields.getFieldItem("b12c96nforg_postal"));
+
     }
 
     private static void setCombFlag(Item fieldItem) {

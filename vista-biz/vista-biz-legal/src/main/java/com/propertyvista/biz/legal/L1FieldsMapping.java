@@ -27,6 +27,7 @@ import com.propertyvista.domain.legal.NsfChargeDetails;
 import com.propertyvista.domain.legal.RentOwingForPeriod;
 import com.propertyvista.domain.legal.utils.CanadianPostalCodePartitioner;
 import com.propertyvista.domain.legal.utils.FileNumberPartitioner;
+import com.propertyvista.domain.legal.utils.L1LandlordsContactInfo;
 
 public class L1FieldsMapping extends LtbFormFieldsMapping<L1FormFieldsData> {
 
@@ -184,6 +185,40 @@ public class L1FieldsMapping extends LtbFormFieldsMapping<L1FormFieldsData> {
         money(proto().part5_TotalRentOwing()).mapTo(fieldsPartition("@@b12c96nfl1_renttotal", 2, 3, 2)).define();
         money(proto().part5_TotalNsfChequeChargesOwing()).mapTo(fieldsPartition("@@b12c96nfl1_nsf_total", 1, 3, 2)).define();
         money(proto().part5_Total()).mapTo(fieldsPartition("@@b12c96nfl1_totalown", 2, 3, 2)).define();
+        
+        // PART 6
+        table(proto().part6_landlordsContactInfos()).rowMapping(Arrays.<LtbFormFieldsMapping<L1LandlordsContactInfo>>asList(
+                new LtbFormFieldsMapping<L1LandlordsContactInfo>(L1LandlordsContactInfo.class) {@Override protected void configure() {
+                    field(proto().typeOfLandlord())
+                        .states("M", "F", "G")
+                        .mapTo("b12c96nfP1_gender")
+                    .define();
+                    
+                    text(proto().firstName()).mapTo("b12c96nfP1_first_name").define();
+                    text(proto().lastName()).mapTo("b12c96nfP1_last_name").define();
+                    text(proto().streetAddress()).mapTo("b12c96nfP1_st_address").define();
+                    text(proto().unit()).mapTo("b12c96nfP1_unit_no").define();
+                    text(proto().municipality()).mapTo("b12c96nfP1_city").define();
+                    text(proto().province()).mapTo("b12c96nfP1_prov").define();
+                    text(proto().postalCode()).mapTo("b12c96nfP1_postal").define();
+                    phone(proto().dayPhoneNumber()).mapTo(phonePartition("@@b12c96nfP1_day_phone")).define();
+                    phone(proto().eveningPhoneNumber()).mapTo(phonePartition("@@b12c96nfP1_evg_phone")).define();
+                    phone(proto().faxNumber()).mapTo(phonePartition("@@b12c96nfP1_fax")).define();
+                    text(proto().emailAddress()).mapTo("b12c96nfP1_email").define();
+                }}
+        )).define();
+        
+        text(proto().part6_agentsFirstName()).mapTo("b12c96nfpersonnel_first_name").define();
+        text(proto().part6_agentsLastName()).mapTo("b12c96nfpersonnel_last_name").define();
+        text(proto().part6_agentsCompanyName()).mapTo("b12c96nforg_name").define();
+        text(proto().part6_agentsMailingAddress()).mapTo("b12c96nforg_address").define();
+        text(proto().part6_agentsUnit()).mapTo("b12c96nforg_unit_no").define();
+        text(proto().part6_agentsMunicipality()).mapTo("b12c96nforg_city").define();
+        text(proto().part6_agentsProvince()).mapTo("b12c96nforg_prov").define();
+        text(proto().part6_agentsPostalCode()).mapTo("b12c96nforg_postal").define();
+        phone(proto().part6_agentsPhoneNumber()).mapTo(phonePartition("@@b12c96nfpersonnel_phone")).define();
+        phone(proto().part6_agentsFaxNumber()).mapTo(phonePartition("@@b12c96nfpersonnel_fax_number")).define();
+        text(proto().part6_agentsEmail()).mapTo("b12c96nfpersonnel_email").define();
         
     }//@formatter:on
 }

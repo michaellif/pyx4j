@@ -21,6 +21,8 @@ import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
 
+import com.propertyvista.domain.legal.utils.L1LandlordsContactInfo;
+
 @Transient
 public interface L1FormFieldsData extends IEntity {
 
@@ -38,12 +40,6 @@ public interface L1FormFieldsData extends IEntity {
     public enum RentPaymentPeriod {
 
         week, month, other
-
-    }
-
-    public enum TypeOfLandlord {
-
-        Male, Female, Company
 
     }
 
@@ -144,29 +140,8 @@ public interface L1FormFieldsData extends IEntity {
     IPrimitive<BigDecimal> part5_Total();
 
     // Part6
-    IPrimitive<String> part6_firstName();
-
-    IPrimitive<String> part6_lastName();
-
-    IPrimitive<TypeOfLandlord> part6_typeOfLandlord();
-
-    IPrimitive<String> part6_streetAddress();
-
-    IPrimitive<String> part6_unit();
-
-    IPrimitive<String> part6_municipality();
-
-    IPrimitive<String> part6_provice();
-
-    IPrimitive<String> part6_postalCode();
-
-    IPrimitive<String> part6_dayPhoneNumber();
-
-    IPrimitive<String> part6_eveningPhoneNumber();
-
-    IPrimitive<String> part6_faxNumber();
-
-    IPrimitive<String> part6_emailAddress();
+    /** L1 form can hold only one of these */
+    IList<L1LandlordsContactInfo> part6_landlordsContactInfos();
 
     IPrimitive<String> part6_agentsFirstName();
 

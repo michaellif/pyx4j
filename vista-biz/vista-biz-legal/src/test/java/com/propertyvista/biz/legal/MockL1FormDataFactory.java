@@ -32,6 +32,8 @@ import com.propertyvista.domain.legal.L1FormFieldsData.RentPaymentPeriod;
 import com.propertyvista.domain.legal.L1FormFieldsData.YesNo;
 import com.propertyvista.domain.legal.NsfChargeDetails;
 import com.propertyvista.domain.legal.RentOwingForPeriod;
+import com.propertyvista.domain.legal.utils.L1LandlordsContactInfo;
+import com.propertyvista.domain.legal.utils.L1LandlordsContactInfo.TypeOfLandlord;
 
 public class MockL1FormDataFactory {
 
@@ -163,6 +165,34 @@ public class MockL1FormDataFactory {
         fieldsData.part5_TotalRentOwing().setValue(new BigDecimal("29876.54"));
         fieldsData.part5_TotalNsfChequeChargesOwing().setValue(new BigDecimal("9876.54"));
         fieldsData.part5_Total().setValue(new BigDecimal("39876.54"));
+
+        // PART 7
+        L1LandlordsContactInfo landlordsContactInfo = fieldsData.part6_landlordsContactInfos().$();
+        landlordsContactInfo.typeOfLandlord().setValue(TypeOfLandlord.Company);
+        landlordsContactInfo.firstName().setValue("Art");
+        landlordsContactInfo.lastName().setValue("Vanderlay");
+        landlordsContactInfo.streetAddress().setValue("1100 The West Mall");
+        landlordsContactInfo.unit().setValue("123");
+        landlordsContactInfo.municipality().setValue("Toronto");
+        landlordsContactInfo.province().setValue("on");
+        landlordsContactInfo.postalCode().setValue("a1a 1a1");
+        landlordsContactInfo.dayPhoneNumber().setValue("(647) 123-5555");
+        landlordsContactInfo.eveningPhoneNumber().setValue("(647) 123-6666");
+        landlordsContactInfo.faxNumber().setValue("(647) 123-7777");
+        landlordsContactInfo.emailAddress().setValue("art.vanderlay@vanderlay-inc.com");
+        fieldsData.part6_landlordsContactInfos().add(landlordsContactInfo);
+
+        fieldsData.part6_agentsFirstName().setValue("Mad");
+        fieldsData.part6_agentsLastName().setValue("Hatter");
+        fieldsData.part6_agentsCompanyName().setValue("I haven't the slightest idea");
+        fieldsData.part6_agentsMailingAddress().setValue("777 Wonderland");
+        fieldsData.part6_agentsUnit().setValue("555");
+        fieldsData.part6_agentsMunicipality().setValue("Somewhere");
+        fieldsData.part6_agentsProvince().setValue("on");
+        fieldsData.part6_agentsPostalCode().setValue("a1a 1a1");
+        fieldsData.part6_agentsPhoneNumber().setValue("(647) 123-5555");
+        fieldsData.part6_agentsFaxNumber().setValue("(647) 123-6666");
+        fieldsData.part6_agentsEmail().setValue("mad.hatter@wonderland.net");
 
         return fieldsData;
     }
