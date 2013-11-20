@@ -110,6 +110,7 @@ BEGIN
         ***     ====================================================================================================
         **/
         
+        CREATE INDEX lease_billing_account_idx ON lease USING btree (billing_account);
        
         
         -- billing_arrears_snapshot -GiST index!
