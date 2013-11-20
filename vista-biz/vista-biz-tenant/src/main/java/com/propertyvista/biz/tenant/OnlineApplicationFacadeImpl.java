@@ -71,7 +71,7 @@ public class OnlineApplicationFacadeImpl implements OnlineApplicationFacade {
 
     @Override
     public List<OnlineApplication> getOnlineApplications(CustomerUser customerUser) {
-        Validate.isTrue(customerUser.isNull(), "Custiomer User can't be null");
+        Validate.isFalse(customerUser.isNull(), "Custiomer User can't be null");
 
         // See if active Application exists
         EntityQueryCriteria<OnlineApplication> criteria = EntityQueryCriteria.create(OnlineApplication.class);
