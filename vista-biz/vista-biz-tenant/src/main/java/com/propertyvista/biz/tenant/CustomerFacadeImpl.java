@@ -240,14 +240,6 @@ public class CustomerFacadeImpl implements CustomerFacade {
 
     }
 
-    // internals:
-
-    private Customer findCustomer(CustomerUser customerUser) {
-        EntityQueryCriteria<Customer> criteria = EntityQueryCriteria.create(Customer.class);
-        criteria.eq(criteria.proto().user(), customerUser);
-        return Persistence.service().retrieve(criteria);
-    }
-
     @Override
     public void prospectSignUp(ProspectSignUp request) {
         // TODO Auto-generated method stub
