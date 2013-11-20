@@ -22,7 +22,7 @@ import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.security.rpc.AuthenticationResponse;
 
-import com.propertyvista.biz.tenant.CustomerFacade;
+import com.propertyvista.biz.tenant.OnlineApplicationFacade;
 import com.propertyvista.domain.contact.AddressStructured;
 import com.propertyvista.domain.tenant.prospect.OnlineApplication;
 import com.propertyvista.portal.rpc.portal.prospect.dto.OnlineApplicationContextChoiceDTO;
@@ -35,7 +35,7 @@ public class ApplicationContextSelectionServiceImpl implements ApplicationContex
     @Override
     //TODO Implement CustomerFacade.getActiveOnlineApplications and AddressRetriever.getOnlineApplicationAddress
     public void getApplicationContextChoices(AsyncCallback<Vector<OnlineApplicationContextChoiceDTO>> callback) {
-        List<OnlineApplication> activeApplications = ServerSideFactory.create(CustomerFacade.class).getActiveOnlineApplications(
+        List<OnlineApplication> activeApplications = ServerSideFactory.create(OnlineApplicationFacade.class).getOnlineApplications(
                 ResidentPortalContext.getCurrentUser());
         Vector<OnlineApplicationContextChoiceDTO> choices = new Vector<OnlineApplicationContextChoiceDTO>(activeApplications.size());
 

@@ -22,7 +22,6 @@ import com.propertyvista.domain.security.VistaCustomerBehavior;
 import com.propertyvista.domain.tenant.Customer;
 import com.propertyvista.domain.tenant.CustomerSelfRegistration;
 import com.propertyvista.domain.tenant.lease.Lease;
-import com.propertyvista.domain.tenant.prospect.OnlineApplication;
 
 public interface CustomerFacade {
 
@@ -37,7 +36,4 @@ public interface CustomerFacade {
     void onVistaTermsAccepted(Key customerUserKey, Key vistaTermsKey, boolean accepted);
 
     void selfRegistration(CustomerSelfRegistration selfRegistration);
-
-    @Deprecated
-    List<OnlineApplication> getActiveOnlineApplications(CustomerUser customerUser);
 }

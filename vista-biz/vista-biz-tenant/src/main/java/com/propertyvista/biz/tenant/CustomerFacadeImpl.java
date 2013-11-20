@@ -23,6 +23,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.pyx4j.commons.Key;
+import com.pyx4j.commons.Validate;
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.entity.server.Persistence;
@@ -45,7 +46,6 @@ import com.propertyvista.domain.tenant.CustomerSelfRegistration;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
 import com.propertyvista.domain.tenant.lease.Tenant;
-import com.propertyvista.domain.tenant.prospect.OnlineApplication;
 import com.propertyvista.operations.domain.legal.VistaTerms.VistaTermsV;
 import com.propertyvista.portal.rpc.portal.resident.dto.ResidentSelfRegistrationDTO;
 import com.propertyvista.portal.rpc.shared.EntityValidationException;
@@ -99,25 +99,23 @@ public class CustomerFacadeImpl implements CustomerFacade {
 
     @Override
     public List<Lease> getActiveLeases(CustomerUser customerUser) {
-        List<Lease> leases = new ArrayList<Lease>();
+        Validate.isTrue(customerUser.isNull(), "Custiomer User can't be null");
 
-        Customer customer = findCustomer(customerUser);
-        if (customer != null) {
-            {
-                EntityQueryCriteria<Lease> criteria = EntityQueryCriteria.create(Lease.class);
-                criteria.in(criteria.proto().status(), Lease.Status.current());
-                criteria.in(criteria.proto().unit().building().suspended(), false);
-                criteria.eq(criteria.proto().currentTerm().version().tenants().$().leaseParticipant().customer(), customer);
-                criteria.in(criteria.proto().currentTerm().version().tenants().$().role(), LeaseTermParticipant.Role.portalAccess());
-                leases.addAll(Persistence.service().query(criteria));
-            }
-            // TODO guarantors portal not supported for now
-            if (false) {
-                EntityQueryCriteria<Lease> criteria = EntityQueryCriteria.create(Lease.class);
-                criteria.in(criteria.proto().status(), Lease.Status.current());
-                criteria.eq(criteria.proto().currentTerm().version().guarantors().$().leaseParticipant().customer(), customer);
-                leases.addAll(Persistence.service().query(criteria));
-            }
+        List<Lease> leases = new ArrayList<Lease>();
+        {
+            EntityQueryCriteria<Lease> criteria = EntityQueryCriteria.create(Lease.class);
+            criteria.in(criteria.proto().status(), Lease.Status.current());
+            criteria.in(criteria.proto().unit().building().suspended(), false);
+            criteria.eq(criteria.proto().currentTerm().version().tenants().$().leaseParticipant().customer().user(), customerUser);
+            criteria.in(criteria.proto().currentTerm().version().tenants().$().role(), LeaseTermParticipant.Role.portalAccess());
+            leases.addAll(Persistence.service().query(criteria));
+        }
+        // TODO guarantors portal not supported for now
+        if (false) {
+            EntityQueryCriteria<Lease> criteria = EntityQueryCriteria.create(Lease.class);
+            criteria.in(criteria.proto().status(), Lease.Status.current());
+            criteria.eq(criteria.proto().currentTerm().version().guarantors().$().leaseParticipant().customer().user(), customerUser);
+            leases.addAll(Persistence.service().query(criteria));
         }
 
         return leases;
@@ -125,15 +123,10 @@ public class CustomerFacadeImpl implements CustomerFacade {
 
     @Override
     public boolean hasToAcceptTerms(CustomerUser customerUser) {
-        Customer customer = findCustomer(customerUser);
-        if (customer == null) {
-            return true;
-        }
-
         final CustomerAcceptedTerms acceptedTerms;
         {
             EntityQueryCriteria<CustomerAcceptedTerms> criteria = EntityQueryCriteria.create(CustomerAcceptedTerms.class);
-            criteria.add(PropertyCriterion.eq(criteria.proto().customer(), customer));
+            criteria.add(PropertyCriterion.eq(criteria.proto().customer().user(), customerUser));
             acceptedTerms = Persistence.service().retrieve(criteria);
             if (acceptedTerms == null || acceptedTerms.vistaTerms().isNull()) {
                 return true;
@@ -150,6 +143,7 @@ public class CustomerFacadeImpl implements CustomerFacade {
                 }
             }
         });
+
         return !versionKey.equals(acceptedTerms.vistaTerms().getValue());
     }
 
@@ -243,21 +237,6 @@ public class CustomerFacadeImpl implements CustomerFacade {
         Persistence.service().persist(credential);
         log.info("tenant {} {} registered for tenant portal", selfRegistration.firstName(), selfRegistration.lastName());
 
-    }
-
-    @Override
-    public List<OnlineApplication> getActiveOnlineApplications(CustomerUser customerUser) {
-        List<OnlineApplication> applications = new ArrayList<OnlineApplication>();
-
-        Customer customer = findCustomer(customerUser);
-        if (customer != null) {
-            EntityQueryCriteria<OnlineApplication> criteria = EntityQueryCriteria.create(OnlineApplication.class);
-            criteria.in(criteria.proto().status(), Lease.Status.current());
-            criteria.in(criteria.proto().customer(), customer);
-            applications.addAll(Persistence.service().query(criteria));
-        }
-
-        return applications;
     }
 
     // internals:

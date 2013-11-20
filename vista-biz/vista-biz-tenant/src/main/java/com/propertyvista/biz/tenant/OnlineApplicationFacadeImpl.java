@@ -17,6 +17,7 @@ import java.math.BigDecimal;
 import java.util.List;
 
 import com.pyx4j.commons.UserRuntimeException;
+import com.pyx4j.commons.Validate;
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
@@ -70,9 +71,11 @@ public class OnlineApplicationFacadeImpl implements OnlineApplicationFacade {
 
     @Override
     public List<OnlineApplication> getOnlineApplications(CustomerUser customerUser) {
+        Validate.isTrue(customerUser.isNull(), "Custiomer User can't be null");
+
         // See if active Application exists
         EntityQueryCriteria<OnlineApplication> criteria = EntityQueryCriteria.create(OnlineApplication.class);
-        criteria.add(PropertyCriterion.eq(criteria.proto().customer().user(), customerUser));
+        criteria.eq(criteria.proto().customer().user(), customerUser);
         return Persistence.service().query(criteria);
     }
 
