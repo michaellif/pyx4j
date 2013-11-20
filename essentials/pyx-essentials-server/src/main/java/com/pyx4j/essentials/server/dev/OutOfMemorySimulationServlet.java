@@ -48,9 +48,9 @@ import com.pyx4j.i18n.annotations.I18n;
 import com.pyx4j.i18n.shared.I18nEnum;
 
 @SuppressWarnings("serial")
-public class OutOfMemorSimulationServlet extends HttpServlet {
+public class OutOfMemorySimulationServlet extends HttpServlet {
 
-    private final static Logger log = LoggerFactory.getLogger(OutOfMemorSimulationServlet.class);
+    private final static Logger log = LoggerFactory.getLogger(OutOfMemorySimulationServlet.class);
 
     @I18n(strategy = I18n.I18nStrategy.IgnoreAll)
     private static enum Action {
