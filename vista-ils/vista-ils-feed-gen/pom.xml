@@ -17,31 +17,124 @@
     <name>vista-ils-feed-gen</name>
 
     <dependencies>
+	<dependency>
+            <groupId>org.apache.axis2</groupId>
+            <artifactId>axis2-adb</artifactId>
+        </dependency>
+		       <dependency>
+            <groupId>com.pyx4j</groupId>
+            <artifactId>pyx-essentials-j2se</artifactId>
+        </dependency>
 
     </dependencies>
 
     <build>
-        <plugins>
-
+                <plugins>
+		<plugin>
+                <!-- Avoid extra warnings in build output -->
+                <artifactId>maven-clean-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>removet-generated-sources</id>
+                        <phase>generate-sources</phase>
+                        <goals>
+                            <goal>clean</goal>
+                        </goals>
+                        <configuration>
+                            <filesets>
+                                <fileset>
+                                    <directory>${project.build.directory}/generated-sources</directory>
+                                </fileset>
+                            </filesets>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+			
+<!--WebServices: WSDL compilation-->
+			 <plugin>
+                <groupId>org.apache.axis2</groupId>
+                <artifactId>axis2-wsdl2code-maven-plugin</artifactId>
+                <configuration>
+                    <generateServerSide>false</generateServerSide>
+                    <generateServerSideInterface>false</generateServerSideInterface>
+                    <generateAllClasses>true</generateAllClasses>
+                    <unpackClasses>false</unpackClasses>
+                    <syncMode>sync</syncMode>
+                    <databindingName>adb</databindingName>
+                    <namespaceURIs>
+                        <namespaceURI>
+                            <uri>http://feedws.gottarent.com/</uri>
+                            <packageName>com.gottarent.ws</packageName>
+                        </namespaceURI>
+                    </namespaceURIs>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>wsdl2code-client-gottarent</id>
+                        <phase>generate-sources</phase>
+                        <goals>
+                            <goal>wsdl2code</goal>
+                        </goals>
+                        <configuration>
+						<wsdlOptions>
+                                <wsdlOption>
+								<!--TODO:wsdlLocation>https://feedws.gottarent.com/feed.asmx?wsdl</wsdlLocation-->
+                                    <wsdlLocation>${basedir}/src/main/resources/wsdl/GottarentWS.wsdl</wsdlLocation>
+                                    <extraargs>
+                                        <extraarg>-xjc-Xcollection-setter-injector</extraarg>
+                                    </extraargs>
+                                </wsdlOption>
+                            </wsdlOptions>
+                            <!--TODO:wsdlFile>https://feedws.gottarent.com/feed.asmx?wsdl</wsdlFile-->
+                            <wsdlFile>${basedir}/src/main/resources/wsdl/GottarentWS.wsdl</wsdlFile>
+                            <packageName>com.gottarent.ws</packageName>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+			
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>jaxb2-maven-plugin</artifactId>
                 <executions>
                     <execution>
-                        <id>xsd2java</id>
+                        <id>kijiji.xsd2java</id>
                         <goals>
                             <goal>xjc</goal>
                         </goals>
                         <configuration>
-                            <schemaDirectory>src/main/resources/xsd</schemaDirectory>
-                            <bindingDirectory>src/main/resources/xsd</bindingDirectory>
-                            <packageName>com.kijiji.pint.rs</packageName>
+                            <schemaDirectory>src/main/resources/xsd/kijiji</schemaDirectory>
+                            <bindingDirectory>src/main/resources/xsd/kijiji</bindingDirectory>
+                            <packageName>com.kijiji.pint.rs</packageName>		
+                            <arguments>-extension -Xnamespace-prefix</arguments>					
+                            <clearOutputDir>false</clearOutputDir>
                             <staleFile>${project.build.directory}/jaxb2/.schema1XjcStaleFlag</staleFile>
+                        </configuration>
+                    </execution>					
+                    <execution>
+                        <id>gottarent.xsd2java</id>
+                        <goals>
+                            <goal>xjc</goal>
+                        </goals>
+                        <configuration>
+                            <schemaDirectory>src/main/resources/xsd/gottarent</schemaDirectory>
+                            <bindingDirectory>src/main/resources/xsd/gottarent</bindingDirectory>
+                            <packageName>com.gottarent.rs</packageName>		
+                            <arguments>-extension -Xnamespace-prefix</arguments>					
+                            <clearOutputDir>false</clearOutputDir>
+                            <staleFile>${project.build.directory}/jaxb2/.schema2XjcStaleFlag</staleFile>
                         </configuration>
                     </execution>
                 </executions>
+				<dependencies>
+                    <dependency>
+                        <groupId>org.jvnet.jaxb2_commons</groupId>
+                        <artifactId>jaxb2-namespace-prefix</artifactId>
+                        <version>1.1</version>
+                    </dependency>
+                </dependencies>
             </plugin>
-
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-source-plugin</artifactId>

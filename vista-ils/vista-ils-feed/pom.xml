@@ -74,6 +74,11 @@
         </dependency>
 
         <dependency>
+            <groupId>org.apache.httpcomponents</groupId>
+            <artifactId>httpclient</artifactId>
+        </dependency>
+
+        <dependency>
             <groupId>com.propertyvista</groupId>
             <artifactId>vista-unit-mock</artifactId>
             <version>${project.version}</version>
