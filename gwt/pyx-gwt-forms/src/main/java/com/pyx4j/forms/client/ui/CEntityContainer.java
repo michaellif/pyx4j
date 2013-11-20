@@ -230,11 +230,15 @@ public abstract class CEntityContainer<E extends IObject<?>> extends CComponent<
     public void applyVisibilityRules() {
         super.applyVisibilityRules();
         asWidget().setVisible(isVisible());
+        if (getComponents() != null) {
+            for (CComponent<?> component : getComponents()) {
+                component.applyVisibilityRules();
+            }
+        }
 
         //TODO Workaround to fire event for container - that should be reviewed - event should be fired 
         //on accessibility adapters change
         PropertyChangeEvent.fire(this, PropertyChangeEvent.PropertyName.visible);
-
     }
 
     @Override
