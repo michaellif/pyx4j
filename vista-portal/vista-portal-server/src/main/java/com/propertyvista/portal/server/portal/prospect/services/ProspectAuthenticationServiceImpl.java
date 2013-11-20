@@ -77,6 +77,7 @@ public class ProspectAuthenticationServiceImpl extends VistaAuthenticationServic
     @Override
     public String beginSession(CustomerUser user, CustomerUserCredential credentials, Set<Behavior> behaviors, IEntity additionalConditions) {
         Set<Behavior> actualBehaviors = new HashSet<Behavior>();
+        actualBehaviors.add(getVistaApplication());
 
         // See if active Application exists
         List<OnlineApplication> applications = ServerSideFactory.create(OnlineApplicationFacade.class).getOnlineApplications(user);
