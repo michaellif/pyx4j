@@ -100,7 +100,7 @@ public class CustomerFacadeImpl implements CustomerFacade {
 
     @Override
     public List<Lease> getActiveLeases(CustomerUser customerUser) {
-        Validate.isTrue(customerUser.isNull(), "Custiomer User can't be null");
+        Validate.isFalse(customerUser.isNull(), "Customer User can't be null");
 
         List<Lease> leases = new ArrayList<Lease>();
         {
