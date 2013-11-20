@@ -34,7 +34,7 @@ import com.pyx4j.entity.server.servlet.InitializationServletContextListener;
 import com.pyx4j.essentials.server.admin.DeployVerificationServlet;
 import com.pyx4j.essentials.server.dev.DebugServlet;
 import com.pyx4j.essentials.server.dev.DevDumpProxyServlet;
-import com.pyx4j.essentials.server.dev.OutOfMemorSimulationServlet;
+import com.pyx4j.essentials.server.dev.OutOfMemorySimulationServlet;
 import com.pyx4j.essentials.server.download.DownloadServlet;
 import com.pyx4j.essentials.server.download.LogViewServlet;
 import com.pyx4j.gwt.server.GWTCacheFilter;
@@ -289,7 +289,7 @@ public class VistaWebApplicationInitializer implements ServletContainerInitializ
             //TODO if Not production
             {
                 {
-                    ServletRegistration.Dynamic sc = ctx.addServlet("OutOfMemorSimulationServlet", OutOfMemorSimulationServlet.class);
+                    ServletRegistration.Dynamic sc = ctx.addServlet("OutOfMemorSimulationServlet", OutOfMemorySimulationServlet.class);
                     sc.addMapping("/o/ooms");
                 }
                 {
