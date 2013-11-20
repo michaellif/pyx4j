@@ -225,6 +225,7 @@ public interface Lease extends IEntity {
 
     @ReadOnly
     @JoinColumn
+    @Indexed
     @MemberColumn(notNull = true)
     @Owned(forceCreation = true, cascade = {})
     BillingAccount billingAccount();
