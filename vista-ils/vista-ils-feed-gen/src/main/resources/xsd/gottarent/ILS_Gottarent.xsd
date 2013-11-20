@@ -1,0 +1,171 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:element name="Listing">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="Company"/>
+      </xs:sequence>
+      <xs:attribute name="numProperties" type="xs:integer"/>
+      <xs:attribute name="numUnits" type="xs:integer"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="Company">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" ref="CompanyName"/>
+        <xs:element minOccurs="0" ref="CompanyEmail"/>
+        <xs:element minOccurs="0" ref="CompanyWebsite"/>
+        <xs:element minOccurs="1" maxOccurs="1" ref="Portfolio"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="CompanyName" type="xs:string"/>
+  <xs:element name="CompanyEmail" type="xs:string"/>
+  <xs:element name="CompanyWebsite" type="xs:string"/>
+  <xs:element name="Portfolio">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" maxOccurs="unbounded" ref="Building"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="Building">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="1" maxOccurs="1" ref="ExternalBuildingId"/>
+        <xs:element minOccurs="1" maxOccurs="1" ref="BuildingName"/>
+        <xs:element minOccurs="0" maxOccurs="1" ref="BuildingEnabled"/>
+        <xs:element minOccurs="0" maxOccurs="1" ref="BuildingType"/>
+        <xs:element minOccurs="0" maxOccurs="1" ref="BuildingInfo"/>
+        <xs:element minOccurs="0" maxOccurs="1" ref="CommunityInfo"/>
+        <xs:element minOccurs="1" maxOccurs="1" ref="Address"/>
+        <xs:element minOccurs="1" maxOccurs="1" ref="BuildingRentalOffice"/>
+        <xs:element minOccurs="0" ref="BuildingVacancies"/>
+        <xs:element minOccurs="0" maxOccurs="1" ref="BuildingAmenity"/>
+        <xs:element minOccurs="0" maxOccurs="1" ref="CommunityAmenity"/>
+        <xs:element minOccurs="0" maxOccurs="1" ref="BuildingIncentives"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="ExternalBuildingId" type="xs:string"/>
+  <xs:element name="BuildingName" type="xs:string"/>
+  <xs:element name="BuildingEnabled" type="xs:string"/>
+  <xs:element name="BuildingType" type="xs:string"/>
+  <xs:element name="BuildingInfo">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="BuildingInfoDescription"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="BuildingInfoDescription" type="xs:string"/>
+  <xs:element name="CommunityInfo">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="CommunityInfoDescription"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="CommunityInfoDescription" type="xs:string"/>
+  <xs:element name="Address">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="1" maxOccurs="1" ref="BuildingStreetNumber"/>
+        <xs:element minOccurs="1" maxOccurs="1" ref="BuildingStreetAddress"/>
+        <xs:element minOccurs="0" maxOccurs="1" ref="BuildingLatitude"/>
+        <xs:element minOccurs="0" maxOccurs="1" ref="BuildingLongitude"/>
+        <xs:element minOccurs="1" maxOccurs="1" ref="BuildingCity"/>
+        <xs:element minOccurs="1" maxOccurs="1" ref="BuildingProvinceAbbreviation"/>
+        <xs:element minOccurs="0" maxOccurs="1" ref="BuildingPostalCode"/>
+        <xs:element minOccurs="0" maxOccurs="1" ref="BuildingIntersection"/>
+        <xs:element minOccurs="0" maxOccurs="1" ref="BuildingRegion"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="BuildingStreetNumber" type="xs:string"/>
+  <xs:element name="BuildingStreetAddress" type="xs:string"/>
+  <xs:element name="BuildingLatitude" type="xs:decimal"/>
+  <xs:element name="BuildingLongitude" type="xs:decimal"/>
+  <xs:element name="BuildingCity" type="xs:string"/>
+  <xs:element name="BuildingProvinceAbbreviation" type="xs:NCName"/>
+  <xs:element name="BuildingPostalCode" type="xs:string"/>
+  <xs:element name="BuildingIntersection" type="xs:string"/>
+  <xs:element name="BuildingRegion" type="xs:string"/>
+  <xs:element name="BuildingRentalOffice">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" maxOccurs="1" ref="RentalOfficePhone"/>
+        <xs:element minOccurs="0" maxOccurs="1" ref="RentalOfficePhoneExt"/>
+        <xs:element minOccurs="1" maxOccurs="1" ref="RentalOfficeEmail"/>
+        <xs:element minOccurs="0" maxOccurs="1" ref="BuildingRentalOfficeWeekday"/>
+        <xs:element minOccurs="0" maxOccurs="1" ref="BuildingRentalOfficeSaturday"/>
+        <xs:element minOccurs="0" maxOccurs="1" ref="BuildingRentalOfficeSunday"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="RentalOfficePhone" type="xs:string"/>
+  <xs:element name="RentalOfficePhoneExt" type="xs:string"/>
+  <xs:element name="RentalOfficeEmail" type="xs:string"/>
+  <xs:element name="BuildingRentalOfficeWeekday" type="xs:string"/>
+  <xs:element name="BuildingRentalOfficeSaturday" type="xs:string"/>
+  <xs:element name="BuildingRentalOfficeSunday" type="xs:string"/>
+  <xs:element name="BuildingVacancies">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element maxOccurs="unbounded" ref="BuildingVacancy"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="BuildingVacancy">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="1" maxOccurs="1" ref="ExternalBuildingVacancySuiteID"/>
+        <xs:element minOccurs="1" maxOccurs="1" ref="BuildingVacancyBedroomSize"/>
+        <xs:element minOccurs="0" maxOccurs="1" ref="BuildingVacancyBaths"/>
+        <xs:element minOccurs="0" maxOccurs="1" ref="BuildingVacancySize"/>
+        <xs:element minOccurs="0" maxOccurs="1" ref="BuildingVacancyPrice"/>
+        <xs:element minOccurs="0" maxOccurs="1" ref="BuildingVacancyAltTag"/>
+        <xs:element minOccurs="0" maxOccurs="1" ref="BuildingVacancyVisible"/>
+        <xs:element minOccurs="0" maxOccurs="1" ref="BuildingVacancyEnabled"/>
+        <xs:element minOccurs="0" maxOccurs="1" ref="BuildingVacancyAvailabilityDate"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="ExternalBuildingVacancySuiteID" type="xs:string"/>
+  <xs:element name="BuildingVacancyBedroomSize" type="xs:string"/>
+  <xs:element name="BuildingVacancyBaths" type="xs:string"/>
+  <xs:element name="BuildingVacancySize" type="xs:string"/>
+  <xs:element name="BuildingVacancyPrice" type="xs:string"/>
+  <xs:element name="BuildingVacancyAltTag" type="xs:string"/>
+  <xs:element name="BuildingVacancyVisible" type="xs:string"/>
+  <xs:element name="BuildingVacancyEnabled" type="xs:string"/>
+  <xs:element name="BuildingVacancyAvailabilityDate" type="xs:string"/>
+  <xs:element name="BuildingAmenity">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element maxOccurs="unbounded" ref="BuildingAmenityName"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="BuildingAmenityName" type="xs:string"/>
+  <xs:element name="CommunityAmenity">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element maxOccurs="unbounded" ref="CommunityAmenityName"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="CommunityAmenityName" type="xs:string"/>
+  <xs:element name="BuildingIncentives">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" maxOccurs="1" ref="BuildingIncentivePoint1"/>
+        <xs:element minOccurs="0" maxOccurs="1" ref="BuildingIncentivePoint2"/>
+        <xs:element minOccurs="0" maxOccurs="1" ref="BuildingIncentivePoint3"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="BuildingIncentivePoint1" type="xs:string"/>
+  <xs:element name="BuildingIncentivePoint2" type="xs:string"/>
+  <xs:element name="BuildingIncentivePoint3" type="xs:string"/>
+</xs:schema>

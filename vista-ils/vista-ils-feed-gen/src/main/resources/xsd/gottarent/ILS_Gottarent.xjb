@@ -1,0 +1,9 @@
+<jxb:bindings version="2.0" xmlns:jxb="http://java.sun.com/xml/ns/jaxb" 
+	xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+	xmlns:namespace="http://jaxb2-commons.dev.java.net/namespace-prefix">
+	<jxb:bindings schemaLocation="ILS_Gottarent.xsd" >
+        <jxb:schemaBindings>
+            <jxb:package name="com.gottarent.rs"/> 
+        </jxb:schemaBindings>
+		</jxb:bindings>
+</jxb:bindings>

@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<wsdl:definitions xmlns:s="http://www.w3.org/2001/XMLSchema" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" xmlns:tns="http://feedws.gottarent.com/" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:tm="http://microsoft.com/wsdl/mime/textMatching/" xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" targetNamespace="http://feedws.gottarent.com/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+  <wsdl:types>
+    <s:schema elementFormDefault="qualified" targetNamespace="http://feedws.gottarent.com/">
+      <s:element name="ImportOp">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="buffer" type="s:base64Binary" />
+            <s:element minOccurs="0" maxOccurs="1" name="UserID" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="ImportResponse">
+        <s:complexType />
+      </s:element>
+    </s:schema>
+  </wsdl:types>
+  <wsdl:message name="ImportSoapIn">
+    <wsdl:part name="parameters" element="tns:ImportOp" />
+  </wsdl:message>
+  <wsdl:message name="ImportSoapOut">
+    <wsdl:part name="parameters" element="tns:ImportResponse" />
+  </wsdl:message>
+  <wsdl:portType name="GottarentWSSoap">
+    <wsdl:operation name="ImportOp">
+      <wsdl:input message="tns:ImportSoapIn" />
+      <wsdl:output message="tns:ImportSoapOut" />
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="GottarentWSSoap" type="tns:GottarentWSSoap">
+    <soap:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="ImportOp">
+      <soap:operation soapAction="http://feedws.gottarent.com/Import" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:binding name="GottarentWSSoap12" type="tns:GottarentWSSoap">
+    <soap12:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="ImportOp">
+      <soap12:operation soapAction="http://feedws.gottarent.com/Import" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="GottarentWS">
+    <wsdl:port name="GottarentWSSoap" binding="tns:GottarentWSSoap">
+      <soap:address location="https://feedws.gottarent.com/feed.asmx" />
+    </wsdl:port>
+    <wsdl:port name="GottarentWSSoap12" binding="tns:GottarentWSSoap12">
+      <soap12:address location="https://feedws.gottarent.com/feed.asmx" />
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>
