@@ -70,16 +70,20 @@ public class FinancialDashboardActivity extends SecurityAwareActivity implements
             }
         });
 
-        paymentService.getAutoPaySummary(new DefaultAsyncCallback<AutoPaySummaryDTO>() {
-            @Override
-            public void onSuccess(AutoPaySummaryDTO result) {
-                view.populate(result);
-            }
-        });
+        populateAutoPaySummary();
 
         paymentService.getPaymentMethodSummary(new DefaultAsyncCallback<PaymentMethodSummaryDTO>() {
             @Override
             public void onSuccess(PaymentMethodSummaryDTO result) {
+                view.populate(result);
+            }
+        });
+    }
+
+    private void populateAutoPaySummary() {
+        paymentService.getAutoPaySummary(new DefaultAsyncCallback<AutoPaySummaryDTO>() {
+            @Override
+            public void onSuccess(AutoPaySummaryDTO result) {
                 view.populate(result);
             }
         });
@@ -132,11 +136,13 @@ public class FinancialDashboardActivity extends SecurityAwareActivity implements
     }
 
     @Override
-    public void deletePaymentMethod(PaymentMethodInfoDTO paymentMethod) {
+    public void deletePaymentMethod(final PaymentMethodInfoDTO paymentMethod) {
         paymentService.deletePaymentMethod(new DefaultAsyncCallback<Boolean>() {
             @Override
             public void onSuccess(Boolean result) {
-                // TODO Auto-generated method stub
+                if (paymentMethod.usedByAutoPay().isBooleanTrue()) {
+                    populateAutoPaySummary();
+                }
             }
         }, EntityFactory.createIdentityStub(LeasePaymentMethod.class, paymentMethod.getPrimaryKey()));
     }

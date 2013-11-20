@@ -24,6 +24,7 @@ import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.AttachLevel;
 import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.utils.EntityBinder;
 
 import com.propertyvista.biz.financial.payment.PaymentFacade;
@@ -176,11 +177,18 @@ public class PaymentServiceImpl implements PaymentService {
 
             pmi.id().setValue(pm.id().getValue());
             pmi.paymentMethod().set(pm);
+            pmi.usedByAutoPay().setValue(isUsedByAutoPay(pm));
 
             paymentMethods.add(pmi);
         }
 
         return paymentMethods;
+    }
+
+    private static Boolean isUsedByAutoPay(LeasePaymentMethod pm) {
+        EntityQueryCriteria<AutopayAgreement> criteria = EntityQueryCriteria.create(AutopayAgreement.class);
+        criteria.eq(criteria.proto().paymentMethod(), pm);
+        return Persistence.service().exists(criteria);
     }
 
     class PaymentMethodDtoBinder extends EntityBinder<LeasePaymentMethod, PaymentMethodDTO> {
