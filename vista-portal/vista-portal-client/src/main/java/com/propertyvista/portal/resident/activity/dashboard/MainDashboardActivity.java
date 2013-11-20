@@ -19,10 +19,8 @@ import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
-import com.pyx4j.security.shared.SecurityController;
 import com.pyx4j.site.client.AppSite;
 
-import com.propertyvista.domain.security.VistaCustomerPaymentTypeBehavior;
 import com.propertyvista.portal.resident.ResidentPortalSite;
 import com.propertyvista.portal.resident.ui.dashboard.MainDashboardView;
 import com.propertyvista.portal.rpc.portal.resident.ResidentPortalSiteMap;
@@ -83,16 +81,12 @@ public class MainDashboardActivity extends SecurityAwareActivity implements Main
 
     @Override
     public void payNow() {
-        if (SecurityController.checkAnyBehavior(VistaCustomerPaymentTypeBehavior.values())) {
-            AppSite.getPlaceController().goTo(new ResidentPortalSiteMap.Financial.Payment.PayNow());
-        }
+        AppSite.getPlaceController().goTo(new ResidentPortalSiteMap.Financial.Payment.PayNow());
     }
 
     @Override
     public void setAutopay() {
-        if (SecurityController.checkAnyBehavior(VistaCustomerPaymentTypeBehavior.values())) {
-            AppSite.getPlaceController().goTo(new ResidentPortalSiteMap.Financial.PreauthorizedPayments.NewPreauthorizedPayment());
-        }
+        AppSite.getPlaceController().goTo(new ResidentPortalSiteMap.Financial.PreauthorizedPayments.NewPreauthorizedPayment());
     }
 
     @Override

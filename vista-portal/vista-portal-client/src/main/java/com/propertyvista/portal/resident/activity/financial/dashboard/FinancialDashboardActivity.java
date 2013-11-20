@@ -20,12 +20,10 @@ import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
-import com.pyx4j.security.shared.SecurityController;
 import com.pyx4j.site.client.AppSite;
 
 import com.propertyvista.domain.payment.AutopayAgreement;
 import com.propertyvista.domain.payment.LeasePaymentMethod;
-import com.propertyvista.domain.security.VistaCustomerPaymentTypeBehavior;
 import com.propertyvista.portal.resident.ResidentPortalSite;
 import com.propertyvista.portal.resident.ui.financial.dashboard.FinancialDashboardView;
 import com.propertyvista.portal.resident.ui.financial.dashboard.FinancialDashboardView.FinancialDashboardPresenter;
@@ -104,16 +102,12 @@ public class FinancialDashboardActivity extends SecurityAwareActivity implements
 
     @Override
     public void makePayment() {
-        if (SecurityController.checkAnyBehavior(VistaCustomerPaymentTypeBehavior.values())) {
-            AppSite.getPlaceController().goTo(new ResidentPortalSiteMap.Financial.Payment.PayNow());
-        }
+        AppSite.getPlaceController().goTo(new ResidentPortalSiteMap.Financial.Payment.PayNow());
     }
 
     @Override
     public void addAutoPay() {
-        if (SecurityController.checkAnyBehavior(VistaCustomerPaymentTypeBehavior.values())) {
-            AppSite.getPlaceController().goTo(new ResidentPortalSiteMap.Financial.PreauthorizedPayments.NewPreauthorizedPayment());
-        }
+        AppSite.getPlaceController().goTo(new ResidentPortalSiteMap.Financial.PreauthorizedPayments.NewPreauthorizedPayment());
     }
 
     @Override
@@ -134,9 +128,7 @@ public class FinancialDashboardActivity extends SecurityAwareActivity implements
 
     @Override
     public void addPaymentMethod() {
-        if (SecurityController.checkAnyBehavior(VistaCustomerPaymentTypeBehavior.values())) {
-            AppSite.getPlaceController().goTo(new ResidentPortalSiteMap.Financial.PaymentMethods.NewPaymentMethod());
-        }
+        AppSite.getPlaceController().goTo(new ResidentPortalSiteMap.Financial.PaymentMethods.NewPaymentMethod());
     }
 
     @Override
