@@ -45,6 +45,8 @@ public class VistaNamespaceResolver implements NamespaceResolver {
 
     private final static Set<String> prodSystemDnsBase = new HashSet<String>();
 
+    private final static Set<String> testSystemDnsBase = new HashSet<String>();
+
     private final static Set<String> mapToNoNamespace = new HashSet<String>();
 
     private final static String prodPmcAppEnvRegex = "^.*prod\\d*$|^.*staging\\d*$";
@@ -52,15 +54,18 @@ public class VistaNamespaceResolver implements NamespaceResolver {
     static {
         prodSystemDnsBase.add("my-community.co");
         prodSystemDnsBase.add("residentportalsite.com");
-        prodSystemDnsBase.add("residentportalsite.ca");
         prodSystemDnsBase.add("prospectportalsite.com");
-        prodSystemDnsBase.add("prospectportalsite.ca");
         prodSystemDnsBase.add("propertyvista.com");
-        prodSystemDnsBase.add("propertyvista.ca");
 
-        prodSystemDnsBase.add("propertyvista.biz");
-        prodSystemDnsBase.add("residentportal.info");
-        prodSystemDnsBase.add("prospectportal.info");
+        testSystemDnsBase.add("birchwoodsoftwaregroup.com");
+        testSystemDnsBase.add("pyx4j.com");
+        testSystemDnsBase.add("propertyvista.biz");
+        // Old names not used
+//        testSystemDnsBase.add("propertyvista.ca");
+//        testSystemDnsBase.add("residentportalsite.ca");
+//        testSystemDnsBase.add("prospectportalsite.ca");
+//        testSystemDnsBase.add("residentportal.info");
+//        testSystemDnsBase.add("prospectportal.info");
 
         mapToNoNamespace.add("static");
         mapToNoNamespace.add("operations");
@@ -108,7 +113,7 @@ public class VistaNamespaceResolver implements NamespaceResolver {
                 if (namespaceProposal.matches(prodPmcAppEnvRegex)) {
                     namespaceProposal = getNamespaceFromPmcAppEnv(serverNameParts);
                 }
-            } else if (dnsBase.equals("birchwoodsoftwaregroup.com") || dnsBase.equals("pyx4j.com")) {
+            } else if (testSystemDnsBase.contains(dnsBase)) {
                 namespaceProposal = getNamespaceFromPmcAppEnv(serverNameParts);
             }
         }
@@ -129,8 +134,8 @@ public class VistaNamespaceResolver implements NamespaceResolver {
                     or.right(PropertyCriterion.eq(criteria.proto().dnsNameAliases().$().enabled(), Boolean.TRUE));
                     or.right(PropertyCriterion.eq(criteria.proto().dnsNameAliases().$().dnsName(), serverName));
                 } else {
-                    criteria.add(PropertyCriterion.eq(criteria.proto().dnsNameAliases().$().enabled(), Boolean.TRUE));
-                    criteria.add(PropertyCriterion.eq(criteria.proto().dnsNameAliases().$().dnsName(), serverName));
+                    criteria.eq(criteria.proto().dnsNameAliases().$().enabled(), Boolean.TRUE);
+                    criteria.eq(criteria.proto().dnsNameAliases().$().dnsName(), serverName);
                 }
                 Pmc pmc = Persistence.service().retrieve(criteria);
                 if (pmc != null) {

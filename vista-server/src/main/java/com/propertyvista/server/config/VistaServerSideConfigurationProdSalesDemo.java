@@ -17,7 +17,6 @@ import java.util.EnumSet;
 import java.util.Set;
 
 import com.propertyvista.domain.DemoData.DemoPmc;
-import com.propertyvista.domain.security.common.VistaApplication;
 
 public class VistaServerSideConfigurationProdSalesDemo extends VistaServerSideConfigurationCustom {
 
@@ -37,21 +36,13 @@ public class VistaServerSideConfigurationProdSalesDemo extends VistaServerSideCo
     }
 
     @Override
-    public String getDefaultApplicationURL(VistaApplication application, String pmcDnsName) {
-        switch (application) {
-        case crm:
-            return "http://" + pmcDnsName + ".propertyvista.biz/";
-        case site:
-            return "http://" + pmcDnsName + ".residentportal.info/";
-        case resident:
-            return "https://" + pmcDnsName + ".residentportal.info/";
-        case prospect:
-            return "http://" + pmcDnsName + ".prospectportal.info/";
-        case onboarding:
-            return "http://start.propertyvista.biz/";
-        default:
-            return super.getDefaultApplicationURL(application, pmcDnsName);
-        }
+    protected String getApplicationDeploymentProtocol() {
+        return "https";
+    }
+
+    @Override
+    public String getApplicationURLNamespace(boolean secure) {
+        return ".propertyvista.biz/";
     }
 
     @Override
