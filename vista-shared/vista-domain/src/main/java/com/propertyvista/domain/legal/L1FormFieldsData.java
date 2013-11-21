@@ -68,6 +68,12 @@ public interface L1FormFieldsData extends IEntity {
 
     }
 
+    public enum LanguageServiceType {
+
+        French, Sign;
+
+    }
+
     IPrimitive<BigDecimal> totalRentOwing();
 
     IPrimitive<LogicalDate> totalRentOwingAsOf();
@@ -216,9 +222,9 @@ public interface L1FormFieldsData extends IEntity {
 
     IPrimitive<LogicalDate> section2_part2_toTenantDeliveryDate();
 
-    // PART3
-    IPrimitive<Boolean> section2_part3_isFrenchServiceRequired();
+    IPrimitive<ApplicationPackageDeliveryMethodToTenant> section2_part2_applicationPackageDeliveryMethodToTenant();
 
-    IPrimitive<Boolean> section2_part3_isSignLanguageServiceRequired();
+    // PART3
+    IPrimitive<LanguageServiceType> section2_part3_languageServices();
 
 }

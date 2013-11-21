@@ -230,6 +230,7 @@ public class L1FieldsMapping extends LtbFormFieldsMapping<L1FormFieldsData> {
         
         
         // L1 Payment and Schedule Subform Fields
+        // PART 1
         field(proto().section2_part1_paymentMethod()).states("CASH", "DEBT", "MORD", "CHEQ", "VI", "MAST", "AMEX").mapTo("b12c96nfpayment_method").define();
         text(proto().section2_part1_creditCardNumber()).mapTo("b12c96nfcardholder_card_no").define();
         field(proto().section2_part1_expiryDate())
@@ -238,6 +239,21 @@ public class L1FieldsMapping extends LtbFormFieldsMapping<L1FormFieldsData> {
             .mapTo("@@b12c96nfcreditcard_expiry_date_mm.0{2}", "b12c96nfcreditcard_expiry_date_yy{2}")
             .define();
         text(proto().section2_part1_cardholdersName()).mapTo("b12c96nfcardholder_name").define();
+        
+        // PART 2
+        field(proto().section2_part2_applicationPackageDeliveryMethodToLandlord())
+            .states("T", "M", "F")
+            .mapTo("b12c96nfdeliver_NOH_method")
+            .define();        
+        date(proto().section2_part2_pickupDate()).mapTo(datePartition("@@b12c96nfdeliver_NOH_pickup_date")).define();
+        text(proto().section2_part2_officeName()).mapTo("b12c96nfdeliver_NOH_pickup_Office").define();
+        phone(proto().section2_part2_fax()).mapTo(phonePartition("@@b12c96nfdeliver_NOH_fax_no")).define();
+        field(proto().section2_part2_isSameDayDeliveryToTenant()).states("y", "n").mapTo("b12c96nfServeWhenReceived").define();
+        date(proto().section2_part2_toTenantDeliveryDate()).mapTo(datePartition("@@b12c96nfdate_of_service")).define();
+        field(proto().section2_part2_applicationPackageDeliveryMethodToTenant()).states("M", "C", "A").mapTo("b12c96nfmethod_of_service").define();
+        
+        // PART3
+        field(proto().section2_part3_languageServices()).states("F", "S").mapTo("b12c96nflanguage").define();
         
     }//@formatter:on
 }

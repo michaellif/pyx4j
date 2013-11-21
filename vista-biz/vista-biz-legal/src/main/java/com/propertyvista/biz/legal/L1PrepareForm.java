@@ -106,6 +106,7 @@ public class L1PrepareForm {
         setCombFlag(fields.getFieldItem("b12c96nfcreditcard_expiry_date_mm"));
         setCombFlag(fields.getFieldItem("b12c96nfcreditcard_expiry_date_yy"));
         setCombFlag(fields.getFieldItem("b12c96nfcardholder_name"));
+        setCombFlag(fields.getFieldItem("b12c96nfdeliver_NOH_pickup_Office"));
 
     }
 

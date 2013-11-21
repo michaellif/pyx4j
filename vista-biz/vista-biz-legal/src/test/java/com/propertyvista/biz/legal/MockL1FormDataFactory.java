@@ -30,8 +30,11 @@ import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.gwt.server.DateUtils;
 
 import com.propertyvista.domain.legal.L1FormFieldsData;
+import com.propertyvista.domain.legal.L1FormFieldsData.ApplicationPackageDeliveryMethodToLandlord;
+import com.propertyvista.domain.legal.L1FormFieldsData.ApplicationPackageDeliveryMethodToTenant;
 import com.propertyvista.domain.legal.L1FormFieldsData.Gender;
 import com.propertyvista.domain.legal.L1FormFieldsData.LandlordOrAgent;
+import com.propertyvista.domain.legal.L1FormFieldsData.LanguageServiceType;
 import com.propertyvista.domain.legal.L1FormFieldsData.PaymentMethod;
 import com.propertyvista.domain.legal.L1FormFieldsData.RentPaymentPeriod;
 import com.propertyvista.domain.legal.L1FormFieldsData.YesNo;
@@ -213,10 +216,24 @@ public class MockL1FormDataFactory {
         fieldsData.part7_date().setValue(new LogicalDate(DateUtils.detectDateformat("2055-01-01")));
 
         // L1 Schedule and Payment
+        // PART1
         fieldsData.section2_part1_paymentMethod().setValue(PaymentMethod.MasterCard);
         fieldsData.section2_part1_creditCardNumber().setValue("5123 1231 1231 1231");
         fieldsData.section2_part1_expiryDate().setValue(new LogicalDate(DateUtils.detectDateformat("2013-05-01")));
         fieldsData.section2_part1_cardholdersName().setValue("YOZHIK V TUMANE");
+
+        // PART2        
+        fieldsData.section2_part2_applicationPackageDeliveryMethodToLandlord().setValue(ApplicationPackageDeliveryMethodToLandlord.ByMail);
+        fieldsData.section2_part2_pickupDate().setValue(new LogicalDate(DateUtils.detectDateformat("2413-01-01")));
+        fieldsData.section2_part2_officeName().setValue("whatever");
+        fieldsData.section2_part2_fax().setValue("(416) 123-1234");
+        fieldsData.section2_part2_applicationPackageDeliveryMethodToTenant().setValue(ApplicationPackageDeliveryMethodToTenant.ByCourier);
+
+        fieldsData.section2_part2_isSameDayDeliveryToTenant().setValue(YesNo.No);
+        fieldsData.section2_part2_toTenantDeliveryDate().setValue(new LogicalDate(DateUtils.detectDateformat("2013-05-01")));
+
+        //PART3
+        fieldsData.section2_part3_languageServices().setValue(LanguageServiceType.Sign);
 
         return fieldsData;
     }
