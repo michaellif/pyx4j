@@ -44,11 +44,13 @@ public interface MasterOnlineApplication extends IEntity {
 
         Incomplete, // Mapped to Lease status ApplicationInProgress
 
-        Submitted, // LeaseApplication.Status.Draft
+        Submitted, // LeaseApplication.Status.isDraft
 
         InformationRequested,
 
-        Cancelled; // LeaseApplication.Status.Draft
+        Approved, // LeaseApplication.Status.Approved
+
+        Cancelled; // LeaseApplication.Status.isDraft
 
         @Override
         public String toString() {

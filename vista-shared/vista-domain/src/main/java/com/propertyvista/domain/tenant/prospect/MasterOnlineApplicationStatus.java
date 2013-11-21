@@ -22,6 +22,8 @@ import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
 
+import com.propertyvista.domain.tenant.prospect.MasterOnlineApplication.Status;
+
 @Transient
 public interface MasterOnlineApplicationStatus extends IEntity {
 
@@ -33,4 +35,6 @@ public interface MasterOnlineApplicationStatus extends IEntity {
     @Format("#0.00")
     @Caption(name = "Overall Application Progress (%)")
     IPrimitive<BigDecimal> progress();
+
+    IPrimitive<Status> status();
 }

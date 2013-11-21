@@ -26,6 +26,8 @@ public interface OnlineApplicationFacade {
 
     void createMasterOnlineApplication(MasterOnlineApplication masterOnlineApplication);
 
+    void approveMasterOnlineApplication(MasterOnlineApplication masterOnlineApplication);
+
     List<OnlineApplication> getOnlineApplications(CustomerUser customerUser);
 
     VistaCustomerBehavior getOnlineApplicationBehavior(OnlineApplication application);
@@ -34,5 +36,5 @@ public interface OnlineApplicationFacade {
 
     void resendInvitationEmail(LeaseTermParticipant leaseParticipant);
 
-    MasterOnlineApplicationStatus calculateOnlineApplicationStatus(MasterOnlineApplication ma);
+    MasterOnlineApplicationStatus calculateOnlineApplicationStatus(MasterOnlineApplication masterOnlineApplication);
 }

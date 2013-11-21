@@ -374,6 +374,8 @@ public abstract class LeaseAbstractManager {
             lease.leaseApplication().decisionReason().setValue(decisionReason);
             lease.leaseApplication().decisionDate().setValue(new LogicalDate(SystemDateManager.getDate()));
 
+            ServerSideFactory.create(OnlineApplicationFacade.class).approveMasterOnlineApplication(lease.leaseApplication().onlineApplication());
+
             recordApplicationData(lease.currentTerm());
         }
 

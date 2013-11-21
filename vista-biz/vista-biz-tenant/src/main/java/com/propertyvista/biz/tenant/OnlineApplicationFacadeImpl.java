@@ -20,6 +20,7 @@ import com.pyx4j.commons.UserRuntimeException;
 import com.pyx4j.commons.Validate;
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.server.Persistence;
+import com.pyx4j.entity.shared.AttachLevel;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria.VersionedCriteria;
@@ -41,8 +42,8 @@ import com.propertyvista.domain.tenant.lease.LeaseTermTenant;
 import com.propertyvista.domain.tenant.prospect.MasterOnlineApplication;
 import com.propertyvista.domain.tenant.prospect.MasterOnlineApplicationStatus;
 import com.propertyvista.domain.tenant.prospect.OnlineApplication;
-import com.propertyvista.domain.tenant.prospect.OnlineApplicationStatus;
 import com.propertyvista.domain.tenant.prospect.OnlineApplication.Role;
+import com.propertyvista.domain.tenant.prospect.OnlineApplicationStatus;
 
 public class OnlineApplicationFacadeImpl implements OnlineApplicationFacade {
 
@@ -67,6 +68,17 @@ public class OnlineApplicationFacadeImpl implements OnlineApplicationFacade {
             }
         }
         throw new UserRuntimeException("Main applicant not found");
+    }
+
+    @Override
+    public void approveMasterOnlineApplication(MasterOnlineApplication masterOnlineApplication) {
+        Persistence.ensureRetrieve(masterOnlineApplication, AttachLevel.Attached);
+
+        if (!masterOnlineApplication.status().isNull()) {
+            masterOnlineApplication.status().setValue(MasterOnlineApplication.Status.Approved);
+
+            Persistence.service().persist(masterOnlineApplication);
+        }
     }
 
     @Override
@@ -190,19 +202,21 @@ public class OnlineApplicationFacadeImpl implements OnlineApplicationFacade {
     }
 
     @Override
-    public MasterOnlineApplicationStatus calculateOnlineApplicationStatus(MasterOnlineApplication ma) {
-        if (ma == null) {
+    public MasterOnlineApplicationStatus calculateOnlineApplicationStatus(MasterOnlineApplication moa) {
+        if (moa == null) {
             return null;
         }
 
-        if (ma.isValueDetached()) {
-            Persistence.service().retrieve(ma);
+        if (moa.isValueDetached()) {
+            Persistence.service().retrieve(moa);
         }
 
-        MasterOnlineApplicationStatus maStatus = EntityFactory.create(MasterOnlineApplicationStatus.class);
+        MasterOnlineApplicationStatus moaStatus = EntityFactory.create(MasterOnlineApplicationStatus.class);
         BigDecimal progressSum = new BigDecimal("0.0");
 
-        for (OnlineApplication app : ma.applications()) {
+        moaStatus.status().setValue(moa.status().getValue());
+
+        for (OnlineApplication app : moa.applications()) {
             if (app.isValueDetached()) {
                 Persistence.service().retrieve(app);
             }
@@ -216,15 +230,16 @@ public class OnlineApplicationFacadeImpl implements OnlineApplicationFacade {
             // calculate progress:
             status.progress().setValue(app.progress().getValue());
 
-            maStatus.individualApplications().add(status);
+            moaStatus.individualApplications().add(status);
 
             progressSum = progressSum.add(status.progress().getValue());
         }
 
-        if (!ma.applications().isEmpty()) {
-            maStatus.progress().setValue(progressSum.divide(new BigDecimal(ma.applications().size())));
+        if (!moa.applications().isEmpty()) {
+            moaStatus.progress().setValue(progressSum.divide(new BigDecimal(moa.applications().size())));
         }
-        return maStatus;
+
+        return moaStatus;
     }
 
     // implementation internals
