@@ -64,6 +64,11 @@ BEGIN
         ***     ======================================================================================================
         **/
         
+        
+        -- maintenance_request
+        
+        ALTER TABLE maintenance_request ADD COLUMN resolved_date DATE;
+        
        
         -- payment_record
         
@@ -78,7 +83,13 @@ BEGIN
         ***     =====================================================================================================
         **/
         
+        -- maintenance_request
         
+        EXECUTE 'UPDATE '||v_schema_name||'.maintenance_request AS m '
+                ||'SET    resolved_date = updated '
+                ||'FROM '||v_schema_name||'.maintenance_request_status ms '
+                ||'WHERE        ms.phase = ''Resolved'' '
+                ||'AND          ms.id = m.status ';
        
         
         /**
@@ -132,4 +143,3 @@ END;
 $$
 LANGUAGE plpgsql VOLATILE;
 
-        
