@@ -227,7 +227,7 @@ public class MaintenanceRequestForm extends CrmEntityForm<MaintenanceRequestDTO>
         resolvedPanel = new TwoColumnFlexFormPanel();
         innerRow = -1;
         resolvedPanel.setWidget(++innerRow, 0, new FormDecoratorBuilder(inject(proto().resolvedDate(), new CDateLabel()), 10).build());
-        resolvedPanel.setWidget(++innerRow, 0, new FormDecoratorBuilder(inject(proto().resolution(), new CLabel<String>()), 10).build());
+        resolvedPanel.setWidget(++innerRow, 0, new FormDecoratorBuilder(inject(proto().resolution(), new CLabel<String>()), 40).build());
 
         FlowPanel detailHolder = new FlowPanel();
         detailHolder.add(scheduledPanel);

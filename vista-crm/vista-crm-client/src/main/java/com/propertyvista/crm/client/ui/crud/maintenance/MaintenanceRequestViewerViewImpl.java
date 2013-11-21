@@ -208,8 +208,8 @@ public class MaintenanceRequestViewerViewImpl extends CrmViewerViewImplBase<Main
                 public IsWidget createContent() {
                     TwoColumnFlexFormPanel main = new TwoColumnFlexFormPanel();
 
-                    main.setWidget(0, 0, new FormDecoratorBuilder(inject(proto().resolvedDate()), 20).build());
-                    main.setWidget(1, 0, new FormDecoratorBuilder(inject(proto().resolution()), 20).build());
+                    main.setWidget(0, 0, new FormDecoratorBuilder(inject(proto().resolvedDate()), 10).build());
+                    main.setWidget(1, 0, new FormDecoratorBuilder(inject(proto().resolution()), 25).build());
 
                     CComponent<LogicalDate> datePicker = get(proto().resolvedDate());
                     datePicker.setMandatory(true);
