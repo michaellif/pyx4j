@@ -72,8 +72,6 @@ public class ApplicationContextSelectionActivity extends AbstractActivity implem
                     ClientContext.authenticated(result);
                     AppSite.getPlaceController().goTo(AppPlace.NOWHERE);
 
-                    throw new Error("Application wasn't selected");
-
                 }
 
             }, application);
