@@ -22,6 +22,7 @@ import com.pyx4j.commons.css.ThemeColor;
 import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
 
+import com.propertyvista.domain.tenant.prospect.MasterOnlineApplication;
 import com.propertyvista.domain.tenant.prospect.MasterOnlineApplicationStatus;
 import com.propertyvista.portal.shared.themes.EntityViewTheme;
 import com.propertyvista.portal.shared.ui.CPortalEntityForm;
@@ -52,6 +53,51 @@ public class ApplicationStatusPage extends CPortalEntityForm<MasterOnlineApplica
 
     @Override
     protected void onValuePropagation(MasterOnlineApplicationStatus value, boolean fireEvent, boolean populate) {
-        System.out.println("++++++++++++++++" + value);
+
+        MasterOnlineApplication.Status status = MasterOnlineApplication.Status.Incomplete;
+
+        switch (status) {
+        case Incomplete:
+            //=================== 1.
+            //"Your application progress is 55%. Click 'Continue Application' button below to complete your application."
+
+            // Application progress
+
+            // Button "Continue Application"
+
+            //=================== 2.
+            //Your application has been submitted. We are waiting for application submission from other co-applicants. 
+
+            //Application progress
+
+            //Click 'Send Status Update' below to resend application status update to the email address(es) we have on file.
+
+            // Button "Send Status Update"
+
+            break;
+        case Submitted:
+        case InformationRequested: // TODO for now information request will be processed and entered by CRM manually.
+
+            //Your application is still pending. You will be contacted from
+            // our office management team once the application has been processed.
+
+            break;
+        case Approved:
+
+            // Your application has been reviewed and approved! 
+            // Our office management team representative will contact you shortly to make move-in arrangements
+
+            break;
+        case Cancelled:
+
+            // Your application has been reviewed and unfortunately has not met our move-in criteria. If you would like re-apply
+            // with a Guarantor, please start a new application. Thank you.
+
+            // Button "Restart Application"
+
+            break;
+
+        }
+
     }
 }
