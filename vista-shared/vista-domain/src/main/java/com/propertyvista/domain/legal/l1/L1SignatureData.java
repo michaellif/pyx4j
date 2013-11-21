@@ -7,16 +7,29 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on 2013-11-11
+ * Created on 2013-11-21
  * @author ArtyomB
  * @version $Id$
  */
-package com.propertyvista.biz.legal;
+package com.propertyvista.domain.legal.l1;
 
-import com.propertyvista.domain.legal.l1.L1FormFieldsData;
+import com.pyx4j.commons.LogicalDate;
+import com.pyx4j.entity.annotations.Transient;
+import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.shared.IPrimitive;
 
-public interface L1GenerationFacade {
+@Transient
+public interface L1SignatureData extends IEntity {
 
-    byte[] generateL1Letter(L1FormFieldsData fieldsData);
+    public enum LandlordOrAgent {
+
+        Landlord, Agent
+    }
+
+    IPrimitive<byte[]> signature();
+
+    IPrimitive<LandlordOrAgent> landlordOrAgent();
+
+    IPrimitive<LogicalDate> date();
 
 }
