@@ -21,7 +21,6 @@ import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
 import com.pyx4j.commons.UserRuntimeException;
-import com.pyx4j.entity.rpc.EntitySearchResult;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.rpc.shared.VoidSerializable;
 import com.pyx4j.security.client.ClientContext;
@@ -36,8 +35,6 @@ import com.propertyvista.portal.rpc.portal.prospect.dto.ProspectSignUpDTO;
 import com.propertyvista.portal.rpc.portal.prospect.services.ProspectAuthenticationService;
 import com.propertyvista.portal.rpc.portal.prospect.services.ProspectSignUpService;
 import com.propertyvista.portal.rpc.portal.resident.ResidentPortalSiteMap;
-import com.propertyvista.portal.rpc.portal.resident.dto.SelfRegistrationBuildingDTO;
-import com.propertyvista.portal.rpc.portal.resident.services.SelfRegistrationBuildingsSourceService;
 import com.propertyvista.portal.rpc.shared.EntityValidationException;
 import com.propertyvista.portal.shared.PortalSite;
 
@@ -57,17 +54,8 @@ public class SignUpActivity extends AbstractActivity implements SignUpPresenter 
 
     @Override
     public void start(final AcceptsOneWidget panel, EventBus eventBus) {
-
-        GWT.<SelfRegistrationBuildingsSourceService> create(SelfRegistrationBuildingsSourceService.class).obtainBuildings(
-                new DefaultAsyncCallback<EntitySearchResult<SelfRegistrationBuildingDTO>>() {
-
-                    @Override
-                    public void onSuccess(EntitySearchResult<SelfRegistrationBuildingDTO> result) {
-                        view.setPresenter(SignUpActivity.this);
-                        panel.setWidget(view);
-                    }
-                });
-
+        view.setPresenter(SignUpActivity.this);
+        panel.setWidget(view);
     }
 
     @Override

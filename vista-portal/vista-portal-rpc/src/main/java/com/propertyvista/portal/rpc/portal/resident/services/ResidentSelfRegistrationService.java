@@ -20,6 +20,7 @@ import com.pyx4j.rpc.shared.IService;
 import com.pyx4j.rpc.shared.VoidSerializable;
 
 import com.propertyvista.portal.rpc.portal.resident.dto.ResidentSelfRegistrationDTO;
+import com.propertyvista.portal.rpc.portal.resident.dto.SelfRegistrationBuildingDTO;
 
 public interface ResidentSelfRegistrationService extends IService {
 

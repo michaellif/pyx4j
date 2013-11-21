@@ -33,11 +33,10 @@ import com.pyx4j.site.rpc.AppPlaceInfo;
 import com.propertyvista.portal.resident.ResidentPortalSite;
 import com.propertyvista.portal.resident.ui.signup.SignUpView;
 import com.propertyvista.portal.rpc.portal.resident.ResidentPortalSiteMap;
-import com.propertyvista.portal.rpc.portal.resident.dto.SelfRegistrationBuildingDTO;
 import com.propertyvista.portal.rpc.portal.resident.dto.ResidentSelfRegistrationDTO;
+import com.propertyvista.portal.rpc.portal.resident.dto.SelfRegistrationBuildingDTO;
 import com.propertyvista.portal.rpc.portal.resident.services.ResidentAuthenticationService;
 import com.propertyvista.portal.rpc.portal.resident.services.ResidentSelfRegistrationService;
-import com.propertyvista.portal.rpc.portal.resident.services.SelfRegistrationBuildingsSourceService;
 import com.propertyvista.portal.rpc.shared.EntityValidationException;
 
 public class SignUpActivity extends AbstractActivity implements SignUpView.SignUpPresenter {
@@ -57,7 +56,7 @@ public class SignUpActivity extends AbstractActivity implements SignUpView.SignU
     @Override
     public void start(final AcceptsOneWidget panel, EventBus eventBus) {
 
-        GWT.<SelfRegistrationBuildingsSourceService> create(SelfRegistrationBuildingsSourceService.class).obtainBuildings(
+        GWT.<ResidentSelfRegistrationService> create(ResidentSelfRegistrationService.class).obtainBuildings(
                 new DefaultAsyncCallback<EntitySearchResult<SelfRegistrationBuildingDTO>>() {
 
                     @Override

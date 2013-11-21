@@ -20,7 +20,6 @@ import com.pyx4j.commons.Key;
 import com.propertyvista.domain.security.CustomerUser;
 import com.propertyvista.domain.security.VistaCustomerBehavior;
 import com.propertyvista.domain.tenant.Customer;
-import com.propertyvista.domain.tenant.ProspectSignUp;
 import com.propertyvista.domain.tenant.ResidentSelfRegistration;
 import com.propertyvista.domain.tenant.lease.Lease;
 
@@ -38,7 +37,6 @@ public interface CustomerFacade {
 
     void residentSelfRegistration(ResidentSelfRegistration request);
 
-    void prospectSignUp(ProspectSignUp request);
-
+    void setCustomerPassword(Customer customer, String password);
 
 }

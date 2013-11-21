@@ -17,12 +17,15 @@ import java.util.List;
 
 import com.propertyvista.domain.security.CustomerUser;
 import com.propertyvista.domain.security.VistaCustomerBehavior;
+import com.propertyvista.domain.tenant.ProspectSignUp;
 import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
 import com.propertyvista.domain.tenant.prospect.MasterOnlineApplication;
 import com.propertyvista.domain.tenant.prospect.MasterOnlineApplicationStatus;
 import com.propertyvista.domain.tenant.prospect.OnlineApplication;
 
 public interface OnlineApplicationFacade {
+
+    void prospectSignUp(ProspectSignUp request);
 
     void createMasterOnlineApplication(MasterOnlineApplication masterOnlineApplication);
 

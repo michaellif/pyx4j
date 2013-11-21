@@ -20,7 +20,7 @@ import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.rpc.shared.VoidSerializable;
 
-import com.propertyvista.biz.tenant.CustomerFacade;
+import com.propertyvista.biz.tenant.OnlineApplicationFacade;
 import com.propertyvista.domain.tenant.ProspectSignUp;
 import com.propertyvista.portal.rpc.portal.prospect.dto.ProspectSignUpDTO;
 import com.propertyvista.portal.rpc.portal.prospect.services.ProspectSignUpService;
@@ -37,7 +37,7 @@ public class ProspectSignUpServiceImpl implements ProspectSignUpService {
         request.email().setValue(dto.email().getValue());
         request.password().setValue(dto.password().getValue());
 
-        ServerSideFactory.create(CustomerFacade.class).prospectSignUp(request);
+        ServerSideFactory.create(OnlineApplicationFacade.class).prospectSignUp(request);
         Persistence.service().commit();
         callback.onSuccess(null);
     }

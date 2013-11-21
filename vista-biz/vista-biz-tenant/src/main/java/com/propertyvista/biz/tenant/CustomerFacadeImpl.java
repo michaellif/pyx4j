@@ -42,7 +42,6 @@ import com.propertyvista.domain.security.CustomerUser;
 import com.propertyvista.domain.security.VistaCustomerBehavior;
 import com.propertyvista.domain.tenant.Customer;
 import com.propertyvista.domain.tenant.CustomerAcceptedTerms;
-import com.propertyvista.domain.tenant.ProspectSignUp;
 import com.propertyvista.domain.tenant.ResidentSelfRegistration;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
@@ -69,6 +68,7 @@ public class CustomerFacadeImpl implements CustomerFacade {
         if (!customer.user().isNull() && customer.person().email().isNull()) {
             throw new UnRecoverableRuntimeException(i18n.tr("Can''t remove e-mail address for {0} ", customer.person().name().getStringView()));
         }
+        boolean newUser = false;
         if ((!customer.person().email().isNull()) || (customer.user().getPrimaryKey() != null)) {
             customer.person().email().setValue(EmailValidator.normalizeEmailAddress(customer.person().email().getValue()));
             Persistence.service().retrieve(customer.user());
@@ -78,14 +78,11 @@ public class CustomerFacadeImpl implements CustomerFacade {
                 Persistence.service().merge(customer.user());
             } else {
                 Persistence.service().persist(customer.user());
+                newUser = true;
 
                 CustomerUserCredential credential = EntityFactory.create(CustomerUserCredential.class);
                 credential.setPrimaryKey(customer.user().getPrimaryKey());
                 credential.user().set(customer.user());
-                if (ApplicationMode.isDevelopment() || VistaDemo.isDemo()) {
-                    credential.credential().setValue(
-                            ServerSideFactory.create(PasswordEncryptorFacade.class).encryptUserPassword(customer.user().email().getValue()));
-                }
                 credential.enabled().setValue(Boolean.TRUE);
                 Persistence.service().persist(credential);
             }
@@ -96,6 +93,10 @@ public class CustomerFacadeImpl implements CustomerFacade {
         }
 
         Persistence.service().merge(customer);
+
+        if (newUser && (ApplicationMode.isDevelopment() || VistaDemo.isDemo())) {
+            setCustomerPassword(customer, customer.user().email().getValue());
+        }
     }
 
     @Override
@@ -226,24 +227,21 @@ public class CustomerFacadeImpl implements CustomerFacade {
                     .build();//@formatter:on            
         }
 
-        CustomerUserCredential credential = Persistence.service().retrieve(CustomerUserCredential.class, tenant.customer().user().getPrimaryKey());
-        credential.accessKey().setValue(null);
-        credential.credential().setValue(ServerSideFactory.create(PasswordEncryptorFacade.class).encryptUserPassword(selfRegistration.password().getValue()));
+        setCustomerPassword(tenant.customer(), selfRegistration.password().getValue());
 
-        credential.passwordUpdated().setValue(new Date());
-        credential.requiredPasswordChangeOnNextLogIn().setValue(Boolean.FALSE);
-
-        ServerSideFactory.create(AuditFacade.class).credentialsUpdated(credential.user());
-
-        Persistence.service().persist(credential);
         log.info("tenant {} {} registered for tenant portal", selfRegistration.firstName(), selfRegistration.lastName());
 
     }
 
     @Override
-    public void prospectSignUp(ProspectSignUp request) {
-        // TODO Auto-generated method stub
-
+    public void setCustomerPassword(Customer customer, String password) {
+        CustomerUserCredential credential = Persistence.service().retrieve(CustomerUserCredential.class, customer.user().getPrimaryKey());
+        credential.accessKey().setValue(null);
+        credential.credential().setValue(ServerSideFactory.create(PasswordEncryptorFacade.class).encryptUserPassword(password));
+        credential.passwordUpdated().setValue(new Date());
+        credential.requiredPasswordChangeOnNextLogIn().setValue(Boolean.FALSE);
+        ServerSideFactory.create(AuditFacade.class).credentialsUpdated(credential.user());
+        Persistence.service().persist(credential);
     }
 
 }

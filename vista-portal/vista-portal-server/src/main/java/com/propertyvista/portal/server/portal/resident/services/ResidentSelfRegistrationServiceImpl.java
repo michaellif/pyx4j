@@ -31,8 +31,8 @@ import com.propertyvista.biz.tenant.CustomerFacade;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.tenant.ResidentSelfRegistration;
 import com.propertyvista.portal.rpc.portal.resident.dto.ResidentSelfRegistrationDTO;
+import com.propertyvista.portal.rpc.portal.resident.dto.SelfRegistrationBuildingDTO;
 import com.propertyvista.portal.rpc.portal.resident.services.ResidentSelfRegistrationService;
-import com.propertyvista.portal.rpc.portal.resident.services.SelfRegistrationBuildingDTO;
 
 public class ResidentSelfRegistrationServiceImpl implements ResidentSelfRegistrationService {
 

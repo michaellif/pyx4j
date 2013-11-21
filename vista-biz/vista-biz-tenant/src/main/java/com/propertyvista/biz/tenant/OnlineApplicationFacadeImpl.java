@@ -29,11 +29,14 @@ import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.biz.communication.CommunicationFacade;
 import com.propertyvista.biz.policy.IdAssignmentFacade;
+import com.propertyvista.biz.tenant.lease.LeaseFacade;
 import com.propertyvista.domain.security.CustomerUser;
 import com.propertyvista.domain.security.VistaCustomerBehavior;
 import com.propertyvista.domain.tenant.Customer;
 import com.propertyvista.domain.tenant.CustomerScreening;
+import com.propertyvista.domain.tenant.ProspectSignUp;
 import com.propertyvista.domain.tenant.lease.Lease;
+import com.propertyvista.domain.tenant.lease.Lease.Status;
 import com.propertyvista.domain.tenant.lease.LeaseApplication;
 import com.propertyvista.domain.tenant.lease.LeaseTerm;
 import com.propertyvista.domain.tenant.lease.LeaseTermGuarantor;
@@ -290,4 +293,23 @@ public class OnlineApplicationFacadeImpl implements OnlineApplicationFacade {
         return app;
     }
 
+    @Override
+    public void prospectSignUp(ProspectSignUp request) {
+        Lease lease = ServerSideFactory.create(LeaseFacade.class).create(Status.Application);
+
+        LeaseTermTenant mainTenant = lease.currentTerm().version().tenants().$();
+        lease.currentTerm().version().tenants().add(mainTenant);
+
+        mainTenant.leaseParticipant().customer().person().name().firstName().setValue(request.firstName().getValue());
+        mainTenant.leaseParticipant().customer().person().name().middleName().setValue(request.middleName().getValue());
+        mainTenant.leaseParticipant().customer().person().name().lastName().setValue(request.lastName().getValue());
+        mainTenant.leaseParticipant().customer().person().email().setValue(request.email().getValue());
+
+        mainTenant.role().setValue(LeaseTermParticipant.Role.Applicant);
+
+        ServerSideFactory.create(LeaseFacade.class).persist(lease);
+        ServerSideFactory.create(LeaseFacade.class).createMasterOnlineApplication(lease);
+
+        ServerSideFactory.create(CustomerFacade.class).setCustomerPassword(mainTenant.leaseParticipant().customer(), request.password().getValue());
+    }
 }
