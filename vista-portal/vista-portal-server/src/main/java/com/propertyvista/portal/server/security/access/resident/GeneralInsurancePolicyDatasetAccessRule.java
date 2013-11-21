@@ -11,7 +11,7 @@
  * @author ArtyomB
  * @version $Id$
  */
-package com.propertyvista.portal.server.security.access;
+package com.propertyvista.portal.server.security.access.resident;
 
 import com.pyx4j.entity.security.DatasetAccessRule;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
@@ -26,8 +26,8 @@ public class GeneralInsurancePolicyDatasetAccessRule implements DatasetAccessRul
 
     @Override
     public void applyRule(EntityQueryCriteria<GeneralInsurancePolicy> criteria) {
-        criteria.or(PropertyCriterion.eq(criteria.proto().tenant(), ResidentPortalContext.getCurrentUserTenant().getPrimaryKey()),
-                PropertyCriterion.eq(criteria.proto().tenant().lease().leaseParticipants(), ResidentPortalContext.getCurrentUserTenant().getPrimaryKey()));
+        criteria.or(PropertyCriterion.eq(criteria.proto().tenant(), ResidentPortalContext.getTenant().getPrimaryKey()),
+                PropertyCriterion.eq(criteria.proto().tenant().lease().leaseParticipants(), ResidentPortalContext.getTenant().getPrimaryKey()));
     }
 
 }

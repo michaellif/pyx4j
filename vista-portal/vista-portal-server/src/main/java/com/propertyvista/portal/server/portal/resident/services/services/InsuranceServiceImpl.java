@@ -31,7 +31,7 @@ public class InsuranceServiceImpl implements InsuranceService {
             new InsuranceServiceMockImpl().retreiveInsuranceStatus(callback);
         } else {
             callback.onSuccess(ServerSideFactory.create(TenantInsuranceFacade.class).getInsuranceStatus(
-                    ResidentPortalContext.getCurrentUserTenantInLease().leaseParticipant().<Tenant> createIdentityStub()));
+                    ResidentPortalContext.getTenantInLease().leaseParticipant().<Tenant> createIdentityStub()));
         }
     }
 

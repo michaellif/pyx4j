@@ -46,15 +46,15 @@ public class TenantSurePaymentMethodCrudServiceImpl implements TenantSurePayment
 
     @Override
     public void create(AsyncCallback<Key> callback, InsurancePaymentMethodDTO editableEntity) {
-        editableEntity.paymentMethod().tenant().set(ResidentPortalContext.getCurrentUserTenant());
-        ServerSideFactory.create(TenantSureFacade.class).updatePaymentMethod(editableEntity.paymentMethod(), ResidentPortalContext.getCurrentUserTenant());
+        editableEntity.paymentMethod().tenant().set(ResidentPortalContext.getTenant());
+        ServerSideFactory.create(TenantSureFacade.class).updatePaymentMethod(editableEntity.paymentMethod(), ResidentPortalContext.getTenant());
         Persistence.service().commit();
         callback.onSuccess(null);
     }
 
     @Override
     public void getCurrentAddress(AsyncCallback<AddressSimple> callback) {
-        callback.onSuccess(AddressRetriever.getLeaseParticipantCurrentAddressSimple(ResidentPortalContext.getCurrentUserTenant()));
+        callback.onSuccess(AddressRetriever.getLeaseParticipantCurrentAddressSimple(ResidentPortalContext.getTenant()));
     }
 
     @Override

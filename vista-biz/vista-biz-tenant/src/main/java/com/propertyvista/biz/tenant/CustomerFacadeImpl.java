@@ -99,15 +99,15 @@ public class CustomerFacadeImpl implements CustomerFacade {
     }
 
     @Override
-    public List<Lease> getActiveLeases(CustomerUser customerUser) {
-        Validate.isFalse(customerUser.isNull(), "Customer User can't be null");
+    public List<Lease> getActiveLeases(CustomerUser customerUserId) {
+        Validate.isFalse(customerUserId.isNull(), "Customer User can't be null");
 
         List<Lease> leases = new ArrayList<Lease>();
         {
             EntityQueryCriteria<Lease> criteria = EntityQueryCriteria.create(Lease.class);
             criteria.in(criteria.proto().status(), Lease.Status.current());
             criteria.in(criteria.proto().unit().building().suspended(), false);
-            criteria.eq(criteria.proto().currentTerm().version().tenants().$().leaseParticipant().customer().user(), customerUser);
+            criteria.eq(criteria.proto().currentTerm().version().tenants().$().leaseParticipant().customer().user(), customerUserId);
             criteria.in(criteria.proto().currentTerm().version().tenants().$().role(), LeaseTermParticipant.Role.portalAccess());
             leases.addAll(Persistence.service().query(criteria));
         }
@@ -115,7 +115,7 @@ public class CustomerFacadeImpl implements CustomerFacade {
         if (false) {
             EntityQueryCriteria<Lease> criteria = EntityQueryCriteria.create(Lease.class);
             criteria.in(criteria.proto().status(), Lease.Status.current());
-            criteria.eq(criteria.proto().currentTerm().version().guarantors().$().leaseParticipant().customer().user(), customerUser);
+            criteria.eq(criteria.proto().currentTerm().version().guarantors().$().leaseParticipant().customer().user(), customerUserId);
             leases.addAll(Persistence.service().query(criteria));
         }
 

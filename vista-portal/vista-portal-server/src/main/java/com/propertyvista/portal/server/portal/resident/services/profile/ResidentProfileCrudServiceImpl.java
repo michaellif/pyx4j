@@ -21,10 +21,8 @@ import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityListCriteria;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
-import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.server.contexts.Context;
 
-import com.propertyvista.domain.security.CustomerUser;
 import com.propertyvista.domain.tenant.Customer;
 import com.propertyvista.portal.rpc.portal.resident.dto.ResidentProfileDTO;
 import com.propertyvista.portal.rpc.portal.resident.services.profile.ResidentProfileCrudService;
@@ -34,10 +32,9 @@ public class ResidentProfileCrudServiceImpl implements ResidentProfileCrudServic
 
     @Override
     public void retrieve(AsyncCallback<ResidentProfileDTO> callback, Key entityId, RetrieveTarget retrieveTarget) {
-        CustomerUser currentUser = ResidentPortalContext.getCurrentUser();
         // find associated tenant entry
         EntityQueryCriteria<Customer> criteria = EntityQueryCriteria.create(Customer.class);
-        criteria.add(PropertyCriterion.eq(criteria.proto().user(), currentUser));
+        criteria.eq(criteria.proto().user(), ResidentPortalContext.getCustomerUserIdStub());
         Customer customer = Persistence.service().retrieve(criteria);
         Persistence.service().retrieve(customer.emergencyContacts());
         Persistence.service().retrieve(customer.picture());
@@ -54,10 +51,7 @@ public class ResidentProfileCrudServiceImpl implements ResidentProfileCrudServic
 
     @Override
     public void save(AsyncCallback<Key> callback, ResidentProfileDTO dto) {
-        CustomerUser currentUser = ResidentPortalContext.getCurrentUser();
-        EntityQueryCriteria<Customer> criteria = EntityQueryCriteria.create(Customer.class);
-        criteria.add(PropertyCriterion.eq(criteria.proto().user(), currentUser));
-        Customer customer = Persistence.service().retrieve(criteria);
+        Customer customer = ResidentPortalContext.getCustomer();
 
         customer.person().set(dto.person().cast());
 

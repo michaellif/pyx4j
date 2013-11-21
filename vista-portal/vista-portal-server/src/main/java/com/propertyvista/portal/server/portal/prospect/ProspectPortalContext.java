@@ -13,55 +13,36 @@
  */
 package com.propertyvista.portal.server.portal.prospect;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.pyx4j.commons.Key;
-import com.pyx4j.commons.UserRuntimeException;
 import com.pyx4j.entity.server.Persistence;
-import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.rpc.shared.UnRecoverableRuntimeException;
+import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.server.contexts.Context;
-import com.pyx4j.server.contexts.Visit;
 
+import com.propertyvista.domain.tenant.prospect.MasterOnlineApplication;
 import com.propertyvista.domain.tenant.prospect.OnlineApplication;
 import com.propertyvista.portal.server.portal.shared.PortalVistaContext;
 
 public class ProspectPortalContext extends PortalVistaContext {
 
-    private final static Logger log = LoggerFactory.getLogger(ProspectPortalContext.class);
+    private final static String slectedApplicationAttribute = "selected-application";
 
-    private static final I18n i18n = I18n.get(ProspectPortalContext.class);
-
-    public static ProspectPortalAttributes getVisitAttributes() {
-        Visit visit = Context.getVisit();
-        if ((visit == null) || (!visit.isUserLoggedIn())) {
-            log.trace("no session");
-            throw new UnRecoverableRuntimeException(i18n.tr("No Session"));
-        }
-        ProspectPortalAttributes attr = (ProspectPortalAttributes) visit.getAttribute("pt-visit");
-        if (attr == null) {
-            attr = new ProspectPortalAttributes();
-            visit.setAttribute("pt-visit", attr);
-        }
-        return attr;
+    public static void setOnlineApplication(OnlineApplication application) {
+        Context.getVisit().setAttribute(slectedApplicationAttribute, application.getPrimaryKey());
     }
 
-    public static void setCurrentUserApplication(OnlineApplication application) {
-        getVisitAttributes().setApplicationPrimaryKey(application.getPrimaryKey());
+    public static OnlineApplication getOnlineApplicationIdStub() {
+        return EntityFactory.createIdentityStub(OnlineApplication.class, (Key) Context.getVisit().getAttribute(slectedApplicationAttribute));
     }
 
-    public static Key getCurrentUserApplicationPrimaryKey() {
-        Key key = getVisitAttributes().getApplicationPrimaryKey();
-        if (key == null) {
-            log.trace("no application selected");
-            throw new UserRuntimeException(i18n.tr("No Application Has Been Selected"));
-        }
-        return key;
+    public static OnlineApplication getOnlineApplication() {
+        return Persistence.service().retrieve(OnlineApplication.class, getOnlineApplicationIdStub().getPrimaryKey());
     }
 
-    public static OnlineApplication retrieveCurrentUserApplication() {
-        return Persistence.service().retrieve(OnlineApplication.class, getCurrentUserApplicationPrimaryKey());
+    public static MasterOnlineApplication getMasterOnlineApplication() {
+        EntityQueryCriteria<MasterOnlineApplication> criteria = EntityQueryCriteria.create(MasterOnlineApplication.class);
+        criteria.eq(criteria.proto().applications(), getOnlineApplicationIdStub());
+        return Persistence.service().retrieve(criteria);
     }
 
 }

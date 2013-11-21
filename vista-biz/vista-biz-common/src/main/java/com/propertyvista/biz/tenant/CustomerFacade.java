@@ -28,7 +28,7 @@ public interface CustomerFacade {
 
     void persistCustomer(Customer customer);
 
-    List<Lease> getActiveLeases(CustomerUser customerUser);
+    List<Lease> getActiveLeases(CustomerUser customerUserId);
 
     VistaCustomerBehavior getLeaseBehavior(CustomerUser customerUser, Lease lease);
 

@@ -7,25 +7,25 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Oct 30, 2013
- * @author stanp
+ * Created on Oct 18, 2013
+ * @author vlads
  * @version $Id$
  */
-package com.propertyvista.portal.server.security.access;
+package com.propertyvista.portal.server.security.access.resident;
 
 import com.pyx4j.entity.security.DatasetAccessRule;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 
-import com.propertyvista.domain.tenant.CustomerPicture;
+import com.propertyvista.domain.payment.LeasePaymentMethod;
 import com.propertyvista.portal.server.portal.resident.ResidentPortalContext;
 
-public class CustomrPictureTenantDatasetAccessRule implements DatasetAccessRule<CustomerPicture> {
+public class LeasePaymentMethodTenantDatasetAccessRule implements DatasetAccessRule<LeasePaymentMethod> {
 
-    private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 208121970549388304L;
 
     @Override
-    public void applyRule(EntityQueryCriteria<CustomerPicture> criteria) {
-        criteria.eq(criteria.proto().id(), ResidentPortalContext.getCurrentUserTenantInLease().leaseParticipant().customer().picture());
+    public void applyRule(EntityQueryCriteria<LeasePaymentMethod> criteria) {
+        criteria.eq(criteria.proto().customer().user(), ResidentPortalContext.getCustomerUserIdStub());
     }
 
 }

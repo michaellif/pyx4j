@@ -130,7 +130,7 @@ public class TenantSureInsurancePolicyCrudServiceImpl implements TenantSureInsur
 
         TenantSureQuoteDTO quote = ServerSideFactory.create(TenantSureFacade.class).getQuote(//@formatter:off
                 quotationRequest,
-                ResidentPortalContext.getCurrentUserTenant().<Tenant> createIdentityStub()
+                ResidentPortalContext.getTenant().<Tenant> createIdentityStub()
         );//@formatter:on
 
         if (quote.specialQuote().isNull()) {
@@ -146,12 +146,12 @@ public class TenantSureInsurancePolicyCrudServiceImpl implements TenantSureInsur
             throw new TenantSureOnMaintenanceException();
         }
 
-        paymentMethod.tenant().set(ResidentPortalContext.getCurrentUserTenant());
+        paymentMethod.tenant().set(ResidentPortalContext.getTenant());
 
         // TODO since we pass the current user tenant to the facade function i think there's we should not settenant() filed of payment method
         ServerSideFactory.create(TenantSureFacade.class).savePaymentMethod(//@formatter:off
                 paymentMethod,
-                ResidentPortalContext.getCurrentUserTenant().<Tenant> createIdentityStub()
+                ResidentPortalContext.getTenant().<Tenant> createIdentityStub()
         );//@formatter:on
 
         TenantSureQuoteDTO quote = ServerSideQuteStorage.get(quoteIdHolder.quoteId().getValue());
@@ -160,7 +160,7 @@ public class TenantSureInsurancePolicyCrudServiceImpl implements TenantSureInsur
         }
         ServerSideFactory.create(TenantSureFacade.class).buyInsurance(//@formatter:off
                 quote,
-                ResidentPortalContext.getCurrentUserTenant().<Tenant> createIdentityStub(),
+                ResidentPortalContext.getTenant().<Tenant> createIdentityStub(),
                 tenantName,
                 tenantPhone
         );//@formatter:on
@@ -172,7 +172,7 @@ public class TenantSureInsurancePolicyCrudServiceImpl implements TenantSureInsur
 
     @Override
     public void getCurrentTenantAddress(AsyncCallback<AddressSimple> callback) {
-        callback.onSuccess(AddressRetriever.getLeaseParticipantCurrentAddressSimple(ResidentPortalContext.getCurrentUserTenant()));
+        callback.onSuccess(AddressRetriever.getLeaseParticipantCurrentAddressSimple(ResidentPortalContext.getTenant()));
     }
 
     @Override
@@ -180,7 +180,7 @@ public class TenantSureInsurancePolicyCrudServiceImpl implements TenantSureInsur
         if (ServerSideQuteStorage.get(quoteId) == null) {
             throw new Error("The requested quote " + quoteId + " was not found in client's context");
         }
-        String email = ServerSideFactory.create(TenantSureFacade.class).sendQuote(ResidentPortalContext.getCurrentUserTenant().<Tenant> createIdentityStub(),
+        String email = ServerSideFactory.create(TenantSureFacade.class).sendQuote(ResidentPortalContext.getTenant().<Tenant> createIdentityStub(),
                 quoteId);
         asyncCallback.onSuccess(email);
     }
@@ -217,7 +217,7 @@ public class TenantSureInsurancePolicyCrudServiceImpl implements TenantSureInsur
 
         TenantSureInsurancePolicyDTO tenantInsurancePolicy = EntityFactory.create(TenantSureInsurancePolicyDTO.class);
 
-        Tenant tenant = Persistence.service().retrieve(Tenant.class, ResidentPortalContext.getCurrentUserTenant().getPrimaryKey());
+        Tenant tenant = Persistence.service().retrieve(Tenant.class, ResidentPortalContext.getTenant().getPrimaryKey());
         tenantInsurancePolicy.tenantSureCoverageRequest().tenantName().setValue(tenant.customer().person().name().getStringView());
         tenantInsurancePolicy.tenantSureCoverageRequest().tenantPhone().setValue(getDefaultPhone(tenant.customer().person()));
         tenantInsurancePolicy.tenantSureCoverageRequest().paymentSchedule().setValue(TenantSurePaymentSchedule.Monthly);
@@ -238,7 +238,7 @@ public class TenantSureInsurancePolicyCrudServiceImpl implements TenantSureInsur
             throw new TenantSureOnMaintenanceException();
         }
         TenantSureInsurancePolicyDTO status = ServerSideFactory.create(TenantSureFacade.class).getStatus(
-                ResidentPortalContext.getCurrentUserTenantInLease().leaseParticipant().<Tenant> createIdentityStub());
+                ResidentPortalContext.getTenantInLease().leaseParticipant().<Tenant> createIdentityStub());
 
         if (status != null) {
             callback.onSuccess(status);
@@ -253,12 +253,12 @@ public class TenantSureInsurancePolicyCrudServiceImpl implements TenantSureInsur
             throw new TenantSureOnMaintenanceException();
         }
 
-        policyDto.paymentMethod().tenant().set(ResidentPortalContext.getCurrentUserTenant());
+        policyDto.paymentMethod().tenant().set(ResidentPortalContext.getTenant());
 
         // TODO since we pass the current user tenant to the facade function i think there's we should not settenant() filed of payment method
         ServerSideFactory.create(TenantSureFacade.class).savePaymentMethod(//@formatter:off
                 policyDto.paymentMethod(),
-                ResidentPortalContext.getCurrentUserTenant().<Tenant> createIdentityStub()
+                ResidentPortalContext.getTenant().<Tenant> createIdentityStub()
         );//@formatter:on
 
         TenantSureQuoteDTO quote = ServerSideQuteStorage.get(policyDto.quote().quoteId().getValue());
@@ -267,7 +267,7 @@ public class TenantSureInsurancePolicyCrudServiceImpl implements TenantSureInsur
         }
         Key key = ServerSideFactory.create(TenantSureFacade.class).buyInsurance(//@formatter:off
                 quote,
-                ResidentPortalContext.getCurrentUserTenant().<Tenant> createIdentityStub(),
+                ResidentPortalContext.getTenant().<Tenant> createIdentityStub(),
                 policyDto.tenantSureCoverageRequest().tenantName().getValue(),
                 policyDto.tenantSureCoverageRequest().tenantPhone().getValue()
         );//@formatter:on
@@ -282,10 +282,10 @@ public class TenantSureInsurancePolicyCrudServiceImpl implements TenantSureInsur
         if (((VistaSystemMaintenanceState) SystemMaintenance.getSystemMaintenanceInfo()).enableTenantSureMaintenance().isBooleanTrue()) {
             throw new TenantSureOnMaintenanceException();
         }
-        paymentMethod.tenant().set(ResidentPortalContext.getCurrentUserTenant());
+        paymentMethod.tenant().set(ResidentPortalContext.getTenant());
 
         ServerSideFactory.create(TenantSureFacade.class).updatePaymentMethod(paymentMethod,
-                ResidentPortalContext.getCurrentUserTenant().<Tenant> createIdentityStub());
+                ResidentPortalContext.getTenant().<Tenant> createIdentityStub());
 
         Persistence.service().commit();
 
@@ -299,7 +299,7 @@ public class TenantSureInsurancePolicyCrudServiceImpl implements TenantSureInsur
         }
 
         ServerSideFactory.create(TenantSureFacade.class).scheduleCancelByTenant(
-                ResidentPortalContext.getCurrentUserTenantInLease().leaseParticipant().<Tenant> createIdentityStub());
+                ResidentPortalContext.getTenantInLease().leaseParticipant().<Tenant> createIdentityStub());
         callback.onSuccess(null);
     }
 
@@ -310,7 +310,7 @@ public class TenantSureInsurancePolicyCrudServiceImpl implements TenantSureInsur
         }
 
         ServerSideFactory.create(TenantSureFacade.class).reinstate(
-                ResidentPortalContext.getCurrentUserTenantInLease().leaseParticipant().<Tenant> createIdentityStub());
+                ResidentPortalContext.getTenantInLease().leaseParticipant().<Tenant> createIdentityStub());
         callback.onSuccess(null);
     }
 
@@ -321,7 +321,7 @@ public class TenantSureInsurancePolicyCrudServiceImpl implements TenantSureInsur
         }
 
         String sentTo = ServerSideFactory.create(TenantSureFacade.class).sendCertificate(
-                ResidentPortalContext.getCurrentUserTenantInLease().leaseParticipant().<Tenant> createIdentityStub(), email);
+                ResidentPortalContext.getTenantInLease().leaseParticipant().<Tenant> createIdentityStub(), email);
         callback.onSuccess(sentTo);
     }
 
@@ -329,13 +329,13 @@ public class TenantSureInsurancePolicyCrudServiceImpl implements TenantSureInsur
         if (((VistaSystemMaintenanceState) SystemMaintenance.getSystemMaintenanceInfo()).enableTenantSureMaintenance().isBooleanTrue()) {
             throw new TenantSureOnMaintenanceException();
         }
-        if (ServerSideFactory.create(TenantSureFacade.class).getStatus(ResidentPortalContext.getCurrentUserTenant().<Tenant> createIdentityStub()) != null) {
+        if (ServerSideFactory.create(TenantSureFacade.class).getStatus(ResidentPortalContext.getTenant().<Tenant> createIdentityStub()) != null) {
             throw new TenantSureAlreadyPurchasedException();
         }
 
         TenantSureAgreementParamsDTO params = EntityFactory.create(TenantSureAgreementParamsDTO.class);
 
-        Lease lease = Persistence.service().retrieve(Lease.class, ResidentPortalContext.getCurrentUserLeaseIdStub().getPrimaryKey());
+        Lease lease = Persistence.service().retrieve(Lease.class, ResidentPortalContext.getLeaseIdStub().getPrimaryKey());
         TenantInsurancePolicy tenantInsurancePolicy = ServerSideFactory.create(PolicyFacade.class).obtainEffectivePolicy(
                 lease.unit().<AptUnit> createIdentityStub(), TenantInsurancePolicy.class);
 

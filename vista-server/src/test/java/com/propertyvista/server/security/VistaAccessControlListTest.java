@@ -134,7 +134,7 @@ public class VistaAccessControlListTest {
 
         OnlineApplication application = EntityFactory.create(OnlineApplication.class);
         application.setPrimaryKey(new Key(-251));
-        ProspectPortalContext.setCurrentUserApplication(application);
+        ProspectPortalContext.setOnlineApplication(application);
 
         assertEntityPermission(true, ApplicationDocumentFile.class, application);
         assertEntityPermission(true, TenantInLeaseListDTO.class, application);

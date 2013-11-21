@@ -35,7 +35,7 @@ public class LeaseContextSelectionServiceImpl implements LeaseContextSelectionSe
     @Override
     public void getLeaseContextChoices(AsyncCallback<Vector<LeaseContextChoiceDTO>> callback) {
 
-        List<Lease> activeLeases = ServerSideFactory.create(CustomerFacade.class).getActiveLeases(ResidentPortalContext.getCurrentUser());
+        List<Lease> activeLeases = ServerSideFactory.create(CustomerFacade.class).getActiveLeases(ResidentPortalContext.getCustomerUserIdStub());
         Vector<LeaseContextChoiceDTO> choices = new Vector<LeaseContextChoiceDTO>(activeLeases.size());
 
         for (Lease lease : activeLeases) {

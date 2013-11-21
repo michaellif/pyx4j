@@ -57,7 +57,7 @@ public class BillingServiceImpl implements BillingService {
     public void retreiveBillingSummary(AsyncCallback<BillingSummaryDTO> callback) {
         BillingSummaryDTO summary = EntityFactory.create(BillingSummaryDTO.class);
 
-        Lease lease = ResidentPortalContext.getCurrentUserLease();
+        Lease lease = ResidentPortalContext.getLease();
 
         summary.currentBalance().setValue(ServerSideFactory.create(ARFacade.class).getCurrentBalance(lease.billingAccount()));
         if (!VistaFeatures.instance().yardiIntegration()) {
@@ -73,7 +73,7 @@ public class BillingServiceImpl implements BillingService {
     public void retreiveBillingHistory(AsyncCallback<BillingHistoryDTO> callback) {
         BillingHistoryDTO history = EntityFactory.create(BillingHistoryDTO.class);
 
-        Lease lease = ResidentPortalContext.getCurrentUserLease();
+        Lease lease = ResidentPortalContext.getLease();
 
         history.bills().addAll(retrieveBillHistory(lease));
 
@@ -82,7 +82,7 @@ public class BillingServiceImpl implements BillingService {
 
     @Override
     public void retreiveTransactionHistory(AsyncCallback<TransactionHistoryDTO> callback) {
-        Lease lease = ResidentPortalContext.getCurrentUserLease();
+        Lease lease = ResidentPortalContext.getLease();
 
         callback.onSuccess(ServerSideFactory.create(ARFacade.class).getTransactionHistory(lease.billingAccount()));
     }
@@ -91,7 +91,7 @@ public class BillingServiceImpl implements BillingService {
     public void retreiveLatestActivities(AsyncCallback<LatestActivitiesDTO> callback) {
         LatestActivitiesDTO activities = EntityFactory.create(LatestActivitiesDTO.class);
 
-        Lease lease = ResidentPortalContext.getCurrentUserLease();
+        Lease lease = ResidentPortalContext.getLease();
 
         for (InvoicePayment item : ServerSideFactory.create(PaymentFacade.class).getLatestPaymentActivity(lease.billingAccount())) {
             InvoicePaymentDTO paymentInfo = EntityFactory.create(InvoicePaymentDTO.class);
@@ -118,7 +118,7 @@ public class BillingServiceImpl implements BillingService {
         Bill bill = null;
         if (entityId == null) {
             // find current bill instead:
-            bill = ServerSideFactory.create(BillingFacade.class).getLatestConfirmedBill(ResidentPortalContext.getCurrentUserLease());
+            bill = ServerSideFactory.create(BillingFacade.class).getLatestConfirmedBill(ResidentPortalContext.getLease());
         } else {
             bill = Persistence.secureRetrieve(Bill.class, entityId.getPrimaryKey());
         }
@@ -177,7 +177,7 @@ public class BillingServiceImpl implements BillingService {
             pi.paymentDate().setValue(excutionDate);
             pi.payer().set(pap.tenant());
             Persistence.ensureRetrieve(pi.payer(), AttachLevel.ToStringMembers);
-            if (pi.payer().equals(ResidentPortalContext.getCurrentUserTenant())) {
+            if (pi.payer().equals(ResidentPortalContext.getTenant())) {
                 pi.paymentMethod().set(pap.paymentMethod());
             }
 

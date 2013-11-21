@@ -30,7 +30,7 @@ public class ResidentSummaryServiceImpl implements ResidentSummaryService {
     public void retreiveProfileSummary(AsyncCallback<ResidentSummaryDTO> callback) {
         ResidentSummaryDTO profileSummary = EntityFactory.create(ResidentSummaryDTO.class);
 
-        LeaseTermTenant tenantInLease = ResidentPortalContext.getCurrentUserTenantInLease();
+        LeaseTermTenant tenantInLease = ResidentPortalContext.getTenantInLease();
         Persistence.service().retrieve(tenantInLease.leaseTermV());
         Persistence.service().retrieve(tenantInLease.leaseTermV().holder().lease());
         Persistence.service().retrieve(tenantInLease.leaseTermV().holder().lease().unit().floorplan());

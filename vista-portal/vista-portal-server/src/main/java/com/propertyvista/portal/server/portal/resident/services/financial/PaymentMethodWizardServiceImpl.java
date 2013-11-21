@@ -44,7 +44,7 @@ public class PaymentMethodWizardServiceImpl extends AbstractCrudServiceDtoImpl<L
 
     @Override
     protected PaymentMethodDTO init(InitializationData initializationData) {
-        Lease lease = ResidentPortalContext.getCurrentUserLease();
+        Lease lease = ResidentPortalContext.getLease();
 
         PaymentMethodDTO dto = EntityFactory.create(PaymentMethodDTO.class);
 
@@ -67,9 +67,9 @@ public class PaymentMethodWizardServiceImpl extends AbstractCrudServiceDtoImpl<L
 
     @Override
     protected void persist(LeasePaymentMethod bo, PaymentMethodDTO to) {
-        Lease lease = ResidentPortalContext.getCurrentUserLease();
+        Lease lease = ResidentPortalContext.getLease();
 
-        bo.customer().set(ResidentPortalContext.getCurrentUserCustomer());
+        bo.customer().set(ResidentPortalContext.getCustomer());
         bo.isProfiledMethod().setValue(Boolean.TRUE);
 
         ServerSideFactory.create(PaymentFacade.class).validatePaymentMethod(lease.billingAccount(), bo, VistaApplication.resident);
@@ -78,6 +78,6 @@ public class PaymentMethodWizardServiceImpl extends AbstractCrudServiceDtoImpl<L
 
     @Override
     public void getCurrentAddress(AsyncCallback<AddressSimple> callback) {
-        callback.onSuccess(AddressRetriever.getLeaseParticipantCurrentAddressSimple(ResidentPortalContext.getCurrentUserTenant()));
+        callback.onSuccess(AddressRetriever.getLeaseParticipantCurrentAddressSimple(ResidentPortalContext.getTenant()));
     }
 }

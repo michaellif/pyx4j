@@ -17,7 +17,6 @@ import com.pyx4j.commons.Key;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
-import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.server.contexts.Context;
 
 import com.propertyvista.domain.property.asset.unit.AptUnit;
@@ -33,38 +32,38 @@ public class ResidentPortalContext extends PortalVistaContext {
 
     private final static String slectedLeaseAtt = "selected-lease";
 
-    public static Lease getCurrentUserLeaseIdStub() {
-        return EntityFactory.createIdentityStub(Lease.class, (Key) Context.getVisit().getAttribute(slectedLeaseAtt));
-    }
-
-    public static void setCurrentUserLease(Lease lease) {
+    public static void setLease(Lease lease) {
         Context.getVisit().setAttribute(slectedLeaseAtt, lease.getPrimaryKey());
     }
 
-    public static Tenant getCurrentUserTenant() {
+    public static Lease getLeaseIdStub() {
+        return EntityFactory.createIdentityStub(Lease.class, (Key) Context.getVisit().getAttribute(slectedLeaseAtt));
+    }
+
+    public static Lease getLease() {
+        return Persistence.service().retrieve(Lease.class, getLeaseIdStub().getPrimaryKey());
+    }
+
+    public static Tenant getTenant() {
         EntityQueryCriteria<Tenant> criteria = EntityQueryCriteria.create(Tenant.class);
-        criteria.add(PropertyCriterion.eq(criteria.proto().lease(), getCurrentUserLeaseIdStub()));
-        criteria.add(PropertyCriterion.eq(criteria.proto().customer().user(), ResidentPortalContext.getCurrentUser()));
+        criteria.eq(criteria.proto().lease(), getLeaseIdStub());
+        criteria.eq(criteria.proto().customer().user(), getCustomerUserIdStub());
         return Persistence.service().retrieve(criteria);
     }
 
-    public static LeaseTermTenant getCurrentUserTenantInLease() {
+    public static LeaseTermTenant getTenantInLease() {
         EntityQueryCriteria<LeaseTermTenant> criteria = EntityQueryCriteria.create(LeaseTermTenant.class);
-        criteria.eq(criteria.proto().leaseParticipant().customer().user(), ResidentPortalContext.getCurrentUser());
-        criteria.eq(criteria.proto().leaseParticipant().lease(), getCurrentUserLeaseIdStub());
+        criteria.eq(criteria.proto().leaseParticipant().customer().user(), getCustomerUserIdStub());
+        criteria.eq(criteria.proto().leaseParticipant().lease(), getLeaseIdStub());
         criteria.isCurrent(criteria.proto().leaseTermV());
         criteria.eq(criteria.proto().leaseTermV().holder(), criteria.proto().leaseTermV().holder().lease().currentTerm());
         return Persistence.service().retrieve(criteria);
     }
 
-    public static AptUnit getCurrentCustomerUnit() {
+    public static AptUnit getUnit() {
         EntityQueryCriteria<AptUnit> criteria = EntityQueryCriteria.create(AptUnit.class);
-        criteria.eq(criteria.proto()._Leases(), getCurrentUserLeaseIdStub());
+        criteria.eq(criteria.proto()._Leases(), getLeaseIdStub());
         return Persistence.service().retrieve(criteria);
-    }
-
-    public static Lease getCurrentUserLease() {
-        return Persistence.service().retrieve(Lease.class, getCurrentUserLeaseIdStub().getPrimaryKey());
     }
 
 }

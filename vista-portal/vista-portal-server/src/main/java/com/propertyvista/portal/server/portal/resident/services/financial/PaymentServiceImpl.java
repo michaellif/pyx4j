@@ -61,7 +61,7 @@ public class PaymentServiceImpl implements PaymentService {
         }.createTO(dbo);
 
         // enhance dto:
-        Lease lease = ResidentPortalContext.getCurrentUserLease();
+        Lease lease = ResidentPortalContext.getLease();
         Persistence.service().retrieve(lease.unit());
         Persistence.service().retrieve(lease.unit().building());
 
@@ -85,7 +85,7 @@ public class PaymentServiceImpl implements PaymentService {
         PaymentMethodDTO dto = new PaymentMethodDtoBinder().createTO(Persistence.secureRetrieve(LeasePaymentMethod.class, itemId.getPrimaryKey()));
 
         // enhance dto:
-        Lease lease = ResidentPortalContext.getCurrentUserLease();
+        Lease lease = ResidentPortalContext.getLease();
         Persistence.service().retrieve(lease.unit());
         Persistence.service().retrieve(lease.unit().building());
 
@@ -104,7 +104,7 @@ public class PaymentServiceImpl implements PaymentService {
     public void getPaymentMethodSummary(AsyncCallback<PaymentMethodSummaryDTO> callback) {
         PaymentMethodSummaryDTO summary = EntityFactory.create(PaymentMethodSummaryDTO.class);
 
-        Lease lease = ResidentPortalContext.getCurrentUserLease();
+        Lease lease = ResidentPortalContext.getLease();
 
         summary.paymentMethods().addAll(retrievePaymentMethods(lease));
 
@@ -125,7 +125,7 @@ public class PaymentServiceImpl implements PaymentService {
         AutoPayDTO dto = new AutoPayDtoBinder().createTO(dbo);
 
         // enhance dto:
-        Lease lease = ResidentPortalContext.getCurrentUserLease();
+        Lease lease = ResidentPortalContext.getLease();
         Persistence.service().retrieve(lease.unit().building());
 
         dto.electronicPaymentsAllowed().setValue(ServerSideFactory.create(PaymentFacade.class).isElectronicPaymentsSetup(lease.billingAccount()));
@@ -154,7 +154,7 @@ public class PaymentServiceImpl implements PaymentService {
     public void getAutoPaySummary(AsyncCallback<AutoPaySummaryDTO> callback) {
         AutoPaySummaryDTO summary = EntityFactory.create(AutoPaySummaryDTO.class);
 
-        Lease lease = ResidentPortalContext.getCurrentUserLease();
+        Lease lease = ResidentPortalContext.getLease();
 
         summary.currentAutoPayments().addAll(retrieveCurrentAutoPayments(lease));
         summary.currentAutoPayDate().setValue(ServerSideFactory.create(PaymentMethodFacade.class).getNextAutopayDate(lease));
@@ -170,7 +170,7 @@ public class PaymentServiceImpl implements PaymentService {
         List<PaymentMethodInfoDTO> paymentMethods = new ArrayList<PaymentMethodInfoDTO>();
 
         List<LeasePaymentMethod> methods = ServerSideFactory.create(PaymentMethodFacade.class).retrieveLeasePaymentMethods(
-                ResidentPortalContext.getCurrentUserTenantInLease(), PaymentMethodUsage.InProfile, VistaApplication.resident);
+                ResidentPortalContext.getTenantInLease(), PaymentMethodUsage.InProfile, VistaApplication.resident);
 
         for (LeasePaymentMethod pm : methods) {
             PaymentMethodInfoDTO pmi = EntityFactory.create(PaymentMethodInfoDTO.class);
@@ -220,7 +220,7 @@ public class PaymentServiceImpl implements PaymentService {
             autoPayInfo.paymentDate().setValue(excutionDate);
             autoPayInfo.payer().set(pap.tenant());
             Persistence.ensureRetrieve(autoPayInfo.payer(), AttachLevel.ToStringMembers);
-            if (autoPayInfo.payer().equals(ResidentPortalContext.getCurrentUserTenant())) {
+            if (autoPayInfo.payer().equals(ResidentPortalContext.getTenant())) {
                 autoPayInfo.paymentMethod().set(pap.paymentMethod());
             }
 

@@ -33,7 +33,6 @@ import com.propertyvista.domain.security.CustomerUser;
 import com.propertyvista.domain.security.VistaCustomerBehavior;
 import com.propertyvista.domain.security.common.VistaApplication;
 import com.propertyvista.domain.security.common.VistaBasicBehavior;
-import com.propertyvista.domain.tenant.prospect.MasterOnlineApplication;
 import com.propertyvista.domain.tenant.prospect.OnlineApplication;
 import com.propertyvista.portal.rpc.portal.prospect.services.ProspectAuthenticationService;
 import com.propertyvista.portal.server.portal.prospect.ProspectPortalContext;
@@ -118,7 +117,7 @@ public class ProspectAuthenticationServiceImpl extends VistaAuthenticationServic
 
         // set application in context here:
         if (selectedApplication != null) {
-            ProspectPortalContext.setCurrentUserApplication(selectedApplication);
+            ProspectPortalContext.setOnlineApplication(selectedApplication);
         }
 
         return sessionToken;

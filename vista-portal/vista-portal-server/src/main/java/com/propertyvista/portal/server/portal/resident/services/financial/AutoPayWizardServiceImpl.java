@@ -62,7 +62,7 @@ public class AutoPayWizardServiceImpl extends AbstractCrudServiceDtoImpl<Autopay
 
     @Override
     protected AutoPayDTO init(InitializationData initializationData) {
-        Lease lease = ResidentPortalContext.getCurrentUserLease();
+        Lease lease = ResidentPortalContext.getLease();
         Persistence.service().retrieve(lease.unit().building());
 
         AutoPayDTO dto = EntityFactory.create(AutoPayDTO.class);
@@ -86,7 +86,7 @@ public class AutoPayWizardServiceImpl extends AbstractCrudServiceDtoImpl<Autopay
         dto.leaseId().set(lease.leaseId());
         dto.leaseStatus().set(lease.status());
 
-        dto.tenant().set(ResidentPortalContext.getCurrentUserTenant());
+        dto.tenant().set(ResidentPortalContext.getTenant());
 
         dto.nextPaymentDate().setValue(ServerSideFactory.create(PaymentMethodFacade.class).getNextAutopayDate(lease));
 
@@ -97,10 +97,10 @@ public class AutoPayWizardServiceImpl extends AbstractCrudServiceDtoImpl<Autopay
 
     @Override
     protected void persist(AutopayAgreement bo, AutoPayDTO to) {
-        Lease lease = ResidentPortalContext.getCurrentUserLease();
+        Lease lease = ResidentPortalContext.getLease();
 
         if (bo.paymentMethod().getPrimaryKey() == null) {
-            bo.paymentMethod().customer().set(ResidentPortalContext.getCurrentUserCustomer());
+            bo.paymentMethod().customer().set(ResidentPortalContext.getCustomer());
             bo.paymentMethod().isProfiledMethod().setValue(Boolean.TRUE);
 
             ServerSideFactory.create(PaymentFacade.class).validatePaymentMethod(lease.billingAccount(), to.paymentMethod(), VistaApplication.resident);
@@ -111,18 +111,18 @@ public class AutoPayWizardServiceImpl extends AbstractCrudServiceDtoImpl<Autopay
 
         ServerSideFactory.create(PaymentFacade.class).validatePaymentMethod(lease.billingAccount(), to.paymentMethod(), VistaApplication.resident);
         bo.set(ServerSideFactory.create(PaymentMethodFacade.class).persistAutopayAgreement(bo,
-                EntityFactory.createIdentityStub(Tenant.class, ResidentPortalContext.getCurrentUserTenant().getPrimaryKey())));
+                EntityFactory.createIdentityStub(Tenant.class, ResidentPortalContext.getTenant().getPrimaryKey())));
     }
 
     @Override
     protected void enhanceRetrieved(AutopayAgreement bo, AutoPayDTO to, com.pyx4j.entity.rpc.AbstractCrudService.RetrieveTarget retrieveTarget) {
         super.enhanceRetrieved(bo, to, retrieveTarget);
 
-        if (!to.tenant().equals(ResidentPortalContext.getCurrentUserTenant())) {
+        if (!to.tenant().equals(ResidentPortalContext.getTenant())) {
             to.paymentMethod().set(null);
         }
 
-        Lease lease = ResidentPortalContext.getCurrentUserLease();
+        Lease lease = ResidentPortalContext.getLease();
         Persistence.service().retrieve(lease.unit().building());
 
         to.electronicPaymentsAllowed().setValue(ServerSideFactory.create(PaymentFacade.class).isElectronicPaymentsSetup(lease.billingAccount()));
@@ -146,13 +146,13 @@ public class AutoPayWizardServiceImpl extends AbstractCrudServiceDtoImpl<Autopay
     @Override
     public void getProfiledPaymentMethods(AsyncCallback<Vector<LeasePaymentMethod>> callback) {
         List<LeasePaymentMethod> methods = ServerSideFactory.create(PaymentMethodFacade.class).retrieveLeasePaymentMethods(
-                ResidentPortalContext.getCurrentUserTenantInLease(), PaymentMethodUsage.AutopayAgreementSetup, VistaApplication.resident);
+                ResidentPortalContext.getTenantInLease(), PaymentMethodUsage.AutopayAgreementSetup, VistaApplication.resident);
         callback.onSuccess(new Vector<LeasePaymentMethod>(methods));
     }
 
     @Override
     public void getCurrentAddress(AsyncCallback<AddressSimple> callback) {
-        callback.onSuccess(AddressRetriever.getLeaseParticipantCurrentAddressSimple(ResidentPortalContext.getCurrentUserTenant()));
+        callback.onSuccess(AddressRetriever.getLeaseParticipantCurrentAddressSimple(ResidentPortalContext.getTenant()));
     }
 
     @Override

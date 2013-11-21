@@ -64,7 +64,7 @@ public class PaymentWizardServiceImpl extends AbstractCrudServiceDtoImpl<Payment
 
     @Override
     protected PaymentDTO init(InitializationData initializationData) {
-        Lease lease = ResidentPortalContext.getCurrentUserLease();
+        Lease lease = ResidentPortalContext.getLease();
         Persistence.service().retrieve(lease.unit());
         Persistence.service().retrieve(lease.unit().building());
 
@@ -87,7 +87,7 @@ public class PaymentWizardServiceImpl extends AbstractCrudServiceDtoImpl<Payment
         dto.leaseId().set(lease.leaseId());
         dto.leaseStatus().set(lease.status());
 
-        dto.leaseTermParticipant().set(ResidentPortalContext.getCurrentUserTenantInLease());
+        dto.leaseTermParticipant().set(ResidentPortalContext.getTenantInLease());
 
         // some default values:
         dto.createdDate().setValue(new LogicalDate(SystemDateManager.getDate()));
@@ -105,9 +105,9 @@ public class PaymentWizardServiceImpl extends AbstractCrudServiceDtoImpl<Payment
 
     @Override
     protected void persist(PaymentRecord bo, PaymentDTO to) {
-        Lease lease = Persistence.service().retrieve(Lease.class, ResidentPortalContext.getCurrentUserLeaseIdStub().getPrimaryKey());
+        Lease lease = Persistence.service().retrieve(Lease.class, ResidentPortalContext.getLeaseIdStub().getPrimaryKey());
 
-        bo.paymentMethod().customer().set(ResidentPortalContext.getCurrentUserCustomer());
+        bo.paymentMethod().customer().set(ResidentPortalContext.getCustomer());
         bo.billingAccount().set(lease.billingAccount());
 
         // Do not change profile methods
@@ -140,20 +140,20 @@ public class PaymentWizardServiceImpl extends AbstractCrudServiceDtoImpl<Payment
 
     @Override
     public void getCurrentAddress(AsyncCallback<AddressSimple> callback) {
-        callback.onSuccess(AddressRetriever.getLeaseParticipantCurrentAddressSimple(ResidentPortalContext.getCurrentUserTenant()));
+        callback.onSuccess(AddressRetriever.getLeaseParticipantCurrentAddressSimple(ResidentPortalContext.getTenant()));
     }
 
     @Override
     public void getProfiledPaymentMethods(AsyncCallback<Vector<LeasePaymentMethod>> callback) {
         List<LeasePaymentMethod> methods = ServerSideFactory.create(PaymentMethodFacade.class).retrieveLeasePaymentMethods(
-                ResidentPortalContext.getCurrentUserTenantInLease(), PaymentMethodUsage.OneTimePayments, VistaApplication.resident);
+                ResidentPortalContext.getTenantInLease(), PaymentMethodUsage.OneTimePayments, VistaApplication.resident);
         callback.onSuccess(new Vector<LeasePaymentMethod>(methods));
     }
 
     @Override
     public void getConvenienceFee(AsyncCallback<PaymentConvenienceFeeDTO> callback, PaymentConvenienceFeeDTO to) {
         if (to.paymentMethod().details().isInstanceOf(CreditCardInfo.class)) {
-            Lease lease = ResidentPortalContext.getCurrentUserLease();
+            Lease lease = ResidentPortalContext.getLease();
 
             CreditCardType ccType = to.paymentMethod().details().<CreditCardInfo> cast().cardType().getValue();
             if (ServerSideFactory.create(PaymentFacade.class).getConvenienceFeeApplicableCardTypes(lease.billingAccount(), VistaApplication.resident)

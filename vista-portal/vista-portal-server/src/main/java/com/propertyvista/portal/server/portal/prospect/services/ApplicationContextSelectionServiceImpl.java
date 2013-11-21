@@ -36,7 +36,7 @@ public class ApplicationContextSelectionServiceImpl implements ApplicationContex
     //TODO Implement CustomerFacade.getActiveOnlineApplications and AddressRetriever.getOnlineApplicationAddress
     public void getApplicationContextChoices(AsyncCallback<Vector<OnlineApplicationContextChoiceDTO>> callback) {
         List<OnlineApplication> activeApplications = ServerSideFactory.create(OnlineApplicationFacade.class).getOnlineApplications(
-                ResidentPortalContext.getCurrentUser());
+                ResidentPortalContext.getCustomerUserIdStub());
         Vector<OnlineApplicationContextChoiceDTO> choices = new Vector<OnlineApplicationContextChoiceDTO>(activeApplications.size());
 
         for (OnlineApplication onlineApplication : activeApplications) {

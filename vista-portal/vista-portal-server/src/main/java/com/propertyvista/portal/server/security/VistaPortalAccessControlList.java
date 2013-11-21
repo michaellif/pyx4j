@@ -69,11 +69,11 @@ import com.propertyvista.portal.rpc.portal.shared.services.PortalPolicyRetrieveS
 import com.propertyvista.portal.rpc.portal.shared.services.PortalVistaTermsService;
 import com.propertyvista.portal.rpc.portal.shared.services.SiteThemeServices;
 import com.propertyvista.portal.rpc.shared.services.CreditCardValidationService;
-import com.propertyvista.portal.server.security.access.AutopayAgreementTenantDatasetAccessRule;
-import com.propertyvista.portal.server.security.access.CustomrPictureTenantDatasetAccessRule;
-import com.propertyvista.portal.server.security.access.GeneralInsurancePolicyDatasetAccessRule;
-import com.propertyvista.portal.server.security.access.InsuranceCertificateScanDatasetAccessRule;
-import com.propertyvista.portal.server.security.access.LeasePaymentMethodTenantDatasetAccessRule;
+import com.propertyvista.portal.server.security.access.resident.AutopayAgreementTenantDatasetAccessRule;
+import com.propertyvista.portal.server.security.access.resident.CustomrPictureTenantDatasetAccessRule;
+import com.propertyvista.portal.server.security.access.resident.GeneralInsurancePolicyDatasetAccessRule;
+import com.propertyvista.portal.server.security.access.resident.InsuranceCertificateScanDatasetAccessRule;
+import com.propertyvista.portal.server.security.access.resident.LeasePaymentMethodTenantDatasetAccessRule;
 import com.propertyvista.server.common.security.UserEntityInstanceAccess;
 
 public class VistaPortalAccessControlList extends ServletContainerAclBuilder {
@@ -122,11 +122,9 @@ public class VistaPortalAccessControlList extends ServletContainerAclBuilder {
         InstanceAccess userEntityAccess = new UserEntityInstanceAccess();
         grant(VistaCustomerBehavior.Prospective, new EntityPermission(OnlineApplication.class, userEntityAccess, CRUD));
 
-        InstanceAccess applicationEntityAccess = new ApplicationEntityInstanceAccess();
-
         grant(VistaCustomerBehavior.Prospective, new EntityPermission(OrganizationPoliciesNode.class, EntityPermission.READ));
         grant(VistaCustomerBehavior.Prospective, new EntityPermission(IdentificationDocumentType.class, EntityPermission.READ));
-        grant(VistaCustomerBehavior.Prospective, new EntityPermission(LeaseTermTenant.class, applicationEntityAccess, CRUD));
+        grant(VistaCustomerBehavior.Prospective, new EntityPermission(LeaseTermTenant.class, CRUD));
 
         grant(VistaCustomerBehavior.ProspectiveApplicant, VistaCustomerBehavior.Prospective);
         grant(VistaCustomerBehavior.ProspectiveCoApplicant, VistaCustomerBehavior.Prospective);

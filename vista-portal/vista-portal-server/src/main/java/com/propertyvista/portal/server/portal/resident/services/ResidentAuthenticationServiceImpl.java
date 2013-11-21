@@ -149,7 +149,7 @@ public class ResidentAuthenticationServiceImpl extends VistaAuthenticationServic
         String sessionToken = super.beginSession(user, credentials, actualBehaviors, additionalConditions);
 
         if (selectedLease != null) {
-            ResidentPortalContext.setCurrentUserLease(selectedLease);
+            ResidentPortalContext.setLease(selectedLease);
         }
         return sessionToken;
     }

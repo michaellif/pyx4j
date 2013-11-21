@@ -55,7 +55,7 @@ public class MaintenanceRequestCrudServiceImpl extends AbstractCrudServiceDtoImp
 
     @Override
     protected MaintenanceRequestDTO init(InitializationData initializationData) {
-        Tenant tenant = ResidentPortalContext.getCurrentUserTenantInLease().leaseParticipant();
+        Tenant tenant = ResidentPortalContext.getTenantInLease().leaseParticipant();
         MaintenanceRequest maintenanceRequest = ServerSideFactory.create(MaintenanceFacade.class).createNewRequestForTenant(tenant);
         return createTO(maintenanceRequest);
     }
@@ -72,7 +72,7 @@ public class MaintenanceRequestCrudServiceImpl extends AbstractCrudServiceDtoImp
 
     protected void enhanceAll(MaintenanceRequestDTO dto) {
         enhanceDbo(dto);
-        dto.reportedForOwnUnit().setValue(ResidentPortalContext.getCurrentCustomerUnit().id().equals(dto.unit().id()));
+        dto.reportedForOwnUnit().setValue(ResidentPortalContext.getUnit().id().equals(dto.unit().id()));
         // populate latest scheduled info
         if (!dto.workHistory().isEmpty()) {
             MaintenanceRequestSchedule latest = dto.workHistory().get(dto.workHistory().size() - 1);
@@ -126,7 +126,7 @@ public class MaintenanceRequestCrudServiceImpl extends AbstractCrudServiceDtoImp
 
     @Override
     public void getCategoryMeta(AsyncCallback<MaintenanceRequestMetadata> callback, boolean levelsOnly) {
-        Tenant tenant = ResidentPortalContext.getCurrentUserTenantInLease().leaseParticipant();
+        Tenant tenant = ResidentPortalContext.getTenantInLease().leaseParticipant();
         Persistence.ensureRetrieve(tenant.lease(), AttachLevel.Attached);
         Persistence.ensureRetrieve(tenant.lease().unit(), AttachLevel.Attached);
         Persistence.ensureRetrieve(tenant.lease().unit().building(), AttachLevel.Attached);
@@ -142,7 +142,7 @@ public class MaintenanceRequestCrudServiceImpl extends AbstractCrudServiceDtoImp
     public void retreiveMaintenanceSummary(AsyncCallback<MaintenanceSummaryDTO> callback) {
         MaintenanceSummaryDTO dto = EntityFactory.create(MaintenanceSummaryDTO.class);
         List<MaintenanceRequest> requests = ServerSideFactory.create(MaintenanceFacade.class).getMaintenanceRequests(
-                EnumSet.allOf(MaintenanceRequestStatus.StatusPhase.class), ResidentPortalContext.getCurrentUserTenant());
+                EnumSet.allOf(MaintenanceRequestStatus.StatusPhase.class), ResidentPortalContext.getTenant());
         for (MaintenanceRequest mr : requests) {
             MaintenanceRequestStatusDTO statusDto = EntityFactory.create(MaintenanceRequestStatusDTO.class);
             statusDto.id().setValue(mr.getPrimaryKey());

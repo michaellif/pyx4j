@@ -54,7 +54,7 @@ public class GeneralInsurancePolicyCrudServiceImpl extends AbstractCrudServiceDt
 
     @Override
     public void create(AsyncCallback<Key> callback, GeneralInsurancePolicyDTO dto) {
-        ServerSideFactory.create(GeneralInsuranceFacade.class).createGeneralTenantInsurance(ResidentPortalContext.getCurrentUserTenant(), dto.certificate());
+        ServerSideFactory.create(GeneralInsuranceFacade.class).createGeneralTenantInsurance(ResidentPortalContext.getTenant(), dto.certificate());
         Persistence.service().commit();
         callback.onSuccess(null);
     }
@@ -83,7 +83,7 @@ public class GeneralInsurancePolicyCrudServiceImpl extends AbstractCrudServiceDt
     }
 
     private void populateMinLiability(GeneralInsurancePolicyDTO to) {
-        Lease lease = Persistence.service().retrieve(Lease.class, ResidentPortalContext.getCurrentUserLeaseIdStub().getPrimaryKey());
+        Lease lease = Persistence.service().retrieve(Lease.class, ResidentPortalContext.getLeaseIdStub().getPrimaryKey());
         TenantInsurancePolicy insurancePolicy = ServerSideFactory.create(PolicyFacade.class).obtainEffectivePolicy(lease.unit(), TenantInsurancePolicy.class);
         to.minLiability().setValue(insurancePolicy.requireMinimumLiability().isBooleanTrue() ? insurancePolicy.minimumRequiredLiability().getValue() : null);
     }
