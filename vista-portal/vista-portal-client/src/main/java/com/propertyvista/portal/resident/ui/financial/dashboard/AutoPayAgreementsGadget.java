@@ -28,13 +28,16 @@ import com.pyx4j.forms.client.ui.folder.CEntityFolderItem;
 import com.pyx4j.forms.client.ui.folder.IFolderItemDecorator;
 import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.security.shared.SecurityController;
 import com.pyx4j.widgets.client.Anchor;
 import com.pyx4j.widgets.client.Button;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
 
+import com.propertyvista.common.client.policy.ClientPolicyManager;
 import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
 import com.propertyvista.domain.payment.PaymentMethod;
+import com.propertyvista.domain.policy.policies.AutoPayPolicy;
 import com.propertyvista.domain.security.VistaCustomerPaymentTypeBehavior;
 import com.propertyvista.domain.tenant.lease.Tenant;
 import com.propertyvista.portal.rpc.portal.resident.dto.financial.AutoPayInfoDTO;
@@ -85,24 +88,34 @@ public class AutoPayAgreementsGadget extends AbstractGadget<FinancialDashboardVi
 
     class AutoPaysView extends CEntityForm<AutoPaySummaryDTO> {
 
-        private final BasicFlexFormPanel mainPanel;
+        private final AutoPayFolder autoPayFolder = new AutoPayFolder();
 
         public AutoPaysView() {
             super(AutoPaySummaryDTO.class);
-
-            mainPanel = new BasicFlexFormPanel();
-
         }
 
         @Override
         public IsWidget createContent() {
+            BasicFlexFormPanel mainPanel = new BasicFlexFormPanel();
             int row = -1;
 
             mainPanel.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().nextAutoPayDate(), new CDateLabel()), 100).build());
             mainPanel.setBR(++row, 0, 1);
-            mainPanel.setWidget(++row, 0, inject(proto().currentAutoPayments(), new AutoPayFolder()));
+            mainPanel.setWidget(++row, 0, inject(proto().currentAutoPayments(), autoPayFolder));
 
             return mainPanel;
+        }
+
+        @Override
+        protected void onValueSet(boolean populate) {
+            super.onValueSet(populate);
+
+            ClientPolicyManager.obtainEffectivePolicy(getValue().building(), AutoPayPolicy.class, new DefaultAsyncCallback<AutoPayPolicy>() {
+                @Override
+                public void onSuccess(AutoPayPolicy result) {
+                    autoPayFolder.setRemovable(result.allowCancelationByResident().isBooleanTrue());
+                }
+            });
         }
     }
 

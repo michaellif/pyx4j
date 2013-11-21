@@ -160,6 +160,7 @@ public class PaymentServiceImpl implements PaymentService {
         summary.currentAutoPayDate().setValue(ServerSideFactory.create(PaymentMethodFacade.class).getNextAutopayDate(lease));
         summary.nextAutoPayDate().setValue(ServerSideFactory.create(PaymentMethodFacade.class).getNextAutopayDate(lease));
         summary.leaseStatus().setValue(lease.status().getValue());
+        summary.building().set(lease.unit().building());
 
         callback.onSuccess(summary);
     }
