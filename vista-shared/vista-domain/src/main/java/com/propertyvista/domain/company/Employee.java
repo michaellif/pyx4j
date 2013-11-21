@@ -20,6 +20,7 @@ import com.pyx4j.entity.adapters.index.AlphanumIndexAdapter;
 import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.CascadeType;
 import com.pyx4j.entity.annotations.Detached;
+import com.pyx4j.entity.annotations.DiscriminatorValue;
 import com.pyx4j.entity.annotations.Editor;
 import com.pyx4j.entity.annotations.Indexed;
 import com.pyx4j.entity.annotations.JoinTable;
@@ -36,12 +37,14 @@ import com.pyx4j.entity.shared.AttachLevel;
 import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
 
+import com.propertyvista.domain.note.HasNotesAndAttachments;
 import com.propertyvista.domain.person.Person;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.security.CrmUser;
 
 @ToStringFormat("{0}, {1}")
-public interface Employee extends Person {
+@DiscriminatorValue("Employee")
+public interface Employee extends Person, HasNotesAndAttachments {
 
     @NotNull
     @ToString(index = 63)

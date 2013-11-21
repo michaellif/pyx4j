@@ -22,7 +22,7 @@ import com.pyx4j.entity.shared.IPrimitive;
 
 import com.propertyvista.domain.policy.framework.PolicyNode;
 
-@DiscriminatorValue("Disc_Province")
+@DiscriminatorValue("Province")
 public interface Province extends PolicyNode {
 
     @ToString

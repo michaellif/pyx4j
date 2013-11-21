@@ -19,6 +19,7 @@ import java.util.Date;
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.Detached;
+import com.pyx4j.entity.annotations.DiscriminatorValue;
 import com.pyx4j.entity.annotations.Editor;
 import com.pyx4j.entity.annotations.Editor.EditorType;
 import com.pyx4j.entity.annotations.Format;
@@ -38,12 +39,14 @@ import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.i18n.annotations.I18n;
 
+import com.propertyvista.domain.note.HasNotesAndAttachments;
 import com.propertyvista.domain.security.common.AbstractPmcUser;
 import com.propertyvista.domain.tenant.lease.BillableItem;
 import com.propertyvista.domain.tenant.lease.Tenant;
 
 @Caption(name = "Pre-Authorized Payment Agreement")
-public interface AutopayAgreement extends IEntity {
+@DiscriminatorValue("AutopayAgreement")
+public interface AutopayAgreement extends IEntity, HasNotesAndAttachments {
 
     public interface AutopayAgreementCoveredItem extends IEntity {
 

@@ -13,8 +13,8 @@
  */
 package com.propertyvista.crm.client.activity.crud;
 
-import com.pyx4j.commons.GWTJava5Helper;
 import com.pyx4j.entity.rpc.AbstractCrudService;
+import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.client.activity.AbstractViewerActivity;
@@ -23,7 +23,7 @@ import com.pyx4j.site.rpc.CrudAppPlace;
 
 import com.propertyvista.crm.client.event.CrudNavigateEvent;
 import com.propertyvista.crm.client.visor.notes.NotesAndAttachmentsVisorController;
-import com.propertyvista.shared.NotesParentId;
+import com.propertyvista.domain.note.HasNotesAndAttachments;
 
 public class CrmViewerActivity<E extends IEntity> extends AbstractViewerActivity<E> {
 
@@ -49,6 +49,7 @@ public class CrmViewerActivity<E extends IEntity> extends AbstractViewerActivity
         AppSite.getEventBus().fireEvent(new CrudNavigateEvent(place, result));
     }
 
+    // TODO VISTA-3708 create when HasNotesAndAttachments
     public NotesAndAttachmentsVisorController getNotesAndAttachmentsController() {
         if (notesAndAttachmentsController == null) {
             notesAndAttachmentsController = new NotesAndAttachmentsVisorController(getView(), createNotesParentId());
@@ -56,13 +57,13 @@ public class CrmViewerActivity<E extends IEntity> extends AbstractViewerActivity
         return notesAndAttachmentsController;
     }
 
-    protected NotesParentId createNotesParentId() {
-        return new NotesParentId(entityClass, getEntityId());
+    protected HasNotesAndAttachments createNotesParentId() {
+        IEntity reflectionCapableInstance = EntityFactory.createIdentityStub(entityClass, getEntityId());
+        if (reflectionCapableInstance.isInstanceOf(HasNotesAndAttachments.class)) {
+            return (HasNotesAndAttachments) reflectionCapableInstance;
+        } else {
+            return null;
+        }
     }
 
-    // TODO : this algorithm should be revised 
-    //TODO use EntityMeta or ClassName.getClassName(klass)
-    public final String getEntitySimpleClassName(Class<? extends IEntity> entityClass) {
-        return GWTJava5Helper.getSimpleName(entityClass);
-    }
 }

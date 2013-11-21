@@ -19,15 +19,14 @@ import com.google.gwt.user.client.Command;
 import com.pyx4j.commons.Key;
 import com.pyx4j.entity.rpc.EntitySearchResult;
 import com.pyx4j.entity.shared.criterion.EntityListCriteria;
-import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.site.client.activity.AbstractVisorController;
 import com.pyx4j.site.client.ui.IPane;
 
 import com.propertyvista.crm.rpc.services.notes.NotesAndAttachmentsCrudService;
+import com.propertyvista.domain.note.HasNotesAndAttachments;
 import com.propertyvista.domain.note.NotesAndAttachments;
-import com.propertyvista.shared.NotesParentId;
 
 public class NotesAndAttachmentsVisorController extends AbstractVisorController {
 
@@ -37,9 +36,9 @@ public class NotesAndAttachmentsVisorController extends AbstractVisorController 
 
     private final NotesAndAttachmentsVisorView visor;
 
-    private final NotesParentId notesParentId;
+    private final HasNotesAndAttachments notesParentId;
 
-    public NotesAndAttachmentsVisorController(IPane parentView, NotesParentId notesParentId) {
+    public NotesAndAttachmentsVisorController(IPane parentView, HasNotesAndAttachments notesParentId) {
         super(parentView);
         service = GWT.<NotesAndAttachmentsCrudService> create(NotesAndAttachmentsCrudService.class);
         visor = new NotesAndAttachmentsVisorView(this);
@@ -59,14 +58,12 @@ public class NotesAndAttachmentsVisorController extends AbstractVisorController 
 
     public void populate(DefaultAsyncCallback<EntitySearchResult<NotesAndAttachments>> callback) {
         EntityListCriteria<NotesAndAttachments> criteria = new EntityListCriteria<NotesAndAttachments>(NotesAndAttachments.class);
-        criteria.add(PropertyCriterion.eq(criteria.proto().ownerClass(), notesParentId.getOwnerClass()));
-        criteria.add(PropertyCriterion.eq(criteria.proto().ownerId(), notesParentId.getOwnerId()));
+        criteria.eq(criteria.proto().owner(), notesParentId);
         service.list(callback, criteria);
     }
 
     public void save(NotesAndAttachments item, DefaultAsyncCallback<Key> callback) {
-        item.ownerClass().setValue(notesParentId.getOwnerClass());
-        item.ownerId().setValue(notesParentId.getOwnerId());
+        item.owner().set(notesParentId);
         if (item.getPrimaryKey() == null) {
             service.create(callback, item);
         } else {

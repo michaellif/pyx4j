@@ -33,7 +33,7 @@ import com.pyx4j.entity.shared.ISet;
 import com.propertyvista.domain.property.vendor.LicensedWarrantedMaintained;
 
 @ToStringFormat("{0}, {1}")
-@DiscriminatorValue("Roof_BuildingElement")
+@DiscriminatorValue("Roof")
 public interface Roof extends LicensedWarrantedMaintained, BuildingElement {
 
     @ToString(index = 0)

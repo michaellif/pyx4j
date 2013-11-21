@@ -16,6 +16,7 @@ package com.propertyvista.domain.property.asset;
 import javax.xml.bind.annotation.XmlType;
 
 import com.pyx4j.entity.annotations.Detached;
+import com.pyx4j.entity.annotations.DiscriminatorValue;
 import com.pyx4j.entity.annotations.JoinColumn;
 import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.annotations.Owner;
@@ -27,10 +28,11 @@ import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.i18n.annotations.I18n;
 import com.pyx4j.i18n.shared.I18nEnum;
 
+import com.propertyvista.domain.note.HasNotesAndAttachments;
 import com.propertyvista.shared.adapters.LockerCountersAdapter;
 
-//TODO - replace inheritance on IEntity!!
-public interface Locker extends IEntity {
+@DiscriminatorValue("Locker")
+public interface Locker extends IEntity, HasNotesAndAttachments {
 
     @I18n
     @XmlType(name = "LockerType")

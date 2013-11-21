@@ -18,6 +18,7 @@ import java.math.BigDecimal;
 import com.pyx4j.commons.Key;
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.annotations.Detached;
+import com.pyx4j.entity.annotations.DiscriminatorValue;
 import com.pyx4j.entity.annotations.Editor;
 import com.pyx4j.entity.annotations.Editor.EditorType;
 import com.pyx4j.entity.annotations.Format;
@@ -33,8 +34,10 @@ import com.pyx4j.i18n.shared.I18nEnum;
 
 import com.propertyvista.domain.financial.PaymentRecord.PaidOrRejectedAggregatedTransferId;
 import com.propertyvista.domain.financial.PaymentRecord.ReturnAggregatedTransferId;
+import com.propertyvista.domain.note.HasNotesAndAttachments;
 
-public interface AggregatedTransfer extends IEntity {
+@DiscriminatorValue("AggregatedTransfer")
+public interface AggregatedTransfer extends IEntity, HasNotesAndAttachments {
 
     @I18n
     enum AggregatedTransferStatus {

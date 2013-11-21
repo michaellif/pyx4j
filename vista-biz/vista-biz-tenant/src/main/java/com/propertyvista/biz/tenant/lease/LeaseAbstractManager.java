@@ -90,7 +90,6 @@ import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
 import com.propertyvista.domain.tenant.lease.LeaseTermParticipant.Role;
 import com.propertyvista.domain.tenant.lease.LeaseTermTenant;
 import com.propertyvista.domain.tenant.lease.Tenant;
-import com.propertyvista.shared.NotesParentId;
 
 public abstract class LeaseAbstractManager {
 
@@ -982,8 +981,7 @@ public abstract class LeaseAbstractManager {
 
     private NotesAndAttachments creteLeaseNote(Lease leaseId, String subject, String note, CrmUser user) {
         NotesAndAttachments naa = EntityFactory.create(NotesAndAttachments.class);
-
-        new NotesParentId(leaseId).setOwner(naa);
+        naa.owner().set(leaseId);
 
         naa.subject().setValue(subject);
         naa.note().setValue(note);

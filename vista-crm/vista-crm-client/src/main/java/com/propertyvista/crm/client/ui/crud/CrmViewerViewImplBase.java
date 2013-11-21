@@ -72,6 +72,7 @@ public class CrmViewerViewImplBase<E extends IEntity> extends AbstractViewer<E> 
         this.viewOnly = viewOnly;
 
         // Notes button:
+        // TODO VISTA-3708 create when HasNotesAndAttachments
         addHeaderToolbarItem((notesButton = new Button(i18n.tr("Notes"), new Command() {
             @SuppressWarnings("unchecked")
             @Override

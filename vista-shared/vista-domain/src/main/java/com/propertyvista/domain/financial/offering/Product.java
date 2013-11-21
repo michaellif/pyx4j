@@ -35,11 +35,12 @@ import com.pyx4j.i18n.annotations.I18n;
 
 import com.propertyvista.domain.financial.ARCode;
 import com.propertyvista.domain.financial.offering.Product.ProductV;
+import com.propertyvista.domain.note.HasNotesAndAttachments;
 
 @AbstractEntity
 @Inheritance(strategy = Inheritance.InheritanceStrategy.SINGLE_TABLE)
 @I18n(strategy = I18n.I18nStrategy.IgnoreThis)
-public interface Product<V extends ProductV<?>> extends IVersionedEntity<V>, ILooseVersioning {
+public interface Product<V extends ProductV<?>> extends IVersionedEntity<V>, ILooseVersioning, HasNotesAndAttachments {
 
     @Owner
     @NotNull

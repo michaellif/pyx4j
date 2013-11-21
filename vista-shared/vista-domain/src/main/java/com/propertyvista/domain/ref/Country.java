@@ -25,7 +25,7 @@ import com.pyx4j.entity.shared.ISet;
 
 import com.propertyvista.domain.policy.framework.PolicyNode;
 
-@DiscriminatorValue("Disc_Country")
+@DiscriminatorValue("Country")
 public interface Country extends PolicyNode {
 
     @ToString

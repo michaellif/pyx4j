@@ -22,6 +22,7 @@ import com.pyx4j.commons.Key;
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.adapters.index.AlphanumIndexAdapter;
 import com.pyx4j.entity.annotations.Detached;
+import com.pyx4j.entity.annotations.DiscriminatorValue;
 import com.pyx4j.entity.annotations.Indexed;
 import com.pyx4j.entity.annotations.JoinColumn;
 import com.pyx4j.entity.annotations.Length;
@@ -44,10 +45,12 @@ import com.pyx4j.i18n.shared.I18nEnum;
 
 import com.propertyvista.domain.financial.ARCode;
 import com.propertyvista.domain.financial.BillingAccount;
+import com.propertyvista.domain.note.HasNotesAndAttachments;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 
 @ToStringFormat("{0}, {1}, {2}, {3}")
-public interface Lease extends IEntity {
+@DiscriminatorValue("Lease")
+public interface Lease extends IEntity, HasNotesAndAttachments {
 
     @I18n(context = "Lease Status")
     @XmlType(name = "LeaseStatus")

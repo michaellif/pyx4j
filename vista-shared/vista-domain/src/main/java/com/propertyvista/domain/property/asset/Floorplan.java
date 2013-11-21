@@ -36,11 +36,12 @@ import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.i18n.annotations.I18n;
 
 import com.propertyvista.domain.MediaFile;
+import com.propertyvista.domain.note.HasNotesAndAttachments;
 import com.propertyvista.domain.policy.framework.PolicyNode;
 import com.propertyvista.domain.property.asset.building.Building;
 
-@DiscriminatorValue("Disc_Floorplan")
-public interface Floorplan extends PolicyNode {
+@DiscriminatorValue("Floorplan")
+public interface Floorplan extends PolicyNode, HasNotesAndAttachments {
 
     @Owner
     @NotNull

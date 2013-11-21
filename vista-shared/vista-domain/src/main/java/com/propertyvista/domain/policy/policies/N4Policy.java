@@ -29,7 +29,7 @@ import com.propertyvista.domain.policy.framework.LowestApplicableNode;
 import com.propertyvista.domain.policy.framework.OrganizationPoliciesNode;
 import com.propertyvista.domain.policy.framework.Policy;
 
-@DiscriminatorValue("LeaseBillingPolicy")
+@DiscriminatorValue("N4Policy")
 @LowestApplicableNode(value = OrganizationPoliciesNode.class)
 public interface N4Policy extends Policy {
 

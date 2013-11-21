@@ -28,7 +28,7 @@ import com.pyx4j.entity.shared.AttachLevel;
 import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.entity.shared.ISet;
 
-@DiscriminatorValue("LockerArea_BuildingElement")
+@DiscriminatorValue("LockerArea")
 public interface LockerArea extends BuildingElement {
 
     @NotNull

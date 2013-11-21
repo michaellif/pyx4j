@@ -27,11 +27,12 @@ import com.pyx4j.entity.shared.AttachLevel;
 import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
 
+import com.propertyvista.domain.note.HasNotesAndAttachments;
 import com.propertyvista.domain.policy.framework.PolicyNode;
 import com.propertyvista.domain.property.asset.building.Building;
 
-@DiscriminatorValue("Disc Complex")
-public interface Complex extends PolicyNode {
+@DiscriminatorValue("Complex")
+public interface Complex extends PolicyNode, HasNotesAndAttachments {
 
     /**
      * Legal name of the property (max 120 char)

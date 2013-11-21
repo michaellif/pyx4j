@@ -19,5 +19,7 @@ import com.pyx4j.entity.shared.IList;
 
 @Transient
 public interface NotesAndAttachmentsDTO extends IEntity {
+
     IList<NotesAndAttachments> notes();
+
 }

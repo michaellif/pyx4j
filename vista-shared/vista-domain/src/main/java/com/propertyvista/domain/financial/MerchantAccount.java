@@ -16,6 +16,7 @@ package com.propertyvista.domain.financial;
 import java.util.Date;
 
 import com.pyx4j.entity.annotations.Detached;
+import com.pyx4j.entity.annotations.DiscriminatorValue;
 import com.pyx4j.entity.annotations.Editor;
 import com.pyx4j.entity.annotations.JoinTable;
 import com.pyx4j.entity.annotations.ReadOnly;
@@ -29,10 +30,12 @@ import com.pyx4j.entity.shared.ISet;
 import com.pyx4j.i18n.annotations.I18n;
 import com.pyx4j.i18n.shared.I18nEnum;
 
+import com.propertyvista.domain.note.HasNotesAndAttachments;
 import com.propertyvista.domain.property.asset.building.Building;
 
 @ToStringFormat("{1}-{0}: {2}")
-public interface MerchantAccount extends AbstractMerchantAccount {
+@DiscriminatorValue("MerchantAccount")
+public interface MerchantAccount extends AbstractMerchantAccount, HasNotesAndAttachments {
 
     @I18n
     enum MerchantAccountActivationStatus {

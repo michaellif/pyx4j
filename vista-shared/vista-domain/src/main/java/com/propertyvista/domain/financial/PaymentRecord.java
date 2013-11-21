@@ -24,6 +24,7 @@ import com.pyx4j.config.shared.ApplicationDevelopmentFeature;
 import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.ColumnId;
 import com.pyx4j.entity.annotations.Detached;
+import com.pyx4j.entity.annotations.DiscriminatorValue;
 import com.pyx4j.entity.annotations.Editor;
 import com.pyx4j.entity.annotations.Editor.EditorType;
 import com.pyx4j.entity.annotations.Format;
@@ -46,6 +47,7 @@ import com.pyx4j.i18n.annotations.I18n;
 import com.pyx4j.i18n.shared.I18nEnum;
 
 import com.propertyvista.domain.financial.billing.BillingCycle;
+import com.propertyvista.domain.note.HasNotesAndAttachments;
 import com.propertyvista.domain.payment.AutopayAgreement;
 import com.propertyvista.domain.payment.AutopayAgreement.AutopayAgreementCoveredItem;
 import com.propertyvista.domain.payment.LeasePaymentMethod;
@@ -63,7 +65,8 @@ import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
  * @author Alexs
  */
 @ToStringFormat("{0}, ${1,number,#,##0.00} - {2}")
-public interface PaymentRecord extends IEntity {
+@DiscriminatorValue("PaymentRecord")
+public interface PaymentRecord extends IEntity, HasNotesAndAttachments {
 
     @I18n
     enum PaymentStatus {
