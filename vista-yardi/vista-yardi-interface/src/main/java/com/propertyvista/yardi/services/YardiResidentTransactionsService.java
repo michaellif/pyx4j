@@ -74,6 +74,7 @@ import com.propertyvista.misc.VistaTODO;
 import com.propertyvista.operations.domain.scheduler.CompletionType;
 import com.propertyvista.yardi.bean.Properties;
 import com.propertyvista.yardi.mapper.MappingUtils;
+import com.propertyvista.yardi.merger.LeaseMerger;
 import com.propertyvista.yardi.stub.ExternalInterfaceLoggingStub;
 import com.propertyvista.yardi.stub.YardiILSGuestCardStub;
 import com.propertyvista.yardi.stub.YardiPropertyNoAccessException;
@@ -272,8 +273,8 @@ public class YardiResidentTransactionsService extends YardiAbstractService {
                 String propertyCode = building.propertyCode().getValue();
                 log.info("Processing building: {}", propertyCode);
 
-                List<Lease> activeLeases = MappingUtils.sortLeases(getActiveLeases(yardiInterfaceId, propertyCode));
-                for (final RTCustomer rtCustomer : property.getRTCustomer()) {
+                List<Lease> activeLeases = getActiveLeases(yardiInterfaceId, propertyCode);
+                for (final RTCustomer rtCustomer : LeaseMerger.sortRtCustomers(property.getRTCustomer())) {
                     String leaseId = rtCustomer.getCustomerID();
                     log.info("  for {}", leaseId);
 

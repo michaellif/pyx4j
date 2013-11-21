@@ -14,6 +14,8 @@
 package com.propertyvista.yardi.merger;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
@@ -230,7 +232,45 @@ public class LeaseMerger {
         }
     }
 
-    private LogicalDate getImportedDate(Date date) {
+    private static LogicalDate getImportedDate(Date date) {
         return (date != null ? new LogicalDate(date) : null);
+    }
+
+    /**
+     * Sort list of leases by ascending by lease end date, so current and open ended ones go last...
+     * 
+     * @param rtCustomers
+     *            - list to sort
+     * @return - sorted input list
+     */
+
+    public static List<RTCustomer> sortRtCustomers(List<RTCustomer> rtCustomers) {
+        Collections.sort(rtCustomers, new Comparator<RTCustomer>() {
+            @Override
+            public int compare(RTCustomer c1, RTCustomer c2) {
+                int res = 0;
+
+                LogicalDate ltd1 = getImportedDate(c1.getCustomers().getCustomer().get(0).getLease().getLeaseToDate());
+                LogicalDate ltd2 = getImportedDate(c2.getCustomers().getCustomer().get(0).getLease().getLeaseToDate());
+
+                if (ltd1 == null) {
+                    if (ltd2 == null) {
+                        res = 0; // both are null - assume they are the same
+                    } else {
+                        res = 1; // first is null - it is greater 
+                    }
+                } else {
+                    if (ltd2 == null) {
+                        res = -1; // second is null - first is less 
+                    } else {
+                        res = ltd1.compareTo(ltd2);
+                    }
+                }
+
+                return res;
+            }
+        });
+
+        return rtCustomers;
     }
 }
