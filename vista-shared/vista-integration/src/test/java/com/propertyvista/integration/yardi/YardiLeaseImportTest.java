@@ -19,9 +19,6 @@ import org.junit.experimental.categories.Category;
 
 import com.yardi.entity.mits.Customerinfo;
 
-import com.pyx4j.entity.server.Persistence;
-import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
-import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.gwt.server.DateUtils;
 
 import com.propertyvista.domain.tenant.lease.Lease;
@@ -135,14 +132,6 @@ public class YardiLeaseImportTest extends YardiTestBase {
             // @formatter:on
             MockEventBus.fireEvent(new LeaseChargeUpdateEvent(updater));
         }
-    }
-
-    private Lease getLeaseById(String leaseId) {
-        EntityQueryCriteria<Lease> criteria = EntityQueryCriteria.create(Lease.class);
-        criteria.add(PropertyCriterion.eq(criteria.proto().leaseId(), leaseId));
-        Lease lease = Persistence.service().retrieve(criteria);
-        Persistence.service().retrieve(lease.currentTerm().version().tenants());
-        return lease;
     }
 
     public void testOneCustomerMultipleLeases_InitialImport() throws Exception {

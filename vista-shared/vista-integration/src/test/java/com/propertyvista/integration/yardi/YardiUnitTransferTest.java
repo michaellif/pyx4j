@@ -19,9 +19,6 @@ import org.junit.experimental.categories.Category;
 
 import com.yardi.entity.mits.Customerinfo;
 
-import com.pyx4j.entity.server.Persistence;
-import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
-import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.gwt.server.DateUtils;
 
 import com.propertyvista.domain.tenant.lease.Lease;
@@ -79,13 +76,6 @@ public class YardiUnitTransferTest extends YardiTestBase {
             MockEventBus.fireEvent(new RtCustomerUpdateEvent(updater));
         }
 
-    }
-
-    private Lease getLeaseById(String leaseId) {
-        EntityQueryCriteria<Lease> criteria = EntityQueryCriteria.create(Lease.class);
-        criteria.add(PropertyCriterion.eq(criteria.proto().leaseId(), leaseId));
-        Lease lease = Persistence.service().retrieve(criteria);
-        return lease;
     }
 
     public void testUnitTransfer() throws Exception {

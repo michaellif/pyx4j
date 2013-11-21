@@ -47,7 +47,7 @@ public class MiscTests {
         MappingUtils.sortLeases(leases);
 
         assertEquals(leases.get(0), l1);
-
+        
         // -------------------------------
 
         l1.leaseTo().setValue(new LogicalDate());

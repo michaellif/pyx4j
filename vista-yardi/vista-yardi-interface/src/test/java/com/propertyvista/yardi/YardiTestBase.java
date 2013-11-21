@@ -133,6 +133,14 @@ public class YardiTestBase extends IntegrationTestBase {
         return Persistence.service().retrieve(criteria);
     }
 
+    protected Lease getLeaseById(String leaseId) {
+        EntityQueryCriteria<Lease> criteria = EntityQueryCriteria.create(Lease.class);
+        criteria.add(PropertyCriterion.eq(criteria.proto().leaseId(), leaseId));
+        Lease lease = Persistence.service().retrieve(criteria);
+        Persistence.service().retrieve(lease.currentTerm().version().tenants());
+        return lease;
+    }
+
     protected PmcYardiCredential getYardiCredential(String propertyCode) {
         final String namespace = NamespaceManager.getNamespace();
         assert (!namespace.equals(VistaNamespace.operationsNamespace)) : "Function not available when running in operations namespace";
