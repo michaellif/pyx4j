@@ -57,6 +57,10 @@ public interface MaintenanceRequestT extends IEntity {
 
     IPrimitive<String> updated();
 
+    IPrimitive<String> resolved();
+
+    IPrimitive<String> resolution();
+
     IPrimitive<String> cancellationNote();
 
     IPrimitive<String> requestViewUrl();

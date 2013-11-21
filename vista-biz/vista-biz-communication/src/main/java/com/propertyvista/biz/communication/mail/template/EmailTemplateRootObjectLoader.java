@@ -208,6 +208,8 @@ public class EmailTemplateRootObjectLoader {
             t.status().setValue(mr.status().getStringView());
             t.submitted().setValue(mr.submitted().getStringView());
             t.updated().setValue(mr.updated().getStringView());
+            t.resolved().setValue(mr.resolvedDate().getStringView());
+            t.resolution().set(mr.resolution());
             t.cancellationNote().set(mr.cancellationNote());
             // generate url for maintenance request viewer in Resident Portal
             String residentUrl = VistaDeployment.getBaseApplicationURL(VistaApplication.resident, true);

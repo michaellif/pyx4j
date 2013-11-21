@@ -16,6 +16,7 @@ package com.propertyvista.crm.rpc.services;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.commons.Key;
+import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.rpc.AbstractCrudService;
 import com.pyx4j.rpc.shared.VoidSerializable;
@@ -41,7 +42,7 @@ public interface MaintenanceCrudService extends AbstractCrudService<MaintenanceR
 
     void updateProgressAction(AsyncCallback<VoidSerializable> callback, String progressNote, Key scheduleId);
 
-    void resolveAction(AsyncCallback<VoidSerializable> callback, Key entityId);
+    void resolveAction(AsyncCallback<VoidSerializable> callback, LogicalDate resolvedOn, String resolution, Key entityId);
 
     void rateAction(AsyncCallback<VoidSerializable> callback, SurveyResponse rate, Key entityId);
 

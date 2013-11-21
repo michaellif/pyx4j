@@ -674,7 +674,7 @@ public class EmailTemplatesPolicyPreloader extends AbstractPolicyPreloader<Email
                 // WO Created: June 6, 2013
                 "<a href=\"{13}\">Request ID: {10}</a><br/>" +
                 "Request Submitted: {11}<br/>" +
-                "Current Status: {12}<br/>",
+                "Request Completed: {16}<br/>",
                 EmailTemplateManager.getVarname(requestT.propertyCode()),
                 EmailTemplateManager.getVarname(requestT.unitNo()),
                 EmailTemplateManager.getVarname(requestT.reporterName()),
@@ -691,6 +691,7 @@ public class EmailTemplatesPolicyPreloader extends AbstractPolicyPreloader<Email
                 EmailTemplateManager.getVarname(requestT.requestViewUrl()),
                 EmailTemplateManager.getVarname(bldT.PropertyMarketingName()),
                 EmailTemplateManager.getVarname(bldT.Address()),
+                EmailTemplateManager.getVarname(requestT.resolved()),
                 "SurveyURL" // TODO
         ));//@formatter:on
         return template;

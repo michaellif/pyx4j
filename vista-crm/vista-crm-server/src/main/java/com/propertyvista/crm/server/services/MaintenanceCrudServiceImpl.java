@@ -16,6 +16,7 @@ package com.propertyvista.crm.server.services;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.commons.Key;
+import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.rpc.EntitySearchResult;
 import com.pyx4j.entity.server.AbstractCrudServiceDtoImpl;
@@ -122,9 +123,11 @@ public class MaintenanceCrudServiceImpl extends AbstractCrudServiceDtoImpl<Maint
     }
 
     @Override
-    public void resolveAction(AsyncCallback<VoidSerializable> callback, Key entityId) {
+    public void resolveAction(AsyncCallback<VoidSerializable> callback, LogicalDate resolvedOn, String resolution, Key entityId) {
         MaintenanceRequest request = Persistence.service().retrieve(MaintenanceRequest.class, entityId);
         enhanceDbo(request);
+        request.resolvedDate().setValue(resolvedOn);
+        request.resolution().setValue(resolution);
         ServerSideFactory.create(MaintenanceFacade.class).resolveMaintenanceRequest(request);
         Persistence.service().commit();
         callback.onSuccess(null);

@@ -21,10 +21,14 @@ import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.MenuItem;
 import com.google.gwt.user.client.ui.Widget;
 
+import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.ui.CNumberField;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
+import com.pyx4j.forms.client.validators.EditableValueValidator;
+import com.pyx4j.forms.client.validators.ValidationError;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
 import com.pyx4j.widgets.client.dialog.OkCancelDialog;
@@ -81,7 +85,17 @@ public class MaintenanceRequestViewerViewImpl extends CrmViewerViewImplBase<Main
         transitionActions.put(StatusPhase.Resolved, new MenuItem(i18n.tr("Resolve"), new Command() {
             @Override
             public void execute() {
-                ((MaintenanceRequestViewerView.Presenter) getPresenter()).resolveAction();
+                new ResolutionBox(getForm().getValue()) {
+                    @Override
+                    public boolean onClickOk() {
+                        if (validate()) {
+                            ((MaintenanceRequestViewerView.Presenter) getPresenter()).resolveAction(getValue());
+                            return true;
+                        } else {
+                            return false;
+                        }
+                    }
+                }.show();
             }
         }));
         transitionActions.put(StatusPhase.Cancelled, new MenuItem(i18n.tr("Cancel"), new Command() {
@@ -177,12 +191,70 @@ public class MaintenanceRequestViewerViewImpl extends CrmViewerViewImplBase<Main
         }
     }
 
+    static abstract class ResolutionBox extends OkCancelDialog {
+
+        private CEntityForm<MaintenanceRequestDTO> content;
+
+        public ResolutionBox(MaintenanceRequestDTO mr) {
+            super(i18n.tr("Resolve"));
+            setBody(createBody(mr));
+        }
+
+        protected Widget createBody(final MaintenanceRequestDTO mr) {
+            getOkButton().setEnabled(true);
+
+            content = new CEntityForm<MaintenanceRequestDTO>(MaintenanceRequestDTO.class) {
+                @Override
+                public IsWidget createContent() {
+                    TwoColumnFlexFormPanel main = new TwoColumnFlexFormPanel();
+
+                    main.setWidget(0, 0, new FormDecoratorBuilder(inject(proto().resolvedDate()), 20).build());
+                    main.setWidget(1, 0, new FormDecoratorBuilder(inject(proto().resolution()), 20).build());
+
+                    CComponent<LogicalDate> datePicker = get(proto().resolvedDate());
+                    datePicker.setMandatory(true);
+                    datePicker.addValueValidator(new EditableValueValidator<LogicalDate>() {
+                        @Override
+                        public ValidationError isValid(CComponent<LogicalDate> component, LogicalDate value) {
+                            return (value.before(new LogicalDate(mr.submitted().getValue())) ? new ValidationError(component, i18n
+                                    .tr("Request cannot be Resolved before it was Submitted")) : null);
+                        }
+                    });
+
+                    return main;
+                }
+            };
+
+            content.initContent();
+            // default date is today
+            if (mr != null && mr.resolvedDate().isNull()) {
+                mr.resolvedDate().setValue(new LogicalDate());
+            }
+            content.populate(mr);
+            return content.asWidget();
+        }
+
+        public boolean validate() {
+            if (content.isValid()) {
+                return true;
+            } else {
+                content.setUnconditionalValidationErrorRendering(true);
+                MessageDialog.error(i18n.tr("Error"), content.getValidationResults().getValidationMessage(true, true, true));
+                return false;
+            }
+        }
+
+        public MaintenanceRequestDTO getValue() {
+            return content.getValue();
+        }
+    }
+
     static abstract class RateBox extends OkCancelDialog {
 
         private CEntityForm<SurveyResponse> content;
 
         public RateBox(SurveyResponse currentRate) {
-            super(i18n.tr("Schedule"));
+            super(i18n.tr("Rate"));
             setBody(createBody(currentRate));
         }
 

@@ -154,6 +154,9 @@ public interface MaintenanceRequest extends IEntity {
     @Editor(type = Editor.EditorType.textarea)
     IPrimitive<String> resolution();
 
+    @Caption(name = "Resolved On")
+    IPrimitive<LogicalDate> resolvedDate();
+
     @Length(2048)
     @Editor(type = Editor.EditorType.textarea)
     IPrimitive<String> cancellationNote();

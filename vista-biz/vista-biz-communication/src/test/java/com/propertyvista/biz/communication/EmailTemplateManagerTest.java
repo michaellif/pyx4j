@@ -443,7 +443,7 @@ public class EmailTemplateManagerTest extends VistaDBTestBase {
             "<br/>" +
             "<a href=\"{13}\">Request ID: {10}</a><br/>" +
             "Request Submitted: {11}<br/>" +
-            "Current Status: {12}<br/>";
+            "Request Completed: {16}<br/>";
             break;
         case MaintenanceRequestCancelled:
             templateFmt = "<h3>Dear {2},</h3><br/>" +
@@ -855,7 +855,8 @@ public class EmailTemplateManagerTest extends VistaDBTestBase {
                         mr.status().getStringView(),
                         mrViewPortalUrl + "&Id=" + mr.getPrimaryKey(),
                         mr.building().marketing().name().getValue(),
-                        mr.building().info().address().getStringView()
+                        mr.building().info().address().getStringView(),
+                        mr.resolvedDate().getStringView()
                 };
                 fmtArgs = args;
             } else {
@@ -878,6 +879,7 @@ public class EmailTemplateManagerTest extends VistaDBTestBase {
                         EmailTemplateManager.getVarname(requestT.requestViewUrl()),
                         EmailTemplateManager.getVarname(bldT.PropertyMarketingName()),
                         EmailTemplateManager.getVarname(bldT.Address()),
+                        EmailTemplateManager.getVarname(requestT.resolved()),
                         "SurveyURL" // TODO
                 };
                 fmtArgs = args;
@@ -1183,6 +1185,7 @@ public class EmailTemplateManagerTest extends VistaDBTestBase {
         }
         mr.summary().setValue("Store closed");
         mr.description().setValue("Please open a 24-hour liquor store!");
+        mr.submitted().setValue(new LogicalDate(SystemDateManager.getDate()));
         mr.permissionToEnter().setValue(true);
         mr.petInstructions().setValue("just a friendly crocodile");
         mr.preferredDate1().setValue(new LogicalDate(SystemDateManager.getDate()));
@@ -1204,7 +1207,9 @@ public class EmailTemplateManagerTest extends VistaDBTestBase {
         schedule.scheduledTimeTo().setValue(Time.valueOf("13:00:00"));
         schedule.workDescription().setValue("planting trees");
         mr.workHistory().add(schedule);
-
+        // mr resolution info
+        mr.resolvedDate().setValue(new LogicalDate(SystemDateManager.getDate()));
+        mr.resolution().setValue("all good");
         generateEmailPolicy();
     }
 

@@ -17,9 +17,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.google.gwt.dom.client.Style.VerticalAlign;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.Command;
+import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HasVerticalAlignment;
 import com.google.gwt.user.client.ui.IsWidget;
@@ -78,6 +80,10 @@ public class MaintenanceRequestForm extends CrmEntityForm<MaintenanceRequestDTO>
     private TwoColumnFlexFormPanel accessPanel;
 
     private TwoColumnFlexFormPanel statusPanel;
+
+    private TwoColumnFlexFormPanel scheduledPanel;
+
+    private TwoColumnFlexFormPanel resolvedPanel;
 
     private TwoColumnFlexFormPanel surveyPanel;
 
@@ -205,19 +211,33 @@ public class MaintenanceRequestForm extends CrmEntityForm<MaintenanceRequestDTO>
         // --------------------------------------------------------------------------------------------------------------------
 
         statusPanel = new TwoColumnFlexFormPanel();
-        int innerRow = -1;
+        statusPanel.setH1(0, 0, 3, i18n.tr("Status"));
 
-        statusPanel.setH1(++innerRow, 0, 2, i18n.tr("Status"));
+        int innerRow = 0;
         statusPanel.setWidget(++innerRow, 0, new FormDecoratorBuilder(inject(proto().status(), new CEntityLabel<MaintenanceRequestStatus>()), 10).build());
         statusPanel.setWidget(++innerRow, 0, new FormDecoratorBuilder(inject(proto().updated(), new CDateLabel()), 10).build());
         statusPanel.setWidget(++innerRow, 0, new FormDecoratorBuilder(inject(proto().submitted(), new CDateLabel()), 10).build());
 
-        innerRow = 0;
-        statusPanel.setWidget(++innerRow, 1, new FormDecoratorBuilder(inject(proto().scheduledDate(), new CDateLabel()), 10).build());
-        statusPanel.setWidget(++innerRow, 1, new FormDecoratorBuilder(inject(proto().scheduledTimeFrom(), new CTimeLabel()), 10).build());
-        statusPanel.setWidget(++innerRow, 1, new FormDecoratorBuilder(inject(proto().scheduledTimeTo(), new CTimeLabel()), 10).build());
+        scheduledPanel = new TwoColumnFlexFormPanel();
+        innerRow = -1;
+        scheduledPanel.setWidget(++innerRow, 0, new FormDecoratorBuilder(inject(proto().scheduledDate(), new CDateLabel()), 10).build());
+        scheduledPanel.setWidget(++innerRow, 0, new FormDecoratorBuilder(inject(proto().scheduledTimeFrom(), new CTimeLabel()), 10).build());
+        scheduledPanel.setWidget(++innerRow, 0, new FormDecoratorBuilder(inject(proto().scheduledTimeTo(), new CTimeLabel()), 10).build());
 
-        panel.setWidget(++row, 0, 2, statusPanel);
+        resolvedPanel = new TwoColumnFlexFormPanel();
+        innerRow = -1;
+        resolvedPanel.setWidget(++innerRow, 0, new FormDecoratorBuilder(inject(proto().resolvedDate(), new CDateLabel()), 10).build());
+        resolvedPanel.setWidget(++innerRow, 0, new FormDecoratorBuilder(inject(proto().resolution(), new CLabel<String>()), 10).build());
+
+        FlowPanel detailHolder = new FlowPanel();
+        detailHolder.add(scheduledPanel);
+        detailHolder.add(resolvedPanel);
+
+        statusPanel.setWidget(1, 1, detailHolder);
+        statusPanel.getFlexCellFormatter().setRowSpan(1, 1, 3);
+        statusPanel.getFlexCellFormatter().getElement(1, 1).getStyle().setVerticalAlign(VerticalAlign.TOP);
+
+        panel.setWidget(++row, 0, 3, statusPanel);
 
         // --------------------------------------------------------------------------------------------------------------------
 
@@ -292,14 +312,13 @@ public class MaintenanceRequestForm extends CrmEntityForm<MaintenanceRequestDTO>
         // to support yardi mode with multiple interfaces
         ensureBuilding();
 
-        StatusPhase phase = mr.status().phase().getValue();
-        get(proto().scheduledDate()).setVisible(phase == StatusPhase.Scheduled);
-        get(proto().scheduledTimeFrom()).setVisible(phase == StatusPhase.Scheduled);
-        get(proto().scheduledTimeTo()).setVisible(phase == StatusPhase.Scheduled);
-
         get(proto().submitted()).setVisible(!mr.submitted().isNull());
         get(proto().updated()).setVisible(!mr.updated().isNull());
         get(proto().status()).setVisible(!mr.submitted().isNull());
+
+        StatusPhase phase = mr.status().phase().getValue();
+        scheduledPanel.setVisible(phase == StatusPhase.Scheduled);
+        resolvedPanel.setVisible(phase == StatusPhase.Resolved);
 
         statusPanel.setVisible(!mr.id().isNull());
         surveyPanel.setVisible(phase == StatusPhase.Resolved);

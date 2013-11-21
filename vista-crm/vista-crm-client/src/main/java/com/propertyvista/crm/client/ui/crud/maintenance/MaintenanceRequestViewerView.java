@@ -32,7 +32,7 @@ public interface MaintenanceRequestViewerView extends IViewer<MaintenanceRequest
 
         void updateProgressAction(MaintenanceRequestSchedule schedule);
 
-        void resolveAction();
+        void resolveAction(MaintenanceRequestDTO mr);
 
         void rateAction(SurveyResponse rate);
 

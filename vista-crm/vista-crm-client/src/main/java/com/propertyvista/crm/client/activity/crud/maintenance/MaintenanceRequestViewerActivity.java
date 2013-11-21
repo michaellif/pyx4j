@@ -68,13 +68,13 @@ public class MaintenanceRequestViewerActivity extends CrmViewerActivity<Maintena
     }
 
     @Override
-    public void resolveAction() {
+    public void resolveAction(MaintenanceRequestDTO mr) {
         ((MaintenanceCrudService) getService()).resolveAction(new DefaultAsyncCallback<VoidSerializable>() {
             @Override
             public void onSuccess(VoidSerializable result) {
                 populate();
             }
-        }, getEntityId());
+        }, mr.resolvedDate().getValue(), mr.resolution().getValue(), getEntityId());
     }
 
     @Override
