@@ -50,4 +50,8 @@ public class ApplicationStatusPage extends CPortalEntityForm<MasterOnlineApplica
         return mainPanel;
     }
 
+    @Override
+    protected void onValuePropagation(MasterOnlineApplicationStatus value, boolean fireEvent, boolean populate) {
+        System.out.println("++++++++++++++++" + value);
+    }
 }
