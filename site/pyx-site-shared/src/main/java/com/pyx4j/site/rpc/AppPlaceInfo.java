@@ -102,21 +102,22 @@ public class AppPlaceInfo {
         if (appUrl != null) {
             b.append(appUrl);
         }
+        boolean firstArgument = true;
         if (placeClass != null) {
             if (redirectable) {
                 b.append("?").append(NavigNode.PLACE_ARGUMENT).append("=");
+                firstArgument = false;
             } else {
                 b.append("#");
             }
             b.append(getPlaceId(placeClass));
         }
         if (encodedComponentsNameValue != null) {
-            boolean first = !redirectable;
             boolean name = true;
             for (String encodedComponent : encodedComponentsNameValue) {
-                if (first) {
+                if (firstArgument) {
                     b.append(NavigNode.ARGS_GROUP_SEPARATOR);
-                    first = false;
+                    firstArgument = false;
                 } else if (name) {
                     b.append(NavigNode.ARGS_SEPARATOR);
                 } else {
