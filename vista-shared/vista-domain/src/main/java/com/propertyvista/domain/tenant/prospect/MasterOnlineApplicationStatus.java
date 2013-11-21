@@ -11,7 +11,7 @@
  * @author michaellif
  * @version $Id$
  */
-package com.propertyvista.dto;
+package com.propertyvista.domain.tenant.prospect;
 
 import java.math.BigDecimal;
 
@@ -23,9 +23,9 @@ import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
 
 @Transient
-public interface MasterOnlineApplicationOnlineStatusDTO extends IEntity {
+public interface MasterOnlineApplicationStatus extends IEntity {
 
-    IList<OnlineApplicationStatusDTO> individualApplications();
+    IList<OnlineApplicationStatus> individualApplications();
 
     /**
      * Completed steps/total steps in %

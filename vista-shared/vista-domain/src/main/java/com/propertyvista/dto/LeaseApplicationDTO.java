@@ -20,12 +20,13 @@ import com.pyx4j.entity.shared.IPrimitive;
 
 import com.propertyvista.domain.tenant.Customer;
 import com.propertyvista.domain.tenant.lease.Lease;
+import com.propertyvista.domain.tenant.prospect.MasterOnlineApplicationStatus;
 
 @Transient
 @ExtendsBO(Lease.class)
 public interface LeaseApplicationDTO extends LeaseDTO {
 
-    MasterOnlineApplicationOnlineStatusDTO masterApplicationStatus();
+    MasterOnlineApplicationStatus masterApplicationStatus();
 
     IList<TenantFinancialDTO> tenantFinancials();
 

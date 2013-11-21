@@ -55,7 +55,6 @@ import com.propertyvista.pmsite.server.PMSiteApplication;
 import com.propertyvista.pmsite.server.PMSiteFilter;
 import com.propertyvista.pmsite.server.PMSiteRobotsTxtFilter;
 import com.propertyvista.portal.server.portal.PublicMediaServlet;
-import com.propertyvista.portal.server.upload.ApplicationDocumentServlet;
 import com.propertyvista.portal.server.upload.EmployeeSignatureServlet;
 import com.propertyvista.portal.server.upload.LegalLetterDocumentServlet;
 import com.propertyvista.portal.server.upload.PmcDocumentServlet;
@@ -222,11 +221,6 @@ public class VistaWebApplicationInitializer implements ServletContainerInitializ
 
         // Special downloads; TODO unify
         {
-            {
-                ServletRegistration.Dynamic sc = ctx.addServlet("ApplicationDocumentServlet", ApplicationDocumentServlet.class);
-                sc.addMapping(urlPattern(VistaApplication.crm, "/application_document/*"));
-                sc.addMapping(urlPattern(VistaApplication.prospect, "/application_document/*"));
-            }
             {
                 ServletRegistration.Dynamic sc = ctx.addServlet("PmcDocumentServlet", PmcDocumentServlet.class);
                 sc.addMapping(urlPattern(VistaApplication.crm, "/pmc_document/*"));

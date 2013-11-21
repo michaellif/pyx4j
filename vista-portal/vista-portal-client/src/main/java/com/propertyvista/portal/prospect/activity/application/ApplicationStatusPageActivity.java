@@ -13,14 +13,18 @@
  */
 package com.propertyvista.portal.prospect.activity.application;
 
+import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
+import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.site.rpc.AppPlace;
 
+import com.propertyvista.domain.tenant.prospect.MasterOnlineApplicationStatus;
 import com.propertyvista.portal.prospect.ProspectPortalSite;
 import com.propertyvista.portal.prospect.ui.application.ApplicationStatusPageView;
 import com.propertyvista.portal.prospect.ui.application.ApplicationStatusPageView.ApplicationStatusPagePresenter;
+import com.propertyvista.portal.rpc.portal.prospect.services.ApplicationStatusService;
 import com.propertyvista.portal.shared.activity.SecurityAwareActivity;
 
 public class ApplicationStatusPageActivity extends SecurityAwareActivity implements ApplicationStatusPagePresenter {
@@ -37,12 +41,13 @@ public class ApplicationStatusPageActivity extends SecurityAwareActivity impleme
         super.start(panel, eventBus);
         panel.setWidget(view);
 
-//        GWT.<BillingService> create(BillingService.class).retreiveBillingHistory(new DefaultAsyncCallback<BillingHistoryDTO>() {
-//            @Override
-//            public void onSuccess(BillingHistoryDTO result) {
-//                 view.populate(result);
-//            }
-//        });
+        GWT.<ApplicationStatusService> create(ApplicationStatusService.class).retrieveMasterApplicationStatus(
+                new DefaultAsyncCallback<MasterOnlineApplicationStatus>() {
+                    @Override
+                    public void onSuccess(MasterOnlineApplicationStatus result) {
+                        view.populate(result);
+                    }
+                });
     }
 
 }

@@ -41,7 +41,7 @@ import com.propertyvista.domain.security.common.VistaBasicBehavior;
 import com.propertyvista.domain.tenant.Customer;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.portal.rpc.portal.resident.services.ResidentAuthenticationService;
-import com.propertyvista.portal.server.security.VistaCustomerContext;
+import com.propertyvista.portal.server.portal.resident.ResidentPortalContext;
 import com.propertyvista.server.common.security.VistaAuthenticationServicesImpl;
 import com.propertyvista.server.domain.security.CustomerUserCredential;
 
@@ -149,7 +149,7 @@ public class ResidentAuthenticationServiceImpl extends VistaAuthenticationServic
         String sessionToken = super.beginSession(user, credentials, actualBehaviors, additionalConditions);
 
         if (selectedLease != null) {
-            VistaCustomerContext.setCurrentUserLease(selectedLease);
+            ResidentPortalContext.setCurrentUserLease(selectedLease);
         }
         return sessionToken;
     }

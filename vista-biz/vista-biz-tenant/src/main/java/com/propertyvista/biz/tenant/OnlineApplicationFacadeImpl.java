@@ -39,10 +39,10 @@ import com.propertyvista.domain.tenant.lease.LeaseTermGuarantor;
 import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
 import com.propertyvista.domain.tenant.lease.LeaseTermTenant;
 import com.propertyvista.domain.tenant.prospect.MasterOnlineApplication;
+import com.propertyvista.domain.tenant.prospect.MasterOnlineApplicationStatus;
 import com.propertyvista.domain.tenant.prospect.OnlineApplication;
+import com.propertyvista.domain.tenant.prospect.OnlineApplicationStatus;
 import com.propertyvista.domain.tenant.prospect.OnlineApplication.Role;
-import com.propertyvista.dto.MasterOnlineApplicationOnlineStatusDTO;
-import com.propertyvista.dto.OnlineApplicationStatusDTO;
 
 public class OnlineApplicationFacadeImpl implements OnlineApplicationFacade {
 
@@ -190,7 +190,7 @@ public class OnlineApplicationFacadeImpl implements OnlineApplicationFacade {
     }
 
     @Override
-    public MasterOnlineApplicationOnlineStatusDTO calculateOnlineApplicationStatus(MasterOnlineApplication ma) {
+    public MasterOnlineApplicationStatus calculateOnlineApplicationStatus(MasterOnlineApplication ma) {
         if (ma == null) {
             return null;
         }
@@ -199,7 +199,7 @@ public class OnlineApplicationFacadeImpl implements OnlineApplicationFacade {
             Persistence.service().retrieve(ma);
         }
 
-        MasterOnlineApplicationOnlineStatusDTO maStatus = EntityFactory.create(MasterOnlineApplicationOnlineStatusDTO.class);
+        MasterOnlineApplicationStatus maStatus = EntityFactory.create(MasterOnlineApplicationStatus.class);
         BigDecimal progressSum = new BigDecimal("0.0");
 
         for (OnlineApplication app : ma.applications()) {
@@ -207,18 +207,16 @@ public class OnlineApplicationFacadeImpl implements OnlineApplicationFacade {
                 Persistence.service().retrieve(app);
             }
 
-            OnlineApplicationStatusDTO status = EntityFactory.create(OnlineApplicationStatusDTO.class);
+            OnlineApplicationStatus status = EntityFactory.create(OnlineApplicationStatus.class);
             status.status().setValue(app.status().getValue());
 
-            status.person().set(app.customer().person().name());
+            status.customer().set(app.customer());
             status.role().set(app.role());
 
             // calculate progress:
             status.progress().setValue(app.progress().getValue());
 
-            if (!status.person().isEmpty()) {
-                maStatus.individualApplications().add(status);
-            }
+            maStatus.individualApplications().add(status);
 
             progressSum = progressSum.add(status.progress().getValue());
         }

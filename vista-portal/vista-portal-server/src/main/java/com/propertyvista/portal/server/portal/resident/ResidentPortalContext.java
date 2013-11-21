@@ -13,52 +13,32 @@
  */
 package com.propertyvista.portal.server.portal.resident;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
+import com.pyx4j.commons.Key;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
-import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.rpc.shared.UnRecoverableRuntimeException;
 import com.pyx4j.server.contexts.Context;
-import com.pyx4j.server.contexts.Visit;
 
 import com.propertyvista.domain.property.asset.unit.AptUnit;
-import com.propertyvista.domain.security.CustomerUser;
-import com.propertyvista.domain.tenant.Customer;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.LeaseTermTenant;
 import com.propertyvista.domain.tenant.lease.Tenant;
-import com.propertyvista.portal.server.security.VistaCustomerContext;
+import com.propertyvista.portal.server.portal.shared.PortalVistaContext;
 
 /**
  * This may be an optimization point for future.
  */
-public class ResidentPortalContext extends VistaCustomerContext {
+public class ResidentPortalContext extends PortalVistaContext {
 
-    private final static Logger log = LoggerFactory.getLogger(ResidentPortalContext.class);
+    private final static String slectedLeaseAtt = "selected-lease";
 
-    private static final I18n i18n = I18n.get(ResidentPortalContext.class);
-
-    public static CustomerUser getCurrentUser() {
-        Visit v = Context.getVisit();
-        if ((v == null) || (!v.isUserLoggedIn()) || (v.getUserVisit().getPrincipalPrimaryKey() == null)) {
-            log.trace("no session");
-            throw new UnRecoverableRuntimeException(i18n.tr("No Session"));
-        }
-        CustomerUser user = EntityFactory.create(CustomerUser.class);
-        user.setPrimaryKey(v.getUserVisit().getPrincipalPrimaryKey());
-        user.name().setValue(v.getUserVisit().getName());
-        user.email().setValue(v.getUserVisit().getEmail());
-        return user;
+    public static Lease getCurrentUserLeaseIdStub() {
+        return EntityFactory.createIdentityStub(Lease.class, (Key) Context.getVisit().getAttribute(slectedLeaseAtt));
     }
 
-    public static Customer getCurrentUserCustomer() {
-        EntityQueryCriteria<Customer> criteria = EntityQueryCriteria.create(Customer.class);
-        criteria.add(PropertyCriterion.eq(criteria.proto().user(), ResidentPortalContext.getCurrentUser()));
-        return Persistence.service().retrieve(criteria);
+    public static void setCurrentUserLease(Lease lease) {
+        Context.getVisit().setAttribute(slectedLeaseAtt, lease.getPrimaryKey());
     }
 
     public static Tenant getCurrentUserTenant() {

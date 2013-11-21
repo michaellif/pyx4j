@@ -22,18 +22,18 @@ import com.pyx4j.forms.client.ui.CEntityLabel;
 import com.pyx4j.forms.client.ui.folder.EntityFolderColumnDescriptor;
 
 import com.propertyvista.domain.person.Name;
-import com.propertyvista.dto.OnlineApplicationStatusDTO;
+import com.propertyvista.domain.tenant.prospect.OnlineApplicationStatus;
 
-public class ApplicationStatusFolder extends VistaTableFolder<OnlineApplicationStatusDTO> {
+public class ApplicationStatusFolder extends VistaTableFolder<OnlineApplicationStatus> {
 
     public ApplicationStatusFolder() {
-        super(OnlineApplicationStatusDTO.class, false);
+        super(OnlineApplicationStatus.class, false);
     }
 
     @Override
     public List<EntityFolderColumnDescriptor> columns() {
         ArrayList<EntityFolderColumnDescriptor> columns = new ArrayList<EntityFolderColumnDescriptor>();
-        columns.add(new EntityFolderColumnDescriptor(proto().person(), "20em"));
+        columns.add(new EntityFolderColumnDescriptor(proto().customer(), "20em"));
         columns.add(new EntityFolderColumnDescriptor(proto().role(), "10em"));
         columns.add(new EntityFolderColumnDescriptor(proto().status(), "10em"));
         columns.add(new EntityFolderColumnDescriptor(proto().progress(), "7em"));

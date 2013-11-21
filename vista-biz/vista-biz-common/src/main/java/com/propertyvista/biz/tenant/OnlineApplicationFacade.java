@@ -19,8 +19,8 @@ import com.propertyvista.domain.security.CustomerUser;
 import com.propertyvista.domain.security.VistaCustomerBehavior;
 import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
 import com.propertyvista.domain.tenant.prospect.MasterOnlineApplication;
+import com.propertyvista.domain.tenant.prospect.MasterOnlineApplicationStatus;
 import com.propertyvista.domain.tenant.prospect.OnlineApplication;
-import com.propertyvista.dto.MasterOnlineApplicationOnlineStatusDTO;
 
 public interface OnlineApplicationFacade {
 
@@ -34,5 +34,5 @@ public interface OnlineApplicationFacade {
 
     void resendInvitationEmail(LeaseTermParticipant leaseParticipant);
 
-    MasterOnlineApplicationOnlineStatusDTO calculateOnlineApplicationStatus(MasterOnlineApplication ma);
+    MasterOnlineApplicationStatus calculateOnlineApplicationStatus(MasterOnlineApplication ma);
 }

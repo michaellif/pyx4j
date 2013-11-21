@@ -15,10 +15,14 @@ package com.propertyvista.portal.server.portal.prospect.services;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
+import com.pyx4j.config.server.ServerSideFactory;
+import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.i18n.shared.I18n;
 
-import com.propertyvista.portal.rpc.portal.prospect.dto.OnlineApplicationStatusDTO;
+import com.propertyvista.biz.tenant.OnlineApplicationFacade;
+import com.propertyvista.domain.tenant.prospect.MasterOnlineApplication;
+import com.propertyvista.domain.tenant.prospect.MasterOnlineApplicationStatus;
 import com.propertyvista.portal.rpc.portal.prospect.dto.RentalSummaryDTO;
 import com.propertyvista.portal.rpc.portal.prospect.services.ApplicationStatusService;
 
@@ -27,8 +31,15 @@ public class ApplicationStatusServiceImpl implements ApplicationStatusService {
     private static final I18n i18n = I18n.get(ApplicationStatusServiceImpl.class);
 
     @Override
-    public void retrieveApplicationStatus(AsyncCallback<OnlineApplicationStatusDTO> callback) {
-        OnlineApplicationStatusDTO account = EntityFactory.create(OnlineApplicationStatusDTO.class);
+    public void retrieveMasterApplicationStatus(AsyncCallback<MasterOnlineApplicationStatus> callback) {
+//        MasterOnlineApplicationStatus account = ServerSideFactory.create(OnlineApplicationFacade.class).calculateOnlineApplicationStatus(
+//                to.leaseApplication().onlineApplication());
+
+//        MasterOnlineApplication masterOnlineApplication = Persistence.service().retrieve(MasterOnlineApplication.class,
+//                selectedApplication.masterOnlineApplication().getPrimaryKey());
+
+        MasterOnlineApplicationStatus account = EntityFactory.create(MasterOnlineApplicationStatus.class);
+
         callback.onSuccess(account);
     }
 

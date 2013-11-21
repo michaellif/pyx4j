@@ -22,16 +22,16 @@ import com.pyx4j.commons.css.ThemeColor;
 import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
 
-import com.propertyvista.portal.rpc.portal.prospect.dto.OnlineApplicationStatusDTO;
+import com.propertyvista.domain.tenant.prospect.MasterOnlineApplicationStatus;
 import com.propertyvista.portal.shared.themes.EntityViewTheme;
 import com.propertyvista.portal.shared.ui.CPortalEntityForm;
 
-public class ApplicationStatusPage extends CPortalEntityForm<OnlineApplicationStatusDTO> {
+public class ApplicationStatusPage extends CPortalEntityForm<MasterOnlineApplicationStatus> {
 
     private static final I18n i18n = I18n.get(ApplicationStatusPage.class);
 
     public ApplicationStatusPage(ApplicationStatusPageViewImpl view) {
-        super(OnlineApplicationStatusDTO.class, view, "Application Status", ThemeColor.contrast2);
+        super(MasterOnlineApplicationStatus.class, view, "Application Status", ThemeColor.contrast2);
         asWidget().setStyleName(EntityViewTheme.StyleName.EntityView.name());
     }
 

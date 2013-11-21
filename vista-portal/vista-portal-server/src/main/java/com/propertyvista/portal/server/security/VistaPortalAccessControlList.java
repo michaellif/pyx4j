@@ -42,7 +42,6 @@ import com.propertyvista.domain.tenant.CustomerPicture;
 import com.propertyvista.domain.tenant.insurance.GeneralInsurancePolicy;
 import com.propertyvista.domain.tenant.insurance.InsuranceCertificateScan;
 import com.propertyvista.domain.tenant.insurance.TenantSureInsurancePolicy;
-import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.LeaseTermTenant;
 import com.propertyvista.domain.tenant.prospect.OnlineApplication;
 import com.propertyvista.portal.rpc.portal.prospect.services.ApplicationContextSelectionService;
@@ -75,7 +74,6 @@ import com.propertyvista.portal.server.security.access.CustomrPictureTenantDatas
 import com.propertyvista.portal.server.security.access.GeneralInsurancePolicyDatasetAccessRule;
 import com.propertyvista.portal.server.security.access.InsuranceCertificateScanDatasetAccessRule;
 import com.propertyvista.portal.server.security.access.LeasePaymentMethodTenantDatasetAccessRule;
-import com.propertyvista.portal.server.security.access.LeaseTenantDatasetAccessRule;
 import com.propertyvista.server.common.security.UserEntityInstanceAccess;
 
 public class VistaPortalAccessControlList extends ServletContainerAclBuilder {
@@ -219,7 +217,6 @@ public class VistaPortalAccessControlList extends ServletContainerAclBuilder {
 
         // Data Access
         grant(VistaCustomerBehavior.Tenant, VistaDataAccessBehavior.TenantInPortal);
-        grant(VistaDataAccessBehavior.TenantInPortal, new LeaseTenantDatasetAccessRule(), Lease.class);
         grant(VistaDataAccessBehavior.TenantInPortal, new CustomrPictureTenantDatasetAccessRule(), CustomerPicture.class);
         grant(VistaDataAccessBehavior.TenantInPortal, new LeasePaymentMethodTenantDatasetAccessRule(), LeasePaymentMethod.class);
         grant(VistaDataAccessBehavior.TenantInPortal, new AutopayAgreementTenantDatasetAccessRule(), AutopayAgreement.class);

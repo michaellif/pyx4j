@@ -119,9 +119,6 @@ public class ProspectAuthenticationServiceImpl extends VistaAuthenticationServic
         // set application in context here:
         if (selectedApplication != null) {
             ProspectPortalContext.setCurrentUserApplication(selectedApplication);
-            MasterOnlineApplication masterOnlineApplication = Persistence.service().retrieve(MasterOnlineApplication.class,
-                    selectedApplication.masterOnlineApplication().getPrimaryKey());
-            ProspectPortalContext.setCurrentUserLease(masterOnlineApplication.leaseApplication().lease());
         }
 
         return sessionToken;
