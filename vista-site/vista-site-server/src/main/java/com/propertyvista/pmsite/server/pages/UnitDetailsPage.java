@@ -19,6 +19,7 @@ import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.markup.html.IHeaderResponse;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.BookmarkablePageLink;
+import org.apache.wicket.markup.html.link.ExternalLink;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.model.Model;
@@ -28,16 +29,20 @@ import templates.TemplateResources;
 
 import com.pyx4j.commons.MinMaxPair;
 import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.site.rpc.AppPlaceInfo;
 
+import com.propertyvista.config.VistaDeployment;
 import com.propertyvista.domain.property.asset.AreaMeasurementUnit;
 import com.propertyvista.domain.property.asset.Floorplan;
 import com.propertyvista.domain.property.asset.FloorplanAmenity;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
+import com.propertyvista.domain.security.common.VistaApplication;
 import com.propertyvista.pmsite.server.PMSiteApplication;
 import com.propertyvista.pmsite.server.PMSiteWebRequest;
 import com.propertyvista.pmsite.server.PropertyFinder;
 import com.propertyvista.pmsite.server.model.WicketUtils.VolatileTemplateResourceReference;
 import com.propertyvista.pmsite.server.panels.FloorplanInfoPanel;
+import com.propertyvista.portal.rpc.portal.prospect.ProspectPortalSiteMap;
 
 public class UnitDetailsPage extends BasePage {
 
@@ -92,6 +97,11 @@ public class UnitDetailsPage extends BasePage {
             }
         });
         add(new BookmarkablePageLink<Void>("requestApmnt", InquiryPage.class, params).setBody(new Model<String>(i18n.tr("Request Appointment"))));
+
+        String applyUrl = AppPlaceInfo.absoluteUrl(VistaDeployment.getBaseApplicationURL(VistaApplication.prospect, true), true, null,
+                ProspectPortalSiteMap.ARG_ILS_BUILDING_ID, fp.building().propertyCode().getValue(), //
+                ProspectPortalSiteMap.ARG_ILS_FLOORPLAN_ID, fp.name().getValue());
+        add(new ExternalLink("applyNow", applyUrl).setBody(new Model<String>(i18n.tr("Apply Now"))));
     }
 
     @Override

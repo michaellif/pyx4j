@@ -21,6 +21,12 @@ import com.propertyvista.portal.rpc.portal.PortalSiteMap;
 
 public class ProspectPortalSiteMap extends PortalSiteMap {
 
+    public static String ARG_ILS_BUILDING_ID = "building";
+
+    public static String ARG_ILS_FLOORPLAN_ID = "floorplan";
+
+    public static String ARG_ILS_UNIT_ID = "unit";
+
     public static class TermsAndConditions extends AppPlace implements PublicPlace {
     }
 

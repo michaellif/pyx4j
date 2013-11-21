@@ -22,6 +22,7 @@ import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.markup.html.IHeaderResponse;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.BookmarkablePageLink;
+import org.apache.wicket.markup.html.link.ExternalLink;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.model.Model;
@@ -31,13 +32,16 @@ import templates.TemplateResources;
 
 import com.pyx4j.commons.MinMaxPair;
 import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.site.rpc.AppPlaceInfo;
 
+import com.propertyvista.config.VistaDeployment;
 import com.propertyvista.domain.media.ThumbnailSize;
 import com.propertyvista.domain.property.asset.AreaMeasurementUnit;
 import com.propertyvista.domain.property.asset.Floorplan;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.building.BuildingAmenity;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
+import com.propertyvista.domain.security.common.VistaApplication;
 import com.propertyvista.domain.util.DomainUtil;
 import com.propertyvista.pmsite.server.PMSiteApplication;
 import com.propertyvista.pmsite.server.PMSiteContentManager;
@@ -46,6 +50,7 @@ import com.propertyvista.pmsite.server.PropertyFinder;
 import com.propertyvista.pmsite.server.model.WicketUtils.SimpleImage;
 import com.propertyvista.pmsite.server.model.WicketUtils.VolatileTemplateResourceReference;
 import com.propertyvista.pmsite.server.panels.BuildingInfoPanel;
+import com.propertyvista.portal.rpc.portal.prospect.ProspectPortalSiteMap;
 
 public class AptDetailsPage extends BasePage {
 
@@ -139,6 +144,11 @@ public class AptDetailsPage extends BasePage {
             }
         });
         add(new BookmarkablePageLink<Void>("requestApmnt", InquiryPage.class, params).setBody(new Model<String>(i18n.tr("Request Appointment"))));
+
+        String applyUrl = AppPlaceInfo.absoluteUrl(VistaDeployment.getBaseApplicationURL(VistaApplication.prospect, true), true, null,
+                ProspectPortalSiteMap.ARG_ILS_BUILDING_ID, propInfo.propertyCode().getValue());
+        add(new ExternalLink("applyNow", applyUrl).setBody(new Model<String>(i18n.tr("Apply Now"))));
+
     }
 
     @Override
