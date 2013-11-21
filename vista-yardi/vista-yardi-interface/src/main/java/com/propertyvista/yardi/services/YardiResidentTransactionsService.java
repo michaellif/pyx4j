@@ -272,7 +272,7 @@ public class YardiResidentTransactionsService extends YardiAbstractService {
                 String propertyCode = building.propertyCode().getValue();
                 log.info("Processing building: {}", propertyCode);
 
-                List<Lease> activeLeases = getActiveLeases(yardiInterfaceId, propertyCode);
+                List<Lease> activeLeases = MappingUtils.sortLeases(getActiveLeases(yardiInterfaceId, propertyCode));
                 for (final RTCustomer rtCustomer : property.getRTCustomer()) {
                     String leaseId = rtCustomer.getCustomerID();
                     log.info("  for {}", leaseId);

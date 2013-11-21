@@ -15,6 +15,8 @@ package com.propertyvista.yardi.mapper;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Locale;
 
@@ -36,6 +38,7 @@ import com.propertyvista.domain.pmc.Pmc;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.ref.Country;
 import com.propertyvista.domain.ref.Province;
+import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.server.common.util.CanadianStreetAddressParser;
 import com.propertyvista.server.common.util.StreetAddressParser.StreetAddress;
 
@@ -183,5 +186,40 @@ public class MappingUtils {
             throw new Exception("more than one country was found name = '" + name + "': " + countries);
         }
         return foundCountries.get(0);
+    }
+
+    /**
+     * Sort list of leases by ascending by lease end date, so current and open ended ones go last...
+     * 
+     * @param leases
+     *            - list to sort
+     * @return - sorted input list
+     */
+
+    public static List<Lease> sortLeases(List<Lease> leases) {
+        Collections.sort(leases, new Comparator<Lease>() {
+            @Override
+            public int compare(Lease l1, Lease l2) {
+                int res = 0;
+
+                if (l1.leaseTo().isNull()) {
+                    if (l2.leaseTo().isNull()) {
+                        res = 0; // both are null - assume they are the same
+                    } else {
+                        res = 1; // first is null - it is greater 
+                    }
+                } else {
+                    if (l2.leaseTo().isNull()) {
+                        res = -1; // second is null - first is less 
+                    } else {
+                        res = l1.leaseTo().getValue().compareTo(l2.leaseTo().getValue());
+                    }
+                }
+
+                return res;
+            }
+        });
+
+        return leases;
     }
 }
