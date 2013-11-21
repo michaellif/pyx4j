@@ -18,7 +18,7 @@
  * @author Artyom
  * @version $Id$
  */
-package com.propertyvista.biz.legal;
+package com.propertyvista.biz.legal.form.framework;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -49,12 +49,15 @@ import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IObject;
 
+import com.propertyvista.biz.legal.form.framework.mapping.PdfFieldDescriptor;
+import com.propertyvista.biz.legal.form.framework.mapping.PdfFieldsMapping;
 import com.propertyvista.domain.legal.utils.Formatter;
 import com.propertyvista.domain.legal.utils.Partitioner;
 import com.propertyvista.domain.legal.utils.PdfFormFieldFormatter;
 import com.propertyvista.domain.legal.utils.PdfFormFieldMapping;
 import com.propertyvista.domain.legal.utils.PdfFormFieldPartitioner;
 
+@Deprecated
 public class FormUtils {
 
     private static final DateFormat dateFormat = new SimpleDateFormat("dd/MM/YYYY");

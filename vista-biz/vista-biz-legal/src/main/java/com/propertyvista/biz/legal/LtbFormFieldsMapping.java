@@ -27,6 +27,7 @@ import com.pyx4j.entity.shared.IObject;
 
 import com.propertyvista.biz.legal.form.fieldadapters.MoneyShortFormatter;
 import com.propertyvista.biz.legal.form.fieldadapters.MoneyShortPartitioner;
+import com.propertyvista.biz.legal.form.framework.mapping.PdfFieldsMapping;
 import com.propertyvista.biz.legal.form.utils.LandlordAndTenantBoardPdfFormUtils;
 import com.propertyvista.domain.legal.utils.DateFormatter;
 import com.propertyvista.domain.legal.utils.DatePartitioner;

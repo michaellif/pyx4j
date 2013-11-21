@@ -22,6 +22,7 @@ package com.propertyvista.biz.legal;
 
 import org.apache.commons.io.IOUtils;
 
+import com.propertyvista.biz.legal.form.framework.filling.FormFillerImpl;
 import com.propertyvista.domain.legal.L1FormFieldsData;
 
 public class L1GenerationFacadeImpl implements L1GenerationFacade {
@@ -33,7 +34,7 @@ public class L1GenerationFacadeImpl implements L1GenerationFacade {
         byte[] filledForm = null;
         try {
             byte[] formTemplate = IOUtils.toByteArray(N4GenerationFacadeImpl.class.getResourceAsStream(N4_FORM_FILE));
-            filledForm = FormUtils.fillForm(fieldsData, new L1FieldsMapping(), formTemplate);
+            filledForm = new FormFillerImpl().fillForm(formTemplate, new L1FieldsMapping(), fieldsData, true);
         } catch (Throwable e) {
             throw new RuntimeException(e);
         }

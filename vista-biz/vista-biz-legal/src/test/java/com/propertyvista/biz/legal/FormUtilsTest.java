@@ -36,6 +36,8 @@ import com.itextpdf.text.pdf.PdfReader;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.gwt.server.DateUtils;
 
+import com.propertyvista.biz.legal.form.framework.FormUtils;
+
 public class FormUtilsTest {
 
     private final byte[] MOCK_FORM;

@@ -18,7 +18,7 @@
  * @author ArtyomB
  * @version $Id$
  */
-package com.propertyvista.biz.legal;
+package com.propertyvista.biz.legal.form.framework.mapping;
 
 import java.util.Arrays;
 import java.util.Collections;
@@ -38,23 +38,38 @@ public abstract class PdfFieldsMapping<E extends IEntity> {
 
     private final E proto;
 
-    private final HashMap<String, PdfFieldDescriptor> mapping;
+    private final HashMap<String, PdfFieldDescriptor> fieldsMapping;
 
     private final HashMap<String, List<PdfFieldsMapping<?>>> tablesMapping;
 
     public PdfFieldsMapping(Class<E> klass) {
         proto = EntityFactory.getEntityPrototype(klass);
-        mapping = new HashMap<String, PdfFieldDescriptor>();
+        fieldsMapping = new HashMap<String, PdfFieldDescriptor>();
         tablesMapping = new HashMap<String, List<PdfFieldsMapping<?>>>();
+
         configure();
     }
 
     public final PdfFieldDescriptor getDescriptor(IObject<?> field) {
-        return mapping.get(field.getFieldName());
+        return fieldsMapping.get(field.getFieldName());
     }
 
+    @Deprecated
+    /** get child mapping should be used instead */
     public final PdfFieldDescriptor getDescriptor(IList<?> tableField, IObject<?> field, int row) {
         return tablesMapping.get(tableField.getFieldName()).get(row).getDescriptor(field);
+    }
+
+    public final PdfFieldsMapping<?> getChildMapping(IEntity child) {
+        return findChildMapping(child, 0);
+    }
+
+    public final PdfFieldsMapping<?> getChildMapping(IList<?> tableField, int row) {
+        return findChildMapping(tableField, row);
+    }
+
+    private PdfFieldsMapping<?> findChildMapping(IObject<?> child, int row) {
+        return tablesMapping.get(child.getFieldName()).get(row);
     }
 
     /** called from constructor, should hold descriptors of fields */
@@ -70,6 +85,11 @@ public abstract class PdfFieldsMapping<E extends IEntity> {
 
     protected final <TableRow extends IEntity> PdfTableDescriptorBuilder<TableRow> table(IList<TableRow> tableField) {
         return new PdfTableDescriptorBuilder<TableRow>(tableField.getFieldName(), tableField.getValueClass());
+    }
+
+    protected final <Child extends IEntity> void mapping(Child child, PdfFieldsMapping<Child> childMapping) {
+        new PdfTableDescriptorBuilder<Child>(child.getFieldName(), (Class<Child>) child.getInstanceValueClass()).rowMapping(Arrays.asList(childMapping))
+                .define();
     }
 
     protected class PdfFieldDescriptorBuilder {
@@ -114,7 +134,7 @@ public abstract class PdfFieldsMapping<E extends IEntity> {
         }
 
         public void define() {
-            mapping.put(field.getFieldName(), new PdfFieldDescriptor(formatters, mappings, partitioner, states));
+            fieldsMapping.put(field.getFieldName(), new PdfFieldDescriptor(formatters, mappings, partitioner, states));
         }
     }
 
