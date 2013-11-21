@@ -15,6 +15,8 @@ package com.propertyvista.yardi.services;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -427,6 +429,29 @@ public class YardiLeaseProcessor {
         }
 
         return date;
+    }
+
+    /**
+     * Sort list of Yardi leases (RTCustomer-s) by lease status: former -> current -> future
+     * 
+     * @param rtCustomers
+     *            - list to sort
+     * @return - sorted input list
+     */
+
+    public static List<RTCustomer> sortRtCustomers(List<RTCustomer> rtCustomers) {
+        Collections.sort(rtCustomers, new Comparator<RTCustomer>() {
+            @Override
+            public int compare(RTCustomer c1, RTCustomer c2) {
+
+                int s1 = (isFormerLease(c1) ? -1 : (isFutureLease(c1) ? 1 : 0));
+                int s2 = (isFormerLease(c2) ? -1 : (isFutureLease(c2) ? 1 : 0));
+
+                return (s1 < s2 ? -1 : (s1 > s2 ? 1 : 0));
+            }
+        });
+
+        return rtCustomers;
     }
 
     private BillableItem createBillableItem(ChargeDetail detail, int chargeCodeItemNo) {
