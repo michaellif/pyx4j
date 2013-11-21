@@ -73,7 +73,7 @@ public class PaymentMethodFacadeImpl implements PaymentMethodFacade {
     @Override
     public List<LeasePaymentMethod> retrieveLeasePaymentMethods(LeaseTermParticipant<? extends LeaseParticipant<?>> participantId, PaymentMethodUsage usage,
             VistaApplication vistaApplication) {
-        Persistence.ensureRetrieve(participantId.leaseParticipant(), AttachLevel.Attached);
+        Persistence.ensureRetrieve(participantId, AttachLevel.Attached);
         return retrieveLeasePaymentMethods(participantId.leaseParticipant(), usage, vistaApplication);
     }
 
@@ -114,6 +114,7 @@ public class PaymentMethodFacadeImpl implements PaymentMethodFacade {
         if (usage == PaymentMethodUsage.AutopayAgreementSetup) {
             Collection<CreditCardType> restrictedCardTypes = ServerSideFactory.create(PaymentFacade.class).getConvenienceFeeApplicableCardTypes(billingAccount,
                     vistaApplication);
+            allowedCardTypes = new ArrayList<CreditCardType>(allowedCardTypes);
             allowedCardTypes.removeAll(restrictedCardTypes);
         }
 
