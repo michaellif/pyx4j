@@ -18,7 +18,7 @@
  * @author ArtyomB
  * @version $Id$
  */
-package com.propertyvista.biz.legal;
+package com.propertyvista.biz.legal.forms.l1;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -34,6 +34,8 @@ import com.itextpdf.text.pdf.PdfCopyFields;
 import com.itextpdf.text.pdf.PdfName;
 import com.itextpdf.text.pdf.PdfNumber;
 import com.itextpdf.text.pdf.PdfReader;
+
+import com.propertyvista.biz.legal.forms.n4.N4PrepareForm;
 
 public class L1PrepareForm {
 

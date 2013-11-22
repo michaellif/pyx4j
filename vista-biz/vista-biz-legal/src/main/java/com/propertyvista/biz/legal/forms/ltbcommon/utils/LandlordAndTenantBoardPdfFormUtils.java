@@ -14,18 +14,22 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  *
- * Created on 2013-11-21
+ * Created on 2013-11-19
  * @author ArtyomB
  * @version $Id$
  */
-package com.propertyvista.biz.legal.form.framework.filling;
+package com.propertyvista.biz.legal.forms.ltbcommon.utils;
 
-import com.pyx4j.entity.shared.IEntity;
+import java.util.ArrayList;
+import java.util.List;
 
-import com.propertyvista.biz.legal.form.framework.mapping.PdfFieldsMapping;
+public class LandlordAndTenantBoardPdfFormUtils {
 
-public interface FormFiller {
-
-    public <Data extends IEntity> byte[] fillForm(byte[] form, PdfFieldsMapping<Data> mapping, Data fieldsData, boolean flatten) throws Exception;
-
+    public static List<String> split(String fieldName, int... partLengthVector) {
+        List<String> fieldNames = new ArrayList<String>(partLengthVector.length);
+        for (int i = 0; i < partLengthVector.length; ++i) {
+            fieldNames.add(fieldName + "." + i + "{" + partLengthVector[i] + "}");
+        }
+        return fieldNames;
+    }
 }

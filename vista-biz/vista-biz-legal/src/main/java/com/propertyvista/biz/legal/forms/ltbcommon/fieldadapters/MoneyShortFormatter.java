@@ -18,7 +18,7 @@
  * @author ArtyomB
  * @version $Id$
  */
-package com.propertyvista.biz.legal.form.fieldadapters;
+package com.propertyvista.biz.legal.forms.ltbcommon.fieldadapters;
 
 import java.math.BigDecimal;
 

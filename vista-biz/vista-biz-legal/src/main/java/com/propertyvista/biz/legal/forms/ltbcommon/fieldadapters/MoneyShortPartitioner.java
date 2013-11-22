@@ -18,18 +18,21 @@
  * @author ArtyomB
  * @version $Id$
  */
-package com.propertyvista.biz.legal.form.utils;
+package com.propertyvista.biz.legal.forms.ltbcommon.fieldadapters;
 
-import java.util.ArrayList;
-import java.util.List;
+import com.propertyvista.domain.legal.utils.Partitioner;
 
-public class LandlordAndTenantBoardPdfFormUtils {
+public class MoneyShortPartitioner implements Partitioner {
 
-    public static List<String> split(String fieldName, int... partLengthVector) {
-        List<String> fieldNames = new ArrayList<String>(partLengthVector.length);
-        for (int i = 0; i < partLengthVector.length; ++i) {
-            fieldNames.add(fieldName + "." + i + "{" + partLengthVector[i] + "}");
+    @Override
+    public String getPart(String value, int partIndex) {
+        switch (partIndex) {
+        case 0:
+        case 1:
+            return value.split("\\.")[partIndex];
+        default:
+            return "";
         }
-        return fieldNames;
     }
+
 }

@@ -18,20 +18,20 @@
  * @author ArtyomB
  * @version $Id$
  */
-package com.propertyvista.biz.legal.form.fieldadapters;
+package com.propertyvista.biz.legal.forms.ltbcommon.fieldadapters;
 
-import com.propertyvista.domain.legal.utils.Partitioner;
+import java.util.Date;
 
-public class CreditCardExpiryDatePartitioner implements Partitioner {
+import com.pyx4j.commons.SimpleMessageFormat;
+
+import com.propertyvista.domain.legal.utils.Formatter;
+
+public class CreditCardExpiryDateFormatter implements Formatter {
 
     @Override
-    public String getPart(String value, int partIndex) {
-        if (partIndex == 0 || partIndex == 1) {
-            return value.split("/")[partIndex];
-        } else {
-            return "";
-        }
-
+    public String format(Object object) {
+        Date value = (Date) object;
+        return SimpleMessageFormat.format("{0,date,MM/YY}", value);
     }
 
 }

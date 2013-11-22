@@ -18,7 +18,7 @@
  * @author ArtyomB
  * @version $Id$
  */
-package com.propertyvista.biz.legal;
+package com.propertyvista.biz.legal.forms.n4;
 
 import java.util.ArrayList;
 import java.util.Collection;

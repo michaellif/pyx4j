@@ -22,7 +22,8 @@ package com.propertyvista.biz.legal;
 
 import org.apache.commons.io.IOUtils;
 
-import com.propertyvista.biz.legal.form.framework.filling.FormFillerImpl;
+import com.propertyvista.biz.legal.forms.framework.filling.FormFillerImpl;
+import com.propertyvista.biz.legal.forms.l1.L1FieldsMapping;
 import com.propertyvista.domain.legal.l1.L1FormFieldsData;
 
 public class L1GenerationFacadeImpl implements L1GenerationFacade {

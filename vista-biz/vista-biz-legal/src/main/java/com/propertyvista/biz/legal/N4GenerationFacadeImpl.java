@@ -34,7 +34,7 @@ import com.pyx4j.config.server.SystemDateManager;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
 
-import com.propertyvista.biz.legal.form.framework.FormUtils;
+import com.propertyvista.biz.legal.forms.framework.FormUtils;
 import com.propertyvista.domain.contact.AddressSimple;
 import com.propertyvista.domain.contact.AddressStructured;
 import com.propertyvista.domain.financial.ARCode;

@@ -18,7 +18,7 @@
  * @author ArtyomB
  * @version $Id$
  */
-package com.propertyvista.biz.legal.form.framework.mapping;
+package com.propertyvista.biz.legal.forms.framework.mapping;
 
 import java.util.Collections;
 import java.util.List;

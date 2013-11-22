@@ -14,25 +14,24 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  *
- * Created on 2013-11-19
+ * Created on 2013-11-20
  * @author ArtyomB
  * @version $Id$
  */
-package com.propertyvista.biz.legal.form.fieldadapters;
+package com.propertyvista.biz.legal.forms.ltbcommon.fieldadapters;
 
 import com.propertyvista.domain.legal.utils.Partitioner;
 
-public class MoneyShortPartitioner implements Partitioner {
+public class CreditCardExpiryDatePartitioner implements Partitioner {
 
     @Override
     public String getPart(String value, int partIndex) {
-        switch (partIndex) {
-        case 0:
-        case 1:
-            return value.split("\\.")[partIndex];
-        default:
+        if (partIndex == 0 || partIndex == 1) {
+            return value.split("/")[partIndex];
+        } else {
             return "";
         }
+
     }
 
 }

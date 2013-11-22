@@ -33,6 +33,7 @@ import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 
 import com.propertyvista.biz.financial.ar.ARFacade;
+import com.propertyvista.biz.legal.forms.n4.N4GenerationUtils;
 import com.propertyvista.domain.financial.ARCode;
 import com.propertyvista.domain.financial.BillingAccount;
 import com.propertyvista.domain.financial.billing.BillingCycle;

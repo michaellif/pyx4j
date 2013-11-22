@@ -18,7 +18,7 @@
  * @author ArtyomB
  * @version $Id$
  */
-package com.propertyvista.biz.legal;
+package com.propertyvista.biz.legal.forms.n4;
 
 import java.io.File;
 import java.io.FileOutputStream;

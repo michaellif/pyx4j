@@ -18,12 +18,13 @@
  * @author ArtyomB
  * @version $Id$
  */
-package com.propertyvista.biz.legal;
+package com.propertyvista.biz.legal.forms.l1;
 
 import java.util.Arrays;
 
-import com.propertyvista.biz.legal.form.fieldadapters.CreditCardExpiryDateFormatter;
-import com.propertyvista.biz.legal.form.fieldadapters.CreditCardExpiryDatePartitioner;
+import com.propertyvista.biz.legal.forms.ltbcommon.LtbFormFieldsMapping;
+import com.propertyvista.biz.legal.forms.ltbcommon.fieldadapters.CreditCardExpiryDateFormatter;
+import com.propertyvista.biz.legal.forms.ltbcommon.fieldadapters.CreditCardExpiryDatePartitioner;
 import com.propertyvista.domain.legal.NsfChargeDetails;
 import com.propertyvista.domain.legal.RentOwingForPeriod;
 import com.propertyvista.domain.legal.l1.L1AgentContactInfo;

@@ -39,6 +39,7 @@ import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 
 import com.propertyvista.biz.financial.ar.ARFacade;
+import com.propertyvista.biz.legal.forms.n4.N4GenerationUtils;
 import com.propertyvista.biz.policy.PolicyFacade;
 import com.propertyvista.crm.rpc.dto.legal.n4.N4GenerationQueryDTO.DeliveryMethod;
 import com.propertyvista.domain.company.Employee;

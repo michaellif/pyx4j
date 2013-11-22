@@ -18,7 +18,7 @@
  * @author ArtyomB
  * @version $Id$
  */
-package com.propertyvista.biz.legal.form.framework.filling;
+package com.propertyvista.biz.legal.forms.framework.filling;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -41,8 +41,8 @@ import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.entity.shared.IPrimitive;
 
-import com.propertyvista.biz.legal.form.framework.mapping.PdfFieldDescriptor;
-import com.propertyvista.biz.legal.form.framework.mapping.PdfFieldsMapping;
+import com.propertyvista.biz.legal.forms.framework.mapping.PdfFieldDescriptor;
+import com.propertyvista.biz.legal.forms.framework.mapping.PdfFieldsMapping;
 import com.propertyvista.domain.legal.utils.Formatter;
 
 public class FormFillerImpl implements FormFiller {
