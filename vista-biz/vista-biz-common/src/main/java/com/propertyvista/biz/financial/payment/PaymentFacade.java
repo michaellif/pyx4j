@@ -20,7 +20,6 @@ import java.util.List;
 import com.propertyvista.domain.financial.AggregatedTransfer;
 import com.propertyvista.domain.financial.BillingAccount;
 import com.propertyvista.domain.financial.PaymentRecord;
-import com.propertyvista.domain.financial.billing.InvoicePayment;
 import com.propertyvista.domain.payment.CreditCardInfo.CreditCardType;
 import com.propertyvista.domain.payment.LeasePaymentMethod;
 import com.propertyvista.domain.payment.PaymentType;
@@ -84,5 +83,5 @@ public interface PaymentFacade {
     public void cancelAggregatedTransfer(AggregatedTransfer aggregatedTransferStub);
 
     /** get payments for the last 3 months */
-    public List<InvoicePayment> getLatestPaymentActivity(BillingAccount billingAccount);
+    public List<PaymentRecord> getLatestPaymentActivity(BillingAccount billingAccount);
 }

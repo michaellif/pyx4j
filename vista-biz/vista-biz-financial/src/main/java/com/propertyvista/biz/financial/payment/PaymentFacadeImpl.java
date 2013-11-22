@@ -49,7 +49,6 @@ import com.propertyvista.domain.financial.BillingAccount;
 import com.propertyvista.domain.financial.MerchantAccount;
 import com.propertyvista.domain.financial.PaymentRecord;
 import com.propertyvista.domain.financial.PaymentRecord.PaymentStatus;
-import com.propertyvista.domain.financial.billing.InvoicePayment;
 import com.propertyvista.domain.payment.CreditCardInfo;
 import com.propertyvista.domain.payment.CreditCardInfo.CreditCardType;
 import com.propertyvista.domain.payment.LeasePaymentMethod;
@@ -416,19 +415,19 @@ public class PaymentFacadeImpl implements PaymentFacade {
     }
 
     @Override
-    public List<InvoicePayment> getLatestPaymentActivity(BillingAccount billingAccount) {
+    public List<PaymentRecord> getLatestPaymentActivity(BillingAccount billingAccount) {
         Calendar cal = GregorianCalendar.getInstance();
         cal.add(Calendar.MONTH, -3);
         LogicalDate dateFrom = new LogicalDate(cal.getTime());
-        EntityQueryCriteria<InvoicePayment> criteria = EntityQueryCriteria.create(InvoicePayment.class);
+        EntityQueryCriteria<PaymentRecord> criteria = EntityQueryCriteria.create(PaymentRecord.class);
         criteria.add(PropertyCriterion.eq(criteria.proto().billingAccount(), billingAccount));
-        criteria.add(PropertyCriterion.gt(criteria.proto().paymentRecord().receivedDate(), dateFrom));
-        List<InvoicePayment> result = Persistence.service().query(criteria);
+        criteria.add(PropertyCriterion.gt(criteria.proto().receivedDate(), dateFrom));
+        List<PaymentRecord> result = Persistence.service().query(criteria);
         // sort recent first
-        Collections.sort(result, new Comparator<InvoicePayment>() {
+        Collections.sort(result, new Comparator<PaymentRecord>() {
             @Override
-            public int compare(InvoicePayment o1, InvoicePayment o2) {
-                return o2.paymentRecord().receivedDate().compareTo(o1.paymentRecord().receivedDate());
+            public int compare(PaymentRecord o1, PaymentRecord o2) {
+                return o2.receivedDate().compareTo(o1.receivedDate());
             }
         });
         return result;

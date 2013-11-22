@@ -33,8 +33,8 @@ import com.propertyvista.biz.financial.billing.BillingFacade;
 import com.propertyvista.biz.financial.billing.BillingUtils;
 import com.propertyvista.biz.financial.payment.PaymentFacade;
 import com.propertyvista.biz.financial.payment.PaymentMethodFacade;
+import com.propertyvista.domain.financial.PaymentRecord;
 import com.propertyvista.domain.financial.billing.Bill;
-import com.propertyvista.domain.financial.billing.InvoicePayment;
 import com.propertyvista.domain.payment.AutopayAgreement;
 import com.propertyvista.domain.payment.AutopayAgreement.AutopayAgreementCoveredItem;
 import com.propertyvista.domain.tenant.lease.Lease;
@@ -93,17 +93,17 @@ public class BillingServiceImpl implements BillingService {
 
         Lease lease = ResidentPortalContext.getLease();
 
-        for (InvoicePayment item : ServerSideFactory.create(PaymentFacade.class).getLatestPaymentActivity(lease.billingAccount())) {
+        for (PaymentRecord item : ServerSideFactory.create(PaymentFacade.class).getLatestPaymentActivity(lease.billingAccount())) {
             InvoicePaymentDTO paymentInfo = EntityFactory.create(InvoicePaymentDTO.class);
 
-            paymentInfo.id().set(item.paymentRecord().id());
-            paymentInfo.amount().setValue(item.paymentRecord().amount().getValue());
-            paymentInfo.convenienceFee().setValue(item.paymentRecord().convenienceFee().getValue());
-            paymentInfo.date().setValue(item.paymentRecord().receivedDate().getValue());
-            paymentInfo.status().setValue(item.paymentRecord().paymentStatus().getValue());
+            paymentInfo.id().set(item.id());
+            paymentInfo.amount().setValue(item.amount().getValue());
+            paymentInfo.convenienceFee().setValue(item.convenienceFee().getValue());
+            paymentInfo.date().setValue(item.receivedDate().getValue());
+            paymentInfo.status().setValue(item.paymentStatus().getValue());
 
-            Persistence.ensureRetrieve(item.paymentRecord().leaseTermParticipant(), AttachLevel.Attached);
-            paymentInfo.payer().set(item.paymentRecord().leaseTermParticipant().leaseParticipant().customer().person().name());
+            Persistence.ensureRetrieve(item.leaseTermParticipant(), AttachLevel.Attached);
+            paymentInfo.payer().set(item.leaseTermParticipant().leaseParticipant().customer().person().name());
 
             activities.payments().add(paymentInfo);
         }
