@@ -11,7 +11,9 @@
  * @author ArtyomB
  * @version $Id$
  */
-package com.propertyvista.domain.legal.utils;
+package com.propertyvista.biz.legal.forms.ltbcommon.fieldadapters.partitioners;
+
+import com.propertyvista.biz.legal.forms.framework.mapping.Partitioner;
 
 public class PhoneNumberPartitioner implements Partitioner {
 

@@ -22,6 +22,7 @@ import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
 
 import com.propertyvista.domain.contact.AddressStructured;
+import com.propertyvista.domain.legal.ltbcommon.RentOwingForPeriod;
 import com.propertyvista.domain.tenant.lease.Tenant;
 
 @Transient
@@ -35,6 +36,6 @@ public interface N4LeaseData extends IEntity {
 
     IPrimitive<BigDecimal> totalRentOwning();
 
-    IList<N4RentOwingForPeriod> rentOwingBreakdown();
+    IList<RentOwingForPeriod> rentOwingBreakdown();
 
 }

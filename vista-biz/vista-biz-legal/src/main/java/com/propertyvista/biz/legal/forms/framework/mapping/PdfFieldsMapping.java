@@ -31,9 +31,6 @@ import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IObject;
 
-import com.propertyvista.domain.legal.utils.Formatter;
-import com.propertyvista.domain.legal.utils.Partitioner;
-
 public abstract class PdfFieldsMapping<E extends IEntity> {
 
     private final E proto;
@@ -88,8 +85,7 @@ public abstract class PdfFieldsMapping<E extends IEntity> {
     }
 
     protected final <Child extends IEntity> void mapping(Child child, PdfFieldsMapping<Child> childMapping) {
-        new PdfTableDescriptorBuilder<Child>(child.getFieldName(), (Class<Child>) child.getInstanceValueClass()).rowMapping(Arrays.asList(childMapping))
-                .define();
+        new PdfTableDescriptorBuilder<Child>(child.getFieldName(), (Class<Child>) child.getValueClass()).rowMapping(Arrays.asList(childMapping)).define();
     }
 
     protected class PdfFieldDescriptorBuilder {

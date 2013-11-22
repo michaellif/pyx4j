@@ -27,23 +27,23 @@ import java.util.List;
 
 import org.apache.commons.io.IOUtils;
 
-import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.commons.SimpleMessageFormat;
 import com.pyx4j.config.server.SystemDateManager;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
 
-import com.propertyvista.biz.legal.forms.framework.FormUtils;
+import com.propertyvista.biz.legal.forms.framework.filling.FormFillerImpl;
+import com.propertyvista.biz.legal.forms.n4.N4FieldsMapping;
 import com.propertyvista.domain.contact.AddressSimple;
 import com.propertyvista.domain.contact.AddressStructured;
 import com.propertyvista.domain.financial.ARCode;
 import com.propertyvista.domain.financial.billing.InvoiceDebit;
-import com.propertyvista.domain.legal.n4.N4FormFieldsDataDepr;
+import com.propertyvista.domain.legal.ltbcommon.RentOwingForPeriod;
+import com.propertyvista.domain.legal.n4.N4FormFieldsData;
 import com.propertyvista.domain.legal.n4.N4LandlordsData;
 import com.propertyvista.domain.legal.n4.N4LeaseData;
-import com.propertyvista.domain.legal.n4.N4RentOwingForPeriod;
-import com.propertyvista.domain.legal.n4.N4FormFieldsDataDepr.SignedBy;
+import com.propertyvista.domain.legal.n4.N4Signature.SignedBy;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.LeaseTermTenant;
 import com.propertyvista.domain.tenant.lease.Tenant;
@@ -60,11 +60,11 @@ public class N4GenerationFacadeImpl implements N4GenerationFacade {
     }
 
     @Override
-    public byte[] generateN4Letter(N4FormFieldsDataDepr formData) {
+    public byte[] generateN4Letter(N4FormFieldsData formData) {
         byte[] filledForm = null;
         try {
             byte[] formTemplate = IOUtils.toByteArray(N4GenerationFacadeImpl.class.getResourceAsStream(N4_FORM_FILE));
-            filledForm = FormUtils.fillForm(formData, null, formTemplate);
+            filledForm = new FormFillerImpl().fillForm(formTemplate, new N4FieldsMapping(), formData, true);
         } catch (Throwable e) {
             throw new RuntimeException(e);
         }
@@ -72,150 +72,47 @@ public class N4GenerationFacadeImpl implements N4GenerationFacade {
     }
 
     @Override
-    public N4FormFieldsDataDepr populateFormData(N4LeaseData leaseData, N4LandlordsData landlordsData) {
-        N4FormFieldsDataDepr fieldsData = EntityFactory.create(N4FormFieldsDataDepr.class);
+    public N4FormFieldsData populateFormData(N4LeaseData leaseData, N4LandlordsData landlordsData) {
+        N4FormFieldsData fieldsData = EntityFactory.create(N4FormFieldsData.class);
         fieldsData.to().setValue(
                 SimpleMessageFormat.format("{0}\n{1}", formatTenants(leaseData.leaseTenants()), formatRentalAddress(leaseData.rentalUnitAddress())));
         fieldsData.from().setValue(
                 SimpleMessageFormat.format("{0}\n{1}", landlordsData.landlordsLegalName().getValue(), formatLandlordAddress(landlordsData.landlordsAddress())));
 
-        fieldsData.tenantStreetNumber().setValue(
-                leaseData.rentalUnitAddress().streetNumber().getStringView() + leaseData.rentalUnitAddress().streetNumberSuffix().getStringView());
-        fieldsData.tenantStreetName().setValue(leaseData.rentalUnitAddress().streetName().getStringView());
-        fieldsData.tenantStreetType().setValue(leaseData.rentalUnitAddress().streetType().getStringView());
-        fieldsData.tenantStreetDirection().setValue(leaseData.rentalUnitAddress().streetDirection().getStringView());
-        fieldsData.tenantUnit().setValue(leaseData.rentalUnitAddress().suiteNumber().getStringView());
-        fieldsData.tenantMunicipality().setValue(leaseData.rentalUnitAddress().city().getValue());
-        fieldsData.tenantPostalCodeADA().setValue(leaseData.rentalUnitAddress().postalCode().getValue().substring(0, 3));
-        fieldsData.tenantPostalCodeDAD().setValue(leaseData.rentalUnitAddress().postalCode().getValue().substring(4, 7));
+        // TODO review this: refactor to eliminate unnecessary code duplication
+        fieldsData.rentalUnitAddress().streetNumber()
+                .setValue(leaseData.rentalUnitAddress().streetNumber().getStringView() + leaseData.rentalUnitAddress().streetNumberSuffix().getStringView());
+        fieldsData.rentalUnitAddress().streetName().setValue(leaseData.rentalUnitAddress().streetName().getStringView());
+        fieldsData.rentalUnitAddress().streetType().setValue(leaseData.rentalUnitAddress().streetType().getStringView());
+        fieldsData.rentalUnitAddress().direction().setValue(leaseData.rentalUnitAddress().streetDirection().getStringView());
+        fieldsData.rentalUnitAddress().unit().setValue(leaseData.rentalUnitAddress().suiteNumber().getStringView());
+        fieldsData.rentalUnitAddress().municipality().setValue(leaseData.rentalUnitAddress().city().getValue());
+        fieldsData.rentalUnitAddress().postalCode().setValue(leaseData.rentalUnitAddress().postalCode().getValue());
 
-        // create a date in the following format: dd/MM/YYYY        
-        String[] globalTerminationDate = FormUtils.splitDate(leaseData.terminationDate().getValue());
-        fieldsData.terminationDateDD().setValue(globalTerminationDate[0]);
-        fieldsData.terminationDateMM().setValue(globalTerminationDate[1]);
-        fieldsData.terminationDateYYYY().setValue(globalTerminationDate[2]);
+        fieldsData.terminationDate().setValue(leaseData.terminationDate().getValue());
+        fieldsData.totalRentOwed().setValue(leaseData.totalRentOwning().getValue());
 
-        String[] totalOwed = FormUtils.splitCurrency(leaseData.totalRentOwning().getValue(), false);
-        fieldsData.globalTotalOwedThousands().setValue(totalOwed[0]);
-        fieldsData.globalTotalOwedHundreds().setValue(totalOwed[1]);
-        fieldsData.globalTotalOwedCents().setValue(totalOwed[2]);
+        fieldsData.owedRent().rentOwingBreakdown().addAll(leaseData.rentOwingBreakdown());
+        fieldsData.owedRent().totalRentOwing().setValue(leaseData.totalRentOwning().getValue());
 
-        if (leaseData.rentOwingBreakdown().size() >= 1) {
-            N4RentOwingForPeriod rentOwningForPeriod = leaseData.rentOwingBreakdown().get(0);
-            String[] owedFrom = FormUtils.splitDate(rentOwningForPeriod.from().getValue());
-            fieldsData.owedFromDDA().setValue(owedFrom[0]);
-            fieldsData.owedFromMMA().setValue(owedFrom[1]);
-            fieldsData.owedFromYYYYA().setValue(owedFrom[2]);
+        fieldsData.signature().signedBy().setValue(landlordsData.isLandlord().isBooleanTrue() ? SignedBy.Landlord : SignedBy.Agent);
+        fieldsData.signature().signature().setValue(landlordsData.signature().getValue());
+        fieldsData.signature().signatureDate().setValue(landlordsData.signatureDate().getValue());
 
-            String[] owedTo = FormUtils.splitDate(rentOwningForPeriod.to().getValue());
-            fieldsData.owedToDDA().setValue(owedTo[0]);
-            fieldsData.owedToMMA().setValue(owedTo[1]);
-            fieldsData.owedToYYYYA().setValue(owedTo[2]);
+        fieldsData.landlordsContactInfo().firstName().setValue(landlordsData.signingEmployee().name().firstName().getStringView());
+        fieldsData.landlordsContactInfo().lastName().setValue(landlordsData.signingEmployee().name().lastName().getStringView());
+        fieldsData.landlordsContactInfo().companyName().setValue(landlordsData.landlordsLegalName().getStringView());
 
-            String[] charged = FormUtils.splitCurrency(rentOwningForPeriod.rentCharged().getValue(), true);
-            fieldsData.rentChargedThousandsA().setValue(charged[0]);
-            fieldsData.rentChargedHundredsA().setValue(charged[1]);
-            fieldsData.rentChargedCentsA().setValue(charged[2]);
+        fieldsData.landlordsContactInfo().mailingAddress().setValue(landlordsData.landlordsAddress().street1().getValue());
+        fieldsData.landlordsContactInfo().unit().setValue(landlordsData.landlordsAddress().street2().getValue());
+        fieldsData.landlordsContactInfo().municipality().setValue(landlordsData.landlordsAddress().city().getValue());
+        fieldsData.landlordsContactInfo().province().setValue(landlordsData.landlordsAddress().province().code().getStringView());
+        fieldsData.landlordsContactInfo().postalCode().setValue(landlordsData.landlordsAddress().postalCode().getValue());
 
-            String[] paid = FormUtils.splitCurrency(rentOwningForPeriod.rentPaid().getValue(), true);
-            fieldsData.rentPaidThousandsA().setValue(paid[0]);
-            fieldsData.rentPaidHundredsA().setValue(paid[1]);
-            fieldsData.rentPaidCentsA().setValue(paid[2]);
+        fieldsData.landlordsContactInfo().phoneNumber().setValue(landlordsData.landlordsPhoneNumber().getValue());
+        fieldsData.landlordsContactInfo().faxNumber().setValue(landlordsData.faxNumber().getValue());
 
-            String[] owing = FormUtils.splitCurrency(rentOwningForPeriod.rentOwing().getValue(), true);
-            fieldsData.rentOwingThousandsA().setValue(owing[0]);
-            fieldsData.rentOwingHundredsA().setValue(owing[1]);
-            fieldsData.rentOwingCentsA().setValue(owing[2]);
-        }
-
-        if (leaseData.rentOwingBreakdown().size() >= 2) {
-            N4RentOwingForPeriod rentOwningForPeriod = leaseData.rentOwingBreakdown().get(1);
-            String[] owedFrom = FormUtils.splitDate(rentOwningForPeriod.from().getValue());
-            fieldsData.owedFromDDB().setValue(owedFrom[0]);
-            fieldsData.owedFromMMB().setValue(owedFrom[1]);
-            fieldsData.owedFromYYYYB().setValue(owedFrom[2]);
-
-            String[] owedTo = FormUtils.splitDate(rentOwningForPeriod.to().getValue());
-            fieldsData.owedToDDB().setValue(owedTo[0]);
-            fieldsData.owedToMMB().setValue(owedTo[1]);
-            fieldsData.owedToYYYYB().setValue(owedTo[2]);
-
-            String[] charged = FormUtils.splitCurrency(rentOwningForPeriod.rentCharged().getValue(), true);
-            fieldsData.rentChargedThousandsB().setValue(charged[0]);
-            fieldsData.rentChargedHundredsB().setValue(charged[1]);
-            fieldsData.rentChargedCentsB().setValue(charged[2]);
-
-            String[] paid = FormUtils.splitCurrency(rentOwningForPeriod.rentPaid().getValue(), true);
-            fieldsData.rentPaidThousandsB().setValue(paid[0]);
-            fieldsData.rentPaidHundredsB().setValue(paid[1]);
-            fieldsData.rentPaidCentsB().setValue(paid[2]);
-
-            String[] owing = FormUtils.splitCurrency(rentOwningForPeriod.rentOwing().getValue(), true);
-            fieldsData.rentOwingThousandsB().setValue(owing[0]);
-            fieldsData.rentOwingHundredsB().setValue(owing[1]);
-            fieldsData.rentOwingCentsB().setValue(owing[2]);
-        }
-        if (leaseData.rentOwingBreakdown().size() == 3) {
-            N4RentOwingForPeriod rentOwningForPeriod = leaseData.rentOwingBreakdown().get(2);
-            String[] owedFrom = FormUtils.splitDate(rentOwningForPeriod.from().getValue());
-            fieldsData.owedFromDDC().setValue(owedFrom[0]);
-            fieldsData.owedFromMMC().setValue(owedFrom[1]);
-            fieldsData.owedFromYYYYC().setValue(owedFrom[2]);
-
-            String[] owedTo = FormUtils.splitDate(rentOwningForPeriod.to().getValue());
-            fieldsData.owedToDDC().setValue(owedTo[0]);
-            fieldsData.owedToMMC().setValue(owedTo[1]);
-            fieldsData.owedToYYYYC().setValue(owedTo[2]);
-
-            String[] charged = FormUtils.splitCurrency(rentOwningForPeriod.rentCharged().getValue(), true);
-            fieldsData.rentChargedThousandsC().setValue(charged[0]);
-            fieldsData.rentChargedHundredsC().setValue(charged[1]);
-            fieldsData.rentChargedCentsC().setValue(charged[2]);
-
-            String[] paid = FormUtils.splitCurrency(rentOwningForPeriod.rentPaid().getValue(), true);
-            fieldsData.rentPaidThousandsC().setValue(paid[0]);
-            fieldsData.rentPaidHundredsC().setValue(paid[1]);
-            fieldsData.rentPaidCentsC().setValue(paid[2]);
-
-            String[] owing = FormUtils.splitCurrency(rentOwningForPeriod.rentOwing().getValue(), true);
-            fieldsData.rentOwingThousandsC().setValue(owing[0]);
-            fieldsData.rentOwingHundredsC().setValue(owing[1]);
-            fieldsData.rentOwingCentsC().setValue(owing[2]);
-        }
-        fieldsData.rentOwingThousandsTotal().setValue(totalOwed[0]);
-        fieldsData.rentOwingHundredsTotal().setValue(totalOwed[1]);
-        fieldsData.rentOwingCentsTotal().setValue(totalOwed[2]);
-
-        fieldsData.signedBy().setValue(landlordsData.isLandlord().isBooleanTrue() ? SignedBy.Landlord : SignedBy.Agent);
-        fieldsData.signature().setValue(landlordsData.signature().getValue());
-
-        fieldsData.signatureDate().setValue(SimpleMessageFormat.format("{0,date,dd/MM/YYYY}", landlordsData.signatureDate().getValue()));
-
-        fieldsData.signatureFirstName().setValue(landlordsData.signingEmployee().name().firstName().getStringView());
-        fieldsData.signatureLastName().setValue(landlordsData.signingEmployee().name().lastName().getStringView());
-        fieldsData.signatureCompanyName().setValue(landlordsData.landlordsLegalName().getStringView());
-
-        fieldsData.signatureAddress().setValue(landlordsData.landlordsAddress().street1().getValue());
-        fieldsData.signatureUnit().setValue(landlordsData.landlordsAddress().street2().getValue());
-        fieldsData.signatureMunicipality().setValue(landlordsData.landlordsAddress().city().getValue());
-        fieldsData.signatureProvince().setValue(landlordsData.landlordsAddress().province().code().getStringView());
-        fieldsData.signaturePostalCode().setValue(landlordsData.landlordsAddress().postalCode().getValue());
-
-        if (!CommonsStringUtils.isEmpty(landlordsData.landlordsPhoneNumber().getValue())) {
-            String[] signaturPhoneNumber = FormUtils.splitPhoneNumber(landlordsData.landlordsPhoneNumber().getValue());
-            fieldsData.signaturePhoneNumberAreaCode().setValue(signaturPhoneNumber[0]);
-            fieldsData.signaturePhoneNumberCombA().setValue(signaturPhoneNumber[1]);
-            fieldsData.signaturePhoneNumberCombB().setValue(signaturPhoneNumber[2]);
-        }
-
-        if (!CommonsStringUtils.isEmpty(landlordsData.faxNumber().getValue())) {
-            String[] signatureFaxNumber = FormUtils.splitPhoneNumber(landlordsData.faxNumber().getValue());
-            fieldsData.signatureFaxNumberAreaCode().setValue(signatureFaxNumber[0]);
-            fieldsData.signatureFaxNumberCombA().setValue(signatureFaxNumber[1]);
-            fieldsData.signatureFaxNumberCombB().setValue(signatureFaxNumber[2]);
-        }
-
-        fieldsData.signatureEmailAddress().setValue(landlordsData.emailAddress().getValue());
+        fieldsData.landlordsContactInfo().email().setValue(landlordsData.emailAddress().getValue());
 
         return fieldsData;
     }
@@ -246,7 +143,7 @@ public class N4GenerationFacadeImpl implements N4GenerationFacade {
         n4LeaseData.rentOwingBreakdown().addAll(debitAggregator.debitsForPeriod(debitAggregator.aggregate(filteredDebits)));
 
         BigDecimal totalRentOwning = BigDecimal.ZERO;
-        for (N4RentOwingForPeriod rentOwingForPeriod : n4LeaseData.rentOwingBreakdown()) {
+        for (RentOwingForPeriod rentOwingForPeriod : n4LeaseData.rentOwingBreakdown()) {
             totalRentOwning = totalRentOwning.add(rentOwingForPeriod.rentOwing().getValue());
         }
         n4LeaseData.totalRentOwning().setValue(totalRentOwning);

@@ -18,16 +18,16 @@ import java.util.Collection;
 import com.pyx4j.commons.LogicalDate;
 
 import com.propertyvista.domain.financial.ARCode;
-import com.propertyvista.domain.legal.n4.N4FormFieldsDataDepr;
+import com.propertyvista.domain.legal.n4.N4FormFieldsData;
 import com.propertyvista.domain.legal.n4.N4LandlordsData;
 import com.propertyvista.domain.legal.n4.N4LeaseData;
 import com.propertyvista.domain.tenant.lease.Lease;
 
 public interface N4GenerationFacade {
 
-    byte[] generateN4Letter(N4FormFieldsDataDepr formData);
+    byte[] generateN4Letter(N4FormFieldsData formData);
 
-    N4FormFieldsDataDepr populateFormData(N4LeaseData leaseData, N4LandlordsData landlordsData);
+    N4FormFieldsData populateFormData(N4LeaseData leaseData, N4LandlordsData landlordsData);
 
     N4LeaseData prepareN4LeaseData(Lease leaseId, LogicalDate noticeDate, int terminationAdvanceDays, Collection<ARCode> acceptedARCodes);
 }

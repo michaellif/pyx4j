@@ -33,15 +33,15 @@ import com.propertyvista.domain.legal.l1.L1ApplicationSchedule.ApplicationPackag
 import com.propertyvista.domain.legal.l1.L1ApplicationSchedule.ApplicationPackageDeliveryMethodToTenant;
 import com.propertyvista.domain.legal.l1.L1FormFieldsData;
 import com.propertyvista.domain.legal.l1.L1LandlordsContactInfo;
+import com.propertyvista.domain.legal.l1.L1LandlordsContactInfo.TypeOfLandlord;
 import com.propertyvista.domain.legal.l1.L1PaymentInfo;
 import com.propertyvista.domain.legal.l1.L1ReasonForApplication;
-import com.propertyvista.domain.legal.l1.NsfChargeDetails;
-import com.propertyvista.domain.legal.l1.L1LandlordsContactInfo.TypeOfLandlord;
 import com.propertyvista.domain.legal.l1.L1ReasonForApplication.YesNo;
 import com.propertyvista.domain.legal.l1.L1ScheduleAndPayment.LanguageServiceType;
 import com.propertyvista.domain.legal.l1.L1SignatureData;
 import com.propertyvista.domain.legal.l1.L1TenantInfo;
 import com.propertyvista.domain.legal.l1.L1TenantInfo.Gender;
+import com.propertyvista.domain.legal.l1.NsfChargeDetails;
 import com.propertyvista.domain.legal.ltbcommon.RentOwingForPeriod;
 
 public class MockL1FormDataFactory {
@@ -65,8 +65,8 @@ public class MockL1FormDataFactory {
         fieldsData.rentalUnitInfo().postalCode().setValue("A1A 1A1");
 
         // TODO I don't really know if this 'file number' includes alpha symbols
-        fieldsData.rentalUnitInfo().relatedApplicationFileNumber1().setValue("111-11111");
-        fieldsData.rentalUnitInfo().relatedApplicationFileNumber2().setValue("222-22222");
+        fieldsData.relatedApplicationFileNumber1().setValue("111-11111");
+        fieldsData.relatedApplicationFileNumber2().setValue("222-22222");
 
         // Part2
         L1TenantInfo tenantInfo1 = fieldsData.tenants().$();

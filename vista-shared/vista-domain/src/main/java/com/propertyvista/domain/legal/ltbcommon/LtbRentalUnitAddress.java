@@ -11,35 +11,27 @@
  * @author ArtyomB
  * @version $Id$
  */
-package com.propertyvista.domain.legal.l1;
+package com.propertyvista.domain.legal.ltbcommon;
 
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 
 @Transient
-public interface L1AgentContactInfo extends IEntity {
+public interface LtbRentalUnitAddress extends IEntity {
 
-    IPrimitive<String> firstName();
+    IPrimitive<String> streetNumber();
 
-    IPrimitive<String> lastName();
+    IPrimitive<String> streetName();
 
-    IPrimitive<String> companyName();
+    IPrimitive<String> streetType();
 
-    IPrimitive<String> mailingAddress();
+    IPrimitive<String> direction();
 
     IPrimitive<String> unit();
 
     IPrimitive<String> municipality();
 
-    IPrimitive<String> province();
-
     IPrimitive<String> postalCode();
-
-    IPrimitive<String> phoneNumber();
-
-    IPrimitive<String> faxNumber();
-
-    IPrimitive<String> email();
 
 }

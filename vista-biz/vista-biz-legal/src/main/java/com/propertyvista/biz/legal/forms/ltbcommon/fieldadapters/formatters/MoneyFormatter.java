@@ -11,14 +11,19 @@
  * @author ArtyomB
  * @version $Id$
  */
-package com.propertyvista.domain.legal.utils;
+package com.propertyvista.biz.legal.forms.ltbcommon.fieldadapters.formatters;
 
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
+import java.math.BigDecimal;
 
-@Retention(RetentionPolicy.RUNTIME)
-public @interface PdfFormFieldFormatter {
+import com.pyx4j.commons.SimpleMessageFormat;
 
-    Class<? extends Formatter> value();
+import com.propertyvista.biz.legal.forms.framework.mapping.Formatter;
+
+public class MoneyFormatter implements Formatter {
+
+    @Override
+    public String format(Object object) {
+        return SimpleMessageFormat.format("{0,number,#,##0.00}", (BigDecimal) object);
+    }
 
 }

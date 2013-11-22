@@ -14,24 +14,23 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  *
- * Created on 2013-11-20
+ * Created on 2013-11-19
  * @author ArtyomB
  * @version $Id$
  */
-package com.propertyvista.biz.legal.forms.ltbcommon.fieldadapters;
+package com.propertyvista.biz.legal.forms.ltbcommon.fieldadapters.formatters;
 
-import java.util.Date;
+import java.math.BigDecimal;
 
 import com.pyx4j.commons.SimpleMessageFormat;
 
-import com.propertyvista.domain.legal.utils.Formatter;
+import com.propertyvista.biz.legal.forms.framework.mapping.Formatter;
 
-public class CreditCardExpiryDateFormatter implements Formatter {
+public class MoneyShortFormatter implements Formatter {
 
     @Override
     public String format(Object object) {
-        Date value = (Date) object;
-        return SimpleMessageFormat.format("{0,date,MM/YY}", value);
+        return SimpleMessageFormat.format("{0,number,##0.00}", (BigDecimal) object);
     }
 
 }

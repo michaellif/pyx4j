@@ -30,121 +30,77 @@ import com.pyx4j.gwt.server.DateUtils;
 
 import com.propertyvista.domain.contact.AddressStructured.StreetDirection;
 import com.propertyvista.domain.contact.AddressStructured.StreetType;
-import com.propertyvista.domain.legal.n4.N4FormFieldsDataDepr;
+import com.propertyvista.domain.legal.ltbcommon.RentOwingForPeriod;
+import com.propertyvista.domain.legal.n4.N4FormFieldsData;
 import com.propertyvista.domain.legal.n4.N4LeaseData;
-import com.propertyvista.domain.legal.n4.N4FormFieldsDataDepr.SignedBy;
+import com.propertyvista.domain.legal.n4.N4Signature.SignedBy;
 import com.propertyvista.domain.tenant.lease.Tenant;
 
 public class MockN4FormDataFactory {
 
     private final static String SIGNATURE = "mock-signature.jpg";
 
-    public static N4FormFieldsDataDepr makeMockN4FormFieldsData(String tenantName) {
-        N4FormFieldsDataDepr mockFormData = EntityFactory.create(N4FormFieldsDataDepr.class);
+    public static N4FormFieldsData makeMockN4FormFieldsData(String tenantName) {
+        N4FormFieldsData mockFormData = EntityFactory.create(N4FormFieldsData.class);
         mockFormData.to().setValue(tenantName + "\n11-2222 Bathurst Street Toronto ON A9A 9A9");
         mockFormData.from().setValue("RedRiDge");
 
-        mockFormData.tenantStreetNumber().setValue("2222");
-        mockFormData.tenantStreetName().setValue("Bathurst");
-        mockFormData.tenantStreetType().setValue("Street");
-        mockFormData.tenantStreetDirection().setValue("North");
-        mockFormData.tenantUnit().setValue("11");
-        mockFormData.tenantMunicipality().setValue("Toronto");
-        mockFormData.tenantPostalCodeADA().setValue("A9A");
-        mockFormData.tenantPostalCodeDAD().setValue("9A9");
+        mockFormData.rentalUnitAddress().streetNumber().setValue("2222");
+        mockFormData.rentalUnitAddress().streetName().setValue("Bathurst");
+        mockFormData.rentalUnitAddress().streetType().setValue("Street");
+        mockFormData.rentalUnitAddress().direction().setValue("North");
+        mockFormData.rentalUnitAddress().unit().setValue("11");
+        mockFormData.rentalUnitAddress().municipality().setValue("Toronto");
+        mockFormData.rentalUnitAddress().postalCode().setValue("A9A 9A9");
 
-        mockFormData.terminationDateDD().setValue("31");
-        mockFormData.terminationDateMM().setValue("12");
-        mockFormData.terminationDateYYYY().setValue("2013");
+        mockFormData.terminationDate().setValue(new LogicalDate(DateUtils.detectDateformat("2013-12-31")));
+        mockFormData.totalRentOwed().setValue(new BigDecimal("11234.99"));
 
-        mockFormData.globalTotalOwedThousands().setValue(" 1");
-        mockFormData.globalTotalOwedHundreds().setValue("234");
-        mockFormData.globalTotalOwedCents().setValue("99");
+        mockFormData.owedRent().totalRentOwing().setValue(new BigDecimal("21234.99"));
+        RentOwingForPeriod period1 = mockFormData.owedRent().rentOwingBreakdown().$();
+        period1.from().setValue(new LogicalDate(DateUtils.detectDateformat("2012-01-01")));
+        period1.to().setValue(new LogicalDate(DateUtils.detectDateformat("2013-12-31")));
+        period1.rentCharged().setValue(new BigDecimal("1155.00"));
+        period1.rentPaid().setValue(new BigDecimal("113.44"));
+        period1.rentOwing().setValue(new BigDecimal("1234.55"));
+        mockFormData.owedRent().rentOwingBreakdown().add(period1);
 
-        {
-            mockFormData.owedFromDDA().setValue("01");
-            mockFormData.owedFromMMA().setValue("01");
-            mockFormData.owedFromYYYYA().setValue("2012");
+        RentOwingForPeriod period2 = mockFormData.owedRent().rentOwingBreakdown().$();
+        period2.from().setValue(new LogicalDate(DateUtils.detectDateformat("2013-01-01")));
+        period2.to().setValue(new LogicalDate(DateUtils.detectDateformat("2014-12-31")));
+        period2.rentCharged().setValue(new BigDecimal("5555.55"));
+        period2.rentPaid().setValue(new BigDecimal("13.44"));
+        period2.rentOwing().setValue(new BigDecimal("1234.55"));
+        mockFormData.owedRent().rentOwingBreakdown().add(period2);
 
-            mockFormData.owedToDDA().setValue("31");
-            mockFormData.owedToMMA().setValue("12");
-            mockFormData.owedToYYYYA().setValue("2013");
+        RentOwingForPeriod period3 = mockFormData.owedRent().rentOwingBreakdown().$();
+        period3.from().setValue(new LogicalDate(DateUtils.detectDateformat("2015-01-01")));
+        period3.to().setValue(new LogicalDate(DateUtils.detectDateformat("2016-12-31")));
+        period3.rentCharged().setValue(new BigDecimal("7777.77"));
+        period3.rentPaid().setValue(new BigDecimal("1113.44"));
+        period3.rentOwing().setValue(new BigDecimal("234.55"));
+        mockFormData.owedRent().rentOwingBreakdown().add(period3);
 
-            mockFormData.rentChargedThousandsA().setValue("1");
-            mockFormData.rentChargedHundredsA().setValue("155");
-            mockFormData.rentChargedCentsA().setValue("00");
-            mockFormData.rentPaidThousandsA().setValue(" ");
-            mockFormData.rentPaidHundredsA().setValue("235");
-            mockFormData.rentPaidCentsA().setValue("17");
-            mockFormData.rentOwingThousandsA().setValue("1");
-            mockFormData.rentOwingHundredsA().setValue("235");
-            mockFormData.rentOwingCentsA().setValue("15");
-        }
-        {
-            mockFormData.owedFromDDB().setValue("01");
-            mockFormData.owedFromMMB().setValue("01");
-            mockFormData.owedFromYYYYB().setValue("2012");
-
-            mockFormData.owedToDDB().setValue("31");
-            mockFormData.owedToMMB().setValue("12");
-            mockFormData.owedToYYYYB().setValue("2013");
-
-            mockFormData.rentChargedThousandsB().setValue("1");
-            mockFormData.rentChargedHundredsB().setValue("155");
-            mockFormData.rentChargedCentsB().setValue("00");
-            mockFormData.rentPaidThousandsB().setValue(" ");
-            mockFormData.rentPaidHundredsB().setValue("235");
-            mockFormData.rentPaidCentsB().setValue("17");
-            mockFormData.rentOwingThousandsB().setValue("1");
-            mockFormData.rentOwingHundredsB().setValue("235");
-            mockFormData.rentOwingCentsB().setValue("15");
-        }
-        {
-            mockFormData.owedFromDDC().setValue("01");
-            mockFormData.owedFromMMC().setValue("01");
-            mockFormData.owedFromYYYYC().setValue("2012");
-
-            mockFormData.owedToDDC().setValue("31");
-            mockFormData.owedToMMC().setValue("12");
-            mockFormData.owedToYYYYC().setValue("2013");
-
-            mockFormData.rentChargedThousandsC().setValue("1");
-            mockFormData.rentChargedHundredsC().setValue("155");
-            mockFormData.rentChargedCentsC().setValue("00");
-            mockFormData.rentPaidThousandsC().setValue(" ");
-            mockFormData.rentPaidHundredsC().setValue("235");
-            mockFormData.rentPaidCentsC().setValue("17");
-            mockFormData.rentOwingThousandsC().setValue("1");
-            mockFormData.rentOwingHundredsC().setValue("235");
-            mockFormData.rentOwingCentsC().setValue("15");
-        }
-
-        mockFormData.signedBy().setValue(SignedBy.Agent);
+        mockFormData.signature().signedBy().setValue(SignedBy.Agent);
         try {
-            mockFormData.signature().setValue(IOUtils.toByteArray(N4GenerationFacadeImpl.class.getResourceAsStream(SIGNATURE)));
+            mockFormData.signature().signature().setValue(IOUtils.toByteArray(N4GenerationFacadeImpl.class.getResourceAsStream(SIGNATURE)));
         } catch (Throwable e) {
             throw new RuntimeException(e);
         }
-        mockFormData.signatureDate().setValue("31/12/2013");
+        mockFormData.signature().signatureDate().setValue(new LogicalDate(DateUtils.detectDateformat("2013-12-31")));
 
-        mockFormData.signatureFirstName().setValue("Foo");
-        mockFormData.signatureLastName().setValue("Bar");
-        mockFormData.signatureCompanyName().setValue("Red Ridge");
+        mockFormData.landlordsContactInfo().firstName().setValue("Foo");
+        mockFormData.landlordsContactInfo().lastName().setValue("Bar");
+        mockFormData.landlordsContactInfo().companyName().setValue("Red Ridge");
 
-        mockFormData.signatureAddress().setValue("405 The West Mall");
-        mockFormData.signatureUnit().setValue("1111");
-        mockFormData.signatureMunicipality().setValue("Toronto");
-        mockFormData.signatureProvince().setValue("ON");
-        mockFormData.signaturePostalCode().setValue("A9A 9A9");
-        mockFormData.signaturePhoneNumberAreaCode().setValue("647");
-        mockFormData.signaturePhoneNumberCombA().setValue("647");
-        mockFormData.signaturePhoneNumberCombB().setValue("555");
-        mockFormData.signaturePhoneNumberCombB().setValue("5555");
-        mockFormData.signatureFaxNumberAreaCode().setValue("647");
-        mockFormData.signatureFaxNumberCombA().setValue("647");
-        mockFormData.signatureFaxNumberCombB().setValue("555");
-        mockFormData.signatureFaxNumberCombB().setValue("5555");
-        mockFormData.signatureEmailAddress().setValue("foob@redridge.ca");
+        mockFormData.landlordsContactInfo().mailingAddress().setValue("405 The West Mall");
+        mockFormData.landlordsContactInfo().unit().setValue("1111");
+        mockFormData.landlordsContactInfo().municipality().setValue("Toronto");
+        mockFormData.landlordsContactInfo().province().setValue("ON");
+        mockFormData.landlordsContactInfo().postalCode().setValue("A9A 9A9");
+        mockFormData.landlordsContactInfo().phoneNumber().setValue("(647) 555-5555");
+        mockFormData.landlordsContactInfo().faxNumber().setValue("(647) 444-4444");
+        mockFormData.landlordsContactInfo().email().setValue("foob@redridge.ca");
 
         return mockFormData;
     }

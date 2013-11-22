@@ -7,7 +7,7 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on 2013-09-20
+ * Created on 2013-11-22
  * @author ArtyomB
  * @version $Id$
  */
@@ -20,17 +20,29 @@ import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 
+import com.propertyvista.domain.legal.ltbcommon.LtbAgentContactInfo;
+import com.propertyvista.domain.legal.ltbcommon.LtbOwedRent;
+import com.propertyvista.domain.legal.ltbcommon.LtbRentalUnitAddress;
+
 @Transient
-public interface N4RentOwingForPeriod extends IEntity {
+public interface N4FormFieldsData extends IEntity {
 
-    IPrimitive<LogicalDate> from();
+    /** Tenant names and address */
+    IPrimitive<String> to();
 
-    IPrimitive<LogicalDate> to();
+    /** Landlord's name */
+    IPrimitive<String> from();
 
-    IPrimitive<BigDecimal> rentCharged();
+    LtbRentalUnitAddress rentalUnitAddress();
 
-    IPrimitive<BigDecimal> rentPaid();
+    IPrimitive<LogicalDate> terminationDate();
 
-    IPrimitive<BigDecimal> rentOwing();
+    IPrimitive<BigDecimal> totalRentOwed();
+
+    LtbOwedRent owedRent();
+
+    N4Signature signature();
+
+    LtbAgentContactInfo landlordsContactInfo();
 
 }

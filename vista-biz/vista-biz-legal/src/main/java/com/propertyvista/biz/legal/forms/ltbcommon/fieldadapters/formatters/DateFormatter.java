@@ -7,27 +7,24 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on 2013-11-15
+ * Created on 2013-11-13
  * @author ArtyomB
  * @version $Id$
  */
-package com.propertyvista.domain.legal.utils;
+package com.propertyvista.biz.legal.forms.ltbcommon.fieldadapters.formatters;
 
-public class DatePartitioner implements Partitioner {
+import java.util.Date;
+
+import com.pyx4j.commons.SimpleMessageFormat;
+
+import com.propertyvista.biz.legal.forms.framework.mapping.Formatter;
+
+public class DateFormatter implements Formatter {
 
     @Override
-    public String getPart(String value, int partIndex) {
-        String part = null;
-        switch (partIndex) {
-        case 0:
-        case 1:
-        case 2:
-            part = value.split("/")[partIndex];
-            break;
-        default:
-            part = "";
-        }
-        return part;
+    public String format(Object object) {
+        Date value = (Date) object;
+        return SimpleMessageFormat.format("{0,date,dd/MM/YYYY}", value);
     }
 
 }

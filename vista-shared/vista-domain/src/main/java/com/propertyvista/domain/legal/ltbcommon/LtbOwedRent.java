@@ -11,31 +11,20 @@
  * @author ArtyomB
  * @version $Id$
  */
-package com.propertyvista.domain.legal.l1;
+package com.propertyvista.domain.legal.ltbcommon;
+
+import java.math.BigDecimal;
 
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
 
 @Transient
-public interface L1RentalUnitInfo extends IEntity {
+public interface LtbOwedRent extends IEntity {
 
-    IPrimitive<String> streetNumber();
+    IList<RentOwingForPeriod> rentOwingBreakdown();
 
-    IPrimitive<String> streetName();
-
-    IPrimitive<String> streetType();
-
-    IPrimitive<String> direction();
-
-    IPrimitive<String> unit();
-
-    IPrimitive<String> municipality();
-
-    IPrimitive<String> postalCode();
-
-    IPrimitive<String> relatedApplicationFileNumber1();
-
-    IPrimitive<String> relatedApplicationFileNumber2();
+    IPrimitive<BigDecimal> totalRentOwing();
 
 }

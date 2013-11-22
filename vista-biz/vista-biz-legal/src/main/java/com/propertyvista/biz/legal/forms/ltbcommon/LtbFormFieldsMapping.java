@@ -26,15 +26,15 @@ import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IObject;
 
 import com.propertyvista.biz.legal.forms.framework.mapping.PdfFieldsMapping;
-import com.propertyvista.biz.legal.forms.ltbcommon.fieldadapters.MoneyShortFormatter;
-import com.propertyvista.biz.legal.forms.ltbcommon.fieldadapters.MoneyShortPartitioner;
+import com.propertyvista.biz.legal.forms.ltbcommon.fieldadapters.formatters.DateFormatter;
+import com.propertyvista.biz.legal.forms.ltbcommon.fieldadapters.formatters.MoneyFormatter;
+import com.propertyvista.biz.legal.forms.ltbcommon.fieldadapters.formatters.MoneyShortFormatter;
+import com.propertyvista.biz.legal.forms.ltbcommon.fieldadapters.formatters.UppercaseFormatter;
+import com.propertyvista.biz.legal.forms.ltbcommon.fieldadapters.partitioners.DatePartitioner;
+import com.propertyvista.biz.legal.forms.ltbcommon.fieldadapters.partitioners.MoneyPartitioner;
+import com.propertyvista.biz.legal.forms.ltbcommon.fieldadapters.partitioners.MoneyShortPartitioner;
+import com.propertyvista.biz.legal.forms.ltbcommon.fieldadapters.partitioners.PhoneNumberPartitioner;
 import com.propertyvista.biz.legal.forms.ltbcommon.utils.LandlordAndTenantBoardPdfFormUtils;
-import com.propertyvista.domain.legal.utils.DateFormatter;
-import com.propertyvista.domain.legal.utils.DatePartitioner;
-import com.propertyvista.domain.legal.utils.MoneyFormatter;
-import com.propertyvista.domain.legal.utils.MoneyPartitioner;
-import com.propertyvista.domain.legal.utils.PhoneNumberPartitioner;
-import com.propertyvista.domain.legal.utils.UppercaseFormatter;
 
 public abstract class LtbFormFieldsMapping<E extends IEntity> extends PdfFieldsMapping<E> {
 

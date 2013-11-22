@@ -21,6 +21,9 @@ import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
 
+import com.propertyvista.domain.legal.ltbcommon.LtbAgentContactInfo;
+import com.propertyvista.domain.legal.ltbcommon.LtbOwedRent;
+import com.propertyvista.domain.legal.ltbcommon.LtbRentalUnitAddress;
 
 @Transient
 public interface L1FormFieldsData extends IEntity {
@@ -31,7 +34,12 @@ public interface L1FormFieldsData extends IEntity {
 
     IPrimitive<LogicalDate> fillingDate();
 
-    L1RentalUnitInfo rentalUnitInfo();
+    // Part1
+    LtbRentalUnitAddress rentalUnitInfo();
+
+    IPrimitive<String> relatedApplicationFileNumber1();
+
+    IPrimitive<String> relatedApplicationFileNumber2();
 
     // Part2
     IList<L1TenantInfo> tenants();
@@ -42,7 +50,7 @@ public interface L1FormFieldsData extends IEntity {
     L1ReasonForApplication reasonForApplication();
 
     // Part4
-    L1OwedRent owedRent();
+    LtbOwedRent owedRent();
 
     L1OwedNsfCharges owedNsfCharges();
 
@@ -53,7 +61,7 @@ public interface L1FormFieldsData extends IEntity {
     /** L1 form can hold only one of these */
     IList<L1LandlordsContactInfo> landlordsContactInfos();
 
-    L1AgentContactInfo agentContactInfo();
+    LtbAgentContactInfo agentContactInfo();
 
     // Part7
     L1SignatureData signatureData();

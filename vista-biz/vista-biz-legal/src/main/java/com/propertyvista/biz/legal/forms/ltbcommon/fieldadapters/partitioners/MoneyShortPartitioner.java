@@ -18,9 +18,9 @@
  * @author ArtyomB
  * @version $Id$
  */
-package com.propertyvista.biz.legal.forms.ltbcommon.fieldadapters;
+package com.propertyvista.biz.legal.forms.ltbcommon.fieldadapters.partitioners;
 
-import com.propertyvista.domain.legal.utils.Partitioner;
+import com.propertyvista.biz.legal.forms.framework.mapping.Partitioner;
 
 public class MoneyShortPartitioner implements Partitioner {
 

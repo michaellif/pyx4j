@@ -20,7 +20,7 @@
  */
 package com.propertyvista.biz.legal;
 
-import com.propertyvista.domain.legal.utils.Partitioner;
+import com.propertyvista.biz.legal.forms.framework.mapping.Partitioner;
 
 public class MockFieldPartitioner implements Partitioner {
 

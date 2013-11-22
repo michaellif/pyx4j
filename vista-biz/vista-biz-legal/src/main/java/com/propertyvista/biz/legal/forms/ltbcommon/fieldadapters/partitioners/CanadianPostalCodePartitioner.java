@@ -7,18 +7,29 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on 2013-11-13
+ * Created on 2013-11-15
  * @author ArtyomB
  * @version $Id$
  */
-package com.propertyvista.domain.legal.utils;
+package com.propertyvista.biz.legal.forms.ltbcommon.fieldadapters.partitioners;
 
+import com.propertyvista.biz.legal.forms.framework.mapping.Partitioner;
 
-public class UppercaseFormatter implements Formatter {
+public class CanadianPostalCodePartitioner implements Partitioner {
 
     @Override
-    public String format(Object object) {
-        return object.toString().toUpperCase();
+    public String getPart(String value, int partIndex) {
+        String part = null;
+        switch (partIndex) {
+        case 0:
+        case 1:
+            part = value.split(" ")[partIndex];
+            break;
+        default:
+            part = "";
+            break;
+        }
+        return part;
     }
 
 }

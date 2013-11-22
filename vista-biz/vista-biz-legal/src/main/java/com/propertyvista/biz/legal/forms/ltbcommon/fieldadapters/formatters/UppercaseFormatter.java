@@ -11,18 +11,16 @@
  * @author ArtyomB
  * @version $Id$
  */
-package com.propertyvista.domain.legal.utils;
+package com.propertyvista.biz.legal.forms.ltbcommon.fieldadapters.formatters;
 
-import java.util.Date;
+import com.propertyvista.biz.legal.forms.framework.mapping.Formatter;
 
-import com.pyx4j.commons.SimpleMessageFormat;
 
-public class DateFormatter implements Formatter {
+public class UppercaseFormatter implements Formatter {
 
     @Override
     public String format(Object object) {
-        Date value = (Date) object;
-        return SimpleMessageFormat.format("{0,date,dd/MM/YYYY}", value);
+        return object.toString().toUpperCase();
     }
 
 }

@@ -41,9 +41,9 @@ import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.entity.shared.IPrimitive;
 
+import com.propertyvista.biz.legal.forms.framework.mapping.Formatter;
 import com.propertyvista.biz.legal.forms.framework.mapping.PdfFieldDescriptor;
 import com.propertyvista.biz.legal.forms.framework.mapping.PdfFieldsMapping;
-import com.propertyvista.domain.legal.utils.Formatter;
 
 public class FormFillerImpl implements FormFiller {
 

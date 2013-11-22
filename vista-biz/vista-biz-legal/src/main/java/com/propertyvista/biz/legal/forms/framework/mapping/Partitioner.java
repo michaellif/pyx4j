@@ -11,17 +11,10 @@
  * @author ArtyomB
  * @version $Id$
  */
-package com.propertyvista.domain.legal.utils;
+package com.propertyvista.biz.legal.forms.framework.mapping;
 
-import java.math.BigDecimal;
+public interface Partitioner {
 
-import com.pyx4j.commons.SimpleMessageFormat;
-
-public class MoneyFormatter implements Formatter {
-
-    @Override
-    public String format(Object object) {
-        return SimpleMessageFormat.format("{0,number,#,##0.00}", (BigDecimal) object);
-    }
+    String getPart(String value, int partIndex);
 
 }

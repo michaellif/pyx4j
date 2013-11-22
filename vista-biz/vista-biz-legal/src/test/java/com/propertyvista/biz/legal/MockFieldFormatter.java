@@ -20,7 +20,7 @@
  */
 package com.propertyvista.biz.legal;
 
-import com.propertyvista.domain.legal.utils.Formatter;
+import com.propertyvista.biz.legal.forms.framework.mapping.Formatter;
 
 /**
  * separates letters by <code>!</code>, i.e <code>abcde</code> will be turned into <code>a!b!c!d!e!</code>

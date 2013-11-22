@@ -11,27 +11,23 @@
  * @author ArtyomB
  * @version $Id$
  */
-package com.propertyvista.domain.legal.utils;
+package com.propertyvista.biz.legal.forms.ltbcommon.fieldadapters.partitioners;
 
-public class MoneyPartitioner implements Partitioner {
+import com.propertyvista.biz.legal.forms.framework.mapping.Partitioner;
+
+public class DatePartitioner implements Partitioner {
 
     @Override
     public String getPart(String value, int partIndex) {
         String part = null;
         switch (partIndex) {
         case 0:
-            part = value.contains(",") ? value.split(",")[0] : "";
-            break;
         case 1:
-            part = value.split("\\.")[0];
-            part = part.contains(",") ? part.split(",")[1] : part;
-            break;
         case 2:
-            part = value.split("\\.")[1];
+            part = value.split("/")[partIndex];
             break;
         default:
             part = "";
-            break;
         }
         return part;
     }

@@ -24,22 +24,13 @@ import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 
-import com.propertyvista.domain.legal.utils.PdfFormFieldFormatter;
-import com.propertyvista.domain.legal.utils.PdfFormFieldMapping;
-import com.propertyvista.domain.legal.utils.PdfFormFieldPartitioner;
-
 @Transient
 public interface MockFormFieldsData extends IEntity {
 
-    @PdfFormFieldMapping("field1")
     IPrimitive<String> field1();
 
-    @PdfFormFieldPartitioner(MockFieldPartitioner.class)
-    @PdfFormFieldMapping("field2_1{2},field2_2{3},field2_3{4}")
     IPrimitive<String> field2();
 
-    @PdfFormFieldFormatter(MockFieldFormatter.class)
-    @PdfFormFieldMapping("field10")
     IPrimitive<String> field10();
 
 }

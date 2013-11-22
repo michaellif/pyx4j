@@ -7,14 +7,29 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on 2013-09-24
+ * Created on 2013-11-22
  * @author ArtyomB
  * @version $Id$
  */
-package com.propertyvista.domain.legal.utils;
+package com.propertyvista.domain.legal.n4;
 
-public interface Formatter {
+import com.pyx4j.commons.LogicalDate;
+import com.pyx4j.entity.annotations.Transient;
+import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.shared.IPrimitive;
 
-    String format(Object object);
+@Transient
+public interface N4Signature extends IEntity {
 
+    public enum SignedBy {
+
+        Landlord, Agent
+
+    }
+
+    IPrimitive<SignedBy> signedBy();
+
+    IPrimitive<byte[]> signature();
+
+    IPrimitive<LogicalDate> signatureDate();
 }

@@ -23,8 +23,6 @@ package com.propertyvista.biz.legal.forms.framework.mapping;
 import java.util.Collections;
 import java.util.List;
 
-import com.propertyvista.domain.legal.utils.Formatter;
-import com.propertyvista.domain.legal.utils.Partitioner;
 
 public class PdfFieldDescriptor {
 

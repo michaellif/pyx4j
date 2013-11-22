@@ -23,26 +23,26 @@ package com.propertyvista.biz.legal.forms.l1;
 import java.util.Arrays;
 
 import com.propertyvista.biz.legal.forms.ltbcommon.LtbFormFieldsMapping;
-import com.propertyvista.biz.legal.forms.ltbcommon.fieldadapters.CreditCardExpiryDateFormatter;
-import com.propertyvista.biz.legal.forms.ltbcommon.fieldadapters.CreditCardExpiryDatePartitioner;
-import com.propertyvista.domain.legal.l1.L1AgentContactInfo;
+import com.propertyvista.biz.legal.forms.ltbcommon.fieldadapters.formatters.CreditCardExpiryDateFormatter;
+import com.propertyvista.biz.legal.forms.ltbcommon.fieldadapters.partitioners.CanadianPostalCodePartitioner;
+import com.propertyvista.biz.legal.forms.ltbcommon.fieldadapters.partitioners.CreditCardExpiryDatePartitioner;
+import com.propertyvista.biz.legal.forms.ltbcommon.fieldadapters.partitioners.FileNumberPartitioner;
 import com.propertyvista.domain.legal.l1.L1ApplicationSchedule;
 import com.propertyvista.domain.legal.l1.L1FormFieldsData;
 import com.propertyvista.domain.legal.l1.L1LandlordsContactInfo;
 import com.propertyvista.domain.legal.l1.L1OwedNsfCharges;
-import com.propertyvista.domain.legal.l1.L1OwedRent;
 import com.propertyvista.domain.legal.l1.L1OwedSummary;
 import com.propertyvista.domain.legal.l1.L1PaymentInfo;
 import com.propertyvista.domain.legal.l1.L1ReasonForApplication;
-import com.propertyvista.domain.legal.l1.L1RentalUnitInfo;
 import com.propertyvista.domain.legal.l1.L1ScheduleAndPayment;
 import com.propertyvista.domain.legal.l1.L1SignatureData;
 import com.propertyvista.domain.legal.l1.L1TenantContactInfo;
 import com.propertyvista.domain.legal.l1.L1TenantInfo;
 import com.propertyvista.domain.legal.l1.NsfChargeDetails;
+import com.propertyvista.domain.legal.ltbcommon.LtbAgentContactInfo;
+import com.propertyvista.domain.legal.ltbcommon.LtbOwedRent;
 import com.propertyvista.domain.legal.ltbcommon.RentOwingForPeriod;
-import com.propertyvista.domain.legal.utils.CanadianPostalCodePartitioner;
-import com.propertyvista.domain.legal.utils.FileNumberPartitioner;
+import com.propertyvista.domain.legal.ltbcommon.LtbRentalUnitAddress;
 
 public class L1FieldsMapping extends LtbFormFieldsMapping<L1FormFieldsData> {
 
@@ -58,7 +58,7 @@ public class L1FieldsMapping extends LtbFormFieldsMapping<L1FormFieldsData> {
         date(proto().fillingDate()).mapTo("b12c96nmfiling_date").partitionBy(null).define();
         
         // PART1
-        mapping(proto().rentalUnitInfo(), new LtbFormFieldsMapping<L1RentalUnitInfo>(L1RentalUnitInfo.class) {@Override protected void configure() {
+        mapping(proto().rentalUnitInfo(), new LtbFormFieldsMapping<LtbRentalUnitAddress>(LtbRentalUnitAddress.class) {@Override protected void configure() {
             text(proto().streetNumber()).mapTo("b12c96nfapp_street_no").define();            
             text(proto().streetName()).mapTo("b12c96nfapp_street_name").define();        
             text(proto().streetType()).mapTo("b12c96nfapp_street_label").define();        
@@ -71,16 +71,18 @@ public class L1FieldsMapping extends LtbFormFieldsMapping<L1FormFieldsData> {
                     .mapTo("b12c96nfapp_postal_code_1{3}", "@@b12c96nfapp_postal_code_2.0{3}")
                 .define();
             
-            text(proto().relatedApplicationFileNumber1())            
-                .partitionBy(new FileNumberPartitioner())
-                    .mapTo("b12c96nfdivision_code_1{3}", "@@b12c96nfcase_number_1.0{5}")
-                .define();
-            
-            text(proto().relatedApplicationFileNumber2())           
-                .partitionBy(new FileNumberPartitioner())
-                    .mapTo("b12c96nfdivision_code_2{3}", "@@b12c96nfcase_number_2.0{5}")
-                 .define();
+
         }});
+        
+        text(proto().relatedApplicationFileNumber1())            
+            .partitionBy(new FileNumberPartitioner())
+            .mapTo("b12c96nfdivision_code_1{3}", "@@b12c96nfcase_number_1.0{5}")
+            .define();
+    
+        text(proto().relatedApplicationFileNumber2())           
+            .partitionBy(new FileNumberPartitioner())
+            .mapTo("b12c96nfdivision_code_2{3}", "@@b12c96nfcase_number_2.0{5}")
+            .define();
         
         // PART2
         table(proto().tenants()).rowMapping(Arrays.<LtbFormFieldsMapping<L1TenantInfo>>asList(
@@ -134,7 +136,7 @@ public class L1FieldsMapping extends LtbFormFieldsMapping<L1FormFieldsData> {
         }});
         
         // PART 4
-        mapping(proto().owedRent(), new LtbFormFieldsMapping<L1OwedRent>(L1OwedRent.class) {
+        mapping(proto().owedRent(), new LtbFormFieldsMapping<LtbOwedRent>(LtbOwedRent.class) {
             @Override
             protected void configure() {
                 table(proto().rentOwingBreakdown()).rowMapping(Arrays.<LtbFormFieldsMapping<RentOwingForPeriod>>asList(
@@ -248,7 +250,7 @@ public class L1FieldsMapping extends LtbFormFieldsMapping<L1FormFieldsData> {
                 }}
         )).define();
         
-        mapping(proto().agentContactInfo(), new LtbFormFieldsMapping<L1AgentContactInfo>(L1AgentContactInfo.class) {
+        mapping(proto().agentContactInfo(), new LtbFormFieldsMapping<LtbAgentContactInfo>(LtbAgentContactInfo.class) {
             @Override
             protected void configure() {
                 text(proto().firstName()).mapTo("b12c96nfpersonnel_first_name").define();

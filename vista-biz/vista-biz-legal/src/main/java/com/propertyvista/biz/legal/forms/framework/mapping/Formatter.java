@@ -7,14 +7,14 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on 2013-11-15
+ * Created on 2013-09-24
  * @author ArtyomB
  * @version $Id$
  */
-package com.propertyvista.domain.legal.utils;
+package com.propertyvista.biz.legal.forms.framework.mapping;
 
-public interface Partitioner {
+public interface Formatter {
 
-    String getPart(String value, int partIndex);
+    String format(Object object);
 
 }
