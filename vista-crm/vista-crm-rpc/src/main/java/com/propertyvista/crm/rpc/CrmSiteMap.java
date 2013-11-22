@@ -247,6 +247,11 @@ public class CrmSiteMap implements SiteMap {
 
         }
 
+        @PlaceProperties(navigLabel = "Generate L1", caption = "L1")
+        public static class L1GenerationWizard extends CrmCrudAppPlace {
+
+        }
+
     }
 
     public static class Finance extends AppPlace {
