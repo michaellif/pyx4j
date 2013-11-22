@@ -29,17 +29,14 @@ import com.pyx4j.forms.client.ui.folder.CEntityFolderItem;
 import com.pyx4j.forms.client.ui.folder.IFolderItemDecorator;
 import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.security.shared.SecurityController;
 import com.pyx4j.widgets.client.Anchor;
 import com.pyx4j.widgets.client.Button;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
 
-import com.propertyvista.common.client.policy.ClientPolicyManager;
 import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
 import com.propertyvista.domain.contact.AddressSimple;
 import com.propertyvista.domain.payment.PaymentDetails;
-import com.propertyvista.domain.policy.policies.AutoPayPolicy;
 import com.propertyvista.domain.security.VistaCustomerPaymentTypeBehavior;
 import com.propertyvista.portal.rpc.portal.resident.dto.financial.PaymentMethodInfoDTO;
 import com.propertyvista.portal.rpc.portal.resident.dto.financial.PaymentMethodSummaryDTO;
@@ -182,12 +179,7 @@ public class PaymentMethodsGadget extends AbstractGadget<FinancialDashboardViewI
                 super.onValueSet(populate);
 
                 if (getValue().usedByAutoPay().isBooleanTrue()) {
-                    ClientPolicyManager.obtainEffectivePolicy(parentView.getValue().building(), AutoPayPolicy.class, new DefaultAsyncCallback<AutoPayPolicy>() {
-                        @Override
-                        public void onSuccess(AutoPayPolicy result) {
-                            ((CEntityFolderItem<PaymentMethodInfoDTO>) getParent()).setRemovable(result.allowCancelationByResident().isBooleanTrue());
-                        }
-                    });
+                    ((CEntityFolderItem<PaymentMethodInfoDTO>) getParent()).setRemovable(parentView.getValue().allowCancelationByResident().isBooleanTrue());
                 }
             }
         }

@@ -30,10 +30,12 @@ import com.pyx4j.entity.shared.utils.EntityBinder;
 import com.propertyvista.biz.financial.payment.PaymentFacade;
 import com.propertyvista.biz.financial.payment.PaymentMethodFacade;
 import com.propertyvista.biz.financial.payment.PaymentMethodFacade.PaymentMethodUsage;
+import com.propertyvista.biz.policy.PolicyFacade;
 import com.propertyvista.domain.financial.PaymentRecord;
 import com.propertyvista.domain.payment.AutopayAgreement;
 import com.propertyvista.domain.payment.AutopayAgreement.AutopayAgreementCoveredItem;
 import com.propertyvista.domain.payment.LeasePaymentMethod;
+import com.propertyvista.domain.policy.policies.AutoPayPolicy;
 import com.propertyvista.domain.security.common.VistaApplication;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.dto.PaymentRecordDTO;
@@ -107,7 +109,9 @@ public class PaymentServiceImpl implements PaymentService {
         Lease lease = ResidentPortalContext.getLease();
 
         summary.paymentMethods().addAll(retrievePaymentMethods(lease));
-        summary.building().set(lease.unit().building());
+        summary.allowCancelationByResident().setValue(
+                ServerSideFactory.create(PolicyFacade.class).obtainEffectivePolicy(lease.unit().building(), AutoPayPolicy.class).allowCancelationByResident()
+                        .getValue());
 
         callback.onSuccess(summary);
     }
@@ -161,7 +165,9 @@ public class PaymentServiceImpl implements PaymentService {
         summary.currentAutoPayDate().setValue(ServerSideFactory.create(PaymentMethodFacade.class).getNextAutopayDate(lease));
         summary.nextAutoPayDate().setValue(ServerSideFactory.create(PaymentMethodFacade.class).getNextAutopayDate(lease));
         summary.leaseStatus().setValue(lease.status().getValue());
-        summary.building().set(lease.unit().building());
+        summary.allowCancelationByResident().setValue(
+                ServerSideFactory.create(PolicyFacade.class).obtainEffectivePolicy(lease.unit().building(), AutoPayPolicy.class).allowCancelationByResident()
+                        .getValue());
 
         callback.onSuccess(summary);
     }

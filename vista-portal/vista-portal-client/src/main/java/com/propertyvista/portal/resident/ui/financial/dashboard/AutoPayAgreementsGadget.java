@@ -28,16 +28,13 @@ import com.pyx4j.forms.client.ui.folder.CEntityFolderItem;
 import com.pyx4j.forms.client.ui.folder.IFolderItemDecorator;
 import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.security.shared.SecurityController;
 import com.pyx4j.widgets.client.Anchor;
 import com.pyx4j.widgets.client.Button;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
 
-import com.propertyvista.common.client.policy.ClientPolicyManager;
 import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
 import com.propertyvista.domain.payment.PaymentMethod;
-import com.propertyvista.domain.policy.policies.AutoPayPolicy;
 import com.propertyvista.domain.security.VistaCustomerPaymentTypeBehavior;
 import com.propertyvista.domain.tenant.lease.Tenant;
 import com.propertyvista.portal.rpc.portal.resident.dto.financial.AutoPayInfoDTO;
@@ -88,8 +85,6 @@ public class AutoPayAgreementsGadget extends AbstractGadget<FinancialDashboardVi
 
     class AutoPaysView extends CEntityForm<AutoPaySummaryDTO> {
 
-        private final AutoPayFolder autoPayFolder = new AutoPayFolder();
-
         public AutoPaysView() {
             super(AutoPaySummaryDTO.class);
         }
@@ -101,28 +96,19 @@ public class AutoPayAgreementsGadget extends AbstractGadget<FinancialDashboardVi
 
             mainPanel.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().nextAutoPayDate(), new CDateLabel()), 100).build());
             mainPanel.setBR(++row, 0, 1);
-            mainPanel.setWidget(++row, 0, inject(proto().currentAutoPayments(), autoPayFolder));
+            mainPanel.setWidget(++row, 0, inject(proto().currentAutoPayments(), new AutoPayFolder(this)));
 
             return mainPanel;
-        }
-
-        @Override
-        protected void onValueSet(boolean populate) {
-            super.onValueSet(populate);
-
-            ClientPolicyManager.obtainEffectivePolicy(getValue().building(), AutoPayPolicy.class, new DefaultAsyncCallback<AutoPayPolicy>() {
-                @Override
-                public void onSuccess(AutoPayPolicy result) {
-                    autoPayFolder.setRemovable(result.allowCancelationByResident().isBooleanTrue());
-                }
-            });
         }
     }
 
     private class AutoPayFolder extends VistaBoxFolder<AutoPayInfoDTO> {
 
-        public AutoPayFolder() {
+        private final AutoPaysView parentView;
+
+        public AutoPayFolder(AutoPaysView parentView) {
             super(AutoPayInfoDTO.class, true);
+            this.parentView = parentView;
 
             setOrderable(false);
             setAddable(false);
@@ -189,9 +175,8 @@ public class AutoPayAgreementsGadget extends AbstractGadget<FinancialDashboardVi
 
                 get(proto().paymentMethod()).setVisible(!getValue().paymentMethod().isNull());
 
-                if (AutoPayFolder.this.isRemovable()) {
-                    ((CEntityFolderItem<AutoPayInfoDTO>) getParent()).setRemovable(!getValue().paymentMethod().isEmpty());
-                }
+                ((CEntityFolderItem<AutoPayInfoDTO>) getParent()).setRemovable(!getValue().paymentMethod().isEmpty()
+                        && parentView.getValue().allowCancelationByResident().isBooleanTrue());
             }
         }
     }
