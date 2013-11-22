@@ -51,7 +51,6 @@ public class ApplicationContextSelectionActivity extends AbstractActivity implem
         populate();
     }
 
-    @Override
     public void populate() {
         service.getApplicationContextChoices(new DefaultAsyncCallback<Vector<OnlineApplicationContextChoiceDTO>>() {
             @Override

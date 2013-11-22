@@ -13,13 +13,18 @@
  */
 package com.propertyvista.portal.prospect.ui.application;
 
+import com.pyx4j.site.client.IsView;
+
 import com.propertyvista.domain.tenant.prospect.MasterOnlineApplicationStatus;
-import com.propertyvista.portal.shared.ui.IFormView;
 
-public interface ApplicationStatusPageView extends IFormView<MasterOnlineApplicationStatus> {
+public interface ApplicationStatusPageView extends IsView {
 
-    public interface ApplicationStatusPagePresenter extends IFormPresenter<MasterOnlineApplicationStatus> {
+    public interface ApplicationStatusPagePresenter {
 
     }
+
+    void setPresenter(ApplicationStatusPagePresenter presenter);
+
+    void populate(MasterOnlineApplicationStatus status);
 
 }

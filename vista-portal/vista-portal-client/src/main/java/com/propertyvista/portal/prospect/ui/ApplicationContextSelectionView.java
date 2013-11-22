@@ -27,8 +27,6 @@ public interface ApplicationContextSelectionView extends IsView {
 
     public interface ApplicationContextSelectionPresenter {
 
-        void populate();
-
         void setApplicationContext();
 
     }
