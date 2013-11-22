@@ -280,7 +280,7 @@ public class OnlineApplicationFacadeImpl implements OnlineApplicationFacade {
         }
     }
 
-    private OnlineApplication createOnlineApplication(MasterOnlineApplication masterOnlineApplication, LeaseTermParticipant participant, Role role) {
+    private OnlineApplication createOnlineApplication(MasterOnlineApplication masterOnlineApplication, LeaseTermParticipant<?> participant, Role role) {
         OnlineApplication app = EntityFactory.create(OnlineApplication.class);
         app.status().setValue(OnlineApplication.Status.Invited);
 

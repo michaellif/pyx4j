@@ -48,6 +48,12 @@ public interface ScreeningFacade {
      */
     CustomerScreening retrivePersonScreeningDraftOrFinal(Customer customerId, AttachLevel attachLevel);
 
+    /**
+     * Find if Draft exists, if not find final version. If Draft - finalize it.
+     * Used on Lease Application approval (and every LeaseTerm finalization)
+     */
+    CustomerScreening retriveAndFinalizePersonScreening(Customer customerId, AttachLevel attachLevel);
+
     CustomerCreditCheck retrivePersonCreditCheck(Customer customerId);
 
     /**

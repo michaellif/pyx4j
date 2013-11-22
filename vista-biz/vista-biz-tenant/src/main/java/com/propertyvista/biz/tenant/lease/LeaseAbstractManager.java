@@ -36,7 +36,6 @@ import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.entity.shared.IVersionedEntity.SaveAction;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
-import com.pyx4j.entity.shared.criterion.EntityQueryCriteria.VersionedCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.entity.shared.utils.EntityGraph;
 import com.pyx4j.entity.shared.utils.VersionedEntityUtils;
@@ -282,29 +281,6 @@ public abstract class LeaseAbstractManager {
         for (LeaseTermGuarantor leaseParticipant : leaseTerm.version().guarantors()) {
             leaseParticipant.creditCheck().set(
                     ServerSideFactory.create(ScreeningFacade.class).retrivePersonCreditCheck(leaseParticipant.leaseParticipant().customer()));
-        }
-    }
-
-    public CustomerScreening retrivePersonScreeningId(Customer customer) {
-        if (ScreeningValidator.screeningIsAutomaticallyFinalized) {
-            EntityQueryCriteria<CustomerScreening> criteria = EntityQueryCriteria.create(CustomerScreening.class);
-            criteria.add(PropertyCriterion.eq(criteria.proto().screene(), customer));
-            criteria.setVersionedCriteria(VersionedCriteria.onlyDraft);
-            CustomerScreening screening = Persistence.service().retrieve(criteria);
-            if ((screening != null) && (!screening.version().isNull())) {
-                screening.saveAction().setValue(SaveAction.saveAsFinal);
-                Persistence.service().persist(screening);
-            }
-            return screening;
-        } else {
-            if (customer.personScreening().getAttachLevel() == AttachLevel.Detached) {
-                Persistence.service().retrieveMember(customer.personScreening(), AttachLevel.IdOnly);
-            }
-            if (customer.personScreening().isNull()) {
-                return null;
-            } else {
-                return customer.personScreening();
-            }
         }
     }
 
@@ -976,6 +952,21 @@ public abstract class LeaseAbstractManager {
             leaseParticipant.leaseParticipant().id().set(leaseCustomer.id());
             leaseParticipant.leaseParticipant().lease().set(leaseTerm.lease());
             leaseParticipant.leaseParticipant().participantId().set(leaseCustomer.participantId());
+        }
+    }
+
+    private CustomerScreening retrivePersonScreeningId(Customer customer) {
+        if (ScreeningValidator.screeningIsAutomaticallyFinalized) {
+            return ServerSideFactory.create(ScreeningFacade.class).retriveAndFinalizePersonScreening(customer, AttachLevel.Attached);
+        } else {
+            if (customer.personScreening().getAttachLevel() == AttachLevel.Detached) {
+                Persistence.service().retrieveMember(customer.personScreening(), AttachLevel.IdOnly);
+            }
+            if (customer.personScreening().isNull()) {
+                return null;
+            } else {
+                return customer.personScreening();
+            }
         }
     }
 

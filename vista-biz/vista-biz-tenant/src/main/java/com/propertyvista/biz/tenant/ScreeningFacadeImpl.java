@@ -265,6 +265,16 @@ public class ScreeningFacadeImpl implements ScreeningFacade {
     }
 
     @Override
+    public CustomerScreening retriveAndFinalizePersonScreening(Customer customerId, AttachLevel attachLevel) {
+        CustomerScreening screening = retrivePersonScreeningDraftOrFinal(customerId, AttachLevel.Attached);
+        if ((screening != null) && (screening.version().isNull())) {
+            screening.saveAction().setValue(SaveAction.saveAsFinal);
+            Persistence.service().persist(screening);
+        }
+        return screening;
+    }
+
+    @Override
     public CustomerCreditCheck retrivePersonCreditCheck(Customer customerId) {
         EntityQueryCriteria<CustomerCreditCheck> criteria = EntityQueryCriteria.create(CustomerCreditCheck.class);
         criteria.add(PropertyCriterion.eq(criteria.proto().screening().screene(), customerId));
