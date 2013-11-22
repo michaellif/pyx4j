@@ -109,6 +109,16 @@ public class EntityValidationException extends UserRuntimeException {
         return errors;
     }
 
+    @Override
+    public String getMessage() {
+        StringBuilder messageBuilder = new StringBuilder();
+        for (MemberValidationError validationError : getErrors()) {
+            messageBuilder.append(validationError.getMember().getPath().toString() + ": " + validationError.getMessage());
+            messageBuilder.append("; ");
+        }
+        return messageBuilder.toString();
+    }
+
     public static <E extends IEntity> Builder<E> make(Class<E> clazz) {
         return new EntityValidationException.Builder<E>(clazz);
     }
