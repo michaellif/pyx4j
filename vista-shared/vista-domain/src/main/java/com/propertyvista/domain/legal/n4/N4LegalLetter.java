@@ -7,30 +7,22 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on 2013-09-20
+ * Created on 2013-10-04
  * @author ArtyomB
  * @version $Id$
  */
-package com.propertyvista.domain.legal;
+package com.propertyvista.domain.legal.n4;
 
 import java.math.BigDecimal;
 
-import com.pyx4j.commons.LogicalDate;
-import com.pyx4j.entity.annotations.Transient;
-import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.annotations.DiscriminatorValue;
 import com.pyx4j.entity.shared.IPrimitive;
 
-@Transient
-public interface N4RentOwingForPeriod extends IEntity {
+import com.propertyvista.domain.legal.LegalLetter;
 
-    IPrimitive<LogicalDate> from();
+@DiscriminatorValue("N4LegalLetter")
+public interface N4LegalLetter extends LegalLetter {
 
-    IPrimitive<LogicalDate> to();
-
-    IPrimitive<BigDecimal> rentCharged();
-
-    IPrimitive<BigDecimal> rentPaid();
-
-    IPrimitive<BigDecimal> rentOwing();
+    IPrimitive<BigDecimal> amountOwed();
 
 }

@@ -48,11 +48,11 @@ import com.propertyvista.domain.financial.ARCode;
 import com.propertyvista.domain.financial.BillingAccount;
 import com.propertyvista.domain.financial.billing.InvoiceDebit;
 import com.propertyvista.domain.legal.LegalNoticeCandidate;
-import com.propertyvista.domain.legal.N4FormFieldsData;
-import com.propertyvista.domain.legal.N4LandlordsData;
-import com.propertyvista.domain.legal.N4LeaseData;
-import com.propertyvista.domain.legal.N4LegalLetter;
-import com.propertyvista.domain.legal.N4RentOwingForPeriod;
+import com.propertyvista.domain.legal.n4.N4FormFieldsDataDepr;
+import com.propertyvista.domain.legal.n4.N4LandlordsData;
+import com.propertyvista.domain.legal.n4.N4LeaseData;
+import com.propertyvista.domain.legal.n4.N4LegalLetter;
+import com.propertyvista.domain.legal.n4.N4RentOwingForPeriod;
 import com.propertyvista.domain.policy.framework.OrganizationPoliciesNode;
 import com.propertyvista.domain.policy.policies.N4Policy;
 import com.propertyvista.domain.property.asset.building.Building;
@@ -172,7 +172,7 @@ public class N4ManagementFacadeImpl implements N4ManagementFacade {
 
         N4LeaseData n4LeaseData = ServerSideFactory.create(N4GenerationFacade.class).prepareN4LeaseData(leaseId, noticeDate, terminationDateAdvanceDays,
                 relevantArCodes);
-        N4FormFieldsData n4FormData = ServerSideFactory.create(N4GenerationFacade.class).populateFormData(n4LeaseData, n4LandLordsData);
+        N4FormFieldsDataDepr n4FormData = ServerSideFactory.create(N4GenerationFacade.class).populateFormData(n4LeaseData, n4LandLordsData);
         byte[] n4LetterBinary = ServerSideFactory.create(N4GenerationFacade.class).generateN4Letter(n4FormData);
 
         LegalLetterBlob blob = EntityFactory.create(LegalLetterBlob.class);

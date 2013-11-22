@@ -20,7 +20,7 @@ import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
 
-import com.propertyvista.domain.legal.RentOwingForPeriod;
+import com.propertyvista.domain.legal.ltbcommon.RentOwingForPeriod;
 
 @Transient
 public interface L1OwedRent extends IEntity {

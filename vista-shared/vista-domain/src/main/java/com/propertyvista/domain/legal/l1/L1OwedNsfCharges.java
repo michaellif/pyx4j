@@ -20,7 +20,6 @@ import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
 
-import com.propertyvista.domain.legal.NsfChargeDetails;
 
 @Transient
 public interface L1OwedNsfCharges extends IEntity {

@@ -16,7 +16,7 @@ package com.propertyvista.crm.server.services.legal;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 
-import com.propertyvista.domain.legal.N4LegalLetter;
+import com.propertyvista.domain.legal.n4.N4LegalLetter;
 import com.propertyvista.domain.tenant.lease.Lease;
 
 public class N4Utils {

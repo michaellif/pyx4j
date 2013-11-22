@@ -11,7 +11,7 @@
  * @author ArtyomB
  * @version $Id$
  */
-package com.propertyvista.domain.legal;
+package com.propertyvista.domain.legal.n4;
 
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.shared.IEntity;
@@ -21,7 +21,7 @@ import com.propertyvista.domain.legal.utils.PdfFormFieldMapping;
 
 @Transient
 /** This maps directly to the fields of PDF template of N4 Form */
-public interface N4FormFieldsData extends IEntity {
+public interface N4FormFieldsDataDepr extends IEntity {
 
     public enum SignedBy {
 

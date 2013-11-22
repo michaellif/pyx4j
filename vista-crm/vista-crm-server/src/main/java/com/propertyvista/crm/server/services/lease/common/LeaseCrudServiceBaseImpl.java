@@ -28,7 +28,7 @@ import com.propertyvista.biz.financial.payment.PaymentMethodFacade;
 import com.propertyvista.biz.legal.N4ManagementFacade;
 import com.propertyvista.biz.policy.PolicyFacade;
 import com.propertyvista.biz.tenant.insurance.TenantInsuranceFacade;
-import com.propertyvista.domain.legal.N4LegalLetter;
+import com.propertyvista.domain.legal.n4.N4LegalLetter;
 import com.propertyvista.domain.policy.policies.RestrictionsPolicy;
 import com.propertyvista.domain.tenant.lease.BillableItem;
 import com.propertyvista.domain.tenant.lease.Lease;

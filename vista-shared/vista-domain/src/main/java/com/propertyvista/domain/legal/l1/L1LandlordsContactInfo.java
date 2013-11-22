@@ -11,28 +11,43 @@
  * @author ArtyomB
  * @version $Id$
  */
-package com.propertyvista.domain.legal;
+package com.propertyvista.domain.legal.l1;
 
-import java.math.BigDecimal;
-
-import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 
 @Transient
-public interface NsfChargeDetails extends IEntity {
+public interface L1LandlordsContactInfo extends IEntity {
 
-    IPrimitive<BigDecimal> chequeAmount();
+    public enum TypeOfLandlord {
 
-    IPrimitive<LogicalDate> dateOfCheque();
+        Male, Female, Company
 
-    IPrimitive<LogicalDate> dateOfNsfCharge();
+    }
 
-    IPrimitive<BigDecimal> bankCharge();
+    IPrimitive<TypeOfLandlord> typeOfLandlord();
 
-    IPrimitive<BigDecimal> landlordsAdministrationCharge();
+    IPrimitive<String> firstName();
 
-    IPrimitive<BigDecimal> totalCharge();
+    IPrimitive<String> lastName();
+
+    IPrimitive<String> streetAddress();
+
+    IPrimitive<String> unit();
+
+    IPrimitive<String> municipality();
+
+    IPrimitive<String> province();
+
+    IPrimitive<String> postalCode();
+
+    IPrimitive<String> dayPhoneNumber();
+
+    IPrimitive<String> eveningPhoneNumber();
+
+    IPrimitive<String> faxNumber();
+
+    IPrimitive<String> emailAddress();
 
 }

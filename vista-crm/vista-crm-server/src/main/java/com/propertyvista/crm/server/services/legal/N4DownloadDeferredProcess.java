@@ -32,7 +32,7 @@ import com.pyx4j.gwt.rpc.deferred.DeferredProcessProgressResponse;
 import com.pyx4j.gwt.server.IOUtils;
 import com.pyx4j.gwt.server.deferred.AbstractDeferredProcess;
 
-import com.propertyvista.domain.legal.N4LegalLetter;
+import com.propertyvista.domain.legal.n4.N4LegalLetter;
 import com.propertyvista.server.domain.LegalLetterBlob;
 
 public class N4DownloadDeferredProcess extends AbstractDeferredProcess {

@@ -17,7 +17,7 @@ import com.pyx4j.entity.security.DatasetAccessRule;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.server.contexts.Context;
 
-import com.propertyvista.domain.legal.N4LegalLetter;
+import com.propertyvista.domain.legal.n4.N4LegalLetter;
 
 public class N4LegalLetterDatasetAccessRule implements DatasetAccessRule<N4LegalLetter> {
 

@@ -33,7 +33,7 @@ import com.propertyvista.crm.rpc.dto.legal.n4.LegalNoticeCandidateDTO;
 import com.propertyvista.crm.rpc.dto.legal.n4.N4DownloadSettingsDTO;
 import com.propertyvista.crm.rpc.dto.legal.n4.N4GenerationDTO;
 import com.propertyvista.crm.rpc.services.legal.N4DownloadToolService;
-import com.propertyvista.domain.legal.N4LegalLetter;
+import com.propertyvista.domain.legal.n4.N4LegalLetter;
 import com.propertyvista.portal.rpc.DeploymentConsts;
 
 public class N4DownloadToolActivity extends AbstractBulkOperationToolActivity<N4DownloadSettingsDTO, LegalNoticeCandidateDTO, Vector<N4LegalLetter>> implements

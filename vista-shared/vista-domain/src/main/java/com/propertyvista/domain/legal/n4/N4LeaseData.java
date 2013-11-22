@@ -11,7 +11,7 @@
  * @author ArtyomB
  * @version $Id$
  */
-package com.propertyvista.domain.legal;
+package com.propertyvista.domain.legal.n4;
 
 import java.math.BigDecimal;
 

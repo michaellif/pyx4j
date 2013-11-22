@@ -20,7 +20,7 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.propertyvista.crm.rpc.dto.legal.n4.N4GenerationDTO;
 import com.propertyvista.crm.rpc.dto.legal.n4.LegalNoticeCandidateDTO;
 import com.propertyvista.crm.rpc.dto.legal.n4.N4DownloadSettingsDTO;
-import com.propertyvista.domain.legal.N4LegalLetter;
+import com.propertyvista.domain.legal.n4.N4LegalLetter;
 
 public interface N4DownloadToolService extends AbstractBulkOperationService<N4DownloadSettingsDTO, LegalNoticeCandidateDTO, Vector<N4LegalLetter>> {
 

@@ -30,7 +30,7 @@ import com.propertyvista.common.client.ui.components.MediaUtils;
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
 import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
 import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
-import com.propertyvista.domain.legal.N4LegalLetter;
+import com.propertyvista.domain.legal.n4.N4LegalLetter;
 
 public class N4LegalLetterFolder extends VistaBoxFolder<N4LegalLetter> {
 

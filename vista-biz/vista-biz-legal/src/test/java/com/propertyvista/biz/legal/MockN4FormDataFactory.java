@@ -30,17 +30,17 @@ import com.pyx4j.gwt.server.DateUtils;
 
 import com.propertyvista.domain.contact.AddressStructured.StreetDirection;
 import com.propertyvista.domain.contact.AddressStructured.StreetType;
-import com.propertyvista.domain.legal.N4FormFieldsData;
-import com.propertyvista.domain.legal.N4FormFieldsData.SignedBy;
-import com.propertyvista.domain.legal.N4LeaseData;
+import com.propertyvista.domain.legal.n4.N4FormFieldsDataDepr;
+import com.propertyvista.domain.legal.n4.N4LeaseData;
+import com.propertyvista.domain.legal.n4.N4FormFieldsDataDepr.SignedBy;
 import com.propertyvista.domain.tenant.lease.Tenant;
 
 public class MockN4FormDataFactory {
 
     private final static String SIGNATURE = "mock-signature.jpg";
 
-    public static N4FormFieldsData makeMockN4FormFieldsData(String tenantName) {
-        N4FormFieldsData mockFormData = EntityFactory.create(N4FormFieldsData.class);
+    public static N4FormFieldsDataDepr makeMockN4FormFieldsData(String tenantName) {
+        N4FormFieldsDataDepr mockFormData = EntityFactory.create(N4FormFieldsDataDepr.class);
         mockFormData.to().setValue(tenantName + "\n11-2222 Bathurst Street Toronto ON A9A 9A9");
         mockFormData.from().setValue("RedRiDge");
 

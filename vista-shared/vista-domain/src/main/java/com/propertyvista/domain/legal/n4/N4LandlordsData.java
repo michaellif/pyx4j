@@ -11,7 +11,7 @@
  * @author ArtyomB
  * @version $Id$
  */
-package com.propertyvista.domain.legal;
+package com.propertyvista.domain.legal.n4;
 
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.annotations.Transient;

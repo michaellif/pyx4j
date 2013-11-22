@@ -25,11 +25,10 @@ import java.util.Arrays;
 import com.propertyvista.biz.legal.forms.ltbcommon.LtbFormFieldsMapping;
 import com.propertyvista.biz.legal.forms.ltbcommon.fieldadapters.CreditCardExpiryDateFormatter;
 import com.propertyvista.biz.legal.forms.ltbcommon.fieldadapters.CreditCardExpiryDatePartitioner;
-import com.propertyvista.domain.legal.NsfChargeDetails;
-import com.propertyvista.domain.legal.RentOwingForPeriod;
 import com.propertyvista.domain.legal.l1.L1AgentContactInfo;
 import com.propertyvista.domain.legal.l1.L1ApplicationSchedule;
 import com.propertyvista.domain.legal.l1.L1FormFieldsData;
+import com.propertyvista.domain.legal.l1.L1LandlordsContactInfo;
 import com.propertyvista.domain.legal.l1.L1OwedNsfCharges;
 import com.propertyvista.domain.legal.l1.L1OwedRent;
 import com.propertyvista.domain.legal.l1.L1OwedSummary;
@@ -40,9 +39,10 @@ import com.propertyvista.domain.legal.l1.L1ScheduleAndPayment;
 import com.propertyvista.domain.legal.l1.L1SignatureData;
 import com.propertyvista.domain.legal.l1.L1TenantContactInfo;
 import com.propertyvista.domain.legal.l1.L1TenantInfo;
+import com.propertyvista.domain.legal.l1.NsfChargeDetails;
+import com.propertyvista.domain.legal.ltbcommon.RentOwingForPeriod;
 import com.propertyvista.domain.legal.utils.CanadianPostalCodePartitioner;
 import com.propertyvista.domain.legal.utils.FileNumberPartitioner;
-import com.propertyvista.domain.legal.utils.L1LandlordsContactInfo;
 
 public class L1FieldsMapping extends LtbFormFieldsMapping<L1FormFieldsData> {
 

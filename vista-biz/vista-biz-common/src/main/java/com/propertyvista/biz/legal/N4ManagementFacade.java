@@ -23,7 +23,7 @@ import com.pyx4j.commons.LogicalDate;
 import com.propertyvista.crm.rpc.dto.legal.n4.N4GenerationQueryDTO.DeliveryMethod;
 import com.propertyvista.domain.company.Employee;
 import com.propertyvista.domain.legal.LegalNoticeCandidate;
-import com.propertyvista.domain.legal.N4LegalLetter;
+import com.propertyvista.domain.legal.n4.N4LegalLetter;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.tenant.lease.Lease;
 

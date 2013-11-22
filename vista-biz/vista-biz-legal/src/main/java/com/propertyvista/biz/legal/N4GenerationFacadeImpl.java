@@ -39,11 +39,11 @@ import com.propertyvista.domain.contact.AddressSimple;
 import com.propertyvista.domain.contact.AddressStructured;
 import com.propertyvista.domain.financial.ARCode;
 import com.propertyvista.domain.financial.billing.InvoiceDebit;
-import com.propertyvista.domain.legal.N4FormFieldsData;
-import com.propertyvista.domain.legal.N4FormFieldsData.SignedBy;
-import com.propertyvista.domain.legal.N4LandlordsData;
-import com.propertyvista.domain.legal.N4LeaseData;
-import com.propertyvista.domain.legal.N4RentOwingForPeriod;
+import com.propertyvista.domain.legal.n4.N4FormFieldsDataDepr;
+import com.propertyvista.domain.legal.n4.N4LandlordsData;
+import com.propertyvista.domain.legal.n4.N4LeaseData;
+import com.propertyvista.domain.legal.n4.N4RentOwingForPeriod;
+import com.propertyvista.domain.legal.n4.N4FormFieldsDataDepr.SignedBy;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.LeaseTermTenant;
 import com.propertyvista.domain.tenant.lease.Tenant;
@@ -60,7 +60,7 @@ public class N4GenerationFacadeImpl implements N4GenerationFacade {
     }
 
     @Override
-    public byte[] generateN4Letter(N4FormFieldsData formData) {
+    public byte[] generateN4Letter(N4FormFieldsDataDepr formData) {
         byte[] filledForm = null;
         try {
             byte[] formTemplate = IOUtils.toByteArray(N4GenerationFacadeImpl.class.getResourceAsStream(N4_FORM_FILE));
@@ -72,8 +72,8 @@ public class N4GenerationFacadeImpl implements N4GenerationFacade {
     }
 
     @Override
-    public N4FormFieldsData populateFormData(N4LeaseData leaseData, N4LandlordsData landlordsData) {
-        N4FormFieldsData fieldsData = EntityFactory.create(N4FormFieldsData.class);
+    public N4FormFieldsDataDepr populateFormData(N4LeaseData leaseData, N4LandlordsData landlordsData) {
+        N4FormFieldsDataDepr fieldsData = EntityFactory.create(N4FormFieldsDataDepr.class);
         fieldsData.to().setValue(
                 SimpleMessageFormat.format("{0}\n{1}", formatTenants(leaseData.leaseTenants()), formatRentalAddress(leaseData.rentalUnitAddress())));
         fieldsData.from().setValue(

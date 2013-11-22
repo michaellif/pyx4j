@@ -7,11 +7,11 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on 2013-11-20
+ * Created on 2013-09-20
  * @author ArtyomB
  * @version $Id$
  */
-package com.propertyvista.domain.legal;
+package com.propertyvista.domain.legal.n4;
 
 import java.math.BigDecimal;
 
@@ -21,7 +21,7 @@ import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 
 @Transient
-public interface RentOwingForPeriod extends IEntity {
+public interface N4RentOwingForPeriod extends IEntity {
 
     IPrimitive<LogicalDate> from();
 

@@ -184,7 +184,7 @@ import com.propertyvista.domain.financial.billing.LeaseAgingBuckets;
 import com.propertyvista.domain.financial.offering.Concession;
 import com.propertyvista.domain.financial.offering.Feature;
 import com.propertyvista.domain.financial.offering.Service;
-import com.propertyvista.domain.legal.N4LegalLetter;
+import com.propertyvista.domain.legal.n4.N4LegalLetter;
 import com.propertyvista.domain.maintenance.MaintenanceRequest;
 import com.propertyvista.domain.policy.policies.EmailTemplatesPolicy;
 import com.propertyvista.domain.property.asset.Boiler;

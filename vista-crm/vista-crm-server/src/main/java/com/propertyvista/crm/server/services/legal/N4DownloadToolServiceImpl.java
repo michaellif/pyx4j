@@ -32,7 +32,7 @@ import com.propertyvista.crm.rpc.dto.legal.n4.LegalNoticeCandidateDTO;
 import com.propertyvista.crm.rpc.dto.legal.n4.N4DownloadSettingsDTO;
 import com.propertyvista.crm.rpc.dto.legal.n4.N4GenerationDTO;
 import com.propertyvista.crm.rpc.services.legal.N4DownloadToolService;
-import com.propertyvista.domain.legal.N4LegalLetter;
+import com.propertyvista.domain.legal.n4.N4LegalLetter;
 import com.propertyvista.server.common.util.AddressRetriever;
 
 public class N4DownloadToolServiceImpl implements N4DownloadToolService {

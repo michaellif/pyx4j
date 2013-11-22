@@ -29,20 +29,20 @@ import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.gwt.server.DateUtils;
 
-import com.propertyvista.domain.legal.NsfChargeDetails;
-import com.propertyvista.domain.legal.RentOwingForPeriod;
 import com.propertyvista.domain.legal.l1.L1ApplicationSchedule.ApplicationPackageDeliveryMethodToLandlord;
 import com.propertyvista.domain.legal.l1.L1ApplicationSchedule.ApplicationPackageDeliveryMethodToTenant;
 import com.propertyvista.domain.legal.l1.L1FormFieldsData;
+import com.propertyvista.domain.legal.l1.L1LandlordsContactInfo;
 import com.propertyvista.domain.legal.l1.L1PaymentInfo;
 import com.propertyvista.domain.legal.l1.L1ReasonForApplication;
+import com.propertyvista.domain.legal.l1.NsfChargeDetails;
+import com.propertyvista.domain.legal.l1.L1LandlordsContactInfo.TypeOfLandlord;
 import com.propertyvista.domain.legal.l1.L1ReasonForApplication.YesNo;
 import com.propertyvista.domain.legal.l1.L1ScheduleAndPayment.LanguageServiceType;
 import com.propertyvista.domain.legal.l1.L1SignatureData;
 import com.propertyvista.domain.legal.l1.L1TenantInfo;
 import com.propertyvista.domain.legal.l1.L1TenantInfo.Gender;
-import com.propertyvista.domain.legal.utils.L1LandlordsContactInfo;
-import com.propertyvista.domain.legal.utils.L1LandlordsContactInfo.TypeOfLandlord;
+import com.propertyvista.domain.legal.ltbcommon.RentOwingForPeriod;
 
 public class MockL1FormDataFactory {
 
