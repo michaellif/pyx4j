@@ -44,12 +44,6 @@ public class SignUpActivity extends AbstractActivity implements SignUpPresenter 
 
     public SignUpActivity(Place place) {
         this.view = PortalSite.getViewFactory().getView(SignUpView.class);
-        withPlace(place);
-
-    }
-
-    public SignUpActivity withPlace(Place place) {
-        return this;
     }
 
     @Override

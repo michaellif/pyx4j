@@ -25,7 +25,7 @@ import com.propertyvista.portal.rpc.shared.EntityValidationException;
 
 public interface SignUpView extends IsView {
 
-    interface SignUpPresenter {
+    public interface SignUpPresenter {
 
         void register(ResidentSelfRegistrationDTO value);
 

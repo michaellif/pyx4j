@@ -30,6 +30,7 @@ import com.pyx4j.security.rpc.AuthenticationService;
 import com.pyx4j.site.client.NavigationUri;
 import com.pyx4j.site.rpc.AppPlaceInfo;
 
+import com.propertyvista.portal.resident.ui.signup.SignUpView.SignUpPresenter;
 import com.propertyvista.portal.resident.ResidentPortalSite;
 import com.propertyvista.portal.resident.ui.signup.SignUpView;
 import com.propertyvista.portal.rpc.portal.resident.ResidentPortalSiteMap;
@@ -39,18 +40,12 @@ import com.propertyvista.portal.rpc.portal.resident.services.ResidentAuthenticat
 import com.propertyvista.portal.rpc.portal.resident.services.ResidentSelfRegistrationService;
 import com.propertyvista.portal.rpc.shared.EntityValidationException;
 
-public class SignUpActivity extends AbstractActivity implements SignUpView.SignUpPresenter {
+public class SignUpActivity extends AbstractActivity implements SignUpPresenter {
 
     private final SignUpView view;
 
     public SignUpActivity(Place place) {
         this.view = ResidentPortalSite.getViewFactory().getView(SignUpView.class);
-        withPlace(place);
-
-    }
-
-    public SignUpActivity withPlace(Place place) {
-        return this;
     }
 
     @Override
