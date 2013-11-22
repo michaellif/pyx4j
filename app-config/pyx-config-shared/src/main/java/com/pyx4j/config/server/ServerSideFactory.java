@@ -20,6 +20,9 @@
  */
 package com.pyx4j.config.server;
 
+import java.lang.reflect.InvocationHandler;
+import java.lang.reflect.Method;
+import java.lang.reflect.Proxy;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -82,6 +85,21 @@ public class ServerSideFactory {
             return klass.newInstance();
         } catch (Throwable e) {
             throw new RuntimeException("Can't create " + interfaceClassName, e);
+        }
+    }
+
+    @SuppressWarnings("unchecked")
+    public static <T> T createEmptyImplementation(Class<T> interfaceCalss) {
+        try {
+            return (T) Proxy.newProxyInstance(Thread.currentThread().getContextClassLoader(), new Class[] { interfaceCalss }, new InvocationHandler() {
+
+                @Override
+                public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
+                    return null;
+                }
+            });
+        } catch (IllegalArgumentException e) {
+            throw new RuntimeException("Can't create " + interfaceCalss.getName(), e);
         }
     }
 
