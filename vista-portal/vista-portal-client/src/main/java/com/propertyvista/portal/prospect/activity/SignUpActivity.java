@@ -55,6 +55,7 @@ public class SignUpActivity extends AbstractActivity implements SignUpPresenter 
     @Override
     public void start(final AcceptsOneWidget panel, EventBus eventBus) {
         view.setPresenter(SignUpActivity.this);
+        view.init();
         panel.setWidget(view);
     }
 

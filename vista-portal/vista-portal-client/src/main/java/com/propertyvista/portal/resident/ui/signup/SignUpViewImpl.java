@@ -63,8 +63,8 @@ public class SignUpViewImpl extends FlowPanel implements SignUpView {
     }
 
     @Override
-    public void setBuildingOptions(List<SelfRegistrationBuildingDTO> buildings) {
-        gadget.setBuildingOptions(buildings);
+    public void init(List<SelfRegistrationBuildingDTO> buildings) {
+        gadget.init(buildings);
     }
 
     @Override

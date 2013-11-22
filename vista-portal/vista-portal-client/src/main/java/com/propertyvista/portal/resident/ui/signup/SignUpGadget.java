@@ -63,7 +63,7 @@ public class SignUpGadget extends AbstractGadget<SignUpViewImpl> {
 
     private SignUpPresenter presenter;
 
-    private final SignUpForm signupform;
+    private final SignUpForm signupForm;
 
     private final Anchor termsAndConditionsAnchor;
 
@@ -74,9 +74,9 @@ public class SignUpGadget extends AbstractGadget<SignUpViewImpl> {
         FlowPanel contentPanel = new FlowPanel();
         contentPanel.getElement().getStyle().setTextAlign(TextAlign.CENTER);
 
-        signupform = new SignUpForm();
-        signupform.initContent();
-        contentPanel.add(signupform);
+        signupForm = new SignUpForm();
+        signupForm.initContent();
+        contentPanel.add(signupForm);
 
         FlowPanel loginTermsLinkPanel = new FlowPanel();
         loginTermsLinkPanel.getElement().getStyle().setTextAlign(TextAlign.LEFT);
@@ -115,29 +115,26 @@ public class SignUpGadget extends AbstractGadget<SignUpViewImpl> {
     }
 
     public void showValidationError(EntityValidationException caught) {
-        signupform.setEntityValidationError(caught);
+        signupForm.setEntityValidationError(caught);
     }
 
-    public void setBuildingOptions(List<SelfRegistrationBuildingDTO> buildings) {
-        signupform.setBuildingOptions(buildings);
-        signupform.setUnconditionalValidationErrorRendering(false);
-        signupform.setVisited(false);
-        signupform.populateNew();
+    public void init(List<SelfRegistrationBuildingDTO> buildings) {
+        signupForm.init(buildings);
     }
 
     public void doLayout(LayoutType layoutType) {
         switch (layoutType) {
         case phonePortrait:
         case phoneLandscape:
-            signupform.signUpBuildingImage.setVisible(false);
-            signupform.signUpPersonalImage.setVisible(false);
-            signupform.signUpSecurity.setVisible(false);
+            signupForm.signUpBuildingImage.setVisible(false);
+            signupForm.signUpPersonalImage.setVisible(false);
+            signupForm.signUpSecurity.setVisible(false);
             break;
 
         default:
-            signupform.signUpBuildingImage.setVisible(true);
-            signupform.signUpPersonalImage.setVisible(true);
-            signupform.signUpSecurity.setVisible(true);
+            signupForm.signUpBuildingImage.setVisible(true);
+            signupForm.signUpPersonalImage.setVisible(true);
+            signupForm.signUpSecurity.setVisible(true);
             break;
         }
     }
@@ -151,11 +148,11 @@ public class SignUpGadget extends AbstractGadget<SignUpViewImpl> {
             signUpButton = new Button(i18n.tr("REGISTER"), new Command() {
                 @Override
                 public void execute() {
-                    signupform.setEntityValidationError(null);
-                    signupform.revalidate();
-                    signupform.setUnconditionalValidationErrorRendering(true);
-                    if (signupform.isValid()) {
-                        presenter.register(signupform.getValue());
+                    signupForm.setEntityValidationError(null);
+                    signupForm.revalidate();
+                    signupForm.setUnconditionalValidationErrorRendering(true);
+                    if (signupForm.isValid()) {
+                        presenter.register(signupForm.getValue());
                     }
                 }
             });
@@ -292,8 +289,11 @@ public class SignUpGadget extends AbstractGadget<SignUpViewImpl> {
             return flexPanel;
         }
 
-        public void setBuildingOptions(List<SelfRegistrationBuildingDTO> buildings) {
+        public void init(List<SelfRegistrationBuildingDTO> buildings) {
             buildingSelector.setOptions(buildings);
+            setUnconditionalValidationErrorRendering(false);
+            setVisited(false);
+            populateNew();
         }
 
         public void setEntityValidationError(EntityValidationException caught) {

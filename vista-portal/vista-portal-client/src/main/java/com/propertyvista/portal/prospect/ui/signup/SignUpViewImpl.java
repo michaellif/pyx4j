@@ -13,6 +13,8 @@
  */
 package com.propertyvista.portal.prospect.ui.signup;
 
+import java.util.List;
+
 import com.google.gwt.dom.client.Style.Display;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.FlowPanel;
@@ -24,6 +26,7 @@ import com.pyx4j.site.client.ui.layout.responsive.LayoutChangeHandler;
 import com.pyx4j.site.client.ui.layout.responsive.ResponsiveLayoutPanel.LayoutType;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
 
+import com.propertyvista.portal.rpc.portal.resident.dto.SelfRegistrationBuildingDTO;
 import com.propertyvista.portal.rpc.shared.EntityValidationException;
 import com.propertyvista.portal.shared.themes.DashboardTheme;
 
@@ -57,6 +60,11 @@ public class SignUpViewImpl extends FlowPanel implements SignUpView {
 
     private void doLayout(LayoutType layoutType) {
         gadget.doLayout(layoutType);
+    }
+
+    @Override
+    public void init() {
+        gadget.init();
     }
 
     @Override

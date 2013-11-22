@@ -36,7 +36,7 @@ public interface SignUpView extends IsView {
 
     void setPresenter(SignUpPresenter presenter);
 
-    void setBuildingOptions(List<SelfRegistrationBuildingDTO> buildings);
+    void init(List<SelfRegistrationBuildingDTO> buildings);
 
     void showError(String message);
 

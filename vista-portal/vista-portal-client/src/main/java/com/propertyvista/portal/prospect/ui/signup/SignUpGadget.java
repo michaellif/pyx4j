@@ -13,6 +13,8 @@
  */
 package com.propertyvista.portal.prospect.ui.signup;
 
+import java.util.List;
+
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Style.Display;
 import com.google.gwt.dom.client.Style.TextAlign;
@@ -47,6 +49,7 @@ import com.pyx4j.widgets.client.Button;
 
 import com.propertyvista.portal.prospect.ui.signup.SignUpView.SignUpPresenter;
 import com.propertyvista.portal.rpc.portal.prospect.dto.ProspectSignUpDTO;
+import com.propertyvista.portal.rpc.portal.resident.dto.SelfRegistrationBuildingDTO;
 import com.propertyvista.portal.rpc.shared.EntityValidationException;
 import com.propertyvista.portal.rpc.shared.EntityValidationException.MemberValidationError;
 import com.propertyvista.portal.shared.resources.PortalImages;
@@ -60,7 +63,7 @@ public class SignUpGadget extends AbstractGadget<SignUpViewImpl> {
 
     private SignUpPresenter presenter;
 
-    private final SignUpForm signupform;
+    private final SignUpForm signupForm;
 
     private final Anchor termsAndConditionsAnchor;
 
@@ -71,9 +74,9 @@ public class SignUpGadget extends AbstractGadget<SignUpViewImpl> {
         FlowPanel contentPanel = new FlowPanel();
         contentPanel.getElement().getStyle().setTextAlign(TextAlign.CENTER);
 
-        signupform = new SignUpForm();
-        signupform.initContent();
-        contentPanel.add(signupform);
+        signupForm = new SignUpForm();
+        signupForm.initContent();
+        contentPanel.add(signupForm);
 
         FlowPanel loginTermsLinkPanel = new FlowPanel();
         loginTermsLinkPanel.getElement().getStyle().setTextAlign(TextAlign.LEFT);
@@ -112,18 +115,22 @@ public class SignUpGadget extends AbstractGadget<SignUpViewImpl> {
     }
 
     public void showValidationError(EntityValidationException caught) {
-        signupform.setEntityValidationError(caught);
+        signupForm.setEntityValidationError(caught);
+    }
+
+    public void init() {
+        signupForm.init();
     }
 
     public void doLayout(LayoutType layoutType) {
         switch (layoutType) {
         case phonePortrait:
         case phoneLandscape:
-            signupform.signUpPersonalImage.setVisible(false);
+            signupForm.signUpPersonalImage.setVisible(false);
             break;
 
         default:
-            signupform.signUpPersonalImage.setVisible(true);
+            signupForm.signUpPersonalImage.setVisible(true);
             break;
         }
     }
@@ -137,11 +144,11 @@ public class SignUpGadget extends AbstractGadget<SignUpViewImpl> {
             signUpButton = new Button(i18n.tr("CREATE ACCOUNT"), new Command() {
                 @Override
                 public void execute() {
-                    signupform.setEntityValidationError(null);
-                    signupform.revalidate();
-                    signupform.setUnconditionalValidationErrorRendering(true);
-                    if (signupform.isValid()) {
-                        presenter.signUp(signupform.getValue());
+                    signupForm.setEntityValidationError(null);
+                    signupForm.revalidate();
+                    signupForm.setUnconditionalValidationErrorRendering(true);
+                    if (signupForm.isValid()) {
+                        presenter.signUp(signupForm.getValue());
                     }
                 }
             });
@@ -238,6 +245,12 @@ public class SignUpGadget extends AbstractGadget<SignUpViewImpl> {
             flexPanel.setBR(++row, 0, 2);
 
             return flexPanel;
+        }
+
+        public void init() {
+            setUnconditionalValidationErrorRendering(false);
+            setVisited(false);
+            populateNew();
         }
 
         public void setEntityValidationError(EntityValidationException caught) {
