@@ -28,7 +28,6 @@ import com.pyx4j.site.client.SingletonViewFactory;
 import com.pyx4j.site.client.events.NotificationEvent;
 import com.pyx4j.site.client.events.NotificationHandler;
 import com.pyx4j.site.client.ui.layout.responsive.ResponsiveLayoutPanel;
-import com.pyx4j.site.rpc.AppPlace;
 
 import com.propertyvista.common.client.ClientNavigUtils;
 import com.propertyvista.common.client.config.VistaFeaturesCustomizationClient;

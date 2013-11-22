@@ -30,9 +30,9 @@ import com.pyx4j.security.rpc.AuthenticationService;
 import com.pyx4j.site.client.NavigationUri;
 import com.pyx4j.site.rpc.AppPlaceInfo;
 
-import com.propertyvista.portal.resident.ui.signup.SignUpView.SignUpPresenter;
 import com.propertyvista.portal.resident.ResidentPortalSite;
 import com.propertyvista.portal.resident.ui.signup.SignUpView;
+import com.propertyvista.portal.resident.ui.signup.SignUpView.SignUpPresenter;
 import com.propertyvista.portal.rpc.portal.resident.ResidentPortalSiteMap;
 import com.propertyvista.portal.rpc.portal.resident.dto.ResidentSelfRegistrationDTO;
 import com.propertyvista.portal.rpc.portal.resident.dto.SelfRegistrationBuildingDTO;

@@ -13,8 +13,6 @@
  */
 package com.propertyvista.portal.prospect.ui.signup;
 
-import java.util.List;
-
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Style.Display;
 import com.google.gwt.dom.client.Style.TextAlign;
@@ -49,7 +47,6 @@ import com.pyx4j.widgets.client.Button;
 
 import com.propertyvista.portal.prospect.ui.signup.SignUpView.SignUpPresenter;
 import com.propertyvista.portal.rpc.portal.prospect.dto.ProspectSignUpDTO;
-import com.propertyvista.portal.rpc.portal.resident.dto.SelfRegistrationBuildingDTO;
 import com.propertyvista.portal.rpc.shared.EntityValidationException;
 import com.propertyvista.portal.rpc.shared.EntityValidationException.MemberValidationError;
 import com.propertyvista.portal.shared.resources.PortalImages;

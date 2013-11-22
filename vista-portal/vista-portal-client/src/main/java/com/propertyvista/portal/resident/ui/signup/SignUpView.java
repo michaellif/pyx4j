@@ -19,8 +19,8 @@ import com.google.gwt.place.shared.Place;
 
 import com.pyx4j.site.client.IsView;
 
-import com.propertyvista.portal.rpc.portal.resident.dto.SelfRegistrationBuildingDTO;
 import com.propertyvista.portal.rpc.portal.resident.dto.ResidentSelfRegistrationDTO;
+import com.propertyvista.portal.rpc.portal.resident.dto.SelfRegistrationBuildingDTO;
 import com.propertyvista.portal.rpc.shared.EntityValidationException;
 
 public interface SignUpView extends IsView {

@@ -13,15 +13,21 @@
  */
 package com.propertyvista.portal.prospect.ui.application;
 
+import com.google.gwt.dom.client.Style.TextAlign;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.FlowPanel;
 
 import com.pyx4j.commons.css.StyleManager;
 import com.pyx4j.commons.css.ThemeColor;
 import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.site.client.AppSite;
 import com.pyx4j.widgets.client.Button;
+import com.pyx4j.widgets.client.Label;
 
 import com.propertyvista.domain.tenant.prospect.MasterOnlineApplicationStatus;
+import com.propertyvista.domain.tenant.prospect.OnlineApplication;
+import com.propertyvista.domain.tenant.prospect.OnlineApplicationStatus;
+import com.propertyvista.portal.rpc.portal.prospect.ProspectPortalSiteMap;
 import com.propertyvista.portal.shared.themes.DashboardTheme;
 import com.propertyvista.portal.shared.ui.AbstractGadget;
 import com.propertyvista.portal.shared.ui.GadgetToolbar;
@@ -36,6 +42,14 @@ public class ApplicationStatusPageViewImpl extends FlowPanel implements Applicat
 
     private final ApplicationProgressGadget progressGadget;
 
+    private Label messageLabel;
+
+    private Button continueApplicationButton;
+
+    private Button restartApplicationButton;
+
+    private Button sendUpdateButton;
+
     public ApplicationStatusPageViewImpl() {
         setStyleName(DashboardTheme.StyleName.Dashboard.name());
 
@@ -43,6 +57,7 @@ public class ApplicationStatusPageViewImpl extends FlowPanel implements Applicat
         add(statusGadget);
 
         progressGadget = new ApplicationProgressGadget();
+        progressGadget.setVisible(false);
         add(progressGadget);
 
     }
@@ -53,57 +68,82 @@ public class ApplicationStatusPageViewImpl extends FlowPanel implements Applicat
     }
 
     @Override
-    public void populate(MasterOnlineApplicationStatus status) {
+    public void populate(MasterOnlineApplicationStatus masterAppStatus) {
 
-        switch (status.status().getValue()) {
-        case Incomplete:
-            //=================== 1.
-            //"Your application progress is 55%. Click 'Continue Application' button below to complete your application."
+        continueApplicationButton.setVisible(false);
+        restartApplicationButton.setVisible(false);
+        sendUpdateButton.setVisible(false);
+        progressGadget.setVisible(false);
 
-            // Application progress
+        if (masterAppStatus == null) {
+            progressGadget.populate(null);
+            messageLabel.setText(null);
 
-            // Button "Continue Application"
+        } else {
 
-            //=================== 2.
-            //Your application has been submitted. We are waiting for application submission from other co-applicants. 
+            switch (masterAppStatus.status().getValue()) {
+            case Incomplete:
 
-            //Application progress
+                OnlineApplicationStatus userAppStatus = getUserApplication(masterAppStatus);
 
-            //Click 'Send Status Update' below to resend application status update to the email address(es) we have on file.
+                switch (userAppStatus.status().getValue()) {
+                case Incomplete:
+                case Invited:
+                    messageLabel.setText(i18n.tr("Your application progress is " + masterAppStatus.progress().getValue()
+                            + "%. Click 'Continue Application' button below to complete your application."));
+                    continueApplicationButton.setVisible(true);
+                    break;
+                case Submitted:
+                case InformationRequested:
+                    messageLabel.setText(i18n.tr("Your application has been submitted. "
+                            + "We are waiting for application submission from other co-applicants."));
+                    break;
+                }
 
-            // Button "Send Status Update"
+                if (masterAppStatus.individualApplications().size() > 1) {
+                    progressGadget.populate(masterAppStatus);
+                    progressGadget.setVisible(true);
+                }
 
-            break;
-        case Submitted:
-        case InformationRequested: // TODO for now information request will be processed and entered by CRM manually.
+                if (OnlineApplication.Role.Applicant.equals(userAppStatus.role().getValue())) {
+                    sendUpdateButton.setVisible(true);
+                }
 
-            //Your application is still pending. You will be contacted from
-            // our office management team once the application has been processed.
-
-            break;
-        case Approved:
-
-            // Your application has been reviewed and approved! 
-            // Our office management team representative will contact you shortly to make move-in arrangements
-
-            break;
-        case Cancelled:
-
-            // Your application has been reviewed and unfortunately has not met our move-in criteria. If you would like re-apply
-            // with a Guarantor, please start a new application. Thank you.
-
-            // Button "Restart Application"
-
-            break;
-
+                break;
+            case Submitted:
+            case InformationRequested: // TODO for now information request will be processed and entered by CRM manually.
+                messageLabel.setText(i18n.tr("Your application is still pending. "
+                        + "You will be contacted from our office management team once the application has been processed."));
+                break;
+            case Approved:
+                messageLabel.setText(i18n.tr("Your application has been reviewed and approved! "
+                        + "Our office management team representative will contact you shortly to make move-in arrangements."));
+                break;
+            case Cancelled:
+                messageLabel.setText(i18n.tr("Your application has been reviewed and unfortunately has not met our move-in criteria. "
+                        + "If you would like re-apply with a Guarantor, please start a new application. Thank you."));
+                restartApplicationButton.setVisible(true);
+                break;
+            }
         }
+    }
 
+    private OnlineApplicationStatus getUserApplication(MasterOnlineApplicationStatus masterAppStatus) {
+        return masterAppStatus.individualApplications().get(0);
     }
 
     class ApplicationStatusGadget extends AbstractGadget<ApplicationStatusPageViewImpl> {
 
         ApplicationStatusGadget() {
-            super(ApplicationStatusPageViewImpl.this, null, i18n.tr("Application Status"), ThemeColor.foreground, 0.3);
+            super(ApplicationStatusPageViewImpl.this, null, i18n.tr("Application Status"), ThemeColor.contrast2, 1);
+
+            FlowPanel viewPanel = new FlowPanel();
+            viewPanel.getElement().getStyle().setTextAlign(TextAlign.CENTER);
+
+            messageLabel = new Label();
+            viewPanel.add(messageLabel);
+
+            setContent(viewPanel);
 
             setActionsToolbar(new ApplicationStatusToolbar());
 
@@ -112,14 +152,25 @@ public class ApplicationStatusPageViewImpl extends FlowPanel implements Applicat
         class ApplicationStatusToolbar extends GadgetToolbar {
             public ApplicationStatusToolbar() {
 
-                final Button restartApplicationButton = new Button("Restart Application", new Command() {
+                continueApplicationButton = new Button("Continue Application", new Command() {
+
+                    @Override
+                    public void execute() {
+                        AppSite.getPlaceController().goTo(new ProspectPortalSiteMap.Application());
+                    }
+                });
+                continueApplicationButton.setVisible(false);
+                continueApplicationButton.getElement().getStyle().setProperty("background", StyleManager.getPalette().getThemeColor(ThemeColor.contrast2, 1));
+                addItem(continueApplicationButton);
+
+                restartApplicationButton = new Button("Restart Application", new Command() {
 
                     @Override
                     public void execute() {
                     }
                 });
-
-                restartApplicationButton.getElement().getStyle().setProperty("background", StyleManager.getPalette().getThemeColor(ThemeColor.foreground, 0.4));
+                restartApplicationButton.setVisible(false);
+                restartApplicationButton.getElement().getStyle().setProperty("background", StyleManager.getPalette().getThemeColor(ThemeColor.contrast2, 1));
                 addItem(restartApplicationButton);
             }
         }
@@ -128,23 +179,28 @@ public class ApplicationStatusPageViewImpl extends FlowPanel implements Applicat
     class ApplicationProgressGadget extends AbstractGadget<ApplicationStatusPageViewImpl> {
 
         ApplicationProgressGadget() {
-            super(ApplicationStatusPageViewImpl.this, null, i18n.tr("Application Progress"), ThemeColor.foreground, 0.3);
+            super(ApplicationStatusPageViewImpl.this, null, i18n.tr("Application Progress"), ThemeColor.contrast2, 1);
 
             setActionsToolbar(new ApplicationProgressToolbar());
+
+        }
+
+        public void populate(MasterOnlineApplicationStatus masterAppStatus) {
+            // TODO Auto-generated method stub
 
         }
 
         class ApplicationProgressToolbar extends GadgetToolbar {
             public ApplicationProgressToolbar() {
 
-                final Button sendUpdateButton = new Button("Send Status Update", new Command() {
+                sendUpdateButton = new Button("Send Status Update", new Command() {
 
                     @Override
                     public void execute() {
                     }
                 });
-
-                sendUpdateButton.getElement().getStyle().setProperty("background", StyleManager.getPalette().getThemeColor(ThemeColor.foreground, 0.4));
+                sendUpdateButton.setVisible(false);
+                sendUpdateButton.getElement().getStyle().setProperty("background", StyleManager.getPalette().getThemeColor(ThemeColor.contrast2, 1));
                 addItem(sendUpdateButton);
             }
         }

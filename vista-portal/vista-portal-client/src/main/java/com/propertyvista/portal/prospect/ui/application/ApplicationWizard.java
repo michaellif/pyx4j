@@ -13,10 +13,6 @@
  */
 package com.propertyvista.portal.prospect.ui.application;
 
-import java.util.List;
-
-import com.google.gwt.core.client.Scheduler;
-
 import com.pyx4j.commons.css.StyleManager;
 import com.pyx4j.commons.css.ThemeColor;
 import com.pyx4j.forms.client.ui.decorators.IDecorator;
@@ -25,7 +21,6 @@ import com.pyx4j.forms.client.ui.wizard.CEntityWizard;
 import com.pyx4j.forms.client.ui.wizard.WizardDecorator;
 import com.pyx4j.forms.client.ui.wizard.WizardProgressIndicator;
 import com.pyx4j.forms.client.ui.wizard.WizardStep;
-import com.pyx4j.forms.client.validators.ValidationResults;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.portal.prospect.ui.application.ApplicationWizardView.ApplicationWizardPresenter;
