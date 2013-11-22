@@ -28,6 +28,8 @@ public enum EmailTemplateType {
 
     PasswordRetrievalTenant,
 
+    ProspectWelcome,
+
     ApplicationCreatedApplicant,
 
     ApplicationCreatedCoApplicant,

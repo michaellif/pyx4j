@@ -65,7 +65,12 @@ public class OnlineApplicationFacadeImpl implements OnlineApplicationFacade {
                     throw new UserRuntimeException(i18n.tr("Primary applicant must have an e-mail to start Online Application."));
                 }
                 tenant.application().set(createOnlineApplication(masterOnlineApplication, tenant, Role.Applicant));
-                ServerSideFactory.create(CommunicationFacade.class).sendApplicantApplicationInvitation(tenant);
+
+                if (masterOnlineApplication.leaseApplication().lease().unit().isNull()) {
+                    ServerSideFactory.create(CommunicationFacade.class).sendProspectWelcome(tenant);
+                } else {
+                    ServerSideFactory.create(CommunicationFacade.class).sendApplicantApplicationInvitation(tenant);
+                }
                 Persistence.service().persist(tenant);
                 return;
             }

@@ -21,6 +21,7 @@ import com.pyx4j.commons.UserRuntimeException;
 import com.pyx4j.config.server.IMailServiceConfigConfiguration;
 import com.pyx4j.config.server.ServerSideConfiguration;
 import com.pyx4j.entity.server.Persistence;
+import com.pyx4j.entity.shared.AttachLevel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.server.mail.Mail;
 import com.pyx4j.server.mail.MailDeliveryStatus;
@@ -53,18 +54,12 @@ public class CommunicationFacadeImpl implements CommunicationFacade {
 
     private static final I18n i18n = I18n.get(CommunicationFacadeImpl.class);
 
-    private static boolean disabled = false;
-
     final static String GENERIC_FAILED_MESSAGE = "Invalid User Account";
 
     @Override
-    public void setDisabled(boolean disabled) {
-        CommunicationFacadeImpl.disabled = disabled;
-    }
-
-    @Override
-    public boolean isDisabled() {
-        return disabled;
+    public void sendProspectWelcome(LeaseTermTenant tenant) {
+        // TODO
+        EmailTemplateType emailTemplateType = EmailTemplateType.ProspectWelcome;
     }
 
     @Override
@@ -83,9 +78,6 @@ public class CommunicationFacadeImpl implements CommunicationFacade {
     }
 
     private static void sendInvitationEmail(LeaseTermParticipant leaseParticipant, EmailTemplateType emailTemplateType) {
-        if (disabled) {
-            return;
-        }
         String token = AccessKey.createAccessToken(leaseParticipant.leaseParticipant().customer().user(), CustomerUserCredential.class, 10);
         if (token == null) {
             throw new UserRuntimeException(GENERIC_FAILED_MESSAGE);
@@ -98,9 +90,6 @@ public class CommunicationFacadeImpl implements CommunicationFacade {
 
     @Override
     public void sendApplicationStatus(LeaseTermTenant tenantId) {
-        if (disabled) {
-            return;
-        }
         LeaseTermTenant tenant = Persistence.service().retrieve(LeaseTermTenant.class, tenantId.getPrimaryKey());
         Persistence.service().retrieve(tenant.leaseTermV());
         Persistence.service().retrieve(tenant.leaseTermV().holder().lease());
@@ -125,13 +114,8 @@ public class CommunicationFacadeImpl implements CommunicationFacade {
 
     @Override
     public void sendTenantInvitation(LeaseTermTenant tenant) {
-        if (disabled) {
-            return;
-        }
         CustomerUser user = tenant.leaseParticipant().customer().user();
-        if (user.isValueDetached()) {
-            Persistence.service().retrieve(user);
-        }
+        Persistence.ensureRetrieve(user, AttachLevel.Attached);
 
         String token = AccessKey.createAccessToken(user, CustomerUserCredential.class, 10);
         if (token == null) {
@@ -148,9 +132,6 @@ public class CommunicationFacadeImpl implements CommunicationFacade {
 
     @Override
     public void sendProspectPasswordRetrievalToken(Customer customer) {
-        if (disabled) {
-            return;
-        }
         String token = AccessKey.createAccessToken(customer.user(), CustomerUserCredential.class, 1);
         if (token == null) {
             throw new UserRuntimeException(GENERIC_FAILED_MESSAGE);
@@ -163,9 +144,6 @@ public class CommunicationFacadeImpl implements CommunicationFacade {
 
     @Override
     public void sendTenantPasswordRetrievalToken(Customer customer) {
-        if (disabled) {
-            return;
-        }
         String token = AccessKey.createAccessToken(customer.user(), CustomerUserCredential.class, 1);
         if (token == null) {
             throw new UserRuntimeException(GENERIC_FAILED_MESSAGE);
@@ -178,9 +156,6 @@ public class CommunicationFacadeImpl implements CommunicationFacade {
 
     @Override
     public void sendAdminPasswordRetrievalToken(OperationsUser user) {
-        if (disabled) {
-            return;
-        }
         String token = AccessKey.createAccessToken(user, OperationsUserCredential.class, 1);
         if (token == null) {
             throw new UserRuntimeException(GENERIC_FAILED_MESSAGE);
@@ -193,9 +168,6 @@ public class CommunicationFacadeImpl implements CommunicationFacade {
 
     @Override
     public void sendCrmPasswordRetrievalToken(CrmUser user) {
-        if (disabled) {
-            return;
-        }
         String token = AccessKey.createAccessToken(user, CrmUserCredential.class, 1);
         if (token == null) {
             throw new UserRuntimeException(GENERIC_FAILED_MESSAGE);
@@ -214,10 +186,6 @@ public class CommunicationFacadeImpl implements CommunicationFacade {
 
     @Override
     public void sendNewPmcEmail(OnboardingUser user, Pmc pmc) {
-        if (disabled) {
-            return;
-        }
-
         MailMessage m = MessageTemplates.createNewPmcEmail(user, pmc);
 
         m.setTo(user.email().getValue());
@@ -233,10 +201,6 @@ public class CommunicationFacadeImpl implements CommunicationFacade {
 
     @Override
     public void sendTenantSurePaymentNotProcessedEmail(String tenantEmail, LogicalDate gracePeriodEndDate, LogicalDate cancellationDate) {
-        if (disabled) {
-            return;
-        }
-
         MailMessage m = MessageTemplates.createTenantSurePaymentNotProcessedEmail(gracePeriodEndDate, cancellationDate);
 
         m.setTo(tenantEmail);
@@ -249,10 +213,6 @@ public class CommunicationFacadeImpl implements CommunicationFacade {
 
     @Override
     public void sendTenantSurePaymentsResumedEmail(String tenantEmail) {
-        if (disabled) {
-            return;
-        }
-
         MailMessage m = MessageTemplates.createTenantSurePaymentsResumedEmail();
 
         m.setTo(tenantEmail);
@@ -265,10 +225,6 @@ public class CommunicationFacadeImpl implements CommunicationFacade {
 
     @Override
     public void sendOnlinePaymentSetupCompletedEmail(String userName, String userEmail) {
-        if (disabled) {
-            return;
-        }
-
         MailMessage m = MessageTemplates.createOnlinePaymentSetupCompletedEmail(userName);
 
         m.setTo(userEmail);
@@ -280,9 +236,6 @@ public class CommunicationFacadeImpl implements CommunicationFacade {
 
     @Override
     public void sendPaymentRejectedNotification(List<String> targetEmails, PaymentRecord paymentRecord, boolean applyNSF) {
-        if (disabled) {
-            return;
-        }
         MailMessage m = MessageTemplates.createPaymentRejectedNotificationEmail(paymentRecord, applyNSF);
         m.setTo(targetEmails);
         Mail.send(m);
@@ -290,9 +243,6 @@ public class CommunicationFacadeImpl implements CommunicationFacade {
 
     @Override
     public void sendPaymentYardiUnableToRejectNotification(List<String> targetEmails, PaymentRecord paymentRecord, boolean applyNSF, String yardiErrorMessage) {
-        if (disabled) {
-            return;
-        }
         MailMessage m = MessageTemplates.createPostToYardiFailedNotificationEmail(paymentRecord, applyNSF, yardiErrorMessage);
         m.setTo(targetEmails);
         Mail.send(m);
@@ -300,9 +250,6 @@ public class CommunicationFacadeImpl implements CommunicationFacade {
 
     @Override
     public void sendAutoPayReviewRequiredNotification(List<String> targetEmails, List<Lease> leaseIds) {
-        if (disabled) {
-            return;
-        }
         MailMessage m = MessageTemplates.createAutoPayReviewRequiredNotificationEmail(leaseIds);
         m.setTo(targetEmails);
         Mail.send(m);
@@ -310,9 +257,6 @@ public class CommunicationFacadeImpl implements CommunicationFacade {
 
     @Override
     public void sendAutoPayCancelledBySystemNotification(List<String> targetEmails, List<Lease> leaseIds, Map<Lease, List<AutopayAgreement>> canceledAgreements) {
-        if (disabled) {
-            return;
-        }
         MailMessage m = MessageTemplates.createAutoPayCancelledBySystemNotificationEmail(leaseIds, canceledAgreements);
         m.setTo(targetEmails);
         Mail.send(m);
@@ -320,9 +264,6 @@ public class CommunicationFacadeImpl implements CommunicationFacade {
 
     @Override
     public void sendAutoPayCancelledByResidentNotification(List<String> targetEmails, Lease leaseId, List<AutopayAgreement> canceledAgreements) {
-        if (disabled) {
-            return;
-        }
         MailMessage m = MessageTemplates.createAutoPayCancelledByResidentNotificationEmail(leaseId, canceledAgreements);
         m.setTo(targetEmails);
         Mail.send(m);
@@ -366,9 +307,6 @@ public class CommunicationFacadeImpl implements CommunicationFacade {
     }
 
     private MailMessage sendMaintenanceRequestEmail(String sendTo, EmailTemplateType emailType, MaintenanceRequest request) {
-        if (disabled) {
-            return null;
-        }
         if (sendTo == null) {
             return null;
         }

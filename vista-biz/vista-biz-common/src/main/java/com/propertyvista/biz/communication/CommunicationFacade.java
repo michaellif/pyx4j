@@ -38,10 +38,6 @@ import com.propertyvista.operations.domain.security.OperationsUser;
  */
 public interface CommunicationFacade {
 
-    void setDisabled(boolean disabled);
-
-    boolean isDisabled();
-
     //TODO move to OprationsNotificationFacade
     void sendAdminPasswordRetrievalToken(OperationsUser user);
 
@@ -53,6 +49,8 @@ public interface CommunicationFacade {
     void sendProspectPasswordRetrievalToken(Customer customer);
 
     void sendTenantPasswordRetrievalToken(Customer customer);
+
+    void sendProspectWelcome(LeaseTermTenant tenant);
 
     void sendApplicantApplicationInvitation(LeaseTermTenant tenant);
 

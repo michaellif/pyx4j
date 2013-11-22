@@ -62,6 +62,9 @@ public class EmailTemplateManager {
         case PasswordRetrievalTenant:
             values.add(EntityFactory.create(PasswordRequestTenantT.class));
             break;
+        case ProspectWelcome:
+            values.add(EntityFactory.create(ApplicationT.class));
+            break;
         case ApplicationApproved:
             values.add(EntityFactory.create(ApplicationT.class));
             values.add(EntityFactory.create(LeaseT.class));

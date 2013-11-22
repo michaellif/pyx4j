@@ -18,10 +18,12 @@ import java.util.List;
 
 import com.pyx4j.commons.SimpleMessageFormat;
 import com.pyx4j.config.server.ServerSideConfiguration;
+import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.server.mail.Mail;
 import com.pyx4j.server.mail.MailMessage;
 import com.pyx4j.site.rpc.AppPlaceInfo;
 
+import com.propertyvista.biz.system.VistaSystemFacade;
 import com.propertyvista.config.AbstractVistaServerSideConfiguration;
 import com.propertyvista.config.VistaDeployment;
 import com.propertyvista.domain.security.common.VistaApplication;
@@ -36,6 +38,9 @@ import com.propertyvista.operations.rpc.OperationsSiteMap;
 public class JobNotifications {
 
     public static void notify(Trigger trigger, Run run) {
+        if (ServerSideFactory.create(VistaSystemFacade.class).isCommunicationsDisabled()) {
+            return;
+        }
 
         List<TriggerNotificationEvent> events = new ArrayList<TriggerNotificationEvent>();
         events.add(TriggerNotificationEvent.All);

@@ -61,6 +61,7 @@ public class EmailTemplatesPolicyPreloader extends AbstractPolicyPreloader<Email
         policy.templates().add(defaultEmailTemplatePasswordRetrievalCrm());
         policy.templates().add(defaultEmailTemplatePasswordRetrievalProspect());
         policy.templates().add(defaultEmailTemplatePasswordRetrievalTenant());
+        policy.templates().add(defaultEmailTemplateProspectWelcome());
         policy.templates().add(defaultEmailTemplateApplicationCreatedApplicant());
         policy.templates().add(defaultEmailTemplateApplicationCreatedCoApplicant());
         policy.templates().add(defaultEmailTemplateApplicationCreatedGuarantor());
@@ -173,6 +174,33 @@ public class EmailTemplatesPolicyPreloader extends AbstractPolicyPreloader<Email
                 EmailTemplateManager.getVarname(pwdReqT.RequestorName()),
                 EmailTemplateManager.getVarname(portalT.CompanyName()),
                 EmailTemplateManager.getVarname(pwdReqT.PasswordResetUrl())
+        ));//@formatter:on
+        return template;
+    }
+
+    //TODO
+    private EmailTemplate defaultEmailTemplateProspectWelcome() {
+        EmailTemplateType type = EmailTemplateType.ProspectWelcome;
+
+        ApplicationT appT = EmailTemplateManager.getProto(type, ApplicationT.class);
+        PortalLinksT portalT = EmailTemplateManager.getProto(type, PortalLinksT.class);
+
+        EmailTemplate template = EntityFactory.create(EmailTemplate.class);
+        template.useHeader().setValue(Boolean.TRUE);
+        template.useFooter().setValue(Boolean.TRUE);
+        template.type().setValue(type);
+        template.subject().setValue(i18n.tr("Your Lease Application Created"));
+        template.content().setValue(i18n.tr(//@formatter:off
+                "Dear {0},<br/><br/>" +
+                "Your lease application has been created. The Application Reference Number is: {1}<br/><br/>" +
+                "You can now start completing it online by logging to your account using following link: <br/><br/>" +
+                "{2}<br/><br/>" +
+                "Sincerely,<br/><br/>" +
+                "{3}<br/>",
+                EmailTemplateManager.getVarname(appT.ApplicantName()),
+                EmailTemplateManager.getVarname(appT.ReferenceNumber()),
+                EmailTemplateManager.getVarname(portalT.ProspectPortalUrl()),
+                EmailTemplateManager.getVarname(portalT.CompanyName())
         ));//@formatter:on
         return template;
     }

@@ -62,9 +62,9 @@ import com.pyx4j.server.contexts.Lifecycle;
 import com.pyx4j.server.contexts.NamespaceManager;
 import com.pyx4j.server.mail.Mail;
 
-import com.propertyvista.biz.communication.CommunicationFacade;
 import com.propertyvista.biz.system.OperationsTriggerFacade;
 import com.propertyvista.biz.system.PmcFacade;
+import com.propertyvista.biz.system.VistaSystemFacade;
 import com.propertyvista.config.AbstractVistaServerSideConfiguration;
 import com.propertyvista.config.VistaDeployment;
 import com.propertyvista.domain.DemoData.DemoPmc;
@@ -304,7 +304,7 @@ public class DBResetServlet extends HttpServlet {
                             Persistence.service().startBackgroundProcessTransaction();
                             Lifecycle.startElevatedUserContext();
                             Mail.getMailService().setDisabled(true);
-                            ServerSideFactory.create(CommunicationFacade.class).setDisabled(true);
+                            ServerSideFactory.create(VistaSystemFacade.class).setCommunicationsDisabled(true);
                             try {
                                 if (EnumSet.of(ResetType.prodReset, ResetType.all, ResetType.allMini, ResetType.vistaMini, ResetType.vistaMax3000,
                                         ResetType.allWithMockup, ResetType.resetOperationsAndPmc, ResetType.clear).contains(type)) {
@@ -426,7 +426,7 @@ public class DBResetServlet extends HttpServlet {
                                 Persistence.service().rollback();
                                 throw new Error(t);
                             } finally {
-                                ServerSideFactory.create(CommunicationFacade.class).setDisabled(false);
+                                ServerSideFactory.create(VistaSystemFacade.class).setCommunicationsDisabled(false);
                                 Mail.getMailService().setDisabled(false);
                                 Lifecycle.endElevatedUserContext();
                                 Persistence.service().endTransaction();
