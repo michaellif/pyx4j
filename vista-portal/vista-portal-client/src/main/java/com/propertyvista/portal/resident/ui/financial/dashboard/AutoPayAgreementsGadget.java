@@ -189,7 +189,9 @@ public class AutoPayAgreementsGadget extends AbstractGadget<FinancialDashboardVi
 
                 get(proto().paymentMethod()).setVisible(!getValue().paymentMethod().isNull());
 
-                ((CEntityFolderItem<AutoPayInfoDTO>) getParent()).setRemovable(!getValue().paymentMethod().isEmpty());
+                if (AutoPayFolder.this.isRemovable()) {
+                    ((CEntityFolderItem<AutoPayInfoDTO>) getParent()).setRemovable(!getValue().paymentMethod().isEmpty());
+                }
             }
         }
     }

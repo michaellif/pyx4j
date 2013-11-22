@@ -29,14 +29,17 @@ import com.pyx4j.forms.client.ui.folder.CEntityFolderItem;
 import com.pyx4j.forms.client.ui.folder.IFolderItemDecorator;
 import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.security.shared.SecurityController;
 import com.pyx4j.widgets.client.Anchor;
 import com.pyx4j.widgets.client.Button;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
 
+import com.propertyvista.common.client.policy.ClientPolicyManager;
 import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
 import com.propertyvista.domain.contact.AddressSimple;
 import com.propertyvista.domain.payment.PaymentDetails;
+import com.propertyvista.domain.policy.policies.AutoPayPolicy;
 import com.propertyvista.domain.security.VistaCustomerPaymentTypeBehavior;
 import com.propertyvista.portal.rpc.portal.resident.dto.financial.PaymentMethodInfoDTO;
 import com.propertyvista.portal.rpc.portal.resident.dto.financial.PaymentMethodSummaryDTO;
@@ -94,7 +97,7 @@ public class PaymentMethodsGadget extends AbstractGadget<FinancialDashboardViewI
             BasicFlexFormPanel content = new BasicFlexFormPanel();
             int row = -1;
 
-            content.setWidget(++row, 0, inject(proto().paymentMethods(), new PaymentMethodFolder()));
+            content.setWidget(++row, 0, inject(proto().paymentMethods(), new PaymentMethodFolder(this)));
 
             return content;
         }
@@ -102,8 +105,11 @@ public class PaymentMethodsGadget extends AbstractGadget<FinancialDashboardViewI
 
     private class PaymentMethodFolder extends VistaBoxFolder<PaymentMethodInfoDTO> {
 
-        public PaymentMethodFolder() {
+        private final PaymentMethodsView parentView;
+
+        public PaymentMethodFolder(PaymentMethodsView parentView) {
             super(PaymentMethodInfoDTO.class, true);
+            this.parentView = parentView;
 
             setOrderable(false);
             setAddable(false);
@@ -169,6 +175,20 @@ public class PaymentMethodsGadget extends AbstractGadget<FinancialDashboardViewI
                 }));
 
                 return content;
+            }
+
+            @Override
+            protected void onValueSet(boolean populate) {
+                super.onValueSet(populate);
+
+                if (getValue().usedByAutoPay().isBooleanTrue()) {
+                    ClientPolicyManager.obtainEffectivePolicy(parentView.getValue().building(), AutoPayPolicy.class, new DefaultAsyncCallback<AutoPayPolicy>() {
+                        @Override
+                        public void onSuccess(AutoPayPolicy result) {
+                            ((CEntityFolderItem<PaymentMethodInfoDTO>) getParent()).setRemovable(result.allowCancelationByResident().isBooleanTrue());
+                        }
+                    });
+                }
             }
         }
     }

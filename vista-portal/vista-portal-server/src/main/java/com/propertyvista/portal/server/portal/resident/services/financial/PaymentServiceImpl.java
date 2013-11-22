@@ -107,6 +107,7 @@ public class PaymentServiceImpl implements PaymentService {
         Lease lease = ResidentPortalContext.getLease();
 
         summary.paymentMethods().addAll(retrievePaymentMethods(lease));
+        summary.building().set(lease.unit().building());
 
         callback.onSuccess(summary);
     }
