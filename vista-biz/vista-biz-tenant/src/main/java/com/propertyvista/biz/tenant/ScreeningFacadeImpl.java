@@ -267,7 +267,7 @@ public class ScreeningFacadeImpl implements ScreeningFacade {
     @Override
     public CustomerScreening retriveAndFinalizePersonScreening(Customer customerId, AttachLevel attachLevel) {
         CustomerScreening screening = retrivePersonScreeningDraftOrFinal(customerId, AttachLevel.Attached);
-        if ((screening != null) && (screening.version().isNull())) {
+        if (screening != null && screening.getPrimaryKey().isDraft()) {
             screening.saveAction().setValue(SaveAction.saveAsFinal);
             Persistence.service().persist(screening);
         }
