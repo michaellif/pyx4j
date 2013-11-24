@@ -31,44 +31,32 @@ public class ApplicationWizard extends CPortalEntityWizard<OnlineApplicationDTO>
 
     private static final I18n i18n = I18n.get(ApplicationWizard.class);
 
-    private final WizardStep leaseStep;
+    private WizardStep leaseStep;
 
-    private final WizardStep unitStep;
+    private WizardStep unitStep;
 
-    private final WizardStep optionsStep;
+    private WizardStep optionsStep;
 
-    private final WizardStep personalInfoAStep;
+    private WizardStep personalInfoAStep;
 
-    private final WizardStep personalInfoBStep;
+    private WizardStep personalInfoBStep;
 
-    private final WizardStep financialStep;
+    private WizardStep financialStep;
 
-    private final WizardStep peopleStep;
+    private WizardStep peopleStep;
 
-    private final WizardStep contactsStep;
+    private WizardStep contactsStep;
 
-    private final WizardStep pmcCustomStep;
+    private WizardStep pmcCustomStep;
 
-    private final WizardStep summaryStep;
+    private WizardStep summaryStep;
 
-    private final WizardStep paymentStep;
+    private WizardStep paymentStep;
 
     private ApplicationWizardPresenter presenter;
 
     public ApplicationWizard(ApplicationWizardViewImpl view) {
         super(OnlineApplicationDTO.class, view, i18n.tr("Profile Payment Setup"), i18n.tr("Submit"), ThemeColor.contrast4);
-        leaseStep = addStep(createLeaseStep());
-        unitStep = addStep(createUnitStep());
-        optionsStep = addStep(createOptionsStep());
-        personalInfoAStep = addStep(createPersonalInfoAStep());
-        personalInfoBStep = addStep(createPersonalInfoBStep());
-        financialStep = addStep(createFinancialStep());
-        peopleStep = addStep(createPeopleStep());
-        contactsStep = addStep(createContactsStep());
-        pmcCustomStep = addStep(createPmcCustomStep());
-        summaryStep = addStep(createSummaryStep());
-        paymentStep = addStep(createPaymentStep());
-
     }
 
     public void setPresenter(ApplicationWizardPresenter presenter) {
@@ -155,6 +143,22 @@ public class ApplicationWizard extends CPortalEntityWizard<OnlineApplicationDTO>
     @Override
     protected IDecorator<?> createDecorator() {
         return new ApplicationWizardDecorator();
+    }
+
+    @Override
+    protected void onValuePropagation(OnlineApplicationDTO value, boolean fireEvent, boolean populate) {
+        leaseStep = addStep(createLeaseStep());
+        unitStep = addStep(createUnitStep());
+        optionsStep = addStep(createOptionsStep());
+        personalInfoAStep = addStep(createPersonalInfoAStep());
+        personalInfoBStep = addStep(createPersonalInfoBStep());
+        financialStep = addStep(createFinancialStep());
+        peopleStep = addStep(createPeopleStep());
+        contactsStep = addStep(createContactsStep());
+        pmcCustomStep = addStep(createPmcCustomStep());
+        summaryStep = addStep(createSummaryStep());
+        paymentStep = addStep(createPaymentStep());
+        super.onValuePropagation(value, fireEvent, populate);
     }
 
     class ApplicationWizardDecorator extends WizardDecorator<OnlineApplicationDTO> implements WizardProgressIndicator {

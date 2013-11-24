@@ -84,7 +84,7 @@ public class ApplicationStatusPageViewImpl extends FlowPanel implements Applicat
             switch (masterAppStatus.status().getValue()) {
             case Incomplete:
 
-                OnlineApplicationStatus userAppStatus = getUserApplication(masterAppStatus);
+                OnlineApplicationStatus userAppStatus = getUserApplicationStatus(masterAppStatus);
 
                 switch (userAppStatus.status().getValue()) {
                 case Incomplete:
@@ -128,7 +128,8 @@ public class ApplicationStatusPageViewImpl extends FlowPanel implements Applicat
         }
     }
 
-    private OnlineApplicationStatus getUserApplication(MasterOnlineApplicationStatus masterAppStatus) {
+    private OnlineApplicationStatus getUserApplicationStatus(MasterOnlineApplicationStatus masterAppStatus) {
+
         return masterAppStatus.individualApplications().get(0);
     }
 

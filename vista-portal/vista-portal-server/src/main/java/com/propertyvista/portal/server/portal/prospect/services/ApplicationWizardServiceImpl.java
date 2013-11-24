@@ -14,10 +14,12 @@
 package com.propertyvista.portal.server.portal.prospect.services;
 
 import com.pyx4j.entity.server.AbstractCrudServiceDtoImpl;
+import com.pyx4j.entity.shared.EntityFactory;
 
 import com.propertyvista.domain.tenant.prospect.OnlineApplication;
 import com.propertyvista.portal.rpc.portal.prospect.dto.OnlineApplicationDTO;
 import com.propertyvista.portal.rpc.portal.prospect.services.ApplicationWizardService;
+import com.propertyvista.portal.server.portal.prospect.ProspectPortalContext;
 
 public class ApplicationWizardServiceImpl extends AbstractCrudServiceDtoImpl<OnlineApplication, OnlineApplicationDTO> implements ApplicationWizardService {
 
@@ -30,4 +32,12 @@ public class ApplicationWizardServiceImpl extends AbstractCrudServiceDtoImpl<Onl
         bindCompleteObject();
     }
 
+    @Override
+    protected OnlineApplicationDTO init(InitializationData initializationData) {
+
+        OnlineApplicationDTO dto = EntityFactory.create(OnlineApplicationDTO.class);
+        copyBOtoTO(ProspectPortalContext.getOnlineApplication(), dto);
+
+        return dto;
+    }
 }
