@@ -60,7 +60,7 @@ public class ApplicationWizard extends CPortalEntityWizard<OnlineApplicationDTO>
     public ApplicationWizard(ApplicationWizardViewImpl view) {
         super(OnlineApplicationDTO.class, view, i18n.tr("Profile Payment Setup"), i18n.tr("Submit"), ThemeColor.contrast4);
 
-        if (isMainApplicant()) {
+        if (SecurityController.checkBehavior(VistaCustomerBehavior.ProspectiveApplicant)) {
             unitStep = addStep(createUnitStep());
             optionsStep = addStep(createOptionsStep());
             peopleStep = addStep(createPeopleStep());
@@ -81,10 +81,6 @@ public class ApplicationWizard extends CPortalEntityWizard<OnlineApplicationDTO>
             summaryStep = addStep(createSummaryStep());
         }
 
-    }
-
-    private boolean isMainApplicant() {
-        return SecurityController.checkBehavior(VistaCustomerBehavior.ProspectiveApplicant);
     }
 
     public void setPresenter(ApplicationWizardPresenter presenter) {

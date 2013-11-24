@@ -13,17 +13,26 @@
  */
 package com.propertyvista.portal.prospect.ui.application;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.google.gwt.dom.client.Style.TextAlign;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.FlowPanel;
+import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.commons.css.StyleManager;
 import com.pyx4j.commons.css.ThemeColor;
+import com.pyx4j.forms.client.ui.CEntityForm;
+import com.pyx4j.forms.client.ui.folder.EntityFolderColumnDescriptor;
+import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.security.client.ClientContext;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.widgets.client.Button;
 import com.pyx4j.widgets.client.Label;
 
+import com.propertyvista.common.client.ui.components.folders.VistaTableFolder;
 import com.propertyvista.domain.tenant.prospect.MasterOnlineApplicationStatus;
 import com.propertyvista.domain.tenant.prospect.OnlineApplication;
 import com.propertyvista.domain.tenant.prospect.OnlineApplicationStatus;
@@ -31,6 +40,7 @@ import com.propertyvista.portal.rpc.portal.prospect.ProspectPortalSiteMap;
 import com.propertyvista.portal.shared.themes.DashboardTheme;
 import com.propertyvista.portal.shared.ui.AbstractGadget;
 import com.propertyvista.portal.shared.ui.GadgetToolbar;
+import com.propertyvista.portal.shared.ui.util.decorators.FormWidgetDecoratorBuilder;
 
 public class ApplicationStatusPageViewImpl extends FlowPanel implements ApplicationStatusPageView {
 
@@ -129,8 +139,13 @@ public class ApplicationStatusPageViewImpl extends FlowPanel implements Applicat
     }
 
     private OnlineApplicationStatus getUserApplicationStatus(MasterOnlineApplicationStatus masterAppStatus) {
-        //TODO implement
-        return masterAppStatus.individualApplications().get(0);
+
+        for (OnlineApplicationStatus appStatus : masterAppStatus.individualApplications()) {
+            if (ClientContext.getUserVisit().getPrincipalPrimaryKey().equals(appStatus.customer().user().getPrimaryKey())) {
+                return appStatus;
+            }
+        }
+        throw new Error("Application is not found");
     }
 
     class ApplicationStatusGadget extends AbstractGadget<ApplicationStatusPageViewImpl> {
@@ -179,16 +194,22 @@ public class ApplicationStatusPageViewImpl extends FlowPanel implements Applicat
 
     class ApplicationProgressGadget extends AbstractGadget<ApplicationStatusPageViewImpl> {
 
+        private ApplicationProgressForm progressForm;
+
         ApplicationProgressGadget() {
             super(ApplicationStatusPageViewImpl.this, null, i18n.tr("Application Progress"), ThemeColor.contrast2, 1);
+
+            ApplicationProgressForm progressForm = new ApplicationProgressForm();
+            progressForm.setEditable(false);
+            progressForm.initContent();
+            setContent(progressForm);
 
             setActionsToolbar(new ApplicationProgressToolbar());
 
         }
 
         public void populate(MasterOnlineApplicationStatus masterAppStatus) {
-            // TODO Auto-generated method stub
-
+            progressForm.populate(masterAppStatus);
         }
 
         class ApplicationProgressToolbar extends GadgetToolbar {
@@ -205,6 +226,44 @@ public class ApplicationStatusPageViewImpl extends FlowPanel implements Applicat
                 addItem(sendUpdateButton);
             }
         }
+
+        class ApplicationProgressForm extends CEntityForm<MasterOnlineApplicationStatus> {
+
+            public ApplicationProgressForm() {
+                super(MasterOnlineApplicationStatus.class);
+                setViewable(true);
+            }
+
+            @Override
+            public IsWidget createContent() {
+                BasicFlexFormPanel main = new BasicFlexFormPanel();
+
+                int row = -1;
+                main.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().progress())).build());
+                main.setBR(++row, 0, 1);
+                main.setWidget(++row, 0, inject(proto().individualApplications(), new ApplicationStatusFolder()));
+
+                return main;
+            }
+
+            class ApplicationStatusFolder extends VistaTableFolder<OnlineApplicationStatus> {
+
+                public ApplicationStatusFolder() {
+                    super(OnlineApplicationStatus.class, false);
+                }
+
+                @Override
+                public List<EntityFolderColumnDescriptor> columns() {
+                    ArrayList<EntityFolderColumnDescriptor> columns = new ArrayList<EntityFolderColumnDescriptor>();
+                    columns.add(new EntityFolderColumnDescriptor(proto().customer(), "20em"));
+                    columns.add(new EntityFolderColumnDescriptor(proto().role(), "10em"));
+                    columns.add(new EntityFolderColumnDescriptor(proto().status(), "10em"));
+                    columns.add(new EntityFolderColumnDescriptor(proto().progress(), "7em"));
+                    return columns;
+                }
+            }
+        }
+
     }
 
 }
