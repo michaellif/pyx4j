@@ -31,11 +31,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.google.gwt.core.client.GWT;
-import com.google.web.bindery.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.Cookies;
 import com.google.gwt.user.client.History;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
+import com.google.web.bindery.event.shared.HandlerRegistration;
 
 import com.pyx4j.commons.TimeUtils;
 import com.pyx4j.config.client.ClientApplicationBackendConfig;
@@ -154,6 +154,17 @@ public class ClientContext {
 
     public static UserVisit getUserVisit() {
         return userVisit;
+    }
+
+    /**
+     * Convenience method to access custom UserVisit
+     * 
+     * @param userVisitClass
+     * @return
+     */
+    @SuppressWarnings("unchecked")
+    public static <E extends UserVisit> E getUserVisit(Class<E> userVisitClass) {
+        return (E) getUserVisit();
     }
 
     public static ClientSystemInfo getClientSystemInfo() {

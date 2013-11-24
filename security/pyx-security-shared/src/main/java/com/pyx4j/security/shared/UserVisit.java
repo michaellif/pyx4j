@@ -40,8 +40,9 @@ public class UserVisit implements Serializable {
 
     private String serverSideHashCode;
 
-    protected transient boolean changed;
+    private transient boolean changed;
 
+    // to make it GWT Serializable
     public UserVisit() {
 
     }
@@ -58,7 +59,7 @@ public class UserVisit implements Serializable {
 
     public void setName(String name) {
         if (!CommonsStringUtils.equals(this.name, name)) {
-            this.changed = true;
+            setChanged();
         }
         this.name = name;
     }
@@ -69,7 +70,7 @@ public class UserVisit implements Serializable {
 
     public void setEmail(String email) {
         if (!CommonsStringUtils.equals(this.email, email)) {
-            this.changed = true;
+            setChanged();
         }
         this.email = email;
     }
@@ -84,6 +85,13 @@ public class UserVisit implements Serializable {
 
     public boolean isChanged() {
         return changed;
+    }
+
+    /**
+     * Set Flag to propagate UserVisit to GWT Client
+     */
+    protected void setChanged() {
+        changed = true;
     }
 
     /**
