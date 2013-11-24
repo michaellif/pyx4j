@@ -57,10 +57,38 @@ public class ApplicationWizard extends CPortalEntityWizard<OnlineApplicationDTO>
 
     public ApplicationWizard(ApplicationWizardViewImpl view) {
         super(OnlineApplicationDTO.class, view, i18n.tr("Profile Payment Setup"), i18n.tr("Submit"), ThemeColor.contrast4);
+
+        if (isMainApplicant()) {
+            unitStep = addStep(createUnitStep());
+            optionsStep = addStep(createOptionsStep());
+            peopleStep = addStep(createPeopleStep());
+            personalInfoAStep = addStep(createPersonalInfoAStep());
+            personalInfoBStep = addStep(createPersonalInfoBStep());
+            financialStep = addStep(createFinancialStep());
+            contactsStep = addStep(createContactsStep());
+            pmcCustomStep = addStep(createPmcCustomStep());
+            summaryStep = addStep(createSummaryStep());
+            paymentStep = addStep(createPaymentStep());
+        } else {
+            leaseStep = addStep(createLeaseStep());
+            personalInfoAStep = addStep(createPersonalInfoAStep());
+            personalInfoBStep = addStep(createPersonalInfoBStep());
+            financialStep = addStep(createFinancialStep());
+            contactsStep = addStep(createContactsStep());
+            pmcCustomStep = addStep(createPmcCustomStep());
+            summaryStep = addStep(createSummaryStep());
+        }
+
+    }
+
+    private boolean isMainApplicant() {
+        // TODO Auto-generated method stub
+        return false;
     }
 
     public void setPresenter(ApplicationWizardPresenter presenter) {
         this.presenter = presenter;
+        updateProgress();
     }
 
     private BasicFlexFormPanel createLeaseStep() {
@@ -147,17 +175,6 @@ public class ApplicationWizard extends CPortalEntityWizard<OnlineApplicationDTO>
 
     @Override
     protected void onValuePropagation(OnlineApplicationDTO value, boolean fireEvent, boolean populate) {
-        leaseStep = addStep(createLeaseStep());
-        unitStep = addStep(createUnitStep());
-        optionsStep = addStep(createOptionsStep());
-        personalInfoAStep = addStep(createPersonalInfoAStep());
-        personalInfoBStep = addStep(createPersonalInfoBStep());
-        financialStep = addStep(createFinancialStep());
-        peopleStep = addStep(createPeopleStep());
-        contactsStep = addStep(createContactsStep());
-        pmcCustomStep = addStep(createPmcCustomStep());
-        summaryStep = addStep(createSummaryStep());
-        paymentStep = addStep(createPaymentStep());
         super.onValuePropagation(value, fireEvent, populate);
     }
 

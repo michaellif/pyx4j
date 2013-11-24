@@ -25,15 +25,19 @@ public class ApplicationWizardViewImpl extends AbstractWizardFormView<OnlineAppl
 
     public ApplicationWizardViewImpl() {
         super();
-        setWizard(new ApplicationWizard(this));
 
     }
 
     @Override
     public void setPresenter(IWizardView.IWizardFormPresenter<OnlineApplicationDTO> presenter) {
         super.setPresenter(presenter);
-        ((ApplicationWizard) getWizard()).setPresenter((ApplicationWizardPresenter) presenter);
+        if (presenter == null) {
+            setWizard(null);
+        } else {
+            ApplicationWizard applicationWizard = new ApplicationWizard(this);
+            setWizard(applicationWizard);
 
-        ((ApplicationWizard) getWizard()).updateProgress();
+            applicationWizard.setPresenter((ApplicationWizardPresenter) presenter);
+        }
     }
 }

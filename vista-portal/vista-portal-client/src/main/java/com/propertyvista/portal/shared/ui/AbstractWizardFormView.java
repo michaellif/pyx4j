@@ -33,7 +33,9 @@ public abstract class AbstractWizardFormView<E extends IEntity> extends Abstract
     public void setWizard(CPortalEntityWizard<E> wizardForm) {
         this.wizardForm = wizardForm;
         setWidget(wizardForm);
-        wizardForm.initContent();
+        if (wizardForm != null) {
+            wizardForm.initContent();
+        }
     }
 
     @Override

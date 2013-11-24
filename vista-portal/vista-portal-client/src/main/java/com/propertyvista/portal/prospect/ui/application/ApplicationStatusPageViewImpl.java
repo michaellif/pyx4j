@@ -129,7 +129,7 @@ public class ApplicationStatusPageViewImpl extends FlowPanel implements Applicat
     }
 
     private OnlineApplicationStatus getUserApplicationStatus(MasterOnlineApplicationStatus masterAppStatus) {
-
+        //TODO implement
         return masterAppStatus.individualApplications().get(0);
     }
 
