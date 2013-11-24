@@ -22,7 +22,9 @@ import com.pyx4j.forms.client.ui.wizard.WizardDecorator;
 import com.pyx4j.forms.client.ui.wizard.WizardProgressIndicator;
 import com.pyx4j.forms.client.ui.wizard.WizardStep;
 import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.security.shared.SecurityController;
 
+import com.propertyvista.domain.security.VistaCustomerBehavior;
 import com.propertyvista.portal.prospect.ui.application.ApplicationWizardView.ApplicationWizardPresenter;
 import com.propertyvista.portal.rpc.portal.prospect.dto.OnlineApplicationDTO;
 import com.propertyvista.portal.shared.ui.CPortalEntityWizard;
@@ -82,8 +84,7 @@ public class ApplicationWizard extends CPortalEntityWizard<OnlineApplicationDTO>
     }
 
     private boolean isMainApplicant() {
-        // TODO Auto-generated method stub
-        return false;
+        return SecurityController.checkBehavior(VistaCustomerBehavior.ProspectiveApplicant);
     }
 
     public void setPresenter(ApplicationWizardPresenter presenter) {
