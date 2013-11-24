@@ -101,8 +101,7 @@ public class CEntityWizard<E extends IEntity> extends CEntityForm<E> {
     }
 
     public WizardStep addStep(Widget content, String tabTitle) {
-        WizardStep step = null;
-        step = new WizardStep(content, tabTitle);
+        WizardStep step = new WizardStep(content, tabTitle);
         wizardPanel.addStep(step);
         return step;
     }
