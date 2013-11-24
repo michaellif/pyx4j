@@ -26,16 +26,16 @@ public class OnboardingUserVisit extends UserVisit {
 
     public void setStatus(OnboardingApplicationStatus status) {
         this.status = status;
-        this.changed = true;
+        setChanged();
     }
 
     public void setPmcNamespace(String pmcNamespace) {
         this.pmcNamespace = pmcNamespace;
-        this.changed = true;
+        setChanged();
     }
 
     public void setAccountCreationDeferredCorrelationId(String deferredCorrelationId) {
         this.accountCreationDeferredCorrelationId = deferredCorrelationId;
-        this.changed = true;
+        setChanged();
     }
 }

@@ -20,13 +20,13 @@ import com.pyx4j.commons.Key;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.shared.UnRecoverableRuntimeException;
 import com.pyx4j.server.contexts.Context;
-import com.pyx4j.server.contexts.Visit;
 
 import com.propertyvista.domain.security.CrmUser;
 import com.propertyvista.domain.security.CustomerUser;
 import com.propertyvista.domain.security.common.AbstractUser;
 import com.propertyvista.domain.security.common.VistaUserType;
 import com.propertyvista.operations.domain.security.OperationsUser;
+import com.propertyvista.shared.VistaUserVisit;
 
 public class VistaContext {
 
@@ -34,27 +34,12 @@ public class VistaContext {
 
     private static final I18n i18n = I18n.get(VistaContext.class);
 
-    private final static String userAttr = "vistaUser";
-
     public static Key getCurrentUserPrimaryKey() {
-        Visit v = Context.getVisit();
-        if ((v == null) || (!v.isUserLoggedIn()) || (v.getUserVisit().getPrincipalPrimaryKey() == null)) {
+        if (!Context.isUserLoggedIn()) {
             log.trace("no session");
             throw new UnRecoverableRuntimeException(i18n.tr("No Session"));
         }
-        return v.getUserVisit().getPrincipalPrimaryKey();
-    }
-
-    public static void setCurrentUser(AbstractUser abstractUser) {
-        Context.getVisit().setAttribute(userAttr, abstractUser);
-    }
-
-    public static AbstractUser getUserFromVisit(Visit visit) {
-        if (visit != null) {
-            return (AbstractUser) visit.getAttribute(userAttr);
-        } else {
-            return null;
-        }
+        return Context.getVisit().getUserVisit().getPrincipalPrimaryKey();
     }
 
     public static AbstractUser getCurrentUser() {
@@ -68,11 +53,10 @@ public class VistaContext {
     }
 
     public static AbstractUser getCurrentUserIfAvalable() {
-        Visit v = Context.getVisit();
-        if ((v == null) || (!v.isUserLoggedIn()) || (v.getUserVisit().getPrincipalPrimaryKey() == null)) {
+        if (!Context.isUserLoggedIn()) {
             return null;
         } else {
-            return (AbstractUser) v.getAttribute(userAttr);
+            return Context.getUserVisit(VistaUserVisit.class).getCurrentUser();
         }
     }
 

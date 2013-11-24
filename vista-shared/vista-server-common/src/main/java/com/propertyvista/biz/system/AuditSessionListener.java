@@ -22,8 +22,9 @@ import com.pyx4j.server.contexts.Context;
 import com.pyx4j.server.contexts.Lifecycle;
 import com.pyx4j.server.contexts.Visit;
 
+import com.propertyvista.domain.security.common.AbstractUser;
 import com.propertyvista.domain.security.common.VistaApplication;
-import com.propertyvista.server.common.security.VistaContext;
+import com.propertyvista.shared.VistaUserVisit;
 
 public class AuditSessionListener implements HttpSessionListener {
 
@@ -40,9 +41,12 @@ public class AuditSessionListener implements HttpSessionListener {
         HttpSession session = se.getSession();
         String namespace = Lifecycle.getNamespaceFromSession(session);
         Visit visit = Lifecycle.getVisitFromSession(session);
-        // TODO get application
+        AbstractUser user = null;
         VistaApplication application = null;
-        ServerSideFactory.create(AuditFacade.class).sessionExpiration(namespace, application, VistaContext.getUserFromVisit(visit), session.getId());
+        if ((visit != null) && (visit.getUserVisit() instanceof VistaUserVisit)) {
+            user = ((VistaUserVisit<?>) visit.getUserVisit()).getCurrentUser();
+            application = ((VistaUserVisit<?>) visit.getUserVisit()).getApplication();
+        }
+        ServerSideFactory.create(AuditFacade.class).sessionExpiration(namespace, application, user, session.getId());
     }
-
 }

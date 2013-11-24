@@ -13,26 +13,23 @@
  */
 package com.propertyvista.portal.server.portal.prospect;
 
-import com.pyx4j.commons.Key;
 import com.pyx4j.entity.server.Persistence;
-import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.server.contexts.Context;
 
 import com.propertyvista.domain.tenant.prospect.MasterOnlineApplication;
 import com.propertyvista.domain.tenant.prospect.OnlineApplication;
+import com.propertyvista.portal.rpc.portal.prospect.ProspectUserVisit;
 import com.propertyvista.portal.server.portal.shared.PortalVistaContext;
 
 public class ProspectPortalContext extends PortalVistaContext {
 
-    private final static String slectedApplicationAttribute = "selected-application";
-
     public static void setOnlineApplication(OnlineApplication application) {
-        Context.getVisit().setAttribute(slectedApplicationAttribute, application.getPrimaryKey());
+        Context.getUserVisit(ProspectUserVisit.class).setOnlineApplication(application);
     }
 
     public static OnlineApplication getOnlineApplicationIdStub() {
-        return EntityFactory.createIdentityStub(OnlineApplication.class, (Key) Context.getVisit().getAttribute(slectedApplicationAttribute));
+        return Context.getUserVisit(ProspectUserVisit.class).getOnlineApplication();
     }
 
     public static OnlineApplication getOnlineApplication() {

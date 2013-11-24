@@ -40,6 +40,7 @@ import com.propertyvista.operations.domain.security.AuditRecord;
 import com.propertyvista.server.common.security.VistaAntiBot;
 import com.propertyvista.server.common.security.VistaContext;
 import com.propertyvista.server.jobs.TaskRunner;
+import com.propertyvista.shared.VistaUserVisit;
 
 public class AuditFacadeImpl implements AuditFacade {
 
@@ -179,7 +180,7 @@ public class AuditFacadeImpl implements AuditFacade {
             if (userVisit == null) {
                 return null;
             } else {
-                return VistaContext.getUserFromVisit(visit);
+                return Context.getUserVisit(VistaUserVisit.class).getCurrentUser();
             }
         }
     }

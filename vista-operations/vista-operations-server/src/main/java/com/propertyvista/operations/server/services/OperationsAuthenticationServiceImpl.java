@@ -25,8 +25,10 @@ import com.propertyvista.domain.security.common.VistaApplication;
 import com.propertyvista.domain.security.common.VistaBasicBehavior;
 import com.propertyvista.operations.domain.security.OperationsUser;
 import com.propertyvista.operations.domain.security.OperationsUserCredential;
+import com.propertyvista.operations.rpc.OperationsUserVisit;
 import com.propertyvista.operations.rpc.services.OperationsAuthenticationService;
 import com.propertyvista.server.common.security.VistaAuthenticationServicesImpl;
+import com.propertyvista.shared.VistaUserVisit;
 
 public class OperationsAuthenticationServiceImpl extends VistaAuthenticationServicesImpl<OperationsUser, OperationsUserCredential> implements
         OperationsAuthenticationService {
@@ -53,6 +55,11 @@ public class OperationsAuthenticationServiceImpl extends VistaAuthenticationServ
     @Override
     protected Behavior getPasswordChangeRequiredBehavior() {
         return VistaBasicBehavior.OperationsPasswordChangeRequired;
+    }
+
+    @Override
+    protected VistaUserVisit<OperationsUser> createUserVisit(OperationsUser user) {
+        return new OperationsUserVisit(getVistaApplication(), user);
     }
 
     @Override

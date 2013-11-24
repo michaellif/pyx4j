@@ -73,6 +73,7 @@ import com.propertyvista.domain.security.common.VistaApplication;
 import com.propertyvista.domain.security.common.VistaBasicBehavior;
 import com.propertyvista.portal.rpc.DeploymentConsts;
 import com.propertyvista.shared.VistaSystemIdentification;
+import com.propertyvista.shared.VistaUserVisit;
 
 public abstract class VistaAuthenticationServicesImpl<U extends AbstractUser, E extends AbstractUserCredential<U>> extends
         com.pyx4j.security.server.AuthenticationServiceImpl implements AclRevalidator {
@@ -96,6 +97,8 @@ public abstract class VistaAuthenticationServicesImpl<U extends AbstractUser, E 
     protected abstract VistaApplication getVistaApplication();
 
     protected abstract VistaBasicBehavior getApplicationBehavior();
+
+    protected abstract VistaUserVisit<U> createUserVisit(U user);
 
     protected abstract Behavior getPasswordChangeRequiredBehavior();
 
@@ -224,12 +227,10 @@ public abstract class VistaAuthenticationServicesImpl<U extends AbstractUser, E 
             Persistence.service().persist(cr);
             Persistence.service().commit();
         }
-        UserVisit visit = new UserVisit(user.getPrimaryKey(), user.name().getValue());
-        visit.setEmail(user.email().getValue());
+        UserVisit visit = createUserVisit(user);
         log.info("authenticated {} as {}", user.email().getValue(), behaviors);
 
         String sessionToken = Lifecycle.beginSession(visit, behaviors);
-        VistaContext.setCurrentUser(user);
         ServerSideFactory.create(AuditFacade.class).login(getVistaApplication());
         callback.onSuccess(createAuthenticationResponse(sessionToken));
     }
@@ -305,10 +306,8 @@ public abstract class VistaAuthenticationServicesImpl<U extends AbstractUser, E 
             Set<Behavior> behaviors = new HashSet<Behavior>();
             behaviors.add(getVistaApplication());
             behaviors.add(getPasswordChangeRequiredBehavior());
-            UserVisit visit = new UserVisit(user.getPrimaryKey(), user.name().getValue());
-            visit.setEmail(user.email().getValue());
+            UserVisit visit = createUserVisit(user);
             String token = Lifecycle.beginSession(visit, behaviors);
-            VistaContext.setCurrentUser(user);
             ServerSideFactory.create(AuditFacade.class).login(getVistaApplication());
             return token;
         } else {
@@ -376,11 +375,9 @@ public abstract class VistaAuthenticationServicesImpl<U extends AbstractUser, E 
         if (behaviors.isEmpty() || ((behaviors.size() == 2) && (behaviors.contains(getApplicationBehavior())) && (behaviors.contains(getVistaApplication())))) {
             throw new UserRuntimeException(AbstractAntiBot.GENERIC_LOGIN_FAILED_MESSAGE);
         }
-        UserVisit visit = new UserVisit(user.getPrimaryKey(), user.name().getValue());
-        visit.setEmail(user.email().getValue());
+        UserVisit visit = createUserVisit(user);
         log.info("authenticated {} as {}", user.email().getValue(), behaviors);
         String token = Lifecycle.beginSession(visit, behaviors);
-        VistaContext.setCurrentUser(user);
         try {
             ServerSideFactory.create(AuditFacade.class).login(getVistaApplication());
         } catch (DatastoreReadOnlyRuntimeException readOnly) {

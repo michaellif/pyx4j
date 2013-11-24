@@ -14,18 +14,19 @@
 package com.propertyvista.portal.server.portal.shared;
 
 import com.pyx4j.entity.server.Persistence;
-import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
+import com.pyx4j.server.contexts.Context;
 
 import com.propertyvista.domain.security.CustomerUser;
 import com.propertyvista.domain.tenant.Customer;
+import com.propertyvista.portal.rpc.portal.CustomerUserVisit;
 import com.propertyvista.server.common.security.VistaContext;
 
 public class PortalVistaContext extends VistaContext {
 
     public static CustomerUser getCustomerUserIdStub() {
-        return EntityFactory.createIdentityStub(CustomerUser.class, getCurrentUserPrimaryKey());
+        return Context.getUserVisit(CustomerUserVisit.class).getCurrentUser();
     }
 
     public static Customer getCustomer() {

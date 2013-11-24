@@ -40,10 +40,12 @@ import com.propertyvista.domain.security.common.VistaApplication;
 import com.propertyvista.domain.security.common.VistaBasicBehavior;
 import com.propertyvista.domain.tenant.Customer;
 import com.propertyvista.domain.tenant.lease.Lease;
+import com.propertyvista.portal.rpc.portal.resident.ResidentUserVisit;
 import com.propertyvista.portal.rpc.portal.resident.services.ResidentAuthenticationService;
 import com.propertyvista.portal.server.portal.resident.ResidentPortalContext;
 import com.propertyvista.server.common.security.VistaAuthenticationServicesImpl;
 import com.propertyvista.server.domain.security.CustomerUserCredential;
+import com.propertyvista.shared.VistaUserVisit;
 
 public class ResidentAuthenticationServiceImpl extends VistaAuthenticationServicesImpl<CustomerUser, CustomerUserCredential> implements
         ResidentAuthenticationService {
@@ -77,6 +79,11 @@ public class ResidentAuthenticationServiceImpl extends VistaAuthenticationServic
     @Override
     protected Collection<Behavior> getAccountSetupRequiredBehaviors() {
         return Arrays.asList(new Behavior[] { getPasswordChangeRequiredBehavior(), VistaCustomerBehavior.LeaseSelectionRequired });
+    }
+
+    @Override
+    protected VistaUserVisit<CustomerUser> createUserVisit(CustomerUser user) {
+        return new ResidentUserVisit(getVistaApplication(), user);
     }
 
     @Override

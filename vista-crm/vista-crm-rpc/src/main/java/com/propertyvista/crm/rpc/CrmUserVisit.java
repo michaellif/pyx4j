@@ -7,15 +7,25 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on 2012-12-12
+ * Created on Nov 23, 2013
  * @author vlads
  * @version $Id$
  */
-package com.propertyvista.portal.rpc.portal.prospect.dto;
+package com.propertyvista.crm.rpc;
 
-import com.pyx4j.security.shared.UserVisit;
+import com.propertyvista.domain.security.CrmUser;
+import com.propertyvista.domain.security.common.VistaApplication;
+import com.propertyvista.shared.VistaUserVisit;
 
 @SuppressWarnings("serial")
-public class ProspectUserVisit extends UserVisit {
+public class CrmUserVisit extends VistaUserVisit<CrmUser> {
 
+    // to make it GWT Serializable ?
+    public CrmUserVisit() {
+        super();
+    }
+
+    public CrmUserVisit(VistaApplication application, CrmUser user) {
+        super(application, user);
+    }
 }

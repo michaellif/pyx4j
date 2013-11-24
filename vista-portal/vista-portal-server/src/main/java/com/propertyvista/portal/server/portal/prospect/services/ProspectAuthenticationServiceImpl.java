@@ -34,6 +34,7 @@ import com.propertyvista.domain.security.VistaCustomerBehavior;
 import com.propertyvista.domain.security.common.VistaApplication;
 import com.propertyvista.domain.security.common.VistaBasicBehavior;
 import com.propertyvista.domain.tenant.prospect.OnlineApplication;
+import com.propertyvista.portal.rpc.portal.prospect.ProspectUserVisit;
 import com.propertyvista.portal.rpc.portal.prospect.services.ProspectAuthenticationService;
 import com.propertyvista.portal.server.portal.prospect.ProspectPortalContext;
 import com.propertyvista.server.common.security.VistaAuthenticationServicesImpl;
@@ -71,6 +72,11 @@ public class ProspectAuthenticationServiceImpl extends VistaAuthenticationServic
     @Override
     protected Collection<Behavior> getAccountSetupRequiredBehaviors() {
         return Arrays.asList(new Behavior[] { getPasswordChangeRequiredBehavior(), VistaCustomerBehavior.ApplicationSelectionRequired });
+    }
+
+    @Override
+    protected ProspectUserVisit createUserVisit(CustomerUser user) {
+        return new ProspectUserVisit(getVistaApplication(), user);
     }
 
     @Override

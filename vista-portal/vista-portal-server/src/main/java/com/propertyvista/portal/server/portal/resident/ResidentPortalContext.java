@@ -13,9 +13,7 @@
  */
 package com.propertyvista.portal.server.portal.resident;
 
-import com.pyx4j.commons.Key;
 import com.pyx4j.entity.server.Persistence;
-import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.server.contexts.Context;
 
@@ -23,6 +21,7 @@ import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.LeaseTermTenant;
 import com.propertyvista.domain.tenant.lease.Tenant;
+import com.propertyvista.portal.rpc.portal.resident.ResidentUserVisit;
 import com.propertyvista.portal.server.portal.shared.PortalVistaContext;
 
 /**
@@ -30,14 +29,12 @@ import com.propertyvista.portal.server.portal.shared.PortalVistaContext;
  */
 public class ResidentPortalContext extends PortalVistaContext {
 
-    private final static String slectedLeaseAtt = "selected-lease";
-
     public static void setLease(Lease lease) {
-        Context.getVisit().setAttribute(slectedLeaseAtt, lease.getPrimaryKey());
+        Context.getUserVisit(ResidentUserVisit.class).setLease(lease);
     }
 
     public static Lease getLeaseIdStub() {
-        return EntityFactory.createIdentityStub(Lease.class, (Key) Context.getVisit().getAttribute(slectedLeaseAtt));
+        return Context.getUserVisit(ResidentUserVisit.class).getLease();
     }
 
     public static Lease getLease() {

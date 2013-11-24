@@ -37,7 +37,7 @@ public class OnboardingAppPlaceDispatcher extends AbstractAppPlaceDispatcher {
     protected void obtainDefaultPlace(AsyncCallback<AppPlace> callback) {
         if (ClientContext.isAuthenticated()) {
             if (ClientContext.getUserVisit() instanceof OnboardingUserVisit) {
-                OnboardingUserVisit visit = (OnboardingUserVisit) ClientContext.getUserVisit();
+                OnboardingUserVisit visit = ClientContext.getUserVisit(OnboardingUserVisit.class);
                 switch (visit.status) {
                 case accountCreated:
                     callback.onSuccess(new OnboardingSiteMap.PmcAccountCreationComplete());

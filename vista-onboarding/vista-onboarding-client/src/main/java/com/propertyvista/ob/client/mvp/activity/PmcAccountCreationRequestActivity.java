@@ -134,7 +134,7 @@ public class PmcAccountCreationRequestActivity extends AbstractActivity implemen
         pmcRegistrationService.createAccount(new DefaultAsyncCallback<String>() {
             @Override
             public void onSuccess(String deferredCorellationId) {
-                OnboardingUserVisit visit = (OnboardingUserVisit) ClientContext.getUserVisit();
+                OnboardingUserVisit visit = ClientContext.getUserVisit(OnboardingUserVisit.class);
                 visit.accountCreationDeferredCorrelationId = deferredCorellationId;
                 goToProgressPlace();
             }
