@@ -55,7 +55,6 @@ import com.propertyvista.pmsite.server.PMSiteApplication;
 import com.propertyvista.pmsite.server.PMSiteFilter;
 import com.propertyvista.pmsite.server.PMSiteRobotsTxtFilter;
 import com.propertyvista.portal.server.portal.PublicMediaServlet;
-import com.propertyvista.portal.server.upload.EmployeeSignatureServlet;
 import com.propertyvista.portal.server.upload.LegalLetterDocumentServlet;
 import com.propertyvista.portal.server.upload.PmcDocumentServlet;
 import com.propertyvista.portal.server.upload.SiteImageResourceServlet;
@@ -234,11 +233,6 @@ public class VistaWebApplicationInitializer implements ServletContainerInitializ
             {
                 ServletRegistration.Dynamic sc = ctx.addServlet("LegalLetterDocumentServlet", LegalLetterDocumentServlet.class);
                 sc.addMapping(urlPattern(VistaApplication.crm, "/legal_letter/*"));
-            }
-
-            {
-                ServletRegistration.Dynamic sc = ctx.addServlet("EmployeeSignatureServlet", EmployeeSignatureServlet.class);
-                sc.addMapping(urlPattern(VistaApplication.crm, "/employee_signature/*"));
             }
 
         }

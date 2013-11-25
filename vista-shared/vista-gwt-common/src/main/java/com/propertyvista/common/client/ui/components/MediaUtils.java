@@ -71,18 +71,6 @@ public class MediaUtils {
                 + DeploymentConsts.siteImageResourceServletMapping;
     }
 
-    public static String createCustomerPictureUrl(CustomerPicture picture) {
-        return new VistaFileURLBuilder<CustomerPicture>(CustomerPicture.class).getUrl(picture);
-    }
-
-    public static String createInsuranceCertificateScanUrl(InsuranceCertificateScan certificateScan) {
-        return new VistaFileURLBuilder<InsuranceCertificateScan>(InsuranceCertificateScan.class).getUrl(certificateScan);
-    }
-
-    public static String createMediaImageUrl(MediaFile mediaFile) {
-        return new PublicMediaURLBuilder().getUrl(mediaFile);
-    }
-
     public static String createSiteSmallLogoUrl() {
         return ClientNavigUtils.getDeploymentBaseURL() + "/" + DeploymentConsts.portalLogoSmall + DeploymentConsts.siteImageResourceServletMapping;
     }
@@ -95,8 +83,19 @@ public class MediaUtils {
         return ClientNavigUtils.getDeploymentBaseURL() + "/" + DeploymentConsts.crmLogo + DeploymentConsts.siteImageResourceServletMapping;
     }
 
+    public static String createMediaImageUrl(MediaFile mediaFile) {
+        return new PublicMediaURLBuilder().getUrl(mediaFile);
+    }
+
+    public static String createCustomerPictureUrl(CustomerPicture picture) {
+        return new VistaFileURLBuilder<CustomerPicture>(CustomerPicture.class).getUrl(picture);
+    }
+
+    public static String createInsuranceCertificateScanUrl(InsuranceCertificateScan certificateScan) {
+        return new VistaFileURLBuilder<InsuranceCertificateScan>(InsuranceCertificateScan.class).getUrl(certificateScan);
+    }
+
     public static String createEmployeeSignatureUrl(EmployeeSignature employeeSignature) {
-        return GWT.getModuleBaseURL() + DeploymentConsts.employeeSignatureServletMapping + employeeSignature.id().getStringView() + "/"
-                + employeeSignature.fileName().getStringView();
+        return new VistaFileURLBuilder<EmployeeSignature>(EmployeeSignature.class).getUrl(employeeSignature);
     }
 }

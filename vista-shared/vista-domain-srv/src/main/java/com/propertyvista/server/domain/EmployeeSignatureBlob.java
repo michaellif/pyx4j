@@ -13,29 +13,10 @@
  */
 package com.propertyvista.server.domain;
 
-import java.util.Date;
-
-import com.pyx4j.entity.annotations.Length;
 import com.pyx4j.entity.annotations.RpcTransient;
-import com.pyx4j.entity.annotations.Timestamp;
-import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.i18n.annotations.I18n;
 
 @RpcTransient
 @I18n(strategy = I18n.I18nStrategy.IgnoreAll)
-public interface EmployeeSignatureBlob extends IEntity {
-
-    IPrimitive<String> contentType();
-
-    /**
-     * This is actual BLOB of the Image or PDF stored on server
-     */
-    @RpcTransient
-    @Length(15 * 1024 * 1024)
-    IPrimitive<byte[]> data();
-
-    @Timestamp(Timestamp.Update.Created)
-    IPrimitive<Date> created();
-
+public interface EmployeeSignatureBlob extends IFileBlob {
 }

@@ -13,9 +13,11 @@
  */
 package com.propertyvista.portal.server.upload;
 
+import com.propertyvista.domain.company.EmployeeSignature;
 import com.propertyvista.domain.tenant.CustomerPicture;
 import com.propertyvista.domain.tenant.insurance.InsuranceCertificateScan;
 import com.propertyvista.server.domain.CustomerPictureBlob;
+import com.propertyvista.server.domain.EmployeeSignatureBlob;
 import com.propertyvista.server.domain.GeneralInsurancePolicyBlob;
 
 @SuppressWarnings("serial")
@@ -24,5 +26,6 @@ public class VistaFileAccessServlet extends VistaAbstractFileAccessServlet {
     public VistaFileAccessServlet() {
         register(CustomerPicture.class, CustomerPictureBlob.class);
         register(InsuranceCertificateScan.class, GeneralInsurancePolicyBlob.class);
+        register(EmployeeSignature.class, EmployeeSignatureBlob.class);
     }
 }

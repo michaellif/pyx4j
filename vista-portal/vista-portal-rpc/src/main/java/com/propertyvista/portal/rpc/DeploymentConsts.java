@@ -37,8 +37,6 @@ public interface DeploymentConsts {
 
     public static final String legalLetterServletMappning = "legal_letter/";
 
-    public static final String employeeSignatureServletMapping = "employee_signature/";
-
     public static final String portalLogo = "logo-large.png";
 
     public static final String portalLogoSmall = "logo-small.png";
