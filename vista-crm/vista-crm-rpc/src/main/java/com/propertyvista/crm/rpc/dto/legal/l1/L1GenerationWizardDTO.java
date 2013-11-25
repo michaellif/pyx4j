@@ -7,16 +7,23 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on 2013-11-22
+ * Created on 2013-11-25
  * @author ArtyomB
  * @version $Id$
  */
-package com.propertyvista.crm.client.ui.tools.l1generation;
+package com.propertyvista.crm.rpc.dto.legal.l1;
 
-import com.pyx4j.site.client.ui.prime.wizard.IWizard;
+import com.pyx4j.entity.annotations.Transient;
+import com.pyx4j.entity.shared.IEntity;
 
-import com.propertyvista.crm.rpc.dto.legal.l1.L1GenerationWizardDTO;
+import com.propertyvista.domain.legal.l1.L1FormFieldsData;
+import com.propertyvista.domain.tenant.lease.Lease;
 
-public interface L1GenerationWizardView extends IWizard<L1GenerationWizardDTO> {
+@Transient
+public interface L1GenerationWizardDTO extends IEntity {
+
+    L1FormFieldsData formData();
+
+    Lease leaseIdStub();
 
 }

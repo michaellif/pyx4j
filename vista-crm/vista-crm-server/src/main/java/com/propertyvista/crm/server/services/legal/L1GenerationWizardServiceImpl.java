@@ -17,40 +17,41 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.commons.Key;
 import com.pyx4j.entity.rpc.EntitySearchResult;
-import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityListCriteria;
 import com.pyx4j.rpc.shared.ServiceExecution;
 
+import com.propertyvista.crm.rpc.dto.legal.l1.L1GenerationWizardDTO;
 import com.propertyvista.crm.rpc.services.legal.L1GenerationWizardService;
-import com.propertyvista.domain.legal.l1.L1FormFieldsData;
 
 public class L1GenerationWizardServiceImpl implements L1GenerationWizardService {
 
     @Override
-    public void init(AsyncCallback<L1FormFieldsData> callback, com.pyx4j.entity.rpc.AbstractCrudService.InitializationData initializationData) {
-        callback.onSuccess(EntityFactory.create(L1FormFieldsData.class));
-    }
-
-    @Override
-    public void retrieve(AsyncCallback<L1FormFieldsData> callback, Key entityId, com.pyx4j.entity.rpc.AbstractCrudService.RetrieveTarget retrieveTarget) {
+    public void init(AsyncCallback<L1GenerationWizardDTO> callback, com.pyx4j.entity.rpc.AbstractCrudService.InitializationData initializationData) {
         // TODO Auto-generated method stub
+
     }
 
     @Override
-    public void create(AsyncCallback<Key> callback, L1FormFieldsData editableEntity) {
+    public void retrieve(AsyncCallback<L1GenerationWizardDTO> callback, Key entityId, com.pyx4j.entity.rpc.AbstractCrudService.RetrieveTarget retrieveTarget) {
+        // TODO Auto-generated method stub
+
+    }
+
+    @Override
+    public void create(AsyncCallback<Key> callback, L1GenerationWizardDTO editableEntity) {
         // TODO Auto-generated method stub
 
     }
 
     @Override
     @ServiceExecution(waitCaption = "Saving...")
-    public void save(AsyncCallback<Key> callback, L1FormFieldsData editableEntity) {
+    public void save(AsyncCallback<Key> callback, L1GenerationWizardDTO editableEntity) {
         // TODO Auto-generated method stub
 
     }
 
     @Override
-    public void list(AsyncCallback<EntitySearchResult<L1FormFieldsData>> callback, EntityListCriteria<L1FormFieldsData> criteria) {
+    public void list(AsyncCallback<EntitySearchResult<L1GenerationWizardDTO>> callback, EntityListCriteria<L1GenerationWizardDTO> criteria) {
         // TODO Auto-generated method stub
 
     }

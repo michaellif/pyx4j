@@ -19,19 +19,21 @@ import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.prime.wizard.IWizard;
 import com.pyx4j.site.client.ui.prime.wizard.WizardForm;
 
-import com.propertyvista.domain.legal.l1.L1FormFieldsData;
+import com.propertyvista.crm.rpc.dto.legal.l1.L1GenerationWizardDTO;
 
-public class L1GenerationWizardForm extends WizardForm<L1FormFieldsData> {
+public class L1GenerationWizardForm extends WizardForm<L1GenerationWizardDTO> {
 
     private static final I18n i18n = I18n.get(L1GenerationWizardForm.class);
 
     public L1GenerationWizardForm(IWizard<? extends IEntity> view) {
-        super(L1FormFieldsData.class, view);
-        addStep(createPartZeroStep());
+        super(L1GenerationWizardDTO.class, view);
+        addStep(createRentalUnitAddressStep());
     }
 
-    private TwoColumnFlexFormPanel createPartZeroStep() {
-        TwoColumnFlexFormPanel panel = new TwoColumnFlexFormPanel(i18n.tr("Step Zero"));
+    private TwoColumnFlexFormPanel createRentalUnitAddressStep() {
+        TwoColumnFlexFormPanel panel = new TwoColumnFlexFormPanel(i18n.tr("Rental Unit Address"));
+        int row = -1;
+        panel.setWidget(++row, 0, inject(proto().formData().rentalUnitInfo(), new LtbRentalUnitAddressForm()));
         return panel;
     }
 
