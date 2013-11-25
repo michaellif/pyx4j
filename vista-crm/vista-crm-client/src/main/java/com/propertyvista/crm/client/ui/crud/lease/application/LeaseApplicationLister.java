@@ -14,18 +14,14 @@
 package com.propertyvista.crm.client.ui.crud.lease.application;
 
 import java.util.Arrays;
-import java.util.EnumSet;
 import java.util.List;
 
-import com.pyx4j.entity.shared.criterion.EntityListCriteria;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria.Sort;
-import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor.Builder;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.prime.lister.AbstractLister;
 
 import com.propertyvista.crm.client.ui.crud.lease.common.dialogs.LeaseDataDialog;
-import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.dto.LeaseApplicationDTO;
 
 public class LeaseApplicationLister extends AbstractLister<LeaseApplicationDTO> {
@@ -76,14 +72,6 @@ public class LeaseApplicationLister extends AbstractLister<LeaseApplicationDTO> 
     @Override
     public List<Sort> getDefaultSorting() {
         return Arrays.asList(new Sort(proto().leaseId(), false));
-    }
-
-    @Override
-    protected EntityListCriteria<LeaseApplicationDTO> updateCriteria(EntityListCriteria<LeaseApplicationDTO> criteria) {
-        // TODO : set all that stuff in Activity (like TenantListers) or CRUD service ?
-        criteria.add(PropertyCriterion.in(criteria.proto().status(), EnumSet.of(Lease.Status.Application, Lease.Status.Approved)));
-        criteria.add(PropertyCriterion.isNotNull(criteria.proto().leaseApplication().status()));
-        return super.updateCriteria(criteria);
     }
 
     @Override

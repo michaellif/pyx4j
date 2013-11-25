@@ -22,11 +22,11 @@ import com.pyx4j.gwt.rpc.upload.UploadService;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.security.shared.SecurityController;
 import com.pyx4j.site.client.ReportDialog;
-import com.pyx4j.site.client.activity.AbstractListerActivity;
 
 import com.propertyvista.common.client.ui.components.UploadDialogBase;
 import com.propertyvista.common.client.ui.components.UploadResponseDownloadableReciver;
 import com.propertyvista.crm.client.CrmSite;
+import com.propertyvista.crm.client.activity.crud.lease.common.LeaseListerActivityBase;
 import com.propertyvista.crm.client.ui.crud.lease.LeaseListerView;
 import com.propertyvista.crm.rpc.services.customer.TenantPadFileDownloadService;
 import com.propertyvista.crm.rpc.services.customer.TenantPadFileUploadService;
@@ -36,13 +36,12 @@ import com.propertyvista.dto.DownloadableUploadResponseDTO;
 import com.propertyvista.dto.LeaseDTO;
 import com.propertyvista.portal.rpc.DeploymentConsts;
 
-public class LeaseListerActivity extends AbstractListerActivity<LeaseDTO> implements LeaseListerView.Presenter {
+public class LeaseListerActivity extends LeaseListerActivityBase<LeaseDTO> implements LeaseListerView.Presenter {
 
     private static final I18n i18n = I18n.get(LeaseListerActivity.class);
 
     public LeaseListerActivity(Place place) {
-        super(place, CrmSite.getViewFactory().getView(LeaseListerView.class), GWT.<LeaseViewerCrudService> create(LeaseViewerCrudService.class),
-                LeaseDTO.class);
+        super(place, CrmSite.getViewFactory().getView(LeaseListerView.class), GWT.<LeaseViewerCrudService> create(LeaseViewerCrudService.class), LeaseDTO.class);
         ((LeaseListerView) getView()).setPadFileControlsEnabled(SecurityController.checkBehavior(VistaCrmBehavior.PropertyVistaSupport));
     }
 

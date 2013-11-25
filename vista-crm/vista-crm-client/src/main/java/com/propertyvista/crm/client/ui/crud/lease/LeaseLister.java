@@ -19,9 +19,7 @@ import java.util.List;
 
 import com.google.gwt.user.client.Command;
 
-import com.pyx4j.entity.shared.criterion.EntityListCriteria;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria.Sort;
-import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.forms.client.images.EntityFolderImages;
 import com.pyx4j.forms.client.ui.datatable.ColumnDescriptor;
 import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
@@ -33,7 +31,6 @@ import com.pyx4j.widgets.client.Button;
 
 import com.propertyvista.crm.client.ui.crud.lease.common.dialogs.LeaseDataDialog;
 import com.propertyvista.domain.security.VistaCrmBehavior;
-import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.dto.LeaseDTO;
 import com.propertyvista.shared.config.VistaFeatures;
 
@@ -154,12 +151,5 @@ public class LeaseLister extends AbstractLister<LeaseDTO> {
     public void setPadFileControlsEnabled(boolean isEnabled) {
         padFileDownload.setVisible(isEnabled);
         padFileUpload.setVisible(isEnabled);
-    }
-
-    @Override
-    protected EntityListCriteria<LeaseDTO> updateCriteria(EntityListCriteria<LeaseDTO> criteria) {
-        // TODO : set all that stuff in Activity (like TenantListers) or CRUD service ?
-        criteria.add(PropertyCriterion.in(criteria.proto().status(), Lease.Status.present()));
-        return super.updateCriteria(criteria);
     }
 }

@@ -25,6 +25,7 @@ import com.google.gwt.user.client.ui.Image;
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.commons.TimeUtils;
 import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.entity.shared.IList;
 import com.pyx4j.forms.client.ui.CBooleanLabel;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CEnumLabel;
@@ -37,7 +38,11 @@ import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.site.client.AppPlaceEntityMapper;
 import com.pyx4j.site.client.ui.prime.form.IEditor;
 import com.pyx4j.site.client.ui.prime.form.IForm;
+import com.pyx4j.site.client.ui.prime.misc.CEntityCollectionCrudHyperlink;
+import com.pyx4j.site.client.ui.prime.misc.CEntityCollectionCrudHyperlink.AppPlaceBuilder;
 import com.pyx4j.site.client.ui.prime.misc.CEntityCrudHyperlink;
+import com.pyx4j.site.rpc.AppPlace;
+import com.pyx4j.site.rpc.CrudAppPlace;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
 
 import com.propertyvista.common.client.VistaFileURLBuilder;
@@ -55,8 +60,11 @@ import com.propertyvista.domain.payment.PaymentType;
 import com.propertyvista.domain.policy.policies.domain.IdAssignmentItem.IdTarget;
 import com.propertyvista.domain.tenant.CustomerPicture;
 import com.propertyvista.domain.tenant.CustomerScreening;
+import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
 import com.propertyvista.dto.GuarantorDTO;
+import com.propertyvista.dto.LeaseApplicationDTO;
+import com.propertyvista.dto.LeaseDTO;
 import com.propertyvista.dto.LeaseParticipantDTO;
 import com.propertyvista.dto.TenantDTO;
 import com.propertyvista.shared.config.VistaFeatures;
@@ -167,6 +175,38 @@ public class LeaseParticipantForm<P extends LeaseParticipantDTO<?>> extends CrmE
 
         if (VistaFeatures.instance().yardiIntegration()) {
             get(proto().customer().person().name()).setViewable(true);
+        }
+
+        main.setHR(++row, 0, 2);
+        {
+            AppPlaceBuilder<IList<Lease>> appPlaceBuilder = new AppPlaceBuilder<IList<Lease>>() {
+                @Override
+                public AppPlace createAppPlace(IList<Lease> value) {
+                    CrudAppPlace place = AppPlaceEntityMapper.resolvePlace(LeaseDTO.class);
+                    place.formListerPlace().queryArg(
+                            EntityFactory.getEntityPrototype(LeaseDTO.class).leaseParticipants().$().customer().customerId().getPath().toString(),
+                            getValue().customer().customerId().getValue().toString());
+                    return place;
+                }
+            };
+
+            CEntityCollectionCrudHyperlink<IList<Lease>> link = new CEntityCollectionCrudHyperlink<IList<Lease>>(appPlaceBuilder);
+            main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().leasesOfThisCustomer(), link), 5).build());
+        }
+        {
+            AppPlaceBuilder<IList<Lease>> appPlaceBuilder = new AppPlaceBuilder<IList<Lease>>() {
+                @Override
+                public AppPlace createAppPlace(IList<Lease> value) {
+                    CrudAppPlace place = AppPlaceEntityMapper.resolvePlace(LeaseApplicationDTO.class);
+                    place.formListerPlace().queryArg(
+                            EntityFactory.getEntityPrototype(LeaseApplicationDTO.class).leaseParticipants().$().customer().customerId().getPath().toString(),
+                            getValue().customer().customerId().getValue().toString());
+                    return place;
+                }
+            };
+
+            CEntityCollectionCrudHyperlink<IList<Lease>> link = new CEntityCollectionCrudHyperlink<IList<Lease>>(appPlaceBuilder);
+            main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().applicationsOfThisCustomer(), link), 5).build());
         }
 
         return main;

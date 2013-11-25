@@ -15,7 +15,9 @@ package com.propertyvista.dto;
 
 import com.pyx4j.entity.annotations.AbstractEntity;
 import com.pyx4j.entity.annotations.Caption;
+import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.Transient;
+import com.pyx4j.entity.shared.AttachLevel;
 import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.entity.shared.IPrimitiveSet;
@@ -46,4 +48,9 @@ public interface LeaseParticipantDTO<E extends LeaseTermParticipant<?>> extends 
     /** Sets the age of majority for validation, null if no validation is required */
     IPrimitive<Integer> ageOfMajority();
 
+    @Detached(level = AttachLevel.CollectionSizeOnly)
+    IList<Lease> leasesOfThisCustomer();
+
+    @Detached(level = AttachLevel.CollectionSizeOnly)
+    IList<Lease> applicationsOfThisCustomer();
 }

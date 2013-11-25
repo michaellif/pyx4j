@@ -13,6 +13,7 @@
  */
 package com.propertyvista.crm.server.services.customer;
 
+import java.util.EnumSet;
 import java.util.List;
 import java.util.Vector;
 
@@ -37,6 +38,8 @@ import com.propertyvista.domain.payment.LeasePaymentMethod;
 import com.propertyvista.domain.payment.PaymentType;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.security.common.VistaApplication;
+import com.propertyvista.domain.tenant.lease.Lease;
+import com.propertyvista.domain.tenant.lease.Lease.Status;
 import com.propertyvista.domain.tenant.lease.LeaseParticipant;
 import com.propertyvista.domain.tenant.lease.LeaseTerm;
 import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
@@ -80,6 +83,20 @@ public abstract class LeaseParticipantCrudServiceBaseImpl<BO extends LeasePartic
         to.electronicPaymentsAllowed().setValue(ServerSideFactory.create(PaymentFacade.class).isElectronicPaymentsSetup(to.leaseTermV().holder()));
 
         Persistence.service().retrieve(to.customer().picture());
+
+        {
+            EntityQueryCriteria<Lease> criteria = EntityQueryCriteria.create(Lease.class);
+            criteria.eq(criteria.proto().leaseParticipants().$().customer(), bo.customer());
+            criteria.in(criteria.proto().status(), Status.present());
+            to.leasesOfThisCustomer().setCollectionSizeOnly(Persistence.service().count(criteria));
+        }
+        {
+            EntityQueryCriteria<Lease> criteria = EntityQueryCriteria.create(Lease.class);
+            criteria.eq(criteria.proto().leaseParticipants().$().customer(), bo.customer());
+            criteria.in(criteria.proto().status(), EnumSet.of(Lease.Status.Application, Lease.Status.Approved));
+            criteria.isNotNull(criteria.proto().leaseApplication().status());
+            to.applicationsOfThisCustomer().setCollectionSizeOnly(Persistence.service().count(criteria));
+        }
     }
 
     @Override

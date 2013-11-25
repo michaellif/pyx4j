@@ -14,6 +14,7 @@
 package com.propertyvista.crm.server.services.lease;
 
 import java.math.BigDecimal;
+import java.util.EnumSet;
 import java.util.Vector;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
@@ -24,6 +25,7 @@ import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.AttachLevel;
 import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.entity.shared.criterion.EntityListCriteria;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.shared.VoidSerializable;
 
@@ -58,6 +60,14 @@ public class LeaseApplicationViewerCrudServiceImpl extends LeaseViewerCrudServic
 
     public LeaseApplicationViewerCrudServiceImpl() {
         super(LeaseApplicationDTO.class);
+    }
+
+    @Override
+    protected void enhanceListCriteria(EntityListCriteria<Lease> boCriteria, EntityListCriteria<LeaseApplicationDTO> toCriteria) {
+        super.enhanceListCriteria(boCriteria, toCriteria);
+
+        boCriteria.in(boCriteria.proto().status(), EnumSet.of(Lease.Status.Application, Lease.Status.Approved));
+        boCriteria.isNotNull(boCriteria.proto().leaseApplication().status());
     }
 
     @Override

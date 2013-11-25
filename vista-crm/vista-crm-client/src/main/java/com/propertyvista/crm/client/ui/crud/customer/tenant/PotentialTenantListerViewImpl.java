@@ -19,7 +19,6 @@ import com.propertyvista.dto.TenantDTO;
 public class PotentialTenantListerViewImpl extends CrmListerViewImplBase<TenantDTO> implements PotentialTenantListerView {
 
     public PotentialTenantListerViewImpl() {
-        PotentialTenantLister l = new PotentialTenantLister();
-        setLister(l);
+        setLister(new PotentialTenantLister());
     }
 }

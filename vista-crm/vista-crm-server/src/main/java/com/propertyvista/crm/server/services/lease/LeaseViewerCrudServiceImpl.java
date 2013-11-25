@@ -77,7 +77,10 @@ public class LeaseViewerCrudServiceImpl extends LeaseViewerCrudServiceBaseImpl<L
                 dbCriteria.isNotNull(dbCriteria.proto().currentTerm().version().tenants().$().leaseParticipant().preauthorizedPayments());
             }
         }
+
         super.enhanceListCriteria(dbCriteria, dtoCriteria);
+
+        dbCriteria.in(dbCriteria.proto().status(), Lease.Status.present());
     }
 
     @Override
