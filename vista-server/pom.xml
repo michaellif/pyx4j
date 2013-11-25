@@ -696,7 +696,7 @@
                                 <configuration>
                                     <target>
                                         <!-- Maximum time in seconds; Also see ProxyTimeout on server config-master.conf  -->
-                                        <get src="${vista-app-ping-url}/public/verify?buildLabel=1${buildLabel}" dest="${project.build.directory}/verify.txt" maxtime="10"/>
+                                        <get src="${vista-app-ping-url}/public/verify?buildLabel=${buildLabel}" dest="${project.build.directory}/verify.txt" maxtime="10"/>
                                     </target>
                                 </configuration>
                             </execution>
