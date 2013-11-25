@@ -30,6 +30,8 @@ import com.pyx4j.commons.Consts;
 import com.pyx4j.commons.Key;
 import com.pyx4j.entity.cache.CacheService;
 import com.pyx4j.entity.server.Persistence;
+import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
+import com.pyx4j.essentials.server.upload.FileUploadRegistry;
 import com.pyx4j.gwt.server.IOUtils;
 import com.pyx4j.security.shared.SecurityController;
 
@@ -37,6 +39,7 @@ import com.propertyvista.domain.MediaFile;
 import com.propertyvista.domain.PublicVisibilityType;
 import com.propertyvista.domain.media.ThumbnailSize;
 import com.propertyvista.domain.security.common.VistaBasicBehavior;
+import com.propertyvista.portal.rpc.DeploymentConsts;
 import com.propertyvista.portal.rpc.portal.ImageConsts;
 import com.propertyvista.portal.rpc.portal.ImageConsts.ImageTarget;
 import com.propertyvista.server.common.blob.BlobService;
@@ -81,43 +84,45 @@ public class PublicMediaServlet extends HttpServlet {
         }
 
         //TODO deserialize key
-        long key;
-        try {
-            key = Long.valueOf(id);
-        } catch (NumberFormatException e) {
-            response.setStatus(HttpServletResponse.SC_GONE);
-            serveNotSet(thumbnailSize, response);
-            return;
+        MediaFile file = null;
+        if (id.startsWith(DeploymentConsts.TRANSIENT_FILE_PREF)) {
+            // treat id as accessKey
+            file = FileUploadRegistry.get(id.substring(DeploymentConsts.TRANSIENT_FILE_PREF.length()));
+        } else {
+            // treat id as blobKey
+            Key blobKey = new Key(id);
+            EntityQueryCriteria<MediaFile> crit = EntityQueryCriteria.create(MediaFile.class);
+            crit.eq(crit.proto().blobKey(), blobKey);
+            file = Persistence.service().retrieve(crit);
         }
-        MediaFile media = Persistence.service().retrieve(MediaFile.class, new Key(key));
-        if (media == null) {
+        if (file == null) {
             log.debug("no media {} {}", id, filename);
             response.setStatus(HttpServletResponse.SC_NOT_FOUND);
             serveNotFound(thumbnailSize, response);
             return;
-        } else if (media.blobKey().isNull()) {
+        } else if (file.blobKey().isNull()) {
             log.debug("no media {} {} is not file", id, filename);
             response.setStatus(HttpServletResponse.SC_NOT_FOUND);
             serveNotFound(thumbnailSize, response);
             return;
         }
-        if (!PublicVisibilityType.global.equals(media.visibility().getValue())) {
+        if (!PublicVisibilityType.global.equals(file.visibility().getValue())) {
             if (!SecurityController.checkBehavior(VistaBasicBehavior.CRM)) {
                 response.setStatus(HttpServletResponse.SC_FORBIDDEN);
                 return;
             }
         }
 
-        String token = ETag.getEntityTag(media, thumbnailSize);
+        String token = ETag.getEntityTag(file, thumbnailSize);
         response.setHeader("Etag", token);
 
-        if (!media.timestamp().isNull()) {
+        if (!file.timestamp().isNull()) {
             long since = request.getDateHeader("If-Modified-Since");
-            if ((since != -1) && (media.timestamp().getValue() < since)) {
+            if ((since != -1) && (file.timestamp().getValue() < since)) {
                 response.setStatus(HttpServletResponse.SC_NOT_MODIFIED);
                 return;
             }
-            response.setDateHeader("Last-Modified", media.timestamp().getValue());
+            response.setDateHeader("Last-Modified", file.timestamp().getValue());
             // HTTP 1.0
             response.setDateHeader("Expires", System.currentTimeMillis() + Consts.HOURS2MSEC * cacheExpiresHours);
             // HTTP 1.1
@@ -130,13 +135,13 @@ public class PublicMediaServlet extends HttpServlet {
         }
 
         if (thumbnailSize == null) {
-            if (!media.contentMimeType().isNull()) {
-                response.setContentType(media.contentMimeType().getValue());
+            if (!file.contentMimeType().isNull()) {
+                response.setContentType(file.contentMimeType().getValue());
             }
-            BlobService.serve(media.blobKey().getValue(), response);
+            BlobService.serve(file.blobKey().getValue(), response);
         } else {
-            if (!ThumbnailService.serve(media.blobKey().getValue(), thumbnailSize, response)) {
-                log.debug("no blob {} for media {}", media.blobKey().getValue(), id);
+            if (!ThumbnailService.serve(file.blobKey().getValue(), thumbnailSize, response)) {
+                log.debug("no blob {} for media {}", file.blobKey().getValue(), id);
                 response.setStatus(HttpServletResponse.SC_NOT_FOUND);
                 serveNotFound(thumbnailSize, response);
             }

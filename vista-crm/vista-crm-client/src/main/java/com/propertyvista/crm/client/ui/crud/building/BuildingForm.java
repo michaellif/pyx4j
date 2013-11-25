@@ -43,7 +43,6 @@ import com.pyx4j.forms.client.ui.folder.EntityFolderColumnDescriptor;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
 import com.pyx4j.forms.client.validators.ValidationError;
-import com.pyx4j.gwt.shared.IFileURLBuilder;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.security.client.ClientContext;
@@ -54,9 +53,9 @@ import com.pyx4j.site.client.ui.prime.form.IForm;
 import com.pyx4j.site.client.ui.prime.misc.CEntityCrudHyperlink;
 import com.pyx4j.widgets.client.tabpanel.Tab;
 
+import com.propertyvista.common.client.PublicMediaURLBuilder;
 import com.propertyvista.common.client.policy.ClientPolicyManager;
 import com.propertyvista.common.client.resources.VistaImages;
-import com.propertyvista.common.client.ui.components.MediaUtils;
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
 import com.propertyvista.common.client.ui.components.editors.AddressStructuredEditor;
 import com.propertyvista.common.client.ui.components.editors.MarketingEditor;
@@ -350,7 +349,7 @@ public class BuildingForm extends CrmEntityForm<BuildingDTO> {
 
         flexPanel.setH1(++row, 0, 2, i18n.tr("Images"));
         CImageSlider<MediaFile> imageSlider = new CImageSlider<MediaFile>(MediaFile.class,
-                GWT.<MediaUploadBuildingService> create(MediaUploadBuildingService.class), new MediaImageUrlBuilder()) {
+                GWT.<MediaUploadBuildingService> create(MediaUploadBuildingService.class), new PublicMediaURLBuilder()) {
             @Override
             protected EntityFolderImages getFolderIcons() {
                 return VistaImages.INSTANCE;
@@ -562,11 +561,4 @@ public class BuildingForm extends CrmEntityForm<BuildingDTO> {
             get(proto().merchantAccount()).setNote(null);
         }
     }
-
-    class MediaImageUrlBuilder implements IFileURLBuilder<MediaFile> {
-        @Override
-        public String getUrl(MediaFile file) {
-            return MediaUtils.createMediaImageUrl(file);
-        }
-    };
 }

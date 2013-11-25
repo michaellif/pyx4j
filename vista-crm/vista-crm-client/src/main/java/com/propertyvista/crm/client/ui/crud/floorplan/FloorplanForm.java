@@ -33,15 +33,14 @@ import com.pyx4j.forms.client.ui.CImageSlider;
 import com.pyx4j.forms.client.ui.folder.CEntityFolder;
 import com.pyx4j.forms.client.ui.folder.EntityFolderColumnDescriptor;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
-import com.pyx4j.gwt.shared.IFileURLBuilder;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.site.client.ui.dialogs.SelectEnumDialog;
 import com.pyx4j.site.client.ui.prime.form.IForm;
 import com.pyx4j.widgets.client.tabpanel.Tab;
 
+import com.propertyvista.common.client.PublicMediaURLBuilder;
 import com.propertyvista.common.client.resources.VistaImages;
-import com.propertyvista.common.client.ui.components.MediaUtils;
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
 import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
 import com.propertyvista.common.client.ui.components.folders.VistaTableFolder;
@@ -94,7 +93,7 @@ public class FloorplanForm extends CrmEntityForm<FloorplanDTO> {
 
         main.setH1(++row, 0, 2, i18n.tr("Images"));
         CImageSlider<MediaFile> imageSlider = new CImageSlider<MediaFile>(MediaFile.class,
-                GWT.<MediaUploadFloorplanService> create(MediaUploadFloorplanService.class), new MediaImageUrlBuilder()) {
+                GWT.<MediaUploadFloorplanService> create(MediaUploadFloorplanService.class), new PublicMediaURLBuilder()) {
             @Override
             protected EntityFolderImages getFolderIcons() {
                 return VistaImages.INSTANCE;
@@ -217,11 +216,4 @@ public class FloorplanForm extends CrmEntityForm<FloorplanDTO> {
             }
         }
     }
-
-    class MediaImageUrlBuilder implements IFileURLBuilder<MediaFile> {
-        @Override
-        public String getUrl(MediaFile file) {
-            return MediaUtils.createMediaImageUrl(file);
-        }
-    };
 }

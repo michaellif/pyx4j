@@ -82,62 +82,50 @@ public class VistaAbstractFileAccessServlet extends HttpServlet {
             return;
         }
 
-        Key key;
-        boolean transientFile = false;
+        IFile file = null;
+        Key blobKey = null;
         if (id.startsWith(DeploymentConsts.TRANSIENT_FILE_PREF)) {
-            IFile file = FileUploadRegistry.get(id.substring(DeploymentConsts.TRANSIENT_FILE_PREF.length()));
-            if (file == null) {
-                log.debug("no such document {} {}", id, filename);
-                response.setStatus(HttpServletResponse.SC_NOT_FOUND);
-                return;
-            }
-            key = file.blobKey().getValue();
-            transientFile = true;
+            // treat id as accessKey
+            file = FileUploadRegistry.get(id.substring(DeploymentConsts.TRANSIENT_FILE_PREF.length()));
+            blobKey = file.blobKey().getValue();
         } else {
-            key = new Key(id);
+            // treat id as blobKey
+            blobKey = new Key(id);
+            // ensure access allowed
+            EntityQueryCriteria<? extends IFile> crit = EntityQueryCriteria.create(blobEntry.fileClass);
+            crit.eq(crit.proto().blobKey(), blobKey);
+            file = Persistence.secureRetrieve(crit);
         }
 
-        IFileBlob blob = Persistence.service().retrieve(blobClass, key);
-        if (blob == null) {
+        IFileBlob blob = Persistence.service().retrieve(blobClass, blobKey);
+        if (file == null || blob == null) {
             log.debug("no such document {} {}", id, filename);
             response.setStatus(HttpServletResponse.SC_NOT_FOUND);
             return;
         }
 
-        if (!transientFile) {
-            // ensure access allowed
-            EntityQueryCriteria<? extends IFile> crit = EntityQueryCriteria.create(blobEntry.fileClass);
-            crit.eq(crit.proto().blobKey(), key);
-            IFile file = Persistence.secureRetrieve(crit);
-            if (file == null) {
-                log.debug("no such document {} {}", key, filename);
-                response.setStatus(HttpServletResponse.SC_NOT_FOUND);
+        String token = ETag.getEntityTag(file, "");
+        response.setHeader("Etag", token);
+
+        if (!file.timestamp().isNull()) {
+            long since = request.getDateHeader("If-Modified-Since");
+            if ((since != -1) && (file.timestamp().getValue() < since)) {
+                response.setStatus(HttpServletResponse.SC_NOT_MODIFIED);
                 return;
             }
+            response.setDateHeader("Last-Modified", file.timestamp().getValue());
+            // HTTP 1.0
+            response.setDateHeader("Expires", System.currentTimeMillis() + Consts.HOURS2MSEC * cacheExpiresHours);
+            // HTTP 1.1
+            response.setHeader("Cache-Control", "public, max-age=" + ((long) Consts.HOURS2SEC * cacheExpiresHours));
 
-            String token = ETag.getEntityTag(file, "");
-            response.setHeader("Etag", token);
+        }
+        if (ETag.checkIfNoneMatch(token, request.getHeader("If-None-Match"))) {
+            response.setStatus(HttpServletResponse.SC_NOT_MODIFIED);
+        }
 
-            if (!file.timestamp().isNull()) {
-                long since = request.getDateHeader("If-Modified-Since");
-                if ((since != -1) && (file.timestamp().getValue() < since)) {
-                    response.setStatus(HttpServletResponse.SC_NOT_MODIFIED);
-                    return;
-                }
-                response.setDateHeader("Last-Modified", file.timestamp().getValue());
-                // HTTP 1.0
-                response.setDateHeader("Expires", System.currentTimeMillis() + Consts.HOURS2MSEC * cacheExpiresHours);
-                // HTTP 1.1
-                response.setHeader("Cache-Control", "public, max-age=" + ((long) Consts.HOURS2SEC * cacheExpiresHours));
-
-            }
-            if (ETag.checkIfNoneMatch(token, request.getHeader("If-None-Match"))) {
-                response.setStatus(HttpServletResponse.SC_NOT_MODIFIED);
-            }
-
-            if (!file.contentMimeType().isNull()) {
-                response.setContentType(file.contentMimeType().getValue());
-            }
+        if (!file.contentMimeType().isNull()) {
+            response.setContentType(file.contentMimeType().getValue());
         }
 
         response.setContentType(blob.contentType().getValue());
