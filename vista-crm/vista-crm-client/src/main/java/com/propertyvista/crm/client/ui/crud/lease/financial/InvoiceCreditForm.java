@@ -35,6 +35,7 @@ public class InvoiceCreditForm extends CrmEntityForm<InvoiceCreditDTO> {
         panel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().date())).build());
         panel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().totalAmount())).build());
         panel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().outstandingCredit())).build());
+
         panel.setH2(++row, 0, 2, i18n.tr("Links"));
         panel.setWidget(++row, 0, 2, inject(proto().debitCreditLinks(), new DebitCreditLinkFolder()));
 
