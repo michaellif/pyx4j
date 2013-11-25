@@ -38,6 +38,8 @@ public class L1GenerationWizardForm extends WizardForm<L1GenerationWizardDTO> {
         addStep(createTenantsStep());
         addStep(createReasonForApplicationStep());
         addStep(createDetailsOfLandlordsClaimStep());
+        addStep(createLandlordContactInfoStep());
+        addStep(createAgentsSignatureStep());
     }
 
     @Override
@@ -103,6 +105,24 @@ public class L1GenerationWizardForm extends WizardForm<L1GenerationWizardDTO> {
         panel.setWidget(++row, 0, 2, inject(proto().formData().owedRent(), new LtbOwedRentForm()));
         panel.setH1(++row, 0, 2, i18n.tr(i18n.tr("NSF Check Charges")));
         panel.setWidget(++row, 0, 2, inject(proto().formData().owedNsfCharges(), new L1OwedNsfChargesForm()));
+        return panel;
+    }
+
+    private TwoColumnFlexFormPanel createLandlordContactInfoStep() {
+        TwoColumnFlexFormPanel panel = new TwoColumnFlexFormPanel(i18n.tr("Landlord(s) Details"));
+        int row = -1;
+        panel.setWidget(++row, 0, 2, inject(proto().formData().landlordsContactInfos(), new L1LandlordsContactInfoFolder()));
+        return panel;
+    }
+
+    private TwoColumnFlexFormPanel createAgentsSignatureStep() {
+        TwoColumnFlexFormPanel panel = new TwoColumnFlexFormPanel(i18n.tr("Signature"));
+        int row = -1;
+        panel.setH1(++row, 0, 2,
+                i18n.tr("If the person who signs this application is an agent or an officer of a corporation, you must provide the following information:"));
+        panel.setWidget(++row, 0, 2, inject(proto().formData().agentContactInfo(), new LtbAgentContactInfoForm()));
+        panel.setH1(++row, 0, 2, i18n.tr("Signature:"));
+        panel.setWidget(++row, 0, 2, inject(proto().formData().signatureData(), new L1SignatureDataForm()));
         return panel;
     }
 
