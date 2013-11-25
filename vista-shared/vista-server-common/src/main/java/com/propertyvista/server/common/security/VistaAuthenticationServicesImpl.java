@@ -252,6 +252,7 @@ public abstract class VistaAuthenticationServicesImpl<U extends AbstractUser, E 
         String email = EmailValidator.normalizeEmailAddress(request.email().getValue());
         if (VistaDeployment.isVistaStaging()) {
             if (!email.startsWith("s!")) {
+                log.warn("Staging env protection (s!${email}) triggered for user {}", email);
                 throw new UserRuntimeException(i18n.tr("Application is Unavailable due to short maintenance.\nPlease try again in one hour"));
             } else {
                 email = email.substring(2, email.length());
