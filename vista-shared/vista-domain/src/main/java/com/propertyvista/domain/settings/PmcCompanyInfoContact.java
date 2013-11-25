@@ -15,9 +15,13 @@ package com.propertyvista.domain.settings;
 
 import com.pyx4j.entity.annotations.BusinessEqualValue;
 import com.pyx4j.entity.annotations.Caption;
+import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.Editor;
 import com.pyx4j.entity.annotations.Editor.EditorType;
+import com.pyx4j.entity.annotations.JoinColumn;
 import com.pyx4j.entity.annotations.MemberColumn;
+import com.pyx4j.entity.annotations.Owner;
+import com.pyx4j.entity.annotations.ReadOnly;
 import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IEntity;
@@ -39,6 +43,14 @@ public interface PmcCompanyInfoContact extends IEntity {
         }
 
     }
+
+    @Owner
+    @NotNull
+    @MemberColumn(notNull = true)
+    @ReadOnly
+    @Detached
+    @JoinColumn
+    PmcCompanyInfo companyInfo();
 
     @NotNull
     @MemberColumn(name = "tp")
