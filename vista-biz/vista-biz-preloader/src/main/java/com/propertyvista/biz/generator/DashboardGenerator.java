@@ -11,7 +11,7 @@
  * @author Vlad
  * @version $Id$
  */
-package com.propertyvista.biz.preloader;
+package com.propertyvista.biz.generator;
 
 import java.util.ArrayList;
 import java.util.List;

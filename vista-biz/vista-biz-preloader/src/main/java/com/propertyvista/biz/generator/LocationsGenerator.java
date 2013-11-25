@@ -11,7 +11,7 @@
  * @author dmitry
  * @version $Id$
  */
-package com.propertyvista.biz.preloader;
+package com.propertyvista.biz.generator;
 
 import java.util.Collections;
 import java.util.Comparator;

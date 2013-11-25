@@ -29,7 +29,7 @@ public class ProdSitePreloader extends AbstractSitePreloader {
 
     @Override
     protected String pmcName() {
-        return (String) getParameter(VistaDataPreloaderParameter.pmcName);
+        return (String) getParameter(VistaDataPreloaderParameter.pmcName.name());
     }
 
     @Override

@@ -7,16 +7,14 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on 2012-04-16
+ * Created on Nov 1, 2011
  * @author vlads
  * @version $Id$
  */
 package com.propertyvista.biz.preloader;
 
-import com.propertyvista.operations.rpc.dto.PmcDTO;
+import com.pyx4j.entity.server.dataimport.AbstractDataPreloader;
 
-public interface PmcCreatorFacade {
-
-    void createPmc(PmcDTO pmc);
+public abstract class AbstractVistaDataPreloader extends AbstractDataPreloader {
 
 }

@@ -23,7 +23,7 @@ import com.pyx4j.entity.server.dataimport.AbstractDataPreloader;
 
 import com.propertyvista.biz.dashboard.DashboardManagementFacade;
 import com.propertyvista.biz.dashboard.GadgetStorageFacade;
-import com.propertyvista.biz.preloader.DashboardGenerator;
+import com.propertyvista.biz.generator.DashboardGenerator;
 import com.propertyvista.crm.rpc.dto.dashboard.DashboardColumnLayoutFormat;
 import com.propertyvista.crm.rpc.dto.dashboard.DashboardColumnLayoutFormat.Builder;
 import com.propertyvista.domain.dashboard.DashboardMetadata;

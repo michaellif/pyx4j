@@ -21,10 +21,10 @@ import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 
+import com.propertyvista.biz.preloader.AbstractVistaDataPreloader;
 import com.propertyvista.domain.policy.framework.OrganizationPoliciesNode;
 import com.propertyvista.domain.policy.framework.Policy;
 import com.propertyvista.domain.policy.framework.PolicyNode;
-import com.propertyvista.portal.server.preloader.util.AbstractVistaDataPreloader;
 
 public abstract class AbstractPolicyPreloader<P extends Policy> extends AbstractVistaDataPreloader {
 

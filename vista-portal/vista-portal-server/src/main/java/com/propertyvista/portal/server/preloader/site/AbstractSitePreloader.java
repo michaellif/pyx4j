@@ -36,6 +36,7 @@ import com.pyx4j.i18n.annotations.I18nComment;
 import com.pyx4j.i18n.server.ServerI18nFactory;
 import com.pyx4j.i18n.shared.I18n;
 
+import com.propertyvista.biz.preloader.AbstractVistaDataPreloader;
 import com.propertyvista.domain.DemoData;
 import com.propertyvista.domain.customizations.CountryOfOperation;
 import com.propertyvista.domain.site.AvailableLocale;
@@ -63,7 +64,6 @@ import com.propertyvista.domain.site.gadgets.TestimonialsGadgetContent;
 import com.propertyvista.generator.PreloadData;
 import com.propertyvista.generator.util.RandomUtil;
 import com.propertyvista.portal.rpc.DeploymentConsts;
-import com.propertyvista.portal.server.preloader.util.AbstractVistaDataPreloader;
 import com.propertyvista.server.common.blob.BlobService;
 import com.propertyvista.shared.config.VistaFeatures;
 import com.propertyvista.shared.i18n.CompiledLocale;
