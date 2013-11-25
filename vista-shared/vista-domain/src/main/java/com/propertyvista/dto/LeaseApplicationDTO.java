@@ -18,7 +18,6 @@ import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
 
-import com.propertyvista.domain.tenant.Customer;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.prospect.MasterOnlineApplicationStatus;
 
@@ -42,5 +41,4 @@ public interface LeaseApplicationDTO extends LeaseDTO {
 
     IPrimitive<Integer> numberOfGuarantors();
 
-    Customer mainApplicant();
 }

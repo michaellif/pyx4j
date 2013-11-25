@@ -65,6 +65,8 @@ public class LeaseLister extends AbstractLister<LeaseDTO> {
             new Builder(proto()._applicant().customer().person().name().firstName(), false).columnTitle(i18n.tr("Primary Tenant First Name")).build(),
             new Builder(proto()._applicant().customer().person().name().lastName(), false).columnTitle(i18n.tr("Primary Tenant Last Name")).build(),
             
+            new Builder(proto().leaseParticipants().$().customer().customerId(), false).build(),
+            
             new Builder(proto().status()).build(),
             new Builder(proto().completion()).build(),
             new Builder(proto().billingAccount().accountNumber()).build(),

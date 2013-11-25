@@ -31,7 +31,6 @@ import com.propertyvista.crm.client.ui.gadgets.util.Proxy;
 import com.propertyvista.crm.rpc.services.lease.LeaseApplicationViewerCrudService;
 import com.propertyvista.domain.dashboard.gadgets.util.ListerUserSettings;
 import com.propertyvista.dto.LeaseApplicationDTO;
-import com.propertyvista.misc.VistaTODO;
 
 public class ApplicationsDetailsFactory extends AbstractListerDetailsFactory<LeaseApplicationDTO, CounterGadgetFilter> {
 
@@ -61,7 +60,10 @@ public class ApplicationsDetailsFactory extends AbstractListerDetailsFactory<Lea
                     
                     new Builder(proto.creationDate(), false).build(),
                     
-                    new Builder(proto.mainApplicant()).sortable(!VistaTODO.complextQueryCriteria).searchable(!VistaTODO.complextQueryCriteria).build(),
+                    new Builder(proto._applicant().customer().person().name()).columnTitle(i18n.tr("Primary Tenant Name")).searchable(false).build(),
+                    new Builder(proto._applicant().customer().person().name().firstName(), false).columnTitle(i18n.tr("Primary Tenant First Name")).build(),
+                    new Builder(proto._applicant().customer().person().name().lastName(), false).columnTitle(i18n.tr("Primary Tenant Last Name")).build(),
+                    new Builder(proto.leaseParticipants().$().customer().customerId(), false).build(),
                     
                     new Builder(proto.numberOfOccupants(), false).sortable(false).searchable(false).title(i18n.tr("Occupants")).build(),
                     new Builder(proto.numberOfApplicants(), true).sortable(false).searchable(false).title(i18n.tr("Applicants")).build(),

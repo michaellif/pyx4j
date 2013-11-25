@@ -27,7 +27,6 @@ import com.pyx4j.site.client.ui.prime.lister.AbstractLister;
 import com.propertyvista.crm.client.ui.crud.lease.common.dialogs.LeaseDataDialog;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.dto.LeaseApplicationDTO;
-import com.propertyvista.misc.VistaTODO;
 
 public class LeaseApplicationLister extends AbstractLister<LeaseApplicationDTO> {
 
@@ -56,7 +55,10 @@ public class LeaseApplicationLister extends AbstractLister<LeaseApplicationDTO> 
 
             new Builder(proto().creationDate(), false).build(),
 
-            new Builder(proto().mainApplicant()).sortable(!VistaTODO.complextQueryCriteria).searchable(!VistaTODO.complextQueryCriteria).build(),
+            new Builder(proto()._applicant().customer().person().name()).columnTitle(i18n.tr("Primary Tenant Name")).searchable(false).build(),
+            new Builder(proto()._applicant().customer().person().name().firstName(), false).columnTitle(i18n.tr("Primary Tenant First Name")).build(),
+            new Builder(proto()._applicant().customer().person().name().lastName(), false).columnTitle(i18n.tr("Primary Tenant Last Name")).build(),
+            new Builder(proto().leaseParticipants().$().customer().customerId(), false).build(),
 
             new Builder(proto().numberOfOccupants(), false).sortable(false).searchable(false).title(i18n.tr("Occupants")).build(),
             new Builder(proto().numberOfApplicants(), true).sortable(false).searchable(false).title(i18n.tr("Applicants")).build(),

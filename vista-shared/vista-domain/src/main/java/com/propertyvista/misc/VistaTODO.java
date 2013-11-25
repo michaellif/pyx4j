@@ -45,9 +45,6 @@ public class VistaTODO {
 
     public static boolean vladsLeaseMigration = true;
 
-    /** joins with conditions */
-    public static final boolean complextQueryCriteria = true;
-
     public static final boolean VISTA_1588 = true;
 
     public static final boolean Equifax_Off_VISTA_478 = false;

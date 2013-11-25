@@ -99,7 +99,6 @@ public class LeaseApplicationViewerCrudServiceImpl extends LeaseViewerCrudServic
 
             switch (tenant.role().getValue()) {
             case Applicant:
-                dto.mainApplicant().set(tenant.leaseParticipant().customer());
                 dto.numberOfApplicants().setValue(dto.numberOfApplicants().getValue() + 1);
                 break;
             case CoApplicant:
