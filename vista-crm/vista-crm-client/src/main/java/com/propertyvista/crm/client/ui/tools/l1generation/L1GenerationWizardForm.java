@@ -40,6 +40,7 @@ public class L1GenerationWizardForm extends WizardForm<L1GenerationWizardDTO> {
         addStep(createDetailsOfLandlordsClaimStep());
         addStep(createLandlordContactInfoStep());
         addStep(createAgentsSignatureStep());
+        addStep(createPaymentAndSchedulingStep());
     }
 
     @Override
@@ -123,6 +124,13 @@ public class L1GenerationWizardForm extends WizardForm<L1GenerationWizardDTO> {
         panel.setWidget(++row, 0, 2, inject(proto().formData().agentContactInfo(), new LtbAgentContactInfoForm()));
         panel.setH1(++row, 0, 2, i18n.tr("Signature:"));
         panel.setWidget(++row, 0, 2, inject(proto().formData().signatureData(), new L1SignatureDataForm()));
+        return panel;
+    }
+
+    private TwoColumnFlexFormPanel createPaymentAndSchedulingStep() {
+        TwoColumnFlexFormPanel panel = new TwoColumnFlexFormPanel(i18n.tr("Payment and Scheduling"));
+        int row = -1;
+        panel.setWidget(++row, 0, 2, inject(proto().formData().scheduleAndPayment(), new L1ScheduleAndPaymentForm()));
         return panel;
     }
 
