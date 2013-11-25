@@ -42,6 +42,8 @@ public class TenantViewerViewImpl extends CrmViewerViewImplBase<TenantDTO> imple
 
     private final MenuItem registrationAction;
 
+    private final MenuItem viewDeletedPapsAction;
+
     public TenantViewerViewImpl() {
         setForm(new TenantForm(this));
 
@@ -86,6 +88,15 @@ public class TenantViewerViewImpl extends CrmViewerViewImplBase<TenantDTO> imple
             }
         });
         addAction(registrationAction);
+
+        viewDeletedPapsAction = new MenuItem(i18n.tr("View Deleted PAPs"), new Command() {
+            @Override
+            public void execute() {
+                ((TenantViewerView.Presenter) getPresenter()).viewDeletedPaps();
+            }
+        });
+
+        addAction(viewDeletedPapsAction);
     }
 
     @Override

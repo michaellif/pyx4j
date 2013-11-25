@@ -16,7 +16,6 @@ package com.propertyvista.crm.client.activity.crud.financial.paps;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.place.shared.Place;
 
-import com.pyx4j.commons.Key;
 import com.pyx4j.entity.shared.criterion.EntityFiltersBuilder;
 import com.pyx4j.site.client.activity.AbstractListerActivity;
 import com.pyx4j.site.rpc.AppPlace;
@@ -29,8 +28,7 @@ import com.propertyvista.domain.payment.AutopayAgreement;
 public class PapListerActivity extends AbstractListerActivity<AutopayAgreement> {
 
     public PapListerActivity(Place place) {
-        super(place, CrmSite.getViewFactory().getView(PapListerView.class), GWT.<AutoPayCrudService> create(AutoPayCrudService.class),
-                AutopayAgreement.class);
+        super(place, CrmSite.getViewFactory().getView(PapListerView.class), GWT.<AutoPayCrudService> create(AutoPayCrudService.class), AutopayAgreement.class);
     }
 
     @Override
@@ -38,11 +36,11 @@ public class PapListerActivity extends AbstractListerActivity<AutopayAgreement> 
         super.parseExternalFilters(place, entityClass, filters);
 
         String val;
-        if ((val = place.getFirstArg(filters.proto().tenant().id().getPath().toString())) != null) {
-            filters.eq(filters.proto().tenant().id(), new Key(val));
+        if ((val = place.getFirstArg(filters.proto().tenant().participantId().getPath().toString())) != null) {
+            filters.eq(filters.proto().tenant().participantId(), val);
         }
-        if ((val = place.getFirstArg(filters.proto().tenant().lease().id().getPath().toString())) != null) {
-            filters.eq(filters.proto().tenant().lease().id(), new Key(val));
+        if ((val = place.getFirstArg(filters.proto().tenant().lease().leaseId().getPath().toString())) != null) {
+            filters.eq(filters.proto().tenant().lease().leaseId(), val);
         }
         if ((val = place.getFirstArg(filters.proto().isDeleted().getPath().toString())) != null) {
             filters.eq(filters.proto().isDeleted(), Boolean.valueOf(val));

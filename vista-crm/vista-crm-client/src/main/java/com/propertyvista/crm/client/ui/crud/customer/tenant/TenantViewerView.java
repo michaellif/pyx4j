@@ -33,6 +33,8 @@ public interface TenantViewerView extends IViewer<TenantDTO> {
         void goToChangePassword(Key tenantPrincipalPk, String tenantName);
 
         void getPortalRegistrationInformation();
+
+        void viewDeletedPaps();
     }
 
     public void displayPortalRegistrationInformation(TenantPortalAccessInformationDTO info);

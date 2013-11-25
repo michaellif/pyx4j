@@ -19,6 +19,7 @@ import com.pyx4j.commons.Key;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.security.shared.SecurityController;
+import com.pyx4j.site.client.AppPlaceEntityMapper;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.rpc.AppPlace;
 import com.pyx4j.site.rpc.CrudAppPlace;
@@ -32,6 +33,7 @@ import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.crm.rpc.services.MaintenanceCrudService;
 import com.propertyvista.crm.rpc.services.customer.TenantCrudService;
 import com.propertyvista.crm.rpc.services.customer.screening.CustomerScreeningCrudService;
+import com.propertyvista.domain.payment.AutopayAgreement;
 import com.propertyvista.domain.security.VistaCrmBehavior;
 import com.propertyvista.domain.tenant.Customer;
 import com.propertyvista.domain.tenant.lease.Tenant;
@@ -47,6 +49,8 @@ public class TenantViewerActivity extends CrmViewerActivity<TenantDTO> implement
     private Key currentBuildingId;
 
     private Customer screeningCustomer;
+
+    private TenantDTO currentValue;
 
     public TenantViewerActivity(CrudAppPlace place) {
         super(place, CrmSite.getViewFactory().getView(TenantViewerView.class), GWT.<TenantCrudService> create(TenantCrudService.class));
@@ -90,6 +94,8 @@ public class TenantViewerActivity extends CrmViewerActivity<TenantDTO> implement
     public void onPopulateSuccess(TenantDTO result) {
         super.onPopulateSuccess(result);
 
+        currentValue = result;
+
         currentTenantId = result.getPrimaryKey();
         screeningCustomer = result.customer();
         currentBuildingId = result.lease().unit().building().id().getValue();
@@ -108,5 +114,20 @@ public class TenantViewerActivity extends CrmViewerActivity<TenantDTO> implement
                 ((TenantViewerView) getView()).displayPortalRegistrationInformation(result);
             }
         }, EntityFactory.createIdentityStub(Tenant.class, getEntityId()));
+    }
+
+    @Override
+    public void viewDeletedPaps() {
+        AutopayAgreement proto = EntityFactory.getEntityPrototype(AutopayAgreement.class);
+        CrudAppPlace place = AppPlaceEntityMapper.resolvePlace(AutopayAgreement.class);
+        place.formListerPlace();
+
+        place.queryArg(proto.tenant().lease().leaseId().getPath().toString(), currentValue.lease().leaseId().getValue().toString());
+
+        place.queryArg(proto.tenant().participantId().getPath().toString(), currentValue.participantId().getValue().toString());
+
+        place.queryArg(proto.isDeleted().getPath().toString(), Boolean.TRUE.toString());
+
+        AppSite.getPlaceController().goTo(place);
     }
 }

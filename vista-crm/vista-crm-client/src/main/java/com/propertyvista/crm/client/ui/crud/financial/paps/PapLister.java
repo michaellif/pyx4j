@@ -33,8 +33,8 @@ public class PapLister extends AbstractLister<AutopayAgreement> {
         setColumnDescriptors(//@formatter:off
                 new MemberColumnDescriptor.Builder(proto().tenant().lease()).searchable(false).build(),
                 new MemberColumnDescriptor.Builder(proto().tenant()).searchable(false).build(),
-                new MemberColumnDescriptor.Builder(proto().tenant().lease().id()).columnTitle(i18n.tr("Lease Id")).searchableOnly().build(),
-                new MemberColumnDescriptor.Builder(proto().tenant().id()).columnTitle(i18n.tr("Tenant Id")).searchableOnly().build(),
+                new MemberColumnDescriptor.Builder(proto().tenant().lease().leaseId()).searchableOnly().build(),
+                new MemberColumnDescriptor.Builder(proto().tenant().participantId()).columnTitle(i18n.tr("Tenant Id")).searchableOnly().build(),
                 
                 new MemberColumnDescriptor.Builder(proto().paymentMethod()).searchable(false).build(),
                 new MemberColumnDescriptor.Builder(proto().paymentMethod().type()).title(i18n.tr("Payment Method Type")).visible(false).build(),
@@ -47,8 +47,6 @@ public class PapLister extends AbstractLister<AutopayAgreement> {
                 new MemberColumnDescriptor.Builder(proto().updatedByTenant(), false).build(),
                 new MemberColumnDescriptor.Builder(proto().updatedBySystem(), false).build(),
                 new MemberColumnDescriptor.Builder(proto().updated()).searchable(false).build(),
-                
-
                 
                 new MemberColumnDescriptor.Builder(proto().isDeleted(), false).build()
         );//@formatter:on
