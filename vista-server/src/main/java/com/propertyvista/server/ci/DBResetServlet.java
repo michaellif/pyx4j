@@ -538,6 +538,7 @@ public class DBResetServlet extends HttpServlet {
         }
         setPreloadConfigParameter(req, cfg);
         preloaders.setParameterValue(VistaDataPreloaderParameter.devPreloadConfig.name(), cfg);
+        preloaders.setParameterValue(VistaDataPreloaderParameter.pmcName.name(), pmc.name().getStringView());
 
         if (type.name().toLowerCase().contains("add")) {
             Vector<DataPreloaderInfo> dpis = preloaders.getDataPreloaderInfo();
