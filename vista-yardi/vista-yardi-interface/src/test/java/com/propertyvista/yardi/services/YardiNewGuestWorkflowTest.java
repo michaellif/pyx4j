@@ -136,7 +136,8 @@ public class YardiNewGuestWorkflowTest {
             Map<String, Prospect> guests = new HashMap<String, Prospect>();
             for (Prospect guest : guestActivity.getProspects().getProspect()) {
                 Customer c = guest.getCustomers().getCustomer().get(0);
-                if (EnumSet.of(CustomerInfo.CURRENT_RESIDENT, CustomerInfo.FORMER_RESIDENT, CustomerInfo.FUTURE_RESIDENT).contains(c.getType())) {
+                if (EnumSet.of(CustomerInfo.CURRENT_RESIDENT, CustomerInfo.FORMER_RESIDENT, CustomerInfo.FUTURE_RESIDENT, CustomerInfo.OTHER).contains(
+                        c.getType())) {
                     // drop residents
                     continue;
                 }
@@ -192,7 +193,7 @@ public class YardiNewGuestWorkflowTest {
                 if (StringUtils.isEmpty(moveInStr)) {
                     return;
                 }
-                moveIn = new SimpleDateFormat("yyyy-mm-dd").parse(moveInStr);
+                moveIn = new SimpleDateFormat("yyyy-MM-dd").parse(moveInStr);
                 if (moveIn == null) {
                     System.out.println("Invalid date: " + moveInStr + " - please try again...");
                     continue;
@@ -234,9 +235,9 @@ public class YardiNewGuestWorkflowTest {
     static PmcYardiCredential getTestPmcYardiCredential() {
         PmcYardiCredential cr = EntityFactory.create(PmcYardiCredential.class);
         cr.propertyListCodes().setValue("prvista2");
-        cr.serviceURLBase().setValue("https://www.iyardiasp.com/8223thirddev");
-        cr.username().setValue("propertyvista-ilsws");
-        cr.password().number().setValue("55318");
+        cr.serviceURLBase().setValue("https://www.iyardiasp.com/8223third_17");
+        cr.username().setValue("propertyvistadb");
+        cr.password().number().setValue("52673");
         cr.serverName().setValue("aspdb04");
         cr.database().setValue("afqoml_live");
         cr.platform().setValue(PmcYardiCredential.Platform.SQL);
@@ -311,6 +312,11 @@ public class YardiNewGuestWorkflowTest {
             for (String itemName : itemNames) {
                 AdditionalPreference item = new AdditionalPreference();
                 item.setAdditionalPreferenceType(itemName.trim());
+                item.setValue("02");
+                guest.getCustomerPreferences().getCustomerAdditionalPreferences().add(item);
+                item = new AdditionalPreference();
+                item.setAdditionalPreferenceType(itemName.trim());
+                item.setValue("03");
                 guest.getCustomerPreferences().getCustomerAdditionalPreferences().add(item);
             }
             EventType event = new YardiGuestProcessor().getNewEvent(AGENT, SOURCE, EventTypes.OTHER, false);
