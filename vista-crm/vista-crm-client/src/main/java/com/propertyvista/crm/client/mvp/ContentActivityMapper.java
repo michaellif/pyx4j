@@ -60,13 +60,13 @@ import com.propertyvista.crm.client.activity.crud.administration.website.brandin
 import com.propertyvista.crm.client.activity.crud.administration.website.branding.PortalViewerActivity;
 import com.propertyvista.crm.client.activity.crud.administration.website.content.CityIntroPageEditorActivity;
 import com.propertyvista.crm.client.activity.crud.administration.website.content.CityIntroPageViewerActivity;
-import com.propertyvista.crm.client.activity.crud.administration.website.content.SiteActivity;
-import com.propertyvista.crm.client.activity.crud.administration.website.content.SiteEditorActivity;
-import com.propertyvista.crm.client.activity.crud.administration.website.content.SiteViewerActivity;
 import com.propertyvista.crm.client.activity.crud.administration.website.content.HomePageGadgetEditorActivity;
 import com.propertyvista.crm.client.activity.crud.administration.website.content.HomePageGadgetViewerActivity;
 import com.propertyvista.crm.client.activity.crud.administration.website.content.PageEditorActivity;
 import com.propertyvista.crm.client.activity.crud.administration.website.content.PageViewerActivity;
+import com.propertyvista.crm.client.activity.crud.administration.website.content.SiteActivity;
+import com.propertyvista.crm.client.activity.crud.administration.website.content.SiteEditorActivity;
+import com.propertyvista.crm.client.activity.crud.administration.website.content.SiteViewerActivity;
 import com.propertyvista.crm.client.activity.crud.administration.website.general.GeneralActivity;
 import com.propertyvista.crm.client.activity.crud.administration.website.general.GeneralEditorActivity;
 import com.propertyvista.crm.client.activity.crud.administration.website.general.GeneralViewerActivity;
@@ -238,6 +238,7 @@ import com.propertyvista.crm.client.activity.security.PasswordChangeActivity;
 import com.propertyvista.crm.client.activity.security.PasswordResetActivity;
 import com.propertyvista.crm.client.activity.security.PasswordResetRequestActivity;
 import com.propertyvista.crm.client.activity.tools.autopayreview.AutoPayReviewActivity;
+import com.propertyvista.crm.client.activity.tools.l1generation.L1GenerationWizardActivity;
 import com.propertyvista.crm.client.activity.tools.n4generation.N4DownloadToolActivity;
 import com.propertyvista.crm.client.activity.tools.n4generation.N4GenerationToolActivity;
 import com.propertyvista.crm.client.activity.wizard.creditcheck.CreditCheckActivity;
@@ -679,6 +680,8 @@ public class ContentActivityMapper implements AppActivityMapper {
 
                     } else if (crudPlace instanceof LegalAndCollections.N4DownloadTool) {
                         activity = new N4DownloadToolActivity(crudPlace);
+                    } else if (crudPlace instanceof LegalAndCollections.L1GenerationWizard) {
+                        activity = new L1GenerationWizardActivity(crudPlace);
 
 // - Financial-related:
 

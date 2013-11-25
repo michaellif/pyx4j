@@ -17,6 +17,7 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.commons.Key;
 import com.pyx4j.entity.rpc.EntitySearchResult;
+import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityListCriteria;
 import com.pyx4j.rpc.shared.ServiceExecution;
 
@@ -27,39 +28,33 @@ public class L1GenerationWizardServiceImpl implements L1GenerationWizardService 
 
     @Override
     public void init(AsyncCallback<L1GenerationWizardDTO> callback, com.pyx4j.entity.rpc.AbstractCrudService.InitializationData initializationData) {
-        // TODO Auto-generated method stub
-
+        callback.onSuccess(EntityFactory.create(L1GenerationWizardDTO.class));
     }
 
     @Override
     public void retrieve(AsyncCallback<L1GenerationWizardDTO> callback, Key entityId, com.pyx4j.entity.rpc.AbstractCrudService.RetrieveTarget retrieveTarget) {
         // TODO Auto-generated method stub
-
     }
 
     @Override
     public void create(AsyncCallback<Key> callback, L1GenerationWizardDTO editableEntity) {
         // TODO Auto-generated method stub
-
     }
 
     @Override
     @ServiceExecution(waitCaption = "Saving...")
     public void save(AsyncCallback<Key> callback, L1GenerationWizardDTO editableEntity) {
         // TODO Auto-generated method stub
-
     }
 
     @Override
     public void list(AsyncCallback<EntitySearchResult<L1GenerationWizardDTO>> callback, EntityListCriteria<L1GenerationWizardDTO> criteria) {
         // TODO Auto-generated method stub
-
     }
 
     @Override
     public void delete(AsyncCallback<Boolean> callback, Key entityId) {
         // TODO Auto-generated method stub
-
     }
 
 }

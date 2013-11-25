@@ -19,27 +19,20 @@ import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 
 import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
-import com.propertyvista.domain.legal.ltbcommon.LtbRentalUnitAddress;
+import com.propertyvista.domain.legal.l1.L1OwedNsfCharges;
 
-public class LtbRentalUnitAddressForm extends CEntityForm<LtbRentalUnitAddress> {
+public class L1OwedNsfChargesForm extends CEntityForm<L1OwedNsfCharges> {
 
-    public LtbRentalUnitAddressForm() {
-        super(LtbRentalUnitAddress.class);
+    public L1OwedNsfChargesForm() {
+        super(L1OwedNsfCharges.class);
     }
 
     @Override
     public IsWidget createContent() {
         TwoColumnFlexFormPanel panel = new TwoColumnFlexFormPanel();
         int row = -1;
-
-        panel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().streetNumber())).build());
-        panel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().streetName())).build());
-        panel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().streetType())).build());
-        panel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().direction())).build());
-        panel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().unit())).build());
-        panel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().municipality())).build());
-        panel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().postalCode())).build());
-
+        panel.setWidget(++row, 0, 2, inject(proto().nsfChargesBreakdown(), new L1NsfChargesBreakdownFolder()));
+        panel.setWidget(++row, 0, 1, new FormDecoratorBuilder(inject(proto().nsfTotalChargeOwed())).build());
         return panel;
     }
 
