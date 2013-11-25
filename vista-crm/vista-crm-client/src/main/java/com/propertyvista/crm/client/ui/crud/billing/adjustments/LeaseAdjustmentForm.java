@@ -24,6 +24,7 @@ import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CMoneyField;
 import com.pyx4j.forms.client.ui.CPercentageField;
+import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
@@ -52,7 +53,7 @@ public class LeaseAdjustmentForm extends CrmEntityForm<LeaseAdjustment> {
     public LeaseAdjustmentForm(IForm<LeaseAdjustment> view) {
         super(LeaseAdjustment.class, view);
 
-        TwoColumnFlexFormPanel left = new TwoColumnFlexFormPanel();
+        BasicFlexFormPanel left = new BasicFlexFormPanel();
         int row = -1;
 
         left.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().code(), new CEntitySelectorHyperlink<ARCode>() {
@@ -81,14 +82,14 @@ public class LeaseAdjustmentForm extends CrmEntityForm<LeaseAdjustment> {
         left.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().receivedDate()), 10).build());
         left.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().description()), 25).build());
 
-        TwoColumnFlexFormPanel right = new TwoColumnFlexFormPanel();
+        BasicFlexFormPanel right = new BasicFlexFormPanel();
         row = -1;
         right.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().overwriteDefaultTax()), 5).build());
         right.setWidget(++row, 0, taxHolder);
         right.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().taxType()), 10).build());
         if (!isEditable()) {
-            right.setBR(++row, 0, 2);
-            right.setBR(++row, 0, 2);
+            right.setBR(++row, 0, 1);
+            right.setBR(++row, 0, 1);
             right.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto()._total()), 10).build());
         }
 
@@ -119,7 +120,7 @@ public class LeaseAdjustmentForm extends CrmEntityForm<LeaseAdjustment> {
             }
         });
 
-        TwoColumnFlexFormPanel content = new TwoColumnFlexFormPanel(i18n.tr("General"));
+        TwoColumnFlexFormPanel content = new TwoColumnFlexFormPanel();
 
         content.setWidget(0, 0, left);
         content.setWidget(0, 1, right);
@@ -137,6 +138,7 @@ public class LeaseAdjustmentForm extends CrmEntityForm<LeaseAdjustment> {
         }
 
         selectTab(addTab(content));
+        setTabBarVisible(false);
     }
 
     @Override
