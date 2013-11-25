@@ -731,7 +731,7 @@
                                     <groupId>${project.groupId}</groupId>
                                     <artifactId>${project.artifactId}</artifactId>
                                     <type>war</type>
-                                    <pingURL>${vista-app-ping-url}/public/verify?buildLabel=${buildLabel}</pingURL>
+                                    <pingURL>${vista-app-ping-url}/public/status</pingURL>
                                     <!-- 5 min -->
                                     <pingTimeout>300000</pingTimeout>
                                     <properties>
@@ -740,6 +740,23 @@
                                 </deployable>
                             </deployables>
                         </configuration>
+                    </plugin>
+
+                    <plugin>
+                        <artifactId>maven-antrun-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <id>deploy.verify-version</id>
+                                <phase>pre-integration-test</phase>
+                                <goals><goal>run</goal></goals>
+                                <configuration>
+                                    <target>
+                                        <!-- Maximum time in seconds; Also see ProxyTimeout on server config-master.conf  -->
+                                        <get src="${vista-app-ping-url}/public/verify?buildLabel=1${buildLabel}" dest="${project.build.directory}/verify.txt" maxtime="10"/>
+                                    </target>
+                                </configuration>
+                            </execution>
+                        </executions>
                     </plugin>
 
                 </plugins>
