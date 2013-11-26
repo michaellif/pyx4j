@@ -29,9 +29,9 @@ public class CaledonFeeCalulationResponse {
     @Size(max = 8)
     public String terminalID;
 
-    @HttpResponseField(value = "reference_number")
+    @HttpResponseField(value = "fee_reference_number")
     @NotNull
-    @Size(max = 60)
+    @Size(max = 30)
     public String referenceNumber;
 
     @HttpResponseField(value = "card_product")

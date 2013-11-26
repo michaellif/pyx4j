@@ -44,9 +44,9 @@ import com.propertyvista.biz.financial.payment.PaymentMethodFacade;
 import com.propertyvista.biz.system.Vista2PmcFacade;
 import com.propertyvista.domain.payment.CreditCardInfo;
 import com.propertyvista.domain.payment.InsurancePaymentMethod;
-import com.propertyvista.domain.tenant.insurance.TenantSureTransaction;
 import com.propertyvista.domain.tenant.insurance.TenantSureInsurancePolicy;
 import com.propertyvista.domain.tenant.insurance.TenantSureInsurancePolicy.TenantSureStatus;
+import com.propertyvista.domain.tenant.insurance.TenantSureTransaction;
 import com.propertyvista.domain.tenant.lease.Tenant;
 import com.propertyvista.server.jobs.TaskRunner;
 
@@ -111,25 +111,22 @@ class TenantSurePayments {
 
     static TenantSureTransaction preAuthorization(TenantSureTransaction transaction) {
         BigDecimal amount = transaction.amount().getValue();
-        String referenceNumber = transaction.id().getStringView();
         String authorizationNumber = ServerSideFactory.create(CreditCardFacade.class).preAuthorization(tenantSureMerchantTerminalId(), amount,
-                ReferenceNumberPrefix.TenantSure, referenceNumber, (CreditCardInfo) transaction.paymentMethod().details().cast());
+                ReferenceNumberPrefix.TenantSure, transaction.id(), (CreditCardInfo) transaction.paymentMethod().details().cast());
         transaction.transactionAuthorizationNumber().setValue(authorizationNumber);
         transaction.transactionDate().setValue(SystemDateManager.getDate());
         return transaction;
     }
 
     static void preAuthorizationReversal(TenantSureTransaction transaction) {
-        String referenceNumber = transaction.id().getStringView();
         ServerSideFactory.create(CreditCardFacade.class).preAuthorizationReversal(tenantSureMerchantTerminalId(), ReferenceNumberPrefix.TenantSure,
-                referenceNumber, (CreditCardInfo) transaction.paymentMethod().details().cast());
+                transaction.id(), (CreditCardInfo) transaction.paymentMethod().details().cast());
     }
 
     static void compleateTransaction(TenantSureTransaction transaction) {
         BigDecimal amount = transaction.amount().getValue();
-        String referenceNumber = transaction.id().getStringView();
         String authorizationNumber = ServerSideFactory.create(CreditCardFacade.class).completion(tenantSureMerchantTerminalId(), amount,
-                ReferenceNumberPrefix.TenantSure, referenceNumber, (CreditCardInfo) transaction.paymentMethod().details().cast());
+                ReferenceNumberPrefix.TenantSure, transaction.id(), (CreditCardInfo) transaction.paymentMethod().details().cast());
         transaction.transactionAuthorizationNumber().setValue(authorizationNumber);
         transaction.transactionDate().setValue(SystemDateManager.getDate());
     }
@@ -250,11 +247,9 @@ class TenantSurePayments {
         transaction.transactionDate().setValue(SystemDateManager.getDate());
 
         try {
-            String referenceNumber = transaction.id().getStringView();
-
             CreditCardTransactionResponse response = ServerSideFactory.create(CreditCardFacade.class).realTimeSale(tenantSureMerchantTerminalId(),
-                    transaction.amount().getValue(), null, ReferenceNumberPrefix.TenantSure,
-                    referenceNumber, (CreditCardInfo) transaction.paymentMethod().details().cast());
+                    transaction.amount().getValue(), null,//
+                    ReferenceNumberPrefix.TenantSure, transaction.id(), null, (CreditCardInfo) transaction.paymentMethod().details().cast());
 
             if (response.success().getValue()) {
                 transaction.transactionAuthorizationNumber().setValue(response.authorizationNumber().getValue());

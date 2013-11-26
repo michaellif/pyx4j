@@ -40,6 +40,7 @@ import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.biz.financial.ar.ARException;
 import com.propertyvista.biz.financial.ar.ARFacade;
+import com.propertyvista.biz.financial.payment.CreditCardFacade.ReferenceNumberPrefix;
 import com.propertyvista.biz.system.AuditFacade;
 import com.propertyvista.biz.system.OperationsAlertFacade;
 import com.propertyvista.config.VistaDeployment;
@@ -57,7 +58,7 @@ import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.security.common.VistaApplication;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.LeaseTerm;
-import com.propertyvista.dto.payment.ConvenienceFeeCalulationResponseTO;
+import com.propertyvista.dto.payment.ConvenienceFeeCalculationResponseTO;
 import com.propertyvista.server.common.security.VistaContext;
 
 public class PaymentFacadeImpl implements PaymentFacade {
@@ -102,9 +103,10 @@ public class PaymentFacadeImpl implements PaymentFacade {
     }
 
     @Override
-    public ConvenienceFeeCalulationResponseTO getConvenienceFee(BillingAccount billingAccountId, CreditCardType cardType, BigDecimal amount) {
+    public ConvenienceFeeCalculationResponseTO getConvenienceFee(BillingAccount billingAccountId, CreditCardType cardType, BigDecimal amount) {
         MerchantAccount account = PaymentUtils.retrieveValidMerchantAccount(billingAccountId);
-        return ServerSideFactory.create(CreditCardFacade.class).getConvenienceFee(account.merchantTerminalId().getValue(), cardType, amount);
+        return ServerSideFactory.create(CreditCardFacade.class).getConvenienceFee(account.merchantTerminalId().getValue(), ReferenceNumberPrefix.RentPayments,
+                cardType, amount);
     }
 
     @Override
@@ -134,6 +136,7 @@ public class PaymentFacadeImpl implements PaymentFacade {
             if (ServerSideFactory.create(PaymentFacade.class).getConvenienceFeeApplicableCardTypes(paymentRecord.billingAccount(), vistaApplication)
                     .contains(ccType)) {
                 Validate.notNull(paymentRecord.convenienceFee().getValue(), "Convenience Fee fee not calculated");
+                Validate.notNull(paymentRecord.convenienceFeeReferenceNumber().getValue(), "Convenience Fee fee not calculated");
             }
         }
         if (!paymentRecord.paymentMethod().id().isNull()) {

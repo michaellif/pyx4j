@@ -18,6 +18,7 @@ import java.math.BigDecimal;
 import com.pyx4j.entity.annotations.Editor;
 import com.pyx4j.entity.annotations.Editor.EditorType;
 import com.pyx4j.entity.annotations.Format;
+import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IEntity;
@@ -26,7 +27,7 @@ import com.pyx4j.i18n.annotations.I18n;
 
 @Transient
 @I18n(strategy = I18n.I18nStrategy.IgnoreThis)
-public interface ConvenienceFeeCalulationResponseTO extends IEntity {
+public interface ConvenienceFeeCalculationResponseTO extends IEntity {
 
     @NotNull
     IPrimitive<String> transactionNumber();
@@ -40,4 +41,9 @@ public interface ConvenienceFeeCalulationResponseTO extends IEntity {
     @Format("#,##0.00")
     @Editor(type = EditorType.money)
     IPrimitive<BigDecimal> feeAmount();
+
+    @ToString(index = 3)
+    @Format("$#,##0.00")
+    @Editor(type = EditorType.money)
+    IPrimitive<BigDecimal> total();
 }

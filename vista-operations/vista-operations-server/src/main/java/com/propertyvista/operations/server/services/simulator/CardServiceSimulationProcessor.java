@@ -173,6 +173,8 @@ public class CardServiceSimulationProcessor {
                     CaledonResponse caledonResponse = processCard(merchantAccount, caledonRequest);
                     response.responseCode = caledonResponse.code;
                     response.responseText = caledonResponse.text;
+                    String feeAuthorizationNumber = "F" + new Random().nextInt(99999);
+                    response.responseTextFee = feeAuthorizationNumber + " $" + response.getFeeAmount();
                 }
             }
         } finally {

@@ -23,9 +23,14 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.pyx4j.commons.UserRuntimeException;
+import com.pyx4j.config.server.ServerSideFactory;
+import com.pyx4j.entity.server.Executable;
+import com.pyx4j.entity.server.Persistence;
+import com.pyx4j.entity.server.TransactionScopeOption;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.i18n.shared.I18n;
 
+import com.propertyvista.biz.financial.payment.CreditCardFacade.ReferenceNumberPrefix;
 import com.propertyvista.config.VistaDeployment;
 import com.propertyvista.domain.financial.MerchantAccount;
 import com.propertyvista.domain.payment.CreditCardInfo;
@@ -33,7 +38,8 @@ import com.propertyvista.domain.payment.CreditCardInfo.CreditCardType;
 import com.propertyvista.domain.pmc.Pmc;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.util.ValidationUtils;
-import com.propertyvista.dto.payment.ConvenienceFeeCalulationResponseTO;
+import com.propertyvista.dto.payment.ConvenienceFeeCalculationResponseTO;
+import com.propertyvista.operations.domain.payment.cards.CardTransactionRecord;
 import com.propertyvista.payment.CCInformation;
 import com.propertyvista.payment.FeeCalulationRequest;
 import com.propertyvista.payment.FeeCalulationResponse;
@@ -44,6 +50,7 @@ import com.propertyvista.payment.PaymentRequest;
 import com.propertyvista.payment.PaymentResponse;
 import com.propertyvista.payment.Token;
 import com.propertyvista.payment.caledon.CaledonPaymentProcessor;
+import com.propertyvista.server.jobs.TaskRunner;
 
 class CreditCardProcessor {
 
@@ -199,7 +206,7 @@ class CreditCardProcessor {
     }
 
     static CreditCardTransactionResponse realTimeSale(String merchantTerminalId, BigDecimal amount, BigDecimal convenienceFee, String referenceNumber,
-            CreditCardInfo cc) {
+            String convenienceFeeReferenceNumber, CreditCardInfo cc) {
         Merchant merchant = EntityFactory.create(Merchant.class);
         merchant.terminalID().setValue(merchantTerminalId);
 
@@ -207,6 +214,7 @@ class CreditCardProcessor {
         request.referenceNumber().setValue(referenceNumber);
         request.amount().setValue(amount);
         request.convenienceFee().setValue(convenienceFee);
+        request.convenienceFeeReferenceNumber().setValue(convenienceFeeReferenceNumber);
 
         request.paymentInstrument().set(createPaymentInstrument(cc));
 
@@ -303,12 +311,25 @@ class CreditCardProcessor {
         }
     }
 
-    public static ConvenienceFeeCalulationResponseTO getConvenienceFee(String merchantTerminalId, CreditCardType cardType, BigDecimal amount) {
+    public static ConvenienceFeeCalculationResponseTO getConvenienceFee(final String merchantTerminalId, ReferenceNumberPrefix uniquePrefix,
+            final CreditCardType cardType, final BigDecimal amount) {
         Merchant merchant = EntityFactory.create(Merchant.class);
         merchant.terminalID().setValue(merchantTerminalId);
 
-        //TODO
-        String referenceNumber = "TODO1";
+        final CardTransactionRecord transactionRecord = TaskRunner.runUnitOfWorkInOperationstNamespace(TransactionScopeOption.RequiresNew,
+                new Executable<CardTransactionRecord, RuntimeException>() {
+                    @Override
+                    public CardTransactionRecord execute() {
+                        CardTransactionRecord transactionRecord = EntityFactory.create(CardTransactionRecord.class);
+                        transactionRecord.amount().setValue(amount);
+                        transactionRecord.cardType().setValue(cardType);
+                        transactionRecord.merchantTerminalId().setValue(merchantTerminalId);
+                        Persistence.service().persist(transactionRecord);
+                        return transactionRecord;
+                    }
+                });
+
+        String referenceNumber = ServerSideFactory.create(CreditCardFacade.class).getTransactionreferenceNumber(uniquePrefix, transactionRecord.id());
 
         FeeCalulationRequest request = EntityFactory.create(FeeCalulationRequest.class);
         request.amount().setValue(amount);
@@ -318,17 +339,30 @@ class CreditCardProcessor {
 
         FeeCalulationResponse response = getPaymentProcessor().getConvenienceFee(merchant, request);
 
+        transactionRecord.feeResponseCode().setValue(response.code().getValue());
         if (response.success().getValue()) {
-            log.debug("fee calulatedd {}", response);
+            transactionRecord.feeAmount().setValue(response.feeAmount().getValue());
+        }
+        TaskRunner.runUnitOfWorkInOperationstNamespace(TransactionScopeOption.RequiresNew, new Executable<Void, RuntimeException>() {
+            @Override
+            public Void execute() {
+                Persistence.service().persist(transactionRecord);
+                return null;
+            }
+        });
 
-            ConvenienceFeeCalulationResponseTO to = EntityFactory.create(ConvenienceFeeCalulationResponseTO.class);
+        if (response.success().getValue()) {
+            log.debug("fee calculated {}", response);
+
+            ConvenienceFeeCalculationResponseTO to = EntityFactory.create(ConvenienceFeeCalculationResponseTO.class);
             to.transactionNumber().setValue(referenceNumber);
             to.amount().setValue(amount);
             to.feeAmount().setValue(response.feeAmount().getValue());
+            to.total().setValue(response.totalAmount().getValue());
             return to;
         } else {
-            log.debug("cc Fee Calulation rejected {}", response);
-            throw new UserRuntimeException(i18n.tr("Card Fee Calulation failed {0}", response.message()));
+            log.debug("cc Fee Calculation rejected {}", response);
+            throw new UserRuntimeException(i18n.tr("Card Fee Calculation failed {0}", response.message()));
         }
     }
 }

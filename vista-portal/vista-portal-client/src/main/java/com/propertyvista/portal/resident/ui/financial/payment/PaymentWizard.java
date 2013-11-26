@@ -77,6 +77,7 @@ import com.propertyvista.domain.payment.LeasePaymentMethod;
 import com.propertyvista.domain.payment.PaymentType;
 import com.propertyvista.domain.person.Person;
 import com.propertyvista.dto.PaymentDataDTO.PaymentSelect;
+import com.propertyvista.dto.payment.ConvenienceFeeCalculationResponseTO;
 import com.propertyvista.portal.resident.ui.financial.PortalPaymentTypesUtil;
 import com.propertyvista.portal.resident.ui.financial.paymentmethod.editor.PaymentMethodEditor;
 import com.propertyvista.portal.rpc.portal.resident.dto.financial.PaymentConvenienceFeeDTO;
@@ -394,14 +395,15 @@ public class PaymentWizard extends CPortalEntityWizard<PaymentDTO> {
         PaymentConvenienceFeeDTO inData = EntityFactory.create(PaymentConvenienceFeeDTO.class);
         inData.paymentMethod().set(get(proto().paymentMethod()).getValue());
         inData.amount().setValue(get(proto().amount()).getValue());
-        ((PaymentWizardView.Presenter) getView().getPresenter()).getConvenienceFee(new DefaultAsyncCallback<PaymentConvenienceFeeDTO>() {
+        ((PaymentWizardView.Presenter) getView().getPresenter()).getConvenienceFee(new DefaultAsyncCallback<ConvenienceFeeCalculationResponseTO>() {
             @Override
-            public void onSuccess(PaymentConvenienceFeeDTO result) {
-                if (!result.fee().isNull()) {
-                    panel.add(createDecorator(i18n.tr("Convenience Fee:"), result.fee().getStringView()));
+            public void onSuccess(ConvenienceFeeCalculationResponseTO result) {
+                if (result != null) {
+                    panel.add(createDecorator(i18n.tr("Convenience Fee:"), result.feeAmount().getStringView()));
                     panel.add(createDecorator(i18n.tr("Payment Total:"), result.total().getStringView()));
 
-                    getValue().convenienceFee().setValue(result.fee().getValue());
+                    getValue().convenienceFee().setValue(result.feeAmount().getValue());
+                    getValue().convenienceFeeReferenceNumber().setValue(result.transactionNumber().getValue());
                 }
             }
         }, inData);

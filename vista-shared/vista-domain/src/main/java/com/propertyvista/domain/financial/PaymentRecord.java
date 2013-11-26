@@ -30,6 +30,7 @@ import com.pyx4j.entity.annotations.Editor.EditorType;
 import com.pyx4j.entity.annotations.Format;
 import com.pyx4j.entity.annotations.Indexed;
 import com.pyx4j.entity.annotations.JoinColumn;
+import com.pyx4j.entity.annotations.Length;
 import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.annotations.Owner;
@@ -209,6 +210,9 @@ public interface PaymentRecord extends IEntity, HasNotesAndAttachments {
     @Format("#,##0.00")
     @Editor(type = EditorType.money)
     IPrimitive<BigDecimal> convenienceFee();
+
+    @Length(30)
+    IPrimitive<String> convenienceFeeReferenceNumber();
 
     LeasePaymentMethod paymentMethod();
 

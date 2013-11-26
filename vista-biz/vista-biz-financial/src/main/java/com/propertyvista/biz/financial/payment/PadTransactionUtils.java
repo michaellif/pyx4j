@@ -16,7 +16,10 @@ package com.propertyvista.biz.financial.payment;
 import java.util.concurrent.Callable;
 
 import com.pyx4j.commons.Key;
+import com.pyx4j.entity.server.Executable;
 import com.pyx4j.entity.server.Persistence;
+import com.pyx4j.entity.server.TransactionScopeOption;
+import com.pyx4j.entity.server.UnitOfWork;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
@@ -46,20 +49,22 @@ public class PadTransactionUtils {
     }
 
     static Key toVistaPaymentRecordId(IPrimitive<String> transactionId) {
+        return toVistaPaymentRecordId(transactionId.getValue());
+    }
+
+    static Key toVistaPaymentRecordId(String transactionId) {
         if (VistaDeployment.isVistaProduction()) {
-            return new Key(transactionId.getValue());
+            return new Key(transactionId);
         } else {
-            int separator = transactionId.getValue().indexOf(transactionSeparator);
+            int separator = transactionId.indexOf(transactionSeparator);
             if (separator == -1) {
-                // TODO throw error
-                //throw new Error("Unexpected production transactionId " + transactionId.getValue());
-                return new Key(transactionId.getValue());
+                throw new Error("Unexpected production transactionId " + transactionId);
             } else {
-                String versionId = transactionId.getValue().substring(0, separator);
+                String versionId = transactionId.substring(0, separator);
                 if (!versionId.equals(readTestDBversionIdInOperations())) {
-                    throw new Error("Unexpected transactionId " + transactionId.getValue() + "; expected prefix " + readTestDBversionIdInOperations());
+                    throw new Error("Unexpected transactionId " + transactionId + "; expected prefix " + readTestDBversionIdInOperations());
                 }
-                return new Key(transactionId.getValue().substring(separator + 1));
+                return new Key(transactionId.substring(separator + 1));
             }
         }
     }
@@ -76,9 +81,15 @@ public class PadTransactionUtils {
     public static String readTestDBversionId() {
         PadTestTransactionOffset dbResetSequence = Persistence.service().retrieve(EntityQueryCriteria.create(PadTestTransactionOffset.class));
         if (dbResetSequence == null) {
-            dbResetSequence = EntityFactory.create(PadTestTransactionOffset.class);
-            dbResetSequence.number().setValue(readNextTestDBversionId());
-            Persistence.service().persist(dbResetSequence);
+            dbResetSequence = new UnitOfWork(TransactionScopeOption.RequiresNew).execute(new Executable<PadTestTransactionOffset, RuntimeException>() {
+                @Override
+                public PadTestTransactionOffset execute() throws RuntimeException {
+                    PadTestTransactionOffset dbResetSequence = EntityFactory.create(PadTestTransactionOffset.class);
+                    dbResetSequence.number().setValue(readNextTestDBversionId());
+                    Persistence.service().persist(dbResetSequence);
+                    return dbResetSequence;
+                }
+            });
         }
         return String.valueOf(dbResetSequence.number().getValue());
     }

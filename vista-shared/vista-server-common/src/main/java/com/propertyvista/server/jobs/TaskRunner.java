@@ -23,7 +23,10 @@ import org.apache.commons.lang.Validate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.pyx4j.entity.server.Executable;
 import com.pyx4j.entity.server.Persistence;
+import com.pyx4j.entity.server.TransactionScopeOption;
+import com.pyx4j.entity.server.UnitOfWork;
 import com.pyx4j.server.contexts.Context;
 import com.pyx4j.server.contexts.InheritableUserContext;
 import com.pyx4j.server.contexts.Lifecycle;
@@ -48,6 +51,20 @@ public class TaskRunner {
     public static <T> T runInTargetNamespace(final String targetNamespace, final Callable<T> task) {
         Validate.notEmpty(targetNamespace);
         return NamespaceManager.runInTargetNamespace(targetNamespace, task);
+    }
+
+    public static <R, E extends Exception> R runUnitOfWorkInOperationstNamespace(TransactionScopeOption transactionScopeOption, Executable<R, E> task) {
+        return runUnitOfWorkInTargetNamespace(VistaNamespace.operationsNamespace, transactionScopeOption, task);
+    }
+
+    public static <R, E extends Exception> R runUnitOfWorkInTargetNamespace(final String targetNamespace, final TransactionScopeOption transactionScopeOption,
+            final Executable<R, E> task) {
+        return NamespaceManager.runInTargetNamespace(targetNamespace, new Callable<R>() {
+            @Override
+            public R call() throws E {
+                return new UnitOfWork(transactionScopeOption).execute(task);
+            }
+        });
     }
 
     public static <T> T runAutonomousTransation(final Callable<T> task) {

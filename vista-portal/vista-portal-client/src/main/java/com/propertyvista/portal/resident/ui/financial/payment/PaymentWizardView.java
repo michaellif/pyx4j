@@ -20,6 +20,7 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.propertyvista.domain.contact.AddressSimple;
 import com.propertyvista.domain.payment.LeasePaymentMethod;
+import com.propertyvista.dto.payment.ConvenienceFeeCalculationResponseTO;
 import com.propertyvista.portal.rpc.portal.resident.dto.financial.PaymentConvenienceFeeDTO;
 import com.propertyvista.portal.rpc.portal.resident.dto.financial.PaymentDTO;
 import com.propertyvista.portal.shared.ui.IWizardView;
@@ -32,7 +33,7 @@ public interface PaymentWizardView extends IWizardView<PaymentDTO> {
 
         void getProfiledPaymentMethods(AsyncCallback<List<LeasePaymentMethod>> callback);
 
-        void getConvenienceFee(AsyncCallback<PaymentConvenienceFeeDTO> callback, PaymentConvenienceFeeDTO inData);
+        void getConvenienceFee(AsyncCallback<ConvenienceFeeCalculationResponseTO> callback, PaymentConvenienceFeeDTO inData);
 
         Class<? extends Place> getTermsOfUsePlace();
 

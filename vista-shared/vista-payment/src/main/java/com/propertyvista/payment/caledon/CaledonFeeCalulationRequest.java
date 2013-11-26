@@ -31,9 +31,9 @@ public class CaledonFeeCalulationRequest {
     @Size(max = 8)
     public String terminalID;
 
-    @HttpRequestField(value = "reference_number")
+    @HttpRequestField(value = "fee_reference_number")
     @NotNull
-    @Size(max = 60)
+    @Size(max = 30)
     public String referenceNumber;
 
     @HttpRequestField(value = "card_product")

@@ -15,9 +15,12 @@ package com.propertyvista.biz.financial.payment;
 
 import java.math.BigDecimal;
 
+import com.pyx4j.commons.Key;
+import com.pyx4j.entity.shared.IPrimitive;
+
 import com.propertyvista.domain.payment.CreditCardInfo;
 import com.propertyvista.domain.payment.CreditCardInfo.CreditCardType;
-import com.propertyvista.dto.payment.ConvenienceFeeCalulationResponseTO;
+import com.propertyvista.dto.payment.ConvenienceFeeCalculationResponseTO;
 
 public class CreditCardFacadeImpl implements CreditCardFacade {
 
@@ -27,35 +30,43 @@ public class CreditCardFacadeImpl implements CreditCardFacade {
     }
 
     @Override
-    public String getTransactionreferenceNumber(ReferenceNumberPrefix uniquePrefix, String referenceNumber) {
-        return uniquePrefix.getValue() + referenceNumber;
+    public String getTransactionreferenceNumber(ReferenceNumberPrefix uniquePrefix, IPrimitive<Key> referenceNumber) {
+        return uniquePrefix.getValue() + PadTransactionUtils.toCaldeonTransactionId(referenceNumber);
+    }
+
+    @Override
+    public Key getVistaRecordId(ReferenceNumberPrefix uniquePrefix, String transactionreferenceNumber) {
+        return PadTransactionUtils.toVistaPaymentRecordId(transactionreferenceNumber.substring(uniquePrefix.getValue().length()));
     }
 
     @Override
     public CreditCardTransactionResponse realTimeSale(String merchantTerminalId, BigDecimal amount, BigDecimal convenienceFee,
-            ReferenceNumberPrefix uniquePrefix, String referenceNumber, CreditCardInfo cc) {
-        return CreditCardProcessor.realTimeSale(merchantTerminalId, amount, convenienceFee, uniquePrefix.getValue() + referenceNumber, cc);
+            ReferenceNumberPrefix uniquePrefix, IPrimitive<Key> referenceNumber, String convenienceFeeReferenceNumber, CreditCardInfo cc) {
+        return CreditCardProcessor.realTimeSale(merchantTerminalId, amount, convenienceFee, getTransactionreferenceNumber(uniquePrefix, referenceNumber),
+                convenienceFeeReferenceNumber, cc);
     }
 
     @Override
     public CreditCardTransactionResponse voidTransaction(String merchantTerminalId, BigDecimal amount, ReferenceNumberPrefix uniquePrefix,
-            String referenceNumber) {
-        return CreditCardProcessor.voidTransaction(merchantTerminalId, amount, uniquePrefix.getValue() + referenceNumber);
+            IPrimitive<Key> referenceNumber) {
+        return CreditCardProcessor.voidTransaction(merchantTerminalId, amount, getTransactionreferenceNumber(uniquePrefix, referenceNumber));
     }
 
     @Override
-    public String preAuthorization(String merchantTerminalId, BigDecimal amount, ReferenceNumberPrefix uniquePrefix, String referenceNumber, CreditCardInfo cc) {
-        return CreditCardProcessor.preAuthorization(merchantTerminalId, amount, uniquePrefix.getValue() + referenceNumber, cc);
+    public String preAuthorization(String merchantTerminalId, BigDecimal amount, ReferenceNumberPrefix uniquePrefix, IPrimitive<Key> referenceNumber,
+            CreditCardInfo cc) {
+        return CreditCardProcessor.preAuthorization(merchantTerminalId, amount, getTransactionreferenceNumber(uniquePrefix, referenceNumber), cc);
     }
 
     @Override
-    public void preAuthorizationReversal(String merchantTerminalId, ReferenceNumberPrefix uniquePrefix, String referenceNumber, CreditCardInfo cc) {
-        CreditCardProcessor.preAuthorizationReversal(merchantTerminalId, uniquePrefix.getValue() + referenceNumber, cc);
+    public void preAuthorizationReversal(String merchantTerminalId, ReferenceNumberPrefix uniquePrefix, IPrimitive<Key> referenceNumber, CreditCardInfo cc) {
+        CreditCardProcessor.preAuthorizationReversal(merchantTerminalId, getTransactionreferenceNumber(uniquePrefix, referenceNumber), cc);
     }
 
     @Override
-    public String completion(String merchantTerminalId, BigDecimal amount, ReferenceNumberPrefix uniquePrefix, String referenceNumber, CreditCardInfo cc) {
-        return CreditCardProcessor.completion(merchantTerminalId, amount, uniquePrefix.getValue() + referenceNumber, cc);
+    public String completion(String merchantTerminalId, BigDecimal amount, ReferenceNumberPrefix uniquePrefix, IPrimitive<Key> referenceNumber,
+            CreditCardInfo cc) {
+        return CreditCardProcessor.completion(merchantTerminalId, amount, getTransactionreferenceNumber(uniquePrefix, referenceNumber), cc);
     }
 
     @Override
@@ -69,7 +80,8 @@ public class CreditCardFacadeImpl implements CreditCardFacade {
     }
 
     @Override
-    public ConvenienceFeeCalulationResponseTO getConvenienceFee(String merchantTerminalId, CreditCardType cardType, BigDecimal amount) {
-        return CreditCardProcessor.getConvenienceFee(merchantTerminalId, cardType, amount);
+    public ConvenienceFeeCalculationResponseTO getConvenienceFee(String merchantTerminalId, ReferenceNumberPrefix uniquePrefix, CreditCardType cardType,
+            BigDecimal amount) {
+        return CreditCardProcessor.getConvenienceFee(merchantTerminalId, uniquePrefix, cardType, amount);
     }
 }

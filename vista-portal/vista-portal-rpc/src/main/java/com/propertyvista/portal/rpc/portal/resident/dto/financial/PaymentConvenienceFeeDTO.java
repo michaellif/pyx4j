@@ -29,8 +29,6 @@ import com.propertyvista.domain.payment.AbstractPaymentMethod;
 @Transient
 public interface PaymentConvenienceFeeDTO extends IEntity {
 
-    // Request Data:
-
     @NotNull
     @ToString(index = 0)
     AbstractPaymentMethod paymentMethod();
@@ -41,17 +39,4 @@ public interface PaymentConvenienceFeeDTO extends IEntity {
     @Editor(type = EditorType.money)
     IPrimitive<BigDecimal> amount();
 
-    // Result Data:
-
-    @ToString(index = 2)
-    @Format("$#,##0.00")
-    @Editor(type = EditorType.money)
-    IPrimitive<BigDecimal> fee();
-
-    @ToString(index = 3)
-    @Format("$#,##0.00")
-    @Editor(type = EditorType.money)
-    IPrimitive<BigDecimal> total();
-
-    IPrimitive<String> transactionNumber();
 }

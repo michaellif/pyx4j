@@ -101,7 +101,7 @@ public class CaledonPaymentProcessor implements IPaymentProcessor {
 
     @Override
     public PaymentResponse realTimeSale(Merchant merchant, PaymentRequest request) throws PaymentProcessingException {
-        if (request.convenienceFee().isNull()) {
+        if (request.convenienceFee().isNull() && request.convenienceFeeReferenceNumber().isNull()) {
             return realTimeSaleSimple(merchant, request);
         } else {
             return realTimeSaleConvenienceFee(merchant, request);
@@ -127,6 +127,7 @@ public class CaledonPaymentProcessor implements IPaymentProcessor {
 
         crequest.terminalID = merchant.terminalID().getValue();
         crequest.referenceNumber = request.referenceNumber().getValue();
+        crequest.referenceNumberFeeCalulation = request.convenienceFeeReferenceNumber().getValue();
         crequest.setAmount(request.amount().getValue());
         crequest.setFeeAmount(request.convenienceFee().getValue());
         crequest.setTotalAmount(request.amount().getValue().add(request.convenienceFee().getValue()));
@@ -141,15 +142,14 @@ public class CaledonPaymentProcessor implements IPaymentProcessor {
 
         CaledonPaymentWithFeeResponse cresponse = caledonConvenienceFeeClient().transaction(crequest);
 
-        FeeCalulationResponse response = EntityFactory.create(FeeCalulationResponse.class);
+        PaymentResponse response = EntityFactory.create(PaymentResponse.class);
         response.success().setValue("0000".equals(cresponse.responseCode));
         response.code().setValue(cresponse.responseCode);
         response.message().setValue(cresponse.responseText);
-        //response.authorizationNumber().setValue(cresponse.authorizationNumber);
 
-        if (response.success().getValue()) {
-            response.feeAmount().setValue(cresponse.getFeeAmount());
-        }
+        //TODO pars the amount values returned by caledon 
+        response.authorizationNumber().setValue(cresponse.responseText + " " + cresponse.responseTextFee);
+
         return response;
     }
 
@@ -330,10 +330,10 @@ public class CaledonPaymentProcessor implements IPaymentProcessor {
         response.success().setValue("0000".equals(cresponse.responseCode));
         response.code().setValue(cresponse.responseCode);
         response.message().setValue(cresponse.responseText);
-        //response.authorizationNumber().setValue(cresponse.authorizationNumber);
 
         if (response.success().getValue()) {
             response.feeAmount().setValue(cresponse.getFeeAmount());
+            response.totalAmount().setValue(cresponse.getTotalAmount());
         }
         return response;
     }

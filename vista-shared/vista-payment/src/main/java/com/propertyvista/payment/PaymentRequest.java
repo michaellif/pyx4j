@@ -34,4 +34,7 @@ public interface PaymentRequest extends IEntity {
     @Length(60)
     IPrimitive<String> referenceNumber();
 
+    @Length(30)
+    IPrimitive<String> convenienceFeeReferenceNumber();
+
 }

@@ -31,7 +31,7 @@ public interface FeeCalulationRequest extends IEntity {
 
     IPrimitive<BigDecimal> amount();
 
-    @Length(60)
+    @Length(30)
     IPrimitive<String> referenceNumber();
 
 }

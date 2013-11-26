@@ -17,17 +17,23 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.pyx4j.commons.LogicalDate;
+import com.pyx4j.commons.Validate;
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.config.server.SystemDateManager;
 import com.pyx4j.entity.server.CompensationHandler;
+import com.pyx4j.entity.server.Executable;
 import com.pyx4j.entity.server.Persistence;
+import com.pyx4j.entity.server.TransactionScopeOption;
 import com.pyx4j.entity.server.UnitOfWork;
+import com.pyx4j.entity.shared.EntityFactory;
 
 import com.propertyvista.biz.financial.payment.CreditCardFacade.ReferenceNumberPrefix;
 import com.propertyvista.biz.system.OperationsAlertFacade;
 import com.propertyvista.domain.financial.MerchantAccount;
 import com.propertyvista.domain.financial.PaymentRecord;
 import com.propertyvista.domain.payment.CreditCardInfo;
+import com.propertyvista.operations.domain.payment.cards.CardTransactionRecord;
+import com.propertyvista.server.jobs.TaskRunner;
 
 class PaymentCreditCard {
 
@@ -36,10 +42,47 @@ class PaymentCreditCard {
     static void processPayment(final PaymentRecord paymentRecord) {
         final MerchantAccount account = PaymentUtils.retrieveValidMerchantAccount(paymentRecord);
 
+        final CardTransactionRecord transactionRecord = TaskRunner.runUnitOfWorkInOperationstNamespace(TransactionScopeOption.RequiresNew,
+                new Executable<CardTransactionRecord, RuntimeException>() {
+                    @Override
+                    public CardTransactionRecord execute() {
+                        CardTransactionRecord transactionRecord;
+                        if (paymentRecord.convenienceFeeReferenceNumber().isNull()) {
+                            transactionRecord = EntityFactory.create(CardTransactionRecord.class);
+                            transactionRecord.amount().setValue(paymentRecord.amount().getValue());
+                            transactionRecord.cardType().setValue(paymentRecord.paymentMethod().details().<CreditCardInfo> cast().cardType().getValue());
+                            transactionRecord.merchantTerminalId().setValue(account.merchantTerminalId().getValue());
+                        } else {
+                            transactionRecord = Persistence.service().retrieve(
+                                    CardTransactionRecord.class,
+                                    ServerSideFactory.create(CreditCardFacade.class).getVistaRecordId(ReferenceNumberPrefix.RentPayments,
+                                            paymentRecord.convenienceFeeReferenceNumber().getValue()));
+                            Validate.isEquals(transactionRecord.amount().getValue(), transactionRecord.amount().getValue(), "Convenience Fee Reference");
+                        }
+                        transactionRecord.paymentTransactionId().setValue(
+                                ServerSideFactory.create(CreditCardFacade.class).getTransactionreferenceNumber(ReferenceNumberPrefix.RentPayments,
+                                        paymentRecord.id()));
+                        Persistence.service().persist(transactionRecord);
+                        return transactionRecord;
+                    }
+                });
+
         final CreditCardTransactionResponse saleResponse = ServerSideFactory.create(CreditCardFacade.class).realTimeSale(
                 account.merchantTerminalId().getValue(), //
-                paymentRecord.amount().getValue(), paymentRecord.convenienceFee().getValue(), //
-                ReferenceNumberPrefix.RentPayments, paymentRecord.id().getStringView(), paymentRecord.paymentMethod().details().<CreditCardInfo> cast());
+                paymentRecord.amount().getValue(),
+                paymentRecord.convenienceFee().getValue(), //
+                ReferenceNumberPrefix.RentPayments, paymentRecord.id(), paymentRecord.convenienceFeeReferenceNumber().getValue(),
+                paymentRecord.paymentMethod().details().<CreditCardInfo> cast());
+
+        TaskRunner.runUnitOfWorkInOperationstNamespace(TransactionScopeOption.RequiresNew, new Executable<Void, RuntimeException>() {
+            @Override
+            public Void execute() {
+                transactionRecord.saleResponseCode().setValue(saleResponse.code().getValue());
+                transactionRecord.saleResponseText().setValue(saleResponse.message().getValue());
+                Persistence.service().persist(transactionRecord);
+                return null;
+            }
+        });
 
         if (saleResponse.success().getValue()) {
             log.debug("ccTransaction accepted {}", saleResponse);
@@ -62,7 +105,7 @@ class PaymentCreditCard {
                     try {
                         CreditCardTransactionResponse voidResponse = ServerSideFactory.create(CreditCardFacade.class).voidTransaction(
                                 account.merchantTerminalId().getValue(), paymentRecord.amount().getValue(), //
-                                ReferenceNumberPrefix.RentPayments, paymentRecord.id().getStringView());
+                                ReferenceNumberPrefix.RentPayments, paymentRecord.id());
 
                         if (voidResponse.success().getValue()) {
                             log.info("transaction {} successfully voided {}", paymentRecord.id(), voidResponse.message());

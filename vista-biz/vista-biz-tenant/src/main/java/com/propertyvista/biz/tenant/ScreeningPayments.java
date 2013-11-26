@@ -88,7 +88,7 @@ class ScreeningPayments {
         // Do authorization
         try {
             String authorizationNumber = ServerSideFactory.create(CreditCardFacade.class).preAuthorization(merchantTerminalId(),
-                    transaction.amount().getValue(), ReferenceNumberPrefix.EquifaxScreening, transaction.getPrimaryKey().toString(),
+                    transaction.amount().getValue(), ReferenceNumberPrefix.EquifaxScreening, transaction.id(),
                     (CreditCardInfo) transaction.paymentMethod().details().cast());
 
             transaction.status().setValue(CustomerCreditCheckTransaction.TransactionStatus.Authorized);
@@ -130,7 +130,7 @@ class ScreeningPayments {
 
         try {
             ServerSideFactory.create(CreditCardFacade.class).preAuthorizationReversal(merchantTerminalId(), ReferenceNumberPrefix.EquifaxScreening,
-                    transaction.getPrimaryKey().toString(), (CreditCardInfo) transaction.paymentMethod().details().cast());
+                    transaction.id(), (CreditCardInfo) transaction.paymentMethod().details().cast());
             transaction.transactionDate().setValue(SystemDateManager.getDate());
             transaction.status().setValue(CustomerCreditCheckTransaction.TransactionStatus.Reversal);
 
@@ -160,8 +160,7 @@ class ScreeningPayments {
 
         try {
             String authorizationNumber = ServerSideFactory.create(CreditCardFacade.class).completion(merchantTerminalId(), transaction.amount().getValue(),
-                    ReferenceNumberPrefix.EquifaxScreening, transaction.getPrimaryKey().toString(),
-                    (CreditCardInfo) transaction.paymentMethod().details().cast());
+                    ReferenceNumberPrefix.EquifaxScreening, transaction.id(), (CreditCardInfo) transaction.paymentMethod().details().cast());
             transaction.transactionAuthorizationNumber().setValue(authorizationNumber);
             transaction.transactionDate().setValue(SystemDateManager.getDate());
             transaction.status().setValue(CustomerCreditCheckTransaction.TransactionStatus.Cleared);

@@ -25,4 +25,6 @@ public interface FeeCalulationResponse extends PaymentResponse {
 
     IPrimitive<BigDecimal> feeAmount();
 
+    IPrimitive<BigDecimal> totalAmount();
+
 }

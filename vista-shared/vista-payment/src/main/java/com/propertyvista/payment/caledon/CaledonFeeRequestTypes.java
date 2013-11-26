@@ -17,7 +17,9 @@ public enum CaledonFeeRequestTypes {
 
     FeeCalulation("C"),
 
-    PaymentWithFee("P");
+    PaymentWithFee("P"),
+
+    Void("V");
 
     private final String intrfaceId;
 

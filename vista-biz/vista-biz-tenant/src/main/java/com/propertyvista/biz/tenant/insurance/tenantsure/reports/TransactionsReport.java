@@ -94,7 +94,7 @@ public class TransactionsReport implements Report {
                         transactionReportLine.amount().setValue(transaction.amount().getValue());
                         transactionReportLine.transactionReferenceNumber().setValue(
                                 ServerSideFactory.create(CreditCardFacade.class).getTransactionreferenceNumber(ReferenceNumberPrefix.TenantSure,
-                                        transaction.id().getStringView()));
+                                        transaction.id()));
 
                         reportGenerator.reportEntity(formatter, transactionReportLine);
                         executionMonitor.addProcessedEvent(EXECUTION_MONITOR_SECTION_NAME);

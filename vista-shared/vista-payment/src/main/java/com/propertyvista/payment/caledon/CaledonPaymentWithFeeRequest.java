@@ -24,12 +24,17 @@ public class CaledonPaymentWithFeeRequest {
 
     @HttpRequestField(value = "type", first = true)
     @NotNull
-    public final String type = CaledonFeeRequestTypes.PaymentWithFee.getIntrfaceValue();
+    public String type = CaledonFeeRequestTypes.PaymentWithFee.getIntrfaceValue();
 
     @HttpRequestField(value = "terminal_id")
     @NotNull
     @Size(max = 8)
     public String terminalID;
+
+    @HttpRequestField(value = "fee_reference_number")
+    @NotNull
+    @Size(max = 30)
+    public String referenceNumberFeeCalulation;
 
     @HttpRequestField(value = "reference_number")
     @NotNull
