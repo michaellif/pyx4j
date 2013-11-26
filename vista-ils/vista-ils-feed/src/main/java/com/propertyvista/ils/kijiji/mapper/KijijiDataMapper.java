@@ -60,7 +60,7 @@ public class KijijiDataMapper {
 
     private Image createImage(MediaFile media) {
         Image image = factory.createILSUnitImagesImage();
-        image.setSourceUrl(KijijiMapperUtils.getMediaImgUrl(media.getPrimaryKey().asLong(), ThumbnailSize.large));
+        image.setSourceUrl(KijijiMapperUtils.getMediaImgUrl(media, ThumbnailSize.large));
         image.setClientImageId(media.getPrimaryKey().toString());
         image.setName(media.caption().getValue());
 

@@ -18,11 +18,12 @@ import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 
 import com.propertyvista.config.VistaDeployment;
+import com.propertyvista.domain.MediaFile;
 import com.propertyvista.domain.media.ThumbnailSize;
 import com.propertyvista.domain.security.common.VistaApplication;
-import com.propertyvista.domain.site.SiteLogoImageResource;
 import com.propertyvista.domain.site.SiteDescriptor;
 import com.propertyvista.domain.site.SiteImageResource;
+import com.propertyvista.domain.site.SiteLogoImageResource;
 import com.propertyvista.portal.rpc.DeploymentConsts;
 import com.propertyvista.portal.rpc.portal.ImageConsts;
 import com.propertyvista.shared.i18n.CompiledLocale;
@@ -50,12 +51,13 @@ public class KijijiMapperUtils {
     }
 
     public static String getSiteImageResourceUrl(SiteImageResource resource) {
-        return getPortalHomeUrl() + "/" + resource.id().toString() + "/" + resource.fileName().getStringView()
+        return getPortalHomeUrl() + "/" + resource.id().getStringView() + "/" + resource.fileName().getStringView()
                 + DeploymentConsts.siteImageResourceServletMapping;
     }
 
-    public static String getMediaImgUrl(long mediaId, ThumbnailSize size) {
-        return getPortalHomeUrl() + "/" + DeploymentConsts.mediaImagesServletMapping + mediaId + "/" + size.name() + "." + ImageConsts.THUMBNAIL_TYPE;
+    public static String getMediaImgUrl(MediaFile media, ThumbnailSize size) {
+        return getPortalHomeUrl() + "/" + DeploymentConsts.mediaImagesServletMapping + media.blobKey().getStringView() + "/" + size.name() + "."
+                + ImageConsts.THUMBNAIL_TYPE;
     }
 
     public static String getPortalHomeUrl() {
