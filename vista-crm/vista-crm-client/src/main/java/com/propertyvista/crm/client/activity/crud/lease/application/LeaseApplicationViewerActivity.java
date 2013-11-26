@@ -25,12 +25,14 @@ import com.pyx4j.entity.rpc.AbstractCrudService;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.rpc.shared.VoidSerializable;
+import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.rpc.CrudAppPlace;
 
 import com.propertyvista.common.client.ui.components.HandledErrorAsyncCallback;
 import com.propertyvista.crm.client.CrmSite;
 import com.propertyvista.crm.client.activity.crud.lease.common.LeaseViewerActivityBase;
 import com.propertyvista.crm.client.ui.crud.lease.application.LeaseApplicationViewerView;
+import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.crm.rpc.dto.LeaseApplicationActionDTO;
 import com.propertyvista.crm.rpc.dto.LeaseApplicationActionDTO.Action;
 import com.propertyvista.crm.rpc.services.lease.LeaseApplicationViewerCrudService;
@@ -44,16 +46,28 @@ public class LeaseApplicationViewerActivity extends LeaseViewerActivityBase<Leas
 
     private BigDecimal creditCheckAmount;
 
+    private LeaseApplicationDTO currentValue;
+
     @SuppressWarnings("unchecked")
     public LeaseApplicationViewerActivity(CrudAppPlace place) {
-        super(place,  CrmSite.getViewFactory().getView(LeaseApplicationViewerView.class), (AbstractCrudService<LeaseApplicationDTO>) GWT
+        super(place, CrmSite.getViewFactory().getView(LeaseApplicationViewerView.class), (AbstractCrudService<LeaseApplicationDTO>) GWT
                 .create(LeaseApplicationViewerCrudService.class));
     }
 
     @Override
     protected void populateView(LeaseApplicationDTO result) {
         super.populateView(result);
+
+        currentValue = result;
+
         creditCheckAmount = result.leaseApproval().rentAmount().getValue();
+    }
+
+    // Views:
+
+    @Override
+    public void viewLease() {
+        AppSite.getPlaceController().goTo(new CrmSiteMap.Tenants.Lease().formViewerPlace(currentValue.getPrimaryKey()));
     }
 
     // Actions:

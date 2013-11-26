@@ -60,7 +60,6 @@ import com.propertyvista.crm.client.ui.components.boxes.ReasonBox;
 import com.propertyvista.crm.client.ui.crud.billing.adjustments.LeaseAdjustmentLister;
 import com.propertyvista.crm.client.ui.crud.billing.bill.BillLister;
 import com.propertyvista.crm.client.ui.crud.billing.payment.PaymentLister;
-import com.propertyvista.crm.client.ui.crud.customer.tenant.TenantViewerView;
 import com.propertyvista.crm.client.ui.crud.lease.common.LeaseViewerViewImplBase;
 import com.propertyvista.crm.client.ui.crud.lease.common.deposit.DepositLifecycleLister;
 import com.propertyvista.crm.client.ui.crud.lease.common.dialogs.N4GenerationQueryDialog;
@@ -97,6 +96,8 @@ public class LeaseViewerViewImpl extends LeaseViewerViewImplBase<LeaseDTO> imple
 
     private final MenuItem viewApplication;
 
+    private final MenuItem viewDeletedPapsAction;
+
     private final MenuItem sendMailAction;
 
     private final MenuItem runBillAction;
@@ -129,8 +130,6 @@ public class LeaseViewerViewImpl extends LeaseViewerViewImplBase<LeaseDTO> imple
 
     private final MenuItem maintenanceAction;
 
-    private final MenuItem viewDeletedPapsAction;
-
     private final MenuItem yardiImportAction;
 
     private MenuItem issueN4Action;
@@ -149,17 +148,26 @@ public class LeaseViewerViewImpl extends LeaseViewerViewImplBase<LeaseDTO> imple
             }
         });
 
-        // Actions:
+        // Views:
 
         viewApplication = new MenuItem(i18n.tr("View Application"), new Command() {
             @Override
             public void execute() {
-                AppSite.getPlaceController().goTo(new CrmSiteMap.Tenants.LeaseApplication().formViewerPlace(getForm().getValue().getPrimaryKey()));
+                ((LeaseViewerView.Presenter) getPresenter()).viewApplication();
             }
         });
-        if (VistaTODO.VISTA_2108_View_Lease_Application) {
-            addAction(viewApplication);
-        }
+        addView(viewApplication);
+
+        viewDeletedPapsAction = new MenuItem(i18n.tr("View Deleted PAPs"), new Command() {
+            @Override
+            public void execute() {
+                ((LeaseViewerView.Presenter) getPresenter()).viewDeletedPaps(null);
+            }
+        });
+
+        addView(viewDeletedPapsAction);
+
+        // Actions:
 
         sendMailAction = new MenuItem(i18n.tr("Send Mail..."), new Command() {
             @Override
@@ -357,19 +365,10 @@ public class LeaseViewerViewImpl extends LeaseViewerViewImplBase<LeaseDTO> imple
         maintenanceAction = new MenuItem(i18n.tr("Create Maintenance Request"), new Command() {
             @Override
             public void execute() {
-                ((TenantViewerView.Presenter) getPresenter()).goToCreateMaintenanceRequest();
+                ((LeaseViewerView.Presenter) getPresenter()).goToCreateMaintenanceRequest();
             }
         });
-//        addAction(maintenanceAction);
-
-        viewDeletedPapsAction = new MenuItem(i18n.tr("View Deleted PAPs"), new Command() {
-            @Override
-            public void execute() {
-                ((LeaseViewerView.Presenter) getPresenter()).viewDeletedPaps(null);
-            }
-        });
-
-        addAction(viewDeletedPapsAction);
+        addAction(maintenanceAction);
 
         // Renewing stuff : ---------------------------------------------------------------------------------------------------
 
@@ -458,9 +457,8 @@ public class LeaseViewerViewImpl extends LeaseViewerViewImplBase<LeaseDTO> imple
 
     @Override
     public void reset() {
-        if (VistaTODO.VISTA_2108_View_Lease_Application) {
-            setActionVisible(viewApplication, false);
-        }
+        setViewVisible(viewApplication, false);
+
         setActionVisible(sendMailAction, false);
         setActionVisible(runBillAction, false);
         setActionVisible(noticeAction, false);
@@ -486,9 +484,8 @@ public class LeaseViewerViewImpl extends LeaseViewerViewImplBase<LeaseDTO> imple
         // set buttons state:
         CompletionType completion = value.completion().getValue();
 
-        if (VistaTODO.VISTA_2108_View_Lease_Application) {
-            setActionVisible(viewApplication, !value.leaseApplication().isNull());
-        }
+        setViewVisible(viewApplication, !value.leaseApplication().isNull());
+
         setActionVisible(sendMailAction, status.isCurrent());
         setActionVisible(runBillAction, status.isCurrent());
 

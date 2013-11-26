@@ -60,6 +60,10 @@ public class CrmViewerViewImplBase<E extends IEntity> extends AbstractViewer<E> 
 
     private MenuItem finalizeMenu;
 
+    private Button viewsButton;
+
+    private Button.ButtonMenuBar viewsMenu;
+
     private Button actionsButton;
 
     private Button.ButtonMenuBar actionsMenu;
@@ -93,6 +97,13 @@ public class CrmViewerViewImplBase<E extends IEntity> extends AbstractViewer<E> 
             });
             addHeaderToolbarItem(editButton);
         }
+
+        // Views button:
+        viewsButton = new Button(i18n.tr("Views"));
+        viewsMenu = viewsButton.createMenu();
+        viewsButton.setMenu(viewsMenu);
+        addHeaderToolbarItem(viewsButton);
+        viewsButton.setVisible(false);
 
         // Actions button:
         actionsButton = new Button(i18n.tr("Actions"));
@@ -162,6 +173,24 @@ public class CrmViewerViewImplBase<E extends IEntity> extends AbstractViewer<E> 
         actionsButton.removeStyleName(DefaultPaneTheme.StyleName.HighlightedButton.name());
     }
 
+    public MenuItemSeparator addViewsSeparator() {
+        return viewsMenu.addSeparator();
+    }
+
+    public void addView(MenuItem view) {
+        viewsMenu.addItem(view);
+    }
+
+    public void removeView(MenuItem view) {
+        viewsMenu.removeItem(view);
+        viewsButton.setVisible(!viewsMenu.isMenuEmpty());
+    }
+
+    public void setViewVisible(MenuItem view, boolean visible) {
+        view.setVisible(visible);
+        viewsButton.setVisible(!viewsMenu.isMenuEmpty());
+    }
+
     public void setNotesEnabled(boolean enabled) {
         notesButton.setEnabled(enabled);
     }
@@ -209,8 +238,11 @@ public class CrmViewerViewImplBase<E extends IEntity> extends AbstractViewer<E> 
     @Override
     public void reset() {
         setFinalizationVisible(false);
+
+        viewsButton.setVisible(false);
         actionsButton.setVisible(false);
         resetActionHighlighting();
+
         super.reset();
     }
 
@@ -224,7 +256,9 @@ public class CrmViewerViewImplBase<E extends IEntity> extends AbstractViewer<E> 
 
         setEditingEnabled(super.getPresenter().canEdit());
 
+        viewsButton.setVisible(!viewsMenu.isMenuEmpty());
         actionsButton.setVisible(!actionsMenu.isMenuEmpty());
+
         populateBreadcrumbs(value);
     }
 

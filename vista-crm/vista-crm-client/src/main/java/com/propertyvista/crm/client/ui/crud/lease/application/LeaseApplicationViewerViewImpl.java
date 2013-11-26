@@ -25,7 +25,6 @@ import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.security.shared.SecurityController;
-import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.client.ui.dialogs.EntitySelectorListDialog;
 import com.pyx4j.widgets.client.Button;
 import com.pyx4j.widgets.client.dialog.Dialog;
@@ -35,7 +34,6 @@ import com.pyx4j.widgets.client.dialog.YesNoOption;
 import com.propertyvista.crm.client.ui.components.boxes.ReasonBox;
 import com.propertyvista.crm.client.ui.crud.lease.common.LeaseViewerViewBase;
 import com.propertyvista.crm.client.ui.crud.lease.common.LeaseViewerViewImplBase;
-import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.crm.rpc.dto.LeaseApplicationActionDTO;
 import com.propertyvista.crm.rpc.dto.LeaseApplicationActionDTO.Action;
 import com.propertyvista.domain.customizations.CountryOfOperation;
@@ -91,16 +89,16 @@ public class LeaseApplicationViewerViewImpl extends LeaseViewerViewImplBase<Leas
         });
         addHeaderToolbarItem(editButton.asWidget());
 
-        // Actions:
+        // Views:
         viewLease = new MenuItem(i18n.tr("View Lease"), new Command() {
             @Override
             public void execute() {
-                AppSite.getPlaceController().goTo(new CrmSiteMap.Tenants.Lease().formViewerPlace(getForm().getValue().getPrimaryKey()));
+                ((LeaseApplicationViewerView.Presenter) getPresenter()).viewLease();
             }
         });
-        if (VistaTODO.VISTA_2108_View_Lease_Application) {
-            addAction(viewLease);
-        }
+        addView(viewLease);
+
+        // Actions:
 
         onlineApplication = new MenuItem(i18n.tr("Start Online Application"), new Command() {
             @Override
@@ -245,9 +243,8 @@ public class LeaseApplicationViewerViewImpl extends LeaseViewerViewImplBase<Leas
 
     @Override
     public void reset() {
-        if (VistaTODO.VISTA_2108_View_Lease_Application) {
-            setActionVisible(viewLease, false);
-        }
+        setViewVisible(viewLease, false);
+
         setActionVisible(onlineApplication, false);
         setActionVisible(inviteAction, false);
         setActionVisible(checkAction, false);
@@ -266,9 +263,8 @@ public class LeaseApplicationViewerViewImpl extends LeaseViewerViewImplBase<Leas
         Status status = value.leaseApplication().status().getValue();
 
         // set buttons state:
-        if (VistaTODO.VISTA_2108_View_Lease_Application) {
-            setActionVisible(viewLease, status.isCurrent());
-        }
+        setViewVisible(viewLease, status.isCurrent());
+
         setActionVisible(onlineApplication, status == Status.Created);
         setActionVisible(inviteAction, status == Status.OnlineApplication);
         setActionVisible(checkAction, status.isDraft());

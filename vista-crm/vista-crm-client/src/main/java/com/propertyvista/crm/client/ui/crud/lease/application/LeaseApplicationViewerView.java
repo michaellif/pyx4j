@@ -31,6 +31,8 @@ public interface LeaseApplicationViewerView extends LeaseViewerViewBase<LeaseApp
 
     interface Presenter extends LeaseViewerViewBase.Presenter {
 
+        void viewLease();
+
         void startOnlineApplication();
 
         void inviteUsers(List<LeaseTermParticipant<?>> users);

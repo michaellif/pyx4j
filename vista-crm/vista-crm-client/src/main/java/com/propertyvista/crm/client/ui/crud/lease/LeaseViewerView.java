@@ -73,7 +73,11 @@ public interface LeaseViewerView extends LeaseViewerViewBase<LeaseDTO> {
 
         void issueN4(N4GenerationQueryDTO n4GenerationQuery);
 
+        void viewApplication();
+
         void viewDeletedPaps(Tenant tenantId);
+
+        void goToCreateMaintenanceRequest();
     }
 
     ILister<DepositLifecycleDTO> getDepositListerView();

@@ -43,6 +43,7 @@ import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.crm.rpc.dto.billing.BillDataDTO;
 import com.propertyvista.crm.rpc.dto.legal.n4.N4GenerationQueryDTO;
 import com.propertyvista.crm.rpc.dto.occupancy.opconstraints.CancelMoveOutConstraintsDTO;
+import com.propertyvista.crm.rpc.services.MaintenanceCrudService;
 import com.propertyvista.crm.rpc.services.billing.BillingExecutionService;
 import com.propertyvista.crm.rpc.services.billing.LeaseAdjustmentCrudService;
 import com.propertyvista.crm.rpc.services.billing.PaymentCrudService;
@@ -52,6 +53,7 @@ import com.propertyvista.crm.rpc.services.lease.common.LeaseTermCrudService;
 import com.propertyvista.domain.communication.EmailTemplateType;
 import com.propertyvista.domain.financial.BillingAccount;
 import com.propertyvista.domain.payment.AutopayAgreement;
+import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.security.VistaCrmBehavior;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.LeaseAdjustment;
@@ -305,5 +307,17 @@ public class LeaseViewerActivity extends LeaseViewerActivityBase<LeaseDTO> imple
         place.queryArg(proto.isDeleted().getPath().toString(), Boolean.TRUE.toString());
 
         AppSite.getPlaceController().goTo(place);
+    }
+
+    @Override
+    public void viewApplication() {
+        AppSite.getPlaceController().goTo(new CrmSiteMap.Tenants.LeaseApplication().formViewerPlace(currentValue.getPrimaryKey()));
+    }
+
+    @Override
+    public void goToCreateMaintenanceRequest() {
+        MaintenanceCrudService.MaintenanceInitializationData id = EntityFactory.create(MaintenanceCrudService.MaintenanceInitializationData.class);
+        id.building().set(EntityFactory.createIdentityStub(Building.class, currentValue.unit().building().getPrimaryKey()));
+        AppSite.getPlaceController().goTo(new CrmSiteMap.Tenants.MaintenanceRequest().formNewItemPlace(id));
     }
 }
