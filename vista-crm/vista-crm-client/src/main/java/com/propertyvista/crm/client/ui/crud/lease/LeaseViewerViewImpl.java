@@ -365,7 +365,7 @@ public class LeaseViewerViewImpl extends LeaseViewerViewImplBase<LeaseDTO> imple
         maintenanceAction = new MenuItem(i18n.tr("Create Maintenance Request"), new Command() {
             @Override
             public void execute() {
-                ((LeaseViewerView.Presenter) getPresenter()).goToCreateMaintenanceRequest();
+                ((LeaseViewerView.Presenter) getPresenter()).createMaintenanceRequest();
             }
         });
         addAction(maintenanceAction);

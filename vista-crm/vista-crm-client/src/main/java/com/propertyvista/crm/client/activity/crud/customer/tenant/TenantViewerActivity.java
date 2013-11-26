@@ -65,7 +65,7 @@ public class TenantViewerActivity extends CrmViewerActivity<TenantDTO> implement
     }
 
     @Override
-    public void goToCreateScreening() {
+    public void createScreening() {
         CustomerScreeningCrudService.CustomerScreeningInitializationData id = EntityFactory
                 .create(CustomerScreeningCrudService.CustomerScreeningInitializationData.class);
         id.screene().set(screeningCustomer);
@@ -73,14 +73,14 @@ public class TenantViewerActivity extends CrmViewerActivity<TenantDTO> implement
     }
 
     @Override
-    public void goToCreateMaintenanceRequest() {
+    public void createMaintenanceRequest() {
         MaintenanceCrudService.MaintenanceInitializationData id = EntityFactory.create(MaintenanceCrudService.MaintenanceInitializationData.class);
         id.tenant().set(EntityFactory.createIdentityStub(Tenant.class, getEntityId()));
         AppSite.getPlaceController().goTo(new CrmSiteMap.Tenants.MaintenanceRequest().formNewItemPlace(id));
     }
 
     @Override
-    public void goToChangePassword(Key tenantPrincipalPk, String tenantName) {
+    public void changePassword(Key tenantPrincipalPk, String tenantName) {
         if (tenantPrincipalPk != null) {
             AppPlace passwordChangePlace = new CrmSiteMap.PasswordChange();
             passwordChangePlace.queryArg(PasswordChangeView.Presenter.PRINCIPAL_PK_ARG, tenantPrincipalPk.toString());
@@ -107,7 +107,7 @@ public class TenantViewerActivity extends CrmViewerActivity<TenantDTO> implement
     }
 
     @Override
-    public void getPortalRegistrationInformation() {
+    public void retrievePortalRegistrationInformation() {
         ((TenantCrudService) getService()).getPortalAccessInformation(new DefaultAsyncCallback<TenantPortalAccessInformationDTO>() {
             @Override
             public void onSuccess(TenantPortalAccessInformationDTO result) {

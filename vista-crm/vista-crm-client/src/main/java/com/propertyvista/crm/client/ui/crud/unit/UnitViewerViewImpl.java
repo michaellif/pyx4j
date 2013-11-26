@@ -50,6 +50,8 @@ public class UnitViewerViewImpl extends CrmViewerViewImplBase<AptUnitDTO> implem
 
     private final MenuItem makePendingAction;
 
+    private final MenuItem maintenanceAction;
+
     private boolean canScopeOffMarket;
 
     private boolean canScopeAvailable;
@@ -101,15 +103,13 @@ public class UnitViewerViewImpl extends CrmViewerViewImplBase<AptUnitDTO> implem
             public void execute() {
                 Lease lease = getForm().getValue().lease();
                 if (!lease.isNull() && (!lease.completion().isNull() && lease.actualMoveOut().isNull())) {
-                    MessageDialog.show(i18n.tr("Caution"), i18n.tr("This unit is not freed completely. Proceed with caution!"), Type.Warning,
-                            new OkOption() {
-                                @Override
-                                public boolean onClickOk() {
-                                    new ScopeDialog((UnitViewerView.Presenter) getPresenter(), canScopeAvailable, canScopeOffMarket, minRenovationEndDate)
-                                            .show();
-                                    return true;
-                                }
-                            });
+                    MessageDialog.show(i18n.tr("Caution"), i18n.tr("This unit is not freed completely. Proceed with caution!"), Type.Warning, new OkOption() {
+                        @Override
+                        public boolean onClickOk() {
+                            new ScopeDialog((UnitViewerView.Presenter) getPresenter(), canScopeAvailable, canScopeOffMarket, minRenovationEndDate).show();
+                            return true;
+                        }
+                    });
                 } else {
                     new ScopeDialog((UnitViewerView.Presenter) getPresenter(), canScopeAvailable, canScopeOffMarket, minRenovationEndDate).show();
                 }
@@ -132,6 +132,14 @@ public class UnitViewerViewImpl extends CrmViewerViewImplBase<AptUnitDTO> implem
         if (!VistaFeatures.instance().yardiIntegration()) {
             addAction(makePendingAction);
         }
+
+        maintenanceAction = new MenuItem(i18n.tr("Create Maintenance Request"), new Command() {
+            @Override
+            public void execute() {
+                ((UnitViewerView.Presenter) getPresenter()).createMaintenanceRequest();
+            }
+        });
+        addAction(maintenanceAction);
     }
 
     @Override

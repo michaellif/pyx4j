@@ -59,7 +59,7 @@ public class TenantViewerViewImpl extends CrmViewerViewImplBase<TenantDTO> imple
         passwordAction = new MenuItem(i18n.tr("Change Password"), new Command() {
             @Override
             public void execute() {
-                ((TenantViewerView.Presenter) getPresenter()).goToChangePassword(getForm().getValue().customer().user().getPrimaryKey(), getForm().getValue()
+                ((TenantViewerView.Presenter) getPresenter()).changePassword(getForm().getValue().customer().user().getPrimaryKey(), getForm().getValue()
                         .customer().person().getStringView());
             }
         });
@@ -68,7 +68,7 @@ public class TenantViewerViewImpl extends CrmViewerViewImplBase<TenantDTO> imple
         screeningAction = new MenuItem(i18n.tr("Create Screening"), new Command() {
             @Override
             public void execute() {
-                ((TenantViewerView.Presenter) getPresenter()).goToCreateScreening();
+                ((TenantViewerView.Presenter) getPresenter()).createScreening();
             }
         });
         addAction(screeningAction);
@@ -76,7 +76,7 @@ public class TenantViewerViewImpl extends CrmViewerViewImplBase<TenantDTO> imple
         maintenanceAction = new MenuItem(i18n.tr("Create Maintenance Request"), new Command() {
             @Override
             public void execute() {
-                ((TenantViewerView.Presenter) getPresenter()).goToCreateMaintenanceRequest();
+                ((TenantViewerView.Presenter) getPresenter()).createMaintenanceRequest();
             }
         });
         addAction(maintenanceAction);
@@ -84,7 +84,7 @@ public class TenantViewerViewImpl extends CrmViewerViewImplBase<TenantDTO> imple
         registrationAction = new MenuItem(i18n.tr("Portal Registration Information"), new Command() {
             @Override
             public void execute() {
-                ((TenantViewerView.Presenter) getPresenter()).getPortalRegistrationInformation();
+                ((TenantViewerView.Presenter) getPresenter()).retrievePortalRegistrationInformation();
             }
         });
         addAction(registrationAction);

@@ -26,13 +26,13 @@ public interface TenantViewerView extends IViewer<TenantDTO> {
 
         MaintenanceRequestVisorController getMaintenanceRequestVisorController();
 
-        void goToCreateScreening();
+        void createScreening();
 
-        void goToCreateMaintenanceRequest();
+        void createMaintenanceRequest();
 
-        void goToChangePassword(Key tenantPrincipalPk, String tenantName);
+        void changePassword(Key tenantPrincipalPk, String tenantName);
 
-        void getPortalRegistrationInformation();
+        void retrievePortalRegistrationInformation();
 
         void viewDeletedPaps();
     }

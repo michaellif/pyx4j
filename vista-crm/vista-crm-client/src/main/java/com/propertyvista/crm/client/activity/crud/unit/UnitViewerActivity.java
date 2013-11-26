@@ -17,9 +17,11 @@ import com.google.gwt.core.client.GWT;
 
 import com.pyx4j.commons.Key;
 import com.pyx4j.commons.LogicalDate;
+import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.rpc.shared.VoidSerializable;
 import com.pyx4j.security.shared.SecurityController;
+import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.client.activity.ListerController;
 import com.pyx4j.site.client.ui.prime.lister.ILister;
 import com.pyx4j.site.rpc.CrudAppPlace;
@@ -27,11 +29,14 @@ import com.pyx4j.site.rpc.CrudAppPlace;
 import com.propertyvista.crm.client.CrmSite;
 import com.propertyvista.crm.client.activity.crud.CrmViewerActivity;
 import com.propertyvista.crm.client.ui.crud.unit.UnitViewerView;
+import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.crm.rpc.dto.occupancy.opconstraints.MakeVacantConstraintsDTO;
+import com.propertyvista.crm.rpc.services.MaintenanceCrudService;
 import com.propertyvista.crm.rpc.services.unit.UnitCrudService;
 import com.propertyvista.crm.rpc.services.unit.UnitItemCrudService;
 import com.propertyvista.crm.rpc.services.unit.UnitOccupancyCrudService;
 import com.propertyvista.crm.rpc.services.unit.UnitOccupancyManagerService;
+import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.property.asset.unit.AptUnitItem;
 import com.propertyvista.domain.property.asset.unit.occupancy.AptUnitOccupancySegment;
 import com.propertyvista.domain.property.asset.unit.occupancy.AptUnitOccupancySegment.OffMarketType;
@@ -46,8 +51,10 @@ public class UnitViewerActivity extends CrmViewerActivity<AptUnitDTO> implements
 
     private final UnitOccupancyManagerService occupancyManagerService;
 
+    private AptUnitDTO currentValue;
+
     public UnitViewerActivity(CrudAppPlace place) {
-        super(place,  CrmSite.getViewFactory().getView(UnitViewerView.class), GWT.<UnitCrudService> create(UnitCrudService.class));
+        super(place, CrmSite.getViewFactory().getView(UnitViewerView.class), GWT.<UnitCrudService> create(UnitCrudService.class));
 
         unitItemsLister = new ListerController<AptUnitItem>(((UnitViewerView) getView()).getUnitItemsListerView(),
                 GWT.<UnitItemCrudService> create(UnitItemCrudService.class), AptUnitItem.class);
@@ -61,6 +68,8 @@ public class UnitViewerActivity extends CrmViewerActivity<AptUnitDTO> implements
     @Override
     public void onPopulateSuccess(AptUnitDTO result) {
         super.onPopulateSuccess(result);
+
+        currentValue = result;
 
         unitItemsLister.setParent(result.getPrimaryKey());
         unitItemsLister.populate();
@@ -155,4 +164,12 @@ public class UnitViewerActivity extends CrmViewerActivity<AptUnitDTO> implements
 
         }, getEntityId(), vacantFrom);
     }
+
+    @Override
+    public void createMaintenanceRequest() {
+        MaintenanceCrudService.MaintenanceInitializationData id = EntityFactory.create(MaintenanceCrudService.MaintenanceInitializationData.class);
+        id.unit().set(EntityFactory.createIdentityStub(AptUnit.class, currentValue.getPrimaryKey()));
+        AppSite.getPlaceController().goTo(new CrmSiteMap.Tenants.MaintenanceRequest().formNewItemPlace(id));
+    }
+
 }
