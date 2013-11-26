@@ -49,6 +49,7 @@ import com.propertyvista.crm.server.util.CrmAppContext;
 import com.propertyvista.domain.communication.EmailTemplateType;
 import com.propertyvista.domain.payment.AutopayAgreement;
 import com.propertyvista.domain.tenant.lease.Lease;
+import com.propertyvista.domain.tenant.lease.LeaseTerm;
 import com.propertyvista.domain.tenant.lease.LeaseTermGuarantor;
 import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
 import com.propertyvista.domain.tenant.lease.LeaseTermTenant;
@@ -105,6 +106,19 @@ public class LeaseViewerCrudServiceImpl extends LeaseViewerCrudServiceBaseImpl<L
         }
 
         to.isMoveOutWithinNextBillingCycle().setValue(ServerSideFactory.create(LeaseFacade.class).isMoveOutWithinNextBillingCycle(in));
+    }
+
+    @Override
+    protected void loadCurrentTerm(LeaseDTO to) {
+        assert (!to.currentTerm().isNull());
+
+        Persistence.service().retrieve(to.currentTerm());
+        if (to.currentTerm().version().isNull()) {
+            to.currentTerm().set(Persistence.secureRetrieveDraft(LeaseTerm.class, to.currentTerm().getPrimaryKey()));
+        }
+
+        Persistence.service().retrieveMember(to.currentTerm().version().tenants());
+        Persistence.service().retrieveMember(to.currentTerm().version().guarantors());
     }
 
     @Override

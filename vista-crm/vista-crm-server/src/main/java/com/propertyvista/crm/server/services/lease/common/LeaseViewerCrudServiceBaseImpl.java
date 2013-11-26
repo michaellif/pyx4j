@@ -33,17 +33,13 @@ import com.propertyvista.domain.tenant.lease.LeaseTerm;
 import com.propertyvista.domain.tenant.lease.LeaseTermGuarantor;
 import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
 import com.propertyvista.domain.tenant.lease.LeaseTermTenant;
-import com.propertyvista.dto.LeaseApplicationDTO;
 import com.propertyvista.dto.LeaseDTO;
 import com.propertyvista.shared.config.VistaFeatures;
 
 public abstract class LeaseViewerCrudServiceBaseImpl<DTO extends LeaseDTO> extends LeaseCrudServiceBaseImpl<DTO> implements LeaseViewerCrudServiceBase<DTO> {
 
-    private final boolean isApplication;
-
     protected LeaseViewerCrudServiceBaseImpl(Class<DTO> dtoClass) {
         super(dtoClass);
-        isApplication = dtoClass.equals(LeaseApplicationDTO.class);
     }
 
     @Override

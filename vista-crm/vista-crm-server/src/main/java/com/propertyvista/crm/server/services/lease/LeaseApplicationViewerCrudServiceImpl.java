@@ -43,7 +43,9 @@ import com.propertyvista.domain.pmc.PmcEquifaxStatus;
 import com.propertyvista.domain.tenant.income.CustomerScreeningIncome;
 import com.propertyvista.domain.tenant.income.IEmploymentInfo;
 import com.propertyvista.domain.tenant.lease.Lease;
+import com.propertyvista.domain.tenant.lease.LeaseApplication.Status;
 import com.propertyvista.domain.tenant.lease.LeaseParticipant;
+import com.propertyvista.domain.tenant.lease.LeaseTerm;
 import com.propertyvista.domain.tenant.lease.LeaseTermGuarantor;
 import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
 import com.propertyvista.domain.tenant.lease.LeaseTermTenant;
@@ -73,9 +75,6 @@ public class LeaseApplicationViewerCrudServiceImpl extends LeaseViewerCrudServic
     @Override
     protected void enhanceListRetrieved(Lease in, LeaseApplicationDTO dto) {
         super.enhanceListRetrieved(in, dto);
-
-        loadCurrentTerm(dto);
-
         enhanceRetrievedCommon(in, dto);
     }
 
@@ -126,6 +125,24 @@ public class LeaseApplicationViewerCrudServiceImpl extends LeaseViewerCrudServic
         }
     }
 
+    @Override
+    protected void loadCurrentTerm(LeaseApplicationDTO dto) {
+        assert (!dto.leaseApplication().isNull());
+        assert (!dto.currentTerm().isNull());
+
+        if (dto.leaseApplication().status().getValue() == Status.Approved) {
+            dto.currentTerm().set(Persistence.secureRetrieve(LeaseTerm.class, dto.currentTerm().getPrimaryKey().asVersionKey(dto.approvalDate().getValue())));
+        } else {
+            Persistence.service().retrieve(dto.currentTerm());
+            if (dto.currentTerm().version().isNull()) {
+                dto.currentTerm().set(Persistence.secureRetrieveDraft(LeaseTerm.class, dto.currentTerm().getPrimaryKey()));
+            }
+        }
+
+        Persistence.service().retrieveMember(dto.currentTerm().version().tenants());
+        Persistence.service().retrieveMember(dto.currentTerm().version().guarantors());
+    }
+
     private void loadLeaseParticipant(Lease lease, LeaseApplicationDTO dto, LeaseTermParticipant<? extends LeaseParticipant<?>> leaseParticipantId) {
         LeaseTermParticipant<? extends LeaseParticipant<?>> leaseParticipant = (LeaseTermParticipant<?>) Persistence.service().retrieve(
                 leaseParticipantId.getValueClass(), leaseParticipantId.getPrimaryKey());
@@ -170,7 +187,6 @@ public class LeaseApplicationViewerCrudServiceImpl extends LeaseViewerCrudServic
     }
 
     private TenantInfoDTO fillQuickSummary(TenantInfoDTO tenantInfo) {
-
         return tenantInfo;
     }
 
@@ -260,13 +276,13 @@ public class LeaseApplicationViewerCrudServiceImpl extends LeaseViewerCrudServic
         for (LeaseTermParticipant<?> leaseParticipant : users) {
             ServerSideFactory.create(ScreeningFacade.class).runCreditCheck(creditCheckAmount, leaseParticipant, currentUserEmployee);
         }
+
         String successMessage = i18n.tr("Credit check has been proceeded successfully.");
         callback.onSuccess(successMessage);
     }
 
     @Override
     public void applicationAction(AsyncCallback<VoidSerializable> callback, LeaseApplicationActionDTO actionDTO) {
-
         switch (actionDTO.action().getValue()) {
         case Approve:
             ServerSideFactory.create(LeaseFacade.class).approve(actionDTO.leaseId(), CrmAppContext.getCurrentUserEmployee(),
@@ -283,6 +299,7 @@ public class LeaseApplicationViewerCrudServiceImpl extends LeaseViewerCrudServic
         default:
             throw new IllegalArgumentException();
         }
+
         Persistence.service().commit();
         callback.onSuccess(null);
     }
@@ -297,6 +314,7 @@ public class LeaseApplicationViewerCrudServiceImpl extends LeaseViewerCrudServic
         if (ServerSideFactory.create(ScreeningFacade.class).isReadReportLimitReached()) {
             throw new UserRuntimeException(i18n.tr("Read Report Daily limit exceeded"));
         }
+
         callback.onSuccess(null);
     }
 }

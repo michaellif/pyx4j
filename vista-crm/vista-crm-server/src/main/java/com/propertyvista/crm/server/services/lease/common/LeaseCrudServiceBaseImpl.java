@@ -32,7 +32,6 @@ import com.propertyvista.domain.legal.n4.N4LegalLetter;
 import com.propertyvista.domain.policy.policies.RestrictionsPolicy;
 import com.propertyvista.domain.tenant.lease.BillableItem;
 import com.propertyvista.domain.tenant.lease.Lease;
-import com.propertyvista.domain.tenant.lease.LeaseTerm;
 import com.propertyvista.domain.tenant.lease.LeaseTermGuarantor;
 import com.propertyvista.domain.tenant.lease.LeaseTermTenant;
 import com.propertyvista.domain.tenant.lease.Tenant;
@@ -73,9 +72,11 @@ public abstract class LeaseCrudServiceBaseImpl<DTO extends LeaseDTO> extends Abs
     }
 
     @Override
-    protected void enhanceListRetrieved(Lease in, DTO dto) {
-        Persistence.service().retrieve(dto.unit().building());
-        Persistence.service().retrieve(dto._applicant());
+    protected void enhanceListRetrieved(Lease in, DTO to) {
+        Persistence.service().retrieve(to.unit().building());
+        Persistence.service().retrieve(to._applicant());
+
+        loadCurrentTerm(to);
     }
 
     @Override
@@ -83,17 +84,12 @@ public abstract class LeaseCrudServiceBaseImpl<DTO extends LeaseDTO> extends Abs
         throw new Error("Facade should be used");
     }
 
-    protected void loadCurrentTerm(DTO to) {
-        if (!to.currentTerm().isNull()) {
-            Persistence.service().retrieve(to.currentTerm());
-            if (to.currentTerm().version().isNull()) {
-                to.currentTerm().set(Persistence.secureRetrieveDraft(LeaseTerm.class, to.currentTerm().getPrimaryKey()));
-            }
-
-            Persistence.service().retrieveMember(to.currentTerm().version().tenants());
-            Persistence.service().retrieveMember(to.currentTerm().version().guarantors());
-        }
-    }
+    /**
+     * override in descendants to implement appropriate term loading procedure (for Lease/Application)
+     * 
+     * @param to
+     */
+    protected abstract void loadCurrentTerm(DTO to);
 
     protected void loadDetachedProducts(DTO dto) {
         Persistence.service().retrieve(dto.currentTerm().version().leaseProducts().serviceItem().item().product());
