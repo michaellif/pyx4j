@@ -238,6 +238,7 @@ import com.propertyvista.crm.client.activity.security.PasswordChangeActivity;
 import com.propertyvista.crm.client.activity.security.PasswordResetActivity;
 import com.propertyvista.crm.client.activity.security.PasswordResetRequestActivity;
 import com.propertyvista.crm.client.activity.tools.autopayreview.AutoPayReviewActivity;
+import com.propertyvista.crm.client.activity.tools.l1generation.L1DelinquentLeaseSearchActivity;
 import com.propertyvista.crm.client.activity.tools.l1generation.L1FormDataReviewWizardActivity;
 import com.propertyvista.crm.client.activity.tools.n4generation.N4DownloadToolActivity;
 import com.propertyvista.crm.client.activity.tools.n4generation.N4GenerationToolActivity;
@@ -250,6 +251,7 @@ import com.propertyvista.crm.rpc.CrmSiteMap.Administration;
 import com.propertyvista.crm.rpc.CrmSiteMap.Dashboard;
 import com.propertyvista.crm.rpc.CrmSiteMap.Finance;
 import com.propertyvista.crm.rpc.CrmSiteMap.LegalAndCollections;
+import com.propertyvista.crm.rpc.CrmSiteMap.LegalAndCollections.L1FormDataReview;
 import com.propertyvista.crm.rpc.CrmSiteMap.Login;
 import com.propertyvista.crm.rpc.CrmSiteMap.LoginWithToken;
 import com.propertyvista.crm.rpc.CrmSiteMap.Marketing;
@@ -680,9 +682,10 @@ public class ContentActivityMapper implements AppActivityMapper {
 
                     } else if (crudPlace instanceof LegalAndCollections.N4DownloadTool) {
                         activity = new N4DownloadToolActivity(crudPlace);
-                    } else if (crudPlace instanceof LegalAndCollections.L1GenerationWizard) {
+                    } else if (crudPlace instanceof LegalAndCollections.L1GenerationTool) {
+                        activity = new L1DelinquentLeaseSearchActivity();
+                    } else if (crudPlace instanceof L1FormDataReview) {
                         activity = new L1FormDataReviewWizardActivity(crudPlace);
-
 // - Financial-related:
 
                     } else if (crudPlace instanceof Finance.BillingCycle) {
