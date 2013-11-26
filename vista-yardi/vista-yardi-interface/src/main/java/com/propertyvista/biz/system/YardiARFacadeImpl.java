@@ -52,6 +52,13 @@ public class YardiARFacadeImpl implements YardiARFacade {
     }
 
     @Override
+    public void updateProductCatalog(Building building) throws YardiServiceException, RemoteException {
+        assert VistaFeatures.instance().yardiIntegration();
+        Persistence.ensureRetrieve(building, AttachLevel.Attached);
+        YardiResidentTransactionsService.getInstance().updateProductCatalog(VistaDeployment.getPmcYardiCredential(building), building);
+    }
+
+    @Override
     public PaymentBatchContext createPaymentBatchContext(Building building) throws RemoteException, YardiServiceException {
         assert VistaFeatures.instance().yardiIntegration();
         YardiPaymentBatchContext paymentBatchContext = new YardiPaymentBatchContext();
@@ -94,5 +101,4 @@ public class YardiARFacadeImpl implements YardiARFacade {
 
         return propertyConfigurations;
     }
-
 }

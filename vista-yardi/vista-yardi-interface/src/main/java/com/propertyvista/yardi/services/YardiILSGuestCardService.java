@@ -28,10 +28,14 @@ import com.propertyvista.domain.settings.PmcYardiCredential;
 import com.propertyvista.yardi.stubs.YardiILSGuestCardStub;
 
 public class YardiILSGuestCardService extends YardiAbstractService {
+
     private static final Logger log = LoggerFactory.getLogger(YardiILSGuestCardService.class);
 
     private static class SingletonHolder {
         public static final YardiILSGuestCardService INSTANCE = new YardiILSGuestCardService();
+    }
+
+    private YardiILSGuestCardService() {
     }
 
     public static YardiILSGuestCardService getInstance() {

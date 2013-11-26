@@ -31,6 +31,8 @@ public interface YardiARFacade {
 
     void updateLease(Lease lease) throws YardiServiceException, RemoteException;
 
+    void updateProductCatalog(Building building) throws YardiServiceException, RemoteException;
+
     PaymentBatchContext createPaymentBatchContext(Building building) throws YardiServiceException, RemoteException;
 
     void postReceipt(YardiReceipt receipt, PaymentBatchContext paymentBatchContext) throws ARException, YardiServiceException, RemoteException;

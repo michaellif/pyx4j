@@ -200,6 +200,7 @@ public class YardiResidentTransactionsService extends YardiAbstractService {
                 importLease(yardiInterfaceId, propertyCode, property.getRTCustomer().iterator().next(), null);
             }
         }
+
         // import lease charges
         BillingCycle nextCycle = ServerSideFactory.create(PaymentMethodFacade.class).getNextAutopayBillingCycle(lease);
         ResidentTransactions leaseCharges = null;
@@ -222,6 +223,11 @@ public class YardiResidentTransactionsService extends YardiAbstractService {
                 new YardiLeaseProcessor().expireLeaseProducts(lease);
             }
         }
+    }
+
+    public void updateProductCatalog(PmcYardiCredential yc, Building building) {
+        // TODO Auto-generated method stub
+
     }
 
     public void postReceiptReversal(PmcYardiCredential yc, YardiReceiptReversal reversal) throws YardiServiceException, RemoteException {
