@@ -56,14 +56,14 @@ public abstract class ILSTestBase extends IntegrationTestBase {
         return models;
     }
 
-    protected Building getBuilding() {
+    protected Building generateBuilding() {
         if (building == null) {
-            generateBuilding();
+            generateBuildingData();
         }
         return building;
     }
 
-    private void generateBuilding() {
+    private void generateBuildingData() {
         building = getDataModel(BuildingDataModel.class).addBuilding();
 
         building.info().address().streetName().setValue("Talwood Drive");
