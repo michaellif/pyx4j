@@ -19,15 +19,15 @@ import com.pyx4j.site.rpc.CrudAppPlace;
 
 import com.propertyvista.crm.client.CrmSite;
 import com.propertyvista.crm.client.activity.crud.CrmWizardActivity;
-import com.propertyvista.crm.client.ui.tools.l1generation.L1GenerationWizardView;
-import com.propertyvista.crm.rpc.dto.legal.l1.L1GenerationWizardDTO;
-import com.propertyvista.crm.rpc.services.legal.L1GenerationWizardService;
+import com.propertyvista.crm.client.ui.tools.l1generation.L1FormDataReviewWizardView;
+import com.propertyvista.crm.rpc.dto.legal.l1.L1FormDataReviewWizardDTO;
+import com.propertyvista.crm.rpc.services.legal.L1FormDataReviewWizardService;
 
-public class L1GenerationWizardActivity extends CrmWizardActivity<L1GenerationWizardDTO> implements L1GenerationWizardView.Presenter {
+public class L1FormDataReviewWizardActivity extends CrmWizardActivity<L1FormDataReviewWizardDTO> implements L1FormDataReviewWizardView.Presenter {
 
-    public L1GenerationWizardActivity(CrudAppPlace place) {
-        super(place, CrmSite.getViewFactory().getView(L1GenerationWizardView.class), GWT.<L1GenerationWizardService> create(L1GenerationWizardService.class),
-                L1GenerationWizardDTO.class);
+    public L1FormDataReviewWizardActivity(CrudAppPlace place) {
+        super(place, CrmSite.getViewFactory().getView(L1FormDataReviewWizardView.class), GWT
+                .<L1FormDataReviewWizardService> create(L1FormDataReviewWizardService.class), L1FormDataReviewWizardDTO.class);
     }
 
 }

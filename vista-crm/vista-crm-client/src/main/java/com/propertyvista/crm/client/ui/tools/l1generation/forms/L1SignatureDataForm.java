@@ -11,7 +11,7 @@
  * @author ArtyomB
  * @version $Id$
  */
-package com.propertyvista.crm.client.ui.tools.l1generation;
+package com.propertyvista.crm.client.ui.tools.l1generation.forms;
 
 import com.google.gwt.user.client.ui.IsWidget;
 
@@ -19,20 +19,20 @@ import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 
 import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
-import com.propertyvista.domain.legal.l1.L1OwedNsfCharges;
+import com.propertyvista.domain.legal.l1.L1SignatureData;
 
-public class L1OwedNsfChargesForm extends CEntityForm<L1OwedNsfCharges> {
+public class L1SignatureDataForm extends CEntityForm<L1SignatureData> {
 
-    public L1OwedNsfChargesForm() {
-        super(L1OwedNsfCharges.class);
+    public L1SignatureDataForm() {
+        super(L1SignatureData.class);
     }
 
     @Override
     public IsWidget createContent() {
         TwoColumnFlexFormPanel panel = new TwoColumnFlexFormPanel();
         int row = -1;
-        panel.setWidget(++row, 0, 2, inject(proto().nsfChargesBreakdown(), new L1NsfChargesBreakdownFolder()));
-        panel.setWidget(++row, 0, 1, new FormDecoratorBuilder(inject(proto().nsfTotalChargeOwed())).build());
+        panel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().landlordOrAgent())).build());
+        panel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().date())).build());
         return panel;
     }
 

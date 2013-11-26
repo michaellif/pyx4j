@@ -15,8 +15,8 @@ package com.propertyvista.crm.rpc.services.legal;
 
 import com.pyx4j.entity.rpc.AbstractCrudService;
 
-import com.propertyvista.crm.rpc.dto.legal.l1.L1GenerationWizardDTO;
+import com.propertyvista.crm.rpc.dto.legal.l1.L1FormDataReviewWizardDTO;
 
-public interface L1GenerationWizardService extends AbstractCrudService<L1GenerationWizardDTO> {
+public interface L1FormDataReviewWizardService extends AbstractCrudService<L1FormDataReviewWizardDTO> {
 
 }

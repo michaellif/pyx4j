@@ -238,7 +238,7 @@ import com.propertyvista.crm.client.activity.security.PasswordChangeActivity;
 import com.propertyvista.crm.client.activity.security.PasswordResetActivity;
 import com.propertyvista.crm.client.activity.security.PasswordResetRequestActivity;
 import com.propertyvista.crm.client.activity.tools.autopayreview.AutoPayReviewActivity;
-import com.propertyvista.crm.client.activity.tools.l1generation.L1GenerationWizardActivity;
+import com.propertyvista.crm.client.activity.tools.l1generation.L1FormDataReviewWizardActivity;
 import com.propertyvista.crm.client.activity.tools.n4generation.N4DownloadToolActivity;
 import com.propertyvista.crm.client.activity.tools.n4generation.N4GenerationToolActivity;
 import com.propertyvista.crm.client.activity.wizard.creditcheck.CreditCheckActivity;
@@ -681,7 +681,7 @@ public class ContentActivityMapper implements AppActivityMapper {
                     } else if (crudPlace instanceof LegalAndCollections.N4DownloadTool) {
                         activity = new N4DownloadToolActivity(crudPlace);
                     } else if (crudPlace instanceof LegalAndCollections.L1GenerationWizard) {
-                        activity = new L1GenerationWizardActivity(crudPlace);
+                        activity = new L1FormDataReviewWizardActivity(crudPlace);
 
 // - Financial-related:
 

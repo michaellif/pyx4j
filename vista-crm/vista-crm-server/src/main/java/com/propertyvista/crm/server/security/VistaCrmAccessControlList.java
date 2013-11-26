@@ -115,7 +115,7 @@ import com.propertyvista.crm.rpc.services.lease.common.DepositLifecycleCrudServi
 import com.propertyvista.crm.rpc.services.lease.common.LeaseTermCrudService;
 import com.propertyvista.crm.rpc.services.lease.financial.InvoiceCreditCrudService;
 import com.propertyvista.crm.rpc.services.lease.financial.InvoiceDebitCrudService;
-import com.propertyvista.crm.rpc.services.legal.L1GenerationWizardService;
+import com.propertyvista.crm.rpc.services.legal.L1FormDataReviewWizardService;
 import com.propertyvista.crm.rpc.services.legal.N4DownloadToolService;
 import com.propertyvista.crm.rpc.services.legal.N4GenerationToolService;
 import com.propertyvista.crm.rpc.services.notes.NotesAndAttachmentsCrudService;
@@ -272,7 +272,7 @@ public class VistaCrmAccessControlList extends ServletContainerAclBuilder {
         grant(VistaBasicBehavior.CRM, new IServiceExecutePermission(N4GenerationToolService.class));
         grant(VistaBasicBehavior.CRM, new IServiceExecutePermission(N4DownloadToolService.class));
 
-        grant(VistaBasicBehavior.CRM, new IServiceExecutePermission(L1GenerationWizardService.class));
+        grant(VistaBasicBehavior.CRM, new IServiceExecutePermission(L1FormDataReviewWizardService.class));
 
 // - Financial:
         grant(VistaBasicBehavior.CRM, new IServiceExecutePermission(AutoPayCrudService.class));

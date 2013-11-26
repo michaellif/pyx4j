@@ -11,7 +11,7 @@
  * @author ArtyomB
  * @version $Id$
  */
-package com.propertyvista.crm.client.ui.tools.l1generation;
+package com.propertyvista.crm.client.ui.tools.l1generation.forms;
 
 import java.util.Arrays;
 import java.util.List;

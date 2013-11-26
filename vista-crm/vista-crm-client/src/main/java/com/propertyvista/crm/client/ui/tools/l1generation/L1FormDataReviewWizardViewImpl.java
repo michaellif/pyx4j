@@ -13,10 +13,18 @@
  */
 package com.propertyvista.crm.client.ui.tools.l1generation;
 
-import com.pyx4j.site.client.ui.prime.wizard.IWizard;
+import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.site.client.ui.prime.wizard.AbstractWizard;
 
-import com.propertyvista.crm.rpc.dto.legal.l1.L1GenerationWizardDTO;
+import com.propertyvista.crm.rpc.dto.legal.l1.L1FormDataReviewWizardDTO;
 
-public interface L1GenerationWizardView extends IWizard<L1GenerationWizardDTO> {
+public class L1FormDataReviewWizardViewImpl extends AbstractWizard<L1FormDataReviewWizardDTO> implements L1FormDataReviewWizardView {
+
+    private static final I18n i18n = I18n.get(L1FormDataReviewWizardViewImpl.class);
+
+    public L1FormDataReviewWizardViewImpl() {
+        super(i18n.tr("L1 Form Review"));
+        setForm(new L1FormDataReviewWizardForm(this));
+    }
 
 }

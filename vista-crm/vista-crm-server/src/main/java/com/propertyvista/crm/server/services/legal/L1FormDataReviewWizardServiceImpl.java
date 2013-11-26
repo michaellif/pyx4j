@@ -21,34 +21,34 @@ import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityListCriteria;
 import com.pyx4j.rpc.shared.ServiceExecution;
 
-import com.propertyvista.crm.rpc.dto.legal.l1.L1GenerationWizardDTO;
-import com.propertyvista.crm.rpc.services.legal.L1GenerationWizardService;
+import com.propertyvista.crm.rpc.dto.legal.l1.L1FormDataReviewWizardDTO;
+import com.propertyvista.crm.rpc.services.legal.L1FormDataReviewWizardService;
 
-public class L1GenerationWizardServiceImpl implements L1GenerationWizardService {
+public class L1FormDataReviewWizardServiceImpl implements L1FormDataReviewWizardService {
 
     @Override
-    public void init(AsyncCallback<L1GenerationWizardDTO> callback, com.pyx4j.entity.rpc.AbstractCrudService.InitializationData initializationData) {
-        callback.onSuccess(EntityFactory.create(L1GenerationWizardDTO.class));
+    public void init(AsyncCallback<L1FormDataReviewWizardDTO> callback, com.pyx4j.entity.rpc.AbstractCrudService.InitializationData initializationData) {
+        callback.onSuccess(EntityFactory.create(L1FormDataReviewWizardDTO.class));
     }
 
     @Override
-    public void retrieve(AsyncCallback<L1GenerationWizardDTO> callback, Key entityId, com.pyx4j.entity.rpc.AbstractCrudService.RetrieveTarget retrieveTarget) {
+    public void retrieve(AsyncCallback<L1FormDataReviewWizardDTO> callback, Key entityId, com.pyx4j.entity.rpc.AbstractCrudService.RetrieveTarget retrieveTarget) {
         // TODO Auto-generated method stub
     }
 
     @Override
-    public void create(AsyncCallback<Key> callback, L1GenerationWizardDTO editableEntity) {
+    public void create(AsyncCallback<Key> callback, L1FormDataReviewWizardDTO editableEntity) {
         // TODO Auto-generated method stub
     }
 
     @Override
     @ServiceExecution(waitCaption = "Saving...")
-    public void save(AsyncCallback<Key> callback, L1GenerationWizardDTO editableEntity) {
+    public void save(AsyncCallback<Key> callback, L1FormDataReviewWizardDTO editableEntity) {
         // TODO Auto-generated method stub
     }
 
     @Override
-    public void list(AsyncCallback<EntitySearchResult<L1GenerationWizardDTO>> callback, EntityListCriteria<L1GenerationWizardDTO> criteria) {
+    public void list(AsyncCallback<EntitySearchResult<L1FormDataReviewWizardDTO>> callback, EntityListCriteria<L1FormDataReviewWizardDTO> criteria) {
         // TODO Auto-generated method stub
     }
 

@@ -23,16 +23,26 @@ import com.pyx4j.site.client.ui.prime.wizard.WizardForm;
 import com.pyx4j.widgets.client.Button;
 
 import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
-import com.propertyvista.crm.rpc.dto.legal.l1.L1GenerationWizardDTO;
+import com.propertyvista.crm.client.ui.tools.l1generation.forms.L1LandlordsContactInfoFolder;
+import com.propertyvista.crm.client.ui.tools.l1generation.forms.L1OwedNsfChargesForm;
+import com.propertyvista.crm.client.ui.tools.l1generation.forms.L1ReasonForApplicationForm;
+import com.propertyvista.crm.client.ui.tools.l1generation.forms.L1ScheduleAndPaymentForm;
+import com.propertyvista.crm.client.ui.tools.l1generation.forms.L1SignatureDataForm;
+import com.propertyvista.crm.client.ui.tools.l1generation.forms.L1TenantContactInfoForm;
+import com.propertyvista.crm.client.ui.tools.l1generation.forms.L1TenantInfoFolder;
+import com.propertyvista.crm.client.ui.tools.l1generation.forms.LtbAgentContactInfoForm;
+import com.propertyvista.crm.client.ui.tools.l1generation.forms.LtbOwedRentForm;
+import com.propertyvista.crm.client.ui.tools.l1generation.forms.LtbRentalUnitAddressForm;
+import com.propertyvista.crm.rpc.dto.legal.l1.L1FormDataReviewWizardDTO;
 
-public class L1GenerationWizardForm extends WizardForm<L1GenerationWizardDTO> {
+public class L1FormDataReviewWizardForm extends WizardForm<L1FormDataReviewWizardDTO> {
 
-    private static final I18n i18n = I18n.get(L1GenerationWizardForm.class);
+    private static final I18n i18n = I18n.get(L1FormDataReviewWizardForm.class);
 
     private Button editToggleButton;
 
-    public L1GenerationWizardForm(IWizard<? extends IEntity> view) {
-        super(L1GenerationWizardDTO.class, view);
+    public L1FormDataReviewWizardForm(IWizard<? extends IEntity> view) {
+        super(L1FormDataReviewWizardDTO.class, view);
         addStep(createRentalUnitAddressStep());
         addStep(createRelatedFilesStep());
         addStep(createTenantsStep());
