@@ -77,6 +77,7 @@ import com.propertyvista.yardi.mappers.MappingUtils;
 import com.propertyvista.yardi.processors.YardiBuildingProcessor;
 import com.propertyvista.yardi.processors.YardiChargeProcessor;
 import com.propertyvista.yardi.processors.YardiILSMarketingProcessor;
+import com.propertyvista.yardi.processors.YardiLeaseProcessor;
 import com.propertyvista.yardi.processors.YardiPaymentProcessor;
 import com.propertyvista.yardi.stubs.ExternalInterfaceLoggingStub;
 import com.propertyvista.yardi.stubs.YardiILSGuestCardStub;

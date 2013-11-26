@@ -11,7 +11,7 @@
  * @author michaellif
  * @version $Id$
  */
-package com.propertyvista.yardi.services;
+package com.propertyvista.yardi.processors;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -67,6 +67,7 @@ import com.propertyvista.portal.rpc.shared.PolicyNotFoundException;
 import com.propertyvista.yardi.mergers.LeaseMerger;
 import com.propertyvista.yardi.mergers.TenantMerger;
 import com.propertyvista.yardi.mergers.LeaseMerger.LeaseChargesMergeStatus;
+import com.propertyvista.yardi.services.ARCodeAdapter;
 
 public class YardiLeaseProcessor {
 
