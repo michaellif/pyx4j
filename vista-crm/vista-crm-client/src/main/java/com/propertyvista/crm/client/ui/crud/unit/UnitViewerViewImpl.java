@@ -84,20 +84,6 @@ public class UnitViewerViewImpl extends CrmViewerViewImplBase<AptUnitDTO> implem
         canScopeOffMarket = false;
         minRenovationEndDate = null;
 
-        existingLeaseAction = new MenuItem(i18n.tr("Create Current Lease..."), new Command() {
-            @Override
-            public void execute() {
-                if (getForm().getValue().isPresentInCatalog().isBooleanTrue()) {
-                    new LeaseDataDialog(LeaseDataDialog.Type.Current, getForm().getValue()).show();
-                } else {
-                    MessageDialog.error(i18n.tr("Product Catalog"), i18n.tr("The unit should be added to the building Product Catalog first!"));
-                }
-            }
-        });
-        if (!VistaFeatures.instance().yardiIntegration()) {
-            addAction(existingLeaseAction);
-        }
-
         scopeAction = new MenuItem(i18n.tr("Scope..."), new Command() {
             @Override
             public void execute() {
@@ -115,6 +101,7 @@ public class UnitViewerViewImpl extends CrmViewerViewImplBase<AptUnitDTO> implem
                 }
             }
         });
+
         scopeAction.ensureDebugId(DebugIds.unitViewerViewScopeAction.debugId());
         if (!VistaFeatures.instance().yardiIntegration()) {
             addAction(scopeAction);
@@ -133,6 +120,20 @@ public class UnitViewerViewImpl extends CrmViewerViewImplBase<AptUnitDTO> implem
             addAction(makePendingAction);
         }
 
+        existingLeaseAction = new MenuItem(i18n.tr("Create Current Lease..."), new Command() {
+            @Override
+            public void execute() {
+                if (getForm().getValue().isPresentInCatalog().isBooleanTrue()) {
+                    new LeaseDataDialog(LeaseDataDialog.Type.Current, getForm().getValue()).show();
+                } else {
+                    MessageDialog.error(i18n.tr("Product Catalog"), i18n.tr("The unit should be added to the building Product Catalog first!"));
+                }
+            }
+        });
+        if (!VistaFeatures.instance().yardiIntegration()) {
+            addAction(existingLeaseAction);
+        }
+
         maintenanceAction = new MenuItem(i18n.tr("Create Maintenance Request"), new Command() {
             @Override
             public void execute() {
@@ -144,9 +145,9 @@ public class UnitViewerViewImpl extends CrmViewerViewImplBase<AptUnitDTO> implem
 
     @Override
     public void reset() {
-        setActionVisible(existingLeaseAction, false);
         setActionVisible(scopeAction, false);
         setActionVisible(makePendingAction, false);
+        setActionVisible(existingLeaseAction, false);
         super.reset();
     }
 
