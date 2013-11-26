@@ -48,12 +48,12 @@ import com.propertyvista.domain.financial.PaymentRecord;
 import com.propertyvista.domain.financial.billing.Bill;
 import com.propertyvista.domain.maintenance.MaintenanceRequest;
 import com.propertyvista.domain.maintenance.MaintenanceRequestCategory;
+import com.propertyvista.domain.payment.AutopayAgreement;
+import com.propertyvista.domain.payment.AutopayAgreement.AutopayAgreementCoveredItem;
 import com.propertyvista.domain.payment.CreditCardInfo;
 import com.propertyvista.domain.payment.CreditCardInfo.CreditCardType;
 import com.propertyvista.domain.payment.LeasePaymentMethod;
 import com.propertyvista.domain.payment.PaymentType;
-import com.propertyvista.domain.payment.AutopayAgreement;
-import com.propertyvista.domain.payment.AutopayAgreement.AutopayAgreementCoveredItem;
 import com.propertyvista.domain.tenant.lease.BillableItem;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.Lease.CompletionType;
@@ -249,9 +249,8 @@ public class LeaseLifecycleSimulator {
 
         @Override
         public void exec() {
-            MaintenanceRequest maintenanceRequest = ServerSideFactory.create(MaintenanceFacade.class).createNewRequest(lease.unit().building());
+            MaintenanceRequest maintenanceRequest = ServerSideFactory.create(MaintenanceFacade.class).createNewRequest(lease.unit());
             maintenanceRequest.reporter().set(lease.leaseParticipants().iterator().next().<Tenant> cast());
-            maintenanceRequest.unit().set(lease.unit());
             maintenanceRequest.submitted().setValue(SystemDateManager.getDate());
             maintenanceRequest.updated().setValue(SystemDateManager.getDate());
             maintenanceRequest.description().setValue(RandomUtil.randomLetters(50));

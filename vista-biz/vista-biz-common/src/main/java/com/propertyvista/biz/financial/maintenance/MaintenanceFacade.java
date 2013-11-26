@@ -22,6 +22,7 @@ import com.propertyvista.domain.maintenance.MaintenanceRequestSchedule;
 import com.propertyvista.domain.maintenance.MaintenanceRequestStatus.StatusPhase;
 import com.propertyvista.domain.maintenance.SurveyResponse;
 import com.propertyvista.domain.property.asset.building.Building;
+import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.tenant.lease.Tenant;
 
 /*
@@ -35,6 +36,8 @@ public interface MaintenanceFacade {
     List<MaintenanceRequest> getMaintenanceRequests(Set<StatusPhase> statuses, Tenant reporter);
 
     MaintenanceRequest createNewRequest(Building building);
+
+    MaintenanceRequest createNewRequest(AptUnit unit);
 
     MaintenanceRequest createNewRequestForTenant(Tenant tenant);
 

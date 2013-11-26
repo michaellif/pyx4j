@@ -37,6 +37,7 @@ import com.propertyvista.domain.maintenance.MaintenanceRequestStatus;
 import com.propertyvista.domain.maintenance.MaintenanceRequestStatus.StatusPhase;
 import com.propertyvista.domain.maintenance.SurveyResponse;
 import com.propertyvista.domain.property.asset.building.Building;
+import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.tenant.lease.Tenant;
 
 public abstract class MaintenanceAbstractManager {
@@ -44,16 +45,37 @@ public abstract class MaintenanceAbstractManager {
 
     public MaintenanceRequest createNewRequest(Building building) {
         MaintenanceRequest request = EntityFactory.create(MaintenanceRequest.class);
+
+        Persistence.ensureRetrieve(building, AttachLevel.Attached);
+
         request.building().set(building);
+
+        return request;
+    }
+
+    public MaintenanceRequest createNewRequest(AptUnit unit) {
+        MaintenanceRequest request = EntityFactory.create(MaintenanceRequest.class);
+
+        Persistence.ensureRetrieve(unit, AttachLevel.Attached);
+        Persistence.ensureRetrieve(unit.building(), AttachLevel.Attached);
+
+        request.building().set(unit.building());
+        request.unit().set(unit);
+
         return request;
     }
 
     public MaintenanceRequest createNewRequest(Tenant tenant) {
         MaintenanceRequest request = EntityFactory.create(MaintenanceRequest.class);
+
+        Persistence.ensureRetrieve(tenant, AttachLevel.Attached);
         Persistence.ensureRetrieve(tenant.lease(), AttachLevel.Attached);
         Persistence.ensureRetrieve(tenant.lease().unit().building(), AttachLevel.Attached);
+
         request.building().set(tenant.lease().unit().building());
+        request.unit().set(tenant.lease().unit());
         request.reporter().set(tenant);
+
         return request;
     }
 

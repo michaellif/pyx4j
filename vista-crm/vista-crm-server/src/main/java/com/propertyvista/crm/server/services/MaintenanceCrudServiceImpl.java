@@ -35,7 +35,6 @@ import com.propertyvista.domain.maintenance.MaintenanceRequestMetadata;
 import com.propertyvista.domain.maintenance.MaintenanceRequestSchedule;
 import com.propertyvista.domain.maintenance.SurveyResponse;
 import com.propertyvista.domain.property.asset.building.Building;
-import com.propertyvista.domain.tenant.lease.Tenant;
 import com.propertyvista.dto.MaintenanceRequestDTO;
 import com.propertyvista.dto.MaintenanceRequestScheduleDTO;
 import com.propertyvista.shared.config.VistaFeatures;
@@ -157,13 +156,11 @@ public class MaintenanceCrudServiceImpl extends AbstractCrudServiceDtoImpl<Maint
 
         if (initData != null) {
             if (!initData.tenant().isNull()) {
-                Tenant tenant = Persistence.service().retrieve(Tenant.class, initData.tenant().getPrimaryKey());
-                MaintenanceRequest maintenanceRequest = ServerSideFactory.create(MaintenanceFacade.class).createNewRequestForTenant(tenant);
-                return createTO(maintenanceRequest);
+                return createTO(ServerSideFactory.create(MaintenanceFacade.class).createNewRequestForTenant(initData.tenant()));
+            } else if (!initData.unit().isNull()) {
+                return createTO(ServerSideFactory.create(MaintenanceFacade.class).createNewRequest(initData.unit()));
             } else if (!initData.building().isNull()) {
-                Building building = Persistence.service().retrieve(Building.class, initData.building().getPrimaryKey());
-                MaintenanceRequest maintenanceRequest = ServerSideFactory.create(MaintenanceFacade.class).createNewRequest(building);
-                return createTO(maintenanceRequest);
+                return createTO(ServerSideFactory.create(MaintenanceFacade.class).createNewRequest(initData.building()));
             } else {
                 return super.init(initializationData);
             }

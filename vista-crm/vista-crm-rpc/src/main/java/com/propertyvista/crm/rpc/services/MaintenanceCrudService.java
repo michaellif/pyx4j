@@ -24,6 +24,7 @@ import com.pyx4j.rpc.shared.VoidSerializable;
 import com.propertyvista.domain.maintenance.MaintenanceRequestMetadata;
 import com.propertyvista.domain.maintenance.SurveyResponse;
 import com.propertyvista.domain.property.asset.building.Building;
+import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.tenant.lease.Tenant;
 import com.propertyvista.dto.MaintenanceRequestDTO;
 import com.propertyvista.dto.MaintenanceRequestScheduleDTO;
@@ -34,6 +35,8 @@ public interface MaintenanceCrudService extends AbstractCrudService<MaintenanceR
     interface MaintenanceInitializationData extends InitializationData {
 
         Building building();
+
+        AptUnit unit();
 
         Tenant tenant();
     }

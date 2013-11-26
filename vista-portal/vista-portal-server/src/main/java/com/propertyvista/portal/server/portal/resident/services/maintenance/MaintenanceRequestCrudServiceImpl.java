@@ -55,8 +55,8 @@ public class MaintenanceRequestCrudServiceImpl extends AbstractCrudServiceDtoImp
 
     @Override
     protected MaintenanceRequestDTO init(InitializationData initializationData) {
-        Tenant tenant = ResidentPortalContext.getTenantInLease().leaseParticipant();
-        MaintenanceRequest maintenanceRequest = ServerSideFactory.create(MaintenanceFacade.class).createNewRequestForTenant(tenant);
+        MaintenanceRequest maintenanceRequest = ServerSideFactory.create(MaintenanceFacade.class).createNewRequestForTenant(
+                ResidentPortalContext.getTenantInLease().leaseParticipant());
         return createTO(maintenanceRequest);
     }
 

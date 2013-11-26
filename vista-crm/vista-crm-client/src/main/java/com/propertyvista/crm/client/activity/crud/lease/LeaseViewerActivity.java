@@ -53,7 +53,7 @@ import com.propertyvista.crm.rpc.services.lease.common.LeaseTermCrudService;
 import com.propertyvista.domain.communication.EmailTemplateType;
 import com.propertyvista.domain.financial.BillingAccount;
 import com.propertyvista.domain.payment.AutopayAgreement;
-import com.propertyvista.domain.property.asset.building.Building;
+import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.security.VistaCrmBehavior;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.LeaseAdjustment;
@@ -317,7 +317,7 @@ public class LeaseViewerActivity extends LeaseViewerActivityBase<LeaseDTO> imple
     @Override
     public void goToCreateMaintenanceRequest() {
         MaintenanceCrudService.MaintenanceInitializationData id = EntityFactory.create(MaintenanceCrudService.MaintenanceInitializationData.class);
-        id.building().set(EntityFactory.createIdentityStub(Building.class, currentValue.unit().building().getPrimaryKey()));
+        id.unit().set(EntityFactory.createIdentityStub(AptUnit.class, currentValue.unit().getPrimaryKey()));
         AppSite.getPlaceController().goTo(new CrmSiteMap.Tenants.MaintenanceRequest().formNewItemPlace(id));
     }
 }

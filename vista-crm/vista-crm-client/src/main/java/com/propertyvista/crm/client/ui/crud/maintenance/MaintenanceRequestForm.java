@@ -354,38 +354,6 @@ public class MaintenanceRequestForm extends CrmEntityForm<MaintenanceRequestDTO>
         }
     }
 
-    class TenantSelector extends CEntitySelectorHyperlink<Tenant> {
-        @Override
-        protected AppPlace getTargetPlace() {
-            return AppPlaceEntityMapper.resolvePlace(Tenant.class, getValue().getPrimaryKey());
-        }
-
-        @Override
-        protected TenantSelectorDialog getSelectorDialog() {
-            return new TenantSelectorDialog(false) {
-
-                @Override
-                public boolean onClickOk() {
-                    if (getSelectedItems().isEmpty()) {
-                        return false;
-                    }
-                    setValue(getSelectedItems().get(0));
-                    return true;
-                }
-
-                @Override
-                protected void setFilters(List<Criterion> filters) {
-                    super.setFilters(filters);
-                    // add building filter if value set
-                    Building building = MaintenanceRequestForm.this.getValue().building();
-                    if (!building.isNull()) {
-                        addFilter(PropertyCriterion.eq(proto().lease().unit().building(), building));
-                    }
-                }
-            };
-        }
-    }
-
     class UnitSelector extends CEntitySelectorHyperlink<AptUnit> {
         @Override
         protected AppPlace getTargetPlace() {
@@ -408,10 +376,49 @@ public class MaintenanceRequestForm extends CrmEntityForm<MaintenanceRequestDTO>
                 @Override
                 protected void setFilters(List<Criterion> filters) {
                     super.setFilters(filters);
+
                     // add building filter if value set
                     Building building = MaintenanceRequestForm.this.getValue().building();
                     if (!building.isNull()) {
                         addFilter(PropertyCriterion.eq(proto().building(), building));
+                    }
+                }
+            };
+        }
+    }
+
+    class TenantSelector extends CEntitySelectorHyperlink<Tenant> {
+        @Override
+        protected AppPlace getTargetPlace() {
+            return AppPlaceEntityMapper.resolvePlace(Tenant.class, getValue().getPrimaryKey());
+        }
+
+        @Override
+        protected TenantSelectorDialog getSelectorDialog() {
+            return new TenantSelectorDialog(false) {
+
+                @Override
+                public boolean onClickOk() {
+                    if (getSelectedItems().isEmpty()) {
+                        return false;
+                    }
+                    setValue(getSelectedItems().get(0));
+                    return true;
+                }
+
+                @Override
+                protected void setFilters(List<Criterion> filters) {
+                    super.setFilters(filters);
+
+                    // add unit/building filter if value set
+                    AptUnit unit = MaintenanceRequestForm.this.getValue().unit();
+                    if (!unit.isNull()) {
+                        addFilter(PropertyCriterion.eq(proto().lease().unit(), unit));
+                    } else {
+                        Building building = MaintenanceRequestForm.this.getValue().building();
+                        if (!building.isNull()) {
+                            addFilter(PropertyCriterion.eq(proto().lease().unit().building(), building));
+                        }
                     }
                 }
             };
