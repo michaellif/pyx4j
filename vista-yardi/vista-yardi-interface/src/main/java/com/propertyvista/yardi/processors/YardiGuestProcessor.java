@@ -11,7 +11,7 @@
  * @author stanp
  * @version $Id$
  */
-package com.propertyvista.yardi.services;
+package com.propertyvista.yardi.processors;
 
 import java.sql.Timestamp;
 import java.util.Date;

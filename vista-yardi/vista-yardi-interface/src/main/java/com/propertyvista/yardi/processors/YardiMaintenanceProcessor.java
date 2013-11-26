@@ -11,7 +11,7 @@
  * @author stanp
  * @version $Id$
  */
-package com.propertyvista.yardi.services;
+package com.propertyvista.yardi.processors;
 
 import java.rmi.RemoteException;
 import java.util.ArrayList;
@@ -48,6 +48,7 @@ import com.propertyvista.domain.maintenance.MaintenanceRequestStatus;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.settings.PmcYardiCredential;
+import com.propertyvista.yardi.services.YardiMaintenanceRequestsService;
 
 public class YardiMaintenanceProcessor {
     private final static Logger log = LoggerFactory.getLogger(YardiMaintenanceProcessor.class);

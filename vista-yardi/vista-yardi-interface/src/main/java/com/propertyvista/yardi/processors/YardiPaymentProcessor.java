@@ -11,7 +11,7 @@
  * @author stanp
  * @version $Id$
  */
-package com.propertyvista.yardi.services;
+package com.propertyvista.yardi.processors;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -36,7 +36,7 @@ public class YardiPaymentProcessor {
 
     private final static Logger log = LoggerFactory.getLogger(YardiPaymentProcessor.class);
 
-    void removeOldPayments(BillingAccount account) {
+    public void removeOldPayments(BillingAccount account) {
         EntityQueryCriteria<YardiPayment> criteria = EntityQueryCriteria.create(YardiPayment.class);
         criteria.eq(criteria.proto().billingAccount(), account);
         criteria.isNull(criteria.proto().paymentRecord());

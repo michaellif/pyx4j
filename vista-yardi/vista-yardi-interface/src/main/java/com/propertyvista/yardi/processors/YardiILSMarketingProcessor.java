@@ -11,7 +11,7 @@
  * @author stanp
  * @version $Id$
  */
-package com.propertyvista.yardi.services;
+package com.propertyvista.yardi.processors;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

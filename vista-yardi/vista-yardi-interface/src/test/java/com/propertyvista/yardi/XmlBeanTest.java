@@ -51,7 +51,7 @@ import com.propertyvista.domain.ref.Province;
 import com.propertyvista.server.jobs.TaskRunner;
 import com.propertyvista.yardi.bean.Properties;
 import com.propertyvista.yardi.mapper.UnitsMapper;
-import com.propertyvista.yardi.services.YardiBuildingProcessor;
+import com.propertyvista.yardi.processors.YardiBuildingProcessor;
 
 public class XmlBeanTest {
 

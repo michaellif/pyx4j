@@ -49,6 +49,7 @@ import com.propertyvista.domain.maintenance.MaintenanceRequestMetadata;
 import com.propertyvista.domain.settings.PmcYardiCredential;
 import com.propertyvista.shared.config.VistaFeatures;
 import com.propertyvista.yardi.bean.Properties;
+import com.propertyvista.yardi.processors.YardiMaintenanceProcessor;
 import com.propertyvista.yardi.stub.YardiMaintenanceRequestsStub;
 
 /*

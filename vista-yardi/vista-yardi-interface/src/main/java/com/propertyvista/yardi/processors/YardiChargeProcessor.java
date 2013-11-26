@@ -11,7 +11,7 @@
  * @author stanp
  * @version $Id$
  */
-package com.propertyvista.yardi.services;
+package com.propertyvista.yardi.processors;
 
 import com.yardi.entity.resident.RTCustomer;
 
@@ -27,7 +27,7 @@ import com.propertyvista.domain.financial.yardi.YardiDebit;
 
 public class YardiChargeProcessor {
 
-    BillingAccount getAccount(final Key yardiInterfaceId, RTCustomer cust) throws YardiServiceException {
+    public BillingAccount getAccount(final Key yardiInterfaceId, RTCustomer cust) throws YardiServiceException {
         BillingAccount account = YardiARIntegrationAgent.getYardiBillingAccount(yardiInterfaceId, cust);
         if (account == null) {
             throw new YardiServiceException("YardiBillingAccount is null for RTCustomer");
@@ -35,7 +35,7 @@ public class YardiChargeProcessor {
         return account;
     }
 
-    void removeOldCharges(BillingAccount account) {
+    public void removeOldCharges(BillingAccount account) {
         // regular charges
         EntityQueryCriteria<YardiDebit> oldCharges = EntityQueryCriteria.create(YardiDebit.class);
         oldCharges.eq(oldCharges.proto().billingAccount(), account);
