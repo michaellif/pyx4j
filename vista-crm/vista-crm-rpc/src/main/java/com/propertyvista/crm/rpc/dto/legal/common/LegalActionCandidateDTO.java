@@ -13,12 +13,11 @@
  */
 package com.propertyvista.crm.rpc.dto.legal.common;
 
-import java.math.BigDecimal;
-
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 
+import com.propertyvista.crm.rpc.dto.legal.l1.L1FormDataReviewWizardDTO;
 import com.propertyvista.domain.tenant.lease.Lease;
 
 /** This will hopefully replace LegalNoticeCandidate: should be used as a basic entity for all kinds of legal related actions */
@@ -35,6 +34,8 @@ public interface LegalActionCandidateDTO extends IEntity {
 
     IPrimitive<String> unit();
 
-    IPrimitive<BigDecimal> owedAmount();
+    L1FormDataReviewWizardDTO l1FormReview();
+
+    IPrimitive<Boolean> isReviewed();
 
 }

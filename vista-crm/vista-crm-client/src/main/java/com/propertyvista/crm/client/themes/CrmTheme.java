@@ -54,6 +54,7 @@ import com.propertyvista.crm.client.ui.tools.autopayreview.PapReviewsHolderForm;
 import com.propertyvista.crm.client.ui.tools.common.BulkEditableEntityForm;
 import com.propertyvista.crm.client.ui.tools.common.BulkOperationToolViewImpl;
 import com.propertyvista.crm.client.ui.tools.common.ItemsHolderForm;
+import com.propertyvista.crm.client.ui.tools.l1generation.visors.L1VisorStyles;
 import com.propertyvista.crm.client.ui.tools.n4generation.LegalNoticeCandidateFolderHolderForm;
 import com.propertyvista.crm.client.ui.tools.n4generation.LegalNoticeCandidateForm;
 import com.propertyvista.crm.client.ui.tools.n4generation.N4GenerationToolViewImpl;
@@ -152,6 +153,7 @@ public class CrmTheme extends VistaTheme {
         initBulkOperationToolStyles();
         initAutoPayReviewToolStyles();
         initN4GenerationToolStyles();
+        initL1GenerationToolStyles();
     }
 
     @Override
@@ -968,5 +970,11 @@ public class CrmTheme extends VistaTheme {
         style.addProperty("width", "200px");
         addStyle(style);
 
+    }
+
+    private void initL1GenerationToolStyles() {
+        Style style = new Style("." + L1VisorStyles.L1GenerationVisor.name());
+        style.addProperty("background-color", ThemeColor.background);
+        addStyle(style);
     }
 }

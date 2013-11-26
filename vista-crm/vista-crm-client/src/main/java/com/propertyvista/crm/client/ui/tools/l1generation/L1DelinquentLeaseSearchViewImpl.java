@@ -13,6 +13,8 @@
  */
 package com.propertyvista.crm.client.ui.tools.l1generation;
 
+import com.google.gwt.cell.client.ActionCell;
+import com.google.gwt.cell.client.ActionCell.Delegate;
 import com.google.gwt.cell.client.Cell;
 import com.google.gwt.cell.client.CheckboxCell;
 import com.google.gwt.cell.client.TextCell;
@@ -20,11 +22,13 @@ import com.google.gwt.cell.client.ValueUpdater;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.safehtml.shared.SafeHtmlBuilder;
+import com.google.gwt.safehtml.shared.SafeHtmlUtils;
 import com.google.gwt.user.cellview.client.Column;
 import com.google.gwt.user.cellview.client.DataGrid;
 import com.google.gwt.user.cellview.client.Header;
 import com.google.gwt.user.cellview.client.SimplePager;
 import com.google.gwt.user.cellview.client.SimplePager.TextLocation;
+import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.LayoutPanel;
 import com.google.gwt.view.client.DefaultSelectionEventManager;
 import com.google.gwt.view.client.MultiSelectionModel;
@@ -37,6 +41,7 @@ import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.entity.shared.Path;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.prime.AbstractPrimePane;
+import com.pyx4j.widgets.client.Button;
 
 import com.propertyvista.crm.rpc.dto.legal.common.LegalActionCandidateDTO;
 
@@ -125,10 +130,28 @@ public class L1DelinquentLeaseSearchViewImpl extends AbstractPrimePane implement
             Column<LegalActionCandidateDTO, String> owedAmountColumn = new Column<LegalActionCandidateDTO, String>(new TextCell()) {
                 @Override
                 public String getValue(LegalActionCandidateDTO object) {
-                    return SimpleMessageFormat.format("{0,number,$#,##0.00}", object.owedAmount().getValue());
+                    return SimpleMessageFormat.format("{0,number,$#,##0.00}", object.l1FormReview().formData().totalRentOwing().getValue());
                 }
             };
             defColumn(owedAmountColumn, i18n.tr("Owed Amount"), 100, Unit.PX);
+            {
+                Column<LegalActionCandidateDTO, LegalActionCandidateDTO> reviewButtonColumn = new Column<LegalActionCandidateDTO, LegalActionCandidateDTO>(
+                        new ActionCell<LegalActionCandidateDTO>(i18n.tr("Review"), new Delegate<LegalActionCandidateDTO>() {
+                            @Override
+                            public void execute(LegalActionCandidateDTO object) {
+                                L1DelinquentLeaseSearchViewImpl.this.reviewCandidate(object);
+                            }
+                        })) {
+
+                    @Override
+                    public LegalActionCandidateDTO getValue(LegalActionCandidateDTO object) {
+                        return object;
+                    }
+
+                };
+                this.addColumn(reviewButtonColumn, SafeHtmlUtils.fromSafeConstant("<br>"));
+                this.setColumnWidth(reviewButtonColumn, 50, Unit.PX);
+            }
         }
 
         private void defTextColumn(IObject<String> columnField, double columWidth, Unit columnWidthUnit) {
@@ -137,7 +160,8 @@ public class L1DelinquentLeaseSearchViewImpl extends AbstractPrimePane implement
         }
 
         private void defColumn(Column<LegalActionCandidateDTO, ?> column, String headerCaption, double columWidth, Unit columnWidthUnit) {
-            this.addColumn(column, new SafeHtmlBuilder().appendHtmlConstant("<div>").appendEscaped(headerCaption).appendHtmlConstant("</div>").toSafeHtml());
+            this.addColumn(column, new SafeHtmlBuilder().appendHtmlConstant("<div>").appendEscaped(headerCaption).appendHtmlConstant("</div>").toSafeHtml(),
+                    new SafeHtmlBuilder().appendHtmlConstant("<div>").appendEscaped(headerCaption).appendHtmlConstant("</div>").toSafeHtml());
             this.setColumnWidth(column, columWidth, columnWidthUnit);
         }
     }
@@ -149,8 +173,16 @@ public class L1DelinquentLeaseSearchViewImpl extends AbstractPrimePane implement
     private final SimplePager pager;
 
     public L1DelinquentLeaseSearchViewImpl() {
-        LayoutPanel panel = new LayoutPanel();
+        addHeaderToolbarItem(new Button(i18n.tr("Search...")));
+        addHeaderToolbarItem(new Button(i18n.tr("Fill Out Common Fields..."), new Command() {
+            @Override
+            public void execute() {
+                fillCommonFields();
+            }
+        }));
+        addHeaderToolbarItem(new Button(i18n.tr("Issue L1's")));
 
+        LayoutPanel panel = new LayoutPanel();
         dataGrid = new LegalActionCandidateDataGrid();
 
         panel.add(dataGrid);
@@ -175,7 +207,14 @@ public class L1DelinquentLeaseSearchViewImpl extends AbstractPrimePane implement
         this.presenter = presenter;
         this.dataGrid.setSelectionModel(this.presenter.getSelectionModel(), DefaultSelectionEventManager.<LegalActionCandidateDTO> createCheckboxManager());
         this.presenter.getDataProvider().addDataDisplay(this.dataGrid);
+    }
 
+    protected void reviewCandidate(LegalActionCandidateDTO object) {
+        this.presenter.reviewCandidate(object);
+    }
+
+    protected void fillCommonFields() {
+        this.presenter.fillCommonFields();
     }
 
 }

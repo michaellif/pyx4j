@@ -29,6 +29,10 @@ public interface L1DelinquentLeaseSearchView extends IPrimePane {
         SelectionModel<? super LegalActionCandidateDTO> getSelectionModel();
 
         void toggleSelectAll(Boolean selected);
+
+        void reviewCandidate(LegalActionCandidateDTO candidate);
+
+        void fillCommonFields();
     }
 
     void setPresenter(Presenter presenter);
