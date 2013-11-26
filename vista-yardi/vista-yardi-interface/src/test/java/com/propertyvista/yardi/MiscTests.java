@@ -26,7 +26,7 @@ import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.gwt.server.DateUtils;
 
 import com.propertyvista.domain.tenant.lease.Lease;
-import com.propertyvista.yardi.mapper.MappingUtils;
+import com.propertyvista.yardi.mappers.MappingUtils;
 
 public class MiscTests {
 

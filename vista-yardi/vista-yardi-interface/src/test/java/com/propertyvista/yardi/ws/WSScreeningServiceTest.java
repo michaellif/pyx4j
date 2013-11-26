@@ -29,8 +29,8 @@ import com.yardi.ws.WSScreeningService;
 
 import com.pyx4j.essentials.j2se.util.MarshallUtil;
 
-import com.propertyvista.yardi.bean.Message.MessageType;
-import com.propertyvista.yardi.bean.Messages;
+import com.propertyvista.yardi.beans.Messages;
+import com.propertyvista.yardi.beans.Message.MessageType;
 
 public class WSScreeningServiceTest extends WSTestBase {
 

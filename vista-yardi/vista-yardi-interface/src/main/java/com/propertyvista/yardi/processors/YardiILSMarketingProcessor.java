@@ -25,7 +25,7 @@ import com.pyx4j.commons.LogicalDate;
 import com.propertyvista.biz.ExecutionMonitor;
 import com.propertyvista.biz.system.YardiServiceException;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
-import com.propertyvista.yardi.mapper.MappingUtils;
+import com.propertyvista.yardi.mappers.MappingUtils;
 
 public class YardiILSMarketingProcessor {
 

@@ -7,11 +7,11 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Oct 9, 2013
+ * Created on Aug 28, 2013
  * @author stanp
  * @version $Id$
  */
-package com.propertyvista.yardi.mock.stub;
+package com.propertyvista.yardi.stubs;
 
 import java.rmi.RemoteException;
 
@@ -20,29 +20,10 @@ import com.yardi.entity.ils.PhysicalProperty;
 import com.propertyvista.biz.system.YardiServiceException;
 import com.propertyvista.domain.settings.PmcYardiCredential;
 import com.propertyvista.yardi.beans.Properties;
-import com.propertyvista.yardi.stubs.YardiILSGuestCardStub;
 
-public class YardiMockILSGuestCardStubImpl implements YardiILSGuestCardStub {
+public interface YardiILSGuestCardStub extends ExternalInterfaceLoggingStub {
+    Properties getPropertyConfigurations(PmcYardiCredential yc) throws YardiServiceException, RemoteException;
 
-    @Override
-    public long getRequestsTime() {
-        return 0;
-    }
-
-    @Override
-    public void logRecordedTracastions() {
-    }
-
-    @Override
-    public Properties getPropertyConfigurations(PmcYardiCredential yc) throws YardiServiceException, RemoteException {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    @Override
-    public PhysicalProperty getPropertyMarketingInfo(PmcYardiCredential yc, String propertyId) throws YardiServiceException {
-        // TODO Auto-generated method stub
-        return null;
-    }
+    PhysicalProperty getPropertyMarketingInfo(PmcYardiCredential yc, String propertyId) throws YardiServiceException;
 
 }

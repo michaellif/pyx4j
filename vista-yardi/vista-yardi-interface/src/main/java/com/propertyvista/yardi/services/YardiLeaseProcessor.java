@@ -64,9 +64,9 @@ import com.propertyvista.domain.tenant.lease.Lease.CompletionType;
 import com.propertyvista.domain.tenant.lease.LeaseTerm;
 import com.propertyvista.domain.tenant.lease.extradata.YardiLeaseChargeData;
 import com.propertyvista.portal.rpc.shared.PolicyNotFoundException;
-import com.propertyvista.yardi.merger.LeaseMerger;
-import com.propertyvista.yardi.merger.LeaseMerger.LeaseChargesMergeStatus;
-import com.propertyvista.yardi.merger.TenantMerger;
+import com.propertyvista.yardi.mergers.LeaseMerger;
+import com.propertyvista.yardi.mergers.TenantMerger;
+import com.propertyvista.yardi.mergers.LeaseMerger.LeaseChargesMergeStatus;
 
 public class YardiLeaseProcessor {
 

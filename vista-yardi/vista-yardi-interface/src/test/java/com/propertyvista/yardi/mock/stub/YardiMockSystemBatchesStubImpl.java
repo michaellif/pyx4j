@@ -20,7 +20,7 @@ import com.yardi.entity.resident.ResidentTransactions;
 import com.propertyvista.biz.system.YardiServiceException;
 import com.propertyvista.domain.settings.PmcYardiCredential;
 import com.propertyvista.yardi.mock.YardiMockServer;
-import com.propertyvista.yardi.stub.YardiSystemBatchesStub;
+import com.propertyvista.yardi.stubs.YardiSystemBatchesStub;
 
 public class YardiMockSystemBatchesStubImpl implements YardiSystemBatchesStub {
 

@@ -72,17 +72,17 @@ import com.propertyvista.domain.settings.PmcYardiCredential;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.misc.VistaTODO;
 import com.propertyvista.operations.domain.scheduler.CompletionType;
-import com.propertyvista.yardi.bean.Properties;
-import com.propertyvista.yardi.mapper.MappingUtils;
+import com.propertyvista.yardi.beans.Properties;
+import com.propertyvista.yardi.mappers.MappingUtils;
 import com.propertyvista.yardi.processors.YardiBuildingProcessor;
 import com.propertyvista.yardi.processors.YardiChargeProcessor;
 import com.propertyvista.yardi.processors.YardiILSMarketingProcessor;
 import com.propertyvista.yardi.processors.YardiPaymentProcessor;
-import com.propertyvista.yardi.stub.ExternalInterfaceLoggingStub;
-import com.propertyvista.yardi.stub.YardiILSGuestCardStub;
-import com.propertyvista.yardi.stub.YardiPropertyNoAccessException;
-import com.propertyvista.yardi.stub.YardiResidentNoTenantsExistException;
-import com.propertyvista.yardi.stub.YardiResidentTransactionsStub;
+import com.propertyvista.yardi.stubs.ExternalInterfaceLoggingStub;
+import com.propertyvista.yardi.stubs.YardiILSGuestCardStub;
+import com.propertyvista.yardi.stubs.YardiPropertyNoAccessException;
+import com.propertyvista.yardi.stubs.YardiResidentNoTenantsExistException;
+import com.propertyvista.yardi.stubs.YardiResidentTransactionsStub;
 
 /**
  * Implementation functionality for updating properties/units/leases/tenants basing on getResidentTransactions from YARDI api
@@ -244,7 +244,7 @@ public class YardiResidentTransactionsService extends YardiAbstractService {
 
     private List<YardiPropertyConfiguration> getPropertyConfigurations(Properties properties) {
         List<YardiPropertyConfiguration> propertyConfigurations = new ArrayList<YardiPropertyConfiguration>();
-        for (com.propertyvista.yardi.bean.Property property : properties.getProperties()) {
+        for (com.propertyvista.yardi.beans.Property property : properties.getProperties()) {
             if (StringUtils.isNotEmpty(property.getCode())) {
                 YardiPropertyConfiguration configuration = EntityFactory.create(YardiPropertyConfiguration.class);
                 configuration.propertyID().setValue(property.getCode());

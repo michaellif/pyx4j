@@ -30,9 +30,9 @@ import com.pyx4j.essentials.j2se.util.MarshallUtil;
 import com.propertyvista.biz.system.YardiServiceException;
 import com.propertyvista.domain.settings.PmcYardiCredential;
 import com.propertyvista.yardi.TransactionLog;
-import com.propertyvista.yardi.bean.Properties;
+import com.propertyvista.yardi.beans.Properties;
 import com.propertyvista.yardi.mock.YardiMockServer;
-import com.propertyvista.yardi.stub.YardiResidentTransactionsStub;
+import com.propertyvista.yardi.stubs.YardiResidentTransactionsStub;
 
 public class YardiMockResidentTransactionsStubImpl implements YardiResidentTransactionsStub {
 

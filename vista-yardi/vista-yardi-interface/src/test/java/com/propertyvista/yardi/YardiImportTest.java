@@ -43,7 +43,7 @@ import com.propertyvista.yardi.mock.RtCustomerUpdater;
 import com.propertyvista.yardi.mock.TransactionChargeUpdateEvent;
 import com.propertyvista.yardi.mock.TransactionChargeUpdater;
 import com.propertyvista.yardi.services.YardiResidentTransactionsService;
-import com.propertyvista.yardi.stub.YardiResidentTransactionsStub;
+import com.propertyvista.yardi.stubs.YardiResidentTransactionsStub;
 
 public class YardiImportTest extends YardiTestBase {
 

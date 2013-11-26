@@ -48,9 +48,9 @@ import com.propertyvista.domain.maintenance.MaintenanceRequest;
 import com.propertyvista.domain.maintenance.MaintenanceRequestMetadata;
 import com.propertyvista.domain.settings.PmcYardiCredential;
 import com.propertyvista.shared.config.VistaFeatures;
-import com.propertyvista.yardi.bean.Properties;
+import com.propertyvista.yardi.beans.Properties;
 import com.propertyvista.yardi.processors.YardiMaintenanceProcessor;
-import com.propertyvista.yardi.stub.YardiMaintenanceRequestsStub;
+import com.propertyvista.yardi.stubs.YardiMaintenanceRequestsStub;
 
 /*
  * The agent is responsible for persisting all imported data in the DB by requests from MaintenanceFacade.
@@ -276,7 +276,7 @@ public class YardiMaintenanceRequestsService extends YardiAbstractService {
     public List<String> getPropertyCodes(YardiMaintenanceRequestsStub stub, PmcYardiCredential yc) throws YardiServiceException, RemoteException {
         List<String> propertyCodes = new ArrayList<String>();
         Properties properties = stub.getPropertyConfigurations(yc);
-        for (com.propertyvista.yardi.bean.Property property : properties.getProperties()) {
+        for (com.propertyvista.yardi.beans.Property property : properties.getProperties()) {
             if (StringUtils.isNotEmpty(property.getCode())) {
                 propertyCodes.add(property.getCode());
             }

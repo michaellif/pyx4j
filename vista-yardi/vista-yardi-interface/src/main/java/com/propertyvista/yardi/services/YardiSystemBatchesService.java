@@ -28,7 +28,7 @@ import com.propertyvista.biz.system.YardiServiceException;
 import com.propertyvista.domain.financial.yardi.YardiReceipt;
 import com.propertyvista.domain.settings.PmcYardiCredential;
 import com.propertyvista.yardi.processors.YardiPaymentProcessor;
-import com.propertyvista.yardi.stub.YardiSystemBatchesStub;
+import com.propertyvista.yardi.stubs.YardiSystemBatchesStub;
 
 public class YardiSystemBatchesService extends YardiAbstractService {
 

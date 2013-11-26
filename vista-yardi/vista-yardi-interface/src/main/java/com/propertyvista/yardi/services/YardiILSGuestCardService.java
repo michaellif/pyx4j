@@ -25,7 +25,7 @@ import com.pyx4j.config.server.ServerSideFactory;
 import com.propertyvista.biz.system.YardiServiceException;
 import com.propertyvista.config.VistaDeployment;
 import com.propertyvista.domain.settings.PmcYardiCredential;
-import com.propertyvista.yardi.stub.YardiILSGuestCardStub;
+import com.propertyvista.yardi.stubs.YardiILSGuestCardStub;
 
 public class YardiILSGuestCardService extends YardiAbstractService {
     private static final Logger log = LoggerFactory.getLogger(YardiILSGuestCardService.class);

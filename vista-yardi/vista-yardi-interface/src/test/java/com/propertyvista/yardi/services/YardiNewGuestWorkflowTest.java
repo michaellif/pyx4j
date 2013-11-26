@@ -63,7 +63,7 @@ import com.pyx4j.essentials.j2se.util.MarshallUtil;
 import com.propertyvista.config.tests.VistaTestsServerSideConfiguration;
 import com.propertyvista.domain.settings.PmcYardiCredential;
 import com.propertyvista.yardi.processors.YardiGuestProcessor;
-import com.propertyvista.yardi.stub.YardiGuestManagementStub;
+import com.propertyvista.yardi.stubs.YardiGuestManagementStub;
 
 /**
  * Proof of concept for PTAPP-Yardi integration that exercises the following scenario:

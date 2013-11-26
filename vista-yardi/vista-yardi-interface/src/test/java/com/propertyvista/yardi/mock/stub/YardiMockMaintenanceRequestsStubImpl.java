@@ -21,8 +21,8 @@ import com.yardi.ws.operations.requests.GetServiceRequest_Search;
 
 import com.propertyvista.biz.system.YardiServiceException;
 import com.propertyvista.domain.settings.PmcYardiCredential;
-import com.propertyvista.yardi.bean.Properties;
-import com.propertyvista.yardi.stub.YardiMaintenanceRequestsStub;
+import com.propertyvista.yardi.beans.Properties;
+import com.propertyvista.yardi.stubs.YardiMaintenanceRequestsStub;
 
 public class YardiMockMaintenanceRequestsStubImpl implements YardiMaintenanceRequestsStub {
 

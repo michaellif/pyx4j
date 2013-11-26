@@ -54,10 +54,10 @@ import com.propertyvista.yardi.mock.stub.YardiMockMaintenanceRequestsStubImpl;
 import com.propertyvista.yardi.mock.stub.YardiMockResidentTransactionsStubImpl;
 import com.propertyvista.yardi.mock.stub.YardiMockSystemBatchesStubImpl;
 import com.propertyvista.yardi.services.YardiResidentTransactionsService;
-import com.propertyvista.yardi.stub.YardiILSGuestCardStub;
-import com.propertyvista.yardi.stub.YardiMaintenanceRequestsStub;
-import com.propertyvista.yardi.stub.YardiResidentTransactionsStub;
-import com.propertyvista.yardi.stub.YardiSystemBatchesStub;
+import com.propertyvista.yardi.stubs.YardiILSGuestCardStub;
+import com.propertyvista.yardi.stubs.YardiMaintenanceRequestsStub;
+import com.propertyvista.yardi.stubs.YardiResidentTransactionsStub;
+import com.propertyvista.yardi.stubs.YardiSystemBatchesStub;
 
 public class YardiTestBase extends IntegrationTestBase {
 

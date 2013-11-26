@@ -35,11 +35,11 @@ import com.propertyvista.biz.ExecutionMonitor;
 import com.propertyvista.biz.system.YardiServiceException;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
-import com.propertyvista.yardi.mapper.BuildingsMapper;
-import com.propertyvista.yardi.mapper.MappingUtils;
-import com.propertyvista.yardi.mapper.UnitsMapper;
-import com.propertyvista.yardi.merger.BuildingsMerger;
-import com.propertyvista.yardi.merger.UnitsMerger;
+import com.propertyvista.yardi.mappers.BuildingsMapper;
+import com.propertyvista.yardi.mappers.MappingUtils;
+import com.propertyvista.yardi.mappers.UnitsMapper;
+import com.propertyvista.yardi.mergers.BuildingsMerger;
+import com.propertyvista.yardi.mergers.UnitsMerger;
 
 public class YardiBuildingProcessor {
     private final static Logger log = LoggerFactory.getLogger(YardiBuildingProcessor.class);

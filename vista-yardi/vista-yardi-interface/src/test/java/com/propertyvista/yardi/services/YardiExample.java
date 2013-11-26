@@ -25,7 +25,7 @@ import com.pyx4j.config.server.ServerSideFactory;
 
 import com.propertyvista.domain.property.yardi.YardiPropertyConfiguration;
 import com.propertyvista.server.config.DevYardiCredentials;
-import com.propertyvista.yardi.stub.YardiResidentTransactionsStub;
+import com.propertyvista.yardi.stubs.YardiResidentTransactionsStub;
 
 public class YardiExample {
 

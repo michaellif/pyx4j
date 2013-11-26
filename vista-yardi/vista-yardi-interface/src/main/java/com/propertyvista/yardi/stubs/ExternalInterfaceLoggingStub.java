@@ -7,25 +7,16 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Nov 14, 2013
+ * Created on Aug 23, 2013
  * @author vlads
  * @version $Id$
  */
-package com.propertyvista.biz.system;
+package com.propertyvista.yardi.stubs;
 
-import com.propertyvista.domain.settings.PmcYardiCredential;
-import com.propertyvista.yardi.stubs.YardiLicense;
+public interface ExternalInterfaceLoggingStub {
 
-public class YardiOperationsFacadeImpl implements YardiOperationsFacade {
+    long getRequestsTime();
 
-    @Override
-    public void restLicenseCache() {
-        YardiLicense.restLicenseCache();
-    }
-
-    @Override
-    public void verifyInterface(PmcYardiCredential yc, Void yardiInterfaceType) {
-        // TODO implement ping   VISTA-3820
-    }
+    void logRecordedTracastions();
 
 }

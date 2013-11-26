@@ -39,10 +39,10 @@ import com.pyx4j.i18n.shared.I18n;
 import com.propertyvista.biz.system.YardiServiceException;
 import com.propertyvista.domain.tenant.Customer;
 import com.propertyvista.server.domain.CustomerCreditCheckReport;
-import com.propertyvista.yardi.bean.Message;
-import com.propertyvista.yardi.bean.Message.MessageType;
-import com.propertyvista.yardi.bean.Messages;
-import com.propertyvista.yardi.mapper.ApplicantScreeningMapper;
+import com.propertyvista.yardi.beans.Message;
+import com.propertyvista.yardi.beans.Messages;
+import com.propertyvista.yardi.beans.Message.MessageType;
+import com.propertyvista.yardi.mappers.ApplicantScreeningMapper;
 
 @WebService(endpointInterface = "com.yardi.ws.WSScreeningService")
 public class WSScreeningServiceImpl implements WSScreeningService {

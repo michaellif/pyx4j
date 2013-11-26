@@ -36,7 +36,7 @@ import com.pyx4j.essentials.j2se.util.MarshallUtil;
 import com.propertyvista.config.tests.VistaTestsServerSideConfiguration;
 import com.propertyvista.domain.settings.PmcYardiCredential;
 import com.propertyvista.server.config.DevYardiCredentials;
-import com.propertyvista.yardi.stub.YardiILSGuestCardStub;
+import com.propertyvista.yardi.stubs.YardiILSGuestCardStub;
 
 public class YardiILSServiceClientTest {
 
@@ -50,17 +50,17 @@ public class YardiILSServiceClientTest {
         try {
             if (true) {
                 YardiILSGuestCardStub stub = ServerSideFactory.create(YardiILSGuestCardStub.class);
-                com.propertyvista.yardi.bean.Properties propConfig = null;
+                com.propertyvista.yardi.beans.Properties propConfig = null;
                 if (false) {
-                    propConfig = new com.propertyvista.yardi.bean.Properties();
-                    com.propertyvista.yardi.bean.Property prop = new com.propertyvista.yardi.bean.Property();
+                    propConfig = new com.propertyvista.yardi.beans.Properties();
+                    com.propertyvista.yardi.beans.Property prop = new com.propertyvista.yardi.beans.Property();
                     prop.setCode(yc.propertyListCodes().getValue());
                     propConfig.getProperties().add(prop);
                 } else {
                     // get properties from getPropertyConfigurations()
                     propConfig = stub.getPropertyConfigurations(yc);
                 }
-                for (com.propertyvista.yardi.bean.Property prop : propConfig.getProperties()) {
+                for (com.propertyvista.yardi.beans.Property prop : propConfig.getProperties()) {
                     PhysicalProperty property = stub.getPropertyMarketingInfo(yc, prop.getCode());
                     log.info("PhysicalProperty: {}", property.getProperty().get(0).getPropertyID().getIdentification().getPrimaryID());
 //                for (Property building : property.getProperty()) {
