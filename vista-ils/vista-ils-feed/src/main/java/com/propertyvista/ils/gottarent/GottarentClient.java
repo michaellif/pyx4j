@@ -61,7 +61,8 @@ public class GottarentClient {
         GottarentWSStub ws = new GottarentWSStub();
         ImportOp input = new ImportOp();
 
-        DataSource dataSource = new ByteArrayDataSource(Base64.encodeBase64(objectToXml(requestListing, Listing.class).getBytes()));
+        String generatedXml = objectToXml(requestListing, Listing.class);
+        DataSource dataSource = new ByteArrayDataSource(Base64.encodeBase64(generatedXml.getBytes()));
 
         input.setBuffer(new DataHandler(dataSource));
         input.setUserID(userId);

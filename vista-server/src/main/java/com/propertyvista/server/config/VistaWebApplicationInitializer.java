@@ -45,7 +45,6 @@ import com.pyx4j.server.contexts.LifecycleFilter;
 import com.propertyvista.biz.system.AuditSessionListener;
 import com.propertyvista.domain.security.common.VistaApplication;
 import com.propertyvista.ils.ILSAuthFilter;
-import com.propertyvista.ils.gottarent.rs.GottarentRsApplication;
 import com.propertyvista.ils.kijiji.rs.KijijiApiRsApplication;
 import com.propertyvista.misc.VistaTODO;
 import com.propertyvista.oapi.rs.OpenApiRsApplication;
@@ -191,11 +190,7 @@ public class VistaWebApplicationInitializer implements ServletContainerInitializ
                 sc.addMapping("/interfaces/ils/kijiji/*");
                 sc.setInitParameter("javax.ws.rs.Application", KijijiApiRsApplication.class.getName());
             }
-            {
-                ServletRegistration.Dynamic sc = ctx.addServlet("ILSGottarentService", ServletContainer.class);
-                sc.addMapping("/interfaces/ils/gottarent/*");
-                sc.setInitParameter("javax.ws.rs.Application", GottarentRsApplication.class.getName());
-            }
+
         }
 
         // Main GWT Entry point

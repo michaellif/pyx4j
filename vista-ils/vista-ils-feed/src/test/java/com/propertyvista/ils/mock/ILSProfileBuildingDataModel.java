@@ -7,42 +7,30 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Nov 20, 2013
- * @author stanp
+ * Created on Nov 21, 2013
+ * @author smolka
  * @version $Id$
  */
-package com.propertyvista.ils.gottarent;
-
-import javax.xml.bind.JAXBException;
-
-import org.junit.experimental.categories.Category;
-
-import com.gottarent.rs.Listing;
-import com.gottarent.rs.ObjectFactory;
+package com.propertyvista.ils.mock;
 
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
 
-import com.propertyvista.biz.occupancy.ILSGottarentIntegrationAgent;
 import com.propertyvista.domain.marketing.MarketingContacts;
 import com.propertyvista.domain.marketing.ils.ILSProfileBuilding;
 import com.propertyvista.domain.marketing.ils.ILSProfileFloorplan;
 import com.propertyvista.domain.property.asset.Floorplan;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.settings.ILSConfig.ILSVendor;
-import com.propertyvista.ils.ILSTestBase;
-import com.propertyvista.ils.gottarent.mapper.GottarentDataMapper;
-import com.propertyvista.ils.gottarent.mapper.dto.ILSReportDTO;
-import com.propertyvista.test.integration.IntegrationTestBase.FunctionalTests;
+import com.propertyvista.test.mock.MockDataModel;
 
-@Category(FunctionalTests.class)
-public class GottarentListingTest extends ILSTestBase {
+public class ILSProfileBuildingDataModel extends MockDataModel<ILSProfileBuilding> {
 
     @Override
-    protected void setUp() throws Exception {
-        super.setUp();
-        preloadData();
-        Building building = getBuilding();
+    protected void generate() {
+    }
+
+    public void fillProfiles(Building building) {
 
         ILSProfileBuilding profileBuilding = EntityFactory.create(ILSProfileBuilding.class);
         profileBuilding.building().set(building);
@@ -60,33 +48,6 @@ public class GottarentListingTest extends ILSTestBase {
             floorplan.vendor().setValue(ILSVendor.kijiji);
             Persistence.service().persist(floorplan);
         }
-    }
-
-    public void testScenario() {
-        try {
-            // fetch relevant data and prepare gottarent xml
-            Listing listing = generateData();
-
-            if (hasData(listing)) {
-                // update gottarent server
-                GottarentClient.updateGottarent("UserId", listing);
-            }
-        } catch (Exception e) {
-            fail(e.getMessage());
-        }
-    }
-
-    private boolean hasData(Listing listing) {
-        return listing != null && listing.getCompany() != null && listing.getCompany().getPortfolio() != null
-                && listing.getCompany().getPortfolio().getBuilding() != null && listing.getCompany().getPortfolio().getBuilding().size() > 0;
-    }
-
-    private Listing generateData() throws JAXBException {
-
-        ILSReportDTO ilsReport = new ILSGottarentIntegrationAgent().getUnitListing();
-        assertTrue("No Units found", ilsReport.totalUnits().getValue() > 0);
-
-        return new GottarentDataMapper(new ObjectFactory()).createListing(ilsReport);
     }
 
 }

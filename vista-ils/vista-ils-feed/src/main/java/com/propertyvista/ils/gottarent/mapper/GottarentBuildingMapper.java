@@ -34,6 +34,7 @@ import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.AttachLevel;
 import com.pyx4j.entity.shared.IList;
+import com.pyx4j.geo.GeoPoint;
 
 import com.propertyvista.domain.contact.AddressStructured;
 import com.propertyvista.domain.marketing.Marketing;
@@ -177,15 +178,17 @@ public class GottarentBuildingMapper {
         CommunityInfo to = factory.createCommunityInfo();
         if (from != null && from.size() > 0) {
             for (com.propertyvista.domain.property.asset.building.BuildingAmenity fromAmenity : from) {
-                switch (fromAmenity.type().getValue()) {
-                case transportation:
-                    to.setCommunityInfoDescription("Public transit");
-                    return to;
-                case childCare:
-                    to.setCommunityInfoDescription("Schools nearby");
-                    return to;
-                default:
-                    break;
+                if (!fromAmenity.type().isNull()) {
+                    switch (fromAmenity.type().getValue()) {
+                    case transportation:
+                        to.setCommunityInfoDescription("Public transit");
+                        return to;
+                    case childCare:
+                        to.setCommunityInfoDescription("Schools nearby");
+                        return to;
+                    default:
+                        break;
+                    }
                 }
             }
         }
@@ -205,8 +208,12 @@ public class GottarentBuildingMapper {
         //to.setBuildingRegion(address.country().getStringView());// TODO: Smolka, it is unclear whether we need it
         to.setBuildingStreetAddress(ILSUtils.formatStreetOnly(address));
         to.setBuildingStreetNumber(ILSUtils.formatStreetNumber(address));
-        to.setBuildingLatitude(new BigDecimal(from.info().location().getValue().getLat()));
-        to.setBuildingLongitude(new BigDecimal(from.info().location().getValue().getLng()));
+        GeoPoint gp = from.info().location().getValue();
+        if (gp != null) {
+            to.setBuildingLatitude(new BigDecimal(gp.getLat()));
+            to.setBuildingLongitude(new BigDecimal(gp.getLng()));
+        }
+
         //to.setBuildingIntersection(value);  //TODO: Smolka does not exist in vista
 
         return to;
@@ -238,37 +245,42 @@ public class GottarentBuildingMapper {
         String value = null;
         StructureType structureType = from.structureType().getValue();
 
-        switch (structureType) {
-        case lowRise:
-            value = "Low rise";
-            break;
-        case highRise:
-            value = "High rise";
-            break;
-        case condo:
-            value = "Condo";
-            break;
-        case townhouse:
-            value = "Townhouse";
-            break;
-        default:
-            break;
-        }
-        if (value == null) {
-            Type buildingType = from.type().getValue();
-
-            switch (buildingType) {
-            case commercial:
-                value = "Commercial";
+        if (structureType != null) {
+            switch (structureType) {
+            case lowRise:
+                value = "Low rise";
                 break;
-            case industrial:
-                value = "Industrial";
+            case highRise:
+                value = "High rise";
                 break;
             case condo:
                 value = "Condo";
                 break;
+            case townhouse:
+                value = "Townhouse";
+                break;
             default:
                 break;
+            }
+        }
+
+        if (value == null) {
+            Type buildingType = from.type().getValue();
+
+            if (buildingType != null) {
+                switch (buildingType) {
+                case commercial:
+                    value = "Commercial";
+                    break;
+                case industrial:
+                    value = "Industrial";
+                    break;
+                case condo:
+                    value = "Condo";
+                    break;
+                default:
+                    break;
+                }
             }
         }
         if (value != null) {

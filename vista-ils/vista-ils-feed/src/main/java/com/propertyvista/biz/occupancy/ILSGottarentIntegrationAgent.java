@@ -81,15 +81,16 @@ public class ILSGottarentIntegrationAgent {
             buildingMap.put(profile.building(), profile);
         }
 
-        // create floorplan profile map
-        floorplanMap = new HashMap<Floorplan, ILSProfileFloorplan>();
-        EntityQueryCriteria<ILSProfileFloorplan> critFp = EntityQueryCriteria.create(ILSProfileFloorplan.class);
-        critFp.eq(critFp.proto().vendor(), vendor);
-        critFp.in(critFp.proto().floorplan().building(), buildingMap.keySet());
-        for (ILSProfileFloorplan profile : Persistence.service().query(critFp)) {
-            floorplanMap.put(profile.floorplan(), profile);
+        if (buildingMap.size() > 0) {
+            // create floorplan profile map
+            floorplanMap = new HashMap<Floorplan, ILSProfileFloorplan>();
+            EntityQueryCriteria<ILSProfileFloorplan> critFp = EntityQueryCriteria.create(ILSProfileFloorplan.class);
+            critFp.eq(critFp.proto().vendor(), vendor);
+            critFp.in(critFp.proto().floorplan().building(), buildingMap.keySet());
+            for (ILSProfileFloorplan profile : Persistence.service().query(critFp)) {
+                floorplanMap.put(profile.floorplan(), profile);
+            }
         }
-
         // generate priority map
         priorityMap = new HashMap<Floorplan, ILSProfileFloorplan.Priority>();
         for (ILSProfileFloorplan profile : floorplanMap.values()) {
