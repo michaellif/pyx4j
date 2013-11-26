@@ -45,6 +45,7 @@ import com.propertyvista.biz.financial.billingcycle.BillingCycleFacade;
 import com.propertyvista.biz.financial.payment.PaymentMethodFacade;
 import com.propertyvista.config.VistaDeployment;
 import com.propertyvista.domain.financial.MerchantAccount;
+import com.propertyvista.domain.financial.MerchantAccount.MerchantAccountActivationStatus;
 import com.propertyvista.domain.financial.PaymentRecord;
 import com.propertyvista.domain.financial.billing.BillingCycle;
 import com.propertyvista.domain.financial.billing.InvoiceProductCharge;
@@ -71,6 +72,8 @@ class CaledonReport {
         ICursorIterator<MerchantAccount> accountIterator;
         { //TODO->Closure
             EntityQueryCriteria<MerchantAccount> criteria = EntityQueryCriteria.create(MerchantAccount.class);
+            criteria.eq(criteria.proto().status(), MerchantAccountActivationStatus.Active);
+            criteria.eq(criteria.proto().invalid(), false);
             criteria.isNotNull(criteria.proto()._buildings());
             accountIterator = Persistence.service().query(null, criteria, AttachLevel.Attached);
         }
@@ -94,6 +97,7 @@ class CaledonReport {
 
         {
             EntityQueryCriteria<Building> criteria = EntityQueryCriteria.create(Building.class);
+            criteria.eq(criteria.proto().suspended(), false);
             criteria.eq(criteria.proto().merchantAccounts().$().merchantAccount(), merchantAccount);
             model.buildings().setValue(Persistence.service().count(criteria));
         }
