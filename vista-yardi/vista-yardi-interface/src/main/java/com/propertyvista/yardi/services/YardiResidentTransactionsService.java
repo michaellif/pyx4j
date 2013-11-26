@@ -27,6 +27,7 @@ import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.yardi.entity.guestcard40.RentableItems;
 import com.yardi.entity.ils.Availability;
 import com.yardi.entity.ils.ILSUnit;
 import com.yardi.entity.ils.PhysicalProperty;
@@ -79,7 +80,9 @@ import com.propertyvista.yardi.processors.YardiChargeProcessor;
 import com.propertyvista.yardi.processors.YardiILSMarketingProcessor;
 import com.propertyvista.yardi.processors.YardiLeaseProcessor;
 import com.propertyvista.yardi.processors.YardiPaymentProcessor;
+import com.propertyvista.yardi.processors.YardiProductCatalogProcessor;
 import com.propertyvista.yardi.stubs.ExternalInterfaceLoggingStub;
+import com.propertyvista.yardi.stubs.YardiGuestManagementStub;
 import com.propertyvista.yardi.stubs.YardiILSGuestCardStub;
 import com.propertyvista.yardi.stubs.YardiPropertyNoAccessException;
 import com.propertyvista.yardi.stubs.YardiResidentNoTenantsExistException;
@@ -191,7 +194,6 @@ public class YardiResidentTransactionsService extends YardiAbstractService {
     public void updateLease(PmcYardiCredential yc, Lease lease) throws YardiServiceException, RemoteException {
         YardiResidentTransactionsStub stub = ServerSideFactory.create(YardiResidentTransactionsStub.class);
         final Key yardiInterfaceId = yc.getPrimaryKey();
-        Persistence.service().retrieve(lease.unit().building());
         String propertyCode = lease.unit().building().propertyCode().getValue();
         ResidentTransactions transaction = stub.getResidentTransactionsForTenant(yc, propertyCode, lease.leaseId().getValue());
         if (transaction != null && !transaction.getProperty().isEmpty()) {
@@ -225,9 +227,14 @@ public class YardiResidentTransactionsService extends YardiAbstractService {
         }
     }
 
-    public void updateProductCatalog(PmcYardiCredential yc, Building building) {
-        // TODO Auto-generated method stub
-
+    public void updateProductCatalog(PmcYardiCredential yc, Building building) throws YardiServiceException {
+        final Key yardiInterfaceId = yc.getPrimaryKey();
+        String propertyCode = building.propertyCode().getValue();
+        YardiGuestManagementStub stub = ServerSideFactory.create(YardiGuestManagementStub.class);
+        RentableItems rentableItems = stub.getRentableItems(yc, propertyCode);
+        if (rentableItems != null && !rentableItems.getItemType().isEmpty()) {
+            importProductCatalog(yardiInterfaceId, building, rentableItems);
+        }
     }
 
     public void postReceiptReversal(PmcYardiCredential yc, YardiReceiptReversal reversal) throws YardiServiceException, RemoteException {
@@ -463,6 +470,18 @@ public class YardiResidentTransactionsService extends YardiAbstractService {
         }
 
         return state;
+    }
+
+    private void importProductCatalog(final Key yardiInterfaceId, final Building building, final RentableItems rentableItems) throws YardiServiceException {
+        new UnitOfWork(TransactionScopeOption.RequiresNew).execute(new Executable<Void, YardiServiceException>() {
+            @Override
+            public Void execute() throws YardiServiceException {
+                new YardiProductCatalogProcessor().processCatalog(building, rentableItems, yardiInterfaceId);
+
+                ServerSideFactory.create(BuildingFacade.class).persist(building);
+                return null;
+            }
+        });
     }
 
     private List<ResidentTransactions> getAllResidentTransactions(YardiResidentTransactionsStub stub, PmcYardiCredential yc, ExecutionMonitor executionMonitor,
