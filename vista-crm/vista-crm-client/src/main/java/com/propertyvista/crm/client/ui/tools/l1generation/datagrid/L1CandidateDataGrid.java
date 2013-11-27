@@ -44,7 +44,7 @@ public class L1CandidateDataGrid extends DataGrid<LegalActionCandidateDTO> {
 
     private static final I18n i18n = I18n.get(L1CandidateDataGrid.class);
 
-    private static final int PAGE_SIZE = 100;
+    private static final int PAGE_SIZE = 50;
 
     private L1DelinquentLeaseSearchView.Presenter presenter;
 
@@ -54,7 +54,7 @@ public class L1CandidateDataGrid extends DataGrid<LegalActionCandidateDTO> {
         DataGridScrollFixerHack.apply(this);
     }
 
-    private void setPresenter(L1DelinquentLeaseSearchView.Presenter presenter) {
+    public void setPresenter(L1DelinquentLeaseSearchView.Presenter presenter) {
         this.presenter = presenter;
     }
 

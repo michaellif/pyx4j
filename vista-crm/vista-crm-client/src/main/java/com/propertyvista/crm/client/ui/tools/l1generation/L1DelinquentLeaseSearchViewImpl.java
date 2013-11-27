@@ -107,6 +107,7 @@ public class L1DelinquentLeaseSearchViewImpl extends AbstractPrimePane implement
     @Override
     public void setPresenter(L1DelinquentLeaseSearchView.Presenter presenter) {
         this.presenter = presenter;
+        this.dataGrid.setPresenter(this.presenter);
         this.dataGrid.setSelectionModel(this.presenter.getSelectionModel(), DefaultSelectionEventManager.<LegalActionCandidateDTO> createCheckboxManager());
         this.presenter.getDataProvider().addDataDisplay(this.dataGrid);
     }
