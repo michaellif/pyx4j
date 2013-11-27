@@ -188,7 +188,21 @@ public class EFTTransportFacadeImpl implements EFTTransportFacade {
             move(new File(workdir, fileName), workdir, "error");
         } else {
             move(new File(workdir, fileName), workdir, "processed");
-            new BmoSftpClient().removeFile(fileName);
+            try {
+                try {
+                    new BmoSftpClient().removeFile(fileName);
+                } catch (SftpTransportConnectionException noConnection) {
+                    try {
+                        Thread.sleep(1000);
+                    } catch (InterruptedException e) {
+                        throw new RuntimeException(e);
+                    }
+                    new BmoSftpClient().removeFile(fileName);
+                }
+            } catch (Throwable e) {
+                log.warn("unable to remove remote file {}", fileName, e);
+                ServerSideFactory.create(OperationsAlertFacade.class).record(null, "Unable to remote remote file {} on BMO SFTP, Remove it manually", fileName);
+            }
         }
     }
 

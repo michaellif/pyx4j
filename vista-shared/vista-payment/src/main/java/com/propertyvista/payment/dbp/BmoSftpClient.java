@@ -33,7 +33,7 @@ public class BmoSftpClient {
         return SftpClient.receiveFile(configuration(), new BmoSftpRetrieveFilter(targetDirectory, configuration().bmoMailboxNumber()), ".");
     }
 
-    public void removeFile(String fileName) {
+    public void removeFile(String fileName) throws SftpTransportConnectionException {
         if (configuration().removeReceivedFileFromSftpHost()) {
             SftpClient.removeFile(configuration(), ".", fileName);
         }

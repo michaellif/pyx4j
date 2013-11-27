@@ -84,7 +84,11 @@ public class PadSimulationManager {
         }
         Persistence.service().commit();
         // remove the loaded file from server
-        new CaledonPadSftpClient().removeFilesSim(sftpFile.fundsTransferType, sftpFile.remoteName);
+        try {
+            new CaledonPadSftpClient().removeFilesSim(sftpFile.fundsTransferType, sftpFile.remoteName);
+        } catch (SftpTransportConnectionException e) {
+            throw new Error(e);
+        }
 
         return padFile;
     }
