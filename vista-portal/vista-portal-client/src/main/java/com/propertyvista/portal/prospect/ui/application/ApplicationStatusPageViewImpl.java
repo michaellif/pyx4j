@@ -194,12 +194,12 @@ public class ApplicationStatusPageViewImpl extends FlowPanel implements Applicat
 
     class ApplicationProgressGadget extends AbstractGadget<ApplicationStatusPageViewImpl> {
 
-        private ApplicationProgressForm progressForm;
+        private final ApplicationProgressForm progressForm;
 
         ApplicationProgressGadget() {
             super(ApplicationStatusPageViewImpl.this, null, i18n.tr("Application Progress"), ThemeColor.contrast2, 1);
 
-            ApplicationProgressForm progressForm = new ApplicationProgressForm();
+            progressForm = new ApplicationProgressForm();
             progressForm.setEditable(false);
             progressForm.initContent();
             setContent(progressForm);
