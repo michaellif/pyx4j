@@ -21,7 +21,9 @@ BEGIN
         ***     ======================================================================================================
         **/
         
+        -- check constraints
         
+        ALTER TABLE merchant_account DROP CONSTRAINT merchant_account_status_e_ck;
         
         /**
         ***     ======================================================================================================
@@ -65,7 +67,9 @@ BEGIN
         **/
         
         
+        -- payment_record
         
+        ALTER TABLE payment_record ADD COLUMN convenience_fee_reference_number VARCHAR(30);
        
         
         /**
@@ -99,6 +103,11 @@ BEGIN
         ***     
         ***     =======================================================================================================
         **/
+        
+        -- check constraints
+        
+        ALTER TABLE merchant_account ADD CONSTRAINT merchant_account_status_e_ck 
+                CHECK ((status) IN ('Active', 'Cancelled', 'PendindAcknowledgement', 'PendindAppoval', 'Rejected', 'Suspended'));
         
         -- not null
         
