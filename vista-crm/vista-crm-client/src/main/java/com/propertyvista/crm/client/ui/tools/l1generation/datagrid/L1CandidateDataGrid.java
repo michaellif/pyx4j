@@ -51,6 +51,7 @@ public class L1CandidateDataGrid extends DataGrid<LegalActionCandidateDTO> {
     public L1CandidateDataGrid() {
         super(PAGE_SIZE, L1CandidateDataGridResources.getInstance(), LeaseIdProvider.INSTANCE);
         initColumns();
+        DataGridScrollFixerHack.apply(this);
     }
 
     private void setPresenter(L1DelinquentLeaseSearchView.Presenter presenter) {
