@@ -155,7 +155,7 @@ public class EFTTransportFacadeImpl implements EFTTransportFacade {
                 }
             } catch (Throwable e) {
                 log.warn("unable to remove remote file {}", fileName, e);
-                ServerSideFactory.create(OperationsAlertFacade.class).record(null, "Unable to remote remote file {} {} on caledon SFTP, Remove it manually",
+                ServerSideFactory.create(OperationsAlertFacade.class).record(null, "Unable to remove remote file {} {} on caledon SFTP, Remove it manually",
                         fundsTransferType, fileName);
             }
         }
@@ -201,7 +201,7 @@ public class EFTTransportFacadeImpl implements EFTTransportFacade {
                 }
             } catch (Throwable e) {
                 log.warn("unable to remove remote file {}", fileName, e);
-                ServerSideFactory.create(OperationsAlertFacade.class).record(null, "Unable to remote remote file {} on BMO SFTP, Remove it manually", fileName);
+                ServerSideFactory.create(OperationsAlertFacade.class).record(null, "Unable to remove remote file {} on BMO SFTP, Remove it manually", fileName);
             }
         }
     }
