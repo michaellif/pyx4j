@@ -31,7 +31,8 @@ import com.propertyvista.biz.communication.CommunicationFacade;
 import com.propertyvista.biz.policy.IdAssignmentFacade;
 import com.propertyvista.biz.tenant.lease.LeaseFacade;
 import com.propertyvista.domain.security.CustomerUser;
-import com.propertyvista.domain.security.VistaCustomerBehavior;
+import com.propertyvista.domain.security.PortalProspectBehavior;
+import com.propertyvista.domain.security.PortalResidentBehavior;
 import com.propertyvista.domain.tenant.Customer;
 import com.propertyvista.domain.tenant.CustomerScreening;
 import com.propertyvista.domain.tenant.ProspectSignUp;
@@ -100,7 +101,7 @@ public class OnlineApplicationFacadeImpl implements OnlineApplicationFacade {
     }
 
     @Override
-    public VistaCustomerBehavior getOnlineApplicationBehavior(OnlineApplication application) {
+    public PortalProspectBehavior getOnlineApplicationBehavior(OnlineApplication application) {
         EntityQueryCriteria<LeaseTerm> criteria = EntityQueryCriteria.create(LeaseTerm.class);
         criteria.setVersionedCriteria(VersionedCriteria.onlyDraft);
         criteria.add(PropertyCriterion.eq(criteria.proto().lease().leaseApplication().onlineApplication().applications(), application));
@@ -112,17 +113,9 @@ public class OnlineApplicationFacadeImpl implements OnlineApplicationFacade {
 
                 switch (tenant.role().getValue()) {
                 case Applicant:
-                    if (application.status().getValue() == OnlineApplication.Status.Submitted) {
-                        return VistaCustomerBehavior.ProspectiveSubmittedApplicant;
-                    } else {
-                        return VistaCustomerBehavior.ProspectiveApplicant;
-                    }
+                    return PortalProspectBehavior.Applicant;
                 case CoApplicant:
-                    if (application.status().getValue() == OnlineApplication.Status.Submitted) {
-                        return VistaCustomerBehavior.ProspectiveSubmittedCoApplicant;
-                    } else {
-                        return VistaCustomerBehavior.ProspectiveCoApplicant;
-                    }
+                    return PortalProspectBehavior.CoApplicant;
                 default:
                     return null;
                 }
@@ -131,11 +124,7 @@ public class OnlineApplicationFacadeImpl implements OnlineApplicationFacade {
         for (LeaseTermGuarantor guarantor : leaseTerm.version().guarantors()) {
             Persistence.service().retrieve(guarantor);
             if (application.customer().equals(guarantor.leaseParticipant().customer())) {
-                if (application.status().getValue() == OnlineApplication.Status.Submitted) {
-                    return VistaCustomerBehavior.GuarantorSubmitted;
-                } else {
-                    return VistaCustomerBehavior.Guarantor;
-                }
+                return PortalProspectBehavior.Guarantor;
             }
         }
 

@@ -18,7 +18,7 @@ import java.util.List;
 import com.pyx4j.commons.Key;
 
 import com.propertyvista.domain.security.CustomerUser;
-import com.propertyvista.domain.security.VistaCustomerBehavior;
+import com.propertyvista.domain.security.PortalResidentBehavior;
 import com.propertyvista.domain.tenant.Customer;
 import com.propertyvista.domain.tenant.ResidentSelfRegistration;
 import com.propertyvista.domain.tenant.lease.Lease;
@@ -29,7 +29,7 @@ public interface CustomerFacade {
 
     List<Lease> getActiveLeases(CustomerUser customerUserId);
 
-    VistaCustomerBehavior getLeaseBehavior(CustomerUser customerUser, Lease lease);
+    PortalResidentBehavior getLeaseBehavior(CustomerUser customerUser, Lease lease);
 
     boolean hasToAcceptTerms(CustomerUser customerUser);
 

@@ -22,7 +22,8 @@ import com.pyx4j.site.rpc.AppPlace;
 import com.pyx4j.site.rpc.NotificationAppPlace;
 import com.pyx4j.site.shared.domain.Notification;
 
-import com.propertyvista.domain.security.VistaCustomerBehavior;
+import com.propertyvista.domain.security.PortalProspectBehavior;
+import com.propertyvista.domain.security.PortalResidentBehavior;
 import com.propertyvista.domain.security.common.VistaBasicBehavior;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap;
 import com.propertyvista.portal.rpc.portal.prospect.ProspectPortalSiteMap;
@@ -48,7 +49,7 @@ public class ProspectPortalSiteDispatcher extends AbstractAppPlaceDispatcher {
     @Override
     protected void isPlaceNavigable(AppPlace targetPlace, AsyncCallback<Boolean> callback) {
         if (targetPlace instanceof ProspectPortalSiteMap.ApplicationContextSelection) {
-            callback.onSuccess(SecurityController.checkAnyBehavior(VistaCustomerBehavior.HasMultipleApplications));
+            callback.onSuccess(SecurityController.checkAnyBehavior(PortalProspectBehavior.HasMultipleApplications));
         } else {
             callback.onSuccess(Boolean.TRUE);
         }
@@ -58,7 +59,7 @@ public class ProspectPortalSiteDispatcher extends AbstractAppPlaceDispatcher {
     protected AppPlace mandatoryActionForward(AppPlace newPlace) {
         if (SecurityController.checkBehavior(VistaBasicBehavior.ProspectivePortalPasswordChangeRequired)) {
             return new PortalSiteMap.PasswordReset();
-        } else if (SecurityController.checkBehavior(VistaCustomerBehavior.ApplicationSelectionRequired)) {
+        } else if (SecurityController.checkBehavior(PortalProspectBehavior.ApplicationSelectionRequired)) {
             return new ProspectPortalSiteMap.ApplicationContextSelection();
         } else {
             return null;

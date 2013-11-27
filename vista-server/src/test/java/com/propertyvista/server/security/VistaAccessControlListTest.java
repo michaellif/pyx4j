@@ -37,7 +37,8 @@ import com.pyx4j.unit.server.mock.TestLifecycle;
 import com.propertyvista.config.tests.VistaTestDBSetup;
 import com.propertyvista.domain.IBoundToApplication;
 import com.propertyvista.domain.media.ApplicationDocumentFile;
-import com.propertyvista.domain.security.VistaCustomerBehavior;
+import com.propertyvista.domain.security.PortalProspectBehavior;
+import com.propertyvista.domain.security.PortalResidentBehavior;
 import com.propertyvista.domain.tenant.lease.LeaseTermTenant;
 import com.propertyvista.domain.tenant.prospect.OnlineApplication;
 import com.propertyvista.dto.TenantFinancialDTO;
@@ -84,16 +85,7 @@ public class VistaAccessControlListTest {
 
     @Test
     public void prospectiveTenantServicePermissions() {
-        TestLifecycle.testSession(null, VistaCustomerBehavior.Prospective);
-        TestLifecycle.beginRequest();
-
-        TestLifecycle.endRequest();
-    }
-
-    @Test
-    @Ignore
-    public void prospectiveSubmittedTenantServicePermissions() {
-        TestLifecycle.testSession(null, VistaCustomerBehavior.ProspectiveSubmitted);
+        TestLifecycle.testSession(null, PortalProspectBehavior.Prospect);
         TestLifecycle.beginRequest();
 
         TestLifecycle.endRequest();
@@ -129,7 +121,7 @@ public class VistaAccessControlListTest {
     @Test
     @Ignore
     public void tenantApplicationEntityInstanceAccess() {
-        TestLifecycle.testSession(new UserVisit(new Key(-101), "bob"), VistaCustomerBehavior.Prospective);
+        TestLifecycle.testSession(new UserVisit(new Key(-101), "bob"), PortalProspectBehavior.Prospect);
         TestLifecycle.beginRequest();
 
         OnlineApplication application = EntityFactory.create(OnlineApplication.class);

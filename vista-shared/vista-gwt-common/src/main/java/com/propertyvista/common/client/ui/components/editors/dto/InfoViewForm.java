@@ -45,7 +45,7 @@ import com.propertyvista.common.client.ui.validators.PastDateIncludeTodayValidat
 import com.propertyvista.common.client.ui.validators.PastDateValidator;
 import com.propertyvista.common.client.ui.validators.StartEndDateValidation;
 import com.propertyvista.domain.PriorAddress;
-import com.propertyvista.domain.security.VistaCustomerBehavior;
+import com.propertyvista.domain.security.PortalResidentBehavior;
 import com.propertyvista.domain.tenant.EmergencyContact;
 import com.propertyvista.dto.TenantInfoDTO;
 import com.propertyvista.misc.BusinessRules;
@@ -122,7 +122,7 @@ public class InfoViewForm extends CEntityDecoratableForm<TenantInfoDTO> {
         questionary.setWidget(++row, 0, 2, decorateLegalQuestion(inject(proto().version().legalQuestions().filedBankruptcy())));
         main.setWidget(++row, 0, 2, questionary);
 
-        if (!SecurityController.checkBehavior(VistaCustomerBehavior.Guarantor)) {
+        if (!SecurityController.checkBehavior(PortalResidentBehavior.Guarantor)) {
             main.setH1(++row, 0, 2, proto().emergencyContacts().getMeta().getCaption());
             main.setWidget(++row, 0, 2, inject(proto().emergencyContacts(), new EmergencyContactFolder(isEditable())));
         }
@@ -181,7 +181,7 @@ public class InfoViewForm extends CEntityDecoratableForm<TenantInfoDTO> {
 
         // ------------------------------------------------------------------------------------------------
 
-        if (!SecurityController.checkBehavior(VistaCustomerBehavior.Guarantor)) {
+        if (!SecurityController.checkBehavior(PortalResidentBehavior.Guarantor)) {
             get(proto().emergencyContacts()).addValueValidator(new EditableValueValidator<List<EmergencyContact>>() {
                 @Override
                 public ValidationError isValid(CComponent<List<EmergencyContact>> component, List<EmergencyContact> value) {

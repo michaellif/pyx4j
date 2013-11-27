@@ -24,7 +24,8 @@ import com.pyx4j.forms.client.ui.wizard.WizardStep;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.security.shared.SecurityController;
 
-import com.propertyvista.domain.security.VistaCustomerBehavior;
+import com.propertyvista.domain.security.PortalProspectBehavior;
+import com.propertyvista.domain.security.PortalResidentBehavior;
 import com.propertyvista.portal.prospect.ui.application.ApplicationWizardView.ApplicationWizardPresenter;
 import com.propertyvista.portal.rpc.portal.prospect.dto.OnlineApplicationDTO;
 import com.propertyvista.portal.shared.ui.CPortalEntityWizard;
@@ -60,7 +61,7 @@ public class ApplicationWizard extends CPortalEntityWizard<OnlineApplicationDTO>
     public ApplicationWizard(ApplicationWizardViewImpl view) {
         super(OnlineApplicationDTO.class, view, i18n.tr("Profile Payment Setup"), i18n.tr("Submit"), ThemeColor.contrast4);
 
-        if (SecurityController.checkBehavior(VistaCustomerBehavior.ProspectiveApplicant)) {
+        if (SecurityController.checkBehavior(PortalProspectBehavior.Applicant)) {
             unitStep = addStep(createUnitStep());
             optionsStep = addStep(createOptionsStep());
             peopleStep = addStep(createPeopleStep());

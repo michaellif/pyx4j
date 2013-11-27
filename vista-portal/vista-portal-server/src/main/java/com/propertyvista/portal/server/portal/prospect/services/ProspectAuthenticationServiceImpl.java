@@ -30,7 +30,8 @@ import com.pyx4j.security.shared.Behavior;
 import com.propertyvista.biz.communication.CommunicationFacade;
 import com.propertyvista.biz.tenant.OnlineApplicationFacade;
 import com.propertyvista.domain.security.CustomerUser;
-import com.propertyvista.domain.security.VistaCustomerBehavior;
+import com.propertyvista.domain.security.PortalProspectBehavior;
+import com.propertyvista.domain.security.PortalResidentBehavior;
 import com.propertyvista.domain.security.common.VistaApplication;
 import com.propertyvista.domain.security.common.VistaBasicBehavior;
 import com.propertyvista.domain.tenant.prospect.OnlineApplication;
@@ -71,7 +72,7 @@ public class ProspectAuthenticationServiceImpl extends VistaAuthenticationServic
 
     @Override
     protected Collection<Behavior> getAccountSetupRequiredBehaviors() {
-        return Arrays.asList(new Behavior[] { getPasswordChangeRequiredBehavior(), VistaCustomerBehavior.ApplicationSelectionRequired });
+        return Arrays.asList(new Behavior[] { getPasswordChangeRequiredBehavior(), PortalProspectBehavior.ApplicationSelectionRequired });
     }
 
     @Override
@@ -102,7 +103,7 @@ public class ProspectAuthenticationServiceImpl extends VistaAuthenticationServic
                 throw new UserRuntimeException(i18n.tr(GENERIC_FAILED_MESSAGE));
             }
         } else if (selectedApplication != null) {
-            VistaCustomerBehavior behavior = ServerSideFactory.create(OnlineApplicationFacade.class).getOnlineApplicationBehavior(selectedApplication);
+            PortalProspectBehavior behavior = ServerSideFactory.create(OnlineApplicationFacade.class).getOnlineApplicationBehavior(selectedApplication);
             if (behavior == null) {
                 if (ApplicationMode.isDevelopment()) {
                     throw new Error("User Not Authorized to access application, " + user.getStringView());
@@ -113,10 +114,10 @@ public class ProspectAuthenticationServiceImpl extends VistaAuthenticationServic
             actualBehaviors.add(behavior);
             actualBehaviors.addAll(behaviors);
             if (applications.size() > 1) {
-                actualBehaviors.add(VistaCustomerBehavior.HasMultipleApplications);
+                actualBehaviors.add(PortalProspectBehavior.HasMultipleApplications);
             }
         } else {
-            actualBehaviors.add(VistaCustomerBehavior.ApplicationSelectionRequired);
+            actualBehaviors.add(PortalProspectBehavior.ApplicationSelectionRequired);
         }
 
         String sessionToken = super.beginSession(user, credentials, actualBehaviors, additionalConditions);

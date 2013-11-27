@@ -39,7 +39,7 @@ import com.propertyvista.biz.policy.IdAssignmentFacade;
 import com.propertyvista.biz.system.AuditFacade;
 import com.propertyvista.biz.system.encryption.PasswordEncryptorFacade;
 import com.propertyvista.domain.security.CustomerUser;
-import com.propertyvista.domain.security.VistaCustomerBehavior;
+import com.propertyvista.domain.security.PortalResidentBehavior;
 import com.propertyvista.domain.tenant.Customer;
 import com.propertyvista.domain.tenant.CustomerAcceptedTerms;
 import com.propertyvista.domain.tenant.ResidentSelfRegistration;
@@ -182,9 +182,9 @@ public class CustomerFacadeImpl implements CustomerFacade {
     }
 
     @Override
-    public VistaCustomerBehavior getLeaseBehavior(CustomerUser customerUser, Lease lease) {
+    public PortalResidentBehavior getLeaseBehavior(CustomerUser customerUser, Lease lease) {
         // TODO implement TenantSecondary and Guarantor
-        return VistaCustomerBehavior.TenantPrimary;
+        return PortalResidentBehavior.ResidentPrimary;
     }
 
     @Override

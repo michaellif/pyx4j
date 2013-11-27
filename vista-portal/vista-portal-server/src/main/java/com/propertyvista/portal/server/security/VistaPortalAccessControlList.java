@@ -35,7 +35,8 @@ import com.propertyvista.domain.policy.policies.domain.IdentificationDocumentTyp
 import com.propertyvista.domain.ref.City;
 import com.propertyvista.domain.ref.Country;
 import com.propertyvista.domain.ref.Province;
-import com.propertyvista.domain.security.VistaCustomerBehavior;
+import com.propertyvista.domain.security.PortalProspectBehavior;
+import com.propertyvista.domain.security.PortalResidentBehavior;
 import com.propertyvista.domain.security.VistaDataAccessBehavior;
 import com.propertyvista.domain.security.common.VistaBasicBehavior;
 import com.propertyvista.domain.tenant.CustomerPicture;
@@ -90,11 +91,11 @@ public class VistaPortalAccessControlList extends ServletContainerAclBuilder {
         grant(new IServiceExecutePermission(ProspectAuthenticationService.class));
         grant(new IServiceExecutePermission(ProspectSignUpService.class));
 
-        grant(VistaCustomerBehavior.LeaseSelectionRequired, new IServiceExecutePermission(LeaseContextSelectionService.class));
-        grant(VistaCustomerBehavior.HasMultipleLeases, new IServiceExecutePermission(LeaseContextSelectionService.class));
+        grant(PortalResidentBehavior.LeaseSelectionRequired, new IServiceExecutePermission(LeaseContextSelectionService.class));
+        grant(PortalResidentBehavior.HasMultipleLeases, new IServiceExecutePermission(LeaseContextSelectionService.class));
 
-        grant(VistaCustomerBehavior.ApplicationSelectionRequired, new IServiceExecutePermission(ApplicationContextSelectionService.class));
-        grant(VistaCustomerBehavior.HasMultipleApplications, new IServiceExecutePermission(ApplicationContextSelectionService.class));
+        grant(PortalProspectBehavior.ApplicationSelectionRequired, new IServiceExecutePermission(ApplicationContextSelectionService.class));
+        grant(PortalProspectBehavior.HasMultipleApplications, new IServiceExecutePermission(ApplicationContextSelectionService.class));
 
         // Old TODO remove
         grant(new IServiceExecutePermission(ReferenceDataService.class));
@@ -112,105 +113,98 @@ public class VistaPortalAccessControlList extends ServletContainerAclBuilder {
         grant(VistaBasicBehavior.ProspectivePortal, new IServiceExecutePermission(PasswordChangeUserService.class));
 
         // Old TODO remove
-        grant(VistaCustomerBehavior.Prospective, new IServiceExecutePermission(ReferenceDataService.class));
+        grant(PortalProspectBehavior.Prospect, new IServiceExecutePermission(ReferenceDataService.class));
 
-        grant(VistaCustomerBehavior.Prospective, new EntityPermission(Country.class, EntityPermission.READ));
-        grant(VistaCustomerBehavior.Prospective, new EntityPermission(Province.class, EntityPermission.READ));
+        grant(PortalProspectBehavior.Prospect, new EntityPermission(Country.class, EntityPermission.READ));
+        grant(PortalProspectBehavior.Prospect, new EntityPermission(Province.class, EntityPermission.READ));
 
         InstanceAccess userEntityAccess = new UserEntityInstanceAccess();
-        grant(VistaCustomerBehavior.Prospective, new EntityPermission(OnlineApplication.class, userEntityAccess, CRUD));
+        grant(PortalProspectBehavior.Prospect, new EntityPermission(OnlineApplication.class, userEntityAccess, CRUD));
 
-        grant(VistaCustomerBehavior.Prospective, new EntityPermission(OrganizationPoliciesNode.class, EntityPermission.READ));
-        grant(VistaCustomerBehavior.Prospective, new EntityPermission(IdentificationDocumentType.class, EntityPermission.READ));
-        grant(VistaCustomerBehavior.Prospective, new EntityPermission(LeaseTermTenant.class, CRUD));
+        grant(PortalProspectBehavior.Prospect, new EntityPermission(OrganizationPoliciesNode.class, EntityPermission.READ));
+        grant(PortalProspectBehavior.Prospect, new EntityPermission(IdentificationDocumentType.class, EntityPermission.READ));
+        grant(PortalProspectBehavior.Prospect, new EntityPermission(LeaseTermTenant.class, CRUD));
 
-        grant(VistaCustomerBehavior.ProspectiveApplicant, VistaCustomerBehavior.Prospective);
-        grant(VistaCustomerBehavior.ProspectiveCoApplicant, VistaCustomerBehavior.Prospective);
-        grant(VistaCustomerBehavior.Guarantor, VistaCustomerBehavior.Prospective);
-
-        // Submitted prospective:
-        grant(VistaCustomerBehavior.ProspectiveSubmitted, new EntityPermission(OrganizationPoliciesNode.class, EntityPermission.READ));
-        grant(VistaCustomerBehavior.ProspectiveSubmitted, new EntityPermission(IdentificationDocumentType.class, EntityPermission.READ));
-
-        grant(VistaCustomerBehavior.ProspectiveSubmittedApplicant, VistaCustomerBehavior.ProspectiveSubmitted);
-        grant(VistaCustomerBehavior.ProspectiveSubmittedCoApplicant, VistaCustomerBehavior.ProspectiveSubmitted);
-        grant(VistaCustomerBehavior.GuarantorSubmitted, VistaCustomerBehavior.ProspectiveSubmitted);
+        grant(PortalProspectBehavior.Applicant, PortalProspectBehavior.Prospect);
+        grant(PortalProspectBehavior.CoApplicant, PortalProspectBehavior.Prospect);
+        grant(PortalResidentBehavior.Guarantor, PortalProspectBehavior.Prospect);
 
         // -------------
 
-        grant(VistaCustomerBehavior.Tenant, new IServiceExecutePermission(CreditCardValidationService.class));
+        grant(PortalResidentBehavior.Resident, new IServiceExecutePermission(CreditCardValidationService.class));
 
-        grant(VistaCustomerBehavior.Tenant, new IServiceExecutePermission(ResidentProfileCrudService.class));
-        grant(VistaCustomerBehavior.Tenant, new IServiceExecutePermission(ResidentAccountCrudService.class));
+        grant(PortalResidentBehavior.Resident, new IServiceExecutePermission(ResidentProfileCrudService.class));
+        grant(PortalResidentBehavior.Resident, new IServiceExecutePermission(ResidentAccountCrudService.class));
 
         //========================= My Community
 
-        grant(VistaCustomerBehavior.Tenant, new IServiceExecutePermission(BillingService.class));
-        grant(VistaCustomerBehavior.Tenant, new IServiceExecutePermission(com.propertyvista.portal.rpc.portal.resident.services.financial.PaymentService.class));
+        grant(PortalResidentBehavior.Resident, new IServiceExecutePermission(BillingService.class));
+        grant(PortalResidentBehavior.Resident,
+                new IServiceExecutePermission(com.propertyvista.portal.rpc.portal.resident.services.financial.PaymentService.class));
 
-        grant(VistaCustomerBehavior.Tenant, new IServiceExecutePermission(
+        grant(PortalResidentBehavior.Resident, new IServiceExecutePermission(
                 com.propertyvista.portal.rpc.portal.resident.services.financial.PaymentMethodWizardService.class));
-        grant(VistaCustomerBehavior.Tenant, new IServiceExecutePermission(
+        grant(PortalResidentBehavior.Resident, new IServiceExecutePermission(
                 com.propertyvista.portal.rpc.portal.resident.services.financial.PaymentWizardService.class));
-        grant(VistaCustomerBehavior.Tenant, new IServiceExecutePermission(AutoPayWizardService.class));
+        grant(PortalResidentBehavior.Resident, new IServiceExecutePermission(AutoPayWizardService.class));
 
-        grant(VistaCustomerBehavior.Tenant, new IServiceExecutePermission(BillingService.class));
+        grant(PortalResidentBehavior.Resident, new IServiceExecutePermission(BillingService.class));
 
-        grant(VistaCustomerBehavior.Tenant, new IServiceExecutePermission(ResidentSummaryService.class));
+        grant(PortalResidentBehavior.Resident, new IServiceExecutePermission(ResidentSummaryService.class));
 
-        grant(VistaCustomerBehavior.Tenant,
-                new IServiceExecutePermission(com.propertyvista.portal.rpc.portal.resident.services.services.InsuranceService.class));
+        grant(PortalResidentBehavior.Resident, new IServiceExecutePermission(
+                com.propertyvista.portal.rpc.portal.resident.services.services.InsuranceService.class));
 
-        grant(VistaCustomerBehavior.Tenant, new IServiceExecutePermission(InsuranceCertificateScanUploadService.class));
+        grant(PortalResidentBehavior.Resident, new IServiceExecutePermission(InsuranceCertificateScanUploadService.class));
 
-        grant(VistaCustomerBehavior.Tenant, new IServiceExecutePermission(GeneralInsurancePolicyCrudService.class));
+        grant(PortalResidentBehavior.Resident, new IServiceExecutePermission(GeneralInsurancePolicyCrudService.class));
 
-        grant(VistaCustomerBehavior.Tenant, new IServiceExecutePermission(MaintenanceRequestCrudService.class));
+        grant(PortalResidentBehavior.Resident, new IServiceExecutePermission(MaintenanceRequestCrudService.class));
 
-        grant(VistaCustomerBehavior.Tenant, new IServiceExecutePermission(ResidentPictureUploadService.class));
-        grant(VistaCustomerBehavior.Tenant, new IServiceExecutePermission(DeferredProcessService.class));
+        grant(PortalResidentBehavior.Resident, new IServiceExecutePermission(ResidentPictureUploadService.class));
+        grant(PortalResidentBehavior.Resident, new IServiceExecutePermission(DeferredProcessService.class));
 
-        grant(VistaCustomerBehavior.Tenant, new EntityPermission(CustomerPicture.class, CRUD));
+        grant(PortalResidentBehavior.Resident, new EntityPermission(CustomerPicture.class, CRUD));
 
         //========================= My Community Prospect Portal
 
-        grant(VistaCustomerBehavior.Prospective, new IServiceExecutePermission(ApplicationStatusService.class));
-        grant(VistaCustomerBehavior.Prospective, new IServiceExecutePermission(ApplicationWizardService.class));
-        grant(VistaCustomerBehavior.Prospective, new IServiceExecutePermission(ApplicationContextSelectionService.class));
+        grant(PortalProspectBehavior.Prospect, new IServiceExecutePermission(ApplicationStatusService.class));
+        grant(PortalProspectBehavior.Prospect, new IServiceExecutePermission(ApplicationWizardService.class));
+        grant(PortalProspectBehavior.Prospect, new IServiceExecutePermission(ApplicationContextSelectionService.class));
 
         //=======================================
 
         // Tenant Insurance and TenantSure
-        grant(VistaCustomerBehavior.Tenant, new EntityPermission(GeneralInsurancePolicy.class, CRUD));
-        grant(VistaCustomerBehavior.Tenant, new EntityPermission(InsuranceCertificateScan.class, EntityPermission.READ));
-        grant(VistaCustomerBehavior.Tenant, new IServiceExecutePermission(GeneralInsurancePolicyCrudService.class));
+        grant(PortalResidentBehavior.Resident, new EntityPermission(GeneralInsurancePolicy.class, CRUD));
+        grant(PortalResidentBehavior.Resident, new EntityPermission(InsuranceCertificateScan.class, EntityPermission.READ));
+        grant(PortalResidentBehavior.Resident, new IServiceExecutePermission(GeneralInsurancePolicyCrudService.class));
 
-        grant(VistaCustomerBehavior.Tenant, new EntityPermission(TenantSureInsurancePolicy.class, CRUD));
+        grant(PortalResidentBehavior.Resident, new EntityPermission(TenantSureInsurancePolicy.class, CRUD));
 
-        grant(VistaCustomerBehavior.Tenant, new IServiceExecutePermission(TenantSureInsurancePolicyCrudService.class));
-        grant(VistaCustomerBehavior.Tenant, new IServiceExecutePermission(TenantSurePaymentMethodCrudService.class));
+        grant(PortalResidentBehavior.Resident, new IServiceExecutePermission(TenantSureInsurancePolicyCrudService.class));
+        grant(PortalResidentBehavior.Resident, new IServiceExecutePermission(TenantSurePaymentMethodCrudService.class));
 
         // Billing and Payments
-        grant(VistaCustomerBehavior.Tenant, new EntityPermission(Bill.class, EntityPermission.READ));
-        grant(VistaCustomerBehavior.Tenant, new EntityPermission(InvoiceLineItem.class, EntityPermission.READ));
+        grant(PortalResidentBehavior.Resident, new EntityPermission(Bill.class, EntityPermission.READ));
+        grant(PortalResidentBehavior.Resident, new EntityPermission(InvoiceLineItem.class, EntityPermission.READ));
 
-        grant(VistaCustomerBehavior.Tenant, new EntityPermission(PaymentRecord.class, CRUD));
-        grant(VistaCustomerBehavior.Tenant, new EntityPermission(LeasePaymentMethod.class, CRUD));
-        grant(VistaCustomerBehavior.Tenant, new EntityPermission(AutopayAgreement.class, CRUD));
-        grant(VistaCustomerBehavior.Tenant, new EntityPermission(AutopayAgreementCoveredItem.class, CRUD));
+        grant(PortalResidentBehavior.Resident, new EntityPermission(PaymentRecord.class, CRUD));
+        grant(PortalResidentBehavior.Resident, new EntityPermission(LeasePaymentMethod.class, CRUD));
+        grant(PortalResidentBehavior.Resident, new EntityPermission(AutopayAgreement.class, CRUD));
+        grant(PortalResidentBehavior.Resident, new EntityPermission(AutopayAgreementCoveredItem.class, CRUD));
 
-        grant(VistaCustomerBehavior.Tenant, new EntityPermission(YardiServiceRequest.class, CRUD));
+        grant(PortalResidentBehavior.Resident, new EntityPermission(YardiServiceRequest.class, CRUD));
 
-        grant(VistaCustomerBehavior.Tenant, new EntityPermission(MaintenanceRequest.class, CRUD));
-        grant(VistaCustomerBehavior.Tenant, new EntityPermission(MaintenanceRequestCategory.class, EntityPermission.READ));
+        grant(PortalResidentBehavior.Resident, new EntityPermission(MaintenanceRequest.class, CRUD));
+        grant(PortalResidentBehavior.Resident, new EntityPermission(MaintenanceRequestCategory.class, EntityPermission.READ));
 
-        grant(VistaCustomerBehavior.Tenant, new EntityPermission(ApplicationDocumentFile.class, CRUD));
+        grant(PortalResidentBehavior.Resident, new EntityPermission(ApplicationDocumentFile.class, CRUD));
 
-        grant(VistaCustomerBehavior.TenantPrimary, VistaCustomerBehavior.Tenant);
-        grant(VistaCustomerBehavior.TenantSecondary, VistaCustomerBehavior.Tenant);
+        grant(PortalResidentBehavior.ResidentPrimary, PortalResidentBehavior.Resident);
+        grant(PortalResidentBehavior.ResidentSecondary, PortalResidentBehavior.Resident);
 
         // Data Access
-        grant(VistaCustomerBehavior.Tenant, VistaDataAccessBehavior.TenantInPortal);
+        grant(PortalResidentBehavior.Resident, VistaDataAccessBehavior.TenantInPortal);
         grant(VistaDataAccessBehavior.TenantInPortal, new CustomrPictureTenantDatasetAccessRule(), CustomerPicture.class);
         grant(VistaDataAccessBehavior.TenantInPortal, new LeasePaymentMethodTenantDatasetAccessRule(), LeasePaymentMethod.class);
         grant(VistaDataAccessBehavior.TenantInPortal, new AutopayAgreementTenantDatasetAccessRule(), AutopayAgreement.class);

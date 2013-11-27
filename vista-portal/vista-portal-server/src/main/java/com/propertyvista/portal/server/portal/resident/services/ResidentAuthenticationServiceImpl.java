@@ -34,7 +34,7 @@ import com.propertyvista.biz.financial.payment.PaymentFacade;
 import com.propertyvista.biz.tenant.CustomerFacade;
 import com.propertyvista.domain.payment.PaymentType;
 import com.propertyvista.domain.security.CustomerUser;
-import com.propertyvista.domain.security.VistaCustomerBehavior;
+import com.propertyvista.domain.security.PortalResidentBehavior;
 import com.propertyvista.domain.security.VistaCustomerPaymentTypeBehavior;
 import com.propertyvista.domain.security.common.VistaApplication;
 import com.propertyvista.domain.security.common.VistaBasicBehavior;
@@ -78,7 +78,7 @@ public class ResidentAuthenticationServiceImpl extends VistaAuthenticationServic
 
     @Override
     protected Collection<Behavior> getAccountSetupRequiredBehaviors() {
-        return Arrays.asList(new Behavior[] { getPasswordChangeRequiredBehavior(), VistaCustomerBehavior.LeaseSelectionRequired });
+        return Arrays.asList(new Behavior[] { getPasswordChangeRequiredBehavior(), PortalResidentBehavior.LeaseSelectionRequired });
     }
 
     @Override
@@ -110,10 +110,10 @@ public class ResidentAuthenticationServiceImpl extends VistaAuthenticationServic
             actualBehaviors.add(ServerSideFactory.create(CustomerFacade.class).getLeaseBehavior(user, selectedLease));
             actualBehaviors.addAll(behaviors);
             if (leases.size() > 1) {
-                actualBehaviors.add(VistaCustomerBehavior.HasMultipleLeases);
+                actualBehaviors.add(PortalResidentBehavior.HasMultipleLeases);
             }
         } else {
-            actualBehaviors.add(VistaCustomerBehavior.LeaseSelectionRequired);
+            actualBehaviors.add(PortalResidentBehavior.LeaseSelectionRequired);
         }
 
         EntityQueryCriteria<Customer> criteria = EntityQueryCriteria.create(Customer.class);
@@ -127,7 +127,7 @@ public class ResidentAuthenticationServiceImpl extends VistaAuthenticationServic
 
         // check if terms have been signed
         if (ServerSideFactory.create(CustomerFacade.class).hasToAcceptTerms(user)) {
-            actualBehaviors.add(VistaCustomerBehavior.VistaTermsAcceptanceRequired);
+            actualBehaviors.add(VistaBasicBehavior.VistaTermsAcceptanceRequired);
         }
 
         if (selectedLease != null) {

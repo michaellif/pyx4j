@@ -22,7 +22,7 @@ import com.pyx4j.site.rpc.AppPlace;
 import com.pyx4j.site.rpc.NotificationAppPlace;
 import com.pyx4j.site.shared.domain.Notification;
 
-import com.propertyvista.domain.security.VistaCustomerBehavior;
+import com.propertyvista.domain.security.PortalResidentBehavior;
 import com.propertyvista.domain.security.common.VistaBasicBehavior;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap;
 import com.propertyvista.portal.rpc.portal.resident.ResidentPortalSiteMap;
@@ -48,7 +48,7 @@ public class ResidentPortalSiteDispatcher extends AbstractAppPlaceDispatcher {
     @Override
     protected void isPlaceNavigable(AppPlace targetPlace, AsyncCallback<Boolean> callback) {
         if (targetPlace instanceof ResidentPortalSiteMap.LeaseContextSelection) {
-            callback.onSuccess(SecurityController.checkAnyBehavior(VistaCustomerBehavior.LeaseSelectionRequired, VistaCustomerBehavior.HasMultipleLeases));
+            callback.onSuccess(SecurityController.checkAnyBehavior(PortalResidentBehavior.LeaseSelectionRequired, PortalResidentBehavior.HasMultipleLeases));
         } else {
             callback.onSuccess(Boolean.TRUE);
         }
@@ -58,7 +58,7 @@ public class ResidentPortalSiteDispatcher extends AbstractAppPlaceDispatcher {
     protected AppPlace mandatoryActionForward(AppPlace newPlace) {
         if (SecurityController.checkBehavior(VistaBasicBehavior.ResidentPortalPasswordChangeRequired)) {
             return new PortalSiteMap.PasswordReset();
-        } else if (SecurityController.checkBehavior(VistaCustomerBehavior.LeaseSelectionRequired)) {
+        } else if (SecurityController.checkBehavior(PortalResidentBehavior.LeaseSelectionRequired)) {
             return new ResidentPortalSiteMap.LeaseContextSelection();
         } else {
             return null;
