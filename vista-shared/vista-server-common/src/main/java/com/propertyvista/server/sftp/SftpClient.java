@@ -154,17 +154,20 @@ public class SftpClient implements Closeable {
         }
     }
 
-    public static void removeFile(SftpConnectionConfiguration configuration, String remotePath, String remoteName) {
+    public static void removeFile(SftpConnectionConfiguration configuration, String remotePath, String remoteName) throws SftpTransportConnectionException {
         SftpClient client = new SftpClient(configuration);
         try {
             client.connect();
+        } catch (JSchException e) {
+            log.error("SFTP error", e);
+            IOUtils.closeQuietly(client);
+            throw new SftpTransportConnectionException(e.getMessage(), e);
+        }
+        try {
             client.channel.cd(remotePath);
             log.info("SFTP removing file {} / {} on {} ", remotePath, remoteName, configuration.sftpHost());
             client.channel.rm(remoteName);
         } catch (SftpException e) {
-            log.error("SFTP error", e);
-            throw new Error(e.getMessage());
-        } catch (JSchException e) {
             log.error("SFTP error", e);
             throw new Error(e.getMessage());
         } finally {

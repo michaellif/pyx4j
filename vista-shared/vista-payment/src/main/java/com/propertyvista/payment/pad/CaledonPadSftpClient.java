@@ -59,11 +59,11 @@ public class CaledonPadSftpClient {
                 CaledonFundsTransferDirectories.allPostDirectories());
     }
 
-    public void removeFile(FundsTransferType fundsTransferType, String fileName) {
+    public void removeFile(FundsTransferType fundsTransferType, String fileName) throws SftpTransportConnectionException {
         SftpClient.removeFile(configuration, fundsTransferType.getDirectoryName(CaledonFundsTransferDirectories.getSrc), fileName);
     }
 
-    public void removeFilesSim(FundsTransferType fundsTransferType, String fileName) {
+    public void removeFilesSim(FundsTransferType fundsTransferType, String fileName) throws SftpTransportConnectionException {
         if (!ApplicationMode.isDevelopment()) {
             throw new UserRuntimeException("FundsTransfer Simulator is not available");
         }

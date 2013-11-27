@@ -22,7 +22,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.pyx4j.config.server.ServerSideConfiguration;
+import com.pyx4j.config.server.ServerSideFactory;
 
+import com.propertyvista.biz.system.OperationsAlertFacade;
 import com.propertyvista.config.AbstractVistaServerSideConfiguration;
 import com.propertyvista.domain.financial.FundsTransferType;
 import com.propertyvista.operations.domain.payment.dbp.DirectDebitFile;
@@ -139,7 +141,23 @@ public class EFTTransportFacadeImpl implements EFTTransportFacade {
             move(new File(padWorkdir, fileName), padWorkdir, "error");
         } else {
             move(new File(padWorkdir, fileName), padWorkdir, "processed");
-            new CaledonPadSftpClient().removeFile(fundsTransferType, fileName);
+
+            try {
+                try {
+                    new CaledonPadSftpClient().removeFile(fundsTransferType, fileName);
+                } catch (SftpTransportConnectionException noConnection) {
+                    try {
+                        Thread.sleep(1000);
+                    } catch (InterruptedException e) {
+                        throw new RuntimeException(e);
+                    }
+                    new CaledonPadSftpClient().removeFile(fundsTransferType, fileName);
+                }
+            } catch (Throwable e) {
+                log.warn("unable to remove remote file {}", fileName, e);
+                ServerSideFactory.create(OperationsAlertFacade.class).record(null, "Unable to remote remote file {} {} on caledon SFTP, Remove it manually",
+                        fundsTransferType, fileName);
+            }
         }
     }
 
