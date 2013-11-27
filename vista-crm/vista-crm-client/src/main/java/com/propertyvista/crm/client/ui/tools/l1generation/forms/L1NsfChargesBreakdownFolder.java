@@ -59,9 +59,9 @@ public class L1NsfChargesBreakdownFolder extends VistaTableFolder<NsfChargeDetai
                 @Override
                 protected CComponent<?> createCell(EntityFolderColumnDescriptor column) {
                     if (proto().chequeAmount() == column.getObject()) {
-                        CDatePicker datePicker = new CDatePicker();
-                        datePicker.setMandatory(true);
-                        return inject(column.getObject(), datePicker);
+                        CMoneyField moneyField = new CMoneyField();
+                        moneyField.setMandatory(true);
+                        return inject(column.getObject(), moneyField);
                     } else if (proto().dateOfCheque() == column.getObject()) {
                         CDatePicker datePicker = new CDatePicker();
                         datePicker.setMandatory(true);
@@ -86,18 +86,28 @@ public class L1NsfChargesBreakdownFolder extends VistaTableFolder<NsfChargeDetai
                 @Override
                 public IsWidget createContent() {
                     IsWidget w = super.createContent();
-                    get(proto().bankCharge()).addValueChangeHandler(createTotalChargeUpdateHandler());
-                    get(proto().landlordsAdministrationCharge()).addValueChangeHandler(createTotalChargeUpdateHandler());
+                    get(proto().bankCharge()).addValueChangeHandler(createTotalChargeUpdateRequiredHandler());
+                    get(proto().landlordsAdministrationCharge()).addValueChangeHandler(createTotalChargeUpdateRequiredHandler());
+                    get(proto().totalCharge()).addValueChangeHandler(createTotalCharedUpdatedHandler());
                     return w;
                 }
 
-                private ValueChangeHandler<BigDecimal> createTotalChargeUpdateHandler() {
+                private ValueChangeHandler<BigDecimal> createTotalChargeUpdateRequiredHandler() {
                     return new ValueChangeHandler<BigDecimal>() {
                         @Override
                         public void onValueChange(ValueChangeEvent<BigDecimal> event) {
                             BigDecimal bankCharge = getValue().bankCharge().getValue(new BigDecimal("0.00"));
                             BigDecimal landlordsAdministrationCharge = getValue().landlordsAdministrationCharge().getValue(new BigDecimal("0.00"));
-                            get(proto().totalCharge()).setValue(bankCharge.add(landlordsAdministrationCharge), false, true);
+                            get(proto().totalCharge()).setValue(bankCharge.add(landlordsAdministrationCharge), true, true);
+                        }
+                    };
+                }
+
+                private ValueChangeHandler<BigDecimal> createTotalCharedUpdatedHandler() {
+                    return new ValueChangeHandler<BigDecimal>() {
+                        @Override
+                        public void onValueChange(ValueChangeEvent<BigDecimal> event) {
+                            onTotalChargeChanged();
                         }
                     };
                 }
@@ -106,5 +116,15 @@ public class L1NsfChargesBreakdownFolder extends VistaTableFolder<NsfChargeDetai
             return rowEditor;
         }
         return super.create(member);
+    }
+
+    @Override
+    protected void onValueSet(boolean populate) {
+        super.onValueSet(populate);
+        onTotalChargeChanged();
+    }
+
+    public void onTotalChargeChanged() {
+
     }
 }

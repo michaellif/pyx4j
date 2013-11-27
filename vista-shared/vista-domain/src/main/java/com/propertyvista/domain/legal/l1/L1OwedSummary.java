@@ -26,6 +26,8 @@ public interface L1OwedSummary extends IEntity {
 
     IPrimitive<BigDecimal> totalNsfChequeChargesOwing();
 
+    IPrimitive<BigDecimal> applicationFillingFee();
+
     IPrimitive<BigDecimal> total();
 
 }

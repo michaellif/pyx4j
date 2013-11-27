@@ -103,18 +103,41 @@ public class L1CandidateDataGrid extends DataGrid<LegalActionCandidateDTO> {
         defTextColumn(proto.leaseId(), 50, Unit.PX);
         defTextColumn(proto.propertyCode(), 50, Unit.PX);
         defTextColumn(proto.unit(), 50, Unit.PX);
-        defTextColumn(proto.streetAddress(), 200, Unit.PX);
+        defTextColumn(proto.streetAddress(), 150, Unit.PX);
 
+        // TODO unite as under a single group header
         {
             Column<LegalActionCandidateDTO, Number> owedAmountColumn = new Column<LegalActionCandidateDTO, Number>(new NumberCell(
                     NumberFormat.getFormat("$#,##0.00"))) {
                 @Override
                 public BigDecimal getValue(LegalActionCandidateDTO object) {
-                    return object.l1FormReview().formData().totalRentOwing().getValue();
+                    return object.l1FormReview().formData().owedRent().totalRentOwing().getValue();
                 }
             };
             owedAmountColumn.setCellStyleNames(L1CandidateDataGridStyles.L1DataGridMoneyCell.name());
-            defColumn(owedAmountColumn, i18n.tr("Total Owed"), 50, Unit.PX);
+            defColumn(owedAmountColumn, i18n.tr("Rent Owing"), 50, Unit.PX);
+        }
+        {
+            Column<LegalActionCandidateDTO, Number> owedAmountColumn = new Column<LegalActionCandidateDTO, Number>(new NumberCell(
+                    NumberFormat.getFormat("$#,##0.00"))) {
+                @Override
+                public BigDecimal getValue(LegalActionCandidateDTO object) {
+                    return object.l1FormReview().formData().owedNsfCharges().nsfTotalChargeOwed().getValue();
+                }
+            };
+            owedAmountColumn.setCellStyleNames(L1CandidateDataGridStyles.L1DataGridMoneyCell.name());
+            defColumn(owedAmountColumn, i18n.tr("NSF Owing"), 50, Unit.PX);
+        }
+        {
+            Column<LegalActionCandidateDTO, Number> owedAmountColumn = new Column<LegalActionCandidateDTO, Number>(new NumberCell(
+                    NumberFormat.getFormat("$#,##0.00"))) {
+                @Override
+                public BigDecimal getValue(LegalActionCandidateDTO object) {
+                    return object.l1FormReview().formData().owedSummary().total().getValue();
+                }
+            };
+            owedAmountColumn.setCellStyleNames(L1CandidateDataGridStyles.L1DataGridMoneyCell.name());
+            defColumn(owedAmountColumn, i18n.tr("Total Owing"), 50, Unit.PX);
         }
 
         {

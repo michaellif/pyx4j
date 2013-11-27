@@ -13,6 +13,8 @@
  */
 package com.propertyvista.crm.client.ui.tools.l1generation.forms;
 
+import java.math.BigDecimal;
+
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.forms.client.ui.CEntityForm;
@@ -20,6 +22,7 @@ import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 
 import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
 import com.propertyvista.domain.legal.ltbcommon.LtbOwedRent;
+import com.propertyvista.domain.legal.ltbcommon.RentOwingForPeriod;
 
 public class LtbOwedRentForm extends CEntityForm<LtbOwedRent> {
 
@@ -31,9 +34,29 @@ public class LtbOwedRentForm extends CEntityForm<LtbOwedRent> {
     public IsWidget createContent() {
         TwoColumnFlexFormPanel panel = new TwoColumnFlexFormPanel();
         int row = -1;
-        panel.setWidget(++row, 0, 2, inject(proto().rentOwingBreakdown(), new LtbRentOwedBreakdownFolder()));
+        panel.setWidget(++row, 0, 2, inject(proto().rentOwingBreakdown(), new LtbRentOwedBreakdownFolder() {
+            @Override
+            public void onTotalOwedRentChanged() {
+                LtbOwedRentForm.this.updateTotal();
+            }
+        }));
         panel.setWidget(++row, 0, 1, new FormDecoratorBuilder(inject(proto().totalRentOwing())).build());
+        get(proto().totalRentOwing()).setViewable(true);
         return panel;
+    }
+
+    public void onTotalUpdated() {
+
+    }
+
+    private void updateTotal() {
+        BigDecimal total = BigDecimal.ZERO;
+        for (RentOwingForPeriod rentOwingForPeriod : getValue().rentOwingBreakdown()) {
+            total = total.add(rentOwingForPeriod.rentOwing().getValue(BigDecimal.ZERO));
+        }
+        get(proto().totalRentOwing()).setValue(total, false, true);
+
+        onTotalUpdated();
     }
 
 }

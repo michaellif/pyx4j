@@ -13,6 +13,8 @@
  */
 package com.propertyvista.crm.client.ui.tools.l1generation;
 
+import java.math.BigDecimal;
+
 import com.google.gwt.user.client.Command;
 
 import com.pyx4j.entity.shared.IEntity;
@@ -113,9 +115,25 @@ public class L1FormDataReviewWizardForm extends WizardForm<L1FormDataReviewWizar
         TwoColumnFlexFormPanel panel = new TwoColumnFlexFormPanel(i18n.tr("Details of Landlord's Claim"));
         int row = -1;
         panel.setH1(++row, 0, 2, i18n.tr(i18n.tr("Rent Owing")));
-        panel.setWidget(++row, 0, 2, inject(proto().formData().owedRent(), new LtbOwedRentForm()));
+        panel.setWidget(++row, 0, 2, inject(proto().formData().owedRent(), new LtbOwedRentForm() {
+            @Override
+            public void onTotalUpdated() {
+                updateTotalOwed();
+            }
+        }));
         panel.setH1(++row, 0, 2, i18n.tr(i18n.tr("NSF Check Charges")));
-        panel.setWidget(++row, 0, 2, inject(proto().formData().owedNsfCharges(), new L1OwedNsfChargesForm()));
+        panel.setWidget(++row, 0, 2, inject(proto().formData().owedNsfCharges(), new L1OwedNsfChargesForm() {
+            @Override
+            public void onTotalUpdated() {
+                updateTotalOwed();
+            }
+        }));
+        panel.setH1(++row, 0, 2, i18n.tr(i18n.tr("Summary")));
+        panel.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().formData().owedSummary().applicationFillingFee())).build());
+        get(proto().formData().owedSummary().applicationFillingFee()).setViewable(true);
+        panel.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().formData().owedSummary().total())).build());
+        get(proto().formData().owedSummary().total()).setViewable(true);
+
         return panel;
     }
 
@@ -144,4 +162,12 @@ public class L1FormDataReviewWizardForm extends WizardForm<L1FormDataReviewWizar
         return panel;
     }
 
+    private void updateTotalOwed() {
+        BigDecimal rent = getValue().formData().owedRent().totalRentOwing().getValue(BigDecimal.ZERO);
+        BigDecimal nsf = getValue().formData().owedNsfCharges().nsfTotalChargeOwed().getValue(BigDecimal.ZERO);
+        BigDecimal applicationFillingFee = getValue().formData().owedSummary().applicationFillingFee().getValue();
+
+        BigDecimal total = rent.add(nsf).add(applicationFillingFee);
+        get(proto().formData().owedSummary().total()).setValue(total);
+    }
 }

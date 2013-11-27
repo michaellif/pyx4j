@@ -19,7 +19,6 @@ import java.util.List;
 
 import com.google.gwt.activity.shared.AbstractActivity;
 import com.google.gwt.event.shared.EventBus;
-import com.google.gwt.user.client.Random;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 import com.google.gwt.view.client.AbstractDataProvider;
 import com.google.gwt.view.client.ListDataProvider;
@@ -27,7 +26,6 @@ import com.google.gwt.view.client.MultiSelectionModel;
 import com.google.gwt.view.client.SelectionModel;
 
 import com.pyx4j.commons.Key;
-import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.site.client.activity.AbstractVisorController;
 import com.pyx4j.site.client.ui.prime.wizard.IWizard;
@@ -42,6 +40,7 @@ import com.propertyvista.crm.client.ui.tools.l1generation.visors.L1CommonFormDat
 import com.propertyvista.crm.client.ui.tools.l1generation.visors.L1FormDataReviewVisorView;
 import com.propertyvista.crm.rpc.dto.legal.common.LegalActionCandidateDTO;
 import com.propertyvista.crm.rpc.dto.legal.l1.L1CommonFieldsDTO;
+import com.propertyvista.crm.rpc.dto.legal.l1.L1FormDataReviewWizardDTO;
 import com.propertyvista.domain.legal.l1.L1LandlordsContactInfo;
 
 public class L1DelinquentLeaseSearchActivity extends AbstractActivity implements L1DelinquentLeaseSearchView.Presenter {
@@ -95,12 +94,20 @@ public class L1DelinquentLeaseSearchActivity extends AbstractActivity implements
                     @Override
                     public void populate() {
                         visor.reset();
-                        visor.populate(candidate.l1FormReview());
+                        visor.populate(candidate.l1FormReview().duplicate(L1FormDataReviewWizardDTO.class));
                         getParentView().showVisor(visor);
                     }
 
                     @Override
                     public void finish() {
+                        candidate.l1FormReview().set(visor.getValue());
+
+                        // update 'auto fields' that are not updated by the visor
+
+                        // should trigger view update  
+                        int i = dataProvider.getList().indexOf(candidate);
+                        dataProvider.getList().set(i, candidate);
+
                         hide();
                     }
 
@@ -180,8 +187,8 @@ public class L1DelinquentLeaseSearchActivity extends AbstractActivity implements
         c.unit().setValue("" + (100 + n));
         c.streetAddress().setValue("1234 The West Mall, Toronto ON A1A 1A1");
 
-        c.l1FormReview().formData().totalRentOwing().setValue(new BigDecimal("800").add(new BigDecimal(100 + Random.nextInt(500))));
-        c.l1FormReview().formData().totalRentOwingAsOf().setValue(new LogicalDate());
+        c.l1FormReview().formData().owedSummary().applicationFillingFee().setValue(new BigDecimal("170.00"));
+        c.l1FormReview().formData().owedSummary().total().setValue(new BigDecimal("170.00"));
 
         return c;
     }
