@@ -49,7 +49,7 @@ public class MaintenanceRequestFolderItem extends CEntityForm<MaintenanceRequest
         int row = -1;
 
         content.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().subject(), new CLabel<String>()), 180).build());
-        content.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().description(), new CLabel<String>()), 180).build());
+        content.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().description(), new CLabel<String>()), 250).build());
         content.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().status().phase(), new CLabel<StatusPhase>()), 180).build());
         content.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().priority().level(), new CLabel<PriorityLevel>()), 180).build());
         content.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().lastUpdated(), new CLabel<String>()), 180).build());
@@ -58,9 +58,7 @@ public class MaintenanceRequestFolderItem extends CEntityForm<MaintenanceRequest
 
             @Override
             public void execute() {
-                System.out.println("+++++++++View Details " + getValue().getPrimaryKey());
-                AppSite.getPlaceController()
-                        .goTo(new ResidentPortalSiteMap.Maintenance.MaintenanceRequestPage().formPlace(getValue().getPrimaryKey()));
+                AppSite.getPlaceController().goTo(new ResidentPortalSiteMap.Maintenance.MaintenanceRequestPage().formPlace(getValue().getPrimaryKey()));
             }
         });
         detailsLink.getElement().getStyle().setMarginTop(10, Unit.PX);
