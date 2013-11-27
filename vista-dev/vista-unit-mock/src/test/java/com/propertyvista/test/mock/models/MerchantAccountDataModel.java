@@ -27,6 +27,7 @@ import com.propertyvista.config.VistaDeployment;
 import com.propertyvista.domain.VistaNamespace;
 import com.propertyvista.domain.financial.BuildingMerchantAccount;
 import com.propertyvista.domain.financial.MerchantAccount;
+import com.propertyvista.domain.financial.MerchantAccount.MerchantAccountActivationStatus;
 import com.propertyvista.domain.pmc.Pmc;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.test.mock.MockDataModel;
@@ -56,6 +57,7 @@ public class MerchantAccountDataModel extends MockDataModel<MerchantAccount> {
             } else {
                 createMerchantAccount.merchantTerminalId().setValue(DataGenerator.randomLetters(6 - 2) + (++id));
             }
+            createMerchantAccount.status().setValue(MerchantAccountActivationStatus.Active);
             createMerchantAccount.bankId().setValue("109");
             createMerchantAccount.branchTransitNumber().setValue("54685");
             createMerchantAccount.accountNumber().setValue("548758665");
