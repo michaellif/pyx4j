@@ -184,7 +184,7 @@ public abstract class CEntityForm<E extends IEntity> extends CEntityContainer<E>
         assert (value == null) || proto().isAssignableFrom(value.getInstanceValueClass()) : "Trying to set value of a wrong type, expected "
                 + proto().getValueClass() + ", got " + value.getInstanceValueClass() + " in form " + getTitle();
         if (populate) {
-            assert value != null : "Entity Editor should not be populated with null. Use discard() instead";
+            assert value != null : "Entity Editor should not be populated with null. Use reset() instead";
             if (!isAttached()) {
                 this.origEntity = (E) value.duplicate();
             }
