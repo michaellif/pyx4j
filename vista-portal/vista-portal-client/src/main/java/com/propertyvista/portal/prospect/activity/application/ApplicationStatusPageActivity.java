@@ -52,7 +52,7 @@ public class ApplicationStatusPageActivity extends SecurityAwareActivity impleme
 
     @Override
     public void onCancel() {
-        view.populate(null);
+        view.reset();
     }
 
     @Override

@@ -138,6 +138,11 @@ public class ApplicationStatusPageViewImpl extends FlowPanel implements Applicat
         }
     }
 
+    @Override
+    public void reset() {
+        progressGadget.reset();
+    }
+
     private OnlineApplicationStatus getUserApplicationStatus(MasterOnlineApplicationStatus masterAppStatus) {
 
         for (OnlineApplicationStatus appStatus : masterAppStatus.individualApplications()) {
@@ -210,6 +215,10 @@ public class ApplicationStatusPageViewImpl extends FlowPanel implements Applicat
 
         public void populate(MasterOnlineApplicationStatus masterAppStatus) {
             progressForm.populate(masterAppStatus);
+        }
+
+        public void reset() {
+            progressForm.reset();
         }
 
         class ApplicationProgressToolbar extends GadgetToolbar {

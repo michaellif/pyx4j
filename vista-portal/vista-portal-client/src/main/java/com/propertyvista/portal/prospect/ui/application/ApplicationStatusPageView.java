@@ -27,4 +27,6 @@ public interface ApplicationStatusPageView extends IsView {
 
     void populate(MasterOnlineApplicationStatus status);
 
+    void reset();
+
 }
