@@ -26,7 +26,7 @@ public class TenantSurePageViewImpl extends AbstractEditorView<TenantSureInsuran
     }
 
     @Override
-    public void setPresenter(com.propertyvista.portal.shared.ui.IFormView.IFormPresenter<TenantSureInsurancePolicyDTO> presenter) {
+    public void setPresenter(com.propertyvista.portal.shared.ui.IViewerView.IViewerPresenter<TenantSureInsurancePolicyDTO> presenter) {
         ((TenantSurePage) getForm()).setPresenter((TenantSurePagePresenter) presenter);
         super.setPresenter(presenter);
     }

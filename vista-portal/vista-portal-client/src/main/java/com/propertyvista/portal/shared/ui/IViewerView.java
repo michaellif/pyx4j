@@ -16,15 +16,15 @@ package com.propertyvista.portal.shared.ui;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.site.client.IsView;
 
-public interface IFormView<E extends IEntity> extends IsView {
+public interface IViewerView<E extends IEntity> extends IsView {
 
-    interface IFormPresenter<E extends IEntity> {
+    interface IViewerPresenter<E extends IEntity> {
 
     }
 
-    void setPresenter(IFormPresenter<E> presenter);
+    void setPresenter(IViewerPresenter<E> presenter);
 
-    IFormPresenter<E> getPresenter();
+    IViewerPresenter<E> getPresenter();
 
     void populate(E value);
 

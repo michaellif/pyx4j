@@ -16,11 +16,11 @@ package com.propertyvista.portal.shared.ui;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.i18n.shared.I18n;
 
-public class AbstractFormView<E extends IEntity> extends AbstractPortalPanel implements IFormView<E> {
+public class AbstractFormView<E extends IEntity> extends AbstractPortalPanel implements IViewerView<E> {
 
     protected static final I18n i18n = I18n.get(AbstractFormView.class);
 
-    private IFormPresenter<E> presenter;
+    private IViewerPresenter<E> presenter;
 
     private CPortalEntityForm<E> form;
 
@@ -39,13 +39,13 @@ public class AbstractFormView<E extends IEntity> extends AbstractPortalPanel imp
     }
 
     @Override
-    public void setPresenter(IFormPresenter<E> presenter) {
+    public void setPresenter(IViewerPresenter<E> presenter) {
         this.presenter = presenter;
         form.reset();
     }
 
     @Override
-    public IFormPresenter<E> getPresenter() {
+    public IViewerPresenter<E> getPresenter() {
         return presenter;
     }
 

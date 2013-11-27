@@ -73,8 +73,13 @@ public class ApplicationStatusPageViewImpl extends FlowPanel implements Applicat
     }
 
     @Override
-    public void setPresenter(ApplicationStatusPagePresenter presenter) {
-        this.presenter = presenter;
+    public void setPresenter(IViewerPresenter<MasterOnlineApplicationStatus> presenter) {
+        this.presenter = (ApplicationStatusPagePresenter) presenter;
+    }
+
+    @Override
+    public ApplicationStatusPagePresenter getPresenter() {
+        return presenter;
     }
 
     @Override

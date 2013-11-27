@@ -21,7 +21,7 @@ import com.pyx4j.forms.client.ui.form.FormDecorator;
 
 public abstract class CPortalEntityForm<E extends IEntity> extends CEntityForm<E> {
 
-    private final IFormView<? extends IEntity> view;
+    private final IViewerView<? extends IEntity> view;
 
     private FormDecorator<E, CEntityForm<E>> decorator;
 
@@ -29,7 +29,7 @@ public abstract class CPortalEntityForm<E extends IEntity> extends CEntityForm<E
 
     private final ThemeColor themeColor;
 
-    public CPortalEntityForm(Class<E> clazz, IFormView<? extends IEntity> view, String headerCaption, ThemeColor themeColor) {
+    public CPortalEntityForm(Class<E> clazz, IViewerView<? extends IEntity> view, String headerCaption, ThemeColor themeColor) {
         super(clazz);
         this.view = view;
         this.headerCaption = headerCaption;
@@ -45,7 +45,7 @@ public abstract class CPortalEntityForm<E extends IEntity> extends CEntityForm<E
         return themeColor;
     }
 
-    public IFormView<? extends IEntity> getView() {
+    public IViewerView<? extends IEntity> getView() {
         return view;
     }
 

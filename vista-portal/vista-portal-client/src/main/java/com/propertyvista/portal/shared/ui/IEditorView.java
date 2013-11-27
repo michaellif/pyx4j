@@ -15,9 +15,9 @@ package com.propertyvista.portal.shared.ui;
 
 import com.pyx4j.entity.shared.IEntity;
 
-public interface IEditorView<E extends IEntity> extends IFormView<E> {
+public interface IEditorView<E extends IEntity> extends IViewerView<E> {
 
-    public interface IEditorPresenter<E extends IEntity> extends IFormPresenter<E> {
+    public interface IEditorPresenter<E extends IEntity> extends IViewerPresenter<E> {
 
         void edit();
 

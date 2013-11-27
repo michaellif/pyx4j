@@ -14,11 +14,11 @@
 package com.propertyvista.portal.resident.ui.services.insurance;
 
 import com.propertyvista.portal.rpc.portal.resident.dto.insurance.TenantSureInsurancePolicyDTO;
-import com.propertyvista.portal.shared.ui.IFormView;
+import com.propertyvista.portal.shared.ui.IViewerView;
 
-public interface TenantSureOrderConfirmationPageView extends IFormView<TenantSureInsurancePolicyDTO> {
+public interface TenantSureOrderConfirmationPageView extends IViewerView<TenantSureInsurancePolicyDTO> {
 
-    public interface TenantSureOrderConfirmationPagePresenter extends IFormView.IFormPresenter<TenantSureInsurancePolicyDTO> {
+    public interface TenantSureOrderConfirmationPagePresenter extends IViewerView.IViewerPresenter<TenantSureInsurancePolicyDTO> {
 
         void back();
     }

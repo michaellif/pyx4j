@@ -15,11 +15,11 @@ package com.propertyvista.portal.resident.ui.financial.views;
 
 import com.propertyvista.domain.financial.billing.Bill;
 import com.propertyvista.portal.rpc.portal.resident.dto.financial.BillingHistoryDTO;
-import com.propertyvista.portal.shared.ui.IFormView;
+import com.propertyvista.portal.shared.ui.IViewerView;
 
-public interface BillingHistoryView extends IFormView<BillingHistoryDTO> {
+public interface BillingHistoryView extends IViewerView<BillingHistoryDTO> {
 
-    interface Presenter extends IFormPresenter<BillingHistoryDTO> {
+    interface Presenter extends IViewerPresenter<BillingHistoryDTO> {
 
         void viewBill(Bill itemId);
     }

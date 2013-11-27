@@ -14,11 +14,11 @@
 package com.propertyvista.portal.resident.ui.financial.views;
 
 import com.propertyvista.dto.TransactionHistoryDTO;
-import com.propertyvista.portal.shared.ui.IFormView;
+import com.propertyvista.portal.shared.ui.IViewerView;
 
-public interface TransactionHistoryView extends IFormView<TransactionHistoryDTO> {
+public interface TransactionHistoryView extends IViewerView<TransactionHistoryDTO> {
 
-    interface Presenter extends IFormPresenter<TransactionHistoryDTO> {
+    interface Presenter extends IViewerPresenter<TransactionHistoryDTO> {
 
     }
 }
