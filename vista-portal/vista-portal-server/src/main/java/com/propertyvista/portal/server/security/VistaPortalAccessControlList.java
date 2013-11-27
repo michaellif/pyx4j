@@ -127,7 +127,7 @@ public class VistaPortalAccessControlList extends ServletContainerAclBuilder {
 
         grant(PortalProspectBehavior.Applicant, PortalProspectBehavior.Prospect);
         grant(PortalProspectBehavior.CoApplicant, PortalProspectBehavior.Prospect);
-        grant(PortalResidentBehavior.Guarantor, PortalProspectBehavior.Prospect);
+        grant(PortalProspectBehavior.Guarantor, PortalProspectBehavior.Prospect);
 
         // -------------
 
@@ -139,8 +139,8 @@ public class VistaPortalAccessControlList extends ServletContainerAclBuilder {
         //========================= My Community
 
         grant(PortalResidentBehavior.Resident, new IServiceExecutePermission(BillingService.class));
-        grant(PortalResidentBehavior.Resident,
-                new IServiceExecutePermission(com.propertyvista.portal.rpc.portal.resident.services.financial.PaymentService.class));
+        grant(PortalResidentBehavior.Resident, new IServiceExecutePermission(
+                com.propertyvista.portal.rpc.portal.resident.services.financial.PaymentService.class));
 
         grant(PortalResidentBehavior.Resident, new IServiceExecutePermission(
                 com.propertyvista.portal.rpc.portal.resident.services.financial.PaymentMethodWizardService.class));
