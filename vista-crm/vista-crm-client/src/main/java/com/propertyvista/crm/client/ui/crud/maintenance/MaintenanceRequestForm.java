@@ -54,6 +54,7 @@ import com.propertyvista.common.client.policy.ClientPolicyManager;
 import com.propertyvista.common.client.ui.components.MaintenanceRequestCategoryChoice;
 import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
 import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
+import com.propertyvista.common.client.ui.validators.FutureDateValidator;
 import com.propertyvista.crm.client.ui.components.boxes.BuildingSelectorDialog;
 import com.propertyvista.crm.client.ui.components.boxes.TenantSelectorDialog;
 import com.propertyvista.crm.client.ui.components.boxes.UnitSelectorDialog;
@@ -205,6 +206,9 @@ public class MaintenanceRequestForm extends CrmEntityForm<MaintenanceRequestDTO>
         accessPanel.setWidget(2, 0, new FormDecoratorBuilder(inject(proto().preferredTime1()), 10).build());
         accessPanel.setWidget(1, 1, new FormDecoratorBuilder(inject(proto().preferredDate2()), 10).build());
         accessPanel.setWidget(2, 1, new FormDecoratorBuilder(inject(proto().preferredTime2()), 10).build());
+
+        get(proto().preferredDate1()).addValueValidator(new FutureDateValidator());
+        get(proto().preferredDate2()).addValueValidator(new FutureDateValidator());
 
         panel.setWidget(++row, 0, 2, accessPanel);
 
@@ -483,44 +487,46 @@ public class MaintenanceRequestForm extends CrmEntityForm<MaintenanceRequestDTO>
         @Override
         protected CEntityFolderItem<MaintenanceRequestSchedule> createItem(boolean first) {
             final CEntityFolderItem<MaintenanceRequestSchedule> item = super.createItem(first);
-            item.addAction(ActionType.Cust1, "Add Progress Note", HelperImages.INSTANCE.editButton(), new Command() {
-                @Override
-                public void execute() {
-                    new OkCancelDialog("Enter Progress Note") {
-                        private final CEntityForm<MaintenanceRequestSchedule> content = createContent();
+            if (!isEditable()) {
+                item.addAction(ActionType.Cust1, "Add Progress Note", HelperImages.INSTANCE.editButton(), new Command() {
+                    @Override
+                    public void execute() {
+                        new OkCancelDialog("Enter Progress Note") {
+                            private final CEntityForm<MaintenanceRequestSchedule> content = createContent();
 
-                        private CEntityForm<MaintenanceRequestSchedule> createContent() {
-                            CEntityForm<MaintenanceRequestSchedule> content = new CEntityForm<MaintenanceRequestSchedule>(MaintenanceRequestSchedule.class) {
+                            private CEntityForm<MaintenanceRequestSchedule> createContent() {
+                                CEntityForm<MaintenanceRequestSchedule> content = new CEntityForm<MaintenanceRequestSchedule>(MaintenanceRequestSchedule.class) {
 
-                                @Override
-                                public IsWidget createContent() {
-                                    TwoColumnFlexFormPanel main = new TwoColumnFlexFormPanel();
+                                    @Override
+                                    public IsWidget createContent() {
+                                        TwoColumnFlexFormPanel main = new TwoColumnFlexFormPanel();
 
-                                    int row = -1;
-                                    main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().workDescription(), new CLabel<String>()), 40).build());
-                                    main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().scheduledDate(), new CDateLabel()), 10).build());
-                                    main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().progressNote()), 25).build());
+                                        int row = -1;
+                                        main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().workDescription(), new CLabel<String>()), 40).build());
+                                        main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().scheduledDate(), new CDateLabel()), 10).build());
+                                        main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().progressNote()), 25).build());
 
-                                    return main;
-                                }
-                            };
+                                        return main;
+                                    }
+                                };
 
-                            content.initContent();
-                            content.populate(item.getValue());
+                                content.initContent();
+                                content.populate(item.getValue());
 
-                            setBody(content.asWidget());
+                                setBody(content.asWidget());
 
-                            return content;
-                        }
+                                return content;
+                            }
 
-                        @Override
-                        public boolean onClickOk() {
-                            ((MaintenanceRequestViewerView.Presenter) getParentView().getPresenter()).updateProgressAction(content.getValue());
-                            return true;
-                        }
-                    }.show();
-                }
-            });
+                            @Override
+                            public boolean onClickOk() {
+                                ((MaintenanceRequestViewerView.Presenter) getParentView().getPresenter()).updateProgressAction(content.getValue());
+                                return true;
+                            }
+                        }.show();
+                    }
+                });
+            }
             return item;
         }
 

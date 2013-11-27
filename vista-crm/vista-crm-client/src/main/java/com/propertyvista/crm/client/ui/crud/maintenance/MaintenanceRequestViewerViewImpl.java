@@ -34,6 +34,7 @@ import com.pyx4j.widgets.client.dialog.MessageDialog;
 import com.pyx4j.widgets.client.dialog.OkCancelDialog;
 
 import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
+import com.propertyvista.common.client.ui.validators.FutureDateValidator;
 import com.propertyvista.crm.client.ui.crud.CrmViewerViewImplBase;
 import com.propertyvista.domain.maintenance.MaintenanceRequestStatus.StatusPhase;
 import com.propertyvista.domain.maintenance.SurveyResponse;
@@ -160,6 +161,8 @@ public class MaintenanceRequestViewerViewImpl extends CrmViewerViewImplBase<Main
                     main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().scheduledTimeFrom()), 10).build());
                     main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().scheduledTimeTo()), 10).build());
                     main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().workDescription()), 25).build());
+
+                    get(proto().scheduledDate()).addValueValidator(new FutureDateValidator());
 
                     return main;
                 }
