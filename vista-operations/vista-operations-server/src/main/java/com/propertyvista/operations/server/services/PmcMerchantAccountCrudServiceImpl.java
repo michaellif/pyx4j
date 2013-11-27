@@ -31,6 +31,7 @@ import com.propertyvista.biz.system.PmcFacade;
 import com.propertyvista.biz.system.Vista2PmcFacade;
 import com.propertyvista.domain.financial.BuildingMerchantAccount;
 import com.propertyvista.domain.financial.MerchantAccount;
+import com.propertyvista.domain.financial.MerchantAccount.MerchantAccountActivationStatus;
 import com.propertyvista.domain.pmc.Pmc;
 import com.propertyvista.domain.pmc.Pmc.PmcStatus;
 import com.propertyvista.domain.pmc.PmcMerchantAccountIndex;
@@ -58,6 +59,7 @@ public class PmcMerchantAccountCrudServiceImpl extends AbstractCrudServiceDtoImp
         PmcMerchantAccountDTO ent = EntityFactory.create(PmcMerchantAccountDTO.class);
 
         ent.pmc().name().set(Persistence.service().retrieve(Pmc.class, initData.parent().getPrimaryKey()).name());
+        ent.merchantAccount().status().setValue(MerchantAccountActivationStatus.PendindAppoval);
         ent.merchantAccount().invalid().setValue(Boolean.FALSE);
 
         return ent;

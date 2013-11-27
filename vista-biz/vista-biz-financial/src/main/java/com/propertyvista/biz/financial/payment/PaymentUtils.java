@@ -28,6 +28,7 @@ import com.propertyvista.biz.policy.PolicyFacade;
 import com.propertyvista.domain.financial.BillingAccount;
 import com.propertyvista.domain.financial.BillingAccount.PaymentAccepted;
 import com.propertyvista.domain.financial.MerchantAccount;
+import com.propertyvista.domain.financial.MerchantAccount.MerchantAccountActivationStatus;
 import com.propertyvista.domain.financial.PaymentRecord;
 import com.propertyvista.domain.payment.CreditCardInfo.CreditCardType;
 import com.propertyvista.domain.payment.PaymentType;
@@ -46,7 +47,7 @@ class PaymentUtils {
         if ((merchantAccount == null) || merchantAccount.invalid().getValue(Boolean.TRUE)) {
             return false;
         } else {
-            return !merchantAccount.merchantTerminalId().isNull();
+            return (merchantAccount.status().getValue() == MerchantAccountActivationStatus.Active) && (!merchantAccount.merchantTerminalId().isNull());
         }
     }
 
@@ -96,8 +97,9 @@ class PaymentUtils {
 
     static MerchantAccount retrieveValidMerchantAccount(BillingAccount billingAccountId) {
         EntityQueryCriteria<MerchantAccount> criteria = EntityQueryCriteria.create(MerchantAccount.class);
-        criteria.add(PropertyCriterion.eq(criteria.proto().invalid(), Boolean.FALSE));
-        criteria.add(PropertyCriterion.eq(criteria.proto()._buildings().$().units().$()._Leases().$().billingAccount(), billingAccountId));
+        criteria.eq(criteria.proto().invalid(), Boolean.FALSE);
+        criteria.eq(criteria.proto().status(), MerchantAccountActivationStatus.Active);
+        criteria.eq(criteria.proto()._buildings().$().units().$()._Leases().$().billingAccount(), billingAccountId);
         for (MerchantAccount merchantAccount : Persistence.service().query(criteria)) {
             if (!merchantAccount.merchantTerminalId().isNull()) {
                 return merchantAccount;

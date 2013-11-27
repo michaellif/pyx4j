@@ -49,6 +49,8 @@ public interface MerchantAccount extends AbstractMerchantAccount, HasNotesAndAtt
 
         Active,
 
+        Suspended,
+
         Cancelled;
 
         @Override
