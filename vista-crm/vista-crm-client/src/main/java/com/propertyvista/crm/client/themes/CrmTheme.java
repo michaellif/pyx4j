@@ -54,6 +54,7 @@ import com.propertyvista.crm.client.ui.tools.autopayreview.PapReviewsHolderForm;
 import com.propertyvista.crm.client.ui.tools.common.BulkEditableEntityForm;
 import com.propertyvista.crm.client.ui.tools.common.BulkOperationToolViewImpl;
 import com.propertyvista.crm.client.ui.tools.common.ItemsHolderForm;
+import com.propertyvista.crm.client.ui.tools.l1generation.datagrid.L1CandidateDataGridStyles;
 import com.propertyvista.crm.client.ui.tools.l1generation.visors.L1VisorStyles;
 import com.propertyvista.crm.client.ui.tools.n4generation.LegalNoticeCandidateFolderHolderForm;
 import com.propertyvista.crm.client.ui.tools.n4generation.LegalNoticeCandidateForm;
@@ -973,8 +974,36 @@ public class CrmTheme extends VistaTheme {
     }
 
     private void initL1GenerationToolStyles() {
+        // VISORS
         Style style = new Style("." + L1VisorStyles.L1GenerationVisor.name());
         style.addProperty("background-color", ThemeColor.background);
         addStyle(style);
+
+        // DATA GRID
+
+        // some tweaks for default data grid styles
+        // warning: THIS WILL ONLY WORK WHEN GWT Complier doesn't try to minify selector names (http://www.gwtproject.org/doc/latest/DevGuideClientBundle.html#CssResource)  
+        style = new Style("." + L1CandidateDataGridStyles.L1DataGridHeader.name());
+        style.addProperty("border-bottom", "2px solid #6F7277");
+        style.addProperty("color", "4B4A4A");
+        style.addProperty("padding", "3px 15px");
+        style.addProperty("text-align", "left");
+//        style.addProperty("text-shadow", "1px 1px 0 #DDDDFF");
+        style.addProperty("white-space", "normal");
+        addStyle(style);
+
+        style = new Style("." + L1CandidateDataGridStyles.L1DataGridFooter.name());
+        style.addProperty("border-bottom", "2px solid #6F7277");
+        style.addProperty("color", "4B4A4A");
+        style.addProperty("padding", "3px 15px");
+        style.addProperty("text-align", "left");
+//        style.addProperty("text-shadow", "1px 1px 0 #DDDDFF");
+        style.addProperty("white-space", "normal");
+        addStyle(style);
+
+        style = new Style("." + L1CandidateDataGridStyles.L1DataGridMoneyCell.name());
+        style.addProperty("text-align", "right");
+        addStyle(style);
+
     }
 }
