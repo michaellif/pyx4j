@@ -28,7 +28,7 @@ public enum PortalProspectBehavior implements Behavior {
 
     CanEditLeaseTerms,
 
-    ApplicationSubmitted,
+    CanEditApplication,
 
     ApplicationSelectionRequired,
 
