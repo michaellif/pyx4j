@@ -37,6 +37,7 @@ public class KijijiUnitMapper {
             title = from.floorplan().marketingName().isNull() ? from.floorplan().name().getValue() : from.floorplan().marketingName().getValue();
         }
         to.setTitle(title);
+        to.setDescription(from.profile().description().isNull() ? from.floorplan().description().getValue() : from.profile().description().getValue());
 
         to.setBedrooms(getBedrooms(from.floorplan().bedrooms().getValue()));
         to.setBathrooms(getBathrooms(from.floorplan().bathrooms().getValue(), from.floorplan().halfBath().getValue()));
