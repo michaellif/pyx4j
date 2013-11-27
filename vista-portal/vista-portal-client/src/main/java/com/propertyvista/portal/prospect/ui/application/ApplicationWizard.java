@@ -62,8 +62,12 @@ public class ApplicationWizard extends CPortalEntityWizard<OnlineApplicationDTO>
         super(OnlineApplicationDTO.class, view, i18n.tr("Profile Payment Setup"), i18n.tr("Submit"), ThemeColor.contrast4);
 
         if (SecurityController.checkBehavior(PortalProspectBehavior.Applicant)) {
-            unitStep = addStep(createUnitStep());
-            optionsStep = addStep(createOptionsStep());
+            if (SecurityController.checkBehavior(PortalProspectBehavior.CanEditLeaseTerms)) {
+                unitStep = addStep(createUnitStep());
+                optionsStep = addStep(createOptionsStep());
+            } else {
+                leaseStep = addStep(createLeaseStep());
+            }
             peopleStep = addStep(createPeopleStep());
             personalInfoAStep = addStep(createPersonalInfoAStep());
             personalInfoBStep = addStep(createPersonalInfoBStep());
@@ -72,6 +76,7 @@ public class ApplicationWizard extends CPortalEntityWizard<OnlineApplicationDTO>
             pmcCustomStep = addStep(createPmcCustomStep());
             summaryStep = addStep(createSummaryStep());
             paymentStep = addStep(createPaymentStep());
+
         } else {
             leaseStep = addStep(createLeaseStep());
             personalInfoAStep = addStep(createPersonalInfoAStep());
