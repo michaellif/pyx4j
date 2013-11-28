@@ -21,6 +21,7 @@ import com.propertyvista.operations.client.ui.components.OperationsEditorsCompon
 import com.propertyvista.operations.client.ui.crud.OperationsEditorViewImplBase;
 import com.propertyvista.operations.client.ui.crud.OperationsEntityForm;
 import com.propertyvista.operations.domain.dev.CardServiceSimulationCard;
+import com.propertyvista.operations.domain.dev.CardServiceSimulationMerchantAccount;
 import com.propertyvista.operations.domain.dev.CardServiceSimulationTransaction;
 
 public class CardServiceSimulationTransactionEditorViewImpl extends OperationsEditorViewImplBase<CardServiceSimulationTransaction> implements
@@ -34,9 +35,11 @@ public class CardServiceSimulationTransactionEditorViewImpl extends OperationsEd
             TwoColumnFlexFormPanel tabPanel = new TwoColumnFlexFormPanel("General Transaction Data");
             int row = -1;
 
-            tabPanel.setWidget(++row, 0,
-                    new FormDecoratorBuilder(inject(proto().card(), OperationsEditorsComponentFactory.createEntityHyperlink(CardServiceSimulationCard.class)),
-                            18).build());
+            tabPanel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().card(), // 
+                    OperationsEditorsComponentFactory.createEntityHyperlink(CardServiceSimulationCard.class)), 18).build());
+
+            tabPanel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().card().merchant(), //
+                    OperationsEditorsComponentFactory.createEntityHyperlink(CardServiceSimulationMerchantAccount.class)), 18).build());
 
             tabPanel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().transactionType())).build());
             tabPanel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().scheduledSimulatedResponce())).build());

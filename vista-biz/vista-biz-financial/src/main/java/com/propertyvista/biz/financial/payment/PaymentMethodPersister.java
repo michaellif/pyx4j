@@ -250,7 +250,7 @@ class PaymentMethodPersister {
                 needUpdate |= (!EntityGraph.membersEquals(cc, origPaymentMethod.details().cast(), cc.expiryDate()));
             }
             if (needUpdate) {
-                CreditCardProcessor.persistToken(merchantTerminalSource.getMerchantTerminalId(), cc);
+                ServerSideFactory.create(CreditCardFacade.class).persistToken(merchantTerminalSource.getMerchantTerminalId(), cc);
                 Persistence.service().merge(cc);
             }
             break;

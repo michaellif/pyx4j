@@ -18,7 +18,7 @@ import java.math.BigDecimal;
 import com.pyx4j.entity.shared.EntityFactory;
 
 import com.propertyvista.payment.CCInformation;
-import com.propertyvista.payment.IPaymentProcessor;
+import com.propertyvista.payment.CreditCardPaymentProcessorFacade;
 import com.propertyvista.payment.Merchant;
 import com.propertyvista.payment.PaymentProcessingException;
 import com.propertyvista.payment.PaymentRequest;
@@ -40,7 +40,7 @@ public class CaledonRealTimeTest extends CaledonTestBase {
     }
 
     static PaymentResponse assertRealTimeSale(Merchant merchant, PaymentRequest request, String responseCode) {
-        IPaymentProcessor proc = new CaledonPaymentProcessor();
+        CreditCardPaymentProcessorFacade proc = new CaledonPaymentProcessor();
         PaymentResponse response = proc.realTimeSale(merchant, request);
         assertEquals(responseCode, response.code().getValue());
         return response;

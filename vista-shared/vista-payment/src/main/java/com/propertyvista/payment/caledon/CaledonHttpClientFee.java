@@ -28,7 +28,7 @@ import org.apache.commons.httpclient.HttpException;
 import org.apache.commons.httpclient.NameValuePair;
 import org.apache.commons.httpclient.UsernamePasswordCredentials;
 import org.apache.commons.httpclient.auth.AuthScope;
-import org.apache.commons.httpclient.methods.GetMethod;
+import org.apache.commons.httpclient.methods.PostMethod;
 import org.apache.commons.httpclient.params.HttpMethodParams;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -44,8 +44,6 @@ import com.propertyvista.payment.PaymentProcessingException;
 public class CaledonHttpClientFee {
 
     private final static Logger log = LoggerFactory.getLogger(CaledonHttpClientFee.class);
-
-    private final boolean debug = true;
 
     private final String urlProd = "https://portal.caledoncard.com/convfee/";
 
@@ -67,14 +65,10 @@ public class CaledonHttpClientFee {
             url = urlProd;
         }
 
-        GetMethod httpMethod = new GetMethod(url);
+        PostMethod httpMethod = new PostMethod(url);
         httpMethod.setFollowRedirects(false);
-        httpMethod.setQueryString(caledoneQueryEncoding(buildRequestQuery(request)));
+        httpMethod.addParameters(buildRequestQuery(request));
         httpMethod.getParams().setParameter(HttpMethodParams.RETRY_HANDLER, new DefaultHttpMethodRetryHandler(0, false));
-
-        if (debug) {
-            log.debug("Query: {}", querySafeToLog(httpMethod.getQueryString()));
-        }
 
         HttpClient httpClient = new HttpClient();
 
@@ -103,27 +97,6 @@ public class CaledonHttpClientFee {
             log.error("transaction transport error", e);
             throw new PaymentProcessingException("Transport error occurs", e);
         }
-    }
-
-    private String querySafeToLog(String queryString) {
-        return queryString.replaceAll("&card_number=\\d+", "&card_number=***").replaceAll("&cvv=\\d+", "&cvv=***");
-    }
-
-    private String caledoneQueryEncoding(NameValuePair[] pairs) {
-        StringBuilder b = new StringBuilder();
-        for (int i = 0; i < pairs.length; i++) {
-            if (i != 0) {
-                b.append('&');
-            }
-            b.append(pairs[i].getName());
-            b.append('=');
-            b.append(caledoneQueryValueEncoding(pairs[i].getValue()));
-        }
-        return b.toString();
-    }
-
-    private String caledoneQueryValueEncoding(String value) {
-        return value.replace("&", "&&");
     }
 
     private NameValuePair[] buildRequestQuery(Object request) {

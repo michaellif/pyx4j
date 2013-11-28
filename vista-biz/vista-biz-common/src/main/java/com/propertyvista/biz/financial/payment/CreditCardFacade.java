@@ -56,11 +56,14 @@ public interface CreditCardFacade {
 
     public void persistToken(String merchantTerminalId, CreditCardInfo cc);
 
-    public CreditCardTransactionResponse realTimeSale(String merchantTerminalId, BigDecimal amount, BigDecimal convenienceFee,
-            ReferenceNumberPrefix uniquePrefix, IPrimitive<Key> referenceNumber, String convenienceFeeReferenceNumber, CreditCardInfo cc);
+    public CreditCardTransactionResponse realTimeSale(String merchantTerminalId, //
+            BigDecimal amount, BigDecimal convenienceFee,//
+            ReferenceNumberPrefix uniquePrefix, IPrimitive<Key> referenceNumber, String convenienceFeeReferenceNumber, //
+            CreditCardInfo cc);
 
-    public CreditCardTransactionResponse voidTransaction(String merchantTerminalId, BigDecimal amount, ReferenceNumberPrefix uniquePrefix,
-            IPrimitive<Key> referenceNumber);
+    public CreditCardTransactionResponse voidTransaction(String merchantTerminalId,//
+            BigDecimal amount, BigDecimal convenienceFee, //
+            ReferenceNumberPrefix uniquePrefix, IPrimitive<Key> referenceNumber, String convenienceFeeReferenceNumber);
 
     /**
      * @return authorizationNumber

@@ -13,7 +13,11 @@
  */
 package com.propertyvista.payment;
 
-public interface IPaymentProcessor {
+/**
+ * Actual real time credit cards transactions interface to Bank
+ */
+//TODO Move to vista-biz-common com.propertyvista.payment.cards
+public interface CreditCardPaymentProcessorFacade {
 
     PaymentResponse realTimeSale(Merchant merchant, PaymentRequest request);
 
@@ -34,8 +38,6 @@ public interface IPaymentProcessor {
     PaymentResponse deactivateToken(Merchant merchant, Token token);
 
     PaymentResponse reactivateToken(Merchant merchant, Token token);
-
-    PaymentResponse tokenSale(Merchant merchant, PaymentRequest request);
 
     PaymentResponse voidTransaction(Merchant merchant, PaymentRequest request);
 

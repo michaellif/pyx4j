@@ -21,6 +21,7 @@ import junit.framework.Assert;
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.server.Persistence;
 
+import com.propertyvista.biz.financial.LeaseFinancialTestBase;
 import com.propertyvista.domain.financial.PaymentRecord;
 import com.propertyvista.domain.payment.CreditCardInfo;
 import com.propertyvista.domain.payment.EcheckInfo;
@@ -30,7 +31,7 @@ import com.propertyvista.domain.tenant.Customer;
 import com.propertyvista.test.mock.models.CustomerDataModel;
 import com.propertyvista.test.mock.models.LeaseDataModel;
 
-public class PaymentMethodPersistenceTestBase extends PaymentTestBase {
+public class PaymentMethodPersistenceTestBase extends LeaseFinancialTestBase {
 
     private CustomerDataModel customerDataModel;
 
@@ -189,5 +190,26 @@ public class PaymentMethodPersistenceTestBase extends PaymentTestBase {
         Assert.assertEquals(1, profileMethods.size());
 
         Assert.assertEquals("PaymentMethod in DB", existingPaymentMethodsCount + 2, customerDataModel.retrieveAllPaymentMethods(customer).size());
+    }
+
+    protected void assertRpcTransientMemebers(List<LeasePaymentMethod> methods) {
+        for (LeasePaymentMethod method : methods) {
+            assertRpcTransientMemebers(method);
+        }
+    }
+
+    @SuppressWarnings("incomplete-switch")
+    protected void assertRpcTransientMemebers(LeasePaymentMethod paymentMethod) {
+        switch (paymentMethod.type().getValue()) {
+        case Echeck:
+            EcheckInfo ec = paymentMethod.details().cast();
+            Assert.assertNull(ec.accountNo().number().getValue());
+            break;
+        case CreditCard:
+            CreditCardInfo cc = paymentMethod.details().cast();
+            Assert.assertNull(cc.card().number().getValue());
+            Assert.assertNull(cc.securityCode().getValue());
+            break;
+        }
     }
 }

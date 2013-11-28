@@ -40,16 +40,20 @@ public class CreditCardFacadeImpl implements CreditCardFacade {
     }
 
     @Override
-    public CreditCardTransactionResponse realTimeSale(String merchantTerminalId, BigDecimal amount, BigDecimal convenienceFee,
-            ReferenceNumberPrefix uniquePrefix, IPrimitive<Key> referenceNumber, String convenienceFeeReferenceNumber, CreditCardInfo cc) {
+    public CreditCardTransactionResponse realTimeSale(String merchantTerminalId, //
+            BigDecimal amount, BigDecimal convenienceFee,//
+            ReferenceNumberPrefix uniquePrefix, IPrimitive<Key> referenceNumber, String convenienceFeeReferenceNumber, //
+            CreditCardInfo cc) {
         return CreditCardProcessor.realTimeSale(merchantTerminalId, amount, convenienceFee, getTransactionreferenceNumber(uniquePrefix, referenceNumber),
                 convenienceFeeReferenceNumber, cc);
     }
 
     @Override
-    public CreditCardTransactionResponse voidTransaction(String merchantTerminalId, BigDecimal amount, ReferenceNumberPrefix uniquePrefix,
-            IPrimitive<Key> referenceNumber) {
-        return CreditCardProcessor.voidTransaction(merchantTerminalId, amount, getTransactionreferenceNumber(uniquePrefix, referenceNumber));
+    public CreditCardTransactionResponse voidTransaction(String merchantTerminalId,//
+            BigDecimal amount, BigDecimal convenienceFee, //
+            ReferenceNumberPrefix uniquePrefix, IPrimitive<Key> referenceNumber, String convenienceFeeReferenceNumber) {
+        return CreditCardProcessor.voidTransaction(merchantTerminalId, amount, convenienceFee, getTransactionreferenceNumber(uniquePrefix, referenceNumber),
+                convenienceFeeReferenceNumber);
     }
 
     @Override

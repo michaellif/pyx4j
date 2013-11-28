@@ -48,11 +48,18 @@ public class CardServiceSimulationServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest httpRequest, HttpServletResponse httpResponse) throws ServletException, IOException {
+        process(httpRequest, httpResponse, false);
+    }
+
+    @Override
+    protected void doPost(HttpServletRequest httpRequest, HttpServletResponse httpResponse) throws ServletException, IOException {
+        process(httpRequest, httpResponse, true);
+    }
+
+    protected void process(HttpServletRequest httpRequest, HttpServletResponse httpResponse, boolean convFeeApi) throws ServletException, IOException {
         NamespaceManager.setNamespace(VistaNamespace.operationsNamespace);
         String responseBody = null;
         CardServiceSimulatorConfig simulatorConfig = CardServiceSimulationUtils.getCardServiceSimulatorConfig();
-
-        boolean convFeeApi = httpRequest.getRequestURI().endsWith("/convfee/");
 
         try {
             switch (simulatorConfig.responseType().getValue()) {
@@ -103,11 +110,11 @@ public class CardServiceSimulationServlet extends HttpServlet {
             String type = httpRequest.getParameter("type");
             if (CaledonFeeRequestTypes.FeeCalulation.getIntrfaceValue().equals(type)) {
                 CaledonFeeCalulationRequest caledonRequest = buildCaledonRequest(httpRequest, new CaledonFeeCalulationRequest());
-                CaledonFeeCalulationResponse caledonResponse = CardServiceSimulationProcessor.execute(caledonRequest);
+                CaledonFeeCalulationResponse caledonResponse = CardServiceSimulationProcessor.executeFeeCalulation(caledonRequest);
                 return buildResponse(caledonResponse);
-            } else if (CaledonFeeRequestTypes.PaymentWithFee.getIntrfaceValue().equals(type)) {
+            } else if (CaledonFeeRequestTypes.PaymentWithFee.getIntrfaceValue().equals(type) || CaledonFeeRequestTypes.Void.getIntrfaceValue().equals(type)) {
                 CaledonPaymentWithFeeRequest caledonRequest = buildCaledonRequest(httpRequest, new CaledonPaymentWithFeeRequest());
-                CaledonPaymentWithFeeResponse caledonResponse = CardServiceSimulationProcessor.execute(caledonRequest);
+                CaledonPaymentWithFeeResponse caledonResponse = CardServiceSimulationProcessor.executePaymentWithFee(caledonRequest);
                 return buildResponse(caledonResponse);
             } else {
                 return "&response_code=C001&response_text=Simulation type Rejected";

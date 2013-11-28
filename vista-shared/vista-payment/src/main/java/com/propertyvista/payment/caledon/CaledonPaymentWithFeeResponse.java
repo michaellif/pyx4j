@@ -83,9 +83,10 @@ public class CaledonPaymentWithFeeResponse {
     @NotNull
     public String responseCode;
 
-    @HttpResponseField("response_text")
-    public String responseText;
+    @HttpResponseField("fee_response")
+    public String responseFeeAuthorization;
 
-    @HttpResponseField("fee_response_text")
-    public String responseTextFee;
+    @HttpResponseField("payment_response")
+    public String responsePaymentAuthorization;
+
 }

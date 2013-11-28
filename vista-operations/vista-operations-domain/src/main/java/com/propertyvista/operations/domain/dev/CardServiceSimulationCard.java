@@ -69,6 +69,11 @@ public interface CardServiceSimulationCard extends IEntity {
 
     @Editor(type = EditorType.money)
     @Format("#0.00")
+    IPrimitive<BigDecimal> creditLimit();
+
+    @ToString(index = 3)
+    @Editor(type = EditorType.money)
+    @Format("#0.00")
     IPrimitive<BigDecimal> balance();
 
     @Editor(type = EditorType.money)

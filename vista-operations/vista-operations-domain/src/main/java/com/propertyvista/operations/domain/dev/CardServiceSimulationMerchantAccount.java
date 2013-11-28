@@ -45,12 +45,13 @@ import com.propertyvista.domain.VistaNamespace;
 @Table(prefix = "dev", namespace = VistaNamespace.operationsNamespace)
 public interface CardServiceSimulationMerchantAccount extends IEntity {
 
-    @ToString
+    @ToString(index = 1)
     @Indexed(uniqueConstraint = true)
     @NotNull
     @Length(8)
     IPrimitive<String> terminalID();
 
+    @ToString(index = 2)
     @Editor(type = EditorType.money)
     @Format("#0.00")
     IPrimitive<BigDecimal> balance();

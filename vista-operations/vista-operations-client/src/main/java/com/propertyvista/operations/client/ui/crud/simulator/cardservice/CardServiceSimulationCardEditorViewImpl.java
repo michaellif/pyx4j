@@ -119,6 +119,7 @@ public class CardServiceSimulationCardEditorViewImpl extends OperationsEditorVie
             contentPanel.setWidget(row, 1, new FormDecoratorBuilder(inject(proto().updated())).build());
             contentPanel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().number())).build());
             contentPanel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().expiryDate())).build());
+            contentPanel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().creditLimit())).build());
             contentPanel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().balance())).build());
             contentPanel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().reserved())).build());
             contentPanel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().responseCode())).build());

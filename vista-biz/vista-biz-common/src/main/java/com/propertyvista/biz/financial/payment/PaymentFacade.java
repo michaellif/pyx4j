@@ -50,8 +50,6 @@ public interface PaymentFacade {
 
     boolean isElectronicPaymentsSetup(LeaseTerm leaseTermId);
 
-    //boolean isPaymentsAllowedInPortal(BillingAccount billingAccountId);
-
     PaymentRecord persistPayment(PaymentRecord paymentRecord);
 
     PaymentRecord schedulePayment(PaymentRecord paymentId);

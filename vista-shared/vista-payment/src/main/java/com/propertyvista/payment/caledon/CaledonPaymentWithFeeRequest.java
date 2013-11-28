@@ -24,7 +24,7 @@ public class CaledonPaymentWithFeeRequest {
 
     @HttpRequestField(value = "type", first = true)
     @NotNull
-    public String type = CaledonFeeRequestTypes.PaymentWithFee.getIntrfaceValue();
+    public String type;
 
     @HttpRequestField(value = "terminal_id")
     @NotNull

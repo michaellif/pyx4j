@@ -24,7 +24,7 @@ import com.propertyvista.domain.payment.CreditCardInfo.CreditCardType;
 import com.propertyvista.payment.CCInformation;
 import com.propertyvista.payment.FeeCalulationRequest;
 import com.propertyvista.payment.FeeCalulationResponse;
-import com.propertyvista.payment.IPaymentProcessor;
+import com.propertyvista.payment.CreditCardPaymentProcessorFacade;
 import com.propertyvista.payment.Merchant;
 import com.propertyvista.payment.PaymentInstrument;
 import com.propertyvista.payment.PaymentProcessingException;
@@ -33,7 +33,7 @@ import com.propertyvista.payment.PaymentResponse;
 import com.propertyvista.payment.Token;
 import com.propertyvista.payment.caledon.dev.VisaDebitInternalValidator;
 
-public class CaledonPaymentProcessor implements IPaymentProcessor {
+public class CaledonPaymentProcessor implements CreditCardPaymentProcessorFacade {
 
     private static final Set<String> networkErrorCodes = initNetworkErrorCodes();
 
@@ -125,6 +125,7 @@ public class CaledonPaymentProcessor implements IPaymentProcessor {
     private PaymentResponse realTimeSaleConvenienceFee(Merchant merchant, PaymentRequest request) throws PaymentProcessingException {
         CaledonPaymentWithFeeRequest crequest = new CaledonPaymentWithFeeRequest();
 
+        crequest.type = CaledonFeeRequestTypes.PaymentWithFee.getIntrfaceValue();
         crequest.terminalID = merchant.terminalID().getValue();
         crequest.referenceNumber = request.referenceNumber().getValue();
         crequest.referenceNumberFeeCalulation = request.convenienceFeeReferenceNumber().getValue();
@@ -145,10 +146,10 @@ public class CaledonPaymentProcessor implements IPaymentProcessor {
         PaymentResponse response = EntityFactory.create(PaymentResponse.class);
         response.success().setValue("0000".equals(cresponse.responseCode));
         response.code().setValue(cresponse.responseCode);
-        response.message().setValue(cresponse.responseText);
+        response.message().setValue(cresponse.responsePaymentAuthorization);
 
         //TODO pars the amount values returned by caledon 
-        response.authorizationNumber().setValue(cresponse.responseText + " " + cresponse.responseTextFee);
+        response.authorizationNumber().setValue(cresponse.responsePaymentAuthorization + " " + cresponse.responseFeeAuthorization);
 
         return response;
     }
@@ -269,22 +270,15 @@ public class CaledonPaymentProcessor implements IPaymentProcessor {
     }
 
     @Override
-    public PaymentResponse tokenSale(Merchant merchant, PaymentRequest request) {
-        CaledonRequestToken crequest = new CaledonRequestToken();
-
-        crequest.terminalID = merchant.terminalID().getValue();
-        crequest.transactionType = CaledonTransactionType.SALE.getValue();
-        crequest.token = ((Token) (request.paymentInstrument().getValue())).code().getValue();
-        crequest.referenceNumber = request.referenceNumber().getValue();
-        crequest.setAmount(request.amount().getValue());
-
-        CaledonResponse cresponse = caledonCardsClient().transaction(crequest);
-
-        return createResponse(cresponse);
+    public PaymentResponse voidTransaction(Merchant merchant, PaymentRequest request) {
+        if (request.convenienceFee().isNull() && request.convenienceFeeReferenceNumber().isNull()) {
+            return voidTransactionSimple(merchant, request);
+        } else {
+            return voidTransactionConvenienceFee(merchant, request);
+        }
     }
 
-    @Override
-    public PaymentResponse voidTransaction(Merchant merchant, PaymentRequest request) {
+    private PaymentResponse voidTransactionSimple(Merchant merchant, PaymentRequest request) {
         CaledonRequestToken crequest = new CaledonRequestToken();
 
         crequest.terminalID = merchant.terminalID().getValue();
@@ -297,6 +291,27 @@ public class CaledonPaymentProcessor implements IPaymentProcessor {
         CaledonResponse cresponse = caledonCardsClient().transaction(crequest);
 
         return createResponse(cresponse);
+    }
+
+    private PaymentResponse voidTransactionConvenienceFee(Merchant merchant, PaymentRequest request) {
+        CaledonPaymentWithFeeRequest crequest = new CaledonPaymentWithFeeRequest();
+
+        crequest.type = CaledonFeeRequestTypes.Void.getIntrfaceValue();
+        crequest.terminalID = merchant.terminalID().getValue();
+        crequest.referenceNumber = request.referenceNumber().getValue();
+        crequest.referenceNumberFeeCalulation = request.convenienceFeeReferenceNumber().getValue();
+        crequest.setAmount(request.amount().getValue());
+        crequest.setFeeAmount(request.convenienceFee().getValue());
+        crequest.setTotalAmount(request.amount().getValue().add(request.convenienceFee().getValue()));
+
+        CaledonPaymentWithFeeResponse cresponse = caledonConvenienceFeeClient().transaction(crequest);
+
+        PaymentResponse response = EntityFactory.create(PaymentResponse.class);
+        response.success().setValue("0000".equals(cresponse.responseCode));
+        response.code().setValue(cresponse.responseCode);
+        response.message().setValue(cresponse.responsePaymentAuthorization);
+
+        return response;
     }
 
     @Override

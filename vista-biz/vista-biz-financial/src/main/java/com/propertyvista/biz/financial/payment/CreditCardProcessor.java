@@ -41,15 +41,14 @@ import com.propertyvista.domain.util.ValidationUtils;
 import com.propertyvista.dto.payment.ConvenienceFeeCalculationResponseTO;
 import com.propertyvista.operations.domain.payment.cards.CardTransactionRecord;
 import com.propertyvista.payment.CCInformation;
+import com.propertyvista.payment.CreditCardPaymentProcessorFacade;
 import com.propertyvista.payment.FeeCalulationRequest;
 import com.propertyvista.payment.FeeCalulationResponse;
-import com.propertyvista.payment.IPaymentProcessor;
 import com.propertyvista.payment.Merchant;
 import com.propertyvista.payment.PaymentInstrument;
 import com.propertyvista.payment.PaymentRequest;
 import com.propertyvista.payment.PaymentResponse;
 import com.propertyvista.payment.Token;
-import com.propertyvista.payment.caledon.CaledonPaymentProcessor;
 import com.propertyvista.server.jobs.TaskRunner;
 
 class CreditCardProcessor {
@@ -95,8 +94,8 @@ class CreditCardProcessor {
         }
     }
 
-    static IPaymentProcessor getPaymentProcessor() {
-        return new CaledonPaymentProcessor();
+    static CreditCardPaymentProcessorFacade getPaymentProcessor() {
+        return ServerSideFactory.create(CreditCardPaymentProcessorFacade.class);
     }
 
     static void persistToken(String merchantTerminalId, CreditCardInfo cc) {
@@ -118,6 +117,11 @@ class CreditCardProcessor {
         }
         ccInfo.creditCardExpiryDate().setValue(cc.expiryDate().getValue());
         ccInfo.securityCode().setValue(cc.securityCode().getValue());
+
+        // Remove transient data
+        cc.securityCode().setValue(null);
+        cc.card().number().setValue(null);
+        cc.card().newNumber().setValue(null);
 
         if (cc.id().isNull()) {
             throw new Error("CreditCardInfo should be saved first");
@@ -227,13 +231,16 @@ class CreditCardProcessor {
         return createResponse(response);
     }
 
-    static CreditCardTransactionResponse voidTransaction(String merchantTerminalId, BigDecimal amount, String referenceNumber) {
+    static CreditCardTransactionResponse voidTransaction(String merchantTerminalId, BigDecimal amount, BigDecimal convenienceFee, String referenceNumber,
+            String convenienceFeeReferenceNumber) {
         Merchant merchant = EntityFactory.create(Merchant.class);
         merchant.terminalID().setValue(merchantTerminalId);
 
         PaymentRequest request = EntityFactory.create(PaymentRequest.class);
         request.referenceNumber().setValue(referenceNumber);
         request.amount().setValue(amount);
+        request.convenienceFee().setValue(convenienceFee);
+        request.convenienceFeeReferenceNumber().setValue(convenienceFeeReferenceNumber);
 
         PaymentResponse response = getPaymentProcessor().voidTransaction(merchant, request);
         if (response.success().getValue()) {

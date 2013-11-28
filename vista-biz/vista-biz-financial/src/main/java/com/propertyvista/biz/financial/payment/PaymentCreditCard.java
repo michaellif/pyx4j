@@ -104,8 +104,9 @@ class PaymentCreditCard {
                 public Void execute() {
                     try {
                         CreditCardTransactionResponse voidResponse = ServerSideFactory.create(CreditCardFacade.class).voidTransaction(
-                                account.merchantTerminalId().getValue(), paymentRecord.amount().getValue(), //
-                                ReferenceNumberPrefix.RentPayments, paymentRecord.id());
+                                account.merchantTerminalId().getValue(), //
+                                paymentRecord.amount().getValue(), paymentRecord.convenienceFee().getValue(),//
+                                ReferenceNumberPrefix.RentPayments, paymentRecord.id(), paymentRecord.convenienceFeeReferenceNumber().getValue());
 
                         if (voidResponse.success().getValue()) {
                             log.info("transaction {} successfully voided {}", paymentRecord.id(), voidResponse.message());

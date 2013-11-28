@@ -18,13 +18,17 @@ import java.util.Collection;
 import junit.framework.Assert;
 import junit.framework.TestCase;
 
+import org.junit.experimental.categories.Category;
+
 import com.pyx4j.entity.shared.EntityFactory;
 
 import com.propertyvista.domain.payment.CreditCardInfo.CreditCardType;
 import com.propertyvista.domain.policy.policies.PaymentTypeSelectionPolicy;
 import com.propertyvista.domain.security.common.VistaApplication;
 import com.propertyvista.misc.VistaTODO;
+import com.propertyvista.test.integration.IntegrationTestBase.FunctionalTests;
 
+@Category({ FunctionalTests.class })
 public class PaymentAcceptanceUtilsTest extends TestCase {
 
     static enum Expect {

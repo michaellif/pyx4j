@@ -20,7 +20,7 @@ import org.slf4j.LoggerFactory;
 
 import com.pyx4j.entity.shared.EntityFactory;
 
-import com.propertyvista.payment.IPaymentProcessor;
+import com.propertyvista.payment.CreditCardPaymentProcessorFacade;
 import com.propertyvista.payment.PaymentRequest;
 import com.propertyvista.payment.PaymentResponse;
 import com.propertyvista.payment.Token;
@@ -30,7 +30,7 @@ public class CaledonTokenTest extends CaledonTestBase {
     private final static Logger log = LoggerFactory.getLogger(CaledonTokenTest.class);
 
     public void testCreateToken() {
-        IPaymentProcessor proc = new CaledonPaymentProcessor();
+        CreditCardPaymentProcessorFacade proc = new CaledonPaymentProcessor();
         Token token = EntityFactory.create(Token.class);
         token.code().setValue(String.valueOf(System.currentTimeMillis()));
         PaymentResponse pr = proc.createToken(testMerchant, super.createCCInformation(TestData.CARD_MC1, "2015-01"), token);
@@ -41,7 +41,7 @@ public class CaledonTokenTest extends CaledonTestBase {
     }
 
     public void testCreateTokenWithSecurityCode() {
-        IPaymentProcessor proc = new CaledonPaymentProcessor();
+        CreditCardPaymentProcessorFacade proc = new CaledonPaymentProcessor();
         Token token = EntityFactory.create(Token.class);
         token.code().setValue(String.valueOf(System.currentTimeMillis()));
         PaymentResponse pr = proc.createToken(testMerchant, super.createCCInformation(TestData.CARD_MC1, "2015-01", "1234"), token);
@@ -52,7 +52,7 @@ public class CaledonTokenTest extends CaledonTestBase {
     }
 
     public void testTokenTransaction() {
-        IPaymentProcessor proc = new CaledonPaymentProcessor();
+        CreditCardPaymentProcessorFacade proc = new CaledonPaymentProcessor();
         Token token = EntityFactory.create(Token.class);
         token.code().setValue(String.valueOf(System.currentTimeMillis()));
 

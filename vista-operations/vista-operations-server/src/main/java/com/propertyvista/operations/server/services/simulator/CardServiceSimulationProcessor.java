@@ -34,6 +34,7 @@ import com.propertyvista.payment.caledon.CaledonCardProduct;
 import com.propertyvista.payment.caledon.CaledonCardsUtils;
 import com.propertyvista.payment.caledon.CaledonFeeCalulationRequest;
 import com.propertyvista.payment.caledon.CaledonFeeCalulationResponse;
+import com.propertyvista.payment.caledon.CaledonFeeRequestTypes;
 import com.propertyvista.payment.caledon.CaledonPaymentWithFeeRequest;
 import com.propertyvista.payment.caledon.CaledonPaymentWithFeeResponse;
 import com.propertyvista.payment.caledon.CaledonRequest;
@@ -85,7 +86,7 @@ public class CardServiceSimulationProcessor {
         return caledonResponse;
     }
 
-    public static CaledonFeeCalulationResponse execute(CaledonFeeCalulationRequest request) {
+    public static CaledonFeeCalulationResponse executeFeeCalulation(CaledonFeeCalulationRequest request) {
         CaledonFeeCalulationResponse response = new CaledonFeeCalulationResponse();
         response.type = request.type;
         response.terminalID = request.terminalID;
@@ -134,7 +135,7 @@ public class CardServiceSimulationProcessor {
         return amount.multiply(feePercent).setScale(2, RoundingMode.HALF_UP);
     }
 
-    public static CaledonPaymentWithFeeResponse execute(CaledonPaymentWithFeeRequest request) {
+    public static CaledonPaymentWithFeeResponse executePaymentWithFee(CaledonPaymentWithFeeRequest request) {
         CaledonPaymentWithFeeResponse response = new CaledonPaymentWithFeeResponse();
         response.type = request.type;
         response.terminalID = request.terminalID;
@@ -150,38 +151,47 @@ public class CardServiceSimulationProcessor {
             CardServiceSimulationMerchantAccount merchantAccount = ehshureMerchantAccount(request.terminalID);
             if (!merchantAccount.responseCode().isNull()) {
                 response.responseCode = merchantAccount.responseCode().getValue();
-                response.responseText = "Simulated merchant code '" + response.responseCode + "'";
+                response.responsePaymentAuthorization = "Simulated merchant code '" + response.responseCode + "'";
             } else if (validPaymentWithFeeRequest(request, response)) {
                 // Verify the fee amount
-                BigDecimal fee = feeCalulation(merchantAccount, request.cardProduct, response.getAmount());
-                if (fee.compareTo(response.getFeeAmount()) != 0) {
-                    response.responseCode = "C011";
-                    response.responseText = "Fee amount mismatch";
-                } else {
-                    // Process payment using old API
-                    CaledonRequestTokenWithFee caledonRequest = new CaledonRequestTokenWithFee();
-
-                    // Only Token API supported
-                    caledonRequest.token = response.token;
-                    caledonRequest.terminalID = request.terminalID;
-                    caledonRequest.transactionType = CaledonTransactionType.SALE.getValue();
-                    caledonRequest.referenceNumber = request.referenceNumber;
-
-                    caledonRequest.setAmount(response.getAmount());
-                    caledonRequest.feeAmount = response.getFeeAmount();
-
-                    CaledonResponse caledonResponse = processCard(merchantAccount, caledonRequest);
-                    response.responseCode = caledonResponse.code;
-                    response.responseText = caledonResponse.text;
-                    String feeAuthorizationNumber = "F" + new Random().nextInt(99999);
-                    response.responseTextFee = feeAuthorizationNumber + " $" + response.getFeeAmount();
+                if (CaledonFeeRequestTypes.PaymentWithFee.getIntrfaceValue().equals(request.type)) {
+                    BigDecimal fee = feeCalulation(merchantAccount, request.cardProduct, response.getAmount());
+                    if (fee.compareTo(response.getFeeAmount()) != 0) {
+                        response.responseCode = "C011";
+                        response.responsePaymentAuthorization = "Fee amount mismatch";
+                        return response;
+                    }
                 }
+
+                // Process payment using old API
+                CaledonRequestTokenWithFee caledonRequest = new CaledonRequestTokenWithFee();
+
+                // Only Token API supported
+                caledonRequest.token = response.token;
+                caledonRequest.terminalID = request.terminalID;
+                if (CaledonFeeRequestTypes.PaymentWithFee.getIntrfaceValue().equals(request.type)) {
+                    caledonRequest.transactionType = CaledonTransactionType.SALE.getValue();
+                } else if (CaledonFeeRequestTypes.Void.getIntrfaceValue().equals(request.type)) {
+                    caledonRequest.transactionType = CaledonTransactionType.VOID.getValue();
+                }
+
+                caledonRequest.referenceNumber = request.referenceNumber;
+
+                caledonRequest.setAmount(response.getAmount());
+                caledonRequest.feeAmount = response.getFeeAmount();
+
+                CaledonResponse caledonResponse = processCard(merchantAccount, caledonRequest);
+                response.responseCode = caledonResponse.code;
+                response.responsePaymentAuthorization = caledonResponse.authorizationNumber;
+                String feeAuthorizationNumber = "F" + new Random().nextInt(99999);
+                response.responseFeeAuthorization = feeAuthorizationNumber;
+
             }
         } finally {
             Persistence.service().commit();
         }
-        if (response.responseText == null) {
-            response.responseText = "Rejected";
+        if (response.responsePaymentAuthorization == null) {
+            response.responsePaymentAuthorization = "Rejected";
         }
         return response;
     }
@@ -189,19 +199,19 @@ public class CardServiceSimulationProcessor {
     private static boolean validPaymentWithFeeRequest(CaledonPaymentWithFeeRequest request, CaledonPaymentWithFeeResponse response) {
         if (!CardServiceSimulationUtils.isValidAmount(request.feeAmount)) {
             response.responseCode = "C006";
-            response.responseText = "invalid fee amount";
+            response.responsePaymentAuthorization = "invalid fee amount";
             return false;
         } else if (!CardServiceSimulationUtils.isValidAmount(request.amount)) {
             response.responseCode = "C005";
-            response.responseText = "invalid amount";
+            response.responsePaymentAuthorization = "invalid amount";
             return false;
         } else if (!CardServiceSimulationUtils.isValidAmount(request.totalAmount)) {
             response.responseCode = "C007";
-            response.responseText = "invalid payment total";
+            response.responsePaymentAuthorization = "invalid payment total";
             return false;
         } else if (response.getTotalAmount().compareTo(response.getAmount().add(response.getFeeAmount())) != 0) {
             response.responseCode = "C012";
-            response.responseText = "payment total mismatch";
+            response.responsePaymentAuthorization = "payment total mismatch";
             return false;
         } else {
             return true;
@@ -350,6 +360,12 @@ public class CardServiceSimulationProcessor {
         transaction.reference().setValue(caledonRequest.referenceNumber);
         transaction.transactionType().setValue(CardServiceSimulationUtils.toSimTransactionType(transactionType));
 
+        CardServiceSimulationMerchantAccount convenienceFeeMerchantAccount = null;
+        if (caledonRequest instanceof CaledonRequestTokenWithFee) {
+            transaction.convenienceFee().setValue(((CaledonRequestTokenWithFee) caledonRequest).feeAmount);
+            convenienceFeeMerchantAccount = ehshureMerchantAccount("ConvFee");
+        }
+
         CardServiceSimulatorConfig config = CardServiceSimulationUtils.getCardServiceSimulatorConfig();
         if (!card.responseCode().isNull()) {
             caledonResponse.code = card.responseCode().getStringView();
@@ -366,7 +382,10 @@ public class CardServiceSimulationProcessor {
             switch (transactionType) {
             case SALE:
                 newBalance = card.balance().getValue().subtract(transaction.amount().getValue());
-                if (newBalance.compareTo(BigDecimal.ZERO) == -1) {
+                if (caledonRequest instanceof CaledonRequestTokenWithFee) {
+                    newBalance = newBalance.subtract(transaction.convenienceFee().getValue());
+                }
+                if (newBalance.compareTo(card.creditLimit().getValue()) == -1) {
                     caledonResponse.code = "0001";
                     caledonResponse.text = "Credit limit exceeded";
                 } else {
@@ -375,16 +394,14 @@ public class CardServiceSimulationProcessor {
                     caledonResponse.authorizationNumber = "T" + new Random().nextInt(99999);
                     caledonResponse.text = caledonResponse.authorizationNumber + " $" + transaction.amount().getStringView();
                     moveMoney(merchantAccount, transaction.amount().getValue());
+                    if (caledonRequest instanceof CaledonRequestTokenWithFee) {
+                        moveMoney(convenienceFeeMerchantAccount, transaction.convenienceFee().getValue());
+                    }
                 }
-
-                if (caledonRequest instanceof CaledonRequestTokenWithFee) {
-                    transaction.convenienceFee().setValue(((CaledonRequestTokenWithFee) caledonRequest).feeAmount);
-                }
-
                 break;
             case PREAUTH:
                 newBalance = card.balance().getValue().subtract(transaction.amount().getValue()).subtract(card.reserved().getValue(BigDecimal.ZERO));
-                if (newBalance.compareTo(BigDecimal.ZERO) == -1) {
+                if (newBalance.compareTo(card.creditLimit().getValue()) == -1) {
                     caledonResponse.code = "0001";
                     caledonResponse.text = "Credit limit exceeded";
                 } else {
@@ -436,13 +453,18 @@ public class CardServiceSimulationProcessor {
                     prevTransaction.voided().setValue(true);
                     Persistence.service().persist(prevTransaction);
 
-                    newBalance = card.balance().getValue().subtract(transaction.amount().getValue());
+                    newBalance = card.balance().getValue().add(transaction.amount().getValue());
+                    if (caledonRequest instanceof CaledonRequestTokenWithFee) {
+                        newBalance = newBalance.add(transaction.convenienceFee().getValue());
+                    }
                     card.balance().setValue(newBalance);
-                    card.reserved().setValue(card.reserved().getValue(BigDecimal.ZERO).subtract(transaction.amount().getValue()));
 
                     caledonResponse.code = "0000";
                     caledonResponse.text = "VOID OK";
                     moveMoney(merchantAccount, transaction.amount().getValue());
+                    if (caledonRequest instanceof CaledonRequestTokenWithFee) {
+                        moveMoney(convenienceFeeMerchantAccount, transaction.convenienceFee().getValue());
+                    }
                 } else {
                     caledonResponse.code = "1017";
                     caledonResponse.text = "NO MATCH";
@@ -514,7 +536,8 @@ public class CardServiceSimulationProcessor {
         card.number().setValue(caledonRequest.creditCardNumber);
         card.cardType().setValue(CardServiceSimulationUtils.detectCardType(caledonRequest.creditCardNumber));
         card.expiryDate().setValue(CardServiceSimulationUtils.parsDate(caledonRequest.expiryDate));
-        card.balance().setValue(new BigDecimal("10000"));
+        card.creditLimit().setValue(new BigDecimal("-10000.00"));
+        card.balance().setValue(BigDecimal.ZERO);
         card.reserved().setValue(BigDecimal.ZERO);
         return card;
     }
@@ -539,8 +562,11 @@ public class CardServiceSimulationProcessor {
         }
         card.merchant().set(merchantAccount);
         card.expiryDate().setValue(CardServiceSimulationUtils.parsDate(caledonRequest.expiryDate));
+        if (card.creditLimit().isNull()) {
+            card.creditLimit().setValue(new BigDecimal("-10000.00"));
+        }
         if (card.balance().isNull()) {
-            card.balance().setValue(new BigDecimal("10000"));
+            card.balance().setValue(BigDecimal.ZERO);
         }
         if (card.reserved().isNull()) {
             card.reserved().setValue(BigDecimal.ZERO);
