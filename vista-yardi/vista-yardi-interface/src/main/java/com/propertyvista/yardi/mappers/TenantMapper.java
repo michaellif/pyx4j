@@ -13,7 +13,9 @@
  */
 package com.propertyvista.yardi.mappers;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -40,6 +42,14 @@ public class TenantMapper {
     private final static Logger log = LoggerFactory.getLogger(TenantMapper.class);
 
     private final ExecutionMonitor executionMonitor;
+
+    private final static Set<String> ignoredEmailLocalParts = new HashSet<String>();
+
+    static {
+        ignoredEmailLocalParts.add("noemail");
+        ignoredEmailLocalParts.add("nowhere");
+        ignoredEmailLocalParts.add("nobody");
+    }
 
     public TenantMapper() {
         this(null);
@@ -184,7 +194,15 @@ public class TenantMapper {
 
     private String retrieveYardiCustomerEmail(YardiCustomer yardiCustomer) {
         if (!yardiCustomer.getAddress().isEmpty()) {
-            return yardiCustomer.getAddress().get(0).getEmail();
+            String email = yardiCustomer.getAddress().get(0).getEmail();
+            if (!CommonsStringUtils.isEmpty(email)) {
+                email = EmailValidator.normalizeEmailAddress(email);
+                if (isEmailIgnorable(email)) {
+                    log.debug("ignoring email {} for customerID : {}", yardiCustomer.getCustomerID(), email);
+                } else {
+                    return email;
+                }
+            }
         }
         return null;
     }
@@ -203,6 +221,14 @@ public class TenantMapper {
                 }
             }
         }
+    }
+
+    /**
+     * Solution for noemail@realstar.ca
+     */
+    private boolean isEmailIgnorable(String normalizedEmail) {
+        String[] emailParts = normalizedEmail.split("@");
+        return (emailParts.length > 0) && (ignoredEmailLocalParts.contains(emailParts[0]));
     }
 
     private boolean isFormerLease(YardiCustomer yardiCustomer) {
