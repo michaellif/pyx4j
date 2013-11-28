@@ -476,9 +476,12 @@ public class YardiResidentTransactionsService extends YardiAbstractService {
         new UnitOfWork(TransactionScopeOption.RequiresNew).execute(new Executable<Void, YardiServiceException>() {
             @Override
             public Void execute() throws YardiServiceException {
-                new YardiProductCatalogProcessor().processCatalog(building, rentableItems, yardiInterfaceId);
+                YardiProductCatalogProcessor processor = new YardiProductCatalogProcessor();
 
-                ServerSideFactory.create(BuildingFacade.class).persist(building);
+                processor.processCatalog(building, rentableItems, yardiInterfaceId);
+                processor.updateUnits(building);
+                processor.persistCatalog(building);
+
                 return null;
             }
         });

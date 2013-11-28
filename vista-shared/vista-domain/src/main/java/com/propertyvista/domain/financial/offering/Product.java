@@ -13,9 +13,14 @@
  */
 package com.propertyvista.domain.financial.offering;
 
+import java.math.BigDecimal;
+
 import com.pyx4j.entity.annotations.AbstractEntity;
+import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.Editor;
+import com.pyx4j.entity.annotations.Editor.EditorType;
+import com.pyx4j.entity.annotations.Format;
 import com.pyx4j.entity.annotations.Inheritance;
 import com.pyx4j.entity.annotations.JoinColumn;
 import com.pyx4j.entity.annotations.Length;
@@ -77,5 +82,11 @@ public interface Product<V extends ProductV<?>> extends IVersionedEntity<V>, ILo
         @Length(250)
         @Editor(type = Editor.EditorType.textarea)
         IPrimitive<String> description();
+
+        @NotNull
+        @Format("#,##0.00")
+        @Caption(name = "Market Price")
+        @Editor(type = EditorType.money)
+        IPrimitive<BigDecimal> price();
     }
 }
