@@ -461,9 +461,9 @@ public class CardServiceSimulationProcessor {
 
                     caledonResponse.code = "0000";
                     caledonResponse.text = "VOID OK";
-                    moveMoney(merchantAccount, transaction.amount().getValue());
+                    returnMoney(merchantAccount, transaction.amount().getValue());
                     if (caledonRequest instanceof CaledonRequestTokenWithFee) {
-                        moveMoney(convenienceFeeMerchantAccount, transaction.convenienceFee().getValue());
+                        returnMoney(convenienceFeeMerchantAccount, transaction.convenienceFee().getValue());
                     }
                 } else {
                     caledonResponse.code = "1017";
@@ -527,6 +527,11 @@ public class CardServiceSimulationProcessor {
 
     private static void moveMoney(CardServiceSimulationMerchantAccount merchantAccount, BigDecimal value) {
         merchantAccount.balance().setValue(merchantAccount.balance().getValue(BigDecimal.ZERO).add(value));
+        Persistence.service().persist(merchantAccount);
+    }
+
+    private static void returnMoney(CardServiceSimulationMerchantAccount merchantAccount, BigDecimal value) {
+        merchantAccount.balance().setValue(merchantAccount.balance().getValue(BigDecimal.ZERO).subtract(value));
         Persistence.service().persist(merchantAccount);
     }
 
