@@ -72,7 +72,7 @@ public class ApplicationWizard extends CPortalEntityWizard<OnlineApplicationDTO>
             personalInfoBStep = addStep(createPersonalInfoBStep());
             financialStep = addStep(createFinancialStep());
             contactsStep = addStep(createContactsStep());
-            pmcCustomStep = addStep(createPmcCustomStep());
+            pmcCustomStep = addStep(createLegalStep());
             summaryStep = addStep(createSummaryStep());
             paymentStep = addStep(createPaymentStep());
 
@@ -82,7 +82,7 @@ public class ApplicationWizard extends CPortalEntityWizard<OnlineApplicationDTO>
             personalInfoBStep = addStep(createPersonalInfoBStep());
             financialStep = addStep(createFinancialStep());
             contactsStep = addStep(createContactsStep());
-            pmcCustomStep = addStep(createPmcCustomStep());
+            pmcCustomStep = addStep(createLegalStep());
             summaryStep = addStep(createSummaryStep());
         }
 
@@ -172,8 +172,8 @@ public class ApplicationWizard extends CPortalEntityWizard<OnlineApplicationDTO>
         return panel;
     }
 
-    private BasicFlexFormPanel createPmcCustomStep() {
-        BasicFlexFormPanel panel = new BasicFlexFormPanel(i18n.tr("PMC Custom"));
+    private BasicFlexFormPanel createLegalStep() {
+        BasicFlexFormPanel panel = new BasicFlexFormPanel(i18n.tr("Legal"));
         int row = -1;
         panel.setH1(++row, 0, 1, panel.getTitle());
         return panel;
