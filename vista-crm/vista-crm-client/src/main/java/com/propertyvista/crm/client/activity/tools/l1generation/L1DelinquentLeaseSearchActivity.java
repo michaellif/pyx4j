@@ -36,7 +36,9 @@ import com.pyx4j.site.rpc.AppPlace;
 import com.propertyvista.crm.client.CrmSite;
 import com.propertyvista.crm.client.ui.tools.l1generation.L1DelinquentLeaseSearchView;
 import com.propertyvista.crm.client.ui.tools.l1generation.L1DelinquentLeaseSearchViewImpl;
-import com.propertyvista.crm.client.ui.tools.l1generation.datagrid.MultiSelectorAdditionalPresets;
+import com.propertyvista.crm.client.ui.tools.l1generation.datagrid.L1CandidateSelectionPresets;
+import com.propertyvista.crm.client.ui.tools.l1generation.datagrid.MultiSelectorCellModel;
+import com.propertyvista.crm.client.ui.tools.l1generation.datagrid.MultiSelectorState;
 import com.propertyvista.crm.client.ui.tools.l1generation.visors.L1CommonFormDataVisorView;
 import com.propertyvista.crm.client.ui.tools.l1generation.visors.L1FormDataReviewVisorView;
 import com.propertyvista.crm.rpc.dto.legal.common.LegalActionCandidateDTO;
@@ -75,20 +77,16 @@ public class L1DelinquentLeaseSearchActivity extends AbstractActivity implements
     }
 
     @Override
-    public void toggleSelectAll(Boolean selected) {
-        for (LegalActionCandidateDTO c : dataProvider.getList()) {
-            selectionModel.setSelected(c, selected);
-        }
-
-    }
-
-    @Override
-    public void updateSelection(Object selectedPreset) {
-        if (selectedPreset == null) {
-            toggleSelectAll(false);
-        } else if (selectedPreset == MultiSelectorAdditionalPresets.Reviewed) {
+    public void updateSelection(MultiSelectorCellModel selected) {
+        if (selected.getState() != MultiSelectorState.Preset) {
             for (LegalActionCandidateDTO c : dataProvider.getList()) {
-                selectionModel.setSelected(c, c.isReviewed().isBooleanTrue());
+                selectionModel.setSelected(c, selected.getState() == MultiSelectorState.All);
+            }
+        } else {
+            if (selected.getPreset() == L1CandidateSelectionPresets.Reviewed) {
+                for (LegalActionCandidateDTO c : dataProvider.getList()) {
+                    selectionModel.setSelected(c, c.isReviewed().isBooleanTrue());
+                }
             }
         }
     }

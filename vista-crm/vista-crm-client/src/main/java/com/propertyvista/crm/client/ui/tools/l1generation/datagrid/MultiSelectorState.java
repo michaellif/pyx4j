@@ -15,6 +15,6 @@ package com.propertyvista.crm.client.ui.tools.l1generation.datagrid;
 
 public enum MultiSelectorState {
 
-    None, Some, All
+    None, All, Some, Preset
 
 }

@@ -13,7 +13,7 @@
  */
 package com.propertyvista.crm.client.ui.tools.l1generation.datagrid;
 
-public enum MultiSelectorAdditionalPresets {
+public enum L1CandidateSelectionPresets {
 
     Reviewed;
 

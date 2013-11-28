@@ -13,8 +13,6 @@
  */
 package com.propertyvista.crm.client.ui.tools.l1generation.datagrid;
 
-import java.util.List;
-
 import com.google.gwt.cell.client.AbstractEditableCell;
 import com.google.gwt.cell.client.ValueUpdater;
 import com.google.gwt.dom.client.BrowserEvents;
@@ -30,6 +28,8 @@ import com.pyx4j.commons.css.IStyleName;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.Button;
 
+import com.propertyvista.crm.client.ui.tools.l1generation.datagrid.MultiSelectorCellModel.MultiSelectorCellModelFactory;
+
 public class MultiSelectorCell extends AbstractEditableCell<MultiSelectorCellModel, MultiSelectorCellModel> {
 
     private static final I18n i18n = I18n.get(MultiSelectorCell.class);
@@ -42,7 +42,7 @@ public class MultiSelectorCell extends AbstractEditableCell<MultiSelectorCellMod
 
     public static class PresetSelectorPopup extends PopupPanel {
 
-        public PresetSelectorPopup(final List<Object> presets, final ValueUpdater<MultiSelectorCellModel> valueUpdater) {
+        public PresetSelectorPopup(final MultiSelectorCellModel.MultiSelectorCellModelFactory factory, final ValueUpdater<MultiSelectorCellModel> valueUpdater) {
             super(true); // set auto-hide = true;
             setStyleName(Styles.MultiSlectorPresetMenu.name());
 
@@ -50,26 +50,20 @@ public class MultiSelectorCell extends AbstractEditableCell<MultiSelectorCellMod
             panel.add(new Button(i18n.tr("All"), new Command() {
                 @Override
                 public void execute() {
-                    MultiSelectorCellModel value = new MultiSelectorCellModel(presets);
-                    value.setSelectAll();
-                    valueUpdater.update(value);
+                    valueUpdater.update(factory.makeAll());
                 }
             }));
             panel.add(new Button(i18n.tr("None"), new Command() {
                 @Override
                 public void execute() {
-                    MultiSelectorCellModel value = new MultiSelectorCellModel(presets);
-                    value.setSelectNone();
-                    valueUpdater.update(value);
+                    valueUpdater.update(factory.makeNone());
                 }
             }));
-            for (final Object p : presets) {
+            for (final Object p : factory.makeNone().presets()) {
                 panel.add(new Button(p.toString(), new Command() {
                     @Override
                     public void execute() {
-                        MultiSelectorCellModel value = new MultiSelectorCellModel(presets);
-                        value.setSelectSome(p);
-                        valueUpdater.update(value);
+                        valueUpdater.update(factory.makePreset(p));
                     }
                 }));
             }
@@ -77,8 +71,11 @@ public class MultiSelectorCell extends AbstractEditableCell<MultiSelectorCellMod
         }
     }
 
-    public MultiSelectorCell() {
+    private final MultiSelectorCellModelFactory factory;
+
+    public MultiSelectorCell(MultiSelectorCellModelFactory factory) {
         super(BrowserEvents.CLICK, BrowserEvents.KEYDOWN);
+        this.factory = factory;
     }
 
     @Override
@@ -98,7 +95,7 @@ public class MultiSelectorCell extends AbstractEditableCell<MultiSelectorCellMod
         if (value.getState() == MultiSelectorState.All) {
             sb.appendHtmlConstant("<input type=\"checkbox\" class=\"" + Styles.MultiSelectorCheckbox.name() + "\" checked>");
         }
-        if (value.getState() == MultiSelectorState.Some) {
+        if (value.getState() == MultiSelectorState.Some || value.getState() == MultiSelectorState.Preset) {
             sb.appendHtmlConstant("<span class=\"" + Styles.MultiSelectorCheckbox.name() + "\">some</span>"); // TODO draw something beautiful 
         }
 
@@ -116,19 +113,18 @@ public class MultiSelectorCell extends AbstractEditableCell<MultiSelectorCellMod
         Element target = event.getEventTarget().cast();
 
         if (BrowserEvents.CLICK.equals(event.getType())) {
-
             if (target.getClassName().contains(Styles.MultiSelectorCheckbox.name())) {
-                MultiSelectorCellModel updatedValue = new MultiSelectorCellModel(value.presets());
-                if (value.getState() == MultiSelectorState.All || value.getState() == MultiSelectorState.Some) {
-                    updatedValue.setSelectNone();
+                MultiSelectorCellModel updatedValue = null;
+                if (value.getState() == MultiSelectorState.All || value.getState() == MultiSelectorState.Some || value.getState() == MultiSelectorState.Preset) {
+                    updatedValue = factory.makeModel(MultiSelectorState.None, null);
                 } else {
-                    updatedValue.setSelectAll();
+                    updatedValue = factory.makeAll();
                 }
                 if (valueUpdater != null) {
                     valueUpdater.update(updatedValue);
                 }
             } else if (target.getClassName().contains(Styles.MultiSelectorPresetSelector.name())) {
-                final PresetSelectorPopup popup = new PresetSelectorPopup(value.presets(), valueUpdater);
+                final PresetSelectorPopup popup = new PresetSelectorPopup(factory, valueUpdater);
                 final int left = parent.getAbsoluteLeft();
                 final int top = parent.getAbsoluteBottom() + 1;
                 popup.setPopupPositionAndShow(new PositionCallback() {

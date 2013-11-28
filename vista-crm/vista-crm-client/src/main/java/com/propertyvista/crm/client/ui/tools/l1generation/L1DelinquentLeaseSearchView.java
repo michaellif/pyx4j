@@ -18,6 +18,7 @@ import com.google.gwt.view.client.SelectionModel;
 
 import com.pyx4j.site.client.ui.prime.IPrimePane;
 
+import com.propertyvista.crm.client.ui.tools.l1generation.datagrid.MultiSelectorCellModel;
 import com.propertyvista.crm.rpc.dto.legal.common.LegalActionCandidateDTO;
 
 public interface L1DelinquentLeaseSearchView extends IPrimePane {
@@ -28,9 +29,7 @@ public interface L1DelinquentLeaseSearchView extends IPrimePane {
 
         SelectionModel<? super LegalActionCandidateDTO> getSelectionModel();
 
-        void toggleSelectAll(Boolean selected);
-
-        void updateSelection(Object selectedPreset);
+        void updateSelection(MultiSelectorCellModel selectedPreset);
 
         void reviewCandidate(LegalActionCandidateDTO candidate);
 

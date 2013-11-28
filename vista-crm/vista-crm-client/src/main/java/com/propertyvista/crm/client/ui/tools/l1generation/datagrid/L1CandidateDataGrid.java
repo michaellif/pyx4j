@@ -15,7 +15,6 @@ package com.propertyvista.crm.client.ui.tools.l1generation.datagrid;
 
 import java.math.BigDecimal;
 import java.util.Arrays;
-import java.util.List;
 
 import com.google.gwt.cell.client.ActionCell;
 import com.google.gwt.cell.client.ActionCell.Delegate;
@@ -39,6 +38,7 @@ import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.crm.client.ui.tools.l1generation.L1DelinquentLeaseSearchView;
 import com.propertyvista.crm.client.ui.tools.l1generation.L1DelinquentLeaseSearchViewImpl.LeaseIdProvider;
+import com.propertyvista.crm.client.ui.tools.l1generation.datagrid.MultiSelectorCellModel.MultiSelectorCellModelFactory;
 import com.propertyvista.crm.rpc.dto.legal.common.LegalActionCandidateDTO;
 
 public class L1CandidateDataGrid extends DataGrid<LegalActionCandidateDTO> {
@@ -47,8 +47,8 @@ public class L1CandidateDataGrid extends DataGrid<LegalActionCandidateDTO> {
 
     private static final int PAGE_SIZE = 50;
 
-    // TODO this is presenter's part actually
-    private static final List<Object> MULTI_SELECTOR_PRESETS = Arrays.<Object> asList(MultiSelectorAdditionalPresets.values());
+    private static MultiSelectorCellModel.MultiSelectorCellModelFactory SELECTION_STATES_FACTORY = new MultiSelectorCellModelFactory(
+            Arrays.<Object> asList(L1CandidateSelectionPresets.values()));
 
     private L1DelinquentLeaseSearchView.Presenter presenter;
 
@@ -74,7 +74,7 @@ public class L1CandidateDataGrid extends DataGrid<LegalActionCandidateDTO> {
                 }
             };
 
-            Header<MultiSelectorCellModel> selectionColumnHeader = new Header<MultiSelectorCellModel>(new MultiSelectorCell()) {
+            Header<MultiSelectorCellModel> selectionColumnHeader = new Header<MultiSelectorCellModel>(new MultiSelectorCell(SELECTION_STATES_FACTORY)) {
                 @Override
                 public MultiSelectorCellModel getValue() {
                     return L1CandidateDataGrid.this.getSelectionState();
@@ -84,12 +84,7 @@ public class L1CandidateDataGrid extends DataGrid<LegalActionCandidateDTO> {
                 @Override
                 public void update(MultiSelectorCellModel value) {
                     if (L1CandidateDataGrid.this.presenter != null) {
-                        if (value.getState() == MultiSelectorState.All || value.getState() == MultiSelectorState.None) {
-                            L1CandidateDataGrid.this.presenter.toggleSelectAll(value.getState() == MultiSelectorState.All);
-                        } else if (value.getState() == MultiSelectorState.Some) {
-                            L1CandidateDataGrid.this.presenter.updateSelection(value.getSelectedPreset());
-                        }
-
+                        L1CandidateDataGrid.this.presenter.updateSelection(value);
                     }
                 }
             });
@@ -197,25 +192,23 @@ public class L1CandidateDataGrid extends DataGrid<LegalActionCandidateDTO> {
     private MultiSelectorCellModel getSelectionState() {
         if (getSelectionModel() != null && getSelectionModel() instanceof MultiSelectionModel) {
             MultiSelectionModel<LegalActionCandidateDTO> selectionModel = ((MultiSelectionModel<LegalActionCandidateDTO>) getSelectionModel());
-            boolean isSome = selectionModel.getSelectedSet().size() > 0;
-            boolean isAll = selectionModel.getSelectedSet().size() == getRowCount();
+            MultiSelectorState state = selectionModel.getSelectedSet().size() > 0 ? MultiSelectorState.Some : MultiSelectorState.None;
+            state = selectionModel.getSelectedSet().size() == getRowCount() ? MultiSelectorState.All : state;
 
-            MultiSelectorCellModel selectorModel = makeL1CandidateDataGridSelectorCellModel();
-            if (isSome) {
-                if (isAll) {
-                    selectorModel.setSelectAll();
-                } else {
-                    selectorModel.setSelectSome(null);
-                }
+            if (state == MultiSelectorState.All || state == MultiSelectorState.None) {
+                return SELECTION_STATES_FACTORY.makeModel(state, null);
             } else {
-                selectorModel.setSelectNone();
+                Object preset = L1CandidateSelectionPresets.Reviewed;
+                state = MultiSelectorState.Preset;
+                for (LegalActionCandidateDTO c : selectionModel.getSelectedSet()) {
+                    if (!c.isReviewed().isBooleanTrue()) {
+                        preset = null;
+                        state = MultiSelectorState.Some;
+                    }
+                }
+                return SELECTION_STATES_FACTORY.makeModel(state, preset);
             }
-            return selectorModel;
         }
-        return makeL1CandidateDataGridSelectorCellModel();
-    }
-
-    private static MultiSelectorCellModel makeL1CandidateDataGridSelectorCellModel() {
-        return new MultiSelectorCellModel(MULTI_SELECTOR_PRESETS);
+        return SELECTION_STATES_FACTORY.makeNone();
     }
 }
