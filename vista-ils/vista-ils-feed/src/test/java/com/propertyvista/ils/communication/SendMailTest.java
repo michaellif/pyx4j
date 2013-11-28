@@ -24,8 +24,6 @@ import com.pyx4j.server.mail.MailDeliveryStatus;
 import com.pyx4j.server.mail.SMTPGmailMailServiceConfig;
 
 import com.propertyvista.config.tests.VistaDBTestBase;
-import com.propertyvista.ils.communication.FeedEMail;
-import com.propertyvista.ils.communication.MailSendFacade;
 import com.propertyvista.test.integration.IntegrationTestBase.FunctionalTests;
 
 @Category(FunctionalTests.class)
@@ -41,16 +39,16 @@ public class SendMailTest extends VistaDBTestBase {
         try {
             MailSendFacade mailFacade = new MailSendFacade();
             testSend(mailFacade);
-            testFailedSend();
+            testFailedSend(mailFacade);
         } catch (Exception e) {
             fail(e.getMessage());
         }
     }
 
-    private void testFailedSend() {
+    private void testFailedSend(MailSendFacade mailFacade) {
         Exception ex = null;
         try {
-            new MailSendFacade().sendMail(createInput(false));
+            mailFacade.sendMail(createInput(false));
             fail("Should throw invalid argument exception on empty input");
         } catch (Exception ee) {
             ex = ee;
