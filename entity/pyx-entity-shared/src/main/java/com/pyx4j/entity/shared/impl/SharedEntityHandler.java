@@ -929,36 +929,38 @@ public abstract class SharedEntityHandler extends ObjectHandler<Map<String, Seri
     public <T extends IEntity> T duplicate(Class<T> entityClass) {
         Map<String, Serializable> entityValue = getValue();
         T entity = EntityFactory.create(entityClass);
-        // Down cast
-        if (entity.getEntityMeta().isEntityClassAssignableFrom(this)) {
-            entity.setPrimaryKey(this.getPrimaryKey());
-            if (this.isValueDetached()) {
-                entity.setValueDetached();
-            } else {
-                Map<Object, Serializable> processed = new IdentityHashMap<Object, Serializable>();
-                processed.put(this.getValue(), (Serializable) entity.getValue());
-                for (String memberName : entity.getEntityMeta().getMemberNames()) {
-                    if (entityValue.containsKey(memberName)) {
-                        entity.setMemberValue(memberName, cloneValue(entityValue.get(memberName), processed));
+        if (entityValue != null) {
+            // Down cast
+            if (entity.getEntityMeta().isEntityClassAssignableFrom(this)) {
+                entity.setPrimaryKey(this.getPrimaryKey());
+                if (this.isValueDetached()) {
+                    entity.setValueDetached();
+                } else {
+                    Map<Object, Serializable> processed = new IdentityHashMap<Object, Serializable>();
+                    processed.put(this.getValue(), (Serializable) entity.getValue());
+                    for (String memberName : entity.getEntityMeta().getMemberNames()) {
+                        if (entityValue.containsKey(memberName)) {
+                            entity.setMemberValue(memberName, cloneValue(entityValue.get(memberName), processed));
+                        }
                     }
                 }
-            }
-            // Up cast
-        } else if (this.getEntityMeta().isEntityClassAssignableFrom(entity)) {
-            entity.setPrimaryKey(this.getPrimaryKey());
-            if (this.isValueDetached()) {
-                entity.setValueDetached();
-            } else {
-                Map<Object, Serializable> processed = new IdentityHashMap<Object, Serializable>();
-                processed.put(this.getValue(), (Serializable) entity.getValue());
-                for (String memberName : this.getEntityMeta().getMemberNames()) {
-                    if (entityValue.containsKey(memberName)) {
-                        entity.setMemberValue(memberName, cloneValue(entityValue.get(memberName), processed));
+                // Up cast
+            } else if (this.getEntityMeta().isEntityClassAssignableFrom(entity)) {
+                entity.setPrimaryKey(this.getPrimaryKey());
+                if (this.isValueDetached()) {
+                    entity.setValueDetached();
+                } else {
+                    Map<Object, Serializable> processed = new IdentityHashMap<Object, Serializable>();
+                    processed.put(this.getValue(), (Serializable) entity.getValue());
+                    for (String memberName : this.getEntityMeta().getMemberNames()) {
+                        if (entityValue.containsKey(memberName)) {
+                            entity.setMemberValue(memberName, cloneValue(entityValue.get(memberName), processed));
+                        }
                     }
                 }
+            } else {
+                throw new ClassCastException(entity.getEntityMeta().getCaption() + " is not assignable from " + this.getEntityMeta().getCaption());
             }
-        } else {
-            throw new ClassCastException(entity.getEntityMeta().getCaption() + " is not assignable from " + this.getEntityMeta().getCaption());
         }
         return entity;
     }
