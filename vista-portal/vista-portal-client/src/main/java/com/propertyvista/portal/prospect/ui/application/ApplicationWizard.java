@@ -25,7 +25,6 @@ import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.security.shared.SecurityController;
 
 import com.propertyvista.domain.security.PortalProspectBehavior;
-import com.propertyvista.domain.security.PortalResidentBehavior;
 import com.propertyvista.portal.prospect.ui.application.ApplicationWizardView.ApplicationWizardPresenter;
 import com.propertyvista.portal.rpc.portal.prospect.dto.OnlineApplicationDTO;
 import com.propertyvista.portal.shared.ui.CPortalEntityWizard;
@@ -97,21 +96,50 @@ public class ApplicationWizard extends CPortalEntityWizard<OnlineApplicationDTO>
     private BasicFlexFormPanel createLeaseStep() {
         BasicFlexFormPanel panel = new BasicFlexFormPanel(i18n.tr("Lease Information"));
         int row = -1;
+
         panel.setH1(++row, 0, 1, panel.getTitle());
+
+        panel.setH3(++row, 0, 1, i18n.tr("Unit"));
+
+        panel.setH3(++row, 0, 1, i18n.tr("Lease Term"));
+
+        panel.setH3(++row, 0, 1, i18n.tr("Lease Options"));
+
+        if (SecurityController.checkBehavior(PortalProspectBehavior.Applicant) && !SecurityController.checkBehavior(PortalProspectBehavior.CanEditLeaseTerms)) {
+            panel.setH3(++row, 0, 1, i18n.tr("People"));
+        }
+
         return panel;
     }
 
     private BasicFlexFormPanel createUnitStep() {
         BasicFlexFormPanel panel = new BasicFlexFormPanel(i18n.tr("Unit Selection"));
         int row = -1;
+
         panel.setH1(++row, 0, 1, panel.getTitle());
+
         return panel;
     }
 
     private BasicFlexFormPanel createOptionsStep() {
         BasicFlexFormPanel panel = new BasicFlexFormPanel(i18n.tr("Unit Options"));
         int row = -1;
+
         panel.setH1(++row, 0, 1, panel.getTitle());
+
+        return panel;
+    }
+
+    private BasicFlexFormPanel createPeopleStep() {
+        BasicFlexFormPanel panel = new BasicFlexFormPanel(i18n.tr("People"));
+        int row = -1;
+
+        panel.setH1(++row, 0, 1, panel.getTitle());
+
+        panel.setH3(++row, 0, 1, i18n.tr("Tenants"));
+
+        panel.setH3(++row, 0, 1, i18n.tr("Guarantors"));
+
         return panel;
     }
 
@@ -119,6 +147,7 @@ public class ApplicationWizard extends CPortalEntityWizard<OnlineApplicationDTO>
         BasicFlexFormPanel panel = new BasicFlexFormPanel(i18n.tr("About You"));
         int row = -1;
         panel.setH1(++row, 0, 1, panel.getTitle());
+
         return panel;
     }
 
@@ -131,13 +160,6 @@ public class ApplicationWizard extends CPortalEntityWizard<OnlineApplicationDTO>
 
     private BasicFlexFormPanel createFinancialStep() {
         BasicFlexFormPanel panel = new BasicFlexFormPanel(i18n.tr("Financial"));
-        int row = -1;
-        panel.setH1(++row, 0, 1, panel.getTitle());
-        return panel;
-    }
-
-    private BasicFlexFormPanel createPeopleStep() {
-        BasicFlexFormPanel panel = new BasicFlexFormPanel(i18n.tr("People"));
         int row = -1;
         panel.setH1(++row, 0, 1, panel.getTitle());
         return panel;

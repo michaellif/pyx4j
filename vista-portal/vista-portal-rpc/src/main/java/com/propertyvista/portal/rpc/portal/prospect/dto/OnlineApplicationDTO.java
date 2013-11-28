@@ -14,10 +14,9 @@
 package com.propertyvista.portal.rpc.portal.prospect.dto;
 
 import com.pyx4j.entity.annotations.Transient;
-
-import com.propertyvista.domain.tenant.prospect.OnlineApplication;
+import com.pyx4j.entity.shared.IEntity;
 
 @Transient
-public interface OnlineApplicationDTO extends OnlineApplication {
+public interface OnlineApplicationDTO extends IEntity {
 
 }

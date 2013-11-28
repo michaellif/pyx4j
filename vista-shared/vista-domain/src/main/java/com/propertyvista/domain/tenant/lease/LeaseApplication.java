@@ -96,12 +96,12 @@ public interface LeaseApplication extends IEntity {
     @ToString(index = 0)
     IPrimitive<Status> status();
 
-    Employee decidedBy();
-
     /**
      * if empty - application has been created by prospect
      */
     Employee createdBy();
+
+    Employee decidedBy();
 
     @ToString(index = 1)
     IPrimitive<LogicalDate> decisionDate();
