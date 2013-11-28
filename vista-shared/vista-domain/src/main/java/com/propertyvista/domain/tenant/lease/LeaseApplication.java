@@ -98,6 +98,11 @@ public interface LeaseApplication extends IEntity {
 
     Employee decidedBy();
 
+    /**
+     * if empty - application has been created by prospect
+     */
+    Employee createdBy();
+
     @ToString(index = 1)
     IPrimitive<LogicalDate> decisionDate();
 
