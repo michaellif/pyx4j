@@ -13,10 +13,8 @@
  */
 package com.propertyvista.crm.client.ui.tools.l1generation;
 
-import com.google.gwt.cell.client.Cell;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Style.Unit;
-import com.google.gwt.user.cellview.client.Column;
 import com.google.gwt.user.cellview.client.SimplePager;
 import com.google.gwt.user.cellview.client.SimplePager.TextLocation;
 import com.google.gwt.user.client.Command;
@@ -24,9 +22,6 @@ import com.google.gwt.user.client.ui.LayoutPanel;
 import com.google.gwt.view.client.DefaultSelectionEventManager;
 import com.google.gwt.view.client.ProvidesKey;
 
-import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.entity.shared.IObject;
-import com.pyx4j.entity.shared.Path;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.prime.AbstractPrimePane;
 import com.pyx4j.widgets.client.Button;
@@ -52,63 +47,29 @@ public class L1DelinquentLeaseSearchViewImpl extends AbstractPrimePane implement
 
     }
 
-    public static class EntityFieldColumn<E extends IEntity, DataType> extends Column<E, DataType> {
-
-        private final Path fieldPath;
-
-        public EntityFieldColumn(IObject<DataType> field, Cell<DataType> cell) {
-            super(cell);
-            this.fieldPath = field.getPath();
-        }
-
-        @Override
-        public DataType getValue(E object) {
-            return (DataType) object.getMember(fieldPath).getValue();
-        }
-
-    }
-
     L1DelinquentLeaseSearchView.Presenter presenter;
 
-    private final L1CandidateDataGrid dataGrid;
+    private L1CandidateDataGrid dataGrid;
 
-    private final SimplePager pager;
+    private SimplePager pager;
+
+    private final LayoutPanel viewPanel;
 
     public L1DelinquentLeaseSearchViewImpl() {
-        addHeaderToolbarItem(new Button(i18n.tr("Search...")));
-        addHeaderToolbarItem(new Button(i18n.tr("Fill Out Common Fields..."), new Command() {
-            @Override
-            public void execute() {
-                fillCommonFields();
-            }
-        }));
-        addHeaderToolbarItem(new Button(i18n.tr("Issue L1's")));
-
-        LayoutPanel panel = new LayoutPanel();
-        dataGrid = new L1CandidateDataGrid();
-
-        panel.add(dataGrid);
-        panel.setWidgetLeftWidth(dataGrid, 0, Unit.PX, 100, Unit.PCT);
-        panel.setWidgetTopBottom(dataGrid, 0, Unit.PX, 31, Unit.PX);
-
-        SimplePager.Resources pagerResources = GWT.create(SimplePager.Resources.class);
-        pager = new SimplePager(TextLocation.CENTER, pagerResources, false, 0, true);
-        pager.setDisplay(dataGrid);
-        pager.getElement().getStyle().setProperty("marginLeft", "auto");
-        pager.getElement().getStyle().setProperty("marginRight", "auto");
-        panel.add(pager);
-        panel.setWidgetLeftRight(pager, 0, Unit.PX, 0, Unit.PX);
-        panel.setWidgetBottomHeight(pager, 0, Unit.PCT, 30, Unit.PX);
-
-        setContentPane(panel);
+        viewPanel = new LayoutPanel();
+        setContentPane(viewPanel);
         setSize("100%", "100%");
+
+        initToolbar();
+        initDataGrid();
     }
 
     @Override
     public void setPresenter(L1DelinquentLeaseSearchView.Presenter presenter) {
         this.presenter = presenter;
+
         this.dataGrid.setPresenter(this.presenter);
-        this.dataGrid.setSelectionModel(this.presenter.getSelectionModel(), DefaultSelectionEventManager.<LegalActionCandidateDTO> createCheckboxManager());
+        this.dataGrid.setSelectionModel(this.presenter.getSelectionModel(), DefaultSelectionEventManager.<LegalActionCandidateDTO> createCheckboxManager(0));
         this.presenter.getDataProvider().addDataDisplay(this.dataGrid);
     }
 
@@ -118,6 +79,34 @@ public class L1DelinquentLeaseSearchViewImpl extends AbstractPrimePane implement
 
     protected void fillCommonFields() {
         this.presenter.fillCommonFields();
+    }
+
+    private void initToolbar() {
+        addHeaderToolbarItem(new Button(i18n.tr("Search...")));
+        addHeaderToolbarItem(new Button(i18n.tr("Fill Out Common Fields..."), new Command() {
+            @Override
+            public void execute() {
+                fillCommonFields();
+            }
+        }));
+        addHeaderToolbarItem(new Button(i18n.tr("Issue L1's")));
+    }
+
+    private void initDataGrid() {
+        dataGrid = new L1CandidateDataGrid();
+        viewPanel.add(dataGrid);
+        viewPanel.setWidgetLeftWidth(dataGrid, 0, Unit.PX, 100, Unit.PCT);
+        viewPanel.setWidgetTopBottom(dataGrid, 0, Unit.PX, 31, Unit.PX);
+
+        SimplePager.Resources pagerResources = GWT.create(SimplePager.Resources.class);
+        pager = new SimplePager(TextLocation.CENTER, pagerResources, false, 0, true);
+        pager.setDisplay(dataGrid);
+        // TODO this method doesn't help to center the pager on IE:
+        pager.getElement().getStyle().setProperty("marginLeft", "auto");
+        pager.getElement().getStyle().setProperty("marginRight", "auto");
+        viewPanel.add(pager);
+        viewPanel.setWidgetLeftRight(pager, 0, Unit.PX, 0, Unit.PX);
+        viewPanel.setWidgetBottomHeight(pager, 0, Unit.PCT, 30, Unit.PX);
     }
 
 }

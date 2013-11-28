@@ -38,4 +38,6 @@ public interface LegalActionCandidateDTO extends IEntity {
 
     IPrimitive<Boolean> isReviewed();
 
+    /** Warnings describing things that requrie human attention delimited by ';' */
+    IPrimitive<String> warnings();
 }

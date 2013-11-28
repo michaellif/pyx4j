@@ -36,6 +36,7 @@ import com.pyx4j.site.rpc.AppPlace;
 import com.propertyvista.crm.client.CrmSite;
 import com.propertyvista.crm.client.ui.tools.l1generation.L1DelinquentLeaseSearchView;
 import com.propertyvista.crm.client.ui.tools.l1generation.L1DelinquentLeaseSearchViewImpl;
+import com.propertyvista.crm.client.ui.tools.l1generation.datagrid.MultiSelectorAdditionalPresets;
 import com.propertyvista.crm.client.ui.tools.l1generation.visors.L1CommonFormDataVisorView;
 import com.propertyvista.crm.client.ui.tools.l1generation.visors.L1FormDataReviewVisorView;
 import com.propertyvista.crm.rpc.dto.legal.common.LegalActionCandidateDTO;
@@ -79,6 +80,17 @@ public class L1DelinquentLeaseSearchActivity extends AbstractActivity implements
             selectionModel.setSelected(c, selected);
         }
 
+    }
+
+    @Override
+    public void updateSelection(Object selectedPreset) {
+        if (selectedPreset == null) {
+            toggleSelectAll(false);
+        } else if (selectedPreset == MultiSelectorAdditionalPresets.Reviewed) {
+            for (LegalActionCandidateDTO c : dataProvider.getList()) {
+                selectionModel.setSelected(c, c.isReviewed().isBooleanTrue());
+            }
+        }
     }
 
     @Override

@@ -55,6 +55,7 @@ import com.propertyvista.crm.client.ui.tools.common.BulkEditableEntityForm;
 import com.propertyvista.crm.client.ui.tools.common.BulkOperationToolViewImpl;
 import com.propertyvista.crm.client.ui.tools.common.ItemsHolderForm;
 import com.propertyvista.crm.client.ui.tools.l1generation.datagrid.L1CandidateDataGridStyles;
+import com.propertyvista.crm.client.ui.tools.l1generation.datagrid.MultiSelectorCell;
 import com.propertyvista.crm.client.ui.tools.l1generation.visors.L1VisorStyles;
 import com.propertyvista.crm.client.ui.tools.n4generation.LegalNoticeCandidateFolderHolderForm;
 import com.propertyvista.crm.client.ui.tools.n4generation.LegalNoticeCandidateForm;
@@ -980,7 +981,6 @@ public class CrmTheme extends VistaTheme {
         addStyle(style);
 
         // DATA GRID
-
         // some tweaks for default data grid styles
         // warning: THIS WILL ONLY WORK WHEN GWT Complier doesn't try to minify selector names (http://www.gwtproject.org/doc/latest/DevGuideClientBundle.html#CssResource)  
         style = new Style("." + L1CandidateDataGridStyles.L1DataGridHeader.name());
@@ -1005,5 +1005,15 @@ public class CrmTheme extends VistaTheme {
         style.addProperty("text-align", "right");
         addStyle(style);
 
+        // MultiSelectorCell
+        style = new Style("." + MultiSelectorCell.Styles.MultiSlectorPresetMenu.name());
+        style.addProperty("width", "100px");
+        style.addProperty("display", "block");
+        addStyle(style);
+
+        style = new Style("." + MultiSelectorCell.Styles.MultiSlectorPresetMenu.name() + " .Button");
+        style.addProperty("width", "100%");
+        style.addProperty("display", "block");
+        addStyle(style);
     }
 }
