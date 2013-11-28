@@ -81,6 +81,10 @@ SET search_path = '_admin_';
         ALTER TABLE card_transaction_record OWNER TO vista;
         
         
+        -- dev_card_service_simulation_card
+        
+        ALTER TABLE dev_card_service_simulation_card ADD COLUMN credit_limit NUMERIC(18,2);
+        
         /**
         ***     ============================================================================================================
         ***
