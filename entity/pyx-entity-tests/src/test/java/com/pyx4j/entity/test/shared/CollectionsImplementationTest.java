@@ -161,4 +161,17 @@ public class CollectionsImplementationTest extends InitializerTestBase {
         Assert.assertEquals("Proper item reamins", ent2, ent.references().get(0));
 
     }
+
+    public void testDetachedIterator() {
+        ReferenceEntity ent = EntityFactory.create(ReferenceEntity.class);
+        ent.references().setAttachLevel(AttachLevel.Detached);
+
+        boolean accessed = false;
+        try {
+            ent.references().iterator();
+            accessed = true;
+        } catch (AssertionError ok) {
+        }
+        Assert.assertFalse("access should have fail", accessed);
+    }
 }
