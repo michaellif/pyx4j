@@ -173,5 +173,14 @@ public class CollectionsImplementationTest extends InitializerTestBase {
         } catch (AssertionError ok) {
         }
         Assert.assertFalse("access should have fail", accessed);
+
+        // Just in case 
+        try {
+            for (Base1Entity ent2 : ent.references()) {
+            }
+            accessed = true;
+        } catch (AssertionError ok) {
+        }
+        Assert.assertFalse("access should have fail", accessed);
     }
 }
