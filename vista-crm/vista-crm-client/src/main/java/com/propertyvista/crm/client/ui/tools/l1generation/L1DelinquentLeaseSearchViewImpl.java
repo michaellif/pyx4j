@@ -67,7 +67,6 @@ public class L1DelinquentLeaseSearchViewImpl extends AbstractPrimePane implement
     @Override
     public void setPresenter(L1DelinquentLeaseSearchView.Presenter presenter) {
         this.presenter = presenter;
-
         this.dataGrid.setPresenter(this.presenter);
         this.dataGrid.setSelectionModel(this.presenter.getSelectionModel(), DefaultSelectionEventManager.<LegalActionCandidateDTO> createCheckboxManager(0));
         this.presenter.getDataProvider().addDataDisplay(this.dataGrid);
@@ -101,6 +100,7 @@ public class L1DelinquentLeaseSearchViewImpl extends AbstractPrimePane implement
         SimplePager.Resources pagerResources = GWT.create(SimplePager.Resources.class);
         pager = new SimplePager(TextLocation.CENTER, pagerResources, false, 0, true);
         pager.setDisplay(dataGrid);
+
         // TODO this method doesn't help to center the pager on IE:
         pager.getElement().getStyle().setProperty("marginLeft", "auto");
         pager.getElement().getStyle().setProperty("marginRight", "auto");

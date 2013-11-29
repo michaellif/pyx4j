@@ -304,6 +304,11 @@ public class CrmSiteMap implements SiteMap {
 
         public static class AutoPayReview extends AppPlace {
         }
+
+        @PlaceProperties(navigLabel = "Money In", caption = "Money In - Quick Collect")
+        public static class MoneyIn extends CrmCrudAppPlace {
+
+        }
     }
 
     public static class Organization extends AppPlace {

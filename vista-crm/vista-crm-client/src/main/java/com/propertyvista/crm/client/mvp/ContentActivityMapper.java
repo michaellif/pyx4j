@@ -238,6 +238,7 @@ import com.propertyvista.crm.client.activity.security.PasswordChangeActivity;
 import com.propertyvista.crm.client.activity.security.PasswordResetActivity;
 import com.propertyvista.crm.client.activity.security.PasswordResetRequestActivity;
 import com.propertyvista.crm.client.activity.tools.autopayreview.AutoPayReviewActivity;
+import com.propertyvista.crm.client.activity.tools.financial.moneyin.MoneyInCreateBatchActivity;
 import com.propertyvista.crm.client.activity.tools.l1generation.L1DelinquentLeaseSearchActivity;
 import com.propertyvista.crm.client.activity.tools.l1generation.L1FormDataReviewWizardActivity;
 import com.propertyvista.crm.client.activity.tools.n4generation.N4DownloadToolActivity;
@@ -775,6 +776,8 @@ public class ContentActivityMapper implements AppActivityMapper {
                         default:
                             break;
                         }
+                    } else if (crudPlace instanceof Finance.MoneyIn) {
+                        activity = new MoneyInCreateBatchActivity();
 
 // - Organization-related:
                     } else if (crudPlace instanceof Organization.Employee) {
