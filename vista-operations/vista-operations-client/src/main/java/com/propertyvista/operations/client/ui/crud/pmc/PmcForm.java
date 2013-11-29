@@ -26,6 +26,7 @@ import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CField;
 import com.pyx4j.forms.client.ui.CLabel;
+import com.pyx4j.forms.client.ui.CPersonalIdentityField;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.AppSite;
@@ -33,11 +34,13 @@ import com.pyx4j.site.client.ui.prime.form.IForm;
 import com.pyx4j.site.client.ui.prime.lister.ListerDataSource;
 import com.pyx4j.widgets.client.Anchor;
 
+import com.propertyvista.common.client.ui.components.PasswordIdentityFormat;
 import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
 import com.propertyvista.domain.pmc.Pmc;
 import com.propertyvista.domain.pmc.Pmc.PmcStatus;
 import com.propertyvista.domain.pmc.PmcEquifaxStatus;
 import com.propertyvista.domain.pmc.PmcPaymentTypeInfo;
+import com.propertyvista.domain.security.PasswordIdentity;
 import com.propertyvista.operations.client.ui.components.EquifaxFeeQuoteForm;
 import com.propertyvista.operations.client.ui.components.PaymentFeesForm;
 import com.propertyvista.operations.client.ui.crud.OperationsEntityForm;
@@ -217,8 +220,14 @@ public class PmcForm extends OperationsEntityForm<PmcDTO> {
         content.setWidget(row, 1, new FormDecoratorBuilder(inject(proto().equifaxInfo().equifaxPerApplicantCreditCheckFee())).build());
         get(proto().equifaxInfo().equifaxPerApplicantCreditCheckFee()).setViewable(true);
 
-        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().equifaxInfo().customerNumber())).build());
-        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().equifaxInfo().securityCode())).build());
+        CPersonalIdentityField<PasswordIdentity> memberNumber = new CPersonalIdentityField<PasswordIdentity>(PasswordIdentity.class);
+        memberNumber.setFormat(new PasswordIdentityFormat(memberNumber));
+        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().equifaxInfo().memberNumber(), memberNumber)).build());
+
+        CPersonalIdentityField<PasswordIdentity> securityCode = new CPersonalIdentityField<PasswordIdentity>(PasswordIdentity.class);
+        securityCode.setFormat(new PasswordIdentityFormat(securityCode));
+        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().equifaxInfo().securityCode(), securityCode)).build());
+
         content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().equifaxInfo().customerCode())).build());
         content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().equifaxInfo().customerReferenceNumber())).build());
 

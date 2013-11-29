@@ -145,7 +145,7 @@ public class EquifaxCreditCheck {
         EquifaxEnforceLimit.assertLimit(AuditRecordEventType.EquifaxRequest);
         ServerSideFactory.create(AuditFacade.class).record(AuditRecordEventType.EquifaxRequest, customer, "Run EquifaxRequest for customer {0}", customer);
 
-        CNConsAndCommRequestType requestMessage = EquifaxModelMapper.createRequest(customer, pcc, strategyNumber);
+        CNConsAndCommRequestType requestMessage = EquifaxModelMapper.createRequest(equifaxInfo, customer, pcc, strategyNumber);
 
         if (ApplicationMode.isDevelopment()) {
             EntityFileLogger.logXml("equifax", "request", XmlCreator.devToXMl(requestMessage));

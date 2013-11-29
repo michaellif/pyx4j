@@ -47,7 +47,9 @@ import com.propertyvista.domain.customizations.CountryOfOperation;
 import com.propertyvista.domain.pmc.Pmc;
 import com.propertyvista.domain.pmc.Pmc.PmcStatus;
 import com.propertyvista.domain.pmc.PmcDnsName;
+import com.propertyvista.domain.pmc.PmcEquifaxInfo;
 import com.propertyvista.domain.security.OnboardingUser;
+import com.propertyvista.domain.security.PasswordIdentity;
 import com.propertyvista.domain.security.common.VistaApplication;
 import com.propertyvista.domain.settings.PmcYardiCredential;
 import com.propertyvista.ob.server.PmcActivationDeferredProcess;
@@ -94,13 +96,18 @@ public class PmcCrudServiceImpl extends AbstractCrudServiceDtoImpl<Pmc, PmcDTO> 
         Persistence.service().retrieveMember(bo.yardiCredentials());
 
         for (PmcYardiCredential yardiCredential : bo.yardiCredentials()) {
-            if (!yardiCredential.password().encrypted().isNull()) {
-                yardiCredential.password().obfuscatedNumber().setValue("**");
-            } else if (!yardiCredential.password().number().isNull()) {
-                yardiCredential.password().obfuscatedNumber().setValue("##");
-            }
+            setOfuscatedPassword(yardiCredential.password());
         }
+        setOfuscatedPassword(bo.equifaxInfo().memberNumber());
+        setOfuscatedPassword(bo.equifaxInfo().securityCode());
+    }
 
+    private void setOfuscatedPassword(PasswordIdentity passwordDescr) {
+        if (!passwordDescr.encrypted().isNull()) {
+            passwordDescr.obfuscatedNumber().setValue("**");
+        } else if (!passwordDescr.number().isNull()) {
+            passwordDescr.obfuscatedNumber().setValue("##");
+        }
     }
 
     @Override
@@ -143,6 +150,7 @@ public class PmcCrudServiceImpl extends AbstractCrudServiceDtoImpl<Pmc, PmcDTO> 
         for (PmcYardiCredential yardiCredential : bo.yardiCredentials()) {
             encryptPassword(yardiCredential);
         }
+        encryptPassword(bo.equifaxInfo());
 
         super.persist(bo, to);
 
@@ -166,6 +174,7 @@ public class PmcCrudServiceImpl extends AbstractCrudServiceDtoImpl<Pmc, PmcDTO> 
         for (PmcYardiCredential yardiCredential : entity.yardiCredentials()) {
             encryptPassword(yardiCredential);
         }
+        encryptPassword(entity.equifaxInfo());
         ServerSideFactory.create(PmcFacade.class).create(entity);
 
         OnboardingUser user = dto.onboardingUser();
@@ -174,19 +183,40 @@ public class PmcCrudServiceImpl extends AbstractCrudServiceDtoImpl<Pmc, PmcDTO> 
         Persistence.service().persist(user);
     }
 
-    private void encryptPassword(PmcYardiCredential yardiCredential) {
-        if (!yardiCredential.password().newNumber().isNull()) {
-            ServerSideFactory.create(PasswordEncryptorFacade.class).encryptPassword(yardiCredential.password(),
-                    yardiCredential.password().newNumber().getValue());
-        } else if (yardiCredential.getPrimaryKey() != null) {
-            PmcYardiCredential orig = Persistence.service().retrieve(PmcYardiCredential.class, yardiCredential.getPrimaryKey());
-            if (!orig.password().number().isNull()) {
-                ServerSideFactory.create(PasswordEncryptorFacade.class).encryptPassword(yardiCredential.password(), orig.password().number().getValue());
-                yardiCredential.password().number().setValue(null);
+    private void encryptPassword(PasswordIdentity value, PasswordIdentity originalValue) {
+        if (!value.newNumber().isNull()) {
+            ServerSideFactory.create(PasswordEncryptorFacade.class).encryptPassword(value, value.newNumber().getValue());
+        } else if (!originalValue.isNull()) {
+            if (!originalValue.number().isNull()) {
+                ServerSideFactory.create(PasswordEncryptorFacade.class).encryptPassword(value, originalValue.number().getValue());
+                value.number().setValue(null);
             } else {
-                yardiCredential.password().encrypted().setValue(orig.password().encrypted().getValue());
+                value.encrypted().setValue(originalValue.encrypted().getValue());
             }
         }
+    }
+
+    private void encryptPassword(PmcYardiCredential yardiCredential) {
+        PmcYardiCredential orig;
+        if (yardiCredential.getPrimaryKey() != null) {
+            orig = Persistence.service().retrieve(PmcYardiCredential.class, yardiCredential.getPrimaryKey());
+        } else {
+            orig = EntityFactory.create(PmcYardiCredential.class);
+        }
+
+        encryptPassword(yardiCredential.password(), orig.password());
+    }
+
+    private void encryptPassword(PmcEquifaxInfo equifaxInfo) {
+        PmcEquifaxInfo orig;
+        if (equifaxInfo.getPrimaryKey() != null) {
+            orig = Persistence.service().retrieve(PmcEquifaxInfo.class, equifaxInfo.getPrimaryKey());
+        } else {
+            orig = EntityFactory.create(PmcEquifaxInfo.class);
+        }
+        Persistence.service().retrieve(orig);
+        encryptPassword(equifaxInfo.memberNumber(), orig.memberNumber());
+        encryptPassword(equifaxInfo.securityCode(), orig.securityCode());
     }
 
     @Override

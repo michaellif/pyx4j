@@ -61,6 +61,8 @@ public class PmcCreatorDev {
 
         pmc.equifaxInfo().status().setValue(PmcEquifaxStatus.Active);
         pmc.equifaxInfo().reportType().setValue(CreditCheckReportType.FullCreditReport);
+        pmc.equifaxInfo().memberNumber().number().setValue("999RZ00012");
+        pmc.equifaxInfo().securityCode().number().setValue("77");
 
         if (VistaDemo.isDemo()) {
             pmc.equifaxFee().recommendationReportPerApplicantFee().setValue(BigDecimal.ZERO);

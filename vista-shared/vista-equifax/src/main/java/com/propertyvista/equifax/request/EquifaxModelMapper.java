@@ -46,10 +46,13 @@ import ca.equifax.uat.to.SubjectsType;
 import ca.equifax.uat.to.SubjectsType.Subject;
 
 import com.pyx4j.commons.LogicalDate;
+import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.shared.IPrimitive;
 
+import com.propertyvista.biz.system.encryption.PasswordEncryptorFacade;
 import com.propertyvista.domain.PriorAddress;
 import com.propertyvista.domain.media.IdentificationDocument;
+import com.propertyvista.domain.pmc.PmcEquifaxInfo;
 import com.propertyvista.domain.policy.policies.domain.IdentificationDocumentType;
 import com.propertyvista.domain.tenant.Customer;
 import com.propertyvista.domain.tenant.CustomerCreditCheck;
@@ -69,7 +72,7 @@ public class EquifaxModelMapper {
 
     private final static Logger log = LoggerFactory.getLogger(EquifaxModelMapper.class);
 
-    public static CNConsAndCommRequestType createRequest(Customer customer, CustomerCreditCheck pcc, int strategyNumber) {
+    public static CNConsAndCommRequestType createRequest(PmcEquifaxInfo equifaxInfo, Customer customer, CustomerCreditCheck pcc, int strategyNumber) {
 
         ObjectFactory factory = new ObjectFactory();
 
@@ -79,14 +82,22 @@ public class EquifaxModelMapper {
         CNCustomerInfoType cnCustomerInfo = factory.createCNCustomerInfoType();
         transmit.setCNCustomerInfo(cnCustomerInfo);
 
+        if (equifaxInfo.customerCode().isNull()) {
+            cnCustomerInfo.setCustomerCode("P028");
+            cnCustomerInfo.setCustomerId("vista");
+        } else {
+            cnCustomerInfo.setCustomerCode(equifaxInfo.customerCode().getValue());
+            cnCustomerInfo.setCustomerId(equifaxInfo.customerReferenceNumber().getValue());
+        }
+
         cnCustomerInfo.setCustomerCode("P028");
         cnCustomerInfo.setCustomerId("vista");
 
         CustomerInfoType customerInfo = factory.createCustomerInfoType();
         cnCustomerInfo.setCustomerInfo(customerInfo);
 
-        customerInfo.setCustomerNumber("999RZ00012");
-        customerInfo.setSecurityCode("77");
+        customerInfo.setCustomerNumber(ServerSideFactory.create(PasswordEncryptorFacade.class).decryptPassword(equifaxInfo.memberNumber()));
+        customerInfo.setSecurityCode(ServerSideFactory.create(PasswordEncryptorFacade.class).decryptPassword(equifaxInfo.securityCode()));
 
         // requests
         CNRequestsType requests = factory.createCNRequestsType();
