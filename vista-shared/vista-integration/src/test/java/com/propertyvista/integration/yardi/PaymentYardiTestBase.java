@@ -18,7 +18,6 @@ import java.util.List;
 
 import com.yardi.entity.mits.Customerinfo;
 
-import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.AttachLevel;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
@@ -55,8 +54,8 @@ public abstract class PaymentYardiTestBase extends YardiTestBase {
     protected void setUp() throws Exception {
         super.setUp();
 
-        ServerSideFactory.register(EFTTransportFacade.class, EFTTransportFacadeMock.class);
-        ServerSideFactory.register(OperationsTriggerFacade.class, OperationsTriggerFacadeMock.class);
+        registerFacadeMock(EFTTransportFacade.class, EFTTransportFacadeMock.class);
+        registerFacadeMock(OperationsTriggerFacade.class, OperationsTriggerFacadeMock.class);
         EFTTransportFacadeMock.init();
 
         preloadData();

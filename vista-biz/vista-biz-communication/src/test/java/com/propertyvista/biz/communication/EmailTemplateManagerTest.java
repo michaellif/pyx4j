@@ -161,7 +161,7 @@ public class EmailTemplateManagerTest extends VistaDBTestBase {
     public void setUp() throws Exception {
         super.setUp();
         VistaTestDBSetup.initNamespace();
-        ServerSideFactory.register(PasswordEncryptorFacade.class, PasswordEncryptorFacadeMock.class);
+        registerFacadeMock(PasswordEncryptorFacade.class, PasswordEncryptorFacadeMock.class);
 
         TestLifecycle.testSession(null, VistaBasicBehavior.CRM);
         TestLifecycle.beginRequest();

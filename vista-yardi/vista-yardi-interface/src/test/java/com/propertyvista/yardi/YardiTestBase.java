@@ -20,7 +20,6 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
@@ -65,11 +64,11 @@ public class YardiTestBase extends IntegrationTestBase {
 
     @Override
     protected void setUp() throws Exception {
-        ServerSideFactory.register(YardiResidentTransactionsStub.class, YardiMockResidentTransactionsStubImpl.class);
-        ServerSideFactory.register(YardiSystemBatchesStub.class, YardiMockSystemBatchesStubImpl.class);
-        ServerSideFactory.register(YardiMaintenanceRequestsStub.class, YardiMockMaintenanceRequestsStubImpl.class);
-        ServerSideFactory.register(YardiILSGuestCardStub.class, YardiMockILSGuestCardStubImpl.class);
-        ServerSideFactory.register(PasswordEncryptorFacade.class, PasswordEncryptorFacadeMock.class);
+        registerFacadeMock(YardiResidentTransactionsStub.class, YardiMockResidentTransactionsStubImpl.class);
+        registerFacadeMock(YardiSystemBatchesStub.class, YardiMockSystemBatchesStubImpl.class);
+        registerFacadeMock(YardiMaintenanceRequestsStub.class, YardiMockMaintenanceRequestsStubImpl.class);
+        registerFacadeMock(YardiILSGuestCardStub.class, YardiMockILSGuestCardStubImpl.class);
+        registerFacadeMock(PasswordEncryptorFacade.class, PasswordEncryptorFacadeMock.class);
 
         //Init YardiMockServer
         YardiMockServer.instance().cleanup();

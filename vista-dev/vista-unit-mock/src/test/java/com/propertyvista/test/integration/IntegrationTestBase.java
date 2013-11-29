@@ -34,7 +34,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.pyx4j.commons.LogicalDate;
-import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.config.server.SystemDateManager;
 import com.pyx4j.entity.cache.CacheService;
 import com.pyx4j.entity.server.Executable;
@@ -93,7 +92,7 @@ public abstract class IntegrationTestBase extends VistaDBTestBase {
 
         scheduler = new TaskScheduler();
 
-        ServerSideFactory.register(NotificationFacade.class, NotificationFacadeMock.class);
+        registerFacadeMock(NotificationFacade.class, NotificationFacadeMock.class);
     }
 
     @Override

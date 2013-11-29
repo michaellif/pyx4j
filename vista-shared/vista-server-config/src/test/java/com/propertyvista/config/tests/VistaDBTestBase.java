@@ -13,8 +13,12 @@
  */
 package com.propertyvista.config.tests;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import junit.framework.TestCase;
 
+import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.cache.CacheService;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.server.PersistenceServicesFactory;
@@ -28,6 +32,8 @@ public abstract class VistaDBTestBase extends TestCase {
     private static int uniqueIntCount = 0;
 
     private static int runningTestsCount = 0;
+
+    private final Set<Class<?>> registeredMocks = new HashSet<Class<?>>();
 
     @Override
     protected void setUp() throws Exception {
@@ -47,6 +53,18 @@ public abstract class VistaDBTestBase extends TestCase {
             VistaTestDBSetup.resetDatabase();
         }
         runningTestsCount++;
+    }
+
+    public <T> void registerFacadeMock(Class<T> interfaceCalss, Class<? extends T> implCalss) {
+        ServerSideFactory.register(interfaceCalss, implCalss);
+        registeredMocks.add(interfaceCalss);
+    }
+
+    @Override
+    protected void tearDown() throws Exception {
+        for (Class<?> mocks : registeredMocks) {
+            ServerSideFactory.unregister(mocks);
+        }
     }
 
     public synchronized String uniqueString() {

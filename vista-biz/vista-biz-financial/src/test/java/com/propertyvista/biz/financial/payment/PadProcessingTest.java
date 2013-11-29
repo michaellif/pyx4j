@@ -38,8 +38,8 @@ import com.propertyvista.payment.pad.mock.EFTTransportFacadeMock;
 import com.propertyvista.payment.pad.mock.ScheduledResponseAckMerchant;
 import com.propertyvista.payment.pad.mock.ScheduledResponseAckTransaction;
 import com.propertyvista.server.jobs.TaskRunner;
-import com.propertyvista.test.integration.PaymentRecordTester;
 import com.propertyvista.test.integration.IntegrationTestBase.RegressionTests;
+import com.propertyvista.test.integration.PaymentRecordTester;
 import com.propertyvista.test.mock.MockConfig;
 import com.propertyvista.test.mock.MockEventBus;
 import com.propertyvista.test.mock.models.CustomerDataModel;
@@ -57,8 +57,8 @@ public class PadProcessingTest extends LeaseFinancialTestBase {
     protected void setUp() throws Exception {
         super.setUp();
         preloadData();
-        ServerSideFactory.register(EFTTransportFacade.class, EFTTransportFacadeMock.class);
-        ServerSideFactory.register(OperationsTriggerFacade.class, OperationsTriggerFacadeMock.class);
+        registerFacadeMock(EFTTransportFacade.class, EFTTransportFacadeMock.class);
+        registerFacadeMock(OperationsTriggerFacade.class, OperationsTriggerFacadeMock.class);
         EFTTransportFacadeMock.init();
 
         customerDataModel = getDataModel(CustomerDataModel.class);

@@ -54,7 +54,7 @@ public class CreditCardPaymentYardiTest extends PaymentYardiTestBase {
     protected void setUp() throws Exception {
         super.setUp();
 
-        ServerSideFactory.register(CreditCardPaymentProcessorFacade.class, CreditCardPaymentProcessorFacadeMock.class);
+        registerFacadeMock(CreditCardPaymentProcessorFacade.class, CreditCardPaymentProcessorFacadeMock.class);
         CreditCardPaymentProcessorFacadeMock.init();
 
         createYardiBuilding("prop1");

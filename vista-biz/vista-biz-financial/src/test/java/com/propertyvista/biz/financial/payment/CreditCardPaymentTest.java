@@ -48,7 +48,7 @@ public class CreditCardPaymentTest extends LeaseFinancialTestBase {
     protected void setUp() throws Exception {
         super.setUp();
         preloadData();
-        ServerSideFactory.register(CreditCardPaymentProcessorFacade.class, CreditCardPaymentProcessorFacadeMock.class);
+        registerFacadeMock(CreditCardPaymentProcessorFacade.class, CreditCardPaymentProcessorFacadeMock.class);
         CreditCardPaymentProcessorFacadeMock.init();
 
         customerDataModel = getDataModel(CustomerDataModel.class);
