@@ -22,6 +22,7 @@ package com.pyx4j.entity.shared.impl;
 
 import java.io.Serializable;
 
+import com.pyx4j.entity.shared.AttachLevel;
 import com.pyx4j.entity.shared.ICollection;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IObject;
@@ -73,6 +74,11 @@ public abstract class ObjectHandler<VALUE_TYPE> implements IObject<VALUE_TYPE>, 
     @Override
     public boolean isPrototype() {
         return getOwner().isPrototype();
+    }
+
+    @Override
+    public boolean isValueDetached() {
+        return getAttachLevel() != AttachLevel.Attached;
     }
 
     @Override

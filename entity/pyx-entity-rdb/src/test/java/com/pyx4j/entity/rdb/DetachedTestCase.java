@@ -259,11 +259,20 @@ public abstract class DetachedTestCase extends DatastoreTestBase {
 
         {
             DetachedCompletely or1 = srv.retrieve(DetachedCompletely.class, o.getPrimaryKey());
-            Assert.assertEquals("child data is not retrived", AttachLevel.Detached, or1.child().getAttachLevel());
-            Assert.assertEquals("child data is not retrived", AttachLevel.Detached, or1.children().getAttachLevel());
+            Assert.assertEquals("child data is not retrieved", AttachLevel.Detached, or1.child().getAttachLevel());
             srv.retrieveMember(or1.child());
             Assert.assertEquals(testId, or1.child().testId().getValue());
             Assert.assertEquals(cName1, or1.child().name().getValue());
+
+            Assert.assertEquals("child data is not retrieved", AttachLevel.Detached, or1.children().getAttachLevel());
+            boolean accessed = false;
+            try {
+                or1.children().iterator();
+                accessed = true;
+            } catch (AssertionError ok) {
+            }
+            Assert.assertFalse("access should have fail", accessed);
+
         }
 
         // Update child

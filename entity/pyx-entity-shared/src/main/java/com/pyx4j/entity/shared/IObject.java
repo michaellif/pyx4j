@@ -42,6 +42,11 @@ public interface IObject<VALUE_TYPE> extends IStringView {
     public AttachLevel getAttachLevel();
 
     /**
+     * @return true is some data was not retrieved. e.g. getAttachLevel() != AttachLevel.Attached
+     */
+    public boolean isValueDetached();
+
+    /**
      * Internally used by persistence layer when loading values for object.
      */
     public void setAttachLevel(AttachLevel level);

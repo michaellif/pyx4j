@@ -565,11 +565,6 @@ public abstract class SharedEntityHandler extends ObjectHandler<Map<String, Seri
     }
 
     @Override
-    public boolean isValueDetached() {
-        return getAttachLevel() != AttachLevel.Attached;
-    }
-
-    @Override
     public void setValuePopulated() {
         setAttachLevel(AttachLevel.Attached);
     }
