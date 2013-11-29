@@ -64,7 +64,16 @@ public interface Product<V extends ProductV<?>> extends IVersionedEntity<V>, ILo
     @NotNull
     @ToString(index = 0)
     @MemberColumn(name = "codeType", notNull = true)
+    @Deprecated
+    //TODO remove
     IPrimitive<ARCode.Type> type();
+
+    @NotNull
+    @ToString(index = 1)
+    ARCode code();
+
+    @Caption(name = "Default")
+    IPrimitive<Boolean> isDefault();
 
     @AbstractEntity
     @Inheritance(strategy = Inheritance.InheritanceStrategy.SINGLE_TABLE)

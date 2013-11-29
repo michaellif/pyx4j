@@ -56,7 +56,13 @@ public interface ProductItem extends IEntity {
 
     @NotNull
     @ToString(index = 1)
+    @Deprecated
+    //TODO move to Product 
     ARCode code();
+
+    @Length(50)
+    @ToString(index = 1)
+    IPrimitive<String> name();
 
     @NotNull
     @ToString(index = 2)
@@ -76,5 +82,7 @@ public interface ProductItem extends IEntity {
     BuildingElement element();
 
     @Caption(name = "Default")
+    @Deprecated
+    //TODO move to Product 
     IPrimitive<Boolean> isDefault();
 }
