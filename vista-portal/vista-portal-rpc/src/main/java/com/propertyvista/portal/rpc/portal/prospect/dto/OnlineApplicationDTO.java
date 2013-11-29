@@ -19,8 +19,8 @@ import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
 
+import com.propertyvista.domain.financial.offering.Product.ProductV;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
-import com.propertyvista.domain.tenant.lease.LeaseProducts;
 
 @Transient
 public interface OnlineApplicationDTO extends IEntity {
@@ -33,9 +33,10 @@ public interface OnlineApplicationDTO extends IEntity {
 
     IPrimitive<LogicalDate> termTo();
 
-    IList<TenantDTO> tenants();
+    IList<ProductV<?>> options();
 
-    IList<GuarantorDTO> guarantors();
+    IList<CoApplicantDTO> tenants();
 
-    LeaseProducts leaseProducts();
+    IList<CoApplicantDTO> guarantors();
+
 }

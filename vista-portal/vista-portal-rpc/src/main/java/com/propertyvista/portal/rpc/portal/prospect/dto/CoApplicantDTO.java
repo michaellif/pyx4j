@@ -15,6 +15,6 @@ package com.propertyvista.portal.rpc.portal.prospect.dto;
 
 import com.pyx4j.entity.shared.IEntity;
 
-public interface GuarantorDTO extends IEntity {
+public interface CoApplicantDTO extends IEntity {
 
 }
