@@ -14,7 +14,6 @@
 package com.propertyvista.portal.rpc.portal.prospect.dto;
 
 import com.pyx4j.commons.LogicalDate;
-import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
@@ -22,7 +21,6 @@ import com.pyx4j.entity.shared.IPrimitive;
 import com.propertyvista.domain.financial.offering.Product.ProductV;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 
-@Transient
 public interface OnlineApplicationDTO extends IEntity {
 
     ApplicantDTO applicant();
