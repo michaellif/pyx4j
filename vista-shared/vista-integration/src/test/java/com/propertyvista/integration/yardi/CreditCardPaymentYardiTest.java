@@ -28,10 +28,13 @@ import com.propertyvista.biz.financial.payment.PaymentException;
 import com.propertyvista.biz.financial.payment.PaymentFacade;
 import com.propertyvista.domain.financial.PaymentRecord;
 import com.propertyvista.domain.financial.PaymentRecord.PaymentStatus;
+import com.propertyvista.domain.payment.CreditCardInfo;
+import com.propertyvista.domain.payment.CreditCardInfo.CreditCardType;
 import com.propertyvista.domain.payment.LeasePaymentMethod;
 import com.propertyvista.domain.payment.PaymentType;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.Tenant;
+import com.propertyvista.dto.payment.ConvenienceFeeCalculationResponseTO;
 import com.propertyvista.payment.CreditCardPaymentProcessorFacade;
 import com.propertyvista.payment.cards.CreditCardMockFacade;
 import com.propertyvista.payment.cards.CreditCardPaymentProcessorFacadeMock;
@@ -87,7 +90,7 @@ public class CreditCardPaymentYardiTest extends PaymentYardiTestBase {
         assertEquals(ServerSideFactory.create(CreditCardMockFacade.class).getAccountBalance(paymentMethod), new BigDecimal("-100.00"));
     }
 
-    public void TODO_testFailedPostingVoidTransaction() throws Exception {
+    public void testFailedPostingVoidTransaction() throws Exception {
         {
             PropertyUpdater updater = new PropertyUpdater("prop1")//
                     .set(PropertyUpdater.MockFeatures.BlockTransactionPostLeases, getLease().leaseId().getValue());
@@ -114,6 +117,46 @@ public class CreditCardPaymentYardiTest extends PaymentYardiTestBase {
             new PaymentRecordTester(getLease().billingAccount()).lastRecordStatus(PaymentStatus.Void);
         }
 
-        assertEquals(ServerSideFactory.create(CreditCardMockFacade.class).getAccountBalance(paymentMethod), new BigDecimal("-100.00"));
+        assertEquals(ServerSideFactory.create(CreditCardMockFacade.class).getAccountBalance(paymentMethod), new BigDecimal("0.00"));
+    }
+
+    public void testConvenienceFeeFailedPostingVoidTransaction() throws Exception {
+        {
+            PropertyUpdater updater = new PropertyUpdater("prop1")//
+                    .set(PropertyUpdater.MockFeatures.BlockTransactionPostLeases, getLease().leaseId().getValue());
+            MockEventBus.fireEvent(new PropertyUpdateEvent(updater));
+        }
+
+        // Make a payment
+        {
+            final PaymentRecord paymentRecord = getDataModel(LeaseDataModel.class).createPaymentRecord(getLease(), paymentMethod, "100");
+            // Add fee
+            {
+                CreditCardType ccType = paymentRecord.paymentMethod().details().<CreditCardInfo> cast().cardType().getValue();
+                ConvenienceFeeCalculationResponseTO fees = ServerSideFactory.create(PaymentFacade.class).getConvenienceFee(getLease().billingAccount(), ccType,
+                        paymentRecord.amount().getValue());
+
+                paymentRecord.convenienceFee().setValue(fees.feeAmount().getValue());
+                paymentRecord.convenienceFeeReferenceNumber().setValue(fees.transactionNumber().getValue());
+                ServerSideFactory.create(PaymentFacade.class).persistPayment(paymentRecord);
+            }
+            Persistence.service().commit();
+            try {
+                new UnitOfWork().execute(new Executable<Void, PaymentException>() {
+
+                    @Override
+                    public Void execute() throws PaymentException {
+                        ServerSideFactory.create(PaymentFacade.class).processPayment(paymentRecord, null);
+                        return null;
+                    }
+                });
+                Assert.fail("Payment should fail");
+            } catch (PaymentException expected) {
+            }
+
+            new PaymentRecordTester(getLease().billingAccount()).lastRecordStatus(PaymentStatus.Void);
+        }
+        assertEquals(ServerSideFactory.create(CreditCardMockFacade.class).getConvenienceFeeBalance(), new BigDecimal("0.00"));
+        assertEquals(ServerSideFactory.create(CreditCardMockFacade.class).getAccountBalance(paymentMethod), new BigDecimal("0.00"));
     }
 }

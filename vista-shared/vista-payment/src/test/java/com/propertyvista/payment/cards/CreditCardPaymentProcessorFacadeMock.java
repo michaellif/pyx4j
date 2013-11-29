@@ -13,8 +13,6 @@
  */
 package com.propertyvista.payment.cards;
 
-import static com.propertyvista.payment.cards.PaymentResponseHelper.createResponse;
-
 import com.propertyvista.payment.CCInformation;
 import com.propertyvista.payment.CreditCardPaymentProcessorFacade;
 import com.propertyvista.payment.FeeCalulationRequest;
@@ -42,25 +40,25 @@ public class CreditCardPaymentProcessorFacadeMock implements CreditCardPaymentPr
     @Override
     public PaymentResponse realTimePreAuthorization(Merchant merchant, PaymentRequest request) {
         // TODO implement Mock
-        return createResponse("1000", "Mock not implemented");
+        throw new Error("Mock not implemented");
     }
 
     @Override
     public PaymentResponse realTimePreAuthorizationReversal(Merchant merchant, PaymentRequest request) {
         // TODO implement Mock
-        return createResponse("1000", "Mock not implemented");
+        throw new Error("Mock not implemented");
     }
 
     @Override
     public PaymentResponse realTimePreAuthorizationCompletion(Merchant merchant, PaymentRequest request) {
         // TODO implement Mock
-        return createResponse("1000", "Mock not implemented");
+        throw new Error("Mock not implemented");
     }
 
     @Override
     public PaymentResponse validateVisaDebit(CCInformation ccinfo) {
         // TODO Auto-generated method stub
-        return null;
+        throw new Error("Mock not implemented");
     }
 
     @Override
@@ -76,25 +74,24 @@ public class CreditCardPaymentProcessorFacadeMock implements CreditCardPaymentPr
     @Override
     public PaymentResponse updateToken(Merchant merchant, CCInformation ccinfo, Token token) {
         // TODO implement Mock
-        return createResponse("1000", "Mock not implemented");
+        throw new Error("Mock not implemented");
     }
 
     @Override
     public PaymentResponse deactivateToken(Merchant merchant, Token token) {
         // TODO implement Mock
-        return createResponse("1000", "Mock not implemented");
+        throw new Error("Mock not implemented");
     }
 
     @Override
     public PaymentResponse reactivateToken(Merchant merchant, Token token) {
         // TODO implement Mock
-        return createResponse("1000", "Mock not implemented");
+        throw new Error("Mock not implemented");
     }
 
     @Override
     public PaymentResponse voidTransaction(Merchant merchant, PaymentRequest request) {
-        // TODO implement Mock
-        return createResponse("1000", "Mock not implemented");
+        return PCIMock.instance().voidTransaction(merchant, request);
     }
 
     @Override

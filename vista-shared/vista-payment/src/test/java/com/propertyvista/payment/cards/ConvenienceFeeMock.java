@@ -59,4 +59,10 @@ class ConvenienceFeeMock {
         balance = balance.add(request.convenienceFee().getValue());
 
     }
+
+    void voidFee(PaymentRequest request) {
+        // TODO some validations
+
+        balance = balance.subtract(request.convenienceFee().getValue());
+    }
 }

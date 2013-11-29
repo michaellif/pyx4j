@@ -14,8 +14,11 @@
 package com.propertyvista.payment.cards;
 
 import java.math.BigDecimal;
+import java.util.HashMap;
+import java.util.Map;
 
 import com.propertyvista.payment.CCInformation;
+import com.propertyvista.payment.cards.CardTransactionMock.TransactionStatus;
 
 class CardAccountMock {
 
@@ -25,16 +28,37 @@ class CardAccountMock {
 
     BigDecimal creditLimit = new BigDecimal("-10000.00");
 
+    Map<String, CardTransactionMock> transactions = new HashMap<String, CardTransactionMock>();
+
     CardAccountMock(CCInformation ccinfo) {
         this.ccinfo = ccinfo;
     }
 
-    boolean sale(BigDecimal amount) {
+    boolean sale(BigDecimal amount, String referenceNumber) {
+        if (transactions.containsKey(referenceNumber)) {
+            throw new Error("Duplicate transaction " + referenceNumber);
+        }
         BigDecimal newBalance = balance.subtract(amount);
         if (newBalance.compareTo(creditLimit) == -1) {
             return false;
         } else {
             balance = newBalance;
+            CardTransactionMock t = new CardTransactionMock();
+            t.amount = amount;
+            t.status = TransactionStatus.compleated;
+            transactions.put(referenceNumber, t);
+            return true;
+        }
+    }
+
+    boolean voidTransaction(BigDecimal amount, String referenceNumber) {
+        CardTransactionMock t = transactions.get(referenceNumber);
+        if ((t == null) || (t.status != TransactionStatus.compleated)) {
+            return false;
+        } else {
+            BigDecimal newBalance = balance.add(amount);
+            balance = newBalance;
+            t.status = TransactionStatus.voided;
             return true;
         }
     }
