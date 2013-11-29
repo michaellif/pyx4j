@@ -11,13 +11,13 @@
  * @author ArtyomB
  * @version $Id$
  */
-package com.propertyvista.crm.client.ui.tools.l1generation.datagrid;
+package com.propertyvista.crm.client.ui.tools.common.datagrid;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-public final class MultiSelectorCellModel {
+public final class SelectionPresetModel {
 
     private final List<Object> presets;
 
@@ -33,29 +33,29 @@ public final class MultiSelectorCellModel {
             this.presets = Collections.unmodifiableList(new ArrayList<Object>(presets));
         }
 
-        public MultiSelectorCellModel makeAll() {
-            return new MultiSelectorCellModel(MultiSelectorState.All, null, presets);
+        public SelectionPresetModel makeAll() {
+            return new SelectionPresetModel(MultiSelectorState.All, null, presets);
         }
 
-        public MultiSelectorCellModel makeNone() {
-            return new MultiSelectorCellModel(MultiSelectorState.None, null, presets);
+        public SelectionPresetModel makeNone() {
+            return new SelectionPresetModel(MultiSelectorState.None, null, presets);
         }
 
-        public MultiSelectorCellModel makeSome() {
-            return new MultiSelectorCellModel(MultiSelectorState.Some, null, presets);
+        public SelectionPresetModel makeSome() {
+            return new SelectionPresetModel(MultiSelectorState.Some, null, presets);
         }
 
-        public MultiSelectorCellModel makePreset(Object preset) {
-            return new MultiSelectorCellModel(MultiSelectorState.Preset, preset, presets);
+        public SelectionPresetModel makePreset(Object preset) {
+            return new SelectionPresetModel(MultiSelectorState.Preset, preset, presets);
         }
 
-        public MultiSelectorCellModel makeModel(MultiSelectorState state, Object preset) {
-            return new MultiSelectorCellModel(state, state != MultiSelectorState.Preset ? null : preset, presets);
+        public SelectionPresetModel makeModel(MultiSelectorState state, Object preset) {
+            return new SelectionPresetModel(state, state != MultiSelectorState.Preset ? null : preset, presets);
         }
 
     }
 
-    private MultiSelectorCellModel(MultiSelectorState state, Object preset, List<Object> presets) {
+    private SelectionPresetModel(MultiSelectorState state, Object preset, List<Object> presets) {
         this.presets = presets;
         this.selectedState = state;
         this.selectedPreset = preset;

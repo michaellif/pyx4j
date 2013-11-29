@@ -11,7 +11,7 @@
  * @author ArtyomB
  * @version $Id$
  */
-package com.propertyvista.crm.client.ui.tools.l1generation.datagrid;
+package com.propertyvista.crm.client.ui.tools.common.datagrid;
 
 public enum MultiSelectorState {
 

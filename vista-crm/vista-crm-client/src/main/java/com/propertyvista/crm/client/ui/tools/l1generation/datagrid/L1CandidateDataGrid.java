@@ -36,9 +36,14 @@ import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.i18n.shared.I18n;
 
+import com.propertyvista.crm.client.ui.tools.common.datagrid.DataGridScrollFixerHack;
+import com.propertyvista.crm.client.ui.tools.common.datagrid.EntityFieldColumn;
+import com.propertyvista.crm.client.ui.tools.common.datagrid.MultiSelectorCell;
+import com.propertyvista.crm.client.ui.tools.common.datagrid.MultiSelectorState;
+import com.propertyvista.crm.client.ui.tools.common.datagrid.SelectionPresetModel;
+import com.propertyvista.crm.client.ui.tools.common.datagrid.SelectionPresetModel.MultiSelectorCellModelFactory;
 import com.propertyvista.crm.client.ui.tools.l1generation.L1DelinquentLeaseSearchView;
 import com.propertyvista.crm.client.ui.tools.l1generation.L1DelinquentLeaseSearchViewImpl.LeaseIdProvider;
-import com.propertyvista.crm.client.ui.tools.l1generation.datagrid.MultiSelectorCellModel.MultiSelectorCellModelFactory;
 import com.propertyvista.crm.rpc.dto.legal.common.LegalActionCandidateDTO;
 
 public class L1CandidateDataGrid extends DataGrid<LegalActionCandidateDTO> {
@@ -47,7 +52,7 @@ public class L1CandidateDataGrid extends DataGrid<LegalActionCandidateDTO> {
 
     private static final int PAGE_SIZE = 50;
 
-    private static MultiSelectorCellModel.MultiSelectorCellModelFactory SELECTION_STATES_FACTORY = new MultiSelectorCellModelFactory(
+    private static SelectionPresetModel.MultiSelectorCellModelFactory SELECTION_STATES_FACTORY = new MultiSelectorCellModelFactory(
             Arrays.<Object> asList(L1CandidateSelectionPresets.values()));
 
     private L1DelinquentLeaseSearchView.Presenter presenter;
@@ -74,15 +79,15 @@ public class L1CandidateDataGrid extends DataGrid<LegalActionCandidateDTO> {
                 }
             };
 
-            Header<MultiSelectorCellModel> selectionColumnHeader = new Header<MultiSelectorCellModel>(new MultiSelectorCell(SELECTION_STATES_FACTORY)) {
+            Header<SelectionPresetModel> selectionColumnHeader = new Header<SelectionPresetModel>(new MultiSelectorCell(SELECTION_STATES_FACTORY)) {
                 @Override
-                public MultiSelectorCellModel getValue() {
+                public SelectionPresetModel getValue() {
                     return L1CandidateDataGrid.this.getSelectionState();
                 }
             };
-            selectionColumnHeader.setUpdater(new ValueUpdater<MultiSelectorCellModel>() {
+            selectionColumnHeader.setUpdater(new ValueUpdater<SelectionPresetModel>() {
                 @Override
-                public void update(MultiSelectorCellModel value) {
+                public void update(SelectionPresetModel value) {
                     if (L1CandidateDataGrid.this.presenter != null) {
                         L1CandidateDataGrid.this.presenter.updateSelection(value);
                     }
@@ -189,7 +194,7 @@ public class L1CandidateDataGrid extends DataGrid<LegalActionCandidateDTO> {
         this.setColumnWidth(column, columWidth, columnWidthUnit);
     }
 
-    private MultiSelectorCellModel getSelectionState() {
+    private SelectionPresetModel getSelectionState() {
         if (getSelectionModel() != null && getSelectionModel() instanceof MultiSelectionModel) {
             MultiSelectionModel<LegalActionCandidateDTO> selectionModel = ((MultiSelectionModel<LegalActionCandidateDTO>) getSelectionModel());
             MultiSelectorState state = selectionModel.getSelectedSet().size() > 0 ? MultiSelectorState.Some : MultiSelectorState.None;
