@@ -236,7 +236,6 @@ public class LeasePreloader extends BaseVistaDevDataPreloader {
                     tenant.leaseParticipant().customer().person().email().setValue(email2);
 
                     tenant.role().setValue(LeaseTermParticipant.Role.CoApplicant);
-                    tenant.takeOwnership().setValue(false);
                 }
             } else if (i == DemoData.UserType.PTENANT.getDefaultMax()) {
                 LeaseTermTenant mainTenant = lease.currentTerm().version().tenants().get(0);

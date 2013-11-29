@@ -47,7 +47,7 @@ import com.propertyvista.domain.tenant.prospect.OnlineApplication;
 
 @AbstractEntity
 @Inheritance(strategy = Inheritance.InheritanceStrategy.SINGLE_TABLE)
-public interface LeaseTermParticipant<LC extends LeaseParticipant<?>> extends IEntity {
+public interface LeaseTermParticipant<LP extends LeaseParticipant<?>> extends IEntity {
 
     @I18n
     @XmlType(name = "TenantRole")
@@ -89,7 +89,7 @@ public interface LeaseTermParticipant<LC extends LeaseParticipant<?>> extends IE
     @ToString(index = 0)
     @MemberColumn(notNull = true)
     @JoinColumn(LeaseParticipantHolderId.class)
-    LC leaseParticipant();
+    LP leaseParticipant();
 
     @NotNull
     @ToString(index = 1)

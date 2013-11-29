@@ -36,7 +36,6 @@ public class TenantConverter {
             bind(toProto.leaseParticipant().customer(), boProto.leaseParticipant().customer());
             bind(toProto.relationship(), boProto.relationship());
             bind(toProto.role(), boProto.role());
-            bind(toProto.takeOwnership(), boProto.takeOwnership());
         }
     }
 

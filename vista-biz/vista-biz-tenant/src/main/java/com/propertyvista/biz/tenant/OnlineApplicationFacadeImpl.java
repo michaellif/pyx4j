@@ -244,7 +244,7 @@ public class OnlineApplicationFacadeImpl implements OnlineApplicationFacade {
     private void inviteCoApplicants(Lease lease) {
         Persistence.service().retrieve(lease.currentTerm().version().tenants());
         for (LeaseTermTenant tenant : lease.currentTerm().version().tenants()) {
-            if ((tenant.role().getValue() == LeaseTermParticipant.Role.CoApplicant && (!tenant.takeOwnership().isBooleanTrue()))) {
+            if ((tenant.role().getValue() == LeaseTermParticipant.Role.CoApplicant)) {
                 if (tenant.leaseParticipant().customer().user().isNull()) {
                     throw new UserRuntimeException(i18n.tr("Co-Applicant must have an e-mail to start Online Application."));
                 }

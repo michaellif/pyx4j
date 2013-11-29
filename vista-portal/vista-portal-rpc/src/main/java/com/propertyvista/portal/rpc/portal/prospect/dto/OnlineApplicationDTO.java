@@ -13,10 +13,29 @@
  */
 package com.propertyvista.portal.rpc.portal.prospect.dto;
 
+import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.shared.IList;
+import com.pyx4j.entity.shared.IPrimitive;
+
+import com.propertyvista.domain.property.asset.unit.AptUnit;
+import com.propertyvista.domain.tenant.lease.LeaseProducts;
 
 @Transient
 public interface OnlineApplicationDTO extends IEntity {
 
+    ApplicantDTO applicant();
+
+    AptUnit unit();
+
+    IPrimitive<LogicalDate> termFrom();
+
+    IPrimitive<LogicalDate> termTo();
+
+    IList<TenantDTO> tenants();
+
+    IList<GuarantorDTO> guarantors();
+
+    LeaseProducts leaseProducts();
 }

@@ -114,7 +114,6 @@ public class LeaseGenerator extends DataGenerator {
 
             tenant.role().setValue(RandomUtil.random(EnumSet.of(LeaseTermParticipant.Role.CoApplicant, LeaseTermParticipant.Role.Dependent)));
             tenant.relationship().setValue(RandomUtil.randomEnum(PersonRelationship.class));
-            tenant.takeOwnership().setValue(RandomUtil.randomBoolean());
 
             lease.currentTerm().version().tenants().add(tenant);
         }
