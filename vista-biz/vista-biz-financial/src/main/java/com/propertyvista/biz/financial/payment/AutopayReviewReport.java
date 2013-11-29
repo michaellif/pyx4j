@@ -308,7 +308,7 @@ class AutopayReviewReport {
         }
         description += billableItem.description().getStringView();
         if (description.length() == 0) {
-            description += billableItem.item().code().getStringView();
+            description += billableItem.item().name().getStringView();
         }
         return description;
     }

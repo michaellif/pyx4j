@@ -82,7 +82,7 @@ public class UnitCrudServiceImpl extends AbstractCrudServiceDtoImpl<AptUnit, Apt
         // check unit catalog/lease readiness:
         if (retrieveTarget == RetrieveTarget.View) {
             EntityQueryCriteria<ProductItem> criteria = EntityQueryCriteria.create(ProductItem.class);
-            criteria.add(PropertyCriterion.in(criteria.proto().code().type(), ARCode.Type.services()));
+            criteria.add(PropertyCriterion.in(criteria.proto().product().holder().code().type(), ARCode.Type.services()));
             criteria.add(PropertyCriterion.eq(criteria.proto().element(), in));
 
             to.isPresentInCatalog().setValue(Persistence.service().exists(criteria));
@@ -116,7 +116,7 @@ public class UnitCrudServiceImpl extends AbstractCrudServiceDtoImpl<AptUnit, Apt
     private void retrieveServicePrices(AptUnitDTO dto) {
         EntityQueryCriteria<Service> criteria = EntityQueryCriteria.create(Service.class);
         criteria.add(PropertyCriterion.eq(criteria.proto().catalog().building(), dto.building()));
-        criteria.add(PropertyCriterion.in(criteria.proto().type(), ARCode.Type.unitRelatedServices()));
+        criteria.add(PropertyCriterion.in(criteria.proto().code().type(), ARCode.Type.unitRelatedServices()));
 
         for (Service service : Persistence.secureQuery(criteria)) {
             if (!service.isDefaultCatalogItem().isBooleanTrue()) {

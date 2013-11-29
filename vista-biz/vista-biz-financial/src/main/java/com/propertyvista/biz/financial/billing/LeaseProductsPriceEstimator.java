@@ -100,11 +100,10 @@ public class LeaseProductsPriceEstimator {
     }
 
     private InvoiceProductCharge createCharge(BillableItem billableItem) {
-        Persistence.service().retrieve(billableItem.item().product());
 
         InvoiceProductCharge charge = EntityFactory.create(InvoiceProductCharge.class);
 
-        charge.arCode().set(billableItem.item().code());
+        charge.arCode().set(billableItem.item().product().holder().code());
 
         if (BillingUtils.isService(billableItem.item().product())) {
             charge.productType().setValue(InvoiceProductCharge.ProductType.service);
@@ -172,7 +171,7 @@ public class LeaseProductsPriceEstimator {
         }
 
         adjustment.amount().setValue(amount);
-        adjustment.description().setValue(billableItemAdjustment.billableItem().item().code().getStringView() + " " + i18n.tr("Adjustment"));
+        adjustment.description().setValue(billableItemAdjustment.billableItem().item().name().getStringView() + " " + i18n.tr("Adjustment"));
         adjustment.billableItemAdjustment().set(billableItemAdjustment);
 
         charge.adjustmentSubLineItems().add(adjustment);

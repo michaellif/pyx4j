@@ -94,7 +94,7 @@ public class DepositFacadeImpl implements DepositFacade {
         DepositPolicyItem policyItem = null;
         DepositPolicy depositPolicy = ServerSideFactory.create(PolicyFacade.class).obtainEffectivePolicy(node, DepositPolicy.class);
         for (DepositPolicyItem pi : depositPolicy.policyItems()) {
-            if (pi.depositType().getValue().equals(depositType) && pi.productCode().equals(billableItem.item().code())) {
+            if (pi.depositType().getValue().equals(depositType) && pi.productCode().equals(billableItem.item().product().holder().code())) {
                 policyItem = pi;
                 break;
             }
@@ -107,7 +107,7 @@ public class DepositFacadeImpl implements DepositFacade {
         DepositPolicy depositPolicy = ServerSideFactory.create(PolicyFacade.class).obtainEffectivePolicy(node, DepositPolicy.class);
         List<Deposit> deposits = new ArrayList<Deposit>();
         for (DepositPolicyItem policyItem : depositPolicy.policyItems()) {
-            if (!policyItem.productCode().equals(billableItem.item().code())) {
+            if (!policyItem.productCode().equals(billableItem.item().product().holder().code())) {
                 continue;
             }
             deposits.add(makeDeposit(policyItem, billableItem));

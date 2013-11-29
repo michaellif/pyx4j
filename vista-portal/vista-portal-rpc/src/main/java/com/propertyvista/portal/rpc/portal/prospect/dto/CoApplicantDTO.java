@@ -13,8 +13,10 @@
  */
 package com.propertyvista.portal.rpc.portal.prospect.dto;
 
+import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.shared.IEntity;
 
+@Transient
 public interface CoApplicantDTO extends IEntity {
 
 }

@@ -93,10 +93,10 @@ public class BuildingDataModel extends MockDataModel<Building> {
         standardResidentialService = Persistence.retrieveDraftForEdit(Service.class, standardResidentialService.getPrimaryKey());
 
         ProductItem productItem = EntityFactory.create(ProductItem.class);
-        productItem.code().set(arCodes.get(ARCode.Type.Residential).get(0));
+        productItem.name().setValue(arCodes.get(ARCode.Type.Residential).get(0).name().getValue());
         productItem.element().set(generateResidentialUnit(building));
         productItem.price().setValue(price);
-        productItem.description().setValue(productItem.code().name().getValue());
+        productItem.description().setValue(productItem.name().getValue());
 
         standardResidentialService.version().items().add(productItem);
         Persistence.service().persist(standardResidentialService);
@@ -141,7 +141,7 @@ public class BuildingDataModel extends MockDataModel<Building> {
     private Service generateResidentialUnitService(Building building) {
         Service standardResidentialService = EntityFactory.create(Service.class);
         standardResidentialService.catalog().set(building.productCatalog());
-        standardResidentialService.type().setValue(ARCode.Type.Residential);
+        standardResidentialService.code().set(arCodes.get(ARCode.Type.Residential).get(0));
         standardResidentialService.version().name().setValue("Standard Residential Unit");
         standardResidentialService.version().description().setValue("Standard Residential Unit Lease for 1 year term");
 
@@ -151,54 +151,44 @@ public class BuildingDataModel extends MockDataModel<Building> {
 
     private void generateFeatures(Building building, Service standardResidentialService) {
         for (ARCode.Type type : ARCode.Type.features()) {
-            generateFeature(building, standardResidentialService, type);
+            generateFeature(building, standardResidentialService, arCodes.get(type).get(0));
         }
     }
 
-    private void generateFeature(Building building, Service standardResidentialService, ARCode.Type type) {
+    private void generateFeature(Building building, Service standardResidentialService, ARCode arCode) {
         Feature feature = EntityFactory.create(Feature.class);
 
         feature.catalog().set(building.productCatalog());
 
-        feature.type().setValue(type);
+        feature.code().set(arCode);
 
-        feature.version().name().setValue("Regular " + type.name());
-        feature.version().description().setValue("Feature - " + type.name());
+        feature.version().name().setValue("Regular " + arCode.name().getValue());
+        feature.version().description().setValue("Feature - " + arCode.name().getValue());
 
-        switch (type) {
+        switch (arCode.type().getValue()) {
         case Parking:
             feature.version().recurring().setValue(true);
             for (Parking parking : building.parkings()) {
-                for (ARCode arCode : arCodes.get(type)) {
-                    generateFeatureItem(feature, parking, arCode, "80.00");
-                }
+                generateFeatureItem(feature, parking, arCode, "80.00");
             }
             break;
         case Locker:
             feature.version().recurring().setValue(true);
             for (LockerArea lockerArea : building.lockerAreas()) {
-                for (ARCode arCode : arCodes.get(type)) {
-                    generateFeatureItem(feature, lockerArea, arCode, "60.00");
-                }
+                generateFeatureItem(feature, lockerArea, arCode, "60.00");
             }
             break;
         case Pet:
             feature.version().recurring().setValue(true);
-            for (ARCode arCode : arCodes.get(type)) {
-                generateFeatureItem(feature, arCode, "20");
-            }
+            generateFeatureItem(feature, arCode, "20");
             break;
         case AddOn:
             feature.version().recurring().setValue(true);
-            for (ARCode arCode : arCodes.get(type)) {
-                generateFeatureItem(feature, arCode, "40");
-            }
+            generateFeatureItem(feature, arCode, "40");
             break;
         case OneTime:
             feature.version().recurring().setValue(false);
-            for (ARCode arCode : arCodes.get(type)) {
-                generateFeatureItem(feature, arCode, "30");
-            }
+            generateFeatureItem(feature, arCode, "30");
             break;
 
         default:
@@ -216,9 +206,9 @@ public class BuildingDataModel extends MockDataModel<Building> {
 
     private void generateFeatureItem(Feature feature, BuildingElement element, ARCode code, String price) {
         ProductItem productItem = EntityFactory.create(ProductItem.class);
-        productItem.code().set(code);
+        productItem.name().setValue(code.name().getValue());
         productItem.price().setValue(new BigDecimal(price));
-        productItem.description().setValue(code.name().getValue());
+        productItem.description().setValue(code.name().getStringView() + " Description");
         if (element != null) {
             productItem.element().set(element);
         }

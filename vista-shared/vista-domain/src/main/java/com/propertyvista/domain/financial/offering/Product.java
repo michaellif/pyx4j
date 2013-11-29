@@ -30,6 +30,7 @@ import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.annotations.Owner;
 import com.pyx4j.entity.annotations.ReadOnly;
 import com.pyx4j.entity.annotations.ToString;
+import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.ILooseVersioning;
@@ -61,15 +62,14 @@ public interface Product<V extends ProductV<?>> extends IVersionedEntity<V>, ILo
     @NotNull
     IPrimitive<Boolean> isDefaultCatalogItem();
 
-    @NotNull
-    @ToString(index = 0)
-    @MemberColumn(name = "codeType", notNull = true)
+    @Transient
     @Deprecated
     //TODO remove
     IPrimitive<ARCode.Type> type();
 
+    @ToString(index = 0)
     @NotNull
-    @ToString(index = 1)
+    @MemberColumn(notNull = true)
     ARCode code();
 
     @Caption(name = "Default")

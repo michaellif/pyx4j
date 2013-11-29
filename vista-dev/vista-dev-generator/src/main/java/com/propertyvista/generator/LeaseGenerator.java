@@ -168,10 +168,10 @@ public class LeaseGenerator extends DataGenerator {
 
     private static void ensureAgreedPrice(BillableItem billableItem) {
         if (billableItem.item().price().getValue().compareTo(BigDecimal.ZERO) == 0) {
-            if (ARCode.Type.services().contains(billableItem.item().code().type().getValue())) {
+            if (ARCode.Type.services().contains(billableItem.item().product().holder().code().type().getValue())) {
                 billableItem.agreedPrice().setValue(new BigDecimal(500 + RandomUtil.randomInt(500)));
-            } else if (ARCode.Type.features().contains(billableItem.item().code().type().getValue())) {
-                switch (billableItem.item().code().type().getValue()) {
+            } else if (ARCode.Type.features().contains(billableItem.item().product().holder().code().type().getValue())) {
+                switch (billableItem.item().product().holder().code().type().getValue()) {
                 case Parking:
                     billableItem.agreedPrice().setValue(new BigDecimal(5 + RandomUtil.randomInt(50)));
                     break;

@@ -178,6 +178,15 @@ public class BuildingImporter extends ImportPersister {
         Building building = createBuilding(buildingIO, mediaConfig);
 
         List<ProductItem> products = new ArrayList<ProductItem>();
+
+        ARCode arCode = null;
+
+        if (VistaFeatures.instance().productCatalog()) {
+            EntityQueryCriteria<ARCode> serviceCriteria = EntityQueryCriteria.create(ARCode.class);
+            serviceCriteria.add(PropertyCriterion.eq(serviceCriteria.proto().type(), ARCode.Type.Residential));
+            arCode = Persistence.service().retrieve(serviceCriteria);
+        }
+
         //Floorplan
         {
             for (FloorplanIO floorplanIO : buildingIO.floorplans()) {
@@ -250,16 +259,12 @@ public class BuildingImporter extends ImportPersister {
                     counters.units += items.size();
 
                     if (VistaFeatures.instance().productCatalog()) {
-                        EntityQueryCriteria<ARCode> serviceCriteria = EntityQueryCriteria.create(ARCode.class);
-                        serviceCriteria.add(PropertyCriterion.eq(serviceCriteria.proto().type(), ARCode.Type.Residential));
-                        ARCode productType = Persistence.service().retrieve(serviceCriteria);
-
                         for (AptUnit unit : items) {
                             ProductItem product = EntityFactory.create(ProductItem.class);
                             BigDecimal price = unit.financial()._marketRent().getValue();
-                            product.code().set(productType);
+                            product.name().setValue(arCode.name().getStringView());
                             product.price().setValue(price);
-                            product.description().setValue(ARCode.Type.Residential.toString() + " description");
+                            product.description().setValue(arCode.type().getStringView() + " description");
                             product.element().set(unit);
 
                             products.add(product);
@@ -272,7 +277,7 @@ public class BuildingImporter extends ImportPersister {
         if (VistaFeatures.instance().productCatalog()) {
             List<Service> services = new ArrayList<Service>();
             Service service = EntityFactory.create(Service.class);
-            service.type().setValue(ARCode.Type.Residential);
+            service.code().set(arCode);
             service.version().items().addAll(products);
             service.catalog().set(building.productCatalog());
             services.add(service);

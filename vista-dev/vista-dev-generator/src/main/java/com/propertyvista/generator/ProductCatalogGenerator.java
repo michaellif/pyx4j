@@ -69,7 +69,10 @@ public class ProductCatalogGenerator {
     public List<Service> createServices(ProductCatalog catalog) {
         List<Service> items = new ArrayList<Service>(ARCode.Type.services().size());
         for (ARCode.Type type : ARCode.Type.services()) {
-            items.add(createService(catalog, type));
+            List<ARCode> arCodes = getARCodes(type);
+            for (ARCode arCode : arCodes) {
+                items.add(createService(catalog, arCode));
+            }
         }
         return items;
     }
@@ -77,7 +80,10 @@ public class ProductCatalogGenerator {
     public List<Feature> createFeatures(ProductCatalog catalog) {
         List<Feature> items = new ArrayList<Feature>(ARCode.Type.features().size());
         for (ARCode.Type type : ARCode.Type.features()) {
-            items.add(createFeature(catalog, type));
+            List<ARCode> arCodes = getARCodes(type);
+            for (ARCode arCode : arCodes) {
+                items.add(createFeature(catalog, arCode));
+            }
         }
         return items;
     }
@@ -92,7 +98,7 @@ public class ProductCatalogGenerator {
 
     public void buildEligibilityMatrix(ProductCatalog catalog) {
         for (Service service : catalog.services()) {
-            if (ARCode.Type.services().contains(service.type().getValue()) && !service.isDefaultCatalogItem().isBooleanTrue()) {
+            if (ARCode.Type.services().contains(service.code().type().getValue()) && !service.isDefaultCatalogItem().isBooleanTrue()) {
                 for (Feature feature : catalog.features()) {
                     if (!feature.isDefaultCatalogItem().isBooleanTrue()) {
                         service.version().features().add(feature);
@@ -114,112 +120,68 @@ public class ProductCatalogGenerator {
         return Persistence.service().query(criteria);
     }
 
-    private Service createService(ProductCatalog catalog, ARCode.Type type) {
-        Service item = EntityFactory.create(Service.class);
-        item.catalog().set(catalog);
+    private Service createService(ProductCatalog catalog, ARCode arCode) {
 
-        item.type().setValue(type);
-        item.version().name().setValue(RandomUtil.randomLetters(6));
-        item.version().description().setValue("Service description");
+        Service service = EntityFactory.create(Service.class);
+        service.catalog().set(catalog);
 
-        item.version().items().addAll(createServiceItems(type));
-        return item;
+        service.code().set(arCode);
+        service.version().name().setValue(RandomUtil.randomLetters(6));
+        service.version().description().setValue("Service description");
+
+        return service;
+
     }
 
-    private List<ProductItem> createServiceItems(ARCode.Type type) {
-        if (ARCode.Type.unitRelatedServices().contains(type)) {
-            return new ArrayList<ProductItem>(); // no items for unit services - will be added by createBuildingElementServices latter!
-        }
+    private Feature createFeature(ProductCatalog catalog, ARCode arCode) {
+        Feature feature = EntityFactory.create(Feature.class);
+        feature.catalog().set(catalog);
 
-        // create some default item(s): 
-        List<ARCode> allowedItemTypes = new ArrayList<ARCode>();
-        for (ARCode item : getARCodes(type)) {
-            if (type.equals(item.type().getValue())) {
-                allowedItemTypes.add(item);
-            }
-        }
+        feature.code().set(arCode);
+        feature.version().name().setValue(RandomUtil.randomLetters(6));
+        feature.version().description().setValue("Feature description");
 
-        int count = 1;
-        List<ProductItem> items = new ArrayList<ProductItem>(count);
-        if (!allowedItemTypes.isEmpty()) {
-            for (int i = 0; i < count; ++i) {
-                ProductItem item = EntityFactory.create(ProductItem.class);
-                ARCode selectedItem = RandomUtil.random(allowedItemTypes);
+        feature.version().recurring().setValue(RandomUtil.randomBoolean() && !ARCode.Type.nonReccuringFeatures().contains(arCode.type()));
+        feature.version().mandatory().setValue(RandomUtil.randomBoolean() && !ARCode.Type.nonMandatoryFeatures().contains(arCode.type()));
 
-                item.code().set(selectedItem);
-                item.price().setValue(new BigDecimal(500 + RandomUtil.randomInt(500)));
-                item.description().setValue(item.code().getStringView() + " description");
-
-                items.add(item);
-            }
-        }
-
-        return items;
-    }
-
-    private Feature createFeature(ProductCatalog catalog, ARCode.Type type) {
-        Feature item = EntityFactory.create(Feature.class);
-        item.catalog().set(catalog);
-
-        item.type().setValue(type);
-        item.version().name().setValue(RandomUtil.randomLetters(6));
-        item.version().description().setValue("Feature description");
-
-        item.version().recurring().setValue(RandomUtil.randomBoolean() && !ARCode.Type.nonReccuringFeatures().contains(type));
-        item.version().mandatory().setValue(RandomUtil.randomBoolean() && !ARCode.Type.nonMandatoryFeatures().contains(type));
-
-        item.version().items().addAll(createFeatureItems(type));
-        if (item.version().mandatory().isBooleanTrue()) {
+        feature.version().items().add(createFeatureItem(arCode));
+        if (feature.version().mandatory().isBooleanTrue()) {
             // if feature is mandatory - the default item should be set!
-            ProductItem fi = RandomUtil.random(item.version().items());
+            ProductItem fi = RandomUtil.random(feature.version().items());
             fi.isDefault().setValue(Boolean.TRUE);
         }
-        return item;
+
+        return feature;
     }
 
-    private List<ProductItem> createFeatureItems(ARCode.Type type) {
-        List<ARCode> allowedItemTypes = new ArrayList<ARCode>();
-        for (ARCode item : getARCodes(type)) {
-            if (type.equals(item.type().getValue())) {
-                allowedItemTypes.add(item);
-            }
+    private ProductItem createFeatureItem(ARCode arCode) {
+        ProductItem item = EntityFactory.create(ProductItem.class);
+
+        item.name().setValue(arCode.name().getStringView());
+        item.description().setValue(arCode.type().getStringView() + " description");
+
+        switch (arCode.type().getValue()) {
+        case Parking:
+            item.price().setValue(new BigDecimal(5 + RandomUtil.randomInt(50)));
+            break;
+        case Locker:
+            item.price().setValue(new BigDecimal(5 + RandomUtil.randomInt(10)));
+            break;
+        case Pet:
+            item.price().setValue(new BigDecimal(20 + RandomUtil.randomInt(20)));
+            break;
+        case AddOn:
+            item.price().setValue(new BigDecimal(30 + RandomUtil.randomInt(50)));
+            break;
+        case OneTime:
+            item.price().setValue(new BigDecimal(20 + RandomUtil.randomInt(20)));
+            break;
+        case Utility:
+            item.price().setValue(new BigDecimal(80 + RandomUtil.randomInt(50)));
+            break;
         }
 
-        int count = Math.min(3, allowedItemTypes.size());
-        List<ProductItem> items = new ArrayList<ProductItem>(count);
-        if (!allowedItemTypes.isEmpty()) {
-            for (int i = 0; i < count; ++i) {
-                ProductItem item = EntityFactory.create(ProductItem.class);
-
-                item.code().set(RandomUtil.random(allowedItemTypes));
-                item.description().setValue(item.code().getStringView() + " description");
-
-                switch (type) {
-                case Parking:
-                    item.price().setValue(new BigDecimal(5 + RandomUtil.randomInt(50)));
-                    break;
-                case Locker:
-                    item.price().setValue(new BigDecimal(5 + RandomUtil.randomInt(10)));
-                    break;
-                case Pet:
-                    item.price().setValue(new BigDecimal(20 + RandomUtil.randomInt(20)));
-                    break;
-                case AddOn:
-                    item.price().setValue(new BigDecimal(30 + RandomUtil.randomInt(50)));
-                    break;
-                case OneTime:
-                    item.price().setValue(new BigDecimal(20 + RandomUtil.randomInt(20)));
-                    break;
-                case Utility:
-                    item.price().setValue(new BigDecimal(80 + RandomUtil.randomInt(50)));
-                    break;
-                }
-
-                items.add(item);
-            }
-        }
-
-        return items;
+        return item;
     }
 
     private Concession createConcession(ProductCatalog catalog) {
@@ -289,13 +251,13 @@ public class ProductCatalogGenerator {
         return items;
     }
 
-    private Service getService(ProductCatalog catalog, ARCode.Type type) {
+    private Service getService(ProductCatalog catalog, ARCode arCode) {
         for (Service service : catalog.services()) {
-            if (service.type().getValue().equals(type) && !service.isDefaultCatalogItem().isBooleanTrue()) {
+            if (service.code().equals(arCode) && !service.isDefaultCatalogItem().isBooleanTrue()) {
                 return service;
             }
         }
-        throw new Error("Service of type " + type + " not found");
+        throw new Error("Service with ARCode = " + arCode + " not found");
     }
 
     private static BigDecimal createUnitMarketRent(AptUnit unit) {
@@ -309,22 +271,25 @@ public class ProductCatalogGenerator {
         List<ProductItem> serviceItems = new ArrayList<ProductItem>();
 
         for (ARCode.Type type : ARCode.Type.unitRelatedServices()) {
-            serviceItems.add(createBuildingElementServices(catalog, unit, type, createUnitMarketRent(unit)));
+
+            ARCode arCode = RandomUtil.random(getARCodes(type));
+
+            serviceItems.add(createBuildingElementServices(catalog, unit, arCode, createUnitMarketRent(unit)));
         }
 
         return serviceItems;
     }
 
-    public ProductItem createBuildingElementServices(ProductCatalog catalog, BuildingElement buildingElement, ARCode.Type type, BigDecimal price) {
-        Service service = getService(catalog, type);
+    private ProductItem createBuildingElementServices(ProductCatalog catalog, BuildingElement buildingElement, ARCode arCode, BigDecimal price) {
+        Service service = getService(catalog, arCode);
 
         ProductItem item = EntityFactory.create(ProductItem.class);
-        ARCode selectedItem = RandomUtil.random(getARCodes(type));
 
-        item.code().set(selectedItem);
+        item.name().setValue(arCode.name().getStringView());
         // This value may not be used in all cases and overridden later in generator
         item.price().setValue(price);
-        item.description().setValue(item.code().getStringView() + " description");
+        item.description().setValue(arCode.type().getStringView() + " description");
+
         item.element().set(buildingElement);
 
         service.version().items().add(item);

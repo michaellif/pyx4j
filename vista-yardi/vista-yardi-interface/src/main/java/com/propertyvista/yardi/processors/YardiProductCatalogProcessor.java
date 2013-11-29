@@ -67,7 +67,7 @@ public class YardiProductCatalogProcessor {
 
         for (Service service : building.productCatalog().services()) {
             if (!service.isDefaultCatalogItem().isBooleanTrue()) {
-                if (ARCode.Type.unitRelatedServices().contains(service.type().getValue())) {
+                if (ARCode.Type.unitRelatedServices().contains(service.code().type().getValue())) {
                     updateUnitItems(service, units);
                 }
             }
@@ -86,20 +86,17 @@ public class YardiProductCatalogProcessor {
         });
 
         for (AptUnit unit : units) {
-            ProductItem pi = EntityFactory.create(ProductItem.class);
-            pi.element().set(unit);
+            ProductItem item = EntityFactory.create(ProductItem.class);
+            item.element().set(unit);
 
-            if (Collections.binarySearch(serviceItems, pi, new Comparator<ProductItem>() {
+            if (Collections.binarySearch(serviceItems, item, new Comparator<ProductItem>() {
                 @Override
                 public int compare(ProductItem o1, ProductItem o2) {
                     return o1.element().getPrimaryKey().compareTo(o2.element().getPrimaryKey());
                 }
             }) < 0) {
-                EntityQueryCriteria<ARCode> criteria = EntityQueryCriteria.create(ARCode.class);
-                criteria.eq(criteria.proto().type(), service.type());
-                assert (ARCode.Type.unitRelatedServices().contains(service.type().getValue()));
-                pi.code().set(Persistence.service().retrieve(criteria));
-                service.version().items().add(pi);
+                item.name().setValue(service.code().name().getStringView());
+                service.version().items().add(item);
             }
         }
 
@@ -182,7 +179,7 @@ public class YardiProductCatalogProcessor {
         EntityQueryCriteria<Service> criteria = EntityQueryCriteria.create(Service.class);
         criteria.eq(criteria.proto().catalog(), catalog);
         criteria.eq(criteria.proto().isDefaultCatalogItem(), false);
-        criteria.eq(criteria.proto().type(), typeData.getArCode().type().getValue());
+        criteria.eq(criteria.proto().code().type(), typeData.getArCode().type().getValue());
         criteria.eq(criteria.proto().version().name(), typeData.getYariItemType().getCode());
 
         Service service = Persistence.service().retrieve(criteria);
@@ -190,7 +187,7 @@ public class YardiProductCatalogProcessor {
             service = EntityFactory.create(Service.class);
             service.isDefaultCatalogItem().setValue(false);
             service.catalog().set(catalog);
-            service.type().setValue(typeData.getArCode().type().getValue());
+            service.code().set(typeData.getArCode());
             service.version().name().setValue(typeData.getYariItemType().getCode());
         } else {
             service = Persistence.secureRetrieveDraft(Service.class, service.getPrimaryKey());
@@ -216,7 +213,7 @@ public class YardiProductCatalogProcessor {
         EntityQueryCriteria<Feature> criteria = EntityQueryCriteria.create(Feature.class);
         criteria.eq(criteria.proto().catalog(), catalog);
         criteria.eq(criteria.proto().isDefaultCatalogItem(), false);
-        criteria.eq(criteria.proto().type(), typeData.getArCode().type().getValue());
+        criteria.eq(criteria.proto().code(), typeData.getArCode());
         criteria.eq(criteria.proto().version().name(), typeData.getYariItemType().getCode());
 
         Feature feature = Persistence.service().retrieve(criteria);
@@ -224,7 +221,7 @@ public class YardiProductCatalogProcessor {
             feature = EntityFactory.create(Feature.class);
             feature.isDefaultCatalogItem().setValue(false);
             feature.catalog().set(catalog);
-            feature.type().setValue(typeData.getArCode().type().getValue());
+            feature.code().set(typeData.getArCode());
             feature.version().name().setValue(typeData.getYariItemType().getCode());
             feature.version().recurring().setValue(!ARCode.Type.nonReccuringFeatures().contains(typeData.getArCode().type().getValue()));
             feature.version().mandatory().setValue(false);
@@ -247,7 +244,7 @@ public class YardiProductCatalogProcessor {
     private ProductItem createFeatureItem(ARCode code) {
         ProductItem item = EntityFactory.create(ProductItem.class);
 
-        item.code().set(code);
+        item.name().setValue(code.name().getStringView());
         item.price().setValue(BigDecimal.ZERO);
 
         return item;

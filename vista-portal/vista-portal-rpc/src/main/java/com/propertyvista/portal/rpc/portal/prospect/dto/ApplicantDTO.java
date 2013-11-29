@@ -17,6 +17,8 @@ import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.Length;
 import com.pyx4j.entity.annotations.Owned;
+import com.pyx4j.entity.annotations.Transient;
+import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
 
 import com.propertyvista.domain.PriorAddress;
@@ -26,7 +28,8 @@ import com.propertyvista.domain.tenant.EmergencyContact;
 import com.propertyvista.domain.tenant.income.CustomerScreeningIncome;
 import com.propertyvista.domain.tenant.income.CustomerScreeningPersonalAsset;
 
-public interface ApplicantDTO {
+@Transient
+public interface ApplicantDTO extends IEntity {
 
     Person person();
 

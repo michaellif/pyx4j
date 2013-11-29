@@ -106,8 +106,9 @@ public class TaxUtils {
 
     public static void calculateProductChargeTaxes(InvoiceProductCharge charge, Building building) {
         if (!charge.amount().isNull()) {
-            charge.taxes()
-                    .addAll(TaxUtils.calculateProductTaxes(charge.amount().getValue(), charge.chargeSubLineItem().billableItem().item().code(), building));
+            charge.taxes().addAll(
+                    TaxUtils.calculateProductTaxes(charge.amount().getValue(), charge.chargeSubLineItem().billableItem().item().product().holder().code(),
+                            building));
         }
         charge.taxTotal().setValue(BigDecimal.ZERO);
         for (InvoiceChargeTax chargeTax : charge.taxes()) {

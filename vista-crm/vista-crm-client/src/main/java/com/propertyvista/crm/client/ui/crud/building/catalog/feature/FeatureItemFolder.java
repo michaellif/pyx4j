@@ -59,9 +59,8 @@ class FeatureItemFolder extends VistaTableFolder<ProductItem> {
     @Override
     public List<EntityFolderColumnDescriptor> columns() {
         ArrayList<EntityFolderColumnDescriptor> columns = new ArrayList<EntityFolderColumnDescriptor>();
-        columns.add(new EntityFolderColumnDescriptor(proto().code(), "20em"));
+        columns.add(new EntityFolderColumnDescriptor(proto().name(), "20em"));
         columns.add(new EntityFolderColumnDescriptor(proto().price(), "8em"));
-        columns.add(new EntityFolderColumnDescriptor(proto().isDefault(), "5em"));
         columns.add(new EntityFolderColumnDescriptor(proto().element(), "15em"));
         columns.add(new EntityFolderColumnDescriptor(proto().description(), "25em"));
         return columns;
@@ -85,7 +84,7 @@ class FeatureItemFolder extends VistaTableFolder<ProductItem> {
         @Override
         protected CComponent<?> createCell(EntityFolderColumnDescriptor column) {
             Class<? extends IEntity> buildingElementClass = null;
-            switch (parent.getValue().type().getValue()) {
+            switch (parent.getValue().code().type().getValue()) {
             case Parking:
                 buildingElementClass = Parking.class;
                 break;
@@ -107,16 +106,16 @@ class FeatureItemFolder extends VistaTableFolder<ProductItem> {
                 } else {
                     comp = new CLabel(""); // there is no building element for this item!
                 }
-            } else if (column.getObject() == proto().code()) {
+            } else if (column.getObject() == proto().product().holder().code()) {
                 comp = inject(column.getObject(), new CEntityComboBox<ARCode>(ARCode.class));
             } else {
                 comp = super.createCell(column);
             }
 
-            if (column.getObject() == proto().code()) {
+            if (column.getObject() == proto().name()) {
                 if (parent.isEditable() && comp instanceof CEntityComboBox<?>) {
                     final CEntityComboBox<ARCode> combo = (CEntityComboBox<ARCode>) comp;
-                    combo.addCriterion(PropertyCriterion.eq(combo.proto().type(), parent.getValue().type()));
+//TODO                    combo.addCriterion(PropertyCriterion.eq(combo.proto().type(), parent.getValue().type()));
                     // preselect if single option:                    
                     combo.addOptionsChangeHandler(new OptionsChangeHandler<List<ARCode>>() {
                         @Override

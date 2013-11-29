@@ -34,10 +34,10 @@ public class FeatureCrudServiceImpl extends AbstractCrudServiceImpl<Feature> imp
 
     @Override
     protected Feature init(InitializationData initializationData) {
-        FeatureInitializationdata initData = (FeatureInitializationdata) initializationData;
+        FeatureInitializationData initData = (FeatureInitializationData) initializationData;
 
         Feature entity = EntityFactory.create(Feature.class);
-        entity.type().setValue(initData.type().getValue());
+        entity.code().set(initData.code());
         entity.catalog().setPrimaryKey(initData.parent().getPrimaryKey());
         entity.catalog().setValueDetached();
 

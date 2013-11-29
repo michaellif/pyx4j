@@ -47,18 +47,11 @@ public interface ProductItem extends IEntity {
     @ReadOnly
     @JoinColumn
     @ToString(index = 0)
-    @Detached(level = AttachLevel.ToStringMembers)
     @Indexed
     Product.ProductV<?> product();
 
     @OrderColumn
     IPrimitive<Integer> _orderColumn();
-
-    @NotNull
-    @ToString(index = 1)
-    @Deprecated
-    //TODO move to Product 
-    ARCode code();
 
     @Length(50)
     @ToString(index = 1)

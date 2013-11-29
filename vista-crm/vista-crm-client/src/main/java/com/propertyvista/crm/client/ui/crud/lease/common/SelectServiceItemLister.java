@@ -30,7 +30,7 @@ public class SelectServiceItemLister extends AbstractLister<ProductItem> {
         getDataTablePanel().setPageSize(PAGESIZE_SMALL);
 
         setColumnDescriptors(//@formatter:off
-            new MemberColumnDescriptor.Builder(proto().code()).build(),
+            new MemberColumnDescriptor.Builder(proto().name()).build(),
             new MemberColumnDescriptor.Builder(proto().price()).build(),
             new MemberColumnDescriptor.Builder(proto().description()).build()
         );//@formatter:on
@@ -38,6 +38,6 @@ public class SelectServiceItemLister extends AbstractLister<ProductItem> {
 
     @Override
     public List<Sort> getDefaultSorting() {
-        return Arrays.asList(new Sort(proto().code(), false));
+        return Arrays.asList(new Sort(proto().name(), false));
     }
 }

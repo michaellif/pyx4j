@@ -39,7 +39,7 @@ public class FeatureLister extends AbstractLister<Feature> {
         getDataTablePanel().setFilteringEnabled(false);
 
         setColumnDescriptors(//@formatter:off
-            new MemberColumnDescriptor.Builder(proto().type(), true).build(),
+            new MemberColumnDescriptor.Builder(proto().code(), true).build(),
             new MemberColumnDescriptor.Builder(proto().version().name(), true).build(),
             new MemberColumnDescriptor.Builder(proto().version().mandatory(), true).build(),
             new MemberColumnDescriptor.Builder(proto().version().recurring(), true).build(),
@@ -49,7 +49,7 @@ public class FeatureLister extends AbstractLister<Feature> {
 
     @Override
     public List<Sort> getDefaultSorting() {
-        return Arrays.asList(new Sort(proto().type(), false), new Sort(proto().version().name(), false));
+        return Arrays.asList(new Sort(proto().code(), false), new Sort(proto().version().name(), false));
     }
 
     @Override
@@ -62,13 +62,13 @@ public class FeatureLister extends AbstractLister<Feature> {
 
     @Override
     protected void onItemNew() {
-        new SelectEnumDialog<ARCode.Type>(i18n.tr("Select Feature Type"), ARCode.Type.features()) {
+        new SelectEnumDialog<ARCode.Type>(i18n.tr("Select AR Code"), ARCode.Type.features()) {
             @Override
             public boolean onClickOk() {
-                FeatureCrudService.FeatureInitializationdata id = EntityFactory.create(FeatureCrudService.FeatureInitializationdata.class);
-                id.parent().set(EntityFactory.createIdentityStub(ProductCatalog.class, getPresenter().getParent()));
-                id.type().setValue(getSelectedType());
-                getPresenter().editNew(getItemOpenPlaceClass(), id);
+                FeatureCrudService.FeatureInitializationData initData = EntityFactory.create(FeatureCrudService.FeatureInitializationData.class);
+                initData.parent().set(EntityFactory.createIdentityStub(ProductCatalog.class, getPresenter().getParent()));
+//TODO                initData.code().setValue(getSelectedType());
+                getPresenter().editNew(getItemOpenPlaceClass(), initData);
                 return true;
             }
         }.show();

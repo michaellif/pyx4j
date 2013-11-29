@@ -191,7 +191,7 @@ public class BillingProductChargeProcessor extends AbstractBillingProcessor<Inte
         charge.fromDate().setValue(overlap.getFromDate());
         charge.toDate().setValue(overlap.getToDate());
         charge.dueDate().setValue(bill.dueDate().getValue());
-        charge.arCode().set(billableItem.item().code());
+        charge.arCode().set(billableItem.item().product().holder().code());
 
         if (BillingUtils.isService(billableItem.item().product())) {
             charge.productType().setValue(InvoiceProductCharge.ProductType.service);
@@ -274,7 +274,7 @@ public class BillingProductChargeProcessor extends AbstractBillingProcessor<Inte
 
         BigDecimal proration = ProrationUtils.prorate(overlap.getFromDate(), overlap.getToDate(), bill.billingCycle());
         adjustment.amount().setValue(DomainUtil.roundMoney(amount.multiply(proration)));
-        adjustment.description().setValue(billableItemAdjustment.billableItem().item().code().getStringView() + " " + i18n.tr("Adjustment"));
+        adjustment.description().setValue(billableItemAdjustment.billableItem().item().name().getStringView() + " " + i18n.tr("Adjustment"));
         adjustment.billableItemAdjustment().set(billableItemAdjustment);
 
         charge.adjustmentSubLineItems().add(adjustment);

@@ -889,7 +889,7 @@ public class OccupancyFacadeImpl implements OccupancyFacade {
         EntityQueryCriteria<Service> criteria = EntityQueryCriteria.create(Service.class);
 
         criteria.add(PropertyCriterion.eq(criteria.proto().catalog().building(), unit.building()));
-        criteria.add(PropertyCriterion.in(criteria.proto().type(), ARCode.Type.unitRelatedServices()));
+        criteria.add(PropertyCriterion.in(criteria.proto().code().type(), ARCode.Type.unitRelatedServices()));
 
         for (Service service : Persistence.secureQuery(criteria)) {
             Persistence.service().retrieve(service.version().items());

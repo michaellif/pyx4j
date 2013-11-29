@@ -330,13 +330,16 @@ public class AvailabilityReportManager {
 
         EntityQueryCriteria<Service> criteria = EntityQueryCriteria.create(Service.class);
         criteria.add(PropertyCriterion.eq(criteria.proto().catalog().building(), unit.building()));
-        criteria.add(PropertyCriterion.in(criteria.proto().type(), ARCode.Type.unitRelatedServices()));
+        criteria.add(PropertyCriterion.in(criteria.proto().code().type(), ARCode.Type.unitRelatedServices()));
 
         for (Service service : Persistence.secureQuery(criteria)) {
             Persistence.service().retrieve(service.version().items());
             for (ProductItem item : service.version().items()) {
+                if (item.element() == null || item.element().isNull()) {
+                    System.out.println("++++++++++++++==");
+                }
                 if (item.element().getInstanceValueClass().equals(AptUnit.class) & item.element().getPrimaryKey().equals(unit.getPrimaryKey())) {
-                    if (service.type().getValue() == ARCode.Type.Residential) {
+                    if (service.code().type().getValue() == ARCode.Type.Residential) {
                         residentialUnitMarketRent = item.price().getValue();
                         break;
                     }

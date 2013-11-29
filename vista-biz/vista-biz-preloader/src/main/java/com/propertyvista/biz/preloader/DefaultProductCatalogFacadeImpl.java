@@ -106,7 +106,7 @@ public class DefaultProductCatalogFacadeImpl implements DefaultProductCatalogFac
 
         for (Service service : building.productCatalog().services()) {
             if (service.isDefaultCatalogItem().isBooleanTrue()) {
-                if (ARCode.Type.unitRelatedServices().contains(service.type().getValue())) {
+                if (ARCode.Type.unitRelatedServices().contains(service.code().type().getValue())) {
                     ProductItem item = createUnitItem(unit, service);
                     Persistence.service().persist(item);
                 }
@@ -126,7 +126,7 @@ public class DefaultProductCatalogFacadeImpl implements DefaultProductCatalogFac
 
         for (Service service : building.productCatalog().services()) {
             if (service.isDefaultCatalogItem().isBooleanTrue()) {
-                if (ARCode.Type.unitRelatedServices().contains(service.type().getValue())) {
+                if (ARCode.Type.unitRelatedServices().contains(service.code().type().getValue())) {
                     updateUnitItem(unit, service);
                 }
             }
@@ -150,23 +150,23 @@ public class DefaultProductCatalogFacadeImpl implements DefaultProductCatalogFac
         criteria.in(criteria.proto().type(), ARCode.Type.services());
 
         // create services:
-        List<Service> items = new ArrayList<Service>();
+        List<Service> services = new ArrayList<Service>();
         for (ARCode code : Persistence.service().query(criteria)) {
-            items.add(createService(catalog, code));
+            services.add(createService(catalog, code));
         }
 
-        return items;
+        return services;
     }
 
     private Service createService(ProductCatalog catalog, ARCode code) {
-        Service item = EntityFactory.create(Service.class);
-        item.isDefaultCatalogItem().setValue(true);
+        Service service = EntityFactory.create(Service.class);
+        service.isDefaultCatalogItem().setValue(true);
 
-        item.catalog().set(catalog);
-        item.type().setValue(code.type().getValue());
-        item.version().name().setValue(code.name().getValue());
+        service.catalog().set(catalog);
+        service.code().set(code);
+        service.version().name().setValue(code.name().getValue());
 
-        return item;
+        return service;
     }
 
     // ----------------------------------------------------------------------------------
@@ -185,47 +185,32 @@ public class DefaultProductCatalogFacadeImpl implements DefaultProductCatalogFac
         EntityQueryCriteria<ARCode> criteria = EntityQueryCriteria.create(ARCode.class);
         criteria.in(criteria.proto().type(), ARCode.Type.features());
         List<ARCode> codes = Persistence.service().query(criteria);
-
-        // accumulate unique type:
-        List<ARCode.Type> types = new ArrayList<ARCode.Type>();
+        List<Feature> items = new ArrayList<Feature>();
         for (ARCode code : codes) {
-            if (!types.contains(code.type().getValue())) {
-                types.add(code.type().getValue());
-            }
+            items.add(createFeature(catalog, code));
         }
-
-        // create corresponding features:
-        List<Feature> items = new ArrayList<Feature>(types.size());
-        for (ARCode.Type type : types) {
-            items.add(createFeature(catalog, type, codes));
-        }
-
         return items;
     }
 
-    private Feature createFeature(ProductCatalog catalog, ARCode.Type type, List<ARCode> codes) {
-        Feature item = EntityFactory.create(Feature.class);
-        item.isDefaultCatalogItem().setValue(true);
+    private Feature createFeature(ProductCatalog catalog, ARCode code) {
+        Feature feature = EntityFactory.create(Feature.class);
+        feature.isDefaultCatalogItem().setValue(true);
 
-        item.catalog().set(catalog);
-        item.type().setValue(type);
-        item.version().name().setValue(type.toString());
-        item.version().recurring().setValue(!ARCode.Type.nonReccuringFeatures().contains(type));
-        item.version().mandatory().setValue(false);
+        feature.catalog().set(catalog);
+        feature.code().set(code);
+        feature.version().name().setValue(code.name().getValue());
+        feature.version().recurring().setValue(!ARCode.Type.nonReccuringFeatures().contains(code));
+        feature.version().mandatory().setValue(false);
 
-        for (ARCode code : codes) {
-            if (type.equals(code.type().getValue())) {
-                item.version().items().add(createFeatureItem(code));
-            }
-        }
+        feature.version().items().add(createFeatureItem(code));
 
-        return item;
+        return feature;
     }
 
     private ProductItem createFeatureItem(ARCode code) {
         ProductItem item = EntityFactory.create(ProductItem.class);
 
-        item.code().set(code);
+        item.name().setValue(code.name().getValue());
         item.price().setValue(BigDecimal.ZERO);
 
         return item;
@@ -252,12 +237,7 @@ public class DefaultProductCatalogFacadeImpl implements DefaultProductCatalogFac
         ProductItem item = EntityFactory.create(ProductItem.class);
         item.product().set(service.version());
 
-        EntityQueryCriteria<ARCode> criteria = EntityQueryCriteria.create(ARCode.class);
-        criteria.eq(criteria.proto().type(), service.type());
-
-        assert (ARCode.Type.unitRelatedServices().contains(service.type().getValue()));
-
-        item.code().set(Persistence.service().retrieve(criteria));
+        item.name().setValue(service.code().name().getValue());
         item.price().setValue(unit.financial()._marketRent().isNull() ? BigDecimal.ZERO : unit.financial()._marketRent().getValue());
         item.element().set(unit);
 

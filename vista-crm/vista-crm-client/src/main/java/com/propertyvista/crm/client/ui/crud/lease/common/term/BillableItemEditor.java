@@ -188,13 +188,13 @@ public class BillableItemEditor extends CEntityDecoratableForm<BillableItem> {
             depositPanel.setVisible((isEditable() || !getValue().deposits().isEmpty()));
 
         } else if (!getValue().item().isEmpty()) {
-            if (ARCode.Type.services().contains(getValue().item().code().type().getValue())) {
+            if (ARCode.Type.services().contains(getValue().item().product().holder().code().type().getValue())) {
                 // hide effective dates:
                 get(proto().effectiveDate()).setVisible(false);
                 get(proto().expirationDate()).setVisible(false);
 
                 updateServiceItemEditability();
-            } else if (ARCode.Type.features().contains(getValue().item().code().type().getValue())) {
+            } else if (ARCode.Type.features().contains(getValue().item().product().holder().code().type().getValue())) {
                 // show/hide effective dates (hide expiration for non-recurring; show in editor, hide in viewer if empty):
                 boolean recurring = isRecurringFeature(getValue().item().product());
                 get(proto().effectiveDate()).setVisible((isEditable() || !getValue().effectiveDate().isNull()));
@@ -272,8 +272,8 @@ public class BillableItemEditor extends CEntityDecoratableForm<BillableItem> {
             if (extraData.getInstanceValueClass() == YardiLeaseChargeData.class) {
                 editor = new YardiDataEditor();
             } else {
-                if (ARCode.Type.features().contains(value.item().code().type().getValue())) {
-                    switch (value.item().code().type().getValue()) {
+                if (ARCode.Type.features().contains(value.item().product().holder().code().type().getValue())) {
+                    switch (value.item().product().holder().code().type().getValue()) {
                     case Parking:
                         editor = new VehicleDataEditor();
                         if (extraData.getInstanceValueClass() != Vehicle.class) {

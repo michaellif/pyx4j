@@ -90,10 +90,10 @@ public class AptUnitOccupancyManagerTestBase {
 
         generateIdAssignmentPolicy();
 
-        ARCode type = EntityFactory.create(ARCode.class);
-        type.type().setValue(ARCode.Type.Residential);
-        type.name().setValue("residential unit for every child");
-        Persistence.service().merge(type);
+        ARCode arCode = EntityFactory.create(ARCode.class);
+        arCode.type().setValue(ARCode.Type.Residential);
+        arCode.name().setValue("residential unit for every child");
+        Persistence.service().merge(arCode);
 
         unit = EntityFactory.create(AptUnit.class);
         unit.info().number().setValue("" + (++gensymCount));
@@ -103,14 +103,14 @@ public class AptUnitOccupancyManagerTestBase {
         Persistence.service().merge(unit);
 
         Service service = EntityFactory.create(Service.class);
-        service.type().setValue(ARCode.Type.Residential);
+        service.code().set(arCode);
         service.version().name().setValue("Residential Unit Service");
         service.version().description().setValue("Residential Unit Descriptio");
 
         ProductItem serviceItem = EntityFactory.create(ProductItem.class);
         serviceItem.element().set(unit);
         serviceItem.price().setValue(new BigDecimal("1000.00"));
-        serviceItem.code().set(type);
+        serviceItem.name().setValue(arCode.name().getValue());
         serviceItem.description().setValue("a mockup unit");
 
         service.version().items().add(serviceItem);

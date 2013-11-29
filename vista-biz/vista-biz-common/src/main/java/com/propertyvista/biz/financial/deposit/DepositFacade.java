@@ -41,7 +41,7 @@ public interface DepositFacade {
         public ProductTerm(BillableItem product, Lease lease) {
             from = product.effectiveDate().isNull() ? lease.currentTerm().termFrom().getValue() : product.effectiveDate().getValue();
             to = product.expirationDate().isNull() ? lease.currentTerm().termTo().getValue() : product.expirationDate().getValue();
-            productType = product.item().code();
+            productType = product.item().product().holder().code();
         }
     }
 

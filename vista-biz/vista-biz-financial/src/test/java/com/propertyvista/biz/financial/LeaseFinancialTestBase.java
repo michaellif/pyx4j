@@ -350,14 +350,15 @@ public abstract class LeaseFinancialTestBase extends IntegrationTestBase {
         Persistence.service().retrieve(serviceItem.product());
         Service.ServiceV service = serviceItem.product().cast();
         Persistence.service().retrieve(service.features());
+
+        ARCode arCode = getDataModel(ARCodeDataModel.class).getARCode(code);
+
         for (Feature feature : service.features()) {
 
-            Persistence.service().retrieve(feature.version().items());
-            for (ProductItem item : feature.version().items()) {
+            if (arCode.equals(feature.code())) {
 
-                ARCode arCode = getDataModel(ARCodeDataModel.class).getARCode(code);
-
-                if (arCode.equals(item.code())) {
+                Persistence.service().retrieve(feature.version().items());
+                for (ProductItem item : feature.version().items()) {
 
                     LeaseFacade leaseFacade = ServerSideFactory.create(LeaseFacade.class);
                     BillableItem billableItem = leaseFacade.createBillableItem(lease, item, lease.unit().building());

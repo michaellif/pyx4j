@@ -34,7 +34,7 @@ public class FeatureForm extends CrmEntityForm<Feature> {
 
         int row = -1;
         content.setH1(++row, 0, 2, i18n.tr("Information"));
-        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().type(), new CEnumLabel()), 20).build());
+        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().code().type(), new CEnumLabel()), 20).build());
         content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().version().name()), 20).build());
         content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().version().description()), 55).build());
 
