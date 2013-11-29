@@ -131,6 +131,7 @@ class AutopayAgreementMananger {
 
         if (isNew) {
             ServerSideFactory.create(AuditFacade.class).created(preauthorizedPayment);
+            ServerSideFactory.create(NotificationFacade.class).autopaySetupCompleted(preauthorizedPayment);
         } else {
             ServerSideFactory.create(AuditFacade.class).updated(preauthorizedPayment, EntityDiff.getChanges(orig, preauthorizedPayment));
         }

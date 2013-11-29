@@ -52,7 +52,17 @@ public enum EmailTemplateType {
 
     MaintenanceRequestCancelled,
 
-    MaintenanceRequestEntryNotice;
+    MaintenanceRequestEntryNotice,
+
+    OneTimePaymentSubmitted,
+
+    PaymentReceipt,
+
+    PaymentReceiptWithConvenienceFee,
+
+    AutoPaySetupConfirmation,
+
+    PaymentReturned;
 
     public static Set<EmailTemplateType> maintenanceTemplates() {
         return EnumSet.of(

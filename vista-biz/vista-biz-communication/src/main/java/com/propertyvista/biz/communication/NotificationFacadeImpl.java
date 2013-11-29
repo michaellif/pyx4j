@@ -77,6 +77,7 @@ public class NotificationFacadeImpl implements NotificationFacade {
     @Override
     public void rejectPayment(PaymentRecord paymentRecord, boolean applyNSF) {
         aggregateOrSend(new RejectPaymentNotification(paymentRecord, applyNSF));
+        ServerSideFactory.create(CommunicationFacade.class).sendTenantPaymenttRejected(paymentRecord, applyNSF);
     }
 
     @Override
@@ -97,6 +98,21 @@ public class NotificationFacadeImpl implements NotificationFacade {
     @Override
     public void autoPayCancelledBySystemNotification(Lease leaseId, List<AutopayAgreement> canceledAgreements) {
         aggregateOrSend(new AutoPayCancelledBySystemNotification(leaseId, canceledAgreements));
+    }
+
+    @Override
+    public void oneTimePaymentSubmitted(PaymentRecord paymentRecord) {
+        ServerSideFactory.create(CommunicationFacade.class).sendTenantOneTimePaymentSubmitted(paymentRecord);
+    }
+
+    @Override
+    public void paymentCleared(PaymentRecord paymentRecord) {
+        ServerSideFactory.create(CommunicationFacade.class).sendTenantPaymentCleared(paymentRecord);
+    }
+
+    @Override
+    public void autopaySetupCompleted(AutopayAgreement autopayAgreement) {
+        ServerSideFactory.create(CommunicationFacade.class).sendTenantAutopaySetupCompleted(autopayAgreement);
     }
 
 }

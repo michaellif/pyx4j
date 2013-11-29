@@ -22,6 +22,7 @@ import org.slf4j.LoggerFactory;
 
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.commons.SimpleMessageFormat;
+import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.config.server.SystemDateManager;
 import com.pyx4j.entity.server.Executable;
 import com.pyx4j.entity.server.Persistence;
@@ -31,6 +32,7 @@ import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 
 import com.propertyvista.biz.ExecutionMonitor;
+import com.propertyvista.biz.communication.NotificationFacade;
 import com.propertyvista.config.VistaDeployment;
 import com.propertyvista.domain.financial.AggregatedTransfer;
 import com.propertyvista.domain.financial.AggregatedTransfer.AggregatedTransferStatus;
@@ -300,6 +302,7 @@ abstract class AbstractReconciliationProcessor {
         paymentRecord.finalizeDate().setValue(new LogicalDate(SystemDateManager.getDate()));
         Persistence.service().merge(paymentRecord);
         log.info("Payment {} {} {} Cleared", fundsTransferType, paymentRecord.id().getValue(), paymentRecord.amount().getValue());
+        ServerSideFactory.create(NotificationFacade.class).paymentCleared(paymentRecord);
     }
 
 }

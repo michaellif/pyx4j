@@ -38,6 +38,7 @@ import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.i18n.shared.I18n;
 
+import com.propertyvista.biz.communication.NotificationFacade;
 import com.propertyvista.biz.financial.ar.ARException;
 import com.propertyvista.biz.financial.ar.ARFacade;
 import com.propertyvista.biz.financial.payment.CreditCardFacade.ReferenceNumberPrefix;
@@ -309,6 +310,10 @@ public class PaymentFacadeImpl implements PaymentFacade {
 
         Persistence.service().merge(paymentRecord);
 
+        if ((paymentRecord.paymentMethod().type().getValue() == PaymentType.Echeck) && (paymentRecord.preauthorizedPayment().isNull())) {
+            ServerSideFactory.create(NotificationFacade.class).oneTimePaymentSubmitted(paymentRecord);
+        }
+
         return paymentRecord;
     }
 
@@ -362,7 +367,7 @@ public class PaymentFacadeImpl implements PaymentFacade {
         Persistence.service().merge(paymentRecord);
 
         ServerSideFactory.create(AuditFacade.class).updated(paymentRecord, "Cleared");
-
+        ServerSideFactory.create(NotificationFacade.class).paymentCleared(paymentRecord);
         return paymentRecord;
     }
 

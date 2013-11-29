@@ -581,6 +581,54 @@ public class MessageTemplates {
         return email;
     }
 
+    static EmailTemplate getEmailTemplate(EmailTemplateType type, BillingAccount billingAccountId) {
+        EntityQueryCriteria<Building> criteria = EntityQueryCriteria.create(Building.class);
+        criteria.eq(criteria.proto().units().$()._Leases().$().billingAccount(), billingAccountId);
+        return getEmailTemplate(type, Persistence.service().retrieve(criteria, AttachLevel.IdOnly));
+    }
+
+    public static MailMessage createTenantOneTimePaymentSubmitted(PaymentRecord paymentRecord) {
+        EmailTemplate emailTemplate = getEmailTemplate(EmailTemplateType.OneTimePaymentSubmitted, paymentRecord.billingAccount());
+
+//        EmailTemplateContext context = EntityFactory.create(EmailTemplateContext.class);
+//        // populate context properties required by template type
+//        context.leaseParticipant().set(tenantInLease);
+//
+//        ArrayList<IEntity> data = new ArrayList<IEntity>();
+//        for (IEntity tObj : EmailTemplateManager.getTemplateDataObjects(type)) {
+//            // ObjectLoader will load required T-Objects using context data
+//            data.add(EmailTemplateRootObjectLoader.loadRootObject(tObj, context));
+//        }
+//        MailMessage email = new MailMessage();
+//        CustomerUser user = tenantInLease.leaseParticipant().customer().user();
+//        if (user.isValueDetached()) {
+//            Persistence.service().retrieve(tenantInLease.leaseParticipant().customer().user());
+//        }
+//        email.setTo(user.email().getValue());
+//        email.setSender(getSender());
+//        // set email subject and body from the template
+//        buildEmail(email, emailTemplate, data);
+//
+//        return email;
+
+        return null;
+    }
+
+    public static MailMessage createTenantPaymenttRejected(PaymentRecord paymentRecord, boolean applyNSF) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    public static MailMessage createTenantPaymentCleared(PaymentRecord paymentRecord) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    public static MailMessage createTenantAutopaySetupCompleted(AutopayAgreement AutopayAgreement) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
     public static MailMessage createMaintenanceRequestEmail(EmailTemplateType emailType, MaintenanceRequest request) {
         EmailTemplate emailTemplate = getEmailTemplate(emailType, request.building());
 

@@ -27,6 +27,7 @@ import com.pyx4j.entity.server.TransactionScopeOption;
 import com.pyx4j.entity.server.UnitOfWork;
 import com.pyx4j.entity.shared.EntityFactory;
 
+import com.propertyvista.biz.communication.NotificationFacade;
 import com.propertyvista.biz.financial.payment.CreditCardFacade.ReferenceNumberPrefix;
 import com.propertyvista.biz.system.OperationsAlertFacade;
 import com.propertyvista.domain.financial.MerchantAccount;
@@ -89,6 +90,7 @@ class PaymentCreditCard {
             paymentRecord.paymentStatus().setValue(PaymentRecord.PaymentStatus.Cleared);
             paymentRecord.lastStatusChangeDate().setValue(new LogicalDate(SystemDateManager.getDate()));
             paymentRecord.transactionAuthorizationNumber().setValue(saleResponse.authorizationNumber().getValue());
+            ServerSideFactory.create(NotificationFacade.class).paymentCleared(paymentRecord);
         } else {
             log.debug("ccTransaction rejected {}", saleResponse);
             paymentRecord.paymentStatus().setValue(PaymentRecord.PaymentStatus.Rejected);

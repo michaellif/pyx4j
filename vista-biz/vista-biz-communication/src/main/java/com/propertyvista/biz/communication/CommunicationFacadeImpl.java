@@ -270,6 +270,28 @@ public class CommunicationFacadeImpl implements CommunicationFacade {
     }
 
     @Override
+    public void sendTenantOneTimePaymentSubmitted(PaymentRecord paymentRecord) {
+        // TODO Auto-generated method stub
+
+    }
+
+    @Override
+    public void sendTenantPaymenttRejected(PaymentRecord paymentRecord, boolean applyNSF) {
+        // TODO Auto-generated method stub
+
+    }
+
+    @Override
+    public void sendTenantPaymentCleared(PaymentRecord paymentRecord) {
+        // TODO Auto-generated method stub
+    }
+
+    @Override
+    public void sendTenantAutopaySetupCompleted(AutopayAgreement AutopayAgreement) {
+        // TODO Auto-generated method stub
+    }
+
+    @Override
     public void sendMaintenanceRequestCreatedPMC(MaintenanceRequest request) {
         for (Employee employee : NotificationsUtils.getNotificationTraget(request.building(), Notification.NotificationType.MaintenanceRequest)) {
             sendMaintenanceRequestEmail(employee.email().getValue(), EmailTemplateType.MaintenanceRequestCreatedPMC, request);
@@ -317,4 +339,5 @@ public class CommunicationFacadeImpl implements CommunicationFacade {
         }
         return m;
     }
+
 }

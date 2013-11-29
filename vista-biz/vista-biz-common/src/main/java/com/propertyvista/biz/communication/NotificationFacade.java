@@ -19,11 +19,22 @@ import com.propertyvista.domain.financial.PaymentRecord;
 import com.propertyvista.domain.payment.AutopayAgreement;
 import com.propertyvista.domain.tenant.lease.Lease;
 
+/**
+ * CRM and Tenant Notifications.
+ * 
+ * Does decision if email should actually be sent.
+ */
 public interface NotificationFacade {
+
+    public void oneTimePaymentSubmitted(PaymentRecord paymentRecord);
+
+    public void paymentCleared(PaymentRecord paymentRecord);
 
     public void rejectPayment(PaymentRecord paymentRecord, boolean applyNSF);
 
     public void yardiUnableToRejectPayment(PaymentRecord paymentRecord, boolean applyNSF, String yardiErrorMessage);
+
+    public void autopaySetupCompleted(AutopayAgreement autopayAgreement);
 
     public void autoPayReviewRequiredNotification(Lease leaseId);
 

@@ -81,6 +81,14 @@ public interface CommunicationFacade {
 
     void sendAutoPayCancelledByResidentNotification(List<String> targetEmails, Lease leaseId, List<AutopayAgreement> canceledAgreements);
 
+    void sendTenantOneTimePaymentSubmitted(PaymentRecord paymentRecord);
+
+    void sendTenantPaymenttRejected(PaymentRecord paymentRecord, boolean applyNSF);
+
+    void sendTenantPaymentCleared(PaymentRecord paymentRecord);
+
+    void sendTenantAutopaySetupCompleted(AutopayAgreement AutopayAgreement);
+
     //void sendCustomerMessage(CustomerCustomMessageTemplate customMessageTemplate, Customer customer);
 
     //void sendEmployeeMessage(EmployeeMessageType employeeMessageType, Employee employee);
