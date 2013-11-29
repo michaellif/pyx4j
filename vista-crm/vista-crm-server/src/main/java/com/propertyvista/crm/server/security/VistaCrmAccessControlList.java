@@ -470,7 +470,7 @@ public class VistaCrmAccessControlList extends ServletContainerAclBuilder {
         grant(VistaCrmBehavior.Organization, new IServiceExecutePermission(SelectCrmRoleListService.class));
 
         grant(VistaCrmBehavior.Organization, new IServiceExecutePermission(ManagedCrmUserService.class));
-        grant(VistaCrmBehavior.Organization, new IServiceExecutePermission(CrmLoginAttemptsListerService.class));
+        grant(VistaBasicBehavior.CRM, new IServiceExecutePermission(CrmLoginAttemptsListerService.class));
 
 // -- Crm Users, Self management
         grant(VistaBasicBehavior.CRM, new IServiceExecutePermission(CrmPasswordChangeUserService.class));

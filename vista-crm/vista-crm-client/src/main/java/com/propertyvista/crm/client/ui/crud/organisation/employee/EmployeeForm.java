@@ -36,6 +36,7 @@ import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.dialogs.SelectEnumDialog;
 import com.pyx4j.site.client.ui.prime.form.IForm;
 import com.pyx4j.widgets.client.ImageViewport.ScaleMode;
+import com.pyx4j.widgets.client.tabpanel.Tab;
 
 import com.propertyvista.common.client.policy.ClientPolicyManager;
 import com.propertyvista.common.client.resources.VistaImages;
@@ -63,15 +64,17 @@ public class EmployeeForm extends CrmEntityForm<EmployeeDTO> {
 
     private static final I18n i18n = I18n.get(EmployeeForm.class);
 
+    private final Tab privilegesTab, auditingTab, alertsTab;
+
     private final TwoColumnFlexFormPanel buildingsAccessPanel = new TwoColumnFlexFormPanel();
 
     public EmployeeForm(IForm<EmployeeDTO> view) {
         super(EmployeeDTO.class, view);
 
         selectTab(addTab(createInfoTab(i18n.tr("Personal Information"))));
-        addTab(createPrivilegesTab(i18n.tr("Privileges")));
-        addTab(createAuditingConfigurationTab(i18n.tr("Auditing")));
-        addTab(createAlertsTab(i18n.tr("Alerts")));
+        privilegesTab = addTab(createPrivilegesTab(i18n.tr("Privileges")));
+        auditingTab = addTab(createAuditingConfigurationTab(i18n.tr("Auditing")));
+        alertsTab = addTab(createAlertsTab(i18n.tr("Alerts")));
     }
 
     @Override
@@ -125,6 +128,14 @@ public class EmployeeForm extends CrmEntityForm<EmployeeDTO> {
         get(proto().employees()).setEditable(isManager);
 
         get(proto().userAuditingConfiguration()).setEnabled(isSelfEditor || isManager);
+
+        get(proto().birthDate()).setVisible(isManager || isSelfEditor);
+        get(proto().homePhone()).setVisible(isManager || isSelfEditor);
+        get(proto().mobilePhone()).setVisible(isManager || isSelfEditor);
+        get(proto().signature()).setVisible(isManager || isSelfEditor);
+        privilegesTab.setTabVisible(isSelfEditor || isManager);
+        auditingTab.setTabVisible(isSelfEditor || isManager);
+        alertsTab.setTabVisible(isSelfEditor || isManager);
     }
 
     private TwoColumnFlexFormPanel createInfoTab(String title) {
@@ -148,8 +159,7 @@ public class EmployeeForm extends CrmEntityForm<EmployeeDTO> {
         main.setBR(++row, 0, 2);
         main.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().description()), true).build());
 
-        main.setH3(++row, 0, 2, i18n.tr("Signature"));
-
+        main.setBR(++row, 0, 2);
         CImage<EmployeeSignature> signature = new CImage<EmployeeSignature>(GWT.<EmployeeSignatureUploadService> create(EmployeeSignatureUploadService.class),
                 new IFileURLBuilder<EmployeeSignature>() {
                     @Override
@@ -160,7 +170,7 @@ public class EmployeeForm extends CrmEntityForm<EmployeeDTO> {
         signature.setScaleMode(ScaleMode.Contain);
         signature.setImageSize(368, 60);
         signature.setThumbnailPlaceholder(new Image(VistaImages.INSTANCE.signaturePlaceholder()));
-        main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().signature(), signature)).customLabel("").build());
+        main.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().signature(), signature), true).customLabel(i18n.tr("Signature")).build());
         return main;
     }
 
