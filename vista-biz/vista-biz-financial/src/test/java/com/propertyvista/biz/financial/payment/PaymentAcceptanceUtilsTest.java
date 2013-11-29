@@ -57,6 +57,7 @@ public class PaymentAcceptanceUtilsTest extends TestCase {
     public void testPaymentTypeSelectionNoConvenienceFee() {
         if (VistaTODO.convenienceFeeEnabled) {
             //tests are not applicable
+            return;
         }
 
         // Nothing accepted, fee applied on all but On CashEquivalent
