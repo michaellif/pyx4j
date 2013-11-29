@@ -35,36 +35,20 @@ public class ILSUtils {
     }
 
     public static String formatStreetAddress(AddressStructured address) {
-        Object[] args = new Object[] {
-                // @formatter:off
-                address.suiteNumber().getValue(),
-                address.streetNumber().getValue(),
-                address.streetNumberSuffix().getValue(),
-                address.streetName().getValue(),
-                address.streetType().getValue(),
-                address.streetDirection().getValue()
-        }; // @formatter:on
-        return SimpleMessageFormat.format("{0,choice,null#|!null#{0}-}{1} {2} {3}{4,choice,null#|!null# {4}}{5,choice,null#|!null# {5}}", args);
+        return SimpleMessageFormat.format("{0,choice,null#|!null#{0}-}{1} {2} {3}{4,choice,null#|!null# {4}}{5,choice,null#|!null# {5}}", address.suiteNumber()
+                .getValue(), address.streetNumber().getValue(), address.streetNumberSuffix().getValue(), address.streetName().getValue(), address.streetType()
+                .getValue(), address.streetDirection().getValue());
     }
 
     public static String formatStreetOnly(AddressStructured address) {
-        Object[] args = new Object[] {
-// @formatter:off
-                address.streetName().getValue(),
-                address.streetType().getValue(),
-                address.streetDirection().getValue()
-        }; // @formatter:on
-        return SimpleMessageFormat.format("{0}{1,choice,null#|!null# {1}}{2,choice,null#|!null# {2}}", args);
+
+        return SimpleMessageFormat.format("{0}{1,choice,null#|!null# {1}}{2,choice,null#|!null# {2}}", address.streetName().getValue(), address.streetType()
+                .getValue(), address.streetDirection().getValue());
     }
 
     public static String formatStreetNumber(AddressStructured address) {
-        Object[] args = new Object[] {
-// @formatter:off
-                address.suiteNumber().getValue(),
-                address.streetNumber().getValue(),
-                address.streetNumberSuffix().getValue(),
-        }; // @formatter:on
-        return SimpleMessageFormat.format("{0,choice,null#|!null#{0}-}{1} {2}", args);
+        return SimpleMessageFormat.format("{0,choice,null#|!null#{0}-}{1} {2}", address.suiteNumber().getValue(), address.streetNumber().getValue(), address
+                .streetNumberSuffix().getValue());
     }
 
     public static BedroomsEnum getBedrooms(Integer beds) {
