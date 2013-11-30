@@ -21,10 +21,9 @@ import com.pyx4j.entity.shared.criterion.EntityListCriteria;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria.Sort;
 import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.site.client.ui.dialogs.SelectEnumDialog;
 import com.pyx4j.site.client.ui.prime.lister.AbstractLister;
 
-import com.propertyvista.crm.rpc.services.building.catalog.FeatureCrudService;
+import com.propertyvista.crm.rpc.services.building.catalog.FeatureCrudService.FeatureInitializationData;
 import com.propertyvista.domain.financial.ARCode;
 import com.propertyvista.domain.financial.offering.Feature;
 import com.propertyvista.domain.financial.offering.ProductCatalog;
@@ -62,13 +61,13 @@ public class FeatureLister extends AbstractLister<Feature> {
 
     @Override
     protected void onItemNew() {
-        new SelectEnumDialog<ARCode.Type>(i18n.tr("Select AR Code"), ARCode.Type.features()) {
+        new ProductCodeSelectorDialog(ARCode.Type.features(), i18n.tr("Select Feature ARCode")) {
             @Override
             public boolean onClickOk() {
-                FeatureCrudService.FeatureInitializationData initData = EntityFactory.create(FeatureCrudService.FeatureInitializationData.class);
-                initData.parent().set(EntityFactory.createIdentityStub(ProductCatalog.class, getPresenter().getParent()));
-//TODO                initData.code().setValue(getSelectedType());
-                getPresenter().editNew(getItemOpenPlaceClass(), initData);
+                FeatureInitializationData id = EntityFactory.create(FeatureInitializationData.class);
+                id.parent().set(EntityFactory.createIdentityStub(ProductCatalog.class, getPresenter().getParent()));
+                id.code().set(getSelectedItem());
+                getPresenter().editNew(getItemOpenPlaceClass(), id);
                 return true;
             }
         }.show();
