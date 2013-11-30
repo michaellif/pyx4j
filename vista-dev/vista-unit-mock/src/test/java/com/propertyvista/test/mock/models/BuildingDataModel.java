@@ -151,7 +151,10 @@ public class BuildingDataModel extends MockDataModel<Building> {
 
     private void generateFeatures(Building building, Service standardResidentialService) {
         for (ARCode.Type type : ARCode.Type.features()) {
-            generateFeature(building, standardResidentialService, arCodes.get(type).get(0));
+            List<ARCode> codes = arCodes.get(type);
+            for (ARCode arCode : codes) {
+                generateFeature(building, standardResidentialService, arCode);
+            }
         }
     }
 
