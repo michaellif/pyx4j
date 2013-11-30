@@ -27,7 +27,7 @@ import com.propertyvista.domain.financial.ARCode;
 @Transient
 public interface AptUnitServicePriceDTO extends IEntity {
 
-    IPrimitive<ARCode.Type> type();
+    ARCode code();
 
     IPrimitive<String> name();
 

@@ -24,7 +24,7 @@ import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria.Sort;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CEntityForm;
-import com.pyx4j.forms.client.ui.CEnumLabel;
+import com.pyx4j.forms.client.ui.CEntityLabel;
 import com.pyx4j.forms.client.ui.CField;
 import com.pyx4j.forms.client.ui.datatable.ColumnDescriptor;
 import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
@@ -37,6 +37,7 @@ import com.pyx4j.site.client.ui.dialogs.EntitySelectorTableDialog;
 
 import com.propertyvista.common.client.ui.components.folders.VistaTableFolder;
 import com.propertyvista.crm.rpc.services.selections.SelectFeatureListService;
+import com.propertyvista.domain.financial.ARCode;
 import com.propertyvista.domain.financial.offering.Feature;
 import com.propertyvista.domain.financial.offering.Service;
 
@@ -81,8 +82,8 @@ class ServiceFeatureFolder extends VistaTableFolder<Feature> {
         @Override
         public CComponent<?> create(IObject<?> member) {
             CComponent<?> comp = null;
-            if (member.equals(proto().type())) {
-                comp = new CEnumLabel();
+            if (member.equals(proto().code())) {
+                comp = new CEntityLabel<ARCode>();
                 if (!ServiceFeatureFolder.this.isEditable()) {
                     ((CField) comp).setNavigationCommand(new Command() {
                         @Override
@@ -126,7 +127,7 @@ class ServiceFeatureFolder extends VistaTableFolder<Feature> {
         @Override
         protected List<ColumnDescriptor> defineColumnDescriptors() {
             return Arrays.asList(//@formatter:off
-                    new MemberColumnDescriptor.Builder(proto().type(), true).build(),
+                    new MemberColumnDescriptor.Builder(proto().code(), true).build(),
                     new MemberColumnDescriptor.Builder(proto().version().name(), true).build(),
                     new MemberColumnDescriptor.Builder(proto().version().mandatory(), true).build(),
                     new MemberColumnDescriptor.Builder(proto().version().recurring(), true).build(),
@@ -136,7 +137,7 @@ class ServiceFeatureFolder extends VistaTableFolder<Feature> {
 
         @Override
         public List<Sort> getDefaultSorting() {
-            return Arrays.asList(new Sort(proto().type(), false), new Sort(proto().version().name(), false));
+            return Arrays.asList(new Sort(proto().code(), false), new Sort(proto().version().name(), false));
         }
 
         @Override

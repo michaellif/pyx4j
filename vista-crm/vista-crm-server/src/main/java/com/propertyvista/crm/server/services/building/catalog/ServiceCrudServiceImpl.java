@@ -44,7 +44,7 @@ public class ServiceCrudServiceImpl extends AbstractCrudServiceImpl<Service> imp
         ServiceInitializationdata initData = (ServiceInitializationdata) initializationData;
 
         Service entity = EntityFactory.create(Service.class);
-        entity.type().setValue(initData.type().getValue());
+        entity.code().set(initData.code());
         entity.catalog().setPrimaryKey(initData.parent().getPrimaryKey());
         entity.catalog().setValueDetached();
 

@@ -125,7 +125,7 @@ public class UnitCrudServiceImpl extends AbstractCrudServiceDtoImpl<AptUnit, Apt
                     if (item.element().getInstanceValueClass().equals(AptUnit.class) & item.element().getPrimaryKey().equals(dto.getPrimaryKey())) {
                         AptUnitServicePriceDTO serviceDTO = EntityFactory.create(AptUnitServicePriceDTO.class);
                         serviceDTO.id().setValue(service.id().getValue());
-                        serviceDTO.type().setValue(service.type().getValue());
+                        serviceDTO.code().set(service.code());
                         serviceDTO.name().setValue(service.version().name().getValue());
                         serviceDTO.price().setValue(item.price().getValue());
                         dto.marketPrices().add(serviceDTO);

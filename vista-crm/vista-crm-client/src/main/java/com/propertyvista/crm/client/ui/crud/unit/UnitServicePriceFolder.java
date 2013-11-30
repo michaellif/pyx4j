@@ -20,7 +20,7 @@ import com.google.gwt.user.client.Command;
 
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.forms.client.ui.CComponent;
-import com.pyx4j.forms.client.ui.CEnumLabel;
+import com.pyx4j.forms.client.ui.CEntityLabel;
 import com.pyx4j.forms.client.ui.CField;
 import com.pyx4j.forms.client.ui.folder.CEntityFolderRowEditor;
 import com.pyx4j.forms.client.ui.folder.EntityFolderColumnDescriptor;
@@ -31,6 +31,7 @@ import com.pyx4j.site.rpc.CrudAppPlace;
 
 import com.propertyvista.common.client.ui.components.folders.VistaTableFolder;
 import com.propertyvista.crm.rpc.CrmSiteMap;
+import com.propertyvista.domain.financial.ARCode;
 import com.propertyvista.dto.AptUnitServicePriceDTO;
 
 public class UnitServicePriceFolder extends VistaTableFolder<AptUnitServicePriceDTO> {
@@ -42,7 +43,7 @@ public class UnitServicePriceFolder extends VistaTableFolder<AptUnitServicePrice
     @Override
     public List<EntityFolderColumnDescriptor> columns() {
         ArrayList<EntityFolderColumnDescriptor> columns = new ArrayList<EntityFolderColumnDescriptor>();
-        columns.add(new EntityFolderColumnDescriptor(proto().type(), "20em"));
+        columns.add(new EntityFolderColumnDescriptor(proto().code(), "20em"));
         columns.add(new EntityFolderColumnDescriptor(proto().name(), "20em"));
         columns.add(new EntityFolderColumnDescriptor(proto().price(), "8em"));
         return columns;
@@ -75,8 +76,8 @@ public class UnitServicePriceFolder extends VistaTableFolder<AptUnitServicePrice
         @Override
         protected CComponent<?> createCell(EntityFolderColumnDescriptor column) {
             CComponent<?> comp;
-            if (column.getObject() == proto().type()) {
-                comp = inject(proto().type(), new CEnumLabel());
+            if (column.getObject() == proto().code()) {
+                comp = inject(proto().code(), new CEntityLabel<ARCode>());
                 if (!isEditable()) {
                     ((CField) comp).setNavigationCommand(new Command() {
                         @Override

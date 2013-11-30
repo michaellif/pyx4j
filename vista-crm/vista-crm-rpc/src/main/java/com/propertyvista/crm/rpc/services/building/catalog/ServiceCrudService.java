@@ -18,7 +18,6 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.pyx4j.commons.Key;
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.rpc.AbstractCrudService;
-import com.pyx4j.entity.shared.IPrimitive;
 
 import com.propertyvista.domain.financial.ARCode;
 import com.propertyvista.domain.financial.offering.ProductCatalog;
@@ -31,7 +30,7 @@ public interface ServiceCrudService extends AbstractCrudService<Service> {
 
         ProductCatalog parent();
 
-        IPrimitive<ARCode.Type> type();
+        ARCode code();
     }
 
     public void retrieveCatalog(AsyncCallback<ProductCatalog> callback, Key entityId);

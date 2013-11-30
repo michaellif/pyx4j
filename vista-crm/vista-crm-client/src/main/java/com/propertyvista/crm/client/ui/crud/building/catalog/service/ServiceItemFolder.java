@@ -71,7 +71,7 @@ class ServiceItemFolder extends VistaTableFolder<ProductItem> {
     @Override
     protected void addItem() {
         EntitySelectorTableDialog<?> buildingElementSelectionBox = null;
-        if (ARCode.Type.unitRelatedServices().contains(parent.getValue().type().getValue())) {
+        if (ARCode.Type.unitRelatedServices().contains(parent.getValue().code().type().getValue())) {
             List<AptUnit> alreadySelected = new ArrayList<AptUnit>(getValue().size());
             for (ProductItem item : getValue()) {
                 alreadySelected.add((AptUnit) item.element().cast());
@@ -122,7 +122,7 @@ class ServiceItemFolder extends VistaTableFolder<ProductItem> {
             boolean isViewable = false;
             Class<? extends IEntity> buildingElementClass = null;
 
-            if (ARCode.Type.unitRelatedServices().contains(parent.getValue().type().getValue())) {
+            if (ARCode.Type.unitRelatedServices().contains(parent.getValue().code().type().getValue())) {
                 buildingElementClass = AptUnit.class;
                 isViewable = true;
             }
@@ -150,7 +150,7 @@ class ServiceItemFolder extends VistaTableFolder<ProductItem> {
             if (column.getObject() == proto().name()) {
                 if (parent.isEditable() && comp instanceof CEntityComboBox<?>) {
                     final CEntityComboBox<ARCode> combo = (CEntityComboBox<ARCode>) comp;
-                    combo.addCriterion(PropertyCriterion.eq(combo.proto().type(), parent.getValue().type()));
+                    combo.addCriterion(PropertyCriterion.eq(combo.proto().type(), parent.getValue().code().type()));
                     // preselect if single option:                    
                     combo.addOptionsChangeHandler(new OptionsChangeHandler<List<ARCode>>() {
                         @Override
