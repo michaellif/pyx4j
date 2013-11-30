@@ -23,8 +23,6 @@ import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
-import com.pyx4j.forms.client.events.OptionsChangeEvent;
-import com.pyx4j.forms.client.events.OptionsChangeHandler;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CEntityComboBox;
 import com.pyx4j.forms.client.ui.CEntityForm;
@@ -38,7 +36,6 @@ import com.pyx4j.site.client.AppPlaceEntityMapper;
 import com.pyx4j.site.client.ui.prime.misc.CEntityCrudHyperlink;
 
 import com.propertyvista.common.client.ui.components.folders.VistaTableFolder;
-import com.propertyvista.domain.financial.ARCode;
 import com.propertyvista.domain.financial.offering.Feature;
 import com.propertyvista.domain.financial.offering.ProductItem;
 import com.propertyvista.domain.property.asset.BuildingElement;
@@ -107,30 +104,10 @@ class FeatureItemFolder extends VistaTableFolder<ProductItem> {
                 } else {
                     comp = new CLabel(""); // there is no building element for this item!
                 }
-            } else if (column.getObject() == proto().product().holder().code()) {
-                comp = inject(column.getObject(), new CEntityComboBox<ARCode>(ARCode.class));
             } else {
                 comp = super.createCell(column);
             }
 
-            if (column.getObject() == proto().name()) {
-                if (parent.isEditable() && comp instanceof CEntityComboBox<?>) {
-                    final CEntityComboBox<ARCode> combo = (CEntityComboBox<ARCode>) comp;
-//TODO                    combo.addCriterion(PropertyCriterion.eq(combo.proto().type(), parent.getValue().type()));
-                    // preselect if single option:                    
-                    combo.addOptionsChangeHandler(new OptionsChangeHandler<List<ARCode>>() {
-                        @Override
-                        public void onOptionsChange(OptionsChangeEvent<List<ARCode>> event) {
-                            if (event.getOptions().size() == 1) {
-                                if (combo.getValue() == null) {
-                                    combo.setValue(event.getOptions().get(0), false);
-                                }
-                                combo.setEditable(false);
-                            }
-                        }
-                    });
-                }
-            }
             return comp;
         }
 
