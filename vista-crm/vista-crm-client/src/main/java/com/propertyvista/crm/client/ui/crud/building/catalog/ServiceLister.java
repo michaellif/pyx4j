@@ -94,7 +94,6 @@ public class ServiceLister extends AbstractLister<Service> {
                 id.code().set(getSelectedItem());
                 getPresenter().editNew(getItemOpenPlaceClass(), id);
                 return true;
-
             }
         }.show();
     }

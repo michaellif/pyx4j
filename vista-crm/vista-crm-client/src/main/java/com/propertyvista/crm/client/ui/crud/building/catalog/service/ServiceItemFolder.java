@@ -21,8 +21,6 @@ import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.entity.shared.criterion.Criterion;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
-import com.pyx4j.forms.client.events.OptionsChangeEvent;
-import com.pyx4j.forms.client.events.OptionsChangeHandler;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CEntityComboBox;
 import com.pyx4j.forms.client.ui.CEntityForm;
@@ -141,29 +139,8 @@ class ServiceItemFolder extends VistaTableFolder<ProductItem> {
                 } else {
                     comp = new CLabel(""); // there is no building element for this item!
                 }
-            } else if (column.getObject() == proto().name()) {
-                comp = inject(column.getObject(), new CEntityComboBox<ARCode>(ARCode.class));
             } else {
                 comp = super.createCell(column);
-            }
-
-            if (column.getObject() == proto().name()) {
-                if (parent.isEditable() && comp instanceof CEntityComboBox<?>) {
-                    final CEntityComboBox<ARCode> combo = (CEntityComboBox<ARCode>) comp;
-                    combo.addCriterion(PropertyCriterion.eq(combo.proto().type(), parent.getValue().code().type()));
-                    // preselect if single option:                    
-                    combo.addOptionsChangeHandler(new OptionsChangeHandler<List<ARCode>>() {
-                        @Override
-                        public void onOptionsChange(OptionsChangeEvent<List<ARCode>> event) {
-                            if (event.getOptions().size() == 1) {
-                                if (combo.getValue() == null) {
-                                    combo.setValue(event.getOptions().get(0), false);
-                                }
-                                combo.setEditable(false);
-                            }
-                        }
-                    });
-                }
             }
 
             return comp;

@@ -127,10 +127,10 @@ class ServiceFeatureFolder extends VistaTableFolder<Feature> {
         @Override
         protected List<ColumnDescriptor> defineColumnDescriptors() {
             return Arrays.asList(//@formatter:off
-                    new MemberColumnDescriptor.Builder(proto().code(), true).build(),
-                    new MemberColumnDescriptor.Builder(proto().version().name(), true).build(),
-                    new MemberColumnDescriptor.Builder(proto().version().mandatory(), true).build(),
-                    new MemberColumnDescriptor.Builder(proto().version().recurring(), true).build(),
+                    new MemberColumnDescriptor.Builder(proto().code()).build(),
+                    new MemberColumnDescriptor.Builder(proto().version().name()).build(),
+                    new MemberColumnDescriptor.Builder(proto().version().mandatory()).build(),
+                    new MemberColumnDescriptor.Builder(proto().version().recurring()).build(),
                     new MemberColumnDescriptor.Builder(proto().version().versionNumber()).build()
             );//@formatter:on
         }
