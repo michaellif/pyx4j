@@ -131,6 +131,15 @@ public abstract class EntitySelectorTableDialog<E extends IEntity> extends Abstr
         return lister;
     }
 
+    protected E getSelectedItem() {
+        if (isMultiselect) {
+            List<E> items = lister.getCheckedItems();
+            return items.isEmpty() ? null : items.get(0);
+        } else {
+            return lister.getSelectedItem();
+        }
+    }
+
     @SuppressWarnings("unchecked")
     protected List<E> getSelectedItems() {
         if (isMultiselect) {
