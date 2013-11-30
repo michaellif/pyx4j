@@ -271,24 +271,26 @@ public class CommunicationFacadeImpl implements CommunicationFacade {
 
     @Override
     public void sendTenantOneTimePaymentSubmitted(PaymentRecord paymentRecord) {
-        // TODO Auto-generated method stub
-
+        MailMessage m = MessageTemplates.createTenantOneTimePaymentSubmitted(paymentRecord);
+        Mail.send(m);
     }
 
     @Override
     public void sendTenantPaymenttRejected(PaymentRecord paymentRecord, boolean applyNSF) {
-        // TODO Auto-generated method stub
-
+        MailMessage m = MessageTemplates.createTenantPaymenttRejected(paymentRecord, applyNSF);
+        Mail.send(m);
     }
 
     @Override
     public void sendTenantPaymentCleared(PaymentRecord paymentRecord) {
-        // TODO Auto-generated method stub
+        MailMessage m = MessageTemplates.createTenantPaymentCleared(paymentRecord);
+        Mail.send(m);
     }
 
     @Override
-    public void sendTenantAutopaySetupCompleted(AutopayAgreement AutopayAgreement) {
-        // TODO Auto-generated method stub
+    public void sendTenantAutopaySetupCompleted(AutopayAgreement autopayAgreement) {
+        MailMessage m = MessageTemplates.createTenantAutopaySetupCompleted(autopayAgreement);
+        Mail.send(m);
     }
 
     @Override

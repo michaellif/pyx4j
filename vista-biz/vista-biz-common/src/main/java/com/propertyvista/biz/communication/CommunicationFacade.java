@@ -87,7 +87,7 @@ public interface CommunicationFacade {
 
     void sendTenantPaymentCleared(PaymentRecord paymentRecord);
 
-    void sendTenantAutopaySetupCompleted(AutopayAgreement AutopayAgreement);
+    void sendTenantAutopaySetupCompleted(AutopayAgreement autopayAgreement);
 
     //void sendCustomerMessage(CustomerCustomMessageTemplate customMessageTemplate, Customer customer);
 

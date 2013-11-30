@@ -54,13 +54,13 @@ public enum EmailTemplateType {
 
     MaintenanceRequestEntryNotice,
 
+    AutoPaySetupConfirmation,
+
     OneTimePaymentSubmitted,
 
     PaymentReceipt,
 
     PaymentReceiptWithConvenienceFee,
-
-    AutoPaySetupConfirmation,
 
     PaymentReturned;
 

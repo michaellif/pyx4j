@@ -34,6 +34,7 @@ import com.pyx4j.entity.shared.meta.EntityMeta;
 import com.pyx4j.entity.shared.meta.MemberMeta;
 
 import com.propertyvista.biz.communication.mail.template.model.ApplicationT;
+import com.propertyvista.biz.communication.mail.template.model.AutopayAgreementT;
 import com.propertyvista.biz.communication.mail.template.model.BuildingT;
 import com.propertyvista.biz.communication.mail.template.model.LeaseT;
 import com.propertyvista.biz.communication.mail.template.model.MaintenanceRequestT;
@@ -41,7 +42,9 @@ import com.propertyvista.biz.communication.mail.template.model.MaintenanceReques
 import com.propertyvista.biz.communication.mail.template.model.PasswordRequestCrmT;
 import com.propertyvista.biz.communication.mail.template.model.PasswordRequestProspectT;
 import com.propertyvista.biz.communication.mail.template.model.PasswordRequestTenantT;
+import com.propertyvista.biz.communication.mail.template.model.PaymentT;
 import com.propertyvista.biz.communication.mail.template.model.PortalLinksT;
+import com.propertyvista.biz.communication.mail.template.model.TenantT;
 import com.propertyvista.domain.communication.EmailTemplateType;
 
 public class EmailTemplateManager {
@@ -103,6 +106,21 @@ public class EmailTemplateManager {
         case MaintenanceRequestEntryNotice:
             values.add(EntityFactory.create(MaintenanceRequestT.class));
             values.add(EntityFactory.create(MaintenanceRequestWOT.class));
+            values.add(EntityFactory.create(BuildingT.class));
+            break;
+        case AutoPaySetupConfirmation:
+            values.add(EntityFactory.create(AutopayAgreementT.class));
+            values.add(EntityFactory.create(TenantT.class));
+            values.add(EntityFactory.create(LeaseT.class));
+            values.add(EntityFactory.create(BuildingT.class));
+            break;
+        case OneTimePaymentSubmitted:
+        case PaymentReceipt:
+        case PaymentReceiptWithConvenienceFee:
+        case PaymentReturned:
+            values.add(EntityFactory.create(PaymentT.class));
+            values.add(EntityFactory.create(TenantT.class));
+            values.add(EntityFactory.create(LeaseT.class));
             values.add(EntityFactory.create(BuildingT.class));
             break;
         default:

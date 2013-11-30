@@ -92,6 +92,18 @@ public class MessageTemplates {
         return fetchEmailTemplate(type, policy);
     }
 
+    static EmailTemplate getEmailTemplate(EmailTemplateType type, BillingAccount billingAccountId) {
+        EntityQueryCriteria<Building> criteria = EntityQueryCriteria.create(Building.class);
+        criteria.eq(criteria.proto().units().$()._Leases().$().billingAccount(), billingAccountId);
+        return getEmailTemplate(type, Persistence.service().retrieve(criteria, AttachLevel.IdOnly));
+    }
+
+    static EmailTemplate getEmailTemplate(EmailTemplateType type, Lease leaseId) {
+        EntityQueryCriteria<Building> criteria = EntityQueryCriteria.create(Building.class);
+        criteria.eq(criteria.proto().units().$()._Leases(), leaseId);
+        return getEmailTemplate(type, Persistence.service().retrieve(criteria, AttachLevel.IdOnly));
+    }
+
     private static EmailTemplate fetchEmailTemplate(EmailTemplateType type, EmailTemplatesPolicy policy) {
         for (EmailTemplate emt : policy.templates()) {
             if (emt.type().getValue() == type)
@@ -110,7 +122,7 @@ public class MessageTemplates {
 
         EmailTemplateContext context = EntityFactory.create(EmailTemplateContext.class);
         // populate context properties required by template type
-        context.leaseParticipant().set(tenantInLease);
+        context.leaseTermParticipant().set(tenantInLease);
 
         ArrayList<IEntity> data = new ArrayList<IEntity>();
         for (IEntity tObj : EmailTemplateManager.getTemplateDataObjects(type)) {
@@ -130,7 +142,7 @@ public class MessageTemplates {
         return email;
     }
 
-    public static MailMessage createTenantInvitationEmail(LeaseTermParticipant leaseParticipant, EmailTemplateType emailType, String token) {
+    public static MailMessage createTenantInvitationEmail(LeaseTermParticipant<?> leaseParticipant, EmailTemplateType emailType, String token) {
         Persistence.service().retrieve(leaseParticipant.leaseTermV());
         Persistence.service().retrieve(leaseParticipant.leaseTermV().holder().lease());
         Persistence.service().retrieve(leaseParticipant.leaseTermV().holder().lease().unit());
@@ -144,7 +156,7 @@ public class MessageTemplates {
         EmailTemplateContext context = EntityFactory.create(EmailTemplateContext.class);
         context.user().set(leaseParticipant.leaseParticipant().customer().user());
         context.lease().set(leaseParticipant.leaseTermV().holder().lease());
-        context.leaseParticipant().set(leaseParticipant);
+        context.leaseTermParticipant().set(leaseParticipant);
         context.accessToken().setValue(token);
         // load data objects for template variable lookup
         ArrayList<IEntity> data = new ArrayList<IEntity>();
@@ -581,52 +593,66 @@ public class MessageTemplates {
         return email;
     }
 
-    static EmailTemplate getEmailTemplate(EmailTemplateType type, BillingAccount billingAccountId) {
-        EntityQueryCriteria<Building> criteria = EntityQueryCriteria.create(Building.class);
-        criteria.eq(criteria.proto().units().$()._Leases().$().billingAccount(), billingAccountId);
-        return getEmailTemplate(type, Persistence.service().retrieve(criteria, AttachLevel.IdOnly));
+    private static MailMessage createTenantPayment(EmailTemplateType type, PaymentRecord paymentRecord) {
+        EmailTemplate emailTemplate = getEmailTemplate(type, paymentRecord.billingAccount());
+
+        EmailTemplateContext context = EntityFactory.create(EmailTemplateContext.class);
+        context.paymentRecord().set(paymentRecord);
+        context.leaseTermParticipant().set(paymentRecord.leaseTermParticipant());
+
+        ArrayList<IEntity> data = new ArrayList<IEntity>();
+        for (IEntity tObj : EmailTemplateManager.getTemplateDataObjects(type)) {
+            data.add(EmailTemplateRootObjectLoader.loadRootObject(tObj, context));
+        }
+        MailMessage email = new MailMessage();
+
+        Persistence.ensureRetrieve(paymentRecord.leaseTermParticipant().leaseParticipant().customer().user(), AttachLevel.Attached);
+        email.setTo(paymentRecord.leaseTermParticipant().leaseParticipant().customer().user().email().getValue());
+
+        email.setSender(getSender());
+        buildEmail(email, emailTemplate, data);
+
+        return email;
     }
 
     public static MailMessage createTenantOneTimePaymentSubmitted(PaymentRecord paymentRecord) {
-        EmailTemplate emailTemplate = getEmailTemplate(EmailTemplateType.OneTimePaymentSubmitted, paymentRecord.billingAccount());
-
-//        EmailTemplateContext context = EntityFactory.create(EmailTemplateContext.class);
-//        // populate context properties required by template type
-//        context.leaseParticipant().set(tenantInLease);
-//
-//        ArrayList<IEntity> data = new ArrayList<IEntity>();
-//        for (IEntity tObj : EmailTemplateManager.getTemplateDataObjects(type)) {
-//            // ObjectLoader will load required T-Objects using context data
-//            data.add(EmailTemplateRootObjectLoader.loadRootObject(tObj, context));
-//        }
-//        MailMessage email = new MailMessage();
-//        CustomerUser user = tenantInLease.leaseParticipant().customer().user();
-//        if (user.isValueDetached()) {
-//            Persistence.service().retrieve(tenantInLease.leaseParticipant().customer().user());
-//        }
-//        email.setTo(user.email().getValue());
-//        email.setSender(getSender());
-//        // set email subject and body from the template
-//        buildEmail(email, emailTemplate, data);
-//
-//        return email;
-
-        return null;
+        return createTenantPayment(EmailTemplateType.OneTimePaymentSubmitted, paymentRecord);
     }
 
     public static MailMessage createTenantPaymenttRejected(PaymentRecord paymentRecord, boolean applyNSF) {
-        // TODO Auto-generated method stub
-        return null;
+        return createTenantPayment(EmailTemplateType.PaymentReturned, paymentRecord);
     }
 
     public static MailMessage createTenantPaymentCleared(PaymentRecord paymentRecord) {
-        // TODO Auto-generated method stub
-        return null;
+        if (paymentRecord.convenienceFee().isNull()) {
+            return createTenantPayment(EmailTemplateType.PaymentReceipt, paymentRecord);
+        } else {
+            return createTenantPayment(EmailTemplateType.PaymentReceiptWithConvenienceFee, paymentRecord);
+        }
     }
 
-    public static MailMessage createTenantAutopaySetupCompleted(AutopayAgreement AutopayAgreement) {
-        // TODO Auto-generated method stub
-        return null;
+    public static MailMessage createTenantAutopaySetupCompleted(AutopayAgreement autopayAgreement) {
+        Persistence.ensureRetrieve(autopayAgreement.tenant(), AttachLevel.Attached);
+        EmailTemplate emailTemplate = getEmailTemplate(EmailTemplateType.AutoPaySetupConfirmation, autopayAgreement.tenant().lease());
+
+        EmailTemplateContext context = EntityFactory.create(EmailTemplateContext.class);
+        context.preauthorizedPayment().set(autopayAgreement);
+        context.leaseParticipant().set(autopayAgreement.tenant());
+        context.lease().set(autopayAgreement.tenant().lease());
+
+        ArrayList<IEntity> data = new ArrayList<IEntity>();
+        for (IEntity tObj : EmailTemplateManager.getTemplateDataObjects(EmailTemplateType.AutoPaySetupConfirmation)) {
+            data.add(EmailTemplateRootObjectLoader.loadRootObject(tObj, context));
+        }
+        MailMessage email = new MailMessage();
+
+        Persistence.ensureRetrieve(autopayAgreement.tenant().customer().user(), AttachLevel.Attached);
+        email.setTo(autopayAgreement.tenant().customer().user().email().getValue());
+
+        email.setSender(getSender());
+        buildEmail(email, emailTemplate, data);
+
+        return email;
     }
 
     public static MailMessage createMaintenanceRequestEmail(EmailTemplateType emailType, MaintenanceRequest request) {

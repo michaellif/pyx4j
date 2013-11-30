@@ -13,8 +13,10 @@
  */
 package com.propertyvista.biz.communication.mail.template;
 
+import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 
+import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.AttachLevel;
 import com.pyx4j.entity.shared.IEntity;
@@ -25,6 +27,7 @@ import com.pyx4j.security.rpc.AuthenticationService;
 import com.pyx4j.site.rpc.AppPlaceInfo;
 
 import com.propertyvista.biz.communication.mail.template.model.ApplicationT;
+import com.propertyvista.biz.communication.mail.template.model.AutopayAgreementT;
 import com.propertyvista.biz.communication.mail.template.model.BuildingT;
 import com.propertyvista.biz.communication.mail.template.model.EmailTemplateContext;
 import com.propertyvista.biz.communication.mail.template.model.LeaseT;
@@ -33,18 +36,22 @@ import com.propertyvista.biz.communication.mail.template.model.MaintenanceReques
 import com.propertyvista.biz.communication.mail.template.model.PasswordRequestCrmT;
 import com.propertyvista.biz.communication.mail.template.model.PasswordRequestProspectT;
 import com.propertyvista.biz.communication.mail.template.model.PasswordRequestTenantT;
+import com.propertyvista.biz.communication.mail.template.model.PaymentT;
 import com.propertyvista.biz.communication.mail.template.model.PortalLinksT;
 import com.propertyvista.biz.communication.mail.template.model.TenantT;
+import com.propertyvista.biz.financial.payment.PaymentMethodFacade;
 import com.propertyvista.config.VistaDeployment;
 import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.domain.maintenance.MaintenanceRequest;
 import com.propertyvista.domain.maintenance.MaintenanceRequestCategory;
 import com.propertyvista.domain.maintenance.MaintenanceRequestSchedule;
+import com.propertyvista.domain.payment.AutopayAgreement.AutopayAgreementCoveredItem;
 import com.propertyvista.domain.property.PropertyContact;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.security.common.AbstractUser;
 import com.propertyvista.domain.security.common.VistaApplication;
 import com.propertyvista.domain.site.SiteDescriptor;
+import com.propertyvista.domain.tenant.Customer;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
 import com.propertyvista.domain.tenant.prospect.OnlineApplication;
@@ -73,7 +80,6 @@ public class EmailTemplateRootObjectLoader {
                 t.CopyrightNotice().set(siteDescriptor.siteTitles().get(0).copyright());
                 t.CompanyName().set(siteDescriptor.siteTitles().get(0).residentPortalTitle());
             }
-
         } else if (tObj instanceof PasswordRequestTenantT) {
             PasswordRequestTenantT t = (PasswordRequestTenantT) tObj;
             if (context.user().isNull() || context.accessToken().isNull()) {
@@ -103,17 +109,26 @@ public class EmailTemplateRootObjectLoader {
             t.PasswordResetUrl().setValue(getCrmAccessUrl(token));
         } else if (tObj instanceof TenantT) {
             TenantT t = (TenantT) tObj;
-            if (context.leaseParticipant().isNull()) {
-                throw new Error("TenantInLease should be provided in context");
+            Customer customer;
+            if (!context.leaseParticipant().isNull()) {
+                Persistence.ensureRetrieve(context.leaseParticipant(), AttachLevel.Attached);
+                customer = context.leaseParticipant().customer();
+            } else if (!context.leaseTermParticipant().isNull()) {
+                Persistence.ensureRetrieve(context.leaseTermParticipant(), AttachLevel.Attached);
+                customer = context.leaseTermParticipant().leaseParticipant().customer();
+            } else {
+                throw new Error("LeaseParticipant or LeaseTermParticipant should be provided in context");
             }
-            t.Name().setValue(context.leaseParticipant().leaseParticipant().customer().person().name().getStringView());
+            t.Name().setValue(customer.person().name().getStringView());
+            t.FirstName().setValue(customer.person().name().firstName().getStringView());
+            t.LastName().setValue(customer.person().name().lastName().getStringView());
         } else if (tObj instanceof BuildingT) {
             BuildingT t = (BuildingT) tObj;
             Building bld = null;
             if (!context.lease().isNull()) {
                 bld = getBuilding(context.lease());
-            } else if (!context.leaseParticipant().isNull()) {
-                Lease lease = getLease(context.leaseParticipant());
+            } else if (!context.leaseTermParticipant().isNull()) {
+                Lease lease = getLease(context.leaseTermParticipant());
                 bld = getBuilding(lease);
             } else if (!context.maintenanceRequest().isNull()) {
                 Persistence.ensureRetrieve(context.maintenanceRequest().building(), AttachLevel.Attached);
@@ -148,12 +163,12 @@ public class EmailTemplateRootObjectLoader {
             ApplicationT t = (ApplicationT) tObj;
             OnlineApplication app = null;
             AbstractUser user = null;
-            if (!context.leaseParticipant().isNull()) {
-                app = getApplication(context.leaseParticipant());
-                if (context.leaseParticipant().leaseParticipant().customer().user().isValueDetached()) {
-                    Persistence.service().retrieve(context.leaseParticipant().leaseParticipant().customer().user());
+            if (!context.leaseTermParticipant().isNull()) {
+                app = getApplication(context.leaseTermParticipant());
+                if (context.leaseTermParticipant().leaseParticipant().customer().user().isValueDetached()) {
+                    Persistence.service().retrieve(context.leaseTermParticipant().leaseParticipant().customer().user());
                 }
-                user = context.leaseParticipant().leaseParticipant().customer().user();
+                user = context.leaseTermParticipant().leaseParticipant().customer().user();
             } else if (!context.lease().isNull() && !context.user().isNull()) {
                 app = getApplication(context.user(), context.lease());
                 user = context.user();
@@ -169,9 +184,9 @@ public class EmailTemplateRootObjectLoader {
         } else if (tObj instanceof LeaseT) {
             LeaseT t = (LeaseT) tObj;
             if (context.lease().isNull()) {
-                context.lease().set(getLease(context.leaseParticipant()));
+                context.lease().set(getLease(context.leaseTermParticipant()));
             }
-            t.ApplicantName().setValue(context.leaseParticipant().leaseParticipant().customer().person().name().getStringView());
+            t.ApplicantName().setValue(context.leaseTermParticipant().leaseParticipant().customer().person().name().getStringView());
             t.StartDate().setValue(context.lease().currentTerm().termFrom().getStringView());
             t.StartDateWeekDay().setValue(new SimpleDateFormat("EEEE").format(context.lease().currentTerm().termFrom().getValue()));
         } else if (tObj instanceof MaintenanceRequestT) {
@@ -225,6 +240,28 @@ public class EmailTemplateRootObjectLoader {
             t.scheduledDate().setValue(wo.scheduledDate().getStringView());
             t.scheduledTimeSlot().setValue(i18n.tr("between {0} and {1}", wo.scheduledTimeFrom().getStringView(), wo.scheduledTimeTo().getStringView()));
             t.workDescription().set(wo.workDescription());
+        } else if (tObj instanceof AutopayAgreementT) {
+            AutopayAgreementT t = (AutopayAgreementT) tObj;
+            if (context.preauthorizedPayment().isNull()) {
+                throw new Error("PreauthorizedPayment should be provided in context");
+            }
+            BigDecimal amount = BigDecimal.ZERO;
+            for (AutopayAgreementCoveredItem item : context.preauthorizedPayment().coveredItems()) {
+                amount = amount.add(item.amount().getValue());
+            }
+            t.Amount().setValue(amount.toString());
+            t.NextPaymentDate().setValue(
+                    new SimpleDateFormat("MM/dd/yyyy").format(ServerSideFactory.create(PaymentMethodFacade.class).getNextAutopayDate(context.lease())));
+        } else if (tObj instanceof PaymentT) {
+            PaymentT t = (PaymentT) tObj;
+            if (context.paymentRecord().isNull()) {
+                throw new Error("PaymentRecord should be provided in context");
+            }
+            t.Amount().setValue(context.paymentRecord().amount().getStringView());
+            t.ConvenienceFee().setValue(context.paymentRecord().convenienceFee().getStringView());
+            t.ReferenceNumber().setValue(context.paymentRecord().id().getStringView());
+            t.Date().setValue(context.paymentRecord().receivedDate().getStringView());
+            t.RejectReason().setValue(context.paymentRecord().transactionErrorMessage().getValue());
         }
         return tObj;
     }
@@ -246,7 +283,7 @@ public class EmailTemplateRootObjectLoader {
                 AuthenticationService.AUTH_TOKEN_ARG, token);
     }
 
-    private static OnlineApplication getApplication(LeaseTermParticipant tenantInLease) {
+    private static OnlineApplication getApplication(LeaseTermParticipant<?> tenantInLease) {
         if (tenantInLease == null || tenantInLease.isNull()) {
             throw new Error("Context cannot be null");
         }
@@ -275,7 +312,7 @@ public class EmailTemplateRootObjectLoader {
         return app;
     }
 
-    private static Lease getLease(LeaseTermParticipant tenantInLease) {
+    private static Lease getLease(LeaseTermParticipant<?> tenantInLease) {
         if (tenantInLease.isNull()) {
             throw new Error("Context cannot be null");
         }
