@@ -178,6 +178,7 @@
                         <include>**/FunctionalSuite.java</include>
                     </includes>
                     <reuseForks>false</reuseForks>
+                    <argLine>-Djava.awt.headless=true -XX:MaxPermSize=64m -Xms64m -Xmx228m</argLine>
                 </configuration>
             </plugin>
         </plugins>
