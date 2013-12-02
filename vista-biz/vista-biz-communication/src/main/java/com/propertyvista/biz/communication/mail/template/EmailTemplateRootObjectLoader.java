@@ -29,6 +29,7 @@ import com.pyx4j.site.rpc.AppPlaceInfo;
 import com.propertyvista.biz.communication.mail.template.model.ApplicationT;
 import com.propertyvista.biz.communication.mail.template.model.AutopayAgreementT;
 import com.propertyvista.biz.communication.mail.template.model.BuildingT;
+import com.propertyvista.biz.communication.mail.template.model.CompanyInfoT;
 import com.propertyvista.biz.communication.mail.template.model.EmailTemplateContext;
 import com.propertyvista.biz.communication.mail.template.model.LeaseT;
 import com.propertyvista.biz.communication.mail.template.model.MaintenanceRequestT;
@@ -50,6 +51,9 @@ import com.propertyvista.domain.property.PropertyContact;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.security.common.AbstractUser;
 import com.propertyvista.domain.security.common.VistaApplication;
+import com.propertyvista.domain.settings.PmcCompanyInfo;
+import com.propertyvista.domain.settings.PmcCompanyInfoContact;
+import com.propertyvista.domain.settings.PmcCompanyInfoContact.CompanyInfoContactType;
 import com.propertyvista.domain.site.SiteDescriptor;
 import com.propertyvista.domain.tenant.Customer;
 import com.propertyvista.domain.tenant.lease.Lease;
@@ -66,7 +70,20 @@ public class EmailTemplateRootObjectLoader {
         if (tObj == null || context == null) {
             throw new Error("Loading object or Context cannot be null");
         }
-        if (tObj instanceof PortalLinksT) {
+        if (tObj instanceof CompanyInfoT) {
+            CompanyInfoT t = (CompanyInfoT) tObj;
+            PmcCompanyInfo info = Persistence.service().retrieve(EntityQueryCriteria.create(PmcCompanyInfo.class));
+            t.CompanyName().setValue(info.companyName().getValue());
+            for (PmcCompanyInfoContact cont : info.contacts()) {
+                if (cont.type().isNull()) {
+                    continue;
+                } else if (cont.type().getValue().equals(CompanyInfoContactType.administrator)) {
+                    t.Administrator().ContactName().set(cont.name());
+                    t.Administrator().Phone().set(cont.phone());
+                    t.Administrator().Email().set(cont.email());
+                }
+            }
+        } else if (tObj instanceof PortalLinksT) {
             PortalLinksT t = (PortalLinksT) tObj;
             t.SiteHomeUrl().setValue(VistaDeployment.getBaseApplicationURL(VistaApplication.site, false));
             t.TenantPortalUrl().setValue(VistaDeployment.getBaseApplicationURL(VistaApplication.resident, true));
