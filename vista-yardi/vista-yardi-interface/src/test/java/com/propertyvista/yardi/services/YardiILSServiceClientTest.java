@@ -33,9 +33,11 @@ import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.rdb.cfg.Configuration.DatabaseType;
 import com.pyx4j.essentials.j2se.util.MarshallUtil;
 
+import com.propertyvista.biz.system.encryption.PasswordEncryptorFacade;
 import com.propertyvista.config.tests.VistaTestsServerSideConfiguration;
 import com.propertyvista.domain.settings.PmcYardiCredential;
 import com.propertyvista.server.config.DevYardiCredentials;
+import com.propertyvista.test.mock.security.PasswordEncryptorFacadeMock;
 import com.propertyvista.yardi.stubs.YardiILSGuestCardStub;
 
 public class YardiILSServiceClientTest {
@@ -43,6 +45,9 @@ public class YardiILSServiceClientTest {
     private final static Logger log = LoggerFactory.getLogger(YardiILSServiceClientTest.class);
 
     public static void main(String[] args) {
+
+        ServerSideFactory.register(PasswordEncryptorFacade.class, PasswordEncryptorFacadeMock.class);
+
         ServerSideConfiguration.setInstance(new VistaTestsServerSideConfiguration(DatabaseType.HSQLDB));
 
         PmcYardiCredential yc = DevYardiCredentials.getTestPmcYardiCredential();

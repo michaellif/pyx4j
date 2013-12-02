@@ -104,7 +104,6 @@ public class YardiILSGuestCardStubImpl extends AbstractYardiStub implements Yard
             request.setInterfaceLicense(YardiLicense.getInterfaceLicense(YardiInterface.ILSGuestCard, yc));
 
             request.setUserName(yc.username().getValue());
-            request.setPassword(yc.password().number().getValue());
             request.setPassword(ServerSideFactory.create(PasswordEncryptorFacade.class).decryptPassword(yc.password()));
             request.setServerName(yc.serverName().getValue());
             request.setDatabase(yc.database().getValue());

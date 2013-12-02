@@ -59,8 +59,6 @@ public class YardiGuestManagementStubImpl extends AbstractYardiStub implements Y
 
     private final static Logger log = LoggerFactory.getLogger(YardiGuestManagementStubImpl.class);
 
-    private final boolean testMode = true;
-
     @Override
     public RentableItems getRentableItems(PmcYardiCredential yc, String propertyId) throws YardiServiceException {
         try {
@@ -72,11 +70,7 @@ public class YardiGuestManagementStubImpl extends AbstractYardiStub implements Y
             request.setInterfaceLicense(YardiLicense.getInterfaceLicense(YardiInterface.ILSGuestCard, yc));
 
             request.setUserName(yc.username().getValue());
-            if (testMode) { // TODO
-                request.setPassword(yc.password().number().getValue());
-            } else {
-                request.setPassword(ServerSideFactory.create(PasswordEncryptorFacade.class).decryptPassword(yc.password()));
-            }
+            request.setPassword(ServerSideFactory.create(PasswordEncryptorFacade.class).decryptPassword(yc.password()));
             request.setServerName(yc.serverName().getValue());
             request.setDatabase(yc.database().getValue());
             request.setPlatform(yc.platform().getValue().name());
@@ -125,11 +119,7 @@ public class YardiGuestManagementStubImpl extends AbstractYardiStub implements Y
             request.setInterfaceLicense(YardiLicense.getInterfaceLicense(YardiInterface.ILSGuestCard, yc));
 
             request.setUserName(yc.username().getValue());
-            if (testMode) { // TODO
-                request.setPassword(yc.password().number().getValue());
-            } else {
-                request.setPassword(ServerSideFactory.create(PasswordEncryptorFacade.class).decryptPassword(yc.password()));
-            }
+            request.setPassword(ServerSideFactory.create(PasswordEncryptorFacade.class).decryptPassword(yc.password()));
             request.setServerName(yc.serverName().getValue());
             request.setDatabase(yc.database().getValue());
             request.setPlatform(yc.platform().getValue().name());
@@ -180,11 +170,7 @@ public class YardiGuestManagementStubImpl extends AbstractYardiStub implements Y
             request.setInterfaceLicense(YardiLicense.getInterfaceLicense(YardiInterface.ILSGuestCard, yc));
 
             request.setUserName(yc.username().getValue());
-            if (testMode) { // TODO
-                request.setPassword(yc.password().number().getValue());
-            } else {
-                request.setPassword(ServerSideFactory.create(PasswordEncryptorFacade.class).decryptPassword(yc.password()));
-            }
+            request.setPassword(ServerSideFactory.create(PasswordEncryptorFacade.class).decryptPassword(yc.password()));
             request.setServerName(yc.serverName().getValue());
             request.setDatabase(yc.database().getValue());
             request.setPlatform(yc.platform().getValue().name());
@@ -230,11 +216,7 @@ public class YardiGuestManagementStubImpl extends AbstractYardiStub implements Y
             request.setInterfaceLicense(YardiLicense.getInterfaceLicense(YardiInterface.ILSGuestCard, yc));
 
             request.setUserName(yc.username().getValue());
-            if (testMode) { // TODO
-                request.setPassword(yc.password().number().getValue());
-            } else {
-                request.setPassword(ServerSideFactory.create(PasswordEncryptorFacade.class).decryptPassword(yc.password()));
-            }
+            request.setPassword(ServerSideFactory.create(PasswordEncryptorFacade.class).decryptPassword(yc.password()));
             request.setServerName(yc.serverName().getValue());
             request.setDatabase(yc.database().getValue());
             request.setPlatform(yc.platform().getValue().name());
@@ -280,11 +262,7 @@ public class YardiGuestManagementStubImpl extends AbstractYardiStub implements Y
             request.setInterfaceLicense(YardiLicense.getInterfaceLicense(YardiInterface.ILSGuestCard, yc));
 
             request.setUserName(yc.username().getValue());
-            if (testMode) { // TODO
-                request.setPassword(yc.password().number().getValue());
-            } else {
-                request.setPassword(ServerSideFactory.create(PasswordEncryptorFacade.class).decryptPassword(yc.password()));
-            }
+            request.setPassword(ServerSideFactory.create(PasswordEncryptorFacade.class).decryptPassword(yc.password()));
             request.setServerName(yc.serverName().getValue());
             request.setDatabase(yc.database().getValue());
             request.setPlatform(yc.platform().getValue().name());
@@ -328,11 +306,7 @@ public class YardiGuestManagementStubImpl extends AbstractYardiStub implements Y
             request.setInterfaceLicense(YardiLicense.getInterfaceLicense(YardiInterface.ILSGuestCard, yc));
 
             request.setUserName(yc.username().getValue());
-            if (testMode) { // TODO
-                request.setPassword(yc.password().number().getValue());
-            } else {
-                request.setPassword(ServerSideFactory.create(PasswordEncryptorFacade.class).decryptPassword(yc.password()));
-            }
+            request.setPassword(ServerSideFactory.create(PasswordEncryptorFacade.class).decryptPassword(yc.password()));
             request.setServerName(yc.serverName().getValue());
             request.setDatabase(yc.database().getValue());
             request.setPlatform(yc.platform().getValue().name());

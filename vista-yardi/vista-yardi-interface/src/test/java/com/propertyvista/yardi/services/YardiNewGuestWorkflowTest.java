@@ -60,8 +60,10 @@ import com.pyx4j.entity.rdb.cfg.Configuration.DatabaseType;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.essentials.j2se.util.MarshallUtil;
 
+import com.propertyvista.biz.system.encryption.PasswordEncryptorFacade;
 import com.propertyvista.config.tests.VistaTestsServerSideConfiguration;
 import com.propertyvista.domain.settings.PmcYardiCredential;
+import com.propertyvista.test.mock.security.PasswordEncryptorFacadeMock;
 import com.propertyvista.yardi.processors.YardiGuestProcessor;
 import com.propertyvista.yardi.stubs.YardiGuestManagementStub;
 
@@ -83,6 +85,8 @@ public class YardiNewGuestWorkflowTest {
     private static PmcYardiCredential yc;
 
     static {
+        ServerSideFactory.register(PasswordEncryptorFacade.class, PasswordEncryptorFacadeMock.class);
+
         ServerSideConfiguration.setInstance(new VistaTestsServerSideConfiguration(DatabaseType.HSQLDB));
         stub = ServerSideFactory.create(YardiGuestManagementStub.class);
         yc = getTestPmcYardiCredential();
