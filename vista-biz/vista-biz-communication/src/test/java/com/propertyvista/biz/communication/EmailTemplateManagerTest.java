@@ -86,6 +86,7 @@ import com.propertyvista.domain.ref.Province;
 import com.propertyvista.domain.security.CrmUser;
 import com.propertyvista.domain.security.common.VistaApplication;
 import com.propertyvista.domain.security.common.VistaBasicBehavior;
+import com.propertyvista.domain.settings.PmcCompanyInfo;
 import com.propertyvista.domain.site.SiteDescriptor;
 import com.propertyvista.domain.site.SiteTitles;
 import com.propertyvista.domain.tenant.Customer;
@@ -155,6 +156,9 @@ public class EmailTemplateManagerTest extends VistaDBTestBase {
                 return null;
             }
         });
+        PmcCompanyInfo info = EntityFactory.create(PmcCompanyInfo.class);
+        info.companyName().setValue(NamespaceManager.getNamespace());
+        Persistence.service().persist(info);
     }
 
     @Override
