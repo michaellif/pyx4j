@@ -874,7 +874,7 @@ public class EmailTemplatesPolicyPreloader extends AbstractPolicyPreloader<Email
                 "Thank you for submitting your payment.<br/><br/>" +
                 "Your payment of <b>{1}</b> and your convenience fee of <b>{2}</b> has been submitted successfully on <b>{3}</b>. " + 
                 "You will see two transaction lines for the payments above from your payment provider. The convenience fee will be shown as TBD<br/><br/>" +
-                "Your Payment Identification Reference Number for this payments are:<br/><br/>" + 
+                "Your Payment Identification Reference Number for these payments is:<br/><br/>" + 
                 "<div style=\"margin-left:80px\">#<b>{4}</b></div><br/><br/>" +
                 "You can review the status of your payment at anytime in your myCommunity portal here {5}<br/><br/>" +
                 "Thank you for choosing {6}.",
