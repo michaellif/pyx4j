@@ -36,6 +36,7 @@ import com.pyx4j.entity.shared.meta.MemberMeta;
 import com.propertyvista.biz.communication.mail.template.model.ApplicationT;
 import com.propertyvista.biz.communication.mail.template.model.AutopayAgreementT;
 import com.propertyvista.biz.communication.mail.template.model.BuildingT;
+import com.propertyvista.biz.communication.mail.template.model.CompanyInfoT;
 import com.propertyvista.biz.communication.mail.template.model.LeaseT;
 import com.propertyvista.biz.communication.mail.template.model.MaintenanceRequestT;
 import com.propertyvista.biz.communication.mail.template.model.MaintenanceRequestWOT;
@@ -55,6 +56,7 @@ public class EmailTemplateManager {
         List<IEntity> values = new Vector<IEntity>();
         // add PortalLinks to all templates
         values.add(EntityFactory.create(PortalLinksT.class));
+        values.add(EntityFactory.create(CompanyInfoT.class));
         switch (template) {
         case PasswordRetrievalCrm:
             values.add(EntityFactory.create(PasswordRequestCrmT.class));

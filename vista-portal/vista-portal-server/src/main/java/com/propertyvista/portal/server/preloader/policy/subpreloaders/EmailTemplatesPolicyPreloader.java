@@ -27,6 +27,7 @@ import com.propertyvista.biz.communication.mail.template.EmailTemplateManager;
 import com.propertyvista.biz.communication.mail.template.model.ApplicationT;
 import com.propertyvista.biz.communication.mail.template.model.AutopayAgreementT;
 import com.propertyvista.biz.communication.mail.template.model.BuildingT;
+import com.propertyvista.biz.communication.mail.template.model.CompanyInfoT;
 import com.propertyvista.biz.communication.mail.template.model.LeaseT;
 import com.propertyvista.biz.communication.mail.template.model.MaintenanceRequestT;
 import com.propertyvista.biz.communication.mail.template.model.MaintenanceRequestWOT;
@@ -133,7 +134,7 @@ public class EmailTemplatesPolicyPreloader extends AbstractPolicyPreloader<Email
                 "Dear {0},<br/>\n" +
                 "This email was sent to you in response to your request to modify your Property Vista account password.<br/>\n" +
                 "Click the link below to go to the {1} site and create new password for your account:<br/>\n" +
-                "    <a style=\"color:#929733\" href=\"{2}\">Change Your Password</a>",
+                "    [[{2}|Change Your Password]]",
                 EmailTemplateManager.getVarname(pwdReqT.RequestorName()),
                 EmailTemplateManager.getVarname(portalT.CompanyName()),
                 EmailTemplateManager.getVarname(pwdReqT.PasswordResetUrl())
@@ -156,7 +157,7 @@ public class EmailTemplatesPolicyPreloader extends AbstractPolicyPreloader<Email
                 "Dear {0},<br/>\n" +
                 "This email was sent to you in response to your request to modify your Property Vista account password.<br/>\n" +
                 "Click the link below to go to the {1} site and create new password for your account:<br/>\n" +
-                "    <a style=\"color:#929733\" href=\"{2}\">Change Your Password</a>",
+                "    [[{2}|Change Your Password]]",
                 EmailTemplateManager.getVarname(pwdReqT.RequestorName()),
                 EmailTemplateManager.getVarname(portalT.CompanyName()),
                 EmailTemplateManager.getVarname(pwdReqT.PasswordResetUrl())
@@ -179,7 +180,7 @@ public class EmailTemplatesPolicyPreloader extends AbstractPolicyPreloader<Email
                 "Dear {0},<br/>\n" +
                 "This email was sent to you in response to your request to modify your Property Vista account password.<br/>\n" +
                 "Click the link below to go to the {1} site and create new password for your account:<br/>\n" +
-                "    <a style=\"color:#929733\" href=\"{2}\">Change Your Password</a>",
+                "    [[{2}|Change Your Password]]",
                 EmailTemplateManager.getVarname(pwdReqT.RequestorName()),
                 EmailTemplateManager.getVarname(portalT.CompanyName()),
                 EmailTemplateManager.getVarname(pwdReqT.PasswordResetUrl())
@@ -187,12 +188,12 @@ public class EmailTemplatesPolicyPreloader extends AbstractPolicyPreloader<Email
         return template;
     }
 
-    //TODO
     private EmailTemplate defaultEmailTemplateProspectWelcome() {
         EmailTemplateType type = EmailTemplateType.ProspectWelcome;
 
         ApplicationT appT = EmailTemplateManager.getProto(type, ApplicationT.class);
         PortalLinksT portalT = EmailTemplateManager.getProto(type, PortalLinksT.class);
+        CompanyInfoT companyT = EmailTemplateManager.getProto(type, CompanyInfoT.class);
 
         EmailTemplate template = EntityFactory.create(EmailTemplate.class);
         template.useHeader().setValue(Boolean.TRUE);
@@ -201,15 +202,25 @@ public class EmailTemplatesPolicyPreloader extends AbstractPolicyPreloader<Email
         template.subject().setValue(i18n.tr("Your Lease Application Created"));
         template.content().setValue(i18n.tr(//@formatter:off
                 "Dear {0},<br/><br/>" +
-                "Your lease application has been created. The Application Reference Number is: {1}<br/><br/>" +
-                "You can now start completing it online by logging to your account using following link: <br/><br/>" +
-                "{2}<br/><br/>" +
-                "Sincerely,<br/><br/>" +
-                "{3}<br/>",
-                EmailTemplateManager.getVarname(appT.ApplicantName()),
+                "Welcome to your Online Application.<br/><br/>" + 
+                "We have created a secure and safe environment for you that allows you to complete the Application at your leisure from any internet connected device. Once you login, you will have the opportunity to select the Rental Suite that is best suited to your needs.<br/><br/>" +
+                "During this process you, your roommates, dependents and guarantors will have the opportunity to complete all necessary information needed to process your Application online. Do not worry, you can take a break at anytime and the information will be saved for you to complete where you left off when you are ready.<br/><br/>" +
+                "Please keep in mind, Applications get processed on a first-come-first-served basis and will not be processed until completed in full.<br/><br/>" + 
+                "If at anytime during the process you have any concerns or questions, please call us directly at {1} and have your Application Reference Number ready.<br/><br/>" +
+                "Your Application Reference Number is: {2}<br/><br/>" +
+                "To get started, please login to your account [[{3}|here]]<br/><br/>" +
+                "<i>(If the link does not work please copy and paste the following URL:{4}<br/><br/>)</i>" + 
+                "We look forward to making this application process as smooth as possible for you.<br/><br/>"+
+                "Sincerely,<br/><br/>"+
+                "{5}<br/>" +
+                "{6}",
+                EmailTemplateManager.getVarname(appT.ApplicantFirstName()),
+                EmailTemplateManager.getVarname(companyT.Administrator().Phone()),
                 EmailTemplateManager.getVarname(appT.ReferenceNumber()),
                 EmailTemplateManager.getVarname(portalT.ProspectPortalUrl()),
-                EmailTemplateManager.getVarname(portalT.CompanyName())
+                EmailTemplateManager.getVarname(portalT.ProspectPortalUrl()),
+                EmailTemplateManager.getVarname(companyT.Administrator().ContactName()),
+                EmailTemplateManager.getVarname(companyT.CompanyName())
         ));//@formatter:on
         return template;
     }
@@ -394,7 +405,7 @@ public class EmailTemplatesPolicyPreloader extends AbstractPolicyPreloader<Email
                 "<h3>Welcome {0}!</h3><br/><br/>" +                        
                 "We are excited to have you join the Online Tenant Portal of {1} that we created just for you! " +
                 "To access the site and create new password for your account please follow the link below:<br/>\n" +
-                "    <a style=\"color:#929733\" href=\"{2}\">Reset Your Password</a><br/>" +
+                "    [[{2}|Reset Your Password]]<br/>" +
                 "Please keep your username and password as they will be required to access your Portal. " +
                 "You can visit it anytime by going to<br/>" +
                 "{3} and clicking on Residents menu tab. You will be redirected to Online Tenant Portal immediately. " +
@@ -444,7 +455,7 @@ public class EmailTemplatesPolicyPreloader extends AbstractPolicyPreloader<Email
                 // TODO
                 // WO # : 01 <----- this should be a link to actual work order request
                 // WO Created: June 6, 2013
-                "<a href=\"{13}\">Request ID: {10}</a><br/>" +
+                "[[{13}|Request ID: {10}]]<br/>" +
                 "Request Submitted: {11}<br/>" +
                 "Current Status: {12}<br/>",
                 EmailTemplateManager.getVarname(requestT.propertyCode()),
@@ -522,7 +533,7 @@ public class EmailTemplatesPolicyPreloader extends AbstractPolicyPreloader<Email
                 // TODO
                 // WO # : 01 <----- this should be a link to actual work order request
                 // WO Created: June 6, 2013
-                "<a href=\"{13}\">Request ID: {10}</a><br/>" +
+                "[[{13}|Request ID: {10}]]<br/>" +
                 "Request Submitted: {11}<br/>" +
                 "Current Status: {12}<br/>",
                 EmailTemplateManager.getVarname(requestT.propertyCode()),
@@ -583,7 +594,7 @@ public class EmailTemplatesPolicyPreloader extends AbstractPolicyPreloader<Email
                 // TODO
                 // WO # : 01 <----- this should be a link to actual work order request
                 // WO Created: June 6, 2013
-                "<a href=\"{13}\">Request ID: {10}</a><br/>" +
+                "[[{13}|Request ID: {10}]]<br/>" +
                 "Request Submitted: {11}<br/>" +
                 "Current Status: {12}<br/>",
                 EmailTemplateManager.getVarname(requestT.propertyCode()),
@@ -645,7 +656,7 @@ public class EmailTemplatesPolicyPreloader extends AbstractPolicyPreloader<Email
                 // TODO
                 // WO # : 01 <----- this should be a link to actual work order request
                 // WO Created: June 6, 2013
-                "<a href=\"{13}\">Request ID: {10}</a><br/>" +
+                "[[{13}|Request ID: {10}]]<br/>" +
                 "Request Submitted: {11}<br/>" +
                 "Current Status: {12}<br/>",
                 EmailTemplateManager.getVarname(requestT.propertyCode()),
@@ -685,7 +696,7 @@ public class EmailTemplatesPolicyPreloader extends AbstractPolicyPreloader<Email
                 "This is to inform You that the Maintenance Request below has been completed and closed. " +
                 "If requested work has not been done to your satisfaction, please call the office to advise " +
                 "us accordingly.<br/>" +
-                "Please complete the survey to rate your experience <a href='{16}'>here</a>.<br/>" +
+                "Please complete the survey to rate your experience [[{16}|here]].<br/>" +
                 "<br/>" +
                 "The following Maintenance Request has been closed:<br/>" +
                 "<br/>" +
@@ -709,7 +720,7 @@ public class EmailTemplatesPolicyPreloader extends AbstractPolicyPreloader<Email
                 // TODO
                 // WO # : 01 <----- this should be a link to actual work order request
                 // WO Created: June 6, 2013
-                "<a href=\"{13}\">Request ID: {10}</a><br/>" +
+                "[[{13}|Request ID: {10}]]<br/>" +
                 "Request Submitted: {11}<br/>" +
                 "Request Completed: {16}<br/>",
                 EmailTemplateManager.getVarname(requestT.propertyCode()),
@@ -771,7 +782,7 @@ public class EmailTemplatesPolicyPreloader extends AbstractPolicyPreloader<Email
                 // TODO
                 // WO # : 01 <----- this should be a link to actual work order request
                 // WO Created: June 6, 2013
-                "<a href=\"{13}\">Request ID: {10}</a><br/>" +
+                "[[{13}|Request ID: {10}]]<br/>" +
                 "Request Submitted: {11}<br/>" +
                 "Current Status: {12}<br/>",
                 EmailTemplateManager.getVarname(requestT.propertyCode()),
@@ -814,7 +825,7 @@ public class EmailTemplatesPolicyPreloader extends AbstractPolicyPreloader<Email
                 "Please keep in mind, your payment is not considered paid until it gets processed by the bank successfully, which can take 1-3 business days.<br/><br/>" +
                 "Your Payment Identification Reference Number for this payment is:<br/><br/>" + 
                 "<div style=\"margin-left:80px\">#<b>{3}</b></div><br/><br/>" +
-                "You can review the status of your payment at anytime in your myCommunity portal here {4}<br/><br/>" +
+                "You can review the status of your payment at anytime in your myCommunity portal [[{4}|here]]<br/><br/>" +
                 "Thank you for choosing {5}.",
                 EmailTemplateManager.getVarname(tenantT.FirstName()),
                 EmailTemplateManager.getVarname(paymentT.Amount()),
@@ -844,7 +855,7 @@ public class EmailTemplatesPolicyPreloader extends AbstractPolicyPreloader<Email
                 "Your payment of <b>{1}</b> has been successfully processed on <b>{2}</b> and your file has been updated accordingly.<br/><br/>" + 
                 "Your Payment Identification Reference Number for this payment is:<br/><br/>" + 
                 "<div style=\"margin-left:80px\">#<b>{3}</b></div><br/><br/>" +
-                "You can review the status of your payment at anytime in your myCommunity portal here {4}<br/><br/>" +
+                "You can review the status of your payment at anytime in your myCommunity portal [[{4}|here]]<br/><br/>" +
                 "Thank you for choosing {5}.",
                 //TODO (If you do not wish to receive this notice any further you can opt out under your personal settings in your myCommunity portal here)
                 EmailTemplateManager.getVarname(tenantT.FirstName()),
@@ -876,7 +887,7 @@ public class EmailTemplatesPolicyPreloader extends AbstractPolicyPreloader<Email
                 "You will see two transaction lines for the payments above from your payment provider. The convenience fee will be shown as TBD<br/><br/>" +
                 "Your Payment Identification Reference Number for these payments is:<br/><br/>" + 
                 "<div style=\"margin-left:80px\">#<b>{4}</b></div><br/><br/>" +
-                "You can review the status of your payment at anytime in your myCommunity portal here {5}<br/><br/>" +
+                "You can review the status of your payment at anytime in your myCommunity portal [[{5}|here]]<br/><br/>" +
                 "Thank you for choosing {6}.",
                 EmailTemplateManager.getVarname(tenantT.FirstName()),
                 EmailTemplateManager.getVarname(paymentT.Amount()),
@@ -906,10 +917,10 @@ public class EmailTemplatesPolicyPreloader extends AbstractPolicyPreloader<Email
                 "Your payment of <b>{1}</b> on <b>{2}</b> was <b>not</b> successfully processed for the following reason:<br/><br/>" +
                 "<div style=\"margin-left:80px\"><b>{3}</b></div><br/><br/>" +
                 "Where applicable, an administrative fee has been added to your account for this payment reversal as per your agreement.<br/><br/>" + 
-                "<b>Please sign in to your myCommunity account here {4} to resubmit your payment to avoid any legal consequences.</b> <br/><br/>" +
+                "<b>Please sign in to your myCommunity account [[{4}|here]] to resubmit your payment to avoid any legal consequences.</b> <br/><br/>" +
                 "For your reference, your payment Reference number for this transaction is:<br/><br/>" + 
                 "<div style=\"margin-left:80px\">#<b>{5}</b></div><br/><br/>" +
-                "You can review the status of your arrears on your myCommunity portal at anytime. To access your myCommunity Resident Portal click {6}<br/><br/>" +
+                "You can review the status of your arrears on your myCommunity portal at anytime. To access your myCommunity Resident Portal click [[{6}|here]]<br/><br/>" +
                 "Thank you for choosing {7}.",
                 EmailTemplateManager.getVarname(tenantT.FirstName()),
                 EmailTemplateManager.getVarname(paymentT.Amount()),
@@ -940,7 +951,7 @@ public class EmailTemplatesPolicyPreloader extends AbstractPolicyPreloader<Email
                 "Thank you for setting up your AutoPay payment.<br/><br/>" + 
                 "Your payment of <b>{1}</b> has been successfully setup and will be processed automatically on the 1st of the month.<br/><br/>" + 
                 "Your first payment will be processed on <b>{2}</b><br/><br/>" + 
-                "You can review the status of your payment at anytime in your myCommunity portal here {3} and easily make any changes to your AutoPay payment via your myCommunity portal.<br/><br/>" +
+                "You can review the status of your payment at anytime in your myCommunity portal [[{3}|here]] and easily make any changes to your AutoPay payment via your myCommunity portal.<br/><br/>" +
                 "Thank you for choosing {4}.",
                 EmailTemplateManager.getVarname(tenantT.FirstName()),
                 EmailTemplateManager.getVarname(paymentT.Amount()),
