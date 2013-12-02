@@ -17,6 +17,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.pyx4j.commons.TimeUtils;
+import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.rdb.RDBUtils;
 import com.pyx4j.entity.server.Executable;
 import com.pyx4j.entity.server.TransactionScopeOption;
@@ -25,6 +26,7 @@ import com.pyx4j.entity.server.dataimport.DataPreloaderCollection;
 import com.pyx4j.server.contexts.Lifecycle;
 import com.pyx4j.server.contexts.NamespaceManager;
 
+import com.propertyvista.biz.system.VistaSystemFacade;
 import com.propertyvista.config.tests.VistaDBTestBase;
 import com.propertyvista.domain.VistaNamespace;
 import com.propertyvista.misc.VistaDataPreloaderParameter;
@@ -35,6 +37,12 @@ import com.propertyvista.portal.server.preloader.VistaDataPreloaders;
 public class VistaDBPreloadTest extends VistaDBTestBase {
 
     private final static Logger log = LoggerFactory.getLogger(VistaDBPreloadTest.class);
+
+    @Override
+    public void setUp() throws Exception {
+        super.setUp();
+        ServerSideFactory.create(VistaSystemFacade.class).setCommunicationsDisabled(true);
+    }
 
     public void testDefaultPreload() {
         long start = System.currentTimeMillis();
