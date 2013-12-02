@@ -121,7 +121,6 @@ public class ProductCatalogGenerator {
     }
 
     private Service createService(ProductCatalog catalog, ARCode arCode) {
-
         Service service = EntityFactory.create(Service.class);
         service.catalog().set(catalog);
 
@@ -145,11 +144,6 @@ public class ProductCatalogGenerator {
         feature.version().mandatory().setValue(RandomUtil.randomBoolean() && !ARCode.Type.nonMandatoryFeatures().contains(arCode.type()));
 
         feature.version().items().add(createFeatureItem(arCode));
-        if (feature.version().mandatory().isBooleanTrue()) {
-            // if feature is mandatory - the default item should be set!
-            ProductItem fi = RandomUtil.random(feature.version().items());
-            fi.isDefault().setValue(Boolean.TRUE);
-        }
 
         return feature;
     }
@@ -178,6 +172,10 @@ public class ProductCatalogGenerator {
             break;
         case Utility:
             item.price().setValue(new BigDecimal(80 + RandomUtil.randomInt(50)));
+            break;
+        default:
+            // all other types are not feature-relevant!
+            assert (!ARCode.Type.features().contains(arCode.type().getValue()));
             break;
         }
 

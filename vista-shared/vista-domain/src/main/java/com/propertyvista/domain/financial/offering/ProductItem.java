@@ -31,11 +31,9 @@ import com.pyx4j.entity.annotations.ReadOnly;
 import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.annotations.ToStringFormat;
 import com.pyx4j.entity.annotations.validator.NotNull;
-import com.pyx4j.entity.shared.AttachLevel;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 
-import com.propertyvista.domain.financial.ARCode;
 import com.propertyvista.domain.property.asset.BuildingElement;
 
 @ToStringFormat("{0}, {1}, ${2}")
@@ -73,9 +71,4 @@ public interface ProductItem extends IEntity {
     @JoinColumn(BuildingElementColumnId.class)
     @Detached
     BuildingElement element();
-
-    @Caption(name = "Default")
-    @Deprecated
-    //TODO move to Product 
-    IPrimitive<Boolean> isDefault();
 }

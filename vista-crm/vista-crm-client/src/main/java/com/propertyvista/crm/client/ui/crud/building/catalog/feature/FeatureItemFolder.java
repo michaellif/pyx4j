@@ -16,11 +16,7 @@ package com.propertyvista.crm.client.ui.crud.building.catalog.feature;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.google.gwt.event.logical.shared.ValueChangeEvent;
-import com.google.gwt.event.logical.shared.ValueChangeHandler;
-
 import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.forms.client.ui.CComponent;
@@ -29,8 +25,6 @@ import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.ui.CLabel;
 import com.pyx4j.forms.client.ui.folder.CEntityFolderRowEditor;
 import com.pyx4j.forms.client.ui.folder.EntityFolderColumnDescriptor;
-import com.pyx4j.forms.client.validators.EditableValueValidator;
-import com.pyx4j.forms.client.validators.ValidationError;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.AppPlaceEntityMapper;
 import com.pyx4j.site.client.ui.prime.misc.CEntityCrudHyperlink;
@@ -58,7 +52,6 @@ class FeatureItemFolder extends VistaTableFolder<ProductItem> {
         ArrayList<EntityFolderColumnDescriptor> columns = new ArrayList<EntityFolderColumnDescriptor>();
         columns.add(new EntityFolderColumnDescriptor(proto().name(), "20em"));
         columns.add(new EntityFolderColumnDescriptor(proto().price(), "8em"));
-        columns.add(new EntityFolderColumnDescriptor(proto().isDefault(), "5em"));
         columns.add(new EntityFolderColumnDescriptor(proto().element(), "15em"));
         columns.add(new EntityFolderColumnDescriptor(proto().description(), "25em"));
         return columns;
@@ -110,53 +103,5 @@ class FeatureItemFolder extends VistaTableFolder<ProductItem> {
 
             return comp;
         }
-
-        @Override
-        public void addValidations() {
-            super.addValidations();
-
-            get(proto().isDefault()).addValueChangeHandler(new ValueChangeHandler<Boolean>() {
-                @Override
-                public void onValueChange(ValueChangeEvent<Boolean> event) {
-                    if (event.getValue() != null && event.getValue().booleanValue()) {
-                        for (int i = 0; i < FeatureItemFolder.this.getItemCount(); ++i) {
-                            for (CComponent<?> comp : FeatureItemFolder.this.getItem(i).getComponents()) {
-                                if (comp instanceof FeatureItemEditor && !comp.equals(FeatureItemEditor.this)) {
-                                    ((FeatureItemEditor) comp).get(proto().isDefault()).setValue(false);
-                                }
-                            }
-                        }
-                    }
-                }
-            });
-        }
-    }
-
-    @Override
-    public void addValidations() {
-        super.addValidations();
-
-        this.addValueValidator(new EditableValueValidator<IList<ProductItem>>() {
-            @Override
-            public ValidationError isValid(CComponent<IList<ProductItem>> component, IList<ProductItem> value) {
-                if (value != null && !value.isEmpty()) {
-                    CComponent<Boolean> comp = parent.get(parent.proto().version().mandatory());
-                    if (comp != null && comp.getValue() != null && comp.getValue()) {
-                        boolean defaultFound = false;
-                        for (ProductItem item : value) {
-                            if (item.isDefault().isBooleanTrue()) {
-                                defaultFound = true;
-                                break;
-                            }
-                        }
-                        if (!defaultFound) {
-                            return new ValidationError(component, i18n.tr("Default item should be selected"));
-                        }
-                    }
-                }
-
-                return null;
-            }
-        });
     }
 }

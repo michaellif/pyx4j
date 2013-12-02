@@ -798,15 +798,12 @@ public abstract class LeaseAbstractManager {
         leaseTerm.version().leaseProducts().concessions().clear();
 
         // pre-populate mandatory features for the new service:
-        Persistence.service().retrieve(service.features());
+        Persistence.ensureRetrieve(service.features(), AttachLevel.Attached);
         for (Feature feature : service.features()) {
             if (feature.version().mandatory().isBooleanTrue()) {
-                Persistence.service().retrieve(feature.version().items());
-                for (ProductItem item : feature.version().items()) {
-                    if (item.isDefault().isBooleanTrue()) {
-                        leaseTerm.version().leaseProducts().featureItems().add(createBillableItem(lease, item, node));
-                        break;
-                    }
+                Persistence.ensureRetrieve(feature.version().items(), AttachLevel.Attached);
+                if (!feature.version().items().isEmpty()) {
+                    leaseTerm.version().leaseProducts().featureItems().add(createBillableItem(lease, feature.version().items().get(0), node));
                 }
             }
         }
