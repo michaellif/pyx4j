@@ -20,7 +20,7 @@ import com.pyx4j.entity.shared.IPrimitive;
 import com.propertyvista.domain.tenant.lease.Tenant;
 
 @Transient
-public interface MoneyInPayerCandidateDTO extends IEntity {
+public interface MoneyInPayerOptionDTO extends IEntity {
 
     Tenant tenantIdStub();
 

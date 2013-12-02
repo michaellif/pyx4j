@@ -33,6 +33,7 @@ import com.pyx4j.site.rpc.AppPlace;
 import com.propertyvista.crm.client.CrmSite;
 import com.propertyvista.crm.client.ui.tools.financial.moneyin.MoneyInCreateBatchView;
 import com.propertyvista.crm.rpc.dto.financial.autopayreview.moneyin.MoneyInCandidateDTO;
+import com.propertyvista.crm.rpc.dto.financial.autopayreview.moneyin.MoneyInPayerOptionDTO;
 
 public class MoneyInCreateBatchActivity extends AbstractActivity implements MoneyInCreateBatchView.Presenter {
 
@@ -76,41 +77,47 @@ public class MoneyInCreateBatchActivity extends AbstractActivity implements Mone
 
     @Override
     public void setProcessCandidate(MoneyInCandidateDTO candidate, boolean process) {
-        // TODO Auto-generated method stub        
+        candidate.processPayment().setValue(process);
+        int i = this.dataProvider.getList().indexOf(candidate);
+        this.dataProvider.getList().set(i, candidate);
+    }
+
+    @Override
+    public void setPayer(MoneyInCandidateDTO candidate, MoneyInPayerOptionDTO payer) {
+        if (payer == null) {
+            candidate.payment().payerTenantIdStub().set(null);
+        } else {
+            candidate.payment().payerTenantIdStub().set(payer.tenantIdStub().duplicate());
+        }
+        int i = this.dataProvider.getList().indexOf(candidate);
+        this.dataProvider.getList().set(i, candidate);
     }
 
     @Override
     public void setAmount(MoneyInCandidateDTO candidate, BigDecimal amountToPay) {
         // TODO Auto-generated method stub
-
     }
 
     @Override
     public void setCheckNumber(MoneyInCandidateDTO candidate, BigDecimal chequeNumber) {
         // TODO Auto-generated method stub
-
     }
 
     @Override
     public void createBatch() {
         // TODO Auto-generated method stub
-
     }
 
     @Override
     public void populate() {
-        // TODO Auto-generated method stub
-
     }
 
     @Override
     public void refresh() {
-        // TODO Auto-generated method stub
     }
 
     @Override
     public AppPlace getPlace() {
-        // TODO Auto-generated method stub
         return null;
     }
 
@@ -131,6 +138,13 @@ public class MoneyInCreateBatchActivity extends AbstractActivity implements Mone
 
         c.prepayments().setValue(new BigDecimal("0.00"));
         c.totalOutstanding().setValue(new BigDecimal("1077.00"));
+
+        for (int t = 1; t != 3; ++t) {
+            MoneyInPayerOptionDTO payer = c.payerCandidates().$();
+            payer.tenantIdStub().setPrimaryKey(new Key(t));
+            payer.name().setValue("Tenat Tenantovic #" + t);
+            c.payerCandidates().add(payer);
+        }
 
         return c;
     }

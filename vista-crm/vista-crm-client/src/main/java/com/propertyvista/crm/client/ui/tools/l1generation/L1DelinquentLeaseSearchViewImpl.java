@@ -19,7 +19,6 @@ import com.google.gwt.user.cellview.client.SimplePager;
 import com.google.gwt.user.cellview.client.SimplePager.TextLocation;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.LayoutPanel;
-import com.google.gwt.view.client.DefaultSelectionEventManager;
 import com.google.gwt.view.client.ProvidesKey;
 
 import com.pyx4j.i18n.shared.I18n;
@@ -68,8 +67,6 @@ public class L1DelinquentLeaseSearchViewImpl extends AbstractPrimePane implement
     public void setPresenter(L1DelinquentLeaseSearchView.Presenter presenter) {
         this.presenter = presenter;
         this.dataGrid.setPresenter(this.presenter);
-        this.dataGrid.setSelectionModel(this.presenter.getSelectionModel(), DefaultSelectionEventManager.<LegalActionCandidateDTO> createCheckboxManager(0));
-        this.presenter.getDataProvider().addDataDisplay(this.dataGrid);
     }
 
     protected void reviewCandidate(LegalActionCandidateDTO object) {

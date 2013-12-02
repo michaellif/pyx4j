@@ -21,6 +21,7 @@ import com.google.gwt.view.client.SelectionModel;
 import com.pyx4j.site.client.ui.prime.IPrimePane;
 
 import com.propertyvista.crm.rpc.dto.financial.autopayreview.moneyin.MoneyInCandidateDTO;
+import com.propertyvista.crm.rpc.dto.financial.autopayreview.moneyin.MoneyInPayerOptionDTO;
 
 public interface MoneyInCreateBatchView extends IPrimePane {
 
@@ -39,6 +40,8 @@ public interface MoneyInCreateBatchView extends IPrimePane {
         void setCheckNumber(MoneyInCandidateDTO candidate, BigDecimal chequeNumber);
 
         void createBatch();
+
+        void setPayer(MoneyInCandidateDTO object, MoneyInPayerOptionDTO selectedOption);
 
     }
 

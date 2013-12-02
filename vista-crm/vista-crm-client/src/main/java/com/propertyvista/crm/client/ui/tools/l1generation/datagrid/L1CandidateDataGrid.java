@@ -29,6 +29,7 @@ import com.google.gwt.safehtml.shared.SafeHtmlBuilder;
 import com.google.gwt.user.cellview.client.Column;
 import com.google.gwt.user.cellview.client.DataGrid;
 import com.google.gwt.user.cellview.client.Header;
+import com.google.gwt.view.client.DefaultSelectionEventManager;
 import com.google.gwt.view.client.MultiSelectionModel;
 
 import com.pyx4j.commons.CommonsStringUtils;
@@ -67,6 +68,9 @@ public class L1CandidateDataGrid extends DataGrid<LegalActionCandidateDTO> {
 
     public void setPresenter(L1DelinquentLeaseSearchView.Presenter presenter) {
         this.presenter = presenter;
+        this.setSelectionModel(this.presenter.getSelectionModel(), DefaultSelectionEventManager.<LegalActionCandidateDTO> createCheckboxManager(0));
+        this.presenter.getDataProvider().addDataDisplay(this);
+
     }
 
     private void initColumns() {

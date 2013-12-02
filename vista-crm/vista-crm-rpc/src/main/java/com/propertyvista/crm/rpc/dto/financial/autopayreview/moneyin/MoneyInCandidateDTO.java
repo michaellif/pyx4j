@@ -39,7 +39,7 @@ public interface MoneyInCandidateDTO extends IEntity {
 
     IPrimitive<BigDecimal> totalOutstanding();
 
-    IList<MoneyInCandidateDTO> payerCandidates();
+    IList<MoneyInPayerOptionDTO> payerCandidates();
 
     IPrimitive<Boolean> processPayment();
 
