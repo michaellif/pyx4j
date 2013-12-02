@@ -249,7 +249,7 @@ public class EmailTemplateRootObjectLoader {
             for (AutopayAgreementCoveredItem item : context.preauthorizedPayment().coveredItems()) {
                 amount = amount.add(item.amount().getValue());
             }
-            t.Amount().setValue(amount.toString());
+            t.Amount().setValue(i18n.tr("$") + amount.toString());
             t.NextPaymentDate().setValue(
                     new SimpleDateFormat("MM/dd/yyyy").format(ServerSideFactory.create(PaymentMethodFacade.class).getNextAutopayDate(context.lease())));
         } else if (tObj instanceof PaymentT) {
@@ -257,8 +257,8 @@ public class EmailTemplateRootObjectLoader {
             if (context.paymentRecord().isNull()) {
                 throw new Error("PaymentRecord should be provided in context");
             }
-            t.Amount().setValue(context.paymentRecord().amount().getStringView());
-            t.ConvenienceFee().setValue(context.paymentRecord().convenienceFee().getStringView());
+            t.Amount().setValue(i18n.tr("$") + context.paymentRecord().amount().getStringView());
+            t.ConvenienceFee().setValue(i18n.tr("$") + context.paymentRecord().convenienceFee().getStringView());
             t.ReferenceNumber().setValue(context.paymentRecord().id().getStringView());
             t.Date().setValue(context.paymentRecord().receivedDate().getStringView());
             t.RejectReason().setValue(context.paymentRecord().transactionErrorMessage().getValue());
