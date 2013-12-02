@@ -172,7 +172,7 @@ public class YardiResidentTransactionsService extends YardiAbstractService {
             }
 
             // availability
-            if (!executionMonitor.isTerminationRequested() && (ApplicationMode.isDevelopment() || !VistaTODO.pendingYardiConfigPatchILS)) {
+            if (false || !executionMonitor.isTerminationRequested() && (ApplicationMode.isDevelopment() || !VistaTODO.pendingYardiConfigPatchILS)) {
                 YardiILSGuestCardStub ilsStub = ServerSideFactory.create(YardiILSGuestCardStub.class);
                 List<PhysicalProperty> properties = getILSPropertyMarketing(ilsStub, yc, executionMonitor, propertyListCodes);
                 for (PhysicalProperty property : properties) {

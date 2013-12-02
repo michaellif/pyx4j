@@ -18,6 +18,7 @@ import java.util.Iterator;
 import java.util.List;
 
 import com.google.gwt.user.client.Command;
+import com.google.gwt.user.client.ui.MenuItem;
 
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.annotations.validator.NotNull;
@@ -55,6 +56,7 @@ import com.propertyvista.dto.FloorplanDTO;
 import com.propertyvista.dto.LockerAreaDTO;
 import com.propertyvista.dto.ParkingDTO;
 import com.propertyvista.dto.RoofDTO;
+import com.propertyvista.shared.config.VistaFeatures;
 
 public class BuildingViewerViewImpl extends CrmViewerViewImplBase<BuildingDTO> implements BuildingViewerView {
 
@@ -83,6 +85,8 @@ public class BuildingViewerViewImpl extends CrmViewerViewImplBase<BuildingDTO> i
     private final ILister<BillingCycleDTO> billingCycleLister;
 
     private final ButtonMenuBar dashboardsMenu;
+
+    private final MenuItem yardiImportAction;
 
     public BuildingViewerViewImpl() {
 
@@ -119,6 +123,17 @@ public class BuildingViewerViewImpl extends CrmViewerViewImplBase<BuildingDTO> i
         dashboardsMenu = new ButtonMenuBar();
         dashboardButton.setMenu(dashboardsMenu);
         addHeaderToolbarItem(dashboardButton);
+
+        yardiImportAction = new MenuItem(i18n.tr("Update From Yardi"), new Command() {
+            @Override
+            public void execute() {
+                ((BuildingViewerView.Presenter) getPresenter()).updateFromYardi();
+            }
+        });
+        if (VistaFeatures.instance().yardiIntegration()) {
+            addAction(yardiImportAction);
+        }
+
     }
 
     @Override

@@ -18,6 +18,7 @@ import java.util.Vector;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.entity.rpc.AbstractCrudService;
+import com.pyx4j.rpc.shared.VoidSerializable;
 
 import com.propertyvista.domain.financial.MerchantAccount;
 import com.propertyvista.domain.property.asset.building.Building;
@@ -28,5 +29,7 @@ public interface BuildingCrudService extends AbstractCrudService<BuildingDTO> {
 
     void retrieveMerchantAccountStatus(AsyncCallback<MerchantAccount> callback, MerchantAccount merchantAccountStub);
 
-    void getILSVendors(AsyncCallback<Vector<ILSVendor>> callback, Building building);
+    void updateFromYardi(AsyncCallback<VoidSerializable> callback, Building buildingId);
+
+    void getILSVendors(AsyncCallback<Vector<ILSVendor>> callback, Building buildingId);
 }

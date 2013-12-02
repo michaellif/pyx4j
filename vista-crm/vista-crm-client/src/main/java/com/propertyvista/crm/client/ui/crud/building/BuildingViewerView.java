@@ -42,6 +42,8 @@ public interface BuildingViewerView extends IViewer<BuildingDTO> {
         MaintenanceRequestVisorController getMaintenanceRequestVisorController();
 
         IDashboardVisorController getDashboardController(DashboardMetadata dashboardMetadata, List<Building> buildings);
+
+        void updateFromYardi();
     }
 
     ILister<FloorplanDTO> getFloorplanListerView();

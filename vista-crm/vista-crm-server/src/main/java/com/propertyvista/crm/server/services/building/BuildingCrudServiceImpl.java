@@ -13,11 +13,13 @@
  */
 package com.propertyvista.crm.server.services.building;
 
+import java.rmi.RemoteException;
 import java.util.List;
 import java.util.Vector;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
+import com.pyx4j.commons.UserRuntimeException;
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.server.AbstractCrudServiceDtoImpl;
 import com.pyx4j.entity.server.Persistence;
@@ -27,9 +29,13 @@ import com.pyx4j.entity.shared.criterion.EntityListCriteria;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.geo.GeoPoint;
+import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.rpc.shared.VoidSerializable;
 
 import com.propertyvista.biz.asset.BuildingFacade;
 import com.propertyvista.biz.system.Vista2PmcFacade;
+import com.propertyvista.biz.system.YardiARFacade;
+import com.propertyvista.biz.system.YardiServiceException;
 import com.propertyvista.crm.rpc.services.building.BuildingCrudService;
 import com.propertyvista.domain.GeoLocation;
 import com.propertyvista.domain.GeoLocation.LatitudeType;
@@ -48,6 +54,8 @@ import com.propertyvista.dto.BuildingDTO;
 import com.propertyvista.server.common.reference.geo.SharedGeoLocator;
 
 public class BuildingCrudServiceImpl extends AbstractCrudServiceDtoImpl<Building, BuildingDTO> implements BuildingCrudService {
+
+    private final static I18n i18n = I18n.get(BuildingCrudServiceImpl.class);
 
     public BuildingCrudServiceImpl() {
         super(Building.class, BuildingDTO.class);
@@ -221,7 +229,23 @@ public class BuildingCrudServiceImpl extends AbstractCrudServiceDtoImpl<Building
     }
 
     @Override
-    public void getILSVendors(AsyncCallback<Vector<ILSVendor>> callback, Building buildingStub) {
+    public void updateFromYardi(AsyncCallback<VoidSerializable> callback, Building buildingId) {
+        Building building = Persistence.service().retrieve(boClass, buildingId.getPrimaryKey());
+
+        try {
+            ServerSideFactory.create(YardiARFacade.class).updateProductCatalog(building);
+        } catch (RemoteException e) {
+            throw new UserRuntimeException(i18n.tr("Yardi connection problem"), e);
+        } catch (YardiServiceException e) {
+            throw new UserRuntimeException(i18n.tr("Error updating lease form Yardi"), e);
+        }
+
+        Persistence.service().commit();
+        callback.onSuccess(null);
+    }
+
+    @Override
+    public void getILSVendors(AsyncCallback<Vector<ILSVendor>> callback, Building buildingId) {
         // find configured vendors
         Vector<ILSVendor> vendors = new Vector<ILSVendor>();
         ILSConfig config = Persistence.service().retrieve(EntityQueryCriteria.create(ILSConfig.class));

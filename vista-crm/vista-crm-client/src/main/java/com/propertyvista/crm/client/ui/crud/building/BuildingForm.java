@@ -115,7 +115,7 @@ public class BuildingForm extends CrmEntityForm<BuildingDTO> {
 
         addTab(createMarketingTab());
 
-        if (VistaFeatures.instance().productCatalog() && !VistaFeatures.instance().yardiIntegration()) {
+        if (VistaFeatures.instance().productCatalog() /* && !VistaFeatures.instance().yardiIntegration() */) {
             setTabEnabled(catalogTab = addTab(createCatalogTab()), !isEditable());
         }
 
@@ -157,8 +157,7 @@ public class BuildingForm extends CrmEntityForm<BuildingDTO> {
         billingCyclesTab.setTabVisible(SecurityController.checkBehavior(VistaCrmBehavior.Billing));
 
         if (catalogTab != null) {
-            catalogTab.setTabVisible(SecurityController.checkBehavior(VistaCrmBehavior.ProductCatalog)
-                    && !getValue().defaultProductCatalog().isBooleanTrue());
+            catalogTab.setTabVisible(SecurityController.checkBehavior(VistaCrmBehavior.ProductCatalog) && !getValue().defaultProductCatalog().isBooleanTrue());
         }
 
         fillMerchantAccountStatus(getValue().merchantAccount());
@@ -205,7 +204,7 @@ public class BuildingForm extends CrmEntityForm<BuildingDTO> {
                             new FormDecoratorBuilder(inject(proto().complex(),
                                     new CEntityCrudHyperlink<Complex>(AppPlaceEntityMapper.resolvePlace(Complex.class))), 15).build());
         }
-        if (VistaFeatures.instance().productCatalog() && !VistaFeatures.instance().yardiIntegration()) {
+        if (VistaFeatures.instance().productCatalog() /* && !VistaFeatures.instance().yardiIntegration() */) {
             flexPanel.setWidget(row++, 1, new FormDecoratorBuilder(inject(proto().defaultProductCatalog()), 5).build());
         }
         flexPanel.setWidget(row++, 1, new FormDecoratorBuilder(inject(proto().suspended()), 5).build());

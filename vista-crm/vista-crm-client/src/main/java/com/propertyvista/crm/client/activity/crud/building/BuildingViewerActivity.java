@@ -22,6 +22,8 @@ import com.pyx4j.commons.Key;
 import com.pyx4j.entity.rpc.AbstractCrudService;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
+import com.pyx4j.rpc.client.DefaultAsyncCallback;
+import com.pyx4j.rpc.shared.VoidSerializable;
 import com.pyx4j.security.shared.SecurityController;
 import com.pyx4j.site.client.ui.prime.lister.ILister.Presenter;
 import com.pyx4j.site.rpc.CrudAppPlace;
@@ -92,7 +94,7 @@ public class BuildingViewerActivity extends CrmViewerActivity<BuildingDTO> imple
 
     @SuppressWarnings("unchecked")
     public BuildingViewerActivity(CrudAppPlace place) {
-        super(place,  CrmSite.getViewFactory().getView(BuildingViewerView.class), (AbstractCrudService<BuildingDTO>) GWT.create(BuildingCrudService.class));
+        super(place, CrmSite.getViewFactory().getView(BuildingViewerView.class), (AbstractCrudService<BuildingDTO>) GWT.create(BuildingCrudService.class));
 
         floorplanLister = ListerControllerFactory.create(((BuildingViewerView) getView()).getFloorplanListerView(),
                 (AbstractCrudService<FloorplanDTO>) GWT.create(FloorplanCrudService.class), FloorplanDTO.class, VistaCrmBehavior.PropertyManagement);
@@ -195,5 +197,15 @@ public class BuildingViewerActivity extends CrmViewerActivity<BuildingDTO> imple
     @Override
     public void retrieveMerchantAccountStatus(AsyncCallback<MerchantAccount> callback, MerchantAccount merchantAccountStub) {
         ((BuildingCrudService) getService()).retrieveMerchantAccountStatus(callback, merchantAccountStub);
+    }
+
+    @Override
+    public void updateFromYardi() {
+        ((BuildingCrudService) getService()).updateFromYardi(new DefaultAsyncCallback<VoidSerializable>() {
+            @Override
+            public void onSuccess(VoidSerializable result) {
+                populate();
+            }
+        }, EntityFactory.createIdentityStub(Building.class, getEntityId()));
     }
 }

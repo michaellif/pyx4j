@@ -76,7 +76,7 @@ public class YardiProductCatalogProcessor {
     private void updateUnitItems(Service service, List<AptUnit> units) {
         Persistence.ensureRetrieve(service.version().items(), AttachLevel.Attached);
 
-        List<ProductItem> serviceItems = service.version().items();
+        List<ProductItem> serviceItems = new ArrayList<ProductItem>(service.version().items());
         Collections.sort(serviceItems, new Comparator<ProductItem>() {
             @Override
             public int compare(ProductItem o1, ProductItem o2) {
@@ -168,6 +168,7 @@ public class YardiProductCatalogProcessor {
         for (Service service : catalog.services()) {
             if (service.isDefaultCatalogItem().isBooleanTrue() && service.expiredFrom().isNull()) {
                 service.expiredFrom().setValue(new LogicalDate(SystemDateManager.getDate()));
+                Persistence.service().merge(service);
             }
         }
     }
@@ -210,6 +211,7 @@ public class YardiProductCatalogProcessor {
         for (Feature feature : catalog.features()) {
             if (feature.isDefaultCatalogItem().isBooleanTrue() && feature.expiredFrom().isNull()) {
                 feature.expiredFrom().setValue(new LogicalDate(SystemDateManager.getDate()));
+                Persistence.service().merge(feature);
             }
         }
     }
