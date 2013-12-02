@@ -81,8 +81,8 @@ public class DefaultProductCatalogFacadeImpl implements DefaultProductCatalogFac
     @Override
     public void persistFor(Building building) {
         assert (!building.productCatalog().isValueDetached());
-        assert (building.productCatalog().services().getAttachLevel() == AttachLevel.Attached);
-        assert (building.productCatalog().features().getAttachLevel() == AttachLevel.Attached);
+        assert (!building.productCatalog().services().isValueDetached());
+        assert (!building.productCatalog().features().isValueDetached());
 
         // Save services and features:
         for (Feature feature : building.productCatalog().features()) {
@@ -234,6 +234,8 @@ public class DefaultProductCatalogFacadeImpl implements DefaultProductCatalogFac
     }
 
     private ProductItem createUnitItem(AptUnit unit, Service service) {
+        assert (ARCode.Type.unitRelatedServices().contains(service.code().type().getValue()));
+
         ProductItem item = EntityFactory.create(ProductItem.class);
         item.product().set(service.version());
 
@@ -245,6 +247,8 @@ public class DefaultProductCatalogFacadeImpl implements DefaultProductCatalogFac
     }
 
     private void updateUnitItem(AptUnit unit, Service service) {
+        assert (ARCode.Type.unitRelatedServices().contains(service.code().type().getValue()));
+
         EntityQueryCriteria<ProductItem> criteria = EntityQueryCriteria.create(ProductItem.class);
         criteria.eq(criteria.proto().product(), service.version());
         criteria.eq(criteria.proto().element(), unit);

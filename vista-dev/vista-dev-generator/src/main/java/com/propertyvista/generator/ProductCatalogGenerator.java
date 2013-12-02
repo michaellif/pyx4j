@@ -67,7 +67,7 @@ public class ProductCatalogGenerator {
     }
 
     public List<Service> createServices(ProductCatalog catalog) {
-        List<Service> items = new ArrayList<Service>(ARCode.Type.services().size());
+        List<Service> items = new ArrayList<Service>();
         for (ARCode.Type type : ARCode.Type.services()) {
             List<ARCode> arCodes = getARCodes(type);
             for (ARCode arCode : arCodes) {
@@ -78,7 +78,7 @@ public class ProductCatalogGenerator {
     }
 
     public List<Feature> createFeatures(ProductCatalog catalog) {
-        List<Feature> items = new ArrayList<Feature>(ARCode.Type.features().size());
+        List<Feature> items = new ArrayList<Feature>();
         for (ARCode.Type type : ARCode.Type.features()) {
             List<ARCode> arCodes = getARCodes(type);
             for (ARCode arCode : arCodes) {
@@ -157,7 +157,7 @@ public class ProductCatalogGenerator {
     private ProductItem createFeatureItem(ARCode arCode) {
         ProductItem item = EntityFactory.create(ProductItem.class);
 
-        item.name().setValue(arCode.name().getStringView());
+        item.name().setValue(arCode.name().getValue());
         item.description().setValue(arCode.type().getStringView() + " description");
 
         switch (arCode.type().getValue()) {
@@ -271,10 +271,7 @@ public class ProductCatalogGenerator {
         List<ProductItem> serviceItems = new ArrayList<ProductItem>();
 
         for (ARCode.Type type : ARCode.Type.unitRelatedServices()) {
-
-            ARCode arCode = RandomUtil.random(getARCodes(type));
-
-            serviceItems.add(createBuildingElementServices(catalog, unit, arCode, createUnitMarketRent(unit)));
+            serviceItems.add(createBuildingElementServices(catalog, unit, RandomUtil.random(getARCodes(type)), createUnitMarketRent(unit)));
         }
 
         return serviceItems;
@@ -285,11 +282,9 @@ public class ProductCatalogGenerator {
 
         ProductItem item = EntityFactory.create(ProductItem.class);
 
-        item.name().setValue(arCode.name().getStringView());
-        // This value may not be used in all cases and overridden later in generator
-        item.price().setValue(price);
+        item.name().setValue(arCode.name().getValue());
         item.description().setValue(arCode.type().getStringView() + " description");
-
+        item.price().setValue(price); // This value may not be used in all cases and overridden later in generator
         item.element().set(buildingElement);
 
         service.version().items().add(item);

@@ -58,7 +58,7 @@ public class YardiProductCatalogProcessor {
 
     public void updateUnits(Building building) {
         assert (!building.productCatalog().isValueDetached());
-        assert (building.productCatalog().services().getAttachLevel() != AttachLevel.Attached);
+        assert (!building.productCatalog().services().isValueDetached());
 
         EntityQueryCriteria<AptUnit> criteria = EntityQueryCriteria.create(AptUnit.class);
         criteria.in(criteria.proto().building(), building);
@@ -108,8 +108,8 @@ public class YardiProductCatalogProcessor {
 
     public void persistCatalog(Building building) {
         assert (!building.productCatalog().isValueDetached());
-        assert (building.productCatalog().services().getAttachLevel() != AttachLevel.Attached);
-        assert (building.productCatalog().features().getAttachLevel() != AttachLevel.Attached);
+        assert (!building.productCatalog().services().isValueDetached());
+        assert (!building.productCatalog().features().isValueDetached());
 
         // Save services and features:
         for (Feature feature : building.productCatalog().features()) {
