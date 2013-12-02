@@ -813,7 +813,7 @@ public class EmailTemplatesPolicyPreloader extends AbstractPolicyPreloader<Email
                 "Your payment of <b>{1}</b> has been submitted successfully on <b>{2}</b>.<br/><br/>" + 
                 "Please keep in mind, your payment is not considered paid until it gets processed by the bank successfully, which can take 1-3 business days.<br/><br/>" +
                 "Your Payment Identification Reference Number for this payment is:<br/><br/>" + 
-                "<div style=\"margin-left:80px\"><b>{3}</b></div><br/><br/>" +
+                "<div style=\"margin-left:80px\">#<b>{3}</b></div><br/><br/>" +
                 "You can review the status of your payment at anytime in your myCommunity portal here {4}<br/><br/>" +
                 "Thank you for choosing {5}.",
                 EmailTemplateManager.getVarname(tenantT.FirstName()),
@@ -843,7 +843,7 @@ public class EmailTemplatesPolicyPreloader extends AbstractPolicyPreloader<Email
                 "Thank you for submitting your payment.<br/><br/>" +
                 "Your payment of <b>{1}</b> has been successfully processed on <b>{2}</b> and your file has been updated accordingly.<br/><br/>" + 
                 "Your Payment Identification Reference Number for this payment is:<br/><br/>" + 
-                "<div style=\"margin-left:80px\"><b>{3}</b></div><br/><br/>" +
+                "<div style=\"margin-left:80px\">#<b>{3}</b></div><br/><br/>" +
                 "You can review the status of your payment at anytime in your myCommunity portal here {4}<br/><br/>" +
                 "Thank you for choosing {5}.",
                 //TODO (If you do not wish to receive this notice any further you can opt out under your personal settings in your myCommunity portal here)
@@ -875,7 +875,7 @@ public class EmailTemplatesPolicyPreloader extends AbstractPolicyPreloader<Email
                 "Your payment of <b>{1}</b> and your convenience fee of <b>{2}</b> has been submitted successfully on <b>{3}</b>. " + 
                 "You will see two transaction lines for the payments above from your payment provider. The convenience fee will be shown as TBD<br/><br/>" +
                 "Your Payment Identification Reference Number for this payments are:<br/><br/>" + 
-                "<div style=\"margin-left:80px\">{4}</div><br/><br/>" +
+                "<div style=\"margin-left:80px\">#<b>{4}</b></div><br/><br/>" +
                 "You can review the status of your payment at anytime in your myCommunity portal here {5}<br/><br/>" +
                 "Thank you for choosing {6}.",
                 EmailTemplateManager.getVarname(tenantT.FirstName()),
@@ -908,7 +908,7 @@ public class EmailTemplatesPolicyPreloader extends AbstractPolicyPreloader<Email
                 "Where applicable, an administrative fee has been added to your account for this payment reversal as per your agreement.<br/><br/>" + 
                 "<b>Please sign in to your myCommunity account here {4} to resubmit your payment to avoid any legal consequences.</b> <br/><br/>" +
                 "For your reference, your payment Reference number for this transaction is:<br/><br/>" + 
-                "<div style=\"margin-left:80px\"><b>{5}</b></div><br/><br/>" +
+                "<div style=\"margin-left:80px\">#<b>{5}</b></div><br/><br/>" +
                 "You can review the status of your arrears on your myCommunity portal at anytime. To access your myCommunity Resident Portal click {6}<br/><br/>" +
                 "Thank you for choosing {7}.",
                 EmailTemplateManager.getVarname(tenantT.FirstName()),
