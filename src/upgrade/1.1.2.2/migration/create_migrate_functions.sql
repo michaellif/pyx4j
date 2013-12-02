@@ -80,6 +80,16 @@ BEGIN
         ***     =====================================================================================================
         **/
         
+        -- email_template
+        
+        EXECUTE 'UPDATE '||v_schema_name||'.email_template '
+                ||'SET content = regexp_replace(content,''Current Status: \${MaintenanceRequest.status}'', '
+                ||'             ''Request Completed: ${MaintenanceRequest.resolved}'' ) '
+                ||'WHERE template_type = ''MaintenanceRequestCompleted'' ';
+        
+        
+        -- merchant_account
+        
         EXECUTE 'UPDATE '||v_schema_name||'.merchant_account '
                 ||'SET  invalid = FALSE '
                 ||'WHERE invalid IS NULL';
