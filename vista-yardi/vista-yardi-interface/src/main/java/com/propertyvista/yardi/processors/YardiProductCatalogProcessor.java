@@ -25,6 +25,8 @@ import com.yardi.entity.guestcard40.RentableItemType;
 import com.yardi.entity.guestcard40.RentableItems;
 
 import com.pyx4j.commons.Key;
+import com.pyx4j.commons.LogicalDate;
+import com.pyx4j.config.server.SystemDateManager;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.AttachLevel;
 import com.pyx4j.entity.shared.EntityFactory;
@@ -47,11 +49,8 @@ public class YardiProductCatalogProcessor {
         Persistence.ensureRetrieve(building.productCatalog().services(), AttachLevel.Attached);
         Persistence.ensureRetrieve(building.productCatalog().features(), AttachLevel.Attached);
 
-        building.productCatalog().services().clear();
-        building.productCatalog().services().addAll(createServices(building.productCatalog(), rentableItems));
-
-        building.productCatalog().features().clear();
-        building.productCatalog().features().addAll(createFeatures(building.productCatalog(), rentableItems));
+        updateServices(building.productCatalog(), rentableItems);
+        updateFeatures(building.productCatalog(), rentableItems);
 
         updateEligibilityMatrixes(building.productCatalog());
     }
@@ -165,21 +164,33 @@ public class YardiProductCatalogProcessor {
         return productTypeData;
     }
 
-    private List<Service> createServices(ProductCatalog catalog, RentableItems rentableItems) {
-        List<Service> items = new ArrayList<Service>();
+    private void deleteServices(ProductCatalog catalog) {
+        assert (!catalog.isValueDetached());
+        assert (!catalog.services().isValueDetached());
 
-        for (ProductTypeData typeData : retrieveProductTypeData(rentableItems, ARCode.Type.services())) {
-            items.add(ensureService(catalog, typeData));
+        for (Service service : catalog.services()) {
+            if (service.isDefaultCatalogItem().isBooleanTrue() && service.expiredFrom().isNull()) {
+                service.expiredFrom().setValue(new LogicalDate(SystemDateManager.getDate()));
+            }
         }
+    }
 
-        return items;
+    private void updateServices(ProductCatalog catalog, RentableItems rentableItems) {
+        assert (!catalog.isValueDetached());
+        assert (!catalog.services().isValueDetached());
+
+        deleteServices(catalog);
+        catalog.services().clear();
+        for (ProductTypeData typeData : retrieveProductTypeData(rentableItems, ARCode.Type.services())) {
+            catalog.services().add(ensureService(catalog, typeData));
+        }
     }
 
     private Service ensureService(ProductCatalog catalog, ProductTypeData typeData) {
         EntityQueryCriteria<Service> criteria = EntityQueryCriteria.create(Service.class);
         criteria.eq(criteria.proto().catalog(), catalog);
         criteria.eq(criteria.proto().isDefaultCatalogItem(), false);
-        criteria.eq(criteria.proto().code().type(), typeData.getArCode().type().getValue());
+        criteria.eq(criteria.proto().code(), typeData.getArCode());
         criteria.eq(criteria.proto().version().name(), typeData.getYariItemType().getCode());
 
         Service service = Persistence.service().retrieve(criteria);
@@ -196,17 +207,31 @@ public class YardiProductCatalogProcessor {
         service.version().description().setValue(typeData.getYariItemType().getDescription());
         service.version().price().setValue(new BigDecimal(typeData.getYariItemType().getRent()));
 
+        service.expiredFrom().setValue(null);
+
         return service;
     }
 
-    private List<Feature> createFeatures(ProductCatalog catalog, RentableItems rentableItems) {
-        List<Feature> items = new ArrayList<Feature>();
+    private void deleteFeatures(ProductCatalog catalog) {
+        assert (!catalog.isValueDetached());
+        assert (!catalog.features().isValueDetached());
 
-        for (ProductTypeData typeData : retrieveProductTypeData(rentableItems, ARCode.Type.features())) {
-            items.add(ensureFeature(catalog, typeData));
+        for (Feature feature : catalog.features()) {
+            if (feature.isDefaultCatalogItem().isBooleanTrue() && feature.expiredFrom().isNull()) {
+                feature.expiredFrom().setValue(new LogicalDate(SystemDateManager.getDate()));
+            }
         }
+    }
 
-        return items;
+    private void updateFeatures(ProductCatalog catalog, RentableItems rentableItems) {
+        assert (!catalog.isValueDetached());
+        assert (!catalog.features().isValueDetached());
+
+        deleteFeatures(catalog);
+        catalog.features().clear();
+        for (ProductTypeData typeData : retrieveProductTypeData(rentableItems, ARCode.Type.features())) {
+            catalog.features().add(ensureFeature(catalog, typeData));
+        }
     }
 
     private Feature ensureFeature(ProductCatalog catalog, ProductTypeData typeData) {
@@ -237,6 +262,8 @@ public class YardiProductCatalogProcessor {
         for (ProductItem item : feature.version().items()) {
             item.price().setValue(feature.version().price().getValue());
         }
+
+        feature.expiredFrom().setValue(null);
 
         return feature;
     }

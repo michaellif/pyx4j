@@ -15,6 +15,7 @@ package com.propertyvista.domain.financial.offering;
 
 import java.math.BigDecimal;
 
+import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.annotations.AbstractEntity;
 import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.Detached;
@@ -61,13 +62,15 @@ public interface Product<V extends ProductV<?>> extends IVersionedEntity<V>, ILo
     @NotNull
     IPrimitive<Boolean> isDefaultCatalogItem();
 
+    /**
+     * expired date when it is no loner effective
+     */
+    IPrimitive<LogicalDate> expiredFrom();
+
     @ToString(index = 0)
     @NotNull
     @MemberColumn(notNull = true)
     ARCode code();
-
-    @Caption(name = "Default")
-    IPrimitive<Boolean> isDefault();
 
     @AbstractEntity
     @Inheritance(strategy = Inheritance.InheritanceStrategy.SINGLE_TABLE)
