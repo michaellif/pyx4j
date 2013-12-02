@@ -207,9 +207,9 @@ public class EmailTemplatesPolicyPreloader extends AbstractPolicyPreloader<Email
                 "During this process you, your roommates, dependents and guarantors will have the opportunity to complete all necessary information needed to process your Application online. Do not worry, you can take a break at anytime and the information will be saved for you to complete where you left off when you are ready.<br/><br/>" +
                 "Please keep in mind, Applications get processed on a first-come-first-served basis and will not be processed until completed in full.<br/><br/>" + 
                 "If at anytime during the process you have any concerns or questions, please call us directly at {1} and have your Application Reference Number ready.<br/><br/>" +
-                "Your Application Reference Number is: {2}<br/><br/>" +
+                "Your Application Reference Number is: <b>{2}</b><br/><br/>" +
                 "To get started, please login to your account [[{3}|here]]<br/><br/>" +
-                "<i>(If the link does not work please copy and paste the following URL:{4}<br/><br/>)</i>" + 
+                "<i>(If the link does not work please copy and paste the following URL:<br/>{4} )<br/></i>" + 
                 "We look forward to making this application process as smooth as possible for you.<br/><br/>"+
                 "Sincerely,<br/><br/>"+
                 "{5}<br/>" +

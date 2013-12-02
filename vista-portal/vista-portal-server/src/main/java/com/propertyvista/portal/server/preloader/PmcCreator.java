@@ -43,7 +43,6 @@ import com.propertyvista.domain.pmc.Pmc;
 import com.propertyvista.domain.security.CrmRole;
 import com.propertyvista.domain.security.CrmUser;
 import com.propertyvista.domain.security.OnboardingUser;
-import com.propertyvista.domain.settings.PmcCompanyInfo;
 import com.propertyvista.generator.SecurityGenerator;
 import com.propertyvista.misc.VistaDataPreloaderParameter;
 import com.propertyvista.server.domain.security.CrmUserCredential;
@@ -71,10 +70,6 @@ public class PmcCreator {
                     }
 
                 });
-
-                PmcCompanyInfo pmcCompanyInfo = EntityFactory.create(PmcCompanyInfo.class);
-                pmcCompanyInfo.companyName().setValue(pmc.name().getStringView());
-                Persistence.service().persist(pmcCompanyInfo);
 
                 AbstractDataPreloader preloader = VistaDataPreloaders.productionPmcPreloaders();
                 preloader.setParameterValue(VistaDataPreloaderParameter.pmcName.name(), pmc.name().getStringView());

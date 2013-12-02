@@ -112,6 +112,24 @@ public class MessageTemplates {
         return null;
     }
 
+    public static MailMessage createProspectWelcome(LeaseTermTenant tenantInLease) {
+        EmailTemplate emailTemplate = getEmailTemplate(EmailTemplateType.ProspectWelcome,
+                Persistence.service().retrieve(EntityQueryCriteria.create(OrganizationPoliciesNode.class)));
+
+        EmailTemplateContext context = EntityFactory.create(EmailTemplateContext.class);
+        context.leaseTermParticipant().set(tenantInLease);
+
+        ArrayList<IEntity> data = new ArrayList<IEntity>();
+        for (IEntity tObj : EmailTemplateManager.getTemplateDataObjects(EmailTemplateType.ProspectWelcome)) {
+            data.add(EmailTemplateRootObjectLoader.loadRootObject(tObj, context));
+        }
+        MailMessage email = new MailMessage();
+        email.setTo(tenantInLease.leaseParticipant().customer().user().email().getValue());
+        email.setSender(getSender());
+        buildEmail(email, emailTemplate, data);
+        return email;
+    }
+
     public static MailMessage createApplicationStatusEmail(LeaseTermTenant tenantInLease, EmailTemplateType type) {
         // get building policy node
         Persistence.service().retrieve(tenantInLease.leaseTermV());

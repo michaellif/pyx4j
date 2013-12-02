@@ -58,8 +58,8 @@ public class CommunicationFacadeImpl implements CommunicationFacade {
 
     @Override
     public void sendProspectWelcome(LeaseTermTenant tenant) {
-        // TODO
-        EmailTemplateType emailTemplateType = EmailTemplateType.ProspectWelcome;
+        MailMessage m = MessageTemplates.createProspectWelcome(tenant);
+        Mail.send(m);
     }
 
     @Override
