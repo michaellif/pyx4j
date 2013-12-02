@@ -163,7 +163,12 @@
                 </executions>
             </plugin>
 
-	        <!-- WebServices: XSD compilation -->
+	    <!-- WebServices: XSD compilation -->
+	    <!-- ATTENTION: All references to remote xsd includes must be manually downloaded and converted to local files, eg:
+		 <xs:include schemaLocation="http://sample.com/sample.xsd"/> change to <xs:include schemaLocation="sample.xsd"/>
+		 http://sample.com/sample.xsd must be downloaded and stored in the schemaDirectory.
+		-->
+
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>jaxb2-maven-plugin</artifactId>

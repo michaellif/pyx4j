@@ -11,7 +11,7 @@
     </jxb:globalBindings>
 
 
-    <jxb:bindings schemaLocation="http://www.nmhc.info/MITS/MITSCoreData30.xsd" >
+    <jxb:bindings schemaLocation="MITSCoreData30.xsd" >
         <jxb:schemaBindings>
             <jxb:package name="com.yardi.entity.leaseapp30"/>
         </jxb:schemaBindings>

@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified" attributeFormDefault="unqualified">
-	<xs:include schemaLocation="http://www.nmhc.info/MITS/MITSCoreData30.xsd"/>
-	<xs:include schemaLocation="http://www.nmhc.info/MITS/MITSCustomExtension.xsd"/>
+	<!-- xs:include schemaLocation="http://www.nmhc.info/MITS/MITSCoreData30.xsd"/ -->
+	<!-- xs:include schemaLocation="http://www.nmhc.info/MITS/MITSCustomExtension.xsd"/ -->
+	<xs:include schemaLocation="MITSCoreData30.xsd"/>
+	<xs:include schemaLocation="MITSCustomExtension.xsd"/>
 	<xs:element name="LeaseApplication" type="LeaseApplication">
 		<xs:annotation>
 			<xs:documentation>MITS Lease/Application 3.0m Draft 10/29/2008</xs:documentation>
