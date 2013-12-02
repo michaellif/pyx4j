@@ -166,7 +166,7 @@ public class YardiProductCatalogProcessor {
 
     private void deleteServices(ProductCatalog catalog) {
         for (Service service : catalog.services()) {
-            if (service.isDefaultCatalogItem().isBooleanTrue() && service.expiredFrom().isNull()) {
+            if (!service.isDefaultCatalogItem().isBooleanTrue() && service.expiredFrom().isNull()) {
                 service.expiredFrom().setValue(new LogicalDate(SystemDateManager.getDate()));
                 Persistence.service().merge(service);
             }
@@ -209,7 +209,7 @@ public class YardiProductCatalogProcessor {
 
     private void deleteFeatures(ProductCatalog catalog) {
         for (Feature feature : catalog.features()) {
-            if (feature.isDefaultCatalogItem().isBooleanTrue() && feature.expiredFrom().isNull()) {
+            if (!feature.isDefaultCatalogItem().isBooleanTrue() && feature.expiredFrom().isNull()) {
                 feature.expiredFrom().setValue(new LogicalDate(SystemDateManager.getDate()));
                 Persistence.service().merge(feature);
             }
