@@ -165,9 +165,6 @@ public class YardiProductCatalogProcessor {
     }
 
     private void deleteServices(ProductCatalog catalog) {
-        assert (!catalog.isValueDetached());
-        assert (!catalog.services().isValueDetached());
-
         for (Service service : catalog.services()) {
             if (service.isDefaultCatalogItem().isBooleanTrue() && service.expiredFrom().isNull()) {
                 service.expiredFrom().setValue(new LogicalDate(SystemDateManager.getDate()));
@@ -176,9 +173,6 @@ public class YardiProductCatalogProcessor {
     }
 
     private void updateServices(ProductCatalog catalog, RentableItems rentableItems) {
-        assert (!catalog.isValueDetached());
-        assert (!catalog.services().isValueDetached());
-
         deleteServices(catalog);
         catalog.services().clear();
         for (ProductTypeData typeData : retrieveProductTypeData(rentableItems, ARCode.Type.services())) {
@@ -213,9 +207,6 @@ public class YardiProductCatalogProcessor {
     }
 
     private void deleteFeatures(ProductCatalog catalog) {
-        assert (!catalog.isValueDetached());
-        assert (!catalog.features().isValueDetached());
-
         for (Feature feature : catalog.features()) {
             if (feature.isDefaultCatalogItem().isBooleanTrue() && feature.expiredFrom().isNull()) {
                 feature.expiredFrom().setValue(new LogicalDate(SystemDateManager.getDate()));
@@ -224,9 +215,6 @@ public class YardiProductCatalogProcessor {
     }
 
     private void updateFeatures(ProductCatalog catalog, RentableItems rentableItems) {
-        assert (!catalog.isValueDetached());
-        assert (!catalog.features().isValueDetached());
-
         deleteFeatures(catalog);
         catalog.features().clear();
         for (ProductTypeData typeData : retrieveProductTypeData(rentableItems, ARCode.Type.features())) {
