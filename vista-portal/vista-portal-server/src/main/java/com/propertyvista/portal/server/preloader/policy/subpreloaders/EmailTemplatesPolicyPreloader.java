@@ -821,8 +821,8 @@ public class EmailTemplatesPolicyPreloader extends AbstractPolicyPreloader<Email
         template.content().setValue(i18n.tr(//@formatter:off
                 "Dear {0},<br/><br/>" +
                 "Thank you for submitting your payment.<br/><br/>" +
-                "Your payment of <b>{1}</b> has been submitted successfully on <b>{2}</b>.<br/><br/>" + 
-                "Please keep in mind, your payment is not considered paid until it gets processed by the bank successfully, which can take 1-3 business days.<br/><br/>" +
+                "Your payment of <b>{1}</b> was submitted successfully on <b>{2}</b>.<br/><br/>" + 
+                "Please keep in mind, your payment is not considered paid until it processed by the bank successfully, which can take 1-3 business days.<br/><br/>" +
                 "Your Payment Identification Reference Number for this payment is:<br/><br/>" + 
                 "<div style=\"margin-left:80px\">#<b>{3}</b></div><br/><br/>" +
                 "You can review the status of your payment at anytime in your myCommunity portal [[{4}|here]]<br/><br/>" +
@@ -852,7 +852,7 @@ public class EmailTemplatesPolicyPreloader extends AbstractPolicyPreloader<Email
         template.content().setValue(i18n.tr(//@formatter:off
                 "Dear {0},<br/><br/>" +
                 "Thank you for submitting your payment.<br/><br/>" +
-                "Your payment of <b>{1}</b> has been successfully processed on <b>{2}</b> and your file has been updated accordingly.<br/><br/>" + 
+                "Your payment of <b>{1}</b> was successfully processed on <b>{2}</b> and your file has been updated accordingly.<br/><br/>" + 
                 "Your Payment Identification Reference Number for this payment is:<br/><br/>" + 
                 "<div style=\"margin-left:80px\">#<b>{3}</b></div><br/><br/>" +
                 "You can review the status of your payment at anytime in your myCommunity portal [[{4}|here]]<br/><br/>" +
@@ -883,7 +883,7 @@ public class EmailTemplatesPolicyPreloader extends AbstractPolicyPreloader<Email
         template.content().setValue(i18n.tr(//@formatter:off
                 "Dear {0},<br/><br/>" +
                 "Thank you for submitting your payment.<br/><br/>" +
-                "Your payment of <b>{1}</b> and your convenience fee of <b>{2}</b> has been submitted successfully on <b>{3}</b>. " + 
+                "Your payment of <b>{1}</b> and your convenience fee of <b>{2}</b> were submitted successfully on <b>{3}</b>. " + 
                 "You will see two transaction lines for the payments above from your payment provider. The convenience fee will be shown as TBD<br/><br/>" +
                 "Your Payment Identification Reference Number for these payments is:<br/><br/>" + 
                 "<div style=\"margin-left:80px\">#<b>{4}</b></div><br/><br/>" +
