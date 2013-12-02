@@ -42,7 +42,8 @@ public class FeatureLister extends AbstractLister<Feature> {
             new MemberColumnDescriptor.Builder(proto().version().name(), true).build(),
             new MemberColumnDescriptor.Builder(proto().version().mandatory(), true).build(),
             new MemberColumnDescriptor.Builder(proto().version().recurring(), true).build(),
-            new MemberColumnDescriptor.Builder(proto().version().versionNumber()).build()
+            new MemberColumnDescriptor.Builder(proto().version().versionNumber()).build(), 
+            new MemberColumnDescriptor.Builder(proto().expiredFrom(), false).build()
         );//@formatter:on
     }
 

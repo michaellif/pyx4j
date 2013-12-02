@@ -40,7 +40,8 @@ public class ServiceLister extends AbstractLister<Service> {
         setColumnDescriptors(//@formatter:off
             new MemberColumnDescriptor.Builder(proto().code()).build(),
             new MemberColumnDescriptor.Builder(proto().version().name()).build(),
-            new MemberColumnDescriptor.Builder(proto().version().versionNumber()).build()
+            new MemberColumnDescriptor.Builder(proto().version().versionNumber()).build(), 
+            new MemberColumnDescriptor.Builder(proto().expiredFrom(), false).build()
         );//@formatter:on
     }
 

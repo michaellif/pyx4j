@@ -37,32 +37,41 @@ public class ServiceForm extends CrmEntityForm<Service> {
     }
 
     public TwoColumnFlexFormPanel createGeneralTab(String title) {
-        TwoColumnFlexFormPanel main = new TwoColumnFlexFormPanel(title);
+        TwoColumnFlexFormPanel content = new TwoColumnFlexFormPanel(title);
 
         int row = -1;
-        main.setH1(++row, 0, 2, i18n.tr("Information"));
-        main.setWidget(++row, 0,
+        content.setH1(++row, 0, 2, i18n.tr("Information"));
+        content.setWidget(++row, 0,
                 new FormDecoratorBuilder(inject(proto().code(), new CEntityCrudHyperlink<ARCode>(AppPlaceEntityMapper.resolvePlace(ARCode.class))), 20).build());
-        main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().version().name()), 20).build());
-        main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().version().description()), 55).build());
+        content.setWidget(row, 1, new FormDecoratorBuilder(inject(proto().expiredFrom()), 10).build());
 
-        main.setH1(++row, 0, 2, i18n.tr("Items"));
-        main.setWidget(++row, 0, 2, inject(proto().version().items(), new ServiceItemFolder(this)));
+        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().version().name()), 20).build());
+        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().version().description()), 55).build());
 
-        return main;
+        content.setH1(++row, 0, 2, i18n.tr("Items"));
+        content.setWidget(++row, 0, 2, inject(proto().version().items(), new ServiceItemFolder(this)));
+
+        return content;
     }
 
     public TwoColumnFlexFormPanel createEligibilityTab(String title) {
-        TwoColumnFlexFormPanel main = new TwoColumnFlexFormPanel(title);
+        TwoColumnFlexFormPanel content = new TwoColumnFlexFormPanel(title);
 
         int row = -1;
-        main.setH1(++row, 0, 1, i18n.tr("Features"));
-        main.setWidget(++row, 0, inject(proto().version().features(), new ServiceFeatureFolder(isEditable(), this)));
+        content.setH1(++row, 0, 1, i18n.tr("Features"));
+        content.setWidget(++row, 0, inject(proto().version().features(), new ServiceFeatureFolder(isEditable(), this)));
 
         if (!VistaTODO.VISTA_1756_Concessions_Should_Be_Hidden) {
-            main.setH1(++row, 0, 1, i18n.tr("Concessions"));
-            main.setWidget(++row, 0, inject(proto().version().concessions(), new ServiceConcessionFolder(isEditable(), this)));
+            content.setH1(++row, 0, 1, i18n.tr("Concessions"));
+            content.setWidget(++row, 0, inject(proto().version().concessions(), new ServiceConcessionFolder(isEditable(), this)));
         }
-        return main;
+        return content;
+    }
+
+    @Override
+    protected void onValueSet(boolean populate) {
+        super.onValueSet(populate);
+
+        get(proto().expiredFrom()).setVisible(isEditable() || !getValue().expiredFrom().isNull());
     }
 }

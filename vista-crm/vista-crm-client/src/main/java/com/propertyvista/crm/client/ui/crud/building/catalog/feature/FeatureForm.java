@@ -47,9 +47,17 @@ public class FeatureForm extends CrmEntityForm<Feature> {
         row = 0;
         content.setWidget(++row, 1, new FormDecoratorBuilder(inject(proto().version().mandatory()), 4).build());
         content.setWidget(++row, 1, new FormDecoratorBuilder(inject(proto().version().recurring()), 4).build());
+        content.setWidget(++row, 1, new FormDecoratorBuilder(inject(proto().expiredFrom()), 10).build());
 
         selectTab(addTab(content));
         setTabBarVisible(false);
+    }
+
+    @Override
+    protected void onValueSet(boolean populate) {
+        super.onValueSet(populate);
+
+        get(proto().expiredFrom()).setVisible(isEditable() || !getValue().expiredFrom().isNull());
     }
 
     @Override
