@@ -806,7 +806,7 @@ public class EmailTemplatesPolicyPreloader extends AbstractPolicyPreloader<Email
         template.useHeader().setValue(Boolean.TRUE);
         template.useFooter().setValue(Boolean.TRUE);
         template.type().setValue(type);
-        template.subject().setValue(i18n.tr("Your payment has been Submitted"));
+        template.subject().setValue(i18n.tr("{0} - Your payment has been Submitted", EmailTemplateManager.getVarname(portalT.CompanyName())));
         template.content().setValue(i18n.tr(//@formatter:off
                 "Dear {0},<br/><br/>" +
                 "Thank you for submitting your payment.<br/><br/>" +
@@ -837,7 +837,7 @@ public class EmailTemplatesPolicyPreloader extends AbstractPolicyPreloader<Email
         template.useHeader().setValue(Boolean.TRUE);
         template.useFooter().setValue(Boolean.TRUE);
         template.type().setValue(type);
-        template.subject().setValue(i18n.tr("Your payment has been Processed"));
+        template.subject().setValue(i18n.tr("{0} - Your payment has been Processed", EmailTemplateManager.getVarname(portalT.CompanyName())));
         template.content().setValue(i18n.tr(//@formatter:off
                 "Dear {0},<br/><br/>" +
                 "Thank you for submitting your payment.<br/><br/>" +
@@ -868,7 +868,7 @@ public class EmailTemplatesPolicyPreloader extends AbstractPolicyPreloader<Email
         template.useHeader().setValue(Boolean.TRUE);
         template.useFooter().setValue(Boolean.TRUE);
         template.type().setValue(type);
-        template.subject().setValue(i18n.tr("Your payment has been Processed"));
+        template.subject().setValue(i18n.tr("{0} - Your payment has been Processed", EmailTemplateManager.getVarname(portalT.CompanyName())));
         template.content().setValue(i18n.tr(//@formatter:off
                 "Dear {0},<br/><br/>" +
                 "Thank you for submitting your payment.<br/><br/>" +
@@ -900,7 +900,7 @@ public class EmailTemplatesPolicyPreloader extends AbstractPolicyPreloader<Email
         template.useHeader().setValue(Boolean.TRUE);
         template.useFooter().setValue(Boolean.TRUE);
         template.type().setValue(type);
-        template.subject().setValue(i18n.tr("YOUR PAYMENT WAS NOT PROCESSED"));
+        template.subject().setValue(i18n.tr("{0} - YOUR PAYMENT WAS NOT PROCESSED", EmailTemplateManager.getVarname(portalT.CompanyName())));
         template.content().setValue(i18n.tr(//@formatter:off
                 "Dear {0},<br/><br/>" +
                 "Your payment of <b>{1}</b> on <b>{2}</b> was <b>not</b> successfully processed for the following reason:<br/><br/>" +
@@ -934,7 +934,7 @@ public class EmailTemplatesPolicyPreloader extends AbstractPolicyPreloader<Email
         template.useHeader().setValue(Boolean.TRUE);
         template.useFooter().setValue(Boolean.TRUE);
         template.type().setValue(type);
-        template.subject().setValue(i18n.tr("AutoPay Setup Confirmation"));
+        template.subject().setValue(i18n.tr("{0} - AutoPay Setup Confirmation", EmailTemplateManager.getVarname(portalT.CompanyName())));
         template.content().setValue(i18n.tr(//@formatter:off
                 "Dear {0},<br/><br/>" +
                 "Thank you for setting up your AutoPay payment.<br/><br/>" + 
