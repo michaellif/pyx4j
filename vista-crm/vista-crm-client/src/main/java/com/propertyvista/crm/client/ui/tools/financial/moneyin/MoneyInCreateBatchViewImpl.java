@@ -20,6 +20,7 @@ import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.LayoutPanel;
 import com.google.gwt.user.client.ui.SimplePanel;
+import com.google.gwt.view.client.HasData;
 
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.DefaultPaneTheme;
@@ -28,6 +29,7 @@ import com.pyx4j.widgets.client.Button;
 import com.pyx4j.widgets.client.actionbar.Toolbar;
 
 import com.propertyvista.crm.client.ui.tools.financial.moneyin.datagrid.MoneyInCandidateDataGrid;
+import com.propertyvista.crm.rpc.dto.financial.autopayreview.moneyin.MoneyInCandidateDTO;
 
 public class MoneyInCreateBatchViewImpl extends AbstractPrimePane implements MoneyInCreateBatchView {
 
@@ -59,6 +61,16 @@ public class MoneyInCreateBatchViewImpl extends AbstractPrimePane implements Mon
     public void setPresenter(MoneyInCreateBatchView.Presenter presenter) {
         this.presenter = presenter;
         this.searchCandidateDataGrid.setPresenter(presenter);
+    }
+
+    @Override
+    public HasData<MoneyInCandidateDTO> searchResults() {
+        return this.searchCandidateDataGrid;
+    }
+
+    @Override
+    public HasData<MoneyInCandidateDTO> selectedForProcessing() {
+        return null;
     }
 
     private LayoutPanel initViewPanel() {

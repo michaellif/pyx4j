@@ -17,17 +17,17 @@ import java.text.ParseException;
 
 import com.pyx4j.forms.client.ui.IFormat;
 
-import com.propertyvista.crm.rpc.dto.financial.autopayreview.moneyin.MoneyInPayerOptionDTO;
+import com.propertyvista.crm.rpc.dto.financial.autopayreview.moneyin.MoneyInLeaseParticipantDTO;
 
-public class PayerOptionFormat implements IFormat<MoneyInPayerOptionDTO> {
+public class PayerOptionFormat implements IFormat<MoneyInLeaseParticipantDTO> {
 
     @Override
-    public String format(MoneyInPayerOptionDTO value) {
+    public String format(MoneyInLeaseParticipantDTO value) {
         return value.name().getValue();
     }
 
     @Override
-    public MoneyInPayerOptionDTO parse(String string) throws ParseException {
+    public MoneyInLeaseParticipantDTO parse(String string) throws ParseException {
         return null; // should not be used 
     }
 

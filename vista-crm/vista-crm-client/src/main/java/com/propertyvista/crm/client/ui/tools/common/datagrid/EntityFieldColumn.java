@@ -24,7 +24,7 @@ public class EntityFieldColumn<E extends IEntity, DataType> extends Column<E, Da
 
     private final Path fieldPath;
 
-    public EntityFieldColumn(IObject<DataType> field, Cell<DataType> cell) {
+    public EntityFieldColumn(IObject<? extends DataType> field, Cell<DataType> cell) {
         super(cell);
         this.fieldPath = field.getPath();
     }

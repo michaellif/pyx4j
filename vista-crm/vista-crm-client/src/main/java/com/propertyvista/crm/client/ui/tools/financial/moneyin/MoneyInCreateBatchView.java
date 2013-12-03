@@ -15,21 +15,16 @@ package com.propertyvista.crm.client.ui.tools.financial.moneyin;
 
 import java.math.BigDecimal;
 
-import com.google.gwt.view.client.AbstractDataProvider;
-import com.google.gwt.view.client.SelectionModel;
+import com.google.gwt.view.client.HasData;
 
 import com.pyx4j.site.client.ui.prime.IPrimePane;
 
 import com.propertyvista.crm.rpc.dto.financial.autopayreview.moneyin.MoneyInCandidateDTO;
-import com.propertyvista.crm.rpc.dto.financial.autopayreview.moneyin.MoneyInPayerOptionDTO;
+import com.propertyvista.crm.rpc.dto.financial.autopayreview.moneyin.MoneyInLeaseParticipantDTO;
 
 public interface MoneyInCreateBatchView extends IPrimePane {
 
     interface Presenter extends IPrimePane.Presenter {
-
-        AbstractDataProvider<MoneyInCandidateDTO> getDataProvider();
-
-        SelectionModel<MoneyInCandidateDTO> getSelectionModel();
 
         void search();
 
@@ -37,14 +32,17 @@ public interface MoneyInCreateBatchView extends IPrimePane {
 
         void setAmount(MoneyInCandidateDTO candidate, BigDecimal amountToPay);
 
-        void setCheckNumber(MoneyInCandidateDTO candidate, BigDecimal chequeNumber);
+        void setCheckNumber(MoneyInCandidateDTO candidate, String checkNumber);
+
+        void setPayer(MoneyInCandidateDTO candidate, MoneyInLeaseParticipantDTO payer);
 
         void createBatch();
-
-        void setPayer(MoneyInCandidateDTO object, MoneyInPayerOptionDTO selectedOption);
-
     }
 
     void setPresenter(Presenter presenter);
+
+    HasData<MoneyInCandidateDTO> searchResults();
+
+    HasData<MoneyInCandidateDTO> selectedForProcessing();
 
 }

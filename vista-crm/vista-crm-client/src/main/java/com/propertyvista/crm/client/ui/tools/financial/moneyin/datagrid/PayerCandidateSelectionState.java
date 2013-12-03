@@ -15,18 +15,18 @@ package com.propertyvista.crm.client.ui.tools.financial.moneyin.datagrid;
 
 import com.propertyvista.crm.client.ui.tools.common.datagrid.ObjectSelectionState;
 import com.propertyvista.crm.rpc.dto.financial.autopayreview.moneyin.MoneyInCandidateDTO;
-import com.propertyvista.crm.rpc.dto.financial.autopayreview.moneyin.MoneyInPayerOptionDTO;
+import com.propertyvista.crm.rpc.dto.financial.autopayreview.moneyin.MoneyInLeaseParticipantDTO;
 
-public class PayerCandidateSelectionState extends ObjectSelectionState<MoneyInPayerOptionDTO> {
+public class PayerCandidateSelectionState extends ObjectSelectionState<MoneyInLeaseParticipantDTO> {
 
     public PayerCandidateSelectionState(MoneyInCandidateDTO candidate) {
         super(candidate.payerCandidates(), extractSelected(candidate));
     }
 
-    private static MoneyInPayerOptionDTO extractSelected(MoneyInCandidateDTO candidate) {
-        MoneyInPayerOptionDTO selected = null;
+    private static MoneyInLeaseParticipantDTO extractSelected(MoneyInCandidateDTO candidate) {
+        MoneyInLeaseParticipantDTO selected = null;
         if (candidate.payment().payerTenantIdStub().getPrimaryKey() != null) {
-            for (MoneyInPayerOptionDTO payerCandidate : candidate.payerCandidates()) {
+            for (MoneyInLeaseParticipantDTO payerCandidate : candidate.payerCandidates()) {
                 if (payerCandidate.tenantIdStub().getPrimaryKey().equals(candidate.payment().payerTenantIdStub().getPrimaryKey())) {
                     selected = payerCandidate;
                     break;

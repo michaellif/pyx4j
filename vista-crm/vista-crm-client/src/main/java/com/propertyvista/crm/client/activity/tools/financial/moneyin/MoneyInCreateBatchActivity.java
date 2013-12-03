@@ -20,11 +20,8 @@ import java.util.List;
 import com.google.gwt.activity.shared.AbstractActivity;
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
-import com.google.gwt.view.client.AbstractDataProvider;
 import com.google.gwt.view.client.ListDataProvider;
-import com.google.gwt.view.client.MultiSelectionModel;
 import com.google.gwt.view.client.ProvidesKey;
-import com.google.gwt.view.client.SelectionModel;
 
 import com.pyx4j.commons.Key;
 import com.pyx4j.entity.shared.EntityFactory;
@@ -33,41 +30,29 @@ import com.pyx4j.site.rpc.AppPlace;
 import com.propertyvista.crm.client.CrmSite;
 import com.propertyvista.crm.client.ui.tools.financial.moneyin.MoneyInCreateBatchView;
 import com.propertyvista.crm.rpc.dto.financial.autopayreview.moneyin.MoneyInCandidateDTO;
-import com.propertyvista.crm.rpc.dto.financial.autopayreview.moneyin.MoneyInPayerOptionDTO;
+import com.propertyvista.crm.rpc.dto.financial.autopayreview.moneyin.MoneyInLeaseParticipantDTO;
 
 public class MoneyInCreateBatchActivity extends AbstractActivity implements MoneyInCreateBatchView.Presenter {
 
     private final MoneyInCreateBatchView view;
 
-    private final ListDataProvider<MoneyInCandidateDTO> dataProvider;
-
-    private final MultiSelectionModel<MoneyInCandidateDTO> selectionModel;
+    private final ListDataProvider<MoneyInCandidateDTO> searchResultsProvider;
 
     public MoneyInCreateBatchActivity() {
         view = CrmSite.getViewFactory().getView(MoneyInCreateBatchView.class);
-        dataProvider = new ListDataProvider<MoneyInCandidateDTO>(makeMockCandidates(), new ProvidesKey<MoneyInCandidateDTO>() {
+        searchResultsProvider = new ListDataProvider<MoneyInCandidateDTO>(makeMockCandidates(), new ProvidesKey<MoneyInCandidateDTO>() {
             @Override
             public Object getKey(MoneyInCandidateDTO item) {
                 return item.leaseIdStub().getPrimaryKey();
             }
         });
-        selectionModel = new MultiSelectionModel<MoneyInCandidateDTO>(dataProvider.getKeyProvider());
     }
 
     @Override
     public void start(AcceptsOneWidget panel, EventBus eventBus) {
         view.setPresenter(this);
+        searchResultsProvider.addDataDisplay(view.searchResults());
         panel.setWidget(view);
-    }
-
-    @Override
-    public AbstractDataProvider<MoneyInCandidateDTO> getDataProvider() {
-        return this.dataProvider;
-    }
-
-    @Override
-    public SelectionModel<MoneyInCandidateDTO> getSelectionModel() {
-        return this.selectionModel;
     }
 
     @Override
@@ -78,28 +63,27 @@ public class MoneyInCreateBatchActivity extends AbstractActivity implements Mone
     @Override
     public void setProcessCandidate(MoneyInCandidateDTO candidate, boolean process) {
         candidate.processPayment().setValue(process);
-        int i = this.dataProvider.getList().indexOf(candidate);
-        this.dataProvider.getList().set(i, candidate);
+        updateView(candidate);
     }
 
     @Override
-    public void setPayer(MoneyInCandidateDTO candidate, MoneyInPayerOptionDTO payer) {
+    public void setPayer(MoneyInCandidateDTO candidate, MoneyInLeaseParticipantDTO payer) {
         if (payer == null) {
             candidate.payment().payerTenantIdStub().set(null);
         } else {
             candidate.payment().payerTenantIdStub().set(payer.tenantIdStub().duplicate());
         }
-        int i = this.dataProvider.getList().indexOf(candidate);
-        this.dataProvider.getList().set(i, candidate);
+        updateView(candidate);
     }
 
     @Override
     public void setAmount(MoneyInCandidateDTO candidate, BigDecimal amountToPay) {
-        // TODO Auto-generated method stub
+        candidate.payment().payedAmount().setValue(amountToPay);
+        updateView(candidate);
     }
 
     @Override
-    public void setCheckNumber(MoneyInCandidateDTO candidate, BigDecimal chequeNumber) {
+    public void setCheckNumber(MoneyInCandidateDTO candidate, String checkNumber) {
         // TODO Auto-generated method stub
     }
 
@@ -121,6 +105,11 @@ public class MoneyInCreateBatchActivity extends AbstractActivity implements Mone
         return null;
     }
 
+    private void updateView(MoneyInCandidateDTO candidate) {
+        int i = this.searchResultsProvider.getList().indexOf(candidate);
+        this.searchResultsProvider.getList().set(i, candidate);
+    }
+
     private List<MoneyInCandidateDTO> makeMockCandidates() {
         List<MoneyInCandidateDTO> mockCandidates = new LinkedList<MoneyInCandidateDTO>();
         for (int i = 1; i < 101; ++i) {
@@ -140,7 +129,7 @@ public class MoneyInCreateBatchActivity extends AbstractActivity implements Mone
         c.totalOutstanding().setValue(new BigDecimal("1077.00"));
 
         for (int t = 1; t != 3; ++t) {
-            MoneyInPayerOptionDTO payer = c.payerCandidates().$();
+            MoneyInLeaseParticipantDTO payer = c.payerCandidates().$();
             payer.tenantIdStub().setPrimaryKey(new Key(t));
             payer.name().setValue("Tenat Tenantovic #" + t);
             c.payerCandidates().add(payer);
