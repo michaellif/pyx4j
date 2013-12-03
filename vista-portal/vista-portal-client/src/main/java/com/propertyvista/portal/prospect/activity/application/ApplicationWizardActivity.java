@@ -14,28 +14,37 @@
 package com.propertyvista.portal.prospect.activity.application;
 
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.event.shared.EventBus;
+import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
-import com.pyx4j.commons.Key;
-import com.pyx4j.site.client.AppSite;
+import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.site.rpc.AppPlace;
 
 import com.propertyvista.portal.prospect.ui.application.ApplicationWizardView;
 import com.propertyvista.portal.prospect.ui.application.ApplicationWizardView.ApplicationWizardPresenter;
 import com.propertyvista.portal.rpc.portal.prospect.dto.OnlineApplicationDTO;
 import com.propertyvista.portal.rpc.portal.prospect.services.ApplicationWizardService;
-import com.propertyvista.portal.rpc.portal.resident.ResidentPortalSiteMap.Financial;
-import com.propertyvista.portal.shared.activity.AbstractWizardCrudActivity;
+import com.propertyvista.portal.shared.activity.AbstractWizardActivity;
 
-public class ApplicationWizardActivity extends AbstractWizardCrudActivity<OnlineApplicationDTO> implements ApplicationWizardPresenter {
+public class ApplicationWizardActivity extends AbstractWizardActivity<OnlineApplicationDTO> implements ApplicationWizardPresenter {
+
+    private final ApplicationWizardService service;
 
     public ApplicationWizardActivity(AppPlace place) {
-        super(ApplicationWizardView.class, GWT.<ApplicationWizardService> create(ApplicationWizardService.class), OnlineApplicationDTO.class);
+        super(ApplicationWizardView.class);
+
+        this.service = GWT.<ApplicationWizardService> create(ApplicationWizardService.class);
     }
 
     @Override
-    protected void onFinish(Key result) {
-        getView().reset();
-        AppSite.getPlaceController().goTo(new Financial.PreauthorizedPayments.PreauthorizedPaymentSubmitted(result));
+    public void start(final AcceptsOneWidget panel, final EventBus eventBus) {
+        super.start(panel, eventBus);
+        service.init(new DefaultAsyncCallback<OnlineApplicationDTO>() {
+            @Override
+            public void onSuccess(OnlineApplicationDTO result) {
+                getView().populate(result);
+            }
+        });
     }
 
 }

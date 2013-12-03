@@ -13,8 +13,11 @@
  */
 package com.propertyvista.portal.prospect.ui.application;
 
+import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.commons.css.StyleManager;
 import com.pyx4j.commons.css.ThemeColor;
+import com.pyx4j.forms.client.ui.CEntityLabel;
+import com.pyx4j.forms.client.ui.CLabel;
 import com.pyx4j.forms.client.ui.decorators.IDecorator;
 import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
 import com.pyx4j.forms.client.ui.wizard.CEntityWizard;
@@ -24,10 +27,15 @@ import com.pyx4j.forms.client.ui.wizard.WizardStep;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.security.shared.SecurityController;
 
+import com.propertyvista.domain.contact.AddressStructured;
+import com.propertyvista.domain.property.asset.Floorplan;
 import com.propertyvista.domain.security.PortalProspectBehavior;
 import com.propertyvista.portal.prospect.ui.application.ApplicationWizardView.ApplicationWizardPresenter;
+import com.propertyvista.portal.resident.ui.profile.EmergencyContactFolder;
+import com.propertyvista.portal.resident.ui.profile.ProfilePageViewImpl;
 import com.propertyvista.portal.rpc.portal.prospect.dto.OnlineApplicationDTO;
 import com.propertyvista.portal.shared.ui.CPortalEntityWizard;
+import com.propertyvista.portal.shared.ui.util.decorators.FormWidgetDecoratorBuilder;
 
 public class ApplicationWizard extends CPortalEntityWizard<OnlineApplicationDTO> {
 
@@ -101,9 +109,21 @@ public class ApplicationWizard extends CPortalEntityWizard<OnlineApplicationDTO>
 
         panel.setH3(++row, 0, 1, i18n.tr("Unit"));
 
+        panel.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().unit().info().number(), new CLabel<String>())).build());
+        panel.setWidget(++row, 0,
+                new FormWidgetDecoratorBuilder(inject(proto().unit().building().info().address(), new CEntityLabel<AddressStructured>())).build());
+        panel.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().unit().floorplan(), new CEntityLabel<Floorplan>())).build());
+
         panel.setH3(++row, 0, 1, i18n.tr("Lease Term"));
 
+        panel.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().leaseFrom(), new CLabel<LogicalDate>())).build());
+        panel.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().leaseTo(), new CLabel<LogicalDate>())).build());
+
+        panel.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().leasePrice(), new CLabel<LogicalDate>())).build());
+
         panel.setH3(++row, 0, 1, i18n.tr("Lease Options"));
+
+        panel.setWidget(++row, 0, inject(proto().options(), new ApplicationOptionsFolder((ApplicationWizardViewImpl) getView())));
 
         if (SecurityController.checkBehavior(PortalProspectBehavior.Applicant) && !SecurityController.checkBehavior(PortalProspectBehavior.CanEditLeaseTerms)) {
             panel.setH3(++row, 0, 1, i18n.tr("People"));

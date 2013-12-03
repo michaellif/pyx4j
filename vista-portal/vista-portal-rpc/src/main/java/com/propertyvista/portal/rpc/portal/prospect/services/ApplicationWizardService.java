@@ -13,10 +13,21 @@
  */
 package com.propertyvista.portal.rpc.portal.prospect.services;
 
-import com.pyx4j.entity.rpc.AbstractCrudService;
+import com.google.gwt.user.client.rpc.AsyncCallback;
+
+import com.pyx4j.commons.Key;
+import com.pyx4j.rpc.shared.IService;
+import com.pyx4j.rpc.shared.ServiceExecution;
 
 import com.propertyvista.portal.rpc.portal.prospect.dto.OnlineApplicationDTO;
 
-public interface ApplicationWizardService extends AbstractCrudService<OnlineApplicationDTO> {
+public interface ApplicationWizardService extends IService {
+
+    public void init(AsyncCallback<OnlineApplicationDTO> callback);
+
+    @ServiceExecution(waitCaption = "Saving...")
+    public void save(AsyncCallback<Key> callback, OnlineApplicationDTO editableEntity);
+
+    public void submit(AsyncCallback<Key> callback, OnlineApplicationDTO editableEntity);
 
 }

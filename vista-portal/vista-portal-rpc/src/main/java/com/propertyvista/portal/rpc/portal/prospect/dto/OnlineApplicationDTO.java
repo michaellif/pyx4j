@@ -13,13 +13,17 @@
  */
 package com.propertyvista.portal.rpc.portal.prospect.dto;
 
+import java.math.BigDecimal;
+
 import com.pyx4j.commons.LogicalDate;
+import com.pyx4j.entity.annotations.Editor;
+import com.pyx4j.entity.annotations.Editor.EditorType;
+import com.pyx4j.entity.annotations.Format;
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
 
-import com.propertyvista.domain.financial.offering.Product.ProductV;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 
 @Transient
@@ -29,11 +33,15 @@ public interface OnlineApplicationDTO extends IEntity {
 
     AptUnit unit();
 
-    IPrimitive<LogicalDate> termFrom();
+    IPrimitive<LogicalDate> leaseFrom();
 
-    IPrimitive<LogicalDate> termTo();
+    IPrimitive<LogicalDate> leaseTo();
 
-    IList<ProductV<?>> options();
+    @Format("#,##0.00")
+    @Editor(type = EditorType.money)
+    IPrimitive<BigDecimal> leasePrice();
+
+    IList<OptionDTO> options();
 
     IList<CoApplicantDTO> tenants();
 

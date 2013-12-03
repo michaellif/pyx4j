@@ -14,20 +14,30 @@
 package com.propertyvista.portal.resident.ui.profile;
 
 import com.google.gwt.user.client.Command;
+import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.entity.shared.IObject;
+import com.pyx4j.forms.client.events.PropertyChangeEvent;
+import com.pyx4j.forms.client.events.PropertyChangeHandler;
+import com.pyx4j.forms.client.events.PropertyChangeEvent.PropertyName;
 import com.pyx4j.forms.client.ui.CComponent;
+import com.pyx4j.forms.client.ui.CEntityForm;
+import com.pyx4j.forms.client.ui.CEntityLabel;
 import com.pyx4j.forms.client.ui.folder.BoxFolderDecorator;
 import com.pyx4j.forms.client.ui.folder.BoxFolderItemDecorator;
 import com.pyx4j.forms.client.ui.folder.CEntityFolder;
 import com.pyx4j.forms.client.ui.folder.CEntityFolderItem;
 import com.pyx4j.forms.client.ui.folder.IFolderDecorator;
 import com.pyx4j.forms.client.ui.folder.IFolderItemDecorator;
+import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
 
 import com.propertyvista.common.client.resources.VistaImages;
+import com.propertyvista.domain.person.Name;
 import com.propertyvista.domain.tenant.EmergencyContact;
+import com.propertyvista.portal.resident.ui.PortalAddressSimpleEditor;
+import com.propertyvista.portal.shared.ui.util.decorators.FormWidgetDecoratorBuilder;
 
 public class EmergencyContactFolder extends CEntityFolder<EmergencyContact> {
 
@@ -57,7 +67,7 @@ public class EmergencyContactFolder extends CEntityFolder<EmergencyContact> {
     @Override
     public CComponent<?> create(IObject<?> member) {
         if (member instanceof EmergencyContact) {
-            return new EmergencyContactForm(view);
+            return new EmergencyContactForm();
         } else {
             return super.create(member);
         }
@@ -71,5 +81,62 @@ public class EmergencyContactFolder extends CEntityFolder<EmergencyContact> {
                 EmergencyContactFolder.super.removeItem(item);
             }
         });
+    }
+
+    class EmergencyContactForm extends CEntityForm<EmergencyContact> {
+
+        public EmergencyContactForm() {
+            super(EmergencyContact.class);
+        }
+
+        @Override
+        public IsWidget createContent() {
+            BasicFlexFormPanel mainPanel = new BasicFlexFormPanel();
+
+            int row = -1;
+            mainPanel.setWidget(++row, 0,
+                    new FormWidgetDecoratorBuilder(inject(proto().name(), new CEntityLabel<Name>()), 200).customLabel(i18n.tr("Full Name")).build());
+
+            mainPanel.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().name().firstName()), 200).build());
+            mainPanel.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().name().lastName()), 200).build());
+            mainPanel.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().name().namePrefix()), 70).build());
+
+            mainPanel.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().email()), 230).build());
+            mainPanel.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().homePhone()), 200).build());
+            mainPanel.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().mobilePhone()), 200).build());
+            mainPanel.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().workPhone()), 200).build());
+
+            mainPanel.setWidget(++row, 0, inject(proto().address(), new PortalAddressSimpleEditor()));
+
+            calculateFieldsStatus();
+
+            addPropertyChangeHandler(new PropertyChangeHandler() {
+
+                @Override
+                public void onPropertyChange(PropertyChangeEvent event) {
+                    if (event.isEventOfType(PropertyName.viewable)) {
+                        calculateFieldsStatus();
+                    }
+                }
+            });
+
+            return mainPanel;
+        }
+
+        private void calculateFieldsStatus() {
+            if (isViewable()) {
+                get(proto().name()).setVisible(true);
+                get(proto().name().firstName()).setVisible(false);
+                get(proto().name().lastName()).setVisible(false);
+                get(proto().name().namePrefix()).setVisible(false);
+            } else {
+                get(proto().name()).setVisible(false);
+                get(proto().name().firstName()).setVisible(true);
+                get(proto().name().lastName()).setVisible(true);
+                get(proto().name().namePrefix()).setVisible(true);
+            }
+
+        }
+
     }
 }
