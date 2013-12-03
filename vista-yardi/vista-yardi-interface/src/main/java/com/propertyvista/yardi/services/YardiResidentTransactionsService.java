@@ -171,8 +171,15 @@ public class YardiResidentTransactionsService extends YardiAbstractService {
                 }
             }
 
+            // product catalog:
+            if (!executionMonitor.isTerminationRequested()) {
+                for (Building building : importedBuildings) {
+                    updateProductCatalog(yc, building);
+                }
+            }
+
             // availability
-            if (false || !executionMonitor.isTerminationRequested() && (ApplicationMode.isDevelopment() || !VistaTODO.pendingYardiConfigPatchILS)) {
+            if (!executionMonitor.isTerminationRequested() && (ApplicationMode.isDevelopment() || !VistaTODO.pendingYardiConfigPatchILS)) {
                 YardiILSGuestCardStub ilsStub = ServerSideFactory.create(YardiILSGuestCardStub.class);
                 List<PhysicalProperty> properties = getILSPropertyMarketing(ilsStub, yc, executionMonitor, propertyListCodes);
                 for (PhysicalProperty property : properties) {
@@ -183,6 +190,7 @@ public class YardiResidentTransactionsService extends YardiAbstractService {
                     importPropertyMarketingInfo(yardiInterfaceId, property, executionMonitor, ilsStub);
                 }
             }
+
         } finally {
             executionMonitor.addInfoEvent("yardiTime", TimeUtils.durationFormat(stub.getRequestsTime()), new BigDecimal(stub.getRequestsTime()));
             ServerSideFactory.create(NotificationFacade.class).aggregatedNotificationsSend();
@@ -228,12 +236,10 @@ public class YardiResidentTransactionsService extends YardiAbstractService {
     }
 
     public void updateProductCatalog(PmcYardiCredential yc, Building building) throws YardiServiceException {
-        final Key yardiInterfaceId = yc.getPrimaryKey();
-        String propertyCode = building.propertyCode().getValue();
         YardiGuestManagementStub stub = ServerSideFactory.create(YardiGuestManagementStub.class);
-        RentableItems rentableItems = stub.getRentableItems(yc, propertyCode);
+        RentableItems rentableItems = stub.getRentableItems(yc, building.propertyCode().getValue());
         if (rentableItems != null && !rentableItems.getItemType().isEmpty()) {
-            importProductCatalog(yardiInterfaceId, building, rentableItems);
+            importProductCatalog(yc.getPrimaryKey(), building, rentableItems);
         }
     }
 
