@@ -101,7 +101,9 @@ public class MoneyInCreateBatchActivity extends AbstractActivity implements Mone
 
     @Override
     public void setCheckNumber(MoneyInCandidateDTO candidate, String checkNumber) {
-        // TODO Auto-generated method stub
+        candidate.payment().checkNumber().setValue(checkNumber);
+        updateSearchResultsView(candidate);
+        updateSelectedForProcessingView(candidate);
     }
 
     @Override

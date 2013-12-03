@@ -14,6 +14,7 @@
 package com.propertyvista.crm.client.ui.tools.financial.moneyin.datagrid;
 
 import java.math.BigDecimal;
+import java.text.ParseException;
 
 import com.google.gwt.cell.client.CheckboxCell;
 import com.google.gwt.cell.client.FieldUpdater;
@@ -23,14 +24,15 @@ import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.i18n.client.NumberFormat;
 import com.google.gwt.user.cellview.client.Column;
 
+import com.pyx4j.forms.client.ui.IFormat;
 import com.pyx4j.forms.client.ui.formatters.MoneyFormat;
 import com.pyx4j.i18n.shared.I18n;
 
-import com.propertyvista.crm.client.ui.tools.common.datagrid.VistaDataGrid;
 import com.propertyvista.crm.client.ui.tools.common.datagrid.EntityFieldColumn;
 import com.propertyvista.crm.client.ui.tools.common.datagrid.ObjectEditCell;
 import com.propertyvista.crm.client.ui.tools.common.datagrid.ObjectSelectionCell;
 import com.propertyvista.crm.client.ui.tools.common.datagrid.ObjectSelectionState;
+import com.propertyvista.crm.client.ui.tools.common.datagrid.VistaDataGrid;
 import com.propertyvista.crm.client.ui.tools.common.datagrid.VistaDataGridStyles;
 import com.propertyvista.crm.client.ui.tools.financial.moneyin.MoneyInCreateBatchView;
 import com.propertyvista.crm.client.ui.tools.financial.moneyin.MoneyInCreateBatchView.Presenter;
@@ -113,6 +115,34 @@ public class MoneyInCandidateDataGrid extends VistaDataGrid<MoneyInCandidateDTO>
         });
         amountToPayColumn.setCellStyleNames(VistaDataGridStyles.VistaMoneyCell.name());
         defColumn(amountToPayColumn, i18n.tr("Amount to Pay"), 50, Unit.PX);
+
+        Column<MoneyInCandidateDTO, String> checkNumberColumn = new Column<MoneyInCandidateDTO, String>(new ObjectEditCell<String>(new IFormat<String>() {
+            @Override
+            public String format(String value) {
+                return value == null ? "" : value;
+            }
+
+            @Override
+            public String parse(String string) throws ParseException {
+                if (string == null || !string.trim().matches("[0-9]*")) {
+                    throw new ParseException(i18n.tr("Check number may contain only digits"), 0);
+                }
+                return string;
+            }
+        }, ObjectEditCell.Styles.ObjectEditCell.name() + " " + VistaDataGridStyles.VistaMoneyCell.name(), null)) {
+            @Override
+            public String getValue(MoneyInCandidateDTO object) {
+                return object.payment().checkNumber().getValue();
+            }
+        };
+        checkNumberColumn.setFieldUpdater(new FieldUpdater<MoneyInCandidateDTO, String>() {
+            @Override
+            public void update(int index, MoneyInCandidateDTO object, String checkNumber) {
+                presenter.setCheckNumber(object, checkNumber);
+            }
+        });
+        checkNumberColumn.setCellStyleNames(VistaDataGridStyles.VistaMoneyCell.name());
+        defColumn(checkNumberColumn, i18n.tr("Ref #"), 40, Unit.PX);
 
         Column<MoneyInCandidateDTO, Boolean> processColumn = new Column<MoneyInCandidateDTO, Boolean>(new CheckboxCell(false, false)) {
             @Override
