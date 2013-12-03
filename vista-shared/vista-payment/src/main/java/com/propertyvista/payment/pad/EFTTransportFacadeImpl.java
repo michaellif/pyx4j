@@ -46,7 +46,7 @@ public class EFTTransportFacadeImpl implements EFTTransportFacade {
     private static final Logger log = LoggerFactory.getLogger(EFTTransportFacadeImpl.class);
 
     @Override
-    public void sendPadFile(PadFile padFile) {
+    public void sendPadFile(PadFile padFile) throws FileCreationException, SftpTransportConnectionException {
         File padWorkdir = getPadBaseDir();
         File file = null;
         try {
@@ -64,7 +64,7 @@ public class EFTTransportFacadeImpl implements EFTTransportFacade {
                 }
             } while (file.exists() || fileSent.exists());
 
-            log.info("sending pad file {}", file.getAbsolutePath());
+            log.debug("creating pad file {}", file.getAbsolutePath());
 
             CaledonPadFileWriter writer = new CaledonPadFileWriter(padFile, file);
             try {
@@ -72,18 +72,31 @@ public class EFTTransportFacadeImpl implements EFTTransportFacade {
             } finally {
                 writer.close();
             }
-
-            String errorMessage = new CaledonPadSftpClient().sftpPut(padFile.fundsTransferType().getValue(), file);
-            if (errorMessage != null) {
-                throw new Error(errorMessage);
-            }
-            log.info("pad file sent {}", file.getAbsolutePath());
         } catch (Throwable e) {
             log.error("pad write error", e);
             if (file != null) {
                 move(file, padWorkdir, "error");
             }
-            throw new Error(e.getMessage());
+            throw new FileCreationException(e.getMessage(), e);
+        }
+
+        try {
+
+            log.info("sending pad file {}", file.getAbsolutePath());
+
+            new CaledonPadSftpClient().sftpPut(padFile.fundsTransferType().getValue(), file);
+
+            log.info("pad file sent {}", file.getAbsolutePath());
+        } catch (Throwable e) {
+            log.error("pad send error", e);
+            if (file != null) {
+                move(file, padWorkdir, "error");
+            }
+            if (e instanceof SftpTransportConnectionException) {
+                throw (SftpTransportConnectionException) e;
+            } else {
+                throw new Error(e.getMessage());
+            }
         }
         move(file, padWorkdir, "processed");
     }

@@ -44,6 +44,7 @@ import com.propertyvista.operations.domain.payment.pad.PadFile;
 import com.propertyvista.operations.domain.payment.pad.PadFileCreationNumber;
 import com.propertyvista.operations.domain.payment.pad.PadReconciliationFile;
 import com.propertyvista.payment.pad.EFTTransportFacade;
+import com.propertyvista.payment.pad.FileCreationException;
 import com.propertyvista.payment.pad.data.PadAckFile;
 import com.propertyvista.server.sftp.SftpTransportConnectionException;
 
@@ -162,6 +163,14 @@ public class FundsTransferCaledon {
             ServerSideFactory.create(EFTTransportFacade.class).sendPadFile(padFile);
             padFile.status().setValue(PadFile.PadFileStatus.Sent);
             padFile.sent().setValue(new Date());
+        } catch (SftpTransportConnectionException e) {
+            // Allow to recover the process automatically
+            sendError = e;
+            padFile.status().setValue(PadFile.PadFileStatus.Creating);
+        } catch (FileCreationException e) {
+            // Allow to recover the process automatically
+            sendError = e;
+            padFile.status().setValue(PadFile.PadFileStatus.Creating);
         } catch (Throwable e) {
             sendError = e;
             padFile.status().setValue(PadFile.PadFileStatus.SendError);

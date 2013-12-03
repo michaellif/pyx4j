@@ -22,7 +22,7 @@ import com.propertyvista.server.sftp.SftpTransportConnectionException;
 
 public interface EFTTransportFacade {
 
-    void sendPadFile(PadFile padFile);
+    void sendPadFile(PadFile padFile) throws SftpTransportConnectionException, FileCreationException;
 
     PadAckFile receivePadAcknowledgementFile(String companyId) throws SftpTransportConnectionException;
 

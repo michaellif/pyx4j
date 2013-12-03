@@ -34,15 +34,15 @@ public class CaledonPadSftpClient {
         configuration = ServerSideConfiguration.instance(AbstractVistaServerSideConfiguration.class).getCaledonFundsTransferConfiguration();
     }
 
-    public String sftpPut(FundsTransferType fundsTransferType, File file) {
-        return SftpClient.sftpPut(configuration, file, fundsTransferType.getDirectoryName(CaledonFundsTransferDirectories.postDst));
+    public void sftpPut(FundsTransferType fundsTransferType, File file) throws SftpTransportConnectionException {
+        SftpClient.sftpPut(configuration, file, fundsTransferType.getDirectoryName(CaledonFundsTransferDirectories.postDst));
     }
 
-    public String sftpPutSim(FundsTransferType fundsTransferType, File file) {
+    public void sftpPutSim(FundsTransferType fundsTransferType, File file) throws SftpTransportConnectionException {
         if (!ApplicationMode.isDevelopment()) {
             throw new UserRuntimeException("FundsTransfer Simulator is not available");
         }
-        return SftpClient.sftpPut(configuration, file, fundsTransferType.getDirectoryName(CaledonFundsTransferDirectories.getSrc));
+        SftpClient.sftpPut(configuration, file, fundsTransferType.getDirectoryName(CaledonFundsTransferDirectories.getSrc));
     }
 
     public CaledonFundsTransferSftpFile receiveFiles(String companyId, CaledonFundsTransferFileType padFileType, File targetDirectory)

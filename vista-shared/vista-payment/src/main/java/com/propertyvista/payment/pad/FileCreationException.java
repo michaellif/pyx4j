@@ -7,20 +7,21 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on 2013-05-13
+ * Created on Dec 3, 2013
  * @author vlads
  * @version $Id$
  */
-package com.propertyvista.server.sftp;
+package com.propertyvista.payment.pad;
 
 /**
- * Recoverable connection error. e.g. no attempt to send or receive file to remote interface was made
+ * Recoverable error. e.g. no attempt to send or receive file to remote interface was made
+ * 
  */
-public class SftpTransportConnectionException extends Exception {
+public class FileCreationException extends Exception {
 
     private static final long serialVersionUID = 1L;
 
-    public SftpTransportConnectionException(final String message, final Throwable cause) {
+    public FileCreationException(final String message, final Throwable cause) {
         super(message, cause);
     }
 }

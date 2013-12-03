@@ -89,22 +89,31 @@ public class SftpClient implements Closeable {
         }
     }
 
-    public static String sftpPut(SftpConnectionConfiguration configuration, File file, String dst) {
+    public static void sftpPut(SftpConnectionConfiguration configuration, File file, String dst) throws SftpTransportConnectionException {
         SftpClient client = new SftpClient(configuration);
         try {
             client.connect();
+        } catch (JSchException e) {
+            log.error("SFTP connecton error", e);
+            IOUtils.closeQuietly(client);
+            throw new SftpTransportConnectionException(e.getMessage(), e);
+        }
 
+        try {
             client.channel.cd(dst);
+        } catch (SftpException e) {
+            IOUtils.closeQuietly(client);
+            log.error("SFTP error", e);
+            throw new SftpTransportConnectionException(e.getMessage(), e);
+        }
+
+        try {
             client.channel.put(file.getAbsolutePath(), file.getName());
 
             log.info("SFTP file {} transfer completed to {}, directory {}", file.getAbsolutePath(), configuration.sftpHost(), dst);
-            return null;
         } catch (SftpException e) {
             log.error("SFTP error", e);
-            return e.getMessage();
-        } catch (JSchException e) {
-            log.error("SFTP error", e);
-            return e.getMessage();
+            throw new Error(e.getMessage(), e);
         } finally {
             IOUtils.closeQuietly(client);
         }
@@ -116,7 +125,7 @@ public class SftpClient implements Closeable {
         try {
             client.connect();
         } catch (JSchException e) {
-            log.error("SFTP error", e);
+            log.error("SFTP connecton error", e);
             IOUtils.closeQuietly(client);
             throw new SftpTransportConnectionException(e.getMessage(), e);
         }

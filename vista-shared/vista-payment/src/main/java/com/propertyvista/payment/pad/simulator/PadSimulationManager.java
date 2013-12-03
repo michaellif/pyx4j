@@ -145,10 +145,12 @@ public class PadSimulationManager {
             log.error("pad write error", e);
             throw new Error(e.getMessage());
         }
-        String errorMessage = new CaledonPadSftpClient().sftpPutSim(padFile.fundsTransferType().getValue(), file);
-        if (errorMessage != null) {
-            throw new Error(errorMessage);
+        try {
+            new CaledonPadSftpClient().sftpPutSim(padFile.fundsTransferType().getValue(), file);
+        } catch (SftpTransportConnectionException e) {
+            throw new UserRuntimeException(e.getMessage(), e);
         }
+
         log.info("pad file sent {}", file.getAbsolutePath());
 
         Persistence.service().persist(padFile);
@@ -244,9 +246,10 @@ public class PadSimulationManager {
             log.error("pad write error", e);
             throw new Error(e.getMessage());
         }
-        String errorMessage = new CaledonPadSftpClient().sftpPutSim(padFile.fundsTransferType().getValue(), file);
-        if (errorMessage != null) {
-            throw new Error(errorMessage);
+        try {
+            new CaledonPadSftpClient().sftpPutSim(padFile.fundsTransferType().getValue(), file);
+        } catch (SftpTransportConnectionException e) {
+            throw new UserRuntimeException(e.getMessage(), e);
         }
         log.info("pad file sent {}", file.getAbsolutePath());
 
@@ -368,9 +371,10 @@ public class PadSimulationManager {
             log.error("pad write error", e);
             throw new Error(e.getMessage());
         }
-        String errorMessage = new CaledonPadSftpClient().sftpPutSim(padFile.fundsTransferType().getValue(), file);
-        if (errorMessage != null) {
-            throw new Error(errorMessage);
+        try {
+            new CaledonPadSftpClient().sftpPutSim(padFile.fundsTransferType().getValue(), file);
+        } catch (SftpTransportConnectionException e) {
+            throw new UserRuntimeException(e.getMessage(), e);
         }
         log.info("pad file sent {}", file.getAbsolutePath());
 
