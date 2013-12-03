@@ -11,15 +11,15 @@
  * @author michaellif
  * @version $Id$
  */
-package com.propertyvista.portal.resident.ui.profile;
+package com.propertyvista.portal.shared.ui;
 
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.forms.client.events.PropertyChangeEvent;
-import com.pyx4j.forms.client.events.PropertyChangeHandler;
 import com.pyx4j.forms.client.events.PropertyChangeEvent.PropertyName;
+import com.pyx4j.forms.client.events.PropertyChangeHandler;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.ui.CEntityLabel;
@@ -36,18 +36,14 @@ import com.pyx4j.widgets.client.dialog.MessageDialog;
 import com.propertyvista.common.client.resources.VistaImages;
 import com.propertyvista.domain.person.Name;
 import com.propertyvista.domain.tenant.EmergencyContact;
-import com.propertyvista.portal.resident.ui.PortalAddressSimpleEditor;
 import com.propertyvista.portal.shared.ui.util.decorators.FormWidgetDecoratorBuilder;
 
 public class EmergencyContactFolder extends CEntityFolder<EmergencyContact> {
 
     private static final I18n i18n = I18n.get(EmergencyContactFolder.class);
 
-    private final ProfilePageViewImpl view;
-
-    public EmergencyContactFolder(ProfilePageViewImpl view) {
+    public EmergencyContactFolder() {
         super(EmergencyContact.class);
-        this.view = view;
         setOrderable(true);
         setRemovable(true);
         setAddable(true);

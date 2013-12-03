@@ -43,8 +43,8 @@ public interface OnlineApplicationDTO extends IEntity {
 
     IList<OptionDTO> options();
 
-    IList<CoApplicantDTO> tenants();
+    IList<CoapplicantDTO> coapplicants();
 
-    IList<CoApplicantDTO> guarantors();
+    IList<GuarantorDTO> guarantors();
 
 }

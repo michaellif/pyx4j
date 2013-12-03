@@ -23,6 +23,7 @@ import com.pyx4j.entity.shared.IList;
 
 import com.propertyvista.domain.PriorAddress;
 import com.propertyvista.domain.person.Person;
+import com.propertyvista.domain.tenant.CustomerPicture;
 import com.propertyvista.domain.tenant.CustomerScreeningLegalQuestions;
 import com.propertyvista.domain.tenant.EmergencyContact;
 import com.propertyvista.domain.tenant.income.CustomerScreeningIncome;
@@ -32,6 +33,8 @@ import com.propertyvista.domain.tenant.income.CustomerScreeningPersonalAsset;
 public interface ApplicantDTO extends IEntity {
 
     Person person();
+
+    CustomerPicture picture();
 
     PriorAddress currentAddress();
 

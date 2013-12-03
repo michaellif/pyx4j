@@ -13,10 +13,22 @@
  */
 package com.propertyvista.portal.rpc.portal.prospect.dto;
 
+import com.pyx4j.entity.annotations.Editor;
 import com.pyx4j.entity.annotations.Transient;
+import com.pyx4j.entity.annotations.Editor.EditorType;
 import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.shared.IPrimitive;
 
 @Transient
-public interface CoApplicantDTO extends IEntity {
+public interface CoapplicantDTO extends IEntity {
+
+    IPrimitive<Boolean> dependent();
+
+    IPrimitive<String> firstName();
+
+    IPrimitive<String> lastName();
+
+    @Editor(type = EditorType.email)
+    IPrimitive<String> email();
 
 }

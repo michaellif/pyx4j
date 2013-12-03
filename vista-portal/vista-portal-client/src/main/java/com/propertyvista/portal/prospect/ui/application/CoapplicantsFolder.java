@@ -18,7 +18,6 @@ import com.google.gwt.user.client.ui.IsWidget;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CEntityForm;
-import com.pyx4j.forms.client.ui.CEntityLabel;
 import com.pyx4j.forms.client.ui.folder.BoxFolderDecorator;
 import com.pyx4j.forms.client.ui.folder.BoxFolderItemDecorator;
 import com.pyx4j.forms.client.ui.folder.CEntityFolder;
@@ -28,46 +27,47 @@ import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.common.client.resources.VistaImages;
-import com.propertyvista.domain.financial.offering.ProductItem;
+import com.propertyvista.portal.rpc.portal.prospect.dto.CoapplicantDTO;
 import com.propertyvista.portal.rpc.portal.prospect.dto.OptionDTO;
 import com.propertyvista.portal.shared.ui.util.decorators.FormWidgetDecoratorBuilder;
 
-public class ApplicationOptionsFolder extends CEntityFolder<OptionDTO> {
+public class CoapplicantsFolder extends CEntityFolder<CoapplicantDTO> {
 
-    private static final I18n i18n = I18n.get(ApplicationOptionsFolder.class);
+    private static final I18n i18n = I18n.get(CoapplicantsFolder.class);
 
     private final ApplicationWizardViewImpl view;
 
-    public ApplicationOptionsFolder(ApplicationWizardViewImpl view) {
-        super(OptionDTO.class);
+    public CoapplicantsFolder(ApplicationWizardViewImpl view) {
+        super(CoapplicantDTO.class);
         this.view = view;
-        setEditable(false);
+        setRemovable(true);
+        setOrderable(true);
     }
 
     @Override
-    public IFolderItemDecorator<OptionDTO> createItemDecorator() {
-        BoxFolderItemDecorator<OptionDTO> decor = new BoxFolderItemDecorator<OptionDTO>(VistaImages.INSTANCE);
+    public IFolderItemDecorator<CoapplicantDTO> createItemDecorator() {
+        BoxFolderItemDecorator<CoapplicantDTO> decor = new BoxFolderItemDecorator<CoapplicantDTO>(VistaImages.INSTANCE);
         return decor;
     }
 
     @Override
-    protected IFolderDecorator<OptionDTO> createFolderDecorator() {
-        return new BoxFolderDecorator<OptionDTO>(VistaImages.INSTANCE);
+    protected IFolderDecorator<CoapplicantDTO> createFolderDecorator() {
+        return new BoxFolderDecorator<CoapplicantDTO>(VistaImages.INSTANCE, i18n.tr("Add Occupant"));
     }
 
     @Override
     public CComponent<?> create(IObject<?> member) {
-        if (member instanceof OptionDTO) {
-            return new ApplicationOptionForm();
+        if (member instanceof CoapplicantDTO) {
+            return new CoapplicantForm();
         } else {
             return super.create(member);
         }
     }
 
-    class ApplicationOptionForm extends CEntityForm<OptionDTO> {
+    class CoapplicantForm extends CEntityForm<CoapplicantDTO> {
 
-        public ApplicationOptionForm() {
-            super(OptionDTO.class);
+        public CoapplicantForm() {
+            super(CoapplicantDTO.class);
         }
 
         @Override
@@ -75,10 +75,11 @@ public class ApplicationOptionsFolder extends CEntityFolder<OptionDTO> {
             BasicFlexFormPanel mainPanel = new BasicFlexFormPanel();
 
             int row = -1;
-            mainPanel.setWidget(++row, 0,
-                    new FormWidgetDecoratorBuilder(inject(proto().item(), new CEntityLabel<ProductItem>()), 200).customLabel(i18n.tr("Item Name")).build());
+            mainPanel.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().dependent())).build());
+            mainPanel.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().firstName())).build());
+            mainPanel.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().lastName())).build());
+            mainPanel.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().email())).build());
 
-            mainPanel.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().price()), 200).build());
             return mainPanel;
         }
 
