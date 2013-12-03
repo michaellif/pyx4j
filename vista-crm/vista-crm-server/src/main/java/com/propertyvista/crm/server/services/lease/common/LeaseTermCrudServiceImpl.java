@@ -277,10 +277,12 @@ public class LeaseTermCrudServiceImpl extends AbstractVersionedCrudServiceDtoImp
             // features:
             Persistence.service().retrieve(selectedService.features());
             for (Feature feature : selectedService.features()) {
-                Persistence.service().retrieve(feature.version().items());
-                for (ProductItem item : feature.version().items()) {
-                    Persistence.service().retrieve(item.product());
-                    currentValue.selectedFeatureItems().add(item);
+                if (feature.expiredFrom().isNull() || feature.expiredFrom().getValue().before(new LogicalDate(SystemDateManager.getDate()))) {
+                    Persistence.service().retrieve(feature.version().items());
+                    for (ProductItem item : feature.version().items()) {
+                        Persistence.service().retrieve(item.product());
+                        currentValue.selectedFeatureItems().add(item);
+                    }
                 }
             }
 
@@ -301,9 +303,11 @@ public class LeaseTermCrudServiceImpl extends AbstractVersionedCrudServiceDtoImp
         boolean useDefaultCatalog = (currentValue.unit().building().defaultProductCatalog().isBooleanTrue() || currentValue.lease().status().getValue() == Lease.Status.ExistingLease);
 
         EntityQueryCriteria<Service> serviceCriteria = new EntityQueryCriteria<Service>(Service.class);
-        serviceCriteria.add(PropertyCriterion.eq(serviceCriteria.proto().catalog(), currentValue.unit().building().productCatalog()));
-        serviceCriteria.add(PropertyCriterion.eq(serviceCriteria.proto().code().type(), currentValue.lease().type()));
-        serviceCriteria.add(PropertyCriterion.eq(serviceCriteria.proto().isDefaultCatalogItem(), useDefaultCatalog));
+        serviceCriteria.eq(serviceCriteria.proto().catalog(), currentValue.unit().building().productCatalog());
+        serviceCriteria.eq(serviceCriteria.proto().code().type(), currentValue.lease().type());
+        serviceCriteria.eq(serviceCriteria.proto().isDefaultCatalogItem(), useDefaultCatalog);
+        serviceCriteria.or(PropertyCriterion.isNull(serviceCriteria.proto().expiredFrom()),
+                PropertyCriterion.lt(serviceCriteria.proto().expiredFrom(), new LogicalDate(SystemDateManager.getDate())));
         serviceCriteria.isCurrent(serviceCriteria.proto().version());
 
         for (Service service : Persistence.service().query(serviceCriteria)) {
