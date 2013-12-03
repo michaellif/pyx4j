@@ -274,10 +274,12 @@ public class LeaseTermCrudServiceImpl extends AbstractVersionedCrudServiceDtoImp
 
         // fill related:
         if (selectedService != null) {
+            LogicalDate termFrom = (currentValue.termFrom().isNull() ? new LogicalDate(SystemDateManager.getDate()) : currentValue.termFrom().getValue());
+
             // features:
             Persistence.service().retrieve(selectedService.features());
             for (Feature feature : selectedService.features()) {
-                if (feature.expiredFrom().isNull() || feature.expiredFrom().getValue().before(new LogicalDate(SystemDateManager.getDate()))) {
+                if (feature.expiredFrom().isNull() || feature.expiredFrom().getValue().before(termFrom)) {
                     Persistence.service().retrieve(feature.version().items());
                     for (ProductItem item : feature.version().items()) {
                         Persistence.service().retrieve(item.product());
@@ -301,13 +303,14 @@ public class LeaseTermCrudServiceImpl extends AbstractVersionedCrudServiceDtoImp
 
         // use default product catalog items for specific cases:
         boolean useDefaultCatalog = (currentValue.unit().building().defaultProductCatalog().isBooleanTrue() || currentValue.lease().status().getValue() == Lease.Status.ExistingLease);
+        LogicalDate termFrom = (currentValue.termFrom().isNull() ? new LogicalDate(SystemDateManager.getDate()) : currentValue.termFrom().getValue());
 
         EntityQueryCriteria<Service> serviceCriteria = new EntityQueryCriteria<Service>(Service.class);
         serviceCriteria.eq(serviceCriteria.proto().catalog(), currentValue.unit().building().productCatalog());
         serviceCriteria.eq(serviceCriteria.proto().code().type(), currentValue.lease().type());
         serviceCriteria.eq(serviceCriteria.proto().isDefaultCatalogItem(), useDefaultCatalog);
         serviceCriteria.or(PropertyCriterion.isNull(serviceCriteria.proto().expiredFrom()),
-                PropertyCriterion.lt(serviceCriteria.proto().expiredFrom(), new LogicalDate(SystemDateManager.getDate())));
+                PropertyCriterion.lt(serviceCriteria.proto().expiredFrom(), termFrom));
         serviceCriteria.isCurrent(serviceCriteria.proto().version());
 
         for (Service service : Persistence.service().query(serviceCriteria)) {

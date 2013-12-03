@@ -797,10 +797,12 @@ public abstract class LeaseAbstractManager {
         leaseTerm.version().leaseProducts().featureItems().clear();
         leaseTerm.version().leaseProducts().concessions().clear();
 
+        LogicalDate termFrom = (leaseTerm.termFrom().isNull() ? new LogicalDate(SystemDateManager.getDate()) : leaseTerm.termFrom().getValue());
+
         // pre-populate mandatory features for the new service:
         Persistence.ensureRetrieve(service.features(), AttachLevel.Attached);
         for (Feature feature : service.features()) {
-            if (feature.expiredFrom().isNull() || feature.expiredFrom().getValue().before(new LogicalDate(SystemDateManager.getDate()))) {
+            if (feature.expiredFrom().isNull() || feature.expiredFrom().getValue().before(termFrom)) {
                 if (feature.version().mandatory().isBooleanTrue()) {
                     Persistence.ensureRetrieve(feature.version().items(), AttachLevel.Attached);
                     if (!feature.version().items().isEmpty()) {
@@ -1076,6 +1078,8 @@ public abstract class LeaseAbstractManager {
 
         boolean succeeded = false;
 
+        LogicalDate termFrom = (leaseTerm.termFrom().isNull() ? new LogicalDate(SystemDateManager.getDate()) : leaseTerm.termFrom().getValue());
+
         // use default product catalog items for specific cases:
         boolean useDefaultCatalog = (leaseTerm.unit().building().defaultProductCatalog().isBooleanTrue() || leaseTerm.lease().status().getValue() == Lease.Status.ExistingLease);
 
@@ -1084,7 +1088,7 @@ public abstract class LeaseAbstractManager {
         serviceCriteria.eq(serviceCriteria.proto().code().type(), leaseTerm.lease().type());
         serviceCriteria.eq(serviceCriteria.proto().isDefaultCatalogItem(), useDefaultCatalog);
         serviceCriteria.or(PropertyCriterion.isNull(serviceCriteria.proto().expiredFrom()),
-                PropertyCriterion.lt(serviceCriteria.proto().expiredFrom(), new LogicalDate(SystemDateManager.getDate())));
+                PropertyCriterion.lt(serviceCriteria.proto().expiredFrom(), termFrom));
         serviceCriteria.isCurrent(serviceCriteria.proto().version());
 
         for (Service service : Persistence.service().query(serviceCriteria)) {
