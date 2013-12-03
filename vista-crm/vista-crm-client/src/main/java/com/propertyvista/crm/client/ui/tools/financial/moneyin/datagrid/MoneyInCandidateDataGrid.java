@@ -15,7 +15,7 @@ package com.propertyvista.crm.client.ui.tools.financial.moneyin.datagrid;
 
 import java.math.BigDecimal;
 
-import com.google.gwt.cell.client.ButtonCell;
+import com.google.gwt.cell.client.CheckboxCell;
 import com.google.gwt.cell.client.EditTextCell;
 import com.google.gwt.cell.client.FieldUpdater;
 import com.google.gwt.cell.client.NumberCell;
@@ -50,7 +50,7 @@ public class MoneyInCandidateDataGrid extends EntityDataGrid<MoneyInCandidateDTO
     private Presenter presenter;
 
     public MoneyInCandidateDataGrid() {
-        super(MoneyInCandidateDTO.class);
+        super(MoneyInCandidateDTO.class, false);
         setPageSize(PAGE_SIZE);
         initColumns();
     }
@@ -62,7 +62,7 @@ public class MoneyInCandidateDataGrid extends EntityDataGrid<MoneyInCandidateDTO
     private void initColumns() {//@formatter:off
         defTextColumn(proto().building(), i18n.tr("Building"), 40, Unit.PX);
         defTextColumn(proto().unit(), i18n.tr("Unit"), 40, Unit.PX);
-        defTextColumn(proto().leaseId(), i18n.tr("Lease ID"), 40, Unit.PX);
+        defTextColumn(proto().leaseId(), i18n.tr("Lease"), 40, Unit.PX);
 
         Column<MoneyInCandidateDTO, String> leaseParticipantsColumn = new Column<MoneyInCandidateDTO, String>(new TextCell()) {
             @Override public String getValue(MoneyInCandidateDTO object) { return renderLeaseParticipants(object); }
@@ -114,19 +114,19 @@ public class MoneyInCandidateDataGrid extends EntityDataGrid<MoneyInCandidateDTO
         });
         defColumn(amountToPayColumn, i18n.tr("Amount to Pay"), 50, Unit.PX);
 
-        Column<MoneyInCandidateDTO, String> processColumn = new Column<MoneyInCandidateDTO, String>(new ButtonCell()) {
+        Column<MoneyInCandidateDTO, Boolean> processColumn = new Column<MoneyInCandidateDTO, Boolean>(new CheckboxCell(false, false)) {
             @Override
-            public String getValue(MoneyInCandidateDTO object) {
-                return object.processPayment().isBooleanTrue() ? i18n.tr("Don't Process") : i18n.tr("Process");
+            public Boolean getValue(MoneyInCandidateDTO object) {
+                return object.processPayment().isBooleanTrue();
             }
         };
-        processColumn.setFieldUpdater(new FieldUpdater<MoneyInCandidateDTO, String>() {
+        processColumn.setFieldUpdater(new FieldUpdater<MoneyInCandidateDTO, Boolean>() {
             @Override
-            public void update(int index, MoneyInCandidateDTO object, String value) {
-                presenter.setProcessCandidate(object, !object.processPayment().isBooleanTrue());
+            public void update(int index, MoneyInCandidateDTO object, Boolean value) {
+                presenter.setProcessCandidate(object, value);
             }
         });
-        defColumn(processColumn, "", 50, Unit.PX);
+        defColumn(processColumn, "Process?", 50, Unit.PX);
     }//@formatter:on
 
     private String renderLeaseParticipants(MoneyInCandidateDTO candidate) {

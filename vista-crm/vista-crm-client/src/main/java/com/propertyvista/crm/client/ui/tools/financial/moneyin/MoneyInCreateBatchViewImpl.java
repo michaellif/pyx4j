@@ -13,11 +13,17 @@
  */
 package com.propertyvista.crm.client.ui.tools.financial.moneyin;
 
+import com.google.gwt.core.client.GWT;
+import com.google.gwt.dom.client.Style.FontWeight;
 import com.google.gwt.dom.client.Style.TextAlign;
 import com.google.gwt.dom.client.Style.Unit;
+import com.google.gwt.user.cellview.client.SimplePager;
+import com.google.gwt.user.cellview.client.SimplePager.TextLocation;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTML;
+import com.google.gwt.user.client.ui.HasHorizontalAlignment;
+import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.LayoutPanel;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.view.client.HasData;
@@ -43,17 +49,79 @@ public class MoneyInCreateBatchViewImpl extends AbstractPrimePane implements Mon
 
     private MoneyInCandidateDataGrid searchCandidateDataGrid;
 
+    private MoneyInCandidateDataGrid selectedForProcessingDataGrid;
+
     public MoneyInCreateBatchViewImpl() {
         initToolBars();
+
         viewPanel = initViewPanel();
 
         viewPanel.add(searchBar = initSearchBar());
         viewPanel.setWidgetTopHeight(searchBar, 0, Unit.PX, 100, Unit.PX);
         viewPanel.setWidgetLeftRight(searchBar, 0, Unit.PX, 0, Unit.PX);
 
-        viewPanel.add(searchCandidateDataGrid = new MoneyInCandidateDataGrid());
-        viewPanel.setWidgetTopBottom(searchCandidateDataGrid, 101, Unit.PX, 250, Unit.PX);
-        viewPanel.setWidgetLeftRight(searchCandidateDataGrid, 0, Unit.PX, 0, Unit.PX);
+        LayoutPanel gridsHolder = new LayoutPanel();
+        viewPanel.add(gridsHolder);
+        viewPanel.setWidgetTopBottom(gridsHolder, 100, Unit.PX, 0, Unit.PX);
+        viewPanel.setWidgetLeftRight(gridsHolder, 0, Unit.PX, 0, Unit.PX);
+
+        {
+            LayoutPanel foundHolder = new LayoutPanel();
+            gridsHolder.add(foundHolder);
+            gridsHolder.setWidgetTopBottom(foundHolder, 0, Unit.PX, 50, Unit.PCT);
+            gridsHolder.setWidgetLeftRight(foundHolder, 0, Unit.PX, 0, Unit.PX);
+
+            // found:
+            foundHolder.add(searchCandidateDataGrid = new MoneyInCandidateDataGrid());
+            foundHolder.setWidgetTopBottom(searchCandidateDataGrid, 0, Unit.PX, 33, Unit.PX);
+            foundHolder.setWidgetLeftRight(searchCandidateDataGrid, 0, Unit.PX, 0, Unit.PX);
+
+            SimplePager.Resources pagerResources = GWT.create(SimplePager.Resources.class);
+            SimplePager searchResultsPager = new SimplePager(TextLocation.CENTER, pagerResources, false, 0, true);
+            searchResultsPager.setDisplay(searchCandidateDataGrid);
+
+            HorizontalPanel searchResultsPagerHolder = new HorizontalPanel();
+            searchResultsPagerHolder.setWidth("100%");
+            searchResultsPagerHolder.add(searchResultsPager);
+            searchResultsPagerHolder.setCellHorizontalAlignment(searchResultsPager, HasHorizontalAlignment.ALIGN_CENTER);
+
+            foundHolder.add(searchResultsPagerHolder);
+            foundHolder.setWidgetBottomHeight(searchResultsPagerHolder, 24, Unit.PX, 24, Unit.PX);
+            foundHolder.setWidgetLeftRight(searchResultsPagerHolder, 0, Unit.PX, 0, Unit.PX);
+        }
+
+        {
+            LayoutPanel selectedHolder = new LayoutPanel();
+            gridsHolder.add(selectedHolder);
+            gridsHolder.setWidgetTopBottom(selectedHolder, 51, Unit.PCT, 0, Unit.PX);
+            gridsHolder.setWidgetLeftRight(selectedHolder, 0, Unit.PX, 0, Unit.PX);
+
+            // selected:
+            HTML selectedHeader = new HTML(i18n.tr("Click \"Create Batch\" to Process the Following Payments:"));
+            selectedHeader.getElement().getStyle().setTextAlign(TextAlign.CENTER);
+            selectedHeader.getElement().getStyle().setLineHeight(30, Unit.PX);
+            selectedHeader.getElement().getStyle().setFontWeight(FontWeight.BOLD);
+
+            selectedHolder.add(selectedHeader);
+            selectedHolder.setWidgetTopHeight(selectedHeader, 0, Unit.PX, 30, Unit.PX);
+            selectedHolder.setWidgetLeftRight(selectedHeader, 0, Unit.PX, 0, Unit.PX);
+
+            selectedHolder.add(selectedForProcessingDataGrid = new MoneyInCandidateDataGrid());
+            selectedHolder.setWidgetTopBottom(selectedForProcessingDataGrid, 31, Unit.PX, 33, Unit.PX);
+            selectedHolder.setWidgetLeftRight(selectedForProcessingDataGrid, 0, Unit.PX, 0, Unit.PX);
+
+            SimplePager.Resources pagerResources = GWT.create(SimplePager.Resources.class);
+            SimplePager selectedPager = new SimplePager(TextLocation.CENTER, pagerResources, false, 0, true);
+            selectedPager.setDisplay(selectedForProcessingDataGrid);
+            HorizontalPanel selectedPagerHolder = new HorizontalPanel();
+            selectedPagerHolder.setWidth("100%");
+            selectedPagerHolder.add(selectedPager);
+            selectedPagerHolder.setCellHorizontalAlignment(selectedPager, HasHorizontalAlignment.ALIGN_CENTER);
+
+            selectedHolder.add(selectedPagerHolder);
+            selectedHolder.setWidgetBottomHeight(selectedPagerHolder, 24, Unit.PX, 24, Unit.PX);
+            selectedHolder.setWidgetLeftRight(selectedPagerHolder, 0, Unit.PX, 0, Unit.PX);
+        }
 
     }
 
@@ -61,6 +129,7 @@ public class MoneyInCreateBatchViewImpl extends AbstractPrimePane implements Mon
     public void setPresenter(MoneyInCreateBatchView.Presenter presenter) {
         this.presenter = presenter;
         this.searchCandidateDataGrid.setPresenter(presenter);
+        this.selectedForProcessingDataGrid.setPresenter(presenter);
     }
 
     @Override
@@ -70,7 +139,7 @@ public class MoneyInCreateBatchViewImpl extends AbstractPrimePane implements Mon
 
     @Override
     public HasData<MoneyInCandidateDTO> selectedForProcessing() {
-        return null;
+        return selectedForProcessingDataGrid;
     }
 
     private LayoutPanel initViewPanel() {

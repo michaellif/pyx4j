@@ -32,9 +32,12 @@ public class EntityDataGrid<E extends IEntity> extends DataGrid<E> {
 
     private final E proto;
 
-    public EntityDataGrid(Class<E> klass) {
+    private final boolean createFooter;
+
+    public EntityDataGrid(Class<E> klass, boolean createFooter) {
         super(50, L1CandidateDataGridResources.getInstance());
         DataGridScrollFixerHack.apply(this);
+        this.createFooter = createFooter;
         this.proto = EntityFactory.getEntityPrototype(klass);
     }
 
@@ -57,7 +60,7 @@ public class EntityDataGrid<E extends IEntity> extends DataGrid<E> {
 
     protected void defColumn(Column<E, ?> column, String headerCaption, double columWidth, Unit columnWidthUnit) {
         this.addColumn(column, new SafeHtmlBuilder().appendHtmlConstant("<div>").appendEscaped(headerCaption).appendHtmlConstant("</div>").toSafeHtml(),
-                new SafeHtmlBuilder().appendHtmlConstant("<div>").appendEscaped(headerCaption).appendHtmlConstant("</div>").toSafeHtml());
+                createFooter ? new SafeHtmlBuilder().appendHtmlConstant("<div>").appendEscaped(headerCaption).appendHtmlConstant("</div>").toSafeHtml() : null);
         this.setColumnWidth(column, columWidth, columnWidthUnit);
     }
 

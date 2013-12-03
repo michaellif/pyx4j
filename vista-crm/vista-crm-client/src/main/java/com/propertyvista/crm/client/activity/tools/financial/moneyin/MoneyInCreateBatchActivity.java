@@ -38,6 +38,8 @@ public class MoneyInCreateBatchActivity extends AbstractActivity implements Mone
 
     private final ListDataProvider<MoneyInCandidateDTO> searchResultsProvider;
 
+    private ListDataProvider<MoneyInCandidateDTO> selectedForProcessingProvider;
+
     public MoneyInCreateBatchActivity() {
         view = CrmSite.getViewFactory().getView(MoneyInCreateBatchView.class);
         searchResultsProvider = new ListDataProvider<MoneyInCandidateDTO>(makeMockCandidates(), new ProvidesKey<MoneyInCandidateDTO>() {
@@ -46,12 +48,20 @@ public class MoneyInCreateBatchActivity extends AbstractActivity implements Mone
                 return item.leaseIdStub().getPrimaryKey();
             }
         });
+        selectedForProcessingProvider = new ListDataProvider<MoneyInCandidateDTO>(new LinkedList<MoneyInCandidateDTO>(),
+                new ProvidesKey<MoneyInCandidateDTO>() {
+                    @Override
+                    public Object getKey(MoneyInCandidateDTO item) {
+                        return item.leaseIdStub().getPrimaryKey();
+                    }
+                });
     }
 
     @Override
     public void start(AcceptsOneWidget panel, EventBus eventBus) {
         view.setPresenter(this);
         searchResultsProvider.addDataDisplay(view.searchResults());
+        selectedForProcessingProvider.addDataDisplay(view.selectedForProcessing());
         panel.setWidget(view);
     }
 
@@ -63,7 +73,12 @@ public class MoneyInCreateBatchActivity extends AbstractActivity implements Mone
     @Override
     public void setProcessCandidate(MoneyInCandidateDTO candidate, boolean process) {
         candidate.processPayment().setValue(process);
-        updateView(candidate);
+        if (process == true) {
+            selectedForProcessingProvider.getList().add(candidate);
+        } else {
+            selectedForProcessingProvider.getList().remove(candidate);
+        }
+        updateSearchResultsView(candidate);
     }
 
     @Override
@@ -73,13 +88,15 @@ public class MoneyInCreateBatchActivity extends AbstractActivity implements Mone
         } else {
             candidate.payment().payerTenantIdStub().set(payer.tenantIdStub().duplicate());
         }
-        updateView(candidate);
+        updateSearchResultsView(candidate);
+        updateSelectedForProcessingView(candidate);
     }
 
     @Override
     public void setAmount(MoneyInCandidateDTO candidate, BigDecimal amountToPay) {
         candidate.payment().payedAmount().setValue(amountToPay);
-        updateView(candidate);
+        updateSearchResultsView(candidate);
+        updateSelectedForProcessingView(candidate);
     }
 
     @Override
@@ -105,9 +122,18 @@ public class MoneyInCreateBatchActivity extends AbstractActivity implements Mone
         return null;
     }
 
-    private void updateView(MoneyInCandidateDTO candidate) {
+    private void updateSearchResultsView(MoneyInCandidateDTO candidate) {
         int i = this.searchResultsProvider.getList().indexOf(candidate);
-        this.searchResultsProvider.getList().set(i, candidate);
+        if (i != -1) {
+            this.searchResultsProvider.getList().set(i, candidate);
+        }
+    }
+
+    private void updateSelectedForProcessingView(MoneyInCandidateDTO candidate) {
+        int i = this.selectedForProcessingProvider.getList().indexOf(candidate);
+        if (i != -1) {
+            this.selectedForProcessingProvider.getList().set(i, candidate);
+        }
     }
 
     private List<MoneyInCandidateDTO> makeMockCandidates() {
