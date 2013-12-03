@@ -7,16 +7,14 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on 2013-11-27
+ * Created on 2013-12-03
  * @author ArtyomB
  * @version $Id$
  */
-package com.propertyvista.crm.client.ui.tools.l1generation.datagrid;
+package com.propertyvista.crm.client.ui.tools.common.datagrid;
 
-import com.pyx4j.commons.css.IStyleName;
+public enum VistaDataGridStyles {
 
-public enum L1CandidateDataGridStyles implements IStyleName {
-
-    L1DataGrid
+    VistaDataGridHeader, VistaDataGridFooter, VistaMoneyCell;
 
 }

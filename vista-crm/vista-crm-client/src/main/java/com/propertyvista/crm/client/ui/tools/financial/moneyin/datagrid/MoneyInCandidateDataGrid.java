@@ -16,7 +16,6 @@ package com.propertyvista.crm.client.ui.tools.financial.moneyin.datagrid;
 import java.math.BigDecimal;
 
 import com.google.gwt.cell.client.CheckboxCell;
-import com.google.gwt.cell.client.EditTextCell;
 import com.google.gwt.cell.client.FieldUpdater;
 import com.google.gwt.cell.client.NumberCell;
 import com.google.gwt.cell.client.TextCell;
@@ -27,16 +26,18 @@ import com.google.gwt.user.cellview.client.Column;
 import com.pyx4j.forms.client.ui.formatters.MoneyFormat;
 import com.pyx4j.i18n.shared.I18n;
 
-import com.propertyvista.crm.client.ui.tools.common.datagrid.EntityDataGrid;
+import com.propertyvista.crm.client.ui.tools.common.datagrid.VistaDataGrid;
 import com.propertyvista.crm.client.ui.tools.common.datagrid.EntityFieldColumn;
+import com.propertyvista.crm.client.ui.tools.common.datagrid.ObjectEditCell;
 import com.propertyvista.crm.client.ui.tools.common.datagrid.ObjectSelectionCell;
 import com.propertyvista.crm.client.ui.tools.common.datagrid.ObjectSelectionState;
+import com.propertyvista.crm.client.ui.tools.common.datagrid.VistaDataGridStyles;
 import com.propertyvista.crm.client.ui.tools.financial.moneyin.MoneyInCreateBatchView;
 import com.propertyvista.crm.client.ui.tools.financial.moneyin.MoneyInCreateBatchView.Presenter;
 import com.propertyvista.crm.rpc.dto.financial.autopayreview.moneyin.MoneyInCandidateDTO;
 import com.propertyvista.crm.rpc.dto.financial.autopayreview.moneyin.MoneyInLeaseParticipantDTO;
 
-public class MoneyInCandidateDataGrid extends EntityDataGrid<MoneyInCandidateDTO> {
+public class MoneyInCandidateDataGrid extends VistaDataGrid<MoneyInCandidateDTO> {
 
     private static final I18n i18n = I18n.get(MoneyInCandidateDataGrid.class);
 
@@ -59,19 +60,25 @@ public class MoneyInCandidateDataGrid extends EntityDataGrid<MoneyInCandidateDTO
         this.presenter = presenter;
     }
 
-    private void initColumns() {//@formatter:off
+    private void initColumns() {
         defTextColumn(proto().building(), i18n.tr("Building"), 40, Unit.PX);
         defTextColumn(proto().unit(), i18n.tr("Unit"), 40, Unit.PX);
         defTextColumn(proto().leaseId(), i18n.tr("Lease"), 40, Unit.PX);
 
         Column<MoneyInCandidateDTO, String> leaseParticipantsColumn = new Column<MoneyInCandidateDTO, String>(new TextCell()) {
-            @Override public String getValue(MoneyInCandidateDTO object) { return renderLeaseParticipants(object); }
+            @Override
+            public String getValue(MoneyInCandidateDTO object) {
+                return renderLeaseParticipants(object);
+            }
         };
         defColumn(leaseParticipantsColumn, i18n.tr("Tenants"), 100, Unit.PX);
 
         Column<MoneyInCandidateDTO, ObjectSelectionState<MoneyInLeaseParticipantDTO>> payerSelectionColumn = new Column<MoneyInCandidateDTO, ObjectSelectionState<MoneyInLeaseParticipantDTO>>(
                 new ObjectSelectionCell<MoneyInLeaseParticipantDTO>(new PayerOptionFormat())) {
-            @Override public ObjectSelectionState<MoneyInLeaseParticipantDTO> getValue(MoneyInCandidateDTO object) { return new PayerCandidateSelectionState(object); }
+            @Override
+            public ObjectSelectionState<MoneyInLeaseParticipantDTO> getValue(MoneyInCandidateDTO object) {
+                return new PayerCandidateSelectionState(object);
+            }
         };
         payerSelectionColumn.setFieldUpdater(new FieldUpdater<MoneyInCandidateDTO, ObjectSelectionState<MoneyInLeaseParticipantDTO>>() {
             @Override
@@ -81,37 +88,30 @@ public class MoneyInCandidateDataGrid extends EntityDataGrid<MoneyInCandidateDTO
         });
         defColumn(payerSelectionColumn, i18n.tr("Payer"), 100, Unit.PX);
 
-        Column<MoneyInCandidateDTO, Number> prepaymentsColumn = new EntityFieldColumn<MoneyInCandidateDTO, Number>(
-                proto().prepayments(),
-                new NumberCell(CURRENCY_FORMAT)
-        );
+        Column<MoneyInCandidateDTO, Number> prepaymentsColumn = new EntityFieldColumn<MoneyInCandidateDTO, Number>(proto().prepayments(), new NumberCell(
+                CURRENCY_FORMAT));
+        prepaymentsColumn.setCellStyleNames(VistaDataGridStyles.VistaMoneyCell.name());
         defColumn(prepaymentsColumn, i18n.tr("Prepayments"), 50, Unit.PX);
 
-        Column<MoneyInCandidateDTO, Number> totalUnpaidColumn = new EntityFieldColumn<MoneyInCandidateDTO, Number>(
-                proto().totalOutstanding(),
-                new NumberCell(CURRENCY_FORMAT)
-        );
+        Column<MoneyInCandidateDTO, Number> totalUnpaidColumn = new EntityFieldColumn<MoneyInCandidateDTO, Number>(proto().totalOutstanding(), new NumberCell(
+                CURRENCY_FORMAT));
+        totalUnpaidColumn.setCellStyleNames(VistaDataGridStyles.VistaMoneyCell.name());
         defColumn(totalUnpaidColumn, i18n.tr("Total Unpaid"), 50, Unit.PX);
-        
-        Column<MoneyInCandidateDTO, String> amountToPayColumn = new Column<MoneyInCandidateDTO, String>(new EditTextCell()) {
+
+        Column<MoneyInCandidateDTO, BigDecimal> amountToPayColumn = new Column<MoneyInCandidateDTO, BigDecimal>(new ObjectEditCell<BigDecimal>(
+                new MoneyFormat(), ObjectEditCell.Styles.ObjectEditCell.name() + " " + VistaDataGridStyles.VistaMoneyCell.name(), null)) {
             @Override
-            public String getValue(MoneyInCandidateDTO object) {
-                BigDecimal value = object.payment().payedAmount().getValue();
-                return value != null ? CURRENCY_FORMAT.format(object.payment().payedAmount().getValue()) : "";
+            public BigDecimal getValue(MoneyInCandidateDTO object) {
+                return object.payment().payedAmount().getValue();
             }
         };
-        amountToPayColumn.setFieldUpdater(new FieldUpdater<MoneyInCandidateDTO, String>() {
+        amountToPayColumn.setFieldUpdater(new FieldUpdater<MoneyInCandidateDTO, BigDecimal>() {
             @Override
-            public void update(int index, MoneyInCandidateDTO object, String value) {               
-                BigDecimal amount = null;
-                try {
-                    amount = MONEY_FORMAT.parse(value);
-                } catch (Throwable e) {
-                    // ignore
-                }
+            public void update(int index, MoneyInCandidateDTO object, BigDecimal amount) {
                 presenter.setAmount(object, amount);
             }
         });
+        amountToPayColumn.setCellStyleNames(VistaDataGridStyles.VistaMoneyCell.name());
         defColumn(amountToPayColumn, i18n.tr("Amount to Pay"), 50, Unit.PX);
 
         Column<MoneyInCandidateDTO, Boolean> processColumn = new Column<MoneyInCandidateDTO, Boolean>(new CheckboxCell(false, false)) {
@@ -127,7 +127,7 @@ public class MoneyInCandidateDataGrid extends EntityDataGrid<MoneyInCandidateDTO
             }
         });
         defColumn(processColumn, "Process?", 50, Unit.PX);
-    }//@formatter:on
+    }
 
     private String renderLeaseParticipants(MoneyInCandidateDTO candidate) {
         StringBuilder b = new StringBuilder();

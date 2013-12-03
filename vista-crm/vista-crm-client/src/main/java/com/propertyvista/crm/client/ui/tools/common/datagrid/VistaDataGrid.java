@@ -23,19 +23,18 @@ import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IObject;
 
-import com.propertyvista.crm.client.ui.tools.l1generation.datagrid.L1CandidateDataGridResources;
 
 /**
  * Same as GWT DataGrid, but with some convenience methods for defining columns based on subject contained entity type
  */
-public class EntityDataGrid<E extends IEntity> extends DataGrid<E> {
+public class VistaDataGrid<E extends IEntity> extends DataGrid<E> {
 
     private final E proto;
 
     private final boolean createFooter;
 
-    public EntityDataGrid(Class<E> klass, boolean createFooter) {
-        super(50, L1CandidateDataGridResources.getInstance());
+    public VistaDataGrid(Class<E> klass, boolean createFooter) {
+        super(50, VistaDataGridResources.getInstance());
         DataGridScrollFixerHack.apply(this);
         this.createFooter = createFooter;
         this.proto = EntityFactory.getEntityPrototype(klass);

@@ -42,7 +42,9 @@ import com.propertyvista.crm.client.ui.tools.common.datagrid.EntityFieldColumn;
 import com.propertyvista.crm.client.ui.tools.common.datagrid.MultiSelectorCell;
 import com.propertyvista.crm.client.ui.tools.common.datagrid.MultiSelectorState;
 import com.propertyvista.crm.client.ui.tools.common.datagrid.SelectionPresetModel;
+import com.propertyvista.crm.client.ui.tools.common.datagrid.VistaDataGridResources;
 import com.propertyvista.crm.client.ui.tools.common.datagrid.SelectionPresetModel.MultiSelectorCellModelFactory;
+import com.propertyvista.crm.client.ui.tools.common.datagrid.VistaDataGridStyles;
 import com.propertyvista.crm.client.ui.tools.l1generation.L1DelinquentLeaseSearchView;
 import com.propertyvista.crm.client.ui.tools.l1generation.L1DelinquentLeaseSearchViewImpl.LeaseIdProvider;
 import com.propertyvista.crm.rpc.dto.legal.common.LegalActionCandidateDTO;
@@ -59,7 +61,7 @@ public class L1CandidateDataGrid extends DataGrid<LegalActionCandidateDTO> {
     private L1DelinquentLeaseSearchView.Presenter presenter;
 
     public L1CandidateDataGrid() {
-        super(PAGE_SIZE, L1CandidateDataGridResources.getInstance(), LeaseIdProvider.INSTANCE);
+        super(PAGE_SIZE, VistaDataGridResources.getInstance(), LeaseIdProvider.INSTANCE);
 
         initColumns();
         DataGridScrollFixerHack.apply(this);
@@ -119,7 +121,7 @@ public class L1CandidateDataGrid extends DataGrid<LegalActionCandidateDTO> {
                     return object.l1FormReview().formData().owedRent().totalRentOwing().getValue();
                 }
             };
-            owedAmountColumn.setCellStyleNames(L1CandidateDataGridStyles.L1DataGridMoneyCell.name());
+            owedAmountColumn.setCellStyleNames(VistaDataGridStyles.VistaMoneyCell.name());
             defColumn(owedAmountColumn, i18n.tr("Rent Owing"), 50, Unit.PX);
         }
         {
@@ -130,7 +132,7 @@ public class L1CandidateDataGrid extends DataGrid<LegalActionCandidateDTO> {
                     return object.l1FormReview().formData().owedNsfCharges().nsfTotalChargeOwed().getValue();
                 }
             };
-            owedAmountColumn.setCellStyleNames(L1CandidateDataGridStyles.L1DataGridMoneyCell.name());
+            owedAmountColumn.setCellStyleNames(VistaDataGridStyles.VistaMoneyCell.name());
             defColumn(owedAmountColumn, i18n.tr("NSF Owing"), 50, Unit.PX);
         }
         {
@@ -141,7 +143,7 @@ public class L1CandidateDataGrid extends DataGrid<LegalActionCandidateDTO> {
                     return object.l1FormReview().formData().owedSummary().total().getValue();
                 }
             };
-            owedAmountColumn.setCellStyleNames(L1CandidateDataGridStyles.L1DataGridMoneyCell.name());
+            owedAmountColumn.setCellStyleNames(VistaDataGridStyles.VistaMoneyCell.name());
             defColumn(owedAmountColumn, i18n.tr("Total Owing"), 50, Unit.PX);
         }
 

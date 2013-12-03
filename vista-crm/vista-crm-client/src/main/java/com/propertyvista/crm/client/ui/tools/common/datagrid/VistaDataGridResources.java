@@ -11,22 +11,23 @@
  * @author ArtyomB
  * @version $Id$
  */
-package com.propertyvista.crm.client.ui.tools.l1generation.datagrid;
+package com.propertyvista.crm.client.ui.tools.common.datagrid;
 
 import com.google.gwt.core.shared.GWT;
 import com.google.gwt.resources.client.ImageResource;
 import com.google.gwt.user.cellview.client.DataGrid;
 import com.google.gwt.user.cellview.client.DataGrid.Style;
 
-public class L1CandidateDataGridResources implements DataGrid.Resources {
 
-    private static L1CandidateDataGridResources INSTANCE;
+public class VistaDataGridResources implements DataGrid.Resources {
+
+    private static VistaDataGridResources INSTANCE;
 
     private final DataGrid.Resources DEFAULTS = GWT.create(DataGrid.Resources.class);
 
     private final DataGrid.Style DEFAULT_STYLE = DEFAULTS.dataGridStyle();
 
-    private final DataGrid.Style L1_DATAGRID_STYLE = new DataGrid.Style() {
+    private final DataGrid.Style VISTA_DATAGRID_STYLE = new DataGrid.Style() {
 
         @Override
         public boolean ensureInjected() {
@@ -75,12 +76,12 @@ public class L1CandidateDataGridResources implements DataGrid.Resources {
 
         @Override
         public String dataGridFooter() {
-            return L1CandidateDataGridStyles.L1DataGridFooter.name();
+            return VistaDataGridStyles.VistaDataGridFooter.name();
         }
 
         @Override
         public String dataGridHeader() {
-            return L1CandidateDataGridStyles.L1DataGridHeader.name();
+            return VistaDataGridStyles.VistaDataGridFooter.name();
         }
 
         @Override
@@ -181,15 +182,15 @@ public class L1CandidateDataGridResources implements DataGrid.Resources {
 
     @Override
     public Style dataGridStyle() {
-        return L1_DATAGRID_STYLE;
+        return VISTA_DATAGRID_STYLE;
     }
 
-    private L1CandidateDataGridResources() {
+    private VistaDataGridResources() {
     }
 
-    public static L1CandidateDataGridResources getInstance() {
+    public static VistaDataGridResources getInstance() {
         if (INSTANCE == null) {
-            INSTANCE = new L1CandidateDataGridResources();
+            INSTANCE = new VistaDataGridResources();
         }
         return INSTANCE;
     }
