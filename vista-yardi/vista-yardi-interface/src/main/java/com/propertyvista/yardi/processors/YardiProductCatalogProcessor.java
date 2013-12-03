@@ -24,6 +24,7 @@ import java.util.List;
 import com.yardi.entity.guestcard40.RentableItemType;
 import com.yardi.entity.guestcard40.RentableItems;
 
+import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.commons.Key;
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.config.server.SystemDateManager;
@@ -73,38 +74,6 @@ public class YardiProductCatalogProcessor {
         }
     }
 
-    private void updateUnitItems(Service service, List<AptUnit> units) {
-        Persistence.ensureRetrieve(service.version().items(), AttachLevel.Attached);
-
-        List<ProductItem> serviceItems = new ArrayList<ProductItem>(service.version().items());
-        Collections.sort(serviceItems, new Comparator<ProductItem>() {
-            @Override
-            public int compare(ProductItem o1, ProductItem o2) {
-                return o1.element().getPrimaryKey().compareTo(o2.element().getPrimaryKey());
-            }
-        });
-
-        for (AptUnit unit : units) {
-            ProductItem item = EntityFactory.create(ProductItem.class);
-            item.element().set(unit);
-
-            if (Collections.binarySearch(serviceItems, item, new Comparator<ProductItem>() {
-                @Override
-                public int compare(ProductItem o1, ProductItem o2) {
-                    return o1.element().getPrimaryKey().compareTo(o2.element().getPrimaryKey());
-                }
-            }) < 0) {
-                item.name().setValue(service.code().name().getStringView());
-                service.version().items().add(item);
-            }
-        }
-
-        // update items price:
-        for (ProductItem item : service.version().items()) {
-            item.price().setValue(service.version().price().getValue());
-        }
-    }
-
     public void persistCatalog(Building building) {
         assert (!building.productCatalog().isValueDetached());
         assert (!building.productCatalog().services().isValueDetached());
@@ -128,19 +97,19 @@ public class YardiProductCatalogProcessor {
 
     // internals:
 
-    private class ProductTypeData {
+    public static class YardiRentableItemTypeData {
 
-        private final RentableItemType yariItemType;
+        private final RentableItemType itemType;
 
         private final ARCode arCode;
 
-        private ProductTypeData(RentableItemType yariItemType, ARCode arCode) {
-            this.yariItemType = yariItemType;
+        public YardiRentableItemTypeData(RentableItemType itemType, ARCode arCode) {
+            this.itemType = itemType;
             this.arCode = arCode;
         }
 
-        public RentableItemType getYariItemType() {
-            return yariItemType;
+        public RentableItemType getItemType() {
+            return itemType;
         }
 
         public ARCode getArCode() {
@@ -148,8 +117,8 @@ public class YardiProductCatalogProcessor {
         }
     }
 
-    private Collection<ProductTypeData> retrieveProductTypeData(RentableItems rentableItems, EnumSet<Type> forProductTypes) {
-        Collection<ProductTypeData> productTypeData = new ArrayList<ProductTypeData>();
+    private Collection<YardiRentableItemTypeData> retrieveYardiRentableItemTypeData(RentableItems rentableItems, EnumSet<Type> forProductTypes) {
+        Collection<YardiRentableItemTypeData> productTypeData = new ArrayList<YardiRentableItemTypeData>();
 
         for (RentableItemType itemType : rentableItems.getItemType()) {
             EntityQueryCriteria<ARCode> criteria = EntityQueryCriteria.create(ARCode.class);
@@ -157,11 +126,21 @@ public class YardiProductCatalogProcessor {
             criteria.eq(criteria.proto().yardiChargeCodes().$().yardiChargeCode(), itemType.getChargeCode());
             ARCode arCode = Persistence.service().retrieve(criteria);
             if (arCode != null) {
-                productTypeData.add(new ProductTypeData(itemType, arCode));
+                productTypeData.add(new YardiRentableItemTypeData(itemType, arCode));
             }
         }
 
         return productTypeData;
+    }
+
+    // ----------------------------------------------------------------------------------
+
+    private void updateServices(ProductCatalog catalog, RentableItems rentableItems) {
+        deleteServices(catalog);
+        catalog.services().clear();
+        for (YardiRentableItemTypeData typeData : retrieveYardiRentableItemTypeData(rentableItems, ARCode.Type.services())) {
+            catalog.services().add(ensureService(catalog, typeData));
+        }
     }
 
     private void deleteServices(ProductCatalog catalog) {
@@ -173,20 +152,12 @@ public class YardiProductCatalogProcessor {
         }
     }
 
-    private void updateServices(ProductCatalog catalog, RentableItems rentableItems) {
-        deleteServices(catalog);
-        catalog.services().clear();
-        for (ProductTypeData typeData : retrieveProductTypeData(rentableItems, ARCode.Type.services())) {
-            catalog.services().add(ensureService(catalog, typeData));
-        }
-    }
-
-    private Service ensureService(ProductCatalog catalog, ProductTypeData typeData) {
+    private Service ensureService(ProductCatalog catalog, YardiRentableItemTypeData typeData) {
         EntityQueryCriteria<Service> criteria = EntityQueryCriteria.create(Service.class);
         criteria.eq(criteria.proto().catalog(), catalog);
         criteria.eq(criteria.proto().isDefaultCatalogItem(), false);
         criteria.eq(criteria.proto().code(), typeData.getArCode());
-        criteria.eq(criteria.proto().version().name(), typeData.getYariItemType().getCode());
+        criteria.eq(criteria.proto().version().name(), typeData.getItemType().getCode());
 
         Service service = Persistence.service().retrieve(criteria);
         if (service == null) {
@@ -194,17 +165,44 @@ public class YardiProductCatalogProcessor {
             service.isDefaultCatalogItem().setValue(false);
             service.catalog().set(catalog);
             service.code().set(typeData.getArCode());
-            service.version().name().setValue(typeData.getYariItemType().getCode());
+            service.version().name().setValue(typeData.getItemType().getCode());
         } else {
-            service = Persistence.secureRetrieveDraft(Service.class, service.getPrimaryKey());
+            if (isServiceChanged(service, typeData)) {
+                service = Persistence.secureRetrieveDraft(Service.class, service.getPrimaryKey());
+            }
         }
 
-        service.version().description().setValue(typeData.getYariItemType().getDescription());
-        service.version().price().setValue(new BigDecimal(typeData.getYariItemType().getRent()));
+        service.version().description().setValue(typeData.getItemType().getDescription());
+        service.version().price().setValue(new BigDecimal(typeData.getItemType().getRent()));
 
         service.expiredFrom().setValue(null);
 
         return service;
+    }
+
+    private boolean isServiceChanged(Service service, YardiRentableItemTypeData itemTypeData) {
+
+        boolean isChanged = false;
+
+        if (!isChanged) {
+            isChanged = (service.version().price().isNull() || service.version().price().getValue()
+                    .compareTo(new BigDecimal(itemTypeData.getItemType().getRent())) != 0);
+        }
+        if (!isChanged) {
+            isChanged = !CommonsStringUtils.equals(service.version().description().getValue(), itemTypeData.getItemType().getDescription());
+        }
+
+        return isChanged;
+    }
+
+    // ----------------------------------------------------------------------------------
+
+    private void updateFeatures(ProductCatalog catalog, RentableItems rentableItems) {
+        deleteFeatures(catalog);
+        catalog.features().clear();
+        for (YardiRentableItemTypeData typeData : retrieveYardiRentableItemTypeData(rentableItems, ARCode.Type.features())) {
+            catalog.features().add(ensureFeature(catalog, typeData));
+        }
     }
 
     private void deleteFeatures(ProductCatalog catalog) {
@@ -216,20 +214,12 @@ public class YardiProductCatalogProcessor {
         }
     }
 
-    private void updateFeatures(ProductCatalog catalog, RentableItems rentableItems) {
-        deleteFeatures(catalog);
-        catalog.features().clear();
-        for (ProductTypeData typeData : retrieveProductTypeData(rentableItems, ARCode.Type.features())) {
-            catalog.features().add(ensureFeature(catalog, typeData));
-        }
-    }
-
-    private Feature ensureFeature(ProductCatalog catalog, ProductTypeData typeData) {
+    private Feature ensureFeature(ProductCatalog catalog, YardiRentableItemTypeData typeData) {
         EntityQueryCriteria<Feature> criteria = EntityQueryCriteria.create(Feature.class);
         criteria.eq(criteria.proto().catalog(), catalog);
         criteria.eq(criteria.proto().isDefaultCatalogItem(), false);
         criteria.eq(criteria.proto().code(), typeData.getArCode());
-        criteria.eq(criteria.proto().version().name(), typeData.getYariItemType().getCode());
+        criteria.eq(criteria.proto().version().name(), typeData.getItemType().getCode());
 
         Feature feature = Persistence.service().retrieve(criteria);
         if (feature == null) {
@@ -237,18 +227,21 @@ public class YardiProductCatalogProcessor {
             feature.isDefaultCatalogItem().setValue(false);
             feature.catalog().set(catalog);
             feature.code().set(typeData.getArCode());
-            feature.version().name().setValue(typeData.getYariItemType().getCode());
+            feature.version().name().setValue(typeData.getItemType().getCode());
             feature.version().recurring().setValue(!ARCode.Type.nonReccuringFeatures().contains(typeData.getArCode().type().getValue()));
             feature.version().mandatory().setValue(false);
             feature.version().items().add(createFeatureItem(typeData.getArCode()));
         } else {
-            feature = Persistence.secureRetrieveDraft(Feature.class, feature.getPrimaryKey());
+            if (isFeatureChanged(feature, typeData)) {
+                feature = Persistence.secureRetrieveDraft(Feature.class, feature.getPrimaryKey());
+            }
         }
 
-        feature.version().description().setValue(typeData.getYariItemType().getDescription());
-        feature.version().price().setValue(new BigDecimal(typeData.getYariItemType().getRent()));
+        feature.version().description().setValue(typeData.getItemType().getDescription());
+        feature.version().price().setValue(new BigDecimal(typeData.getItemType().getRent()));
 
         // update items price:
+        Persistence.ensureRetrieve(feature.version().items(), AttachLevel.Attached);
         for (ProductItem item : feature.version().items()) {
             item.price().setValue(feature.version().price().getValue());
         }
@@ -256,6 +249,21 @@ public class YardiProductCatalogProcessor {
         feature.expiredFrom().setValue(null);
 
         return feature;
+    }
+
+    private boolean isFeatureChanged(Feature feature, YardiRentableItemTypeData itemTypeData) {
+
+        boolean isChanged = false;
+
+        if (!isChanged) {
+            isChanged = (feature.version().price().isNull() || feature.version().price().getValue()
+                    .compareTo(new BigDecimal(itemTypeData.getItemType().getRent())) != 0);
+        }
+        if (!isChanged) {
+            isChanged = !CommonsStringUtils.equals(feature.version().description().getValue(), itemTypeData.getItemType().getDescription());
+        }
+
+        return isChanged;
     }
 
     private ProductItem createFeatureItem(ARCode code) {
@@ -266,6 +274,8 @@ public class YardiProductCatalogProcessor {
 
         return item;
     }
+
+    // ----------------------------------------------------------------------------------
 
     private void updateEligibilityMatrixes(ProductCatalog catalog) {
         for (Service service : catalog.services()) {
@@ -279,6 +289,37 @@ public class YardiProductCatalogProcessor {
                     service.version().concessions().clear();
                 }
             }
+        }
+    }
+
+    // ----------------------------------------------------------------------------------
+
+    private class ProductItemByElementComparator implements Comparator<ProductItem> {
+        @Override
+        public int compare(ProductItem o1, ProductItem o2) {
+            return o1.element().getPrimaryKey().compareTo(o2.element().getPrimaryKey());
+        }
+    };
+
+    private void updateUnitItems(Service service, List<AptUnit> units) {
+        Persistence.ensureRetrieve(service.version().items(), AttachLevel.Attached);
+
+        List<ProductItem> serviceItems = new ArrayList<ProductItem>(service.version().items());
+        Collections.sort(serviceItems, new ProductItemByElementComparator());
+
+        for (AptUnit unit : units) {
+            ProductItem item = EntityFactory.create(ProductItem.class);
+            item.element().set(unit);
+
+            if (Collections.binarySearch(serviceItems, item, new ProductItemByElementComparator()) < 0) {
+                item.name().setValue(service.code().name().getStringView());
+                service.version().items().add(item);
+            }
+        }
+
+        // update items price:
+        for (ProductItem item : service.version().items()) {
+            item.price().setValue(service.version().price().getValue());
         }
     }
 }
