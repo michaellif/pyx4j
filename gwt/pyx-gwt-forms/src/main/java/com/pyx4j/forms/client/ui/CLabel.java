@@ -42,7 +42,7 @@ public class CLabel<E> extends CField<E, NLabel<E>> {
         return format;
     }
 
-    public String format(E value) {
+    protected String format(E value) {
         String text = null;
         try {
             text = getFormat().format(value);
