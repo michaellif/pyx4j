@@ -37,6 +37,10 @@ public class ProspectSignUpServiceImpl implements ProspectSignUpService {
         request.email().setValue(dto.email().getValue());
         request.password().setValue(dto.password().getValue());
 
+        request.ilsBuildingId().setValue(dto.ilsBuildingId().getValue());
+        request.ilsFloorplanId().setValue(dto.ilsFloorplanId().getValue());
+        request.ilsUnitId().setValue(dto.ilsUnitId().getValue());
+
         ServerSideFactory.create(OnlineApplicationFacade.class).prospectSignUp(request);
         Persistence.service().commit();
         callback.onSuccess(null);

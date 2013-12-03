@@ -34,6 +34,8 @@ import com.pyx4j.entity.shared.ISet;
 import com.pyx4j.i18n.annotations.I18n;
 import com.pyx4j.i18n.shared.I18nEnum;
 
+import com.propertyvista.domain.property.asset.Floorplan;
+import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.tenant.lease.LeaseApplication;
 
 public interface MasterOnlineApplication extends IEntity {
@@ -71,6 +73,12 @@ public interface MasterOnlineApplication extends IEntity {
     IPrimitive<String> onlineApplicationId();
 
     IPrimitive<Status> status();
+
+    @Detached
+    Building building();
+
+    @Detached
+    Floorplan floorplan();
 
     @Owned
     @Detached

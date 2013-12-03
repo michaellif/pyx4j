@@ -41,6 +41,7 @@ import com.propertyvista.domain.policy.policies.TenantInsurancePolicy;
 import com.propertyvista.domain.tenant.insurance.GeneralInsuranceCertificate;
 import com.propertyvista.domain.tenant.insurance.InsuranceCertificate;
 import com.propertyvista.domain.tenant.insurance.PropertyVistaIntegratedInsurance;
+import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.LeaseTerm;
 import com.propertyvista.domain.tenant.lease.LeaseTermParticipant.Role;
 import com.propertyvista.domain.tenant.lease.LeaseTermTenant;
@@ -132,7 +133,9 @@ public class TenantCrudServiceImpl extends LeaseParticipantCrudServiceBaseImpl<T
     private void fillPreauthorizedPayments(TenantDTO dto, RetrieveTarget retrieveTarget) {
         dto.preauthorizedPayments().addAll(
                 PreauthorizedPaymentsCommons.createPreauthorizedPayments(EntityFactory.createIdentityStub(Tenant.class, dto.id().getValue()), retrieveTarget));
-        dto.nextScheduledPaymentDate().setValue(ServerSideFactory.create(PaymentMethodFacade.class).getNextAutopayDate(dto.lease()));
+        if (!Lease.Status.isApplicationWithoutUnit(dto.lease())) {
+            dto.nextScheduledPaymentDate().setValue(ServerSideFactory.create(PaymentMethodFacade.class).getNextAutopayDate(dto.lease()));
+        }
     }
 
     private void savePreauthorizedPayments(TenantDTO dto) {

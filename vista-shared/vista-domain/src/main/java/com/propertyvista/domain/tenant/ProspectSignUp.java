@@ -40,4 +40,11 @@ public interface ProspectSignUp extends IEntity {
     @NotNull
     @LogTransient
     IPrimitive<String> password();
+
+    IPrimitive<String> ilsBuildingId();
+
+    IPrimitive<String> ilsFloorplanId();
+
+    IPrimitive<String> ilsUnitId();
+
 }

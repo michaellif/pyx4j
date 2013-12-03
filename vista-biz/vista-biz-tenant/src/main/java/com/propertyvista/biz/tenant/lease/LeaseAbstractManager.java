@@ -685,6 +685,9 @@ public abstract class LeaseAbstractManager {
 
     public boolean isMoveOutWithinNextBillingCycle(Lease leaseId) {
         Lease lease = Persistence.service().retrieve(Lease.class, leaseId.getPrimaryKey());
+        if (Lease.Status.isApplicationWithoutUnit(lease)) {
+            return false;
+        }
         BillingCycle nextCycle = ServerSideFactory.create(PaymentMethodFacade.class).getNextAutopayBillingCycle(lease);
         AutoPayPolicy autoPayPolicy = ServerSideFactory.create(PolicyFacade.class).obtainEffectivePolicy(lease.unit().building(), AutoPayPolicy.class);
 

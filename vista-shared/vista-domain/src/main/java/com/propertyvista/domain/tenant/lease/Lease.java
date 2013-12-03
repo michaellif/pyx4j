@@ -151,6 +151,14 @@ public interface Lease extends IEntity, HasNotesAndAttachments {
         public boolean isNoAutoPay() {
             return noAutoPay().contains(this);
         }
+
+        /**
+         * Unit was not selected yet.
+         */
+        public static boolean isApplicationWithoutUnit(Lease lease) {
+            return (lease.status().getValue() == Application) && lease.unit().isNull();
+        }
+
     }
 
     @I18n(context = "Lease Completion Type")

@@ -31,6 +31,7 @@ import com.pyx4j.site.rpc.AppPlaceInfo;
 
 import com.propertyvista.portal.prospect.ui.signup.SignUpView;
 import com.propertyvista.portal.prospect.ui.signup.SignUpView.SignUpPresenter;
+import com.propertyvista.portal.rpc.portal.prospect.ProspectPortalSiteMap;
 import com.propertyvista.portal.rpc.portal.prospect.dto.ProspectSignUpDTO;
 import com.propertyvista.portal.rpc.portal.prospect.services.ProspectAuthenticationService;
 import com.propertyvista.portal.rpc.portal.prospect.services.ProspectSignUpService;
@@ -55,6 +56,10 @@ public class SignUpActivity extends AbstractActivity implements SignUpPresenter 
 
     @Override
     public void signUp(final ProspectSignUpDTO value) {
+        value.ilsBuildingId().setValue(Window.Location.getParameter(ProspectPortalSiteMap.ARG_ILS_BUILDING_ID));
+        value.ilsFloorplanId().setValue(Window.Location.getParameter(ProspectPortalSiteMap.ARG_ILS_FLOORPLAN_ID));
+        value.ilsUnitId().setValue(Window.Location.getParameter(ProspectPortalSiteMap.ARG_ILS_UNIT_ID));
+
         GWT.<ProspectSignUpService> create(ProspectSignUpService.class).signUp(new DefaultAsyncCallback<VoidSerializable>() {
             @Override
             public void onSuccess(VoidSerializable result) {

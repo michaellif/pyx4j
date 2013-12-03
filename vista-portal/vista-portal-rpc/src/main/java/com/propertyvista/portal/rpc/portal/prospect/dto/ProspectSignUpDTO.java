@@ -14,10 +14,16 @@
 package com.propertyvista.portal.rpc.portal.prospect.dto;
 
 import com.pyx4j.entity.annotations.Transient;
+import com.pyx4j.entity.shared.IPrimitive;
 
 import com.propertyvista.portal.rpc.portal.shared.dto.SelfRegistrationDTO;
 
 @Transient
 public interface ProspectSignUpDTO extends SelfRegistrationDTO {
 
+    IPrimitive<String> ilsBuildingId();
+
+    IPrimitive<String> ilsFloorplanId();
+
+    IPrimitive<String> ilsUnitId();
 }

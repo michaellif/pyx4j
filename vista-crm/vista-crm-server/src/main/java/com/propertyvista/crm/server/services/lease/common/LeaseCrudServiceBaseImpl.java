@@ -104,7 +104,7 @@ public abstract class LeaseCrudServiceBaseImpl<DTO extends LeaseDTO> extends Abs
         lease.tenantInsuranceCertificates().addAll(ServerSideFactory.create(TenantInsuranceFacade.class).getInsuranceCertificates(tenantId, false));
     }
 
-    private void loadRestrictions(LeaseDTO lease) {
+    protected void loadRestrictions(DTO lease) {
         RestrictionsPolicy restrictionsPolicy = ServerSideFactory.create(PolicyFacade.class).obtainEffectivePolicy(lease.unit(), RestrictionsPolicy.class);
         if (restrictionsPolicy.enforceAgeOfMajority().isBooleanTrue()) {
             lease.ageOfMajority().setValue(restrictionsPolicy.ageOfMajority().getValue());
