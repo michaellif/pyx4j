@@ -40,6 +40,7 @@ public class FeatureLister extends AbstractLister<Feature> {
         setColumnDescriptors(//@formatter:off
             new MemberColumnDescriptor.Builder(proto().code(), true).build(),
             new MemberColumnDescriptor.Builder(proto().version().name(), true).build(),
+            new MemberColumnDescriptor.Builder(proto().version().price()).build(),
             new MemberColumnDescriptor.Builder(proto().version().mandatory(), true).build(),
             new MemberColumnDescriptor.Builder(proto().version().recurring(), true).build(),
             new MemberColumnDescriptor.Builder(proto().version().versionNumber()).build(), 

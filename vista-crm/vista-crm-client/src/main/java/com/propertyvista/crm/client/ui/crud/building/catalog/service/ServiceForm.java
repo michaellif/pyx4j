@@ -46,6 +46,8 @@ public class ServiceForm extends CrmEntityForm<Service> {
         content.setWidget(row, 1, new FormDecoratorBuilder(inject(proto().expiredFrom()), 10).build());
 
         content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().version().name()), 20).build());
+        content.setWidget(row, 1, new FormDecoratorBuilder(inject(proto().version().price()), 10).build());
+
         content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().version().description()), 55).build());
 
         content.setH1(++row, 0, 2, i18n.tr("Items"));

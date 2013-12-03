@@ -41,13 +41,15 @@ public class FeatureForm extends CrmEntityForm<Feature> {
         content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().version().name()), 20).build());
         content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().version().description()), 55).build());
 
-        content.setH1(++row, 0, 2, i18n.tr("Items"));
-        content.setWidget(++row, 0, 2, inject(proto().version().items(), new FeatureItemFolder(this)));
-
         row = 0;
+        content.setWidget(++row, 1, new FormDecoratorBuilder(inject(proto().expiredFrom()), 10).build());
+
+        content.setWidget(++row, 1, new FormDecoratorBuilder(inject(proto().version().price()), 10).build());
         content.setWidget(++row, 1, new FormDecoratorBuilder(inject(proto().version().mandatory()), 4).build());
         content.setWidget(++row, 1, new FormDecoratorBuilder(inject(proto().version().recurring()), 4).build());
-        content.setWidget(++row, 1, new FormDecoratorBuilder(inject(proto().expiredFrom()), 10).build());
+
+        content.setH1(++row, 0, 2, i18n.tr("Items"));
+        content.setWidget(++row, 0, 2, inject(proto().version().items(), new FeatureItemFolder(this)));
 
         selectTab(addTab(content));
         setTabBarVisible(false);
