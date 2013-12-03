@@ -21,7 +21,6 @@ import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.AttachLevel;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
-import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.security.rpc.AuthenticationService;
 import com.pyx4j.site.rpc.AppPlaceInfo;
@@ -124,21 +123,6 @@ public class EmailTemplateRootObjectLoader {
             String token = context.accessToken().getValue();
             t.RequestorName().set(user.name());
             t.PasswordResetUrl().setValue(getCrmAccessUrl(token));
-        } else if (tObj instanceof TenantT) {
-            TenantT t = (TenantT) tObj;
-            Customer customer;
-            if (!context.leaseParticipant().isNull()) {
-                Persistence.ensureRetrieve(context.leaseParticipant(), AttachLevel.Attached);
-                customer = context.leaseParticipant().customer();
-            } else if (!context.leaseTermParticipant().isNull()) {
-                Persistence.ensureRetrieve(context.leaseTermParticipant(), AttachLevel.Attached);
-                customer = context.leaseTermParticipant().leaseParticipant().customer();
-            } else {
-                throw new Error("LeaseParticipant or LeaseTermParticipant should be provided in context");
-            }
-            t.Name().setValue(customer.person().name().getStringView());
-            t.FirstName().setValue(customer.person().name().firstName().getStringView());
-            t.LastName().setValue(customer.person().name().lastName().getStringView());
         } else if (tObj instanceof BuildingT) {
             BuildingT t = (BuildingT) tObj;
             Building bld = null;
@@ -179,25 +163,38 @@ public class EmailTemplateRootObjectLoader {
         } else if (tObj instanceof ApplicationT) {
             ApplicationT t = (ApplicationT) tObj;
             OnlineApplication app = null;
-            AbstractUser user = null;
+            Customer customer;
             if (!context.leaseTermParticipant().isNull()) {
                 app = getApplication(context.leaseTermParticipant());
-                if (context.leaseTermParticipant().leaseParticipant().customer().user().isValueDetached()) {
-                    Persistence.service().retrieve(context.leaseTermParticipant().leaseParticipant().customer().user());
-                }
-                user = context.leaseTermParticipant().leaseParticipant().customer().user();
-            } else if (!context.lease().isNull() && !context.user().isNull()) {
-                app = getApplication(context.user(), context.lease());
-                user = context.user();
+                Persistence.ensureRetrieve(context.leaseTermParticipant(), AttachLevel.Attached);
+                customer = context.leaseTermParticipant().leaseParticipant().customer();
+            } else {
+                throw new Error("LeaseTermParticipant should be provided in context");
             }
-            if (app == null || user == null) {
-                throw new Error("Either TenantInLease or AbstractUser and Lease should be provided in context");
-            }
-            t.ApplicantName().set(user.name());
+            t.ApplicantName().setValue(customer.person().name().getStringView());
+            t.ApplicantFirstName().setValue(customer.person().name().firstName().getStringView());
+            t.ApplicantLastName().setValue(customer.person().name().lastName().getStringView());
             t.ReferenceNumber().setValue(app.getPrimaryKey().toString());
             if (!context.accessToken().isNull()) {
                 t.SignUpUrl().setValue(getPtappAccessUrl(context.accessToken().getValue()));
+            } else {
+                t.SignUpUrl().setValue(VistaDeployment.getBaseApplicationURL(VistaApplication.prospect, true));
             }
+        } else if (tObj instanceof TenantT) {
+            TenantT t = (TenantT) tObj;
+            Customer customer;
+            if (!context.leaseParticipant().isNull()) {
+                Persistence.ensureRetrieve(context.leaseParticipant(), AttachLevel.Attached);
+                customer = context.leaseParticipant().customer();
+            } else if (!context.leaseTermParticipant().isNull()) {
+                Persistence.ensureRetrieve(context.leaseTermParticipant(), AttachLevel.Attached);
+                customer = context.leaseTermParticipant().leaseParticipant().customer();
+            } else {
+                throw new Error("LeaseParticipant or LeaseTermParticipant should be provided in context");
+            }
+            t.Name().setValue(customer.person().name().getStringView());
+            t.FirstName().setValue(customer.person().name().firstName().getStringView());
+            t.LastName().setValue(customer.person().name().lastName().getStringView());
         } else if (tObj instanceof LeaseT) {
             LeaseT t = (LeaseT) tObj;
             if (context.lease().isNull()) {
@@ -309,20 +306,6 @@ public class EmailTemplateRootObjectLoader {
             Persistence.service().retrieve(tenantInLease.application());
         }
         OnlineApplication app = tenantInLease.application();
-        if (app == null || app.isNull()) {
-            throw new Error("Invalid context. No Application found.");
-        }
-        return app;
-    }
-
-    private static OnlineApplication getApplication(AbstractUser user, Lease lease) {
-        if (user == null || user.isNull() || lease == null || lease.isNull()) {
-            throw new Error("Context cannot be null");
-        }
-        EntityQueryCriteria<OnlineApplication> appSearch = EntityQueryCriteria.create(OnlineApplication.class);
-        appSearch.add(PropertyCriterion.eq(appSearch.proto().customer().user(), user));
-        appSearch.add(PropertyCriterion.eq(appSearch.proto().masterOnlineApplication().leaseApplication().lease(), lease));
-        OnlineApplication app = Persistence.service().retrieve(appSearch);
         if (app == null || app.isNull()) {
             throw new Error("Invalid context. No Application found.");
         }

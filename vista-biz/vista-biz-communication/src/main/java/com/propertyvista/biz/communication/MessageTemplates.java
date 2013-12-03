@@ -124,6 +124,7 @@ public class MessageTemplates {
             data.add(EmailTemplateRootObjectLoader.loadRootObject(tObj, context));
         }
         MailMessage email = new MailMessage();
+        Persistence.ensureRetrieve(tenantInLease.leaseParticipant().customer().user(), AttachLevel.Attached);
         email.setTo(tenantInLease.leaseParticipant().customer().user().email().getValue());
         email.setSender(getSender());
         buildEmail(email, emailTemplate, data);
