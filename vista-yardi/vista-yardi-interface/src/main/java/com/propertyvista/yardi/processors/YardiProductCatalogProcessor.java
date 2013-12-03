@@ -94,7 +94,6 @@ public class YardiProductCatalogProcessor {
     }
 
     // ----------------------------------------------------------------------------------
-
     // internals:
 
     public static class YardiRentableItemTypeData {

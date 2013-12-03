@@ -172,8 +172,11 @@ public class YardiResidentTransactionsService extends YardiAbstractService {
             }
 
             // product catalog:
-            if (!executionMonitor.isTerminationRequested()) {
+            if (!executionMonitor.isTerminationRequested() && (ApplicationMode.isDevelopment() || !VistaTODO.pendingYardiConfigPatchILS)) {
                 for (Building building : importedBuildings) {
+                    if (executionMonitor.isTerminationRequested()) {
+                        break;
+                    }
                     updateProductCatalog(yc, building);
                 }
             }
