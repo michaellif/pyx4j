@@ -13,10 +13,13 @@
  */
 package com.propertyvista.crm.client.ui.tools.financial.moneyin;
 
+import com.google.gwt.cell.client.ActionCell;
+import com.google.gwt.cell.client.ActionCell.Delegate;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Style.FontWeight;
 import com.google.gwt.dom.client.Style.TextAlign;
 import com.google.gwt.dom.client.Style.Unit;
+import com.google.gwt.user.cellview.client.Column;
 import com.google.gwt.user.cellview.client.SimplePager;
 import com.google.gwt.user.cellview.client.SimplePager.TextLocation;
 import com.google.gwt.user.client.Command;
@@ -106,7 +109,27 @@ public class MoneyInCreateBatchViewImpl extends AbstractPrimePane implements Mon
             selectedHolder.setWidgetTopHeight(selectedHeader, 0, Unit.PX, 30, Unit.PX);
             selectedHolder.setWidgetLeftRight(selectedHeader, 0, Unit.PX, 0, Unit.PX);
 
-            selectedHolder.add(selectedForProcessingDataGrid = new MoneyInCandidateDataGrid());
+            selectedHolder.add(selectedForProcessingDataGrid = new MoneyInCandidateDataGrid() {
+                @Override
+                protected void defProcessColumn() {
+                    Column<MoneyInCandidateDTO, MoneyInCandidateDTO> processColumn = new Column<MoneyInCandidateDTO, MoneyInCandidateDTO>(
+                            new ActionCell<MoneyInCandidateDTO>(i18n.tr("Remove"), new Delegate<MoneyInCandidateDTO>() {
+                                @Override
+                                public void execute(MoneyInCandidateDTO object) {
+                                    presenter.setProcessCandidate(object, false);
+                                }
+
+                            })) {
+
+                        @Override
+                        public MoneyInCandidateDTO getValue(MoneyInCandidateDTO object) {
+                            return object;
+                        }
+
+                    };
+                    defColumn(processColumn, "", 50, Unit.PX);
+                }
+            });
             selectedHolder.setWidgetTopBottom(selectedForProcessingDataGrid, 31, Unit.PX, 33, Unit.PX);
             selectedHolder.setWidgetLeftRight(selectedForProcessingDataGrid, 0, Unit.PX, 0, Unit.PX);
 

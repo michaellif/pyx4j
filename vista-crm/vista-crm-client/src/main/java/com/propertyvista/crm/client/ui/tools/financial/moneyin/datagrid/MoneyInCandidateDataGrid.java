@@ -144,6 +144,11 @@ public class MoneyInCandidateDataGrid extends VistaDataGrid<MoneyInCandidateDTO>
         checkNumberColumn.setCellStyleNames(VistaDataGridStyles.VistaMoneyCell.name());
         defColumn(checkNumberColumn, i18n.tr("Ref #"), 40, Unit.PX);
 
+        defProcessColumn();
+    }
+
+    // TODO this method doesn't indicate in any way that it renders 'process' column, maybe rename it to defLastColumn? 
+    protected void defProcessColumn() {
         Column<MoneyInCandidateDTO, Boolean> processColumn = new Column<MoneyInCandidateDTO, Boolean>(new CheckboxCell(false, false)) {
             @Override
             public Boolean getValue(MoneyInCandidateDTO object) {
@@ -156,7 +161,7 @@ public class MoneyInCandidateDataGrid extends VistaDataGrid<MoneyInCandidateDTO>
                 presenter.setProcessCandidate(object, value);
             }
         });
-        defColumn(processColumn, "Process?", 50, Unit.PX);
+        defColumn(processColumn, i18n.tr("Process?"), 50, Unit.PX);
     }
 
     private String renderLeaseParticipants(MoneyInCandidateDTO candidate) {
