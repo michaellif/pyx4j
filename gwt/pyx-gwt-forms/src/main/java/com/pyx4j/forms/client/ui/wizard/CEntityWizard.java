@@ -194,8 +194,5 @@ public class CEntityWizard<E extends IEntity> extends CEntityForm<E> {
     }
 
     public void updateProgress() {
-        if (getDecorator() instanceof WizardProgressIndicator) {
-            ((WizardProgressIndicator) getDecorator()).updateProgress();
-        }
     }
 }
