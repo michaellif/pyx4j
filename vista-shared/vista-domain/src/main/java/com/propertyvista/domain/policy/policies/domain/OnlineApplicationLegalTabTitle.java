@@ -18,21 +18,18 @@ import com.pyx4j.entity.annotations.JoinColumn;
 import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.annotations.Owner;
 import com.pyx4j.entity.annotations.ReadOnly;
-import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 
+import com.propertyvista.domain.ILocalizedEntity;
 import com.propertyvista.domain.policy.policies.OnlineApplicationPolicy;
-import com.propertyvista.domain.site.AvailableLocale;
 
-public interface OnlineApplicationLegalTabTitle extends IEntity {
+public interface OnlineApplicationLegalTabTitle extends ILocalizedEntity {
     @Detached
     @ReadOnly
     @Owner
     @MemberColumn(notNull = true)
     @JoinColumn
     OnlineApplicationPolicy policy();
-
-    AvailableLocale locale();
 
     IPrimitive<String> title();
 

@@ -14,16 +14,17 @@
 package com.propertyvista.domain.policy.policies.domain;
 
 import com.pyx4j.entity.annotations.Detached;
+import com.pyx4j.entity.annotations.Editor;
 import com.pyx4j.entity.annotations.JoinColumn;
+import com.pyx4j.entity.annotations.Length;
 import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.annotations.Owner;
 import com.pyx4j.entity.annotations.ReadOnly;
-import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 
-import com.propertyvista.domain.site.AvailableLocale;
+import com.propertyvista.domain.ILocalizedEntity;
 
-public interface OnlineApplicationLegalTermContent extends IEntity {
+public interface OnlineApplicationLegalTermContent extends ILocalizedEntity {
     @Detached
     @ReadOnly
     @Owner
@@ -31,10 +32,10 @@ public interface OnlineApplicationLegalTermContent extends IEntity {
     @JoinColumn
     OnlineApplicationLegalTerm term();
 
-    AvailableLocale locale();
-
     IPrimitive<String> title();
 
+    @Editor(type = Editor.EditorType.richtextarea)
+    @Length(48000)
     IPrimitive<String> body();
 
 }
