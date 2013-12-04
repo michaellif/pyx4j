@@ -11,16 +11,17 @@
  * @author michaellif
  * @version $Id$
  */
-package com.propertyvista.portal.prospect.ui;
+package com.propertyvista.portal.prospect.ui.application;
 
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTML;
+import com.google.gwt.user.client.ui.Label;
 
 import com.pyx4j.i18n.shared.I18n;
 
+import com.propertyvista.portal.prospect.themes.RentalSummaryTheme;
 import com.propertyvista.portal.rpc.portal.prospect.dto.OnlineApplicationDTO;
 import com.propertyvista.portal.shared.themes.BlockMixin;
-import com.propertyvista.portal.shared.themes.ExtraGadgetsTheme;
 import com.propertyvista.portal.shared.themes.PortalRootPaneTheme;
 
 public class ChargesSummaryGadget extends FlowPanel {
@@ -35,18 +36,18 @@ public class ChargesSummaryGadget extends FlowPanel {
 
         HTML titleHTML = new HTML(i18n.tr("Charges"));
         titleHTML.setStyleName(PortalRootPaneTheme.StyleName.ExtraGadgetItemTitle.name());
-
         add(titleHTML);
 
         FlowPanel panel = new FlowPanel();
 
         HTML applicationChargesHTML = new HTML(i18n.tr("Application Charges"));
-        applicationChargesHTML.setStyleName(ExtraGadgetsTheme.StyleName.CommunityEventCaption.name());
-        panel.add(applicationChargesHTML);
+        if (false) {
+            panel.add(applicationChargesHTML);
+        }
 
-        HTML monthlyChargesHTML = new HTML(i18n.tr("Monthly Charges"));
-        monthlyChargesHTML.setStyleName(ExtraGadgetsTheme.StyleName.CommunityEventCaption.name());
-        panel.add(monthlyChargesHTML);
+        Label monthlyChargesCaption = new Label(i18n.tr("Monthly Charges"));
+        monthlyChargesCaption.setStyleName(RentalSummaryTheme.StyleName.ChargesCaption.name());
+        panel.add(monthlyChargesCaption);
 
         add(panel);
     }

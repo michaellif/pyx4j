@@ -19,10 +19,10 @@ import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.i18n.shared.I18n;
 
+import com.propertyvista.portal.resident.themes.ExtraGadgetsTheme;
 import com.propertyvista.portal.resident.ui.extra.ExtraGadget;
 import com.propertyvista.portal.rpc.portal.resident.dto.CommunityEventDTO;
 import com.propertyvista.portal.rpc.portal.resident.dto.CommunityEventsGadgetDTO;
-import com.propertyvista.portal.shared.themes.ExtraGadgetsTheme;
 
 public class CommunityEventsGadget extends ExtraGadget<CommunityEventsGadgetDTO> {
 

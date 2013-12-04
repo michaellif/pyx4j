@@ -11,7 +11,7 @@
  * @author Mykola
  * @version $Id$
  */
-package com.propertyvista.portal.prospect.ui;
+package com.propertyvista.portal.prospect.ui.application;
 
 import com.google.gwt.user.client.ui.FlowPanel;
 

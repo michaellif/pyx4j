@@ -25,6 +25,7 @@ public class ResidentPortalTheme extends PortalTheme {
     protected void initStyles() {
         super.initStyles();
         addTheme(new TenantSureTheme());
+        addTheme(new ExtraGadgetsTheme());
     }
 
 }

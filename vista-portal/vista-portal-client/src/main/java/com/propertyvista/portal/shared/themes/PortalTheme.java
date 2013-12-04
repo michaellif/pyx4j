@@ -33,6 +33,7 @@ import com.pyx4j.widgets.client.dialog.DefaultDialogTheme;
 import com.propertyvista.common.client.theme.HorizontalAlignCenterMixin;
 import com.propertyvista.common.client.theme.TransactionHistoryViewerTheme;
 import com.propertyvista.common.client.theme.VistaTheme.StyleName;
+import com.propertyvista.portal.resident.themes.ExtraGadgetsTheme;
 import com.propertyvista.portal.shared.resources.PortalImages;
 
 public class PortalTheme extends Theme {
@@ -326,7 +327,6 @@ public class PortalTheme extends Theme {
         addTheme(new PortalBillingTheme());
         addTheme(new TransactionHistoryViewerTheme());
         addTheme(new DashboardTheme());
-        addTheme(new ExtraGadgetsTheme());
         addTheme(new EntityViewTheme());
         addTheme(new StepsTheme());
 

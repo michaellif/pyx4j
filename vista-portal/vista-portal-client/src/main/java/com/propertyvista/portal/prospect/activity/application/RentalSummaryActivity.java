@@ -11,7 +11,7 @@
  * @author michaellif
  * @version $Id$
  */
-package com.propertyvista.portal.prospect.activity;
+package com.propertyvista.portal.prospect.activity.application;
 
 import com.google.gwt.activity.shared.AbstractActivity;
 import com.google.gwt.event.shared.EventBus;
@@ -25,8 +25,8 @@ import com.pyx4j.site.client.ui.layout.responsive.LayoutChangeRequestEvent.Chang
 import com.propertyvista.portal.prospect.ProspectPortalSite;
 import com.propertyvista.portal.prospect.events.ApplicationWizardStateChangeEvent;
 import com.propertyvista.portal.prospect.events.ApplicationWizardStateChangeHandler;
-import com.propertyvista.portal.prospect.ui.RentalSummaryView;
-import com.propertyvista.portal.prospect.ui.RentalSummaryView.RentalSummaryPresenter;
+import com.propertyvista.portal.prospect.ui.application.RentalSummaryView;
+import com.propertyvista.portal.prospect.ui.application.RentalSummaryView.RentalSummaryPresenter;
 
 public class RentalSummaryActivity extends AbstractActivity implements RentalSummaryPresenter {
 
@@ -43,8 +43,14 @@ public class RentalSummaryActivity extends AbstractActivity implements RentalSum
         eventBus.addHandler(ApplicationWizardStateChangeEvent.getType(), new ApplicationWizardStateChangeHandler() {
             @Override
             public void onStateChange(ApplicationWizardStateChangeEvent event) {
-                if (event.getChangeType() == ApplicationWizardStateChangeEvent.ChangeType.termChange) {
-                    view.populate(event.getApplicationWizard().getValue());
+                if (event.getChangeType() == ApplicationWizardStateChangeEvent.ChangeType.termChange
+                        || event.getChangeType() == ApplicationWizardStateChangeEvent.ChangeType.init
+                        || event.getChangeType() == ApplicationWizardStateChangeEvent.ChangeType.discard) {
+                    if (event.getApplicationWizard() != null) {
+                        view.populate(event.getApplicationWizard().getValue());
+                    } else {
+                        view.populate(null);
+                    }
                 }
             }
         });

@@ -11,21 +11,23 @@
  * @author michaellif
  * @version $Id$
  */
-package com.propertyvista.portal.prospect.ui;
+package com.propertyvista.portal.prospect.ui.application;
 
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTML;
 
 import com.pyx4j.i18n.shared.I18n;
 
+import com.propertyvista.portal.prospect.themes.RentalSummaryTheme;
 import com.propertyvista.portal.rpc.portal.prospect.dto.OnlineApplicationDTO;
 import com.propertyvista.portal.shared.themes.BlockMixin;
-import com.propertyvista.portal.shared.themes.ExtraGadgetsTheme;
 import com.propertyvista.portal.shared.themes.PortalRootPaneTheme;
 
 public class RentalSummaryGadget extends FlowPanel {
 
     private static final I18n i18n = I18n.get(RentalSummaryGadget.class);
+
+    private final HTML addressHTML;
 
     public RentalSummaryGadget() {
         super();
@@ -35,29 +37,29 @@ public class RentalSummaryGadget extends FlowPanel {
 
         HTML titleHTML = new HTML(i18n.tr("Rental Summary"));
         titleHTML.setStyleName(PortalRootPaneTheme.StyleName.ExtraGadgetItemTitle.name());
-
         add(titleHTML);
 
         FlowPanel panel = new FlowPanel();
 
-        HTML captionHTML = new HTML();
-        captionHTML.setStyleName(ExtraGadgetsTheme.StyleName.CommunityEventCaption.name());
+        addressHTML = new HTML();
+        addressHTML.setStyleName(RentalSummaryTheme.StyleName.Address.name());
 
-        panel.add(captionHTML);
-
-        HTML timeAndLocationHTML = new HTML();
-        timeAndLocationHTML.setStyleName(ExtraGadgetsTheme.StyleName.CommunityEventTimeAndLocation.name());
-        panel.add(timeAndLocationHTML);
-
-        HTML descriptionHTML = new HTML();
-        panel.add(descriptionHTML);
+        panel.add(addressHTML);
 
         add(panel);
     }
 
     public void populate(OnlineApplicationDTO onlineApplication) {
-        // TODO Auto-generated method stub
+        if (onlineApplication != null) {
+            StringBuilder builder = new StringBuilder();
+            builder.append(i18n.tr("Unit")).append(" ").append(onlineApplication.unit().info().number().getStringView()).append("<br/>");
+            builder.append(" ").append(onlineApplication.unit().floorplan().marketingName().getStringView()).append("<br/>");
+            builder.append(onlineApplication.unit().building().info().address().getStringView());
 
+            addressHTML.setHTML(builder.toString());
+        } else {
+            addressHTML.setHTML("");
+        }
     }
 
 }

@@ -17,7 +17,7 @@ import com.google.gwt.activity.shared.Activity;
 import com.google.gwt.activity.shared.ActivityMapper;
 import com.google.gwt.place.shared.Place;
 
-import com.propertyvista.portal.prospect.activity.RentalSummaryActivity;
+import com.propertyvista.portal.prospect.activity.application.RentalSummaryActivity;
 import com.propertyvista.portal.rpc.portal.prospect.ProspectPortalSiteMap.Application;
 
 public class RentalSummaryActivityMapper implements ActivityMapper {

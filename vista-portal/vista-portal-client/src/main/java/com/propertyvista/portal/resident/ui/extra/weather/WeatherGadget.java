@@ -20,9 +20,9 @@ import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.i18n.shared.I18n;
 
+import com.propertyvista.portal.resident.themes.ExtraGadgetsTheme;
 import com.propertyvista.portal.resident.ui.extra.ExtraGadget;
 import com.propertyvista.portal.rpc.portal.resident.dto.WeatherGadgetDTO;
-import com.propertyvista.portal.shared.themes.ExtraGadgetsTheme;
 
 public class WeatherGadget extends ExtraGadget<WeatherGadgetDTO> {
 

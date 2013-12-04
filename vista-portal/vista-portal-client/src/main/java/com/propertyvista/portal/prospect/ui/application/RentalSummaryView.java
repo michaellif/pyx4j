@@ -11,7 +11,7 @@
  * @author michaellif
  * @version $Id$
  */
-package com.propertyvista.portal.prospect.ui;
+package com.propertyvista.portal.prospect.ui.application;
 
 import com.pyx4j.site.client.IsView;
 
