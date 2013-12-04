@@ -55,6 +55,8 @@ public class MenuViewImpl extends DockPanel implements MenuView {
 
     private final MenuItem applicationSelectionMenu;
 
+    private ApplicationWizard applicationWizard;
+
     public MenuViewImpl() {
         setStyleName(PortalRootPaneTheme.StyleName.MainMenu.name());
 
@@ -88,7 +90,8 @@ public class MenuViewImpl extends DockPanel implements MenuView {
     }
 
     @Override
-    public void updateStepButtons(final ApplicationWizard applicationWizard) {
+    public void updateStepButtons(ApplicationWizard applicationWizard) {
+        this.applicationWizard = applicationWizard;
         mainHolder.reset(applicationWizard);
         if (applicationWizard != null) {
 
@@ -109,6 +112,7 @@ public class MenuViewImpl extends DockPanel implements MenuView {
             }
 
         }
+        doLayout(LayoutType.getLayoutType(Window.getClientWidth()));
     }
 
     @Override
@@ -124,6 +128,7 @@ public class MenuViewImpl extends DockPanel implements MenuView {
             removeStyleDependentName(PortalRootPaneTheme.StyleDependent.collapsedMenu.name());
             footerHolder.setVisible(true);
             headerHolder.setVisible(true);
+            setVisible(true);
             break;
         case tabletPortrait:
         case tabletLandscape:
@@ -131,6 +136,7 @@ public class MenuViewImpl extends DockPanel implements MenuView {
             addStyleDependentName(PortalRootPaneTheme.StyleDependent.collapsedMenu.name());
             footerHolder.setVisible(false);
             headerHolder.setVisible(false);
+            setVisible(applicationWizard != null);
             break;
         case monitor:
         case huge:
@@ -138,6 +144,7 @@ public class MenuViewImpl extends DockPanel implements MenuView {
             removeStyleDependentName(PortalRootPaneTheme.StyleDependent.collapsedMenu.name());
             footerHolder.setVisible(false);
             headerHolder.setVisible(false);
+            setVisible(applicationWizard != null);
             break;
         }
     }
