@@ -130,8 +130,8 @@ public class SftpClient implements Closeable {
             throw new SftpTransportConnectionException(e.getMessage(), e);
         }
 
+        E receivedFile = null;
         try {
-            E receivedFile = null;
             String baseDirectory = client.channel.pwd();
 
             scanDirectories: for (String dir : directories) {
@@ -143,17 +143,27 @@ public class SftpClient implements Closeable {
                 for (LsEntry rFile : rFiles) {
                     E dst = filter.accept(dir, rFile.getFilename());
                     if (dst != null) {
-                        client.channel.get(rFile.getFilename(), dst.localFile.getAbsolutePath());
-                        log.info("SFTP file {} received from {}, directory {}", dst.localFile.getAbsolutePath(), configuration.sftpHost(), dir);
                         receivedFile = dst;
                         receivedFile.remoteName = rFile.getFilename();
                         receivedFile.remotePath = dir;
                         break scanDirectories;
                     }
                 }
+
                 client.channel.cd(baseDirectory);
             }
+        } catch (SftpException e) {
+            IOUtils.closeQuietly(client);
+            log.error("SFTP scan error", e);
+            throw new SftpTransportConnectionException(e.getMessage(), e);
+        }
 
+        try {
+            if (receivedFile != null) {
+                client.channel.get(receivedFile.remoteName, receivedFile.localFile.getAbsolutePath());
+                log.info("SFTP file {} received from {}, directory {}", receivedFile.localFile.getAbsolutePath(), configuration.sftpHost(),
+                        receivedFile.remotePath);
+            }
             return receivedFile;
         } catch (SftpException e) {
             log.error("SFTP error", e);
@@ -172,8 +182,16 @@ public class SftpClient implements Closeable {
             IOUtils.closeQuietly(client);
             throw new SftpTransportConnectionException(e.getMessage(), e);
         }
+
         try {
             client.channel.cd(remotePath);
+        } catch (SftpException e) {
+            IOUtils.closeQuietly(client);
+            log.error("SFTP error", e);
+            throw new SftpTransportConnectionException(e.getMessage(), e);
+        }
+
+        try {
             log.info("SFTP removing file {} / {} on {} ", remotePath, remoteName, configuration.sftpHost());
             client.channel.rm(remoteName);
         } catch (SftpException e) {
