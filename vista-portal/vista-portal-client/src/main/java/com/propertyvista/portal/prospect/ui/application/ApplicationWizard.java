@@ -26,6 +26,7 @@ import com.pyx4j.forms.client.ui.decorators.IDecorator;
 import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
 import com.pyx4j.forms.client.ui.wizard.WizardDecorator;
 import com.pyx4j.forms.client.ui.wizard.WizardStep;
+import com.pyx4j.gwt.commons.ClientEventBus;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.security.shared.SecurityController;
 
@@ -36,6 +37,7 @@ import com.propertyvista.domain.person.Name;
 import com.propertyvista.domain.property.asset.Floorplan;
 import com.propertyvista.domain.security.PortalProspectBehavior;
 import com.propertyvista.domain.tenant.CustomerPicture;
+import com.propertyvista.portal.prospect.events.ApplicationWizardStateChangeEvent;
 import com.propertyvista.portal.prospect.ui.application.ApplicationWizardView.ApplicationWizardPresenter;
 import com.propertyvista.portal.rpc.portal.prospect.dto.OnlineApplicationDTO;
 import com.propertyvista.portal.rpc.portal.resident.services.ResidentPictureUploadService;
@@ -276,8 +278,9 @@ public class ApplicationWizard extends CPortalEntityWizard<OnlineApplicationDTO>
     }
 
     @Override
-    protected void onValuePropagation(OnlineApplicationDTO value, boolean fireEvent, boolean populate) {
-        super.onValuePropagation(value, fireEvent, populate);
+    public void updateProgress() {
+        super.updateProgress();
+        ClientEventBus.instance.fireEvent(new ApplicationWizardStateChangeEvent(this, ApplicationWizardStateChangeEvent.ChangeType.stepChange));
     }
 
     class ApplicationWizardDecorator extends WizardDecorator<OnlineApplicationDTO> {
