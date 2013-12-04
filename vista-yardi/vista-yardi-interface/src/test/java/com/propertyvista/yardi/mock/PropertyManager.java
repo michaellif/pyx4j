@@ -14,7 +14,6 @@
 package com.propertyvista.yardi.mock;
 
 import java.lang.reflect.Method;
-import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -44,6 +43,14 @@ import com.yardi.entity.resident.Transactions;
 
 import com.pyx4j.config.server.SystemDateManager;
 
+import com.propertyvista.yardi.mock.updater.CoTenantUpdater;
+import com.propertyvista.yardi.mock.updater.LeaseChargeUpdater;
+import com.propertyvista.yardi.mock.updater.PropertyUpdater;
+import com.propertyvista.yardi.mock.updater.RentableItemTypeUpdater;
+import com.propertyvista.yardi.mock.updater.RtCustomerUpdater;
+import com.propertyvista.yardi.mock.updater.TransactionChargeUpdater;
+import com.propertyvista.yardi.mock.updater.UnitTransferSimulator;
+
 public class PropertyManager {
 
     private final String propertyId;
@@ -56,7 +63,7 @@ public class PropertyManager {
 
     private final Map<String, Map<String, Charge>> leaseCharges;
 
-    private final ArrayList<RentableItemType> rentableItemTypes;
+    private final Map<String, RentableItemType> rentableItemTypes;
 
     public PropertyManager(String propertyId) {
         this.propertyId = propertyId;
@@ -64,7 +71,7 @@ public class PropertyManager {
         property = new com.yardi.entity.mits.Property();
         transactions = new ResidentTransactions();
         leaseCharges = new LinkedHashMap<String, Map<String, Charge>>();
-        rentableItemTypes = new ArrayList<RentableItemType>();
+        rentableItemTypes = new LinkedHashMap<String, RentableItemType>();
 
         transactions.getProperty().add(new com.yardi.entity.resident.Property());
     }
@@ -135,7 +142,7 @@ public class PropertyManager {
     public RentableItems getRentableItems() {
         RentableItems retVal = new RentableItems();
 
-        retVal.getItemType().addAll(rentableItemTypes);
+        retVal.getItemType().addAll(rentableItemTypes.values());
 
         return retVal;
     }
@@ -182,7 +189,7 @@ public class PropertyManager {
             rtProperty.getPropertyID().add(propertyID);
         }
 
-        for (com.propertyvista.yardi.mock.Name name : updater.getPropertyMap().keySet()) {
+        for (com.propertyvista.yardi.mock.updater.Name name : updater.getPropertyMap().keySet()) {
             Property<?> property = updater.getPropertyMap().get(name);
             if (property.getName() instanceof PropertyUpdater.ADDRESS) {
                 Address address = rtProperty.getPropertyID().get(0).getAddress().get(0);
@@ -208,8 +215,8 @@ public class PropertyManager {
             leaseCharges.put(updater.getCustomerID(), new LinkedHashMap<String, Charge>());
         }
 
-        Map<com.propertyvista.yardi.mock.Name, Property<?>> map = updater.getPropertyMap();
-        for (com.propertyvista.yardi.mock.Name name : map.keySet()) {
+        Map<com.propertyvista.yardi.mock.updater.Name, Property<?>> map = updater.getPropertyMap();
+        for (com.propertyvista.yardi.mock.updater.Name name : map.keySet()) {
             Property<?> property = map.get(name);
 
             if (property.getName() instanceof RtCustomerUpdater.RTCUSTOMER) {
@@ -330,7 +337,7 @@ public class PropertyManager {
             transactions.setCharge(charge);
             ChargeDetail detail = new ChargeDetail();
 
-            for (com.propertyvista.yardi.mock.Name name : updater.getPropertyMap().keySet()) {
+            for (com.propertyvista.yardi.mock.updater.Name name : updater.getPropertyMap().keySet()) {
                 Property<?> property = updater.getPropertyMap().get(name);
                 updateProperty(detail, property);
             }
@@ -357,7 +364,7 @@ public class PropertyManager {
             rtCustomer.getCustomers().getCustomer().add(coTenant);
         }
 
-        for (com.propertyvista.yardi.mock.Name name : updater.getPropertyMap().keySet()) {
+        for (com.propertyvista.yardi.mock.updater.Name name : updater.getPropertyMap().keySet()) {
             Property<?> property = updater.getPropertyMap().get(name);
             if (property.getName() instanceof CoTenantUpdater.YCUSTOMER) {
 
@@ -396,7 +403,6 @@ public class PropertyManager {
     }
 
     public void addOrUpdateLeaseCharge(LeaseChargeUpdater updater) {
-
         Map<String, Charge> charges = leaseCharges.get(updater.getCustomerID());
         Charge charge = charges.get(updater.getLeaseChargeID());
         if (charge == null) {
@@ -410,7 +416,7 @@ public class PropertyManager {
         detail.setUnitID(updater.getCustomerID().substring(3));
         detail.setPropertyPrimaryID(updater.getPropertyID());
 
-        for (com.propertyvista.yardi.mock.Name name : updater.getPropertyMap().keySet()) {
+        for (com.propertyvista.yardi.mock.updater.Name name : updater.getPropertyMap().keySet()) {
             Property<?> property = updater.getPropertyMap().get(name);
             updateProperty(charge.getDetail(), property);
         }
@@ -484,5 +490,21 @@ public class PropertyManager {
         transactions.getProperty().get(0).getRTCustomer().add(rtCustomerTransfered);
 
         // TODO transactions and Lease charges
+    }
+
+    public void addOrUpdateRentableItemType(RentableItemTypeUpdater updater) {
+        RentableItemType rit = rentableItemTypes.get(updater.getCode());
+        if (rit == null) {
+            rit = new RentableItemType();
+        }
+
+        for (com.propertyvista.yardi.mock.updater.Name name : updater.getPropertyMap().keySet()) {
+            Property<?> property = updater.getPropertyMap().get(name);
+            updateProperty(rit, property);
+        }
+    }
+
+    public void removeRentableItemType(RentableItemTypeUpdater updater) {
+        rentableItemTypes.remove(updater.getCode());
     }
 }

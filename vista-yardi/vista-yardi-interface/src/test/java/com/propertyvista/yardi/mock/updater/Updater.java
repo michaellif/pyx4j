@@ -11,10 +11,12 @@
  * @author michaellif
  * @version $Id$
  */
-package com.propertyvista.yardi.mock;
+package com.propertyvista.yardi.mock.updater;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
+
+import com.propertyvista.yardi.mock.Property;
 
 public class Updater<MODEL, INST_CLASS> {
 
@@ -34,7 +36,7 @@ public class Updater<MODEL, INST_CLASS> {
         return (INST_CLASS) this;
     }
 
-    Map<Name, Property<?>> getPropertyMap() {
+    public Map<Name, Property<?>> getPropertyMap() {
         return map;
     }
 

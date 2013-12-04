@@ -11,31 +11,37 @@
  * @author vlads
  * @version $Id$
  */
-package com.propertyvista.yardi.mock;
+package com.propertyvista.yardi.mock.updater;
 
 import com.propertyvista.test.mock.MockEvent;
 
-public class RtCustomerUpdateEvent extends MockEvent<RtCustomerUpdateEvent.Handler> {
+public class LeaseChargeUpdateEvent extends MockEvent<LeaseChargeUpdateEvent.Handler> {
 
-    public final RtCustomerUpdater updater;
+    private final LeaseChargeUpdater updater;
 
     public interface Handler {
 
-        void addOrUpdateRtCustomer(RtCustomerUpdateEvent event);
+        void addOrUpdateLeaseCharge(LeaseChargeUpdateEvent event);
+
+        void removeLeaseCharge(LeaseChargeUpdateEvent event);
 
     }
 
-    public RtCustomerUpdateEvent(RtCustomerUpdater updater) {
+    public LeaseChargeUpdateEvent(LeaseChargeUpdater updater) {
         super();
         this.updater = updater;
     }
 
     @Override
     protected final void dispatch(Handler handler) {
-        handler.addOrUpdateRtCustomer(this);
+        if (updater.remove) {
+            handler.removeLeaseCharge(this);
+        } else {
+            handler.addOrUpdateLeaseCharge(this);
+        }
     }
 
-    public RtCustomerUpdater getUpdater() {
+    public LeaseChargeUpdater getUpdater() {
         return updater;
     }
 }

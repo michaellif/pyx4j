@@ -11,7 +11,7 @@
  * @author michaellif
  * @version $Id$
  */
-package com.propertyvista.yardi.mock;
+package com.propertyvista.yardi.mock.updater;
 
 import com.yardi.entity.resident.RTCustomer;
 

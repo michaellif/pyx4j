@@ -11,33 +11,33 @@
  * @author michaellif
  * @version $Id$
  */
-package com.propertyvista.yardi.mock;
+package com.propertyvista.yardi.mock.updater;
 
 import com.yardi.entity.resident.RTCustomer;
 
 public class RtCustomerUpdater extends Updater<RTCustomer, RtCustomerUpdater> {
 
-    public enum YCUSTOMER implements com.propertyvista.yardi.mock.Name {
+    public enum YCUSTOMER implements com.propertyvista.yardi.mock.updater.Name {
         Type, CustomerID, Description /* aka YardiPersonId */;
     }
 
-    public enum YCUSTOMERNAME implements com.propertyvista.yardi.mock.Name {
+    public enum YCUSTOMERNAME implements com.propertyvista.yardi.mock.updater.Name {
         FirstName, LastName;
     }
 
-    public enum YCUSTOMERADDRESS implements com.propertyvista.yardi.mock.Name {
+    public enum YCUSTOMERADDRESS implements com.propertyvista.yardi.mock.updater.Name {
         Type, Address1, Address2, City, State, PostalCode, Email;
     }
 
-    public enum YLEASE implements com.propertyvista.yardi.mock.Name {
+    public enum YLEASE implements com.propertyvista.yardi.mock.updater.Name {
         CurrentRent, ExpectedMoveInDate, ExpectedMoveOutDate, LeaseFromDate, LeaseToDate, ActualMoveIn, ActualMoveOut, ResponsibleForLease;
     }
 
-    public enum RTCUSTOMER implements com.propertyvista.yardi.mock.Name {
+    public enum RTCUSTOMER implements com.propertyvista.yardi.mock.updater.Name {
         LeaseID, CustomerID, PaymentAccepted;
     }
 
-    public enum UNITINFO implements com.propertyvista.yardi.mock.Name {
+    public enum UNITINFO implements com.propertyvista.yardi.mock.updater.Name {
         UnitID, UnitType, UnitBedrooms, UnitBathrooms, UnitRent, FloorPlanID, FloorplanName;
     }
 

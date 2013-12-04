@@ -13,6 +13,8 @@
  */
 package com.propertyvista.yardi.mock;
 
+import com.propertyvista.yardi.mock.updater.PropertyUpdater;
+
 /**
  * Yardi errors simulations model for building.
  * Should be POJO.

@@ -13,6 +13,8 @@
  */
 package com.propertyvista.yardi.mock;
 
+import com.propertyvista.yardi.mock.updater.Name;
+
 public class Property<E> {
 
     private final Name name;

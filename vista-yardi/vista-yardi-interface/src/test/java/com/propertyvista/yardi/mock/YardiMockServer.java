@@ -23,9 +23,23 @@ import com.yardi.entity.resident.Transactions;
 
 import com.propertyvista.biz.system.YardiServiceException;
 import com.propertyvista.test.mock.MockEventBus;
+import com.propertyvista.yardi.mock.updater.CoTenantUpdateEvent;
+import com.propertyvista.yardi.mock.updater.CoTenantUpdater;
+import com.propertyvista.yardi.mock.updater.LeaseChargeUpdateEvent;
+import com.propertyvista.yardi.mock.updater.LeaseChargeUpdater;
+import com.propertyvista.yardi.mock.updater.PropertyUpdateEvent;
+import com.propertyvista.yardi.mock.updater.PropertyUpdater;
+import com.propertyvista.yardi.mock.updater.RentableItemTypeUpdateEvent;
+import com.propertyvista.yardi.mock.updater.RentableItemTypeUpdater;
+import com.propertyvista.yardi.mock.updater.RtCustomerUpdateEvent;
+import com.propertyvista.yardi.mock.updater.RtCustomerUpdater;
+import com.propertyvista.yardi.mock.updater.TransactionChargeUpdateEvent;
+import com.propertyvista.yardi.mock.updater.TransactionChargeUpdater;
+import com.propertyvista.yardi.mock.updater.UnitTransferSimulator;
+import com.propertyvista.yardi.mock.updater.UnitTransferSimulatorEvent;
 
 public class YardiMockServer implements TransactionChargeUpdateEvent.Handler, PropertyUpdateEvent.Handler, RtCustomerUpdateEvent.Handler,
-        CoTenantUpdateEvent.Handler, LeaseChargeUpdateEvent.Handler, UnitTransferSimulatorEvent.Handler {
+        CoTenantUpdateEvent.Handler, LeaseChargeUpdateEvent.Handler, UnitTransferSimulatorEvent.Handler, RentableItemTypeUpdateEvent.Handler {
 
     static final ThreadLocal<YardiMockServer> threadLocalContext = new ThreadLocal<YardiMockServer>() {
         @Override
@@ -51,6 +65,7 @@ public class YardiMockServer implements TransactionChargeUpdateEvent.Handler, Pr
         MockEventBus.addHandler(CoTenantUpdateEvent.class, this);
         MockEventBus.addHandler(LeaseChargeUpdateEvent.class, this);
         MockEventBus.addHandler(UnitTransferSimulatorEvent.class, this);
+        MockEventBus.addHandler(RentableItemTypeUpdateEvent.class, this);
     }
 
     public void cleanup() {
@@ -174,6 +189,18 @@ public class YardiMockServer implements TransactionChargeUpdateEvent.Handler, Pr
     public void unitTransferSimulation(UnitTransferSimulatorEvent event) {
         UnitTransferSimulator updater = event.getUpdater();
         getExistingPropertyManager(updater.getPropertyID()).unitTransferSimulation(updater);
+    }
+
+    @Override
+    public void addOrUpdateRentableItemType(RentableItemTypeUpdateEvent event) {
+        RentableItemTypeUpdater updater = event.getUpdater();
+        getExistingPropertyManager(updater.getPropertyID()).addOrUpdateRentableItemType(updater);
+    }
+
+    @Override
+    public void removeRentableItemType(RentableItemTypeUpdateEvent event) {
+        RentableItemTypeUpdater updater = event.getUpdater();
+        getExistingPropertyManager(updater.getPropertyID()).removeRentableItemType(updater);
     }
 
 }

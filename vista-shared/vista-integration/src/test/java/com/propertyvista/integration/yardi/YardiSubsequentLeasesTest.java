@@ -26,10 +26,10 @@ import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.test.integration.IntegrationTestBase.RegressionTests;
 import com.propertyvista.test.mock.MockEventBus;
 import com.propertyvista.yardi.YardiTestBase;
-import com.propertyvista.yardi.mock.PropertyUpdateEvent;
-import com.propertyvista.yardi.mock.PropertyUpdater;
-import com.propertyvista.yardi.mock.RtCustomerUpdateEvent;
-import com.propertyvista.yardi.mock.RtCustomerUpdater;
+import com.propertyvista.yardi.mock.updater.PropertyUpdateEvent;
+import com.propertyvista.yardi.mock.updater.PropertyUpdater;
+import com.propertyvista.yardi.mock.updater.RtCustomerUpdateEvent;
+import com.propertyvista.yardi.mock.updater.RtCustomerUpdater;
 
 @Category(RegressionTests.class)
 public class YardiSubsequentLeasesTest extends YardiTestBase {

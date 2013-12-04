@@ -7,35 +7,42 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on 2013-05-09
- * @author vlads
+ * Created on Dec 4, 2013
+ * @author VladL
  * @version $Id$
  */
-package com.propertyvista.yardi.mock;
+package com.propertyvista.yardi.mock.updater;
 
 import com.propertyvista.test.mock.MockEvent;
 
-public class TransactionChargeUpdateEvent extends MockEvent<TransactionChargeUpdateEvent.Handler> {
+public class RentableItemTypeUpdateEvent extends MockEvent<RentableItemTypeUpdateEvent.Handler> {
 
-    public final TransactionChargeUpdater updater;
+    private final RentableItemTypeUpdater updater;
 
     public interface Handler {
 
-        void addOrUpdateTransactionCharge(TransactionChargeUpdateEvent event);
+        void addOrUpdateRentableItemType(RentableItemTypeUpdateEvent event);
+
+        void removeRentableItemType(RentableItemTypeUpdateEvent event);
 
     }
 
-    public TransactionChargeUpdateEvent(TransactionChargeUpdater updater) {
+    public RentableItemTypeUpdateEvent(RentableItemTypeUpdater updater) {
         super();
         this.updater = updater;
     }
 
     @Override
     protected final void dispatch(Handler handler) {
-        handler.addOrUpdateTransactionCharge(this);
+        if (updater.remove) {
+            handler.removeRentableItemType(this);
+        } else {
+            handler.addOrUpdateRentableItemType(this);
+        }
     }
 
-    public TransactionChargeUpdater getUpdater() {
+    public RentableItemTypeUpdater getUpdater() {
         return updater;
     }
+
 }

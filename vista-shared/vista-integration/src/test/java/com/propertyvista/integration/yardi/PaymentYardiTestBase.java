@@ -39,14 +39,14 @@ import com.propertyvista.test.mock.models.LeaseDataModel;
 import com.propertyvista.test.mock.models.MerchantAccountDataModel;
 import com.propertyvista.test.mock.schedule.OperationsTriggerFacadeMock;
 import com.propertyvista.yardi.YardiTestBase;
-import com.propertyvista.yardi.mock.LeaseChargeUpdateEvent;
-import com.propertyvista.yardi.mock.LeaseChargeUpdater;
-import com.propertyvista.yardi.mock.PropertyUpdateEvent;
-import com.propertyvista.yardi.mock.PropertyUpdater;
-import com.propertyvista.yardi.mock.RtCustomerUpdateEvent;
-import com.propertyvista.yardi.mock.RtCustomerUpdater;
-import com.propertyvista.yardi.mock.TransactionChargeUpdateEvent;
-import com.propertyvista.yardi.mock.TransactionChargeUpdater;
+import com.propertyvista.yardi.mock.updater.LeaseChargeUpdateEvent;
+import com.propertyvista.yardi.mock.updater.LeaseChargeUpdater;
+import com.propertyvista.yardi.mock.updater.PropertyUpdateEvent;
+import com.propertyvista.yardi.mock.updater.PropertyUpdater;
+import com.propertyvista.yardi.mock.updater.RtCustomerUpdateEvent;
+import com.propertyvista.yardi.mock.updater.RtCustomerUpdater;
+import com.propertyvista.yardi.mock.updater.TransactionChargeUpdateEvent;
+import com.propertyvista.yardi.mock.updater.TransactionChargeUpdater;
 
 public abstract class PaymentYardiTestBase extends YardiTestBase {
 

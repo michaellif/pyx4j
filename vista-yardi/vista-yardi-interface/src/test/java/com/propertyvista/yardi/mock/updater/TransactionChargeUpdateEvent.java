@@ -11,31 +11,31 @@
  * @author vlads
  * @version $Id$
  */
-package com.propertyvista.yardi.mock;
+package com.propertyvista.yardi.mock.updater;
 
 import com.propertyvista.test.mock.MockEvent;
 
-public class UnitTransferSimulatorEvent extends MockEvent<UnitTransferSimulatorEvent.Handler> {
+public class TransactionChargeUpdateEvent extends MockEvent<TransactionChargeUpdateEvent.Handler> {
 
-    public final UnitTransferSimulator updater;
+    public final TransactionChargeUpdater updater;
 
     public interface Handler {
 
-        void unitTransferSimulation(UnitTransferSimulatorEvent event);
+        void addOrUpdateTransactionCharge(TransactionChargeUpdateEvent event);
 
     }
 
-    public UnitTransferSimulatorEvent(UnitTransferSimulator updater) {
+    public TransactionChargeUpdateEvent(TransactionChargeUpdater updater) {
         super();
         this.updater = updater;
     }
 
     @Override
     protected final void dispatch(Handler handler) {
-        handler.unitTransferSimulation(this);
+        handler.addOrUpdateTransactionCharge(this);
     }
 
-    public UnitTransferSimulator getUpdater() {
+    public TransactionChargeUpdater getUpdater() {
         return updater;
     }
 }

@@ -11,45 +11,45 @@
  * @author michaellif
  * @version $Id$
  */
-package com.propertyvista.yardi.mock;
+package com.propertyvista.yardi.mock.updater;
 
 import com.yardi.entity.resident.ChargeDetail;
 
-public class TransactionChargeUpdater extends Updater<ChargeDetail, TransactionChargeUpdater> {
+public class LeaseChargeUpdater extends Updater<ChargeDetail, LeaseChargeUpdater> {
 
     private final String customerID;
 
     private final String propertyID;
 
-    public enum Name implements com.propertyvista.yardi.mock.Name {
+    private final String leaseChargeID;
+
+    public enum Name implements com.propertyvista.yardi.mock.updater.Name {
 
         Description,
 
-        TransactionDate,
+        ServiceToDate,
 
-        TransactionID,
+        ServiceFromDate,
 
         ChargeCode,
 
         GLAccountNumber,
 
-        CustomerID,
-
-        AmountPaid,
-
-        BalanceDue,
-
         Amount,
 
-        Comment;
+        Comment,
+
+        PropertyPrimaryID;
 
     }
 
-    public TransactionChargeUpdater(String propertyID, String customerID) {
+    public LeaseChargeUpdater(String propertyID, String customerID, String leaseChargeID) {
         assert propertyID != null : "propertyID should not be null";
         this.propertyID = propertyID;
         assert customerID != null : "customerID should not be null";
         this.customerID = customerID;
+        assert leaseChargeID != null : "leaseChargeId should not be null";
+        this.leaseChargeID = leaseChargeID;
     }
 
     public String getPropertyID() {
@@ -58,5 +58,9 @@ public class TransactionChargeUpdater extends Updater<ChargeDetail, TransactionC
 
     public String getCustomerID() {
         return customerID;
+    }
+
+    public String getLeaseChargeID() {
+        return leaseChargeID;
     }
 }

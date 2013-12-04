@@ -11,25 +11,25 @@
  * @author michaellif
  * @version $Id$
  */
-package com.propertyvista.yardi.mock;
+package com.propertyvista.yardi.mock.updater;
 
 import com.yardi.entity.mits.YardiCustomer;
 
 public class CoTenantUpdater extends Updater<YardiCustomer, CoTenantUpdater> {
 
-    public enum YCUSTOMER implements com.propertyvista.yardi.mock.Name {
+    public enum YCUSTOMER implements com.propertyvista.yardi.mock.updater.Name {
         Type, CustomerID;
     }
 
-    public enum YCUSTOMERNAME implements com.propertyvista.yardi.mock.Name {
+    public enum YCUSTOMERNAME implements com.propertyvista.yardi.mock.updater.Name {
         FirstName, LastName;
     }
 
-    public enum YCUSTOMERADDRESS implements com.propertyvista.yardi.mock.Name {
+    public enum YCUSTOMERADDRESS implements com.propertyvista.yardi.mock.updater.Name {
         Email;
     }
 
-    public enum YLEASE implements com.propertyvista.yardi.mock.Name {
+    public enum YLEASE implements com.propertyvista.yardi.mock.updater.Name {
         ActualMoveIn, ResponsibleForLease;
     }
 

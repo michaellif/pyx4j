@@ -11,31 +11,31 @@
  * @author vlads
  * @version $Id$
  */
-package com.propertyvista.yardi.mock;
+package com.propertyvista.yardi.mock.updater;
 
 import com.propertyvista.test.mock.MockEvent;
 
-public class CoTenantUpdateEvent extends MockEvent<CoTenantUpdateEvent.Handler> {
+public class UnitTransferSimulatorEvent extends MockEvent<UnitTransferSimulatorEvent.Handler> {
 
-    public final CoTenantUpdater updater;
+    public final UnitTransferSimulator updater;
 
     public interface Handler {
 
-        void addOrUpdateCoTenant(CoTenantUpdateEvent event);
+        void unitTransferSimulation(UnitTransferSimulatorEvent event);
 
     }
 
-    public CoTenantUpdateEvent(CoTenantUpdater updater) {
+    public UnitTransferSimulatorEvent(UnitTransferSimulator updater) {
         super();
         this.updater = updater;
     }
 
     @Override
     protected final void dispatch(Handler handler) {
-        handler.addOrUpdateCoTenant(this);
+        handler.unitTransferSimulation(this);
     }
 
-    public CoTenantUpdater getUpdater() {
+    public UnitTransferSimulator getUpdater() {
         return updater;
     }
 }

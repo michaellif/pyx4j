@@ -27,14 +27,14 @@ import com.propertyvista.test.integration.IntegrationTestBase.RegressionTests;
 import com.propertyvista.test.integration.LeaseTermTenantTester;
 import com.propertyvista.test.mock.MockEventBus;
 import com.propertyvista.yardi.YardiTestBase;
-import com.propertyvista.yardi.mock.CoTenantUpdateEvent;
-import com.propertyvista.yardi.mock.CoTenantUpdater;
-import com.propertyvista.yardi.mock.LeaseChargeUpdateEvent;
-import com.propertyvista.yardi.mock.LeaseChargeUpdater;
-import com.propertyvista.yardi.mock.PropertyUpdateEvent;
-import com.propertyvista.yardi.mock.PropertyUpdater;
-import com.propertyvista.yardi.mock.RtCustomerUpdateEvent;
-import com.propertyvista.yardi.mock.RtCustomerUpdater;
+import com.propertyvista.yardi.mock.updater.CoTenantUpdateEvent;
+import com.propertyvista.yardi.mock.updater.CoTenantUpdater;
+import com.propertyvista.yardi.mock.updater.LeaseChargeUpdateEvent;
+import com.propertyvista.yardi.mock.updater.LeaseChargeUpdater;
+import com.propertyvista.yardi.mock.updater.PropertyUpdateEvent;
+import com.propertyvista.yardi.mock.updater.PropertyUpdater;
+import com.propertyvista.yardi.mock.updater.RtCustomerUpdateEvent;
+import com.propertyvista.yardi.mock.updater.RtCustomerUpdater;
 
 @Category(RegressionTests.class)
 public class YardiLeaseImportTest extends YardiTestBase {

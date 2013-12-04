@@ -16,6 +16,8 @@ package com.propertyvista.yardi.mock;
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Target;
 
+import com.propertyvista.yardi.mock.updater.Name;
+
 /**
  * Helper to find implementation of updater
  */

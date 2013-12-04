@@ -11,7 +11,7 @@
  * @author michaellif
  * @version $Id$
  */
-package com.propertyvista.yardi.mock;
+package com.propertyvista.yardi.mock.updater;
 
 import com.yardi.entity.resident.ChargeDetail;
 
@@ -19,11 +19,11 @@ public class PropertyUpdater extends Updater<ChargeDetail, PropertyUpdater> {
 
     private final String propertyID;
 
-    public enum ADDRESS implements com.propertyvista.yardi.mock.Name {
+    public enum ADDRESS implements com.propertyvista.yardi.mock.updater.Name {
         Address1, Country;
     }
 
-    public enum MockFeatures implements com.propertyvista.yardi.mock.Name {
+    public enum MockFeatures implements com.propertyvista.yardi.mock.updater.Name {
 
         BlockAccess, BlockBatchOpening, BlockTransactionPostLeases;
 

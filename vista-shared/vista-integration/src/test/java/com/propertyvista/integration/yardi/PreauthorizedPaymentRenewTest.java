@@ -32,8 +32,8 @@ import com.propertyvista.test.mock.MockEventBus;
 import com.propertyvista.test.mock.models.AutoPayPolicyDataModel;
 import com.propertyvista.test.mock.models.CustomerDataModel;
 import com.propertyvista.test.mock.models.LeaseDataModel;
-import com.propertyvista.yardi.mock.RtCustomerUpdateEvent;
-import com.propertyvista.yardi.mock.RtCustomerUpdater;
+import com.propertyvista.yardi.mock.updater.RtCustomerUpdateEvent;
+import com.propertyvista.yardi.mock.updater.RtCustomerUpdater;
 
 @Category(FunctionalTests.class)
 public class PreauthorizedPaymentRenewTest extends PaymentYardiTestBase {

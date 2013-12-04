@@ -46,12 +46,12 @@ import com.propertyvista.test.integration.PaymentAgreementTester;
 import com.propertyvista.test.integration.PreauthorizedPaymentBuilder;
 import com.propertyvista.test.mock.MockEventBus;
 import com.propertyvista.yardi.YardiTestBase;
-import com.propertyvista.yardi.mock.LeaseChargeUpdateEvent;
-import com.propertyvista.yardi.mock.LeaseChargeUpdater;
-import com.propertyvista.yardi.mock.PropertyUpdateEvent;
-import com.propertyvista.yardi.mock.PropertyUpdater;
-import com.propertyvista.yardi.mock.RtCustomerUpdateEvent;
-import com.propertyvista.yardi.mock.RtCustomerUpdater;
+import com.propertyvista.yardi.mock.updater.LeaseChargeUpdateEvent;
+import com.propertyvista.yardi.mock.updater.LeaseChargeUpdater;
+import com.propertyvista.yardi.mock.updater.PropertyUpdateEvent;
+import com.propertyvista.yardi.mock.updater.PropertyUpdater;
+import com.propertyvista.yardi.mock.updater.RtCustomerUpdateEvent;
+import com.propertyvista.yardi.mock.updater.RtCustomerUpdater;
 import com.propertyvista.yardi.services.YardiResidentTransactionsService;
 
 @Category(FunctionalTests.class)

@@ -43,8 +43,8 @@ import com.propertyvista.test.integration.PaymentRecordTester;
 import com.propertyvista.test.mock.MockEventBus;
 import com.propertyvista.test.mock.models.CustomerDataModel;
 import com.propertyvista.test.mock.models.LeaseDataModel;
-import com.propertyvista.yardi.mock.PropertyUpdateEvent;
-import com.propertyvista.yardi.mock.PropertyUpdater;
+import com.propertyvista.yardi.mock.updater.PropertyUpdateEvent;
+import com.propertyvista.yardi.mock.updater.PropertyUpdater;
 
 @Category(FunctionalTests.class)
 public class CreditCardPaymentYardiTest extends PaymentYardiTestBase {

@@ -37,8 +37,8 @@ import com.propertyvista.test.integration.PreauthorizedPaymentBuilder;
 import com.propertyvista.test.mock.MockEventBus;
 import com.propertyvista.test.mock.models.CustomerDataModel;
 import com.propertyvista.test.mock.models.LeaseDataModel;
-import com.propertyvista.yardi.mock.LeaseChargeUpdateEvent;
-import com.propertyvista.yardi.mock.LeaseChargeUpdater;
+import com.propertyvista.yardi.mock.updater.LeaseChargeUpdateEvent;
+import com.propertyvista.yardi.mock.updater.LeaseChargeUpdater;
 
 /**
  * 
