@@ -497,6 +497,8 @@ public class PropertyManager {
         RentableItemType rit = rentableItemTypes.get(updater.getCode());
         if (rit == null) {
             rit = new RentableItemType();
+
+            rentableItemTypes.put(updater.getCode(), rit);
         }
 
         for (com.propertyvista.yardi.mock.updater.Name name : updater.getPropertyMap().keySet()) {

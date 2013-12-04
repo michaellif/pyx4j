@@ -56,10 +56,10 @@ public class ARCodeDataModel extends MockDataModel<ARCode> {
         code = generateARCode("Dog", ARCode.Type.Pet, 5930, 1, false);
         codeMap.put(Code.dogRent, code);
 
-        code = generateARCode("Small Locker", ARCode.Type.Locker, 5110, 1, false);
+        code = generateARCode("Small Locker", ARCode.Type.Locker, 5110, 1, false, new String[] { "rslocker" });
         codeMap.put(Code.smallLocker, code);
 
-        code = generateARCode("Medium Locker", ARCode.Type.Locker, 5110, 1, false);
+        code = generateARCode("Medium Locker", ARCode.Type.Locker, 5110, 1, false, new String[] { "rmlocker" });
         codeMap.put(Code.largeLocker, code);
 
         generateARCode("Large Locker", ARCode.Type.Locker, 5110, 1, false);

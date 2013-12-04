@@ -38,9 +38,13 @@ public class RentableItemTypeUpdater extends Updater<RentableItemType, RentableI
 
     public RentableItemTypeUpdater(String propertyID, String code) {
         assert propertyID != null : "'propertyID' should not be null";
-        this.propertyID = propertyID;
         assert code != null : "'code' should not be null";
+
+        this.propertyID = propertyID;
         this.code = code;
+
+        set(Name.Code, code);
+        set(Name.Property, propertyID);
     }
 
     public String getCode() {

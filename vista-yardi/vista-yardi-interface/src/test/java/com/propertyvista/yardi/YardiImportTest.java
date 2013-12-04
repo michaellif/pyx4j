@@ -22,6 +22,7 @@ import com.yardi.entity.resident.ResidentTransactions;
 
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.server.Persistence;
+import com.pyx4j.entity.shared.AttachLevel;
 import com.pyx4j.gwt.server.DateUtils;
 
 import com.propertyvista.biz.ExecutionMonitor;
@@ -38,6 +39,8 @@ import com.propertyvista.yardi.mock.updater.LeaseChargeUpdateEvent;
 import com.propertyvista.yardi.mock.updater.LeaseChargeUpdater;
 import com.propertyvista.yardi.mock.updater.PropertyUpdateEvent;
 import com.propertyvista.yardi.mock.updater.PropertyUpdater;
+import com.propertyvista.yardi.mock.updater.RentableItemTypeUpdateEvent;
+import com.propertyvista.yardi.mock.updater.RentableItemTypeUpdater;
 import com.propertyvista.yardi.mock.updater.RtCustomerUpdateEvent;
 import com.propertyvista.yardi.mock.updater.RtCustomerUpdater;
 import com.propertyvista.yardi.mock.updater.TransactionChargeUpdateEvent;
@@ -47,6 +50,8 @@ import com.propertyvista.yardi.stubs.YardiResidentTransactionsStub;
 
 public class YardiImportTest extends YardiTestBase {
 
+    private static String PROPERTYID = "prop123";
+
     @Override
     protected void setUp() throws Exception {
         super.setUp();
@@ -54,7 +59,7 @@ public class YardiImportTest extends YardiTestBase {
 
         {
             // @formatter:off
-            PropertyUpdater updater = new PropertyUpdater("prop123").
+            PropertyUpdater updater = new PropertyUpdater(PROPERTYID).
             set(PropertyUpdater.ADDRESS.Address1, "11 prop123 str").
             set(PropertyUpdater.ADDRESS.Country, "Canada");        
             // @formatter:on
@@ -86,7 +91,7 @@ public class YardiImportTest extends YardiTestBase {
 
         {
             // @formatter:off
-            LeaseChargeUpdater updater = new LeaseChargeUpdater("prop123", "t000111", "rent").
+            LeaseChargeUpdater updater = new LeaseChargeUpdater(PROPERTYID, "t000111", "rent").
             set(LeaseChargeUpdater.Name.Description, "Rent").
             set(LeaseChargeUpdater.Name.ServiceFromDate, DateUtils.detectDateformat("01-Jun-2012")).
             set(LeaseChargeUpdater.Name.ServiceToDate, DateUtils.detectDateformat("31-Jul-2014")).
@@ -100,7 +105,7 @@ public class YardiImportTest extends YardiTestBase {
 
         {
             // @formatter:off
-            LeaseChargeUpdater updater = new LeaseChargeUpdater("prop123", "t000111", "parkA").
+            LeaseChargeUpdater updater = new LeaseChargeUpdater(PROPERTYID, "t000111", "parkA").
             set(LeaseChargeUpdater.Name.Description, "Parking A").
             set(LeaseChargeUpdater.Name.ServiceFromDate, DateUtils.detectDateformat("01-Jun-2012")).
             set(LeaseChargeUpdater.Name.ServiceToDate, DateUtils.detectDateformat("31-Jul-2014")).
@@ -113,7 +118,7 @@ public class YardiImportTest extends YardiTestBase {
 
         {
             // @formatter:off
-            LeaseChargeUpdater updater = new LeaseChargeUpdater("prop123", "t000111", "parkB").
+            LeaseChargeUpdater updater = new LeaseChargeUpdater(PROPERTYID, "t000111", "parkB").
             set(LeaseChargeUpdater.Name.Description, "Parking B").
             set(LeaseChargeUpdater.Name.ServiceFromDate, DateUtils.detectDateformat("01-Jun-2012")).
             set(LeaseChargeUpdater.Name.ServiceToDate, DateUtils.detectDateformat("31-Jul-2014")).
@@ -127,7 +132,7 @@ public class YardiImportTest extends YardiTestBase {
         {
 
             // @formatter:off
-            CoTenantUpdater updater = new CoTenantUpdater("prop123", "t000111", "r000222").
+            CoTenantUpdater updater = new CoTenantUpdater(PROPERTYID, "t000111", "r000222").
             set(CoTenantUpdater.YCUSTOMER.Type, Customerinfo.CUSTOMER).
             set(CoTenantUpdater.YCUSTOMER.CustomerID, "r000222").
             set(CoTenantUpdater.YCUSTOMERNAME.FirstName, "Jane").
@@ -140,7 +145,7 @@ public class YardiImportTest extends YardiTestBase {
 
         {
             // @formatter:off
-            TransactionChargeUpdater updater = new TransactionChargeUpdater("prop123", "t000111").
+            TransactionChargeUpdater updater = new TransactionChargeUpdater(PROPERTYID, "t000111").
             set(TransactionChargeUpdater.Name.Description, "Rent").
             set(TransactionChargeUpdater.Name.TransactionDate, DateUtils.detectDateformat("01-May-2013")).
             set(TransactionChargeUpdater.Name.TransactionID, "700324302").
@@ -154,6 +159,62 @@ public class YardiImportTest extends YardiTestBase {
             // @formatter:on
             MockEventBus.fireEvent(new TransactionChargeUpdateEvent(updater));
         }
+
+// this an example of rentable items test preload:
+//             setupRentableItem();
+
+    }
+
+    protected void setupRentableItem() {
+        {
+            // @formatter:off
+            RentableItemTypeUpdater updater = new RentableItemTypeUpdater(PROPERTYID, "unit_rent").
+            set(RentableItemTypeUpdater.Name.Description, "Unit rent").
+            set(RentableItemTypeUpdater.Name.ChargeCode, "rrent").
+            set(RentableItemTypeUpdater.Name.Rent, "1000.00");
+            // @formatter:on
+            MockEventBus.fireEvent(new RentableItemTypeUpdateEvent(updater));
+        }
+
+        {
+            // @formatter:off
+            RentableItemTypeUpdater updater = new RentableItemTypeUpdater(PROPERTYID, "outdoor_parking").
+            set(RentableItemTypeUpdater.Name.Description, "Outdoor Parking rent").
+            set(RentableItemTypeUpdater.Name.ChargeCode, "routpark").
+            set(RentableItemTypeUpdater.Name.Rent, "15.00");
+            // @formatter:on
+            MockEventBus.fireEvent(new RentableItemTypeUpdateEvent(updater));
+        }
+
+        {
+            // @formatter:off
+            RentableItemTypeUpdater updater = new RentableItemTypeUpdater(PROPERTYID, "indoor_parking").
+            set(RentableItemTypeUpdater.Name.Description, "Indoor Parking rent").
+            set(RentableItemTypeUpdater.Name.ChargeCode, "rinpark").
+            set(RentableItemTypeUpdater.Name.Rent, "25.00");
+            // @formatter:on
+            MockEventBus.fireEvent(new RentableItemTypeUpdateEvent(updater));
+        }
+
+        {
+            // @formatter:off
+            RentableItemTypeUpdater updater = new RentableItemTypeUpdater(PROPERTYID, "small_locker").
+            set(RentableItemTypeUpdater.Name.Description, "Small Locker rent").
+            set(RentableItemTypeUpdater.Name.ChargeCode, "rslocker").
+            set(RentableItemTypeUpdater.Name.Rent, "10.00");
+            // @formatter:on
+            MockEventBus.fireEvent(new RentableItemTypeUpdateEvent(updater));
+        }
+
+        {
+            // @formatter:off
+            RentableItemTypeUpdater updater = new RentableItemTypeUpdater(PROPERTYID, "medium_locker").
+            set(RentableItemTypeUpdater.Name.Description, "Medium Locker rent").
+            set(RentableItemTypeUpdater.Name.ChargeCode, "rmlocker").
+            set(RentableItemTypeUpdater.Name.Rent, "15.00");
+            // @formatter:on
+            MockEventBus.fireEvent(new RentableItemTypeUpdateEvent(updater));
+        }
     }
 
     @Test
@@ -161,7 +222,7 @@ public class YardiImportTest extends YardiTestBase {
 
         setSysDate("25-May-2013");
 
-        String propertyCode = "prop123";
+        String propertyCode = PROPERTYID;
 
         YardiResidentTransactionsService.getInstance().updateAll(getYardiCredential(propertyCode), new ExecutionMonitor());
 
@@ -222,7 +283,7 @@ public class YardiImportTest extends YardiTestBase {
 
         {
             // @formatter:off
-            RtCustomerUpdater updater = new RtCustomerUpdater("prop123", "t000111").
+            RtCustomerUpdater updater = new RtCustomerUpdater(PROPERTYID, "t000111").
             set(RtCustomerUpdater.YLEASE.CurrentRent, new BigDecimal("1250.00"));
             // @formatter:on
             MockEventBus.fireEvent(new RtCustomerUpdateEvent(updater));
@@ -230,7 +291,7 @@ public class YardiImportTest extends YardiTestBase {
 
         {
             // @formatter:off
-            LeaseChargeUpdater updater = new LeaseChargeUpdater("prop123", "t000111", "rent").
+            LeaseChargeUpdater updater = new LeaseChargeUpdater(PROPERTYID, "t000111", "rent").
             set(LeaseChargeUpdater.Name.Amount, "1250.00");
             // @formatter:on
             MockEventBus.fireEvent(new LeaseChargeUpdateEvent(updater));
@@ -238,14 +299,14 @@ public class YardiImportTest extends YardiTestBase {
 
         { // item will be removed from next term
             // @formatter:off
-            LeaseChargeUpdater updater = new LeaseChargeUpdater("prop123", "t000111", "parkB").remove();
+            LeaseChargeUpdater updater = new LeaseChargeUpdater(PROPERTYID, "t000111", "parkB").remove();
             // @formatter:on
             MockEventBus.fireEvent(new LeaseChargeUpdateEvent(updater));
         }
 
         {
             // @formatter:off
-            LeaseChargeUpdater updater = new LeaseChargeUpdater("prop123", "t000111", "lockerA").
+            LeaseChargeUpdater updater = new LeaseChargeUpdater(PROPERTYID, "t000111", "lockerA").
             set(LeaseChargeUpdater.Name.Description, "Locker A").
             set(LeaseChargeUpdater.Name.ServiceFromDate, DateUtils.detectDateformat("01-Jun-2012")).
             set(LeaseChargeUpdater.Name.ServiceToDate, DateUtils.detectDateformat("31-Jul-2014")).
@@ -258,7 +319,7 @@ public class YardiImportTest extends YardiTestBase {
 
         {
             // @formatter:off
-            CoTenantUpdater updater = new CoTenantUpdater("prop123", "t000111", "r000222").
+            CoTenantUpdater updater = new CoTenantUpdater(PROPERTYID, "t000111", "r000222").
             set(CoTenantUpdater.YCUSTOMERNAME.LastName, "Smith");
             // @formatter:on
             MockEventBus.fireEvent(new CoTenantUpdateEvent(updater));
@@ -312,7 +373,7 @@ public class YardiImportTest extends YardiTestBase {
     @Test
     public void testGetResidentTransactionsForTenant() throws Exception {
 
-        String propertyCode = "prop123";
+        String propertyCode = PROPERTYID;
         String tenantId = "t000111";
 
         YardiResidentTransactionsStub stub = ServerSideFactory.create(YardiResidentTransactionsStub.class);
@@ -326,7 +387,7 @@ public class YardiImportTest extends YardiTestBase {
     @Test
     public void testGetLeaseChargesForTenant() throws Exception {
 
-        String propertyCode = "prop123";
+        String propertyCode = PROPERTYID;
         String tenantId = "t000111";
 
         YardiResidentTransactionsStub stub = ServerSideFactory.create(YardiResidentTransactionsStub.class);
@@ -344,5 +405,24 @@ public class YardiImportTest extends YardiTestBase {
 
         transactions = stub.getLeaseChargesForTenant(getYardiCredential(propertyCode), propertyCode, tenantId, null);
         assertEquals("Has LeaseCharges", 0, transactions.getProperty().get(0).getRTCustomer().get(0).getRTServiceTransactions().getTransactions().size());
+    }
+
+    public void testRentableItemsPreload() throws Exception {
+        setupRentableItem();
+
+        setSysDate("2010-11-01");
+
+        // Initial Import 
+        yardiImportAll(getYardiCredential(PROPERTYID));
+
+        Building building = getBuilding(PROPERTYID);
+        assertNotNull("Building imported", building);
+
+        Persistence.ensureRetrieve(building.productCatalog(), AttachLevel.Attached);
+        Persistence.ensureRetrieve(building.productCatalog().services(), AttachLevel.Attached);
+        Persistence.ensureRetrieve(building.productCatalog().features(), AttachLevel.Attached);
+
+        assertTrue("Catalog Services", !building.productCatalog().services().isEmpty());
+        assertTrue("Catalog Features", !building.productCatalog().features().isEmpty());
     }
 }
