@@ -14,8 +14,11 @@
 package com.propertyvista.portal.server.portal.shared.services;
 
 import com.pyx4j.security.rpc.AuthenticationResponse;
+import com.pyx4j.security.shared.SecurityController;
 
+import com.propertyvista.domain.security.common.VistaBasicBehavior;
 import com.propertyvista.portal.rpc.portal.shared.services.PortalPasswordResetService;
+import com.propertyvista.portal.server.portal.prospect.services.ProspectAuthenticationServiceImpl;
 import com.propertyvista.portal.server.portal.resident.services.ResidentAuthenticationServiceImpl;
 import com.propertyvista.server.common.security.VistaPasswordResetServiceImpl;
 import com.propertyvista.server.domain.security.CustomerUserCredential;
@@ -28,7 +31,11 @@ public class PortalPasswordResetServiceImpl extends VistaPasswordResetServiceImp
 
     @Override
     protected AuthenticationResponse authenticate(CustomerUserCredential credentials) {
-        return new ResidentAuthenticationServiceImpl().authenticate(credentials, null);
+        if (SecurityController.checkBehavior(VistaBasicBehavior.ProspectivePortalPasswordChangeRequired)) {
+            return new ProspectAuthenticationServiceImpl().authenticate(credentials, null);
+        } else {
+            return new ResidentAuthenticationServiceImpl().authenticate(credentials, null);
+        }
     }
 
 }
