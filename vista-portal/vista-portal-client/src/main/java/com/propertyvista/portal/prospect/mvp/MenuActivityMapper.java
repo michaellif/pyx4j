@@ -17,18 +17,19 @@ import com.google.gwt.activity.shared.Activity;
 import com.google.gwt.activity.shared.ActivityMapper;
 import com.google.gwt.place.shared.Place;
 
-import com.propertyvista.portal.prospect.activity.application.NavigationActivity;
-import com.propertyvista.portal.rpc.portal.prospect.ProspectPortalSiteMap.Application;
+import com.pyx4j.security.client.ClientContext;
 
-public class NavigationActivityMapper implements ActivityMapper {
+import com.propertyvista.portal.prospect.activity.MenuActivity;
 
-    public NavigationActivityMapper() {
+public class MenuActivityMapper implements ActivityMapper {
+
+    public MenuActivityMapper() {
     }
 
     @Override
     public Activity getActivity(Place place) {
-        if (place instanceof Application) {
-            return new NavigationActivity(place);
+        if (ClientContext.isAuthenticated()) {
+            return new MenuActivity(place);
         } else {
             return null;
         }

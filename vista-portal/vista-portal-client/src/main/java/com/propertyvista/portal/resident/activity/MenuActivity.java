@@ -18,19 +18,15 @@ import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
-import com.pyx4j.security.client.BehaviorChangeEvent;
-import com.pyx4j.security.client.BehaviorChangeHandler;
 import com.pyx4j.security.client.ClientContext;
-import com.pyx4j.security.client.ContextChangeEvent;
-import com.pyx4j.security.client.ContextChangeHandler;
+import com.pyx4j.security.shared.SecurityController;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.client.ui.layout.responsive.LayoutChangeRequestEvent;
 import com.pyx4j.site.client.ui.layout.responsive.LayoutChangeRequestEvent.ChangeType;
-import com.pyx4j.site.rpc.AppPlace;
 
+import com.propertyvista.domain.security.PortalResidentBehavior;
 import com.propertyvista.portal.resident.ResidentPortalSite;
 import com.propertyvista.portal.resident.ui.MenuView;
-import com.propertyvista.portal.rpc.portal.PortalSiteMap;
 
 public class MenuActivity extends AbstractActivity implements MenuView.MenuPresenter {
 
@@ -44,31 +40,9 @@ public class MenuActivity extends AbstractActivity implements MenuView.MenuPrese
     @Override
     public void start(AcceptsOneWidget panel, EventBus eventBus) {
         panel.setWidget(view);
-        updateView();
-        eventBus.addHandler(BehaviorChangeEvent.getType(), new BehaviorChangeHandler() {
-            @Override
-            public void onBehaviorChange(BehaviorChangeEvent event) {
-                updateView();
-            }
-        });
-
-        eventBus.addHandler(ContextChangeEvent.getType(), new ContextChangeHandler() {
-
-            @Override
-            public void onContextChange(ContextChangeEvent event) {
-                updateView();
-            }
-        });
-
+        view.setUserName(ClientContext.getUserVisit().getName());
+        view.setLeasesSelectorEnabled(SecurityController.checkAnyBehavior(PortalResidentBehavior.HasMultipleLeases));
         AppSite.getEventBus().fireEvent(new LayoutChangeRequestEvent(ChangeType.resizeComponents));
-    }
-
-    private void updateView() {
-        if (ClientContext.isAuthenticated()) {
-            view.onLogedIn(ClientContext.getUserVisit().getName());
-        } else {
-            view.onLogedOut();
-        }
     }
 
 }

@@ -11,24 +11,26 @@
  * @author Misha
  * @version $Id$
  */
-package com.propertyvista.portal.prospect.ui.application;
+package com.propertyvista.portal.prospect.ui;
 
 import com.pyx4j.site.client.IsView;
 import com.pyx4j.site.rpc.AppPlace;
 
-public interface NavigationView extends IsView {
+import com.propertyvista.portal.prospect.ui.application.ApplicationWizard;
 
-    public interface NavigationPresenter {
+public interface MenuView extends IsView {
+
+    public interface MenuPresenter {
         public void navigTo(AppPlace place);
 
     }
 
-    void onLogedOut();
+    void setUserName(String userName);
 
-    void onLogedIn(String userName);
-
-    public void setPresenter(NavigationPresenter presenter);
+    public void setPresenter(MenuPresenter presenter);
 
     void updateStepButtons(ApplicationWizard applicationWizard);
+
+    void setApplicationsSelectorEnabled(boolean enabled);
 
 }

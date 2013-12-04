@@ -22,7 +22,7 @@ import com.google.gwt.user.client.ui.ComplexPanel;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Widget;
 
-import com.propertyvista.portal.prospect.ui.application.ApplicationProgressPanel.StepStatus;
+import com.propertyvista.portal.prospect.ui.application.NavigStepItem.StepStatus;
 import com.propertyvista.portal.shared.themes.PortalRootPaneTheme;
 
 public class NavigStepList implements IsWidget {

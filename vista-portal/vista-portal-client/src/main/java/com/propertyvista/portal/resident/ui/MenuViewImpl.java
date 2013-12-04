@@ -46,13 +46,15 @@ public class MenuViewImpl extends DockPanel implements MenuView {
 
     private static final I18n i18n = I18n.get(MenuViewImpl.class);
 
-    MenuPresenter presenter;
+    private MenuPresenter presenter;
 
     private final HeaderHolder headerHolder;
 
     private final MenuList mainHolder;
 
     private final MenuList footerHolder;
+
+    private final MenuItem leaseSelectionMenu;
 
     public MenuViewImpl() {
         setStyleName(PortalRootPaneTheme.StyleName.MainMenu.name());
@@ -74,8 +76,7 @@ public class MenuViewImpl extends DockPanel implements MenuView {
 
         mainHolder.addMenuItem(new MenuItem(new ResidentPortalSiteMap.Maintenance(), PortalImages.INSTANCE.maintenanceMenu(), ThemeColor.contrast5));
         if (VistaTODO.ENABLE_COMMUNCATION_CENTER) {
-            mainHolder
-                    .addMenuItem(new MenuItem(new ResidentPortalSiteMap.CommunicationCenter(), PortalImages.INSTANCE.dashboardMenu(), ThemeColor.contrast6));
+            mainHolder.addMenuItem(new MenuItem(new ResidentPortalSiteMap.CommunicationCenter(), PortalImages.INSTANCE.dashboardMenu(), ThemeColor.contrast6));
         }
 
         if (VistaFeatures.instance().countryOfOperation() == CountryOfOperation.Canada) {
@@ -87,6 +88,9 @@ public class MenuViewImpl extends DockPanel implements MenuView {
 
         footerHolder.addMenuItem(new MenuItem(new ResidentPortalSiteMap.Profile(), PortalImages.INSTANCE.profileMenu(), ThemeColor.background));
         footerHolder.addMenuItem(new MenuItem(new ResidentPortalSiteMap.Account(), PortalImages.INSTANCE.accountMenu(), ThemeColor.background));
+
+        leaseSelectionMenu = new MenuItem(new ResidentPortalSiteMap.LeaseContextSelection(), PortalImages.INSTANCE.accountMenu(), ThemeColor.background);
+        footerHolder.addMenuItem(leaseSelectionMenu);
 
         footerHolder.addMenuItem(new MenuItem(new PortalSiteMap.Logout(), PortalImages.INSTANCE.logoutMenu(), ThemeColor.background));
 
@@ -109,6 +113,11 @@ public class MenuViewImpl extends DockPanel implements MenuView {
         for (MenuItem item : mainHolder.getMenuItems()) {
             item.setSelected(currentPlace.getPlaceId().contains(item.getPlace().getPlaceId()));
         }
+    }
+
+    @Override
+    public void setLeasesSelectorEnabled(boolean enabled) {
+        leaseSelectionMenu.setVisible(enabled);
     }
 
     private void doLayout(LayoutType layoutType) {
@@ -138,12 +147,7 @@ public class MenuViewImpl extends DockPanel implements MenuView {
     }
 
     @Override
-    public void onLogedOut() {
-        headerHolder.setName(null);
-    }
-
-    @Override
-    public void onLogedIn(String userName) {
+    public void setUserName(String userName) {
         headerHolder.setName(userName);
     }
 

@@ -11,7 +11,7 @@
  * @author Misha
  * @version $Id$
  */
-package com.propertyvista.portal.prospect.ui.application;
+package com.propertyvista.portal.prospect.ui;
 
 import java.util.List;
 
@@ -31,18 +31,21 @@ import com.pyx4j.site.client.ui.layout.responsive.LayoutChangeEvent;
 import com.pyx4j.site.client.ui.layout.responsive.LayoutChangeHandler;
 import com.pyx4j.site.client.ui.layout.responsive.ResponsiveLayoutPanel.LayoutType;
 
-import com.propertyvista.portal.prospect.ui.application.ApplicationProgressPanel.StepStatus;
+import com.propertyvista.portal.prospect.ui.application.ApplicationWizard;
+import com.propertyvista.portal.prospect.ui.application.NavigStepItem.StepStatus;
+import com.propertyvista.portal.prospect.ui.application.NavigStepList;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap;
+import com.propertyvista.portal.rpc.portal.prospect.ProspectPortalSiteMap;
 import com.propertyvista.portal.shared.resources.PortalImages;
 import com.propertyvista.portal.shared.themes.PortalRootPaneTheme;
 import com.propertyvista.portal.shared.ui.MenuItem;
 import com.propertyvista.portal.shared.ui.MenuList;
 
-public class NavigationViewImpl extends DockPanel implements NavigationView {
+public class MenuViewImpl extends DockPanel implements MenuView {
 
-    private static final I18n i18n = I18n.get(NavigationViewImpl.class);
+    private static final I18n i18n = I18n.get(MenuViewImpl.class);
 
-    private NavigationPresenter presenter;
+    private MenuPresenter presenter;
 
     private final HeaderHolder headerHolder;
 
@@ -50,7 +53,9 @@ public class NavigationViewImpl extends DockPanel implements NavigationView {
 
     private final MenuList footerHolder;
 
-    public NavigationViewImpl() {
+    private final MenuItem applicationSelectionMenu;
+
+    public MenuViewImpl() {
         setStyleName(PortalRootPaneTheme.StyleName.MainMenu.name());
 
         headerHolder = new HeaderHolder();
@@ -63,6 +68,10 @@ public class NavigationViewImpl extends DockPanel implements NavigationView {
         add(mainHolder, DockPanel.CENTER);
         add(footerHolder, DockPanel.SOUTH);
         setCellHeight(footerHolder, "1px");
+
+        applicationSelectionMenu = new MenuItem(new ProspectPortalSiteMap.ApplicationContextSelection(), PortalImages.INSTANCE.accountMenu(),
+                ThemeColor.background);
+        footerHolder.addMenuItem(applicationSelectionMenu);
 
         footerHolder.addMenuItem(new MenuItem(new PortalSiteMap.Logout(), PortalImages.INSTANCE.logoutMenu(), ThemeColor.background));
 
@@ -103,7 +112,7 @@ public class NavigationViewImpl extends DockPanel implements NavigationView {
     }
 
     @Override
-    public void setPresenter(NavigationPresenter presenter) {
+    public void setPresenter(MenuPresenter presenter) {
         this.presenter = presenter;
     }
 
@@ -134,13 +143,13 @@ public class NavigationViewImpl extends DockPanel implements NavigationView {
     }
 
     @Override
-    public void onLogedOut() {
-        headerHolder.setName(null);
+    public void setUserName(String userName) {
+        headerHolder.setName(userName);
     }
 
     @Override
-    public void onLogedIn(String userName) {
-        headerHolder.setName(userName);
+    public void setApplicationsSelectorEnabled(boolean enabled) {
+        applicationSelectionMenu.setVisible(enabled);
     }
 
     class HeaderHolder extends FlowPanel {

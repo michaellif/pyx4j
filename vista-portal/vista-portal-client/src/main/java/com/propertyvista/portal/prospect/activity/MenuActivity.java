@@ -11,18 +11,14 @@
  * @author Misha
  * @version $Id$
  */
-package com.propertyvista.portal.prospect.activity.application;
+package com.propertyvista.portal.prospect.activity;
 
 import com.google.gwt.activity.shared.AbstractActivity;
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
-import com.pyx4j.security.client.BehaviorChangeEvent;
-import com.pyx4j.security.client.BehaviorChangeHandler;
 import com.pyx4j.security.client.ClientContext;
-import com.pyx4j.security.client.ContextChangeEvent;
-import com.pyx4j.security.client.ContextChangeHandler;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.client.ui.layout.responsive.LayoutChangeRequestEvent;
 import com.pyx4j.site.client.ui.layout.responsive.LayoutChangeRequestEvent.ChangeType;
@@ -31,41 +27,26 @@ import com.pyx4j.site.rpc.AppPlace;
 import com.propertyvista.portal.prospect.ProspectPortalSite;
 import com.propertyvista.portal.prospect.events.ApplicationWizardStateChangeEvent;
 import com.propertyvista.portal.prospect.events.ApplicationWizardStateChangeHandler;
+import com.propertyvista.portal.prospect.ui.MenuView;
+import com.propertyvista.portal.prospect.ui.MenuView.MenuPresenter;
 import com.propertyvista.portal.prospect.ui.application.ApplicationWizard;
-import com.propertyvista.portal.prospect.ui.application.NavigationView;
-import com.propertyvista.portal.prospect.ui.application.NavigationView.NavigationPresenter;
-import com.propertyvista.portal.rpc.portal.PortalSiteMap;
 
-public class NavigationActivity extends AbstractActivity implements NavigationPresenter {
+public class MenuActivity extends AbstractActivity implements MenuPresenter {
 
-    private final NavigationView view;
+    private final MenuView view;
 
     private ApplicationWizard applicationWizard;
 
-    public NavigationActivity(Place place) {
-        this.view = ProspectPortalSite.getViewFactory().getView(NavigationView.class);
+    public MenuActivity(Place place) {
+        this.view = ProspectPortalSite.getViewFactory().getView(MenuView.class);
         view.setPresenter(this);
     }
 
     @Override
     public void start(AcceptsOneWidget panel, EventBus eventBus) {
         panel.setWidget(view);
-        updateView();
-
-        eventBus.addHandler(BehaviorChangeEvent.getType(), new BehaviorChangeHandler() {
-            @Override
-            public void onBehaviorChange(BehaviorChangeEvent event) {
-                updateView();
-            }
-        });
-
-        eventBus.addHandler(ContextChangeEvent.getType(), new ContextChangeHandler() {
-
-            @Override
-            public void onContextChange(ContextChangeEvent event) {
-                updateView();
-            }
-        });
+        view.setUserName(ClientContext.getUserVisit().getName());
+        view.updateStepButtons(applicationWizard);
 
         eventBus.addHandler(ApplicationWizardStateChangeEvent.getType(), new ApplicationWizardStateChangeHandler() {
             @Override
@@ -73,23 +54,14 @@ public class NavigationActivity extends AbstractActivity implements NavigationPr
                 if (event.getChangeType() == ApplicationWizardStateChangeEvent.ChangeType.init
                         || event.getChangeType() == ApplicationWizardStateChangeEvent.ChangeType.discard) {
                     applicationWizard = event.getApplicationWizard();
-                    updateView();
+                    view.updateStepButtons(applicationWizard);
                 } else if (event.getChangeType() == ApplicationWizardStateChangeEvent.ChangeType.stepChange) {
-                    updateView();
+                    view.updateStepButtons(applicationWizard);
                 }
             }
         });
 
         AppSite.getEventBus().fireEvent(new LayoutChangeRequestEvent(ChangeType.resizeComponents));
-    }
-
-    private void updateView() {
-        if (ClientContext.isAuthenticated()) {
-            view.onLogedIn(ClientContext.getUserVisit().getName());
-        } else {
-            view.onLogedOut();
-        }
-        view.updateStepButtons(applicationWizard);
     }
 
     @Override

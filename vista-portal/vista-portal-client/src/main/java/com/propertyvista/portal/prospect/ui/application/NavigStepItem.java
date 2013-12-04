@@ -14,7 +14,6 @@
 package com.propertyvista.portal.prospect.ui.application;
 
 import com.google.gwt.dom.client.Style.Cursor;
-import com.google.gwt.dom.client.Style.Display;
 import com.google.gwt.dom.client.Style.Float;
 import com.google.gwt.dom.client.Style.TextAlign;
 import com.google.gwt.dom.client.Style.Unit;
@@ -38,11 +37,14 @@ import com.pyx4j.site.client.ui.layout.responsive.LayoutChangeRequestEvent;
 import com.pyx4j.site.client.ui.layout.responsive.LayoutChangeRequestEvent.ChangeType;
 import com.pyx4j.site.client.ui.layout.responsive.ResponsiveLayoutPanel.LayoutType;
 
-import com.propertyvista.portal.prospect.ui.application.ApplicationProgressPanel.StepStatus;
 import com.propertyvista.portal.shared.themes.PortalRootPaneTheme;
 import com.propertyvista.portal.shared.themes.StepsTheme;
 
 public class NavigStepItem implements IsWidget {
+
+    public static enum StepStatus {
+        notComplete, complete, invalid, current
+    }
 
     private final ContentPanel contentPanel;
 

@@ -105,6 +105,10 @@ public class MenuItem implements IsWidget {
         return appPlace;
     }
 
+    public void setVisible(boolean visible) {
+        contentPanel.setVisible(visible);
+    }
+
     private class ContentPanel extends ComplexPanel {
         private ContentPanel() {
             setElement(DOM.createElement("li"));

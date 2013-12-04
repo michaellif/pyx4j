@@ -21,10 +21,10 @@ public interface MenuView extends IsView {
 
     }
 
-    void onLogedOut();
-
-    void onLogedIn(String userName);
+    void setUserName(String userName);
 
     public void setPresenter(MenuPresenter presenter);
+
+    void setLeasesSelectorEnabled(boolean enabled);
 
 }

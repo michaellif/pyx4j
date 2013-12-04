@@ -14,7 +14,7 @@
 package com.propertyvista.portal.prospect.ui;
 
 import com.propertyvista.portal.prospect.mvp.ContentActivityMapper;
-import com.propertyvista.portal.prospect.mvp.NavigationActivityMapper;
+import com.propertyvista.portal.prospect.mvp.MenuActivityMapper;
 import com.propertyvista.portal.prospect.mvp.RentalSummaryActivityMapper;
 import com.propertyvista.portal.prospect.mvp.ToolbarActivityMapper;
 import com.propertyvista.portal.shared.mvp.FooterActivityMapper;
@@ -29,7 +29,7 @@ public class ProspectPortalRootPane extends PortalRootPane {
 
         bind(new HeaderActivityMapper(), asWidget().getHeaderDisplay());
         bind(new ToolbarActivityMapper(), asWidget().getToolbarDisplay());
-        bind(new NavigationActivityMapper(), asWidget().getMenuDisplay());
+        bind(new MenuActivityMapper(), asWidget().getMenuDisplay());
         bind(new ContentActivityMapper(), asWidget().getContentDisplay());
         bind(new FooterActivityMapper(), asWidget().getFooterDisplay());
         bind(new RentalSummaryActivityMapper(), asWidget().getExtraDisplay());
