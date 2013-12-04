@@ -93,18 +93,8 @@ public class NavigationActivity extends AbstractActivity implements NavigationPr
     }
 
     @Override
-    public void logout() {
-        AppSite.getPlaceController().goTo(new PortalSiteMap.Logout());
-    }
-
-    @Override
     public void navigTo(AppPlace place) {
         AppSite.getPlaceController().goTo(place);
-    }
-
-    @Override
-    public AppPlace getWhere() {
-        return AppSite.getPlaceController().getWhere();
     }
 
 }

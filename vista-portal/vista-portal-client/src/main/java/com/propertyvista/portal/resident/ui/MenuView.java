@@ -14,16 +14,10 @@
 package com.propertyvista.portal.resident.ui;
 
 import com.pyx4j.site.client.IsView;
-import com.pyx4j.site.rpc.AppPlace;
 
 public interface MenuView extends IsView {
 
     public interface MenuPresenter {
-        public void navigTo(AppPlace place);
-
-        public AppPlace getWhere();
-
-        public void logout();
 
     }
 

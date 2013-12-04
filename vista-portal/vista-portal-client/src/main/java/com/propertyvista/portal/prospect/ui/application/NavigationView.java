@@ -21,10 +21,6 @@ public interface NavigationView extends IsView {
     public interface NavigationPresenter {
         public void navigTo(AppPlace place);
 
-        public AppPlace getWhere();
-
-        public void logout();
-
     }
 
     void onLogedOut();

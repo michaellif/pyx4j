@@ -44,7 +44,7 @@ public class ApplicationConfirmationForm extends CPortalEntityForm<PaymentMethod
     private static final I18n i18n = I18n.get(ApplicationConfirmationForm.class);
 
     public ApplicationConfirmationForm(ApplicationConfirmationView view) {
-        super(PaymentMethodDTO.class, view, i18n.tr("New Payment Method Submitted Successfully!"), ThemeColor.contrast4);
+        super(PaymentMethodDTO.class, view, i18n.tr("New Payment Method Submitted Successfully!"), ThemeColor.contrast2);
     }
 
     @Override
@@ -62,7 +62,7 @@ public class ApplicationConfirmationForm extends CPortalEntityForm<PaymentMethod
         contentPanel.setStyleName(EntityViewTheme.StyleName.EntityViewContent.name());
         contentPanel.addStyleName(BlockMixin.StyleName.PortalBlock.name());
         contentPanel.getElement().getStyle().setProperty("borderTopWidth", "5px");
-        contentPanel.getElement().getStyle().setProperty("borderTopColor", StyleManager.getPalette().getThemeColor(ThemeColor.contrast4, 1));
+        contentPanel.getElement().getStyle().setProperty("borderTopColor", StyleManager.getPalette().getThemeColor(ThemeColor.contrast2, 1));
 
         return mainPanel;
 

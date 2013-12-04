@@ -33,7 +33,6 @@ public class StepsTheme extends Theme {
 
         style = new Style(".", StepsTheme.StyleName.WizardStepHandler.name());
         style.addProperty("font-style", "italic");
-        style.addProperty("color", "white");
         addStyle(style);
 
         style = new Style(".", StepsTheme.StyleName.WizardStepHandlerCaption.name());

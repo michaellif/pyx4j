@@ -74,7 +74,7 @@ public class ApplicationWizard extends CPortalEntityWizard<OnlineApplicationDTO>
     private ApplicationWizardPresenter presenter;
 
     public ApplicationWizard(ApplicationWizardViewImpl view) {
-        super(OnlineApplicationDTO.class, view, i18n.tr("Profile Payment Setup"), i18n.tr("Submit"), ThemeColor.contrast4);
+        super(OnlineApplicationDTO.class, view, i18n.tr("Profile Payment Setup"), i18n.tr("Submit"), ThemeColor.contrast2);
 
         if (SecurityController.checkBehavior(PortalProspectBehavior.Applicant)) {
             if (SecurityController.checkBehavior(PortalProspectBehavior.CanEditLeaseTerms)) {
@@ -291,13 +291,13 @@ public class ApplicationWizard extends CPortalEntityWizard<OnlineApplicationDTO>
             setCaption(i18n.tr("Lease Application"));
 
             getMainPanel().getElement().getStyle().setProperty("borderTopWidth", "5px");
-            getMainPanel().getElement().getStyle().setProperty("borderTopColor", StyleManager.getPalette().getThemeColor(ThemeColor.contrast4, 1));
+            getMainPanel().getElement().getStyle().setProperty("borderTopColor", StyleManager.getPalette().getThemeColor(ThemeColor.contrast2, 1));
 
             getHeaderPanel().getElement().getStyle().setProperty("borderTopWidth", "5px");
-            getHeaderPanel().getElement().getStyle().setProperty("borderTopColor", StyleManager.getPalette().getThemeColor(ThemeColor.contrast4, 1));
+            getHeaderPanel().getElement().getStyle().setProperty("borderTopColor", StyleManager.getPalette().getThemeColor(ThemeColor.contrast2, 1));
 
             getFooterPanel().getElement().getStyle().setProperty("borderTopWidth", "5px");
-            getFooterPanel().getElement().getStyle().setProperty("borderTopColor", StyleManager.getPalette().getThemeColor(ThemeColor.contrast4, 1));
+            getFooterPanel().getElement().getStyle().setProperty("borderTopColor", StyleManager.getPalette().getThemeColor(ThemeColor.contrast2, 1));
 
         }
 
