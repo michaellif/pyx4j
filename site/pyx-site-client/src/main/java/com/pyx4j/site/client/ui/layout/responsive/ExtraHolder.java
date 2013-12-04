@@ -35,8 +35,6 @@ public class ExtraHolder extends SimplePanel {
         setWidget(parent.getExtraDisplay());
         getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
         getWidget().getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
-
-        addStyleName("TESTTEST");
     }
 
     public void onPositionChange() {
