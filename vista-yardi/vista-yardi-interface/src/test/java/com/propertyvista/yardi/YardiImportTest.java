@@ -23,9 +23,12 @@ import com.yardi.entity.resident.ResidentTransactions;
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.AttachLevel;
+import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.gwt.server.DateUtils;
 
 import com.propertyvista.biz.ExecutionMonitor;
+import com.propertyvista.domain.financial.offering.Feature;
+import com.propertyvista.domain.financial.offering.Service;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.tenant.lease.Lease;
@@ -52,6 +55,10 @@ public class YardiImportTest extends YardiTestBase {
 
     private static String PROPERTYID = "prop123";
 
+    private static String TENANTID = "t000111";
+
+    private static String COTENANTID = "r000222";
+
     @Override
     protected void setUp() throws Exception {
         super.setUp();
@@ -69,9 +76,9 @@ public class YardiImportTest extends YardiTestBase {
         //Add RtCustomer, main tenant and Unit
         {
             // @formatter:off
-            RtCustomerUpdater updater = new RtCustomerUpdater("prop123", "t000111").
+            RtCustomerUpdater updater = new RtCustomerUpdater(PROPERTYID, TENANTID).
             set(RtCustomerUpdater.YCUSTOMER.Type, Customerinfo.CURRENT_RESIDENT).
-            set(RtCustomerUpdater.YCUSTOMER.CustomerID, "t000111").
+            set(RtCustomerUpdater.YCUSTOMER.CustomerID, TENANTID).
             set(RtCustomerUpdater.YCUSTOMERNAME.FirstName, "John").
             set(RtCustomerUpdater.YCUSTOMERNAME.LastName, "Smith").
             set(RtCustomerUpdater.YLEASE.CurrentRent, new BigDecimal("1234.56")).
@@ -91,7 +98,7 @@ public class YardiImportTest extends YardiTestBase {
 
         {
             // @formatter:off
-            LeaseChargeUpdater updater = new LeaseChargeUpdater(PROPERTYID, "t000111", "rent").
+            LeaseChargeUpdater updater = new LeaseChargeUpdater(PROPERTYID, TENANTID, "rent").
             set(LeaseChargeUpdater.Name.Description, "Rent").
             set(LeaseChargeUpdater.Name.ServiceFromDate, DateUtils.detectDateformat("01-Jun-2012")).
             set(LeaseChargeUpdater.Name.ServiceToDate, DateUtils.detectDateformat("31-Jul-2014")).
@@ -105,7 +112,7 @@ public class YardiImportTest extends YardiTestBase {
 
         {
             // @formatter:off
-            LeaseChargeUpdater updater = new LeaseChargeUpdater(PROPERTYID, "t000111", "parkA").
+            LeaseChargeUpdater updater = new LeaseChargeUpdater(PROPERTYID, TENANTID, "parkA").
             set(LeaseChargeUpdater.Name.Description, "Parking A").
             set(LeaseChargeUpdater.Name.ServiceFromDate, DateUtils.detectDateformat("01-Jun-2012")).
             set(LeaseChargeUpdater.Name.ServiceToDate, DateUtils.detectDateformat("31-Jul-2014")).
@@ -118,7 +125,7 @@ public class YardiImportTest extends YardiTestBase {
 
         {
             // @formatter:off
-            LeaseChargeUpdater updater = new LeaseChargeUpdater(PROPERTYID, "t000111", "parkB").
+            LeaseChargeUpdater updater = new LeaseChargeUpdater(PROPERTYID, TENANTID, "parkB").
             set(LeaseChargeUpdater.Name.Description, "Parking B").
             set(LeaseChargeUpdater.Name.ServiceFromDate, DateUtils.detectDateformat("01-Jun-2012")).
             set(LeaseChargeUpdater.Name.ServiceToDate, DateUtils.detectDateformat("31-Jul-2014")).
@@ -132,9 +139,9 @@ public class YardiImportTest extends YardiTestBase {
         {
 
             // @formatter:off
-            CoTenantUpdater updater = new CoTenantUpdater(PROPERTYID, "t000111", "r000222").
+            CoTenantUpdater updater = new CoTenantUpdater(PROPERTYID, TENANTID, COTENANTID).
             set(CoTenantUpdater.YCUSTOMER.Type, Customerinfo.CUSTOMER).
-            set(CoTenantUpdater.YCUSTOMER.CustomerID, "r000222").
+            set(CoTenantUpdater.YCUSTOMER.CustomerID, COTENANTID).
             set(CoTenantUpdater.YCUSTOMERNAME.FirstName, "Jane").
             set(CoTenantUpdater.YCUSTOMERNAME.LastName, "Doe").
             set(CoTenantUpdater.YCUSTOMERADDRESS.Email, "Jane@Doe.ca").
@@ -145,13 +152,13 @@ public class YardiImportTest extends YardiTestBase {
 
         {
             // @formatter:off
-            TransactionChargeUpdater updater = new TransactionChargeUpdater(PROPERTYID, "t000111").
+            TransactionChargeUpdater updater = new TransactionChargeUpdater(PROPERTYID, TENANTID).
             set(TransactionChargeUpdater.Name.Description, "Rent").
             set(TransactionChargeUpdater.Name.TransactionDate, DateUtils.detectDateformat("01-May-2013")).
             set(TransactionChargeUpdater.Name.TransactionID, "700324302").
             set(TransactionChargeUpdater.Name.ChargeCode, "rrent").
             set(TransactionChargeUpdater.Name.GLAccountNumber, "40000301").
-            set(TransactionChargeUpdater.Name.CustomerID, "t000111").
+            set(TransactionChargeUpdater.Name.CustomerID, TENANTID).
             set(TransactionChargeUpdater.Name.AmountPaid, "1.00").
             set(TransactionChargeUpdater.Name.BalanceDue, "1234.56").
             set(TransactionChargeUpdater.Name.Amount, "1234.56").
@@ -162,13 +169,12 @@ public class YardiImportTest extends YardiTestBase {
 
 // this an example of rentable items test preload:
 //             setupRentableItem();
-
     }
 
     protected void setupRentableItem() {
         {
             // @formatter:off
-            RentableItemTypeUpdater updater = new RentableItemTypeUpdater(PROPERTYID, "unit_rent").
+            RentableItemTypeUpdater updater = new RentableItemTypeUpdater(PROPERTYID, "UnitRent").
             set(RentableItemTypeUpdater.Name.Description, "Unit rent").
             set(RentableItemTypeUpdater.Name.ChargeCode, "rrent").
             set(RentableItemTypeUpdater.Name.Rent, "1000.00");
@@ -178,7 +184,7 @@ public class YardiImportTest extends YardiTestBase {
 
         {
             // @formatter:off
-            RentableItemTypeUpdater updater = new RentableItemTypeUpdater(PROPERTYID, "outdoor_parking").
+            RentableItemTypeUpdater updater = new RentableItemTypeUpdater(PROPERTYID, "OutdoorParking").
             set(RentableItemTypeUpdater.Name.Description, "Outdoor Parking rent").
             set(RentableItemTypeUpdater.Name.ChargeCode, "routpark").
             set(RentableItemTypeUpdater.Name.Rent, "15.00");
@@ -188,7 +194,7 @@ public class YardiImportTest extends YardiTestBase {
 
         {
             // @formatter:off
-            RentableItemTypeUpdater updater = new RentableItemTypeUpdater(PROPERTYID, "indoor_parking").
+            RentableItemTypeUpdater updater = new RentableItemTypeUpdater(PROPERTYID, "IndoorParking").
             set(RentableItemTypeUpdater.Name.Description, "Indoor Parking rent").
             set(RentableItemTypeUpdater.Name.ChargeCode, "rinpark").
             set(RentableItemTypeUpdater.Name.Rent, "25.00");
@@ -198,7 +204,7 @@ public class YardiImportTest extends YardiTestBase {
 
         {
             // @formatter:off
-            RentableItemTypeUpdater updater = new RentableItemTypeUpdater(PROPERTYID, "small_locker").
+            RentableItemTypeUpdater updater = new RentableItemTypeUpdater(PROPERTYID, "SmallLocker").
             set(RentableItemTypeUpdater.Name.Description, "Small Locker rent").
             set(RentableItemTypeUpdater.Name.ChargeCode, "rslocker").
             set(RentableItemTypeUpdater.Name.Rent, "10.00");
@@ -208,7 +214,7 @@ public class YardiImportTest extends YardiTestBase {
 
         {
             // @formatter:off
-            RentableItemTypeUpdater updater = new RentableItemTypeUpdater(PROPERTYID, "medium_locker").
+            RentableItemTypeUpdater updater = new RentableItemTypeUpdater(PROPERTYID, "MediumLocker").
             set(RentableItemTypeUpdater.Name.Description, "Medium Locker rent").
             set(RentableItemTypeUpdater.Name.ChargeCode, "rmlocker").
             set(RentableItemTypeUpdater.Name.Rent, "15.00");
@@ -222,12 +228,10 @@ public class YardiImportTest extends YardiTestBase {
 
         setSysDate("25-May-2013");
 
-        String propertyCode = PROPERTYID;
+        YardiResidentTransactionsService.getInstance().updateAll(getYardiCredential(PROPERTYID), new ExecutionMonitor());
 
-        YardiResidentTransactionsService.getInstance().updateAll(getYardiCredential(propertyCode), new ExecutionMonitor());
-
-        Building building = getBuilding(propertyCode);
-        assertEquals(propertyCode, building.propertyCode().getValue());
+        Building building = getBuilding(PROPERTYID);
+        assertEquals(PROPERTYID, building.propertyCode().getValue());
 
         AptUnit unit = getUnit(building, "0111");
         assertNotNull(unit);
@@ -283,7 +287,7 @@ public class YardiImportTest extends YardiTestBase {
 
         {
             // @formatter:off
-            RtCustomerUpdater updater = new RtCustomerUpdater(PROPERTYID, "t000111").
+            RtCustomerUpdater updater = new RtCustomerUpdater(PROPERTYID, TENANTID).
             set(RtCustomerUpdater.YLEASE.CurrentRent, new BigDecimal("1250.00"));
             // @formatter:on
             MockEventBus.fireEvent(new RtCustomerUpdateEvent(updater));
@@ -291,7 +295,7 @@ public class YardiImportTest extends YardiTestBase {
 
         {
             // @formatter:off
-            LeaseChargeUpdater updater = new LeaseChargeUpdater(PROPERTYID, "t000111", "rent").
+            LeaseChargeUpdater updater = new LeaseChargeUpdater(PROPERTYID, TENANTID, "rent").
             set(LeaseChargeUpdater.Name.Amount, "1250.00");
             // @formatter:on
             MockEventBus.fireEvent(new LeaseChargeUpdateEvent(updater));
@@ -299,14 +303,14 @@ public class YardiImportTest extends YardiTestBase {
 
         { // item will be removed from next term
             // @formatter:off
-            LeaseChargeUpdater updater = new LeaseChargeUpdater(PROPERTYID, "t000111", "parkB").remove();
+            LeaseChargeUpdater updater = new LeaseChargeUpdater(PROPERTYID, TENANTID, "parkB").remove();
             // @formatter:on
             MockEventBus.fireEvent(new LeaseChargeUpdateEvent(updater));
         }
 
         {
             // @formatter:off
-            LeaseChargeUpdater updater = new LeaseChargeUpdater(PROPERTYID, "t000111", "lockerA").
+            LeaseChargeUpdater updater = new LeaseChargeUpdater(PROPERTYID, TENANTID, "lockerA").
             set(LeaseChargeUpdater.Name.Description, "Locker A").
             set(LeaseChargeUpdater.Name.ServiceFromDate, DateUtils.detectDateformat("01-Jun-2012")).
             set(LeaseChargeUpdater.Name.ServiceToDate, DateUtils.detectDateformat("31-Jul-2014")).
@@ -319,13 +323,13 @@ public class YardiImportTest extends YardiTestBase {
 
         {
             // @formatter:off
-            CoTenantUpdater updater = new CoTenantUpdater(PROPERTYID, "t000111", "r000222").
+            CoTenantUpdater updater = new CoTenantUpdater(PROPERTYID, TENANTID, COTENANTID).
             set(CoTenantUpdater.YCUSTOMERNAME.LastName, "Smith");
             // @formatter:on
             MockEventBus.fireEvent(new CoTenantUpdateEvent(updater));
         }
 
-        YardiResidentTransactionsService.getInstance().updateAll(getYardiCredential(propertyCode), new ExecutionMonitor());
+        YardiResidentTransactionsService.getInstance().updateAll(getYardiCredential(PROPERTYID), new ExecutionMonitor());
 
         lease = getCurrentLease(unit);
         Persistence.service().retrieveMember(lease.currentTerm().versions());
@@ -372,38 +376,30 @@ public class YardiImportTest extends YardiTestBase {
 
     @Test
     public void testGetResidentTransactionsForTenant() throws Exception {
-
-        String propertyCode = PROPERTYID;
-        String tenantId = "t000111";
-
         YardiResidentTransactionsStub stub = ServerSideFactory.create(YardiResidentTransactionsStub.class);
 
-        ResidentTransactions transactions = stub.getResidentTransactionsForTenant(getYardiCredential(propertyCode), propertyCode, tenantId);
+        ResidentTransactions transactions = stub.getResidentTransactionsForTenant(getYardiCredential(PROPERTYID), PROPERTYID, TENANTID);
         assertNotNull(transactions);
         assertEquals(1, transactions.getProperty().get(0).getRTCustomer().size());
-        assertEquals(tenantId, transactions.getProperty().get(0).getRTCustomer().get(0).getCustomerID());
+        assertEquals(TENANTID, transactions.getProperty().get(0).getRTCustomer().get(0).getCustomerID());
     }
 
     @Test
     public void testGetLeaseChargesForTenant() throws Exception {
-
-        String propertyCode = PROPERTYID;
-        String tenantId = "t000111";
-
         YardiResidentTransactionsStub stub = ServerSideFactory.create(YardiResidentTransactionsStub.class);
 
-        ResidentTransactions transactions = stub.getLeaseChargesForTenant(getYardiCredential(propertyCode), propertyCode, tenantId, null);
+        ResidentTransactions transactions = stub.getLeaseChargesForTenant(getYardiCredential(PROPERTYID), PROPERTYID, TENANTID, null);
         assertEquals(1, transactions.getProperty().get(0).getRTCustomer().size());
         assertEquals("Has LeaseCharges", 0, transactions.getProperty().get(0).getRTCustomer().get(0).getRTServiceTransactions().getTransactions().size());
 
         setSysDate("01-Jun-2012");
 
-        transactions = stub.getLeaseChargesForTenant(getYardiCredential(propertyCode), propertyCode, tenantId, null);
+        transactions = stub.getLeaseChargesForTenant(getYardiCredential(PROPERTYID), PROPERTYID, TENANTID, null);
         assertEquals("Has LeaseCharges", 3, transactions.getProperty().get(0).getRTCustomer().get(0).getRTServiceTransactions().getTransactions().size());
 
         setSysDate("01-Aug-2014");
 
-        transactions = stub.getLeaseChargesForTenant(getYardiCredential(propertyCode), propertyCode, tenantId, null);
+        transactions = stub.getLeaseChargesForTenant(getYardiCredential(PROPERTYID), PROPERTYID, TENANTID, null);
         assertEquals("Has LeaseCharges", 0, transactions.getProperty().get(0).getRTCustomer().get(0).getRTServiceTransactions().getTransactions().size());
     }
 
@@ -424,5 +420,55 @@ public class YardiImportTest extends YardiTestBase {
 
         assertTrue("Catalog Services", !building.productCatalog().services().isEmpty());
         assertTrue("Catalog Features", !building.productCatalog().features().isEmpty());
+
+        {
+            EntityQueryCriteria<Service> criteria = EntityQueryCriteria.create(Service.class);
+            criteria.eq(criteria.proto().catalog(), building.productCatalog());
+            criteria.eq(criteria.proto().version().name(), "UnitRent");
+            Service service = Persistence.service().retrieve(criteria);
+
+            assertNotNull("Unit Rent Service", service);
+            assertTrue("Unit Rent Service items", !service.version().items().isEmpty());
+        }
+
+        {
+            EntityQueryCriteria<Feature> criteria = EntityQueryCriteria.create(Feature.class);
+            criteria.eq(criteria.proto().catalog(), building.productCatalog());
+            criteria.eq(criteria.proto().version().name(), "IndoorParking");
+            Feature feature = Persistence.service().retrieve(criteria);
+
+            assertNotNull("Indoor Parking Feature", feature);
+            assertTrue("Indoor Parking Feature items", !feature.version().items().isEmpty());
+        }
+
+        {
+            EntityQueryCriteria<Feature> criteria = EntityQueryCriteria.create(Feature.class);
+            criteria.eq(criteria.proto().catalog(), building.productCatalog());
+            criteria.eq(criteria.proto().version().name(), "OutdoorParking");
+            Feature feature = Persistence.service().retrieve(criteria);
+
+            assertNotNull("Outdoor Parking Feature", feature);
+            assertTrue("Outdoor Parking Feature items", !feature.version().items().isEmpty());
+        }
+
+        {
+            EntityQueryCriteria<Feature> criteria = EntityQueryCriteria.create(Feature.class);
+            criteria.eq(criteria.proto().catalog(), building.productCatalog());
+            criteria.eq(criteria.proto().version().name(), "SmallLocker");
+            Feature feature = Persistence.service().retrieve(criteria);
+
+            assertNotNull("Samll Locker Feature", feature);
+            assertTrue("Samll Locker Feature items", !feature.version().items().isEmpty());
+        }
+
+        {
+            EntityQueryCriteria<Feature> criteria = EntityQueryCriteria.create(Feature.class);
+            criteria.eq(criteria.proto().catalog(), building.productCatalog());
+            criteria.eq(criteria.proto().version().name(), "MediumLocker");
+            Feature feature = Persistence.service().retrieve(criteria);
+
+            assertNotNull("Medium Locker Feature", feature);
+            assertTrue("Medium Locker Feature items", !feature.version().items().isEmpty());
+        }
     }
 }
