@@ -14,12 +14,15 @@
 package com.propertyvista.yardi.mock;
 
 import java.lang.reflect.Method;
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
 import org.apache.commons.lang.SerializationUtils;
 
+import com.yardi.entity.guestcard40.RentableItemType;
+import com.yardi.entity.guestcard40.RentableItems;
 import com.yardi.entity.mits.Address;
 import com.yardi.entity.mits.Identification;
 import com.yardi.entity.mits.Information;
@@ -53,11 +56,15 @@ public class PropertyManager {
 
     private final Map<String, Map<String, Charge>> leaseCharges;
 
+    private final ArrayList<RentableItemType> rentableItemTypes;
+
     public PropertyManager(String propertyId) {
         this.propertyId = propertyId;
+
         property = new com.yardi.entity.mits.Property();
         transactions = new ResidentTransactions();
         leaseCharges = new LinkedHashMap<String, Map<String, Charge>>();
+        rentableItemTypes = new ArrayList<RentableItemType>();
 
         transactions.getProperty().add(new com.yardi.entity.resident.Property());
     }
@@ -121,6 +128,14 @@ public class PropertyManager {
 
         RTCustomer rtCustomer = createRtCustomerWithCharges(leaseCharges.get(tenantId));
         rtProperty.getRTCustomer().add(rtCustomer);
+
+        return retVal;
+    }
+
+    public RentableItems getRentableItems() {
+        RentableItems retVal = new RentableItems();
+
+        retVal.getItemType().addAll(rentableItemTypes);
 
         return retVal;
     }

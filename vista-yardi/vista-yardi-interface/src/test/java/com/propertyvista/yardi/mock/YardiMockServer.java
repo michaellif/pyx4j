@@ -16,6 +16,7 @@ package com.propertyvista.yardi.mock;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.yardi.entity.guestcard40.RentableItems;
 import com.yardi.entity.resident.RTCustomer;
 import com.yardi.entity.resident.ResidentTransactions;
 import com.yardi.entity.resident.Transactions;
@@ -81,6 +82,10 @@ public class YardiMockServer implements TransactionChargeUpdateEvent.Handler, Pr
 
     public ResidentTransactions getLeaseChargesForTenant(String propertyId, String tenantId) {
         return getExistingPropertyManager(propertyId).getLeaseChargesForTenant(tenantId);
+    }
+
+    public RentableItems getRentableItems(String propertyId) {
+        return getExistingPropertyManager(propertyId).getRentableItems();
     }
 
     public long openReceiptBatch(String propertyId) {

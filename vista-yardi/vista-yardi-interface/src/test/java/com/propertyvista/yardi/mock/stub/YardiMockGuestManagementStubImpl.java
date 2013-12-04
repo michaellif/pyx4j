@@ -13,6 +13,8 @@
  */
 package com.propertyvista.yardi.mock.stub;
 
+import javax.xml.bind.JAXBException;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -22,13 +24,26 @@ import com.yardi.entity.guestcard40.RentableItems;
 import com.yardi.entity.ils.PhysicalProperty;
 import com.yardi.entity.leaseapp30.LeaseApplication;
 
+import com.pyx4j.essentials.j2se.util.MarshallUtil;
+
 import com.propertyvista.biz.system.YardiServiceException;
 import com.propertyvista.domain.settings.PmcYardiCredential;
+import com.propertyvista.yardi.TransactionLog;
+import com.propertyvista.yardi.mock.YardiMockServer;
 import com.propertyvista.yardi.stubs.YardiGuestManagementStub;
 
 public class YardiMockGuestManagementStubImpl implements YardiGuestManagementStub {
 
     private final static Logger log = LoggerFactory.getLogger(YardiMockGuestManagementStubImpl.class);
+
+    public static <T> T dumpXml(String contextName, T data) {
+        try {
+            TransactionLog.log(TransactionLog.getNextNumber(), contextName, MarshallUtil.marshall(data), ".xml");
+        } catch (JAXBException e) {
+            log.error("writing data dump error", e);
+        }
+        return data;
+    }
 
     @Override
     public long getRequestsTime() {
@@ -43,8 +58,7 @@ public class YardiMockGuestManagementStubImpl implements YardiGuestManagementStu
 
     @Override
     public RentableItems getRentableItems(PmcYardiCredential yc, String propertyId) throws YardiServiceException {
-        // TODO Auto-generated method stub
-        return null;
+        return dumpXml("getRentableItems", YardiMockServer.instance().getRentableItems(propertyId));
     }
 
     @Override
