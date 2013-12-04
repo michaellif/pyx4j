@@ -16,8 +16,6 @@ package com.propertyvista.portal.shared.ui;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.site.client.IsView;
 
-import com.propertyvista.portal.prospect.ui.application.ApplicationWizard;
-
 public interface IWizardView<E extends IEntity> extends IsView {
 
     public interface IWizardFormPresenter<E extends IEntity> {
@@ -40,7 +38,10 @@ public interface IWizardView<E extends IEntity> extends IsView {
 
     public boolean isDirty();
 
-    boolean onSubmittionFailed(Throwable caught);
+    /**
+     * return true if error is handled by wizard itself
+     */
+    boolean manageSubmissionFailure(Throwable caught);
 
     void onStepChange();
 

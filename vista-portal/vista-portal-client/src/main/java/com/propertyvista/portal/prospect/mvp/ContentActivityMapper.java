@@ -25,6 +25,7 @@ import com.pyx4j.site.rpc.AppPlace;
 import com.propertyvista.portal.prospect.activity.ApplicationContextSelectionActivity;
 import com.propertyvista.portal.prospect.activity.LandingActivity;
 import com.propertyvista.portal.prospect.activity.SignUpActivity;
+import com.propertyvista.portal.prospect.activity.application.ApplicationConfirmationActivity;
 import com.propertyvista.portal.prospect.activity.application.ApplicationStatusPageActivity;
 import com.propertyvista.portal.prospect.activity.application.ApplicationWizardActivity;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap;
@@ -78,6 +79,8 @@ public class ContentActivityMapper implements AppActivityMapper {
 
                     } else if (appPlace instanceof ProspectPortalSiteMap.Application) {
                         activity = new ApplicationWizardActivity(appPlace);
+                    } else if (appPlace instanceof ProspectPortalSiteMap.ApplicationConfirmation) {
+                        activity = new ApplicationConfirmationActivity(appPlace);
 
                     }
 

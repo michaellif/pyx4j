@@ -18,9 +18,7 @@ import com.propertyvista.portal.shared.ui.IViewerView;
 
 public interface ApplicationConfirmationView extends IViewerView<PaymentMethodDTO> {
 
-    interface ApplicationConfirmationPresenter extends IViewerView.IViewerPresenter<PaymentMethodDTO> {
-
-        void goToAutoPay();
+    public interface ApplicationConfirmationPresenter extends IViewerView.IViewerPresenter<PaymentMethodDTO> {
 
         void back();
     }

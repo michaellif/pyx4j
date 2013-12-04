@@ -82,7 +82,7 @@ public abstract class AbstractWizardCrudActivity<E extends IEntity> extends Abst
 
             @Override
             public void onFailure(Throwable caught) {
-                if (!getView().onSubmittionFailed(caught)) {
+                if (!getView().manageSubmissionFailure(caught)) {
                     throw new UnrecoverableClientError(caught);
                 }
             }

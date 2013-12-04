@@ -55,13 +55,11 @@ public class ApplicationWizardServiceImpl implements ApplicationWizardService {
 
     @Override
     public void save(AsyncCallback<Key> callback, OnlineApplicationDTO editableEntity) {
-        // TODO Auto-generated method stub
-
+        callback.onSuccess(null);
     }
 
     @Override
     public void submit(AsyncCallback<Key> callback, OnlineApplicationDTO editableEntity) {
-        // TODO Auto-generated method stub
-
+        callback.onSuccess(null);
     }
 }

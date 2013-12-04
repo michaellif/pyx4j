@@ -70,7 +70,7 @@ public abstract class AbstractWizardFormView<E extends IEntity> extends Abstract
     }
 
     @Override
-    public boolean onSubmittionFailed(Throwable caught) {
+    public boolean manageSubmissionFailure(Throwable caught) {
         if (caught instanceof UniqueConstraintUserRuntimeException) {
             MessageDialog.error(i18n.tr("Error"), caught.getMessage());
             return true;

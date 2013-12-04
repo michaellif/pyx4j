@@ -42,7 +42,8 @@ public class ProspectPortalSiteMap extends PortalSiteMap {
     }
 
     public static class Application extends AppPlace {
-
     }
 
+    public static class ApplicationConfirmation extends AppPlace {
+    }
 }
