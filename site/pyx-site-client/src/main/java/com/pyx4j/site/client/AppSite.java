@@ -118,6 +118,9 @@ public abstract class AppSite implements EntryPoint {
             boolean first = true;
             for (Entry<String, List<String>> me : Window.Location.getParameterMap().entrySet()) {
                 String paramName = me.getKey();
+                if (paramName.equals("gwt.codesvr")) {
+                    continue;
+                }
                 urlBuilder.removeParameter(paramName);
                 if (!paramName.equals(NavigNode.PLACE_ARGUMENT)) {
                     if (first) {
