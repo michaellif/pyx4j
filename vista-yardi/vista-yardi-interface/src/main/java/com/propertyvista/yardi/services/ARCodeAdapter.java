@@ -66,8 +66,9 @@ public class ARCodeAdapter {
 
     private ARCode retrieveDefaultUnkownARCode(ARCode.ActionType actionType) {
         EntityQueryCriteria<ARCode> unknownExternalCodeCriteria = EntityQueryCriteria.create(ARCode.class);
-        unknownExternalCodeCriteria.in(unknownExternalCodeCriteria.proto().type(), actionType == ActionType.Credit ? ARCode.Type.ExternalCredit
+        unknownExternalCodeCriteria.eq(unknownExternalCodeCriteria.proto().type(), actionType == ActionType.Credit ? ARCode.Type.ExternalCredit
                 : ARCode.Type.ExternalCharge);
+        unknownExternalCodeCriteria.eq(unknownExternalCodeCriteria.proto().reserved(), true);
         ARCode code = Persistence.service().retrieve(unknownExternalCodeCriteria);
         if (code == null) {
             throw new IllegalStateException("ARCode for external unknown charge action type '" + actionType + "' wasn't found!");

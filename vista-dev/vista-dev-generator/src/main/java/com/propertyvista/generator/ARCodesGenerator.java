@@ -53,8 +53,8 @@ public class ARCodesGenerator {
         createARCode("Booking", ARCode.Type.OneTime, 5934, false);
 
         // TODO define correct GL Code for these unknown external charge and credit
-        createARCode("Unknown External Credit", ARCode.Type.ExternalCredit, 0, false);
-        createARCode("Unknown External Charge", ARCode.Type.ExternalCharge, 0, false);
+        createARCode("Unknown External Credit", ARCode.Type.ExternalCredit, 0, true);
+        createARCode("Unknown External Charge", ARCode.Type.ExternalCharge, 0, true);
 
         // reserved codes:
         createARCode("Deposit", ARCode.Type.Deposit, 0, true);
