@@ -27,47 +27,85 @@ import com.google.gwt.safehtml.client.SafeHtmlTemplates;
 import com.google.gwt.safehtml.client.SafeHtmlTemplates.Template;
 import com.google.gwt.safehtml.shared.SafeHtml;
 import com.google.gwt.safehtml.shared.SafeHtmlBuilder;
+import com.google.gwt.user.client.ui.PopupPanel;
+import com.google.gwt.user.client.ui.PopupPanel.PositionCallback;
+import com.google.gwt.user.client.ui.VerticalPanel;
 
 import com.pyx4j.commons.css.IStyleName;
 import com.pyx4j.forms.client.ui.IFormat;
+import com.pyx4j.widgets.client.Label;
 
-public class ObjectEditCell<E> extends AbstractEditableCell<E, String> {
+public class ObjectEditCell<E> extends AbstractEditableCell<E, ValidationErrors> {
 
     public interface Template extends SafeHtmlTemplates {
 
         @Template("<input type=\"text\" value=\"{1}\" tabindex=\"-1\" class=\"{0}\"></input>")
-        SafeHtml inputBox(String style, String formattedValue);
-    }
-
-    public enum Styles implements IStyleName {
-
-        ObjectEditCell;
+        SafeHtml inputBox(String appliedStyles, String formattedValue);
 
     }
 
-    private final IFormat<E> format;
+    public enum StyleNames implements IStyleName {
+
+        ObjectEditCell, ObjectEditCellPendingValidation, ObjectEditCellFailedValidation, ObjectEditCellValidationPopup;
+
+    }
+
+    public interface Style {
+
+        String objectEditCell();
+
+        String objectEditCellPendingValidation();
+
+        String objectEditCellFailedValidation();
+
+        String objectEditCellValidationPopup();
+
+    }
+
+    public static class DefaultStyle implements Style {//@formatter:off
+        @Override public String objectEditCellValidationPopup() { return  StyleNames.ObjectEditCellValidationPopup.name(); }
+        @Override public String objectEditCellPendingValidation() { return StyleNames.ObjectEditCellPendingValidation.name();} 
+        @Override public String objectEditCellFailedValidation() { return StyleNames.ObjectEditCellFailedValidation.name();}            
+        @Override public String objectEditCell() { return StyleNames.ObjectEditCell.name();};
+    };//@formatter:on
+
+    private class ValidationErrorsPopup extends PopupPanel {
+
+        public ValidationErrorsPopup(ValidationErrors validationErrors) {
+            VerticalPanel errorsPanel = new VerticalPanel();
+            for (String errorMessage : validationErrors.getValidationErrorMessages()) {
+                errorsPanel.add(new Label(errorMessage));
+            }
+            setWidget(errorsPanel);
+            addStyleName(ObjectEditCell.this.style.objectEditCellValidationPopup());
+        }
+
+    }
+
+    protected final IFormat<E> format;
 
     private final Template template;
 
-    private final String style;
+    private final Style style;
 
-    private final String onParseErrorMessage;
+    private ValidationErrorsPopup displayedPopup;
 
     /**
+     * Let's edit any data in form of string. The <code>IFormat</code> passed in constructor will be responsible for parsing and formatting the values.
+     * If parsing fails {@link #onParsingFailed} will be launched, else value updater will be launched, and value in input field will be replaced with a
+     * formatted value.
+     * 
      * @param format
      *            Required. This will be used to parse input and format the value. And of course '<code>format.parse(format.format(value)) == value</code>' must
      *            always hold and never throw a <code>ParseException</code>.
      * @param style
-     *            Optional. Will set class of the input cell, if <code>null</code> the class will be {@link Styles#ObjectEditCell}.
-     * @param onParseErrorMessage
-     *            if parsing fails will show this text as a suggestion what whet wrong and how to fix it. UNFORTUNATELY NOT YET IMPLEMENTED
+     *            Optional. sets styles for the input cell
      */
-    public ObjectEditCell(IFormat<E> format, String style, String onParseErrorMessage) {
-        super(BrowserEvents.BLUR);
+    public ObjectEditCell(IFormat<E> format, Style style) {
+        super(BrowserEvents.BLUR, BrowserEvents.MOUSEOVER, BrowserEvents.MOUSEOUT);
         this.template = GWT.create(Template.class);
-        this.style = (style != null) ? style : Styles.ObjectEditCell.name();
+        this.style = (style != null) ? style : new DefaultStyle();
         this.format = format;
-        this.onParseErrorMessage = onParseErrorMessage;
     }
 
     @Override
@@ -78,29 +116,78 @@ public class ObjectEditCell<E> extends AbstractEditableCell<E, String> {
     @Override
     public void render(Context context, E value, SafeHtmlBuilder sb) {
         String formattedValue = format.format(value);
-        sb.append(template.inputBox(this.style, formattedValue));
+
+        ValidationErrors validationErrors = getViewData(context.getKey());
+        String appliedStyleNames = this.style.objectEditCell();
+        if (validationErrors != null) {
+            appliedStyleNames += " "
+                    + ((validationErrors.isPending()) ? this.style.objectEditCellPendingValidation() : this.style.objectEditCellFailedValidation());
+        }
+        sb.append(template.inputBox(appliedStyleNames, formattedValue));
     }
 
     @Override
-    public void onBrowserEvent(com.google.gwt.cell.client.Cell.Context context, Element parent, E value, NativeEvent event, ValueUpdater<E> valueUpdater) {
+    public void onBrowserEvent(Context context, Element parent, E value, NativeEvent event, ValueUpdater<E> valueUpdater) {
         EventTarget eventTarget = event.getEventTarget();
         if (Element.is(eventTarget)) {
-            Element target = Element.as(eventTarget);
-            if ("input".equals(target.getTagName().toLowerCase())) {
-                InputElement input = (InputElement) parent.getFirstChild();
-                String unparsedValue = input.getValue();
-                E parsedValue = null;
-                try {
-                    parsedValue = format.parse(unparsedValue);
-                } catch (ParseException parseException) {
-                    // TODO show a popup with error 
+            if (event.getType().equals(BrowserEvents.BLUR)) {
+                Element target = Element.as(eventTarget);
+                if (InputElement.TAG.equals(target.getTagName().toLowerCase())) {
+                    InputElement input = (InputElement) parent.getFirstChild();
+                    String unparsedValue = input.getValue();
+                    E parsedValue = null;
+                    try {
+                        parsedValue = format.parse(unparsedValue);
+                    } catch (ParseException parseException) {
+                        // TODO show a popup with error 
+                    }
+                    if (parsedValue != null) {
+                        String newFormatted = format.format(parsedValue);
+                        input.setValue(newFormatted);
+                        if (valueUpdater != null) {
+                            valueUpdater.update(parsedValue);
+                        }
+                    } else {
+                        onParsingFailed(context, input, value, valueUpdater);
+                    }
                 }
-                String newFormatted = format.format(parsedValue != null ? parsedValue : value);
-                input.setValue(newFormatted);
-                if (parsedValue != null) {
-                    valueUpdater.update(parsedValue);
+            } else if (event.getType().equals(BrowserEvents.MOUSEOVER)) {
+                if (displayedPopup != null) {
+                    displayedPopup.hide();
+                    displayedPopup = null;
                 }
+                ValidationErrors validationErrors = getViewData(context.getKey());
+                if (validationErrors != null) {
+                    // TODO set popup position properly (top bottom, left or right, not just bottom);
+                    displayedPopup = new ValidationErrorsPopup(validationErrors);
+                    final int left = parent.getAbsoluteLeft();
+                    final int top = parent.getAbsoluteBottom() + 1;
+                    displayedPopup.setPopupPositionAndShow(new PositionCallback() {
+                        @Override
+                        public void setPosition(int offsetWidth, int offsetHeight) {
+                            displayedPopup.setPopupPosition(left, top);
+                        }
+                    });
+                }
+            } else if (event.getType().equals(BrowserEvents.MOUSEOUT) && displayedPopup != null) {
+                displayedPopup.hide();
+                displayedPopup = null;
             }
+
         }
+
+    }
+
+    /**
+     * Called when parsing of input field fails. The default implementation fills the input field with a formatted value of the cell.
+     * Params same as in onBrowserEvent
+     * 
+     * @param context
+     * @param input
+     * @param value
+     * @param valueUpdater
+     */
+    protected void onParsingFailed(Context context, InputElement input, E value, ValueUpdater<E> valueUpdater) {
+        input.setValue(format.format(value));
     }
 }

@@ -14,47 +14,46 @@
 package com.propertyvista.crm.client.activity.tools.financial.moneyin;
 
 import java.math.BigDecimal;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 import com.google.gwt.activity.shared.AbstractActivity;
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 import com.google.gwt.view.client.ListDataProvider;
-import com.google.gwt.view.client.ProvidesKey;
 
+import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.commons.Key;
 import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.entity.shared.Path;
+import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.rpc.AppPlace;
 
 import com.propertyvista.crm.client.CrmSite;
+import com.propertyvista.crm.client.ui.tools.common.datagrid.ValidationErrors;
 import com.propertyvista.crm.client.ui.tools.financial.moneyin.MoneyInCreateBatchView;
 import com.propertyvista.crm.rpc.dto.financial.autopayreview.moneyin.MoneyInCandidateDTO;
 import com.propertyvista.crm.rpc.dto.financial.autopayreview.moneyin.MoneyInLeaseParticipantDTO;
 
 public class MoneyInCreateBatchActivity extends AbstractActivity implements MoneyInCreateBatchView.Presenter {
 
+    private static final I18n i18n = I18n.get(MoneyInCreateBatchActivity.class);
+
     private final MoneyInCreateBatchView view;
 
     private final ListDataProvider<MoneyInCandidateDTO> searchResultsProvider;
 
-    private ListDataProvider<MoneyInCandidateDTO> selectedForProcessingProvider;
+    private final ListDataProvider<MoneyInCandidateDTO> selectedForProcessingProvider;
+
+    private final Map<Key, HashMap<Path, ValidationErrors>> validationErrorsMap;
 
     public MoneyInCreateBatchActivity() {
+        validationErrorsMap = new HashMap<Key, HashMap<Path, ValidationErrors>>();
         view = CrmSite.getViewFactory().getView(MoneyInCreateBatchView.class);
-        searchResultsProvider = new ListDataProvider<MoneyInCandidateDTO>(makeMockCandidates(), new ProvidesKey<MoneyInCandidateDTO>() {
-            @Override
-            public Object getKey(MoneyInCandidateDTO item) {
-                return item.leaseIdStub().getPrimaryKey();
-            }
-        });
-        selectedForProcessingProvider = new ListDataProvider<MoneyInCandidateDTO>(new LinkedList<MoneyInCandidateDTO>(),
-                new ProvidesKey<MoneyInCandidateDTO>() {
-                    @Override
-                    public Object getKey(MoneyInCandidateDTO item) {
-                        return item.leaseIdStub().getPrimaryKey();
-                    }
-                });
+        searchResultsProvider = new ListDataProvider<MoneyInCandidateDTO>(makeMockCandidates(), this);
+        selectedForProcessingProvider = new ListDataProvider<MoneyInCandidateDTO>(new LinkedList<MoneyInCandidateDTO>(), this);
     }
 
     @Override
@@ -66,6 +65,11 @@ public class MoneyInCreateBatchActivity extends AbstractActivity implements Mone
     }
 
     @Override
+    public Key getKey(MoneyInCandidateDTO item) {
+        return item.leaseIdStub().getPrimaryKey();
+    }
+
+    @Override
     public void search() {
         // TODO Auto-generated method stub        
     }
@@ -73,11 +77,14 @@ public class MoneyInCreateBatchActivity extends AbstractActivity implements Mone
     @Override
     public void setProcessCandidate(MoneyInCandidateDTO candidate, boolean process) {
         candidate.processPayment().setValue(process);
-        if (process == true) {
+        validate(candidate);
+
+        if (candidate.processPayment().isBooleanTrue()) {
             selectedForProcessingProvider.getList().add(candidate);
         } else {
             selectedForProcessingProvider.getList().remove(candidate);
         }
+
         updateSearchResultsView(candidate);
     }
 
@@ -88,6 +95,8 @@ public class MoneyInCreateBatchActivity extends AbstractActivity implements Mone
         } else {
             candidate.payment().payerTenantIdStub().set(payer.tenantIdStub().duplicate());
         }
+        validate(candidate);
+
         updateSearchResultsView(candidate);
         updateSelectedForProcessingView(candidate);
     }
@@ -95,6 +104,8 @@ public class MoneyInCreateBatchActivity extends AbstractActivity implements Mone
     @Override
     public void setAmount(MoneyInCandidateDTO candidate, BigDecimal amountToPay) {
         candidate.payment().payedAmount().setValue(amountToPay);
+        validate(candidate);
+
         updateSearchResultsView(candidate);
         updateSelectedForProcessingView(candidate);
     }
@@ -102,6 +113,8 @@ public class MoneyInCreateBatchActivity extends AbstractActivity implements Mone
     @Override
     public void setCheckNumber(MoneyInCandidateDTO candidate, String checkNumber) {
         candidate.payment().checkNumber().setValue(checkNumber);
+        validate(candidate);
+
         updateSearchResultsView(candidate);
         updateSelectedForProcessingView(candidate);
     }
@@ -109,6 +122,16 @@ public class MoneyInCreateBatchActivity extends AbstractActivity implements Mone
     @Override
     public void createBatch() {
         // TODO Auto-generated method stub
+    }
+
+    @Override
+    public ValidationErrors getValidationErrors(MoneyInCandidateDTO object, Path memberPath) {
+        Map<Path, ValidationErrors> objectValidationErrors = this.validationErrorsMap.get(getKey(object));
+        if (objectValidationErrors != null) {
+            return objectValidationErrors.get(memberPath);
+        } else {
+            return null;
+        }
     }
 
     @Override
@@ -124,6 +147,36 @@ public class MoneyInCreateBatchActivity extends AbstractActivity implements Mone
         return null;
     }
 
+    private void validate(MoneyInCandidateDTO candidate) {
+        if (candidate.processPayment().isBooleanTrue()) {
+            List<String> paymentAmountErrors = new LinkedList<String>();
+            if (candidate.payment().payedAmount().isNull()) {
+                paymentAmountErrors.add(i18n.tr("'Amount is required for processing"));
+            } else {
+                if (candidate.payment().payedAmount().getValue().compareTo(BigDecimal.ZERO) <= 0) {
+                    paymentAmountErrors.add(i18n.tr("'Amount to pay' should be greater than zero"));
+                }
+            }
+            if (!paymentAmountErrors.isEmpty()) {
+                setErrors(candidate, candidate.payment().payedAmount().getPath(), new ValidationErrors(paymentAmountErrors));
+            } else {
+                setErrors(candidate, candidate.payment().payedAmount().getPath(), null);
+            }
+
+            List<String> checkNumberErrors = new LinkedList<String>();
+            if (CommonsStringUtils.isEmpty(candidate.payment().checkNumber().getValue())) {
+                checkNumberErrors.add(i18n.tr("Check number is required to for processing"));
+            }
+            if (!checkNumberErrors.isEmpty()) {
+                setErrors(candidate, candidate.payment().checkNumber().getPath(), new ValidationErrors(checkNumberErrors));
+            } else {
+                setErrors(candidate, candidate.payment().checkNumber().getPath(), null);
+            }
+        } else {
+            setErrors(candidate, null, null);
+        }
+    }
+
     private void updateSearchResultsView(MoneyInCandidateDTO candidate) {
         int i = this.searchResultsProvider.getList().indexOf(candidate);
         if (i != -1) {
@@ -135,6 +188,33 @@ public class MoneyInCreateBatchActivity extends AbstractActivity implements Mone
         int i = this.selectedForProcessingProvider.getList().indexOf(candidate);
         if (i != -1) {
             this.selectedForProcessingProvider.getList().set(i, candidate);
+        }
+    }
+
+    /**
+     * 
+     * @param candidate
+     * @param path
+     *            pass <code>null</code> to clear the errors of the candidate
+     * @param validationErrors
+     *            pass <code>null</code> to clear the errors in path
+     */
+    private void setErrors(MoneyInCandidateDTO candidate, Path path, ValidationErrors validationErrors) {
+        if (path != null) {
+            HashMap<Path, ValidationErrors> objectValidationErrors = this.validationErrorsMap.get(getKey(candidate));
+            if (validationErrors != null) {
+                if (objectValidationErrors == null) {
+                    objectValidationErrors = new HashMap<Path, ValidationErrors>();
+                    this.validationErrorsMap.put(getKey(candidate), objectValidationErrors);
+                }
+                objectValidationErrors.put(path, validationErrors);
+            } else {
+                if (objectValidationErrors != null) {
+                    objectValidationErrors.remove(path);
+                }
+            }
+        } else {
+            this.validationErrorsMap.remove(getKey(candidate));
         }
     }
 

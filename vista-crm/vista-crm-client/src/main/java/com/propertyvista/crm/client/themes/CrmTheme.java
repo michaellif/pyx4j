@@ -778,8 +778,28 @@ public class CrmTheme extends VistaTheme {
         // TODO ^^^^^ review if styles from this line up to upper TODO are required
 
         // These are good: DataGrid and custom Cells styles definitions
-        style = new Style("." + ObjectEditCell.Styles.ObjectEditCell.name());
+        style = new Style("." + ObjectEditCell.StyleNames.ObjectEditCell.name());
         style.addProperty("width", "100%");
+        addStyle(style);
+
+        style = new Style("." + ObjectEditCell.StyleNames.ObjectEditCellFailedValidation.name());
+        style.addProperty("color", "red");
+        style.addProperty("border-color", "red");
+        addStyle(style);
+
+        style = new Style("." + ObjectEditCell.StyleNames.ObjectEditCellPendingValidation.name());
+        style.addProperty("border-color", "blue");
+        style.addProperty("border-color", "blue");
+        addStyle(style);
+
+        style = new Style("." + ObjectEditCell.StyleNames.ObjectEditCellValidationPopup.name());
+        style.addProperty("width", "200px");
+        style.addProperty("background-color", "#FFCACA");
+        style.addProperty("border-style", "outset");
+        style.addProperty("border-width", "1px");
+        style.addProperty("border-radius", "5px");
+        style.addProperty("border-color", "#6B2424");
+        style.addProperty("padding", "3px");
         addStyle(style);
 
         style = new Style("." + VistaDataGridStyles.VistaMoneyCell.name());

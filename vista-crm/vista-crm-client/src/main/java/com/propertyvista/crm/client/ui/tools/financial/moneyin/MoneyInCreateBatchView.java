@@ -16,15 +16,18 @@ package com.propertyvista.crm.client.ui.tools.financial.moneyin;
 import java.math.BigDecimal;
 
 import com.google.gwt.view.client.HasData;
+import com.google.gwt.view.client.ProvidesKey;
 
+import com.pyx4j.entity.shared.Path;
 import com.pyx4j.site.client.ui.prime.IPrimePane;
 
+import com.propertyvista.crm.client.ui.tools.common.datagrid.ValidationErrors;
 import com.propertyvista.crm.rpc.dto.financial.autopayreview.moneyin.MoneyInCandidateDTO;
 import com.propertyvista.crm.rpc.dto.financial.autopayreview.moneyin.MoneyInLeaseParticipantDTO;
 
 public interface MoneyInCreateBatchView extends IPrimePane {
 
-    interface Presenter extends IPrimePane.Presenter {
+    interface Presenter extends IPrimePane.Presenter, ProvidesKey<MoneyInCandidateDTO> {
 
         void search();
 
@@ -37,6 +40,8 @@ public interface MoneyInCreateBatchView extends IPrimePane {
         void setPayer(MoneyInCandidateDTO candidate, MoneyInLeaseParticipantDTO payer);
 
         void createBatch();
+
+        ValidationErrors getValidationErrors(MoneyInCandidateDTO object, Path memberPath);
     }
 
     void setPresenter(Presenter presenter);

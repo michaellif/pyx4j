@@ -23,6 +23,7 @@ import com.google.gwt.cell.client.TextCell;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.i18n.client.NumberFormat;
 import com.google.gwt.user.cellview.client.Column;
+import com.google.gwt.view.client.ProvidesKey;
 
 import com.pyx4j.forms.client.ui.IFormat;
 import com.pyx4j.forms.client.ui.formatters.MoneyFormat;
@@ -30,6 +31,7 @@ import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.crm.client.ui.tools.common.datagrid.EntityFieldColumn;
 import com.propertyvista.crm.client.ui.tools.common.datagrid.ObjectEditCell;
+import com.propertyvista.crm.client.ui.tools.common.datagrid.ObjectEditCell.StyleNames;
 import com.propertyvista.crm.client.ui.tools.common.datagrid.ObjectSelectionCell;
 import com.propertyvista.crm.client.ui.tools.common.datagrid.ObjectSelectionState;
 import com.propertyvista.crm.client.ui.tools.common.datagrid.VistaDataGrid;
@@ -46,27 +48,52 @@ public class MoneyInCandidateDataGrid extends VistaDataGrid<MoneyInCandidateDTO>
     /** This is one way */
     private static final NumberFormat CURRENCY_FORMAT = NumberFormat.getFormat("$#,##0.00");
 
-    private static final MoneyFormat MONEY_FORMAT = new MoneyFormat();
-
     private static final int PAGE_SIZE = 50;
 
     private Presenter presenter;
 
+    private ObjectEditCell<BigDecimal> amountToPayCell;
+
+    private ObjectEditCell.Style moneyEditCellStyle;
+
+    private ObjectEditCell<String> checkNumberCell;
+
     public MoneyInCandidateDataGrid() {
         super(MoneyInCandidateDTO.class, false);
         setPageSize(PAGE_SIZE);
+        moneyEditCellStyle = new ObjectEditCell.DefaultStyle() {
+            @Override
+            public String objectEditCell() {
+                return StyleNames.ObjectEditCell.name() + " " + VistaDataGridStyles.VistaMoneyCell.name();
+            };
+        };
         initColumns();
+
     }
 
     public void setPresenter(MoneyInCreateBatchView.Presenter presenter) {
         this.presenter = presenter;
     }
 
+    @Override
+    public ProvidesKey<MoneyInCandidateDTO> getKeyProvider() {
+        return this.presenter;
+    }
+
     private void initColumns() {
         defTextColumn(proto().building(), i18n.tr("Building"), 40, Unit.PX);
         defTextColumn(proto().unit(), i18n.tr("Unit"), 40, Unit.PX);
         defTextColumn(proto().leaseId(), i18n.tr("Lease"), 40, Unit.PX);
+        defTenantsColumn();
+        defPayerColumn();
+        defPrepaymentsColumn();
+        defTotalUnpaidColumn();
+        defAmountToPayColumn();
+        defCheckNumberColumn();
+        defProcessColumn();
+    }
 
+    private void defTenantsColumn() {
         Column<MoneyInCandidateDTO, String> leaseParticipantsColumn = new Column<MoneyInCandidateDTO, String>(new TextCell()) {
             @Override
             public String getValue(MoneyInCandidateDTO object) {
@@ -74,7 +101,9 @@ public class MoneyInCandidateDataGrid extends VistaDataGrid<MoneyInCandidateDTO>
             }
         };
         defColumn(leaseParticipantsColumn, i18n.tr("Tenants"), 100, Unit.PX);
+    }
 
+    private void defPayerColumn() {
         Column<MoneyInCandidateDTO, ObjectSelectionState<MoneyInLeaseParticipantDTO>> payerSelectionColumn = new Column<MoneyInCandidateDTO, ObjectSelectionState<MoneyInLeaseParticipantDTO>>(
                 new ObjectSelectionCell<MoneyInLeaseParticipantDTO>(new PayerOptionFormat())) {
             @Override
@@ -89,21 +118,29 @@ public class MoneyInCandidateDataGrid extends VistaDataGrid<MoneyInCandidateDTO>
             }
         });
         defColumn(payerSelectionColumn, i18n.tr("Payer"), 100, Unit.PX);
+    }
 
+    private void defPrepaymentsColumn() {
         Column<MoneyInCandidateDTO, Number> prepaymentsColumn = new EntityFieldColumn<MoneyInCandidateDTO, Number>(proto().prepayments(), new NumberCell(
                 CURRENCY_FORMAT));
         prepaymentsColumn.setCellStyleNames(VistaDataGridStyles.VistaMoneyCell.name());
         defColumn(prepaymentsColumn, i18n.tr("Prepayments"), 50, Unit.PX);
+    }
 
+    private void defTotalUnpaidColumn() {
         Column<MoneyInCandidateDTO, Number> totalUnpaidColumn = new EntityFieldColumn<MoneyInCandidateDTO, Number>(proto().totalOutstanding(), new NumberCell(
                 CURRENCY_FORMAT));
         totalUnpaidColumn.setCellStyleNames(VistaDataGridStyles.VistaMoneyCell.name());
         defColumn(totalUnpaidColumn, i18n.tr("Total Unpaid"), 50, Unit.PX);
+    }
 
-        Column<MoneyInCandidateDTO, BigDecimal> amountToPayColumn = new Column<MoneyInCandidateDTO, BigDecimal>(new ObjectEditCell<BigDecimal>(
-                new MoneyFormat(), ObjectEditCell.Styles.ObjectEditCell.name() + " " + VistaDataGridStyles.VistaMoneyCell.name(), null)) {
+    private void defAmountToPayColumn() {
+        amountToPayCell = new ObjectEditCell<BigDecimal>(new MoneyFormat(), moneyEditCellStyle);
+        Column<MoneyInCandidateDTO, BigDecimal> amountToPayColumn = new Column<MoneyInCandidateDTO, BigDecimal>(amountToPayCell) {
             @Override
             public BigDecimal getValue(MoneyInCandidateDTO object) {
+                Object key = MoneyInCandidateDataGrid.this.presenter.getKey(object);
+                amountToPayCell.setViewData(key, MoneyInCandidateDataGrid.this.presenter.getValidationErrors(object, object.payment().payedAmount().getPath()));
                 return object.payment().payedAmount().getValue();
             }
         };
@@ -115,8 +152,10 @@ public class MoneyInCandidateDataGrid extends VistaDataGrid<MoneyInCandidateDTO>
         });
         amountToPayColumn.setCellStyleNames(VistaDataGridStyles.VistaMoneyCell.name());
         defColumn(amountToPayColumn, i18n.tr("Amount to Pay"), 50, Unit.PX);
+    }
 
-        Column<MoneyInCandidateDTO, String> checkNumberColumn = new Column<MoneyInCandidateDTO, String>(new ObjectEditCell<String>(new IFormat<String>() {
+    private void defCheckNumberColumn() {
+        IFormat<String> checkFormat = new IFormat<String>() {
             @Override
             public String format(String value) {
                 return value == null ? "" : value;
@@ -129,9 +168,13 @@ public class MoneyInCandidateDataGrid extends VistaDataGrid<MoneyInCandidateDTO>
                 }
                 return string;
             }
-        }, ObjectEditCell.Styles.ObjectEditCell.name() + " " + VistaDataGridStyles.VistaMoneyCell.name(), null)) {
+        };
+        checkNumberCell = new ObjectEditCell<String>(checkFormat, moneyEditCellStyle);
+        Column<MoneyInCandidateDTO, String> checkNumberColumn = new Column<MoneyInCandidateDTO, String>(checkNumberCell) {
             @Override
             public String getValue(MoneyInCandidateDTO object) {
+                checkNumberCell.setViewData(MoneyInCandidateDataGrid.this.presenter.getKey(object),
+                        MoneyInCandidateDataGrid.this.presenter.getValidationErrors(object, object.payment().checkNumber().getPath()));
                 return object.payment().checkNumber().getValue();
             }
         };
@@ -143,8 +186,6 @@ public class MoneyInCandidateDataGrid extends VistaDataGrid<MoneyInCandidateDTO>
         });
         checkNumberColumn.setCellStyleNames(VistaDataGridStyles.VistaMoneyCell.name());
         defColumn(checkNumberColumn, i18n.tr("Ref #"), 40, Unit.PX);
-
-        defProcessColumn();
     }
 
     // TODO this method doesn't indicate in any way that it renders 'process' column, maybe rename it to defLastColumn? 
