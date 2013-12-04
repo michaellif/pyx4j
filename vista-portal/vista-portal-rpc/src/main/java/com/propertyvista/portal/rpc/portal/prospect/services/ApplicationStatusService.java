@@ -18,12 +18,9 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.pyx4j.rpc.shared.IService;
 
 import com.propertyvista.domain.tenant.prospect.MasterOnlineApplicationStatus;
-import com.propertyvista.portal.rpc.portal.prospect.dto.RentalSummaryDTO;
 
 public interface ApplicationStatusService extends IService {
 
     void retrieveMasterApplicationStatus(AsyncCallback<MasterOnlineApplicationStatus> callback);
-
-    void retrieveRentalSummary(AsyncCallback<RentalSummaryDTO> callback);
 
 }

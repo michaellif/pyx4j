@@ -18,7 +18,7 @@ import com.google.gwt.user.client.ui.HTML;
 
 import com.pyx4j.i18n.shared.I18n;
 
-import com.propertyvista.portal.rpc.portal.prospect.dto.RentalSummaryDTO;
+import com.propertyvista.portal.rpc.portal.prospect.dto.OnlineApplicationDTO;
 import com.propertyvista.portal.shared.themes.BlockMixin;
 import com.propertyvista.portal.shared.themes.ExtraGadgetsTheme;
 import com.propertyvista.portal.shared.themes.PortalRootPaneTheme;
@@ -51,7 +51,7 @@ public class ChargesSummaryGadget extends FlowPanel {
         add(panel);
     }
 
-    public void populate(RentalSummaryDTO rentalSummary) {
+    public void populate(OnlineApplicationDTO onlineApplication) {
         // TODO Auto-generated method stub
 
     }

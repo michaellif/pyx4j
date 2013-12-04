@@ -15,7 +15,7 @@ package com.propertyvista.portal.prospect.ui;
 
 import com.google.gwt.user.client.ui.FlowPanel;
 
-import com.propertyvista.portal.rpc.portal.prospect.dto.RentalSummaryDTO;
+import com.propertyvista.portal.rpc.portal.prospect.dto.OnlineApplicationDTO;
 import com.propertyvista.portal.shared.themes.PortalRootPaneTheme;
 
 public class RentalSummaryViewImpl extends FlowPanel implements RentalSummaryView {
@@ -37,8 +37,8 @@ public class RentalSummaryViewImpl extends FlowPanel implements RentalSummaryVie
     }
 
     @Override
-    public void populate(RentalSummaryDTO rentalSummary) {
-        rentalSummaryGadget.populate(rentalSummary);
-        chargesSummaryGadget.populate(rentalSummary);
+    public void populate(OnlineApplicationDTO onlineApplication) {
+        rentalSummaryGadget.populate(onlineApplication);
+        chargesSummaryGadget.populate(onlineApplication);
     }
 }

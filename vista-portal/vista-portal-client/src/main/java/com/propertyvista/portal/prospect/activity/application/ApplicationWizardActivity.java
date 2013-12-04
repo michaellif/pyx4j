@@ -17,9 +17,11 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
+import com.pyx4j.gwt.commons.ClientEventBus;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.site.rpc.AppPlace;
 
+import com.propertyvista.portal.prospect.events.ApplicationWizardStateChangeEvent;
 import com.propertyvista.portal.prospect.ui.application.ApplicationWizardView;
 import com.propertyvista.portal.prospect.ui.application.ApplicationWizardView.ApplicationWizardPresenter;
 import com.propertyvista.portal.rpc.portal.prospect.dto.OnlineApplicationDTO;
@@ -43,8 +45,16 @@ public class ApplicationWizardActivity extends AbstractWizardActivity<OnlineAppl
             @Override
             public void onSuccess(OnlineApplicationDTO result) {
                 getView().populate(result);
+                eventBus.fireEvent(new ApplicationWizardStateChangeEvent(((ApplicationWizardView) getView()).getApplicationWizard(),
+                        ApplicationWizardStateChangeEvent.ChangeType.init));
             }
         });
+    }
+
+    @Override
+    protected void onDiscard() {
+        super.onDiscard();
+        ClientEventBus.instance.fireEvent(new ApplicationWizardStateChangeEvent(null, ApplicationWizardStateChangeEvent.ChangeType.discard));
     }
 
 }

@@ -16,6 +16,8 @@ package com.propertyvista.portal.shared.ui;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.site.client.IsView;
 
+import com.propertyvista.portal.prospect.ui.application.ApplicationWizard;
+
 public interface IWizardView<E extends IEntity> extends IsView {
 
     public interface IWizardFormPresenter<E extends IEntity> {

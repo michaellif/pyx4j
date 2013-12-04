@@ -21,4 +21,7 @@ public interface ApplicationWizardView extends IWizardView<OnlineApplicationDTO>
     public interface ApplicationWizardPresenter extends IWizardFormPresenter<OnlineApplicationDTO> {
 
     }
+
+    ApplicationWizard getApplicationWizard();
+
 }

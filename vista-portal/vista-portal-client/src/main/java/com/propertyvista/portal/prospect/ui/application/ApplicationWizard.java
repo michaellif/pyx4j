@@ -24,9 +24,7 @@ import com.pyx4j.forms.client.ui.CImage;
 import com.pyx4j.forms.client.ui.CLabel;
 import com.pyx4j.forms.client.ui.decorators.IDecorator;
 import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
-import com.pyx4j.forms.client.ui.wizard.CEntityWizard;
 import com.pyx4j.forms.client.ui.wizard.WizardDecorator;
-import com.pyx4j.forms.client.ui.wizard.WizardProgressIndicator;
 import com.pyx4j.forms.client.ui.wizard.WizardStep;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.security.shared.SecurityController;
@@ -39,7 +37,6 @@ import com.propertyvista.domain.property.asset.Floorplan;
 import com.propertyvista.domain.security.PortalProspectBehavior;
 import com.propertyvista.domain.tenant.CustomerPicture;
 import com.propertyvista.portal.prospect.ui.application.ApplicationWizardView.ApplicationWizardPresenter;
-import com.propertyvista.portal.resident.ui.profile.ProfilePageViewImpl;
 import com.propertyvista.portal.rpc.portal.prospect.dto.OnlineApplicationDTO;
 import com.propertyvista.portal.rpc.portal.resident.services.ResidentPictureUploadService;
 import com.propertyvista.portal.shared.ui.CPortalEntityWizard;
@@ -209,7 +206,7 @@ public class ApplicationWizard extends CPortalEntityWizard<OnlineApplicationDTO>
     }
 
     private BasicFlexFormPanel createPersonalInfoBStep() {
-        BasicFlexFormPanel panel = new BasicFlexFormPanel(i18n.tr("Additional Information"));
+        BasicFlexFormPanel panel = new BasicFlexFormPanel(i18n.tr("Additional Info"));
         int row = -1;
         panel.setH1(++row, 0, 1, panel.getTitle());
 
@@ -283,9 +280,7 @@ public class ApplicationWizard extends CPortalEntityWizard<OnlineApplicationDTO>
         super.onValuePropagation(value, fireEvent, populate);
     }
 
-    class ApplicationWizardDecorator extends WizardDecorator<OnlineApplicationDTO> implements WizardProgressIndicator {
-
-        private final ApplicationProgressPanel progressPanel;
+    class ApplicationWizardDecorator extends WizardDecorator<OnlineApplicationDTO> {
 
         public ApplicationWizardDecorator() {
             super(i18n.tr("Submit"));
@@ -301,21 +296,8 @@ public class ApplicationWizard extends CPortalEntityWizard<OnlineApplicationDTO>
             getFooterPanel().getElement().getStyle().setProperty("borderTopWidth", "5px");
             getFooterPanel().getElement().getStyle().setProperty("borderTopColor", StyleManager.getPalette().getThemeColor(ThemeColor.contrast4, 1));
 
-            progressPanel = new ApplicationProgressPanel();
-            getHeaderPanel().clear();
-            getHeaderPanel().add(progressPanel);
         }
 
-        @Override
-        public void updateProgress() {
-            progressPanel.updateStepButtons();
-        }
-
-        @Override
-        public void setComponent(CEntityWizard<OnlineApplicationDTO> component) {
-            super.setComponent(component);
-            progressPanel.setWizard(component);
-        }
     }
 
 }

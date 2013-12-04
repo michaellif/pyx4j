@@ -19,7 +19,6 @@ import com.pyx4j.config.server.ServerSideFactory;
 
 import com.propertyvista.biz.tenant.OnlineApplicationFacade;
 import com.propertyvista.domain.tenant.prospect.MasterOnlineApplicationStatus;
-import com.propertyvista.portal.rpc.portal.prospect.dto.RentalSummaryDTO;
 import com.propertyvista.portal.rpc.portal.prospect.services.ApplicationStatusService;
 import com.propertyvista.portal.server.portal.prospect.ProspectPortalContext;
 
@@ -30,12 +29,6 @@ public class ApplicationStatusServiceImpl implements ApplicationStatusService {
         MasterOnlineApplicationStatus account = ServerSideFactory.create(OnlineApplicationFacade.class).calculateOnlineApplicationStatus(
                 ProspectPortalContext.getMasterOnlineApplication());
         callback.onSuccess(account);
-    }
-
-    @Override
-    public void retrieveRentalSummary(AsyncCallback<RentalSummaryDTO> callback) {
-        // TODO Auto-generated method stub
-
     }
 
 }
