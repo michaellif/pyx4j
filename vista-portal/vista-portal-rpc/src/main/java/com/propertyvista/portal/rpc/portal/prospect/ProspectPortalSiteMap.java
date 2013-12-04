@@ -34,7 +34,7 @@ public class ProspectPortalSiteMap extends PortalSiteMap {
     public static class Registration extends AppPlace implements PublicPlace {
     }
 
-    @PlaceProperties(navigLabel = "Select Lease", caption = "Select Lease")
+    @PlaceProperties(navigLabel = "Select Application", caption = "Select Application")
     public static class ApplicationContextSelection extends AppPlace {
     }
 
