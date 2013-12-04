@@ -58,6 +58,7 @@ public class MenuActivity extends AbstractActivity implements MenuPresenter {
                 } else if (event.getChangeType() == ApplicationWizardStateChangeEvent.ChangeType.stepChange) {
                     view.updateStepButtons(applicationWizard);
                 }
+                AppSite.getEventBus().fireEvent(new LayoutChangeRequestEvent(ChangeType.resizeComponents));
             }
         });
 
