@@ -147,33 +147,34 @@ public class MoneyInCreateBatchActivity extends AbstractActivity implements Mone
         return null;
     }
 
+    // TODO needs refactoring
     private void validate(MoneyInCandidateDTO candidate) {
         if (candidate.processPayment().isBooleanTrue()) {
             List<String> paymentAmountErrors = new LinkedList<String>();
             if (candidate.payment().payedAmount().isNull()) {
-                paymentAmountErrors.add(i18n.tr("'Amount is required for processing"));
+                paymentAmountErrors.add(i18n.tr("Amount is required for processing."));
             } else {
                 if (candidate.payment().payedAmount().getValue().compareTo(BigDecimal.ZERO) <= 0) {
-                    paymentAmountErrors.add(i18n.tr("'Amount to pay' should be greater than zero"));
+                    paymentAmountErrors.add(i18n.tr("Amount must be greater than zero."));
                 }
             }
             if (!paymentAmountErrors.isEmpty()) {
-                setErrors(candidate, candidate.payment().payedAmount().getPath(), new ValidationErrors(paymentAmountErrors));
+                setValidationErrors(candidate, candidate.payment().payedAmount().getPath(), new ValidationErrors(paymentAmountErrors));
             } else {
-                setErrors(candidate, candidate.payment().payedAmount().getPath(), null);
+                setValidationErrors(candidate, candidate.payment().payedAmount().getPath(), null);
             }
 
             List<String> checkNumberErrors = new LinkedList<String>();
             if (CommonsStringUtils.isEmpty(candidate.payment().checkNumber().getValue())) {
-                checkNumberErrors.add(i18n.tr("Check number is required to for processing"));
+                checkNumberErrors.add(i18n.tr("Check number is required to for processing."));
             }
             if (!checkNumberErrors.isEmpty()) {
-                setErrors(candidate, candidate.payment().checkNumber().getPath(), new ValidationErrors(checkNumberErrors));
+                setValidationErrors(candidate, candidate.payment().checkNumber().getPath(), new ValidationErrors(checkNumberErrors));
             } else {
-                setErrors(candidate, candidate.payment().checkNumber().getPath(), null);
+                setValidationErrors(candidate, candidate.payment().checkNumber().getPath(), null);
             }
         } else {
-            setErrors(candidate, null, null);
+            setValidationErrors(candidate, null, null);
         }
     }
 
@@ -192,14 +193,14 @@ public class MoneyInCreateBatchActivity extends AbstractActivity implements Mone
     }
 
     /**
-     * 
      * @param candidate
+     *            an item subject to validation errors
      * @param path
      *            pass <code>null</code> to clear the errors of the candidate
      * @param validationErrors
      *            pass <code>null</code> to clear the errors in path
      */
-    private void setErrors(MoneyInCandidateDTO candidate, Path path, ValidationErrors validationErrors) {
+    private void setValidationErrors(MoneyInCandidateDTO candidate, Path path, ValidationErrors validationErrors) {
         if (path != null) {
             HashMap<Path, ValidationErrors> objectValidationErrors = this.validationErrorsMap.get(getKey(candidate));
             if (validationErrors != null) {
