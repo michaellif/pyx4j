@@ -123,7 +123,7 @@ public abstract class VistaAuthenticationServicesImpl<U extends AbstractUser, E 
     protected boolean isSessionValid() {
         boolean sessionValid = SecurityController.checkBehavior(getVistaApplication())
                 && (SecurityController.checkBehavior(getApplicationBehavior()) || SecurityController.checkAnyBehavior(getAccountSetupRequiredBehaviors()));
-        if (!sessionValid) {
+        if ((!sessionValid) && (Context.getSession() != null)) {
             log.warn("sessionInvalid: {} {}", getVistaApplication(), SecurityController.checkBehavior(getVistaApplication()));
             log.warn("sessionInvalid: {} {}", getApplicationBehavior(), SecurityController.checkBehavior(getApplicationBehavior()));
             log.warn("sessionInvalid: {} {}", getAccountSetupRequiredBehaviors(), SecurityController.checkAnyBehavior(getAccountSetupRequiredBehaviors()));
