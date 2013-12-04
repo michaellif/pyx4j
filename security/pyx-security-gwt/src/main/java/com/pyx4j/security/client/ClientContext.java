@@ -95,7 +95,7 @@ public class ClientContext {
 
     private static ServerSession serverSession;
 
-    private static AuthenticationService service;
+    private static AuthenticationService authenticationService;
 
     private static boolean authenticationObtained = false;
 
@@ -305,10 +305,31 @@ public class ClientContext {
         ClientEventBus.fireEvent(new ContextChangeEvent(USER_VISIT_ATTRIBUTE, null));
     }
 
+    public static AuthenticationService getAuthenticationService() {
+        return authenticationService;
+    }
+
+    public static void setAuthenticationService(AuthenticationService authenticationService) {
+        ClientContext.authenticationService = authenticationService;
+    }
+
+    private static AuthenticationService select(AuthenticationService authenticationService) {
+        if (authenticationService == null) {
+            return ClientContext.authenticationService;
+        } else {
+            return authenticationService;
+        }
+    }
+
     /**
      * Keep in mind when changing URL just after this call, that some fast bowers like
      * Chrome and Safari would not execute RPC call and session would still be active.
      */
+
+    public static void logout(final AsyncCallback<AuthenticationResponse> callback) {
+        logout(null, "/", callback);
+    }
+
     public static void logout(AuthenticationService authenticationService, final AsyncCallback<AuthenticationResponse> callback) {
         logout(authenticationService, "/", callback);
     }
@@ -334,7 +355,7 @@ public class ClientContext {
                 }
             }
         };
-        authenticationService.logout(defaultCallback);
+        select(authenticationService).logout(defaultCallback);
     }
 
     public static String getCurrentURL() {
@@ -405,12 +426,6 @@ public class ClientContext {
 
     public static void obtainAuthenticationData(AuthenticationService authenticationService, final AsyncCallback<Boolean> onAuthenticationAvailable,
             boolean force, String authenticationToken) {
-        if (authenticationService != null) {
-            service = authenticationService;
-        }
-        if (service == null) {
-            throw new Error();
-        }
         if (!force && authenticationObtained) {
             if (onAuthenticationAvailable != null) {
                 onAuthenticationAvailable.onSuccess(isAuthenticated());
@@ -464,12 +479,15 @@ public class ClientContext {
                 authenticationToken = HTML5Storage.getLocalStorage().getItem(TOKEN_STORAGE_ATTRIBUTE);
             }
             log.debug("authenticate {}", authenticationToken);
-            service.authenticate(callback, clientSystemInfo, authenticationToken);
+            select(authenticationService).authenticate(callback, clientSystemInfo, authenticationToken);
         }
     }
 
+    public static void authenticate(AuthenticationRequest request, final AsyncCallback<Boolean> callback) {
+        authenticate(null, request, callback);
+    }
+
     public static void authenticate(AuthenticationService authenticationService, AuthenticationRequest request, final AsyncCallback<Boolean> callback) {
-        service = authenticationService;
         AsyncCallback<AuthenticationResponse> rpcCallback = new DefaultAsyncCallback<AuthenticationResponse>() {
 
             @Override
@@ -487,6 +505,6 @@ public class ClientContext {
             }
 
         };
-        authenticationService.authenticate(rpcCallback, ClientContext.getClientSystemInfo(), request);
+        select(authenticationService).authenticate(rpcCallback, ClientContext.getClientSystemInfo(), request);
     }
 }
