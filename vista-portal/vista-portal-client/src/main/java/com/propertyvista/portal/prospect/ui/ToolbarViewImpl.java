@@ -54,6 +54,8 @@ public class ToolbarViewImpl extends FlowPanel implements ToolbarView {
 
     private final Button tenantButton;
 
+    private final MenuItem applicationSelectionMenu;
+
     private final MenuItem logoutMenu;
 
     private final Button sideMenuButton;
@@ -82,6 +84,14 @@ public class ToolbarViewImpl extends FlowPanel implements ToolbarView {
 
         tenantButton = new Button("");
         ButtonMenuBar tenantButtonMenu = new ButtonMenuBar();
+
+        applicationSelectionMenu = new MenuItem(i18n.tr("My Applications"), new Command() {
+            @Override
+            public void execute() {
+                presenter.showApplications();
+            }
+        });
+        tenantButtonMenu.addItem(applicationSelectionMenu);
 
         logoutMenu = new MenuItem(i18n.tr("Logout"), new Command() {
             @Override
@@ -206,6 +216,11 @@ public class ToolbarViewImpl extends FlowPanel implements ToolbarView {
             menuBar.addItem(item);
         }
         languageButton.setMenu(menuBar);
+    }
+
+    @Override
+    public void setApplicationsSelectorEnabled(boolean enabled) {
+        applicationSelectionMenu.setVisible(enabled);
     }
 
     private void doLayout(LayoutType layoutType) {

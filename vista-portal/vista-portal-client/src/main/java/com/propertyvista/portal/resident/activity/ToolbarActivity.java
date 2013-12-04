@@ -32,11 +32,12 @@ import com.propertyvista.common.client.ClientNavigUtils;
 import com.propertyvista.domain.security.PortalResidentBehavior;
 import com.propertyvista.portal.resident.ResidentPortalSite;
 import com.propertyvista.portal.resident.ui.ToolbarView;
+import com.propertyvista.portal.resident.ui.ToolbarView.ToolbarPresenter;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap;
 import com.propertyvista.portal.rpc.portal.resident.ResidentPortalSiteMap;
 import com.propertyvista.shared.i18n.CompiledLocale;
 
-public class ToolbarActivity extends AbstractActivity implements ToolbarView.ToolbarPresenter {
+public class ToolbarActivity extends AbstractActivity implements ToolbarPresenter {
 
     private final ToolbarView view;
 
@@ -52,36 +53,16 @@ public class ToolbarActivity extends AbstractActivity implements ToolbarView.Too
     @Override
     public void start(AcceptsOneWidget panel, EventBus eventBus) {
         panel.setWidget(view);
-        updateView();
-        eventBus.addHandler(BehaviorChangeEvent.getType(), new BehaviorChangeHandler() {
-            @Override
-            public void onBehaviorChange(BehaviorChangeEvent event) {
-                updateView();
-            }
-        });
-
-        eventBus.addHandler(ContextChangeEvent.getType(), new ContextChangeHandler() {
-
-            @Override
-            public void onContextChange(ContextChangeEvent event) {
-                updateView();
-            }
-        });
-
-        obtainAvailableLocales();
-        AppSite.getEventBus().fireEvent(new LayoutChangeRequestEvent(ChangeType.resizeComponents));
-
-    }
-
-    private void updateView() {
         if (ClientContext.isAuthenticated()) {
             view.onLogedIn(ClientContext.getUserVisit().getName());
-            view.setMyLeasesVisibility(SecurityController.checkAnyBehavior(PortalResidentBehavior.HasMultipleLeases));
+            view.setLeasesSelectorEnabled(SecurityController.checkAnyBehavior(PortalResidentBehavior.HasMultipleLeases));
         } else {
             boolean hideLoginButton = place instanceof PortalSiteMap.Login;
             view.onLogedOut(hideLoginButton);
-            view.setMyLeasesVisibility(false);
+            view.setLeasesSelectorEnabled(false);
         }
+        obtainAvailableLocales();
+        AppSite.getEventBus().fireEvent(new LayoutChangeRequestEvent(ChangeType.resizeComponents));
     }
 
     @Override

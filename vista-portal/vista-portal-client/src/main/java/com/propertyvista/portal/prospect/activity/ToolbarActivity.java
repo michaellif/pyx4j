@@ -23,17 +23,22 @@ import com.pyx4j.security.client.BehaviorChangeHandler;
 import com.pyx4j.security.client.ClientContext;
 import com.pyx4j.security.client.ContextChangeEvent;
 import com.pyx4j.security.client.ContextChangeHandler;
+import com.pyx4j.security.shared.SecurityController;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.client.ui.layout.responsive.LayoutChangeRequestEvent;
 import com.pyx4j.site.client.ui.layout.responsive.LayoutChangeRequestEvent.ChangeType;
 
 import com.propertyvista.common.client.ClientNavigUtils;
+import com.propertyvista.domain.security.PortalProspectBehavior;
+import com.propertyvista.domain.security.PortalResidentBehavior;
 import com.propertyvista.portal.prospect.ui.ToolbarView;
+import com.propertyvista.portal.prospect.ui.ToolbarView.ToolbarPresenter;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap;
+import com.propertyvista.portal.rpc.portal.prospect.ProspectPortalSiteMap;
 import com.propertyvista.portal.shared.PortalSite;
 import com.propertyvista.shared.i18n.CompiledLocale;
 
-public class ToolbarActivity extends AbstractActivity implements ToolbarView.ToolbarPresenter {
+public class ToolbarActivity extends AbstractActivity implements ToolbarPresenter {
 
     private final ToolbarView view;
 
@@ -49,34 +54,16 @@ public class ToolbarActivity extends AbstractActivity implements ToolbarView.Too
     @Override
     public void start(AcceptsOneWidget panel, EventBus eventBus) {
         panel.setWidget(view);
-        updateView();
-        eventBus.addHandler(BehaviorChangeEvent.getType(), new BehaviorChangeHandler() {
-            @Override
-            public void onBehaviorChange(BehaviorChangeEvent event) {
-                updateView();
-            }
-        });
-
-        eventBus.addHandler(ContextChangeEvent.getType(), new ContextChangeHandler() {
-
-            @Override
-            public void onContextChange(ContextChangeEvent event) {
-                updateView();
-            }
-        });
-
-        obtainAvailableLocales();
-        AppSite.getEventBus().fireEvent(new LayoutChangeRequestEvent(ChangeType.resizeComponents));
-
-    }
-
-    private void updateView() {
         if (ClientContext.isAuthenticated()) {
             view.onLogedIn(ClientContext.getUserVisit().getName());
+            view.setApplicationsSelectorEnabled(SecurityController.checkAnyBehavior(PortalProspectBehavior.HasMultipleApplications));
         } else {
             boolean hideLoginButton = place instanceof PortalSiteMap.Login;
             view.onLogedOut(hideLoginButton);
+            view.setApplicationsSelectorEnabled(false);
         }
+        obtainAvailableLocales();
+        AppSite.getEventBus().fireEvent(new LayoutChangeRequestEvent(ChangeType.resizeComponents));
     }
 
     @Override
@@ -98,4 +85,8 @@ public class ToolbarActivity extends AbstractActivity implements ToolbarView.Too
         ClientNavigUtils.changeApplicationLocale(locale);
     }
 
+    @Override
+    public void showApplications() {
+        AppSite.getPlaceController().goTo(new ProspectPortalSiteMap.ApplicationContextSelection());
+    }
 }

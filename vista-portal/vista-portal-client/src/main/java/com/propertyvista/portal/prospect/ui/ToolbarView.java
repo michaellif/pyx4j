@@ -21,21 +21,25 @@ import com.propertyvista.shared.i18n.CompiledLocale;
 
 public interface ToolbarView extends IsView {
 
-    void setPresenter(ToolbarPresenter presenter);
-
-    interface ToolbarPresenter {
+    public interface ToolbarPresenter {
 
         void logout();
 
         void login();
 
+        void showApplications();
+
         void setLocale(CompiledLocale locale);
     }
+
+    void setPresenter(ToolbarPresenter presenter);
 
     void onLogedOut(boolean hideLoginButton);
 
     void onLogedIn(String userName);
 
     void setAvailableLocales(List<CompiledLocale> locales);
+
+    void setApplicationsSelectorEnabled(boolean enabled);
 
 }

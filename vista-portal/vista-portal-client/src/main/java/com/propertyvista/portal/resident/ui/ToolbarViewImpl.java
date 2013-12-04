@@ -62,6 +62,8 @@ public class ToolbarViewImpl extends FlowPanel implements ToolbarView {
 
     private final MenuItem logoutMenu;
 
+    private final MenuItem leaseSelectionMenu;
+
     private final Button sideMenuButton;
 
     private final Button languageButton;
@@ -80,8 +82,6 @@ public class ToolbarViewImpl extends FlowPanel implements ToolbarView {
 
     private boolean loggedIn = false;
 
-    private final MenuItem myLeasesMenu;
-
     public ToolbarViewImpl() {
         setStyleName(PortalRootPaneTheme.StyleName.MainToolbar.name());
         getElement().getStyle().setProperty("whiteSpace", "nowrap");
@@ -91,13 +91,13 @@ public class ToolbarViewImpl extends FlowPanel implements ToolbarView {
         tenantButton = new Button("");
         ButtonMenuBar tenantButtonMenu = new ButtonMenuBar();
 
-        myLeasesMenu = new MenuItem(i18n.tr("My Leases"), new Command() {
+        leaseSelectionMenu = new MenuItem(i18n.tr("My Leases"), new Command() {
             @Override
             public void execute() {
                 presenter.showLeases();
             }
         });
-        tenantButtonMenu.addItem(myLeasesMenu);
+        tenantButtonMenu.addItem(leaseSelectionMenu);
 
         myProfileMenu = new MenuItem(i18n.tr("My Profile"), new Command() {
             @Override
@@ -261,8 +261,8 @@ public class ToolbarViewImpl extends FlowPanel implements ToolbarView {
     }
 
     @Override
-    public void setMyLeasesVisibility(boolean isVisible) {
-        myLeasesMenu.setVisible(isVisible);
+    public void setLeasesSelectorEnabled(boolean enabled) {
+        leaseSelectionMenu.setVisible(enabled);
     }
 
     private void doLayout(LayoutType layoutType) {
