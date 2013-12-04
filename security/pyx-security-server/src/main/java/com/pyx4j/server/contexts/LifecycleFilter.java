@@ -115,7 +115,11 @@ public class LifecycleFilter implements Filter {
 
                     chain.doFilter(httprequest, response);
                 } catch (Throwable t) {
-                    log.error("return http error {}", t);
+                    if (t instanceof ContainerHandledUserRuntimeException) {
+                        log.debug("return http error {}", t.getClass());
+                    } else {
+                        log.error("return http error {}", t);
+                    }
                     if (ServerSideConfiguration.instance().isDevelopmentBehavior()) {
                         RequestDebug.debug(request);
                         RequestDebug.debug(httprequest);
