@@ -66,11 +66,11 @@ public abstract class VistaUserSelfPasswordChangeServiceImpl<E extends AbstractU
             if (AbstractAntiBot.authenticationFailed(LoginType.userLogin, Context.getVisit().getUserVisit().getEmail())) {
                 throw new ChallengeVerificationRequired(i18n.tr("Too Many Failed Log In Attempts"));
             } else {
-                throw new UserRuntimeException(AbstractAntiBot.GENERIC_LOGIN_FAILED_MESSAGE);
+                throw new UserRuntimeException(true, AbstractAntiBot.GENERIC_LOGIN_FAILED_MESSAGE);
             }
         }
         if (ServerSideFactory.create(PasswordEncryptorFacade.class).checkUserPassword(request.newPassword().getValue(), credential.credential().getValue())) {
-            throw new UserRuntimeException(i18n.tr("Your password cannot repeat your previous password"));
+            throw new UserRuntimeException(true, i18n.tr("Your password cannot repeat your previous password"));
         }
         credential.accessKey().setValue(null);
         credential.credential().setValue(ServerSideFactory.create(PasswordEncryptorFacade.class).encryptUserPassword(request.newPassword().getValue()));

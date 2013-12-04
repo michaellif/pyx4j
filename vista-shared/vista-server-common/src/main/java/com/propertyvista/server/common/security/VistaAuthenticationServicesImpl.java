@@ -164,14 +164,14 @@ public abstract class VistaAuthenticationServicesImpl<U extends AbstractUser, E 
             switch (SystemMaintenance.getState()) {
             case Unavailable:
             case ReadOnly:
-                throw new UserRuntimeException(SystemMaintenance.getApplicationMaintenanceMessage());
+                throw new UserRuntimeException(true, SystemMaintenance.getApplicationMaintenanceMessage());
             default:
                 break;
             }
         }
         AccessKey.TokenParser token = new AccessKey.TokenParser(accessToken);
         if (!EmailValidator.isValid(token.email)) {
-            throw new UserRuntimeException(AbstractAntiBot.GENERIC_LOGIN_FAILED_MESSAGE);
+            throw new UserRuntimeException(true, AbstractAntiBot.GENERIC_LOGIN_FAILED_MESSAGE);
         }
         String email = EmailValidator.normalizeEmailAddress(token.email);
         AbstractAntiBot.assertLogin(LoginType.accessToken, email, null);
@@ -184,7 +184,7 @@ public abstract class VistaAuthenticationServicesImpl<U extends AbstractUser, E 
             if (AbstractAntiBot.authenticationFailed(LoginType.accessToken, email)) {
                 throw new ChallengeVerificationRequired(i18n.tr("Too Many Failed Log In Attempts"));
             } else {
-                throw new UserRuntimeException(AbstractAntiBot.GENERIC_LOGIN_FAILED_MESSAGE);
+                throw new UserRuntimeException(true, AbstractAntiBot.GENERIC_LOGIN_FAILED_MESSAGE);
             }
         }
         U user = users.get(0);
@@ -194,19 +194,20 @@ public abstract class VistaAuthenticationServicesImpl<U extends AbstractUser, E 
         try {
             cr = Persistence.service().retrieve(credentialClass, user.getPrimaryKey());
             if (cr == null) {
-                throw new UserRuntimeException(i18n.tr("Invalid User Account. Please Contact Support"));
+                throw new UserRuntimeException(true, i18n.tr("Invalid User Account. Please Contact Support"));
             }
             if (!cr.enabled().isBooleanTrue()) {
-                throw new UserRuntimeException(AbstractAntiBot.GENERIC_LOGIN_FAILED_MESSAGE);
+                log.warn("Invalid log-in attempt {} : disabled user", email);
+                throw new UserRuntimeException(true, AbstractAntiBot.GENERIC_LOGIN_FAILED_MESSAGE);
             }
 
             if (!token.accessKey.equals(cr.accessKey().getValue())) {
                 AbstractAntiBot.authenticationFailed(LoginType.accessToken, token.email);
-                throw new UserRuntimeException(AbstractAntiBot.GENERIC_LOGIN_FAILED_MESSAGE);
+                throw new UserRuntimeException(true, AbstractAntiBot.GENERIC_LOGIN_FAILED_MESSAGE);
             }
 
             if ((new Date().after(cr.accessKeyExpire().getValue()))) {
-                throw new UserRuntimeException(i18n.tr("Token Has Expired"));
+                throw new UserRuntimeException(true, i18n.tr("Token Has Expired"));
             }
             credentialsOk = true;
         } finally {
@@ -239,7 +240,7 @@ public abstract class VistaAuthenticationServicesImpl<U extends AbstractUser, E 
         if (honorSystemState()) {
             switch (SystemMaintenance.getState()) {
             case Unavailable:
-                throw new UserRuntimeException(SystemMaintenance.getApplicationMaintenanceMessage());
+                throw new UserRuntimeException(true, SystemMaintenance.getApplicationMaintenanceMessage());
             default:
                 break;
             }
@@ -247,13 +248,13 @@ public abstract class VistaAuthenticationServicesImpl<U extends AbstractUser, E 
 
         if (CommonsStringUtils.isEmpty(request.email().getValue()) || !EmailValidator.isValid(request.email().getValue())
                 || CommonsStringUtils.isEmpty(request.password().getValue())) {
-            throw new UserRuntimeException(AbstractAntiBot.GENERIC_LOGIN_FAILED_MESSAGE);
+            throw new UserRuntimeException(true, AbstractAntiBot.GENERIC_LOGIN_FAILED_MESSAGE);
         }
         String email = EmailValidator.normalizeEmailAddress(request.email().getValue());
         if (VistaDeployment.isVistaStaging()) {
             if (!email.startsWith("s!")) {
                 log.warn("Staging env protection (s!${email}) triggered for user {}", email);
-                throw new UserRuntimeException(i18n.tr("Application is Unavailable due to short maintenance.\nPlease try again in one hour"));
+                throw new UserRuntimeException(true, i18n.tr("Application is Unavailable due to short maintenance.\nPlease try again in one hour"));
             } else {
                 email = email.substring(2, email.length());
             }
@@ -268,7 +269,7 @@ public abstract class VistaAuthenticationServicesImpl<U extends AbstractUser, E 
             if (AbstractAntiBot.authenticationFailed(LoginType.userLogin, email)) {
                 throw new ChallengeVerificationRequired(i18n.tr("Too Many Failed Log In Attempts"));
             } else {
-                throw new UserRuntimeException(AbstractAntiBot.GENERIC_LOGIN_FAILED_MESSAGE);
+                throw new UserRuntimeException(true, AbstractAntiBot.GENERIC_LOGIN_FAILED_MESSAGE);
             }
         }
         U user = users.get(0);
@@ -281,14 +282,15 @@ public abstract class VistaAuthenticationServicesImpl<U extends AbstractUser, E 
                 throw new UserRuntimeException(i18n.tr("Invalid User Account. Please Contact Support"));
             }
             if (!cr.enabled().isBooleanTrue()) {
-                throw new UserRuntimeException(AbstractAntiBot.GENERIC_LOGIN_FAILED_MESSAGE);
+                log.warn("Invalid log-in attempt {} : disabled user", email);
+                throw new UserRuntimeException(true, AbstractAntiBot.GENERIC_LOGIN_FAILED_MESSAGE);
             }
             if (!checkPassword(user, cr, email, request.password().getValue(), cr.credential().getValue())) {
                 log.info("Invalid password for user {}", email);
                 if (AbstractAntiBot.authenticationFailed(LoginType.userLogin, email)) {
                     throw new ChallengeVerificationRequired(i18n.tr("Too Many Failed Log In Attempts"));
                 } else {
-                    throw new UserRuntimeException(AbstractAntiBot.GENERIC_LOGIN_FAILED_MESSAGE);
+                    throw new UserRuntimeException(true, AbstractAntiBot.GENERIC_LOGIN_FAILED_MESSAGE);
                 }
             }
             credentialsOk = true;
