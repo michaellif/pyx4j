@@ -29,12 +29,19 @@ public class UserRuntimeException extends RuntimeExceptionSerializable {
 
     private transient Throwable cause;
 
+    private transient boolean skipLogStackTrace;
+
     protected UserRuntimeException() {
         super();
     }
 
     public UserRuntimeException(String message) {
         super(message);
+    }
+
+    public UserRuntimeException(boolean skipLogStackTrace, String message) {
+        super(message);
+        this.skipLogStackTrace = skipLogStackTrace;
     }
 
     public UserRuntimeException(String message, Throwable cause) {
@@ -45,5 +52,9 @@ public class UserRuntimeException extends RuntimeExceptionSerializable {
     @Override
     public Throwable getCause() {
         return cause;
+    }
+
+    public boolean isSkipLogStackTrace() {
+        return skipLogStackTrace;
     }
 }

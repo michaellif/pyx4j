@@ -30,6 +30,7 @@ import org.slf4j.LoggerFactory;
 import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.commons.IsWarningException;
 import com.pyx4j.commons.RuntimeExceptionSerializable;
+import com.pyx4j.commons.UserRuntimeException;
 import com.pyx4j.config.server.rpc.IServiceFactory;
 import com.pyx4j.config.server.rpc.IServiceFilter;
 import com.pyx4j.config.shared.ApplicationMode;
@@ -165,10 +166,14 @@ public class RemoteServiceImpl implements RemoteService {
                     }
                 } else {
                     // Log SecurityViolationException
-                    if (ApplicationMode.isDevelopment()) {
-                        log.error("Service call exception for {}", Context.getVisit(), e);
+                    if (logStakTrace(e)) {
+                        if (ApplicationMode.isDevelopment()) {
+                            log.error("Service call exception for {}", Context.getVisit(), e);
+                        } else {
+                            log.error("Service call exception for {} {}", Context.getVisit(), e.getMessage());
+                        }
                     } else {
-                        log.error("Service call exception for {} {}", Context.getVisit(), e.getMessage());
+                        log.warn("Service call exception for {} '{}'", Context.getVisit(), e.getMessage());
                     }
                 }
                 if (e instanceof RuntimeExceptionSerializable) {
@@ -196,6 +201,16 @@ public class RemoteServiceImpl implements RemoteService {
             } else {
                 throw oe;
             }
+        }
+    }
+
+    static boolean logStakTrace(Throwable e) {
+        if (e instanceof UserRuntimeException) {
+            return !((UserRuntimeException) e).isSkipLogStackTrace();
+        } else if ((e.getCause() != null) && (e.getCause() != e) && (e.getCause() instanceof UserRuntimeException)) {
+            return !((UserRuntimeException) e.getCause()).isSkipLogStackTrace();
+        } else {
+            return true;
         }
     }
 }

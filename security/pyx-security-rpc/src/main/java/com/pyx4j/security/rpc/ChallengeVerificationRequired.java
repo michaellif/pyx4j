@@ -30,6 +30,6 @@ public class ChallengeVerificationRequired extends UserRuntimeException {
     }
 
     public ChallengeVerificationRequired(String message) {
-        super(message);
+        super(true, message);
     }
 }
