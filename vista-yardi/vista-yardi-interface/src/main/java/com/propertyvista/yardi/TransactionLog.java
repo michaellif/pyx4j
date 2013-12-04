@@ -34,6 +34,8 @@ import com.pyx4j.essentials.server.dev.NumberInFile;
 import com.pyx4j.gwt.server.IOUtils;
 import com.pyx4j.log4j.LoggerConfig;
 
+import com.propertyvista.config.VistaDeployment;
+
 public class TransactionLog {
 
     private final static Logger log = LoggerFactory.getLogger(TransactionLog.class);
@@ -51,7 +53,11 @@ public class TransactionLog {
         } else {
             dir = new File("logs");
         }
-        return new File(dir, "yardi-transactions");
+        if (VistaDeployment.isVistaStaging()) {
+            return new File(dir, "yardi-transactions-staging");
+        } else {
+            return new File(dir, "yardi-transactions");
+        }
 
     }
 
