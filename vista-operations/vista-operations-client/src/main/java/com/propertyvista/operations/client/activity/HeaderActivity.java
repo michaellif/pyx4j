@@ -14,7 +14,6 @@
 package com.propertyvista.operations.client.activity;
 
 import com.google.gwt.activity.shared.AbstractActivity;
-import com.google.gwt.core.client.GWT;
 import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.place.shared.Place;
@@ -22,17 +21,15 @@ import com.google.gwt.place.shared.PlaceController;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
-import com.pyx4j.security.client.ClientContext;
 import com.pyx4j.security.client.BehaviorChangeEvent;
 import com.pyx4j.security.client.BehaviorChangeHandler;
+import com.pyx4j.security.client.ClientContext;
 import com.pyx4j.security.rpc.AuthenticationResponse;
-import com.pyx4j.security.rpc.AuthenticationService;
 import com.pyx4j.site.client.AppSite;
 
 import com.propertyvista.operations.client.OperationsSite;
 import com.propertyvista.operations.client.ui.HeaderView;
 import com.propertyvista.operations.rpc.OperationsSiteMap;
-import com.propertyvista.operations.rpc.services.OperationsAuthenticationService;
 
 public class HeaderActivity extends AbstractActivity implements HeaderView.Presenter {
 
@@ -84,13 +81,12 @@ public class HeaderActivity extends AbstractActivity implements HeaderView.Prese
         Scheduler.get().scheduleDeferred(new Scheduler.ScheduledCommand() {
             @Override
             public void execute() {
-                ClientContext.logout((AuthenticationService) GWT.create(OperationsAuthenticationService.class),
-                        new DefaultAsyncCallback<AuthenticationResponse>() {
-                            @Override
-                            public void onSuccess(AuthenticationResponse result) {
-                                AppSite.getPlaceController().goTo(new OperationsSiteMap.Login());
-                            }
-                        });
+                ClientContext.logout(new DefaultAsyncCallback<AuthenticationResponse>() {
+                    @Override
+                    public void onSuccess(AuthenticationResponse result) {
+                        AppSite.getPlaceController().goTo(new OperationsSiteMap.Login());
+                    }
+                });
             }
         });
     }

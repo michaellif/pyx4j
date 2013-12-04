@@ -25,7 +25,6 @@ import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.rpc.shared.VoidSerializable;
 import com.pyx4j.security.client.ClientContext;
 import com.pyx4j.security.rpc.AuthenticationRequest;
-import com.pyx4j.security.rpc.AuthenticationService;
 import com.pyx4j.site.client.NavigationUri;
 import com.pyx4j.site.rpc.AppPlaceInfo;
 
@@ -33,7 +32,6 @@ import com.propertyvista.portal.prospect.ui.signup.SignUpView;
 import com.propertyvista.portal.prospect.ui.signup.SignUpView.SignUpPresenter;
 import com.propertyvista.portal.rpc.portal.prospect.ProspectPortalSiteMap;
 import com.propertyvista.portal.rpc.portal.prospect.dto.ProspectSignUpDTO;
-import com.propertyvista.portal.rpc.portal.prospect.services.ProspectAuthenticationService;
 import com.propertyvista.portal.rpc.portal.prospect.services.ProspectSignUpService;
 import com.propertyvista.portal.rpc.portal.resident.ResidentPortalSiteMap;
 import com.propertyvista.portal.rpc.shared.EntityValidationException;
@@ -80,7 +78,7 @@ public class SignUpActivity extends AbstractActivity implements SignUpPresenter 
     }
 
     private void authenticate(AuthenticationRequest request) {
-        ClientContext.authenticate(GWT.<AuthenticationService> create(ProspectAuthenticationService.class), request, new DefaultAsyncCallback<Boolean>() {
+        ClientContext.authenticate(request, new DefaultAsyncCallback<Boolean>() {
 
             @Override
             public void onSuccess(Boolean result) {

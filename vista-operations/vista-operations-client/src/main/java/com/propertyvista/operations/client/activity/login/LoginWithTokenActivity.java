@@ -13,22 +13,17 @@
  */
 package com.propertyvista.operations.client.activity.login;
 
-import com.google.gwt.core.client.GWT;
 import com.google.gwt.place.shared.Place;
 
-import com.pyx4j.security.rpc.AuthenticationService;
-
-import com.propertyvista.operations.client.viewfactories.LoginVeiwFactory;
-import com.propertyvista.operations.rpc.OperationsSiteMap;
-import com.propertyvista.operations.rpc.services.OperationsAuthenticationService;
 import com.propertyvista.common.client.ui.components.login.AbstractLoginWithTokenActivity;
 import com.propertyvista.common.client.ui.components.login.LoginWithTokenView;
+import com.propertyvista.operations.client.viewfactories.LoginVeiwFactory;
+import com.propertyvista.operations.rpc.OperationsSiteMap;
 
 public class LoginWithTokenActivity extends AbstractLoginWithTokenActivity {
 
     public LoginWithTokenActivity(Place place) {
-        super(place, LoginVeiwFactory.instance(LoginWithTokenView.class), GWT.<AuthenticationService> create(OperationsAuthenticationService.class),
-                new OperationsSiteMap.PasswordReset(), new OperationsSiteMap.Login());
+        super(place, LoginVeiwFactory.instance(LoginWithTokenView.class), new OperationsSiteMap.PasswordReset(), new OperationsSiteMap.Login());
     }
 
 }

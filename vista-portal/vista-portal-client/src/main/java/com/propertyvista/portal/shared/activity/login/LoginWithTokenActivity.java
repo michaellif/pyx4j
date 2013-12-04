@@ -13,22 +13,17 @@
  */
 package com.propertyvista.portal.shared.activity.login;
 
-import com.google.gwt.core.client.GWT;
 import com.google.gwt.place.shared.Place;
-
-import com.pyx4j.security.rpc.AuthenticationService;
 
 import com.propertyvista.common.client.ui.components.login.AbstractLoginWithTokenActivity;
 import com.propertyvista.common.client.ui.components.login.LoginWithTokenView;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap;
-import com.propertyvista.portal.rpc.portal.resident.services.ResidentAuthenticationService;
 import com.propertyvista.portal.shared.PortalSite;
 
 public class LoginWithTokenActivity extends AbstractLoginWithTokenActivity {
 
     public LoginWithTokenActivity(Place place) {
-        super(place, PortalSite.getViewFactory().getView(LoginWithTokenView.class), GWT.<AuthenticationService> create(ResidentAuthenticationService.class),
-                new PortalSiteMap.PasswordReset(), new PortalSiteMap.Login());
+        super(place, PortalSite.getViewFactory().getView(LoginWithTokenView.class), new PortalSiteMap.PasswordReset(), new PortalSiteMap.Login());
     }
 
 }

@@ -22,7 +22,7 @@ import com.google.gwt.user.client.ui.AcceptsOneWidget;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.rpc.shared.VoidSerializable;
-import com.pyx4j.security.rpc.AuthenticationService;
+import com.pyx4j.security.client.ClientContext;
 import com.pyx4j.security.rpc.PasswordRetrievalRequest;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.rpc.AppPlace;
@@ -35,21 +35,17 @@ public class AbstractPasswordResetRequestActivity extends AbstractActivity imple
 
     private final PasswordResetRequestView view;
 
-    private final AuthenticationService authService;
-
     private final AppPlace loginPlace;
 
     /**
      * 
      * @param place
      * @param view
-     * @param authService
      * @param loginPlace
      *            a place to return to after a successful request.
      */
-    public AbstractPasswordResetRequestActivity(Place place, PasswordResetRequestView view, AuthenticationService authService, AppPlace loginPlace) {
+    public AbstractPasswordResetRequestActivity(Place place, PasswordResetRequestView view, AppPlace loginPlace) {
         this.loginPlace = loginPlace;
-        this.authService = authService;
         this.view = view;
         this.view.setPresenter(this);
         withPlace(place);
@@ -78,7 +74,7 @@ public class AbstractPasswordResetRequestActivity extends AbstractActivity imple
                 view.displayPasswordResetFailedMessage();
             }
         };
-        authService.requestPasswordReset(callback, request);
+        ClientContext.getAuthenticationService().requestPasswordReset(callback, request);
     }
 
     /**
@@ -99,7 +95,7 @@ public class AbstractPasswordResetRequestActivity extends AbstractActivity imple
             view.createNewCaptchaChallenge();
             view.displayPasswordResetFailedMessage();
         } else {
-            authService.obtainRecaptchaPublicKey(new DefaultAsyncCallback<String>() {
+            ClientContext.getAuthenticationService().obtainRecaptchaPublicKey(new DefaultAsyncCallback<String>() {
                 @Override
                 public void onSuccess(String result) {
                     CaptchaComposite.setPublicKey(result);

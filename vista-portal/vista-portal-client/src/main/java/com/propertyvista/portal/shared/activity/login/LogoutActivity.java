@@ -14,20 +14,16 @@
 package com.propertyvista.portal.shared.activity.login;
 
 import com.google.gwt.activity.shared.AbstractActivity;
-import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
 import com.pyx4j.security.client.ClientContext;
-import com.pyx4j.security.rpc.AuthenticationService;
-
-import com.propertyvista.portal.rpc.portal.resident.services.ResidentAuthenticationService;
 
 public class LogoutActivity extends AbstractActivity {
 
     @Override
     public void start(AcceptsOneWidget panel, EventBus eventBus) {
-        ClientContext.logout(GWT.<AuthenticationService> create(ResidentAuthenticationService.class), null);
+        ClientContext.logout(null);
     }
 
 }

@@ -89,11 +89,13 @@ public class CrmSite extends VistaSite {
 
         CrmEntityMapper.init();
 
+        ClientContext.setAuthenticationService(GWT.<AuthenticationService> create(CrmAuthenticationService.class));
+
         SessionInactiveDialog.register();
         SessionMonitor.addSessionInactiveHandler(new SessionInactiveHandler() {
             @Override
             public void onSessionInactive(SessionInactiveEvent event) {
-                ClientContext.logout((AuthenticationService) GWT.create(CrmAuthenticationService.class), null);
+                ClientContext.logout(null);
             }
         });
 
@@ -164,7 +166,7 @@ public class CrmSite extends VistaSite {
     }
 
     private void obtainAuthenticationData() {
-        ClientContext.obtainAuthenticationData(((CrmAuthenticationService) GWT.create(CrmAuthenticationService.class)), new DefaultAsyncCallback<Boolean>() {
+        ClientContext.obtainAuthenticationData(new DefaultAsyncCallback<Boolean>() {
 
             @Override
             public void onSuccess(Boolean result) {

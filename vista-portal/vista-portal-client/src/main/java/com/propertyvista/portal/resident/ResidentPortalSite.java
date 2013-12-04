@@ -15,6 +15,7 @@ package com.propertyvista.portal.resident;
 
 import com.google.gwt.core.client.GWT;
 
+import com.pyx4j.security.client.ClientContext;
 import com.pyx4j.security.rpc.AuthenticationService;
 
 import com.propertyvista.portal.resident.themes.ResidentPortalTheme;
@@ -30,8 +31,10 @@ public class ResidentPortalSite extends PortalSite {
     }
 
     @Override
-    protected AuthenticationService getAuthenticationService() {
-        return GWT.create(ResidentAuthenticationService.class);
+    public void onSiteLoad() {
+        // RPC creation below, Entity needs to be compiled -> generated first
+        ClientContext.setAuthenticationService(GWT.<AuthenticationService> create(ResidentAuthenticationService.class));
+        super.onSiteLoad();
     }
 
 }

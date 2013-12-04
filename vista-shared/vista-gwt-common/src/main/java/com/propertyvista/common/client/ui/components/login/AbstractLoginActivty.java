@@ -29,7 +29,6 @@ import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.security.client.ClientContext;
 import com.pyx4j.security.rpc.AuthenticationRequest;
-import com.pyx4j.security.rpc.AuthenticationService;
 import com.pyx4j.security.rpc.ChallengeVerificationRequired;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.rpc.AppPlace;
@@ -69,8 +68,6 @@ public abstract class AbstractLoginActivty extends AbstractActivity implements L
 
     private static String HTML5_KEY = AppSite.instance().getAppId() + ".userid";
 
-    private final AuthenticationService authService;
-
     private final AppPlace passwordResetRequestPlace;
 
     private final LoginView loginView;
@@ -82,8 +79,7 @@ public abstract class AbstractLoginActivty extends AbstractActivity implements L
      * @param passwordResetRequestPlace
      *            a place to a activity that manages password reset request view.
      */
-    protected AbstractLoginActivty(Place place, LoginView loginView, AuthenticationService authService, AppPlace passwordResetRequestPlace) {
-        this.authService = authService;
+    protected AbstractLoginActivty(Place place, LoginView loginView, AppPlace passwordResetRequestPlace) {
         this.passwordResetRequestPlace = passwordResetRequestPlace;
         this.loginView = loginView;
     }
@@ -138,7 +134,7 @@ public abstract class AbstractLoginActivty extends AbstractActivity implements L
             }
 
         };
-        ClientContext.authenticate(authService, request, callback);
+        ClientContext.authenticate(request, callback);
     }
 
     protected void onSuccessLogin() {
@@ -168,7 +164,7 @@ public abstract class AbstractLoginActivty extends AbstractActivity implements L
                 }
 
             };
-            authService.obtainRecaptchaPublicKey(callback);
+            ClientContext.getAuthenticationService().obtainRecaptchaPublicKey(callback);
         }
     }
 

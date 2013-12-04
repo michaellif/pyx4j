@@ -35,16 +35,13 @@ public class AbstractLoginWithTokenActivity extends AbstractActivity {
 
     private final String authToken;
 
-    private final AuthenticationService service;
-
     private final AppPlace loginPlace;
 
     // TODO clean this up: the redirection to password reset place works via *SiteDispatcher that should forward user to special password related place: passwordResetPlace arg is not required here
-    public AbstractLoginWithTokenActivity(Place place, LoginWithTokenView view, AuthenticationService service, AppPlace passwordResetPlace, AppPlace loginPlace) {
+    public AbstractLoginWithTokenActivity(Place place, LoginWithTokenView view, AppPlace passwordResetPlace, AppPlace loginPlace) {
         assert (place instanceof AppPlace);
         this.authToken = ((AppPlace) place).getFirstArg(AuthenticationService.AUTH_TOKEN_ARG);
         this.view = view;
-        this.service = service;
         this.loginPlace = loginPlace;
     }
 
@@ -52,7 +49,7 @@ public class AbstractLoginWithTokenActivity extends AbstractActivity {
     public void start(AcceptsOneWidget panel, EventBus eventBus) {
         panel.setWidget(view);
 
-        service.authenticateWithToken(new DefaultAsyncCallback<AuthenticationResponse>() {
+        ClientContext.getAuthenticationService().authenticateWithToken(new DefaultAsyncCallback<AuthenticationResponse>() {
             @Override
             public void onSuccess(AuthenticationResponse result) {
                 ClientContext.authenticated(result);

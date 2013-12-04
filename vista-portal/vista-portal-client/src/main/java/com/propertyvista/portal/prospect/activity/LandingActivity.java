@@ -16,11 +16,9 @@ package com.propertyvista.portal.prospect.activity;
 import java.util.Arrays;
 import java.util.List;
 
-import com.google.gwt.core.client.GWT;
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.Window;
 
-import com.pyx4j.security.rpc.AuthenticationService;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.client.NavigationUri;
 import com.pyx4j.site.rpc.AppPlaceInfo;
@@ -31,14 +29,12 @@ import com.propertyvista.domain.DemoData.UserType;
 import com.propertyvista.portal.prospect.ui.landing.LandingView;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap;
 import com.propertyvista.portal.rpc.portal.prospect.ProspectPortalSiteMap;
-import com.propertyvista.portal.rpc.portal.prospect.services.ProspectAuthenticationService;
 import com.propertyvista.portal.shared.PortalSite;
 
 public class LandingActivity extends AbstractLoginActivty implements LandingView.LandingPresenter {
 
     public LandingActivity(Place place) {
-        super(place, PortalSite.getViewFactory().getView(LandingView.class), GWT.<AuthenticationService> create(ProspectAuthenticationService.class),
-                new PortalSiteMap.PasswordResetRequest());
+        super(place, PortalSite.getViewFactory().getView(LandingView.class), new PortalSiteMap.PasswordResetRequest());
     }
 
     @Override

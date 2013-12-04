@@ -15,6 +15,7 @@ package com.propertyvista.portal.prospect;
 
 import com.google.gwt.core.client.GWT;
 
+import com.pyx4j.security.client.ClientContext;
 import com.pyx4j.security.rpc.AuthenticationService;
 
 import com.propertyvista.portal.prospect.themes.ProspectPortalTheme;
@@ -30,8 +31,10 @@ public class ProspectPortalSite extends PortalSite {
     }
 
     @Override
-    protected AuthenticationService getAuthenticationService() {
-        return GWT.create(ProspectAuthenticationService.class);
+    public void onSiteLoad() {
+        // RPC creation below, Entity needs to be compiled -> generated first
+        ClientContext.setAuthenticationService(GWT.<AuthenticationService> create(ProspectAuthenticationService.class));
+        super.onSiteLoad();
     }
 
 }

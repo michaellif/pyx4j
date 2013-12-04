@@ -20,7 +20,6 @@ import com.pyx4j.commons.css.StyleManager;
 import com.pyx4j.gwt.commons.UncaughtHandler;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.security.client.ClientContext;
-import com.pyx4j.security.rpc.AuthenticationService;
 import com.pyx4j.site.client.AppPlaceDispatcher;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.client.RootPane;
@@ -110,10 +109,8 @@ public abstract class PortalSite extends VistaSite {
 
     }
 
-    protected abstract AuthenticationService getAuthenticationService();
-
     private void obtainAuthenticationData() {
-        ClientContext.obtainAuthenticationData(getAuthenticationService(), new DefaultAsyncCallback<Boolean>() {
+        ClientContext.obtainAuthenticationData(null, new DefaultAsyncCallback<Boolean>() {
 
             @Override
             public void onSuccess(Boolean result) {

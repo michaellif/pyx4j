@@ -108,6 +108,7 @@ public class VistaPortalAccessControlList extends ServletContainerAclBuilder {
         grant(new IServiceExecutePermission(PortalPolicyRetrieveService.class));
 
         grant(VistaBasicBehavior.ResidentPortalPasswordChangeRequired, new IServiceExecutePermission(PortalPasswordResetService.class));
+        grant(VistaBasicBehavior.ProspectivePortalPasswordChangeRequired, new IServiceExecutePermission(PortalPasswordResetService.class));
 
         grant(VistaBasicBehavior.ResidentPortal, new IServiceExecutePermission(PasswordChangeUserService.class));
         grant(VistaBasicBehavior.ProspectivePortal, new IServiceExecutePermission(PasswordChangeUserService.class));

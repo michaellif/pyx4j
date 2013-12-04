@@ -14,7 +14,6 @@
 package com.propertyvista.crm.client.activity;
 
 import com.google.gwt.activity.shared.AbstractActivity;
-import com.google.gwt.core.client.GWT;
 import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.place.shared.Place;
@@ -28,7 +27,6 @@ import com.pyx4j.security.client.ClientContext;
 import com.pyx4j.security.client.ContextChangeEvent;
 import com.pyx4j.security.client.ContextChangeHandler;
 import com.pyx4j.security.rpc.AuthenticationResponse;
-import com.pyx4j.security.rpc.AuthenticationService;
 import com.pyx4j.security.shared.SecurityController;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.rpc.AppPlace;
@@ -40,7 +38,6 @@ import com.propertyvista.crm.client.activity.login.GetSatisfaction;
 import com.propertyvista.crm.client.ui.HeaderView;
 import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.crm.rpc.CrmSiteMap.Administration.Financial;
-import com.propertyvista.crm.rpc.services.pub.CrmAuthenticationService;
 import com.propertyvista.domain.security.VistaCrmBehavior;
 import com.propertyvista.shared.config.VistaDemo;
 import com.propertyvista.shared.i18n.CompiledLocale;
@@ -99,7 +96,7 @@ public class HeaderActivity extends AbstractActivity implements HeaderView.Prese
         Scheduler.get().scheduleDeferred(new Scheduler.ScheduledCommand() {
             @Override
             public void execute() {
-                ClientContext.logout((AuthenticationService) GWT.create(CrmAuthenticationService.class), new DefaultAsyncCallback<AuthenticationResponse>() {
+                ClientContext.logout(new DefaultAsyncCallback<AuthenticationResponse>() {
                     @Override
                     public void onSuccess(AuthenticationResponse result) {
                         AppSite.getPlaceController().goTo(AppPlace.NOWHERE);

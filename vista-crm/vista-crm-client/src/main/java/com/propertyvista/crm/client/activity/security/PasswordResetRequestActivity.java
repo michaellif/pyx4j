@@ -13,21 +13,16 @@
  */
 package com.propertyvista.crm.client.activity.security;
 
-import com.google.gwt.core.client.GWT;
 import com.google.gwt.place.shared.Place;
-
-import com.pyx4j.security.rpc.AuthenticationService;
 
 import com.propertyvista.common.client.ui.components.login.AbstractPasswordResetRequestActivity;
 import com.propertyvista.common.client.ui.components.login.PasswordResetRequestView;
 import com.propertyvista.crm.client.CrmSite;
 import com.propertyvista.crm.rpc.CrmSiteMap;
-import com.propertyvista.crm.rpc.services.pub.CrmAuthenticationService;
 
 public class PasswordResetRequestActivity extends AbstractPasswordResetRequestActivity implements PasswordResetRequestView.PasswordResetRequestPresenter {
 
     public PasswordResetRequestActivity(Place place) {
-        super(place, CrmSite.getViewFactory().getView(PasswordResetRequestView.class), GWT.<AuthenticationService> create(CrmAuthenticationService.class),
-                new CrmSiteMap.Login());
+        super(place, CrmSite.getViewFactory().getView(PasswordResetRequestView.class), new CrmSiteMap.Login());
     }
 }

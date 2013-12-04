@@ -21,6 +21,7 @@ import com.pyx4j.essentials.client.DefaultErrorHandlerDialog;
 import com.pyx4j.essentials.client.SessionInactiveDialog;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.security.client.ClientContext;
+import com.pyx4j.security.rpc.AuthenticationService;
 import com.pyx4j.site.client.SingletonViewFactory;
 
 import com.propertyvista.common.client.site.VistaBrowserRequirments;
@@ -43,6 +44,7 @@ public class OperationsSite extends VistaSite {
         OperationsEntityMapper.init();
         DefaultErrorHandlerDialog.register();
 
+        ClientContext.setAuthenticationService(GWT.<AuthenticationService> create(OperationsAuthenticationService.class));
         getHistoryHandler().register(getPlaceController(), getEventBus());
         StyleManager.installTheme(new OperationsTheme(), new OperationsPalette());
 
@@ -61,23 +63,22 @@ public class OperationsSite extends VistaSite {
     }
 
     private void obtainAuthenticationData() {
-        ClientContext.obtainAuthenticationData(((OperationsAuthenticationService) GWT.create(OperationsAuthenticationService.class)),
-                new DefaultAsyncCallback<Boolean>() {
+        ClientContext.obtainAuthenticationData(new DefaultAsyncCallback<Boolean>() {
 
-                    @Override
-                    public void onSuccess(Boolean result) {
-                        setOperationsTitle();
-                        OperationsSite.getHistoryHandler().handleCurrentHistory();
-                    }
+            @Override
+            public void onSuccess(Boolean result) {
+                setOperationsTitle();
+                OperationsSite.getHistoryHandler().handleCurrentHistory();
+            }
 
-                    @Override
-                    public void onFailure(Throwable caught) {
-                        setOperationsTitle();
-                        //TODO handle it properly
-                        OperationsSite.getHistoryHandler().handleCurrentHistory();
-                        super.onFailure(caught);
-                    }
-                });
+            @Override
+            public void onFailure(Throwable caught) {
+                setOperationsTitle();
+                //TODO handle it properly
+                OperationsSite.getHistoryHandler().handleCurrentHistory();
+                super.onFailure(caught);
+            }
+        });
     }
 
     private void setOperationsTitle() {

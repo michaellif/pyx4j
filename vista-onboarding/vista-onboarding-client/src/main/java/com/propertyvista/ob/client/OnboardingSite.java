@@ -24,17 +24,16 @@ import com.google.gwt.user.client.ui.SimplePanel;
 
 import com.pyx4j.commons.css.StyleManager;
 import com.pyx4j.config.shared.ApplicationMode;
-import com.pyx4j.entity.client.ClientEntityFactory;
 import com.pyx4j.gwt.commons.UncaughtHandler;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.security.client.ClientContext;
 import com.pyx4j.security.rpc.AuthenticationResponse;
+import com.pyx4j.security.rpc.AuthenticationService;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.client.SingletonViewFactory;
 import com.pyx4j.site.client.activity.AppActivityManager;
 import com.pyx4j.site.client.events.NotificationEvent;
 import com.pyx4j.site.client.events.NotificationHandler;
-import com.pyx4j.site.rpc.AppPlace;
 
 import com.propertyvista.common.client.handlers.VistaUnrecoverableErrorHandler;
 import com.propertyvista.common.client.site.VistaBrowserRequirments;
@@ -50,10 +49,6 @@ public class OnboardingSite extends VistaSite {
 
     public static final String ONBOARDING_INSERTION_ID = "vista.ob";
 
-    static {
-        ClientEntityFactory.ensureIEntityImplementations();
-    }
-
     public OnboardingSite() {
         super("vista-onboarding", OnboardingSiteMap.class, new SingletonViewFactory(), new OnboardingAppPlaceDispatcher());
     }
@@ -61,6 +56,7 @@ public class OnboardingSite extends VistaSite {
     @Override
     public void onSiteLoad() {
         super.onSiteLoad();
+        ClientContext.setAuthenticationService(GWT.<AuthenticationService> create(OnboardingAuthenticationService.class));
         UncaughtHandler.setUnrecoverableErrorHandler(new VistaUnrecoverableErrorHandler());
         // subscribe to UserMessageEvent fired from VistaUnrecoverableErrorHandler
         getEventBus().addHandler(NotificationEvent.getType(), new NotificationHandler() {
@@ -85,22 +81,21 @@ public class OnboardingSite extends VistaSite {
     }
 
     private void obtainAuthenticationData() {
-        ClientContext.obtainAuthenticationData((GWT.<OnboardingAuthenticationService> create(OnboardingAuthenticationService.class)),
-                new DefaultAsyncCallback<Boolean>() {
+        ClientContext.obtainAuthenticationData(new DefaultAsyncCallback<Boolean>() {
 
-                    @Override
-                    public void onFailure(Throwable caught) {
-                        hideLoadingIndicator();
-                        super.onFailure(caught);
-                    }
+            @Override
+            public void onFailure(Throwable caught) {
+                hideLoadingIndicator();
+                super.onFailure(caught);
+            }
 
-                    @Override
-                    public void onSuccess(Boolean result) {
-                        hideLoadingIndicator();
-                        AppSite.getHistoryHandler().handleCurrentHistory();
-                    }
+            @Override
+            public void onSuccess(Boolean result) {
+                hideLoadingIndicator();
+                AppSite.getHistoryHandler().handleCurrentHistory();
+            }
 
-                });
+        });
     }
 
     private void createAndBindUI() {
@@ -128,13 +123,12 @@ public class OnboardingSite extends VistaSite {
 
                 @Override
                 public void onClick(ClickEvent event) {
-                    ClientContext.logout(GWT.<OnboardingAuthenticationService> create(OnboardingAuthenticationService.class),
-                            new DefaultAsyncCallback<AuthenticationResponse>() {
-                                @Override
-                                public void onSuccess(AuthenticationResponse result) {
-                                    // the place redirection should be handled automatically by security controller
-                                }
-                            });
+                    ClientContext.logout(new DefaultAsyncCallback<AuthenticationResponse>() {
+                        @Override
+                        public void onSuccess(AuthenticationResponse result) {
+                            // the place redirection should be handled automatically by security controller
+                        }
+                    });
                 }
 
             });

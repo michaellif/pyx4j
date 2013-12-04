@@ -22,6 +22,7 @@ import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.rpc.shared.VoidSerializable;
+import com.pyx4j.security.client.ClientContext;
 import com.pyx4j.security.rpc.AuthenticationService;
 import com.pyx4j.security.rpc.PasswordRetrievalRequest;
 import com.pyx4j.site.shared.domain.Notification;
@@ -52,7 +53,7 @@ public class PasswordResetRequestWizardActivity extends AbstractWizardActivity<P
 
     @Override
     public void submit() {
-        GWT.<AuthenticationService> create(ResidentAuthenticationService.class).requestPasswordReset(new DefaultAsyncCallback<VoidSerializable>() {
+        ClientContext.getAuthenticationService().requestPasswordReset(new DefaultAsyncCallback<VoidSerializable>() {
             @Override
             public void onSuccess(VoidSerializable result) {
                 PasswordResetRequestWizardActivity.super.submit();
