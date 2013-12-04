@@ -61,9 +61,10 @@ public class AccessKey {
             }
             email = token.substring(0, idx);
             accessKey = token.substring(idx + 1);
-            if (accessKey.length() != ACCESS_KEY_LEN) {
+            if (accessKey.length() < ACCESS_KEY_LEN) {
                 throw new RuntimeExceptionSerializable(i18n.tr("Invalid Request"));
             }
+            accessKey = accessKey.substring(0, ACCESS_KEY_LEN);
             validateAccessKey(accessKey);
 
             char encodedBehavior = accessKey.charAt(ACCESS_KEY_LEN - 1);
