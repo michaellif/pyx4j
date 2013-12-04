@@ -42,7 +42,9 @@ import com.google.gwt.user.rebind.SourceWriter;
 import com.pyx4j.commons.EnglishGrammar;
 import com.pyx4j.i18n.annotations.I18nAnnotation;
 import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.site.client.place.AppPlaceFactory;
 import com.pyx4j.site.client.place.AppPlaceHistoryMapper;
+import com.pyx4j.site.client.place.AppPlaceListingImplBase;
 import com.pyx4j.site.rpc.AppPlace;
 import com.pyx4j.site.rpc.AppPlaceInfo;
 import com.pyx4j.site.rpc.annotations.PlaceProperties;
@@ -51,6 +53,8 @@ import com.pyx4j.site.shared.meta.SiteMap;
 public class AppPlaceListingGenerator extends Generator {
 
     private JClassType placeType;
+
+    private JClassType siteMapType;
 
     @Override
     public String generate(TreeLogger logger, GeneratorContext context, String typeName) throws UnableToCompleteException {
@@ -61,6 +65,7 @@ public class AppPlaceListingGenerator extends Generator {
             String simpleName = interfaceType.getSimpleSourceName() + "_Impl";
             ClassSourceFileComposerFactory composer = new ClassSourceFileComposerFactory(packageName, simpleName);
             composer.addImplementedInterface(typeName);
+            composer.setSuperclass(AppPlaceListingImplBase.class.getName());
             composer.addImport(Map.class.getName());
             composer.addImport(List.class.getName());
             composer.addImport(ArrayList.class.getName());
@@ -80,6 +85,7 @@ public class AppPlaceListingGenerator extends Generator {
                 return packageName + "." + simpleName;
             }
 
+            siteMapType = oracle.getType(SiteMap.class.getName());
             placeType = oracle.getType(AppPlace.class.getName());
             List<JClassType> placeClasses = new Vector<JClassType>();
 
@@ -91,7 +97,7 @@ public class AppPlaceListingGenerator extends Generator {
             }
 
             SourceWriter writer = composer.createSourceWriter(context, printWriter);
-            writeImpl(writer, placeClasses);
+            writeImpl(writer, simpleName, placeClasses);
             writer.commit(logger);
             return composer.getCreatedClassName();
         } catch (NotFoundException e) {
@@ -116,43 +122,54 @@ public class AppPlaceListingGenerator extends Generator {
         }
     }
 
-    private void writeImpl(SourceWriter writer, List<JClassType> placeClasses) {
+    JClassType getSiteMapClass(JClassType placeClassType) {
+        JClassType type = placeClassType.getEnclosingType();
+        while (type != null) {
+            if (type.isAssignableTo(siteMapType)) {
+                return type;
+            }
+            type = type.getEnclosingType();
+        }
+        return null;
+    }
+
+    private void writeImpl(SourceWriter writer, String simpleName, List<JClassType> placeClasses) {
         writer.println();
 
-        writer.println("private static final I18n i18n = I18n.get(AppPlace.class);");
-
-        //getPlace()
-        writer.println("@Override");
-        writer.println("public AppPlace getPlace(Class<? extends SiteMap> siteMapClass, String token) {");
         writer.indent();
+        writer.println("public " + simpleName + "() { ");
+        writer.indent();
+        writer.println("super();");
 
         for (JClassType jClassType : placeClasses) {
-            if (!jClassType.isAbstract()) {
-                String type = jClassType.getQualifiedSourceName();
-                writer.println("if (\"" + type + "\".contains(siteMapClass.getName()) && ");
-                writer.println("    token.equals(AppPlaceInfo.getPlaceId(" + type + ".class))) {");
-                writer.indent();
-                writer.println("return new " + type + "();");
-                writer.outdent();
-                writer.println("}");
+            JClassType siteMap = getSiteMapClass(jClassType);
+            if (!jClassType.isAbstract() && (siteMap != null)) {
+                writer.print("map(");
+
+                writer.print(siteMap.getQualifiedSourceName());
+                writer.print(".class, ");
+
+                writer.print(jClassType.getQualifiedSourceName());
+                writer.print(".class, ");
+
+                writer.print("new " + AppPlaceFactory.class.getName() + "(){");
+                writer.print(" @Override public AppPlace create() { return new ");
+                writer.print(jClassType.getQualifiedSourceName());
+                writer.print("(); } }");
+
+                writer.println(");");
+
             }
         }
 
-        writer.println("return null;");
-        writer.outdent();
-        writer.println("}");
-
-        writer.println();
-
-        //getPlaceInfo()
-        writer.println("@Override");
-        writer.println("public AppPlaceInfo getPlaceInfo(AppPlace place) {");
-        writer.indent();
+        writer.println("");
 
         for (JClassType jClassType : placeClasses) {
             if (!jClassType.isAbstract()) {
-                writer.println("if (place.getClass() == " + jClassType.getQualifiedSourceName() + ".class) {");
-                writer.indent();
+
+                writer.print("map(");
+                writer.print(jClassType.getQualifiedSourceName());
+                writer.print(".class, ");
 
                 String caption = null;
                 String navigLabel = null;
@@ -172,19 +189,18 @@ public class AppPlaceListingGenerator extends Generator {
                 if (navigLabel == null || I18nAnnotation.DEFAULT_VALUE.equals(navigLabel)) {
                     navigLabel = caption;
                 }
-
-                writer.print("return new ");
+                writer.print("new ");
                 writer.print(AppPlaceInfo.class.getSimpleName());
-                writer.println("(" + i18nEscapeSourceString(navigLabel) + ", " + i18nEscapeSourceString(caption) + ", " + i18nEscapeSourceString(staticContent)
-                        + ");");
-                writer.outdent();
-                writer.println("}");
+                writer.print("(" + i18nEscapeSourceString(navigLabel) + ", " + i18nEscapeSourceString(caption) + ", " + i18nEscapeSourceString(staticContent)
+                        + ")");
+
+                writer.println(");");
             }
         }
 
-        writer.println("return null;");
         writer.outdent();
         writer.println("}");
+        writer.outdent();
 
         writer.println();
     }

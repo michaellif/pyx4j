@@ -1,6 +1,6 @@
 /*
  * Pyx4j framework
- * Copyright (C) 2008-2011 pyx4j.com.
+ * Copyright (C) 2008-2013 pyx4j.com.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -14,21 +14,16 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  *
- * Created on Feb 4, 2011
- * @author Misha
+ * Created on Dec 4, 2013
+ * @author vlads
  * @version $Id$
  */
 package com.pyx4j.site.client.place;
 
 import com.pyx4j.site.rpc.AppPlace;
-import com.pyx4j.site.rpc.AppPlaceInfo;
-import com.pyx4j.site.shared.meta.SiteMap;
 
-public interface AppPlaceListing {
+public interface AppPlaceFactory<E extends AppPlace> {
 
-    AppPlace getPlace(Class<? extends SiteMap> siteMapClass, String token);
+    public E create();
 
-    <E extends AppPlace> E createPlace(Class<E> placeClass);
-
-    AppPlaceInfo getPlaceInfo(Class<? extends AppPlace> placeClass);
 }
