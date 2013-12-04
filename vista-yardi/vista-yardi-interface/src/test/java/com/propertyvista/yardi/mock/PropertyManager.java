@@ -45,6 +45,7 @@ import com.pyx4j.config.server.SystemDateManager;
 
 import com.propertyvista.yardi.mock.updater.CoTenantUpdater;
 import com.propertyvista.yardi.mock.updater.LeaseChargeUpdater;
+import com.propertyvista.yardi.mock.updater.Property;
 import com.propertyvista.yardi.mock.updater.PropertyUpdater;
 import com.propertyvista.yardi.mock.updater.RentableItemTypeUpdater;
 import com.propertyvista.yardi.mock.updater.RtCustomerUpdater;

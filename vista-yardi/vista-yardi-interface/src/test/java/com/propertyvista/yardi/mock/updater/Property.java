@@ -11,9 +11,8 @@
  * @author michaellif
  * @version $Id$
  */
-package com.propertyvista.yardi.mock;
+package com.propertyvista.yardi.mock.updater;
 
-import com.propertyvista.yardi.mock.updater.Name;
 
 public class Property<E> {
 

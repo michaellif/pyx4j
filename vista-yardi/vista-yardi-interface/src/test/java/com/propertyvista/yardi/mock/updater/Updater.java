@@ -16,8 +16,6 @@ package com.propertyvista.yardi.mock.updater;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-import com.propertyvista.yardi.mock.Property;
-
 public class Updater<MODEL, INST_CLASS> {
 
     protected final Map<Name, Property<?>> map = new LinkedHashMap<Name, Property<?>>();
