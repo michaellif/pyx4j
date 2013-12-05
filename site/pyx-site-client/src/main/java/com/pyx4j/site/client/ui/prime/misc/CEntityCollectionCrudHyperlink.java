@@ -81,7 +81,7 @@ public class CEntityCollectionCrudHyperlink<E extends ICollection<?, ?>> extends
     }
 
     public CEntityCollectionCrudHyperlink(final AppPlaceBuilder<E> placeBuilder) {
-        super((String) null);
+        super();
         setNavigationCommand(new Command() {
             @Override
             public void execute() {

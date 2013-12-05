@@ -63,19 +63,11 @@ public class CListBox<E> extends CFocusComponent<List<E>, NListBox<E>> implement
     private String emptyValueFormat;
 
     public CListBox() {
-        this((String) null);
+        this(SelectionMode.SINGLE_PANEL);
     }
 
     public CListBox(SelectionMode mode) {
-        this(null, mode);
-    }
-
-    public CListBox(String title) {
-        this(title, SelectionMode.SINGLE_PANEL);
-    }
-
-    public CListBox(String title, SelectionMode mode) {
-        super(title);
+        super();
         this.mode = mode;
         nativeListBox = new NListBox<E>(this);
         setNativeWidget(nativeListBox);

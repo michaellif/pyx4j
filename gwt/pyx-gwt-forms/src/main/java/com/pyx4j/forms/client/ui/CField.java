@@ -40,11 +40,7 @@ public abstract class CField<DATA_TYPE, WIDGET_TYPE extends INativeComponent<DAT
     private Command navigationCommand;
 
     public CField() {
-        this(null);
-    }
-
-    public CField(String title) {
-        super(title);
+        super();
     }
 
     @Override

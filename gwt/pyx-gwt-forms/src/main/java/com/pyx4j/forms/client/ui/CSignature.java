@@ -20,7 +20,6 @@
  */
 package com.pyx4j.forms.client.ui;
 
-
 public class CSignature extends CTextFieldBase<Boolean, NSignature> {
 
     public enum SignatureType {
@@ -28,11 +27,7 @@ public class CSignature extends CTextFieldBase<Boolean, NSignature> {
     }
 
     public CSignature() {
-        this(null);
-    }
-
-    public CSignature(String title) {
-        super(title);
+        super();
         setNativeWidget(new NSignature(this));
         asWidget().setWidth("100%");
     }

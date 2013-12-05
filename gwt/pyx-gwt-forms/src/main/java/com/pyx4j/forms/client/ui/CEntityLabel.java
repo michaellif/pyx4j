@@ -25,11 +25,7 @@ import com.pyx4j.entity.shared.IEntity;
 public class CEntityLabel<E extends IEntity> extends CLabel<E> {
 
     public CEntityLabel() {
-        this(null);
-    }
-
-    public CEntityLabel(String title) {
-        super(title);
+        super();
         this.setFormat(new IFormat<E>() {
 
             @Override

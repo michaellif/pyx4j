@@ -73,11 +73,7 @@ public class CEntitySuggestBox<E extends IEntity> extends CAbstractSuggestBox<E>
     private boolean hasAsyncValue = false;
 
     public CEntitySuggestBox(Class<E> entityClass) {
-        this(null, entityClass);
-    }
-
-    public CEntitySuggestBox(String title, Class<E> entityClass) {
-        super(title);
+        super();
         this.entityClass = entityClass;
         this.criteria = new EntityQueryCriteria<E>(entityClass);
         setFormat(new EntitySuggestFormat());

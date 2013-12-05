@@ -30,7 +30,7 @@ import com.pyx4j.site.rpc.CrudAppPlace;
 public class CEntityCrudHyperlink<E extends IEntity> extends CEntityHyperlink<E> {
 
     public CEntityCrudHyperlink(final CrudAppPlace place) {
-        super((String) null);
+        super();
         setNavigationCommand(new Command() {
             @Override
             public void execute() {

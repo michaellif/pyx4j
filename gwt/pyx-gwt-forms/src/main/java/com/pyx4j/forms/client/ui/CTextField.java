@@ -27,17 +27,13 @@ import com.pyx4j.forms.client.validators.RegexValidator;
 
 public class CTextField extends CTextFieldBase<String, NTextBox<String>> {
 
-    public CTextField() {
-        this(null);
-    }
-
-    public CTextField(String title, boolean mandatory) {
-        this(title);
+    public CTextField(boolean mandatory) {
+        this();
         this.setMandatory(mandatory);
     }
 
-    public CTextField(String title) {
-        super(title);
+    public CTextField() {
+        super();
         setFormat(new StringFormat());
         setNativeWidget(new NTextBox<String>(this));
         asWidget().setWidth("100%");

@@ -30,11 +30,7 @@ public class CLongField extends CNumberField<Long> {
     private static final I18n i18n = I18n.get(CLongField.class);
 
     public CLongField() {
-        this(null);
-    }
-
-    public CLongField(String title) {
-        super(title);
+        super();
         setFormat(new IFormat<Long>() {
 
             @Override

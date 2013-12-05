@@ -36,11 +36,7 @@ public class CTimeField extends CTextFieldBase<Time, NTextBox<Time>> {
     public static final String defaultTimeFormat = i18n.tr("h:mm a");
 
     public CTimeField() {
-        this(null);
-    }
-
-    public CTimeField(String title) {
-        super(title);
+        super();
         setTimeFormat(defaultTimeFormat);
         addValueValidator(new TextBoxParserValidator<Time>());
         setNativeWidget(new NTextBox<Time>(this));

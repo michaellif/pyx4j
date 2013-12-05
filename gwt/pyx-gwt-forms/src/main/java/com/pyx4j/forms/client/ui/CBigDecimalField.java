@@ -31,11 +31,7 @@ public class CBigDecimalField extends CNumberField<BigDecimal> {
     private static final I18n i18n = I18n.get(CBigDecimalField.class);
 
     public CBigDecimalField() {
-        this(null);
-    }
-
-    public CBigDecimalField(String title) {
-        super(title);
+        super();
         setFormat(new IFormat<BigDecimal>() {
 
             @Override

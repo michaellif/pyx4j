@@ -28,11 +28,7 @@ import com.pyx4j.forms.client.validators.TextBoxParserValidator;
 public class CPhoneField extends CTextFieldBase<String, NTextBox<String>> {
 
     public CPhoneField() {
-        this(null);
-    }
-
-    public CPhoneField(String title) {
-        super(title);
+        super();
         setFormat(new PhoneFormat());
         addValueValidator(new TextBoxParserValidator<String>());
         setNativeWidget(new NTextBox<String>(this));

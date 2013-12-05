@@ -48,18 +48,13 @@ public class CComboBoxBoolean extends CComboBox<Boolean> {
         return i18n.tr("Yes");
     }
 
-    public CComboBoxBoolean(String title) {
-        super(title);
-        setBooleanOptions();
-    }
-
-    public CComboBoxBoolean(String title, String trueText, String falseText) {
-        this(title);
+    public CComboBoxBoolean(String trueText, String falseText) {
+        this();
         setTrueFalseOptionText(trueText, falseText);
     }
 
-    public CComboBoxBoolean(String title, boolean mandatory) {
-        super(title, mandatory);
+    public CComboBoxBoolean(boolean mandatory) {
+        super(mandatory);
         setBooleanOptions();
     }
 

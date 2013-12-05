@@ -27,11 +27,8 @@ import com.pyx4j.forms.client.ui.formatters.MoneyFormat;
 public class CMoneyLabel extends CLabel<BigDecimal> {
 
     public CMoneyLabel() {
-        this(null);
-    }
-
-    public CMoneyLabel(String title) {
-        super(title);
+        super();
         setFormat(new MoneyFormat());
     }
+
 }

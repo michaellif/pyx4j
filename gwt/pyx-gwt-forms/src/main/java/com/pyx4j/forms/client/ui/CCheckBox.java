@@ -35,11 +35,7 @@ public class CCheckBox extends CFocusComponent<Boolean, NCheckBox> {
     }
 
     public CCheckBox() {
-        this(null);
-    }
-
-    public CCheckBox(String title) {
-        super(title);
+        super();
         alignment = Alignment.left;
         populate(false);
         setFormat(new IFormat<Boolean>() {

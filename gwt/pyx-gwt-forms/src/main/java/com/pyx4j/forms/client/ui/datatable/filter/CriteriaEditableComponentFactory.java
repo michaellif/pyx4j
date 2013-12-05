@@ -53,10 +53,10 @@ public class CriteriaEditableComponentFactory implements IEditableComponentFacto
         MemberMeta mm = member.getMeta();
         CComponent<?> comp;
         if (mm.isEntity()) {
-            comp = new CEntityComboBox(mm.getCaption(), mm.getObjectClass());
+            comp = new CEntityComboBox(mm.getObjectClass());
             ((CEntityComboBox) comp).setOptionsComparator(EntityComparatorFactory.createStringViewComparator());
         } else if ((mm.getObjectClassType() == ObjectClassType.EntityList) || (mm.getObjectClassType() == ObjectClassType.EntitySet)) {
-            comp = new CEntityComboBox(mm.getCaption(), mm.getValueClass());
+            comp = new CEntityComboBox(mm.getValueClass());
             ((CEntityComboBox) comp).setOptionsComparator(EntityComparatorFactory.createStringViewComparator());
         } else if (mm.getValueClass().isEnum()) {
             comp = new CComboBox();

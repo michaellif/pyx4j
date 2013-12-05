@@ -25,11 +25,7 @@ import com.google.gwt.user.client.ui.IsWidget;
 public abstract class CViewer<E> extends CField<E, NViewer<E>> {
 
     public CViewer() {
-        this(null);
-    }
-
-    public CViewer(String title) {
-        super(title);
+        super();
         setNativeWidget(new NViewer<E>(this));
     }
 

@@ -153,6 +153,8 @@ public interface EntityI extends IEntity {
     @Editor(type = EditorType.color)
     IPrimitive<Integer> color();
 
+    IPrimitive<Boolean> signature1();
+
     IList<TFile> files();
 
 }

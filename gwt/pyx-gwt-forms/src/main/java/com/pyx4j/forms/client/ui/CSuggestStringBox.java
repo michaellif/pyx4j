@@ -27,11 +27,7 @@ import com.pyx4j.commons.CommonsStringUtils;
 public class CSuggestStringBox extends CAbstractSuggestBox<String> {
 
     public CSuggestStringBox() {
-        this(null);
-    }
-
-    public CSuggestStringBox(String title) {
-        super(title);
+        super();
         setFormat(new SuggestFormat());
         asWidget().setWidth("100%");
     }

@@ -25,11 +25,7 @@ public class CLabel<E> extends CField<E, NLabel<E>> {
     private IFormat<E> format;
 
     public CLabel() {
-        this(null);
-    }
-
-    public CLabel(String title) {
-        super(title);
+        super();
         setFormat(new LabelFormat());
         setNativeWidget(new NLabel<E>(this));
     }
@@ -53,11 +49,6 @@ public class CLabel<E> extends CField<E, NLabel<E>> {
 
     public String getFormattedValue() {
         return format(getValue());
-    }
-
-    public CLabel(String title, boolean mandatory) {
-        this(title);
-        this.setMandatory(mandatory);
     }
 
     class LabelFormat implements IFormat<E> {

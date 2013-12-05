@@ -34,8 +34,8 @@ public abstract class CNumberField<E extends Number> extends CTextFieldBase<E, N
 
     private NumberFormat numberFormat;
 
-    public CNumberField(String title) {
-        super(title);
+    public CNumberField() {
+        super();
         numberFormat = NumberFormat.getDecimalFormat();
         validator = new TextBoxParserValidator<E>();
         addValueValidator(validator);

@@ -43,11 +43,7 @@ public abstract class CRadioGroup<E> extends CFocusComponent<E, NRadioGroup<E>> 
     private Collection<E> enabledOptions;
 
     public CRadioGroup(RadioGroup.Layout layout) {
-        this(null, layout);
-    }
-
-    public CRadioGroup(String title, RadioGroup.Layout layout) {
-        super(title);
+        super();
         this.layout = layout;
     }
 

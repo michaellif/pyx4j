@@ -30,11 +30,7 @@ public class CIntegerField extends CNumberField<Integer> {
     private static final I18n i18n = I18n.get(CIntegerField.class);
 
     public CIntegerField() {
-        this(null);
-    }
-
-    public CIntegerField(String title) {
-        super(title);
+        super();
         setFormat(new IFormat<Integer>() {
 
             @Override

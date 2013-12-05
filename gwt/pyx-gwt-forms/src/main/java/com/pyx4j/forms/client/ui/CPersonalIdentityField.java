@@ -53,16 +53,12 @@ public class CPersonalIdentityField<T extends IPersonalIdentity> extends CTextFi
         this(entityClass, null);
     }
 
-    public CPersonalIdentityField(Class<T> entityClass, String title) {
-        this(entityClass, null, title, false);
+    public CPersonalIdentityField(Class<T> entityClass, String pattern) {
+        this(entityClass, pattern, false);
     }
 
-    public CPersonalIdentityField(Class<T> entityClass, String pattern, String title) {
-        this(entityClass, pattern, title, false);
-    }
-
-    public CPersonalIdentityField(Class<T> entityClass, String pattern, String title, boolean mandatory) {
-        super(title);
+    public CPersonalIdentityField(Class<T> entityClass, String pattern, boolean mandatory) {
+        super();
         this.entityClass = entityClass;
         setMandatory(mandatory);
         setPersonalIdentityFormat(pattern == null ? "" : pattern);

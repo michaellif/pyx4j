@@ -30,11 +30,7 @@ public abstract class CFocusComponent<DATA, WIDGET extends INativeFocusComponent
     private int tabIndex = 0;
 
     public CFocusComponent() {
-        this(null);
-    }
-
-    public CFocusComponent(String title) {
-        super(title);
+        super();
     }
 
     @Override

@@ -37,15 +37,11 @@ public class CEmailField extends CTextFieldBase<String, NTextBox<String>> {
     public static final String EMAIL_REGEXPR = "[a-zA-Z0-9!#$%&'*+/=?^_`{|}~-]+(?:\\.[a-zA-Z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-zA-Z0-9](?:[a-zA-Z0-9-]*[a-zA-Z0-9])?\\.)+[a-zA-Z0-9](?:[a-zA-Z0-9-]*[a-zA-Z0-9])?";
 
     public CEmailField() {
-        this(null, false);
+        this(false);
     }
 
-    public CEmailField(String title) {
-        this(title, false);
-    }
-
-    public CEmailField(String title, boolean mandatory) {
-        super(title);
+    public CEmailField(boolean mandatory) {
+        super();
         this.setMandatory(mandatory);
         setFormat(new EmailFormat());
         addValueValidator(new TextBoxParserValidator<String>());

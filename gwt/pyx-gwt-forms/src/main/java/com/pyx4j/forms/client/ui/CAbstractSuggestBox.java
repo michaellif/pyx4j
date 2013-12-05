@@ -35,11 +35,7 @@ public abstract class CAbstractSuggestBox<E> extends CTextFieldBase<E, NSuggestB
     private List<E> options = new ArrayList<E>();
 
     public CAbstractSuggestBox() {
-        this(null);
-    }
-
-    public CAbstractSuggestBox(String title) {
-        super(title);
+        super();
 
         NSuggestBox<E> nativeTextField = new NSuggestBox<E>(this);
         setNativeWidget(nativeTextField);

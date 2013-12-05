@@ -37,12 +37,8 @@ public abstract class CTextFieldBase<DATA, WIDGET extends INativeTextComponent<D
 
     private IFormat<DATA> format;
 
-    public CTextFieldBase(String title) {
-        super(title);
-    }
-
     public CTextFieldBase() {
-        this(null);
+        super();
     }
 
     public void setFormat(IFormat<DATA> format) {

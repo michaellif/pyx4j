@@ -27,11 +27,7 @@ import com.pyx4j.forms.client.ui.formatters.PercentageFormat;
 public class CPercentageLabel extends CLabel<BigDecimal> {
 
     public CPercentageLabel() {
-        this(null);
-    }
-
-    public CPercentageLabel(String title) {
-        super(title);
+        super();
         setFormat(new PercentageFormat());
     }
 

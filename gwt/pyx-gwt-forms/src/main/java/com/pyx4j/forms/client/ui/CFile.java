@@ -33,7 +33,7 @@ public class CFile<E extends IFile> extends CField<E, NFile<E>> {
     private IFileURLBuilder<E> fileUrlBuilder;
 
     public CFile(UploadService<?, E> service, IFileURLBuilder<E> fileURLBuilder) {
-        super("");
+        super();
         this.service = service;
         this.fileUrlBuilder = fileURLBuilder;
 

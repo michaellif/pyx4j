@@ -15,11 +15,7 @@ import com.google.gwt.i18n.client.DateTimeFormat;
 public class CTimeLabel extends CLabel<Time> {
 
     public CTimeLabel() {
-        this(null);
-    }
-
-    public CTimeLabel(String title) {
-        super(title);
+        super();
         setTimeFormat(CTimeField.defaultTimeFormat);
     }
 

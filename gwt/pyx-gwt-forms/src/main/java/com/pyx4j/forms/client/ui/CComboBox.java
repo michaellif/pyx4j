@@ -51,21 +51,13 @@ public class CComboBox<E> extends CFocusComponent<E, NComboBox<E>> implements Ha
         this(null);
     }
 
-    public CComboBox(String title) {
-        this(title, null);
-    }
-
     public CComboBox(boolean mandatory) {
-        this(null, mandatory);
-    }
-
-    public CComboBox(String title, boolean mandatory) {
-        this(title);
+        this();
         this.setMandatory(mandatory);
     }
 
-    public CComboBox(String title, NotInOptionsPolicy policy) {
-        this(title, policy, new IFormat<E>() {
+    public CComboBox(NotInOptionsPolicy policy) {
+        this(policy, new IFormat<E>() {
 
             @Override
             public String format(E o) {
@@ -85,8 +77,8 @@ public class CComboBox<E> extends CFocusComponent<E, NComboBox<E>> implements Ha
         });
     }
 
-    public CComboBox(String title, NotInOptionsPolicy policy, IFormat<E> format) {
-        super(title);
+    public CComboBox(NotInOptionsPolicy policy, IFormat<E> format) {
+        super();
         this.format = format;
         if (policy == null) {
             this.policy = NotInOptionsPolicy.KEEP;

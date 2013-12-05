@@ -45,11 +45,7 @@ public class CDatePicker extends CTextFieldBase<LogicalDate, NDatePicker> {
     private final PastDateSelectionAllowedValidator pastDateSelectionAllowedValidator = new PastDateSelectionAllowedValidator();
 
     public CDatePicker() {
-        this(null);
-    }
-
-    public CDatePicker(String title) {
-        super(title);
+        super();
         setFormat(new DateFormat(defaultDateFormat));
         addValueValidator(new TextBoxParserValidator<LogicalDate>());
         setNativeWidget(new NDatePicker(this));

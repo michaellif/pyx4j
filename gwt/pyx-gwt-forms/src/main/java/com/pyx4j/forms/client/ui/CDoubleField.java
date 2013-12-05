@@ -30,11 +30,7 @@ public class CDoubleField extends CNumberField<Double> {
     private static final I18n i18n = I18n.get(CDoubleField.class);
 
     public CDoubleField() {
-        this(null);
-    }
-
-    public CDoubleField(String title) {
-        super(title);
+        super();
         setFormat(new IFormat<Double>() {
 
             @Override

@@ -27,12 +27,7 @@ public class CTextArea extends CTextComponent<String, NTextArea> {
     private int rows = 4;
 
     public CTextArea() {
-        this(null);
-
-    }
-
-    public CTextArea(String title) {
-        super(title);
+        super();
         NTextArea nativeTextArea = new NTextArea(this);
         nativeTextArea.setVisibleLines(getRows());
         nativeTextArea.setWidth("100%");

@@ -81,28 +81,12 @@ public class CEntityListBox<E extends IEntity> extends CListBox<E> {
         super(mode);
     }
 
-    public CEntityListBox(String title) {
-        super(title);
-    }
-
-    public CEntityListBox(String title, SelectionMode mode) {
-        super(title, mode);
-    }
-
     public CEntityListBox(Class<E> entityClass) {
-        this(null, entityClass, SelectionMode.SINGLE_PANEL);
+        this(entityClass, SelectionMode.SINGLE_PANEL);
     }
 
     public CEntityListBox(Class<E> entityClass, SelectionMode mode) {
-        this(null, entityClass, mode);
-    }
-
-    public CEntityListBox(String title, Class<E> entityClass) {
-        this(title, entityClass, SelectionMode.SINGLE_PANEL);
-    }
-
-    public CEntityListBox(String title, Class<E> entityClass, SelectionMode mode) {
-        this(title, mode);
+        this(mode);
         this.criteria = new EntityQueryCriteria<E>(entityClass);
     }
 

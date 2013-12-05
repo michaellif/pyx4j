@@ -26,12 +26,12 @@ import com.pyx4j.entity.shared.IEntity;
 
 public class CEntityHyperlink<E extends IEntity> extends CEntityLabel<E> {
 
-    protected CEntityHyperlink(String title) {
-        super(title);
+    protected CEntityHyperlink() {
+        this(null);
     }
 
-    public CEntityHyperlink(String title, Command command) {
-        this(title);
+    public CEntityHyperlink(Command command) {
+        super();
         setNavigationCommand(command);
     }
 

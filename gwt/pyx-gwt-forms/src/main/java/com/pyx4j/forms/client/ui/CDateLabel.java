@@ -15,11 +15,7 @@ import com.google.gwt.i18n.client.DateTimeFormat;
 public class CDateLabel extends CLabel<Date> {
 
     public CDateLabel() {
-        this(null);
-    }
-
-    public CDateLabel(String title) {
-        super(title);
+        super();
         setDateFormat(CDatePicker.defaultDateFormat);
     }
 

@@ -84,15 +84,11 @@ public class CEntityComboBox<E extends IEntity> extends CComboBox<E> implements 
     private TerminableHandlingCallback optionHandlingCallback = null;
 
     public CEntityComboBox(Class<E> entityClass) {
-        this(null, entityClass, (NotInOptionsPolicy) null, null);
+        this(entityClass, (NotInOptionsPolicy) null, null);
     }
 
-    public CEntityComboBox(String title, Class<E> entityClass) {
-        this(title, entityClass, (NotInOptionsPolicy) null, null);
-    }
-
-    public CEntityComboBox(String title, Class<E> entityClass, NotInOptionsPolicy policy, EntityDataSource<E> optionsDataSource) {
-        super(title, policy);
+    public CEntityComboBox(Class<E> entityClass, NotInOptionsPolicy policy, EntityDataSource<E> optionsDataSource) {
+        super(policy);
         this.criteria = new EntityQueryCriteria<E>(entityClass);
         this.optionsDataSource = optionsDataSource;
         retriveOptions(null);

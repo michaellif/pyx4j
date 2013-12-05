@@ -34,10 +34,6 @@ public abstract class CTextComponent<DATA, WIDGET extends INativeFocusComponent<
         super();
     }
 
-    public CTextComponent(String title) {
-        super(title);
-    }
-
     public void setMaxLength(int length) {
         removeValueValidator(validator);
         validator = new TextComponentLengthValidator(length);
