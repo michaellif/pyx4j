@@ -11,11 +11,15 @@
  * @author Vlad
  * @version $Id$
  */
-package com.propertyvista.portal.shared.ui;
+package com.propertyvista.portal.shared.ui.util.editors;
 
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.commons.EqualsHelper;
+import com.pyx4j.config.shared.ApplicationMode;
+import com.pyx4j.forms.client.events.DevShortcutEvent;
+import com.pyx4j.forms.client.events.DevShortcutHandler;
+import com.pyx4j.forms.client.ui.CComboBox;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.ui.CTextFieldBase;
@@ -32,9 +36,9 @@ import com.propertyvista.domain.ref.Country;
 import com.propertyvista.domain.ref.Province;
 import com.propertyvista.portal.shared.ui.util.decorators.FormWidgetDecoratorBuilder;
 
-public class PortalAddressSimpleEditor extends CEntityForm<AddressSimple> {
+public class AddressSimpleEditor extends CEntityForm<AddressSimple> {
 
-    public PortalAddressSimpleEditor() {
+    public AddressSimpleEditor() {
         super(AddressSimple.class);
     }
 
@@ -55,16 +59,15 @@ public class PortalAddressSimpleEditor extends CEntityForm<AddressSimple> {
     }
 
     @Override
-    @SuppressWarnings("unchecked")
     public void addValidations() {
         super.addValidations();
 
         CComponent<Province> province = get(proto().province());
         CComponent<Country> country = get(proto().country());
+
+        @SuppressWarnings("unchecked")
         CTextFieldBase<String, ?> postalCode = (CTextFieldBase<String, ?>) get(proto().postalCode());
-
         postalCode.setFormat(new PostalCodeFormat(new CountryContextCComponentProvider(country)));
-
         postalCode.addValueValidator(new ZipCodeValueValidator(this, proto().country()));
 
         country.addValueChangeHandler(new RevalidationTrigger<Country>(postalCode));
@@ -81,6 +84,34 @@ public class PortalAddressSimpleEditor extends CEntityForm<AddressSimple> {
                 }
             }
         });
+
+        if (ApplicationMode.isDevelopment()) {
+            this.addDevShortcutHandler(new DevShortcutHandler() {
+                @Override
+                public void onDevShortcut(DevShortcutEvent event) {
+                    if (event.getKeyCode() == 'Q') {
+                        event.consume();
+                        devGenerateAddress();
+                    }
+                }
+            });
+        }
+
     }
 
+    protected void devGenerateAddress() {
+        get(proto().street1()).setValue("100 King St. W");
+        get(proto().city()).setValue("Toronto");
+        get(proto().postalCode()).setValue("M5H 1A1");
+        ((CComboBox<?>) get(proto().province())).setValueByString("Ontario");
+
+        // invoke ancestor/outer
+        onDevGenerateAddress();
+    }
+
+    /**
+     * override in ancestor/outer class to implement some additional data generation
+     */
+    protected void onDevGenerateAddress() {
+    }
 }

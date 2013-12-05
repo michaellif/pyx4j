@@ -46,5 +46,4 @@ public interface OnlineApplicationDTO extends IEntity {
     IList<CoapplicantDTO> coapplicants();
 
     IList<GuarantorDTO> guarantors();
-
 }

@@ -68,10 +68,10 @@ import com.propertyvista.domain.tenant.lease.Tenant;
 import com.propertyvista.dto.PaymentDataDTO;
 import com.propertyvista.dto.PaymentDataDTO.PaymentSelect;
 import com.propertyvista.dto.PreauthorizedPaymentCoveredItemDTO;
-import com.propertyvista.portal.resident.ui.financial.paymentmethod.editor.PaymentMethodEditor;
 import com.propertyvista.portal.rpc.portal.resident.dto.financial.AutoPayDTO;
 import com.propertyvista.portal.shared.ui.CPortalEntityWizard;
 import com.propertyvista.portal.shared.ui.util.decorators.FormWidgetDecoratorBuilder;
+import com.propertyvista.portal.shared.ui.util.editors.PaymentMethodEditor;
 
 public class AutoPayWizard extends CPortalEntityWizard<AutoPayDTO> {
 

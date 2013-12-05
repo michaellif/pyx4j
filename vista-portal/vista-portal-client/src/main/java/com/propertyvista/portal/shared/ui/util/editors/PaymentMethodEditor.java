@@ -11,7 +11,7 @@
  * @author Dad
  * @version $Id$
  */
-package com.propertyvista.portal.resident.ui.financial.paymentmethod.editor;
+package com.propertyvista.portal.shared.ui.util.editors;
 
 import java.util.Date;
 import java.util.EnumSet;
@@ -40,7 +40,6 @@ import com.propertyvista.domain.payment.AbstractPaymentMethod;
 import com.propertyvista.domain.payment.CreditCardInfo.CreditCardType;
 import com.propertyvista.domain.payment.PaymentType;
 import com.propertyvista.portal.resident.ui.financial.PortalPaymentTypesUtil;
-import com.propertyvista.portal.shared.ui.PortalAddressSimpleEditor;
 import com.propertyvista.portal.shared.ui.util.decorators.FormWidgetDecoratorBuilder;
 
 public class PaymentMethodEditor<E extends AbstractPaymentMethod> extends com.propertyvista.common.client.ui.components.editors.payments.PaymentMethodEditor<E> {
@@ -73,7 +72,7 @@ public class PaymentMethodEditor<E extends AbstractPaymentMethod> extends com.pr
 
         content.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().sameAsCurrent())).build());
 
-        content.setWidget(++row, 0, inject(proto().billingAddress(), new PortalAddressSimpleEditor()));
+        content.setWidget(++row, 0, inject(proto().billingAddress(), new AddressSimpleEditor()));
 
         // tweaks:
         ((CComboBox<PaymentType>) get(proto().type())).setOptions(defaultPaymentTypes());

@@ -40,15 +40,15 @@ import com.propertyvista.domain.media.ProofOfEmploymentDocument;
 import com.propertyvista.domain.policy.policies.BackgroundCheckPolicy.BjccEntry;
 import com.propertyvista.domain.policy.policies.domain.IdentificationDocumentType;
 import com.propertyvista.domain.tenant.CustomerCreditCheck;
-import com.propertyvista.domain.tenant.CustomerScreeningLegalQuestions;
 import com.propertyvista.domain.tenant.CustomerCreditCheck.CreditCheckResult;
 import com.propertyvista.domain.tenant.CustomerScreening;
+import com.propertyvista.domain.tenant.CustomerScreeningLegalQuestions;
+import com.propertyvista.domain.tenant.income.CustomerScreeningIncome;
+import com.propertyvista.domain.tenant.income.CustomerScreeningPersonalAsset;
+import com.propertyvista.domain.tenant.income.CustomerScreeningPersonalAsset.AssetType;
 import com.propertyvista.domain.tenant.income.IncomeInfoEmployer;
 import com.propertyvista.domain.tenant.income.IncomeInfoSelfEmployed;
 import com.propertyvista.domain.tenant.income.IncomeSource;
-import com.propertyvista.domain.tenant.income.CustomerScreeningPersonalAsset;
-import com.propertyvista.domain.tenant.income.CustomerScreeningPersonalAsset.AssetType;
-import com.propertyvista.domain.tenant.income.CustomerScreeningIncome;
 import com.propertyvista.generator.util.CommonsGenerator;
 import com.propertyvista.generator.util.RandomUtil;
 import com.propertyvista.server.domain.ApplicationDocumentBlob;
@@ -160,7 +160,7 @@ public class ScreeningGenerator {
     public static IncomeInfoEmployer createEmployer() {
         IncomeInfoEmployer employer = EntityFactory.create(IncomeInfoEmployer.class);
 
-        employer.address().set(CommonsGenerator.createAddressStructured());
+        employer.address().set(CommonsGenerator.createAddressSimple());
 
         employer.name().setValue(RandomUtil.random(PreloadData.EMPLOYER_NAMES));
         employer.supervisorName().setValue("Mr. " + DataGenerator.randomLastName());
@@ -180,7 +180,7 @@ public class ScreeningGenerator {
     public static IncomeInfoSelfEmployed createSelfEmployed() {
         IncomeInfoSelfEmployed selfEmpl = EntityFactory.create(IncomeInfoSelfEmployed.class);
 
-        selfEmpl.address().set(CommonsGenerator.createAddressStructured());
+        selfEmpl.address().set(CommonsGenerator.createAddressSimple());
 
         selfEmpl.name().setValue(RandomUtil.random(PreloadData.EMPLOYER_NAMES));
         selfEmpl.supervisorName().setValue("Mr. " + DataGenerator.randomLastName());

@@ -35,8 +35,8 @@ import com.pyx4j.security.client.ClientContext;
 import com.propertyvista.domain.contact.AddressSimple;
 import com.propertyvista.domain.payment.InsurancePaymentMethod;
 import com.propertyvista.domain.payment.PaymentType;
-import com.propertyvista.portal.resident.ui.financial.paymentmethod.editor.PaymentMethodEditor;
 import com.propertyvista.portal.shared.ui.util.decorators.FormWidgetDecoratorBuilder;
+import com.propertyvista.portal.shared.ui.util.editors.PaymentMethodEditor;
 
 public class TenantSurePaymentMethodForm extends PaymentMethodEditor<InsurancePaymentMethod> {
 

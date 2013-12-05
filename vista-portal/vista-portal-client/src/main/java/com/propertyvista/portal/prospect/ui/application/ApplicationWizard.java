@@ -13,37 +13,56 @@
  */
 package com.propertyvista.portal.prospect.ui.application;
 
+import java.util.Date;
+
 import com.google.gwt.core.shared.GWT;
+import com.google.gwt.event.logical.shared.ValueChangeEvent;
+import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.ui.Image;
 
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.commons.css.StyleManager;
 import com.pyx4j.commons.css.ThemeColor;
+import com.pyx4j.forms.client.ui.CComponent;
+import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.ui.CEntityLabel;
 import com.pyx4j.forms.client.ui.CImage;
 import com.pyx4j.forms.client.ui.CLabel;
+import com.pyx4j.forms.client.ui.RevalidationTrigger;
 import com.pyx4j.forms.client.ui.decorators.IDecorator;
+import com.pyx4j.forms.client.ui.decorators.WidgetDecorator;
+import com.pyx4j.forms.client.ui.decorators.WidgetDecorator.Builder.Alignment;
 import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
 import com.pyx4j.forms.client.ui.wizard.WizardDecorator;
 import com.pyx4j.forms.client.ui.wizard.WizardStep;
+import com.pyx4j.forms.client.validators.EditableValueValidator;
+import com.pyx4j.forms.client.validators.ValidationError;
 import com.pyx4j.gwt.commons.ClientEventBus;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.security.shared.SecurityController;
 
 import com.propertyvista.common.client.VistaFileURLBuilder;
 import com.propertyvista.common.client.resources.VistaImages;
+import com.propertyvista.common.client.ui.components.folders.IdUploaderFolder;
+import com.propertyvista.common.client.ui.validators.FutureDateIncludeTodayValidator;
+import com.propertyvista.common.client.ui.validators.PastDateIncludeTodayValidator;
+import com.propertyvista.common.client.ui.validators.PastDateValidator;
+import com.propertyvista.common.client.ui.validators.StartEndDateValidation;
 import com.propertyvista.domain.contact.AddressStructured;
 import com.propertyvista.domain.person.Name;
 import com.propertyvista.domain.property.asset.Floorplan;
 import com.propertyvista.domain.security.PortalProspectBehavior;
 import com.propertyvista.domain.tenant.CustomerPicture;
+import com.propertyvista.misc.BusinessRules;
 import com.propertyvista.portal.prospect.events.ApplicationWizardStateChangeEvent;
 import com.propertyvista.portal.prospect.ui.application.ApplicationWizardView.ApplicationWizardPresenter;
 import com.propertyvista.portal.rpc.portal.prospect.dto.OnlineApplicationDTO;
+import com.propertyvista.portal.rpc.portal.prospect.dto.PriorAddressDTO;
 import com.propertyvista.portal.rpc.portal.resident.services.ResidentPictureUploadService;
 import com.propertyvista.portal.shared.ui.CPortalEntityWizard;
 import com.propertyvista.portal.shared.ui.EmergencyContactFolder;
 import com.propertyvista.portal.shared.ui.util.decorators.FormWidgetDecoratorBuilder;
+import com.propertyvista.portal.shared.ui.util.editors.PriorAddressEditor;
 
 public class ApplicationWizard extends CPortalEntityWizard<OnlineApplicationDTO> {
 
@@ -73,6 +92,16 @@ public class ApplicationWizard extends CPortalEntityWizard<OnlineApplicationDTO>
 
     private ApplicationWizardPresenter presenter;
 
+    private final BasicFlexFormPanel previousAddress = new BasicFlexFormPanel() {
+        @Override
+        public void setVisible(boolean visible) {
+            get(proto().applicant().previousAddress()).setVisible(visible);
+            super.setVisible(visible);
+        }
+    };
+
+    private IdUploaderFolder fileUpload;
+
     public ApplicationWizard(ApplicationWizardViewImpl view) {
         super(OnlineApplicationDTO.class, view, i18n.tr("Profile Payment Setup"), i18n.tr("Submit"), ThemeColor.contrast2);
 
@@ -101,7 +130,6 @@ public class ApplicationWizard extends CPortalEntityWizard<OnlineApplicationDTO>
             pmcCustomStep = addStep(createLegalStep());
             summaryStep = addStep(createSummaryStep());
         }
-
     }
 
     public void setPresenter(ApplicationWizardPresenter presenter) {
@@ -137,7 +165,6 @@ public class ApplicationWizard extends CPortalEntityWizard<OnlineApplicationDTO>
             panel.setH3(++row, 0, 1, i18n.tr("People"));
 
             panel.setWidget(++row, 0, inject(proto().coapplicants(), new CoapplicantsFolder((ApplicationWizardViewImpl) getView())));
-
         }
 
         return panel;
@@ -188,7 +215,6 @@ public class ApplicationWizard extends CPortalEntityWizard<OnlineApplicationDTO>
         panel.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().applicant().picture(), imageHolder)).customLabel("").build());
 
         panel.setH3(++row, 0, 1, i18n.tr("Personal Information"));
-
         panel.setWidget(++row, 0,
                 new FormWidgetDecoratorBuilder(inject(proto().applicant().person().name(), new CEntityLabel<Name>()), 200).customLabel(i18n.tr("Full Name"))
                         .build());
@@ -196,13 +222,14 @@ public class ApplicationWizard extends CPortalEntityWizard<OnlineApplicationDTO>
         panel.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().applicant().person().sex()), 100).build());
 
         panel.setH3(++row, 0, 1, i18n.tr("Contact Information"));
-        panel.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().applicant().person().homePhone()), 200).build());
-        panel.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().applicant().person().mobilePhone()), 200).build());
-        panel.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().applicant().person().workPhone()), 200).build());
+        panel.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().applicant().person().homePhone()), 180).build());
+        panel.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().applicant().person().mobilePhone()), 180).build());
+        panel.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().applicant().person().workPhone()), 180).build());
         panel.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().applicant().person().email()), 230).build());
 
         panel.setH3(++row, 0, 1, i18n.tr("Secure Information"));
         panel.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().applicant().person().birthDate()), 150).build());
+        panel.setWidget(++row, 0, 2, inject(proto().applicant().documents(), fileUpload = new IdUploaderFolder()));
 
         return panel;
     }
@@ -210,21 +237,42 @@ public class ApplicationWizard extends CPortalEntityWizard<OnlineApplicationDTO>
     private BasicFlexFormPanel createPersonalInfoBStep() {
         BasicFlexFormPanel panel = new BasicFlexFormPanel(i18n.tr("Additional Info"));
         int row = -1;
+
         panel.setH1(++row, 0, 1, panel.getTitle());
 
         panel.setH3(++row, 0, 1, i18n.tr("Additional Personal Information"));
 
         panel.setH3(++row, 0, 1, i18n.tr("Current Address"));
+        panel.setWidget(++row, 0, inject(proto().applicant().currentAddress(), new PriorAddressEditor()));
 
-        panel.setH3(++row, 0, 1, i18n.tr("Previous Address"));
+        previousAddress.setH3(++row, 0, 1, i18n.tr("Previous Address"));
+        previousAddress.setWidget(1, 0, inject(proto().applicant().previousAddress(), new PriorAddressEditor()));
+        panel.setWidget(++row, 0, previousAddress);
 
         panel.setH3(++row, 0, 1, i18n.tr("Vehicles"));
 
         panel.setH3(++row, 0, 1, i18n.tr("General Questions"));
+        panel.setWidget(++row, 0, decorateLegalQuestion(inject(proto().applicant().legalQuestions().suedForRent())));
+        panel.setHR(++row, 0, 1);
+        panel.setWidget(++row, 0, decorateLegalQuestion(inject(proto().applicant().legalQuestions().suedForDamages())));
+        panel.setHR(++row, 0, 1);
+        panel.setWidget(++row, 0, decorateLegalQuestion(inject(proto().applicant().legalQuestions().everEvicted())));
+        panel.setHR(++row, 0, 1);
+        panel.setWidget(++row, 0, decorateLegalQuestion(inject(proto().applicant().legalQuestions().defaultedOnLease())));
+        panel.setHR(++row, 0, 1);
+        panel.setWidget(++row, 0, decorateLegalQuestion(inject(proto().applicant().legalQuestions().convictedOfFelony())));
+        panel.setHR(++row, 0, 1);
+        panel.setWidget(++row, 0, decorateLegalQuestion(inject(proto().applicant().legalQuestions().legalTroubles())));
+        panel.setHR(++row, 0, 1);
+        panel.setWidget(++row, 0, decorateLegalQuestion(inject(proto().applicant().legalQuestions().filedBankruptcy())));
 
         panel.setH3(++row, 0, 1, i18n.tr("How Did You Hear About Us?"));
 
         return panel;
+    }
+
+    private WidgetDecorator decorateLegalQuestion(CComponent<?> comp) {
+        return new FormWidgetDecoratorBuilder(comp, 400, 70, 70).labelAlignment(Alignment.left).useLabelSemicolon(false).build();
     }
 
     private BasicFlexFormPanel createFinancialStep() {
@@ -275,6 +323,89 @@ public class ApplicationWizard extends CPortalEntityWizard<OnlineApplicationDTO>
     @Override
     protected IDecorator<?> createDecorator() {
         return new ApplicationWizardDecorator();
+    }
+
+    @Override
+    public void addValidations() {
+        super.addValidations();
+
+        // ------------------------------------------------------------------------------------------------
+        // PersonalInfoBStep:
+
+        CEntityForm<PriorAddressDTO> currentAddressForm = ((CEntityForm<PriorAddressDTO>) get(proto().applicant().currentAddress()));
+        CEntityForm<PriorAddressDTO> previousAddressForm = ((CEntityForm<PriorAddressDTO>) get(proto().applicant().previousAddress()));
+
+        CComponent<LogicalDate> c1 = currentAddressForm.get(currentAddressForm.proto().moveInDate());
+        CComponent<LogicalDate> c2 = currentAddressForm.get(currentAddressForm.proto().moveOutDate());
+        CComponent<LogicalDate> p1 = previousAddressForm.get(previousAddressForm.proto().moveInDate());
+        CComponent<LogicalDate> p2 = previousAddressForm.get(previousAddressForm.proto().moveOutDate());
+
+        currentAddressForm.get(currentAddressForm.proto().moveInDate()).addValueChangeHandler(new ValueChangeHandler<LogicalDate>() {
+            @Override
+            public void onValueChange(ValueChangeEvent<LogicalDate> event) {
+                enablePreviousAddress();
+            }
+        });
+
+        p1.addValueValidator(new PastDateValidator());
+        c1.addValueValidator(new PastDateIncludeTodayValidator());
+        c2.addValueValidator(new FutureDateIncludeTodayValidator());
+
+        new StartEndDateValidation(c1, c2);
+        new StartEndDateValidation(p1, p2);
+        StartEndDateWithinMonth(c1, p2, i18n.tr("Current Move In Date Should Be Within 30 Days Of Previous Move Out Date"));
+        StartEndDateWithinMonth(p2, c1, i18n.tr("Current Move In Date Should Be Within 30 Days Of Previous Move Out Date"));
+
+        previousAddressForm.get(previousAddressForm.proto().moveInDate()).addValueChangeHandler(
+                new RevalidationTrigger<LogicalDate>(previousAddressForm.get(previousAddressForm.proto().moveOutDate())));
+
+        previousAddressForm.get(previousAddressForm.proto().moveInDate()).addValueChangeHandler(
+                new RevalidationTrigger<LogicalDate>(currentAddressForm.get(currentAddressForm.proto().moveInDate())));
+
+        currentAddressForm.get(currentAddressForm.proto().moveInDate()).addValueChangeHandler(
+                new RevalidationTrigger<LogicalDate>(previousAddressForm.get(previousAddressForm.proto().moveInDate())));
+
+        previousAddressForm.get(previousAddressForm.proto().moveOutDate()).addValueChangeHandler(
+                new RevalidationTrigger<LogicalDate>(currentAddressForm.get(currentAddressForm.proto().moveInDate())));
+
+        currentAddressForm.get(currentAddressForm.proto().moveInDate()).addValueChangeHandler(
+                new RevalidationTrigger<LogicalDate>(previousAddressForm.get(previousAddressForm.proto().moveOutDate())));
+
+        previousAddressForm.get(previousAddressForm.proto().moveOutDate()).addValueChangeHandler(
+                new RevalidationTrigger<LogicalDate>(previousAddressForm.get(previousAddressForm.proto().moveInDate())));
+
+        // ------------------------------------------------------------------------------------------------
+    }
+
+    @Override
+    protected void onValueSet(boolean populate) {
+        super.onValueSet(populate);
+
+        if (isEditable()) {
+            fileUpload.setParentEntity(getValue());
+        }
+
+        enablePreviousAddress();
+    }
+
+    private void enablePreviousAddress() {
+        previousAddress.setVisible(BusinessRules.infoPageNeedPreviousAddress(getValue().applicant().currentAddress().moveInDate().getValue()));
+    }
+
+    private void StartEndDateWithinMonth(final CComponent<LogicalDate> value1, final CComponent<LogicalDate> value2, final String message) {
+        value1.addValueValidator(new EditableValueValidator<LogicalDate>() {
+            @Override
+            public ValidationError isValid(CComponent<LogicalDate> component, LogicalDate value) {
+                if (getValue() == null || getValue().isEmpty() || value2.getValue() == null) {
+                    return null;
+                }
+
+                Date date = value2.getValue();
+                long limit1 = date.getTime() + 2678400000L; //limits date1 to be within a month of date2
+                long limit2 = date.getTime() - 2678400000L;
+                return (date == null || (value.getTime() > limit2 && value.getTime() < limit1)) ? null : new ValidationError(component, message);
+            }
+        });
     }
 
     @Override

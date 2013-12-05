@@ -23,9 +23,9 @@ import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.domain.payment.CreditCardInfo.CreditCardType;
 import com.propertyvista.domain.payment.LeasePaymentMethod;
-import com.propertyvista.portal.resident.ui.financial.paymentmethod.editor.PaymentMethodEditor;
 import com.propertyvista.portal.rpc.portal.resident.dto.financial.PaymentMethodDTO;
 import com.propertyvista.portal.shared.ui.CPortalEntityEditor;
+import com.propertyvista.portal.shared.ui.util.editors.PaymentMethodEditor;
 
 public class PaymentMethodViewForm extends CPortalEntityEditor<PaymentMethodDTO> {
 

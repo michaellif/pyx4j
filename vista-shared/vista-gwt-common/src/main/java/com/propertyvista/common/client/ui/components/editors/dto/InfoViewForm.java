@@ -34,7 +34,6 @@ import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.security.shared.SecurityController;
 
 import com.propertyvista.common.client.ui.components.VistaEditorsComponentFactory;
-import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
 import com.propertyvista.common.client.ui.components.editors.NameEditor;
 import com.propertyvista.common.client.ui.components.editors.PriorAddressEditor;
 import com.propertyvista.common.client.ui.components.folders.EmergencyContactFolder;
@@ -50,7 +49,7 @@ import com.propertyvista.domain.tenant.EmergencyContact;
 import com.propertyvista.dto.TenantInfoDTO;
 import com.propertyvista.misc.BusinessRules;
 
-public class InfoViewForm extends CEntityDecoratableForm<TenantInfoDTO> {
+public class InfoViewForm extends CEntityForm<TenantInfoDTO> {
 
     private static final I18n i18n = I18n.get(InfoViewForm.class);
 

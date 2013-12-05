@@ -22,12 +22,12 @@ import com.pyx4j.forms.client.events.DevShortcutEvent;
 import com.pyx4j.forms.client.events.DevShortcutHandler;
 import com.pyx4j.forms.client.ui.CComboBox;
 import com.pyx4j.forms.client.ui.CComponent;
+import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.ui.CTextFieldBase;
 import com.pyx4j.forms.client.ui.OptionsFilter;
 import com.pyx4j.forms.client.ui.RevalidationTrigger;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 
-import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
 import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
 import com.propertyvista.common.client.ui.validators.ProvinceContryFilters;
 import com.propertyvista.common.client.ui.validators.ZipCodeValueValidator;
@@ -37,7 +37,7 @@ import com.propertyvista.domain.contact.AddressStructured.StreetType;
 import com.propertyvista.domain.ref.Country;
 import com.propertyvista.domain.ref.Province;
 
-public abstract class AddressStructuredEditorImpl<A extends AddressStructured> extends CEntityDecoratableForm<A> {
+public abstract class AddressStructuredEditorImpl<A extends AddressStructured> extends CEntityForm<A> {
 
     private final boolean showUnit;
 

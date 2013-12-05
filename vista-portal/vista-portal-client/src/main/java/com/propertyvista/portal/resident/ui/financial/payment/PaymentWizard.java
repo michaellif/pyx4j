@@ -79,13 +79,13 @@ import com.propertyvista.domain.person.Person;
 import com.propertyvista.dto.PaymentDataDTO.PaymentSelect;
 import com.propertyvista.dto.payment.ConvenienceFeeCalculationResponseTO;
 import com.propertyvista.portal.resident.ui.financial.PortalPaymentTypesUtil;
-import com.propertyvista.portal.resident.ui.financial.paymentmethod.editor.PaymentMethodEditor;
 import com.propertyvista.portal.rpc.portal.resident.dto.financial.PaymentConvenienceFeeDTO;
 import com.propertyvista.portal.rpc.portal.resident.dto.financial.PaymentDTO;
 import com.propertyvista.portal.shared.resources.PortalImages;
 import com.propertyvista.portal.shared.ui.CPortalEntityWizard;
 import com.propertyvista.portal.shared.ui.IWizardView;
 import com.propertyvista.portal.shared.ui.util.decorators.FormWidgetDecoratorBuilder;
+import com.propertyvista.portal.shared.ui.util.editors.PaymentMethodEditor;
 
 public class PaymentWizard extends CPortalEntityWizard<PaymentDTO> {
 

@@ -37,6 +37,7 @@ import com.propertyvista.common.client.resources.VistaImages;
 import com.propertyvista.domain.person.Name;
 import com.propertyvista.domain.tenant.EmergencyContact;
 import com.propertyvista.portal.shared.ui.util.decorators.FormWidgetDecoratorBuilder;
+import com.propertyvista.portal.shared.ui.util.editors.AddressSimpleEditor;
 
 public class EmergencyContactFolder extends CEntityFolder<EmergencyContact> {
 
@@ -102,7 +103,7 @@ public class EmergencyContactFolder extends CEntityFolder<EmergencyContact> {
             mainPanel.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().mobilePhone()), 200).build());
             mainPanel.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().workPhone()), 200).build());
 
-            mainPanel.setWidget(++row, 0, inject(proto().address(), new PortalAddressSimpleEditor()));
+            mainPanel.setWidget(++row, 0, inject(proto().address(), new AddressSimpleEditor()));
 
             calculateFieldsStatus();
 

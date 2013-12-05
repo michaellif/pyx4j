@@ -21,7 +21,7 @@ import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
 
-import com.propertyvista.domain.PriorAddress;
+import com.propertyvista.domain.media.IdentificationDocument;
 import com.propertyvista.domain.person.Person;
 import com.propertyvista.domain.tenant.CustomerPicture;
 import com.propertyvista.domain.tenant.CustomerScreeningLegalQuestions;
@@ -36,11 +36,13 @@ public interface ApplicantDTO extends IEntity {
 
     CustomerPicture picture();
 
-    PriorAddress currentAddress();
+    IList<IdentificationDocument> documents();
+
+    PriorAddressDTO currentAddress();
+
+    PriorAddressDTO previousAddress();
 
     IList<EmergencyContact> emergencyContacts();
-
-    PriorAddress previousAddress();
 
     @Owned
     @Caption(name = "General Questions")
@@ -58,5 +60,4 @@ public interface ApplicantDTO extends IEntity {
     @Detached
     @Length(3)
     IList<CustomerScreeningPersonalAsset> assets();
-
 }
