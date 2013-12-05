@@ -38,7 +38,7 @@ public class NSignature extends NTextFieldBase<Boolean, SignaturePanel, CSignatu
 
     @Override
     protected SignaturePanel createEditor() {
-        return null;
+        return new SignaturePanel();
     }
 
 }

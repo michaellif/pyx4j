@@ -20,10 +20,21 @@
  */
 package com.pyx4j.forms.client.ui;
 
+
 public class CSignature extends CTextFieldBase<Boolean, NSignature> {
 
     public enum SignatureType {
         FullName, Initials, AgreeBox, AgreeBoxAndFullName
+    }
+
+    public CSignature() {
+        this(null);
+    }
+
+    public CSignature(String title) {
+        super(title);
+        setNativeWidget(new NSignature(this));
+        asWidget().setWidth("100%");
     }
 
 }
