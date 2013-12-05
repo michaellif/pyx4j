@@ -61,6 +61,7 @@ import com.propertyvista.domain.policy.policies.LeaseBillingPolicy;
 import com.propertyvista.domain.policy.policies.LeaseTerminationPolicy;
 import com.propertyvista.domain.policy.policies.LegalDocumentation;
 import com.propertyvista.domain.policy.policies.N4Policy;
+import com.propertyvista.domain.policy.policies.OnlineApplicationPolicy;
 import com.propertyvista.domain.policy.policies.PaymentTypeSelectionPolicy;
 import com.propertyvista.domain.policy.policies.PetPolicy;
 import com.propertyvista.domain.policy.policies.ProductTaxPolicy;
@@ -168,6 +169,7 @@ public class CrmEntityMapper {
         AppPlaceEntityMapper.register(LeaseAdjustmentPolicy.class, Administration.Policies.LeaseAdjustment.class, defaultImage);
         AppPlaceEntityMapper.register(LeaseTerminationPolicy.class, Administration.Policies.LeaseTermination.class, defaultImage);
         AppPlaceEntityMapper.register(LeaseBillingPolicy.class, Administration.Policies.Billing.class, defaultImage);
+        AppPlaceEntityMapper.register(OnlineApplicationPolicy.class, Administration.Policies.OnlineApplication.class, defaultImage);
         AppPlaceEntityMapper.register(LegalDocumentation.class, Administration.Policies.LegalDocumentation.class, defaultImage);
         AppPlaceEntityMapper.register(N4Policy.class, Administration.Policies.N4.class, defaultImage);
         AppPlaceEntityMapper.register(DatesPolicy.class, Administration.Policies.Dates.class, defaultImage);

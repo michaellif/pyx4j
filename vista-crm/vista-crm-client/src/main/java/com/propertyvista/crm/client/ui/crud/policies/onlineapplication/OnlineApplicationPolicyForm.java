@@ -48,8 +48,13 @@ public class OnlineApplicationPolicyForm extends PolicyDTOTabPanelBasedForm<Onli
     private TwoColumnFlexFormPanel createPaymentAuthorizationPanel() {
         TwoColumnFlexFormPanel container = new TwoColumnFlexFormPanel(i18n.tr("Legal Tab"));
         int row = -1;
+
+        container.setH1(++row, 0, 2, proto().customLegalTabTitle().getMeta().getCaption());
         container.setWidget(++row, 0, 2, inject(proto().customLegalTabTitle(), new LegalTabTitleFolder(isEditable())));
+
+        container.setH1(++row, 0, 2, proto().terms().getMeta().getCaption());
         container.setWidget(++row, 0, 2, inject(proto().terms(), new LegalTermFolder(isEditable())));
+
         return container;
     }
 
@@ -78,7 +83,10 @@ public class OnlineApplicationPolicyForm extends PolicyDTOTabPanelBasedForm<Onli
                 TwoColumnFlexFormPanel main = new TwoColumnFlexFormPanel();
                 int row = -1;
 
-                main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().content(), new LegalTermContentFolder(isEditable()))).build());
+                main.setH1(++row, 0, 2, proto().content().getMeta().getCaption());
+                main.setWidget(++row, 0, 2, inject(proto().content(), new LegalTermContentFolder(isEditable())));
+
+                main.setH1(++row, 0, 2, proto().signatureType().getMeta().getCaption());
                 main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().signatureType(), new CSignature())).build());
 
                 return main;

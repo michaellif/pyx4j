@@ -208,6 +208,9 @@ import com.propertyvista.crm.client.activity.policies.misc.DatesPolicyViewerActi
 import com.propertyvista.crm.client.activity.policies.n4.N4PolicyEditorActivity;
 import com.propertyvista.crm.client.activity.policies.n4.N4PolicyListerActivity;
 import com.propertyvista.crm.client.activity.policies.n4.N4PolicyViewerActivity;
+import com.propertyvista.crm.client.activity.policies.onlineapplication.OnlineApplicationPolicyEditorActivity;
+import com.propertyvista.crm.client.activity.policies.onlineapplication.OnlineApplicationPolicyListerActivity;
+import com.propertyvista.crm.client.activity.policies.onlineapplication.OnlineApplicationPolicyViewerActivity;
 import com.propertyvista.crm.client.activity.policies.paymenttypeselection.PaymentTypeSelectionPolicyEditorActivity;
 import com.propertyvista.crm.client.activity.policies.paymenttypeselection.PaymentTypeSelectionPolicyListerActivity;
 import com.propertyvista.crm.client.activity.policies.paymenttypeselection.PaymentTypeSelectionPolicyViewerActivity;
@@ -1020,6 +1023,19 @@ public class ContentActivityMapper implements AppActivityMapper {
                             break;
                         case viewer:
                             activity = new ApplicationDocumentationPolicyViewerActivity(crudPlace);
+                            break;
+                        }
+
+                    } else if (crudPlace instanceof Administration.Policies.OnlineApplication) {
+                        switch (crudPlace.getType()) {
+                        case lister:
+                            activity = new OnlineApplicationPolicyListerActivity(crudPlace);
+                            break;
+                        case editor:
+                            activity = new OnlineApplicationPolicyEditorActivity(crudPlace);
+                            break;
+                        case viewer:
+                            activity = new OnlineApplicationPolicyViewerActivity(crudPlace);
                             break;
                         }
 
