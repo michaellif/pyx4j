@@ -13,10 +13,16 @@
  */
 package com.propertyvista.crm.rpc.services.selections;
 
+import java.util.Vector;
+
+import com.google.gwt.user.client.rpc.AsyncCallback;
+
 import com.pyx4j.entity.rpc.AbstractListService;
+import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 
 import com.propertyvista.domain.property.asset.building.Building;
 
 public interface SelectBuildingListService extends AbstractListService<Building> {
 
+    void getAll(AsyncCallback<Vector<Building>> callback, EntityQueryCriteria<Building> criteria);
 }

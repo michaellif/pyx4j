@@ -38,6 +38,7 @@ import com.pyx4j.widgets.client.Button;
 import com.pyx4j.widgets.client.actionbar.Toolbar;
 
 import com.propertyvista.crm.client.ui.tools.financial.moneyin.datagrid.MoneyInCandidateDataGrid;
+import com.propertyvista.crm.client.ui.tools.financial.moneyin.forms.MoneyInCandidateSearchCriteriaForm;
 import com.propertyvista.crm.rpc.dto.financial.autopayreview.moneyin.MoneyInCandidateDTO;
 
 public class MoneyInCreateBatchViewImpl extends AbstractPrimePane implements MoneyInCreateBatchView {
@@ -179,8 +180,11 @@ public class MoneyInCreateBatchViewImpl extends AbstractPrimePane implements Mon
         formHolderPanel.getElement().getStyle().setTextAlign(TextAlign.CENTER);
         formHolderPanel.add(new HTML(i18n.tr("Here will be a form with search criteria")));
 
-        searchBar.add(formHolderPanel);
-        searchBar.setWidgetTopBottom(formHolderPanel, 0, Unit.PX, 31, Unit.PX);
+        MoneyInCandidateSearchCriteriaForm searchForm = new MoneyInCandidateSearchCriteriaForm();
+        searchForm.initContent();
+
+        searchBar.add(searchForm);
+        searchBar.setWidgetTopBottom(searchForm, 0, Unit.PX, 31, Unit.PX);
 
         Toolbar searchToolbar = new Toolbar();
         Button searchButton = new Button(i18n.tr("Search"), new Command() {

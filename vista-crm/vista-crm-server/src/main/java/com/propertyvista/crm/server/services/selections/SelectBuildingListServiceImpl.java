@@ -13,7 +13,14 @@
  */
 package com.propertyvista.crm.server.services.selections;
 
+import java.util.Vector;
+
+import com.google.gwt.user.client.rpc.AsyncCallback;
+
 import com.pyx4j.entity.server.AbstractListServiceImpl;
+import com.pyx4j.entity.server.Persistence;
+import com.pyx4j.entity.shared.AttachLevel;
+import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 
 import com.propertyvista.crm.rpc.services.selections.SelectBuildingListService;
 import com.propertyvista.domain.property.asset.building.Building;
@@ -28,5 +35,10 @@ public class SelectBuildingListServiceImpl extends AbstractListServiceImpl<Build
     protected void bind() {
         bind(toProto.id(), boProto.id());
         bindCompleteObject();
+    }
+
+    @Override
+    public void getAll(AsyncCallback<Vector<Building>> callback, EntityQueryCriteria<Building> criteria) {
+        callback.onSuccess(new Vector<Building>(Persistence.secureQuery(criteria, AttachLevel.ToStringMembers)));
     }
 }
