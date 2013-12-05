@@ -26,6 +26,6 @@ public class HeaderActivityMapper implements ActivityMapper {
 
     @Override
     public Activity getActivity(Place place) {
-        return new HeaderActivity(place);
+        return HeaderActivity.instance();
     }
 }

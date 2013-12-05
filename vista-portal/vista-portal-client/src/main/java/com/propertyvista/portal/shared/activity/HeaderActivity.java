@@ -14,9 +14,9 @@
 package com.propertyvista.portal.shared.activity;
 
 import com.google.gwt.activity.shared.AbstractActivity;
+import com.google.gwt.activity.shared.Activity;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.shared.EventBus;
-import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
@@ -32,7 +32,9 @@ public class HeaderActivity extends AbstractActivity {
 
     private final PortalContentService service;
 
-    public HeaderActivity(Place place) {
+    private static final HeaderActivity instance = new HeaderActivity();
+
+    private HeaderActivity() {
         view = PortalSite.getViewFactory().getView(HeaderView.class);
         service = GWT.<PortalContentService> create(PortalContentService.class);
         service.getPortalContent(new DefaultAsyncCallback<PortalContentDTO>() {
@@ -48,4 +50,7 @@ public class HeaderActivity extends AbstractActivity {
         panel.setWidget(view);
     }
 
+    public static Activity instance() {
+        return instance;
+    }
 }
