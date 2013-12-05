@@ -15,18 +15,14 @@ package com.propertyvista.portal.resident.ui.services.insurance;
 
 import java.math.BigDecimal;
 
-import com.google.gwt.user.client.Command;
-
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.commons.css.ThemeColor;
 import com.pyx4j.forms.client.ui.CComponent;
-import com.pyx4j.forms.client.ui.CEntityLabel;
 import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
 import com.pyx4j.forms.client.validators.ValidationError;
 import com.pyx4j.i18n.shared.I18n;
 
-import com.propertyvista.domain.tenant.Customer;
 import com.propertyvista.domain.tenant.lease.Tenant;
 import com.propertyvista.portal.rpc.portal.resident.dto.insurance.GeneralInsurancePolicyDTO;
 import com.propertyvista.portal.shared.ui.CPortalEntityWizard;
@@ -44,45 +40,22 @@ public class GeneralPolicyUploadWizard extends CPortalEntityWizard<GeneralInsura
 
     private BigDecimal minRequiredLiability;
 
-    private final boolean displayTenantOwner;
-
-    private final TenantOwnerClickHandler tenantOwnerClickHandler;
-
     /**
      * @param displayTenantOwner
      *            display the owners name (if true then populated insurance certificated entity <b>must</b> have the tenant.customer.person() name)
      * @param tenantOwnerClickHandler
      *            a handler for tenantOwner click (if not null will render tenant's name as a hyperlink that execs this handler on click)
      */
-    public GeneralPolicyUploadWizard(GeneralPolicyUploadWizardView view, boolean displayTenantOwner, TenantOwnerClickHandler tenantOwnerClickHandler) {
+    public GeneralPolicyUploadWizard(GeneralPolicyUploadWizardView view) {
         super(GeneralInsurancePolicyDTO.class, view, i18n.tr("Insurance Certificate"), i18n.tr("Submit"), ThemeColor.contrast3);
         this.minRequiredLiability = null;
-        this.displayTenantOwner = displayTenantOwner;
-        this.tenantOwnerClickHandler = tenantOwnerClickHandler;
 
         addStep(createDetailsStep());
     }
 
-    public GeneralPolicyUploadWizard(GeneralPolicyUploadWizardView view) {
-        this(view, false, null);
-
-    }
-
     public BasicFlexFormPanel createDetailsStep() {
-        BasicFlexFormPanel contentPanel = new BasicFlexFormPanel(); // TODO the only reason its a field is to set a proper caption for the insurance certificate folder
+        BasicFlexFormPanel contentPanel = new BasicFlexFormPanel();
         int row = -1;
-        if (displayTenantOwner) {
-            CEntityLabel<Customer> comp = new CEntityLabel<Customer>(i18n.tr("Tenant"));
-            if (tenantOwnerClickHandler != null) {
-                comp.setNavigationCommand(new Command() {
-                    @Override
-                    public void execute() {
-                        //TODO     UploadSertificateWizard.this.tenantOwnerClickHandler.onTenantOwnerClicked(getValue().tenant().<Tenant> createIdentityStub());
-                    }
-                });
-            }
-            //TODO    contentPanel.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().tenant(), comp), 150).build());
-        }
 
         contentPanel.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().certificate().insuranceProvider()), 150).mockValue("Insurance Provider")
                 .build());
