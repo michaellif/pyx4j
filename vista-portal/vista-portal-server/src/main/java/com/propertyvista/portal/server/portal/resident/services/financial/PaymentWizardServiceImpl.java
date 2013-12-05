@@ -41,6 +41,7 @@ import com.propertyvista.domain.payment.LeasePaymentMethod;
 import com.propertyvista.domain.payment.PaymentType;
 import com.propertyvista.domain.security.common.VistaApplication;
 import com.propertyvista.domain.tenant.lease.Lease;
+import com.propertyvista.domain.util.DomainUtil;
 import com.propertyvista.dto.payment.ConvenienceFeeCalculationResponseTO;
 import com.propertyvista.portal.rpc.portal.resident.dto.financial.PaymentConvenienceFeeDTO;
 import com.propertyvista.portal.rpc.portal.resident.dto.financial.PaymentDTO;
@@ -158,7 +159,8 @@ public class PaymentWizardServiceImpl extends AbstractCrudServiceDtoImpl<Payment
             CreditCardType ccType = to.paymentMethod().details().<CreditCardInfo> cast().cardType().getValue();
             if (ServerSideFactory.create(PaymentFacade.class).getConvenienceFeeApplicableCardTypes(lease.billingAccount(), VistaApplication.resident)
                     .contains(ccType)) {
-                result = ServerSideFactory.create(PaymentFacade.class).getConvenienceFee(lease.billingAccount(), ccType, to.amount().getValue());
+                result = ServerSideFactory.create(PaymentFacade.class).getConvenienceFee(lease.billingAccount(), ccType,
+                        DomainUtil.roundMoney(to.amount().getValue()));
             }
         }
         callback.onSuccess(result);

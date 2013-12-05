@@ -28,6 +28,7 @@ import com.pyx4j.entity.server.Executable;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.server.TransactionScopeOption;
 import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.essentials.server.dev.DataDump;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.biz.financial.payment.CreditCardFacade.ReferenceNumberPrefix;
@@ -222,11 +223,14 @@ class CreditCardProcessor {
 
         request.paymentInstrument().set(createPaymentInstrument(cc));
 
+        log.debug("ccPayment transaction #{} ${} ConvenienceFee #{} ${}", request.referenceNumber(), request.amount(), request.convenienceFeeReferenceNumber(),
+                request.convenienceFee());
+
         PaymentResponse response = getPaymentProcessor().realTimeSale(merchant, request);
         if (response.success().getValue()) {
-            log.debug("ccPayment transaction accepted {}", response);
+            log.debug("ccPayment transaction accepted {}", DataDump.xmlStringView(response));
         } else {
-            log.debug("ccPayment transaction rejected {}", response);
+            log.debug("ccPayment transaction rejected {}", DataDump.xmlStringView(response));
         }
         return createResponse(response);
     }
@@ -242,11 +246,14 @@ class CreditCardProcessor {
         request.convenienceFee().setValue(convenienceFee);
         request.convenienceFeeReferenceNumber().setValue(convenienceFeeReferenceNumber);
 
+        log.debug("ccPayment voidTransaction #{} ${} ConvenienceFee #{} ${}", request.referenceNumber(), request.amount(),
+                request.convenienceFeeReferenceNumber(), request.convenienceFee());
+
         PaymentResponse response = getPaymentProcessor().voidTransaction(merchant, request);
         if (response.success().getValue()) {
-            log.debug("ccPayment transaction accepted {}", response);
+            log.debug("ccPayment voidTransaction accepted {}", DataDump.xmlStringView(response));
         } else {
-            log.debug("ccPayment transaction rejected {}", response);
+            log.debug("ccPayment voidTransaction rejected {}", DataDump.xmlStringView(response));
         }
         return createResponse(response);
     }
@@ -272,10 +279,10 @@ class CreditCardProcessor {
 
         PaymentResponse response = getPaymentProcessor().realTimePreAuthorization(merchant, request);
         if (response.success().getValue()) {
-            log.debug("ccTransaction accepted {}", response);
+            log.debug("ccTransaction accepted {}", DataDump.xmlStringView(response));
             return response.authorizationNumber().getValue();
         } else {
-            log.debug("ccTransaction rejected {}", response);
+            log.debug("ccTransaction rejected {}", DataDump.xmlStringView(response));
             throw new UserRuntimeException(i18n.tr("Credit Card Authorization failed {0}", response.message()));
         }
     }
@@ -291,9 +298,9 @@ class CreditCardProcessor {
 
         PaymentResponse response = getPaymentProcessor().realTimePreAuthorizationReversal(merchant, request);
         if (response.success().getValue()) {
-            log.debug("ccTransaction accepted {}", response);
+            log.debug("ccTransaction accepted {}", DataDump.xmlStringView(response));
         } else {
-            log.debug("ccTransaction rejected {}", response);
+            log.debug("ccTransaction rejected {}", DataDump.xmlStringView(response));
             throw new UserRuntimeException(i18n.tr("Credit Card Pre-authorization reversal failed {0}", response.message()));
         }
     }
@@ -310,10 +317,10 @@ class CreditCardProcessor {
 
         PaymentResponse response = getPaymentProcessor().realTimePreAuthorizationCompletion(merchant, request);
         if (response.success().getValue()) {
-            log.debug("ccTransaction accepted {}", response);
+            log.debug("ccTransaction accepted {}", DataDump.xmlStringView(response));
             return response.authorizationNumber().getValue();
         } else {
-            log.debug("ccTransaction rejected {}", response);
+            log.debug("ccTransaction rejected {}", DataDump.xmlStringView(response));
             throw new UserRuntimeException(i18n.tr("Credit Card Payment failed {0}", response.message()));
         }
     }
@@ -344,6 +351,8 @@ class CreditCardProcessor {
 
         request.referenceNumber().setValue(referenceNumber);
 
+        log.debug("get ConvenienceFee #{} {} ${}", request.referenceNumber(), request.cardType(), request.amount());
+
         FeeCalulationResponse response = getPaymentProcessor().getConvenienceFee(merchant, request);
 
         transactionRecord.feeResponseCode().setValue(response.code().getValue());
@@ -359,7 +368,7 @@ class CreditCardProcessor {
         });
 
         if (response.success().getValue()) {
-            log.debug("fee calculated {}", response);
+            log.debug("ConvenienceFee #{} calculated {}", request.referenceNumber(), DataDump.xmlStringView(response));
 
             ConvenienceFeeCalculationResponseTO to = EntityFactory.create(ConvenienceFeeCalculationResponseTO.class);
             to.transactionNumber().setValue(referenceNumber);
@@ -368,7 +377,7 @@ class CreditCardProcessor {
             to.total().setValue(response.totalAmount().getValue());
             return to;
         } else {
-            log.debug("cc Fee Calculation rejected {}", response);
+            log.debug("ConvenienceFee Calculation #{} rejected {} {}", request.referenceNumber(), response.code(), response.message());
             throw new UserRuntimeException(i18n.tr("Card Fee Calculation failed {0}", response.message()));
         }
     }

@@ -13,9 +13,12 @@
  */
 package com.propertyvista.payment.caledon;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.lang.reflect.Field;
 import java.net.HttpURLConnection;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -35,6 +38,7 @@ import org.slf4j.LoggerFactory;
 
 import com.pyx4j.config.server.ServerSideConfiguration;
 import com.pyx4j.essentials.j2se.HostConfig.ProxyConfig;
+import com.pyx4j.gwt.server.IOUtils;
 
 import com.propertyvista.config.AbstractVistaServerSideConfiguration;
 import com.propertyvista.config.SystemConfig;
@@ -45,7 +49,7 @@ public class CaledonHttpClientFee {
 
     private final static Logger log = LoggerFactory.getLogger(CaledonHttpClientFee.class);
 
-    private final String urlProd = "https://portal.caledoncard.com/convfee/";
+    private final String urlProd = "https://portal.caledoncard.com/convfee_testing/";
 
     public CaledonFeeCalulationResponse transaction(CaledonFeeCalulationRequest request) {
         return transaction(request, new CaledonFeeCalulationResponse());
@@ -89,13 +93,24 @@ public class CaledonHttpClientFee {
             if (httpResponseCode != HttpURLConnection.HTTP_OK) {
                 throw new PaymentProcessingException("Unexpected server response " + httpResponseCode);
             }
-            return buildResponse(httpMethod.getResponseBodyAsString(), responseInstance);
+            return buildResponse(getResponseBodyAsString(httpMethod), responseInstance);
         } catch (HttpException e) {
             log.error("transaction protocol error", e);
             throw new PaymentProcessingException("Protocol error occurs", e);
         } catch (IOException e) {
             log.error("transaction transport error", e);
             throw new PaymentProcessingException("Transport error occurs", e);
+        }
+    }
+
+    private String getResponseBodyAsString(PostMethod httpMethod) throws IOException {
+        InputStream in = httpMethod.getResponseBodyAsStream();
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+        try {
+            IOUtils.copyStream(in, out, 1024);
+            return out.toString(StandardCharsets.UTF_8.name());
+        } finally {
+            IOUtils.closeQuietly(in);
         }
     }
 
@@ -122,6 +137,9 @@ public class CaledonHttpClientFee {
                 throw new PaymentProcessingException("System error", e);
             }
         }
+
+        pairs.add(0, new NameValuePair("TESTING", "1"));
+        log.debug("Request {}", pairs);
 
         return pairs.toArray(new NameValuePair[pairs.size()]);
     }

@@ -22,9 +22,9 @@ import com.pyx4j.entity.shared.EntityFactory;
 
 import com.propertyvista.domain.payment.CreditCardInfo.CreditCardType;
 import com.propertyvista.payment.CCInformation;
+import com.propertyvista.payment.CreditCardPaymentProcessorFacade;
 import com.propertyvista.payment.FeeCalulationRequest;
 import com.propertyvista.payment.FeeCalulationResponse;
-import com.propertyvista.payment.CreditCardPaymentProcessorFacade;
 import com.propertyvista.payment.Merchant;
 import com.propertyvista.payment.PaymentInstrument;
 import com.propertyvista.payment.PaymentProcessingException;
@@ -347,8 +347,21 @@ public class CaledonPaymentProcessor implements CreditCardPaymentProcessorFacade
         response.message().setValue(cresponse.responseText);
 
         if (response.success().getValue()) {
+            if ((cresponse.getFeeAmount() == null) || (cresponse.getTotalAmount() == null) || (cresponse.getAmount() == null)) {
+                throw new PaymentProcessingException("Protocol error, amounts are not returned");
+            }
+            if (request.amount().getValue().compareTo(cresponse.getAmount()) != 0) {
+                throw new PaymentProcessingException("Protocol error, returned amount are do not match");
+            }
+
             response.feeAmount().setValue(cresponse.getFeeAmount());
             response.totalAmount().setValue(cresponse.getTotalAmount());
+
+            if (response.feeAmount().getValue().add(cresponse.getAmount()).compareTo(response.totalAmount().getValue()) != 0) {
+//                // TODO use this validation
+//                response.totalAmount().setValue(response.feeAmount().getValue().add(cresponse.getAmount()));
+                throw new PaymentProcessingException("Protocol error, returned amounts are do not match");
+            }
         }
         return response;
     }
