@@ -21,6 +21,7 @@
 package com.pyx4j.forms.client.ui.formatters;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.text.ParseException;
 
 import com.google.gwt.i18n.client.NumberFormat;
@@ -61,7 +62,7 @@ public class MoneyFormat implements IFormat<BigDecimal> {
             if (string.startsWith(CMoneyField.symbol)) {
                 string = string.substring(1);
             }
-            return new BigDecimal(nf.parse(string));
+            return new BigDecimal(nf.parse(string)).setScale(2, RoundingMode.HALF_UP);
         } catch (NumberFormatException e) {
             throw new ParseException(i18n.tr("Invalid money format. Enter valid number"), 0);
         }
