@@ -143,7 +143,8 @@ public class LeaseParticipanApprovalFolder extends VistaBoxFolder<LeaseParticipa
 
             left.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().creditCheck().creditCheckDate()), 15, 10, 10).build());
 
-            CLabel<Key> creditCheckReport = new CLabel<Key>(i18n.tr("View Full Report"));
+            CLabel<Key> creditCheckReport = new CLabel<Key>();
+            creditCheckReport.setTitle(i18n.tr("View Full Report"));
             creditCheckReport.setFormat(new IFormat<Key>() {
                 @Override
                 public String format(Key value) {

@@ -25,7 +25,7 @@ public class YesNoComboBox extends CComboBox<Boolean> {
     private static final I18n i18n = I18n.get(YesNoComboBox.class);
 
     public YesNoComboBox() {
-        super(null, null, new IFormat<Boolean>() {
+        super(null, new IFormat<Boolean>() {
             @Override
             public String format(Boolean value) {
                 if (value == null) {

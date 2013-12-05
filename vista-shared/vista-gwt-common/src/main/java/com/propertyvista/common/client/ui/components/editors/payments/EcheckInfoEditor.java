@@ -43,7 +43,7 @@ public class EcheckInfoEditor extends CEntityForm<EcheckInfo> {
     private static final I18n i18n = I18n.get(EcheckInfoEditor.class);
 
     protected final CPersonalIdentityField<AccountNumberIdentity> accountEditor = new CPersonalIdentityField<AccountNumberIdentity>(
-            AccountNumberIdentity.class, "X xxxx;XX xxxx;XXX xxxx;XXXX xxxx;X XXXX xxxx;XX XXXX xxxx;XXX XXXX xxxx;XXXX XXXX xxxx", null);
+            AccountNumberIdentity.class, "X xxxx;XX xxxx;XXX xxxx;XXXX xxxx;X XXXX xxxx;XX XXXX xxxx;XXX XXXX xxxx;XXXX XXXX xxxx");
 
     public EcheckInfoEditor() {
         super(EcheckInfo.class);

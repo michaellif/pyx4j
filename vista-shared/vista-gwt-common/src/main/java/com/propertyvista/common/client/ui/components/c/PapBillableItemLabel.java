@@ -21,12 +21,7 @@ import com.propertyvista.domain.tenant.lease.BillableItem;
 public class PapBillableItemLabel extends CEntityLabel<BillableItem> {
 
     public PapBillableItemLabel() {
-        this(null);
-    }
-
-    public PapBillableItemLabel(String title) {
-        super(title);
-
+        super();
         setFormat(new IFormat<BillableItem>() {
             @Override
             public String format(BillableItem value) {
@@ -51,4 +46,5 @@ public class PapBillableItemLabel extends CEntityLabel<BillableItem> {
             }
         });
     }
+
 }

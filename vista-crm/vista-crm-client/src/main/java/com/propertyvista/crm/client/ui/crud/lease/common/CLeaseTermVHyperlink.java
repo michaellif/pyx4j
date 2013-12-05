@@ -26,7 +26,7 @@ import com.propertyvista.domain.tenant.lease.LeaseTerm.LeaseTermV;
 public class CLeaseTermVHyperlink extends CEntityLabel<LeaseTermV> {
 
     public CLeaseTermVHyperlink() {
-        super(null);
+        super();
 
         setNavigationCommand(new Command() {
             @Override

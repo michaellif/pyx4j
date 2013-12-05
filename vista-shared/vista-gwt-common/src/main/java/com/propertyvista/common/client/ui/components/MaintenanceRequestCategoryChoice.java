@@ -41,7 +41,7 @@ public class MaintenanceRequestCategoryChoice extends CComboBox<MaintenanceReque
     private LoadOptionsMode optionsMode = LoadOptionsMode.EMPTY_SET;
 
     public MaintenanceRequestCategoryChoice() {
-        super("", NotInOptionsPolicy.DISCARD);
+        super(NotInOptionsPolicy.DISCARD);
         setMandatory(true);
         setVisible(false);
     }

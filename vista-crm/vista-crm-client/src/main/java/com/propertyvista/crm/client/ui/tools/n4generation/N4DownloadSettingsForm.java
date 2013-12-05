@@ -38,7 +38,7 @@ public class N4DownloadSettingsForm extends CEntityDecoratableForm<N4DownloadSet
         BasicFlexFormPanel panel = new BasicFlexFormPanel();
         int row = -1;
 
-        generationsBox = new CComboBox<N4GenerationDTO>("", com.pyx4j.forms.client.ui.CComboBox.NotInOptionsPolicy.DISCARD) {
+        generationsBox = new CComboBox<N4GenerationDTO>(CComboBox.NotInOptionsPolicy.DISCARD) {
             @Override
             public String getItemName(N4GenerationDTO o) {
                 if (o != null) {

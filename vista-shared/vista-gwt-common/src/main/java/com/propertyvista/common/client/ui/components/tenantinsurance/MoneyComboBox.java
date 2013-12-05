@@ -47,7 +47,7 @@ public class MoneyComboBox extends CComboBox<BigDecimal> {
     }
 
     public MoneyComboBox() {
-        super(null, null, new MoneyComboBoxFormat());
+        super(null, new MoneyComboBoxFormat());
     }
 
     @Override

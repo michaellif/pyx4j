@@ -68,7 +68,7 @@ public class CreditCardInfoEditor extends CEntityForm<CreditCardInfo> {
     protected final CComboBox<CreditCardType> typeSelector = new CComboBox<CreditCardType>();
 
     protected final CPersonalIdentityField<CreditCardNumberIdentity> cardEditor = new CPersonalIdentityField<CreditCardNumberIdentity>(
-            CreditCardNumberIdentity.class, "X XXXX XXXX xxxx;XXXX XXXX XXXX xxxx", null);
+            CreditCardNumberIdentity.class, "X XXXX XXXX xxxx;XXXX XXXX XXXX xxxx");
 
     public CreditCardInfoEditor() {
         super(CreditCardInfo.class);

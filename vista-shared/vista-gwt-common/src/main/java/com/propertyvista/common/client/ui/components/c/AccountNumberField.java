@@ -25,7 +25,7 @@ import com.propertyvista.domain.payment.AccountNumberIdentity;
 public abstract class AccountNumberField extends CPersonalIdentityField<AccountNumberIdentity> {
 
     public AccountNumberField() {
-        super(AccountNumberIdentity.class, "X xxxx;XX xxxx;XXX xxxx;XXXX xxxx;X XXXX xxxx;XX XXXX xxxx;XXX XXXX xxxx;XXXX XXXX xxxx", null);
+        super(AccountNumberIdentity.class, "X xxxx;XX xxxx;XXX xxxx;XXXX xxxx;X XXXX xxxx;XX XXXX xxxx;XXX XXXX xxxx;XXXX XXXX xxxx");
 
         NPersonalIdentityField<AccountNumberIdentity> field = new NPersonalIdentityField<AccountNumberIdentity>(this);
 

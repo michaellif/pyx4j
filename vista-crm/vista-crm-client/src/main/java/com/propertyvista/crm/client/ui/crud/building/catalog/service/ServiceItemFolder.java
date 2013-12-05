@@ -137,7 +137,7 @@ class ServiceItemFolder extends VistaTableFolder<ProductItem> {
                         comp = inject(column.getObject(), new CEntityCrudHyperlink<BuildingElement>(AppPlaceEntityMapper.resolvePlace(buildingElementClass)));
                     }
                 } else {
-                    comp = new CLabel(""); // there is no building element for this item!
+                    comp = new CLabel(); // there is no building element for this item!
                 }
             } else {
                 comp = super.createCell(column);

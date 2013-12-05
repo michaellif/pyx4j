@@ -73,7 +73,8 @@ public class TenantInsuranceCertificateForm<E extends InsuranceCertificate> exte
         contentPanel = new BasicFlexFormPanel(); // TODO the only reason its a field is to set a proper caption for the insurance certificate folder
         int row = -1;
         if (displayTenantOwner) {
-            CEntityLabel<Customer> comp = new CEntityLabel<Customer>(i18n.tr("Tenant"));
+            CEntityLabel<Customer> comp = new CEntityLabel<Customer>();
+
             if (tenantOwnerClickHandler != null) {
                 comp.setNavigationCommand(new Command() {
                     @Override
