@@ -10,7 +10,10 @@
 
 CREATE OR REPLACE FUNCTION _dba_.migrate_pmc_1122(v_schema_name TEXT) RETURNS VOID AS
 $$
+DECLARE 
+        v_row_cnt       INT ;
 BEGIN
+        
         EXECUTE 'SET search_path = '||v_schema_name;
         
         /**
@@ -79,6 +82,46 @@ BEGIN
         ***
         ***     =====================================================================================================
         **/
+        
+        -- arcode 
+        
+        v_row_cnt := 0;
+        
+        EXECUTE 'SELECT COUNT(id) FROM '||v_schema_name||'.arcode WHERE name = ''Unknown External Credit'' '
+                INTO v_row_cnt;
+        
+        IF (v_row_cnt = 0)         
+        THEN
+                EXECUTE 'INSERT INTO '||v_schema_name||'.arcode (id,code_type,name,updated,reserved) '
+                        ||'(SELECT      nextval(''public.arcode_seq'') AS id, ''ExternalCredit'' AS code_type,'
+                        ||'             ''Unknown External Credit'' AS name, DATE_TRUNC(''second'',current_timestamp)::timestamp, '
+                        ||'             TRUE)';
+        ELSE
+                EXECUTE 'UPDATE '||v_schema_name||'.arcode '
+                        ||'SET  reserved = TRUE,'
+                        ||'     updated = DATE_TRUNC(''second'',current_timestamp)::timestamp '
+                        ||'WHERE name = ''Unknown External Credit'' '
+                        ||'AND  NOT reserved ';
+        END IF;
+        
+        
+        EXECUTE 'SELECT COUNT(id) FROM '||v_schema_name||'.arcode WHERE name = ''Unknown External Charge'' '
+                INTO v_row_cnt;
+        
+        IF (v_row_cnt = 0)         
+        THEN
+                EXECUTE 'INSERT INTO '||v_schema_name||'.arcode (id,code_type,name,updated,reserved) '
+                        ||'(SELECT      nextval(''public.arcode_seq'') AS id, ''ExternalCharge'' AS code_type,'
+                        ||'             ''Unknown External Charge'' AS name, DATE_TRUNC(''second'',current_timestamp)::timestamp, '
+                        ||'             TRUE)';
+        ELSE
+                EXECUTE 'UPDATE '||v_schema_name||'.arcode '
+                        ||'SET  reserved = TRUE,'
+                        ||'     updated = DATE_TRUNC(''second'',current_timestamp)::timestamp '
+                        ||'WHERE name = ''Unknown External Charge'' '
+                        ||'AND  NOT reserved ';
+        END IF;
+        
         
         -- email_template
         
