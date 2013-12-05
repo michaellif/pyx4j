@@ -33,12 +33,12 @@ public interface ConvenienceFeeCalculationResponseTO extends IEntity {
     IPrimitive<String> transactionNumber();
 
     @NotNull
-    @Format("#,##0.00")
+    @Format("$#,##0.00")
     @Editor(type = EditorType.money)
     IPrimitive<BigDecimal> amount();
 
     @NotNull
-    @Format("#,##0.00")
+    @Format("$#,##0.00")
     @Editor(type = EditorType.money)
     IPrimitive<BigDecimal> feeAmount();
 
