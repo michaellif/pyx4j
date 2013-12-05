@@ -11,7 +11,7 @@
  * @author vlads
  * @version $Id$
  */
-package com.propertyvista.portal.resident.ui.financial;
+package com.propertyvista.portal.shared.ui.util;
 
 import java.util.EnumSet;
 import java.util.Set;
