@@ -203,20 +203,25 @@ public class PaymentAcceptanceUtils {
         require.add(new PaymentTypeAcceptance(PaymentType.Echeck, p.electronicPayments(), p.acceptedEcheck(), p.residentPortalEcheck(), p
                 .cashEquivalentEcheck()));
 
-        require.add(new PaymentTypeAcceptance(PaymentType.CreditCard, p.electronicPayments(), p.acceptedCreditCardMasterCard(), p
-                .residentPortalCreditCardMasterCard(), p.notCashEquivalent()));
-        require.add(new PaymentTypeAcceptance(PaymentType.CreditCard, p.electronicPayments(), p.acceptedCreditCardMasterCard(), p
-                .residentPortalCreditCardMasterCard(), p.cashEquivalentCreditCardMasterCard()));
+        if (VistaTODO.convenienceFeeEnabled) {
+            require.add(new PaymentTypeAcceptance(PaymentType.CreditCard, p.electronicPayments(), p.notCashEquivalent()));
+            require.add(new PaymentTypeAcceptance(PaymentType.CreditCard, p.electronicPayments(), p.cashEquivalentCreditCardMasterCard()));
+        } else {
+            require.add(new PaymentTypeAcceptance(PaymentType.CreditCard, p.electronicPayments(), p.acceptedCreditCardMasterCard(), p
+                    .residentPortalCreditCardMasterCard(), p.notCashEquivalent()));
+            require.add(new PaymentTypeAcceptance(PaymentType.CreditCard, p.electronicPayments(), p.acceptedCreditCardMasterCard(), p
+                    .residentPortalCreditCardMasterCard(), p.cashEquivalentCreditCardMasterCard()));
 
-        require.add(new PaymentTypeAcceptance(PaymentType.CreditCard, p.electronicPayments(), p.acceptedCreditCardVisa(), p.residentPortalCreditCardVisa(), p
-                .notCashEquivalent()));
-        require.add(new PaymentTypeAcceptance(PaymentType.CreditCard, p.electronicPayments(), p.acceptedCreditCardVisa(), p.residentPortalCreditCardVisa(), p
-                .cashEquivalentCreditCardVisa()));
+            require.add(new PaymentTypeAcceptance(PaymentType.CreditCard, p.electronicPayments(), p.acceptedCreditCardVisa(), p.residentPortalCreditCardVisa(),
+                    p.notCashEquivalent()));
+            require.add(new PaymentTypeAcceptance(PaymentType.CreditCard, p.electronicPayments(), p.acceptedCreditCardVisa(), p.residentPortalCreditCardVisa(),
+                    p.cashEquivalentCreditCardVisa()));
 
-        require.add(new PaymentTypeAcceptance(PaymentType.CreditCard, p.electronicPayments(), p.acceptedVisaDebit(), p.residentPortalVisaDebit(), p
-                .notCashEquivalent()));
-        require.add(new PaymentTypeAcceptance(PaymentType.CreditCard, p.electronicPayments(), p.acceptedVisaDebit(), p.residentPortalVisaDebit(), p
-                .cashEquivalentVisaDebit()));
+            require.add(new PaymentTypeAcceptance(PaymentType.CreditCard, p.electronicPayments(), p.acceptedVisaDebit(), p.residentPortalVisaDebit(), p
+                    .notCashEquivalent()));
+            require.add(new PaymentTypeAcceptance(PaymentType.CreditCard, p.electronicPayments(), p.acceptedVisaDebit(), p.residentPortalVisaDebit(), p
+                    .cashEquivalentVisaDebit()));
+        }
 
         require.add(new PaymentTypeAcceptance(PaymentType.DirectBanking, p.electronicPayments(), p.acceptedDirectBanking(), p.residentPortalDirectBanking(), p
                 .notCashEquivalent()));

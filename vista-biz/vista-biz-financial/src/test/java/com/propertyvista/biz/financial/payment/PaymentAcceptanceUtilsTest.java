@@ -23,6 +23,7 @@ import org.junit.experimental.categories.Category;
 import com.pyx4j.entity.shared.EntityFactory;
 
 import com.propertyvista.domain.payment.CreditCardInfo.CreditCardType;
+import com.propertyvista.domain.payment.PaymentType;
 import com.propertyvista.domain.policy.policies.PaymentTypeSelectionPolicy;
 import com.propertyvista.domain.security.common.VistaApplication;
 import com.propertyvista.misc.VistaTODO;
@@ -129,6 +130,13 @@ public class PaymentAcceptanceUtilsTest extends TestCase {
                 assertAllowed(VistaApplication.resident, true, selectionPolicy, creditCardType, Expect.Disable);
                 assertAllowed(VistaApplication.crm, true, selectionPolicy, creditCardType, Expect.Disable);
             }
+
+            Collection<PaymentType> paymentTypesCrm = PaymentAcceptanceUtils.getAllowedPaymentTypes(VistaApplication.crm, true, false, selectionPolicy);
+            Assert.assertFalse("Cards Not Allowed expected, but was " + paymentTypesCrm, paymentTypesCrm.contains(PaymentType.CreditCard));
+
+            Collection<PaymentType> paymentTypesresident = PaymentAcceptanceUtils.getAllowedPaymentTypes(VistaApplication.resident, true, false,
+                    selectionPolicy);
+            Assert.assertTrue("Cards Allowed expected, but was " + paymentTypesresident, paymentTypesresident.contains(PaymentType.CreditCard));
         }
 
         // Accepted only MasterCard on CashEquivalent
