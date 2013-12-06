@@ -17,26 +17,33 @@ import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.forms.client.ui.CEntityForm;
+import com.pyx4j.forms.client.ui.decorators.WidgetDecorator.Builder.LabelPosition;
 
-import com.propertyvista.crm.client.ui.tools.common.selectors.BuildingSelector;
-import com.propertyvista.crm.rpc.dto.financial.autopayreview.moneyin.MoneyInCandidateDTO;
+import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
+import com.propertyvista.crm.client.ui.tools.common.selectors.CBuildingSelector;
+import com.propertyvista.crm.rpc.dto.financial.autopayreview.moneyin.MoneyInCandidateSearchCriteriaDTO;
 
-public class MoneyInCandidateSearchCriteriaForm extends CEntityForm<MoneyInCandidateDTO> {
-
-    private BuildingSelector buildingSelector;
+public class MoneyInCandidateSearchCriteriaForm extends CEntityForm<MoneyInCandidateSearchCriteriaDTO> {
 
     public MoneyInCandidateSearchCriteriaForm() {
-        super(MoneyInCandidateDTO.class);
+        super(MoneyInCandidateSearchCriteriaDTO.class);
     }
 
     @Override
     public IsWidget createContent() {
         FlowPanel panel = new FlowPanel();
+//        panel.getElement().getStyle().setPadding(5, Unit.PX);
+//        panel.getElement().getStyle().setOverflow(Overflow.SCROLL);
 
-        buildingSelector = new BuildingSelector();
-        buildingSelector.setWidth("300px");
+        panel.add(new FormDecoratorBuilder(inject(proto().buildingCriteria(), new CBuildingSelector())).componentWidth("300px").contentWidth("300px")
+                .labelWidth("300px").labelPosition(LabelPosition.top).build());
+        panel.add(new FormDecoratorBuilder(inject(proto().unit())).componentWidth("50px").contentWidth("50px").labelWidth("50px")
+                .labelPosition(LabelPosition.top).build());
+        panel.add(new FormDecoratorBuilder(inject(proto().lease())).componentWidth("100px").contentWidth("100px").labelWidth("100px")
+                .labelPosition(LabelPosition.top).build());
+        panel.add(new FormDecoratorBuilder(inject(proto().tenantCriteria())).componentWidth("200px").contentWidth("200px").labelWidth("200px")
+                .labelPosition(LabelPosition.top).build());
 
-        panel.add(buildingSelector);
         return panel;
     }
 

@@ -179,7 +179,7 @@ public abstract class SuperSuggestiveSelector<DataType> extends SuperSelector<Da
         }
 
         public void selectNext() {
-            if (selectedIndex < (suggestionList.getPageSize() - 1)) {
+            if (selectedIndex < (suggestionList.getVisibleItemCount() - 1)) {
                 selectedIndex += 1;
                 selectionModel.setSelected(suggestionList.getVisibleItem(selectedIndex), true);
             } else {

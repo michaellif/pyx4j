@@ -57,6 +57,8 @@ import com.propertyvista.crm.client.ui.tools.common.ItemsHolderForm;
 import com.propertyvista.crm.client.ui.tools.common.datagrid.MultiSelectorCell;
 import com.propertyvista.crm.client.ui.tools.common.datagrid.ObjectEditCell;
 import com.propertyvista.crm.client.ui.tools.common.datagrid.VistaDataGridStyles;
+import com.propertyvista.crm.client.ui.tools.common.widgets.superselector.SelectedItem;
+import com.propertyvista.crm.client.ui.tools.common.widgets.superselector.SuperSelector;
 import com.propertyvista.crm.client.ui.tools.common.widgets.superselector.SuperSuggestiveSelector;
 import com.propertyvista.crm.client.ui.tools.l1generation.visors.L1VisorStyles;
 import com.propertyvista.crm.client.ui.tools.n4generation.LegalNoticeCandidateFolderHolderForm;
@@ -155,6 +157,7 @@ public class CrmTheme extends VistaTheme {
         initGadgetStyles();
 
         initBulkOperationToolStyles();
+        initBulkOperationToolStylesMk2();
         initAutoPayReviewToolStyles();
 
         initN4GenerationToolStyles();
@@ -712,6 +715,7 @@ public class CrmTheme extends VistaTheme {
         addStyle(style);
     }
 
+    @Deprecated
     private void initBulkOperationToolStyles() {
         Style style;
 
@@ -779,7 +783,31 @@ public class CrmTheme extends VistaTheme {
         addStyle(style);
         // TODO ^^^^^ review if styles from this line up to upper TODO are required
 
+    }
+
+    private void initBulkOperationToolStylesMk2() {
+        Style style;
+
+        // some tweaks for default data grid styles
+        // warning: THIS WILL ONLY WORK WHEN GWT Complier doesn't try to minify selector names (http://www.gwtproject.org/doc/latest/DevGuideClientBundle.html#CssResource)  
+        style = new Style("." + VistaDataGridStyles.VistaDataGridHeader.name());
+        style.addProperty("border-bottom", "2px solid #6F7277");
+        style.addProperty("color", "4B4A4A");
+        style.addProperty("padding", "3px 15px");
+        style.addProperty("text-align", "left");
+        style.addProperty("white-space", "normal");
+        addStyle(style);
+
+        style = new Style("." + VistaDataGridStyles.VistaDataGridFooter.name());
+        style.addProperty("border-bottom", "2px solid #6F7277");
+        style.addProperty("color", "4B4A4A");
+        style.addProperty("padding", "3px 15px");
+        style.addProperty("text-align", "left");
+        style.addProperty("white-space", "normal");
+        addStyle(style);
+
         // The following are good: DataGrid and custom Cells styles definitions
+
         // Object Edit Cell Styles
         style = new Style("." + ObjectEditCell.StyleNames.ObjectEditCell.name());
         style.addProperty("width", "100%");
@@ -805,29 +833,41 @@ public class CrmTheme extends VistaTheme {
         style.addProperty("padding", "5px");
         addStyle(style);
 
+        // Specialized Data Type related styles
         style = new Style("." + VistaDataGridStyles.VistaMoneyCell.name());
         style.addProperty("text-align", "right");
         addStyle(style);
 
-        // some tweaks for default data grid styles
-        // warning: THIS WILL ONLY WORK WHEN GWT Complier doesn't try to minify selector names (http://www.gwtproject.org/doc/latest/DevGuideClientBundle.html#CssResource)  
-        style = new Style("." + VistaDataGridStyles.VistaDataGridHeader.name());
-        style.addProperty("border-bottom", "2px solid #6F7277");
-        style.addProperty("color", "4B4A4A");
-        style.addProperty("padding", "3px 15px");
-        style.addProperty("text-align", "left");
-        style.addProperty("white-space", "normal");
-        addStyle(style);
-
-        style = new Style("." + VistaDataGridStyles.VistaDataGridFooter.name());
-        style.addProperty("border-bottom", "2px solid #6F7277");
-        style.addProperty("color", "4B4A4A");
-        style.addProperty("padding", "3px 15px");
-        style.addProperty("text-align", "left");
-        style.addProperty("white-space", "normal");
-        addStyle(style);
-
         // This is for 'Super Selector' used in bulk operation search criteria forms:
+        style = new Style("." + SuperSelector.Styles.SuperSelectorStyle.name()); // should be similar to a regular text box
+        style.addProperty("color", ThemeColor.foreground);
+        style.addProperty("background-color", "white");
+
+        style.addProperty("padding", "2px 5px");
+        style.addProperty("line-height", "2em");
+
+        style.addProperty("border-width", "1px");
+        style.addProperty("border-style", "solid");
+        style.addProperty("border-color", ThemeColor.foreground, 0.5);// TODO i don't really know
+        addStyle(style);
+
+        // remove 'clear field' X mark that appears in IE10
+        style = new Style("." + SuperSelector.Styles.SuperSelectorStyle.name() + " input::-ms-clear");
+        style.addProperty("width", "0px");
+        style.addProperty("height", "0px");
+        style.addProperty("display", "none");
+        addStyle(style);
+
+        style = new Style("." + SelectedItem.Styles.SuperSelectedItemStyle.name()); // should be similar to a regular text box
+        style.addProperty("display", "inline-block");
+        style.addProperty("padding", "1px 3px");
+        style.addProperty("border-width", "1px");
+        style.addProperty("border-style", "solid");
+        style.addProperty("border-color", "grey");
+        style.addProperty("border-radius", "3px");
+        style.addProperty("cursor", "default");
+        addStyle(style);
+
         style = new Style("." + SuperSuggestiveSelector.Styles.SuggestionsPopup.name());
         style.addProperty("background-color", ThemeColor.background);
         style.addProperty("padding", "5px");

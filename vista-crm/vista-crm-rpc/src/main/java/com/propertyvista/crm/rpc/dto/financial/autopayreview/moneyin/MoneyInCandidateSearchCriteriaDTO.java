@@ -13,10 +13,27 @@
  */
 package com.propertyvista.crm.rpc.dto.financial.autopayreview.moneyin;
 
+import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.shared.IList;
+import com.pyx4j.entity.shared.IPrimitive;
+
+import com.propertyvista.crm.rpc.dto.selections.BuildingForSelectionDTO;
 
 @Transient
 public interface MoneyInCandidateSearchCriteriaDTO extends IEntity {
+
+    // TODO add portfolio
+
+    @Caption(name = "Buildings")
+    IList<BuildingForSelectionDTO> buildingCriteria();
+
+    IPrimitive<String> unit();
+
+    IPrimitive<String> lease();
+
+    @Caption(name = "Tenant")
+    IPrimitive<String> tenantCriteria();
 
 }

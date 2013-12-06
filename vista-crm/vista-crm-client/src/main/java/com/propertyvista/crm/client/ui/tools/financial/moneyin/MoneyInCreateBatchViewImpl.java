@@ -17,13 +17,14 @@ import com.google.gwt.cell.client.ActionCell;
 import com.google.gwt.cell.client.ActionCell.Delegate;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Style.FontWeight;
+import com.google.gwt.dom.client.Style.Overflow;
 import com.google.gwt.dom.client.Style.TextAlign;
 import com.google.gwt.dom.client.Style.Unit;
+import com.google.gwt.dom.client.Style.VerticalAlign;
 import com.google.gwt.user.cellview.client.Column;
 import com.google.gwt.user.cellview.client.SimplePager;
 import com.google.gwt.user.cellview.client.SimplePager.TextLocation;
 import com.google.gwt.user.client.Command;
-import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.HorizontalPanel;
@@ -175,18 +176,22 @@ public class MoneyInCreateBatchViewImpl extends AbstractPrimePane implements Mon
 
     private LayoutPanel initSearchBar() {
         LayoutPanel searchBar = new LayoutPanel();
-
-        FlowPanel formHolderPanel = new FlowPanel();
-        formHolderPanel.getElement().getStyle().setTextAlign(TextAlign.CENTER);
-        formHolderPanel.add(new HTML(i18n.tr("Here will be a form with search criteria")));
-
+        searchBar.setWidth("100%");
+        searchBar.setHeight("100%");
         MoneyInCandidateSearchCriteriaForm searchForm = new MoneyInCandidateSearchCriteriaForm();
         searchForm.initContent();
+        searchForm.asWidget().getElement().getStyle().setPadding(5, Unit.PX);
+        searchForm.asWidget().getElement().getStyle().setOverflow(Overflow.AUTO);
 
         searchBar.add(searchForm);
-        searchBar.setWidgetTopBottom(searchForm, 0, Unit.PX, 31, Unit.PX);
+        searchBar.setWidgetTopBottom(searchForm, 0, Unit.PX, 0, Unit.PX);
+        searchBar.setWidgetLeftRight(searchForm, 0, Unit.PX, 100, Unit.PX);
 
         Toolbar searchToolbar = new Toolbar();
+        searchToolbar.getElement().getStyle().setHeight(100, Unit.PX);
+        searchToolbar.getElement().getStyle().setProperty("display", "table-cell");
+        searchToolbar.getElement().getStyle().setVerticalAlign(VerticalAlign.MIDDLE);
+
         Button searchButton = new Button(i18n.tr("Search"), new Command() {
             @Override
             public void execute() {
@@ -196,11 +201,12 @@ public class MoneyInCreateBatchViewImpl extends AbstractPrimePane implements Mon
         searchToolbar.addItem(searchButton);
 
         SimplePanel searchToolbarHolder = new SimplePanel();
-        searchToolbarHolder.setStyleName(DefaultPaneTheme.StyleName.FooterToolbar.name());
+        searchToolbarHolder.setStyleName(DefaultPaneTheme.StyleName.HeaderToolbar.name());
         searchToolbarHolder.add(searchToolbar);
 
         searchBar.add(searchToolbarHolder);
-        searchBar.setWidgetBottomHeight(searchToolbarHolder, 0, Unit.PX, 30, Unit.PX);
+        searchBar.setWidgetTopBottom(searchToolbarHolder, 0, Unit.PX, 0, Unit.PX);
+        searchBar.setWidgetRightWidth(searchToolbarHolder, 0, Unit.PX, 100, Unit.PX);
         return searchBar;
     }
 

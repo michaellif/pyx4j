@@ -22,6 +22,7 @@ package com.propertyvista.crm.client.ui.tools.common.widgets.superselector;
 
 import com.google.gwt.dom.client.Style.Cursor;
 import com.google.gwt.dom.client.Style.Display;
+import com.google.gwt.dom.client.Style.FontWeight;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
@@ -29,29 +30,38 @@ import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.Label;
 
+import com.pyx4j.commons.css.IStyleName;
 import com.pyx4j.forms.client.ui.IFormat;
+import com.pyx4j.i18n.shared.I18n;
 
 public class SelectedItem<C> extends Composite {
+
+    private static final I18n i18n = I18n.get(SelectedItem.class);
 
     private final SuperSelector<C> parent;
 
     private final C item;
+
+    public enum Styles implements IStyleName {
+
+        SuperSelectedItemStyle
+    }
 
     public SelectedItem(IFormat<C> format, SuperSelector<C> parent, C item) {
         this.parent = parent;
         this.item = item;
 
         FlowPanel panel = new FlowPanel();
-        panel.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
-        panel.getElement().getStyle().setPaddingLeft(3, Unit.PX);
-        panel.getElement().getStyle().setPaddingRight(3, Unit.PX);
+        panel.setStyleName(Styles.SuperSelectedItemStyle.name());
 
         Label itemLabel = new Label(format.format(item));
         itemLabel.getElement().getStyle().setDisplay(Display.INLINE);
         panel.add(itemLabel);
 
-        Label deleteItemAction = new Label("\u2718");
+        Label deleteItemAction = new Label("\u2716"); // 'heavy multiplication' symbol
+        deleteItemAction.setTitle(i18n.tr("Remove"));
         deleteItemAction.getElement().getStyle().setDisplay(Display.INLINE);
+        deleteItemAction.getElement().getStyle().setFontWeight(FontWeight.BOLD);
         deleteItemAction.getElement().getStyle().setPaddingLeft(3, Unit.PX);
         deleteItemAction.getElement().getStyle().setPaddingRight(3, Unit.PX);
         deleteItemAction.getElement().getStyle().setCursor(Cursor.POINTER);

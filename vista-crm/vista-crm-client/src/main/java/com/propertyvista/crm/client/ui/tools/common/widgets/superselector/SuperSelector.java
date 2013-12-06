@@ -26,7 +26,7 @@ import java.util.List;
 
 import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.core.client.Scheduler.ScheduledCommand;
-import com.google.gwt.dom.client.Element;
+import com.google.gwt.dom.client.Style.BorderStyle;
 import com.google.gwt.dom.client.Style.Display;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.BlurEvent;
@@ -42,9 +42,16 @@ import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.TextBox;
 
+import com.pyx4j.commons.css.IStyleName;
 import com.pyx4j.forms.client.ui.IFormat;
 
 public abstract class SuperSelector<C> extends Composite {
+
+    public enum Styles implements IStyleName {
+
+        SuperSelectorStyle;
+
+    }
 
     private final TextBox inputTextBox;
 
@@ -56,14 +63,9 @@ public abstract class SuperSelector<C> extends Composite {
 
     private final IFormat<C> format;
 
-    // @formatter:off
-    // these are fixes for width so that the inputext will not get to next row
-    // TODO i'm not sure with this is happending but this shouldn't exits and must be fixed
-    private final static int FIX_INPUT_WIDTH_CALCULATION = 20;
-    private final static int FIX_ROW_WIDTH_CALCULATION = 5;
-    // @formatter:on
-
     private boolean isFocused;
+
+    private final FlowPanel containerBox;
 
     /**
      * The format will be used to parse input and convert it to stuff, and to display selected items. if convert fails it can return "null" to avoid adding an
@@ -72,13 +74,26 @@ public abstract class SuperSelector<C> extends Composite {
     public SuperSelector(IFormat<C> format) {
         this.format = format;
         FlowPanel panel = new FlowPanel();
+        panel.setStyleName(Styles.SuperSelectorStyle.name());
+
+        // this 'container box' is used to calculate client width of the panel that does not include padding
+        containerBox = new FlowPanel();
+        containerBox.getElement().getStyle().setWidth(100, Unit.PCT);
+        containerBox.getElement().getStyle().setHeight(100, Unit.PCT);
+        containerBox.getElement().getStyle().setBorderStyle(BorderStyle.NONE);
+        containerBox.getElement().getStyle().setBorderWidth(0, Unit.PX);
+        containerBox.getElement().getStyle().setPadding(0, Unit.PX);
+        containerBox.getElement().getStyle().setMargin(0, Unit.PX);
+        panel.add(containerBox);
 
         selectedItemsContainerPanel = new FlowPanel();
         selectedItemsContainerPanel.getElement().getStyle().setDisplay(Display.INLINE);
-        panel.add(selectedItemsContainerPanel);
+        selectedItemsContainerPanel.getElement().getStyle().setBorderWidth(0, Unit.PX);
+        containerBox.add(selectedItemsContainerPanel);
 
         inputTextBox = new TextBox();
         inputTextBox.getElement().getStyle().setDisplay(Display.INLINE);
+        inputTextBox.getElement().getStyle().setBorderStyle(BorderStyle.NONE);
 
         inputTextBox.addKeyPressHandler(new KeyPressHandler() {
             @Override
@@ -115,7 +130,7 @@ public abstract class SuperSelector<C> extends Composite {
             }
         });
 
-        panel.add(inputTextBox);
+        containerBox.add(inputTextBox);
 
         initWidget(panel);
         selectedWidgets = new LinkedList<SelectedItem<C>>();
@@ -198,27 +213,25 @@ public abstract class SuperSelector<C> extends Composite {
         Scheduler.get().scheduleDeferred(new ScheduledCommand() {
             @Override
             public void execute() {
-                int maxRowWidth = elementWidth(SuperSelector.this.getElement());
+                int maxRowWidth = containerBox.getElement().getClientWidth();
                 int rowWidth = 0;
                 for (SelectedItem<C> w : selectedWidgets) {
-                    rowWidth += elementWidth(w.getElement()) + FIX_ROW_WIDTH_CALCULATION;
+                    rowWidth += w.getElement().getOffsetWidth();
+                    if (rowWidth > maxRowWidth) {
+                        rowWidth = w.getElement().getOffsetWidth();
+                    }
                 }
-                rowWidth = rowWidth % maxRowWidth;
                 int proposedInputWidth = maxRowWidth - rowWidth;
-                int effectiveInputWidth = (proposedInputWidth < minInputBoxWidth ? maxRowWidth : proposedInputWidth) - FIX_INPUT_WIDTH_CALCULATION;
+                int effectiveInputWidth = (proposedInputWidth < minInputBoxWidth ? maxRowWidth : proposedInputWidth) - 2;
                 inputTextBox.getElement().getStyle().setWidth(effectiveInputWidth, Unit.PX);
+                Scheduler.get().scheduleDeferred(new ScheduledCommand() {
+                    @Override
+                    public void execute() {
+                        onRedraw();
+                    }
+                });
             }
         });
-        Scheduler.get().scheduleDeferred(new ScheduledCommand() {
-            @Override
-            public void execute() {
-                onRedraw();
-            }
-        });
-    }
-
-    private static int elementWidth(Element el) {
-        return el.getAbsoluteRight() - el.getAbsoluteLeft();
     }
 
     @Override
