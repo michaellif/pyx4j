@@ -30,7 +30,6 @@ import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.dialogs.SelectEnumDialog;
 
 import com.propertyvista.common.client.resources.VistaImages;
-import com.propertyvista.common.client.ui.components.editors.PersonalIncomeEditor;
 import com.propertyvista.domain.tenant.income.CustomerScreeningIncome;
 import com.propertyvista.domain.tenant.income.IncomeInfoEmployer;
 import com.propertyvista.domain.tenant.income.IncomeSource;
@@ -83,8 +82,6 @@ public class PersonalIncomeFolder extends CEntityFolder<CustomerScreeningIncome>
         super.addValidations();
 
         this.addValueValidator(new EditableValueValidator<IList<CustomerScreeningIncome>>() {
-
-            @SuppressWarnings("incomplete-switch")
             @Override
             public ValidationError isValid(CComponent<IList<CustomerScreeningIncome>> component, IList<CustomerScreeningIncome> value) {
                 if (value != null && value.size() == 1) {

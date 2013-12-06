@@ -29,7 +29,7 @@ import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.i18n.annotations.Translate;
 import com.pyx4j.i18n.shared.I18nEnum;
 
-import com.propertyvista.domain.contact.AddressStructured;
+import com.propertyvista.domain.contact.AddressSimple;
 
 @ToStringFormat("${0}, {1}")
 @DiscriminatorValue("student")
@@ -61,7 +61,7 @@ public interface IncomeInfoStudentIncome extends CustomerScreeningIncomeInfo {
     IPrimitive<String> name();
 
     @EmbeddedEntity
-    AddressStructured address();
+    AddressSimple address();
 
     @NotNull
     @Override
