@@ -54,7 +54,7 @@ public class PersonalAssetFolder extends CEntityFolder<CustomerScreeningPersonal
 
     @Override
     protected IFolderDecorator<CustomerScreeningPersonalAsset> createFolderDecorator() {
-        return new BoxFolderDecorator<CustomerScreeningPersonalAsset>(VistaImages.INSTANCE, "Add Emergency Contact");
+        return new BoxFolderDecorator<CustomerScreeningPersonalAsset>(VistaImages.INSTANCE, "Add Personal Asset");
     }
 
     @Override
@@ -76,9 +76,9 @@ public class PersonalAssetFolder extends CEntityFolder<CustomerScreeningPersonal
             BasicFlexFormPanel main = new BasicFlexFormPanel();
             int row = -1;
 
-            main.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().assetType()), 120).build());
+            main.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().assetType()), 180).build());
             main.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().percent()), 60).build());
-            main.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().assetValue()), 60).build());
+            main.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().assetValue()), 100).build());
 
             return main;
         }
