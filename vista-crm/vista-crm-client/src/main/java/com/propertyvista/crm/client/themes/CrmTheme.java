@@ -857,6 +857,10 @@ public class CrmTheme extends VistaTheme {
         style.addProperty("height", "0px");
         style.addProperty("display", "none");
         addStyle(style);
+        // remove orange outline from chrome
+        style = new Style("." + SuperSelector.Styles.SuperSelectorStyle.name() + " input:focus");
+        style.addProperty("outline", "0px");
+        addStyle(style);
 
         style = new Style("." + SelectedItem.Styles.SuperSelectedItemStyle.name()); // should be similar to a regular text box
         style.addProperty("display", "inline-block");
