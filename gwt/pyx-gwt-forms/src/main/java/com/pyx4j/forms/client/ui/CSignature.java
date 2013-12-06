@@ -20,11 +20,9 @@
  */
 package com.pyx4j.forms.client.ui;
 
-public class CSignature extends CTextFieldBase<Boolean, NSignature> {
+import com.pyx4j.entity.shared.ISignature;
 
-    public enum SignatureType {
-        FullName, Initials, AgreeBox, AgreeBoxAndFullName
-    }
+public class CSignature extends CTextFieldBase<ISignature, NSignature> {
 
     public CSignature() {
         super();

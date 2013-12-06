@@ -35,6 +35,7 @@ import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPersonalIdentity;
 import com.pyx4j.entity.shared.IPrimitive;
+import com.pyx4j.entity.shared.ISignature;
 import com.pyx4j.i18n.annotations.I18n;
 import com.pyx4j.i18n.shared.I18nEnum;
 import com.pyx4j.tester.domain.TFile;
@@ -153,7 +154,7 @@ public interface EntityI extends IEntity {
     @Editor(type = EditorType.color)
     IPrimitive<Integer> color();
 
-    IPrimitive<Boolean> signature1();
+    ISignature signature1();
 
     IList<TFile> files();
 

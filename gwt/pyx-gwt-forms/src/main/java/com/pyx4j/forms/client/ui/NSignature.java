@@ -28,9 +28,10 @@ import com.google.gwt.event.dom.client.KeyUpHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.ui.FlowPanel;
 
+import com.pyx4j.entity.shared.ISignature;
 import com.pyx4j.widgets.client.ITextWidget;
 
-public class NSignature extends NTextFieldBase<Boolean, SignaturePanel, CSignature> {
+public class NSignature extends NTextFieldBase<ISignature, SignaturePanel, CSignature> {
 
     public NSignature(CSignature cComponent) {
         super(cComponent);
