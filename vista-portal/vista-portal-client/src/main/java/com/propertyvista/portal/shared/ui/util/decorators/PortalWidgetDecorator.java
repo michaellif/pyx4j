@@ -40,7 +40,7 @@ public class PortalWidgetDecorator extends WidgetDecorator {
     @Override
     protected void onLoad() {
         if (getLabelPosition() != LabelPosition.hidden) {
-            setLabelPosition(AbstractPortalPanel.getWidgetLayout());
+            setLabelPosition(AbstractPortalPanel.getWidgetLabelPosition());
         }
     };
 }

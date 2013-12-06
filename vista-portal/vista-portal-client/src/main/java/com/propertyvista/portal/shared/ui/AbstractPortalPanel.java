@@ -42,14 +42,14 @@ public abstract class AbstractPortalPanel extends SimplePanel {
     }
 
     public void doLayout() {
-        LabelPosition newWdgetLayout = getWidgetLayout();
+        LabelPosition newWdgetLayout = getWidgetLabelPosition();
         if (widgetLayout != newWdgetLayout) {
             updateDecoratorsLayout(AbstractPortalPanel.this, newWdgetLayout);
             widgetLayout = newWdgetLayout;
         }
     }
 
-    public static LabelPosition getWidgetLayout() {
+    public static LabelPosition getWidgetLabelPosition() {
         LabelPosition layout;
         switch (LayoutType.getLayoutType(Window.getClientWidth())) {
         case phonePortrait:

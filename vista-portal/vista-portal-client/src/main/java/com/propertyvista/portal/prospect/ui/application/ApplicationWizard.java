@@ -32,6 +32,7 @@ import com.pyx4j.forms.client.ui.RevalidationTrigger;
 import com.pyx4j.forms.client.ui.decorators.IDecorator;
 import com.pyx4j.forms.client.ui.decorators.WidgetDecorator;
 import com.pyx4j.forms.client.ui.decorators.WidgetDecorator.Builder.Alignment;
+import com.pyx4j.forms.client.ui.decorators.WidgetDecorator.Builder.LabelPosition;
 import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
 import com.pyx4j.forms.client.ui.wizard.WizardDecorator;
 import com.pyx4j.forms.client.ui.wizard.WizardStep;
@@ -59,9 +60,11 @@ import com.propertyvista.portal.prospect.events.ApplicationWizardStateChangeEven
 import com.propertyvista.portal.prospect.ui.application.ApplicationWizardView.ApplicationWizardPresenter;
 import com.propertyvista.portal.rpc.portal.prospect.dto.OnlineApplicationDTO;
 import com.propertyvista.portal.rpc.portal.resident.services.ResidentPictureUploadService;
+import com.propertyvista.portal.shared.ui.AbstractPortalPanel;
 import com.propertyvista.portal.shared.ui.CPortalEntityWizard;
 import com.propertyvista.portal.shared.ui.EmergencyContactFolder;
 import com.propertyvista.portal.shared.ui.util.decorators.FormWidgetDecoratorBuilder;
+import com.propertyvista.portal.shared.ui.util.decorators.PortalWidgetDecorator;
 import com.propertyvista.portal.shared.ui.util.editors.PriorAddressEditor;
 
 public class ApplicationWizard extends CPortalEntityWizard<OnlineApplicationDTO> {
@@ -252,27 +255,23 @@ public class ApplicationWizard extends CPortalEntityWizard<OnlineApplicationDTO>
         panel.setH3(++row, 0, 1, i18n.tr("Vehicles"));
 
         panel.setH3(++row, 0, 1, i18n.tr("General Questions"));
-        panel.setWidget(++row, 0, decorateLegalQuestion(inject(proto().applicant().legalQuestions().suedForRent())));
+        panel.setWidget(++row, 0, new LegalQuestionWidgetDecoratorBuilder(inject(proto().applicant().legalQuestions().suedForRent())).build());
         panel.setHR(++row, 0, 1);
-        panel.setWidget(++row, 0, decorateLegalQuestion(inject(proto().applicant().legalQuestions().suedForDamages())));
+        panel.setWidget(++row, 0, new LegalQuestionWidgetDecoratorBuilder(inject(proto().applicant().legalQuestions().suedForDamages())).build());
         panel.setHR(++row, 0, 1);
-        panel.setWidget(++row, 0, decorateLegalQuestion(inject(proto().applicant().legalQuestions().everEvicted())));
+        panel.setWidget(++row, 0, new LegalQuestionWidgetDecoratorBuilder(inject(proto().applicant().legalQuestions().everEvicted())).build());
         panel.setHR(++row, 0, 1);
-        panel.setWidget(++row, 0, decorateLegalQuestion(inject(proto().applicant().legalQuestions().defaultedOnLease())));
+        panel.setWidget(++row, 0, new LegalQuestionWidgetDecoratorBuilder(inject(proto().applicant().legalQuestions().defaultedOnLease())).build());
         panel.setHR(++row, 0, 1);
-        panel.setWidget(++row, 0, decorateLegalQuestion(inject(proto().applicant().legalQuestions().convictedOfFelony())));
+        panel.setWidget(++row, 0, new LegalQuestionWidgetDecoratorBuilder(inject(proto().applicant().legalQuestions().convictedOfFelony())).build());
         panel.setHR(++row, 0, 1);
-        panel.setWidget(++row, 0, decorateLegalQuestion(inject(proto().applicant().legalQuestions().legalTroubles())));
+        panel.setWidget(++row, 0, new LegalQuestionWidgetDecoratorBuilder(inject(proto().applicant().legalQuestions().legalTroubles())).build());
         panel.setHR(++row, 0, 1);
-        panel.setWidget(++row, 0, decorateLegalQuestion(inject(proto().applicant().legalQuestions().filedBankruptcy())));
+        panel.setWidget(++row, 0, new LegalQuestionWidgetDecoratorBuilder(inject(proto().applicant().legalQuestions().filedBankruptcy())).build());
 
         panel.setH3(++row, 0, 1, i18n.tr("How Did You Hear About Us?"));
 
         return panel;
-    }
-
-    private WidgetDecorator decorateLegalQuestion(CComponent<?> comp) {
-        return new FormWidgetDecoratorBuilder(comp, 400, 70, 70).labelAlignment(Alignment.left).useLabelSemicolon(false).build();
     }
 
     private BasicFlexFormPanel createFinancialStep() {
@@ -434,4 +433,17 @@ public class ApplicationWizard extends CPortalEntityWizard<OnlineApplicationDTO>
 
     }
 
+    class LegalQuestionWidgetDecoratorBuilder extends PortalWidgetDecorator.Builder {
+
+        public LegalQuestionWidgetDecoratorBuilder(CComponent<?> component) {
+            super(component);
+            labelWidth(400 + "px");
+            contentWidth(70 + "px");
+            componentWidth(70 + "px");
+            labelPosition(AbstractPortalPanel.getWidgetLabelPosition());
+            useLabelSemicolon(false);
+            labelAlignment(Alignment.left);
+        }
+
+    }
 }
