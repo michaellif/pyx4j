@@ -70,6 +70,7 @@ import com.propertyvista.portal.rpc.portal.shared.services.PortalPasswordResetSe
 import com.propertyvista.portal.rpc.portal.shared.services.PortalPolicyRetrieveService;
 import com.propertyvista.portal.rpc.portal.shared.services.PortalVistaTermsService;
 import com.propertyvista.portal.rpc.portal.shared.services.SiteThemeServices;
+import com.propertyvista.portal.rpc.ptapp.services.ApplicationDocumentUploadService;
 import com.propertyvista.portal.rpc.shared.services.CreditCardValidationService;
 import com.propertyvista.portal.server.security.access.resident.AutopayAgreementTenantDatasetAccessRule;
 import com.propertyvista.portal.server.security.access.resident.CustomrPictureTenantDatasetAccessRule;
@@ -96,6 +97,8 @@ public class VistaPortalAccessControlList extends ServletContainerAclBuilder {
 
         grant(PortalProspectBehavior.ApplicationSelectionRequired, new IServiceExecutePermission(ApplicationContextSelectionService.class));
         grant(PortalProspectBehavior.HasMultipleApplications, new IServiceExecutePermission(ApplicationContextSelectionService.class));
+
+        grant(new IServiceExecutePermission(ApplicationDocumentUploadService.class));
 
         // Old TODO remove
         grant(new IServiceExecutePermission(ReferenceDataService.class));
