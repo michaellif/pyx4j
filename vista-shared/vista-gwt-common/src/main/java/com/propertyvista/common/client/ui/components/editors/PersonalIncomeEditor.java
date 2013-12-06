@@ -228,7 +228,7 @@ public class PersonalIncomeEditor extends CEntityForm<CustomerScreeningIncome> {
                 main.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().name()), 25).build());
 
                 main.setH3(++row, 0, 2, proto().address().getMeta().getCaption());
-                main.setWidget(++row, 0, 2, inject(proto().address(), new AddressStructuredEditor()));
+                main.setWidget(++row, 0, 2, inject(proto().address(), new AddressSimpleEditor(false)));
 
                 main.setH3(++row, 0, 2, i18n.tr("Program Info"));
                 main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().program()), 10).build());
