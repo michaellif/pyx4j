@@ -97,6 +97,7 @@ public abstract class DefaultWidgetDecoratorTheme extends Theme {
         style.addProperty("padding-right", "1em");
         style.addProperty("white-space", "normal");
         style.addProperty("line-height", "2em");
+        style.addProperty("text-align", "left");
         addStyle(style);
 
         style = new Style(".", StyleName.WidgetDecoratorComponent, " .", CComponentTheme.StyleName.FieldEditorPanel);

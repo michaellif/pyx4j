@@ -89,8 +89,8 @@ public abstract class FlexFormPanelTheme extends Theme {
         addStyle(style);
 
         style = new Style(".", StyleName.FormFlexPanelHR);
-        style.addProperty("background-color", getBackgroundColor(), 0.4);
-        style.addProperty("height", "2px");
+        style.addProperty("background-color", getBackgroundColor(), 0.6);
+        style.addProperty("height", "1px");
         style.addProperty("margin", "6px 0 4px 0");
         addStyle(style);
 
