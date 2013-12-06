@@ -14,59 +14,37 @@
 package com.propertyvista.portal.shared.ui.util.editors;
 
 import com.google.gwt.dom.client.Style.FontWeight;
-import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.commons.Key;
-import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.forms.client.events.PropertyChangeEvent;
+import com.pyx4j.forms.client.events.PropertyChangeEvent.PropertyName;
+import com.pyx4j.forms.client.events.PropertyChangeHandler;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.ui.CEntityLabel;
-import com.pyx4j.forms.client.ui.CField;
 import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
-import com.pyx4j.site.client.AppPlaceEntityMapper;
-import com.pyx4j.site.client.AppSite;
-import com.pyx4j.site.rpc.CrudAppPlace;
 
 import com.propertyvista.domain.person.Name;
 import com.propertyvista.portal.shared.ui.util.decorators.FormWidgetDecoratorBuilder;
 
 public class NameEditor extends CEntityForm<Name> {
 
-    private final CComponent<Name> viewComp;
+    private final CComponent<Name> nameComp;
 
     private final String customViewLabel;
-
-    private final CrudAppPlace linkPlace;
 
     public NameEditor() {
         this(null);
     }
 
-    public NameEditor(String customViewLabel) {
-        this(customViewLabel, null);
-    }
-
     @SuppressWarnings("rawtypes")
-    public NameEditor(String customViewLabel, Class<? extends IEntity> linkType) {
+    public NameEditor(String customViewLabel) {
         super(Name.class);
         this.customViewLabel = customViewLabel;
 
-        linkPlace = (linkType != null ? AppPlaceEntityMapper.resolvePlace(linkType) : null);
-        viewComp = new CEntityLabel<Name>();
-        viewComp.setViewable(true);
-        viewComp.asWidget().getElement().getStyle().setFontWeight(FontWeight.BOLDER);
-
-        if (linkPlace != null) {
-            ((CField) viewComp).setNavigationCommand(new Command() {
-                @Override
-                public void execute() {
-                    if (getLinkKey() != null) {
-                        AppSite.getPlaceController().goTo(linkPlace.formViewerPlace(getLinkKey()));
-                    }
-                }
-            });
-        }
+        nameComp = new CEntityLabel<Name>();
+        nameComp.asWidget().getElement().getStyle().setFontWeight(FontWeight.BOLDER);
     }
 
     /**
@@ -81,19 +59,45 @@ public class NameEditor extends CEntityForm<Name> {
         BasicFlexFormPanel main = new BasicFlexFormPanel();
         int row = -1;
 
-        if (!isViewable()) {
-            main.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().firstName()), 200).build());
-            main.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().lastName()), 200).build());
-            main.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().middleName()), 60).build());
+        main.setWidget(0, 0, 1, new FormWidgetDecoratorBuilder(nameComp, 200).customLabel(customViewLabel).build());
 
-            main.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().namePrefix()), 60).build());
-            main.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().nameSuffix()), 60).build());
-            main.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().maidenName()), 200).build());
-        } else {
-            main.setWidget(0, 0, 1, new FormWidgetDecoratorBuilder(viewComp, 200).customLabel(customViewLabel).build());
-        }
+        main.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().firstName()), 200).build());
+        main.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().lastName()), 200).build());
+        main.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().middleName()), 60).build());
+        main.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().namePrefix()), 60).build());
+        main.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().nameSuffix()), 60).build());
+//        main.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().maidenName()), 200).build());
+
+        calculateFieldsStatus();
+
+        addPropertyChangeHandler(new PropertyChangeHandler() {
+            @Override
+            public void onPropertyChange(PropertyChangeEvent event) {
+                if (event.isEventOfType(PropertyName.viewable)) {
+                    calculateFieldsStatus();
+                }
+            }
+        });
 
         return main;
+    }
+
+    private void calculateFieldsStatus() {
+        if (isViewable()) {
+            nameComp.setVisible(true);
+
+            get(proto().firstName()).setVisible(false);
+            get(proto().lastName()).setVisible(false);
+            get(proto().namePrefix()).setVisible(false);
+            get(proto().nameSuffix()).setVisible(false);
+        } else {
+            nameComp.setVisible(false);
+
+            get(proto().firstName()).setVisible(true);
+            get(proto().lastName()).setVisible(true);
+            get(proto().namePrefix()).setVisible(true);
+            get(proto().nameSuffix()).setVisible(true);
+        }
     }
 
     @Override
@@ -101,7 +105,7 @@ public class NameEditor extends CEntityForm<Name> {
         super.onValueSet(populate);
 
         if (!isEditable()) {
-            viewComp.setValue(getValue());
+            nameComp.setValue(getValue());
         }
     }
 }

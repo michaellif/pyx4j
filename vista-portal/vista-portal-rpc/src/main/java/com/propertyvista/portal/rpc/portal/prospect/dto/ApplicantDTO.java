@@ -20,6 +20,7 @@ import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
+import com.pyx4j.entity.shared.IPrimitive;
 
 import com.propertyvista.domain.PriorAddress;
 import com.propertyvista.domain.media.IdentificationDocument;
@@ -29,6 +30,7 @@ import com.propertyvista.domain.tenant.CustomerScreeningLegalQuestions;
 import com.propertyvista.domain.tenant.EmergencyContact;
 import com.propertyvista.domain.tenant.income.CustomerScreeningIncome;
 import com.propertyvista.domain.tenant.income.CustomerScreeningPersonalAsset;
+import com.propertyvista.domain.tenant.lead.Lead.RefSource;
 
 @Transient
 public interface ApplicantDTO extends IEntity {
@@ -48,6 +50,9 @@ public interface ApplicantDTO extends IEntity {
     @Owned
     @Caption(name = "General Questions")
     CustomerScreeningLegalQuestions legalQuestions();
+
+    @Caption(name = "How did you hear about us")
+    IPrimitive<RefSource> refSource();
 
     //=============== Financial =============//
 

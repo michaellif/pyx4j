@@ -30,9 +30,6 @@ import com.pyx4j.forms.client.ui.CImage;
 import com.pyx4j.forms.client.ui.CLabel;
 import com.pyx4j.forms.client.ui.RevalidationTrigger;
 import com.pyx4j.forms.client.ui.decorators.IDecorator;
-import com.pyx4j.forms.client.ui.decorators.WidgetDecorator;
-import com.pyx4j.forms.client.ui.decorators.WidgetDecorator.Builder.Alignment;
-import com.pyx4j.forms.client.ui.decorators.WidgetDecorator.Builder.LabelPosition;
 import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
 import com.pyx4j.forms.client.ui.wizard.WizardDecorator;
 import com.pyx4j.forms.client.ui.wizard.WizardStep;
@@ -62,9 +59,11 @@ import com.propertyvista.portal.rpc.portal.prospect.dto.OnlineApplicationDTO;
 import com.propertyvista.portal.rpc.portal.resident.services.ResidentPictureUploadService;
 import com.propertyvista.portal.shared.ui.AbstractPortalPanel;
 import com.propertyvista.portal.shared.ui.CPortalEntityWizard;
-import com.propertyvista.portal.shared.ui.EmergencyContactFolder;
 import com.propertyvista.portal.shared.ui.util.decorators.FormWidgetDecoratorBuilder;
 import com.propertyvista.portal.shared.ui.util.decorators.PortalWidgetDecorator;
+import com.propertyvista.portal.shared.ui.util.editors.EmergencyContactFolder;
+import com.propertyvista.portal.shared.ui.util.editors.PersonalAssetFolder;
+import com.propertyvista.portal.shared.ui.util.editors.PersonalIncomeFolder;
 import com.propertyvista.portal.shared.ui.util.editors.PriorAddressEditor;
 
 public class ApplicationWizard extends CPortalEntityWizard<OnlineApplicationDTO> {
@@ -185,7 +184,6 @@ public class ApplicationWizard extends CPortalEntityWizard<OnlineApplicationDTO>
     private BasicFlexFormPanel createOptionsStep() {
         BasicFlexFormPanel panel = new BasicFlexFormPanel(i18n.tr("Unit Options"));
         int row = -1;
-
         panel.setH1(++row, 0, 1, panel.getTitle());
 
         return panel;
@@ -194,11 +192,9 @@ public class ApplicationWizard extends CPortalEntityWizard<OnlineApplicationDTO>
     private BasicFlexFormPanel createPeopleStep() {
         BasicFlexFormPanel panel = new BasicFlexFormPanel(i18n.tr("People"));
         int row = -1;
-
         panel.setH1(++row, 0, 1, panel.getTitle());
 
         panel.setH3(++row, 0, 1, i18n.tr("People Living with You"));
-
         panel.setWidget(++row, 0, inject(proto().coapplicants(), new CoapplicantsFolder((ApplicationWizardViewImpl) getView())));
 
         return panel;
@@ -207,7 +203,6 @@ public class ApplicationWizard extends CPortalEntityWizard<OnlineApplicationDTO>
     private BasicFlexFormPanel createPersonalInfoAStep() {
         BasicFlexFormPanel panel = new BasicFlexFormPanel(i18n.tr("About You"));
         int row = -1;
-
         panel.setH1(++row, 0, 1, panel.getTitle());
 
         CImage<CustomerPicture> imageHolder = new CImage<CustomerPicture>(GWT.<ResidentPictureUploadService> create(ResidentPictureUploadService.class),
@@ -232,6 +227,8 @@ public class ApplicationWizard extends CPortalEntityWizard<OnlineApplicationDTO>
 
         panel.setH3(++row, 0, 1, i18n.tr("Secure Information"));
         panel.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().applicant().person().birthDate()), 150).build());
+
+        panel.setH3(++row, 0, 1, i18n.tr("Identification Documents"));
         panel.setWidget(++row, 0, 2, inject(proto().applicant().documents(), fileUpload = new IdUploaderFolder()));
 
         return panel;
@@ -240,10 +237,7 @@ public class ApplicationWizard extends CPortalEntityWizard<OnlineApplicationDTO>
     private BasicFlexFormPanel createPersonalInfoBStep() {
         BasicFlexFormPanel panel = new BasicFlexFormPanel(i18n.tr("Additional Info"));
         int row = -1;
-
         panel.setH1(++row, 0, 1, panel.getTitle());
-
-        panel.setH3(++row, 0, 1, i18n.tr("Additional Personal Information"));
 
         panel.setH3(++row, 0, 1, i18n.tr("Current Address"));
         panel.setWidget(++row, 0, inject(proto().applicant().currentAddress(), new PriorAddressEditor()));
@@ -251,8 +245,6 @@ public class ApplicationWizard extends CPortalEntityWizard<OnlineApplicationDTO>
         previousAddress.setH3(0, 0, 1, i18n.tr("Previous Address"));
         previousAddress.setWidget(1, 0, inject(proto().applicant().previousAddress(), new PriorAddressEditor()));
         panel.setWidget(++row, 0, previousAddress);
-
-        panel.setH3(++row, 0, 1, i18n.tr("Vehicles"));
 
         panel.setH3(++row, 0, 1, i18n.tr("General Questions"));
         panel.setWidget(++row, 0, new LegalQuestionWidgetDecoratorBuilder(inject(proto().applicant().legalQuestions().suedForRent())).build());
@@ -270,6 +262,7 @@ public class ApplicationWizard extends CPortalEntityWizard<OnlineApplicationDTO>
         panel.setWidget(++row, 0, new LegalQuestionWidgetDecoratorBuilder(inject(proto().applicant().legalQuestions().filedBankruptcy())).build());
 
         panel.setH3(++row, 0, 1, i18n.tr("How Did You Hear About Us?"));
+        panel.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().applicant().refSource()), 180).build());
 
         return panel;
     }
@@ -280,10 +273,13 @@ public class ApplicationWizard extends CPortalEntityWizard<OnlineApplicationDTO>
         panel.setH1(++row, 0, 1, panel.getTitle());
 
         panel.setH3(++row, 0, 1, i18n.tr("Income"));
+        panel.setWidget(++row, 0, inject(proto().applicant().incomes(), new PersonalIncomeFolder()));
 
         panel.setH3(++row, 0, 1, i18n.tr("Assets"));
+        panel.setWidget(++row, 0, inject(proto().applicant().assets(), new PersonalAssetFolder()));
 
         panel.setH3(++row, 0, 1, i18n.tr("Guarantors"));
+        panel.setWidget(++row, 0, inject(proto().guarantors(), new GuarantorsFolder((ApplicationWizardViewImpl) getView())));
 
         return panel;
     }
@@ -302,6 +298,7 @@ public class ApplicationWizard extends CPortalEntityWizard<OnlineApplicationDTO>
         BasicFlexFormPanel panel = new BasicFlexFormPanel(i18n.tr("Legal"));
         int row = -1;
         panel.setH1(++row, 0, 1, panel.getTitle());
+
         return panel;
     }
 
@@ -309,6 +306,7 @@ public class ApplicationWizard extends CPortalEntityWizard<OnlineApplicationDTO>
         BasicFlexFormPanel panel = new BasicFlexFormPanel(i18n.tr("Summary"));
         int row = -1;
         panel.setH1(++row, 0, 1, panel.getTitle());
+
         return panel;
     }
 
@@ -316,6 +314,7 @@ public class ApplicationWizard extends CPortalEntityWizard<OnlineApplicationDTO>
         BasicFlexFormPanel panel = new BasicFlexFormPanel(i18n.tr("Payment"));
         int row = -1;
         panel.setH1(++row, 0, 1, panel.getTitle());
+
         return panel;
     }
 
@@ -372,6 +371,17 @@ public class ApplicationWizard extends CPortalEntityWizard<OnlineApplicationDTO>
 
         previousAddressForm.get(previousAddressForm.proto().moveOutDate()).addValueChangeHandler(
                 new RevalidationTrigger<LogicalDate>(previousAddressForm.get(previousAddressForm.proto().moveInDate())));
+
+        // ------------------------------------------------------------------------------------------------
+        // createFinancialStep:
+
+        this.addValueValidator(new EditableValueValidator<OnlineApplicationDTO>() {
+            @Override
+            public ValidationError isValid(CComponent<OnlineApplicationDTO> component, OnlineApplicationDTO value) {
+                return (value.applicant().assets().size() > 0) || (value.applicant().incomes().size() > 0) ? null : new ValidationError(component, i18n
+                        .tr("At least one source of income or one asset is required"));
+            }
+        });
 
         // ------------------------------------------------------------------------------------------------
     }
