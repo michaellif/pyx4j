@@ -48,6 +48,7 @@ import com.propertyvista.common.client.ui.validators.FutureDateIncludeTodayValid
 import com.propertyvista.common.client.ui.validators.PastDateIncludeTodayValidator;
 import com.propertyvista.common.client.ui.validators.PastDateValidator;
 import com.propertyvista.common.client.ui.validators.StartEndDateValidation;
+import com.propertyvista.domain.PriorAddress;
 import com.propertyvista.domain.contact.AddressStructured;
 import com.propertyvista.domain.person.Name;
 import com.propertyvista.domain.property.asset.Floorplan;
@@ -57,7 +58,6 @@ import com.propertyvista.misc.BusinessRules;
 import com.propertyvista.portal.prospect.events.ApplicationWizardStateChangeEvent;
 import com.propertyvista.portal.prospect.ui.application.ApplicationWizardView.ApplicationWizardPresenter;
 import com.propertyvista.portal.rpc.portal.prospect.dto.OnlineApplicationDTO;
-import com.propertyvista.portal.rpc.portal.prospect.dto.PriorAddressDTO;
 import com.propertyvista.portal.rpc.portal.resident.services.ResidentPictureUploadService;
 import com.propertyvista.portal.shared.ui.CPortalEntityWizard;
 import com.propertyvista.portal.shared.ui.EmergencyContactFolder;
@@ -245,7 +245,7 @@ public class ApplicationWizard extends CPortalEntityWizard<OnlineApplicationDTO>
         panel.setH3(++row, 0, 1, i18n.tr("Current Address"));
         panel.setWidget(++row, 0, inject(proto().applicant().currentAddress(), new PriorAddressEditor()));
 
-        previousAddress.setH3(++row, 0, 1, i18n.tr("Previous Address"));
+        previousAddress.setH3(0, 0, 1, i18n.tr("Previous Address"));
         previousAddress.setWidget(1, 0, inject(proto().applicant().previousAddress(), new PriorAddressEditor()));
         panel.setWidget(++row, 0, previousAddress);
 
@@ -332,8 +332,8 @@ public class ApplicationWizard extends CPortalEntityWizard<OnlineApplicationDTO>
         // ------------------------------------------------------------------------------------------------
         // PersonalInfoBStep:
 
-        CEntityForm<PriorAddressDTO> currentAddressForm = ((CEntityForm<PriorAddressDTO>) get(proto().applicant().currentAddress()));
-        CEntityForm<PriorAddressDTO> previousAddressForm = ((CEntityForm<PriorAddressDTO>) get(proto().applicant().previousAddress()));
+        CEntityForm<PriorAddress> currentAddressForm = ((CEntityForm<PriorAddress>) get(proto().applicant().currentAddress()));
+        CEntityForm<PriorAddress> previousAddressForm = ((CEntityForm<PriorAddress>) get(proto().applicant().previousAddress()));
 
         CComponent<LogicalDate> c1 = currentAddressForm.get(currentAddressForm.proto().moveInDate());
         CComponent<LogicalDate> c2 = currentAddressForm.get(currentAddressForm.proto().moveOutDate());
@@ -396,7 +396,7 @@ public class ApplicationWizard extends CPortalEntityWizard<OnlineApplicationDTO>
         value1.addValueValidator(new EditableValueValidator<LogicalDate>() {
             @Override
             public ValidationError isValid(CComponent<LogicalDate> component, LogicalDate value) {
-                if (getValue() == null || getValue().isEmpty() || value2.getValue() == null) {
+                if (value == null || getValue() == null || getValue().isEmpty() || value2.getValue() == null) {
                     return null;
                 }
 

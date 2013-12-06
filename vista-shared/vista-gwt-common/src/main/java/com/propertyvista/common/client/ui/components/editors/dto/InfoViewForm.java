@@ -219,7 +219,7 @@ public class InfoViewForm extends CEntityForm<TenantInfoDTO> {
 
             @Override
             public ValidationError isValid(CComponent<LogicalDate> component, LogicalDate value) {
-                if (getValue() == null || getValue().isEmpty() || value2.getValue() == null) {
+                if (value == null || getValue() == null || getValue().isEmpty() || value2.getValue() == null) {
                     return null;
                 }
 

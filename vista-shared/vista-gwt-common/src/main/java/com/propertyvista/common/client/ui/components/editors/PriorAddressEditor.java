@@ -35,7 +35,6 @@ public class PriorAddressEditor extends AddressStructuredEditorImpl<PriorAddress
         super(PriorAddress.class, twoColumns);
     }
 
-    @SuppressWarnings({ "rawtypes", "unchecked" })
     @Override
     public IsWidget createContent() {
         TwoColumnFlexFormPanel main = internalCreateContent();
@@ -48,15 +47,16 @@ public class PriorAddressEditor extends AddressStructuredEditorImpl<PriorAddress
         main.setWidget(++row0, 0, new FormDecoratorBuilder(inject(proto().moveInDate()), 10).build());
         main.setWidget(++row0, 0, new FormDecoratorBuilder(inject(proto().moveOutDate()), 10).build());
 
-        CComponent<?> rentedComponent = inject(proto().rented());
-        rentedComponent.addValueChangeHandler(new ValueChangeHandler() {
+        int col = 1;
+
+        @SuppressWarnings("unchecked")
+        CComponent<OwnedRented> rentedComponent = (CComponent<OwnedRented>) inject(proto().rented());
+        rentedComponent.addValueChangeHandler(new ValueChangeHandler<OwnedRented>() {
             @Override
-            public void onValueChange(ValueChangeEvent event) {
+            public void onValueChange(ValueChangeEvent<OwnedRented> event) {
                 setVisibility(getValue());
             }
         });
-
-        int col = 1;
 
         main.setWidget(++row1, col, new FormDecoratorBuilder(rentedComponent, 15).build());
         main.setWidget(++row1, col, new FormDecoratorBuilder(inject(proto().payment()), 8).build());

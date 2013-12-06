@@ -19,31 +19,23 @@ import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.forms.client.ui.CComponent;
-import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
 
+import com.propertyvista.domain.PriorAddress;
 import com.propertyvista.domain.PriorAddress.OwnedRented;
-import com.propertyvista.portal.rpc.portal.prospect.dto.PriorAddressDTO;
 import com.propertyvista.portal.shared.ui.util.decorators.FormWidgetDecoratorBuilder;
 
-public class PriorAddressEditor extends CEntityForm<PriorAddressDTO> {
+public class PriorAddressEditor extends AddressStructuredEditorImpl<PriorAddress> {
 
     public PriorAddressEditor() {
-        super(PriorAddressDTO.class);
+        super(PriorAddress.class);
     }
 
     @Override
     public IsWidget createContent() {
-        BasicFlexFormPanel main = new BasicFlexFormPanel();
+        BasicFlexFormPanel main = internalCreateContent();
 
-        int row = -1;
-
-        main.setWidget(++row, 0, inject(proto().address(), new AddressSimpleEditor() {
-            @Override
-            protected void onDevGenerateAddress() {
-                PriorAddressEditor.this.onDevGenerateAddress();
-            }
-        }));
+        int row = main.getRowCount();
 
         main.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().moveInDate()), 120).build());
         main.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().moveOutDate()), 120).build());
@@ -74,7 +66,7 @@ public class PriorAddressEditor extends CEntityForm<PriorAddressDTO> {
         setVisibility(getValue());
     }
 
-    private void setVisibility(PriorAddressDTO value) {
+    private void setVisibility(PriorAddress value) {
         boolean rented = OwnedRented.rented.equals(value.rented().getValue());
         get(proto().payment()).setVisible(rented);
         get(proto().propertyCompany()).setVisible(rented);
@@ -83,7 +75,9 @@ public class PriorAddressEditor extends CEntityForm<PriorAddressDTO> {
         get(proto().managerEmail()).setVisible(rented);
     }
 
-    protected void onDevGenerateAddress() {
+    @Override
+    protected void devGenerateAddress() {
+        super.devGenerateAddress();
         get(proto().moveInDate()).setValue(new LogicalDate(101, 5, 21));
         get(proto().rented()).setValue(OwnedRented.owned);
     }

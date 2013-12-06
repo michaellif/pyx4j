@@ -11,7 +11,7 @@
  * @author michaellif
  * @version $Id$
  */
-package com.propertyvista.common.client.ui.components.editors;
+package com.propertyvista.portal.shared.ui.util.editors;
 
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
@@ -26,9 +26,10 @@ import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.ui.CTextFieldBase;
 import com.pyx4j.forms.client.ui.OptionsFilter;
 import com.pyx4j.forms.client.ui.RevalidationTrigger;
-import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
+import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
 
-import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
+import com.propertyvista.common.client.ui.components.editors.CountryContextCComponentProvider;
+import com.propertyvista.common.client.ui.components.editors.PostalCodeFormat;
 import com.propertyvista.common.client.ui.validators.ProvinceContryFilters;
 import com.propertyvista.common.client.ui.validators.ZipCodeValueValidator;
 import com.propertyvista.domain.contact.AddressStructured;
@@ -36,6 +37,7 @@ import com.propertyvista.domain.contact.AddressStructured.StreetDirection;
 import com.propertyvista.domain.contact.AddressStructured.StreetType;
 import com.propertyvista.domain.ref.Country;
 import com.propertyvista.domain.ref.Province;
+import com.propertyvista.portal.shared.ui.util.decorators.FormWidgetDecoratorBuilder;
 
 public abstract class AddressStructuredEditorImpl<A extends AddressStructured> extends CEntityForm<A> {
 
@@ -50,8 +52,8 @@ public abstract class AddressStructuredEditorImpl<A extends AddressStructured> e
         this.showUnit = showUnit;
     }
 
-    protected TwoColumnFlexFormPanel internalCreateContent() {
-        TwoColumnFlexFormPanel content = new TwoColumnFlexFormPanel();
+    protected BasicFlexFormPanel internalCreateContent() {
+        BasicFlexFormPanel content = new BasicFlexFormPanel();
 
         @SuppressWarnings("unchecked")
         final CComponent<Country> country = (CComponent<Country>) inject(proto().country());
@@ -66,22 +68,20 @@ public abstract class AddressStructuredEditorImpl<A extends AddressStructured> e
         }
 
         int row = -1;
+
         if (showUnit) {
-            content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().suiteNumber()), 10).build());
+            content.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().suiteNumber()), 120).build());
         }
-        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().streetNumber()), 10).build());
-        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().streetNumberSuffix()), 10).build());
-        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().streetName()), 16).build());
-        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().streetType()), 10).build());
-        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().streetDirection()), 10).build());
-
-        row = -1;
-
-        content.setWidget(++row, 1, new FormDecoratorBuilder(inject(proto().city()), 15).build());
-        content.setWidget(++row, 1, new FormDecoratorBuilder(inject(proto().county()), 15).build());
-        content.setWidget(++row, 1, new FormDecoratorBuilder(province, 15).build());
-        content.setWidget(++row, 1, new FormDecoratorBuilder(country, 15).build());
-        content.setWidget(++row, 1, new FormDecoratorBuilder(postalCode, 10).build());
+        content.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().streetNumber()), 120).build());
+        content.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().streetNumberSuffix()), 120).build());
+        content.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().streetName()), 200).build());
+        content.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().streetType()), 120).build());
+        content.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().streetDirection()), 120).build());
+        content.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().city()), 200).build());
+        content.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().county()), 200).build());
+        content.setWidget(++row, 0, new FormWidgetDecoratorBuilder(province, 200).build());
+        content.setWidget(++row, 0, new FormWidgetDecoratorBuilder(country, 200).build());
+        content.setWidget(++row, 0, new FormWidgetDecoratorBuilder(postalCode, 120).build());
 
         // tweaks:
         attachFilters(proto(), province, country, postalCode);

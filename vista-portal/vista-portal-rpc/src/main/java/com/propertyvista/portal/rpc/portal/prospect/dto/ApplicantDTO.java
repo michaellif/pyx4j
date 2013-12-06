@@ -21,6 +21,7 @@ import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
 
+import com.propertyvista.domain.PriorAddress;
 import com.propertyvista.domain.media.IdentificationDocument;
 import com.propertyvista.domain.person.Person;
 import com.propertyvista.domain.tenant.CustomerPicture;
@@ -38,9 +39,9 @@ public interface ApplicantDTO extends IEntity {
 
     IList<IdentificationDocument> documents();
 
-    PriorAddressDTO currentAddress();
+    PriorAddress currentAddress();
 
-    PriorAddressDTO previousAddress();
+    PriorAddress previousAddress();
 
     IList<EmergencyContact> emergencyContacts();
 

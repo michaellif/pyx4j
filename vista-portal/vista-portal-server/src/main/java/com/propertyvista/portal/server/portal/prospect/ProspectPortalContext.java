@@ -41,5 +41,4 @@ public class ProspectPortalContext extends PortalVistaContext {
         criteria.eq(criteria.proto().applications(), getOnlineApplicationIdStub());
         return Persistence.service().retrieve(criteria);
     }
-
 }
