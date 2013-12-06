@@ -57,6 +57,7 @@ import com.propertyvista.crm.client.ui.tools.common.ItemsHolderForm;
 import com.propertyvista.crm.client.ui.tools.common.datagrid.MultiSelectorCell;
 import com.propertyvista.crm.client.ui.tools.common.datagrid.ObjectEditCell;
 import com.propertyvista.crm.client.ui.tools.common.datagrid.VistaDataGridStyles;
+import com.propertyvista.crm.client.ui.tools.common.widgets.superselector.SuperSuggestiveSelector;
 import com.propertyvista.crm.client.ui.tools.l1generation.visors.L1VisorStyles;
 import com.propertyvista.crm.client.ui.tools.n4generation.LegalNoticeCandidateFolderHolderForm;
 import com.propertyvista.crm.client.ui.tools.n4generation.LegalNoticeCandidateForm;
@@ -155,6 +156,7 @@ public class CrmTheme extends VistaTheme {
 
         initBulkOperationToolStyles();
         initAutoPayReviewToolStyles();
+
         initN4GenerationToolStyles();
         initL1GenerationToolStyles();
     }
@@ -777,8 +779,7 @@ public class CrmTheme extends VistaTheme {
         addStyle(style);
         // TODO ^^^^^ review if styles from this line up to upper TODO are required
 
-        // These are good: DataGrid and custom Cells styles definitions
-
+        // The following are good: DataGrid and custom Cells styles definitions
         // Object Edit Cell Styles
         style = new Style("." + ObjectEditCell.StyleNames.ObjectEditCell.name());
         style.addProperty("width", "100%");
@@ -815,7 +816,6 @@ public class CrmTheme extends VistaTheme {
         style.addProperty("color", "4B4A4A");
         style.addProperty("padding", "3px 15px");
         style.addProperty("text-align", "left");
-//        style.addProperty("text-shadow", "1px 1px 0 #DDDDFF");
         style.addProperty("white-space", "normal");
         addStyle(style);
 
@@ -824,8 +824,16 @@ public class CrmTheme extends VistaTheme {
         style.addProperty("color", "4B4A4A");
         style.addProperty("padding", "3px 15px");
         style.addProperty("text-align", "left");
-//        style.addProperty("text-shadow", "1px 1px 0 #DDDDFF");
         style.addProperty("white-space", "normal");
+        addStyle(style);
+
+        // This is for 'Super Selector' used in bulk operation search criteria forms:
+        style = new Style("." + SuperSuggestiveSelector.Styles.SuggestionsPopup.name());
+        style.addProperty("background-color", ThemeColor.background);
+        style.addProperty("padding", "5px");
+        style.addProperty("border-color", ThemeColor.foreground);
+        style.addProperty("border-width", "1px");
+        style.addProperty("border-style", "outset");
         addStyle(style);
 
     }

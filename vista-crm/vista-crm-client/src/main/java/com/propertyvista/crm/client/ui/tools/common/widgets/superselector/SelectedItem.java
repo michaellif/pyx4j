@@ -29,7 +29,7 @@ import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.Label;
 
-import com.propertyvista.domain.property.asset.building.Building;
+import com.pyx4j.forms.client.ui.IFormat;
 
 public class SelectedItem<C> extends Composite {
 
@@ -37,7 +37,7 @@ public class SelectedItem<C> extends Composite {
 
     private final C item;
 
-    public SelectedItem(SuperSelector<C> parent, C item) {
+    public SelectedItem(IFormat<C> format, SuperSelector<C> parent, C item) {
         this.parent = parent;
         this.item = item;
 
@@ -46,9 +46,7 @@ public class SelectedItem<C> extends Composite {
         panel.getElement().getStyle().setPaddingLeft(3, Unit.PX);
         panel.getElement().getStyle().setPaddingRight(3, Unit.PX);
 
-        // TODO change to string
-
-        Label itemLabel = new Label((item instanceof Building) ? ((Building) item).propertyCode().getValue() : item.toString());
+        Label itemLabel = new Label(format.format(item));
         itemLabel.getElement().getStyle().setDisplay(Display.INLINE);
         panel.add(itemLabel);
 

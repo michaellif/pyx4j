@@ -21,24 +21,44 @@
 package com.propertyvista.crm.client.ui.tools.common.widgets.superselector;
 
 import com.google.gwt.cell.client.Cell;
+import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.BrowserEvents;
 import com.google.gwt.dom.client.NativeEvent;
+import com.google.gwt.dom.client.Style.FontWeight;
+import com.google.gwt.dom.client.Style.TextAlign;
+import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.KeyCodes;
 import com.google.gwt.event.dom.client.KeyPressEvent;
 import com.google.gwt.event.dom.client.KeyPressHandler;
+import com.google.gwt.event.dom.client.MouseOutEvent;
+import com.google.gwt.event.dom.client.MouseOutHandler;
+import com.google.gwt.event.dom.client.MouseOverEvent;
+import com.google.gwt.event.dom.client.MouseOverHandler;
 import com.google.gwt.touch.client.Point;
 import com.google.gwt.user.cellview.client.CellList;
+import com.google.gwt.user.cellview.client.HasKeyboardPagingPolicy.KeyboardPagingPolicy;
 import com.google.gwt.user.cellview.client.HasKeyboardSelectionPolicy.KeyboardSelectionPolicy;
+import com.google.gwt.user.cellview.client.SimplePager;
+import com.google.gwt.user.cellview.client.SimplePager.TextLocation;
 import com.google.gwt.user.client.Element;
 import com.google.gwt.user.client.Timer;
+import com.google.gwt.user.client.ui.HasHorizontalAlignment;
+import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.PopupPanel;
 import com.google.gwt.user.client.ui.PopupPanel.PositionCallback;
+import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.view.client.AbstractDataProvider;
 import com.google.gwt.view.client.CellPreviewEvent;
 import com.google.gwt.view.client.CellPreviewEvent.Handler;
 import com.google.gwt.view.client.SingleSelectionModel;
 
+import com.pyx4j.commons.css.IStyleName;
+import com.pyx4j.forms.client.ui.IFormat;
+import com.pyx4j.i18n.shared.I18n;
+
 public abstract class SuperSuggestiveSelector<DataType> extends SuperSelector<DataType> {
+
+    private static final I18n i18n = I18n.get(SuperSuggestiveSelector.class);
 
     public static abstract class SuggestionsProvider<DataType> extends AbstractDataProvider<DataType> {
 
@@ -46,19 +66,31 @@ public abstract class SuperSuggestiveSelector<DataType> extends SuperSelector<Da
 
     }
 
-    private final static int DEFAULT_POPUP_DELAY = 100;
+    public enum Styles implements IStyleName {
+
+        SuggestionsPopup
+
+    }
+
+    private final static int SUGGESTIONS_PER_PAGE = 5;
+
+    private final static int POPUP_HIDE_DELAY = 400;
+
+    private final static int DEFAULT_SUGGE_DELAY = 100;
 
     private final SuggestionsProvider<DataType> suggestionsProvider;
 
-    private boolean isSuggestionsActive;
-
     private final Cell<DataType> cell;
-
-    private Timer popupTimer;
 
     private SuggestionsPopup popup;
 
+    private final boolean alwaysSuggest;
+
+    private Timer popupTimer;
+
     private int popupDelay;
+
+    private boolean suggestionsInUse;
 
     public class SuggestionsPopup extends PopupPanel {
 
@@ -66,11 +98,35 @@ public abstract class SuperSuggestiveSelector<DataType> extends SuperSelector<Da
 
         private SingleSelectionModel<DataType> selectionModel;
 
+        private final SimplePager pager;
+
         int selectedIndex;
 
         public SuggestionsPopup() {
-            super(true);
+            super(false);
+            selectedIndex = -1;
+            popupDelay = DEFAULT_SUGGE_DELAY;
+
+            VerticalPanel panel = new VerticalPanel();
+            panel.setStyleName(Styles.SuggestionsPopup.name());
+            panel.addDomHandler(new MouseOverHandler() {
+                @Override
+                public void onMouseOver(MouseOverEvent event) {
+                    suggestionsInUse = true;
+                }
+            }, MouseOverEvent.getType());
+            panel.addDomHandler(new MouseOutHandler() {
+                @Override
+                public void onMouseOut(MouseOutEvent event) {
+                    suggestionsInUse = false;
+                    if (!SuperSuggestiveSelector.this.isFocused()) {
+                        SuperSuggestiveSelector.this.delayedHideSuggestions();
+                    }
+                }
+            }, MouseOutEvent.getType());
+
             suggestionList = new CellList<DataType>(cell, suggestionsProvider.getKeyProvider());
+            suggestionList.setPageSize(SUGGESTIONS_PER_PAGE);
             suggestionList.setSelectionModel(selectionModel = new SingleSelectionModel<DataType>(suggestionsProvider.getKeyProvider()));
             suggestionList.setKeyboardSelectionPolicy(KeyboardSelectionPolicy.ENABLED);
             suggestionList.addCellPreviewHandler(new Handler<DataType>() {
@@ -86,28 +142,50 @@ public abstract class SuperSuggestiveSelector<DataType> extends SuperSelector<Da
                     }
                 }
             });
+            suggestionList.setKeyboardPagingPolicy(KeyboardPagingPolicy.CHANGE_PAGE);
 
+            Label noSuggestionsMessage = new Label(i18n.tr("No Suggestions"));
+            noSuggestionsMessage.getElement().getStyle().setWidth(100, Unit.PCT);
+            noSuggestionsMessage.getElement().getStyle().setTextAlign(TextAlign.CENTER);
+            noSuggestionsMessage.getElement().getStyle().setFontWeight(FontWeight.BOLD);
+
+            suggestionList.setEmptyListWidget(noSuggestionsMessage);
             suggestionsProvider.addDataDisplay(suggestionList);
-            selectedIndex = -1;
-            popupDelay = DEFAULT_POPUP_DELAY;
+            panel.add(suggestionList);
 
-            setWidget(suggestionList);
+            SimplePager.Resources pagerResources = GWT.create(SimplePager.Resources.class);
+            pager = new SimplePager(TextLocation.CENTER, pagerResources, false, 0, true);
+            pager.setDisplay(suggestionList);
+
+            panel.add(pager);
+            panel.setCellHorizontalAlignment(pager, HasHorizontalAlignment.ALIGN_CENTER);
+
+            setWidget(panel);
         }
 
-        public void suggestPrevious() {
-            if (selectedIndex == 0) {
-                selectedIndex = -1;
-                selectionModel.clear();
+        public void selectPrevious() {
+            if (selectedIndex == -1) {
+                pager.previousPage();
+                return;
             } else {
+                selectionModel.setSelected(suggestionList.getVisibleItem(selectedIndex), false);
                 selectedIndex -= 1;
-                selectionModel.setSelected(suggestionList.getVisibleItem(selectedIndex), true);
+                if (selectedIndex > -1) {
+                    selectionModel.setSelected(suggestionList.getVisibleItem(selectedIndex), true);
+                } else {
+                    pager.previousPage();
+                }
             }
         }
 
-        public void suggestNext() {
-            if (selectedIndex < suggestionList.getRowCount() - 1) {
+        public void selectNext() {
+            if (selectedIndex < (suggestionList.getPageSize() - 1)) {
                 selectedIndex += 1;
                 selectionModel.setSelected(suggestionList.getVisibleItem(selectedIndex), true);
+            } else {
+                pager.nextPage();
+                selectionModel.setSelected(selectionModel.getSelectedObject(), false);
+                selectedIndex = -1;
             }
         }
 
@@ -117,33 +195,32 @@ public abstract class SuperSuggestiveSelector<DataType> extends SuperSelector<Da
 
         @Override
         public void hide() {
-            SuperSuggestiveSelector.this.isSuggestionsActive = false;
             SuperSuggestiveSelector.this.popup = null;
             super.hide();
-
         }
     }
 
-    public SuperSuggestiveSelector(Cell<DataType> cell, SuggestionsProvider<DataType> suggestionsProvider) {
+    public SuperSuggestiveSelector(IFormat<DataType> format, Cell<DataType> cell, SuggestionsProvider<DataType> suggestionsProvider, boolean alwaysSuggest) {
+        super(format);
+        this.alwaysSuggest = alwaysSuggest;
         this.cell = cell;
         this.suggestionsProvider = suggestionsProvider;
-        this.isSuggestionsActive = false;
 
         addDomHandler(new KeyPressHandler() {
             @Override
             public void onKeyPress(KeyPressEvent event) {
                 if (SuperSuggestiveSelector.this.popup != null) {
                     if (event.getNativeEvent().getKeyCode() == KeyCodes.KEY_UP) {
-                        SuperSuggestiveSelector.this.popup.suggestPrevious();
+                        SuperSuggestiveSelector.this.popup.selectPrevious();
                     } else if (event.getNativeEvent().getKeyCode() == KeyCodes.KEY_DOWN) {
-                        SuperSuggestiveSelector.this.popup.suggestNext();
+                        SuperSuggestiveSelector.this.popup.selectNext();
                     }
                 }
             }
         }, KeyPressEvent.getType());
     }
 
-    public void setSuggestionPopupDelay(int coundownMillis) {
+    public void setSuggestionDelay(int coundownMillis) {
         this.popupDelay = coundownMillis;
     }
 
@@ -177,20 +254,32 @@ public abstract class SuperSuggestiveSelector<DataType> extends SuperSelector<Da
         }
     }
 
+    @Override
+    protected void onFocus() {
+        this.suggestionsInUse = false;
+        if (alwaysSuggest) {
+            showSuggestions();
+            this.suggestionsProvider.onSuggestionCriteriaChange("");
+        }
+    }
+
+    @Override
+    protected void onBlur() {
+        delayedHideSuggestions();
+    }
+
     private void onSuggestionCriteriaChange(String newSuggestionCriteria) {
         if ("".equals(newSuggestionCriteria.trim())) {
-            hideSuggestionsPopup();
+            if (!alwaysSuggest) {
+                hideSuggestions();
+            }
         } else {
-            showSuggestionsPopup();
-        }
-        if (isSuggestionsActive) {
+            showSuggestions();
             this.suggestionsProvider.onSuggestionCriteriaChange(newSuggestionCriteria);
         }
     }
 
-    private void showSuggestionsPopup() {
-        this.isSuggestionsActive = true;
-
+    private void showSuggestions() {
         if (popup == null) {
             popup = new SuggestionsPopup();
 
@@ -203,10 +292,22 @@ public abstract class SuperSuggestiveSelector<DataType> extends SuperSelector<Da
         }
     }
 
-    private void hideSuggestionsPopup() {
+    private void hideSuggestions() {
         if (this.popup != null) {
             this.popup.hide();
         }
+    }
+
+    private void delayedHideSuggestions() {
+        Timer delayedHide = new Timer() {
+            @Override
+            public void run() {
+                if (!SuperSuggestiveSelector.this.suggestionsInUse) {
+                    hideSuggestions();
+                }
+            }
+        };
+        delayedHide.schedule(POPUP_HIDE_DELAY);
     }
 
     private void repostitionPopup() {

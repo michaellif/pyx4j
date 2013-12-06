@@ -19,9 +19,10 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.entity.server.AbstractListServiceImpl;
 import com.pyx4j.entity.server.Persistence;
-import com.pyx4j.entity.shared.AttachLevel;
+import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 
+import com.propertyvista.crm.rpc.dto.selections.BuildingForSelectionDTO;
 import com.propertyvista.crm.rpc.services.selections.SelectBuildingListService;
 import com.propertyvista.domain.property.asset.building.Building;
 
@@ -38,7 +39,21 @@ public class SelectBuildingListServiceImpl extends AbstractListServiceImpl<Build
     }
 
     @Override
-    public void getAll(AsyncCallback<Vector<Building>> callback, EntityQueryCriteria<Building> criteria) {
-        callback.onSuccess(new Vector<Building>(Persistence.secureQuery(criteria, AttachLevel.ToStringMembers)));
+    public void getBuildingsForSelection(AsyncCallback<Vector<BuildingForSelectionDTO>> callback, EntityQueryCriteria<Building> criteria) {
+        Vector<Building> buildings = Persistence.secureQuery(criteria);
+        Vector<BuildingForSelectionDTO> dtos = new Vector<BuildingForSelectionDTO>(buildings.size());
+        for (Building buidling : buildings) {
+            dtos.add(convertTo4SelectionDto(buidling));
+        }
+        callback.onSuccess(dtos);
+    }
+
+    private BuildingForSelectionDTO convertTo4SelectionDto(Building building) {
+        BuildingForSelectionDTO dto = EntityFactory.create(BuildingForSelectionDTO.class);
+        dto.id().setValue(building.id().getValue());
+        dto.propertyCode().setValue(building.propertyCode().getValue());
+        dto.name().setValue(building.info().name().getValue());
+        dto.address().setValue(building.info().address().getStringView());
+        return dto;
     }
 }

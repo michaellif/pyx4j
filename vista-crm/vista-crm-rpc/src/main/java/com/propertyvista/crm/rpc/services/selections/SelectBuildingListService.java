@@ -20,9 +20,10 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.pyx4j.entity.rpc.AbstractListService;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 
+import com.propertyvista.crm.rpc.dto.selections.BuildingForSelectionDTO;
 import com.propertyvista.domain.property.asset.building.Building;
 
 public interface SelectBuildingListService extends AbstractListService<Building> {
 
-    void getAll(AsyncCallback<Vector<Building>> callback, EntityQueryCriteria<Building> criteria);
+    void getBuildingsForSelection(AsyncCallback<Vector<BuildingForSelectionDTO>> callback, EntityQueryCriteria<Building> criteria);
 }

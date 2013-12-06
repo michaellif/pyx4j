@@ -20,6 +20,7 @@
  */
 package com.propertyvista.crm.client.ui.tools.common.widgets.superselector;
 
+import java.text.ParseException;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -28,6 +29,10 @@ import com.google.gwt.core.client.Scheduler.ScheduledCommand;
 import com.google.gwt.dom.client.Element;
 import com.google.gwt.dom.client.Style.Display;
 import com.google.gwt.dom.client.Style.Unit;
+import com.google.gwt.event.dom.client.BlurEvent;
+import com.google.gwt.event.dom.client.BlurHandler;
+import com.google.gwt.event.dom.client.FocusEvent;
+import com.google.gwt.event.dom.client.FocusHandler;
 import com.google.gwt.event.dom.client.KeyCodes;
 import com.google.gwt.event.dom.client.KeyPressEvent;
 import com.google.gwt.event.dom.client.KeyPressHandler;
@@ -36,6 +41,8 @@ import com.google.gwt.event.dom.client.KeyUpHandler;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.TextBox;
+
+import com.pyx4j.forms.client.ui.IFormat;
 
 public abstract class SuperSelector<C> extends Composite {
 
@@ -47,6 +54,8 @@ public abstract class SuperSelector<C> extends Composite {
 
     private final int minInputBoxWidth = 50;
 
+    private final IFormat<C> format;
+
     // @formatter:off
     // these are fixes for width so that the inputext will not get to next row
     // TODO i'm not sure with this is happending but this shouldn't exits and must be fixed
@@ -54,7 +63,14 @@ public abstract class SuperSelector<C> extends Composite {
     private final static int FIX_ROW_WIDTH_CALCULATION = 5;
     // @formatter:on
 
-    public SuperSelector() {
+    private boolean isFocused;
+
+    /**
+     * The format will be used to parse input and convert it to stuff, and to display selected items. if convert fails it can return "null" to avoid adding an
+     * item.
+     */
+    public SuperSelector(IFormat<C> format) {
+        this.format = format;
         FlowPanel panel = new FlowPanel();
 
         selectedItemsContainerPanel = new FlowPanel();
@@ -81,6 +97,21 @@ public abstract class SuperSelector<C> extends Composite {
             @Override
             public void onKeyUp(KeyUpEvent event) {
                 onInputChanged(inputTextBox.getValue());
+            }
+        });
+        inputTextBox.addFocusHandler(new FocusHandler() {
+
+            @Override
+            public void onFocus(FocusEvent event) {
+                SuperSelector.this.isFocused = true;
+                SuperSelector.this.onFocus();
+            }
+        });
+        inputTextBox.addBlurHandler(new BlurHandler() {
+            @Override
+            public void onBlur(BlurEvent event) {
+                SuperSelector.this.isFocused = false;
+                SuperSelector.this.onBlur();
             }
         });
 
@@ -111,7 +142,7 @@ public abstract class SuperSelector<C> extends Composite {
             return;
         }
 
-        SelectedItem<C> w = new SelectedItem<C>(this, item);
+        SelectedItem<C> w = new SelectedItem<C>(this.format, this, item);
         selectedWidgets.add(w);
         selectedItemsContainerPanel.add(w);
 
@@ -134,15 +165,27 @@ public abstract class SuperSelector<C> extends Composite {
         updateInputTextBoxWidth();
     }
 
-    protected abstract C parseItem(String stringRepresentation);
-
     protected void onInputChanged(String newInput) {
+    }
+
+    protected void onFocus() {
 
     }
 
+    protected void onBlur() {
+    }
+
+    protected boolean isFocused() {
+        return isFocused;
+    }
+
     private void addItemFromInputBox() {
-        addItem(parseItem(inputTextBox.getText()));
-        inputTextBox.setText("");
+        try {
+            addItem(format.parse(inputTextBox.getText()));
+            inputTextBox.setText("");
+        } catch (ParseException e) {
+            // TODO deal with this (i.e. render a popup or something like that
+        }
     }
 
     private void removeLastItem() {
