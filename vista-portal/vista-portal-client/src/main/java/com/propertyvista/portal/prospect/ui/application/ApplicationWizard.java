@@ -256,17 +256,17 @@ public class ApplicationWizard extends CPortalEntityWizard<OnlineApplicationDTO>
 
         panel.setH3(++row, 0, 1, i18n.tr("General Questions"));
         panel.setWidget(++row, 0, new LegalQuestionWidgetDecoratorBuilder(inject(proto().applicant().legalQuestions().suedForRent())).build());
-        panel.setHR(++row, 0, 1);
+        panel.setBR(++row, 0, 1);
         panel.setWidget(++row, 0, new LegalQuestionWidgetDecoratorBuilder(inject(proto().applicant().legalQuestions().suedForDamages())).build());
-        panel.setHR(++row, 0, 1);
+        panel.setBR(++row, 0, 1);
         panel.setWidget(++row, 0, new LegalQuestionWidgetDecoratorBuilder(inject(proto().applicant().legalQuestions().everEvicted())).build());
-        panel.setHR(++row, 0, 1);
+        panel.setBR(++row, 0, 1);
         panel.setWidget(++row, 0, new LegalQuestionWidgetDecoratorBuilder(inject(proto().applicant().legalQuestions().defaultedOnLease())).build());
-        panel.setHR(++row, 0, 1);
+        panel.setBR(++row, 0, 1);
         panel.setWidget(++row, 0, new LegalQuestionWidgetDecoratorBuilder(inject(proto().applicant().legalQuestions().convictedOfFelony())).build());
-        panel.setHR(++row, 0, 1);
+        panel.setBR(++row, 0, 1);
         panel.setWidget(++row, 0, new LegalQuestionWidgetDecoratorBuilder(inject(proto().applicant().legalQuestions().legalTroubles())).build());
-        panel.setHR(++row, 0, 1);
+        panel.setBR(++row, 0, 1);
         panel.setWidget(++row, 0, new LegalQuestionWidgetDecoratorBuilder(inject(proto().applicant().legalQuestions().filedBankruptcy())).build());
 
         panel.setH3(++row, 0, 1, i18n.tr("How Did You Hear About Us?"));
