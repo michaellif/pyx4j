@@ -198,8 +198,7 @@ public class WidgetDecorator extends FlowPanel implements IDecorator<CComponent<
         add(labelHolder);
         add(containerPanel);
 
-        setLabelPosition(builder.labelPosition);
-
+        updateLabelPosition();
         updateLabelAlignment();
         updateNote();
         updateCaption();
@@ -284,28 +283,6 @@ public class WidgetDecorator extends FlowPanel implements IDecorator<CComponent<
         return component;
     }
 
-    public void setLabelPosition(LabelPosition layout) {
-        builder.labelPosition = layout;
-        switch (layout) {
-        case left:
-            labelHolder.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
-            labelHolder.getElement().getStyle().setVerticalAlign(VerticalAlign.MIDDLE);
-            containerPanel.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
-            containerPanel.getElement().getStyle().setVerticalAlign(VerticalAlign.TOP);
-            removeStyleDependentName(DefaultWidgetDecoratorTheme.StyleDependent.verticalAlign.name());
-            break;
-        case top:
-            labelHolder.getElement().getStyle().setDisplay(Display.BLOCK);
-            containerPanel.getElement().getStyle().setDisplay(Display.BLOCK);
-            addStyleDependentName(DefaultWidgetDecoratorTheme.StyleDependent.verticalAlign.name());
-            break;
-        case hidden:
-            labelHolder.getElement().getStyle().setDisplay(Display.NONE);
-            break;
-
-        }
-    }
-
     public LabelPosition getLabelPosition() {
         return builder.labelPosition;
     }
@@ -346,7 +323,28 @@ public class WidgetDecorator extends FlowPanel implements IDecorator<CComponent<
 
     }
 
-    public void updateLabelAlignment() {
+    protected void updateLabelPosition() {
+        switch (builder.labelPosition) {
+        case left:
+            labelHolder.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
+            labelHolder.getElement().getStyle().setVerticalAlign(VerticalAlign.MIDDLE);
+            containerPanel.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
+            containerPanel.getElement().getStyle().setVerticalAlign(VerticalAlign.TOP);
+            removeStyleDependentName(DefaultWidgetDecoratorTheme.StyleDependent.verticalAlign.name());
+            break;
+        case top:
+            labelHolder.getElement().getStyle().setDisplay(Display.BLOCK);
+            containerPanel.getElement().getStyle().setDisplay(Display.BLOCK);
+            addStyleDependentName(DefaultWidgetDecoratorTheme.StyleDependent.verticalAlign.name());
+            break;
+        case hidden:
+            labelHolder.getElement().getStyle().setDisplay(Display.NONE);
+            break;
+
+        }
+    }
+
+    protected void updateLabelAlignment() {
         switch (builder.labelAlignment) {
         case left:
             labelHolder.removeStyleDependentName(DefaultWidgetDecoratorTheme.StyleDependent.labelAlignCenter.name());
@@ -417,6 +415,10 @@ public class WidgetDecorator extends FlowPanel implements IDecorator<CComponent<
             caption += builder.useLabelSemicolon ? ":" : "";
         }
         label.setText(caption);
+    }
+
+    protected Builder getBuilder() {
+        return builder;
     }
 
     public static class Builder {
