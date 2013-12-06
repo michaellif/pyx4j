@@ -26,10 +26,16 @@ import com.propertyvista.domain.tenant.lease.Lease;
 
 public interface BillingCycleFacade {
 
+    /**
+     * Calculate bulling type base on Lease billing period and Policy
+     */
     BillingType getBillingType(Lease lease);
 
     BillingCycle getLeaseFirstBillingCycle(Lease lease);
 
+    /**
+     * Find or create BillingCycle covering the input Date according to Lease billing Type.
+     */
     BillingCycle getBillingCycleForDate(Lease lease, LogicalDate date);
 
     BillingCycle getBillingCycleForDate(Building buildingId, BillingPeriod billingPeriod, Integer billingCycleStartDay, LogicalDate date);

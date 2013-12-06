@@ -730,11 +730,10 @@ public abstract class LeaseAbstractManager {
             // set LeaseBillingPolicy offsets
             LeaseBillingPolicy billingPolicy = ServerSideFactory.create(PolicyFacade.class).obtainEffectivePolicy(unit.building(), LeaseBillingPolicy.class);
             boolean policyFound = false;
-            for (LeaseBillingTypePolicyItem billingType : billingPolicy.availableBillingTypes()) {
-                if (billingType.billingPeriod().getValue().equals(lease.billingAccount().billingPeriod().getValue())) {
-                    lease.billingAccount().billingCycleStartDay().set(billingType.billingCycleStartDay());
-                    lease.billingAccount().paymentDueDayOffset().set(billingType.paymentDueDayOffset());
-                    lease.billingAccount().finalDueDayOffset().set(billingType.finalDueDayOffset());
+            for (LeaseBillingTypePolicyItem policyItem : billingPolicy.availableBillingTypes()) {
+                if (policyItem.billingPeriod().getValue().equals(lease.billingAccount().billingPeriod().getValue())) {
+                    lease.billingAccount().paymentDueDayOffset().set(policyItem.paymentDueDayOffset());
+                    lease.billingAccount().finalDueDayOffset().set(policyItem.finalDueDayOffset());
                     policyFound = true;
                     break;
                 }

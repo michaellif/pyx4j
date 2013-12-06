@@ -157,8 +157,6 @@ public interface BillingAccount extends IEntity {
 
     BillingType billingType();
 
-    IPrimitive<Integer> billingCycleStartDay();
-
     @Caption(name = "Payment Due Day", description = "Number of days between Billing Period Start Date and Payment Due Date")
     IPrimitive<Integer> paymentDueDayOffset();
 
