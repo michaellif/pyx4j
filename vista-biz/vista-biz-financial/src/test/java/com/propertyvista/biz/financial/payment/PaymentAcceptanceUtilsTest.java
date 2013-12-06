@@ -134,9 +134,9 @@ public class PaymentAcceptanceUtilsTest extends TestCase {
             Collection<PaymentType> paymentTypesCrm = PaymentAcceptanceUtils.getAllowedPaymentTypes(VistaApplication.crm, true, false, selectionPolicy);
             Assert.assertFalse("Cards Not Allowed expected, but was " + paymentTypesCrm, paymentTypesCrm.contains(PaymentType.CreditCard));
 
-            Collection<PaymentType> paymentTypesresident = PaymentAcceptanceUtils.getAllowedPaymentTypes(VistaApplication.resident, true, false,
+            Collection<PaymentType> paymentTypesResident = PaymentAcceptanceUtils.getAllowedPaymentTypes(VistaApplication.resident, true, false,
                     selectionPolicy);
-            Assert.assertTrue("Cards Allowed expected, but was " + paymentTypesresident, paymentTypesresident.contains(PaymentType.CreditCard));
+            Assert.assertTrue("Cards Allowed expected, but was " + paymentTypesResident, paymentTypesResident.contains(PaymentType.CreditCard));
         }
 
         // Accepted only MasterCard on CashEquivalent
