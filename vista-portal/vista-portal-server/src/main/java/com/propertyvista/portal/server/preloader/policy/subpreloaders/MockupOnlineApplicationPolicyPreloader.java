@@ -15,6 +15,7 @@ package com.propertyvista.portal.server.preloader.policy.subpreloaders;
 
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.entity.shared.ISignature.SignatureType;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.i18n.shared.I18n;
@@ -22,7 +23,6 @@ import com.pyx4j.i18n.shared.I18n;
 import com.propertyvista.domain.policy.policies.OnlineApplicationPolicy;
 import com.propertyvista.domain.policy.policies.domain.OnlineApplicationLegalTabTitle;
 import com.propertyvista.domain.policy.policies.domain.OnlineApplicationLegalTerm;
-import com.propertyvista.domain.policy.policies.domain.OnlineApplicationLegalTerm.SignatureType;
 import com.propertyvista.domain.policy.policies.domain.OnlineApplicationLegalTermContent;
 import com.propertyvista.domain.site.AvailableLocale;
 import com.propertyvista.generator.util.CommonsGenerator;

@@ -98,6 +98,4 @@ public interface OnlineApplication extends IEntity {
      */
     IPrimitive<BigDecimal> progress();
 
-    @Owned
-    IList<DigitalSignature> signatures();
 }

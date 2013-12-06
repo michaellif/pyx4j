@@ -24,13 +24,11 @@ import com.pyx4j.entity.annotations.ReadOnly;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
+import com.pyx4j.entity.shared.ISignature.SignatureType;
 
 import com.propertyvista.domain.policy.policies.OnlineApplicationPolicy;
 
 public interface OnlineApplicationLegalTerm extends IEntity {
-    public enum SignatureType {
-        FullName, Initials, AgreeBox, AgreeBoxAndFullName
-    }
 
     @Detached
     @ReadOnly
