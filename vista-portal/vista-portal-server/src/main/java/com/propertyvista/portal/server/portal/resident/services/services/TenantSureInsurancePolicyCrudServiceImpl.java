@@ -238,7 +238,7 @@ public class TenantSureInsurancePolicyCrudServiceImpl implements TenantSureInsur
             throw new TenantSureOnMaintenanceException();
         }
         TenantSureInsurancePolicyDTO status = ServerSideFactory.create(TenantSureFacade.class).getStatus(
-                ResidentPortalContext.getTenantInLease().leaseParticipant().<Tenant> createIdentityStub());
+                ResidentPortalContext.getLeaseTermTenant().leaseParticipant().<Tenant> createIdentityStub());
 
         if (status != null) {
             callback.onSuccess(status);
@@ -299,7 +299,7 @@ public class TenantSureInsurancePolicyCrudServiceImpl implements TenantSureInsur
         }
 
         ServerSideFactory.create(TenantSureFacade.class).scheduleCancelByTenant(
-                ResidentPortalContext.getTenantInLease().leaseParticipant().<Tenant> createIdentityStub());
+                ResidentPortalContext.getLeaseTermTenant().leaseParticipant().<Tenant> createIdentityStub());
         callback.onSuccess(null);
     }
 
@@ -310,7 +310,7 @@ public class TenantSureInsurancePolicyCrudServiceImpl implements TenantSureInsur
         }
 
         ServerSideFactory.create(TenantSureFacade.class).reinstate(
-                ResidentPortalContext.getTenantInLease().leaseParticipant().<Tenant> createIdentityStub());
+                ResidentPortalContext.getLeaseTermTenant().leaseParticipant().<Tenant> createIdentityStub());
         callback.onSuccess(null);
     }
 
@@ -321,7 +321,7 @@ public class TenantSureInsurancePolicyCrudServiceImpl implements TenantSureInsur
         }
 
         String sentTo = ServerSideFactory.create(TenantSureFacade.class).sendCertificate(
-                ResidentPortalContext.getTenantInLease().leaseParticipant().<Tenant> createIdentityStub(), email);
+                ResidentPortalContext.getLeaseTermTenant().leaseParticipant().<Tenant> createIdentityStub(), email);
         callback.onSuccess(sentTo);
     }
 

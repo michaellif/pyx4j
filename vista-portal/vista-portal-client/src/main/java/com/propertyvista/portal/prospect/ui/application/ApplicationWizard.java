@@ -48,7 +48,6 @@ import com.propertyvista.common.client.ui.validators.PastDateValidator;
 import com.propertyvista.common.client.ui.validators.StartEndDateValidation;
 import com.propertyvista.domain.PriorAddress;
 import com.propertyvista.domain.contact.AddressStructured;
-import com.propertyvista.domain.person.Name;
 import com.propertyvista.domain.property.asset.Floorplan;
 import com.propertyvista.domain.security.PortalProspectBehavior;
 import com.propertyvista.domain.tenant.CustomerPicture;
@@ -62,6 +61,7 @@ import com.propertyvista.portal.shared.ui.CPortalEntityWizard;
 import com.propertyvista.portal.shared.ui.util.decorators.FormWidgetDecoratorBuilder;
 import com.propertyvista.portal.shared.ui.util.decorators.PortalWidgetDecorator;
 import com.propertyvista.portal.shared.ui.util.editors.EmergencyContactFolder;
+import com.propertyvista.portal.shared.ui.util.editors.NameEditor;
 import com.propertyvista.portal.shared.ui.util.editors.PersonalAssetFolder;
 import com.propertyvista.portal.shared.ui.util.editors.PersonalIncomeFolder;
 import com.propertyvista.portal.shared.ui.util.editors.PriorAddressEditor;
@@ -209,24 +209,18 @@ public class ApplicationWizard extends CPortalEntityWizard<OnlineApplicationDTO>
                 new VistaFileURLBuilder<CustomerPicture>(CustomerPicture.class));
         imageHolder.setImageSize(150, 200);
         imageHolder.setThumbnailPlaceholder(new Image(VistaImages.INSTANCE.profilePicture()));
-
         panel.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().applicant().picture(), imageHolder)).customLabel("").build());
 
         panel.setH3(++row, 0, 1, i18n.tr("Personal Information"));
-        panel.setWidget(++row, 0,
-                new FormWidgetDecoratorBuilder(inject(proto().applicant().person().name(), new CEntityLabel<Name>()), 200).customLabel(i18n.tr("Full Name"))
-                        .build());
-
+        panel.setWidget(++row, 0, inject(proto().applicant().person().name(), new NameEditor(i18n.tr("Full Name"))));
         panel.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().applicant().person().sex()), 100).build());
+        panel.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().applicant().person().birthDate()), 150).build());
 
         panel.setH3(++row, 0, 1, i18n.tr("Contact Information"));
         panel.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().applicant().person().homePhone()), 180).build());
         panel.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().applicant().person().mobilePhone()), 180).build());
         panel.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().applicant().person().workPhone()), 180).build());
         panel.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().applicant().person().email()), 230).build());
-
-        panel.setH3(++row, 0, 1, i18n.tr("Secure Information"));
-        panel.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().applicant().person().birthDate()), 150).build());
 
         panel.setH3(++row, 0, 1, i18n.tr("Identification Documents"));
         panel.setWidget(++row, 0, 2, inject(proto().applicant().documents(), fileUpload = new IdUploaderFolder()));

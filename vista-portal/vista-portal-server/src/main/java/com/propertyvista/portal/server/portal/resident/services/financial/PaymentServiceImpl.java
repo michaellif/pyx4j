@@ -178,7 +178,7 @@ public class PaymentServiceImpl implements PaymentService {
         List<PaymentMethodInfoDTO> paymentMethods = new ArrayList<PaymentMethodInfoDTO>();
 
         List<LeasePaymentMethod> methods = ServerSideFactory.create(PaymentMethodFacade.class).retrieveLeasePaymentMethods(
-                ResidentPortalContext.getTenantInLease(), PaymentMethodUsage.InProfile, VistaApplication.resident);
+                ResidentPortalContext.getLeaseTermTenant(), PaymentMethodUsage.InProfile, VistaApplication.resident);
 
         for (LeasePaymentMethod pm : methods) {
             PaymentMethodInfoDTO pmi = EntityFactory.create(PaymentMethodInfoDTO.class);

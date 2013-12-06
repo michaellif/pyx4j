@@ -88,7 +88,7 @@ public class PaymentWizardServiceImpl extends AbstractCrudServiceDtoImpl<Payment
         dto.leaseId().set(lease.leaseId());
         dto.leaseStatus().set(lease.status());
 
-        dto.leaseTermParticipant().set(ResidentPortalContext.getTenantInLease());
+        dto.leaseTermParticipant().set(ResidentPortalContext.getLeaseTermTenant());
 
         // some default values:
         dto.createdDate().setValue(new LogicalDate(SystemDateManager.getDate()));
@@ -147,7 +147,7 @@ public class PaymentWizardServiceImpl extends AbstractCrudServiceDtoImpl<Payment
     @Override
     public void getProfiledPaymentMethods(AsyncCallback<Vector<LeasePaymentMethod>> callback) {
         List<LeasePaymentMethod> methods = ServerSideFactory.create(PaymentMethodFacade.class).retrieveLeasePaymentMethods(
-                ResidentPortalContext.getTenantInLease(), PaymentMethodUsage.OneTimePayments, VistaApplication.resident);
+                ResidentPortalContext.getLeaseTermTenant(), PaymentMethodUsage.OneTimePayments, VistaApplication.resident);
         callback.onSuccess(new Vector<LeasePaymentMethod>(methods));
     }
 

@@ -17,13 +17,17 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.commons.Key;
 import com.pyx4j.entity.server.Persistence;
+import com.pyx4j.entity.shared.AttachLevel;
 import com.pyx4j.entity.shared.EntityFactory;
 
 import com.propertyvista.domain.tenant.lease.LeaseTerm;
+import com.propertyvista.domain.tenant.lease.LeaseTermTenant;
 import com.propertyvista.domain.tenant.prospect.OnlineApplication;
+import com.propertyvista.portal.rpc.portal.prospect.dto.ApplicantDTO;
 import com.propertyvista.portal.rpc.portal.prospect.dto.OnlineApplicationDTO;
 import com.propertyvista.portal.rpc.portal.prospect.services.ApplicationWizardService;
 import com.propertyvista.portal.server.portal.prospect.ProspectPortalContext;
+import com.propertyvista.server.common.util.LeaseParticipantUtils;
 
 public class ApplicationWizardServiceImpl implements ApplicationWizardService {
 
@@ -50,6 +54,8 @@ public class ApplicationWizardServiceImpl implements ApplicationWizardService {
         to.leaseTo().setValue(bo.masterOnlineApplication().leaseApplication().lease().leaseTo().getValue());
         to.leasePrice().set(term.version().leaseProducts().serviceItem().agreedPrice());
 
+        fillApplicantData(bo, to);
+
         callback.onSuccess(to);
     }
 
@@ -61,5 +67,36 @@ public class ApplicationWizardServiceImpl implements ApplicationWizardService {
     @Override
     public void submit(AsyncCallback<Key> callback, OnlineApplicationDTO editableEntity) {
         callback.onSuccess(null);
+    }
+
+    // internals:
+    private void fillApplicantData(OnlineApplication bo, OnlineApplicationDTO to) {
+        to.applicant().set(EntityFactory.create(ApplicantDTO.class));
+
+        switch (bo.role().getValue()) {
+        case Applicant:
+        case CoApplicant:
+            LeaseTermTenant tenant = ProspectPortalContext.getLeaseTermTenant();
+            Persistence.service().retrieve(tenant.leaseParticipant().customer().emergencyContacts());
+            LeaseParticipantUtils.retrieveLeaseTermEffectiveScreening(bo.masterOnlineApplication().leaseApplication().lease(), tenant, AttachLevel.Attached);
+
+            to.applicant().person().set(tenant.leaseParticipant().customer().person());
+            to.applicant().picture().set(tenant.leaseParticipant().customer().picture());
+            to.applicant().emergencyContacts().set(tenant.leaseParticipant().customer().emergencyContacts());
+
+            to.applicant().currentAddress().set(tenant.effectiveScreening().version().currentAddress());
+            to.applicant().previousAddress().set(tenant.effectiveScreening().version().previousAddress());
+            to.applicant().legalQuestions().set(tenant.effectiveScreening().version().legalQuestions());
+
+            to.applicant().incomes().set(tenant.effectiveScreening().version().incomes());
+            to.applicant().assets().set(tenant.effectiveScreening().version().assets());
+
+            to.applicant().documents().set(tenant.effectiveScreening().documents());
+            break;
+
+        case Guarantor:
+            break;
+        }
+
     }
 }

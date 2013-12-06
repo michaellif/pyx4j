@@ -56,7 +56,7 @@ public class MaintenanceRequestCrudServiceImpl extends AbstractCrudServiceDtoImp
     @Override
     protected MaintenanceRequestDTO init(InitializationData initializationData) {
         MaintenanceRequest maintenanceRequest = ServerSideFactory.create(MaintenanceFacade.class).createNewRequestForTenant(
-                ResidentPortalContext.getTenantInLease().leaseParticipant());
+                ResidentPortalContext.getLeaseTermTenant().leaseParticipant());
         return createTO(maintenanceRequest);
     }
 
@@ -126,7 +126,7 @@ public class MaintenanceRequestCrudServiceImpl extends AbstractCrudServiceDtoImp
 
     @Override
     public void getCategoryMeta(AsyncCallback<MaintenanceRequestMetadata> callback, boolean levelsOnly) {
-        Tenant tenant = ResidentPortalContext.getTenantInLease().leaseParticipant();
+        Tenant tenant = ResidentPortalContext.getLeaseTermTenant().leaseParticipant();
         Persistence.ensureRetrieve(tenant.lease(), AttachLevel.Attached);
         Persistence.ensureRetrieve(tenant.lease().unit(), AttachLevel.Attached);
         Persistence.ensureRetrieve(tenant.lease().unit().building(), AttachLevel.Attached);

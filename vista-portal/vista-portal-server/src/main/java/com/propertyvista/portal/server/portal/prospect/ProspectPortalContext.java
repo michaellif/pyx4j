@@ -17,6 +17,10 @@ import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.server.contexts.Context;
 
+import com.propertyvista.domain.tenant.lease.Guarantor;
+import com.propertyvista.domain.tenant.lease.LeaseTermGuarantor;
+import com.propertyvista.domain.tenant.lease.LeaseTermTenant;
+import com.propertyvista.domain.tenant.lease.Tenant;
 import com.propertyvista.domain.tenant.prospect.MasterOnlineApplication;
 import com.propertyvista.domain.tenant.prospect.OnlineApplication;
 import com.propertyvista.portal.rpc.portal.prospect.ProspectUserVisit;
@@ -39,6 +43,38 @@ public class ProspectPortalContext extends PortalVistaContext {
     public static MasterOnlineApplication getMasterOnlineApplication() {
         EntityQueryCriteria<MasterOnlineApplication> criteria = EntityQueryCriteria.create(MasterOnlineApplication.class);
         criteria.eq(criteria.proto().applications(), getOnlineApplicationIdStub());
+        return Persistence.service().retrieve(criteria);
+    }
+
+    public static Tenant getTenant() {
+        EntityQueryCriteria<Tenant> criteria = EntityQueryCriteria.create(Tenant.class);
+        criteria.eq(criteria.proto().lease().leaseApplication().onlineApplication().applications(), getOnlineApplicationIdStub());
+        criteria.eq(criteria.proto().customer().user(), getCustomerUserIdStub());
+        return Persistence.service().retrieve(criteria);
+    }
+
+    public static LeaseTermTenant getLeaseTermTenant() {
+        EntityQueryCriteria<LeaseTermTenant> criteria = EntityQueryCriteria.create(LeaseTermTenant.class);
+        criteria.eq(criteria.proto().leaseParticipant().customer().user(), getCustomerUserIdStub());
+        criteria.eq(criteria.proto().leaseParticipant().lease().leaseApplication().onlineApplication().applications(), getOnlineApplicationIdStub());
+        criteria.eq(criteria.proto().leaseTermV().holder(), criteria.proto().leaseTermV().holder().lease().currentTerm());
+        criteria.isDraft(criteria.proto().leaseTermV());
+        return Persistence.service().retrieve(criteria);
+    }
+
+    public static Guarantor getGuarantor() {
+        EntityQueryCriteria<Guarantor> criteria = EntityQueryCriteria.create(Guarantor.class);
+        criteria.eq(criteria.proto().lease().leaseApplication().onlineApplication().applications(), getOnlineApplicationIdStub());
+        criteria.eq(criteria.proto().customer().user(), getCustomerUserIdStub());
+        return Persistence.service().retrieve(criteria);
+    }
+
+    public static LeaseTermGuarantor getLeaseTermGuarantor() {
+        EntityQueryCriteria<LeaseTermGuarantor> criteria = EntityQueryCriteria.create(LeaseTermGuarantor.class);
+        criteria.eq(criteria.proto().leaseParticipant().customer().user(), getCustomerUserIdStub());
+        criteria.eq(criteria.proto().leaseParticipant().lease().leaseApplication().onlineApplication().applications(), getOnlineApplicationIdStub());
+        criteria.eq(criteria.proto().leaseTermV().holder(), criteria.proto().leaseTermV().holder().lease().currentTerm());
+        criteria.isDraft(criteria.proto().leaseTermV());
         return Persistence.service().retrieve(criteria);
     }
 }

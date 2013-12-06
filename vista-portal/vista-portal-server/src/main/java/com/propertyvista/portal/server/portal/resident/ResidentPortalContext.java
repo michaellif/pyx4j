@@ -48,12 +48,12 @@ public class ResidentPortalContext extends PortalVistaContext {
         return Persistence.service().retrieve(criteria);
     }
 
-    public static LeaseTermTenant getTenantInLease() {
+    public static LeaseTermTenant getLeaseTermTenant() {
         EntityQueryCriteria<LeaseTermTenant> criteria = EntityQueryCriteria.create(LeaseTermTenant.class);
         criteria.eq(criteria.proto().leaseParticipant().customer().user(), getCustomerUserIdStub());
         criteria.eq(criteria.proto().leaseParticipant().lease(), getLeaseIdStub());
-        criteria.isCurrent(criteria.proto().leaseTermV());
         criteria.eq(criteria.proto().leaseTermV().holder(), criteria.proto().leaseTermV().holder().lease().currentTerm());
+        criteria.isCurrent(criteria.proto().leaseTermV());
         return Persistence.service().retrieve(criteria);
     }
 

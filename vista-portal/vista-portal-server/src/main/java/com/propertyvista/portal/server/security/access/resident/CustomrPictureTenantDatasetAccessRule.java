@@ -25,7 +25,7 @@ public class CustomrPictureTenantDatasetAccessRule implements DatasetAccessRule<
 
     @Override
     public void applyRule(EntityQueryCriteria<CustomerPicture> criteria) {
-        criteria.eq(criteria.proto().id(), ResidentPortalContext.getTenantInLease().leaseParticipant().customer().picture());
+        criteria.eq(criteria.proto().id(), ResidentPortalContext.getLeaseTermTenant().leaseParticipant().customer().picture());
     }
 
 }

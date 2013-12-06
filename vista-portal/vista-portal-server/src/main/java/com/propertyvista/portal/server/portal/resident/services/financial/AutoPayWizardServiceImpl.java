@@ -146,7 +146,7 @@ public class AutoPayWizardServiceImpl extends AbstractCrudServiceDtoImpl<Autopay
     @Override
     public void getProfiledPaymentMethods(AsyncCallback<Vector<LeasePaymentMethod>> callback) {
         List<LeasePaymentMethod> methods = ServerSideFactory.create(PaymentMethodFacade.class).retrieveLeasePaymentMethods(
-                ResidentPortalContext.getTenantInLease(), PaymentMethodUsage.AutopayAgreementSetup, VistaApplication.resident);
+                ResidentPortalContext.getLeaseTermTenant(), PaymentMethodUsage.AutopayAgreementSetup, VistaApplication.resident);
         callback.onSuccess(new Vector<LeasePaymentMethod>(methods));
     }
 
