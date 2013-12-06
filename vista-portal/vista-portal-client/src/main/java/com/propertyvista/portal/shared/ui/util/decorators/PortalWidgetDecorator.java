@@ -33,14 +33,21 @@ public class PortalWidgetDecorator extends WidgetDecorator {
 
         @Override
         public WidgetDecorator build() {
-            return new PortalWidgetDecorator(this);
+            return new PortalWidgetDecorator(this) {
+                @Override
+                protected void onLoad() {
+                    if (getLabelPosition() != LabelPosition.hidden) {
+                        labelPosition(AbstractPortalPanel.getWidgetLabelPosition());
+                        updateLabelPosition();
+                    }
+                };
+            };
         }
     }
 
-    @Override
-    protected void onLoad() {
-        if (getLabelPosition() != LabelPosition.hidden) {
-            setLabelPosition(AbstractPortalPanel.getWidgetLabelPosition());
-        }
-    };
+    public void setLabelPosition(LabelPosition layout) {
+        getBuilder().labelPosition(layout);
+        updateLabelPosition();
+    }
+
 }

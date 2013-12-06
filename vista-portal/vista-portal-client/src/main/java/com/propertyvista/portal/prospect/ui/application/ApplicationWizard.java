@@ -437,7 +437,7 @@ public class ApplicationWizard extends CPortalEntityWizard<OnlineApplicationDTO>
 
         public LegalQuestionWidgetDecoratorBuilder(CComponent<?> component) {
             super(component);
-            labelWidth(400 + "px");
+            labelWidth(300 + "px");
             contentWidth(70 + "px");
             componentWidth(70 + "px");
             labelPosition(AbstractPortalPanel.getWidgetLabelPosition());
