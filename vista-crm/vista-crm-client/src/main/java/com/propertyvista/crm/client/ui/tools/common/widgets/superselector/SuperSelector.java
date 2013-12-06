@@ -34,8 +34,8 @@ import com.google.gwt.event.dom.client.BlurHandler;
 import com.google.gwt.event.dom.client.FocusEvent;
 import com.google.gwt.event.dom.client.FocusHandler;
 import com.google.gwt.event.dom.client.KeyCodes;
-import com.google.gwt.event.dom.client.KeyPressEvent;
-import com.google.gwt.event.dom.client.KeyPressHandler;
+import com.google.gwt.event.dom.client.KeyDownEvent;
+import com.google.gwt.event.dom.client.KeyDownHandler;
 import com.google.gwt.event.dom.client.KeyUpEvent;
 import com.google.gwt.event.dom.client.KeyUpHandler;
 import com.google.gwt.user.client.ui.Composite;
@@ -95,9 +95,9 @@ public abstract class SuperSelector<C> extends Composite {
         inputTextBox.getElement().getStyle().setDisplay(Display.INLINE);
         inputTextBox.getElement().getStyle().setBorderStyle(BorderStyle.NONE);
 
-        inputTextBox.addKeyPressHandler(new KeyPressHandler() {
+        inputTextBox.addKeyDownHandler(new KeyDownHandler() {
             @Override
-            public void onKeyPress(KeyPressEvent event) {
+            public void onKeyDown(KeyDownEvent event) {
                 if (KeyCodes.KEY_ENTER == event.getNativeEvent().getKeyCode() || KeyCodes.KEY_TAB == event.getNativeEvent().getKeyCode()) {
                     addItemFromInputBox();
                     event.preventDefault();

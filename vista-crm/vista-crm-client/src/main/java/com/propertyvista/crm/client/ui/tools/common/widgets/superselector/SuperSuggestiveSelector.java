@@ -28,8 +28,8 @@ import com.google.gwt.dom.client.Style.FontWeight;
 import com.google.gwt.dom.client.Style.TextAlign;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.KeyCodes;
-import com.google.gwt.event.dom.client.KeyPressEvent;
-import com.google.gwt.event.dom.client.KeyPressHandler;
+import com.google.gwt.event.dom.client.KeyDownEvent;
+import com.google.gwt.event.dom.client.KeyDownHandler;
 import com.google.gwt.event.dom.client.MouseOutEvent;
 import com.google.gwt.event.dom.client.MouseOutHandler;
 import com.google.gwt.event.dom.client.MouseOverEvent;
@@ -135,7 +135,7 @@ public abstract class SuperSuggestiveSelector<DataType> extends SuperSelector<Da
                     NativeEvent nativeEvent = event.getNativeEvent();
                     if (BrowserEvents.CLICK.equals(nativeEvent.getType())) {
                         addItem(event.getValue());
-                    } else if (BrowserEvents.KEYUP.equals(nativeEvent.getType()) && (nativeEvent.getKeyCode() == KeyCodes.KEY_ENTER)) {
+                    } else if (BrowserEvents.KEYDOWN.equals(nativeEvent.getType()) && (nativeEvent.getKeyCode() == KeyCodes.KEY_ENTER)) {
                         addItem(event.getValue());
                         selectedIndex = event.getIndex();
                         selectionModel.setSelected(event.getValue(), true);
@@ -206,9 +206,9 @@ public abstract class SuperSuggestiveSelector<DataType> extends SuperSelector<Da
         this.cell = cell;
         this.suggestionsProvider = suggestionsProvider;
 
-        addDomHandler(new KeyPressHandler() {
+        addDomHandler(new KeyDownHandler() {
             @Override
-            public void onKeyPress(KeyPressEvent event) {
+            public void onKeyDown(KeyDownEvent event) {
                 if (SuperSuggestiveSelector.this.popup != null) {
                     if (event.getNativeEvent().getKeyCode() == KeyCodes.KEY_UP) {
                         SuperSuggestiveSelector.this.popup.selectPrevious();
@@ -217,7 +217,7 @@ public abstract class SuperSuggestiveSelector<DataType> extends SuperSelector<Da
                     }
                 }
             }
-        }, KeyPressEvent.getType());
+        }, KeyDownEvent.getType());
     }
 
     public void setSuggestionDelay(int coundownMillis) {
