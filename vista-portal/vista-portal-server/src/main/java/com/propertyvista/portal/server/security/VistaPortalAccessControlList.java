@@ -96,6 +96,10 @@ public class VistaPortalAccessControlList extends ServletContainerAclBuilder {
 
         grant(PortalProspectBehavior.ApplicationSelectionRequired, new IServiceExecutePermission(ApplicationContextSelectionService.class));
         grant(PortalProspectBehavior.HasMultipleApplications, new IServiceExecutePermission(ApplicationContextSelectionService.class));
+        
+        grant(PortalResidentBehavior.Resident, new IServiceExecutePermission(ResidentPictureUploadService.class));
+        grant(PortalResidentBehavior.Resident, new IServiceExecutePermission(DeferredProcessService.class));
+        
 
         // Old TODO remove
         grant(new IServiceExecutePermission(ReferenceDataService.class));

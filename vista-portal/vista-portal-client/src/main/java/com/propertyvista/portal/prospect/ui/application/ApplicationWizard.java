@@ -41,7 +41,6 @@ import com.pyx4j.security.shared.SecurityController;
 
 import com.propertyvista.common.client.VistaFileURLBuilder;
 import com.propertyvista.common.client.resources.VistaImages;
-import com.propertyvista.common.client.ui.components.folders.IdUploaderFolder;
 import com.propertyvista.common.client.ui.validators.FutureDateIncludeTodayValidator;
 import com.propertyvista.common.client.ui.validators.PastDateIncludeTodayValidator;
 import com.propertyvista.common.client.ui.validators.PastDateValidator;
@@ -61,6 +60,7 @@ import com.propertyvista.portal.shared.ui.CPortalEntityWizard;
 import com.propertyvista.portal.shared.ui.util.decorators.FormWidgetDecoratorBuilder;
 import com.propertyvista.portal.shared.ui.util.decorators.PortalWidgetDecorator;
 import com.propertyvista.portal.shared.ui.util.editors.EmergencyContactFolder;
+import com.propertyvista.portal.shared.ui.util.editors.IdUploaderFolder;
 import com.propertyvista.portal.shared.ui.util.editors.NameEditor;
 import com.propertyvista.portal.shared.ui.util.editors.PersonalAssetFolder;
 import com.propertyvista.portal.shared.ui.util.editors.PersonalIncomeFolder;
@@ -102,7 +102,7 @@ public class ApplicationWizard extends CPortalEntityWizard<OnlineApplicationDTO>
         }
     };
 
-    private IdUploaderFolder fileUpload;
+    private final IdUploaderFolder fileUpload = new IdUploaderFolder();
 
     public ApplicationWizard(ApplicationWizardViewImpl view) {
         super(OnlineApplicationDTO.class, view, i18n.tr("Profile Payment Setup"), i18n.tr("Submit"), ThemeColor.contrast2);
@@ -223,7 +223,7 @@ public class ApplicationWizard extends CPortalEntityWizard<OnlineApplicationDTO>
         panel.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().applicant().person().email()), 230).build());
 
         panel.setH3(++row, 0, 1, i18n.tr("Identification Documents"));
-        panel.setWidget(++row, 0, 2, inject(proto().applicant().documents(), fileUpload = new IdUploaderFolder()));
+        panel.setWidget(++row, 0, 2, inject(proto().applicant().documents(), fileUpload));
 
         return panel;
     }
