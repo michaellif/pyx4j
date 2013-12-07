@@ -46,13 +46,13 @@ import com.propertyvista.domain.tenant.insurance.TenantSureInsurancePolicy;
 import com.propertyvista.domain.tenant.lease.LeaseTermTenant;
 import com.propertyvista.domain.tenant.prospect.OnlineApplication;
 import com.propertyvista.portal.rpc.portal.prospect.services.ApplicationContextSelectionService;
+import com.propertyvista.portal.rpc.portal.prospect.services.ApplicationDocumentProspectUploadService;
 import com.propertyvista.portal.rpc.portal.prospect.services.ApplicationStatusService;
 import com.propertyvista.portal.rpc.portal.prospect.services.ApplicationWizardService;
 import com.propertyvista.portal.rpc.portal.prospect.services.ProspectAuthenticationService;
 import com.propertyvista.portal.rpc.portal.prospect.services.ProspectSignUpService;
 import com.propertyvista.portal.rpc.portal.resident.services.LeaseContextSelectionService;
 import com.propertyvista.portal.rpc.portal.resident.services.ResidentAuthenticationService;
-import com.propertyvista.portal.rpc.portal.resident.services.ResidentPictureUploadService;
 import com.propertyvista.portal.rpc.portal.resident.services.ResidentSelfRegistrationService;
 import com.propertyvista.portal.rpc.portal.resident.services.financial.AutoPayWizardService;
 import com.propertyvista.portal.rpc.portal.resident.services.financial.BillingService;
@@ -61,9 +61,10 @@ import com.propertyvista.portal.rpc.portal.resident.services.profile.ResidentAcc
 import com.propertyvista.portal.rpc.portal.resident.services.profile.ResidentProfileCrudService;
 import com.propertyvista.portal.rpc.portal.resident.services.profile.ResidentSummaryService;
 import com.propertyvista.portal.rpc.portal.resident.services.services.GeneralInsurancePolicyCrudService;
-import com.propertyvista.portal.rpc.portal.resident.services.services.InsuranceCertificateScanUploadService;
+import com.propertyvista.portal.rpc.portal.resident.services.services.InsuranceCertificateScanResidentUploadService;
 import com.propertyvista.portal.rpc.portal.resident.services.services.TenantSureInsurancePolicyCrudService;
 import com.propertyvista.portal.rpc.portal.resident.services.services.TenantSurePaymentMethodCrudService;
+import com.propertyvista.portal.rpc.portal.shared.services.CustomerPicturePortalUploadService;
 import com.propertyvista.portal.rpc.portal.shared.services.PasswordChangeUserService;
 import com.propertyvista.portal.rpc.portal.shared.services.PortalContentService;
 import com.propertyvista.portal.rpc.portal.shared.services.PortalPasswordResetService;
@@ -156,13 +157,13 @@ public class VistaPortalAccessControlList extends ServletContainerAclBuilder {
         grant(PortalResidentBehavior.Resident, new IServiceExecutePermission(
                 com.propertyvista.portal.rpc.portal.resident.services.services.InsuranceService.class));
 
-        grant(PortalResidentBehavior.Resident, new IServiceExecutePermission(InsuranceCertificateScanUploadService.class));
+        grant(PortalResidentBehavior.Resident, new IServiceExecutePermission(InsuranceCertificateScanResidentUploadService.class));
 
         grant(PortalResidentBehavior.Resident, new IServiceExecutePermission(GeneralInsurancePolicyCrudService.class));
 
         grant(PortalResidentBehavior.Resident, new IServiceExecutePermission(MaintenanceRequestCrudService.class));
 
-        grant(PortalResidentBehavior.Resident, new IServiceExecutePermission(ResidentPictureUploadService.class));
+        grant(PortalResidentBehavior.Resident, new IServiceExecutePermission(CustomerPicturePortalUploadService.class));
         grant(PortalResidentBehavior.Resident, new IServiceExecutePermission(DeferredProcessService.class));
 
         grant(PortalResidentBehavior.Resident, new EntityPermission(CustomerPicture.class, CRUD));
@@ -172,6 +173,9 @@ public class VistaPortalAccessControlList extends ServletContainerAclBuilder {
         grant(PortalProspectBehavior.Prospect, new IServiceExecutePermission(ApplicationStatusService.class));
         grant(PortalProspectBehavior.Prospect, new IServiceExecutePermission(ApplicationWizardService.class));
         grant(PortalProspectBehavior.Prospect, new IServiceExecutePermission(ApplicationContextSelectionService.class));
+        grant(PortalProspectBehavior.Prospect, new IServiceExecutePermission(ApplicationDocumentProspectUploadService.class));
+        grant(PortalProspectBehavior.Prospect, new IServiceExecutePermission(CustomerPicturePortalUploadService.class));
+        grant(PortalProspectBehavior.Prospect, new IServiceExecutePermission(DeferredProcessService.class));
 
         //=======================================
 
