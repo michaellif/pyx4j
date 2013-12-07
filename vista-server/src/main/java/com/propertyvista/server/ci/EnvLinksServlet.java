@@ -73,14 +73,17 @@ public class EnvLinksServlet extends HttpServlet {
         Date realTime = WorldDateManager.getWorldTime();
 
         StringBuilder b = new StringBuilder();
-        b.append("System time: ");
+        b.append("<pre style=\"margin:0\">System time: ");
         b.append(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(systemTime));
+        b.append("</pre>");
 
         if (Math.abs(systemTime.getTime() - realTime.getTime()) > 1 * Consts.MIN2MSEC) {
-            b.append("; World time: ");
+            b.append("<pre style=\"margin:0\">World  time: ");
             b.append(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(realTime));
 
-            b.append("; System time offset: ").append(TimeUtils.durationFormat(systemTime.getTime() - realTime.getTime()));
+            b.append("; System time offset: ").append(
+                    TimeUtils.durationFormatSeconds((int) ((systemTime.getTime() - realTime.getTime()) / Consts.SEC2MILLISECONDS)));
+            b.append("</pre>");
         }
 
         return b.toString();
