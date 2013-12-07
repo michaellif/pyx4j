@@ -69,9 +69,9 @@ import com.propertyvista.crm.rpc.services.building.mech.ElevatorCrudService;
 import com.propertyvista.crm.rpc.services.building.mech.RoofCrudService;
 import com.propertyvista.crm.rpc.services.customer.ActiveGuarantorCrudService;
 import com.propertyvista.crm.rpc.services.customer.ActiveTenantCrudService;
-import com.propertyvista.crm.rpc.services.customer.CrmInsuranceCertificateScanUploadService;
+import com.propertyvista.crm.rpc.services.customer.InsuranceCertificateScanCrmUploadService;
 import com.propertyvista.crm.rpc.services.customer.CustomerCreditCheckLongReportService;
-import com.propertyvista.crm.rpc.services.customer.CustomerPictureUploadService;
+import com.propertyvista.crm.rpc.services.customer.CustomerPictureCrmUploadService;
 import com.propertyvista.crm.rpc.services.customer.ExportTenantsService;
 import com.propertyvista.crm.rpc.services.customer.FormerGuarantorCrudService;
 import com.propertyvista.crm.rpc.services.customer.FormerTenantCrudService;
@@ -109,6 +109,7 @@ import com.propertyvista.crm.rpc.services.financial.AutoPayCrudService;
 import com.propertyvista.crm.rpc.services.financial.AutoPayReviewService;
 import com.propertyvista.crm.rpc.services.financial.PaymentRecordListService;
 import com.propertyvista.crm.rpc.services.financial.RevealAccountNumberService;
+import com.propertyvista.crm.rpc.services.lease.ApplicationDocumentCrmUploadService;
 import com.propertyvista.crm.rpc.services.lease.LeaseApplicationViewerCrudService;
 import com.propertyvista.crm.rpc.services.lease.LeaseViewerCrudService;
 import com.propertyvista.crm.rpc.services.lease.common.DepositLifecycleCrudService;
@@ -388,6 +389,7 @@ public class VistaCrmAccessControlList extends ServletContainerAclBuilder {
         grant(VistaBasicBehavior.CRM, new EntityPermission(Lease.class, EntityPermission.ALL));
         grant(VistaBasicBehavior.CRM, new IServiceExecutePermission(LeaseViewerCrudService.class));
         grant(VistaBasicBehavior.CRM, new IServiceExecutePermission(LeaseApplicationViewerCrudService.class));
+        grant(VistaBasicBehavior.CRM, new IServiceExecutePermission(ApplicationDocumentCrmUploadService.class));
 
         grant(VistaBasicBehavior.CRM, new EntityPermission(LeaseTerm.class, EntityPermission.ALL));
         grant(VistaBasicBehavior.CRM, new IServiceExecutePermission(LeaseTermCrudService.class));
@@ -415,8 +417,8 @@ public class VistaCrmAccessControlList extends ServletContainerAclBuilder {
 
         grant(VistaBasicBehavior.CRM, new IServiceExecutePermission(PreauthorizedPaymentsVisorService.class));
 
-        grant(VistaBasicBehavior.CRM, new IServiceExecutePermission(CustomerPictureUploadService.class));
-        grant(VistaBasicBehavior.CRM, new IServiceExecutePermission(CrmInsuranceCertificateScanUploadService.class));
+        grant(VistaBasicBehavior.CRM, new IServiceExecutePermission(CustomerPictureCrmUploadService.class));
+        grant(VistaBasicBehavior.CRM, new IServiceExecutePermission(InsuranceCertificateScanCrmUploadService.class));
 
 // - Billing
         grant(VistaCrmBehavior.Billing, new EntityPermission(Bill.class, EntityPermission.READ));

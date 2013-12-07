@@ -36,7 +36,7 @@ import com.propertyvista.domain.person.Name;
 import com.propertyvista.domain.tenant.CustomerPicture;
 import com.propertyvista.domain.tenant.EmergencyContact;
 import com.propertyvista.portal.rpc.portal.resident.dto.ResidentProfileDTO;
-import com.propertyvista.portal.rpc.portal.resident.services.ResidentPictureUploadService;
+import com.propertyvista.portal.rpc.portal.shared.services.CustomerPicturePortalUploadService;
 import com.propertyvista.portal.shared.themes.EntityViewTheme;
 import com.propertyvista.portal.shared.ui.CPortalEntityEditor;
 import com.propertyvista.portal.shared.ui.util.decorators.FormWidgetDecoratorBuilder;
@@ -57,7 +57,7 @@ public class ProfilePage extends CPortalEntityEditor<ResidentProfileDTO> {
         BasicFlexFormPanel mainPanel = new BasicFlexFormPanel();
         int row = -1;
 
-        CImage<CustomerPicture> imageHolder = new CImage<CustomerPicture>(GWT.<ResidentPictureUploadService> create(ResidentPictureUploadService.class),
+        CImage<CustomerPicture> imageHolder = new CImage<CustomerPicture>(GWT.<CustomerPicturePortalUploadService> create(CustomerPicturePortalUploadService.class),
                 new VistaFileURLBuilder<CustomerPicture>(CustomerPicture.class));
         imageHolder.setImageSize(150, 200);
         imageHolder.setThumbnailPlaceholder(new Image(VistaImages.INSTANCE.profilePicture()));

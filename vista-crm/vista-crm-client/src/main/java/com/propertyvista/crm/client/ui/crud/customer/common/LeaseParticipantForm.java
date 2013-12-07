@@ -53,7 +53,7 @@ import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
 import com.propertyvista.common.client.ui.validators.BirthdayDateValidator;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.crm.client.ui.crud.lease.common.CLeaseTermVHyperlink;
-import com.propertyvista.crm.rpc.services.customer.CustomerPictureUploadService;
+import com.propertyvista.crm.rpc.services.customer.CustomerPictureCrmUploadService;
 import com.propertyvista.domain.contact.AddressSimple;
 import com.propertyvista.domain.payment.CreditCardInfo.CreditCardType;
 import com.propertyvista.domain.payment.PaymentType;
@@ -138,7 +138,7 @@ public class LeaseParticipantForm<P extends LeaseParticipantDTO<?>> extends CrmE
         }
 
         int row = -1;
-        CImage<CustomerPicture> imageHolder = new CImage<CustomerPicture>(GWT.<CustomerPictureUploadService> create(CustomerPictureUploadService.class),
+        CImage<CustomerPicture> imageHolder = new CImage<CustomerPicture>(GWT.<CustomerPictureCrmUploadService> create(CustomerPictureCrmUploadService.class),
                 new VistaFileURLBuilder<CustomerPicture>(CustomerPicture.class));
         imageHolder.setImageSize(150, 200);
         imageHolder.setThumbnailPlaceholder(new Image(VistaImages.INSTANCE.profilePicture()));

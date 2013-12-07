@@ -27,7 +27,7 @@ import com.propertyvista.common.client.VistaFileURLBuilder;
 import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
 import com.propertyvista.domain.tenant.insurance.InsuranceCertificateDoc;
 import com.propertyvista.domain.tenant.insurance.InsuranceCertificateScan;
-import com.propertyvista.portal.rpc.portal.resident.services.services.InsuranceCertificateScanUploadService;
+import com.propertyvista.portal.rpc.portal.resident.services.services.InsuranceCertificateScanResidentUploadService;
 import com.propertyvista.portal.shared.ui.util.decorators.FormWidgetDecoratorBuilder;
 
 public class CertificateScanFolder extends VistaBoxFolder<InsuranceCertificateDoc> {
@@ -63,7 +63,7 @@ public class CertificateScanFolder extends VistaBoxFolder<InsuranceCertificateDo
                     0,
                     new FormWidgetDecoratorBuilder(inject(proto().scan(),
                             new CFile<InsuranceCertificateScan>(
-                                    GWT.<InsuranceCertificateScanUploadService> create(InsuranceCertificateScanUploadService.class),
+                                    GWT.<InsuranceCertificateScanResidentUploadService> create(InsuranceCertificateScanResidentUploadService.class),
                                     new VistaFileURLBuilder<InsuranceCertificateScan>(InsuranceCertificateScan.class))), 250).build());
 
             content.setWidget(++row, 0, new FormWidgetDecoratorBuilder(inject(proto().description()), 200).mockValue("Description").build());

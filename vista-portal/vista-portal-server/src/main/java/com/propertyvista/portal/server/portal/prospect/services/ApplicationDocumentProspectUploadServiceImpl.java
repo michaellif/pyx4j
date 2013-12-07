@@ -7,17 +7,15 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Jul 19, 2013
- * @author stanp
+ * Created on Dec 6, 2013
+ * @author vlads
  * @version $Id$
  */
-package com.propertyvista.portal.rpc.portal.resident.services;
+package com.propertyvista.portal.server.portal.prospect.services;
 
-import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.gwt.rpc.upload.UploadService;
+import com.propertyvista.portal.rpc.portal.prospect.services.ApplicationDocumentProspectUploadService;
+import com.propertyvista.server.common.upload.AbstractApplicationDocumentUploadServiceImpl;
 
-import com.propertyvista.domain.tenant.CustomerPicture;
-
-public interface ResidentPictureUploadService extends UploadService<IEntity, CustomerPicture> {
+public class ApplicationDocumentProspectUploadServiceImpl extends AbstractApplicationDocumentUploadServiceImpl implements ApplicationDocumentProspectUploadService {
 
 }

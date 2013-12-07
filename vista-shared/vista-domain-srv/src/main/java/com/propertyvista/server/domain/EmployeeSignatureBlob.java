@@ -13,10 +13,21 @@
  */
 package com.propertyvista.server.domain;
 
+import com.pyx4j.entity.annotations.Length;
 import com.pyx4j.entity.annotations.RpcTransient;
+import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.i18n.annotations.I18n;
 
 @RpcTransient
 @I18n(strategy = I18n.I18nStrategy.IgnoreAll)
 public interface EmployeeSignatureBlob extends IFileBlob {
+
+    /**
+     * This is actual BLOB of the Image or PDF stored on server
+     */
+    @Override
+    @RpcTransient
+    @Length(1 * 1024 * 1024)
+    IPrimitive<byte[]> data();
+
 }

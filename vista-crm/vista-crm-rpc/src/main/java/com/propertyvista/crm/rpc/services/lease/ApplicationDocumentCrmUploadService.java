@@ -7,17 +7,17 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Jul 19, 2013
- * @author stanp
+ * Created on Dec 6, 2013
+ * @author vlads
  * @version $Id$
  */
-package com.propertyvista.portal.rpc.portal.resident.services.services;
+package com.propertyvista.crm.rpc.services.lease;
 
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.gwt.rpc.upload.UploadService;
 
-import com.propertyvista.domain.tenant.insurance.InsuranceCertificateScan;
+import com.propertyvista.domain.media.ApplicationDocumentFile;
 
-public interface InsuranceCertificateScanUploadService extends UploadService<IEntity, InsuranceCertificateScan> {
+public interface ApplicationDocumentCrmUploadService extends UploadService<IEntity, ApplicationDocumentFile> {
 
 }

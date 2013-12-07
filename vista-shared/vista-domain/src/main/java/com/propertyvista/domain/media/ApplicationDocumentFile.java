@@ -30,6 +30,7 @@ public interface ApplicationDocumentFile extends IFile {
 
     @Override
     @I18n(strategy = I18n.I18nStrategy.IgnoreThis)
+    //TODO review What it was doing it does
     @MemberColumn(modificationAdapters = { ApplicationDocumentUploadedBlobSecurityAdapter.class })
     IPrimitive<Key> blobKey();
 

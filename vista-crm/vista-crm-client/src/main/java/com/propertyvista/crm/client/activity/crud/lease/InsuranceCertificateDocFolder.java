@@ -26,7 +26,7 @@ import com.pyx4j.i18n.shared.I18n;
 import com.propertyvista.common.client.VistaFileURLBuilder;
 import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
 import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
-import com.propertyvista.crm.rpc.services.customer.CrmInsuranceCertificateScanUploadService;
+import com.propertyvista.crm.rpc.services.customer.InsuranceCertificateScanCrmUploadService;
 import com.propertyvista.domain.tenant.insurance.InsuranceCertificateDoc;
 import com.propertyvista.domain.tenant.insurance.InsuranceCertificateScan;
 
@@ -64,7 +64,7 @@ public class InsuranceCertificateDocFolder extends VistaBoxFolder<InsuranceCerti
                     new FormDecoratorBuilder(inject(
                             proto().scan(),
                             new CFile<InsuranceCertificateScan>(GWT
-                                    .<CrmInsuranceCertificateScanUploadService> create(CrmInsuranceCertificateScanUploadService.class),
+                                    .<InsuranceCertificateScanCrmUploadService> create(InsuranceCertificateScanCrmUploadService.class),
                                     new VistaFileURLBuilder<InsuranceCertificateScan>(InsuranceCertificateScan.class))), 250).build());
 
             content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().description())).componentWidth("300px").build());

@@ -54,7 +54,7 @@ import com.propertyvista.misc.BusinessRules;
 import com.propertyvista.portal.prospect.events.ApplicationWizardStateChangeEvent;
 import com.propertyvista.portal.prospect.ui.application.ApplicationWizardView.ApplicationWizardPresenter;
 import com.propertyvista.portal.rpc.portal.prospect.dto.OnlineApplicationDTO;
-import com.propertyvista.portal.rpc.portal.resident.services.ResidentPictureUploadService;
+import com.propertyvista.portal.rpc.portal.shared.services.CustomerPicturePortalUploadService;
 import com.propertyvista.portal.shared.ui.AbstractPortalPanel;
 import com.propertyvista.portal.shared.ui.CPortalEntityWizard;
 import com.propertyvista.portal.shared.ui.util.decorators.FormWidgetDecoratorBuilder;
@@ -205,7 +205,7 @@ public class ApplicationWizard extends CPortalEntityWizard<OnlineApplicationDTO>
         int row = -1;
         panel.setH1(++row, 0, 1, panel.getTitle());
 
-        CImage<CustomerPicture> imageHolder = new CImage<CustomerPicture>(GWT.<ResidentPictureUploadService> create(ResidentPictureUploadService.class),
+        CImage<CustomerPicture> imageHolder = new CImage<CustomerPicture>(GWT.<CustomerPicturePortalUploadService> create(CustomerPicturePortalUploadService.class),
                 new VistaFileURLBuilder<CustomerPicture>(CustomerPicture.class));
         imageHolder.setImageSize(150, 200);
         imageHolder.setThumbnailPlaceholder(new Image(VistaImages.INSTANCE.profilePicture()));

@@ -22,6 +22,8 @@ import com.pyx4j.gwt.shared.DownloadFormat;
 
 import com.propertyvista.domain.media.ApplicationDocumentFile;
 
+//TODO Remove, use ApplicationDocumentProspectUploadService or ApplicationDocumentProspectCRMService
+@Deprecated
 public interface ApplicationDocumentUploadService extends UploadService<IEntity, ApplicationDocumentFile> {
 
     // TODO remove, Service call is made to obtain formats

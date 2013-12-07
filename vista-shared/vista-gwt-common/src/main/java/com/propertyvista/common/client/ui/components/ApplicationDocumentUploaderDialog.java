@@ -30,6 +30,8 @@ import com.propertyvista.domain.media.ApplicationDocumentFile;
 import com.propertyvista.portal.rpc.DeploymentConsts;
 import com.propertyvista.portal.rpc.ptapp.services.ApplicationDocumentUploadService;
 
+//TODO Remove
+@Deprecated
 public abstract class ApplicationDocumentUploaderDialog extends VerticalPanel implements OkCancelOption, OkOptionText {
 
     private static final I18n i18n = I18n.get(ApplicationDocumentUploaderDialog.class);

@@ -7,11 +7,11 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Oct 23, 2013
- * @author michaellif
+ * Created on Dec 6, 2013
+ * @author vlads
  * @version $Id$
  */
-package com.propertyvista.portal.server.portal.resident.services.services;
+package com.propertyvista.server.common.upload;
 
 import java.util.Collection;
 import java.util.EnumSet;
@@ -24,31 +24,29 @@ import com.pyx4j.essentials.server.upload.UploadedData;
 import com.pyx4j.gwt.shared.DownloadFormat;
 import com.pyx4j.i18n.shared.I18n;
 
-import com.propertyvista.domain.tenant.insurance.InsuranceCertificateScan;
-import com.propertyvista.portal.rpc.portal.resident.services.services.InsuranceCertificateScanUploadService;
-import com.propertyvista.portal.server.portal.resident.services.ResidentPictureUploadServiceImpl;
-import com.propertyvista.server.domain.GeneralInsurancePolicyBlob;
+import com.propertyvista.domain.tenant.CustomerPicture;
+import com.propertyvista.server.domain.CustomerPictureBlob;
+import com.propertyvista.server.domain.FileBlob;
 
-public class InsuranceCertificateScanUploadServiceImpl extends AbstractUploadServiceImpl<IEntity, InsuranceCertificateScan> implements
-        InsuranceCertificateScanUploadService {
+public class AbstractCustomerPictureUploadServiceImpl extends AbstractUploadServiceImpl<IEntity, CustomerPicture> {
 
     public static final Collection<DownloadFormat> supportedFormats = EnumSet.of(DownloadFormat.JPEG, DownloadFormat.GIF, DownloadFormat.PNG,
-            DownloadFormat.PDF, DownloadFormat.ARCHIVE);
+            DownloadFormat.BMP);
 
-    private static final I18n i18n = I18n.get(ResidentPictureUploadServiceImpl.class);
+    private static final I18n i18n = I18n.get(AbstractCustomerPictureUploadServiceImpl.class);
 
-    public InsuranceCertificateScanUploadServiceImpl() {
-        super(InsuranceCertificateScan.class);
+    public AbstractCustomerPictureUploadServiceImpl() {
+        super(CustomerPicture.class);
     }
 
     @Override
     public long getMaxSize() {
-        return EntityFactory.getEntityPrototype(GeneralInsurancePolicyBlob.class).data().getMeta().getLength();
+        return EntityFactory.getEntityPrototype(FileBlob.class).content().getMeta().getLength();
     }
 
     @Override
     public String getUploadFileTypeName() {
-        return i18n.tr("Insurance Certificate Scan");
+        return i18n.tr("Customer Picture");
     }
 
     @Override
@@ -57,8 +55,8 @@ public class InsuranceCertificateScanUploadServiceImpl extends AbstractUploadSer
     }
 
     @Override
-    protected void processUploadedData(IEntity uploadInitiationData, UploadedData uploadedData, InsuranceCertificateScan response) {
-        GeneralInsurancePolicyBlob blob = EntityFactory.create(GeneralInsurancePolicyBlob.class);
+    protected void processUploadedData(IEntity uploadInitiationData, UploadedData uploadedData, CustomerPicture response) {
+        CustomerPictureBlob blob = EntityFactory.create(CustomerPictureBlob.class);
         blob.contentType().setValue(uploadedData.contentMimeType);
         blob.data().setValue(uploadedData.binaryContent);
         Persistence.service().persist(blob);
@@ -67,4 +65,5 @@ public class InsuranceCertificateScanUploadServiceImpl extends AbstractUploadSer
 
         Persistence.service().commit();
     }
+
 }

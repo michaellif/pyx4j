@@ -14,8 +14,10 @@
 package com.propertyvista.portal.server.upload;
 
 import com.propertyvista.domain.company.EmployeeSignature;
+import com.propertyvista.domain.media.ApplicationDocumentFile;
 import com.propertyvista.domain.tenant.CustomerPicture;
 import com.propertyvista.domain.tenant.insurance.InsuranceCertificateScan;
+import com.propertyvista.server.domain.ApplicationDocumentBlob;
 import com.propertyvista.server.domain.CustomerPictureBlob;
 import com.propertyvista.server.domain.EmployeeSignatureBlob;
 import com.propertyvista.server.domain.GeneralInsurancePolicyBlob;
@@ -27,5 +29,6 @@ public class VistaFileAccessServlet extends VistaAbstractFileAccessServlet {
         register(CustomerPicture.class, CustomerPictureBlob.class);
         register(InsuranceCertificateScan.class, GeneralInsurancePolicyBlob.class);
         register(EmployeeSignature.class, EmployeeSignatureBlob.class);
+        register(ApplicationDocumentFile.class, ApplicationDocumentBlob.class);
     }
 }
