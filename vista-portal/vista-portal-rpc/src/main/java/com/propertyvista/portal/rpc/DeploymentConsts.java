@@ -25,15 +25,11 @@ public interface DeploymentConsts {
 
     public static final String siteImageResourceServletMapping = "/vista.siteimgrc";
 
-    public static final String customerPictureServletMapping = "picture/";
-
+    //TODO REMOVE
+    @Deprecated
     public static final String applicationDocumentServletMapping = "application_document/";
 
-    public static final String insuranceCertificateServletMapping = "insurance_certificate/";
-
     public static final String pmcDocumentServletMapping = "pmc_document/";
-
-    public static final String insuranceCertificateScanMapping = "certificate_scan/";
 
     public static final String legalLetterServletMappning = "legal_letter/";
 

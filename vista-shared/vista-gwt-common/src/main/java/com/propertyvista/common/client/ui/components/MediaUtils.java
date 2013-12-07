@@ -57,6 +57,8 @@ public class MediaUtils {
         return baseURL + DeploymentConsts.pmcDocumentServletMapping + file.id().getStringView() + "/" + file.fileName().getStringView();
     }
 
+    //TODO REMOVE
+    @Deprecated
     public static String createApplicationDocumentUrl(ApplicationDocumentFile file) {
         return ClientNavigUtils.getDeploymentBaseURL() + DeploymentConsts.applicationDocumentServletMapping + file.id().getStringView() + "/"
                 + file.fileName().getStringView();
