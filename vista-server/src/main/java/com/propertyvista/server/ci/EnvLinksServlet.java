@@ -15,16 +15,21 @@ package com.propertyvista.server.ci;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.pyx4j.commons.Consts;
+import com.pyx4j.commons.TimeUtils;
 import com.pyx4j.config.server.ApplicationVersion;
 import com.pyx4j.config.server.ServerSideConfiguration;
 import com.pyx4j.gwt.server.IOUtils;
 
+import com.propertyvista.biz.system.WorldDateManager;
 import com.propertyvista.config.AbstractVistaServerSideConfiguration;
 import com.propertyvista.config.VistaDeployment;
 
@@ -55,9 +60,29 @@ public class EnvLinksServlet extends HttpServlet {
         body = body.replace("${version}", "version: " + ApplicationVersion.getProductVersion() + " " + ApplicationVersion.getBuildLabel() + " "
                 + ApplicationVersion.getBuildTime());
 
+        body = body.replace("${systemDate}", buildSystemDate());
+
         body = body.replace("${text}", new EnvLinksBuilder().toString());
 
         out.print(body);
         out.flush();
+    }
+
+    private String buildSystemDate() {
+        Date systemTime = new Date();
+        Date realTime = WorldDateManager.getWorldTime();
+
+        StringBuilder b = new StringBuilder();
+        b.append("System time: ");
+        b.append(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(systemTime));
+
+        if (Math.abs(systemTime.getTime() - realTime.getTime()) > 1 * Consts.MIN2MSEC) {
+            b.append("; World time: ");
+            b.append(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(realTime));
+
+            b.append("; System time offset: ").append(TimeUtils.durationFormat(systemTime.getTime() - realTime.getTime()));
+        }
+
+        return b.toString();
     }
 }

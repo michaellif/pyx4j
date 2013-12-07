@@ -70,6 +70,7 @@ public class OpenId {
                     HttpClientFactory.setProxyProperties(proxyProps);
                 }
                 manager = new ConsumerManager();
+                manager.setNonceVerifier(new TimeShiftInMemoryNonceVerifier());
             }
 
             String identifier = ((AbstractVistaServerSideConfiguration) ServerSideConfiguration.instance()).openIdDomainIdentifier(userDomain);
