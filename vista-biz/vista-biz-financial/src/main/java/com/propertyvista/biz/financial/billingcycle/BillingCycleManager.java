@@ -69,6 +69,7 @@ class BillingCycleManager {
         return SingletonHolder.INSTANCE;
     }
 
+    /** Find/Create BillingType for a new/draft Lease based on the BillingType policy */
     protected BillingType getBillingType(Lease lease) {
         Persistence.service().retrieve(lease.unit());
         Persistence.service().retrieve(lease.unit().building());
@@ -82,14 +83,14 @@ class BillingCycleManager {
         Calendar calendar = new GregorianCalendar();
         calendar.setTime(billingCycle.billingCycleEndDate().getValue());
         calendar.add(Calendar.DAY_OF_MONTH, 1);
-        return ensureBillingCycle(billingCycle.building(), billingCycle.billingType().billingPeriod().getValue(), new LogicalDate(calendar.getTime()));
+        return ensureBillingCycle(billingCycle.building(), billingCycle.billingType(), new LogicalDate(calendar.getTime()));
     }
 
     protected BillingCycle getPriorBillingCycle(BillingCycle billingCycle) {
         Calendar calendar = new GregorianCalendar();
         calendar.setTime(billingCycle.billingCycleStartDate().getValue());
         calendar.add(Calendar.DAY_OF_MONTH, -1);
-        return ensureBillingCycle(billingCycle.building(), billingCycle.billingType().billingPeriod().getValue(), new LogicalDate(calendar.getTime()));
+        return ensureBillingCycle(billingCycle.building(), billingCycle.billingType(), new LogicalDate(calendar.getTime()));
     }
 
     protected BillingCycle getLeaseFirstBillingCycle(Lease lease) {
@@ -103,20 +104,23 @@ class BillingCycleManager {
         } else {
             firstCycleStartDate = lease.leaseFrom().getValue();
         }
-        return ensureBillingCycle(lease.unit().building(), billingAccount.billingPeriod().getValue(), firstCycleStartDate);
+        return ensureBillingCycle(lease, firstCycleStartDate);
     }
 
+    /** Find/Create BillingCycle for a new lease based on the BillingType policy for the given building */
     protected BillingCycle getBillingCycleForDate(Lease lease, LogicalDate date) {
         Persistence.ensureRetrieve(lease, AttachLevel.Attached);
         LogicalDate startDate = calculateBillingCycleStartDate(lease.billingAccount().billingType(), date);
-        return ensureBillingCycle(lease.unit().building(), lease.billingAccount().billingPeriod().getValue(), startDate);
+        return ensureBillingCycle(lease, startDate);
     }
 
+    /** Find/Create BillingCycle based on the BillingType policy for the given building */
     protected BillingCycle getBillingCycleForDate(Building buildingId, BillingPeriod billingPeriod, Integer billingCycleStartDay, LogicalDate date) {
         LogicalDate startDate = calculateBillingCycleStartDate(billingPeriod, billingCycleStartDay, date);
         return ensureBillingCycle(buildingId, billingPeriod, startDate);
     }
 
+    /** Find/Create required BillingType based on the BillingType policy for the given building */
     BillingType ensureBillingType(Building building, BillingPeriod billingPeriod, LogicalDate leaseStartDate) {
         LeaseBillingTypePolicyItem policy = retreiveLeaseBillingTypePolicyItem(building, billingPeriod);
 
@@ -125,11 +129,10 @@ class BillingCycleManager {
         } else { // According to policy default start day
             return ensureBillingType(billingPeriod, policy.billingCycleStartDay().getValue());
         }
-
     }
 
-    BillingType ensureBillingType(final BillingPeriod billingPeriod, final int billingCycleStartDay) {
-
+    /** Find/Create required BillingType - utility method */
+    private BillingType ensureBillingType(final BillingPeriod billingPeriod, final int billingCycleStartDay) {
         // Try to find existing billing type
         EntityQueryCriteria<BillingType> criteria = EntityQueryCriteria.create(BillingType.class);
         criteria.add(PropertyCriterion.eq(criteria.proto().billingPeriod(), billingPeriod));
@@ -154,7 +157,7 @@ class BillingCycleManager {
      * - for 'monthly' or 'semimonthly' PaymentFrequency and if lease date starts on 29, 30, or 31 we correspond this lease to cycle
      * with billingPeriodStartDay = 1 and prorate days of 29/30/31.
      */
-    int getBillingCycleStartDay(BillingPeriod billingPeriod, LogicalDate leaseStartDate) {
+    private int getBillingCycleStartDay(BillingPeriod billingPeriod, LogicalDate leaseStartDate) {
         int billingCycleStartDay = 0;
         Calendar calendar = new GregorianCalendar();
         calendar.setTime(leaseStartDate);
@@ -189,7 +192,7 @@ class BillingCycleManager {
         return billingCycleStartDay;
     }
 
-    BillingType createBillingType(final BillingPeriod billingPeriod, Integer billingCycleStartDay) throws BillingException {
+    private BillingType createBillingType(final BillingPeriod billingPeriod, Integer billingCycleStartDay) throws BillingException {
         BillingType billingType = EntityFactory.create(BillingType.class);
         billingType.billingPeriod().setValue(billingPeriod);
         billingType.billingCycleStartDay().setValue(billingCycleStartDay);
@@ -197,10 +200,21 @@ class BillingCycleManager {
         return billingType;
     }
 
+    /** Find/Create BillingCycle for a new lease based on the BillingType policy for the given building */
     BillingCycle ensureBillingCycle(final Building building, final BillingPeriod billingPeriod, final LogicalDate billingPeriodStartDate) {
-
         BillingType billingType = ensureBillingType(building, billingPeriod, billingPeriodStartDate);
+        return ensureBillingCycle(building, billingType, billingPeriodStartDate);
+    }
 
+    /** Find/Create BillingCycle for an existing lease */
+    BillingCycle ensureBillingCycle(final Lease lease, final LogicalDate billingPeriodStartDate) {
+        Persistence.ensureRetrieve(lease.unit().building(), AttachLevel.IdOnly);
+        Persistence.ensureRetrieve(lease.billingAccount().billingType(), AttachLevel.Attached);
+        return ensureBillingCycle(lease.unit().building(), lease.billingAccount().billingType(), billingPeriodStartDate);
+    }
+
+    /** Find/Create BillingCycle of the given type - utility method */
+    private BillingCycle ensureBillingCycle(final Building building, final BillingType billingType, final LogicalDate billingPeriodStartDate) {
         // Try to find existing billing cycle
         EntityQueryCriteria<BillingCycle> criteria = EntityQueryCriteria.create(BillingCycle.class);
         criteria.add(PropertyCriterion.eq(criteria.proto().billingType(), billingType));
@@ -217,7 +231,7 @@ class BillingCycleManager {
             billingCycle = new UnitOfWork(TransactionScopeOption.RequiresNew).execute(new Executable<BillingCycle, RuntimeException>() {
                 @Override
                 public BillingCycle execute() {
-                    return createBillingCycle(building, billingPeriod, billingPeriodStartDate);
+                    return createBillingCycle(building, billingType.billingPeriod().getValue(), billingPeriodStartDate);
                 }
             });
         } else {
