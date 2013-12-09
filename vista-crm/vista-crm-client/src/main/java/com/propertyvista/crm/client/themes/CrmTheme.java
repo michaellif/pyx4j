@@ -56,6 +56,7 @@ import com.propertyvista.crm.client.ui.tools.common.BulkOperationToolViewImpl;
 import com.propertyvista.crm.client.ui.tools.common.ItemsHolderForm;
 import com.propertyvista.crm.client.ui.tools.common.datagrid.MultiSelectorCell;
 import com.propertyvista.crm.client.ui.tools.common.datagrid.ObjectEditCell;
+import com.propertyvista.crm.client.ui.tools.common.datagrid.ObjectSelectionCell;
 import com.propertyvista.crm.client.ui.tools.common.datagrid.VistaDataGridStyles;
 import com.propertyvista.crm.client.ui.tools.common.widgets.superselector.SelectedItemHolder;
 import com.propertyvista.crm.client.ui.tools.common.widgets.superselector.SuperSelector;
@@ -809,6 +810,10 @@ public class CrmTheme extends VistaTheme {
         // The following are good: DataGrid and custom Cells styles definitions
 
         // Object Edit Cell Styles
+        style = new Style("." + ObjectSelectionCell.StyleNames.ObjectSelectionCell.name());
+        style.addProperty("width", "100%");
+        addStyle(style);
+
         style = new Style("." + ObjectEditCell.StyleNames.ObjectEditCell.name());
         style.addProperty("width", "100%");
         addStyle(style);
